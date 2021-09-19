@@ -16,7 +16,7 @@
 // #define         DB_SWITCHES                         // Debug Switches
 // #define         DB_MODEL_EXCHANGE                   // Debug MODEL EXCHANGE (by RF link)
 //*********************************************************************************************
-// this is a new test comment
+// this is a second new test comment
 
 #define         PACKETS_PER_HOP     20                 // Must match RX setting
 #define         PACEMAKER           5                  // MINIMUM Ms between packets of data. - Probably needs to be between 7 and 20
