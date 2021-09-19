@@ -1,0 +1,5027 @@
+//********************************************************************************************
+#define         TXVERSIONNUMBER     64.9   //   Sept 19th 2021  Malcolm Messiter ************* 
+//********************************************************************************************
+
+     #define         USE_WATCHDOG                           // Enable when developing only  ??
+     #define         WATCHDOGTIMEOUT     10000              // 10 Seconds before reboot (32ms -> 500 seconds)
+     #define         KICKRATE            1000               // Kick once a second (must be between WATCHDOGMAXRATE and WATCHDOGTIMEOUT)
+     #define         WATCHDOGMAXRATE     500                // 500 ms secs between kicks is max rate allowed 
+ 
+// *********** UNCOMMENT ANY OF THESE for that bit of debug info *****************************
+// #define         DB_FHSS                             // Debug real time FHSS data  
+// #define         DB_NEXTION                          // Debug Nextion and SD card data 
+// #define         DB_CHANNEL_AVOID                    // Debug FHSS channel avoiding data etc   
+// #define         DB_SENSORS                          // Debug Sensors
+// #define         DB_BIND                             // Debug Binding
+// #define         DB_SWITCHES                         // Debug Switches
+// #define         DB_MODEL_EXCHANGE                   // Debug MODEL EXCHANGE (by RF link)
+//*********************************************************************************************
+
+#define         PACKETS_PER_HOP     20                 // Must match RX setting
+#define         PACEMAKER           5                  // MINIMUM Ms between packets of data. - Probably needs to be between 7 and 20
+#define         CHANNELSUSED        16                 // 16 Channels
+#define         MAXMIXES            32                 // 32 mixes
+#define         TICKSPERMINUTE      60000              // millis() += 60000 per minute  
+#define         UNCOMPRESSEDWORDS   20                 // DATA TO SEND = 40  Bytes
+#define         COMPRESSEDWORDS     UNCOMPRESSEDWORDS  * 3/4  // COMPRESSED DATA SENT = 30  Bytes
+#define         PROPOCHANNELS       8                  // Only 4 have knobs / 2 sticks (= 4 hall sensors)
+#define         FLIGHTMODESWITCH    4                  // Default MODE switch
+#define         AUTOSWITCH          1                  // Default AUTO switch
+#define         DEFAULTPIPEADDRESS  0xBABE1E5420LL     // Pipe address for startup - any value but MUST match RX
+#define         BINDPIPETIMEOUT     10                 // timeout for switching from Bound to Default pipe
+#define         LOWBATTERY          35                 // percent for warning
+#define         BAD_CHANNEL_MAX     40                 // WAS 96 --  NEEDS TO BE *ALWAYS* LESS THAN SELECTED HOPPING RANGE ****
+#define         FHSS_RESCUE_BOTTOM  118                // reduced range for recovery
+#define         FHSS_RESCUE_TOP     125                // reduced range for recovery
+#define         CE_PIN              9                  // for SPI to nRF24L01
+#define         CSN_PIN             10                 // for SPI to nRF24L01
+#define         REINITDELAY         50                 // 1/20 sec delay waiting for RX to init.
+#define         INACTIVITYTIMEOUT   10                 // Default time after which to switch off
+#define         INACTIVITYMINIMUM   5*TICKSPERMINUTE   // Inactivity timeout minimum is 5 minutes         
+#define         INACTIVITYMAXIMUM   30*TICKSPERMINUTE  // Inactivity timeout maximum is 30 minutes     
+#define         DS1307_ADDRESS      0x68
+
+
+// ************** CurrentMode values (=WHETHER TO SEND DATA) ***********************************
+
+#define         NORMAL              0                  // Normal for transmit as usual
+#define         CALIBRATELIMITS     1                  // Calibrate limits
+#define         CENTRESTICKS        2                  // Calibrate Centres
+#define         SCANWAVEBAND        3                  // Scan waveband
+#define         SENDNOTHING         4                  // Transmission off
+
+// ****************** VALUES FOR MAX SERVO RESOLUTION *************************************************
+
+#define         EXTRAMICROS         500                            
+#define         MINMICROS           1000  - EXTRAMICROS
+#define         MAXMICROS           2000  + EXTRAMICROS
+#define         HALFMICROSRANGE     (MAXMICROS-MINMICROS)/2        //  = 500
+#define         MIDMICROS           MINMICROS + HALFMICROSRANGE
+
+//*******************************************************************************************
+
+//  Works on Teensy 4.1
+//  16 channels
+//  12 BIT servo resolution (11 BIT via SBUS)
+//  32 Mixes
+//  4 Flight modes, or 3 plus autorotation
+//  User defined Channel names
+//  64 editable 5-point curves (16 channels x 4 flight modes)
+//  FailSafe on any channel(s)
+//  2.4 GHz RF scan
+//  Motor Timer 
+//  Lossless data compression.
+//  Trims on screen saved per flight mode and model.
+//  Screen timeout.
+//  FFHS fast recovery on lost packet
+//  FFHS stores busy and failed frequencies and avoids hopping there again.
+//  Edit and store PID Gains. 
+//  Shows Roll Pitch Yaw telemetry
+//  Scans at startup for FHSS frequencies to dodge.
+//  Use 32 GIG SD card for model memories
+//  Binding - Each TX must has unique pipe address.
+//  Four User definable three position switches 
+//  PID Gains implemented and stored to SD indepentently per flight mode and per model
+//  Input sources definable
+//  Model memories export and import
+//  Model memory files alphabetically sorted
+//  Model memory automatically corrected on connection if was wrong. (REMOVED)
+//  Timer goes on and off with motor to keep track of motor use.
+//  Model memories can be sent between transmitters by RF link. 
+//  DS1307 RTC added
+//  MAC address now used as unique TX ID for pipe and binding.
+//  Failsafe channel flags compressed to two bytes
+//  Exponential added 
+
+/*******************************************************************
+ * Teesny 4.1 Pins -> Connections **********************************
+ -------------------------------------------------------------------
+ *       GND       -> GND
+ *       Vin       -> + 5.0 VDC
+ *       0  (RX1)  -> Nextion  (TX)
+ *       1  (TX2)  -> Nextion  (RX) 
+ *       2  LED   -> RED
+ *       3  LED   -> GREEN
+ *       4  LED   -> BLUE
+ *       5  POLOLU   2808 ALL POWER OFF SIGNAL (When high)
+ *       9  (CE)   -> nRF24l01 (CE)
+ *       10 (CS)   -> nRF24l01 (CSN)
+ *       11 (MOSI) -> nRF24l01 (MOSI)
+ *       12 (MISO) -> nRF24l01 (MISO)
+ *       13 (SCK)  -> nRF24l01 (SCK)
+ *       14 (A0)   -> Joystick POT CH1
+ *       15 (A1)   -> Joystick POT CH2
+ *       16 (A2)   -> Joystick POT CH3
+ *       17 (A3)   -> Joystick POT CH4
+ *       18        -> I2C bus  SDA
+ *       19        -> I2C bus  SCL
+ *       20 (A6)   -> POT KNOB CH5
+ *       21 (A7)   -> POT KNOB CH6   
+ *       22 (A8)   -> POT KNOB CH7   
+ *       23 (A9)   -> POT KNOB CH8
+ *       25        -> Switch 1
+ *       26        -> Switch 1
+ *       27        -> Switch 2
+ *       28        -> Switch 2
+ *       29        -> Switch 3
+ *       30        -> Switch 3
+ *       31        -> Switch 4
+ *       32        -> Switch 4
+ *    
+ *******************************************************************
+ *******************************************************************
+ *******************************************************************/
+
+#include        <Arduino.h>
+#include        <SD.h> 
+#include        <SPI.h> 
+#include        <RF24.h> 
+#include        <Wire.h>
+#include        <Adafruit_INA219.h>
+#include        <Compress.h>
+#include        <TimeLib.h>
+#include        <DS1307RTC.h>
+#include        <TeensyID.h>
+#include        <EEPROM.h>
+#include        <InterpolationLib.h>
+
+#ifdef  USE_WATCHDOG
+    #include        <Watchdog_t4.h>
+#endif 
+
+#define         Nextion             Serial1  // Nextion is connected to Serial1
+#define         Black               0 
+#define         Blue                31  
+#define         Brown               48192 
+#define         Green               2016   
+#define         Yellow              65504  
+#define         Red                 63488 
+#define         Gray                33840  
+#define         SkyBlue             2047 
+#define         Purple              39070
+#define         Orange              64512
+#define         White               65535 
+#define         FlightModesUsed     4                
+#define         M_Enabled           0       // Offsets for Mixes array
+#define         M_FlightMode        1   
+#define         M_MasterChannel     2   
+#define         M_SlaveChannel      3   
+#define         M_Reversed          4   
+#define         M_Percent           5   
+#define         M_R1                6   
+#define         M_R2                7  
+#define         FrontView           0 
+#define         SticksView          1 
+#define         GraphView           2
+#define         MixesView           3  
+#define         FhssView            4 
+#define         ModelsView          5
+#define         CalibrateView       6
+#define         MainSetupView       7
+#define         GainsView           8
+#define         DataView            9
+#define         Trim_View           10
+#define         Mode_View           11
+#define         Switches_View       12
+#define         One_Switch_View     13
+#define         Help_View           14
+#define         Options_View        15
+
+#define         Switch0             32    // SWITCHES' PIN NUMBERS ... 
+#define         Switch1             31
+#define         Switch2             30
+#define         Switch3             29
+#define         Switch4             28
+#define         Switch5             27
+#define         Switch6             26
+#define         Switch7             25
+#define         REDLED               2    // COLOURED LEDS' PIN NUMBERS ... 
+#define         GREENLED             3
+#define         BLUELED              4
+#define         POWER_OFF_PIN        5 //should be 5
+
+
+// SDCARD MODEL MEMORY CONSTANTS **************************************
+
+#define         RENEWDATA           8787          // Change these to rewrite all
+#define         TXSIZE              250           // reserved spaces bigger than needed
+#define         MODELSIZE           1600          // MEMORY for one model
+
+// *******************************************************************
+
+#define         MAXFILELEN          1021          // MAX SIZE FOR HELP FILE
+
+
+RF24            Radio1(CE_PIN,CSN_PIN);
+
+
+#ifdef  USE_WATCHDOG
+    WDT_T4<WDT3>  TeensyWatchDog;
+    WDT_timings_t WatchDogConfig;
+#endif
+
+byte            FHSSBottom          =1;                            //  Channel range for hopping 
+byte            FHSSTop             =83;
+byte            Mixes[MAXMIXES+1][CHANNELSUSED+1];                  // Channel mixes' 2D array store 
+int             Trims[FlightModesUsed+1][CHANNELSUSED+1];           // Trims to store 
+byte            TrimsReversed[FlightModesUsed+1][CHANNELSUSED+1];   // Trim directions to store 
+byte            Exponential[FlightModesUsed+1][CHANNELSUSED+1];     // Exponential 
+byte            InterpolationTypes[FlightModesUsed+1][CHANNELSUSED+1]; 
+byte            LastMixNumber   = 1; 
+byte            MixNumber       = 0;
+byte            CurrentView        = FrontView;
+byte            SavedCurrentView   = FrontView;
+const uint8_t   CharsMax        = 120;  // 80; 
+ #ifdef        DB_FHSS  
+float           PSTARTTIME=0;
+float           PENDTIME=0;
+float           PDURATION=0;
+ #endif 
+const uint8_t   MaxDataTransferred  = UNCOMPRESSEDWORDS;        // = 40 bytes     A few extra bytes sent after channels' values
+uint64_t        DefaultPipe         = DEFAULTPIPEADDRESS;       //          Default Radio pipe address
+uint64_t        NewPipe             = 0xBABE1E5420LL;           //             New Radio pipe address for binding will come from MAC address
+char            TextIn[CharsMax];
+char            WordsIn[CharsMax];
+unsigned int    i;
+int             PacketsPerSecond  = 0;
+unsigned int    LostPackets       = 0;
+byte            PacketNumber      = 0;
+byte            NextFrequency     = 100;
+byte            ThisFrequency     = 99;
+char            AckPayLoad[15];                   //    Where to put received telemetry data
+uint16_t        SendBuffer[MaxDataTransferred];   //    Data to send to rx (16 words)
+uint16_t        ShownBuffer[MaxDataTransferred];  //    Data shown before
+uint16_t        LastBuffer[CHANNELSUSED+1];       //    Used to spot any change
+uint16_t        PreMixBuffer[CHANNELSUSED+1];     //    Data collected from sticks
+byte            MaxDegrees[5][CHANNELSUSED+1];    //    Max degrees (180?)  
+byte            MidHiDegrees[5][CHANNELSUSED+1];  //    MidHi degrees (135?)
+byte            CentreDegrees[5][CHANNELSUSED+1]; //    Degrees (90)
+byte            MidLowDegrees[5][CHANNELSUSED+1]; //    MidLow Degrees (45?)
+byte            MinDegrees[5][CHANNELSUSED+1];    //    Max Degrees (0?)
+byte            FlightMode              =  1;          
+byte            PreviousFlightMode      =  1;                                
+int             ChannelMax[CHANNELSUSED+1];       //    output of pots at max
+int             ChannelMidHi[CHANNELSUSED+1];     //    output of pots at MidHi
+int             ChannelCentre[CHANNELSUSED+1];    //    output of pots at Centre
+int             ChannelMidLow[CHANNELSUSED+1];    //    output of pots at MidLow
+int             ChannelMin[CHANNELSUSED+1];       //    output of pots at min
+int             ChanneltoSet=0;
+bool            Connected=false;
+byte            ShowCommsCounter=0;
+
+
+double          PointsCount=5;       // This for displaying curves only 
+double          xPoints[5]; 
+double          yPoints[5]; 
+double          xPoint=0;
+double          yPoint=0;
+
+int             BoxOffset=35;
+int             BoxSize=395;
+int             BoxBottom;
+int             BoxTop;
+int             BoxLeft;
+int             BoxRight;
+int             ClickX;
+int             ClickY;
+bool            CalibratedYet = false;
+int             AnalogueInput[PROPOCHANNELS] = {A0, A1, A2, A3, A6, A7, A8, A9};            // PROPO Channels for transmission                           
+byte            CurrentMode = NORMAL; 
+byte            BadChannels[BAD_CHANNEL_MAX+5];      // room to spare
+byte            BadChannelPointer=0;
+byte            AllChannels[127];                    /// for scanning
+byte            NoCarrier[127];
+byte            ScanStart               = 1;
+byte            ScanEnd                 = 126;
+unsigned long   TimerMillis             = 0;
+unsigned long   LastSeconds             = 0;
+unsigned long   Secs                    = 0;
+unsigned long   PausedSecs              = 0;
+unsigned long   Mins                    = 0;
+unsigned long   Hours                   = 0;
+byte            NameCount               = 0;
+char            ModelName[30]           = "Undefined";
+byte            ModelNumber             = 1;
+byte            ModelDefined            = 0;
+unsigned int    txm                     = 0;   // SD memory for tx
+unsigned int    mxm                     = 0;   // SD memory per model
+unsigned int    addr                    = 0;   // for SD
+char            FrontView_Hours[]       = "Hours";
+char            FrontView_Mins[]        = "Mins";  
+char            FrontView_Secs[]        = "Secs";
+char            page_FrontView[]        = "page FrontView";
+char            page_FhssView[]         = "page FhssView"; 
+char            FhssView_Rlow[]         = "FHSSLow";
+char            FhssView_Rhigh[]        = "FHSSHigh";
+char            BindDonemsg[]           = "Bound!";
+char            BindScreenBox[]         = "BindStatus";
+char            NextionSleepTime[]      = "thsp=";           
+char            NextionWakeOnTouch[]    = "thup=1";
+char            NextionSleepNow[]       = "sleep=1";
+char            NextionWakeUp[]         = "sleep=0";
+char            ScreenViewTimeout[]     = "Sto";
+char            NoSleeping[]            = "thsp=0";
+int             ScreenTimeout           = 120;                          // Screen has two minute timeout by default
+char            HtextCMD[]              = "click HelpText,0";
+int             LastLinePosition        = 0;
+byte            RXCellCount             = 2;
+bool            JustHoppedFlag          = true;
+bool            LostPacketFlag          = true;
+bool            LostContactFlag         = true;
+byte            RecentPacketsLost       = 0;
+long int        RecoveryTimer           = 0;
+bool            ReconnectingFlag        = true;
+int             ReconnectTime           = 0;
+int             GapSum                  = 0;
+int             GapLongest              = 0;
+int             GapStart                = 0;
+int             ThisGap                 = 0;
+char            CalibrateNow[]          = "touch_j";
+char            ModelVolts[12]          = " ";
+char            ModelAltitude[12]       = " ";
+char            MaxAltitude[12]         = "0";
+float           MaxAlt                  = 0;
+char            ModelRoll[12]           = " ";
+char            ModelPitch[12]          = " ";
+char            ModelYaw[12]            = " ";
+char            ModelVersionNumber[12]  = " ";
+char            deletedmodel[]          = "Deleted"; 
+byte            ModelType               = 1;
+byte            rollp[5]; 
+byte            rolli[5]; 
+byte            rolld[5]; 
+byte            yawp[5];                 
+byte            yawi[5];              
+byte            yawd[5];         
+
+File            ModelsFileNumber;
+Compress        compress;
+
+Adafruit_INA219 ina219;
+const int       chipSelect              = BUILTIN_SDCARD;
+char            SingleModelFile[80];  
+bool            SingleModelFlag         = false;
+char            ModelsFile[]            = "models.dat";
+bool            ModelsFileOpen          = false; 
+bool            USE_INA219              = false;
+byte            BindingNow              = 0;
+int             BindingTimer            = 0;
+bool            BoundFlag               = false;
+int             PipeTimeout             = 0;
+float           VersionNumber           = TXVERSIONNUMBER;
+bool            Switch[8];
+byte            SwitchNumber[8]         = {Switch0,Switch1,Switch2,Switch3,Switch4,Switch5,Switch6,Switch7};
+
+
+char            TrimView_ch1[]          = "ch1";
+char            TrimView_ch2[]          = "ch2";
+char            TrimView_ch3[]          = "ch3";
+char            TrimView_ch4[]          = "ch4";
+char            TrimView_n1[]           = "n1";
+char            TrimView_n2[]           = "n2";
+char            TrimView_n3[]           = "n3";
+char            TrimView_n4[]           = "n4";
+char            TrimView_r1[]           = "r1";
+char            TrimView_r2[]           = "r2";
+char            TrimView_r3[]           = "r3";
+char            TrimView_r4[]           = "r4";
+
+char            Rollp[]                 = "Rollp";
+char            Rolli[]                 = "Rolli";
+char            Rolld[]                 = "Rolld";
+char            Yawp[]                  = "Yawp";
+char            Yawi[]                  = "Yawi";
+char            Yawd[]                  = "Yawd";
+char            Rp[]                    = "rp";
+char            Ri[]                    = "ri";
+char            Rd[]                    = "rd";
+char            Yp[]                    = "yp";
+char            Yi[]                    = "yi";
+char            Yd[]                    = "yd";
+char            GainsViewFM[]           = "fm";
+char            GainsViewMN[]           = "mn";
+
+
+byte            FMSwitch                = FLIGHTMODESWITCH;
+byte            AutoSwitch              = AUTOSWITCH;
+
+byte            Channel9Switch          = 0;
+byte            Channel10Switch         = 0;
+byte            Channel11Switch         = 0;
+byte            Channel12Switch         = 0;
+
+byte            Channel9SwitchValue      = 0;
+byte            Channel10SwitchValue     = 0;
+byte            Channel11SwitchValue     = 0;
+byte            Channel12SwitchValue     = 0;
+
+
+bool            Switch1Reversed         = false;
+bool            Switch2Reversed         = false;
+bool            Switch3Reversed         = false;
+bool            Switch4Reversed         = false;
+
+int             OneModelMemory          = 0;
+int             StartLocation           = 0;
+char            OKButton[]              = "GainsView.b10";
+char            SaveButton[]            = "GainsView.b0";
+char            OKTypeButton[]          = "TypeView.b10";
+char            SaveTypeButton[]        = "TypeView.b0";
+bool            ValueSent               = false;
+int             SwitchEditNumber        = 0;  // number of switch being edited
+uint32_t        ShowServoTimer          = 0;
+bool            LastFourOnly            = false; 
+byte            InPutStick[17]           = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};  //
+byte            ExportedFileCounter     = 0;
+char            TheFilesList[100][14];
+int             FileNumberInView        = 0;
+bool            FileError               = false;
+int             RangeTestStart          = 0;
+int             RangeTestGoodPackets    = 0;
+int             RangeTestLostPackets    = 0;
+float           success                 = 0; // percent of packets that  succeed
+byte            SaveFlightMode          = 0;
+bool            FailSafeChannel[CHANNELSUSED];
+bool            SaveFailSafeNow         = false;
+int             ChannelsLapped          = 0;
+char            ChannelNames[CHANNELSUSED][11] = {{"Aileron"},{"Elevator"},{"Throttle"},{"Rudder"},
+                                                 {"Gear"},  {"AUX1"},  {"AUX2"},  {"AUX3"},
+                                                 {"AUX4"},  {"AUX5"},  {"AUX6"},  {"AUX7"},
+                                                 {"AUX8"},  {"AUX9"},  {"AUX10"},  {"AUX11"}
+                                                 };
+
+bool            VoltsDetected = true;
+bool            TXWarningFlag = false;
+bool            RXWarningFlag = false;
+byte            PowerSetting=4;
+byte            DataRate=1;
+bool            ReInit = false;
+byte            ReInitCounter=0;
+uint32_t        ReInitTimer =0;
+uint32_t        TxOnTime=0;
+uint32_t        TxPace=0;
+bool            ModelDetected = false;
+uint16_t        CompressedData[COMPRESSEDWORDS]; // = 20 
+uint32_t        Inactivity_Timeout =10 * TICKSPERMINUTE;
+uint32_t        Inactivity_Start= 0;
+
+tmElements_t    tm;
+char            TxName[32] = {"Curtis Youngblood"};
+int             LastTimeRead=0;
+int             LastShowTime=0;
+int             LastDogKick=0;
+uint8_t         MacAddress[6];
+char            DateTime[]="DateTime";
+
+
+int             XtouchPlace=0;         // Clicked X
+int             YtouchPlace=0;         // Clicked Y
+bool            SetupFlag=false;       // No transmitter while setting up
+byte            zero = 0x00;           //workaround for issue #527 
+
+//********************************* // changing these four valiables controls LED blink and speed
+
+bool            LedIsBlinking = false;  
+float           BlinkHertz = 1; 
+uint32_t        BlinkTimer=0;
+uint8_t         BlinkOnPhase=1; 
+      
+
+// *************************** END OF DECLARATIONS ********************************************************************************
+
+// *************************** START OF FUNCTIONS *********************************************************************************
+
+byte decToBcd(byte val){return((val/10*16)+(val%10));}
+byte bcdToDec(byte val){return((val/16*10)+(val%16));}
+
+void AdjustDateTime(byte MinChange, byte HourChange, byte YearChange,byte MonthChange,byte DateChange){ 
+  byte second =      tm.Second; // 0-59
+  byte minute =      tm.Minute; // 0-59
+  byte hour =        tm.Hour;   // 0-23
+  byte weekDay  =    tm.Wday;   // 1-7
+  byte monthDay =    tm.Day;    // 1-31
+  byte month =       tm.Month;  // 1-12
+  byte year  =       tm.Year;   // 0-99
+  minute+=MinChange;
+  if (minute>59){minute=0;if (hour<23) {hour++;}}
+  if (minute<1) {minute=0;if (hour>0)  {hour--;}}
+  hour+=HourChange;
+  if (hour<0) hour=0;
+  if (hour>23) hour=23;
+  year+=YearChange;
+  if (year<0) year=0;
+  if (year>99) year=99;
+  month+=MonthChange;
+  if (month<1) month=1;
+  if (month>12) month=12;
+  monthDay+=DateChange;
+  if (monthDay<1) monthDay=1;
+  if (monthDay>31) monthDay=31;
+  year-=30;
+  second=0;
+  Wire.beginTransmission(DS1307_ADDRESS);
+  Wire.write(zero);                       //stop Oscillator
+  Wire.write(decToBcd(second));
+  Wire.write(decToBcd(minute));
+  Wire.write(decToBcd(hour));
+  Wire.write(decToBcd(weekDay));
+  Wire.write(decToBcd(monthDay));
+  Wire.write(decToBcd(month));
+  Wire.write(decToBcd(year));
+  Wire.write(zero); //start 
+  Wire.endTransmission();
+}
+
+void IncMinute(){
+  byte c=1;if (RTC.read(tm)) {AdjustDateTime(c,zero,zero,zero,zero);}
+}
+void DecMinute(){
+  byte c= -1; if (RTC.read(tm)) {AdjustDateTime(c,zero,zero,zero,zero);}
+}
+void IncHour(){
+  byte c=1;if (RTC.read(tm)) {AdjustDateTime(zero,c,zero,zero,zero);}
+}
+void DecHour(){
+  byte c=-1;if (RTC.read(tm)) {AdjustDateTime(zero,c,zero,zero,zero);}
+}
+void IncYear(){
+  byte c=1;if (RTC.read(tm)) {AdjustDateTime(zero,zero,c,zero,zero);}
+}
+void DecYear(){
+  byte c= -1; if (RTC.read(tm)) {AdjustDateTime(zero,zero,c,zero,zero);}
+}
+void IncMonth(){
+  byte c=1;if (RTC.read(tm)) {AdjustDateTime(zero,zero,zero,c,zero);}
+}
+void DecMonth(){
+  byte c= -1; if (RTC.read(tm)) {AdjustDateTime(zero,zero,zero,c,zero);}
+}
+void IncDate(){
+  byte c=1;if (RTC.read(tm)) {AdjustDateTime(zero,zero,zero,zero,c);}
+}
+void DecDate(){
+  byte c= -1; if (RTC.read(tm)) {AdjustDateTime(zero,zero,zero,zero,c);}
+}
+
+bool getTime(const char *str){
+  int Hour, Min, Sec;
+  if (sscanf(str, "%d:%d:%d", &Hour, &Min, &Sec) != 3) return false;
+  tm.Hour = Hour;
+  tm.Minute = Min;
+  tm.Second = Sec;
+  return true;                  
+}
+
+bool getDate(const char *str)
+{
+  char Month[12];
+  int Day, Year;
+  uint8_t monthIndex;
+  const char *monthName[12] = {
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+};
+  if (sscanf(str, "%s %d %d", Month, &Day, &Year) != 3) return false;
+   for (monthIndex = 0; monthIndex < 12; monthIndex++) {
+    if (strcmp(Month, monthName[monthIndex]) == 0) break;
+  }
+  if (monthIndex >= 12) return false;
+  tm.Day = Day;
+  tm.Month = monthIndex + 1;
+  tm.Year = CalendarYrToTm(Year);
+  return true;
+}
+
+void KickTheDog(){   
+  #ifdef  USE_WATCHDOG   
+             if (millis()-LastDogKick >= KICKRATE){
+                 LastDogKick=millis();
+                 TeensyWatchDog.feed();
+            }
+  #endif
+}
+
+void Reboot(){   
+  #ifdef  USE_WATCHDOG   
+            for (i=0;i<30;i++) {TeensyWatchDog.feed(); }   // Dog will explode when overfed       
+  #endif
+}
+
+void SendCommand(char* tbox){
+           Nextion.print(tbox); 
+                                  
+                              //    Serial.print (" Nextion TEST COMMAND: ");  // For wierd  session 
+                              //    Serial.println(tbox);
+          
+           for (i=0;i<3;i++) {Nextion.write (0xff);} // Send end of Input message
+}
+
+void SendText(char* tbox, char* NewWord){
+char txt[]=".txt=\"";
+char quote[]="\"";
+char CB[100];
+char TooLong[]="Too long!";
+
+             if (strlen(NewWord)>90) {strcpy(NewWord,TooLong);}
+             strcpy (CB,tbox);
+             strcat (CB,txt);
+             strcat (CB,NewWord);
+             strcat (CB,quote);
+             SendCommand(CB);
+}
+
+
+void SendText1(char* tbox, char* NewWord){
+char txt[]=".txt=\"";
+char quote[]="\"";
+char CB[1300];
+char TooLong[]="Too long!";
+
+             if (strlen(NewWord)>1250) {strcpy(NewWord,TooLong);}
+             strcpy (CB,tbox);
+             strcat (CB,txt);
+             strcat (CB,NewWord);
+             strcat (CB,quote);
+             SendCommand(CB);
+}
+
+
+char* Str(char *s, int n, int comma){
+int r,i,m,flag;
+char cma[] = ",";
+    flag=0;i=0;m=1000000000;if (n<0){s[0]='-';i=1;n=-n;} 
+    if (n==0){s[0]=48;s[1]=0;if (comma==1){strcat (s,cma);} return s;} 
+    while (m>=1){
+      r = n/m; if (r>0) {flag=1;}                //  first digit
+      if (flag==1){s[i]=48+r;i++;s[i]=0;}
+      n-=(r*m);m/=10; 
+    }    
+    if (comma==1) {strcat (s,cma);}
+    return s;
+} 
+
+
+bool MayBeAddZero(byte nn){
+    if (nn >= 0 && nn < 10) {return true;}
+    return false;
+}
+
+
+
+void ReadTime(){
+  static char month[12][15] = {"January","February","March","April","May","June","July","August","Sept","October","November","December"};
+  char NB[10];
+  char TimeString[50];
+  char Space[]= " ";
+  char colon[]= ":";
+  char zero[]= "0";
+ 
+  char Owner[]="Owner"; 
+  if (CurrentView==FrontView || CurrentView==Options_View) {
+    if (RTC.read(tm)) {   
+      strcpy (TimeString,Str(NB,tm.Day,0));
+      strcat (TimeString, Space);
+      strcat (TimeString, month[tm.Month-1]);
+      strcat (TimeString, Space);
+      strcat (TimeString, (Str(NB,tmYearToCalendar(tm.Year),0)));
+      strcat (TimeString, Space);
+      if (MayBeAddZero(tm.Hour)) strcat(TimeString,zero);
+      strcat (TimeString, Str(NB,tm.Hour,0));
+      strcat (TimeString, colon);
+      if (MayBeAddZero(tm.Minute)) strcat(TimeString,zero);
+      strcat (TimeString, Str(NB,tm.Minute,0));
+      strcat (TimeString, colon);
+      if (MayBeAddZero(tm.Second)) strcat(TimeString,zero);
+      strcat (TimeString, Str(NB,tm.Second,0));
+      SendText(DateTime,TimeString); SendText(Owner,TxName); 
+    }
+  }
+ }
+
+void StartInactvityTimeout(){
+     Inactivity_Start=millis();
+}
+
+uint8_t GetBrightness(){
+ if (LedIsBlinking) {if ((millis()-BlinkTimer) > (500 / BlinkHertz)) {BlinkOnPhase ^= 1; BlinkTimer=millis();}} else {BlinkOnPhase=1;}
+ if (BlinkOnPhase)  {switch (PowerSetting){case 1:return 1;case 2:return 4;case 3:return 16;case 4:return 32;default:return 1;}return 1;}else{return 0;}
+}
+void RedLedOn(){
+  analogWrite(GREENLED,0);
+  analogWrite(BLUELED,0);
+  analogWrite(REDLED,GetBrightness());     // Brightness is a function of transmission powersetting and maybe blinking
+}
+void GreenLedOn(){
+  analogWrite(BLUELED,0);
+  analogWrite(REDLED,0); 
+  analogWrite(GREENLED,GetBrightness());   // Brightness is a function of transmission powersetting and maybe blinking
+}
+void BlueLedOn(){ 
+  analogWrite(REDLED,0);
+  analogWrite(GREENLED,0);
+  analogWrite(BLUELED,GetBrightness());    // Brightness is a function of transmission powersetting and maybe blinking
+}
+
+
+
+
+uint16_t mp(byte lowres){return map(lowres,0,180,MINMICROS,MAXMICROS);}    // This returns the 5 curve-points at the higher resolution
+ 
+
+
+
+void ClearText(){
+  for (i=0; i<CharsMax; i++){
+    WordsIn[i]=char(0);
+    TextIn[i]=0;
+  }
+  i=0;
+}
+
+// *******************************************************************************************************
+// ***************************  Nextion functions  *******************************************************
+// *******************************************************************************************************
+
+
+void EndSend(){
+      for (int pp=0;pp<3;pp++) Nextion.write (0xff); // Send end of Input message
+      delay(65);                              // ** A DELAY ** (>=50 ms) is needed if an answer might come!
+} 
+
+
+
+void SendValue(char* nbox, int value) {
+char Val[]=".val=";
+char CB[100];
+char NB[25]; 
+             strcpy (CB,nbox);
+             strcat (CB,Val);
+             strcat (CB,Str(NB,value,0));
+             SendCommand(CB);
+             ValueSent=true;
+             
+}
+
+void GetTextIn(){
+      ClearText();
+      if (Nextion.available()){ 
+          delay(10);
+          while (Nextion.available()){
+              TextIn[i]=byte(Nextion.read());
+              if (i<CharsMax) i++; 
+          }  
+  }
+}
+
+
+int   GetValue(char* nbox){   
+double   ValueIn = 0 ;
+char GET[] = "get ";
+char VAL[] = ".val";
+char CB[100];
+            strcpy(CB,GET);
+            strcat(CB,nbox);
+            strcat(CB,VAL);
+            Nextion.print(CB); 
+           
+            EndSend();
+            GetTextIn();
+            if (TextIn[0] == 'q') {      
+                ValueIn  =  TextIn[1];        // Collect and build 32 bit value from 4 bytes
+                ValueIn += (TextIn[2]<<8);
+                ValueIn += (TextIn[3]<<16);
+                ValueIn += (TextIn[4]<<24);
+            }  
+           return ValueIn; 
+           //Serial.println(strlen(CB));
+}
+
+void GetWordsIn(){
+      char a=0;
+      ClearText();
+      if (Nextion.available()){  
+            delay(10);
+            while (Nextion.available()){
+            a=char(Nextion.read());
+            TextIn[i]=a;
+            WordsIn[i]=char(a);
+            if (i<CharsMax) i++; 
+          }
+          WordsIn[i]=char(0); // Terminator?
+       }
+}
+
+bool GetButtonPress(){
+  bool ButtonPressed = false; 
+  char a;   
+  i=0;  
+      if (Nextion.available()){  
+         ButtonPressed=true; 
+         delay(10);
+         while (Nextion.available()){      
+            a=char(Nextion.read());
+            if (a>31 && a<128) {
+              WordsIn[i]=a;
+              WordsIn[i+1]=char(0);
+            }
+            if (i<CharsMax) i++;
+         } 
+      }  
+      return ButtonPressed;
+}   
+
+
+void SendValue1(char* nbox, int value) {
+char CB[100];
+char NB[25]; 
+             strcpy (CB,nbox);
+             strcat (CB,Str(NB,value,0));
+             SendCommand(CB);         
+}
+
+
+uint8_t um(uint16_t bv){
+  return (map(bv,MINMICROS,MAXMICROS,0,100));  // lower res is enough on display
+}
+
+void CheckTimer(){  
+    if (FlightMode < 4 && !LostContactFlag ){
+          Secs=((millis()-TimerMillis)/1000)+PausedSecs;   
+              Hours=Secs/3600;Secs%=3600;
+              Mins=Secs/60;Secs%=60;  
+    }
+    if (CurrentView == FrontView){
+              if (LastSeconds!=Secs){
+                  SendValue(FrontView_Secs,Secs);
+                  SendValue(FrontView_Mins,Mins);
+                  SendValue(FrontView_Hours,Hours);
+                  LastSeconds=Secs;
+              }
+    }
+    
+}
+
+void ShowServoPos(){ 
+
+char SticksView_Ch1[]     = "Ch1";
+char SticksView_Ch2[]     = "Ch2";
+char SticksView_Ch3[]     = "Ch3";
+char SticksView_Ch4[]     = "Ch4";
+char SticksView_Ch5[]     = "Ch5";
+char SticksView_Ch6[]     = "Ch6";
+char SticksView_Ch7[]     = "Ch7";
+char SticksView_Ch8[]     = "Ch8";
+char SticksView_Ch9[]     = "Ch9";
+char SticksView_Ch10[]    = "Ch10";
+char SticksView_Ch11[]    = "Ch11";
+char SticksView_Ch12[]    = "Ch12";
+char SticksView_Ch13[]    = "Ch13";
+char SticksView_Ch14[]    = "Ch14";
+char SticksView_Ch15[]    = "Ch15";
+char SticksView_Ch16[]    = "Ch16";
+char CalibrateView_Ch1[]  = "Ch1";
+char CalibrateView_Ch2[]  = "Ch2";
+char CalibrateView_Ch3[]  = "Ch3";
+char CalibrateView_Ch4[]  = "Ch4";
+char CalibrateView_Ch5[]  = "Ch5";
+char CalibrateView_Ch6[]  = "Ch6";
+char CalibrateView_Ch7[]  = "Ch7";
+char CalibrateView_Ch8[]  = "Ch8";
+char ChannelInput[]       = "Input";
+char ChannelOutput[]      = "Output";
+
+int l                    = 0;
+int l1                   = 0;
+int LeastDistance        = 2;    // if the change is small, don't re-display anything - to reduce flashing.
+
+              if (CurrentView==CalibrateView){
+                          if (abs(SendBuffer[0]- ShownBuffer[0])>LeastDistance) {SendValue(CalibrateView_Ch1,um(SendBuffer[0]));   ShownBuffer[0] = SendBuffer[0];}
+                          if (abs(SendBuffer[1]- ShownBuffer[1])>LeastDistance) {SendValue(CalibrateView_Ch2,um(SendBuffer[1]));   ShownBuffer[1] = SendBuffer[1];}
+                          if (abs(SendBuffer[2]- ShownBuffer[2])>LeastDistance) {SendValue(CalibrateView_Ch3,um(SendBuffer[2]));   ShownBuffer[2] = SendBuffer[2];}
+                          if (abs(SendBuffer[3]- ShownBuffer[3])>LeastDistance) {SendValue(CalibrateView_Ch4,um(SendBuffer[3]));   ShownBuffer[3] = SendBuffer[3];}
+                          if (abs(SendBuffer[4]- ShownBuffer[4])>LeastDistance) {SendValue(CalibrateView_Ch5,um(SendBuffer[4]));   ShownBuffer[4] = SendBuffer[4];}
+                          if (abs(SendBuffer[5]- ShownBuffer[5])>LeastDistance) {SendValue(CalibrateView_Ch6,um(SendBuffer[5]));   ShownBuffer[5] = SendBuffer[5];}
+                          if (abs(SendBuffer[6]- ShownBuffer[6])>LeastDistance) {SendValue(CalibrateView_Ch7,um(SendBuffer[6]));   ShownBuffer[6] = SendBuffer[6];}
+                          if (abs(SendBuffer[7]- ShownBuffer[7])>LeastDistance) {SendValue(CalibrateView_Ch8,um(SendBuffer[7]));   ShownBuffer[7] = SendBuffer[7];}
+                         
+                                
+              }         
+              if (CurrentView == SticksView) {                      
+                          if (abs(SendBuffer[0]- ShownBuffer[0])>LeastDistance) {SendValue(SticksView_Ch1,um(SendBuffer[0]));      ShownBuffer[0] = SendBuffer[0];}
+                          if (abs(SendBuffer[1]- ShownBuffer[1])>LeastDistance) {SendValue(SticksView_Ch2,um(SendBuffer[1]));      ShownBuffer[1] = SendBuffer[1];}
+                          if (abs(SendBuffer[2]- ShownBuffer[2])>LeastDistance) {SendValue(SticksView_Ch3,um(SendBuffer[2]));      ShownBuffer[2] = SendBuffer[2];}
+                          if (abs(SendBuffer[3]- ShownBuffer[3])>LeastDistance) {SendValue(SticksView_Ch4,um(SendBuffer[3]));      ShownBuffer[3] = SendBuffer[3];}
+                          if (abs(SendBuffer[4]- ShownBuffer[4])>LeastDistance) {SendValue(SticksView_Ch5,um(SendBuffer[4]));      ShownBuffer[4] = SendBuffer[4];}
+                          if (abs(SendBuffer[5]- ShownBuffer[5])>LeastDistance) {SendValue(SticksView_Ch6,um(SendBuffer[5]));      ShownBuffer[5] = SendBuffer[5];}
+                          if (abs(SendBuffer[6]- ShownBuffer[6])>LeastDistance) {SendValue(SticksView_Ch7,um(SendBuffer[6]));      ShownBuffer[6] = SendBuffer[6];}
+                          if (abs(SendBuffer[7]- ShownBuffer[7])>LeastDistance) {SendValue(SticksView_Ch8,um(SendBuffer[7]));      ShownBuffer[7] = SendBuffer[7];}
+                          if (abs(SendBuffer[8]- ShownBuffer[8])>LeastDistance) {SendValue(SticksView_Ch9,um(SendBuffer[8]));      ShownBuffer[8] = SendBuffer[8];}
+                          if (abs(SendBuffer[9]- ShownBuffer[9])>LeastDistance) {SendValue(SticksView_Ch10,um(SendBuffer[9]));     ShownBuffer[9] = SendBuffer[9];}
+                          if (abs(SendBuffer[10]-ShownBuffer[10])>LeastDistance){SendValue(SticksView_Ch11,um(SendBuffer[10]));    ShownBuffer[10]= SendBuffer[10];}
+                          if (abs(SendBuffer[11]-ShownBuffer[11])>LeastDistance){SendValue(SticksView_Ch12,um(SendBuffer[11]));    ShownBuffer[11]= SendBuffer[11];}                         
+                          if (abs(SendBuffer[12]-ShownBuffer[12])>LeastDistance){SendValue(SticksView_Ch13,um(SendBuffer[12]));    ShownBuffer[12]= SendBuffer[12];}
+                          if (abs(SendBuffer[13]-ShownBuffer[13])>LeastDistance){SendValue(SticksView_Ch14,um(SendBuffer[13]));    ShownBuffer[13]= SendBuffer[13];}
+                          if (abs(SendBuffer[14]-ShownBuffer[14])>LeastDistance){SendValue(SticksView_Ch15,um(SendBuffer[14]));    ShownBuffer[14]= SendBuffer[14];}
+                          if (abs(SendBuffer[15]-ShownBuffer[15])>LeastDistance){SendValue(SticksView_Ch16,um(SendBuffer[15]));    ShownBuffer[15]= SendBuffer[15];} 
+               
+               }
+              if (CurrentView == GraphView) {                                                                        // Display current stick and output values
+                    if (ChanneltoSet<=8){                                
+                      l= (InPutStick[ChanneltoSet-1]);l1=analogRead(AnalogueInput[l]); 
+                      if(l1<=ChannelCentre[l]){
+                          SendValue(ChannelInput,map(l1,ChannelCentre[l],ChannelMin[l],0,-100)); 
+                      }else{
+                          SendValue(ChannelInput,map(l1,ChannelCentre[l],ChannelMax[l],0,100)); 
+                      }                      
+                          SendValue(ChannelOutput,map(SendBuffer[ChanneltoSet-1],MINMICROS,MAXMICROS,-100,100));          
+                      }
+                     }else{   
+                      SendValue(ChannelInput,0);   
+                      SendValue(ChannelOutput,0);                 
+                     } 
+             }                         
+
+
+
+// ******************************************************************************************************************
+// ************************* SHOW COMMS *****************************************************************************
+// ******************************************************************************************************************
+
+void ShowComms() {
+bool ShowNow=false;  
+char na[] = "";              
+char FrontView_Connected[]    = "FrontView.Connected";
+char FrontView_AckPayload[]   = "FrontView.AckPayload";  
+char FrontView_RXBV[]         = "FrontView.RXBV";  
+char FrontView_TXBV[]         = "FrontView.TXBV"; 
+char Not_Connected[]          = "Not connected";
+char Msg_Connected[]          = "** Connected! **";
+char Msg_BindNeeded[]         = ">>>BIND MODEL?>>>";
+char DataView_pps[]           = "DataView.pps";
+char DataView_lps[]           = "DataView.lps";
+char DataView_Alt[]           = "DataView.alt";
+char DataView_MaxAlt[]        = "DataView.MaxAlt";
+char DataView_roll[]          = "DataView.roll";
+char DataView_pitch[]         = "DataView.pitch";
+char DataView_yaw[]           = "DataView.yaw";
+char DataView_txv[]           = "DataView.txv";
+char DataView_rxv[]           = "DataView.rxv";
+char DataView_chav[]          = "DataView.chav";
+char DataView_Ls[]            = "DataView.Ls";
+char DataView_Ts[]            = "DataView.Ts";
+char DataView_Sc[]            = "DataView.Success";
+char WarnNow[]                = "vis Warning,1";
+char WarnOff[]                = "vis Warning,0";
+char TXVolts[]                = "FrontView.t21";
+float Volts                   =  0; 
+char Vbuf[12];
+char pc[] = "%";
+char v[] = "V, ";
+float txv = 0;
+int   txpc=0;
+char LiFe2s[] = " 2s LiFe,  ";
+char LiPo2s[] = " 2s LiPo,  ";
+char LiPo3s[] = " 3s LiPo,  ";
+char LiPo4s[] = " 4s LiPo,  ";
+char LiPo5s[] = " 5s LiPo,  ";
+char LiPo6s[] = " 6s LiPo,  ";
+char PerCell[] = "V/C";
+char RXBattInfo[55];
+char RXBattNA[] = "(No data)";
+char RXBattNV[] = "    ";
+char TXBattInfo[55];
+float ReadVolts = 0; 
+float VoltsPerCell = 0;
+      
+                      if (CurrentView==FrontView || CurrentView==DataView) {
+                        if (millis()-LastShowTime>1000) {ShowNow=true;}
+                      }
+                      if (ShowNow){
+                              LastShowTime=millis();
+                              if (USE_INA219){
+                              txv=(ina219.getBusVoltage_V())*100;
+                             
+                              txpc = map(txv,512,670,0,100);                                    // LiFePo4 Battery 2.6 ->3.5  volts per cell
+                              if (txpc<LOWBATTERY) {TXWarningFlag=true;}
+                              dtostrf(txpc, 0, 0, Vbuf);
+                              strcat(Vbuf,pc);
+                              if (CurrentView==FrontView)  SendText(TXVolts,Vbuf);   
+                              txv/=100;
+                              dtostrf(txv, 1, 1, Vbuf);
+                              strcpy(TXBattInfo,Vbuf);
+                              strcat(TXBattInfo,v);
+                              txv/=2;
+                              strcat(TXBattInfo,LiFe2s);
+                              dtostrf(txv, 2, 2, Vbuf);
+                              strcat(TXBattInfo,Vbuf);
+                              strcat(TXBattInfo,PerCell);
+                              if (CurrentView==FrontView) SendText(FrontView_TXBV,TXBattInfo);  
+                              dtostrf(VersionNumber, 2, 2, Vbuf);              // TX Version Number
+                              if(CurrentView == DataView) SendText(DataView_txv,Vbuf);
+                              
+                           }
+                           if(!LostContactFlag){
+                                          if((CurrentView == FrontView)){
+                                            if (!BoundFlag){
+                                                 SendText(FrontView_Connected,Msg_BindNeeded); 
+                                              }else{
+                                                 SendText(FrontView_Connected,Msg_Connected);    
+                                                 if (BoundFlag==true) {
+                                                   GreenLedOn();
+                                                   StartInactvityTimeout();
+                                                   }   
+                                              }  
+                                            }
+                                          if(CurrentView == DataView){
+                                            SendValue(DataView_pps,PacketsPerSecond);    
+                                            SendValue(DataView_lps,LostPackets);  
+                                            SendText(DataView_Alt,ModelAltitude);  
+                                            SendText(DataView_MaxAlt,MaxAltitude);  
+                                            SendText(DataView_roll,ModelRoll); 
+                                            SendText(DataView_pitch,ModelPitch);  
+                                            SendText(DataView_yaw,ModelYaw); 
+                                            SendText(DataView_rxv,ModelVersionNumber);     // RX Version Number  
+                                            SendValue(DataView_chav,BadChannelPointer+ChannelsLapped); 
+                                            SendValue(DataView_Ls,GapLongest);             // millis
+                                            SendValue(DataView_Ts,GapSum);                 // millis
+                                            SendValue(DataView_Sc,success);        
+                                          }
+                                          ReadVolts=atof(ModelVolts)*10;
+                                          // 6s Max 25.2 -> 20.4
+                                          // 5s Max 21.0 -> 17.0
+                                          // 4s Max 16.8 -> 13.6
+                                          // 3s Max 12.6 -> 10.2
+                                          // 2s Max 8.4  -> 6.8
+                                          if (RXCellCount==6) Volts = map(ReadVolts,204,252,0,100); // works for 6s batteries (*10)
+                                          if (RXCellCount==5) Volts = map(ReadVolts,170,210,0,100); // works for 5s batteries (*10)
+                                          if (RXCellCount==4) Volts = map(ReadVolts,136,168,0,100); // works for 4s batteries (*10)    
+                                          if (RXCellCount==3) Volts = map(ReadVolts,102,126,0,100); // works for 3s batteries (*10)
+                                          if (RXCellCount==2) Volts = map(ReadVolts,68,84,0,100);   // works for 2s batteries (*10) 
+                                          
+                                          if (VoltsDetected){Volts = constrain (Volts,0,100);                                          
+                                                if (Volts<=LOWBATTERY && Volts>0) {RXWarningFlag=true;}else{RXWarningFlag=false;}
+                                          }
+                                          if (VoltsDetected){ 
+                                              dtostrf(Volts, 0, 0, Vbuf);
+                                              strcat(Vbuf,pc);
+                                              if (BoundFlag &&  CurrentView==FrontView) SendText(FrontView_AckPayload,Vbuf);                                 
+                                              strcpy(RXBattInfo,ModelVolts); 
+                                              strcat(RXBattInfo,v);
+                                              if (RXCellCount==6) strcat(RXBattInfo,LiPo6s);
+                                              if (RXCellCount==5) strcat(RXBattInfo,LiPo5s);
+                                              if (RXCellCount==4) strcat(RXBattInfo,LiPo4s); 
+                                              if (RXCellCount==3) strcat(RXBattInfo,LiPo3s); 
+                                              if (RXCellCount==2) strcat(RXBattInfo,LiPo2s); 
+                                              VoltsPerCell = (ReadVolts/RXCellCount)/10;
+                                              dtostrf(VoltsPerCell, 2, 2, Vbuf); 
+                                              strcat(RXBattInfo,Vbuf);
+                                              strcat(RXBattInfo,PerCell);
+                                              if (BoundFlag  &&  CurrentView==FrontView) SendText(FrontView_RXBV,RXBattInfo); 
+                                           }
+                                            if (!VoltsDetected){    
+                                            if (BoundFlag  &&  CurrentView==FrontView) SendText(FrontView_RXBV,RXBattNA); 
+                                            if (BoundFlag &&  CurrentView==FrontView) SendText(FrontView_AckPayload,RXBattNV);           
+                                           }
+                                    }else{  
+                                          if (BoundFlag){
+                                            if (CurrentView==DataView) {
+                                                PacketsPerSecond=0;
+                                                SendValue(DataView_pps,PacketsPerSecond);    
+                                                SendValue(DataView_lps,LostPackets); 
+                                            
+                                            }         
+                                            
+                                            if (CurrentView==FrontView) {
+                                                  SendText(FrontView_Connected,Not_Connected);
+                                                  SendText(FrontView_RXBV,na);                // data not available
+                                                  SendText(FrontView_AckPayload,na);
+                                                   
+                                            }  
+                                          }                                 
+                                }
+                       }    
+                        if (CurrentView==FrontView){
+                          if (RXWarningFlag || TXWarningFlag) {SendCommand(WarnNow);}
+                            if (!RXWarningFlag){if (!TXWarningFlag){SendCommand(WarnOff);}}
+                        }
+                     }
+
+
+void FailedPacket(){
+int secondsRemaining;
+
+                LostPacketFlag=true;
+                GapStart = millis();  // keep track of gaps' length
+                RecentPacketsLost++;
+                if (RecentPacketsLost>10) {
+                    LostContactFlag=true;
+                    ModelDetected=false;
+                    RecentPacketsLost=0;
+                    RedLedOn();
+                    ShowComms();
+                    if (CurrentView!=FrontView){
+                        SetupFlag=true;
+                        BlueLedOn();
+                    }
+                }
+                LostPackets++;
+                ShowComms();  
+                secondsRemaining= (Inactivity_Timeout/1000) - (millis()-Inactivity_Start)/1000;
+                if (secondsRemaining<=0) digitalWrite(POWER_OFF_PIN,HIGH);                         // INACTIVITY POWER OFF 
+}
+
+//   ********************* Send 13 joined together char arrays to Nextion **********************************************************************************
+
+void SendCharArray(char* ch0, char* ch1,char* ch2,char* ch3,char* ch4,char* ch5, char* ch6, char* ch7,char* ch8,char* ch9,char* ch10,char* ch11,char* ch12){
+                    strcpy (ch0,ch1);
+                    strcat (ch0,ch2);
+                    strcat (ch0,ch3);
+                    strcat (ch0,ch4);
+                    strcat (ch0,ch5);
+                    strcat (ch0,ch6);
+                    strcat (ch0,ch7);
+                    strcat (ch0,ch8);
+                    strcat (ch0,ch9);
+                    strcat (ch0,ch10);
+                    strcat (ch0,ch11);
+                    strcat (ch0,ch12);
+                    SendCommand(ch0);
+                }
+     
+//*******************************************************************************************************************************************************
+
+#define  xx1 90 // was 75
+#define  yy1 90 // Needed below... Edit xx1,yy1 to move box
+
+void DrawFhssBox(){    
+int x1 = xx1;         
+int y1 = yy1;
+int x2=x1+(128*5);
+int y2=y1+255;
+int xd = 20;           // half of 40 which is character width
+int xd1= 24;           
+char STR126[]       = "\"127\"";
+char STR126GHZ[]    = "\"2.527\"";
+char STR96[]        = "\"96\"";
+char STR96GHZ[]     = "\"2.496\"";
+char STR64[]        = "\"64\"";
+char STR64GHZ[]     = "\"2.464\"";
+char STR32[]        = "\"32\"";
+char STR32GHZ[]     = "\"2.432\"";
+char STR1[]         = "\"0\"";
+char STR1GHZ[]      = "\"2.400\"";
+char GHZ[]          = "\"GHz:\"";
+char CH[]           = "\"Ch:\"";
+char CB[150];      // COMMAND BUFFER
+char draw[] = "draw "; 
+char xstr[] = "xstr ";
+char fyll[] = "fill ";
+char NB[12];        // Number Buffers
+char NB1[12];         
+char NB2[12];       
+char NB3[12];       
+char NB4[12];         
+char NB5[12];         
+char NB6[12];       
+char NB7[12];       
+char NB8[12];       
+char NA[1]   = ""  ; // blank one     
+char whyte[] = "WHITE";
+char whyte1[]= "WHITE,"; // ... with a comma 
+                             
+     SendCharArray(CB,draw,Str(NB1,x1,1),Str(NB2,y1,1),Str(NB3,x2,1),Str(NB4,y2,1),whyte,NA,NA,NA,NA,NA,NA);
+     SendCharArray(CB,xstr,Str(NB,x1-xd,1),Str(NB1,y2+4,1),Str(NB2,40,1),Str(NB3,25,1),Str(NB4,0,1),whyte1,Str(NB5,214,1),Str(NB6,1,1),Str(NB7,1,1),Str(NB8,1,1),STR1); 
+     SendCharArray(CB,xstr,Str(NB,30,1),Str(NB1,y2+4,1),Str(NB2,40,1),Str(NB3,25,1),Str(NB4,0,1),whyte1,Str(NB5,214,1),Str(NB6,1,1),Str(NB7,1,1),Str(NB8,1,1),CH);                 
+     SendCharArray(CB,xstr,Str(NB,16,1),Str(NB1,y2+25,1),Str(NB2,50,1),Str(NB3,25,1),Str(NB4,0,1),whyte1,Str(NB5,214,1),Str(NB6,1,1),Str(NB7,1,1),Str(NB8,1,1),GHZ); 
+     SendCharArray(CB,xstr,Str(NB,x1-xd1,1),Str(NB1,y2+25,1),Str(NB2,60,1),Str(NB3,25,1),Str(NB4,0,1),whyte1,Str(NB5,214,1),Str(NB6,1,1),Str(NB7,1,1),Str(NB8,1,1),STR1GHZ);     
+     SendCharArray(CB,xstr,Str(NB,x1+((x2-x1)/4)-xd,1),Str(NB1,y2+4,1),Str(NB2,40,1),Str(NB3,25,1),Str(NB4,0,1),whyte1,Str(NB5,214,1),Str(NB6,1,1),Str(NB7,1,1),Str(NB8,1,1),STR32);       
+     SendCharArray(CB,xstr,Str(NB,(x1+((x2-x1)/4)-xd1),1),Str(NB1,y2+25,1),Str(NB2,60,1),Str(NB3,25,1),Str(NB4,0,1),whyte1,Str(NB5,214,1),Str(NB6,1,1),Str(NB7,1,1),Str(NB8,1,1),STR32GHZ);                
+     SendCharArray(CB,xstr,Str(NB,(x1+((x2-x1)/2)-xd),1),Str(NB1,y2+4,1),Str(NB2,40,1),Str(NB3,25,1),Str(NB4,0,1),whyte1,Str(NB5,214,1),Str(NB6,1,1),Str(NB7,1,1),Str(NB8,1,1),STR64);    
+     SendCharArray(CB,xstr,Str(NB,(x1+((x2-x1)/2)-xd1),1),Str(NB1,y2+25,1),Str(NB2,60,1),Str(NB3,25,1),Str(NB4,0,1),whyte1,Str(NB5,214,1),Str(NB6,1,1),Str(NB7,1,1),Str(NB8,1,1),STR64GHZ);    
+     SendCharArray(CB,xstr,Str(NB,(x1+(((x2-x1)/4)*3)-xd),1),Str(NB1,y2+4,1),Str(NB2,40,1),Str(NB3,25,1),Str(NB4,0,1),whyte1,Str(NB5,214,1),Str(NB6,1,1),Str(NB7,1,1),Str(NB8,1,1),STR96);     
+     SendCharArray(CB,xstr,Str(NB,(x1+(((x2-x1)/4)*3)-xd1),1),Str(NB1,y2+25,1),Str(NB2,60,1),Str(NB3,25,1),Str(NB4,0,1),whyte1,Str(NB5,214,1),Str(NB6,1,1),Str(NB7,1,1),Str(NB8,1,1),STR96GHZ);     
+     SendCharArray(CB,xstr,Str(NB,(x2-xd),1),Str(NB1,y2+4,1),Str(NB2,40,1),Str(NB3,25,1),Str(NB4,0,1),whyte1,Str(NB5,214,1),Str(NB6,1,1),Str(NB7,1,1),Str(NB8,1,1),STR126);
+     SendCharArray(CB,xstr,Str(NB,(x2-xd1),1),Str(NB1,y2+25,1),Str(NB2,60,1),Str(NB3,25,1),Str(NB4,0,1),whyte1,Str(NB5,214,1),Str(NB6,1,1),Str(NB7,1,1),Str(NB8,1,1),STR126GHZ);
+     SendCharArray(CB,fyll,Str(NB,(x1+1),1),Str(NB1,(y1+1),1),Str(NB2,((128*5)-2),1),Str(NB3,254,1),Str(NB4,214,0),NA,NA,NA,NA,NA,NA);                         
+}
+
+
+
+
+void SendMixValues(){  
+
+char MixesView_Enabled[]        =  "MixesView.Enabled";
+char MixesView_FlightMode[]     =  "MixesView.FlightMode";
+char MixesView_MasterChannel[]  =  "MixesView.MasterChannel";
+char MixesView_SlaveChannel[]   =  "MixesView.SlaveChannel";
+char MixesView_Reversed[]       =  "MixesView.Reversed";
+char MixesView_Percent[]        =  "MixesView.Percent";
+char MixesView_h0[]             =  "MixesView.h0";            // =the slider control
+char MixesView_chM[]            = "MixesView.chM";
+char MixesView_chS[]            = "MixesView.chS";
+             
+                  
+                  SendText(MixesView_chM,ChannelNames[Mixes[MixNumber][M_MasterChannel]-1]);
+                  SendText(MixesView_chS,ChannelNames[Mixes[MixNumber][M_SlaveChannel]-1]);                  
+                  SendValue(MixesView_Enabled, Mixes[MixNumber][M_Enabled]); 
+                  SendValue(MixesView_FlightMode, Mixes[MixNumber][M_FlightMode]);
+                  if (Mixes[MixNumber][M_MasterChannel]==0)Mixes[MixNumber][M_MasterChannel]=1;
+                  SendValue(MixesView_MasterChannel,Mixes[MixNumber][M_MasterChannel]);
+                  if (Mixes[MixNumber][M_SlaveChannel]==0)Mixes[MixNumber][M_SlaveChannel]=1;
+                  SendValue(MixesView_SlaveChannel,Mixes[MixNumber][M_SlaveChannel]);            
+                  SendValue(MixesView_Reversed,Mixes[MixNumber][M_Reversed]);
+                  if (Mixes[MixNumber][M_Percent]==0)Mixes[MixNumber][M_Percent]=100;
+                  if(Mixes[MixNumber][M_SlaveChannel]==Mixes[MixNumber][M_MasterChannel]) {
+                        Mixes[MixNumber][M_SlaveChannel]++;
+                        SendValue(MixesView_SlaveChannel,Mixes[MixNumber][M_SlaveChannel]);     
+                  }
+                  SendValue(MixesView_Percent,Mixes[MixNumber][M_Percent]); 
+                  SendValue(MixesView_h0,Mixes[MixNumber][M_Percent]); 
+          }
+
+int GetNextNumber(int p1,char text1[CharsMax])   
+{
+char text2[CharsMax];
+int j=0;
+        i=p1-1;
+        j=0;
+        while (isDigit(text1[i])&&i<CharsMax)
+        {text2[j]=text1[i];i++;j++;text2[j]=0;}
+        i=j; // = strlen only simpler
+        if (i==3)
+        {     j= (text2[0]-48)*100;
+              j+=(text2[1]-48)*10;
+              j+=(text2[2]-48);
+        }
+        if (i==2)
+        {
+              j= (text2[0]-48)*10;
+              j+=(text2[1]-48);     
+        }
+        if (i==1) j=(text2[0]-48);
+        return j;
+}
+
+
+short unsigned int GetStickInput(byte l){    // This bit needs to be optimised but it works well enough.
+short unsigned int k=0;
+
+if (l==8) {
+          if (Channel9SwitchValue  == 0)   k    = mp(MinDegrees[FlightMode][8]);        
+          if (Channel9SwitchValue  == 90)  k    = mp(CentreDegrees[FlightMode][8]);    
+          if (Channel9SwitchValue  == 180) k    = mp(MaxDegrees[FlightMode][8]);  
+}
+
+
+if (l==9) {
+          if (Channel10SwitchValue  == 0)   k    = mp(MinDegrees[FlightMode][9]);        
+          if (Channel10SwitchValue  == 90)  k    = mp(CentreDegrees[FlightMode][9]);    
+          if (Channel10SwitchValue  == 180) k    = mp(MaxDegrees[FlightMode][9]);  
+}
+
+if (l==10) {
+          if (Channel11SwitchValue  == 0)   k    = mp(MinDegrees[FlightMode][10]);        
+          if (Channel11SwitchValue  == 90)  k    = mp(CentreDegrees[FlightMode][10]);    
+          if (Channel11SwitchValue  == 180) k    = mp(MaxDegrees[FlightMode][10]);  
+}
+
+
+if (l==11) {
+          if (Channel12SwitchValue  == 0)   k    = mp(MinDegrees[FlightMode][11]);        
+          if (Channel12SwitchValue  == 90)  k    = mp(CentreDegrees[FlightMode][11]);    
+          if (Channel12SwitchValue  == 180) k    = mp(MaxDegrees[FlightMode][11]);  
+}
+          if (l>11)  k    = mp(CentreDegrees[FlightMode][InPutStick[l]]); // ?? 
+          return k;
+}
+
+// ***************************************** MIXES *********************************************************************
+// *********************************************************************************************************************
+// *********************************************************************************************************************
+
+void DoMixes(){  
+int m,c,p,mindeg,maxdeg,TheSum,Result;
+    for (m=1;m<=MAXMIXES;m++){
+      if (Mixes[m][M_FlightMode]==FlightMode || Mixes[m][M_FlightMode]==0){   
+       if (Mixes[m][M_Enabled]==1){  
+         for (c=0;c<CHANNELSUSED;c++){            
+          if ((Mixes[m][M_MasterChannel]-1)==c){        
+            p = map(PreMixBuffer[c],MINMICROS,MAXMICROS,-HALFMICROSRANGE,HALFMICROSRANGE);   
+            p = p*Mixes[m][M_Percent]/50;       // *****  50, not 100, because mix can now go right to 200% *****
+            if (Mixes[m][M_Reversed]==1) p=-p;
+            TheSum=SendBuffer[(Mixes[m][M_SlaveChannel])-1]+p;
+            mindeg=mp(MinDegrees[FlightMode][(Mixes[m][M_SlaveChannel])-1]);
+            maxdeg=mp(MaxDegrees[FlightMode][(Mixes[m][M_SlaveChannel])-1]);
+            if (mindeg>maxdeg) {Result=constrain(TheSum,maxdeg,mindeg);}
+            else               {Result=constrain(TheSum,mindeg,maxdeg);}
+            SendBuffer[(Mixes[m][M_SlaveChannel])-1]=Result;
+          }
+        }
+      }
+    }
+  }
+}
+
+
+float MapExp(float xx, float Xxmin, float Xxmax,float Yymin, float Yymax,float Expo){   // heer
+        Expo=map(Expo,-100,100,0,1);xx=pow(xx*xx,Expo);Xxmin=pow(Xxmin*Xxmin,Expo);Xxmax=pow(Xxmax*Xxmax,Expo);
+        return map(xx,Xxmin,Xxmax,Yymin,Yymax);;
+}
+
+
+// *********************************************************************************************************************
+// **************************** GET NEW SERVO POSITIONS ****************************************************************
+// *********************************************************************************************************************
+
+void get_new_channels_values() {
+short unsigned int k=0,l=0,m=0,n=0;   
+     for (n = 0; n <  CHANNELSUSED; n++){         
+                   l=InPutStick[n];                                                                // input sticks knobs & switches are now mapped by user
+                   if (l<=7) m=analogRead(AnalogueInput[l]);                                       // Get values from sticks' pots              
+                   if (l>7) {                                                                      // Switch ?
+                      k=GetStickInput(l);                                                          // Four 3 postion switches
+                   } else {                                                                        // Map the eight analogue inputs
+                      if (InterpolationTypes[FlightMode][n]==0){      // Linear
+                        if (m >= ChannelMidHi[l]) k=map(m,ChannelMidHi[l],ChannelMax[l],mp(MidHiDegrees[FlightMode][n]),mp(MaxDegrees[FlightMode][n]));                                              
+                        if (m >= ChannelCentre[l] && m <= (ChannelMidHi[l])) k=map(m,ChannelCentre[l], ChannelMidHi[l],mp(CentreDegrees[FlightMode][n]),mp(MidHiDegrees[FlightMode][n]));         
+                        if (m >= ChannelMidLow[l] && m <= ChannelCentre[l])  k=map(m,ChannelMidLow[l], ChannelCentre[l],mp(MidLowDegrees[FlightMode][n]),mp(CentreDegrees[FlightMode][n]));          
+                        if (m <= ChannelMidLow[l]) k=map(m,ChannelMin[l], ChannelMidLow[l], mp(MinDegrees[FlightMode][n]),mp(MidLowDegrees[FlightMode][n]));             
+                      }
+
+                       if (InterpolationTypes[FlightMode][n]==1){      // CatmullSpline (!)
+                         xPoints[0]=ChannelMin[l];xPoints[1]=ChannelMidLow[l];xPoints[2]=ChannelCentre[l];xPoints[3]=ChannelMidHi[l];xPoints[4]=ChannelMax[l];
+                         yPoints[4]=mp(MaxDegrees[FlightMode][n]);yPoints[3]=mp(MidHiDegrees[FlightMode][n]);yPoints[2]=mp(CentreDegrees[FlightMode][n]);yPoints[1]=mp(MidLowDegrees[FlightMode][n]);yPoints[0]=mp(MinDegrees[FlightMode][n]);
+                         k=Interpolation::CatmullSpline(xPoints, yPoints, PointsCount, m);
+                       }
+                        if (InterpolationTypes[FlightMode][n]==2 ){      // EXPONENTIAL (!!)
+                          if (m >= ChannelCentre[l]){
+                            k=MapExp(m-ChannelCentre[l],0,ChannelMax[l]-ChannelCentre[l],0,mp(MaxDegrees[FlightMode][n])-mp(CentreDegrees[FlightMode][n]),Exponential[FlightMode][n])+mp(CentreDegrees[FlightMode][n]);   
+                          }     
+                          if (m < ChannelCentre[l]){
+                            k=MapExp(ChannelCentre[l]-m,0,ChannelCentre[l]-ChannelMin[l],mp(CentreDegrees[FlightMode][n])-mp(MinDegrees[FlightMode][n]),0,Exponential[FlightMode][n])+mp(MinDegrees[FlightMode][n]);  
+                          }
+                        }
+                    }                     
+                   if (n<4){if (TrimsReversed[FlightMode][n]==0){k+=(Trims[FlightMode][n]-80);              // TRIMS on lower four channels 80 is mid point (40 - 120)           
+                         }else                                  {k-=(Trims[FlightMode][n]-80);}}          
+              
+              if (!CalibratedYet) k=map(m, 0, 1024, MINMICROS, MAXMICROS);                                     // Crude servos until calibrated 
+              PreMixBuffer[n]=constrain(k,MINMICROS,MAXMICROS);
+              k=1500;
+              SendBuffer[n]=PreMixBuffer[n];                    
+              }
+              if (CurrentMode == NORMAL) DoMixes();      // not while calibrating       
+      
+        
+}
+
+
+
+
+
+void CalibrateSticks() {
+ int j;
+     for (i = 0; i <  PROPOCHANNELS; i++)
+     {
+       j = analogRead(AnalogueInput[i]);   
+       if (ChannelMax[i]<j) ChannelMax[i]=j;
+       if (ChannelMin[i]>j) ChannelMin[i]=j;  
+     }  
+     get_new_channels_values(); 
+     ShowServoPos();
+     SendCommand(NoSleeping);  // no screen timeout while calibrating     
+}
+void CentreMaxMins(){
+  for (i = 0; i <  CHANNELSUSED; i++)
+  {
+        ChannelMax[i]=512; // halfway up
+        ChannelMin[i]=512; // halfway down
+        ChannelCentre[i]=512;
+  }
+}
+
+
+
+void  UpdateTrimView(){
+                
+                SendValue(TrimView_ch1,(Trims[FlightMode][0])); 
+                SendValue(TrimView_ch4,(Trims[FlightMode][1])); 
+                SendValue(TrimView_ch2,(Trims[FlightMode][2])); 
+                SendValue(TrimView_ch3,(Trims[FlightMode][3]));            
+                
+                SendValue(TrimView_n1,(Trims[FlightMode][0]-80)); 
+                SendValue(TrimView_n4,(Trims[FlightMode][1]-80)); 
+                SendValue(TrimView_n2,(Trims[FlightMode][2]-80)); 
+                SendValue(TrimView_n3,(Trims[FlightMode][3]-80));  
+                
+                SendValue(TrimView_r1,TrimsReversed[FlightMode][0]);
+                SendValue(TrimView_r4,TrimsReversed[FlightMode][1]);
+                SendValue(TrimView_r2,TrimsReversed[FlightMode][2]);
+                SendValue(TrimView_r3,TrimsReversed[FlightMode][3]);
+  
+}
+
+
+
+
+
+void DoScanInit(){
+   Radio1.setDataRate(RF24_1MBPS); // Scan only works at this default rate
+   CurrentMode=SCANWAVEBAND;                 // Fhss == No transmitting please, we are scanning.  
+   SendCommand(NoSleeping);
+    for (i=0;i<127;i++){
+         NoCarrier[i]=0;
+         AllChannels[i]=0;
+        }
+}
+  
+void DoScanEnd(){
+    Radio1.setDataRate(RF24_250KBPS);
+    CurrentMode=NORMAL;
+    SendCommand(NextionSleepTime);  
+}
+
+
+
+
+void ScanI2c() {
+int ii;              
+            USE_INA219  = false;   
+            for (ii=1;ii<127;ii++){  
+                Wire.beginTransmission(ii);
+                if(Wire.endTransmission()==0){
+                      #ifdef DB_SENSORS
+                              Serial.print (ii,HEX); // in case new one shows up
+                              Serial.print("   ");   
+                              if (ii==0x40) Serial.println("INA219 voltage meter detected!");  
+                      #endif 
+                      if (ii==0x40) {USE_INA219=true;}       
+                  }    
+         }
+}
+
+
+
+
+void CloseModelsFile(){
+   if (ModelsFileOpen){
+       ModelsFileNumber.close();
+       ModelsFileOpen=false;
+   }
+}
+
+void OpenModelsFile(){
+    if (SingleModelFlag){
+            ModelsFileNumber = SD.open(SingleModelFile, FILE_WRITE);
+    }else{
+            ModelsFileNumber = SD.open(ModelsFile, FILE_WRITE);  
+    }
+           if(ModelsFileNumber==0) FileError=true;
+            ModelsFileOpen=true;
+}
+
+
+void UpdateGainsView(){
+                SendValue(Rollp,rollp[FlightMode]); 
+                SendValue(Rolli,rolli[FlightMode]);
+                SendValue(Rolld,rolld[FlightMode]);
+                SendValue(Yawp,yawp[FlightMode]);
+                SendValue(Yawi,yawi[FlightMode]);
+                SendValue(Yawd,yawd[FlightMode]);    
+                SendValue(Rp,rollp[FlightMode]); 
+                SendValue(Ri,rolli[FlightMode]);
+                SendValue(Rd,rolld[FlightMode]);
+                SendValue(Yp,yawp[FlightMode]);
+                SendValue(Yi,yawi[FlightMode]);
+                SendValue(Yd,yawd[FlightMode]);  
+                SendValue(GainsViewFM,FlightMode);  
+                SendText(GainsViewMN,ModelName);                                                       
+}
+
+void   SDUpdateInt(int p_address, int p_value){
+       ModelsFileNumber.seek(p_address);
+       ModelsFileNumber.write(byte (p_value));
+       ModelsFileNumber.write(byte (p_value >> 8)); 
+}
+void   SDUpdateByte(int p_address, byte p_value){
+       ModelsFileNumber.seek(p_address);
+       ModelsFileNumber.write(byte (p_value));    
+}
+int SDReadInt(int p_address){
+       ModelsFileNumber.seek(p_address); 
+       int r = ModelsFileNumber.read();
+       r += ModelsFileNumber.read() <<8;
+       return r;
+}
+byte SDReadByte(int p_address){
+       ModelsFileNumber.seek(p_address);
+       byte r = ModelsFileNumber.read();
+       return r;
+}
+
+void UpdateModelsNameEveryWhere(){                    // ... and flight mode ... and trim settings etc...
+char fm1[]                   = "Flight mode 1";
+char fm2[]                   = "Flight mode 2";
+char fm3[]                   = "Flight mode 3";
+char fm4[]                   = "Flight mode 4";
+char FrontView_ModelName[]   = "ModelName";
+char SticksView_ModelName[]  = "ModelName";
+char MixesView_ModelName[]   = "ModelName";
+char ModelsView_ModelName[]  = "ModelName";
+char GraphView_ModelName[]   = "ModelName";
+char GraphView_Channel[]     = "Channel";
+char TrimView_ModelName[]    = "ModelName";
+char TrimView_FlightMode[]   = "t1";
+char GraphView_fmode[]       = "fmode";
+char SticksView_t1[]         = "t1";
+char FrontView_fm1[]         = "fm1";
+char FrontView_fm2[]         = "fm2";
+char FrontView_fm3[]         = "fm3";
+char FrontView_fm4[]         = "fm4";
+char NoName[17];
+char Ch[]                    = "Channel ";
+char Nbuf[7];
+
+       switch(CurrentView){
+                case FrontView:
+                      SendText(FrontView_ModelName,ModelName);
+                      break;
+                case SticksView:
+                      SendText(SticksView_ModelName,ModelName);
+                      break;
+                case MixesView:
+                      SendText(MixesView_ModelName,ModelName);
+                      break;
+                case GraphView:
+                      SendText(GraphView_ModelName,ModelName);  
+                      if (strlen(ChannelNames[ChanneltoSet-1])<2){    // if no name, just show the channel number
+                          strcpy(NoName,Ch);SendText(GraphView_Channel,strcat(NoName,Str(Nbuf,ChanneltoSet,0))); 
+                      }else{
+                          SendText(GraphView_Channel,ChannelNames[ChanneltoSet-1]);  
+                      }             
+                      break;
+                case ModelsView:
+                      SendText(ModelsView_ModelName,ModelName);
+                      break;
+                case Trim_View:
+                      SendText(TrimView_ModelName,ModelName); 
+                      UpdateTrimView();
+                      break;
+                default:
+                      break;
+              }
+              
+           
+             if (FlightMode==1) {
+              if (CurrentView==SticksView) SendText(SticksView_t1,fm1);   
+              if (CurrentView==GraphView)  SendText(GraphView_fmode,fm1);   
+              if (CurrentView==Trim_View)  {SendText(TrimView_FlightMode,fm1);UpdateTrimView();}  
+              if (CurrentView==FrontView)  SendValue(FrontView_fm1,1);
+              if (CurrentView==GainsView)  UpdateGainsView();
+               
+            }
+             if (FlightMode==2) {
+              if (CurrentView==SticksView) SendText(SticksView_t1,fm2);  
+              if (CurrentView==GraphView)  SendText(GraphView_fmode,fm2);   
+              if (CurrentView==Trim_View)  {SendText(TrimView_FlightMode,fm2);UpdateTrimView();}
+              if (CurrentView==FrontView)  SendValue(FrontView_fm2,1); 
+              if (CurrentView==GainsView)  UpdateGainsView(); 
+             }        
+             if (FlightMode==3) {
+              if (CurrentView==SticksView) SendText(SticksView_t1,fm3); 
+              if (CurrentView==GraphView)  SendText(GraphView_fmode,fm3);   
+              if (CurrentView==Trim_View)  {SendText(TrimView_FlightMode,fm3);UpdateTrimView();}
+              if (CurrentView==FrontView)  SendValue(FrontView_fm3,1);
+              if (CurrentView==GainsView)  UpdateGainsView();   
+             }            
+             if (FlightMode==4) {
+              if (CurrentView==SticksView) SendText(SticksView_t1,fm4);  
+              if (CurrentView==GraphView)  SendText(GraphView_fmode,fm4);   
+              if (CurrentView==Trim_View)  {SendText(TrimView_FlightMode,fm4);UpdateTrimView();}
+              if (CurrentView==FrontView)  SendValue(FrontView_fm4,1);
+              if (CurrentView==GainsView)  UpdateGainsView();   
+             }
+             
+}
+
+void InitRadio(uint64_t Pipe){
+
+ // char NRF24OK[] = "One nRF24L01+ chip found!";
+ // char NRF24KO[] = "ZERO nRF24L01+ chips found!";
+
+  Radio1.begin();                          // Turn on the Radio - might be something good on.
+ // if (Radio1.isChipConnected()){SendText(DateTime,NRF24OK); }
+ //                          else{SendText(DateTime,NRF24KO); 
+ //   ;}
+ 
+  switch (PowerSetting){
+      case 1:
+            Radio1.setPALevel(RF24_PA_MIN);
+            break;
+      case 2:
+            Radio1.setPALevel(RF24_PA_LOW);
+            break;
+      case 3:
+            Radio1.setPALevel(RF24_PA_HIGH);
+            break;
+      case 4:
+            Radio1.setPALevel(RF24_PA_MAX);
+            break;
+      default:
+            break;
+  }
+
+  switch (DataRate){
+      case 1:
+           Radio1.setDataRate(RF24_250KBPS);     
+           break;
+      case 2:
+           Radio1.setDataRate(RF24_1MBPS);
+           break;
+      case 3:
+           Radio1.setDataRate(RF24_2MBPS);
+           break;
+      default:
+           break;
+  }
+  
+  Radio1.setAutoAck(1);                      // We want Acks  
+  Radio1.enableAckPayload();                 // We want telemetry
+  Radio1.openWritingPipe(Pipe);              // Pipe address used for Binding
+  Radio1.setRetries(15,15);                  // Max automatic retries = (15,15). Packet failure will take 0.06 seconds 
+  Radio1.setPayloadSize(COMPRESSEDWORDS*2);  // send 30 bytes - COMPRESSED (->40 )
+  Radio1.stopListening();                    // It's a true Messiter
+  Radio1.enableDynamicPayloads();            // 
+  Radio1.setAddressWidth(4);                 // 1 2 3 4 5
+  Radio1.setCRCLength(RF24_CRC_8);           // could be 16 or disabled
+
+  
+  
+  
+  PipeTimeout=millis();                     // Initialise timeout
+  GapSum=0;
+ 
+}
+
+
+void InitSwitches(){
+ for (i=0;i<8;i++){pinMode(SwitchNumber[i], INPUT_PULLUP);}
+}
+
+
+//**********************************************************************
+// *******************  STICKS CALIBRATION *****************************
+//**********************************************************************
+void InitMaxMin(){
+   for (i = 0; i <  CHANNELSUSED; i++)
+    {
+    ChannelMax[i]=1024;     
+    ChannelMidHi[i]=512+256;
+    ChannelCentre[i]=512;
+    ChannelMidLow[i]= 256;   
+    ChannelMin[i]=0;  
+    }  
+}
+
+void CentreTrims(){
+for (int j=0;j<=FlightModesUsed;j++){
+               for (i=0;i<CHANNELSUSED;i++){   
+               Trims[j][i]=80;             
+               }
+      }
+}
+
+void InitCentreDegrees(){
+ int j;
+    
+    for (j=1; j<=4;j++){     
+      for (i = 0; i <  CHANNELSUSED; i++)
+      {
+      MaxDegrees[j][i]=180 ;   //  180 degrees
+      MidHiDegrees[j][i]=135;
+      CentreDegrees[j][i]=90;  //  90 degrees
+      MidLowDegrees[j][i]=45;
+      MinDegrees[j][i]=0 ;     //  0 degrees
+      }
+    }
+}
+
+void ChannelCentres(){ // Get centre as 90 degrees
+        for (i = 0; i < 8; i++){      
+          ChannelCentre[i]=analogRead(AnalogueInput[i]);
+          ChannelMidHi[i]=ChannelCentre[i]+((ChannelMax[i]-ChannelCentre[i])/2);
+          ChannelMidLow[i]=ChannelMin[i]+((ChannelCentre[i]-ChannelMin[i])/2);    
+          }  
+          get_new_channels_values();
+          ShowServoPos();      
+}  
+
+
+void UpdateButtonLabels(){ 
+char InPutStick_ch1[]              = "InputsView.ch1";
+char InPutStick_ch2[]              = "InputsView.ch2";
+char InPutStick_ch3[]              = "InputsView.ch3";
+char InPutStick_ch4[]              = "InputsView.ch4";
+char InPutStick_ch5[]              = "InputsView.ch5";
+char InPutStick_ch6[]              = "InputsView.ch6";
+char InPutStick_ch7[]              = "InputsView.ch7";
+char InPutStick_ch8[]              = "InputsView.ch8";
+char InPutStick_ch9[]              = "InputsView.ch9";
+char InPutStick_ch10[]             = "InputsView.ch10";
+char InPutStick_ch11[]             = "InputsView.ch11";
+char InPutStick_ch12[]             = "InputsView.ch12";
+char InPutStick_ch13[]             = "InputsView.ch13";
+char InPutStick_ch14[]             = "InputsView.ch14";
+char InPutStick_ch15[]             = "InputsView.ch15";
+char InPutStick_ch16[]             = "InputsView.ch16";
+char fsch1[]                       = "ch1";
+char fsch2[]                       = "ch2";
+char fsch3[]                       = "ch3";
+char fsch4[]                       = "ch4";
+char fsch5[]                       = "ch5";
+char fsch6[]                       = "ch6";
+char fsch7[]                       = "ch7";
+char fsch8[]                       = "ch8";
+char fsch9[]                       = "ch9";
+char fsch10[]                      = "ch10";
+char fsch11[]                      = "ch11";
+char fsch12[]                      = "ch12";
+char fsch13[]                      = "ch13";
+char fsch14[]                      = "ch14";
+char fsch15[]                      = "ch15";
+char fsch16[]                      = "ch16";
+char arrowrh[]                     = " >";
+char arrowlh[]                     = "< ";
+char BoxOffsetLabel[20];  
+char SticksViewButton1[]   = "SticksView.Sch1";  
+char SticksViewButton2[]   = "SticksView.Sch2";  
+char SticksViewButton3[]   = "SticksView.Sch3";  
+char SticksViewButton4[]   = "SticksView.Sch4";  
+char SticksViewButton5[]   = "SticksView.Sch5";  
+char SticksViewButton6[]   = "SticksView.Sch6";  
+char SticksViewButton7[]   = "SticksView.Sch7";  
+char SticksViewButton8[]   = "SticksView.Sch8";  
+char SticksViewButton9[]   = "SticksView.Sch9";  
+char SticksViewButton10[]  = "SticksView.Sch10";  
+char SticksViewButton11[]  = "SticksView.Sch11";  
+char SticksViewButton12[]  = "SticksView.Sch12";  
+char SticksViewButton13[]  = "SticksView.Sch13";  
+char SticksViewButton14[]  = "SticksView.Sch14";  
+char SticksViewButton15[]  = "SticksView.Sch15";  
+char SticksViewButton16[]  = "SticksView.Sch16";  
+char one[]=" (1)";
+char two[]="(2) ";
+char three[]=" (3)";
+char four[]="(4) ";
+char five[]=" (5)";
+char six[]="(6) ";
+char seven[]=" (7)";
+char eight[]="(8) ";
+char nine[]=" (9)";
+char ten[]="(10) ";
+char eleven[]=" (11)";
+char twelve[]="(12) ";
+char thirteen[]=" (13)";
+char fourteen[]="(14) ";
+char fifteen[]=" (15)";
+char sixteen[]="(16) ";
+
+     strcpy (BoxOffsetLabel, ChannelNames[0]); 
+     strcat (BoxOffsetLabel,one);
+     strcat (BoxOffsetLabel,arrowrh);
+     SendText(SticksViewButton1, BoxOffsetLabel);  
+     strcpy (BoxOffsetLabel,arrowlh);
+     strcat (BoxOffsetLabel,two);
+     strcat (BoxOffsetLabel, ChannelNames[1]);
+     SendText(SticksViewButton2, BoxOffsetLabel);  
+     strcpy (BoxOffsetLabel, ChannelNames[2]);
+     strcat (BoxOffsetLabel,three);
+     strcat (BoxOffsetLabel,arrowrh);
+     SendText(SticksViewButton3, BoxOffsetLabel);  
+     strcpy (BoxOffsetLabel,arrowlh);
+     strcat (BoxOffsetLabel,four);
+     strcat (BoxOffsetLabel, ChannelNames[3]);
+     SendText(SticksViewButton4, BoxOffsetLabel);  
+     strcpy (BoxOffsetLabel, ChannelNames[4]);
+     strcat (BoxOffsetLabel,five);
+     strcat (BoxOffsetLabel,arrowrh);
+     SendText(SticksViewButton5, BoxOffsetLabel);  
+     strcpy (BoxOffsetLabel,arrowlh);
+     strcat (BoxOffsetLabel,six);
+     strcat (BoxOffsetLabel, ChannelNames[5]);
+     SendText(SticksViewButton6, BoxOffsetLabel);  
+     strcpy (BoxOffsetLabel, ChannelNames[6]);
+     strcat (BoxOffsetLabel,seven);
+     strcat (BoxOffsetLabel,arrowrh);
+     SendText(SticksViewButton7, BoxOffsetLabel);  
+     strcpy (BoxOffsetLabel,arrowlh);
+     strcat (BoxOffsetLabel,eight);
+     strcat (BoxOffsetLabel, ChannelNames[7]);
+     SendText(SticksViewButton8, BoxOffsetLabel);  
+     strcpy (BoxOffsetLabel, ChannelNames[8]);
+     strcat (BoxOffsetLabel,nine);
+     strcat (BoxOffsetLabel,arrowrh);
+     SendText(SticksViewButton9, BoxOffsetLabel);  
+     strcpy (BoxOffsetLabel,arrowlh);
+     strcat (BoxOffsetLabel,ten);
+     strcat (BoxOffsetLabel, ChannelNames[9]);
+     SendText(SticksViewButton10, BoxOffsetLabel);  
+     strcpy (BoxOffsetLabel, ChannelNames[10]);
+     strcat (BoxOffsetLabel,eleven);
+     strcat (BoxOffsetLabel,arrowrh);
+     SendText(SticksViewButton11, BoxOffsetLabel);  
+     strcpy (BoxOffsetLabel,arrowlh);
+     strcat (BoxOffsetLabel,twelve);
+     strcat (BoxOffsetLabel, ChannelNames[11]);
+     SendText(SticksViewButton12, BoxOffsetLabel);  
+     strcpy (BoxOffsetLabel, ChannelNames[12]);
+     strcat (BoxOffsetLabel,thirteen);
+     strcat (BoxOffsetLabel,arrowrh);
+     SendText(SticksViewButton13, BoxOffsetLabel);  
+     strcpy (BoxOffsetLabel,arrowlh);
+     strcat (BoxOffsetLabel,fourteen);
+     strcat (BoxOffsetLabel, ChannelNames[13]);
+     SendText(SticksViewButton14, BoxOffsetLabel);  
+     strcpy (BoxOffsetLabel, ChannelNames[14]);
+     strcat (BoxOffsetLabel,fifteen);
+     strcat (BoxOffsetLabel,arrowrh);
+     SendText(SticksViewButton15, BoxOffsetLabel);  
+     strcpy (BoxOffsetLabel,arrowlh);
+     strcat (BoxOffsetLabel,sixteen);
+     strcat (BoxOffsetLabel, ChannelNames[15]);
+     SendText(SticksViewButton16, BoxOffsetLabel);  
+     SendText(fsch1, ChannelNames[0]);  
+     SendText(fsch2, ChannelNames[1]);
+     SendText(fsch3, ChannelNames[2]);  
+     SendText(fsch4, ChannelNames[3]);
+     SendText(fsch5, ChannelNames[4]);  
+     SendText(fsch6, ChannelNames[5]);
+     SendText(fsch7, ChannelNames[6]);  
+     SendText(fsch8, ChannelNames[7]);
+     SendText(fsch9, ChannelNames[8]);  
+     SendText(fsch10,ChannelNames[9]);
+     SendText(fsch11,ChannelNames[10]);  
+     SendText(fsch12,ChannelNames[11]);
+     SendText(fsch13,ChannelNames[12]);  
+     SendText(fsch14,ChannelNames[13]);
+     SendText(fsch15,ChannelNames[14]);  
+     SendText(fsch16,ChannelNames[15]);
+     SendText(InPutStick_ch1, ChannelNames[0]);  
+     SendText(InPutStick_ch2, ChannelNames[1]);
+     SendText(InPutStick_ch3, ChannelNames[2]);  
+     SendText(InPutStick_ch4, ChannelNames[3]);
+     SendText(InPutStick_ch5, ChannelNames[4]);  
+     SendText(InPutStick_ch6, ChannelNames[5]);
+     SendText(InPutStick_ch7, ChannelNames[6]);  
+     SendText(InPutStick_ch8, ChannelNames[7]);
+     SendText(InPutStick_ch9, ChannelNames[8]);  
+     SendText(InPutStick_ch10,ChannelNames[9]);
+     SendText(InPutStick_ch11,ChannelNames[10]);  
+     SendText(InPutStick_ch12,ChannelNames[11]);
+     SendText(InPutStick_ch13,ChannelNames[12]);  
+     SendText(InPutStick_ch14,ChannelNames[13]);
+     SendText(InPutStick_ch15,ChannelNames[14]);  
+     SendText(InPutStick_ch16,ChannelNames[15]); 
+  }
+
+bool ReadOneModel(byte Mnum){   
+  unsigned int j;
+            ModelDetected=true;
+            if (!ModelsFileOpen) OpenModelsFile();
+            addr=TXSIZE;                           //  spare bytes for TX stuff
+            addr+=((Mnum-1) * MODELSIZE);          //  spare bytes for Model params          
+            StartLocation=addr;      
+            ModelDefined = SDReadByte(addr);       // this variable is redundant now   could be re-used
+            addr ++;
+            for (j=0;j<30;j++){
+            ModelName[j]=SDReadByte(addr); 
+            addr ++; }
+
+           for (i = 0; i < CHANNELSUSED; i++)
+          { 
+           for (j=1;j<=4;j++){
+              MaxDegrees[j][i]              = SDReadByte(addr);
+              addr ++;  
+              MidHiDegrees[j][i]            = SDReadByte(addr);
+              addr ++;  
+              CentreDegrees[j][i]           = SDReadByte(addr);
+              addr ++;  
+              MidLowDegrees[j][i]           = SDReadByte(addr);
+              addr ++;  
+              MinDegrees[j][i]              = SDReadByte(addr);       
+              addr ++; 
+          }   
+        }
+        for (j=0;j<MAXMIXES;j++){
+            for (i=0;i<CHANNELSUSED+1;i++){
+              Mixes[j][i]                    = SDReadByte(addr);           // Read mixes
+              addr ++;
+             }
+        }
+
+        for (j=0;j<FlightModesUsed+1;j++){             
+               for (i=0;i<CHANNELSUSED+1;i++){   
+               Trims[j][i] = SDReadByte(addr);
+               addr++;
+               }
+          }
+         for (j=0;j<FlightModesUsed+1;j++){
+               for (i=0;i<CHANNELSUSED+1;i++){   
+               TrimsReversed[j][i] = SDReadByte(addr);
+               addr++;
+               }
+          }
+          RXCellCount=SDReadByte(addr);
+          addr++;
+
+         for (j=0;j<FlightModesUsed+1;j++){ 
+
+            rollp[j]=SDReadByte(addr);
+            addr++;
+            rolli[j]=SDReadByte(addr);
+            addr++;
+            rolld[j]=SDReadByte(addr);
+            addr++;
+            yawp[j]=SDReadByte(addr);
+            addr++;
+            yawi[j]=SDReadByte(addr);
+            addr++;
+            yawd[j]=SDReadByte(addr);
+            addr++;        
+        }         
+          ModelType=SDReadByte(addr);
+          addr++ ; 
+           for (i = 0; i < CHANNELSUSED; i++){                              
+              InPutStick[i]=SDReadByte(addr);
+              if (InPutStick[i]> 16) InPutStick[i]=i;  // reset if nothing was saved!
+              addr ++;
+           }      
+
+       // **************************
+          
+          FMSwitch=SDReadByte(addr);
+          addr ++;
+          AutoSwitch=SDReadByte(addr);
+          addr ++;
+          Channel9Switch=SDReadByte(addr);
+          addr ++;
+          Channel10Switch=SDReadByte(addr);
+          addr ++;
+          Channel11Switch=SDReadByte(addr);
+          addr ++;
+          Channel12Switch=SDReadByte(addr);
+          addr ++;
+          Switch1Reversed =  bool(SDReadByte(addr));
+          addr ++;
+          Switch2Reversed =  bool(SDReadByte(addr));
+          addr ++;    
+          Switch3Reversed =  bool(SDReadByte(addr));
+          addr ++;
+          Switch4Reversed =  bool(SDReadByte(addr));
+          addr ++;     
+          for (i=0; i<CHANNELSUSED; i++){
+              FailSafeChannel[i] = bool(SDReadByte(addr));
+              if (int(FailSafeChannel[i]) >1) FailSafeChannel[i] =0;
+              addr ++; 
+         }
+      for (i=0; i<CHANNELSUSED; i++){
+              for (j=0; j<10; j++){
+                ChannelNames[i][j]=SDReadByte(addr);
+                addr ++; 
+              }             
+        }
+
+     for (j=0;j<FlightModesUsed+1;j++){ 
+               for (i=0;i<CHANNELSUSED+1;i++){   
+                      Exponential[j][i]=SDReadByte(addr);
+                      if (Exponential[j][i]>200 || Exponential[j][i]<0) {Exponential[j][i]=20;}
+                      addr++;
+               }             
+      }
+      for (j=0;j<FlightModesUsed+1;j++){
+               for (i=0;i<CHANNELSUSED+1;i++){   
+                         InterpolationTypes[j][i]=SDReadByte(addr); 
+                         if  (InterpolationTypes[j][i]<0 || InterpolationTypes[j][i]>2) {InterpolationTypes[j][i]=2;}
+                      addr++;
+             }             
+    }
+
+
+
+
+        // **************************************
+   
+         if (ModelType==0) ModelType=1;
+         OneModelMemory=addr-StartLocation;    
+       
+       #ifdef DB_NEXTION   
+         Serial.print (txm);
+         Serial.println(" bytes were  used for TX data.");
+         Serial.print (TXSIZE);
+         Serial.println (" bytes had been reserved.");
+         Serial.print ("So ");
+         Serial.print  (TXSIZE- txm);
+         Serial.println (" spare bytes still remain for TX params.");
+         Serial.println (" ");
+         Serial.print ("Loaded model number: ");  
+         Serial.println (ModelNumber);  
+         Serial.print ("Model name: ");
+         Serial.println (ModelName);  
+         Serial.println (" ");
+         Serial.print (OneModelMemory);
+         Serial.println (" bytes used per model.");
+         Serial.print (MODELSIZE-OneModelMemory);
+         Serial.println (" spare bytes per model.");
+         Serial.print (MODELSIZE);
+         Serial.println (" bytes reserved per model.)");
+         #endif         
+         UpdateButtonLabels(); 
+         
+          
+  return true;
+}
+
+bool LoadAllParameters(){
+int p;
+int j=0;
+     if (!ModelsFileOpen) OpenModelsFile();
+     addr=0;
+      p   =   SDReadInt(addr);      
+      if (p == RENEWDATA) 
+      {
+          addr += 2;     
+          for (i = 0; i < CHANNELSUSED; i++)
+          {
+           ChannelMin[i]              = SDReadInt(addr);   
+           addr += 2;  
+           ChannelMidLow[i]           = SDReadInt(addr);   
+           addr += 2;      
+           ChannelCentre[i]           = SDReadInt(addr);    
+           addr += 2;  
+           ChannelMidHi[i]            = SDReadInt(addr);   
+           addr += 2;  
+           ChannelMax[i]              = SDReadInt(addr);   
+           addr += 2;  
+          }
+          FHSSTop       = SDReadByte(addr);         // These are  currently definable
+          addr ++;
+          FHSSBottom    = SDReadByte(addr);         // These are  currently definable  
+          if(FHSSBottom<1)FHSSBottom=1;
+          addr ++;   
+          ModelNumber   = SDReadByte(addr); 
+          addr ++;
+          ScreenTimeout = SDReadInt(addr);  
+          addr ++;  
+          addr ++;  
+          Inactivity_Timeout    = SDReadByte(addr) * TICKSPERMINUTE;        
+          
+          addr ++;
+         for (j=0;j<30;j++){
+            TxName[j]= SDReadByte(addr);
+            addr ++;  
+          }
+          txm=addr;       
+          ReadOneModel(ModelNumber); 
+          return true;
+      }
+      else
+      {
+      return false;
+      }
+}      
+
+void PreScan(){   // This scans quietly at startup
+int ScanTime=0; 
+
+#ifdef DB_CHANNEL_AVOID
+ int scount=0; 
+#endif
+
+
+      int Sc; 
+      #ifdef DB_CHANNEL_AVOID
+        Serial.println ("Prescanning ..."); 
+      #endif
+      
+        DoScanInit();
+        ScanTime=millis();
+        while ((millis()-ScanTime) < 1000){
+             KickTheDog(); // Watchdog 
+            for(Sc=ScanStart;Sc<=ScanEnd;Sc++){
+                    Radio1.setChannel(Sc);
+                    Radio1.startListening();
+                    delayMicroseconds(120);   // Minimum!?
+                    Radio1.stopListening();    
+                    if (Radio1.testCarrier()) {
+                         AllChannels[Sc]++;                    
+                    }
+              }
+        }
+            for(Sc=ScanStart+1;Sc<=ScanEnd-1;Sc++){
+               if (AllChannels[Sc] >0) {
+                    if (BadChannelPointer<BAD_CHANNEL_MAX){
+                        BadChannels[BadChannelPointer]=Sc; 
+                        BadChannelPointer++;
+                        } 
+                #ifdef DB_CHANNEL_AVOID
+                {Serial.println (Sc);scount++; }
+                #endif
+                } 
+           }
+          DoScanEnd();
+            #ifdef DB_CHANNEL_AVOID
+              Serial.print ("Found ");  
+              Serial.println (scount);  
+           #endif
+}    
+
+void Force_ReDisplay(){ 
+   for (int i=0;i<CHANNELSUSED;i++) {ShownBuffer[i] = 242;}    // to force a re-show of servo positions
+}
+
+void ButtonRed(char* but){
+char  lbut[60];
+char red[] = ".pco=RED";
+            strcpy(lbut,but);
+            strcat (lbut,red);
+            SendCommand(lbut);
+}        
+
+void ButtonWhite(char* but){
+char  lbut[60];
+char wight[] = ".pco=WHITE";
+            strcpy(lbut,but);
+            strcat (lbut,wight);
+            SendCommand(lbut);
+}
+
+
+
+#ifdef  USE_WATCHDOG
+void WatchDogCallBack() {
+ // Serial.println("RESETTING ...");
+}
+#endif 
+
+
+void SetDS1307ToCompilerTime(){
+          if (getDate(__DATE__) && getTime(__TIME__)) {RTC.write(tm); }     // only useful when connected to compiler
+}
+
+// ************************************************************************************************************************************
+// ******************************************** SETUP *********************************************************************************
+// ************************************************************************************************************************************
+
+void setup(){
+  char FrontView_Connected[]    = "FrontView.Connected";
+  char Initialising[]           = "Initialising ... ";  
+  char Scanning[]               = "Scanning ... ";  
+  char OptionsViewTXname[]      = "OptionsView.TxName";
+  Nextion.begin(115200);                         // BAUD rate also set in display code   
+
+  teensyMAC(MacAddress);                         // Get MAC address and use it as pipe address
+  NewPipe =(uint64_t)MacAddress[0]<<40;
+  NewPipe+=(uint64_t)MacAddress[1]<<32;
+  NewPipe+=(uint64_t)MacAddress[2]<<24;
+  NewPipe+=(uint64_t)MacAddress[3]<<16;  
+  NewPipe+=(uint64_t)MacAddress[4]<<8;
+  NewPipe+=(uint64_t)MacAddress[5];
+
+  pinMode(REDLED,OUTPUT);
+  pinMode(GREENLED,OUTPUT);
+  pinMode(BLUELED,OUTPUT);
+  pinMode(POWER_OFF_PIN,OUTPUT);
+  BlueLedOn();
+  SendText(FrontView_Connected,Scanning);
+  Serial.begin(115200);                        
+  Wire.begin();
+  ScanI2c(); 
+  if (USE_INA219) ina219.begin(); 
+  SD.begin(chipSelect);
+  SPI.begin();                                  // Need SPI data connection to nRF24l01+ 
+  SPI.setClockDivider (SPI_CLOCK_DIV16);        // Slow data down a little bit for the nRF24l01+ (Teensy is too fast for it.)
+  InitRadio(DefaultPipe); 
+  InitSwitches();
+  SendCommand(NextionWakeUp); 
+  InitMaxMin();                                  // in case not yet calibrated
+  InitCentreDegrees();                           // In case not yet calibrated
+  CentreTrims();
+  CalibratedYet=LoadAllParameters();             // If exists, read saved SD card settings.
+  SendValue(ScreenViewTimeout,ScreenTimeout);
+  SendCommand(page_FrontView);                    // Let's start at the beginning. Why not?                            
+  PreScan();                                      // Do quiet scan while Nextion boots and Front View loads ... 
+  SendText(FrontView_Connected,Initialising);
+  SendValue1(NextionSleepTime,ScreenTimeout);     // Setup Screen timeout (No .val needed)
+  SendCommand(NextionWakeOnTouch);                // Wake on touch
+  SendValue(FrontView_Hours,0);
+  SendValue(FrontView_Mins,0);
+  SendValue(FrontView_Secs,0);
+  UpdateGainsView();
+  //SetDS1307ToCompilerTime();       // *******************   uncomment this line to set clock to computer time. BUT then re-comment it! ***********************
+  RecoveryTimer = millis();
+  BoundFlag=false;
+  TxOnTime = millis();
+  UpdateModelsNameEveryWhere();
+  SendText(OptionsViewTXname,TxName);
+ #ifdef  USE_WATCHDOG
+    WatchDogConfig.window  = WATCHDOGMAXRATE  ;  //  = MINIMUM RATE in milli seconds, (32ms to 522.232s) must be MUCH smaller than timeout 
+    WatchDogConfig.timeout = WATCHDOGTIMEOUT  ;  //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s) 
+    WatchDogConfig.callback = WatchDogCallBack;
+    TeensyWatchDog.begin(WatchDogConfig); 
+    LastDogKick=millis(); // needed? - yes!
+  #endif 
+  StartInactvityTimeout();
+}
+
+
+void GetStatistics(){
+          success=(float(RangeTestGoodPackets)/(float(RangeTestGoodPackets)+float(RangeTestLostPackets)))*100;
+          PacketsPerSecond=RangeTestGoodPackets;RangeTestGoodPackets=0;RangeTestLostPackets=0;  
+}
+
+
+int InStrng(char text1[CharsMax],char text2[CharsMax]){                // Returns position of text1 within text2 or 0 if not found
+unsigned int j;
+unsigned int flag;
+for (j=0;j<strlen(text2);j++){
+          flag=0;
+          for (i=0;i<strlen(text1);i++){
+              if (text1[i]!=text2[i+j])flag=1;
+              }
+          if (flag==0) return j+1;
+          }   
+       return 0;
+}
+
+void SaveTXStuff(){
+int rd=0;
+bool EON = false;
+int j=0;
+
+    if (!ModelsFileOpen) OpenModelsFile();
+      rd=RENEWDATA; 
+      addr=0;
+      CalibratedYet=true;
+      SDUpdateInt(addr,rd);                           // xxxx in first two bytes = calibration done! *** CHANGE THIS NUMBER IF FORMAT IS NEW!! ****
+      addr += 2;
+      for (i = 0; i < CHANNELSUSED; i++){
+          SDUpdateInt(addr, ChannelMin[i]);           // Stick min output of pot  
+          addr += 2;  
+          SDUpdateInt(addr, ChannelMidLow[i]);        //  
+          addr += 2;            
+          SDUpdateInt(addr,ChannelCentre[i]);         // Stick Centre output of pot
+          addr += 2; 
+          SDUpdateInt(addr, ChannelMidHi[i]);         //
+          addr += 2;         
+          SDUpdateInt(addr,ChannelMax[i]);            // Stick max output of pot 
+          addr += 2;  
+      }
+        SDUpdateByte(addr,FHSSTop);                  // These are  currently definable
+        addr ++;
+        SDUpdateByte(addr,FHSSBottom);               // These are  currently definable
+        addr ++;        
+        SDUpdateByte(addr,ModelNumber); 
+        addr ++;  
+        SDUpdateInt(addr,ScreenTimeout); 
+        addr ++;  
+        addr ++; 
+        SDUpdateByte(addr,(Inactivity_Timeout/TICKSPERMINUTE));              
+        addr ++;
+        for (j=0;j<30;j++){
+            if (EON) TxName[j]=0;
+            SDUpdateByte(addr,TxName[j]);
+            if (TxName[j]==0) EON=true;
+            addr ++;  
+            } 
+          
+        CloseModelsFile();
+}
+
+
+// MODEL Specific ****************************************************************************
+
+void SaveOneModel(int mnum){
+
+bool EndOfName = false;
+  
+   if (!ModelsFileOpen) OpenModelsFile();
+unsigned int j;
+      addr=TXSIZE;                  //  spare bytes for TX stuff
+      addr+=(mnum-1) * MODELSIZE;   //  spare bytes for Model params
+      StartLocation=addr;    
+      ModelDefined=42;
+      SDUpdateByte(addr,ModelDefined);        
+      addr ++;  
+      for (j=0;j<30;j++){
+            if (EndOfName) ModelName[j]=0;
+            SDUpdateByte(addr,ModelName[j]);
+            if (ModelName[j]==0) EndOfName=true;
+            addr ++;  
+            } 
+      for (i = 0; i < CHANNELSUSED; i++){    
+          for (j=1;j<=4;j++)
+            {
+                SDUpdateByte(addr,MaxDegrees[j][i]);           // Max requested in degrees (180)
+                addr ++; 
+                SDUpdateByte(addr,MidHiDegrees[j][i]);         // MidHi requested in degrees (135)
+                addr ++; 
+                SDUpdateByte(addr,CentreDegrees[j][i]);        // Centre requested in degrees (90)
+                addr ++;  
+                SDUpdateByte(addr,MidLowDegrees[j][i]);        // MidLo requested in degrees (45)
+                addr ++;  
+                SDUpdateByte(addr,MinDegrees[j][i]);           // Min requested in degrees (0)   
+                addr ++;
+            }  
+      }
+      for (j=0;j<MAXMIXES;j++){
+               for (i=0;i<CHANNELSUSED+1;i++){   
+                  SDUpdateByte(addr,Mixes[j][i]);           // Save mixes
+                  addr ++;
+              }
+      }  
+     for (j=0;j<FlightModesUsed+1;j++){
+               for (i=0;i<CHANNELSUSED+1;i++){   
+               SDUpdateByte(addr,Trims[j][i]);
+               addr++;
+               }
+          }         
+     for (j=0;j<FlightModesUsed+1;j++){
+               for (i=0;i<CHANNELSUSED+1;i++){   
+                      SDUpdateByte(addr,TrimsReversed[j][i]);
+                      addr++;
+               }             
+      }
+      SDUpdateByte(addr,RXCellCount);
+      addr++;
+    
+      for (j=0;j<FlightModesUsed+1;j++){
+          SDUpdateByte(addr,rollp[j]);
+          addr++;
+          SDUpdateByte(addr,rolli[j]);
+          addr++;
+          SDUpdateByte(addr,rolld[j]);
+          addr++;
+          SDUpdateByte(addr,yawp[j]);
+          addr++;
+          SDUpdateByte(addr,yawi[j]);
+          addr++;
+          SDUpdateByte(addr,yawd[j]);
+          addr++;
+         }
+          if (ModelType==0) ModelType=1; // no zeros please
+          SDUpdateByte(addr,ModelType);
+          addr++;
+            for (i = 0; i < CHANNELSUSED; i++){                              
+            SDUpdateByte(addr,InPutStick[i]);
+            addr ++;
+            }
+
+        SDUpdateByte(addr,FMSwitch); 
+        addr ++;
+        SDUpdateByte(addr,AutoSwitch);
+        addr ++;
+        SDUpdateByte(addr,Channel9Switch);
+        addr ++;
+        SDUpdateByte(addr,Channel10Switch);
+        addr ++;
+        SDUpdateByte(addr,Channel11Switch);
+        addr ++;
+        SDUpdateByte(addr,Channel12Switch);
+        addr ++;
+        SDUpdateByte(addr,Switch1Reversed);
+        addr ++;
+        SDUpdateByte(addr,Switch2Reversed);
+        addr ++;
+        SDUpdateByte(addr,Switch3Reversed);
+        addr ++;
+        SDUpdateByte(addr,Switch4Reversed);
+        addr ++;                   
+        for (i=0; i<CHANNELSUSED; i++){
+            SDUpdateByte(addr,FailSafeChannel[i]);
+            addr ++;  
+        }
+        for (i=0; i<CHANNELSUSED; i++){
+              for (j=0; j<10; j++){
+                SDUpdateByte(addr,ChannelNames[i][j]);
+                addr ++; 
+              }
+         }     
+         for (j=0;j<FlightModesUsed+1;j++){ 
+               for (i=0;i<CHANNELSUSED+1;i++){   
+                      SDUpdateByte(addr,Exponential[j][i]);
+                      addr++;
+               }             
+            }
+
+      for (j=0;j<FlightModesUsed+1;j++){
+               for (i=0;i<CHANNELSUSED+1;i++){   
+                       SDUpdateByte(addr,InterpolationTypes[j][i]);
+                      addr++;
+               }             
+            }
+       // **********************
+
+      
+        OneModelMemory=addr-StartLocation;   
+       #ifdef DB_NEXTION             
+        Serial.print("Saved model: ");
+        Serial.println(ModelName);
+        Serial.println (" ");
+        Serial.print (OneModelMemory);
+        Serial.println (" bytes used per model.");
+        Serial.print (MODELSIZE-OneModelMemory);
+        Serial.println (" spare bytes per model.");
+        Serial.print (MODELSIZE);
+        Serial.println (" bytes reserved per model.)");
+        Serial.println (" ");
+       #endif  
+       CloseModelsFile();
+}
+
+void ReadHelpFile(char* fname, char* htext){
+char  errormsg[]="Help file was not found.";
+File fnumber;
+char a[]=" ";
+
+      htext[0]=0;i=0;  
+      fnumber = SD.open(fname,FILE_READ); 
+      if (fnumber){
+           while(fnumber.available() && i<MAXFILELEN) {
+                a[0]=fnumber.read();if (a[0]!=34) {strcat (htext,a);i++;} 
+           }
+      }else{
+           strcpy(htext,errormsg);
+      } 
+      fnumber.close();     
+}
+
+void SendHelp(){
+char HelpView[]= "HelpView.HelpText";     
+char HelpFile[20];
+char HelpText[MAXFILELEN+10];  // MAX = 1200      
+        i=9;int j=0;
+        while (WordsIn[i]!=0&&j<19){HelpFile[j]=WordsIn[i];i++;j++;HelpFile[j]=0;} 
+        ReadHelpFile(HelpFile,HelpText); SendText1 (HelpView,HelpText);             
+}
+
+int GetChannel(){                 // Discover which channel to setup
+  
+        for (i=0;i<sizeof(WordsIn);i++){if(isdigit(WordsIn[i]))break;}return atoi(&WordsIn[i]);   
+}
+
+void  UpdateSwitchesDisplay(){
+  
+char SwitchesView_sw1[]          = "SwitchesView.sw1";
+char SwitchesView_sw2[]          = "SwitchesView.sw2";
+char SwitchesView_sw3[]          = "SwitchesView.sw3";
+char SwitchesView_sw4[]          = "SwitchesView.sw4";
+char NotUsed[]                   = "Not used";
+char FlightModes123[]            = "Flight modes 1 2 3";
+char Auto[]                      = "Auto (FM 4)";
+char Channel_9[]                 = "Channel 9";
+char Channel_10[]                = "Channel 10";
+char Channel_11[]                = "Channel 11";
+char Channel_12[]                = "Channel 12";
+ 
+                 SendText(SwitchesView_sw1,NotUsed);
+                 if (AutoSwitch==1)      SendText(SwitchesView_sw1,Auto);
+                 if (FMSwitch==1)        SendText(SwitchesView_sw1,FlightModes123);
+                 if (Channel9Switch==1)  SendText(SwitchesView_sw1,Channel_9);
+                 if (Channel10Switch==1) SendText(SwitchesView_sw1,Channel_10);
+                 if (Channel11Switch==1) SendText(SwitchesView_sw1,Channel_11);
+                 if (Channel12Switch==1) SendText(SwitchesView_sw1,Channel_12);
+
+                 SendText(SwitchesView_sw2,NotUsed);
+                 if (AutoSwitch==2)      SendText(SwitchesView_sw2,Auto);
+                 if (FMSwitch==2)        SendText(SwitchesView_sw2,FlightModes123);
+                 if (Channel9Switch==2)  SendText(SwitchesView_sw2,Channel_9);
+                 if (Channel10Switch==2) SendText(SwitchesView_sw2,Channel_10);
+                 if (Channel11Switch==2) SendText(SwitchesView_sw2,Channel_11);
+                 if (Channel12Switch==2) SendText(SwitchesView_sw2,Channel_12);
+
+                  SendText(SwitchesView_sw3,NotUsed);
+                 if (AutoSwitch==3)      SendText(SwitchesView_sw3,Auto);
+                 if (FMSwitch==3)        SendText(SwitchesView_sw3,FlightModes123);
+                 if (Channel9Switch==3)  SendText(SwitchesView_sw3,Channel_9);
+                 if (Channel10Switch==3) SendText(SwitchesView_sw3,Channel_10);
+                 if (Channel11Switch==3) SendText(SwitchesView_sw3,Channel_11);
+                 if (Channel12Switch==3) SendText(SwitchesView_sw3,Channel_12);
+
+                  SendText(SwitchesView_sw4,NotUsed);
+                 if (AutoSwitch==4)      SendText(SwitchesView_sw4,Auto);
+                 if (FMSwitch==4)        SendText(SwitchesView_sw4,FlightModes123);
+                 if (Channel9Switch==4)  SendText(SwitchesView_sw4,Channel_9);
+                 if (Channel10Switch==4) SendText(SwitchesView_sw4,Channel_10);
+                 if (Channel11Switch==4) SendText(SwitchesView_sw4,Channel_11);
+                 if (Channel12Switch==4) SendText(SwitchesView_sw4,Channel_12);
+}
+
+byte CheckRange_0_16(byte v){
+
+   if (v>16) v=16;
+   if (v<0)  v=0;
+   return v;
+   
+}
+
+void DoNewChannelName(int ch, int k){
+                     int j=0; 
+                     ChannelNames[ch-1][0]=32;
+                     ChannelNames[ch-1][1]=0;  // remove old name
+                     while(byte(WordsIn[k])>0){ChannelNames[ch-1][j]=WordsIn[k];j++;k++;ChannelNames[ch-1][j]=0;}
+                     SaveOneModel(ModelNumber);
+}
+
+void SortDirectory(){    // Bubble sort
+int f=0;
+bool flag=true;
+int Scount=0;
+char BoxOffset[18];  
+     while (flag && Scount<10000){
+          flag=false;
+          for (f=0;f<ExportedFileCounter-1;f++){ 
+             if (strcmp(TheFilesList[f],TheFilesList[f+1])>0){ 
+                 strcpy(BoxOffset,TheFilesList[f]);
+                 strcpy(TheFilesList[f],TheFilesList[f+1]);
+                 strcpy(TheFilesList[f+1],BoxOffset); 
+                 flag=true; 
+                 Scount++; 
+             }
+          }
+      }
+}
+
+void BuildDirectory() {
+char MOD[]                 = ".MOD";
+char Entry1[20];
+char fn[18];
+File dir; 
+   dir = SD.open("/");
+   ExportedFileCounter=0;
+   while(true) {
+     File entry =  dir.openNextFile(); if (!entry || ExportedFileCounter>18 ) break; 
+      strcpy(Entry1,entry.name());
+      if (InStrng(MOD,Entry1) > 0){      
+      strcpy(fn,entry.name());
+      for (i=0;i<12;i++){
+        TheFilesList[ExportedFileCounter][i]=fn[i];  
+      }
+      ExportedFileCounter++;
+   }
+   entry.close();
+   }
+   SortDirectory();
+  
+}
+
+void ShowFileNumber(){                                    // updates display in textbox
+  char ModelsView_filename[] = "filename";
+  char newfname[17];
+  if (FileNumberInView>=ExportedFileCounter) FileNumberInView = 0; 
+  if (FileNumberInView<0) FileNumberInView=ExportedFileCounter-1;  
+  for (i=0;i<12;i++){newfname[i]=TheFilesList[FileNumberInView][i]; newfname[i+1]=0;if (newfname[i]<=32 || newfname[i]>127) break;}
+  SendText(ModelsView_filename,newfname);
+}
+
+void ShowFileErrorMsg(){   
+char ErrorOn[]                = "vis error,1";
+char ErrorOff[]               = "vis error,0";
+     for (int pp=0;pp<3;pp++){
+        SendCommand(ErrorOn);
+        delay(200);
+        SendCommand(ErrorOff);
+        delay(100);}
+        FileError=false;
+}
+
+void SaveAllParameters(){
+      if (!ModelsFileOpen) OpenModelsFile();
+        SaveTXStuff();
+        txm=addr-2;
+        SaveOneModel(ModelNumber);   
+      #ifdef DB_NEXTION 
+        Serial.println (" ");
+        Serial.print (txm);
+        Serial.println (" bytes written to SD CARD FOR TX.");  
+        Serial.print (TXSIZE);
+        Serial.println (" bytes reserved for TX.");    
+        Serial.print (TXSIZE-txm);
+        Serial.println (" Spare bytes still for any new TX params.");
+        Serial.print ("Saved model: ");  
+        Serial.print (ModelNumber);  
+        Serial.print (" (");
+        Serial.print (ModelName);
+        Serial.println (")");    
+      #endif
+}
+
+void ShowDirectory(){
+char filelistbuf[1024];
+char nul[] = "";
+char crlf[]                = {13,10,0};     
+char space[] = {' ',0};       
+char fileviewlist[]        = "FilesView.list";
+char t[2]= "P"; 
+byte n=0;
+byte nlp=0;
+     strcpy(filelistbuf,nul); 
+     for (i=0;i<ExportedFileCounter;i++){  
+          nlp=13;  
+          for (int z=0;z<12;z++){
+               t[0]=TheFilesList[i][z]; 
+               if (t[0]==0) break;
+               nlp--; 
+               strcat(filelistbuf,t);
+             }
+           n++;
+           if (n>2){
+             strcat(filelistbuf,crlf);n=0;
+           }
+           else      
+           {
+             for (int q=0;q<nlp;q++){strcat(filelistbuf,space);}
+           }
+     }
+     SendText1(fileviewlist,filelistbuf);
+}
+
+void SaveNewGains(){
+                ButtonRed(SaveButton);
+                ButtonRed(OKButton);
+                rollp[FlightMode]=GetValue(Rollp); 
+                rolli[FlightMode]=GetValue(Rolli); 
+                rolld[FlightMode]=GetValue(Rolld);        
+                yawp[FlightMode]=GetValue(Yawp); 
+                yawi[FlightMode]=GetValue(Yawi); 
+                yawd[FlightMode]=GetValue(Yawd); 
+                SaveOneModel(ModelNumber);
+                ButtonWhite(SaveButton);
+                ButtonWhite(OKButton);
+}
+
+void SetDefaultValues(){  
+          int j;
+          char ProgressStart[]               = "vis Progress,1";
+          char ProgressEnd[]                 = "vis Progress,0";
+          char Progress[]                    = "Progress";
+          char defaultName[]                 = "(Deleted)"; 
+          char DefaultChannelNames[CHANNELSUSED][11] = {{"Aileron"},{"Elevator"},{"Throttle"},{"Rudder"},{"Ch 5"},  {"Ch 6"},  {"Ch 7"},  {"Ch 8"},
+                          {"Ch 9"},  {"Ch 10"},  {"Ch 11"},  {"Ch 12"},{"Ch 13"},  {"Ch 14"},  {"Ch 15"},  {"Ch 16"}};
+          SendCommand(ProgressStart);
+          SendValue(Progress,5); delay(10);        
+          strcpy(ModelName,defaultName);
+
+      for (i = 0; i < CHANNELSUSED; i++) { 
+           for (j=1;j<=4;j++){
+                if (i==1){
+                    MaxDegrees[j][i]           = 30;     // Elevator goes the other way by default
+                    MidHiDegrees[j][i]         = 60;
+                    CentreDegrees[j][i]        = 90;      
+                    MidLowDegrees[j][i]        = 120;       
+                    MinDegrees[j][i]           = 150; 
+                }else{
+                    MaxDegrees[j][i]           = 150;     
+                    MidHiDegrees[j][i]         = 120;
+                    CentreDegrees[j][i]        = 90;      
+                    MidLowDegrees[j][i]        = 60;       
+                    MinDegrees[j][i]           = 30;       
+                }
+          }   
+      }
+      SendValue(Progress,15); delay(10);
+            for (j=0;j<MAXMIXES;j++){
+            for (i=0;i<CHANNELSUSED;i++){
+              Mixes[j][i]  = 0;
+             }
+        }
+      SendValue(Progress,25);delay(10);
+    
+        for (j=0;j<FlightModesUsed+1;j++){        // must have fudged this somewhere.... 5?!
+               for (i=0;i<CHANNELSUSED;i++){   
+               Trims[j][i] = 80;                // MIDPOINT is 80 !
+               TrimsReversed[j][i] = 0;
+               }
+          }
+         RXCellCount = 3;
+         for (j=0;j<FlightModesUsed+1;j++){ 
+            rollp[j]=0;
+            rolli[j]=0;
+            rolld[j]=0;
+            yawp[j]=0;
+            yawi[j]=0;
+            yawd[j]=0;     
+        }         
+        SendValue(Progress,45);delay(10);
+          ModelType=1;
+          for (i = 0; i < CHANNELSUSED; i++){                            
+              InPutStick[i]=i;  
+          }      
+          FMSwitch=4;   
+          AutoSwitch=1;
+          Channel9Switch=2;
+          Channel10Switch=3;
+          Channel11Switch=0;
+          Channel12Switch=0;
+          Switch1Reversed =  false;
+          Switch2Reversed =  false;   
+          Switch3Reversed =  false;   
+          Switch4Reversed =  false;   
+          SendValue(Progress,65);delay(10);       
+          for (i=0; i<CHANNELSUSED; i++){
+              FailSafeChannel[i] =false;
+          }  
+          SendValue(Progress,75);delay(10);
+          for (i=0; i<CHANNELSUSED; i++){
+              for (j=0; j<10; j++){
+                ChannelNames[i][j]= DefaultChannelNames[i][j];  
+                addr ++; 
+              }             
+          }
+
+      for (j=0;j<FlightModesUsed+1;j++){ 
+               for (i=0;i<CHANNELSUSED+1;i++){   
+                      Exponential[j][i]=0;          // 20% expo = default
+                      addr++;
+               }             
+      }
+      for (j=0;j<FlightModesUsed+1;j++){
+               for (i=0;i<CHANNELSUSED+1;i++){   
+                      InterpolationTypes[j][i]=2;  // Expo is default
+                      addr++;
+             }             
+    }
+
+          SendValue(Progress,95); delay(10);
+          SaveOneModel(ModelNumber);
+          UpdateModelsNameEveryWhere();
+          SendValue(Progress,100); delay(200);       
+          SendCommand(ProgressEnd);    
+}
+
+
+void ClearBox(){char fillcmd[]= "fill 30,30,380,365,214";SendCommand (fillcmd);}
+
+void DrawLine(int x1,int y1,int x2, int y2, int c){  // <x1>,<y1>,<x2>,<y2>,<color>
+    char line[] = "line ";
+    char nb[12];
+    char cb[50];
+    char comma[]=",";
+    strcpy(cb,line);
+    strcat(cb,Str(nb,x1,0));
+    strcat(cb,comma);
+    strcat(cb,Str(nb,y1,0));
+    strcat(cb,comma);
+    strcat(cb,Str(nb,x2,0));
+    strcat(cb,comma);
+    strcat(cb,Str(nb,y2,0));
+    strcat(cb,comma);
+    strcat(cb,Str(nb,c,0));
+    SendCommand(cb);
+}
+
+
+void DrawBox(int x1,int y1,int x2, int y2, int c){  // <x1>,<y1>,<x2>,<y2>,<color>
+    char line[] = "draw ";
+    char nb[12];
+    char cb[50];
+    char comma[]=",";
+    strcpy(cb,line);
+    strcat(cb,Str(nb,x1,0));
+    strcat(cb,comma);
+    strcat(cb,Str(nb,y1,0));
+    strcat(cb,comma);
+    strcat(cb,Str(nb,x2,0));
+    strcat(cb,comma);
+    strcat(cb,Str(nb,y2,0));
+    strcat(cb,comma);
+    strcat(cb,Str(nb,c,0));
+    SendCommand(cb);
+}
+
+
+void GetDotPositions(){ // Uses servo degrees to position dots
+int p=0;
+          BoxOffset = 35;
+          BoxLeft = BoxOffset;
+          BoxTop  = BoxOffset; 
+          BoxRight=BoxLeft+395;
+          BoxBottom=BoxRight; 
+          xPoints[0]=BoxLeft;
+          xPoints[4]=BoxRight-BoxOffset;
+       
+          
+          p=map(MinDegrees[FlightMode][ChanneltoSet-1],0,180,BoxSize,BoxOffset);
+          yPoints[0]=constrain(p,39,391);     
+          p=map(MidLowDegrees[FlightMode][ChanneltoSet-1],0,180,BoxSize,BoxOffset);
+          yPoints[1]=constrain(p,39,391); 
+          xPoints[1]=BoxOffset+90;
+          xPoints[2]=BoxOffset+180;
+          p=map(CentreDegrees[FlightMode][ChanneltoSet-1],0,180,BoxSize,BoxOffset);
+          yPoints[2]=constrain(p,39,391);
+          xPoints[3]=BoxOffset+270;
+          p=map(MidHiDegrees[FlightMode][ChanneltoSet-1],0,180,BoxSize,BoxOffset);
+          yPoints[3]=constrain(p,39,391);
+          p=map(MaxDegrees[FlightMode][ChanneltoSet-1],0,180,BoxSize,BoxOffset);
+          yPoints[4]=constrain(p,39,391);
+    
+         
+}
+
+int DegsToPercent(int degs){return map(degs,0,180,-100,100);}
+
+
+
+void DrawDot(int xx, int yy, int rad, int colr){ 
+    char cirs[] = "cirs ";
+    char nb[12];
+    char cb[50];
+    char comma[]=",";
+    strcpy(cb,cirs);
+    strcat(cb,Str(nb,xx,0));
+    strcat(cb,comma);
+    strcat(cb,Str(nb,yy,0));
+    strcat(cb,comma);
+    strcat(cb,Str(nb,rad,0));
+    strcat(cb,comma);
+    strcat(cb,Str(nb,colr,0));
+    SendCommand(cb);
+}
+
+
+void updateInterpolationTypes(){
+  char ExpR[]                      = "Exp";
+  char Smooth[]                    = "Smooth";
+  char Lines[]                     = "Lines";
+  char Expon[]                     = "Expo";       // number display
+  char Ex1[]                       = "Ex1";        // slider
+  char t3on[]                      = "vis t3,1"  ; // expo value lable
+  char b13on[]                     = "vis b13,1" ; // expo -
+  char b12on[]                     = "vis b12,1" ; // expo +
+  char ExponOn[]                   = "vis Expo,1"; // number display
+  char Ex1On[]                     = "vis Ex1,1" ; // slider
+  char t3off[]                     = "vis t3,0"  ; // expo value lable
+  char b13off[]                    = "vis b13,0" ; // expo -
+  char b12off[]                    = "vis b12,0" ; // expo +
+  char ExponOff[]                  = "vis Expo,0"; // number display
+  char Ex1Off[]                    = "vis Ex1,0";  // slider
+
+
+            
+            switch (InterpolationTypes[FlightMode][ChanneltoSet-1]){
+            case 0:
+                  SendValue(Lines,1);
+                  SendValue(Smooth,0);
+                  SendValue(ExpR,0);
+                  SendCommand(t3off);
+                  SendCommand(b13off);
+                  SendCommand(b12off);
+                  SendCommand(ExponOff);
+                  SendCommand(Ex1Off);
+            break;           
+            case 1:
+                  SendValue(Lines,0);
+                  SendValue(Smooth,1);
+                  SendValue(ExpR,0);
+                  SendCommand(t3off);
+                  SendCommand(b13off);
+                  SendCommand(b12off);
+                  SendCommand(ExponOff);
+                  SendCommand(Ex1Off);
+            break;   
+             case 2:
+                  SendValue(Lines,0);
+                  SendValue(Smooth,0);
+                  SendValue(ExpR,1);
+                  SendCommand(t3on);
+                  SendCommand(b13on);
+                  SendCommand(b12on);
+                  SendCommand(ExponOn);
+                  SendCommand(Ex1On);
+                  SendValue(Ex1,Exponential[FlightMode][ChanneltoSet-1]); 
+                  SendValue(Expon,Exponential[FlightMode][ChanneltoSet-1]); 
+            break;   
+            default:
+            break;
+            }            
+}
+
+void DisplayCurve(){
+int p=0; 
+char Gn1[]        = "n1";
+char Gn2[]        = "n2";
+char Gn3[]        = "n3";
+char Gn4[]        = "n4";
+char Gn5[]        = "n5";
+char b3on[]   ="vis b3,1";
+char b4on[]   ="vis b4,1";
+char b7on[]   ="vis b7,1";
+char b8on[]   ="vis b8,1";
+char n2on[]   ="vis n2,1";
+char n4on[]   ="vis n4,1";
+char b3off[]   ="vis b3,0";
+char b4off[]   ="vis b4,0";
+char b7off[]   ="vis b7,0";
+char b8off[]   ="vis b8,0";
+char n2off[]   ="vis n2,0";
+char n4off[]   ="vis n4,0";
+
+int    Step=8;
+float  HalfXRange;
+float  TopHalfYRange;
+float  BottomHalfYRange;
+int    xDot1;
+int    yDot1;
+int    xDot2=0;
+int    yDot2=0;
+int    DotSize       = 2;
+int    DotColour     = Yellow;
+            ClearBox();
+            p=constrain(MinDegrees[FlightMode][ChanneltoSet-1],0,180);
+            MinDegrees[FlightMode][ChanneltoSet-1]=p;
+            p=constrain(MidLowDegrees[FlightMode][ChanneltoSet-1],0,180);
+            MidLowDegrees[FlightMode][ChanneltoSet-1]=p; 
+            p=constrain(CentreDegrees[FlightMode][ChanneltoSet-1],0,180); 
+            CentreDegrees[FlightMode][ChanneltoSet-1]=p; 
+            p=constrain(MidHiDegrees[FlightMode][ChanneltoSet-1],0,180);   
+            MidHiDegrees[FlightMode][ChanneltoSet-1]=p;
+            p=constrain(MaxDegrees[FlightMode][ChanneltoSet-1],0,180);   
+            MaxDegrees[FlightMode][ChanneltoSet-1]=p;
+            GetDotPositions();   
+            SendValue(Gn1,DegsToPercent(MinDegrees[FlightMode][ChanneltoSet-1]));     // put numbers at top row
+            SendValue(Gn2,DegsToPercent(MidLowDegrees[FlightMode][ChanneltoSet-1]));     
+            SendValue(Gn3,DegsToPercent(CentreDegrees[FlightMode][ChanneltoSet-1]));   
+            SendValue(Gn4,DegsToPercent(MidHiDegrees[FlightMode][ChanneltoSet-1]));
+            SendValue(Gn5,DegsToPercent(MaxDegrees[FlightMode][ChanneltoSet-1]));    
+            DrawBox(BoxLeft,BoxTop,BoxRight-BoxLeft,BoxBottom-BoxTop,Green);  
+            
+            xDot1=xPoints[0];
+            yDot1=((BoxBottom-BoxTop)/2)+20; // ?
+            xDot2=BoxRight-BoxOffset;
+            yDot2=yDot1;
+            DrawLine(xDot1,yDot1,xDot2,yDot1,Red); 
+
+            xDot1=xPoints[2];
+            yDot1=BoxTop;
+            xDot2=xDot1;
+            yDot2=BoxBottom-BoxOffset;
+            DrawLine(xDot1,yDot1,xDot2,yDot2,Red); 
+            
+            if (InterpolationTypes[FlightMode][ChanneltoSet-1]==0){
+                  SendCommand(b3on);
+                  SendCommand(b4on);
+                  SendCommand(b7on);
+                  SendCommand(b8on);
+                  SendCommand(n2on);
+                  SendCommand(n4on);
+                  DrawLine(xPoints[0],yPoints[0],xPoints[1],yPoints[1],White);                        // this adds the straight version of the curve
+                  DrawLine(xPoints[1],yPoints[1],xPoints[2],yPoints[2],White);  
+                  DrawLine(xPoints[2],yPoints[2],xPoints[3],yPoints[3],White);  
+                  DrawLine(xPoints[3],yPoints[3],xPoints[4],yPoints[4],White);    
+            }
+           delay(250);
+            if (InterpolationTypes[FlightMode][ChanneltoSet-1]==1){
+                  SendCommand(b3on);
+                  SendCommand(b4on);
+                  SendCommand(b7on);
+                  SendCommand(b8on);
+                  SendCommand(n2on);
+                  SendCommand(n4on);
+                  yDot2=0;
+                  for (xPoint = xPoints[0]; xPoint <= xPoints[4]; xPoint+=Step) {
+                      if (Step>xPoints[4]-xPoint) {Step=xPoints[4]-xPoint;}
+                      if (Step<1) Step=1;
+                      yPoint=Interpolation::CatmullSpline(xPoints, yPoints, PointsCount, xPoint);
+                      xDot1=xPoint;
+                      yDot1=yPoint;
+                      if (yDot2==0){xDot2=xDot1;yDot2=yDot1;}
+                      DrawLine(xDot1,yDot1,xDot2,yDot2,White);
+                      xDot2=xDot1;yDot2=yDot1;
+                  }
+           }
+
+            if (InterpolationTypes[FlightMode][ChanneltoSet-1]==2){              //EXPO  ************************************************************************************************
+                  SendCommand(b3off);
+                  SendCommand(b4off);
+                  SendCommand(b7off);
+                  SendCommand(b8off);
+                  SendCommand(n2off);
+                  SendCommand(n4off);
+                  HalfXRange=xPoints[4]-xPoints[2];
+                  TopHalfYRange=yPoints[4]-yPoints[2];
+                  BottomHalfYRange=yPoints[2]-yPoints[0];
+                  yDot2=0;Step=10;
+                  for (xPoint = 0; xPoint <= HalfXRange;xPoint+=Step) {              // Simulate a curve with many short lines
+                      yPoint=MapExp(HalfXRange-xPoint,HalfXRange,0,0,BottomHalfYRange,Exponential[FlightMode][ChanneltoSet-1]); 
+                      if (Step>HalfXRange-xPoint) {Step=HalfXRange-xPoint;}
+                      if (Step<1) Step=1;
+                      yDot1= yPoint+yPoints[0];
+                      xDot1=xPoint+xPoints[0];
+                      if (yDot2==0) {xDot2=xDot1;yDot2=yDot1;}
+                      DrawLine(xDot1,yDot1,xDot2,yDot2,White);                       // Draw short line from this point to previous point
+                      xDot2=xDot1;yDot2=yDot1;
+                  }
+                  Step=10;yDot2=0;
+                  for (xPoint = 0; xPoint <= HalfXRange;xPoint+=Step) {              // Simulate a curve with many short lines
+                          yPoint=MapExp(xPoint,0,HalfXRange,0,TopHalfYRange,Exponential[FlightMode][ChanneltoSet-1]);  
+                          if (Step>HalfXRange-xPoint) {Step=HalfXRange-xPoint;}
+                          if (Step<1) Step=1;
+                          yDot1= yPoint+yPoints[2];
+                          xDot1=xPoint+xPoints[2];
+                          if (yDot2==0) {xDot2=xDot1;yDot2=yDot1;}
+                          DrawLine(xDot1,yDot1,xDot2,yDot2,White);                                           // Draw short line from this point to previous point
+                          xDot2=xDot1;yDot2=yDot1;
+                  }
+                  DrawDot(xPoints[0],yPoints[0],DotSize,DotColour);                                       // This adds 3 dots
+                  DrawDot(xPoints[2],yPoints[2],DotSize,DotColour);
+                  DrawDot(xPoints[4],yPoints[4],DotSize,DotColour);
+         
+            }
+
+
+            if (InterpolationTypes[FlightMode][ChanneltoSet-1]!=2){ 
+              DrawDot(xPoints[0],yPoints[0],DotSize,DotColour);                                           // This adds 5 dots
+              DrawDot(xPoints[1],yPoints[1],DotSize,DotColour);
+              DrawDot(xPoints[2],yPoints[2],DotSize,DotColour);
+              DrawDot(xPoints[3],yPoints[3],DotSize,DotColour);
+              DrawDot(xPoints[4],yPoints[4],DotSize,DotColour);
+            }
+            updateInterpolationTypes();
+
+}
+
+void BindNow(){
+      #ifdef   DB_BIND
+          Serial.println ("Binding");
+      #endif  
+       BindingNow=1; 
+       ModelDetected=true; // just to stop auto model switching     
+}
+
+int GetDifference(int YtouchPlace,int oldy) {
+int dd;       
+          dd=(YtouchPlace-oldy)/2;
+          if (dd<0) dd=-dd;
+          return dd;
+}
+
+void MovePoint() { // moves point very close to where user hit screen            
+int rjump=0;        
+                  GetDotPositions();                      // current  
+                  if (XtouchPlace>BoxRight-BoxOffset)   return;        // out of range
+                  if (XtouchPlace<BoxOffset)            return;        // out of range
+                  if (YtouchPlace<BoxTop)               return;        // out of range
+                  if (YtouchPlace>BoxBottom-BoxOffset)  return;        // out of range
+
+
+                  if(XtouchPlace<BoxOffset+xPoints[0])         // do leftmost point  ?
+                   {
+                    rjump=GetDifference(YtouchPlace,yPoints[0]);          
+                    if(YtouchPlace>yPoints[0])
+                      {
+                      if (MinDegrees[FlightMode][ChanneltoSet-1]>=rjump) MinDegrees[FlightMode][ChanneltoSet-1]-=rjump;
+                      } 
+                      else
+                      {
+                       if (MinDegrees[FlightMode][ChanneltoSet-1] <= (180-rjump)) MinDegrees[FlightMode][ChanneltoSet-1]+=rjump;
+                      }
+                     } 
+
+                   if(XtouchPlace>xPoints[1]-BoxOffset && XtouchPlace<xPoints[1]+BoxOffset)         // do next point  ?
+                       {
+                      if (InterpolationTypes[FlightMode][ChanneltoSet-1]==2) return;                                    //  expo = ignore this area
+                        rjump=GetDifference(YtouchPlace,yPoints[1]);   
+                        if(YtouchPlace>yPoints[1])
+                        {
+                        if (MidLowDegrees[FlightMode][ChanneltoSet-1]>=rjump) MidLowDegrees[FlightMode][ChanneltoSet-1]-=rjump;
+                        } 
+                        else
+                        {
+                         if(MidLowDegrees[FlightMode][ChanneltoSet-1]<=180-rjump) MidLowDegrees[FlightMode][ChanneltoSet-1]+=rjump;
+                        }
+                      }
+                 
+            if(XtouchPlace>xPoints[2]-BoxOffset && XtouchPlace<xPoints[2]+BoxOffset)         // do next point  ?
+                     {
+                     rjump=GetDifference(YtouchPlace,yPoints[2]);     
+                     if(YtouchPlace>yPoints[2])
+                      {
+                      if (CentreDegrees[FlightMode][ChanneltoSet-1]>=rjump)CentreDegrees[FlightMode][ChanneltoSet-1]-=rjump;
+                      } 
+                      else
+                      {
+                       if (CentreDegrees[FlightMode][ChanneltoSet-1]<=180-rjump) CentreDegrees[FlightMode][ChanneltoSet-1]+=rjump;
+                      }
+                    }
+
+                if(XtouchPlace>xPoints[3]-BoxOffset && XtouchPlace<xPoints[3]+BoxOffset)         // do next point  ?
+                       {
+                    if (InterpolationTypes[FlightMode][ChanneltoSet-1]==2) return;               //  expo = ignore this area
+                    rjump=GetDifference(YtouchPlace,yPoints[3]);     
+                    if(YtouchPlace>yPoints[3])
+                      {
+                      if (MidHiDegrees[FlightMode][ChanneltoSet-1]>=rjump)MidHiDegrees[FlightMode][ChanneltoSet-1]-=rjump;
+                      } 
+                      else
+                      {
+                        if (MidHiDegrees[FlightMode][ChanneltoSet-1]<=180-rjump) MidHiDegrees[FlightMode][ChanneltoSet-1]+=rjump;
+                      }
+                    }             
+                if(XtouchPlace>xPoints[3]+BoxOffset)         // do hi point  ?
+                    { 
+                    rjump=GetDifference(YtouchPlace,yPoints[4]);   
+                    if(YtouchPlace>yPoints[4])
+                      {
+                      if (MaxDegrees[FlightMode][ChanneltoSet-1]>rjump)MaxDegrees[FlightMode][ChanneltoSet-1]-=rjump;
+                      } 
+                      else
+                      {
+                       if (MaxDegrees[FlightMode][ChanneltoSet-1]<=180-rjump)MaxDegrees[FlightMode][ChanneltoSet-1]+=rjump;
+                      }
+                    }
+              DisplayCurve();      
+}
+
+
+// ****************************************************************************************************************************
+// ****************************************************************************************************************************
+// ******************************************** SEND AND RECEIVE A MODEL FILE *************************************************
+// ****************************************************************************************************************************
+// ****************************************************************************************************************************
+
+ #define FILEPIPEADDRESS     0xFEFEFEFEFELL  // Unique pipe address for FILE EXCHANGE 
+ #define BUFFERSIZE          20                           
+ #define FILEDATARATE        RF24_250KBPS  
+ #define FILEPALEVEL         RF24_PA_MAX
+ #define FILECHANNEL         123  
+ #define FILETIMEOUT         30          
+  
+// ******************************************** RECEIVE A MODEL FILE **********************************************************
+        
+void ReceiveModelFile(){
+uint64_t RXPipe;
+uint32_t RXTimer=0;
+
+
+char ModelsView_filename[]         = "filename";
+char ProgressStart[]               = "vis Progress,1";
+char ProgressEnd[]                 = "vis Progress,0";
+char Progress[]                    = "Progress";
+char Fbuffer[BUFFERSIZE+12];
+char Fack[]= "Packet received OK!";
+char Waiting[] = "Waiting ";
+char WaitTime[6];
+char WaitMsg[17];
+char ThreeDots[] = "...";
+char Receiving[] = "Receiving ...";
+char TimeoutMsg[] = "TIMEOUT";
+char CheckSumErrorMsg[] = "Checksum error!";
+char Success[] = "* Success! *";
+unsigned long LCheckSum=0;
+unsigned long RCheckSum=0;
+unsigned long Fsize=0;
+unsigned long Fposition=0;
+float SecondsElapsed=0;
+byte p=5;
+                        #ifdef DB_MODEL_EXCHANGE
+                            byte PacketNumber=0;
+                            Serial.println("Receiving model ...");  
+                            Serial.println(Waiting); 
+                        #endif
+                        SendText(ModelsView_filename,Waiting);
+                        RXPipe=FILEPIPEADDRESS;
+                        Radio1.begin();     
+                        Radio1.setAutoAck(1);                    
+                        Radio1.enableAckPayload(); 
+                        Radio1.setPayloadSize(32);                  
+                        Radio1.maskIRQ(1,1,1);           
+                        Radio1.setChannel(FILECHANNEL);           
+                        Radio1.setDataRate(FILEDATARATE);                         
+                        Radio1.setPALevel(FILEPALEVEL);
+                        Radio1.openReadingPipe(1,RXPipe);                        
+                        Radio1.startListening();
+                        RXTimer=millis();                                                                        // Start timer
+                        while (!Radio1.available()){                                                              // Await the sender....
+                            delay(5);
+                            KickTheDog(); // Watchdog 
+                            if ((millis()-RXTimer)/1000>=FILETIMEOUT) {
+                               #ifdef DB_MODEL_EXCHANGE
+                                    Serial.println("Timeout");
+                               #endif
+                               SendText(ModelsView_filename,TimeoutMsg);
+                               InitRadio(NewPipe);
+                               return;                                                                          // Give up waiting
+                            }else{
+                              SecondsElapsed = (millis()-RXTimer)/1000;
+                              if (SecondsElapsed == (int)SecondsElapsed) {                                      // whole number of seconds?
+                                  strcpy(WaitMsg,Waiting); strcat(WaitMsg,Str(WaitTime,(FILETIMEOUT-SecondsElapsed),0)); strcat(WaitMsg,ThreeDots);               
+                                  SendText(ModelsView_filename,WaitMsg);                                        // Show user how long remains to wait
+                              }
+                            }
+                         }                                                                                       // *First* packet must have arrived!
+                         SendCommand(ProgressStart);
+                         SendValue(Progress,p); 
+                         SendText(ModelsView_filename,Receiving);
+                         Radio1.writeAckPayload(1,&Fack,sizeof(Fack));                                            // Ack first packet
+                         Radio1.read(&Fbuffer, BUFFERSIZE+12);                                                    // Read it
+                         strcpy(SingleModelFile,Fbuffer);                                                        // Get filename  
+                         Fsize=Fbuffer[20];Fsize+=Fbuffer[21]<<8;Fsize+=Fbuffer[22]<<16;Fsize+=Fbuffer[23]<<24;  // Get file size                        
+                         #ifdef DB_MODEL_EXCHANGE
+                             Serial.println("CONNECTED!");
+                             Serial.print("FileName=");
+                             Serial.println(SingleModelFile);
+                             Serial.print("File size = ");
+                             Serial.println(Fsize);   
+                         #endif
+                         Fposition=0;
+                         ModelsFileNumber = SD.open(SingleModelFile, FILE_WRITE);       // Open file to receive 
+                         RXTimer=millis();                                              // zero timeout
+                         while ((Fposition<Fsize) && (millis()-RXTimer)/1000<=FILETIMEOUT){ // heer !!!!!!!!!!!!!!??????????????????  (Fposition<Fsize) ********************
+                            KickTheDog(); // Watchdog 
+                            if (Radio1.available()){         
+                            Radio1.writeAckPayload(1,&Fack,sizeof(Fack));     
+                            Radio1.read(&Fbuffer, BUFFERSIZE+12);  
+                            LCheckSum=0;
+                            for (i=0;i<BUFFERSIZE;i++) {LCheckSum+=byte(Fbuffer[i]);}  // Calculate Local Checksum  
+                            RCheckSum=Fbuffer[26];RCheckSum+=Fbuffer[27]<<8;RCheckSum+=Fbuffer[28]<<16;RCheckSum+=Fbuffer[29]<<24; // RCHECKSUM AT OFFSET 26
+                            ModelsFileNumber.seek(Fposition);                          // Move filepointer
+                            ModelsFileNumber.write(Fbuffer,BUFFERSIZE);                // Write part of file
+                            Fposition+=BUFFERSIZE;
+                            p = ((float)Fposition/(float)Fsize)*100;
+                            SendValue(Progress,p);
+                            delay(10);
+                            if (RCheckSum!=LCheckSum) {SendText(ModelsView_filename,CheckSumErrorMsg);} // Checksum checking ...
+                            #ifdef DB_MODEL_EXCHANGE
+                               PacketNumber=Fbuffer[25];
+                              Serial.print ("PacketNumber: ");
+                              Serial.println (PacketNumber);
+                              Serial.print ("Local checksum: ");
+                              Serial.print (LCheckSum);
+                              Serial.print ("  Remote checksum: ");
+                              Serial.println (RCheckSum);
+                             #endif                  
+                         }
+                               
+                       } 
+                      SendValue(Progress,100);
+                      ModelsFileNumber.close();
+                      BuildDirectory();
+                      SendText(ModelsView_filename,Success);
+                      delay(2000);
+                      SendText(ModelsView_filename,SingleModelFile);
+                      // Here the new model is imported for immediate use
+                          SingleModelFlag=true; 
+                          CloseModelsFile();     
+                          ReadOneModel(1);
+                          SingleModelFlag=false;  
+                          CloseModelsFile();   
+                          SaveAllParameters();     
+                          CloseModelsFile();  
+                          UpdateModelsNameEveryWhere();
+                      // ****************************************************
+                      InitRadio(NewPipe);
+                      SendCommand(ProgressEnd);          
+}
+
+// ******************************************** SEND A MODEL FILE *************************************************************
+
+void SendModelFile(){
+  char ProgressStart[]               = "vis Progress,1";
+  char ProgressEnd[]                 = "vis Progress,0";
+  char Progress[]                    = "Progress";
+  uint64_t TXPipe;
+  unsigned long Fsize=0;
+  unsigned long Fposition=0;
+  char Fbuffer[BUFFERSIZE+15];
+  unsigned long CheckSum=0;
+  byte PacketNumber=0;
+  int p=5;
+                SendCommand(ProgressStart);
+                SendValue(Progress,p); delay(10);
+                #ifdef DB_MODEL_EXCHANGE
+                    Serial.print ("Sending model: ");
+                    Serial.println (SingleModelFile);
+                #endif
+                TXPipe=FILEPIPEADDRESS;
+                ModelsFileNumber = SD.open(SingleModelFile, O_READ);        // Open file for reading
+                Fsize = ModelsFileNumber.size();                            // Get file size
+                #ifdef DB_MODEL_EXCHANGE
+                    Serial.print ("File Size: ");
+                    Serial.print (Fsize);
+                    Serial.println (" bytes.");
+                #endif
+                Radio1.begin();                                              // setup Radio1           
+                Radio1.setChannel(FILECHANNEL);                     
+                Radio1.setPALevel(FILEPALEVEL);
+                Radio1.setDataRate(FILEDATARATE);     
+                Radio1.setAutoAck(true);         
+                Radio1.enableAckPayload();   
+                Radio1.setRetries(5,5); 
+                Radio1.setPayloadSize(32); 
+                Radio1.openWritingPipe(TXPipe); 
+                Radio1.stopListening(); 
+                while (Fposition<Fsize){
+                      KickTheDog(); // Watchdog 
+                      p = ((float)Fposition/(float)Fsize)*100;
+                      SendValue(Progress,p);
+                      PacketNumber++;
+                      if (PacketNumber==1){
+                              strcpy(Fbuffer,SingleModelFile);                          // Filename in first packet
+                              Fbuffer[20]=Fsize;Fbuffer[21]=Fsize>>8;Fbuffer[22]=Fsize>>16;Fbuffer[23] = Fsize>>24;  // SEND FILE SIZE (four bytes)
+                              Fbuffer[25] = PacketNumber;                               // Packet number at offset 25
+                      }else{
+                              CheckSum=0;
+                              ModelsFileNumber.seek(Fposition);                         // Move filepointer
+                              ModelsFileNumber.read(Fbuffer,BUFFERSIZE);                // Read part of file
+                              for (i=0;i<BUFFERSIZE;i++) {CheckSum+=byte(Fbuffer[i]);}  // Calculate Checksum 
+                              Fbuffer[25] = PacketNumber;                               // Packet number at offset 25
+                              Fbuffer[26] = CheckSum;Fbuffer[27] = CheckSum>>8;Fbuffer[28] = CheckSum>>16;Fbuffer[29] = CheckSum>>24; // CHECKSUM AT offset 26
+                              Fposition+=BUFFERSIZE;
+                     }
+                     if (Radio1.write(&Fbuffer, BUFFERSIZE+12)){                         // Send part of file  
+                        delay(100);                                                     // allow time for receive and write
+                         if (Radio1.isAckPayloadAvailable()){   
+                             Radio1.read(&AckPayLoad, sizeof(AckPayLoad));                                                                                           
+                         } 
+                    }else{
+                         if (PacketNumber==2) {   // error - no connection
+                             InitRadio(NewPipe);
+                             SendCommand(ProgressEnd);
+                         return;          
+                         }
+                    }  
+                    #ifdef DB_MODEL_EXCHANGE
+                            Serial.println (PacketNumber);
+                    #endif 
+                }
+                ModelsFileNumber.close();
+                #ifdef DB_MODEL_EXCHANGE
+                        Serial.println ("ALL SENT.");
+                #endif
+                SendValue(Progress,100); delay(100);
+                InitRadio(NewPipe);
+                SendCommand(ProgressEnd);
+}
+
+void ShowFlightMode(){
+char        FMPress1[] = "click fm1,1";
+char        FMPress2[] = "click fm2,1";
+char        FMPress3[] = "click fm3,1";
+char        FMPress4[] = "click fm4,1";
+char        FMPress10[]= "click fm1,0";
+char        FMPress20[]= "click fm2,0";
+char        FMPress30[]= "click fm3,0";
+char        FMPress40[]= "click fm4,0";
+              switch (FlightMode){
+                case 1: SendCommand(FMPress1);
+                        SendCommand(FMPress10); 
+                break;
+                case 2: SendCommand(FMPress2);
+                        SendCommand(FMPress20);
+                break;
+                case 3: SendCommand(FMPress3);
+                        SendCommand(FMPress30);
+                break;
+                case 4: SendCommand(FMPress4);
+                        SendCommand(FMPress40);
+                break;
+                default:
+                break;
+              }    
+}
+
+void updateOneSwitchView(){
+char OneSwitchView_r0[]          = "r0";       // Not used
+char OneSwitchView_r1[]          = "r1";       // Flight modes
+char OneSwitchView_r2[]          = "r2";       // Auto
+char OneSwitchView_r3[]          = "r3";       // Ch9
+char OneSwitchView_r4[]          = "r4";       // Ch10
+char OneSwitchView_r5[]          = "r5";       // Ch11
+char OneSwitchView_r6[]          = "r6";       // Ch12
+char OneSwitchViewc_revd[]       = "c_revd";   // Reversed
+char SwNum[]                     = "Sw";
+
+       
+          
+          if (SwitchEditNumber==1){
+                 ValueSent=false;                                            // If no setting, = Not Used
+                 if (FMSwitch==1)        SendValue(OneSwitchView_r1,1);
+                 if (AutoSwitch==1)      SendValue(OneSwitchView_r2,1);
+                 if (Channel9Switch==1)  SendValue(OneSwitchView_r3,1);
+                 if (Channel10Switch==1) SendValue(OneSwitchView_r4,1);
+                 if (Channel11Switch==1) SendValue(OneSwitchView_r5,1);
+                 if (Channel12Switch==1) SendValue(OneSwitchView_r6,1);
+                 if (!ValueSent)         SendValue(OneSwitchView_r0,1);       // nothing yet, so not used
+                 if (Switch1Reversed)    SendValue(OneSwitchViewc_revd,1);
+         }
+         if (SwitchEditNumber==2){
+                 ValueSent=false;
+                 if (FMSwitch==2)        SendValue(OneSwitchView_r1,1); 
+                 if (AutoSwitch==2)      SendValue(OneSwitchView_r2,1);
+                 if (Channel9Switch==2)  SendValue(OneSwitchView_r3,1);
+                 if (Channel10Switch==2) SendValue(OneSwitchView_r4,1);
+                 if (Channel11Switch==2) SendValue(OneSwitchView_r5,1);
+                 if (Channel12Switch==2) SendValue(OneSwitchView_r6,1);
+                 if (!ValueSent)         SendValue(OneSwitchView_r0,1);      // nothing yet, so not used
+                 if (Switch2Reversed)    SendValue(OneSwitchViewc_revd,1);     
+         }
+         if (SwitchEditNumber==3){
+                 ValueSent=false;
+                 if (FMSwitch==3)        SendValue(OneSwitchView_r1,1);
+                 if (AutoSwitch==3)      SendValue(OneSwitchView_r2,1);
+                 if (Channel9Switch==3)  SendValue(OneSwitchView_r3,1);
+                 if (Channel10Switch==3) SendValue(OneSwitchView_r4,1);
+                 if (Channel11Switch==3) SendValue(OneSwitchView_r5,1);
+                 if (Channel12Switch==3) SendValue(OneSwitchView_r6,1);
+                 if (!ValueSent)         SendValue(OneSwitchView_r0,1);       // nothing yet, so not used
+                 if (Switch3Reversed)    SendValue(OneSwitchViewc_revd,1);
+         }
+         if (SwitchEditNumber==4){
+                 ValueSent=false;
+                 if (FMSwitch==4)        SendValue(OneSwitchView_r1,1);  
+                 if (AutoSwitch==4)      SendValue(OneSwitchView_r2,1);   
+                 if (Channel9Switch==4)  SendValue(OneSwitchView_r3,1);
+                 if (Channel10Switch==4) SendValue(OneSwitchView_r4,1);
+                 if (Channel11Switch==4) SendValue(OneSwitchView_r5,1);
+                 if (Channel12Switch==4) SendValue(OneSwitchView_r6,1);
+                 if (!ValueSent)         SendValue(OneSwitchView_r0,1);       // nothing yet, so not used
+                  if (Switch4Reversed)   SendValue(OneSwitchViewc_revd,1);
+         }   
+                 SendValue(SwNum,SwitchEditNumber);                            // show switch number     
+     
+
+}
+
+
+
+// *********************************************************************************************************************************
+// *********************************************************************************************************************************
+// ********************************************* BUTTON WAS PRESSED ****************************************************************
+// ************************************ (DEAL WITH INPUT FROM NEXTION DISPLAY) *****************************************************
+//**********************************************************************************************************************************
+
+void Button_was_pressed(){
+ 
+char OneSwitchView_r1[]          = "r1";       // Flight modes
+char OneSwitchView_r2[]          = "r2";       // Auto
+char OneSwitchView_r3[]          = "r3";       // Ch9
+char OneSwitchView_r4[]          = "r4";       // Ch10
+char OneSwitchView_r5[]          = "r5";       // Ch11
+char OneSwitchView_r6[]          = "r6";       // Ch12
+char OneSwitchViewc_revd[]       = "c_revd";   // Reversed          
+char Write[]        = "Write";
+char Setup[]        = "Setup";
+char ClickX[]       = "ClickX";
+char ClickY[]       = "ClickY";
+char Reset[]        = "Reset";
+char Reverse[]      = "Reverse";
+char yy1up[]        = "yy1up";
+char yy1down[]      = "yy1down";
+char yy2up[]        = "yy2up";
+char yy2down[]      = "yy2down";
+char midlowyup[]    = "midlowyup";
+char midlowydown[]  = "midlowydown";
+char midyup[]       = "midyup";
+char midydown[]     = "midydown";
+char midhiyup[]     = "midhiyup";
+char midhiydown[]   = "midhiydown";
+char Front_View[]   = "FrontView";   
+char Sticks_View[]  = "SticksView";  
+char Graph_View[]   = "GraphView";  
+char Mixes_View[]   = "MixesView";  
+char SetupView[]    = "MainSetup";    // changed string to avoid overlap
+char SetupViewFM[]  = "SetupViewFM:"; 
+char ModelNMSave[]  = "ModelNMSave";
+char Data_View[]    = "DataView";
+char Calibrate_View[] = "CalibrateView"; 
+char Trim[]          = "Trim";
+char TrimView[]      = "TrimView";
+char TR1[]           = "TR1";
+char TR2[]           = "TR2";
+char TR3[]           = "TR3";
+char TR4[]           = "TR4";
+char TRIMS50[]       = "TRIMS50";
+char RTRIM[]         = "RTRIM";
+char MIXES_VIEW[]    = "MIXESVIEW"; // first call  
+char Fhss_View[]     = "FhssView"; 
+char bind[]           = "Bind";
+char FM1[]            = "FM 1";
+char FM2[]            = "FM 2";
+char FM3[]            = "FM 3";
+char FM4[]            = "FM 4";
+char ReScan[]         = "ReScan";
+char StopScan[]       = "StopScan";
+char LoadModel[]      = "LoadModel";
+char Models_View[]    = "ModelsView";
+char Delete[]         = "Delete";
+char SaveGains[]      = "SaveGains";
+char Gains_View[]     = "GainsView";
+int j                 =   0;
+int p                 =   0;         
+char MixesView_MixNumber[]       = "MixNumber";
+char ModelsView_ModelNumber[]    = "ModelNumber";
+char page_SticksView[]           = "page SticksView";
+char page_GraphView[]            = "page GraphView";
+char MixesView_Enabled[]         = "Enabled";
+char MixesView_FlightMode[]      = "FlightMode";
+char MixesView_MasterChannel[]   = "MasterChannel";
+char MixesView_SlaveChannel[]    = "SlaveChannel";
+char MixesView_Reversed[]        = "Reversed";
+char MixesView_Percent[]         = "Percent";
+char page_SetupView[]            = "page SetupView";
+char page_FrontView[]            = "page FrontView";
+char GoSetupView[]               = "GoSetupView";
+char GoFrontView[]               = "GoFrontView";              
+char SvT11[]                     = "t11";
+char CMsg1[]                     = "Please move all controls\r\nto their full extremes several times,\r\nthen press the button again ...";
+char SvB0[]                      = "b0";   
+char CMsg2[]                     = "Wiggle, then press!";  
+char Cmsg3[]                     = "Please CENTRE all controls,\r\nWait a moment,\r\nthen press again...";                      
+char Cmsg4[]                     = "CENTRE ALL!";
+char Cmsg5[]                     = "To calibrate TX sticks,\r\npress the button below\r\nthen follow instructions here... ";
+char Cmsg6[]                     = "Calibrate TX sticks";
+char CaliNextion[]               = "CaliNextion";
+char SaveType[]                  = "SaveType";
+char TypeView[]                  = "TypeView";
+char AeroplaneType[]             = "mt1";
+char HelicopterType[]            = "mt2";
+char QuadcopterType[]            = "mt3";
+char HexacopterType[]            = "mt4";
+char OctocopterType[]            = "mt5";
+char CopyToAllFlightModes[]      = "callfm";   
+char RXBAT[]                     = "RXBAT"; 
+char r2s[]                       = "r2s";
+char r3s[]                       = "r3s";
+char r4s[]                       = "r4s";
+char r5s[]                       = "r5s";
+char r6s[]                       = "r6s";
+
+char SwitchesView[]              = "SwitchesView";
+char SwitchesView1[]             = "SwitchesView1";
+char OneSwitchView[]             = "OneSwitchView";
+char PageOneSwitchView[]         = "page OneSwitchView";
+char PageSwitchView[]            = "page SwitchesView";
+char InputsView[]                = "InputsView";
+char InputsDone[]                = "InputsDone";
+char InPutStick_c1[]             = "c1";
+char InPutStick_c2[]             = "c2";
+char InPutStick_c3[]             = "c3";
+char InPutStick_c4[]             = "c4";
+char InPutStick_c5[]             = "c5";
+char InPutStick_c6[]             = "c6";
+char InPutStick_c7[]             = "c7";
+char InPutStick_c8[]             = "c8";
+char InPutStick_c9[]             = "c9";
+char InPutStick_c10[]            = "c10";
+char InPutStick_c11[]            = "c11";
+char InPutStick_c12[]            = "c12";
+char InPutStick_c13[]            = "c13";
+char InPutStick_c14[]            = "c14";
+char InPutStick_c15[]            = "c15";
+char InPutStick_c16[]            = "c16";
+char Export[]                    = "Export";
+char Import[]                    = "Import";
+char ListFiles[]                 = "ListFiles";
+char Nextfile[]                  = "Nextfile";
+char Prevfile[]                  = "Prevfile";
+char DelFile[]                   = "DelFile";
+char ModExt[]                    = ".MOD";
+char FailSAVE[]                  = "FailSAVE";
+char FailSafe[]                  = "FailSafe";
+char fs1[]                       = "fs1";
+char fs2[]                       = "fs2";
+char fs3[]                       = "fs3";
+char fs4[]                       = "fs4";
+char fs5[]                       = "fs5";
+char fs6[]                       = "fs6";
+char fs7[]                       = "fs7";
+char fs8[]                       = "fs8";
+char fs9[]                       = "fs9";
+char fs10[]                      = "fs10";
+char fs11[]                      = "fs11";
+char fs12[]                      = "fs12";
+char fs13[]                      = "fs13";
+char fs14[]                      = "fs14";
+char fs15[]                      = "fs15";
+char fs16[]                      = "fs16";
+char CH1NAME[]                   = "CH1NAME=";
+char CH2NAME[]                   = "CH2NAME=";
+char CH3NAME[]                   = "CH3NAME=";
+char CH4NAME[]                   = "CH4NAME=";
+char CH5NAME[]                   = "CH5NAME=";
+char CH6NAME[]                   = "CH6NAME=";
+char CH7NAME[]                   = "CH7NAME=";
+char CH8NAME[]                   = "CH8NAME=";
+char CH9NAME[]                   = "CH9NAME=";
+char CH10NAME[]                  = "CH10NAME=";
+char CH11NAME[]                  = "CH11NAME=";
+char CH12NAME[]                  = "CH12NAME=";
+char CH13NAME[]                  = "CH13NAME=";
+char CH14NAME[]                  = "CH14NAME=";
+char CH15NAME[]                  = "CH15NAME=";
+char CH16NAME[]                  = "CH16NAME=";
+char MixesView_chM[]             = "chM";
+char MixesView_chS[]             = "chS";
+char ProgressStart[]             = "vis Progress,1";
+char ProgressEnd[]               = "vis Progress,0";
+char Progress[]                  = "Progress";
+char HelpView[]                  = "HelpView";
+char ModelsView_filename[]       = "filename";
+char RangeView[]                 = "RangeView";
+char Phigh[]                     = "Phigh";
+char Pmed[]                      = "Pmed";
+char Plow[]                      = "Plow";
+char Pmin[]                      = "Pmin";
+char Dhigh[]                     = "Dhigh";
+char Dmid[]                      = "Dmid";
+char Dlow[]                      = "Dlow";
+char SetPower[]                  = "Power=";
+char DATARATE[]                  = "DATARATE=";
+char ReceiveModel[]              = "ReceiveModel";
+char SendModel[]                 = "SendModel";
+char PowerOff[]                  = "PowerOff";
+char OffNow[]                    = "OffNow";  // force power off
+char StillConnected[]            = "vis StillConnected,1";
+char NotStillConnected[]         = "vis StillConnected,0";
+char OptionsView[]               = "OptionsView";
+char OptionsViewS[]              = "OptionsViewS";
+char Pto[]                       = "Pto";
+char Tx_Name[]                   = "TxName";
+char Exrite[]                    = "Exrite";
+char ExpR[]                      = "Exp";
+char Smooth[]                    = "Smooth";
+char Lines[]                     = "Lines";
+char Expon[]                     = "Expo"; // number display
+char GOTO[]                      = "GOTO:";
+char WhichPage[]                 = "page                            "; // excessive spaces for page name
+char setTime[]                   = "SetTime";
+char AddMinute[]                 = "IncMinute";
+char Dec_Minute[]                = "DecMinute";
+char Dec_Hour[]                  = "DecHour";
+char Inc_Hour[]                  = "IncHour";
+char Inc_Year[]                  = "IncYear";
+char Dec_Year[]                  = "DecYear"; 
+char Inc_Date[]                  = "IncDate";
+char Dec_Date[]                  = "DecDate";
+char Inc_Month[]                 = "IncMonth";
+char Dec_Month[]                 = "DecMonth";  
+
+
+       if (strlen(WordsIn)> 0) 
+        {    
+           StartInactvityTimeout();
+            #ifdef DB_NEXTION 
+               Serial.print ("From Nextion: ");  
+               Serial.println (WordsIn);    
+            #endif
+
+           if (InStrng(HelpView,WordsIn) > 0){
+                 SavedCurrentView=CurrentView;
+                 CurrentView=Help_View;
+                 SendHelp();
+           }
+   
+if (InStrng(setTime,WordsIn) > 0){ // TEST ZONE
+               ClearText();
+           }
+ if (InStrng(Dec_Minute,WordsIn) > 0){ 
+                 DecMinute();
+                 ClearText();
+           }
+  if (InStrng(AddMinute,WordsIn) > 0){ 
+                 IncMinute();
+                 ClearText();
+           }
+
+if (InStrng(Dec_Hour,WordsIn) > 0){ 
+                 DecHour();
+                 ClearText();
+           }
+if (InStrng(Inc_Hour,WordsIn) > 0){ 
+                 IncHour();
+                 ClearText();
+           }
+
+if (InStrng(Dec_Year,WordsIn) > 0){ 
+                 DecYear();
+                 ClearText();
+           }
+if (InStrng(Inc_Year,WordsIn) > 0){ 
+                 IncYear();
+                 ClearText();
+           }
+
+if (InStrng(Dec_Date,WordsIn) > 0){ 
+                 DecDate();
+                 ClearText();
+           }
+if (InStrng(Inc_Date,WordsIn) > 0){ 
+                 IncDate();
+                 ClearText();
+           }
+
+if (InStrng(Dec_Month,WordsIn) > 0){ 
+                 DecMonth();
+                 ClearText();
+           }
+if (InStrng(Inc_Month,WordsIn) > 0){ 
+                 IncMonth();
+                 ClearText();
+           }
+
+
+
+
+if (InStrng(OptionsViewS,WordsIn) > 0){  
+           if(FHSSBottom<1) FHSSBottom=1;
+           SendValue (FhssView_Rlow, FHSSBottom);
+           SendValue (FhssView_Rhigh, FHSSTop);
+           SendValue (ScreenViewTimeout,ScreenTimeout); 
+           SendValue (Pto,(Inactivity_Timeout/TICKSPERMINUTE));
+           SendText  (Tx_Name,TxName); 
+           CurrentView=Options_View;
+           ClearText();
+        }
+if (InStrng(GOTO,WordsIn) > 0){          
+           i=5;while(byte(WordsIn[i])>0 && i<30) {WhichPage[i]=WordsIn[i];i++;WhichPage[i]=0;}   // Get page name to which to return
+           SendCommand (WhichPage);
+           CurrentView=SavedCurrentView;
+           if (CurrentView==GraphView) {DisplayCurve();SendValue(CopyToAllFlightModes,0);}
+           if (CurrentView==Switches_View) {UpdateSwitchesDisplay();}
+           if (CurrentView==One_Switch_View) {updateOneSwitchView();}
+           if (CurrentView==ModelsView) {SendValue(ModelsView_ModelNumber,ModelNumber);  }    //HEER
+           ClearText();
+        }
+
+       if (InStrng(Exrite,WordsIn) > 0){                //  *******************
+            if(GetValue(ExpR))   {InterpolationTypes[FlightMode][ChanneltoSet-1]=2;}
+            if(GetValue(Smooth)) {InterpolationTypes[FlightMode][ChanneltoSet-1]=1;}
+            if(GetValue(Lines))  {InterpolationTypes[FlightMode][ChanneltoSet-1]=0;}
+            Exponential[FlightMode][ChanneltoSet-1]=(GetValue(Expon));
+            ClearText();
+            DisplayCurve();
+       }
+
+
+
+        p=InStrng(OptionsView,WordsIn);
+          if (p>0){
+          i=strlen(OptionsView);j=0;   
+          while(byte(WordsIn[i])>0 && i<100){TxName[j]=WordsIn[i];j++;i++;TxName[j]=0;}   
+          FHSSBottom=GetValue(FhssView_Rlow);
+          FHSSTop=GetValue(FhssView_Rhigh);
+          if (FHSSBottom>FHSSTop) {BoxOffset=FHSSBottom;FHSSBottom=FHSSTop;FHSSTop=BoxOffset;}
+          if (FHSSBottom<1) FHSSBottom=1; 
+          if (FHSSTop>125) FHSSTop=125;
+          if (FHSSBottom==FHSSTop) {FHSSBottom=1;FHSSTop=83;}
+          ScreenTimeout=GetValue(ScreenViewTimeout);
+          Inactivity_Timeout=GetValue(Pto)*TICKSPERMINUTE; 
+          if (Inactivity_Timeout<INACTIVITYMINIMUM) Inactivity_Timeout=INACTIVITYMINIMUM;   
+          if (Inactivity_Timeout>INACTIVITYMAXIMUM) Inactivity_Timeout=INACTIVITYMAXIMUM;   
+          
+          SaveTXStuff();
+          ClearText();
+        }
+
+if (InStrng(ReceiveModel,WordsIn) > 0){  
+        i=strlen(ReceiveModel);j=0;                                                          
+        while(byte(WordsIn[i] && i<100)>0){SingleModelFile[j]=WordsIn[i];j++;i++;SingleModelFile[j]=0;}   // got local name but won't use it.....
+        ReceiveModelFile();
+
+}
+if (InStrng(PowerOff,WordsIn) > 0){  
+       if (!LostContactFlag && BoundFlag){
+              SendCommand(StillConnected);
+              delay(750); // 3/4 second
+              SendCommand(NotStillConnected);
+       }else{
+              digitalWrite(POWER_OFF_PIN,HIGH);
+       }
+}
+
+
+if (InStrng(OffNow,WordsIn) > 0){  
+              digitalWrite(POWER_OFF_PIN,HIGH);   // force OFF in Options View
+             
+}
+
+
+if (InStrng(SendModel,WordsIn) > 0){  
+        i=strlen(SendModel);j=0;                                                          
+        while(byte(WordsIn[i])>0){SingleModelFile[j]=WordsIn[i];j++;i++;SingleModelFile[j]=0;}   
+        SendModelFile();
+
+}
+
+if (InStrng(RangeView,WordsIn) > 0){ 
+
+            SendValue(Pmin,0);
+            SendValue(Plow,0);
+            SendValue(Pmed,0);
+            SendValue(Phigh,0);
+            SendValue(Dlow,0);
+            SendValue(Dmid,0);
+            SendValue(Dhigh,0);
+            switch(PowerSetting){
+              case 1:
+              SendValue(Pmin,1);break;
+              case 2: 
+              SendValue(Plow,1);break;
+              case 3: 
+              SendValue(Pmed,1);break;
+              case 4: 
+              SendValue(Phigh,1);break;
+            }
+             switch(DataRate){
+              case 1:
+              SendValue(Dlow,1);break;
+              case 2: 
+              SendValue(Dmid,1);break;
+              case 3: 
+              SendValue(Dhigh,1);break;
+            }
+          }
+
+        p=InStrng(SetPower,WordsIn);
+        if (p > 0){ 
+           PowerSetting=GetNextNumber(strlen(SetPower)+1,WordsIn);
+           if (PowerSetting==0){  // reset to default
+              PowerSetting=4;
+              DataRate=1; 
+           }
+           ReInit=true;
+        }
+      p=InStrng(DATARATE,WordsIn);
+       if (p > 0){ 
+            DataRate=GetNextNumber(strlen(DATARATE)+1,WordsIn);   
+            ReInit=true;
+       }
+
+          if (InStrng(FailSAVE,WordsIn) > 0){ 
+            SendCommand(ProgressStart);
+            SendValue(Progress,0); 
+            FailSafeChannel[0] = GetValue(fs1);
+            SendValue(Progress,5); 
+            FailSafeChannel[1] = GetValue(fs2);
+            SendValue(Progress,15); 
+            FailSafeChannel[2] = GetValue(fs3);
+            SendValue(Progress,25); 
+            FailSafeChannel[3] = GetValue(fs4);
+            SendValue(Progress,35); 
+            FailSafeChannel[4] = GetValue(fs5);
+            SendValue(Progress,45); 
+            FailSafeChannel[5] = GetValue(fs6);
+            SendValue(Progress,50); 
+            FailSafeChannel[6] = GetValue(fs7);
+            SendValue(Progress,55); 
+            FailSafeChannel[7] = GetValue(fs8);
+            SendValue(Progress,60);
+            FailSafeChannel[8] = GetValue(fs9);
+            SendValue(Progress,65);
+            FailSafeChannel[9] = GetValue(fs10);
+            SendValue(Progress,70);
+            FailSafeChannel[10]= GetValue(fs11);
+            SendValue(Progress,71);
+            FailSafeChannel[11]= GetValue(fs12);
+            SendValue(Progress,72);
+            FailSafeChannel[12] = GetValue(fs13);
+            SendValue(Progress,75);
+            FailSafeChannel[13] = GetValue(fs14);
+            SendValue(Progress,80);
+            FailSafeChannel[14]= GetValue(fs15);
+            SendValue(Progress,85);
+            FailSafeChannel[15]= GetValue(fs16);
+            SendValue(Progress,90);
+            SaveOneModel(ModelNumber);
+            SendValue(Progress,100); delay (200);
+            SaveFailSafeNow=true;
+            SendCommand(ProgressEnd);
+          }
+
+            if (InStrng(FailSafe,WordsIn) > 0){ 
+              SendValue(fs1, FailSafeChannel[0]);
+              SendValue(fs2, FailSafeChannel[1]);
+              SendValue(fs3, FailSafeChannel[2]);
+              SendValue(fs4, FailSafeChannel[3]);
+              SendValue(fs5, FailSafeChannel[4]);
+              SendValue(fs6, FailSafeChannel[5]);
+              SendValue(fs7, FailSafeChannel[6]);
+              SendValue(fs8, FailSafeChannel[7]);
+              SendValue(fs9, FailSafeChannel[8]);
+              SendValue(fs10, FailSafeChannel[9]);
+              SendValue(fs11, FailSafeChannel[10]);
+              SendValue(fs12, FailSafeChannel[11]);
+              SendValue(fs13, FailSafeChannel[12]);
+              SendValue(fs14, FailSafeChannel[13]);
+              SendValue(fs15, FailSafeChannel[14]);
+              SendValue(fs16, FailSafeChannel[15]);
+
+      
+        }
+ 
+         
+         if (InStrng(OneSwitchView,WordsIn) > 0){  
+              SwitchEditNumber=GetChannel();                                 // which switch?        
+              CurrentView=One_Switch_View;
+              SendCommand (PageOneSwitchView);                               // edit one switch - could be 1-4
+              updateOneSwitchView();
+         
+}
+           
+
+
+
+          
+           
+        if (InStrng(SwitchesView1,WordsIn) > 0){                                                    //  read switch values from screen (could be 1-4)
+               if (GetValue(OneSwitchView_r1)) {FMSwitch = SwitchEditNumber;} else {
+                  if (FMSwitch == SwitchEditNumber) FMSwitch=0;}
+               if (GetValue(OneSwitchView_r2))  {AutoSwitch= SwitchEditNumber;} else {
+                  if (AutoSwitch == SwitchEditNumber) AutoSwitch=0; }
+               if (GetValue(OneSwitchView_r3)) {Channel9Switch = SwitchEditNumber;} else {
+                  if (Channel9Switch == SwitchEditNumber) Channel9Switch=0;  }
+               if (GetValue(OneSwitchView_r4)) {Channel10Switch = SwitchEditNumber;} else {
+                  if (Channel10Switch == SwitchEditNumber) Channel10Switch=0;}
+               if (GetValue(OneSwitchView_r5)) {Channel11Switch = SwitchEditNumber;} else {
+                  if (Channel11Switch == SwitchEditNumber) Channel11Switch=0;}
+               if (GetValue(OneSwitchView_r6)) {Channel12Switch = SwitchEditNumber;} else {
+                   if (Channel12Switch == SwitchEditNumber) Channel12Switch=0;}
+        
+                if  (SwitchEditNumber==1)  {if (GetValue(OneSwitchViewc_revd)) {Switch1Reversed=true;} else {Switch1Reversed=false;}}
+                if  (SwitchEditNumber==2)  {if (GetValue(OneSwitchViewc_revd)) {Switch2Reversed=true;} else {Switch2Reversed=false;}}
+                if  (SwitchEditNumber==3)  {if (GetValue(OneSwitchViewc_revd)) {Switch3Reversed=true;} else {Switch3Reversed=false;}}
+                if  (SwitchEditNumber==4)  {if (GetValue(OneSwitchViewc_revd)) {Switch4Reversed=true;} else {Switch4Reversed=false;}}              
+               SaveOneModel(ModelNumber);
+               SendCommand (PageSwitchView);                                                        // change to all switches screen
+               UpdateSwitchesDisplay();                                                             // update its info  
+         }
+               if (InStrng(InputsView,WordsIn) > 0){   
+                        SendValue(InPutStick_c1,InPutStick[0]+1);  
+                        SendValue(InPutStick_c2,InPutStick[1]+1);       
+                        SendValue(InPutStick_c3,InPutStick[2]+1);       
+                        SendValue(InPutStick_c4,InPutStick[3]+1);       
+                        SendValue(InPutStick_c5,InPutStick[4]+1);       
+                        SendValue(InPutStick_c6,InPutStick[5]+1);       
+                        SendValue(InPutStick_c7,InPutStick[6]+1);     
+                        SendValue(InPutStick_c8,InPutStick[7]+1);  
+                        SendValue(InPutStick_c9,InPutStick[8]+1);       
+                        SendValue(InPutStick_c10,InPutStick[9]+1);       
+                        SendValue(InPutStick_c11,InPutStick[10]+1);     
+                        SendValue(InPutStick_c12,InPutStick[11]+1);   
+                        SendValue(InPutStick_c13,InPutStick[12]+1);       
+                        SendValue(InPutStick_c14,InPutStick[13]+1);       
+                        SendValue(InPutStick_c15,InPutStick[14]+1);     
+                        SendValue(InPutStick_c16,InPutStick[15]+1);   
+
+
+             
+               }
+
+                if (InStrng(InputsDone,WordsIn) > 0){  
+                          SendCommand(ProgressStart);
+                          InPutStick[0]=CheckRange_0_16(GetValue(InPutStick_c1))-1;
+                          SendValue(Progress,5); 
+                          InPutStick[1]=CheckRange_0_16(GetValue(InPutStick_c2))-1;
+                          SendValue(Progress,15); 
+                          InPutStick[2]=CheckRange_0_16(GetValue(InPutStick_c3))-1;
+                          SendValue(Progress,25);
+                          InPutStick[3]=CheckRange_0_16(GetValue(InPutStick_c4))-1;
+                          SendValue(Progress,35);
+                          InPutStick[4]=CheckRange_0_16(GetValue(InPutStick_c5))-1;
+                          SendValue(Progress,45); 
+                          InPutStick[5]=CheckRange_0_16(GetValue(InPutStick_c6))-1;
+                          SendValue(Progress,55); 
+                          InPutStick[6]=CheckRange_0_16(GetValue(InPutStick_c7))-1;
+                          SendValue(Progress,65); 
+                          InPutStick[7]=CheckRange_0_16(GetValue(InPutStick_c8))-1;   
+                          SendValue(Progress,75); 
+                          InPutStick[8]=CheckRange_0_16(GetValue(InPutStick_c9))-1;
+                          SendValue(Progress,80); 
+                          InPutStick[9]=CheckRange_0_16(GetValue(InPutStick_c10))-1;
+                          SendValue(Progress,85); 
+                          InPutStick[10]=CheckRange_0_16(GetValue(InPutStick_c11))-1; 
+                          SendValue(Progress,86); 
+                          InPutStick[11]=CheckRange_0_16(GetValue(InPutStick_c12))-1; 
+                          SendValue(Progress,87);               
+                          InPutStick[12]=CheckRange_0_16(GetValue(InPutStick_c13))-1;
+                          SendValue(Progress,88);          
+                          InPutStick[13]=CheckRange_0_16(GetValue(InPutStick_c14))-1;  
+                          SendValue(Progress,89);        
+                          InPutStick[14]=CheckRange_0_16(GetValue(InPutStick_c15))-1;   
+                          SendValue(Progress,95);    
+                          InPutStick[15]=CheckRange_0_16(GetValue(InPutStick_c16))-1;  
+                          SendValue(Progress,99);        
+                          SaveOneModel(ModelNumber);
+                          SendValue(Progress,100); 
+                          CurrentMode=NORMAL;
+                          SendCommand(ProgressEnd); 
+                          UpdateButtonLabels();     
+                          SendCommand (page_SetupView);    
+ 
+               }
+
+            if (InStrng(CH1NAME, WordsIn) > 0){i=p+8;DoNewChannelName(1,i) ;}
+            if (InStrng(CH2NAME, WordsIn) > 0){i=p+8;DoNewChannelName(2,i) ;}
+            if (InStrng(CH3NAME, WordsIn) > 0){i=p+8;DoNewChannelName(3,i) ;}
+            if (InStrng(CH4NAME, WordsIn) > 0){i=p+8;DoNewChannelName(4,i) ;}
+            if (InStrng(CH5NAME, WordsIn) > 0){i=p+8;DoNewChannelName(5,i) ;}
+            if (InStrng(CH6NAME, WordsIn) > 0){i=p+8;DoNewChannelName(6,i) ;}
+            if (InStrng(CH7NAME, WordsIn) > 0){i=p+8;DoNewChannelName(7,i) ;}
+            if (InStrng(CH8NAME, WordsIn) > 0){i=p+8;DoNewChannelName(8,i) ;}
+            if (InStrng(CH9NAME, WordsIn) > 0){i=p+8;DoNewChannelName(9,i) ;}
+            if (InStrng(CH10NAME,WordsIn) > 0){i=p+9;DoNewChannelName(10,i);}
+            if (InStrng(CH11NAME,WordsIn) > 0){i=p+9;DoNewChannelName(11,i);}
+            if (InStrng(CH12NAME,WordsIn) > 0){i=p+9;DoNewChannelName(12,i);}
+            if (InStrng(CH13NAME,WordsIn) > 0){i=p+9;DoNewChannelName(13,i);}
+            if (InStrng(CH14NAME,WordsIn) > 0){i=p+9;DoNewChannelName(14,i);}
+            if (InStrng(CH15NAME,WordsIn) > 0){i=p+9;DoNewChannelName(15,i);}
+            if (InStrng(CH16NAME,WordsIn) > 0){i=p+9;DoNewChannelName(16,i);}
+ 
+             if (InStrng(DelFile,WordsIn) > 0){    // Delete a file
+                    j=0;i=p+7;                                                          
+                    while(byte(WordsIn[i])>0){
+                    SingleModelFile[j]=WordsIn[i];
+                    j++;i++;SingleModelFile[j]=0;}    
+                    SD.remove(SingleModelFile);
+                    BuildDirectory(); 
+                    FileNumberInView--; 
+                    ShowFileNumber(); 
+                    CloseModelsFile();       
+            }
+           
+            if (InStrng(Nextfile,WordsIn) > 0){   // show next file
+               FileNumberInView++; 
+               ShowFileNumber(); 
+               CloseModelsFile();       
+            }
+
+             
+            if (InStrng(Prevfile,WordsIn) > 0){  // show prev file
+               FileNumberInView--; 
+               ShowFileNumber(); 
+               CloseModelsFile();       
+            }
+           
+           
+           if (InStrng(SwitchesView,WordsIn) > 0){                                                                                  
+                 UpdateSwitchesDisplay();                                                   // display saved values               
+                 CurrentView = Switches_View;  
+           }
+ 
+            if ((InStrng(Calibrate_View,WordsIn)) > 0){
+                Force_ReDisplay();
+                CurrentView=CalibrateView; 
+               
+                ClearText();
+            }   
+
+                    p=InStrng(Export,WordsIn);    
+                    if (p>0){
+                         j=0;i=p+5; 
+                     while((WordsIn[i])>0){ 
+                          if (WordsIn[i]>=97 && WordsIn[i] <=122){WordsIn[i]&=~0x20;}            // upper case only                    
+                          if (WordsIn[i]<=32 || WordsIn[i]>127) break;
+                          SingleModelFile[j]=WordsIn[i];
+                          j++;i++;SingleModelFile[j]=0;
+                      }                                          
+                      if (InStrng(ModExt,SingleModelFile)==0) {strcat(SingleModelFile,ModExt);}   
+                      SendText(ModelsView_filename,SingleModelFile);
+                      SendCommand(ProgressStart); delay(20);
+                      SendValue(Progress,10);  delay(20);
+                      CloseModelsFile(); 
+                      for (int WriteTwice=1; WriteTwice<=2;WriteTwice++){ // if a new file, write twice seems to be needed!!
+                            SingleModelFlag=true; 
+                            OpenModelsFile();     
+                            SendValue(Progress,25);  delay(10);                                     
+                            SaveOneModel(1);
+                            SendValue(Progress,50);  delay(10);
+                            CloseModelsFile();         
+                      }
+                      SingleModelFlag=false; 
+                      SendValue(Progress,75); delay(10);
+                      BuildDirectory();
+                      SendValue(Progress,100); delay(10);
+                      SendCommand(ProgressEnd);
+                      if (FileError) ShowFileErrorMsg(); 
+               }
+
+                    p=InStrng(Import,WordsIn);    
+                    if (p>0){
+                    SendCommand(ProgressStart);delay(10);
+                    SendValue(Progress,5);delay(10);
+                    j=0;i=p+5;                                                        
+                    while((WordsIn[i])>0){
+                        if (WordsIn[i]>=97 && WordsIn[i] <=122){WordsIn[i]&=~0x20;}
+                        SingleModelFile[j]=WordsIn[i];
+                        j++;i++;SingleModelFile[j]=0;
+                    } 
+                    if (InStrng(ModExt,SingleModelFile)==0) strcat(SingleModelFile,ModExt);                               
+                    SingleModelFlag=true; 
+                    SendValue(Progress,10); delay(10);
+                    CloseModelsFile();     
+                    ReadOneModel(1);
+                    SendValue(Progress,50); delay(10);
+                    SingleModelFlag=false;  
+                    CloseModelsFile();   
+                    SendValue(Progress,75); delay(10);
+                    SaveAllParameters();     
+                    CloseModelsFile();  
+                    UpdateModelsNameEveryWhere();
+                    SendValue(Progress,100); delay(10);
+                    SendCommand(ProgressEnd);
+                    if (FileError) ShowFileErrorMsg(); 
+               }
+               if (InStrng(ListFiles,WordsIn) > 0){
+                       ShowDirectory();  // TODO HEER (upon return need somehow to fix model number)
+               }
+
+            if (InStrng(CaliNextion,WordsIn) > 0){
+                  SendCommand(CalibrateNow);
+                  ClearText(); 
+            }  
+                        
+            if (InStrng(SetupViewFM,WordsIn) > 0){                                                // New model name occurs at offset 12 in WordsIn 
+                i=0; while (WordsIn[i+12]>0) {ModelName[i]=WordsIn[i+12];ModelName[i+1]=0;i++;}   // copy new name
+                SaveOneModel(ModelNumber); 
+                ClearText(); 
+                SendCommand (page_SetupView);
+                CurrentMode=NORMAL;                                                                    // Send data again
+                CurrentView=MainSetupView;
+             }   
+             
+            if (InStrng(ModelNMSave,WordsIn) > 0){                                                // Save modelname without exiting screen
+                i=0; while (WordsIn[i+12]>0) {ModelName[i]=WordsIn[i+12];ModelName[i+1]=0;i++;}   // copy new name
+                SaveOneModel(ModelNumber); 
+                ClearText(); 
+             } 
+            
+             if (InStrng(GoSetupView,WordsIn) > 0){ 
+                ClearText();
+                if (LostContactFlag)  {
+                        SetupFlag=true;
+                        BlueLedOn();    
+                        }          
+                CurrentView=MainSetupView;
+                SendCommand (page_SetupView);
+                
+            }
+            if (InStrng(GoFrontView,WordsIn) > 0){
+                ClearText();
+                SetupFlag=false;              
+                CurrentView=FrontView;
+                SendCommand (page_FrontView);   
+                UpdateModelsNameEveryWhere();
+                ShowFlightMode(); 
+            }
+             
+             
+             if (InStrng(SetupView,WordsIn) > 0){
+                ClearText();
+                DoScanEnd();       
+                SaveAllParameters();                
+                CurrentView=MainSetupView;
+                SendCommand (page_SetupView);
+            }
+             
+             
+             if (InStrng(Gains_View,WordsIn) > 0){
+                  CurrentView=GainsView;
+                  UpdateGainsView();
+             }
+
+             if (InStrng(SaveGains,WordsIn) > 0){  
+                SaveNewGains();
+            }
+            if (InStrng(TypeView,WordsIn) > 0){            
+                  SendValue(AeroplaneType,0);
+                  SendValue(HelicopterType,0);
+                  SendValue(QuadcopterType,0);
+                  SendValue(HexacopterType,0);
+                  SendValue(OctocopterType,0);
+              if (ModelType==0) ModelType=1;
+              if (ModelType==1) SendValue(AeroplaneType,1);
+              if (ModelType==2) SendValue(HelicopterType,1);
+              if (ModelType==3) SendValue(QuadcopterType,1);
+              if (ModelType==4) SendValue(HexacopterType,1);
+              if (ModelType==5) SendValue(OctocopterType,1);
+
+                SendValue(r2s,0);                        // Zero all RX batt cell count
+                SendValue(r3s,0);
+                SendValue(r4s,0);
+                SendValue(r5s,0);
+                SendValue(r6s,0);
+                if (RXCellCount==2) SendValue(r2s,1);    // Then update RX batt cell count
+                if (RXCellCount==3) SendValue(r3s,1);
+                if (RXCellCount==4) SendValue(r4s,1);
+                if (RXCellCount==5) SendValue(r5s,1);
+                if (RXCellCount==6) SendValue(r6s,1);
+
+             }
+
+            if (InStrng(SaveType,WordsIn) > 0){
+                 ButtonRed(SaveTypeButton);
+                 ButtonRed(OKTypeButton);
+                 if (GetValue(AeroplaneType) ) ModelType=1 ;
+                 if (GetValue(HelicopterType)) ModelType=2 ;
+                 if (GetValue(QuadcopterType)) ModelType=3 ;
+                 if (GetValue(HexacopterType)) ModelType=4 ;
+                 if (GetValue(OctocopterType)) ModelType=5 ;
+                 if (ModelType==0) ModelType=1;
+                SaveOneModel(ModelNumber);
+                 ButtonWhite(SaveTypeButton);
+                 ButtonWhite(OKTypeButton);
+
+             }
+             
+            if (InStrng(RXBAT,WordsIn) > 0){              // UPdate RX batt cell count
+                 if (GetValue(r2s)==1)RXCellCount=2;
+                 if (GetValue(r3s)==1)RXCellCount=3;
+                 if (GetValue(r4s)==1)RXCellCount=4;
+                 if (GetValue(r5s)==1)RXCellCount=5;
+                 if (GetValue(r6s)==1)RXCellCount=6;
+                 SaveOneModel(ModelNumber);
+               }   
+
+                  
+            if (InStrng(TrimView,WordsIn) > 0){                                // TrimView just appeared, so update it.     
+                CurrentView=Trim_View;
+                UpdateModelsNameEveryWhere(); // also updates trimview
+                ClearText();
+            }          
+
+                if (InStrng(RTRIM,WordsIn) > 0){                   
+                      TrimsReversed[FlightMode][0]=GetValue(TrimView_r1);         // Fudged as I'd numbered differently!
+                      TrimsReversed[FlightMode][1]=GetValue(TrimView_r4);
+                      TrimsReversed[FlightMode][2]=GetValue(TrimView_r2);
+                      TrimsReversed[FlightMode][3]=GetValue(TrimView_r3);
+                      ClearText();                                
+                   }
+
+               if (InStrng(TRIMS50,WordsIn) > 0){   
+                   for (i=0;i<4;i++){
+                   Trims[FlightMode][i]=80;                                         // Mid value is 80
+                   }
+               }
+              if (InStrng(TR1,WordsIn) > 0){      //  TR1->0
+                  Trims[FlightMode][0]=WordsIn[3];                 
+              }
+                if (InStrng(TR4,WordsIn) > 0){    // TR4 ->1   
+                  Trims[FlightMode][1]=WordsIn[3];                    
+              }
+                if (InStrng(TR2,WordsIn) > 0){    // TR2 ->2
+                   Trims[FlightMode][2]=WordsIn[3];     
+              }
+                if (InStrng(TR3,WordsIn) > 0){    // TR3 ->3
+                   Trims[FlightMode][3]=WordsIn[3];                    
+              }
+            
+              if (InStrng(Trim,WordsIn) > 0){            
+                  SaveOneModel(ModelNumber);  // save trims to SDcard       
+            }
+             if (InStrng(Models_View,WordsIn) > 0){  
+                ReadOneModel(ModelNumber);
+                CurrentMode=SENDNOTHING;
+                CurrentView=ModelsView;
+                UpdateModelsNameEveryWhere();
+                SendValue(ModelsView_ModelNumber,ModelNumber);  
+                BuildDirectory();    // of SD card 
+                ShowFileNumber(); 
+                BlueLedOn();
+           
+            }
+            if (InStrng(LoadModel,WordsIn) > 0){ 
+                ModelNumber=GetValue(ModelsView_ModelNumber);
+                if (ModelNumber>=99) {  
+                ModelNumber=1;SendValue(ModelsView_ModelNumber,ModelNumber);}          
+                SendCommand(ProgressStart);
+                SendValue(Progress,5); delay(10);  
+                SendValue(Progress,50); delay(20);  
+                ReadOneModel(ModelNumber);
+                SendValue(Progress,75); delay(10);    
+                UpdateModelsNameEveryWhere();
+                SendValue(Progress,99); delay(10);  
+                SaveTXStuff();   
+                SendValue(Progress,100); delay(20);
+                SendCommand(ProgressEnd);                
+            }
+
+             if (InStrng(Delete,WordsIn) > 0)  
+            {
+              ModelNumber=GetValue(ModelsView_ModelNumber);
+              SetDefaultValues(); 
+            }
+
+            if (InStrng(Write,WordsIn) > 0){    //  write new data to SD  
+                p=GetValue(CopyToAllFlightModes);
+                if (p==1){
+                 
+                 for (p=1;p<=4;p++){
+                        if (p!=FlightMode){
+                        MinDegrees[p][ChanneltoSet-1]= MinDegrees[FlightMode][ChanneltoSet-1];
+                        MidLowDegrees[p][ChanneltoSet-1]=MidLowDegrees[FlightMode][ChanneltoSet-1];
+                        CentreDegrees[p][ChanneltoSet-1]=CentreDegrees[FlightMode][ChanneltoSet-1];
+                        MidHiDegrees[p][ChanneltoSet-1]= MidHiDegrees[FlightMode][ChanneltoSet-1];
+                        MaxDegrees[p][ChanneltoSet-1]=MaxDegrees[FlightMode][ChanneltoSet-1];
+                        InterpolationTypes[p][ChanneltoSet-1]=InterpolationTypes[FlightMode][ChanneltoSet-1];
+                        Exponential[p][ChanneltoSet-1]=Exponential[FlightMode][ChanneltoSet-1];
+
+                        }
+                    }
+                }
+                ChanneltoSet=0;        
+                SaveOneModel(ModelNumber);
+                Force_ReDisplay();
+                SendCommand(page_SticksView);              // Set to SticksView
+                CurrentView=SticksView;    
+                UpdateModelsNameEveryWhere();      
+            }
+              
+            if (InStrng(Setup,WordsIn) > 0){           // Which channel to setup ... Goes to GraphView 
+                  ChanneltoSet=GetChannel();     
+                  ClearText();          
+                  SendCommand(page_GraphView);         // Set to GraphView
+                  CurrentView=GraphView;
+                  DisplayCurve();                      // redisplay curve 
+                  updateInterpolationTypes();
+                  UpdateModelsNameEveryWhere();   
+                  SendValue(CopyToAllFlightModes,0);
+            }
+              
+               p=(InStrng(Front_View,WordsIn));       //which screen is in view?
+               if (p>0){
+                  CurrentView=FrontView;              
+                  ClearText();
+                  PreviousFlightMode=250;             // sure to be different
+                  CurrentMode=NORMAL;
+                  UpdateModelsNameEveryWhere();   
+                }
+              
+              p=(InStrng(Sticks_View,WordsIn));
+              if (p>0){
+                CurrentView=SticksView;
+                Force_ReDisplay();
+                SendCommand(page_SticksView);              // Set to SticksView
+                UpdateModelsNameEveryWhere();
+                CurrentView=SticksView;
+                SaveAllParameters();                       // because mixes might have changed.
+                DoScanEnd();                               // re-enable Transmit
+              }
+            
+                p=(InStrng(Fhss_View,WordsIn));  
+                if (p>0)
+                  {
+                  DrawFhssBox();
+                  DoScanInit();
+                  CurrentMode = 3;
+                  }
+
+                p=(InStrng(ReScan,WordsIn));
+                if (p>0)  {
+                        DrawFhssBox();DoScanInit();
+                        }
+                  
+                p=(InStrng(StopScan,WordsIn));
+                if (p>0)  {
+                        CurrentMode=SENDNOTHING;       // stops the scanning          
+                           }
+                           
+              p=(InStrng(MIXES_VIEW,WordsIn));   //
+              if (p>0)  {
+                        CurrentView=MixesView;
+                        UpdateModelsNameEveryWhere();
+                        if (MixNumber==0) MixNumber=1;
+                        LastMixNumber=33; // just to be differernt
+                        SendValue(MixesView_MixNumber,MixNumber);   // New load of mix window
+                        }
+                        
+              p=(InStrng(Mixes_View,WordsIn));                       // Get New Mixes!
+              if (p>0){
+                CurrentView=MixesView;
+                UpdateModelsNameEveryWhere();
+                MixNumber=GetValue(MixesView_MixNumber);
+                if (LastMixNumber!=MixNumber){                        // Did it change?       
+                     LastMixNumber=MixNumber; 
+                     SendMixValues(); 
+                }else{ 
+                     Mixes[MixNumber][M_Enabled]       = GetValue(MixesView_Enabled);
+                     Mixes[MixNumber][M_FlightMode]    = GetValue(MixesView_FlightMode);   
+                     Mixes[MixNumber][M_MasterChannel] = GetValue(MixesView_MasterChannel); 
+                     Mixes[MixNumber][M_SlaveChannel]  = GetValue(MixesView_SlaveChannel); 
+                     Mixes[MixNumber][M_Reversed]      = GetValue(MixesView_Reversed); 
+                     Mixes[MixNumber][M_Percent]       = GetValue(MixesView_Percent);
+                     SendText(MixesView_chM,ChannelNames[Mixes[MixNumber][M_MasterChannel]-1]);
+                     SendText(MixesView_chS,ChannelNames[Mixes[MixNumber][M_SlaveChannel]-1]);
+                  }
+               }
+                
+              p=(InStrng(Graph_View,WordsIn)); 
+              if (p>0){CurrentView=GraphView;}
+
+              p=(InStrng(Data_View,WordsIn)); 
+              if (p>0){
+                CurrentView=DataView;
+               }
+             
+              p=(InStrng(Fhss_View,WordsIn)); 
+              if (p>0){CurrentView=FhssView;
+                  BlueLedOn();
+              }
+
+              p=(InStrng(bind,WordsIn)); 
+              if (p>0) {BindNow();} 
+              
+              p=(InStrng(FM1,WordsIn)); 
+              if (p>0){FlightMode=1;
+              PreviousFlightMode=1;
+              UpdateModelsNameEveryWhere();}
+              
+              p=(InStrng(FM2,WordsIn)); 
+              if (p>0){FlightMode=2;
+              PreviousFlightMode=2;
+              UpdateModelsNameEveryWhere();}
+              
+              p=(InStrng(FM3,WordsIn)); 
+              if (p>0){FlightMode=3;
+              PreviousFlightMode=3;
+              UpdateModelsNameEveryWhere();}
+              
+              p=(InStrng(FM4,WordsIn)); 
+              if (p>0){FlightMode=4;
+              PreviousFlightMode=4;
+              UpdateModelsNameEveryWhere();
+              }
+              p=(InStrng(midyup,WordsIn)); // midy up? 
+              if (p>0){CentreDegrees[FlightMode][ChanneltoSet-1]++;DisplayCurve();ClearText();}
+
+              p=(InStrng(midydown,WordsIn)); // midy down? 
+              if (p>0){CentreDegrees[FlightMode][ChanneltoSet-1]--;DisplayCurve();ClearText();}
+
+              p=(InStrng(midhiyup,WordsIn)); // midhiy up? 
+              if (p>0){MidHiDegrees[FlightMode][ChanneltoSet-1]++;DisplayCurve();ClearText();}
+
+              p=(InStrng(midhiydown,WordsIn)); // midhiy down?
+              if (p>0){MidHiDegrees[FlightMode][ChanneltoSet-1]--;DisplayCurve();ClearText();}
+
+              p=(InStrng(midlowyup,WordsIn)); // midlowy up? 
+              if (p>0){MidLowDegrees[FlightMode][ChanneltoSet-1]++;DisplayCurve();ClearText();}
+
+              p=(InStrng(midlowydown,WordsIn)); // midlowy down? 
+              if (p>0){MidLowDegrees[FlightMode][ChanneltoSet-1]--;DisplayCurve();ClearText();}
+  
+              p=(InStrng(yy1up,WordsIn)); // yy1 up? 
+              if (p>0){MaxDegrees[FlightMode][ChanneltoSet-1]++;DisplayCurve();ClearText();}
+            
+              p=(InStrng(yy1down,WordsIn)); // yy1 down? 
+              if (p>0){MaxDegrees[FlightMode][ChanneltoSet-1]--;DisplayCurve();ClearText();}
+
+              p=(InStrng(yy2up,WordsIn)); // yy1 up? 
+              if (p>0){MinDegrees[FlightMode][ChanneltoSet-1]++;DisplayCurve();ClearText();}
+            
+              p=(InStrng(yy2down,WordsIn)); // yy1 down? 
+              if (p>0){MinDegrees[FlightMode][ChanneltoSet-1]--;DisplayCurve();ClearText();}
+
+              p=(InStrng(Reset,WordsIn)); // RESET? 
+              if (p>0)
+              {
+                    MinDegrees[FlightMode][ChanneltoSet-1]=30; 
+                    MidLowDegrees[FlightMode][ChanneltoSet-1]=60;
+                    CentreDegrees[FlightMode][ChanneltoSet-1]=90;
+                    MidHiDegrees[FlightMode][ChanneltoSet-1]=120;
+                    MaxDegrees[FlightMode][ChanneltoSet-1]=150;
+                    Exponential[FlightMode][ChanneltoSet-1]=0;
+                    InterpolationTypes[FlightMode][ChanneltoSet-1]=2; // expo = default
+                    DisplayCurve();ClearText();
+                   
+              }
+
+              p=(InStrng(Reverse,WordsIn)); // REVERSE? 
+              if (p>0)
+              {
+                    p=MinDegrees[FlightMode][ChanneltoSet-1];
+                    MinDegrees[FlightMode][ChanneltoSet-1]=180-p;
+                    p=MidLowDegrees[FlightMode][ChanneltoSet-1];
+                    MidLowDegrees[FlightMode][ChanneltoSet-1]=180-p;
+                    p=CentreDegrees[FlightMode][ChanneltoSet-1];
+                    CentreDegrees[FlightMode][ChanneltoSet-1]=180-p;                 
+                    p=MidHiDegrees[FlightMode][ChanneltoSet-1];
+                    MidHiDegrees[FlightMode][ChanneltoSet-1]=180-p;
+                    p=MaxDegrees[FlightMode][ChanneltoSet-1];
+                    MaxDegrees[FlightMode][ChanneltoSet-1]=180-p;             
+                    DisplayCurve();ClearText();
+              }                   
+              p=(InStrng(ClickX,WordsIn)); // Clicked to move point?
+              if (p>0)
+             {
+                  XtouchPlace=GetNextNumber(p+7,WordsIn);
+                  
+             }
+             p=(InStrng(ClickY,WordsIn)); // Clicked to move point?
+             if (p>0)
+             {
+                  YtouchPlace=GetNextNumber(p+7,WordsIn); 
+                                 
+                  MovePoint(); 
+             }  
+
+    if (CurrentMode==0) 
+                      {
+                      if (strcmp(WordsIn,"Calibrate1")==0) 
+                          {
+                            CurrentMode=CALIBRATELIMITS; 
+                            CentreMaxMins();
+                            SendText(SvT11,CMsg1); 
+                            SendText(SvB0,CMsg2);
+                            ClearText();
+                            return;
+                          }
+                      }
+                      
+   if (CurrentMode==1)            
+                      {
+                      if (strcmp(WordsIn,"Calibrate1")==0) 
+                          {
+                           CurrentMode=CENTRESTICKS; 
+                           SendText(SvT11,Cmsg3);
+                           SendText(SvB0,Cmsg4);
+                           ClearText();
+                           return;
+                          }
+                      }
+   if (CurrentMode==2) 
+                      {               
+                      if (strcmp(WordsIn,"Calibrate1")==0) 
+                          {
+                           CurrentMode=NORMAL; 
+                           SaveAllParameters();
+                           SendText(SvT11,Cmsg5);
+                           SendText(SvB0,Cmsg6);
+                           SendValue1(NextionSleepTime,ScreenTimeout);     // Re enable timeout
+                          ClearText();
+                          }
+                      }  
+    }        
+ ClearText(); // Let's have cleared text for next one!
+}
+
+uint16_t MakeTwoBytes(bool *f){                   // Pass arraypointer. Returns the two bytes
+uint16_t tb=0;                                    // all false is default
+        for (i=0;i<16;i++){
+                if (f[15-i]==true) {tb |=1<<(i);} // sets a bit if true
+        }                           
+        return tb; 
+}
+
+
+
+
+void LoadPacketData(){  // MUST NOT ADD MORE
+
+uint16_t TwoBytes=0;
+uint8_t  byte1;
+uint8_t  byte2;
+
+        SendBuffer[CHANNELSUSED+1]=PacketNumber;        // to let reciever know current packet number
+        SendBuffer[CHANNELSUSED+2]=NextFrequency ;      // Send next frequency     
+       
+        TwoBytes=MakeTwoBytes(FailSafeChannel);         // 16 bool values compressed to 16 bits
+        byte1 =  uint8_t (TwoBytes  >>8);               // sent as two bytes 
+        byte2 =  uint8_t (TwoBytes & 0x00FF);     
+
+switch (PacketNumber){
+    case 3:
+         SendBuffer[CHANNELSUSED+3]=rollp[FlightMode];
+         break;
+    case 4:
+         SendBuffer[CHANNELSUSED+3]=rolli[FlightMode];
+         break;
+    case 5:
+         SendBuffer[CHANNELSUSED+3]=rolld[FlightMode];
+         break;
+    case 6:
+         if (ModelDetected) SendBuffer[CHANNELSUSED+3] = ModelNumber;      // send model number but not before reading one!
+         break;    
+    case 7:
+         SendBuffer[CHANNELSUSED+3] = PowerSetting;
+         break;
+    case 8:
+         SendBuffer[CHANNELSUSED+3] = DataRate;
+         break;
+    case 9:
+         SendBuffer[CHANNELSUSED+3]=yawp[FlightMode];
+         break;
+    case 10:
+         SendBuffer[CHANNELSUSED+3]=yawi[FlightMode];
+         break;
+    case 11:
+         SendBuffer[CHANNELSUSED+3]=yawd[FlightMode];
+         break; 
+    case 12:
+         if (ModelType==0) ModelType=1;             // in case we forgot to define it!
+         SendBuffer[CHANNELSUSED+3]=ModelType;
+         break; 
+    case 13:
+         SendBuffer[CHANNELSUSED+3]=BindingNow;
+         if (BindingNow==1){
+         BindingTimer=millis(); // start a timer
+         BindingNow=2;
+         }
+         break;  
+    case 14:   
+         SendBuffer[CHANNELSUSED+3]=byte1;      // these are failsafe flags
+         break;  
+    case 15:  
+         SendBuffer[CHANNELSUSED+3]=byte2;      // these are failsafe flags
+         break;   
+    case 16:
+         SendBuffer[CHANNELSUSED+3]= SaveFailSafeNow;  // FailSafeSaveMoment 
+         SaveFailSafeNow=false;                        // once should do it.
+         break;    
+    case 17:           
+            if (ReInit){
+              ReInitCounter++;
+              if (ReInitCounter>100){
+                  ReInitTimer = millis(); // start the timer!
+                  ReInit=false;
+                  ReInitCounter=0;
+              }
+            }
+            SendBuffer[CHANNELSUSED+3]= ReInit;  
+          
+            break;    
+   default: 
+         break; 
+      }
+}
+
+
+void GetNextHopChannelNumber1(){  NextFrequency=random(FHSSBottom,FHSSTop);  } // leave this just in case ....
+
+void GetNextHopChannelNumber(){ 
+
+bool KnownInterferenceChannel = true;
+            i=0;
+            while (KnownInterferenceChannel && i<BAD_CHANNEL_MAX){    // Bug fixed here!!
+                      NextFrequency=random(FHSSBottom,FHSSTop);      
+                      KnownInterferenceChannel=false;i=0;
+                      while (i<BAD_CHANNEL_MAX && KnownInterferenceChannel==false){
+                           if (NextFrequency == BadChannels[i]){ 
+                                  KnownInterferenceChannel=true;
+                                  #ifdef DB_CHANNEL_AVOID
+                                    Serial.print ("Avoiding known interference channel: ");
+                                    Serial.println (NextFrequency);
+                                    Serial.print (BadChannelPointer);
+                                    Serial.print (" bad channels detected so far: ");
+                                    for (int j=0;j<BadChannelPointer;j++){
+                                     Serial.print(BadChannels[j]);Serial.print(" ");}
+                                     Serial.println(" ");
+                                  #endif 
+                              }
+                          i++;
+                    }
+           }
+}
+
+
+
+void TryOtherPipe(){
+  if (BoundFlag==true){
+     BoundFlag=false;
+     InitRadio(DefaultPipe);
+  }else{
+     BoundFlag=true;
+     InitRadio(NewPipe);
+  }
+}
+
+void  ReadFMSwitch(bool sw1, bool sw2, bool rev){
+        if (sw1==false && sw2==false) {FlightMode = 2;} 
+        if (rev){if (sw1) FlightMode = 1;if (sw2) FlightMode = 3;}
+        else    {if (sw1) FlightMode = 3;if (sw2) FlightMode = 1;}
+}
+
+
+byte ReadCHSwitch(bool sw1, bool sw2, bool rev){
+byte ttmp=90;
+        if (sw1==false && sw2==false) ttmp=90;
+        if (rev){if (sw1) ttmp=0;  if (sw2) ttmp=180;}
+        else    {if (sw1) ttmp=180;if (sw2) ttmp=0;}
+      return ttmp;
+}
+
+
+byte CheckSwitch(byte swt){
+byte rtv=90;
+ if (swt==1) rtv=ReadCHSwitch(Switch[7],Switch[6],Switch1Reversed);                                            
+ if (swt==2) rtv=ReadCHSwitch(Switch[5],Switch[4],Switch2Reversed); 
+ if (swt==3) rtv=ReadCHSwitch(Switch[0],Switch[1],Switch3Reversed);                   
+ if (swt==4) rtv=ReadCHSwitch(Switch[2],Switch[3],Switch4Reversed);    
+  return rtv;
+}
+
+void GetFlightMode(){                         //  and AUTO and other switchy things ...
+
+if (FMSwitch==4)      ReadFMSwitch(Switch[2],Switch[3],Switch4Reversed);   
+if (FMSwitch==3)      ReadFMSwitch(Switch[0],Switch[1],Switch3Reversed);   
+if (FMSwitch==2)      ReadFMSwitch(Switch[4],Switch[5],Switch2Reversed);              
+if (FMSwitch==1)      ReadFMSwitch(Switch[6],Switch[7],Switch1Reversed);                       
+if (AutoSwitch==1     && Switch[6]==Switch1Reversed)   FlightMode = 4;                                    // Flight mode 4 (Auto) overrides modes 1,2,3.
+if (AutoSwitch==2     && Switch[4]==Switch2Reversed)   FlightMode = 4;
+if (AutoSwitch==3     && Switch[1]==Switch3Reversed)   FlightMode = 4;             
+if (AutoSwitch==4     && Switch[3]==Switch4Reversed)   FlightMode = 4;     
+
+      Channel9SwitchValue = CheckSwitch(Channel9Switch);
+      Channel10SwitchValue=CheckSwitch(Channel10Switch);
+      Channel11SwitchValue=CheckSwitch(Channel11Switch);
+      Channel12SwitchValue=CheckSwitch(Channel12Switch);
+ 
+      if (FlightMode !=PreviousFlightMode){      
+           SendCommand(NextionWakeUp);       // wake screen up if flight mode changes    
+           LastSeconds=0;                    // Just to force redisplay of timer 
+          if (PreviousFlightMode==4){        // Start or restart timer when auto goes off 
+            TimerMillis=millis();
+           
+           }
+          
+            if (FlightMode==4){                                 // Pause timer when auto on 
+                   PausedSecs=Secs + (Mins*60) + (Hours*3600);  // Remember how long so far
+            }
+
+            CheckTimer(); // update timer
+            
+            if (CurrentView==FrontView){   
+              ShowFlightMode(); 
+ 
+          }
+
+         if (CurrentView==GainsView) {   // Save gains settings when changing flight mode 
+           SaveFlightMode=FlightMode;
+           FlightMode=PreviousFlightMode;
+           SaveNewGains();
+           FlightMode=SaveFlightMode;
+         }
+
+          
+        UpdateModelsNameEveryWhere();
+        if (CurrentView==GraphView) DisplayCurve();              
+         }
+         PreviousFlightMode=FlightMode;
+}
+
+void ReadSwitches(){
+   for (i=0;i<8;i++){
+    if (!digitalRead(SwitchNumber[i])) {Switch[i]=true;}else{Switch[i]=false;}  
+      #ifdef   DB_SWITCHES
+          Serial.print("Switch ");
+          Serial.print (i);
+          Serial.print (" = ");
+          Serial.println(Switch[i]);
+        #endif 
+   }
+   GetFlightMode();
+}
+
+void HopToNextFrequency(){
+                          Radio1.setChannel(NextFrequency); 
+                          Radio1.stopListening();
+                          ReadSwitches();
+                          ShowComms();
+                          PacketNumber=0;
+                          CheckTimer(); // update timer if on                            
+                          #ifdef DB_FHSS
+                                PENDTIME=millis();
+                                PDURATION=(PENDTIME-PSTARTTIME)/1000; 
+                                Serial.print ("Hop duration: ");
+                                Serial.print (PDURATION);
+                                Serial.print (" seconds. Good packets per hop: ");
+                                Serial.print (PACKETS_PER_HOP);
+                                Serial.print (" Next channel: (range: ");
+                                Serial.print (FHSSBottom);
+                                Serial.print ("-");
+                                Serial.print (FHSSTop);
+                                Serial.print (") ");
+                                Serial.println (NextFrequency);
+                                PSTARTTIME=millis();
+                          #endif
+                         ThisFrequency=NextFrequency;
+                         JustHoppedFlag=true;                    
+}
+
+void ReadExtraData(){
+ // char ShowModelsView[]            = "page ModelsView";
+ // char ModelsView_ModelNumber[]    = "ModelsView.ModelNumber";
+  float alt;
+  byte mn=0;
+        switch (AckPayLoad[0]) {
+          case 'A':
+              strcpy (ModelAltitude,&AckPayLoad[1]);       // Altitude
+              alt = atof(ModelAltitude);  
+              if (alt>MaxAlt) {MaxAlt=alt; dtostrf(MaxAlt, 1, 0, MaxAltitude);}    
+              break;
+          case 'v':                                        // Volts
+               VoltsDetected=false;
+               if (atoi(&AckPayLoad[1])>0) {strcpy (ModelVolts,&AckPayLoad[1]);VoltsDetected=true;}
+               break;
+          case 'R':                                        // Roll
+               strcpy (ModelRoll,&AckPayLoad[1]);
+               break;
+           case 'P':                                       // Pitch
+               strcpy (ModelPitch,&AckPayLoad[1]);
+               break;
+           case 'Y':                                        // Yaw
+               strcpy (ModelYaw,&AckPayLoad[1]);
+               break;
+           case 'V':
+               strcpy (ModelVersionNumber,&AckPayLoad[1]);    // Software version number
+               break;
+           case 'M':
+            if(!ModelDetected && BoundFlag){                            // Receiver thinks model number was wrong, so correct it and go to model selection screen for confirmation from user.
+               mn=AckPayLoad[1]; 
+               ModelDetected=true;
+              if (mn!=ModelNumber && mn>0){ 
+                    //  ModelNumber=mn;
+                    //  CurrentMode=SENDNOTHING;                          // Stop transmission  
+                    //  ReadOneModel(ModelNumber);             
+                    //  SaveAllParameters();
+                    //  SendCommand (ShowModelsView);
+                    //  SendValue(ModelsView_ModelNumber,ModelNumber);  
+                    //  CurrentView=ModelsView;     
+                    //  UpdateModelsNameEveryWhere();
+                    //  BuildDirectory();                       // of SD card 
+                    //  ShowFileNumber(); 
+                }
+              }
+              break; 
+                case 'D':
+                  if (AckPayLoad[1]==true){
+                        ReInit=false;
+                        ReInitCounter=0;
+                  }
+                  break;
+                default: 
+                    break; 
+        } 
+}
+
+ void CheckGapsLength(){
+        if (ReconnectingFlag){
+              ReconnectingFlag=false;
+            #ifdef DB_CHANNEL_AVOID
+                Serial.print ("Reconnect time: ");
+                Serial.print ((millis()-ReconnectTime)/1000); 
+                Serial.println (" seconds.");
+            #endif 
+        }
+        if (GapStart>0){        // if Reconnected, how long was connection lost?
+            ThisGap = millis() - GapStart;
+            if (ThisGap > GapLongest) {GapLongest = ThisGap;}
+            GapSum+=ThisGap;
+            GapStart=0;
+        }                      
+ }
+
+
+void SendData(){      
+  
+        if ((millis()-TxPace) >= PACEMAKER){
+           TxPace=millis();
+           get_new_channels_values();       // Load SendBuffer with new servo positions           
+           
+           if (SetupFlag) {ReadSwitches(); return;}                // Don't try to send data when just setting up.                                 
+           
+              if (!BoundFlag && !(CurrentView==CalibrateView) && !(CurrentView==SticksView)){
+                       SendBuffer[0] = (byte)((NewPipe >> 56) & 0xFF);                                 // if not yet bound, send pipe    
+                       SendBuffer[1] = (byte)((NewPipe >> 48) & 0xFF);
+                       SendBuffer[2] = (byte)((NewPipe >> 40) & 0xFF);
+                       SendBuffer[3] = (byte)((NewPipe >> 32) & 0xFF);
+                       SendBuffer[4] = (byte)((NewPipe >> 24) & 0xFF);
+                       SendBuffer[5] = (byte)((NewPipe >> 16) & 0xFF);
+                       SendBuffer[6] = (byte)((NewPipe >> 8)  & 0xFF);
+                       SendBuffer[7] = (byte)((NewPipe)       & 0xFF);
+              } 
+              LoadPacketData();
+              if (JustHoppedFlag){GetNextHopChannelNumber();  JustHoppedFlag=false;}
+              if (LostContactFlag){ShowComms();if ((millis()-PipeTimeout) > BINDPIPETIMEOUT) {TryOtherPipe();} }
+              if (LostPacketFlag){     
+                    if ((millis()-RecoveryTimer)>75){
+                      NextFrequency=random(FHSS_RESCUE_BOTTOM,FHSS_RESCUE_TOP);    // more limited range for recovery
+                      HopToNextFrequency();
+                      RecoveryTimer = millis();
+                      #ifdef DB_CHANNEL_AVOID
+                          Serial.print ("Reconnect channel: ");
+                          Serial.println (NextFrequency);
+                      #endif
+                    }
+                } 
+                Connected=false;  
+                compress.Comp(CompressedData,SendBuffer,UNCOMPRESSEDWORDS);           // Compress with my library - 32 bytes down to 24    
+                if (Radio1.write(&CompressedData, sizeof(CompressedData))){             // ********** ACTUALLY SEND THE DATA *************
+                      if (Radio1.isAckPayloadAvailable()){   
+                          Radio1.read(&AckPayLoad, sizeof(AckPayLoad));
+                          RangeTestGoodPackets++;
+                          Connected=true;
+                          if (BoundFlag) {GreenLedOn();}
+                      }else{
+                          RangeTestLostPackets++;
+                      }
+                      CheckGapsLength();
+                      LostPacketFlag=false; 
+                      LostContactFlag=false; 
+                      PacketNumber++; 
+                      ReadExtraData();
+                      RecentPacketsLost=0;
+                      if (PacketNumber>PACKETS_PER_HOP) {HopToNextFrequency();} 
+                }else{   
+                      FailedPacket();              
+            }
+            
+     }
+  }
+     
+
+void ScanAllChannels(){            // This scans and displays result
+  int x1 = xx1;         
+  int y1 = yy1;
+  int Sc;
+  int x2,y2;
+  int BlobHeight=4;     // Blobs are 4x4 pixels
+  char NB[12];          // Number Buffer
+  char NB1[12];         
+  char NB2[12];     
+  char NB3[12];         
+  char NB4[12];         
+  char CB[100];        // COMMAND BUFFER
+  char fyll[]       = "fill ";
+  char IELLOW[]     = "YELLOW";
+  char NA[1]        = "";      // blank one     
+   
+   for(Sc=ScanStart;Sc<=ScanEnd;Sc++){
+          Radio1.setChannel(Sc);
+          Radio1.startListening();
+          x2  =  x1 + (Sc*5);
+          y2=y1+255;                  
+          y2=y2-BlobHeight;         
+          y2=y2-AllChannels[Sc];
+          delayMicroseconds(120); // Minimum!?
+          Radio1.stopListening();    
+              if  (Radio1.testCarrier()){
+                  if (AllChannels[Sc]<(250)) { 
+                  AllChannels[Sc]+=BlobHeight;
+                  SendCharArray(CB,fyll,Str(NB,x2,1),Str(NB1,(y2),1),Str(NB2,5,1),Str(NB3,BlobHeight,1),IELLOW,NA,NA,NA,NA,NA,NA);   
+                }
+              }
+              else{
+                   NoCarrier[Sc]++;
+                   if (NoCarrier[Sc]>15){                       // must see no carrier >15 times before reducing the trace
+                        if (AllChannels[Sc]>=(BlobHeight)){
+                        SendCharArray(CB,fyll,Str(NB,x2,1),Str(NB1,(y2+BlobHeight),1),Str(NB2,5,1),Str(NB3,BlobHeight,1),Str(NB4,214,0),NA,NA,NA,NA,NA,NA);        
+                        AllChannels[Sc]-=(BlobHeight);
+                        NoCarrier[Sc]=0;
+                        }
+                  }         
+             }
+      }    
+}
+
+//**************************************************************************************************************
+//********************************** MAIN LOOP *****************************************************************
+//**************************************************************************************************************
+void loop() {
+            KickTheDog(); // Watchdog 
+            if (millis()-LastTimeRead>=1000)  {ReadTime(); LastTimeRead=millis();}     // Do the clock!
+            if (millis()-RangeTestStart>=1000){GetStatistics(); RangeTestStart=millis();}   // Do stats
+            if ((millis()-ShowServoTimer>=100) && (CurrentView!=FrontView)) {ShowServoPos();ShowServoTimer=millis();}   // Show servos positions
+            if (GetButtonPress()) {Button_was_pressed();} // Deal with button!
+
+            if (ReInitTimer>0) {
+                  if(millis()-ReInitTimer > REINITDELAY){
+                    InitRadio(NewPipe);
+                    ReInitTimer=0;
+                  }
+            }
+            
+            if ((millis()-TxOnTime) > 2000){ // Transmit nothing for 1.5 seconds
+               switch (CurrentMode){
+                case 0: SendData();        break; 
+                case 1: CalibrateSticks(); break;
+                case 2: ChannelCentres();  break;
+                case 3: ScanAllChannels(); break;
+                default:break;                 // CurrentMode >= 4 for no action at all.  
+              }
+
+            } 
+              
+       if (BindingNow==2 && (millis()-BindingTimer)>100 ){
+              if (!BoundFlag){
+       #ifdef   DB_BIND
+           Serial.println ("Binding now");    
+       #endif
+              InitRadio(NewPipe);
+              BindingNow=0;
+              BoundFlag=true;
+              GreenLedOn();
+              }
+              SendText (BindScreenBox,BindDonemsg) ;
+       }     
+}
+//**************************************************************************************************************
+//********************************** BOTTOM OF MAIN LOOP *******************************************************
+//**************************************************************************************************************
