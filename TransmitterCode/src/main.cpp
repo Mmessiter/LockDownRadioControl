@@ -793,7 +793,7 @@ char CB[100];
                 ValueIn += (TextIn[4]<<24);
             }  
            return ValueIn; 
-           //Serial.println(strlen(CB));
+       
 }
 
 void GetWordsIn(){
@@ -807,7 +807,7 @@ void GetWordsIn(){
             WordsIn[i]=char(a);
             if (i<CharsMax) i++; 
           }
-          WordsIn[i]=char(0); // Terminator?
+          WordsIn[i]=char(0); 
        }
 }
 
@@ -1421,10 +1421,6 @@ void  UpdateTrimView(){
   
 }
 
-
-
-
-
 void DoScanInit(){
    Radio1.setDataRate(RF24_1MBPS); // Scan only works at this default rate
    CurrentMode=SCANWAVEBAND;                 // Fhss == No transmitting please, we are scanning.  
@@ -1440,9 +1436,6 @@ void DoScanEnd(){
     CurrentMode=NORMAL;
     SendCommand(NextionSleepTime);  
 }
-
-
-
 
 void ScanI2c() {
 int ii;              
@@ -1460,9 +1453,6 @@ int ii;
          }
 }
 
-
-
-
 void CloseModelsFile(){
    if (ModelsFileOpen){
        ModelsFileNumber.close();
@@ -1479,7 +1469,6 @@ void OpenModelsFile(){
            if(ModelsFileNumber==0) FileError=true;
             ModelsFileOpen=true;
 }
-
 
 void UpdateGainsView(){
                 SendValue(Rollp,rollp[FlightMode]); 
@@ -1605,15 +1594,7 @@ char Nbuf[7];
 }
 
 void InitRadio(uint64_t Pipe){
-
- // char NRF24OK[] = "One nRF24L01+ chip found!";
- // char NRF24KO[] = "ZERO nRF24L01+ chips found!";
-
-  Radio1.begin();                          // Turn on the Radio - might be something good on.
- // if (Radio1.isChipConnected()){SendText(DateTime,NRF24OK); }
- //                          else{SendText(DateTime,NRF24KO); 
- //   ;}
- 
+  Radio1.begin();                          
   switch (PowerSetting){
       case 1:
             Radio1.setPALevel(RF24_PA_MIN);
@@ -1654,10 +1635,6 @@ void InitRadio(uint64_t Pipe){
   Radio1.enableDynamicPayloads();            // 
   Radio1.setAddressWidth(4);                 // 1 2 3 4 5
   Radio1.setCRCLength(RF24_CRC_8);           // could be 16 or disabled
-
-  
-  
-  
   PipeTimeout=millis();                     // Initialise timeout
   GapSum=0;
  
@@ -2005,9 +1982,6 @@ bool ReadOneModel(byte Mnum){
                       addr++;
              }             
     }
-
-
-
 
         // **************************************
    
@@ -2864,8 +2838,6 @@ void updateInterpolationTypes(){
   char b12off[]                    = "vis b12,0" ; // expo +
   char ExponOff[]                  = "vis Expo,0"; // number display
   char Ex1Off[]                    = "vis Ex1,0";  // slider
-
-
             
             switch (InterpolationTypes[FlightMode][ChanneltoSet-1]){
             case 0:
@@ -3010,7 +2982,7 @@ int    DotColour     = Yellow;
                   TopHalfYRange=yPoints[4]-yPoints[2];
                   BottomHalfYRange=yPoints[2]-yPoints[0];
                   yDot2=0;Step=10;
-                  for (xPoint = 0; xPoint <= HalfXRange;xPoint+=Step) {              // Simulate a curve with many short lines
+                  for (xPoint = 0; xPoint <= HalfXRange;xPoint+=Step) {              // Simulate a curve with many short lines to speed it up
                       yPoint=MapExp(HalfXRange-xPoint,HalfXRange,0,0,BottomHalfYRange,Exponential[FlightMode][ChanneltoSet-1]); 
                       if (Step>HalfXRange-xPoint) {Step=HalfXRange-xPoint;}
                       if (Step<1) Step=1;
@@ -3021,7 +2993,7 @@ int    DotColour     = Yellow;
                       xDot2=xDot1;yDot2=yDot1;
                   }
                   Step=10;yDot2=0;
-                  for (xPoint = 0; xPoint <= HalfXRange;xPoint+=Step) {              // Simulate a curve with many short lines
+                  for (xPoint = 0; xPoint <= HalfXRange;xPoint+=Step) {              // Simulate a curve with many short lines to speed it up
                           yPoint=MapExp(xPoint,0,HalfXRange,0,TopHalfYRange,Exponential[FlightMode][ChanneltoSet-1]);  
                           if (Step>HalfXRange-xPoint) {Step=HalfXRange-xPoint;}
                           if (Step<1) Step=1;
