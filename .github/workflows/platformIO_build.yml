@@ -22,7 +22,7 @@ jobs:
 
         matrix:
           aspect:
-            - Reciever
+            - Receiver
             - Transmitter
 
     steps:
