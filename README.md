@@ -1,6 +1,8 @@
+[![PlatformIO build](https://github.com/Mmessiter/LockDownRadioControl/actions/workflows/platformIO_build.yml/badge.svg)](https://github.com/Mmessiter/LockDownRadioControl/actions/workflows/platformIO_build.yml)
+
 # LockDownRadioControl
- 16 channel Radio Controlled system for R/C models of all kinds.
- 
+A 16 channel Radio Controlled system for R/C models of all kinds.
+
 ## Highlights
 Build your own radio controlled system for flying R/C models. Learn about software, electronics, 3-D printing by building your own radio control system.
 
@@ -41,4 +43,3 @@ You may need to get your radio certified before you are allowed to use it at you
 * [Academy of Model Aeronautics AMA](https://www.modelaircraft.org/)
 * [Model Aeronortical Association of Australia MAAA](https://www.maaa.asn.au/)
 * [British Model Flying Association BMFA](https://bmfa.org/)
-

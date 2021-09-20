@@ -1,0 +1,55 @@
+name: PlatformIO build
+
+on:
+  pull_request:
+    types: [opened, reopened]
+    paths:
+      - ".github/workflows/platformIO_build.yml"
+      - "*Code/**"
+  push:
+    paths:
+      - ".github/workflows/platformIO_build.yml"
+      - "*Code/**"
+  # release:
+  #   types: [published, edited]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+        fail-fast: false
+
+        matrix:
+          aspect:
+            - Receiver
+            - Transmitter
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+
+      - name: Install PlatformIO
+        run: |
+          python -m pip install --upgrade pip
+          pip install --upgrade platformio
+
+      - name: build aspect of project
+        run: |
+          cd ${{ matrix.aspect }}Code
+          pio run
+
+      - name: Save artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: "${{ matrix.aspect }}Binaries"
+          path: ${{ matrix.aspect }}Code/.pio/build/*/firmware.*
+
+      # - name: Upload Release assets
+      #   if: github.event_name == 'release'
+      #   uses: csexton/release-asset-action@master
+      #   with:
+      #     pattern: "${{ matrix.aspect }}Code/.pio/build/*/firmware.*"
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
