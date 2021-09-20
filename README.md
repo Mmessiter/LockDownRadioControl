@@ -33,7 +33,7 @@ This is a mid-level to advanced project and you will need some understanding of 
 * General 3D printing skills
 
 ## Things that can help
-* Join a RC model club and get help from more advanced pilots
+Join a RC model club and get help from more advanced pilots. 
 
 * [Academy of Model Aeronautics AMA](https://www.modelaircraft.org/)
 * [Model Aeronortical Association of Australia MAAA](https://www.maaa.asn.au/)
@@ -41,3 +41,5 @@ This is a mid-level to advanced project and you will need some understanding of 
 
 ## To Do 
 You may need to get your radio certified before you are allowed to use it at your local RC model flying club.
+
+
