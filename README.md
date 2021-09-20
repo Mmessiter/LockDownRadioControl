@@ -4,13 +4,13 @@
 ## Highlights
 Build your own radio controled system for flying R/C models. Learn about software, electronics, 3-D printing and building your own radio controlled system.
 
-## Safety precautions
-Flying radio controlled models can fun but it can also be dangerous and cause injury and or death. Use extreme caution when bench testing and field flying. This project is supplied as-is and the user accepts full responsibility for its use and purpose. The project owner and its contributors accept no responsibility for the use or missuse of this build project.
+## Safety Precautions
+Flying radio controlled models can fun but it can also be dangerous and cause serious injury or death. Use extreme caution when bench testing and field flying. This project is supplied as-is and the user accepts full responsibility for its use and purpose. **Use at your own risk.** The project owner and its contributors accept no responsibility for the use or missuse of this build project no correspondence will be entered into.
 
 ## The skills you will learn
 **Software engineering** This project is written in C++ and a good understanding of general software and programming practices in C++ would be helpful.
 
-**Electronics** Learning electronics can be fun and this project will integrate your software skills with electronics. The LDRC radio uses the [ Teensy 4.1 Micro Controller](https://www.pjrc.com/store/teensy41_pins.html) 
+**Electronics** Learning electronics can be fun and this project will integrate your software skills with your electronics skills. The LDRC radio uses the [ Teensy 4.1 Micro Controller](https://www.pjrc.com/store/teensy41_pins.html) and 
 
 
 **3-D Printing**
