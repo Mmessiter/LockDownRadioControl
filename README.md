@@ -1,7 +1,7 @@
 [![PlatformIO build](https://github.com/Mmessiter/LockDownRadioControl/actions/workflows/platformIO_build.yml/badge.svg)](https://github.com/Mmessiter/LockDownRadioControl/actions/workflows/platformIO_build.yml)
 
 # LockDownRadioControl
-A 16 channel Radio Controlled system for R/C models of all kinds.
+A 16 channel Radio Controlled system for R/C models of all kinds. This project was started during the 2020 pandemic lockdown (thus the title), and has since grown out of passion & enthusiasm.
 
 ## Highlights
 Build your own radio controlled system for flying R/C models. Learn about software, electronics, 3-D printing by building your own radio control system.
