@@ -35,10 +35,9 @@ This is a mid-level to advanced project and you will need some understanding of 
 ## Things that can help
 * Join a RC model club and get help from more advanced pilots
 
-## To Do 
-You may need to get your radio certified before you are allowed to use it at your local RC model flying club.
-
 * [Academy of Model Aeronautics AMA](https://www.modelaircraft.org/)
 * [Model Aeronortical Association of Australia MAAA](https://www.maaa.asn.au/)
 * [British Model Flying Association BMFA](https://bmfa.org/)
 
+## To Do 
+You may need to get your radio certified before you are allowed to use it at your local RC model flying club.
