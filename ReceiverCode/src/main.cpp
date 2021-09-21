@@ -126,7 +126,7 @@ int      tt;
 SBUS     MySbus(SBUSPORT);
 RF24     Radio1(pinCE1, pinCSN1);
 RF24     Radio2(pinCE2, pinCSN2);
-RF24     CurrentRadio(pinCE1, pinCSN1);
+RF24*     CurrentRadio =&Radio1;
 Compress compress;
 
 char payLoad[ACKPAYLOADLENGTH]; // must have spare space
@@ -508,9 +508,9 @@ void ShowHopDurationEtc()
 void HopToNextFrequency()
 {
 
-    CurrentRadio.stopListening();
-    CurrentRadio.setChannel(NextFrequency);
-    CurrentRadio.startListening();
+    CurrentRadio->stopListening();
+    CurrentRadio->setChannel(NextFrequency);
+    CurrentRadio->startListening();
     LastConnectionMoment = millis();
 #ifdef DEBUG
     ShowHopDurationEtc();
@@ -521,47 +521,47 @@ void HopToNextFrequency()
 
 void InitCurrentRadio()
 {
-    CurrentRadio.begin();
-    CurrentRadio.setAutoAck(1);
-    CurrentRadio.enableAckPayload();
-    CurrentRadio.maskIRQ(1, 1, 1); // no interrupts
-    CurrentRadio.enableDynamicPayloads();
-    CurrentRadio.setAddressWidth(4);
-    CurrentRadio.setCRCLength(RF24_CRC_8); // could be 16 or disabled
+    CurrentRadio->begin();
+    CurrentRadio->setAutoAck(1);
+    CurrentRadio->enableAckPayload();
+    CurrentRadio->maskIRQ(1, 1, 1); // no interrupts
+    CurrentRadio->enableDynamicPayloads();
+    CurrentRadio->setAddressWidth(4);
+    CurrentRadio->setCRCLength(RF24_CRC_8); // could be 16 or disabled
 
     switch (PowerSetting) {
         case 1:
-            CurrentRadio.setPALevel(RF24_PA_MIN);
+            CurrentRadio->setPALevel(RF24_PA_MIN);
             break;
         case 2:
-            CurrentRadio.setPALevel(RF24_PA_LOW);
+            CurrentRadio->setPALevel(RF24_PA_LOW);
             break;
         case 3:
-            CurrentRadio.setPALevel(RF24_PA_HIGH);
+            CurrentRadio->setPALevel(RF24_PA_HIGH);
             break;
         case 4:
-            CurrentRadio.setPALevel(RF24_PA_MAX);
+            CurrentRadio->setPALevel(RF24_PA_MAX);
             break;
         default:
             break;
     }
     switch (DataRate) {
         case 1:
-            CurrentRadio.setDataRate(RF24_250KBPS);
+            CurrentRadio->setDataRate(RF24_250KBPS);
             break;
         case 2:
-            CurrentRadio.setDataRate(RF24_1MBPS);
+            CurrentRadio->setDataRate(RF24_1MBPS);
             break;
         case 3:
-            CurrentRadio.setDataRate(RF24_2MBPS);
+            CurrentRadio->setDataRate(RF24_2MBPS);
             break;
         default:
             break;
     }
 
-    CurrentRadio.openReadingPipe(1, ThisPipe);
+    CurrentRadio->openReadingPipe(1, ThisPipe);
     SaveNewBind = true;
-    CurrentRadio.startListening();
+    CurrentRadio->startListening();
 }
 
 /************************************************************************************************************/
@@ -572,14 +572,14 @@ void Reconnect()
     reconnect_attempts++;
     if (reconnect_attempts > 0) {
         reconnect_attempts = 0;
-        CurrentRadio.stopListening();
+        CurrentRadio->stopListening();
         if (Rnumber == 1) {
             Rnumber      = 2;
-            CurrentRadio = Radio2;
+            CurrentRadio= &Radio2;
         }
         else {
             Rnumber      = 1;
-            CurrentRadio = Radio1;
+            CurrentRadio = &Radio1;
         }
         InitCurrentRadio();
     }
@@ -602,15 +602,15 @@ void Reconnect()
 #endif
 
         i = FHSS_RESCUE_BOTTOM;
-        while (!CurrentRadio.available() && i <= FHSS_RESCUE_TOP) { // Search for frequency
-            CurrentRadio.stopListening();
-            CurrentRadio.setChannel(i);
-            CurrentRadio.startListening();
+        while (!CurrentRadio->available() && i <= FHSS_RESCUE_TOP) { // Search for frequency
+            CurrentRadio->stopListening();
+            CurrentRadio->setChannel(i);
+            CurrentRadio->startListening();
             delay(4);
             i++;
         }
 
-        if (CurrentRadio.available()) {
+        if (CurrentRadio->available()) {
             Connected          = true;
             FailSafeSent       = false;
             reconnect_attempts = 0;
@@ -691,12 +691,12 @@ bool ReadData()
     uint16_t CompressedData[COMPRESSEDWORDS]; // 30 bytes -> 40 bytes when uncompressed
     Connected = false;
     delay(RX_DELAY);
-    if (CurrentRadio.available()) {
+    if (CurrentRadio->available()) {
         LoadExtraPayload();
         Connected            = true;
         LastConnectionMoment = millis();
-        CurrentRadio.writeAckPayload(1, &payLoad, ACKPAYLOADLENGTH);      // Send telemetry (actual length plus 0)
-        CurrentRadio.read(&CompressedData, sizeof(CompressedData));       // Get Data
+        CurrentRadio->writeAckPayload(1, &payLoad, ACKPAYLOADLENGTH);      // Send telemetry (actual length plus 0)
+        CurrentRadio->read(&CompressedData, sizeof(CompressedData));       // Get Data
         compress.DeComp(ReceivedData, CompressedData, UNCOMPRESSEDWORDS); // my library to decompress !
         FailSafeDataLoaded = false;
         MapToSBUS();
@@ -749,7 +749,7 @@ void BindModel()
             EEPROMUpdateByte(i, ReceivedData[i]);
         }
     }
-    CurrentRadio.stopListening();
+    CurrentRadio->stopListening();
     InitCurrentRadio();
     BoundFlag   = true;
     BindNow     = 0;
@@ -1071,11 +1071,11 @@ void setup()
     SPI.begin();
     SPI.setClockDivider(SPI_CLOCK_DIV16); // for Teensy - Slow SPI bus
 
-    CurrentRadio = Radio1;
+    CurrentRadio = &Radio1;
     InitCurrentRadio();
 
 #ifdef SECOND_TRANSCEIVER
-    CurrentRadio = Radio2;
+    CurrentRadio = &Radio2;
     InitCurrentRadio();
 #endif
 #ifndef SECOND_TRANSCEIVER

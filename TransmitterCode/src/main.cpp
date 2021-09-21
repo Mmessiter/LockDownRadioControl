@@ -91,7 +91,7 @@
  */
 
 /**
- * | Teesny 4.1 Pins | Connections |
+ * | Teensy 4.1 Pins | Connections |
  * |-----------------|-------------|
  * | GND       | GND |
  * | Vin       | + 5.0 VDC |
