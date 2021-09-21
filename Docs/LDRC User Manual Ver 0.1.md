@@ -3,7 +3,7 @@ by Malcolm Messiter
 
 
 ![](../Pictures/LDRC%201.png)
-This document is in three parts - and quite short - and not yet finished. 
+This document is in three parts - and quite short - and not yet finised. 
 
 * Part one is an introduction.
 * Part two is a User Manual
