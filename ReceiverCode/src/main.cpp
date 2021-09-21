@@ -126,7 +126,7 @@ int      tt;
 SBUS     MySbus(SBUSPORT);
 RF24     Radio1(pinCE1, pinCSN1);
 RF24     Radio2(pinCE2, pinCSN2);
-RF24*     CurrentRadio =&Radio1;
+RF24*    CurrentRadio = &Radio1;
 Compress compress;
 
 char payLoad[ACKPAYLOADLENGTH]; // must have spare space
