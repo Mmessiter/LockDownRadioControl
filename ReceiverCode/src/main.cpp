@@ -575,7 +575,7 @@ void Reconnect()
         CurrentRadio->stopListening();
         if (Rnumber == 1) {
             Rnumber      = 2;
-            CurrentRadio= &Radio2;
+            CurrentRadio = &Radio2;
         }
         else {
             Rnumber      = 1;
@@ -1068,8 +1068,8 @@ void setup()
     ScanI2c(); // see what's connected
     if (USE_BNO055) BNO055_Cheapo.begin();
     if (USE_BNO055A) BNO055_Adafruit.begin();
-    SPI.begin();
-    SPI.setClockDivider(SPI_CLOCK_DIV16); // for Teensy - Slow SPI bus
+   // SPI.begin();
+   // SPI.setClockDivider(SPI_CLOCK_DIV16); // for Teensy - Slow SPI bus
 
     CurrentRadio = &Radio1;
     InitCurrentRadio();
