@@ -2556,8 +2556,8 @@ void setup()
     ScanI2c();
     if (USE_INA219) ina219.begin();
     SD.begin(chipSelect);
-    SPI.begin();                          // Need SPI data connection to nRF24l01+
-    SPI.setClockDivider(SPI_CLOCK_DIV16); // Slow data down a little bit for the nRF24l01+ (Teensy is too fast for it.)
+   // SPI.begin();                          // Need SPI data connection to nRF24l01+
+   // SPI.setClockDivider(SPI_CLOCK_DIV16); // Slow data down a little bit for the nRF24l01+ (Teensy is too fast for it.)
     InitRadio(DefaultPipe);
     InitSwitches();
     SendCommand(NextionWakeUp);
