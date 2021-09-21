@@ -1,8 +1,8 @@
 # Lockdown Radio
 by Malcolm Messiter
 
-![LDRC Image](https://github.com/Mmessiter/LockDownRadioControl/blob/main/Pictures/LDRC%201.png)
 
+![](../Pictures/LDRC%201.png)
 This document is in three parts - and quite short - and not yet finished. 
 
 * Part one is an introduction.
@@ -47,17 +47,17 @@ More features will be added here …
 
 When you switch on the transmitter, this is the first screen you will see:
 
-![](https://github.com/Mmessiter/LockDownRadioControl/blob/main/Pictures/IMG_1039.jpeg)
+![](../Pictures/IMG_1039.jpeg)
 
 (Some details will of course be different!)
 The very first thing you must do is calibrate the sticks, knobs, and switches. 
 To do this press the **Setup** button to reveal the setup screen:
 
-![](https://github.com/Mmessiter/LockDownRadioControl/blob/main/Pictures/IMG_1040.jpeg)
+![](../Pictures/IMG_1040.jpeg)
 
 Then press the **Calibrate** button to see the Calibration screen :
 
-![](https://github.com/Mmessiter/LockDownRadioControl/blob/main/Pictures/IMG_1058.jpeg)
+![]../Pictures/IMG_1058.jpeg)
 
 Press the **Calibrate sticks etc** button, then wiggle both sticks to the extremes of their travel in every direction several times. Also move all the switches to their extremes, and any knobs. Then press the button again. Then make sure every control is **precisely centred** and press the button a third time. Calibration is complete! Hit the **OK** button to exit.
 
@@ -69,23 +69,23 @@ To connect to a model, the receiver must be bound to the transmitter. Switch on 
 
 The Models screen looks like this:
 
-![](https://github.com/Mmessiter/LockDownRadioControl/blob/main/Pictures/IMG_1046.jpeg)
+![](../IMG_1046.jpeg)
 
 All you need to do here now is pick a number on the left by pressing plus or minus, then click the name below the number and edit it to the name you wish to appear there. 
 
 Then go to the **Channels** screen:
 
-![](https://github.com/Mmessiter/LockDownRadioControl/blob/main/Pictures/IMG_1043.jpeg)
+![](../Pictures/IMG_1043.jpeg)
 
 Here you can observe the effect of moving sticks etc. and if necessary you can redefine the names of the channels using the **Inputs** screen:
 
 From the **Channels** screen you can select to edit the curve for that channel. Press the button on the left or on the right relating to the channel in question in order to see the curve editing screen:
 
-![](https://github.com/Mmessiter/LockDownRadioControl/blob/main/Pictures/IMG_1064%202.jpeg)
+![](../Pictures/IMG_1064%202.jpeg)
 
-Here you can experiment with different values for the five points on the curve. When you hit **OK**, your settings are saved for the selected flight mode, only. To use this curve for all flight modes, check the box marked **Copy to all flight modes:** before hitting **OK.**
+Here you can experiment with different values for the five points on the curve. When you hit **OK**, your settings are saved for the s..elected flight mode, only. To use this curve for all flight modes, check the box marked **Copy to all flight modes:** before hitting **OK.**
 
-![](https://github.com/Mmessiter/LockDownRadioControl/blob/main/Pictures/IMG_1045.jpeg)
+![](../Pictures/IMG_1045.jpeg)
 
 When you have set up all channels, it’s usually a good idea to return to the models screen in order to save this model memory to a file. On the **Models** screen, click on the green file name on the right and edit it to your chosen file name. (The name must have eight characters or fewer, a dot, then **.MOD**). Press **->Export** to save the file. If that file existed, it’s overwritten with the new data.
 
@@ -101,13 +101,13 @@ After copying a model memory to another transmitter, check all functionality bef
 ## Failsafe
 Immediately after setting up a model, it is recommended to set up Failsafe – especially for the motor. Go to the **Failsafe** screen:
 
-![](https://github.com/Mmessiter/LockDownRadioControl/blob/main/Pictures/IMG_1053.jpeg)
+![](../Pictures/IMG_1053.jpeg)
 
 Usually all you need to do is reduce the throttle to minimum, centre all of the other controls, check every channel that you are using, and press the **Save** button. This must be done while the model is connected since the data are saved at the receiver end.
 
 You may notice that during a connection you cannot turn off the transmitter using its hardware button or the front screen option. This is for safety. So in order to test failsafe you must go to the options screen and select **Switch off now**… (…even if still connected.)
 
-![](https://github.com/Mmessiter/LockDownRadioControl/blob/main/Pictures/IMG_1054.jpeg)
+![](../Pictures/IMG_1054.jpeg)
 
 While on the **Options** screen, note that to save battery the screen turns itself off after a definable period of no use. To turn it back on again, just touch the screen. The transmitter will switch itself right off after a defined inactivity period. The transmitter will never switch itself off if it’s still connected. Inactivity means no stick movements and no screen touches.
 
@@ -123,9 +123,9 @@ Setting up a **Flight modes** switch and an **Auto** switch is an important part
 
 For this radio, **Auto** means exactly the same as **Flight mode 4**. When Auto or Flight mode 4 is selected, the system assumes that the **motor is not running** and so it pauses the timer on the front screen. This is useful for knowing how long the motor has been running and hence perhaps the likely state of its battery - if you didn’t setup voltage telemetry yet.
 
-![](https://github.com/Mmessiter/LockDownRadioControl/blob/main/Pictures/IMG_1063.jpeg)
+![](../Pictures/IMG_1063.jpeg)
 
-![](https://github.com/Mmessiter/LockDownRadioControl/blob/main/Pictures/IMG_1065.jpeg)
+![](../Pictures/IMG_1065.jpeg)
 
 So whatever model you have, always setup Flight mode 4 so the motor is stopped when it’s selected.
 
@@ -136,7 +136,7 @@ The front screen always displays the current flight mode. So use the front scree
 
 For gliders and aeroplanes with multiple flaps, V tails, deltas, elevons, ailerons etc., mixes are certainly needed. The mixes screen looks like this:
 
-![](https://github.com/Mmessiter/LockDownRadioControl/blob/main/Pictures/IMG_1051.jpeg)
+![](../Pictures/IMG_1051.jpeg)
 
 Often it is desirable that a mix applies to equally in every flight mode. In this case select 0 (zero) as the flight mode. Otherwise the mix will only be applied for the selected flight mode. 
 
@@ -146,7 +146,7 @@ Be sure to check carefully the effects of your mixes before leaving the ground!
 
 ## Features still in development 
 
-![](https://github.com/Mmessiter/LockDownRadioControl/blob/main/Pictures/IMG_1060.jpeg)
+![](../Pictures/IMG_1060.jpeg)
 
 The Gains screen (below) is still a work in progress and not yet ready for use. It will be for multi-rotors and helicopters. Support for these is planned to come soon. For now please ignore it. 
 
@@ -154,7 +154,7 @@ The Gains screen (below) is still a work in progress and not yet ready for use. 
 
 Sometimes it’s interesting to know the extent of possible interference on the 2.4 Ghz band. That’s why I included this scanner (below) which here shows rather a lot of traffic - probably WiFi because this was done at home. Things are usually much quieter at the flying field.
 
-![](https://github.com/Mmessiter/LockDownRadioControl/blob/main/Pictures/IMG_1061.jpeg)
+![](../Pictures/IMG_1061.jpeg)
 
 ## Power and data rate
 
@@ -221,9 +221,9 @@ All parts are obtained easily from Amazon, eBay and other sources.
 * Various servo extension cables
 * Solder
 
-[](https://github.com/Mmessiter/LockDownRadioControl/blob/main/Pictures/IMG_1067.jpeg)
+[](../Pictures/IMG_1067.jpeg)
 
-![](https://github.com/Mmessiter/LockDownRadioControl/blob/main/Pictures/IMG_1071.jpeg)
+![](../Pictures/IMG_1071.jpeg)
 
 The case is 3D printed and this can take many hours, so start the printer while assembling the circuit board. 
 
@@ -232,7 +232,7 @@ Two 7805 5 volt regulators, and above these, an AMS 1117 3.3 volt regulator.
 
 All capacitors values are marked. They are all ceramic SMD 1206 capacitors except for the 47uF capacitors which should be tantalum case size B.
 
-![](https://github.com/Mmessiter/LockDownRadioControl/blob/main/Pictures/IMG_1070.jpeg)
+![](../Pictures/IMG_1070.jpeg)
 
 Start by soldering in all the SMD components and the 100uF through hole electrolytic capacitor, which should be lying down unless its a very short one - because the INA219 will be above it.
 
