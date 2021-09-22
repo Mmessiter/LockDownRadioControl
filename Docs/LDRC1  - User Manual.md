@@ -74,7 +74,7 @@ Here you can observe the effect of moving sticks etc. and if necessary you can r
 
 From the **Channels** screen you can select to edit the curve for that channel. Press the button on the left or on the right relating to the channel in question in order to see the curve editing screen:
 
-![](https://github.com/Mmessiter/LockDownRadioControl/blob/main/Pictures/IMG_1064%202.jpeg)
+![image](https://user-images.githubusercontent.com/66127058/134363538-292036cd-39b4-47ed-bc6a-62e2a35bda6c.jpeg)
 
 Here you can experiment with different values for the five points on the curve. When you hit **OK**, your settings are saved for the selected flight mode, only. To use this curve for all flight modes, check the box marked **Copy to all flight modes:** before hitting **OK.**
 
