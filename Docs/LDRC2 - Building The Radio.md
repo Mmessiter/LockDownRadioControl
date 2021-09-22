@@ -56,7 +56,9 @@ The plastic case is usually 3D printed and this can take many hours or even days
 
 **Printed circuit board**
 
-The Gerber files for this (Transmitter 1b) are on GitHub. [insert PCB image here.]
+![image](https://user-images.githubusercontent.com/66127058/134360875-59f97849-a041-4665-9974-f3e0b3c67883.jpeg)
+
+The Gerber files for this (Transmitter_1b) are on GitHub.
 
 Most components are pretty clearly marked on the board to show where they should go. But three at the top right are not marked. These are voltage regulators as can be seen in the picture. Two 7805 5 volt regulators, and above these, an AMS 1117 3.3 volt regulator. The 7805 regulators can be replaced if preferred with **Pololu S9V11F5 boost-buck convertors**. These luckily are pinout compatible with a 7805 and thus can be simply soldered to the PCB without any change or problem - but do be careful to put them the right way around! This substitution would also permit using a 2S lipo battery in place of the LIFEPO4 one I use - but that would also require a change to voltage sensing code.
 
