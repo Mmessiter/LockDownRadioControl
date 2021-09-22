@@ -56,7 +56,7 @@ The plastic case is usually 3D printed and this can take many hours or even days
 
 **Printed circuit board**
 
-The Gerber files for this (Transmitter 1b) are on GitHub,
+The Gerber files for this (Transmitter 1b) are on GitHub. [insert PCB image here.]
 
 Most components are pretty clearly marked on the board to show where they should go. But three at the top right are not marked. These are voltage regulators as can be seen in the picture. Two 7805 5 volt regulators, and above these, an AMS 1117 3.3 volt regulator. The 7805 regulators can be replaced if preferred with **Pololu S9V11F5 boost-buck convertors**. These luckily are pinout compatible with a 7805 and thus can be simply soldered to the PCB without any change or problem - but do be careful to put them the right way around! This substitution would also permit using a 2S lipo battery in place of the LIFEPO4 one I use - but that would also require a change to voltage sensing code.
 
@@ -70,9 +70,11 @@ The two Schotkky diodes also can go on the back of the PCB in order to prevent t
 
 Start by soldering on all the SMD components and the 100uF through hole electrolytic capacitor, which should be lying down unless its a very short one - because the INA219 will be above it.
 
-There are several breakout boards: the Teensy 4.1, the Pololu 2808, and so on. Solder male header pins to all of these, and female headers to the PCB. This will allow them easily to be removed and replaced should this ever be needed, or just removed for access and cleaning.
+There are several breakout boards: the Teensy 4.1, the Pololu 2808, and the Tiny DS 1307 RTC. Solder male header pins to all of these, and female headers to the PCB. (The ML01DP5 transceiver already has eight male header pins attached.) This will allow these easily to be removed and replaced should this ever be needed, or just removed for easy access and cleaning. Look at the image to check the corrent placement of male and female header pins.
 
-To be continued....
+At the bottom of the PCB are eight 3-pin servo-style connectors
+
+
 
 
 #  
