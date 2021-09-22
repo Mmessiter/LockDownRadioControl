@@ -1,4 +1,4 @@
-# Lockdown Radio
+# LockDownRadioControl - User Manual
 by Malcolm Messiter
 
 ![LDRC Image](https://github.com/Mmessiter/LockDownRadioControl/blob/main/Pictures/LDRC%201.png)
@@ -13,7 +13,7 @@ During 2020 I decided to try to design and build a radio control system from scr
 * 2.5 km range
 * 16 channels
 * 99 model memories
-* 12 BIT servo resolution
+* 12 BIT servo resolution (11 BIT via SBUS)
 * 32 mixes
 * Four flight modes
 * Transmitter modes 1,2,3, or 4
@@ -36,7 +36,7 @@ During 2020 I decided to try to design and build a radio control system from scr
 * Real-time clock keeps time even when system is off
 * Motor timer - runs while motor is running
 
-More features will be added here …
+(More features will be added here …)
 
 When you switch on the transmitter, this is the first screen you will see:
 
