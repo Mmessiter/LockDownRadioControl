@@ -581,7 +581,7 @@ void Reconnect()
             Rnumber      = 1;
             CurrentRadio = &Radio1;
         }
-        InitCurrentRadio();
+       // InitCurrentRadio(); // Not needed. Both (if indeed two) were already initialised in setup()
     }
 #ifdef DEBUG
     Serial.print("Reconnection attempt: ");
@@ -750,7 +750,7 @@ void BindModel()
         }
     }
     CurrentRadio->stopListening();
-    InitCurrentRadio();
+    InitCurrentRadio();  // This one is needed because the pipe changed
     BoundFlag   = true;
     BindNow     = 0;
     SaveNewBind = false;
@@ -835,18 +835,17 @@ void CheckParams()
             FailSaveSafe = bool(ReceivedData[CHANNELSUSED + 3]);
             if (FailSaveSafe) {
                 TwoBytes = uint16_t(byte2) + uint16_t(byte1 << 8);
-                // Serial.println (TwoBytes,BIN);
                 RebuildFlags(FailSafeChannel, TwoBytes);
             }
             break;
         case 17:
             ReInit = bool(ReceivedData[CHANNELSUSED + 3]); // must reinitialise the port if changed settings
             if (ReInit) {
-                InitCurrentRadio();
+                InitCurrentRadio();  // I think was used for "binding". Will check as might be duplicated.
             }
             break;
         default:
-            break; //
+            break; 
     }
 }
 
@@ -1079,7 +1078,7 @@ void setup()
     InitCurrentRadio();
 #endif
 #ifndef SECOND_TRANSCEIVER
-    Radio2 = Radio1;
+    Radio2 = Radio1;     // This allows Reconnect() to work without change with only one tranceiver
 #endif
 
     if (USE_BMP280) {
