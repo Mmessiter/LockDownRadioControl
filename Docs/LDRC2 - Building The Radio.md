@@ -55,7 +55,7 @@ The "M9 Hall Effect Gimbal" will fit the 3D-printed case nicely. You could use o
 
 The plastic case is usually 3D printed and this can take many hours or even days, so it might be a good idea to start your printer before doing anything else. The latest .STL files needed are on Github. If no printer is available there are many 3D printing services available on the Internet, such as www.shapeways.com.
 
-**Printed circuit board**
+**Printed circuit board**!
 
 ![image](https://user-images.githubusercontent.com/66127058/134360875-59f97849-a041-4665-9974-f3e0b3c67883.jpeg)
 
@@ -117,8 +117,7 @@ Use this application to load the latest firmware file (currently `Transmitter512
 
 Solder a 220uF electolytic capacitor to the screens power as shown in this image:
 
-(**TODO:** Insert image of Nextion capacitor added here)
-
+![](2021-09-22-22-23-55.png) 
 Use four small self tapping screws to hold the Nextion screen in the case **with its connector to the left.** 
 
 Once the screen is in place, the printed cicuit board, bolted to the plastic tray support (using 3M bolts and locknuts) can be mounted above it, and held in place with two more self tapping small screws.
