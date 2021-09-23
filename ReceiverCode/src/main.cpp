@@ -7,7 +7,7 @@
 // #define DB_FAILSAFE
 
 // #define SECOND_TRANSCEIVER
-#define RX_DELAY        0  // for new library and extra tranceiver
+// #define RX_DELAY        0  // for new library and extra tranceiver
 #define RECEIVE_TIMEOUT 66 // 15 milliseconds was too short
 #define PacketsPerHop   20
 #define CHANNELSUSED    16
@@ -126,7 +126,7 @@ int      tt;
 SBUS     MySbus(SBUSPORT);
 RF24     Radio1(pinCE1, pinCSN1);
 RF24     Radio2(pinCE2, pinCSN2);
-RF24*    CurrentRadio = &Radio1;
+RF24*     CurrentRadio =&Radio1;
 Compress compress;
 
 char payLoad[ACKPAYLOADLENGTH]; // must have spare space
@@ -575,13 +575,13 @@ void Reconnect()
         CurrentRadio->stopListening();
         if (Rnumber == 1) {
             Rnumber      = 2;
-            CurrentRadio = &Radio2;
+            CurrentRadio= &Radio2;
         }
         else {
             Rnumber      = 1;
             CurrentRadio = &Radio1;
         }
-       // InitCurrentRadio(); // Not needed. Both (if indeed two) were already initialised in setup()
+        InitCurrentRadio();
     }
 #ifdef DEBUG
     Serial.print("Reconnection attempt: ");
@@ -690,7 +690,7 @@ bool ReadData()
 {
     uint16_t CompressedData[COMPRESSEDWORDS]; // 30 bytes -> 40 bytes when uncompressed
     Connected = false;
-    delay(RX_DELAY);
+    //delay(RX_DELAY);
     if (CurrentRadio->available()) {
         LoadExtraPayload();
         Connected            = true;
@@ -750,7 +750,7 @@ void BindModel()
         }
     }
     CurrentRadio->stopListening();
-    InitCurrentRadio();  // This one is needed because the pipe changed
+    InitCurrentRadio();
     BoundFlag   = true;
     BindNow     = 0;
     SaveNewBind = false;
@@ -835,17 +835,18 @@ void CheckParams()
             FailSaveSafe = bool(ReceivedData[CHANNELSUSED + 3]);
             if (FailSaveSafe) {
                 TwoBytes = uint16_t(byte2) + uint16_t(byte1 << 8);
+                // Serial.println (TwoBytes,BIN);
                 RebuildFlags(FailSafeChannel, TwoBytes);
             }
             break;
         case 17:
             ReInit = bool(ReceivedData[CHANNELSUSED + 3]); // must reinitialise the port if changed settings
             if (ReInit) {
-                InitCurrentRadio();  // I think was used for "binding". Will check as might be duplicated.
+                InitCurrentRadio();
             }
             break;
         default:
-            break; 
+            break; //
     }
 }
 
@@ -1061,14 +1062,14 @@ void setup()
 {
     pinMode(LED_PIN, OUTPUT);
     digitalWrite(LED_PIN, HIGH);
-    delay(2000); // Needed ! - possibly for stabilising capacitors.
+    delay(1000); // Needed ! - possibly for stabilising capacitors.
     Serial.begin(9600);
     Wire.begin();
     ScanI2c(); // see what's connected
     if (USE_BNO055) BNO055_Cheapo.begin();
     if (USE_BNO055A) BNO055_Adafruit.begin();
-   // SPI.begin();
-   // SPI.setClockDivider(SPI_CLOCK_DIV16); // for Teensy - Slow SPI bus
+    SPI.begin();
+    SPI.setClockDivider(SPI_CLOCK_DIV16); // for Teensy - Slow SPI bus
 
     CurrentRadio = &Radio1;
     InitCurrentRadio();
@@ -1078,7 +1079,7 @@ void setup()
     InitCurrentRadio();
 #endif
 #ifndef SECOND_TRANSCEIVER
-    Radio2 = Radio1;     // This allows Reconnect() to work without change with only one tranceiver
+    Radio2 = Radio1;
 #endif
 
     if (USE_BMP280) {
