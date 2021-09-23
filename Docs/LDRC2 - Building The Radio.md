@@ -3,13 +3,20 @@
 
 # Building the LockDownRadioControl
 
-This section will explain how to build a system as well as list needed parts.
+---
+
+This section list the parts and explains how to build the radio.
 
 # 1. Transmitter 
 
-To build the transmitter, first acquire all the components (see list below). 
+<p align="center">
+<img src="2021-09-23-15-34-58.png" width="550"/>
+</p>
+To build the transmitter, first acquire all the components listed below. 
 The printed circuit board can be created from the published Gerber files.
-The current transmitter uses version 1b of the PCB  
+The current transmitter uses version 1b of the PCB.  
+
+---
 
 ## Parts list:
 
@@ -47,29 +54,37 @@ All parts can be obtained from Amazon, eBay and/or many other sources.
 * Various servo extension cables
 * Solder
 
-The "M9 Hall Effect Gimbal" will fit the 3D-printed case nicely. You could use other gimbals of course, but then you would need to redesign the case unless the fit happens to be good.
+The "M9 Hall Effect Gimbal" will fit the 3D-printed case nicely. You could use other gimbals of course, but then you would need to redesign the case, unless the fit happens to be good.
 
-**Case**
+## Case
 
-(**TODO:** Insert image of case parts here)
+<p align="center">
+<img src="2021-09-23-15-38-35.png" width="450"/>
+</p>
+The plastic case is usually 3D printed and this can take many hours or even days. So it might be a good idea to start your 3-D printer before doing anything else. The latest .STL files for this are on Github. If no printer is available there are many 3D printing services available on the Internet, such as  http://www.shapeways.com.
 
-The plastic case is usually 3D printed and this can take many hours or even days, so it might be a good idea to start your printer before doing anything else. The latest .STL files needed are on Github. If no printer is available there are many 3D printing services available on the Internet, such as www.shapeways.com.
-
-**Printed circuit board**!
-
-![image](https://user-images.githubusercontent.com/66127058/134360875-59f97849-a041-4665-9974-f3e0b3c67883.jpeg)
-
+**Printed circuit board**
+<p align="center">
+<img src="2021-09-23-15-16-26.png" width="450"/>
+</p>
 The Gerber files for this (Transmitter_1b) are on GitHub.
 
-Most components are pretty clearly marked on the board to show where they should go. But three at the top right are not marked. These are voltage regulators as can be seen in the picture. Two 7805 5 volt regulators, and above these, an AMS 1117 3.3 volt regulator. The 7805 regulators can be replaced if preferred with **Pololu S9V11F5 boost-buck convertors**. These luckily are pinout compatible with a 7805 and thus can be simply soldered to the PCB without any change or problem - but do be careful to put them the right way around! (This substitution would also permit using a 2S lipo battery in place of the LIFEPO4 one I use - but that would also require a change to voltage sensing code.)
+Most components are marked on the board to show where they should go. But three at the top right were not marked. These are simply voltage regulators as can be seen in the picture. Two 7805 5 volt regulators, and above these, an AMS 1117 3.3 volt regulator. The 7805 regulators can be replaced if preferred with **Pololu S9V11F5 boost-buck convertors**. These luckily are pinout compatible with a 7805 and thus can be simply soldered to the PCB without any change or problem - but do be careful to put them the right way around! (This substitution would also permit using a 2S lipo battery in place of the LIFEPO4 one I use - but that would also require a change to voltage sensing code.)
+
+<p align="center">
+<img src="2021-09-23-15-44-12.png" width="750"/>
+</p>
+
 
 All capacitors' values are marked on the PCB. They are mostly ceramic SMD 1206 capacitors except for the 47uF capacitors which should be **Tantalum case size B** and a 100uF electrolytic TTH capactor near the Pololu 2808 power switch. The 47uF Tantalum capacitors are not symmetrical so the end with the darker stripe must be at the end marked positive (+). Similarly the 100uF electrolytic TTH capacitor must have its longer lead through the hole marked (+). Also note that the INA219 voltage sensor will be above this capacitor - so if it's too tall, lie it down out of the way. 
 
 To prevent the Nextion screen putting noise onto the 5V power supply (which it would because of its use of PWM for brightness) it gets it's very own 5V regulator, and two extra large electrolytic capacitors across its power in. I suggest one is attached to the back of the screen itself, and another to the back of the PCB where the screen is connected. 
+<p align="center">
+<img src="2021-09-23-15-45-46.png"  width="450"/></p> 
 
-The two Schotkky diodes also can go on the back of the PCB in order to prevent these capacitors from discharging through the voltage regulators 'backwards' when you turn the power off. This might damage the regulators.
-
-![](https://github.com/Mmessiter/LockDownRadioControl/blob/main/Pictures/IMG_1070.jpeg)
+The two Schotkky diodes should also be added to the back of the PCB in order to prevent these capacitors from discharging through the voltage regulators 'backwards' when you turn the power off. This might damage the regulators.
+<p align="center">
+<img src="2021-09-23-15-06-59.png"  width="450"/></p> 
 
 Start by soldering on all the SMD components and the 100uF through hole electrolytic capacitor, which should be lying down unless its a very short one - because the INA219 will be above it.
 
@@ -116,8 +131,10 @@ If you have not already done so, now download the free Nextion editor from [http
 Use this application to load the latest firmware file (currently `Transmitter512.HMI`) and upload it into the Nextion screen itself. This firmware file (or latest version) is on GitHub.
 
 Solder a 220uF electolytic capacitor to the screens power as shown in this image:
+<p align="center">
+<img src="2021-09-22-22-23-55.png" width="450"/>
+</p>
 
-![](2021-09-22-22-23-55.png) 
 Use four small self tapping screws to hold the Nextion screen in the case **with its connector to the left.** 
 
 Once the screen is in place, the printed cicuit board, bolted to the plastic tray support (using 3M bolts and locknuts) can be mounted above it, and held in place with two more self tapping small screws.
