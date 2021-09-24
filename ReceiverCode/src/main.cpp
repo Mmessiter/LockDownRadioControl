@@ -575,13 +575,15 @@ void Reconnect()
         CurrentRadio->stopListening();
         if (Rnumber == 1) {
             Rnumber      = 2;
+#ifdef SECOND_TRANSCEIVER
             CurrentRadio= &Radio2;
+#endif
         }
         else {
             Rnumber      = 1;
             CurrentRadio = &Radio1;
         }
-       // InitCurrentRadio(); NOT NEEDED!!
+       // InitCurrentRadio(); //NOT NEEDED!!
     }
 #ifdef DEBUG
     Serial.print("Reconnection attempt: ");
