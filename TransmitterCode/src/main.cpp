@@ -1251,12 +1251,14 @@ void ShowComms()
     float ReadVolts    = 0;
     float VoltsPerCell = 0;
 
+
     if (CurrentView == FrontView || CurrentView == DataView) {
         if (millis() - LastShowTime > 1000) {
             ShowNow = true;
         }
     }
-    if (ShowNow) {
+    if (ShowNow) 
+    {
         LastShowTime = millis();
         if (USE_INA219) {
             txv = (ina219.getBusVoltage_V()) * 100;
@@ -1364,6 +1366,12 @@ void ShowComms()
                     SendText(FrontView_RXBV, na); // data not available
                     SendText(FrontView_AckPayload, na);
                 }
+            } else 
+            {
+                 if (CurrentView == FrontView)
+                 {
+                   SendText(FrontView_Connected, Not_Connected);
+                 }
             }
         }
     }
@@ -5588,7 +5596,7 @@ void ReadExtraData()
         case 'V':
             strcpy(ModelVersionNumber, &AckPayLoad[1]); // Software version number
             break;
-       // case 'M':   // redundant now ...          
+        // case 'M':   // redundant now ...          
         //    break;
         // case 'D':  
         //    break;
