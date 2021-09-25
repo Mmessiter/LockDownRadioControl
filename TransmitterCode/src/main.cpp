@@ -32,7 +32,6 @@
 #define FHSS_RESCUE_TOP    125                       // reduced range for recovery
 #define CE_PIN             9                         // for SPI to nRF24L01
 #define CSN_PIN            10                        // for SPI to nRF24L01
-#define REINITDELAY        50                        // 1/20 sec delay waiting for RX to init.
 #define INACTIVITYTIMEOUT  10                        // Default time after which to switch off
 #define INACTIVITYMINIMUM  5 * TICKSPERMINUTE        // Inactivity timeout minimum is 5 minutes
 #define INACTIVITYMAXIMUM  30 * TICKSPERMINUTE       // Inactivity timeout maximum is 30 minutes
@@ -442,8 +441,6 @@ bool     RXWarningFlag = false;
 byte     PowerSetting  = 4;
 byte     DataRate      = 1;
 bool     ReInit        = false;
-byte     ReInitCounter = 0;
-uint32_t ReInitTimer   = 0;
 uint32_t TxOnTime      = 0;
 uint32_t TxPace        = 0;
 bool     ModelDetected = false;
@@ -2556,9 +2553,7 @@ void setup()
     ScanI2c();
     if (USE_INA219) ina219.begin();
     SD.begin(chipSelect);
-   // SPI.begin();                          // Need SPI data connection to nRF24l01+
-   // SPI.setClockDivider(SPI_CLOCK_DIV16); // Slow data down a little bit for the nRF24l01+ (Teensy is too fast for it.)
-    InitRadio(DefaultPipe);
+    InitRadio(DefaultPipe);  // Startup
     InitSwitches();
     SendCommand(NextionWakeUp);
     InitMaxMin();        // in case not yet calibrated
@@ -3631,6 +3626,14 @@ void MovePoint()
     DisplayCurve();
 }
 
+/************************************************************************************************************/
+
+void SetThePipe(uint64_t WhichPipe)
+{ 
+        Radio1.openWritingPipe(WhichPipe);
+        Radio1.stopListening();
+}
+
 /*********************************************************************************************************************************/
 // SEND AND RECEIVE A MODEL FILE
 /*********************************************************************************************************************************/
@@ -3696,7 +3699,7 @@ void ReceiveModelFile()
             Serial.println("Timeout");
 #endif
             SendText(ModelsView_filename, TimeoutMsg);
-            InitRadio(NewPipe);
+            SetThePipe(DefaultPipe); 
             return; // Give up waiting
         }
         else {
@@ -3777,8 +3780,7 @@ void ReceiveModelFile()
     SaveAllParameters();
     CloseModelsFile();
     UpdateModelsNameEveryWhere();
-    // ****************************************************
-    InitRadio(NewPipe);
+    SetThePipe(DefaultPipe); 
     SendCommand(ProgressEnd);
 }
 
@@ -3857,7 +3859,7 @@ void SendModelFile()
         }
         else {
             if (PacketNumber == 2) { // error - no connection
-                InitRadio(NewPipe);
+                SetThePipe(DefaultPipe); 
                 SendCommand(ProgressEnd);
                 return;
             }
@@ -3872,7 +3874,7 @@ void SendModelFile()
 #endif
     SendValue(Progress, 100);
     delay(100);
-    InitRadio(NewPipe);
+    SetThePipe(DefaultPipe); 
     SendCommand(ProgressEnd);
 }
 
@@ -5350,18 +5352,8 @@ void LoadPacketData()
             SendBuffer[CHANNELSUSED + 3] = SaveFailSafeNow; // FailSafeSaveMoment
             SaveFailSafeNow              = false;           // once should do it.
             break;
-        case 17:
-            if (ReInit) {
-                ReInitCounter++;
-                if (ReInitCounter > 100) {
-                    ReInitTimer   = millis(); // start the timer!
-                    ReInit        = false;
-                    ReInitCounter = 0;
-                }
-            }
-            SendBuffer[CHANNELSUSED + 3] = ReInit;
-
-            break;
+       // case 17:
+        //    break;
         default:
             break;
     }
@@ -5412,11 +5404,12 @@ void TryOtherPipe()
 {
     if (BoundFlag == true) {
         BoundFlag = false;
-        InitRadio(DefaultPipe);
+        SetThePipe(DefaultPipe);   
     }
-    else {
+    else 
+    {
         BoundFlag = true;
-        InitRadio(NewPipe);
+        SetThePipe(NewPipe); 
     }
 }
 
@@ -5566,10 +5559,7 @@ void HopToNextFrequency()
 
 void ReadExtraData()
 {
-    // char ShowModelsView[]            = "page ModelsView";
-    // char ModelsView_ModelNumber[]    = "ModelsView.ModelNumber";
     float alt;
-    byte  mn = 0;
     switch (AckPayLoad[0]) {
         case 'A':
             strcpy(ModelAltitude, &AckPayLoad[1]); // Altitude
@@ -5598,30 +5588,10 @@ void ReadExtraData()
         case 'V':
             strcpy(ModelVersionNumber, &AckPayLoad[1]); // Software version number
             break;
-        case 'M':
-            if (!ModelDetected && BoundFlag) { // Receiver thinks model number was wrong, so correct it and go to model selection screen for confirmation from user.
-                mn            = AckPayLoad[1];
-                ModelDetected = true;
-                if (mn != ModelNumber && mn > 0) {
-                    //  ModelNumber=mn;
-                    //  CurrentMode=SENDNOTHING;                          // Stop transmission
-                    //  ReadOneModel(ModelNumber);
-                    //  SaveAllParameters();
-                    //  SendCommand (ShowModelsView);
-                    //  SendValue(ModelsView_ModelNumber,ModelNumber);
-                    //  CurrentView=ModelsView;
-                    //  UpdateModelsNameEveryWhere();
-                    //  BuildDirectory();                       // of SD card
-                    //  ShowFileNumber();
-                }
-            }
-            break;
-        case 'D':
-            if (AckPayLoad[1] == true) {
-                ReInit        = false;
-                ReInitCounter = 0;
-            }
-            break;
+       // case 'M':   // redundant now ...          
+        //    break;
+        // case 'D':  
+        //    break;
         default:
             break;
     }
@@ -5795,13 +5765,6 @@ void loop()
         Button_was_pressed();
     } // Deal with button!
 
-    if (ReInitTimer > 0) {
-        if (millis() - ReInitTimer > REINITDELAY) {
-            InitRadio(NewPipe);
-            ReInitTimer = 0;
-        }
-    }
-
     if ((millis() - TxOnTime) > 2000) { // Transmit nothing for 1.5 seconds
         switch (CurrentMode) {
             case 0:
@@ -5826,7 +5789,7 @@ void loop()
 #ifdef DB_BIND
             Serial.println("Binding now");
 #endif
-            InitRadio(NewPipe);
+            SetThePipe(NewPipe);  
             BindingNow = 0;
             BoundFlag  = true;
             GreenLedOn();
