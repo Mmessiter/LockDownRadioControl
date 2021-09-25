@@ -1,18 +1,17 @@
-#define RXVERSIONNUMBER 64.5 // Sept 19th 2021
+#define RXVERSIONNUMBER 64.75 // Sept 25th 2021
 
 // #define DEBUG
 // #define DB_SENSORS
 // #define DB_PID
 // #define DB_BIND
 // #define DB_FAILSAFE
-
 // #define SECOND_TRANSCEIVER
-// #define RX_DELAY        0  // for new library and extra tranceiver
-#define RECEIVE_TIMEOUT 66 // 15 milliseconds was too short
+
+#define RECEIVE_TIMEOUT 66    // 15 milliseconds was too short
 #define PacketsPerHop   20
 #define CHANNELSUSED    16
 #define SERVOSUSED      10
-#define SBUSRATE        10 // SBUS frame every 10 milliseconds
+#define SBUSRATE        10    // SBUS frame every 10 milliseconds
 #define SBUSPORT        Serial3
 
 bool USE_BMP280  = false; //  Pressure BMP280
@@ -96,7 +95,7 @@ BMP280_DEV         bmp280;
 MPU6050            mpu6050(Wire);
 Servo              MCMServo[SERVOSUSED];
 
-byte PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 16}; // ten now
+byte PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 16}; // ten now, last 6 only via sbus
 
 #define FHSS_RESCUE_BOTTOM 118
 #define FHSS_RESCUE_TOP    125
@@ -104,8 +103,10 @@ byte PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 16}; // ten now
 #define pinCE1  9  // NRF1
 #define pinCSN1 10 // NRF1
 
-#define pinCSN2 20 // NRF2
-#define pinCE2  21 // NRF2
+ #ifdef SECOND_TRANSCEIVER
+    #define pinCSN2 20 // NRF2
+    #define pinCE2  21 // NRF2
+#endif
 
 #define FAILSAFE_TIMEOUT 2000
 #define LED_PIN          13
@@ -125,7 +126,11 @@ int      tt;
 
 SBUS     MySbus(SBUSPORT);
 RF24     Radio1(pinCE1, pinCSN1);
-RF24     Radio2(pinCE2, pinCSN2);
+
+#ifdef SECOND_TRANSCEIVER
+    RF24     Radio2(pinCE2, pinCSN2);
+#endif
+
 RF24*     CurrentRadio =&Radio1;
 Compress compress;
 
@@ -224,7 +229,7 @@ unsigned int RX_TimeOut         = RECEIVE_TIMEOUT; // 50 MS by default
 bool         FailSafeSent       = false;
 uint8_t      byte1              = 0;
 uint8_t      byte2              = 0;
-byte         reconnect_attempts = 0;
+byte         ReconnectAttempts = 0;
 byte         Rnumber            = 1;
 
 /************************************************************************************************************/
@@ -558,10 +563,10 @@ void InitCurrentRadio()
         default:
             break;
     }
-
     CurrentRadio->openReadingPipe(1, ThisPipe);
     SaveNewBind = true;
-    CurrentRadio->startListening();
+   
+   // CurrentRadio->startListening(); Not required, it would appear.
 }
 
 /************************************************************************************************************/
@@ -569,59 +574,59 @@ void InitCurrentRadio()
 void Reconnect()
 {
     SearchStartTime = millis();
-    reconnect_attempts++;
-    if (reconnect_attempts > 0) {
-        reconnect_attempts = 0;
-        CurrentRadio->stopListening();
-        if (Rnumber == 1) {
-            Rnumber      = 2;
-            CurrentRadio= &Radio2;
-        }
-        else {
-            Rnumber      = 1;
-            CurrentRadio = &Radio1;
-        }
-        InitCurrentRadio();
-    }
-#ifdef DEBUG
-    Serial.print("Reconnection attempt: ");
-    Serial.print(reconnect_attempts);
-    Serial.print("  Radio: ");
-    Serial.println(Rnumber);
-#endif
-
-    while (!Connected) {
+    ReconnectAttempts = 0;
+    while (!Connected) 
+        {
         StillSearchingTime = millis() - SearchStartTime;
+        ReconnectAttempts++;
 
-#ifdef DEBUG
-        Serial.print(millis());
-        Serial.print("  Pipe=");
-        Serial.print(abs(int(ThisPipe)));
-        Serial.print("  ");
-        Serial.println("Searching (Reconnecting)...");
+#ifdef SECOND_TRANSCEIVER                      // This part swaps to other transceiver if connection lost and two fitted 
+        if (ReconnectAttempts > 2) 
+            {
+            ReconnectAttempts = 0;
+            CurrentRadio->stopListening();
+            if (Rnumber == 1) 
+                {
+                Rnumber      = 2;
+                CurrentRadio= &Radio2;       
+                }
+            else 
+                {
+                Rnumber      = 1;
+                CurrentRadio = &Radio1;
+                }
+            }
 #endif
 
-        i = FHSS_RESCUE_BOTTOM;
-        while (!CurrentRadio->available() && i <= FHSS_RESCUE_TOP) { // Search for frequency
-            CurrentRadio->stopListening();
-            CurrentRadio->setChannel(i);
-            CurrentRadio->startListening();
-            delay(4);
-            i++;
-        }
-
-        if (CurrentRadio->available()) {
+#ifdef DEBUG
+            Serial.print("Reconnection attempt: ");
+            Serial.print(ReconnectAttempts);
+            Serial.print("  Radio: ");
+            Serial.println(Rnumber);
+#endif
+            i = FHSS_RESCUE_BOTTOM;
+            while (!CurrentRadio->available() && i <= FHSS_RESCUE_TOP)  
+                { 
+                CurrentRadio->stopListening();
+                CurrentRadio->setChannel(i);
+                CurrentRadio->startListening();
+                delay(3); // was 4, but 3 now seems good and is 25% faster?!
+                i++;
+                }
+        if (CurrentRadio->available()) 
+            {
             Connected          = true;
             FailSafeSent       = false;
-            reconnect_attempts = 0;
+            ReconnectAttempts = 0;
 #ifdef DEBUG
             Serial.println("*****************************************************************************************************************");
 #endif
+            }
+            else if (StillSearchingTime >= FAILSAFE_TIMEOUT) 
+                    {
+                    FailSafe();
+                    }
         }
-        else if (StillSearchingTime >= FAILSAFE_TIMEOUT) {
-            FailSafe();
-        }
-    }
 }
 
 /************************************************************************************************************/
@@ -690,7 +695,6 @@ bool ReadData()
 {
     uint16_t CompressedData[COMPRESSEDWORDS]; // 30 bytes -> 40 bytes when uncompressed
     Connected = false;
-    //delay(RX_DELAY);
     if (CurrentRadio->available()) {
         LoadExtraPayload();
         Connected            = true;
@@ -741,6 +745,17 @@ void AttachServos()
 
 /************************************************************************************************************/
 
+
+
+/************************************************************************************************************/
+
+void SetNewPipe()
+{
+        CurrentRadio->openReadingPipe(1, ThisPipe);
+}
+
+/************************************************************************************************************/
+
 void BindModel()
 {
     ThisPipe = NewPipe;
@@ -750,11 +765,11 @@ void BindModel()
         }
     }
     CurrentRadio->stopListening();
-    InitCurrentRadio();
+    SetNewPipe();               // No Longer InitCurrentRadio(); which was here   
     BoundFlag   = true;
     BindNow     = 0;
     SaveNewBind = false;
-    AttachServos(); // AND SBUS!!!
+    AttachServos();             // AND SBUS!!!
 #ifdef DB_BIND
     Serial.println("BINDING NOW");
 #endif
@@ -835,14 +850,13 @@ void CheckParams()
             FailSaveSafe = bool(ReceivedData[CHANNELSUSED + 3]);
             if (FailSaveSafe) {
                 TwoBytes = uint16_t(byte2) + uint16_t(byte1 << 8);
-                // Serial.println (TwoBytes,BIN);
                 RebuildFlags(FailSafeChannel, TwoBytes);
             }
             break;
         case 17:
             ReInit = bool(ReceivedData[CHANNELSUSED + 3]); // must reinitialise the port if changed settings
             if (ReInit) {
-                InitCurrentRadio();
+               // InitCurrentRadio(); // seems not needed - out now, but must investigate!
             }
             break;
         default:
@@ -1068,20 +1082,14 @@ void setup()
     ScanI2c(); // see what's connected
     if (USE_BNO055) BNO055_Cheapo.begin();
     if (USE_BNO055A) BNO055_Adafruit.begin();
-    SPI.begin();
-    SPI.setClockDivider(SPI_CLOCK_DIV16); // for Teensy - Slow SPI bus
-
-    CurrentRadio = &Radio1;
-    InitCurrentRadio();
 
 #ifdef SECOND_TRANSCEIVER
     CurrentRadio = &Radio2;
-    InitCurrentRadio();
-#endif
-#ifndef SECOND_TRANSCEIVER
-    Radio2 = Radio1;
+    InitCurrentRadio();   // initialise BOTH at setup, if two.
 #endif
 
+    CurrentRadio = &Radio1;
+    InitCurrentRadio();
     if (USE_BMP280) {
 #ifdef DB_SENSORS
         Serial.print("Starting BMP280 ... ");
