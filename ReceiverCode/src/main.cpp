@@ -1,4 +1,4 @@
-#define RXVERSIONNUMBER 64.75 // Sept 25th 2021
+#define RXVERSIONNUMBER 65.01 // Sept 26th 2021
 
 // #define DEBUG
 // #define DB_SENSORS
