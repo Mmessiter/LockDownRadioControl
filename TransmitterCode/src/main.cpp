@@ -1982,11 +1982,11 @@ void InitRadio(uint64_t Pipe)
     Radio1.enableAckPayload();                  // Needed
     Radio1.openWritingPipe(Pipe);               // Current Pipe address used for Binding
     Radio1.setRetries(15, 15);                  // Max automatic retries = (15,15). Packet failure will take 0.06 seconds
-    Radio1.setPayloadSize(COMPRESSEDWORDS * 2); // send 30 bytes - COMPRESSED (->40 )
+ // Radio1.setPayloadSize(COMPRESSEDWORDS * 2); // send 30 bytes - COMPRESSED (->40 )
     Radio1.stopListening();                     // It's a true Messiter
     Radio1.enableDynamicPayloads();             // Needed
     Radio1.setAddressWidth(5);                  // was 4, is now 5
-    Radio1.setCRCLength(RF24_CRC_8);            // could be 16 or disabled
+    Radio1.setCRCLength(RF24_CRC_8);            // could be 16 
     PipeTimeout = millis();                     // Initialise timeout
     GapSum      = 0;
 }
