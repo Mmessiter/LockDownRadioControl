@@ -1,4 +1,4 @@
-#define TXVERSIONNUMBER 64.91 //   Sept 25th 2021 Malcolm Messiter
+#define TXVERSIONNUMBER 65.01 //   Sept 26th 2021 Malcolm Messiter
 
 #define USE_WATCHDOG          // Enable when developing only  ??
 #define WATCHDOGTIMEOUT 10000 // 10 Seconds before reboot (32ms -> 500 seconds)
@@ -1978,14 +1978,14 @@ void InitRadio(uint64_t Pipe)
         default: break;
     }
 
-    Radio1.setAutoAck(1);                       // We want Acks
-    Radio1.enableAckPayload();                  // We want telemetry
-    Radio1.openWritingPipe(Pipe);               // Pipe address used for Binding
+ // Radio1.setAutoAck(1);                       // Not needed! is the default anyhow.
+    Radio1.enableAckPayload();                  // Needed
+    Radio1.openWritingPipe(Pipe);               // Current Pipe address used for Binding
     Radio1.setRetries(15, 15);                  // Max automatic retries = (15,15). Packet failure will take 0.06 seconds
     Radio1.setPayloadSize(COMPRESSEDWORDS * 2); // send 30 bytes - COMPRESSED (->40 )
     Radio1.stopListening();                     // It's a true Messiter
-    Radio1.enableDynamicPayloads();             //
-    Radio1.setAddressWidth(4);                  // 1 2 3 4 5
+    Radio1.enableDynamicPayloads();             // Needed
+    Radio1.setAddressWidth(5);                  // was 4, is now 5
     Radio1.setCRCLength(RF24_CRC_8);            // could be 16 or disabled
     PipeTimeout = millis();                     // Initialise timeout
     GapSum      = 0;

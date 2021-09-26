@@ -526,12 +526,12 @@ void HopToNextFrequency()
 
 void InitCurrentRadio()
 {
-    CurrentRadio->begin();
-    CurrentRadio->setAutoAck(1);
-    CurrentRadio->enableAckPayload();
-    CurrentRadio->maskIRQ(1, 1, 1); // no interrupts
-    CurrentRadio->enableDynamicPayloads();
-    CurrentRadio->setAddressWidth(4);
+    CurrentRadio->begin();                  // sets all to defaults
+     // CurrentRadio->setAutoAck(1);        // not needed - was default
+    CurrentRadio->enableAckPayload();       // needed
+    CurrentRadio->maskIRQ(1, 1, 1);         // no interrupts - at the moment - (line *IS* connected)
+    CurrentRadio->enableDynamicPayloads();  // needed
+    CurrentRadio->setAddressWidth(5);       // was 4, now 5 in RX too
     CurrentRadio->setCRCLength(RF24_CRC_8); // could be 16 or disabled
 
     switch (PowerSetting) {
