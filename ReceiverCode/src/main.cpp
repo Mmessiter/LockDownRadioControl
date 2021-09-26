@@ -7,7 +7,7 @@
 // #define DB_FAILSAFE
 // #define SECOND_TRANSCEIVER
 
-#define RECEIVE_TIMEOUT 66    // 15 milliseconds was too short  ........ updated?
+#define RECEIVE_TIMEOUT 66    // 15 milliseconds was too short 
 #define PacketsPerHop   20
 #define CHANNELSUSED    16
 #define SERVOSUSED      10
