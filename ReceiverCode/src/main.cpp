@@ -625,7 +625,11 @@ void Reconnect()
             }
             else if (StillSearchingTime >= FAILSAFE_TIMEOUT) 
                     {
-                    FailSafe();
+                    if (!FailSafeSent) 
+                        { 
+                        FailSafe();
+                        FailSafeSent       = true;
+                        }
                     }
         }
 }
