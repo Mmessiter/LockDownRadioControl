@@ -528,7 +528,6 @@ void HopToNextFrequency()
 void InitCurrentRadio()
 {
     CurrentRadio->begin();                  // sets all to defaults
-     // CurrentRadio->setAutoAck(1);        // not needed - was default
     CurrentRadio->enableAckPayload();       // needed
     CurrentRadio->maskIRQ(1, 1, 1);         // no interrupts - at the moment - (line *IS* connected)
     CurrentRadio->enableDynamicPayloads();  // needed
@@ -566,8 +565,6 @@ void InitCurrentRadio()
     }
     CurrentRadio->openReadingPipe(1, ThisPipe);
     SaveNewBind = true;
-   
-   // CurrentRadio->startListening(); Not required, it would appear.
 }
 
 /************************************************************************************************************/
@@ -582,7 +579,7 @@ void Reconnect()
         ReconnectAttempts++;
 
 #ifdef SECOND_TRANSCEIVER                      // This part swaps to other transceiver if connection lost and two fitted 
-        if (ReconnectAttempts > 2) 
+        if (ReconnectAttempts > 2)             // TODO: To be checked with two ML01DP5 tranceivers...
             {
             ReconnectAttempts = 0;
             CurrentRadio->stopListening();
@@ -606,19 +603,20 @@ void Reconnect()
             Serial.println(Rnumber);
 #endif
             i = FHSS_RESCUE_BOTTOM;
-            while (!CurrentRadio->available() && i <= FHSS_RESCUE_TOP)  
+            while (!CurrentRadio->available() && i <= FHSS_RESCUE_TOP)  // This loop exits as soon as connection is detected.
                 { 
                 CurrentRadio->stopListening();
                 CurrentRadio->setChannel(i);
                 CurrentRadio->startListening();
-                delay(3); // was 4, but 3 now seems good and is 25% faster?!
+                delay(3);                                                // was 4, but 3 now seems good and is 25% faster?!
                 i++;
                 }
         if (CurrentRadio->available()) 
             {
-            Connected          = true;
+            Connected          = true;                                  // Connection is re-established so return, smiling!
             FailSafeSent       = false;
             ReconnectAttempts = 0;
+            StillSearchingTime = 0;
 #ifdef DEBUG
             Serial.println("*****************************************************************************************************************");
 #endif
@@ -628,7 +626,7 @@ void Reconnect()
                     if (!FailSafeSent) 
                         { 
                         FailSafe();
-                        FailSafeSent       = true;
+                        FailSafeSent       = true;                       // Once is enough
                         }
                     }
         }
