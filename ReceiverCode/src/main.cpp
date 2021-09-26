@@ -28,7 +28,7 @@ bool USE_MPU6050 = false; //  Gyro MPU6050
 #define COMPRESSEDWORDS   UNCOMPRESSEDWORDS * 3 / 4 // = 16 WORDS  with no extra
 
 /** Features List
- * - WORKS ON TEENSY 4.0, LC and 4.1
+ * - WORKS ON TEENSY 4.0 
  * - Detects and uses INA219 to read volts
  * - Detects and uses uses MPU6050 gyro
  * - Detects and uses BMP280 pressure sensor for altitude
@@ -36,11 +36,12 @@ bool USE_MPU6050 = false; //  Gyro MPU6050
  * - Add Simple Kalman filter for PID.
  * - Gyro Angular velocity used for Quadcopter... a work in progress
  * - Binding implemented
- * - SBUS WORKING!
- * - Failsafe working (after two seconds)
- * - MODEL MEMORY AUTO SELECTION
- * - RESOLUTION INCREASED TO 12 BIT
- * - Channels incleased to 16, but only 12 PWM outputs.  SBUS can handle all.
+ * - SBUS implemented
+ * - Failsafe implemented (after two seconds)
+ * - MODEL MEMORY AUTO SELECTION (REMOVED LATER)
+ * - RESOLUTION INCREASED TO 12 BITS
+ * - Channels incleased to 16, but only 10 PWM outputs.  SBUS can handle all.
+ * - Exponential implemented (at TX end)
  */
 
 /** TEENSY 4.0 PINS
@@ -48,20 +49,20 @@ bool USE_MPU6050 = false; //  Gyro MPU6050
  * |---------------|---------|
  * | 0...7 | PWM SERVOS Channels 1 - 8 |
  * | 8     | PWM SERVO Channel 9 |
- * | 9     | SPI CE1 |
- * | 10    | SPI CSN1 |
- * | 11    | SPI MOSI |
- * | 12    | SPI MISO |
- * | 13    | SPI SCK |
+ * | 9     | SPI CE1 |  (FOR RADIO1)
+ * | 10    | SPI CSN1 | (FOR RADIO1)
+ * | 11    | SPI MOSI | (FOR BOTH RADIOS)
+ * | 12    | SPI MISO | (FOR BOTH RADIOS)
+ * | 13    | SPI SCK |  (FOR BOTH RADIOS)
  * | 14    | SBUS output (TX3) |
  * | 15    | N/A (RX3) |
- * | 16    | PWM Channel 10 |
- * | 18    | I2C SDA |
- * | 19    | I2C SCK |
- * | 20    | SPI CSN2 |
- * | 21    | SPI CE2 |
- * | 22    | IRQ1 |
- * | 23    |  RQ2 |
+ * | 16    | PWM SERVO Channel 10 |
+ * | 18    | I2C SDA | (FOR I2C)
+ * | 19    | I2C SCK | (FOR I2C)
+ * | 20    | SPI CSN2 | (FOR RADIO2)
+ * | 21    | SPI CE2 | (FOR RADIO2)
+ * | 22    | IRQ1 | (FOR RADIO1)
+ * | 23    | IRQ2 | (FOR RADIO2)
  */
 
 #include "SBUS.h"
