@@ -267,7 +267,6 @@ void LoadFailSafeData()
 
 void MapToSBUS()
 {
-
     int RangeMax = 2047; // = Frsky at 150 %
     int RangeMin = 0;
 
@@ -613,7 +612,7 @@ void Reconnect()
                 }
         if (CurrentRadio->available()) 
             {
-            Connected          = true;                                  // Connection is re-established so return, smiling!
+            Connected          = true;                                   // Connection is re-established so return, smiling!
             FailSafeSent       = false;
             ReconnectAttempts = 0;
             StillSearchingTime = 0;

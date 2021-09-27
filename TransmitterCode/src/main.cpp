@@ -1977,12 +1977,9 @@ void InitRadio(uint64_t Pipe)
         case 3: Radio1.setDataRate(RF24_2MBPS); break;
         default: break;
     }
-
- // Radio1.setAutoAck(1);                       // Not needed! is the default anyhow.
     Radio1.enableAckPayload();                  // Needed
     Radio1.openWritingPipe(Pipe);               // Current Pipe address used for Binding
     Radio1.setRetries(15, 15);                  // Max automatic retries = (15,15). Packet failure will take 0.06 seconds
- // Radio1.setPayloadSize(COMPRESSEDWORDS * 2); // send 30 bytes - COMPRESSED (->40 )
     Radio1.stopListening();                     // It's a true Messiter
     Radio1.enableDynamicPayloads();             // Needed
     Radio1.setAddressWidth(5);                  // was 4, is now 5
