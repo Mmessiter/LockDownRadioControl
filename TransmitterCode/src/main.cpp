@@ -1,4 +1,4 @@
-#define TXVERSIONNUMBER 65.01 //   Sept 26th 2021 Malcolm Messiter
+#define TXVERSIONNUMBER 65.02 //   Sept 26th 2021 Malcolm Messiter
 
 #define USE_WATCHDOG          // Enable when developing only  ??
 #define WATCHDOGTIMEOUT 10000 // 10 Seconds before reboot (32ms -> 500 seconds)
@@ -7,7 +7,7 @@
 
 // UNCOMMENT ANY OF THESE for that bit of debug info
 // #define DB_FHSS           // Debug real time FHSS data
-// #define DB_NEXTION        // Debug Nextion and SD card data
+   #define DB_NEXTION        // Debug Nextion and SD card data
 // #define DB_CHANNEL_AVOID  // Debug FHSS channel avoiding data etc
 // #define DB_SENSORS        // Debug Sensors
 // #define DB_BIND           // Debug Binding
@@ -1208,29 +1208,29 @@ void ShowComms()
 {
     bool  ShowNow                = false;
     char  na[]                   = "";
-    char  FrontView_Connected[]  = "FrontView.Connected";
-    char  FrontView_AckPayload[] = "FrontView.AckPayload";
-    char  FrontView_RXBV[]       = "FrontView.RXBV";
-    char  FrontView_TXBV[]       = "FrontView.TXBV";
+    char  FrontView_Connected[]  = "Connected";
+    char  FrontView_AckPayload[] = "AckPayload";
+    char  FrontView_RXBV[]       = "RXBV";
+    char  FrontView_TXBV[]       = "TXBV";
     char  Not_Connected[]        = "Not connected";
     char  Msg_Connected[]        = "** Connected! **";
     char  Msg_BindNeeded[]       = ">>>BIND MODEL?>>>";
-    char  DataView_pps[]         = "DataView.pps";
-    char  DataView_lps[]         = "DataView.lps";
-    char  DataView_Alt[]         = "DataView.alt";
-    char  DataView_MaxAlt[]      = "DataView.MaxAlt";
-    char  DataView_roll[]        = "DataView.roll";
-    char  DataView_pitch[]       = "DataView.pitch";
-    char  DataView_yaw[]         = "DataView.yaw";
-    char  DataView_txv[]         = "DataView.txv";
-    char  DataView_rxv[]         = "DataView.rxv";
-    char  DataView_chav[]        = "DataView.chav";
-    char  DataView_Ls[]          = "DataView.Ls";
-    char  DataView_Ts[]          = "DataView.Ts";
-    char  DataView_Sc[]          = "DataView.Success";
+    char  DataView_pps[]         = "pps";
+    char  DataView_lps[]         = "lps";
+    char  DataView_Alt[]         = "alt";
+    char  DataView_MaxAlt[]      = "MaxAlt";
+    char  DataView_roll[]        = "roll";
+    char  DataView_pitch[]       = "pitch";
+    char  DataView_yaw[]         = "yaw";
+    char  DataView_txv[]         = "txv";
+    char  DataView_rxv[]         = "rxv";
+    char  DataView_chav[]        = "chav";
+    char  DataView_Ls[]          = "DLs";
+    char  DataView_Ts[]          = "Ts";
+    char  DataView_Sc[]          = "Success";
     char  WarnNow[]              = "vis Warning,1";
     char  WarnOff[]              = "vis Warning,0";
-    char  TXVolts[]              = "FrontView.t21";
+    char  TXVolts[]              = "t21";
     float Volts                  = 0;
     char  Vbuf[12];
     char  pc[]      = "%";
@@ -2056,22 +2056,22 @@ void ChannelCentres()
 
 void UpdateButtonLabels()
 {
-    char InPutStick_ch1[]  = "InputsView.ch1";
-    char InPutStick_ch2[]  = "InputsView.ch2";
-    char InPutStick_ch3[]  = "InputsView.ch3";
-    char InPutStick_ch4[]  = "InputsView.ch4";
-    char InPutStick_ch5[]  = "InputsView.ch5";
-    char InPutStick_ch6[]  = "InputsView.ch6";
-    char InPutStick_ch7[]  = "InputsView.ch7";
-    char InPutStick_ch8[]  = "InputsView.ch8";
-    char InPutStick_ch9[]  = "InputsView.ch9";
-    char InPutStick_ch10[] = "InputsView.ch10";
-    char InPutStick_ch11[] = "InputsView.ch11";
-    char InPutStick_ch12[] = "InputsView.ch12";
-    char InPutStick_ch13[] = "InputsView.ch13";
-    char InPutStick_ch14[] = "InputsView.ch14";
-    char InPutStick_ch15[] = "InputsView.ch15";
-    char InPutStick_ch16[] = "InputsView.ch16";
+    char InPutStick_ch1[]  = "ch1";
+    char InPutStick_ch2[]  = "ch2";
+    char InPutStick_ch3[]  = "ch3";
+    char InPutStick_ch4[]  = "ch4";
+    char InPutStick_ch5[]  = "ch5";
+    char InPutStick_ch6[]  = "ch6";
+    char InPutStick_ch7[]  = "ch7";
+    char InPutStick_ch8[]  = "ch8";
+    char InPutStick_ch9[]  = "ch9";
+    char InPutStick_ch10[] = "ch10";
+    char InPutStick_ch11[] = "ch11";
+    char InPutStick_ch12[] = "ch12";
+    char InPutStick_ch13[] = "ch13";
+    char InPutStick_ch14[] = "ch14";
+    char InPutStick_ch15[] = "ch15";
+    char InPutStick_ch16[] = "ch16";
     char fsch1[]           = "ch1";
     char fsch2[]           = "ch2";
     char fsch3[]           = "ch3";
@@ -2091,22 +2091,22 @@ void UpdateButtonLabels()
     char arrowrh[]         = " >";
     char arrowlh[]         = "< ";
     char BoxOffsetLabel[20];
-    char SticksViewButton1[]  = "SticksView.Sch1";
-    char SticksViewButton2[]  = "SticksView.Sch2";
-    char SticksViewButton3[]  = "SticksView.Sch3";
-    char SticksViewButton4[]  = "SticksView.Sch4";
-    char SticksViewButton5[]  = "SticksView.Sch5";
-    char SticksViewButton6[]  = "SticksView.Sch6";
-    char SticksViewButton7[]  = "SticksView.Sch7";
-    char SticksViewButton8[]  = "SticksView.Sch8";
-    char SticksViewButton9[]  = "SticksView.Sch9";
-    char SticksViewButton10[] = "SticksView.Sch10";
-    char SticksViewButton11[] = "SticksView.Sch11";
-    char SticksViewButton12[] = "SticksView.Sch12";
-    char SticksViewButton13[] = "SticksView.Sch13";
-    char SticksViewButton14[] = "SticksView.Sch14";
-    char SticksViewButton15[] = "SticksView.Sch15";
-    char SticksViewButton16[] = "SticksView.Sch16";
+    char SticksViewButton1[]  = "Sch1";
+    char SticksViewButton2[]  = "Sch2";
+    char SticksViewButton3[]  = "Sch3";
+    char SticksViewButton4[]  = "Sch4";
+    char SticksViewButton5[]  = "Sch5";
+    char SticksViewButton6[]  = "Sch6";
+    char SticksViewButton7[]  = "Sch7";
+    char SticksViewButton8[]  = "Sch8";
+    char SticksViewButton9[]  = "Sch9";
+    char SticksViewButton10[] = "Sch10";
+    char SticksViewButton11[] = "Sch11";
+    char SticksViewButton12[] = "Sch12";
+    char SticksViewButton13[] = "Sch13";
+    char SticksViewButton14[] = "Sch14";
+    char SticksViewButton15[] = "Sch15";
+    char SticksViewButton16[] = "Sch16";
     char one[]                = " (1)";
     char two[]                = "(2) ";
     char three[]              = " (3)";
@@ -2865,10 +2865,10 @@ int GetChannel()
 
 void UpdateSwitchesDisplay()
 {
-    char SwitchesView_sw1[] = "SwitchesView.sw1";
-    char SwitchesView_sw2[] = "SwitchesView.sw2";
-    char SwitchesView_sw3[] = "SwitchesView.sw3";
-    char SwitchesView_sw4[] = "SwitchesView.sw4";
+    char SwitchesView_sw1[] = "sw1";
+    char SwitchesView_sw2[] = "sw2";
+    char SwitchesView_sw3[] = "sw3";
+    char SwitchesView_sw4[] = "sw4";
     char NotUsed[]          = "Not used";
     char FlightModes123[]   = "Flight modes 1 2 3";
     char Auto[]             = "Auto (FM 4)";
@@ -3685,14 +3685,7 @@ void ReceiveModelFile()
 #endif
     SendText(ModelsView_filename, Waiting);
     RXPipe = FILEPIPEADDRESS;
-    Radio1.begin();
-    Radio1.setAutoAck(1);
-    Radio1.enableAckPayload();
-    Radio1.setPayloadSize(32);
-    Radio1.maskIRQ(1, 1, 1);
     Radio1.setChannel(FILECHANNEL);
-    Radio1.setDataRate(FILEDATARATE);
-    Radio1.setPALevel(FILEPALEVEL);
     Radio1.openReadingPipe(1, RXPipe);
     Radio1.startListening();
     RXTimer = millis();           // Start timer
@@ -3819,14 +3812,8 @@ void SendModelFile()
     Serial.print(Fsize);
     Serial.println(" bytes.");
 #endif
-    Radio1.begin(); // setup Radio1
     Radio1.setChannel(FILECHANNEL);
     Radio1.setPALevel(FILEPALEVEL);
-    Radio1.setDataRate(FILEDATARATE);
-    Radio1.setAutoAck(true);
-    Radio1.enableAckPayload();
-    Radio1.setRetries(5, 5);
-    Radio1.setPayloadSize(32);
     Radio1.openWritingPipe(TXPipe);
     Radio1.stopListening();
     while (Fposition < Fsize) {
