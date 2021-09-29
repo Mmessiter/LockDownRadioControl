@@ -349,7 +349,6 @@ byte     yawi[5];
 byte     yawd[5];
 
 File     ModelsFileNumber;
-// Compress compress;
 
 Adafruit_INA219 ina219;
 
@@ -470,6 +469,7 @@ bool     LedIsBlinking = false;
 float    BlinkHertz    = 1;
 uint32_t BlinkTimer    = 0;
 uint8_t  BlinkOnPhase  = 1;
+bool LedWasGreen= false;
 
 /*********************************************************************************************************************************/
 
@@ -868,6 +868,7 @@ uint8_t GetBrightness()
 
 void RedLedOn()
 {
+    LedWasGreen=false;
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, 0);
     analogWrite(REDLED, GetBrightness()); // Brightness is a function of transmission powersetting and maybe blinking
@@ -877,15 +878,20 @@ void RedLedOn()
 
 void GreenLedOn()
 {
+if  (!LedWasGreen) {
+    LedWasGreen=true;
     analogWrite(BLUELED, 0);
     analogWrite(REDLED, 0);
     analogWrite(GREENLED, GetBrightness()); // Brightness is a function of transmission powersetting and maybe blinking
+    LastShowTime=0;
+    }
 }
 
 /*********************************************************************************************************************************/
 
 void BlueLedOn()
 {
+    LedWasGreen=false;
     analogWrite(REDLED, 0);
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, GetBrightness()); // Brightness is a function of transmission powersetting and maybe blinking
@@ -1256,7 +1262,7 @@ void ShowComms()
 
 
     if (CurrentView == FrontView || CurrentView == DataView) {
-        if (millis() - LastShowTime > 1000) {
+        if (millis() - LastShowTime > 2500) {
             ShowNow = true;
         }
     }
@@ -4729,6 +4735,7 @@ void Button_was_pressed()
             SendCommand(page_FrontView);
             UpdateModelsNameEveryWhere();
             ShowFlightMode();
+            LastShowTime=0;
         }
 
         if (InStrng(SetupView, WordsIn) > 0) {
@@ -4978,6 +4985,7 @@ void Button_was_pressed()
         p = (InStrng(Data_View, WordsIn));
         if (p > 0) {
             CurrentView = DataView;
+            LastShowTime=0;
         }
 
         p = (InStrng(Fhss_View, WordsIn));
