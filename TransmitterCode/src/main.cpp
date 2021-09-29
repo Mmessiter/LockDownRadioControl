@@ -30,8 +30,6 @@
 #define BAD_CHANNEL_MAX    40                        // WAS 96 --  NEEDS TO BE *ALWAYS* LESS THAN SELECTED HOPPING RANGE ****
 #define FHSS_RESCUE_BOTTOM 118                       // reduced range for recovery
 #define FHSS_RESCUE_TOP    125                       // reduced range for recovery
-//#define CE_PIN             9                         // for SPI to nRF24L01
-//#define CSN_PIN            10                        // for SPI to nRF24L01
 #define INACTIVITYTIMEOUT  10                        // Default time after which to switch off
 #define INACTIVITYMINIMUM  5 * TICKSPERMINUTE        // Inactivity timeout minimum is 5 minutes
 #define INACTIVITYMAXIMUM  30 * TICKSPERMINUTE       // Inactivity timeout maximum is 30 minutes
@@ -138,7 +136,7 @@
 #include <TeensyID.h>
 #include <EEPROM.h>
 #include <InterpolationLib.h>
-#include <RadioFunctions.h>
+#include <Hardware/RadioFunctions.h>
 
 #ifdef USE_WATCHDOG
     #include <Watchdog_t4.h>
