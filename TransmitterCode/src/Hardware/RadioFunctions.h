@@ -6,8 +6,8 @@
 #ifndef RadioFunctions_H    
 #define RadioFunctions_H
 
-#include "RF24.h"
-#include "compress.h"
+#include <RF24.h>
+#include <compress.h>
 
 #define NORMAL          0 // Normal for transmit as usual
 #define CALIBRATELIMITS 1 // Calibrate limits
