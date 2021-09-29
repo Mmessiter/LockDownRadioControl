@@ -5346,7 +5346,7 @@ void LoadPacketData()
             break;
        // case 17:
         //    break;
-        default:
+        default:   // Goes to 20 
             break;
     }
 }
