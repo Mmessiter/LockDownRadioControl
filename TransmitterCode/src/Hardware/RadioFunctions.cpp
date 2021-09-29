@@ -3,21 +3,21 @@
 #include "RadioFunctions.h"  
 
 
-#define SticksView         1
-#define GraphView          2
-#define MixesView          3
-#define FhssView           4
-#define ModelsView         5
-#define CalibrateView      6 
-#define MainSetupView      7
-#define GainsView          8
-#define DataView           9
-#define Trim_View          10
-#define Mode_View          11
-#define Switches_View      12
-#define One_Switch_View    13
-#define Help_View          14
-#define Options_View       15
+#define SticksView      1
+#define GraphView       2
+#define MixesView       3
+#define FhssView        4
+#define ModelsView      5
+#define CalibrateView   6
+#define MainSetupView   7
+#define GainsView       8
+#define DataView        9
+#define Trim_View       10
+#define Mode_View       11
+#define Switches_View   12
+#define One_Switch_View 13
+#define Help_View       14
+#define Options_View    15
 #define BINDPIPETIMEOUT    10                        // timeout for switching from Bound to Default pipe
 #define FHSS_RESCUE_BOTTOM 118                       // reduced range for recovery
 #define FHSS_RESCUE_TOP    125                       // reduced range for recovery
@@ -28,6 +28,42 @@
 
 /************************************************************************************************************/
 /************************************************************************************************************/
+
+
+// **** Decompresses cc*3/4 x 16 BIT values up to cc loading only their low 12 BITS cc must be divisble by 4! ******************
+void DeComp(uint16_t* d, uint16_t* c, int cc)
+{
+    int p = 0, l = 0;
+    for (l = 0; l < (cc * 3 / 4); l += 3) {
+        d[p] = c[l] >> 4;
+        p++;
+        d[p] = (c[l] & 0xf) << 8 | c[l + 1] >> 8;
+        p++;
+        d[p] = (c[l + 1] & 0xff) << 4 | c[l + 2] >> 12;
+        p++;
+        d[p] = c[l + 2] & 0xfff;
+        p++;
+    }
+}
+
+// **** Compresses cc x 16 BIT 'o' values down to only cc*3/4 'c' values by using only their low 12 BITS... cc *must* be divisible by 4! ********
+void Comp(uint16_t* c, uint16_t* o, int cc)
+{
+    int p = 0, l = 0;
+    for (l = 0; l < (cc * 3 / 4); l += 3) {
+        c[l] = o[p] << 4 | o[p + 1] >> 8;
+        p++;
+        c[l + 1] = o[p] << 8 | o[p + 1] >> 4;
+        p++;
+        c[l + 2] = o[p] << 12 | o[p + 1];
+        p++;
+        p++;
+    }
+}
+
+
+
+
 
 void TryOtherPipe()
 {
@@ -52,8 +88,9 @@ void SendData()
 
         if (SetupFlag) {
             ReadSwitches();
-            return; // Don't try to send data when just setting up.
-        } 
+            return;
+        } // Don't try to send data when just setting up.
+
         if (!BoundFlag && !(CurrentView == CalibrateView) && !(CurrentView == SticksView)) {
             SendBuffer[0] = (byte)((NewPipe >> 56) & 0xFF); // if not yet bound, send pipe
             SendBuffer[1] = (byte)((NewPipe >> 48) & 0xFF);
@@ -87,7 +124,7 @@ void SendData()
             }
         }
         Connected = false;
-        compress.Comp(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress with my library - 32 bytes down to 24
+        Comp(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress with my library - 32 bytes down to 24
         if (Radio1.write(&CompressedData, 30)) {  // ********** ACTUALLY SEND THE DATA *************
             if (Radio1.isAckPayloadAvailable()) {
                 Radio1.read(&AckPayLoad, 15);
@@ -116,7 +153,11 @@ void SendData()
     }
 }
 
-/************************************************************************************************************/
+
+
+
+
+
 
 #define xx1 90 // was 75
 #define yy1 90 // Needed below... Edit xx1,yy1 to move box
@@ -167,7 +208,9 @@ void ScanAllChannels()
     }
 }
 
-/************************************************************************************************************/
+
+
+
 
 void HopToNextFrequency()
 {
@@ -195,6 +238,8 @@ void HopToNextFrequency()
     ThisFrequency  = NextFrequency;
     JustHoppedFlag = true;
 }
+
+
 
 /*********************************************************************************************************************************/
 
@@ -242,7 +287,9 @@ void PreScan()
 #endif
 }
 
+
 /*********************************************************************************************************************************/
+
 
 void InitRadio(uint64_t Pipe)
 {

@@ -1,6 +1,5 @@
 #define TXVERSIONNUMBER 65.03 //   Sept 29th 2021 Malcolm Messiter
 
-
 #define USE_WATCHDOG          // Enable when developing only  ??
 #define WATCHDOGTIMEOUT 10000 // 10 Seconds before reboot (32ms -> 500 seconds)
 #define KICKRATE        1000  // Kick once a second (must be between WATCHDOGMAXRATE and WATCHDOGTIMEOUT)
@@ -126,7 +125,6 @@
 #include <RF24.h>
 #include <Wire.h>
 #include <Adafruit_INA219.h>
-#include <Compress.h>
 #include <TimeLib.h>
 #include <DS1307RTC.h>
 #include <TeensyID.h>
@@ -351,7 +349,7 @@ byte     yawi[5];
 byte     yawd[5];
 
 File     ModelsFileNumber;
-Compress compress;
+// Compress compress;
 
 Adafruit_INA219 ina219;
 
@@ -472,7 +470,6 @@ bool     LedIsBlinking = false;
 float    BlinkHertz    = 1;
 uint32_t BlinkTimer    = 0;
 uint8_t  BlinkOnPhase  = 1;
-bool     LedWasGreen = false;
 
 /*********************************************************************************************************************************/
 
@@ -874,20 +871,15 @@ void RedLedOn()
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, 0);
     analogWrite(REDLED, GetBrightness()); // Brightness is a function of transmission powersetting and maybe blinking
-    LedWasGreen=false;
 }
 
 /*********************************************************************************************************************************/
 
 void GreenLedOn()
 {
-    if (!LedWasGreen) {
-        analogWrite(BLUELED, 0);
-        analogWrite(REDLED, 0);
-        analogWrite(GREENLED, GetBrightness()); // Brightness is a function of transmission powersetting and maybe blinking
-        LastShowTime=0;  // updates display sooner 
-        LedWasGreen=true;
-    }
+    analogWrite(BLUELED, 0);
+    analogWrite(REDLED, 0);
+    analogWrite(GREENLED, GetBrightness()); // Brightness is a function of transmission powersetting and maybe blinking
 }
 
 /*********************************************************************************************************************************/
@@ -897,7 +889,6 @@ void BlueLedOn()
     analogWrite(REDLED, 0);
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, GetBrightness()); // Brightness is a function of transmission powersetting and maybe blinking
-    LedWasGreen=false;
 }
 
 /*********************************************************************************************************************************/
@@ -1265,7 +1256,7 @@ void ShowComms()
 
 
     if (CurrentView == FrontView || CurrentView == DataView) {
-        if (millis() - LastShowTime > 5000) {
+        if (millis() - LastShowTime > 1000) {
             ShowNow = true;
         }
     }
@@ -1303,7 +1294,7 @@ void ShowComms()
                 else {
                     SendText(FrontView_Connected, Msg_Connected);
                     if (BoundFlag == true) {
-                        GreenLedOn();  
+                        GreenLedOn();
                         StartInactvityTimeout();
                     }
                 }
@@ -4738,7 +4729,6 @@ void Button_was_pressed()
             SendCommand(page_FrontView);
             UpdateModelsNameEveryWhere();
             ShowFlightMode();
-            LastShowTime=0; // update display sooner
         }
 
         if (InStrng(SetupView, WordsIn) > 0) {
@@ -4987,7 +4977,6 @@ void Button_was_pressed()
 
         p = (InStrng(Data_View, WordsIn));
         if (p > 0) {
-            LastShowTime=0; // Just to make display almost instant
             CurrentView = DataView;
         }
 
@@ -5528,8 +5517,6 @@ void loop()
             BindingNow = 0;
             BoundFlag  = true;
             GreenLedOn();
-            
-
         }
         SendText(BindScreenBox, BindDonemsg);
     }
