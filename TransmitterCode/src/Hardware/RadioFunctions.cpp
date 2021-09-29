@@ -3,21 +3,21 @@
 #include "RadioFunctions.h"  
 
 
-#define SticksView      1
-#define GraphView       2
-#define MixesView       3
-#define FhssView        4
-#define ModelsView      5
-#define CalibrateView   6
-#define MainSetupView   7
-#define GainsView       8
-#define DataView        9
-#define Trim_View       10
-#define Mode_View       11
-#define Switches_View   12
-#define One_Switch_View 13
-#define Help_View       14
-#define Options_View    15
+#define SticksView         1
+#define GraphView          2
+#define MixesView          3
+#define FhssView           4
+#define ModelsView         5
+#define CalibrateView      6 
+#define MainSetupView      7
+#define GainsView          8
+#define DataView           9
+#define Trim_View          10
+#define Mode_View          11
+#define Switches_View      12
+#define One_Switch_View    13
+#define Help_View          14
+#define Options_View       15
 #define BINDPIPETIMEOUT    10                        // timeout for switching from Bound to Default pipe
 #define FHSS_RESCUE_BOTTOM 118                       // reduced range for recovery
 #define FHSS_RESCUE_TOP    125                       // reduced range for recovery
@@ -52,9 +52,8 @@ void SendData()
 
         if (SetupFlag) {
             ReadSwitches();
-            return;
-        } // Don't try to send data when just setting up.
-
+            return; // Don't try to send data when just setting up.
+        } 
         if (!BoundFlag && !(CurrentView == CalibrateView) && !(CurrentView == SticksView)) {
             SendBuffer[0] = (byte)((NewPipe >> 56) & 0xFF); // if not yet bound, send pipe
             SendBuffer[1] = (byte)((NewPipe >> 48) & 0xFF);
@@ -117,11 +116,7 @@ void SendData()
     }
 }
 
-
-
-
-
-
+/************************************************************************************************************/
 
 #define xx1 90 // was 75
 #define yy1 90 // Needed below... Edit xx1,yy1 to move box
@@ -172,9 +167,7 @@ void ScanAllChannels()
     }
 }
 
-
-
-
+/************************************************************************************************************/
 
 void HopToNextFrequency()
 {
@@ -202,8 +195,6 @@ void HopToNextFrequency()
     ThisFrequency  = NextFrequency;
     JustHoppedFlag = true;
 }
-
-
 
 /*********************************************************************************************************************************/
 
@@ -251,9 +242,7 @@ void PreScan()
 #endif
 }
 
-
 /*********************************************************************************************************************************/
-
 
 void InitRadio(uint64_t Pipe)
 {

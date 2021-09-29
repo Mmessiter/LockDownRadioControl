@@ -19,16 +19,15 @@
 /*********************************************************************************************************************************/
 // external (global vars) needed here
 
-extern RF24 Radio1;
+extern RF24     Radio1;
 extern Compress compress;
-extern byte PowerSetting;
-extern byte DataRate;
-extern int  PipeTimeout;   
-extern int  GapSum;    
-extern byte CurrentMode; 
-extern byte NoCarrier[];
-extern byte AllChannels[];
-extern unsigned int i;
+extern byte     PowerSetting;
+extern byte     DataRate;
+extern int      PipeTimeout;   
+extern int      GapSum;    
+extern byte     CurrentMode; 
+extern byte     NoCarrier[];
+extern byte     AllChannels[];
 extern char     NoSleeping[];
 extern char     NextionSleepTime[];
 extern byte     ScanStart;
@@ -55,6 +54,7 @@ extern char     AckPayLoad[];
 extern int      RangeTestLostPackets;
 extern byte     RecentPacketsLost; 
 extern int      RangeTestGoodPackets;
+extern unsigned int i;
 
 /*********************************************************************************************************************************/
 // external functions needed here
