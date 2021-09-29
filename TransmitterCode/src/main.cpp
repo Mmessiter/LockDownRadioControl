@@ -472,6 +472,7 @@ bool     LedIsBlinking = false;
 float    BlinkHertz    = 1;
 uint32_t BlinkTimer    = 0;
 uint8_t  BlinkOnPhase  = 1;
+bool     LedWasGreen = false;
 
 /*********************************************************************************************************************************/
 
@@ -879,9 +880,13 @@ void RedLedOn()
 
 void GreenLedOn()
 {
-    analogWrite(BLUELED, 0);
-    analogWrite(REDLED, 0);
-    analogWrite(GREENLED, GetBrightness()); // Brightness is a function of transmission powersetting and maybe blinking
+    if (!LedWasGreen) {
+        analogWrite(BLUELED, 0);
+        analogWrite(REDLED, 0);
+        analogWrite(GREENLED, GetBrightness()); // Brightness is a function of transmission powersetting and maybe blinking
+        LastShowTime=0;  // updates display sooner 
+        LedWasGreen=true;
+    }
 }
 
 /*********************************************************************************************************************************/
@@ -1258,7 +1263,7 @@ void ShowComms()
 
 
     if (CurrentView == FrontView || CurrentView == DataView) {
-        if (millis() - LastShowTime > 1000) {
+        if (millis() - LastShowTime > 5000) {
             ShowNow = true;
         }
     }
@@ -1296,7 +1301,7 @@ void ShowComms()
                 else {
                     SendText(FrontView_Connected, Msg_Connected);
                     if (BoundFlag == true) {
-                        GreenLedOn();
+                        GreenLedOn();  
                         StartInactvityTimeout();
                     }
                 }
@@ -4979,6 +4984,7 @@ void Button_was_pressed()
 
         p = (InStrng(Data_View, WordsIn));
         if (p > 0) {
+            LastShowTime=0; // Just to make display almost instant
             CurrentView = DataView;
         }
 
@@ -5519,6 +5525,8 @@ void loop()
             BindingNow = 0;
             BoundFlag  = true;
             GreenLedOn();
+            
+
         }
         SendText(BindScreenBox, BindDonemsg);
     }
