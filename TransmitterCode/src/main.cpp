@@ -18,15 +18,12 @@
 #define CHANNELSUSED       16                        // 16 Channels
 #define MAXMIXES           32                        // 32 mixes
 #define TICKSPERMINUTE     60000                     // millis() += 60000 per minute
-
 #define PROPOCHANNELS      8                         // Only 4 have knobs / 2 sticks (= 4 hall sensors)
 #define FLIGHTMODESWITCH   4                         // Default MODE switch
 #define AUTOSWITCH         1                         // Default AUTO switch
 #define DEFAULTPIPEADDRESS 0xBABE1E5420LL            // Pipe address for startup - any value but MUST match RX
-
 #define LOWBATTERY         35                        // percent for warning
 #define BAD_CHANNEL_MAX    40                        // WAS 96 --  NEEDS TO BE *ALWAYS* LESS THAN SELECTED HOPPING RANGE ****
-
 #define CE_PIN             9                         // for SPI to nRF24L01
 #define CSN_PIN            10                        // for SPI to nRF24L01
 #define INACTIVITYTIMEOUT  10                        // Default time after which to switch off
@@ -1233,7 +1230,7 @@ void ShowComms()
     char  DataView_txv[]         = "txv";
     char  DataView_rxv[]         = "rxv";
     char  DataView_chav[]        = "chav";
-    char  DataView_Ls[]          = "DLs";
+    char  DataView_Ls[]          = "Ls";
     char  DataView_Ts[]          = "Ts";
     char  DataView_Sc[]          = "Success";
     char  WarnNow[]              = "vis Warning,1";
