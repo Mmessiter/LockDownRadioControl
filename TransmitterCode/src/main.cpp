@@ -14,22 +14,18 @@
 // #define DB_SWITCHES       // Debug Switches
 // #define DB_MODEL_EXCHANGE // Debug MODEL EXCHANGE (by RF link)
 
-#define PACKETS_PER_HOP    20                        // Must match RX setting
-#define PACEMAKER          5                         // MINIMUM Ms between packets of data. - Probably needs to be between 7 and 20
 #define CHANNELSUSED       16                        // 16 Channels
 #define MAXMIXES           32                        // 32 mixes
 #define TICKSPERMINUTE     60000                     // millis() += 60000 per minute
-#define UNCOMPRESSEDWORDS  20                        // DATA TO SEND = 40  Bytes
-#define COMPRESSEDWORDS    UNCOMPRESSEDWORDS * 3 / 4 // COMPRESSED DATA SENT = 30  Bytes
+
 #define PROPOCHANNELS      8                         // Only 4 have knobs / 2 sticks (= 4 hall sensors)
 #define FLIGHTMODESWITCH   4                         // Default MODE switch
 #define AUTOSWITCH         1                         // Default AUTO switch
 #define DEFAULTPIPEADDRESS 0xBABE1E5420LL            // Pipe address for startup - any value but MUST match RX
-#define BINDPIPETIMEOUT    10                        // timeout for switching from Bound to Default pipe
+
 #define LOWBATTERY         35                        // percent for warning
 #define BAD_CHANNEL_MAX    40                        // WAS 96 --  NEEDS TO BE *ALWAYS* LESS THAN SELECTED HOPPING RANGE ****
-#define FHSS_RESCUE_BOTTOM 118                       // reduced range for recovery
-#define FHSS_RESCUE_TOP    125                       // reduced range for recovery
+
 #define CE_PIN             9                         // for SPI to nRF24L01
 #define CSN_PIN            10                        // for SPI to nRF24L01
 #define INACTIVITYTIMEOUT  10                        // Default time after which to switch off
@@ -188,6 +184,8 @@ RF24 Radio1(CE_PIN, CSN_PIN);
 #define One_Switch_View 13
 #define Help_View       14
 #define Options_View    15
+#define UNCOMPRESSEDWORDS  20                        // DATA TO SEND = 40  Bytes
+#define COMPRESSEDWORDS    UNCOMPRESSEDWORDS * 3 / 4 // COMPRESSED DATA SENT = 30  Bytes
 
 #define Switch0       32 // SWITCHES' PIN NUMBERS ...
 #define Switch1       31
@@ -5290,20 +5288,7 @@ void GetNextHopChannelNumber()
     }
 }
 
-/************************************************************************************************************/
 
-void TryOtherPipe()
-{
-    if (BoundFlag == true) {
-        BoundFlag = false;
-        SetThePipe(DefaultPipe);   
-    }
-    else 
-    {
-        BoundFlag = true;
-        SetThePipe(NewPipe); 
-    }
-}
 
 /************************************************************************************************************/
 
@@ -5483,82 +5468,6 @@ void CheckGapsLength()
 }
 
 /************************************************************************************************************/
-
-void SendData()
-{
-    if ((millis() - TxPace) >= PACEMAKER) {
-        TxPace = millis();
-        get_new_channels_values(); // Load SendBuffer with new servo positions
-
-        if (SetupFlag) {
-            ReadSwitches();
-            return;
-        } // Don't try to send data when just setting up.
-
-        if (!BoundFlag && !(CurrentView == CalibrateView) && !(CurrentView == SticksView)) {
-            SendBuffer[0] = (byte)((NewPipe >> 56) & 0xFF); // if not yet bound, send pipe
-            SendBuffer[1] = (byte)((NewPipe >> 48) & 0xFF);
-            SendBuffer[2] = (byte)((NewPipe >> 40) & 0xFF);
-            SendBuffer[3] = (byte)((NewPipe >> 32) & 0xFF);
-            SendBuffer[4] = (byte)((NewPipe >> 24) & 0xFF);
-            SendBuffer[5] = (byte)((NewPipe >> 16) & 0xFF);
-            SendBuffer[6] = (byte)((NewPipe >> 8) & 0xFF);
-            SendBuffer[7] = (byte)((NewPipe)&0xFF);
-        }
-        LoadPacketData();
-        if (JustHoppedFlag) {
-            GetNextHopChannelNumber();
-            JustHoppedFlag = false;
-        }
-        if (LostContactFlag) {
-            ShowComms();
-            if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {
-                TryOtherPipe();
-            }
-        }
-        if (LostPacketFlag) {
-            if ((millis() - RecoveryTimer) > 75) {
-                NextFrequency = random(FHSS_RESCUE_BOTTOM, FHSS_RESCUE_TOP); // more limited range for recovery
-                HopToNextFrequency();
-                RecoveryTimer = millis();
-#ifdef DB_CHANNEL_AVOID
-                Serial.print("Reconnect channel: ");
-                Serial.println(NextFrequency);
-#endif
-            }
-        }
-        Connected = false;
-        compress.Comp(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress with my library - 32 bytes down to 24
-        if (Radio1.write(&CompressedData, sizeof(CompressedData))) {  // ********** ACTUALLY SEND THE DATA *************
-            if (Radio1.isAckPayloadAvailable()) {
-                Radio1.read(&AckPayLoad, sizeof(AckPayLoad));
-                RangeTestGoodPackets++;
-                Connected = true;
-                if (BoundFlag) {
-                    GreenLedOn();
-                }
-            }
-            else {
-                RangeTestLostPackets++;
-            }
-            CheckGapsLength();
-            LostPacketFlag  = false;
-            LostContactFlag = false;
-            PacketNumber++;
-            ReadExtraData();
-            RecentPacketsLost = 0;
-            if (PacketNumber > PACKETS_PER_HOP) {
-                HopToNextFrequency();
-            }
-        }
-        else {
-            FailedPacket();
-        }
-    }
-}
-
-
-
 
 
 /************************************************************************************************************/

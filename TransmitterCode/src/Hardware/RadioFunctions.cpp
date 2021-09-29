@@ -3,11 +3,126 @@
 #include "RadioFunctions.h"  
 
 
+#define SticksView      1
+#define GraphView       2
+#define MixesView       3
+#define FhssView        4
+#define ModelsView      5
+#define CalibrateView   6
+#define MainSetupView   7
+#define GainsView       8
+#define DataView        9
+#define Trim_View       10
+#define Mode_View       11
+#define Switches_View   12
+#define One_Switch_View 13
+#define Help_View       14
+#define Options_View    15
+#define BINDPIPETIMEOUT    10                        // timeout for switching from Bound to Default pipe
+#define FHSS_RESCUE_BOTTOM 118                       // reduced range for recovery
+#define FHSS_RESCUE_TOP    125                       // reduced range for recovery
+#define UNCOMPRESSEDWORDS  20                        // DATA TO SEND = 40  Bytes
+#define COMPRESSEDWORDS    UNCOMPRESSEDWORDS * 3 / 4 // COMPRESSED DATA SENT = 30  Bytes
+#define PACKETS_PER_HOP    20                        // Must match RX setting
 
 
 /************************************************************************************************************/
-
 /************************************************************************************************************/
+
+void TryOtherPipe()
+{
+    if (BoundFlag == true) {
+        BoundFlag = false;
+        SetThePipe(DefaultPipe);   
+    }
+    else 
+    {
+        BoundFlag = true;
+        SetThePipe(NewPipe); 
+    }
+}
+/************************************************************************************************************/
+
+#define PACEMAKER          5                         // MINIMUM Ms between packets of data. - Probably needs to be between 7 and 20
+void SendData()
+{
+    if ((millis() - TxPace) >= PACEMAKER) {
+        TxPace = millis();
+        get_new_channels_values(); // Load SendBuffer with new servo positions
+
+        if (SetupFlag) {
+            ReadSwitches();
+            return;
+        } // Don't try to send data when just setting up.
+
+        if (!BoundFlag && !(CurrentView == CalibrateView) && !(CurrentView == SticksView)) {
+            SendBuffer[0] = (byte)((NewPipe >> 56) & 0xFF); // if not yet bound, send pipe
+            SendBuffer[1] = (byte)((NewPipe >> 48) & 0xFF);
+            SendBuffer[2] = (byte)((NewPipe >> 40) & 0xFF);
+            SendBuffer[3] = (byte)((NewPipe >> 32) & 0xFF);
+            SendBuffer[4] = (byte)((NewPipe >> 24) & 0xFF);
+            SendBuffer[5] = (byte)((NewPipe >> 16) & 0xFF);
+            SendBuffer[6] = (byte)((NewPipe >> 8) & 0xFF);
+            SendBuffer[7] = (byte)((NewPipe)&0xFF);
+        }
+        LoadPacketData();
+        if (JustHoppedFlag) {
+            GetNextHopChannelNumber();
+            JustHoppedFlag = false;
+        }
+        if (LostContactFlag) {
+            ShowComms();
+            if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {
+                TryOtherPipe();
+            }
+        }
+        if (LostPacketFlag) {
+            if ((millis() - RecoveryTimer) > 75) {
+                NextFrequency = random(FHSS_RESCUE_BOTTOM, FHSS_RESCUE_TOP); // more limited range for recovery
+                HopToNextFrequency();
+                RecoveryTimer = millis();
+#ifdef DB_CHANNEL_AVOID
+                Serial.print("Reconnect channel: ");
+                Serial.println(NextFrequency);
+#endif
+            }
+        }
+        Connected = false;
+        compress.Comp(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress with my library - 32 bytes down to 24
+        if (Radio1.write(&CompressedData, 30)) {  // ********** ACTUALLY SEND THE DATA *************
+            if (Radio1.isAckPayloadAvailable()) {
+                Radio1.read(&AckPayLoad, 15);
+                RangeTestGoodPackets++;
+                Connected = true;
+                if (BoundFlag) {
+                    GreenLedOn();
+                }
+            }
+            else {
+                RangeTestLostPackets++;
+            }
+            CheckGapsLength();
+            LostPacketFlag  = false;
+            LostContactFlag = false;
+            PacketNumber++;
+            ReadExtraData();
+            RecentPacketsLost = 0;
+            if (PacketNumber > PACKETS_PER_HOP) {
+                HopToNextFrequency();
+            }
+        }
+        else {
+            FailedPacket();
+        }
+    }
+}
+
+
+
+
+
+
+
 #define xx1 90 // was 75
 #define yy1 90 // Needed below... Edit xx1,yy1 to move box
 
