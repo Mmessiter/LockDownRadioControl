@@ -1,5 +1,6 @@
 #define TXVERSIONNUMBER 65.03 //   Sept 29th 2021 Malcolm Messiter
 
+
 #define USE_WATCHDOG          // Enable when developing only  ??
 #define WATCHDOGTIMEOUT 10000 // 10 Seconds before reboot (32ms -> 500 seconds)
 #define KICKRATE        1000  // Kick once a second (must be between WATCHDOGMAXRATE and WATCHDOGTIMEOUT)
