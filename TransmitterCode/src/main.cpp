@@ -30,8 +30,8 @@
 #define BAD_CHANNEL_MAX    40                        // WAS 96 --  NEEDS TO BE *ALWAYS* LESS THAN SELECTED HOPPING RANGE ****
 #define FHSS_RESCUE_BOTTOM 118                       // reduced range for recovery
 #define FHSS_RESCUE_TOP    125                       // reduced range for recovery
-#define CE_PIN             9                         // for SPI to nRF24L01
-#define CSN_PIN            10                        // for SPI to nRF24L01
+//#define CE_PIN             9                         // for SPI to nRF24L01
+//#define CSN_PIN            10                        // for SPI to nRF24L01
 #define INACTIVITYTIMEOUT  10                        // Default time after which to switch off
 #define INACTIVITYMINIMUM  5 * TICKSPERMINUTE        // Inactivity timeout minimum is 5 minutes
 #define INACTIVITYMAXIMUM  30 * TICKSPERMINUTE       // Inactivity timeout maximum is 30 minutes
@@ -125,6 +125,7 @@
  * | 32        | Switch 4 |
  */
 
+
 #include <Arduino.h>
 #include <SD.h>
 #include <SPI.h>
@@ -137,10 +138,18 @@
 #include <TeensyID.h>
 #include <EEPROM.h>
 #include <InterpolationLib.h>
+#include <RadioFunctions.h>
 
 #ifdef USE_WATCHDOG
     #include <Watchdog_t4.h>
 #endif
+
+
+
+#define CE_PIN             9                         // for SPI to nRF24L01
+#define CSN_PIN            10     
+RF24 Radio1(CE_PIN, CSN_PIN);
+
 
 #define Nextion         Serial1 // Nextion is connected to Serial1
 #define Black           0
@@ -200,7 +209,7 @@
 #define MODELSIZE  1600 // MEMORY for one model
 #define MAXFILELEN 1021 // MAX SIZE FOR HELP FILE
 
-RF24 Radio1(CE_PIN, CSN_PIN);
+
 
 #ifdef USE_WATCHDOG
 WDT_T4<WDT3>  TeensyWatchDog;
@@ -1738,28 +1747,6 @@ void UpdateTrimView()
 
 /*********************************************************************************************************************************/
 
-void DoScanInit()
-{
-    Radio1.setDataRate(RF24_1MBPS); // Scan only works at this default rate
-    CurrentMode = SCANWAVEBAND;     // Fhss == No transmitting please, we are scanning.
-    SendCommand(NoSleeping);
-    for (i = 0; i < 127; i++) {
-        NoCarrier[i]   = 0;
-        AllChannels[i] = 0;
-    }
-}
-
-/*********************************************************************************************************************************/
-
-void DoScanEnd()
-{
-    Radio1.setDataRate(RF24_250KBPS);
-    CurrentMode = NORMAL;
-    SendCommand(NextionSleepTime);
-}
-
-/*********************************************************************************************************************************/
-
 void ScanI2c()
 {
     int ii;
@@ -1956,36 +1943,6 @@ void UpdateModelsNameEveryWhere()
         if (CurrentView == FrontView) SendValue(FrontView_fm4, 1);
         if (CurrentView == GainsView) UpdateGainsView();
     }
-}
-
-/*********************************************************************************************************************************/
-
-void InitRadio(uint64_t Pipe)
-{
-    Radio1.begin();
-    switch (PowerSetting) {
-        case 1: Radio1.setPALevel(RF24_PA_MIN); break;
-        case 2: Radio1.setPALevel(RF24_PA_LOW); break;
-        case 3: Radio1.setPALevel(RF24_PA_HIGH); break;
-        case 4: Radio1.setPALevel(RF24_PA_MAX); break;
-        default: break;
-    }
-
-    switch (DataRate) {
-        case 1: Radio1.setDataRate(RF24_250KBPS); break;
-        case 2: Radio1.setDataRate(RF24_1MBPS); break;
-        case 3: Radio1.setDataRate(RF24_2MBPS); break;
-        default: break;
-    }
-    Radio1.enableAckPayload();                  // Needed
-    Radio1.openWritingPipe(Pipe);               // Current Pipe address used for Binding
-    Radio1.setRetries(15, 15);                  // Max automatic retries = (15,15). Packet failure will take 0.06 seconds
-    Radio1.stopListening();                     // It's a true Messiter
-    Radio1.enableDynamicPayloads();             // Needed
-    Radio1.setAddressWidth(5);                  // was 4, is now 5
-    Radio1.setCRCLength(RF24_CRC_8);            // could be 16 
-    PipeTimeout = millis();                     // Initialise timeout
-    GapSum      = 0;
 }
 
 /*********************************************************************************************************************************/
@@ -2558,7 +2515,7 @@ void setup()
     ScanI2c();
     if (USE_INA219) ina219.begin();
     SD.begin(chipSelect);
-    InitRadio(DefaultPipe);  // Startup
+    InitRadio(DefaultPipe);  //  ***** Now in RadioFunctions file! *****
     InitSwitches();
     SendCommand(NextionWakeUp);
     InitMaxMin();        // in case not yet calibrated
@@ -3629,14 +3586,6 @@ void MovePoint()
         }
     }
     DisplayCurve();
-}
-
-/************************************************************************************************************/
-
-void SetThePipe(uint64_t WhichPipe)
-{ 
-        Radio1.openWritingPipe(WhichPipe);
-        Radio1.stopListening();
 }
 
 /*********************************************************************************************************************************/
