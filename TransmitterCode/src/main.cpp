@@ -874,6 +874,7 @@ void RedLedOn()
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, 0);
     analogWrite(REDLED, GetBrightness()); // Brightness is a function of transmission powersetting and maybe blinking
+    LedWasGreen=false;
 }
 
 /*********************************************************************************************************************************/
@@ -896,6 +897,7 @@ void BlueLedOn()
     analogWrite(REDLED, 0);
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, GetBrightness()); // Brightness is a function of transmission powersetting and maybe blinking
+    LedWasGreen=false;
 }
 
 /*********************************************************************************************************************************/
@@ -4736,6 +4738,7 @@ void Button_was_pressed()
             SendCommand(page_FrontView);
             UpdateModelsNameEveryWhere();
             ShowFlightMode();
+            LastShowTime=0; // update display sooner
         }
 
         if (InStrng(SetupView, WordsIn) > 0) {
