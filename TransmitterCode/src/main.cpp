@@ -130,7 +130,7 @@
 #include <TeensyID.h>
 #include <EEPROM.h>
 #include <InterpolationLib.h>
-#include <Hardware/RadioFunctions.h>
+#include "Hardware/RadioFunctions.h"
 
 #ifdef USE_WATCHDOG
     #include <Watchdog_t4.h>
