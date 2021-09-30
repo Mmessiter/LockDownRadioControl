@@ -1,4 +1,4 @@
-#define TXVERSIONNUMBER 65.03 //   Sept 29th 2021 Malcolm Messiter
+#define TXVERSIONNUMBER 65.1 //   Sept 30th 2021 Malcolm Messiter
 
 #define USE_WATCHDOG          // Enable when developing only  ??
 #define WATCHDOGTIMEOUT 10000 // 10 Seconds before reboot (32ms -> 500 seconds)
@@ -78,7 +78,7 @@
  * - Model memories can be sent between transmitters by RF link.
  * - DS1307 RTC added
  * - MAC address now used as unique TX ID for pipe and binding.
- * - Failsafe channel flags compressed to two bytes
+ * - Failsafe channel flags compressed to two uint8_ts
  * - Exponential added
  */
 
@@ -180,8 +180,8 @@ RF24 Radio1(CE_PIN, CSN_PIN);
 #define One_Switch_View 13
 #define Help_View       14
 #define Options_View    15
-#define UNCOMPRESSEDWORDS  20                        // DATA TO SEND = 40  Bytes
-#define COMPRESSEDWORDS    UNCOMPRESSEDWORDS * 3 / 4 // COMPRESSED DATA SENT = 30  Bytes
+#define UNCOMPRESSEDWORDS  20                        // DATA TO SEND = 40  uint8_ts
+#define COMPRESSEDWORDS    UNCOMPRESSEDWORDS * 3 / 4 // COMPRESSED DATA SENT = 30  uint8_ts
 
 #define Switch0       32 // SWITCHES' PIN NUMBERS ...
 #define Switch1       31
@@ -210,25 +210,25 @@ WDT_T4<WDT3>  TeensyWatchDog;
 WDT_timings_t WatchDogConfig;
 #endif
 
-byte FHSSBottom = 1; //  Channel range for hopping
-byte FHSSTop    = 83;
-byte Mixes[MAXMIXES + 1][CHANNELSUSED + 1];                // Channel mixes' 2D array store
-int  Trims[FlightModesUsed + 1][CHANNELSUSED + 1];         // Trims to store
-byte TrimsReversed[FlightModesUsed + 1][CHANNELSUSED + 1]; // Trim directions to store
-byte Exponential[FlightModesUsed + 1][CHANNELSUSED + 1];   // Exponential
-byte InterpolationTypes[FlightModesUsed + 1][CHANNELSUSED + 1];
+uint8_t FHSSBottom = 1; //  Channel range for hopping
+uint8_t FHSSTop    = 83;
+uint8_t Mixes[MAXMIXES + 1][CHANNELSUSED + 1];                // Channel mixes' 2D array store
+int  Trims[FlightModesUsed + 1][CHANNELSUSED + 1];            // Trims to store
+uint8_t TrimsReversed[FlightModesUsed + 1][CHANNELSUSED + 1]; // Trim directions to store
+uint8_t Exponential[FlightModesUsed + 1][CHANNELSUSED + 1];   // Exponential
+uint8_t InterpolationTypes[FlightModesUsed + 1][CHANNELSUSED + 1];
 
-byte          LastMixNumber    = 1;
-byte          MixNumber        = 0;
-byte          CurrentView      = FrontView;
-byte          SavedCurrentView = FrontView;
+uint8_t          LastMixNumber    = 1;
+uint8_t          MixNumber        = 0;
+uint8_t          CurrentView      = FrontView;
+uint8_t          SavedCurrentView = FrontView;
 const uint8_t CharsMax         = 120; // 80;
 #ifdef DB_FHSS
 float PSTARTTIME = 0;
 float PENDTIME   = 0;
 float PDURATION  = 0;
 #endif
-const uint8_t MaxDataTransferred = UNCOMPRESSEDWORDS;  // = 40 bytes     A few extra bytes sent after channels' values
+const uint8_t MaxDataTransferred = UNCOMPRESSEDWORDS;  // = 40 uint8_ts     A few extra uint8_ts sent after channels' values
 uint64_t      DefaultPipe        = DEFAULTPIPEADDRESS; //          Default Radio pipe address
 uint64_t      NewPipe            = 0xBABE1E5420LL;     //             New Radio pipe address for binding will come from MAC address
 char          TextIn[CharsMax];
@@ -236,21 +236,22 @@ char          WordsIn[CharsMax];
 unsigned int  i;
 int           PacketsPerSecond = 0;
 unsigned int  LostPackets      = 0;
-byte          PacketNumber     = 0;
-byte          NextFrequency    = 100;
-byte          ThisFrequency    = 99;
+uint8_t       PacketNumber     = 0;
+uint8_t       NextFrequency    = 100;
+uint8_t       ThisFrequency    = 99;
 char          AckPayLoad[15];                     //    Where to put received telemetry data
+uint8_t       SizeOfAckPayLoad;
 uint16_t      SendBuffer[MaxDataTransferred];     //    Data to send to rx (16 words)
 uint16_t      ShownBuffer[MaxDataTransferred];    //    Data shown before
 uint16_t      LastBuffer[CHANNELSUSED + 1];       //    Used to spot any change
 uint16_t      PreMixBuffer[CHANNELSUSED + 1];     //    Data collected from sticks
-byte          MaxDegrees[5][CHANNELSUSED + 1];    //    Max degrees (180?)
-byte          MidHiDegrees[5][CHANNELSUSED + 1];  //    MidHi degrees (135?)
-byte          CentreDegrees[5][CHANNELSUSED + 1]; //    Degrees (90)
-byte          MidLowDegrees[5][CHANNELSUSED + 1]; //    MidLow Degrees (45?)
-byte          MinDegrees[5][CHANNELSUSED + 1];    //    Max Degrees (0?)
-byte          FlightMode         = 1;
-byte          PreviousFlightMode = 1;
+uint8_t       MaxDegrees[5][CHANNELSUSED + 1];    //    Max degrees (180?)
+uint8_t       MidHiDegrees[5][CHANNELSUSED + 1];  //    MidHi degrees (135?)
+uint8_t       CentreDegrees[5][CHANNELSUSED + 1]; //    Degrees (90)
+uint8_t       MidLowDegrees[5][CHANNELSUSED + 1]; //    MidLow Degrees (45?)
+uint8_t       MinDegrees[5][CHANNELSUSED + 1];    //    Max Degrees (0?)
+uint8_t       FlightMode         = 1;
+uint8_t       PreviousFlightMode = 1;
 int           ChannelMax[CHANNELSUSED + 1];    //    output of pots at max
 int           ChannelMidHi[CHANNELSUSED + 1];  //    output of pots at MidHi
 int           ChannelCentre[CHANNELSUSED + 1]; //    output of pots at Centre
@@ -258,32 +259,32 @@ int           ChannelMidLow[CHANNELSUSED + 1]; //    output of pots at MidLow
 int           ChannelMin[CHANNELSUSED + 1];    //    output of pots at min
 int           ChanneltoSet     = 0;
 bool          Connected        = false;
-byte          ShowCommsCounter = 0;
+uint8_t       ShowCommsCounter = 0;
 
-double PointsCount = 5; // This for displaying curves only
-double xPoints[5];
-double yPoints[5];
-double xPoint = 0;
-double yPoint = 0;
+double  PointsCount = 5; // This for displaying curves only
+double  xPoints[5];
+double  yPoints[5];
+double  xPoint = 0;
+double  yPoint = 0;
 
-int  BoxOffset = 35;
-int  BoxSize   = 395;
-int  BoxBottom;
-int  BoxTop;
-int  BoxLeft;
-int  BoxRight;
-int  ClickX;
-int  ClickY;
-bool CalibratedYet                = false;
-int  AnalogueInput[PROPOCHANNELS] = {A0, A1, A2, A3, A6, A7, A8, A9}; // PROPO Channels for transmission
-byte CurrentMode                  = NORMAL;
-byte BadChannels[BAD_CHANNEL_MAX + 5]; // room to spare
-byte BadChannelPointer = 0;
-byte AllChannels[127]; /// for scanning
-byte NoCarrier[127];
+int     BoxOffset = 35;
+int     BoxSize   = 395;
+int     BoxBottom;
+int     BoxTop;
+int     BoxLeft;
+int     BoxRight;
+int     ClickX;
+int     ClickY;
+bool    CalibratedYet                = false;
+int     AnalogueInput[PROPOCHANNELS] = {A0, A1, A2, A3, A6, A7, A8, A9}; // PROPO Channels for transmission
+uint8_t CurrentMode                  = NORMAL;
+uint8_t BadChannels[BAD_CHANNEL_MAX + 5]; // room to spare
+uint8_t BadChannelPointer = 0;
+uint8_t AllChannels[127]; /// for scanning
+uint8_t NoCarrier[127];
 
-byte          ScanStart   = 1;
-byte          ScanEnd     = 126;
+uint8_t       ScanStart   = 1;
+uint8_t       ScanEnd     = 126;
 unsigned long TimerMillis = 0;
 unsigned long LastSeconds = 0;
 unsigned long Secs        = 0;
@@ -291,48 +292,48 @@ unsigned long PausedSecs  = 0;
 unsigned long Mins        = 0;
 unsigned long Hours       = 0;
 
-byte NameCount     = 0;
-char ModelName[30] = "Undefined";
-byte ModelNumber   = 1;
-byte ModelDefined  = 0;
+uint8_t NameCount     = 0;
+char    ModelName[30] = "Undefined";
+uint8_t ModelNumber   = 1;
+uint8_t ModelDefined  = 0;
 
 unsigned int txm  = 0; // SD memory for tx
 unsigned int mxm  = 0; // SD memory per model
 unsigned int addr = 0; // for SD
 
-char     FrontView_Hours[]      = "Hours";
-char     FrontView_Mins[]       = "Mins";
-char     FrontView_Secs[]       = "Secs";
-char     page_FrontView[]       = "page FrontView";
-char     page_FhssView[]        = "page FhssView";
-char     FhssView_Rlow[]        = "FHSSLow";
-char     FhssView_Rhigh[]       = "FHSSHigh";
-char     BindDonemsg[]          = "Bound!";
-char     BindScreenBox[]        = "BindStatus";
-char     NextionSleepTime[]     = "thsp=";
-char     NextionWakeOnTouch[]   = "thup=1";
-char     NextionSleepNow[]      = "sleep=1";
-char     NextionWakeUp[]        = "sleep=0";
-char     ScreenViewTimeout[]    = "Sto";
-char     NoSleeping[]           = "thsp=0";
-int      ScreenTimeout          = 120; // Screen has two minute timeout by default
-char     HtextCMD[]             = "click HelpText,0";
-int      LastLinePosition       = 0;
-byte     RXCellCount            = 2;
-bool     JustHoppedFlag         = true;
-bool     LostPacketFlag         = true;
-bool     LostContactFlag        = true;
-byte     RecentPacketsLost      = 0;
-long int RecoveryTimer          = 0;
-bool     ReconnectingFlag       = true;
-int      ReconnectTime          = 0;
-int      GapSum                 = 0;
-int      GapLongest             = 0;
-int      GapStart               = 0;
-int      ThisGap                = 0;
-char     CalibrateNow[]         = "touch_j";
-char     ModelVolts[12]         = " ";
-char     ModelAltitude[12]      = " ";
+char        FrontView_Hours[]      = "Hours";
+char        FrontView_Mins[]       = "Mins";
+char        FrontView_Secs[]       = "Secs";
+char        page_FrontView[]       = "page FrontView";
+char        page_FhssView[]        = "page FhssView";
+char        FhssView_Rlow[]        = "FHSSLow";
+char        FhssView_Rhigh[]       = "FHSSHigh";
+char        BindDonemsg[]          = "Bound!";
+char        BindScreenBox[]        = "BindStatus";
+char        NextionSleepTime[]     = "thsp=";
+char        NextionWakeOnTouch[]   = "thup=1";
+char        NextionSleepNow[]      = "sleep=1";
+char        NextionWakeUp[]        = "sleep=0";
+char        ScreenViewTimeout[]    = "Sto";
+char        NoSleeping[]           = "thsp=0";
+int         ScreenTimeout          = 120; // Screen has two minute timeout by default
+char        HtextCMD[]             = "click HelpText,0";
+int         LastLinePosition       = 0;
+uint8_t     RXCellCount            = 2;
+bool        JustHoppedFlag         = true;
+bool        LostPacketFlag         = true;
+bool        LostContactFlag        = true;
+uint8_t     RecentPacketsLost      = 0;
+long int    RecoveryTimer          = 0;
+bool        ReconnectingFlag       = true;
+int         ReconnectTime          = 0;
+int         GapSum                 = 0;
+int         GapLongest             = 0;
+int         GapStart               = 0;
+int         ThisGap                = 0;
+char        CalibrateNow[]         = "touch_j";
+char        ModelVolts[12]         = " ";
+char        ModelAltitude[12]      = " ";
 char     MaxAltitude[12]        = "0";
 float    MaxAlt                 = 0;
 char     ModelRoll[12]          = " ";
@@ -340,13 +341,13 @@ char     ModelPitch[12]         = " ";
 char     ModelYaw[12]           = " ";
 char     ModelVersionNumber[12] = " ";
 char     deletedmodel[]         = "Deleted";
-byte     ModelType              = 1;
-byte     rollp[5];
-byte     rolli[5];
-byte     rolld[5];
-byte     yawp[5];
-byte     yawi[5];
-byte     yawd[5];
+uint8_t     ModelType              = 1;
+uint8_t     rollp[5];
+uint8_t     rolli[5];
+uint8_t     rolld[5];
+uint8_t     yawp[5];
+uint8_t     yawi[5];
+uint8_t     yawd[5];
 
 File     ModelsFileNumber;
 
@@ -358,13 +359,13 @@ bool      SingleModelFlag = false;
 char      ModelsFile[]    = "models.dat";
 bool      ModelsFileOpen  = false;
 bool      USE_INA219      = false;
-byte      BindingNow      = 0;
+uint8_t      BindingNow      = 0;
 int       BindingTimer    = 0;
 bool      BoundFlag       = false;
 int       PipeTimeout     = 0;
 float     VersionNumber   = TXVERSIONNUMBER;
 bool      Switch[8];
-byte      SwitchNumber[8] = {Switch0, Switch1, Switch2, Switch3, Switch4, Switch5, Switch6, Switch7};
+uint8_t      SwitchNumber[8] = {Switch0, Switch1, Switch2, Switch3, Switch4, Switch5, Switch6, Switch7};
 
 char TrimView_ch1[] = "ch1";
 char TrimView_ch2[] = "ch2";
@@ -394,18 +395,18 @@ char Yd[]          = "yd";
 char GainsViewFM[] = "fm";
 char GainsViewMN[] = "mn";
 
-byte FMSwitch   = FLIGHTMODESWITCH;
-byte AutoSwitch = AUTOSWITCH;
+uint8_t FMSwitch   = FLIGHTMODESWITCH;
+uint8_t AutoSwitch = AUTOSWITCH;
 
-byte Channel9Switch  = 0;
-byte Channel10Switch = 0;
-byte Channel11Switch = 0;
-byte Channel12Switch = 0;
+uint8_t Channel9Switch  = 0;
+uint8_t Channel10Switch = 0;
+uint8_t Channel11Switch = 0;
+uint8_t Channel12Switch = 0;
 
-byte Channel9SwitchValue  = 0;
-byte Channel10SwitchValue = 0;
-byte Channel11SwitchValue = 0;
-byte Channel12SwitchValue = 0;
+uint8_t Channel9SwitchValue  = 0;
+uint8_t Channel10SwitchValue = 0;
+uint8_t Channel11SwitchValue = 0;
+uint8_t Channel12SwitchValue = 0;
 
 bool Switch1Reversed = false;
 bool Switch2Reversed = false;
@@ -422,8 +423,8 @@ bool     ValueSent           = false;
 int      SwitchEditNumber    = 0; // number of switch being edited
 uint32_t ShowServoTimer      = 0;
 bool     LastFourOnly        = false;
-byte     InPutStick[17]      = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}; //
-byte     ExportedFileCounter = 0;
+uint8_t     InPutStick[17]      = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}; //
+uint8_t     ExportedFileCounter = 0;
 char     TheFilesList[100][14];
 int      FileNumberInView     = 0;
 bool     FileError            = false;
@@ -431,7 +432,7 @@ int      RangeTestStart       = 0;
 int      RangeTestGoodPackets = 0;
 int      RangeTestLostPackets = 0;
 float    success              = 0; // percent of packets that  succeed
-byte     SaveFlightMode       = 0;
+uint8_t     SaveFlightMode       = 0;
 bool     FailSafeChannel[CHANNELSUSED];
 bool     SaveFailSafeNow                = false;
 int      ChannelsLapped                 = 0;
@@ -440,13 +441,14 @@ char     ChannelNames[CHANNELSUSED][11] = {{"Aileron"}, {"Elevator"}, {"Throttle
 bool     VoltsDetected = true;
 bool     TXWarningFlag = false;
 bool     RXWarningFlag = false;
-byte     PowerSetting  = 4;
-byte     DataRate      = 1;
+uint8_t     PowerSetting  = 4;
+uint8_t     DataRate      = 1;
 bool     ReInit        = false;
 uint32_t TxOnTime      = 0;
 uint32_t TxPace        = 0;
 bool     ModelDetected = false;
 uint16_t CompressedData[COMPRESSEDWORDS]; // = 20
+uint8_t   SizeOfCompressedData;
 uint32_t Inactivity_Timeout = 10 * TICKSPERMINUTE;
 uint32_t Inactivity_Start   = 0;
 
@@ -461,7 +463,7 @@ char         DateTime[] = "DateTime";
 int  XtouchPlace = 0;     // Clicked X
 int  YtouchPlace = 0;     // Clicked Y
 bool SetupFlag   = false; // No transmitter while setting up
-byte zero        = 0x00;  //workaround for issue #527
+uint8_t zero        = 0x00;  //workaround for issue #527
 
 // changing these four valiables controls LED blink and speed
 
@@ -473,29 +475,29 @@ bool LedWasGreen= false;
 
 /*********************************************************************************************************************************/
 
-byte decToBcd(byte val)
+uint8_t decToBcd(uint8_t val)
 {
     return ((val / 10 * 16) + (val % 10));
 }
 
 /*********************************************************************************************************************************/
 
-byte bcdToDec(byte val)
+uint8_t bcdToDec(uint8_t val)
 {
     return ((val / 16 * 10) + (val % 16));
 }
 
 /*********************************************************************************************************************************/
 
-void AdjustDateTime(byte MinChange, byte HourChange, byte YearChange, byte MonthChange, byte DateChange)
+void AdjustDateTime(uint8_t MinChange, uint8_t HourChange, uint8_t YearChange, uint8_t MonthChange, uint8_t DateChange)
 {
-    byte second   = tm.Second; // 0-59
-    byte minute   = tm.Minute; // 0-59
-    byte hour     = tm.Hour;   // 0-23
-    byte weekDay  = tm.Wday;   // 1-7
-    byte monthDay = tm.Day;    // 1-31
-    byte month    = tm.Month;  // 1-12
-    byte year     = tm.Year;   // 0-99
+    uint8_t second   = tm.Second; // 0-59
+    uint8_t minute   = tm.Minute; // 0-59
+    uint8_t hour     = tm.Hour;   // 0-23
+    uint8_t weekDay  = tm.Wday;   // 1-7
+    uint8_t monthDay = tm.Day;    // 1-31
+    uint8_t month    = tm.Month;  // 1-12
+    uint8_t year     = tm.Year;   // 0-99
     minute += MinChange;
     if (minute > 59) {
         minute = 0;
@@ -540,7 +542,7 @@ void AdjustDateTime(byte MinChange, byte HourChange, byte YearChange, byte Month
 
 void IncMinute()
 {
-    byte c = 1;
+    uint8_t c = 1;
     if (RTC.read(tm)) {
         AdjustDateTime(c, zero, zero, zero, zero);
     }
@@ -550,7 +552,7 @@ void IncMinute()
 
 void DecMinute()
 {
-    byte c = -1;
+    uint8_t c = -1;
     if (RTC.read(tm)) {
         AdjustDateTime(c, zero, zero, zero, zero);
     }
@@ -560,7 +562,7 @@ void DecMinute()
 
 void IncHour()
 {
-    byte c = 1;
+    uint8_t c = 1;
     if (RTC.read(tm)) {
         AdjustDateTime(zero, c, zero, zero, zero);
     }
@@ -570,7 +572,7 @@ void IncHour()
 
 void DecHour()
 {
-    byte c = -1;
+    uint8_t c = -1;
     if (RTC.read(tm)) {
         AdjustDateTime(zero, c, zero, zero, zero);
     }
@@ -580,7 +582,7 @@ void DecHour()
 
 void IncYear()
 {
-    byte c = 1;
+    uint8_t c = 1;
     if (RTC.read(tm)) {
         AdjustDateTime(zero, zero, c, zero, zero);
     }
@@ -590,7 +592,7 @@ void IncYear()
 
 void DecYear()
 {
-    byte c = -1;
+    uint8_t c = -1;
     if (RTC.read(tm)) {
         AdjustDateTime(zero, zero, c, zero, zero);
     }
@@ -600,7 +602,7 @@ void DecYear()
 
 void IncMonth()
 {
-    byte c = 1;
+    uint8_t c = 1;
     if (RTC.read(tm)) {
         AdjustDateTime(zero, zero, zero, c, zero);
     }
@@ -610,7 +612,7 @@ void IncMonth()
 
 void DecMonth()
 {
-    byte c = -1;
+    uint8_t c = -1;
     if (RTC.read(tm)) {
         AdjustDateTime(zero, zero, zero, c, zero);
     }
@@ -620,7 +622,7 @@ void DecMonth()
 
 void IncDate()
 {
-    byte c = 1;
+    uint8_t c = 1;
     if (RTC.read(tm)) {
         AdjustDateTime(zero, zero, zero, zero, c);
     }
@@ -630,7 +632,7 @@ void IncDate()
 
 void DecDate()
 {
-    byte c = -1;
+    uint8_t c = -1;
     if (RTC.read(tm)) {
         AdjustDateTime(zero, zero, zero, zero, c);
     }
@@ -787,7 +789,7 @@ char* Str(char* s, int n, int comma)
 
 /*********************************************************************************************************************************/
 
-bool MayBeAddZero(byte nn)
+bool MayBeAddZero(uint8_t nn)
 {
     if (nn >= 0 && nn < 10) {
         return true;
@@ -899,7 +901,7 @@ void BlueLedOn()
 
 /*********************************************************************************************************************************/
 
-uint16_t mp(byte lowres)
+uint16_t mp(uint8_t lowres)
 {
     return map(lowres, 0, 180, MINMICROS, MAXMICROS);
 } // This returns the 5 curve-points at the higher resolution
@@ -947,7 +949,7 @@ void GetTextIn()
     if (Nextion.available()) {
         delay(10);
         while (Nextion.available()) {
-            TextIn[i] = byte(Nextion.read());
+            TextIn[i] = uint8_t(Nextion.read());
             if (i < CharsMax) i++;
         }
     }
@@ -969,7 +971,7 @@ int GetValue(char* nbox)
     EndSend();
     GetTextIn();
     if (TextIn[0] == 'q') {
-        ValueIn = TextIn[1]; // Collect and build 32 bit value from 4 bytes
+        ValueIn = TextIn[1]; // Collect and build 32 bit value from 4 uint8_ts
         ValueIn += (TextIn[2] << 8);
         ValueIn += (TextIn[3] << 16);
         ValueIn += (TextIn[4] << 24);
@@ -1563,7 +1565,7 @@ int GetNextNumber(int p1, char text1[CharsMax])
 
 /*********************************************************************************************************************************/
 
-short unsigned int GetStickInput(byte l)
+short unsigned int GetStickInput(uint8_t l)
 {
     // This bit needs to be optimised but it works well enough.
     short unsigned int k = 0;
@@ -1815,16 +1817,16 @@ void UpdateGainsView()
 void SDUpdateInt(int p_address, int p_value)
 {
     ModelsFileNumber.seek(p_address);
-    ModelsFileNumber.write(byte(p_value));
-    ModelsFileNumber.write(byte(p_value >> 8));
+    ModelsFileNumber.write(uint8_t(p_value));
+    ModelsFileNumber.write(uint8_t(p_value >> 8));
 }
 
 /*********************************************************************************************************************************/
 
-void SDUpdateByte(int p_address, byte p_value)
+void SDUpdateuint8_t(int p_address, uint8_t p_value)
 {
     ModelsFileNumber.seek(p_address);
-    ModelsFileNumber.write(byte(p_value));
+    ModelsFileNumber.write(uint8_t(p_value));
 }
 
 /*********************************************************************************************************************************/
@@ -1839,10 +1841,10 @@ int SDReadInt(int p_address)
 
 /*********************************************************************************************************************************/
 
-byte SDReadByte(int p_address)
+uint8_t SDReaduint8_t(int p_address)
 {
     ModelsFileNumber.seek(p_address);
-    byte r = ModelsFileNumber.read();
+    uint8_t r = ModelsFileNumber.read();
     return r;
 }
 
@@ -2181,117 +2183,117 @@ void UpdateButtonLabels()
 
 /*********************************************************************************************************************************/
 
-bool ReadOneModel(byte Mnum)
+bool ReadOneModel(uint8_t Mnum)
 {
     unsigned int j;
     ModelDetected = true;
     if (!ModelsFileOpen) OpenModelsFile();
-    addr = TXSIZE;                    //  spare bytes for TX stuff
-    addr += ((Mnum - 1) * MODELSIZE); //  spare bytes for Model params
+    addr = TXSIZE;                    //  spare uint8_ts for TX stuff
+    addr += ((Mnum - 1) * MODELSIZE); //  spare uint8_ts for Model params
     StartLocation = addr;
-    ModelDefined  = SDReadByte(addr); // this variable is redundant now   could be re-used
+    ModelDefined  = SDReaduint8_t(addr); // this variable is redundant now   could be re-used
     addr++;
     for (j = 0; j < 30; j++) {
-        ModelName[j] = SDReadByte(addr);
+        ModelName[j] = SDReaduint8_t(addr);
         addr++;
     }
 
     for (i = 0; i < CHANNELSUSED; i++) {
         for (j = 1; j <= 4; j++) {
-            MaxDegrees[j][i] = SDReadByte(addr);
+            MaxDegrees[j][i] = SDReaduint8_t(addr);
             addr++;
-            MidHiDegrees[j][i] = SDReadByte(addr);
+            MidHiDegrees[j][i] = SDReaduint8_t(addr);
             addr++;
-            CentreDegrees[j][i] = SDReadByte(addr);
+            CentreDegrees[j][i] = SDReaduint8_t(addr);
             addr++;
-            MidLowDegrees[j][i] = SDReadByte(addr);
+            MidLowDegrees[j][i] = SDReaduint8_t(addr);
             addr++;
-            MinDegrees[j][i] = SDReadByte(addr);
+            MinDegrees[j][i] = SDReaduint8_t(addr);
             addr++;
         }
     }
     for (j = 0; j < MAXMIXES; j++) {
         for (i = 0; i < CHANNELSUSED + 1; i++) {
-            Mixes[j][i] = SDReadByte(addr); // Read mixes
+            Mixes[j][i] = SDReaduint8_t(addr); // Read mixes
             addr++;
         }
     }
 
     for (j = 0; j < FlightModesUsed + 1; j++) {
         for (i = 0; i < CHANNELSUSED + 1; i++) {
-            Trims[j][i] = SDReadByte(addr);
+            Trims[j][i] = SDReaduint8_t(addr);
             addr++;
         }
     }
     for (j = 0; j < FlightModesUsed + 1; j++) {
         for (i = 0; i < CHANNELSUSED + 1; i++) {
-            TrimsReversed[j][i] = SDReadByte(addr);
+            TrimsReversed[j][i] = SDReaduint8_t(addr);
             addr++;
         }
     }
-    RXCellCount = SDReadByte(addr);
+    RXCellCount = SDReaduint8_t(addr);
     addr++;
 
     for (j = 0; j < FlightModesUsed + 1; j++) {
 
-        rollp[j] = SDReadByte(addr);
+        rollp[j] = SDReaduint8_t(addr);
         addr++;
-        rolli[j] = SDReadByte(addr);
+        rolli[j] = SDReaduint8_t(addr);
         addr++;
-        rolld[j] = SDReadByte(addr);
+        rolld[j] = SDReaduint8_t(addr);
         addr++;
-        yawp[j] = SDReadByte(addr);
+        yawp[j] = SDReaduint8_t(addr);
         addr++;
-        yawi[j] = SDReadByte(addr);
+        yawi[j] = SDReaduint8_t(addr);
         addr++;
-        yawd[j] = SDReadByte(addr);
+        yawd[j] = SDReaduint8_t(addr);
         addr++;
     }
-    ModelType = SDReadByte(addr);
+    ModelType = SDReaduint8_t(addr);
     addr++;
     for (i = 0; i < CHANNELSUSED; i++) {
-        InPutStick[i] = SDReadByte(addr);
+        InPutStick[i] = SDReaduint8_t(addr);
         if (InPutStick[i] > 16) InPutStick[i] = i; // reset if nothing was saved!
         addr++;
     }
 
     // **************************
 
-    FMSwitch = SDReadByte(addr);
+    FMSwitch = SDReaduint8_t(addr);
     addr++;
-    AutoSwitch = SDReadByte(addr);
+    AutoSwitch = SDReaduint8_t(addr);
     addr++;
-    Channel9Switch = SDReadByte(addr);
+    Channel9Switch = SDReaduint8_t(addr);
     addr++;
-    Channel10Switch = SDReadByte(addr);
+    Channel10Switch = SDReaduint8_t(addr);
     addr++;
-    Channel11Switch = SDReadByte(addr);
+    Channel11Switch = SDReaduint8_t(addr);
     addr++;
-    Channel12Switch = SDReadByte(addr);
+    Channel12Switch = SDReaduint8_t(addr);
     addr++;
-    Switch1Reversed = bool(SDReadByte(addr));
+    Switch1Reversed = bool(SDReaduint8_t(addr));
     addr++;
-    Switch2Reversed = bool(SDReadByte(addr));
+    Switch2Reversed = bool(SDReaduint8_t(addr));
     addr++;
-    Switch3Reversed = bool(SDReadByte(addr));
+    Switch3Reversed = bool(SDReaduint8_t(addr));
     addr++;
-    Switch4Reversed = bool(SDReadByte(addr));
+    Switch4Reversed = bool(SDReaduint8_t(addr));
     addr++;
     for (i = 0; i < CHANNELSUSED; i++) {
-        FailSafeChannel[i] = bool(SDReadByte(addr));
+        FailSafeChannel[i] = bool(SDReaduint8_t(addr));
         if (int(FailSafeChannel[i]) > 1) FailSafeChannel[i] = 0;
         addr++;
     }
     for (i = 0; i < CHANNELSUSED; i++) {
         for (j = 0; j < 10; j++) {
-            ChannelNames[i][j] = SDReadByte(addr);
+            ChannelNames[i][j] = SDReaduint8_t(addr);
             addr++;
         }
     }
 
     for (j = 0; j < FlightModesUsed + 1; j++) {
         for (i = 0; i < CHANNELSUSED + 1; i++) {
-            Exponential[j][i] = SDReadByte(addr);
+            Exponential[j][i] = SDReaduint8_t(addr);
             if (Exponential[j][i] > 200 || Exponential[j][i] < 0) {
                 Exponential[j][i] = 20;
             }
@@ -2300,7 +2302,7 @@ bool ReadOneModel(byte Mnum)
     }
     for (j = 0; j < FlightModesUsed + 1; j++) {
         for (i = 0; i < CHANNELSUSED + 1; i++) {
-            InterpolationTypes[j][i] = SDReadByte(addr);
+            InterpolationTypes[j][i] = SDReaduint8_t(addr);
             if (InterpolationTypes[j][i] < 0 || InterpolationTypes[j][i] > 2) {
                 InterpolationTypes[j][i] = 2;
             }
@@ -2315,12 +2317,12 @@ bool ReadOneModel(byte Mnum)
 
 #ifdef DB_NEXTION
     Serial.print(txm);
-    Serial.println(" bytes were  used for TX data.");
+    Serial.println(" uint8_ts were  used for TX data.");
     Serial.print(TXSIZE);
-    Serial.println(" bytes had been reserved.");
+    Serial.println(" uint8_ts had been reserved.");
     Serial.print("So ");
     Serial.print(TXSIZE - txm);
-    Serial.println(" spare bytes still remain for TX params.");
+    Serial.println(" spare uint8_ts still remain for TX params.");
     Serial.println(" ");
     Serial.print("Loaded model number: ");
     Serial.println(ModelNumber);
@@ -2328,11 +2330,11 @@ bool ReadOneModel(byte Mnum)
     Serial.println(ModelName);
     Serial.println(" ");
     Serial.print(OneModelMemory);
-    Serial.println(" bytes used per model.");
+    Serial.println(" uint8_ts used per model.");
     Serial.print(MODELSIZE - OneModelMemory);
-    Serial.println(" spare bytes per model.");
+    Serial.println(" spare uint8_ts per model.");
     Serial.print(MODELSIZE);
-    Serial.println(" bytes reserved per model.)");
+    Serial.println(" uint8_ts reserved per model.)");
 #endif // defined DB_NEXTION
     UpdateButtonLabels();
 
@@ -2362,21 +2364,21 @@ bool LoadAllParameters()
             ChannelMax[i] = SDReadInt(addr);
             addr += 2;
         }
-        FHSSTop = SDReadByte(addr); // These are  currently definable
+        FHSSTop = SDReaduint8_t(addr); // These are  currently definable
         addr++;
-        FHSSBottom = SDReadByte(addr); // These are  currently definable
+        FHSSBottom = SDReaduint8_t(addr); // These are  currently definable
         if (FHSSBottom < 1) FHSSBottom = 1;
         addr++;
-        ModelNumber = SDReadByte(addr);
+        ModelNumber = SDReaduint8_t(addr);
         addr++;
         ScreenTimeout = SDReadInt(addr);
         addr++;
         addr++;
-        Inactivity_Timeout = SDReadByte(addr) * TICKSPERMINUTE;
+        Inactivity_Timeout = SDReaduint8_t(addr) * TICKSPERMINUTE;
 
         addr++;
         for (j = 0; j < 30; j++) {
-            TxName[j] = SDReadByte(addr);
+            TxName[j] = SDReaduint8_t(addr);
             addr++;
         }
         txm = addr;
@@ -2497,6 +2499,8 @@ void setup()
     LastDogKick = millis(); // needed? - yes!
 #endif
     StartInactvityTimeout();
+    SizeOfAckPayLoad     = sizeof (AckPayLoad);   // in order to refer to this externally 
+    SizeOfCompressedData = sizeof (CompressedData);
 }
 
 /*********************************************************************************************************************************/
@@ -2538,7 +2542,7 @@ void SaveTXStuff()
     rd            = RENEWDATA;
     addr          = 0;
     CalibratedYet = true;
-    SDUpdateInt(addr, rd); // xxxx in first two bytes = calibration done! *** CHANGE THIS NUMBER IF FORMAT IS NEW!! ****
+    SDUpdateInt(addr, rd); // xxxx in first two uint8_ts = calibration done! *** CHANGE THIS NUMBER IF FORMAT IS NEW!! ****
     addr += 2;
     for (i = 0; i < CHANNELSUSED; i++) {
         SDUpdateInt(addr, ChannelMin[i]); // Stick min output of pot
@@ -2552,20 +2556,20 @@ void SaveTXStuff()
         SDUpdateInt(addr, ChannelMax[i]); // Stick max output of pot
         addr += 2;
     }
-    SDUpdateByte(addr, FHSSTop); // These are  currently definable
+    SDUpdateuint8_t(addr, FHSSTop); // These are  currently definable
     addr++;
-    SDUpdateByte(addr, FHSSBottom); // These are  currently definable
+    SDUpdateuint8_t(addr, FHSSBottom); // These are  currently definable
     addr++;
-    SDUpdateByte(addr, ModelNumber);
+    SDUpdateuint8_t(addr, ModelNumber);
     addr++;
     SDUpdateInt(addr, ScreenTimeout);
     addr++;
     addr++;
-    SDUpdateByte(addr, (Inactivity_Timeout / TICKSPERMINUTE));
+    SDUpdateuint8_t(addr, (Inactivity_Timeout / TICKSPERMINUTE));
     addr++;
     for (j = 0; j < 30; j++) {
         if (EON) TxName[j] = 0;
-        SDUpdateByte(addr, TxName[j]);
+        SDUpdateuint8_t(addr, TxName[j]);
         if (TxName[j] == 0) EON = true;
         addr++;
     }
@@ -2582,115 +2586,115 @@ void SaveOneModel(int mnum)
 
     if (!ModelsFileOpen) OpenModelsFile();
     unsigned int j;
-    addr = TXSIZE;                  //  spare bytes for TX stuff
-    addr += (mnum - 1) * MODELSIZE; //  spare bytes for Model params
+    addr = TXSIZE;                  //  spare uint8_ts for TX stuff
+    addr += (mnum - 1) * MODELSIZE; //  spare uint8_ts for Model params
     StartLocation = addr;
     ModelDefined  = 42;
-    SDUpdateByte(addr, ModelDefined);
+    SDUpdateuint8_t(addr, ModelDefined);
     addr++;
     for (j = 0; j < 30; j++) {
         if (EndOfName) ModelName[j] = 0;
-        SDUpdateByte(addr, ModelName[j]);
+        SDUpdateuint8_t(addr, ModelName[j]);
         if (ModelName[j] == 0) EndOfName = true;
         addr++;
     }
     for (i = 0; i < CHANNELSUSED; i++) {
         for (j = 1; j <= 4; j++) {
-            SDUpdateByte(addr, MaxDegrees[j][i]); // Max requested in degrees (180)
+            SDUpdateuint8_t(addr, MaxDegrees[j][i]); // Max requested in degrees (180)
             addr++;
-            SDUpdateByte(addr, MidHiDegrees[j][i]); // MidHi requested in degrees (135)
+            SDUpdateuint8_t(addr, MidHiDegrees[j][i]); // MidHi requested in degrees (135)
             addr++;
-            SDUpdateByte(addr, CentreDegrees[j][i]); // Centre requested in degrees (90)
+            SDUpdateuint8_t(addr, CentreDegrees[j][i]); // Centre requested in degrees (90)
             addr++;
-            SDUpdateByte(addr, MidLowDegrees[j][i]); // MidLo requested in degrees (45)
+            SDUpdateuint8_t(addr, MidLowDegrees[j][i]); // MidLo requested in degrees (45)
             addr++;
-            SDUpdateByte(addr, MinDegrees[j][i]); // Min requested in degrees (0)
+            SDUpdateuint8_t(addr, MinDegrees[j][i]); // Min requested in degrees (0)
             addr++;
         }
     }
     for (j = 0; j < MAXMIXES; j++) {
         for (i = 0; i < CHANNELSUSED + 1; i++) {
-            SDUpdateByte(addr, Mixes[j][i]); // Save mixes
+            SDUpdateuint8_t(addr, Mixes[j][i]); // Save mixes
             addr++;
         }
     }
     for (j = 0; j < FlightModesUsed + 1; j++) {
         for (i = 0; i < CHANNELSUSED + 1; i++) {
-            SDUpdateByte(addr, Trims[j][i]);
+            SDUpdateuint8_t(addr, Trims[j][i]);
             addr++;
         }
     }
     for (j = 0; j < FlightModesUsed + 1; j++) {
         for (i = 0; i < CHANNELSUSED + 1; i++) {
-            SDUpdateByte(addr, TrimsReversed[j][i]);
+            SDUpdateuint8_t(addr, TrimsReversed[j][i]);
             addr++;
         }
     }
-    SDUpdateByte(addr, RXCellCount);
+    SDUpdateuint8_t(addr, RXCellCount);
     addr++;
 
     for (j = 0; j < FlightModesUsed + 1; j++) {
-        SDUpdateByte(addr, rollp[j]);
+        SDUpdateuint8_t(addr, rollp[j]);
         addr++;
-        SDUpdateByte(addr, rolli[j]);
+        SDUpdateuint8_t(addr, rolli[j]);
         addr++;
-        SDUpdateByte(addr, rolld[j]);
+        SDUpdateuint8_t(addr, rolld[j]);
         addr++;
-        SDUpdateByte(addr, yawp[j]);
+        SDUpdateuint8_t(addr, yawp[j]);
         addr++;
-        SDUpdateByte(addr, yawi[j]);
+        SDUpdateuint8_t(addr, yawi[j]);
         addr++;
-        SDUpdateByte(addr, yawd[j]);
+        SDUpdateuint8_t(addr, yawd[j]);
         addr++;
     }
     if (ModelType == 0) ModelType = 1; // no zeros please
-    SDUpdateByte(addr, ModelType);
+    SDUpdateuint8_t(addr, ModelType);
     addr++;
     for (i = 0; i < CHANNELSUSED; i++) {
-        SDUpdateByte(addr, InPutStick[i]);
+        SDUpdateuint8_t(addr, InPutStick[i]);
         addr++;
     }
 
-    SDUpdateByte(addr, FMSwitch);
+    SDUpdateuint8_t(addr, FMSwitch);
     addr++;
-    SDUpdateByte(addr, AutoSwitch);
+    SDUpdateuint8_t(addr, AutoSwitch);
     addr++;
-    SDUpdateByte(addr, Channel9Switch);
+    SDUpdateuint8_t(addr, Channel9Switch);
     addr++;
-    SDUpdateByte(addr, Channel10Switch);
+    SDUpdateuint8_t(addr, Channel10Switch);
     addr++;
-    SDUpdateByte(addr, Channel11Switch);
+    SDUpdateuint8_t(addr, Channel11Switch);
     addr++;
-    SDUpdateByte(addr, Channel12Switch);
+    SDUpdateuint8_t(addr, Channel12Switch);
     addr++;
-    SDUpdateByte(addr, Switch1Reversed);
+    SDUpdateuint8_t(addr, Switch1Reversed);
     addr++;
-    SDUpdateByte(addr, Switch2Reversed);
+    SDUpdateuint8_t(addr, Switch2Reversed);
     addr++;
-    SDUpdateByte(addr, Switch3Reversed);
+    SDUpdateuint8_t(addr, Switch3Reversed);
     addr++;
-    SDUpdateByte(addr, Switch4Reversed);
+    SDUpdateuint8_t(addr, Switch4Reversed);
     addr++;
     for (i = 0; i < CHANNELSUSED; i++) {
-        SDUpdateByte(addr, FailSafeChannel[i]);
+        SDUpdateuint8_t(addr, FailSafeChannel[i]);
         addr++;
     }
     for (i = 0; i < CHANNELSUSED; i++) {
         for (j = 0; j < 10; j++) {
-            SDUpdateByte(addr, ChannelNames[i][j]);
+            SDUpdateuint8_t(addr, ChannelNames[i][j]);
             addr++;
         }
     }
     for (j = 0; j < FlightModesUsed + 1; j++) {
         for (i = 0; i < CHANNELSUSED + 1; i++) {
-            SDUpdateByte(addr, Exponential[j][i]);
+            SDUpdateuint8_t(addr, Exponential[j][i]);
             addr++;
         }
     }
 
     for (j = 0; j < FlightModesUsed + 1; j++) {
         for (i = 0; i < CHANNELSUSED + 1; i++) {
-            SDUpdateByte(addr, InterpolationTypes[j][i]);
+            SDUpdateuint8_t(addr, InterpolationTypes[j][i]);
             addr++;
         }
     }
@@ -2702,11 +2706,11 @@ void SaveOneModel(int mnum)
     Serial.println(ModelName);
     Serial.println(" ");
     Serial.print(OneModelMemory);
-    Serial.println(" bytes used per model.");
+    Serial.println(" uint8_ts used per model.");
     Serial.print(MODELSIZE - OneModelMemory);
-    Serial.println(" spare bytes per model.");
+    Serial.println(" spare uint8_ts per model.");
     Serial.print(MODELSIZE);
-    Serial.println(" bytes reserved per model.)");
+    Serial.println(" uint8_ts reserved per model.)");
     Serial.println(" ");
 #endif // defined DB_NEXTION
     CloseModelsFile();
@@ -2820,7 +2824,7 @@ void UpdateSwitchesDisplay()
 
 /*********************************************************************************************************************************/
 
-byte CheckRange_0_16(byte v)
+uint8_t CheckRange_0_16(uint8_t v)
 {
 
     if (v > 16) v = 16;
@@ -2835,7 +2839,7 @@ void DoNewChannelName(int ch, int k)
     int j                   = 0;
     ChannelNames[ch - 1][0] = 32;
     ChannelNames[ch - 1][1] = 0; // remove old name
-    while (byte(WordsIn[k]) > 0) {
+    while (uint8_t(WordsIn[k]) > 0) {
         ChannelNames[ch - 1][j] = WordsIn[k];
         j++;
         k++;
@@ -2936,11 +2940,11 @@ void SaveAllParameters()
 #ifdef DB_NEXTION
     Serial.println(" ");
     Serial.print(txm);
-    Serial.println(" bytes written to SD CARD FOR TX.");
+    Serial.println(" uint8_ts written to SD CARD FOR TX.");
     Serial.print(TXSIZE);
-    Serial.println(" bytes reserved for TX.");
+    Serial.println(" uint8_ts reserved for TX.");
     Serial.print(TXSIZE - txm);
-    Serial.println(" Spare bytes still for any new TX params.");
+    Serial.println(" Spare uint8_ts still for any new TX params.");
     Serial.print("Saved model: ");
     Serial.print(ModelNumber);
     Serial.print(" (");
@@ -2959,8 +2963,8 @@ void ShowDirectory()
     char space[]        = {' ', 0};
     char fileviewlist[] = "FilesView.list";
     char t[2]           = "P";
-    byte n              = 0;
-    byte nlp            = 0;
+    uint8_t n              = 0;
+    uint8_t nlp            = 0;
     strcpy(filelistbuf, nul);
     for (i = 0; i < ExportedFileCounter; i++) {
         nlp = 13;
@@ -3577,9 +3581,9 @@ void ReceiveModelFile()
     unsigned long Fsize              = 0;
     unsigned long Fposition          = 0;
     float         SecondsElapsed     = 0;
-    byte          p                  = 5;
+    uint8_t          p                  = 5;
 #ifdef DB_MODEL_EXCHANGE
-    byte PacketNumber = 0;
+    uint8_t PacketNumber = 0;
     Serial.println("Receiving model ...");
     Serial.println(Waiting);
 #endif
@@ -3637,7 +3641,7 @@ void ReceiveModelFile()
             Radio1.read(&Fbuffer, BUFFERSIZE + 12);
             LCheckSum = 0;
             for (i = 0; i < BUFFERSIZE; i++) {
-                LCheckSum += byte(Fbuffer[i]);
+                LCheckSum += uint8_t(Fbuffer[i]);
             } // Calculate Local Checksum
             RCheckSum = Fbuffer[26];
             RCheckSum += Fbuffer[27] << 8;
@@ -3695,7 +3699,7 @@ void SendModelFile()
     unsigned long Fposition = 0;
     char          Fbuffer[BUFFERSIZE + 15];
     unsigned long CheckSum     = 0;
-    byte          PacketNumber = 0;
+    uint8_t          PacketNumber = 0;
     int           p            = 5;
     SendCommand(ProgressStart);
     SendValue(Progress, p);
@@ -3710,7 +3714,7 @@ void SendModelFile()
 #ifdef DB_MODEL_EXCHANGE
     Serial.print("File Size: ");
     Serial.print(Fsize);
-    Serial.println(" bytes.");
+    Serial.println(" uint8_ts.");
 #endif
     Radio1.setChannel(FILECHANNEL);
     Radio1.setPALevel(FILEPALEVEL);
@@ -3726,7 +3730,7 @@ void SendModelFile()
             Fbuffer[20] = Fsize;
             Fbuffer[21] = Fsize >> 8;
             Fbuffer[22] = Fsize >> 16;
-            Fbuffer[23] = Fsize >> 24;  // SEND FILE SIZE (four bytes)
+            Fbuffer[23] = Fsize >> 24;  // SEND FILE SIZE (four uint8_ts)
             Fbuffer[25] = PacketNumber; // Packet number at offset 25
         }
         else {
@@ -3734,7 +3738,7 @@ void SendModelFile()
             ModelsFileNumber.seek(Fposition);           // Move filepointer
             ModelsFileNumber.read(Fbuffer, BUFFERSIZE); // Read part of file
             for (i = 0; i < BUFFERSIZE; i++) {
-                CheckSum += byte(Fbuffer[i]);
+                CheckSum += uint8_t(Fbuffer[i]);
             }                           // Calculate Checksum
             Fbuffer[25] = PacketNumber; // Packet number at offset 25
             Fbuffer[26] = CheckSum;
@@ -3746,7 +3750,7 @@ void SendModelFile()
         if (Radio1.write(&Fbuffer, BUFFERSIZE + 12)) { // Send part of file
             delay(100);                                // allow time for receive and write
             if (Radio1.isAckPayloadAvailable()) {
-                Radio1.read(&AckPayLoad, sizeof(AckPayLoad));
+                Radio1.read(&AckPayLoad, SizeOfAckPayLoad);
             }
         }
         else {
@@ -4151,7 +4155,7 @@ void Button_was_pressed()
         }
         if (InStrng(GOTO, WordsIn) > 0) {
             i = 5;
-            while (byte(WordsIn[i]) > 0 && i < 30) {
+            while (uint8_t(WordsIn[i]) > 0 && i < 30) {
                 WhichPage[i] = WordsIn[i];
                 i++;
                 WhichPage[i] = 0;
@@ -4193,7 +4197,7 @@ void Button_was_pressed()
         if (p > 0) {
             i = strlen(OptionsView);
             j = 0;
-            while (byte(WordsIn[i]) > 0 && i < 100) {
+            while (uint8_t(WordsIn[i]) > 0 && i < 100) {
                 TxName[j] = WordsIn[i];
                 j++;
                 i++;
@@ -4224,7 +4228,7 @@ void Button_was_pressed()
         if (InStrng(ReceiveModel, WordsIn) > 0) {
             i = strlen(ReceiveModel);
             j = 0;
-            while (byte(WordsIn[i] && i < 100) > 0) {
+            while (uint8_t(WordsIn[i] && i < 100) > 0) {
                 SingleModelFile[j] = WordsIn[i];
                 j++;
                 i++;
@@ -4250,7 +4254,7 @@ void Button_was_pressed()
         if (InStrng(SendModel, WordsIn) > 0) {
             i = strlen(SendModel);
             j = 0;
-            while (byte(WordsIn[i]) > 0) {
+            while (uint8_t(WordsIn[i]) > 0) {
                 SingleModelFile[j] = WordsIn[i];
                 j++;
                 i++;
@@ -4566,7 +4570,7 @@ void Button_was_pressed()
         if (InStrng(DelFile, WordsIn) > 0) { // Delete a file
             j = 0;
             i = p + 7;
-            while (byte(WordsIn[i]) > 0) {
+            while (uint8_t(WordsIn[i]) > 0) {
                 SingleModelFile[j] = WordsIn[i];
                 j++;
                 i++;
@@ -5170,8 +5174,8 @@ void Button_was_pressed()
 
 /************************************************************************************************************/
 
-uint16_t MakeTwoBytes(bool* f)
-{                    // Pass arraypointer. Returns the two bytes
+uint16_t MakeTwouint8_ts(bool* f)
+{                    // Pass arraypointer. Returns the two uint8_ts
     uint16_t tb = 0; // all false is default
     for (i = 0; i < 16; i++) {
         if (f[15 - i] == true) {
@@ -5186,16 +5190,16 @@ uint16_t MakeTwoBytes(bool* f)
 void LoadPacketData()
 { // MUST NOT ADD MORE
 
-    uint16_t TwoBytes = 0;
-    uint8_t  byte1;
-    uint8_t  byte2;
+    uint16_t Twouint8_ts = 0;
+    uint8_t  uint8_t1;
+    uint8_t  uint8_t2;
 
     SendBuffer[CHANNELSUSED + 1] = PacketNumber;  // to let reciever know current packet number
     SendBuffer[CHANNELSUSED + 2] = NextFrequency; // Send next frequency
 
-    TwoBytes = MakeTwoBytes(FailSafeChannel); // 16 bool values compressed to 16 bits
-    byte1    = uint8_t(TwoBytes >> 8);        // sent as two bytes
-    byte2    = uint8_t(TwoBytes & 0x00FF);
+    Twouint8_ts = MakeTwouint8_ts(FailSafeChannel); // 16 bool values compressed to 16 bits
+    uint8_t1    = uint8_t(Twouint8_ts >> 8);        // sent as two uint8_ts
+    uint8_t2    = uint8_t(Twouint8_ts & 0x00FF);
 
     switch (PacketNumber) {
         case 3:
@@ -5237,10 +5241,10 @@ void LoadPacketData()
             }
             break;
         case 14:
-            SendBuffer[CHANNELSUSED + 3] = byte1; // these are failsafe flags
+            SendBuffer[CHANNELSUSED + 3] = uint8_t1; // these are failsafe flags
             break;
         case 15:
-            SendBuffer[CHANNELSUSED + 3] = byte2; // these are failsafe flags
+            SendBuffer[CHANNELSUSED + 3] = uint8_t2; // these are failsafe flags
             break;
         case 16:
             SendBuffer[CHANNELSUSED + 3] = SaveFailSafeNow; // FailSafeSaveMoment
@@ -5311,9 +5315,9 @@ void ReadFMSwitch(bool sw1, bool sw2, bool rev)
 
 /************************************************************************************************************/
 
-byte ReadCHSwitch(bool sw1, bool sw2, bool rev)
+uint8_t ReadCHSwitch(bool sw1, bool sw2, bool rev)
 {
-    byte ttmp = 90;
+    uint8_t ttmp = 90;
     if (sw1 == false && sw2 == false) ttmp = 90;
     if (rev) {
         if (sw1) ttmp = 0;
@@ -5328,9 +5332,9 @@ byte ReadCHSwitch(bool sw1, bool sw2, bool rev)
 
 /************************************************************************************************************/
 
-byte CheckSwitch(byte swt)
+uint8_t CheckSwitch(uint8_t swt)
 {
-    byte rtv = 90;
+    uint8_t rtv = 90;
     if (swt == 1) rtv = ReadCHSwitch(Switch[7], Switch[6], Switch1Reversed);
     if (swt == 2) rtv = ReadCHSwitch(Switch[5], Switch[4], Switch2Reversed);
     if (swt == 3) rtv = ReadCHSwitch(Switch[0], Switch[1], Switch3Reversed);

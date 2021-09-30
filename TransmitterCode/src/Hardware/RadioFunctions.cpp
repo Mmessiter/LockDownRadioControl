@@ -1,23 +1,25 @@
 
+/************************************************************************************************************/
+//                                      Radio Functions
+/************************************************************************************************************/
 
 #include "RadioFunctions.h"  
 
-
-#define SticksView      1
-#define GraphView       2
-#define MixesView       3
-#define FhssView        4
-#define ModelsView      5
-#define CalibrateView   6
-#define MainSetupView   7
-#define GainsView       8
-#define DataView        9
-#define Trim_View       10
-#define Mode_View       11
-#define Switches_View   12
-#define One_Switch_View 13
-#define Help_View       14
-#define Options_View    15
+#define SticksView         1
+#define GraphView          2
+#define MixesView          3
+#define FhssView           4
+#define ModelsView         5
+#define CalibrateView      6
+#define MainSetupView      7
+#define GainsView          8
+#define DataView           9
+#define Trim_View          10
+#define Mode_View          11
+#define Switches_View      12
+#define One_Switch_View    13
+#define Help_View          14
+#define Options_View       15
 #define BINDPIPETIMEOUT    10                        // timeout for switching from Bound to Default pipe
 #define FHSS_RESCUE_BOTTOM 118                       // reduced range for recovery
 #define FHSS_RESCUE_TOP    125                       // reduced range for recovery
@@ -25,10 +27,7 @@
 #define COMPRESSEDWORDS    UNCOMPRESSEDWORDS * 3 / 4 // COMPRESSED DATA SENT = 30  Bytes
 #define PACKETS_PER_HOP    20                        // Must match RX setting
 
-
 /************************************************************************************************************/
-/************************************************************************************************************/
-
 
 // **** Decompresses cc*3/4 x 16 BIT values up to cc loading only their low 12 BITS cc must be divisble by 4! ******************
 void DeComp(uint16_t* d, uint16_t* c, int cc)
@@ -60,10 +59,7 @@ void Comp(uint16_t* c, uint16_t* o, int cc)
         p++;
     }
 }
-
-
-
-
+/************************************************************************************************************/
 
 void TryOtherPipe()
 {
@@ -92,14 +88,14 @@ void SendData()
         } // Don't try to send data when just setting up.
 
         if (!BoundFlag && !(CurrentView == CalibrateView) && !(CurrentView == SticksView)) {
-            SendBuffer[0] = (byte)((NewPipe >> 56) & 0xFF); // if not yet bound, send pipe
-            SendBuffer[1] = (byte)((NewPipe >> 48) & 0xFF);
-            SendBuffer[2] = (byte)((NewPipe >> 40) & 0xFF);
-            SendBuffer[3] = (byte)((NewPipe >> 32) & 0xFF);
-            SendBuffer[4] = (byte)((NewPipe >> 24) & 0xFF);
-            SendBuffer[5] = (byte)((NewPipe >> 16) & 0xFF);
-            SendBuffer[6] = (byte)((NewPipe >> 8) & 0xFF);
-            SendBuffer[7] = (byte)((NewPipe)&0xFF);
+            SendBuffer[0] = (uint8_t)((NewPipe >> 56) & 0xFF); // if not yet bound, send pipe
+            SendBuffer[1] = (uint8_t)((NewPipe >> 48) & 0xFF);
+            SendBuffer[2] = (uint8_t)((NewPipe >> 40) & 0xFF);
+            SendBuffer[3] = (uint8_t)((NewPipe >> 32) & 0xFF);
+            SendBuffer[4] = (uint8_t)((NewPipe >> 24) & 0xFF);
+            SendBuffer[5] = (uint8_t)((NewPipe >> 16) & 0xFF);
+            SendBuffer[6] = (uint8_t)((NewPipe >> 8) & 0xFF);
+            SendBuffer[7] = (uint8_t)((NewPipe)&0xFF);
         }
         LoadPacketData();
         if (JustHoppedFlag) {
@@ -124,10 +120,10 @@ void SendData()
             }
         }
         Connected = false;
-        Comp(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress with my library - 32 bytes down to 24
-        if (Radio1.write(&CompressedData, 30)) {  // ********** ACTUALLY SEND THE DATA *************
+        Comp(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);              // Compress 32 bytes down to 24
+        if (Radio1.write(&CompressedData, SizeOfCompressedData)) {        //  "sizeof" doesn't work with externs, hence 2 new vars.
             if (Radio1.isAckPayloadAvailable()) {
-                Radio1.read(&AckPayLoad, 15);
+                Radio1.read(&AckPayLoad, SizeOfAckPayLoad);               //  "sizeof" doesn't work with externs, hence 2 new vars.
                 RangeTestGoodPackets++;
                 Connected = true;
                 if (BoundFlag) {
@@ -153,11 +149,7 @@ void SendData()
     }
 }
 
-
-
-
-
-
+/************************************************************************************************************/
 
 #define xx1 90 // was 75
 #define yy1 90 // Needed below... Edit xx1,yy1 to move box
@@ -208,9 +200,7 @@ void ScanAllChannels()
     }
 }
 
-
-
-
+/************************************************************************************************************/
 
 void HopToNextFrequency()
 {
@@ -238,8 +228,6 @@ void HopToNextFrequency()
     ThisFrequency  = NextFrequency;
     JustHoppedFlag = true;
 }
-
-
 
 /*********************************************************************************************************************************/
 
@@ -287,9 +275,7 @@ void PreScan()
 #endif
 }
 
-
 /*********************************************************************************************************************************/
-
 
 void InitRadio(uint64_t Pipe)
 {
@@ -347,3 +333,4 @@ void DoScanEnd()
     CurrentMode = NORMAL;
     SendCommand(NextionSleepTime);
 }
+/*********************************************************************************************************************************/
