@@ -7,7 +7,7 @@
 
 // UNCOMMENT ANY OF THESE for that bit of debug info
 // #define DB_FHSS           // Debug real time FHSS data
- #define DB_NEXTION        // Debug Nextion and SD card data
+// #define DB_NEXTION        // Debug Nextion and SD card data
 // #define DB_CHANNEL_AVOID  // Debug FHSS channel avoiding data etc
 // #define DB_SENSORS        // Debug Sensors
 // #define DB_BIND           // Debug Binding
@@ -180,6 +180,8 @@ RF24 Radio1(CE_PIN, CSN_PIN);
 #define One_Switch_View 13
 #define Help_View       14
 #define Options_View    15
+#define Inputs_View     16
+
 #define UNCOMPRESSEDWORDS  20                        // DATA TO SEND = 40  bytes
 #define COMPRESSEDWORDS    UNCOMPRESSEDWORDS * 3 / 4 // COMPRESSED DATA SENT = 30  bytes
 
@@ -1631,7 +1633,7 @@ void DoMixes()
 /*********************************************************************************************************************************/
 
 float MapExp(float xx, float Xxmin, float Xxmax, float Yymin, float Yymax, float Expo)
-{ // heer
+{ 
     Expo  = map(Expo, -100, 100, 0, 1);
     xx    = pow(xx * xx, Expo);
     Xxmin = pow(Xxmin * Xxmin, Expo);
@@ -2014,22 +2016,6 @@ void ChannelCentres()
 
 void UpdateButtonLabels()
 {
-    char InPutStick_ch1[]  = "ch1";
-    char InPutStick_ch2[]  = "ch2";
-    char InPutStick_ch3[]  = "ch3";
-    char InPutStick_ch4[]  = "ch4";
-    char InPutStick_ch5[]  = "ch5";
-    char InPutStick_ch6[]  = "ch6";
-    char InPutStick_ch7[]  = "ch7";
-    char InPutStick_ch8[]  = "ch8";
-    char InPutStick_ch9[]  = "ch9";
-    char InPutStick_ch10[] = "ch10";
-    char InPutStick_ch11[] = "ch11";
-    char InPutStick_ch12[] = "ch12";
-    char InPutStick_ch13[] = "ch13";
-    char InPutStick_ch14[] = "ch14";
-    char InPutStick_ch15[] = "ch15";
-    char InPutStick_ch16[] = "ch16";
     char fsch1[]           = "ch1";
     char fsch2[]           = "ch2";
     char fsch3[]           = "ch3";
@@ -2081,7 +2067,7 @@ void UpdateButtonLabels()
     char fourteen[]           = "(14) ";
     char fifteen[]            = " (15)";
     char sixteen[]            = "(16) ";
-
+if (CurrentView == SticksView){
     strcpy(BoxOffsetLabel, ChannelNames[0]);
     strcat(BoxOffsetLabel, one);
     strcat(BoxOffsetLabel, arrowrh);
@@ -2144,8 +2130,10 @@ void UpdateButtonLabels()
     SendText(SticksViewButton15, BoxOffsetLabel);
     strcpy(BoxOffsetLabel, arrowlh);
     strcat(BoxOffsetLabel, sixteen);
-    strcat(BoxOffsetLabel, ChannelNames[15]);
+    strcat(BoxOffsetLabel, ChannelNames[15]);   
     SendText(SticksViewButton16, BoxOffsetLabel);
+}
+if (CurrentView == Inputs_View){ 
     SendText(fsch1, ChannelNames[0]);
     SendText(fsch2, ChannelNames[1]);
     SendText(fsch3, ChannelNames[2]);
@@ -2162,22 +2150,7 @@ void UpdateButtonLabels()
     SendText(fsch14, ChannelNames[13]);
     SendText(fsch15, ChannelNames[14]);
     SendText(fsch16, ChannelNames[15]);
-    SendText(InPutStick_ch1, ChannelNames[0]);
-    SendText(InPutStick_ch2, ChannelNames[1]);
-    SendText(InPutStick_ch3, ChannelNames[2]);
-    SendText(InPutStick_ch4, ChannelNames[3]);
-    SendText(InPutStick_ch5, ChannelNames[4]);
-    SendText(InPutStick_ch6, ChannelNames[5]);
-    SendText(InPutStick_ch7, ChannelNames[6]);
-    SendText(InPutStick_ch8, ChannelNames[7]);
-    SendText(InPutStick_ch9, ChannelNames[8]);
-    SendText(InPutStick_ch10, ChannelNames[9]);
-    SendText(InPutStick_ch11, ChannelNames[10]);
-    SendText(InPutStick_ch12, ChannelNames[11]);
-    SendText(InPutStick_ch13, ChannelNames[12]);
-    SendText(InPutStick_ch14, ChannelNames[13]);
-    SendText(InPutStick_ch15, ChannelNames[14]);
-    SendText(InPutStick_ch16, ChannelNames[15]);
+ }
 }
 
 /*********************************************************************************************************************************/
@@ -3633,7 +3606,7 @@ void ReceiveModelFile()
     Fposition        = 0;
     ModelsFileNumber = SD.open(SingleModelFile, FILE_WRITE);                    // Open file to receive
     RXTimer          = millis();                                                // zero timeout
-    while ((Fposition < Fsize) && (millis() - RXTimer) / 1000 <= FILETIMEOUT) { // heer !!!!!!!!!!!!!!??????????????????  (Fposition<Fsize) ********************
+    while ((Fposition < Fsize) && (millis() - RXTimer) / 1000 <= FILETIMEOUT) { //  (Fposition<Fsize) ********************
         KickTheDog();                                                           // Watchdog
         if (Radio1.available()) {
             Radio1.writeAckPayload(1, &Fack, sizeof(Fack));
@@ -4173,7 +4146,7 @@ void Button_was_pressed()
             }
             if (CurrentView == ModelsView) {
                 SendValue(ModelsView_ModelNumber, ModelNumber);
-            } //HEER
+            } 
             ClearText();
         }
 
@@ -4442,22 +4415,8 @@ void Button_was_pressed()
             UpdateSwitchesDisplay();     // update its info
         }
         if (InStrng(InputsView, WordsIn) > 0) {
-            SendValue(InPutStick_c1, InPutStick[0] + 1);
-            SendValue(InPutStick_c2, InPutStick[1] + 1);
-            SendValue(InPutStick_c3, InPutStick[2] + 1);
-            SendValue(InPutStick_c4, InPutStick[3] + 1);
-            SendValue(InPutStick_c5, InPutStick[4] + 1);
-            SendValue(InPutStick_c6, InPutStick[5] + 1);
-            SendValue(InPutStick_c7, InPutStick[6] + 1);
-            SendValue(InPutStick_c8, InPutStick[7] + 1);
-            SendValue(InPutStick_c9, InPutStick[8] + 1);
-            SendValue(InPutStick_c10, InPutStick[9] + 1);
-            SendValue(InPutStick_c11, InPutStick[10] + 1);
-            SendValue(InPutStick_c12, InPutStick[11] + 1);
-            SendValue(InPutStick_c13, InPutStick[12] + 1);
-            SendValue(InPutStick_c14, InPutStick[13] + 1);
-            SendValue(InPutStick_c15, InPutStick[14] + 1);
-            SendValue(InPutStick_c16, InPutStick[15] + 1);
+            CurrentView =  Inputs_View;
+            UpdateButtonLabels();
         }
 
         if (InStrng(InputsDone, WordsIn) > 0) {
@@ -4688,7 +4647,7 @@ void Button_was_pressed()
         }
 
         if (InStrng(ListFiles, WordsIn) > 0) {
-            ShowDirectory(); // TODO HEER (upon return need somehow to fix model number)
+            ShowDirectory(); // 
         }
 
         if (InStrng(CaliNextion, WordsIn) > 0) {
@@ -4745,7 +4704,7 @@ void Button_was_pressed()
         if (InStrng(SetupView, WordsIn) > 0) {
             ClearText();
             DoScanEnd();
-            SaveAllParameters();
+            //SaveAllParameters();
             CurrentView = MainSetupView;
             SendCommand(page_SetupView);
         }
@@ -4922,12 +4881,13 @@ void Button_was_pressed()
             UpdateModelsNameEveryWhere();
         }
 
-        p = (InStrng(Sticks_View, WordsIn));
+        p = (InStrng(Sticks_View, WordsIn));   
         if (p > 0) {
             CurrentView = SticksView;
             Force_ReDisplay();
             SendCommand(page_SticksView); // Set to SticksView
             UpdateModelsNameEveryWhere();
+            UpdateButtonLabels();
             CurrentView = SticksView;
             SaveAllParameters(); // because mixes might have changed.
             DoScanEnd();         // re-enable Transmit
