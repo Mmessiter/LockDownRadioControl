@@ -7,7 +7,7 @@
 
 // UNCOMMENT ANY OF THESE for that bit of debug info
 // #define DB_FHSS           // Debug real time FHSS data
-// #define DB_NEXTION        // Debug Nextion and SD card data
+ #define DB_NEXTION        // Debug Nextion and SD card data
 // #define DB_CHANNEL_AVOID  // Debug FHSS channel avoiding data etc
 // #define DB_SENSORS        // Debug Sensors
 // #define DB_BIND           // Debug Binding
@@ -78,7 +78,7 @@
  * - Model memories can be sent between transmitters by RF link.
  * - DS1307 RTC added
  * - MAC address now used as unique TX ID for pipe and binding.
- * - Failsafe channel flags compressed to two uint8_ts
+ * - Failsafe channel flags compressed to two bytes
  * - Exponential added
  */
 
@@ -180,8 +180,8 @@ RF24 Radio1(CE_PIN, CSN_PIN);
 #define One_Switch_View 13
 #define Help_View       14
 #define Options_View    15
-#define UNCOMPRESSEDWORDS  20                        // DATA TO SEND = 40  uint8_ts
-#define COMPRESSEDWORDS    UNCOMPRESSEDWORDS * 3 / 4 // COMPRESSED DATA SENT = 30  uint8_ts
+#define UNCOMPRESSEDWORDS  20                        // DATA TO SEND = 40  bytes
+#define COMPRESSEDWORDS    UNCOMPRESSEDWORDS * 3 / 4 // COMPRESSED DATA SENT = 30  bytes
 
 #define Switch0       32 // SWITCHES' PIN NUMBERS ...
 #define Switch1       31
@@ -228,7 +228,7 @@ float PSTARTTIME = 0;
 float PENDTIME   = 0;
 float PDURATION  = 0;
 #endif
-const uint8_t MaxDataTransferred = UNCOMPRESSEDWORDS;  // = 40 uint8_ts     A few extra uint8_ts sent after channels' values
+const uint8_t MaxDataTransferred = UNCOMPRESSEDWORDS;  // = 40 bytes     A few extra bytes sent after channels' values
 uint64_t      DefaultPipe        = DEFAULTPIPEADDRESS; //          Default Radio pipe address
 uint64_t      NewPipe            = 0xBABE1E5420LL;     //             New Radio pipe address for binding will come from MAC address
 char          TextIn[CharsMax];
@@ -967,11 +967,10 @@ int GetValue(char* nbox)
     strcat(CB, nbox);
     strcat(CB, VAL);
     Nextion.print(CB);
-
     EndSend();
     GetTextIn();
     if (TextIn[0] == 'q') {
-        ValueIn = TextIn[1]; // Collect and build 32 bit value from 4 uint8_ts
+        ValueIn = TextIn[1]; // Collect and build 32 bit value from 4 bytes
         ValueIn += (TextIn[2] << 8);
         ValueIn += (TextIn[3] << 16);
         ValueIn += (TextIn[4] << 24);
@@ -2188,8 +2187,8 @@ bool ReadOneModel(uint8_t Mnum)
     unsigned int j;
     ModelDetected = true;
     if (!ModelsFileOpen) OpenModelsFile();
-    addr = TXSIZE;                    //  spare uint8_ts for TX stuff
-    addr += ((Mnum - 1) * MODELSIZE); //  spare uint8_ts for Model params
+    addr = TXSIZE;                    //  spare bytes for TX stuff
+    addr += ((Mnum - 1) * MODELSIZE); //  spare bytes for Model params
     StartLocation = addr;
     ModelDefined  = SDReaduint8_t(addr); // this variable is redundant now   could be re-used
     addr++;
@@ -2317,12 +2316,12 @@ bool ReadOneModel(uint8_t Mnum)
 
 #ifdef DB_NEXTION
     Serial.print(txm);
-    Serial.println(" uint8_ts were  used for TX data.");
+    Serial.println(" bytes were  used for TX data.");
     Serial.print(TXSIZE);
-    Serial.println(" uint8_ts had been reserved.");
+    Serial.println(" bytes had been reserved.");
     Serial.print("So ");
     Serial.print(TXSIZE - txm);
-    Serial.println(" spare uint8_ts still remain for TX params.");
+    Serial.println(" spare bytes still remain for TX params.");
     Serial.println(" ");
     Serial.print("Loaded model number: ");
     Serial.println(ModelNumber);
@@ -2330,11 +2329,11 @@ bool ReadOneModel(uint8_t Mnum)
     Serial.println(ModelName);
     Serial.println(" ");
     Serial.print(OneModelMemory);
-    Serial.println(" uint8_ts used per model.");
+    Serial.println(" bytes used per model.");
     Serial.print(MODELSIZE - OneModelMemory);
-    Serial.println(" spare uint8_ts per model.");
+    Serial.println(" spare bytes per model.");
     Serial.print(MODELSIZE);
-    Serial.println(" uint8_ts reserved per model.)");
+    Serial.println(" bytes reserved per model.)");
 #endif // defined DB_NEXTION
     UpdateButtonLabels();
 
@@ -2542,7 +2541,7 @@ void SaveTXStuff()
     rd            = RENEWDATA;
     addr          = 0;
     CalibratedYet = true;
-    SDUpdateInt(addr, rd); // xxxx in first two uint8_ts = calibration done! *** CHANGE THIS NUMBER IF FORMAT IS NEW!! ****
+    SDUpdateInt(addr, rd); // xxxx in first two bytes = calibration done! *** CHANGE THIS NUMBER IF FORMAT IS NEW!! ****
     addr += 2;
     for (i = 0; i < CHANNELSUSED; i++) {
         SDUpdateInt(addr, ChannelMin[i]); // Stick min output of pot
@@ -2586,8 +2585,8 @@ void SaveOneModel(int mnum)
 
     if (!ModelsFileOpen) OpenModelsFile();
     unsigned int j;
-    addr = TXSIZE;                  //  spare uint8_ts for TX stuff
-    addr += (mnum - 1) * MODELSIZE; //  spare uint8_ts for Model params
+    addr = TXSIZE;                  //  spare bytes for TX stuff
+    addr += (mnum - 1) * MODELSIZE; //  spare bytes for Model params
     StartLocation = addr;
     ModelDefined  = 42;
     SDUpdateuint8_t(addr, ModelDefined);
@@ -2706,11 +2705,11 @@ void SaveOneModel(int mnum)
     Serial.println(ModelName);
     Serial.println(" ");
     Serial.print(OneModelMemory);
-    Serial.println(" uint8_ts used per model.");
+    Serial.println(" bytes used per model.");
     Serial.print(MODELSIZE - OneModelMemory);
-    Serial.println(" spare uint8_ts per model.");
+    Serial.println(" spare bytes per model.");
     Serial.print(MODELSIZE);
-    Serial.println(" uint8_ts reserved per model.)");
+    Serial.println(" bytes reserved per model.)");
     Serial.println(" ");
 #endif // defined DB_NEXTION
     CloseModelsFile();
@@ -2940,11 +2939,11 @@ void SaveAllParameters()
 #ifdef DB_NEXTION
     Serial.println(" ");
     Serial.print(txm);
-    Serial.println(" uint8_ts written to SD CARD FOR TX.");
+    Serial.println(" bytes written to SD CARD FOR TX.");
     Serial.print(TXSIZE);
-    Serial.println(" uint8_ts reserved for TX.");
+    Serial.println(" bytes reserved for TX.");
     Serial.print(TXSIZE - txm);
-    Serial.println(" Spare uint8_ts still for any new TX params.");
+    Serial.println(" Spare bytes still for any new TX params.");
     Serial.print("Saved model: ");
     Serial.print(ModelNumber);
     Serial.print(" (");
@@ -3714,7 +3713,7 @@ void SendModelFile()
 #ifdef DB_MODEL_EXCHANGE
     Serial.print("File Size: ");
     Serial.print(Fsize);
-    Serial.println(" uint8_ts.");
+    Serial.println(" bytes.");
 #endif
     Radio1.setChannel(FILECHANNEL);
     Radio1.setPALevel(FILEPALEVEL);
@@ -3730,7 +3729,7 @@ void SendModelFile()
             Fbuffer[20] = Fsize;
             Fbuffer[21] = Fsize >> 8;
             Fbuffer[22] = Fsize >> 16;
-            Fbuffer[23] = Fsize >> 24;  // SEND FILE SIZE (four uint8_ts)
+            Fbuffer[23] = Fsize >> 24;  // SEND FILE SIZE (four bytes)
             Fbuffer[25] = PacketNumber; // Packet number at offset 25
         }
         else {
@@ -4739,7 +4738,8 @@ void Button_was_pressed()
             SendCommand(page_FrontView);
             UpdateModelsNameEveryWhere();
             ShowFlightMode();
-            LastShowTime=0;
+            LastShowTime=0;                 // this is to make redisplay sooner
+            LastTimeRead=0;                 // this is to make redisplay sooner
         }
 
         if (InStrng(SetupView, WordsIn) > 0) {
@@ -5174,8 +5174,8 @@ void Button_was_pressed()
 
 /************************************************************************************************************/
 
-uint16_t MakeTwouint8_ts(bool* f)
-{                    // Pass arraypointer. Returns the two uint8_ts
+uint16_t MakeTwobytes(bool* f)
+{                    // Pass arraypointer. Returns the two bytes
     uint16_t tb = 0; // all false is default
     for (i = 0; i < 16; i++) {
         if (f[15 - i] == true) {
@@ -5190,16 +5190,16 @@ uint16_t MakeTwouint8_ts(bool* f)
 void LoadPacketData()
 { // MUST NOT ADD MORE
 
-    uint16_t Twouint8_ts = 0;
+    uint16_t Twobytes = 0;
     uint8_t  uint8_t1;
     uint8_t  uint8_t2;
 
     SendBuffer[CHANNELSUSED + 1] = PacketNumber;  // to let reciever know current packet number
     SendBuffer[CHANNELSUSED + 2] = NextFrequency; // Send next frequency
 
-    Twouint8_ts = MakeTwouint8_ts(FailSafeChannel); // 16 bool values compressed to 16 bits
-    uint8_t1    = uint8_t(Twouint8_ts >> 8);        // sent as two uint8_ts
-    uint8_t2    = uint8_t(Twouint8_ts & 0x00FF);
+    Twobytes = MakeTwobytes(FailSafeChannel); // 16 bool values compressed to 16 bits
+    uint8_t1    = uint8_t(Twobytes >> 8);        // sent as two bytes
+    uint8_t2    = uint8_t(Twobytes & 0x00FF);
 
     switch (PacketNumber) {
         case 3:
