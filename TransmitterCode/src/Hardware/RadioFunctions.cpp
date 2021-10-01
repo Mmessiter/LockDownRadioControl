@@ -29,6 +29,10 @@
 
 /************************************************************************************************************/
 
+
+
+
+
 // **** Decompresses cc*3/4 x 16 BIT values up to cc loading only their low 12 BITS cc must be divisble by 4! ******************
 void DeComp(uint16_t* d, uint16_t* c, int cc)
 {
@@ -123,7 +127,7 @@ void SendData()
         Comp(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);              // Compress 32 bytes down to 24
         if (Radio1.write(&CompressedData, SizeOfCompressedData)) {        //  "sizeof" doesn't work with externs, hence 2 new vars.
             if (Radio1.isAckPayloadAvailable()) {
-                Radio1.read(&AckPayLoad, SizeOfAckPayLoad);               //  "sizeof" doesn't work with externs, hence 2 new vars.
+                Radio1.read(&AckPayload, AckPayloadSize);               //  "sizeof" doesn't work with externs, hence 2 new vars.
                 RangeTestGoodPackets++;
                 Connected = true;
                 if (BoundFlag) {
@@ -137,7 +141,7 @@ void SendData()
             LostPacketFlag  = false;
             LostContactFlag = false;
             PacketNumber++;
-            ReadExtraData();
+            ParseAckPayload();
             RecentPacketsLost = 0;
             if (PacketNumber > PACKETS_PER_HOP) {
                 HopToNextFrequency();
