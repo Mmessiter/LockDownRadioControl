@@ -633,7 +633,7 @@ void Reconnect()
 
 /************************************************************************************************************/
 
-// This function loads the AckPayload with numberic data which are already converted to ascii char arrays.
+// This function loads the AckPayload with numeric data which are already converted to ascii char arrays.
 // Only one item of data is sent per numbered payload.
 // Arguably - this area could (=should) be redesigned! :-)
 
