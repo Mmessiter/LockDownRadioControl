@@ -1,4 +1,4 @@
-#define TXVERSIONNUMBER 65.1 //   Sept 30th 2021 Malcolm Messiter
+#define TXVERSIONNUMBER 66.00 //   Oct 1st 2021 Malcolm Messiter
 
 #define USE_WATCHDOG          // Enable when developing only  ??
 #define WATCHDOGTIMEOUT 10000 // 10 Seconds before reboot (32ms -> 500 seconds)
@@ -241,8 +241,18 @@ unsigned int  LostPackets      = 0;
 uint8_t       PacketNumber     = 0;
 uint8_t       NextFrequency    = 100;
 uint8_t       ThisFrequency    = 99;
-char          AckPayLoad[15];                     //    Where to put received telemetry data
-uint8_t       SizeOfAckPayLoad;
+
+struct Payload{   // heer
+    float volt;
+    float ReceiverFirmwareVersion;
+    float CurrentAltitude;
+};
+
+Payload AckPayload;
+
+uint8_t       AckPayloadSize = sizeof (AckPayload);
+
+
 uint16_t      SendBuffer[MaxDataTransferred];     //    Data to send to rx (16 words)
 uint16_t      ShownBuffer[MaxDataTransferred];    //    Data shown before
 uint16_t      LastBuffer[CHANNELSUSED + 1];       //    Used to spot any change
@@ -361,7 +371,7 @@ bool      SingleModelFlag = false;
 char      ModelsFile[]    = "models.dat";
 bool      ModelsFileOpen  = false;
 bool      USE_INA219      = false;
-uint8_t      BindingNow      = 0;
+uint8_t   BindingNow      = 0;
 int       BindingTimer    = 0;
 bool      BoundFlag       = false;
 int       PipeTimeout     = 0;
@@ -2471,7 +2481,6 @@ void setup()
     LastDogKick = millis(); // needed? - yes!
 #endif
     StartInactvityTimeout();
-    SizeOfAckPayLoad     = sizeof (AckPayLoad);   // in order to refer to this externally 
     SizeOfCompressedData = sizeof (CompressedData);
 }
 
@@ -3722,7 +3731,7 @@ void SendModelFile()
         if (Radio1.write(&Fbuffer, BUFFERSIZE + 12)) { // Send part of file
             delay(100);                                // allow time for receive and write
             if (Radio1.isAckPayloadAvailable()) {
-                Radio1.read(&AckPayLoad, SizeOfAckPayLoad);
+                Radio1.read(&AckPayload, AckPayloadSize);
             }
         }
         else {
@@ -5372,45 +5381,57 @@ void ReadSwitches()
 }
 
 /************************************************************************************************************/
-
-void ReadExtraData()
+void ParseAckPayload()
 {
-    float alt;
-    switch (AckPayLoad[0]) {
-        case 'A':
-            strcpy(ModelAltitude, &AckPayLoad[1]); // Altitude
-            alt = atof(ModelAltitude);
-            if (alt > MaxAlt) {
-                MaxAlt = alt;
-                dtostrf(MaxAlt, 1, 0, MaxAltitude);
-            }
-            break;
-        case 'v': // Volts
-            VoltsDetected = false;
-            if (atoi(&AckPayLoad[1]) > 0) {
-                strcpy(ModelVolts, &AckPayLoad[1]);
-                VoltsDetected = true;
-            }
-            break;
-        case 'R': // Roll
-            strcpy(ModelRoll, &AckPayLoad[1]);
-            break;
-        case 'P': // Pitch
-            strcpy(ModelPitch, &AckPayLoad[1]);
-            break;
-        case 'Y': // Yaw
-            strcpy(ModelYaw, &AckPayLoad[1]);
-            break;
-        case 'V':
-            strcpy(ModelVersionNumber, &AckPayLoad[1]); // Software version number
-            break;
-        // case 'M':   // redundant now ...          
-        //    break;
-        // case 'D':  
-        //    break;
-        default:
-            break;
-    }
+    char na[] = "N/A";
+
+     dtostrf(AckPayload.ReceiverFirmwareVersion,2,2,ModelVersionNumber);  // Get receiver software version number
+     VoltsDetected = false;
+      if (AckPayload.volt>0)                                               // zero volts means not available
+      {
+            dtostrf(AckPayload.volt,2,2,ModelVolts);                       // Get receiver battery volts, if available.
+            VoltsDetected = true;
+      }            
+      if (AckPayload.CurrentAltitude>0)
+      {
+            dtostrf(AckPayload.CurrentAltitude,0,0,ModelAltitude);
+      } else 
+      {
+            strcpy(ModelAltitude,na);
+      }
+
+
+ //   switch (AckPayLoad[0]) {
+ //       case 'A':
+ //           strcpy(ModelAltitude, &AckPayLoad[1]); // Altitude
+ //           alt = atof(ModelAltitude);
+ //           if (alt > MaxAlt) {
+ //               MaxAlt = alt;
+ //               dtostrf(MaxAlt, 1, 0, MaxAltitude);
+ //           }
+ //           break;
+ //       case 'v': // Volts
+  //          VoltsDetected = false;
+  //          if (atoi(&AckPayLoad[1]) > 0) {
+  //              strcpy(ModelVolts, &AckPayLoad[1]);
+  //              VoltsDetected = true;
+  //          }
+  //          break;
+  //      case 'R': // Roll
+  //          strcpy(ModelRoll, &AckPayLoad[1]);
+  //          break;
+  //      case 'P': // Pitch
+  //          strcpy(ModelPitch, &AckPayLoad[1]);
+  //          break;
+  //      case 'Y': // Yaw
+  //          strcpy(ModelYaw, &AckPayLoad[1]);
+  //          break;
+  //      case 'V':
+  //          strcpy(ModelVersionNumber, &AckPayLoad[1]); // Software version number
+  //          break;
+  //      default:
+  //          break;
+    // }
 }
 
 /************************************************************************************************************/
