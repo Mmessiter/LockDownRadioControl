@@ -1,4 +1,4 @@
-#define RXVERSIONNUMBER 1     // Oct 1st 2021
+#define RXVERSIONNUMBER 1 // Oct 1st 2021
 
 // #define DEBUG
 // #define DB_SENSORS
@@ -7,11 +7,11 @@
 // #define DB_FAILSAFE
 // #define SECOND_TRANSCEIVER
 
-#define RECEIVE_TIMEOUT 50       // 15 milliseconds was too short 
+#define RECEIVE_TIMEOUT 50 // 15 milliseconds was too short
 #define PacketsPerHop   20
 #define CHANNELSUSED    16
 #define SERVOSUSED      10
-#define SBUSRATE        10       // SBUS frame every 10 milliseconds
+#define SBUSRATE        10 // SBUS frame every 10 milliseconds
 #define SBUSPORT        Serial3
 
 bool USE_BMP280  = false; //  Pressure BMP280
@@ -28,7 +28,7 @@ bool USE_MPU6050 = false; //  Gyro MPU6050
 #define COMPRESSEDWORDS   UNCOMPRESSEDWORDS * 3 / 4 // = 16 WORDS  with no extra
 
 /** Features List
- * - WORKS ON TEENSY 4.0 
+ * - WORKS ON TEENSY 4.0
  * - Detects and uses INA219 to read volts
  * - Detects and uses uses MPU6050 gyro
  * - Detects and uses BMP280 pressure sensor for altitude
@@ -65,12 +65,12 @@ bool USE_MPU6050 = false; //  Gyro MPU6050
  * | 23    | IRQ2 | (FOR RADIO2)
  */
 
-#include "SBUS.h"
 #include <SPI.h>
 #include <RF24.h>
 #include <Servo.h>
 #include <Wire.h>
 #include <EEPROM.h>
+#include <SBUS.h>
 #include <Adafruit_INA219.h>
 #include <BMP280_DEV.h>
 #include <Adafruit_Sensor.h>
@@ -87,16 +87,18 @@ bool USE_MPU6050 = false; //  Gyro MPU6050
 SimpleKalmanFilter RollRateKalman(KK, KK, 0.001);
 SimpleKalmanFilter PitchRateKalman(KK, KK, 0.001);
 SimpleKalmanFilter YawRateKalman(KK, KK, 0.001);
-uint16_t           BNO055_SAMPLERATE_DELAY_MS = 100;
-Adafruit_BNO055    BNO055_Cheapo              = Adafruit_BNO055(55, 0x29); // Cheapo version
-Adafruit_BNO055    BNO055_Adafruit            = Adafruit_BNO055(55, 0x28); // Adafruit version
-sensors_event_t    orientationData, angVelocityData;
-Adafruit_INA219    ina219;
-BMP280_DEV         bmp280;
-MPU6050            mpu6050(Wire);
-Servo              MCMServo[SERVOSUSED];
 
-byte PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 16}; // ten now, last 6 only via sbus
+Adafruit_BNO055 BNO055_sensor[2] = {
+    Adafruit_BNO055(55, BNO055_ADDRESS_A), // Adafruit version
+    Adafruit_BNO055(55, BNO055_ADDRESS_B)  // Cheapo version
+};
+sensors_event_t orientationData, angVelocityData;
+Adafruit_INA219 ina219;
+BMP280_DEV      bmp280;
+MPU6050         mpu6050(Wire);
+Servo           MCMServo[SERVOSUSED];
+
+uint8_t PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 16}; // ten now, last 6 only via sbus
 
 #define FHSS_RESCUE_BOTTOM 118
 #define FHSS_RESCUE_TOP    125
@@ -104,15 +106,13 @@ byte PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 16}; // ten now, last 6 o
 #define pinCE1  9  // NRF1
 #define pinCSN1 10 // NRF1
 
- #ifdef SECOND_TRANSCEIVER
+#ifdef SECOND_TRANSCEIVER
     #define pinCSN2 20 // NRF2
     #define pinCE2  21 // NRF2
 #endif
 
 #define FAILSAFE_TIMEOUT 2000
 #define LED_PIN          13
-
-
 
 #define AEROPLANE  1
 #define HELICOPTER 2
@@ -125,31 +125,32 @@ uint64_t NewPipe  = 0;
 uint64_t OldPipe  = 0;
 int      tt;
 
-SBUS     MySbus(SBUSPORT);
-RF24     Radio1(pinCE1, pinCSN1);
+SBUS MySbus(SBUSPORT);
+RF24 Radio1(pinCE1, pinCSN1);
 
 #ifdef SECOND_TRANSCEIVER
-    RF24     Radio2(pinCE2, pinCSN2);
+RF24 Radio2(pinCE2, pinCSN2);
 #endif
 
-RF24*     CurrentRadio =&Radio1;
+RF24* CurrentRadio = &Radio1;
 
 Compress compress;
 // ******** AckPayload Stucture using only 8 bit values for economy and better speed **********************************
-struct Payload {                                                   // Structure for data returned to transmitter.
-        uint8_t volt = 0;                                          // Voltage of RX battery, if measured.
-        uint8_t ReceiverFirmwareVersion = RXVERSIONNUMBER;         // Firmware version number.
-        uint8_t CurrentAltitude = 0;                               // Altitude, if measured.
-        uint8_t ReportedPitch=0;
-        uint8_t ReportedRoll=0;
-        uint8_t ReportedYaw=0;
-};  
+struct Payload
+{                                                      // Structure for data returned to transmitter.
+    uint8_t volt                    = 0;               // Voltage of RX battery, if measured.
+    uint8_t ReceiverFirmwareVersion = RXVERSIONNUMBER; // Firmware version number.
+    uint8_t CurrentAltitude         = 0;               // Altitude, if measured.
+    uint8_t ReportedPitch           = 0;
+    uint8_t ReportedRoll            = 0;
+    uint8_t ReportedYaw             = 0;
+};
 Payload AckPayload;
-uint8_t AckPayloadSize = sizeof (AckPayload);                    // Size for later externs if needed etc.
-// *****************************************************************************************************  
+uint8_t AckPayloadSize = sizeof(AckPayload); // Size for later externs if needed etc.
+// *****************************************************************************************************
 
-byte PacketNumber;
-byte NextFrequency;
+uint8_t PacketNumber;
+uint8_t NextFrequency;
 
 uint16_t ReceivedData[UNCOMPRESSEDWORDS]; //  20  words
 uint16_t PreviousData[UNCOMPRESSEDWORDS];
@@ -162,27 +163,21 @@ int    SearchStartTime      = 0;
 int    StillSearchingTime   = 0;
 double LastVoltMoment       = 0;
 
-float PitchRate; // Filtered versions
-float RollRate;
-float YawRate;
-float Pitch;
-float Roll;
-float Yaw;
+/**
+ * Generic struct for 9 Degrees of Freedom data
+ */
+struct DOF9
+{
+    float PitchRate; /** PitchRate */
+    float RollRate;  /** RollRate */
+    float YawRate;   /** YawRate */
+    float Pitch;     /** Pitch */
+    float Roll;      /** Roll */
+    float Yaw;       /** Yaw */
+};
+
+DOF9  dof9_data = DOF9(); /** The 9 DOF data. This object is used to cache and filter the data from the IMU. */
 float Temperature6050;
-
-float MeasuredPitchRate; // Measured versions
-float MeasuredRollRate;
-float MeasuredYawRate;
-float MeasuredPitch;
-float MeasuredRoll;
-float MeasuredYaw;
-
-float OldPitchRate = 0; // Previous versions
-float OldRollRate  = 0;
-float OldYawRate   = 0;
-float OldPitch     = 0;
-float OldRoll      = 0;
-float OldYaw       = 0;
 
 float RollRateIntegral    = 0;
 float OldRollRateIntegral = 0;
@@ -197,55 +192,51 @@ float OldPitchRateError    = 0;
 float temperature280, pressure, altitude, StartAltitude;
 bool  Swash_DisplayStarted = false;
 
-float Swash_P              = 0;
-float Swash_I              = 0;
-float Swash_D              = 0;
-float yawp                 = 0;
-float yawi                 = 0;
-float yawd                 = 0;
-byte  ModelType            = 0; // 1=Aeroplane 2=Heli 3=Quadcopter 4=Hexacopter 5=Octocopter
-byte  Throttle[8];
-float TargetYawRate       = 0;
-float YawError            = 0;
-float YawRateCorrection   = 0;
-float TargetRollRate      = 0;
-float TargetPitchRate     = 0;
-float RollRateCorrection  = 0;
-float PitchRateCorrection = 0;
+/** Generic struct to hold component-specific PID values. */
+struct PID
+{
+    float P = 0; /** Proportional value */
+    float I = 0; /** Integral value */
+    float D = 0; /** Derivative value */
+};
+PID SwashPID = PID(); /** Used to stabilize Roll & Pitch Rates */
+PID YawPID   = PID(); /** Used to stabilize Yaw Rate */
+
+uint8_t ModelType = 0; // 1=Aeroplane 2=Heli 3=Quadcopter 4=Hexacopter 5=Octocopter
 
 int          LoopsPS      = 0;
 int          TimeThis     = 0;
 int          MainLoopTime = 0;
 long int     DeltaTime    = 0;
-byte         BindNow      = 0;
+uint8_t      BindNow      = 0;
 bool         BoundFlag    = false;
-byte         SavedPipeAddress[8];
-int          BindOKTimer    = 0;
-bool         SaveNewBind    = true;
-bool         ServosAttached = false;
-float        ReceiverFirmwareVersion    = RXVERSIONNUMBER;
+uint8_t      SavedPipeAddress[8];
+int          BindOKTimer             = 0;
+bool         SaveNewBind             = true;
+bool         ServosAttached          = false;
+float        ReceiverFirmwareVersion = RXVERSIONNUMBER;
 uint16_t     SbusChannels[CHANNELSUSED + 8]; // a few spare
 int          SBUSTimer    = 0;
 bool         FailSaveSafe = false;
 bool         FailSafeChannel[17];
 bool         FailSafeDataLoaded = false;
-byte         ModelNumber        = 0;
+uint8_t      ModelNumber        = 0;
 bool         ModelNumberSaved   = false;
-byte         PowerSetting       = 4;
-byte         DataRate           = 1;
+uint8_t      PowerSetting       = 4;
+uint8_t      DataRate           = 1;
 bool         ReInit             = false;
 unsigned int RX_TimeOut         = RECEIVE_TIMEOUT; // 50 MS by default
 bool         FailSafeSent       = false;
 uint8_t      byte1              = 0;
 uint8_t      byte2              = 0;
-byte         ReconnectAttempts = 0;
-byte         Rnumber            = 1;
+uint8_t      ReconnectAttempts  = 0;
+uint8_t      Rnumber            = 1;
 
 /************************************************************************************************************/
 
-byte EEPROMReadByte(int p_address)
+uint8_t EEPROMReadByte(int p_address)
 {
-    byte bt = EEPROM.read(p_address);
+    uint8_t bt = EEPROM.read(p_address);
     return bt;
 }
 
@@ -253,7 +244,7 @@ byte EEPROMReadByte(int p_address)
 
 void LoadFailSafeData()
 {
-    byte     FS_Offset = 10;
+    uint8_t  FS_Offset = 10;
     uint16_t s[CHANNELSUSED];
 
     for (i = 0; i < CHANNELSUSED; i++) {
@@ -283,26 +274,38 @@ void MapToSBUS()
     }
 }
 
-/************************************************************************************************************/
-
-float DoDeadBand(float tr)
+/**
+ * Apply a deadband to a given float value.
+ * @param target_rate The actual value
+ * @returns The result from applying a deadband to the @p target_rate parameter.
+ * @see DEADBAND macro definition
+ */
+float DoDeadBand(float target_rate)
 {
-    if (tr <= DeadBand && tr >= -DeadBand) tr = 0;
-    if (tr > DeadBand) tr -= DeadBand;
-    if (tr < (-DeadBand)) tr += DeadBand;
-    return tr;
+    if (target_rate <= DeadBand && target_rate >= -DeadBand)
+        target_rate = 0;
+    else if (target_rate > DeadBand)
+        target_rate -= DeadBand;
+    else if (target_rate < -DeadBand)
+        target_rate += DeadBand;
+    return target_rate;
 }
 
-/************************************************************************************************************/
-
-void StabilizeYawRate()
+/**
+ * Stabilize the Yaw Rate based on a margin of error and the Yaw's proportional value
+ * @param TargetYawRate The actual measured value
+ * @returns The resulting "stabilized" Yaw measurement.
+ */
+float StabilizeYawRate(float TargetYawRate)
 {
-    YawError          = (YawRate - TargetYawRate);
-    YawRateCorrection = (YawError * yawp); // P
+    return ((dof9_data.YawRate - TargetYawRate) * YawPID.P); // YawError * YawPID.P
 }
 
-/************************************************************************************************************/
-
+/**
+ * Calculate the Roll Rate Integral based on an ellapsed time and the previously returned value from this function.
+ * @param rre The actual measured value
+ * @returns The resulting integral measurement of Roll Rate.
+ */
 float GetRollRateIntegral(float rre)
 {
     RollRateIntegral    = (rre * DeltaTime) + OldRollRateIntegral;
@@ -310,8 +313,11 @@ float GetRollRateIntegral(float rre)
     return RollRateIntegral;
 }
 
-/************************************************************************************************************/
-
+/**
+ * Calculate the Pitch Rate Integral based on an ellapsed time and the previously returned value from this function.
+ * @param rre The actual measured value
+ * @returns The resulting integral measurement of Pitch Rate.
+ */
 float GetPitchRateIntegral(float rre)
 {
     PitchRateIntegral    = (rre * DeltaTime) + OldPitchRateIntegral;
@@ -319,54 +325,60 @@ float GetPitchRateIntegral(float rre)
     return PitchRateIntegral;
 }
 
-/************************************************************************************************************/
-
+/**
+ * Calculate the Roll Rate Derivative based on an ellapsed time and the previously value given to this function.
+ * @param rre The actual measured value
+ * @returns The resulting deviation measurement of Roll Rate.
+ */
 float GetRollRateDerivative(float rre)
 {
-    RollRateDerivative = (rre - OldRollRateError) / DeltaTime;
-    OldRollRateError   = rre;
+    float RollRateDerivative = (rre - OldRollRateError) / DeltaTime;
+    OldRollRateError         = rre;
     return RollRateDerivative;
 }
 
-/************************************************************************************************************/
-
+/**
+ * Calculate the Pitch Rate Derivative based on an ellapsed time and the previously value given to this function.
+ * @param rre The actual measured value
+ * @returns The resulting deviation measurement of Pitch Rate.
+ */
 float GetPitchRateDerivative(float rre)
 {
-    PitchRateDerivative = (rre - OldPitchRateError) / DeltaTime;
-    OldPitchRateError   = rre;
+    float PitchRateDerivative = (rre - OldPitchRateError) / DeltaTime;
+    OldPitchRateError         = rre;
     return PitchRateDerivative;
 }
 
-/************************************************************************************************************/
-
-void StabilizeRollRate()
+/**
+ * Stabilize the Roll Rate Rate based on a margin of error and the Roll Rate's PID
+ * (Proportional, Integral, and Derivative) values.
+ * @param TargetRollRate The actual measured value
+ * @returns The resulting "stabilized" Roll Rate measurement.
+ * @see GetRollRateIntegral(), GetRollRateDerivative(), MAXCORRECTION
+ */
+float StabilizeRollRate(float TargetRollRate)
 {
-    float RollRateError = 0;
-    float I;
-    float D;
-    RollRateError      = RollRate - TargetRollRate;
-    RollRateCorrection = RollRateError * Swash_P; // P
-    I                  = GetRollRateIntegral(RollRateError);
-    RollRateCorrection += I * Swash_I; // I
-    D = GetRollRateDerivative(RollRateError);
-    RollRateCorrection += D * Swash_D; // D
-    RollRateCorrection = constrain(RollRateCorrection, -MAXCORRECTION, MAXCORRECTION);
+    float RollRateError      = dof9_data.RollRate - TargetRollRate;
+    float RollRateCorrection = RollRateError * SwashPID.P;                   // P
+    RollRateCorrection += GetRollRateIntegral(RollRateError) * SwashPID.I;   // I
+    RollRateCorrection += GetRollRateDerivative(RollRateError) * SwashPID.D; // D
+    return constrain(RollRateCorrection, -MAXCORRECTION, MAXCORRECTION);
 }
 
-/************************************************************************************************************/
-
-void StabilizePitchRate()
+/**
+ * Stabilize the Pitch Rate based on a margin of error and the Pitch Rate's PID
+ * (Proportional, Integral, and Derivative) values.
+ * @param TargetPitchRate The actual measured value
+ * @returns The resulting "stabilized" Pitch Rate measurement.
+ * @see GetPitchRateIntegral(), GetPitchRateDerivative(), MAXCORRECTION
+ */
+float StabilizePitchRate(float TargetPitchRate)
 {
-    float PitchRateError = 0;
-    float I;
-    float D;
-    PitchRateError      = (PitchRate - TargetPitchRate);
-    PitchRateCorrection = PitchRateError * Swash_P; // P
-    I                   = GetPitchRateIntegral(PitchRateError);
-    PitchRateCorrection += I * Swash_I; // I
-    D = GetPitchRateDerivative(PitchRateError);
-    PitchRateCorrection += D * Swash_D; // D
-    PitchRateCorrection = constrain(PitchRateCorrection, -MAXCORRECTION, MAXCORRECTION);
+    float PitchRateError      = (dof9_data.PitchRate - TargetPitchRate);
+    float PitchRateCorrection = PitchRateError * SwashPID.P;                    // P
+    PitchRateCorrection += GetPitchRateIntegral(PitchRateError) * SwashPID.I;   // I
+    PitchRateCorrection += GetPitchRateDerivative(PitchRateError) * SwashPID.D; // D
+    return constrain(PitchRateCorrection, -MAXCORRECTION, MAXCORRECTION);
 }
 
 /************************************************************************************************************/
@@ -379,11 +391,11 @@ void ShowPid()
         // Serial.print ("LoopsPS = ");
         // Serial.println(LoopsPS);
         Serial.print("Swash_P: ");
-        Serial.println(Swash_P);
+        Serial.println(SwashPID.P);
         Serial.print("Swash_I: ");
-        Serial.println(Swash_I, 10);
+        Serial.println(SwashPID.I, 10);
         Serial.print("Swash_D: ");
-        Serial.println(Swash_D);
+        Serial.println(SwashPID.D);
         Serial.print("RollRate: ");
         Serial.println(RollRate);
         Serial.print("DeltaTime: ");
@@ -399,8 +411,8 @@ void ShowPid()
 
 void MoveServos()
 {
-    int j     = 0;
-    int k     = 0;
+    int j = 0;
+    int k = 0;
     MySbus.write(&SbusChannels[0]);
     if (1) { //(ModelType==AEROPLANE ){                         // !! fix Later ***************************************
         for (j = 0; j < SERVOSUSED; j++) {
@@ -416,21 +428,22 @@ void MoveServos()
     }
     // ************************** QUADZONE **************************************
     if (ModelType == QUADCOPTER) {
+        uint8_t Throttle[4];
 
-        TargetRollRate  = (map((ReceivedData[0]), 0, 180, -STICKSRATE, STICKSRATE)) / 100; // get Aileron stick
-        TargetRollRate  = DoDeadBand(TargetRollRate);
-        TargetPitchRate = (map((ReceivedData[1]), 0, 180, -STICKSRATE, STICKSRATE)) / 100; // get elevator stick
-        TargetPitchRate = DoDeadBand(TargetPitchRate);
-        TargetYawRate   = (map((ReceivedData[3]), 0, 180, -STICKSRATE, STICKSRATE)) / 100; // get Rudder stick
-        TargetYawRate   = DoDeadBand(TargetYawRate);
+        float TargetRollRate  = (map((ReceivedData[0]), 0, 180, -STICKSRATE, STICKSRATE)) / 100; // get Aileron stick
+        TargetRollRate        = DoDeadBand(TargetRollRate);
+        float TargetPitchRate = (map((ReceivedData[1]), 0, 180, -STICKSRATE, STICKSRATE)) / 100; // get elevator stick
+        TargetPitchRate       = DoDeadBand(TargetPitchRate);
+        float TargetYawRate   = (map((ReceivedData[3]), 0, 180, -STICKSRATE, STICKSRATE)) / 100; // get Rudder stick
+        TargetYawRate         = DoDeadBand(TargetYawRate);
 
         for (k = 0; k <= 3; k++) {
             Throttle[k] = ReceivedData[2];
         } // get throttle stick
 
-        StabilizeRollRate();
-        StabilizePitchRate();
-        StabilizeYawRate();
+        float RollRateCorrection  = StabilizeRollRate(TargetRollRate);
+        float PitchRateCorrection = StabilizePitchRate(TargetPitchRate);
+        float YawRateCorrection   = StabilizeYawRate(TargetYawRate);
 
         ShowPid();
 
@@ -534,7 +547,6 @@ void InitCurrentRadio()
     CurrentRadio->enableAckPayload();       // needed
     CurrentRadio->maskIRQ(1, 1, 1);         // no interrupts - at the moment - (line *IS* connected)
     CurrentRadio->enableDynamicPayloads();  // needed
-    CurrentRadio->setAddressWidth(5);       // was 4, now 5 in RX too
     CurrentRadio->setCRCLength(RF24_CRC_8); // could be 16 or disabled
 
     switch (PowerSetting) {
@@ -547,16 +559,11 @@ void InitCurrentRadio()
         case 3:
             CurrentRadio->setPALevel(RF24_PA_HIGH);
             break;
-        case 4:
-            CurrentRadio->setPALevel(RF24_PA_MAX);
-            break;
         default:
+            CurrentRadio->setPALevel(RF24_PA_MAX);
             break;
     }
     switch (DataRate) {
-        case 1:
-            CurrentRadio->setDataRate(RF24_250KBPS);
-            break;
         case 2:
             CurrentRadio->setDataRate(RF24_1MBPS);
             break;
@@ -564,6 +571,7 @@ void InitCurrentRadio()
             CurrentRadio->setDataRate(RF24_2MBPS);
             break;
         default:
+            CurrentRadio->setDataRate(RF24_250KBPS);
             break;
     }
     CurrentRadio->openReadingPipe(1, ThisPipe);
@@ -574,72 +582,72 @@ void InitCurrentRadio()
 
 void Reconnect()
 {
-    SearchStartTime = millis();
+    SearchStartTime   = millis();
     ReconnectAttempts = 0;
-    while (!Connected) 
-        {
+    while (!Connected)
+    {
         StillSearchingTime = millis() - SearchStartTime;
         ReconnectAttempts++;
 
-#ifdef SECOND_TRANSCEIVER                      // This part swaps to other transceiver if connection lost and two fitted 
-        if (ReconnectAttempts > 2)             // TODO: To be checked with two ML01DP5 tranceivers...
-            {
+#ifdef SECOND_TRANSCEIVER          // This part swaps to other transceiver if connection lost and two fitted
+        if (ReconnectAttempts > 2) // TODO: To be checked with two ML01DP5 tranceivers...
+        {
             ReconnectAttempts = 0;
             CurrentRadio->stopListening();
-            if (Rnumber == 1) 
-                {
+            if (Rnumber == 1)
+            {
                 Rnumber      = 2;
-                CurrentRadio= &Radio2;       
-                }
-            else 
-                {
+                CurrentRadio = &Radio2;
+            }
+            else
+            {
                 Rnumber      = 1;
                 CurrentRadio = &Radio1;
-                }
             }
+        }
 #endif
 
 #ifdef DEBUG
-            Serial.print("Reconnection attempt: ");
-            Serial.print(ReconnectAttempts);
-            Serial.print("  Radio: ");
-            Serial.println(Rnumber);
+        Serial.print("Reconnection attempt: ");
+        Serial.print(ReconnectAttempts);
+        Serial.print("  Radio: ");
+        Serial.println(Rnumber);
 #endif
-            i = FHSS_RESCUE_BOTTOM;
-            while (!CurrentRadio->available() && i <= FHSS_RESCUE_TOP)  // This loop exits as soon as connection is detected.
-                { 
-                CurrentRadio->stopListening();
-                CurrentRadio->setChannel(i);
-                CurrentRadio->startListening();
-                delay(3);                                                // was 4, but 3 now seems good and is 25% faster?!
-                i++;
-                }
-        if (CurrentRadio->available()) 
-            {
-            Connected          = true;                                   // Connection is re-established so return, smiling!
+        i = FHSS_RESCUE_BOTTOM;
+        while (!CurrentRadio->available() && i <= FHSS_RESCUE_TOP) // This loop exits as soon as connection is detected.
+        {
+            CurrentRadio->stopListening();
+            CurrentRadio->setChannel(i);
+            CurrentRadio->startListening();
+            delay(3); // was 4, but 3 now seems good and is 25% faster?!
+            i++;
+        }
+        if (CurrentRadio->available())
+        {
+            Connected          = true; // Connection is re-established so return, smiling!
             FailSafeSent       = false;
-            ReconnectAttempts = 0;
+            ReconnectAttempts  = 0;
             StillSearchingTime = 0;
 #ifdef DEBUG
             Serial.println("*****************************************************************************************************************");
 #endif
-            }
-            else if (StillSearchingTime >= FAILSAFE_TIMEOUT) 
-                    {
-                    if (!FailSafeSent) 
-                        { 
-                        FailSafe();
-                        FailSafeSent       = true;                       // Once is enough
-                        }
-                    }
         }
+        else if (StillSearchingTime >= FAILSAFE_TIMEOUT)
+        {
+            if (!FailSafeSent)
+            {
+                FailSafe();
+                FailSafeSent = true; // Once is enough
+            }
+        }
+    }
 }
 
 /************************************************************************************************************/
 
 void LoadAckPayload()
 {
-  // todo!
+    // todo!
 }
 
 /************************************************************************************************************/
@@ -649,11 +657,11 @@ bool ReadData()
     uint16_t CompressedData[COMPRESSEDWORDS]; // 30 bytes -> 40 bytes when uncompressed
     Connected = false;
     if (CurrentRadio->available()) {
-       // LoadAckPayload(); // it's now loaded by dosensors
+        // LoadAckPayload(); // it's now loaded by dosensors
         Connected            = true;
         LastConnectionMoment = millis();
-        CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize);      // Send telemetry (actual length plus 0)
-        CurrentRadio->read(&CompressedData, sizeof(CompressedData));       // Get Data
+        CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize);    // Send telemetry (actual length plus 0)
+        CurrentRadio->read(&CompressedData, sizeof(CompressedData));      // Get Data
         compress.DeComp(ReceivedData, CompressedData, UNCOMPRESSEDWORDS); // my library to decompress !
         FailSafeDataLoaded = false;
         MapToSBUS();
@@ -663,7 +671,7 @@ bool ReadData()
 
 /************************************************************************************************************/
 
-void EEPROMUpdateByte(int p_address, byte p_value)
+void EEPROMUpdateByte(int p_address, uint8_t p_value)
 {
     EEPROM.update(p_address, p_value);
 }
@@ -698,13 +706,11 @@ void AttachServos()
 
 /************************************************************************************************************/
 
-
-
 /************************************************************************************************************/
 
 void SetNewPipe()
 {
-        CurrentRadio->openReadingPipe(1, ThisPipe);
+    CurrentRadio->openReadingPipe(1, ThisPipe);
 }
 
 /************************************************************************************************************/
@@ -718,11 +724,11 @@ void BindModel()
         }
     }
     CurrentRadio->stopListening();
-    SetNewPipe();               // No Longer InitCurrentRadio(); which was here   
+    SetNewPipe(); // No Longer InitCurrentRadio(); which was here
     BoundFlag   = true;
     BindNow     = 0;
     SaveNewBind = false;
-    AttachServos();             // AND SBUS!!!
+    AttachServos(); // AND SBUS!!!
 #ifdef DB_BIND
     Serial.println("BINDING NOW");
 #endif
@@ -743,7 +749,7 @@ void RebuildFlags(bool* f, uint16_t tb)
 void CheckParams()
 {
 
-    byte     mn       = 0;
+    uint8_t  mn       = 0;
     uint16_t TwoBytes = 0;
 
     PacketNumber  = (ReceivedData[CHANNELSUSED + 1]);
@@ -751,16 +757,16 @@ void CheckParams()
 
     switch (PacketNumber) {
         case 3:
-            Swash_P = ReceivedData[CHANNELSUSED + 3];
-            Swash_P /= 200;
+            SwashPID.P = ReceivedData[CHANNELSUSED + 3];
+            SwashPID.P /= 200;
             break;
         case 4:
-            Swash_I = ReceivedData[CHANNELSUSED + 3];
-            Swash_I /= 1000000000;
+            SwashPID.I = ReceivedData[CHANNELSUSED + 3];
+            SwashPID.I /= 1000000000;
             break;
         case 5:
-            Swash_D = ReceivedData[CHANNELSUSED + 3];
-            Swash_D *= 900;
+            SwashPID.D = ReceivedData[CHANNELSUSED + 3];
+            SwashPID.D *= 900;
             break;
         case 6:
             if (BoundFlag) {
@@ -778,14 +784,14 @@ void CheckParams()
             DataRate = ReceivedData[CHANNELSUSED + 3];
             break;
         case 9:
-            yawp = ReceivedData[CHANNELSUSED + 3];
-            yawp /= 100;
+            YawPID.P = ReceivedData[CHANNELSUSED + 3];
+            YawPID.P /= 100;
             break;
         case 10:
-            yawi = ReceivedData[CHANNELSUSED + 3];
+            YawPID.I = ReceivedData[CHANNELSUSED + 3];
             break;
         case 11:
-            yawd = ReceivedData[CHANNELSUSED + 3];
+            YawPID.D = ReceivedData[CHANNELSUSED + 3];
             break;
         case 12:
             ModelType = ReceivedData[CHANNELSUSED + 3];
@@ -809,7 +815,7 @@ void CheckParams()
         case 17:
             ReInit = bool(ReceivedData[CHANNELSUSED + 3]); // must reinitialise the port if changed settings
             if (ReInit) {
-               // InitCurrentRadio(); // seems not needed - out now, but must investigate!
+                // InitCurrentRadio(); // seems not needed - out now, but must investigate!
             }
             break;
         default:
@@ -861,7 +867,7 @@ void DoSensors()
             AckPayload.CurrentAltitude = int(altitude - StartAltitude);
     }
     if (USE_INA219) {
-        AckPayload.volt=ina219.getBusVoltage_V();
+        AckPayload.volt = ina219.getBusVoltage_V();
     }
 #ifdef DB_SENSORS
     Sensors_Status(); // look if interested
@@ -890,21 +896,21 @@ FASTRUN void ReceiveData()
 
 FASTRUN void KalmanFilter()
 {
-    RollRate  = RollRateKalman.updateEstimate(RollRate);
-    PitchRate = PitchRateKalman.updateEstimate(PitchRate);
-    YawRate   = YawRateKalman.updateEstimate(YawRate);
+    dof9_data.RollRate  = RollRateKalman.updateEstimate(dof9_data.RollRate);
+    dof9_data.PitchRate = PitchRateKalman.updateEstimate(dof9_data.PitchRate);
+    dof9_data.YawRate   = YawRateKalman.updateEstimate(dof9_data.YawRate);
 }
 
 /************************************************************************************************************/
 
 void ReadBNOValues()
 {
-    Yaw       = orientationData.orientation.x;
-    Roll      = orientationData.orientation.y;
-    Pitch     = orientationData.orientation.z;
-    PitchRate = -angVelocityData.gyro.x;
-    RollRate  = -angVelocityData.gyro.y;
-    YawRate   = -angVelocityData.gyro.z;
+    dof9_data.Yaw       = orientationData.orientation.x;
+    dof9_data.Roll      = orientationData.orientation.y;
+    dof9_data.Pitch     = orientationData.orientation.z;
+    dof9_data.PitchRate = -angVelocityData.gyro.x;
+    dof9_data.RollRate  = -angVelocityData.gyro.y;
+    dof9_data.YawRate   = -angVelocityData.gyro.z;
     KalmanFilter();
 }
 
@@ -913,35 +919,31 @@ void ReadBNOValues()
 void Get_Mpu6050()
 {
     mpu6050.update();
-    PitchRate = mpu6050.getGyroX();
-    RollRate  = mpu6050.getGyroY();
-    YawRate   = mpu6050.getGyroZ();
-    Pitch     = mpu6050.getAngleX();
-    Roll      = mpu6050.getAngleY();
-    Yaw       = mpu6050.getAngleZ();
-    
-    AckPayload.ReportedPitch = Pitch; // These values are reported to Transmitter
-    AckPayload.ReportedRoll  = Roll;
-    AckPayload.ReportedYaw   = Yaw;
+    dof9_data.PitchRate = mpu6050.getGyroX();
+    dof9_data.RollRate  = mpu6050.getGyroY();
+    dof9_data.YawRate   = mpu6050.getGyroZ();
+    dof9_data.Pitch     = mpu6050.getAngleX();
+    dof9_data.Roll      = mpu6050.getAngleY();
+    dof9_data.Yaw       = mpu6050.getAngleZ();
 
-     KalmanFilter();
+    AckPayload.ReportedPitch = dof9_data.Pitch; // These values are reported to Transmitter
+    AckPayload.ReportedRoll  = dof9_data.Roll;
+    AckPayload.ReportedYaw   = dof9_data.Yaw;
+
+    KalmanFilter();
 }
 
-/************************************************************************************************************/
-
-void Get_BNO055_Cheapo()
+/**
+ * @brief Get orientation and angular velocity event data from a BNO055 sensor.
+ * @param use_cheapo
+ * - `true` selects the "cheaply" sourced BNO055 sensor.
+ * - `false` selects the BNO055 sensor sourced from Adafruit.
+ * @see ReadBNOValues()
+ */
+void Get_BNO055(const bool use_cheapo)
 {
-    BNO055_Cheapo.getEvent(&orientationData, Adafruit_BNO055::VECTOR_EULER);
-    BNO055_Cheapo.getEvent(&angVelocityData, Adafruit_BNO055::VECTOR_GYROSCOPE);
-    ReadBNOValues();
-}
-
-/************************************************************************************************************/
-
-void Get_BNO055_Adafruit()
-{
-    BNO055_Adafruit.getEvent(&orientationData, Adafruit_BNO055::VECTOR_EULER);
-    BNO055_Adafruit.getEvent(&angVelocityData, Adafruit_BNO055::VECTOR_GYROSCOPE);
+    BNO055_sensor[use_cheapo].getEvent(&orientationData, Adafruit_BNO055::VECTOR_EULER);
+    BNO055_sensor[use_cheapo].getEvent(&angVelocityData, Adafruit_BNO055::VECTOR_GYROSCOPE);
     ReadBNOValues();
 }
 
@@ -1027,12 +1029,12 @@ void setup()
     Serial.begin(9600);
     Wire.begin();
     ScanI2c(); // see what's connected
-    if (USE_BNO055) BNO055_Cheapo.begin();
-    if (USE_BNO055A) BNO055_Adafruit.begin();
+    if (USE_BNO055) BNO055_sensor[1].begin();
+    if (USE_BNO055A) BNO055_sensor[0].begin();
 
 #ifdef SECOND_TRANSCEIVER
     CurrentRadio = &Radio2;
-    InitCurrentRadio();   // initialise BOTH at setup, if two.
+    InitCurrentRadio(); // initialise BOTH at setup, if two.
 #endif
 
     CurrentRadio = &Radio1;
@@ -1081,7 +1083,7 @@ void setup()
 void SaveFailSafeData()
 {
     // FailSafe data occupies EEPROM from offset 10 to 26
-    byte FS_Offset = 10;
+    uint8_t FS_Offset = 10;
     for (i = 0; i < CHANNELSUSED; i++) {
         EEPROMUpdateByte(i + FS_Offset, (map(ReceivedData[i], MINMICROS, MAXMICROS, 0, 180))); // save servo positions lower res: 8 bits
     }
@@ -1147,16 +1149,16 @@ void DoBinding()
 void loop()
 {
     ReceiveData();
-    
+
     if (BoundFlag) {
-       
-        if (Connected) {    
-             if (millis() - SBUSTimer >= SBUSRATE) {
+
+        if (Connected) {
+            if (millis() - SBUSTimer >= SBUSRATE) {
                 DeltaTime = micros() - DeltaTime;
-                SBUSTimer = millis();            // timer starts before send starts....
+                SBUSTimer = millis(); // timer starts before send starts....
                 MoveServos();
-                if (USE_BNO055A) Get_BNO055_Adafruit();
-                if (USE_BNO055)  Get_BNO055_Cheapo();
+                if (USE_BNO055A) Get_BNO055(false);
+                if (USE_BNO055) Get_BNO055(true);
                 if (USE_MPU6050) Get_Mpu6050();
             }
         }
@@ -1164,7 +1166,7 @@ void loop()
         MainLoopTime = millis();
         DeltaTime    = micros();
     }
-    
+
     else {
         DoBinding();
     }
