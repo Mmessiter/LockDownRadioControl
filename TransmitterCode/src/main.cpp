@@ -1,4 +1,4 @@
-#define TXVERSIONNUMBER 66.00 //   Oct 1st 2021 Malcolm Messiter
+#define TXVERSIONNUMBER 1  //   Oct 1st 2021 Malcolm Messiter
 
 #define USE_WATCHDOG          // Enable when developing only  ??
 #define WATCHDOGTIMEOUT 10000 // 10 Seconds before reboot (32ms -> 500 seconds)
@@ -242,15 +242,19 @@ uint8_t       PacketNumber     = 0;
 uint8_t       NextFrequency    = 100;
 uint8_t       ThisFrequency    = 99;
 
+
+// ************************************* AckPayload structure ******************************************************
 struct Payload{   // heer
-    float volt;
-    float ReceiverFirmwareVersion;
-    float CurrentAltitude;
+    uint8_t volt;
+    uint8_t ReceiverFirmwareVersion;
+    uint8_t CurrentAltitude;
+    uint8_t Pitch;
+    uint8_t Roll;
+    uint8_t Yaw;
 };
-
 Payload AckPayload;
-
-uint8_t       AckPayloadSize = sizeof (AckPayload);
+uint8_t AckPayloadSize = sizeof (AckPayload);
+// *****************************************************************************************************************
 
 
 uint16_t      SendBuffer[MaxDataTransferred];     //    Data to send to rx (16 words)
@@ -375,7 +379,7 @@ uint8_t   BindingNow      = 0;
 int       BindingTimer    = 0;
 bool      BoundFlag       = false;
 int       PipeTimeout     = 0;
-float     VersionNumber   = TXVERSIONNUMBER;
+uint8_t   VersionNumber   = TXVERSIONNUMBER;
 bool      Switch[8];
 uint8_t      SwitchNumber[8] = {Switch0, Switch1, Switch2, Switch3, Switch4, Switch5, Switch6, Switch7};
 
@@ -1275,7 +1279,7 @@ void ShowComms()
 
 
     if (CurrentView == FrontView || CurrentView == DataView) {
-        if (millis() - LastShowTime > 2500) {
+        if (millis() - LastShowTime > 1000) {
             ShowNow = true;
         }
     }
@@ -1302,7 +1306,7 @@ void ShowComms()
             strcat(TXBattInfo, Vbuf);
             strcat(TXBattInfo, PerCell);
             if (CurrentView == FrontView) SendText(FrontView_TXBV, TXBattInfo);
-            dtostrf(VersionNumber, 2, 2, Vbuf); // TX Version Number
+            Str(Vbuf,VersionNumber,0);                               // TX Version Number
             if (CurrentView == DataView) SendText(DataView_txv, Vbuf);
         }
         if (!LostContactFlag) {
@@ -5383,59 +5387,19 @@ void ReadSwitches()
 /************************************************************************************************************/
 void ParseAckPayload()
 {
-    char na[] = "N/A";
-
-     dtostrf(AckPayload.ReceiverFirmwareVersion,2,2,ModelVersionNumber);  // Get receiver software version number
-     VoltsDetected = false;
+     Str(ModelVersionNumber,AckPayload.ReceiverFirmwareVersion, 0);
+      VoltsDetected = false;
       if (AckPayload.volt>0)                                               // zero volts means not available
-      {
-            dtostrf(AckPayload.volt,2,2,ModelVolts);                       // Get receiver battery volts, if available.
+      {    
+            Str(ModelVolts,AckPayload.volt,0);                             // Get receiver battery volts, if available.
             VoltsDetected = true;
       }            
-      if (AckPayload.CurrentAltitude>0)
-      {
-            dtostrf(AckPayload.CurrentAltitude,0,0,ModelAltitude);
-      } else 
-      {
-            strcpy(ModelAltitude,na);
-      }
-
-
- //   switch (AckPayLoad[0]) {
- //       case 'A':
- //           strcpy(ModelAltitude, &AckPayLoad[1]); // Altitude
- //           alt = atof(ModelAltitude);
- //           if (alt > MaxAlt) {
- //               MaxAlt = alt;
- //               dtostrf(MaxAlt, 1, 0, MaxAltitude);
- //           }
- //           break;
- //       case 'v': // Volts
-  //          VoltsDetected = false;
-  //          if (atoi(&AckPayLoad[1]) > 0) {
-  //              strcpy(ModelVolts, &AckPayLoad[1]);
-  //              VoltsDetected = true;
-  //          }
-  //          break;
-  //      case 'R': // Roll
-  //          strcpy(ModelRoll, &AckPayLoad[1]);
-  //          break;
-  //      case 'P': // Pitch
-  //          strcpy(ModelPitch, &AckPayLoad[1]);
-  //          break;
-  //      case 'Y': // Yaw
-  //          strcpy(ModelYaw, &AckPayLoad[1]);
-  //          break;
-  //      case 'V':
-  //          strcpy(ModelVersionNumber, &AckPayLoad[1]); // Software version number
-  //          break;
-  //      default:
-  //          break;
-    // }
+      Str(ModelAltitude,AckPayload.CurrentAltitude,0);
+      Str(ModelPitch,AckPayload.Pitch,0);
+      Str(ModelYaw,AckPayload.Yaw,0);
+      Str(ModelRoll,AckPayload.Roll,0);
 }
-
 /************************************************************************************************************/
-
 void CheckGapsLength()
 {
     if (ReconnectingFlag) {
