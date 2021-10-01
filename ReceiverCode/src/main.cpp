@@ -1,4 +1,4 @@
-#define RXVERSIONNUMBER 65.01 // Sept 26th 2021
+#define RXVERSIONNUMBER 65.02 // Oct 1st 2021
 
 // #define DEBUG
 // #define DB_SENSORS
@@ -135,7 +135,7 @@ RF24     Radio1(pinCE1, pinCSN1);
 RF24*     CurrentRadio =&Radio1;
 Compress compress;
 
-char payLoad[ACKPAYLOADLENGTH]; // must have spare space
+char AckPayload[ACKPAYLOADLENGTH]; // must have spare space
 byte PacketNumber;
 byte NextFrequency;
 
@@ -633,6 +633,10 @@ void Reconnect()
 
 /************************************************************************************************************/
 
+// This function loads the AckPayload with numberic data which are already converted to ascii char arrays.
+// Only one item of data is sent per numbered payload.
+// Arguably - this area could (=should) be redesigned! :-)
+
 void LoadExtraPayload()
 {
     char a[] = "A"; // Altitude
@@ -642,49 +646,49 @@ void LoadExtraPayload()
     char y[] = "Y"; // Yaw
     char V[] = "V"; // Software version
     char M[] = "M"; // Model Number
-    char D[] = "D"; // Data rate changed
+   // char D[] = "D"; // Data rate changed
 
     char vbuf[12];
 
     switch (PacketNumber) {
         case 5:
-            strcpy(payLoad, y);
-            strcat(payLoad, ModelYaw);
+            strcpy(AckPayload, y);
+            strcat(AckPayload, ModelYaw);
             break;
 
         case 6:
-            strcpy(payLoad, p);
-            strcat(payLoad, ModelPitch);
+            strcpy(AckPayload, p);
+            strcat(AckPayload, ModelPitch);
             break;
 
         case 7:
-            strcpy(payLoad, a);
-            strcat(payLoad, ModelAltitude);
+            strcpy(AckPayload, a);
+            strcat(AckPayload, ModelAltitude);
             break;
 
         case 8:
-            strcpy(payLoad, r);
-            strcat(payLoad, ModelRoll);
+            strcpy(AckPayload, r);
+            strcat(AckPayload, ModelRoll);
             break;
 
         case 9:
-            strcpy(payLoad, v);
-            strcat(payLoad, volt); //rx volts
+            strcpy(AckPayload, v);
+            strcat(AckPayload, volt); //rx volts
             break;
-        case 10:                      // ... 42
+        case 10:                       
             dtostrf(rxv, 2, 2, vbuf); // rx software version number
-            strcpy(payLoad, V);
-            strcat(payLoad, vbuf);
+            strcpy(AckPayload, V);
+            strcat(AckPayload, vbuf);
             break;
         case 11:
-            strcpy(payLoad, M);
-            payLoad[1] = ModelNumber;
+            strcpy(AckPayload, M);
+            AckPayload[1] = ModelNumber;
             break;
-        case 28:
-            strcpy(payLoad, D);
-            payLoad[1] = ReInit;
-            ReInit     = false;
-            break;
+      //case 28:                      // this function is dissabled at the moment. (It was to reitialize at new datarate or powersetting)
+      //    strcpy(AckPayload, D);
+      //    AckPayload[1] = ReInit;
+      //    ReInit     = false;
+      //    break;
 
         default:
             break;
@@ -701,7 +705,7 @@ bool ReadData()
         LoadExtraPayload();
         Connected            = true;
         LastConnectionMoment = millis();
-        CurrentRadio->writeAckPayload(1, &payLoad, ACKPAYLOADLENGTH);      // Send telemetry (actual length plus 0)
+        CurrentRadio->writeAckPayload(1, &AckPayload, ACKPAYLOADLENGTH);      // Send telemetry (actual length plus 0)
         CurrentRadio->read(&CompressedData, sizeof(CompressedData));       // Get Data
         compress.DeComp(ReceivedData, CompressedData, UNCOMPRESSEDWORDS); // my library to decompress !
         FailSafeDataLoaded = false;
@@ -1171,7 +1175,7 @@ void DoBinding()
     Serial.println(tt);
 #endif
     if (OldPipe == NewPipe) {
-        strcpy(payLoad, BINDOK);
+        strcpy(AckPayload, BINDOK);
         SaveNewBind = false;
 
 #ifdef DB_BIND
