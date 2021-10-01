@@ -1,4 +1,4 @@
-#define RXVERSIONNUMBER 65.02 // Oct 1st 2021
+#define RXVERSIONNUMBER 66.00 // Oct 1st 2021
 
 // #define DEBUG
 // #define DB_SENSORS
@@ -112,7 +112,7 @@ byte PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 16}; // ten now, last 6 o
 #define FAILSAFE_TIMEOUT 2000
 #define LED_PIN          13
 
-#define ACKPAYLOADLENGTH 12
+
 
 #define AEROPLANE  1
 #define HELICOPTER 2
@@ -133,9 +133,18 @@ RF24     Radio1(pinCE1, pinCSN1);
 #endif
 
 RF24*     CurrentRadio =&Radio1;
-Compress compress;
 
-char AckPayload[ACKPAYLOADLENGTH]; // must have spare space
+Compress compress;
+// *********************************** AckPayload Stucture *********************************************
+struct Payload {                                                 // Structure for data returned to transmitter.
+        float volt = 0;                                          // Voltage of RX battery, if measured.
+        float ReceiverFirmwareVersion = RXVERSIONNUMBER;         // Firmware version number.
+        float CurrentAltitude = 0;                               // Altitude, if measured.
+};  
+Payload AckPayload;
+uint8_t AckPayloadSize = sizeof (AckPayload);                    // Size for later externs if needed etc.
+// *****************************************************************************************************  
+
 byte PacketNumber;
 byte NextFrequency;
 
@@ -182,13 +191,12 @@ float OldPitchRateIntegral = 0;
 float PitchRateDerivative  = 0;
 float OldPitchRateError    = 0;
 
-float temperature280, pressure, altitude, StartAltitude, CurrentAltitude;
+float temperature280, pressure, altitude, StartAltitude;
 bool  Swash_DisplayStarted = false;
-char  ModelAltitude[12]    = "N/A";
+//char  ModelAltitude[12]    = "N/A";
 char  ModelRoll[12]        = "N/A";
 char  ModelPitch[12]       = "N/A";
 char  ModelYaw[12]         = "N/A";
-char  volt[12]             = "N/A";
 float Swash_P              = 0;
 float Swash_I              = 0;
 float Swash_D              = 0;
@@ -215,7 +223,7 @@ byte         SavedPipeAddress[8];
 int          BindOKTimer    = 0;
 bool         SaveNewBind    = true;
 bool         ServosAttached = false;
-float        rxv            = RXVERSIONNUMBER;
+float        ReceiverFirmwareVersion    = RXVERSIONNUMBER;
 uint16_t     SbusChannels[CHANNELSUSED + 8]; // a few spare
 int          SBUSTimer    = 0;
 bool         FailSaveSafe = false;
@@ -637,62 +645,62 @@ void Reconnect()
 // Only one item of data is sent per numbered payload.
 // Arguably - this area could (=should) be redesigned! :-)
 
-void LoadExtraPayload()
+void LoadAckPayload()
 {
-    char a[] = "A"; // Altitude
-    char v[] = "v"; // Volts
-    char r[] = "R"; // Roll
-    char p[] = "P"; // Pitch
-    char y[] = "Y"; // Yaw
-    char V[] = "V"; // Software version
-    char M[] = "M"; // Model Number
+   // char a[] = "A"; // Altitude
+   // char v[] = "v"; // Volts
+   // char r[] = "R"; // Roll
+   // char p[] = "P"; // Pitch
+   // char y[] = "Y"; // Yaw
+   // char V[] = "V"; // Software version
+   // char M[] = "M"; // Model Number
    // char D[] = "D"; // Data rate changed
 
-    char vbuf[12];
+    // char vbuf[12];
 
-    switch (PacketNumber) {
-        case 5:
-            strcpy(AckPayload, y);
-            strcat(AckPayload, ModelYaw);
-            break;
-
-        case 6:
-            strcpy(AckPayload, p);
-            strcat(AckPayload, ModelPitch);
-            break;
-
-        case 7:
-            strcpy(AckPayload, a);
-            strcat(AckPayload, ModelAltitude);
-            break;
-
-        case 8:
-            strcpy(AckPayload, r);
-            strcat(AckPayload, ModelRoll);
-            break;
-
-        case 9:
-            strcpy(AckPayload, v);
-            strcat(AckPayload, volt); //rx volts
-            break;
-        case 10:                       
-            dtostrf(rxv, 2, 2, vbuf); // rx software version number
-            strcpy(AckPayload, V);
-            strcat(AckPayload, vbuf);
-            break;
-        case 11:
-            strcpy(AckPayload, M);
-            AckPayload[1] = ModelNumber;
-            break;
+  //  switch (PacketNumber) {
+  //      case 5:
+  //          strcpy(AckPayload, y);
+  //          strcat(AckPayload, ModelYaw);
+  //          break;
+  // 
+   //     case 6:
+  //          strcpy(AckPayload, p);
+  //          strcat(AckPayload, ModelPitch);
+  //          break;
+ //
+  //      case 7:
+  //          strcpy(AckPayload, a);
+  //          strcat(AckPayload, ModelAltitude);
+  //          break;
+//
+ //       case 8:
+ //           strcpy(AckPayload, r);
+ //           strcat(AckPayload, ModelRoll);
+ //           break;
+//
+//        case 9:
+//            strcpy(AckPayload, v);
+//            strcat(AckPayload, volt); //rx volts
+//            break;
+  //      case 10:                       
+ //           dtostrf(ReceiverFirmwareVersion, 2, 2, vbuf); // rx software version number
+ //           strcpy(AckPayload, V);
+ //           strcat(AckPayload, vbuf);
+ //           break;
+ //       case 11:
+ //           strcpy(AckPayload, M);
+ //           AckPayload[1] = ModelNumber;
+//            break;
       //case 28:                      // this function is dissabled at the moment. (It was to reitialize at new datarate or powersetting)
       //    strcpy(AckPayload, D);
       //    AckPayload[1] = ReInit;
       //    ReInit     = false;
       //    break;
 
-        default:
-            break;
-    }
+       // default:
+       //     break;
+    //}
 }
 
 /************************************************************************************************************/
@@ -702,10 +710,10 @@ bool ReadData()
     uint16_t CompressedData[COMPRESSEDWORDS]; // 30 bytes -> 40 bytes when uncompressed
     Connected = false;
     if (CurrentRadio->available()) {
-        LoadExtraPayload();
+        LoadAckPayload();
         Connected            = true;
         LastConnectionMoment = millis();
-        CurrentRadio->writeAckPayload(1, &AckPayload, ACKPAYLOADLENGTH);      // Send telemetry (actual length plus 0)
+        CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize);      // Send telemetry (actual length plus 0)
         CurrentRadio->read(&CompressedData, sizeof(CompressedData));       // Get Data
         compress.DeComp(ReceivedData, CompressedData, UNCOMPRESSEDWORDS); // my library to decompress !
         FailSafeDataLoaded = false;
@@ -911,9 +919,8 @@ void DoSensors()
 {
 
     if (USE_BMP280) {
-        if (bmp280.getMeasurements(temperature280, pressure, altitude))
-            CurrentAltitude = int(altitude - StartAltitude);
-        dtostrf(CurrentAltitude, 0, 0, ModelAltitude);
+        if (bmp280.getMeasurements(temperature280, pressure, altitude)) // heer
+            AckPayload.CurrentAltitude = int(altitude - StartAltitude);
     }
     if (USE_BNO055 || USE_BNO055A || USE_MPU6050) {
 
@@ -923,7 +930,7 @@ void DoSensors()
     }
 
     if (USE_INA219) {
-        dtostrf(ina219.getBusVoltage_V(), 1, 1, volt);
+        AckPayload.volt=ina219.getBusVoltage_V();
     }
 
 #ifdef DB_SENSORS
@@ -1166,7 +1173,6 @@ void SaveFailSafeSettings()
 void DoBinding()
 {
 
-    char BINDOK[] = "BINDOK";
     GetNewPipe();
 #ifdef DB_BIND
     tt = NewPipe;
@@ -1175,7 +1181,6 @@ void DoBinding()
     Serial.println(tt);
 #endif
     if (OldPipe == NewPipe) {
-        strcpy(AckPayload, BINDOK);
         SaveNewBind = false;
 
 #ifdef DB_BIND
