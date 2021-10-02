@@ -3,7 +3,7 @@
 //                                      Radio Functions
 /************************************************************************************************************/
 
-#include "RadioFunctions.h"  
+#include "RadioFunctions.h"
 
 #define SticksView         1
 #define GraphView          2
@@ -49,32 +49,38 @@ void DeComp(uint16_t* d, uint16_t* c, int cc)
     }
 }
 
-// **** Compresses cc x 16 BIT 'o' values down to only cc*3/4 'c' values by using only their low 12 BITS... cc *must* be divisible by 4! ********
-void Comp(uint16_t* c, uint16_t* o, int cc)
+/**
+ * Compresses uint16_t* buffer values (each with 12 bit resolution - the lower 12 bits).
+ * @param compressed_buf[out] Must have allocated 3/4 the size of uncompressed_buf
+ * @param uncompressed_buf[in]
+ * @param uncompressed_size Size is in units of uint16_t (aka word or unsigned short). This *must* be divisible by 4.
+ */
+void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, int uncompressed_size)
 {
-    int p = 0, l = 0;
-    for (l = 0; l < (cc * 3 / 4); l += 3) {
-        c[l] = o[p] << 4 | o[p + 1] >> 8;
+    int p = 0;
+    for (int l = 0; l < (uncompressed_size * 3 / 4); l += 3) {
+        compressed_buf[l] = uncompressed_buf[p] << 4 | uncompressed_buf[p + 1] >> 8;
         p++;
-        c[l + 1] = o[p] << 8 | o[p + 1] >> 4;
+        compressed_buf[l + 1] = uncompressed_buf[p] << 8 | uncompressed_buf[p + 1] >> 4;
         p++;
-        c[l + 2] = o[p] << 12 | o[p + 1];
+        compressed_buf[l + 2] = uncompressed_buf[p] << 12 | uncompressed_buf[p + 1];
         p++;
         p++;
     }
 }
+
 /************************************************************************************************************/
 
 void TryOtherPipe()
 {
     if (BoundFlag == true) {
         BoundFlag = false;
-        SetThePipe(DefaultPipe);   
+        SetThePipe(DefaultPipe);
     }
-    else 
+    else
     {
         BoundFlag = true;
-        SetThePipe(NewPipe); 
+        SetThePipe(NewPipe);
     }
 }
 /************************************************************************************************************/
@@ -124,7 +130,7 @@ void SendData()
             }
         }
         Connected = false;
-        Comp(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);              // Compress 32 bytes down to 24
+        Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);              // Compress 32 bytes down to 24
         if (Radio1.write(&CompressedData, SizeOfCompressedData)) {        //  "sizeof" doesn't work with externs, hence 2 new vars.
             if (Radio1.isAckPayloadAvailable()) {
                 Radio1.read(&AckPayload, AckPayloadSize);               //  "sizeof" doesn't work with externs, hence 2 new vars.
@@ -304,14 +310,14 @@ void InitRadio(uint64_t Pipe)
     Radio1.stopListening();                     // It's a true Messiter
     Radio1.enableDynamicPayloads();             // Needed
     Radio1.setAddressWidth(5);                  // was 4, is now 5
-    Radio1.setCRCLength(RF24_CRC_8);            // could be 16 
+    Radio1.setCRCLength(RF24_CRC_8);            // could be 16
     PipeTimeout = millis();                     // Initialise timeout
     GapSum      = 0;
 }
 /*********************************************************************************************************************************/
 
    void SetThePipe(uint64_t WhichPipe)
-{ 
+{
         Radio1.openWritingPipe(WhichPipe);
         Radio1.stopListening();
 }

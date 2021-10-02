@@ -14,11 +14,11 @@
 #define SBUSRATE        10 // SBUS frame every 10 milliseconds
 #define SBUSPORT        Serial3
 
-bool USE_BMP280  = false; //  Pressure BMP280
 bool USE_INA219  = false; //  Volts INA219
-bool USE_BNO055  = false; //  Cheap BNO055 gyro
-bool USE_BNO055A = false; //  Adafruit BNO055 gyro
-bool USE_MPU6050 = false; //  Gyro MPU6050
+bool USE_BNO055  = false; /** Cheap BNO055 gyro */
+bool USE_BNO055A = false; /** Adafruit BNO055 gyro */
+bool USE_MPU6050 = false; /** Gyro MPU6050 */
+bool USE_BMP280  = false; /** is BMP280 sensor connected */
 
 #define EXTRAMICROS 500 // for extra resolution driving servos
 #define MINMICROS   1000 - EXTRAMICROS
@@ -78,25 +78,32 @@ bool USE_MPU6050 = false; //  Gyro MPU6050
 #include <utility/imumaths.h>
 #include <MPU6050_tockn.h>
 #include <SimpleKalmanFilter.h>
-#include <Compress.h>
 
 #define STICKSRATE    60 * 100 // Max
 #define MAXCORRECTION 15
 #define DeadBand      4
-#define KK            15
-SimpleKalmanFilter RollRateKalman(KK, KK, 0.001);
-SimpleKalmanFilter PitchRateKalman(KK, KK, 0.001);
-SimpleKalmanFilter YawRateKalman(KK, KK, 0.001);
 
+#define KK 15 /** The value for the Kalman filter's measured and estimated parameters */
+
+SimpleKalmanFilter RollRateKalman(KK, KK, 0.001);  /** Kalman filter for Roll */
+SimpleKalmanFilter PitchRateKalman(KK, KK, 0.001); /** Kalman filter for Pitch */
+SimpleKalmanFilter YawRateKalman(KK, KK, 0.001);   /** Kalman filter for Yaw */
+
+MPU6050 mpu6050(Wire); /** instantiated obj for interfacing with the MPU6050 sensor */
+
+/** Array off possibly connected BNO055 sensors */
 Adafruit_BNO055 BNO055_sensor[2] = {
     Adafruit_BNO055(55, BNO055_ADDRESS_A), // Adafruit version
     Adafruit_BNO055(55, BNO055_ADDRESS_B)  // Cheapo version
 };
-sensors_event_t orientationData, angVelocityData;
+sensors_event_t orientationData; /** orientation data for a sensor event */
+sensors_event_t angVelocityData; /** angular velocity data for a sensor event */
+
 Adafruit_INA219 ina219;
-BMP280_DEV      bmp280;
-MPU6050         mpu6050(Wire);
+BMP280_DEV      bmp280; /** The object to access the BMP280 sensor */
 Servo           MCMServo[SERVOSUSED];
+
+// uint16_t BNO055_SAMPLERATE_DELAY_MS = 100; // not actually used anywhere
 
 uint8_t PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 16}; // ten now, last 6 only via sbus
 
@@ -123,7 +130,6 @@ uint8_t PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 16}; // ten now, last 
 uint64_t ThisPipe = 0xBABE1E5420LL; // default startup
 uint64_t NewPipe  = 0;
 uint64_t OldPipe  = 0;
-int      tt;
 
 SBUS MySbus(SBUSPORT);
 RF24 Radio1(pinCE1, pinCSN1);
@@ -134,7 +140,6 @@ RF24 Radio2(pinCE2, pinCSN2);
 
 RF24* CurrentRadio = &Radio1;
 
-Compress compress;
 // ******** AckPayload Stucture using only 8 bit values for economy and better speed **********************************
 struct Payload
 {                                                      // Structure for data returned to transmitter.
@@ -150,14 +155,12 @@ uint8_t AckPayloadSize = sizeof(AckPayload); // Size for later externs if needed
 // *****************************************************************************************************
 
 uint8_t PacketNumber;
-uint8_t NextFrequency;
 
 uint16_t ReceivedData[UNCOMPRESSEDWORDS]; //  20  words
-uint16_t PreviousData[UNCOMPRESSEDWORDS];
+uint16_t PreviousData[UNCOMPRESSEDWORDS]; /** Previously received data (used for servos). */
 
 bool   Connected = false;
 float  PacketStartTime;
-int    i;
 int    LastConnectionMoment = 0;
 int    SearchStartTime      = 0;
 int    StillSearchingTime   = 0;
@@ -177,7 +180,7 @@ struct DOF9
 };
 
 DOF9  dof9_data = DOF9(); /** The 9 DOF data. This object is used to cache and filter the data from the IMU. */
-float Temperature6050;
+float Temperature6050;    /** temperature data from the MPU6050 sensor's internal temperature sensor */
 
 float RollRateIntegral    = 0;
 float OldRollRateIntegral = 0;
@@ -207,9 +210,9 @@ uint8_t ModelType = 0; // 1=Aeroplane 2=Heli 3=Quadcopter 4=Hexacopter 5=Octocop
 int          LoopsPS      = 0;
 int          TimeThis     = 0;
 int          MainLoopTime = 0;
-long int     DeltaTime    = 0;
-uint8_t      BindNow      = 0;
-bool         BoundFlag    = false;
+long int     DeltaTime    = 0;     /** The ellapsed time between updates sent to the Servos */
+uint8_t      BindNow      = 0;     /** indicates that the receiver should start the binding/pairing process */
+bool         BoundFlag    = false; /** indicates if receiver paired with transmitter */
 uint8_t      SavedPipeAddress[8];
 int          BindOKTimer             = 0;
 bool         SaveNewBind             = true;
@@ -240,18 +243,17 @@ uint8_t EEPROMReadByte(int p_address)
     return bt;
 }
 
-/************************************************************************************************************/
-
+/** Load project defaults from EEPROM */
 void LoadFailSafeData()
 {
     uint8_t  FS_Offset = 10;
     uint16_t s[CHANNELSUSED];
 
-    for (i = 0; i < CHANNELSUSED; i++) {
+    for (uint8_t i = 0; i < CHANNELSUSED; ++i) {
         s[i] = map(EEPROMReadByte(i + FS_Offset), 0, 180, MINMICROS, MAXMICROS); // load failsafe values and simulate better resloution
     }
     FS_Offset += CHANNELSUSED;
-    for (i = 0; i < CHANNELSUSED; i++) {
+    for (uint8_t i = 0; i < CHANNELSUSED; ++i) {
         if (EEPROMReadByte(i + FS_Offset)) {
             ReceivedData[i] = s[i];
         }
@@ -269,8 +271,8 @@ void MapToSBUS()
     int RangeMax = 2047; // = Frsky at 150 %
     int RangeMin = 0;
 
-    for (int jj = 0; jj < CHANNELSUSED; jj++) {
-        SbusChannels[jj] = map(ReceivedData[jj], MINMICROS, MAXMICROS, RangeMin, RangeMax);
+    for (int j = 0; j < CHANNELSUSED; ++j) {
+        SbusChannels[j] = map(ReceivedData[j], MINMICROS, MAXMICROS, RangeMin, RangeMax);
     }
 }
 
@@ -415,7 +417,7 @@ void MoveServos()
     int k = 0;
     MySbus.write(&SbusChannels[0]);
     if (1) { //(ModelType==AEROPLANE ){                         // !! fix Later ***************************************
-        for (j = 0; j < SERVOSUSED; j++) {
+        for (j = 0; j < SERVOSUSED; ++j) {
             if (PreviousData[j] != ReceivedData[j]) {
                 MCMServo[j].writeMicroseconds(ReceivedData[j]);
                 PreviousData[j] = ReceivedData[j];
@@ -437,7 +439,7 @@ void MoveServos()
         float TargetYawRate   = (map((ReceivedData[3]), 0, 180, -STICKSRATE, STICKSRATE)) / 100; // get Rudder stick
         TargetYawRate         = DoDeadBand(TargetYawRate);
 
-        for (k = 0; k <= 3; k++) {
+        for (k = 0; k < 4; ++k) {
             Throttle[k] = ReceivedData[2];
         } // get throttle stick
 
@@ -468,13 +470,13 @@ void MoveServos()
         Throttle[3] = constrain(Throttle[3], 20, 180);
 
         if (ReceivedData[2] < 15) { //  no throttle on very low throttle stick input
-            for (k = 0; k <= 3; k++) {
+            for (k = 0; k < 4; ++k) {
                 Throttle[k] = 2;
             }
             OldRollRateError  = 0;
             OldPitchRateError = 0;
         }
-        for (k = 0; k <= 3; k++) {
+        for (k = 0; k < 4; ++k) {
             MCMServo[k].write(Throttle[k]);
         } //  set four throttles
     }
@@ -508,12 +510,13 @@ void FailSafe()
     }
 }
 
-/************************************************************************************************************/
-
-void ShowHopDurationEtc()
+/**
+ * Print out some debugging information about the channel hopping implementation
+ * @param freq The next frequency to be used.
+ */
+void ShowHopDurationEtc(uint8_t freq)
 {
-    float OnePacketTime = 0;
-    OnePacketTime       = (millis() - PacketStartTime) / PacketsPerHop;
+    float OnePacketTime = (millis() - PacketStartTime) / PacketsPerHop;
     Serial.print("Hop duration: ");
     Serial.print((millis() - PacketStartTime) / 1000);
     Serial.print("s  Packets per hop: ");
@@ -521,26 +524,27 @@ void ShowHopDurationEtc()
     Serial.print("  Average Time per packet: ");
     Serial.print(OnePacketTime);
     Serial.print("ms  Next channel: ");
-    Serial.println(NextFrequency);
+    Serial.println(freq);
     PacketStartTime = millis();
 }
 
-/************************************************************************************************************/
-
-void HopToNextFrequency()
+/**
+ * Make radio transceiver "hop" over to the new frequency.
+ * @param freq The next frequency to use.
+ */
+void HopToNextFrequency(uint8_t freq)
 {
 
     CurrentRadio->stopListening();
-    CurrentRadio->setChannel(NextFrequency);
+    CurrentRadio->setChannel(freq);
     CurrentRadio->startListening();
     LastConnectionMoment = millis();
 #ifdef DEBUG
-    ShowHopDurationEtc();
+    ShowHopDurationEtc(freq);
 #endif
 }
 
-/************************************************************************************************************/
-
+/** Initialize a radio transceiver. */
 void InitCurrentRadio()
 {
     CurrentRadio->begin();                  // sets all to defaults
@@ -613,7 +617,7 @@ void Reconnect()
         Serial.print("  Radio: ");
         Serial.println(Rnumber);
 #endif
-        i = FHSS_RESCUE_BOTTOM;
+        uint8_t i = FHSS_RESCUE_BOTTOM;
         while (!CurrentRadio->available() && i <= FHSS_RESCUE_TOP) // This loop exits as soon as connection is detected.
         {
             CurrentRadio->stopListening();
@@ -650,6 +654,27 @@ void LoadAckPayload()
     // todo!
 }
 
+/**
+ * Decompresses uint16_t* buffer values (each with 12 bit resolution - the lower 12 bits).
+ * @param uncompressed_buf[in]
+ * @param compressed_buf[out] Must have allocated 3/4 the size of uncompressed_buf
+ * @param uncompressed_size Size is in units of uint16_t (aka word or unsigned short)
+ */
+void Decompress(uint16_t* uncompressed_buf, uint16_t* compressed_buf, int uncompressed_size)
+{
+    int p = 0;
+    for (int l = 0; l < (uncompressed_size * 3 / 4); l += 3) {
+        uncompressed_buf[p] = compressed_buf[l] >> 4;
+        p++;
+        uncompressed_buf[p] = (compressed_buf[l] & 0xf) << 8 | compressed_buf[l + 1] >> 8;
+        p++;
+        uncompressed_buf[p] = (compressed_buf[l + 1] & 0xff) << 4 | compressed_buf[l + 2] >> 12;
+        p++;
+        uncompressed_buf[p] = compressed_buf[l + 2] & 0xfff;
+        p++;
+    }
+}
+
 /************************************************************************************************************/
 
 bool ReadData()
@@ -660,9 +685,9 @@ bool ReadData()
         // LoadAckPayload(); // it's now loaded by dosensors
         Connected            = true;
         LastConnectionMoment = millis();
-        CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize);    // Send telemetry (actual length plus 0)
-        CurrentRadio->read(&CompressedData, sizeof(CompressedData));      // Get Data
-        compress.DeComp(ReceivedData, CompressedData, UNCOMPRESSEDWORDS); // my library to decompress !
+        CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize);     // Send telemetry (actual length plus 0)
+        CurrentRadio->read(&CompressedData, sizeof(CompressedData));       // Get Data
+        Decompress(ReceivedData, CompressedData, UNCOMPRESSEDWORDS); // decompress data
         FailSafeDataLoaded = false;
         MapToSBUS();
     }
@@ -696,7 +721,7 @@ void LoadModelNumber()
 void AttachServos()
 {
     if (!ServosAttached) {
-        for (i = 0; i < SERVOSUSED; i++) {
+        for (uint8_t i = 0; i < SERVOSUSED; ++i) {
             MCMServo[i].attach(PWMPins[i]);
         }
         ServosAttached = true;
@@ -719,7 +744,7 @@ void BindModel()
 {
     ThisPipe = NewPipe;
     if (SaveNewBind) {
-        for (i = 0; i < 8; i++) {
+        for (uint8_t i = 0; i < 8; ++i) {
             EEPROMUpdateByte(i, ReceivedData[i]);
         }
     }
@@ -738,22 +763,25 @@ void BindModel()
 
 void RebuildFlags(bool* f, uint16_t tb)
 { // Pass arraypointer and the two bytes to be decoded
-    for (i = 0; i < 16; i++) {
+    for (uint8_t i = 0; i < 16; ++i) {
         f[15 - i] = false;                 // false is default
         if (tb & 1 << i) f[15 - i] = true; // sets true if bit was on
     }
 }
 
-/************************************************************************************************************/
-
-void CheckParams()
+/**
+ * Get radio parameters from received packet.
+ * @note Each packet will have a ID number at the third byte in the packet.
+ * This ID number will change a different parameter (which is detirmined by the ID number).
+ * @returns The next frequency that the transmitter plans to use.
+ */
+uint8_t CheckParams()
 {
 
     uint8_t  mn       = 0;
     uint16_t TwoBytes = 0;
 
-    PacketNumber  = (ReceivedData[CHANNELSUSED + 1]);
-    NextFrequency = (ReceivedData[CHANNELSUSED + 2]);
+    PacketNumber = (ReceivedData[CHANNELSUSED + 1]);
 
     switch (PacketNumber) {
         case 3:
@@ -821,39 +849,37 @@ void CheckParams()
         default:
             break; //
     }
+    return ReceivedData[CHANNELSUSED + 2];
 }
 
 /************************************************************************************************************/
-
 #ifdef DB_SENSORS
 void Sensors_Status()
 {
-
     if (USE_BNO055 || USE_BNO055A) {
         Serial.print("Pitch=");
-        Serial.print(int(Pitch));
+        Serial.print(int(dof9_data.Pitch));
         Serial.print(" Roll=");
-        Serial.print(int(Roll));
+        Serial.print(int(dof9_data.Roll));
         Serial.print(" Yaw=");
-        Serial.print(int(Yaw));
+        Serial.print(int(dof9_data.Yaw));
         Serial.print("    PitchRate=");
-        Serial.print(int(PitchRate));
+        Serial.print(int(dof9_data.PitchRate));
         Serial.print(" RollRate=");
-        Serial.print(int(RollRate));
+        Serial.print(int(dof9_data.RollRate));
         Serial.print(" YawRate=");
-        Serial.print(int(YawRate));
+        Serial.print(int(dof9_data.YawRate));
     }
     if (USE_INA219) {
         Serial.print("     Volts=");
-        Serial.print(volt);
+        Serial.print(AckPayload.volt);
     }
     if (USE_BMP280) {
         Serial.print("  Altitude=");
-        Serial.print(int(CurrentAltitude * 3.28084)); // convert from meters
+        Serial.print(int(AckPayload.CurrentAltitude * 3.28084)); // convert from meters
         Serial.print(" Temp=");
         Serial.print(int(temperature280));
     }
-
     Serial.println(" ");
 }
 #endif // defined DB_SENSORS
@@ -870,7 +896,7 @@ void DoSensors()
         AckPayload.volt = ina219.getBusVoltage_V();
     }
 #ifdef DB_SENSORS
-    Sensors_Status(); // look if interested
+    Sensors_Status(); // does nothing if DB_SENSORS is not defined
 #endif
     if ((millis() - LastVoltMoment) > 1000) {
         LastVoltMoment = millis();
@@ -884,16 +910,18 @@ FASTRUN void ReceiveData()
     if (!Connected)
         if (millis() - LastConnectionMoment >= RX_TimeOut) Reconnect();
     if (ReadData()) {
-        CheckParams();
+        uint8_t NextFrequency = CheckParams();
         if (PacketNumber >= PacketsPerHop) {
-            HopToNextFrequency();
+            HopToNextFrequency(NextFrequency);
             DoSensors();
         }
     }
 }
 
-/************************************************************************************************************/
-
+/**
+ * @brief Apply a Kalman filter to the IMU's latest data
+ * @see dof9_data
+ */
 FASTRUN void KalmanFilter()
 {
     dof9_data.RollRate  = RollRateKalman.updateEstimate(dof9_data.RollRate);
@@ -901,8 +929,10 @@ FASTRUN void KalmanFilter()
     dof9_data.YawRate   = YawRateKalman.updateEstimate(dof9_data.YawRate);
 }
 
-/************************************************************************************************************/
-
+/**
+ * Read measurements from the BNO055 sensor's event data & apply the Kalman filter
+ * @see Get_BNO055(), KalmanFilter(), orientationData, angVelocityData
+ */
 void ReadBNOValues()
 {
     dof9_data.Yaw       = orientationData.orientation.x;
@@ -914,8 +944,10 @@ void ReadBNOValues()
     KalmanFilter();
 }
 
-/************************************************************************************************************/
-
+/**
+ * Get updated data from the MPU6050 sensor.
+ * @see dof9_data
+ */
 void Get_Mpu6050()
 {
     mpu6050.update();
@@ -951,13 +983,16 @@ void Get_BNO055(const bool use_cheapo)
 
 void ReadSavedPipe()
 {
-    for (i = 0; i < 8; i++) {
+    for (uint8_t i = 0; i < 8; ++i) {
         SavedPipeAddress[i] = EEPROMReadByte(i); // uses first 8 bytes only.
     }
 }
 
-/************************************************************************************************************/
-
+/**
+ * Get pipe address from EEPROM.
+ * @note Address data in EEPORM is valid only after a previous power cycle observed
+ * a completed binding process (pairing was successful at least once during last flight's session).
+ */
 void GetOldPipe()
 {
     ReadSavedPipe();
@@ -976,35 +1011,48 @@ void GetOldPipe()
 void ScanI2c()
 {
     delay(500); // allow time to wake things up
-    USE_MPU6050 = false;
-    USE_BMP280  = false;
-    USE_INA219  = false;
-    USE_BNO055  = false;
-    USE_BNO055A = false;
-    for (i = 1; i < 127; i++) {
+    for (uint8_t i = 1; i < 127; ++i) {
         Wire.beginTransmission(i);
         if (Wire.endTransmission() == 0) {
+            if (i == 0x28) {
+                USE_BNO055A = true;
 #ifdef DB_SENSORS
-            Serial.print(i, HEX); // in case new one shows up
-            Serial.print("   ");
-            if (i == 0x68) Serial.println("MPU6050 gyro detected!");
-            if (i == 0x76) Serial.println("BMP280 barometer detected!");
-            if (i == 0x40) Serial.println("INA219 voltage meter detected!");
-            if (i == 0x29) Serial.println("Cheapo BNO055 gyro clone detected!");
-            if (i == 0x28) Serial.println("Real Adafruit BNO055 gyro detected!");
+                Serial.println("Real Adafruit BNO055 gyro detected!");
 #endif
-
-            if (i == 0x28) USE_BNO055A = true;
-            if (i == 0x29) USE_BNO055 = true;
-            if (i == 0x40) USE_INA219 = true;
-            if (i == 0x68) USE_MPU6050 = true;
-            if (i == 0x76) USE_BMP280 = true;
+            }
+            else if (i == 0x29) {
+                USE_BNO055 = true;
+#ifdef DB_SENSORS
+                Serial.println("Cheapo BNO055 gyro clone detected!");
+#endif
+            }
+            else if (i == 0x40) {
+                USE_INA219 = true;
+#ifdef DB_SENSORS
+                Serial.println("INA219 voltage meter detected!");
+#endif
+            }
+            else if (i == 0x68) {
+                USE_MPU6050 = true;
+#ifdef DB_SENSORS
+                Serial.println("MPU6050 gyro detected!");
+#endif
+            }
+            else if (i == 0x76) {
+                USE_BMP280 = true;
+#ifdef DB_SENSORS
+                Serial.println("BMP280 barometer detected!");)
+            }
+            else {
+                Serial.print(i, HEX);
+                Serial.print("   "); // in case some new device shows up
+#endif
+            }
         }
     }
 }
 
-/************************************************************************************************************/
-
+/** Store bounded pipe address from the received pairing payload. */
 void GetNewPipe()
 {
     NewPipe = (uint64_t)ReceivedData[0] << 56;
@@ -1015,6 +1063,21 @@ void GetNewPipe()
     NewPipe += (uint64_t)ReceivedData[5] << 16;
     NewPipe += (uint64_t)ReceivedData[6] << 8;
     NewPipe += (uint64_t)ReceivedData[7];
+}
+
+/** Initialize the BMP280 sensor */
+void InitBMP280()
+{
+    bmp280.begin(0x76);
+    bmp280.setTimeStandby(TIME_STANDBY_4000MS);
+    bmp280.startNormalConversion();
+    // warm up bmp280
+    for (int i = 0; i < 15000; ++i) {
+        bmp280.getMeasurements(temperature280, pressure, StartAltitude);
+    }
+    while (!bmp280.getMeasurements(temperature280, pressure, StartAltitude)) {
+        // loop infinitely until data (from the sensor) is ready
+    }
 }
 
 /************************************************************************************************************/
@@ -1043,16 +1106,7 @@ void setup()
 #ifdef DB_SENSORS
         Serial.print("Starting BMP280 ... ");
 #endif
-
-        bmp280.begin(0x76);
-        bmp280.setTimeStandby(TIME_STANDBY_4000MS);
-        bmp280.startNormalConversion();
-        for (i = 0; i < 15000; i++) {
-            bmp280.getMeasurements(temperature280, pressure, StartAltitude);
-        } // warm up bmp280
-        while (!bmp280.getMeasurements(temperature280, pressure, StartAltitude)) {
-        }
-
+        InitBMP280();
 #ifdef DB_SENSORS
         Serial.println("Done! ");
 #endif
@@ -1065,8 +1119,7 @@ void setup()
         mpu6050.begin();
 #ifdef DB_SENSORS
         mpu6050.calcGyroOffsets(true);
-        Serial.println(" ");
-        Serial.println(" ");
+        Serial.println("\n");
 #else
         mpu6050.calcGyroOffsets(false);
 #endif
@@ -1084,11 +1137,11 @@ void SaveFailSafeData()
 {
     // FailSafe data occupies EEPROM from offset 10 to 26
     uint8_t FS_Offset = 10;
-    for (i = 0; i < CHANNELSUSED; i++) {
+    for (uint8_t i = 0; i < CHANNELSUSED; ++i) {
         EEPROMUpdateByte(i + FS_Offset, (map(ReceivedData[i], MINMICROS, MAXMICROS, 0, 180))); // save servo positions lower res: 8 bits
     }
     FS_Offset += CHANNELSUSED;
-    for (i = 0; i < CHANNELSUSED; i++) {
+    for (uint8_t i = 0; i < CHANNELSUSED; ++i) {
         EEPROMUpdateByte(i + FS_Offset, FailSafeChannel[i]); // save flags
     }
 }
@@ -1111,10 +1164,8 @@ void DoBinding()
 
     GetNewPipe();
 #ifdef DB_BIND
-    tt = NewPipe;
-    Serial.println(tt);
-    tt = OldPipe;
-    Serial.println(tt);
+    Serial.println((int)NewPipe, HEX);
+    Serial.println((int)OldPipe, HEX);
 #endif
     if (OldPipe == NewPipe) {
         SaveNewBind = false;
@@ -1135,8 +1186,7 @@ void DoBinding()
     if (BindNow == 1 && !BoundFlag) {
 #ifdef DB_BIND
         Serial.print("Binding to: ");
-        tt = NewPipe;
-        Serial.println(tt);
+        Serial.println((int)NewPipe, HEX);
 #endif
         BindModel();
     }
