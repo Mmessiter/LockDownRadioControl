@@ -662,14 +662,12 @@ void Reconnect()
 
 void LoadAckPayload()
 {
-    AckPayload.Ignore = 0;   // i.e. Don't ignore
+    AckPayload.Ignore = false;   // i.e. Don't ignore
 
-    ++AckPayload.Purpose;    // 0 =  Roll, Pitch, Yaw, Volts.
-                             // 1 =  Version number
+    ++AckPayload.Purpose;        // 0 =  Roll, Pitch, Yaw, Volts.
+                                 // 1 =  Version number
     if (AckPayload.Purpose > 1) AckPayload.Purpose = 0;  // 1 is currently max
-
-
-   if (AckPayload.Purpose==1)
+    if (AckPayload.Purpose==1)
    {
        LoadVersioNumber();   // if 1 send version info
    }
@@ -1224,16 +1222,14 @@ void DoBinding()
 void loop()
 {
     ReceiveData();
-
     if (BoundFlag) {
-
         if (Connected) {
             if (millis() - SBUSTimer >= SBUSRATE) {
                 DeltaTime = micros() - DeltaTime;
                 SBUSTimer = millis(); // timer starts before send starts....
                 MoveServos();
                 if (USE_BNO055A) Get_BNO055(false);
-                if (USE_BNO055) Get_BNO055(true);
+                if (USE_BNO055)  Get_BNO055(true);
                 if (USE_MPU6050) Get_Mpu6050();
             }
         }
@@ -1241,7 +1237,6 @@ void loop()
         MainLoopTime = millis();
         DeltaTime    = micros();
     }
-
     else {
         DoBinding();
     }
