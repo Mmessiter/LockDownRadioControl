@@ -1,4 +1,4 @@
-
+// ************************************************** Receiver code **************************************************
 #define RXVERSION_MAJOR   1     // Oct 3rd 2021
 #define RXVERSION_MINOR   0
 #define RXVERSION_MINIMUS 1
@@ -145,9 +145,9 @@ RF24* CurrentRadio = &Radio1;
 
 // ******** AckPayload Stucture using only 8 bit values for economy and better speed **********************************
 struct Payload
-{                                                      // Structure for data returned to transmitter.
-    
+{                                                      // Structure for data returned to transmitter.  
     uint8_t Purpose                 = 0;               // This new byte determines what **all** the remainder represent!
+    bool    Ignore                  = false;           // Ignore sometimes
     uint8_t volt                    = 0;               // Voltage of RX battery, if measured.
     uint8_t CurrentAltitude         = 0;               // Altitude, if measured.
     uint8_t ReportedPitch           = 0;
@@ -662,8 +662,14 @@ void Reconnect()
 
 void LoadAckPayload()
 {
-    AckPayload.Purpose ^=1;  // Toggle the purpose!
-   if (AckPayload.Purpose)
+    AckPayload.Ignore = 0;   // i.e. Don't ignore
+
+    ++AckPayload.Purpose;    // 0 =  Roll, Pitch, Yaw, Volts.
+                             // 1 =  Version number
+    if (AckPayload.Purpose > 1) AckPayload.Purpose = 0;  // 1 is currently max
+
+
+   if (AckPayload.Purpose==1)
    {
        LoadVersioNumber();   // if 1 send version info
    }
@@ -707,6 +713,7 @@ bool ReadData()
         Decompress(ReceivedData, CompressedData, UNCOMPRESSEDWORDS); // decompress data
         FailSafeDataLoaded = false;
         MapToSBUS();
+        AckPayload.Ignore       = true; 
     }
     return Connected;
 }

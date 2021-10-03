@@ -1,3 +1,5 @@
+// ************************************************** TRANSMITTER CODE **************************************************
+
 #define TXVERSION_MAJOR    1  //   Oct 3rd 2021 Malcolm Messiter
 #define TXVERSION_MINOR    0 
 #define TXVERSION_MINIMUS  1
@@ -248,6 +250,7 @@ uint8_t       ThisFrequency    = 99;
 // ************************************* AckPayload structure ******************************************************
 struct Payload{   // heer
     uint8_t Purpose;                    // Defines meaning of the remainder
+    bool    Ignore;
     uint8_t volt;
     uint8_t CurrentAltitude;
     uint8_t Pitch;
@@ -5419,35 +5422,39 @@ void ReadSwitches()
 void GetRXVersionNumber()
 {
 char nbuf[5];
+   
             Str(ReceiverVersionNumber,AckPayload.Pitch, 2);
             Str(nbuf,AckPayload.Roll, 2);
             strcat(ReceiverVersionNumber,nbuf);
             Str(nbuf,AckPayload.Yaw, 0);
             strcat(ReceiverVersionNumber,nbuf);
+   
 }
 
 /************************************************************************************************************/
 void ParseAckPayload()
 {
-    switch (AckPayload.Purpose) 
+    if (!AckPayload.Ignore)
     {
-       case 0:
-            VoltsDetected = false;
-            if (AckPayload.volt>0)                                               // zero volts means not available
-            {    
+        switch (AckPayload.Purpose) 
+        {
+        case 0:
+              VoltsDetected = false;
+              if (AckPayload.volt>0)                                               // zero volts means not available
+              {    
                     Str(ModelVolts,AckPayload.volt,0);                            // Get receiver battery volts, if available.
                     VoltsDetected = true;
-            }         
-            Str(ModelAltitude,AckPayload.CurrentAltitude,0);
-            Str(ModelPitch,AckPayload.Pitch,0);
-            Str(ModelYaw,AckPayload.Yaw,0);
-            Str(ModelRoll,AckPayload.Roll,0);
-            break;
-      case 1:
-            GetRXVersionNumber();
-            break;
+              }         
+              Str(ModelAltitude,AckPayload.CurrentAltitude,0);
+              Str(ModelPitch,AckPayload.Pitch,0);
+              Str(ModelYaw,AckPayload.Yaw,0);
+              Str(ModelRoll,AckPayload.Roll,0);
+              break;
+         case 1:
+              GetRXVersionNumber();
+              break;
     }
-    
+  }  
 }
 /************************************************************************************************************/
 void CheckGapsLength()
