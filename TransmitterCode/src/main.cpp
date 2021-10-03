@@ -1,4 +1,6 @@
-#define TXVERSIONNUMBER 1  //   Oct 1st 2021 Malcolm Messiter
+#define TXVERSION_MAJOR    1  //   Oct 3rd 2021 Malcolm Messiter
+#define TXVERSION_MINOR    0 
+#define TXVERSION_MINIMUS  1
 
 #define USE_WATCHDOG          // Enable when developing only  ??
 #define WATCHDOGTIMEOUT 10000 // 10 Seconds before reboot (32ms -> 500 seconds)
@@ -245,8 +247,8 @@ uint8_t       ThisFrequency    = 99;
 
 // ************************************* AckPayload structure ******************************************************
 struct Payload{   // heer
+    uint8_t Purpose;                    // Defines meaning of the remainder
     uint8_t volt;
-    uint8_t ReceiverFirmwareVersion;
     uint8_t CurrentAltitude;
     uint8_t Pitch;
     uint8_t Roll;
@@ -350,13 +352,14 @@ int         ThisGap                = 0;
 char        CalibrateNow[]         = "touch_j";
 char        ModelVolts[12]         = " ";
 char        ModelAltitude[12]      = " ";
-char     MaxAltitude[12]        = "0";
-float    MaxAlt                 = 0;
-char     ModelRoll[12]          = " ";
-char     ModelPitch[12]         = " ";
-char     ModelYaw[12]           = " ";
-char     ModelVersionNumber[12] = " ";
-char     deletedmodel[]         = "Deleted";
+char        MaxAltitude[12]        = "0";
+float       MaxAlt                 = 0;
+char        ModelRoll[12]          = " ";
+char        ModelPitch[12]         = " ";
+char        ModelYaw[12]           = " ";
+char        ReceiverVersionNumber[12] = " ";
+char        TransmitterVersionNumber[12] = " ";
+char        deletedmodel[]         = "Deleted";
 uint8_t     ModelType              = 1;
 uint8_t     rollp[5];
 uint8_t     rolli[5];
@@ -379,7 +382,6 @@ uint8_t   BindingNow      = 0;
 int       BindingTimer    = 0;
 bool      BoundFlag       = false;
 int       PipeTimeout     = 0;
-uint8_t   VersionNumber   = TXVERSIONNUMBER;
 bool      Switch[8];
 uint8_t      SwitchNumber[8] = {Switch0, Switch1, Switch2, Switch3, Switch4, Switch5, Switch6, Switch7};
 
@@ -764,10 +766,12 @@ void SendText1(char* tbox, char* NewWord)
 
 /*********************************************************************************************************************************/
 
-char* Str(char* s, int n, int comma)
+char* Str(char* s, int n, int comma) // comma = 0 for nothing, 1 for a comma, 2 for a dot.
 {
     int  r, i, m, flag;
     char cma[] = ",";
+    char dot[] = ".";
+
     flag       = 0;
     i          = 0;
     m          = 1000000000;
@@ -779,8 +783,12 @@ char* Str(char* s, int n, int comma)
     if (n == 0) {
         s[0] = 48;
         s[1] = 0;
+        
         if (comma == 1) {
             strcat(s, cma);
+        }
+         if (comma == 2) {
+            strcat(s, dot);
         }
         return s;
     }
@@ -800,8 +808,12 @@ char* Str(char* s, int n, int comma)
     if (comma == 1) {
         strcat(s, cma);
     }
+    if (comma == 2) {
+        strcat(s, dot);
+    }
     return s;
 }
+
 
 /*********************************************************************************************************************************/
 
@@ -1306,8 +1318,8 @@ void ShowComms()
             strcat(TXBattInfo, Vbuf);
             strcat(TXBattInfo, PerCell);
             if (CurrentView == FrontView) SendText(FrontView_TXBV, TXBattInfo);
-            Str(Vbuf,VersionNumber,0);                               // TX Version Number
-            if (CurrentView == DataView) SendText(DataView_txv, Vbuf);
+            if (CurrentView == DataView) SendText(DataView_txv,TransmitterVersionNumber);   // TX Version Number
+           // if (CurrentView == DataView) SendText(DataView_txv, Vbuf);
         }
         if (!LostContactFlag) {
             if ((CurrentView == FrontView)) {
@@ -1330,7 +1342,7 @@ void ShowComms()
                 SendText(DataView_roll, ModelRoll);
                 SendText(DataView_pitch, ModelPitch);
                 SendText(DataView_yaw, ModelYaw);
-                SendText(DataView_rxv, ModelVersionNumber); // RX Version Number
+                SendText(DataView_rxv, ReceiverVersionNumber); // RX Version Number
                 SendValue(DataView_chav, BadChannelPointer + ChannelsLapped);
                 SendValue(DataView_Ls, GapLongest); // millis
                 SendValue(DataView_Ts, GapSum);     // millis
@@ -2423,6 +2435,21 @@ void SetDS1307ToCompilerTime()
     } // only useful when connected to compiler
 }
 
+/************************************************************************************************************/
+
+void GetTXVersionNumber()
+{
+    char nbuf[5];
+    uint8_t Txv1 = TXVERSION_MAJOR;
+    uint8_t Txv2 = TXVERSION_MINOR;
+    uint8_t Txv3 = TXVERSION_MINIMUS;         
+            Str(TransmitterVersionNumber,Txv1, 2);
+            Str(nbuf,Txv2, 2);
+            strcat(TransmitterVersionNumber,nbuf);
+            Str(nbuf,Txv3, 0);
+            strcat(TransmitterVersionNumber,nbuf);
+}
+
 /*********************************************************************************************************************************/
 // SETUP
 /*********************************************************************************************************************************/
@@ -2486,6 +2513,7 @@ void setup()
 #endif
     StartInactvityTimeout();
     SizeOfCompressedData = sizeof (CompressedData);
+    GetTXVersionNumber();
 }
 
 /*********************************************************************************************************************************/
@@ -5384,20 +5412,42 @@ void ReadSwitches()
     GetFlightMode();
 }
 
+
+
+/************************************************************************************************************/
+
+void GetRXVersionNumber()
+{
+char nbuf[5];
+            Str(ReceiverVersionNumber,AckPayload.Pitch, 2);
+            Str(nbuf,AckPayload.Roll, 2);
+            strcat(ReceiverVersionNumber,nbuf);
+            Str(nbuf,AckPayload.Yaw, 0);
+            strcat(ReceiverVersionNumber,nbuf);
+}
+
 /************************************************************************************************************/
 void ParseAckPayload()
 {
-     Str(ModelVersionNumber,AckPayload.ReceiverFirmwareVersion, 0);
-      VoltsDetected = false;
-      if (AckPayload.volt>0)                                               // zero volts means not available
-      {    
-            Str(ModelVolts,AckPayload.volt,0);                             // Get receiver battery volts, if available.
-            VoltsDetected = true;
-      }            
-      Str(ModelAltitude,AckPayload.CurrentAltitude,0);
-      Str(ModelPitch,AckPayload.Pitch,0);
-      Str(ModelYaw,AckPayload.Yaw,0);
-      Str(ModelRoll,AckPayload.Roll,0);
+    switch (AckPayload.Purpose) 
+    {
+       case 0:
+            VoltsDetected = false;
+            if (AckPayload.volt>0)                                               // zero volts means not available
+            {    
+                    Str(ModelVolts,AckPayload.volt,0);                             // Get receiver battery volts, if available.
+                    VoltsDetected = true;
+            }         
+            Str(ModelAltitude,AckPayload.CurrentAltitude,0);
+            Str(ModelPitch,AckPayload.Pitch,0);
+            Str(ModelYaw,AckPayload.Yaw,0);
+            Str(ModelRoll,AckPayload.Roll,0);
+            break;
+      case 1:
+            GetRXVersionNumber();
+            break;
+    }
+    
 }
 /************************************************************************************************************/
 void CheckGapsLength()
@@ -5419,8 +5469,6 @@ void CheckGapsLength()
         GapStart = 0;
     }
 }
-
-/************************************************************************************************************/
 
 
 /************************************************************************************************************/
