@@ -5435,7 +5435,7 @@ void ParseAckPayload()
             VoltsDetected = false;
             if (AckPayload.volt>0)                                               // zero volts means not available
             {    
-                    Str(ModelVolts,AckPayload.volt,0);                             // Get receiver battery volts, if available.
+                    Str(ModelVolts,AckPayload.volt,0);                            // Get receiver battery volts, if available.
                     VoltsDetected = true;
             }         
             Str(ModelAltitude,AckPayload.CurrentAltitude,0);
