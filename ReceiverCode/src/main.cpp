@@ -1,4 +1,7 @@
-#define RXVERSIONNUMBER 1 // Oct 1st 2021
+
+#define RXVERSION_MAJOR   1     // Oct 3rd 2021
+#define RXVERSION_MINOR   0
+#define RXVERSION_MINIMUS 1
 
 // #define DEBUG
 // #define DB_SENSORS
@@ -143,8 +146,9 @@ RF24* CurrentRadio = &Radio1;
 // ******** AckPayload Stucture using only 8 bit values for economy and better speed **********************************
 struct Payload
 {                                                      // Structure for data returned to transmitter.
+    
+    uint8_t Purpose                 = 0;               // This new byte determines what **all** the remainder represent!
     uint8_t volt                    = 0;               // Voltage of RX battery, if measured.
-    uint8_t ReceiverFirmwareVersion = RXVERSIONNUMBER; // Firmware version number.
     uint8_t CurrentAltitude         = 0;               // Altitude, if measured.
     uint8_t ReportedPitch           = 0;
     uint8_t ReportedRoll            = 0;
@@ -174,9 +178,9 @@ struct DOF9
     float PitchRate; /** PitchRate */
     float RollRate;  /** RollRate */
     float YawRate;   /** YawRate */
-    float Pitch;     /** Pitch */
-    float Roll;      /** Roll */
-    float Yaw;       /** Yaw */
+    float Pitch;     /** Pitch  */
+    float Roll;      /** Roll  */
+    float Yaw;       /** Yaw  */
 };
 
 DOF9  dof9_data = DOF9(); /** The 9 DOF data. This object is used to cache and filter the data from the IMU. */
@@ -217,7 +221,6 @@ uint8_t      SavedPipeAddress[8];
 int          BindOKTimer             = 0;
 bool         SaveNewBind             = true;
 bool         ServosAttached          = false;
-float        ReceiverFirmwareVersion = RXVERSIONNUMBER;
 uint16_t     SbusChannels[CHANNELSUSED + 8]; // a few spare
 int          SBUSTimer    = 0;
 bool         FailSaveSafe = false;
@@ -236,6 +239,13 @@ uint8_t      ReconnectAttempts  = 0;
 uint8_t      Rnumber            = 1;
 
 /************************************************************************************************************/
+
+void LoadVersioNumber(){
+        
+        AckPayload.ReportedPitch = RXVERSION_MAJOR; 
+        AckPayload.ReportedRoll  = RXVERSION_MINOR;
+        AckPayload.ReportedYaw   = RXVERSION_MINIMUS;
+}
 
 uint8_t EEPROMReadByte(int p_address)
 {
@@ -638,6 +648,7 @@ void Reconnect()
         }
         else if (StillSearchingTime >= FAILSAFE_TIMEOUT)
         {
+            BoundFlag          = false;
             if (!FailSafeSent)
             {
                 FailSafe();
@@ -651,8 +662,14 @@ void Reconnect()
 
 void LoadAckPayload()
 {
-    // todo!
+    AckPayload.Purpose ^=1;  // Toggle the purpose!
+   if (AckPayload.Purpose)
+   {
+       LoadVersioNumber();   // if 1 send version info
+   }
 }
+
+/************************************************************************************************************/
 
 /**
  * Decompresses uint16_t* buffer values (each with 12 bit resolution - the lower 12 bits).
@@ -682,7 +699,7 @@ bool ReadData()
     uint16_t CompressedData[COMPRESSEDWORDS]; // 30 bytes -> 40 bytes when uncompressed
     Connected = false;
     if (CurrentRadio->available()) {
-        // LoadAckPayload(); // it's now loaded by dosensors
+        LoadAckPayload();
         Connected            = true;
         LastConnectionMoment = millis();
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize);     // Send telemetry (actual length plus 0)
@@ -890,10 +907,10 @@ void DoSensors()
 {
     if (USE_BMP280) {
         if (bmp280.getMeasurements(temperature280, pressure, altitude)) // heer
-            AckPayload.CurrentAltitude = int(altitude - StartAltitude);
+            if (BoundFlag) AckPayload.CurrentAltitude = int(altitude - StartAltitude);
     }
     if (USE_INA219) {
-        AckPayload.volt = ina219.getBusVoltage_V();
+        if (BoundFlag) AckPayload.volt = ina219.getBusVoltage_V();
     }
 #ifdef DB_SENSORS
     Sensors_Status(); // does nothing if DB_SENSORS is not defined
@@ -1128,7 +1145,8 @@ void setup()
     MainLoopTime = millis();
     GetOldPipe();
     digitalWrite(LED_PIN, LOW);
-    LoadModelNumber();
+   // LoadModelNumber();  // obsolete
+    LoadVersioNumber();
 }
 
 /************************************************************************************************************/
