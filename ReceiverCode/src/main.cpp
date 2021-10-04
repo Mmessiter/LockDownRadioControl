@@ -1,7 +1,7 @@
 // ************************************************** Receiver code **************************************************
 #define RXVERSION_MAJOR   1     // Oct 4th 2021
 #define RXVERSION_MINOR   0
-#define RXVERSION_MINIMUS 2
+#define RXVERSION_MINIMUS 3
 
 // #define DEBUG
 // #define DB_SENSORS
@@ -509,14 +509,8 @@ void FailSafe()
         if (!FailSafeDataLoaded) {
             LoadFailSafeData();
         }
-        if (!FailSafeSent) {
             MapToSBUS();
-            MoveServos();
-#ifdef DB_FAILSAFE
-            Serial.println("FAILSAFE SENT");
-#endif
-            FailSafeSent = true;
-        }
+            MoveServos(); 
     }
 }
 
@@ -647,12 +641,16 @@ void Reconnect()
 #endif
         }
         else if (StillSearchingTime >= FAILSAFE_TIMEOUT)
-        {
-            BoundFlag          = false;
+        {  
             if (!FailSafeSent)
             {
                 FailSafe();
                 FailSafeSent = true; // Once is enough
+                #ifdef DB_FAILSAFE
+                Serial.println ("FailSafe sent");
+                #endif 
+                BoundFlag          = false;
+
             }
         }
     }
