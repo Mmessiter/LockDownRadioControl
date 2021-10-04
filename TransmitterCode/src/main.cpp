@@ -3715,7 +3715,7 @@ void SendModelFile()
     unsigned long Fposition = 0;
     char          Fbuffer[BUFFERSIZE + 15];
     unsigned long CheckSum     = 0;
-    uint8_t          PacketNumber = 0;
+    uint8_t       PacketNumber = 0;
     int           p            = 5;
     SendCommand(ProgressStart);
     SendValue(Progress, p);
