@@ -2,7 +2,7 @@
 
 #define TXVERSION_MAJOR    1  //   Oct 4th 2021 Malcolm Messiter
 #define TXVERSION_MINOR    0 
-#define TXVERSION_MINIMUS  2
+#define TXVERSION_MINIMUS  3
 
 #define USE_WATCHDOG          // Enable when developing only  ??
 #define WATCHDOGTIMEOUT 10000 // 10 Seconds before reboot (32ms -> 500 seconds)
@@ -248,7 +248,7 @@ uint8_t       ThisFrequency    = 99;
 
 
 // ************************************* AckPayload structure ******************************************************
-struct Payload{   // heer
+struct Payload{   
     uint8_t Purpose;                    // Defines meaning of the remainder
                                         // Highest BIT of Purpose means Ignore IF ON
     uint8_t volt;
@@ -4747,10 +4747,10 @@ void Button_was_pressed()
 
         if (InStrng(SetupView, WordsIn) > 0) {
             ClearText();
-            DoScanEnd();
-            //SaveAllParameters();
             CurrentView = MainSetupView;
+            DoScanEnd();
             SendCommand(page_SetupView);
+            
         }
 
         if (InStrng(Gains_View, WordsIn) > 0) {
@@ -4941,7 +4941,6 @@ void Button_was_pressed()
         if (p > 0) {
             DrawFhssBox();
             DoScanInit();
-            CurrentMode = 3;
         }
 
         p = (InStrng(ReScan, WordsIn));
@@ -4952,7 +4951,7 @@ void Button_was_pressed()
 
         p = (InStrng(StopScan, WordsIn));
         if (p > 0) {
-            CurrentMode = SENDNOTHING; // stops the scanning
+            CurrentMode = SCANWAVEBAND; // stops the scanning
         }
 
         p = (InStrng(MIXES_VIEW, WordsIn)); //

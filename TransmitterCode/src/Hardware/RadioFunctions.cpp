@@ -339,8 +339,10 @@ void DoScanInit()
 
 void DoScanEnd()
 {
-    Radio1.setDataRate(RF24_250KBPS);
-    CurrentMode = NORMAL;
     SendCommand(NextionSleepTime);
+    Radio1.setDataRate(RF24_250KBPS);
+    Radio1.openWritingPipe(DefaultPipe);        
+    Radio1.stopListening();    
+    CurrentMode = NORMAL; 
 }
 /*********************************************************************************************************************************/
