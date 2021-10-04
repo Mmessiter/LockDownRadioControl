@@ -1,7 +1,7 @@
 // ************************************************** Receiver code **************************************************
-#define RXVERSION_MAJOR   1     // Oct 3rd 2021
+#define RXVERSION_MAJOR   1     // Oct 4th 2021
 #define RXVERSION_MINOR   0
-#define RXVERSION_MINIMUS 1
+#define RXVERSION_MINIMUS 2
 
 // #define DEBUG
 // #define DB_SENSORS
@@ -143,11 +143,11 @@ RF24 Radio2(pinCE2, pinCSN2);
 
 RF24* CurrentRadio = &Radio1;
 
-// ******** AckPayload Stucture using only 8 bit values for economy and better speed **********************************
+// ******** AckPayload Stucture ************************************************************************
 struct Payload
 {                                                      // Structure for data returned to transmitter.  
-    uint8_t Purpose                 = 0;               // This new byte determines what **all** the remainder represent!
-    bool    Ignore                  = false;           // Ignore sometimes
+    uint8_t Purpose                 = 0;               // This byte determines what the remainder represent.
+                                                       // Highest BIT of Purpose means >>IGNORE IF ON<<
     uint8_t volt                    = 0;               // Voltage of RX battery, if measured.
     uint8_t CurrentAltitude         = 0;               // Altitude, if measured.
     uint8_t ReportedPitch           = 0;
@@ -237,11 +237,11 @@ uint8_t      byte1              = 0;
 uint8_t      byte2              = 0;
 uint8_t      ReconnectAttempts  = 0;
 uint8_t      Rnumber            = 1;
+bool         GyroInstalled      = false;
 
 /************************************************************************************************************/
 
-void LoadVersioNumber(){
-        
+void LoadVersioNumber(){      
         AckPayload.ReportedPitch = RXVERSION_MAJOR; 
         AckPayload.ReportedRoll  = RXVERSION_MINOR;
         AckPayload.ReportedYaw   = RXVERSION_MINIMUS;
@@ -662,7 +662,7 @@ void Reconnect()
 
 void LoadAckPayload()
 {
-    AckPayload.Ignore = false;   // i.e. Don't ignore
+     AckPayload.Purpose &= 0x7F; // Clear hi bit (=do not ignore)
 
     ++AckPayload.Purpose;        // 0 =  Roll, Pitch, Yaw, Volts.
                                  // 1 =  Version number
@@ -696,6 +696,15 @@ void Decompress(uint16_t* uncompressed_buf, uint16_t* compressed_buf, int uncomp
     }
 }
 
+void ClearGyroData(){
+    AckPayload.ReportedPitch = 0;
+    AckPayload.ReportedRoll  = 0;
+    AckPayload.ReportedYaw   = 0;
+    AckPayload.Purpose |= 0x80;
+}
+
+
+
 /************************************************************************************************************/
 
 bool ReadData()
@@ -708,10 +717,11 @@ bool ReadData()
         LastConnectionMoment = millis();
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize);     // Send telemetry (actual length plus 0)
         CurrentRadio->read(&CompressedData, sizeof(CompressedData));       // Get Data
-        Decompress(ReceivedData, CompressedData, UNCOMPRESSEDWORDS); // decompress data
+        if(AckPayload.Purpose == 1 && !GyroInstalled) ClearGyroData();      
+        Decompress(ReceivedData, CompressedData, UNCOMPRESSEDWORDS);       // decompress data
         FailSafeDataLoaded = false;
         MapToSBUS();
-        AckPayload.Ignore       = true; 
+      
     }
     return Connected;
 }
@@ -970,6 +980,7 @@ void ReadBNOValues()
  * Get updated data from the MPU6050 sensor.
  * @see dof9_data
  */
+
 void Get_Mpu6050()
 {
     mpu6050.update();
@@ -1038,12 +1049,14 @@ void ScanI2c()
         if (Wire.endTransmission() == 0) {
             if (i == 0x28) {
                 USE_BNO055A = true;
+                GyroInstalled = true;
 #ifdef DB_SENSORS
                 Serial.println("Real Adafruit BNO055 gyro detected!");
 #endif
             }
             else if (i == 0x29) {
                 USE_BNO055 = true;
+                GyroInstalled = true;
 #ifdef DB_SENSORS
                 Serial.println("Cheapo BNO055 gyro clone detected!");
 #endif
@@ -1056,6 +1069,7 @@ void ScanI2c()
             }
             else if (i == 0x68) {
                 USE_MPU6050 = true;
+                GyroInstalled = true;
 #ifdef DB_SENSORS
                 Serial.println("MPU6050 gyro detected!");
 #endif
@@ -1214,6 +1228,7 @@ void DoBinding()
         BindModel();
     }
 }
+
 
 /************************************************************************************************************/
 // LOOP
