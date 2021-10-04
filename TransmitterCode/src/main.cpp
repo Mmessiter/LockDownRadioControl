@@ -1,8 +1,8 @@
 // ************************************************** TRANSMITTER CODE **************************************************
 
-#define TXVERSION_MAJOR    1  //   Oct 3rd 2021 Malcolm Messiter
+#define TXVERSION_MAJOR    1  //   Oct 4th 2021 Malcolm Messiter
 #define TXVERSION_MINOR    0 
-#define TXVERSION_MINIMUS  1
+#define TXVERSION_MINIMUS  2
 
 #define USE_WATCHDOG          // Enable when developing only  ??
 #define WATCHDOGTIMEOUT 10000 // 10 Seconds before reboot (32ms -> 500 seconds)
@@ -250,7 +250,7 @@ uint8_t       ThisFrequency    = 99;
 // ************************************* AckPayload structure ******************************************************
 struct Payload{   // heer
     uint8_t Purpose;                    // Defines meaning of the remainder
-    bool    Ignore;
+                                        // Highest BIT of Purpose means Ignore IF ON
     uint8_t volt;
     uint8_t CurrentAltitude;
     uint8_t Pitch;
@@ -5433,16 +5433,17 @@ char nbuf[5];
 
 /************************************************************************************************************/
 void ParseAckPayload()
-{
-    if (!AckPayload.Ignore)
+{  
+    if (!(AckPayload.Purpose & 0x80))          // High BIT ON = IGNORE i.e. skip the whole thing
     {
-        switch (AckPayload.Purpose) 
+        switch (AckPayload.Purpose)            // Only looking at the low 7 BITS 
+                                               // High BIT is guaranteed LOW by this point, so no "& 0x7F" is needed.
         {
         case 0:
               VoltsDetected = false;
-              if (AckPayload.volt>0)                                               // zero volts means not available
+              if (AckPayload.volt>0)                     // zero volts means RX volts are not available
               {    
-                    Str(ModelVolts,AckPayload.volt,0);                            // Get receiver battery volts, if available.
+                    Str(ModelVolts,AckPayload.volt,0);   // Get receiver battery volts, if available.
                     VoltsDetected = true;
               }         
               Str(ModelAltitude,AckPayload.CurrentAltitude,0);
@@ -5454,7 +5455,7 @@ void ParseAckPayload()
               GetRXVersionNumber();
               break;
     }
-  }  
+ }  
 }
 /************************************************************************************************************/
 void CheckGapsLength()
