@@ -27,11 +27,17 @@
 #define COMPRESSEDWORDS    UNCOMPRESSEDWORDS * 3 / 4 // COMPRESSED DATA SENT = 30  Bytes
 #define PACKETS_PER_HOP    20                        // Must match RX setting
 
+//#define DB_FHSS           // Debug real time FHSS data
+
 /************************************************************************************************************/
 
 
 
-
+#ifdef DB_FHSS
+    float PSTARTTIME = 0;
+    float PENDTIME   = 0;
+    float PDURATION  = 0;
+#endif 
 
 // **** Decompresses cc*3/4 x 16 BIT values up to cc loading only their low 12 BITS cc must be divisble by 4! ******************
 void DeComp(uint16_t* d, uint16_t* c, int cc)

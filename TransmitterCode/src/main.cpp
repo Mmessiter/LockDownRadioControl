@@ -1,6 +1,6 @@
 // ************************************************** TRANSMITTER CODE **************************************************
 
-#define TXVERSION_MAJOR    1  //   Oct 4th 2021 Malcolm Messiter
+#define TXVERSION_MAJOR    1  //   Oct 5th 2021 Malcolm Messiter
 #define TXVERSION_MINOR    0 
 #define TXVERSION_MINIMUS  3
 
@@ -10,7 +10,7 @@
 #define WATCHDOGMAXRATE 500   // 500 ms secs between kicks is max rate allowed
 
 // UNCOMMENT ANY OF THESE for that bit of debug info
-// #define DB_FHSS           // Debug real time FHSS data
+
 // #define DB_NEXTION        // Debug Nextion and SD card data
 // #define DB_CHANNEL_AVOID  // Debug FHSS channel avoiding data etc
 // #define DB_SENSORS        // Debug Sensors
@@ -229,11 +229,6 @@ uint8_t          MixNumber        = 0;
 uint8_t          CurrentView      = FrontView;
 uint8_t          SavedCurrentView = FrontView;
 const uint8_t CharsMax         = 120; // 80;
-#ifdef DB_FHSS
-float PSTARTTIME = 0;
-float PENDTIME   = 0;
-float PDURATION  = 0;
-#endif
 const uint8_t MaxDataTransferred = UNCOMPRESSEDWORDS;  // = 40 bytes     A few extra bytes sent after channels' values
 uint64_t      DefaultPipe        = DEFAULTPIPEADDRESS; //          Default Radio pipe address
 uint64_t      NewPipe            = 0xBABE1E5420LL;     //             New Radio pipe address for binding will come from MAC address
@@ -4088,9 +4083,11 @@ void Button_was_pressed()
 
  if (InStrng(SetupView, WordsIn) > 0) { 
             CurrentView = MainSetupView;
-            DoScanEnd();
             ClearText();
+            SaveAllParameters(); // TODO HEER - mixes only
+            LostContactFlag=true;
             SendCommand(page_SetupView);
+            DoScanEnd();
         }
 
 
@@ -4688,7 +4685,7 @@ void Button_was_pressed()
             ClearText();
         }
 
-        if (InStrng(SetupViewFM, WordsIn) > 0) { // New model name occurs at offset 12 in WordsIn
+        if (InStrng(SetupViewFM, WordsIn) > 0) { // New model name occurs at offset 12 in WordsIn // heer
             i = 0;
             while (WordsIn[i + 12] > 0) {
                 ModelName[i]     = WordsIn[i + 12];
@@ -4697,6 +4694,7 @@ void Button_was_pressed()
             } // copy new name
             SaveOneModel(ModelNumber);
             ClearText();
+            LostContactFlag=true;
             SendCommand(page_SetupView);
             CurrentMode = NORMAL; // Send data again
             CurrentView = MainSetupView;
@@ -4715,10 +4713,6 @@ void Button_was_pressed()
 
         if (InStrng(GoSetupView, WordsIn) > 0) {
             ClearText();
-            if (LostContactFlag) {
-                SetupFlag = true;
-                BlueLedOn();
-            }
             CurrentView = MainSetupView;
             SendCommand(page_SetupView);
         }
@@ -4910,14 +4904,11 @@ void Button_was_pressed()
 
         p = (InStrng(Sticks_View, WordsIn));   
         if (p > 0) {
-            CurrentView = SticksView;
             Force_ReDisplay();
             SendCommand(page_SticksView); // Set to SticksView
             UpdateModelsNameEveryWhere();
             UpdateButtonLabels();
             CurrentView = SticksView;
-            SaveAllParameters(); // because mixes might have changed.
-            DoScanEnd();         // re-enable Transmit
         }
 
         p = (InStrng(Fhss_View, WordsIn));

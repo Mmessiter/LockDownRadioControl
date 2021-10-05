@@ -14,6 +14,7 @@
 #define BAD_CHANNEL_MAX    40  
 #define Nextion            Serial1 // Nextion is connected to Serial1
 
+
 /*********************************************************************************************************************************/
 // external (global vars) needed here
 
@@ -54,6 +55,10 @@ extern uint8_t  RecentPacketsLost;
 extern uint8_t  AckPayloadSize;
 extern uint8_t  SizeOfCompressedData;
 extern int      RangeTestGoodPackets;
+
+extern uint8_t FHSSBottom ;
+extern uint8_t FHSSTop  ;
+
 
 extern void KickTheDog();
 extern void SendCommand(char* tbox);
