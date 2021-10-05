@@ -3564,7 +3564,7 @@ void MovePoint()
 /*********************************************************************************************************************************/
 
 #define FILEPIPEADDRESS 0xFEFEFEFEFELL // Unique pipe address for FILE EXCHANGE
-#define BUFFERSIZE      20
+#define BUFFERSIZE      28 // + 4 = 32
 #define FILEDATARATE    RF24_250KBPS
 #define FILEPALEVEL     RF24_PA_MAX
 #define FILECHANNEL     123
@@ -3582,18 +3582,15 @@ void ReceiveModelFile()
     char          ProgressStart[]       = "vis Progress,1";
     char          ProgressEnd[]         = "vis Progress,0";
     char          Progress[]            = "Progress";
-    char          Fbuffer[BUFFERSIZE + 12];
-    char          Fack[]    = "Packet received OK!";
+    char          Fbuffer[BUFFERSIZE + 8];  // spare space
+    uint8_t       Fack   = 1;               // just a token byte
     char          Waiting[] = "Waiting ";
     char          WaitTime[6];
     char          WaitMsg[17];
     char          ThreeDots[]        = "...";
     char          Receiving[]        = "Receiving ...";
     char          TimeoutMsg[]       = "TIMEOUT";
-    char          CheckSumErrorMsg[] = "Checksum error!";
     char          Success[]          = "* Success! *";
-    unsigned long LCheckSum          = 0;
-    unsigned long RCheckSum          = 0;
     unsigned long Fsize              = 0;
     unsigned long Fposition          = 0;
     float         SecondsElapsed     = 0;
@@ -3605,7 +3602,8 @@ void ReceiveModelFile()
 #endif
     SendText(ModelsView_filename, Waiting);
     RXPipe = FILEPIPEADDRESS;
-    Radio1.setChannel(FILECHANNEL);
+    Radio1.setChannel(FILECHANNEL);            
+    Radio1.flush_tx();
     Radio1.openReadingPipe(1, RXPipe);
     Radio1.startListening();
     RXTimer = millis();           // Start timer
@@ -3618,6 +3616,7 @@ void ReceiveModelFile()
 #endif
             SendText(ModelsView_filename, TimeoutMsg);
             SetThePipe(DefaultPipe); 
+            Radio1.setCRCLength(RF24_CRC_8);          
             return; // Give up waiting
         }
         else {
@@ -3634,12 +3633,12 @@ void ReceiveModelFile()
     SendValue(Progress, p);
     SendText(ModelsView_filename, Receiving);
     Radio1.writeAckPayload(1, &Fack, sizeof(Fack)); // Ack first packet
-    Radio1.read(&Fbuffer, BUFFERSIZE + 12);         // Read it
+    Radio1.read(&Fbuffer, BUFFERSIZE + 4);          //  HEER!!  Read it was 12
     strcpy(SingleModelFile, Fbuffer);               // Get filename
-    Fsize = Fbuffer[20];
-    Fsize += Fbuffer[21] << 8;
-    Fsize += Fbuffer[22] << 16;
-    Fsize += Fbuffer[23] << 24; // Get file size
+    Fsize = Fbuffer[BUFFERSIZE];
+    Fsize += Fbuffer[BUFFERSIZE+1] << 8;
+    Fsize += Fbuffer[BUFFERSIZE+2] << 16;
+    Fsize += Fbuffer[BUFFERSIZE+3] << 24; // Get file size
 #ifdef DB_MODEL_EXCHANGE
     Serial.println("CONNECTED!");
     Serial.print("FileName=");
@@ -3654,24 +3653,13 @@ void ReceiveModelFile()
         KickTheDog();                                                           // Watchdog
         if (Radio1.available()) {
             Radio1.writeAckPayload(1, &Fack, sizeof(Fack));
-            Radio1.read(&Fbuffer, BUFFERSIZE + 12);
-            LCheckSum = 0;
-            for (i = 0; i < BUFFERSIZE; i++) {
-                LCheckSum += uint8_t(Fbuffer[i]);
-            } // Calculate Local Checksum
-            RCheckSum = Fbuffer[26];
-            RCheckSum += Fbuffer[27] << 8;
-            RCheckSum += Fbuffer[28] << 16;
-            RCheckSum += Fbuffer[29] << 24;              // RCHECKSUM AT OFFSET 26
+            Radio1.read(&Fbuffer, BUFFERSIZE + 4);       // HEER!!
             ModelsFileNumber.seek(Fposition);            // Move filepointer
             ModelsFileNumber.write(Fbuffer, BUFFERSIZE); // Write part of file
             Fposition += BUFFERSIZE;
             p = ((float)Fposition / (float)Fsize) * 100;
             SendValue(Progress, p);
-            delay(10);
-            if (RCheckSum != LCheckSum) {
-                SendText(ModelsView_filename, CheckSumErrorMsg);
-            } // Checksum checking ...
+            delay(10);       
 #ifdef DB_MODEL_EXCHANGE
             PacketNumber = Fbuffer[25];
             Serial.print("PacketNumber: ");
@@ -3699,6 +3687,7 @@ void ReceiveModelFile()
     CloseModelsFile();
     UpdateModelsNameEveryWhere();
     SetThePipe(DefaultPipe); 
+    Radio1.setCRCLength(RF24_CRC_8);           
     SendCommand(ProgressEnd);
 }
 
@@ -3713,8 +3702,7 @@ void SendModelFile()
     uint64_t      TXPipe;
     unsigned long Fsize     = 0;
     unsigned long Fposition = 0;
-    char          Fbuffer[BUFFERSIZE + 15];
-    unsigned long CheckSum     = 0;
+    char          Fbuffer[BUFFERSIZE + 8]; // spare space
     uint8_t       PacketNumber = 0;
     int           p            = 5;
     SendCommand(ProgressStart);
@@ -3732,7 +3720,7 @@ void SendModelFile()
     Serial.print(Fsize);
     Serial.println(" bytes.");
 #endif
-    Radio1.setChannel(FILECHANNEL);
+    Radio1.setChannel(FILECHANNEL);   
     Radio1.setPALevel(FILEPALEVEL);
     Radio1.openWritingPipe(TXPipe);
     Radio1.stopListening();
@@ -3743,28 +3731,19 @@ void SendModelFile()
         PacketNumber++;
         if (PacketNumber == 1) {
             strcpy(Fbuffer, SingleModelFile); // Filename in first packet
-            Fbuffer[20] = Fsize;
-            Fbuffer[21] = Fsize >> 8;
-            Fbuffer[22] = Fsize >> 16;
-            Fbuffer[23] = Fsize >> 24;  // SEND FILE SIZE (four bytes)
-            Fbuffer[25] = PacketNumber; // Packet number at offset 25
+            Fbuffer[BUFFERSIZE] = Fsize;
+            Fbuffer[BUFFERSIZE+1] = Fsize >> 8;
+            Fbuffer[BUFFERSIZE+2] = Fsize >> 16;
+            Fbuffer[BUFFERSIZE+3] = Fsize >> 24;  // SEND FILE SIZE (four bytes)
         }
         else {
-            CheckSum = 0;
+        
             ModelsFileNumber.seek(Fposition);           // Move filepointer
             ModelsFileNumber.read(Fbuffer, BUFFERSIZE); // Read part of file
-            for (i = 0; i < BUFFERSIZE; i++) {
-                CheckSum += uint8_t(Fbuffer[i]);
-            }                           // Calculate Checksum
-            Fbuffer[25] = PacketNumber; // Packet number at offset 25
-            Fbuffer[26] = CheckSum;
-            Fbuffer[27] = CheckSum >> 8;
-            Fbuffer[28] = CheckSum >> 16;
-            Fbuffer[29] = CheckSum >> 24; // CHECKSUM AT offset 26
             Fposition += BUFFERSIZE;
         }
-        if (Radio1.write(&Fbuffer, BUFFERSIZE + 12)) { // Send part of file
-            delay(100);                                // allow time for receive and write
+        if (Radio1.write(&Fbuffer, BUFFERSIZE + 4)) {      // HEER!! Send part of file
+            delay(200);                                     // allow time for receive and write
             if (Radio1.isAckPayloadAvailable()) {
                 Radio1.read(&AckPayload, AckPayloadSize);
             }
@@ -3787,6 +3766,7 @@ void SendModelFile()
     SendValue(Progress, 100);
     delay(100);
     SetThePipe(DefaultPipe); 
+    Radio1.setCRCLength(RF24_CRC_8);        
     SendCommand(ProgressEnd);
 }
 
