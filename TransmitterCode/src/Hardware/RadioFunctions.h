@@ -12,6 +12,7 @@
 #define SCANWAVEBAND       3 // Scan waveband
 #define SENDNOTHING        4 // Transmission off
 #define BAD_CHANNEL_MAX    40  
+#define Nextion            Serial1 // Nextion is connected to Serial1
 
 /*********************************************************************************************************************************/
 // external (global vars) needed here

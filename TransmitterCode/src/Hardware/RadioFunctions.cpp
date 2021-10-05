@@ -181,15 +181,15 @@ void ScanAllChannels()
     char fyll[]   = "fill ";
     char IELLOW[] = "YELLOW";
     char NA[1]    = ""; // blank one
-
     for (Sc = ScanStart; Sc <= ScanEnd; Sc++) {
+        if (Nextion.available()) return;  // in case someone wants to stop!
         Radio1.setChannel(Sc);
         Radio1.startListening();
         x2 = x1 + (Sc * 5);
         y2 = y1 + 255;
         y2 = y2 - BlobHeight;
         y2 = y2 - AllChannels[Sc];
-        delayMicroseconds(120); // Minimum!?
+        delayMicroseconds(120); // Minimum!? heer!
         Radio1.stopListening();
         if (Radio1.testCarrier()) {
             if (AllChannels[Sc] < (250)) {

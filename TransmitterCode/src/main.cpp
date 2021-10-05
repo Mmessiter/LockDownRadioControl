@@ -3633,7 +3633,7 @@ void ReceiveModelFile()
     SendValue(Progress, p);
     SendText(ModelsView_filename, Receiving);
     Radio1.writeAckPayload(1, &Fack, sizeof(Fack)); // Ack first packet
-    Radio1.read(&Fbuffer, BUFFERSIZE + 4);          //  HEER!!  Read it was 12
+    Radio1.read(&Fbuffer, BUFFERSIZE + 4);          //  Read it was 12
     strcpy(SingleModelFile, Fbuffer);               // Get filename
     Fsize = Fbuffer[BUFFERSIZE];
     Fsize += Fbuffer[BUFFERSIZE+1] << 8;
@@ -3653,7 +3653,7 @@ void ReceiveModelFile()
         KickTheDog();                                                           // Watchdog
         if (Radio1.available()) {
             Radio1.writeAckPayload(1, &Fack, sizeof(Fack));
-            Radio1.read(&Fbuffer, BUFFERSIZE + 4);       // HEER!!
+            Radio1.read(&Fbuffer, BUFFERSIZE + 4);       
             ModelsFileNumber.seek(Fposition);            // Move filepointer
             ModelsFileNumber.write(Fbuffer, BUFFERSIZE); // Write part of file
             Fposition += BUFFERSIZE;
@@ -3743,7 +3743,7 @@ void SendModelFile()
             ModelsFileNumber.read(Fbuffer, BUFFERSIZE); // Read part of file
             Fposition += BUFFERSIZE;
         }
-        if (Radio1.write(&Fbuffer, BUFFERSIZE + 4)) {      // HEER!! Send part of file
+        if (Radio1.write(&Fbuffer, BUFFERSIZE + 4)) {      
             delay(200);                                    // allow time for receive and write
             if (Radio1.isAckPayloadAvailable()) {
                 Radio1.read(&Fack, sizeof(Fack));  
@@ -4085,6 +4085,14 @@ void Button_was_pressed()
         Serial.print("From Nextion: ");
         Serial.println(WordsIn);
 #endif
+
+ if (InStrng(SetupView, WordsIn) > 0) { 
+            CurrentView = MainSetupView;
+            DoScanEnd();
+            ClearText();
+            SendCommand(page_SetupView);
+        }
+
 
         if (InStrng(HelpView, WordsIn) > 0) {
             SavedCurrentView = CurrentView;
@@ -4726,13 +4734,7 @@ void Button_was_pressed()
             LastTimeRead=0;                 // this is to make redisplay sooner
         }
 
-        if (InStrng(SetupView, WordsIn) > 0) {
-            ClearText();
-            CurrentView = MainSetupView;
-            DoScanEnd();
-            SendCommand(page_SetupView);
-            
-        }
+       
 
         if (InStrng(Gains_View, WordsIn) > 0) {
             CurrentView = GainsView;
