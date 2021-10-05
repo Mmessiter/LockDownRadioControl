@@ -3700,6 +3700,7 @@ void SendModelFile()
     char          ProgressEnd[]   = "vis Progress,0";
     char          Progress[]      = "Progress";
     uint64_t      TXPipe;
+    uint8_t       Fack = 1;
     unsigned long Fsize     = 0;
     unsigned long Fposition = 0;
     char          Fbuffer[BUFFERSIZE + 8]; // spare space
@@ -3743,9 +3744,9 @@ void SendModelFile()
             Fposition += BUFFERSIZE;
         }
         if (Radio1.write(&Fbuffer, BUFFERSIZE + 4)) {      // HEER!! Send part of file
-            delay(200);                                     // allow time for receive and write
+            delay(200);                                    // allow time for receive and write
             if (Radio1.isAckPayloadAvailable()) {
-                Radio1.read(&AckPayload, AckPayloadSize);
+                Radio1.read(&Fack, sizeof(Fack));  
             }
         }
         else {
