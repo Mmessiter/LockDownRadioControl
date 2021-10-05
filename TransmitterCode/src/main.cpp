@@ -11,7 +11,7 @@
 
 // UNCOMMENT ANY OF THESE for that bit of debug info
 
-// #define DB_NEXTION        // Debug Nextion and SD card data
+ // #define DB_NEXTION        // Debug Nextion and SD card data
 // #define DB_CHANNEL_AVOID  // Debug FHSS channel avoiding data etc
 // #define DB_SENSORS        // Debug Sensors
 // #define DB_BIND           // Debug Binding
@@ -4905,10 +4905,10 @@ void Button_was_pressed()
         p = (InStrng(Sticks_View, WordsIn));   
         if (p > 0) {
             Force_ReDisplay();
-            SendCommand(page_SticksView); // Set to SticksView
+            CurrentView = SticksView;
+            SendCommand(page_SticksView); // Set to SticksView 
             UpdateModelsNameEveryWhere();
             UpdateButtonLabels();
-            CurrentView = SticksView;
         }
 
         p = (InStrng(Fhss_View, WordsIn));
