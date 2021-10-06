@@ -1,5 +1,5 @@
 // ************************************************** Receiver code **************************************************
-#define RXVERSION_MAJOR   1     // Oct 4th 2021
+#define RXVERSION_MAJOR   1     // Oct 6th 2021
 #define RXVERSION_MINOR   0
 #define RXVERSION_MINIMUS 3
 
@@ -502,6 +502,35 @@ void MoveServos()
 
 /************************************************************************************************************/
 
+void ReadSavedPipe()
+{
+    for (uint8_t i = 0; i < 8; ++i) {
+        SavedPipeAddress[i] = EEPROMReadByte(i); // uses first 8 bytes only.
+    }
+}
+
+
+/**
+ * Get pipe address from EEPROM.
+ * @note Address data in EEPORM is valid only after a previous power cycle observed
+ * a completed binding process (pairing was successful at least once during last flight's session).
+ */
+void GetOldPipe()
+{
+    ReadSavedPipe();
+    OldPipe = (uint64_t)SavedPipeAddress[0] << 56;
+    OldPipe += (uint64_t)SavedPipeAddress[1] << 48;
+    OldPipe += (uint64_t)SavedPipeAddress[2] << 40;
+    OldPipe += (uint64_t)SavedPipeAddress[3] << 32;
+    OldPipe += (uint64_t)SavedPipeAddress[4] << 24;
+    OldPipe += (uint64_t)SavedPipeAddress[5] << 16;
+    OldPipe += (uint64_t)SavedPipeAddress[6] << 8;
+    OldPipe += (uint64_t)SavedPipeAddress[7];
+}
+
+
+/************************************************************************************************************/
+
 void FailSafe()
 {
 
@@ -528,7 +557,9 @@ void ShowHopDurationEtc(uint8_t freq)
     Serial.print("  Average Time per packet: ");
     Serial.print(OnePacketTime);
     Serial.print("ms  Next channel: ");
-    Serial.println(freq);
+    Serial.print(freq);
+    if (BoundFlag) Serial.println(" Bound");
+    if (!BoundFlag) Serial.println(" NOT Bound");
     PacketStartTime = millis();
 }
 
@@ -779,7 +810,7 @@ void BindModel()
         }
     }
     CurrentRadio->stopListening();
-    SetNewPipe(); // No Longer InitCurrentRadio(); which was here
+    SetNewPipe();
     BoundFlag   = true;
     BindNow     = 0;
     SaveNewBind = false;
@@ -1010,32 +1041,7 @@ void Get_BNO055(const bool use_cheapo)
     ReadBNOValues();
 }
 
-/************************************************************************************************************/
 
-void ReadSavedPipe()
-{
-    for (uint8_t i = 0; i < 8; ++i) {
-        SavedPipeAddress[i] = EEPROMReadByte(i); // uses first 8 bytes only.
-    }
-}
-
-/**
- * Get pipe address from EEPROM.
- * @note Address data in EEPORM is valid only after a previous power cycle observed
- * a completed binding process (pairing was successful at least once during last flight's session).
- */
-void GetOldPipe()
-{
-    ReadSavedPipe();
-    OldPipe = (uint64_t)SavedPipeAddress[0] << 56;
-    OldPipe += (uint64_t)SavedPipeAddress[1] << 48;
-    OldPipe += (uint64_t)SavedPipeAddress[2] << 40;
-    OldPipe += (uint64_t)SavedPipeAddress[3] << 32;
-    OldPipe += (uint64_t)SavedPipeAddress[4] << 24;
-    OldPipe += (uint64_t)SavedPipeAddress[5] << 16;
-    OldPipe += (uint64_t)SavedPipeAddress[6] << 8;
-    OldPipe += (uint64_t)SavedPipeAddress[7];
-}
 
 /************************************************************************************************************/
 
@@ -1162,7 +1168,6 @@ void setup()
     MainLoopTime = millis();
     GetOldPipe();
     digitalWrite(LED_PIN, LOW);
-   // LoadModelNumber();  // obsolete
     LoadVersioNumber();
 }
 
@@ -1196,14 +1201,17 @@ void SaveFailSafeSettings()
 
 void DoBinding()
 {
-
     GetNewPipe();
 #ifdef DB_BIND
+    Serial.print ("NewPipe: " );
     Serial.println((int)NewPipe, HEX);
+   
+    Serial.print ("OldPipe: " );
     Serial.println((int)OldPipe, HEX);
 #endif
     if (OldPipe == NewPipe) {
         SaveNewBind = false;
+
 
 #ifdef DB_BIND
         Serial.println(millis() - BindOKTimer);
