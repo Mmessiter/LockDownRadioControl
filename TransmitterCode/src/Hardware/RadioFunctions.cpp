@@ -31,13 +31,11 @@
 
 /************************************************************************************************************/
 
-
-
 #ifdef DB_FHSS
-    float PSTARTTIME = 0;
-    float PENDTIME   = 0;
-    float PDURATION  = 0;
-#endif 
+float PSTARTTIME = 0;
+float PENDTIME   = 0;
+float PDURATION  = 0;
+#endif
 
 // **** Decompresses cc*3/4 x 16 BIT values up to cc loading only their low 12 BITS cc must be divisble by 4! ******************
 void DeComp(uint16_t* d, uint16_t* c, int cc)
@@ -91,7 +89,7 @@ void TryOtherPipe()
 }
 /************************************************************************************************************/
 
-#define PACEMAKER          5                         // MINIMUM Ms between packets of data. - Probably needs to be between 7 and 20
+#define PACEMAKER 5 // MINIMUM Ms between packets of data. - Probably needs to be between 7 and 20
 void SendData()
 {
     if ((millis() - TxPace) >= PACEMAKER) {
@@ -136,10 +134,10 @@ void SendData()
             }
         }
         Connected = false;
-        Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);              // Compress 32 bytes down to 24
-        if (Radio1.write(&CompressedData, SizeOfCompressedData)) {        //  "sizeof" doesn't work with externs, hence 2 new vars.
+        Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);   // Compress 32 bytes down to 24
+        if (Radio1.write(&CompressedData, SizeOfCompressedData)) { //  "sizeof" doesn't work with externs, hence 2 new vars.
             if (Radio1.isAckPayloadAvailable()) {
-                Radio1.read(&AckPayload, AckPayloadSize);               //  "sizeof" doesn't work with externs, hence 2 new vars.
+                Radio1.read(&AckPayload, AckPayloadSize); //  "sizeof" doesn't work with externs, hence 2 new vars.
                 RangeTestGoodPackets++;
                 Connected = true;
                 if (BoundFlag) {
@@ -188,7 +186,7 @@ void ScanAllChannels()
     char IELLOW[] = "YELLOW";
     char NA[1]    = ""; // blank one
     for (Sc = ScanStart; Sc <= ScanEnd; Sc++) {
-        if (Nextion.available()) return;  // in case someone wants to stop!
+        if (Nextion.available()) return; // in case someone wants to stop!
         Radio1.setChannel(Sc);
         Radio1.startListening();
         x2 = x1 + (Sc * 5);
@@ -310,22 +308,22 @@ void InitRadio(uint64_t Pipe)
         case 3: Radio1.setDataRate(RF24_2MBPS); break;
         default: break;
     }
-    Radio1.enableAckPayload();                  // Needed
-    Radio1.openWritingPipe(Pipe);               // Current Pipe address used for Binding
-    Radio1.setRetries(15, 15);                  // Max automatic retries = (15,15). Packet failure will take 0.06 seconds
-    Radio1.stopListening();                     // It's a true Messiter
-    Radio1.enableDynamicPayloads();             // Needed
-    Radio1.setAddressWidth(5);                  // was 4, is now 5
-    Radio1.setCRCLength(RF24_CRC_8);            // could be 16
-    PipeTimeout = millis();                     // Initialise timeout
+    Radio1.enableAckPayload();       // Needed
+    Radio1.openWritingPipe(Pipe);    // Current Pipe address used for Binding
+    Radio1.setRetries(15, 15);       // Max automatic retries = (15,15). Packet failure will take 0.06 seconds
+    Radio1.stopListening();          // It's a true Messiter
+    Radio1.enableDynamicPayloads();  // Needed
+    Radio1.setAddressWidth(5);       // was 4, is now 5
+    Radio1.setCRCLength(RF24_CRC_8); // could be 16
+    PipeTimeout = millis();          // Initialise timeout
     GapSum      = 0;
 }
 /*********************************************************************************************************************************/
 
-   void SetThePipe(uint64_t WhichPipe)
+void SetThePipe(uint64_t WhichPipe)
 {
-        Radio1.openWritingPipe(WhichPipe);
-        Radio1.stopListening();
+    Radio1.openWritingPipe(WhichPipe);
+    Radio1.stopListening();
 }
 
 /*********************************************************************************************************************************/
@@ -347,8 +345,8 @@ void DoScanEnd()
 {
     SendCommand(NextionSleepTime);
     Radio1.setDataRate(RF24_250KBPS);
-    Radio1.openWritingPipe(DefaultPipe);        
-    Radio1.stopListening();    
-    CurrentMode = NORMAL; 
+    Radio1.openWritingPipe(DefaultPipe);
+    Radio1.stopListening();
+    CurrentMode = NORMAL;
 }
 /*********************************************************************************************************************************/

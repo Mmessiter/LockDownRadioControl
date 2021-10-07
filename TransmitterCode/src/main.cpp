@@ -1,8 +1,8 @@
 // ************************************************** TRANSMITTER CODE **************************************************
 
-#define TXVERSION_MAJOR    1  //   Oct 5th 2021 Malcolm Messiter
-#define TXVERSION_MINOR    0 
-#define TXVERSION_MINIMUS  3
+#define TXVERSION_MAJOR   1 //   Oct 5th 2021 Malcolm Messiter
+#define TXVERSION_MINOR   0
+#define TXVERSION_MINIMUS 3
 
 #define USE_WATCHDOG          // Enable when developing only  ??
 #define WATCHDOGTIMEOUT 10000 // 10 Seconds before reboot (32ms -> 500 seconds)
@@ -11,27 +11,27 @@
 
 // UNCOMMENT ANY OF THESE for that bit of debug info
 
- // #define DB_NEXTION        // Debug Nextion and SD card data
+// #define DB_NEXTION        // Debug Nextion and SD card data
 // #define DB_CHANNEL_AVOID  // Debug FHSS channel avoiding data etc
 // #define DB_SENSORS        // Debug Sensors
 // #define DB_BIND           // Debug Binding
 // #define DB_SWITCHES       // Debug Switches
 // #define DB_MODEL_EXCHANGE // Debug MODEL EXCHANGE (by RF link)
 
-#define CHANNELSUSED       16                        // 16 Channels
-#define MAXMIXES           32                        // 32 mixes
-#define TICKSPERMINUTE     60000                     // millis() += 60000 per minute
-#define PROPOCHANNELS      8                         // Only 4 have knobs / 2 sticks (= 4 hall sensors)
-#define FLIGHTMODESWITCH   4                         // Default MODE switch
-#define AUTOSWITCH         1                         // Default AUTO switch
-#define DEFAULTPIPEADDRESS 0xBABE1E5420LL            // Pipe address for startup - any value but MUST match RX
-#define LOWBATTERY         35                        // percent for warning
-#define BAD_CHANNEL_MAX    40                        // WAS 96 --  NEEDS TO BE *ALWAYS* LESS THAN SELECTED HOPPING RANGE ****
-#define CE_PIN             9                         // for SPI to nRF24L01
-#define CSN_PIN            10                        // for SPI to nRF24L01
-#define INACTIVITYTIMEOUT  10                        // Default time after which to switch off
-#define INACTIVITYMINIMUM  5 * TICKSPERMINUTE        // Inactivity timeout minimum is 5 minutes
-#define INACTIVITYMAXIMUM  30 * TICKSPERMINUTE       // Inactivity timeout maximum is 30 minutes
+#define CHANNELSUSED       16                  // 16 Channels
+#define MAXMIXES           32                  // 32 mixes
+#define TICKSPERMINUTE     60000               // millis() += 60000 per minute
+#define PROPOCHANNELS      8                   // Only 4 have knobs / 2 sticks (= 4 hall sensors)
+#define FLIGHTMODESWITCH   4                   // Default MODE switch
+#define AUTOSWITCH         1                   // Default AUTO switch
+#define DEFAULTPIPEADDRESS 0xBABE1E5420LL      // Pipe address for startup - any value but MUST match RX
+#define LOWBATTERY         35                  // percent for warning
+#define BAD_CHANNEL_MAX    40                  // WAS 96 --  NEEDS TO BE *ALWAYS* LESS THAN SELECTED HOPPING RANGE ****
+#define CE_PIN             9                   // for SPI to nRF24L01
+#define CSN_PIN            10                  // for SPI to nRF24L01
+#define INACTIVITYTIMEOUT  10                  // Default time after which to switch off
+#define INACTIVITYMINIMUM  5 * TICKSPERMINUTE  // Inactivity timeout minimum is 5 minutes
+#define INACTIVITYMAXIMUM  30 * TICKSPERMINUTE // Inactivity timeout maximum is 30 minutes
 #define DS1307_ADDRESS     0x68
 
 // CurrentMode values (=WHETHER TO SEND DATA)
@@ -122,7 +122,6 @@
  * | 32        | Switch 4 |
  */
 
-
 #include <Arduino.h>
 #include <SD.h>
 #include <SPI.h>
@@ -140,12 +139,9 @@
     #include <Watchdog_t4.h>
 #endif
 
-
-
-#define CE_PIN             9                         // for SPI to nRF24L01
-#define CSN_PIN            10     
+#define CE_PIN  9 // for SPI to nRF24L01
+#define CSN_PIN 10
 RF24 Radio1(CE_PIN, CSN_PIN);
-
 
 #define Nextion         Serial1 // Nextion is connected to Serial1
 #define Black           0
@@ -186,8 +182,8 @@ RF24 Radio1(CE_PIN, CSN_PIN);
 #define Options_View    15
 #define Inputs_View     16
 
-#define UNCOMPRESSEDWORDS  20                        // DATA TO SEND = 40  bytes
-#define COMPRESSEDWORDS    UNCOMPRESSEDWORDS * 3 / 4 // COMPRESSED DATA SENT = 30  bytes
+#define UNCOMPRESSEDWORDS 20                        // DATA TO SEND = 40  bytes
+#define COMPRESSEDWORDS   UNCOMPRESSEDWORDS * 3 / 4 // COMPRESSED DATA SENT = 30  bytes
 
 #define Switch0       32 // SWITCHES' PIN NUMBERS ...
 #define Switch1       31
@@ -209,8 +205,6 @@ RF24 Radio1(CE_PIN, CSN_PIN);
 #define MODELSIZE  1600 // MEMORY for one model
 #define MAXFILELEN 1021 // MAX SIZE FOR HELP FILE
 
-
-
 #ifdef USE_WATCHDOG
 WDT_T4<WDT3>  TeensyWatchDog;
 WDT_timings_t WatchDogConfig;
@@ -219,16 +213,16 @@ WDT_timings_t WatchDogConfig;
 uint8_t FHSSBottom = 1; //  Channel range for hopping
 uint8_t FHSSTop    = 83;
 uint8_t Mixes[MAXMIXES + 1][CHANNELSUSED + 1];                // Channel mixes' 2D array store
-int  Trims[FlightModesUsed + 1][CHANNELSUSED + 1];            // Trims to store
+int     Trims[FlightModesUsed + 1][CHANNELSUSED + 1];         // Trims to store
 uint8_t TrimsReversed[FlightModesUsed + 1][CHANNELSUSED + 1]; // Trim directions to store
 uint8_t Exponential[FlightModesUsed + 1][CHANNELSUSED + 1];   // Exponential
 uint8_t InterpolationTypes[FlightModesUsed + 1][CHANNELSUSED + 1];
 
-uint8_t          LastMixNumber    = 1;
-uint8_t          MixNumber        = 0;
-uint8_t          CurrentView      = FrontView;
-uint8_t          SavedCurrentView = FrontView;
-const uint8_t CharsMax         = 120; // 80;
+uint8_t       LastMixNumber      = 1;
+uint8_t       MixNumber          = 0;
+uint8_t       CurrentView        = FrontView;
+uint8_t       SavedCurrentView   = FrontView;
+const uint8_t CharsMax           = 120;                // 80;
 const uint8_t MaxDataTransferred = UNCOMPRESSEDWORDS;  // = 40 bytes     A few extra bytes sent after channels' values
 uint64_t      DefaultPipe        = DEFAULTPIPEADDRESS; //          Default Radio pipe address
 uint64_t      NewPipe            = 0xBABE1E5420LL;     //             New Radio pipe address for binding will come from MAC address
@@ -241,11 +235,11 @@ uint8_t       PacketNumber     = 0;
 uint8_t       NextFrequency    = 100;
 uint8_t       ThisFrequency    = 99;
 
-
 // ************************************* AckPayload structure ******************************************************
-struct Payload{   
-    uint8_t Purpose;                    // Defines meaning of the remainder
-                                        // Highest BIT of Purpose means Ignore IF ON
+struct Payload
+{
+    uint8_t Purpose; // Defines meaning of the remainder
+                     // Highest BIT of Purpose means Ignore IF ON
     uint8_t volt;
     uint8_t CurrentAltitude;
     uint8_t Pitch;
@@ -253,35 +247,34 @@ struct Payload{
     uint8_t Yaw;
 };
 Payload AckPayload;
-uint8_t AckPayloadSize = sizeof (AckPayload);
+uint8_t AckPayloadSize = sizeof(AckPayload);
 // *****************************************************************************************************************
 
+uint16_t SendBuffer[MaxDataTransferred];     //    Data to send to rx (16 words)
+uint16_t ShownBuffer[MaxDataTransferred];    //    Data shown before
+uint16_t LastBuffer[CHANNELSUSED + 1];       //    Used to spot any change
+uint16_t PreMixBuffer[CHANNELSUSED + 1];     //    Data collected from sticks
+uint8_t  MaxDegrees[5][CHANNELSUSED + 1];    //    Max degrees (180?)
+uint8_t  MidHiDegrees[5][CHANNELSUSED + 1];  //    MidHi degrees (135?)
+uint8_t  CentreDegrees[5][CHANNELSUSED + 1]; //    Degrees (90)
+uint8_t  MidLowDegrees[5][CHANNELSUSED + 1]; //    MidLow Degrees (45?)
+uint8_t  MinDegrees[5][CHANNELSUSED + 1];    //    Max Degrees (0?)
+uint8_t  FlightMode         = 1;
+uint8_t  PreviousFlightMode = 1;
+int      ChannelMax[CHANNELSUSED + 1];    //    output of pots at max
+int      ChannelMidHi[CHANNELSUSED + 1];  //    output of pots at MidHi
+int      ChannelCentre[CHANNELSUSED + 1]; //    output of pots at Centre
+int      ChannelMidLow[CHANNELSUSED + 1]; //    output of pots at MidLow
+int      ChannelMin[CHANNELSUSED + 1];    //    output of pots at min
+int      ChanneltoSet     = 0;
+bool     Connected        = false;
+uint8_t  ShowCommsCounter = 0;
 
-uint16_t      SendBuffer[MaxDataTransferred];     //    Data to send to rx (16 words)
-uint16_t      ShownBuffer[MaxDataTransferred];    //    Data shown before
-uint16_t      LastBuffer[CHANNELSUSED + 1];       //    Used to spot any change
-uint16_t      PreMixBuffer[CHANNELSUSED + 1];     //    Data collected from sticks
-uint8_t       MaxDegrees[5][CHANNELSUSED + 1];    //    Max degrees (180?)
-uint8_t       MidHiDegrees[5][CHANNELSUSED + 1];  //    MidHi degrees (135?)
-uint8_t       CentreDegrees[5][CHANNELSUSED + 1]; //    Degrees (90)
-uint8_t       MidLowDegrees[5][CHANNELSUSED + 1]; //    MidLow Degrees (45?)
-uint8_t       MinDegrees[5][CHANNELSUSED + 1];    //    Max Degrees (0?)
-uint8_t       FlightMode         = 1;
-uint8_t       PreviousFlightMode = 1;
-int           ChannelMax[CHANNELSUSED + 1];    //    output of pots at max
-int           ChannelMidHi[CHANNELSUSED + 1];  //    output of pots at MidHi
-int           ChannelCentre[CHANNELSUSED + 1]; //    output of pots at Centre
-int           ChannelMidLow[CHANNELSUSED + 1]; //    output of pots at MidLow
-int           ChannelMin[CHANNELSUSED + 1];    //    output of pots at min
-int           ChanneltoSet     = 0;
-bool          Connected        = false;
-uint8_t       ShowCommsCounter = 0;
-
-double  PointsCount = 5; // This for displaying curves only
-double  xPoints[5];
-double  yPoints[5];
-double  xPoint = 0;
-double  yPoint = 0;
+double PointsCount = 5; // This for displaying curves only
+double xPoints[5];
+double yPoints[5];
+double xPoint = 0;
+double yPoint = 0;
 
 int     BoxOffset = 35;
 int     BoxSize   = 395;
@@ -317,56 +310,56 @@ unsigned int txm  = 0; // SD memory for tx
 unsigned int mxm  = 0; // SD memory per model
 unsigned int addr = 0; // for SD
 
-char        FrontView_Hours[]      = "Hours";
-char        FrontView_Mins[]       = "Mins";
-char        FrontView_Secs[]       = "Secs";
-char        page_FrontView[]       = "page FrontView";
-char        page_FhssView[]        = "page FhssView";
-char        FhssView_Rlow[]        = "FHSSLow";
-char        FhssView_Rhigh[]       = "FHSSHigh";
-char        BindDonemsg[]          = "Bound!";
-char        BindScreenBox[]        = "BindStatus";
-char        NextionSleepTime[]     = "thsp=";
-char        NextionWakeOnTouch[]   = "thup=1";
-char        NextionSleepNow[]      = "sleep=1";
-char        NextionWakeUp[]        = "sleep=0";
-char        ScreenViewTimeout[]    = "Sto";
-char        NoSleeping[]           = "thsp=0";
-int         ScreenTimeout          = 120; // Screen has two minute timeout by default
-char        HtextCMD[]             = "click HelpText,0";
-int         LastLinePosition       = 0;
-uint8_t     RXCellCount            = 2;
-bool        JustHoppedFlag         = true;
-bool        LostPacketFlag         = true;
-bool        LostContactFlag        = true;
-uint8_t     RecentPacketsLost      = 0;
-long int    RecoveryTimer          = 0;
-bool        ReconnectingFlag       = true;
-int         ReconnectTime          = 0;
-int         GapSum                 = 0;
-int         GapLongest             = 0;
-int         GapStart               = 0;
-int         ThisGap                = 0;
-char        CalibrateNow[]         = "touch_j";
-char        ModelVolts[12]         = " ";
-char        ModelAltitude[12]      = " ";
-char        MaxAltitude[12]        = "0";
-float       MaxAlt                 = 0;
-char        ModelRoll[12]          = " ";
-char        ModelPitch[12]         = " ";
-char        ModelYaw[12]           = " ";
-char        ReceiverVersionNumber[12] = " ";
-char        TransmitterVersionNumber[12] = " ";
-char        deletedmodel[]         = "Deleted";
-uint8_t     ModelType              = 1;
-uint8_t     rollp[5];
-uint8_t     rolli[5];
-uint8_t     rolld[5];
-uint8_t     yawp[5];
-uint8_t     yawi[5];
-uint8_t     yawd[5];
+char     FrontView_Hours[]            = "Hours";
+char     FrontView_Mins[]             = "Mins";
+char     FrontView_Secs[]             = "Secs";
+char     page_FrontView[]             = "page FrontView";
+char     page_FhssView[]              = "page FhssView";
+char     FhssView_Rlow[]              = "FHSSLow";
+char     FhssView_Rhigh[]             = "FHSSHigh";
+char     BindDonemsg[]                = "Bound!";
+char     BindScreenBox[]              = "BindStatus";
+char     NextionSleepTime[]           = "thsp=";
+char     NextionWakeOnTouch[]         = "thup=1";
+char     NextionSleepNow[]            = "sleep=1";
+char     NextionWakeUp[]              = "sleep=0";
+char     ScreenViewTimeout[]          = "Sto";
+char     NoSleeping[]                 = "thsp=0";
+int      ScreenTimeout                = 120; // Screen has two minute timeout by default
+char     HtextCMD[]                   = "click HelpText,0";
+int      LastLinePosition             = 0;
+uint8_t  RXCellCount                  = 2;
+bool     JustHoppedFlag               = true;
+bool     LostPacketFlag               = true;
+bool     LostContactFlag              = true;
+uint8_t  RecentPacketsLost            = 0;
+long int RecoveryTimer                = 0;
+bool     ReconnectingFlag             = true;
+int      ReconnectTime                = 0;
+int      GapSum                       = 0;
+int      GapLongest                   = 0;
+int      GapStart                     = 0;
+int      ThisGap                      = 0;
+char     CalibrateNow[]               = "touch_j";
+char     ModelVolts[12]               = " ";
+char     ModelAltitude[12]            = " ";
+char     MaxAltitude[12]              = "0";
+float    MaxAlt                       = 0;
+char     ModelRoll[12]                = " ";
+char     ModelPitch[12]               = " ";
+char     ModelYaw[12]                 = " ";
+char     ReceiverVersionNumber[12]    = " ";
+char     TransmitterVersionNumber[12] = " ";
+char     deletedmodel[]               = "Deleted";
+uint8_t  ModelType                    = 1;
+uint8_t  rollp[5];
+uint8_t  rolli[5];
+uint8_t  rolld[5];
+uint8_t  yawp[5];
+uint8_t  yawi[5];
+uint8_t  yawd[5];
 
-File     ModelsFileNumber;
+File ModelsFileNumber;
 
 Adafruit_INA219 ina219;
 
@@ -381,7 +374,7 @@ int       BindingTimer    = 0;
 bool      BoundFlag       = false;
 int       PipeTimeout     = 0;
 bool      Switch[8];
-uint8_t      SwitchNumber[8] = {Switch0, Switch1, Switch2, Switch3, Switch4, Switch5, Switch6, Switch7};
+uint8_t   SwitchNumber[8] = {Switch0, Switch1, Switch2, Switch3, Switch4, Switch5, Switch6, Switch7};
 
 char TrimView_ch1[] = "ch1";
 char TrimView_ch2[] = "ch2";
@@ -439,8 +432,8 @@ bool     ValueSent           = false;
 int      SwitchEditNumber    = 0; // number of switch being edited
 uint32_t ShowServoTimer      = 0;
 bool     LastFourOnly        = false;
-uint8_t     InPutStick[17]      = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}; //
-uint8_t     ExportedFileCounter = 0;
+uint8_t  InPutStick[17]      = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}; //
+uint8_t  ExportedFileCounter = 0;
 char     TheFilesList[100][14];
 int      FileNumberInView     = 0;
 bool     FileError            = false;
@@ -448,7 +441,7 @@ int      RangeTestStart       = 0;
 int      RangeTestGoodPackets = 0;
 int      RangeTestLostPackets = 0;
 float    success              = 0; // percent of packets that  succeed
-uint8_t     SaveFlightMode       = 0;
+uint8_t  SaveFlightMode       = 0;
 bool     FailSafeChannel[CHANNELSUSED];
 bool     SaveFailSafeNow                = false;
 int      ChannelsLapped                 = 0;
@@ -457,14 +450,14 @@ char     ChannelNames[CHANNELSUSED][11] = {{"Aileron"}, {"Elevator"}, {"Throttle
 bool     VoltsDetected = true;
 bool     TXWarningFlag = false;
 bool     RXWarningFlag = false;
-uint8_t     PowerSetting  = 4;
-uint8_t     DataRate      = 1;
+uint8_t  PowerSetting  = 4;
+uint8_t  DataRate      = 1;
 bool     ReInit        = false;
 uint32_t TxOnTime      = 0;
 uint32_t TxPace        = 0;
 bool     ModelDetected = false;
 uint16_t CompressedData[COMPRESSEDWORDS]; // = 20
-uint8_t   SizeOfCompressedData;
+uint8_t  SizeOfCompressedData;
 uint32_t Inactivity_Timeout = 10 * TICKSPERMINUTE;
 uint32_t Inactivity_Start   = 0;
 
@@ -476,9 +469,9 @@ int          LastDogKick  = 0;
 uint8_t      MacAddress[6];
 char         DateTime[] = "DateTime";
 
-int  XtouchPlace = 0;     // Clicked X
-int  YtouchPlace = 0;     // Clicked Y
-bool SetupFlag   = false; // No transmitter while setting up
+int     XtouchPlace = 0;     // Clicked X
+int     YtouchPlace = 0;     // Clicked Y
+bool    SetupFlag   = false; // No transmitter while setting up
 uint8_t zero        = 0x00;  //workaround for issue #527
 
 // changing these four valiables controls LED blink and speed
@@ -487,7 +480,7 @@ bool     LedIsBlinking = false;
 float    BlinkHertz    = 1;
 uint32_t BlinkTimer    = 0;
 uint8_t  BlinkOnPhase  = 1;
-bool LedWasGreen= false;
+bool     LedWasGreen   = false;
 
 /*********************************************************************************************************************************/
 
@@ -770,9 +763,9 @@ char* Str(char* s, int n, int comma) // comma = 0 for nothing, 1 for a comma, 2 
     char cma[] = ",";
     char dot[] = ".";
 
-    flag       = 0;
-    i          = 0;
-    m          = 1000000000;
+    flag = 0;
+    i    = 0;
+    m    = 1000000000;
     if (n < 0) {
         s[0] = '-';
         i    = 1;
@@ -781,11 +774,11 @@ char* Str(char* s, int n, int comma) // comma = 0 for nothing, 1 for a comma, 2 
     if (n == 0) {
         s[0] = 48;
         s[1] = 0;
-        
+
         if (comma == 1) {
             strcat(s, cma);
         }
-         if (comma == 2) {
+        if (comma == 2) {
             strcat(s, dot);
         }
         return s;
@@ -811,7 +804,6 @@ char* Str(char* s, int n, int comma) // comma = 0 for nothing, 1 for a comma, 2 
     }
     return s;
 }
-
 
 /*********************************************************************************************************************************/
 
@@ -896,7 +888,7 @@ uint8_t GetBrightness()
 
 void RedLedOn()
 {
-    LedWasGreen=false;
+    LedWasGreen = false;
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, 0);
     analogWrite(REDLED, GetBrightness()); // Brightness is a function of transmission powersetting and maybe blinking
@@ -906,12 +898,12 @@ void RedLedOn()
 
 void GreenLedOn()
 {
-if  (!LedWasGreen) {
-    LedWasGreen=true;
-    analogWrite(BLUELED, 0);
-    analogWrite(REDLED, 0);
-    analogWrite(GREENLED, GetBrightness()); // Brightness is a function of transmission powersetting and maybe blinking
-    LastShowTime=0;
+    if (!LedWasGreen) {
+        LedWasGreen = true;
+        analogWrite(BLUELED, 0);
+        analogWrite(REDLED, 0);
+        analogWrite(GREENLED, GetBrightness()); // Brightness is a function of transmission powersetting and maybe blinking
+        LastShowTime = 0;
     }
 }
 
@@ -919,7 +911,7 @@ if  (!LedWasGreen) {
 
 void BlueLedOn()
 {
-    LedWasGreen=false;
+    LedWasGreen = false;
     analogWrite(REDLED, 0);
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, GetBrightness()); // Brightness is a function of transmission powersetting and maybe blinking
@@ -1287,13 +1279,12 @@ void ShowComms()
     float ReadVolts    = 0;
     float VoltsPerCell = 0;
 
-
     if (CurrentView == FrontView || CurrentView == DataView) {
         if (millis() - LastShowTime > 1000) {
             ShowNow = true;
         }
     }
-    if (ShowNow) 
+    if (ShowNow)
     {
         LastShowTime = millis();
         if (USE_INA219) {
@@ -1316,8 +1307,8 @@ void ShowComms()
             strcat(TXBattInfo, Vbuf);
             strcat(TXBattInfo, PerCell);
             if (CurrentView == FrontView) SendText(FrontView_TXBV, TXBattInfo);
-            if (CurrentView == DataView) SendText(DataView_txv,TransmitterVersionNumber);   // TX Version Number
-           // if (CurrentView == DataView) SendText(DataView_txv, Vbuf);
+            if (CurrentView == DataView) SendText(DataView_txv, TransmitterVersionNumber); // TX Version Number
+                                                                                           // if (CurrentView == DataView) SendText(DataView_txv, Vbuf);
         }
         if (!LostContactFlag) {
             if ((CurrentView == FrontView)) {
@@ -1402,12 +1393,13 @@ void ShowComms()
                     SendText(FrontView_RXBV, na); // data not available
                     SendText(FrontView_AckPayload, na);
                 }
-            } else 
+            }
+            else
             {
-                 if (CurrentView == FrontView)
-                 {
-                   SendText(FrontView_Connected, Not_Connected);
-                 }
+                if (CurrentView == FrontView)
+                {
+                    SendText(FrontView_Connected, Not_Connected);
+                }
             }
         }
     }
@@ -1657,7 +1649,7 @@ void DoMixes()
 /*********************************************************************************************************************************/
 
 float MapExp(float xx, float Xxmin, float Xxmax, float Yymin, float Yymax, float Expo)
-{ 
+{
     Expo  = map(Expo, -100, 100, 0, 1);
     xx    = pow(xx * xx, Expo);
     Xxmin = pow(Xxmin * Xxmin, Expo);
@@ -2040,24 +2032,24 @@ void ChannelCentres()
 
 void UpdateButtonLabels()
 {
-    char fsch1[]           = "ch1";
-    char fsch2[]           = "ch2";
-    char fsch3[]           = "ch3";
-    char fsch4[]           = "ch4";
-    char fsch5[]           = "ch5";
-    char fsch6[]           = "ch6";
-    char fsch7[]           = "ch7";
-    char fsch8[]           = "ch8";
-    char fsch9[]           = "ch9";
-    char fsch10[]          = "ch10";
-    char fsch11[]          = "ch11";
-    char fsch12[]          = "ch12";
-    char fsch13[]          = "ch13";
-    char fsch14[]          = "ch14";
-    char fsch15[]          = "ch15";
-    char fsch16[]          = "ch16";
-    char arrowrh[]         = " >";
-    char arrowlh[]         = "< ";
+    char fsch1[]   = "ch1";
+    char fsch2[]   = "ch2";
+    char fsch3[]   = "ch3";
+    char fsch4[]   = "ch4";
+    char fsch5[]   = "ch5";
+    char fsch6[]   = "ch6";
+    char fsch7[]   = "ch7";
+    char fsch8[]   = "ch8";
+    char fsch9[]   = "ch9";
+    char fsch10[]  = "ch10";
+    char fsch11[]  = "ch11";
+    char fsch12[]  = "ch12";
+    char fsch13[]  = "ch13";
+    char fsch14[]  = "ch14";
+    char fsch15[]  = "ch15";
+    char fsch16[]  = "ch16";
+    char arrowrh[] = " >";
+    char arrowlh[] = "< ";
     char BoxOffsetLabel[20];
     char SticksViewButton1[]  = "Sch1";
     char SticksViewButton2[]  = "Sch2";
@@ -2091,90 +2083,90 @@ void UpdateButtonLabels()
     char fourteen[]           = "(14) ";
     char fifteen[]            = " (15)";
     char sixteen[]            = "(16) ";
-if (CurrentView == SticksView){
-    strcpy(BoxOffsetLabel, ChannelNames[0]);
-    strcat(BoxOffsetLabel, one);
-    strcat(BoxOffsetLabel, arrowrh);
-    SendText(SticksViewButton1, BoxOffsetLabel);
-    strcpy(BoxOffsetLabel, arrowlh);
-    strcat(BoxOffsetLabel, two);
-    strcat(BoxOffsetLabel, ChannelNames[1]);
-    SendText(SticksViewButton2, BoxOffsetLabel);
-    strcpy(BoxOffsetLabel, ChannelNames[2]);
-    strcat(BoxOffsetLabel, three);
-    strcat(BoxOffsetLabel, arrowrh);
-    SendText(SticksViewButton3, BoxOffsetLabel);
-    strcpy(BoxOffsetLabel, arrowlh);
-    strcat(BoxOffsetLabel, four);
-    strcat(BoxOffsetLabel, ChannelNames[3]);
-    SendText(SticksViewButton4, BoxOffsetLabel);
-    strcpy(BoxOffsetLabel, ChannelNames[4]);
-    strcat(BoxOffsetLabel, five);
-    strcat(BoxOffsetLabel, arrowrh);
-    SendText(SticksViewButton5, BoxOffsetLabel);
-    strcpy(BoxOffsetLabel, arrowlh);
-    strcat(BoxOffsetLabel, six);
-    strcat(BoxOffsetLabel, ChannelNames[5]);
-    SendText(SticksViewButton6, BoxOffsetLabel);
-    strcpy(BoxOffsetLabel, ChannelNames[6]);
-    strcat(BoxOffsetLabel, seven);
-    strcat(BoxOffsetLabel, arrowrh);
-    SendText(SticksViewButton7, BoxOffsetLabel);
-    strcpy(BoxOffsetLabel, arrowlh);
-    strcat(BoxOffsetLabel, eight);
-    strcat(BoxOffsetLabel, ChannelNames[7]);
-    SendText(SticksViewButton8, BoxOffsetLabel);
-    strcpy(BoxOffsetLabel, ChannelNames[8]);
-    strcat(BoxOffsetLabel, nine);
-    strcat(BoxOffsetLabel, arrowrh);
-    SendText(SticksViewButton9, BoxOffsetLabel);
-    strcpy(BoxOffsetLabel, arrowlh);
-    strcat(BoxOffsetLabel, ten);
-    strcat(BoxOffsetLabel, ChannelNames[9]);
-    SendText(SticksViewButton10, BoxOffsetLabel);
-    strcpy(BoxOffsetLabel, ChannelNames[10]);
-    strcat(BoxOffsetLabel, eleven);
-    strcat(BoxOffsetLabel, arrowrh);
-    SendText(SticksViewButton11, BoxOffsetLabel);
-    strcpy(BoxOffsetLabel, arrowlh);
-    strcat(BoxOffsetLabel, twelve);
-    strcat(BoxOffsetLabel, ChannelNames[11]);
-    SendText(SticksViewButton12, BoxOffsetLabel);
-    strcpy(BoxOffsetLabel, ChannelNames[12]);
-    strcat(BoxOffsetLabel, thirteen);
-    strcat(BoxOffsetLabel, arrowrh);
-    SendText(SticksViewButton13, BoxOffsetLabel);
-    strcpy(BoxOffsetLabel, arrowlh);
-    strcat(BoxOffsetLabel, fourteen);
-    strcat(BoxOffsetLabel, ChannelNames[13]);
-    SendText(SticksViewButton14, BoxOffsetLabel);
-    strcpy(BoxOffsetLabel, ChannelNames[14]);
-    strcat(BoxOffsetLabel, fifteen);
-    strcat(BoxOffsetLabel, arrowrh);
-    SendText(SticksViewButton15, BoxOffsetLabel);
-    strcpy(BoxOffsetLabel, arrowlh);
-    strcat(BoxOffsetLabel, sixteen);
-    strcat(BoxOffsetLabel, ChannelNames[15]);   
-    SendText(SticksViewButton16, BoxOffsetLabel);
-}
-if (CurrentView == Inputs_View){ 
-    SendText(fsch1, ChannelNames[0]);
-    SendText(fsch2, ChannelNames[1]);
-    SendText(fsch3, ChannelNames[2]);
-    SendText(fsch4, ChannelNames[3]);
-    SendText(fsch5, ChannelNames[4]);
-    SendText(fsch6, ChannelNames[5]);
-    SendText(fsch7, ChannelNames[6]);
-    SendText(fsch8, ChannelNames[7]);
-    SendText(fsch9, ChannelNames[8]);
-    SendText(fsch10, ChannelNames[9]);
-    SendText(fsch11, ChannelNames[10]);
-    SendText(fsch12, ChannelNames[11]);
-    SendText(fsch13, ChannelNames[12]);
-    SendText(fsch14, ChannelNames[13]);
-    SendText(fsch15, ChannelNames[14]);
-    SendText(fsch16, ChannelNames[15]);
- }
+    if (CurrentView == SticksView) {
+        strcpy(BoxOffsetLabel, ChannelNames[0]);
+        strcat(BoxOffsetLabel, one);
+        strcat(BoxOffsetLabel, arrowrh);
+        SendText(SticksViewButton1, BoxOffsetLabel);
+        strcpy(BoxOffsetLabel, arrowlh);
+        strcat(BoxOffsetLabel, two);
+        strcat(BoxOffsetLabel, ChannelNames[1]);
+        SendText(SticksViewButton2, BoxOffsetLabel);
+        strcpy(BoxOffsetLabel, ChannelNames[2]);
+        strcat(BoxOffsetLabel, three);
+        strcat(BoxOffsetLabel, arrowrh);
+        SendText(SticksViewButton3, BoxOffsetLabel);
+        strcpy(BoxOffsetLabel, arrowlh);
+        strcat(BoxOffsetLabel, four);
+        strcat(BoxOffsetLabel, ChannelNames[3]);
+        SendText(SticksViewButton4, BoxOffsetLabel);
+        strcpy(BoxOffsetLabel, ChannelNames[4]);
+        strcat(BoxOffsetLabel, five);
+        strcat(BoxOffsetLabel, arrowrh);
+        SendText(SticksViewButton5, BoxOffsetLabel);
+        strcpy(BoxOffsetLabel, arrowlh);
+        strcat(BoxOffsetLabel, six);
+        strcat(BoxOffsetLabel, ChannelNames[5]);
+        SendText(SticksViewButton6, BoxOffsetLabel);
+        strcpy(BoxOffsetLabel, ChannelNames[6]);
+        strcat(BoxOffsetLabel, seven);
+        strcat(BoxOffsetLabel, arrowrh);
+        SendText(SticksViewButton7, BoxOffsetLabel);
+        strcpy(BoxOffsetLabel, arrowlh);
+        strcat(BoxOffsetLabel, eight);
+        strcat(BoxOffsetLabel, ChannelNames[7]);
+        SendText(SticksViewButton8, BoxOffsetLabel);
+        strcpy(BoxOffsetLabel, ChannelNames[8]);
+        strcat(BoxOffsetLabel, nine);
+        strcat(BoxOffsetLabel, arrowrh);
+        SendText(SticksViewButton9, BoxOffsetLabel);
+        strcpy(BoxOffsetLabel, arrowlh);
+        strcat(BoxOffsetLabel, ten);
+        strcat(BoxOffsetLabel, ChannelNames[9]);
+        SendText(SticksViewButton10, BoxOffsetLabel);
+        strcpy(BoxOffsetLabel, ChannelNames[10]);
+        strcat(BoxOffsetLabel, eleven);
+        strcat(BoxOffsetLabel, arrowrh);
+        SendText(SticksViewButton11, BoxOffsetLabel);
+        strcpy(BoxOffsetLabel, arrowlh);
+        strcat(BoxOffsetLabel, twelve);
+        strcat(BoxOffsetLabel, ChannelNames[11]);
+        SendText(SticksViewButton12, BoxOffsetLabel);
+        strcpy(BoxOffsetLabel, ChannelNames[12]);
+        strcat(BoxOffsetLabel, thirteen);
+        strcat(BoxOffsetLabel, arrowrh);
+        SendText(SticksViewButton13, BoxOffsetLabel);
+        strcpy(BoxOffsetLabel, arrowlh);
+        strcat(BoxOffsetLabel, fourteen);
+        strcat(BoxOffsetLabel, ChannelNames[13]);
+        SendText(SticksViewButton14, BoxOffsetLabel);
+        strcpy(BoxOffsetLabel, ChannelNames[14]);
+        strcat(BoxOffsetLabel, fifteen);
+        strcat(BoxOffsetLabel, arrowrh);
+        SendText(SticksViewButton15, BoxOffsetLabel);
+        strcpy(BoxOffsetLabel, arrowlh);
+        strcat(BoxOffsetLabel, sixteen);
+        strcat(BoxOffsetLabel, ChannelNames[15]);
+        SendText(SticksViewButton16, BoxOffsetLabel);
+    }
+    if (CurrentView == Inputs_View) {
+        SendText(fsch1, ChannelNames[0]);
+        SendText(fsch2, ChannelNames[1]);
+        SendText(fsch3, ChannelNames[2]);
+        SendText(fsch4, ChannelNames[3]);
+        SendText(fsch5, ChannelNames[4]);
+        SendText(fsch6, ChannelNames[5]);
+        SendText(fsch7, ChannelNames[6]);
+        SendText(fsch8, ChannelNames[7]);
+        SendText(fsch9, ChannelNames[8]);
+        SendText(fsch10, ChannelNames[9]);
+        SendText(fsch11, ChannelNames[10]);
+        SendText(fsch12, ChannelNames[11]);
+        SendText(fsch13, ChannelNames[12]);
+        SendText(fsch14, ChannelNames[13]);
+        SendText(fsch15, ChannelNames[14]);
+        SendText(fsch16, ChannelNames[15]);
+    }
 }
 
 /*********************************************************************************************************************************/
@@ -2437,15 +2429,15 @@ void SetDS1307ToCompilerTime()
 
 void GetTXVersionNumber()
 {
-    char nbuf[5];
+    char    nbuf[5];
     uint8_t Txv1 = TXVERSION_MAJOR;
     uint8_t Txv2 = TXVERSION_MINOR;
-    uint8_t Txv3 = TXVERSION_MINIMUS;         
-            Str(TransmitterVersionNumber,Txv1, 2);
-            Str(nbuf,Txv2, 2);
-            strcat(TransmitterVersionNumber,nbuf);
-            Str(nbuf,Txv3, 0);
-            strcat(TransmitterVersionNumber,nbuf);
+    uint8_t Txv3 = TXVERSION_MINIMUS;
+    Str(TransmitterVersionNumber, Txv1, 2);
+    Str(nbuf, Txv2, 2);
+    strcat(TransmitterVersionNumber, nbuf);
+    Str(nbuf, Txv3, 0);
+    strcat(TransmitterVersionNumber, nbuf);
 }
 
 /*********************************************************************************************************************************/
@@ -2479,7 +2471,7 @@ void setup()
     ScanI2c();
     if (USE_INA219) ina219.begin();
     SD.begin(chipSelect);
-    InitRadio(DefaultPipe);  //  ***** Now in RadioFunctions file! *****
+    InitRadio(DefaultPipe); //  ***** Now in RadioFunctions file! *****
     InitSwitches();
     SendCommand(NextionWakeUp);
     InitMaxMin();        // in case not yet calibrated
@@ -2510,7 +2502,7 @@ void setup()
     LastDogKick = millis(); // needed? - yes!
 #endif
     StartInactvityTimeout();
-    SizeOfCompressedData = sizeof (CompressedData);
+    SizeOfCompressedData = sizeof(CompressedData);
     GetTXVersionNumber();
 }
 
@@ -2968,12 +2960,12 @@ void SaveAllParameters()
 
 void ShowDirectory()
 {
-    char filelistbuf[1024];
-    char nul[]          = "";
-    char crlf[]         = {13, 10, 0};
-    char space[]        = {' ', 0};
-    char fileviewlist[] = "FilesView.list";
-    char t[2]           = "P";
+    char    filelistbuf[1024];
+    char    nul[]          = "";
+    char    crlf[]         = {13, 10, 0};
+    char    space[]        = {' ', 0};
+    char    fileviewlist[] = "FilesView.list";
+    char    t[2]           = "P";
     uint8_t n              = 0;
     uint8_t nlp            = 0;
     strcpy(filelistbuf, nul);
@@ -3559,7 +3551,7 @@ void MovePoint()
 /*********************************************************************************************************************************/
 
 #define FILEPIPEADDRESS 0xFEFEFEFEFELL // Unique pipe address for FILE EXCHANGE
-#define BUFFERSIZE      28 // + 4 = 32
+#define BUFFERSIZE      28             // + 4 = 32
 #define FILEDATARATE    RF24_250KBPS
 #define FILEPALEVEL     RF24_PA_MAX
 #define FILECHANNEL     123
@@ -3577,19 +3569,19 @@ void ReceiveModelFile()
     char          ProgressStart[]       = "vis Progress,1";
     char          ProgressEnd[]         = "vis Progress,0";
     char          Progress[]            = "Progress";
-    char          Fbuffer[BUFFERSIZE + 8];  // spare space
-    uint8_t       Fack   = 1;               // just a token byte
+    char          Fbuffer[BUFFERSIZE + 8]; // spare space
+    uint8_t       Fack      = 1;           // just a token byte
     char          Waiting[] = "Waiting ";
     char          WaitTime[6];
     char          WaitMsg[17];
-    char          ThreeDots[]        = "...";
-    char          Receiving[]        = "Receiving ...";
-    char          TimeoutMsg[]       = "TIMEOUT";
-    char          Success[]          = "* Success! *";
-    unsigned long Fsize              = 0;
-    unsigned long Fposition          = 0;
-    float         SecondsElapsed     = 0;
-    uint8_t          p                  = 5;
+    char          ThreeDots[]    = "...";
+    char          Receiving[]    = "Receiving ...";
+    char          TimeoutMsg[]   = "TIMEOUT";
+    char          Success[]      = "* Success! *";
+    unsigned long Fsize          = 0;
+    unsigned long Fposition      = 0;
+    float         SecondsElapsed = 0;
+    uint8_t       p              = 5;
 #ifdef DB_MODEL_EXCHANGE
     uint8_t PacketNumber = 0;
     Serial.println("Receiving model ...");
@@ -3597,7 +3589,7 @@ void ReceiveModelFile()
 #endif
     SendText(ModelsView_filename, Waiting);
     RXPipe = FILEPIPEADDRESS;
-    Radio1.setChannel(FILECHANNEL);            
+    Radio1.setChannel(FILECHANNEL);
     Radio1.flush_tx();
     Radio1.openReadingPipe(1, RXPipe);
     Radio1.startListening();
@@ -3610,8 +3602,8 @@ void ReceiveModelFile()
             Serial.println("Timeout");
 #endif
             SendText(ModelsView_filename, TimeoutMsg);
-            SetThePipe(DefaultPipe); 
-            Radio1.setCRCLength(RF24_CRC_8);          
+            SetThePipe(DefaultPipe);
+            Radio1.setCRCLength(RF24_CRC_8);
             return; // Give up waiting
         }
         else {
@@ -3631,9 +3623,9 @@ void ReceiveModelFile()
     Radio1.read(&Fbuffer, BUFFERSIZE + 4);          //  Read it was 12
     strcpy(SingleModelFile, Fbuffer);               // Get filename
     Fsize = Fbuffer[BUFFERSIZE];
-    Fsize += Fbuffer[BUFFERSIZE+1] << 8;
-    Fsize += Fbuffer[BUFFERSIZE+2] << 16;
-    Fsize += Fbuffer[BUFFERSIZE+3] << 24; // Get file size
+    Fsize += Fbuffer[BUFFERSIZE + 1] << 8;
+    Fsize += Fbuffer[BUFFERSIZE + 2] << 16;
+    Fsize += Fbuffer[BUFFERSIZE + 3] << 24; // Get file size
 #ifdef DB_MODEL_EXCHANGE
     Serial.println("CONNECTED!");
     Serial.print("FileName=");
@@ -3648,13 +3640,13 @@ void ReceiveModelFile()
         KickTheDog();                                                           // Watchdog
         if (Radio1.available()) {
             Radio1.writeAckPayload(1, &Fack, sizeof(Fack));
-            Radio1.read(&Fbuffer, BUFFERSIZE + 4);       
+            Radio1.read(&Fbuffer, BUFFERSIZE + 4);
             ModelsFileNumber.seek(Fposition);            // Move filepointer
             ModelsFileNumber.write(Fbuffer, BUFFERSIZE); // Write part of file
             Fposition += BUFFERSIZE;
             p = ((float)Fposition / (float)Fsize) * 100;
             SendValue(Progress, p);
-            delay(10);       
+            delay(10);
 #ifdef DB_MODEL_EXCHANGE
             PacketNumber = Fbuffer[25];
             Serial.print("PacketNumber: ");
@@ -3681,8 +3673,8 @@ void ReceiveModelFile()
     SaveAllParameters();
     CloseModelsFile();
     UpdateModelsNameEveryWhere();
-    SetThePipe(DefaultPipe); 
-    Radio1.setCRCLength(RF24_CRC_8);           
+    SetThePipe(DefaultPipe);
+    Radio1.setCRCLength(RF24_CRC_8);
     SendCommand(ProgressEnd);
 }
 
@@ -3695,7 +3687,7 @@ void SendModelFile()
     char          ProgressEnd[]   = "vis Progress,0";
     char          Progress[]      = "Progress";
     uint64_t      TXPipe;
-    uint8_t       Fack = 1;
+    uint8_t       Fack      = 1;
     unsigned long Fsize     = 0;
     unsigned long Fposition = 0;
     char          Fbuffer[BUFFERSIZE + 8]; // spare space
@@ -3716,7 +3708,7 @@ void SendModelFile()
     Serial.print(Fsize);
     Serial.println(" bytes.");
 #endif
-    Radio1.setChannel(FILECHANNEL);   
+    Radio1.setChannel(FILECHANNEL);
     Radio1.setPALevel(FILEPALEVEL);
     Radio1.openWritingPipe(TXPipe);
     Radio1.stopListening();
@@ -3727,26 +3719,26 @@ void SendModelFile()
         PacketNumber++;
         if (PacketNumber == 1) {
             strcpy(Fbuffer, SingleModelFile); // Filename in first packet
-            Fbuffer[BUFFERSIZE] = Fsize;
-            Fbuffer[BUFFERSIZE+1] = Fsize >> 8;
-            Fbuffer[BUFFERSIZE+2] = Fsize >> 16;
-            Fbuffer[BUFFERSIZE+3] = Fsize >> 24;  // SEND FILE SIZE (four bytes)
+            Fbuffer[BUFFERSIZE]     = Fsize;
+            Fbuffer[BUFFERSIZE + 1] = Fsize >> 8;
+            Fbuffer[BUFFERSIZE + 2] = Fsize >> 16;
+            Fbuffer[BUFFERSIZE + 3] = Fsize >> 24; // SEND FILE SIZE (four bytes)
         }
         else {
-        
+
             ModelsFileNumber.seek(Fposition);           // Move filepointer
             ModelsFileNumber.read(Fbuffer, BUFFERSIZE); // Read part of file
             Fposition += BUFFERSIZE;
         }
-        if (Radio1.write(&Fbuffer, BUFFERSIZE + 4)) {      
-            delay(200);                                    // allow time for receive and write
+        if (Radio1.write(&Fbuffer, BUFFERSIZE + 4)) {
+            delay(200); // allow time for receive and write
             if (Radio1.isAckPayloadAvailable()) {
-                Radio1.read(&Fack, sizeof(Fack));  
+                Radio1.read(&Fack, sizeof(Fack));
             }
         }
         else {
             if (PacketNumber == 2) { // error - no connection
-                SetThePipe(DefaultPipe); 
+                SetThePipe(DefaultPipe);
                 SendCommand(ProgressEnd);
                 return;
             }
@@ -3761,8 +3753,8 @@ void SendModelFile()
 #endif
     SendValue(Progress, 100);
     delay(100);
-    SetThePipe(DefaultPipe); 
-    Radio1.setCRCLength(RF24_CRC_8);        
+    SetThePipe(DefaultPipe);
+    Radio1.setCRCLength(RF24_CRC_8);
     SendCommand(ProgressEnd);
 }
 
@@ -4081,15 +4073,14 @@ void Button_was_pressed()
         Serial.println(WordsIn);
 #endif
 
- if (InStrng(SetupView, WordsIn) > 0) { 
+        if (InStrng(SetupView, WordsIn) > 0) {
             CurrentView = MainSetupView;
             ClearText();
             SaveAllParameters(); // TODO HEER - mixes only
-            LostContactFlag=true;
+            LostContactFlag = true;
             SendCommand(page_SetupView);
             DoScanEnd();
         }
-
 
         if (InStrng(HelpView, WordsIn) > 0) {
             SavedCurrentView = CurrentView;
@@ -4176,7 +4167,7 @@ void Button_was_pressed()
             }
             if (CurrentView == ModelsView) {
                 SendValue(ModelsView_ModelNumber, ModelNumber);
-            } 
+            }
             ClearText();
         }
 
@@ -4445,7 +4436,7 @@ void Button_was_pressed()
             UpdateSwitchesDisplay();     // update its info
         }
         if (InStrng(InputsView, WordsIn) > 0) {
-            CurrentView =  Inputs_View;
+            CurrentView = Inputs_View;
             UpdateButtonLabels();
         }
 
@@ -4677,7 +4668,7 @@ void Button_was_pressed()
         }
 
         if (InStrng(ListFiles, WordsIn) > 0) {
-            ShowDirectory(); // 
+            ShowDirectory(); //
         }
 
         if (InStrng(CaliNextion, WordsIn) > 0) {
@@ -4694,7 +4685,7 @@ void Button_was_pressed()
             } // copy new name
             SaveOneModel(ModelNumber);
             ClearText();
-            LostContactFlag=true;
+            LostContactFlag = true;
             SendCommand(page_SetupView);
             CurrentMode = NORMAL; // Send data again
             CurrentView = MainSetupView;
@@ -4724,11 +4715,9 @@ void Button_was_pressed()
             SendCommand(page_FrontView);
             UpdateModelsNameEveryWhere();
             ShowFlightMode();
-            LastShowTime=0;                 // this is to make redisplay sooner
-            LastTimeRead=0;                 // this is to make redisplay sooner
+            LastShowTime = 0; // this is to make redisplay sooner
+            LastTimeRead = 0; // this is to make redisplay sooner
         }
-
-       
 
         if (InStrng(Gains_View, WordsIn) > 0) {
             CurrentView = GainsView;
@@ -4902,11 +4891,11 @@ void Button_was_pressed()
             UpdateModelsNameEveryWhere();
         }
 
-        p = (InStrng(Sticks_View, WordsIn));   
+        p = (InStrng(Sticks_View, WordsIn));
         if (p > 0) {
             Force_ReDisplay();
             CurrentView = SticksView;
-            SendCommand(page_SticksView); // Set to SticksView 
+            SendCommand(page_SticksView); // Set to SticksView
             UpdateModelsNameEveryWhere();
             UpdateButtonLabels();
         }
@@ -4965,8 +4954,8 @@ void Button_was_pressed()
 
         p = (InStrng(Data_View, WordsIn));
         if (p > 0) {
-            CurrentView = DataView;
-            LastShowTime=0;
+            CurrentView  = DataView;
+            LastShowTime = 0;
         }
 
         p = (InStrng(Fhss_View, WordsIn));
@@ -5175,8 +5164,8 @@ void LoadPacketData()
     SendBuffer[CHANNELSUSED + 2] = NextFrequency; // Send next frequency
 
     Twobytes = MakeTwobytes(FailSafeChannel); // 16 bool values compressed to 16 bits
-    uint8_t1    = uint8_t(Twobytes >> 8);        // sent as two bytes
-    uint8_t2    = uint8_t(Twobytes & 0x00FF);
+    uint8_t1 = uint8_t(Twobytes >> 8);        // sent as two bytes
+    uint8_t2 = uint8_t(Twobytes & 0x00FF);
 
     switch (PacketNumber) {
         case 3:
@@ -5227,9 +5216,9 @@ void LoadPacketData()
             SendBuffer[CHANNELSUSED + 3] = SaveFailSafeNow; // FailSafeSaveMoment
             SaveFailSafeNow              = false;           // once should do it.
             break;
-       // case 17:
-        //    break;
-        default:   // Goes to 20 
+            // case 17:
+            //    break;
+        default: // Goes to 20
             break;
     }
 }
@@ -5272,8 +5261,6 @@ void GetNextHopChannelNumber()
         }
     }
 }
-
-
 
 /************************************************************************************************************/
 
@@ -5388,47 +5375,44 @@ void ReadSwitches()
     GetFlightMode();
 }
 
-
-
 /************************************************************************************************************/
 
 void GetRXVersionNumber()
 {
-char nbuf[5];
-   
-            Str(ReceiverVersionNumber,AckPayload.Pitch, 2);
-            Str(nbuf,AckPayload.Roll, 2);
-            strcat(ReceiverVersionNumber,nbuf);
-            Str(nbuf,AckPayload.Yaw, 0);
-            strcat(ReceiverVersionNumber,nbuf);
-   
+    char nbuf[5];
+
+    Str(ReceiverVersionNumber, AckPayload.Pitch, 2);
+    Str(nbuf, AckPayload.Roll, 2);
+    strcat(ReceiverVersionNumber, nbuf);
+    Str(nbuf, AckPayload.Yaw, 0);
+    strcat(ReceiverVersionNumber, nbuf);
 }
 
 /************************************************************************************************************/
 void ParseAckPayload()
-{  
-    if (!(AckPayload.Purpose & 0x80))          // High BIT ON = IGNORE i.e. skip the whole thing
+{
+    if (!(AckPayload.Purpose & 0x80)) // High BIT ON = IGNORE i.e. skip the whole thing
     {
-        switch (AckPayload.Purpose)            // Only looking at the low 7 BITS 
-                                               // High BIT is guaranteed LOW by this point, so no "& 0x7F" is needed.
+        switch (AckPayload.Purpose) // Only looking at the low 7 BITS
+                                    // High BIT is guaranteed LOW by this point, so no "& 0x7F" is needed.
         {
-        case 0:
-              VoltsDetected = false;
-              if (AckPayload.volt>0)                     // zero volts means RX volts are not available
-              {    
-                    Str(ModelVolts,AckPayload.volt,0);   // Get receiver battery volts, if available.
+            case 0:
+                VoltsDetected = false;
+                if (AckPayload.volt > 0) // zero volts means RX volts are not available
+                {
+                    Str(ModelVolts, AckPayload.volt, 0); // Get receiver battery volts, if available.
                     VoltsDetected = true;
-              }         
-              Str(ModelAltitude,AckPayload.CurrentAltitude,0);
-              Str(ModelPitch,AckPayload.Pitch,0);
-              Str(ModelYaw,AckPayload.Yaw,0);
-              Str(ModelRoll,AckPayload.Roll,0);
-              break;
-         case 1:
-              GetRXVersionNumber();
-              break;
+                }
+                Str(ModelAltitude, AckPayload.CurrentAltitude, 0);
+                Str(ModelPitch, AckPayload.Pitch, 0);
+                Str(ModelYaw, AckPayload.Yaw, 0);
+                Str(ModelRoll, AckPayload.Roll, 0);
+                break;
+            case 1:
+                GetRXVersionNumber();
+                break;
+        }
     }
- }  
 }
 /************************************************************************************************************/
 void CheckGapsLength()
@@ -5450,7 +5434,6 @@ void CheckGapsLength()
         GapStart = 0;
     }
 }
-
 
 /************************************************************************************************************/
 // LOOP
@@ -5499,7 +5482,7 @@ void loop()
 #ifdef DB_BIND
             Serial.println("Binding now");
 #endif
-            SetThePipe(NewPipe);  
+            SetThePipe(NewPipe);
             BindingNow = 0;
             BoundFlag  = true;
             GreenLedOn();

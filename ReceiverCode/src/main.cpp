@@ -1,5 +1,5 @@
 // ************************************************** Receiver code **************************************************
-#define RXVERSION_MAJOR   1     // Oct 6th 2021
+#define RXVERSION_MAJOR   1 // Oct 6th 2021
 #define RXVERSION_MINOR   0
 #define RXVERSION_MINIMUS 3
 
@@ -145,14 +145,14 @@ RF24* CurrentRadio = &Radio1;
 
 // ******** AckPayload Stucture ************************************************************************
 struct Payload
-{                                                      // Structure for data returned to transmitter.  
-    uint8_t Purpose                 = 0;               // This byte determines what the remainder represent.
-                                                       // Highest BIT of Purpose means >>IGNORE IF ON<<
-    uint8_t volt                    = 0;               // Voltage of RX battery, if measured.
-    uint8_t CurrentAltitude         = 0;               // Altitude, if measured.
-    uint8_t ReportedPitch           = 0;
-    uint8_t ReportedRoll            = 0;
-    uint8_t ReportedYaw             = 0;
+{                                // Structure for data returned to transmitter.
+    uint8_t Purpose = 0;         // This byte determines what the remainder represent.
+                                 // Highest BIT of Purpose means >>IGNORE IF ON<<
+    uint8_t volt            = 0; // Voltage of RX battery, if measured.
+    uint8_t CurrentAltitude = 0; // Altitude, if measured.
+    uint8_t ReportedPitch   = 0;
+    uint8_t ReportedRoll    = 0;
+    uint8_t ReportedYaw     = 0;
 };
 Payload AckPayload;
 uint8_t AckPayloadSize = sizeof(AckPayload); // Size for later externs if needed etc.
@@ -218,9 +218,9 @@ long int     DeltaTime    = 0;     /** The ellapsed time between updates sent to
 uint8_t      BindNow      = 0;     /** indicates that the receiver should start the binding/pairing process */
 bool         BoundFlag    = false; /** indicates if receiver paired with transmitter */
 uint8_t      SavedPipeAddress[8];
-int          BindOKTimer             = 0;
-bool         SaveNewBind             = true;
-bool         ServosAttached          = false;
+int          BindOKTimer    = 0;
+bool         SaveNewBind    = true;
+bool         ServosAttached = false;
 uint16_t     SbusChannels[CHANNELSUSED + 8]; // a few spare
 int          SBUSTimer    = 0;
 bool         FailSaveSafe = false;
@@ -241,10 +241,11 @@ bool         GyroInstalled      = false;
 
 /************************************************************************************************************/
 
-void LoadVersioNumber(){      
-        AckPayload.ReportedPitch = RXVERSION_MAJOR; 
-        AckPayload.ReportedRoll  = RXVERSION_MINOR;
-        AckPayload.ReportedYaw   = RXVERSION_MINIMUS;
+void LoadVersioNumber()
+{
+    AckPayload.ReportedPitch = RXVERSION_MAJOR;
+    AckPayload.ReportedRoll  = RXVERSION_MINOR;
+    AckPayload.ReportedYaw   = RXVERSION_MINIMUS;
 }
 
 uint8_t EEPROMReadByte(int p_address)
@@ -509,7 +510,6 @@ void ReadSavedPipe()
     }
 }
 
-
 /**
  * Get pipe address from EEPROM.
  * @note Address data in EEPORM is valid only after a previous power cycle observed
@@ -528,7 +528,6 @@ void GetOldPipe()
     OldPipe += (uint64_t)SavedPipeAddress[7];
 }
 
-
 /************************************************************************************************************/
 
 void FailSafe()
@@ -538,8 +537,8 @@ void FailSafe()
         if (!FailSafeDataLoaded) {
             LoadFailSafeData();
         }
-            MapToSBUS();
-            MoveServos(); 
+        MapToSBUS();
+        MoveServos();
     }
 }
 
@@ -672,16 +671,15 @@ void Reconnect()
 #endif
         }
         else if (StillSearchingTime >= FAILSAFE_TIMEOUT)
-        {  
+        {
             if (!FailSafeSent)
             {
                 FailSafe();
                 FailSafeSent = true; // Once is enough
-                #ifdef DB_FAILSAFE
-                Serial.println ("FailSafe sent");
-                #endif 
-                BoundFlag          = false;
-
+#ifdef DB_FAILSAFE
+                Serial.println("FailSafe sent");
+#endif
+                BoundFlag = false;
             }
         }
     }
@@ -691,15 +689,15 @@ void Reconnect()
 
 void LoadAckPayload()
 {
-     AckPayload.Purpose &= 0x7F; // Clear hi bit (=do not ignore)
+    AckPayload.Purpose &= 0x7F; // Clear hi bit (=do not ignore)
 
-    ++AckPayload.Purpose;        // 0 =  Roll, Pitch, Yaw, Volts.
-                                 // 1 =  Version number
-    if (AckPayload.Purpose > 1) AckPayload.Purpose = 0;  // 1 is currently max
-    if (AckPayload.Purpose==1)
-   {
-       LoadVersioNumber();   // if 1 send version info
-   }
+    ++AckPayload.Purpose;                               // 0 =  Roll, Pitch, Yaw, Volts.
+                                                        // 1 =  Version number
+    if (AckPayload.Purpose > 1) AckPayload.Purpose = 0; // 1 is currently max
+    if (AckPayload.Purpose == 1)
+    {
+        LoadVersioNumber(); // if 1 send version info
+    }
 }
 
 /************************************************************************************************************/
@@ -725,14 +723,13 @@ void Decompress(uint16_t* uncompressed_buf, uint16_t* compressed_buf, int uncomp
     }
 }
 
-void ClearGyroData(){
+void ClearGyroData()
+{
     AckPayload.ReportedPitch = 0;
     AckPayload.ReportedRoll  = 0;
     AckPayload.ReportedYaw   = 0;
     AckPayload.Purpose |= 0x80;
 }
-
-
 
 /************************************************************************************************************/
 
@@ -744,13 +741,12 @@ bool ReadData()
         LoadAckPayload();
         Connected            = true;
         LastConnectionMoment = millis();
-        CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize);     // Send telemetry (actual length plus 0)
-        CurrentRadio->read(&CompressedData, sizeof(CompressedData));       // Get Data
-        if(AckPayload.Purpose == 1 && !GyroInstalled) ClearGyroData();      
-        Decompress(ReceivedData, CompressedData, UNCOMPRESSEDWORDS);       // decompress data
+        CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // Send telemetry (actual length plus 0)
+        CurrentRadio->read(&CompressedData, sizeof(CompressedData));   // Get Data
+        if (AckPayload.Purpose == 1 && !GyroInstalled) ClearGyroData();
+        Decompress(ReceivedData, CompressedData, UNCOMPRESSEDWORDS); // decompress data
         FailSafeDataLoaded = false;
         MapToSBUS();
-      
     }
     return Connected;
 }
@@ -1041,8 +1037,6 @@ void Get_BNO055(const bool use_cheapo)
     ReadBNOValues();
 }
 
-
-
 /************************************************************************************************************/
 
 void ScanI2c()
@@ -1052,14 +1046,14 @@ void ScanI2c()
         Wire.beginTransmission(i);
         if (Wire.endTransmission() == 0) {
             if (i == 0x28) {
-                USE_BNO055A = true;
+                USE_BNO055A   = true;
                 GyroInstalled = true;
 #ifdef DB_SENSORS
                 Serial.println("Real Adafruit BNO055 gyro detected!");
 #endif
             }
             else if (i == 0x29) {
-                USE_BNO055 = true;
+                USE_BNO055    = true;
                 GyroInstalled = true;
 #ifdef DB_SENSORS
                 Serial.println("Cheapo BNO055 gyro clone detected!");
@@ -1072,7 +1066,7 @@ void ScanI2c()
 #endif
             }
             else if (i == 0x68) {
-                USE_MPU6050 = true;
+                USE_MPU6050   = true;
                 GyroInstalled = true;
 #ifdef DB_SENSORS
                 Serial.println("MPU6050 gyro detected!");
@@ -1203,15 +1197,14 @@ void DoBinding()
 {
     GetNewPipe();
 #ifdef DB_BIND
-    Serial.print ("NewPipe: " );
+    Serial.print("NewPipe: ");
     Serial.println((int)NewPipe, HEX);
-   
-    Serial.print ("OldPipe: " );
+
+    Serial.print("OldPipe: ");
     Serial.println((int)OldPipe, HEX);
 #endif
     if (OldPipe == NewPipe) {
         SaveNewBind = false;
-
 
 #ifdef DB_BIND
         Serial.println(millis() - BindOKTimer);
@@ -1235,7 +1228,6 @@ void DoBinding()
     }
 }
 
-
 /************************************************************************************************************/
 // LOOP
 /************************************************************************************************************/
@@ -1250,7 +1242,7 @@ void loop()
                 SBUSTimer = millis(); // timer starts before send starts....
                 MoveServos();
                 if (USE_BNO055A) Get_BNO055(false);
-                if (USE_BNO055)  Get_BNO055(true);
+                if (USE_BNO055) Get_BNO055(true);
                 if (USE_MPU6050) Get_Mpu6050();
             }
         }
