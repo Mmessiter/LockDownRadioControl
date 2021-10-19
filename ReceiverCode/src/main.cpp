@@ -8,7 +8,7 @@
 // #define DB_PID
 // #define DB_BIND
 // #define DB_FAILSAFE
- // #define SECOND_TRANSCEIVER
+  
 
 #define RECEIVE_TIMEOUT 50 // 15 milliseconds was too short
 #define PacketsPerHop   20
@@ -116,10 +116,10 @@ uint8_t PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 16}; // ten now, last 
 #define pinCE1  9  // NRF1
 #define pinCSN1 10 // NRF1
 
-#ifdef SECOND_TRANSCEIVER
-    #define pinCSN2 20 // NRF2
-    #define pinCE2  21 // NRF2
-#endif
+
+#define pinCSN2 20 // NRF2
+#define pinCE2  21 // NRF2
+
 
 #define FAILSAFE_TIMEOUT 2000
 #define LED_PIN          13
@@ -136,11 +136,7 @@ uint64_t OldPipe  = 0;
 
 SBUS MySbus(SBUSPORT);
 RF24 Radio1(pinCE1, pinCSN1);
-
-#ifdef SECOND_TRANSCEIVER
 RF24 Radio2(pinCE2, pinCSN2);
-#endif
-
 RF24* CurrentRadio = &Radio1;
 
 // ******** AckPayload Stucture ************************************************************************
@@ -238,6 +234,10 @@ uint8_t      byte2              = 0;
 uint8_t      ReconnectAttempts  = 0;
 uint8_t      Rnumber            = 1;
 bool         GyroInstalled      = false;
+bool         Radio1Installed    = false;
+bool         Radio2Installed    = false;
+byte         ThisRadio          = 1;
+bool         TwoRadiosInstalled = false;
 
 /************************************************************************************************************/
 
@@ -579,41 +579,21 @@ void HopToNextFrequency(uint8_t freq)
 }
 
 /** Initialize a radio transceiver. */
-void InitCurrentRadio()
+bool InitCurrentRadio()
 {
-    CurrentRadio->begin();                  // sets all to defaults
-    CurrentRadio->enableAckPayload();       // needed
-    CurrentRadio->maskIRQ(1, 1, 1);         // no interrupts - at the moment - (line *IS* connected)
-    CurrentRadio->enableDynamicPayloads();  // needed
-    CurrentRadio->setCRCLength(RF24_CRC_8); // could be 16 or disabled
-
-    switch (PowerSetting) {
-        case 1:
-            CurrentRadio->setPALevel(RF24_PA_MIN);
-            break;
-        case 2:
-            CurrentRadio->setPALevel(RF24_PA_LOW);
-            break;
-        case 3:
-            CurrentRadio->setPALevel(RF24_PA_HIGH);
-            break;
-        default:
-            CurrentRadio->setPALevel(RF24_PA_MAX);
-            break;
+    CurrentRadio->begin();                 
+    if (CurrentRadio->isChipConnected()){
+        CurrentRadio->enableAckPayload();       // needed
+        CurrentRadio->maskIRQ(1, 1, 1);         // no interrupts - at the moment - (line *IS* connected)
+        CurrentRadio->enableDynamicPayloads();  // needed
+        CurrentRadio->setCRCLength(RF24_CRC_8); // could be 16 or disabled
+        CurrentRadio->setPALevel(RF24_PA_MAX);
+        CurrentRadio->setDataRate(RF24_250KBPS);
+        CurrentRadio->openReadingPipe(1, ThisPipe);
+        SaveNewBind = true;
+        return true;
     }
-    switch (DataRate) {
-        case 2:
-            CurrentRadio->setDataRate(RF24_1MBPS);
-            break;
-        case 3:
-            CurrentRadio->setDataRate(RF24_2MBPS);
-            break;
-        default:
-            CurrentRadio->setDataRate(RF24_250KBPS);
-            break;
-    }
-    CurrentRadio->openReadingPipe(1, ThisPipe);
-    SaveNewBind = true;
+    return false;
 }
 
 /************************************************************************************************************/
@@ -626,31 +606,6 @@ void Reconnect()
     {
         StillSearchingTime = millis() - SearchStartTime;
         ReconnectAttempts++;
-
-#ifdef SECOND_TRANSCEIVER          // This part swaps to other transceiver if connection lost and two fitted
-        if (ReconnectAttempts > 2) // TODO: To be checked with two ML01DP5 tranceivers...
-        {
-            ReconnectAttempts = 0;
-            CurrentRadio->stopListening();
-            if (Rnumber == 1)
-            {
-                Rnumber      = 2;
-                CurrentRadio = &Radio2;
-            }
-            else
-            {
-                Rnumber      = 1;
-                CurrentRadio = &Radio1;
-            }
-        }
-#endif
-
-#ifdef DEBUG
-        Serial.print("Reconnection attempt: ");
-        Serial.print(ReconnectAttempts);
-        Serial.print("  Radio: ");
-        Serial.println(Rnumber);
-#endif
         uint8_t i = FHSS_RESCUE_BOTTOM;
         while (!CurrentRadio->available() && i <= FHSS_RESCUE_TOP) // This loop exits as soon as connection is detected.
         {
@@ -660,15 +615,38 @@ void Reconnect()
             delay(3); // was 4, but 3 now seems good and is 25% faster?!
             i++;
         }
+       
+       if (!CurrentRadio->available()) {
+            if (TwoRadiosInstalled){
+                if  (ReconnectAttempts > 10){ 
+                    ReconnectAttempts  = 0;
+                    if (ThisRadio == 1) {
+                        ThisRadio = 2; 
+                        CurrentRadio = &Radio2;
+                        delay(30);
+                    } else if (ThisRadio == 2){
+                        ThisRadio = 1; 
+                        CurrentRadio = &Radio1;  
+                        delay(30);  
+                    }
+                }        
+                
+                
+               }
+               Serial.print (millis());
+                Serial.print ("   Radio: ");
+                Serial.println (ThisRadio);
+
+
+                
+       }
+
         if (CurrentRadio->available())
         {
             Connected          = true; // Connection is re-established so return, smiling!
             FailSafeSent       = false;
             ReconnectAttempts  = 0;
             StillSearchingTime = 0;
-#ifdef DEBUG
-            Serial.println("*****************************************************************************************************************");
-#endif
         }
         else if (StillSearchingTime >= FAILSAFE_TIMEOUT)
         {
@@ -679,7 +657,7 @@ void Reconnect()
 #ifdef DB_FAILSAFE
                 Serial.println("FailSafe sent");
 #endif
-                BoundFlag = false;
+                //BoundFlag = false;
             }
         }
     }
@@ -1121,21 +1099,25 @@ void InitBMP280()
 void setup()
 {
     pinMode(LED_PIN, OUTPUT);
-    digitalWrite(LED_PIN, HIGH);
-    delay(1000); // Needed ! - possibly for stabilising capacitors.
+    digitalWrite(LED_PIN, HIGH); 
     Serial.begin(9600);
     Wire.begin();
-    ScanI2c(); // see what's connected
+    delay(2000); // Needed ! - possibly for stabilising capacitors.
+    ScanI2c();   // see what's connected
     if (USE_BNO055) BNO055_sensor[1].begin();
     if (USE_BNO055A) BNO055_sensor[0].begin();
-
-#ifdef SECOND_TRANSCEIVER
-    CurrentRadio = &Radio2;
-    InitCurrentRadio(); // initialise BOTH at setup, if two.
-#endif
+   
 
     CurrentRadio = &Radio1;
-    InitCurrentRadio();
+    Radio1Installed=InitCurrentRadio();
+    if (Radio1Installed) ThisRadio=1;
+
+    CurrentRadio = &Radio2;
+    Radio2Installed=InitCurrentRadio(); // initialise BOTH at setup, if two.
+    if (Radio2Installed) ThisRadio=2;
+
+    TwoRadiosInstalled = Radio1Installed & Radio2Installed;
+
     if (USE_BMP280) {
 #ifdef DB_SENSORS
         Serial.print("Starting BMP280 ... ");
