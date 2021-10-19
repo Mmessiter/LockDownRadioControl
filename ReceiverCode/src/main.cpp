@@ -510,6 +510,8 @@ void ReadSavedPipe()
     }
 }
 
+/************************************************************************************************************/
+
 /**
  * Get pipe address from EEPROM.
  * @note Address data in EEPORM is valid only after a previous power cycle observed
@@ -542,6 +544,8 @@ void FailSafe()
     }
 }
 
+/************************************************************************************************************/
+
 /**
  * Print out some debugging information about the channel hopping implementation
  * @param freq The next frequency to be used.
@@ -562,13 +566,14 @@ void ShowHopDurationEtc(uint8_t freq)
     PacketStartTime = millis();
 }
 
+/************************************************************************************************************/
+
 /**
  * Make radio transceiver "hop" over to the new frequency.
  * @param freq The next frequency to use.
  */
 void HopToNextFrequency(uint8_t freq)
 {
-
     CurrentRadio->stopListening();
     CurrentRadio->setChannel(freq);
     CurrentRadio->startListening();
@@ -577,6 +582,8 @@ void HopToNextFrequency(uint8_t freq)
     ShowHopDurationEtc(freq);
 #endif
 }
+
+/************************************************************************************************************/
 
 /** Initialize a radio transceiver. */
 void InitCurrentRadio()
@@ -592,23 +599,17 @@ void InitCurrentRadio()
         CurrentRadio->openReadingPipe(1, ThisPipe);
         SaveNewBind = true;
     }
-   
 }
-
-
 /************************************************************************************************************/
 
-
-void ProdRadio(){  // After switching radios, this prod allows EITHER to connect. Don't know why - yet!
+void ProdRadio(){                              // After switching radios, this prod allows EITHER to connect. Don't know why - yet!
     CurrentRadio->enableDynamicPayloads(); 
-    CurrentRadio->maskIRQ(1, 1, 1);         // no interrupts - seems NEEDED at the moment - (line *IS* connected)
+    CurrentRadio->maskIRQ(1, 1, 1);            // no interrupts - seems NEEDED at the moment - (line *IS* connected)
     CurrentRadio->setCRCLength(RF24_CRC_8); 
     CurrentRadio->setPALevel(RF24_PA_MAX);
     CurrentRadio->setDataRate(RF24_250KBPS);
     CurrentRadio->openReadingPipe(1, ThisPipe);
-    delay(35); // without this short pause it sometimes hangs
-
-
+    delay(35);                                 // without this short pause it sometimes hangs
 }
 /************************************************************************************************************/
 
