@@ -8,7 +8,7 @@
 // #define DB_PID
 // #define DB_BIND
 // #define DB_FAILSAFE
- // #define SECOND_TRANSCEIVER
+  #define SECOND_TRANSCEIVER
   
 
 #define RECEIVE_TIMEOUT 50 // 15 milliseconds was too short
@@ -116,7 +116,6 @@ uint8_t PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 16}; // ten now, last 
 
 #define pinCE1  9  // NRF1
 #define pinCSN1 10 // NRF1
-
 
 #define pinCSN2 20 // NRF2
 #define pinCE2  21 // NRF2
@@ -580,23 +579,37 @@ void HopToNextFrequency(uint8_t freq)
 }
 
 /** Initialize a radio transceiver. */
-bool InitCurrentRadio()
+void InitCurrentRadio()
 {
     CurrentRadio->begin();                 
     if (CurrentRadio->isChipConnected()){
         CurrentRadio->enableAckPayload();       // needed
-        CurrentRadio->maskIRQ(1, 1, 1);         // no interrupts - at the moment - (line *IS* connected)
+        CurrentRadio->maskIRQ(1, 1, 1);         // no interrupts - seems NEEDED at the moment - (line *IS* connected)
         CurrentRadio->enableDynamicPayloads();  // needed
         CurrentRadio->setCRCLength(RF24_CRC_8); // could be 16 or disabled
         CurrentRadio->setPALevel(RF24_PA_MAX);
         CurrentRadio->setDataRate(RF24_250KBPS);
         CurrentRadio->openReadingPipe(1, ThisPipe);
         SaveNewBind = true;
-        return true;
     }
-    return false;
+   
 }
 
+
+/************************************************************************************************************/
+
+
+void ProdRadio(){  // After switching radios, this prod allows EITHER to connect. Don't know why - yet!
+    CurrentRadio->enableDynamicPayloads(); 
+    CurrentRadio->maskIRQ(1, 1, 1);         // no interrupts - seems NEEDED at the moment - (line *IS* connected)
+    CurrentRadio->setCRCLength(RF24_CRC_8); 
+    CurrentRadio->setPALevel(RF24_PA_MAX);
+    CurrentRadio->setDataRate(RF24_250KBPS);
+    CurrentRadio->openReadingPipe(1, ThisPipe);
+    delay(35); // without this short pause it sometimes hangs
+
+
+}
 /************************************************************************************************************/
 
 void Reconnect()
@@ -613,32 +626,33 @@ void Reconnect()
             CurrentRadio->stopListening();
             CurrentRadio->setChannel(i);
             CurrentRadio->startListening();
-            delay(3); // was 4, but 3 now seems good and is 25% faster?!
+            delay(4); // was 4, but 3 now seems good and is 25% faster?!
             i++;
         }
        
        if (!CurrentRadio->available()) {
             if (TwoRadiosInstalled){
-                if  (ReconnectAttempts > 10){ 
+                if  (ReconnectAttempts > 4){ 
                      ReconnectAttempts  = 0;
                     if (ThisRadio == 1) {
                         ThisRadio = 2; 
                         CurrentRadio = &Radio2;
-                        delay(30);
+                        ProdRadio();
                     } else {
                         ThisRadio = 1; 
                         CurrentRadio = &Radio1;  
-                        delay(30);  
-                    }  
-                    Serial.print (millis());            // These lines are just to help fix this area!!
-                    Serial.print ("   Radio: ");        // These lines are just to help fix this area!!
-                    Serial.println (ThisRadio);         // These lines are just to help fix this area!!
+                        ProdRadio();
+                    }   
                 } 
             }    
        }
 
         if (CurrentRadio->available())
         {
+            Serial.print (millis());            // These lines are just to help fix this area!!
+            Serial.print ("   Radio: ");        // These lines are just to help fix this area!!
+            Serial.println (ThisRadio);         // These lines are just to help fix this area!!
+
             Connected          = true; // Connection is re-established so return, smiling!
             FailSafeSent       = false;
             ReconnectAttempts  = 0;
@@ -1106,12 +1120,12 @@ void setup()
 
  #ifdef SECOND_TRANSCEIVER
     CurrentRadio = &Radio2;
-    Radio2Installed=InitCurrentRadio(); // initialise BOTH at setup, if two.
+    InitCurrentRadio(); // initialise BOTH at setup, if two.
     TwoRadiosInstalled = true;
  #endif 
 
     CurrentRadio = &Radio1;
-    Radio1Installed=InitCurrentRadio();
+    InitCurrentRadio();
     ThisRadio=1;
 
     if (USE_BMP280) {
