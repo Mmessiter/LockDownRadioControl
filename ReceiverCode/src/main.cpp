@@ -1,7 +1,7 @@
 // ************************************************** Receiver code **************************************************
-#define RXVERSION_MAJOR   1 // Oct 6th 2021
+#define RXVERSION_MAJOR   1 // Oct 19th 2021
 #define RXVERSION_MINOR   0
-#define RXVERSION_MINIMUS 3
+#define RXVERSION_MINIMUS 4
 
 // #define DEBUG
 // #define DB_SENSORS
