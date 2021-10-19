@@ -8,6 +8,7 @@
 // #define DB_PID
 // #define DB_BIND
 // #define DB_FAILSAFE
+ #define SECOND_TRANSCEIVER
   
 
 #define RECEIVE_TIMEOUT 50 // 15 milliseconds was too short
@@ -619,26 +620,21 @@ void Reconnect()
        if (!CurrentRadio->available()) {
             if (TwoRadiosInstalled){
                 if  (ReconnectAttempts > 10){ 
-                    ReconnectAttempts  = 0;
+                     ReconnectAttempts  = 0;
                     if (ThisRadio == 1) {
                         ThisRadio = 2; 
                         CurrentRadio = &Radio2;
                         delay(30);
-                    } else if (ThisRadio == 2){
+                    } else {
                         ThisRadio = 1; 
                         CurrentRadio = &Radio1;  
                         delay(30);  
-                    }
-                }        
-                
-                
-               }
-               Serial.print (millis());   // These are to help fix this area!!
-               Serial.print ("   Radio: ");
-               Serial.println (ThisRadio);
-
-
-                
+                    }  
+                    Serial.print (millis());            // These lines are just to help fix this area!!
+                    Serial.print ("   Radio: ");        // These lines are just to help fix this area!!
+                    Serial.println (ThisRadio);         // These lines are just to help fix this area!!
+                } 
+            }    
        }
 
         if (CurrentRadio->available())
@@ -1108,15 +1104,15 @@ void setup()
     if (USE_BNO055A) BNO055_sensor[0].begin();
    
 
-    CurrentRadio = &Radio1;
-    Radio1Installed=InitCurrentRadio();
-    if (Radio1Installed) ThisRadio=1;
-
+ #ifdef SECOND_TRANSCEIVER
     CurrentRadio = &Radio2;
     Radio2Installed=InitCurrentRadio(); // initialise BOTH at setup, if two.
-    if (Radio2Installed) {ThisRadio=2;} else {CurrentRadio = &Radio1;}
+    TwoRadiosInstalled = true;
+ #endif 
 
-    TwoRadiosInstalled = Radio1Installed & Radio2Installed;
+    CurrentRadio = &Radio1;
+    Radio1Installed=InitCurrentRadio();
+    ThisRadio=1;
 
     if (USE_BMP280) {
 #ifdef DB_SENSORS
