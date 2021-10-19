@@ -8,7 +8,7 @@
 // #define DB_PID
 // #define DB_BIND
 // #define DB_FAILSAFE
-// #define SECOND_TRANSCEIVER
+ // #define SECOND_TRANSCEIVER
 
 #define RECEIVE_TIMEOUT 50 // 15 milliseconds was too short
 #define PacketsPerHop   20
