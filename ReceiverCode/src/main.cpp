@@ -633,9 +633,9 @@ void Reconnect()
                 
                 
                }
-               Serial.print (millis());
-                Serial.print ("   Radio: ");
-                Serial.println (ThisRadio);
+               Serial.print (millis());   // These are to help fix this area!!
+               Serial.print ("   Radio: ");
+               Serial.println (ThisRadio);
 
 
                 
@@ -1114,7 +1114,7 @@ void setup()
 
     CurrentRadio = &Radio2;
     Radio2Installed=InitCurrentRadio(); // initialise BOTH at setup, if two.
-    if (Radio2Installed) ThisRadio=2;
+    if (Radio2Installed) {ThisRadio=2;} else {CurrentRadio = &Radio1;}
 
     TwoRadiosInstalled = Radio1Installed & Radio2Installed;
 
