@@ -22,7 +22,7 @@ The current transmitter uses version 1b of the PCB.
 
 All parts can be obtained from Amazon, eBay and/or many other sources.
 
-* Plastic filament for your 3D printer (PETG is recommended).
+* Plastic filament for your 3D printer (I prefer PETG).
 * Teensy 4.1 Microcontroller (x1)
 * 32 gigabyte micro SD card (x1)
 * Nextion 5” Enhanced display (x1)
@@ -78,13 +78,24 @@ Most components are marked on the board to show where they should go. But three 
 
 All capacitors' values are marked on the PCB. They are mostly ceramic SMD 1206 capacitors except for the 47uF capacitors which should be **Tantalum case size B** and a 100uF electrolytic TTH capactor near the Pololu 2808 power switch. The 47uF Tantalum capacitors are not symmetrical so the end with the darker stripe must be at the end marked positive (+). Similarly the 100uF electrolytic TTH capacitor must have its longer lead through the hole marked (+). Also note that the INA219 voltage sensor will be above this capacitor - so if it's too tall, lie it down out of the way. 
 
+<p align="center">
+<img src="fdg.png"  width="450"/></p> 
+
+<p align="center">
+<img src="cap_flat.png"  width="450"/></p>
+
 To prevent the Nextion screen putting noise onto the 5V power supply (which it would because of its use of PWM for brightness) it gets it's very own 5V regulator, and two extra large electrolytic capacitors across its power in. I suggest one is attached to the back of the screen itself, and another to the back of the PCB where the screen is connected. 
+
+
+<p align="center">
+<img src="2021-10-19-11-03-24.png"  width="450"/></p> 
+<p align="center">
+<img src="2021-10-19-11-05-09.png"  width="450"/></p> 
+The two Schotkky diodes should also be added to the back of the PCB in order to prevent these capacitors from discharging through the voltage regulators 'backwards' when you turn the power off. This might damage the regulators.
+
 <p align="center">
 <img src="2021-09-23-15-45-46.png"  width="450"/></p> 
 
-The two Schotkky diodes should also be added to the back of the PCB in order to prevent these capacitors from discharging through the voltage regulators 'backwards' when you turn the power off. This might damage the regulators.
-<p align="center">
-<img src="2021-09-23-15-06-59.png"  width="450"/></p> 
 
 Start by soldering on all the SMD components and the 100uF through hole electrolytic capacitor, which should be lying down unless its a very short one - because the INA219 will be above it.
 
@@ -92,9 +103,11 @@ There are several breakout boards: the Teensy 4.1, the Pololu 2808, and the Tiny
 
 **Inputs for Channels 1-8**
 
-At the very bottom of the PCB are the places for eight 3-pin servo-style connectors marked `Sticks and knobs`. See image. These are marked `CH1` at one end and `CH8` at the other. These are used to connect to the gimbals or stick units for channels 1-4. Channels 5-8 are for connection to the four potentiometers (knobs). These four pots can be changed to switches if you prefer (and many do). The switches can be two or three position switches. If you use three position switches then you need also to add two 750K resistors as shown in this image:
+At the very bottom of the PCB are the places for eight 3-pin servo-style connectors marked `Sticks and knobs`. See image. These are marked `CH1` at one end and `CH8` at the other. These are used to connect to the gimbals or stick units for channels 1-4. Channels 5-8 are for connection to the four potentiometers (knobs). These four pots can be changed to switches if you prefer (and most do). The switches can be two or three position switches. If you use three position switches then you need also to add two 750K resistors as shown in this image:
 
-(**TODO:** Insert image of switch with resistors here)
+<p align="center">
+<img src="Switch.png"  width="450"/></p> 
+
 
 The resistors make the switch appear just as a potentiometer would to the firmware,  and give three possible positions instead of only two.
  
@@ -119,35 +132,66 @@ This method allows for the transceiver to be easily replaced if that is ever nee
 
 The first item to go into the case should be the Nextion Screen. 
 
-Before mounting the screen, first modify its connector shown in this image:
+Before mounting the screen, first modify its connector as shown in these two images:
 
-(**TODO:** Insert image of Nextion connector here)
 
-This will allow the screen to be more easily connected correctly to the PCB, and also to an FTDI adaptor. 
+<p align="center">
+<img src="Nextion1.png" width="450"/>
+
+
+<p align="center">
+<img src="Nextion2.png" width="450"/>
+
+
+This will allow the screen to be more easily connected correctly to the PCB, and also to an FTDI adaptor. The order of the wires must be *exactly* as shown - including the gap between black and red.
 
 If you have not already done so, now download the free Nextion editor from [https://nextion.tech/nextion-editor/ 
 ](https://nextion.tech/nextion-editor/)
 
-Use this application to load the latest firmware file (currently `Transmitter512.HMI`) and upload it into the Nextion screen itself. This firmware file (or latest version) is on GitHub.
+Use this application to load the latest firmware file (currently `Transmitter512.HMI`) and upload it into the Nextion screen itself. This firmware file (latest version) is on GitHub.
 
-Solder a 220uF electolytic capacitor to the screens power as shown in this image:
+
+Use four small self tapping screws to mount the Nextion screen into the case **with its connector to the left** as in this image: 
+
 <p align="center">
-<img src="2021-09-22-22-23-55.png" width="450"/>
-</p>
-
-Use four small self tapping screws to hold the Nextion screen in the case **with its connector to the left.** 
+<img src="ScreenMount.png" width="450"/>
 
 Once the screen is in place, the printed cicuit board, bolted to the plastic tray support (using 3M bolts and locknuts) can be mounted above it, and held in place with two more self tapping small screws.
 
-... to be continued ...
+<p align="center">
+<img src="TransmitterTray.png" width="450"/>
+
+The four 'Edge' switches need no resistors. Each has three wires, of which the middle one is always GND. So pick wire colours that you'll remember.
+
+<p align="center">
+<img src="SwitchWires.png" width="450"/>
 
 
+Next, mount these four 'Edge' switches using the cable-tidy brackets as shown:
 
+<p align="center">
+<img src="CableTidy1.png" width="450"/>
 
+<p align="center">
+<img src="CableTidy.png" width="450"/>
 
+<p align="center">
+<img src="CableTidy2.png" width="450"/>
 
+Cut their wires to a suitable length and connect these switches to the connector near the Teensy marked 'Switches 1 - 4'. All four GND wires go on the side away from the Teensy, and the signal wires go next to the Teensy. The centre row is not used, so those pins could be removed as I did here.
 
+<p align="center">
+<img src="SwitchConnections.png" width="450"/>
 
+The 'ON' button and the three colour LED are now mounted into the case as shown in this image. The LED breakout board is first attached with a cable tie to the little LED mount piece, which is then held in place using 5-minute epoxy resin.
+
+<p align="center">
+<img src="LEDSWITCH.png" width="450"/>
+
+To make the internal battery charging lead, modify a couple of 3S balance leads so that they are female at both ends and about 15 cm long. Be sure to get the polarty right! One end is then mounted into the case side with 5-minute epoxy, the other end is eventually connected to the battery's balance lead.
+
+<p align="center">
+<img src="BatteryLead.png" width="450"/>
 
 
 
