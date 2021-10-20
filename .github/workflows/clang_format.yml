@@ -13,13 +13,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: shenxianpeng/cpp-linter-action@master
+      - uses: 2bndy5/cpp-linter-action@main
         id: linter
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           style: file
           tidy-checks: '-*'
+          files-changed-only: false
 
       - name: Code needs attention?
         if: steps.linter.outputs.checks-failed > 0
