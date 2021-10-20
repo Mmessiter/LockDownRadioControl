@@ -8,8 +8,7 @@
 // #define DB_PID
 // #define DB_BIND
 // #define DB_FAILSAFE
-  #define SECOND_TRANSCEIVER
-  
+#define SECOND_TRANSCEIVER
 
 #define RECEIVE_TIMEOUT 50 // 15 milliseconds was too short
 #define PacketsPerHop   20
@@ -120,7 +119,6 @@ uint8_t PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 16}; // ten now, last 
 #define pinCSN2 20 // NRF2
 #define pinCE2  21 // NRF2
 
-
 #define FAILSAFE_TIMEOUT 2000
 #define LED_PIN          13
 
@@ -134,9 +132,9 @@ uint64_t ThisPipe = 0xBABE1E5420LL; // default startup
 uint64_t NewPipe  = 0;
 uint64_t OldPipe  = 0;
 
-SBUS MySbus(SBUSPORT);
-RF24 Radio1(pinCE1, pinCSN1);
-RF24 Radio2(pinCE2, pinCSN2);
+SBUS  MySbus(SBUSPORT);
+RF24  Radio1(pinCE1, pinCSN1);
+RF24  Radio2(pinCE2, pinCSN2);
 RF24* CurrentRadio = &Radio1;
 
 // ******** AckPayload Stucture ************************************************************************
@@ -588,8 +586,8 @@ void HopToNextFrequency(uint8_t freq)
 /** Initialize a radio transceiver. */
 void InitCurrentRadio()
 {
-    CurrentRadio->begin();                 
-    if (CurrentRadio->isChipConnected()){
+    CurrentRadio->begin();
+    if (CurrentRadio->isChipConnected()) {
         CurrentRadio->enableAckPayload();       // needed
         CurrentRadio->maskIRQ(1, 1, 1);         // no interrupts - seems NEEDED at the moment - (line *IS* connected)
         CurrentRadio->enableDynamicPayloads();  // needed
@@ -602,14 +600,15 @@ void InitCurrentRadio()
 }
 /************************************************************************************************************/
 
-void ProdRadio(){                              // After switching radios, this prod allows EITHER to connect. Don't know why - yet!
-    CurrentRadio->enableDynamicPayloads(); 
-    CurrentRadio->maskIRQ(1, 1, 1);            // no interrupts - seems NEEDED at the moment - (line *IS* connected)
-    CurrentRadio->setCRCLength(RF24_CRC_8); 
+void ProdRadio()
+{ // After switching radios, this prod allows EITHER to connect. Don't know why - yet!
+    CurrentRadio->enableDynamicPayloads();
+    CurrentRadio->maskIRQ(1, 1, 1); // no interrupts - seems NEEDED at the moment - (line *IS* connected)
+    CurrentRadio->setCRCLength(RF24_CRC_8);
     CurrentRadio->setPALevel(RF24_PA_MAX);
     CurrentRadio->setDataRate(RF24_250KBPS);
     CurrentRadio->openReadingPipe(1, ThisPipe);
-    delay(35);                                 // without this short pause it sometimes hangs
+    delay(35); // without this short pause it sometimes hangs
 }
 /************************************************************************************************************/
 
@@ -630,29 +629,30 @@ void Reconnect()
             delay(4); // was 4, but 3 now seems good and is 25% faster?!
             i++;
         }
-       
-       if (!CurrentRadio->available()) {
-            if (TwoRadiosInstalled){
-                if  (ReconnectAttempts > 4){ 
-                     ReconnectAttempts  = 0;
+
+        if (!CurrentRadio->available()) {
+            if (TwoRadiosInstalled) {
+                if (ReconnectAttempts > 4) {
+                    ReconnectAttempts = 0;
                     if (ThisRadio == 1) {
-                        ThisRadio = 2; 
+                        ThisRadio    = 2;
                         CurrentRadio = &Radio2;
                         ProdRadio();
-                    } else {
-                        ThisRadio = 1; 
-                        CurrentRadio = &Radio1;  
+                    }
+                    else {
+                        ThisRadio    = 1;
+                        CurrentRadio = &Radio1;
                         ProdRadio();
-                    }   
-                } 
-            }    
-       }
+                    }
+                }
+            }
+        }
 
         if (CurrentRadio->available())
         {
-            Serial.print (millis());            // These lines are just to help fix this area!!
-            Serial.print ("   Radio: ");        // These lines are just to help fix this area!!
-            Serial.println (ThisRadio);         // These lines are just to help fix this area!!
+            Serial.print(millis());     // These lines are just to help fix this area!!
+            Serial.print("   Radio: "); // These lines are just to help fix this area!!
+            Serial.println(ThisRadio);  // These lines are just to help fix this area!!
 
             Connected          = true; // Connection is re-established so return, smiling!
             FailSafeSent       = false;
@@ -1110,24 +1110,23 @@ void InitBMP280()
 void setup()
 {
     pinMode(LED_PIN, OUTPUT);
-    digitalWrite(LED_PIN, HIGH); 
+    digitalWrite(LED_PIN, HIGH);
     Serial.begin(9600);
     Wire.begin();
     delay(2000); // Needed ! - possibly for stabilising capacitors.
     ScanI2c();   // see what's connected
     if (USE_BNO055) BNO055_sensor[1].begin();
     if (USE_BNO055A) BNO055_sensor[0].begin();
-   
 
- #ifdef SECOND_TRANSCEIVER
+#ifdef SECOND_TRANSCEIVER
     CurrentRadio = &Radio2;
     InitCurrentRadio(); // initialise BOTH at setup, if two.
     TwoRadiosInstalled = true;
- #endif 
+#endif
 
     CurrentRadio = &Radio1;
     InitCurrentRadio();
-    ThisRadio=1;
+    ThisRadio = 1;
 
     if (USE_BMP280) {
 #ifdef DB_SENSORS
