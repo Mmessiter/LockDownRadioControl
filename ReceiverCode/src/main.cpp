@@ -8,7 +8,7 @@
 // #define DB_PID
 // #define DB_BIND
 // #define DB_FAILSAFE
-#define SECOND_TRANSCEIVER
+//#define SECOND_TRANSCEIVER
 
 #define RECEIVE_TIMEOUT 50 // 15 milliseconds was too short
 #define PacketsPerHop   20
@@ -654,7 +654,7 @@ void Reconnect()
             Serial.print("   Radio: "); // These lines are just to help fix this area!!
             Serial.println(ThisRadio);  // These lines are just to help fix this area!!
 
-            Connected          = true; // Connection is re-established so return, smiling!
+            Connected          = true;  // Connection is re-established so return, smiling!
             FailSafeSent       = false;
             ReconnectAttempts  = 0;
             StillSearchingTime = 0;
