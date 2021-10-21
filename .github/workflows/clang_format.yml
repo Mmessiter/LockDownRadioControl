@@ -20,6 +20,7 @@ jobs:
         with:
           style: file
           tidy-checks: '-*'
+          version: 12
           files-changed-only: false
 
       - name: Code needs attention?
