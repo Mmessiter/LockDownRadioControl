@@ -692,6 +692,7 @@ void loop()
                 MoveServos();
                 if (USE_BNO055A) Get_BNO055(false);
                 if (USE_BNO055) Get_BNO055(true);
+                AckPayload.CurrentAltitude  = ThisRadio; // This is temporary: Transmitter now sees which radio connected instead of altitute
                 if (USE_MPU6050) {
                     Get_Mpu6050();
 
