@@ -179,7 +179,7 @@ void Reconnect()
             CurrentRadio->stopListening();
             CurrentRadio->setChannel(i);
             CurrentRadio->startListening();
-            delay(4); // was 4, but 3 now seems good and is 25% faster?!
+            delay(3); // was 4, but 3 now seems good and is 25% faster?!
             i++;
         }
 
