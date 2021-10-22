@@ -185,7 +185,7 @@ void Reconnect()
 
 #ifdef SECOND_TRANSCEIVER
         if (!CurrentRadio->available()) {
-            if (ReconnectAttempts > 4) {
+            if (ReconnectAttempts > 1) {
                 ReconnectAttempts = 0;
                 if (ThisRadio == 1) {
                     ThisRadio    = 2;
@@ -197,17 +197,21 @@ void Reconnect()
                     CurrentRadio = &Radio1;
                     ProdRadio();
                 }
+            Serial.print(millis());     // These lines are just to help fix this area!!
+            Serial.print("  ? Testing Radio: "); // These lines are just to help fix this area!!
+            Serial.println(ThisRadio);  // These lines are just to help fix this area!!
+
             }
         }
 #endif // defined (SECOND_TRANSCEIVER)
-
+            
         if (CurrentRadio->available())
         {
             Serial.print(millis());     // These lines are just to help fix this area!!
-            Serial.print("   Radio: "); // These lines are just to help fix this area!!
+            Serial.print("  ! Connected on Radio: "); // These lines are just to help fix this area!!
             Serial.println(ThisRadio);  // These lines are just to help fix this area!!
 
-            Connected          = true; // Connection is re-established so return, smiling!
+            Connected          = true;  // Connection is re-established so return, smiling!
             FailSafeSent       = false;
             ReconnectAttempts  = 0;
             StillSearchingTime = 0;
