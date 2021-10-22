@@ -207,9 +207,12 @@ void Reconnect()
             
         if (CurrentRadio->available())
         {
+
+#ifdef SECOND_TRANSCEIVER
             Serial.print(millis());     // These lines are just to help fix this area!!
             Serial.print("  ! Connected on Radio: "); // These lines are just to help fix this area!!
             Serial.println(ThisRadio);  // These lines are just to help fix this area!!
+#endif // defined (SECOND_TRANSCEIVER)
 
             Connected          = true;  // Connection is re-established so return, smiling!
             FailSafeSent       = false;
