@@ -22,6 +22,7 @@ jobs:
           tidy-checks: '-*'
           version: 12
           lines-changed-only: true
+          thread_comments: false
 
       - name: Code needs attention?
         if: steps.linter.outputs.checks-failed > 0
