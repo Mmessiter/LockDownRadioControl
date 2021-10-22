@@ -6,7 +6,7 @@
 #define SERVOSUSED      10
 #define SBUSRATE        10 // SBUS frame every 10 milliseconds
 #define SBUSPORT        Serial3
-#define SECOND_TRANSCEIVER       
+#define SECOND_TRANSCEIVER
 
 bool USE_BMP280 = false; /** is BMP280 sensor connected */
 
@@ -692,7 +692,7 @@ void loop()
                 MoveServos();
                 if (USE_BNO055A) Get_BNO055(false);
                 if (USE_BNO055) Get_BNO055(true);
-                AckPayload.CurrentAltitude  = ThisRadio; // This is temporary: Transmitter now sees which radio connected instead of altitute
+                AckPayload.CurrentAltitude = ThisRadio; // This is temporary: Transmitter now sees which radio connected instead of altitute
                 if (USE_MPU6050) {
                     Get_Mpu6050();
 

@@ -160,7 +160,7 @@ void ProdRadio()
     CurrentRadio->setPALevel(RF24_PA_MAX);
     CurrentRadio->setDataRate(RF24_250KBPS);
     CurrentRadio->openReadingPipe(1, ThisPipe);
-    delay(50); // Delay requirement has NOT gone away! 
+    delay(50); // Delay requirement has NOT gone away!
 }
 
 /************************************************************************************************************/
@@ -197,24 +197,23 @@ void Reconnect()
                     CurrentRadio = &Radio1;
                     ProdRadio();
                 }
-            Serial.print(millis());     // These lines are just to help fix this area!!
-            Serial.print("  ? Testing Radio: "); // These lines are just to help fix this area!!
-            Serial.println(ThisRadio);  // These lines are just to help fix this area!!
-
+                Serial.print(millis());              // These lines are just to help fix this area!!
+                Serial.print("  ? Testing Radio: "); // These lines are just to help fix this area!!
+                Serial.println(ThisRadio);           // These lines are just to help fix this area!!
             }
         }
 #endif // defined (SECOND_TRANSCEIVER)
-            
+
         if (CurrentRadio->available())
         {
 
 #ifdef SECOND_TRANSCEIVER
-            Serial.print(millis());     // These lines are just to help fix this area!!
+            Serial.print(millis());                   // These lines are just to help fix this area!!
             Serial.print("  ! Connected on Radio: "); // These lines are just to help fix this area!!
-            Serial.println(ThisRadio);  // These lines are just to help fix this area!!
-#endif // defined (SECOND_TRANSCEIVER)
+            Serial.println(ThisRadio);                // These lines are just to help fix this area!!
+#endif                                                // defined (SECOND_TRANSCEIVER)
 
-            Connected          = true;  // Connection is re-established so return, smiling!
+            Connected          = true; // Connection is re-established so return, smiling!
             FailSafeSent       = false;
             ReconnectAttempts  = 0;
             StillSearchingTime = 0;
