@@ -160,7 +160,7 @@ void ProdRadio()
     CurrentRadio->setPALevel(RF24_PA_MAX);
     CurrentRadio->setDataRate(RF24_250KBPS);
     CurrentRadio->openReadingPipe(1, ThisPipe);
-    //delay(35); // Delay requirement has gone away! But Prod requirement remains ...
+    delay(35); // Delay requirement has NOT gone away! 
 }
 
 /************************************************************************************************************/
