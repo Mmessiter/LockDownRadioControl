@@ -21,8 +21,9 @@ jobs:
           style: file
           tidy-checks: '-*'
           version: 12
-          lines-changed-only: true
-          thread_comments: false
+          file-changed-only: false
+          # lines-changed-only: true
+          thread-comments: false
 
       - name: Code needs attention?
         if: steps.linter.outputs.checks-failed > 0

@@ -80,13 +80,13 @@ void TryOtherPipe()
     if (BoundFlag == true) {
         BoundFlag = false;
         SetThePipe(DefaultPipe);
-       // Serial.println ("Default");
+        // Serial.println ("Default");
     }
     else
     {
         BoundFlag = true;
         SetThePipe(NewPipe);
-       // Serial.println ("NEWPIPE");
+        // Serial.println ("NEWPIPE");
     }
 }
 /************************************************************************************************************/
