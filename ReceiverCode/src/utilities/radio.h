@@ -51,6 +51,8 @@ uint8_t AckPayloadSize = sizeof(AckPayload); // Size for later externs if needed
 
 uint8_t PacketNumber; /** A counter for packets between channel hops. */
 
+uint32_t ConnectionStart;
+
 #define UNCOMPRESSEDWORDS 20                        //   16 Channels plus extra 4 16 BIT values
 #define COMPRESSEDWORDS   UNCOMPRESSEDWORDS * 3 / 4 // = 16 WORDS  with no extra
 
@@ -169,6 +171,16 @@ void Reconnect()
 {
     SearchStartTime   = millis();
     ReconnectAttempts = 0;
+
+#ifdef SECOND_TRANSCEIVER
+    if (((millis()-ConnectionStart)/1000) > 0){
+    Serial.print ("Duration on Radio: ");
+    Serial.print (ThisRadio);
+    Serial.print (" = ");
+    Serial.print ((millis()-ConnectionStart)/1000);
+    Serial.println  (" Seconds");
+    }
+#endif // defined (SECOND_TRANSCEIVER)
     while (!Connected)
     {
         StillSearchingTime = millis() - SearchStartTime;
@@ -206,6 +218,7 @@ void Reconnect()
 
         if (CurrentRadio->available())
         {
+            ConnectionStart=millis();
 
 #ifdef SECOND_TRANSCEIVER
             Serial.print(millis());                   // These lines are just to help fix this area!!
