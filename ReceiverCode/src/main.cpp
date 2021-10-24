@@ -138,9 +138,10 @@ void MapToSBUS()
 {
     int RangeMax = 2047; // = Frsky at 150 %
     int RangeMin = 0;
-
-    for (int j = 0; j < CHANNELSUSED; ++j) {
-        SbusChannels[j] = map(ReceivedData[j], MINMICROS, MAXMICROS, RangeMin, RangeMax);
+    if (Connected){
+        for (int j = 0; j < CHANNELSUSED; ++j) {
+            SbusChannels[j] = map(ReceivedData[j], MINMICROS, MAXMICROS, RangeMin, RangeMax);
+        }
     }
 }
 
@@ -176,6 +177,7 @@ void MoveServos()
 {
     int j = 0;
     int k = 0;
+        if (!Connected){return;}      //
     MySbus.write(&SbusChannels[0]);
     if (1) { //(ModelType==AEROPLANE ){                         // !! fix Later ***************************************
         for (j = 0; j < SERVOSUSED; ++j) {
@@ -260,8 +262,10 @@ void FailSafe()
         if (!FailSafeDataLoaded) {
             LoadFailSafeData();
         }
+        Connected=true;   // to force sending data!
         MapToSBUS();
         MoveServos();
+        Connected=false; // I lied earlier - not really connected.
     }
 }
 
