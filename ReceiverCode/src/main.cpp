@@ -500,7 +500,9 @@ void DoSensors()
 FASTRUN void ReceiveData()
 {
     if (!Connected)
-        if (millis() - LastConnectionMoment >= RECEIVE_TIMEOUT) Reconnect();
+        if (millis() - LastConnectionMoment >= RECEIVE_TIMEOUT) {
+            Reconnect();return;
+            }
     if (ReadData()) {
         uint8_t NextFrequency = CheckParams();
         if (PacketNumber >= PacketsPerHop) {
