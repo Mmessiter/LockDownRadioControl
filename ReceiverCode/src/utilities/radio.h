@@ -229,8 +229,8 @@ void Reconnect()
             Serial.print(millis());                   // These lines are just to help fix this area!!
             Serial.print("  ! Connected on Radio: "); // These lines are just to help fix this area!!
             Serial.println(ThisRadio);                // These lines are just to help fix this area!!
-#endif   
-#endif                                       // defined (SECOND_TRANSCEIVER)
+#endif   // defined (SECOND_TRANSCEIVER)
+#endif  // defined (SECOND_TRANSCEIVER_DEBUG)                                    // defined (SECOND_TRANSCEIVER)
 
             Connected          = true; // Connection is re-established so return, smiling!
             FailSafeSent       = false;

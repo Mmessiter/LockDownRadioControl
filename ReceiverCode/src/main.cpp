@@ -7,7 +7,7 @@
 #define SBUSRATE        10 // SBUS frame every 10 milliseconds
 #define SBUSPORT        Serial3
 #define SECOND_TRANSCEIVER
-#define SECOND_TRANSCEIVER_DEBUG
+//#define SECOND_TRANSCEIVER_DEBUG
 
 
 bool USE_BMP280 = false; /** is BMP280 sensor connected */
