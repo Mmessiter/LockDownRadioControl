@@ -173,6 +173,7 @@ void Reconnect()
     ReconnectAttempts = 0;
 
 #ifdef SECOND_TRANSCEIVER
+#ifdef SECOND_TRANSCEIVER_DEBUG
     if (((millis()-ConnectionStart)/1000) > 0){
     Serial.print ("Duration on Radio: ");
     Serial.print (ThisRadio);
@@ -180,7 +181,8 @@ void Reconnect()
     Serial.print ((millis()-ConnectionStart)/1000);
     Serial.println  (" Seconds");
     }
-#endif // defined (SECOND_TRANSCEIVER)
+ #endif // defined (SECOND_TRANSCEIVER)
+ #endif // defined (SECOND_TRANSCEIVER_DEBUG)
     while (!Connected)
     {
         StillSearchingTime = millis() - SearchStartTime;
@@ -209,9 +211,11 @@ void Reconnect()
                     CurrentRadio = &Radio1;
                     ProdRadio();
                 }
+#ifdef SECOND_TRANSCEIVER_DEBUG
                 Serial.print(millis());              // These lines are just to help fix this area!!
                 Serial.print("  ? Testing Radio: "); // These lines are just to help fix this area!!
                 Serial.println(ThisRadio);           // These lines are just to help fix this area!!
+#endif
             }
         }
 #endif // defined (SECOND_TRANSCEIVER)
@@ -221,10 +225,12 @@ void Reconnect()
             ConnectionStart=millis();
 
 #ifdef SECOND_TRANSCEIVER
+#ifdef SECOND_TRANSCEIVER_DEBUG
             Serial.print(millis());                   // These lines are just to help fix this area!!
             Serial.print("  ! Connected on Radio: "); // These lines are just to help fix this area!!
             Serial.println(ThisRadio);                // These lines are just to help fix this area!!
-#endif                                                // defined (SECOND_TRANSCEIVER)
+#endif   
+#endif                                       // defined (SECOND_TRANSCEIVER)
 
             Connected          = true; // Connection is re-established so return, smiling!
             FailSafeSent       = false;
