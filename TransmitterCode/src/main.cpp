@@ -11,7 +11,7 @@
 
 // UNCOMMENT ANY OF THESE for that bit of debug info
 
-   #define DB_NEXTION        // Debug Nextion and SD card data
+  // #define DB_NEXTION        // Debug Nextion and SD card data
 // #define DB_CHANNEL_AVOID  // Debug FHSS channel avoiding data etc
 // #define DB_SENSORS        // Debug Sensors
 // #define DB_BIND           // Debug Binding
@@ -1424,10 +1424,11 @@ void FailedPacket()
     LostPacketFlag = true;
     GapStart       = millis(); // keep track of gaps' length
     RecentPacketsLost++;
-    if (RecentPacketsLost > 10) {  // HEER?
+    if (RecentPacketsLost > 10) {  
         LostContactFlag   = true;
-        ModelDetected     = false;
-        RecentPacketsLost = 0;
+        if (RecentPacketsLost > 100){
+             TxOnTime=millis();
+        }
         RedLedOn();
         ShowComms();
         if (CurrentView != FrontView) {

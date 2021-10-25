@@ -20,7 +20,7 @@
 #define One_Switch_View    13
 #define Help_View          14
 #define Options_View       15
-#define BINDPIPETIMEOUT    500                       // timeout for switching from Bound to Default pipe ** TOO LOW??? WAS 10 ... ***
+#define BINDPIPETIMEOUT    50                        // timeout for switching from Bound to Default pipe ** TOO LOW??? WAS 10 ... ***
 #define FHSS_RESCUE_BOTTOM 118                       // reduced range for recovery
 #define FHSS_RESCUE_TOP    125                       // reduced range for recovery
 #define UNCOMPRESSEDWORDS  20                        // DATA TO SEND = 40  Bytes
@@ -120,7 +120,7 @@ void SendData()
         if (LostContactFlag) {
             ShowComms();
             if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {
-               if ((millis() - TxOnTime) < 10000){        // try other pipe only during first 10 seconds as RX might or might not be bound
+               if ((millis() - TxOnTime) < 60000){        // try other pipe only during first 60 seconds as RX might or might not be bound
                     TryOtherPipe();
                }
             }
