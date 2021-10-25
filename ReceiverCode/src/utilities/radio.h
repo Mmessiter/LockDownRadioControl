@@ -151,7 +151,7 @@ void InitCurrentRadio()
 }
 
 /************************************************************************************************************/
-
+#ifdef SECOND_TRANSCEIVER
 void ProdRadio()
 { // After switching radios, this prod allows EITHER to connect. Don't know why - yet!
     // Re-setting up the radio may be required on power failure or unsufficient current supply. While this function
@@ -165,7 +165,7 @@ void ProdRadio()
     CurrentRadio->openReadingPipe(1, ThisPipe);
     delay(50); // Delay requirement has NOT gone away!
 }
-
+ #endif // defined (SECOND_TRANSCEIVER)
 /************************************************************************************************************/
 
 void Reconnect()
