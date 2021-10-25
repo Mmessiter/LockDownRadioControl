@@ -701,7 +701,7 @@ void loop()
             if (millis() - SBUSTimer >= SBUSRATE) {
                 DeltaTime = micros() - DeltaTime;
                 SBUSTimer = millis(); // timer starts before send starts....
-                if ((millis()- ReconnectedMoment) > RECONNECTGAP)  {
+                if ((millis()- ReconnectedMoment) > RECONNECTGAP)  { // Don't send data for 20 ms after reconnect
                         MoveServos();
                 }
                 if (USE_BNO055A) Get_BNO055(false);
