@@ -510,7 +510,11 @@ FASTRUN void ReceiveData()
             return;
             }
     if (ReadData()) {
-        uint8_t NextFrequency = CheckParams();
+         // uint8_t NextFrequency = CheckParams();  
+          
+          PacketNumber = (ReceivedData[CHANNELSUSED + 1]);            // a test ...
+          uint8_t NextFrequency = (ReceivedData[CHANNELSUSED + 2]);
+
         if (PacketNumber >= PacketsPerHop) {
             HopToNextFrequency(NextFrequency);
             DoSensors();
