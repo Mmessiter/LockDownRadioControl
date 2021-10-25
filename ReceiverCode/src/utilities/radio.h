@@ -163,7 +163,7 @@ void ProdRadio()
     CurrentRadio->setPALevel(RF24_PA_MAX);
     CurrentRadio->setDataRate(RF24_250KBPS);
     CurrentRadio->openReadingPipe(1, ThisPipe);
-    delay(50); // Delay requirement has NOT gone away!
+   // delay(30); // Delay requirement has MAYBE gone away because I added a  CurrentRadio->stopListening();  
 }
  #endif // defined (SECOND_TRANSCEIVER)
 /************************************************************************************************************/
@@ -200,7 +200,7 @@ void Reconnect()
 
 #ifdef SECOND_TRANSCEIVER
         if (!CurrentRadio->available()) {
-            if (ReconnectAttempts > 1) {            // This might be a bigger number after tests
+            if (ReconnectAttempts > 2) {            // This might be a bigger number after tests
                 CurrentRadio->stopListening();      // Maybe this was needed??
                 ReconnectAttempts = 0;
                 if (ThisRadio == 1) {
