@@ -7,7 +7,9 @@
 #define SBUSRATE        10 // SBUS frame every 10 milliseconds
 #define SBUSPORT        Serial3
 #define SECOND_TRANSCEIVER
-//#define SECOND_TRANSCEIVER_DEBUG
+#define SECOND_TRANSCEIVER_DEBUG
+#define RECONNECTGAP    20  // ...
+
 
 
 bool USE_BMP280 = false; /** is BMP280 sensor connected */
@@ -111,6 +113,7 @@ bool     ReInit             = false;
 uint8_t  byte1              = 0;
 uint8_t  byte2              = 0;
 bool     GyroInstalled      = false;
+uint32_t ReconnectedMoment;
 
 /** Load project defaults from EEPROM into the ReceivedData buffer. */
 void LoadFailSafeData()
@@ -179,16 +182,16 @@ void MoveServos()
 {
     int j = 0;
     int k = 0;
-        if (!Connected){return;}      //
+    if (!Connected){return;}                  // avoid sending rubbish
     MySbus.write(&SbusChannels[0]);
-    if (1) { //(ModelType==AEROPLANE ){                         // !! fix Later ***************************************
+    ModelType=AEROPLANE ;                     // !! fix Later ***************************************
+    if (ModelType==AEROPLANE){                        
         for (j = 0; j < SERVOSUSED; ++j) {
             if (PreviousData[j] != ReceivedData[j]) {
                 MCMServo[j].writeMicroseconds(ReceivedData[j]);
                 PreviousData[j] = ReceivedData[j];
             }
-        }
-        return; //  !! remove  later ***************************************
+        } 
     }
     if (ModelType == HELICOPTER) {
         Serial.println("HELICOPTER!");
@@ -698,7 +701,9 @@ void loop()
             if (millis() - SBUSTimer >= SBUSRATE) {
                 DeltaTime = micros() - DeltaTime;
                 SBUSTimer = millis(); // timer starts before send starts....
-                MoveServos();
+                if ((millis()- ReconnectedMoment) > 500)  {
+                        MoveServos();
+                }
                 if (USE_BNO055A) Get_BNO055(false);
                 if (USE_BNO055) Get_BNO055(true);
                 AckPayload.CurrentAltitude = ThisRadio; // This is temporary: Transmitter now sees which radio connected instead of altitute

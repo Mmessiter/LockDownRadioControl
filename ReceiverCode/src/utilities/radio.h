@@ -60,6 +60,7 @@ uint16_t ReceivedData[UNCOMPRESSEDWORDS]; //  20  words
 uint16_t PreviousData[UNCOMPRESSEDWORDS]; /** Previously received data (used for servos). */
 
 extern void FailSafe(); // defined in main.cpp
+extern uint32_t ReconnectedMoment;
 
 /************************************************************************************************************/
 
@@ -225,6 +226,7 @@ void Reconnect()
             ConnectionStart=millis();
 
 #ifdef SECOND_TRANSCEIVER
+            ReconnectedMoment=millis();               // Save this moment, then don't move a servo for a few ms ....
 #ifdef SECOND_TRANSCEIVER_DEBUG
             Serial.print(millis());                   // These lines are just to help fix this area!!
             Serial.print("  ! Connected on Radio: "); // These lines are just to help fix this area!!
