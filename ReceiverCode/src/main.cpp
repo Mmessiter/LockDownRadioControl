@@ -8,7 +8,7 @@
 #define SBUSPORT        Serial3
 #define SECOND_TRANSCEIVER
 #define SECOND_TRANSCEIVER_DEBUG
-#define RECONNECTGAP    20  // ...
+#define RECONNECTGAP    20  // Send no data for 20 ms after reconnect
 
 
 
