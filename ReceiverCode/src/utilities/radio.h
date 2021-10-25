@@ -200,7 +200,8 @@ void Reconnect()
 
 #ifdef SECOND_TRANSCEIVER
         if (!CurrentRadio->available()) {
-            if (ReconnectAttempts > 1) {
+            if (ReconnectAttempts > 1) {            // This might be a bigger number after tests
+                CurrentRadio->stopListening();      // Maybe this was needed??
                 ReconnectAttempts = 0;
                 if (ThisRadio == 1) {
                     ThisRadio    = 2;
