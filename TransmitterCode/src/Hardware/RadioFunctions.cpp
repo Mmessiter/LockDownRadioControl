@@ -100,8 +100,7 @@ void SendData()
 
         if (SetupFlag) {
             ReadSwitches();
-            return;
-        } // Don't try to send data when just setting up.
+            return;} // Don't try to send data when just setting up.
 
         if (!BoundFlag && !(CurrentView == CalibrateView) && !(CurrentView == SticksView)) {
             SendBuffer[0] = (uint8_t)((NewPipe >> 56) & 0xFF); // if not yet bound, send pipe
@@ -125,7 +124,7 @@ void SendData()
             }
         }
         if (LostPacketFlag) {
-            if ((millis() - RecoveryTimer) > 75) {
+            if ((millis() - RecoveryTimer) > 200) {                          // 75 might have been too short ??
                 NextFrequency = random(FHSS_RESCUE_BOTTOM, FHSS_RESCUE_TOP); // more limited range for recovery
                 HopToNextFrequency();
                 RecoveryTimer = millis();
