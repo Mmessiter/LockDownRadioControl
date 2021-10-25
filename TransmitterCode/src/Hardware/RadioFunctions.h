@@ -57,6 +57,7 @@ extern int            RangeTestGoodPackets;
 
 extern uint8_t FHSSBottom;
 extern uint8_t FHSSTop;
+extern uint32_t TxOnTime;
 
 extern void  KickTheDog();
 extern void  SendCommand(char* tbox);

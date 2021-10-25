@@ -20,7 +20,7 @@
 #define One_Switch_View    13
 #define Help_View          14
 #define Options_View       15
-#define BINDPIPETIMEOUT    150                       // timeout for switching from Bound to Default pipe ** TO LOW??? WAS 10 ... ***
+#define BINDPIPETIMEOUT    500                       // timeout for switching from Bound to Default pipe ** TOO LOW??? WAS 10 ... ***
 #define FHSS_RESCUE_BOTTOM 118                       // reduced range for recovery
 #define FHSS_RESCUE_TOP    125                       // reduced range for recovery
 #define UNCOMPRESSEDWORDS  20                        // DATA TO SEND = 40  Bytes
@@ -80,13 +80,13 @@ void TryOtherPipe()
     if (BoundFlag == true) {
         BoundFlag = false;
         SetThePipe(DefaultPipe);
-        // Serial.println ("Default");
+        
     }
     else
     {
         BoundFlag = true;
         SetThePipe(NewPipe);
-        // Serial.println ("NEWPIPE");
+        
     }
 }
 /************************************************************************************************************/
@@ -120,7 +120,9 @@ void SendData()
         if (LostContactFlag) {
             ShowComms();
             if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {
-                TryOtherPipe();
+               if ((millis() - TxOnTime) < 10000){
+                    TryOtherPipe();
+               }
             }
         }
         if (LostPacketFlag) {

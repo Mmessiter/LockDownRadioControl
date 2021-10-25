@@ -11,7 +11,7 @@
 
 // UNCOMMENT ANY OF THESE for that bit of debug info
 
-// #define DB_NEXTION        // Debug Nextion and SD card data
+   #define DB_NEXTION        // Debug Nextion and SD card data
 // #define DB_CHANNEL_AVOID  // Debug FHSS channel avoiding data etc
 // #define DB_SENSORS        // Debug Sensors
 // #define DB_BIND           // Debug Binding
@@ -1424,7 +1424,7 @@ void FailedPacket()
     LostPacketFlag = true;
     GapStart       = millis(); // keep track of gaps' length
     RecentPacketsLost++;
-    if (RecentPacketsLost > 10) {
+    if (RecentPacketsLost > 10) {  // HEER?
         LostContactFlag   = true;
         ModelDetected     = false;
         RecentPacketsLost = 0;
@@ -4054,7 +4054,6 @@ void Button_was_pressed()
     char Expon[]               = "Expo"; // number display
     char GOTO[]                = "GOTO:";
     char WhichPage[]           = "page                            "; // excessive spaces for page name
-    char setTime[]             = "SetTime";
     char AddMinute[]           = "IncMinute";
     char Dec_Minute[]          = "DecMinute";
     char Dec_Hour[]            = "DecHour";
@@ -4077,7 +4076,6 @@ void Button_was_pressed()
             CurrentView = MainSetupView;
             ClearText();
             SaveAllParameters(); // TODO HEER - mixes only
-            LostContactFlag = true;
             SendCommand(page_SetupView);
             DoScanEnd();
         }
@@ -4086,10 +4084,6 @@ void Button_was_pressed()
             SavedCurrentView = CurrentView;
             CurrentView      = Help_View;
             SendHelp();
-        }
-
-        if (InStrng(setTime, WordsIn) > 0) { // TEST ZONE
-            ClearText();
         }
         if (InStrng(Dec_Minute, WordsIn) > 0) {
             DecMinute();
@@ -4685,7 +4679,6 @@ void Button_was_pressed()
             } // copy new name
             SaveOneModel(ModelNumber);
             ClearText();
-            LostContactFlag = true;
             SendCommand(page_SetupView);
             CurrentMode = NORMAL; // Send data again
             CurrentView = MainSetupView;
