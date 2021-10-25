@@ -14,6 +14,8 @@
 // #define DB_BIND
 // #define DB_FAILSAFE
 // #define SECOND_TRANSCEIVER
+// #define SECOND_TRANSCEIVER_DEBUG
+
 
 int  LastConnectionMoment = 0;
 bool FailSafeSave         = false;
