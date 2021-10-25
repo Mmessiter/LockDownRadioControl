@@ -120,7 +120,7 @@ void SendData()
         if (LostContactFlag) {
             ShowComms();
             if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {
-               if ((millis() - TxOnTime) < 10000){
+               if ((millis() - TxOnTime) < 10000){        // try other pipe only during first 10 seconds as RX might or might not be bound
                     TryOtherPipe();
                }
             }
