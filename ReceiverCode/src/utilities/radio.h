@@ -163,7 +163,6 @@ void ProdRadio()
     CurrentRadio->setPALevel(RF24_PA_MAX);
     CurrentRadio->setDataRate(RF24_250KBPS);
     CurrentRadio->openReadingPipe(1, ThisPipe);
-   // delay(3);  
 }
  #endif // defined (SECOND_TRANSCEIVER)
 /************************************************************************************************************/
@@ -176,11 +175,11 @@ void Reconnect()
 #ifdef SECOND_TRANSCEIVER
 #ifdef SECOND_TRANSCEIVER_DEBUG
     if (((millis()-ConnectionStart)/1000) > 0){
-    Serial.print ("Duration on Radio: ");
+    Serial.print ("                         ********    Duration on Radio: ");
     Serial.print (ThisRadio);
     Serial.print (" = ");
     Serial.print ((millis()-ConnectionStart)/1000);
-    Serial.println  (" Seconds");
+    Serial.println  (" Seconds ********");
     }
  #endif // defined (SECOND_TRANSCEIVER)
  #endif // defined (SECOND_TRANSCEIVER_DEBUG)
@@ -194,7 +193,7 @@ void Reconnect()
             CurrentRadio->stopListening();
             CurrentRadio->setChannel(i);
             CurrentRadio->startListening();
-            delay(4); // was 4
+            delay(3); // was 4
             i++;
         }
 
@@ -202,7 +201,7 @@ void Reconnect()
         if (!CurrentRadio->available()) {
             if (ReconnectAttempts > 2) {            // This might be a bigger number after tests
                 CurrentRadio->stopListening();      // Maybe this was needed??
-                delay(2);
+                delay(1);
                 ReconnectAttempts = 0;
                 if (ThisRadio == 1) {
                     ThisRadio    = 2;
