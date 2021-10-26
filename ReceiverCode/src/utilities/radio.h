@@ -163,6 +163,7 @@ void ProdRadio()
     CurrentRadio->setPALevel(RF24_PA_MAX);
     CurrentRadio->setDataRate(RF24_250KBPS);
     CurrentRadio->openReadingPipe(1, ThisPipe);
+    delay(3);                           // This might help
 }
  #endif // defined (SECOND_TRANSCEIVER)
 /************************************************************************************************************/
@@ -193,15 +194,15 @@ void Reconnect()
             CurrentRadio->stopListening();
             CurrentRadio->setChannel(i);
             CurrentRadio->startListening();
-            delay(3); // was 4
+            delay(4); // was 4
             i++;
         }
 
 #ifdef SECOND_TRANSCEIVER
         if (!CurrentRadio->available()) {
             if (ReconnectAttempts > 2) {            // This might be a bigger number after tests
-                CurrentRadio->stopListening();      // Maybe this was needed??
-                delay(1);
+                CurrentRadio->stopListening();      // This has helped massively
+                delay(3);                           // This might help
                 ReconnectAttempts = 0;
                 if (ThisRadio == 1) {
                     ThisRadio    = 2;
