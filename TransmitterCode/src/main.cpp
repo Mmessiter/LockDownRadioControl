@@ -1421,7 +1421,7 @@ void FailedPacket()
     int secondsRemaining;
     GapStart       = millis(); // keep track of gaps' length
     RecentPacketsLost++;
-    if (RecentPacketsLost > 5) {  
+    if (RecentPacketsLost > 15) {  
         LostContactFlag   = true;
         RedLedOn();
         ShowComms();
