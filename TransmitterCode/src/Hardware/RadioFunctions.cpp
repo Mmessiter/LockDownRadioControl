@@ -119,11 +119,11 @@ void SendData()
         if (LostContactFlag) {
             ShowComms();
                 if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {
-                    TryOtherPipe();
-                    PipeTimeout=millis();                                    // This line had been ommitted! Forgot it! 
+                    if ((millis() - TxOnTime) < (10 * 60000)) TryOtherPipe(); // after 10 minutes on, don't ever change pipe
+                    PipeTimeout=millis();                                     // This line had been ommitted! Forgot it! 
                 }
-                if ((millis() - RecoveryTimer) > 500) {                      // New frequency on recovery every half second
-                NextFrequency = random(FHSS_RESCUE_BOTTOM, FHSS_RESCUE_TOP); // more limited range for recovery
+                if ((millis() - RecoveryTimer) > 500) {                       // New frequency on recovery every half second
+                NextFrequency = random(FHSS_RESCUE_BOTTOM, FHSS_RESCUE_TOP);  // more limited range for recovery
                 HopToNextFrequency();
                 RecoveryTimer = millis();
             }
