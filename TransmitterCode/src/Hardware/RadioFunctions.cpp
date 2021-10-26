@@ -115,29 +115,25 @@ void SendData()
             GetNextHopChannelNumber();
             JustHoppedFlag = false;
         }
+       
         if (LostContactFlag) {
             ShowComms();
                 if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {
                     TryOtherPipe();
-                    PipeTimeout=millis(); // This line had been ommitted! Forgot it! 
-            }
-        }
-        if (LostPacketFlag) {
-            if ((millis() - RecoveryTimer) > 200) {                          // 75 might have been too short ??
+                    PipeTimeout=millis();            // This line had been ommitted! Forgot it! 
+                }
+                if ((millis() - RecoveryTimer) > 500) {                     // New frequency on recovery every half second
                 NextFrequency = random(FHSS_RESCUE_BOTTOM, FHSS_RESCUE_TOP); // more limited range for recovery
                 HopToNextFrequency();
                 RecoveryTimer = millis();
-#ifdef DB_CHANNEL_AVOID
-                Serial.print("Reconnect channel: ");
-                Serial.println(NextFrequency);
-#endif
             }
         }
+
         Connected = false;
-        Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);   // Compress 32 bytes down to 24
-        if (Radio1.write(&CompressedData, SizeOfCompressedData)) { //  "sizeof" doesn't work with externs, hence 2 new vars.
+        Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);    // Compress 32 bytes down to 24
+        if (Radio1.write(&CompressedData, SizeOfCompressedData)) {  //  "sizeof" doesn't work with externs, hence 2 new vars.
             if (Radio1.isAckPayloadAvailable()) {
-                Radio1.read(&AckPayload, AckPayloadSize); //  "sizeof" doesn't work with externs, hence 2 new vars.
+                Radio1.read(&AckPayload, AckPayloadSize);           //  "sizeof" doesn't work with externs, hence 2 new vars.
                 RangeTestGoodPackets++;
                 Connected = true;
                 if (BoundFlag) {
