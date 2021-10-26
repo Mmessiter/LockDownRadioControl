@@ -117,9 +117,11 @@ void SendData()
         }
         if (LostContactFlag) {
             ShowComms();
-            if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {
-                TryOtherPipe();
-                PipeTimeout=millis(); // This line had been ommitted! Forgot it! 
+            if ((millis()-TxOnTime)<60000){
+                if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {
+                    TryOtherPipe();
+                    PipeTimeout=millis(); // This line had been ommitted! Forgot it! 
+                }
             }
         }
         if (LostPacketFlag) {
