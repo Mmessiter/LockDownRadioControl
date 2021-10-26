@@ -120,7 +120,7 @@ void SendData()
             ShowComms();
                 if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {
                     TryOtherPipe();
-                    PipeTimeout=millis();            // This line had been ommitted! Forgot it! 
+                    PipeTimeout=millis();                                   // This line had been ommitted! Forgot it! 
                 }
                 if ((millis() - RecoveryTimer) > 500) {                     // New frequency on recovery every half second
                 NextFrequency = random(FHSS_RESCUE_BOTTOM, FHSS_RESCUE_TOP); // more limited range for recovery
@@ -128,7 +128,6 @@ void SendData()
                 RecoveryTimer = millis();
             }
         }
-
         Connected = false;
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);    // Compress 32 bytes down to 24
         if (Radio1.write(&CompressedData, SizeOfCompressedData)) {  //  "sizeof" doesn't work with externs, hence 2 new vars.
@@ -144,7 +143,6 @@ void SendData()
                 RangeTestLostPackets++;
             }
             CheckGapsLength();
-            LostPacketFlag  = false;
             LostContactFlag = false;
             PacketNumber++;
             ParseAckPayload();

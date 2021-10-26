@@ -11,7 +11,7 @@
 
 // UNCOMMENT ANY OF THESE for that bit of debug info
 
-  // #define DB_NEXTION        // Debug Nextion and SD card data
+// #define DB_NEXTION        // Debug Nextion and SD card data
 // #define DB_CHANNEL_AVOID  // Debug FHSS channel avoiding data etc
 // #define DB_SENSORS        // Debug Sensors
 // #define DB_BIND           // Debug Binding
@@ -330,7 +330,6 @@ char     HtextCMD[]                   = "click HelpText,0";
 int      LastLinePosition             = 0;
 uint8_t  RXCellCount                  = 2;
 bool     JustHoppedFlag               = true;
-bool     LostPacketFlag               = true;
 bool     LostContactFlag              = true;
 uint8_t  RecentPacketsLost            = 0;
 long int RecoveryTimer                = 0;
@@ -1420,15 +1419,10 @@ void ShowComms()
 void FailedPacket()
 {
     int secondsRemaining;
-
-    LostPacketFlag = true;
     GapStart       = millis(); // keep track of gaps' length
     RecentPacketsLost++;
     if (RecentPacketsLost > 10) {  
         LostContactFlag   = true;
-        if (RecentPacketsLost > 100){
-            BoundFlag=false;
-        }
         RedLedOn();
         ShowComms();
         if (CurrentView != FrontView) {

@@ -44,7 +44,6 @@ extern uint16_t       SendBuffer[];
 extern uint64_t       NewPipe;
 extern bool           LostContactFlag;
 extern uint64_t       DefaultPipe;
-extern bool           LostPacketFlag;
 extern long int       RecoveryTimer;
 extern bool           Connected;
 extern uint16_t       CompressedData[];
