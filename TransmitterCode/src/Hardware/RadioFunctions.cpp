@@ -20,7 +20,7 @@
 #define One_Switch_View    13
 #define Help_View          14
 #define Options_View       15
-#define BINDPIPETIMEOUT    200                       // timeout for switching from Bound to Default pipe 
+#define BINDPIPETIMEOUT    300                       // timeout for switching from Bound to Default pipe 
 #define FHSS_RESCUE_BOTTOM 118                       // reduced range for recovery
 #define FHSS_RESCUE_TOP    125                       // reduced range for recovery
 #define UNCOMPRESSEDWORDS  20                        // DATA TO SEND = 40  Bytes
@@ -117,11 +117,9 @@ void SendData()
         }
         if (LostContactFlag) {
             ShowComms();
-            if ((millis()-TxOnTime)<60000){
                 if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {
                     TryOtherPipe();
                     PipeTimeout=millis(); // This line had been ommitted! Forgot it! 
-                }
             }
         }
         if (LostPacketFlag) {
