@@ -1427,7 +1427,7 @@ void FailedPacket()
     if (RecentPacketsLost > 10) {  
         LostContactFlag   = true;
         if (RecentPacketsLost > 100){
-             TxOnTime=millis();
+            BoundFlag=false;
         }
         RedLedOn();
         ShowComms();
