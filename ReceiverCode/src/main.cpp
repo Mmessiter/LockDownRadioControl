@@ -1,6 +1,6 @@
 // ************************************************** Receiver code **************************************************
 
-#define RECEIVE_TIMEOUT 100 // 15 milliseconds was too short
+#define RECEIVE_TIMEOUT 35 // 15 milliseconds was too short
 #define PacketsPerHop   20
 #define CHANNELSUSED    16
 #define SERVOSUSED      10
