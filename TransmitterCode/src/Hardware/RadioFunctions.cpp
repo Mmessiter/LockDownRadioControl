@@ -120,7 +120,7 @@ void SendData()
             ShowComms();
                 if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {
                     if ((millis() - TxOnTime) < (10 * 60000)) TryOtherPipe(); // after 10 minutes on, don't ever change pipe
-                    PipeTimeout=millis();                                     // This line had been ommitted! Forgot it! 
+                    PipeTimeout=millis();                                      
                 }
                 if ((millis() - RecoveryTimer) > 500) {                       // New frequency on recovery every half second
                 NextFrequency = random(FHSS_RESCUE_BOTTOM, FHSS_RESCUE_TOP);  // more limited range for recovery
@@ -130,21 +130,21 @@ void SendData()
         }
         Connected = false;
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);    // Compress 32 bytes down to 24
-        if (Radio1.write(&CompressedData, SizeOfCompressedData)) {  //  "sizeof" doesn't work with externs, hence 2 new vars.
+        if (Radio1.write(&CompressedData, SizeOfCompressedData)) {  //  *** SEND ***   ("sizeof" doesn't work with externs, hence 2 new vars.)
             if (Radio1.isAckPayloadAvailable()) {
                 Radio1.read(&AckPayload, AckPayloadSize);           //  "sizeof" doesn't work with externs, hence 2 new vars.
-                RangeTestGoodPackets++;
+                ++RangeTestGoodPackets;
                 Connected = true;
                 if (BoundFlag) {
                     GreenLedOn();
                 }
             }
             else {
-                RangeTestLostPackets++;
+                ++RangeTestLostPackets;
             }
             CheckGapsLength();
             LostContactFlag = false;
-            PacketNumber++;
+            ++PacketNumber;
             ParseAckPayload();
             RecentPacketsLost = 0;
             if (PacketNumber > PACKETS_PER_HOP) {
@@ -179,7 +179,7 @@ void ScanAllChannels()
     char fyll[]   = "fill ";
     char IELLOW[] = "YELLOW";
     char NA[1]    = ""; // blank one
-    for (Sc = ScanStart; Sc <= ScanEnd; Sc++) {
+    for (Sc = ScanStart; Sc <= ScanEnd; ++Sc) {
         if (Nextion.available()) return; // in case someone wants to stop!
         Radio1.setChannel(Sc);
         Radio1.startListening();
@@ -187,7 +187,7 @@ void ScanAllChannels()
         y2 = y1 + 255;
         y2 = y2 - BlobHeight;
         y2 = y2 - AllChannels[Sc];
-        delayMicroseconds(120); // Minimum!? heer!
+        delayMicroseconds(120); // Minimum!? 
         Radio1.stopListening();
         if (Radio1.testCarrier()) {
             if (AllChannels[Sc] < (250)) {
@@ -196,7 +196,7 @@ void ScanAllChannels()
             }
         }
         else {
-            NoCarrier[Sc]++;
+            ++NoCarrier[Sc];
             if (NoCarrier[Sc] > 15) { // must see no carrier >15 times before reducing the trace
                 if (AllChannels[Sc] >= (BlobHeight)) {
                     SendCharArray(CB, fyll, Str(NB, x2, 1), Str(NB1, (y2 + BlobHeight), 1), Str(NB2, 5, 1), Str(NB3, BlobHeight, 1), Str(NB4, 214, 0), NA, NA, NA, NA, NA, NA);
