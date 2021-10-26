@@ -120,9 +120,9 @@ void SendData()
             ShowComms();
                 if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {
                     TryOtherPipe();
-                    PipeTimeout=millis();                                   // This line had been ommitted! Forgot it! 
+                    PipeTimeout=millis();                                    // This line had been ommitted! Forgot it! 
                 }
-                if ((millis() - RecoveryTimer) > 500) {                     // New frequency on recovery every half second
+                if ((millis() - RecoveryTimer) > 500) {                      // New frequency on recovery every half second
                 NextFrequency = random(FHSS_RESCUE_BOTTOM, FHSS_RESCUE_TOP); // more limited range for recovery
                 HopToNextFrequency();
                 RecoveryTimer = millis();
