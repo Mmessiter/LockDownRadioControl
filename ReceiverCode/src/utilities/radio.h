@@ -226,15 +226,15 @@ void Reconnect()
         if (CurrentRadio->available())
         {
             ConnectionStart=millis();
+            ReconnectedMoment=ConnectionStart;        // Save this moment, then don't move a servo for a few ms ....
 
-#ifdef SECOND_TRANSCEIVER
-            ReconnectedMoment=millis();               // Save this moment, then don't move a servo for a few ms ....
+#ifdef SECOND_TRANSCEIVER    
 #ifdef SECOND_TRANSCEIVER_DEBUG
             Serial.print(millis());                   // These lines are just to help fix this area!!
             Serial.print("  ! Connected on Radio: "); // These lines are just to help fix this area!!
             Serial.println(ThisRadio);                // These lines are just to help fix this area!!
-#endif   // defined (SECOND_TRANSCEIVER)
-#endif  // defined (SECOND_TRANSCEIVER_DEBUG)                                    // defined (SECOND_TRANSCEIVER)
+#endif  // defined (SECOND_TRANSCEIVER)
+#endif  // defined (SECOND_TRANSCEIVER_DEBUG)        
 
             Connected          = true; // Connection is re-established so return, smiling!
             FailSafeSent       = false;
