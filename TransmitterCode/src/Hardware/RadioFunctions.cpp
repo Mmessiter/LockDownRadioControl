@@ -117,14 +117,15 @@ void SendData()
         }
        
         if (LostContactFlag) {
+            if  ((millis()-GapStart) > 20000) TxOnTime = millis();                        // after 20 seconds failure simulate a TX restart
             ShowComms();
                 if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {       
-                    if  (((millis()-GapStart) > 20000) || (millis()-TxOnTime) < 120000)           {  // IF NO CONNECTION AFTER 20 SECONDS TRY DEFAULT PIPE
-                        TryOtherPipe();                                                             // OR TRY OTHER PIPE DURING FIRST 2 MINUTES OF TX ON TIME
-                    }
-                    PipeTimeout=millis();  
-                    Serial.println (millis()-GapStart);    
-                    Serial.println ("PIPE");                               
+                    if  (((millis()-GapStart) > 20000) || (millis()-TxOnTime) < 120000){  // IF NO CONNECTION AFTER 20 SECONDS TRY DEFAULT PIPE
+                        TryOtherPipe();                                                   // OR TRY OTHER PIPE DURING FIRST 2 MINUTES OF TX ON TIME
+                        Serial.println (millis()-TxOnTime);    
+                        Serial.println ("PIPE");    
+                        PipeTimeout=millis();                                              
+                    }                     
                 }
                 if ((millis() - RecoveryTimer) > 500) {                       // New frequency on recovery every half second
                 NextFrequency = random(FHSS_RESCUE_BOTTOM, FHSS_RESCUE_TOP);  // more limited range for recovery
