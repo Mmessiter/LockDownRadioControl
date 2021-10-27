@@ -119,8 +119,8 @@ void SendData()
         if (LostContactFlag) {
             ShowComms();
                 if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {       
-                    if  (((millis()-GapStart) > 20000) || (millis()-TxOnTime) < 60000)           {  // IF NO CONNECTION AFTER 20 SECONDS TRY DEFAULT PIPE
-                        TryOtherPipe();                                                             // OR TRY OTHER PIPE DURING FIRST MINUTE OF TX ON TIME
+                    if  (((millis()-GapStart) > 20000) || (millis()-TxOnTime) < 120000)           {  // IF NO CONNECTION AFTER 20 SECONDS TRY DEFAULT PIPE
+                        TryOtherPipe();                                                             // OR TRY OTHER PIPE DURING FIRST 2 MINUTES OF TX ON TIME
                     }
                     PipeTimeout=millis();                                      
                 }
