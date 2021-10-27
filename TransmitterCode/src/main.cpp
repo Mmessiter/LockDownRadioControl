@@ -1419,7 +1419,9 @@ void ShowComms()
 void FailedPacket()
 {
     int secondsRemaining;
-    GapStart       = millis(); // keep track of gaps' length
+    if (GapStart == 0) {
+        GapStart = millis();   // To keep track of gaps' length
+    } 
     RecentPacketsLost++;
     if (RecentPacketsLost > 3) {  
         RecentPacketsLost=0;

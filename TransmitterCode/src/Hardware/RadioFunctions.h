@@ -72,6 +72,7 @@ extern void  GreenLedOn();
 extern void  CheckGapsLength();
 extern void  ParseAckPayload();
 extern void  FailedPacket();
+extern int   GapStart;
 
 /*********************************************************************************************************************************/
 // function prototypes

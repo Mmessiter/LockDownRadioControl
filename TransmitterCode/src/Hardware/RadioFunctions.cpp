@@ -119,7 +119,11 @@ void SendData()
         if (LostContactFlag) {
             ShowComms();
                 if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {
-                    if ((millis() - TxOnTime) < (10 * 60000)) TryOtherPipe(); // after 10 minutes on, don't ever change pipe
+                    
+                    if ((millis()-GapStart) > 3000) {  // IF NO CONNECTION AFTER FIVE SECONDS TRY DEFAULT PIPE
+                        TryOtherPipe();
+                        Serial.println (GapStart);
+                    }
                     PipeTimeout=millis();                                      
                 }
                 if ((millis() - RecoveryTimer) > 500) {                       // New frequency on recovery every half second
@@ -134,6 +138,7 @@ void SendData()
             if (Radio1.isAckPayloadAvailable()) {
                 Radio1.read(&AckPayload, AckPayloadSize);           //  "sizeof" doesn't work with externs, hence 2 new vars.
                 ++RangeTestGoodPackets;
+                GapStart = 0;
                 Connected = true;
                 if (BoundFlag) {
                     GreenLedOn();
