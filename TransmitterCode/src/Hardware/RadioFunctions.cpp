@@ -137,7 +137,7 @@ void SendData()
             if (Radio1.isAckPayloadAvailable()) {
                 Radio1.read(&AckPayload, AckPayloadSize);           //  "sizeof" doesn't work with externs, hence 2 new vars.
                 ++RangeTestGoodPackets;
-                GapStart = 0;
+                GapStart = 0;                                       // this is reset to millis() on lost connection
                 Connected = true;
                 if (BoundFlag) {
                     GreenLedOn();

@@ -336,7 +336,7 @@ long int RecoveryTimer                = 0;
 bool     ReconnectingFlag             = true;
 int      ReconnectTime                = 0;
 int      GapSum                       = 0;
-int      GapLongest                   = 0;
+uint32_t GapLongest                   = 0;
 uint32_t GapStart                     = 0;
 uint32_t ThisGap                      = 0;
 char     CalibrateNow[]               = "touch_j";
@@ -1423,7 +1423,7 @@ void FailedPacket()
         GapStart = millis();   // To keep track of gaps' length
     } 
     RecentPacketsLost++;
-    if (RecentPacketsLost > 3) {  
+    if (RecentPacketsLost > 5) {  
         RecentPacketsLost=0;
         LostContactFlag   = true;
         RedLedOn();
