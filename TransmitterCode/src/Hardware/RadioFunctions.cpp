@@ -118,11 +118,9 @@ void SendData()
        
         if (LostContactFlag) {
             ShowComms();
-                if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {
-                    
-                    if ((millis()-GapStart) > 20000) {  // IF NO CONNECTION AFTER ten SECONDS TRY DEFAULT PIPE
-                        TryOtherPipe();
-                        Serial.println (GapStart);
+                if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {       
+                    if  (((millis()-GapStart) > 20000) || (millis()-TxOnTime) < 60000)           {  // IF NO CONNECTION AFTER 20 SECONDS TRY DEFAULT PIPE
+                        TryOtherPipe();                                                             // OR TRY OTHER PIPE DURING FIRST MINUTE OF CONNECTION
                     }
                     PipeTimeout=millis();                                      
                 }
