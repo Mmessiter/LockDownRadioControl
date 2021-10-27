@@ -117,11 +117,12 @@ void SendData()
         }
        
         if (LostContactFlag) {
-            if  ((millis()-GapStart) > 20000) TxOnTime = millis();                        // after 20 seconds failure simulate a TX restart
+          //  if  ((millis()-GapStart) > 20000) TxOnTime = millis();                        // after 20 seconds failure simulate a TX restart
             ShowComms();
                 if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {       
-                    if  (((millis()-GapStart) > 20000) || (millis()-TxOnTime) < 120000){  // IF NO CONNECTION AFTER 20 SECONDS TRY DEFAULT PIPE
-                        TryOtherPipe();                                                   // OR TRY OTHER PIPE DURING FIRST 2 MINUTES OF TX ON TIME  
+                  //  if  (((millis()-GapStart) > 20000) || (millis()-TxOnTime) < 120000) {  // IF NO CONNECTION AFTER 20 SECONDS TRY DEFAULT PIPE
+                      if  (((millis()-GapStart) > 20000)) {  // IF NO CONNECTION AFTER 20 SECONDS TRY DEFAULT PIPE
+                        TryOtherPipe();                                                 
                         PipeTimeout=millis();                                              
                     }                     
                 }
