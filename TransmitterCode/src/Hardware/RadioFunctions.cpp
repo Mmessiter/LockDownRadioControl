@@ -120,7 +120,7 @@ void SendData()
             ShowComms();
                 if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {
                     
-                    if ((millis()-GapStart) > 3000) {  // IF NO CONNECTION AFTER FIVE SECONDS TRY DEFAULT PIPE
+                    if ((millis()-GapStart) > 10000) {  // IF NO CONNECTION AFTER ten SECONDS TRY DEFAULT PIPE
                         TryOtherPipe();
                         Serial.println (GapStart);
                     }
