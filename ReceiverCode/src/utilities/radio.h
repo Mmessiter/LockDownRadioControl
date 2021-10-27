@@ -61,7 +61,7 @@ uint16_t PreviousData[UNCOMPRESSEDWORDS]; /** Previously received data (used for
 
 extern void FailSafe(); // defined in main.cpp
 extern uint32_t ReconnectedMoment;
-
+extern bool BoundFlag;
 /************************************************************************************************************/
 
 void SetNewPipe()
@@ -250,7 +250,7 @@ void Reconnect()
 #ifdef DB_FAILSAFE
                 Serial.println("FailSafe sent");
 #endif
-                //BoundFlag = false;
+                // BoundFlag = false;
             }
         }
     }
