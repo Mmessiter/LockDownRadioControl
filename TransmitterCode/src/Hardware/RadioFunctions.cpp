@@ -122,7 +122,9 @@ void SendData()
                     if  (((millis()-GapStart) > 20000) || (millis()-TxOnTime) < 120000)           {  // IF NO CONNECTION AFTER 20 SECONDS TRY DEFAULT PIPE
                         TryOtherPipe();                                                             // OR TRY OTHER PIPE DURING FIRST 2 MINUTES OF TX ON TIME
                     }
-                    PipeTimeout=millis();                                      
+                    PipeTimeout=millis();  
+                    Serial.println (millis()-GapStart);    
+                    Serial.println ("PIPE");                               
                 }
                 if ((millis() - RecoveryTimer) > 500) {                       // New frequency on recovery every half second
                 NextFrequency = random(FHSS_RESCUE_BOTTOM, FHSS_RESCUE_TOP);  // more limited range for recovery
