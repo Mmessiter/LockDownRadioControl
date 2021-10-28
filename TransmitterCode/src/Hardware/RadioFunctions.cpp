@@ -20,7 +20,7 @@
 #define One_Switch_View    13
 #define Help_View          14
 #define Options_View       15
-#define BINDPIPETIMEOUT    300                       // timeout for switching from Bound to Default pipe 
+#define BINDPIPETIMEOUT    100                       // timeout for switching from Bound to Default pipe 
 #define FHSS_RESCUE_BOTTOM 118                       // reduced range for recovery
 #define FHSS_RESCUE_TOP    125                       // reduced range for recovery
 #define UNCOMPRESSEDWORDS  20                        // DATA TO SEND = 40  Bytes
@@ -118,10 +118,10 @@ void SendData()
         if (LostContactFlag) {
             ShowComms();
                 if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {       
-                      if  (((millis()-GapStart) > 20000) || (millis()-TxOnTime) < 120000) {  // IF NO CONNECTION AFTER 20 SECONDS TRY DEFAULT PIPE
+                     // if  (((millis()-GapStart) > 20000) || (millis()-TxOnTime) < 120000) {  // IF NO CONNECTION AFTER 20 SECONDS TRY DEFAULT PIPE
                         TryOtherPipe();                                                 
                         PipeTimeout=millis();                                              
-                    }                     
+                   // }                     
                 }
                 if ((millis() - RecoveryTimer) > 500) {                       // New frequency on recovery every half second
                 NextFrequency = random(FHSS_RESCUE_BOTTOM, FHSS_RESCUE_TOP);  // more limited range for recovery
@@ -131,6 +131,7 @@ void SendData()
         }
         Connected = false;
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);    // Compress 32 bytes down to 24
+
 //  *************************************** SEND ************************************************************************************* 
         if (Radio1.write(&CompressedData, SizeOfCompressedData)) {  //  *** SEND ***   ("sizeof" doesn't work with externs, hence 2 new vars.)
 //  *************************************** SEND ************************************************************************************* 
@@ -144,7 +145,6 @@ void SendData()
                     RecentPacketsLost = 0;
                     ++PacketNumber;
                     Connected = true;
-
                 if (BoundFlag) {
                     GreenLedOn();
                 }
