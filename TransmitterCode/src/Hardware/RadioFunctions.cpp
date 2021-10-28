@@ -118,10 +118,8 @@ void SendData()
         if (LostContactFlag) {
             ShowComms();
                 if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {       
-                     // if  (((millis()-GapStart) > 20000) || (millis()-TxOnTime) < 120000) {  // IF NO CONNECTION AFTER 20 SECONDS TRY DEFAULT PIPE
                         TryOtherPipe();                                                 
-                        PipeTimeout=millis();                                              
-                   // }                     
+                        PipeTimeout=millis();                                                             
                 }
                 if ((millis() - RecoveryTimer) > 500) {                       // New frequency on recovery every half second
                 NextFrequency = random(FHSS_RESCUE_BOTTOM, FHSS_RESCUE_TOP);  // more limited range for recovery
@@ -129,11 +127,11 @@ void SendData()
                 RecoveryTimer = millis();
             }
         }
-        Connected = false;
-        Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);    // Compress 32 bytes down to 24
+        Connected = false;                                               // This bool is made true if packet acked
+        Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);         // Compress 32 bytes down to 24
 
 //  *************************************** SEND ************************************************************************************* 
-        if (Radio1.write(&CompressedData, SizeOfCompressedData)) {  //  *** SEND ***   ("sizeof" doesn't work with externs, hence 2 new vars.)
+        if (Radio1.write(&CompressedData, SizeOfCompressedData)) {       //  *** SEND ***   ("sizeof" doesn't work with externs, hence 2 new vars.)
 //  *************************************** SEND ************************************************************************************* 
 
             if (Radio1.isAckPayloadAvailable()) {
@@ -148,9 +146,6 @@ void SendData()
                 if (BoundFlag) {
                     GreenLedOn();
                 }
-            }
-            else {
-                ++RangeTestLostPackets;
             }
             CheckGapsLength();
             if (PacketNumber > PACKETS_PER_HOP) {

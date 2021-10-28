@@ -1425,6 +1425,7 @@ void FailedPacket()
     RecentPacketsLost++;
     if (RecentPacketsLost > 10) {   // was 5
         RecentPacketsLost=0;
+         ++RangeTestLostPackets;
         LostContactFlag   = true;
         RedLedOn();
         ShowComms();
