@@ -1423,16 +1423,11 @@ void FailedPacket()
         GapStart = millis();   // To keep track of gaps' length
     } 
     RecentPacketsLost++;
-    if (RecentPacketsLost > 10) {   // was 5
-        RecentPacketsLost=0;
+    if (RecentPacketsLost > 10) {   
          ++RangeTestLostPackets;
         LostContactFlag   = true;
         RedLedOn();
         ShowComms();
-        if (CurrentView != FrontView) {
-            SetupFlag = true;
-            BlueLedOn();
-        }
     }
     LostPackets++;
     ShowComms();
@@ -4697,6 +4692,12 @@ void Button_was_pressed()
         if (InStrng(GoSetupView, WordsIn) > 0) {
             ClearText();
             CurrentView = MainSetupView;
+            if (!Connected){
+               if (RecentPacketsLost > 50){
+                   BlueLedOn();
+                   SetupFlag=true;
+               }
+            }
             SendCommand(page_SetupView);
         }
 
@@ -4804,13 +4805,11 @@ void Button_was_pressed()
         }
         if (InStrng(Models_View, WordsIn) > 0) {
             ReadOneModel(ModelNumber);
-            CurrentMode = SENDNOTHING;
             CurrentView = ModelsView;
             UpdateModelsNameEveryWhere();
             SendValue(ModelsView_ModelNumber, ModelNumber);
             BuildDirectory(); // of SD card
             ShowFileNumber();
-            BlueLedOn();
         }
         if (InStrng(LoadModel, WordsIn) > 0) {
             ModelNumber = GetValue(ModelsView_ModelNumber);
