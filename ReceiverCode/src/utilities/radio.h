@@ -200,7 +200,7 @@ void Reconnect()
 
 #ifdef SECOND_TRANSCEIVER
         if (!CurrentRadio->available()) {
-            if (ReconnectAttempts > 2) {            // This might be a bigger number after tests
+            if (ReconnectAttempts > 5) {            // This might be a bigger number after tests
                 CurrentRadio->stopListening();      // This has helped massively
                 delay(3);                           // This might help
                 ReconnectAttempts = 0;

@@ -4,9 +4,9 @@
 #include <stdint.h>
 #include <EEPROM.h>
 
-#define RXVERSION_MAJOR   1 // Oct 19th 2021
+#define RXVERSION_MAJOR   1 
 #define RXVERSION_MINOR   1
-#define RXVERSION_MINIMUS 0 // Oct 26th 2021
+#define RXVERSION_MINIMUS 2 // Oct 28th 2021
 
 // #define DEBUG
 // #define DB_SENSORS
@@ -14,8 +14,7 @@
 // #define DB_BIND
 // #define DB_FAILSAFE
  #define SECOND_TRANSCEIVER
- // #define SECOND_TRANSCEIVER_DEBUG
-
+// #define SECOND_TRANSCEIVER_DEBUG
 
 int  LastConnectionMoment = 0;
 bool FailSafeSave         = false;
