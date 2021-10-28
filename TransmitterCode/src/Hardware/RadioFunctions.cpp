@@ -115,13 +115,10 @@ void SendData()
             GetNextHopChannelNumber();
             JustHoppedFlag = false;
         }
-       
         if (LostContactFlag) {
-          //  if  ((millis()-GapStart) > 20000) TxOnTime = millis();                        // after 20 seconds failure simulate a TX restart
             ShowComms();
                 if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {       
                       if  (((millis()-GapStart) > 20000) || (millis()-TxOnTime) < 120000) {  // IF NO CONNECTION AFTER 20 SECONDS TRY DEFAULT PIPE
-                     // if  (((millis()-GapStart) > 20000)) {  // IF NO CONNECTION AFTER 20 SECONDS TRY DEFAULT PIPE
                         TryOtherPipe();                                                 
                         PipeTimeout=millis();                                              
                     }                     
@@ -134,12 +131,20 @@ void SendData()
         }
         Connected = false;
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);    // Compress 32 bytes down to 24
+//  *************************************** SEND ************************************************************************************* 
         if (Radio1.write(&CompressedData, SizeOfCompressedData)) {  //  *** SEND ***   ("sizeof" doesn't work with externs, hence 2 new vars.)
+//  *************************************** SEND ************************************************************************************* 
+
             if (Radio1.isAckPayloadAvailable()) {
-                Radio1.read(&AckPayload, AckPayloadSize);           //  "sizeof" doesn't work with externs, hence 2 new vars.
-                ++RangeTestGoodPackets;
-                GapStart = 0;                                       // this is reset to millis() on lost connection
-                Connected = true;
+                    (Radio1.read(&AckPayload, AckPayloadSize));         //  "sizeof" doesn't work with externs, hence 2 new vars.
+                    ++RangeTestGoodPackets;
+                    GapStart = 0;                                       // this is reset to millis() on lost connection
+                    LostContactFlag = false;
+                    ParseAckPayload();
+                    RecentPacketsLost = 0;
+                    ++PacketNumber;
+                    Connected = true;
+
                 if (BoundFlag) {
                     GreenLedOn();
                 }
@@ -148,10 +153,6 @@ void SendData()
                 ++RangeTestLostPackets;
             }
             CheckGapsLength();
-            LostContactFlag = false;
-            ++PacketNumber;
-            ParseAckPayload();
-            RecentPacketsLost = 0;
             if (PacketNumber > PACKETS_PER_HOP) {
                 HopToNextFrequency();
             }
