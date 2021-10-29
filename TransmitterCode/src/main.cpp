@@ -4022,13 +4022,13 @@ void Button_was_pressed()
     char HelpView[]            = "HelpView";
     char ModelsView_filename[] = "filename";
     char RangeView[]           = "RangeView";
-    char Phigh[]               = "Phigh";
-    char Pmed[]                = "Pmed";
-    char Plow[]                = "Plow";
-    char Pmin[]                = "Pmin";
-    char Dhigh[]               = "Dhigh";
-    char Dmid[]                = "Dmid";
-    char Dlow[]                = "Dlow";
+   // char Phigh[]               = "Phigh";
+   // char Pmed[]                = "Pmed";
+   // char Plow[]                = "Plow";
+   // char Pmin[]                = "Pmin";
+   // char Dhigh[]               = "Dhigh";
+   // char Dmid[]                = "Dmid";
+   // char Dlow[]                = "Dlow";
     char SetPower[]            = "Power=";
     char DATARATE[]            = "DATARATE=";
     char ReceiveModel[]        = "ReceiveModel";
@@ -4244,26 +4244,26 @@ void Button_was_pressed()
             SendModelFile();
         }
 
-        if (InStrng(RangeView, WordsIn) > 0) {
-
-            SendValue(Pmin, 0);
-            SendValue(Plow, 0);
-            SendValue(Pmed, 0);
-            SendValue(Phigh, 0);
-            SendValue(Dlow, 0);
-            SendValue(Dmid, 0);
-            SendValue(Dhigh, 0);
-            switch (PowerSetting) {
-                case 1: SendValue(Pmin, 1); break;
-                case 2: SendValue(Plow, 1); break;
-                case 3: SendValue(Pmed, 1); break;
-                case 4: SendValue(Phigh, 1); break;
-            }
-            switch (DataRate) {
-                case 1: SendValue(Dlow, 1); break;
-                case 2: SendValue(Dmid, 1); break;
-                case 3: SendValue(Dhigh, 1); break;
-            }
+        if (InStrng(RangeView, WordsIn) > 0) { // heer
+            SendCommand(page_SetupView);
+           // SendValue(Pmin, 0);
+           // SendValue(Plow, 0);
+           // SendValue(Pmed, 0);
+           // SendValue(Phigh, 0);
+           // SendValue(Dlow, 0);
+           // SendValue(Dmid, 0);
+           // SendValue(Dhigh, 0);
+           // switch (PowerSetting) {
+           //     case 1: SendValue(Pmin, 1); break;
+           //     case 2: SendValue(Plow, 1); break;
+           //     case 3: SendValue(Pmed, 1); break;
+           //     case 4: SendValue(Phigh, 1); break;
+           // }
+           // switch (DataRate) {
+           //     case 1: SendValue(Dlow, 1); break;
+           //     case 2: SendValue(Dmid, 1); break;
+           //     case 3: SendValue(Dhigh, 1); break;
+           // }
         }
 
         p = InStrng(SetPower, WordsIn);
@@ -4664,7 +4664,7 @@ void Button_was_pressed()
             ClearText();
         }
 
-        if (InStrng(SetupViewFM, WordsIn) > 0) { // New model name occurs at offset 12 in WordsIn // heer
+        if (InStrng(SetupViewFM, WordsIn) > 0) { // New model name occurs at offset 12 in WordsIn 
             i = 0;
             while (WordsIn[i + 12] > 0) {
                 ModelName[i]     = WordsIn[i + 12];
