@@ -3394,6 +3394,8 @@ void DisplayCurve()
     }
 
     if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == 2) { //EXPO  ************************************************************************************************
+        #define APPROXIMATION     3
+        
         SendCommand(b3off);
         SendCommand(b4off);
         SendCommand(b7off);
@@ -3404,7 +3406,7 @@ void DisplayCurve()
         TopHalfYRange    = yPoints[4] - yPoints[2];
         BottomHalfYRange = yPoints[2] - yPoints[0];
         yDot2            = 0;
-        Step             = 10;
+        Step             = APPROXIMATION;                                    // This is the approximation of the screen curve
         for (xPoint = 0; xPoint <= HalfXRange; xPoint += Step) { // Simulate a curve with many short lines to speed it up
             yPoint = MapExp(HalfXRange - xPoint, HalfXRange, 0, 0, BottomHalfYRange, Exponential[FlightMode][ChanneltoSet - 1]);
             if (Step > HalfXRange - xPoint) {
@@ -3421,7 +3423,7 @@ void DisplayCurve()
             xDot2 = xDot1;
             yDot2 = yDot1;
         }
-        Step  = 10;
+        Step  = APPROXIMATION;
         yDot2 = 0;
         for (xPoint = 0; xPoint <= HalfXRange; xPoint += Step) { // Simulate a curve with many short lines to speed it up
             yPoint = MapExp(xPoint, 0, HalfXRange, 0, TopHalfYRange, Exponential[FlightMode][ChanneltoSet - 1]);
