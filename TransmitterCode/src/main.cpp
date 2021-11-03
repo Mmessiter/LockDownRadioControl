@@ -1422,14 +1422,14 @@ void FailedPacket()
     if (GapStart == 0) {
         GapStart = millis();   // To keep track of gaps' length
     } 
-    RecentPacketsLost++;
+    ++RecentPacketsLost;
     if (RecentPacketsLost > 10) {   
          ++RangeTestLostPackets;
         LostContactFlag   = true;
         RedLedOn();
         ShowComms();
     }
-    LostPackets++;
+    ++LostPackets;
     ShowComms();
     secondsRemaining = (Inactivity_Timeout / 1000) - (millis() - Inactivity_Start) / 1000;
     if (secondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH); // INACTIVITY POWER OFF
@@ -5481,6 +5481,7 @@ void loop()
             SetThePipe(NewPipe);
             BindingNow = 0;
             BoundFlag  = true;
+            LostPackets = 0;            // Start afresh!
             GreenLedOn();
         }
         SendText(BindScreenBox, BindDonemsg);
