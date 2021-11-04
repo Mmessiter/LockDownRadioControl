@@ -73,6 +73,7 @@ extern void  CheckGapsLength();
 extern void  ParseAckPayload();
 extern void  FailedPacket();
 extern uint32_t   GapStart;
+extern uint8_t BadChannelMax;
 
 /*********************************************************************************************************************************/
 // function prototypes

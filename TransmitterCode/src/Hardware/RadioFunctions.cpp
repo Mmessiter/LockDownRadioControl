@@ -267,7 +267,7 @@ void PreScan()
     }
     for (Sc = ScanStart + 1; Sc <= ScanEnd - 1; Sc++) {
         if (AllChannels[Sc] > 0) {
-            if (BadChannelPointer < BAD_CHANNEL_MAX) {
+            if (BadChannelPointer < BadChannelMax) {
                 BadChannels[BadChannelPointer] = Sc;
                 BadChannelPointer++;
             }

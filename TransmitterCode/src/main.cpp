@@ -480,6 +480,15 @@ float    BlinkHertz    = 1;
 uint32_t BlinkTimer    = 0;
 uint8_t  BlinkOnPhase  = 1;
 bool     LedWasGreen   = false;
+uint8_t  BadChannelMax = BAD_CHANNEL_MAX;
+
+/*********************************************************************************************************************************/
+
+void ReviseBadChannelMax(){
+
+BadChannelMax =((FHSSTop - FHSSBottom)/4) * 3;  // Max number of channels to avoid must not exceed 3/4 of available channels
+
+}
 
 /*********************************************************************************************************************************/
 
@@ -2472,9 +2481,10 @@ void setup()
     InitCentreDegrees(); // In case not yet calibrated
     CentreTrims();
     CalibratedYet = LoadAllParameters(); // If exists, read saved SD card settings.
+    ReviseBadChannelMax();
     SendValue(ScreenViewTimeout, ScreenTimeout);
     SendCommand(page_FrontView); // Let's start at the beginning. Why not?
-    PreScan();                   // Do quiet scan while Nextion boots and Front View loads ...
+    PreScan();                   // Do quiet scan while Nextion boots and Front View loads ...  
     SendText(FrontView_Connected, Initialising);
     SendValue1(NextionSleepTime, ScreenTimeout); // Setup Screen timeout (No .val needed)
     SendCommand(NextionWakeOnTouch);             // Wake on touch
@@ -2498,6 +2508,7 @@ void setup()
     StartInactvityTimeout();
     SizeOfCompressedData = sizeof(CompressedData);
     GetTXVersionNumber();
+   
 }
 
 /*********************************************************************************************************************************/
@@ -4137,6 +4148,7 @@ void Button_was_pressed()
             SendValue(Pto, (Inactivity_Timeout / TICKSPERMINUTE));
             SendText(Tx_Name, TxName);
             CurrentView = Options_View;
+            ReviseBadChannelMax();
             ClearText();
         }
         if (InStrng(GOTO, WordsIn) > 0) {
@@ -4202,6 +4214,7 @@ void Button_was_pressed()
                 FHSSBottom = 1;
                 FHSSTop    = 83;
             }
+            ReviseBadChannelMax();
             ScreenTimeout      = GetValue(ScreenViewTimeout);
             Inactivity_Timeout = GetValue(Pto) * TICKSPERMINUTE;
             if (Inactivity_Timeout < INACTIVITYMINIMUM) Inactivity_Timeout = INACTIVITYMINIMUM;
@@ -5233,12 +5246,12 @@ void GetNextHopChannelNumber()
     bool KnownInterferenceChannel = true;
 
     i = 0;
-    while (KnownInterferenceChannel && i < BAD_CHANNEL_MAX) { // Bug fixed here!!
+    while (KnownInterferenceChannel && i < BadChannelMax) { // Bug fixed here!!
         NextFrequency            = random(FHSSBottom, FHSSTop);
         KnownInterferenceChannel = false;
 
         i = 0;
-        while (i < BAD_CHANNEL_MAX && KnownInterferenceChannel == false) {
+        while (i < BadChannelMax && KnownInterferenceChannel == false) {
             if (NextFrequency == BadChannels[i]) {
                 KnownInterferenceChannel = true;
 #ifdef DB_CHANNEL_AVOID
