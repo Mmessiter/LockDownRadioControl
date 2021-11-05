@@ -1,8 +1,8 @@
 // ************************************************** TRANSMITTER CODE **************************************************
 
-#define TXVERSION_MAJOR   1 //   Oct 28th 2021 Malcolm Messiter
+#define TXVERSION_MAJOR   1 //   Nov 5th 2021 Malcolm Messiter
 #define TXVERSION_MINOR   1
-#define TXVERSION_MINIMUS 2
+#define TXVERSION_MINIMUS 3
 
 #define USE_WATCHDOG          // Enable when developing only  ??
 #define WATCHDOGTIMEOUT 10000 // 10 Seconds before reboot (32ms -> 500 seconds)
@@ -472,6 +472,7 @@ int     XtouchPlace = 0;     // Clicked X
 int     YtouchPlace = 0;     // Clicked Y
 bool    SetupFlag   = false; // No transmitter while setting up
 uint8_t zero        = 0x00;  //workaround for issue #527
+bool    BindButton = false;
 
 // changing these four valiables controls LED blink and speed
 
@@ -902,6 +903,14 @@ void RedLedOn()
     analogWrite(REDLED, GetBrightness()); // Brightness is a function of transmission powersetting and maybe blinking
 }
 
+ void MakeBindButtonInvisible(){
+    char bbiv[]= "vis bind,0";
+    if (BindButton){
+     SendCommand(bbiv);
+     BindButton=false;
+    }
+ }
+
 /*********************************************************************************************************************************/
 
 void GreenLedOn()
@@ -912,6 +921,7 @@ void GreenLedOn()
         analogWrite(REDLED, 0);
         analogWrite(GREENLED, GetBrightness()); // Brightness is a function of transmission powersetting and maybe blinking
         LastShowTime = 0;
+        MakeBindButtonInvisible();
     }
 }
 
@@ -1323,6 +1333,7 @@ void ShowComms()
             if ((CurrentView == FrontView)) {
                 if (!BoundFlag) {
                     SendCommand(BindButtonVisible); 
+                    BindButton=true;
                 }
                 else {
                     SendText(FrontView_Connected, Msg_Connected);
@@ -5446,10 +5457,6 @@ void CheckGapsLength()
     }
 }
 
-void MakeBindButtonInvisible(){
-     char BindButtonInVisible[] = "vis bind,0";
-     SendCommand(BindButtonInVisible);
-}
 
 /************************************************************************************************************/
 // LOOP
