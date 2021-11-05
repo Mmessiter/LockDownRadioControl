@@ -1250,7 +1250,6 @@ void ShowComms()
     char  FrontView_TXBV[]       = "TXBV";
     char  Not_Connected[]        = "Not connected";
     char  Msg_Connected[]        = "** Connected! **";
-    char  Msg_BindNeeded[]       = ">>>BIND MODEL?>>>";
     char  DataView_pps[]         = "pps";
     char  DataView_lps[]         = "lps";
     char  DataView_Alt[]         = "alt";
@@ -1286,6 +1285,8 @@ void ShowComms()
     char  TXBattInfo[55];
     float ReadVolts    = 0;
     float VoltsPerCell = 0;
+    char BindButtonVisible[]  = "vis bind,1";
+    
 
     if (CurrentView == FrontView || CurrentView == DataView) {
         if (millis() - LastShowTime > 1000) {
@@ -1321,7 +1322,7 @@ void ShowComms()
         if (!LostContactFlag) {
             if ((CurrentView == FrontView)) {
                 if (!BoundFlag) {
-                    SendText(FrontView_Connected, Msg_BindNeeded);
+                    SendCommand(BindButtonVisible); 
                 }
                 else {
                     SendText(FrontView_Connected, Msg_Connected);
@@ -3474,6 +3475,7 @@ void DisplayCurve()
 
 void BindNow()
 {
+    
 #ifdef DB_BIND
     Serial.println("Binding");
 #endif
@@ -5444,12 +5446,18 @@ void CheckGapsLength()
     }
 }
 
+void MakeBindButtonInvisible(){
+     char BindButtonInVisible[] = "vis bind,0";
+     SendCommand(BindButtonInVisible);
+}
+
 /************************************************************************************************************/
 // LOOP
 /************************************************************************************************************/
 
 void loop()
 {
+   
     KickTheDog(); // Watchdog
     if (millis() - LastTimeRead >= 1000) {
         ReadTime();
@@ -5496,6 +5504,7 @@ void loop()
             BoundFlag  = true;
             LostPackets = 0;            // Start afresh!
             GreenLedOn();
+            MakeBindButtonInvisible();
         }
         SendText(BindScreenBox, BindDonemsg);
     }
