@@ -298,6 +298,7 @@ void ClearGyroData()
     AckPayload.ReportedPitch = 0;
     AckPayload.ReportedRoll  = 0;
     AckPayload.ReportedYaw   = 0;
+    AckPayload.CurrentAltitude   = 0;
     AckPayload.Purpose |= 0x80;
 }
 
@@ -704,7 +705,6 @@ void loop()
                 }
                 if (USE_BNO055A) Get_BNO055(false);
                 if (USE_BNO055) Get_BNO055(true);
-               //   AckPayload.CurrentAltitude = ThisRadio; // This is temporary: Transmitter now sees which radio connected instead of altitute
                 if (USE_MPU6050) {
                     Get_Mpu6050();
 
