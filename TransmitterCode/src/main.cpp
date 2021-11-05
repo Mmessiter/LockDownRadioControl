@@ -5459,6 +5459,8 @@ void loop()
             BindingNow = 0;
             BoundFlag  = true;
             LostPackets = 0;            // Start afresh!
+            GapLongest = 0;
+            GapSum = 0;
             GreenLedOn();
             MakeBindButtonInvisible();
         }
