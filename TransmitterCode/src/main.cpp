@@ -449,8 +449,6 @@ char     ChannelNames[CHANNELSUSED][11] = {{"Aileron"}, {"Elevator"}, {"Throttle
 bool     VoltsDetected = true;
 bool     TXWarningFlag = false;
 bool     RXWarningFlag = false;
-uint8_t  PowerSetting  = 4;
-uint8_t  DataRate      = 1;
 bool     ReInit        = false;
 uint32_t TxOnTime      = 0;
 uint32_t TxPace        = 0;
@@ -482,6 +480,7 @@ uint32_t BlinkTimer    = 0;
 uint8_t  BlinkOnPhase  = 1;
 bool     LedWasGreen   = false;
 uint8_t  BadChannelMax = BAD_CHANNEL_MAX;
+char     ThisRadio[4] = "0 ";
 
 /*********************************************************************************************************************************/
 
@@ -879,14 +878,7 @@ uint8_t GetBrightness()
         BlinkOnPhase = 1;
     }
     if (BlinkOnPhase) {
-        switch (PowerSetting) {
-            case 1: return 1;
-            case 2: return 4;
-            case 3: return 16;
-            case 4: return 32;
-            default: return 1;
-        }
-        return 1;
+         return 32;
     }
     else {
         return 0;
@@ -900,7 +892,7 @@ void RedLedOn()
     LedWasGreen = false;
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, 0);
-    analogWrite(REDLED, GetBrightness()); // Brightness is a function of transmission powersetting and maybe blinking
+    analogWrite(REDLED, GetBrightness()); // Brightness is a function of blinking
 }
 
  void MakeBindButtonInvisible(){
@@ -919,7 +911,7 @@ void GreenLedOn()
         LedWasGreen = true;
         analogWrite(BLUELED, 0);
         analogWrite(REDLED, 0);
-        analogWrite(GREENLED, GetBrightness()); // Brightness is a function of transmission powersetting and maybe blinking
+        analogWrite(GREENLED, GetBrightness()); // Brightness is a function maybe blinking
         LastShowTime = 0;
         MakeBindButtonInvisible();
     }
@@ -932,7 +924,7 @@ void BlueLedOn()
     LedWasGreen = false;
     analogWrite(REDLED, 0);
     analogWrite(GREENLED, 0);
-    analogWrite(BLUELED, GetBrightness()); // Brightness is a function of transmission powersetting and maybe blinking
+    analogWrite(BLUELED, GetBrightness()); // Brightness is a function of blinking
 }
 
 /*********************************************************************************************************************************/
@@ -1273,6 +1265,7 @@ void ShowComms()
     char  DataView_Ls[]          = "Ls";
     char  DataView_Ts[]          = "Ts";
     char  DataView_Sc[]          = "Success";
+    char  DataView_Rx[]          = "rx";
     char  WarnNow[]              = "vis Warning,1";
     char  WarnOff[]              = "vis Warning,0";
     char  TXVolts[]              = "t21";
@@ -1355,7 +1348,8 @@ void ShowComms()
                 SendValue(DataView_chav, BadChannelPointer + ChannelsLapped);
                 SendValue(DataView_Ls, GapLongest); // millis
                 SendValue(DataView_Ts, GapSum);     // millis
-                SendValue(DataView_Sc, success);
+                SendValue(DataView_Sc, success);   
+                SendText(DataView_Rx, ThisRadio);
             }
             ReadVolts = atof(ModelVolts) * 10;
             // 6s Max 25.2 -> 20.4
@@ -4050,16 +4044,6 @@ void Button_was_pressed()
     char Progress[]            = "Progress";
     char HelpView[]            = "HelpView";
     char ModelsView_filename[] = "filename";
-    char RangeView[]           = "RangeView";
-   // char Phigh[]               = "Phigh";
-   // char Pmed[]                = "Pmed";
-   // char Plow[]                = "Plow";
-   // char Pmin[]                = "Pmin";
-   // char Dhigh[]               = "Dhigh";
-   // char Dmid[]                = "Dmid";
-   // char Dlow[]                = "Dlow";
-    char SetPower[]            = "Power=";
-    char DATARATE[]            = "DATARATE=";
     char ReceiveModel[]        = "ReceiveModel";
     char SendModel[]           = "SendModel";
     char PowerOff[]            = "PowerOff";
@@ -4273,43 +4257,6 @@ void Button_was_pressed()
                 SingleModelFile[j] = 0;
             }
             SendModelFile();
-        }
-
-        if (InStrng(RangeView, WordsIn) > 0) { // heer
-            SendCommand(page_SetupView);
-           // SendValue(Pmin, 0);
-           // SendValue(Plow, 0);
-           // SendValue(Pmed, 0);
-           // SendValue(Phigh, 0);
-           // SendValue(Dlow, 0);
-           // SendValue(Dmid, 0);
-           // SendValue(Dhigh, 0);
-           // switch (PowerSetting) {
-           //     case 1: SendValue(Pmin, 1); break;
-           //     case 2: SendValue(Plow, 1); break;
-           //     case 3: SendValue(Pmed, 1); break;
-           //     case 4: SendValue(Phigh, 1); break;
-           // }
-           // switch (DataRate) {
-           //     case 1: SendValue(Dlow, 1); break;
-           //     case 2: SendValue(Dmid, 1); break;
-           //     case 3: SendValue(Dhigh, 1); break;
-           // }
-        }
-
-        p = InStrng(SetPower, WordsIn);
-        if (p > 0) {
-            PowerSetting = GetNextNumber(strlen(SetPower) + 1, WordsIn);
-            if (PowerSetting == 0) { // reset to default
-                PowerSetting = 4;
-                DataRate     = 1;
-            }
-            ReInit = true;
-        }
-        p = InStrng(DATARATE, WordsIn);
-        if (p > 0) {
-            DataRate = GetNextNumber(strlen(DATARATE) + 1, WordsIn);
-            ReInit   = true;
         }
 
         if (InStrng(FailSAVE, WordsIn) > 0) {
@@ -5203,10 +5150,10 @@ void LoadPacketData()
             if (ModelDetected) SendBuffer[CHANNELSUSED + 3] = ModelNumber; // send model number but not before reading one!
             break;
         case 7:
-            SendBuffer[CHANNELSUSED + 3] = PowerSetting;
+           //  // no longer used
             break;
         case 8:
-            SendBuffer[CHANNELSUSED + 3] = DataRate;
+           //   // no longer used
             break;
         case 9:
             SendBuffer[CHANNELSUSED + 3] = yawp[FlightMode];
@@ -5407,7 +5354,9 @@ void GetRXVersionNumber()
     Str(nbuf, AckPayload.Roll, 2);
     strcat(ReceiverVersionNumber, nbuf);
     Str(nbuf, AckPayload.Yaw, 0);
-    strcat(ReceiverVersionNumber, nbuf);
+    strcat(ReceiverVersionNumber, nbuf); // heer
+    Str(nbuf, AckPayload.CurrentAltitude,0);    
+    strcpy(ThisRadio,nbuf);
 }
 
 /************************************************************************************************************/

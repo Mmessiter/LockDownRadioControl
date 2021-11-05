@@ -18,8 +18,6 @@
 // external (global vars) needed here
 
 extern RF24           Radio1;
-extern uint8_t        PowerSetting;
-extern uint8_t        DataRate;
 extern int            PipeTimeout;
 extern int            GapSum;
 extern uint8_t        CurrentMode;

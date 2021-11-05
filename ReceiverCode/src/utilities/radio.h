@@ -36,9 +36,14 @@ uint8_t SavedPipeAddress[8];
 struct Payload
 {
     /**
-     * This byte determines what the remainder (offset 19) represent.
+     * This byte (Purpose) determines what the remainder (offset 19) represent.
      * Highest BIT of Purpose means >>IGNORE IF ON<<
-     */
+     * If Purpose = 1 then ...
+     * AckPayload.ReportedPitch   =  RXVERSION_MAJOR;
+     * AckPayload.ReportedRoll    =  RXVERSION_MINOR;
+     * AckPayload.ReportedYaw     =  RXVERSION_MINIMUS;
+     * AckPayload.CurrentAltitude =  ThisRadio;  // Radio in current use
+     **/
     uint8_t Purpose         = 0;
     uint8_t volt            = 0; /** Voltage of RX battery, if measured. */
     uint8_t CurrentAltitude = 0; /** Altitude, if measured. */
@@ -80,11 +85,12 @@ void ReadSavedPipe()
 
 /************************************************************************************************************/
 
-void LoadVersioNumber()
+void LoadVersioNumber() // and which radio is currently in use
 {
     AckPayload.ReportedPitch = RXVERSION_MAJOR;
     AckPayload.ReportedRoll  = RXVERSION_MINOR;
     AckPayload.ReportedYaw   = RXVERSION_MINIMUS;
+    AckPayload.CurrentAltitude = ThisRadio;
 }
 
 /************************************************************************************************************/
