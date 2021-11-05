@@ -273,7 +273,7 @@ void LoadAckPayload()
     if (AckPayload.Purpose > 1) AckPayload.Purpose = 0; // 1 is currently max
     if (AckPayload.Purpose == 1)
     {
-        LoadVersioNumber(); // if 1 send version info
+        LoadVersioNumber();                             // if 1 send version info AND RX number
     }
 }
 

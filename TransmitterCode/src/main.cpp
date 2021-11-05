@@ -2,7 +2,7 @@
 
 #define TXVERSION_MAJOR   1 //   Nov 5th 2021 Malcolm Messiter
 #define TXVERSION_MINOR   1
-#define TXVERSION_MINIMUS 3
+#define TXVERSION_MINIMUS 4
 
 #define USE_WATCHDOG          // Enable when developing only  ??
 #define WATCHDOGTIMEOUT 10000 // 10 Seconds before reboot (32ms -> 500 seconds)

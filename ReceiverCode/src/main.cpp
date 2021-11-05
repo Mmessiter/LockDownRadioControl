@@ -9,7 +9,6 @@
 #define RECONNECTGAP    20  // Send no data for 20 ms after reconnect
 
 
-
 bool USE_BMP280 = false; /** is BMP280 sensor connected */
 
 #define EXTRAMICROS 500 // for extra resolution driving servos
