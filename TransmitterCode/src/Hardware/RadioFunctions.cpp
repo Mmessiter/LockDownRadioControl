@@ -21,7 +21,7 @@
 #define Help_View          14
 #define Options_View       15
 #define BINDPIPETIMEOUT    100                       // timeout for switching from Bound to Default pipe 
-#define FHSS_RESCUE_BOTTOM 118                       // reduced range for recovery
+#define FHSS_RESCUE_BOTTOM 121                       // reduced range for recovery
 #define FHSS_RESCUE_TOP    125                       // reduced range for recovery
 #define UNCOMPRESSEDWORDS  20                        // DATA TO SEND = 40  Bytes
 #define COMPRESSEDWORDS    UNCOMPRESSEDWORDS * 3 / 4 // COMPRESSED DATA SENT = 30  Bytes
