@@ -259,7 +259,7 @@ void Reconnect()
                 // BoundFlag = false;
             }
         }
-    delay (35); // This seems to prevent the occasional lockup??
+        delay (35); // This seems to prevent the occasional lockup??
     }
 }
 
