@@ -1499,7 +1499,7 @@ void FailedPacket()
         GapStart = millis();   // To keep track of gaps' length
     } 
     ++RecentPacketsLost;
-    if (RecentPacketsLost > 10) {   
+    if (RecentPacketsLost > 5) {   
          ++RangeTestLostPackets;
         LostContactFlag   = true;
         RedLedOn();

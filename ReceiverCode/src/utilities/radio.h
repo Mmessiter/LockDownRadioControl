@@ -176,7 +176,7 @@ void ProdRadio()
 
 void Reconnect()
 {
-    uint8_t jj;
+   // uint8_t jj;
 
     SearchStartTime   = millis();
     ReconnectAttempts = 0;
@@ -197,26 +197,25 @@ void Reconnect()
         StillSearchingTime = millis() - SearchStartTime;
         ++ReconnectAttempts;
         
-      //  uint8_t i = FHSS_RESCUE_BOTTOM;
-      //  while (!CurrentRadio->available() && i <= FHSS_RESCUE_TOP) // This loop exits as soon as connection is detected.
-      //  {
-      //      CurrentRadio->stopListening();
-      //      CurrentRadio->setChannel(i);
-      //      CurrentRadio->startListening();
-      //      delay(4); // was 4
-      //      i++;
-      //  }
-
-        for (jj = FHSS_RESCUE_BOTTOM; jj < FHSS_RESCUE_TOP; ++jj ){
-              CurrentRadio->stopListening();
-              delay(1); 
-              CurrentRadio->setChannel(jj);
-              CurrentRadio->startListening();
-              delay(3); 
-              if (CurrentRadio->available()) {break;}    // This is a alternative to the commented bit above in case the "while" condition isn't evaluated correctly
+        uint8_t i = FHSS_RESCUE_BOTTOM;
+        while (!CurrentRadio->available() && i <= FHSS_RESCUE_TOP) // This loop exits as soon as connection is detected.
+        {
+            CurrentRadio->stopListening();
+            CurrentRadio->setChannel(i);
+            CurrentRadio->startListening();
+            delay(4); // was 4
+            i++;
         }
-
-        Serial.println (jj);
+            Serial.println (i);
+        //for (jj = FHSS_RESCUE_BOTTOM; jj < FHSS_RESCUE_TOP; ++jj ){
+        //      CurrentRadio->stopListening();
+        //      delay(1); 
+        //      CurrentRadio->setChannel(jj);
+        //      CurrentRadio->startListening();
+        //      delay(3); 
+        //      if (CurrentRadio->available()) {break;}    // This is a alternative to the  bit above in case the "while" condition isn't evaluated correctly
+        // }
+        // Serial.println (jj);
 
 #ifdef SECOND_TRANSCEIVER
         if (!CurrentRadio->available()) {
