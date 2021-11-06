@@ -193,7 +193,7 @@ void Reconnect()
     while (!Connected)
     {
         StillSearchingTime = millis() - SearchStartTime;
-        ReconnectAttempts++;
+        ++ReconnectAttempts;
         uint8_t i = FHSS_RESCUE_BOTTOM;
         while (!CurrentRadio->available() && i <= FHSS_RESCUE_TOP) // This loop exits as soon as connection is detected.
         {
@@ -259,6 +259,7 @@ void Reconnect()
                 // BoundFlag = false;
             }
         }
+    delay (35); // This seems to prevent the occasional lockup??
     }
 }
 
