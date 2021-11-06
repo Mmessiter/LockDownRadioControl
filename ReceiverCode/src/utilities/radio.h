@@ -11,7 +11,7 @@
 #define pinCSN2 20 // NRF2
 #define pinCE2  21 // NRF2
 
-#define FHSS_RESCUE_BOTTOM 121
+#define FHSS_RESCUE_BOTTOM 124
 #define FHSS_RESCUE_TOP    125
 
 #define FAILSAFE_TIMEOUT 2000
@@ -206,7 +206,7 @@ void Reconnect()
             delay(4); // was 4
             i++;
         }
-            Serial.println (i);
+        
         //for (jj = FHSS_RESCUE_BOTTOM; jj < FHSS_RESCUE_TOP; ++jj ){
         //      CurrentRadio->stopListening();
         //      delay(1); 
