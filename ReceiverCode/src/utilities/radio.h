@@ -176,8 +176,6 @@ void ProdRadio()
 
 void Reconnect()
 {
-   // uint8_t jj;
-
     SearchStartTime   = millis();
     ReconnectAttempts = 0;
 
@@ -261,7 +259,7 @@ void Reconnect()
 #endif
             }
         }
-        delay (40); // This seems to prevent the occasional lockup??
+        delay (20); // This seems to prevent the occasional lockup??
     }
 }
 
