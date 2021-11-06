@@ -256,7 +256,6 @@ void Reconnect()
 #ifdef DB_FAILSAFE
                 Serial.println("FailSafe sent");
 #endif
-                // BoundFlag = false;
             }
         }
         delay (35); // This seems to prevent the occasional lockup??
