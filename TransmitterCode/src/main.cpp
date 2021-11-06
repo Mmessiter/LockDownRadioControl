@@ -229,7 +229,7 @@ uint64_t      NewPipe            = 0xBABE1E5420LL;     //             New Radio 
 char          TextIn[CharsMax];
 char          WordsIn[CharsMax];
 unsigned int  i;
-int           PacketsPerSecond = 0;
+unsigned int  PacketsPerSecond = 0;
 unsigned int  LostPackets      = 0;
 uint8_t       PacketNumber     = 0;
 uint8_t       NextFrequency    = 100;
@@ -443,7 +443,6 @@ float    success              = 0; // percent of packets that  succeed
 uint8_t  SaveFlightMode       = 0;
 bool     FailSafeChannel[CHANNELSUSED];
 bool     SaveFailSafeNow                = false;
-int      ChannelsLapped                 = 0;
 char     ChannelNames[CHANNELSUSED][11] = {{"Aileron"}, {"Elevator"}, {"Throttle"}, {"Rudder"}, {"Gear"}, {"AUX1"}, {"AUX2"}, {"AUX3"}, {"AUX4"}, {"AUX5"}, {"AUX6"}, {"AUX7"}, {"AUX8"}, {"AUX9"}, {"AUX10"}, {"AUX11"}};
 
 bool     VoltsDetected = true;
@@ -481,6 +480,20 @@ uint8_t  BlinkOnPhase  = 1;
 bool     LedWasGreen   = false;
 uint8_t  BadChannelMax = BAD_CHANNEL_MAX;
 char     ThisRadio[4] = "0 ";
+
+unsigned int SavedPacketsPerSecond;
+unsigned int SavedLostPackets;
+uint8_t SavedModelAltitude;  //AckPayload.CurrentAltitude;
+char SavedMaxAltitude[4] = "0";
+char SavedModelRoll[4] = "0";
+char SavedModelPitch[4] = "0";
+char SavedModelYaw[4] = "0";
+char SavedReceiverVersionNumber[12];
+uint8_t SavedBadChannelPointer;
+uint32_t SavedGapLongest;
+int SavedGapSum;
+float SavedSuccess;
+char SavedThisRadio[4];
 
 /*********************************************************************************************************************************/
 
@@ -1336,20 +1349,68 @@ void ShowComms()
                     }
                 }
             }
+
+
+
             if (CurrentView == DataView) {
-                SendValue(DataView_pps, PacketsPerSecond);
-                SendValue(DataView_lps, LostPackets);
-                SendText(DataView_Alt, ModelAltitude);
-                SendText(DataView_MaxAlt, MaxAltitude);
-                SendText(DataView_roll, ModelRoll);
-                SendText(DataView_pitch, ModelPitch);
-                SendText(DataView_yaw, ModelYaw);
-                SendText(DataView_rxv, ReceiverVersionNumber); // RX Version Number
-                SendValue(DataView_chav, BadChannelPointer + ChannelsLapped);
-                SendValue(DataView_Ls, GapLongest); // millis
-                SendValue(DataView_Ts, GapSum);     // millis
-                SendValue(DataView_Sc, success);   
-                SendText(DataView_Rx, ThisRadio);
+                if (SavedPacketsPerSecond != PacketsPerSecond){   // Don't redisplay if unchanged (and below)
+                    SendValue(DataView_pps, PacketsPerSecond);
+                    SavedPacketsPerSecond = PacketsPerSecond;
+                }
+                if (LostPackets != SavedLostPackets){
+                    SendValue(DataView_lps, LostPackets);
+                    SavedLostPackets = LostPackets;
+                }
+                if (SavedModelAltitude != AckPayload.CurrentAltitude){
+                        SendText(DataView_Alt, ModelAltitude);
+                        SavedModelAltitude = AckPayload.CurrentAltitude;
+                }
+                if (!strcmp(MaxAltitude, SavedMaxAltitude)){
+                        SendText(DataView_MaxAlt, MaxAltitude);
+                        strcpy(SavedMaxAltitude,MaxAltitude);
+                }
+               
+               if (!strcmp(ModelRoll, SavedModelRoll)){
+                        SendText(DataView_roll, ModelRoll);
+                        strcpy(SavedModelRoll,ModelRoll);
+                }
+               
+                if (!strcmp(ModelPitch, SavedModelPitch)){
+                        SendText(DataView_pitch, ModelPitch);
+                        strcpy(SavedModelPitch,ModelPitch);
+                }
+
+                if (!strcmp(ModelYaw, SavedModelYaw)){
+                        SendText(DataView_yaw, ModelYaw);
+                        strcpy(SavedModelYaw,ModelYaw);
+                } 
+                 if (strcmp(ThisRadio,SavedThisRadio)){
+                        SendText(DataView_Rx,ThisRadio);
+                      strcpy(SavedThisRadio,ThisRadio);
+                }
+                if (strcmp(ReceiverVersionNumber,SavedReceiverVersionNumber)){ // heer
+                      SendText(DataView_rxv,ReceiverVersionNumber);
+                    strcpy(SavedReceiverVersionNumber,ReceiverVersionNumber);
+                 } 
+                if (BadChannelPointer != SavedBadChannelPointer){
+                    SendValue(DataView_chav, BadChannelPointer);
+                    SavedBadChannelPointer = BadChannelPointer;
+                }
+
+                if (GapLongest != SavedGapLongest){
+                    SendValue(DataView_Ls, GapLongest);
+                    SavedGapLongest = GapLongest;
+                }
+
+                if (GapSum != SavedGapSum){
+                    SendValue(DataView_Ts, GapSum);
+                    SavedGapSum = GapSum;
+                }
+                if (success != SavedSuccess){
+                    SendValue(DataView_Sc, success);
+                    SavedSuccess = success;
+                }
+            
             }
             ReadVolts = atof(ModelVolts) * 10;
             // 6s Max 25.2 -> 20.4
@@ -4923,7 +4984,21 @@ void Button_was_pressed()
 
         p = (InStrng(Data_View, WordsIn));
         if (p > 0) {
-            CurrentView  = DataView;
+            strcpy (SavedReceiverVersionNumber,ExpR);   // Fix all these so they must redisplay at least once
+            strcpy (SavedThisRadio,ExpR);               // Fix all these so they must redisplay at least once
+            strcpy (SavedModelRoll,ExpR);               // Fix all these so they must redisplay at least once
+            strcpy (SavedModelYaw,ExpR);                // Fix all these so they must redisplay at least once
+            strcpy (SavedModelPitch,ExpR);              // Fix all these so they must redisplay at least once
+            strcpy (SavedMaxAltitude,ExpR);             // Fix all these so they must redisplay at least once
+            SavedModelAltitude = 0;                     // Fix all these so they must redisplay at least once
+            SavedModelAltitude = 0;                     // Fix all these so they must redisplay at least once
+            SavedPacketsPerSecond = 0;                  // Fix all these so they must redisplay at least once
+            SavedSuccess = 0;                           // Fix all these so they must redisplay at least once
+            SavedGapLongest = 0;                        // Fix all these so they must redisplay at least once
+            SavedGapSum = 0;                            // Fix all these so they must redisplay at least once
+            SavedBadChannelPointer = 0;                 // Fix all these so they must redisplay at least once
+            delay(200);                                 // allow time for screen to display
+            CurrentView  = DataView; 
             LastShowTime = 0;
         }
 
@@ -5354,7 +5429,7 @@ void GetRXVersionNumber()
     Str(nbuf, AckPayload.Roll, 2);
     strcat(ReceiverVersionNumber, nbuf);
     Str(nbuf, AckPayload.Yaw, 0);
-    strcat(ReceiverVersionNumber, nbuf); // heer
+    strcat(ReceiverVersionNumber, nbuf); 
     Str(nbuf, AckPayload.CurrentAltitude,0);    
     strcpy(ThisRadio,nbuf);
 }
