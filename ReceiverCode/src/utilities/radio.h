@@ -169,7 +169,7 @@ void ProdRadio()
     CurrentRadio->setPALevel(RF24_PA_MAX);
     CurrentRadio->setDataRate(RF24_250KBPS);
     CurrentRadio->openReadingPipe(1, ThisPipe);
-    delay(3);                           // This might help
+    delay(9);                           // This might help
 }
  #endif // defined (SECOND_TRANSCEIVER)
 /************************************************************************************************************/
@@ -207,21 +207,11 @@ void Reconnect()
             i++;
         }
         
-        //for (jj = FHSS_RESCUE_BOTTOM; jj < FHSS_RESCUE_TOP; ++jj ){
-        //      CurrentRadio->stopListening();
-        //      delay(1); 
-        //      CurrentRadio->setChannel(jj);
-        //      CurrentRadio->startListening();
-        //      delay(3); 
-        //      if (CurrentRadio->available()) {break;}    // This is a alternative to the  bit above in case the "while" condition isn't evaluated correctly
-        // }
-        // Serial.println (jj);
-
 #ifdef SECOND_TRANSCEIVER
         if (!CurrentRadio->available()) {
             if (ReconnectAttempts > 5) {            // This might be a bigger number after tests
                 CurrentRadio->stopListening();      // This has helped massively
-                delay(3);                           // This might help
+                delay(4);                           // This might help
                 ReconnectAttempts = 0;
                 if (ThisRadio == 1) {
                     ThisRadio    = 2;
