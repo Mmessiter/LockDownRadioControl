@@ -8,6 +8,7 @@
 #define WATCHDOGTIMEOUT 10000 // 10 Seconds before reboot (32ms -> 500 seconds)
 #define KICKRATE        1000  // Kick once a second (must be between WATCHDOGMAXRATE and WATCHDOGTIMEOUT)
 #define WATCHDOGMAXRATE 500   // 500 ms secs between kicks is max rate allowed
+#define LOSTCONTACTCUTOFF 10  // How many packets to lose before reconnect triggers
 
 // UNCOMMENT ANY OF THESE for that bit of debug info
 
@@ -17,6 +18,8 @@
 // #define DB_BIND           // Debug Binding
 // #define DB_SWITCHES       // Debug Switches
 // #define DB_MODEL_EXCHANGE // Debug MODEL EXCHANGE (by RF link)
+   
+
 
 #define CHANNELSUSED       16                  // 16 Channels
 #define MAXMIXES           32                  // 32 mixes
@@ -1388,7 +1391,7 @@ void ShowComms()
                         SendText(DataView_Rx,ThisRadio);
                       strcpy(SavedThisRadio,ThisRadio);
                 }
-                if (strcmp(ReceiverVersionNumber,SavedReceiverVersionNumber)){ // heer
+                if (strcmp(ReceiverVersionNumber,SavedReceiverVersionNumber)){ 
                       SendText(DataView_rxv,ReceiverVersionNumber);
                     strcpy(SavedReceiverVersionNumber,ReceiverVersionNumber);
                  } 
@@ -1499,7 +1502,7 @@ void FailedPacket()
         GapStart = millis();   // To keep track of gaps' length
     } 
     ++RecentPacketsLost;
-    if (RecentPacketsLost > 5) {   
+    if (RecentPacketsLost > LOSTCONTACTCUTOFF) {   
          ++RangeTestLostPackets;
         LostContactFlag   = true;
         RedLedOn();
