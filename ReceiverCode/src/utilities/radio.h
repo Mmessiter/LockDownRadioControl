@@ -38,12 +38,14 @@ struct Payload
 {
     /**
      * This byte (Purpose) determines what the remainder (offset 19) represent.
-     * Highest BIT of Purpose means >>IGNORE IF ON<<
-     * If Purpose = 1 then ...
+     * @warning Highest BIT of Purpose means **IGNORE IF ON**
+     * @note If Purpose = 1 then ...
+     * @code
      * AckPayload.ReportedPitch   =  RXVERSION_MAJOR;
      * AckPayload.ReportedRoll    =  RXVERSION_MINOR;
      * AckPayload.ReportedYaw     =  RXVERSION_MINIMUS;
      * AckPayload.CurrentAltitude =  ThisRadio;  // Radio in current use
+     * @endcode
      **/
     uint8_t Purpose         = 0;
     uint8_t volt            = 0; /** Voltage of RX battery, if measured. */

@@ -1,4 +1,78 @@
-/** @file TransmitterCode/src/main.cpp */
+/** @file TransmitterCode/src/main.cpp
+ *
+ * @page TransmitterCode
+ * @section txFeatures Features list
+ * - Works on Teensy 4.1
+ * - 16 channels
+ * - 12 BIT servo resolution (11 BIT via SBUS)
+ * - 32 Mixes
+ * - 4 Flight modes, or 3 plus autorotation
+ * - User defined Channel names
+ * - 64 editable 5-point curves (16 channels x 4 flight modes)
+ * - FailSafe on any channel(s)
+ * - 2.4 GHz RF scan
+ * - Motor Timer
+ * - Lossless data compression.
+ * - Trims on screen saved per flight mode and model.
+ * - Screen timeout.
+ * - FFHS fast recovery on lost packet
+ * - FFHS stores busy and failed frequencies and avoids hopping there again.
+ * - Edit and store PID Gains.
+ * - Shows Roll Pitch Yaw telemetry
+ * - Scans at startup for FHSS frequencies to dodge.
+ * - Use 32 GIG SD card for model memories
+ * - Binding - Each TX must has unique pipe address.
+ * - Four User definable three position switches
+ * - PID Gains implemented and stored to SD indepentently per flight mode and per model
+ * - Input sources definable
+ * - Model memories export and import
+ * - Model memory files alphabetically sorted
+ * - Model memory automatically corrected on connection if was wrong. (REMOVED)
+ * - Timer goes on and off with motor to keep track of motor use.
+ * - Model memories can be sent between transmitters by RF link.
+ * - DS1307 RTC added
+ * - MAC address now used as unique TX ID for pipe and binding.
+ * - Failsafe channel flags compressed to two bytes
+ * - Exponential added
+ *
+ * @section txPinout Teensy 4.1 Pins
+ * | Teensy 4.1 Pins | Connections |
+ * |-----------------|-------------|
+ * | GND       | GND |
+ * | Vin       | + 5.0 VDC |
+ * | 0  (RX1)  | Nextion  (TX) |
+ * | 1  (TX2)  | Nextion  (RX) |
+ * | 2  LED    | RED |
+ * | 3  LED    | GREEN |
+ * | 4  LED    | BLUE |
+ * | 5  POLOLU | 2808 ALL POWER OFF SIGNAL (When high) |
+ * | 9  (CE)   | nRF24l01 (CE) |
+ * | 10 (CS)   | nRF24l01 (CSN) |
+ * | 11 (MOSI) | nRF24l01 (MOSI) |
+ * | 12 (MISO) | nRF24l01 (MISO) |
+ * | 13 (SCK)  | nRF24l01 (SCK) |
+ * | 14 (A0)   | Joystick POT CH1 |
+ * | 15 (A1)   | Joystick POT CH2 |
+ * | 16 (A2)   | Joystick POT CH3 |
+ * | 17 (A3)   | Joystick POT CH4 |
+ * | 18        | I2C bus  SDA |
+ * | 19        | I2C bus  SCL |
+ * | 20 (A6)   | POT KNOB CH5 |
+ * | 21 (A7)   | POT KNOB CH6 |
+ * | 22 (A8)   | POT KNOB CH7 |
+ * | 23 (A9)   | POT KNOB CH8 |
+ * | 25        | Switch 1 |
+ * | 26        | Switch 1 |
+ * | 27        | Switch 2 |
+ * | 28        | Switch 2 |
+ * | 29        | Switch 3 |
+ * | 30        | Switch 3 |
+ * | 31        | Switch 4 |
+ * | 32        | Switch 4 |
+ *
+ * @see TransmitterCode/src/main.cpp
+ */
+
 // ************************************************** TRANSMITTER CODE **************************************************
 
 #define TXVERSION_MAJOR   1 //   Nov 5th 2021 Malcolm Messiter
@@ -54,78 +128,6 @@
 #define HALFMICROSRANGE (MAXMICROS - MINMICROS) / 2 //  = 500
 #define MIDMICROS       MINMICROS + HALFMICROSRANGE
 
-/**
- * Features list
- * - Works on Teensy 4.1
- * - 16 channels
- * - 12 BIT servo resolution (11 BIT via SBUS)
- * - 32 Mixes
- * - 4 Flight modes, or 3 plus autorotation
- * - User defined Channel names
- * - 64 editable 5-point curves (16 channels x 4 flight modes)
- * - FailSafe on any channel(s)
- * - 2.4 GHz RF scan
- * - Motor Timer
- * - Lossless data compression.
- * - Trims on screen saved per flight mode and model.
- * - Screen timeout.
- * - FFHS fast recovery on lost packet
- * - FFHS stores busy and failed frequencies and avoids hopping there again.
- * - Edit and store PID Gains.
- * - Shows Roll Pitch Yaw telemetry
- * - Scans at startup for FHSS frequencies to dodge.
- * - Use 32 GIG SD card for model memories
- * - Binding - Each TX must has unique pipe address.
- * - Four User definable three position switches
- * - PID Gains implemented and stored to SD indepentently per flight mode and per model
- * - Input sources definable
- * - Model memories export and import
- * - Model memory files alphabetically sorted
- * - Model memory automatically corrected on connection if was wrong. (REMOVED)
- * - Timer goes on and off with motor to keep track of motor use.
- * - Model memories can be sent between transmitters by RF link.
- * - DS1307 RTC added
- * - MAC address now used as unique TX ID for pipe and binding.
- * - Failsafe channel flags compressed to two bytes
- * - Exponential added
- */
-
-/**
- * | Teensy 4.1 Pins | Connections |
- * |-----------------|-------------|
- * | GND       | GND |
- * | Vin       | + 5.0 VDC |
- * | 0  (RX1)  | Nextion  (TX) |
- * | 1  (TX2)  | Nextion  (RX) |
- * | 2  LED    | RED |
- * | 3  LED    | GREEN |
- * | 4  LED    | BLUE |
- * | 5  POLOLU | 2808 ALL POWER OFF SIGNAL (When high) |
- * | 9  (CE)   | nRF24l01 (CE) |
- * | 10 (CS)   | nRF24l01 (CSN) |
- * | 11 (MOSI) | nRF24l01 (MOSI) |
- * | 12 (MISO) | nRF24l01 (MISO) |
- * | 13 (SCK)  | nRF24l01 (SCK) |
- * | 14 (A0)   | Joystick POT CH1 |
- * | 15 (A1)   | Joystick POT CH2 |
- * | 16 (A2)   | Joystick POT CH3 |
- * | 17 (A3)   | Joystick POT CH4 |
- * | 18        | I2C bus  SDA |
- * | 19        | I2C bus  SCL |
- * | 20 (A6)   | POT KNOB CH5 |
- * | 21 (A7)   | POT KNOB CH6 |
- * | 22 (A8)   | POT KNOB CH7 |
- * | 23 (A9)   | POT KNOB CH8 |
- * | 25        | Switch 1 |
- * | 26        | Switch 1 |
- * | 27        | Switch 2 |
- * | 28        | Switch 2 |
- * | 29        | Switch 3 |
- * | 30        | Switch 3 |
- * | 31        | Switch 4 |
- * | 32        | Switch 4 |
- */
-
 #include <Arduino.h>
 #include <SD.h>
 #include <SPI.h>
@@ -143,8 +145,6 @@
     #include <Watchdog_t4.h>
 #endif
 
-#define CE_PIN  9 // for SPI to nRF24L01
-#define CSN_PIN 10
 RF24 Radio1(CE_PIN, CSN_PIN);
 
 #define Nextion         Serial1 // Nextion is connected to Serial1
