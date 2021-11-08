@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['kalmanfilter_241',['KalmanFilter',['../imu_8h.html#a35dce9e6f35ef4283f11c27d7e795d07',1,'imu.h']]],
-  ['kickrate_242',['KICKRATE',['../_transmitter_code_2src_2main_8cpp.html#a639fb69a9b4f236e3b1a16435b82bb81',1,'main.cpp']]],
-  ['kickthedog_243',['KickTheDog',['../_radio_functions_8h.html#ada95a00a341e4a80176eda743a94ab2e',1,'KickTheDog():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#ada95a00a341e4a80176eda743a94ab2e',1,'KickTheDog():&#160;main.cpp']]],
-  ['kk_244',['KK',['../imu_8h.html#af785e033fe89e7d7aeebfdb8eb3c27a4',1,'imu.h']]]
+  ['kalmanfilter_242',['KalmanFilter',['../imu_8h.html#a35dce9e6f35ef4283f11c27d7e795d07',1,'imu.h']]],
+  ['kickrate_243',['KICKRATE',['../_transmitter_code_2src_2main_8cpp.html#a639fb69a9b4f236e3b1a16435b82bb81',1,'main.cpp']]],
+  ['kickthedog_244',['KickTheDog',['../_radio_functions_8h.html#ada95a00a341e4a80176eda743a94ab2e',1,'KickTheDog():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#ada95a00a341e4a80176eda743a94ab2e',1,'KickTheDog():&#160;main.cpp']]],
+  ['kk_245',['KK',['../imu_8h.html#af785e033fe89e7d7aeebfdb8eb3c27a4',1,'imu.h']]]
 ];
