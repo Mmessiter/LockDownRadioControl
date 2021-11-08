@@ -1,10 +1,11 @@
+/** @file ReceiverCode/src/utilities/common.h */
 #ifndef _SRC_UTILITIES_COMMON_H
 #define _SRC_UTILITIES_COMMON_H
 
 #include <stdint.h>
 #include <EEPROM.h>
 
-#define RXVERSION_MAJOR   1 
+#define RXVERSION_MAJOR   1
 #define RXVERSION_MINOR   1
 #define RXVERSION_MINIMUS 4 // Nov 5th 2021
 

@@ -1,3 +1,4 @@
+/** @file ReceiverCode/src/utilities/imu.h */
 #ifndef _SRC_UTILITIES_IMU_H
 #define _SRC_UTILITIES_IMU_H
 

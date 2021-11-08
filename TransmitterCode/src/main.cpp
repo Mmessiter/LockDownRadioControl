@@ -1,3 +1,4 @@
+/** @file TransmitterCode/src/main.cpp */
 // ************************************************** TRANSMITTER CODE **************************************************
 
 #define TXVERSION_MAJOR   1 //   Nov 5th 2021 Malcolm Messiter
@@ -18,7 +19,7 @@
 // #define DB_BIND           // Debug Binding
 // #define DB_SWITCHES       // Debug Switches
 // #define DB_MODEL_EXCHANGE // Debug MODEL EXCHANGE (by RF link)
-   
+
 
 
 #define CHANNELSUSED       16                  // 16 Channels
@@ -1305,7 +1306,7 @@ void ShowComms()
     float ReadVolts    = 0;
     float VoltsPerCell = 0;
     char BindButtonVisible[]  = "vis bind,1";
-    
+
 
     if (CurrentView == FrontView || CurrentView == DataView) {
         if (millis() - LastShowTime > 1000) {
@@ -1341,7 +1342,7 @@ void ShowComms()
         if (!LostContactFlag) {
             if ((CurrentView == FrontView)) {
                 if (!BoundFlag) {
-                    SendCommand(BindButtonVisible); 
+                    SendCommand(BindButtonVisible);
                     BindButton=true;
                 }
                 else {
@@ -1372,12 +1373,12 @@ void ShowComms()
                         SendText(DataView_MaxAlt, MaxAltitude);
                         strcpy(SavedMaxAltitude,MaxAltitude);
                 }
-               
+
                if (!strcmp(ModelRoll, SavedModelRoll)){
                         SendText(DataView_roll, ModelRoll);
                         strcpy(SavedModelRoll,ModelRoll);
                 }
-               
+
                 if (!strcmp(ModelPitch, SavedModelPitch)){
                         SendText(DataView_pitch, ModelPitch);
                         strcpy(SavedModelPitch,ModelPitch);
@@ -1386,15 +1387,15 @@ void ShowComms()
                 if (!strcmp(ModelYaw, SavedModelYaw)){
                         SendText(DataView_yaw, ModelYaw);
                         strcpy(SavedModelYaw,ModelYaw);
-                } 
+                }
                  if (strcmp(ThisRadio,SavedThisRadio)){
                         SendText(DataView_Rx,ThisRadio);
                       strcpy(SavedThisRadio,ThisRadio);
                 }
-                if (strcmp(ReceiverVersionNumber,SavedReceiverVersionNumber)){ 
+                if (strcmp(ReceiverVersionNumber,SavedReceiverVersionNumber)){
                       SendText(DataView_rxv,ReceiverVersionNumber);
                     strcpy(SavedReceiverVersionNumber,ReceiverVersionNumber);
-                 } 
+                 }
                 if (BadChannelPointer != SavedBadChannelPointer){
                     SendValue(DataView_chav, BadChannelPointer);
                     SavedBadChannelPointer = BadChannelPointer;
@@ -1413,7 +1414,7 @@ void ShowComms()
                     SendValue(DataView_Sc, success);
                     SavedSuccess = success;
                 }
-            
+
             }
             ReadVolts = atof(ModelVolts) * 10;
             // 6s Max 25.2 -> 20.4
@@ -1500,9 +1501,9 @@ void FailedPacket()
     int secondsRemaining;
     if (GapStart == 0) {
         GapStart = millis();   // To keep track of gaps' length
-    } 
+    }
     ++RecentPacketsLost;
-    if (RecentPacketsLost > LOSTCONTACTCUTOFF) {   
+    if (RecentPacketsLost > LOSTCONTACTCUTOFF) {
          ++RangeTestLostPackets;
         LostContactFlag   = true;
         RedLedOn();
@@ -2554,7 +2555,7 @@ void setup()
     ReviseBadChannelMax();
     SendValue(ScreenViewTimeout, ScreenTimeout);
     SendCommand(page_FrontView); // Let's start at the beginning. Why not?
-    PreScan();                   // Do quiet scan while Nextion boots and Front View loads ...  
+    PreScan();                   // Do quiet scan while Nextion boots and Front View loads ...
     SendText(FrontView_Connected, Initialising);
     SendValue1(NextionSleepTime, ScreenTimeout); // Setup Screen timeout (No .val needed)
     SendCommand(NextionWakeOnTouch);             // Wake on touch
@@ -2578,7 +2579,7 @@ void setup()
     StartInactvityTimeout();
     SizeOfCompressedData = sizeof(CompressedData);
     GetTXVersionNumber();
-   
+
 }
 
 /*********************************************************************************************************************************/
@@ -3476,7 +3477,7 @@ void DisplayCurve()
 
     if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == 2) { //EXPO  ************************************************************************************************
         #define APPROXIMATION     3  // This is for the approximation of the screen curve
-        
+
         SendCommand(b3off);
         SendCommand(b4off);
         SendCommand(b7off);
@@ -3508,8 +3509,8 @@ void DisplayCurve()
         yDot2 = 0;
        // for (xPoint = 0; xPoint <= HalfXRange; xPoint += Step) { // Simulate a curve with many short lines to speed it up
         for (xPoint = HalfXRange; xPoint >= 0; xPoint -= Step) { // Simulate a curve with many short lines to speed it up
-       
-       
+
+
             yPoint = MapExp(xPoint, 0, HalfXRange, 0, TopHalfYRange, Exponential[FlightMode][ChanneltoSet - 1]);
             if (Step > xPoint) {
                 Step = xPoint;
@@ -3544,7 +3545,7 @@ void DisplayCurve()
 
 void BindNow()
 {
-    
+
 #ifdef DB_BIND
     Serial.println("Binding");
 #endif
@@ -4706,7 +4707,7 @@ void Button_was_pressed()
             ClearText();
         }
 
-        if (InStrng(SetupViewFM, WordsIn) > 0) { // New model name occurs at offset 12 in WordsIn 
+        if (InStrng(SetupViewFM, WordsIn) > 0) { // New model name occurs at offset 12 in WordsIn
             i = 0;
             while (WordsIn[i + 12] > 0) {
                 ModelName[i]     = WordsIn[i + 12];
@@ -5001,7 +5002,7 @@ void Button_was_pressed()
             SavedGapSum = 0;                            // Fix all these so they must redisplay at least once
             SavedBadChannelPointer = 0;                 // Fix all these so they must redisplay at least once
             delay(200);                                 // allow time for screen to display
-            CurrentView  = DataView; 
+            CurrentView  = DataView;
             LastShowTime = 0;
         }
 
@@ -5432,8 +5433,8 @@ void GetRXVersionNumber()
     Str(nbuf, AckPayload.Roll, 2);
     strcat(ReceiverVersionNumber, nbuf);
     Str(nbuf, AckPayload.Yaw, 0);
-    strcat(ReceiverVersionNumber, nbuf); 
-    Str(nbuf, AckPayload.CurrentAltitude,0);    
+    strcat(ReceiverVersionNumber, nbuf);
+    Str(nbuf, AckPayload.CurrentAltitude,0);
     strcpy(ThisRadio,nbuf);
 }
 
@@ -5491,7 +5492,7 @@ void CheckGapsLength()
 
 void loop()
 {
-   
+
     KickTheDog(); // Watchdog
     if (millis() - LastTimeRead >= 1000) {
         ReadTime();

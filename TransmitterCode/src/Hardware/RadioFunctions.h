@@ -1,6 +1,4 @@
-/* All radio functions will be moved here.
-*/
-
+/** @file ReceiverCode/src/Hardware/RadioFunctions.h */
 #ifndef RadioFunctions_H
 #define RadioFunctions_H
 

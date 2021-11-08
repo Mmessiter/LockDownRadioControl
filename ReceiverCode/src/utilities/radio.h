@@ -1,3 +1,4 @@
+/** @file ReceiverCode/src/utilities/radio.h */
 #ifndef _SRC_UTILITIES_RADIO_H
 #define _SRC_UTILITIES_RADIO_H
 
@@ -194,7 +195,7 @@ void Reconnect()
     {
         StillSearchingTime = millis() - SearchStartTime;
         ++ReconnectAttempts;
-        
+
         uint8_t i = FHSS_RESCUE_BOTTOM;
         while (!CurrentRadio->available() && i <= FHSS_RESCUE_TOP) // This loop exits as soon as connection is detected.
         {
@@ -204,7 +205,7 @@ void Reconnect()
             delay(4); // was 4
             i++;
         }
-        
+
 #ifdef SECOND_TRANSCEIVER
         if (!CurrentRadio->available()) {
             if (ReconnectAttempts > 5) {            // This might be a bigger number after tests
@@ -235,13 +236,13 @@ void Reconnect()
             ConnectionStart=millis();
             ReconnectedMoment=ConnectionStart;        // Save this moment, then don't move a servo for a few ms ....
 
-#ifdef SECOND_TRANSCEIVER    
+#ifdef SECOND_TRANSCEIVER
 #ifdef SECOND_TRANSCEIVER_DEBUG
             Serial.print(millis());                   // These lines are just to help fix this area!!
             Serial.print("  ! Connected on Radio: "); // These lines are just to help fix this area!!
             Serial.println(ThisRadio);                // These lines are just to help fix this area!!
 #endif  // defined (SECOND_TRANSCEIVER)
-#endif  // defined (SECOND_TRANSCEIVER_DEBUG)        
+#endif  // defined (SECOND_TRANSCEIVER_DEBUG)
 
             Connected          = true; // Connection is re-established so return, smiling!
             FailSafeSent       = false;

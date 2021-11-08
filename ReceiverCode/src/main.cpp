@@ -1,3 +1,4 @@
+/** @file ReceiverCode/src/main.cpp */
 // ************************************************** Receiver code **************************************************
 
 #define RECEIVE_TIMEOUT 35 // 15 milliseconds was too short
@@ -183,13 +184,13 @@ void MoveServos()
     if (!Connected){return;}                  // avoid sending rubbish
     MySbus.write(&SbusChannels[0]);
     ModelType=AEROPLANE ;                     // !! fix Later ***************************************
-    if (ModelType==AEROPLANE){                        
+    if (ModelType==AEROPLANE){
         for (j = 0; j < SERVOSUSED; ++j) {
             if (PreviousData[j] != ReceivedData[j]) {
                 MCMServo[j].writeMicroseconds(ReceivedData[j]);
                 PreviousData[j] = ReceivedData[j];
             }
-        } 
+        }
     }
     if (ModelType == HELICOPTER) {
         Serial.println("HELICOPTER!");
@@ -508,8 +509,8 @@ FASTRUN void ReceiveData()
             Reconnect();
             return;
             }
-    if (ReadData()) { 
-         uint8_t NextFrequency = CheckParams();  
+    if (ReadData()) {
+         uint8_t NextFrequency = CheckParams();
         if (PacketNumber >= PacketsPerHop) {
             HopToNextFrequency(NextFrequency);
             DoSensors();
