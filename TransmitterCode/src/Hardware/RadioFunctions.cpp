@@ -2,7 +2,7 @@
 /************************************************************************************************************/
 //                                      Radio Functions
 /************************************************************************************************************/
-
+/** @file ReceiverCode/src/Hardware/RadioFunctions.cpp */
 #include "RadioFunctions.h"
 
 #define SticksView         1
@@ -20,7 +20,7 @@
 #define One_Switch_View    13
 #define Help_View          14
 #define Options_View       15
-#define BINDPIPETIMEOUT    100                       // timeout for switching from Bound to Default pipe 
+#define BINDPIPETIMEOUT    100                       // timeout for switching from Bound to Default pipe
 #define FHSS_RESCUE_BOTTOM 118                       // reduced range for recovery
 #define FHSS_RESCUE_TOP    125                       // reduced range for recovery
 #define UNCOMPRESSEDWORDS  20                        // DATA TO SEND = 40  Bytes
@@ -84,7 +84,7 @@ void TryOtherPipe()
     else
     {
         BoundFlag = true;
-        SetThePipe(NewPipe); 
+        SetThePipe(NewPipe);
     }
 }
 /************************************************************************************************************/
@@ -120,9 +120,9 @@ void SendData()
         }
         if (LostContactFlag) {
             ShowComms();
-                if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {       
-                        TryOtherPipe();                                                 
-                        PipeTimeout=millis();                                                             
+                if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {
+                        TryOtherPipe();
+                        PipeTimeout=millis();
                 }
                 if ((millis() - RecoveryTimer) > 500) {                       // New frequency on recovery every half second
                 NextFrequency = random(FHSS_RESCUE_BOTTOM, FHSS_RESCUE_TOP);  // more limited range for recovery
@@ -133,14 +133,14 @@ void SendData()
         Connected = false;
        // sendtime=micros();                                               // This bool is made true if packet acked
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);         // Compress 32 bytes down to 24
-        
-//  *************************************** SEND ************************************************************************************* 
+
+//  *************************************** SEND *************************************************************************************
         if (Radio1.write(&CompressedData, SizeOfCompressedData)) {       //  *** SEND ***   ("sizeof" doesn't work with externs, hence 2 new vars.)
-//  *************************************** SEND ************************************************************************************* 
+//  *************************************** SEND *************************************************************************************
 
             if (Radio1.isAckPayloadAvailable()) {
                     (Radio1.read(&AckPayload, AckPayloadSize));         //  "sizeof" doesn't work with externs, hence 2 new vars.
-                   
+
                   // acktime=(micros()-sendtime);
                   // Serial.println(acktime);
                     ++RangeTestGoodPackets;
@@ -195,7 +195,7 @@ void ScanAllChannels()
         y2 = y1 + 255;
         y2 = y2 - BlobHeight;
         y2 = y2 - AllChannels[Sc];
-        delayMicroseconds(120); // Minimum!? 
+        delayMicroseconds(120); // Minimum!?
         Radio1.stopListening();
         if (Radio1.testCarrier()) {
             if (AllChannels[Sc] < (250)) {
@@ -296,9 +296,9 @@ void PreScan()
 void InitRadio(uint64_t Pipe)
 {
     Radio1.begin();
-    
-    Radio1.setPALevel(RF24_PA_MAX); 
-    Radio1.setDataRate(RF24_250KBPS); 
+
+    Radio1.setPALevel(RF24_PA_MAX);
+    Radio1.setDataRate(RF24_250KBPS);
     Radio1.enableAckPayload();       // Needed
     Radio1.openWritingPipe(Pipe);    // Current Pipe address used for Binding
     Radio1.setRetries(15, 15);       // Max automatic retries = (15,15). Packet failure will take 0.06 seconds
