@@ -262,8 +262,15 @@ void Reconnect()
 #endif
             }
         }
-        delay (20); // This seems to prevent the occasional lockup??
+        delay (5); // This seems to prevent the occasional lockup??
     }
+}
+
+/************************************************************************************************************/
+
+void LoadTimeStamp(){
+
+
 }
 
 /************************************************************************************************************/
@@ -274,11 +281,17 @@ void LoadAckPayload()
 
     ++AckPayload.Purpose;                               // 0 =  Roll, Pitch, Yaw, Volts.
                                                         // 1 =  Version number
-    if (AckPayload.Purpose > 1) AckPayload.Purpose = 0; // 1 is currently max
+    if (AckPayload.Purpose > 2) AckPayload.Purpose = 0; // 2 is currently max BUT CAN EXPAND TO 127 if needed
     if (AckPayload.Purpose == 1)
     {
         LoadVersioNumber();                             // if 1 send version info AND RX number
     }
+     if (AckPayload.Purpose == 2)
+    {
+        LoadTimeStamp();                                 // if 2 send synch time stamp
+    }
+
+
 }
 
 /**
