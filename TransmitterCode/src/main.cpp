@@ -8,7 +8,7 @@
 #define WATCHDOGTIMEOUT 10000 // 10 Seconds before reboot (32ms -> 500 seconds)
 #define KICKRATE        1000  // Kick once a second (must be between WATCHDOGMAXRATE and WATCHDOGTIMEOUT)
 #define WATCHDOGMAXRATE 500   // 500 ms secs between kicks is max rate allowed
-#define LOSTCONTACTCUTOFF 10  // How many packets to lose before reconnect triggers
+#define LOSTCONTACTCUTOFF 15  // How many packets to lose before reconnect triggers
 
 // UNCOMMENT ANY OF THESE for that bit of debug info
 
