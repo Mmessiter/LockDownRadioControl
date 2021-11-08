@@ -21,7 +21,6 @@
 // #define DB_MODEL_EXCHANGE // Debug MODEL EXCHANGE (by RF link)
 
 
-
 #define CHANNELSUSED       16                  // 16 Channels
 #define MAXMIXES           32                  // 32 mixes
 #define TICKSPERMINUTE     60000               // millis() += 60000 per minute
@@ -5460,6 +5459,8 @@ void ParseAckPayload()
                 break;
             case 1:
                 GetRXVersionNumber();
+                break;
+            default:
                 break;
         }
     }
