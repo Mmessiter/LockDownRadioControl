@@ -1,0 +1,161 @@
+body,
+div.header {
+  /* background-color: white; */
+  background-color: #1e1e1e;
+}
+
+div.header {
+  background-image: unset;
+}
+
+tt,
+code,
+kbd,
+samp {
+  color: white;
+}
+
+body,
+table,
+div,
+p,
+dl {
+  color: white;
+}
+
+.mdescLeft,
+.mdescRight,
+.memItemLeft,
+.memItemRight,
+.memTemplItemLeft,
+.memTemplItemRight,
+.memTemplParams {
+  /* background-color: #F9FAFC; */
+  background-color: #262728;
+}
+
+.memdoc,
+dl.reflist dd {
+  /* background-color: #FFFFFF; */
+  background-color: #000;
+}
+
+.memtitle {
+  background-image: unset;
+  /* background-repeat: repeat-x; */
+  /* background-color: #E2E8F2; */
+  background-color: #2B3648;
+}
+
+.memproto,
+dl.reflist dt {
+  /* background-color: #DFE5F1; */
+  background-color: #2E3748;
+}
+
+a,
+a.code,
+a.line {
+  /* color: #3D578C; */
+  color: #3771E6;
+}
+
+.contents a:visited,
+a.line:visited,
+a.code:visited {
+  /* color: #4665A2; */
+  color: #9F33EA;
+}
+
+h2.groupheader {
+  /* color: #354C7B; */
+  color: #6DD5DF;
+}
+
+span.lineno {
+  /* background-color: #E8E8E8; */
+  background-color: #2D2F2E;
+}
+
+div.line {
+  background-color: #171717;
+}
+
+span.lineno a {
+  /* background-color: #D8D8D8; */
+  background-color: #D8D8D80F;
+}
+
+#powerTip {
+  background-color: #2d2f2e;
+}
+
+.directory tr.even {
+  /* background-color: #F7F8FB; */
+  background-color: #252625;
+}
+
+address {
+  /* color: #2A3D61; */
+  color: #00B6FD;
+}
+
+#nav-tree {
+  /* background-color: #F9FAFC; */
+  background-color: #1B1E24;
+  background-image: unset;
+}
+
+span.comment {
+  /* color: #800000; */
+  color: #168000;
+}
+
+div.fragment {
+  /* background-color: #FBFCFD; */
+  /* border: 1px solid #C4CFE5; */
+  background-color: inherit;
+  border: 1px solid #C4CFE538;
+}
+
+.section.see dt {
+  background-color: #0300d052;
+}
+
+dl.see {
+  margin-left: -7px;
+  padding-left: 3px;
+  border-left: 4px solid;
+  border-color: #0300d0;
+}
+
+.section.note dt {
+  background-color: #d0c00052;
+}
+
+.section.warning dt {
+  background-color: #ff000052;
+}
+
+.section.note,
+.section.warning,
+.section.see {
+  background-color: #2d2d2d;
+}
+
+.section.note dt,
+.section.warning dt,
+.section.see dt {
+  margin-left: -0.1rem;
+  padding-left: 0.1rem;
+}
+
+dl.note,
+dl.warning {
+  padding-bottom: 0.1rem;
+}
+
+dl.section dd {
+  margin-bottom: 6px;
+  margin-left: auto;
+}
