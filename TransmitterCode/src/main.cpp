@@ -5466,7 +5466,7 @@ void ParseAckPayload()
             case 1:
                 GetRXVersionNumber();
                 break;
-            case 3:
+            case 2:               // By this means a time synch is enabled every third packet
                 GetTime();
                 break;
             default:
