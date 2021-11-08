@@ -281,8 +281,8 @@ void LoadTimeStamp(){  // This will load time stamp for return to TX for synch p
     union{
         uint32_t Stamp32; 
         uint8_t Stamp8[4];
-    }Time;
-    
+    }Time;             // union used to allow access to each byte of 32 bit value     
+
     Time.Stamp32                    = millis();
     AckPayload.volt                 = Time.Stamp8[0]; 
     AckPayload.CurrentAltitude      = Time.Stamp8[1]; 
