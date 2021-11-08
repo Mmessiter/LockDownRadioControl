@@ -21,7 +21,7 @@
 #define Help_View          14
 #define Options_View       15
 #define BINDPIPETIMEOUT    100                       // timeout for switching from Bound to Default pipe 
-#define FHSS_RESCUE_BOTTOM 124                       // reduced range for recovery
+#define FHSS_RESCUE_BOTTOM 118                       // reduced range for recovery
 #define FHSS_RESCUE_TOP    125                       // reduced range for recovery
 #define UNCOMPRESSEDWORDS  20                        // DATA TO SEND = 40  Bytes
 #define COMPRESSEDWORDS    UNCOMPRESSEDWORDS * 3 / 4 // COMPRESSED DATA SENT = 30  Bytes
@@ -92,6 +92,9 @@ void TryOtherPipe()
 #define PACEMAKER 5 // MINIMUM Ms between packets of data. - Probably needs to be between 7 and 20
 void SendData()
 {
+   // uint32_t sendtime;
+   // uint32_t acktime;
+
     if ((millis() - TxPace) >= PACEMAKER) {
         TxPace = millis();
         get_new_channels_values(); // Load SendBuffer with new servo positions
@@ -127,15 +130,19 @@ void SendData()
                 RecoveryTimer = millis();
             }
         }
-        Connected = false;                                               // This bool is made true if packet acked
+        Connected = false;
+       // sendtime=micros();                                               // This bool is made true if packet acked
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);         // Compress 32 bytes down to 24
-
+        
 //  *************************************** SEND ************************************************************************************* 
         if (Radio1.write(&CompressedData, SizeOfCompressedData)) {       //  *** SEND ***   ("sizeof" doesn't work with externs, hence 2 new vars.)
 //  *************************************** SEND ************************************************************************************* 
 
             if (Radio1.isAckPayloadAvailable()) {
                     (Radio1.read(&AckPayload, AckPayloadSize));         //  "sizeof" doesn't work with externs, hence 2 new vars.
+                   
+                  // acktime=(micros()-sendtime);
+                  // Serial.println(acktime);
                     ++RangeTestGoodPackets;
                     GapStart = 0;                                       // this is reset to millis() on lost connection
                     LostContactFlag = false;

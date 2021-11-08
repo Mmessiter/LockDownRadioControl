@@ -11,7 +11,7 @@
 #define pinCSN2 20 // NRF2
 #define pinCE2  21 // NRF2
 
-#define FHSS_RESCUE_BOTTOM 124
+#define FHSS_RESCUE_BOTTOM 118
 #define FHSS_RESCUE_TOP    125
 
 #define FAILSAFE_TIMEOUT 2000
