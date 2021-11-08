@@ -5438,6 +5438,8 @@ void GetRXVersionNumber()
     strcpy(ThisRadio,nbuf);
 }
 
+/************************************************************************************************************/
+
 void GetTime(){  // this WILL SOON get the time from Recevier to enable FHSS synch
 
 
