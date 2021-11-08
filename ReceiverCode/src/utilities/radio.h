@@ -56,8 +56,8 @@ struct Payload
      **/
 
     uint8_t Purpose         = 0;
-    uint8_t volt            = 0; /** Voltage of RX battery, if measured. */
-    uint8_t CurrentAltitude = 0; /** Altitude, if measured. */
+    uint8_t volt            = 0;  /** Voltage of RX battery, if measured. */
+    uint8_t CurrentAltitude = 0;  /** Altitude, if measured. */
     uint8_t ReportedPitch   = 0;
     uint8_t ReportedRoll    = 0;
     uint8_t ReportedYaw     = 0;
@@ -282,11 +282,11 @@ void LoadTimeStamp(){  // This will load time stamp for return to TX for synch p
         uint32_t Stamp32; 
         uint8_t Stamp8[4];
     } Time;
-    Time.Stamp32 = millis();
-    AckPayload.volt = Time.Stamp8[0]; 
-    AckPayload.CurrentAltitude = Time.Stamp8[1]; 
-    AckPayload.ReportedRoll = Time.Stamp8[2]; 
-    AckPayload.ReportedYaw = Time.Stamp8[3]; 
+    Time.Stamp32                    = millis();
+    AckPayload.volt                 = Time.Stamp8[0]; 
+    AckPayload.CurrentAltitude      = Time.Stamp8[1]; 
+    AckPayload.ReportedRoll         = Time.Stamp8[2]; 
+    AckPayload.ReportedYaw          = Time.Stamp8[3]; 
 }
  
 /************************************************************************************************************/
