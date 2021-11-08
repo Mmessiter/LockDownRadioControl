@@ -44,9 +44,17 @@ struct Payload
      * AckPayload.ReportedPitch   =  RXVERSION_MAJOR;
      * AckPayload.ReportedRoll    =  RXVERSION_MINOR;
      * AckPayload.ReportedYaw     =  RXVERSION_MINIMUS;
-     * AckPayload.CurrentAltitude =  ThisRadio;  // Radio in current use
+     * AckPayload.CurrentAltitude =  ThisRadio;            // Radio in current use
+     * 
+     * @note If Purpose = 2 then ...
+     * @code
+     * AckPayload.volt            = Time.Stamp8[0];       // Time stamp is 32 BIT divided up here.
+     * AckPayload.CurrentAltitude = Time.Stamp8[1]; 
+     * AckPayload.ReportedRoll    = Time.Stamp8[2]; 
+     * AckPayload.ReportedYaw     = Time.Stamp8[3]; 
      * @endcode
      **/
+
     uint8_t Purpose         = 0;
     uint8_t volt            = 0; /** Voltage of RX battery, if measured. */
     uint8_t CurrentAltitude = 0; /** Altitude, if measured. */
