@@ -5438,6 +5438,11 @@ void GetRXVersionNumber()
     strcpy(ThisRadio,nbuf);
 }
 
+void GetTime(){  // this WILL SOON get the time from Recevier to enable FHSS synch
+
+
+}
+
 /************************************************************************************************************/
 void ParseAckPayload()
 {
@@ -5461,6 +5466,12 @@ void ParseAckPayload()
             case 1:
                 GetRXVersionNumber();
                 break;
+            case 3:
+                GetTime();
+                break;
+            default:
+                break;
+
         }
     }
 }
