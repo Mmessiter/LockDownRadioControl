@@ -1,4 +1,45 @@
-/** @file ReceiverCode/src/main.cpp */
+/** @file ReceiverCode/src/main.cpp
+ * @page RXCODE RecieverCode
+ *
+ * @section rxFeatures Features List
+ * - WORKS ON TEENSY 4.0
+ * - Detects and uses INA219 to read volts
+ * - Detects and uses uses MPU6050 gyro
+ * - Detects and uses BMP280 pressure sensor for altitude
+ * - Detects and uses BNO055 gyro at 28 (Adafruit) or 29 (Cheapo) hex
+ * - Add Simple Kalman filter for PID.
+ * - Gyro Angular velocity used for Quadcopter... a work in progress
+ * - Binding implemented
+ * - SBUS implemented
+ * - Failsafe implemented (after two seconds)
+ * - MODEL MEMORY AUTO SELECTION (REMOVED LATER)
+ * - RESOLUTION INCREASED TO 12 BITS
+ * - Channels incleased to 16, but only 10 PWM outputs.  SBUS can handle all.
+ * - Exponential implemented (at TX end)
+ *
+ * @section rxpinout TEENSY 4.0 PINS
+ * | pin number(s) | purpose |
+ * |---------------|---------|
+ * | 0...7 | PWM SERVOS Channels 1 - 8 |
+ * | 8     | PWM SERVO Channel 9 |
+ * | 9     | SPI CE1  (FOR RADIO1) |
+ * | 10    | SPI CSN1 (FOR RADIO1)  |
+ * | 11    | SPI MOSI (FOR BOTH RADIOS)  |
+ * | 12    | SPI MISO (FOR BOTH RADIOS)  |
+ * | 13    | SPI SCK  (FOR BOTH RADIOS) |
+ * | 14    | SBUS output (TX3) |
+ * | 15    | N/A (RX3) |
+ * | 16    | PWM SERVO Channel 10 |
+ * | 18    | I2C SDA (FOR I2C) |
+ * | 19    | I2C SCK (FOR I2C) |
+ * | 20    | SPI CSN2 (FOR RADIO2)  |
+ * | 21    | SPI CE2 (FOR RADIO2) |
+ * | 22    | IRQ1 (FOR RADIO1) |
+ * | 23    | IRQ2 (FOR RADIO2) |
+ *
+ * @see ReceiverCode/src/main.cpp
+ */
+
 // ************************************************** Receiver code **************************************************
 
 #define RECEIVE_TIMEOUT 35 // 15 milliseconds was too short
@@ -15,44 +56,6 @@ bool USE_BMP280 = false; /** is BMP280 sensor connected */
 #define EXTRAMICROS 500 // for extra resolution driving servos
 #define MINMICROS   1000 - EXTRAMICROS
 #define MAXMICROS   2000 + EXTRAMICROS
-
-/** Features List
- * - WORKS ON TEENSY 4.0
- * - Detects and uses INA219 to read volts
- * - Detects and uses uses MPU6050 gyro
- * - Detects and uses BMP280 pressure sensor for altitude
- * - Detects and uses BNO055 gyro at 28 (Adafruit) or 29 (Cheapo) hex
- * - Add Simple Kalman filter for PID.
- * - Gyro Angular velocity used for Quadcopter... a work in progress
- * - Binding implemented
- * - SBUS implemented
- * - Failsafe implemented (after two seconds)
- * - MODEL MEMORY AUTO SELECTION (REMOVED LATER)
- * - RESOLUTION INCREASED TO 12 BITS
- * - Channels incleased to 16, but only 10 PWM outputs.  SBUS can handle all.
- * - Exponential implemented (at TX end)
- */
-
-/** TEENSY 4.0 PINS
- * | pin number(s) | purpose |
- * |---------------|---------|
- * | 0...7 | PWM SERVOS Channels 1 - 8 |
- * | 8     | PWM SERVO Channel 9 |
- * | 9     | SPI CE1 |  (FOR RADIO1)
- * | 10    | SPI CSN1 | (FOR RADIO1)
- * | 11    | SPI MOSI | (FOR BOTH RADIOS)
- * | 12    | SPI MISO | (FOR BOTH RADIOS)
- * | 13    | SPI SCK |  (FOR BOTH RADIOS)
- * | 14    | SBUS output (TX3) |
- * | 15    | N/A (RX3) |
- * | 16    | PWM SERVO Channel 10 |
- * | 18    | I2C SDA | (FOR I2C)
- * | 19    | I2C SCK | (FOR I2C)
- * | 20    | SPI CSN2 | (FOR RADIO2)
- * | 21    | SPI CE2 | (FOR RADIO2)
- * | 22    | IRQ1 | (FOR RADIO1)
- * | 23    | IRQ2 | (FOR RADIO2)
- */
 
 #include <Servo.h>
 #include <EEPROM.h>
