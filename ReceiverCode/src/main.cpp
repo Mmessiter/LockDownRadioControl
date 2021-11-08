@@ -112,6 +112,7 @@ uint8_t  byte2              = 0;
 bool     GyroInstalled      = false;
 uint32_t ReconnectedMoment;
 
+
 /** Load project defaults from EEPROM into the ReceivedData buffer. */
 void LoadFailSafeData()
 {
@@ -507,7 +508,7 @@ FASTRUN void ReceiveData()
             Reconnect();
             return;
             }
-    if (ReadData()) {
+    if (ReadData()) { 
          uint8_t NextFrequency = CheckParams();  
         if (PacketNumber >= PacketsPerHop) {
             HopToNextFrequency(NextFrequency);
