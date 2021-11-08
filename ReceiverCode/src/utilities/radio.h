@@ -268,11 +268,19 @@ void Reconnect()
 
 /************************************************************************************************************/
 
-void LoadTimeStamp(){
+void LoadTimeStamp(){  // This will load time stamp for return to TX for synch purposes heer
 
-
+    union Time_tag {
+        uint32_t Stamp32; 
+        uint8_t Stamp8[4];
+    } Time;
+    Time.Stamp32 = millis();
+    AckPayload.volt = Time.Stamp8[0]; 
+    AckPayload.CurrentAltitude = Time.Stamp8[1]; 
+    AckPayload.ReportedRoll = Time.Stamp8[2]; 
+    AckPayload.ReportedYaw = Time.Stamp8[3]; 
 }
-
+ 
 /************************************************************************************************************/
 
 void LoadAckPayload()
