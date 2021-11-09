@@ -297,14 +297,14 @@ void ShowHopDurationEtc(uint8_t freq)
     PacketStartTime = millis();
 }
 
-void ClearGyroData()
+void ClearAckPayload()
 {
-    AckPayload.volt = 0;
-    AckPayload.ReportedPitch = 0;
-    AckPayload.ReportedRoll  = 0;
-    AckPayload.ReportedYaw   = 0;
+    AckPayload.volt              = 0;
+    AckPayload.ReportedPitch     = 0;
+    AckPayload.ReportedRoll      = 0;
+    AckPayload.ReportedYaw       = 0;
     AckPayload.CurrentAltitude   = 0;
-    AckPayload.Purpose |= 0x80;
+    AckPayload.Purpose          |= 0x80;
 }
 
 /************************************************************************************************************/

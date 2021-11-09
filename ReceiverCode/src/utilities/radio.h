@@ -78,7 +78,7 @@ uint16_t PreviousData[UNCOMPRESSEDWORDS]; /** Previously received data (used for
 extern void FailSafe(); // defined in main.cpp
 extern uint32_t ReconnectedMoment;
 extern bool BoundFlag;
-extern void ClearGyroData();
+extern void ClearAckPayload();
 /************************************************************************************************************/
 
 void SetNewPipe()
@@ -296,12 +296,12 @@ void LoadTimeStamp(){  // This will load time stamp for return to TX for synch p
 
 void LoadAckPayload()
 {
-    
-    AckPayload.Purpose &= 0x7F;                         // Clear hi bit (=do not ignore)
-    
+    AckPayload.Purpose &= 0x7F;                         // Clear hi bit ( = do not ignore)
+
     ++AckPayload.Purpose;                               // 0 =  Roll, Pitch, Yaw, Volts.
                                                         // 1 =  Version number
     if (AckPayload.Purpose > 2) AckPayload.Purpose = 0; // 2 is currently max BUT CAN EXPAND TO 127 if needed
+    
     switch (AckPayload.Purpose){
             case 1:
                 LoadVersioNumber();                     // if 1 send version info AND RX number
@@ -310,7 +310,7 @@ void LoadAckPayload()
                 LoadTimeStamp();                        // if 2 send synch time stamp
                 break;
             default:
-                ClearGyroData();
+                ClearAckPayload();
                 break;
     }
 }
