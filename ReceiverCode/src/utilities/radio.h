@@ -297,21 +297,22 @@ void LoadTimeStamp(){  // This will load time stamp for return to TX for synch p
 void LoadAckPayload()
 {
     
-    AckPayload.Purpose &= 0x7F; // Clear hi bit (=do not ignore)
+    AckPayload.Purpose &= 0x7F;                         // Clear hi bit (=do not ignore)
+    
     ++AckPayload.Purpose;                               // 0 =  Roll, Pitch, Yaw, Volts.
                                                         // 1 =  Version number
     if (AckPayload.Purpose > 2) AckPayload.Purpose = 0; // 2 is currently max BUT CAN EXPAND TO 127 if needed
     switch (AckPayload.Purpose){
             case 1:
-                LoadVersioNumber();    // if 1 send version info AND RX number
+                LoadVersioNumber();                     // if 1 send version info AND RX number
                 break;
             case 2: 
-                LoadTimeStamp();      // if 2 send synch time stamp
+                LoadTimeStamp();                        // if 2 send synch time stamp
                 break;
             default:
                 ClearGyroData();
+                break;
     }
-
 }
 
 /**

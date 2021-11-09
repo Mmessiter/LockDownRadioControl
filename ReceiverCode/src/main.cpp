@@ -299,6 +299,7 @@ void ShowHopDurationEtc(uint8_t freq)
 
 void ClearGyroData()
 {
+    AckPayload.volt = 0;
     AckPayload.ReportedPitch = 0;
     AckPayload.ReportedRoll  = 0;
     AckPayload.ReportedYaw   = 0;
