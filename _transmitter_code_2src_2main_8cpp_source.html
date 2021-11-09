@@ -5456,9 +5456,9 @@ $(document).ready(function(){initNavTree('_transmitter_code_2src_2main_8cpp_sour
 <div class="line"><a name="l05465"></a><span class="lineno"> 5465</span>&#160;    Time.Stamp8[1] = <a class="code" href="_transmitter_code_2src_2main_8cpp.html#a30a079d60b4731ce1531091ffe56a703">AckPayload</a>.<a class="code" href="struct_payload.html#acb14cb9ecd95c6f8613a9ab66153e164">CurrentAltitude</a>;</div>
 <div class="line"><a name="l05466"></a><span class="lineno"> 5466</span>&#160;    Time.Stamp8[2] = <a class="code" href="_transmitter_code_2src_2main_8cpp.html#a30a079d60b4731ce1531091ffe56a703">AckPayload</a>.<a class="code" href="struct_payload.html#a3557de48fcba6c5414e516bd60b31ff4">Roll</a>; </div>
 <div class="line"><a name="l05467"></a><span class="lineno"> 5467</span>&#160;    Time.Stamp8[3] = <a class="code" href="_transmitter_code_2src_2main_8cpp.html#a30a079d60b4731ce1531091ffe56a703">AckPayload</a>.<a class="code" href="struct_payload.html#affc598d90dd6a64cc992c87619715810">Yaw</a>;  </div>
-<div class="line"><a name="l05468"></a><span class="lineno"> 5468</span>&#160;    Serial.println (Time.Stamp32);</div>
-<div class="line"><a name="l05469"></a><span class="lineno"> 5469</span>&#160;    </div>
-<div class="line"><a name="l05470"></a><span class="lineno"> 5470</span>&#160;    <a class="code" href="_receiver_code_2src_2main_8cpp.html#a5a26715a721e1073d6ae00498282c056">ClearAckPayload</a>();</div>
+<div class="line"><a name="l05468"></a><span class="lineno"> 5468</span>&#160;    <a class="code" href="_receiver_code_2src_2main_8cpp.html#a5a26715a721e1073d6ae00498282c056">ClearAckPayload</a>();</div>
+<div class="line"><a name="l05469"></a><span class="lineno"> 5469</span>&#160;    Serial.println  (Time.Stamp32);   <span class="comment">// Time.Stamp32 now has time from receiver!</span></div>
+<div class="line"><a name="l05470"></a><span class="lineno"> 5470</span>&#160; </div>
 <div class="line"><a name="l05471"></a><span class="lineno"> 5471</span>&#160;}</div>
 <div class="line"><a name="l05472"></a><span class="lineno"> 5472</span>&#160; </div>
 <div class="line"><a name="l05473"></a><span class="lineno"> 5473</span>&#160;<span class="comment">/************************************************************************************************************/</span></div>
