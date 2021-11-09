@@ -5453,7 +5453,7 @@ void ClearAckPayload()
 
 /************************************************************************************************************/
 
-void GetRXTime(){  // this WILL SOON get the time from Recevier to enable FHSS synch
+void GetRXTime(){  // this gets the time from Recevier to enable FHSS synch
     union
     {
         uint32_t Stamp32; 
