@@ -5439,14 +5439,16 @@ void GetRXVersionNumber()
 }
 
 
+/************************************************************************************************************/
+
 void ClearAckPayload()
 {
-    AckPayload.volt = 0;
-    AckPayload.Pitch = 0;
-    AckPayload.Roll  = 0;
-    AckPayload.Yaw   = 0;
-    AckPayload.CurrentAltitude   = 0;
-    AckPayload.Purpose |= 0x80;
+    AckPayload.volt             = 0;
+    AckPayload.Pitch            = 0;
+    AckPayload.Roll             = 0;
+    AckPayload.Yaw              = 0;
+    AckPayload.CurrentAltitude  = 0;
+    AckPayload.Purpose         |= 0x80;
 }
 
 /************************************************************************************************************/
