@@ -297,6 +297,8 @@ void ShowHopDurationEtc(uint8_t freq)
     PacketStartTime = millis();
 }
 
+/************************************************************************************************************/
+
 void ClearAckPayload()
 {
     AckPayload.volt              = 0;
