@@ -5453,7 +5453,7 @@ void ClearAckPayload()
 
 /************************************************************************************************************/
 
-void GetTime(){  // this WILL SOON get the time from Recevier to enable FHSS synch
+void GetRXTime(){  // this WILL SOON get the time from Recevier to enable FHSS synch
     union
     {
         uint32_t Stamp32; 
@@ -5466,7 +5466,7 @@ void GetTime(){  // this WILL SOON get the time from Recevier to enable FHSS syn
     Time.Stamp8[2] = AckPayload.Roll; 
     Time.Stamp8[3] = AckPayload.Yaw;  
     ClearAckPayload();
-    Serial.println  (Time.Stamp32);   // Time.Stamp32 now has time from receiver!
+    //Serial.println  (Time.Stamp32);   // Time.Stamp32 now has time from receiver!
 
 }
 
@@ -5494,7 +5494,7 @@ void ParseAckPayload()
                 GetRXVersionNumber();
                 break;
             case 2:               // By this means a time synch is enabled every third packet
-                GetTime();
+                GetRXTime();
                 break;
             default:
                 break;
