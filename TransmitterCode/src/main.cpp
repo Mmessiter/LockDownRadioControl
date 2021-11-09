@@ -449,7 +449,7 @@ bool     FailSafeChannel[CHANNELSUSED];
 bool     SaveFailSafeNow                = false;
 char     ChannelNames[CHANNELSUSED][11] = {{"Aileron"}, {"Elevator"}, {"Throttle"}, {"Rudder"}, {"Gear"}, {"AUX1"}, {"AUX2"}, {"AUX3"}, {"AUX4"}, {"AUX5"}, {"AUX6"}, {"AUX7"}, {"AUX8"}, {"AUX9"}, {"AUX10"}, {"AUX11"}};
 
-bool     VoltsDetected = true;
+bool     VoltsDetected = false;
 bool     TXWarningFlag = false;
 bool     RXWarningFlag = false;
 bool     ReInit        = false;
@@ -5439,8 +5439,9 @@ void GetRXVersionNumber()
 }
 
 
-void ClearGyroData()
+void ClearAckPayload()
 {
+    AckPayload.volt = 0;
     AckPayload.Pitch = 0;
     AckPayload.Roll  = 0;
     AckPayload.Yaw   = 0;
@@ -5451,9 +5452,20 @@ void ClearGyroData()
 /************************************************************************************************************/
 
 void GetTime(){  // this WILL SOON get the time from Recevier to enable FHSS synch
+    union
+    {
+        uint32_t Stamp32; 
+        uint8_t Stamp8[4];
+    }Time;             // union used to allow access to each byte of 32 bit value     
 
     
+    Time.Stamp8[0] = AckPayload.volt;
+    Time.Stamp8[1] = AckPayload.CurrentAltitude;
+    Time.Stamp8[2] = AckPayload.Roll; 
+    Time.Stamp8[3] = AckPayload.Yaw;  
+    Serial.println (Time.Stamp32);
     
+    ClearAckPayload();
 }
 
 /************************************************************************************************************/
