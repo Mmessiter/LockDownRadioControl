@@ -20,7 +20,7 @@ var _receiver_code_2src_2main_8cpp =
     [ "AttachServos", "_receiver_code_2src_2main_8cpp.html#a0cbfd712ab3bd8f654bc19400fd704bd", null ],
     [ "BindModel", "_receiver_code_2src_2main_8cpp.html#aa0c6905579a33aef28d737d43676cbbd", null ],
     [ "CheckParams", "_receiver_code_2src_2main_8cpp.html#a59968cdbd7e86fa4bcb9baeb06c671d1", null ],
-    [ "ClearGyroData", "_receiver_code_2src_2main_8cpp.html#ac44843459ed7a6434be6e3fe6c6a3169", null ],
+    [ "ClearAckPayload", "_receiver_code_2src_2main_8cpp.html#a5a26715a721e1073d6ae00498282c056", null ],
     [ "DoBinding", "_receiver_code_2src_2main_8cpp.html#af4a2e182cd3b86ca9765a08100cfb14a", null ],
     [ "DoSensors", "_receiver_code_2src_2main_8cpp.html#a6fa3cec5deb1ccf813e013189b16e22f", null ],
     [ "FailSafe", "_receiver_code_2src_2main_8cpp.html#a42318598726782ebb2e1857f167c8cda", null ],

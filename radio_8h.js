@@ -10,7 +10,7 @@ var radio_8h =
     [ "pinCSN1", "radio_8h.html#a047f5702802c2bbf4918e9318f3e6a56", null ],
     [ "pinCSN2", "radio_8h.html#a76971ffb50fdfd6bc8e2c3c6ac339459", null ],
     [ "UNCOMPRESSEDWORDS", "radio_8h.html#a0c40a351a0c0e01fbd5e5b1b0187eb48", null ],
-    [ "ClearGyroData", "radio_8h.html#ac44843459ed7a6434be6e3fe6c6a3169", null ],
+    [ "ClearAckPayload", "radio_8h.html#a5a26715a721e1073d6ae00498282c056", null ],
     [ "Decompress", "radio_8h.html#a8e1f4879c351e462d6bca620ae4279e2", null ],
     [ "FailSafe", "radio_8h.html#a42318598726782ebb2e1857f167c8cda", null ],
     [ "GetNewPipe", "radio_8h.html#ad8b2470258da4e397b34d67ffce9ebaf", null ],
