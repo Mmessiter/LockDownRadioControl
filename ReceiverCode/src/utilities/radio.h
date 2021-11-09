@@ -78,6 +78,7 @@ uint16_t PreviousData[UNCOMPRESSEDWORDS]; /** Previously received data (used for
 extern void FailSafe(); // defined in main.cpp
 extern uint32_t ReconnectedMoment;
 extern bool BoundFlag;
+extern void ClearGyroData();
 /************************************************************************************************************/
 
 void SetNewPipe()
@@ -283,11 +284,11 @@ void LoadTimeStamp(){  // This will load time stamp for return to TX for synch p
         uint8_t Stamp8[4];
     }Time;             // union used to allow access to each byte of 32 bit value     
 
-   // Time.Stamp32                    = millis();
-   // AckPayload.volt                 = Time.Stamp8[0]; 
-   // AckPayload.CurrentAltitude      = Time.Stamp8[1]; 
-   // AckPayload.ReportedRoll         = Time.Stamp8[2]; 
-   // AckPayload.ReportedYaw          = Time.Stamp8[3]; 
+    Time.Stamp32                    = millis();
+    AckPayload.volt                 = Time.Stamp8[0]; 
+    AckPayload.CurrentAltitude      = Time.Stamp8[1]; 
+    AckPayload.ReportedRoll         = Time.Stamp8[2]; 
+    AckPayload.ReportedYaw          = Time.Stamp8[3]; 
 }
  
 /************************************************************************************************************/
@@ -295,6 +296,7 @@ void LoadTimeStamp(){  // This will load time stamp for return to TX for synch p
 void LoadAckPayload()
 {
     AckPayload.Purpose &= 0x7F; // Clear hi bit (=do not ignore)
+    ClearGyroData();
 
     ++AckPayload.Purpose;                               // 0 =  Roll, Pitch, Yaw, Volts.
                                                         // 1 =  Version number

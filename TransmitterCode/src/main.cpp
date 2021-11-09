@@ -5438,11 +5438,22 @@ void GetRXVersionNumber()
     strcpy(ThisRadio,nbuf);
 }
 
+
+void ClearGyroData()
+{
+    AckPayload.Pitch = 0;
+    AckPayload.Roll  = 0;
+    AckPayload.Yaw   = 0;
+    AckPayload.CurrentAltitude   = 0;
+    AckPayload.Purpose |= 0x80;
+}
+
 /************************************************************************************************************/
 
 void GetTime(){  // this WILL SOON get the time from Recevier to enable FHSS synch
 
-
+    
+    
 }
 
 /************************************************************************************************************/
@@ -5475,6 +5486,7 @@ void ParseAckPayload()
                 break;
 
         }
+        ClearGyroData();
     }
 }
 /************************************************************************************************************/

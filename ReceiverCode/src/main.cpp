@@ -318,7 +318,6 @@ bool ReadData()
         LastConnectionMoment = millis();
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // Send telemetry (actual length plus 0)
         CurrentRadio->read(&CompressedData, sizeof(CompressedData));   // Get Data
-        if (AckPayload.Purpose > 0 && !GyroInstalled) ClearGyroData();
         Decompress(ReceivedData, CompressedData, UNCOMPRESSEDWORDS); // decompress data
         FailSafeDataLoaded = false;
         MapToSBUS();
