@@ -279,7 +279,8 @@ void Reconnect()
 
 void LoadTimeStamp(){  // This will load time stamp for return to TX for synch purposes heer
 
-    union{
+    union
+    {
         uint32_t Stamp32; 
         uint8_t Stamp8[4];
     }Time;             // union used to allow access to each byte of 32 bit value     
@@ -295,21 +296,21 @@ void LoadTimeStamp(){  // This will load time stamp for return to TX for synch p
 
 void LoadAckPayload()
 {
+    
     AckPayload.Purpose &= 0x7F; // Clear hi bit (=do not ignore)
-    ClearGyroData();
-
     ++AckPayload.Purpose;                               // 0 =  Roll, Pitch, Yaw, Volts.
                                                         // 1 =  Version number
     if (AckPayload.Purpose > 2) AckPayload.Purpose = 0; // 2 is currently max BUT CAN EXPAND TO 127 if needed
-    if (AckPayload.Purpose == 1)
-    {
-        LoadVersioNumber();                             // if 1 send version info AND RX number
+    switch (AckPayload.Purpose){
+            case 1:
+                LoadVersioNumber();    // if 1 send version info AND RX number
+                break;
+            case 2: 
+                LoadTimeStamp();      // if 2 send synch time stamp
+                break;
+            default:
+                ClearGyroData();
     }
-     if (AckPayload.Purpose == 2)
-    {
-        LoadTimeStamp();                                 // if 2 send synch time stamp
-    }
-
 
 }
 
