@@ -4149,6 +4149,7 @@ void Button_was_pressed()
             ClearText();
             SaveAllParameters(); // TODO HEER - mixes only
             SendCommand(page_SetupView);
+            CurrentMode = NORMAL;
             DoScanEnd();
         }
 
@@ -4741,7 +4742,7 @@ void Button_was_pressed()
                    SetupFlag=true;
                }
             }
-            SendCommand(page_SetupView);
+            SendCommand(page_SetupView); //
         }
 
         if (InStrng(GoFrontView, WordsIn) > 0) {
