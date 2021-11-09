@@ -5465,9 +5465,9 @@ void GetTime(){  // this WILL SOON get the time from Recevier to enable FHSS syn
     Time.Stamp8[1] = AckPayload.CurrentAltitude;
     Time.Stamp8[2] = AckPayload.Roll; 
     Time.Stamp8[3] = AckPayload.Yaw;  
-    Serial.println (Time.Stamp32);
-    
     ClearAckPayload();
+    Serial.println  (Time.Stamp32);   // Time.Stamp32 now has time from receiver!
+
 }
 
 /************************************************************************************************************/
