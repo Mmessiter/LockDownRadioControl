@@ -116,6 +116,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "CheckSwitch", "_transmitter_code_2src_2main_8cpp.html#afcd616e96ae28694a7fa2197ad74c6fe", null ],
     [ "CheckTimer", "_transmitter_code_2src_2main_8cpp.html#addfc131a271de92cb52d869fde35729e", null ],
     [ "ClearBox", "_transmitter_code_2src_2main_8cpp.html#a5aeea47b9d855ae9911bae1115d02de7", null ],
+    [ "ClearGyroData", "_transmitter_code_2src_2main_8cpp.html#ac44843459ed7a6434be6e3fe6c6a3169", null ],
     [ "ClearText", "_transmitter_code_2src_2main_8cpp.html#af0852678d8e89501acee8951f09d3b43", null ],
     [ "CloseModelsFile", "_transmitter_code_2src_2main_8cpp.html#a6922974b734cfe3a511e074a2d6ac33c", null ],
     [ "DecDate", "_transmitter_code_2src_2main_8cpp.html#ac00389a3b76e3ced4517c6ad4147e86a", null ],

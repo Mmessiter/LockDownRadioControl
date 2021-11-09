@@ -10,7 +10,7 @@ var searchData=
   ['checkswitch_686',['CheckSwitch',['../_transmitter_code_2src_2main_8cpp.html#afcd616e96ae28694a7fa2197ad74c6fe',1,'main.cpp']]],
   ['checktimer_687',['CheckTimer',['../_radio_functions_8h.html#addfc131a271de92cb52d869fde35729e',1,'CheckTimer():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#addfc131a271de92cb52d869fde35729e',1,'CheckTimer():&#160;main.cpp']]],
   ['clearbox_688',['ClearBox',['../_transmitter_code_2src_2main_8cpp.html#a5aeea47b9d855ae9911bae1115d02de7',1,'main.cpp']]],
-  ['cleargyrodata_689',['ClearGyroData',['../_receiver_code_2src_2main_8cpp.html#ac44843459ed7a6434be6e3fe6c6a3169',1,'main.cpp']]],
+  ['cleargyrodata_689',['ClearGyroData',['../_receiver_code_2src_2main_8cpp.html#ac44843459ed7a6434be6e3fe6c6a3169',1,'ClearGyroData():&#160;main.cpp'],['../radio_8h.html#ac44843459ed7a6434be6e3fe6c6a3169',1,'ClearGyroData():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#ac44843459ed7a6434be6e3fe6c6a3169',1,'ClearGyroData():&#160;main.cpp']]],
   ['cleartext_690',['ClearText',['../_transmitter_code_2src_2main_8cpp.html#af0852678d8e89501acee8951f09d3b43',1,'main.cpp']]],
   ['closemodelsfile_691',['CloseModelsFile',['../_transmitter_code_2src_2main_8cpp.html#a6922974b734cfe3a511e074a2d6ac33c',1,'main.cpp']]],
   ['compress_692',['Compress',['../_radio_functions_8cpp.html#ab46df249e949de237fc3bacdc5225934',1,'RadioFunctions.cpp']]]
