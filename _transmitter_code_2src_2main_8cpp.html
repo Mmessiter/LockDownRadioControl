@@ -587,8 +587,8 @@ Functions</h2></td></tr>
 <tr class="separator:ab0af36f3442ad4f2d0b716c14c7d6085"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4f813935d8fe58355228cbbf25e12f96"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_transmitter_code_2src_2main_8cpp.html#a4f813935d8fe58355228cbbf25e12f96">GetRXVersionNumber</a> ()</td></tr>
 <tr class="separator:a4f813935d8fe58355228cbbf25e12f96"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac44843459ed7a6434be6e3fe6c6a3169"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_transmitter_code_2src_2main_8cpp.html#ac44843459ed7a6434be6e3fe6c6a3169">ClearGyroData</a> ()</td></tr>
-<tr class="separator:ac44843459ed7a6434be6e3fe6c6a3169"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a26715a721e1073d6ae00498282c056"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_transmitter_code_2src_2main_8cpp.html#a5a26715a721e1073d6ae00498282c056">ClearAckPayload</a> ()</td></tr>
+<tr class="separator:a5a26715a721e1073d6ae00498282c056"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab6bd4fd91e0cddba7ab2e37ed6777832"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_transmitter_code_2src_2main_8cpp.html#ab6bd4fd91e0cddba7ab2e37ed6777832">GetTime</a> ()</td></tr>
 <tr class="separator:ab6bd4fd91e0cddba7ab2e37ed6777832"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a230e862a4da0f66746b6b3afba6bd77a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_transmitter_code_2src_2main_8cpp.html#a230e862a4da0f66746b6b3afba6bd77a">ParseAckPayload</a> ()</td></tr>
@@ -1011,7 +1011,7 @@ Variables</h2></td></tr>
 <tr class="separator:acd6754de95b605bb65a52a86e96121f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0c9a9276cbc69bce973fabbed4a9686b"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_transmitter_code_2src_2main_8cpp.html#a0c9a9276cbc69bce973fabbed4a9686b">ChannelNames</a> [<a class="el" href="_transmitter_code_2src_2main_8cpp.html#ad143c01c2b36424b292b568f48cbe014">CHANNELSUSED</a>][11] = {{&quot;Aileron&quot;}, {&quot;Elevator&quot;}, {&quot;Throttle&quot;}, {&quot;Rudder&quot;}, {&quot;Gear&quot;}, {&quot;AUX1&quot;}, {&quot;AUX2&quot;}, {&quot;AUX3&quot;}, {&quot;AUX4&quot;}, {&quot;AUX5&quot;}, {&quot;AUX6&quot;}, {&quot;AUX7&quot;}, {&quot;AUX8&quot;}, {&quot;AUX9&quot;}, {&quot;AUX10&quot;}, {&quot;AUX11&quot;}}</td></tr>
 <tr class="separator:a0c9a9276cbc69bce973fabbed4a9686b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6dfccb2c71ac97313ccc4248d382f6a3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_transmitter_code_2src_2main_8cpp.html#a6dfccb2c71ac97313ccc4248d382f6a3">VoltsDetected</a> = true</td></tr>
+<tr class="memitem:a6dfccb2c71ac97313ccc4248d382f6a3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_transmitter_code_2src_2main_8cpp.html#a6dfccb2c71ac97313ccc4248d382f6a3">VoltsDetected</a> = false</td></tr>
 <tr class="separator:a6dfccb2c71ac97313ccc4248d382f6a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a31cbd43a34f258e0078a06b2d07a4b72"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_transmitter_code_2src_2main_8cpp.html#a31cbd43a34f258e0078a06b2d07a4b72">TXWarningFlag</a> = false</td></tr>
 <tr class="separator:a31cbd43a34f258e0078a06b2d07a4b72"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -3047,7 +3047,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l05491">5491</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l05503">5503</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -3146,6 +3146,31 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
+<a id="a5a26715a721e1073d6ae00498282c056"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a26715a721e1073d6ae00498282c056">&#9670;&nbsp;</a></span>ClearAckPayload()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ClearAckPayload </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l05442">5442</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" frameborder="0" src="_transmitter_code_2src_2main_8cpp_a5a26715a721e1073d6ae00498282c056_icgraph.svg" width="666" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
+</div>
+
+</div>
+</div>
 <a id="a5aeea47b9d855ae9911bae1115d02de7"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5aeea47b9d855ae9911bae1115d02de7">&#9670;&nbsp;</a></span>ClearBox()</h2>
 
@@ -3174,25 +3199,6 @@ Here is the caller graph for this function:</div>
 <div class="center"><iframe scrolling="no" frameborder="0" src="_transmitter_code_2src_2main_8cpp_a5aeea47b9d855ae9911bae1115d02de7_icgraph.svg" width="996" height="114"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
-
-</div>
-</div>
-<a id="ac44843459ed7a6434be6e3fe6c6a3169"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac44843459ed7a6434be6e3fe6c6a3169">&#9670;&nbsp;</a></span>ClearGyroData()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void ClearGyroData </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l05442">5442</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -4307,7 +4313,13 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l05453">5453</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l05454">5454</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" frameborder="0" src="_transmitter_code_2src_2main_8cpp_ab6bd4fd91e0cddba7ab2e37ed6777832_cgraph.svg" width="252" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
+</div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -4833,7 +4845,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l05516">5516</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l05528">5528</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -5085,11 +5097,11 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l05460">5460</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l05472">5472</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="_transmitter_code_2src_2main_8cpp_a230e862a4da0f66746b6b3afba6bd77a_cgraph.svg" width="422" height="139"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="_transmitter_code_2src_2main_8cpp_a230e862a4da0f66746b6b3afba6bd77a_cgraph.svg" width="504" height="139"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 <div class="dynheader">
@@ -10432,7 +10444,7 @@ Here is the caller graph for this function:</div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool VoltsDetected = true</td>
+          <td class="memname">bool VoltsDetected = false</td>
         </tr>
       </table>
 </div><div class="memdoc">
