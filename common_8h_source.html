@@ -106,33 +106,34 @@ $(document).ready(function(){initNavTree('common_8h_source.html',''); initResiza
 <div class="line"><a name="l00008"></a><span class="lineno"><a class="line" href="common_8h.html#a2b147d5155fcf962e9f1c4885b32c67d">    8</a></span>&#160;<span class="preprocessor">#define RXVERSION_MAJOR   1</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno"><a class="line" href="common_8h.html#adeb76229aa4087c3bc1e1fd17bd865b2">    9</a></span>&#160;<span class="preprocessor">#define RXVERSION_MINOR   1</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno"><a class="line" href="common_8h.html#a46d5105ccf92f7e44b10af6fd51772a8">   10</a></span>&#160;<span class="preprocessor">#define RXVERSION_MINIMUS 5 </span><span class="comment">// Nov 10th 2021</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno"><a class="line" href="common_8h.html#ac5f10e9a5bbd8efbba3eb8ec5061a8d9">   11</a></span>&#160;<span class="preprocessor">#define NEW_FHSS</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">//#define NEW_FHSS</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno"><a class="line" href="common_8h.html#a2b9a6e894d695923628defd04ed70479">   12</a></span>&#160;<span class="preprocessor">#define OLD_FHSS</span></div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">// #define DEBUG</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">// #define DB_SENSORS</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">// #define DB_PID</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">// #define DB_BIND</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">// #define DB_FAILSAFE</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="common_8h.html#a2894a289b91f0bc795407decb6e4c39d">   19</a></span>&#160;<span class="preprocessor">  #define SECOND_TRANSCEIVER              </span><span class="comment">// *** DON&#39;T FORGET TO SET THIS ONE!!! ***</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">// #define SECOND_TRANSCEIVER_DEBUG</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="common_8h.html#ae6d822db2ca02c3f6fa690311b580c93">   22</a></span>&#160;<span class="keywordtype">int</span>  <a class="code" href="common_8h.html#ae6d822db2ca02c3f6fa690311b580c93">LastConnectionMoment</a> = 0;</div>
-<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="common_8h.html#a332eaa61dd85cd649cf62de2345e246e">   23</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="common_8h.html#a332eaa61dd85cd649cf62de2345e246e">FailSafeSave</a>         = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="common_8h.html#a97bbae82012a7c41f47dcb8ce8a48a90">   24</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="common_8h.html#a97bbae82012a7c41f47dcb8ce8a48a90">FailSafeSent</a>         = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="comment">/************************************************************************************************************/</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="common_8h.html#a235d91d2b354c3ce98152e3367ff0fb8">   28</a></span>&#160;uint8_t <a class="code" href="common_8h.html#a235d91d2b354c3ce98152e3367ff0fb8">LoadModelNumber</a>()</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;{</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="keywordflow">return</span> EEPROM.read(28);</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;}</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// defined (_SRC_UTILITIES_COMMON_H)</span></div>
-<div class="ttc" id="acommon_8h_html_a235d91d2b354c3ce98152e3367ff0fb8"><div class="ttname"><a href="common_8h.html#a235d91d2b354c3ce98152e3367ff0fb8">LoadModelNumber</a></div><div class="ttdeci">uint8_t LoadModelNumber()</div><div class="ttdef"><b>Definition:</b> <a href="common_8h_source.html#l00028">common.h:28</a></div></div>
-<div class="ttc" id="acommon_8h_html_a332eaa61dd85cd649cf62de2345e246e"><div class="ttname"><a href="common_8h.html#a332eaa61dd85cd649cf62de2345e246e">FailSafeSave</a></div><div class="ttdeci">bool FailSafeSave</div><div class="ttdef"><b>Definition:</b> <a href="common_8h_source.html#l00023">common.h:23</a></div></div>
-<div class="ttc" id="acommon_8h_html_a97bbae82012a7c41f47dcb8ce8a48a90"><div class="ttname"><a href="common_8h.html#a97bbae82012a7c41f47dcb8ce8a48a90">FailSafeSent</a></div><div class="ttdeci">bool FailSafeSent</div><div class="ttdef"><b>Definition:</b> <a href="common_8h_source.html#l00024">common.h:24</a></div></div>
-<div class="ttc" id="acommon_8h_html_ae6d822db2ca02c3f6fa690311b580c93"><div class="ttname"><a href="common_8h.html#ae6d822db2ca02c3f6fa690311b580c93">LastConnectionMoment</a></div><div class="ttdeci">int LastConnectionMoment</div><div class="ttdef"><b>Definition:</b> <a href="common_8h_source.html#l00022">common.h:22</a></div></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">// #define DEBUG</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">// #define DB_SENSORS</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">// #define DB_PID</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">// #define DB_BIND</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">// #define DB_FAILSAFE</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="common_8h.html#a2894a289b91f0bc795407decb6e4c39d">   20</a></span>&#160;<span class="preprocessor">  #define SECOND_TRANSCEIVER              </span><span class="comment">// *** DON&#39;T FORGET TO SET THIS ONE!!! ***</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">// #define SECOND_TRANSCEIVER_DEBUG</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
+<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="common_8h.html#ae6d822db2ca02c3f6fa690311b580c93">   23</a></span>&#160;<span class="keywordtype">int</span>  <a class="code" href="common_8h.html#ae6d822db2ca02c3f6fa690311b580c93">LastConnectionMoment</a> = 0;</div>
+<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="common_8h.html#a332eaa61dd85cd649cf62de2345e246e">   24</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="common_8h.html#a332eaa61dd85cd649cf62de2345e246e">FailSafeSave</a>         = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="common_8h.html#a97bbae82012a7c41f47dcb8ce8a48a90">   25</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="common_8h.html#a97bbae82012a7c41f47dcb8ce8a48a90">FailSafeSent</a>         = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="comment">/************************************************************************************************************/</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
+<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="common_8h.html#a235d91d2b354c3ce98152e3367ff0fb8">   29</a></span>&#160;uint8_t <a class="code" href="common_8h.html#a235d91d2b354c3ce98152e3367ff0fb8">LoadModelNumber</a>()</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;{</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="keywordflow">return</span> EEPROM.read(28);</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;}</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// defined (_SRC_UTILITIES_COMMON_H)</span></div>
+<div class="ttc" id="acommon_8h_html_a235d91d2b354c3ce98152e3367ff0fb8"><div class="ttname"><a href="common_8h.html#a235d91d2b354c3ce98152e3367ff0fb8">LoadModelNumber</a></div><div class="ttdeci">uint8_t LoadModelNumber()</div><div class="ttdef"><b>Definition:</b> <a href="common_8h_source.html#l00029">common.h:29</a></div></div>
+<div class="ttc" id="acommon_8h_html_a332eaa61dd85cd649cf62de2345e246e"><div class="ttname"><a href="common_8h.html#a332eaa61dd85cd649cf62de2345e246e">FailSafeSave</a></div><div class="ttdeci">bool FailSafeSave</div><div class="ttdef"><b>Definition:</b> <a href="common_8h_source.html#l00024">common.h:24</a></div></div>
+<div class="ttc" id="acommon_8h_html_a97bbae82012a7c41f47dcb8ce8a48a90"><div class="ttname"><a href="common_8h.html#a97bbae82012a7c41f47dcb8ce8a48a90">FailSafeSent</a></div><div class="ttdeci">bool FailSafeSent</div><div class="ttdef"><b>Definition:</b> <a href="common_8h_source.html#l00025">common.h:25</a></div></div>
+<div class="ttc" id="acommon_8h_html_ae6d822db2ca02c3f6fa690311b580c93"><div class="ttname"><a href="common_8h.html#ae6d822db2ca02c3f6fa690311b580c93">LastConnectionMoment</a></div><div class="ttdeci">int LastConnectionMoment</div><div class="ttdef"><b>Definition:</b> <a href="common_8h_source.html#l00023">common.h:23</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
