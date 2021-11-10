@@ -515,12 +515,15 @@ FASTRUN void ReceiveData()
             return;
             }
     if (ReadData()) {
+
+#ifdef OLD_FHSS
          uint8_t NextFrequency = CheckParams();
         if (PacketNumber >= PacketsPerHop) {
             HopToNextFrequency(NextFrequency);
             DoSensors();
         }
     }
+#endif
 }
 
 /************************************************************************************************************/

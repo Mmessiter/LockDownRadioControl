@@ -142,6 +142,7 @@ void GetOldPipe()
  * Make radio transceiver "hop" over to the new frequency.
  * @param freq The next frequency to use.
  */
+#ifdef OLD_FHSS
 void HopToNextFrequency(uint8_t freq)
 {
     CurrentRadio->stopListening();
@@ -150,6 +151,7 @@ void HopToNextFrequency(uint8_t freq)
     LastConnectionMoment = millis();
 #ifdef DEBUG
     ShowHopDurationEtc(freq);
+#endif
 #endif
 }
 
