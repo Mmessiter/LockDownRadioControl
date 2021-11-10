@@ -29,7 +29,7 @@ var searchData=
   ['lockdownradiocontrol_20_2d_20user_20manual_272',['LockDownRadioControl - User Manual',['../md__docs__l_d_r_c1_____user__manual.html',1,'']]],
   ['loop_273',['loop',['../_receiver_code_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp']]],
   ['loopsps_274',['LoopsPS',['../_receiver_code_2src_2main_8cpp.html#a50e947d538aceb51b606bbd65dda8512',1,'main.cpp']]],
-  ['lostcontactcutoff_275',['LOSTCONTACTCUTOFF',['../_transmitter_code_2src_2main_8cpp.html#ac5b4f54697bc5a8d58ef0c92c094c6b6',1,'main.cpp']]],
+  ['lostcontactcutoff_275',['LOSTCONTACTCUTOFF',['../_radio_functions_8h.html#ac5b4f54697bc5a8d58ef0c92c094c6b6',1,'RadioFunctions.h']]],
   ['lostcontactflag_276',['LostContactFlag',['../_radio_functions_8h.html#ad5f463902789a79fc622b3befd9409b9',1,'LostContactFlag():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#ad5f463902789a79fc622b3befd9409b9',1,'LostContactFlag():&#160;main.cpp']]],
   ['lostpackets_277',['LostPackets',['../_transmitter_code_2src_2main_8cpp.html#ace8651c9c20dd6ea531190d34d35e1fc',1,'main.cpp']]],
   ['lowbattery_278',['LOWBATTERY',['../_transmitter_code_2src_2main_8cpp.html#adca16f7a43b448d4584dcb62897068a5',1,'main.cpp']]]
