@@ -7,7 +7,9 @@
 
 #define RXVERSION_MAJOR   1
 #define RXVERSION_MINOR   1
-#define RXVERSION_MINIMUS 4 // Nov 5th 2021
+#define RXVERSION_MINIMUS 5 // Nov 10th 2021
+#define NEW_FHSS
+
 
 // #define DEBUG
 // #define DB_SENSORS
