@@ -72,29 +72,7 @@
  *
  * @see TransmitterCode/src/main.cpp
  */
-
 // ************************************************** TRANSMITTER CODE **************************************************
-
-#define TXVERSION_MAJOR   1 //   Nov 5th 2021 Malcolm Messiter
-#define TXVERSION_MINOR   1
-#define TXVERSION_MINIMUS 4
-
-#define USE_WATCHDOG          // Enable when developing only  ??
-#define WATCHDOGTIMEOUT 10000 // 10 Seconds before reboot (32ms -> 500 seconds)
-#define KICKRATE        1000  // Kick once a second (must be between WATCHDOGMAXRATE and WATCHDOGTIMEOUT)
-#define WATCHDOGMAXRATE 500   // 500 ms secs between kicks is max rate allowed
-#define LOSTCONTACTCUTOFF 15  // How many packets to lose before reconnect triggers
-
-// UNCOMMENT ANY OF THESE for that bit of debug info
-
-// #define DB_NEXTION        // Debug Nextion and SD card data
-// #define DB_CHANNEL_AVOID  // Debug FHSS channel avoiding data etc
-// #define DB_SENSORS        // Debug Sensors
-// #define DB_BIND           // Debug Binding
-// #define DB_SWITCHES       // Debug Switches
-// #define DB_MODEL_EXCHANGE // Debug MODEL EXCHANGE (by RF link)
-
-
 
 #define CHANNELSUSED       16                  // 16 Channels
 #define MAXMIXES           32                  // 32 mixes
@@ -5210,8 +5188,9 @@ void LoadPacketData()
     uint8_t  uint8_t2;
 
     SendBuffer[CHANNELSUSED + 1] = PacketNumber;  // to let reciever know current packet number
+#ifdef OLD_FHSS
     SendBuffer[CHANNELSUSED + 2] = NextFrequency; // Send next frequency
-
+#endif
     Twobytes = MakeTwobytes(FailSafeChannel); // 16 bool values compressed to 16 bits
     uint8_t1 = uint8_t(Twobytes >> 8);        // sent as two bytes
     uint8_t2 = uint8_t(Twobytes & 0x00FF);
@@ -5273,7 +5252,7 @@ void LoadPacketData()
 }
 
 /************************************************************************************************************/
-
+#ifdef OLD_FHSS
 void GetNextHopChannelNumber1()
 {
     NextFrequency = random(FHSSBottom, FHSSTop);
@@ -5310,7 +5289,7 @@ void GetNextHopChannelNumber()
         }
     }
 }
-
+#endif // OLD_FFHS
 /************************************************************************************************************/
 
 void ReadFMSwitch(bool sw1, bool sw2, bool rev)
@@ -5467,7 +5446,7 @@ void GetRXTime(){  // this gets the time from Recevier to enable FHSS synch
     Time.Stamp8[2] = AckPayload.Roll; 
     Time.Stamp8[3] = AckPayload.Yaw;  
     ClearAckPayload();
-    //Serial.println  (Time.Stamp32);   // Time.Stamp32 now has time from receiver!
+    Serial.println  (Time.Stamp32);   // Time.Stamp32 now has time from receiver!
 
 }
 

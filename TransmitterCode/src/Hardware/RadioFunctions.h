@@ -2,8 +2,11 @@
 #ifndef RadioFunctions_H
 #define RadioFunctions_H
 
-#include <RF24.h>
 
+
+#define TXVERSION_MAJOR   1 //   Nov 10th 2021 Malcolm Messiter
+#define TXVERSION_MINOR   1
+#define TXVERSION_MINIMUS 5
 #define NORMAL          0 // Normal for transmit as usual
 #define CALIBRATELIMITS 1 // Calibrate limits
 #define CENTRESTICKS    2 // Calibrate Centres
@@ -11,6 +14,26 @@
 #define SENDNOTHING     4 // Transmission off
 #define BAD_CHANNEL_MAX 40
 #define Nextion         Serial1 // Nextion is connected to Serial1
+
+#define OLD_FHSS           // to manage the switch over of FHSS implentation
+//#define NEW_FHSS
+
+#define USE_WATCHDOG          // Enable when developing only  ??
+#define WATCHDOGTIMEOUT 10000 // 10 Seconds before reboot (32ms -> 500 seconds)
+#define KICKRATE        1000  // Kick once a second (must be between WATCHDOGMAXRATE and WATCHDOGTIMEOUT)
+#define WATCHDOGMAXRATE 500   // 500 ms secs between kicks is max rate allowed
+#define LOSTCONTACTCUTOFF 15  // How many packets to lose before reconnect triggers
+
+// UNCOMMENT ANY OF THESE for that bit of debug info
+
+// #define DB_NEXTION        // Debug Nextion and SD card data
+// #define DB_CHANNEL_AVOID  // Debug FHSS channel avoiding data etc
+// #define DB_SENSORS        // Debug Sensors
+// #define DB_BIND           // Debug Binding
+// #define DB_SWITCHES       // Debug Switches
+// #define DB_MODEL_EXCHANGE // Debug MODEL EXCHANGE (by RF link)
+
+#include <RF24.h>
 
 /*********************************************************************************************************************************/
 // external (global vars) needed here

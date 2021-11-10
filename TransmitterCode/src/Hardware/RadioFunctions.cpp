@@ -126,14 +126,16 @@ void SendData()
                         TryOtherPipe();
                         PipeTimeout=millis();
                 }
+               
+#ifdef OLD_FHSS
                 if ((millis() - RecoveryTimer) > 500) {                       // New frequency on recovery every half second
                 NextFrequency = random(FHSS_RESCUE_BOTTOM, FHSS_RESCUE_TOP);  // more limited range for recovery
                 HopToNextFrequency();
                 RecoveryTimer = millis();
             }
+#endif
         }
         Connected = false;
-       // sendtime=micros();                                               // This bool is made true if packet acked
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);         // Compress 32 bytes down to 24
 
 //  *************************************** SEND *************************************************************************************
@@ -142,9 +144,6 @@ void SendData()
 
             if (Radio1.isAckPayloadAvailable()) {
                     (Radio1.read(&AckPayload, AckPayloadSize));         //  "sizeof" doesn't work with externs, hence 2 new vars.
-
-                  // acktime=(micros()-sendtime);
-                  // Serial.println(acktime);
                     ++RangeTestGoodPackets;
                     GapStart = 0;                                       // this is reset to millis() on lost connection
                     LostContactFlag = false;
@@ -217,7 +216,7 @@ void ScanAllChannels()
         }
     }
 }
-
+#ifdef OLD_FHSS
 /************************************************************************************************************/
 
 void HopToNextFrequency()
@@ -246,7 +245,7 @@ void HopToNextFrequency()
     ThisFrequency  = NextFrequency;
     JustHoppedFlag = true;
 }
-
+#endif
 /*********************************************************************************************************************************/
 
 /** @brief This scans quietly at startup */
