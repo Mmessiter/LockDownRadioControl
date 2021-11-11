@@ -4574,27 +4574,27 @@ void Button_was_pressed()
             return;
         }
 
-        if (InStrng(Nextfile, WordsIn) > 0) { // show next file
+        if (InStrng(Nextfile, WordsIn)) { // show next file
             FileNumberInView++;
             ShowFileNumber();
             CloseModelsFile();
             return;
         }
 
-        if (InStrng(Prevfile, WordsIn) > 0) { // show prev file
+        if (InStrng(Prevfile, WordsIn)) { // show prev file
             FileNumberInView--;
             ShowFileNumber();
             CloseModelsFile();
             return;
         }
 
-        if (InStrng(SwitchesView, WordsIn) > 0) {
+        if (InStrng(SwitchesView, WordsIn)) {
             UpdateSwitchesDisplay(); // display saved values
             CurrentView = Switches_View;
             return;
         }
 
-        if ((InStrng(Calibrate_View, WordsIn)) > 0) {
+        if  (InStrng(Calibrate_View, WordsIn)) {
             Force_ReDisplay();
             CurrentView = CalibrateView;
             ClearText();
