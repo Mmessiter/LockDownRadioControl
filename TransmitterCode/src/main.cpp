@@ -4967,6 +4967,7 @@ void Button_was_pressed()
 
         p = (InStrng(Data_View, WordsIn));
         if (p > 0) {
+            CurrentMode = NORMAL;
             strcpy (SavedReceiverVersionNumber,ExpR);   // Fix all these so they must redisplay at least once
             strcpy (SavedThisRadio,ExpR);               // Fix all these so they must redisplay at least once
             strcpy (SavedModelRoll,ExpR);               // Fix all these so they must redisplay at least once
