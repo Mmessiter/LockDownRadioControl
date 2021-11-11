@@ -4461,97 +4461,97 @@ void Button_was_pressed()
         }
         if (InStrng(CH1NAME, WordsIn) > 0) {
             p = InStrng (CH1NAME, WordsIn);
-            i = p + 8;
+            i = p + 7;
             DoNewChannelName(1, i);
             return;
         }
         if (InStrng(CH2NAME, WordsIn) > 0) {
             p = InStrng (CH2NAME, WordsIn);
-            i = p + 8;
+            i = p + 7;
             DoNewChannelName(2, i);
             return;
         }
         if (InStrng(CH3NAME, WordsIn) > 0) {
             p = InStrng(CH3NAME, WordsIn);
-            i = p + 8;
+            i = p + 7;
             DoNewChannelName(3, i);
             return;
         }
         if (InStrng(CH4NAME, WordsIn) > 0) {
             p = InStrng(CH4NAME, WordsIn);
-            i = p + 8;
+            i = p + 7;
             DoNewChannelName(4, i);
             return;
         }
         if (InStrng(CH5NAME, WordsIn) > 0) {
             p = InStrng(CH5NAME, WordsIn);
-            i = p + 8;
+            i = p + 7;
             DoNewChannelName(5, i);
             return;
         }
         if (InStrng(CH6NAME, WordsIn) > 0) {
             p = InStrng(CH6NAME, WordsIn);
-            i = p + 8;
+            i = p + 7;
             DoNewChannelName(6, i);
             return;
         }
         if (InStrng(CH7NAME, WordsIn) > 0) {
             p = InStrng(CH7NAME, WordsIn);
-            i = p + 8;
+            i = p + 7;
             DoNewChannelName(7, i);
             return;
         }
         if (InStrng(CH8NAME, WordsIn) > 0) {
             p = InStrng(CH8NAME, WordsIn);
-            i = p + 8;
+            i = p + 7;
             DoNewChannelName(8, i);
             return;
         }
         if (InStrng(CH9NAME, WordsIn) > 0) {
             p = InStrng(CH9NAME, WordsIn);
-            i = p + 8;
+            i = p + 7;
             DoNewChannelName(9, i);
             return;
         }
         if (InStrng(CH10NAME, WordsIn) > 0) {
             p = InStrng(CH10NAME, WordsIn);
-            i = p + 9;
+            i = p + 8;
             DoNewChannelName(10, i);
             return;
         }
         if (InStrng(CH11NAME, WordsIn) > 0) {
             p = InStrng(CH11NAME, WordsIn);
-            i = p + 9;
+            i = p + 8;
             DoNewChannelName(11, i);
             return;
         }
         if (InStrng(CH12NAME, WordsIn) > 0) {
             p = InStrng(CH12NAME, WordsIn);
-            i = p + 9;
+            i = p + 8;
             DoNewChannelName(12, i);
             return;
         }
         if (InStrng(CH13NAME, WordsIn) > 0) {
             p = InStrng(CH13NAME, WordsIn);
-            i = p + 9;
+            i = p + 8;
             DoNewChannelName(13, i);
             return;
         }
         if (InStrng(CH14NAME, WordsIn) > 0) {
             p = InStrng(CH14NAME, WordsIn);
-            i = p + 9;
+            i = p + 8;
             DoNewChannelName(14, i);
             return;
         }
         if (InStrng(CH15NAME, WordsIn) > 0) {
             p = InStrng(CH15NAME, WordsIn);
-            i = p + 9;
+            i = p + 8;
             DoNewChannelName(15, i);
             return;
         }
         if (InStrng(CH16NAME, WordsIn) > 0) {
             p = InStrng(CH16NAME, WordsIn);
-            i = p + 9;
+            i = p + 8;
             DoNewChannelName(16, i);
             return;
         }
