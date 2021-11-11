@@ -187,7 +187,7 @@ void ProdRadio()
 }
  #endif // defined (SECOND_TRANSCEIVER)
 /************************************************************************************************************/
-
+#ifdef OLD_FHSS
 void Reconnect()
 {
     SearchStartTime   = millis();
@@ -276,6 +276,7 @@ void Reconnect()
         delay (5); // This seems to prevent the occasional lockup??
     }
 }
+#endif // OLD_FHSS
 
 /************************************************************************************************************/
 
