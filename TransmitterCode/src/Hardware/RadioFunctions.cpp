@@ -325,7 +325,7 @@ void DoScanInit()
     Radio1.setDataRate(RF24_1MBPS); // Scan only works at this default rate
     CurrentMode = SCANWAVEBAND;     // Fhss == No transmitting please, we are scanning.
     SendCommand(NoSleeping);
-    for (i = 0; i < 127; i++) {
+    for (i = 0; i < 125; i++) {
         NoCarrier[i]   = 0;
         AllChannels[i] = 0;
     }

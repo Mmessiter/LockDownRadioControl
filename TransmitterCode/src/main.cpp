@@ -275,7 +275,7 @@ uint8_t AllChannels[127]; /// for scanning
 uint8_t NoCarrier[127];
 
 uint8_t       ScanStart   = 1;
-uint8_t       ScanEnd     = 126;
+uint8_t       ScanEnd     = 125;
 unsigned long TimerMillis = 0;
 unsigned long LastSeconds = 0;
 unsigned long Secs        = 0;
@@ -4189,6 +4189,7 @@ void Button_was_pressed()
             SendValue(Pto, (Inactivity_Timeout / TICKSPERMINUTE));
             SendText(Tx_Name, TxName);
             CurrentView = Options_View;
+            CurrentMode = NORMAL;
             ReviseBadChannelMax();
             ClearText();
         }
