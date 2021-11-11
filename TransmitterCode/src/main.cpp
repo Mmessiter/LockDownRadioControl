@@ -4952,11 +4952,6 @@ void Button_was_pressed()
             return;
         }
 
-        p = (InStrng(StopScan, WordsIn));
-        if (p > 0) {
-            CurrentMode = SCANWAVEBAND; // stops the scanning
-        }
-
         p = (InStrng(MIXES_VIEW, WordsIn)); //
         if (p > 0) {
             CurrentView = MixesView;
