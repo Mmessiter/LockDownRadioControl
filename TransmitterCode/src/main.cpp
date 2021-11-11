@@ -5129,16 +5129,15 @@ void Button_was_pressed()
             DisplayCurve();
             ClearText();
         }
-        if (InStrng(ClickX, WordsIn)) // Clicked to move point?
-         {
+         p = (InStrng(ClickX, WordsIn)); // Clicked to move point?
+        if (p > 0) {
             XtouchPlace = GetNextNumber(p + 7, WordsIn);
         }
-        if  (InStrng(ClickY, WordsIn)) // Clicked to move point?
-        {
+        p = (InStrng(ClickY, WordsIn)); // Clicked to move point?
+        if (p > 0) {
             YtouchPlace = GetNextNumber(p + 7, WordsIn);
             MovePoint();
         }
-
         if (CurrentMode == 0) {
             if (strcmp(WordsIn, "Calibrate1") == 0) {
                 CurrentMode = CALIBRATELIMITS;
@@ -5454,7 +5453,7 @@ void GetRXTime(){  // this gets the time from Recevier to enable FHSS synch
     Time.Stamp8[2] = AckPayload.Roll; 
     Time.Stamp8[3] = AckPayload.Yaw;  
     ClearAckPayload();
-    Serial.println  (Time.Stamp32);   // Time.Stamp32 now has time from receiver!
+   // Serial.println  (Time.Stamp32);   // Time.Stamp32 now has time from receiver!
 
 }
 
