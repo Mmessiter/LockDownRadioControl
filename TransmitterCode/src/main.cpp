@@ -4901,73 +4901,73 @@ void Button_was_pressed()
             }
         }
 
-        p = (InStrng(Graph_View, WordsIn));
-        if (p > 0) {
+       if (InStrng(Graph_View, WordsIn))
+        {
             CurrentView = GraphView;
         }
 
-        p = (InStrng(Data_View, WordsIn));
-        if (p > 0) {
+         if (InStrng(Data_View, WordsIn))
+         {
             CurrentMode = NORMAL;
             delay(200);                                 // allow time for screen to display
             CurrentView  = DataView;
             LastShowTime = 0;
         }
 
-        p = (InStrng(Fhss_View, WordsIn));
-        if (p > 0) {
+         if (InStrng(Fhss_View, WordsIn))
+         {
             CurrentView = FhssView;
             BlueLedOn();
         }
 
-        p = (InStrng(bind, WordsIn));
-        if (p > 0) {
+        if (InStrng(bind, WordsIn))
+        {
             BindNow();
         }
 
-        p = (InStrng(FM1, WordsIn));
-        if (p > 0) {
+        if (InStrng(FM1, WordsIn))
+        {
             FlightMode         = 1;
             PreviousFlightMode = 1;
             UpdateModelsNameEveryWhere();
         }
 
-        p = (InStrng(FM2, WordsIn));
+        if (InStrng(FM2, WordsIn))
         if (p > 0) {
             FlightMode         = 2;
             PreviousFlightMode = 2;
             UpdateModelsNameEveryWhere();
         }
 
-        p = (InStrng(FM3, WordsIn));
-        if (p > 0) {
+        if (InStrng(FM3, WordsIn))
+        {
             FlightMode         = 3;
             PreviousFlightMode = 3;
             UpdateModelsNameEveryWhere();
         }
 
-        p = (InStrng(FM4, WordsIn));
-        if (p > 0) {
+        if (InStrng(FM4, WordsIn))
+        {
             FlightMode         = 4;
             PreviousFlightMode = 4;
             UpdateModelsNameEveryWhere();
         }
-        p = (InStrng(midyup, WordsIn)); // midy up?
-        if (p > 0) {
+         if (InStrng(midyup, WordsIn)) // midy up?
+         {
             CentreDegrees[FlightMode][ChanneltoSet - 1]++;
             DisplayCurve();
             ClearText();
         }
 
-        p = (InStrng(midydown, WordsIn)); // midy down?
-        if (p > 0) {
+         if (InStrng(midydown, WordsIn)) // midy down?
+         {
             CentreDegrees[FlightMode][ChanneltoSet - 1]--;
             DisplayCurve();
             ClearText();
         }
 
-        p = (InStrng(midhiyup, WordsIn)); // midhiy up?
-        if (p > 0) {
+        if (InStrng(midhiyup, WordsIn))  // midhiy up?
+        {
             MidHiDegrees[FlightMode][ChanneltoSet - 1]++;
             DisplayCurve();
             ClearText();
