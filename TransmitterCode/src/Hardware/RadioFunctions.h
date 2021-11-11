@@ -7,6 +7,10 @@
 #define TXVERSION_MAJOR   1 //   Nov 10th 2021 Malcolm Messiter
 #define TXVERSION_MINOR   1
 #define TXVERSION_MINIMUS 5
+
+#define OLD_FHSS           // to manage the switch over of FHSS implentation
+//#define NEW_FHSS
+
 #define NORMAL          0 // Normal for transmit as usual
 #define CALIBRATELIMITS 1 // Calibrate limits
 #define CENTRESTICKS    2 // Calibrate Centres
@@ -14,9 +18,6 @@
 #define SENDNOTHING     4 // Transmission off
 #define BAD_CHANNEL_MAX 40
 #define Nextion         Serial1 // Nextion is connected to Serial1
-
-#define OLD_FHSS           // to manage the switch over of FHSS implentation
-//#define NEW_FHSS
 
 #define USE_WATCHDOG          // Enable when developing only  ??
 #define WATCHDOGTIMEOUT 10000 // 10 Seconds before reboot (32ms -> 500 seconds)

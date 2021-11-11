@@ -4933,16 +4933,23 @@ void Button_was_pressed()
             UpdateButtonLabels();
         }
 
-        p = (InStrng(Fhss_View, WordsIn));
-        if (p > 0) {
+      if (InStrng(Fhss_View, WordsIn))
+         {
+            delay(200); 
             DrawFhssBox();
             DoScanInit();
+            CurrentMode = SCANWAVEBAND; 
+            ClearText();
+            return;
         }
 
-        p = (InStrng(ReScan, WordsIn));
-        if (p > 0) {
+         if (InStrng(ReScan, WordsIn))
+       {
             DrawFhssBox();
             DoScanInit();
+            CurrentMode = SCANWAVEBAND; 
+            ClearText();
+            return;
         }
 
         p = (InStrng(StopScan, WordsIn));
