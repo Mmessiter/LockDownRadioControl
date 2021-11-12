@@ -315,7 +315,7 @@ void Reconnect()
 
 void LoadTimeStamp(){  // This will load time stamp for return to TX for synch purposes heer
 
-#define PACKETTIME 200            // ms between channel changes
+#define PACKETTIME 95            // ms between channel changes
 #define FREQUENCYSCOUNT 81         // use 81 different channels
 
     union
