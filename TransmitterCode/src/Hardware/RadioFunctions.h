@@ -76,6 +76,7 @@ extern uint8_t        AckPayloadSize;
 extern uint8_t        SizeOfCompressedData;
 extern int            RangeTestGoodPackets;
 extern uint8_t        NextChannelNumber;
+extern uint8_t        FHSS_Channels[];
 
 extern uint8_t FHSSBottom;
 extern uint8_t FHSSTop;

@@ -273,7 +273,7 @@ void HopToNextFrequency()
  #endif
 #ifdef NEW_FHSS
     Serial.print(" Next channel: ");
-    Serial.println(NextChannelNumber);
+    Serial.println(FHSS_Channels[NextChannelNumber]);
  #endif
     PSTARTTIME = millis();
 #endif
