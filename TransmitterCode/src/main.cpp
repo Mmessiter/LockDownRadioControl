@@ -5265,7 +5265,7 @@ void LoadPacketData()
 #ifdef NEW_FHSS
 void GetNextHopChannelNumber()
 {
-     NextFrequency  = 120;
+     NextFrequency  =   FHSS_Channels[NextChannelNumber];
 }
 #endif
 /************************************************************************************************************/

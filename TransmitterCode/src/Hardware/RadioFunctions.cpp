@@ -174,9 +174,9 @@ void SendData()
             }
 #endif
        
-#ifdef NEW_FHSS
-            NextFrequency = 120;
+#ifdef NEW_FHSS    
             if (!RXTimeStamp) {      // heer
+                GetNextHopChannelNumber();
                 HopToNextFrequency();
                 RXTimeStamp = 100;  // this is to prevent it's being zero next time around
             }
