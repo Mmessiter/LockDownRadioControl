@@ -115,7 +115,7 @@ uint8_t  byte1              = 0;
 uint8_t  byte2              = 0;
 bool     GyroInstalled      = false;
 uint32_t ReconnectedMoment;
-uint8_t NextFrequency = 120;
+uint8_t  NextFrequency = 120;
 
 /** Load project defaults from EEPROM into the ReceivedData buffer. */
 void LoadFailSafeData()
@@ -284,11 +284,21 @@ void FailSafe()
  */
 void ShowHopDurationEtc()
 {
+#ifdef OLD_FHSS
     float OnePacketTime = (millis() - PacketStartTime) / PacketsPerHop;
+#endif
+#ifdef NEW_FHSS
+    float OnePacketTime = (millis() - PacketStartTime) / PacketNumber;
+#endif
     Serial.print("Hop duration: ");
     Serial.print((millis() - PacketStartTime) / 1000);
     Serial.print("s  Packets per hop: ");
+#ifdef OLD_FHSS
     Serial.print(PacketsPerHop);
+#endif
+#ifdef NEW_FHSS
+   Serial.print(PacketNumber); 
+#endif
     Serial.print("  Average Time per packet: ");
     Serial.print(OnePacketTime);
     Serial.print("ms  Next channel: ");
@@ -385,7 +395,10 @@ uint8_t CheckParams()
     uint8_t  mn       = 0;
     uint16_t TwoBytes = 0;
 
+#ifdef OLD_FHSS
     PacketNumber = (ReceivedData[CHANNELSUSED + 1]);
+#endif
+
 
     switch (PacketNumber) {
         case 3:
@@ -493,7 +506,7 @@ void Sensors_Status()
 void DoSensors()
 {
     if (USE_BMP280) {
-        if (bmp280.getMeasurements(temperature280, pressure, altitude)) // heer
+        if (bmp280.getMeasurements(temperature280, pressure, altitude)) 
             if (BoundFlag) AckPayload.CurrentAltitude = int(altitude - StartAltitude);
     }
     if (USE_INA219) {
@@ -519,16 +532,26 @@ FASTRUN void ReceiveData()
 #endif
             }
     if (ReadData()) {
-
          NextFrequency = CheckParams();
+
 #ifdef NEW_FHSS
+        ++PacketNumber;
          NextFrequency = 120 ;
-#endif
-        if (PacketNumber >= PacketsPerHop) {
-            HopToNextFrequency();
+        if (!RXTimeStamp) {
+            HopToNextFrequency(); // heer
+            PacketNumber = 0;
             DoSensors();
-            
+            RXTimeStamp = 100; // just so it's not still zero next time around
         }
+#endif
+
+#ifdef OLD_FHSS
+        if (PacketNumber >= PacketsPerHop) {
+            HopToNextFrequency(); 
+            DoSensors();
+#endif
+            
+       
 
     }
 

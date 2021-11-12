@@ -33,7 +33,8 @@ uint8_t ThisRadio          = 1;
 bool    SaveNewBind        = true;
 uint8_t SavedPipeAddress[8];
 uint32_t FrequencyStart;
-uint8_t  NextPacketNumber=0;
+uint8_t  NextChannelNumber=0;
+uint32_t RXTimeStamp;
 
 extern uint8_t NextFrequency;
 extern void ShowHopDurationEtc();
@@ -306,8 +307,8 @@ void Reconnect()
 
 void LoadTimeStamp(){  // This will load time stamp for return to TX for synch purposes heer
 
-#define PACKETTIME 1000
-#define FREQUENCYSCOUNT 50
+#define PACKETTIME 100
+#define FREQUENCYSCOUNT 40
 
     union
     {
@@ -316,18 +317,20 @@ void LoadTimeStamp(){  // This will load time stamp for return to TX for synch p
     }Time;             // union used to allow access to each byte of 32 bit value     
 
     Time.Stamp32  = (millis() - FrequencyStart);
+    RXTimeStamp=Time.Stamp32;
     if (Time.Stamp32 > PACKETTIME) {
             FrequencyStart=millis();
             Time.Stamp32 = 0;
-            ++NextPacketNumber;
-            if (NextPacketNumber > FREQUENCYSCOUNT) {NextPacketNumber = 0;}
+            RXTimeStamp=Time.Stamp32;
+            ++NextChannelNumber;
+            if (NextChannelNumber > FREQUENCYSCOUNT) {NextChannelNumber = 0;}
     }
 
     AckPayload.volt                  = Time.Stamp8[0]; 
     AckPayload.CurrentAltitude       = Time.Stamp8[1]; 
     AckPayload.ReportedPitch         = Time.Stamp8[2]; 
     AckPayload.ReportedRoll          = Time.Stamp8[3]; 
-    AckPayload.ReportedYaw           = NextPacketNumber;    
+    AckPayload.ReportedYaw           = NextChannelNumber;    
 }
  
 /************************************************************************************************************/
