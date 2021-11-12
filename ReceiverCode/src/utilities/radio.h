@@ -32,6 +32,8 @@ uint8_t ReconnectAttempts  = 0;
 uint8_t ThisRadio          = 1;
 bool    SaveNewBind        = true;
 uint8_t SavedPipeAddress[8];
+uint32_t FrequencyStart;
+uint8_t  NextPacketNumber=0;
 
 /** AckPayload Stucture for data returned to transmitter. */
 struct Payload
@@ -142,16 +144,16 @@ void GetOldPipe()
  * Make radio transceiver "hop" over to the new frequency.
  * @param freq The next frequency to use.
  */
-#ifdef OLD_FHSS
+
 void HopToNextFrequency(uint8_t freq)
 {
     CurrentRadio->stopListening();
     CurrentRadio->setChannel(freq);
     CurrentRadio->startListening();
     LastConnectionMoment = millis();
+    
 #ifdef DEBUG
     ShowHopDurationEtc(freq);
-#endif
 #endif
 }
 
@@ -167,6 +169,7 @@ void InitCurrentRadio()
         CurrentRadio->setDataRate(RF24_250KBPS);
         CurrentRadio->openReadingPipe(1, ThisPipe);
         SaveNewBind = true;
+        FrequencyStart = millis();
     }
 }
 
@@ -282,17 +285,27 @@ void Reconnect()
 
 void LoadTimeStamp(){  // This will load time stamp for return to TX for synch purposes heer
 
+#define PACKETTIME 1000
+#define FREQUENCYSCOUNT 50
+
     union
     {
         uint32_t Stamp32; 
-        uint8_t Stamp8[4];
+        uint8_t  Stamp8[4];
     }Time;             // union used to allow access to each byte of 32 bit value     
 
-    Time.Stamp32                    = millis();
-    AckPayload.volt                 = Time.Stamp8[0]; 
-    AckPayload.CurrentAltitude      = Time.Stamp8[1]; 
-    AckPayload.ReportedRoll         = Time.Stamp8[2]; 
-    AckPayload.ReportedYaw          = Time.Stamp8[3]; 
+    Time.Stamp32  = (millis() - FrequencyStart)+2;
+    if (Time.Stamp32 > PACKETTIME) {
+            FrequencyStart=millis();
+            ++NextPacketNumber;
+            if (NextPacketNumber > FREQUENCYSCOUNT) {NextPacketNumber = 0;}
+    }
+
+    AckPayload.volt                  = Time.Stamp8[0]; 
+    AckPayload.CurrentAltitude       = Time.Stamp8[1]; 
+    AckPayload.ReportedPitch         = Time.Stamp8[2]; 
+    AckPayload.ReportedRoll          = Time.Stamp8[3]; 
+    AckPayload.ReportedYaw           = NextPacketNumber;    
 }
  
 /************************************************************************************************************/
