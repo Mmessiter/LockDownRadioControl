@@ -294,9 +294,10 @@ void LoadTimeStamp(){  // This will load time stamp for return to TX for synch p
         uint8_t  Stamp8[4];
     }Time;             // union used to allow access to each byte of 32 bit value     
 
-    Time.Stamp32  = (millis() - FrequencyStart)+2;
+    Time.Stamp32  = (millis() - FrequencyStart);
     if (Time.Stamp32 > PACKETTIME) {
             FrequencyStart=millis();
+            Time.Stamp32  = 0;
             ++NextPacketNumber;
             if (NextPacketNumber > FREQUENCYSCOUNT) {NextPacketNumber = 0;}
     }
