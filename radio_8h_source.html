@@ -361,7 +361,7 @@ $(document).ready(function(){initNavTree('radio_8h_source.html',''); initResizab
 <div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;    Time.Stamp32  = (millis() - <a class="code" href="radio_8h.html#a538c34c4275db7eeb9bd601c09bb9c8e">FrequencyStart</a>);</div>
 <div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;    <span class="keywordflow">if</span> (Time.Stamp32 &gt; <a class="code" href="radio_8h.html#a945f500adf995e8759c140477e1278a5">PACKETTIME</a>) {</div>
 <div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;            <a class="code" href="radio_8h.html#a538c34c4275db7eeb9bd601c09bb9c8e">FrequencyStart</a>=millis();</div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;            Time.Stamp32  = 0;</div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;            Time.Stamp32 = 0;</div>
 <div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;            ++<a class="code" href="radio_8h.html#a8484b277d2c4df40810b3a1516b6a5df">NextPacketNumber</a>;</div>
 <div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="radio_8h.html#a8484b277d2c4df40810b3a1516b6a5df">NextPacketNumber</a> &gt; <a class="code" href="radio_8h.html#afe5bce36baf737bd284d43cd0e805fdb">FREQUENCYSCOUNT</a>) {<a class="code" href="radio_8h.html#a8484b277d2c4df40810b3a1516b6a5df">NextPacketNumber</a> = 0;}</div>
 <div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;    }</div>
