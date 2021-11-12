@@ -293,7 +293,9 @@ void ShowHopDurationEtc()
     Serial.print(OnePacketTime);
     Serial.print("ms  Next channel: ");
     Serial.print(NextFrequency);
-    Serial.println(BoundFlag ? " Bound" : " NOT Bound");
+    Serial.print(BoundFlag ? " Bound!" : " NOT Bound");
+    Serial.print("  Radio: ");
+    Serial.println (ThisRadio);
     PacketStartTime = millis();
 }
 
