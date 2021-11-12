@@ -297,7 +297,7 @@ void LoadTimeStamp(){  // This will load time stamp for return to TX for synch p
     Time.Stamp32  = (millis() - FrequencyStart);
     if (Time.Stamp32 > PACKETTIME) {
             FrequencyStart=millis();
-            Time.Stamp32  = 0;
+            Time.Stamp32 = 0;
             ++NextPacketNumber;
             if (NextPacketNumber > FREQUENCYSCOUNT) {NextPacketNumber = 0;}
     }
