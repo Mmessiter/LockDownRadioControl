@@ -216,6 +216,7 @@ unsigned int  LostPackets      = 0;
 uint8_t       PacketNumber     = 0;
 uint8_t       NextFrequency    = 120;
 uint8_t       ThisFrequency    = 120;
+uint32_t      RXTimeStamp; 
 
 // ************************************* AckPayload structure ******************************************************
 struct Payload
@@ -462,7 +463,7 @@ uint8_t  BlinkOnPhase  = 1;
 bool     LedWasGreen   = false;
 uint8_t  BadChannelMax = BAD_CHANNEL_MAX;
 char     ThisRadio[4] = "0 ";
-uint8_t  NextPacketNumber = 0;
+uint8_t  NextChannelNumber = 0;
 
 
 /*********************************************************************************************************************************/
@@ -3911,7 +3912,6 @@ void Button_was_pressed()
     char FM3[]                     = "FM 3";
     char FM4[]                     = "FM 4";
     char ReScan[]                  = "ReScan";
-    char StopScan[]                = "StopScan";
     char LoadModel[]               = "LoadModel";
     char Models_View[]             = "ModelsView";
     char Delete[]                  = "Delete";
@@ -5459,10 +5459,12 @@ void GetRXTime(){  // this gets the time from Recevier to enable FHSS synch
     Time.Stamp8[1]   = AckPayload.CurrentAltitude;
     Time.Stamp8[2]   = AckPayload.Pitch; 
     Time.Stamp8[3]   = AckPayload.Roll;  
-    NextPacketNumber = AckPayload.Yaw;   
+    NextChannelNumber = AckPayload.Yaw;  
+    RXTimeStamp      = Time.Stamp32; 
+
 #ifdef DB_NEWFHSS       
     if (!Time.Stamp32){                         // zero means goto next frequency
-        Serial.print    (NextPacketNumber);
+        Serial.print    (NextChannelNumber);
         Serial.print    ("    ");
         Serial.println  (Time.Stamp32);         // Time.Stamp32 has time from receiver
     }

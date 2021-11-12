@@ -166,9 +166,22 @@ void SendData()
                 }
             }
             CheckGapsLength();
+           
+           
+#ifdef OLD_FHSS
             if (PacketNumber > PACKETS_PER_HOP) {
                 HopToNextFrequency();
             }
+#endif
+       
+#ifdef NEW_FHSS
+            NextFrequency = 120;
+            if (!RXTimeStamp) {      // heer
+                HopToNextFrequency();
+                RXTimeStamp = 100;  // this is to prevent it's being zero next time around
+            }
+#endif
+       
         }
         else {
             FailedPacket();
@@ -237,7 +250,6 @@ void HopToNextFrequency()
     Radio1.stopListening();
     ReadSwitches();
     ShowComms();
-    PacketNumber = 0;
     CheckTimer(); // update timer if on
 #ifdef DB_FHSS
     PENDTIME  = millis();
@@ -245,17 +257,29 @@ void HopToNextFrequency()
     Serial.print("Hop duration: ");
     Serial.print(PDURATION);
     Serial.print(" seconds. Good packets per hop: ");
+    #ifdef OLD_FHSS
     Serial.print(PACKETS_PER_HOP);
+    #endif
+    #ifdef NEW_FHSS
+    Serial.print(PacketNumber);
+    #endif
+#ifdef OLD_FHSS
     Serial.print(" Next channel: (range: ");
     Serial.print(FHSSBottom);
     Serial.print("-");
     Serial.print(FHSSTop);
     Serial.print(") ");
     Serial.println(NextFrequency);
+ #endif
+#ifdef NEW_FHSS
+    Serial.print(" Next channel: ");
+    Serial.println(NextChannelNumber);
+ #endif
     PSTARTTIME = millis();
 #endif
     ThisFrequency  = NextFrequency;
     JustHoppedFlag = true;
+    PacketNumber = 0;
 }
 
 /*********************************************************************************************************************************/

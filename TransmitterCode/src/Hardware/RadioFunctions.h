@@ -6,10 +6,10 @@
 
 #define TXVERSION_MAJOR   1 //   Nov 10th 2021 Malcolm Messiter
 #define TXVERSION_MINOR   1
-#define TXVERSION_MINIMUS 5
+#define TXVERSION_MINIMUS 6
 //
-#define OLD_FHSS          // to manage the switch over of FHSS implentation
-//#define NEW_FHSS
+//#define OLD_FHSS          // to manage the switch over of FHSS implentation
+#define NEW_FHSS
 
 #define NORMAL          0 // Normal for transmit as usual
 #define CALIBRATELIMITS 1 // Calibrate limits
@@ -75,6 +75,7 @@ extern uint8_t        RecentPacketsLost;
 extern uint8_t        AckPayloadSize;
 extern uint8_t        SizeOfCompressedData;
 extern int            RangeTestGoodPackets;
+extern uint8_t        NextChannelNumber;
 
 extern uint8_t FHSSBottom;
 extern uint8_t FHSSTop;
@@ -96,6 +97,7 @@ extern void  ParseAckPayload();
 extern void  FailedPacket();
 extern uint32_t   GapStart;
 extern uint8_t BadChannelMax;
+extern uint32_t RXTimeStamp;
 
 /*********************************************************************************************************************************/
 // function prototypes
