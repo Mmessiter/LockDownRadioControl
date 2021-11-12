@@ -152,8 +152,16 @@ void GetOldPipe()
 void HopToNextFrequency()
 {
     CurrentRadio->stopListening();
+#ifdef OLD_FHSS
     CurrentRadio->setChannel(NextFrequency);
+#endif
+#ifdef NEW_FHSS
+    CurrentRadio->setChannel(FHSS_Channels[NextChannelNumber]);
+    delay (1);
+#endif
+
     CurrentRadio->startListening();
+
     LastConnectionMoment = millis();
     
     
@@ -202,7 +210,7 @@ void Reconnect()
     uint8_t i = 0;
     while ((!CurrentRadio->available()) && (i < 10)){
             CurrentRadio->stopListening();
-            CurrentRadio->setChannel(NextFrequency);
+            CurrentRadio->setChannel(120);
             CurrentRadio->startListening();
             delay(4);
             ++i;
@@ -307,8 +315,8 @@ void Reconnect()
 
 void LoadTimeStamp(){  // This will load time stamp for return to TX for synch purposes heer
 
-#define PACKETTIME 100
-#define FREQUENCYSCOUNT 40
+#define PACKETTIME 90              // ms between channel changes
+#define FREQUENCYSCOUNT 81         // use 81 different channels
 
     union
     {

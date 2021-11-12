@@ -42,7 +42,7 @@
 
 // ************************************************** Receiver code **************************************************
 
-#define RECEIVE_TIMEOUT 35 // 15 milliseconds was too short
+#define RECEIVE_TIMEOUT 50     // 15 milliseconds was too short
 #define PacketsPerHop   20
 #define CHANNELSUSED    16
 #define SERVOSUSED      10
@@ -302,7 +302,7 @@ void ShowHopDurationEtc()
     Serial.print("  Average Time per packet: ");
     Serial.print(OnePacketTime);
     Serial.print("ms  Next channel: ");
-    Serial.print(NextFrequency);
+    Serial.print(FHSS_Channels[NextChannelNumber]);
     Serial.print(BoundFlag ? " Bound!" : " NOT Bound");
     Serial.print("  Radio: ");
     Serial.println (ThisRadio);
@@ -536,7 +536,7 @@ FASTRUN void ReceiveData()
 
 #ifdef NEW_FHSS
         ++PacketNumber;
-         NextFrequency = 120 ;
+         NextFrequency = FHSS_Channels[NextChannelNumber];
         if (!RXTimeStamp) {
             HopToNextFrequency(); // heer
             PacketNumber = 0;
