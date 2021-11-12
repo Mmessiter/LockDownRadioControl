@@ -33,6 +33,7 @@
 // #define DB_BIND           // Debug Binding
 // #define DB_SWITCHES       // Debug Switches
 // #define DB_MODEL_EXCHANGE // Debug MODEL EXCHANGE (by RF link)
+   #define DB_NEWFHSS        // Debug revised FFHS system
 
 #include <RF24.h>
 
