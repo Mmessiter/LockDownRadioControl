@@ -34,5 +34,8 @@ var _radio_functions_8cpp =
     [ "ScanAllChannels", "_radio_functions_8cpp.html#a3856ba0adae43d089f08c7b7f653b306", null ],
     [ "SendData", "_radio_functions_8cpp.html#a3d7322e78f097d02d476f17a6306997c", null ],
     [ "SetThePipe", "_radio_functions_8cpp.html#a70dc6f8d2e5ccef6b8e4a2b9b0afb2ce", null ],
-    [ "TryOtherPipe", "_radio_functions_8cpp.html#a7051e235b8f694c6b01bb5edf3925dc7", null ]
+    [ "TryOtherPipe", "_radio_functions_8cpp.html#a7051e235b8f694c6b01bb5edf3925dc7", null ],
+    [ "PDURATION", "_radio_functions_8cpp.html#af3e741308f3c6e1f89daee68f2f3fa6e", null ],
+    [ "PENDTIME", "_radio_functions_8cpp.html#ae776fd40f5c5b226a5a2e6f8e696f5e3", null ],
+    [ "PSTARTTIME", "_radio_functions_8cpp.html#a2ef9079662a8ff255a84c759c473584a", null ]
 ];
