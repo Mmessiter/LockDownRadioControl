@@ -214,8 +214,8 @@ unsigned int  i;
 unsigned int  PacketsPerSecond = 0;
 unsigned int  LostPackets      = 0;
 uint8_t       PacketNumber     = 0;
-uint8_t       NextFrequency    = 100;
-uint8_t       ThisFrequency    = 99;
+uint8_t       NextFrequency    = 120;
+uint8_t       ThisFrequency    = 120;
 
 // ************************************* AckPayload structure ******************************************************
 struct Payload
@@ -5260,7 +5260,12 @@ void LoadPacketData()
             break;
     }
 }
-
+#ifdef NEW_FHSS
+void GetNextHopChannelNumber()
+{
+     NextFrequency  = 120;
+}
+#endif
 /************************************************************************************************************/
 #ifdef OLD_FHSS
 void GetNextHopChannelNumber1()
@@ -5448,7 +5453,7 @@ void GetRXTime(){  // this gets the time from Recevier to enable FHSS synch
     {
         uint32_t Stamp32; 
         uint8_t Stamp8[4];
-    }Time;             // union used to allow access to each byte of 32 bit value     
+    }Time;                                      // union used to allow access to each byte of 32 bit value     
 
     Time.Stamp8[0]   = AckPayload.volt;
     Time.Stamp8[1]   = AckPayload.CurrentAltitude;
@@ -5456,10 +5461,10 @@ void GetRXTime(){  // this gets the time from Recevier to enable FHSS synch
     Time.Stamp8[3]   = AckPayload.Roll;  
     NextPacketNumber = AckPayload.Yaw;   
 #ifdef DB_NEWFHSS       
-    if (Time.Stamp32 < 10){
+    if (!Time.Stamp32){                         // zero means goto next frequency
         Serial.print    (NextPacketNumber);
         Serial.print    ("    ");
-        Serial.println  (Time.Stamp32);        // Time.Stamp32 now has time from receiver!
+        Serial.println  (Time.Stamp32);         // Time.Stamp32 has time from receiver
     }
 #endif 
     ClearAckPayload();

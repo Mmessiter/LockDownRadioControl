@@ -27,8 +27,6 @@
 #define COMPRESSEDWORDS    UNCOMPRESSEDWORDS * 3 / 4 // COMPRESSED DATA SENT = 30  Bytes
 #define PACKETS_PER_HOP    20                        // Must match RX setting
 
-//#define DB_FHSS           // Debug real time FHSS data
-
 /************************************************************************************************************/
 
 #ifdef DB_FHSS
@@ -94,13 +92,11 @@ void TryOtherPipe()
 #define PACEMAKER 5 // MINIMUM Ms between packets of data. - Probably needs to be between 7 and 20
 void SendData()
 {
-   // uint32_t sendtime;
-   // uint32_t acktime;
-
+   
     if ((millis() - TxPace) >= PACEMAKER) {
         TxPace = millis();
         get_new_channels_values(); // Load SendBuffer with new servo positions
-
+ 
         if (SetupFlag) {
             ReadSwitches();
             return;} // Don't try to send data when just setting up.
@@ -120,6 +116,7 @@ void SendData()
             GetNextHopChannelNumber();
             JustHoppedFlag = false;
         }
+        
         if (LostContactFlag) {
             ShowComms();
                 if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {
@@ -134,6 +131,19 @@ void SendData()
                 RecoveryTimer = millis();
             }
 #endif
+
+            
+
+#ifdef NEW_FHSS
+                if ((millis() - RecoveryTimer) > 500) {                       // New frequency on recovery every half second
+                NextFrequency = 120;
+                HopToNextFrequency();
+                RecoveryTimer = millis();
+            }
+#endif
+
+
+
         }
         Connected = false;
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);         // Compress 32 bytes down to 24
@@ -141,7 +151,7 @@ void SendData()
 //  *************************************** SEND *************************************************************************************
         if (Radio1.write(&CompressedData, SizeOfCompressedData)) {       //  *** SEND ***   ("sizeof" doesn't work with externs, hence 2 new vars.)
 //  *************************************** SEND *************************************************************************************
-
+ 
             if (Radio1.isAckPayloadAvailable()) {
                     (Radio1.read(&AckPayload, AckPayloadSize));         //  "sizeof" doesn't work with externs, hence 2 new vars.
                     ++RangeTestGoodPackets;
@@ -216,7 +226,9 @@ void ScanAllChannels()
         }
     }
 }
-#ifdef OLD_FHSS
+
+
+
 /************************************************************************************************************/
 
 void HopToNextFrequency()
@@ -245,7 +257,7 @@ void HopToNextFrequency()
     ThisFrequency  = NextFrequency;
     JustHoppedFlag = true;
 }
-#endif
+
 /*********************************************************************************************************************************/
 
 /** @brief This scans quietly at startup */

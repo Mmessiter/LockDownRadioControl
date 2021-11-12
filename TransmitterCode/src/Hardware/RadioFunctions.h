@@ -7,8 +7,8 @@
 #define TXVERSION_MAJOR   1 //   Nov 10th 2021 Malcolm Messiter
 #define TXVERSION_MINOR   1
 #define TXVERSION_MINIMUS 5
-
-#define OLD_FHSS           // to manage the switch over of FHSS implentation
+//
+#define OLD_FHSS          // to manage the switch over of FHSS implentation
 //#define NEW_FHSS
 
 #define NORMAL          0 // Normal for transmit as usual
@@ -27,13 +27,14 @@
 
 // UNCOMMENT ANY OF THESE for that bit of debug info
 
+   #define DB_FHSS           // Debug real time FHSS data
 // #define DB_NEXTION        // Debug Nextion and SD card data
 // #define DB_CHANNEL_AVOID  // Debug FHSS channel avoiding data etc
 // #define DB_SENSORS        // Debug Sensors
 // #define DB_BIND           // Debug Binding
 // #define DB_SWITCHES       // Debug Switches
 // #define DB_MODEL_EXCHANGE // Debug MODEL EXCHANGE (by RF link)
-   #define DB_NEWFHSS        // Debug revised FFHS system
+// #define DB_NEWFHSS        // Debug revised FFHS system
 
 #include <RF24.h>
 
