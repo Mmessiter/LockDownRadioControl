@@ -1,5 +1,6 @@
 var common_8h =
 [
+    [ "DEBUG", "common_8h.html#ad72dbcf6d0153db1b8d8a58001feed83", null ],
     [ "OLD_FHSS", "common_8h.html#a2b9a6e894d695923628defd04ed70479", null ],
     [ "RXVERSION_MAJOR", "common_8h.html#a2b147d5155fcf962e9f1c4885b32c67d", null ],
     [ "RXVERSION_MINIMUS", "common_8h.html#a46d5105ccf92f7e44b10af6fd51772a8", null ],
