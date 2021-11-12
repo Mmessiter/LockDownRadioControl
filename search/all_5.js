@@ -7,11 +7,11 @@ var searchData=
   ['failsafedataloaded_144',['FailSafeDataLoaded',['../_receiver_code_2src_2main_8cpp.html#a08ed7a870be8e84ae26ee0b972866bb3',1,'main.cpp']]],
   ['failsafesave_145',['FailSafeSave',['../common_8h.html#a332eaa61dd85cd649cf62de2345e246e',1,'common.h']]],
   ['failsafesent_146',['FailSafeSent',['../common_8h.html#a97bbae82012a7c41f47dcb8ce8a48a90',1,'common.h']]],
-  ['fhss_5frescue_5fbottom_147',['FHSS_RESCUE_BOTTOM',['../radio_8h.html#ae3ff62396efcffeead62e0403efbd6de',1,'FHSS_RESCUE_BOTTOM():&#160;radio.h'],['../_radio_functions_8cpp.html#ae3ff62396efcffeead62e0403efbd6de',1,'FHSS_RESCUE_BOTTOM():&#160;RadioFunctions.cpp']]],
+  ['fhss_5frescue_5fbottom_147',['FHSS_RESCUE_BOTTOM',['../_radio_functions_8cpp.html#ae3ff62396efcffeead62e0403efbd6de',1,'FHSS_RESCUE_BOTTOM():&#160;RadioFunctions.cpp'],['../radio_8h.html#ae3ff62396efcffeead62e0403efbd6de',1,'FHSS_RESCUE_BOTTOM():&#160;radio.h']]],
   ['fhss_5frescue_5ftop_148',['FHSS_RESCUE_TOP',['../radio_8h.html#ab269c2e7db5187ffd777d443dc486b7f',1,'FHSS_RESCUE_TOP():&#160;radio.h'],['../_radio_functions_8cpp.html#ab269c2e7db5187ffd777d443dc486b7f',1,'FHSS_RESCUE_TOP():&#160;RadioFunctions.cpp']]],
   ['fhssbottom_149',['FHSSBottom',['../_radio_functions_8h.html#a6b7932c959ee1a9056dd65861ee3a074',1,'FHSSBottom():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a6b7932c959ee1a9056dd65861ee3a074',1,'FHSSBottom():&#160;main.cpp']]],
   ['fhsstop_150',['FHSSTop',['../_radio_functions_8h.html#a7888e8d66857d89df7bdacfb2cfea007',1,'FHSSTop():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a7888e8d66857d89df7bdacfb2cfea007',1,'FHSSTop():&#160;main.cpp']]],
-  ['fhssview_151',['FhssView',['../_transmitter_code_2src_2main_8cpp.html#a878e0e1e38b67ffd5e1de07170efba1c',1,'FhssView():&#160;main.cpp'],['../_radio_functions_8cpp.html#a878e0e1e38b67ffd5e1de07170efba1c',1,'FhssView():&#160;RadioFunctions.cpp']]],
+  ['fhssview_151',['FhssView',['../_radio_functions_8cpp.html#a878e0e1e38b67ffd5e1de07170efba1c',1,'FhssView():&#160;RadioFunctions.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a878e0e1e38b67ffd5e1de07170efba1c',1,'FhssView():&#160;main.cpp']]],
   ['fhssview_5frhigh_152',['FhssView_Rhigh',['../_transmitter_code_2src_2main_8cpp.html#adb9a7a221fbbaa115b355493f8d94dd1',1,'main.cpp']]],
   ['fhssview_5frlow_153',['FhssView_Rlow',['../_transmitter_code_2src_2main_8cpp.html#a07c5647132fc5f6bcdf9333b10dc40a6',1,'main.cpp']]],
   ['filechannel_154',['FILECHANNEL',['../_transmitter_code_2src_2main_8cpp.html#a25a02fd19ba6092af59f73a9de071bd2',1,'main.cpp']]],
@@ -26,8 +26,10 @@ var searchData=
   ['flightmodeswitch_163',['FLIGHTMODESWITCH',['../_transmitter_code_2src_2main_8cpp.html#a360ae40b5dcb40c9beb3fd1af7134f99',1,'main.cpp']]],
   ['fmswitch_164',['FMSwitch',['../_transmitter_code_2src_2main_8cpp.html#a452f6aed1252d3f1da8a0ceb07552c07',1,'main.cpp']]],
   ['force_5fredisplay_165',['Force_ReDisplay',['../_transmitter_code_2src_2main_8cpp.html#aa1e81e58421a34fdfd7bfb31925f5a90',1,'main.cpp']]],
-  ['frontview_166',['FrontView',['../_transmitter_code_2src_2main_8cpp.html#a5bf0c8b2bc9cc2644bb4a4510ba9d168',1,'main.cpp']]],
-  ['frontview_5fhours_167',['FrontView_Hours',['../_transmitter_code_2src_2main_8cpp.html#aedaf1495391d83b1ff10ad2192fffc93',1,'main.cpp']]],
-  ['frontview_5fmins_168',['FrontView_Mins',['../_transmitter_code_2src_2main_8cpp.html#a60f4339de362e3a16c844e1325523c90',1,'main.cpp']]],
-  ['frontview_5fsecs_169',['FrontView_Secs',['../_transmitter_code_2src_2main_8cpp.html#a9a8581d01528b71e16b6b9e0a18f9193',1,'main.cpp']]]
+  ['frequencyscount_166',['FREQUENCYSCOUNT',['../radio_8h.html#afe5bce36baf737bd284d43cd0e805fdb',1,'radio.h']]],
+  ['frequencystart_167',['FrequencyStart',['../radio_8h.html#a538c34c4275db7eeb9bd601c09bb9c8e',1,'radio.h']]],
+  ['frontview_168',['FrontView',['../_transmitter_code_2src_2main_8cpp.html#a5bf0c8b2bc9cc2644bb4a4510ba9d168',1,'main.cpp']]],
+  ['frontview_5fhours_169',['FrontView_Hours',['../_transmitter_code_2src_2main_8cpp.html#aedaf1495391d83b1ff10ad2192fffc93',1,'main.cpp']]],
+  ['frontview_5fmins_170',['FrontView_Mins',['../_transmitter_code_2src_2main_8cpp.html#a60f4339de362e3a16c844e1325523c90',1,'main.cpp']]],
+  ['frontview_5fsecs_171',['FrontView_Secs',['../_transmitter_code_2src_2main_8cpp.html#a9a8581d01528b71e16b6b9e0a18f9193',1,'main.cpp']]]
 ];
