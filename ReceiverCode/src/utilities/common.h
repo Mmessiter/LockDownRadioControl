@@ -12,7 +12,7 @@
 #define OLD_FHSS
 
 
-// #define DEBUG
+   #define DEBUG
 // #define DB_SENSORS
 // #define DB_PID
 // #define DB_BIND

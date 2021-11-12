@@ -115,7 +115,7 @@ uint8_t  byte1              = 0;
 uint8_t  byte2              = 0;
 bool     GyroInstalled      = false;
 uint32_t ReconnectedMoment;
-
+uint8_t NextFrequency = 120;
 
 /** Load project defaults from EEPROM into the ReceivedData buffer. */
 void LoadFailSafeData()
@@ -282,7 +282,7 @@ void FailSafe()
  * Print out some debugging information about the channel hopping implementation
  * @param freq The next frequency to be used.
  */
-void ShowHopDurationEtc(uint8_t freq)
+void ShowHopDurationEtc()
 {
     float OnePacketTime = (millis() - PacketStartTime) / PacketsPerHop;
     Serial.print("Hop duration: ");
@@ -292,7 +292,7 @@ void ShowHopDurationEtc(uint8_t freq)
     Serial.print("  Average Time per packet: ");
     Serial.print(OnePacketTime);
     Serial.print("ms  Next channel: ");
-    Serial.print(freq);
+    Serial.print(NextFrequency);
     Serial.println(BoundFlag ? " Bound" : " NOT Bound");
     PacketStartTime = millis();
 }
@@ -512,18 +512,24 @@ FASTRUN void ReceiveData()
     if (!Connected)
         if (millis() - LastConnectionMoment >= RECEIVE_TIMEOUT) {
             Reconnect();
+#ifdef OLD_FHSS
             return;
+#endif
             }
     if (ReadData()) {
 
-#ifdef OLD_FHSS
-         uint8_t NextFrequency = CheckParams();
-        if (PacketNumber >= PacketsPerHop) {
-            HopToNextFrequency(NextFrequency);
-            DoSensors();
-        }
-    }
+         NextFrequency = CheckParams();
+#ifdef NEW_FHSS
+         NextFrequency = 120 ;
 #endif
+        if (PacketNumber >= PacketsPerHop) {
+            HopToNextFrequency();
+            DoSensors();
+            
+        }
+
+    }
+
 }
 
 /************************************************************************************************************/

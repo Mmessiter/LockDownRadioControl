@@ -35,6 +35,9 @@ uint8_t SavedPipeAddress[8];
 uint32_t FrequencyStart;
 uint8_t  NextPacketNumber=0;
 
+extern uint8_t NextFrequency;
+extern void ShowHopDurationEtc();
+
 /** AckPayload Stucture for data returned to transmitter. */
 struct Payload
 {
@@ -145,15 +148,16 @@ void GetOldPipe()
  * @param freq The next frequency to use.
  */
 
-void HopToNextFrequency(uint8_t freq)
+void HopToNextFrequency()
 {
     CurrentRadio->stopListening();
-    CurrentRadio->setChannel(freq);
+    CurrentRadio->setChannel(NextFrequency);
     CurrentRadio->startListening();
     LastConnectionMoment = millis();
     
+    
 #ifdef DEBUG
-    ShowHopDurationEtc(freq);
+    ShowHopDurationEtc();
 #endif
 }
 
@@ -189,6 +193,22 @@ void ProdRadio()
     delay(9);                           // This might help
 }
  #endif // defined (SECOND_TRANSCEIVER)
+
+
+#ifdef NEW_FHSS
+void Reconnect()
+{
+    uint8_t i = 0;
+    while ((!CurrentRadio->available()) && (i < 10)){
+            CurrentRadio->stopListening();
+            CurrentRadio->setChannel(NextFrequency);
+            CurrentRadio->startListening();
+            delay(4);
+            ++i;
+    }
+}
+#endif 
+
 /************************************************************************************************************/
 #ifdef OLD_FHSS
 void Reconnect()
@@ -273,13 +293,14 @@ void Reconnect()
                 FailSafeSent = true; // Once is enough
 #ifdef DB_FAILSAFE
                 Serial.println("FailSafe sent");
-#endif
+#endif // DB_FAILSAFE
             }
         }
         delay (5); // This seems to prevent the occasional lockup??
     }
 }
-#endif // OLD_FHSS
+#endif 
+
 
 /************************************************************************************************************/
 
