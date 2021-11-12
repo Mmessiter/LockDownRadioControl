@@ -345,6 +345,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "NextionSleepTime", "_transmitter_code_2src_2main_8cpp.html#a11599eb6fbd014f01f2966003929b08e", null ],
     [ "NextionWakeOnTouch", "_transmitter_code_2src_2main_8cpp.html#a5370ec079c89dd5532a40cb7d5164920", null ],
     [ "NextionWakeUp", "_transmitter_code_2src_2main_8cpp.html#a6a0a4bc23a83e5fcf2f3ca7cadb5c99f", null ],
+    [ "NextPacketNumber", "_transmitter_code_2src_2main_8cpp.html#a8484b277d2c4df40810b3a1516b6a5df", null ],
     [ "NoCarrier", "_transmitter_code_2src_2main_8cpp.html#a740b6b60d941238e8a8cd6caa083a7ca", null ],
     [ "NoSleeping", "_transmitter_code_2src_2main_8cpp.html#aa336d2e589396e246b779e7ed2b097c0", null ],
     [ "OKButton", "_transmitter_code_2src_2main_8cpp.html#ac937459151f4a1e8c5b9736c1562a16a", null ],

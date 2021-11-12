@@ -4,10 +4,10 @@ var searchData=
   ['newpipe_993',['NewPipe',['../radio_8h.html#a594f07765a7ed90e0830d4e2f69a7112',1,'NewPipe():&#160;radio.h'],['../_radio_functions_8h.html#a594f07765a7ed90e0830d4e2f69a7112',1,'NewPipe():&#160;radio.h'],['../_transmitter_code_2src_2main_8cpp.html#a594f07765a7ed90e0830d4e2f69a7112',1,'NewPipe():&#160;main.cpp']]],
   ['nextfrequency_994',['NextFrequency',['../_radio_functions_8h.html#aa8f16a99dfc5658df2e8e40339062b94',1,'NextFrequency():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#aa8f16a99dfc5658df2e8e40339062b94',1,'NextFrequency():&#160;main.cpp']]],
   ['nextionsleepnow_995',['NextionSleepNow',['../_transmitter_code_2src_2main_8cpp.html#a80843d3bf0a47d85c0e2b0226b9c1eb6',1,'main.cpp']]],
-  ['nextionsleeptime_996',['NextionSleepTime',['../_radio_functions_8h.html#a11599eb6fbd014f01f2966003929b08e',1,'NextionSleepTime():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a11599eb6fbd014f01f2966003929b08e',1,'NextionSleepTime():&#160;main.cpp']]],
+  ['nextionsleeptime_996',['NextionSleepTime',['../_transmitter_code_2src_2main_8cpp.html#a11599eb6fbd014f01f2966003929b08e',1,'NextionSleepTime():&#160;main.cpp'],['../_radio_functions_8h.html#a11599eb6fbd014f01f2966003929b08e',1,'NextionSleepTime():&#160;main.cpp']]],
   ['nextionwakeontouch_997',['NextionWakeOnTouch',['../_transmitter_code_2src_2main_8cpp.html#a5370ec079c89dd5532a40cb7d5164920',1,'main.cpp']]],
   ['nextionwakeup_998',['NextionWakeUp',['../_transmitter_code_2src_2main_8cpp.html#a6a0a4bc23a83e5fcf2f3ca7cadb5c99f',1,'main.cpp']]],
-  ['nextpacketnumber_999',['NextPacketNumber',['../radio_8h.html#a8484b277d2c4df40810b3a1516b6a5df',1,'radio.h']]],
+  ['nextpacketnumber_999',['NextPacketNumber',['../radio_8h.html#a8484b277d2c4df40810b3a1516b6a5df',1,'NextPacketNumber():&#160;radio.h'],['../_transmitter_code_2src_2main_8cpp.html#a8484b277d2c4df40810b3a1516b6a5df',1,'NextPacketNumber():&#160;main.cpp']]],
   ['nocarrier_1000',['NoCarrier',['../_radio_functions_8h.html#a2a951a35df4a07c010710b02a17f92b7',1,'NoCarrier():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a740b6b60d941238e8a8cd6caa083a7ca',1,'NoCarrier():&#160;main.cpp']]],
   ['nosleeping_1001',['NoSleeping',['../_radio_functions_8h.html#aa336d2e589396e246b779e7ed2b097c0',1,'NoSleeping():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#aa336d2e589396e246b779e7ed2b097c0',1,'NoSleeping():&#160;main.cpp']]]
 ];
