@@ -275,6 +275,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "Exponential", "_transmitter_code_2src_2main_8cpp.html#aa5eef81a07bc2868ef6792bb8372dff3", null ],
     [ "ExportedFileCounter", "_transmitter_code_2src_2main_8cpp.html#a1252681409ac5c9ed335a78f80633236", null ],
     [ "FailSafeChannel", "_transmitter_code_2src_2main_8cpp.html#a5a547d8417a6f90c0b2bdd5d836274b2", null ],
+    [ "FHSS_Channels", "_transmitter_code_2src_2main_8cpp.html#a79ed13ac413de8a0a1767615afccbe2f", null ],
     [ "FHSSBottom", "_transmitter_code_2src_2main_8cpp.html#a6b7932c959ee1a9056dd65861ee3a074", null ],
     [ "FHSSTop", "_transmitter_code_2src_2main_8cpp.html#a7888e8d66857d89df7bdacfb2cfea007", null ],
     [ "FhssView_Rhigh", "_transmitter_code_2src_2main_8cpp.html#adb9a7a221fbbaa115b355493f8d94dd1", null ],

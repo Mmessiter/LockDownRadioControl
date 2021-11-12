@@ -51,6 +51,7 @@ var _radio_functions_8h =
     [ "CurrentMode", "_radio_functions_8h.html#aacabee92eb3ddd2e3cf31695c00a912e", null ],
     [ "CurrentView", "_radio_functions_8h.html#a2c76c41cd62573eb7227882fc9b9e557", null ],
     [ "DefaultPipe", "_radio_functions_8h.html#a0b9fd9f8e85725c128617f006132ea57", null ],
+    [ "FHSS_Channels", "_radio_functions_8h.html#a04e4fafd0e5c4b4b64317128f248a929", null ],
     [ "FHSSBottom", "_radio_functions_8h.html#a6b7932c959ee1a9056dd65861ee3a074", null ],
     [ "FHSSTop", "_radio_functions_8h.html#a7888e8d66857d89df7bdacfb2cfea007", null ],
     [ "GapStart", "_radio_functions_8h.html#aefd589330e26c925a4c6f97b6a8cf98e", null ],
