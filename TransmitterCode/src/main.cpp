@@ -3898,6 +3898,8 @@ void Button_was_pressed()
     char Graph_View[]              = "GraphView";
     char Mixes_View[]              = "MixesView";
     char SetupView[]               = "MainSetup"; 
+    char ScanEnd[]                 = "ScanEnd";
+    char DataEnd[]                 = "DataEnd";
     char SetupViewFM[]             = "SetupViewFM:";
     char ModelNMSave[]             = "ModelNMSave";
     char Data_View[]               = "DataView";
@@ -4072,10 +4074,25 @@ void Button_was_pressed()
         if (InStrng(SetupView, WordsIn) > 0) {
             CurrentView = MainSetupView;
             ClearText();
-            SaveAllParameters();      // TODO HEER - mixes only
+            SaveAllParameters();     
             SendCommand(page_SetupView);
             CurrentMode = NORMAL;
-             DoScanEnd();
+            return;
+        }
+        
+        if (InStrng(DataEnd, WordsIn) > 0) {
+            CurrentView = MainSetupView;
+            ClearText();
+            CurrentMode = NORMAL;
+            return;
+        }
+
+        if (InStrng(ScanEnd, WordsIn) > 0) {
+            CurrentView = MainSetupView;
+            ClearText();
+            SendCommand(page_SetupView);
+            CurrentMode = NORMAL;
+            DoScanEnd();
             return;
         }
 
