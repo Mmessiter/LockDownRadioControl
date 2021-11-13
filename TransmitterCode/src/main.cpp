@@ -5254,9 +5254,7 @@ void Button_was_pressed()
          p = (InStrng(ClickX, WordsIn)); // Clicked to move point?
         if (p > 0) {
             XtouchPlace = GetNextNumber(p + 7, WordsIn);
-           // MovePoint();
-           // ClearText();
-           // return;
+           // This drops through to get Y as well before moving the point
         }
         p = (InStrng(ClickY, WordsIn)); // Clicked to move point?
         if (p > 0) {
