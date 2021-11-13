@@ -406,10 +406,10 @@ bool Switch4Reversed = false;
 
 int      OneModelMemory      = 0;
 int      StartLocation       = 0;
-char     OKButton[]          = "GainsView.b10";
-char     SaveButton[]        = "GainsView.b0";
-char     OKTypeButton[]      = "TypeView.b10";
-char     SaveTypeButton[]    = "TypeView.b0";
+char     OKButton[]          = "b10";
+char     SaveButton[]        = "b0";
+char     OKTypeButton[]      = "b10";
+char     SaveTypeButton[]    = "b0";
 bool     ValueSent           = false;
 int      SwitchEditNumber    = 0; // number of switch being edited
 uint32_t ShowServoTimer      = 0;
@@ -3899,7 +3899,7 @@ void Button_was_pressed()
     char Graph_View[]              = "GraphView";
     char Mixes_View[]              = "MixesView";
     char SetupView[]               = "MainSetup"; 
-    char ScanEnd[]                 = "ScanEnd";
+    char Scan_End[]                = "ScanEnd";
     char DataEnd[]                 = "DataEnd";
     char SetupViewFM[]             = "SetupViewFM:";
     char ModelNMSave[]             = "ModelNMSave";
@@ -3907,7 +3907,7 @@ void Button_was_pressed()
     char Calibrate_View[]          = "CalibrateView";
     char Trim[]                    = "Trim";
     char TrimView[]                = "TrimView";
-    char TR1[]                     = "TR1";
+    char TR1[]                     = "TR1"; 
     char TR2[]                     = "TR2";
     char TR3[]                     = "TR3";
     char TR4[]                     = "TR4";
@@ -4064,6 +4064,16 @@ void Button_was_pressed()
     char Dec_Date[]            = "DecDate";
     char Inc_Month[]           = "IncMonth";
     char Dec_Month[]           = "DecMonth";
+    char pDataView[]           = "page DataView";
+    char pSwitchesView[]       = "page SwitchesView";
+    char pInputsView[]         = "page InputsView";
+    char pOptionsViewS[]       = "page OptionsView";
+    char pModelsView[]         = "page ModelsView";
+    char pTrimView[]           = "page TrimView";
+    char pMixesView[]          = "page MixesView";
+    char pTypeView[]           = "page TypeView";
+    char pCalibrateView[]      = "page CalibrateView";
+    char pFailSafe[]           = "page FailSafeView";
 
     if (strlen(WordsIn) > 0) {
         StartInactvityTimeout();
@@ -4088,7 +4098,7 @@ void Button_was_pressed()
             return;
         }
 
-        if (InStrng(ScanEnd, WordsIn) > 0) { //  goto setup screen from Scan screen
+        if (InStrng(Scan_End, WordsIn) > 0) { //  goto setup screen from Scan screen
             CurrentView = MainSetupView;
             ClearText();
             SendCommand(page_SetupView);
@@ -4160,6 +4170,7 @@ void Button_was_pressed()
         }
 
         if (InStrng(OptionsViewS, WordsIn) > 0) {
+            SendCommand(pOptionsViewS);
             if (FHSSBottom < 1) FHSSBottom = 1;
             SendValue(FhssView_Rlow, FHSSBottom);
             SendValue(FhssView_Rhigh, FHSSTop);
@@ -4334,6 +4345,7 @@ void Button_was_pressed()
         }
 
         if (InStrng(FailSafe, WordsIn) > 0) {
+            SendCommand(pFailSafe);
             SendValue(fs1, FailSafeChannel[0]);
             SendValue(fs2, FailSafeChannel[1]);
             SendValue(fs3, FailSafeChannel[2]);
@@ -4437,6 +4449,7 @@ void Button_was_pressed()
             return;
         }
         if (InStrng(InputsView, WordsIn) > 0) {
+            SendCommand(pInputsView);
             CurrentView = Inputs_View;
             UpdateButtonLabels();
             return;
@@ -4614,12 +4627,14 @@ void Button_was_pressed()
         }
 
         if (InStrng(SwitchesView, WordsIn)) {
+            SendCommand(pSwitchesView);
             UpdateSwitchesDisplay(); // display saved values
             CurrentView = Switches_View;
             return;
         }
 
         if  (InStrng(Calibrate_View, WordsIn)) {
+            SendCommand(pCalibrateView);
             Force_ReDisplay();
             CurrentView = CalibrateView;
             ClearText();
@@ -4783,6 +4798,7 @@ void Button_was_pressed()
             return;
         }
         if (InStrng(TypeView, WordsIn) > 0) {
+            SendCommand(pTypeView);
             SendValue(AeroplaneType, 0);
             SendValue(HelicopterType, 0);
             SendValue(QuadcopterType, 0);
@@ -4834,6 +4850,7 @@ void Button_was_pressed()
         }
 
         if (InStrng(TrimView, WordsIn) > 0) { // TrimView just appeared, so update it.
+            SendCommand(pTrimView);
             CurrentView = Trim_View;
             UpdateModelsNameEveryWhere(); // also updates trimview
             ClearText();
@@ -4871,6 +4888,7 @@ void Button_was_pressed()
             SaveOneModel(ModelNumber); // save trims to SDcard
         }
         if (InStrng(Models_View, WordsIn) > 0) {
+            SendCommand(pModelsView);
             ReadOneModel(ModelNumber);
             CurrentView = ModelsView;
             UpdateModelsNameEveryWhere();
@@ -4951,6 +4969,7 @@ void Button_was_pressed()
 
         p = (InStrng(Sticks_View, WordsIn));
         if (p > 0) {
+            SendCommand(page_SticksView);
             Force_ReDisplay();
             CurrentView = SticksView;
             SendCommand(page_SticksView); // Set to SticksView
@@ -4960,7 +4979,7 @@ void Button_was_pressed()
 
       if (InStrng(Fhss_View, WordsIn))
          {
-            delay(200); 
+            SendCommand (page_FhssView); 
             DrawFhssBox();
             DoScanInit();
             CurrentMode = SCANWAVEBAND; 
@@ -4979,6 +4998,7 @@ void Button_was_pressed()
 
         p = (InStrng(MIXES_VIEW, WordsIn)); //
         if (p > 0) {
+            SendCommand(pMixesView);
             CurrentView = MixesView;
             UpdateModelsNameEveryWhere();
             if (MixNumber == 0) MixNumber = 1;
@@ -5017,12 +5037,7 @@ void Button_was_pressed()
             CurrentMode  = NORMAL;
             CurrentView  = DataView;
             LastShowTime = 0;
-        }
-
-         if (InStrng(Fhss_View, WordsIn))
-         {
-            CurrentView = FhssView;
-            BlueLedOn();
+            SendCommand(pDataView);
         }
 
         if (InStrng(bind, WordsIn))
