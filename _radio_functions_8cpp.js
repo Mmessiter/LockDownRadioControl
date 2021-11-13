@@ -16,7 +16,6 @@ var _radio_functions_8cpp =
     [ "ModelsView", "_radio_functions_8cpp.html#aeed7d902ff232b52159751c98fe8563f", null ],
     [ "One_Switch_View", "_radio_functions_8cpp.html#af3499673555eb59420e78145fce19c47", null ],
     [ "Options_View", "_radio_functions_8cpp.html#a90604ea6b0b372f3c24fa6935127e6fd", null ],
-    [ "PACEMAKER", "_radio_functions_8cpp.html#a56e90cbec59fa96bebfb3db997e6a3fe", null ],
     [ "PACKETS_PER_HOP", "_radio_functions_8cpp.html#a5007d1c13f725ead699cb2ebb07c63d0", null ],
     [ "SticksView", "_radio_functions_8cpp.html#ab7abdd2877694598578f0c4d717f46e8", null ],
     [ "Switches_View", "_radio_functions_8cpp.html#ad16a6b359f59fa52101e30d233fb030f", null ],
