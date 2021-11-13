@@ -89,7 +89,6 @@ void TryOtherPipe()
 }
 /************************************************************************************************************/
 
-#define PACEMAKER 5 // MINIMUM Ms between packets of data. - Probably needs to be between 7 and 20
 void SendData()
 {
    
@@ -273,7 +272,9 @@ void HopToNextFrequency()
  #endif
 #ifdef NEW_FHSS
     Serial.print(" Next channel: ");
-    Serial.println(FHSS_Channels[NextChannelNumber]);
+    Serial.print(FHSS_Channels[NextChannelNumber]);
+     Serial.print(" BoundFlag = ");
+     Serial.println(BoundFlag);
  #endif
     PSTARTTIME = millis();
 #endif

@@ -3897,7 +3897,7 @@ void Button_was_pressed()
     char Sticks_View[]             = "SticksView";
     char Graph_View[]              = "GraphView";
     char Mixes_View[]              = "MixesView";
-    char SetupView[]               = "MainSetup"; // changed string to avoid overlap
+    char SetupView[]               = "MainSetup"; 
     char SetupViewFM[]             = "SetupViewFM:";
     char ModelNMSave[]             = "ModelNMSave";
     char Data_View[]               = "DataView";
@@ -4072,10 +4072,10 @@ void Button_was_pressed()
         if (InStrng(SetupView, WordsIn) > 0) {
             CurrentView = MainSetupView;
             ClearText();
-            SaveAllParameters(); // TODO HEER - mixes only
+            SaveAllParameters();      // TODO HEER - mixes only
             SendCommand(page_SetupView);
             CurrentMode = NORMAL;
-            DoScanEnd();
+             DoScanEnd();
             return;
         }
 
@@ -4996,8 +4996,7 @@ void Button_was_pressed()
 
          if (InStrng(Data_View, WordsIn))
          {
-            CurrentMode = NORMAL;
-            delay(200);                                 // allow time for screen to display
+            CurrentMode  = NORMAL;
             CurrentView  = DataView;
             LastShowTime = 0;
         }
