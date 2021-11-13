@@ -215,6 +215,9 @@ void Reconnect()
             delay(4);
             ++i;
     }
+    ConnectionStart=millis();
+    ReconnectedMoment=ConnectionStart;        // Save this moment, then don't move a servo for a few ms ....
+
 }
 #endif 
 
