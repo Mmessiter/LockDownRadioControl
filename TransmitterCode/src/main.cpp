@@ -4111,6 +4111,7 @@ void Button_was_pressed()
             SavedCurrentView = CurrentView;
             CurrentView      = Help_View;
             SendHelp();
+            ClearText();
             return;
         }
         if (InStrng(Dec_Minute, WordsIn) > 0) {
@@ -4269,6 +4270,7 @@ void Button_was_pressed()
                 SingleModelFile[j] = 0;
             } // got local name but won't use it.....
             ReceiveModelFile();
+            ClearText();
             return;
         }
         if (InStrng(PowerOff, WordsIn) > 0) {
@@ -4285,6 +4287,7 @@ void Button_was_pressed()
 
         if (InStrng(OffNow, WordsIn) > 0) {
             digitalWrite(POWER_OFF_PIN, HIGH); // force OFF in Options View
+            ClearText();
             return;
         }
 
@@ -4298,6 +4301,7 @@ void Button_was_pressed()
                 SingleModelFile[j] = 0;
             }
             SendModelFile();
+            ClearText();
             return;
         }
 
@@ -4341,6 +4345,7 @@ void Button_was_pressed()
             delay(200);
             SaveFailSafeNow = true;
             SendCommand(ProgressEnd);
+            ClearText();
             return;
         }
 
@@ -4362,6 +4367,7 @@ void Button_was_pressed()
             SendValue(fs14, FailSafeChannel[13]);
             SendValue(fs15, FailSafeChannel[14]);
             SendValue(fs16, FailSafeChannel[15]);
+            ClearText();
             return;
         }
 
@@ -4370,6 +4376,7 @@ void Button_was_pressed()
             CurrentView      = One_Switch_View;
             SendCommand(PageOneSwitchView); // edit one switch - could be 1-4
             updateOneSwitchView();
+            ClearText();
             return;
         }
 
@@ -4446,12 +4453,14 @@ void Button_was_pressed()
             SaveOneModel(ModelNumber);
             SendCommand(PageSwitchView); // change to all switches screen
             UpdateSwitchesDisplay();     // update its info
+            ClearText();
             return;
         }
         if (InStrng(InputsView, WordsIn) > 0) {
             SendCommand(pInputsView);
             CurrentView = Inputs_View;
             UpdateButtonLabels();
+            ClearText();
             return;
         }
 
@@ -4495,102 +4504,119 @@ void Button_was_pressed()
             SendCommand(ProgressEnd);
             UpdateButtonLabels();
             SendCommand(page_SetupView);
+            ClearText();
             return;
         }
         if (InStrng(CH1NAME, WordsIn) > 0) {
             p = InStrng (CH1NAME, WordsIn);
             i = p + 7;
             DoNewChannelName(1, i);
+            ClearText();
             return;
         }
         if (InStrng(CH2NAME, WordsIn) > 0) {
             p = InStrng (CH2NAME, WordsIn);
             i = p + 7;
             DoNewChannelName(2, i);
+            ClearText();
             return;
         }
         if (InStrng(CH3NAME, WordsIn) > 0) {
             p = InStrng(CH3NAME, WordsIn);
             i = p + 7;
             DoNewChannelName(3, i);
+            ClearText();
             return;
         }
         if (InStrng(CH4NAME, WordsIn) > 0) {
             p = InStrng(CH4NAME, WordsIn);
             i = p + 7;
             DoNewChannelName(4, i);
+            ClearText();
             return;
         }
         if (InStrng(CH5NAME, WordsIn) > 0) {
             p = InStrng(CH5NAME, WordsIn);
             i = p + 7;
             DoNewChannelName(5, i);
+            ClearText();
             return;
         }
         if (InStrng(CH6NAME, WordsIn) > 0) {
             p = InStrng(CH6NAME, WordsIn);
             i = p + 7;
             DoNewChannelName(6, i);
+            ClearText();
             return;
         }
         if (InStrng(CH7NAME, WordsIn) > 0) {
             p = InStrng(CH7NAME, WordsIn);
             i = p + 7;
             DoNewChannelName(7, i);
+            ClearText();
             return;
         }
         if (InStrng(CH8NAME, WordsIn) > 0) {
             p = InStrng(CH8NAME, WordsIn);
             i = p + 7;
             DoNewChannelName(8, i);
+            ClearText();
             return;
         }
         if (InStrng(CH9NAME, WordsIn) > 0) {
             p = InStrng(CH9NAME, WordsIn);
             i = p + 7;
             DoNewChannelName(9, i);
+            ClearText();
             return;
         }
         if (InStrng(CH10NAME, WordsIn) > 0) {
             p = InStrng(CH10NAME, WordsIn);
             i = p + 8;
             DoNewChannelName(10, i);
+            ClearText();
             return;
         }
         if (InStrng(CH11NAME, WordsIn) > 0) {
             p = InStrng(CH11NAME, WordsIn);
             i = p + 8;
             DoNewChannelName(11, i);
+            ClearText();
             return;
         }
         if (InStrng(CH12NAME, WordsIn) > 0) {
             p = InStrng(CH12NAME, WordsIn);
             i = p + 8;
             DoNewChannelName(12, i);
+            ClearText();
             return;
         }
         if (InStrng(CH13NAME, WordsIn) > 0) {
             p = InStrng(CH13NAME, WordsIn);
             i = p + 8;
             DoNewChannelName(13, i);
+            ClearText();
             return;
         }
         if (InStrng(CH14NAME, WordsIn) > 0) {
             p = InStrng(CH14NAME, WordsIn);
             i = p + 8;
             DoNewChannelName(14, i);
+            ClearText();
             return;
         }
         if (InStrng(CH15NAME, WordsIn) > 0) {
             p = InStrng(CH15NAME, WordsIn);
             i = p + 8;
             DoNewChannelName(15, i);
+            ClearText();
             return;
         }
         if (InStrng(CH16NAME, WordsIn) > 0) {
             p = InStrng(CH16NAME, WordsIn);
             i = p + 8;
             DoNewChannelName(16, i);
+            ClearText();
             return;
         }
 
@@ -4609,6 +4635,7 @@ void Button_was_pressed()
             FileNumberInView--;
             ShowFileNumber();
             CloseModelsFile();
+            ClearText();
             return;
         }
 
@@ -4616,6 +4643,7 @@ void Button_was_pressed()
             FileNumberInView++;
             ShowFileNumber();
             CloseModelsFile();
+            ClearText();
             return;
         }
 
@@ -4623,6 +4651,7 @@ void Button_was_pressed()
             FileNumberInView--;
             ShowFileNumber();
             CloseModelsFile();
+            ClearText();
             return;
         }
 
@@ -4630,6 +4659,7 @@ void Button_was_pressed()
             SendCommand(pSwitchesView);
             UpdateSwitchesDisplay(); // display saved values
             CurrentView = Switches_View;
+            ClearText();
             return;
         }
 
@@ -4682,6 +4712,7 @@ void Button_was_pressed()
             delay(10);
             SendCommand(ProgressEnd);
             if (FileError) ShowFileErrorMsg();
+            ClearText();
             return;
         }
 
@@ -4721,11 +4752,13 @@ void Button_was_pressed()
             delay(10);
             SendCommand(ProgressEnd);
             if (FileError) ShowFileErrorMsg();
+            ClearText();
             return;
         }
 
         if (InStrng(ListFiles, WordsIn) > 0) {
             ShowDirectory(); //
+            ClearText();
             return;
         }
 
@@ -4747,6 +4780,7 @@ void Button_was_pressed()
             SendCommand(page_SetupView);
             CurrentMode = NORMAL; // Send data again
             CurrentView = MainSetupView;
+            ClearText();
             return;
         }
 
@@ -4771,7 +4805,8 @@ void Button_was_pressed()
                    SetupFlag=true;
                }
             }
-            SendCommand(page_SetupView); //
+            SendCommand(page_SetupView); 
+            ClearText();
             return;
         }
 
@@ -4784,17 +4819,20 @@ void Button_was_pressed()
             ShowFlightMode();
             LastShowTime = 0; // this is to make redisplay sooner
             LastTimeRead = 0; // this is to make redisplay sooner
+            ClearText();
             return;
         }
 
         if (InStrng(Gains_View, WordsIn) > 0) {
             CurrentView = GainsView;
             UpdateGainsView();
+            ClearText();
             return;
         }
 
         if (InStrng(SaveGains, WordsIn) > 0) {
             SaveNewGains();
+            ClearText();
             return;
         }
         if (InStrng(TypeView, WordsIn) > 0) {
@@ -4821,6 +4859,7 @@ void Button_was_pressed()
             if (RXCellCount == 4) SendValue(r4s, 1);
             if (RXCellCount == 5) SendValue(r5s, 1);
             if (RXCellCount == 6) SendValue(r6s, 1);
+            ClearText();
             return;
         }
 
@@ -4836,6 +4875,7 @@ void Button_was_pressed()
             SaveOneModel(ModelNumber);
             ButtonWhite(SaveTypeButton);
             ButtonWhite(OKTypeButton);
+            ClearText();
             return;
         }
 
@@ -4846,6 +4886,7 @@ void Button_was_pressed()
             if (GetValue(r5s) == 1) RXCellCount = 5;
             if (GetValue(r6s) == 1) RXCellCount = 6;
             SaveOneModel(ModelNumber);
+            ClearText();
             return;
         }
 
@@ -4917,11 +4958,13 @@ void Button_was_pressed()
             SendValue(Progress, 100);
             delay(20);
             SendCommand(ProgressEnd);
+            ClearText();
         }
 
         if (InStrng(Delete, WordsIn) > 0) {
             ModelNumber = GetValue(ModelsView_ModelNumber);
             SetDefaultValues();
+            ClearText();
         }
 
         if (InStrng(Write, WordsIn) > 0) { //  write new data to SD
@@ -4945,6 +4988,8 @@ void Button_was_pressed()
             SendCommand(page_SticksView); // Set to SticksView
             CurrentView = SticksView;
             UpdateModelsNameEveryWhere();
+            ClearText();
+            return;
         }
 
         if (InStrng(Setup, WordsIn) > 0) { // Which channel to setup ... Goes to GraphView
@@ -4956,6 +5001,8 @@ void Button_was_pressed()
             updateInterpolationTypes();
             UpdateModelsNameEveryWhere();
             SendValue(CopyToAllFlightModes, 0);
+            ClearText();
+            return;
         }
 
         p = (InStrng(Front_View, WordsIn)); //which screen is in view?
@@ -4965,6 +5012,8 @@ void Button_was_pressed()
             PreviousFlightMode = 250; // sure to be different
             CurrentMode        = NORMAL;
             UpdateModelsNameEveryWhere();
+            ClearText();
+            return;
         }
 
         p = (InStrng(Sticks_View, WordsIn));
@@ -4975,6 +5024,8 @@ void Button_was_pressed()
             SendCommand(page_SticksView); // Set to SticksView
             UpdateModelsNameEveryWhere();
             UpdateButtonLabels();
+            ClearText();
+            return;
         }
 
       if (InStrng(Fhss_View, WordsIn))
@@ -5004,6 +5055,8 @@ void Button_was_pressed()
             if (MixNumber == 0) MixNumber = 1;
             LastMixNumber = 33;                        // just to be differernt
             SendValue(MixesView_MixNumber, MixNumber); // New load of mix window
+            ClearText();
+            return;
         }
 
         p = (InStrng(Mixes_View, WordsIn)); // Get New Mixes!
@@ -5025,11 +5078,15 @@ void Button_was_pressed()
                 SendText(MixesView_chM, ChannelNames[Mixes[MixNumber][M_MasterChannel] - 1]);
                 SendText(MixesView_chS, ChannelNames[Mixes[MixNumber][M_SlaveChannel] - 1]);
             }
+            ClearText();
+            return;
         }
 
        if (InStrng(Graph_View, WordsIn))
         {
             CurrentView = GraphView;
+            ClearText();
+            return;
         }
 
          if (InStrng(Data_View, WordsIn))
@@ -5038,11 +5095,15 @@ void Button_was_pressed()
             CurrentView  = DataView;
             LastShowTime = 0;
             SendCommand(pDataView);
+            ClearText();
+            return;
         }
 
         if (InStrng(bind, WordsIn))
         {
             BindNow();
+            ClearText();
+            return;
         }
 
         if (InStrng(FM1, WordsIn))
@@ -5050,6 +5111,8 @@ void Button_was_pressed()
             FlightMode         = 1;
             PreviousFlightMode = 1;
             UpdateModelsNameEveryWhere();
+            ClearText();
+            return;
         }
 
         if (InStrng(FM2, WordsIn))
@@ -5057,6 +5120,8 @@ void Button_was_pressed()
             FlightMode         = 2;
             PreviousFlightMode = 2;
             UpdateModelsNameEveryWhere();
+            ClearText();
+            return;
         }
 
         if (InStrng(FM3, WordsIn))
@@ -5064,6 +5129,8 @@ void Button_was_pressed()
             FlightMode         = 3;
             PreviousFlightMode = 3;
             UpdateModelsNameEveryWhere();
+            ClearText();
+            return;
         }
 
         if (InStrng(FM4, WordsIn))
@@ -5071,12 +5138,15 @@ void Button_was_pressed()
             FlightMode         = 4;
             PreviousFlightMode = 4;
             UpdateModelsNameEveryWhere();
+            ClearText();
+            return;
         }
          if (InStrng(midyup, WordsIn)) // midy up?
          {
             CentreDegrees[FlightMode][ChanneltoSet - 1]++;
             DisplayCurve();
             ClearText();
+            return;
         }
 
          if (InStrng(midydown, WordsIn)) // midy down?
@@ -5084,6 +5154,7 @@ void Button_was_pressed()
             CentreDegrees[FlightMode][ChanneltoSet - 1]--;
             DisplayCurve();
             ClearText();
+            return;
         }
 
         if (InStrng(midhiyup, WordsIn))  // midhiy up?
@@ -5091,6 +5162,7 @@ void Button_was_pressed()
             MidHiDegrees[FlightMode][ChanneltoSet - 1]++;
             DisplayCurve();
             ClearText();
+            return;
         }
 
         if (InStrng(midhiydown, WordsIn)) // midhiy down?
@@ -5098,6 +5170,7 @@ void Button_was_pressed()
             MidHiDegrees[FlightMode][ChanneltoSet - 1]--;
             DisplayCurve();
             ClearText();
+            return;
         }
 
         if (InStrng(midlowyup, WordsIn)) // midlowy up?
@@ -5105,6 +5178,7 @@ void Button_was_pressed()
             MidLowDegrees[FlightMode][ChanneltoSet - 1]++;
             DisplayCurve();
             ClearText();
+            return;
         }
 
        if (InStrng(midlowydown, WordsIn)) // midlowy down?
@@ -5112,6 +5186,7 @@ void Button_was_pressed()
             MidLowDegrees[FlightMode][ChanneltoSet - 1]--;
             DisplayCurve();
             ClearText();
+            return;
         }
 
         if (InStrng(yy1up, WordsIn)) // yy1 up?
@@ -5119,6 +5194,7 @@ void Button_was_pressed()
             MaxDegrees[FlightMode][ChanneltoSet - 1]++;
             DisplayCurve();
             ClearText();
+            return;
         }
 
         if (InStrng(yy1down, WordsIn)) // yy1 down?
@@ -5126,6 +5202,7 @@ void Button_was_pressed()
             MaxDegrees[FlightMode][ChanneltoSet - 1]--;
             DisplayCurve();
             ClearText();
+            return;
         }
 
         if (InStrng(yy2up, WordsIn)) // yy1 up?
@@ -5133,6 +5210,7 @@ void Button_was_pressed()
             MinDegrees[FlightMode][ChanneltoSet - 1]++;
             DisplayCurve();
             ClearText();
+            return;
         }
 
         if (InStrng(yy2down, WordsIn)) // yy1 down?
@@ -5140,6 +5218,7 @@ void Button_was_pressed()
             MinDegrees[FlightMode][ChanneltoSet - 1]--;
             DisplayCurve();
             ClearText();
+            return;
         }
 
         if  (InStrng(Reset, WordsIn)) // RESET?
@@ -5153,6 +5232,7 @@ void Button_was_pressed()
             InterpolationTypes[FlightMode][ChanneltoSet - 1] = 2; // expo = default
             DisplayCurve();
             ClearText();
+            return;
         }
 
         if (InStrng(Reverse, WordsIn)) // REVERSE?
@@ -5169,15 +5249,20 @@ void Button_was_pressed()
             MaxDegrees[FlightMode][ChanneltoSet - 1]    = 180 - p;
             DisplayCurve();
             ClearText();
+            return;
         }
          p = (InStrng(ClickX, WordsIn)); // Clicked to move point?
         if (p > 0) {
             XtouchPlace = GetNextNumber(p + 7, WordsIn);
+            ClearText();
+            return;
         }
         p = (InStrng(ClickY, WordsIn)); // Clicked to move point?
         if (p > 0) {
             YtouchPlace = GetNextNumber(p + 7, WordsIn);
             MovePoint();
+            ClearText();
+            return;
         }
         if (CurrentMode == 0) {
             if (strcmp(WordsIn, "Calibrate1") == 0) {
@@ -5207,6 +5292,7 @@ void Button_was_pressed()
                 SendText(SvB0, Cmsg6);
                 SendValue1(NextionSleepTime, ScreenTimeout); // Re enable timeout
                 ClearText();
+                return;
             }
         }
     }
