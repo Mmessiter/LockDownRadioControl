@@ -205,19 +205,18 @@ void ProdRadio()
 
 
 #ifdef NEW_FHSS
-void Reconnect()
+void Reconnect()  // Still TODO: Failsafe and 2nd transceiver
 {
-    uint8_t i = 0;
-    while ((!CurrentRadio->available()) && (i < 10)){
+    uint16_t i = 0;
             CurrentRadio->stopListening();
             CurrentRadio->setChannel(120);
             CurrentRadio->startListening();
+    while ((!CurrentRadio->available()) && (i < 20000)){
             delay(4);
             ++i;
     }
     ConnectionStart=millis();
     ReconnectedMoment=ConnectionStart;        // Save this moment, then don't move a servo for a few ms ....
-
 }
 #endif 
 
