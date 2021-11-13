@@ -157,7 +157,7 @@ void HopToNextFrequency()
 #endif
 #ifdef NEW_FHSS
     CurrentRadio->setChannel(FHSS_Channels[NextChannelNumber]);
-    delay (1);
+    //delay (1);
 #endif
 
     CurrentRadio->startListening();
