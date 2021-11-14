@@ -530,7 +530,7 @@ FASTRUN void ReceiveData()
 #ifdef OLD_FHSS
             return;
 #endif
-            }
+      }
     if (ReadData()) {
          NextFrequency = CheckParams();
 
