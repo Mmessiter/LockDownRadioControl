@@ -123,30 +123,27 @@ $(document).ready(function(){initNavTree('common_8h_source.html',''); initResiza
 <div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="common_8h.html#a332eaa61dd85cd649cf62de2345e246e">   25</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="common_8h.html#a332eaa61dd85cd649cf62de2345e246e">FailSafeSave</a>         = <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="common_8h.html#a97bbae82012a7c41f47dcb8ce8a48a90">   26</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="common_8h.html#a97bbae82012a7c41f47dcb8ce8a48a90">FailSafeSent</a>         = <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="comment">// test array</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="common_8h.html#a79ed13ac413de8a0a1767615afccbe2f">   30</a></span>&#160;uint8_t <a class="code" href="common_8h.html#a79ed13ac413de8a0a1767615afccbe2f">FHSS_Channels</a>[84] = {120,120,86,109,123,90,98,112,102,99,104,120,85,107,114,95,98,89,99,113,107,112,120,123,100,114,121,102,87,97,86,104,96,120,87,111,116,88,114,103,108,123,110,97,120,88,93,119,84,88,112,92,109,121,100,120,101,119,88,121,95,89,113,103,100,117,120,124,111,108,106,115,115,94,109,119,112,120,87,104,116,85,123,97};</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    </div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="comment">// Use this array for UK legal flying</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="comment">//uint8_t FHSS_Channels[84] = {28,24,61,64,28,55,66,19,76,21,59,67,15,71,82,32,49,69,13,2,34,47,20,34,69,16,2,72,35,76,35,57,45,29,76,75,49,59,3,57,20,16,41,59,62,59,67,11,3,9,77,37,8,31,36,34,18,75,17,9,50,78,77,73,30,50,79,6,36,20,23,79,40,54,51,19,69,12,18,80,53,41,24};</span></div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="comment">// Use this array for UK legal flying</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="comment">//uint8_t FHSS_Channels[84] = {28,24,61,64,28,55,66,19,76,21,59,67,15,71,82,32,49,69,13,2,34,47,20,34,69,16,2,72,35,76,35,57,45,29,76,75,49,59,3,57,20,16,41,59,62,59,67,11,3,9,77,37,8,31,36,34,18,75,17,9,50,78,77,73,30,50,79,6,36,20,23,79,40,54,51,19,69,12,18,80,53,41,24};</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="comment">// Use this array for testing in noisy wifi</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="common_8h.html#a79ed13ac413de8a0a1767615afccbe2f">   34</a></span>&#160;  uint8_t <a class="code" href="common_8h.html#a79ed13ac413de8a0a1767615afccbe2f">FHSS_Channels</a>[84] = {93,111,107,103,106,111,97,108,102,118,104,101,109,98,113,113,124,115,91,111,96,85,117,89,103,117,111,99,85,114,118,118,118,99,87,112,118,117,91,101,86,99,103,99,124,101,104,101,109,94,86,92,119,120,91,114,119,117,101,117,100,92,92,120,119,115,113,92,121,89,119,103,106,121,123,96,93,102,111,95,101,122,95};</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="comment">// Use this array for testing in noisy wifi</span></div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; <span class="comment">// uint8_t FHSS_Channels[84] = {93,111,107,103,106,111,97,108,102,118,104,101,109,98,113,113,124,115,91,111,96,85,117,89,103,117,111,99,85,114,118,118,118,99,87,112,118,117,91,101,86,99,103,99,124,101,104,101,109,94,86,92,119,120,91,114,119,117,101,117,100,92,92,120,119,115,113,92,121,89,119,103,106,121,123,96,93,102,111,95,101,122,95};</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="comment">/************************************************************************************************************/</span></div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="comment">/************************************************************************************************************/</span></div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
-<div class="line"><a name="l00043"></a><span class="lineno"><a class="line" href="common_8h.html#a235d91d2b354c3ce98152e3367ff0fb8">   43</a></span>&#160;uint8_t <a class="code" href="common_8h.html#a235d91d2b354c3ce98152e3367ff0fb8">LoadModelNumber</a>()</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;{</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keywordflow">return</span> EEPROM.read(28);</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;}</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// defined (_SRC_UTILITIES_COMMON_H)</span></div>
-<div class="ttc" id="acommon_8h_html_a235d91d2b354c3ce98152e3367ff0fb8"><div class="ttname"><a href="common_8h.html#a235d91d2b354c3ce98152e3367ff0fb8">LoadModelNumber</a></div><div class="ttdeci">uint8_t LoadModelNumber()</div><div class="ttdef"><b>Definition:</b> <a href="common_8h_source.html#l00043">common.h:43</a></div></div>
+<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="common_8h.html#a235d91d2b354c3ce98152e3367ff0fb8">   40</a></span>&#160;uint8_t <a class="code" href="common_8h.html#a235d91d2b354c3ce98152e3367ff0fb8">LoadModelNumber</a>()</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;{</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keywordflow">return</span> EEPROM.read(28);</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;}</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// defined (_SRC_UTILITIES_COMMON_H)</span></div>
+<div class="ttc" id="acommon_8h_html_a235d91d2b354c3ce98152e3367ff0fb8"><div class="ttname"><a href="common_8h.html#a235d91d2b354c3ce98152e3367ff0fb8">LoadModelNumber</a></div><div class="ttdeci">uint8_t LoadModelNumber()</div><div class="ttdef"><b>Definition:</b> <a href="common_8h_source.html#l00040">common.h:40</a></div></div>
 <div class="ttc" id="acommon_8h_html_a332eaa61dd85cd649cf62de2345e246e"><div class="ttname"><a href="common_8h.html#a332eaa61dd85cd649cf62de2345e246e">FailSafeSave</a></div><div class="ttdeci">bool FailSafeSave</div><div class="ttdef"><b>Definition:</b> <a href="common_8h_source.html#l00025">common.h:25</a></div></div>
-<div class="ttc" id="acommon_8h_html_a79ed13ac413de8a0a1767615afccbe2f"><div class="ttname"><a href="common_8h.html#a79ed13ac413de8a0a1767615afccbe2f">FHSS_Channels</a></div><div class="ttdeci">uint8_t FHSS_Channels[84]</div><div class="ttdef"><b>Definition:</b> <a href="common_8h_source.html#l00030">common.h:30</a></div></div>
+<div class="ttc" id="acommon_8h_html_a79ed13ac413de8a0a1767615afccbe2f"><div class="ttname"><a href="common_8h.html#a79ed13ac413de8a0a1767615afccbe2f">FHSS_Channels</a></div><div class="ttdeci">uint8_t FHSS_Channels[84]</div><div class="ttdef"><b>Definition:</b> <a href="common_8h_source.html#l00034">common.h:34</a></div></div>
 <div class="ttc" id="acommon_8h_html_a97bbae82012a7c41f47dcb8ce8a48a90"><div class="ttname"><a href="common_8h.html#a97bbae82012a7c41f47dcb8ce8a48a90">FailSafeSent</a></div><div class="ttdeci">bool FailSafeSent</div><div class="ttdef"><b>Definition:</b> <a href="common_8h_source.html#l00026">common.h:26</a></div></div>
 <div class="ttc" id="acommon_8h_html_ae6d822db2ca02c3f6fa690311b580c93"><div class="ttname"><a href="common_8h.html#ae6d822db2ca02c3f6fa690311b580c93">LastConnectionMoment</a></div><div class="ttdeci">int LastConnectionMoment</div><div class="ttdef"><b>Definition:</b> <a href="common_8h_source.html#l00024">common.h:24</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
