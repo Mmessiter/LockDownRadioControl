@@ -19,7 +19,6 @@
 #define BAD_CHANNEL_MAX 40
 #define Nextion         Serial1 // Nextion is connected to Serial1
 
-#define RECONNECT_CH     86
 
 #define PACEMAKER       3     // MINIMUM Ms between packets of data.
 #define USE_WATCHDOG          // Enable when developing only  ??
@@ -27,6 +26,9 @@
 #define KICKRATE        1000  // Kick once a second (must be between WATCHDOGMAXRATE and WATCHDOGTIMEOUT)
 #define WATCHDOGMAXRATE 500   // 500 ms secs between kicks is max rate allowed
 #define LOSTCONTACTCUTOFF 15  // How many packets to lose before reconnect triggers
+
+#define NOISYWIFI
+
 
 // UNCOMMENT ANY OF THESE for that bit of debug info
 
