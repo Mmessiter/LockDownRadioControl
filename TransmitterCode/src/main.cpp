@@ -2443,7 +2443,9 @@ void setup()
 {
     char FrontView_Connected[] = "FrontView.Connected";
     char Initialising[]        = "Initialising ... ";
+#ifdef OlD_FFHS
     char Scanning[]            = "Scanning ... ";
+#endif
     char OptionsViewTXname[]   = "OptionsView.TxName";
     Nextion.begin(115200); // BAUD rate also set in display code
 
@@ -2460,7 +2462,9 @@ void setup()
     pinMode(BLUELED, OUTPUT);
     pinMode(POWER_OFF_PIN, OUTPUT);
     BlueLedOn();
+#ifdef OlD_FFHS
     SendText(FrontView_Connected, Scanning);
+#endif
     Serial.begin(115200);
     Wire.begin();
     ScanI2c();
@@ -2476,7 +2480,9 @@ void setup()
     ReviseBadChannelMax();
     SendValue(ScreenViewTimeout, ScreenTimeout);
     SendCommand(page_FrontView); // Let's start at the beginning. Why not?
+#ifdef OlD_FFHS
     PreScan();                   // Do quiet scan while Nextion boots and Front View loads ...
+#endif
     SendText(FrontView_Connected, Initialising);
     SendValue1(NextionSleepTime, ScreenTimeout); // Setup Screen timeout (No .val needed)
     SendCommand(NextionWakeOnTouch);             // Wake on touch
