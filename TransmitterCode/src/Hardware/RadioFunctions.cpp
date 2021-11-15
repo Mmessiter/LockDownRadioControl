@@ -134,8 +134,8 @@ void SendData()
             
 
 #ifdef NEW_FHSS
-                if ((millis() - RecoveryTimer) > 500) {                       // New frequency on recovery every half second
-                NextFrequency = 120;
+                if ((millis() - RecoveryTimer) > 500) {                    
+                NextFrequency = RECONNECT_CH;
                 HopToNextFrequency();
                 RecoveryTimer = millis();
             }
