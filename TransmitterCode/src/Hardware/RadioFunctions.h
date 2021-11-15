@@ -29,7 +29,7 @@
 
 // UNCOMMENT ANY OF THESE for that bit of debug info
 
-// #define DB_FHSS           // Debug real time FHSS data
+ #define DB_FHSS           // Debug real time FHSS data
 // #define DB_NEXTION        // Debug Nextion and SD card data
 // #define DB_CHANNEL_AVOID  // Debug FHSS channel avoiding data etc
 // #define DB_SENSORS        // Debug Sensors
