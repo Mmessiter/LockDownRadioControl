@@ -209,14 +209,31 @@ void Reconnect()  // Still TODO: Failsafe and 2nd transceiver
 {
     SearchStartTime = millis();
     uint16_t i = 0;
+            FailSafeSent = false; 
             CurrentRadio->stopListening();
             CurrentRadio->setChannel(RECONNECT_CH);
             CurrentRadio->startListening();
-    while ((!CurrentRadio->available()) && (millis()-SearchStartTime) <100){
-        ++i;
+    while (!Connected)
+    {
+        
+        ++ReconnectAttempts;
+        while ((!CurrentRadio->available()) && (millis()-SearchStartTime) <100){
+            ++i;
+        }
+       StillSearchingTime = millis() - SearchStartTime;
+       if (StillSearchingTime >FAILSAFE_TIMEOUT) 
+            {
+            if (!FailSafeSent)
+                {
+                    FailSafe();
+                    FailSafeSent = true; // Once is enough
+                }
+            }
+       if (CurrentRadio->available()) Connected = true;
     }
-   // Serial.println (i);
+
     ConnectionStart=millis();
+    StillSearchingTime = 0;
     ReconnectedMoment=ConnectionStart;        // Save this moment, then don't move a servo for a few ms ....
 }
 #endif 
