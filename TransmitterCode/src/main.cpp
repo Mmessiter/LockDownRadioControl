@@ -1424,9 +1424,10 @@ void FailedPacket()
         GapStart = millis();   // To keep track of gaps' length
     }
     ++RecentPacketsLost;
-    if (RecentPacketsLost > LOSTCONTACTCUTOFF) {
-         ++RangeTestLostPackets;
+      if (RecentPacketsLost > LOSTCONTACTCUTOFF) {
+     // if (millis()-GapStart >35) { // same timeout as receiver? 
         LostContactFlag   = true;
+        RecentPacketsLost = 0;
         RedLedOn();
         ShowComms();
     }
@@ -5629,18 +5630,10 @@ void ParseAckPayload()
 /************************************************************************************************************/
 void CheckGapsLength()
 {
-    if (ReconnectingFlag) {
-        ReconnectingFlag = false;
-#ifdef DB_CHANNEL_AVOID
-        Serial.print("Reconnect time: ");
-        Serial.print((millis() - ReconnectTime) / 1000);
-        Serial.println(" seconds.");
-#endif
-    }
     if (GapStart > 0) { // if Reconnected, how long was connection lost?
-        ThisGap = millis() - GapStart;
-        if (ThisGap > GapLongest) {
-            GapLongest = ThisGap;
+       ThisGap = millis() - GapStart;
+       if (ThisGap > GapLongest) {
+                GapLongest = ThisGap;
         }
         GapSum += ThisGap;
         GapStart = 0;

@@ -160,28 +160,24 @@ void SendData()
 
         }
         Connected = false;
-        Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);         // Compress 32 bytes down to 24
+        Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);        // Compress 32 bytes down to 24
 
 //  *************************************** SEND *************************************************************************************
-        if (Radio1.write(&CompressedData, SizeOfCompressedData)) {       //  *** SEND ***   ("sizeof" doesn't work with externs, hence 2 new vars.)
+        if (Radio1.write(&CompressedData, SizeOfCompressedData)) {      //  ******** !SEND! ********     
 //  *************************************** SEND *************************************************************************************
  
             if (Radio1.isAckPayloadAvailable()) {
                     (Radio1.read(&AckPayload, AckPayloadSize));         //  "sizeof" doesn't work with externs, hence 2 new vars.
                     ++RangeTestGoodPackets;
-                    GapStart = 0;                                       // this is reset to millis() on lost connection
                     LostContactFlag = false;
                     ParseAckPayload();
                     RecentPacketsLost = 0;
                     ++PacketNumber;
                     Connected = true;
-                if (BoundFlag) {
-                    GreenLedOn();
-                }
+                    if (BoundFlag) GreenLedOn();    
+                    CheckGapsLength();
             }
-            CheckGapsLength();
-           
-           
+             
 #ifdef OLD_FHSS
             if (PacketNumber > PACKETS_PER_HOP) {
                 HopToNextFrequency();
@@ -192,7 +188,7 @@ void SendData()
             if (!RXTimeStamp) {      // heer
                 GetNextHopChannelNumber();
                 HopToNextFrequency();
-                RXTimeStamp = 100;  // this is to prevent it's being zero next time around
+                RXTimeStamp = 100;  // this is to prevent it's still being zero next time around
             }
 #endif
        

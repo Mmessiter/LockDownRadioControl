@@ -20,14 +20,14 @@
 #define Nextion         Serial1 // Nextion is connected to Serial1
 
 
-#define PACEMAKER       3     // MINIMUM Ms between packets of data.
-#define USE_WATCHDOG          // Enable when developing only  ??
-#define WATCHDOGTIMEOUT 10000 // 10 Seconds before reboot (32ms -> 500 seconds)
-#define KICKRATE        1000  // Kick once a second (must be between WATCHDOGMAXRATE and WATCHDOGTIMEOUT)
-#define WATCHDOGMAXRATE 500   // 500 ms secs between kicks is max rate allowed
-#define LOSTCONTACTCUTOFF 15  // How many packets to lose before reconnect triggers
+#define PACEMAKER         3     // MINIMUM Ms between packets of data.
+#define USE_WATCHDOG            // Enable when developing only  ??
+#define WATCHDOGTIMEOUT   10000 // 10 Seconds before reboot (32ms -> 500 seconds)
+#define KICKRATE          1000  // Kick once a second (must be between WATCHDOGMAXRATE and WATCHDOGTIMEOUT)
+#define WATCHDOGMAXRATE   500   // 500 ms secs between kicks is max rate allowed
+#define LOSTCONTACTCUTOFF 10    // How many packets to lose before reconnect triggers
 
-#define NOISYWIFI             // if defined this uses channels well above most wifi (not licence free in some countries).
+#define NOISYWIFI               // if defined this uses channels well above most wifi (not licence free in some countries).
 
 
 // UNCOMMENT ANY OF THESE for that bit of debug info
