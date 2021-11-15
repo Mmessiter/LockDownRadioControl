@@ -27,7 +27,7 @@
 #define WATCHDOGMAXRATE 500   // 500 ms secs between kicks is max rate allowed
 #define LOSTCONTACTCUTOFF 15  // How many packets to lose before reconnect triggers
 
-#define NOISYWIFI
+#define NOISYWIFI             // if defined this uses channels well above most wifi (not licence free in some countries).
 
 
 // UNCOMMENT ANY OF THESE for that bit of debug info
