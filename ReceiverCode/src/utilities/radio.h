@@ -205,7 +205,7 @@ void ProdRadio()
 
 
 #ifdef NEW_FHSS
-void Reconnect()  // Still TODO: Failsafe and 2nd transceiver
+void Reconnect()  // Still TODO: 2nd transceiver
 {
     SearchStartTime = millis();
     uint16_t i = 0;
