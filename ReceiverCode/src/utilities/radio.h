@@ -207,12 +207,17 @@ void ProdRadio()
 #ifdef NEW_FHSS
 void Reconnect()  // Still TODO: Failsafe and 2nd transceiver
 {
+
+    uint32_t ReconnectStart;
+    ReconnectStart = millis();
+
     uint16_t i = 0;
             CurrentRadio->stopListening();
             CurrentRadio->setChannel(120);
             CurrentRadio->startListening();
-    while ((!CurrentRadio->available()) && (i < 20000)){
-            delay(4);
+           // delay(4);
+    while ((!CurrentRadio->available()) && (millis()-ReconnectStart) <1000){
+           
             ++i;
     }
     ConnectionStart=millis();
