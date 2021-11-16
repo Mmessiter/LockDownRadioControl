@@ -347,7 +347,7 @@ void LoadTimeStamp(){  // This will load time stamp and array index for return t
     Time.Stamp32  = millis() - HopStart;
     RXTimeStamp=Time.Stamp32;
     if (Time.Stamp32 > HOPTIME) {
-            HopStart=millis();
+            HopStart = millis();
             Time.Stamp32 = 0;
             RXTimeStamp = 0;
             ++NextChannelNumber;
