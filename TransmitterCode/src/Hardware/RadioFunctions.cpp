@@ -40,6 +40,7 @@ uint8_t FHSS_Channels[84] = {28,24,61,64,28,55,66,19,76,21,59,67,15,71,82,32,49,
 
 uint8_t       NextFrequency    = RECONNECT_CH;
 uint8_t       ThisFrequency    = RECONNECT_CH;
+uint8_t       PreviousChannelNumber = 0 ;
 
 
 /************************************************************************************************************/
@@ -127,7 +128,7 @@ void SendData()
         }
         LoadPacketData();
         if (JustHoppedFlag) {
-            GetNextHopChannelNumber();
+            GetNextHopChannelNumber();    
             JustHoppedFlag = false;
         }
         
@@ -183,12 +184,12 @@ void SendData()
                 HopToNextFrequency();
             }
 #endif
-       
+        
 #ifdef NEW_FHSS    
-            if (!RXTimeStamp) {      // heer
+            if (((millis()-TXTimeStamp) > HOPTIME) || ((millis()-TXTimeStamp) == 0 )){   // is it time to hop frequncies?
                 GetNextHopChannelNumber();
                 HopToNextFrequency();
-                RXTimeStamp = 100;  // this is to prevent it's still being zero next time around
+                TXTimeStamp  = 0;                                                         // this is to prevent it's still being zero next time around
             }
 #endif
        

@@ -452,6 +452,7 @@ int     YtouchPlace = 0;     // Clicked Y
 bool    SetupFlag   = false; // No transmitter while setting up
 uint8_t zero        = 0x00;  
 bool    BindButton = false;
+uint32_t TXTimeStamp;
 
 
 
@@ -5385,7 +5386,7 @@ void LoadPacketData()
     }
 }
 #ifdef NEW_FHSS
-void GetNextHopChannelNumber()
+void GetNextHopChannelNumber() // TODO: if NextChannelNumber is unchanged, fix it!! heer ...
 {
      NextFrequency  =   FHSS_Channels[NextChannelNumber];
 }
@@ -5579,20 +5580,13 @@ void GetRXTime(){  // this gets the time from Recevier to enable FHSS synch
         uint8_t Stamp8[4];
     }Time;                                      // union used to allow access to each byte of 32 bit value     
 
-    Time.Stamp8[0]   = AckPayload.volt;
-    Time.Stamp8[1]   = AckPayload.CurrentAltitude;
-    Time.Stamp8[2]   = AckPayload.Pitch; 
-    Time.Stamp8[3]   = AckPayload.Roll;  
+    Time.Stamp8[0]    = AckPayload.volt;
+    Time.Stamp8[1]    = AckPayload.CurrentAltitude;
+    Time.Stamp8[2]    = AckPayload.Pitch; 
+    Time.Stamp8[3]    = AckPayload.Roll;  
     NextChannelNumber = AckPayload.Yaw;  
-    RXTimeStamp      = Time.Stamp32; 
-
-#ifdef DB_NEWFHSS       
-    if (!Time.Stamp32){                         // zero means goto next frequency
-        Serial.print    (NextChannelNumber);
-        Serial.print    ("    ");
-        Serial.println  (Time.Stamp32);         // Time.Stamp32 has time from receiver
-    }
-#endif 
+    RXTimeStamp       = Time.Stamp32; 
+    TXTimeStamp       = (millis()-RXTimeStamp);  // resynchronsize TXTimeStamp after very good packet
     ClearAckPayload();
 }
 

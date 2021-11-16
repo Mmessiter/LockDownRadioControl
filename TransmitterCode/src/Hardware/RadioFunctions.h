@@ -28,7 +28,7 @@
 #define LOSTCONTACTCUTOFF 10    // How many packets to lose before reconnect triggers
 
 #define NOISYWIFI               // if defined this uses channels well above most wifi (not licence free in some countries).
-
+#define HOPTIME            95   // A New Frequency Hop every 95 ms (must match receiver setting)
 
 // UNCOMMENT ANY OF THESE for that bit of debug info
 
@@ -86,6 +86,7 @@ extern uint8_t        FHSS_Channels[];
 extern uint8_t FHSSBottom;
 extern uint8_t FHSSTop;
 extern uint32_t TxOnTime;
+extern uint32_t TXTimeStamp;
 
 extern void  KickTheDog();
 extern void  SendCommand(char* tbox);
