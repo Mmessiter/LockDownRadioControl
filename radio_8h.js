@@ -6,7 +6,7 @@ var radio_8h =
     [ "FHSS_RESCUE_BOTTOM", "radio_8h.html#ae3ff62396efcffeead62e0403efbd6de", null ],
     [ "FHSS_RESCUE_TOP", "radio_8h.html#ab269c2e7db5187ffd777d443dc486b7f", null ],
     [ "FREQUENCYSCOUNT", "radio_8h.html#afe5bce36baf737bd284d43cd0e805fdb", null ],
-    [ "PACKETTIME", "radio_8h.html#a945f500adf995e8759c140477e1278a5", null ],
+    [ "HOPTIME", "radio_8h.html#a57d506b5f34172770c8d645c12cb5ba2", null ],
     [ "pinCE1", "radio_8h.html#a29eb13cced8716c95cf23e18ac99ffc7", null ],
     [ "pinCE2", "radio_8h.html#a86715d66aa5d1363f2db07ae6428eb90", null ],
     [ "pinCSN1", "radio_8h.html#a047f5702802c2bbf4918e9318f3e6a56", null ],
