@@ -344,7 +344,7 @@ void LoadTimeStamp(){  // This will load time stamp and array index for return t
         uint8_t  Stamp8[4];
     }Time;                         // union used to allow access to each byte of 32 bit value     
 
-    Time.Stamp32  = (millis() - HopStart);
+    Time.Stamp32  = millis() - HopStart;
     RXTimeStamp=Time.Stamp32;
     if (Time.Stamp32 > HOPTIME) {
             HopStart=millis();
