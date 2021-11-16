@@ -453,6 +453,7 @@ bool    SetupFlag   = false; // No transmitter while setting up
 uint8_t zero        = 0x00;  
 bool    BindButton = false;
 uint32_t TXTimeStamp;
+uint8_t  PreviousChannelNumber = 0 ;
 
 
 
