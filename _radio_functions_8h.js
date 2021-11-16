@@ -3,6 +3,7 @@ var _radio_functions_8h =
     [ "BAD_CHANNEL_MAX", "_radio_functions_8h.html#ac69cb8772c2dbb3abe535a7460febc63", null ],
     [ "CALIBRATELIMITS", "_radio_functions_8h.html#a8d671ce93ba33f2f6b5c314108d3592d", null ],
     [ "CENTRESTICKS", "_radio_functions_8h.html#a53bc52cfc1253f58c2f3835aa39205a3", null ],
+    [ "HOPTIME", "_radio_functions_8h.html#a57d506b5f34172770c8d645c12cb5ba2", null ],
     [ "KICKRATE", "_radio_functions_8h.html#a639fb69a9b4f236e3b1a16435b82bb81", null ],
     [ "LOSTCONTACTCUTOFF", "_radio_functions_8h.html#ac5b4f54697bc5a8d58ef0c92c094c6b6", null ],
     [ "NEW_FHSS", "_radio_functions_8h.html#ac5f10e9a5bbd8efbba3eb8ec5061a8d9", null ],
@@ -81,5 +82,6 @@ var _radio_functions_8h =
     [ "SizeOfCompressedData", "_radio_functions_8h.html#ac99b4fb4d71fa95d1ee8ab0a81696a4d", null ],
     [ "ThisFrequency", "_radio_functions_8h.html#a16a7235629cfd2dec33802caa95dc16d", null ],
     [ "TxOnTime", "_radio_functions_8h.html#a992a1c7536f872bdfd833e282cf3b4e4", null ],
-    [ "TxPace", "_radio_functions_8h.html#a97c9afd7483ad56e7a2aa63db252d616", null ]
+    [ "TxPace", "_radio_functions_8h.html#a97c9afd7483ad56e7a2aa63db252d616", null ],
+    [ "TXTimeStamp", "_radio_functions_8h.html#afd020f35b9f4a1aa2643c4fdcc46f5db", null ]
 ];

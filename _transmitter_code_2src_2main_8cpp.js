@@ -432,6 +432,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "TxName", "_transmitter_code_2src_2main_8cpp.html#a967f3c9b0fd867928c55d75d65cfcd8c", null ],
     [ "TxOnTime", "_transmitter_code_2src_2main_8cpp.html#a992a1c7536f872bdfd833e282cf3b4e4", null ],
     [ "TxPace", "_transmitter_code_2src_2main_8cpp.html#a97c9afd7483ad56e7a2aa63db252d616", null ],
+    [ "TXTimeStamp", "_transmitter_code_2src_2main_8cpp.html#afd020f35b9f4a1aa2643c4fdcc46f5db", null ],
     [ "TXWarningFlag", "_transmitter_code_2src_2main_8cpp.html#a31cbd43a34f258e0078a06b2d07a4b72", null ],
     [ "USE_INA219", "_transmitter_code_2src_2main_8cpp.html#a87ae50e2ac4507568cbf98072f174a1b", null ],
     [ "ValueSent", "_transmitter_code_2src_2main_8cpp.html#ace7e8fecf64d2c788fd0e7d5fe0c47fe", null ],
