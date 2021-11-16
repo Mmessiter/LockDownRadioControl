@@ -35,7 +35,7 @@ var radio_8h =
     [ "Connected", "radio_8h.html#a5318db734c71b1b08208ef690f1f0146", null ],
     [ "ConnectionStart", "radio_8h.html#a11cd5dd0a4f9438c7e7e387349d8636d", null ],
     [ "CurrentRadio", "radio_8h.html#a7bca81159d93f215060f40f45f19b0de", null ],
-    [ "FrequencyStart", "radio_8h.html#a538c34c4275db7eeb9bd601c09bb9c8e", null ],
+    [ "HopStart", "radio_8h.html#a937fc53e966c6b5c66b9d66c01cec13f", null ],
     [ "NewPipe", "radio_8h.html#a594f07765a7ed90e0830d4e2f69a7112", null ],
     [ "NextChannelNumber", "radio_8h.html#a372b457a109ccee3253b219df1a47412", null ],
     [ "NextFrequency", "radio_8h.html#aa8f16a99dfc5658df2e8e40339062b94", null ],

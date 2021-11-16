@@ -28,9 +28,8 @@ var searchData=
   ['fmswitch_165',['FMSwitch',['../_transmitter_code_2src_2main_8cpp.html#a452f6aed1252d3f1da8a0ceb07552c07',1,'main.cpp']]],
   ['force_5fredisplay_166',['Force_ReDisplay',['../_transmitter_code_2src_2main_8cpp.html#aa1e81e58421a34fdfd7bfb31925f5a90',1,'main.cpp']]],
   ['frequencyscount_167',['FREQUENCYSCOUNT',['../radio_8h.html#afe5bce36baf737bd284d43cd0e805fdb',1,'radio.h']]],
-  ['frequencystart_168',['FrequencyStart',['../radio_8h.html#a538c34c4275db7eeb9bd601c09bb9c8e',1,'radio.h']]],
-  ['frontview_169',['FrontView',['../_transmitter_code_2src_2main_8cpp.html#a5bf0c8b2bc9cc2644bb4a4510ba9d168',1,'main.cpp']]],
-  ['frontview_5fhours_170',['FrontView_Hours',['../_transmitter_code_2src_2main_8cpp.html#aedaf1495391d83b1ff10ad2192fffc93',1,'main.cpp']]],
-  ['frontview_5fmins_171',['FrontView_Mins',['../_transmitter_code_2src_2main_8cpp.html#a60f4339de362e3a16c844e1325523c90',1,'main.cpp']]],
-  ['frontview_5fsecs_172',['FrontView_Secs',['../_transmitter_code_2src_2main_8cpp.html#a9a8581d01528b71e16b6b9e0a18f9193',1,'main.cpp']]]
+  ['frontview_168',['FrontView',['../_transmitter_code_2src_2main_8cpp.html#a5bf0c8b2bc9cc2644bb4a4510ba9d168',1,'main.cpp']]],
+  ['frontview_5fhours_169',['FrontView_Hours',['../_transmitter_code_2src_2main_8cpp.html#aedaf1495391d83b1ff10ad2192fffc93',1,'main.cpp']]],
+  ['frontview_5fmins_170',['FrontView_Mins',['../_transmitter_code_2src_2main_8cpp.html#a60f4339de362e3a16c844e1325523c90',1,'main.cpp']]],
+  ['frontview_5fsecs_171',['FrontView_Secs',['../_transmitter_code_2src_2main_8cpp.html#a9a8581d01528b71e16b6b9e0a18f9193',1,'main.cpp']]]
 ];
