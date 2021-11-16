@@ -32,7 +32,7 @@ uint8_t ReconnectAttempts  = 0;
 uint8_t ThisRadio          = 1;
 bool    SaveNewBind        = true;
 uint8_t SavedPipeAddress[8];
-uint32_t FrequencyStart;
+uint32_t HopStart;
 uint8_t  NextChannelNumber=0;
 uint32_t RXTimeStamp;
 
@@ -182,7 +182,7 @@ void InitCurrentRadio()
         CurrentRadio->setDataRate(RF24_250KBPS);
         CurrentRadio->openReadingPipe(1, ThisPipe);
         SaveNewBind = true;
-        FrequencyStart = millis();
+        HopStart = millis();
     }
 }
 
@@ -336,7 +336,7 @@ void Reconnect()
 void LoadTimeStamp(){  // This will load time stamp for return to TX for synch purposes heer
 
 #define HOPTIME 95                 // ms between channel changes
-#define FREQUENCYSCOUNT 81         // use 81 different channels
+#define FREQUENCYSCOUNT 82         // use 82 different channels
 
     union
     {
@@ -344,21 +344,21 @@ void LoadTimeStamp(){  // This will load time stamp for return to TX for synch p
         uint8_t  Stamp8[4];
     }Time;             // union used to allow access to each byte of 32 bit value     
 
-    Time.Stamp32  = (millis() - FrequencyStart);
+    Time.Stamp32  = (millis() - HopStart);
     RXTimeStamp=Time.Stamp32;
     if (Time.Stamp32 > HOPTIME) {
-            FrequencyStart=millis();
+            HopStart=millis();
             Time.Stamp32 = 0;
-            RXTimeStamp=Time.Stamp32;
+            RXTimeStamp = 0;
             ++NextChannelNumber;
-            if (NextChannelNumber > FREQUENCYSCOUNT) {NextChannelNumber = 1;} // Zero will mean error (so that element not used)
+            if (NextChannelNumber >= FREQUENCYSCOUNT) {NextChannelNumber = 1;} // Zero will mean error (so that element not used)
     }
 
-    AckPayload.volt                  = Time.Stamp8[0]; 
-    AckPayload.CurrentAltitude       = Time.Stamp8[1]; 
-    AckPayload.ReportedPitch         = Time.Stamp8[2]; 
-    AckPayload.ReportedRoll          = Time.Stamp8[3]; 
-    AckPayload.ReportedYaw           = NextChannelNumber;    
+    AckPayload.volt                  =  Time.Stamp8[0];   // These values are herewith delivered to Transmitter in Ack Payload
+    AckPayload.CurrentAltitude       =  Time.Stamp8[1]; 
+    AckPayload.ReportedPitch         =  Time.Stamp8[2]; 
+    AckPayload.ReportedRoll          =  Time.Stamp8[3]; 
+    AckPayload.ReportedYaw           =  NextChannelNumber;    
 }
  
 /************************************************************************************************************/
