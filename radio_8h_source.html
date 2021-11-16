@@ -408,7 +408,7 @@ $(document).ready(function(){initNavTree('radio_8h_source.html',''); initResizab
 <div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;        uint8_t  Stamp8[4];</div>
 <div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;    }Time;                         <span class="comment">// union used to allow access to each byte of 32 bit value     </span></div>
 <div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160; </div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;    Time.Stamp32  = (millis() - <a class="code" href="radio_8h.html#a937fc53e966c6b5c66b9d66c01cec13f">HopStart</a>);</div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;    Time.Stamp32  = millis() - <a class="code" href="radio_8h.html#a937fc53e966c6b5c66b9d66c01cec13f">HopStart</a>;</div>
 <div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;    <a class="code" href="radio_8h.html#ac2f93a82721081619ce2f3b497efbc1b">RXTimeStamp</a>=Time.Stamp32;</div>
 <div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;    <span class="keywordflow">if</span> (Time.Stamp32 &gt; <a class="code" href="radio_8h.html#a57d506b5f34172770c8d645c12cb5ba2">HOPTIME</a>) {</div>
 <div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;            <a class="code" href="radio_8h.html#a937fc53e966c6b5c66b9d66c01cec13f">HopStart</a>=millis();</div>
