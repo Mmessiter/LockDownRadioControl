@@ -333,7 +333,7 @@ void Reconnect()
 
 /************************************************************************************************************/
 
-void LoadTimeStamp(){  // This will load time stamp for return to TX for synch purposes heer
+void LoadTimeStamp(){  // This will load time stamp and array index for return to TX for synch purposes heer
 
 #define HOPTIME 95                 // ms between channel changes
 #define FREQUENCYSCOUNT 82         // use 82 different channels
