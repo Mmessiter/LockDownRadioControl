@@ -335,7 +335,7 @@ void Reconnect()
 
 void LoadTimeStamp(){  // This will load time stamp for return to TX for synch purposes heer
 
-#define PACKETTIME 95            // ms between channel changes
+#define HOPTIME 95                 // ms between channel changes
 #define FREQUENCYSCOUNT 81         // use 81 different channels
 
     union
@@ -346,12 +346,12 @@ void LoadTimeStamp(){  // This will load time stamp for return to TX for synch p
 
     Time.Stamp32  = (millis() - FrequencyStart);
     RXTimeStamp=Time.Stamp32;
-    if (Time.Stamp32 > PACKETTIME) {
+    if (Time.Stamp32 > HOPTIME) {
             FrequencyStart=millis();
             Time.Stamp32 = 0;
             RXTimeStamp=Time.Stamp32;
             ++NextChannelNumber;
-            if (NextChannelNumber > FREQUENCYSCOUNT) {NextChannelNumber = 0;}
+            if (NextChannelNumber > FREQUENCYSCOUNT) {NextChannelNumber = 1;} // Zero will mean error (so that element not used)
     }
 
     AckPayload.volt                  = Time.Stamp8[0]; 
