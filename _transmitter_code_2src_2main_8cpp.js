@@ -357,6 +357,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "PipeTimeout", "_transmitter_code_2src_2main_8cpp.html#a54a3133087523f6dc1d418f09f75e06c", null ],
     [ "PointsCount", "_transmitter_code_2src_2main_8cpp.html#abc8fa11262dc227a1bd6eba957fcf95c", null ],
     [ "PreMixBuffer", "_transmitter_code_2src_2main_8cpp.html#ac24c1436596363f5c1d3c50f2c3d5266", null ],
+    [ "PreviousChannelNumber", "_transmitter_code_2src_2main_8cpp.html#abbd06b60b1ad6be88a3363b5129d10d4", null ],
     [ "PreviousFlightMode", "_transmitter_code_2src_2main_8cpp.html#a8f5159f240ef6e3787b668d1dac1a67a", null ],
     [ "RangeTestGoodPackets", "_transmitter_code_2src_2main_8cpp.html#ae8902f278cb496929c9e323774b4374e", null ],
     [ "RangeTestLostPackets", "_transmitter_code_2src_2main_8cpp.html#a8e396337a72c148bea7bf1856578c140", null ],

@@ -30,7 +30,7 @@ var searchData=
   ['premixbuffer_395',['PreMixBuffer',['../_transmitter_code_2src_2main_8cpp.html#ac24c1436596363f5c1d3c50f2c3d5266',1,'main.cpp']]],
   ['prescan_396',['PreScan',['../_radio_functions_8h.html#a5e3e764f8311564f5e20c3a838b25c07',1,'RadioFunctions.h']]],
   ['pressure_397',['pressure',['../_receiver_code_2src_2main_8cpp.html#ac870e1249bab4a2a68cc4126761d24ef',1,'main.cpp']]],
-  ['previouschannelnumber_398',['PreviousChannelNumber',['../_radio_functions_8cpp.html#abbd06b60b1ad6be88a3363b5129d10d4',1,'RadioFunctions.cpp']]],
+  ['previouschannelnumber_398',['PreviousChannelNumber',['../_transmitter_code_2src_2main_8cpp.html#abbd06b60b1ad6be88a3363b5129d10d4',1,'main.cpp']]],
   ['previousdata_399',['PreviousData',['../radio_8h.html#a54007b635670b351453013425e7f2814',1,'radio.h']]],
   ['previousflightmode_400',['PreviousFlightMode',['../_transmitter_code_2src_2main_8cpp.html#a8f5159f240ef6e3787b668d1dac1a67a',1,'main.cpp']]],
   ['prodradio_401',['ProdRadio',['../radio_8h.html#a99f0389cf05f26f8c76aab69eb7d9529',1,'radio.h']]],
