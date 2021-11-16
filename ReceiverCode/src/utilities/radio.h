@@ -338,11 +338,11 @@ void LoadTimeStamp(){  // This will load time stamp and array index for return t
 #define HOPTIME 95                 // ms between channel changes
 #define FREQUENCYSCOUNT 82         // use 82 different channels
 
-    union
+    union                          // union used to allow access to each byte of 32 bit value     
     {
         uint32_t Stamp32; 
         uint8_t  Stamp8[4];
-    }Time;             // union used to allow access to each byte of 32 bit value     
+    }Time;                         // union used to allow access to each byte of 32 bit value     
 
     Time.Stamp32  = (millis() - HopStart);
     RXTimeStamp=Time.Stamp32;
