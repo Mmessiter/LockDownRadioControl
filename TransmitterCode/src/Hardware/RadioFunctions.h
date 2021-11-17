@@ -2,12 +2,9 @@
 #ifndef RadioFunctions_H
 #define RadioFunctions_H
 
-
-
 #define TXVERSION_MAJOR   1 //   Nov 10th 2021 Malcolm Messiter
 #define TXVERSION_MINOR   1
 #define TXVERSION_MINIMUS 6
-
 
 #define NORMAL          0 // Normal for transmit as usual
 #define CALIBRATELIMITS 1 // Calibrate limits
@@ -16,7 +13,6 @@
 #define SENDNOTHING     4 // Transmission off
 #define BAD_CHANNEL_MAX 40
 #define Nextion         Serial1 // Nextion is connected to Serial1
-
 
 #define PACEMAKER         3     // MINIMUM Ms between packets of data.
 #define USE_WATCHDOG            // Enable when developing only  ??

@@ -253,53 +253,6 @@ void HopToNextFrequency()
 }
 
 /*********************************************************************************************************************************/
-#ifdef OlD_FFHS
-/** @brief This scans quietly at startup */
-void PreScan()
-{
-    int ScanTime = 0;
-#ifdef DB_CHANNEL_AVOID
-    int scount = 0;
-#endif
-    int Sc;
-#ifdef DB_CHANNEL_AVOID
-    Serial.println("Prescanning ...");
-#endif
-    DoScanInit();
-    ScanTime = millis();
-    while ((millis() - ScanTime) < 1000) {
-        KickTheDog(); // Watchdog
-        for (Sc = ScanStart; Sc <= ScanEnd; Sc++) {
-            Radio1.setChannel(Sc);
-            Radio1.startListening();
-            delayMicroseconds(120); // Minimum!?
-            Radio1.stopListening();
-            if (Radio1.testCarrier()) {
-                AllChannels[Sc]++;
-            }
-        }
-    }
-    for (Sc = ScanStart + 1; Sc <= ScanEnd - 1; Sc++) {
-        if (AllChannels[Sc] > 0) {
-            if (BadChannelPointer < BadChannelMax) {
-                BadChannels[BadChannelPointer] = Sc;
-                BadChannelPointer++;
-            }
-#ifdef DB_CHANNEL_AVOID
-            Serial.println(Sc);
-            scount++;
-#endif
-        }
-    }
-    DoScanEnd();
-#ifdef DB_CHANNEL_AVOID
-    Serial.print("Found ");
-    Serial.println(scount);
-#endif
-}
-#endif // OLD_FFHS
-
-/*********************************************************************************************************************************/
 
 void InitRadio(uint64_t Pipe)
 {
