@@ -145,7 +145,6 @@ void SendData()
 #endif
 
             
-
 #ifdef NEW_FHSS
                 if ((millis() - RecoveryTimer) > 500) {          // TODO: THIS BIT MUST GO .....           
                 NextFrequency = RECONNECT_CH;
@@ -153,8 +152,6 @@ void SendData()
                 RecoveryTimer = millis();
             }
 #endif
-
-
 
         }
         Connected = false;
