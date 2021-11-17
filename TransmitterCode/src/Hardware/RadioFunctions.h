@@ -8,7 +8,7 @@
 #define TXVERSION_MINOR   1
 #define TXVERSION_MINIMUS 6
 
-//#define OLD_FHSS          // to manage the switch over of FHSS implentation
+//#define OLD_FHSS          // to manage the switch over of FHSS implementation
 #define NEW_FHSS
 
 #define NORMAL          0 // Normal for transmit as usual
