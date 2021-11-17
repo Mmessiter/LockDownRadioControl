@@ -7,7 +7,6 @@ var _radio_functions_8h =
     [ "HOPTIME", "_radio_functions_8h.html#a57d506b5f34172770c8d645c12cb5ba2", null ],
     [ "KICKRATE", "_radio_functions_8h.html#a639fb69a9b4f236e3b1a16435b82bb81", null ],
     [ "LOSTCONTACTCUTOFF", "_radio_functions_8h.html#ac5b4f54697bc5a8d58ef0c92c094c6b6", null ],
-    [ "NEW_FHSS", "_radio_functions_8h.html#ac5f10e9a5bbd8efbba3eb8ec5061a8d9", null ],
     [ "Nextion", "_radio_functions_8h.html#a7280be66ef406b699db09f0a70e26ef7", null ],
     [ "NOISYWIFI", "_radio_functions_8h.html#ae9b67966c7b046a2c4257fba47186eb0", null ],
     [ "NORMAL", "_radio_functions_8h.html#a1291f416b069313021b519eea62d5bf1", null ],
