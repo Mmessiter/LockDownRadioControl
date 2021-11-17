@@ -135,24 +135,12 @@ void SendData()
                         TryOtherPipe();
                         PipeTimeout=millis();
                 }
-               
-#ifdef OLD_FHSS
-                if ((millis() - RecoveryTimer) > 500) {                       // New frequency on recovery every half second
-                NextFrequency = random(FHSS_RESCUE_BOTTOM, FHSS_RESCUE_TOP);  // more limited range for recovery
-                HopToNextFrequency();
-                RecoveryTimer = millis();
-            }
-#endif
 
-            
-#ifdef NEW_FHSS
                 if ((millis() - RecoveryTimer) > 500) {          // TODO: THIS BIT MUST GO .....           
-                NextFrequency = RECONNECT_CH;
-                HopToNextFrequency();
-                RecoveryTimer = millis();
-            }
-#endif
-
+                    NextFrequency = RECONNECT_CH;
+                    HopToNextFrequency();
+                    RecoveryTimer = millis();
+                }
         }
         Connected = false;
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);        // Compress 32 bytes down to 24
@@ -172,19 +160,11 @@ void SendData()
                     if (BoundFlag) GreenLedOn();    
                     CheckGapsLength();
             }
-             
-#ifdef OLD_FHSS
-            if (PacketNumber > PACKETS_PER_HOP) {
-                HopToNextFrequency();
-            }
-#endif
-
-#ifdef NEW_FHSS    
+         
             if (((millis()-TXTimeStamp) == 0) || (millis()-TXTimeStamp) > HOPTIME+10) { // is it time (or indeed it is overdue?) to hop frequency?
                 GetNextHopChannelNumber();    
                 HopToNextFrequency();
             }
-#endif
                 JustHoppedFlag = false;
         }
         else {
@@ -261,26 +241,11 @@ void HopToNextFrequency()
     Serial.print("Hop duration: ");
     Serial.print(PDURATION);
     Serial.print(" seconds. Good packets per hop: ");
-    #ifdef OLD_FHSS
-    Serial.print(PACKETS_PER_HOP);
-    #endif
-    #ifdef NEW_FHSS
     Serial.print(PacketNumber);
-    #endif
-#ifdef OLD_FHSS
-    Serial.print(" Next channel: (range: ");
-    Serial.print(FHSSBottom);
-    Serial.print("-");
-    Serial.print(FHSSTop);
-    Serial.print(") ");
-    Serial.println(NextFrequency);
- #endif
-#ifdef NEW_FHSS
     Serial.print(" Next channel: ");
     Serial.print(FHSS_Channels[NextChannelNumber]);
-     Serial.print(" BoundFlag = ");
-     Serial.println(BoundFlag);
- #endif
+    Serial.print(" BoundFlag = ");
+    Serial.println(BoundFlag);
     PSTARTTIME = millis();
 #endif
     ThisFrequency  = NextFrequency;

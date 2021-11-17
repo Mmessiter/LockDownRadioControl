@@ -5323,10 +5323,9 @@ void LoadPacketData()
     uint8_t  uint8_t1;
     uint8_t  uint8_t2;
 
-    SendBuffer[CHANNELSUSED + 1] = PacketNumber;  // to let reciever know current packet number
-#ifdef OLD_FHSS
-    SendBuffer[CHANNELSUSED + 2] = NextFrequency; // Send next frequency
-#endif
+   // SendBuffer[CHANNELSUSED + 1] = PacketNumber;  // SPARE NOW!
+   // SendBuffer[CHANNELSUSED + 2] = NextFrequency; // SPARE NOW!
+
     Twobytes = MakeTwobytes(FailSafeChannel); // 16 bool values compressed to 16 bits
     uint8_t1 = uint8_t(Twobytes >> 8);        // sent as two bytes
     uint8_t2 = uint8_t(Twobytes & 0x00FF);
@@ -5386,7 +5385,7 @@ void LoadPacketData()
             break;
     }
 }
-#ifdef NEW_FHSS
+
 void GetNextHopChannelNumber() 
 {
     if (NextChannelNumber == 0) {
@@ -5396,46 +5395,7 @@ void GetNextHopChannelNumber()
     NextFrequency  =   FHSS_Channels[NextChannelNumber];
     PreviousChannelNumber =  NextChannelNumber;                            // record it
 }
-#endif
-/************************************************************************************************************/
-#ifdef OLD_FHSS
-void GetNextHopChannelNumber1()
-{
-    NextFrequency = random(FHSSBottom, FHSSTop);
-} // leave this just in case ....
 
-/************************************************************************************************************/
-
-void GetNextHopChannelNumber()
-{
-    bool KnownInterferenceChannel = true;
-
-    i = 0;
-    while (KnownInterferenceChannel && i < BadChannelMax) { // Bug fixed here!!
-        NextFrequency            = random(FHSSBottom, FHSSTop);
-        KnownInterferenceChannel = false;
-
-        i = 0;
-        while (i < BadChannelMax && KnownInterferenceChannel == false) {
-            if (NextFrequency == BadChannels[i]) {
-                KnownInterferenceChannel = true;
-#ifdef DB_CHANNEL_AVOID
-                Serial.print("Avoiding known interference channel: ");
-                Serial.println(NextFrequency);
-                Serial.print(BadChannelPointer);
-                Serial.print(" bad channels detected so far: ");
-                for (int j = 0; j < BadChannelPointer; j++) {
-                    Serial.print(BadChannels[j]);
-                    Serial.print(" ");
-                }
-                Serial.println(" ");
-#endif // defined DB_CHANNEL_AVOID
-            }
-            i++;
-        }
-    }
-}
-#endif // OLD_FFHS
 /************************************************************************************************************/
 
 void ReadFMSwitch(bool sw1, bool sw2, bool rev)
