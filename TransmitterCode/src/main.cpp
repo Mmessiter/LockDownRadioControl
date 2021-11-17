@@ -5382,14 +5382,19 @@ void LoadPacketData()
             break;
             // case 17:
             //    break;
-        default: // Goes to 20
+        default: 
             break;
     }
 }
 #ifdef NEW_FHSS
-void GetNextHopChannelNumber() // TODO: if NextChannelNumber is unchanged, fix it!! heer ...
+void GetNextHopChannelNumber() 
 {
-     NextFrequency  =   FHSS_Channels[NextChannelNumber];
+    if (NextChannelNumber == 0) {
+        NextChannelNumber = PreviousChannelNumber + 1;                     // if error inc it
+        if (NextChannelNumber >= FREQUENCYSCOUNT) NextChannelNumber = 1;   // wrap to 1, not zero which means error
+    } 
+    NextFrequency  =   FHSS_Channels[NextChannelNumber];
+    PreviousChannelNumber =  NextChannelNumber;                            // record it
 }
 #endif
 /************************************************************************************************************/
@@ -5587,7 +5592,8 @@ void GetRXTime(){  // this gets the time from Recevier to enable FHSS synch
     Time.Stamp8[3]    = AckPayload.Roll;  
     NextChannelNumber = AckPayload.Yaw;  
     RXTimeStamp       = Time.Stamp32; 
-    TXTimeStamp       = (millis()-RXTimeStamp);  // resynchronsize TXTimeStamp after very good packet
+    TXTimeStamp       = millis() - RXTimeStamp; // resynch every good packet
+
     ClearAckPayload();
 }
 

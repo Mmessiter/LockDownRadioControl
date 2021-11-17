@@ -127,10 +127,7 @@ void SendData()
             SendBuffer[7] = (uint8_t)((NewPipe)&0xFF);
         }
         LoadPacketData();
-        if (JustHoppedFlag) {
-            GetNextHopChannelNumber();    
-            JustHoppedFlag = false;
-        }
+  
         
         if (LostContactFlag) {
             ShowComms();
@@ -150,7 +147,7 @@ void SendData()
             
 
 #ifdef NEW_FHSS
-                if ((millis() - RecoveryTimer) > 500) {                    
+                if ((millis() - RecoveryTimer) > 500) {          // TODO: THIS BIT MUST GO .....           
                 NextFrequency = RECONNECT_CH;
                 HopToNextFrequency();
                 RecoveryTimer = millis();
@@ -184,15 +181,14 @@ void SendData()
                 HopToNextFrequency();
             }
 #endif
-        
+
 #ifdef NEW_FHSS    
-            if (((millis()-TXTimeStamp) > HOPTIME) || ((millis()-TXTimeStamp) == 0 )){   // is it time to hop frequncies?
-                GetNextHopChannelNumber();
+            if (((millis()-TXTimeStamp) == 0) || (millis()-TXTimeStamp) > HOPTIME+10) { // is it time (or indeed it is overdue?) to hop frequency?
+                GetNextHopChannelNumber();    
                 HopToNextFrequency();
-                TXTimeStamp  = 0;                                                         // this is to prevent it's still being zero next time around
             }
 #endif
-       
+                JustHoppedFlag = false;
         }
         else {
             FailedPacket();
@@ -291,7 +287,6 @@ void HopToNextFrequency()
     PSTARTTIME = millis();
 #endif
     ThisFrequency  = NextFrequency;
-    JustHoppedFlag = true;
     PacketNumber = 0;
 }
 
