@@ -27,7 +27,7 @@ var searchData=
   ['flightmodeswitch_164',['FLIGHTMODESWITCH',['../_transmitter_code_2src_2main_8cpp.html#a360ae40b5dcb40c9beb3fd1af7134f99',1,'main.cpp']]],
   ['fmswitch_165',['FMSwitch',['../_transmitter_code_2src_2main_8cpp.html#a452f6aed1252d3f1da8a0ceb07552c07',1,'main.cpp']]],
   ['force_5fredisplay_166',['Force_ReDisplay',['../_transmitter_code_2src_2main_8cpp.html#aa1e81e58421a34fdfd7bfb31925f5a90',1,'main.cpp']]],
-  ['frequencyscount_167',['FREQUENCYSCOUNT',['../radio_8h.html#afe5bce36baf737bd284d43cd0e805fdb',1,'radio.h']]],
+  ['frequencyscount_167',['FREQUENCYSCOUNT',['../radio_8h.html#afe5bce36baf737bd284d43cd0e805fdb',1,'FREQUENCYSCOUNT():&#160;radio.h'],['../_radio_functions_8h.html#afe5bce36baf737bd284d43cd0e805fdb',1,'FREQUENCYSCOUNT():&#160;RadioFunctions.h']]],
   ['frontview_168',['FrontView',['../_transmitter_code_2src_2main_8cpp.html#a5bf0c8b2bc9cc2644bb4a4510ba9d168',1,'main.cpp']]],
   ['frontview_5fhours_169',['FrontView_Hours',['../_transmitter_code_2src_2main_8cpp.html#aedaf1495391d83b1ff10ad2192fffc93',1,'main.cpp']]],
   ['frontview_5fmins_170',['FrontView_Mins',['../_transmitter_code_2src_2main_8cpp.html#a60f4339de362e3a16c844e1325523c90',1,'main.cpp']]],
