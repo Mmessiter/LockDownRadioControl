@@ -1230,7 +1230,8 @@ void ShowServoPos()
 
 /** @brief SHOW COMMS */
 void ShowComms()
-{
+{ 
+    if (Nextion.available()) return;   // was a button pressed?
     bool  ShowNow                = false;
     char  na[]                   = "";
     char  FrontView_Connected[]  = "Connected";
@@ -4802,12 +4803,6 @@ void Button_was_pressed()
         if (InStrng(GoSetupView, WordsIn) > 0) {
             ClearText();
             CurrentView = MainSetupView;
-            if (!Connected){
-               if (RecentPacketsLost > 50){
-                   BlueLedOn();
-                   SetupFlag=true;
-               }
-            }
             SendCommand(page_SetupView); 
             ClearText();
             return;
@@ -5379,8 +5374,6 @@ void LoadPacketData()
             SendBuffer[CHANNELSUSED + 3] = SaveFailSafeNow; // FailSafeSaveMoment
             SaveFailSafeNow              = false;           // once should do it.
             break;
-            // case 17:
-            //    break;
         default: 
             break;
     }

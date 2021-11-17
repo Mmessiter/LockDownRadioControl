@@ -107,15 +107,11 @@ void TryOtherPipe()
 
 void SendData()
 {
-   
+    if (Nextion.available()) return;   // was a button pressed?
     if ((millis() - TxPace) >= PACEMAKER) {
         TxPace = millis();
         get_new_channels_values(); // Load SendBuffer with new servo positions
  
-        if (SetupFlag) {
-            ReadSwitches();
-            return;} // Don't try to send data when just setting up.
-
         if (!BoundFlag && !(CurrentView == CalibrateView) && !(CurrentView == SticksView)) {
             SendBuffer[0] = (uint8_t)((NewPipe >> 56) & 0xFF); // if not yet bound, send pipe
             SendBuffer[1] = (uint8_t)((NewPipe >> 48) & 0xFF);
@@ -128,9 +124,7 @@ void SendData()
         }
         LoadPacketData();
   
-        
         if (LostContactFlag) {
-            ShowComms();
                 if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {
                         TryOtherPipe();
                         PipeTimeout=millis();
@@ -142,7 +136,8 @@ void SendData()
                     RecoveryTimer = millis();
                 }
         }
-        Connected = false;
+      
+        Connected = false;      
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);        // Compress 32 bytes down to 24
 
 //  *************************************** SEND *************************************************************************************
@@ -160,7 +155,8 @@ void SendData()
                     if (BoundFlag) GreenLedOn();    
                     CheckGapsLength();
             }
-         
+
+
             if (((millis()-TXTimeStamp) == 0) || (millis()-TXTimeStamp) > HOPTIME+10) { // is it time (or indeed it is overdue?) to hop frequency?
                 GetNextHopChannelNumber();    
                 HopToNextFrequency();
