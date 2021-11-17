@@ -1,6 +1,5 @@
 var common_8h =
 [
-    [ "NEW_FHSS", "common_8h.html#ac5f10e9a5bbd8efbba3eb8ec5061a8d9", null ],
     [ "NOISYWIFI", "common_8h.html#ae9b67966c7b046a2c4257fba47186eb0", null ],
     [ "RECONNECT_CH", "common_8h.html#ad3c239265016482b6850360b3dc51a50", null ],
     [ "RXVERSION_MAJOR", "common_8h.html#a2b147d5155fcf962e9f1c4885b32c67d", null ],
