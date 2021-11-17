@@ -15,7 +15,7 @@
 #define FHSS_RESCUE_BOTTOM 118
 #define FHSS_RESCUE_TOP    125
 
-#define FAILSAFE_TIMEOUT 2000
+#define FAILSAFE_TIMEOUT 3000    // TODO: revert this to 2000 when FHSS recovers faster
 
 RF24  Radio1(pinCE1, pinCSN1);
 RF24  Radio2(pinCE2, pinCSN2);
@@ -152,18 +152,9 @@ void GetOldPipe()
 void HopToNextFrequency()
 {
     CurrentRadio->stopListening();
-#ifdef OLD_FHSS
-    CurrentRadio->setChannel(NextFrequency);
-#endif
-#ifdef NEW_FHSS
     CurrentRadio->setChannel(FHSS_Channels[NextChannelNumber]);
-    //delay (1);
-#endif
-
     CurrentRadio->startListening();
-
     LastConnectionMoment = millis();
-    
     
 #ifdef DEBUG
     ShowHopDurationEtc();
@@ -204,7 +195,6 @@ void ProdRadio()
  #endif // defined (SECOND_TRANSCEIVER)
 
 
-#ifdef NEW_FHSS
 void Reconnect()  // Still TODO: 2nd transceiver
 {
     SearchStartTime = millis();
@@ -215,7 +205,6 @@ void Reconnect()  // Still TODO: 2nd transceiver
             CurrentRadio->startListening();
     while (!Connected)
     {
-        
         ++ReconnectAttempts;
         while ((!CurrentRadio->available()) && (millis()-SearchStartTime) <100){
             ++i;
@@ -231,105 +220,10 @@ void Reconnect()  // Still TODO: 2nd transceiver
             }
        if (CurrentRadio->available()) Connected = true;
     }
-
     ConnectionStart=millis();
     StillSearchingTime = 0;
     ReconnectedMoment=ConnectionStart;        // Save this moment, then don't move a servo for a few ms ....
 }
-#endif 
-
-/************************************************************************************************************/
-#ifdef OLD_FHSS
-void Reconnect()
-{
-    SearchStartTime   = millis();
-    ReconnectAttempts = 0;
-
-#ifdef SECOND_TRANSCEIVER
-#ifdef SECOND_TRANSCEIVER_DEBUG
-    if (((millis()-ConnectionStart)/1000) > 0){
-    Serial.print ("                         ********    Duration on Radio: ");
-    Serial.print (ThisRadio);
-    Serial.print (" = ");
-    Serial.print ((millis()-ConnectionStart)/1000);
-    Serial.println  (" Seconds ********");
-    }
- #endif // defined (SECOND_TRANSCEIVER)
- #endif // defined (SECOND_TRANSCEIVER_DEBUG)
-    while (!Connected)
-    {
-        StillSearchingTime = millis() - SearchStartTime;
-        ++ReconnectAttempts;
-
-        uint8_t i = FHSS_RESCUE_BOTTOM;
-        while (!CurrentRadio->available() && i <= FHSS_RESCUE_TOP) // This loop exits as soon as connection is detected.
-        {
-            CurrentRadio->stopListening();
-            CurrentRadio->setChannel(i);
-            CurrentRadio->startListening();
-            delay(4); // was 4
-            i++;
-        }
-
-#ifdef SECOND_TRANSCEIVER
-        if (!CurrentRadio->available()) {
-            if (ReconnectAttempts > 5) {            // This might be a bigger number after tests
-                CurrentRadio->stopListening();      // This has helped massively
-                delay(4);                           // This might help
-                ReconnectAttempts = 0;
-                if (ThisRadio == 1) {
-                    ThisRadio    = 2;
-                    CurrentRadio = &Radio2;
-                    ProdRadio();
-                }
-                else {
-                    ThisRadio    = 1;
-                    CurrentRadio = &Radio1;
-                    ProdRadio();
-                }
-#ifdef SECOND_TRANSCEIVER_DEBUG
-                Serial.print(millis());              // These lines are just to help fix this area!!
-                Serial.print("  ? Testing Radio: "); // These lines are just to help fix this area!!
-                Serial.println(ThisRadio);           // These lines are just to help fix this area!!
-#endif
-            }
-        }
-#endif // defined (SECOND_TRANSCEIVER)
-
-        if (CurrentRadio->available())
-        {
-            ConnectionStart=millis();
-            ReconnectedMoment=ConnectionStart;        // Save this moment, then don't move a servo for a few ms ....
-
-#ifdef SECOND_TRANSCEIVER
-#ifdef SECOND_TRANSCEIVER_DEBUG
-            Serial.print(millis());                   // These lines are just to help fix this area!!
-            Serial.print("  ! Connected on Radio: "); // These lines are just to help fix this area!!
-            Serial.println(ThisRadio);                // These lines are just to help fix this area!!
-#endif  // defined (SECOND_TRANSCEIVER)
-#endif  // defined (SECOND_TRANSCEIVER_DEBUG)
-
-            Connected          = true; // Connection is re-established so return, smiling!
-            FailSafeSent       = false;
-            ReconnectAttempts  = 0;
-            StillSearchingTime = 0;
-        }
-        else if (StillSearchingTime >= FAILSAFE_TIMEOUT)
-        {
-            if (!FailSafeSent)
-            {
-                FailSafe();
-                FailSafeSent = true; // Once is enough
-#ifdef DB_FAILSAFE
-                Serial.println("FailSafe sent");
-#endif // DB_FAILSAFE
-            }
-        }
-        delay (5); // This seems to prevent the occasional lockup??
-    }
-}
-#endif 
-
 
 /************************************************************************************************************/
 

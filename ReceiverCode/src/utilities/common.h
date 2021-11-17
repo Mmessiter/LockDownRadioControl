@@ -9,8 +9,6 @@
 #define RXVERSION_MINOR   1
 #define RXVERSION_MINIMUS 6 // Nov 12th 2021
 
-#define NEW_FHSS   // Working!! but unfinished ...
-// #define OLD_FHSS
 
   #define NOISYWIFI
 // #define DEBUG

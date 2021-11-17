@@ -266,9 +266,7 @@ void MoveServos()
 void FailSafe()
 {
     if (BoundFlag) {
-        if (!FailSafeDataLoaded) {
-            LoadFailSafeData();
-        }
+        LoadFailSafeData();
         Connected=true;   // to force sending data!
         MapToSBUS();
         MoveServos();
@@ -284,21 +282,11 @@ void FailSafe()
  */
 void ShowHopDurationEtc()
 {
-#ifdef OLD_FHSS
-    float OnePacketTime = (millis() - PacketStartTime) / PacketsPerHop;
-#endif
-#ifdef NEW_FHSS
     float OnePacketTime = (millis() - PacketStartTime) / PacketNumber;
-#endif
     Serial.print("Hop duration: ");
     Serial.print((millis() - PacketStartTime) / 1000);
     Serial.print("s  Packets per hop: ");
-#ifdef OLD_FHSS
-    Serial.print(PacketsPerHop);
-#endif
-#ifdef NEW_FHSS
-   Serial.print(PacketNumber); 
-#endif
+    Serial.print(PacketNumber); 
     Serial.print("  Average Time per packet: ");
     Serial.print(OnePacketTime);
     Serial.print("ms  Next channel: ");
@@ -395,9 +383,9 @@ uint8_t CheckParams()
     uint8_t  mn       = 0;
     uint16_t TwoBytes = 0;
 
-#ifdef OLD_FHSS
-    PacketNumber = (ReceivedData[CHANNELSUSED + 1]);
-#endif
+
+   // PacketNumber = (ReceivedData[CHANNELSUSED + 1]); // SPARE NOW!
+
 
 
     switch (PacketNumber) {
@@ -458,10 +446,7 @@ uint8_t CheckParams()
             }
             break;
         case 17:
-            ReInit = bool(ReceivedData[CHANNELSUSED + 3]); // must reinitialise the port if changed settings
-            if (ReInit) {
-                // InitCurrentRadio(); // seems not needed - out now, but must investigate!
-            }
+           
             break;
         default:
             break; //
@@ -527,14 +512,9 @@ FASTRUN void ReceiveData()
     if (!Connected)
         if (millis() - LastConnectionMoment >= RECEIVE_TIMEOUT) {
             Reconnect();
-#ifdef OLD_FHSS
-            return;
-#endif
       }
     if (ReadData()) {
          NextFrequency = CheckParams();
-
-#ifdef NEW_FHSS
         ++PacketNumber;
          NextFrequency = FHSS_Channels[NextChannelNumber];
         if (!RXTimeStamp) {
@@ -543,20 +523,8 @@ FASTRUN void ReceiveData()
             DoSensors();
             RXTimeStamp = 100; // just so it's not still zero next time around
         }
-#endif
-
-#ifdef OLD_FHSS
-        if (PacketNumber >= PacketsPerHop) {
-            HopToNextFrequency(); 
-            DoSensors();
-#endif
-            
-       
-
     }
-
 }
-
 /************************************************************************************************************/
 
 void ScanI2c()
