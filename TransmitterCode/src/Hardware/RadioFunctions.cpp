@@ -257,7 +257,7 @@ void InitRadio(uint64_t Pipe)
     Radio1.setCRCLength(RF24_CRC_8); // could be 16
     PipeTimeout = millis();          // Initialise timeout
     GapSum      = 0;
-    HopStart = millis();
+    HopStart = millis()+2;
 }
 /*********************************************************************************************************************************/
 

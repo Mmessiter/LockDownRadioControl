@@ -14,7 +14,7 @@
 #define BAD_CHANNEL_MAX 40
 #define Nextion         Serial1 // Nextion is connected to Serial1
 
-#define PACEMAKER         3     // MINIMUM Ms between packets of data.
+#define PACEMAKER         2     // MINIMUM Ms between packets of data.
 #define USE_WATCHDOG            // Enable when developing only  ??
 #define WATCHDOGTIMEOUT   10000 // 10 Seconds before reboot (32ms -> 500 seconds)
 #define KICKRATE          1000  // Kick once a second (must be between WATCHDOGMAXRATE and WATCHDOGTIMEOUT)

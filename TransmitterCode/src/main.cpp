@@ -5385,8 +5385,8 @@ void GetNextHopChannelNumber()
         NextChannelNumber = PreviousChannelNumber + 1;                     // if error inc it
         if (NextChannelNumber >= FREQUENCYSCOUNT) NextChannelNumber = 1;   // wrap to 1, not zero which means error
     } 
-    NextFrequency  =   FHSS_Channels[NextChannelNumber];
-    PreviousChannelNumber =  NextChannelNumber;                            // record it
+    PreviousChannelNumber =  NextChannelNumber;   
+    NextFrequency = FHSS_Channels[NextChannelNumber];                      
 }
 
 /************************************************************************************************************/
@@ -5532,7 +5532,7 @@ void ClearAckPayload()
 
 /************************************************************************************************************/
 
-void GetRXTime(){  // this gets the time from Recevier to enable FHSS synch
+void GetRXTime(){  // This gets the time from Receivier to enable FHSS synch
     union
     {uint32_t Stamp32; 
         uint8_t Stamp8[4];
@@ -5544,38 +5544,29 @@ void GetRXTime(){  // this gets the time from Recevier to enable FHSS synch
         Time.Stamp8[2]    = AckPayload.Pitch; 
         Time.Stamp8[3]    = AckPayload.Roll;  
         NextChannelNumber = AckPayload.Yaw;  
-        TXTimeStamp       = Time.Stamp32;    // timestamp synch here
-        if (!TXTimeStamp) {                  // timestamp zero means hop now
-                HopStart = millis()+2;
-                TXTimeStamp = 0;
-
-#ifdef DB_FHSS1
-                Serial.print ("GOOD PACKET  ");  
-                Serial.print (NextChannelNumber); 
-                Serial.print (" Channel: ");  
-                Serial.println (FHSS_Channels[NextChannelNumber]);  
-#endif 
-        }
-    } else {                                   // lost packet
-            TXTimeStamp = millis() - HopStart; // 
-            if (TXTimeStamp >= HOPTIME) {
-
-#ifdef DB_FHSS1
-                Serial.print ("LOST PACKET  ");  
-                Serial.println (NextChannelNumber); 
-#endif 
-                HopStart = millis()+2;
-                TXTimeStamp = 0;
-            }
+        HopStart          = millis() - Time.Stamp32;
+        TXTimeStamp       = millis() - HopStart; 
     }
-    if ((TXTimeStamp == 0) || (TXTimeStamp) > HOPTIME) { // is it time (or indeed it is overdue?) to hop frequency?
+    if ((TXTimeStamp == 0) || (TXTimeStamp) >= HOPTIME) { // is it time (or indeed it is overdue?) to hop frequency?
         GetNextHopChannelNumber();    
         HopToNextFrequency();
-        JustHoppedFlag = true;
+        HopStart = millis(); 
     }
-
-
     ClearAckPayload();
+    ReadSwitches();
+    ShowComms();
+}
+
+
+/************************************************************************************************************/
+void CheckTXTimeStamp(){
+     TXTimeStamp = millis() - HopStart; 
+    if ((TXTimeStamp == 0) || (TXTimeStamp) >= HOPTIME+100) 
+    {
+        HopStart = millis();    
+        GetNextHopChannelNumber();    
+        HopToNextFrequency();
+    }
 }
 
 /************************************************************************************************************/
@@ -5631,6 +5622,9 @@ void loop()
 {
 
     KickTheDog(); // Watchdog
+
+   
+
     if (millis() - LastTimeRead >= 1000) {
         ReadTime();
         LastTimeRead = millis();
@@ -5647,10 +5641,12 @@ void loop()
         Button_was_pressed();
     } // Deal with button!
 
+    CheckTXTimeStamp();
+
     if ((millis() - TxOnTime) > 2000) { // Transmit nothing for 1.5 seconds
         switch (CurrentMode) {
             case 0:
-                SendData();
+                SendData();  
                 break;
             case 1:
                 CalibrateSticks();
