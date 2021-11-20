@@ -58,6 +58,7 @@ var _radio_functions_8h =
     [ "FHSSTop", "_radio_functions_8h.html#a7888e8d66857d89df7bdacfb2cfea007", null ],
     [ "GapStart", "_radio_functions_8h.html#aefd589330e26c925a4c6f97b6a8cf98e", null ],
     [ "GapSum", "_radio_functions_8h.html#ad127f588ea25098d5efb230ec10423f0", null ],
+    [ "HopStart", "_radio_functions_8h.html#a937fc53e966c6b5c66b9d66c01cec13f", null ],
     [ "i", "_radio_functions_8h.html#ac8936188af0c1d2f8b9d0cd25fde43b2", null ],
     [ "JustHoppedFlag", "_radio_functions_8h.html#ae768cbeda38b92908ae481b943893e3b", null ],
     [ "LostContactFlag", "_radio_functions_8h.html#ad5f463902789a79fc622b3befd9409b9", null ],

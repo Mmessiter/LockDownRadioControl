@@ -13,7 +13,7 @@ var searchData=
   ['reconnectingflag_1046',['ReconnectingFlag',['../_transmitter_code_2src_2main_8cpp.html#a1502d75a5bafae6f9508fbe1f34e5bf0',1,'main.cpp']]],
   ['reconnecttime_1047',['ReconnectTime',['../_transmitter_code_2src_2main_8cpp.html#a7cfc66c705193f7d65f7c9029df13fad',1,'main.cpp']]],
   ['recoverytimer_1048',['RecoveryTimer',['../_radio_functions_8h.html#ac6156efad98d22f44766714a565ccf2f',1,'RecoveryTimer():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#ac6156efad98d22f44766714a565ccf2f',1,'RecoveryTimer():&#160;main.cpp']]],
-  ['reinit_1049',['ReInit',['../_receiver_code_2src_2main_8cpp.html#aace5dda203af973b33a46413f02d9f9a',1,'ReInit():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#aace5dda203af973b33a46413f02d9f9a',1,'ReInit():&#160;main.cpp']]],
+  ['reinit_1049',['ReInit',['../_receiver_code_2src_2main_8cpp.html#aace5dda203af973b33a46413f02d9f9a',1,'main.cpp']]],
   ['reportedpitch_1050',['ReportedPitch',['../struct_payload.html#a12079c9fcb4d84730d0d466d69b38d61',1,'Payload']]],
   ['reportedroll_1051',['ReportedRoll',['../struct_payload.html#a81d2cc82507396b17fd66fc31cdc5bcb',1,'Payload']]],
   ['reportedyaw_1052',['ReportedYaw',['../struct_payload.html#aaf684e8606d2129da12ccb630605af7d',1,'Payload']]],
@@ -30,6 +30,6 @@ var searchData=
   ['rollrateintegral_1063',['RollRateIntegral',['../imu_8h.html#a1b473ad821f9b9e8cc9e09fbf478435c',1,'imu.h']]],
   ['rp_1064',['Rp',['../_transmitter_code_2src_2main_8cpp.html#a2e72859e61d76384cbf7acf3fd19a828',1,'main.cpp']]],
   ['rxcellcount_1065',['RXCellCount',['../_transmitter_code_2src_2main_8cpp.html#aa09bc4e1398cb869ae79670683470ed5',1,'main.cpp']]],
-  ['rxtimestamp_1066',['RXTimeStamp',['../radio_8h.html#ac2f93a82721081619ce2f3b497efbc1b',1,'RXTimeStamp():&#160;radio.h'],['../_radio_functions_8h.html#ac2f93a82721081619ce2f3b497efbc1b',1,'RXTimeStamp():&#160;radio.h'],['../_transmitter_code_2src_2main_8cpp.html#ac2f93a82721081619ce2f3b497efbc1b',1,'RXTimeStamp():&#160;main.cpp']]],
+  ['rxtimestamp_1066',['RXTimeStamp',['../radio_8h.html#ac2f93a82721081619ce2f3b497efbc1b',1,'RXTimeStamp():&#160;radio.h'],['../_radio_functions_8h.html#ac2f93a82721081619ce2f3b497efbc1b',1,'RXTimeStamp():&#160;radio.h']]],
   ['rxwarningflag_1067',['RXWarningFlag',['../_transmitter_code_2src_2main_8cpp.html#a2b1c0a2b8f5dff27cb4baae5b07956a0',1,'main.cpp']]]
 ];
