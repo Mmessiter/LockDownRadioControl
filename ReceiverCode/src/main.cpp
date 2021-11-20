@@ -115,7 +115,7 @@ uint8_t  byte1              = 0;
 uint8_t  byte2              = 0;
 bool     GyroInstalled      = false;
 uint32_t ReconnectedMoment;
-uint8_t  NextFrequency = 120;
+
 
 /** Load project defaults from EEPROM into the ReceivedData buffer. */
 void LoadFailSafeData()
@@ -378,15 +378,10 @@ void RebuildFlags(bool* f, uint16_t tb)
  * This ID number will change a different parameter (which is detirmined by the ID number).
  * @returns The next frequency that the transmitter plans to use.
  */
-uint8_t CheckParams()
+void CheckParams()
 {
     uint8_t  mn       = 0;
     uint16_t TwoBytes = 0;
-
-
-   // PacketNumber = (ReceivedData[CHANNELSUSED + 1]); // SPARE NOW!
-
-
 
     switch (PacketNumber) {
         case 3:
@@ -451,7 +446,7 @@ uint8_t CheckParams()
         default:
             break; //
     }
-    return ReceivedData[CHANNELSUSED + 2];
+    return;
 }
 
 /************************************************************************************************************/
@@ -510,19 +505,12 @@ void DoSensors()
 FASTRUN void ReceiveData()
 {
     if (!Connected)
-        if (millis() - LastConnectionMoment >= RECEIVE_TIMEOUT) {
+      if (millis() - LastConnectionMoment >= RECEIVE_TIMEOUT) {
             Reconnect();
       }
     if (ReadData()) {
-         NextFrequency = CheckParams();
-        ++PacketNumber;
-         NextFrequency = FHSS_Channels[NextChannelNumber];
-        if (!RXTimeStamp) {
-            HopToNextFrequency(); // heer
-            PacketNumber = 0;
-            DoSensors();
-            RXTimeStamp = 100; // just so it's not still zero next time around
-        }
+        CheckParams();
+        CheckTimeStamp();
     }
 }
 /************************************************************************************************************/

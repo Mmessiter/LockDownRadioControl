@@ -36,8 +36,8 @@ uint32_t HopStart;
 uint8_t  NextChannelNumber=0;
 uint32_t RXTimeStamp;
 
-extern uint8_t NextFrequency;
 extern void ShowHopDurationEtc();
+extern void DoSensors();
 
 /** AckPayload Stucture for data returned to transmitter. */
 struct Payload
@@ -239,14 +239,15 @@ void LoadTimeStamp(){              // This will load time stamp and array index 
 
     Time.Stamp32  = millis() - HopStart;
     RXTimeStamp = Time.Stamp32;
-    if (Time.Stamp32 > HOPTIME) {
+    if (RXTimeStamp >= HOPTIME) {
             HopStart = millis();
             Time.Stamp32 = 0;
             RXTimeStamp = 0;
             ++NextChannelNumber;
             if (NextChannelNumber >= FREQUENCYSCOUNT) {NextChannelNumber = 1;} // Zero will mean error (so that element not used)
-
-           // if (random(1, 100)>90) NextChannelNumber = 0;
+            HopToNextFrequency(); 
+            PacketNumber = 0;
+            DoSensors();     
     }
     AckPayload.volt                  =  Time.Stamp8[0];                        // These values are herewith delivered to Transmitter in Ack Payload
     AckPayload.CurrentAltitude       =  Time.Stamp8[1]; 
@@ -255,6 +256,23 @@ void LoadTimeStamp(){              // This will load time stamp and array index 
     AckPayload.ReportedYaw           =  NextChannelNumber;    
 }
  
+
+ 
+/************************************************************************************************************/
+void CheckTimeStamp(){
+
+    RXTimeStamp = millis() - HopStart;
+    if (RXTimeStamp >= HOPTIME) {
+        HopStart = millis();
+        RXTimeStamp = 0;
+        ++NextChannelNumber;
+        if (NextChannelNumber >= FREQUENCYSCOUNT) {NextChannelNumber = 1;} // Zero will mean error (so that element not used)
+        HopToNextFrequency(); 
+        PacketNumber = 0;
+        DoSensors(); 
+    }
+    // Serial.println(RXTimeStamp);
+}
 /************************************************************************************************************/
 
 void LoadAckPayload()
@@ -289,13 +307,13 @@ void Decompress(uint16_t* uncompressed_buf, uint16_t* compressed_buf, int uncomp
     int p = 0;
     for (int l = 0; l < (uncompressed_size * 3 / 4); l += 3) {
         uncompressed_buf[p] = compressed_buf[l] >> 4;
-        p++;
+        ++p;
         uncompressed_buf[p] = (compressed_buf[l] & 0xf) << 8 | compressed_buf[l + 1] >> 8;
-        p++;
+        ++p;
         uncompressed_buf[p] = (compressed_buf[l + 1] & 0xff) << 4 | compressed_buf[l + 2] >> 12;
-        p++;
+        ++p;
         uncompressed_buf[p] = compressed_buf[l + 2] & 0xfff;
-        p++;
+        ++p;
     }
 }
 
