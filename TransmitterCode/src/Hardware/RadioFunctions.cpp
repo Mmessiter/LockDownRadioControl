@@ -233,8 +233,7 @@ void HopToNextFrequency()
     Serial.print(PacketNumber);
     Serial.print(" Next channel: ");
     Serial.print(FHSS_Channels[NextChannelNumber]);
-    Serial.print(" BoundFlag = ");
-    Serial.println(BoundFlag);
+    Serial.println(BoundFlag ? " Bound!" : " NOT BOUND.");
     PSTARTTIME = millis();
 #endif
     ThisFrequency  = NextFrequency;

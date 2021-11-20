@@ -506,13 +506,13 @@ void AdjustDateTime(uint8_t MinChange, uint8_t HourChange, uint8_t YearChange, u
     if (minute > 59) {
         minute = 0;
         if (hour < 23) {
-            hour++;
+            ++hour;
         }
     }
     if (minute < 1) {
         minute = 0;
         if (hour > 0) {
-            hour--;
+            --hour;
         }
     }
     hour += HourChange;
@@ -665,7 +665,7 @@ bool getDate(const char* str)
         "Jan", "Feb", "Mar", "Apr", "May", "Jun",
         "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
     if (sscanf(str, "%s %d %d", Month, &Day, &Year) != 3) return false;
-    for (monthIndex = 0; monthIndex < 12; monthIndex++) {
+    for (monthIndex = 0; monthIndex < 12; ++monthIndex) {
         if (strcmp(Month, monthName[monthIndex]) == 0) break;
     }
     if (monthIndex >= 12) return false;
@@ -692,7 +692,7 @@ void KickTheDog()
 void Reboot()
 {
 #ifdef USE_WATCHDOG
-    for (i = 0; i < 30; i++) {
+    for (i = 0; i < 30; ++i) {
         TeensyWatchDog.feed();
     } // Dog will explode when overfed
 #endif
@@ -707,7 +707,7 @@ void SendCommand(char* tbox)
     // Serial.print (" Nextion TEST COMMAND: ");  // For wierd session
     // Serial.println(tbox);
 
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < 3; ++i) {
         Nextion.write(0xff);
     } // Send end of Input message
 }
@@ -785,7 +785,7 @@ char* Str(char* s, int n, int comma) // comma = 0 for nothing, 1 for a comma, 2 
         } //  first digit
         if (flag == 1) {
             s[i] = 48 + r;
-            i++;
+            ++i;
             s[i] = 0;
         }
         n -= (r * m);
@@ -925,7 +925,7 @@ uint16_t mp(uint8_t lowres)
 
 void ClearText()
 {
-    for (i = 0; i < CharsMax; i++) {
+    for (i = 0; i < CharsMax; ++i) {
         WordsIn[i] = char(0);
         TextIn[i]  = 0;
     }
@@ -938,7 +938,7 @@ void ClearText()
 
 void EndSend()
 {
-    for (int pp = 0; pp < 3; pp++) Nextion.write(0xff); // Send end of Input message
+    for (int pp = 0; pp < 3; ++pp) Nextion.write(0xff); // Send end of Input message
     delay(65);                                          // ** A DELAY ** (>=50 ms) is needed if an answer might come!
 }
 
@@ -965,7 +965,7 @@ void GetTextIn()
         delay(10);
         while (Nextion.available()) {
             TextIn[i] = uint8_t(Nextion.read());
-            if (i < CharsMax) i++;
+            if (i < CharsMax) ++i;
         }
     }
 }
@@ -1005,7 +1005,7 @@ void GetWordsIn()
             a          = char(Nextion.read());
             TextIn[i]  = a;
             WordsIn[i] = char(a);
-            if (i < CharsMax) i++;
+            if (i < CharsMax) ++i;
         }
         WordsIn[i] = char(0);
     }
@@ -1027,7 +1027,7 @@ bool GetButtonPress()
                 WordsIn[i]     = a;
                 WordsIn[i + 1] = char(0);
             }
-            if (i < CharsMax) i++;
+            if (i < CharsMax) ++i;
         }
     }
     return ButtonPressed;
@@ -1561,8 +1561,8 @@ int GetNextNumber(int p1, char text1[CharsMax])
     j      = 0;
     while (isDigit(text1[i]) && i < CharsMax) {
         text2[j] = text1[i];
-        i++;
-        j++;
+        ++i;
+        ++j;
         text2[j] = 0;
     }
     i = j; // = strlen only simpler
@@ -1620,10 +1620,10 @@ short unsigned int GetStickInput(uint8_t l)
 void DoMixes()
 {
     int m, c, p, mindeg, maxdeg, TheSum, Result;
-    for (m = 1; m <= MAXMIXES; m++) {
+    for (m = 1; m <= MAXMIXES; ++m) {
         if (Mixes[m][M_FlightMode] == FlightMode || Mixes[m][M_FlightMode] == 0) {
             if (Mixes[m][M_Enabled] == 1) {
-                for (c = 0; c < CHANNELSUSED; c++) {
+                for (c = 0; c < CHANNELSUSED; ++c) {
                     if ((Mixes[m][M_MasterChannel] - 1) == c) {
                         p = map(PreMixBuffer[c], MINMICROS, MAXMICROS, -HALFMICROSRANGE, HALFMICROSRANGE);
                         p = p * Mixes[m][M_Percent] / 50; // *****  50, not 100, because mix can now go right to 200% *****
@@ -1662,7 +1662,7 @@ float MapExp(float xx, float Xxmin, float Xxmax, float Yymin, float Yymax, float
 void get_new_channels_values()
 {
     short unsigned int k = 0, l = 0, m = 0, n = 0;
-    for (n = 0; n < CHANNELSUSED; n++) {
+    for (n = 0; n < CHANNELSUSED; ++n) {
         l = InPutStick[n];                            // input sticks knobs & switches are now mapped by user
         if (l <= 7) m = analogRead(AnalogueInput[l]); // Get values from sticks' pots
         if (l > 7) {                                  // Switch ?
@@ -1720,7 +1720,7 @@ void get_new_channels_values()
 void CalibrateSticks()
 {
     int j;
-    for (i = 0; i < PROPOCHANNELS; i++)
+    for (i = 0; i < PROPOCHANNELS; ++i)
     {
         j = analogRead(AnalogueInput[i]);
         if (ChannelMax[i] < j) ChannelMax[i] = j;
@@ -1735,7 +1735,7 @@ void CalibrateSticks()
 
 void CentreMaxMins()
 {
-    for (i = 0; i < CHANNELSUSED; i++)
+    for (i = 0; i < CHANNELSUSED; ++i)
     {
         ChannelMax[i]    = 512; // halfway up
         ChannelMin[i]    = 512; // halfway down
@@ -1769,7 +1769,7 @@ void ScanI2c()
 {
     int ii;
     USE_INA219 = false;
-    for (ii = 1; ii < 127; ii++) {
+    for (ii = 1; ii < 127; ++ii) {
         Wire.beginTransmission(ii);
         if (Wire.endTransmission() == 0) {
 #ifdef DB_SENSORS
@@ -1967,7 +1967,7 @@ void UpdateModelsNameEveryWhere()
 
 void InitSwitches()
 {
-    for (i = 0; i < 8; i++) {
+    for (i = 0; i < 8; ++i) {
         pinMode(SwitchNumber[i], INPUT_PULLUP);
     }
 }
@@ -1977,7 +1977,7 @@ void InitSwitches()
 /** @brief STICKS CALIBRATION */
 void InitMaxMin()
 {
-    for (i = 0; i < CHANNELSUSED; i++) {
+    for (i = 0; i < CHANNELSUSED; ++i) {
         ChannelMax[i]    = 1024;
         ChannelMidHi[i]  = 512 + 256;
         ChannelCentre[i] = 512;
@@ -1990,8 +1990,8 @@ void InitMaxMin()
 
 void CentreTrims()
 {
-    for (int j = 0; j <= FlightModesUsed; j++) {
-        for (i = 0; i < CHANNELSUSED; i++) {
+    for (int j = 0; j <= FlightModesUsed; ++j) {
+        for (i = 0; i < CHANNELSUSED; ++i) {
             Trims[j][i] = 80;
         }
     }
@@ -2002,8 +2002,8 @@ void CentreTrims()
 void InitCentreDegrees()
 {
     int j;
-    for (j = 1; j <= 4; j++) {
-        for (i = 0; i < CHANNELSUSED; i++) {
+    for (j = 1; j <= 4; ++j) {
+        for (i = 0; i < CHANNELSUSED; ++i) {
             MaxDegrees[j][i]    = 180; //  180 degrees
             MidHiDegrees[j][i]  = 135;
             CentreDegrees[j][i] = 90; //  90 degrees
@@ -2018,7 +2018,7 @@ void InitCentreDegrees()
 /** @brief Get centre as 90 degrees */
 void ChannelCentres()
 {
-    for (i = 0; i < 8; i++) {
+    for (i = 0; i < 8; ++i) {
         ChannelCentre[i] = analogRead(AnalogueInput[i]);
         ChannelMidHi[i]  = ChannelCentre[i] + ((ChannelMax[i] - ChannelCentre[i]) / 2);
         ChannelMidLow[i] = ChannelMin[i] + ((ChannelCentre[i] - ChannelMin[i]) / 2);
@@ -2179,121 +2179,121 @@ bool ReadOneModel(uint8_t Mnum)
     addr += ((Mnum - 1) * MODELSIZE); //  spare bytes for Model params
     StartLocation = addr;
     ModelDefined  = SDReaduint8_t(addr); // this variable is redundant now   could be re-used
-    addr++;
-    for (j = 0; j < 30; j++) {
+    ++addr;
+    for (j = 0; j < 30; ++j) {
         ModelName[j] = SDReaduint8_t(addr);
-        addr++;
+        ++addr;
     }
 
-    for (i = 0; i < CHANNELSUSED; i++) {
-        for (j = 1; j <= 4; j++) {
+    for (i = 0; i < CHANNELSUSED; ++i) {
+        for (j = 1; j <= 4; ++j) {
             MaxDegrees[j][i] = SDReaduint8_t(addr);
-            addr++;
+            ++addr;
             MidHiDegrees[j][i] = SDReaduint8_t(addr);
-            addr++;
+            ++addr;
             CentreDegrees[j][i] = SDReaduint8_t(addr);
-            addr++;
+            ++addr;
             MidLowDegrees[j][i] = SDReaduint8_t(addr);
-            addr++;
+            ++addr;
             MinDegrees[j][i] = SDReaduint8_t(addr);
-            addr++;
+            ++addr;
         }
     }
-    for (j = 0; j < MAXMIXES; j++) {
-        for (i = 0; i < CHANNELSUSED + 1; i++) {
+    for (j = 0; j < MAXMIXES; ++j) {
+        for (i = 0; i < CHANNELSUSED + 1; ++i) {
             Mixes[j][i] = SDReaduint8_t(addr); // Read mixes
-            addr++;
+            ++addr;
         }
     }
 
-    for (j = 0; j < FlightModesUsed + 1; j++) {
-        for (i = 0; i < CHANNELSUSED + 1; i++) {
+    for (j = 0; j < FlightModesUsed + 1; ++j) {
+        for (i = 0; i < CHANNELSUSED + 1; ++i) {
             Trims[j][i] = SDReaduint8_t(addr);
-            addr++;
+            ++addr;
         }
     }
-    for (j = 0; j < FlightModesUsed + 1; j++) {
-        for (i = 0; i < CHANNELSUSED + 1; i++) {
+    for (j = 0; j < FlightModesUsed + 1; ++j) {
+        for (i = 0; i < CHANNELSUSED + 1; ++i) {
             TrimsReversed[j][i] = SDReaduint8_t(addr);
-            addr++;
+            ++addr;
         }
     }
     RXCellCount = SDReaduint8_t(addr);
-    addr++;
+    ++addr;
 
-    for (j = 0; j < FlightModesUsed + 1; j++) {
+    for (j = 0; j < FlightModesUsed + 1; ++j) {
 
         rollp[j] = SDReaduint8_t(addr);
-        addr++;
+        ++addr;
         rolli[j] = SDReaduint8_t(addr);
-        addr++;
+        ++addr;
         rolld[j] = SDReaduint8_t(addr);
-        addr++;
+        ++addr;
         yawp[j] = SDReaduint8_t(addr);
-        addr++;
+        ++addr;
         yawi[j] = SDReaduint8_t(addr);
-        addr++;
+        ++addr;
         yawd[j] = SDReaduint8_t(addr);
-        addr++;
+        ++addr;
     }
     ModelType = SDReaduint8_t(addr);
-    addr++;
-    for (i = 0; i < CHANNELSUSED; i++) {
+    ++addr;
+    for (i = 0; i < CHANNELSUSED; ++i) {
         InPutStick[i] = SDReaduint8_t(addr);
         if (InPutStick[i] > 16) InPutStick[i] = i; // reset if nothing was saved!
-        addr++;
+        ++addr;
     }
 
     // **************************
 
     FMSwitch = SDReaduint8_t(addr);
-    addr++;
+    ++addr;
     AutoSwitch = SDReaduint8_t(addr);
-    addr++;
+    ++addr;
     Channel9Switch = SDReaduint8_t(addr);
-    addr++;
+    ++addr;
     Channel10Switch = SDReaduint8_t(addr);
-    addr++;
+    ++addr;
     Channel11Switch = SDReaduint8_t(addr);
-    addr++;
+    ++addr;
     Channel12Switch = SDReaduint8_t(addr);
-    addr++;
+    ++addr;
     Switch1Reversed = bool(SDReaduint8_t(addr));
-    addr++;
+    ++addr;
     Switch2Reversed = bool(SDReaduint8_t(addr));
-    addr++;
+    ++addr;
     Switch3Reversed = bool(SDReaduint8_t(addr));
-    addr++;
+    ++addr;
     Switch4Reversed = bool(SDReaduint8_t(addr));
-    addr++;
-    for (i = 0; i < CHANNELSUSED; i++) {
+    ++addr;
+    for (i = 0; i < CHANNELSUSED; ++i) {
         FailSafeChannel[i] = bool(SDReaduint8_t(addr));
         if (int(FailSafeChannel[i]) > 1) FailSafeChannel[i] = 0;
-        addr++;
+        ++addr;
     }
-    for (i = 0; i < CHANNELSUSED; i++) {
-        for (j = 0; j < 10; j++) {
+    for (i = 0; i < CHANNELSUSED; ++i) {
+        for (j = 0; j < 10; ++j) {
             ChannelNames[i][j] = SDReaduint8_t(addr);
-            addr++;
+            ++addr;
         }
     }
 
-    for (j = 0; j < FlightModesUsed + 1; j++) {
-        for (i = 0; i < CHANNELSUSED + 1; i++) {
+    for (j = 0; j < FlightModesUsed + 1; ++j) {
+        for (i = 0; i < CHANNELSUSED + 1; ++i) {
             Exponential[j][i] = SDReaduint8_t(addr);
             if (Exponential[j][i] > 200 || Exponential[j][i] < 0) {
                 Exponential[j][i] = 20;
             }
-            addr++;
+            ++addr;
         }
     }
-    for (j = 0; j < FlightModesUsed + 1; j++) {
-        for (i = 0; i < CHANNELSUSED + 1; i++) {
+    for (j = 0; j < FlightModesUsed + 1; ++j) {
+        for (i = 0; i < CHANNELSUSED + 1; ++i) {
             InterpolationTypes[j][i] = SDReaduint8_t(addr);
             if (InterpolationTypes[j][i] < 0 || InterpolationTypes[j][i] > 2) {
                 InterpolationTypes[j][i] = 2;
             }
-            addr++;
+            ++addr;
         }
     }
 
@@ -2339,7 +2339,7 @@ bool LoadAllParameters()
     p    = SDReadInt(addr);
     if (p == RENEWDATA) {
         addr += 2;
-        for (i = 0; i < CHANNELSUSED; i++) {
+        for (i = 0; i < CHANNELSUSED; ++i) {
             ChannelMin[i] = SDReadInt(addr);
             addr += 2;
             ChannelMidLow[i] = SDReadInt(addr);
@@ -2352,21 +2352,21 @@ bool LoadAllParameters()
             addr += 2;
         }
         FHSSTop = SDReaduint8_t(addr); // These are  currently definable
-        addr++;
+        ++addr;
         FHSSBottom = SDReaduint8_t(addr); // These are  currently definable
         if (FHSSBottom < 1) FHSSBottom = 1;
-        addr++;
+        ++addr;
         ModelNumber = SDReaduint8_t(addr);
-        addr++;
+        ++addr;
         ScreenTimeout = SDReadInt(addr);
-        addr++;
-        addr++;
+        ++addr;
+        ++addr;
         Inactivity_Timeout = SDReaduint8_t(addr) * TICKSPERMINUTE;
 
-        addr++;
-        for (j = 0; j < 30; j++) {
+        ++addr;
+        for (j = 0; j < 30; ++j) {
             TxName[j] = SDReaduint8_t(addr);
-            addr++;
+            ++addr;
         }
         txm = addr;
         ReadOneModel(ModelNumber);
@@ -2381,7 +2381,7 @@ bool LoadAllParameters()
 
 void Force_ReDisplay()
 {
-    for (int i = 0; i < CHANNELSUSED; i++) ShownBuffer[i] = 242; // to force a re-show of servo positions
+    for (int i = 0; i < CHANNELSUSED; ++i) ShownBuffer[i] = 242; // to force a re-show of servo positions
 }
 
 /*********************************************************************************************************************************/
@@ -2530,9 +2530,9 @@ int InStrng(char text1[CharsMax], char text2[CharsMax])
 {
     unsigned int j;
     unsigned int flag;
-    for (j = 0; j < strlen(text2); j++) {
+    for (j = 0; j < strlen(text2); ++j) {
         flag = 0;
-        for (i = 0; i < strlen(text1); i++) {
+        for (i = 0; i < strlen(text1); ++i) {
             if (text1[i] != text2[i + j]) flag = 1;
         }
         if (flag == 0) return j + 1;
@@ -2554,7 +2554,7 @@ void SaveTXStuff()
     CalibratedYet = true;
     SDUpdateInt(addr, rd); // xxxx in first two bytes = calibration done! *** CHANGE THIS NUMBER IF FORMAT IS NEW!! ****
     addr += 2;
-    for (i = 0; i < CHANNELSUSED; i++) {
+    for (i = 0; i < CHANNELSUSED; ++i) {
         SDUpdateInt(addr, ChannelMin[i]); // Stick min output of pot
         addr += 2;
         SDUpdateInt(addr, ChannelMidLow[i]); //
@@ -2567,21 +2567,21 @@ void SaveTXStuff()
         addr += 2;
     }
     SDUpdateuint8_t(addr, FHSSTop); // These are  currently definable
-    addr++;
+    ++addr;
     SDUpdateuint8_t(addr, FHSSBottom); // These are  currently definable
-    addr++;
+    ++addr;
     SDUpdateuint8_t(addr, ModelNumber);
-    addr++;
+    ++addr;
     SDUpdateInt(addr, ScreenTimeout);
-    addr++;
-    addr++;
+    ++addr;
+    ++addr;
     SDUpdateuint8_t(addr, (Inactivity_Timeout / TICKSPERMINUTE));
-    addr++;
-    for (j = 0; j < 30; j++) {
+    ++addr;
+    for (j = 0; j < 30; ++j) {
         if (EON) TxName[j] = 0;
         SDUpdateuint8_t(addr, TxName[j]);
         if (TxName[j] == 0) EON = true;
-        addr++;
+        ++addr;
     }
 
     CloseModelsFile();
@@ -2601,111 +2601,111 @@ void SaveOneModel(int mnum)
     StartLocation = addr;
     ModelDefined  = 42;
     SDUpdateuint8_t(addr, ModelDefined);
-    addr++;
-    for (j = 0; j < 30; j++) {
+    ++addr;
+    for (j = 0; j < 30; ++j) {
         if (EndOfName) ModelName[j] = 0;
         SDUpdateuint8_t(addr, ModelName[j]);
         if (ModelName[j] == 0) EndOfName = true;
-        addr++;
+        ++addr;
     }
-    for (i = 0; i < CHANNELSUSED; i++) {
-        for (j = 1; j <= 4; j++) {
+    for (i = 0; i < CHANNELSUSED; ++i) {
+        for (j = 1; j <= 4; ++j) {
             SDUpdateuint8_t(addr, MaxDegrees[j][i]); // Max requested in degrees (180)
-            addr++;
+            ++addr;
             SDUpdateuint8_t(addr, MidHiDegrees[j][i]); // MidHi requested in degrees (135)
-            addr++;
+            ++addr;
             SDUpdateuint8_t(addr, CentreDegrees[j][i]); // Centre requested in degrees (90)
-            addr++;
+            ++addr;
             SDUpdateuint8_t(addr, MidLowDegrees[j][i]); // MidLo requested in degrees (45)
-            addr++;
+            ++addr;
             SDUpdateuint8_t(addr, MinDegrees[j][i]); // Min requested in degrees (0)
-            addr++;
+            ++addr;
         }
     }
-    for (j = 0; j < MAXMIXES; j++) {
-        for (i = 0; i < CHANNELSUSED + 1; i++) {
+    for (j = 0; j < MAXMIXES; ++j) {
+        for (i = 0; i < CHANNELSUSED + 1; ++i) {
             SDUpdateuint8_t(addr, Mixes[j][i]); // Save mixes
-            addr++;
+            ++addr;
         }
     }
-    for (j = 0; j < FlightModesUsed + 1; j++) {
-        for (i = 0; i < CHANNELSUSED + 1; i++) {
+    for (j = 0; j < FlightModesUsed + 1; ++j) {
+        for (i = 0; i < CHANNELSUSED + 1; ++i) {
             SDUpdateuint8_t(addr, Trims[j][i]);
-            addr++;
+            ++addr;
         }
     }
-    for (j = 0; j < FlightModesUsed + 1; j++) {
-        for (i = 0; i < CHANNELSUSED + 1; i++) {
+    for (j = 0; j < FlightModesUsed + 1; ++j) {
+        for (i = 0; i < CHANNELSUSED + 1; ++i) {
             SDUpdateuint8_t(addr, TrimsReversed[j][i]);
-            addr++;
+            ++addr;
         }
     }
     SDUpdateuint8_t(addr, RXCellCount);
-    addr++;
+    ++addr;
 
-    for (j = 0; j < FlightModesUsed + 1; j++) {
+    for (j = 0; j < FlightModesUsed + 1; ++j) {
         SDUpdateuint8_t(addr, rollp[j]);
-        addr++;
+        ++addr;
         SDUpdateuint8_t(addr, rolli[j]);
-        addr++;
+        ++addr;
         SDUpdateuint8_t(addr, rolld[j]);
-        addr++;
+        ++addr;
         SDUpdateuint8_t(addr, yawp[j]);
-        addr++;
+        ++addr;
         SDUpdateuint8_t(addr, yawi[j]);
-        addr++;
+        ++addr;
         SDUpdateuint8_t(addr, yawd[j]);
-        addr++;
+        ++addr;
     }
     if (ModelType == 0) ModelType = 1; // no zeros please
     SDUpdateuint8_t(addr, ModelType);
-    addr++;
-    for (i = 0; i < CHANNELSUSED; i++) {
+    ++addr;
+    for (i = 0; i < CHANNELSUSED; ++i) {
         SDUpdateuint8_t(addr, InPutStick[i]);
-        addr++;
+        ++addr;
     }
 
     SDUpdateuint8_t(addr, FMSwitch);
-    addr++;
+    ++addr;
     SDUpdateuint8_t(addr, AutoSwitch);
-    addr++;
+    ++addr;
     SDUpdateuint8_t(addr, Channel9Switch);
-    addr++;
+    ++addr;
     SDUpdateuint8_t(addr, Channel10Switch);
-    addr++;
+    ++addr;
     SDUpdateuint8_t(addr, Channel11Switch);
-    addr++;
+    ++addr;
     SDUpdateuint8_t(addr, Channel12Switch);
-    addr++;
+    ++addr;
     SDUpdateuint8_t(addr, Switch1Reversed);
-    addr++;
+    ++addr;
     SDUpdateuint8_t(addr, Switch2Reversed);
-    addr++;
+    ++addr;
     SDUpdateuint8_t(addr, Switch3Reversed);
-    addr++;
+    ++addr;
     SDUpdateuint8_t(addr, Switch4Reversed);
-    addr++;
-    for (i = 0; i < CHANNELSUSED; i++) {
+    ++addr;
+    for (i = 0; i < CHANNELSUSED; ++i) {
         SDUpdateuint8_t(addr, FailSafeChannel[i]);
-        addr++;
+        ++addr;
     }
-    for (i = 0; i < CHANNELSUSED; i++) {
-        for (j = 0; j < 10; j++) {
+    for (i = 0; i < CHANNELSUSED; ++i) {
+        for (j = 0; j < 10; ++j) {
             SDUpdateuint8_t(addr, ChannelNames[i][j]);
-            addr++;
+            ++addr;
         }
     }
-    for (j = 0; j < FlightModesUsed + 1; j++) {
-        for (i = 0; i < CHANNELSUSED + 1; i++) {
+    for (j = 0; j < FlightModesUsed + 1; ++j) {
+        for (i = 0; i < CHANNELSUSED + 1; ++i) {
             SDUpdateuint8_t(addr, Exponential[j][i]);
-            addr++;
+            ++addr;
         }
     }
 
-    for (j = 0; j < FlightModesUsed + 1; j++) {
-        for (i = 0; i < CHANNELSUSED + 1; i++) {
+    for (j = 0; j < FlightModesUsed + 1; ++j) {
+        for (i = 0; i < CHANNELSUSED + 1; ++i) {
             SDUpdateuint8_t(addr, InterpolationTypes[j][i]);
-            addr++;
+            ++addr;
         }
     }
     // **********************
@@ -2742,7 +2742,7 @@ void ReadHelpFile(char* fname, char* htext)
             a[0] = fnumber.read();
             if (a[0] != 34) {
                 strcat(htext, a);
-                i++;
+                ++i;
             }
         }
     }
@@ -2763,8 +2763,8 @@ void SendHelp()
     int j = 0;
     while (WordsIn[i] != 0 && j < 19) {
         HelpFile[j] = WordsIn[i];
-        i++;
-        j++;
+        ++i;
+        ++j;
         HelpFile[j] = 0;
     }
     ReadHelpFile(HelpFile, HelpText);
@@ -2777,7 +2777,7 @@ void SendHelp()
 int GetChannel()
 {
 
-    for (i = 0; i < sizeof(WordsIn); i++) {
+    for (i = 0; i < sizeof(WordsIn); ++i) {
         if (isdigit(WordsIn[i])) break;
     }
     return atoi(&WordsIn[i]);
@@ -2851,7 +2851,7 @@ void DoNewChannelName(int ch, int k)
     ChannelNames[ch - 1][1] = 0; // remove old name
     while (uint8_t(WordsIn[k]) > 0) {
         ChannelNames[ch - 1][j] = WordsIn[k];
-        j++;
+        ++j;
         k++;
         ChannelNames[ch - 1][j] = 0;
     }
@@ -2897,7 +2897,7 @@ void BuildDirectory()
         strcpy(Entry1, entry.name());
         if (InStrng(MOD, Entry1) > 0) {
             strcpy(fn, entry.name());
-            for (i = 0; i < 12; i++) {
+            for (i = 0; i < 12; ++i) {
                 TheFilesList[ExportedFileCounter][i] = fn[i];
             }
             ExportedFileCounter++;
@@ -2916,7 +2916,7 @@ void ShowFileNumber()
     char newfname[17];
     if (FileNumberInView >= ExportedFileCounter) FileNumberInView = 0;
     if (FileNumberInView < 0) FileNumberInView = ExportedFileCounter - 1;
-    for (i = 0; i < 12; i++) {
+    for (i = 0; i < 12; ++i) {
         newfname[i]     = TheFilesList[FileNumberInView][i];
         newfname[i + 1] = 0;
         if (newfname[i] <= 32 || newfname[i] > 127) break;
@@ -2976,7 +2976,7 @@ void ShowDirectory()
     uint8_t n              = 0;
     uint8_t nlp            = 0;
     strcpy(filelistbuf, nul);
-    for (i = 0; i < ExportedFileCounter; i++) {
+    for (i = 0; i < ExportedFileCounter; ++i) {
         nlp = 13;
         for (int z = 0; z < 12; z++) {
             t[0] = TheFilesList[i][z];
@@ -3031,8 +3031,8 @@ void SetDefaultValues()
     delay(10);
     strcpy(ModelName, defaultName);
 
-    for (i = 0; i < CHANNELSUSED; i++) {
-        for (j = 1; j <= 4; j++) {
+    for (i = 0; i < CHANNELSUSED; ++i) {
+        for (j = 1; j <= 4; ++j) {
             if (i == 1) {
                 MaxDegrees[j][i]    = 30; // Elevator goes the other way by default
                 MidHiDegrees[j][i]  = 60;
@@ -3051,22 +3051,22 @@ void SetDefaultValues()
     }
     SendValue(Progress, 15);
     delay(10);
-    for (j = 0; j < MAXMIXES; j++) {
-        for (i = 0; i < CHANNELSUSED; i++) {
+    for (j = 0; j < MAXMIXES; ++j) {
+        for (i = 0; i < CHANNELSUSED; ++i) {
             Mixes[j][i] = 0;
         }
     }
     SendValue(Progress, 25);
     delay(10);
 
-    for (j = 0; j < FlightModesUsed + 1; j++) { // must have fudged this somewhere.... 5?!
-        for (i = 0; i < CHANNELSUSED; i++) {
+    for (j = 0; j < FlightModesUsed + 1; ++j) { // must have fudged this somewhere.... 5?!
+        for (i = 0; i < CHANNELSUSED; ++i) {
             Trims[j][i]         = 80; // MIDPOINT is 80 !
             TrimsReversed[j][i] = 0;
         }
     }
     RXCellCount = 3;
-    for (j = 0; j < FlightModesUsed + 1; j++) {
+    for (j = 0; j < FlightModesUsed + 1; ++j) {
         rollp[j] = 0;
         rolli[j] = 0;
         rolld[j] = 0;
@@ -3077,7 +3077,7 @@ void SetDefaultValues()
     SendValue(Progress, 45);
     delay(10);
     ModelType = 1;
-    for (i = 0; i < CHANNELSUSED; i++) {
+    for (i = 0; i < CHANNELSUSED; ++i) {
         InPutStick[i] = i;
     }
     FMSwitch        = 4;
@@ -3092,28 +3092,28 @@ void SetDefaultValues()
     Switch4Reversed = false;
     SendValue(Progress, 65);
     delay(10);
-    for (i = 0; i < CHANNELSUSED; i++) {
+    for (i = 0; i < CHANNELSUSED; ++i) {
         FailSafeChannel[i] = false;
     }
     SendValue(Progress, 75);
     delay(10);
-    for (i = 0; i < CHANNELSUSED; i++) {
-        for (j = 0; j < 10; j++) {
+    for (i = 0; i < CHANNELSUSED; ++i) {
+        for (j = 0; j < 10; ++j) {
             ChannelNames[i][j] = DefaultChannelNames[i][j];
-            addr++;
+            ++addr;
         }
     }
 
-    for (j = 0; j < FlightModesUsed + 1; j++) {
-        for (i = 0; i < CHANNELSUSED + 1; i++) {
+    for (j = 0; j < FlightModesUsed + 1; ++j) {
+        for (i = 0; i < CHANNELSUSED + 1; ++i) {
             Exponential[j][i] = 0; // 20% expo = default
-            addr++;
+            ++addr;
         }
     }
-    for (j = 0; j < FlightModesUsed + 1; j++) {
-        for (i = 0; i < CHANNELSUSED + 1; i++) {
+    for (j = 0; j < FlightModesUsed + 1; ++j) {
+        for (i = 0; i < CHANNELSUSED + 1; ++i) {
             InterpolationTypes[j][i] = 2; // Expo is default
-            addr++;
+            ++addr;
         }
     }
 
@@ -3407,7 +3407,7 @@ void DisplayCurve()
     }
 
     if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == 2) { //EXPO  ************************************************************************************************
-        #define APPROXIMATION     3  // This is for the approximation of the screen curve
+        #define APPROXIMATION     8  // This is for the approximation of the screen curve
 
         SendCommand(b3off);
         SendCommand(b4off);
@@ -4192,7 +4192,7 @@ void Button_was_pressed()
             i = 5;
             while (uint8_t(WordsIn[i]) > 0 && i < 30) {
                 WhichPage[i] = WordsIn[i];
-                i++;
+                ++i;
                 WhichPage[i] = 0;
             } // Get page name to which to return
             SendCommand(WhichPage);
@@ -4236,8 +4236,8 @@ void Button_was_pressed()
             j = 0;
             while (uint8_t(WordsIn[i]) > 0 && i < 100) {
                 TxName[j] = WordsIn[i];
-                j++;
-                i++;
+                ++j;
+                ++i;
                 TxName[j] = 0;
             }
             FHSSBottom = GetValue(FhssView_Rlow);
@@ -4269,8 +4269,8 @@ void Button_was_pressed()
             j = 0;
             while (uint8_t(WordsIn[i] && i < 100) > 0) {
                 SingleModelFile[j] = WordsIn[i];
-                j++;
-                i++;
+                ++j;
+                ++i;
                 SingleModelFile[j] = 0;
             } // got local name but won't use it.....
             ReceiveModelFile();
@@ -4300,8 +4300,8 @@ void Button_was_pressed()
             j = 0;
             while (uint8_t(WordsIn[i]) > 0) {
                 SingleModelFile[j] = WordsIn[i];
-                j++;
-                i++;
+                ++j;
+                ++i;
                 SingleModelFile[j] = 0;
             }
             SendModelFile();
@@ -4630,8 +4630,8 @@ void Button_was_pressed()
             i = p + 7;
             while (uint8_t(WordsIn[i]) > 0) {
                 SingleModelFile[j] = WordsIn[i];
-                j++;
-                i++;
+                ++j;
+                ++i;
                 SingleModelFile[j] = 0;
             }
             SD.remove(SingleModelFile);
@@ -4685,8 +4685,8 @@ void Button_was_pressed()
                 } // upper case only
                 if (WordsIn[i] <= 32 || WordsIn[i] > 127) break;
                 SingleModelFile[j] = WordsIn[i];
-                j++;
-                i++;
+                ++j;
+                ++i;
                 SingleModelFile[j] = 0;
             }
             if (InStrng(ModExt, SingleModelFile) == 0) {
@@ -4733,8 +4733,8 @@ void Button_was_pressed()
                     WordsIn[i] &= ~0x20;
                 }
                 SingleModelFile[j] = WordsIn[i];
-                j++;
-                i++;
+                ++j;
+                ++i;
                 SingleModelFile[j] = 0;
             }
             if (InStrng(ModExt, SingleModelFile) == 0) strcat(SingleModelFile, ModExt);
@@ -4777,7 +4777,7 @@ void Button_was_pressed()
             while (WordsIn[i + 12] > 0) {
                 ModelName[i]     = WordsIn[i + 12];
                 ModelName[i + 1] = 0;
-                i++;
+                ++i;
             } // copy new name
             SaveOneModel(ModelNumber);
             ClearText();
@@ -4793,7 +4793,7 @@ void Button_was_pressed()
             while (WordsIn[i + 12] > 0) {
                 ModelName[i]     = WordsIn[i + 12];
                 ModelName[i + 1] = 0;
-                i++;
+                ++i;
             } // copy new name
             SaveOneModel(ModelNumber);
             ClearText();
@@ -4906,7 +4906,7 @@ void Button_was_pressed()
         }
 
         if (InStrng(TRIMS50, WordsIn) > 0) {
-            for (i = 0; i < 4; i++) {
+            for (i = 0; i < 4; ++i) {
                 Trims[FlightMode][i] = 80; // Mid value is 80
             }
         }
@@ -5301,7 +5301,7 @@ void Button_was_pressed()
 uint16_t MakeTwobytes(bool* f)
 {                    // Pass arraypointer. Returns the two bytes
     uint16_t tb = 0; // all false is default
-    for (i = 0; i < 16; i++) {
+    for (i = 0; i < 16; ++i) {
         if (f[15 - i] == true) {
             tb |= 1 << (i);
         } // sets a bit if true
@@ -5485,7 +5485,7 @@ void GetFlightMode()
 
 void ReadSwitches()
 {
-    for (i = 0; i < 8; i++) {
+    for (i = 0; i < 8; ++i) {
         if (!digitalRead(SwitchNumber[i])) {
             Switch[i] = true;
         }
