@@ -107,6 +107,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "CheckRange_0_16", "_transmitter_code_2src_2main_8cpp.html#a962a0c149ba58563ca3bad19e999e027", null ],
     [ "CheckSwitch", "_transmitter_code_2src_2main_8cpp.html#afcd616e96ae28694a7fa2197ad74c6fe", null ],
     [ "CheckTimer", "_transmitter_code_2src_2main_8cpp.html#addfc131a271de92cb52d869fde35729e", null ],
+    [ "CheckTXTimeStamp", "_transmitter_code_2src_2main_8cpp.html#ab83c716220e82fb8c5db9a7857e9c503", null ],
     [ "ClearAckPayload", "_transmitter_code_2src_2main_8cpp.html#a5a26715a721e1073d6ae00498282c056", null ],
     [ "ClearBox", "_transmitter_code_2src_2main_8cpp.html#a5aeea47b9d855ae9911bae1115d02de7", null ],
     [ "ClearText", "_transmitter_code_2src_2main_8cpp.html#af0852678d8e89501acee8951f09d3b43", null ],
