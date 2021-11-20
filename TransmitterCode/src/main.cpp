@@ -3407,7 +3407,7 @@ void DisplayCurve()
     }
 
     if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == 2) { //EXPO  ************************************************************************************************
-        #define APPROXIMATION     3  // This is for the approximation of the screen curve
+        #define APPROXIMATION     8  // This is for the approximation of the screen curve
 
         SendCommand(b3off);
         SendCommand(b4off);
