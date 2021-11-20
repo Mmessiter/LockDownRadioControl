@@ -238,15 +238,17 @@ void LoadTimeStamp(){              // This will load time stamp and array index 
     }Time;                         
 
     Time.Stamp32  = millis() - HopStart;
-    RXTimeStamp=Time.Stamp32;
+    RXTimeStamp = Time.Stamp32;
     if (Time.Stamp32 > HOPTIME) {
             HopStart = millis();
             Time.Stamp32 = 0;
             RXTimeStamp = 0;
             ++NextChannelNumber;
             if (NextChannelNumber >= FREQUENCYSCOUNT) {NextChannelNumber = 1;} // Zero will mean error (so that element not used)
+
+           // if (random(1, 100)>90) NextChannelNumber = 0;
     }
-    AckPayload.volt                  =  Time.Stamp8[0];                      // These values are herewith delivered to Transmitter in Ack Payload
+    AckPayload.volt                  =  Time.Stamp8[0];                        // These values are herewith delivered to Transmitter in Ack Payload
     AckPayload.CurrentAltitude       =  Time.Stamp8[1]; 
     AckPayload.ReportedPitch         =  Time.Stamp8[2]; 
     AckPayload.ReportedRoll          =  Time.Stamp8[3]; 
