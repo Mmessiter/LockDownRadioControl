@@ -5538,27 +5538,43 @@ void GetRXTime(){  // this gets the time from Recevier to enable FHSS synch
         uint8_t Stamp8[4];
     }Time;                                  // union used to allow access to each byte of 32 bit value     
 
-    if (NextChannelNumber){                  // Good data? (Zero means no data)
+    if (AckPayload.Yaw){                    // Good data? (Zero means no data)
         Time.Stamp8[0]    = AckPayload.volt;
         Time.Stamp8[1]    = AckPayload.CurrentAltitude;
         Time.Stamp8[2]    = AckPayload.Pitch; 
         Time.Stamp8[3]    = AckPayload.Roll;  
         NextChannelNumber = AckPayload.Yaw;  
-        TXTimeStamp       = Time.Stamp32; 
-        if (!TXTimeStamp) {                  // timestamp zero means hop 
+        TXTimeStamp       = Time.Stamp32;    // timestamp synch here
+        if (!TXTimeStamp) {                  // timestamp zero means hop now
                 HopStart = millis()+2;
                 TXTimeStamp = 0;
+
+#ifdef DB_FHSS1
+                Serial.print ("GOOD PACKET  ");  
+                Serial.print (NextChannelNumber); 
+                Serial.print (" Channel: ");  
+                Serial.println (FHSS_Channels[NextChannelNumber]);  
+#endif 
         }
     } else {                                   // lost packet
-            TXTimeStamp = millis() - HopStart; // resynch every good packet
+            TXTimeStamp = millis() - HopStart; // 
             if (TXTimeStamp >= HOPTIME) {
-                Serial.println ("LOST PACKET");  
+
+#ifdef DB_FHSS1
+                Serial.print ("LOST PACKET  ");  
+                Serial.println (NextChannelNumber); 
+#endif 
                 HopStart = millis()+2;
                 TXTimeStamp = 0;
-                ++NextChannelNumber;
-                if (NextChannelNumber >= FREQUENCYSCOUNT) {NextChannelNumber = 1;} // Zero will mean error (so that element not used)
             }
     }
+    if ((TXTimeStamp == 0) || (TXTimeStamp) > HOPTIME) { // is it time (or indeed it is overdue?) to hop frequency?
+        GetNextHopChannelNumber();    
+        HopToNextFrequency();
+        JustHoppedFlag = true;
+    }
+
+
     ClearAckPayload();
 }
 

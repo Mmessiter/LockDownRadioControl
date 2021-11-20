@@ -155,13 +155,6 @@ void SendData()
                     if (BoundFlag) GreenLedOn();    
                     CheckGapsLength();
             }
-
-
-            if ((TXTimeStamp == 0) || (TXTimeStamp) > HOPTIME+10) { // is it time (or indeed it is overdue?) to hop frequency?
-                GetNextHopChannelNumber();    
-                HopToNextFrequency();
-            }
-                JustHoppedFlag = false;
         }
         else {
             FailedPacket();
