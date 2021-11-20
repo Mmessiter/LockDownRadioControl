@@ -3,6 +3,7 @@ var _radio_functions_8h =
     [ "BAD_CHANNEL_MAX", "_radio_functions_8h.html#ac69cb8772c2dbb3abe535a7460febc63", null ],
     [ "CALIBRATELIMITS", "_radio_functions_8h.html#a8d671ce93ba33f2f6b5c314108d3592d", null ],
     [ "CENTRESTICKS", "_radio_functions_8h.html#a53bc52cfc1253f58c2f3835aa39205a3", null ],
+    [ "DB_FHSS1", "_radio_functions_8h.html#a567f2e92d348e6f18a277cd171bc4a65", null ],
     [ "FREQUENCYSCOUNT", "_radio_functions_8h.html#afe5bce36baf737bd284d43cd0e805fdb", null ],
     [ "HOPTIME", "_radio_functions_8h.html#a57d506b5f34172770c8d645c12cb5ba2", null ],
     [ "KICKRATE", "_radio_functions_8h.html#a639fb69a9b4f236e3b1a16435b82bb81", null ],
