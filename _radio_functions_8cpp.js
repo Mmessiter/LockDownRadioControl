@@ -36,8 +36,5 @@ var _radio_functions_8cpp =
     [ "TryOtherPipe", "_radio_functions_8cpp.html#a7051e235b8f694c6b01bb5edf3925dc7", null ],
     [ "FHSS_Channels", "_radio_functions_8cpp.html#a79ed13ac413de8a0a1767615afccbe2f", null ],
     [ "NextFrequency", "_radio_functions_8cpp.html#aa8f16a99dfc5658df2e8e40339062b94", null ],
-    [ "PDURATION", "_radio_functions_8cpp.html#af3e741308f3c6e1f89daee68f2f3fa6e", null ],
-    [ "PENDTIME", "_radio_functions_8cpp.html#ae776fd40f5c5b226a5a2e6f8e696f5e3", null ],
-    [ "PSTARTTIME", "_radio_functions_8cpp.html#a2ef9079662a8ff255a84c759c473584a", null ],
     [ "ThisFrequency", "_radio_functions_8cpp.html#a16a7235629cfd2dec33802caa95dc16d", null ]
 ];
