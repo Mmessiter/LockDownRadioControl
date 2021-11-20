@@ -215,8 +215,6 @@ unsigned int  PacketsPerSecond = 0;
 unsigned int  LostPackets      = 0;
 uint8_t       PacketNumber     = 0;
 
-uint32_t      RXTimeStamp; 
-
 // ************************************* AckPayload structure ******************************************************
 struct Payload
 {
@@ -430,7 +428,7 @@ char     ChannelNames[CHANNELSUSED][11] = {{"Aileron"}, {"Elevator"}, {"Throttle
 bool     VoltsDetected = false;
 bool     TXWarningFlag = false;
 bool     RXWarningFlag = false;
-bool     ReInit        = false;
+
 uint32_t TxOnTime      = 0;
 uint32_t TxPace        = 0;
 bool     ModelDetected = false;
@@ -453,7 +451,9 @@ bool    SetupFlag   = false; // No transmitter while setting up
 uint8_t zero        = 0x00;  
 bool    BindButton = false;
 uint32_t TXTimeStamp;
+uint32_t HopStart;
 uint8_t  PreviousChannelNumber = 0 ;
+uint8_t  NextChannelNumber = 0;
 
 
 
@@ -466,7 +466,7 @@ uint8_t  BlinkOnPhase  = 1;
 bool     LedWasGreen   = false;
 uint8_t  BadChannelMax = BAD_CHANNEL_MAX;
 char     ThisRadio[4] = "0 ";
-uint8_t  NextChannelNumber = 0;
+
 
 
 /*********************************************************************************************************************************/
@@ -5534,19 +5534,31 @@ void ClearAckPayload()
 
 void GetRXTime(){  // this gets the time from Recevier to enable FHSS synch
     union
-    {
-        uint32_t Stamp32; 
+    {uint32_t Stamp32; 
         uint8_t Stamp8[4];
-    }Time;                                      // union used to allow access to each byte of 32 bit value     
+    }Time;                                  // union used to allow access to each byte of 32 bit value     
 
-    Time.Stamp8[0]    = AckPayload.volt;
-    Time.Stamp8[1]    = AckPayload.CurrentAltitude;
-    Time.Stamp8[2]    = AckPayload.Pitch; 
-    Time.Stamp8[3]    = AckPayload.Roll;  
-    NextChannelNumber = AckPayload.Yaw;  
-    RXTimeStamp       = Time.Stamp32; 
-    TXTimeStamp       = millis() - RXTimeStamp; // resynch every good packet
-
+    if (NextChannelNumber){                  // Good data? (Zero means no data)
+        Time.Stamp8[0]    = AckPayload.volt;
+        Time.Stamp8[1]    = AckPayload.CurrentAltitude;
+        Time.Stamp8[2]    = AckPayload.Pitch; 
+        Time.Stamp8[3]    = AckPayload.Roll;  
+        NextChannelNumber = AckPayload.Yaw;  
+        TXTimeStamp       = Time.Stamp32; 
+        if (!TXTimeStamp) {                  // timestamp zero means hop 
+                HopStart = millis()+2;
+                TXTimeStamp = 0;
+        }
+    } else {                                   // lost packet
+            TXTimeStamp = millis() - HopStart; // resynch every good packet
+            if (TXTimeStamp >= HOPTIME) {
+                Serial.println ("LOST PACKET");  
+                HopStart = millis()+2;
+                TXTimeStamp = 0;
+                ++NextChannelNumber;
+                if (NextChannelNumber >= FREQUENCYSCOUNT) {NextChannelNumber = 1;} // Zero will mean error (so that element not used)
+            }
+    }
     ClearAckPayload();
 }
 

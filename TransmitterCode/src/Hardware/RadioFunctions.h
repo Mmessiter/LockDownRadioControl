@@ -82,6 +82,7 @@ extern uint8_t FHSSBottom;
 extern uint8_t FHSSTop;
 extern uint32_t TxOnTime;
 extern uint32_t TXTimeStamp;
+extern uint32_t HopStart;
 
 extern void  KickTheDog();
 extern void  SendCommand(char* tbox);

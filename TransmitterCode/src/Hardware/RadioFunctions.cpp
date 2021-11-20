@@ -157,7 +157,7 @@ void SendData()
             }
 
 
-            if (((millis()-TXTimeStamp) == 0) || (millis()-TXTimeStamp) > HOPTIME+10) { // is it time (or indeed it is overdue?) to hop frequency?
+            if ((TXTimeStamp == 0) || (TXTimeStamp) > HOPTIME+10) { // is it time (or indeed it is overdue?) to hop frequency?
                 GetNextHopChannelNumber();    
                 HopToNextFrequency();
             }
@@ -265,6 +265,7 @@ void InitRadio(uint64_t Pipe)
     Radio1.setCRCLength(RF24_CRC_8); // could be 16
     PipeTimeout = millis();          // Initialise timeout
     GapSum      = 0;
+    HopStart = millis();
 }
 /*********************************************************************************************************************************/
 
