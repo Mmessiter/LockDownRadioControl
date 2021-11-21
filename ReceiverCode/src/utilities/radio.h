@@ -262,7 +262,8 @@ void LoadTimeStamp(){              // This will load time stamp and array index 
 void CheckTimeStamp(){
 
     RXTimeStamp = millis() - HopStart;
-    if (RXTimeStamp >= HOPTIME) {
+    if (RXTimeStamp > HOPTIME) {
+        // Serial.println(RXTimeStamp);
         HopStart = millis();
         RXTimeStamp = 0;
         ++NextChannelNumber;
@@ -271,7 +272,7 @@ void CheckTimeStamp(){
         PacketNumber = 0;
         DoSensors(); 
     }
-    // Serial.println(RXTimeStamp);
+    
 }
 /************************************************************************************************************/
 

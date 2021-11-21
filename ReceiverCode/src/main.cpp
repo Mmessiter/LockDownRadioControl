@@ -509,8 +509,9 @@ FASTRUN void ReceiveData()
             Reconnect();
       }
     if (ReadData()) {
+        ++PacketNumber;
         CheckParams();
-        CheckTimeStamp();
+       // CheckTimeStamp();
     }
 }
 /************************************************************************************************************/
