@@ -5641,7 +5641,7 @@ void loop()
         Button_was_pressed();
     } // Deal with button!
 
-    CheckTXTimeStamp();
+   // CheckTXTimeStamp();
 
     if ((millis() - TxOnTime) > 2000) { // Transmit nothing for 1.5 seconds
         switch (CurrentMode) {
