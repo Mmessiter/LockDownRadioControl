@@ -235,7 +235,7 @@ void Reconnect()  // Still TODO: 2nd transceiver
 
 void LoadTimeStamp(){              // This will load time stamp and array index for return to TX for synch purposes heer
 
-#define HOPTIME  100                 // ms between channel changes
+#define HOPTIME  95                 // ms between channel changes
 #define FREQUENCYSCOUNT 82           // use 82 different channels
 
     union                            // union used to allow access to each byte of 32 bit value     
@@ -252,11 +252,9 @@ void LoadTimeStamp(){              // This will load time stamp and array index 
             ++NextChannelNumber;
             if (NextChannelNumber >= FREQUENCYSCOUNT) {NextChannelNumber = 1;} // Zero will mean error (so that element not used)
             GetNextFrequency();
-            HopNow = true;      // Set flag and hop when ready BUT NOT BEFORE!!!!!
-            PacketNumber = 0;
+            HopNow = true;      // Set flag and hop when ready *** BUT NOT BEFORE ****  !!!!!
+            
             DoSensors();   
-            Serial.print ("  --->>> ");   
-            Serial.println (FHSS_Channels[NextChannelNumber]);
     }
     AckPayload.volt                  =  Time.Stamp8[0];                        // These values are herewith delivered to Transmitter in Ack Payload
     AckPayload.CurrentAltitude       =  Time.Stamp8[1]; 
