@@ -6,6 +6,20 @@
 #define TXVERSION_MINOR   1
 #define TXVERSION_MINIMUS 6
 
+#define HOPTIME           95    // A New Frequency Hop every 95 ms (must match receiver setting)
+#define FREQUENCYSCOUNT   82 
+
+#define NOISYWIFI               // if defined this uses channels well above most wifi (not licence free in some countries).
+
+#ifndef NOISYWIFI // Use this for UK legal flying 
+#define RECONNECT_CH     83
+#endif
+
+
+#ifdef NOISYWIFI // Use this for UK legal flying 
+#define RECONNECT_CH     120
+#endif
+
 #define NORMAL          0 // Normal for transmit as usual
 #define CALIBRATELIMITS 1 // Calibrate limits
 #define CENTRESTICKS    2 // Calibrate Centres
@@ -14,19 +28,17 @@
 #define BAD_CHANNEL_MAX 40
 #define Nextion         Serial1 // Nextion is connected to Serial1
 
-#define PACEMAKER         7     // MINIMUM Ms between packets of data.
+#define PACEMAKER         4     // MINIMUM Ms between packets of data.
 #define USE_WATCHDOG            // Enable when developing only  ??
 #define WATCHDOGTIMEOUT   10000 // 10 Seconds before reboot (32ms -> 500 seconds)
 #define KICKRATE          1000  // Kick once a second (must be between WATCHDOGMAXRATE and WATCHDOGTIMEOUT)
 #define WATCHDOGMAXRATE   500   // 500 ms secs between kicks is max rate allowed
 #define LOSTCONTACTCUTOFF 10    // How many packets to lose before reconnect triggers
 
-#define NOISYWIFI               // if defined this uses channels well above most wifi (not licence free in some countries).
-#define HOPTIME           100   // A New Frequency Hop every 95 ms (must match receiver setting)
-#define FREQUENCYSCOUNT   82 
+
 
 // UNCOMMENT ANY OF THESE for that bit of debug info
-// #define DB_FHSS           // Debug real time FHSS data
+   #define DB_FHSS           // Debug real time FHSS data
 // #define DB_FHSS1          // Debug new FHSS data
 // #define DB_NEXTION        // Debug Nextion and SD card data
 // #define DB_CHANNEL_AVOID  // Debug FHSS channel avoiding data etc
@@ -69,6 +81,7 @@ extern uint64_t       DefaultPipe;
 extern long int       RecoveryTimer;
 extern bool           Connected;
 extern uint16_t       CompressedData[];
+extern uint8_t        FHSS_Channels[];
 extern struct Payload AckPayload;
 extern int            RangeTestLostPackets;
 extern uint8_t        RecentPacketsLost;
@@ -76,7 +89,7 @@ extern uint8_t        AckPayloadSize;
 extern uint8_t        SizeOfCompressedData;
 extern int            RangeTestGoodPackets;
 extern uint8_t        NextChannelNumber;
-extern uint8_t        FHSS_Channels[];
+
 
 extern uint8_t FHSSBottom;
 extern uint8_t FHSSTop;
@@ -115,5 +128,8 @@ void ScanAllChannels();
 void SendData();
 
 /*********************************************************************************************************************************/
+
+
+
 
 #endif
