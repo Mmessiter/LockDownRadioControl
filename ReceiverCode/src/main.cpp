@@ -324,6 +324,10 @@ bool ReadData()
         FailSafeDataLoaded = false;
         MapToSBUS();
         LastConnectionMoment = millis();
+        if (HopNow) {     // this flag gets set in LoadAckPayload();
+            HopToNextFrequency();
+            HopNow = false;
+        }
     }
     return Connected;
 }

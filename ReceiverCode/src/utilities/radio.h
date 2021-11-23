@@ -35,6 +35,7 @@ uint8_t SavedPipeAddress[8];
 uint32_t HopStart;
 uint8_t  NextChannelNumber=0;
 uint32_t RXTimeStamp;
+bool     HopNow = false;
 
 extern void ShowHopDurationEtc();
 extern void DoSensors();
@@ -252,7 +253,8 @@ void LoadTimeStamp(){              // This will load time stamp and array index 
             if (NextChannelNumber >= FREQUENCYSCOUNT) {NextChannelNumber = 1;} // Zero will mean error (so that element not used)
               GetNextFrequency();
               NextFrequency=120;  // temporary!!!
-              HopToNextFrequency();
+              HopNow = true;      // Set flag and hop when ready!
+             // HopToNextFrequency();
             PacketNumber = 0;
             DoSensors();   
             Serial.print ("  --->>> ");   
