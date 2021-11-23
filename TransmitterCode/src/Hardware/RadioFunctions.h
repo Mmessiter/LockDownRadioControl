@@ -2,9 +2,9 @@
 #ifndef RadioFunctions_H
 #define RadioFunctions_H
 
-#define TXVERSION_MAJOR   1 //   Nov 10th 2021 Malcolm Messiter
-#define TXVERSION_MINOR   1
-#define TXVERSION_MINIMUS 6
+#define TXVERSION_MAJOR   1 //   Nov 23rd 2021 Malcolm Messiter
+#define TXVERSION_MINOR   2
+#define TXVERSION_MINIMUS 0
 
 #define HOPTIME           95    // A New Frequency Hop every 95 ms (must match receiver setting)
 #define FREQUENCYSCOUNT   82 
@@ -16,7 +16,7 @@
 #endif
 
 
-#ifdef NOISYWIFI // Use this for UK legal flying 
+#ifdef NOISYWIFI 
 #define RECONNECT_CH     120
 #endif
 
@@ -33,7 +33,7 @@
 #define WATCHDOGTIMEOUT   10000 // 10 Seconds before reboot (32ms -> 500 seconds)
 #define KICKRATE          1000  // Kick once a second (must be between WATCHDOGMAXRATE and WATCHDOGTIMEOUT)
 #define WATCHDOGMAXRATE   500   // 500 ms secs between kicks is max rate allowed
-#define LOSTCONTACTCUTOFF 10    // How many packets to lose before reconnect triggers
+#define LOSTCONTACTCUTOFF 8     // How many packets to lose before reconnect triggers
 
 
 
