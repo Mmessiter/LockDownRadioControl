@@ -250,11 +250,9 @@ void LoadTimeStamp(){              // This will load time stamp and array index 
             RXTimeStamp = 0;
             ++NextChannelNumber;
             if (NextChannelNumber >= FREQUENCYSCOUNT) {NextChannelNumber = 1;} // Zero will mean error (so that element not used)
-            
               GetNextFrequency();
               NextFrequency=120;  // temporary!!!
               HopToNextFrequency();
-
             PacketNumber = 0;
             DoSensors();   
             Serial.print ("  --->>> ");   
