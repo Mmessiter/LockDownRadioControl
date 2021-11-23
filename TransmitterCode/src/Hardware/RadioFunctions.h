@@ -14,7 +14,7 @@
 #define BAD_CHANNEL_MAX 40
 #define Nextion         Serial1 // Nextion is connected to Serial1
 
-#define PACEMAKER         2     // MINIMUM Ms between packets of data.
+#define PACEMAKER         7     // MINIMUM Ms between packets of data.
 #define USE_WATCHDOG            // Enable when developing only  ??
 #define WATCHDOGTIMEOUT   10000 // 10 Seconds before reboot (32ms -> 500 seconds)
 #define KICKRATE          1000  // Kick once a second (must be between WATCHDOGMAXRATE and WATCHDOGTIMEOUT)
@@ -22,7 +22,7 @@
 #define LOSTCONTACTCUTOFF 10    // How many packets to lose before reconnect triggers
 
 #define NOISYWIFI               // if defined this uses channels well above most wifi (not licence free in some countries).
-#define HOPTIME           5000    // A New Frequency Hop every 95 ms (must match receiver setting)
+#define HOPTIME           100   // A New Frequency Hop every 95 ms (must match receiver setting)
 #define FREQUENCYSCOUNT   82 
 
 // UNCOMMENT ANY OF THESE for that bit of debug info

@@ -5549,13 +5549,11 @@ void GetRXTime(){  // This gets the time from Receivier to enable FHSS synch
         TXTimeStamp         =  millis() - HopStart; 
     }
 
-if ((TXTimeStamp == 0)|| (TXTimeStamp >= HOPTIME )) { // is it time (or indeed it is overdue?) to hop frequency?
+if ((TXTimeStamp == 0) || (TXTimeStamp >= HOPTIME )) { // is it time (or indeed it is overdue?) to hop frequency?
         GetNextHopChannelNumber();       // Also gets actual channel number
-        
         HopStart = millis()-2; 
         Serial.println(TXTimeStamp);
         Serial.println(FHSS_Channels[NextChannelNumber]);
-        NextFrequency=120; // temporary!!
         HopToNextFrequency();
         TXTimeStamp = 0;
 }
