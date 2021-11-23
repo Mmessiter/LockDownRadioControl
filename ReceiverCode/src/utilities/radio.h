@@ -85,6 +85,7 @@ extern void FailSafe(); // defined in main.cpp
 extern uint32_t ReconnectedMoment;
 extern bool BoundFlag;
 extern void ClearAckPayload();
+byte NextFrequency;
 /************************************************************************************************************/
 
 void SetNewPipe()
@@ -149,12 +150,16 @@ void GetOldPipe()
  * @param freq The next frequency to use.
  */
 
+void GetNextFrequency(){
+    NextFrequency=FHSS_Channels[NextChannelNumber];
+}
+
 void HopToNextFrequency()
 {
     CurrentRadio->stopListening();
-    CurrentRadio->setChannel(FHSS_Channels[NextChannelNumber]);
+    CurrentRadio->setChannel(NextFrequency);
     CurrentRadio->startListening();
-    LastConnectionMoment = millis();
+    
     
 #ifdef DEBUG
     ShowHopDurationEtc();
@@ -229,10 +234,10 @@ void Reconnect()  // Still TODO: 2nd transceiver
 
 void LoadTimeStamp(){              // This will load time stamp and array index for return to TX for synch purposes heer
 
-#define HOPTIME 95                 // ms between channel changes
-#define FREQUENCYSCOUNT 82         // use 82 different channels
+#define HOPTIME 5000                 // ms between channel changes
+#define FREQUENCYSCOUNT 82           // use 82 different channels
 
-    union                          // union used to allow access to each byte of 32 bit value     
+    union                            // union used to allow access to each byte of 32 bit value     
     {uint32_t Stamp32; 
         uint8_t  Stamp8[4];
     }Time;                         
@@ -245,9 +250,15 @@ void LoadTimeStamp(){              // This will load time stamp and array index 
             RXTimeStamp = 0;
             ++NextChannelNumber;
             if (NextChannelNumber >= FREQUENCYSCOUNT) {NextChannelNumber = 1;} // Zero will mean error (so that element not used)
-            HopToNextFrequency();  // heer?!?!?!?!
+            
+              GetNextFrequency();
+              NextFrequency=120;  // temporary!!!
+              HopToNextFrequency();
+
             PacketNumber = 0;
-            DoSensors();     
+            DoSensors();   
+            Serial.print ("  --->>> ");   
+            Serial.println (FHSS_Channels[NextChannelNumber]);
     }
     AckPayload.volt                  =  Time.Stamp8[0];                        // These values are herewith delivered to Transmitter in Ack Payload
     AckPayload.CurrentAltitude       =  Time.Stamp8[1]; 
