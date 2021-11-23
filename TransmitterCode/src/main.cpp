@@ -5536,25 +5536,31 @@ void GetRXTime(){  // This gets the time from Receivier to enable FHSS synch
     union
     {uint32_t Stamp32; 
         uint8_t Stamp8[4];
-    }Time;                                  // union used to allow access to each byte of 32 bit value     
+    }RXTime;                                  // union used to allow access to each byte of 32 bit value     
+
 
     if (AckPayload.Yaw){                    // Good data? (Zero means no data)
-        Time.Stamp8[0]    = AckPayload.volt;
-        Time.Stamp8[1]    = AckPayload.CurrentAltitude;
-        Time.Stamp8[2]    = AckPayload.Pitch; 
-        Time.Stamp8[3]    = AckPayload.Roll;  
-        NextChannelNumber = AckPayload.Yaw;  
-        HopStart          = millis() - Time.Stamp32;
-        TXTimeStamp       = millis() - HopStart; 
+        RXTime.Stamp8[0]    = AckPayload.volt;
+        RXTime.Stamp8[1]    = AckPayload.CurrentAltitude;
+        RXTime.Stamp8[2]    = AckPayload.Pitch; 
+        RXTime.Stamp8[3]    = AckPayload.Roll;  
+        NextChannelNumber   = AckPayload.Yaw;  
+        HopStart            =  millis() - RXTime.Stamp32;
+        TXTimeStamp         =  millis() - HopStart; 
     }
-    if ((TXTimeStamp == 0) || (TXTimeStamp) >= HOPTIME) { // is it time (or indeed it is overdue?) to hop frequency?
-        GetNextHopChannelNumber();    
+
+if ((TXTimeStamp == 0)|| (TXTimeStamp >= HOPTIME )) { // is it time (or indeed it is overdue?) to hop frequency?
+        GetNextHopChannelNumber();       // Also gets actual channel number
+        NextFrequency=120; // temporary!!
         HopToNextFrequency();
-        HopStart = millis(); 
-    }
-    ClearAckPayload();
-    ReadSwitches();
-    ShowComms();
+        HopStart = millis()-2; 
+        Serial.println(TXTimeStamp);
+        Serial.println(FHSS_Channels[NextChannelNumber]);
+        TXTimeStamp = 0;
+}
+      ClearAckPayload();
+      ReadSwitches();
+      ShowComms();
 }
 
 

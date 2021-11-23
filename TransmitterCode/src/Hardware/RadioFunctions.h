@@ -22,11 +22,11 @@
 #define LOSTCONTACTCUTOFF 10    // How many packets to lose before reconnect triggers
 
 #define NOISYWIFI               // if defined this uses channels well above most wifi (not licence free in some countries).
-#define HOPTIME           95    // A New Frequency Hop every 95 ms (must match receiver setting)
+#define HOPTIME           5000    // A New Frequency Hop every 95 ms (must match receiver setting)
 #define FREQUENCYSCOUNT   82 
 
 // UNCOMMENT ANY OF THESE for that bit of debug info
- //  #define DB_FHSS           // Debug real time FHSS data
+// #define DB_FHSS           // Debug real time FHSS data
 // #define DB_FHSS1          // Debug new FHSS data
 // #define DB_NEXTION        // Debug Nextion and SD card data
 // #define DB_CHANNEL_AVOID  // Debug FHSS channel avoiding data etc
