@@ -42,7 +42,7 @@
 
 // ************************************************** Receiver code **************************************************
 
-#define RECEIVE_TIMEOUT 200     // 15 milliseconds was too short
+#define RECEIVE_TIMEOUT 25     // 15 milliseconds was too short
 #define PacketsPerHop   20
 #define CHANNELSUSED    16
 #define SERVOSUSED      10
@@ -446,7 +446,6 @@ void CheckParams()
             }
             break;
         case 17:
-           
             break;
         default:
             break; 
