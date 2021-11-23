@@ -235,7 +235,7 @@ void Reconnect()  // Still TODO: 2nd transceiver
 
 void LoadTimeStamp(){              // This will load time stamp and array index for return to TX for synch purposes heer
 
-#define HOPTIME 5000                 // ms between channel changes
+#define HOPTIME  100                 // ms between channel changes
 #define FREQUENCYSCOUNT 82           // use 82 different channels
 
     union                            // union used to allow access to each byte of 32 bit value     
@@ -251,10 +251,8 @@ void LoadTimeStamp(){              // This will load time stamp and array index 
             RXTimeStamp = 0;
             ++NextChannelNumber;
             if (NextChannelNumber >= FREQUENCYSCOUNT) {NextChannelNumber = 1;} // Zero will mean error (so that element not used)
-              GetNextFrequency();
-              NextFrequency=120;  // temporary!!!
-              HopNow = true;      // Set flag and hop when ready!
-             // HopToNextFrequency();
+            GetNextFrequency();
+            HopNow = true;      // Set flag and hop when ready BUT NOT BEFORE!!!!!
             PacketNumber = 0;
             DoSensors();   
             Serial.print ("  --->>> ");   
