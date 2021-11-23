@@ -42,7 +42,7 @@
 
 // ************************************************** Receiver code **************************************************
 
-#define RECEIVE_TIMEOUT 35     // 15 milliseconds was too short
+#define RECEIVE_TIMEOUT 10     // 15 milliseconds was too short
 #define PacketsPerHop   20
 #define CHANNELSUSED    16
 #define SERVOSUSED      10
@@ -318,12 +318,12 @@ bool ReadData()
     if (CurrentRadio->available()) {
         LoadAckPayload();
         Connected            = true;
-        LastConnectionMoment = millis();
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // Send telemetry (actual length plus 0)
         CurrentRadio->read(&CompressedData, sizeof(CompressedData));   // Get Data
         Decompress(ReceivedData, CompressedData, UNCOMPRESSEDWORDS); // decompress data
         FailSafeDataLoaded = false;
         MapToSBUS();
+        LastConnectionMoment = millis();
     }
     return Connected;
 }
@@ -504,8 +504,10 @@ void DoSensors()
 
 FASTRUN void ReceiveData()
 {
+    if (CurrentRadio->available()) {Connected=true;}
     if (!Connected)
       if (millis() - LastConnectionMoment >= RECEIVE_TIMEOUT) {
+          Serial.println (millis() - LastConnectionMoment);
             Reconnect();
       }
     if (ReadData()) {
