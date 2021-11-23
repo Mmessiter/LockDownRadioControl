@@ -321,11 +321,10 @@ bool ReadData()
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // Send telemetry (actual length plus 0)
         CurrentRadio->read(&CompressedData, sizeof(CompressedData));   // Get Data
         Decompress(ReceivedData, CompressedData, UNCOMPRESSEDWORDS); // decompress data
-        FailSafeDataLoaded = false;
         MapToSBUS();
         LastConnectionMoment = millis();
         if (HopNow) {     // this flag gets set in LoadAckPayload();
-            delay(2);
+            FailSafeDataLoaded = false;
             HopToNextFrequency();
             HopNow = false;
             PacketNumber = 0;
@@ -381,8 +380,8 @@ void RebuildFlags(bool* f, uint16_t tb)
 /**
  * Get radio parameters from received packet.
  * @note Each packet will have a ID number at the third byte in the packet.
- * This ID number will change a different parameter (which is detirmined by the ID number).
- * @returns The next frequency that the transmitter plans to use.
+ * This ID number will change a different parameter (which is determined by the PacketNumber number).
+ * 
  */
 void CheckParams()
 {
@@ -450,7 +449,7 @@ void CheckParams()
            
             break;
         default:
-            break; //
+            break; 
     }
     return;
 }
