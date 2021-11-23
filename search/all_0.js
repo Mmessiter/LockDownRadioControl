@@ -11,6 +11,6 @@ var searchData=
   ['angvelocitydata_8',['angVelocityData',['../imu_8h.html#a99b9ce57433f4fcf752eaed2bb045093',1,'imu.h']]],
   ['approximation_9',['APPROXIMATION',['../_transmitter_code_2src_2main_8cpp.html#aee8c3c363eab49d6a90d3f74587694d5',1,'main.cpp']]],
   ['attachservos_10',['AttachServos',['../_receiver_code_2src_2main_8cpp.html#a0cbfd712ab3bd8f654bc19400fd704bd',1,'main.cpp']]],
-  ['autoswitch_11',['AutoSwitch',['../_transmitter_code_2src_2main_8cpp.html#a6d1c8ca21c8826267f5687d3799c6a1f',1,'main.cpp']]],
-  ['autoswitch_12',['AUTOSWITCH',['../_transmitter_code_2src_2main_8cpp.html#aa4414f3ff790f01b8bb41a0f51d1518f',1,'main.cpp']]]
+  ['autoswitch_11',['AUTOSWITCH',['../_transmitter_code_2src_2main_8cpp.html#aa4414f3ff790f01b8bb41a0f51d1518f',1,'main.cpp']]],
+  ['autoswitch_12',['AutoSwitch',['../_transmitter_code_2src_2main_8cpp.html#a6d1c8ca21c8826267f5687d3799c6a1f',1,'main.cpp']]]
 ];
