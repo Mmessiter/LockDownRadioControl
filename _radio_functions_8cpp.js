@@ -17,7 +17,6 @@ var _radio_functions_8cpp =
     [ "One_Switch_View", "_radio_functions_8cpp.html#af3499673555eb59420e78145fce19c47", null ],
     [ "Options_View", "_radio_functions_8cpp.html#a90604ea6b0b372f3c24fa6935127e6fd", null ],
     [ "PACKETS_PER_HOP", "_radio_functions_8cpp.html#a5007d1c13f725ead699cb2ebb07c63d0", null ],
-    [ "RECONNECT_CH", "_radio_functions_8cpp.html#ad3c239265016482b6850360b3dc51a50", null ],
     [ "SticksView", "_radio_functions_8cpp.html#ab7abdd2877694598578f0c4d717f46e8", null ],
     [ "Switches_View", "_radio_functions_8cpp.html#ad16a6b359f59fa52101e30d233fb030f", null ],
     [ "Trim_View", "_radio_functions_8cpp.html#a8bf19459f4a8233e32e29d03fcb87980", null ],
@@ -34,7 +33,7 @@ var _radio_functions_8cpp =
     [ "SendData", "_radio_functions_8cpp.html#a3d7322e78f097d02d476f17a6306997c", null ],
     [ "SetThePipe", "_radio_functions_8cpp.html#a70dc6f8d2e5ccef6b8e4a2b9b0afb2ce", null ],
     [ "TryOtherPipe", "_radio_functions_8cpp.html#a7051e235b8f694c6b01bb5edf3925dc7", null ],
-    [ "FHSS_Channels", "_radio_functions_8cpp.html#a79ed13ac413de8a0a1767615afccbe2f", null ],
-    [ "NextFrequency", "_radio_functions_8cpp.html#aa8f16a99dfc5658df2e8e40339062b94", null ],
-    [ "ThisFrequency", "_radio_functions_8cpp.html#a16a7235629cfd2dec33802caa95dc16d", null ]
+    [ "PDURATION", "_radio_functions_8cpp.html#af3e741308f3c6e1f89daee68f2f3fa6e", null ],
+    [ "PENDTIME", "_radio_functions_8cpp.html#ae776fd40f5c5b226a5a2e6f8e696f5e3", null ],
+    [ "PSTARTTIME", "_radio_functions_8cpp.html#a2ef9079662a8ff255a84c759c473584a", null ]
 ];
