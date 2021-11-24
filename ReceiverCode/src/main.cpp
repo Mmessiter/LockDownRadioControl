@@ -327,7 +327,6 @@ bool ReadData()
             FailSafeDataLoaded = false;
             HopToNextFrequency();
             HopNow = false;
-            PacketNumber = 0;
         }
     }
     return Connected;
@@ -386,8 +385,8 @@ void RebuildFlags(bool* f, uint16_t tb)
 void CheckParams()
 {
     uint8_t  mn       = 0;
-    uint16_t TwoBytes = 0;
-
+    uint16_t TwoBytes = 0; 
+    PacketNumber = ReceivedData[CHANNELSUSED+1];  // Needed after all!  (+2 is still spare)
     switch (PacketNumber) {
         case 3:
             SwashPID.P = ReceivedData[CHANNELSUSED + 3];
@@ -511,13 +510,10 @@ FASTRUN void ReceiveData()
     if (CurrentRadio->available()) {Connected=true;}
     if (!Connected)
       if (millis() - LastConnectionMoment >= RECEIVE_TIMEOUT) {
-          Serial.println (millis() - LastConnectionMoment);
             Reconnect();
       }
     if (ReadData()) {
-        ++PacketNumber;
         CheckParams();
-       // CheckTimeStamp();
     }
 }
 /************************************************************************************************************/
@@ -609,11 +605,11 @@ void DoBinding()
 {
     GetNewPipe();
 #ifdef DB_BIND
-    Serial.print("NewPipe: ");
-    Serial.println((int)NewPipe, HEX);
+  //  Serial.print("NewPipe: ");
+   // Serial.println((int)NewPipe, HEX);
 
-    Serial.print("OldPipe: ");
-    Serial.println((int)OldPipe, HEX);
+   // Serial.print("OldPipe: ");
+   // Serial.println((int)OldPipe, HEX);
 #endif
     if (OldPipe == NewPipe) {
         SaveNewBind = false;
@@ -629,6 +625,8 @@ void DoBinding()
             BindNow = 1;
         }
     }
+     
+
     if (BindNow == 1 && !BoundFlag) {
 #ifdef DB_BIND
         Serial.print("Binding to: ");

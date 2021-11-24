@@ -1327,7 +1327,7 @@ void ShowComms()
             if ((CurrentView == FrontView)) {
                 if (!BoundFlag) {
                     SendCommand(BindButtonVisible);
-                    BindButton=true;
+                    BindButton=true; 
                 }
                 else {
                     SendText(FrontView_Connected, Msg_Connected);
@@ -5331,8 +5331,10 @@ void LoadPacketData()
     uint8_t  uint8_t1;
     uint8_t  uint8_t2;
 
-   // SendBuffer[CHANNELSUSED + 1] = PacketNumber;  // SPARE NOW!
-   // SendBuffer[CHANNELSUSED + 2] = NextFrequency; // SPARE NOW!
+    uint8_t dummydata = 42;
+
+    SendBuffer[CHANNELSUSED + 1] = PacketNumber;  
+    SendBuffer[CHANNELSUSED + 2] = dummydata;  // SPARE NOW!
 
     Twobytes = MakeTwobytes(FailSafeChannel); // 16 bool values compressed to 16 bits
     uint8_t1 = uint8_t(Twobytes >> 8);        // sent as two bytes
@@ -5352,10 +5354,10 @@ void LoadPacketData()
             if (ModelDetected) SendBuffer[CHANNELSUSED + 3] = ModelNumber; // send model number but not before reading one!
             break;
         case 7:
-           //  // no longer used
+          SendBuffer[CHANNELSUSED + 3] = dummydata; // no longer used
             break;
         case 8:
-           //   // no longer used
+           SendBuffer[CHANNELSUSED + 3] = dummydata; // no longer used
             break;
         case 9:
             SendBuffer[CHANNELSUSED + 3] = yawp[FlightMode];

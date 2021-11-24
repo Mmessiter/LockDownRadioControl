@@ -2,7 +2,6 @@
 /************************************************************************************************************/
 //                                      Radio Functions
 /************************************************************************************************************/
-/** @file ReceiverCode/src/Hardware/RadioFunctions.cpp */
 #include "RadioFunctions.h"
 
 #define SticksView         1
@@ -137,9 +136,9 @@ void SendData()
                     (Radio1.read(&AckPayload, AckPayloadSize));         //  "sizeof" doesn't work with externs, hence 2 new vars.
                     ++RangeTestGoodPackets;
                     LostContactFlag = false;
+                    ++PacketNumber;
                     ParseAckPayload();
                     RecentPacketsLost = 0;
-                    ++PacketNumber;
                     Connected = true;
                     if (BoundFlag) GreenLedOn();    
                     CheckGapsLength();

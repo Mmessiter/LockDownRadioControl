@@ -1,4 +1,4 @@
-/** @file ReceiverCode/src/Hardware/RadioFunctions.h */
+
 #ifndef RadioFunctions_H
 #define RadioFunctions_H
 
@@ -38,7 +38,7 @@
 
 
 // UNCOMMENT ANY OF THESE for that bit of debug info
-   #define DB_FHSS           // Debug real time FHSS data
+ //  #define DB_FHSS           // Debug real time FHSS data
 // #define DB_FHSS1          // Debug new FHSS data
 // #define DB_NEXTION        // Debug Nextion and SD card data
 // #define DB_CHANNEL_AVOID  // Debug FHSS channel avoiding data etc
