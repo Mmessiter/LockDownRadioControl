@@ -90,6 +90,7 @@ void TryOtherPipe()
         BoundFlag = true;
         SetThePipe(NewPipe);
     }
+     Radio1.stopListening();     
 }
 /************************************************************************************************************/
 
