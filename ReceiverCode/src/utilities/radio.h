@@ -286,12 +286,16 @@ void CheckTimeStamp(){
 void LoadAckPayload()
 {
     AckPayload.Purpose &= 0x7F;                         // Clear hi bit ( = do not ignore)
-
     ++AckPayload.Purpose;                               // 0 =  Roll, Pitch, Yaw, Volts.
                                                         // 1 =  Version number
-    if (AckPayload.Purpose > 2) AckPayload.Purpose = 0; // 2 is currently max BUT CAN EXPAND TO 127 if needed
+                                                        // 2 =  Time stamp for FHSS
+                                                        // More later ... CAN EXPAND TO 127 if needed :-)!
+                                        
+    if (AckPayload.Purpose > 2) AckPayload.Purpose = 0; // 2 is currently the max 
     
     switch (AckPayload.Purpose){
+            case 0:
+                break;                                 //  if 0 send gyro data (is pre-loaded by default)
             case 1:
                 LoadVersioNumber();                     // if 1 send version info AND RX number
                 break;
@@ -299,11 +303,9 @@ void LoadAckPayload()
                 LoadTimeStamp();                        // if 2 send synch time stamp
                 break;
             default:
-                ClearAckPayload();
                 break;
     }
 }
-
 /**
  * Decompresses uint16_t* buffer values (each with 12 bit resolution - the lower 12 bits).
  * @param uncompressed_buf[in]

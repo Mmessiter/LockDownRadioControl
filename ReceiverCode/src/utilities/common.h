@@ -10,21 +10,19 @@
 #define RXVERSION_MINIMUS 0 // Nov 23rd 2021
 
 
-//  #define DEBUG
+// #define DEBUG
 // #define DB_SENSORS
 // #define DB_PID
-   #define DB_BIND
+// #define DB_BIND
 // #define DB_FAILSAFE
-  #define SECOND_TRANSCEIVER              // *** DON'T FORGET TO SET THIS ONE!!! ***
+   #define SECOND_TRANSCEIVER              // *** DON'T FORGET TO SET THIS ONE!!! ***
 // #define SECOND_TRANSCEIVER_DEBUG
 
 int  LastConnectionMoment = 0;
 bool FailSafeSave         = false;
 bool FailSafeSent         = false;
 
-
-
-  #define NOISYWIFI
+#define NOISYWIFI
 
 #ifndef NOISYWIFI   // Use this array for UK legal flying
 #define RECONNECT_CH  83

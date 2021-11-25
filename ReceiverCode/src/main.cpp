@@ -322,6 +322,7 @@ bool ReadData()
         CurrentRadio->read(&CompressedData, sizeof(CompressedData));   // Get Data
         Decompress(ReceivedData, CompressedData, UNCOMPRESSEDWORDS); // decompress data
         MapToSBUS();
+        ClearAckPayload();
         LastConnectionMoment = millis();
         if (HopNow) {     // this flag gets set in LoadAckPayload();
             FailSafeDataLoaded = false;
@@ -554,7 +555,7 @@ void ScanI2c()
             else if (i == 0x76) {
                 USE_BMP280 = true;
 #ifdef DB_SENSORS
-                Serial.println("BMP280 barometer detected!");)
+                Serial.println("BMP280 barometer detected!");
             }
             else {
                 Serial.print(i, HEX);
@@ -689,30 +690,37 @@ void setup()
     LoadVersioNumber();
 }
 
+void ReadSensors()
+{
+    if (USE_BNO055A) Get_BNO055(false);
+    if (USE_BNO055) Get_BNO055(true);
+    if (USE_MPU6050) {
+        Get_Mpu6050();
+        // These values are reported to Transmitter
+        AckPayload.ReportedPitch = dof9_data.Pitch;
+        AckPayload.ReportedRoll  = dof9_data.Roll;
+        AckPayload.ReportedYaw   = dof9_data.Yaw;
+    }
+}
+
+
 /************************************************************************************************************/
 // LOOP
 /************************************************************************************************************/
 
 void loop()
 {
+
     ReceiveData();
     if (BoundFlag) {
         if (Connected) {
             if (millis() - SBUSTimer >= SBUSRATE) {
+               // Serial.println (millis() - SBUSTimer);
                 DeltaTime = micros() - DeltaTime;
+                ReadSensors();
                 SBUSTimer = millis(); // timer starts before send starts....
                 if ((millis()- ReconnectedMoment) > RECONNECTGAP)  { // Don't send data for 20 ms after reconnect
                         MoveServos();
-                }
-                if (USE_BNO055A) Get_BNO055(false);
-                if (USE_BNO055) Get_BNO055(true);
-                if (USE_MPU6050) {
-                    Get_Mpu6050();
-
-                    // These values are reported to Transmitter
-                    AckPayload.ReportedPitch = dof9_data.Pitch;
-                    AckPayload.ReportedRoll  = dof9_data.Roll;
-                    AckPayload.ReportedYaw   = dof9_data.Yaw;
                 }
             }
         }
