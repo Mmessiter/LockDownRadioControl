@@ -81,7 +81,7 @@ void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, int uncompre
 
 void TryOtherPipe()
 {
-    if (BoundFlag == true) {
+    if (BoundFlag == true) {  // TODO: Needs refinement heer!
         BoundFlag = false;
         SetThePipe(DefaultPipe);
     }
