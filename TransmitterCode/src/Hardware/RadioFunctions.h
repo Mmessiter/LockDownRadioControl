@@ -38,7 +38,7 @@
 
 
 // UNCOMMENT ANY OF THESE for that bit of debug info
- //  #define DB_FHSS           // Debug real time FHSS data
+// #define DB_FHSS           // Debug real time FHSS data
 // #define DB_FHSS1          // Debug new FHSS data
 // #define DB_NEXTION        // Debug Nextion and SD card data
 // #define DB_CHANNEL_AVOID  // Debug FHSS channel avoiding data etc
@@ -91,8 +91,6 @@ extern int            RangeTestGoodPackets;
 extern uint8_t        NextChannelNumber;
 
 
-extern uint8_t FHSSBottom;
-extern uint8_t FHSSTop;
 extern uint32_t TxOnTime;
 extern uint32_t TXTimeStamp;
 extern uint32_t HopStart;

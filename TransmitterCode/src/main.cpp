@@ -81,12 +81,11 @@
 #define FLIGHTMODESWITCH   4                   // Default MODE switch
 #define AUTOSWITCH         1                   // Default AUTO switch
 #define DEFAULTPIPEADDRESS 0xBABE1E5420LL      // Pipe address for startup - any value but MUST match RX
-#define LOWBATTERY         35                  // percent for warning
-#define BAD_CHANNEL_MAX    40                  // WAS 96 --  NEEDS TO BE *ALWAYS* LESS THAN SELECTED HOPPING RANGE ****
+#define LOWBATTERY         40                  // percent for warning
 #define CE_PIN             9                   // for SPI to nRF24L01
 #define CSN_PIN            10                  // for SPI to nRF24L01
 #define INACTIVITYTIMEOUT  10                  // Default time after which to switch off
-#define INACTIVITYMINIMUM  5 * TICKSPERMINUTE  // Inactivity timeout minimum is 5 minutes
+#define INACTIVITYMINIMUM  5  * TICKSPERMINUTE // Inactivity timeout minimum is 5 minutes
 #define INACTIVITYMAXIMUM  30 * TICKSPERMINUTE // Inactivity timeout maximum is 30 minutes
 #define DS1307_ADDRESS     0x68
 
@@ -192,8 +191,8 @@ WDT_T4<WDT3>  TeensyWatchDog;
 WDT_timings_t WatchDogConfig;
 #endif
 
-uint8_t FHSSBottom = 1; //  Channel range for hopping
-uint8_t FHSSTop    = 83;
+//uint8_t FHSSBottom = 1; //  Channel range for hopping
+//uint8_t FHSSTop    = 83;
 uint8_t Mixes[MAXMIXES + 1][CHANNELSUSED + 1];                // Channel mixes' 2D array store
 int     Trims[FlightModesUsed + 1][CHANNELSUSED + 1];         // Trims to store
 uint8_t TrimsReversed[FlightModesUsed + 1][CHANNELSUSED + 1]; // Trim directions to store
@@ -267,8 +266,6 @@ int     ClickY;
 bool    CalibratedYet                = false;
 int     AnalogueInput[PROPOCHANNELS] = {A0, A1, A2, A3, A6, A7, A8, A9}; // PROPO Channels for transmission
 uint8_t CurrentMode                  = NORMAL;
-uint8_t BadChannels[BAD_CHANNEL_MAX + 5]; // room to spare
-uint8_t BadChannelPointer = 0;
 uint8_t AllChannels[127]; /// for scanning
 uint8_t NoCarrier[127];
 
@@ -455,8 +452,6 @@ uint32_t HopStart;
 uint8_t  PreviousChannelNumber = 0 ;
 uint8_t  NextChannelNumber = 0;
 
-
-
 // changing these four valiables controls LED blink and speed
 
 bool     LedIsBlinking = false;
@@ -464,7 +459,6 @@ float    BlinkHertz    = 1;
 uint32_t BlinkTimer    = 0;
 uint8_t  BlinkOnPhase  = 1;
 bool     LedWasGreen   = false;
-uint8_t  BadChannelMax = BAD_CHANNEL_MAX;
 char     ThisRadio[4] = "0 ";
 
 uint8_t       NextFrequency    = RECONNECT_CH;
@@ -480,16 +474,6 @@ uint8_t FHSS_Channels[84] = {28,24,61,64,28,55,66,19,76,21,59,67,15,71,82,32,49,
  uint8_t FHSS_Channels[84] = {93,111,107,103,106,111,97,108,102,118,104,101,109,98,113,113,124,115,91,111,96,85,117,89,103,117,111,99,85,114,118,118,118,99,87,112,118,117,91,101,86,99,103,99,124,101,104,101,109,94,86,92,119,120,91,114,119,117,101,117,100,92,92,120,119,115,113,92,121,89,119,103,106,121,123,96,93,102,111,95,101,122,95};
 #endif
 
-
-
-/*********************************************************************************************************************************/
-
-void ReviseBadChannelMax(){
-
-BadChannelMax =((FHSSTop - FHSSBottom)/4) * 3;  // Max number of channels to avoid must not exceed 3/4 of available channels
-
-}
-
 /*********************************************************************************************************************************/
 
 uint8_t decToBcd(uint8_t val)
@@ -503,7 +487,6 @@ uint8_t bcdToDec(uint8_t val)
 {
     return ((val / 16 * 10) + (val % 16));
 }
-
 /*********************************************************************************************************************************/
 
 void AdjustDateTime(uint8_t MinChange, uint8_t HourChange, uint8_t YearChange, uint8_t MonthChange, uint8_t DateChange)
@@ -1262,7 +1245,6 @@ void ShowComms()
     char  DataView_yaw[]         = "yaw";
     char  DataView_txv[]         = "txv";
     char  DataView_rxv[]         = "rxv";
-    char  DataView_chav[]        = "chav";
     char  DataView_Ls[]          = "Ls";
     char  DataView_Ts[]          = "Ts";
     char  DataView_Sc[]          = "Success";
@@ -1302,11 +1284,9 @@ void ShowComms()
         LastShowTime = millis();
         if (USE_INA219) {
             txv = (ina219.getBusVoltage_V()) * 100;
-
             txpc = map(txv, 512, 670, 0, 100); // LiFePo4 Battery 2.6 ->3.5  volts per cell
-            if (txpc < LOWBATTERY) {
-                TXWarningFlag = true;
-            }
+            if (txpc < LOWBATTERY) TXWarningFlag = true;
+            if (txpc > 100) txpc = 100;        // avoid showing > 100% !
             dtostrf(txpc, 0, 0, Vbuf);
             strcat(Vbuf, pc);
             if (CurrentView == FrontView) SendText(TXVolts, Vbuf);
@@ -1348,7 +1328,6 @@ void ShowComms()
                     SendText(DataView_yaw, ModelYaw);
                     SendText(DataView_Rx,ThisRadio);
                     SendText(DataView_rxv,ReceiverVersionNumber);
-                    SendValue(DataView_chav, BadChannelPointer);
                     SendValue(DataView_Ls, GapLongest);
                     SendValue(DataView_Ts, GapSum);
                     SendValue(DataView_Sc, success);
@@ -2364,10 +2343,10 @@ bool LoadAllParameters()
             ChannelMax[i] = SDReadInt(addr);
             addr += 2;
         }
-        FHSSTop = SDReaduint8_t(addr); // These are  currently definable
+        //FHSSTop = SDReaduint8_t(addr); // These are  currently Spare
         ++addr;
-        FHSSBottom = SDReaduint8_t(addr); // These are  currently definable
-        if (FHSSBottom < 1) FHSSBottom = 1;
+        //FHSSBottom = SDReaduint8_t(addr); // These are  currently Spare
+        //if (FHSSBottom < 1) FHSSBottom = 1;
         ++addr;
         ModelNumber = SDReaduint8_t(addr);
         ++addr;
@@ -2460,9 +2439,7 @@ void setup()
 {
     char FrontView_Connected[] = "FrontView.Connected";
     char Initialising[]        = "Initialising ... ";
-#ifdef OlD_FFHS
-    char Scanning[]            = "Scanning ... ";
-#endif
+
     char OptionsViewTXname[]   = "OptionsView.TxName";
     Nextion.begin(115200); // BAUD rate also set in display code
 
@@ -2479,9 +2456,6 @@ void setup()
     pinMode(BLUELED, OUTPUT);
     pinMode(POWER_OFF_PIN, OUTPUT);
     BlueLedOn();
-#ifdef OlD_FFHS
-    SendText(FrontView_Connected, Scanning);
-#endif
     Serial.begin(115200);
     Wire.begin();
     ScanI2c();
@@ -2494,12 +2468,8 @@ void setup()
     InitCentreDegrees(); // In case not yet calibrated
     CentreTrims();
     CalibratedYet = LoadAllParameters(); // If exists, read saved SD card settings.
-    ReviseBadChannelMax();
     SendValue(ScreenViewTimeout, ScreenTimeout);
     SendCommand(page_FrontView); // Let's start at the beginning. Why not?
-#ifdef OlD_FFHS
-    PreScan();                   // Do quiet scan while Nextion boots and Front View loads ...
-#endif
     SendText(FrontView_Connected, Initialising);
     SendValue1(NextionSleepTime, ScreenTimeout); // Setup Screen timeout (No .val needed)
     SendCommand(NextionWakeOnTouch);             // Wake on touch
@@ -2579,9 +2549,9 @@ void SaveTXStuff()
         SDUpdateInt(addr, ChannelMax[i]); // Stick max output of pot
         addr += 2;
     }
-    SDUpdateuint8_t(addr, FHSSTop); // These are  currently definable
+   // SDUpdateuint8_t(addr, FHSSTop); // These are  currently SPARE
     ++addr;
-    SDUpdateuint8_t(addr, FHSSBottom); // These are  currently definable
+   // SDUpdateuint8_t(addr, FHSSBottom); // These are  currently SPARE
     ++addr;
     SDUpdateuint8_t(addr, ModelNumber);
     ++addr;
@@ -4119,8 +4089,8 @@ void Button_was_pressed()
             CurrentView = MainSetupView;
             ClearText();
             SendCommand(page_SetupView);
-            CurrentMode = NORMAL;
             DoScanEnd();
+           // Serial.println ("TEST");
             return;
         }
 
@@ -4189,15 +4159,14 @@ void Button_was_pressed()
 
         if (InStrng(OptionsViewS, WordsIn) > 0) {
             SendCommand(pOptionsViewS);
-            if (FHSSBottom < 1) FHSSBottom = 1;
-            SendValue(FhssView_Rlow, FHSSBottom);
-            SendValue(FhssView_Rhigh, FHSSTop);
+           // if (FHSSBottom < 1) FHSSBottom = 1;
+           // SendValue(FhssView_Rlow, FHSSBottom);
+           // SendValue(FhssView_Rhigh, FHSSTop);
             SendValue(ScreenViewTimeout, ScreenTimeout);
             SendValue(Pto, (Inactivity_Timeout / TICKSPERMINUTE));
             SendText(Tx_Name, TxName);
             CurrentView = Options_View;
             CurrentMode = NORMAL;
-            ReviseBadChannelMax();
             ClearText();
             return;
         }
@@ -4253,20 +4222,7 @@ void Button_was_pressed()
                 ++i;
                 TxName[j] = 0;
             }
-            FHSSBottom = GetValue(FhssView_Rlow);
-            FHSSTop    = GetValue(FhssView_Rhigh);
-            if (FHSSBottom > FHSSTop) {
-                BoxOffset  = FHSSBottom;
-                FHSSBottom = FHSSTop;
-                FHSSTop    = BoxOffset;
-            }
-            if (FHSSBottom < 1) FHSSBottom = 1;
-            if (FHSSTop > 125) FHSSTop = 125;
-            if (FHSSBottom == FHSSTop) {
-                FHSSBottom = 1;
-                FHSSTop    = 83;
-            }
-            ReviseBadChannelMax();
+          
             ScreenTimeout      = GetValue(ScreenViewTimeout);
             Inactivity_Timeout = GetValue(Pto) * TICKSPERMINUTE;
             if (Inactivity_Timeout < INACTIVITYMINIMUM) Inactivity_Timeout = INACTIVITYMINIMUM;
@@ -5045,6 +5001,7 @@ void Button_was_pressed()
             DrawFhssBox();
             DoScanInit();
             CurrentMode = SCANWAVEBAND; 
+            BlueLedOn();
             ClearText();
             return;
         }
@@ -5053,7 +5010,6 @@ void Button_was_pressed()
        {
             DrawFhssBox();
             DoScanInit();
-            CurrentMode = SCANWAVEBAND; 
             ClearText();
             return;
         }
