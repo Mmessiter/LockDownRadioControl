@@ -506,11 +506,12 @@ void DoSensors()
 /************************************************************************************************************/
 
 FASTRUN void ReceiveData()
-{
-    if (CurrentRadio->available()) {Connected=true;}
+{   Connected = false;
+    if (CurrentRadio->available()) {Connected = true;}
+    
     if (!Connected)
       if (millis() - LastConnectionMoment >= RECEIVE_TIMEOUT) {
-            Reconnect();
+         Reconnect();
       }
     if (ReadData()) {
         CheckParams();
@@ -605,11 +606,11 @@ void DoBinding()
 {
     GetNewPipe();
 #ifdef DB_BIND
-  //  Serial.print("NewPipe: ");
-   // Serial.println((int)NewPipe, HEX);
+    Serial.print("NewPipe: ");
+    Serial.println((int)NewPipe, HEX);
 
-   // Serial.print("OldPipe: ");
-   // Serial.println((int)OldPipe, HEX);
+    Serial.print("OldPipe: ");
+    Serial.println((int)OldPipe, HEX);
 #endif
     if (OldPipe == NewPipe) {
         SaveNewBind = false;

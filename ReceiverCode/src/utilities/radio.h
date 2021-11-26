@@ -116,7 +116,7 @@ void LoadVersioNumber() // and which radio is currently in use
 /** Store bounded pipe address from the received pairing payload. */
 void GetNewPipe()
 {
-    NewPipe = (uint64_t)ReceivedData[0] << 56;
+    NewPipe =  (uint64_t)ReceivedData[0] << 56;
     NewPipe += (uint64_t)ReceivedData[1] << 48;
     NewPipe += (uint64_t)ReceivedData[2] << 40;
     NewPipe += (uint64_t)ReceivedData[3] << 32;
