@@ -12,14 +12,12 @@
 #define pinCSN2 20 // NRF2
 #define pinCE2  21 // NRF2
 
-#define FHSS_RESCUE_BOTTOM 118
-#define FHSS_RESCUE_TOP    125
-
-#define FAILSAFE_TIMEOUT 3000    // TODO: revert this to 2000 when FHSS recovers faster
+#define FAILSAFE_TIMEOUT 2000    
 
 RF24  Radio1(pinCE1, pinCSN1);
 RF24  Radio2(pinCE2, pinCSN2);
 RF24* CurrentRadio = &Radio1;
+uint8_t ThisRadio  =       1;
 
 uint64_t ThisPipe = 0xBABE1E5420LL; // default startup
 uint64_t NewPipe  = 0;
@@ -28,8 +26,8 @@ uint64_t OldPipe  = 0;
 bool    Connected          = false;
 int     SearchStartTime    = 0;
 int     StillSearchingTime = 0;
-uint8_t ReconnectAttempts  = 0;
-uint8_t ThisRadio          = 1;
+
+
 bool    SaveNewBind        = true;
 uint8_t SavedPipeAddress[8];
 uint32_t HopStart;
@@ -196,35 +194,66 @@ void ProdRadio()
     CurrentRadio->setPALevel(RF24_PA_MAX);
     CurrentRadio->setDataRate(RF24_250KBPS);
     CurrentRadio->openReadingPipe(1, ThisPipe);
-    delay(9);                           // This might help
+    CurrentRadio->setChannel(RECONNECT_CH);
+    CurrentRadio->startListening();
+    delay(4);                           // This might help
 }
  #endif // defined (SECOND_TRANSCEIVER)
 
 
-void Reconnect()  // Still TODO: 2nd transceiver
+/************************************************************************************************************/
+
+void Reconnect()  
 {
-    SearchStartTime = millis();
-    uint16_t i = 0;
+uint32_t TryTimer;
+uint8_t  ReconnectAttempts  = 0;
+
+            SearchStartTime = millis();
             FailSafeSent = false; 
             CurrentRadio->stopListening();
             CurrentRadio->setChannel(RECONNECT_CH);
             CurrentRadio->startListening();
+            delay(4);   
+    
     while (!Connected)
     {
         ++ReconnectAttempts;
-        while ((!CurrentRadio->available()) && (millis()-SearchStartTime) <100){
-            ++i;
-        }
-       StillSearchingTime = millis() - SearchStartTime;
-       if (StillSearchingTime >FAILSAFE_TIMEOUT) 
-            {
-            if (!FailSafeSent)
+
+#ifdef SECOND_TRANSCEIVER
+        if  (ReconnectAttempts > 2)
+            { 
+            CurrentRadio->stopListening();
+            delay (4);
+            if (ThisRadio == 2)
                 {
-                    FailSafe();
-                    FailSafeSent = true; // Once is enough
+                CurrentRadio = &Radio1;
+                ThisRadio = 1;
+                } else 
+                {
+                CurrentRadio = &Radio2;
+                ThisRadio = 2;
                 }
+            ProdRadio();
+            ReconnectAttempts = 0;
             }
+#endif      // defined (SECOND_TRANSCEIVER)
+
+       TryTimer  = millis();       
+       while ((!CurrentRadio->available()) && (millis()-TryTimer) < 100){  }  // wait a mo during attempt to connect ...
        if (CurrentRadio->available()) Connected = true;
+       if (!Connected)
+       {
+            StillSearchingTime = millis() - SearchStartTime;
+            if (StillSearchingTime >FAILSAFE_TIMEOUT) 
+            {
+                if (!FailSafeSent)
+                    {
+                        FailSafe();
+                        FailSafeSent = true; // Once is enough
+                    }
+            }
+        }
+      
     }
     ConnectionStart=millis();
     StillSearchingTime = 0;
@@ -233,12 +262,12 @@ void Reconnect()  // Still TODO: 2nd transceiver
 
 /************************************************************************************************************/
 
-void LoadTimeStamp(){              // This will load time stamp and array index for return to TX for synch purposes heer
+void LoadTimeStamp(){              // This will load time stamp and array index for return to TX for synch purposes 
 
-#define HOPTIME  95                 // ms between channel changes
-#define FREQUENCYSCOUNT 82           // use 82 different channels
+#define HOPTIME         95          // ms between channel changes
+#define FREQUENCYSCOUNT 82          // use 82 different channels
 
-    union                            // union used to allow access to each byte of 32 bit value     
+    union                           // union used to allow access to each byte of 32 bit value     
     {uint32_t Stamp32; 
         uint8_t  Stamp8[4];
     }Time;                         
@@ -253,7 +282,6 @@ void LoadTimeStamp(){              // This will load time stamp and array index 
             if (NextChannelNumber >= FREQUENCYSCOUNT) {NextChannelNumber = 1;} // Zero will mean error (so that element not used)
             GetNextFrequency();
             HopNow = true;      // Set flag and hop when ready *** BUT NOT BEFORE ****  !!!!!
-            
             DoSensors();   
     }
     AckPayload.volt                  =  Time.Stamp8[0];                        // These values are herewith delivered to Transmitter in Ack Payload

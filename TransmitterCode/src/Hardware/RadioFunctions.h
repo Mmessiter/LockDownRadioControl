@@ -9,7 +9,7 @@
 #define HOPTIME           95    // A New Frequency Hop every 95 ms (must match receiver setting)
 #define FREQUENCYSCOUNT   82 
 
-#define NOISYWIFI               // if defined this uses channels well above most wifi (not licence free in some countries).
+// #define NOISYWIFI               // if defined this uses channels well above most wifi (not licence free in some countries).
 
 #ifndef NOISYWIFI // Use this for UK legal flying 
 #define RECONNECT_CH     83

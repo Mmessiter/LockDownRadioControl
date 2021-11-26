@@ -22,7 +22,7 @@ int  LastConnectionMoment = 0;
 bool FailSafeSave         = false;
 bool FailSafeSent         = false;
 
-#define NOISYWIFI
+//#define NOISYWIFI
 
 #ifndef NOISYWIFI   // Use this array for UK legal flying
 #define RECONNECT_CH  83
