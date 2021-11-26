@@ -109,7 +109,7 @@ var NAVTREEINDEX =
 "_r_x_c_o_d_e.html",
 "_transmitter_code_2src_2main_8cpp.html#a1864beba7616666b0f27dac30975673e",
 "_transmitter_code_2src_2main_8cpp.html#aa60c9cac090f6965b4223d5caf84e2f1",
-"globals_vars_z.html"
+"globals_w.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
