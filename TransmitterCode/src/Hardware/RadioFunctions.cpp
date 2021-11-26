@@ -81,16 +81,18 @@ void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, int uncompre
 
 void TryOtherPipe()
 {
-    if (BoundFlag == true) {  // TODO: Needs refinement heer!
-        BoundFlag = false;
-        SetThePipe(DefaultPipe);
+   // Serial.println (TotalledRecentPacketsLost);
+    if (TotalledRecentPacketsLost > 100 || (!BoundFlag))  {        // This perhaps avoids needless pipe swapping during poor connection
+        if (BoundFlag == true) {  
+            BoundFlag = false;
+            SetThePipe(DefaultPipe);
+        }
+        else
+        {
+            BoundFlag = true;
+            SetThePipe(NewPipe);
+        }    
     }
-    else
-    {
-        BoundFlag = true;
-        SetThePipe(NewPipe);
-    }
-     Radio1.stopListening();     
 }
 /************************************************************************************************************/
 
@@ -140,6 +142,7 @@ void SendData()
                     ++PacketNumber;
                     ParseAckPayload();
                     RecentPacketsLost = 0;
+                    TotalledRecentPacketsLost =0;
                     Connected = true;
                     if (BoundFlag) GreenLedOn();    
                     CheckGapsLength();

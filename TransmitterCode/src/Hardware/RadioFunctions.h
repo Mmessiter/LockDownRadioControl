@@ -89,6 +89,7 @@ extern uint8_t        AckPayloadSize;
 extern uint8_t        SizeOfCompressedData;
 extern int            RangeTestGoodPackets;
 extern uint8_t        NextChannelNumber;
+extern uint32_t       TotalledRecentPacketsLost;
 
 
 extern uint32_t TxOnTime;

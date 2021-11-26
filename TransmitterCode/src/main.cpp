@@ -309,6 +309,7 @@ uint8_t  RXCellCount                  = 2;
 bool     JustHoppedFlag               = true;
 bool     LostContactFlag              = true;
 uint8_t  RecentPacketsLost            = 0;
+uint32_t TotalledRecentPacketsLost    = 0;
 long int RecoveryTimer                = 0;
 bool     ReconnectingFlag             = true;
 int      ReconnectTime                = 0;
@@ -461,8 +462,9 @@ uint8_t  BlinkOnPhase  = 1;
 bool     LedWasGreen   = false;
 char     ThisRadio[4] = "0 ";
 
-uint8_t       NextFrequency    = RECONNECT_CH;
-uint8_t       ThisFrequency    = RECONNECT_CH;
+uint8_t  NextFrequency    = RECONNECT_CH;
+uint8_t  ThisFrequency    = RECONNECT_CH;
+
 
 
 #ifndef NOISYWIFI // Use this for UK legal flying 
@@ -1419,10 +1421,10 @@ void FailedPacket()
         GapStart = millis();   // To keep track of gaps' length
     }
     ++RecentPacketsLost;
+    ++TotalledRecentPacketsLost;                  // this is to keep track of events when receiver is off
       if (RecentPacketsLost > LOSTCONTACTCUTOFF) {
-     // if (millis()-GapStart >35) { // same timeout as receiver? 
-        LostContactFlag   = true;
-        RecentPacketsLost = 0;
+         LostContactFlag   = true;
+         RecentPacketsLost = 0;
         RedLedOn();
         ShowComms();
     }
