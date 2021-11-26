@@ -9,7 +9,6 @@ var _receiver_code_2src_2main_8cpp =
     [ "MAXMICROS", "_receiver_code_2src_2main_8cpp.html#a843e3db36f734b45096220f7ca4b8d9f", null ],
     [ "MINMICROS", "_receiver_code_2src_2main_8cpp.html#ac67e087c11a86a3790c656a29f8c7195", null ],
     [ "OCTOCOPTER", "_receiver_code_2src_2main_8cpp.html#a1ef0d3675db6cdbeb99d43b32e8bff13", null ],
-    [ "PacketsPerHop", "_receiver_code_2src_2main_8cpp.html#ae47b54dd621e8bbb1fa6726eea6eeddb", null ],
     [ "QUADCOPTER", "_receiver_code_2src_2main_8cpp.html#a8dda0e40eec47b6b7d4033bdccbc3001", null ],
     [ "RECEIVE_TIMEOUT", "_receiver_code_2src_2main_8cpp.html#a4c69942f01447fa7563c5726c7d8abf2", null ],
     [ "RECONNECTGAP", "_receiver_code_2src_2main_8cpp.html#a00a419fbe253e6e9cb4d716d02d0b2b7", null ],
