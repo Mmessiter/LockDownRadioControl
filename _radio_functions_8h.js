@@ -8,7 +8,6 @@ var _radio_functions_8h =
     [ "KICKRATE", "_radio_functions_8h.html#a639fb69a9b4f236e3b1a16435b82bb81", null ],
     [ "LOSTCONTACTCUTOFF", "_radio_functions_8h.html#ac5b4f54697bc5a8d58ef0c92c094c6b6", null ],
     [ "Nextion", "_radio_functions_8h.html#a7280be66ef406b699db09f0a70e26ef7", null ],
-    [ "NOISYWIFI", "_radio_functions_8h.html#ae9b67966c7b046a2c4257fba47186eb0", null ],
     [ "NORMAL", "_radio_functions_8h.html#a1291f416b069313021b519eea62d5bf1", null ],
     [ "PACEMAKER", "_radio_functions_8h.html#a56e90cbec59fa96bebfb3db997e6a3fe", null ],
     [ "RECONNECT_CH", "_radio_functions_8h.html#ad3c239265016482b6850360b3dc51a50", null ],
