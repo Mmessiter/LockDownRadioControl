@@ -214,6 +214,7 @@ uint8_t  ReconnectAttempts  = 0;
             CurrentRadio->setChannel(RECONNECT_CH);
             CurrentRadio->startListening();
             delay(4);   
+            if (CurrentRadio->available()) Connected = true;
     
     while (!Connected)
     {
