@@ -2470,7 +2470,6 @@ void setup()
     InitCentreDegrees(); // In case not yet calibrated
     CentreTrims();
     CalibratedYet = LoadAllParameters(); // If exists, read saved SD card settings.
-    SendValue(ScreenViewTimeout, ScreenTimeout);
     SendCommand(page_FrontView); // Let's start at the beginning. Why not?
     SendText(FrontView_Connected, Initialising);
     SendValue1(NextionSleepTime, ScreenTimeout); // Setup Screen timeout (No .val needed)
@@ -4161,9 +4160,6 @@ void Button_was_pressed()
 
         if (InStrng(OptionsViewS, WordsIn) > 0) {
             SendCommand(pOptionsViewS);
-           // if (FHSSBottom < 1) FHSSBottom = 1;
-           // SendValue(FhssView_Rlow, FHSSBottom);
-           // SendValue(FhssView_Rhigh, FHSSTop);
             SendValue(ScreenViewTimeout, ScreenTimeout);
             SendValue(Pto, (Inactivity_Timeout / TICKSPERMINUTE));
             SendText(Tx_Name, TxName);
