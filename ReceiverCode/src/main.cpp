@@ -622,12 +622,11 @@ void DoBinding()
         if (BindOKTimer == 0) {
             BindOKTimer = millis();
         }
-        else if ((millis() - BindOKTimer) > 400) { // allow .4 of a second for the TX to bind
+        else if ((millis() - BindOKTimer) > 100) { // allow .4 of a second for the TX to bind
             BindNow = 1;
         }
     }
      
-
     if (BindNow == 1 && !BoundFlag) {
 #ifdef DB_BIND
         Serial.print("Binding to: ");
@@ -702,20 +701,16 @@ void ReadSensors()
         AckPayload.ReportedYaw   = dof9_data.Yaw;
     }
 }
-
-
 /************************************************************************************************************/
 // LOOP
 /************************************************************************************************************/
 
 void loop()
 {
-
     ReceiveData();
     if (BoundFlag) {
         if (Connected) {
             if (millis() - SBUSTimer >= SBUSRATE) {
-               // Serial.println (millis() - SBUSTimer);
                 DeltaTime = micros() - DeltaTime;
                 ReadSensors();
                 SBUSTimer = millis(); // timer starts before send starts....
@@ -729,6 +724,6 @@ void loop()
         DeltaTime    = micros();
     }
     else {
-        DoBinding();
+       if (Connected) DoBinding();
     }
 }
