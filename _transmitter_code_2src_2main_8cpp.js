@@ -410,6 +410,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "ThisRadio", "_transmitter_code_2src_2main_8cpp.html#a2e695c7565eda3b02ff77324e274772b", null ],
     [ "TimerMillis", "_transmitter_code_2src_2main_8cpp.html#a0a3ad7349c88efc385cc455591c75677", null ],
     [ "tm", "_transmitter_code_2src_2main_8cpp.html#a52357cbf68af66972047f7aed7a45218", null ],
+    [ "TotalledRecentPacketsLost", "_transmitter_code_2src_2main_8cpp.html#a7f485e1361fb90bec75e06944665686d", null ],
     [ "TransmitterVersionNumber", "_transmitter_code_2src_2main_8cpp.html#a66119c028208cdeaef631b469bdadf18", null ],
     [ "Trims", "_transmitter_code_2src_2main_8cpp.html#a0d77de5a9683eac2f6b0c4a93b907432", null ],
     [ "TrimsReversed", "_transmitter_code_2src_2main_8cpp.html#aa39c75ab51f6174dac09a2fc7fdff741", null ],
