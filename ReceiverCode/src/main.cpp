@@ -42,13 +42,13 @@
 
 // ************************************************** Receiver code **************************************************
 
-#define RECEIVE_TIMEOUT 25    // 15 milliseconds was too short
-#define PacketsPerHop   20
+#define RECEIVE_TIMEOUT 25    // 25 milliseconds seems an optimal value
+
 #define CHANNELSUSED    16
 #define SERVOSUSED      10
-#define SBUSRATE        10 // SBUS frame every 10 milliseconds
+#define SBUSRATE        10    // SBUS frame every 10 milliseconds
 #define SBUSPORT        Serial3
-#define RECONNECTGAP    40  // Send no data for 40 ms after reconnect
+#define RECONNECTGAP    40    // Send no data for 40 ms after reconnect
 
 
 bool USE_BMP280 = false; /** is BMP280 sensor connected */
