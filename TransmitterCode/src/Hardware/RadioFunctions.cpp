@@ -257,7 +257,8 @@ void SetThePipe(uint64_t WhichPipe)
 {
     Radio1.openWritingPipe(WhichPipe);
     Radio1.stopListening();
-}
+    delay (5);  // alllow things to happen
+ }
 
 /*********************************************************************************************************************************/
 
@@ -265,6 +266,7 @@ void DoScanInit()
 {
     Radio1.setDataRate(RF24_1MBPS); // Scan only works at this default rate
     CurrentMode = SCANWAVEBAND;     // Fhss == No transmitting please, we are scanning.
+    BoundFlag = false;
     SendCommand(NoSleeping);
     for (i = 0; i < 125; i++) {
         NoCarrier[i]   = 0;
