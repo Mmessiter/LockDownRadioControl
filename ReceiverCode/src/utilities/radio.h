@@ -216,53 +216,50 @@ uint8_t  ReconnectAttempts  = 0;
             delay(4);   
             if (CurrentRadio->available()) Connected = true;
     
-    while (!Connected)
-    {
-        ++ReconnectAttempts;
-
+            while (!Connected)
+                {
+                ++ReconnectAttempts;
 #ifdef SECOND_TRANSCEIVER
-        if  (ReconnectAttempts > 2)
-            { 
-            CurrentRadio->stopListening();
-            delay (4);
-            if (ThisRadio == 2)
-                {
-                CurrentRadio = &Radio1;
-                ThisRadio = 1;
-                } else 
-                {
-                CurrentRadio = &Radio2;
-                ThisRadio = 2;
-                }
-            ProdRadio();
-            ReconnectAttempts = 0;
-            }
+                if  (ReconnectAttempts > 2)
+                    { 
+                    CurrentRadio->stopListening();
+                    delay (4);
+                    if (ThisRadio == 2)
+                        {
+                        CurrentRadio = &Radio1;
+                        ThisRadio = 1;
+                        } else 
+                        {
+                        CurrentRadio = &Radio2;
+                        ThisRadio = 2;
+                        }
+                    ProdRadio();
+                    ReconnectAttempts = 0;
+                    }
 #endif      // defined (SECOND_TRANSCEIVER)
 
-       TryTimer  = millis();       
-       while ((!CurrentRadio->available()) && (millis()-TryTimer) < 100){  }  // wait a mo during attempt to connect ...
-       if (CurrentRadio->available()) Connected = true;
-       if (!Connected)
-       {
-            StillSearchingTime = millis() - SearchStartTime;
-            if (StillSearchingTime >FAILSAFE_TIMEOUT) 
-            {
-                if (!FailSafeSent)
+                TryTimer  = millis();       
+                while ((!CurrentRadio->available()) && (millis()-TryTimer) < 100){  }  // wait a mo during attempt to connect ...
+                if (CurrentRadio->available()) Connected = true;
+                if (!Connected)
                     {
-                        FailSafe();
-                        FailSafeSent = true; // Once is enough
+                    StillSearchingTime = millis() - SearchStartTime;
+                    if (StillSearchingTime >FAILSAFE_TIMEOUT) 
+                        {
+                        if (!FailSafeSent)
+                            {
+                            FailSafe();
+                            FailSafeSent = true; // Once is enough
+                            }
+                        }
                     }
-            }
-        }
       
-    }
-    ConnectionStart=millis();
-    StillSearchingTime = 0;
-    ReconnectedMoment=ConnectionStart;        // Save this moment, then don't move a servo for a few ms ....
+                }
+            ConnectionStart=millis();
+            StillSearchingTime = 0;
+            ReconnectedMoment=ConnectionStart;        // Save this moment, then don't move a servo for a few ms ....
 }
-
 /************************************************************************************************************/
-
 void LoadTimeStamp(){              // This will load time stamp and array index for return to TX for synch purposes 
 
 #define HOPTIME         95          // ms between channel changes
