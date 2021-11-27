@@ -1,8 +1,5 @@
 var NAVTREEINDEX3 =
 {
-"globals_vars_z.html":[8,1,2,23],
-"globals_w.html":[8,1,0,22],
-"globals_x.html":[8,1,0,23],
 "globals_y.html":[8,1,0,24],
 "globals_z.html":[8,1,0,25],
 "imu_8h.html":[8,0,1,0,0,1],
