@@ -225,7 +225,6 @@ var _transmitter_code_2src_2main_8cpp =
     [ "AnalogueInput", "_transmitter_code_2src_2main_8cpp.html#a0c2eb3050c13378578402202c6290391", null ],
     [ "AutoSwitch", "_transmitter_code_2src_2main_8cpp.html#a6d1c8ca21c8826267f5687d3799c6a1f", null ],
     [ "BindButton", "_transmitter_code_2src_2main_8cpp.html#a11a586885b48e92a4cd03ff1840ac374", null ],
-    [ "BindDonemsg", "_transmitter_code_2src_2main_8cpp.html#acf25f1b8a2476b133e7ede39a7dc23f3", null ],
     [ "BindingNow", "_transmitter_code_2src_2main_8cpp.html#a1873a8dc0cbecc66366b95540f9c3249", null ],
     [ "BindingTimer", "_transmitter_code_2src_2main_8cpp.html#a2ffac1bf85fe937c44ef26ac326575e7", null ],
     [ "BindScreenBox", "_transmitter_code_2src_2main_8cpp.html#af138b543ca5fbba0710b6b1c428d31c7", null ],

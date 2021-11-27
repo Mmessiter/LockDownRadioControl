@@ -1,10 +1,9 @@
 var searchData=
 [
-  ['badchannelmax_861',['BadChannelMax',['../_radio_functions_8h.html#a7b80819357d2db1b144841cc23c0f833',1,'RadioFunctions.h']]],
-  ['badchannelpointer_862',['BadChannelPointer',['../_radio_functions_8h.html#adbcabfb5f32b82ef68af292eaa2c8669',1,'RadioFunctions.h']]],
-  ['badchannels_863',['BadChannels',['../_radio_functions_8h.html#a5824d45baec8c549c63ff8a7fa8ac9d8',1,'RadioFunctions.h']]],
-  ['bindbutton_864',['BindButton',['../_transmitter_code_2src_2main_8cpp.html#a11a586885b48e92a4cd03ff1840ac374',1,'main.cpp']]],
-  ['binddonemsg_865',['BindDonemsg',['../_transmitter_code_2src_2main_8cpp.html#acf25f1b8a2476b133e7ede39a7dc23f3',1,'main.cpp']]],
+  ['badchannelmax_862',['BadChannelMax',['../_radio_functions_8h.html#a7b80819357d2db1b144841cc23c0f833',1,'RadioFunctions.h']]],
+  ['badchannelpointer_863',['BadChannelPointer',['../_radio_functions_8h.html#adbcabfb5f32b82ef68af292eaa2c8669',1,'RadioFunctions.h']]],
+  ['badchannels_864',['BadChannels',['../_radio_functions_8h.html#a5824d45baec8c549c63ff8a7fa8ac9d8',1,'RadioFunctions.h']]],
+  ['bindbutton_865',['BindButton',['../_transmitter_code_2src_2main_8cpp.html#a11a586885b48e92a4cd03ff1840ac374',1,'main.cpp']]],
   ['bindingnow_866',['BindingNow',['../_transmitter_code_2src_2main_8cpp.html#a1873a8dc0cbecc66366b95540f9c3249',1,'main.cpp']]],
   ['bindingtimer_867',['BindingTimer',['../_transmitter_code_2src_2main_8cpp.html#a2ffac1bf85fe937c44ef26ac326575e7',1,'main.cpp']]],
   ['bindnow_868',['BindNow',['../_receiver_code_2src_2main_8cpp.html#ac629a0e239d1c27f33584d6ac3e841f8',1,'main.cpp']]],

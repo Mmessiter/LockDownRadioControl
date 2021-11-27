@@ -1,5 +1,6 @@
 var common_8h =
 [
+    [ "DB_BIND", "common_8h.html#a8cb8f85622994433c03e81bccabb9a77", null ],
     [ "RECONNECT_CH", "common_8h.html#ad3c239265016482b6850360b3dc51a50", null ],
     [ "RXVERSION_MAJOR", "common_8h.html#a2b147d5155fcf962e9f1c4885b32c67d", null ],
     [ "RXVERSION_MINIMUS", "common_8h.html#a46d5105ccf92f7e44b10af6fd51772a8", null ],
