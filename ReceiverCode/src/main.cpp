@@ -107,8 +107,8 @@ bool     FailSafeChannel[17];
 bool     FailSafeDataLoaded = false;
 uint8_t  ModelNumber        = 0;
 bool     ModelNumberSaved   = false;
-uint8_t  PowerSetting       = 4;
-uint8_t  DataRate           = 1;
+//uint8_t  PowerSetting       = 4;
+//uint8_t  DataRate           = 1;
 bool     ReInit             = false;
 uint8_t  byte1              = 0;
 uint8_t  byte2              = 0;
@@ -410,10 +410,10 @@ void CheckParams()
             }
             break;
         case 7:
-            PowerSetting = ReceivedData[CHANNELSUSED + 3];
+         
             break;
         case 8:
-            DataRate = ReceivedData[CHANNELSUSED + 3];
+           
             break;
         case 9:
             YawPID.P = ReceivedData[CHANNELSUSED + 3];
@@ -429,7 +429,7 @@ void CheckParams()
             ModelType = ReceivedData[CHANNELSUSED + 3];
             break;
         case 13:
-            BindNow = ReceivedData[CHANNELSUSED + 3];
+            BindNow = ReceivedData[CHANNELSUSED + 3]; 
             break;
         case 14:
             byte1 = ReceivedData[CHANNELSUSED + 3]; // These bytes are failsafe flags
@@ -512,7 +512,7 @@ FASTRUN void ReceiveData()
       if (millis() - LastConnectionMoment >= RECEIVE_TIMEOUT) {
          Reconnect();
       }
-    if (ReadData() && BoundFlag) {
+    if (ReadData() ) {
         CheckParams();
     }
 }
