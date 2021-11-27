@@ -508,12 +508,11 @@ void DoSensors()
 FASTRUN void ReceiveData()
 {   Connected = false;
     if (CurrentRadio->available()) {Connected = true;}
-    
     if (!Connected)
       if (millis() - LastConnectionMoment >= RECEIVE_TIMEOUT) {
          Reconnect();
       }
-    if (ReadData()) {
+    if (ReadData() && BoundFlag) {
         CheckParams();
     }
 }
@@ -622,7 +621,7 @@ void DoBinding()
         if (BindOKTimer == 0) {
             BindOKTimer = millis();
         }
-        else if ((millis() - BindOKTimer) > 100) { // allow .4 of a second for the TX to bind
+        else if ((millis() - BindOKTimer) > 400) {  // allow .4 of a second for the TX to bind
             BindNow = 1;
         }
     }
@@ -724,6 +723,7 @@ void loop()
         DeltaTime    = micros();
     }
     else {
-       if (Connected) DoBinding();
+        DoBinding();
+       
     }
 }

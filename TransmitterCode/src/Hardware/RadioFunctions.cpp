@@ -19,7 +19,7 @@
 #define One_Switch_View    13
 #define Help_View          14
 #define Options_View       15
-#define BINDPIPETIMEOUT    100                       // timeout for switching from Bound to Default pipe
+#define BINDPIPETIMEOUT    1000                      // timeout for switching from Bound to Default pipe
 #define FHSS_RESCUE_BOTTOM 118                       // reduced range for recovery
 #define FHSS_RESCUE_TOP    125                       // reduced range for recovery
 #define UNCOMPRESSEDWORDS  20                        // DATA TO SEND = 40  Bytes
@@ -81,10 +81,12 @@ void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, int uncompre
 
 void TryOtherPipe()
 {
-   // Serial.println (TotalledRecentPacketsLost);
-    if (TotalledRecentPacketsLost > 100 || (!BoundFlag))  {        // This perhaps avoids needless pipe swapping during poor connection
+     Serial.println (TotalledRecentPacketsLost);
+     Serial.println (BoundFlag);
+    // Serial.println ( " " );
+   // if (TotalledRecentPacketsLost > 1000 || (!BoundFlag))  {        // This perhaps avoids needless pipe swapping during poor connection
         if (BoundFlag == true) {  
-            BoundFlag = false;
+             BoundFlag = false;
             SetThePipe(DefaultPipe);
         }
         else
@@ -92,7 +94,7 @@ void TryOtherPipe()
             BoundFlag = true;
             SetThePipe(NewPipe);
         }    
-   }
+  // }
 }
 /************************************************************************************************************/
 
@@ -113,6 +115,7 @@ void SendData()
             SendBuffer[6] = (uint8_t)((NewPipe >> 8) & 0xFF);
             SendBuffer[7] = (uint8_t)((NewPipe)&0xFF);
         }
+
         LoadPacketData();
   
         if (LostContactFlag) {

@@ -294,7 +294,6 @@ char     page_FrontView[]             = "page FrontView";
 char     page_FhssView[]              = "page FhssView";
 char     FhssView_Rlow[]              = "FHSSLow";
 char     FhssView_Rhigh[]             = "FHSSHigh";
-char     BindDonemsg[]                = "Bound!";
 char     BindScreenBox[]              = "BindStatus";
 char     NextionSleepTime[]           = "thsp=";
 char     NextionWakeOnTouch[]         = "thup=1";
@@ -5612,7 +5611,6 @@ void loop()
         Button_was_pressed();
     } // Deal with button!
 
-   // CheckTXTimeStamp();
 
     if ((millis() - TxOnTime) > 2000) { // Transmit nothing for 1.5 seconds
         switch (CurrentMode) {
@@ -5647,6 +5645,5 @@ void loop()
             GreenLedOn();
             MakeBindButtonInvisible();
         }
-        SendText(BindScreenBox, BindDonemsg);
     }
 } // end loop()
