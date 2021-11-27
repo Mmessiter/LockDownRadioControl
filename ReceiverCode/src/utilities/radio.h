@@ -126,6 +126,9 @@ void GetNewPipe()
     NewPipe += (uint64_t)ReceivedData[7];
 }
 
+
+/************************************************************************************************************/
+
 /**
  * Get pipe address from EEPROM.
  * @note Address data in EEPORM is valid only after a previous power cycle observed
@@ -144,6 +147,8 @@ void GetOldPipe()
     OldPipe += (uint64_t)SavedPipeAddress[7];
 }
 
+/************************************************************************************************************/
+
 /**
  * Make radio transceiver "hop" over to the new frequency.
  * @param freq The next frequency to use.
@@ -152,6 +157,8 @@ void GetOldPipe()
 void GetNextFrequency(){
     NextFrequency=FHSS_Channels[NextChannelNumber];
 }
+
+/************************************************************************************************************/
 
 void HopToNextFrequency()
 {
@@ -164,6 +171,8 @@ void HopToNextFrequency()
     ShowHopDurationEtc();
 #endif
 }
+
+/************************************************************************************************************/
 
 /** Initialize a radio transceiver. */
 void InitCurrentRadio()
@@ -199,7 +208,6 @@ void ProdRadio()
     delay(4);                           // This might help
 }
  #endif // defined (SECOND_TRANSCEIVER)
-
 
 /************************************************************************************************************/
 
@@ -253,7 +261,6 @@ uint8_t  ReconnectAttempts  = 0;
                             }
                         }
                     }
-      
                 }
             ConnectionStart=millis();
             StillSearchingTime = 0;
@@ -289,14 +296,11 @@ void LoadTimeStamp(){              // This will load time stamp and array index 
     AckPayload.ReportedYaw           =  NextChannelNumber;    
 }
  
-
- 
 /************************************************************************************************************/
 void CheckTimeStamp(){
 
     RXTimeStamp = millis() - HopStart;
     if (RXTimeStamp > HOPTIME) {
-        // Serial.println(RXTimeStamp);
         HopStart = millis();
         RXTimeStamp = 0;
         ++NextChannelNumber;
@@ -305,7 +309,6 @@ void CheckTimeStamp(){
         PacketNumber = 0;
         DoSensors(); 
     }
-    
 }
 /************************************************************************************************************/
 

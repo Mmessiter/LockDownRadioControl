@@ -15,7 +15,6 @@
 #define RECONNECT_CH     83
 #endif
 
-
 #ifdef NOISYWIFI 
 #define RECONNECT_CH     120
 #endif
@@ -25,7 +24,6 @@
 #define CENTRESTICKS    2 // Calibrate Centres
 #define SCANWAVEBAND    3 // Scan waveband
 #define SENDNOTHING     4 // Transmission off
-#define BAD_CHANNEL_MAX 40
 #define Nextion         Serial1 // Nextion is connected to Serial1
 
 #define PACEMAKER         4     // MINIMUM Ms between packets of data.
@@ -34,7 +32,6 @@
 #define KICKRATE          1000  // Kick once a second (must be between WATCHDOGMAXRATE and WATCHDOGTIMEOUT)
 #define WATCHDOGMAXRATE   500   // 500 ms secs between kicks is max rate allowed
 #define LOSTCONTACTCUTOFF 1     // How many packets to lose before reconnect triggers  (>1)
-
 
 
 // UNCOMMENT ANY OF THESE for that bit of debug info
@@ -90,11 +87,9 @@ extern uint8_t        SizeOfCompressedData;
 extern int            RangeTestGoodPackets;
 extern uint8_t        NextChannelNumber;
 extern uint32_t       TotalledRecentPacketsLost;
-
-
-extern uint32_t TxOnTime;
-extern uint32_t TXTimeStamp;
-extern uint32_t HopStart;
+extern uint32_t       TxOnTime;
+extern uint32_t       TXTimeStamp;
+extern uint32_t       HopStart;
 
 extern void  KickTheDog();
 extern void  SendCommand(char* tbox);
@@ -127,8 +122,6 @@ void ScanAllChannels();
 void SendData();
 
 /*********************************************************************************************************************************/
-
-
 
 
 #endif

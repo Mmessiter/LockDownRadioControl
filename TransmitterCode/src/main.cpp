@@ -191,8 +191,6 @@ WDT_T4<WDT3>  TeensyWatchDog;
 WDT_timings_t WatchDogConfig;
 #endif
 
-//uint8_t FHSSBottom = 1; //  Channel range for hopping
-//uint8_t FHSSTop    = 83;
 uint8_t Mixes[MAXMIXES + 1][CHANNELSUSED + 1];                // Channel mixes' 2D array store
 int     Trims[FlightModesUsed + 1][CHANNELSUSED + 1];         // Trims to store
 uint8_t TrimsReversed[FlightModesUsed + 1][CHANNELSUSED + 1]; // Trim directions to store
@@ -268,7 +266,6 @@ int     AnalogueInput[PROPOCHANNELS] = {A0, A1, A2, A3, A6, A7, A8, A9}; // PROP
 uint8_t CurrentMode                  = NORMAL;
 uint8_t AllChannels[127]; /// for scanning
 uint8_t NoCarrier[127];
-
 uint8_t       ScanStart   = 1;
 uint8_t       ScanEnd     = 125;
 unsigned long TimerMillis = 0;
@@ -1043,7 +1040,7 @@ void SendValue1(char* nbox, int value)
 
 /*********************************************************************************************************************************/
 
-uint8_t um(uint16_t bv)
+uint8_t um(uint16_t bv)                             // convert to lower resolution
 {
     return (map(bv, MINMICROS, MAXMICROS, 0, 100)); // lower res is enough on display
 }
@@ -1832,7 +1829,7 @@ void SDUpdateInt(int p_address, int p_value)
 
 /*********************************************************************************************************************************/
 
-void SDUpdateuint8_t(int p_address, uint8_t p_value)
+void SDUpdateByte(int p_address, uint8_t p_value)
 {
     ModelsFileNumber.seek(p_address);
     ModelsFileNumber.write(uint8_t(p_value));
@@ -1850,7 +1847,7 @@ int SDReadInt(int p_address)
 
 /*********************************************************************************************************************************/
 
-uint8_t SDReaduint8_t(int p_address)
+uint8_t SDReadByte(int p_address)
 {
     ModelsFileNumber.seek(p_address);
     uint8_t r = ModelsFileNumber.read();
@@ -2171,109 +2168,109 @@ bool ReadOneModel(uint8_t Mnum)
     addr = TXSIZE;                    //  spare bytes for TX stuff
     addr += ((Mnum - 1) * MODELSIZE); //  spare bytes for Model params
     StartLocation = addr;
-    ModelDefined  = SDReaduint8_t(addr); // this variable is redundant now   could be re-used
+    ModelDefined  = SDReadByte(addr); // this variable is redundant now   could be re-used
     ++addr;
     for (j = 0; j < 30; ++j) {
-        ModelName[j] = SDReaduint8_t(addr);
+        ModelName[j] = SDReadByte(addr);
         ++addr;
     }
 
     for (i = 0; i < CHANNELSUSED; ++i) {
         for (j = 1; j <= 4; ++j) {
-            MaxDegrees[j][i] = SDReaduint8_t(addr);
+            MaxDegrees[j][i] = SDReadByte(addr);
             ++addr;
-            MidHiDegrees[j][i] = SDReaduint8_t(addr);
+            MidHiDegrees[j][i] = SDReadByte(addr);
             ++addr;
-            CentreDegrees[j][i] = SDReaduint8_t(addr);
+            CentreDegrees[j][i] = SDReadByte(addr);
             ++addr;
-            MidLowDegrees[j][i] = SDReaduint8_t(addr);
+            MidLowDegrees[j][i] = SDReadByte(addr);
             ++addr;
-            MinDegrees[j][i] = SDReaduint8_t(addr);
+            MinDegrees[j][i] = SDReadByte(addr);
             ++addr;
         }
     }
     for (j = 0; j < MAXMIXES; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
-            Mixes[j][i] = SDReaduint8_t(addr); // Read mixes
+            Mixes[j][i] = SDReadByte(addr); // Read mixes
             ++addr;
         }
     }
 
     for (j = 0; j < FlightModesUsed + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
-            Trims[j][i] = SDReaduint8_t(addr);
+            Trims[j][i] = SDReadByte(addr);
             ++addr;
         }
     }
     for (j = 0; j < FlightModesUsed + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
-            TrimsReversed[j][i] = SDReaduint8_t(addr);
+            TrimsReversed[j][i] = SDReadByte(addr);
             ++addr;
         }
     }
-    RXCellCount = SDReaduint8_t(addr);
+    RXCellCount = SDReadByte(addr);
     ++addr;
 
     for (j = 0; j < FlightModesUsed + 1; ++j) {
 
-        rollp[j] = SDReaduint8_t(addr);
+        rollp[j] = SDReadByte(addr);
         ++addr;
-        rolli[j] = SDReaduint8_t(addr);
+        rolli[j] = SDReadByte(addr);
         ++addr;
-        rolld[j] = SDReaduint8_t(addr);
+        rolld[j] = SDReadByte(addr);
         ++addr;
-        yawp[j] = SDReaduint8_t(addr);
+        yawp[j] = SDReadByte(addr);
         ++addr;
-        yawi[j] = SDReaduint8_t(addr);
+        yawi[j] = SDReadByte(addr);
         ++addr;
-        yawd[j] = SDReaduint8_t(addr);
+        yawd[j] = SDReadByte(addr);
         ++addr;
     }
-    ModelType = SDReaduint8_t(addr);
+    ModelType = SDReadByte(addr);
     ++addr;
     for (i = 0; i < CHANNELSUSED; ++i) {
-        InPutStick[i] = SDReaduint8_t(addr);
+        InPutStick[i] = SDReadByte(addr);
         if (InPutStick[i] > 16) InPutStick[i] = i; // reset if nothing was saved!
         ++addr;
     }
 
     // **************************
 
-    FMSwitch = SDReaduint8_t(addr);
+    FMSwitch = SDReadByte(addr);
     ++addr;
-    AutoSwitch = SDReaduint8_t(addr);
+    AutoSwitch = SDReadByte(addr);
     ++addr;
-    Channel9Switch = SDReaduint8_t(addr);
+    Channel9Switch = SDReadByte(addr);
     ++addr;
-    Channel10Switch = SDReaduint8_t(addr);
+    Channel10Switch = SDReadByte(addr);
     ++addr;
-    Channel11Switch = SDReaduint8_t(addr);
+    Channel11Switch = SDReadByte(addr);
     ++addr;
-    Channel12Switch = SDReaduint8_t(addr);
+    Channel12Switch = SDReadByte(addr);
     ++addr;
-    Switch1Reversed = bool(SDReaduint8_t(addr));
+    Switch1Reversed = bool(SDReadByte(addr));
     ++addr;
-    Switch2Reversed = bool(SDReaduint8_t(addr));
+    Switch2Reversed = bool(SDReadByte(addr));
     ++addr;
-    Switch3Reversed = bool(SDReaduint8_t(addr));
+    Switch3Reversed = bool(SDReadByte(addr));
     ++addr;
-    Switch4Reversed = bool(SDReaduint8_t(addr));
+    Switch4Reversed = bool(SDReadByte(addr));
     ++addr;
     for (i = 0; i < CHANNELSUSED; ++i) {
-        FailSafeChannel[i] = bool(SDReaduint8_t(addr));
+        FailSafeChannel[i] = bool(SDReadByte(addr));
         if (int(FailSafeChannel[i]) > 1) FailSafeChannel[i] = 0;
         ++addr;
     }
     for (i = 0; i < CHANNELSUSED; ++i) {
         for (j = 0; j < 10; ++j) {
-            ChannelNames[i][j] = SDReaduint8_t(addr);
+            ChannelNames[i][j] = SDReadByte(addr);
             ++addr;
         }
     }
 
     for (j = 0; j < FlightModesUsed + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
-            Exponential[j][i] = SDReaduint8_t(addr);
+            Exponential[j][i] = SDReadByte(addr);
             if (Exponential[j][i] > 200 || Exponential[j][i] < 0) {
                 Exponential[j][i] = 20;
             }
@@ -2282,7 +2279,7 @@ bool ReadOneModel(uint8_t Mnum)
     }
     for (j = 0; j < FlightModesUsed + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
-            InterpolationTypes[j][i] = SDReaduint8_t(addr);
+            InterpolationTypes[j][i] = SDReadByte(addr);
             if (InterpolationTypes[j][i] < 0 || InterpolationTypes[j][i] > 2) {
                 InterpolationTypes[j][i] = 2;
             }
@@ -2317,7 +2314,6 @@ bool ReadOneModel(uint8_t Mnum)
     Serial.println(" bytes reserved per model.)");
 #endif // defined DB_NEXTION
     UpdateButtonLabels();
-
     return true;
 }
 
@@ -2344,21 +2340,21 @@ bool LoadAllParameters()
             ChannelMax[i] = SDReadInt(addr);
             addr += 2;
         }
-        //FHSSTop = SDReaduint8_t(addr); // These are  currently Spare
+        //FHSSTop = SDReadByte(addr); // These are  currently Spare
         ++addr;
-        //FHSSBottom = SDReaduint8_t(addr); // These are  currently Spare
+        //FHSSBottom = SDReadByte(addr); // These are  currently Spare
         //if (FHSSBottom < 1) FHSSBottom = 1;
         ++addr;
-        ModelNumber = SDReaduint8_t(addr);
+        ModelNumber = SDReadByte(addr);
         ++addr;
         ScreenTimeout = SDReadInt(addr);
         ++addr;
         ++addr;
-        Inactivity_Timeout = SDReaduint8_t(addr) * TICKSPERMINUTE;
+        Inactivity_Timeout = SDReadByte(addr) * TICKSPERMINUTE;
 
         ++addr;
         for (j = 0; j < 30; ++j) {
-            TxName[j] = SDReaduint8_t(addr);
+            TxName[j] = SDReadByte(addr);
             ++addr;
         }
         txm = addr;
@@ -2549,20 +2545,20 @@ void SaveTXStuff()
         SDUpdateInt(addr, ChannelMax[i]); // Stick max output of pot
         addr += 2;
     }
-   // SDUpdateuint8_t(addr, FHSSTop); // These are  currently SPARE
+   // SDUpdateByte(addr, FHSSTop); // These are  currently SPARE
     ++addr;
-   // SDUpdateuint8_t(addr, FHSSBottom); // These are  currently SPARE
+   // SDUpdateByte(addr, FHSSBottom); // These are  currently SPARE
     ++addr;
-    SDUpdateuint8_t(addr, ModelNumber);
+    SDUpdateByte(addr, ModelNumber);
     ++addr;
     SDUpdateInt(addr, ScreenTimeout);
     ++addr;
     ++addr;
-    SDUpdateuint8_t(addr, (Inactivity_Timeout / TICKSPERMINUTE));
+    SDUpdateByte(addr, (Inactivity_Timeout / TICKSPERMINUTE));
     ++addr;
     for (j = 0; j < 30; ++j) {
         if (EON) TxName[j] = 0;
-        SDUpdateuint8_t(addr, TxName[j]);
+        SDUpdateByte(addr, TxName[j]);
         if (TxName[j] == 0) EON = true;
         ++addr;
     }
@@ -2583,111 +2579,111 @@ void SaveOneModel(int mnum)
     addr += (mnum - 1) * MODELSIZE; //  spare bytes for Model params
     StartLocation = addr;
     ModelDefined  = 42;
-    SDUpdateuint8_t(addr, ModelDefined);
+    SDUpdateByte(addr, ModelDefined);
     ++addr;
     for (j = 0; j < 30; ++j) {
         if (EndOfName) ModelName[j] = 0;
-        SDUpdateuint8_t(addr, ModelName[j]);
+        SDUpdateByte(addr, ModelName[j]);
         if (ModelName[j] == 0) EndOfName = true;
         ++addr;
     }
     for (i = 0; i < CHANNELSUSED; ++i) {
         for (j = 1; j <= 4; ++j) {
-            SDUpdateuint8_t(addr, MaxDegrees[j][i]); // Max requested in degrees (180)
+            SDUpdateByte(addr, MaxDegrees[j][i]); // Max requested in degrees (180)
             ++addr;
-            SDUpdateuint8_t(addr, MidHiDegrees[j][i]); // MidHi requested in degrees (135)
+            SDUpdateByte(addr, MidHiDegrees[j][i]); // MidHi requested in degrees (135)
             ++addr;
-            SDUpdateuint8_t(addr, CentreDegrees[j][i]); // Centre requested in degrees (90)
+            SDUpdateByte(addr, CentreDegrees[j][i]); // Centre requested in degrees (90)
             ++addr;
-            SDUpdateuint8_t(addr, MidLowDegrees[j][i]); // MidLo requested in degrees (45)
+            SDUpdateByte(addr, MidLowDegrees[j][i]); // MidLo requested in degrees (45)
             ++addr;
-            SDUpdateuint8_t(addr, MinDegrees[j][i]); // Min requested in degrees (0)
+            SDUpdateByte(addr, MinDegrees[j][i]); // Min requested in degrees (0)
             ++addr;
         }
     }
     for (j = 0; j < MAXMIXES; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
-            SDUpdateuint8_t(addr, Mixes[j][i]); // Save mixes
+            SDUpdateByte(addr, Mixes[j][i]); // Save mixes
             ++addr;
         }
     }
     for (j = 0; j < FlightModesUsed + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
-            SDUpdateuint8_t(addr, Trims[j][i]);
+            SDUpdateByte(addr, Trims[j][i]);
             ++addr;
         }
     }
     for (j = 0; j < FlightModesUsed + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
-            SDUpdateuint8_t(addr, TrimsReversed[j][i]);
+            SDUpdateByte(addr, TrimsReversed[j][i]);
             ++addr;
         }
     }
-    SDUpdateuint8_t(addr, RXCellCount);
+    SDUpdateByte(addr, RXCellCount);
     ++addr;
 
     for (j = 0; j < FlightModesUsed + 1; ++j) {
-        SDUpdateuint8_t(addr, rollp[j]);
+        SDUpdateByte(addr, rollp[j]);
         ++addr;
-        SDUpdateuint8_t(addr, rolli[j]);
+        SDUpdateByte(addr, rolli[j]);
         ++addr;
-        SDUpdateuint8_t(addr, rolld[j]);
+        SDUpdateByte(addr, rolld[j]);
         ++addr;
-        SDUpdateuint8_t(addr, yawp[j]);
+        SDUpdateByte(addr, yawp[j]);
         ++addr;
-        SDUpdateuint8_t(addr, yawi[j]);
+        SDUpdateByte(addr, yawi[j]);
         ++addr;
-        SDUpdateuint8_t(addr, yawd[j]);
+        SDUpdateByte(addr, yawd[j]);
         ++addr;
     }
     if (ModelType == 0) ModelType = 1; // no zeros please
-    SDUpdateuint8_t(addr, ModelType);
+    SDUpdateByte(addr, ModelType);
     ++addr;
     for (i = 0; i < CHANNELSUSED; ++i) {
-        SDUpdateuint8_t(addr, InPutStick[i]);
+        SDUpdateByte(addr, InPutStick[i]);
         ++addr;
     }
 
-    SDUpdateuint8_t(addr, FMSwitch);
+    SDUpdateByte(addr, FMSwitch);
     ++addr;
-    SDUpdateuint8_t(addr, AutoSwitch);
+    SDUpdateByte(addr, AutoSwitch);
     ++addr;
-    SDUpdateuint8_t(addr, Channel9Switch);
+    SDUpdateByte(addr, Channel9Switch);
     ++addr;
-    SDUpdateuint8_t(addr, Channel10Switch);
+    SDUpdateByte(addr, Channel10Switch);
     ++addr;
-    SDUpdateuint8_t(addr, Channel11Switch);
+    SDUpdateByte(addr, Channel11Switch);
     ++addr;
-    SDUpdateuint8_t(addr, Channel12Switch);
+    SDUpdateByte(addr, Channel12Switch);
     ++addr;
-    SDUpdateuint8_t(addr, Switch1Reversed);
+    SDUpdateByte(addr, Switch1Reversed);
     ++addr;
-    SDUpdateuint8_t(addr, Switch2Reversed);
+    SDUpdateByte(addr, Switch2Reversed);
     ++addr;
-    SDUpdateuint8_t(addr, Switch3Reversed);
+    SDUpdateByte(addr, Switch3Reversed);
     ++addr;
-    SDUpdateuint8_t(addr, Switch4Reversed);
+    SDUpdateByte(addr, Switch4Reversed);
     ++addr;
     for (i = 0; i < CHANNELSUSED; ++i) {
-        SDUpdateuint8_t(addr, FailSafeChannel[i]);
+        SDUpdateByte(addr, FailSafeChannel[i]);
         ++addr;
     }
     for (i = 0; i < CHANNELSUSED; ++i) {
         for (j = 0; j < 10; ++j) {
-            SDUpdateuint8_t(addr, ChannelNames[i][j]);
+            SDUpdateByte(addr, ChannelNames[i][j]);
             ++addr;
         }
     }
     for (j = 0; j < FlightModesUsed + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
-            SDUpdateuint8_t(addr, Exponential[j][i]);
+            SDUpdateByte(addr, Exponential[j][i]);
             ++addr;
         }
     }
 
     for (j = 0; j < FlightModesUsed + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
-            SDUpdateuint8_t(addr, InterpolationTypes[j][i]);
+            SDUpdateByte(addr, InterpolationTypes[j][i]);
             ++addr;
         }
     }
@@ -2819,7 +2815,6 @@ void UpdateSwitchesDisplay()
 
 uint8_t CheckRange_0_16(uint8_t v)
 {
-
     if (v > 16) v = 16;
     if (v < 0) v = 0;
     return v;
@@ -3421,10 +3416,7 @@ void DisplayCurve()
         }
         Step  = APPROXIMATION;
         yDot2 = 0;
-       // for (xPoint = 0; xPoint <= HalfXRange; xPoint += Step) { // Simulate a curve with many short lines to speed it up
         for (xPoint = HalfXRange; xPoint >= 0; xPoint -= Step) { // Simulate a curve with many short lines to speed it up
-
-
             yPoint = MapExp(xPoint, 0, HalfXRange, 0, TopHalfYRange, Exponential[FlightMode][ChanneltoSet - 1]);
             if (Step > xPoint) {
                 Step = xPoint;
@@ -3660,7 +3652,7 @@ void ReceiveModelFile()
     SendText(ModelsView_filename, Success);
     delay(2000);
     SendText(ModelsView_filename, SingleModelFile);
-    // Here the new model is imported for immediate use
+    // **************************************** Below Here the new model is imported for immediate use
     SingleModelFlag = true;
     CloseModelsFile();
     ReadOneModel(1);

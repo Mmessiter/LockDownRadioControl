@@ -26,11 +26,6 @@
 #define COMPRESSEDWORDS    UNCOMPRESSEDWORDS * 3 / 4 // COMPRESSED DATA SENT = 30  Bytes
 #define PACKETS_PER_HOP    20                        // Must match RX setting
 
-
-
-
-
-
 /************************************************************************************************************/
 
 #ifdef DB_FHSS
@@ -118,7 +113,7 @@ void SendData()
                         PipeTimeout=millis();
                 }
 
-                if ((millis() - RecoveryTimer) > 500) {          // TODO: THIS BIT MUST GO .....           
+                if ((millis() - RecoveryTimer) > 500) {          // TODO: THIS BIT MUST GO (But not just yet!)           
                     NextFrequency = RECONNECT_CH;
                     HopToNextFrequency();
                     RecoveryTimer = millis();
@@ -234,7 +229,6 @@ void HopToNextFrequency()
 void InitRadio(uint64_t Pipe)
 {
     Radio1.begin();
-
     Radio1.setPALevel(RF24_PA_MAX);
     Radio1.setDataRate(RF24_250KBPS);
     Radio1.enableAckPayload();       // Needed
