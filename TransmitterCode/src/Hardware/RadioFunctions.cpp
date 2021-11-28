@@ -29,9 +29,9 @@
 /************************************************************************************************************/
 
 #ifdef DB_FHSS
-float PSTARTTIME = 0;
-float PENDTIME   = 0;
-float PDURATION  = 0;
+float PStartTime = 0;
+float PEndTime   = 0;
+float Pduration  = 0;
 #endif
 
 // **** Decompresses cc*3/4 x 16 BIT values up to cc loading only their low 12 BITS cc must be divisble by 4! ******************
@@ -210,19 +210,19 @@ void HopToNextFrequency()
     CheckTimer(); // update timer if on
     ShowComms();
 #ifdef DB_FHSS
-    PENDTIME  = millis();
-    PDURATION = (PENDTIME - PSTARTTIME) / 1000;
+    PEndTime  = millis();
+    Pduration = (PEndTime - PStartTime) / 1000;
     Serial.print("Hop duration: ");
-    Serial.print(PDURATION);
+    Serial.print(Pduration);
     Serial.print(" seconds. Good packets per hop: ");
     Serial.print(PacketNumber);
     Serial.print(" Next channel: ");
     Serial.print(FHSS_Channels[NextChannelNumber]);
     if ((FHSS_Channels[NextChannelNumber]) < 10) Serial.print(" ");
     Serial.print(BoundFlag ? " Bound!" : " NOT BOUND.");
-    Serial.print(" Radio: ");
+    Serial.print(" RX Radio: ");
     Serial.println(ThisRadio);
-    PSTARTTIME = millis();
+    PStartTime = millis();
 #endif
     ThisFrequency  = NextFrequency;
     PacketNumber = 0;
