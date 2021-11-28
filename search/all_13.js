@@ -8,7 +8,7 @@ var searchData=
   ['thisfrequency_568',['ThisFrequency',['../_radio_functions_8h.html#a16a7235629cfd2dec33802caa95dc16d',1,'ThisFrequency():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a16a7235629cfd2dec33802caa95dc16d',1,'ThisFrequency():&#160;main.cpp']]],
   ['thisgap_569',['ThisGap',['../_transmitter_code_2src_2main_8cpp.html#ae0aa9266aded94af479d912e6cc4abaf',1,'main.cpp']]],
   ['thispipe_570',['ThisPipe',['../radio_8h.html#a88d2add9e7ca58e7218870f887b25859',1,'radio.h']]],
-  ['thisradio_571',['ThisRadio',['../radio_8h.html#a25cc3bb5cb94f4bbef0f2c5b79140c20',1,'ThisRadio():&#160;radio.h'],['../_transmitter_code_2src_2main_8cpp.html#a2e695c7565eda3b02ff77324e274772b',1,'ThisRadio():&#160;main.cpp']]],
+  ['thisradio_571',['ThisRadio',['../radio_8h.html#a25cc3bb5cb94f4bbef0f2c5b79140c20',1,'ThisRadio():&#160;radio.h'],['../_radio_functions_8h.html#a2e695c7565eda3b02ff77324e274772b',1,'ThisRadio():&#160;radio.h'],['../_transmitter_code_2src_2main_8cpp.html#a2e695c7565eda3b02ff77324e274772b',1,'ThisRadio():&#160;main.cpp']]],
   ['ticksperminute_572',['TICKSPERMINUTE',['../_transmitter_code_2src_2main_8cpp.html#a97290be0c518c6c918c843e88a7f3640',1,'main.cpp']]],
   ['timermillis_573',['TimerMillis',['../_transmitter_code_2src_2main_8cpp.html#a0a3ad7349c88efc385cc455591c75677',1,'main.cpp']]],
   ['timethis_574',['TimeThis',['../_receiver_code_2src_2main_8cpp.html#ada6e8de0f5b5183df711c8bb7f03ec39',1,'main.cpp']]],
