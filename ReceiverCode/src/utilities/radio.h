@@ -105,9 +105,9 @@ void ReadSavedPipe()
 
 void LoadVersioNumber() // and which radio is currently in use
 {
-    AckPayload.ReportedPitch = RXVERSION_MAJOR;
-    AckPayload.ReportedRoll  = RXVERSION_MINOR;
-    AckPayload.ReportedYaw   = RXVERSION_MINIMUS;
+    AckPayload.ReportedPitch   = RXVERSION_MAJOR;
+    AckPayload.ReportedRoll    = RXVERSION_MINOR;
+    AckPayload.ReportedYaw     = RXVERSION_MINIMUS;
     AckPayload.CurrentAltitude = ThisRadio;
 }
 
@@ -155,17 +155,17 @@ void GetOldPipe()
  */
 
 void GetNextFrequency(){
-    NextFrequency=FHSS_Channels[NextChannelNumber];
+    NextFrequency = FHSS_Channels[NextChannelNumber];
 }
 
 /************************************************************************************************************/
 
 void HopToNextFrequency()
 {
-  //  CurrentRadio->stopListening();
+    CurrentRadio->stopListening();
     CurrentRadio->setChannel(NextFrequency);
-  //  CurrentRadio->startListening();
-    delay(1);
+    CurrentRadio->startListening();
+    delay(2);
 #ifdef DEBUG
     ShowHopDurationEtc();
 #endif
@@ -218,10 +218,11 @@ uint8_t  ReconnectAttempts  = 0;
             SearchStartTime = millis();
             FailSafeSent = false; 
             CurrentRadio->stopListening();
-            delay(4);
+            delay(2);
             CurrentRadio->setChannel(RECONNECT_CH);
+            delay(2);
             CurrentRadio->startListening();
-            delay(4);   
+            delay(2);   
             if (CurrentRadio->available()) Connected = true;
     
             while (!Connected)
