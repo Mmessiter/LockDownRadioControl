@@ -7,8 +7,8 @@ var searchData=
   ['page_5ffhssview_1019',['page_FhssView',['../_transmitter_code_2src_2main_8cpp.html#abb0c124b134df44ba1d408d719ab6b75',1,'main.cpp']]],
   ['page_5ffrontview_1020',['page_FrontView',['../_transmitter_code_2src_2main_8cpp.html#a0a6be8adfb11b7e5dafd3f47867c0801',1,'main.cpp']]],
   ['pausedsecs_1021',['PausedSecs',['../_transmitter_code_2src_2main_8cpp.html#abc6a69fc451d9839611fa63037af684c',1,'main.cpp']]],
-  ['pduration_1022',['PDURATION',['../_radio_functions_8cpp.html#af3e741308f3c6e1f89daee68f2f3fa6e',1,'RadioFunctions.cpp']]],
-  ['pendtime_1023',['PENDTIME',['../_radio_functions_8cpp.html#ae776fd40f5c5b226a5a2e6f8e696f5e3',1,'RadioFunctions.cpp']]],
+  ['pduration_1022',['Pduration',['../_radio_functions_8cpp.html#ae73038812d127134daa62bd8bc2c3837',1,'RadioFunctions.cpp']]],
+  ['pendtime_1023',['PEndTime',['../_radio_functions_8cpp.html#a7e1ad468c45da1e139521369743a945c',1,'RadioFunctions.cpp']]],
   ['pipetimeout_1024',['PipeTimeout',['../_transmitter_code_2src_2main_8cpp.html#a54a3133087523f6dc1d418f09f75e06c',1,'PipeTimeout():&#160;main.cpp'],['../_radio_functions_8h.html#a54a3133087523f6dc1d418f09f75e06c',1,'PipeTimeout():&#160;main.cpp']]],
   ['pitch_1025',['Pitch',['../struct_d_o_f9.html#a922dfa854b114dac58b9e7fd52a202c0',1,'DOF9::Pitch()'],['../struct_payload.html#ac2c89819bde96e4f6bbea0cb4e02e949',1,'Payload::Pitch()']]],
   ['pitchrate_1026',['PitchRate',['../struct_d_o_f9.html#af0e03af11a9a2ea65b91569e29528d9e',1,'DOF9']]],
@@ -20,7 +20,7 @@ var searchData=
   ['previouschannelnumber_1032',['PreviousChannelNumber',['../_transmitter_code_2src_2main_8cpp.html#abbd06b60b1ad6be88a3363b5129d10d4',1,'main.cpp']]],
   ['previousdata_1033',['PreviousData',['../radio_8h.html#a54007b635670b351453013425e7f2814',1,'radio.h']]],
   ['previousflightmode_1034',['PreviousFlightMode',['../_transmitter_code_2src_2main_8cpp.html#a8f5159f240ef6e3787b668d1dac1a67a',1,'main.cpp']]],
-  ['pstarttime_1035',['PSTARTTIME',['../_radio_functions_8cpp.html#a2ef9079662a8ff255a84c759c473584a',1,'RadioFunctions.cpp']]],
+  ['pstarttime_1035',['PStartTime',['../_radio_functions_8cpp.html#aeb7f71a83cf50adff09cfc54384bcf9f',1,'RadioFunctions.cpp']]],
   ['purpose_1036',['Purpose',['../struct_payload.html#ac18701f2aa35ebd8402f45f840d5c445',1,'Payload']]],
   ['pwmpins_1037',['PWMPins',['../_receiver_code_2src_2main_8cpp.html#a19f864fa6bdea0867325f70e162c92ef',1,'main.cpp']]]
 ];

@@ -33,7 +33,7 @@ var _radio_functions_8cpp =
     [ "SendData", "_radio_functions_8cpp.html#a3d7322e78f097d02d476f17a6306997c", null ],
     [ "SetThePipe", "_radio_functions_8cpp.html#a70dc6f8d2e5ccef6b8e4a2b9b0afb2ce", null ],
     [ "TryOtherPipe", "_radio_functions_8cpp.html#a7051e235b8f694c6b01bb5edf3925dc7", null ],
-    [ "PDURATION", "_radio_functions_8cpp.html#af3e741308f3c6e1f89daee68f2f3fa6e", null ],
-    [ "PENDTIME", "_radio_functions_8cpp.html#ae776fd40f5c5b226a5a2e6f8e696f5e3", null ],
-    [ "PSTARTTIME", "_radio_functions_8cpp.html#a2ef9079662a8ff255a84c759c473584a", null ]
+    [ "Pduration", "_radio_functions_8cpp.html#ae73038812d127134daa62bd8bc2c3837", null ],
+    [ "PEndTime", "_radio_functions_8cpp.html#a7e1ad468c45da1e139521369743a945c", null ],
+    [ "PStartTime", "_radio_functions_8cpp.html#aeb7f71a83cf50adff09cfc54384bcf9f", null ]
 ];
