@@ -162,11 +162,10 @@ void GetNextFrequency(){
 
 void HopToNextFrequency()
 {
-    CurrentRadio->stopListening();
+  //  CurrentRadio->stopListening();
     CurrentRadio->setChannel(NextFrequency);
-    CurrentRadio->startListening();
-    
-    
+  //  CurrentRadio->startListening();
+    delay(1);
 #ifdef DEBUG
     ShowHopDurationEtc();
 #endif
@@ -219,6 +218,7 @@ uint8_t  ReconnectAttempts  = 0;
             SearchStartTime = millis();
             FailSafeSent = false; 
             CurrentRadio->stopListening();
+            delay(4);
             CurrentRadio->setChannel(RECONNECT_CH);
             CurrentRadio->startListening();
             delay(4);   
