@@ -90,6 +90,7 @@ extern uint32_t       TotalledRecentPacketsLost;
 extern uint32_t       TxOnTime;
 extern uint32_t       TXTimeStamp;
 extern uint32_t       HopStart;
+extern char           ThisRadio[4];
 
 extern void  KickTheDog();
 extern void  SendCommand(char* tbox);
