@@ -269,7 +269,7 @@ $(document).ready(function(){initNavTree('_radio_functions_8cpp_source.html','')
 <div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;        y2 = y2 - <a class="code" href="_radio_functions_8h.html#a340f5f74a3364594ad9b460d4b5b04d5">AllChannels</a>[Sc];</div>
 <div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;        delayMicroseconds(120); <span class="comment">// Minimum!?</span></div>
 <div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;        <a class="code" href="_radio_functions_8h.html#aae23a8374f487a46c5fcb1fb02fadc69">Radio1</a>.stopListening();</div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;        delay(4);</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;        delay(2);</div>
 <div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="_radio_functions_8h.html#aae23a8374f487a46c5fcb1fb02fadc69">Radio1</a>.testCarrier()) {</div>
 <div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="_radio_functions_8h.html#a340f5f74a3364594ad9b460d4b5b04d5">AllChannels</a>[Sc] &lt; (250)) {</div>
 <div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;                <a class="code" href="_radio_functions_8h.html#a340f5f74a3364594ad9b460d4b5b04d5">AllChannels</a>[Sc] += BlobHeight;</div>
@@ -296,8 +296,8 @@ $(document).ready(function(){initNavTree('_radio_functions_8cpp_source.html','')
 <div class="line"><a name="l00205"></a><span class="lineno"><a class="line" href="_radio_functions_8cpp.html#aa48ea4c5d47aa93d17dbc7d7b19238d8">  205</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="_radio_functions_8cpp.html#aa48ea4c5d47aa93d17dbc7d7b19238d8">HopToNextFrequency</a>()</div>
 <div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;{</div>
 <div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;    <a class="code" href="_radio_functions_8h.html#aae23a8374f487a46c5fcb1fb02fadc69">Radio1</a>.setChannel(<a class="code" href="radio_8h.html#a97e43b2285fba75691d8bef36902b9d8">NextFrequency</a>);</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;    <a class="code" href="_radio_functions_8h.html#aae23a8374f487a46c5fcb1fb02fadc69">Radio1</a>.stopListening();</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;    delay(4);</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;   <span class="comment">// Radio1.stopListening();   // needed???? Heer......</span></div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;    <span class="comment">//delay(2);</span></div>
 <div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;    <a class="code" href="_radio_functions_8h.html#ab0af36f3442ad4f2d0b716c14c7d6085">ReadSwitches</a>();</div>
 <div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;    <a class="code" href="_radio_functions_8h.html#aac472b3398ab38e7f54b1a2cae96ba62">ShowComms</a>();</div>
 <div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;    <a class="code" href="_radio_functions_8h.html#addfc131a271de92cb52d869fde35729e">CheckTimer</a>(); <span class="comment">// update timer if on</span></div>
@@ -328,7 +328,7 @@ $(document).ready(function(){initNavTree('_radio_functions_8cpp_source.html','')
 <div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;    <a class="code" href="_radio_functions_8h.html#aae23a8374f487a46c5fcb1fb02fadc69">Radio1</a>.openWritingPipe(Pipe);    <span class="comment">// Current Pipe address used for Binding</span></div>
 <div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;    <a class="code" href="_radio_functions_8h.html#aae23a8374f487a46c5fcb1fb02fadc69">Radio1</a>.setRetries(15, 15);       <span class="comment">// Max automatic retries = (15,15). Packet failure will take 0.06 seconds</span></div>
 <div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;    <a class="code" href="_radio_functions_8h.html#aae23a8374f487a46c5fcb1fb02fadc69">Radio1</a>.stopListening();          <span class="comment">// It&#39;s a true Messiter</span></div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;    delay(4);</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;    delay(2);</div>
 <div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;    <a class="code" href="_radio_functions_8h.html#aae23a8374f487a46c5fcb1fb02fadc69">Radio1</a>.enableDynamicPayloads();  <span class="comment">// Needed</span></div>
 <div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;    <a class="code" href="_radio_functions_8h.html#aae23a8374f487a46c5fcb1fb02fadc69">Radio1</a>.setAddressWidth(5);       <span class="comment">// was 4, is now 5</span></div>
 <div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;    <a class="code" href="_radio_functions_8h.html#aae23a8374f487a46c5fcb1fb02fadc69">Radio1</a>.setCRCLength(RF24_CRC_8); <span class="comment">// could be 16</span></div>
@@ -341,8 +341,8 @@ $(document).ready(function(){initNavTree('_radio_functions_8cpp_source.html','')
 <div class="line"><a name="l00250"></a><span class="lineno"><a class="line" href="_radio_functions_8cpp.html#a70dc6f8d2e5ccef6b8e4a2b9b0afb2ce">  250</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="_radio_functions_8cpp.html#a70dc6f8d2e5ccef6b8e4a2b9b0afb2ce">SetThePipe</a>(uint64_t WhichPipe)</div>
 <div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;{</div>
 <div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;    <a class="code" href="_radio_functions_8h.html#aae23a8374f487a46c5fcb1fb02fadc69">Radio1</a>.openWritingPipe(WhichPipe);</div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;    <a class="code" href="_radio_functions_8h.html#aae23a8374f487a46c5fcb1fb02fadc69">Radio1</a>.stopListening();</div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;    delay (4);  <span class="comment">// alllow things to happen</span></div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;  <span class="comment">//  Radio1.stopListening();</span></div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;   <span class="comment">// delay (4);  // alllow things to happen</span></div>
 <div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160; }</div>
 <div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160; </div>
 <div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;<span class="comment">/*********************************************************************************************************************************/</span></div>
@@ -366,8 +366,8 @@ $(document).ready(function(){initNavTree('_radio_functions_8cpp_source.html','')
 <div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;    <a class="code" href="_radio_functions_8h.html#aecac2f0c289f02ef3c92b85be82eacac">SendCommand</a>(<a class="code" href="_radio_functions_8h.html#a11599eb6fbd014f01f2966003929b08e">NextionSleepTime</a>);</div>
 <div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;    <a class="code" href="_radio_functions_8h.html#aae23a8374f487a46c5fcb1fb02fadc69">Radio1</a>.setDataRate(RF24_250KBPS);</div>
 <div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;    <a class="code" href="_radio_functions_8h.html#aae23a8374f487a46c5fcb1fb02fadc69">Radio1</a>.openWritingPipe(<a class="code" href="_radio_functions_8h.html#a0b9fd9f8e85725c128617f006132ea57">DefaultPipe</a>);</div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;    <a class="code" href="_radio_functions_8h.html#aae23a8374f487a46c5fcb1fb02fadc69">Radio1</a>.stopListening();</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;    delay(4);</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;  <span class="comment">//  Radio1.stopListening();</span></div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;   <span class="comment">// delay(2);</span></div>
 <div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;    <a class="code" href="_radio_functions_8h.html#aacabee92eb3ddd2e3cf31695c00a912e">CurrentMode</a> = <a class="code" href="_radio_functions_8h.html#a1291f416b069313021b519eea62d5bf1">NORMAL</a>;</div>
 <div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;}</div>
 <div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;<span class="comment">/*********************************************************************************************************************************/</span></div>
