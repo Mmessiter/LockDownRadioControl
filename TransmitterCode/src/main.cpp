@@ -3700,7 +3700,7 @@ void SendModelFile()
     Radio1.setPALevel(FILEPALEVEL);
     Radio1.openWritingPipe(TXPipe);
     Radio1.stopListening();
-    delay(4);
+    delay(2);
     while (Fposition < Fsize) {
         KickTheDog(); // Watchdog
         p = ((float)Fposition / (float)Fsize) * 100;

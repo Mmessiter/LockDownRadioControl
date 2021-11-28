@@ -178,7 +178,7 @@ void ScanAllChannels()
         y2 = y2 - AllChannels[Sc];
         delayMicroseconds(120); // Minimum!?
         Radio1.stopListening();
-        delay(4);
+        delay(2);
         if (Radio1.testCarrier()) {
             if (AllChannels[Sc] < (250)) {
                 AllChannels[Sc] += BlobHeight;
@@ -205,8 +205,8 @@ void ScanAllChannels()
 void HopToNextFrequency()
 {
     Radio1.setChannel(NextFrequency);
-    Radio1.stopListening();
-    delay(4);
+   // Radio1.stopListening();   // needed???? Heer......
+    //delay(2);
     ReadSwitches();
     ShowComms();
     CheckTimer(); // update timer if on
@@ -237,7 +237,7 @@ void InitRadio(uint64_t Pipe)
     Radio1.openWritingPipe(Pipe);    // Current Pipe address used for Binding
     Radio1.setRetries(15, 15);       // Max automatic retries = (15,15). Packet failure will take 0.06 seconds
     Radio1.stopListening();          // It's a true Messiter
-    delay(4);
+    delay(2);
     Radio1.enableDynamicPayloads();  // Needed
     Radio1.setAddressWidth(5);       // was 4, is now 5
     Radio1.setCRCLength(RF24_CRC_8); // could be 16
@@ -250,8 +250,8 @@ void InitRadio(uint64_t Pipe)
 void SetThePipe(uint64_t WhichPipe)
 {
     Radio1.openWritingPipe(WhichPipe);
-    Radio1.stopListening();
-    delay (4);  // alllow things to happen
+  //  Radio1.stopListening();
+   // delay (4);  // alllow things to happen
  }
 
 /*********************************************************************************************************************************/
@@ -275,8 +275,8 @@ void DoScanEnd()
     SendCommand(NextionSleepTime);
     Radio1.setDataRate(RF24_250KBPS);
     Radio1.openWritingPipe(DefaultPipe);
-    Radio1.stopListening();
-    delay(4);
+  //  Radio1.stopListening();
+   // delay(2);
     CurrentMode = NORMAL;
 }
 /*********************************************************************************************************************************/
