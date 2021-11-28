@@ -5517,6 +5517,7 @@ if ((TXTimeStamp == 0) || (TXTimeStamp > HOPTIME )) { // is it time (or indeed i
         HopToNextFrequency();
 }
       ClearAckPayload();
+      CheckTimer();
       ReadSwitches();
       ShowComms();
 }
