@@ -4083,7 +4083,6 @@ void Button_was_pressed()
             ClearText();
             SendCommand(page_SetupView);
             DoScanEnd();
-           // Serial.println ("TEST");
             return;
         }
 
@@ -5320,7 +5319,6 @@ void LoadPacketData()
             break;
         case 13:
             SendBuffer[CHANNELSUSED + 3] = BindingNow;
-            Serial.println (BindingNow);
             if (BindingNow == 1) {
                 BindingTimer = millis(); // start a timer
                 BindingNow   = 2;

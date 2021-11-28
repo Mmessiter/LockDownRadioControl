@@ -204,8 +204,8 @@ void ScanAllChannels()
 void HopToNextFrequency()
 {
     Radio1.setChannel(NextFrequency);
-   // Radio1.stopListening();   // needed???? Heer......
-    //delay(2);
+    Radio1.stopListening();   // needed???? Heer......
+    delay(2);
     ReadSwitches();
     CheckTimer(); // update timer if on
     ShowComms();
@@ -218,6 +218,7 @@ void HopToNextFrequency()
     Serial.print(PacketNumber);
     Serial.print(" Next channel: ");
     Serial.print(FHSS_Channels[NextChannelNumber]);
+    if ((FHSS_Channels[NextChannelNumber]) < 10) Serial.print(" ");
     Serial.println(BoundFlag ? " Bound!" : " NOT BOUND.");
     PSTARTTIME = millis();
 #endif

@@ -218,11 +218,10 @@ uint8_t  ReconnectAttempts  = 0;
             SearchStartTime = millis();
             FailSafeSent = false; 
             CurrentRadio->stopListening();
-            delay(2);
+            delay(3);
             CurrentRadio->setChannel(RECONNECT_CH);
-            delay(2);
             CurrentRadio->startListening();
-            delay(2);   
+            delay(3);   
             if (CurrentRadio->available()) Connected = true;
     
             while (!Connected)
