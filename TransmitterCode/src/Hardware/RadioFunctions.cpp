@@ -122,10 +122,12 @@ void SendData()
       
         Connected = false;      
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);        // Compress 32 bytes down to 24
-
+        Radio1.flush_rx();
+        Radio1.flush_tx();
 //  *************************************** SEND *************************************************************************************
         Radio1.write(&CompressedData, SizeOfCompressedData);  //  ******** !SEND! ********     
 //  *************************************** SEND *************************************************************************************
+ 
         if (Radio1.isAckPayloadAvailable()) 
                {
                     (Radio1.read(&AckPayload, AckPayloadSize));         //  "sizeof" doesn't work with externs, hence 2 new vars.
@@ -143,7 +145,7 @@ void SendData()
                {
                     FailedPacket();  
                }
-        Radio1.flush_tx();
+        
     }
 }
 
