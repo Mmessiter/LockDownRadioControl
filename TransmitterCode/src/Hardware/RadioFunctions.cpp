@@ -205,7 +205,7 @@ void HopToNextFrequency()
 {
     Radio1.setChannel(NextFrequency);
     Radio1.stopListening();   // needed???? Heer......
-    delay(2);
+    delay(4);
     ReadSwitches();
     CheckTimer(); // update timer if on
     ShowComms();
@@ -238,7 +238,7 @@ void InitRadio(uint64_t Pipe)
     Radio1.enableAckPayload();       // Needed
     Radio1.openWritingPipe(Pipe);    // Current Pipe address used for Binding
     Radio1.setRetries(15, 15);       // Max automatic retries = (15,15). Packet failure will take 0.06 seconds
-    Radio1.stopListening();          // It's a true Messiter
+    Radio1.stopListening();          
     Radio1.enableDynamicPayloads();  // Needed
     Radio1.setAddressWidth(5);       // was 4, is now 5
     Radio1.setCRCLength(RF24_CRC_8); // could be 16
@@ -251,8 +251,8 @@ void InitRadio(uint64_t Pipe)
 void SetThePipe(uint64_t WhichPipe)
 {
     Radio1.openWritingPipe(WhichPipe);
-  //  Radio1.stopListening();
-   // delay (4);  // alllow things to happen
+    Radio1.stopListening();
+    delay (4);  // alllow things to happen
  }
 
 /*********************************************************************************************************************************/

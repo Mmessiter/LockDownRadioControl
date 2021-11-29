@@ -410,10 +410,18 @@ void CheckParams()
             }
             break;
         case 7:
-         
+             BindNow = ReceivedData[CHANNELSUSED + 3];
+             
+             FailSafeSave = bool(ReceivedData[CHANNELSUSED + 2]);
+                if (FailSafeSave) {
+                TwoBytes = uint16_t(byte2) + uint16_t(byte1 << 8);
+                RebuildFlags(FailSafeChannel, TwoBytes);
+            }
+
             break;
         case 8:
-           
+            byte1 = ReceivedData[CHANNELSUSED + 2]; // These bytes are failsafe flags
+            byte2 = ReceivedData[CHANNELSUSED + 3]; // These bytes are failsafe flags
             break;
         case 9:
             YawPID.P = ReceivedData[CHANNELSUSED + 3];
@@ -425,27 +433,7 @@ void CheckParams()
         case 11:
             YawPID.D = ReceivedData[CHANNELSUSED + 3];
             break;
-        case 12:
-            ModelType = ReceivedData[CHANNELSUSED + 3];
-            break;
-        case 13:
-            BindNow = ReceivedData[CHANNELSUSED + 3]; 
-            break;
-        case 14:
-            byte1 = ReceivedData[CHANNELSUSED + 3]; // These bytes are failsafe flags
-            break;
-        case 15:
-            byte2 = ReceivedData[CHANNELSUSED + 3]; // These bytes are failsafe flags
-            break;
-        case 16:
-            FailSafeSave = bool(ReceivedData[CHANNELSUSED + 3]);
-            if (FailSafeSave) {
-                TwoBytes = uint16_t(byte2) + uint16_t(byte1 << 8);
-                RebuildFlags(FailSafeChannel, TwoBytes);
-            }
-            break;
-        case 17:
-            break;
+      
         default:
             break; 
     }

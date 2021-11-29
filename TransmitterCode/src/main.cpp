@@ -1250,6 +1250,9 @@ void ShowComms()
     char  DataView_Ts[]          = "Ts";
     char  DataView_Sc[]          = "Success";
     char  DataView_Rx[]          = "rx";
+    char  DataView_Sg[]          = "Sg";
+    char  DataView_Ag[]          = "Ag";
+    char  DataView_Gc[]          = "Gc"; 
     char  WarnNow[]              = "vis Warning,1";
     char  WarnOff[]              = "vis Warning,0";
     char  TXVolts[]              = "t21";
@@ -1332,6 +1335,9 @@ void ShowComms()
                     SendValue(DataView_Ls, GapLongest);
                     SendValue(DataView_Ts, GapSum);
                     SendValue(DataView_Sc, success);
+                    SendValue(DataView_Sg, GapShortest);
+                    SendValue(DataView_Ag, GapAverage);
+                    SendValue(DataView_Gc, GapCount);
             }
             ReadVolts = atof(ModelVolts) * 10;
             // 6s Max 25.2 -> 20.4
@@ -3703,7 +3709,7 @@ void SendModelFile()
     Radio1.setPALevel(FILEPALEVEL);
     Radio1.openWritingPipe(TXPipe);
     Radio1.stopListening();
-    delay(2);
+    delay(4);
     while (Fposition < Fsize) {
         KickTheDog(); // Watchdog
         p = ((float)Fposition / (float)Fsize) * 100;
@@ -4057,6 +4063,7 @@ void Button_was_pressed()
     char pTypeView[]           = "page TypeView";
     char pCalibrateView[]      = "page CalibrateView";
     char pFailSafe[]           = "page FailSafeView";
+    char DataView_Clear[]      = "Clear";
 
     if (strlen(WordsIn) > 0) {
         StartInactvityTimeout();
@@ -4079,6 +4086,16 @@ void Button_was_pressed()
             ClearText();
             CurrentMode = NORMAL;
             return;
+        }
+        if (InStrng(DataView_Clear, WordsIn) > 0) { //  goto setup screen from Data screen
+           LostPackets  = 0;
+           GapShortest  = 0;
+           GapLongest   = 0;
+           GapSum       = 0;
+           GapAverage   = 0;
+           GapCount     = 0;
+           ClearText();
+           return;
         }
 
         if (InStrng(Scan_End, WordsIn) > 0) { //  goto setup screen from Scan screen
@@ -5279,10 +5296,8 @@ void LoadPacketData()
     uint8_t  uint8_t1;
     uint8_t  uint8_t2;
 
-    uint8_t dummydata = 42;
 
     SendBuffer[CHANNELSUSED + 1] = PacketNumber;  
-    SendBuffer[CHANNELSUSED + 2] = dummydata;  // SPARE NOW!
 
     Twobytes = MakeTwobytes(FailSafeChannel); // 16 bool values compressed to 16 bits
     uint8_t1 = uint8_t(Twobytes >> 8);        // sent as two bytes
@@ -5302,10 +5317,17 @@ void LoadPacketData()
             if (ModelDetected) SendBuffer[CHANNELSUSED + 3] = ModelNumber; // send model number but not before reading one!
             break;
         case 7:
-          SendBuffer[CHANNELSUSED + 3] = dummydata; // no longer used
+            SendBuffer[CHANNELSUSED + 3] = BindingNow;
+            if (BindingNow == 1) {
+                BindingTimer = millis(); // start a timer
+                BindingNow   = 2;
+            }
+            SendBuffer[CHANNELSUSED + 2] = SaveFailSafeNow; // FailSafeSaveMoment
+            SaveFailSafeNow    = false;                     // once should do it.
             break;
         case 8:
-           SendBuffer[CHANNELSUSED + 3] = dummydata; // no longer used
+             SendBuffer[CHANNELSUSED + 2] = uint8_t2; // these are failsafe flags
+             SendBuffer[CHANNELSUSED + 3] = uint8_t1; // these are failsafe flags
             break;
         case 9:
             SendBuffer[CHANNELSUSED + 3] = yawp[FlightMode];
@@ -5319,23 +5341,6 @@ void LoadPacketData()
         case 12:
             if (ModelType == 0) ModelType = 1; // in case we forgot to define it!
             SendBuffer[CHANNELSUSED + 3] = ModelType;
-            break;
-        case 13:
-            SendBuffer[CHANNELSUSED + 3] = BindingNow;
-            if (BindingNow == 1) {
-                BindingTimer = millis(); // start a timer
-                BindingNow   = 2;
-            }
-            break;
-        case 14:
-            SendBuffer[CHANNELSUSED + 3] = uint8_t1; // these are failsafe flags
-            break;
-        case 15:
-            SendBuffer[CHANNELSUSED + 3] = uint8_t2; // these are failsafe flags
-            break;
-        case 16:
-            SendBuffer[CHANNELSUSED + 3] = SaveFailSafeNow; // FailSafeSaveMoment
-            SaveFailSafeNow              = false;           // once should do it.
             break;
         default: 
             break;
