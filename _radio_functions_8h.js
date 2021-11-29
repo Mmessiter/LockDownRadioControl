@@ -2,6 +2,7 @@ var _radio_functions_8h =
 [
     [ "CALIBRATELIMITS", "_radio_functions_8h.html#a8d671ce93ba33f2f6b5c314108d3592d", null ],
     [ "CENTRESTICKS", "_radio_functions_8h.html#a53bc52cfc1253f58c2f3835aa39205a3", null ],
+    [ "DB_GAPS", "_radio_functions_8h.html#a457b43e5bab13fd2425e1eb38f875837", null ],
     [ "FREQUENCYSCOUNT", "_radio_functions_8h.html#afe5bce36baf737bd284d43cd0e805fdb", null ],
     [ "HOPTIME", "_radio_functions_8h.html#a57d506b5f34172770c8d645c12cb5ba2", null ],
     [ "KICKRATE", "_radio_functions_8h.html#a639fb69a9b4f236e3b1a16435b82bb81", null ],
@@ -54,7 +55,7 @@ var _radio_functions_8h =
     [ "DefaultPipe", "_radio_functions_8h.html#a0b9fd9f8e85725c128617f006132ea57", null ],
     [ "FHSS_Channels", "_radio_functions_8h.html#a04e4fafd0e5c4b4b64317128f248a929", null ],
     [ "GapStart", "_radio_functions_8h.html#aefd589330e26c925a4c6f97b6a8cf98e", null ],
-    [ "GapSum", "_radio_functions_8h.html#ad127f588ea25098d5efb230ec10423f0", null ],
+    [ "GapSum", "_radio_functions_8h.html#a9942132c4d194a03fc9791cfdf876ac3", null ],
     [ "HopStart", "_radio_functions_8h.html#a937fc53e966c6b5c66b9d66c01cec13f", null ],
     [ "i", "_radio_functions_8h.html#ac8936188af0c1d2f8b9d0cd25fde43b2", null ],
     [ "JustHoppedFlag", "_radio_functions_8h.html#ae768cbeda38b92908ae481b943893e3b", null ],
