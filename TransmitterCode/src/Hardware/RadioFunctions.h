@@ -38,7 +38,6 @@
 // #define DB_NEXTION        // Debug Nextion and SD card data
 // #define DB_FHSS           // Debug real time FHSS data
 // #define DB_FHSS1          // Debug new FHSS data
-// #define DB_CHANNEL_AVOID  // Debug FHSS channel avoiding data etc
 // #define DB_SENSORS        // Debug Sensors
 // #define DB_BIND           // Debug Binding
 // #define DB_SWITCHES       // Debug Switches
@@ -91,6 +90,9 @@ extern uint32_t       TXTimeStamp;
 extern uint32_t       HopStart;
 extern char           ThisRadio[4];
 extern uint32_t       GapSum;
+extern uint32_t       GapStart;
+extern uint8_t        BadChannelMax;
+extern uint32_t       RXTimeStamp;
 
 extern void  KickTheDog();
 extern void  SendCommand(char* tbox);
@@ -106,9 +108,7 @@ extern void  GreenLedOn();
 extern void  CheckGapsLength();
 extern void  ParseAckPayload();
 extern void  FailedPacket();
-extern uint32_t   GapStart;
-extern uint8_t BadChannelMax;
-extern uint32_t RXTimeStamp;
+
 
 /*********************************************************************************************************************************/
 // function prototypes

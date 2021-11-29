@@ -1430,13 +1430,12 @@ void FailedPacket()
       if (RecentPacketsLost > LOSTCONTACTCUTOFF) {
          LostContactFlag   = true;
          RecentPacketsLost = 0;
-        RedLedOn();
-        ShowComms();
+         RedLedOn();
     }
     ++LostPackets;
     ShowComms();
     secondsRemaining = (Inactivity_Timeout / 1000) - (millis() - Inactivity_Start) / 1000;
-    if (secondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH); // INACTIVITY POWER OFF
+    if (secondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH);     // INACTIVITY POWER OFF
 }
 
 /*********************************************************************************************************************************/
