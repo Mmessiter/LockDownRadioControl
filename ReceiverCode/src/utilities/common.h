@@ -14,8 +14,8 @@
 #include <EEPROM.h>
 
 #define RXVERSION_MAJOR   1
-#define RXVERSION_MINOR   2
-#define RXVERSION_MINIMUS 0 // Nov 23rd 2021
+#define RXVERSION_MINOR   3
+#define RXVERSION_MINIMUS 0 // Nov 29th 2021
 
 
 // #define DEBUG

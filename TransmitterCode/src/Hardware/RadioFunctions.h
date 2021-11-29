@@ -2,8 +2,8 @@
 #ifndef RadioFunctions_H
 #define RadioFunctions_H
 
-#define TXVERSION_MAJOR   1 //   Nov 23rd 2021 Malcolm Messiter
-#define TXVERSION_MINOR   2
+#define TXVERSION_MAJOR   1 //   Nov 29th 2021 Malcolm Messiter
+#define TXVERSION_MINOR   3
 #define TXVERSION_MINIMUS 0
 
 #define HOPTIME           95    // A New Frequency Hop every 95 ms (must match receiver setting)
