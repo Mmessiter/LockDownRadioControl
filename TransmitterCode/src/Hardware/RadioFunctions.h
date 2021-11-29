@@ -43,7 +43,7 @@
 // #define DB_BIND           // Debug Binding
 // #define DB_SWITCHES       // Debug Switches
 // #define DB_MODEL_EXCHANGE // Debug MODEL EXCHANGE (by RF link)
-// #define DB_NEWFHSS        // Debug revised FFHS system
+   #define DB_GAPS           // Debug Connection Gap assessment
 
 #include <RF24.h>
 
@@ -52,7 +52,6 @@
 
 extern RF24           Radio1;
 extern int            PipeTimeout;
-extern int            GapSum;
 extern uint8_t        CurrentMode;
 extern uint8_t        NoCarrier[];
 extern uint8_t        AllChannels[];
@@ -91,6 +90,7 @@ extern uint32_t       TxOnTime;
 extern uint32_t       TXTimeStamp;
 extern uint32_t       HopStart;
 extern char           ThisRadio[4];
+extern uint32_t       GapSum;
 
 extern void  KickTheDog();
 extern void  SendCommand(char* tbox);

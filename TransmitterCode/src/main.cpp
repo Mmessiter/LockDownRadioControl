@@ -309,10 +309,13 @@ uint32_t TotalledRecentPacketsLost    = 0;
 long int RecoveryTimer                = 0;
 bool     ReconnectingFlag             = true;
 int      ReconnectTime                = 0;
-int      GapSum                       = 0;
+uint32_t GapSum                       = 0;
 uint32_t GapLongest                   = 0;
 uint32_t GapStart                     = 0;
 uint32_t ThisGap                      = 0;
+uint32_t GapAverage                   = 0;
+uint32_t GapCount                     = 0;
+uint32_t GapShortest                  = 0;
 char     CalibrateNow[]               = "touch_j";
 char     ModelVolts[12]               = " ";
 char     ModelAltitude[12]            = " ";
@@ -5567,12 +5570,29 @@ void ParseAckPayload()
 void CheckGapsLength()
 {
     if (GapStart > 0) { // if Reconnected, how long was connection lost?
+       ++GapCount;
        ThisGap = millis() - GapStart;
+       if (!GapShortest) GapShortest = ThisGap;
        if (ThisGap > GapLongest) {
                 GapLongest = ThisGap;
         }
+       if (ThisGap < GapShortest) {
+                GapShortest = ThisGap;
+        }
         GapSum += ThisGap;
         GapStart = 0;
+        GapAverage = GapSum / GapCount;
+#ifdef DB_GAPS 
+        Serial.print ("GapCount: ") ;
+        Serial.println (GapCount) ;
+        Serial.print ("GapAverage: ") ;
+        Serial.println (GapAverage) ;
+        Serial.print ("GapShortest: ") ;
+        Serial.println (GapShortest) ;
+        Serial.print ("GapLongest: ") ;
+        Serial.println (GapLongest) ;
+        Serial.println (" ") ;
+#endif
     }
 }
 
