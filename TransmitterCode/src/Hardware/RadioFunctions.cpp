@@ -87,14 +87,8 @@ void TryOtherPipe()
 }
 /************************************************************************************************************/
 
-void SendData()
+void BufferNewPipe()
 {
-    if (Nextion.available()) return;   // was a button pressed?
-    if ((millis() - TxPace) >= PACEMAKER) {
-        TxPace = millis();
-        get_new_channels_values(); // Load SendBuffer with new servo positions
- 
-        if (!BoundFlag && !(CurrentView == CalibrateView) && !(CurrentView == SticksView)) {
             SendBuffer[0] = (uint8_t)((NewPipe >> 56) & 0xFF); // if not yet bound, send pipe
             SendBuffer[1] = (uint8_t)((NewPipe >> 48) & 0xFF);
             SendBuffer[2] = (uint8_t)((NewPipe >> 40) & 0xFF);
@@ -103,9 +97,20 @@ void SendData()
             SendBuffer[5] = (uint8_t)((NewPipe >> 16) & 0xFF);
             SendBuffer[6] = (uint8_t)((NewPipe >> 8) & 0xFF);
             SendBuffer[7] = (uint8_t)((NewPipe)&0xFF);
-        }
+}
+/************************************************************************************************************/
 
-        LoadPacketData();
+void SendData()
+{
+    if (Nextion.available()) return;   // was a button pressed?
+    if ((millis() - TxPace) >= PACEMAKER) {
+        TxPace = millis();
+        get_new_channels_values(); // Load SendBuffer with new servo positions
+        if (!BoundFlag && !(CurrentView == CalibrateView) && !(CurrentView == SticksView)) 
+            {
+            BufferNewPipe();       // if not yet bound, send our pipe
+            }
+        LoadPacketData();          // extra parameters appended to the data packet
   
         if (LostContactFlag) {
                 if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {
@@ -124,6 +129,7 @@ void SendData()
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);        // Compress 32 bytes down to 24
         Radio1.flush_rx();
         Radio1.flush_tx();
+
 //  *************************************** SEND *************************************************************************************
         Radio1.write(&CompressedData, SizeOfCompressedData);  //  ******** !SEND! ********     
 //  *************************************** SEND *************************************************************************************
