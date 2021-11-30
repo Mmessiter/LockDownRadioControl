@@ -38,6 +38,6 @@ var searchData=
   ['stabilizepitchrate_836',['StabilizePitchRate',['../imu_8h.html#a49760866b31e1d6fdc7354d0bfe1e214',1,'imu.h']]],
   ['stabilizerollrate_837',['StabilizeRollRate',['../imu_8h.html#a728333ba3718182e54444a5d42dfaf42',1,'imu.h']]],
   ['stabilizeyawrate_838',['StabilizeYawRate',['../imu_8h.html#ae6c34569f8567a3895fddfd6448bcee2',1,'imu.h']]],
-  ['startinactvitytimeout_839',['StartInactvityTimeout',['../_transmitter_code_2src_2main_8cpp.html#a793b7bcd77531c95fe72ed4356d421c8',1,'main.cpp']]],
+  ['startinactvitytimeout_839',['StartInactvityTimeout',['../_radio_functions_8h.html#a793b7bcd77531c95fe72ed4356d421c8',1,'StartInactvityTimeout():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a793b7bcd77531c95fe72ed4356d421c8',1,'StartInactvityTimeout():&#160;main.cpp']]],
   ['str_840',['Str',['../_radio_functions_8h.html#ab399ea9eaf21f0d7d034a8e2dcaa6e39',1,'Str(char *s, int n, int comma):&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#ab399ea9eaf21f0d7d034a8e2dcaa6e39',1,'Str(char *s, int n, int comma):&#160;main.cpp']]]
 ];

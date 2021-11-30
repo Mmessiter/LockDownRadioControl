@@ -69,7 +69,7 @@ var searchData=
   ['stabilizerollrate_534',['StabilizeRollRate',['../imu_8h.html#a728333ba3718182e54444a5d42dfaf42',1,'imu.h']]],
   ['stabilizeyawrate_535',['StabilizeYawRate',['../imu_8h.html#ae6c34569f8567a3895fddfd6448bcee2',1,'imu.h']]],
   ['startaltitude_536',['StartAltitude',['../_receiver_code_2src_2main_8cpp.html#a803d7b39ac894b6340d68e152e902c19',1,'main.cpp']]],
-  ['startinactvitytimeout_537',['StartInactvityTimeout',['../_transmitter_code_2src_2main_8cpp.html#a793b7bcd77531c95fe72ed4356d421c8',1,'main.cpp']]],
+  ['startinactvitytimeout_537',['StartInactvityTimeout',['../_transmitter_code_2src_2main_8cpp.html#a793b7bcd77531c95fe72ed4356d421c8',1,'StartInactvityTimeout():&#160;main.cpp'],['../_radio_functions_8h.html#a793b7bcd77531c95fe72ed4356d421c8',1,'StartInactvityTimeout():&#160;main.cpp']]],
   ['startlocation_538',['StartLocation',['../_transmitter_code_2src_2main_8cpp.html#a4037de0ea0fc7cd3c7cd3c40eee10a98',1,'main.cpp']]],
   ['sticksrate_539',['STICKSRATE',['../_receiver_code_2src_2main_8cpp.html#abbca4c9f296f6468f8579ad18f5f5e83',1,'main.cpp']]],
   ['sticksview_540',['SticksView',['../_radio_functions_8cpp.html#ab7abdd2877694598578f0c4d717f46e8',1,'SticksView():&#160;RadioFunctions.cpp'],['../_transmitter_code_2src_2main_8cpp.html#ab7abdd2877694598578f0c4d717f46e8',1,'SticksView():&#160;main.cpp']]],
