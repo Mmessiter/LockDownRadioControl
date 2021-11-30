@@ -317,10 +317,12 @@ bool ReadData()
     if (CurrentRadio->available()) {
         LoadAckPayload();
         Connected            = true;
+        CurrentRadio->flush_tx();
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // Send telemetry (actual length plus 0)
         CurrentRadio->read(&CompressedData, sizeof(CompressedData));   // Get Data
         Decompress(ReceivedData, CompressedData, UNCOMPRESSEDWORDS); // decompress data
         MapToSBUS();
+        CurrentRadio->flush_rx();
         ClearAckPayload();
         LastConnectionMoment = millis();
         if (HopNow) {     // this flag gets set in LoadAckPayload();
