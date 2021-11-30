@@ -812,6 +812,9 @@ bool MayBeAddZero(uint8_t nn)
 void ReadTime()
 {
     static char month[12][15] = {"January", "February", "March", "April", "May", "June", "July", "August", "Sept", "October", "November", "December"};
+    static char ShortMonth[12][7] = {"Jan. ", "Feb. ", "Mar. ", "Apr. ", "May  ", "June ", "July ", "Aug. ", "Sept ", "Oct. ", "Nov. ", "Dec. "};
+   
+    
     char        NB[10];
     char        TimeString[50];
     char        Space[] = " ";
@@ -819,11 +822,18 @@ void ReadTime()
     char        zero[]  = "0";
 
     char Owner[] = "Owner";
+   
     if (CurrentView == FrontView || CurrentView == Options_View) {
         if (RTC.read(tm)) {
             strcpy(TimeString, Str(NB, tm.Day, 0));
             strcat(TimeString, Space);
-            strcat(TimeString, month[tm.Month - 1]);
+            if (CurrentView == Options_View)  
+            {
+                strcat(TimeString, ShortMonth[tm.Month - 1]);
+            } else 
+            {
+                strcat(TimeString, month[tm.Month - 1]);
+            }
             strcat(TimeString, Space);
             strcat(TimeString, (Str(NB, tmYearToCalendar(tm.Year), 0)));
             strcat(TimeString, Space);
@@ -1248,7 +1258,6 @@ void ShowComms()
     char  DataView_rxv[]         = "rxv";
     char  DataView_Ls[]          = "Ls";
     char  DataView_Ts[]          = "Ts";
-    char  DataView_Sc[]          = "Success";
     char  DataView_Rx[]          = "rx";
     char  DataView_Sg[]          = "Sg";
     char  DataView_Ag[]          = "Ag";
@@ -1334,7 +1343,7 @@ void ShowComms()
                     SendText(DataView_rxv,ReceiverVersionNumber);
                     SendValue(DataView_Ls, GapLongest);
                     SendValue(DataView_Ts, GapSum);
-                    SendValue(DataView_Sc, success);
+                    //SendValue(DataView_Sc, success);
                     SendValue(DataView_Sg, GapShortest);
                     SendValue(DataView_Ag, GapAverage);
                     SendValue(DataView_Gc, GapCount);
@@ -2504,10 +2513,10 @@ void setup()
 
 void GetStatistics()
 {
-    success              = (float(RangeTestGoodPackets) / (float(RangeTestGoodPackets) + float(RangeTestLostPackets))) * 100;
+   // success              = (float(RangeTestGoodPackets) / (float(RangeTestGoodPackets) + float(RangeTestLostPackets))) * 100;
     PacketsPerSecond     = RangeTestGoodPackets;
     RangeTestGoodPackets = 0;
-    RangeTestLostPackets = 0;
+   // RangeTestLostPackets = 0;
 }
 
 /*********************************************************************************************************************************/
@@ -5607,11 +5616,7 @@ void CheckGapsLength()
 
 void loop()
 {
-
     KickTheDog(); // Watchdog
-
-   
-
     if (millis() - LastTimeRead >= 1000) {
         ReadTime();
         LastTimeRead = millis();
@@ -5629,7 +5634,7 @@ void loop()
     } // Deal with button!
 
 
-    if ((millis() - TxOnTime) > 2000) { // Transmit nothing for 1.5 seconds
+    if ((millis() - TxOnTime) > 2000) { // Transmit nothing for first 2 seconds
         switch (CurrentMode) {
             case 0:
                 SendData();  
