@@ -500,7 +500,7 @@ FASTRUN void ReceiveData()
       if (millis() - LastConnectionMoment >= RECEIVE_TIMEOUT) {
          Reconnect();
       }
-    if (ReadData() ) {
+    if (ReadData()) { 
         CheckParams();
     }
 }
