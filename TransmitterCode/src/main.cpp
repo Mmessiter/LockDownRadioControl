@@ -444,7 +444,6 @@ char         DateTime[] = "DateTime";
 
 int     XtouchPlace = 0;     // Clicked X
 int     YtouchPlace = 0;     // Clicked Y
-bool    SetupFlag   = false; // No transmitter while setting up
 uint8_t zero        = 0x00;  
 bool    BindButton = false;
 uint32_t TXTimeStamp;
@@ -4105,6 +4104,18 @@ void Button_was_pressed()
            ClearText();
            return;
         }
+         if (InStrng(GoFrontView, WordsIn) > 0) {
+            ClearText();
+            CurrentView = FrontView;
+            SendCommand(page_FrontView);
+            UpdateModelsNameEveryWhere();
+            ShowFlightMode();
+            LastShowTime = 0; // this is to make redisplay sooner (in ShowComms())
+            LastTimeRead = 0; 
+            ClearText();
+            return;
+        }
+
 
         if (InStrng(Scan_End, WordsIn) > 0) { //  goto setup screen from Scan screen
             CurrentView = MainSetupView;
@@ -4794,19 +4805,7 @@ void Button_was_pressed()
             return;
         }
 
-        if (InStrng(GoFrontView, WordsIn) > 0) {
-            ClearText();
-            SetupFlag   = false;
-            CurrentView = FrontView;
-            SendCommand(page_FrontView);
-            UpdateModelsNameEveryWhere();
-            ShowFlightMode();
-            LastShowTime = 0; // this is to make redisplay sooner
-            LastTimeRead = 0; // this is to make redisplay sooner
-            ClearText();
-            return;
-        }
-
+       
         if (InStrng(Gains_View, WordsIn) > 0) {
             CurrentView = GainsView;
             UpdateGainsView();
