@@ -146,6 +146,7 @@ void SendData()
                     Connected = true;
                     if (BoundFlag) GreenLedOn();    
                     CheckGapsLength();
+                    StartInactvityTimeout();
                }
         else 
                {
