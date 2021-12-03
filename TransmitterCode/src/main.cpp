@@ -825,6 +825,10 @@ void ReadTime()
     if (CurrentView == FrontView || CurrentView == Options_View) {
         if (RTC.read(tm)) {
             strcpy(TimeString, Str(NB, tm.Day, 0));
+            if ((tm.Day) < 10) {
+                strcat(TimeString,Space); // to align better the rest of the data
+                strcat(TimeString,Space);
+                }
             strcat(TimeString, Space);
             if (CurrentView == Options_View)  
             {
