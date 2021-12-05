@@ -111,7 +111,7 @@ void SendData()
             BufferNewPipe();       // if not yet bound, send our pipe
             }
         LoadPacketData();          // extra parameters appended to the data packet
-  
+        if (SetupFlag) return;
         if (LostContactFlag) {
                 if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {
                         TryOtherPipe();
@@ -133,7 +133,6 @@ void SendData()
 //  *************************************** SEND *************************************************************************************
         Radio1.write(&CompressedData, SizeOfCompressedData);  //  ******** !SEND! ********     
 //  *************************************** SEND *************************************************************************************
- 
         if (Radio1.isAckPayloadAvailable()) 
                {
                     (Radio1.read(&AckPayload, AckPayloadSize));         //  "sizeof" doesn't work with externs, hence 2 new vars.

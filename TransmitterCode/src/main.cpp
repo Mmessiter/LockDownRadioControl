@@ -462,6 +462,7 @@ char     ThisRadio[4] = "0 ";
 
 uint8_t  NextFrequency    = RECONNECT_CH;
 uint8_t  ThisFrequency    = RECONNECT_CH;
+bool     SetupFlag = false;
 
 
 
@@ -4112,7 +4113,7 @@ void Button_was_pressed()
            return;
         }
          if (InStrng(GoFrontView, WordsIn) > 0) {
-            ClearText();
+            SetupFlag =  false;
             CurrentView = FrontView;
             SendCommand(page_FrontView);
             UpdateModelsNameEveryWhere();
@@ -4808,6 +4809,11 @@ void Button_was_pressed()
             ClearText();
             CurrentView = MainSetupView;
             SendCommand(page_SetupView); 
+            if (!BoundFlag) 
+                {
+                SetupFlag = true;
+                BlueLedOn();
+                }
             ClearText();
             return;
         }
@@ -5623,6 +5629,12 @@ void CheckGapsLength()
 void loop()
 {
     KickTheDog(); // Watchdog
+
+    
+    if (GetButtonPress()) {
+        Button_was_pressed();
+    } // Deal with button!
+
     if (millis() - LastTimeRead >= 1000) {
         ReadTime();
         LastTimeRead = millis();
@@ -5635,11 +5647,6 @@ void loop()
         ShowServoPos();
         ShowServoTimer = millis();
     } // Show servos positions
-    if (GetButtonPress()) {
-        Button_was_pressed();
-    } // Deal with button!
-
-
     if ((millis() - TxOnTime) > 2000) { // Transmit nothing for first 2 seconds
         switch (CurrentMode) {
             case 0:
