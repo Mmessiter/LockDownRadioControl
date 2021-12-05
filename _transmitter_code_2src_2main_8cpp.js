@@ -388,6 +388,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "ScreenViewTimeout", "_transmitter_code_2src_2main_8cpp.html#aa978945d40efd5dcb653649588c922ac", null ],
     [ "Secs", "_transmitter_code_2src_2main_8cpp.html#acfc3c327c23f3721361e4ff9076d8704", null ],
     [ "SendBuffer", "_transmitter_code_2src_2main_8cpp.html#a6f391c9e05e72efd66c5a5ae44caf58a", null ],
+    [ "SetupFlag", "_transmitter_code_2src_2main_8cpp.html#a36ebb4843602524344c482651f4a932b", null ],
     [ "ShowCommsCounter", "_transmitter_code_2src_2main_8cpp.html#a87db39f793446f674bfc10c0c664a1bd", null ],
     [ "ShownBuffer", "_transmitter_code_2src_2main_8cpp.html#a5ba3675eeca98aa72e0c3a332eac53bf", null ],
     [ "ShowServoTimer", "_transmitter_code_2src_2main_8cpp.html#ae4989662282fe08eb2deb769a3611fa0", null ],

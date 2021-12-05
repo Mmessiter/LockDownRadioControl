@@ -17,7 +17,7 @@ var searchData=
   ['secs_1081',['Secs',['../_transmitter_code_2src_2main_8cpp.html#acfc3c327c23f3721361e4ff9076d8704',1,'main.cpp']]],
   ['sendbuffer_1082',['SendBuffer',['../_radio_functions_8h.html#a55f006b14432e3ce08ccbfc802f35cd8',1,'SendBuffer():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a6f391c9e05e72efd66c5a5ae44caf58a',1,'SendBuffer():&#160;main.cpp']]],
   ['servosattached_1083',['ServosAttached',['../_receiver_code_2src_2main_8cpp.html#a95b22fb572f7a91a89a431c7f1236575',1,'main.cpp']]],
-  ['setupflag_1084',['SetupFlag',['../_radio_functions_8h.html#a36ebb4843602524344c482651f4a932b',1,'RadioFunctions.h']]],
+  ['setupflag_1084',['SetupFlag',['../_transmitter_code_2src_2main_8cpp.html#a36ebb4843602524344c482651f4a932b',1,'SetupFlag():&#160;main.cpp'],['../_radio_functions_8h.html#a36ebb4843602524344c482651f4a932b',1,'SetupFlag():&#160;main.cpp']]],
   ['showcommscounter_1085',['ShowCommsCounter',['../_transmitter_code_2src_2main_8cpp.html#a87db39f793446f674bfc10c0c664a1bd',1,'main.cpp']]],
   ['shownbuffer_1086',['ShownBuffer',['../_transmitter_code_2src_2main_8cpp.html#a5ba3675eeca98aa72e0c3a332eac53bf',1,'main.cpp']]],
   ['showservotimer_1087',['ShowServoTimer',['../_transmitter_code_2src_2main_8cpp.html#ae4989662282fe08eb2deb769a3611fa0',1,'main.cpp']]],
