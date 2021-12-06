@@ -381,7 +381,6 @@ var _transmitter_code_2src_2main_8cpp =
     [ "SavedCurrentView", "_transmitter_code_2src_2main_8cpp.html#a9f535eadbf4eb2d6975105c406c1206f", null ],
     [ "SaveFailSafeNow", "_transmitter_code_2src_2main_8cpp.html#acd6754de95b605bb65a52a86e96121f7", null ],
     [ "SaveFlightMode", "_transmitter_code_2src_2main_8cpp.html#a6e7a073d216762b73caa5e1c1a384f1a", null ],
-    [ "SaveTypeButton", "_transmitter_code_2src_2main_8cpp.html#a5c831a190ab5a1f1906469a7ed00be85", null ],
     [ "ScanEnd", "_transmitter_code_2src_2main_8cpp.html#a6fde7bc3d03bda84c33abdbe1ed7b5bf", null ],
     [ "ScanStart", "_transmitter_code_2src_2main_8cpp.html#a40219e66b010dcf762b96491c9e668ec", null ],
     [ "ScreenTimeout", "_transmitter_code_2src_2main_8cpp.html#a99a6fe87dc49be7754f7ec441aa780ec", null ],
