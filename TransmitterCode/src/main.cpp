@@ -3928,8 +3928,8 @@ void Button_was_pressed()
     char LoadModel[]               = "LoadModel";
     char Models_View[]             = "ModelsView";
     char Delete[]                  = "Delete";
-    char SaveGains[]               = "SaveGains";
-    char Gains_View[]              = "GainsView";
+   // char SaveGains[]               = "SaveGains";
+   // char Gains_View[]              = "GainsView";
     int  j                         = 0;
     int  p                         = 0;
     char MixesView_MixNumber[]     = "MixNumber";
@@ -4819,18 +4819,19 @@ void Button_was_pressed()
         }
 
        
-        if (InStrng(Gains_View, WordsIn) > 0) {
-            CurrentView = GainsView;
-            UpdateGainsView();
-            ClearText();
-            return;
-        }
+       // if (InStrng(Gains_View, WordsIn) > 0) {
+       //     CurrentView = GainsView;
+       //     UpdateGainsView();
+       //     ClearText();
+       //     return;
+       // }
 
-        if (InStrng(SaveGains, WordsIn) > 0) {
-            SaveNewGains();
-            ClearText();
-            return;
-        }
+       // if (InStrng(SaveGains, WordsIn) > 0) {
+       //     SaveNewGains();
+       //     ClearText();
+       //     return;
+       // }
+       
         if (InStrng(TypeView, WordsIn) > 0) {
             SendCommand(pTypeView);
             SendValue(AeroplaneType, 0);
