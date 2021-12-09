@@ -4970,7 +4970,7 @@ $(document).ready(function(){initNavTree('_transmitter_code_2src_2main_8cpp_sour
 <div class="line"><a name="l04978"></a><span class="lineno"> 4978</span>&#160;        }</div>
 <div class="line"><a name="l04979"></a><span class="lineno"> 4979</span>&#160; </div>
 <div class="line"><a name="l04980"></a><span class="lineno"> 4980</span>&#160;      <span class="keywordflow">if</span> (<a class="code" href="_transmitter_code_2src_2main_8cpp.html#a535cbca5c4743cf3ffe444846d21113e">InStrng</a>(Fhss_View, <a class="code" href="_transmitter_code_2src_2main_8cpp.html#a3f58ca9d596734472c61e5b21050e38c">WordsIn</a>))</div>
-<div class="line"><a name="l04981"></a><span class="lineno"> 4981</span>&#160;         <span class="keywordflow">if</span> (!<a class="code" href="_receiver_code_2src_2main_8cpp.html#a44d37e4e8af884bf172344c0835a5593">BoundFlag</a>){</div>
+<div class="line"><a name="l04981"></a><span class="lineno"> 4981</span>&#160;         <span class="keywordflow">if</span> (!<a class="code" href="_receiver_code_2src_2main_8cpp.html#a44d37e4e8af884bf172344c0835a5593">BoundFlag</a>){                 <span class="comment">// no scan while connected!!!</span></div>
 <div class="line"><a name="l04982"></a><span class="lineno"> 4982</span>&#160;            {</div>
 <div class="line"><a name="l04983"></a><span class="lineno"> 4983</span>&#160;                <a class="code" href="_transmitter_code_2src_2main_8cpp.html#aecac2f0c289f02ef3c92b85be82eacac">SendCommand</a> (<a class="code" href="_transmitter_code_2src_2main_8cpp.html#abb0c124b134df44ba1d408d719ab6b75">page_FhssView</a>); </div>
 <div class="line"><a name="l04984"></a><span class="lineno"> 4984</span>&#160;                <a class="code" href="_transmitter_code_2src_2main_8cpp.html#a6bdc6419b47dda71d0d2c8faf652adc2">DrawFhssBox</a>();</div>
@@ -4978,8 +4978,8 @@ $(document).ready(function(){initNavTree('_transmitter_code_2src_2main_8cpp_sour
 <div class="line"><a name="l04986"></a><span class="lineno"> 4986</span>&#160;                <a class="code" href="_transmitter_code_2src_2main_8cpp.html#aacabee92eb3ddd2e3cf31695c00a912e">CurrentMode</a> = <a class="code" href="_transmitter_code_2src_2main_8cpp.html#af8400c0c2d5c4779f32223055a12336d">SCANWAVEBAND</a>; </div>
 <div class="line"><a name="l04987"></a><span class="lineno"> 4987</span>&#160;                <a class="code" href="_transmitter_code_2src_2main_8cpp.html#aa1f9aec467eb00917ad9ffdc0bd5b20d">BlueLedOn</a>();</div>
 <div class="line"><a name="l04988"></a><span class="lineno"> 4988</span>&#160;                <a class="code" href="_transmitter_code_2src_2main_8cpp.html#af0852678d8e89501acee8951f09d3b43">ClearText</a>();</div>
-<div class="line"><a name="l04989"></a><span class="lineno"> 4989</span>&#160;                <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l04990"></a><span class="lineno"> 4990</span>&#160;            }</div>
+<div class="line"><a name="l04989"></a><span class="lineno"> 4989</span>&#160;            }</div>
+<div class="line"><a name="l04990"></a><span class="lineno"> 4990</span>&#160;            <span class="keywordflow">return</span>;</div>
 <div class="line"><a name="l04991"></a><span class="lineno"> 4991</span>&#160;         }</div>
 <div class="line"><a name="l04992"></a><span class="lineno"> 4992</span>&#160; </div>
 <div class="line"><a name="l04993"></a><span class="lineno"> 4993</span>&#160;         <span class="keywordflow">if</span> (<a class="code" href="_transmitter_code_2src_2main_8cpp.html#a535cbca5c4743cf3ffe444846d21113e">InStrng</a>(ReScan, <a class="code" href="_transmitter_code_2src_2main_8cpp.html#a3f58ca9d596734472c61e5b21050e38c">WordsIn</a>))</div>
