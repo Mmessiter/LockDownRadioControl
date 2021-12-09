@@ -4978,7 +4978,7 @@ void Button_was_pressed()
         }
 
       if (InStrng(Fhss_View, WordsIn))
-         if (!BoundFlag){
+         if (!BoundFlag){                 // no scan while connected!!!
             {
                 SendCommand (page_FhssView); 
                 DrawFhssBox();
@@ -4986,8 +4986,8 @@ void Button_was_pressed()
                 CurrentMode = SCANWAVEBAND; 
                 BlueLedOn();
                 ClearText();
-                return;
             }
+            return;
          }
 
          if (InStrng(ReScan, WordsIn))
