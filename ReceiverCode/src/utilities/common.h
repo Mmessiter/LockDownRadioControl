@@ -3,7 +3,7 @@
 
 //**************************************************************************************************************************
 //              __________________________
-  //            #define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> DON'T FORGET TO SET THIS ONE !!! <<<<<<<<<<<<<<<<<<<<<<<<< **
+              #define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> DON'T FORGET TO SET THIS ONE !!! <<<<<<<<<<<<<<<<<<<<<<<<< **
 //              __________________________               
 //**************************************************************************************************************************
 
@@ -14,8 +14,8 @@
 #include <EEPROM.h>
 
 #define RXVERSION_MAJOR   1
-#define RXVERSION_MINOR   3
-#define RXVERSION_MINIMUS 0 // Nov 29th 2021
+#define RXVERSION_MINOR   4
+#define RXVERSION_MINIMUS 0 // Dec 9th 2021
 
 
 // #define DEBUG
