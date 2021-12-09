@@ -6,7 +6,8 @@
 #define TXVERSION_MINOR   3
 #define TXVERSION_MINIMUS 0
 
-#define HOPTIME           95    // A New Frequency Hop every 95 ms (must match receiver setting)
+#define HOPTIME           55    // A New Frequency Hop every 55 ms (must match receiver setting)
+#define PACEMAKER         2     // MINIMUM Ms between packets of data.
 #define FREQUENCYSCOUNT   82 
 
 // #define NOISYWIFI               // if defined this uses channels well above most wifi (not licence free in some countries).
@@ -26,7 +27,6 @@
 #define SENDNOTHING     4 // Transmission off
 #define Nextion         Serial1 // Nextion is connected to Serial1
 
-#define PACEMAKER         9     // MINIMUM Ms between packets of data.
 #define USE_WATCHDOG         
 #define WATCHDOGTIMEOUT   10000 // 10 Seconds before reboot (32ms -> 500 seconds)
 #define KICKRATE          1000  // Kick once a second (must be between WATCHDOGMAXRATE and WATCHDOGTIMEOUT)
@@ -36,7 +36,7 @@
 
 // UNCOMMENT ANY OF THESE for that bit of debug info
  //#define DB_NEXTION        // Debug Nextion and SD card data
-// #define DB_FHSS           // Debug real time FHSS data
+   #define DB_FHSS           // Debug real time FHSS data
 // #define DB_FHSS1          // Debug new FHSS data
 // #define DB_SENSORS        // Debug Sensors
 // #define DB_BIND           // Debug Binding

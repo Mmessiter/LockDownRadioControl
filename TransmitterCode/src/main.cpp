@@ -3955,13 +3955,7 @@ void Button_was_pressed()
     char Cmsg5[]                   = "To calibrate TX sticks,\r\npress the button below\r\nthen follow instructions here... ";
     char Cmsg6[]                   = "Calibrate TX sticks";
     char CaliNextion[]             = "CaliNextion";
-   // char SaveType[]                = "SaveType";
     char TypeView[]                = "TypeView";
-   // char AeroplaneType[]           = "mt1";
-   // char HelicopterType[]          = "mt2";
-   // char QuadcopterType[]          = "mt3";
-   // char HexacopterType[]          = "mt4";
-   // char OctocopterType[]          = "mt5";
     char CopyToAllFlightModes[]    = "callfm";
     char RXBAT[]                   = "RXBAT";
     char r2s[]                     = "r2s";
@@ -3969,7 +3963,6 @@ void Button_was_pressed()
     char r4s[]                     = "r4s";
     char r5s[]                     = "r5s";
     char r6s[]                     = "r6s";
-
     char SwitchesView[]        = "SwitchesView";
     char SwitchesView1[]       = "SwitchesView1";
     char OneSwitchView[]       = "OneSwitchView";
@@ -4817,35 +4810,9 @@ void Button_was_pressed()
             ClearText();
             return;
         }
-
-       
-       // if (InStrng(Gains_View, WordsIn) > 0) {
-       //     CurrentView = GainsView;
-       //     UpdateGainsView();
-       //     ClearText();
-       //     return;
-       // }
-
-       // if (InStrng(SaveGains, WordsIn) > 0) {
-       //     SaveNewGains();
-       //     ClearText();
-       //     return;
-       // }
-       
+     
         if (InStrng(TypeView, WordsIn) > 0) {
-               SendCommand(pTypeView);
-     //       SendValue(AeroplaneType, 0);
-     //       SendValue(HelicopterType, 0);
-     //       SendValue(QuadcopterType, 0);
-      //      SendValue(HexacopterType, 0);
-      //      SendValue(OctocopterType, 0);
-      //      if (ModelType == 0) ModelType = 1;
-      //      if (ModelType == 1) SendValue(AeroplaneType, 1);
-      //      if (ModelType == 2) SendValue(HelicopterType, 1);
-      //      if (ModelType == 3) SendValue(QuadcopterType, 1);
-      //      if (ModelType == 4) SendValue(HexacopterType, 1);
-      //      if (ModelType == 5) SendValue(OctocopterType, 1);
-
+            SendCommand(pTypeView);
             SendValue(r2s, 0); // Zero all RX batt cell count
             SendValue(r3s, 0);
             SendValue(r4s, 0);
@@ -4860,21 +4827,6 @@ void Button_was_pressed()
             return;
         }
 
-      //  if (InStrng(SaveType, WordsIn) > 0) {
-      //      ButtonRed(SaveTypeButton);
-      //      ButtonRed(OKTypeButton);
-      //      if (GetValue(AeroplaneType)) ModelType = 1;
-      //      if (GetValue(HelicopterType)) ModelType = 2;
-      //      if (GetValue(QuadcopterType)) ModelType = 3;
-      //      if (GetValue(HexacopterType)) ModelType = 4;
-      //      if (GetValue(OctocopterType)) ModelType = 5;
-      //      if (ModelType == 0) ModelType = 1;
-      //      SaveOneModel(ModelNumber);
-      //      ButtonWhite(SaveTypeButton);
-      //      ButtonWhite(OKTypeButton);
-      //      ClearText();
-      //      return;
-      //  }
 
         if (InStrng(RXBAT, WordsIn) > 0) { // UPdate RX batt cell count
             if (GetValue(r2s) == 1) RXCellCount = 2;
