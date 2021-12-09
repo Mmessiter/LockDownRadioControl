@@ -269,7 +269,7 @@ uint8_t  ReconnectAttempts  = 0;
 /************************************************************************************************************/
 void LoadTimeStamp(){              // This will load time stamp and array index for return to TX for synch purposes 
 
-#define HOPTIME         95          // ms between channel changes
+#define HOPTIME         55          // ms between channel changes
 #define FREQUENCYSCOUNT 82          // use 82 different channels
 
     union                           // union used to allow access to each byte of 32 bit value     
