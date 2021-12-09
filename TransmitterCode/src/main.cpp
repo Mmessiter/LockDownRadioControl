@@ -4978,15 +4978,17 @@ void Button_was_pressed()
         }
 
       if (InStrng(Fhss_View, WordsIn))
-         {
-            SendCommand (page_FhssView); 
-            DrawFhssBox();
-            DoScanInit();
-            CurrentMode = SCANWAVEBAND; 
-            BlueLedOn();
-            ClearText();
-            return;
-        }
+         if (!BoundFlag){
+            {
+                SendCommand (page_FhssView); 
+                DrawFhssBox();
+                DoScanInit();
+                CurrentMode = SCANWAVEBAND; 
+                BlueLedOn();
+                ClearText();
+                return;
+            }
+         }
 
          if (InStrng(ReScan, WordsIn))
        {
