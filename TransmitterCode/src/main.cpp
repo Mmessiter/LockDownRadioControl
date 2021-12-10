@@ -2532,7 +2532,10 @@ void setup()
     SendValue(FrontView_Mins, 0);
     SendValue(FrontView_Secs, 0);
     UpdateGainsView();
-    //SetDS1307ToCompilerTime();  // **   Uncomment this line to set DS1307 clock to compiler time. BUT then re-comment it!! Otherwise it will reset to same time on every boot up! **
+                                    //  ***************************************************************************************
+    //SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
+                                    //  **   BUT then re-comment it!! Otherwise it will reset to same time on every boot up! **
+                                    //  ***************************************************************************************
     RecoveryTimer = millis();
     BoundFlag     = false;
     TxOnTime      = millis();
