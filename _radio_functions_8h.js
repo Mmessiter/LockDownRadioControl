@@ -39,6 +39,7 @@ var _radio_functions_8h =
     [ "SendData", "_radio_functions_8h.html#a3d7322e78f097d02d476f17a6306997c", null ],
     [ "SetThePipe", "_radio_functions_8h.html#a70dc6f8d2e5ccef6b8e4a2b9b0afb2ce", null ],
     [ "ShowComms", "_radio_functions_8h.html#aac472b3398ab38e7f54b1a2cae96ba62", null ],
+    [ "ShowServoPos", "_radio_functions_8h.html#ad959eec03b0151ade81dc088593d816c", null ],
     [ "StartInactvityTimeout", "_radio_functions_8h.html#a793b7bcd77531c95fe72ed4356d421c8", null ],
     [ "Str", "_radio_functions_8h.html#ab399ea9eaf21f0d7d034a8e2dcaa6e39", null ],
     [ "AckPayload", "_radio_functions_8h.html#aec532bb9df7f865e6612fabf46895e6c", null ],

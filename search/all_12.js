@@ -58,7 +58,7 @@ var searchData=
   ['showhopdurationetc_523',['ShowHopDurationEtc',['../_receiver_code_2src_2main_8cpp.html#a2863e7455e30e6fddc0fcf56f62d6564',1,'ShowHopDurationEtc():&#160;main.cpp'],['../radio_8h.html#a2863e7455e30e6fddc0fcf56f62d6564',1,'ShowHopDurationEtc():&#160;main.cpp']]],
   ['shownbuffer_524',['ShownBuffer',['../_transmitter_code_2src_2main_8cpp.html#a5ba3675eeca98aa72e0c3a332eac53bf',1,'main.cpp']]],
   ['showpid_525',['ShowPid',['../_receiver_code_2src_2main_8cpp.html#a6d8b17c285caab118add813ad0dfdc69',1,'main.cpp']]],
-  ['showservopos_526',['ShowServoPos',['../_transmitter_code_2src_2main_8cpp.html#ad959eec03b0151ade81dc088593d816c',1,'main.cpp']]],
+  ['showservopos_526',['ShowServoPos',['../_radio_functions_8h.html#ad959eec03b0151ade81dc088593d816c',1,'ShowServoPos():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#ad959eec03b0151ade81dc088593d816c',1,'ShowServoPos():&#160;main.cpp']]],
   ['showservotimer_527',['ShowServoTimer',['../_transmitter_code_2src_2main_8cpp.html#ae4989662282fe08eb2deb769a3611fa0',1,'main.cpp']]],
   ['singlemodelfile_528',['SingleModelFile',['../_transmitter_code_2src_2main_8cpp.html#ae72cb82df39671a3226320fc9c32c125',1,'main.cpp']]],
   ['singlemodelflag_529',['SingleModelFlag',['../_transmitter_code_2src_2main_8cpp.html#ae2cdde9c7cfcbfc86f8e37f2b63c2fbe',1,'main.cpp']]],
