@@ -75,7 +75,7 @@ void TryOtherPipe()
 {
     if (TotalledRecentPacketsLost > 10 || (!BoundFlag))  {        // This perhaps avoids needless pipe swapping during poor connection
         if (BoundFlag == true) {  
-             BoundFlag = false;
+            BoundFlag = false;
             SetThePipe(DefaultPipe);
         }
         else
@@ -103,28 +103,24 @@ void BufferNewPipe()
 void SendData()
 {
     if (Nextion.available()) return;   // was a button pressed?
+   
     if ((millis() - TxPace) >= PACEMAKER) {
         TxPace = millis();
         get_new_channels_values(); // Load SendBuffer with new servo positions
+        if (SetupFlag)  return;
         if (!BoundFlag && !(CurrentView == CalibrateView) && !(CurrentView == SticksView)) 
             {
             BufferNewPipe();       // if not yet bound, send our pipe
             }
-        LoadPacketData();          // extra parameters appended to the data packet
-        if (SetupFlag) return;
+        LoadPacketData();          // extra parameters appended to the data packet    
         if (LostContactFlag) {
                 if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {
                         TryOtherPipe();
                         PipeTimeout=millis();
                 }
-
-                if ((millis() - RecoveryTimer) > 500) {          // TODO: THIS BIT MUST GO (But not just yet!)           
-                    NextFrequency = RECONNECT_CH;
-                    HopToNextFrequency();
-                    RecoveryTimer = millis();
-                }
+                NextFrequency = RECONNECT_CH;
+                HopToNextFrequency();
         }
-      
         Connected = false;      
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);        // Compress 32 bytes down to 24
         Radio1.flush_rx();

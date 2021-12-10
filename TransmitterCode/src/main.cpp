@@ -403,7 +403,6 @@ int      StartLocation       = 0;
 char     OKButton[]          = "b10";
 char     SaveButton[]        = "b0";
 char     OKTypeButton[]      = "b10";
-//char     SaveTypeButton[]    = "b0";
 bool     ValueSent           = false;
 int      SwitchEditNumber    = 0; // number of switch being edited
 uint32_t ShowServoTimer      = 0;
@@ -462,7 +461,8 @@ char     ThisRadio[4] = "0 ";
 
 uint8_t  NextFrequency    = RECONNECT_CH;
 uint8_t  ThisFrequency    = RECONNECT_CH;
-bool     SetupFlag = false;
+bool     SetupFlag        = false;
+
 
 
 
@@ -4835,7 +4835,7 @@ void Button_was_pressed()
             ClearText();
             CurrentView = MainSetupView;
             SendCommand(page_SetupView); 
-            if (!BoundFlag) 
+            if (!Connected) 
                 {
                 SetupFlag = true;
                 BlueLedOn();
