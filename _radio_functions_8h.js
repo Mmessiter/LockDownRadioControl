@@ -78,7 +78,6 @@ var _radio_functions_8h =
     [ "ScanEnd", "_radio_functions_8h.html#a6fde7bc3d03bda84c33abdbe1ed7b5bf", null ],
     [ "ScanStart", "_radio_functions_8h.html#a40219e66b010dcf762b96491c9e668ec", null ],
     [ "SendBuffer", "_radio_functions_8h.html#a55f006b14432e3ce08ccbfc802f35cd8", null ],
-    [ "SetupFlag", "_radio_functions_8h.html#a36ebb4843602524344c482651f4a932b", null ],
     [ "SizeOfCompressedData", "_radio_functions_8h.html#ac99b4fb4d71fa95d1ee8ab0a81696a4d", null ],
     [ "ThisFrequency", "_radio_functions_8h.html#a16a7235629cfd2dec33802caa95dc16d", null ],
     [ "ThisRadio", "_radio_functions_8h.html#a2e695c7565eda3b02ff77324e274772b", null ],
