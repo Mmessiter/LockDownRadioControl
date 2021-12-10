@@ -107,7 +107,7 @@ void SendData()
     if ((millis() - TxPace) >= PACEMAKER) {
         TxPace = millis();
         get_new_channels_values(); // Load SendBuffer with new servo positions
-        if (SetupFlag) return;
+       // if (SetupFlag) return;
         if (!BoundFlag && !(CurrentView == CalibrateView) && !(CurrentView == SticksView)) 
             {
             BufferNewPipe();       // if not yet bound, send our pipe
@@ -241,7 +241,7 @@ void InitRadio(uint64_t Pipe)
     Radio1.setDataRate(RF24_250KBPS);
     Radio1.enableAckPayload();       // Needed
     Radio1.openWritingPipe(Pipe);    // Current Pipe address used for Binding
-    Radio1.setRetries(15, 15);       // Max automatic retries = (15,15). Packet failure will take 0.06 seconds
+    Radio1.setRetries(2, 1);         // automatic retries = 2,1 was 15,15 !!
     Radio1.stopListening();          
     Radio1.enableDynamicPayloads();  // Needed
     Radio1.setAddressWidth(5);       // was 4, is now 5
