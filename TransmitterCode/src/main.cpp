@@ -1601,29 +1601,28 @@ short unsigned int GetStickInput(uint8_t l)
     short unsigned int k = 0;
 
     if (l == 8) {
-        if (Channel9SwitchValue == 0) k = mp(MinDegrees[FlightMode][8]);
-        if (Channel9SwitchValue == 90) k = mp(CentreDegrees[FlightMode][8]);
+        if (Channel9SwitchValue == 0)   k = mp(MinDegrees[FlightMode][8]);
+        if (Channel9SwitchValue == 90)  k = mp(CentreDegrees[FlightMode][8]);
         if (Channel9SwitchValue == 180) k = mp(MaxDegrees[FlightMode][8]);
     }
 
     if (l == 9) {
-        if (Channel10SwitchValue == 0) k = mp(MinDegrees[FlightMode][9]);
-        if (Channel10SwitchValue == 90) k = mp(CentreDegrees[FlightMode][9]);
+        if (Channel10SwitchValue == 0)   k = mp(MinDegrees[FlightMode][9]);
+        if (Channel10SwitchValue == 90)  k = mp(CentreDegrees[FlightMode][9]);
         if (Channel10SwitchValue == 180) k = mp(MaxDegrees[FlightMode][9]);
     }
 
     if (l == 10) {
-        if (Channel11SwitchValue == 0) k = mp(MinDegrees[FlightMode][10]);
-        if (Channel11SwitchValue == 90) k = mp(CentreDegrees[FlightMode][10]);
+        if (Channel11SwitchValue == 0)   k = mp(MinDegrees[FlightMode][10]);
+        if (Channel11SwitchValue == 90)  k = mp(CentreDegrees[FlightMode][10]);
         if (Channel11SwitchValue == 180) k = mp(MaxDegrees[FlightMode][10]);
     }
 
     if (l == 11) {
-        if (Channel12SwitchValue == 0) k = mp(MinDegrees[FlightMode][11]);
-        if (Channel12SwitchValue == 90) k = mp(CentreDegrees[FlightMode][11]);
+        if (Channel12SwitchValue == 0)   k = mp(MinDegrees[FlightMode][11]);
+        if (Channel12SwitchValue == 90)  k = mp(CentreDegrees[FlightMode][11]);
         if (Channel12SwitchValue == 180) k = mp(MaxDegrees[FlightMode][11]);
     }
-    if (l > 11) k = mp(CentreDegrees[FlightMode][InPutStick[l]]); // ??
     return k;
 }
 
@@ -1678,11 +1677,17 @@ void get_new_channels_values()
     short unsigned int k = 0, l = 0, m = 0, n = 0;
     for (n = 0; n < CHANNELSUSED; ++n) {
         l = InPutStick[n];                            // input sticks knobs & switches are now mapped by user
-        if (l <= 7) m = analogRead(AnalogueInput[l]); // Get values from sticks' pots
-        if (l > 7) {                                  // Switch ?
-            k = GetStickInput(l);                     // Four 3 postion switches
-        }
-        else {                                            // Map the eight analogue inputs
+        if (l <= 7) 
+            {
+                m = analogRead(AnalogueInput[l]);     // Get values from sticks' pots
+            }
+       
+       
+        if (l > 7 ) 
+            {                                          // Switch ?
+                k = GetStickInput(l);                  // Four 3 postion switches
+            }
+        else {                                         // Map the eight analogue inputs
             if (InterpolationTypes[FlightMode][n] == 0) { // Linear
                 if (m >= ChannelMidHi[l]) k = map(m, ChannelMidHi[l], ChannelMax[l], mp(MidHiDegrees[FlightMode][n]), mp(MaxDegrees[FlightMode][n]));
                 if (m >= ChannelCentre[l] && m <= (ChannelMidHi[l])) k = map(m, ChannelCentre[l], ChannelMidHi[l], mp(CentreDegrees[FlightMode][n]), mp(MidHiDegrees[FlightMode][n]));
