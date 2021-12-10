@@ -461,9 +461,6 @@ char     ThisRadio[4] = "0 ";
 
 uint8_t  NextFrequency    = RECONNECT_CH;
 uint8_t  ThisFrequency    = RECONNECT_CH;
-bool     SetupFlag        = false;
-
-
 
 
 #ifndef NOISYWIFI // Use this for UK legal flying 
@@ -4147,7 +4144,6 @@ void Button_was_pressed()
            return;
         }
          if (InStrng(GoFrontView, WordsIn) > 0) {
-            SetupFlag =  false;
             CurrentView = FrontView;
             SendCommand(page_FrontView);
             UpdateModelsNameEveryWhere();
@@ -4843,11 +4839,6 @@ void Button_was_pressed()
             ClearText();
             CurrentView = MainSetupView;
             SendCommand(page_SetupView); 
-            if (!Connected) 
-                {
-                SetupFlag = true;
-                BlueLedOn();
-                }
             ClearText();
             return;
         }

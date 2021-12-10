@@ -66,7 +66,6 @@ extern uint8_t        PacketNumber;
 extern uint8_t        ThisFrequency;
 extern bool           JustHoppedFlag;
 extern uint32_t       TxPace;
-extern bool           SetupFlag;
 extern bool           BoundFlag;
 extern uint8_t        CurrentView;
 extern uint16_t       SendBuffer[];
