@@ -2045,6 +2045,23 @@ void ChannelCentres()
 
 void UpdateButtonLabels()
 {
+    char InPutStick_c1[]       = "c1";
+    char InPutStick_c2[]       = "c2";
+    char InPutStick_c3[]       = "c3";
+    char InPutStick_c4[]       = "c4";
+    char InPutStick_c5[]       = "c5";
+    char InPutStick_c6[]       = "c6";
+    char InPutStick_c7[]       = "c7";
+    char InPutStick_c8[]       = "c8";
+    char InPutStick_c9[]       = "c9";
+    char InPutStick_c10[]      = "c10";
+    char InPutStick_c11[]      = "c11";
+    char InPutStick_c12[]      = "c12";
+    char InPutStick_c13[]      = "c13";
+    char InPutStick_c14[]      = "c14";
+    char InPutStick_c15[]      = "c15";
+    char InPutStick_c16[]      = "c16";
+    
     char fsch1[]   = "ch1";
     char fsch2[]   = "ch2";
     char fsch3[]   = "ch3";
@@ -2179,6 +2196,22 @@ void UpdateButtonLabels()
         SendText(fsch14, ChannelNames[13]);
         SendText(fsch15, ChannelNames[14]);
         SendText(fsch16, ChannelNames[15]);
+        SendValue(InPutStick_c1,InPutStick[0]+1);
+        SendValue(InPutStick_c2,InPutStick[1]+1);
+        SendValue(InPutStick_c3,InPutStick[2]+1);
+        SendValue(InPutStick_c4,InPutStick[3]+1);
+        SendValue(InPutStick_c5,InPutStick[4]+1);
+        SendValue(InPutStick_c6,InPutStick[5]+1);
+        SendValue(InPutStick_c7,InPutStick[6]+1);
+        SendValue(InPutStick_c8,InPutStick[7]+1);
+        SendValue(InPutStick_c9,InPutStick[8]+1);
+        SendValue(InPutStick_c10,InPutStick[9]+1);
+        SendValue(InPutStick_c11,InPutStick[10]+1);
+        SendValue(InPutStick_c12,InPutStick[11]+1);
+        SendValue(InPutStick_c13,InPutStick[12]+1);
+        SendValue(InPutStick_c14,InPutStick[13]+1);
+        SendValue(InPutStick_c15,InPutStick[14]+1);
+        SendValue(InPutStick_c16,InPutStick[15]+1);
     }
 }
 
@@ -2255,6 +2288,8 @@ bool ReadOneModel(uint8_t Mnum)
     for (i = 0; i < CHANNELSUSED; ++i) {
         InPutStick[i] = SDReadByte(addr);
         if (InPutStick[i] > 16) InPutStick[i] = i; // reset if nothing was saved!
+
+       
         ++addr;
     }
 
@@ -3020,7 +3055,7 @@ void SaveNewGains()
 
 /*********************************************************************************************************************************/
 
-void SetDefaultValues()
+void SetDefaultValues() // heer
 {
     int  j;
     char ProgressStart[]                       = "vis Progress,1";
@@ -3124,7 +3159,7 @@ void SetDefaultValues()
     SaveOneModel(ModelNumber);
     UpdateModelsNameEveryWhere();
     SendValue(Progress, 100);
-    delay(200);
+    delay(100);
     SendCommand(ProgressEnd);
 }
 
@@ -3928,8 +3963,6 @@ void Button_was_pressed()
     char LoadModel[]               = "LoadModel";
     char Models_View[]             = "ModelsView";
     char Delete[]                  = "Delete";
-   // char SaveGains[]               = "SaveGains";
-   // char Gains_View[]              = "GainsView";
     int  j                         = 0;
     int  p                         = 0;
     char MixesView_MixNumber[]     = "MixNumber";
