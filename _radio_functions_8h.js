@@ -10,6 +10,8 @@ var _radio_functions_8h =
     [ "NORMAL", "_radio_functions_8h.html#a1291f416b069313021b519eea62d5bf1", null ],
     [ "PACEMAKER", "_radio_functions_8h.html#a56e90cbec59fa96bebfb3db997e6a3fe", null ],
     [ "RECONNECT_CH", "_radio_functions_8h.html#ad3c239265016482b6850360b3dc51a50", null ],
+    [ "RetryCount", "_radio_functions_8h.html#ad3e3c4d87628d85b85ce6773317642a7", null ],
+    [ "RetryWait", "_radio_functions_8h.html#a2d8a411e5a5cb1b5ea4c5d39aae142c5", null ],
     [ "SCANWAVEBAND", "_radio_functions_8h.html#af8400c0c2d5c4779f32223055a12336d", null ],
     [ "SENDNOTHING", "_radio_functions_8h.html#aa8cb091644f8785e060422c38a5ee334", null ],
     [ "TXVERSION_MAJOR", "_radio_functions_8h.html#aebd7ef5764d81d53646b187e0e337bd3", null ],
