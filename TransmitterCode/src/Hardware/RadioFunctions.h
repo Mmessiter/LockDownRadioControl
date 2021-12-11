@@ -10,6 +10,11 @@
 #define PACEMAKER         2     // MINIMUM Ms between packets of data.
 #define FREQUENCYSCOUNT   82 
 
+#define RetryCount        3     // auto retries from nRF24L01
+#define RetryWait         0     // ACTUAL wait between retries will be RetryWait+1 * 250us
+                                // (A failed packet takes (RetryWait+1 * 250us) * RetryCount = 0.75 ms)
+
+
 // #define NOISYWIFI               // if defined this uses channels well above most wifi (not licence free in some countries).
 
 #ifndef NOISYWIFI // Use this for UK legal flying 

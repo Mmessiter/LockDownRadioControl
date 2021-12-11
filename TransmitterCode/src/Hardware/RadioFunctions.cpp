@@ -238,11 +238,11 @@ void InitRadio(uint64_t Pipe)
     Radio1.begin();
     Radio1.setPALevel(RF24_PA_MAX);
     Radio1.setDataRate(RF24_250KBPS);
-    Radio1.enableAckPayload();       // Needed
-    Radio1.openWritingPipe(Pipe);    // Current Pipe address used for Binding
-    Radio1.setRetries(2, 1);         // automatic retries = 2,1 *** WAS 15,15 *** !!
+    Radio1.enableAckPayload();                        
+    Radio1.openWritingPipe(Pipe);                     // Current Pipe address used for Binding
+    Radio1.setRetries(RetryCount, RetryWait);         // automatic retries *** WAS 15,15 *** !! 
     Radio1.stopListening();          
-    Radio1.enableDynamicPayloads();  // Needed
+    Radio1.enableDynamicPayloads();  
     Radio1.setAddressWidth(5);       // was 4, is now 5
     Radio1.setCRCLength(RF24_CRC_8); // could be 16
     PipeTimeout = millis();          // Initialise timeout
