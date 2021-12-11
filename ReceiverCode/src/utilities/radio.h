@@ -264,7 +264,7 @@ uint8_t  ReconnectAttempts  = 0;
                 }
             ConnectionStart=millis();
             StillSearchingTime = 0;
-            ReconnectedMoment=ConnectionStart;        // Save this moment, then don't move a servo for a few ms ....
+            ReconnectedMoment=ConnectionStart;        // Save this moment, then don't move a servo for a few ms ...
 }
 /************************************************************************************************************/
 void LoadTimeStamp(){              // This will load time stamp and array index for return to TX for synch purposes 
