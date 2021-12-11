@@ -22,7 +22,7 @@
 #define RETRYWAIT         0     // NB ACTUAL wait between retries will be RetryWait+1 * 250us
                                 // A failed packet therefore takes (RetryWait+1 * 250us) * RetryCount = 0.75 ms
 // #define NOISYWIFI            // if defined (BOTH ENDS!) this uses channels well above most wifi (but not licence free in some countries).
-
+#define LOSTCONTACTCUTOFF 1     // How many packets to lose before reconnect triggers  (>1)
 #ifndef NOISYWIFI               // Use this for UK legal flying 
 #define RECONNECT_CH     83
 #endif
@@ -57,7 +57,7 @@
 #define WATCHDOGTIMEOUT   10000 // 10 Seconds before reboot (32ms -> 500 seconds)
 #define KICKRATE          1000  // Kick once a second (must be between WATCHDOGMAXRATE and WATCHDOGTIMEOUT)
 #define WATCHDOGMAXRATE   500   // 500 ms secs between kicks is max rate allowed
-#define LOSTCONTACTCUTOFF 1     // How many packets to lose before reconnect triggers  (>1)
+
 // **************************************************************************
 
  // **************************************************************************
