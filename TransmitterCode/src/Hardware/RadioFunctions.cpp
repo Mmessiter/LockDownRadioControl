@@ -208,7 +208,7 @@ void HopToNextFrequency()
 {
     Radio1.setChannel(NextFrequency);
     Radio1.stopListening();   // needed???? Heer......
-    delay(4);
+    delay(1);
     ReadSwitches();
     CheckTimer(); // update timer if on
     ShowComms();
