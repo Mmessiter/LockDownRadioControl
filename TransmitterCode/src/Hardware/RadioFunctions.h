@@ -23,7 +23,7 @@
                                 // A failed packet therefore takes (RetryWait+1 * 250us) * RetryCount = 0.75 ms
 // #define NOISYWIFI            // if defined (BOTH ENDS!) this uses channels well above most wifi (but not licence free in some countries).
 
-#ifndef NOISYWIFI // Use this for UK legal flying 
+#ifndef NOISYWIFI               // Use this for UK legal flying 
 #define RECONNECT_CH     83
 #endif
 #ifdef NOISYWIFI 
