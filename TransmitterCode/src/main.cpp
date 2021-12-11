@@ -1343,21 +1343,20 @@ void ShowComms()
             }
 
             if (CurrentView == DataView) {
-                    SendValue(DataView_pps, PacketsPerSecond);
-                    SendValue(DataView_lps, LostPackets);
-                    SendText(DataView_Alt, ModelAltitude);
-                    SendText(DataView_MaxAlt, MaxAltitude);
-                    SendText(DataView_roll, ModelRoll);
+                    SendValue(DataView_pps,  PacketsPerSecond);
+                    SendValue(DataView_lps,  LostPackets);
+                    SendText(DataView_Alt,   ModelAltitude);
+                    SendText(DataView_MaxAlt,MaxAltitude);
+                    SendText(DataView_roll,  ModelRoll);
                     SendText(DataView_pitch, ModelPitch);
-                    SendText(DataView_yaw, ModelYaw);
-                    SendText(DataView_Rx,ThisRadio);
-                    SendText(DataView_rxv,ReceiverVersionNumber);
-                    SendValue(DataView_Ls, GapLongest);
-                    SendValue(DataView_Ts, GapSum);
-                    //SendValue(DataView_Sc, success);
-                    SendValue(DataView_Sg, GapShortest);
-                    SendValue(DataView_Ag, GapAverage);
-                    SendValue(DataView_Gc, GapCount);
+                    SendText(DataView_yaw,   ModelYaw);
+                    SendText(DataView_Rx,    ThisRadio);
+                    SendText(DataView_rxv,   ReceiverVersionNumber);
+                    SendValue(DataView_Ls,   GapLongest);
+                    SendValue(DataView_Ts,   GapSum);
+                    SendValue(DataView_Sg,   GapShortest);
+                    SendValue(DataView_Ag,   GapAverage);
+                    SendValue(DataView_Gc,   GapCount);
             }
             ReadVolts = atof(ModelVolts) * 10;
             // 6s Max 25.2 -> 20.4

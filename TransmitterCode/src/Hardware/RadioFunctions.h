@@ -2,44 +2,69 @@
 #ifndef RadioFunctions_H
 #define RadioFunctions_H
 
-#define TXVERSION_MAJOR   1 //   Dec 9th 2021 Malcolm Messiter
+ // **************************************************************************
+ //                     TX VERSION NUMBER   (Dec 11th 2021 Malcolm Messiter) *
+ //***************************************************************************
+#define TXVERSION_MAJOR   1  
 #define TXVERSION_MINOR   4
 #define TXVERSION_MINIMUS 0
+ // **************************************************************************
 
-#define HOPTIME           55    // A New Frequency Hop every 55 ms (must match receiver setting)
+
+ // **************************************************************************
+ //                            FHSS PARAMETERS                               *
+ //***************************************************************************
+
+#define HOPTIME           55    // A New frequency hop every 55 ms (must match receiver setting)
 #define PACEMAKER         2     // MINIMUM Ms between packets of data.
-#define FREQUENCYSCOUNT   82 
-
-#define RetryCount        3     // auto retries from nRF24L01
-#define RetryWait         0     // ACTUAL wait between retries will be RetryWait+1 * 250us
-                                // (A failed packet takes (RetryWait+1 * 250us) * RetryCount = 0.75 ms)
-
-
-// #define NOISYWIFI               // if defined this uses channels well above most wifi (not licence free in some countries).
+#define FREQUENCYSCOUNT   82    // How many frequencies to use before wrapping to first
+#define RETRYCOUNT        3     // auto retries from nRF24L01
+#define RETRYWAIT         0     // NB ACTUAL wait between retries will be RetryWait+1 * 250us
+                                // A failed packet therefore takes (RetryWait+1 * 250us) * RetryCount = 0.75 ms
+// #define NOISYWIFI            // if defined (BOTH ENDS!) this uses channels well above most wifi (but not licence free in some countries).
 
 #ifndef NOISYWIFI // Use this for UK legal flying 
 #define RECONNECT_CH     83
 #endif
-
 #ifdef NOISYWIFI 
 #define RECONNECT_CH     120
 #endif
+ // **************************************************************************
+
+
+
+ // **************************************************************************
+ //                            SEND MODE PARAMETERS                          * 
+ //***************************************************************************
 
 #define NORMAL          0 // Normal for transmit as usual
 #define CALIBRATELIMITS 1 // Calibrate limits
 #define CENTRESTICKS    2 // Calibrate Centres
 #define SCANWAVEBAND    3 // Scan waveband
 #define SENDNOTHING     4 // Transmission off
-#define Nextion         Serial1 // Nextion is connected to Serial1
+ // **************************************************************************
 
+ // **************************************************************************
+ //                          NEXTION SERIAL CONNECTION                       *
+ //***************************************************************************
+#define Nextion         Serial1 // Nextion is connected to Serial1
+// ***************************************************************************
+
+ // **************************************************************************
+ //                            WATCHDOG PARAMETERS                           *
+ //***************************************************************************
 #define USE_WATCHDOG         
 #define WATCHDOGTIMEOUT   10000 // 10 Seconds before reboot (32ms -> 500 seconds)
 #define KICKRATE          1000  // Kick once a second (must be between WATCHDOGMAXRATE and WATCHDOGTIMEOUT)
 #define WATCHDOGMAXRATE   500   // 500 ms secs between kicks is max rate allowed
 #define LOSTCONTACTCUTOFF 1     // How many packets to lose before reconnect triggers  (>1)
+// **************************************************************************
 
+ // **************************************************************************
+ //                     DEBUG OPTIONS                                        *
+ //             UNCOMMENT ANY OF THESE for that bit of debug info            *
+ //***************************************************************************
 
-// UNCOMMENT ANY OF THESE for that bit of debug info
 // #define DB_NEXTION        // Debug Nextion and SD card data
 // #define DB_FHSS           // Debug real time FHSS data
 // #define DB_FHSS1          // Debug new FHSS data

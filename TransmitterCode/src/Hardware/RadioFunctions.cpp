@@ -240,7 +240,7 @@ void InitRadio(uint64_t Pipe)
     Radio1.setDataRate(RF24_250KBPS);
     Radio1.enableAckPayload();                        
     Radio1.openWritingPipe(Pipe);                     // Current Pipe address used for Binding
-    Radio1.setRetries(RetryCount, RetryWait);         // automatic retries *** WAS 15,15 *** !! 
+    Radio1.setRetries(RETRYCOUNT, RETRYWAIT);         // automatic retries *** WAS 15,15 *** !! 
     Radio1.stopListening();          
     Radio1.enableDynamicPayloads();  
     Radio1.setAddressWidth(5);       // was 4, is now 5
