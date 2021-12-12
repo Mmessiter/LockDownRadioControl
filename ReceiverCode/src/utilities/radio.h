@@ -204,7 +204,7 @@ void ProdRadio()
     CurrentRadio->openReadingPipe(1, ThisPipe);
     CurrentRadio->setChannel(RECONNECT_CH);
     CurrentRadio->startListening();
-    delay(4);                           // This might help
+    delay(1);                           // This might help
 }
  #endif // defined (SECOND_TRANSCEIVER)
 
@@ -218,10 +218,10 @@ uint8_t  ReconnectAttempts  = 0;
             SearchStartTime = millis();
             FailSafeSent = false; 
             CurrentRadio->stopListening();
-            delay(3);
+            delay(1);
             CurrentRadio->setChannel(RECONNECT_CH);
             CurrentRadio->startListening();
-            delay(3);   
+            delay(1);   
             if (CurrentRadio->available()) Connected = true;
     
             while (!Connected)
@@ -231,7 +231,7 @@ uint8_t  ReconnectAttempts  = 0;
                 if  (ReconnectAttempts > 2)
                     { 
                     CurrentRadio->stopListening();
-                    delay (4);
+                    delay (1);
                     if (ThisRadio == 2)
                         {
                         CurrentRadio = &Radio1;
