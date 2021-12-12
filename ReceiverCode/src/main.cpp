@@ -703,7 +703,7 @@ void loop()
                 DeltaTime = micros() - DeltaTime;
                 ReadSensors();
                 SBUSTimer = millis(); // timer starts before send starts....
-                if ((millis()- ReconnectedMoment) > RECONNECTGAP)  { // Don't send data for 20 ms after reconnect
+                if ((millis()- ReconnectedMoment) > RECONNECTGAP)  { // Don't send data for 10 ms after reconnect
                         MoveServos();
                 }
             }
