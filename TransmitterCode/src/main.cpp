@@ -46,6 +46,9 @@
  * | 3  LED    | GREEN |
  * | 4  LED    | BLUE |
  * | 5  POLOLU | 2808 ALL POWER OFF SIGNAL (When high) |
+ * | 6 (!! SPARE !!)   
+ * | 7 (!! SPARE !! RX2)   
+ * | 8 (!! SPARE !! TX2)   
  * | 9  (CE)   | nRF24l01 (CE) |
  * | 10 (CS)   | nRF24l01 (CSN) |
  * | 11 (MOSI) | nRF24l01 (MOSI) |
@@ -61,6 +64,7 @@
  * | 21 (A7)   | POT KNOB CH6 |
  * | 22 (A8)   | POT KNOB CH7 |
  * | 23 (A9)   | POT KNOB CH8 |
+ * | 24 (!! SPARE !!)   
  * | 25        | Switch 1 |
  * | 26        | Switch 1 |
  * | 27        | Switch 2 |
@@ -69,7 +73,15 @@
  * | 30        | Switch 3 |
  * | 31        | Switch 4 |
  * | 32        | Switch 4 |
- *
+ * | 33 (!! SPARE !!)   
+ * | 34 (!! SPARE !! RX8)   
+ * | 35 (!! SPARE !! TX8)   
+ * | 36 (!! SPARE !!)  
+ * | 37 (!! SPARE !!)  
+ * | 38 (!! SPARE !!)  
+ * | 39 (!! SPARE !!) 
+ * | 40 (!! SPARE !!)  
+ * | 41 (!! SPARE !!)   
  * @see TransmitterCode/src/main.cpp
  */
 // ************************************************** TRANSMITTER CODE **************************************************
