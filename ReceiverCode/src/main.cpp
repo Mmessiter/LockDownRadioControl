@@ -70,8 +70,6 @@ Adafruit_INA219 ina219;
 BMP280_DEV      bmp280; /** The object to access the BMP280 sensor */
 Servo           MCMServo[SERVOSUSED];
 
-// uint16_t BNO055_SAMPLERATE_DELAY_MS = 100; // not actually used anywhere
-
 uint8_t PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 16}; // ten now, last 6 only via sbus
 
 #define LED_PIN 13
