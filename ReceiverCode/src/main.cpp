@@ -315,12 +315,12 @@ bool ReadData()
     if (CurrentRadio->available()) {
         LoadAckPayload();
         Connected            = true;
-        CurrentRadio->flush_tx();
+        CurrentRadio->flush_tx();                                      // This avoids a lockup that happens when the FIFO gets full.
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // Send telemetry (actual length plus 0)
         CurrentRadio->read(&CompressedData, sizeof(CompressedData));   // Get Data
-        Decompress(ReceivedData, CompressedData, UNCOMPRESSEDWORDS); // decompress data
+        Decompress(ReceivedData, CompressedData, UNCOMPRESSEDWORDS);   // decompress data
         MapToSBUS();
-        CurrentRadio->flush_rx();
+        CurrentRadio->flush_rx();                                      // This avoids a lockup that happens when the FIFO gets full.
         ClearAckPayload();
         LastConnectionMoment = millis();
         if (HopNow) {     // this flag gets set in LoadAckPayload();

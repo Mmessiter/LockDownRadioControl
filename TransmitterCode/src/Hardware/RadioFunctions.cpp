@@ -122,9 +122,8 @@ void SendData()
         }
         Connected = false;      
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);        // Compress 32 bytes down to 24
-        Radio1.flush_rx();
-        Radio1.flush_tx();
-
+        Radio1.flush_rx();                                              // This avoids a lockup that happens when the FIFO gets full.
+        Radio1.flush_tx();                                              // This avoids a lockup that happens when the FIFO gets full.
 //  *************************************** SEND *************************************************************************************
         Radio1.write(&CompressedData, SizeOfCompressedData);  //  ******** !SEND! ********     
 //  *************************************** SEND *************************************************************************************
