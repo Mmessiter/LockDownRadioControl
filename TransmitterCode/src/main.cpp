@@ -3659,6 +3659,7 @@ void ReceiveModelFile()
 #endif
     SendText(ModelsView_filename, Waiting);
     RXPipe = FILEPIPEADDRESS;
+    Radio1.setRetries(15, 15);   // heer needed???
     Radio1.setChannel(FILECHANNEL);
     Radio1.flush_tx();
     Radio1.openReadingPipe(1, RXPipe);
@@ -3709,14 +3710,16 @@ void ReceiveModelFile()
     while ((Fposition < Fsize) && (millis() - RXTimer) / 1000 <= FILETIMEOUT) { //  (Fposition<Fsize) ********************
         KickTheDog();                                                           // Watchdog
         if (Radio1.available()) {
+            Radio1.flush_tx();
             Radio1.writeAckPayload(1, &Fack, sizeof(Fack));
             Radio1.read(&Fbuffer, BUFFERSIZE + 4);
             ModelsFileNumber.seek(Fposition);            // Move filepointer
             ModelsFileNumber.write(Fbuffer, BUFFERSIZE); // Write part of file
+            Radio1.flush_rx();
             Fposition += BUFFERSIZE;
             p = ((float)Fposition / (float)Fsize) * 100;
             SendValue(Progress, p);
-            delay(10);
+            delay(5);
 #ifdef DB_MODEL_EXCHANGE
             PacketNumber = Fbuffer[25];
             Serial.print("PacketNumber: ");
@@ -3734,6 +3737,7 @@ void ReceiveModelFile()
     SendText(ModelsView_filename, Success);
     delay(2000);
     SendText(ModelsView_filename, SingleModelFile);
+    Radio1.setRetries(RETRYCOUNT, RETRYWAIT); 
     // **************************************** Below Here the new model is imported for immediate use
     SingleModelFlag = true;
     CloseModelsFile();
@@ -3780,6 +3784,7 @@ void SendModelFile()
 #endif
     Radio1.setChannel(FILECHANNEL);
     Radio1.setPALevel(FILEPALEVEL);
+    Radio1.setRetries(15, 15); 
     Radio1.openWritingPipe(TXPipe);
     Radio1.stopListening();
     delay(4);
@@ -3801,8 +3806,10 @@ void SendModelFile()
             ModelsFileNumber.read(Fbuffer, BUFFERSIZE); // Read part of file
             Fposition += BUFFERSIZE;
         }
+        Radio1.flush_tx();
+        Radio1.flush_rx();
         if (Radio1.write(&Fbuffer, BUFFERSIZE + 4)) {
-            delay(200); // allow time for receive and write
+            delay(25);                                   // allow time for receive and write
             if (Radio1.isAckPayloadAvailable()) {
                 Radio1.read(&Fack, sizeof(Fack));
             }
@@ -3825,6 +3832,7 @@ void SendModelFile()
     SendValue(Progress, 100);
     delay(100);
     SetThePipe(DefaultPipe);
+    Radio1.setRetries(RETRYCOUNT, RETRYWAIT); 
     Radio1.setCRCLength(RF24_CRC_8);
     SendCommand(ProgressEnd);
 }
