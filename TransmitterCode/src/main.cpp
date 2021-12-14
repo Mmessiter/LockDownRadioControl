@@ -3078,7 +3078,7 @@ void SaveNewGains()
 
 /*********************************************************************************************************************************/
 
-void SetDefaultValues() // heer
+void SetDefaultValues() 
 {
     int  j;
     char ProgressStart[]                       = "vis Progress,1";
@@ -4003,7 +4003,7 @@ void Button_was_pressed()
     char GoSetupView[]             = "GoSetupView";
     char GoFrontView[]             = "GoFrontView";
     char SvT11[]                   = "t11";
-    char CMsg1[]                   = "Please move all controls\r\nto their full extremes several times,\r\nthen press the button again ...";
+    char CMsg1[]                   = "Move all controls\r\nto their full extent several times,\r\nthen press the button again.";
     char SvB0[]                    = "b0";
     char CMsg2[]                   = "Wiggle, then press!";
     char Cmsg3[]                   = "Please CENTRE all controls,\r\nWait a moment,\r\nthen press again...";
@@ -5268,7 +5268,7 @@ void Button_was_pressed()
             if (strcmp(WordsIn, "Calibrate1") == 0) {
                 CurrentMode = CALIBRATELIMITS;
                 CentreMaxMins();
-                SendText(SvT11, CMsg1);
+                SendText1(SvT11, CMsg1); //heer
                 SendText(SvB0, CMsg2);
                 ClearText();
                 return;
