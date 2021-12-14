@@ -4688,7 +4688,7 @@ void Button_was_pressed()
         if (InStrng(DelFile, WordsIn) > 0) { // Delete a file
             j = 0;
             p = InStrng(DelFile, WordsIn);
-            i = p + 7;
+            i = p + 6;
             while (uint8_t(WordsIn[i]) > 0) {
                 SingleModelFile[j] = WordsIn[i];
                 ++j;
