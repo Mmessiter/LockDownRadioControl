@@ -47,8 +47,8 @@
  * | 4  LED    | BLUE |
  * | 5  POLOLU | 2808 ALL POWER OFF SIGNAL (When high) |
  * | 6 (!! SPARE !!)   
- * | 7 (!! SPARE !! RX2)   
- * | 8 (!! SPARE !! TX2)   
+ * | 7 (RX2)   | SBUS IN    - BUDDY BOX SYSTEM under developement
+ * | 8 (TX2)   | SBUS OUT   - BUDDY BOX SYSTEM under developement
  * | 9  (CE)   | nRF24l01 (CE) |
  * | 10 (CS)   | nRF24l01 (CSN) |
  * | 11 (MOSI) | nRF24l01 (MOSI) |
