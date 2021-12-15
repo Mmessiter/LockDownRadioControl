@@ -240,6 +240,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "BoxRight", "_transmitter_code_2src_2main_8cpp.html#a7a63dbfa61afc677b54d95ae815af072", null ],
     [ "BoxSize", "_transmitter_code_2src_2main_8cpp.html#ab61017b514745f52f29e44d452d91e4a", null ],
     [ "BoxTop", "_transmitter_code_2src_2main_8cpp.html#a8f75203206238880b26aea4eef57bb11", null ],
+    [ "BuddyMaster", "_transmitter_code_2src_2main_8cpp.html#a26a52012e307147a99289fff5c492358", null ],
     [ "CalibratedYet", "_transmitter_code_2src_2main_8cpp.html#a34512aff25c972f2f4ed2dd5ca95a5fe", null ],
     [ "CalibrateNow", "_transmitter_code_2src_2main_8cpp.html#a53390619a82518a34731b9a2e9e1df6d", null ],
     [ "CentreDegrees", "_transmitter_code_2src_2main_8cpp.html#a90b5b04465812372bdda286367ed8ed8", null ],
