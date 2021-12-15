@@ -480,7 +480,7 @@ char     ThisRadio[4] = "0 ";
 
 uint8_t  NextFrequency    = RECONNECT_CH;
 uint8_t  ThisFrequency    = RECONNECT_CH;
-bool     DoSbusSendOnly   = false;
+bool     DoSbusSendOnly   = true;
 
 
 #ifndef NOISYWIFI // Use this for UK legal flying 
@@ -1299,6 +1299,7 @@ void ShowComms()
     char  FrontView_TXBV[]       = "TXBV";
     char  Not_Connected[]        = "Not connected";
     char  Msg_Connected[]        = "** Connected! **";
+    char  MsgBuddying[]          = "(Buddying)";
     char  DataView_pps[]         = "pps";
     char  DataView_lps[]         = "lps";
     char  DataView_Alt[]         = "alt";
@@ -1368,7 +1369,10 @@ void ShowComms()
             if (CurrentView == DataView) SendText(DataView_txv, TransmitterVersionNumber); // TX Version Number
                                                                                            // if (CurrentView == DataView) SendText(DataView_txv, Vbuf);
         }
-        if (!LostContactFlag) {
+
+       
+        if (!LostContactFlag) 
+            {
             if ((CurrentView == FrontView)) {
                 if (!BoundFlag) {
                     SendCommand(BindButtonVisible);
@@ -1380,9 +1384,9 @@ void ShowComms()
                         GreenLedOn();
                         StartInactvityTimeout();
                     }
-                }
+                } 
             }
-
+           
             if (CurrentView == DataView) {
                     SendValue(DataView_pps,  PacketsPerSecond);
                     SendValue(DataView_lps,  LostPackets);
@@ -1460,7 +1464,14 @@ void ShowComms()
             {
                 if (CurrentView == FrontView)
                 {
-                    SendText(FrontView_Connected, Not_Connected);
+                     if (DoSbusSendOnly) {
+                        SendText(FrontView_Connected, MsgBuddying);
+                     } else {
+                        SendText(FrontView_Connected, Not_Connected);
+                     }
+
+
+
                 }
             }
         }

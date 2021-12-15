@@ -134,6 +134,7 @@ extern uint32_t       GapSum;
 extern uint32_t       GapStart;
 extern uint8_t        BadChannelMax;
 extern uint32_t       RXTimeStamp;
+extern bool           DoSbusSendOnly;
 
 extern void  KickTheDog();
 extern void  SendCommand(char* tbox);
@@ -152,7 +153,7 @@ extern void  FailedPacket();
 extern void  StartInactvityTimeout();
 extern void  ShowServoPos();
 extern void  MapToSBUS();
-extern bool  DoSbusSendOnly;
+
 
 
 
