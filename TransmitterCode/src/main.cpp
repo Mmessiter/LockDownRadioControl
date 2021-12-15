@@ -514,7 +514,7 @@ void MapToSBUS()
             {
                 SbusChannels[j] = map(SendBuffer[j], MINMICROS, MAXMICROS, RangeMin, RangeMax);
             }
-        MySbus.write(&SbusChannels[0]);
+       MySbus.write(&SbusChannels[0]);
        }
 }
 /************************************************************************************************************/
@@ -5671,7 +5671,7 @@ void loop()
 {
     KickTheDog(); // Watchdog
     
-    //MapToSBUS();
+     
     
     if (GetButtonPress()) {
         Button_was_pressed();
@@ -5690,9 +5690,12 @@ void loop()
         ShowServoTimer = millis();
     } // Show servos positions
     if ((millis() - TxOnTime) > 2000) { // Transmit nothing for first 2 seconds
+        
         switch (CurrentMode) {
             case 0:
                 SendData();  
+               // MapToSBUS();
+               // Serial.println (millis());
                 break;
             case 1:
                 CalibrateSticks();
