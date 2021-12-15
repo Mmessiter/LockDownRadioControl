@@ -460,10 +460,10 @@ int          LastDogKick  = 0;
 uint8_t      MacAddress[6];
 char         DateTime[] = "DateTime";
 
-int     XtouchPlace = 0;     // Clicked X
-int     YtouchPlace = 0;     // Clicked Y
-uint8_t zero        = 0x00;  
-bool    BindButton = false;
+int      XtouchPlace = 0;     // Clicked X
+int      YtouchPlace = 0;     // Clicked Y
+uint8_t  zero        = 0x00;  
+bool     BindButton  = false;
 uint32_t TXTimeStamp;
 uint32_t HopStart;
 uint8_t  PreviousChannelNumber = 0 ;
@@ -480,7 +480,7 @@ char     ThisRadio[4] = "0 ";
 
 uint8_t  NextFrequency    = RECONNECT_CH;
 uint8_t  ThisFrequency    = RECONNECT_CH;
-bool     DoSbusSendOnly   = true;
+bool     DoSbusSendOnly   = false;
 
 
 #ifndef NOISYWIFI // Use this for UK legal flying 

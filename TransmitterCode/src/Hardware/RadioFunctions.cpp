@@ -107,17 +107,15 @@ void SendData()
     if ((millis() - TxPace) >= PACEMAKER) {
         TxPace = millis();
         get_new_channels_values(); // Load SendBuffer with new servo positions
-        if (DoSbusSendOnly)
+        
+        if (DoSbusSendOnly)       // If buddying by wire, send down wire only and transmit nothing.
         {
-           
-
             ReadSwitches();
             MapToSBUS(); 
             ShowComms();
             return;
         }
         
-
         if (!BoundFlag && !(CurrentView == CalibrateView) && !(CurrentView == SticksView)) 
             {
             BufferNewPipe();       // if not yet bound, send our pipe
