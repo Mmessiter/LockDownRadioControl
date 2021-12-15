@@ -481,6 +481,7 @@ char     ThisRadio[4] = "0 ";
 uint8_t  NextFrequency    = RECONNECT_CH;
 uint8_t  ThisFrequency    = RECONNECT_CH;
 bool     DoSbusSendOnly   = false;
+bool     BuddyMaster      = false;
 
 
 #ifndef NOISYWIFI // Use this for UK legal flying 
@@ -2459,10 +2460,9 @@ bool LoadAllParameters()
             ChannelMax[i] = SDReadInt(addr);
             addr += 2;
         }
-        //FHSSTop = SDReadByte(addr); // These are  currently Spare
+        DoSbusSendOnly = SDReadByte(addr); 
         ++addr;
-        //FHSSBottom = SDReadByte(addr); // These are  currently Spare
-        //if (FHSSBottom < 1) FHSSBottom = 1;
+        BuddyMaster = SDReadByte(addr); 
         ++addr;
         ModelNumber = SDReadByte(addr);
         ++addr;
@@ -2668,9 +2668,9 @@ void SaveTXStuff()
         SDUpdateInt(addr, ChannelMax[i]); // Stick max output of pot
         addr += 2;
     }
-   // SDUpdateByte(addr, FHSSTop); // These are  currently SPARE
+    SDUpdateByte(addr, DoSbusSendOnly); 
     ++addr;
-   // SDUpdateByte(addr, FHSSBottom); // These are  currently SPARE
+    SDUpdateByte(addr, BuddyMaster);
     ++addr;
     SDUpdateByte(addr, ModelNumber);
     ++addr;
@@ -3700,7 +3700,7 @@ void ReceiveModelFile()
 #endif
     SendText(ModelsView_filename, Waiting);
     RXPipe = FILEPIPEADDRESS;
-    Radio1.setRetries(15, 15);   // heer needed???
+    Radio1.setRetries(15, 15);   
     Radio1.setChannel(FILECHANNEL);
     Radio1.flush_tx();
     Radio1.openReadingPipe(1, RXPipe);
@@ -4177,6 +4177,9 @@ void Button_was_pressed()
     char pCalibrateView[]      = "page CalibrateView";
     char pFailSafe[]           = "page FailSafeView";
     char DataView_Clear[]      = "Clear";
+    char BuddyM[]              = "BuddyM";
+    char BuddyP[]              = "BuddyP";
+    char OptionsEnd[]          = "OptionsEnd";
 
     if (strlen(WordsIn) > 0) {
         StartInactvityTimeout();
@@ -4185,15 +4188,35 @@ void Button_was_pressed()
         Serial.println(WordsIn);
 #endif
 
-        if (InStrng(SetupView, WordsIn) > 0) {  // default goto setup screen
-            CurrentView = MainSetupView;
+        if (InStrng(SetupView, WordsIn) > 0) {    // default goto setup screen
             ClearText();
             SaveAllParameters();     
             SendCommand(page_SetupView);
             CurrentMode = NORMAL;
+            CurrentView = MainSetupView;
             return;
         }
-        
+
+        if (InStrng(OptionsEnd, WordsIn) > 0) {    // Options screen end
+            DoSbusSendOnly = GetValue(BuddyP);     // Pupil, wired // heer
+            BuddyMaster    = GetValue(BuddyM);     // Master, either.
+            if(DoSbusSendOnly)
+            {
+                Connected =  false;
+                LostContactFlag = true;
+                BlueLedOn();
+            }
+            ClearText();
+            SaveAllParameters();     
+            SendCommand(page_SetupView);
+            CurrentMode = NORMAL;
+            CurrentView = MainSetupView;
+            return;
+        }
+
+
+
+
         if (InStrng(DataEnd, WordsIn) > 0) { //  goto setup screen from Data screen
             CurrentView = MainSetupView;
             ClearText();
@@ -4296,6 +4319,8 @@ void Button_was_pressed()
         if (InStrng(OptionsViewS, WordsIn) > 0) {
             SendCommand(pOptionsViewS);
             SendValue(ScreenViewTimeout, ScreenTimeout);
+            SendValue(BuddyM,BuddyMaster);
+            SendValue(BuddyP,DoSbusSendOnly);
             SendValue(Pto, (Inactivity_Timeout / TICKSPERMINUTE));
             SendText(Tx_Name, TxName);
             CurrentView = Options_View;
@@ -5317,7 +5342,7 @@ void Button_was_pressed()
             if (strcmp(WordsIn, "Calibrate1") == 0) {
                 CurrentMode = CALIBRATELIMITS;
                 CentreMaxMins();
-                SendText1(SvT11, CMsg1); //heer
+                SendText1(SvT11, CMsg1);
                 SendText(SvB0, CMsg2);
                 ClearText();
                 return;
