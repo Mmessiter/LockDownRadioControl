@@ -1,14 +1,14 @@
 var searchData=
 [
-  ['sbusport_1267',['SBUSPORT',['../_receiver_code_2src_2main_8cpp.html#aa82f9d8a298740acdbaa5c78a9e9f50c',1,'main.cpp']]],
-  ['sbusrate_1268',['SBUSRATE',['../_receiver_code_2src_2main_8cpp.html#a39848a06498c1e6444c458f25542b252',1,'main.cpp']]],
+  ['sbusport_1267',['SBUSPORT',['../_radio_functions_8h.html#aa82f9d8a298740acdbaa5c78a9e9f50c',1,'SBUSPORT():&#160;RadioFunctions.h'],['../_receiver_code_2src_2main_8cpp.html#aa82f9d8a298740acdbaa5c78a9e9f50c',1,'SBUSPORT():&#160;main.cpp']]],
+  ['sbusrate_1268',['SBUSRATE',['../_receiver_code_2src_2main_8cpp.html#a39848a06498c1e6444c458f25542b252',1,'SBUSRATE():&#160;main.cpp'],['../_radio_functions_8h.html#a39848a06498c1e6444c458f25542b252',1,'SBUSRATE():&#160;RadioFunctions.h']]],
   ['scanwaveband_1269',['SCANWAVEBAND',['../_radio_functions_8h.html#af8400c0c2d5c4779f32223055a12336d',1,'SCANWAVEBAND():&#160;RadioFunctions.h'],['../_transmitter_code_2src_2main_8cpp.html#af8400c0c2d5c4779f32223055a12336d',1,'SCANWAVEBAND():&#160;main.cpp']]],
   ['second_5ftransceiver_1270',['SECOND_TRANSCEIVER',['../common_8h.html#a2894a289b91f0bc795407decb6e4c39d',1,'common.h']]],
   ['sendnothing_1271',['SENDNOTHING',['../_radio_functions_8h.html#aa8cb091644f8785e060422c38a5ee334',1,'SENDNOTHING():&#160;RadioFunctions.h'],['../_transmitter_code_2src_2main_8cpp.html#aa8cb091644f8785e060422c38a5ee334',1,'SENDNOTHING():&#160;main.cpp']]],
   ['servosused_1272',['SERVOSUSED',['../_receiver_code_2src_2main_8cpp.html#ab1515f8a159ef919c7afb5a1d71f55a3',1,'main.cpp']]],
   ['skyblue_1273',['SkyBlue',['../_transmitter_code_2src_2main_8cpp.html#a8a431faef1cf5f8d166b51cd97ee08bf',1,'main.cpp']]],
   ['sticksrate_1274',['STICKSRATE',['../_receiver_code_2src_2main_8cpp.html#abbca4c9f296f6468f8579ad18f5f5e83',1,'main.cpp']]],
-  ['sticksview_1275',['SticksView',['../_transmitter_code_2src_2main_8cpp.html#ab7abdd2877694598578f0c4d717f46e8',1,'SticksView():&#160;main.cpp'],['../_radio_functions_8cpp.html#ab7abdd2877694598578f0c4d717f46e8',1,'SticksView():&#160;RadioFunctions.cpp']]],
+  ['sticksview_1275',['SticksView',['../_radio_functions_8cpp.html#ab7abdd2877694598578f0c4d717f46e8',1,'SticksView():&#160;RadioFunctions.cpp'],['../_transmitter_code_2src_2main_8cpp.html#ab7abdd2877694598578f0c4d717f46e8',1,'SticksView():&#160;main.cpp']]],
   ['switch0_1276',['Switch0',['../_transmitter_code_2src_2main_8cpp.html#ad94e0ecb37f110cec07b0677ecede0a3',1,'main.cpp']]],
   ['switch1_1277',['Switch1',['../_transmitter_code_2src_2main_8cpp.html#a6669806eaa0f81828724af38fafde854',1,'main.cpp']]],
   ['switch2_1278',['Switch2',['../_transmitter_code_2src_2main_8cpp.html#a763567bc25069189fc31134df7a824dd',1,'main.cpp']]],
