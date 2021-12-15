@@ -269,6 +269,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "DateTime", "_transmitter_code_2src_2main_8cpp.html#a4a2edd187b3a0bc44a2b755546b8f144", null ],
     [ "DefaultPipe", "_transmitter_code_2src_2main_8cpp.html#a0b9fd9f8e85725c128617f006132ea57", null ],
     [ "deletedmodel", "_transmitter_code_2src_2main_8cpp.html#ac99744bc17a7d6aebbd08b1341e8fd31", null ],
+    [ "DoSbusSendOnly", "_transmitter_code_2src_2main_8cpp.html#a2f95a8628ae27f3acb9b1598b8321781", null ],
     [ "Exponential", "_transmitter_code_2src_2main_8cpp.html#aa5eef81a07bc2868ef6792bb8372dff3", null ],
     [ "ExportedFileCounter", "_transmitter_code_2src_2main_8cpp.html#a1252681409ac5c9ed335a78f80633236", null ],
     [ "FailSafeChannel", "_transmitter_code_2src_2main_8cpp.html#a5a547d8417a6f90c0b2bdd5d836274b2", null ],
