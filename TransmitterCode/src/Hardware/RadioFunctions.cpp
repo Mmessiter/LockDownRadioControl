@@ -24,7 +24,6 @@
 #define FHSS_RESCUE_TOP    125                       // reduced range for recovery
 #define UNCOMPRESSEDWORDS  20                        // DATA TO SEND = 40  Bytes
 #define COMPRESSEDWORDS    UNCOMPRESSEDWORDS * 3 / 4 // COMPRESSED DATA SENT = 30  Bytes
-#define PACKETS_PER_HOP    20                        // Must match RX setting
 
 /************************************************************************************************************/
 
