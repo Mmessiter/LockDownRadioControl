@@ -12,6 +12,18 @@
 
 
  // **************************************************************************
+ //                            SBUS PARAMETERS   (BUDDY BOX)                 *
+ //***************************************************************************
+
+#define SBUSRATE        10       // SBUS frame every 10 milliseconds (= 100 Hz)
+#define SBUSPORT        Serial2
+
+#define EXTRAMICROS 500 // for extra resolution driving servos
+#define MINMICROS   1000 - EXTRAMICROS
+#define MAXMICROS   2000 + EXTRAMICROS
+
+
+ // **************************************************************************
  //                            FHSS PARAMETERS                               *
  //***************************************************************************
 

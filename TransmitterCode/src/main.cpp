@@ -128,6 +128,7 @@
 #include <TeensyID.h>
 #include <EEPROM.h>
 #include <InterpolationLib.h>
+#include <SBUS.h>
 #include "Hardware/RadioFunctions.h"
 
 #ifdef USE_WATCHDOG
@@ -202,6 +203,12 @@ RF24 Radio1(CE_PIN, CSN_PIN);
 WDT_T4<WDT3>  TeensyWatchDog;
 WDT_timings_t WatchDogConfig;
 #endif
+
+
+SBUS MySbus(SBUSPORT);
+
+uint16_t SbusChannels[CHANNELSUSED + 8]; // a few spare
+int      SBUSTimer = 0;
 
 uint8_t Mixes[MAXMIXES + 1][CHANNELSUSED + 1];                // Channel mixes' 2D array store
 int     Trims[FlightModesUsed + 1][CHANNELSUSED + 1];         // Trims to store
@@ -490,6 +497,27 @@ uint8_t FHSS_Channels[84] = {28,24,61,64,28,55,66,19,76,21,59,67,15,71,82,32,49,
                              86,92,119,120,91,114,119,117,101,117,100,92,92,120,119,115,113,
                              92,121,89,119,103,106,121,123,96,93,102,111,95,101,122,95};
 #endif
+
+
+
+/************************************************************************************************************/
+
+/** Map servo channels' data from SendBuffer into SbusChannels buffer */
+void MapToSBUS()
+{
+    int RangeMax = 2047; // = Frsky at 150 %
+    int RangeMin = 0;
+       if (millis() - SBUSTimer >= SBUSRATE) 
+       {
+         SBUSTimer = millis();
+            for (int j = 0; j < CHANNELSUSED; ++j) 
+            {
+                SbusChannels[j] = map(SendBuffer[j], MINMICROS, MAXMICROS, RangeMin, RangeMax);
+            }
+        MySbus.write(&SbusChannels[0]);
+       }
+}
+/************************************************************************************************************/
 
 /*********************************************************************************************************************************/
 
@@ -5642,7 +5670,8 @@ void CheckGapsLength()
 void loop()
 {
     KickTheDog(); // Watchdog
-
+    
+    //MapToSBUS();
     
     if (GetButtonPress()) {
         Button_was_pressed();

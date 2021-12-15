@@ -105,8 +105,6 @@ bool     FailSafeChannel[17];
 bool     FailSafeDataLoaded = false;
 uint8_t  ModelNumber        = 0;
 bool     ModelNumberSaved   = false;
-//uint8_t  PowerSetting       = 4;
-//uint8_t  DataRate           = 1;
 bool     ReInit             = false;
 uint8_t  byte1              = 0;
 uint8_t  byte2              = 0;
@@ -341,7 +339,7 @@ void AttachServos()
             MCMServo[i].attach(PWMPins[i]);
         }
         ServosAttached = true;
-    } // now 12 SbusChannels, DEFAULT TRAVEL
+    } // now 16 SbusChannels, DEFAULT TRAVEL
     MySbus.begin();
 }
 
