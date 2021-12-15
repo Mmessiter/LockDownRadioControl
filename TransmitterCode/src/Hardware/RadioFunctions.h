@@ -151,6 +151,8 @@ extern void  ParseAckPayload();
 extern void  FailedPacket();
 extern void  StartInactvityTimeout();
 extern void  ShowServoPos();
+extern void  MapToSBUS();
+extern bool  DoSbusSendOnly;
 
 
 

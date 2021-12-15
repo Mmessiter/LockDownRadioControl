@@ -480,6 +480,7 @@ char     ThisRadio[4] = "0 ";
 
 uint8_t  NextFrequency    = RECONNECT_CH;
 uint8_t  ThisFrequency    = RECONNECT_CH;
+bool     DoSbusSendOnly   = false;
 
 
 #ifndef NOISYWIFI // Use this for UK legal flying 
@@ -2599,6 +2600,7 @@ void setup()
     StartInactvityTimeout();
     SizeOfCompressedData = sizeof(CompressedData);
     GetTXVersionNumber();
+    MySbus.begin();
 
 }
 
@@ -5694,8 +5696,6 @@ void loop()
         switch (CurrentMode) {
             case 0:
                 SendData();  
-               // MapToSBUS();
-               // Serial.println (millis());
                 break;
             case 1:
                 CalibrateSticks();
