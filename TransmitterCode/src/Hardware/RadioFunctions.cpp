@@ -109,7 +109,7 @@ void SendData()
         TxPace = millis();
         get_new_channels_values(); // Load SendBuffer with new servo positions
         
-        if (DoSbusSendOnly)       // If buddying by wire, send SBUS data down wire only and transmit nothing.
+        if (DoSbusSendOnly)       // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
         {
             ReadSwitches();
             MapToSBUS(); 
