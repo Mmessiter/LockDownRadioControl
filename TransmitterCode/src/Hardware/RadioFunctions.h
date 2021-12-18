@@ -33,7 +33,7 @@
 #define HOPTIME           55    // A New frequency hop every 55 ms (must match receiver setting)
 #define PACEMAKER         2     // MINIMUM Ms between packets of data.
 #define FREQUENCYSCOUNT   82    // How many frequencies to use before wrapping to first
-#define RETRYCOUNT        2     // auto retries from nRF24L01
+#define RETRYCOUNT        3     // auto retries from nRF24L01
 #define RETRYWAIT         1     // NB ACTUAL wait between retries will be RetryWait+1 * 250us
                                 // A failed packet therefore takes (RetryWait+1 * 250us) * RetryCount 
 // #define NOISYWIFI            // if defined (BOTH ENDS!) this uses channels well above most wifi (but not licence free in some countries).
