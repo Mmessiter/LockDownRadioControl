@@ -144,7 +144,7 @@ void SendData()
 //  *************************************** SEND *************************************************************************************
         if (Radio1.isAckPayloadAvailable()) 
                {
-                    (Radio1.read(&AckPayload, AckPayloadSize));         //  "sizeof" doesn't work with externs, hence 2 new vars.
+                    Radio1.read(&AckPayload, AckPayloadSize);         //  "sizeof" doesn't work with externs, hence 2 new vars.
                     ++RangeTestGoodPackets;
                     LostContactFlag = false;
                     ++PacketNumber;
