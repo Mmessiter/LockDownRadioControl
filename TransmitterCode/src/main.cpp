@@ -205,10 +205,9 @@ WDT_timings_t WatchDogConfig;
 #endif
 
 
-SBUS MySbus(SBUSPORT);
-
-uint16_t SbusChannels[CHANNELSUSED + 8]; // a few spare
-int      SBUSTimer = 0;
+SBUS     MySbus(SBUSPORT);
+uint16_t SbusChannels[CHANNELSUSED + 2]; // a few spare
+uint32_t SBUSTimer = 0;
 
 uint8_t Mixes[MAXMIXES + 1][CHANNELSUSED + 1];                // Channel mixes' 2D array store
 int     Trims[FlightModesUsed + 1][CHANNELSUSED + 1];         // Trims to store
@@ -482,7 +481,7 @@ uint8_t  NextFrequency    = RECONNECT_CH;
 uint8_t  ThisFrequency    = RECONNECT_CH;
 bool     DoSbusSendOnly   = false;
 bool     BuddyMaster      = false;
-uint32_t BuddyTimeout     = false;
+
 
 
 #ifndef NOISYWIFI // Use this for UK legal flying 
@@ -506,22 +505,21 @@ uint8_t FHSS_Channels[84] = {28,24,61,64,28,55,66,19,76,21,59,67,15,71,82,32,49,
 
 void GetSlaveChannelValues (){
 
-    bool failSafeM;                                                                                 // These flags not used, yet.     
+    bool failSafeM;                                                                            // These flags not used, yet.     
     bool lostFrameM;
 
     if(SendBuffer[11] > 1000)
-        {                                                                                           // CHANNEL 12 (500 - 2500) used here as switch.
+    {                                                                                          // CHANNEL 12 (500 - 2500) used here as switch.
         if (MySbus.read(&SbusChannels[0],&failSafeM,&lostFrameM))
-            {
-               BuddyTimeout = millis();                                                             // RESET timeout when data comes in
-            }                                                                                       // Even if there's no new data, re-use old data                                    
-        
-        if(millis() - BuddyTimeout < 500)                                                           // Ignore data more that 500ms old
         {
-            for (int j = 0; j < CHANNELSUSED; ++j)                                                  // While slave has control, his stick data replaces all ours
-                {
-                    SendBuffer[j] = map(SbusChannels[j],RANGEMIN,RANGEMAX,MINMICROS,MAXMICROS);     // Put re-mapped data where we use it.
-                } 
+            SBUSTimer = millis();                                                            // RESET timeout when data comes in
+        }                                                                                       // Even if there's no new data, re-use old data                                    
+        if(millis() - SBUSTimer < 500)                                                       // Ignore data more that 500ms old
+        {
+            for (int j = 0; j < CHANNELSUSED; ++j)                                              // While slave has control, his stick data replaces all ours
+            {
+                SendBuffer[j] = map(SbusChannels[j],RANGEMIN,RANGEMAX,MINMICROS,MAXMICROS);     // Put re-mapped data where we use it.
+            } 
         }
     }
 }
