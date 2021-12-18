@@ -114,7 +114,7 @@ void SendData()
             ReadSwitches();
             MapToSBUS(); 
             ShowComms();
-            return;
+            return;               // no more to do here!
         }
 
         if (BuddyMaster)          // If buddy master, check where student's sticks etc. are.

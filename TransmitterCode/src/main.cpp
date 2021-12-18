@@ -505,11 +505,11 @@ uint8_t FHSS_Channels[84] = {28,24,61,64,28,55,66,19,76,21,59,67,15,71,82,32,49,
 
 void GetSlaveChannelValues (){
 
-    bool failSafeM;                                                                         // These flags not used, yet.     
+    bool failSafeM;                                                                          // These flags not used, yet.     
     bool lostFrameM;
 
     if(SendBuffer[11] > 1000)
-    {                                                                                       // MASTER'S CHANNEL 12 (500 - 2500) used here as switch.
+    {                                                                                        // MASTER'S CHANNEL 12 (500 - 2500) used here as switch.
         if (MySbus.read(&SbusChannels[0],&failSafeM,&lostFrameM))
         {
             SBUSTimer = millis();                                                            // RESET timeout when data comes in
