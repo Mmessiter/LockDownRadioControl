@@ -513,7 +513,7 @@ void GetSlaveChannelValues (){
         MySbus.read(&SbusChannels[0],&failSafeM,&lostFrameM);                                       // Even if there's no new data, re-use old data                                    
         for (int j = 0; j < CHANNELSUSED; ++j)                                                      // While slave has control, his data replaces ours
             {
-                SendBuffer[j] = map(SbusChannels[j],RANGEMIN, RANGEMAX,MINMICROS, MAXMICROS);       // Put re-mapped data where we use it.
+                SendBuffer[j] = map(SbusChannels[j],RANGEMIN,RANGEMAX,MINMICROS,MAXMICROS);       // Put re-mapped data where we use it.
             } 
         }
 }
@@ -529,7 +529,7 @@ void MapToSBUS()
          SBUSTimer = millis();
             for (int j = 0; j < CHANNELSUSED; ++j) 
             {
-                SbusChannels[j] = map(SendBuffer[j], MINMICROS, MAXMICROS, RANGEMIN, RANGEMAX);
+                SbusChannels[j] = map(SendBuffer[j], MINMICROS,MAXMICROS,RANGEMIN,RANGEMAX);
             }
        MySbus.write(&SbusChannels[0]);
        }
