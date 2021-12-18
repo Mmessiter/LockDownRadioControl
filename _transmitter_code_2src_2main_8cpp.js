@@ -140,6 +140,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "GetNextNumber", "_transmitter_code_2src_2main_8cpp.html#a5b456468ac6be5e872b327e0d03a9f7a", null ],
     [ "GetRXTime", "_transmitter_code_2src_2main_8cpp.html#acd508e422b616377d0f0cdb44e4cfae0", null ],
     [ "GetRXVersionNumber", "_transmitter_code_2src_2main_8cpp.html#a4f813935d8fe58355228cbbf25e12f96", null ],
+    [ "GetSlaveChannelValues", "_transmitter_code_2src_2main_8cpp.html#a4635a8fc77c9f57fca53a5206cd5e571", null ],
     [ "GetStatistics", "_transmitter_code_2src_2main_8cpp.html#a1d43600764a34cbda9c2fa211a12ed2e", null ],
     [ "GetStickInput", "_transmitter_code_2src_2main_8cpp.html#a1eb1b5f9139051cef03943c3620c7d81", null ],
     [ "GetTextIn", "_transmitter_code_2src_2main_8cpp.html#a6fe457db5d6bc71ccb447dee824abf6a", null ],
