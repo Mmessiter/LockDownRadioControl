@@ -120,7 +120,6 @@ void SendData()
         if (BuddyMaster)          // If buddy master, check where student's sticks etc. are.
         {
            GetSlaveChannelValues();
-
         }
      
         if (!BoundFlag && !(CurrentView == CalibrateView) && !(CurrentView == SticksView)) 

@@ -482,6 +482,7 @@ uint8_t  NextFrequency    = RECONNECT_CH;
 uint8_t  ThisFrequency    = RECONNECT_CH;
 bool     DoSbusSendOnly   = false;
 bool     BuddyMaster      = false;
+uint32_t BuddyTimeout     = false;
 
 
 #ifndef NOISYWIFI // Use this for UK legal flying 
@@ -510,12 +511,19 @@ void GetSlaveChannelValues (){
 
     if(SendBuffer[11] > 1000)
         {                                                                                           // CHANNEL 12 (500 - 2500) used here as switch.
-        MySbus.read(&SbusChannels[0],&failSafeM,&lostFrameM);                                       // Even if there's no new data, re-use old data                                    
-        for (int j = 0; j < CHANNELSUSED; ++j)                                                      // While slave has control, his data replaces ours
+        if (MySbus.read(&SbusChannels[0],&failSafeM,&lostFrameM))
             {
-                SendBuffer[j] = map(SbusChannels[j],RANGEMIN,RANGEMAX,MINMICROS,MAXMICROS);       // Put re-mapped data where we use it.
-            } 
+               BuddyTimeout=millis();                                                               // RESET timeout when data comes in
+            }                                                                                       // Even if there's no new data, re-use old data                                    
+        
+        if(millis()-BuddyTimeout < 500)                                                             // Ignore data more that 500ms old
+        {
+            for (int j = 0; j < CHANNELSUSED; ++j)                                                  // While slave has control, his data replaces ours
+                {
+                    SendBuffer[j] = map(SbusChannels[j],RANGEMIN,RANGEMAX,MINMICROS,MAXMICROS);     // Put re-mapped data where we use it.
+                } 
         }
+    }
 }
 
 /************************************************************************************************************/
