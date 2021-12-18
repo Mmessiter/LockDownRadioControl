@@ -513,7 +513,7 @@ void GetSlaveChannelValues (){
         {                                                                                           // CHANNEL 12 (500 - 2500) used here as switch.
         if (MySbus.read(&SbusChannels[0],&failSafeM,&lostFrameM))
             {
-               BuddyTimeout=millis();                                                               // RESET timeout when data comes in
+               BuddyTimeout = millis();                                                               // RESET timeout when data comes in
             }                                                                                       // Even if there's no new data, re-use old data                                    
         
         if(millis()-BuddyTimeout < 500)                                                             // Ignore data more that 500ms old
