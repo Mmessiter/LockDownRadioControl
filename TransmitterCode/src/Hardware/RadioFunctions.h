@@ -17,6 +17,9 @@
 
 #define SBUSRATE        10       // SBUS frame every 10 milliseconds (= 100 Hz)
 #define SBUSPORT        Serial2
+#define RANGEMAX        2047      // = Frsky at 150 %
+#define RANGEMIN        0
+
 
 #define EXTRAMICROS 500 // for extra resolution driving servos
 #define MINMICROS   1000 - EXTRAMICROS
@@ -135,7 +138,10 @@ extern uint32_t       GapStart;
 extern uint8_t        BadChannelMax;
 extern uint32_t       RXTimeStamp;
 extern bool           DoSbusSendOnly;
+extern bool           BuddyMaster;
 
+
+extern void  GetSlaveChannelValues();
 extern void  KickTheDog();
 extern void  SendCommand(char* tbox);
 extern void  ReadSwitches();

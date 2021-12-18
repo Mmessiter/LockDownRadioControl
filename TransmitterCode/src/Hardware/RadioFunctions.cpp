@@ -84,6 +84,8 @@ void TryOtherPipe()
         }    
    }
 }
+
+
 /************************************************************************************************************/
 
 void BufferNewPipe()
@@ -107,14 +109,20 @@ void SendData()
         TxPace = millis();
         get_new_channels_values(); // Load SendBuffer with new servo positions
         
-        if (DoSbusSendOnly)       // If buddying by wire, send down wire only and transmit nothing.
+        if (DoSbusSendOnly)       // If buddying by wire, send SBUS data down wire only and transmit nothing.
         {
             ReadSwitches();
             MapToSBUS(); 
             ShowComms();
             return;
         }
-        
+
+        if (BuddyMaster)          // If buddy master, check where student's sticks etc. are.
+        {
+           GetSlaveChannelValues();
+
+        }
+     
         if (!BoundFlag && !(CurrentView == CalibrateView) && !(CurrentView == SticksView)) 
             {
             BufferNewPipe();       // if not yet bound, send our pipe

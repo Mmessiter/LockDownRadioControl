@@ -500,21 +500,36 @@ uint8_t FHSS_Channels[84] = {28,24,61,64,28,55,66,19,76,21,59,67,15,71,82,32,49,
                              92,121,89,119,103,106,121,123,96,93,102,111,95,101,122,95};
 #endif
 
+/************************************************************************************************************/
+// This function reads data from BUDDY (Slave) BUT uses it ONLY WHILE the channel 12 switch is in the ON position ( > 1000)
 
+void GetSlaveChannelValues (){
+
+    bool failSafeM;                                                                                 // These flags not used, yet.     
+    bool lostFrameM;
+
+    if(SendBuffer[11] > 1000)
+        {                                                                                           // CHANNEL 12 (500 - 2500) used here as switch.
+        MySbus.read(&SbusChannels[0],&failSafeM,&lostFrameM);                                       // Even if there's no new data, re-use old data                                    
+        for (int j = 0; j < CHANNELSUSED; ++j)                                                      // While slave has control, his data replaces ours
+            {
+                SendBuffer[j] = map(SbusChannels[j],RANGEMIN, RANGEMAX,MINMICROS, MAXMICROS);       // Put re-mapped data where we use it.
+            } 
+        }
+}
 
 /************************************************************************************************************/
 
 /** Map servo channels' data from SendBuffer into SbusChannels buffer */
+// This funtion is used by the BUDDY slave to send it's controls out down a wire using SBUS
 void MapToSBUS()
 {
-    int RangeMax = 2047; // = Frsky at 150 %
-    int RangeMin = 0;
        if (millis() - SBUSTimer >= SBUSRATE) 
        {
          SBUSTimer = millis();
             for (int j = 0; j < CHANNELSUSED; ++j) 
             {
-                SbusChannels[j] = map(SendBuffer[j], MINMICROS, MAXMICROS, RangeMin, RangeMax);
+                SbusChannels[j] = map(SendBuffer[j], MINMICROS, MAXMICROS, RANGEMIN, RANGEMAX);
             }
        MySbus.write(&SbusChannels[0]);
        }
