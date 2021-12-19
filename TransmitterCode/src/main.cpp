@@ -1322,7 +1322,9 @@ void ShowComms()
     char  FrontView_TXBV[]       = "TXBV";
     char  Not_Connected[]        = "Not connected";
     char  Msg_Connected[]        = "** Connected! **";
-    char  MsgBuddying[]          = "(Buddying)";
+    char  Msg_CnctdBuddyMast[]   = "Connected BUDDY MASTER";
+
+    char  MsgBuddying[]          = "Buddy";
     char  DataView_pps[]         = "pps";
     char  DataView_lps[]         = "lps";
     char  DataView_Alt[]         = "alt";
@@ -1402,8 +1404,16 @@ void ShowComms()
                     BindButton=true; 
                 }
                 else {
-                    SendText(FrontView_Connected, Msg_Connected);
-                    if (BoundFlag == true) {
+                    if (BoundFlag) 
+                    {
+                        if (!BuddyMaster)
+                        {
+                            SendText(FrontView_Connected, Msg_Connected);
+                        }
+                        else
+                        {
+                            SendText(FrontView_Connected, Msg_CnctdBuddyMast); 
+                        }
                         GreenLedOn();
                         StartInactvityTimeout();
                     }
@@ -1483,8 +1493,9 @@ void ShowComms()
                     SendText(FrontView_AckPayload, na);
                 }
             }
-            else
+            else // i.e. contact is lost
             {
+                
                 if (CurrentView == FrontView)
                 {
                      if (DoSbusSendOnly) {
@@ -2262,7 +2273,7 @@ void UpdateButtonLabels()
         strcat(BoxOffsetLabel, ChannelNames[15]);
         SendText(SticksViewButton16, BoxOffsetLabel);
     }
-    if (CurrentView == Inputs_View || CurrentView == FailSafe_View) { // heer!
+    if (CurrentView == Inputs_View || CurrentView == FailSafe_View) { 
         SendText(fsch1, ChannelNames[0]);
         SendText(fsch2, ChannelNames[1]);
         SendText(fsch3, ChannelNames[2]);
@@ -4520,7 +4531,7 @@ void Button_was_pressed()
             SendValue(fs14, FailSafeChannel[13]);
             SendValue(fs15, FailSafeChannel[14]);
             SendValue(fs16, FailSafeChannel[15]);
-            CurrentView = FailSafe_View; // heer
+            CurrentView = FailSafe_View; 
             UpdateButtonLabels();
             ClearText();
             return;
