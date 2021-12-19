@@ -1323,7 +1323,6 @@ void ShowComms()
     char  Not_Connected[]        = "Not connected";
     char  Msg_Connected[]        = "** Connected! **";
     char  Msg_CnctdBuddyMast[]   = "Connected BUDDY MASTER";
-
     char  MsgBuddying[]          = "Buddy";
     char  DataView_pps[]         = "pps";
     char  DataView_lps[]         = "lps";
@@ -1366,7 +1365,7 @@ void ShowComms()
 
 
     if (CurrentView == FrontView || CurrentView == DataView) {
-        if (millis() - LastShowTime > 1000) {
+        if (millis() - LastShowTime > 1000) {  // update this lot only once per second
             ShowNow = true;
         }
     }
