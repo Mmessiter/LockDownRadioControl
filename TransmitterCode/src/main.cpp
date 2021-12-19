@@ -175,6 +175,7 @@ RF24 Radio1(CE_PIN, CSN_PIN);
 #define Help_View       14
 #define Options_View    15
 #define Inputs_View     16
+#define FailSafe_View   17
 
 #define UNCOMPRESSEDWORDS 20                        // DATA TO SEND = 40  bytes
 #define COMPRESSEDWORDS   UNCOMPRESSEDWORDS * 3 / 4 // COMPRESSED DATA SENT = 30  bytes
@@ -2261,7 +2262,7 @@ void UpdateButtonLabels()
         strcat(BoxOffsetLabel, ChannelNames[15]);
         SendText(SticksViewButton16, BoxOffsetLabel);
     }
-    if (CurrentView == Inputs_View) {
+    if (CurrentView == Inputs_View || CurrentView == FailSafe_View) { // heer!
         SendText(fsch1, ChannelNames[0]);
         SendText(fsch2, ChannelNames[1]);
         SendText(fsch3, ChannelNames[2]);
@@ -4219,7 +4220,7 @@ void Button_was_pressed()
         }
 
         if (InStrng(OptionsEnd, WordsIn) > 0) {    // Options screen end
-            DoSbusSendOnly = GetValue(BuddyP);     // Pupil, wired // heer
+            DoSbusSendOnly = GetValue(BuddyP);     // Pupil, wired 
             BuddyMaster    = GetValue(BuddyM);     // Master, either.
             if(DoSbusSendOnly)
             {
@@ -4519,6 +4520,8 @@ void Button_was_pressed()
             SendValue(fs14, FailSafeChannel[13]);
             SendValue(fs15, FailSafeChannel[14]);
             SendValue(fs16, FailSafeChannel[15]);
+            CurrentView = FailSafe_View; // heer
+            UpdateButtonLabels();
             ClearText();
             return;
         }

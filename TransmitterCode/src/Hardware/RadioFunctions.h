@@ -8,23 +8,23 @@
 #define TXVERSION_MAJOR   1  
 #define TXVERSION_MINOR   4
 #define TXVERSION_MINIMUS 2
+ 
  // **************************************************************************
-
-
- // **************************************************************************
- //                            SBUS PARAMETERS   (BUDDY BOX)                 *
+ //                            SBUS PARAMETERS   (FOR BUDDY BOXING)          *
  //***************************************************************************
 
 #define SBUSRATE        10       // SBUS frame every 10 milliseconds (= 100 Hz)
 #define SBUSPORT        Serial2
 #define RANGEMAX        2047      // = Frsky at 150 %
-#define RANGEMIN        0
+#define RANGEMIN        0         // = Frsky at 0 %
 
+ // **************************************************************************
+ //                            SERVO RANGE PARAMETERS                        *
+ //***************************************************************************
 
 #define EXTRAMICROS 500 // for extra resolution driving servos
 #define MINMICROS   1000 - EXTRAMICROS
 #define MAXMICROS   2000 + EXTRAMICROS
-
 
  // **************************************************************************
  //                            FHSS PARAMETERS                               *
@@ -44,9 +44,6 @@
 #ifdef NOISYWIFI 
 #define RECONNECT_CH     120
 #endif
- // **************************************************************************
-
-
 
  // **************************************************************************
  //                            SEND MODE PARAMETERS                          * 
