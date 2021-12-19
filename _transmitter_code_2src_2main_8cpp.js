@@ -401,6 +401,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "SingleModelFile", "_transmitter_code_2src_2main_8cpp.html#ae72cb82df39671a3226320fc9c32c125", null ],
     [ "SingleModelFlag", "_transmitter_code_2src_2main_8cpp.html#ae2cdde9c7cfcbfc86f8e37f2b63c2fbe", null ],
     [ "SizeOfCompressedData", "_transmitter_code_2src_2main_8cpp.html#ac99b4fb4d71fa95d1ee8ab0a81696a4d", null ],
+    [ "SlaveHasControl", "_transmitter_code_2src_2main_8cpp.html#afd042feb8b8e181cbff0d5f27fde063e", null ],
     [ "StartLocation", "_transmitter_code_2src_2main_8cpp.html#a4037de0ea0fc7cd3c7cd3c40eee10a98", null ],
     [ "success", "_transmitter_code_2src_2main_8cpp.html#a78e0e3b7ed8385dd9fdbd0d0b6836054", null ],
     [ "Switch", "_transmitter_code_2src_2main_8cpp.html#a93ac0e6bbb965111abd01e393a21fcfe", null ],
