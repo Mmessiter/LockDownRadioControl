@@ -1393,8 +1393,6 @@ void ShowComms()
             if (CurrentView == DataView) SendText(DataView_txv, TransmitterVersionNumber); // TX Version Number
                                                                                            // if (CurrentView == DataView) SendText(DataView_txv, Vbuf);
         }
-
-       
         if (!LostContactFlag) 
             {
             if ((CurrentView == FrontView)) {
@@ -1417,8 +1415,7 @@ void ShowComms()
                         StartInactvityTimeout();
                     }
                 } 
-            }
-           
+            }         
             if (CurrentView == DataView) {
                     SendValue(DataView_pps,  PacketsPerSecond);
                     SendValue(DataView_lps,  LostPackets);
@@ -1493,8 +1490,7 @@ void ShowComms()
                 }
             }
             else // i.e. contact is lost
-            {
-                
+            {             
                 if (CurrentView == FrontView)
                 {
                      if (DoSbusSendOnly) {
@@ -1502,9 +1498,6 @@ void ShowComms()
                      } else {
                         SendText(FrontView_Connected, Not_Connected);
                      }
-
-
-
                 }
             }
         }
