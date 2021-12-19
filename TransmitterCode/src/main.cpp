@@ -482,6 +482,7 @@ uint8_t  NextFrequency    = RECONNECT_CH;
 uint8_t  ThisFrequency    = RECONNECT_CH;
 bool     DoSbusSendOnly   = false;
 bool     BuddyMaster      = false;
+bool     SlaveHasControl  = false;
 
 
 
@@ -508,7 +509,7 @@ void GetSlaveChannelValues (){
 
     bool failSafeM;                                                                          // These flags not used, yet.     
     bool lostFrameM;
-
+    SlaveHasControl = false;
     if(SendBuffer[11] > 1000)
     {                                                                                        // MASTER'S CHANNEL 12 (500 - 2500) used here as switch.
         if (MySbus.read(&SbusChannels[0],&failSafeM,&lostFrameM))
@@ -517,6 +518,7 @@ void GetSlaveChannelValues (){
         }                                                                                    // Even if there's no new data, re-use old data                                    
         if(millis() - SBUSTimer < 500)                                                       // Ignore data more than 500ms old
         {
+            SlaveHasControl = true;
             for (int j = 0; j < CHANNELSUSED; ++j)                                           // While slave has control, his stick data replaces all ours
             {
                 SendBuffer[j] = map(SbusChannels[j],RANGEMIN,RANGEMAX,MINMICROS,MAXMICROS);  // Put re-mapped data where we use it.
@@ -1323,6 +1325,7 @@ void ShowComms()
     char  Not_Connected[]        = "Not connected";
     char  Msg_Connected[]        = "** Connected! **";
     char  Msg_CnctdBuddyMast[]   = "Connected BUDDY MASTER";
+    char  Msg_CnctdBuddySlave[]  = "Connected BUDDY SLAVE";
     char  MsgBuddying[]          = "Buddy";
     char  DataView_pps[]         = "pps";
     char  DataView_lps[]         = "lps";
@@ -1409,7 +1412,13 @@ void ShowComms()
                         }
                         else
                         {
-                            SendText(FrontView_Connected, Msg_CnctdBuddyMast); 
+                            if (!SlaveHasControl)
+                            {
+                                SendText(FrontView_Connected, Msg_CnctdBuddyMast); 
+                            }else  
+                            {
+                                SendText(FrontView_Connected, Msg_CnctdBuddySlave); 
+                            }
                         }
                         GreenLedOn();
                         StartInactvityTimeout();
