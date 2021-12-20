@@ -15,7 +15,7 @@
 
 #define RXVERSION_MAJOR   1
 #define RXVERSION_MINOR   4
-#define RXVERSION_MINIMUS 2 // Dec 14th 2021
+#define RXVERSION_MINIMUS 3 // Dec 20th 2021
 
 
 // #define DEBUG

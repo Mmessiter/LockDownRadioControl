@@ -111,9 +111,8 @@
 
 // VALUES FOR MAX SERVO RESOLUTION
 
-#define EXTRAMICROS     500
-#define MINMICROS       1000 - EXTRAMICROS
-#define MAXMICROS       2000 + EXTRAMICROS
+#define MINMICROS       500 
+#define MAXMICROS       2500 
 #define HALFMICROSRANGE (MAXMICROS - MINMICROS) / 2 //  = 500
 #define MIDMICROS       MINMICROS + HALFMICROSRANGE
 
@@ -2611,13 +2610,13 @@ void setup()
     ScanI2c();
     if (USE_INA219) ina219.begin();
     SD.begin(chipSelect);
-    InitRadio(DefaultPipe); //  ***** Now in RadioFunctions file! *****
     InitSwitches();
     SendCommand(NextionWakeUp);
     InitMaxMin();        // in case not yet calibrated
     InitCentreDegrees(); // In case not yet calibrated
     CentreTrims();
-    CalibratedYet = LoadAllParameters(); // If exists, read saved SD card settings.
+    CalibratedYet = LoadAllParameters(); // If they exist, read saved SD card settings. 
+    InitRadio(DefaultPipe); 
     SendCommand(page_FrontView); // Let's start at the beginning. Why not?
     SendText(FrontView_Connected, Initialising);
     SendValue1(NextionSleepTime, ScreenTimeout); // Setup Screen timeout (No .val needed)
@@ -2653,10 +2652,8 @@ void setup()
 
 void GetStatistics()
 {
-   // success              = (float(RangeTestGoodPackets) / (float(RangeTestGoodPackets) + float(RangeTestLostPackets))) * 100;
     PacketsPerSecond     = RangeTestGoodPackets;
-    RangeTestGoodPackets = 0;
-   // RangeTestLostPackets = 0;
+    RangeTestGoodPackets = 0; 
 }
 
 /*********************************************************************************************************************************/

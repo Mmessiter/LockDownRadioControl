@@ -3,11 +3,11 @@
 #define RadioFunctions_H
 
  // **************************************************************************
- //                     TX VERSION NUMBER   (Dec 14th 2021 Malcolm Messiter) *
+ //                     TX VERSION NUMBER   (Dec 20th 2021 Malcolm Messiter) *
  //***************************************************************************
 #define TXVERSION_MAJOR   1  
 #define TXVERSION_MINOR   4
-#define TXVERSION_MINIMUS 2
+#define TXVERSION_MINIMUS 3
  
  // **************************************************************************
  //                            SBUS PARAMETERS   (FOR BUDDY BOXING)          *
@@ -22,9 +22,8 @@
  //                            SERVO RANGE PARAMETERS                        *
  //***************************************************************************
 
-#define EXTRAMICROS 500 // for extra resolution driving servos
-#define MINMICROS   1000 - EXTRAMICROS
-#define MAXMICROS   2000 + EXTRAMICROS
+#define MINMICROS   500 
+#define MAXMICROS   2500 
 
  // **************************************************************************
  //                            FHSS PARAMETERS                               *
