@@ -18,7 +18,6 @@ var _transmitter_code_2src_2main_8cpp =
     [ "DataView", "_transmitter_code_2src_2main_8cpp.html#a0dc37f97eb00bb5b63ccbef3acd7f8ed", null ],
     [ "DEFAULTPIPEADDRESS", "_transmitter_code_2src_2main_8cpp.html#a4882e6035f50cbda34385a5388985813", null ],
     [ "DS1307_ADDRESS", "_transmitter_code_2src_2main_8cpp.html#a647261f334080cbf95e4f8dd79f73769", null ],
-    [ "EXTRAMICROS", "_transmitter_code_2src_2main_8cpp.html#a620a7c4d336a5af15e15bddd4ec38f36", null ],
     [ "FailSafe_View", "_transmitter_code_2src_2main_8cpp.html#aed2442e1c08957981a20002ae4a12307", null ],
     [ "FhssView", "_transmitter_code_2src_2main_8cpp.html#a878e0e1e38b67ffd5e1de07170efba1c", null ],
     [ "FILECHANNEL", "_transmitter_code_2src_2main_8cpp.html#a25a02fd19ba6092af59f73a9de071bd2", null ],
