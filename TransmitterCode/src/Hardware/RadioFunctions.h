@@ -13,7 +13,7 @@
  //                            SBUS PARAMETERS   (FOR BUDDY BOXING)          *
  //***************************************************************************
 
-#define SBUSRATE        10       // SBUS frame every 10 milliseconds (= 100 Hz)
+#define SBUSRATE        10        // SBUS frame every 10 milliseconds ( = 100 Hz)
 #define SBUSPORT        Serial2
 #define RANGEMAX        2047      // = Frsky at 150 %
 #define RANGEMIN        0         // = Frsky at 0 %
