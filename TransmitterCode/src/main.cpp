@@ -5717,7 +5717,7 @@ void CheckGapsLength()
                 GapLongest = ThisGap;
         }
        if (ThisGap < GapShortest) {
-                GapShortest = ThisGap;
+                GapShortest = ThisGap + 20; // becuase RX send no data for 20 ms after reconnection
         }
         GapSum += ThisGap;
         GapStart = 0;
