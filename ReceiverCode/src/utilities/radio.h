@@ -222,46 +222,47 @@ uint8_t  ReconnectAttempts  = 0;
             CurrentRadio->setChannel(RECONNECT_CH);
             CurrentRadio->startListening();
             delay(1);   
-            if (CurrentRadio->available()) Connected = true;
-    
+            if (CurrentRadio->available()) 
+            {
+                Connected = true;
+            }
             while (!Connected)
-                {
+            {
                 ++ReconnectAttempts;
 #ifdef SECOND_TRANSCEIVER
                 if  (ReconnectAttempts > 2)
-                    { 
+                { 
                     CurrentRadio->stopListening();
                     delay (1);
                     if (ThisRadio == 2)
-                        {
+                    {
                         CurrentRadio = &Radio1;
                         ThisRadio = 1;
-                        } else 
-                        {
+                    } else 
+                    {
                         CurrentRadio = &Radio2;
                         ThisRadio = 2;
-                        }
+                    }
                     ProdRadio();
                     ReconnectAttempts = 0;
-                    }
+                }
 #endif      // defined (SECOND_TRANSCEIVER)
-
                 TryTimer  = millis();       
                 while ((!CurrentRadio->available()) && (millis()-TryTimer) < 100){  }  // wait a mo during attempt to connect ...
                 if (CurrentRadio->available()) Connected = true;
                 if (!Connected)
-                    {
+                {
                     StillSearchingTime = millis() - SearchStartTime;
                     if (StillSearchingTime >FAILSAFE_TIMEOUT) 
-                        {
+                    {
                         if (!FailSafeSent)
-                            {
+                        {
                             FailSafe();
                             FailSafeSent = true; // Once is enough
-                            }
                         }
                     }
                 }
+            }
             ConnectionStart=millis();
             StillSearchingTime = 0;
             ReconnectedMoment=ConnectionStart;        // Save this moment, then don't move a servo for a few ms ...
