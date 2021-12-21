@@ -47,7 +47,7 @@
 #define SERVOSUSED      10
 #define SBUSRATE        10    // SBUS frame every 10 milliseconds
 #define SBUSPORT        Serial3
-#define RECONNECTGAP    10    // Send no data to servos for 10 ms after a reconnect
+#define RECONNECTGAP    20    // Send no data to servos for 20 ms after a reconnect (10 was not quite enough)
 
 
 bool USE_BMP280 = false; /** is BMP280 sensor connected */
