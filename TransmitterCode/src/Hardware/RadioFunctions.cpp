@@ -72,7 +72,7 @@ void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, int uncompre
 
 void TryOtherPipe()
 {
-    if (TotalledRecentPacketsLost > 10 || (!BoundFlag))  {        // This perhaps avoids needless pipe swapping during poor connection
+    if (TotalledRecentPacketsLost > 10 || (!BoundFlag))  {        // This avoids needless pipe swapping during poor connection
         if (BoundFlag == true) {  
             BoundFlag = false;
             SetThePipe(DefaultPipe);
@@ -160,7 +160,7 @@ void SendData()
                {
                     FailedPacket();  
                }
-    }
+    } 
 }
 
 /************************************************************************************************************/
