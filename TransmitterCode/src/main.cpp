@@ -1535,7 +1535,10 @@ void FailedPacket()
       if (RecentPacketsLost > LOSTCONTACTCUTOFF) {
          LostContactFlag   = true;
          RecentPacketsLost = 0;
-         RedLedOn();
+         if ((millis() - GapStart) > 100)         // there's perhaps no need to blink red for every lost packet. Only after 1/10th second of no connection.
+         {
+           RedLedOn();
+         }
     }
     ++LostPackets;
     ShowComms();
