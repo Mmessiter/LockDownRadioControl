@@ -152,12 +152,12 @@ $(document).ready(function(){initNavTree('_radio_functions_8cpp_source.html','')
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordtype">int</span> p = 0;</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> l = 0; l &lt; (uncompressed_size * 3 / 4); l += 3) {</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        compressed_buf[l] = uncompressed_buf[p] &lt;&lt; 4 | uncompressed_buf[p + 1] &gt;&gt; 8;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        p++;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        ++p;</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        compressed_buf[l + 1] = uncompressed_buf[p] &lt;&lt; 8 | uncompressed_buf[p + 1] &gt;&gt; 4;</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        p++;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        ++p;</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        compressed_buf[l + 2] = uncompressed_buf[p] &lt;&lt; 12 | uncompressed_buf[p + 1];</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        p++;</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        p++;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        ++p;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        ++p;</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    }</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;}</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="comment">/************************************************************************************************************/</span></div>

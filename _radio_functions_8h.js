@@ -55,7 +55,6 @@ var _radio_functions_8h =
     [ "AckPayload", "_radio_functions_8h.html#aec532bb9df7f865e6612fabf46895e6c", null ],
     [ "AckPayloadSize", "_radio_functions_8h.html#a6dc99d00582ef356ea3d57700dca6dab", null ],
     [ "AllChannels", "_radio_functions_8h.html#a340f5f74a3364594ad9b460d4b5b04d5", null ],
-    [ "BadChannelMax", "_radio_functions_8h.html#a7b80819357d2db1b144841cc23c0f833", null ],
     [ "BadChannelPointer", "_radio_functions_8h.html#adbcabfb5f32b82ef68af292eaa2c8669", null ],
     [ "BadChannels", "_radio_functions_8h.html#a5824d45baec8c549c63ff8a7fa8ac9d8", null ],
     [ "BoundFlag", "_radio_functions_8h.html#a44d37e4e8af884bf172344c0835a5593", null ],
