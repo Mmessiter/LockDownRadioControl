@@ -5709,15 +5709,16 @@ void ParseAckPayload()
 /************************************************************************************************************/
 void CheckGapsLength()
 {
-    if (GapStart > 0) { // if Reconnected, how long was connection lost?
+    if (GapStart > 0) {       // if Reconnected, how long was connection lost?
        ++GapCount;
        ThisGap = millis() - GapStart;
        if (!GapShortest) GapShortest = ThisGap;
        if (ThisGap > GapLongest) {
                 GapLongest = ThisGap;
         }
+       ThisGap += 20;           // becuase RX send no data for 20 ms after reconnection
        if (ThisGap < GapShortest) {
-                GapShortest = ThisGap + 20; // becuase RX send no data for 20 ms after reconnection
+                GapShortest = ThisGap; 
         }
         GapSum += ThisGap;
         GapStart = 0;
