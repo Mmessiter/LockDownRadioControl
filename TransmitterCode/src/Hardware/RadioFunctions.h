@@ -131,7 +131,6 @@ extern uint32_t       HopStart;
 extern char           ThisRadio[4];
 extern uint32_t       GapSum;
 extern uint32_t       GapStart;
-extern uint8_t        BadChannelMax;
 extern uint32_t       RXTimeStamp;
 extern bool           DoSbusSendOnly;
 extern bool           BuddyMaster;
