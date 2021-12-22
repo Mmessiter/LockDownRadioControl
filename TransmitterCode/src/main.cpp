@@ -5745,25 +5745,22 @@ void CheckGapsLength()
 void loop()
 {
     KickTheDog(); // Watchdog
-    
-     
-    
     if (GetButtonPress()) {
-        Button_was_pressed();
-    } // Deal with button!
+        Button_was_pressed();     // Deal with button
+    } 
 
     if (millis() - LastTimeRead >= 1000) {
-        ReadTime();
+        ReadTime();                // Do the clock
         LastTimeRead = millis();
-    } // Do the clock!
+    } 
     if (millis() - RangeTestStart >= 1000) {
-        GetStatistics();
+        GetStatistics();           // Do stats
         RangeTestStart = millis();
-    } // Do stats
+    } 
     if ((millis() - ShowServoTimer >= 100) && (CurrentView != FrontView)) {
-        ShowServoPos();
+        ShowServoPos();            // Show servos positions
         ShowServoTimer = millis();
-    } // Show servos positions
+    } 
     if ((millis() - TxOnTime) > 2000) { // Transmit nothing for first 2 seconds
         
         switch (CurrentMode) {
@@ -5792,9 +5789,12 @@ void loop()
             SetThePipe(NewPipe);
             BindingNow = 0;
             BoundFlag  = true;
-            LostPackets = 0;            // Start afresh!
-            GapLongest = 0;
-            GapSum = 0;
+            LostPackets  = 0;
+            GapShortest  = 0;
+            GapLongest   = 0;
+            GapSum       = 0;
+            GapAverage   = 0;
+            GapCount     = 0;  
             GreenLedOn();
             MakeBindButtonInvisible();
         }
