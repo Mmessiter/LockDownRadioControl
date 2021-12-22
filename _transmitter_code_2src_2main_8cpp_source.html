@@ -5724,56 +5724,56 @@ $(document).ready(function(){initNavTree('_transmitter_code_2src_2main_8cpp_sour
 <div class="line"><a name="l05745"></a><span class="lineno"><a class="line" href="_transmitter_code_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f"> 5745</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="_receiver_code_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f">loop</a>()</div>
 <div class="line"><a name="l05746"></a><span class="lineno"> 5746</span>&#160;{</div>
 <div class="line"><a name="l05747"></a><span class="lineno"> 5747</span>&#160;    <a class="code" href="_transmitter_code_2src_2main_8cpp.html#ada95a00a341e4a80176eda743a94ab2e">KickTheDog</a>(); <span class="comment">// Watchdog</span></div>
-<div class="line"><a name="l05748"></a><span class="lineno"> 5748</span>&#160;    </div>
-<div class="line"><a name="l05749"></a><span class="lineno"> 5749</span>&#160;     </div>
-<div class="line"><a name="l05750"></a><span class="lineno"> 5750</span>&#160;    </div>
-<div class="line"><a name="l05751"></a><span class="lineno"> 5751</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="_transmitter_code_2src_2main_8cpp.html#acd96c3022716bba17005df2e6b3d0ed6">GetButtonPress</a>()) {</div>
-<div class="line"><a name="l05752"></a><span class="lineno"> 5752</span>&#160;        <a class="code" href="_transmitter_code_2src_2main_8cpp.html#aed6c682ed45951f95e0b02cf6b570da2">Button_was_pressed</a>();</div>
-<div class="line"><a name="l05753"></a><span class="lineno"> 5753</span>&#160;    } <span class="comment">// Deal with button!</span></div>
-<div class="line"><a name="l05754"></a><span class="lineno"> 5754</span>&#160; </div>
-<div class="line"><a name="l05755"></a><span class="lineno"> 5755</span>&#160;    <span class="keywordflow">if</span> (millis() - <a class="code" href="_transmitter_code_2src_2main_8cpp.html#a870faf10706e215f4301c7e850dcbbbc">LastTimeRead</a> &gt;= 1000) {</div>
-<div class="line"><a name="l05756"></a><span class="lineno"> 5756</span>&#160;        <a class="code" href="_transmitter_code_2src_2main_8cpp.html#a483cced19b61975f76957f5696425fe9">ReadTime</a>();</div>
-<div class="line"><a name="l05757"></a><span class="lineno"> 5757</span>&#160;        <a class="code" href="_transmitter_code_2src_2main_8cpp.html#a870faf10706e215f4301c7e850dcbbbc">LastTimeRead</a> = millis();</div>
-<div class="line"><a name="l05758"></a><span class="lineno"> 5758</span>&#160;    } <span class="comment">// Do the clock!</span></div>
-<div class="line"><a name="l05759"></a><span class="lineno"> 5759</span>&#160;    <span class="keywordflow">if</span> (millis() - <a class="code" href="_transmitter_code_2src_2main_8cpp.html#aee35e643eabc1ed932fa3886c912a8a3">RangeTestStart</a> &gt;= 1000) {</div>
-<div class="line"><a name="l05760"></a><span class="lineno"> 5760</span>&#160;        <a class="code" href="_transmitter_code_2src_2main_8cpp.html#a1d43600764a34cbda9c2fa211a12ed2e">GetStatistics</a>();</div>
-<div class="line"><a name="l05761"></a><span class="lineno"> 5761</span>&#160;        <a class="code" href="_transmitter_code_2src_2main_8cpp.html#aee35e643eabc1ed932fa3886c912a8a3">RangeTestStart</a> = millis();</div>
-<div class="line"><a name="l05762"></a><span class="lineno"> 5762</span>&#160;    } <span class="comment">// Do stats</span></div>
-<div class="line"><a name="l05763"></a><span class="lineno"> 5763</span>&#160;    <span class="keywordflow">if</span> ((millis() - <a class="code" href="_transmitter_code_2src_2main_8cpp.html#ae4989662282fe08eb2deb769a3611fa0">ShowServoTimer</a> &gt;= 100) &amp;&amp; (<a class="code" href="_transmitter_code_2src_2main_8cpp.html#a2c76c41cd62573eb7227882fc9b9e557">CurrentView</a> != <a class="code" href="_transmitter_code_2src_2main_8cpp.html#a5bf0c8b2bc9cc2644bb4a4510ba9d168">FrontView</a>)) {</div>
-<div class="line"><a name="l05764"></a><span class="lineno"> 5764</span>&#160;        <a class="code" href="_transmitter_code_2src_2main_8cpp.html#ad959eec03b0151ade81dc088593d816c">ShowServoPos</a>();</div>
-<div class="line"><a name="l05765"></a><span class="lineno"> 5765</span>&#160;        <a class="code" href="_transmitter_code_2src_2main_8cpp.html#ae4989662282fe08eb2deb769a3611fa0">ShowServoTimer</a> = millis();</div>
-<div class="line"><a name="l05766"></a><span class="lineno"> 5766</span>&#160;    } <span class="comment">// Show servos positions</span></div>
-<div class="line"><a name="l05767"></a><span class="lineno"> 5767</span>&#160;    <span class="keywordflow">if</span> ((millis() - <a class="code" href="_transmitter_code_2src_2main_8cpp.html#a992a1c7536f872bdfd833e282cf3b4e4">TxOnTime</a>) &gt; 2000) { <span class="comment">// Transmit nothing for first 2 seconds</span></div>
-<div class="line"><a name="l05768"></a><span class="lineno"> 5768</span>&#160;        </div>
-<div class="line"><a name="l05769"></a><span class="lineno"> 5769</span>&#160;        <span class="keywordflow">switch</span> (<a class="code" href="_transmitter_code_2src_2main_8cpp.html#aacabee92eb3ddd2e3cf31695c00a912e">CurrentMode</a>) {</div>
-<div class="line"><a name="l05770"></a><span class="lineno"> 5770</span>&#160;            <span class="keywordflow">case</span> 0:</div>
-<div class="line"><a name="l05771"></a><span class="lineno"> 5771</span>&#160;                <a class="code" href="_radio_functions_8cpp.html#a3d7322e78f097d02d476f17a6306997c">SendData</a>();  </div>
+<div class="line"><a name="l05748"></a><span class="lineno"> 5748</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="_transmitter_code_2src_2main_8cpp.html#acd96c3022716bba17005df2e6b3d0ed6">GetButtonPress</a>()) {</div>
+<div class="line"><a name="l05749"></a><span class="lineno"> 5749</span>&#160;        <a class="code" href="_transmitter_code_2src_2main_8cpp.html#aed6c682ed45951f95e0b02cf6b570da2">Button_was_pressed</a>();     <span class="comment">// Deal with button</span></div>
+<div class="line"><a name="l05750"></a><span class="lineno"> 5750</span>&#160;    } </div>
+<div class="line"><a name="l05751"></a><span class="lineno"> 5751</span>&#160; </div>
+<div class="line"><a name="l05752"></a><span class="lineno"> 5752</span>&#160;    <span class="keywordflow">if</span> (millis() - <a class="code" href="_transmitter_code_2src_2main_8cpp.html#a870faf10706e215f4301c7e850dcbbbc">LastTimeRead</a> &gt;= 1000) {</div>
+<div class="line"><a name="l05753"></a><span class="lineno"> 5753</span>&#160;        <a class="code" href="_transmitter_code_2src_2main_8cpp.html#a483cced19b61975f76957f5696425fe9">ReadTime</a>();                <span class="comment">// Do the clock</span></div>
+<div class="line"><a name="l05754"></a><span class="lineno"> 5754</span>&#160;        <a class="code" href="_transmitter_code_2src_2main_8cpp.html#a870faf10706e215f4301c7e850dcbbbc">LastTimeRead</a> = millis();</div>
+<div class="line"><a name="l05755"></a><span class="lineno"> 5755</span>&#160;    } </div>
+<div class="line"><a name="l05756"></a><span class="lineno"> 5756</span>&#160;    <span class="keywordflow">if</span> (millis() - <a class="code" href="_transmitter_code_2src_2main_8cpp.html#aee35e643eabc1ed932fa3886c912a8a3">RangeTestStart</a> &gt;= 1000) {</div>
+<div class="line"><a name="l05757"></a><span class="lineno"> 5757</span>&#160;        <a class="code" href="_transmitter_code_2src_2main_8cpp.html#a1d43600764a34cbda9c2fa211a12ed2e">GetStatistics</a>();           <span class="comment">// Do stats</span></div>
+<div class="line"><a name="l05758"></a><span class="lineno"> 5758</span>&#160;        <a class="code" href="_transmitter_code_2src_2main_8cpp.html#aee35e643eabc1ed932fa3886c912a8a3">RangeTestStart</a> = millis();</div>
+<div class="line"><a name="l05759"></a><span class="lineno"> 5759</span>&#160;    } </div>
+<div class="line"><a name="l05760"></a><span class="lineno"> 5760</span>&#160;    <span class="keywordflow">if</span> ((millis() - <a class="code" href="_transmitter_code_2src_2main_8cpp.html#ae4989662282fe08eb2deb769a3611fa0">ShowServoTimer</a> &gt;= 100) &amp;&amp; (<a class="code" href="_transmitter_code_2src_2main_8cpp.html#a2c76c41cd62573eb7227882fc9b9e557">CurrentView</a> != <a class="code" href="_transmitter_code_2src_2main_8cpp.html#a5bf0c8b2bc9cc2644bb4a4510ba9d168">FrontView</a>)) {</div>
+<div class="line"><a name="l05761"></a><span class="lineno"> 5761</span>&#160;        <a class="code" href="_transmitter_code_2src_2main_8cpp.html#ad959eec03b0151ade81dc088593d816c">ShowServoPos</a>();            <span class="comment">// Show servos positions</span></div>
+<div class="line"><a name="l05762"></a><span class="lineno"> 5762</span>&#160;        <a class="code" href="_transmitter_code_2src_2main_8cpp.html#ae4989662282fe08eb2deb769a3611fa0">ShowServoTimer</a> = millis();</div>
+<div class="line"><a name="l05763"></a><span class="lineno"> 5763</span>&#160;    } </div>
+<div class="line"><a name="l05764"></a><span class="lineno"> 5764</span>&#160;    <span class="keywordflow">if</span> ((millis() - <a class="code" href="_transmitter_code_2src_2main_8cpp.html#a992a1c7536f872bdfd833e282cf3b4e4">TxOnTime</a>) &gt; 2000) { <span class="comment">// Transmit nothing for first 2 seconds</span></div>
+<div class="line"><a name="l05765"></a><span class="lineno"> 5765</span>&#160;        </div>
+<div class="line"><a name="l05766"></a><span class="lineno"> 5766</span>&#160;        <span class="keywordflow">switch</span> (<a class="code" href="_transmitter_code_2src_2main_8cpp.html#aacabee92eb3ddd2e3cf31695c00a912e">CurrentMode</a>) {</div>
+<div class="line"><a name="l05767"></a><span class="lineno"> 5767</span>&#160;            <span class="keywordflow">case</span> 0:</div>
+<div class="line"><a name="l05768"></a><span class="lineno"> 5768</span>&#160;                <a class="code" href="_radio_functions_8cpp.html#a3d7322e78f097d02d476f17a6306997c">SendData</a>();  </div>
+<div class="line"><a name="l05769"></a><span class="lineno"> 5769</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l05770"></a><span class="lineno"> 5770</span>&#160;            <span class="keywordflow">case</span> 1:</div>
+<div class="line"><a name="l05771"></a><span class="lineno"> 5771</span>&#160;                <a class="code" href="_transmitter_code_2src_2main_8cpp.html#ae1b8cef371d26fca2b4f5a101be7a8ba">CalibrateSticks</a>();</div>
 <div class="line"><a name="l05772"></a><span class="lineno"> 5772</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l05773"></a><span class="lineno"> 5773</span>&#160;            <span class="keywordflow">case</span> 1:</div>
-<div class="line"><a name="l05774"></a><span class="lineno"> 5774</span>&#160;                <a class="code" href="_transmitter_code_2src_2main_8cpp.html#ae1b8cef371d26fca2b4f5a101be7a8ba">CalibrateSticks</a>();</div>
+<div class="line"><a name="l05773"></a><span class="lineno"> 5773</span>&#160;            <span class="keywordflow">case</span> 2:</div>
+<div class="line"><a name="l05774"></a><span class="lineno"> 5774</span>&#160;                <a class="code" href="_transmitter_code_2src_2main_8cpp.html#a0e7ca9043d8fa769e8a9290df885e594">ChannelCentres</a>();</div>
 <div class="line"><a name="l05775"></a><span class="lineno"> 5775</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l05776"></a><span class="lineno"> 5776</span>&#160;            <span class="keywordflow">case</span> 2:</div>
-<div class="line"><a name="l05777"></a><span class="lineno"> 5777</span>&#160;                <a class="code" href="_transmitter_code_2src_2main_8cpp.html#a0e7ca9043d8fa769e8a9290df885e594">ChannelCentres</a>();</div>
+<div class="line"><a name="l05776"></a><span class="lineno"> 5776</span>&#160;            <span class="keywordflow">case</span> 3:</div>
+<div class="line"><a name="l05777"></a><span class="lineno"> 5777</span>&#160;                <a class="code" href="_radio_functions_8cpp.html#a3856ba0adae43d089f08c7b7f653b306">ScanAllChannels</a>();</div>
 <div class="line"><a name="l05778"></a><span class="lineno"> 5778</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l05779"></a><span class="lineno"> 5779</span>&#160;            <span class="keywordflow">case</span> 3:</div>
-<div class="line"><a name="l05780"></a><span class="lineno"> 5780</span>&#160;                <a class="code" href="_radio_functions_8cpp.html#a3856ba0adae43d089f08c7b7f653b306">ScanAllChannels</a>();</div>
-<div class="line"><a name="l05781"></a><span class="lineno"> 5781</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l05782"></a><span class="lineno"> 5782</span>&#160;            <span class="keywordflow">default</span>:</div>
-<div class="line"><a name="l05783"></a><span class="lineno"> 5783</span>&#160;                <span class="keywordflow">break</span>; <span class="comment">// CurrentMode &gt;= 4 for no action at all.</span></div>
-<div class="line"><a name="l05784"></a><span class="lineno"> 5784</span>&#160;        }</div>
-<div class="line"><a name="l05785"></a><span class="lineno"> 5785</span>&#160;    }</div>
-<div class="line"><a name="l05786"></a><span class="lineno"> 5786</span>&#160; </div>
-<div class="line"><a name="l05787"></a><span class="lineno"> 5787</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="_transmitter_code_2src_2main_8cpp.html#a1873a8dc0cbecc66366b95540f9c3249">BindingNow</a> == 2 &amp;&amp; (millis() - <a class="code" href="_transmitter_code_2src_2main_8cpp.html#a2ffac1bf85fe937c44ef26ac326575e7">BindingTimer</a>) &gt; 100) {</div>
-<div class="line"><a name="l05788"></a><span class="lineno"> 5788</span>&#160;        <span class="keywordflow">if</span> (!<a class="code" href="_receiver_code_2src_2main_8cpp.html#a44d37e4e8af884bf172344c0835a5593">BoundFlag</a>) {</div>
-<div class="line"><a name="l05789"></a><span class="lineno"> 5789</span>&#160;<span class="preprocessor">#ifdef DB_BIND</span></div>
-<div class="line"><a name="l05790"></a><span class="lineno"> 5790</span>&#160;            Serial.println(<span class="stringliteral">&quot;Binding now&quot;</span>);</div>
-<div class="line"><a name="l05791"></a><span class="lineno"> 5791</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l05792"></a><span class="lineno"> 5792</span>&#160;            <a class="code" href="_radio_functions_8cpp.html#a70dc6f8d2e5ccef6b8e4a2b9b0afb2ce">SetThePipe</a>(<a class="code" href="_transmitter_code_2src_2main_8cpp.html#a594f07765a7ed90e0830d4e2f69a7112">NewPipe</a>);</div>
-<div class="line"><a name="l05793"></a><span class="lineno"> 5793</span>&#160;            <a class="code" href="_transmitter_code_2src_2main_8cpp.html#a1873a8dc0cbecc66366b95540f9c3249">BindingNow</a> = 0;</div>
-<div class="line"><a name="l05794"></a><span class="lineno"> 5794</span>&#160;            <a class="code" href="_receiver_code_2src_2main_8cpp.html#a44d37e4e8af884bf172344c0835a5593">BoundFlag</a>  = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l05795"></a><span class="lineno"> 5795</span>&#160;            <a class="code" href="_transmitter_code_2src_2main_8cpp.html#ace8651c9c20dd6ea531190d34d35e1fc">LostPackets</a> = 0;            <span class="comment">// Start afresh!</span></div>
-<div class="line"><a name="l05796"></a><span class="lineno"> 5796</span>&#160;            <a class="code" href="_transmitter_code_2src_2main_8cpp.html#a0bca236cb88a38219ece770757adcbb2">GapLongest</a> = 0;</div>
-<div class="line"><a name="l05797"></a><span class="lineno"> 5797</span>&#160;            <a class="code" href="_transmitter_code_2src_2main_8cpp.html#a9942132c4d194a03fc9791cfdf876ac3">GapSum</a> = 0;</div>
+<div class="line"><a name="l05779"></a><span class="lineno"> 5779</span>&#160;            <span class="keywordflow">default</span>:</div>
+<div class="line"><a name="l05780"></a><span class="lineno"> 5780</span>&#160;                <span class="keywordflow">break</span>; <span class="comment">// CurrentMode &gt;= 4 for no action at all.</span></div>
+<div class="line"><a name="l05781"></a><span class="lineno"> 5781</span>&#160;        }</div>
+<div class="line"><a name="l05782"></a><span class="lineno"> 5782</span>&#160;    }</div>
+<div class="line"><a name="l05783"></a><span class="lineno"> 5783</span>&#160; </div>
+<div class="line"><a name="l05784"></a><span class="lineno"> 5784</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="_transmitter_code_2src_2main_8cpp.html#a1873a8dc0cbecc66366b95540f9c3249">BindingNow</a> == 2 &amp;&amp; (millis() - <a class="code" href="_transmitter_code_2src_2main_8cpp.html#a2ffac1bf85fe937c44ef26ac326575e7">BindingTimer</a>) &gt; 100) {</div>
+<div class="line"><a name="l05785"></a><span class="lineno"> 5785</span>&#160;        <span class="keywordflow">if</span> (!<a class="code" href="_receiver_code_2src_2main_8cpp.html#a44d37e4e8af884bf172344c0835a5593">BoundFlag</a>) {</div>
+<div class="line"><a name="l05786"></a><span class="lineno"> 5786</span>&#160;<span class="preprocessor">#ifdef DB_BIND</span></div>
+<div class="line"><a name="l05787"></a><span class="lineno"> 5787</span>&#160;            Serial.println(<span class="stringliteral">&quot;Binding now&quot;</span>);</div>
+<div class="line"><a name="l05788"></a><span class="lineno"> 5788</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l05789"></a><span class="lineno"> 5789</span>&#160;            <a class="code" href="_radio_functions_8cpp.html#a70dc6f8d2e5ccef6b8e4a2b9b0afb2ce">SetThePipe</a>(<a class="code" href="_transmitter_code_2src_2main_8cpp.html#a594f07765a7ed90e0830d4e2f69a7112">NewPipe</a>);</div>
+<div class="line"><a name="l05790"></a><span class="lineno"> 5790</span>&#160;            <a class="code" href="_transmitter_code_2src_2main_8cpp.html#a1873a8dc0cbecc66366b95540f9c3249">BindingNow</a> = 0;</div>
+<div class="line"><a name="l05791"></a><span class="lineno"> 5791</span>&#160;            <a class="code" href="_receiver_code_2src_2main_8cpp.html#a44d37e4e8af884bf172344c0835a5593">BoundFlag</a>  = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l05792"></a><span class="lineno"> 5792</span>&#160;            <a class="code" href="_transmitter_code_2src_2main_8cpp.html#ace8651c9c20dd6ea531190d34d35e1fc">LostPackets</a>  = 0;</div>
+<div class="line"><a name="l05793"></a><span class="lineno"> 5793</span>&#160;            <a class="code" href="_transmitter_code_2src_2main_8cpp.html#a4ebbce56831362208cc9e88795f492d3">GapShortest</a>  = 0;</div>
+<div class="line"><a name="l05794"></a><span class="lineno"> 5794</span>&#160;            <a class="code" href="_transmitter_code_2src_2main_8cpp.html#a0bca236cb88a38219ece770757adcbb2">GapLongest</a>   = 0;</div>
+<div class="line"><a name="l05795"></a><span class="lineno"> 5795</span>&#160;            <a class="code" href="_transmitter_code_2src_2main_8cpp.html#a9942132c4d194a03fc9791cfdf876ac3">GapSum</a>       = 0;</div>
+<div class="line"><a name="l05796"></a><span class="lineno"> 5796</span>&#160;            <a class="code" href="_transmitter_code_2src_2main_8cpp.html#ad656113b013dd90ec2b95f43559ea559">GapAverage</a>   = 0;</div>
+<div class="line"><a name="l05797"></a><span class="lineno"> 5797</span>&#160;            <a class="code" href="_transmitter_code_2src_2main_8cpp.html#aec39ffe2e010b8a92d8c536c81579586">GapCount</a>     = 0;  </div>
 <div class="line"><a name="l05798"></a><span class="lineno"> 5798</span>&#160;            <a class="code" href="_transmitter_code_2src_2main_8cpp.html#a62e53eb9359c32b666e3386d62c57037">GreenLedOn</a>();</div>
 <div class="line"><a name="l05799"></a><span class="lineno"> 5799</span>&#160;            <a class="code" href="_transmitter_code_2src_2main_8cpp.html#a2e38b32674344cfc06b09a71dfcaf3f1">MakeBindButtonInvisible</a>();</div>
 <div class="line"><a name="l05800"></a><span class="lineno"> 5800</span>&#160;        }</div>
