@@ -321,10 +321,10 @@ bool ReadData()
         CurrentRadio->flush_rx();                                      // This avoids a lockup that happens when the FIFO gets full.
         ClearAckPayload();
         LastConnectionMoment = millis();
-        if (HopNow) {     // this flag gets set in LoadAckPayload();
-            FailSafeDataLoaded = false;
-            HopToNextFrequency();
-            HopNow = false;
+        if (HopNow) {                                                  // this flag gets set in LoadAckPayload();
+            FailSafeDataLoaded = false;                                // Ack payload instructed to Hop at next opportunity...
+            HopToNextFrequency();                                      // So hop now
+            HopNow = false;                                            // and clear the flag.
         }
     }
     return Connected;
