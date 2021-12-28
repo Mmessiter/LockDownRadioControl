@@ -68,10 +68,10 @@ struct Payload
     uint8_t ReportedRoll    = 0;
     uint8_t ReportedYaw     = 0;
 };
-Payload AckPayload;                          /** object allocated for returned ACK data. */
-uint8_t AckPayloadSize = sizeof(AckPayload); // Size for later externs if needed etc.
+Payload AckPayload;                                  /** object allocated for returned ACK data. */
+uint8_t AckPayloadSize = sizeof(AckPayload);         // Size for later externs if needed etc.
 
-uint8_t PacketNumber; /** A counter for packets between channel hops. */
+uint8_t PacketNumber;                                /** A counter for packets between channel hops. */
 
 uint32_t ConnectionStart;
 
@@ -79,7 +79,7 @@ uint32_t ConnectionStart;
 #define COMPRESSEDWORDS   UNCOMPRESSEDWORDS * 3 / 4 // = 16 WORDS  with no extra
 
 uint16_t ReceivedData[UNCOMPRESSEDWORDS]; //  20  words
-uint16_t PreviousData[UNCOMPRESSEDWORDS]; /** Previously received data (used for servos). */
+uint16_t PreviousData[UNCOMPRESSEDWORDS]; /** Previously received data (used for servos. Hence not used if unchanged) */
 
 extern void FailSafe(); // defined in main.cpp
 extern uint32_t ReconnectedMoment;
