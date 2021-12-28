@@ -326,13 +326,13 @@ void LoadAckPayload()
     
     switch (AckPayload.Purpose){
             case 0:
-                AckPayload.CurrentAltitude = SavedAltitude;
-                break;                                  //  if 0 send gyro data (is pre-loaded by default)
+                AckPayload.CurrentAltitude = SavedAltitude;  //  TODO!!! Altitude needs 16 bits to exceed 255 feet!
+                break;                                       //  if 0 send gyro data (is pre-loaded by default)
             case 1:
-                LoadVersioNumber();                     // if 1 send version info AND RX number
+                LoadVersioNumber();                          //  if 1 send version info AND RX number
                 break;
             case 2: 
-                LoadTimeStamp();                        // if 2 send synch time stamp
+                LoadTimeStamp();                             //  if 2 send synch time stamp
                 break;
             default:
                 break;
