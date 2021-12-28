@@ -1,7 +1,7 @@
 var searchData=
 [
   ['savebutton_1076',['SaveButton',['../_transmitter_code_2src_2main_8cpp.html#acfd58819eed72b51ae74b059736d9104',1,'main.cpp']]],
-  ['savedaltitude_1077',['SavedAltitude',['../_receiver_code_2src_2main_8cpp.html#a487d128f40a22fe40bf86a1ce361c572',1,'SavedAltitude():&#160;main.cpp'],['../radio_8h.html#a487d128f40a22fe40bf86a1ce361c572',1,'SavedAltitude():&#160;main.cpp']]],
+  ['savedaltitude_1077',['SavedAltitude',['../_receiver_code_2src_2main_8cpp.html#a569b1edfd39e1e17a3f9c1131f529953',1,'SavedAltitude():&#160;main.cpp'],['../radio_8h.html#a569b1edfd39e1e17a3f9c1131f529953',1,'SavedAltitude():&#160;main.cpp']]],
   ['savedcurrentview_1078',['SavedCurrentView',['../_transmitter_code_2src_2main_8cpp.html#a9f535eadbf4eb2d6975105c406c1206f',1,'main.cpp']]],
   ['savedpipeaddress_1079',['SavedPipeAddress',['../radio_8h.html#a3398d00540e610ad35ff3f4f85478833',1,'radio.h']]],
   ['savefailsafenow_1080',['SaveFailSafeNow',['../_transmitter_code_2src_2main_8cpp.html#acd6754de95b605bb65a52a86e96121f7',1,'main.cpp']]],

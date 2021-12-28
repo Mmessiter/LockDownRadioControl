@@ -62,7 +62,7 @@ var _receiver_code_2src_2main_8cpp =
     [ "PWMPins", "_receiver_code_2src_2main_8cpp.html#a19f864fa6bdea0867325f70e162c92ef", null ],
     [ "ReconnectedMoment", "_receiver_code_2src_2main_8cpp.html#ae6657a547a79d8e304b8ddeb3f6a38e0", null ],
     [ "ReInit", "_receiver_code_2src_2main_8cpp.html#aace5dda203af973b33a46413f02d9f9a", null ],
-    [ "SavedAltitude", "_receiver_code_2src_2main_8cpp.html#a487d128f40a22fe40bf86a1ce361c572", null ],
+    [ "SavedAltitude", "_receiver_code_2src_2main_8cpp.html#a569b1edfd39e1e17a3f9c1131f529953", null ],
     [ "SbusChannels", "_receiver_code_2src_2main_8cpp.html#ac403118b879ce75447959bba12e261eb", null ],
     [ "SBUSTimer", "_receiver_code_2src_2main_8cpp.html#ab2bf977dee28aac3f049d578d8433f0b", null ],
     [ "ServosAttached", "_receiver_code_2src_2main_8cpp.html#a95b22fb572f7a91a89a431c7f1236575", null ],
