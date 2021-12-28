@@ -1428,7 +1428,7 @@ void ShowComms()
                     SendValue(DataView_pps,  PacketsPerSecond);
                     SendValue(DataView_lps,  LostPackets);
                     SendText(DataView_Alt,   ModelAltitude);
-                    SendText(DataView_MaxAlt,MaxAltitude);
+                    SendText(DataView_MaxAlt,MaxAltitude);     // TODO: MAX must be implemented
                     SendText(DataView_roll,  ModelRoll);
                     SendText(DataView_pitch, ModelPitch);
                     SendText(DataView_yaw,   ModelYaw);

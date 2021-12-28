@@ -37,7 +37,7 @@ bool     HopNow = false;
 
 extern void ShowHopDurationEtc();
 extern void DoSensors();
-extern uint16_t SavedAltitude;
+extern int  SavedAltitude;
 
 /** AckPayload Stucture for data returned to transmitter. */
 struct Payload
