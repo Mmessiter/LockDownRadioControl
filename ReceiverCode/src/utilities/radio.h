@@ -37,6 +37,7 @@ bool     HopNow = false;
 
 extern void ShowHopDurationEtc();
 extern void DoSensors();
+extern uint8_t SavedAltitude;
 
 /** AckPayload Stucture for data returned to transmitter. */
 struct Payload
@@ -298,19 +299,19 @@ void LoadTimeStamp(){              // This will load time stamp and array index 
 }
  
 /************************************************************************************************************/
-void CheckTimeStamp(){
+//void CheckTimeStamp(){
 
-    RXTimeStamp = millis() - HopStart;
-    if (RXTimeStamp > HOPTIME) {
-        HopStart = millis();
-        RXTimeStamp = 0;
-        ++NextChannelNumber;
-        if (NextChannelNumber >= FREQUENCYSCOUNT) {NextChannelNumber = 1;} // Zero will mean error (so that element not used)
-        HopToNextFrequency(); 
-        PacketNumber = 0;
-        DoSensors(); 
-    }
-}
+    //RXTimeStamp = millis() - HopStart;
+    //if (RXTimeStamp > HOPTIME) {
+    //    HopStart = millis();
+    //    RXTimeStamp = 0;
+    //    ++NextChannelNumber;
+    //    if (NextChannelNumber >= FREQUENCYSCOUNT) {NextChannelNumber = 1;} // Zero will mean error (so that element not used)
+    //    HopToNextFrequency(); 
+    //    PacketNumber = 0;
+    //    DoSensors(); 
+    // }
+//}
 /************************************************************************************************************/
 
 void LoadAckPayload()
@@ -325,6 +326,8 @@ void LoadAckPayload()
     
     switch (AckPayload.Purpose){
             case 0:
+                AckPayload.CurrentAltitude = SavedAltitude;
+                //Serial.println (SavedAltitude);
                 break;                                 //  if 0 send gyro data (is pre-loaded by default)
             case 1:
                 LoadVersioNumber();                     // if 1 send version info AND RX number

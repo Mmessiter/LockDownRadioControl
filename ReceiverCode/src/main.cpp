@@ -110,6 +110,7 @@ uint8_t  byte1              = 0;
 uint8_t  byte2              = 0;
 bool     GyroInstalled      = false;
 uint32_t ReconnectedMoment;
+uint8_t  SavedAltitude;
 
 
 /** Load project defaults from EEPROM into the ReceivedData buffer. */
@@ -476,7 +477,9 @@ void DoSensors()
 {
     if (USE_BMP280) {
         if (bmp280.getMeasurements(temperature280, pressure, altitude)) 
-            if (BoundFlag) AckPayload.CurrentAltitude = int(altitude - StartAltitude);
+             if (BoundFlag) SavedAltitude = int(altitude - StartAltitude);
+      
+            
     }
     if (USE_INA219) {
         if (BoundFlag) AckPayload.volt = ina219.getBusVoltage_V();
