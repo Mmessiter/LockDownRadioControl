@@ -63,7 +63,7 @@ struct Payload
 
     uint8_t Purpose         = 0;
     uint8_t volt            = 0;  /** Voltage of RX battery, if measured. */
-    uint8_t CurrentAltitude = 0;  /** Altitude, if measured. */
+    uint8_t CurrentAltitude = 0;  /** Altitude, if measured. TODO: needs more than 8 bits! 16 might be better  */
     uint8_t ReportedPitch   = 0;
     uint8_t ReportedRoll    = 0;
     uint8_t ReportedYaw     = 0;
