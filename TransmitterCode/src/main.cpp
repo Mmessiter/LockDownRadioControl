@@ -4787,7 +4787,7 @@ void Button_was_pressed()
             return;
         }
 
-        if (InStrng(DelFile, WordsIn) > 0) { // Delete a file
+        if (InStrng(DelFile, WordsIn) > 0) { // Delete a file heer
             j = 0;
             p = InStrng(DelFile, WordsIn);
             i = p + 6;
@@ -4852,32 +4852,39 @@ void Button_was_pressed()
                 ++i;
                 SingleModelFile[j] = 0;
             }
-            if (InStrng(ModExt, SingleModelFile) == 0) {
+            
+            if ((InStrng(ModExt, SingleModelFile) == 0) && (strlen(SingleModelFile) <= 8)) {
                 strcat(SingleModelFile, ModExt);
             }
-            SendText(ModelsView_filename, SingleModelFile);
-            SendCommand(ProgressStart);
-            delay(20);
-            SendValue(Progress, 10);
-            delay(20);
-            CloseModelsFile();
-            for (int WriteTwice = 1; WriteTwice <= 2; WriteTwice++) { // if a new file, write twice seems to be needed!!
-                SingleModelFlag = true;
-                OpenModelsFile();
-                SendValue(Progress, 25);
-                delay(10);
-                SaveOneModel(1);
-                SendValue(Progress, 50);
-                delay(10);
+            if ((strlen(SingleModelFile) <= 12) && (InStrng(ModExt, SingleModelFile) > 0))
+            {
+                SendText(ModelsView_filename, SingleModelFile);
+                SendCommand(ProgressStart);
+                delay(20);
+                SendValue(Progress, 10);
+                delay(20);
                 CloseModelsFile();
+                for (uint8_t WriteTwice = 1; WriteTwice <= 2; ++WriteTwice) { // if a new file, write twice seems to be needed!!
+                    SingleModelFlag = true;
+                    OpenModelsFile();
+                    SendValue(Progress, 25);
+                    delay(10);
+                    SaveOneModel(1);
+                    SendValue(Progress, 50);
+                    delay(10);
+                    CloseModelsFile();
+                }
+                SingleModelFlag = false;
+                SendValue(Progress, 75);
+                delay(10);
+                BuildDirectory();
+                SendValue(Progress, 100);
+                delay(10);
+                SendCommand(ProgressEnd);
+            } else {
+                FileError = true;
             }
-            SingleModelFlag = false;
-            SendValue(Progress, 75);
-            delay(10);
-            BuildDirectory();
-            SendValue(Progress, 100);
-            delay(10);
-            SendCommand(ProgressEnd);
+
             if (FileError) ShowFileErrorMsg();
             ClearText();
             return;
