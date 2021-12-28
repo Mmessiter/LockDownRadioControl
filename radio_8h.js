@@ -46,7 +46,7 @@ var radio_8h =
     [ "ReceivedData", "radio_8h.html#ae5bff5a2375f932e5653e5d3659330d3", null ],
     [ "ReconnectedMoment", "radio_8h.html#ae6657a547a79d8e304b8ddeb3f6a38e0", null ],
     [ "RXTimeStamp", "radio_8h.html#ac2f93a82721081619ce2f3b497efbc1b", null ],
-    [ "SavedAltitude", "radio_8h.html#abb8f71c73b898995af64900ac9cf30ed", null ],
+    [ "SavedAltitude", "radio_8h.html#a487d128f40a22fe40bf86a1ce361c572", null ],
     [ "SavedPipeAddress", "radio_8h.html#a3398d00540e610ad35ff3f4f85478833", null ],
     [ "SaveNewBind", "radio_8h.html#a34f8e085f5589c915f292bbf5b0aa513", null ],
     [ "SearchStartTime", "radio_8h.html#ab92d51a6cbfc38d73a79a4c4db7a338e", null ],
