@@ -37,7 +37,7 @@ bool     HopNow = false;
 
 extern void ShowHopDurationEtc();
 extern void DoSensors();
-extern uint8_t SavedAltitude;
+extern uint16_t SavedAltitude;
 
 /** AckPayload Stucture for data returned to transmitter. */
 struct Payload
@@ -327,8 +327,7 @@ void LoadAckPayload()
     switch (AckPayload.Purpose){
             case 0:
                 AckPayload.CurrentAltitude = SavedAltitude;
-                //Serial.println (SavedAltitude);
-                break;                                 //  if 0 send gyro data (is pre-loaded by default)
+                break;                                  //  if 0 send gyro data (is pre-loaded by default)
             case 1:
                 LoadVersioNumber();                     // if 1 send version info AND RX number
                 break;

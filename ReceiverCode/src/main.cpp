@@ -110,7 +110,7 @@ uint8_t  byte1              = 0;
 uint8_t  byte2              = 0;
 bool     GyroInstalled      = false;
 uint32_t ReconnectedMoment;
-uint8_t  SavedAltitude;
+uint16_t SavedAltitude;
 
 
 /** Load project defaults from EEPROM into the ReceivedData buffer. */
