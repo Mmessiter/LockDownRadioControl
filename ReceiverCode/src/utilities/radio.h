@@ -64,12 +64,12 @@ struct Payload
      * @endcode
      **/
 
-    uint8_t Purpose         = 0;
-    uint8_t volt            = 0;  /** Voltage of RX battery, if measured. */
-    uint8_t CurrentAltitude = 0;  /** Altitude, if measured. TODO: needs more than 8 bits! 16 might be better  */
-    uint8_t ReportedPitch   = 0;
-    uint8_t ReportedRoll    = 0;
-    uint8_t ReportedYaw     = 0;
+    uint8_t Purpose         = 0;   // 0  Purpose  
+    uint8_t volt            = 0;   // 1  volt  
+    uint8_t CurrentAltitude = 0;   // 2  CurrentAltitude
+    uint8_t ReportedPitch   = 0;   // 3  ReportedPitch
+    uint8_t ReportedRoll    = 0;   // 4  ReportedRoll
+    uint8_t ReportedYaw     = 0;   // 5  ReportedYaw
 };
 Payload AckPayload;                                  /** object allocated for returned ACK data. */
 uint8_t AckPayloadSize = sizeof(AckPayload);         // Size for later externs if needed etc.
