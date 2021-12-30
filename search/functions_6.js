@@ -21,13 +21,14 @@ var searchData=
   ['getrollrateintegral_741',['GetRollRateIntegral',['../imu_8h.html#aad3abf2eaa21decfe43ff4c98a09570d',1,'imu.h']]],
   ['getrxtime_742',['GetRXTime',['../_transmitter_code_2src_2main_8cpp.html#acd508e422b616377d0f0cdb44e4cfae0',1,'main.cpp']]],
   ['getrxversionnumber_743',['GetRXVersionNumber',['../_transmitter_code_2src_2main_8cpp.html#a4f813935d8fe58355228cbbf25e12f96',1,'main.cpp']]],
-  ['getslavechannelvalues_744',['GetSlaveChannelValues',['../_radio_functions_8h.html#a4635a8fc77c9f57fca53a5206cd5e571',1,'GetSlaveChannelValues():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a4635a8fc77c9f57fca53a5206cd5e571',1,'GetSlaveChannelValues():&#160;main.cpp']]],
-  ['getstatistics_745',['GetStatistics',['../_transmitter_code_2src_2main_8cpp.html#a1d43600764a34cbda9c2fa211a12ed2e',1,'main.cpp']]],
-  ['getstickinput_746',['GetStickInput',['../_transmitter_code_2src_2main_8cpp.html#a1eb1b5f9139051cef03943c3620c7d81',1,'main.cpp']]],
-  ['gettextin_747',['GetTextIn',['../_transmitter_code_2src_2main_8cpp.html#a6fe457db5d6bc71ccb447dee824abf6a',1,'main.cpp']]],
-  ['gettime_748',['getTime',['../_transmitter_code_2src_2main_8cpp.html#ae96ca3df2e8b9eef75d400de6ef06db3',1,'main.cpp']]],
-  ['gettxversionnumber_749',['GetTXVersionNumber',['../_transmitter_code_2src_2main_8cpp.html#a39e1bbcbd0591a8e354b3c5c999a8882',1,'main.cpp']]],
-  ['getvalue_750',['GetValue',['../_transmitter_code_2src_2main_8cpp.html#ad957c44f88874b35bd11323a86408e59',1,'main.cpp']]],
-  ['getwordsin_751',['GetWordsIn',['../_transmitter_code_2src_2main_8cpp.html#a8ebd89bf15e2498080ac9ac69bba4c28',1,'main.cpp']]],
-  ['greenledon_752',['GreenLedOn',['../_radio_functions_8h.html#a62e53eb9359c32b666e3386d62c57037',1,'GreenLedOn():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a62e53eb9359c32b666e3386d62c57037',1,'GreenLedOn():&#160;main.cpp']]]
+  ['getrxvolts_744',['GetRXVolts',['../_transmitter_code_2src_2main_8cpp.html#a79b5170b28687a975a36408630f93dd3',1,'main.cpp']]],
+  ['getslavechannelvalues_745',['GetSlaveChannelValues',['../_radio_functions_8h.html#a4635a8fc77c9f57fca53a5206cd5e571',1,'GetSlaveChannelValues():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a4635a8fc77c9f57fca53a5206cd5e571',1,'GetSlaveChannelValues():&#160;main.cpp']]],
+  ['getstatistics_746',['GetStatistics',['../_transmitter_code_2src_2main_8cpp.html#a1d43600764a34cbda9c2fa211a12ed2e',1,'main.cpp']]],
+  ['getstickinput_747',['GetStickInput',['../_transmitter_code_2src_2main_8cpp.html#a1eb1b5f9139051cef03943c3620c7d81',1,'main.cpp']]],
+  ['gettextin_748',['GetTextIn',['../_transmitter_code_2src_2main_8cpp.html#a6fe457db5d6bc71ccb447dee824abf6a',1,'main.cpp']]],
+  ['gettime_749',['getTime',['../_transmitter_code_2src_2main_8cpp.html#ae96ca3df2e8b9eef75d400de6ef06db3',1,'main.cpp']]],
+  ['gettxversionnumber_750',['GetTXVersionNumber',['../_transmitter_code_2src_2main_8cpp.html#a39e1bbcbd0591a8e354b3c5c999a8882',1,'main.cpp']]],
+  ['getvalue_751',['GetValue',['../_transmitter_code_2src_2main_8cpp.html#ad957c44f88874b35bd11323a86408e59',1,'main.cpp']]],
+  ['getwordsin_752',['GetWordsIn',['../_transmitter_code_2src_2main_8cpp.html#a8ebd89bf15e2498080ac9ac69bba4c28',1,'main.cpp']]],
+  ['greenledon_753',['GreenLedOn',['../_radio_functions_8h.html#a62e53eb9359c32b666e3386d62c57037',1,'GreenLedOn():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a62e53eb9359c32b666e3386d62c57037',1,'GreenLedOn():&#160;main.cpp']]]
 ];
