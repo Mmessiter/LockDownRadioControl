@@ -1384,7 +1384,7 @@ void ShowComms()
             strcat(Vbuf, pc);
             if (CurrentView == FrontView) SendText(TXVolts, Vbuf);
             txv /= 100;
-            dtostrf(txv, 1, 1, Vbuf);
+            snprintf (Vbuf, 5, "%f", txv);   // float to string...
             strcpy(TXBattInfo, Vbuf);
             strcat(TXBattInfo, v);
             txv /= 2;
@@ -1441,7 +1441,7 @@ void ShowComms()
                     SendValue(DataView_Ag,   GapAverage);
                     SendValue(DataView_Gc,   GapCount);
             }
-            ReadVolts = RXModelVolts * 10; //  atof(ModelVolts) * 10;
+            ReadVolts = RXModelVolts * 10; 
             // 6s Max 25.2 -> 20.4
             // 5s Max 21.0 -> 17.0
             // 4s Max 16.8 -> 13.6
@@ -5711,11 +5711,10 @@ void ParseAckPayload()
                 GetRXTime();
                 break;
             case 3:
-                VoltsDetected = false;
                 GetRXVolts();
                 if (RXModelVolts > 0) {
                     VoltsDetected = true;
-                    Str(ModelVolts, RXModelVolts, 0);                     // HEER!!!! 
+                    snprintf (ModelVolts, 5, "%f", RXModelVolts);
                 }
             default:
                 break;
