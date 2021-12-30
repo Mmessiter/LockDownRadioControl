@@ -477,18 +477,18 @@ void Sensors_Status()
 
 void DoSensors()
 {
-    if ((millis()-SensorTime) < 2000) return;  // no need to measure too often
+    if ((millis()-SensorTime) < 5000) return;  // no need to measure too often
     SensorTime = millis();
-
     if (USE_BMP280) {
         if (bmp280.getMeasurements(temperature280, pressure, altitude)) 
              if (BoundFlag) SavedAltitude = altitude - StartAltitude;
     }
     if (USE_INA219) {
-             if (BoundFlag) SavedVolts = ina219.getBusVoltage_V();
+       
+             if (BoundFlag) SavedVolts = ina219.getBusVoltage_V();     
     }
 #ifdef DB_SENSORS
-    Sensors_Status(); // does nothing if DB_SENSORS is not defined
+           Sensors_Status(); // does nothing if DB_SENSORS is not defined
 #endif
    
 }

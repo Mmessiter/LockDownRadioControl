@@ -16,7 +16,7 @@
 
 
 // #define DEBUG
- #define DB_SENSORS
+// #define DB_SENSORS
 // #define DB_PID
 // #define DB_BIND
 // #define DB_FAILSAFE
