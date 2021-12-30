@@ -83,7 +83,6 @@ uint8_t PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 16}; // ten now, last 
 SBUS MySbus(SBUSPORT);
 
 float  PacketStartTime;
-double LastVoltMoment = 0;
 float  Temperature6050; /** temperature data from the MPU6050 sensor's internal temperature sensor */
 
 float temperature280, pressure, altitude, StartAltitude;
@@ -110,8 +109,11 @@ uint8_t  byte1              = 0;
 uint8_t  byte2              = 0;
 bool     GyroInstalled      = false;
 uint32_t ReconnectedMoment;
-int      SavedAltitude;
-
+float    SavedAltitude;
+float    SavedVolts;
+bool     Radio1Exists = false;
+bool     Radio2Exists = false;
+uint32_t    SensorTime = 0;
 
 /** Load project defaults from EEPROM into the ReceivedData buffer. */
 void LoadFailSafeData()
@@ -459,7 +461,7 @@ void Sensors_Status()
     }
     if (USE_INA219) {
         Serial.print("     Volts=");
-        Serial.print(AckPayload.volt);
+        Serial.print(SavedVolts);
     }
     if (USE_BMP280) {
         Serial.print("  Altitude=");
@@ -475,21 +477,20 @@ void Sensors_Status()
 
 void DoSensors()
 {
+    if ((millis()-SensorTime) < 2000) return;  // no need to measure too often
+    SensorTime = millis();
+
     if (USE_BMP280) {
         if (bmp280.getMeasurements(temperature280, pressure, altitude)) 
-             if (BoundFlag) SavedAltitude = int(altitude - StartAltitude);
-      
-            
+             if (BoundFlag) SavedAltitude = altitude - StartAltitude;
     }
     if (USE_INA219) {
-        if (BoundFlag) AckPayload.volt = ina219.getBusVoltage_V();
+             if (BoundFlag) SavedVolts = ina219.getBusVoltage_V();
     }
 #ifdef DB_SENSORS
     Sensors_Status(); // does nothing if DB_SENSORS is not defined
 #endif
-    if ((millis() - LastVoltMoment) > 1000) {
-        LastVoltMoment = millis();
-    }
+   
 }
 
 /************************************************************************************************************/
@@ -641,11 +642,18 @@ void setup()
 
 #ifdef SECOND_TRANSCEIVER
     CurrentRadio = &Radio2;
-    InitCurrentRadio(); // initialise BOTH at setup, if two.
+    if (InitCurrentRadio())
+        {
+        Radio2Exists = true;
+        } 
 #endif
 
     CurrentRadio = &Radio1;
-    InitCurrentRadio();
+    if (InitCurrentRadio())
+        {
+        Radio1Exists = true;
+        }
+
     ThisRadio = 1;
 
     if (USE_BMP280) {

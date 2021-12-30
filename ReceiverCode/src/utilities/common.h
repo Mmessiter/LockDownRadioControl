@@ -1,7 +1,7 @@
 /** @file ReceiverCode/src/utilities/common.h */
 
 //**************************************************************************************************************************
-#define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<<<<<< **            
+//#define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<<<<<< **            
 //**************************************************************************************************************************
 
 #ifndef _SRC_UTILITIES_COMMON_H
@@ -16,7 +16,7 @@
 
 
 // #define DEBUG
-// #define DB_SENSORS
+ #define DB_SENSORS
 // #define DB_PID
 // #define DB_BIND
 // #define DB_FAILSAFE

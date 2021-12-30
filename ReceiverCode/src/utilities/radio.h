@@ -37,7 +37,10 @@ bool     HopNow = false;
 
 extern void ShowHopDurationEtc();
 extern void DoSensors();
-extern int  SavedAltitude;
+extern bool   Radio1Exists;
+extern bool   Radio2Exists;
+extern float  SavedAltitude;
+extern float  SavedVolt;
 
 /** AckPayload Stucture for data returned to transmitter. */
 struct Payload
@@ -175,19 +178,27 @@ void HopToNextFrequency()
 /************************************************************************************************************/
 
 /** Initialize a radio transceiver. */
-void InitCurrentRadio()
+bool InitCurrentRadio()
 {
-    if (CurrentRadio->begin()) {
-        CurrentRadio->enableAckPayload();       // needed
-        CurrentRadio->enableDynamicPayloads();  // needed
-        CurrentRadio->maskIRQ(1, 1, 1);         // no interrupts - seems NEEDED at the moment - (line *IS* connected)
-        CurrentRadio->setCRCLength(RF24_CRC_8); // could be 16 or disabled
-        CurrentRadio->setPALevel(RF24_PA_MAX);
-        CurrentRadio->setDataRate(RF24_250KBPS);
-        CurrentRadio->openReadingPipe(1, ThisPipe);
-        SaveNewBind = true;
-        HopStart = millis();
-    }
+          CurrentRadio->begin();
+          CurrentRadio->enableAckPayload();       // needed
+          CurrentRadio->enableDynamicPayloads();  // needed
+          CurrentRadio->maskIRQ(1, 1, 1);         // no interrupts - seems NEEDED at the moment - (line *IS* connected)
+          CurrentRadio->setCRCLength(RF24_CRC_8); // could be 16 or disabled
+          CurrentRadio->setPALevel(RF24_PA_MAX);
+          CurrentRadio->setDataRate(RF24_250KBPS);
+          CurrentRadio->openReadingPipe(1, ThisPipe);
+          SaveNewBind = true;
+          HopStart = millis(); 
+          //  if (CurrentRadio->isChipConnected())   // This call does not work I've found. Don't know why. Yet.
+          //  {       
+          //   return true;
+          //  }else{
+          //   return false;
+          //  }
+          return true;                              // let's assume its connected
+      
+    
 }
 
 /************************************************************************************************************/
@@ -213,6 +224,9 @@ void ProdRadio()
 
 void Reconnect()  
 {
+   // if (Radio1Exists) Serial.println ("R1 OK") ;
+   // if (Radio2Exists) Serial.println ("R2 OK") ;
+
 uint32_t TryTimer;
 uint8_t  ReconnectAttempts  = 0;
 
