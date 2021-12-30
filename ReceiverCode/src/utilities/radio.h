@@ -53,23 +53,23 @@ struct Payload
      * AckPayload.ReportedPitch   =  RXVERSION_MAJOR;
      * AckPayload.ReportedRoll    =  RXVERSION_MINOR;
      * AckPayload.ReportedYaw     =  RXVERSION_MINIMUS;
-     * AckPayload.CurrentAltitude =  ThisRadio;            // Radio in current use
+     * AckPayload.Byte2 =  ThisRadio;            // Radio in current use
      * 
      * @note If Purpose = 2 then ...
      * @code
-     * AckPayload.volt            = Time.Stamp8[0];       // Time stamp is 32 BIT divided up here.
-     * AckPayload.CurrentAltitude = Time.Stamp8[1]; 
+     * AckPayload.Byte1            = Time.Stamp8[0];       // Time stamp is 32 BIT divided up here.
+     * AckPayload.Byte2 = Time.Stamp8[1]; 
      * AckPayload.ReportedRoll    = Time.Stamp8[2]; 
      * AckPayload.ReportedYaw     = Time.Stamp8[3]; 
      * @endcode
      **/
 
     uint8_t Purpose         = 0;   // 0  Purpose  
-    uint8_t volt            = 0;   // 1  volt  
-    uint8_t CurrentAltitude = 0;   // 2  CurrentAltitude
-    uint8_t ReportedPitch   = 0;   // 3  ReportedPitch
-    uint8_t ReportedRoll    = 0;   // 4  ReportedRoll
-    uint8_t ReportedYaw     = 0;   // 5  ReportedYaw
+    uint8_t Byte1           = 0;   // 1  was volt  
+    uint8_t Byte2           = 0;   // 2  was CurrentAltitude
+    uint8_t ReportedPitch   = 0;   // 3  was ReportedPitch
+    uint8_t ReportedRoll    = 0;   // 4  was ReportedRoll
+    uint8_t ReportedYaw     = 0;   // 5  was ReportedYaw
 };
 Payload AckPayload;                                  /** object allocated for returned ACK data. */
 uint8_t AckPayloadSize = sizeof(AckPayload);         // Size for later externs if needed etc.
@@ -112,7 +112,7 @@ void LoadVersioNumber() // and which radio is currently in use
     AckPayload.ReportedPitch   = RXVERSION_MAJOR;
     AckPayload.ReportedRoll    = RXVERSION_MINOR;
     AckPayload.ReportedYaw     = RXVERSION_MINIMUS;
-    AckPayload.CurrentAltitude = ThisRadio;
+    AckPayload.Byte2 = ThisRadio;
 }
 
 /************************************************************************************************************/
@@ -305,8 +305,8 @@ void LoadTimeStamp(){              // This will load time stamp and array index 
             HopNow = true;      // Set flag and hop when ready *** BUT NOT BEFORE ****  !!!!!
             DoSensors();   
     }
-    AckPayload.volt                  =  Time.Stamp8[0];                        // These values are herewith delivered to Transmitter in Ack Payload
-    AckPayload.CurrentAltitude       =  Time.Stamp8[1]; 
+    AckPayload.Byte1                 =  Time.Stamp8[0];                        // These values are herewith delivered to Transmitter in Ack Payload
+    AckPayload.Byte2                 =  Time.Stamp8[1]; 
     AckPayload.ReportedPitch         =  Time.Stamp8[2]; 
     AckPayload.ReportedRoll          =  Time.Stamp8[3]; 
     AckPayload.ReportedYaw           =  NextChannelNumber;    
@@ -321,8 +321,8 @@ void LoadRXVolts(){
     }RXVolts;   
 
     RXVolts.Val32 = SavedVolts;
-    AckPayload.volt                  =  RXVolts.Val8[0];                        // These values are herewith delivered to Transmitter in Ack Payload
-    AckPayload.CurrentAltitude       =  RXVolts.Val8[1]; 
+    AckPayload.Byte1                 =  RXVolts.Val8[0];                        // These values are herewith delivered to Transmitter in Ack Payload
+    AckPayload.Byte2                 =  RXVolts.Val8[1]; 
     AckPayload.ReportedPitch         =  RXVolts.Val8[2]; 
     AckPayload.ReportedRoll          =  RXVolts.Val8[3]; 
 }
@@ -342,7 +342,7 @@ void LoadAckPayload()
     
     switch (AckPayload.Purpose){
             case 0:
-                AckPayload.CurrentAltitude = SavedAltitude;  //  TODO!!! Altitude needs 16 bits to exceed 255 feet!
+               // AckPayload.Byte2 = SavedAltitude;  //  TODO!!! Altitude needs 16 bits to exceed 255 feet!
                 break;                                       //  if 0 send gyro data (is pre-loaded by default)
             case 1:
                 LoadVersioNumber();                          //  if 1 send version info AND RX number

@@ -299,11 +299,11 @@ void ShowHopDurationEtc()
 
 void ClearAckPayload()
 {
-    AckPayload.volt              = 0;
+    AckPayload.Byte1              = 0;
     AckPayload.ReportedPitch     = 0;
     AckPayload.ReportedRoll      = 0;
     AckPayload.ReportedYaw       = 0;
-    AckPayload.CurrentAltitude   = 0;
+    AckPayload.Byte2             = 0;
     AckPayload.Purpose          |= 0x80;
 }
 
