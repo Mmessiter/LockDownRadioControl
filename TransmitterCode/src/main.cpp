@@ -336,6 +336,7 @@ uint32_t GapCount                     = 0;
 uint32_t GapShortest                  = 0;
 char     CalibrateNow[]               = "touch_j";
 char     ModelVolts[12]               = " ";
+float    RXModelVolts = 0;
 char     ModelAltitude[12]            = " ";
 char     MaxAltitude[12]              = "0";
 float    MaxAlt                       = 0;
@@ -1440,7 +1441,7 @@ void ShowComms()
                     SendValue(DataView_Ag,   GapAverage);
                     SendValue(DataView_Gc,   GapCount);
             }
-            ReadVolts = atof(ModelVolts) * 10;
+            ReadVolts = RXModelVolts * 10; //  atof(ModelVolts) * 10;
             // 6s Max 25.2 -> 20.4
             // 5s Max 21.0 -> 17.0
             // 4s Max 16.8 -> 13.6
@@ -1465,7 +1466,9 @@ void ShowComms()
                 dtostrf(Volts, 0, 0, Vbuf);
                 strcat(Vbuf, pc);
                 if (BoundFlag && CurrentView == FrontView) SendText(FrontView_AckPayload, Vbuf);
+                
                 strcpy(RXBattInfo, ModelVolts);
+
                 strcat(RXBattInfo, v);
                 if (RXCellCount == 6) strcat(RXBattInfo, LiPo6s);
                 if (RXCellCount == 5) strcat(RXBattInfo, LiPo5s);
@@ -4787,7 +4790,7 @@ void Button_was_pressed()
             return;
         }
 
-        if (InStrng(DelFile, WordsIn) > 0) { // Delete a file heer
+        if (InStrng(DelFile, WordsIn) > 0) { // Delete a file 
             j = 0;
             p = InStrng(DelFile, WordsIn);
             i = p + 6;
@@ -5654,6 +5657,7 @@ void GetRXTime(){  // This gets the time from Receivier to enable FHSS synch
         RXTime.Stamp8[1]    = AckPayload.CurrentAltitude;
         RXTime.Stamp8[2]    = AckPayload.Pitch; 
         RXTime.Stamp8[3]    = AckPayload.Roll;  
+
         NextChannelNumber   = AckPayload.Yaw;  
         HopStart            =  millis() - RXTime.Stamp32;
         TXTimeStamp         =  millis() - HopStart; 
@@ -5670,16 +5674,20 @@ if ((TXTimeStamp == 0) || (TXTimeStamp > HOPTIME )) { // is it time (or indeed i
       ShowComms();
 }
 
-
 /************************************************************************************************************/
-void CheckTXTimeStamp(){
-     TXTimeStamp = millis() - HopStart; 
-    if ((TXTimeStamp == 0) || (TXTimeStamp) >= HOPTIME+100) 
-    {
-        HopStart = millis();    
-        GetNextHopChannelNumber();    
-        HopToNextFrequency();
-    }
+
+void GetRXVolts()   // heer
+{
+  union                                                                       // union used to allow access to each byte of 32 bit float     
+    {float Val32; 
+        uint8_t  Val8[4];
+    }RXVolts;   
+    RXVolts.Val8[0] = AckPayload.volt;                      
+    RXVolts.Val8[1] = AckPayload.CurrentAltitude; 
+    RXVolts.Val8[2] = AckPayload.Pitch;   
+    RXVolts.Val8[3] = AckPayload.Roll;
+    RXModelVolts    = RXVolts.Val32 ;
+   
 }
 
 /************************************************************************************************************/
@@ -5691,12 +5699,6 @@ void ParseAckPayload()
                                     // High BIT is guaranteed LOW by this point, so no "& 0x7F" is needed.
         {
             case 0:
-                VoltsDetected = false;
-                if (AckPayload.volt > 0) // zero volts means RX volts are not available
-                {
-                    Str(ModelVolts, AckPayload.volt, 0); // Get receiver battery volts, if available.
-                    VoltsDetected = true;
-                }
                 Str(ModelAltitude, AckPayload.CurrentAltitude, 0);
                 Str(ModelPitch, AckPayload.Pitch, 0);
                 Str(ModelYaw, AckPayload.Yaw, 0);
@@ -5708,6 +5710,13 @@ void ParseAckPayload()
             case 2:               // By this means a time synch is enabled every third packet
                 GetRXTime();
                 break;
+            case 3:
+                VoltsDetected = false;
+                GetRXVolts();
+                if (RXModelVolts > 0) {
+                    VoltsDetected = true;
+                    Str(ModelVolts, RXModelVolts, 0);                     // HEER!!!! 
+                }
             default:
                 break;
         }
@@ -5716,9 +5725,9 @@ void ParseAckPayload()
 /************************************************************************************************************/
 void CheckGapsLength()
 {
-    if (GapStart > 0) {                          // if Reconnected, how long was connection lost?
+    if (GapStart > 0) {                          // when reconnected, how long was connection lost?
        ++GapCount;
-       ThisGap = (millis() - GapStart);          // AND ... RX send no data for 20 ms after reconnection        
+       ThisGap = (millis() - GapStart);          // AND in fact RX sends no data for 20 ms after reconnection        
        if (!GapShortest) GapShortest = ThisGap;
        if (ThisGap > GapLongest) {
                 GapLongest = ThisGap;

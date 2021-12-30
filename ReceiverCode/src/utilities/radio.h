@@ -40,7 +40,7 @@ extern void DoSensors();
 extern bool   Radio1Exists;
 extern bool   Radio2Exists;
 extern float  SavedAltitude;
-extern float  SavedVolt;
+extern float  SavedVolts;
 
 /** AckPayload Stucture for data returned to transmitter. */
 struct Payload
@@ -311,21 +311,22 @@ void LoadTimeStamp(){              // This will load time stamp and array index 
     AckPayload.ReportedRoll          =  Time.Stamp8[3]; 
     AckPayload.ReportedYaw           =  NextChannelNumber;    
 }
- 
-/************************************************************************************************************/
-//void CheckTimeStamp(){
 
-    //RXTimeStamp = millis() - HopStart;
-    //if (RXTimeStamp > HOPTIME) {
-    //    HopStart = millis();
-    //    RXTimeStamp = 0;
-    //    ++NextChannelNumber;
-    //    if (NextChannelNumber >= FREQUENCYSCOUNT) {NextChannelNumber = 1;} // Zero will mean error (so that element not used)
-    //    HopToNextFrequency(); 
-    //    PacketNumber = 0;
-    //    DoSensors(); 
-    // }
-//}
+/************************************************************************************************************/
+
+void LoadRXVolts(){
+     union                                                                       // union used to allow access to each byte of 32 bit float     
+    {float Val32; 
+        uint8_t  Val8[4];
+    }RXVolts;   
+
+    RXVolts.Val32 = SavedVolts;
+    AckPayload.volt                  =  RXVolts.Val8[0];                        // These values are herewith delivered to Transmitter in Ack Payload
+    AckPayload.CurrentAltitude       =  RXVolts.Val8[1]; 
+    AckPayload.ReportedPitch         =  RXVolts.Val8[2]; 
+    AckPayload.ReportedRoll          =  RXVolts.Val8[3]; 
+}
+
 /************************************************************************************************************/
 
 void LoadAckPayload()
@@ -334,9 +335,10 @@ void LoadAckPayload()
     ++AckPayload.Purpose;                               // 0 =  Roll, Pitch, Yaw, Volts.
                                                         // 1 =  Version number
                                                         // 2 =  Time stamp for FHSS
+                                                        // 3 =  RX lipo Voltage
                                                         // More later ... CAN EXPAND TO 127 if needed :-)!
                                         
-    if (AckPayload.Purpose > 2) AckPayload.Purpose = 0; // 2 is currently the max 
+    if (AckPayload.Purpose > 3) AckPayload.Purpose = 0; // 3 is currently the max 
     
     switch (AckPayload.Purpose){
             case 0:
@@ -348,6 +350,8 @@ void LoadAckPayload()
             case 2: 
                 LoadTimeStamp();                             //  if 2 send synch time stamp
                 break;
+            case 3:
+                LoadRXVolts();
             default:
                 break;
     }
