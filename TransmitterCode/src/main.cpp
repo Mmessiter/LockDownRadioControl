@@ -233,13 +233,13 @@ uint8_t       PacketNumber     = 0;
 // ************************************* AckPayload structure ******************************************************
 struct Payload
 {
-    uint8_t Purpose; // Defines meaning of the remainder
-                     // Highest BIT of Purpose means Ignore IF ON
-    uint8_t volt;
-    uint8_t CurrentAltitude;
-    uint8_t Pitch;
-    uint8_t Roll;
-    uint8_t Yaw;
+    uint8_t Purpose;                   // Defines meaning of the remainder
+                                       // Highest BIT of Purpose means Ignore IF ON
+    uint8_t Byte1;                     // was volt
+    uint8_t Byte2;                     // was CurrentAltitude
+    uint8_t Byte3;                     // was Pitch
+    uint8_t Byte4;                     // was Roll
+    uint8_t Byte5;                     // was Yaw
 };
 Payload AckPayload;
 uint8_t AckPayloadSize = sizeof(AckPayload);
@@ -5621,12 +5621,12 @@ void GetRXVersionNumber()
 {
     char nbuf[5];
 
-    Str(ReceiverVersionNumber, AckPayload.Pitch, 2);
-    Str(nbuf, AckPayload.Roll, 2);
+    Str(ReceiverVersionNumber, AckPayload.Byte3, 2);
+    Str(nbuf, AckPayload.Byte4, 2);
     strcat(ReceiverVersionNumber, nbuf);
-    Str(nbuf, AckPayload.Yaw, 0);
+    Str(nbuf, AckPayload.Byte5, 0);
     strcat(ReceiverVersionNumber, nbuf);
-    Str(nbuf, AckPayload.CurrentAltitude,0);
+    Str(nbuf, AckPayload.Byte2,0);
     strcpy(ThisRadio,nbuf);
 }
 
@@ -5635,11 +5635,11 @@ void GetRXVersionNumber()
 
 void ClearAckPayload()
 {
-    AckPayload.volt             = 0;
-    AckPayload.Pitch            = 0;
-    AckPayload.Roll             = 0;
-    AckPayload.Yaw              = 0;
-    AckPayload.CurrentAltitude  = 0;
+    AckPayload.Byte1            = 0;
+    AckPayload.Byte2            = 0;
+    AckPayload.Byte3            = 0;
+    AckPayload.Byte4            = 0;
+    AckPayload.Byte5            = 0;
     AckPayload.Purpose         |= 0x80;
 }
 
@@ -5652,13 +5652,13 @@ void GetRXTime(){  // This gets the time from Receivier to enable FHSS synch
     }RXTime;                                  // union used to allow access to each byte of 32 bit value     
 
 
-    if (AckPayload.Yaw){                    // Good data? (Zero means no data)
-        RXTime.Stamp8[0]    = AckPayload.volt;
-        RXTime.Stamp8[1]    = AckPayload.CurrentAltitude;
-        RXTime.Stamp8[2]    = AckPayload.Pitch; 
-        RXTime.Stamp8[3]    = AckPayload.Roll;  
+    if (AckPayload.Byte5){                    // Good data? (Zero means no data)
+        RXTime.Stamp8[0]    = AckPayload.Byte1;
+        RXTime.Stamp8[1]    = AckPayload.Byte2;
+        RXTime.Stamp8[2]    = AckPayload.Byte3; 
+        RXTime.Stamp8[3]    = AckPayload.Byte4;  
 
-        NextChannelNumber   = AckPayload.Yaw;  
+        NextChannelNumber   = AckPayload.Byte5;  
         HopStart            =  millis() - RXTime.Stamp32;
         TXTimeStamp         =  millis() - HopStart; 
     }
@@ -5682,10 +5682,10 @@ void GetRXVolts()   // heer
     {float Val32; 
         uint8_t  Val8[4];
     }RXVolts;   
-    RXVolts.Val8[0] = AckPayload.volt;                      
-    RXVolts.Val8[1] = AckPayload.CurrentAltitude; 
-    RXVolts.Val8[2] = AckPayload.Pitch;   
-    RXVolts.Val8[3] = AckPayload.Roll;
+    RXVolts.Val8[0] = AckPayload.Byte1;                      
+    RXVolts.Val8[1] = AckPayload.Byte2; 
+    RXVolts.Val8[2] = AckPayload.Byte3;   
+    RXVolts.Val8[3] = AckPayload.Byte4;
     RXModelVolts    = RXVolts.Val32 ;
    
 }
@@ -5699,10 +5699,7 @@ void ParseAckPayload()
                                     // High BIT is guaranteed LOW by this point, so no "& 0x7F" is needed.
         {
             case 0:
-                Str(ModelAltitude, AckPayload.CurrentAltitude, 0);
-                Str(ModelPitch, AckPayload.Pitch, 0);
-                Str(ModelYaw, AckPayload.Yaw, 0);
-                Str(ModelRoll, AckPayload.Roll, 0);
+              
                 break;
             case 1:
                 GetRXVersionNumber();

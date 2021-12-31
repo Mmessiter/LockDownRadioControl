@@ -72,12 +72,6 @@ struct Payload
      **/
 
 
-
-
-
-
-
-
     uint8_t Purpose         = 0;   // 0  Purpose  
     uint8_t Byte1           = 0;   // 1  (was volt)  
     uint8_t Byte2           = 0;   // 2  (was CurrentAltitude)
@@ -205,12 +199,6 @@ bool InitCurrentRadio()
           CurrentRadio->openReadingPipe(1, ThisPipe);
           SaveNewBind = true;
           HopStart = millis(); 
-          //  if (CurrentRadio->isChipConnected())   // This call does not work I've found. Don't know why. Yet.
-          //  {       
-          //   return true;
-          //  }else{
-          //   return false;
-          //  }
           return true;                              // let's assume its connected
       
     
@@ -347,7 +335,7 @@ void LoadRXVolts(){
 void LoadAckPayload()
 {
     AckPayload.Purpose &= 0x7F;                         // Clear hi bit ( = do not ignore)
-    ++AckPayload.Purpose;                               // 0 =  Roll, Pitch, Yaw, Volts.
+    ++AckPayload.Purpose;                               // 0 = ...
                                                         // 1 =  Version number
                                                         // 2 =  Time stamp for FHSS
                                                         // 3 =  RX lipo Voltage
