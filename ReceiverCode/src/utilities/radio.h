@@ -35,8 +35,8 @@ uint8_t  NextChannelNumber=0;
 uint32_t RXTimeStamp;
 bool     HopNow = false;
 
-extern void ShowHopDurationEtc();
-extern void DoSensors();
+extern void   ShowHopDurationEtc();
+extern void   DoSensors();
 extern bool   Radio1Exists;
 extern bool   Radio2Exists;
 extern float  SavedAltitude;
@@ -306,7 +306,7 @@ void LoadTimeStamp(){              // This will load time stamp and array index 
             if (NextChannelNumber >= FREQUENCYSCOUNT) {NextChannelNumber = 1;} // Zero will mean error (so that element not used)
             GetNextFrequency();
             HopNow = true;      // Set flag and hop when ready *** BUT NOT BEFORE ****  !!!!!
-            DoSensors();   
+           
     }
     AckPayload.Byte1         =  Time.Stamp8[0];                        // These values are herewith delivered to Transmitter in Ack Payload
     AckPayload.Byte2         =  Time.Stamp8[1]; 
