@@ -364,21 +364,18 @@ uint32_t GapAverage                   = 0;
 uint32_t GapCount                     = 0;
 uint32_t GapShortest                  = 0;
 char     CalibrateNow[]               = "touch_j";
-char     ModelVolts[12]               = " ";
+char     ModelVolts[8]               = " ";
 float    RXModelVolts                 = 0;
 float    RXModelAltitude              = 0;
 float    RXMAXModelAltitude           = 0;
-
-char     ModelAltitude[12]            = " ";
-char     MaxAltitude[12]              = "0";
+float    RXModelTemperature           = 0;
+char     ModelTemperature[8]         = " ";
+char     ModelAltitude[8]            = " ";
+char     MaxAltitude[8]              = " ";
 float    MaxAlt                       = 0;
-char     ModelRoll[12]                = " ";
-char     ModelPitch[12]               = " ";
-char     ModelYaw[12]                 = " ";
-char     ReceiverVersionNumber[12]    = " ";
-char     TransmitterVersionNumber[12] = " ";
+char     ReceiverVersionNumber[8]    = " ";
+char     TransmitterVersionNumber[8] = " ";
 char     deletedmodel[]               = "Deleted";
-uint8_t  ModelType                    = 1;
 uint8_t  rollp[5];
 uint8_t  rolli[5];
 uint8_t  rolld[5];
@@ -2417,7 +2414,7 @@ bool ReadOneModel(uint8_t Mnum)
         yawd[j] = SDReadByte(addr);
         ++addr;
     }
-    ModelType = SDReadByte(addr);
+   // Spare byte
     ++addr;
     for (i = 0; i < CHANNELSUSED; ++i) {
         InPutStick[i] = SDReadByte(addr);
@@ -2482,7 +2479,7 @@ bool ReadOneModel(uint8_t Mnum)
 
     // **************************************
 
-    if (ModelType == 0) ModelType = 1;
+   
     OneModelMemory = addr - StartLocation;
 
 #ifdef DB_NEXTION
@@ -2830,8 +2827,8 @@ void SaveOneModel(int mnum)
         SDUpdateByte(addr, yawd[j]);
         ++addr;
     }
-    if (ModelType == 0) ModelType = 1; // no zeros please
-    SDUpdateByte(addr, ModelType);
+  
+    // SPARE BYTE
     ++addr;
     for (i = 0; i < CHANNELSUSED; ++i) {
         SDUpdateByte(addr, InPutStick[i]);
@@ -3248,7 +3245,6 @@ void SetDefaultValues()
     }
     SendValue(Progress, 45);
     delay(10);
-    ModelType = 1;
     for (i = 0; i < CHANNELSUSED; ++i) {
         InPutStick[i] = i;
     }
@@ -5518,8 +5514,7 @@ void LoadPacketData()
             SendBuffer[CHANNELSUSED + 3] = yawd[FlightMode];
             break;
         case 12:
-            if (ModelType == 0) ModelType = 1; // in case we forgot to define it!
-            SendBuffer[CHANNELSUSED + 3] = ModelType;
+           
             break;
         default: 
             break;
@@ -5726,7 +5721,7 @@ void GetRXVolts()
 /************************************************************************************************************/
  void GetAltitude(){
 
-  union                                                            // union used to allow access to each byte of 32 bit float     
+  union                                                              // union used to allow access to each byte of 32 bit float     
     {float Val32; 
         uint8_t  Val8[4];   
     }AltitudeUnion;   
@@ -5736,9 +5731,30 @@ void GetRXVolts()
     AltitudeUnion.Val8[3] = AckPayload.Byte4; 
     RXModelAltitude       = AltitudeUnion.Val32;  
     if (RXMAXModelAltitude < RXModelAltitude) RXMAXModelAltitude = RXModelAltitude;
-    snprintf (MaxAltitude , 4, "%f", RXMAXModelAltitude);
-    snprintf (ModelAltitude, 4, "%f", RXModelAltitude);
+    snprintf (MaxAltitude , 5, "%f", RXMAXModelAltitude);
+    snprintf (ModelAltitude, 5, "%f", RXModelAltitude);
  }
+
+
+/************************************************************************************************************/
+  void GetTemperature()
+  {
+
+    union                                                              // union used to allow access to each byte of 32 bit float     
+    {float Val32; 
+        uint8_t  Val8[4];   
+    }TemperatureUnion;   
+
+    TemperatureUnion.Val8[0] = AckPayload.Byte1;                       // These values are herewith delivered to Transmitter in Ack Payload
+    TemperatureUnion.Val8[1] = AckPayload.Byte2; 
+    TemperatureUnion.Val8[2] = AckPayload.Byte3; 
+    TemperatureUnion.Val8[3] = AckPayload.Byte4; 
+    RXModelTemperature       = TemperatureUnion.Val32;  
+   
+    snprintf (ModelTemperature, 5, "%f", RXModelTemperature);
+    // Serial.println (ModelTemperature); // heer
+ }
+
 /************************************************************************************************************/
 void ParseAckPayload()
 {
@@ -5767,6 +5783,12 @@ void ParseAckPayload()
                 break;
             case 5:
                 GetAltitude();
+                 break;
+            case 6:
+                GetRXTime();      // Synch very frequently!
+                break;
+            case 7:
+                GetTemperature();
                  break;
             default:
                 break;

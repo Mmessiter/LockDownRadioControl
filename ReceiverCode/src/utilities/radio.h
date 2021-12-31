@@ -41,6 +41,7 @@ extern bool   Radio1Exists;
 extern bool   Radio2Exists;
 extern float  SavedAltitude;
 extern float  SavedVolts;
+extern float  SavedTemperature;
 
 /** AckPayload Stucture for data returned to transmitter. */
 struct Payload
@@ -344,7 +345,20 @@ void LoadRXVolts(){
     AckPayload.Byte3         =  AltitudeUnion.Val8[2]; 
     AckPayload.Byte4         =  AltitudeUnion.Val8[3]; 
  }
+ 
+/************************************************************************************************************/
 
+ void  LoadTemperature(){
+union                                                                       // union used to allow access to each byte of 32 bit float     
+    {float Val32; 
+        uint8_t  Val8[4];
+    }TemperatureUnion;   
+    TemperatureUnion.Val32   =  SavedTemperature;
+    AckPayload.Byte1         =  TemperatureUnion.Val8[0];                        // These values are herewith delivered to Transmitter in Ack Payload
+    AckPayload.Byte2         =  TemperatureUnion.Val8[1]; 
+    AckPayload.Byte3         =  TemperatureUnion.Val8[2]; 
+    AckPayload.Byte4         =  TemperatureUnion.Val8[3]; 
+ }
 
 /************************************************************************************************************/
 
@@ -357,7 +371,7 @@ void LoadAckPayload()
                                                         // 3 =  RX lipo Voltage
                                                         // More later ... CAN EXPAND TO 127 if needed :-)!
                                         
-    if (AckPayload.Purpose > 5) AckPayload.Purpose = 0; // 3 is currently the max 
+    if (AckPayload.Purpose > 7) AckPayload.Purpose = 0;    // 7 is currently the max 
     
     switch (AckPayload.Purpose){
             case 0:                                         //  if 0 send synch time stamp
@@ -378,6 +392,13 @@ void LoadAckPayload()
             case 5:                                         //  if 5 send synch time stamp
                 LoadAltitude();
                 break;
+            case 6:                                         //  if 4 send synch time stamp
+                LoadTimeStamp();                             
+                break;
+            case 7:                                         //  if 5 send synch time stamp
+                LoadTemperature();
+                break;
+           
             default:
                 break;
     }

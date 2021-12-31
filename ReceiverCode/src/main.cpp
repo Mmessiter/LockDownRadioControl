@@ -110,6 +110,7 @@ uint8_t  FS_byte2              = 0;
 bool     GyroInstalled      = false;
 uint32_t ReconnectedMoment;
 float    SavedAltitude;
+float    SavedTemperature;
 float    SavedVolts;
 bool     Radio1Exists = false;
 bool     Radio2Exists = false;
@@ -478,12 +479,17 @@ void Sensors_Status()
 
 void DoSensors()
 {
-    if ((millis()-SensorTime) < 500) return;  // no need to measure too often
+    if ((millis()-SensorTime) < 2000) return;  // no need to measure too often
     SensorTime = millis();
     if (USE_BMP280) {
         if (bmp280.getMeasurements(temperature280, pressure, altitude)) 
-             if (BoundFlag) SavedAltitude = altitude - StartAltitude;
+             if (BoundFlag) {
+                 SavedAltitude = (altitude - StartAltitude) * 3.28084; // Altitude in feet
+                 SavedTemperature = temperature280;
+             }
     }
+
+
     if (USE_INA219) {
        
              if (BoundFlag) SavedVolts = ina219.getBusVoltage_V();     
@@ -686,18 +692,7 @@ void setup()
     LoadVersioNumber();
 }
 
-void ReadSensors()
-{
-    if (USE_BNO055A) Get_BNO055(false);
-    if (USE_BNO055) Get_BNO055(true);
-    if (USE_MPU6050) {
-        Get_Mpu6050();
-        // These values are reported to Transmitter
-        AckPayload.Byte3 = dof9_data.Pitch;
-        AckPayload.Byte4  = dof9_data.Roll;
-        AckPayload.Byte5   = dof9_data.Yaw;
-    }
-}
+
 /************************************************************************************************************/
 // LOOP
 /************************************************************************************************************/
@@ -709,7 +704,6 @@ void loop()
         if (Connected) {
             if (millis() - SBUSTimer >= SBUSRATE) {
                 DeltaTime = micros() - DeltaTime;
-                ReadSensors();
                 SBUSTimer = millis(); // timer starts before send starts....
                 if ((millis()- ReconnectedMoment) > RECONNECTGAP)  { // Don't send data for 10 ms after reconnect
                         MoveServos();
