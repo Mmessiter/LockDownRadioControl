@@ -51,25 +51,25 @@ struct Payload
      * @note If Purpose = 1 then ...
      * @code
      * AckPayload.ReportedPitch   =  RXVERSION_MAJOR;
-     * AckPayload.ReportedRoll    =  RXVERSION_MINOR;
-     * AckPayload.ReportedYaw     =  RXVERSION_MINIMUS;
+     * AckPayload.Byte4    =  RXVERSION_MINOR;
+     * AckPayload.Byte5     =  RXVERSION_MINIMUS;
      * AckPayload.Byte2 =  ThisRadio;            // Radio in current use
      * 
      * @note If Purpose = 2 then ...
      * @code
      * AckPayload.Byte1            = Time.Stamp8[0];       // Time stamp is 32 BIT divided up here.
      * AckPayload.Byte2 = Time.Stamp8[1]; 
-     * AckPayload.ReportedRoll    = Time.Stamp8[2]; 
-     * AckPayload.ReportedYaw     = Time.Stamp8[3]; 
+     * AckPayload.Byte4    = Time.Stamp8[2]; 
+     * AckPayload.Byte5     = Time.Stamp8[3]; 
      * @endcode
      **/
 
     uint8_t Purpose         = 0;   // 0  Purpose  
     uint8_t Byte1           = 0;   // 1  was volt  
     uint8_t Byte2           = 0;   // 2  was CurrentAltitude
-    uint8_t ReportedPitch   = 0;   // 3  was ReportedPitch
-    uint8_t ReportedRoll    = 0;   // 4  was ReportedRoll
-    uint8_t ReportedYaw     = 0;   // 5  was ReportedYaw
+    uint8_t Byte3           = 0;   // 3  was ReportedPitch
+    uint8_t Byte4           = 0;   // 4  was ReportedRoll
+    uint8_t Byte5           = 0;   // 5  was ReportedYaw
 };
 Payload AckPayload;                                  /** object allocated for returned ACK data. */
 uint8_t AckPayloadSize = sizeof(AckPayload);         // Size for later externs if needed etc.
@@ -109,9 +109,9 @@ void ReadSavedPipe()
 
 void LoadVersioNumber() // and which radio is currently in use
 {
-    AckPayload.ReportedPitch   = RXVERSION_MAJOR;
-    AckPayload.ReportedRoll    = RXVERSION_MINOR;
-    AckPayload.ReportedYaw     = RXVERSION_MINIMUS;
+    AckPayload.Byte3   = RXVERSION_MAJOR;
+    AckPayload.Byte4    = RXVERSION_MINOR;
+    AckPayload.Byte5     = RXVERSION_MINIMUS;
     AckPayload.Byte2 = ThisRadio;
 }
 
@@ -307,9 +307,9 @@ void LoadTimeStamp(){              // This will load time stamp and array index 
     }
     AckPayload.Byte1                 =  Time.Stamp8[0];                        // These values are herewith delivered to Transmitter in Ack Payload
     AckPayload.Byte2                 =  Time.Stamp8[1]; 
-    AckPayload.ReportedPitch         =  Time.Stamp8[2]; 
-    AckPayload.ReportedRoll          =  Time.Stamp8[3]; 
-    AckPayload.ReportedYaw           =  NextChannelNumber;    
+    AckPayload.Byte3         =  Time.Stamp8[2]; 
+    AckPayload.Byte4          =  Time.Stamp8[3]; 
+    AckPayload.Byte5           =  NextChannelNumber;    
 }
 
 /************************************************************************************************************/
@@ -323,8 +323,8 @@ void LoadRXVolts(){
     RXVolts.Val32 = SavedVolts;
     AckPayload.Byte1                 =  RXVolts.Val8[0];                        // These values are herewith delivered to Transmitter in Ack Payload
     AckPayload.Byte2                 =  RXVolts.Val8[1]; 
-    AckPayload.ReportedPitch         =  RXVolts.Val8[2]; 
-    AckPayload.ReportedRoll          =  RXVolts.Val8[3]; 
+    AckPayload.Byte3         =  RXVolts.Val8[2]; 
+    AckPayload.Byte4          =  RXVolts.Val8[3]; 
 }
 
 /************************************************************************************************************/

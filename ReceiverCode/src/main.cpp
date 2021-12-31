@@ -105,8 +105,8 @@ bool     FailSafeDataLoaded = false;
 uint8_t  ModelNumber        = 0;
 bool     ModelNumberSaved   = false;
 bool     ReInit             = false;
-uint8_t  byte1              = 0;
-uint8_t  byte2              = 0;
+uint8_t  FS_byte1              = 0;
+uint8_t  FS_byte2              = 0;
 bool     GyroInstalled      = false;
 uint32_t ReconnectedMoment;
 float    SavedAltitude;
@@ -300,11 +300,11 @@ void ShowHopDurationEtc()
 void ClearAckPayload()
 {
     AckPayload.Byte1              = 0;
-    AckPayload.ReportedPitch     = 0;
-    AckPayload.ReportedRoll      = 0;
-    AckPayload.ReportedYaw       = 0;
-    AckPayload.Byte2             = 0;
-    AckPayload.Purpose          |= 0x80;
+    AckPayload.Byte2              = 0;
+    AckPayload.Byte3              = 0;
+    AckPayload.Byte4              = 0;
+    AckPayload.Byte5              = 0;
+    AckPayload.Purpose           |= 0x80;
 }
 
 /************************************************************************************************************/
@@ -415,14 +415,14 @@ void CheckParams()
              
              FailSafeSave = bool(ReceivedData[CHANNELSUSED + 2]);
                 if (FailSafeSave) {
-                TwoBytes = uint16_t(byte2) + uint16_t(byte1 << 8);
+                TwoBytes = uint16_t(FS_byte2) + uint16_t(FS_byte1 << 8);
                 RebuildFlags(FailSafeChannel, TwoBytes);
             }
 
             break;
         case 8:
-            byte1 = ReceivedData[CHANNELSUSED + 2]; // These bytes are failsafe flags
-            byte2 = ReceivedData[CHANNELSUSED + 3]; // These bytes are failsafe flags
+            FS_byte1 = ReceivedData[CHANNELSUSED + 2]; // These bytes are failsafe flags
+            FS_byte2 = ReceivedData[CHANNELSUSED + 3]; // These bytes are failsafe flags
             break;
         case 9:
             YawPID.P = ReceivedData[CHANNELSUSED + 3];
@@ -692,9 +692,9 @@ void ReadSensors()
     if (USE_MPU6050) {
         Get_Mpu6050();
         // These values are reported to Transmitter
-        AckPayload.ReportedPitch = dof9_data.Pitch;
-        AckPayload.ReportedRoll  = dof9_data.Roll;
-        AckPayload.ReportedYaw   = dof9_data.Yaw;
+        AckPayload.Byte3 = dof9_data.Pitch;
+        AckPayload.Byte4  = dof9_data.Roll;
+        AckPayload.Byte5   = dof9_data.Yaw;
     }
 }
 /************************************************************************************************************/
