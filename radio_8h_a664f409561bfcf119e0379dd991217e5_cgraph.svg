@@ -48,50 +48,35 @@
 <path fill="none" stroke="midnightblue" d="M90.2,-48C100.32,-48 111.17,-48 121.64,-48"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="121.93,-51.5 131.93,-48 121.93,-44.5 121.93,-51.5"/>
 </g>
-<!-- Node6 -->
-<g id="node6" class="node">
-<title>Node6</title>
-<g id="a_node6"><a xlink:href="radio_8h.html#af067d2e9e8981a59af86ec75a0db36b4" target="_top" xlink:title=" ">
+<!-- Node5 -->
+<g id="node5" class="node">
+<title>Node5</title>
+<g id="a_node5"><a xlink:href="radio_8h.html#af067d2e9e8981a59af86ec75a0db36b4" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="black" points="126,-0.5 126,-19.5 227,-19.5 227,-0.5 126,-0.5"/>
 <text text-anchor="middle" x="176.5" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">LoadVersioNumber</text>
 </a>
 </g>
 </g>
-<!-- Node1&#45;&gt;Node6 -->
-<g id="edge5" class="edge">
-<title>Node1&#45;&gt;Node6</title>
+<!-- Node1&#45;&gt;Node5 -->
+<g id="edge4" class="edge">
+<title>Node1&#45;&gt;Node5</title>
 <path fill="none" stroke="midnightblue" d="M78.68,-38.41C95.09,-33.6 115.18,-27.7 132.79,-22.53"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="134.22,-25.76 142.83,-19.59 132.25,-19.04 134.22,-25.76"/>
 </g>
 <!-- Node4 -->
 <g id="node4" class="node">
 <title>Node4</title>
-<g id="a_node4"><a xlink:href="radio_8h.html#a6fa3cec5deb1ccf813e013189b16e22f" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="black" points="279.5,-57.5 279.5,-76.5 344.5,-76.5 344.5,-57.5 279.5,-57.5"/>
-<text text-anchor="middle" x="312" y="-64.5" font-family="Helvetica,sans-Serif" font-size="10.00">DoSensors</text>
+<g id="a_node4"><a xlink:href="radio_8h.html#a5cbe0c69c07d5818a956b9155820cf76" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="black" points="263,-38.5 263,-57.5 361,-57.5 361,-38.5 263,-38.5"/>
+<text text-anchor="middle" x="312" y="-45.5" font-family="Helvetica,sans-Serif" font-size="10.00">GetNextFrequency</text>
 </a>
 </g>
 </g>
 <!-- Node3&#45;&gt;Node4 -->
 <g id="edge3" class="edge">
 <title>Node3&#45;&gt;Node4</title>
-<path fill="none" stroke="midnightblue" d="M221.21,-54.22C236.66,-56.42 253.98,-58.89 269.26,-61.06"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="269.07,-64.57 279.46,-62.51 270.06,-57.64 269.07,-64.57"/>
-</g>
-<!-- Node5 -->
-<g id="node5" class="node">
-<title>Node5</title>
-<g id="a_node5"><a xlink:href="radio_8h.html#a5cbe0c69c07d5818a956b9155820cf76" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="black" points="263,-19.5 263,-38.5 361,-38.5 361,-19.5 263,-19.5"/>
-<text text-anchor="middle" x="312" y="-26.5" font-family="Helvetica,sans-Serif" font-size="10.00">GetNextFrequency</text>
-</a>
-</g>
-</g>
-<!-- Node3&#45;&gt;Node5 -->
-<g id="edge4" class="edge">
-<title>Node3&#45;&gt;Node5</title>
-<path fill="none" stroke="midnightblue" d="M221.21,-41.78C231.24,-40.35 242.06,-38.81 252.59,-37.31"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="253.17,-40.77 262.57,-35.89 252.18,-33.84 253.17,-40.77"/>
+<path fill="none" stroke="midnightblue" d="M221.21,-48C231.14,-48 241.83,-48 252.27,-48"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="252.57,-51.5 262.57,-48 252.57,-44.5 252.57,-51.5"/>
 </g>
 </g>
 </svg>
