@@ -1359,6 +1359,7 @@ void ShowComms()
     char  DataView_pps[]         = "pps";
     char  DataView_lps[]         = "lps";
     char  DataView_Alt[]         = "alt";
+    char  DataView_Temp[]        = "Temp";
     char  DataView_MaxAlt[]      = "MaxAlt";
     char  DataView_txv[]         = "txv";
     char  DataView_rxv[]         = "rxv";
@@ -1462,8 +1463,7 @@ void ShowComms()
                    // SendText(DataView_roll,  ModelRoll);
                   //  SendText(DataView_pitch, ModelPitch);
                   //  SendText(DataView_yaw,   ModelYaw);
-                    
-                    
+                    SendText(DataView_Temp,ModelTemperature);
                     SendText(DataView_Rx,    ThisRadio);
                     SendText(DataView_rxv,   ReceiverVersionNumber);
                     SendValue(DataView_Ls,   GapLongest);
@@ -5750,9 +5750,8 @@ void GetRXVolts()
     TemperatureUnion.Val8[2] = AckPayload.Byte3; 
     TemperatureUnion.Val8[3] = AckPayload.Byte4; 
     RXModelTemperature       = TemperatureUnion.Val32;  
-   
     snprintf (ModelTemperature, 5, "%f", RXModelTemperature);
-    // Serial.println (ModelTemperature); // heer
+   
  }
 
 /************************************************************************************************************/
