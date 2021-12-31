@@ -5681,13 +5681,13 @@ $(document).ready(function(){initNavTree('_transmitter_code_2src_2main_8cpp_sour
 <div class="line"><a name="l05728"></a><span class="lineno"> 5728</span>&#160;                                    <span class="comment">// High BIT is guaranteed LOW by this point, so no &quot;&amp; 0x7F&quot; is needed.</span></div>
 <div class="line"><a name="l05729"></a><span class="lineno"> 5729</span>&#160;        {</div>
 <div class="line"><a name="l05730"></a><span class="lineno"> 5730</span>&#160;            <span class="keywordflow">case</span> 0:</div>
-<div class="line"><a name="l05731"></a><span class="lineno"> 5731</span>&#160;              </div>
+<div class="line"><a name="l05731"></a><span class="lineno"> 5731</span>&#160;                <a class="code" href="_transmitter_code_2src_2main_8cpp.html#acd508e422b616377d0f0cdb44e4cfae0">GetRXTime</a>();      <span class="comment">// Synch very frequently!</span></div>
 <div class="line"><a name="l05732"></a><span class="lineno"> 5732</span>&#160;                <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l05733"></a><span class="lineno"> 5733</span>&#160;            <span class="keywordflow">case</span> 1:</div>
 <div class="line"><a name="l05734"></a><span class="lineno"> 5734</span>&#160;                <a class="code" href="_transmitter_code_2src_2main_8cpp.html#a4f813935d8fe58355228cbbf25e12f96">GetRXVersionNumber</a>();</div>
 <div class="line"><a name="l05735"></a><span class="lineno"> 5735</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l05736"></a><span class="lineno"> 5736</span>&#160;            <span class="keywordflow">case</span> 2:               <span class="comment">// By this means a time synch is enabled every third packet</span></div>
-<div class="line"><a name="l05737"></a><span class="lineno"> 5737</span>&#160;                <a class="code" href="_transmitter_code_2src_2main_8cpp.html#acd508e422b616377d0f0cdb44e4cfae0">GetRXTime</a>();</div>
+<div class="line"><a name="l05736"></a><span class="lineno"> 5736</span>&#160;            <span class="keywordflow">case</span> 2:              </div>
+<div class="line"><a name="l05737"></a><span class="lineno"> 5737</span>&#160;                <a class="code" href="_transmitter_code_2src_2main_8cpp.html#acd508e422b616377d0f0cdb44e4cfae0">GetRXTime</a>();     <span class="comment">// Synch very frequently!</span></div>
 <div class="line"><a name="l05738"></a><span class="lineno"> 5738</span>&#160;                <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l05739"></a><span class="lineno"> 5739</span>&#160;            <span class="keywordflow">case</span> 3:</div>
 <div class="line"><a name="l05740"></a><span class="lineno"> 5740</span>&#160;                <a class="code" href="_transmitter_code_2src_2main_8cpp.html#a79b5170b28687a975a36408630f93dd3">GetRXVolts</a>();</div>
