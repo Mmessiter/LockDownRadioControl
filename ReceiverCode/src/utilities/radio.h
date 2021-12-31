@@ -331,6 +331,22 @@ void LoadRXVolts(){
 }
 
 /************************************************************************************************************/
+ void LoadAltitude(){
+
+  union                                                                       // union used to allow access to each byte of 32 bit float     
+    {float Val32; 
+        uint8_t  Val8[4];
+    }AltitudeUnion;   
+
+    AltitudeUnion.Val32      =  SavedAltitude;
+    AckPayload.Byte1         =  AltitudeUnion.Val8[0];                        // These values are herewith delivered to Transmitter in Ack Payload
+    AckPayload.Byte2         =  AltitudeUnion.Val8[1]; 
+    AckPayload.Byte3         =  AltitudeUnion.Val8[2]; 
+    AckPayload.Byte4         =  AltitudeUnion.Val8[3]; 
+ }
+
+
+/************************************************************************************************************/
 
 void LoadAckPayload()
 {
@@ -341,20 +357,27 @@ void LoadAckPayload()
                                                         // 3 =  RX lipo Voltage
                                                         // More later ... CAN EXPAND TO 127 if needed :-)!
                                         
-    if (AckPayload.Purpose > 3) AckPayload.Purpose = 0; // 3 is currently the max 
+    if (AckPayload.Purpose > 5) AckPayload.Purpose = 0; // 3 is currently the max 
     
     switch (AckPayload.Purpose){
-            case 0:
-                LoadTimeStamp();                             //  if 0 send synch time stamp
+            case 0:                                         //  if 0 send synch time stamp
+                LoadTimeStamp();                             
                 break;                                       
-            case 1:
-                LoadVersioNumber();                          //  if 1 send version info AND RX number
+            case 1:                                         //  if 1 send version info AND RX number
+                LoadVersioNumber();                         
                 break;
-            case 2: 
-                LoadTimeStamp();                             //  if 2 send synch time stamp
+            case 2:                                         //  if 2 send synch time stamp
+                LoadTimeStamp();                           
                 break;
-            case 3:
-                LoadRXVolts();
+            case 3:                                         //  if 3 send send rx lipo volts
+                LoadRXVolts();                             
+                break;
+            case 4:                                         //  if 4 send synch time stamp
+                LoadTimeStamp();                             
+                break;
+            case 5:                                         //  if 5 send synch time stamp
+                LoadAltitude();
+                break;
             default:
                 break;
     }

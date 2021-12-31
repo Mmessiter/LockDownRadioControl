@@ -245,10 +245,10 @@ uint8_t       PacketNumber     = 0;
      * 
      * @note If Purpose = 2 then ...
      * @code
-     * AckPayload.Byte1     = Time.Stamp8[0];       // Time stamp is 32 BIT divided up here.
-     * AckPayload.Byte2     = Time.Stamp8[1]; 
-     * AckPayload.Byte3     = Time.Stamp8[2]; 
-     * AckPayload.Byte4     = Time.Stamp8[3]; 
+     * AckPayload.Byte1     = Time.Val8[0];       // Time stamp is 32 BIT divided up here.
+     * AckPayload.Byte2     = Time.Val8[1]; 
+     * AckPayload.Byte3     = Time.Val8[2]; 
+     * AckPayload.Byte4     = Time.Val8[3]; 
      * AckPayload.Byte5     = Next array pointer for next channel
      * 
      * * @note If Purpose = 3 then ...
@@ -365,7 +365,10 @@ uint32_t GapCount                     = 0;
 uint32_t GapShortest                  = 0;
 char     CalibrateNow[]               = "touch_j";
 char     ModelVolts[12]               = " ";
-float    RXModelVolts = 0;
+float    RXModelVolts                 = 0;
+float    RXModelAltitude              = 0;
+float    RXMAXModelAltitude           = 0;
+
 char     ModelAltitude[12]            = " ";
 char     MaxAltitude[12]              = "0";
 float    MaxAlt                       = 0;
@@ -1360,9 +1363,6 @@ void ShowComms()
     char  DataView_lps[]         = "lps";
     char  DataView_Alt[]         = "alt";
     char  DataView_MaxAlt[]      = "MaxAlt";
-    char  DataView_roll[]        = "roll";
-    char  DataView_pitch[]       = "pitch";
-    char  DataView_yaw[]         = "yaw";
     char  DataView_txv[]         = "txv";
     char  DataView_rxv[]         = "rxv";
     char  DataView_Ls[]          = "Ls";
@@ -1457,11 +1457,16 @@ void ShowComms()
             if (CurrentView == DataView) {
                     SendValue(DataView_pps,  PacketsPerSecond);
                     SendValue(DataView_lps,  LostPackets);
+                   
                     SendText(DataView_Alt,   ModelAltitude);
-                    SendText(DataView_MaxAlt,MaxAltitude);     // TODO: MAX must be implemented
-                    SendText(DataView_roll,  ModelRoll);
-                    SendText(DataView_pitch, ModelPitch);
-                    SendText(DataView_yaw,   ModelYaw);
+                   
+                    SendText(DataView_MaxAlt,MaxAltitude);    
+                   
+                   // SendText(DataView_roll,  ModelRoll);
+                  //  SendText(DataView_pitch, ModelPitch);
+                  //  SendText(DataView_yaw,   ModelYaw);
+                    
+                    
                     SendText(DataView_Rx,    ThisRadio);
                     SendText(DataView_rxv,   ReceiverVersionNumber);
                     SendValue(DataView_Ls,   GapLongest);
@@ -5676,19 +5681,19 @@ void ClearAckPayload()
 
 void GetRXTime(){  // This gets the time from Receivier to enable FHSS synch
     union
-    {uint32_t Stamp32; 
-        uint8_t Stamp8[4];
-    }RXTime;                                  // union used to allow access to each byte of 32 bit value     
+    {uint32_t Val32; 
+        uint8_t Val8[4];
+    }RXTimeUnion;                                  // union used to allow access to each byte of 32 bit value     
 
 
     if (AckPayload.Byte5){                    // Good data? (Zero means no data)
-        RXTime.Stamp8[0]    = AckPayload.Byte1;
-        RXTime.Stamp8[1]    = AckPayload.Byte2;
-        RXTime.Stamp8[2]    = AckPayload.Byte3; 
-        RXTime.Stamp8[3]    = AckPayload.Byte4;  
+        RXTimeUnion.Val8[0]    = AckPayload.Byte1;
+        RXTimeUnion.Val8[1]    = AckPayload.Byte2;
+        RXTimeUnion.Val8[2]    = AckPayload.Byte3; 
+        RXTimeUnion.Val8[3]    = AckPayload.Byte4;  
 
         NextChannelNumber   = AckPayload.Byte5;  
-        HopStart            =  millis() - RXTime.Stamp32;
+        HopStart            =  millis() - RXTimeUnion.Val32;
         TXTimeStamp         =  millis() - HopStart; 
     }
 
@@ -5705,20 +5710,35 @@ if ((TXTimeStamp == 0) || (TXTimeStamp > HOPTIME )) { // is it time (or indeed i
 
 /************************************************************************************************************/
 
-void GetRXVolts()   // heer
+void GetRXVolts()   
 {
   union                                                                       // union used to allow access to each byte of 32 bit float     
     {float Val32; 
         uint8_t  Val8[4];
-    }RXVolts;   
-    RXVolts.Val8[0] = AckPayload.Byte1;                      
-    RXVolts.Val8[1] = AckPayload.Byte2; 
-    RXVolts.Val8[2] = AckPayload.Byte3;   
-    RXVolts.Val8[3] = AckPayload.Byte4;
-    RXModelVolts    = RXVolts.Val32 ;
+    }RXVoltsUnion;   
+    RXVoltsUnion.Val8[0] = AckPayload.Byte1;                      
+    RXVoltsUnion.Val8[1] = AckPayload.Byte2; 
+    RXVoltsUnion.Val8[2] = AckPayload.Byte3;   
+    RXVoltsUnion.Val8[3] = AckPayload.Byte4;
+    RXModelVolts    = RXVoltsUnion.Val32 ;
    
 }
+/************************************************************************************************************/
+ void GetAltitude(){
 
+  union                                                            // union used to allow access to each byte of 32 bit float     
+    {float Val32; 
+        uint8_t  Val8[4];   
+    }AltitudeUnion;   
+    AltitudeUnion.Val8[0] = AckPayload.Byte1;                       // These values are herewith delivered to Transmitter in Ack Payload
+    AltitudeUnion.Val8[1] = AckPayload.Byte2; 
+    AltitudeUnion.Val8[2] = AckPayload.Byte3; 
+    AltitudeUnion.Val8[3] = AckPayload.Byte4; 
+    RXModelAltitude       = AltitudeUnion.Val32;  
+    if (RXMAXModelAltitude < RXModelAltitude) RXMAXModelAltitude = RXModelAltitude;
+    snprintf (MaxAltitude , 4, "%f", RXMAXModelAltitude);
+    snprintf (ModelAltitude, 4, "%f", RXModelAltitude);
+ }
 /************************************************************************************************************/
 void ParseAckPayload()
 {
@@ -5742,6 +5762,12 @@ void ParseAckPayload()
                     VoltsDetected = true;
                     snprintf (ModelVolts, 5, "%f", RXModelVolts);
                 }
+            case 4:
+                GetRXTime();      // Synch very frequently!
+                break;
+            case 5:
+                GetAltitude();
+                 break;
             default:
                 break;
         }
