@@ -328,7 +328,7 @@ bool ReadData()
             FailSafeDataLoaded = false;                                // Ack payload instructed to Hop at next opportunity...
             HopToNextFrequency();                                      // So hop now
             HopNow = false;                                            // and clear the flag.
-            DoSensors();  
+            DoSensors();                                               // read sensors while TX hops an catches up
         }
     }
     return Connected;
