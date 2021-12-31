@@ -231,6 +231,33 @@ unsigned int  LostPackets      = 0;
 uint8_t       PacketNumber     = 0;
 
 // ************************************* AckPayload structure ******************************************************
+
+  /**
+     * This byte (Purpose) determines what the remainder represent.
+     * @warning Highest BIT of Purpose means **IGNORE IF ON**
+     * @note If Purpose = 1 then ...
+     * @code
+     * AckPayload.Byte2           =  ThisRadio;            // Radio in current use  Byte1 and Byte2 are free
+     * AckPayload.Byte3           =  RXVERSION_MAJOR;
+     * AckPayload.Byte4           =  RXVERSION_MINOR;
+     * AckPayload.Byte5           =  RXVERSION_MINIMUS;
+    
+     * 
+     * @note If Purpose = 2 then ...
+     * @code
+     * AckPayload.Byte1     = Time.Stamp8[0];       // Time stamp is 32 BIT divided up here.
+     * AckPayload.Byte2     = Time.Stamp8[1]; 
+     * AckPayload.Byte3     = Time.Stamp8[2]; 
+     * AckPayload.Byte4     = Time.Stamp8[3]; 
+     * AckPayload.Byte5     = Next array pointer for next channel
+     * 
+     * * @note If Purpose = 3 then ...
+     * @code
+     * AckPayload.Byte1  ... Byte4   = Volts (float)      Byte5 is free
+    
+     * @endcode
+     **/
+
 struct Payload
 {
     uint8_t Purpose;                   // Defines meaning of the remainder
@@ -242,7 +269,9 @@ struct Payload
     uint8_t Byte5;                     // (was Yaw)
 };
 Payload AckPayload;
-uint8_t AckPayloadSize = sizeof(AckPayload);
+
+uint8_t AckPayloadSize = sizeof(AckPayload); // i.e. 6
+
 // *****************************************************************************************************************
 
 uint16_t SendBuffer[MaxDataTransferred];     //    Data to send to rx (16 words)
@@ -256,11 +285,11 @@ uint8_t  MidLowDegrees[5][CHANNELSUSED + 1]; //    MidLow Degrees (45?)
 uint8_t  MinDegrees[5][CHANNELSUSED + 1];    //    Max Degrees (0?)
 uint8_t  FlightMode         = 1;
 uint8_t  PreviousFlightMode = 1;
-int      ChannelMax[CHANNELSUSED + 1];    //    output of pots at max
-int      ChannelMidHi[CHANNELSUSED + 1];  //    output of pots at MidHi
-int      ChannelCentre[CHANNELSUSED + 1]; //    output of pots at Centre
-int      ChannelMidLow[CHANNELSUSED + 1]; //    output of pots at MidLow
-int      ChannelMin[CHANNELSUSED + 1];    //    output of pots at min
+int      ChannelMax[CHANNELSUSED + 1];       //    output of pots at max
+int      ChannelMidHi[CHANNELSUSED + 1];     //    output of pots at MidHi
+int      ChannelCentre[CHANNELSUSED + 1];    //    output of pots at Centre
+int      ChannelMidLow[CHANNELSUSED + 1];    //    output of pots at MidLow
+int      ChannelMin[CHANNELSUSED + 1];       //    output of pots at min
 int      ChanneltoSet     = 0;
 bool     Connected        = false;
 uint8_t  ShowCommsCounter = 0;
