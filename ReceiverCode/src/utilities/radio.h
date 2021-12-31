@@ -345,7 +345,7 @@ void LoadAckPayload()
     
     switch (AckPayload.Purpose){
             case 0:
-              
+                LoadTimeStamp();                             //  if 0 send synch time stamp
                 break;                                       
             case 1:
                 LoadVersioNumber();                          //  if 1 send version info AND RX number

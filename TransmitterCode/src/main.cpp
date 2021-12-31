@@ -5728,13 +5728,13 @@ void ParseAckPayload()
                                     // High BIT is guaranteed LOW by this point, so no "& 0x7F" is needed.
         {
             case 0:
-              
+                GetRXTime();      // Synch very frequently!
                 break;
             case 1:
                 GetRXVersionNumber();
                 break;
-            case 2:               // By this means a time synch is enabled every third packet
-                GetRXTime();
+            case 2:              
+                GetRXTime();     // Synch very frequently!
                 break;
             case 3:
                 GetRXVolts();
