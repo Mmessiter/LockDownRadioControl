@@ -50,26 +50,40 @@ struct Payload
      * @warning Highest BIT of Purpose means **IGNORE IF ON**
      * @note If Purpose = 1 then ...
      * @code
-     * AckPayload.ReportedPitch   =  RXVERSION_MAJOR;
-     * AckPayload.Byte4    =  RXVERSION_MINOR;
-     * AckPayload.Byte5     =  RXVERSION_MINIMUS;
-     * AckPayload.Byte2 =  ThisRadio;            // Radio in current use
+     * AckPayload.Byte2           =  ThisRadio;            // Radio in current use  Byte1 and Byte2 are free
+     * AckPayload.Byte3           =  RXVERSION_MAJOR;
+     * AckPayload.Byte4           =  RXVERSION_MINOR;
+     * AckPayload.Byte5           =  RXVERSION_MINIMUS;
+    
      * 
      * @note If Purpose = 2 then ...
      * @code
-     * AckPayload.Byte1            = Time.Stamp8[0];       // Time stamp is 32 BIT divided up here.
-     * AckPayload.Byte2 = Time.Stamp8[1]; 
-     * AckPayload.Byte4    = Time.Stamp8[2]; 
-     * AckPayload.Byte5     = Time.Stamp8[3]; 
+     * AckPayload.Byte1     = Time.Stamp8[0];       // Time stamp is 32 BIT divided up here.
+     * AckPayload.Byte2     = Time.Stamp8[1]; 
+     * AckPayload.Byte3     = Time.Stamp8[2]; 
+     * AckPayload.Byte4     = Time.Stamp8[3]; 
+     * AckPayload.Byte5     = Next array pointer for next channel
+     * 
+     * * @note If Purpose = 3 then ...
+     * @code
+     * AckPayload.Byte1  ... Byte4   = Volts (float)      Byte5 is free
+    
      * @endcode
      **/
 
+
+
+
+
+
+
+
     uint8_t Purpose         = 0;   // 0  Purpose  
-    uint8_t Byte1           = 0;   // 1  was volt  
-    uint8_t Byte2           = 0;   // 2  was CurrentAltitude
-    uint8_t Byte3           = 0;   // 3  was ReportedPitch
-    uint8_t Byte4           = 0;   // 4  was ReportedRoll
-    uint8_t Byte5           = 0;   // 5  was ReportedYaw
+    uint8_t Byte1           = 0;   // 1  (was volt)  
+    uint8_t Byte2           = 0;   // 2  (was CurrentAltitude)
+    uint8_t Byte3           = 0;   // 3  (was ReportedPitch)
+    uint8_t Byte4           = 0;   // 4  (was ReportedRoll)
+    uint8_t Byte5           = 0;   // 5  (was ReportedYaw)
 };
 Payload AckPayload;                                  /** object allocated for returned ACK data. */
 uint8_t AckPayloadSize = sizeof(AckPayload);         // Size for later externs if needed etc.
@@ -109,10 +123,11 @@ void ReadSavedPipe()
 
 void LoadVersioNumber() // and which radio is currently in use
 {
-    AckPayload.Byte3   = RXVERSION_MAJOR;
-    AckPayload.Byte4    = RXVERSION_MINOR;
+    AckPayload.Byte2     = ThisRadio;
+    AckPayload.Byte3     = RXVERSION_MAJOR;
+    AckPayload.Byte4     = RXVERSION_MINOR;
     AckPayload.Byte5     = RXVERSION_MINIMUS;
-    AckPayload.Byte2 = ThisRadio;
+   
 }
 
 /************************************************************************************************************/
@@ -305,11 +320,11 @@ void LoadTimeStamp(){              // This will load time stamp and array index 
             HopNow = true;      // Set flag and hop when ready *** BUT NOT BEFORE ****  !!!!!
             DoSensors();   
     }
-    AckPayload.Byte1                 =  Time.Stamp8[0];                        // These values are herewith delivered to Transmitter in Ack Payload
-    AckPayload.Byte2                 =  Time.Stamp8[1]; 
+    AckPayload.Byte1         =  Time.Stamp8[0];                        // These values are herewith delivered to Transmitter in Ack Payload
+    AckPayload.Byte2         =  Time.Stamp8[1]; 
     AckPayload.Byte3         =  Time.Stamp8[2]; 
-    AckPayload.Byte4          =  Time.Stamp8[3]; 
-    AckPayload.Byte5           =  NextChannelNumber;    
+    AckPayload.Byte4         =  Time.Stamp8[3]; 
+    AckPayload.Byte5         =  NextChannelNumber;    
 }
 
 /************************************************************************************************************/
@@ -320,11 +335,11 @@ void LoadRXVolts(){
         uint8_t  Val8[4];
     }RXVolts;   
 
-    RXVolts.Val32 = SavedVolts;
-    AckPayload.Byte1                 =  RXVolts.Val8[0];                        // These values are herewith delivered to Transmitter in Ack Payload
-    AckPayload.Byte2                 =  RXVolts.Val8[1]; 
+    RXVolts.Val32            =  SavedVolts;
+    AckPayload.Byte1         =  RXVolts.Val8[0];                        // These values are herewith delivered to Transmitter in Ack Payload
+    AckPayload.Byte2         =  RXVolts.Val8[1]; 
     AckPayload.Byte3         =  RXVolts.Val8[2]; 
-    AckPayload.Byte4          =  RXVolts.Val8[3]; 
+    AckPayload.Byte4         =  RXVolts.Val8[3]; 
 }
 
 /************************************************************************************************************/
@@ -342,8 +357,8 @@ void LoadAckPayload()
     
     switch (AckPayload.Purpose){
             case 0:
-               // AckPayload.Byte2 = SavedAltitude;  //  TODO!!! Altitude needs 16 bits to exceed 255 feet!
-                break;                                       //  if 0 send gyro data (is pre-loaded by default)
+              
+                break;                                       
             case 1:
                 LoadVersioNumber();                          //  if 1 send version info AND RX number
                 break;
