@@ -144,7 +144,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00068">68</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00082">82</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
 
 </div>
 </div>
@@ -160,7 +160,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00069">69</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00083">83</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
 
 </div>
 </div>
@@ -176,7 +176,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00070">70</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00084">84</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
 
 </div>
 </div>
@@ -192,7 +192,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00071">71</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00085">85</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
 
 </div>
 </div>
@@ -208,7 +208,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00072">72</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00086">86</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
 
 </div>
 </div>
@@ -256,30 +256,37 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>This byte (Purpose) determines what the remainder (offset 19) represent. </p><dl class="section warning"><dt>Warning</dt><dd>Highest BIT of Purpose means <b>IGNORE IF ON</b> </dd></dl>
-<dl class="section note"><dt>Note</dt><dd>If Purpose = 1 then ... <div class="fragment"><div class="line"><a class="code" href="radio_8h.html#a30a079d60b4731ce1531091ffe56a703">AckPayload</a>.ReportedPitch   =  <a class="code" href="common_8h.html#a2b147d5155fcf962e9f1c4885b32c67d">RXVERSION_MAJOR</a>;</div>
-<div class="line"><a class="code" href="radio_8h.html#a30a079d60b4731ce1531091ffe56a703">AckPayload</a>.<a class="code" href="struct_payload.html#a654bdf192bbe0cc64dc8280527c2da20">Byte4</a>    =  <a class="code" href="common_8h.html#adeb76229aa4087c3bc1e1fd17bd865b2">RXVERSION_MINOR</a>;</div>
-<div class="line"><a class="code" href="radio_8h.html#a30a079d60b4731ce1531091ffe56a703">AckPayload</a>.<a class="code" href="struct_payload.html#ae28220045a0918bdb0fc6484dbff55f9">Byte5</a>     =  <a class="code" href="common_8h.html#a46d5105ccf92f7e44b10af6fd51772a8">RXVERSION_MINIMUS</a>;</div>
-<div class="line"><a class="code" href="radio_8h.html#a30a079d60b4731ce1531091ffe56a703">AckPayload</a>.<a class="code" href="struct_payload.html#ae7106f2efa1bb9f4ebb720c7c9fc54b8">Byte2</a> =  <a class="code" href="radio_8h.html#a25cc3bb5cb94f4bbef0f2c5b79140c20">ThisRadio</a>;            <span class="comment">// Radio in current use</span></div>
+<dl class="section note"><dt>Note</dt><dd>If Purpose = 1 then ... <div class="fragment"><div class="line"><a class="code" href="radio_8h.html#a30a079d60b4731ce1531091ffe56a703">AckPayload</a>.<a class="code" href="struct_payload.html#ae7106f2efa1bb9f4ebb720c7c9fc54b8">Byte2</a>           =  <a class="code" href="radio_8h.html#a25cc3bb5cb94f4bbef0f2c5b79140c20">ThisRadio</a>;            <span class="comment">// Radio in current use  Byte1 and Byte2 are free</span></div>
+<div class="line"><a class="code" href="radio_8h.html#a30a079d60b4731ce1531091ffe56a703">AckPayload</a>.<a class="code" href="struct_payload.html#a31d05bdbdf85fe184cc7f806d3391fa9">Byte3</a>           =  <a class="code" href="common_8h.html#a2b147d5155fcf962e9f1c4885b32c67d">RXVERSION_MAJOR</a>;</div>
+<div class="line"><a class="code" href="radio_8h.html#a30a079d60b4731ce1531091ffe56a703">AckPayload</a>.<a class="code" href="struct_payload.html#a654bdf192bbe0cc64dc8280527c2da20">Byte4</a>           =  <a class="code" href="common_8h.html#adeb76229aa4087c3bc1e1fd17bd865b2">RXVERSION_MINOR</a>;</div>
+<div class="line"><a class="code" href="radio_8h.html#a30a079d60b4731ce1531091ffe56a703">AckPayload</a>.<a class="code" href="struct_payload.html#ae28220045a0918bdb0fc6484dbff55f9">Byte5</a>           =  <a class="code" href="common_8h.html#a46d5105ccf92f7e44b10af6fd51772a8">RXVERSION_MINIMUS</a>;</div>
+<div class="line"> </div>
 <div class="line"> </div>
 <div class="line">@note If <a class="code" href="struct_payload.html#ac18701f2aa35ebd8402f45f840d5c445">Purpose</a> = 2 then ...</div>
 <div class="line">@code</div>
-<div class="line"><a class="code" href="radio_8h.html#a30a079d60b4731ce1531091ffe56a703">AckPayload</a>.<a class="code" href="struct_payload.html#ab1cbe4c4b9ee9ce839084b274f3ea494">Byte1</a>            = Time.Stamp8[0];       <span class="comment">// Time stamp is 32 BIT divided up here.</span></div>
-<div class="line"><a class="code" href="radio_8h.html#a30a079d60b4731ce1531091ffe56a703">AckPayload</a>.<a class="code" href="struct_payload.html#ae7106f2efa1bb9f4ebb720c7c9fc54b8">Byte2</a> = Time.Stamp8[1]; </div>
-<div class="line"><a class="code" href="radio_8h.html#a30a079d60b4731ce1531091ffe56a703">AckPayload</a>.<a class="code" href="struct_payload.html#a654bdf192bbe0cc64dc8280527c2da20">Byte4</a>    = Time.Stamp8[2]; </div>
-<div class="line"><a class="code" href="radio_8h.html#a30a079d60b4731ce1531091ffe56a703">AckPayload</a>.<a class="code" href="struct_payload.html#ae28220045a0918bdb0fc6484dbff55f9">Byte5</a>     = Time.Stamp8[3]; </div>
+<div class="line"><a class="code" href="radio_8h.html#a30a079d60b4731ce1531091ffe56a703">AckPayload</a>.<a class="code" href="struct_payload.html#ab1cbe4c4b9ee9ce839084b274f3ea494">Byte1</a>     = Time.Stamp8[0];       <span class="comment">// Time stamp is 32 BIT divided up here.</span></div>
+<div class="line"><a class="code" href="radio_8h.html#a30a079d60b4731ce1531091ffe56a703">AckPayload</a>.<a class="code" href="struct_payload.html#ae7106f2efa1bb9f4ebb720c7c9fc54b8">Byte2</a>     = Time.Stamp8[1]; </div>
+<div class="line"><a class="code" href="radio_8h.html#a30a079d60b4731ce1531091ffe56a703">AckPayload</a>.<a class="code" href="struct_payload.html#a31d05bdbdf85fe184cc7f806d3391fa9">Byte3</a>     = Time.Stamp8[2]; </div>
+<div class="line"><a class="code" href="radio_8h.html#a30a079d60b4731ce1531091ffe56a703">AckPayload</a>.<a class="code" href="struct_payload.html#a654bdf192bbe0cc64dc8280527c2da20">Byte4</a>     = Time.Stamp8[3]; </div>
+<div class="line"><a class="code" href="radio_8h.html#a30a079d60b4731ce1531091ffe56a703">AckPayload</a>.<a class="code" href="struct_payload.html#ae28220045a0918bdb0fc6484dbff55f9">Byte5</a>     = Next array pointer <span class="keywordflow">for</span> next channel</div>
+<div class="line"> </div>
+<div class="line">* @note If <a class="code" href="struct_payload.html#ac18701f2aa35ebd8402f45f840d5c445">Purpose</a> = 3 then ...</div>
+<div class="line">@code</div>
+<div class="line"><a class="code" href="radio_8h.html#a30a079d60b4731ce1531091ffe56a703">AckPayload</a>.<a class="code" href="struct_payload.html#ab1cbe4c4b9ee9ce839084b274f3ea494">Byte1</a>  ... <a class="code" href="struct_payload.html#a654bdf192bbe0cc64dc8280527c2da20">Byte4</a>   = Volts (<span class="keywordtype">float</span>)      <a class="code" href="struct_payload.html#ae28220045a0918bdb0fc6484dbff55f9">Byte5</a> is free</div>
 <div class="ttc" id="acommon_8h_html_a2b147d5155fcf962e9f1c4885b32c67d"><div class="ttname"><a href="common_8h.html#a2b147d5155fcf962e9f1c4885b32c67d">RXVERSION_MAJOR</a></div><div class="ttdeci">#define RXVERSION_MAJOR</div><div class="ttdef"><b>Definition:</b> <a href="common_8h_source.html#l00013">common.h:13</a></div></div>
 <div class="ttc" id="acommon_8h_html_a46d5105ccf92f7e44b10af6fd51772a8"><div class="ttname"><a href="common_8h.html#a46d5105ccf92f7e44b10af6fd51772a8">RXVERSION_MINIMUS</a></div><div class="ttdeci">#define RXVERSION_MINIMUS</div><div class="ttdef"><b>Definition:</b> <a href="common_8h_source.html#l00015">common.h:15</a></div></div>
 <div class="ttc" id="acommon_8h_html_adeb76229aa4087c3bc1e1fd17bd865b2"><div class="ttname"><a href="common_8h.html#adeb76229aa4087c3bc1e1fd17bd865b2">RXVERSION_MINOR</a></div><div class="ttdeci">#define RXVERSION_MINOR</div><div class="ttdef"><b>Definition:</b> <a href="common_8h_source.html#l00014">common.h:14</a></div></div>
 <div class="ttc" id="aradio_8h_html_a25cc3bb5cb94f4bbef0f2c5b79140c20"><div class="ttname"><a href="radio_8h.html#a25cc3bb5cb94f4bbef0f2c5b79140c20">ThisRadio</a></div><div class="ttdeci">uint8_t ThisRadio</div><div class="ttdef"><b>Definition:</b> <a href="radio_8h_source.html#l00020">radio.h:20</a></div></div>
-<div class="ttc" id="aradio_8h_html_a30a079d60b4731ce1531091ffe56a703"><div class="ttname"><a href="radio_8h.html#a30a079d60b4731ce1531091ffe56a703">AckPayload</a></div><div class="ttdeci">Payload AckPayload</div><div class="ttdef"><b>Definition:</b> <a href="radio_8h_source.html#l00074">radio.h:74</a></div></div>
-<div class="ttc" id="astruct_payload_html_a654bdf192bbe0cc64dc8280527c2da20"><div class="ttname"><a href="struct_payload.html#a654bdf192bbe0cc64dc8280527c2da20">Payload::Byte4</a></div><div class="ttdeci">uint8_t Byte4</div><div class="ttdef"><b>Definition:</b> <a href="radio_8h_source.html#l00071">radio.h:71</a></div></div>
-<div class="ttc" id="astruct_payload_html_ab1cbe4c4b9ee9ce839084b274f3ea494"><div class="ttname"><a href="struct_payload.html#ab1cbe4c4b9ee9ce839084b274f3ea494">Payload::Byte1</a></div><div class="ttdeci">uint8_t Byte1</div><div class="ttdef"><b>Definition:</b> <a href="radio_8h_source.html#l00068">radio.h:68</a></div></div>
-<div class="ttc" id="astruct_payload_html_ac18701f2aa35ebd8402f45f840d5c445"><div class="ttname"><a href="struct_payload.html#ac18701f2aa35ebd8402f45f840d5c445">Payload::Purpose</a></div><div class="ttdeci">uint8_t Purpose</div><div class="ttdef"><b>Definition:</b> <a href="radio_8h_source.html#l00067">radio.h:67</a></div></div>
-<div class="ttc" id="astruct_payload_html_ae28220045a0918bdb0fc6484dbff55f9"><div class="ttname"><a href="struct_payload.html#ae28220045a0918bdb0fc6484dbff55f9">Payload::Byte5</a></div><div class="ttdeci">uint8_t Byte5</div><div class="ttdef"><b>Definition:</b> <a href="radio_8h_source.html#l00072">radio.h:72</a></div></div>
-<div class="ttc" id="astruct_payload_html_ae7106f2efa1bb9f4ebb720c7c9fc54b8"><div class="ttname"><a href="struct_payload.html#ae7106f2efa1bb9f4ebb720c7c9fc54b8">Payload::Byte2</a></div><div class="ttdeci">uint8_t Byte2</div><div class="ttdef"><b>Definition:</b> <a href="radio_8h_source.html#l00069">radio.h:69</a></div></div>
+<div class="ttc" id="aradio_8h_html_a30a079d60b4731ce1531091ffe56a703"><div class="ttname"><a href="radio_8h.html#a30a079d60b4731ce1531091ffe56a703">AckPayload</a></div><div class="ttdeci">Payload AckPayload</div><div class="ttdef"><b>Definition:</b> <a href="radio_8h_source.html#l00088">radio.h:88</a></div></div>
+<div class="ttc" id="astruct_payload_html_a31d05bdbdf85fe184cc7f806d3391fa9"><div class="ttname"><a href="struct_payload.html#a31d05bdbdf85fe184cc7f806d3391fa9">Payload::Byte3</a></div><div class="ttdeci">uint8_t Byte3</div><div class="ttdef"><b>Definition:</b> <a href="radio_8h_source.html#l00084">radio.h:84</a></div></div>
+<div class="ttc" id="astruct_payload_html_a654bdf192bbe0cc64dc8280527c2da20"><div class="ttname"><a href="struct_payload.html#a654bdf192bbe0cc64dc8280527c2da20">Payload::Byte4</a></div><div class="ttdeci">uint8_t Byte4</div><div class="ttdef"><b>Definition:</b> <a href="radio_8h_source.html#l00085">radio.h:85</a></div></div>
+<div class="ttc" id="astruct_payload_html_ab1cbe4c4b9ee9ce839084b274f3ea494"><div class="ttname"><a href="struct_payload.html#ab1cbe4c4b9ee9ce839084b274f3ea494">Payload::Byte1</a></div><div class="ttdeci">uint8_t Byte1</div><div class="ttdef"><b>Definition:</b> <a href="radio_8h_source.html#l00082">radio.h:82</a></div></div>
+<div class="ttc" id="astruct_payload_html_ac18701f2aa35ebd8402f45f840d5c445"><div class="ttname"><a href="struct_payload.html#ac18701f2aa35ebd8402f45f840d5c445">Payload::Purpose</a></div><div class="ttdeci">uint8_t Purpose</div><div class="ttdef"><b>Definition:</b> <a href="radio_8h_source.html#l00081">radio.h:81</a></div></div>
+<div class="ttc" id="astruct_payload_html_ae28220045a0918bdb0fc6484dbff55f9"><div class="ttname"><a href="struct_payload.html#ae28220045a0918bdb0fc6484dbff55f9">Payload::Byte5</a></div><div class="ttdeci">uint8_t Byte5</div><div class="ttdef"><b>Definition:</b> <a href="radio_8h_source.html#l00086">radio.h:86</a></div></div>
+<div class="ttc" id="astruct_payload_html_ae7106f2efa1bb9f4ebb720c7c9fc54b8"><div class="ttname"><a href="struct_payload.html#ae7106f2efa1bb9f4ebb720c7c9fc54b8">Payload::Byte2</a></div><div class="ttdeci">uint8_t Byte2</div><div class="ttdef"><b>Definition:</b> <a href="radio_8h_source.html#l00083">radio.h:83</a></div></div>
 </div><!-- fragment --> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00067">67</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00081">81</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
 
 </div>
 </div>
