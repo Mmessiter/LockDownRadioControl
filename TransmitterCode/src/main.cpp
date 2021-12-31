@@ -235,11 +235,11 @@ struct Payload
 {
     uint8_t Purpose;                   // Defines meaning of the remainder
                                        // Highest BIT of Purpose means Ignore IF ON
-    uint8_t Byte1;                     // was volt
-    uint8_t Byte2;                     // was CurrentAltitude
-    uint8_t Byte3;                     // was Pitch
-    uint8_t Byte4;                     // was Roll
-    uint8_t Byte5;                     // was Yaw
+    uint8_t Byte1;                     // (was volt)
+    uint8_t Byte2;                     // (was CurrentAltitude)
+    uint8_t Byte3;                     // (was Pitch)
+    uint8_t Byte4;                     // (was Roll)
+    uint8_t Byte5;                     // (was Yaw)
 };
 Payload AckPayload;
 uint8_t AckPayloadSize = sizeof(AckPayload);
