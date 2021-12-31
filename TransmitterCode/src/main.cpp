@@ -1455,15 +1455,9 @@ void ShowComms()
             if (CurrentView == DataView) {
                     SendValue(DataView_pps,  PacketsPerSecond);
                     SendValue(DataView_lps,  LostPackets);
-                   
                     SendText(DataView_Alt,   ModelAltitude);
-                   
                     SendText(DataView_MaxAlt,MaxAltitude);    
-                   
-                   // SendText(DataView_roll,  ModelRoll);
-                  //  SendText(DataView_pitch, ModelPitch);
-                  //  SendText(DataView_yaw,   ModelYaw);
-                    SendText(DataView_Temp,ModelTemperature);
+                    SendText(DataView_Temp,  ModelTemperature);
                     SendText(DataView_Rx,    ThisRadio);
                     SendText(DataView_rxv,   ReceiverVersionNumber);
                     SendValue(DataView_Ls,   GapLongest);
