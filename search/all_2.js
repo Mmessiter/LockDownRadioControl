@@ -1,7 +1,7 @@
 var searchData=
 [
   ['calibratedyet_54',['CalibratedYet',['../_transmitter_code_2src_2main_8cpp.html#a34512aff25c972f2f4ed2dd5ca95a5fe',1,'main.cpp']]],
-  ['calibratelimits_55',['CALIBRATELIMITS',['../_transmitter_code_2src_2main_8cpp.html#a8d671ce93ba33f2f6b5c314108d3592d',1,'CALIBRATELIMITS():&#160;main.cpp'],['../_radio_functions_8h.html#a8d671ce93ba33f2f6b5c314108d3592d',1,'CALIBRATELIMITS():&#160;RadioFunctions.h']]],
+  ['calibratelimits_55',['CALIBRATELIMITS',['../_radio_functions_8h.html#a8d671ce93ba33f2f6b5c314108d3592d',1,'CALIBRATELIMITS():&#160;RadioFunctions.h'],['../_transmitter_code_2src_2main_8cpp.html#a8d671ce93ba33f2f6b5c314108d3592d',1,'CALIBRATELIMITS():&#160;main.cpp']]],
   ['calibratenow_56',['CalibrateNow',['../_transmitter_code_2src_2main_8cpp.html#a53390619a82518a34731b9a2e9e1df6d',1,'main.cpp']]],
   ['calibratesticks_57',['CalibrateSticks',['../_transmitter_code_2src_2main_8cpp.html#ae1b8cef371d26fca2b4f5a101be7a8ba',1,'main.cpp']]],
   ['calibrateview_58',['CalibrateView',['../_radio_functions_8cpp.html#a6acbadf0efce9bd09fe2ad80f293f74e',1,'CalibrateView():&#160;RadioFunctions.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a6acbadf0efce9bd09fe2ad80f293f74e',1,'CalibrateView():&#160;main.cpp']]],
@@ -34,7 +34,7 @@ var searchData=
   ['checkswitch_85',['CheckSwitch',['../_transmitter_code_2src_2main_8cpp.html#afcd616e96ae28694a7fa2197ad74c6fe',1,'main.cpp']]],
   ['checktimer_86',['CheckTimer',['../_radio_functions_8h.html#addfc131a271de92cb52d869fde35729e',1,'CheckTimer():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#addfc131a271de92cb52d869fde35729e',1,'CheckTimer():&#160;main.cpp']]],
   ['chipselect_87',['chipSelect',['../_transmitter_code_2src_2main_8cpp.html#a266db0f4dbdfbc06ea34c96f66bebed3',1,'main.cpp']]],
-  ['clearackpayload_88',['ClearAckPayload',['../radio_8h.html#a5a26715a721e1073d6ae00498282c056',1,'ClearAckPayload():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a5a26715a721e1073d6ae00498282c056',1,'ClearAckPayload():&#160;main.cpp'],['../_receiver_code_2src_2main_8cpp.html#a5a26715a721e1073d6ae00498282c056',1,'ClearAckPayload():&#160;main.cpp']]],
+  ['clearackpayload_88',['ClearAckPayload',['../_receiver_code_2src_2main_8cpp.html#a5a26715a721e1073d6ae00498282c056',1,'ClearAckPayload():&#160;main.cpp'],['../radio_8h.html#a5a26715a721e1073d6ae00498282c056',1,'ClearAckPayload():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a5a26715a721e1073d6ae00498282c056',1,'ClearAckPayload():&#160;main.cpp']]],
   ['clearbox_89',['ClearBox',['../_transmitter_code_2src_2main_8cpp.html#a5aeea47b9d855ae9911bae1115d02de7',1,'main.cpp']]],
   ['cleartext_90',['ClearText',['../_transmitter_code_2src_2main_8cpp.html#af0852678d8e89501acee8951f09d3b43',1,'main.cpp']]],
   ['clickx_91',['ClickX',['../_transmitter_code_2src_2main_8cpp.html#a26157c4e738ba5e87d374d18cd0aa46a',1,'main.cpp']]],
@@ -44,11 +44,10 @@ var searchData=
   ['compress_95',['Compress',['../_radio_functions_8cpp.html#ab46df249e949de237fc3bacdc5225934',1,'RadioFunctions.cpp']]],
   ['compresseddata_96',['CompressedData',['../_radio_functions_8h.html#a4fc8940a1091b62dbffbe6358772a691',1,'CompressedData():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#aa16611ba89205c8cb9e75353ce1ad032',1,'CompressedData():&#160;main.cpp']]],
   ['compressedwords_97',['COMPRESSEDWORDS',['../radio_8h.html#a461caf7198eaa60ce589088ff38b97cb',1,'COMPRESSEDWORDS():&#160;radio.h'],['../_radio_functions_8cpp.html#a461caf7198eaa60ce589088ff38b97cb',1,'COMPRESSEDWORDS():&#160;RadioFunctions.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a461caf7198eaa60ce589088ff38b97cb',1,'COMPRESSEDWORDS():&#160;main.cpp']]],
-  ['connected_98',['Connected',['../radio_8h.html#a5318db734c71b1b08208ef690f1f0146',1,'Connected():&#160;radio.h'],['../_radio_functions_8h.html#a5318db734c71b1b08208ef690f1f0146',1,'Connected():&#160;radio.h'],['../_transmitter_code_2src_2main_8cpp.html#a5318db734c71b1b08208ef690f1f0146',1,'Connected():&#160;main.cpp']]],
+  ['connected_98',['Connected',['../_radio_functions_8h.html#a5318db734c71b1b08208ef690f1f0146',1,'Connected():&#160;radio.h'],['../_transmitter_code_2src_2main_8cpp.html#a5318db734c71b1b08208ef690f1f0146',1,'Connected():&#160;main.cpp'],['../radio_8h.html#a5318db734c71b1b08208ef690f1f0146',1,'Connected():&#160;radio.h']]],
   ['connectionstart_99',['ConnectionStart',['../radio_8h.html#a11cd5dd0a4f9438c7e7e387349d8636d',1,'radio.h']]],
   ['csn_5fpin_100',['CSN_PIN',['../_transmitter_code_2src_2main_8cpp.html#a6c4d73944fe1bd2ff7ceee867c315ac1',1,'main.cpp']]],
-  ['currentaltitude_101',['CurrentAltitude',['../struct_payload.html#acb14cb9ecd95c6f8613a9ab66153e164',1,'Payload']]],
-  ['currentmode_102',['CurrentMode',['../_radio_functions_8h.html#aacabee92eb3ddd2e3cf31695c00a912e',1,'CurrentMode():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#aacabee92eb3ddd2e3cf31695c00a912e',1,'CurrentMode():&#160;main.cpp']]],
-  ['currentradio_103',['CurrentRadio',['../radio_8h.html#a7bca81159d93f215060f40f45f19b0de',1,'radio.h']]],
-  ['currentview_104',['CurrentView',['../_radio_functions_8h.html#a2c76c41cd62573eb7227882fc9b9e557',1,'CurrentView():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a2c76c41cd62573eb7227882fc9b9e557',1,'CurrentView():&#160;main.cpp']]]
+  ['currentmode_101',['CurrentMode',['../_radio_functions_8h.html#aacabee92eb3ddd2e3cf31695c00a912e',1,'CurrentMode():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#aacabee92eb3ddd2e3cf31695c00a912e',1,'CurrentMode():&#160;main.cpp']]],
+  ['currentradio_102',['CurrentRadio',['../radio_8h.html#a7bca81159d93f215060f40f45f19b0de',1,'radio.h']]],
+  ['currentview_103',['CurrentView',['../_radio_functions_8h.html#a2c76c41cd62573eb7227882fc9b9e557',1,'CurrentView():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a2c76c41cd62573eb7227882fc9b9e557',1,'CurrentView():&#160;main.cpp']]]
 ];
