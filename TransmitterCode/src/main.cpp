@@ -5672,20 +5672,16 @@ void GetRXTime(){  // This gets the time from Receivier to enable FHSS synch
     union
     {uint32_t Val32; 
         uint8_t Val8[4];
-    }RXTimeUnion;                                  // union used to allow access to each byte of 32 bit value     
-
-
+    }RXTimeUnion;                             // union used to allow access to each byte of 32 bit value     
     if (AckPayload.Byte5){                    // Good data? (Zero means no data)
         RXTimeUnion.Val8[0]    = AckPayload.Byte1;
         RXTimeUnion.Val8[1]    = AckPayload.Byte2;
         RXTimeUnion.Val8[2]    = AckPayload.Byte3; 
         RXTimeUnion.Val8[3]    = AckPayload.Byte4;  
-
-        NextChannelNumber   = AckPayload.Byte5;  
-        HopStart            =  millis() - RXTimeUnion.Val32;
-        TXTimeStamp         =  millis() - HopStart; 
+        NextChannelNumber      = AckPayload.Byte5;  
+        HopStart               =  millis() - RXTimeUnion.Val32;
+        TXTimeStamp            =  millis() - HopStart; 
     }
-
 if ((TXTimeStamp == 0) || (TXTimeStamp > HOPTIME )) { // is it time (or indeed it is overdue?) to hop frequency?
         GetNextHopChannelNumber();       // Also gets actual channel number
         HopStart = millis(); 
@@ -5709,7 +5705,7 @@ void GetRXVolts()
     RXVoltsUnion.Val8[1] = AckPayload.Byte2; 
     RXVoltsUnion.Val8[2] = AckPayload.Byte3;   
     RXVoltsUnion.Val8[3] = AckPayload.Byte4;
-    RXModelVolts    = RXVoltsUnion.Val32 ;
+    RXModelVolts         = RXVoltsUnion.Val32 ;
    
 }
 /************************************************************************************************************/
