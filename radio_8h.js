@@ -20,6 +20,7 @@ var radio_8h =
     [ "HopToNextFrequency", "radio_8h.html#aa48ea4c5d47aa93d17dbc7d7b19238d8", null ],
     [ "InitCurrentRadio", "radio_8h.html#a00e93a7779cf3932c07c78c4d58c91ce", null ],
     [ "LoadAckPayload", "radio_8h.html#a664f409561bfcf119e0379dd991217e5", null ],
+    [ "LoadAltitude", "radio_8h.html#ae7c02edb19bdc7bb0dc66f4b4d698b04", null ],
     [ "LoadRXVolts", "radio_8h.html#ad5c9d0f57db506102e8363427892186a", null ],
     [ "LoadTimeStamp", "radio_8h.html#a3830d14fd002f2ec6d0843b15139360a", null ],
     [ "LoadVersioNumber", "radio_8h.html#af067d2e9e8981a59af86ec75a0db36b4", null ],

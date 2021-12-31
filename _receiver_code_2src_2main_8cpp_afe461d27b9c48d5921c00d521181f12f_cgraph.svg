@@ -78,18 +78,18 @@
 <path fill="none" stroke="midnightblue" d="M35.29,-352C45.39,-352 58.78,-352 71.81,-352"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="72.12,-355.5 82.12,-352 72.12,-348.5 72.12,-355.5"/>
 </g>
-<!-- Node47 -->
-<g id="node47" class="node">
-<title>Node47</title>
-<g id="a_node47"><a xlink:href="_receiver_code_2src_2main_8cpp.html#a96891035aa9f064462b6a614c5878f51" target="_top" xlink:title=" ">
+<!-- Node48 -->
+<g id="node48" class="node">
+<title>Node48</title>
+<g id="a_node48"><a xlink:href="_receiver_code_2src_2main_8cpp.html#a96891035aa9f064462b6a614c5878f51" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="black" points="71,-152.5 71,-171.5 166,-171.5 166,-152.5 71,-152.5"/>
 <text text-anchor="middle" x="118.5" y="-159.5" font-family="Helvetica,sans-Serif" font-size="10.00">SaveFailSafeData</text>
 </a>
 </g>
 </g>
-<!-- Node1&#45;&gt;Node47 -->
-<g id="edge50" class="edge">
-<title>Node1&#45;&gt;Node47</title>
+<!-- Node1&#45;&gt;Node48 -->
+<g id="edge51" class="edge">
+<title>Node1&#45;&gt;Node48</title>
 <path fill="none" stroke="midnightblue" d="M18.7,-342.49C19.79,-314.17 26.8,-229.37 71,-181 72.21,-179.67 73.53,-178.44 74.93,-177.28"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="77.22,-179.97 83.67,-171.57 73.39,-174.11 77.22,-179.97"/>
 </g>
@@ -465,18 +465,18 @@
 <path fill="none" stroke="midnightblue" d="M129.77,-342.28C150.32,-322.85 196.67,-278.99 222.24,-254.8"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="224.89,-257.11 229.75,-247.69 220.08,-252.02 224.89,-257.11"/>
 </g>
-<!-- Node42 -->
-<g id="node42" class="node">
-<title>Node42</title>
-<g id="a_node42"><a xlink:href="radio_8h.html#a692b8b0727e0db358f99c7bf4e8235c0" target="_top" xlink:title=" ">
+<!-- Node43 -->
+<g id="node43" class="node">
+<title>Node43</title>
+<g id="a_node43"><a xlink:href="radio_8h.html#a692b8b0727e0db358f99c7bf4e8235c0" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="black" points="209.5,-399.5 209.5,-418.5 272.5,-418.5 272.5,-399.5 209.5,-399.5"/>
 <text text-anchor="middle" x="241" y="-406.5" font-family="Helvetica,sans-Serif" font-size="10.00">Reconnect</text>
 </a>
 </g>
 </g>
-<!-- Node27&#45;&gt;Node42 -->
-<g id="edge43" class="edge">
-<title>Node27&#45;&gt;Node42</title>
+<!-- Node27&#45;&gt;Node43 -->
+<g id="edge44" class="edge">
+<title>Node27&#45;&gt;Node43</title>
 <path fill="none" stroke="midnightblue" d="M139.67,-361.54C159.05,-370.71 188.54,-384.66 210.55,-395.07"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="209.23,-398.32 219.77,-399.43 212.22,-391.99 209.23,-398.32"/>
 </g>
@@ -570,20 +570,20 @@
 <path fill="none" stroke="midnightblue" d="M270.52,-246.43C287.52,-251.46 309.41,-257.94 328.38,-263.54"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="327.4,-266.91 337.99,-266.38 329.39,-260.19 327.4,-266.91"/>
 </g>
-<!-- Node41 -->
-<g id="node41" class="node">
-<title>Node41</title>
-<g id="a_node41"><a xlink:href="_receiver_code_2src_2main_8cpp.html#a6a495c5560f12cc3fd3df9454927d681" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="black" points="481,-361.5 481,-380.5 555,-380.5 555,-361.5 481,-361.5"/>
-<text text-anchor="middle" x="518" y="-368.5" font-family="Helvetica,sans-Serif" font-size="10.00">MapToSBUS</text>
+<!-- Node42 -->
+<g id="node42" class="node">
+<title>Node42</title>
+<g id="a_node42"><a xlink:href="_receiver_code_2src_2main_8cpp.html#a6a495c5560f12cc3fd3df9454927d681" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="black" points="481,-370.5 481,-389.5 555,-389.5 555,-370.5 481,-370.5"/>
+<text text-anchor="middle" x="518" y="-377.5" font-family="Helvetica,sans-Serif" font-size="10.00">MapToSBUS</text>
 </a>
 </g>
 </g>
-<!-- Node30&#45;&gt;Node41 -->
-<g id="edge42" class="edge">
-<title>Node30&#45;&gt;Node41</title>
-<path fill="none" stroke="midnightblue" d="M252.26,-247.69C265.89,-260.11 291.14,-281.64 316,-295 361.93,-319.68 378.28,-314.4 427,-333 446.74,-340.53 468.57,-349.73 485.79,-357.19"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="484.78,-360.57 495.35,-361.36 487.58,-354.15 484.78,-360.57"/>
+<!-- Node30&#45;&gt;Node42 -->
+<g id="edge43" class="edge">
+<title>Node30&#45;&gt;Node42</title>
+<path fill="none" stroke="midnightblue" d="M252.26,-247.69C265.89,-260.11 291.14,-281.64 316,-295 361.93,-319.68 379.09,-312.43 427,-333 449.28,-342.56 473.59,-355.42 491.33,-365.26"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="490.02,-368.54 500.45,-370.39 493.44,-362.44 490.02,-368.54"/>
 </g>
 <!-- Node35 -->
 <g id="node35" class="node">
@@ -603,132 +603,147 @@
 <!-- Node37 -->
 <g id="node37" class="node">
 <title>Node37</title>
-<g id="a_node37"><a xlink:href="radio_8h.html#ad5c9d0f57db506102e8363427892186a" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="black" points="481,-304.5 481,-323.5 555,-323.5 555,-304.5 481,-304.5"/>
-<text text-anchor="middle" x="518" y="-311.5" font-family="Helvetica,sans-Serif" font-size="10.00">LoadRXVolts</text>
+<g id="a_node37"><a xlink:href="radio_8h.html#ae7c02edb19bdc7bb0dc66f4b4d698b04" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="black" points="482.5,-237.5 482.5,-256.5 553.5,-256.5 553.5,-237.5 482.5,-237.5"/>
+<text text-anchor="middle" x="518" y="-244.5" font-family="Helvetica,sans-Serif" font-size="10.00">LoadAltitude</text>
 </a>
 </g>
 </g>
 <!-- Node36&#45;&gt;Node37 -->
 <g id="edge38" class="edge">
 <title>Node36&#45;&gt;Node37</title>
-<path fill="none" stroke="midnightblue" d="M408.96,-285.59C427.77,-290.54 450.91,-296.62 470.95,-301.89"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="470.24,-305.32 480.8,-304.48 472.02,-298.55 470.24,-305.32"/>
+<path fill="none" stroke="midnightblue" d="M416.64,-267.14C434.26,-263.6 454.53,-259.54 472.22,-255.99"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="473.18,-259.37 482.29,-253.97 471.8,-252.5 473.18,-259.37"/>
 </g>
 <!-- Node38 -->
 <g id="node38" class="node">
 <title>Node38</title>
-<g id="a_node38"><a xlink:href="radio_8h.html#a3830d14fd002f2ec6d0843b15139360a" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="black" points="473.5,-266.5 473.5,-285.5 562.5,-285.5 562.5,-266.5 473.5,-266.5"/>
-<text text-anchor="middle" x="518" y="-273.5" font-family="Helvetica,sans-Serif" font-size="10.00">LoadTimeStamp</text>
+<g id="a_node38"><a xlink:href="radio_8h.html#ad5c9d0f57db506102e8363427892186a" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="black" points="481,-199.5 481,-218.5 555,-218.5 555,-199.5 481,-199.5"/>
+<text text-anchor="middle" x="518" y="-206.5" font-family="Helvetica,sans-Serif" font-size="10.00">LoadRXVolts</text>
 </a>
 </g>
 </g>
 <!-- Node36&#45;&gt;Node38 -->
 <g id="edge39" class="edge">
 <title>Node36&#45;&gt;Node38</title>
-<path fill="none" stroke="midnightblue" d="M416.64,-276C431.21,-276 447.58,-276 462.81,-276"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="463.13,-279.5 473.13,-276 463.13,-272.5 463.13,-279.5"/>
-</g>
-<!-- Node40 -->
-<g id="node40" class="node">
-<title>Node40</title>
-<g id="a_node40"><a xlink:href="radio_8h.html#af067d2e9e8981a59af86ec75a0db36b4" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="black" points="467.5,-228.5 467.5,-247.5 568.5,-247.5 568.5,-228.5 467.5,-228.5"/>
-<text text-anchor="middle" x="518" y="-235.5" font-family="Helvetica,sans-Serif" font-size="10.00">LoadVersioNumber</text>
-</a>
-</g>
-</g>
-<!-- Node36&#45;&gt;Node40 -->
-<g id="edge41" class="edge">
-<title>Node36&#45;&gt;Node40</title>
-<path fill="none" stroke="midnightblue" d="M408.96,-266.41C427.77,-261.46 450.91,-255.38 470.95,-250.11"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="472.02,-253.45 480.8,-247.52 470.24,-246.68 472.02,-253.45"/>
+<path fill="none" stroke="midnightblue" d="M405.85,-266.41C413.03,-263.79 420.43,-260.65 427,-257 444.96,-247.03 445.05,-238 463,-228 466.71,-225.93 470.69,-224.03 474.74,-222.28"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="476.23,-225.46 484.24,-218.52 473.65,-218.95 476.23,-225.46"/>
 </g>
 <!-- Node39 -->
 <g id="node39" class="node">
 <title>Node39</title>
-<g id="a_node39"><a xlink:href="radio_8h.html#a5cbe0c69c07d5818a956b9155820cf76" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="black" points="609,-266.5 609,-285.5 707,-285.5 707,-266.5 609,-266.5"/>
-<text text-anchor="middle" x="658" y="-273.5" font-family="Helvetica,sans-Serif" font-size="10.00">GetNextFrequency</text>
+<g id="a_node39"><a xlink:href="radio_8h.html#a3830d14fd002f2ec6d0843b15139360a" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="black" points="473.5,-313.5 473.5,-332.5 562.5,-332.5 562.5,-313.5 473.5,-313.5"/>
+<text text-anchor="middle" x="518" y="-320.5" font-family="Helvetica,sans-Serif" font-size="10.00">LoadTimeStamp</text>
 </a>
 </g>
 </g>
-<!-- Node38&#45;&gt;Node39 -->
+<!-- Node36&#45;&gt;Node39 -->
 <g id="edge40" class="edge">
-<title>Node38&#45;&gt;Node39</title>
-<path fill="none" stroke="midnightblue" d="M562.66,-276C574.14,-276 586.7,-276 598.8,-276"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="598.83,-279.5 608.83,-276 598.83,-272.5 598.83,-279.5"/>
+<title>Node36&#45;&gt;Node39</title>
+<path fill="none" stroke="midnightblue" d="M401.74,-285.51C423.63,-292.63 453.8,-302.44 477.78,-310.24"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="476.71,-313.58 487.31,-313.34 478.88,-306.92 476.71,-313.58"/>
 </g>
-<!-- Node43 -->
-<g id="node43" class="node">
-<title>Node43</title>
-<g id="a_node43"><a xlink:href="radio_8h.html#a42318598726782ebb2e1857f167c8cda" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="black" points="345,-418.5 345,-437.5 398,-437.5 398,-418.5 345,-418.5"/>
-<text text-anchor="middle" x="371.5" y="-425.5" font-family="Helvetica,sans-Serif" font-size="10.00">FailSafe</text>
+<!-- Node41 -->
+<g id="node41" class="node">
+<title>Node41</title>
+<g id="a_node41"><a xlink:href="radio_8h.html#af067d2e9e8981a59af86ec75a0db36b4" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="black" points="467.5,-275.5 467.5,-294.5 568.5,-294.5 568.5,-275.5 467.5,-275.5"/>
+<text text-anchor="middle" x="518" y="-282.5" font-family="Helvetica,sans-Serif" font-size="10.00">LoadVersioNumber</text>
 </a>
 </g>
 </g>
-<!-- Node42&#45;&gt;Node43 -->
-<g id="edge44" class="edge">
-<title>Node42&#45;&gt;Node43</title>
-<path fill="none" stroke="midnightblue" d="M272.78,-413.55C291.41,-416.31 315.25,-419.83 334.72,-422.71"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="334.33,-426.19 344.73,-424.19 335.35,-419.26 334.33,-426.19"/>
+<!-- Node36&#45;&gt;Node41 -->
+<g id="edge42" class="edge">
+<title>Node36&#45;&gt;Node41</title>
+<path fill="none" stroke="midnightblue" d="M416.64,-278.75C429.4,-279.54 443.56,-280.43 457.11,-281.27"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="457.13,-284.78 467.33,-281.91 457.56,-277.79 457.13,-284.78"/>
 </g>
-<!-- Node45 -->
-<g id="node45" class="node">
-<title>Node45</title>
-<g id="a_node45"><a xlink:href="radio_8h.html#a6e2d4126d864c50e7c23c988c2bfdd1a" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="black" points="348,-380.5 348,-399.5 395,-399.5 395,-380.5 348,-380.5"/>
-<text text-anchor="middle" x="371.5" y="-387.5" font-family="Helvetica,sans-Serif" font-size="10.00">Radio1</text>
+<!-- Node40 -->
+<g id="node40" class="node">
+<title>Node40</title>
+<g id="a_node40"><a xlink:href="radio_8h.html#a5cbe0c69c07d5818a956b9155820cf76" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="black" points="609,-313.5 609,-332.5 707,-332.5 707,-313.5 609,-313.5"/>
+<text text-anchor="middle" x="658" y="-320.5" font-family="Helvetica,sans-Serif" font-size="10.00">GetNextFrequency</text>
 </a>
 </g>
 </g>
-<!-- Node42&#45;&gt;Node45 -->
-<g id="edge48" class="edge">
-<title>Node42&#45;&gt;Node45</title>
-<path fill="none" stroke="midnightblue" d="M272.78,-404.45C292.38,-401.55 317.75,-397.8 337.72,-394.85"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="338.24,-398.31 347.62,-393.38 337.21,-391.38 338.24,-398.31"/>
-</g>
-<!-- Node46 -->
-<g id="node46" class="node">
-<title>Node46</title>
-<g id="a_node46"><a xlink:href="radio_8h.html#a8b76f3c338025926421c7b308405bbfd" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="black" points="348,-456.5 348,-475.5 395,-475.5 395,-456.5 348,-456.5"/>
-<text text-anchor="middle" x="371.5" y="-463.5" font-family="Helvetica,sans-Serif" font-size="10.00">Radio2</text>
-</a>
-</g>
-</g>
-<!-- Node42&#45;&gt;Node46 -->
-<g id="edge49" class="edge">
-<title>Node42&#45;&gt;Node46</title>
-<path fill="none" stroke="midnightblue" d="M259.02,-418.6C273.81,-426.73 295.96,-438.41 316,-447 323.17,-450.07 331.02,-453.04 338.48,-455.67"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="337.36,-458.99 347.96,-458.92 339.64,-452.37 337.36,-458.99"/>
-</g>
-<!-- Node43&#45;&gt;Node8 -->
-<g id="edge47" class="edge">
-<title>Node43&#45;&gt;Node8</title>
-<path fill="none" stroke="midnightblue" d="M398.13,-436.56C407.29,-439.71 417.65,-443.4 427,-447 446.71,-454.59 468.55,-463.79 485.78,-471.24"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="484.77,-474.61 495.34,-475.39 487.56,-468.19 484.77,-474.61"/>
-</g>
-<!-- Node43&#45;&gt;Node41 -->
-<g id="edge46" class="edge">
-<title>Node43&#45;&gt;Node41</title>
-<path fill="none" stroke="midnightblue" d="M398.13,-419.44C407.29,-416.29 417.65,-412.6 427,-409 446.71,-401.41 468.55,-392.21 485.78,-384.76"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="487.56,-387.81 495.34,-380.61 484.77,-381.39 487.56,-387.81"/>
+<!-- Node39&#45;&gt;Node40 -->
+<g id="edge41" class="edge">
+<title>Node39&#45;&gt;Node40</title>
+<path fill="none" stroke="midnightblue" d="M562.66,-323C574.14,-323 586.7,-323 598.8,-323"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="598.83,-326.5 608.83,-323 598.83,-319.5 598.83,-326.5"/>
 </g>
 <!-- Node44 -->
 <g id="node44" class="node">
 <title>Node44</title>
-<g id="a_node44"><a xlink:href="_receiver_code_2src_2main_8cpp.html#a7b232e8049c83655363495df07fc96d9" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="black" points="470.5,-418.5 470.5,-437.5 565.5,-437.5 565.5,-418.5 470.5,-418.5"/>
-<text text-anchor="middle" x="518" y="-425.5" font-family="Helvetica,sans-Serif" font-size="10.00">LoadFailSafeData</text>
+<g id="a_node44"><a xlink:href="radio_8h.html#a42318598726782ebb2e1857f167c8cda" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="black" points="345,-418.5 345,-437.5 398,-437.5 398,-418.5 345,-418.5"/>
+<text text-anchor="middle" x="371.5" y="-425.5" font-family="Helvetica,sans-Serif" font-size="10.00">FailSafe</text>
 </a>
 </g>
 </g>
 <!-- Node43&#45;&gt;Node44 -->
 <g id="edge45" class="edge">
 <title>Node43&#45;&gt;Node44</title>
+<path fill="none" stroke="midnightblue" d="M272.78,-413.55C291.41,-416.31 315.25,-419.83 334.72,-422.71"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="334.33,-426.19 344.73,-424.19 335.35,-419.26 334.33,-426.19"/>
+</g>
+<!-- Node46 -->
+<g id="node46" class="node">
+<title>Node46</title>
+<g id="a_node46"><a xlink:href="radio_8h.html#a6e2d4126d864c50e7c23c988c2bfdd1a" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="black" points="348,-380.5 348,-399.5 395,-399.5 395,-380.5 348,-380.5"/>
+<text text-anchor="middle" x="371.5" y="-387.5" font-family="Helvetica,sans-Serif" font-size="10.00">Radio1</text>
+</a>
+</g>
+</g>
+<!-- Node43&#45;&gt;Node46 -->
+<g id="edge49" class="edge">
+<title>Node43&#45;&gt;Node46</title>
+<path fill="none" stroke="midnightblue" d="M272.78,-404.45C292.38,-401.55 317.75,-397.8 337.72,-394.85"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="338.24,-398.31 347.62,-393.38 337.21,-391.38 338.24,-398.31"/>
+</g>
+<!-- Node47 -->
+<g id="node47" class="node">
+<title>Node47</title>
+<g id="a_node47"><a xlink:href="radio_8h.html#a8b76f3c338025926421c7b308405bbfd" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="black" points="348,-456.5 348,-475.5 395,-475.5 395,-456.5 348,-456.5"/>
+<text text-anchor="middle" x="371.5" y="-463.5" font-family="Helvetica,sans-Serif" font-size="10.00">Radio2</text>
+</a>
+</g>
+</g>
+<!-- Node43&#45;&gt;Node47 -->
+<g id="edge50" class="edge">
+<title>Node43&#45;&gt;Node47</title>
+<path fill="none" stroke="midnightblue" d="M259.02,-418.6C273.81,-426.73 295.96,-438.41 316,-447 323.17,-450.07 331.02,-453.04 338.48,-455.67"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="337.36,-458.99 347.96,-458.92 339.64,-452.37 337.36,-458.99"/>
+</g>
+<!-- Node44&#45;&gt;Node8 -->
+<g id="edge48" class="edge">
+<title>Node44&#45;&gt;Node8</title>
+<path fill="none" stroke="midnightblue" d="M398.13,-436.56C407.29,-439.71 417.65,-443.4 427,-447 446.71,-454.59 468.55,-463.79 485.78,-471.24"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="484.77,-474.61 495.34,-475.39 487.56,-468.19 484.77,-474.61"/>
+</g>
+<!-- Node44&#45;&gt;Node42 -->
+<g id="edge47" class="edge">
+<title>Node44&#45;&gt;Node42</title>
+<path fill="none" stroke="midnightblue" d="M398,-419.53C420.32,-412.12 453.06,-401.24 478.56,-392.77"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="479.9,-396.01 488.28,-389.54 477.69,-389.37 479.9,-396.01"/>
+</g>
+<!-- Node45 -->
+<g id="node45" class="node">
+<title>Node45</title>
+<g id="a_node45"><a xlink:href="_receiver_code_2src_2main_8cpp.html#a7b232e8049c83655363495df07fc96d9" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="black" points="470.5,-418.5 470.5,-437.5 565.5,-437.5 565.5,-418.5 470.5,-418.5"/>
+<text text-anchor="middle" x="518" y="-425.5" font-family="Helvetica,sans-Serif" font-size="10.00">LoadFailSafeData</text>
+</a>
+</g>
+</g>
+<!-- Node44&#45;&gt;Node45 -->
+<g id="edge46" class="edge">
+<title>Node44&#45;&gt;Node45</title>
 <path fill="none" stroke="midnightblue" d="M398,-428C415.28,-428 438.8,-428 460.38,-428"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="460.45,-431.5 470.45,-428 460.45,-424.5 460.45,-431.5"/>
 </g>
