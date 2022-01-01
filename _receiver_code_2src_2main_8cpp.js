@@ -39,10 +39,7 @@ var _receiver_code_2src_2main_8cpp =
     [ "FailSafeDataLoaded", "_receiver_code_2src_2main_8cpp.html#a08ed7a870be8e84ae26ee0b972866bb3", null ],
     [ "FS_byte1", "_receiver_code_2src_2main_8cpp.html#a3be9019b72265fa9443e1f1132fd9bc7", null ],
     [ "FS_byte2", "_receiver_code_2src_2main_8cpp.html#a9949c81d8f6abc28616445945c5d24ba", null ],
-    [ "GyroInstalled", "_receiver_code_2src_2main_8cpp.html#abfd3ece8cb965216618581e1061b3591", null ],
     [ "ina219", "_receiver_code_2src_2main_8cpp.html#a69393b86406e49dbacfbabd283877495", null ],
-    [ "LoopsPS", "_receiver_code_2src_2main_8cpp.html#a50e947d538aceb51b606bbd65dda8512", null ],
-    [ "MainLoopTime", "_receiver_code_2src_2main_8cpp.html#a24e7d3f03447ec5c43728bbb91fa371c", null ],
     [ "MCMServo", "_receiver_code_2src_2main_8cpp.html#aea43f0afa386a593269762fb00bc6c77", null ],
     [ "PacketStartTime", "_receiver_code_2src_2main_8cpp.html#ac479139b01668992bdccae3c508df1df", null ],
     [ "pressure", "_receiver_code_2src_2main_8cpp.html#ac870e1249bab4a2a68cc4126761d24ef", null ],
@@ -59,9 +56,7 @@ var _receiver_code_2src_2main_8cpp =
     [ "SensorTime", "_receiver_code_2src_2main_8cpp.html#a1e9e8116136abd96cf87d7f0fd20a3d8", null ],
     [ "ServosAttached", "_receiver_code_2src_2main_8cpp.html#a95b22fb572f7a91a89a431c7f1236575", null ],
     [ "StartAltitude", "_receiver_code_2src_2main_8cpp.html#a803d7b39ac894b6340d68e152e902c19", null ],
-    [ "Swash_DisplayStarted", "_receiver_code_2src_2main_8cpp.html#ad450c1d6092e94515892d23ce5335147", null ],
     [ "temperature280", "_receiver_code_2src_2main_8cpp.html#a7cc84074d4166c6512a2d479b6f12e30", null ],
-    [ "TimeThis", "_receiver_code_2src_2main_8cpp.html#ada6e8de0f5b5183df711c8bb7f03ec39", null ],
     [ "USE_BMP280", "_receiver_code_2src_2main_8cpp.html#a4be5c27bea3c82b0a4ec92191052d946", null ],
     [ "USE_INA219", "_receiver_code_2src_2main_8cpp.html#a87ae50e2ac4507568cbf98072f174a1b", null ]
 ];

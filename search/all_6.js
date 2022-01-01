@@ -45,6 +45,5 @@ var searchData=
   ['gray_215',['Gray',['../_transmitter_code_2src_2main_8cpp.html#aab957a0fe1c92d227cced2922967fb97',1,'main.cpp']]],
   ['green_216',['Green',['../_transmitter_code_2src_2main_8cpp.html#aa429cd977709122166b6e31fa10903d1',1,'main.cpp']]],
   ['greenled_217',['GREENLED',['../_transmitter_code_2src_2main_8cpp.html#aef42a90443e2cce65762788edcbfb8ee',1,'main.cpp']]],
-  ['greenledon_218',['GreenLedOn',['../_radio_functions_8h.html#a62e53eb9359c32b666e3386d62c57037',1,'GreenLedOn():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a62e53eb9359c32b666e3386d62c57037',1,'GreenLedOn():&#160;main.cpp']]],
-  ['gyroinstalled_219',['GyroInstalled',['../_receiver_code_2src_2main_8cpp.html#abfd3ece8cb965216618581e1061b3591',1,'main.cpp']]]
+  ['greenledon_218',['GreenLedOn',['../_radio_functions_8h.html#a62e53eb9359c32b666e3386d62c57037',1,'GreenLedOn():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a62e53eb9359c32b666e3386d62c57037',1,'GreenLedOn():&#160;main.cpp']]]
 ];
