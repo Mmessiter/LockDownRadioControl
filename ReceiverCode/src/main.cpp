@@ -455,6 +455,9 @@ void setup()
     if (USE_INA219) {
         ina219.begin();
     }
+    if (USE_BMP280) {
+        InitBMP280();
+    }
     GetOldPipe();
     digitalWrite(LED_PIN, LOW);
     LoadVersioNumber();
