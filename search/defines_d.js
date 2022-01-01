@@ -1,6 +1,11 @@
 var searchData=
 [
-  ['one_5fswitch_5fview_1240',['One_Switch_View',['../_radio_functions_8cpp.html#af3499673555eb59420e78145fce19c47',1,'One_Switch_View():&#160;RadioFunctions.cpp'],['../_transmitter_code_2src_2main_8cpp.html#af3499673555eb59420e78145fce19c47',1,'One_Switch_View():&#160;main.cpp']]],
-  ['options_5fview_1241',['Options_View',['../_radio_functions_8cpp.html#a90604ea6b0b372f3c24fa6935127e6fd',1,'Options_View():&#160;RadioFunctions.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a90604ea6b0b372f3c24fa6935127e6fd',1,'Options_View():&#160;main.cpp']]],
-  ['orange_1242',['Orange',['../_transmitter_code_2src_2main_8cpp.html#a154e686fe7f3f545c01af3592ce0cdff',1,'main.cpp']]]
+  ['pacemaker_1241',['PACEMAKER',['../_radio_functions_8h.html#a56e90cbec59fa96bebfb3db997e6a3fe',1,'RadioFunctions.h']]],
+  ['pince1_1242',['pinCE1',['../radio_8h.html#a29eb13cced8716c95cf23e18ac99ffc7',1,'radio.h']]],
+  ['pince2_1243',['pinCE2',['../radio_8h.html#a86715d66aa5d1363f2db07ae6428eb90',1,'radio.h']]],
+  ['pincsn1_1244',['pinCSN1',['../radio_8h.html#a047f5702802c2bbf4918e9318f3e6a56',1,'radio.h']]],
+  ['pincsn2_1245',['pinCSN2',['../radio_8h.html#a76971ffb50fdfd6bc8e2c3c6ac339459',1,'radio.h']]],
+  ['power_5foff_5fpin_1246',['POWER_OFF_PIN',['../_transmitter_code_2src_2main_8cpp.html#aac8f9c268e406507be95a1255281323c',1,'main.cpp']]],
+  ['propochannels_1247',['PROPOCHANNELS',['../_transmitter_code_2src_2main_8cpp.html#a19677884790860fea7a21dae72e1b862',1,'main.cpp']]],
+  ['purple_1248',['Purple',['../_transmitter_code_2src_2main_8cpp.html#a5168ce33eb581e85fbfa454e89012bfb',1,'main.cpp']]]
 ];

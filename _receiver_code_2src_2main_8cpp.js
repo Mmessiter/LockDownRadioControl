@@ -1,7 +1,6 @@
 var _receiver_code_2src_2main_8cpp =
 [
     [ "CHANNELSUSED", "_receiver_code_2src_2main_8cpp.html#ad143c01c2b36424b292b568f48cbe014", null ],
-    [ "EXTRAMICROS", "_receiver_code_2src_2main_8cpp.html#a620a7c4d336a5af15e15bddd4ec38f36", null ],
     [ "LED_PIN", "_receiver_code_2src_2main_8cpp.html#ab4553be4db9860d940f81d7447173b2f", null ],
     [ "MAXMICROS", "_receiver_code_2src_2main_8cpp.html#a843e3db36f734b45096220f7ca4b8d9f", null ],
     [ "MINMICROS", "_receiver_code_2src_2main_8cpp.html#ac67e087c11a86a3790c656a29f8c7195", null ],

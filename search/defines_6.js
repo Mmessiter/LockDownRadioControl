@@ -1,8 +1,6 @@
 var searchData=
 [
-  ['gainsview_1202',['GainsView',['../_radio_functions_8cpp.html#a4e83b7abec31f2eb6f7c06662c83f0d4',1,'GainsView():&#160;RadioFunctions.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a4e83b7abec31f2eb6f7c06662c83f0d4',1,'GainsView():&#160;main.cpp']]],
-  ['graphview_1203',['GraphView',['../_radio_functions_8cpp.html#a878a10eaefbcf00325bcf0931da89e7c',1,'GraphView():&#160;RadioFunctions.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a878a10eaefbcf00325bcf0931da89e7c',1,'GraphView():&#160;main.cpp']]],
-  ['gray_1204',['Gray',['../_transmitter_code_2src_2main_8cpp.html#aab957a0fe1c92d227cced2922967fb97',1,'main.cpp']]],
-  ['green_1205',['Green',['../_transmitter_code_2src_2main_8cpp.html#aa429cd977709122166b6e31fa10903d1',1,'main.cpp']]],
-  ['greenled_1206',['GREENLED',['../_transmitter_code_2src_2main_8cpp.html#aef42a90443e2cce65762788edcbfb8ee',1,'main.cpp']]]
+  ['halfmicrosrange_1205',['HALFMICROSRANGE',['../_transmitter_code_2src_2main_8cpp.html#aa0f99ed9c5fd16fa7deba8d4f0336b3a',1,'main.cpp']]],
+  ['help_5fview_1206',['Help_View',['../_radio_functions_8cpp.html#a05037ba2042b6e261c7f9aca80b34b34',1,'Help_View():&#160;RadioFunctions.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a05037ba2042b6e261c7f9aca80b34b34',1,'Help_View():&#160;main.cpp']]],
+  ['hoptime_1207',['HOPTIME',['../radio_8h.html#a57d506b5f34172770c8d645c12cb5ba2',1,'HOPTIME():&#160;radio.h'],['../_radio_functions_8h.html#a57d506b5f34172770c8d645c12cb5ba2',1,'HOPTIME():&#160;RadioFunctions.h']]]
 ];

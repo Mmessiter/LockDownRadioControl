@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['nextion_1238',['Nextion',['../_radio_functions_8h.html#a7280be66ef406b699db09f0a70e26ef7',1,'Nextion():&#160;RadioFunctions.h'],['../_transmitter_code_2src_2main_8cpp.html#a7280be66ef406b699db09f0a70e26ef7',1,'Nextion():&#160;main.cpp']]],
-  ['normal_1239',['NORMAL',['../_radio_functions_8h.html#a1291f416b069313021b519eea62d5bf1',1,'NORMAL():&#160;RadioFunctions.h'],['../_transmitter_code_2src_2main_8cpp.html#a1291f416b069313021b519eea62d5bf1',1,'NORMAL():&#160;main.cpp']]]
+  ['one_5fswitch_5fview_1238',['One_Switch_View',['../_radio_functions_8cpp.html#af3499673555eb59420e78145fce19c47',1,'One_Switch_View():&#160;RadioFunctions.cpp'],['../_transmitter_code_2src_2main_8cpp.html#af3499673555eb59420e78145fce19c47',1,'One_Switch_View():&#160;main.cpp']]],
+  ['options_5fview_1239',['Options_View',['../_radio_functions_8cpp.html#a90604ea6b0b372f3c24fa6935127e6fd',1,'Options_View():&#160;RadioFunctions.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a90604ea6b0b372f3c24fa6935127e6fd',1,'Options_View():&#160;main.cpp']]],
+  ['orange_1240',['Orange',['../_transmitter_code_2src_2main_8cpp.html#a154e686fe7f3f545c01af3592ce0cdff',1,'main.cpp']]]
 ];
