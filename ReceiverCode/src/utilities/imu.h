@@ -67,7 +67,7 @@ extern long int DeltaTime; // defined in main.cpp
 bool USE_INA219  = false; //  Volts INA219
 bool USE_BNO055  = false; /** Cheap BNO055 gyro */
 bool USE_BNO055A = false; /** Adafruit BNO055 gyro */
-bool USE_MPU6050 = false; /** Gyro MPU6050 */
+//bool USE_MPU6050 = false; /** Gyro MPU6050 */
 
 /**
  * Apply a deadband to a given float value.

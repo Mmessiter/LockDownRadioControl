@@ -62,38 +62,22 @@ bool USE_BMP280 = false; /** is BMP280 sensor connected */
 #include <Adafruit_INA219.h>
 #include <BMP280_DEV.h>
 #include "utilities/radio.h"
-#include "utilities/imu.h"
-
-#define STICKSRATE 60 * 100 // Max
+//#include "utilities/imu.h"   // REMOVED NOW!! (later in own code and device)
 
 Adafruit_INA219 ina219;
 BMP280_DEV      bmp280; /** The object to access the BMP280 sensor */
 Servo           MCMServo[SERVOSUSED];
-
 uint8_t PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 16}; // ten now, last 6 only via sbus
-
 #define LED_PIN 13
-
-#define AEROPLANE  1
-#define HELICOPTER 2
-#define QUADCOPTER 3
-#define HEXACOPTER 4
-#define OCTOCOPTER 5
-
 SBUS MySbus(SBUSPORT);
 
 float  PacketStartTime;
-float  Temperature6050; /** temperature data from the MPU6050 sensor's internal temperature sensor */
-
 float temperature280, pressure, altitude, StartAltitude;
 bool  Swash_DisplayStarted = false;
-
-uint8_t ModelType = 0; // 1=Aeroplane 2=Heli 3=Quadcopter 4=Hexacopter 5=Octocopter
 
 int      LoopsPS        = 0;
 int      TimeThis       = 0;
 int      MainLoopTime   = 0;
-long int DeltaTime      = 0;     /** The ellapsed time between updates sent to the Servos */
 uint8_t  BindNow        = 0;     /** indicates that the receiver should start the binding/pairing process */
 bool     BoundFlag      = false; /** indicates if receiver paired with transmitter */
 int      BindOKTimer    = 0;
@@ -102,8 +86,6 @@ uint16_t SbusChannels[CHANNELSUSED + 8]; // a few spare
 int      SBUSTimer = 0;
 bool     FailSafeChannel[17];
 bool     FailSafeDataLoaded = false;
-uint8_t  ModelNumber        = 0;
-bool     ModelNumberSaved   = false;
 bool     ReInit             = false;
 uint8_t  FS_byte1              = 0;
 uint8_t  FS_byte2              = 0;
@@ -115,6 +97,8 @@ float    SavedVolts;
 bool     Radio1Exists = false;
 bool     Radio2Exists = false;
 uint32_t    SensorTime = 0;
+bool USE_INA219  = false; //  Volts INA219
+
 
 /** Load project defaults from EEPROM into the ReceivedData buffer. */
 void LoadFailSafeData()
@@ -153,109 +137,15 @@ void MapToSBUS()
 
 /************************************************************************************************************/
 
-void ShowPid()
-{
-#ifdef DB_PID
-    LoopsPS++;
-    if (millis() - TimeThis >= 1000) {
-        // Serial.print ("LoopsPS = ");
-        // Serial.println(LoopsPS);
-        Serial.print("Swash_P: ");
-        Serial.println(SwashPID.P);
-        Serial.print("Swash_I: ");
-        Serial.println(SwashPID.I, 10);
-        Serial.print("Swash_D: ");
-        Serial.println(SwashPID.D);
-        Serial.print("RollRate: ");
-        Serial.println(RollRate);
-        Serial.print("DeltaTime: ");
-        Serial.println(DeltaTime);
-        Serial.println(" ");
-        TimeThis = millis();
-        LoopsPS  = 0;
-    }
-#endif // defined DB_PID
-}
-
-/************************************************************************************************************/
-
 void MoveServos()
 {
-    int j = 0;
-    int k = 0;
-    if (!Connected){return;}                  // avoid sending rubbish
-    MySbus.write(&SbusChannels[0]);
-    ModelType=AEROPLANE ;                     // !! fix Later ***************************************
-    if (ModelType==AEROPLANE){
-        for (j = 0; j < SERVOSUSED; ++j) {
-            if (PreviousData[j] != ReceivedData[j]) {
-                MCMServo[j].writeMicroseconds(ReceivedData[j]);
-                PreviousData[j] = ReceivedData[j];
-            }
+    if (!Connected){return;}                                        // avoid sending rubbish
+    MySbus.write(&SbusChannels[0]);                                 // Send SBUS data
+    for (int j = 0; j < SERVOSUSED; ++j) {
+        if (PreviousData[j] != ReceivedData[j]) {                   // if same as last time, don't bother sending again.
+            MCMServo[j].writeMicroseconds(ReceivedData[j]);             
+             PreviousData[j] = ReceivedData[j];
         }
-    }
-    if (ModelType == HELICOPTER) {
-        Serial.println("HELICOPTER!");
-    }
-    // ************************** QUADZONE **************************************
-    if (ModelType == QUADCOPTER) {
-        uint8_t Throttle[4];
-
-        float TargetRollRate  = (map((ReceivedData[0]), 0, 180, -STICKSRATE, STICKSRATE)) / 100; // get Aileron stick
-        TargetRollRate        = DoDeadBand(TargetRollRate);
-        float TargetPitchRate = (map((ReceivedData[1]), 0, 180, -STICKSRATE, STICKSRATE)) / 100; // get elevator stick
-        TargetPitchRate       = DoDeadBand(TargetPitchRate);
-        float TargetYawRate   = (map((ReceivedData[3]), 0, 180, -STICKSRATE, STICKSRATE)) / 100; // get Rudder stick
-        TargetYawRate         = DoDeadBand(TargetYawRate);
-
-        for (k = 0; k < 4; ++k) {
-            Throttle[k] = ReceivedData[2];
-        } // get throttle stick
-
-        float RollRateCorrection  = StabilizeRollRate(TargetRollRate);
-        float PitchRateCorrection = StabilizePitchRate(TargetPitchRate);
-        float YawRateCorrection   = StabilizeYawRate(TargetYawRate);
-
-        ShowPid();
-
-        Throttle[0] -= YawRateCorrection;
-        Throttle[1] += YawRateCorrection;
-        Throttle[2] -= YawRateCorrection;
-        Throttle[3] += YawRateCorrection;
-
-        Throttle[0] += RollRateCorrection;
-        Throttle[1] += RollRateCorrection;
-        Throttle[2] -= RollRateCorrection;
-        Throttle[3] -= RollRateCorrection;
-
-        Throttle[0] -= PitchRateCorrection;
-        Throttle[1] += PitchRateCorrection;
-        Throttle[2] += PitchRateCorrection;
-        Throttle[3] -= PitchRateCorrection;
-
-        Throttle[0] = constrain(Throttle[0], 20, 180);
-        Throttle[1] = constrain(Throttle[1], 20, 180);
-        Throttle[2] = constrain(Throttle[2], 20, 180);
-        Throttle[3] = constrain(Throttle[3], 20, 180);
-
-        if (ReceivedData[2] < 15) { //  no throttle on very low throttle stick input
-            for (k = 0; k < 4; ++k) {
-                Throttle[k] = 2;
-            }
-            OldRollRateError  = 0;
-            OldPitchRateError = 0;
-        }
-        for (k = 0; k < 4; ++k) {
-            MCMServo[k].write(Throttle[k]);
-        } //  set four throttles
-    }
-
-    // ******************************************************************************
-    if (ModelType == HEXACOPTER) {
-        Serial.println("HEXACOPTER!");
-    }
-    if (ModelType == OCTOCOPTER) {
-        Serial.println("OCTOCOPTER!");
     }
 }
 
@@ -379,6 +269,8 @@ void RebuildFlags(bool* f, uint16_t tb)
     }
 }
 
+/************************************************************************************************************/
+
 /**
  * Get radio parameters from received packet.
  * @note Each packet will have a ID number at the third byte in the packet.
@@ -387,80 +279,31 @@ void RebuildFlags(bool* f, uint16_t tb)
  */
 void CheckParams()
 {
-    uint8_t  mn       = 0;
     uint16_t TwoBytes = 0; 
     PacketNumber = ReceivedData[CHANNELSUSED+1];  // Needed after all!  (+2 is still spare)
     switch (PacketNumber) {
-        case 3:
-            SwashPID.P = ReceivedData[CHANNELSUSED + 3];
-            SwashPID.P /= 200;
-            break;
-        case 4:
-            SwashPID.I = ReceivedData[CHANNELSUSED + 3];
-            SwashPID.I /= 1000000000;
-            break;
-        case 5:
-            SwashPID.D = ReceivedData[CHANNELSUSED + 3];
-            SwashPID.D *= 900;
-            break;
-        case 6:
-            if (BoundFlag) {
-                mn = uint8_t(ReceivedData[CHANNELSUSED + 3]);
-                if (mn != ModelNumber && mn > 0) {
-                    ModelNumber = mn;
-                    EEPROM.update(28, ModelNumber);
-                }
-            }
-            break;
         case 7:
              BindNow = ReceivedData[CHANNELSUSED + 3];
-             
              FailSafeSave = bool(ReceivedData[CHANNELSUSED + 2]);
                 if (FailSafeSave) {
                 TwoBytes = uint16_t(FS_byte2) + uint16_t(FS_byte1 << 8);
                 RebuildFlags(FailSafeChannel, TwoBytes);
             }
-
             break;
         case 8:
             FS_byte1 = ReceivedData[CHANNELSUSED + 2]; // These bytes are failsafe flags
             FS_byte2 = ReceivedData[CHANNELSUSED + 3]; // These bytes are failsafe flags
             break;
-        case 9:
-            YawPID.P = ReceivedData[CHANNELSUSED + 3];
-            YawPID.P /= 100;
-            break;
-        case 10:
-            YawPID.I = ReceivedData[CHANNELSUSED + 3];
-            break;
-        case 11:
-            YawPID.D = ReceivedData[CHANNELSUSED + 3];
-            break;
-      
+    
         default:
             break; 
     }
     return;
 }
-
 /************************************************************************************************************/
 #ifdef DB_SENSORS
 void Sensors_Status()
 {
-    if (USE_BNO055 || USE_BNO055A) {
-        Serial.print("Pitch=");
-        Serial.print(int(dof9_data.Pitch));
-        Serial.print(" Roll=");
-        Serial.print(int(dof9_data.Roll));
-        Serial.print(" Yaw=");
-        Serial.print(int(dof9_data.Yaw));
-        Serial.print("    PitchRate=");
-        Serial.print(int(dof9_data.PitchRate));
-        Serial.print(" RollRate=");
-        Serial.print(int(dof9_data.RollRate));
-        Serial.print(" YawRate=");
-        Serial.print(int(dof9_data.YawRate));
-    }
     if (USE_INA219) {
         Serial.print("     Volts=");
         Serial.print(SavedVolts);
@@ -474,9 +317,7 @@ void Sensors_Status()
     Serial.println(" ");
 }
 #endif // defined DB_SENSORS
-
 /************************************************************************************************************/
-
 void DoSensors()
 {
     if ((millis()-SensorTime) < 2000) return;  // no need to measure too often
@@ -488,18 +329,13 @@ void DoSensors()
                  SavedTemperature = temperature280;
              }
     }
-
-
     if (USE_INA219) {
-       
              if (BoundFlag) SavedVolts = ina219.getBusVoltage_V();     
     }
 #ifdef DB_SENSORS
            Sensors_Status(); // does nothing if DB_SENSORS is not defined
 #endif
-   
 }
-
 /************************************************************************************************************/
 
 FASTRUN void ReceiveData()
@@ -514,38 +350,16 @@ FASTRUN void ReceiveData()
     }
 }
 /************************************************************************************************************/
-
 void ScanI2c()
 {
     delay(500); // allow time to wake things up
     for (uint8_t i = 1; i < 127; ++i) {
         Wire.beginTransmission(i);
         if (Wire.endTransmission() == 0) {
-            if (i == 0x28) {
-                USE_BNO055A   = true;
-                GyroInstalled = true;
-#ifdef DB_SENSORS
-                Serial.println("Real Adafruit BNO055 gyro detected!");
-#endif
-            }
-            else if (i == 0x29) {
-                USE_BNO055    = true;
-                GyroInstalled = true;
-#ifdef DB_SENSORS
-                Serial.println("Cheapo BNO055 gyro clone detected!");
-#endif
-            }
-            else if (i == 0x40) {
+             if (i == 0x40) {
                 USE_INA219 = true;
 #ifdef DB_SENSORS
                 Serial.println("INA219 voltage meter detected!");
-#endif
-            }
-            else if (i == 0x68) {
-                USE_MPU6050   = true;
-                GyroInstalled = true;
-#ifdef DB_SENSORS
-                Serial.println("MPU6050 gyro detected!");
 #endif
             }
             else if (i == 0x76) {
@@ -561,7 +375,7 @@ void ScanI2c()
         }
     }
 }
-
+/************************************************************************************************************/
 /** Initialize the BMP280 sensor */
 void InitBMP280()
 {
@@ -576,9 +390,7 @@ void InitBMP280()
         // loop infinitely until data (from the sensor) is ready
     }
 }
-
 /************************************************************************************************************/
-
 void SaveFailSafeData()
 {
     // FailSafe data occupies EEPROM from offset 10 to 26
@@ -595,9 +407,7 @@ void SaveFailSafeData()
 #endif
     FailSafeSave = false;
 }
-
 /************************************************************************************************************/
-
 void DoBinding()
 {
     GetNewPipe();
@@ -614,7 +424,6 @@ void DoBinding()
 #ifdef DB_BIND
         Serial.println(millis() - BindOKTimer);
 #endif
-
         if (BindOKTimer == 0) {
             BindOKTimer = millis();
         }
@@ -622,7 +431,6 @@ void DoBinding()
             BindNow = 1;
         }
     }
-     
     if (BindNow == 1 && !BoundFlag) {
 #ifdef DB_BIND
         Serial.print("Binding to: ");
@@ -631,11 +439,9 @@ void DoBinding()
         BindModel();
     }
 }
-
 /************************************************************************************************************/
 // SETUP
 /************************************************************************************************************/
-
 void setup()
 {
     pinMode(LED_PIN, OUTPUT);
@@ -644,9 +450,6 @@ void setup()
     Wire.begin();
     delay(2000); // Needed ! - possibly for stabilising capacitors.
     ScanI2c();   // see what's connected
-    if (USE_BNO055) BNO055_sensor[1].begin();
-    if (USE_BNO055A) BNO055_sensor[0].begin();
-
 #ifdef SECOND_TRANSCEIVER
     CurrentRadio = &Radio2;
     if (InitCurrentRadio())
@@ -654,68 +457,37 @@ void setup()
         Radio2Exists = true;
         } 
 #endif
-
     CurrentRadio = &Radio1;
     if (InitCurrentRadio())
         {
         Radio1Exists = true;
         }
-
     ThisRadio = 1;
-
-    if (USE_BMP280) {
-#ifdef DB_SENSORS
-        Serial.print("Starting BMP280 ... ");
-#endif
-        InitBMP280();
-#ifdef DB_SENSORS
-        Serial.println("Done! ");
-#endif
-    }
-
     if (USE_INA219) {
         ina219.begin();
     }
-    if (USE_MPU6050) {
-        mpu6050.begin();
-#ifdef DB_SENSORS
-        mpu6050.calcGyroOffsets(true);
-        Serial.println("\n");
-#else
-        mpu6050.calcGyroOffsets(false);
-#endif
-    }
-    DeltaTime    = 0;
     MainLoopTime = millis();
     GetOldPipe();
     digitalWrite(LED_PIN, LOW);
     LoadVersioNumber();
 }
-
-
 /************************************************************************************************************/
 // LOOP
 /************************************************************************************************************/
-
 void loop()
 {
     ReceiveData();
-    if (BoundFlag) {
-        if (Connected) {
-            if (millis() - SBUSTimer >= SBUSRATE) {
-                DeltaTime = micros() - DeltaTime;
-                SBUSTimer = millis(); // timer starts before send starts....
-                if ((millis()- ReconnectedMoment) > RECONNECTGAP)  { // Don't send data for 10 ms after reconnect
-                        MoveServos();
-                }
+    if (BoundFlag && Connected) {
+        if (millis() - SBUSTimer >= SBUSRATE) {                  // SBUS rate is also good enough for servo rate
+            SBUSTimer = millis();                                // timer starts before send starts....
+            if ((millis()- ReconnectedMoment) > RECONNECTGAP)  { // Don't send data for 10 ms after reconnect
+                      MoveServos();
             }
         }
         if (FailSafeSave) SaveFailSafeData();
         MainLoopTime = millis();
-        DeltaTime    = micros();
     }
     else {
         DoBinding();
-       
     }
 }
