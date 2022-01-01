@@ -48,14 +48,13 @@
 #define SBUSRATE        10    // SBUS frame every 10 milliseconds
 #define SBUSPORT        Serial3
 #define RECONNECTGAP    20    // Send no data to servos for 20 ms after a reconnect (10 was not quite enough)
+#define EXTRAMICROS     500 // for extra resolution driving servos
+#define MINMICROS       1000 - EXTRAMICROS
+#define MAXMICROS       2000 + EXTRAMICROS
+#define LED_PIN         1
+#define RANGEMAX        2047 // = Frsky at 150 %
+#define RANGEMIN        0
 
-
-bool USE_BMP280 = false; /** is BMP280 sensor connected */
-
-#define EXTRAMICROS 500 // for extra resolution driving servos
-#define MINMICROS   1000 - EXTRAMICROS
-#define MAXMICROS   2000 + EXTRAMICROS
-#define LED_PIN 1
 
 #include <Servo.h>
 #include <EEPROM.h>
@@ -64,12 +63,13 @@ bool USE_BMP280 = false; /** is BMP280 sensor connected */
 #include <BMP280_DEV.h>
 #include "utilities/radio.h"
 
+bool USE_BMP280 = false;    /** is BMP280 sensor connected */
+bool USE_INA219  = false;   //  Volts from INA219
 Adafruit_INA219 ina219;
 BMP280_DEV      bmp280; /** The object to access the BMP280 sensor */
 Servo           MCMServo[SERVOSUSED];
 uint8_t         PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 16}; // ten now, last 6 only via sbus
 SBUS            MySbus(SBUSPORT);
-
 float    PacketStartTime;
 float    temperature280, pressure, altitude, StartAltitude;
 uint8_t  BindNow        = 0;     /** indicates that the receiver should start the binding/pairing process */
@@ -90,8 +90,6 @@ float    SavedVolts;
 bool     Radio1Exists = false;
 bool     Radio2Exists = false;
 uint32_t    SensorTime = 0;
-bool USE_INA219  = false; //  Volts INA219
-
 
 /** Load project defaults from EEPROM into the ReceivedData buffer. */
 void LoadFailSafeData()
@@ -119,11 +117,9 @@ void LoadFailSafeData()
 /** Map servo channels' data from ReceivedData buffer into SbusChannels buffer */
 void MapToSBUS()
 {
-    int RangeMax = 2047; // = Frsky at 150 %
-    int RangeMin = 0;
     if (Connected){
         for (int j = 0; j < CHANNELSUSED; ++j) {
-            SbusChannels[j] = map(ReceivedData[j], MINMICROS, MAXMICROS, RangeMin, RangeMax);
+            SbusChannels[j] = map(ReceivedData[j], MINMICROS, MAXMICROS, RANGEMIN, RANGEMAX);
         }
     }
 }
