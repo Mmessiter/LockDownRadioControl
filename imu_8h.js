@@ -38,6 +38,5 @@ var imu_8h =
     [ "USE_BNO055", "imu_8h.html#a6d9e90c962a441129febd6d8fe855d88", null ],
     [ "USE_BNO055A", "imu_8h.html#aee4ad491ef71dbe1967c326a4ae708c4", null ],
     [ "USE_INA219", "imu_8h.html#a87ae50e2ac4507568cbf98072f174a1b", null ],
-    [ "USE_MPU6050", "imu_8h.html#aace279f2c5b0cd89d357b2b044b93b3a", null ],
     [ "YawPID", "imu_8h.html#ac0d8246308cae4fca0de8afc5062b592", null ]
 ];

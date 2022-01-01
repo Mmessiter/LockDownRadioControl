@@ -1,7 +1,21 @@
 var searchData=
 [
-  ['xpoint_643',['xPoint',['../_transmitter_code_2src_2main_8cpp.html#a36b7f1f7174274a965e69e8853a3c90c',1,'main.cpp']]],
-  ['xpoints_644',['xPoints',['../_transmitter_code_2src_2main_8cpp.html#aa5b385037c6719d392b15313f432b472',1,'main.cpp']]],
-  ['xtouchplace_645',['XtouchPlace',['../_transmitter_code_2src_2main_8cpp.html#a5339146bea48f821a6abbf680f5fe09b',1,'main.cpp']]],
-  ['xx1_646',['xx1',['../_radio_functions_8cpp.html#af12cb4fe3d6d02738ca7a75e1e1fd722',1,'xx1():&#160;RadioFunctions.cpp'],['../_transmitter_code_2src_2main_8cpp.html#af12cb4fe3d6d02738ca7a75e1e1fd722',1,'xx1():&#160;main.cpp']]]
+  ['yaw_636',['Yaw',['../struct_d_o_f9.html#a244ee8d2e6ee6e67e85649adb228e9f1',1,'DOF9']]],
+  ['yawd_637',['Yawd',['../_transmitter_code_2src_2main_8cpp.html#a680daec6023f7cd083b77c6631780d5a',1,'main.cpp']]],
+  ['yawd_638',['yawd',['../_transmitter_code_2src_2main_8cpp.html#acabb78c612a198a9fb978b66aac0d30f',1,'main.cpp']]],
+  ['yawi_639',['Yawi',['../_transmitter_code_2src_2main_8cpp.html#a970e6a4a595def781db07b7d99c3e699',1,'main.cpp']]],
+  ['yawi_640',['yawi',['../_transmitter_code_2src_2main_8cpp.html#afadad575366301b6a562cd0068cc8144',1,'main.cpp']]],
+  ['yawp_641',['Yawp',['../_transmitter_code_2src_2main_8cpp.html#adc356bbc759c0357308efc9b6d368d89',1,'main.cpp']]],
+  ['yawp_642',['yawp',['../_transmitter_code_2src_2main_8cpp.html#a10af26f14e00a81698f270611ac280b4',1,'main.cpp']]],
+  ['yawpid_643',['YawPID',['../imu_8h.html#ac0d8246308cae4fca0de8afc5062b592',1,'imu.h']]],
+  ['yawrate_644',['YawRate',['../struct_d_o_f9.html#aced461b8001a43b5579a55a45da879cb',1,'DOF9']]],
+  ['yawratekalman_645',['YawRateKalman',['../imu_8h.html#a8bd61f63be4efff70f0c6407776cfcfa',1,'imu.h']]],
+  ['yd_646',['Yd',['../_transmitter_code_2src_2main_8cpp.html#a7a2fd40cbe37ec8bfa2155b2f7c4b969',1,'main.cpp']]],
+  ['yellow_647',['Yellow',['../_transmitter_code_2src_2main_8cpp.html#a239cc4651865ee2ac90ac5c1e6d2d8b5',1,'main.cpp']]],
+  ['yi_648',['Yi',['../_transmitter_code_2src_2main_8cpp.html#aaaa373bf6abad552b0530676ca238ece',1,'main.cpp']]],
+  ['yp_649',['Yp',['../_transmitter_code_2src_2main_8cpp.html#a5e4a0aef220b77f9a1cdb5883afa8a5e',1,'main.cpp']]],
+  ['ypoint_650',['yPoint',['../_transmitter_code_2src_2main_8cpp.html#ac57deb5507c3835634b98d51b5d13c9b',1,'main.cpp']]],
+  ['ypoints_651',['yPoints',['../_transmitter_code_2src_2main_8cpp.html#aff20e4985ae632d4c59eeb3d772874c9',1,'main.cpp']]],
+  ['ytouchplace_652',['YtouchPlace',['../_transmitter_code_2src_2main_8cpp.html#a6e7d01bfa867cd7da9aba15150bc258b',1,'main.cpp']]],
+  ['yy1_653',['yy1',['../_radio_functions_8cpp.html#a10274b74b5b9f35476ae844506775afe',1,'yy1():&#160;RadioFunctions.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a10274b74b5b9f35476ae844506775afe',1,'yy1():&#160;main.cpp']]]
 ];
