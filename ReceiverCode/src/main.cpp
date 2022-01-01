@@ -90,7 +90,8 @@ bool     Radio1Exists = false;
 bool     Radio2Exists = false;
 uint32_t    SensorTime = 0;
 
-/** Load project defaults from EEPROM into the ReceivedData buffer. */
+/************************************************************************************************************/
+
 void LoadFailSafeData()
 {
     uint8_t  FS_Offset = 10;
@@ -144,10 +145,10 @@ void FailSafe()
 {
     if (BoundFlag) {
         LoadFailSafeData();
-        Connected=true;   // to force sending data!
+        Connected = true;   // to force sending this data!
         MapToSBUS();
         MoveServos();
-        Connected=false; // I lied earlier - not really connected.
+        Connected = false;  // I lied earlier - we're not really connected.
     }
 }
 
@@ -222,7 +223,7 @@ void AttachServos()
             MCMServo[i].attach(PWMPins[i]);
         }
         ServosAttached = true;
-    } // now 16 SbusChannels, DEFAULT TRAVEL
+    } 
     MySbus.begin();
 }
 
@@ -241,7 +242,7 @@ void BindModel()
     BoundFlag   = true;
     BindNow     = 0;
     SaveNewBind = false;
-    AttachServos(); // AND SBUS!!!
+    AttachServos(); // AND START SBUS!!!
 #ifdef DB_BIND
     Serial.println("BINDING NOW");
 #endif
@@ -269,7 +270,7 @@ void CheckParams()
 {
     uint16_t TwoBytes = 0; 
     PacketNumber = ReceivedData[CHANNELSUSED+1];  // Needed after all!  (+2 is still spare)
-    switch (PacketNumber) {
+    switch (PacketNumber) {                       // TODO since only two are needed, move these up 
         case 7:
              BindNow = ReceivedData[CHANNELSUSED + 3];
              FailSafeSave = bool(ReceivedData[CHANNELSUSED + 2]);
