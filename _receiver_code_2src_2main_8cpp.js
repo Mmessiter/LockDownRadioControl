@@ -5,6 +5,8 @@ var _receiver_code_2src_2main_8cpp =
     [ "LED_PIN", "_receiver_code_2src_2main_8cpp.html#ab4553be4db9860d940f81d7447173b2f", null ],
     [ "MAXMICROS", "_receiver_code_2src_2main_8cpp.html#a843e3db36f734b45096220f7ca4b8d9f", null ],
     [ "MINMICROS", "_receiver_code_2src_2main_8cpp.html#ac67e087c11a86a3790c656a29f8c7195", null ],
+    [ "RANGEMAX", "_receiver_code_2src_2main_8cpp.html#a152ff5774ac656fc5f23664a214a8b53", null ],
+    [ "RANGEMIN", "_receiver_code_2src_2main_8cpp.html#a2279f0fac9f7362b46f3c53ae91a5ce8", null ],
     [ "RECEIVE_TIMEOUT", "_receiver_code_2src_2main_8cpp.html#a4c69942f01447fa7563c5726c7d8abf2", null ],
     [ "RECONNECTGAP", "_receiver_code_2src_2main_8cpp.html#a00a419fbe253e6e9cb4d716d02d0b2b7", null ],
     [ "SBUSPORT", "_receiver_code_2src_2main_8cpp.html#aa82f9d8a298740acdbaa5c78a9e9f50c", null ],

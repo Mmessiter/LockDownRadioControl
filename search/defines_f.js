@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['rangemax_1251',['RANGEMAX',['../_radio_functions_8h.html#a152ff5774ac656fc5f23664a214a8b53',1,'RadioFunctions.h']]],
-  ['rangemin_1252',['RANGEMIN',['../_radio_functions_8h.html#a2279f0fac9f7362b46f3c53ae91a5ce8',1,'RadioFunctions.h']]],
+  ['rangemax_1251',['RANGEMAX',['../_receiver_code_2src_2main_8cpp.html#a152ff5774ac656fc5f23664a214a8b53',1,'RANGEMAX():&#160;main.cpp'],['../_radio_functions_8h.html#a152ff5774ac656fc5f23664a214a8b53',1,'RANGEMAX():&#160;RadioFunctions.h']]],
+  ['rangemin_1252',['RANGEMIN',['../_receiver_code_2src_2main_8cpp.html#a2279f0fac9f7362b46f3c53ae91a5ce8',1,'RANGEMIN():&#160;main.cpp'],['../_radio_functions_8h.html#a2279f0fac9f7362b46f3c53ae91a5ce8',1,'RANGEMIN():&#160;RadioFunctions.h']]],
   ['receive_5ftimeout_1253',['RECEIVE_TIMEOUT',['../_receiver_code_2src_2main_8cpp.html#a4c69942f01447fa7563c5726c7d8abf2',1,'main.cpp']]],
   ['reconnect_5fch_1254',['RECONNECT_CH',['../common_8h.html#ad3c239265016482b6850360b3dc51a50',1,'RECONNECT_CH():&#160;common.h'],['../_radio_functions_8h.html#ad3c239265016482b6850360b3dc51a50',1,'RECONNECT_CH():&#160;RadioFunctions.h']]],
   ['reconnectgap_1255',['RECONNECTGAP',['../_receiver_code_2src_2main_8cpp.html#a00a419fbe253e6e9cb4d716d02d0b2b7',1,'main.cpp']]],
