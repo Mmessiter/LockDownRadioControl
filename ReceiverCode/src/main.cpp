@@ -55,6 +55,7 @@ bool USE_BMP280 = false; /** is BMP280 sensor connected */
 #define EXTRAMICROS 500 // for extra resolution driving servos
 #define MINMICROS   1000 - EXTRAMICROS
 #define MAXMICROS   2000 + EXTRAMICROS
+#define LED_PIN 1
 
 #include <Servo.h>
 #include <EEPROM.h>
@@ -62,22 +63,15 @@ bool USE_BMP280 = false; /** is BMP280 sensor connected */
 #include <Adafruit_INA219.h>
 #include <BMP280_DEV.h>
 #include "utilities/radio.h"
-//#include "utilities/imu.h"   // REMOVED NOW!! (later in own code and device)
 
 Adafruit_INA219 ina219;
 BMP280_DEV      bmp280; /** The object to access the BMP280 sensor */
 Servo           MCMServo[SERVOSUSED];
-uint8_t PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 16}; // ten now, last 6 only via sbus
-#define LED_PIN 13
-SBUS MySbus(SBUSPORT);
+uint8_t         PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 16}; // ten now, last 6 only via sbus
+SBUS            MySbus(SBUSPORT);
 
-float  PacketStartTime;
-float temperature280, pressure, altitude, StartAltitude;
-bool  Swash_DisplayStarted = false;
-
-int      LoopsPS        = 0;
-int      TimeThis       = 0;
-int      MainLoopTime   = 0;
+float    PacketStartTime;
+float    temperature280, pressure, altitude, StartAltitude;
 uint8_t  BindNow        = 0;     /** indicates that the receiver should start the binding/pairing process */
 bool     BoundFlag      = false; /** indicates if receiver paired with transmitter */
 int      BindOKTimer    = 0;
@@ -87,9 +81,8 @@ int      SBUSTimer = 0;
 bool     FailSafeChannel[17];
 bool     FailSafeDataLoaded = false;
 bool     ReInit             = false;
-uint8_t  FS_byte1              = 0;
+uint8_t  FS_byte1              = 0;    // All 16 failsafe channel flags are in these two bytes
 uint8_t  FS_byte2              = 0;
-bool     GyroInstalled      = false;
 uint32_t ReconnectedMoment;
 float    SavedAltitude;
 float    SavedTemperature;
@@ -466,7 +459,6 @@ void setup()
     if (USE_INA219) {
         ina219.begin();
     }
-    MainLoopTime = millis();
     GetOldPipe();
     digitalWrite(LED_PIN, LOW);
     LoadVersioNumber();
@@ -485,7 +477,6 @@ void loop()
             }
         }
         if (FailSafeSave) SaveFailSafeData();
-        MainLoopTime = millis();
     }
     else {
         DoBinding();
