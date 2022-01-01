@@ -44,13 +44,12 @@
 
 #define RECEIVE_TIMEOUT 25    // 25 milliseconds seems an optimal value
 #define CHANNELSUSED    16
-#define SERVOSUSED      10
+#define SERVOSUSED      10    // All 16 are available via SBUS
 #define SBUSRATE        10    // SBUS frame every 10 milliseconds
 #define SBUSPORT        Serial3
 #define RECONNECTGAP    20    // Send no data to servos for 20 ms after a reconnect (10 was not quite enough)
-#define EXTRAMICROS     500 // for extra resolution driving servos
-#define MINMICROS       1000 - EXTRAMICROS
-#define MAXMICROS       2000 + EXTRAMICROS
+#define MINMICROS       500 
+#define MAXMICROS       2500 
 #define LED_PIN         1
 #define RANGEMAX        2047 // = Frsky at 150 %
 #define RANGEMIN        0
