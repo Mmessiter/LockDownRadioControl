@@ -270,7 +270,7 @@ void SetThePipe(uint64_t WhichPipe)
 {
     Radio1.openWritingPipe(WhichPipe);
     Radio1.stopListening();
-    delay (4);  // alllow things to happen
+    delay (1);  // alllow things to happen
  }
 
 /*********************************************************************************************************************************/
