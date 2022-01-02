@@ -271,7 +271,7 @@ void CheckParams()
     uint16_t TwoBytes = 0; 
     PacketNumber = ReceivedData[CHANNELSUSED+1];  // Needed after all!  (+2 is still spare)
     switch (PacketNumber) {                       // TODO since only two are needed, move these up 
-        case 7:
+        case 1:
              BindNow = ReceivedData[CHANNELSUSED + 3];
              FailSafeSave = bool(ReceivedData[CHANNELSUSED + 2]);
                 if (FailSafeSave) {
@@ -279,11 +279,10 @@ void CheckParams()
                 RebuildFlags(FailSafeChannel, TwoBytes);
             }
             break;
-        case 8:
+        case 2:
             FS_byte1 = ReceivedData[CHANNELSUSED + 2]; // These bytes are failsafe flags
             FS_byte2 = ReceivedData[CHANNELSUSED + 3]; // These bytes are failsafe flags
             break;
-    
         default:
             break; 
     }
@@ -435,29 +434,18 @@ void setup()
 {
     pinMode(LED_PIN, OUTPUT);
     digitalWrite(LED_PIN, HIGH);
-    Serial.begin(9600);
     Wire.begin();
     delay(2000); // Needed ! - possibly for stabilising capacitors.
     ScanI2c();   // see what's connected
 #ifdef SECOND_TRANSCEIVER
     CurrentRadio = &Radio2;
-    if (InitCurrentRadio())
-        {
-        Radio2Exists = true;
-        } 
+    if (InitCurrentRadio()) Radio2Exists = true;
 #endif
     CurrentRadio = &Radio1;
-    if (InitCurrentRadio())
-        {
-        Radio1Exists = true;
-        }
+    if (InitCurrentRadio()) Radio1Exists = true;
     ThisRadio = 1;
-    if (USE_INA219) {
-        ina219.begin();
-    }
-    if (USE_BMP280) {
-        InitBMP280();
-    }
+    if (USE_INA219) ina219.begin();
+    if (USE_BMP280) InitBMP280();
     GetOldPipe();
     digitalWrite(LED_PIN, LOW);
     LoadVersioNumber();

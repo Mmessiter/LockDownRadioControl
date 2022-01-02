@@ -5362,25 +5362,19 @@ uint16_t MakeTwobytes(bool* f)
 /************************************************************************************************************/
 
 void LoadPacketData()
-{ // MUST NOT ADD MORE
-
+{ 
     uint16_t Twobytes = 0;
     uint8_t  uint8_t1;
     uint8_t  uint8_t2;
 
-
     SendBuffer[CHANNELSUSED + 1] = PacketNumber;  
-
     Twobytes = MakeTwobytes(FailSafeChannel); // 16 bool values compressed to 16 bits
     uint8_t1 = uint8_t(Twobytes >> 8);        // sent as two bytes
     uint8_t2 = uint8_t(Twobytes & 0x00FF);
 
     switch (PacketNumber) {
        
-        case 6:
-            if (ModelDetected) SendBuffer[CHANNELSUSED + 3] = ModelNumber; // send model number but not before reading one!
-            break;
-        case 7:
+        case 1:  // yes we could use packet zero, but I didn't.
             SendBuffer[CHANNELSUSED + 3] = BindingNow;
             if (BindingNow == 1) {
                 BindingTimer = millis(); // start a timer
@@ -5389,7 +5383,7 @@ void LoadPacketData()
             SendBuffer[CHANNELSUSED + 2] = SaveFailSafeNow; // FailSafeSaveMoment
             SaveFailSafeNow    = false;                     // once should do it.
             break;
-        case 8:
+        case 2:
              SendBuffer[CHANNELSUSED + 2] = uint8_t2; // these are failsafe flags
              SendBuffer[CHANNELSUSED + 3] = uint8_t1; // these are failsafe flags
             break;
