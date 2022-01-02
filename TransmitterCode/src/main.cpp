@@ -16,9 +16,6 @@
  * - Trims on screen saved per flight mode and model.
  * - Screen timeout.
  * - FFHS fast recovery on lost packet
- * - FFHS stores busy and failed frequencies and avoids hopping there again.
- * - Edit and store PID Gains.
- * - Shows Roll Pitch Yaw telemetry
  * - Scans at startup for FHSS frequencies to dodge.
  * - Use 32 GIG SD card for model memories
  * - Binding - Each TX must has unique pipe address.
@@ -376,12 +373,7 @@ float    MaxAlt                       = 0;
 char     ReceiverVersionNumber[8]    = " ";
 char     TransmitterVersionNumber[8] = " ";
 char     deletedmodel[]               = "Deleted";
-uint8_t  rollp[5];
-uint8_t  rolli[5];
-uint8_t  rolld[5];
-uint8_t  yawp[5];
-uint8_t  yawi[5];
-uint8_t  yawd[5];
+
 
 File ModelsFileNumber;
 
@@ -413,20 +405,6 @@ char TrimView_r2[]  = "r2";
 char TrimView_r3[]  = "r3";
 char TrimView_r4[]  = "r4";
 
-char Rollp[]       = "Rollp";
-char Rolli[]       = "Rolli";
-char Rolld[]       = "Rolld";
-char Yawp[]        = "Yawp";
-char Yawi[]        = "Yawi";
-char Yawd[]        = "Yawd";
-char Rp[]          = "rp";
-char Ri[]          = "ri";
-char Rd[]          = "rd";
-char Yp[]          = "yp";
-char Yi[]          = "yi";
-char Yd[]          = "yd";
-char GainsViewFM[] = "fm";
-char GainsViewMN[] = "mn";
 
 uint8_t FMSwitch   = FLIGHTMODESWITCH;
 uint8_t AutoSwitch = AUTOSWITCH;
@@ -1949,26 +1927,6 @@ void OpenModelsFile()
 
 /*********************************************************************************************************************************/
 
-void UpdateGainsView()
-{
-    SendValue(Rollp, rollp[FlightMode]);
-    SendValue(Rolli, rolli[FlightMode]);
-    SendValue(Rolld, rolld[FlightMode]);
-    SendValue(Yawp, yawp[FlightMode]);
-    SendValue(Yawi, yawi[FlightMode]);
-    SendValue(Yawd, yawd[FlightMode]);
-    SendValue(Rp, rollp[FlightMode]);
-    SendValue(Ri, rolli[FlightMode]);
-    SendValue(Rd, rolld[FlightMode]);
-    SendValue(Yp, yawp[FlightMode]);
-    SendValue(Yi, yawi[FlightMode]);
-    SendValue(Yd, yawd[FlightMode]);
-    SendValue(GainsViewFM, FlightMode);
-    SendText(GainsViewMN, ModelName);
-}
-
-/*********************************************************************************************************************************/
-
 void SDUpdateInt(int p_address, int p_value)
 {
     ModelsFileNumber.seek(p_address);
@@ -2068,7 +2026,7 @@ void UpdateModelsNameEveryWhere()
             UpdateTrimView();
         }
         if (CurrentView == FrontView) SendValue(FrontView_fm1, 1);
-        if (CurrentView == GainsView) UpdateGainsView();
+     
     }
     if (FlightMode == 2) {
         if (CurrentView == SticksView) SendText(SticksView_t1, fm2);
@@ -2078,7 +2036,7 @@ void UpdateModelsNameEveryWhere()
             UpdateTrimView();
         }
         if (CurrentView == FrontView) SendValue(FrontView_fm2, 1);
-        if (CurrentView == GainsView) UpdateGainsView();
+ 
     }
     if (FlightMode == 3) {
         if (CurrentView == SticksView) SendText(SticksView_t1, fm3);
@@ -2088,7 +2046,7 @@ void UpdateModelsNameEveryWhere()
             UpdateTrimView();
         }
         if (CurrentView == FrontView) SendValue(FrontView_fm3, 1);
-        if (CurrentView == GainsView) UpdateGainsView();
+       
     }
     if (FlightMode == 4) {
         if (CurrentView == SticksView) SendText(SticksView_t1, fm4);
@@ -2098,7 +2056,7 @@ void UpdateModelsNameEveryWhere()
             UpdateTrimView();
         }
         if (CurrentView == FrontView) SendValue(FrontView_fm4, 1);
-        if (CurrentView == GainsView) UpdateGainsView();
+       
     }
 }
 
@@ -2392,29 +2350,11 @@ bool ReadOneModel(uint8_t Mnum)
     }
     RXCellCount = SDReadByte(addr);
     ++addr;
-
-    for (j = 0; j < FlightModesUsed + 1; ++j) {
-
-        rollp[j] = SDReadByte(addr);
-        ++addr;
-        rolli[j] = SDReadByte(addr);
-        ++addr;
-        rolld[j] = SDReadByte(addr);
-        ++addr;
-        yawp[j] = SDReadByte(addr);
-        ++addr;
-        yawi[j] = SDReadByte(addr);
-        ++addr;
-        yawd[j] = SDReadByte(addr);
-        ++addr;
-    }
-   // Spare byte
-    ++addr;
+    addr += 30;  // 30 Spare Bytes here (PID stuff gone)
+    ++addr;      // another Spare byte
     for (i = 0; i < CHANNELSUSED; ++i) {
         InPutStick[i] = SDReadByte(addr);
         if (InPutStick[i] > 16) InPutStick[i] = i; // reset if nothing was saved!
-
-       
         ++addr;
     }
 
@@ -2655,7 +2595,7 @@ void setup()
     SendValue(FrontView_Hours, 0);
     SendValue(FrontView_Mins, 0);
     SendValue(FrontView_Secs, 0);
-    UpdateGainsView();
+  
                                     //  ***************************************************************************************
     //SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
                                     //  **   BUT then re-comment it!! Otherwise it will reset to same time on every boot up! **
@@ -2807,23 +2747,10 @@ void SaveOneModel(int mnum)
     SDUpdateByte(addr, RXCellCount);
     ++addr;
 
-    for (j = 0; j < FlightModesUsed + 1; ++j) {
-        SDUpdateByte(addr, rollp[j]);
-        ++addr;
-        SDUpdateByte(addr, rolli[j]);
-        ++addr;
-        SDUpdateByte(addr, rolld[j]);
-        ++addr;
-        SDUpdateByte(addr, yawp[j]);
-        ++addr;
-        SDUpdateByte(addr, yawi[j]);
-        ++addr;
-        SDUpdateByte(addr, yawd[j]);
-        ++addr;
-    }
+    addr += 30; // 30 Spare Bytes here (PID stuff gone)
   
-    // SPARE BYTE
-    ++addr;
+    ++addr;     // another Spare
+
     for (i = 0; i < CHANNELSUSED; ++i) {
         SDUpdateByte(addr, InPutStick[i]);
         ++addr;
@@ -3164,23 +3091,6 @@ void ShowDirectory()
 
 /*********************************************************************************************************************************/
 
-void SaveNewGains()
-{
-    ButtonRed(SaveButton);
-    ButtonRed(OKButton);
-    rollp[FlightMode] = GetValue(Rollp);
-    rolli[FlightMode] = GetValue(Rolli);
-    rolld[FlightMode] = GetValue(Rolld);
-    yawp[FlightMode]  = GetValue(Yawp);
-    yawi[FlightMode]  = GetValue(Yawi);
-    yawd[FlightMode]  = GetValue(Yawd);
-    SaveOneModel(ModelNumber);
-    ButtonWhite(SaveButton);
-    ButtonWhite(OKButton);
-}
-
-/*********************************************************************************************************************************/
-
 void SetDefaultValues() 
 {
     int  j;
@@ -3229,14 +3139,7 @@ void SetDefaultValues()
         }
     }
     RXCellCount = 3;
-    for (j = 0; j < FlightModesUsed + 1; ++j) {
-        rollp[j] = 0;
-        rolli[j] = 0;
-        rolld[j] = 0;
-        yawp[j]  = 0;
-        yawi[j]  = 0;
-        yawd[j]  = 0;
-    }
+    
     SendValue(Progress, 45);
     delay(10);
     for (i = 0; i < CHANNELSUSED; ++i) {
@@ -5473,15 +5376,7 @@ void LoadPacketData()
     uint8_t2 = uint8_t(Twobytes & 0x00FF);
 
     switch (PacketNumber) {
-        case 3:
-            SendBuffer[CHANNELSUSED + 3] = rollp[FlightMode];
-            break;
-        case 4:
-            SendBuffer[CHANNELSUSED + 3] = rolli[FlightMode];
-            break;
-        case 5:
-            SendBuffer[CHANNELSUSED + 3] = rolld[FlightMode];
-            break;
+       
         case 6:
             if (ModelDetected) SendBuffer[CHANNELSUSED + 3] = ModelNumber; // send model number but not before reading one!
             break;
@@ -5498,16 +5393,7 @@ void LoadPacketData()
              SendBuffer[CHANNELSUSED + 2] = uint8_t2; // these are failsafe flags
              SendBuffer[CHANNELSUSED + 3] = uint8_t1; // these are failsafe flags
             break;
-        case 9:
-            SendBuffer[CHANNELSUSED + 3] = yawp[FlightMode];
-            break;
-        case 10:
-            SendBuffer[CHANNELSUSED + 3] = yawi[FlightMode];
-            break;
-        case 11:
-            SendBuffer[CHANNELSUSED + 3] = yawd[FlightMode];
-            break;
-        case 12:
+       
            
             break;
         default: 
@@ -5603,14 +5489,6 @@ void GetFlightMode()
         if (CurrentView == FrontView) {
             ShowFlightMode();
         }
-
-        if (CurrentView == GainsView) { // Save gains settings when changing flight mode
-            SaveFlightMode = FlightMode;
-            FlightMode     = PreviousFlightMode;
-            SaveNewGains();
-            FlightMode = SaveFlightMode;
-        }
-
         UpdateModelsNameEveryWhere();
         if (CurrentView == GraphView) DisplayCurve();
     }
