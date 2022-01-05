@@ -33,16 +33,9 @@
 #define PACEMAKER         2     // MINIMUM Ms between packets of data.
 #define FREQUENCYSCOUNT   82    // How many frequencies to use before wrapping to first
 #define RETRYCOUNT        3     // auto retries from nRF24L01
-#define RETRYWAIT         1     // NB ACTUAL wait between retries will be RetryWait+1 * 250us
-                                // A failed packet therefore takes (RetryWait+1 * 250us) * RetryCount 
-// #define NOISYWIFI            // if defined (BOTH ENDS!) this uses channels well above most wifi (but not licence free in some countries).
+#define RETRYWAIT         1     // Wait between retries is RetryWait+1 * 250us. A failed packet therefore takes (RetryWait+1 * 250us) * RetryCount 
 #define LOSTCONTACTCUTOFF 1     // How many packets to lose before reconnect triggers  (>1)
-#ifndef NOISYWIFI               // Use this for UK legal flying 
 #define RECONNECT_CH     83
-#endif
-#ifdef NOISYWIFI 
-#define RECONNECT_CH     120
-#endif
 
  // **************************************************************************
  //                            SEND MODE PARAMETERS                          * 
@@ -64,6 +57,7 @@
  // **************************************************************************
  //                            WATCHDOG PARAMETERS                           *
  //***************************************************************************
+ 
 #define USE_WATCHDOG         
 #define WATCHDOGTIMEOUT   10000 // 10 Seconds before reboot (32ms -> 500 seconds)
 #define KICKRATE          1000  // Kick once a second (must be between WATCHDOGMAXRATE and WATCHDOGTIMEOUT)
@@ -78,7 +72,6 @@
 
 // #define DB_NEXTION        // Debug Nextion and SD card data
 // #define DB_FHSS           // Debug real time FHSS data
-// #define DB_FHSS1          // Debug new FHSS data
 // #define DB_SENSORS        // Debug Sensors
 // #define DB_BIND           // Debug Binding
 // #define DB_SWITCHES       // Debug Switches

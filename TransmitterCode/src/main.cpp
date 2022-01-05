@@ -4989,21 +4989,9 @@ void Button_was_pressed()
                 ModelNumber = 1;
                 SendValue(ModelsView_ModelNumber, ModelNumber);
             }
-            SendCommand(ProgressStart);
-            SendValue(Progress, 5);
-            delay(10);
-            SendValue(Progress, 50);
-            delay(20);
             ReadOneModel(ModelNumber);
-            SendValue(Progress, 75);
-            delay(10);
             UpdateModelsNameEveryWhere();
-            SendValue(Progress, 99);
-            delay(10);
             SaveTXStuff();
-            SendValue(Progress, 100);
-            delay(20);
-            SendCommand(ProgressEnd);
             ClearText();
         }
 
