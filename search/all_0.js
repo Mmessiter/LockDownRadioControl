@@ -12,9 +12,8 @@ var searchData=
   ['allchannels_9',['AllChannels',['../_radio_functions_8h.html#a340f5f74a3364594ad9b460d4b5b04d5',1,'AllChannels():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a1d18aaaa3cc4ba52bd309c88815c60a7',1,'AllChannels():&#160;main.cpp']]],
   ['altitude_10',['altitude',['../_receiver_code_2src_2main_8cpp.html#a0e13a4b4ae0cefdac2a413284239caa6',1,'main.cpp']]],
   ['analogueinput_11',['AnalogueInput',['../_transmitter_code_2src_2main_8cpp.html#a0c2eb3050c13378578402202c6290391',1,'main.cpp']]],
-  ['angvelocitydata_12',['angVelocityData',['../imu_8h.html#a99b9ce57433f4fcf752eaed2bb045093',1,'imu.h']]],
-  ['approximation_13',['APPROXIMATION',['../_transmitter_code_2src_2main_8cpp.html#aee8c3c363eab49d6a90d3f74587694d5',1,'main.cpp']]],
-  ['attachservos_14',['AttachServos',['../_receiver_code_2src_2main_8cpp.html#a0cbfd712ab3bd8f654bc19400fd704bd',1,'main.cpp']]],
-  ['autoswitch_15',['AutoSwitch',['../_transmitter_code_2src_2main_8cpp.html#a6d1c8ca21c8826267f5687d3799c6a1f',1,'main.cpp']]],
-  ['autoswitch_16',['AUTOSWITCH',['../_transmitter_code_2src_2main_8cpp.html#aa4414f3ff790f01b8bb41a0f51d1518f',1,'main.cpp']]]
+  ['approximation_12',['APPROXIMATION',['../_transmitter_code_2src_2main_8cpp.html#aee8c3c363eab49d6a90d3f74587694d5',1,'main.cpp']]],
+  ['attachservos_13',['AttachServos',['../_receiver_code_2src_2main_8cpp.html#a0cbfd712ab3bd8f654bc19400fd704bd',1,'main.cpp']]],
+  ['autoswitch_14',['AUTOSWITCH',['../_transmitter_code_2src_2main_8cpp.html#aa4414f3ff790f01b8bb41a0f51d1518f',1,'main.cpp']]],
+  ['autoswitch_15',['AutoSwitch',['../_transmitter_code_2src_2main_8cpp.html#a6d1c8ca21c8826267f5687d3799c6a1f',1,'main.cpp']]]
 ];
