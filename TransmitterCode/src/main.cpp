@@ -4194,6 +4194,7 @@ void Button_was_pressed()
            GapSum       = 0;
            GapAverage   = 0;
            GapCount     = 0;
+           RXMAXModelAltitude = 0;
            ClearText();
            return;
         }
