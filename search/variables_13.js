@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['valuesent_1230',['ValueSent',['../_transmitter_code_2src_2main_8cpp.html#ace7e8fecf64d2c788fd0e7d5fe0c47fe',1,'main.cpp']]],
-  ['voltsdetected_1231',['VoltsDetected',['../_transmitter_code_2src_2main_8cpp.html#a6dfccb2c71ac97313ccc4248d382f6a3',1,'main.cpp']]]
+  ['use_5fbmp280_1228',['USE_BMP280',['../_receiver_code_2src_2main_8cpp.html#a4be5c27bea3c82b0a4ec92191052d946',1,'main.cpp']]],
+  ['use_5fbno055_1229',['USE_BNO055',['../imu_8h.html#a6d9e90c962a441129febd6d8fe855d88',1,'imu.h']]],
+  ['use_5fbno055a_1230',['USE_BNO055A',['../imu_8h.html#aee4ad491ef71dbe1967c326a4ae708c4',1,'imu.h']]],
+  ['use_5fina219_1231',['USE_INA219',['../_receiver_code_2src_2main_8cpp.html#a87ae50e2ac4507568cbf98072f174a1b',1,'USE_INA219():&#160;main.cpp'],['../imu_8h.html#a87ae50e2ac4507568cbf98072f174a1b',1,'USE_INA219():&#160;imu.h'],['../_transmitter_code_2src_2main_8cpp.html#a87ae50e2ac4507568cbf98072f174a1b',1,'USE_INA219():&#160;main.cpp']]]
 ];

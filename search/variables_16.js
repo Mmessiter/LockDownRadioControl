@@ -1,9 +1,6 @@
 var searchData=
 [
-  ['yaw_1238',['Yaw',['../struct_d_o_f9.html#a244ee8d2e6ee6e67e85649adb228e9f1',1,'DOF9']]],
-  ['yawpid_1239',['YawPID',['../imu_8h.html#ac0d8246308cae4fca0de8afc5062b592',1,'imu.h']]],
-  ['yawrate_1240',['YawRate',['../struct_d_o_f9.html#aced461b8001a43b5579a55a45da879cb',1,'DOF9']]],
-  ['ypoint_1241',['yPoint',['../_transmitter_code_2src_2main_8cpp.html#ac57deb5507c3835634b98d51b5d13c9b',1,'main.cpp']]],
-  ['ypoints_1242',['yPoints',['../_transmitter_code_2src_2main_8cpp.html#aff20e4985ae632d4c59eeb3d772874c9',1,'main.cpp']]],
-  ['ytouchplace_1243',['YtouchPlace',['../_transmitter_code_2src_2main_8cpp.html#a6e7d01bfa867cd7da9aba15150bc258b',1,'main.cpp']]]
+  ['xpoint_1237',['xPoint',['../_transmitter_code_2src_2main_8cpp.html#a36b7f1f7174274a965e69e8853a3c90c',1,'main.cpp']]],
+  ['xpoints_1238',['xPoints',['../_transmitter_code_2src_2main_8cpp.html#aa5b385037c6719d392b15313f432b472',1,'main.cpp']]],
+  ['xtouchplace_1239',['XtouchPlace',['../_transmitter_code_2src_2main_8cpp.html#a5339146bea48f821a6abbf680f5fe09b',1,'main.cpp']]]
 ];
