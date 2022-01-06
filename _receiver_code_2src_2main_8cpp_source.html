@@ -344,9 +344,9 @@ $(document).ready(function(){initNavTree('_receiver_code_2src_2main_8cpp_source.
 <div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;    }</div>
 <div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="_receiver_code_2src_2main_8cpp.html#a4be5c27bea3c82b0a4ec92191052d946">USE_BMP280</a>) {</div>
 <div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;        Serial.print(<span class="stringliteral">&quot;  Altitude=&quot;</span>);</div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;        Serial.print(<a class="code" href="_receiver_code_2src_2main_8cpp.html#a1eeadec20c253385fe11f15108d783c8">bmp280</a>.<a class="code" href="class_adafruit___b_m_p280.html#a55c1a78abf03a021abb297b3f35127ff">readAltitude</a>(<a class="code" href="_receiver_code_2src_2main_8cpp.html#a681e1ce39901d2a5d94c90f87e5354bc">Qnh</a>) * 3.28084); <span class="comment">// convert from meters</span></div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;        Serial.print(<a class="code" href="_receiver_code_2src_2main_8cpp.html#adb28ad5b86d6d40781011c4315d15024">SavedAltitude</a>); <span class="comment">// convert from meters</span></div>
 <div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;        Serial.print(<span class="stringliteral">&quot; Temp=&quot;</span>);</div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;        Serial.print(<a class="code" href="_receiver_code_2src_2main_8cpp.html#a1eeadec20c253385fe11f15108d783c8">bmp280</a>.<a class="code" href="class_adafruit___b_m_p280.html#a8511efd594618dea5f1e52d6bd149795">readTemperature</a>());</div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;        Serial.print(<a class="code" href="_receiver_code_2src_2main_8cpp.html#a6e2f7314e8e8f6e0d534ae2b882d691a">SavedTemperature</a>);</div>
 <div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;    }</div>
 <div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;    Serial.println(<span class="stringliteral">&quot; &quot;</span>);</div>
 <div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;}</div>
