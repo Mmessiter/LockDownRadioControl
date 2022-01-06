@@ -58,14 +58,15 @@
 #include <Servo.h>
 #include <EEPROM.h>
 #include <SBUS.h>
-#include <Adafruit_INA219.h>
-#include <BMP280_DEV.h>
+#include <Adafruit_INA219.h>   // new library used here±
+#include <Adafruit_BMP280.h>
 #include "utilities/radio.h"
 
 bool USE_BMP280 = false;    /** is BMP280 sensor connected */
 bool USE_INA219  = false;   //  Volts from INA219
 Adafruit_INA219 ina219;
-BMP280_DEV      bmp280; /** The object to access the BMP280 sensor */
+Adafruit_BMP280 bmp280; // I2C
+//BMP280_DEV      bmp280; /** The object to access the BMP280 sensor */
 Servo           MCMServo[SERVOSUSED];
 uint8_t         PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 16}; // ten now, last 6 only via sbus
 SBUS            MySbus(SBUSPORT);
@@ -311,12 +312,14 @@ void DoSensors()
     if ((millis()-SensorTime) < 2000) return;  // no need to measure too often
     SensorTime = millis();
     if (USE_BMP280) {
-        if (bmp280.getMeasurements(temperature280, pressure, altitude)) 
+
              if (BoundFlag) {
-                 SavedAltitude = (altitude - StartAltitude) * 3.28084; // Altitude in feet
-                 SavedTemperature = temperature280;
+                 SavedTemperature = bmp280.readTemperature();
+                 SavedAltitude    = (bmp280.readAltitude(1019.9) * 3.28084);
              }
+    
     }
+       
     if (USE_INA219) {
              if (BoundFlag) SavedVolts = ina219.getBusVoltage_V();     
     }
@@ -368,15 +371,11 @@ void ScanI2c()
 void InitBMP280()
 {
     bmp280.begin(0x76);
-    bmp280.setTimeStandby(TIME_STANDBY_4000MS);
-    bmp280.startNormalConversion();
-    // warm up bmp280
-    for (int i = 0; i < 15000; ++i) {
-        bmp280.getMeasurements(temperature280, pressure, StartAltitude);
-    }
-    while (!bmp280.getMeasurements(temperature280, pressure, StartAltitude)) {
-        // loop infinitely until data (from the sensor) is ready
-    }
+    bmp280.setSampling(Adafruit_BMP280::MODE_NORMAL,        /* Operating Mode. */
+    Adafruit_BMP280::SAMPLING_X2,                           /* Temp. oversampling */
+    Adafruit_BMP280::SAMPLING_X16,                          /* Pressure oversampling */
+    Adafruit_BMP280::FILTER_X16,                            /* Filtering. */ 
+    Adafruit_BMP280::STANDBY_MS_500);                       /* Standby time. */
 }
 /************************************************************************************************************/
 void SaveFailSafeData()
