@@ -1363,10 +1363,10 @@ void ShowComms()
     char  LiPo5s[]  = " 5s LiPo,  ";
     char  LiPo6s[]  = " 6s LiPo,  ";
     char  PerCell[] = "V/C";
-    char  RXBattInfo[55];
+    char  RXBattInfo[65];
     char  RXBattNA[] = "(No data)";
     char  RXBattNV[] = "    ";
-    char  TXBattInfo[55];
+    char  TXBattInfo[65];
     float ReadVolts    = 0;
     float VoltsPerCell = 0;
     char BindButtonVisible[]  = "vis bind,1";
@@ -5354,14 +5354,11 @@ void LoadPacketData()
     uint16_t Twobytes = 0; // Extra data can be send using the last four bytes of each data packet. These are defined by the packet number
     uint8_t  uint8_t1;
     uint8_t  uint8_t2;
-
     SendBuffer[CHANNELSUSED] = PacketNumber;  
     Twobytes = MakeTwobytes(FailSafeChannel); // 16 bool values compressed to 16 bits
     uint8_t1 = uint8_t(Twobytes >> 8);        // sent as two bytes
     uint8_t2 = uint8_t(Twobytes & 0x00FF);
-
     switch (PacketNumber) {
-       
         case 0:  
             SendBuffer[CHANNELSUSED + 2] = BindingNow;
             if (BindingNow == 1) {
