@@ -5351,32 +5351,29 @@ uint16_t MakeTwobytes(bool* f)
 
 void LoadPacketData()
 { 
-    uint16_t Twobytes = 0;
+    uint16_t Twobytes = 0; // Extra data can be send using the last four bytes of each data packet. These are defined by the packet number
     uint8_t  uint8_t1;
     uint8_t  uint8_t2;
 
-    SendBuffer[CHANNELSUSED + 1] = PacketNumber;  
+    SendBuffer[CHANNELSUSED] = PacketNumber;  
     Twobytes = MakeTwobytes(FailSafeChannel); // 16 bool values compressed to 16 bits
     uint8_t1 = uint8_t(Twobytes >> 8);        // sent as two bytes
     uint8_t2 = uint8_t(Twobytes & 0x00FF);
 
     switch (PacketNumber) {
        
-        case 1:  // yes we could use packet zero, but I didn't.
-            SendBuffer[CHANNELSUSED + 3] = BindingNow;
+        case 0:  
+            SendBuffer[CHANNELSUSED + 2] = BindingNow;
             if (BindingNow == 1) {
                 BindingTimer = millis(); // start a timer
                 BindingNow   = 2;
             }
-            SendBuffer[CHANNELSUSED + 2] = SaveFailSafeNow; // FailSafeSaveMoment
+            SendBuffer[CHANNELSUSED + 1] = SaveFailSafeNow; // FailSafeSaveMoment
             SaveFailSafeNow    = false;                     // once should do it.
             break;
-        case 2:
-             SendBuffer[CHANNELSUSED + 2] = uint8_t2; // these are failsafe flags
-             SendBuffer[CHANNELSUSED + 3] = uint8_t1; // these are failsafe flags
-            break;
-       
-           
+        case 1:
+             SendBuffer[CHANNELSUSED + 1] = uint8_t2; // these are failsafe flags
+             SendBuffer[CHANNELSUSED + 2] = uint8_t1; // these are failsafe flags
             break;
         default: 
             break;

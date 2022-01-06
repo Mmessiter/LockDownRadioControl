@@ -262,27 +262,25 @@ void RebuildFlags(bool* f, uint16_t tb)
 /************************************************************************************************************/
 
 /**
- * Get radio parameters from received packet.
- * @note Each packet will have a ID number at the third byte in the packet.
- * This ID number will change a different parameter (which is determined by the PacketNumber number).
- * 
+ * extra parameters can be sent using the last four bytes in every data packet.
+ * the parameter sent is defined by the packet number.
  */
 void CheckParams()
 {
-    uint16_t TwoBytes = 0; 
-    PacketNumber = ReceivedData[CHANNELSUSED+1];  // Needed after all!  (+2 is still spare)
-    switch (PacketNumber) {                       // TODO since only two are needed, move these up 
-        case 1:
-             BindNow = ReceivedData[CHANNELSUSED + 3];
-             FailSafeSave = bool(ReceivedData[CHANNELSUSED + 2]);
+    uint16_t TwoBytes = 0;      
+    PacketNumber = ReceivedData[CHANNELSUSED];     
+    switch (PacketNumber) {     
+        case 0:
+             BindNow = ReceivedData[CHANNELSUSED + 2];
+             FailSafeSave = bool(ReceivedData[CHANNELSUSED + 1]);
                 if (FailSafeSave) {
                 TwoBytes = uint16_t(FS_byte2) + uint16_t(FS_byte1 << 8);
                 RebuildFlags(FailSafeChannel, TwoBytes);
             }
             break;
-        case 2:
-            FS_byte1 = ReceivedData[CHANNELSUSED + 2]; // These 2 bytes are 16 failsafe flags
-            FS_byte2 = ReceivedData[CHANNELSUSED + 3]; // These 2 bytes are 16 failsafe flags
+        case 1:
+            FS_byte1 = ReceivedData[CHANNELSUSED + 1]; // These 2 bytes are 16 failsafe flags
+            FS_byte2 = ReceivedData[CHANNELSUSED + 2]; // These 2 bytes are 16 failsafe flags
             break;
         default:
             break; 
