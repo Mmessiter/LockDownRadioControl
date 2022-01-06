@@ -65,8 +65,7 @@
 bool USE_BMP280 = false;    /** is BMP280 sensor connected */
 bool USE_INA219  = false;   //  Volts from INA219
 Adafruit_INA219 ina219;
-Adafruit_BMP280 bmp280; // I2C
-//BMP280_DEV      bmp280; /** The object to access the BMP280 sensor */
+Adafruit_BMP280 bmp280;      
 Servo           MCMServo[SERVOSUSED];
 uint8_t         PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 16}; // ten now, last 6 only via sbus
 SBUS            MySbus(SBUSPORT);
@@ -89,7 +88,8 @@ float    SavedTemperature;
 float    SavedVolts;
 bool     Radio1Exists = false;
 bool     Radio2Exists = false;
-uint32_t    SensorTime = 0;
+uint32_t SensorTime = 0;
+float    Qnh = 1018;                   //Pressure at sea level here and now
 
 /************************************************************************************************************/
 
@@ -312,14 +312,12 @@ void DoSensors()
     if ((millis()-SensorTime) < 2000) return;  // no need to measure too often
     SensorTime = millis();
     if (USE_BMP280) {
-
              if (BoundFlag) {
                  SavedTemperature = bmp280.readTemperature();
-                 SavedAltitude    = (bmp280.readAltitude(1019.9) * 3.28084);
+                 SavedAltitude    = (bmp280.readAltitude(Qnh) * 3.28084) - StartAltitude;  // TODO: Qnh needs user entry on startup
+                 if (SavedAltitude < 0) SavedAltitude = 0;
              }
-    
-    }
-       
+    }    
     if (USE_INA219) {
              if (BoundFlag) SavedVolts = ina219.getBusVoltage_V();     
     }
@@ -376,6 +374,8 @@ void InitBMP280()
     Adafruit_BMP280::SAMPLING_X16,                          /* Pressure oversampling */
     Adafruit_BMP280::FILTER_X16,                            /* Filtering. */ 
     Adafruit_BMP280::STANDBY_MS_500);                       /* Standby time. */
+
+    StartAltitude    = (bmp280.readAltitude(Qnh) * 3.28084);
 }
 /************************************************************************************************************/
 void SaveFailSafeData()

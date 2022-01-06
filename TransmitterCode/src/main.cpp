@@ -363,8 +363,8 @@ uint32_t GapShortest                  = 0;
 char     CalibrateNow[]               = "touch_j";
 char     ModelVolts[8]               = " ";
 float    RXModelVolts                 = 0;
-float    RXModelAltitude              = 0;
-float    RXMAXModelAltitude           = 0;
+int      RXModelAltitude              = 0;
+int      RXMAXModelAltitude           = 0;
 float    RXModelTemperature           = 0;
 char     ModelTemperature[8]         = " ";
 char     ModelAltitude[8]            = " ";
@@ -5579,10 +5579,10 @@ void GetRXVolts()
     AltitudeUnion.Val8[1] = AckPayload.Byte2; 
     AltitudeUnion.Val8[2] = AckPayload.Byte3; 
     AltitudeUnion.Val8[3] = AckPayload.Byte4; 
-    RXModelAltitude       = AltitudeUnion.Val32;  
+    RXModelAltitude       = int(AltitudeUnion.Val32);  
     if (RXMAXModelAltitude < RXModelAltitude) RXMAXModelAltitude = RXModelAltitude;
-    snprintf (MaxAltitude , 5, "%f", RXMAXModelAltitude);
-    snprintf (ModelAltitude, 5, "%f", RXModelAltitude);
+    snprintf (MaxAltitude , 5, "%d", RXMAXModelAltitude);
+    snprintf (ModelAltitude, 5, "%d", RXModelAltitude);
  }
 
 
