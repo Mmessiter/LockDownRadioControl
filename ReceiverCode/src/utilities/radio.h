@@ -12,36 +12,35 @@
 #define pinCSN2 20 // NRF2
 #define pinCE2  21 // NRF2
 
-#define FAILSAFE_TIMEOUT 2000    
+#define FAILSAFE_TIMEOUT 2000
 
-RF24  Radio1(pinCE1, pinCSN1);
-RF24  Radio2(pinCE2, pinCSN2);
-RF24* CurrentRadio = &Radio1;
-uint8_t ThisRadio  =       1;
+RF24    Radio1(pinCE1, pinCSN1);
+RF24    Radio2(pinCE2, pinCSN2);
+RF24*   CurrentRadio = &Radio1;
+uint8_t ThisRadio    = 1;
 
 uint64_t ThisPipe = 0xBABE1E5420LL; // default startup
 uint64_t NewPipe  = 0;
 uint64_t OldPipe  = 0;
 
-bool    Connected          = false;
-int     SearchStartTime    = 0;
-int     StillSearchingTime = 0;
+bool Connected          = false;
+int  SearchStartTime    = 0;
+int  StillSearchingTime = 0;
 
-
-bool    SaveNewBind        = true;
-uint8_t SavedPipeAddress[8];
+bool     SaveNewBind = true;
+uint8_t  SavedPipeAddress[8];
 uint32_t HopStart;
-uint8_t  NextChannelNumber=0;
+uint8_t  NextChannelNumber = 0;
 uint32_t RXTimeStamp;
 bool     HopNow = false;
 
-extern void   ShowHopDurationEtc();
-extern void   DoSensors();
-extern bool   Radio1Exists;
-extern bool   Radio2Exists;
-extern float  SavedAltitude;
-extern float  SavedVolts;
-extern float  SavedTemperature;
+extern void  ShowHopDurationEtc();
+extern void  DoSensors();
+extern bool  Radio1Exists;
+extern bool  Radio2Exists;
+extern float SavedAltitude;
+extern float SavedVolts;
+extern float SavedTemperature;
 
 /** AckPayload Stucture for data returned to transmitter. */
 struct Payload
@@ -55,35 +54,34 @@ struct Payload
      * AckPayload.Byte3           =  RXVERSION_MAJOR;
      * AckPayload.Byte4           =  RXVERSION_MINOR;
      * AckPayload.Byte5           =  RXVERSION_MINIMUS;
-    
-     * 
+
+     *
      * @note If Purpose = 2 then ...
      * @code
      * AckPayload.Byte1     = Time.Stamp8[0];       // Time stamp is 32 BIT divided up here.
-     * AckPayload.Byte2     = Time.Stamp8[1]; 
-     * AckPayload.Byte3     = Time.Stamp8[2]; 
-     * AckPayload.Byte4     = Time.Stamp8[3]; 
+     * AckPayload.Byte2     = Time.Stamp8[1];
+     * AckPayload.Byte3     = Time.Stamp8[2];
+     * AckPayload.Byte4     = Time.Stamp8[3];
      * AckPayload.Byte5     = Next array pointer for next channel
-     * 
+     *
      * * @note If Purpose = 3 then ...
      * @code
      * AckPayload.Byte1  ... Byte4   = Volts (float)      Byte5 is free
-    
+
      * @endcode
      **/
 
-
-    uint8_t Purpose         = 0;   // 0  Purpose  
-    uint8_t Byte1           = 0;   // 1  (was volt)  
-    uint8_t Byte2           = 0;   // 2  (was CurrentAltitude)
-    uint8_t Byte3           = 0;   // 3  (was ReportedPitch)
-    uint8_t Byte4           = 0;   // 4  (was ReportedRoll)
-    uint8_t Byte5           = 0;   // 5  (was ReportedYaw)
+    uint8_t Purpose = 0; // 0  Purpose
+    uint8_t Byte1   = 0; // 1  (was volt)
+    uint8_t Byte2   = 0; // 2  (was CurrentAltitude)
+    uint8_t Byte3   = 0; // 3  (was ReportedPitch)
+    uint8_t Byte4   = 0; // 4  (was ReportedRoll)
+    uint8_t Byte5   = 0; // 5  (was ReportedYaw)
 };
-Payload AckPayload;                                  /** object allocated for returned ACK data. */
-uint8_t AckPayloadSize = sizeof(AckPayload);         // Size for later externs if needed etc.
+Payload AckPayload;                          /** object allocated for returned ACK data. */
+uint8_t AckPayloadSize = sizeof(AckPayload); // Size for later externs if needed etc.
 
-uint8_t PacketNumber;                                /** A counter for packets between channel hops. */
+uint8_t PacketNumber; /** A counter for packets between channel hops. */
 
 uint32_t ConnectionStart;
 
@@ -93,11 +91,11 @@ uint32_t ConnectionStart;
 uint16_t ReceivedData[UNCOMPRESSEDWORDS]; //  20  words
 uint16_t PreviousData[UNCOMPRESSEDWORDS]; /** Previously received data (used for servos. Hence not used if unchanged) */
 
-extern void FailSafe(); // defined in main.cpp
+extern void     FailSafe(); // defined in main.cpp
 extern uint32_t ReconnectedMoment;
-extern bool BoundFlag;
-extern void ClearAckPayload();
-byte NextFrequency;
+extern bool     BoundFlag;
+extern void     ClearAckPayload();
+byte            NextFrequency;
 /************************************************************************************************************/
 
 void SetNewPipe()
@@ -118,11 +116,10 @@ void ReadSavedPipe()
 
 void LoadVersioNumber() // and which radio is currently in use
 {
-    AckPayload.Byte2     = ThisRadio;
-    AckPayload.Byte3     = RXVERSION_MAJOR;
-    AckPayload.Byte4     = RXVERSION_MINOR;
-    AckPayload.Byte5     = RXVERSION_MINIMUS;
-   
+    AckPayload.Byte2 = ThisRadio;
+    AckPayload.Byte3 = RXVERSION_MAJOR;
+    AckPayload.Byte4 = RXVERSION_MINOR;
+    AckPayload.Byte5 = RXVERSION_MINIMUS;
 }
 
 /************************************************************************************************************/
@@ -130,7 +127,7 @@ void LoadVersioNumber() // and which radio is currently in use
 /** Store bounded pipe address from the received pairing payload. */
 void GetNewPipe()
 {
-    NewPipe =  (uint64_t)ReceivedData[0] << 56;
+    NewPipe = (uint64_t)ReceivedData[0] << 56;
     NewPipe += (uint64_t)ReceivedData[1] << 48;
     NewPipe += (uint64_t)ReceivedData[2] << 40;
     NewPipe += (uint64_t)ReceivedData[3] << 32;
@@ -139,7 +136,6 @@ void GetNewPipe()
     NewPipe += (uint64_t)ReceivedData[6] << 8;
     NewPipe += (uint64_t)ReceivedData[7];
 }
-
 
 /************************************************************************************************************/
 
@@ -168,7 +164,8 @@ void GetOldPipe()
  * @param freq The next frequency to use.
  */
 
-void GetNextFrequency(){
+void GetNextFrequency()
+{
     NextFrequency = FHSS_Channels[NextChannelNumber];
 }
 
@@ -179,7 +176,7 @@ void HopToNextFrequency()
     CurrentRadio->stopListening();
     CurrentRadio->setChannel(NextFrequency);
     CurrentRadio->startListening();
-    delay(2);   // here we allow one EXTRA ms because tx will hop 1 ms or so later
+    delay(2); // here we allow one EXTRA ms because tx will hop 1 ms or so later
 #ifdef DEBUG
     ShowHopDurationEtc();
 #endif
@@ -190,19 +187,17 @@ void HopToNextFrequency()
 /** Initialize a radio transceiver. */
 bool InitCurrentRadio()
 {
-          CurrentRadio->begin();
-          CurrentRadio->enableAckPayload();       // needed
-          CurrentRadio->enableDynamicPayloads();  // needed
-          CurrentRadio->maskIRQ(1, 1, 1);         // no interrupts - seems NEEDED at the moment - (line *IS* connected)
-          CurrentRadio->setCRCLength(RF24_CRC_8); // could be 16 or disabled
-          CurrentRadio->setPALevel(RF24_PA_MAX);
-          CurrentRadio->setDataRate(RF24_250KBPS);
-          CurrentRadio->openReadingPipe(1, ThisPipe);
-          SaveNewBind = true;
-          HopStart = millis(); 
-          return true;                              // let's assume its connected
-      
-    
+    CurrentRadio->begin();
+    CurrentRadio->enableAckPayload();       // needed
+    CurrentRadio->enableDynamicPayloads();  // needed
+    CurrentRadio->maskIRQ(1, 1, 1);         // no interrupts - seems NEEDED at the moment - (line *IS* connected)
+    CurrentRadio->setCRCLength(RF24_CRC_8); // could be 16 or disabled
+    CurrentRadio->setPALevel(RF24_PA_MAX);
+    CurrentRadio->setDataRate(RF24_250KBPS);
+    CurrentRadio->openReadingPipe(1, ThisPipe);
+    SaveNewBind = true;
+    HopStart    = millis();
+    return true; // let's assume its connected
 }
 
 /************************************************************************************************************/
@@ -220,187 +215,198 @@ void ProdRadio()
     CurrentRadio->openReadingPipe(1, ThisPipe);
     CurrentRadio->setChannel(RECONNECT_CH);
     CurrentRadio->startListening();
-    delay(1);                           // This might help
+    delay(1); // This might help
 }
- #endif // defined (SECOND_TRANSCEIVER)
+#endif // defined (SECOND_TRANSCEIVER)
 
 /************************************************************************************************************/
 
-void Reconnect()  
+void Reconnect()
 {
-   // if (Radio1Exists) Serial.println ("R1 OK") ;
-   // if (Radio2Exists) Serial.println ("R2 OK") ;
+    // if (Radio1Exists) Serial.println ("R1 OK") ;
+    // if (Radio2Exists) Serial.println ("R2 OK") ;
 
-uint32_t TryTimer;
-uint8_t  ReconnectAttempts  = 0;
+    uint32_t TryTimer;
+    uint8_t  ReconnectAttempts = 0;
 
-            SearchStartTime = millis();
-            FailSafeSent = false; 
+    SearchStartTime = millis();
+    FailSafeSent    = false;
+    CurrentRadio->stopListening();
+    delay(1);
+    CurrentRadio->setChannel(RECONNECT_CH);
+    CurrentRadio->startListening();
+    delay(1);
+    if (CurrentRadio->available())
+    {
+        Connected = true;
+    }
+    while (!Connected)
+    {
+        ++ReconnectAttempts;
+#ifdef SECOND_TRANSCEIVER
+        if (ReconnectAttempts > 2)
+        {
             CurrentRadio->stopListening();
             delay(1);
-            CurrentRadio->setChannel(RECONNECT_CH);
-            CurrentRadio->startListening();
-            delay(1);   
-            if (CurrentRadio->available()) 
+            if (ThisRadio == 2)
             {
-                Connected = true;
+                CurrentRadio = &Radio1;
+                ThisRadio    = 1;
             }
-            while (!Connected)
+            else
             {
-                ++ReconnectAttempts;
-#ifdef SECOND_TRANSCEIVER
-                if  (ReconnectAttempts > 2)
-                { 
-                    CurrentRadio->stopListening();
-                    delay (1);
-                    if (ThisRadio == 2)
-                    {
-                        CurrentRadio = &Radio1;
-                        ThisRadio = 1;
-                    } else 
-                    {
-                        CurrentRadio = &Radio2;
-                        ThisRadio = 2;
-                    }
-                    ProdRadio();
-                    ReconnectAttempts = 0;
-                }
-#endif      // defined (SECOND_TRANSCEIVER)
-                TryTimer  = millis();       
-                while ((!CurrentRadio->available()) && (millis()-TryTimer) < 100){  }  // wait a mo during attempt to connect ...
-                if (CurrentRadio->available()) Connected = true;
-                if (!Connected)
+                CurrentRadio = &Radio2;
+                ThisRadio    = 2;
+            }
+            ProdRadio();
+            ReconnectAttempts = 0;
+        }
+#endif // defined (SECOND_TRANSCEIVER)
+        TryTimer = millis();
+        while ((!CurrentRadio->available()) && (millis() - TryTimer) < 100) {
+        } // wait a mo during attempt to connect ...
+        if (CurrentRadio->available()) Connected = true;
+        if (!Connected)
+        {
+            StillSearchingTime = millis() - SearchStartTime;
+            if (StillSearchingTime > FAILSAFE_TIMEOUT)
+            {
+                if (!FailSafeSent)
                 {
-                    StillSearchingTime = millis() - SearchStartTime;
-                    if (StillSearchingTime >FAILSAFE_TIMEOUT) 
-                    {
-                        if (!FailSafeSent)
-                        {
-                            FailSafe();
-                            FailSafeSent = true; // Once is enough
-                        }
-                    }
+                    FailSafe();
+                    FailSafeSent = true; // Once is enough
                 }
             }
-            ConnectionStart=millis();
-            StillSearchingTime = 0;
-            ReconnectedMoment=ConnectionStart;        // Save this moment, then don't move a servo for a few ms ...
-}
-/************************************************************************************************************/
-void LoadTimeStamp(){              // This will load time stamp and array index for return to TX for synch purposes 
-
-#define HOPTIME         55          // ms between channel changes
-#define FREQUENCYSCOUNT 82          // use 82 different channels
-
-    union                           // union used to allow access to each byte of 32 bit value     
-    {uint32_t Stamp32; 
-        uint8_t  Stamp8[4];
-    }Time;                         
-
-    Time.Stamp32  = millis() - HopStart;
-    RXTimeStamp = Time.Stamp32;
-    if (RXTimeStamp >= HOPTIME) {
-            HopStart = millis();
-            Time.Stamp32 = 0;
-            RXTimeStamp = 0;
-            ++NextChannelNumber;
-            if (NextChannelNumber >= FREQUENCYSCOUNT) {NextChannelNumber = 1;} // Zero will mean error (so that element not used)
-            GetNextFrequency();
-            HopNow = true;      // Set flag and hop when ready *** BUT NOT BEFORE ****  !!!!!
-           
+        }
     }
-    AckPayload.Byte1         =  Time.Stamp8[0];                        // These values are herewith delivered to Transmitter in Ack Payload
-    AckPayload.Byte2         =  Time.Stamp8[1]; 
-    AckPayload.Byte3         =  Time.Stamp8[2]; 
-    AckPayload.Byte4         =  Time.Stamp8[3]; 
-    AckPayload.Byte5         =  NextChannelNumber;    
+    ConnectionStart    = millis();
+    StillSearchingTime = 0;
+    ReconnectedMoment  = ConnectionStart; // Save this moment, then don't move a servo for a few ms ...
+}
+/************************************************************************************************************/
+void LoadTimeStamp()
+{ // This will load time stamp and array index for return to TX for synch purposes
+
+#define HOPTIME         55 // ms between channel changes
+#define FREQUENCYSCOUNT 82 // use 82 different channels
+
+    union // union used to allow access to each byte of 32 bit value
+    {
+        uint32_t Stamp32;
+        uint8_t  Stamp8[4];
+    } Time;
+
+    Time.Stamp32 = millis() - HopStart;
+    RXTimeStamp  = Time.Stamp32;
+    if (RXTimeStamp >= HOPTIME) {
+        HopStart     = millis();
+        Time.Stamp32 = 0;
+        RXTimeStamp  = 0;
+        ++NextChannelNumber;
+        if (NextChannelNumber >= FREQUENCYSCOUNT) {
+            NextChannelNumber = 1;
+        } // Zero will mean error (so that element not used)
+        GetNextFrequency();
+        HopNow = true; // Set flag and hop when ready *** BUT NOT BEFORE ****  !!!!!
+    }
+    AckPayload.Byte1 = Time.Stamp8[0]; // These values are herewith delivered to Transmitter in Ack Payload
+    AckPayload.Byte2 = Time.Stamp8[1];
+    AckPayload.Byte3 = Time.Stamp8[2];
+    AckPayload.Byte4 = Time.Stamp8[3];
+    AckPayload.Byte5 = NextChannelNumber;
 }
 
 /************************************************************************************************************/
 
-void LoadRXVolts(){
-     union                                                                       // union used to allow access to each byte of 32 bit float     
-    {float Val32; 
-        uint8_t  Val8[4];
-    }RXVolts;   
+void LoadRXVolts()
+{
+    union // union used to allow access to each byte of 32 bit float
+    {
+        float   Val32;
+        uint8_t Val8[4];
+    } RXVolts;
 
-    RXVolts.Val32            =  SavedVolts;
-    AckPayload.Byte1         =  RXVolts.Val8[0];                        // These values are herewith delivered to Transmitter in Ack Payload
-    AckPayload.Byte2         =  RXVolts.Val8[1]; 
-    AckPayload.Byte3         =  RXVolts.Val8[2]; 
-    AckPayload.Byte4         =  RXVolts.Val8[3]; 
+    RXVolts.Val32    = SavedVolts;
+    AckPayload.Byte1 = RXVolts.Val8[0]; // These values are herewith delivered to Transmitter in Ack Payload
+    AckPayload.Byte2 = RXVolts.Val8[1];
+    AckPayload.Byte3 = RXVolts.Val8[2];
+    AckPayload.Byte4 = RXVolts.Val8[3];
 }
 
 /************************************************************************************************************/
- void LoadAltitude(){
+void LoadAltitude()
+{
 
-  union                                                                       // union used to allow access to each byte of 32 bit float     
-    {float Val32; 
-        uint8_t  Val8[4];
-    }AltitudeUnion;   
+    union // union used to allow access to each byte of 32 bit float
+    {
+        float   Val32;
+        uint8_t Val8[4];
+    } AltitudeUnion;
 
-    AltitudeUnion.Val32      =  SavedAltitude;
-    AckPayload.Byte1         =  AltitudeUnion.Val8[0];                        // These values are herewith delivered to Transmitter in Ack Payload
-    AckPayload.Byte2         =  AltitudeUnion.Val8[1]; 
-    AckPayload.Byte3         =  AltitudeUnion.Val8[2]; 
-    AckPayload.Byte4         =  AltitudeUnion.Val8[3]; 
- }
- 
+    AltitudeUnion.Val32 = SavedAltitude;
+    AckPayload.Byte1    = AltitudeUnion.Val8[0]; // These values are herewith delivered to Transmitter in Ack Payload
+    AckPayload.Byte2    = AltitudeUnion.Val8[1];
+    AckPayload.Byte3    = AltitudeUnion.Val8[2];
+    AckPayload.Byte4    = AltitudeUnion.Val8[3];
+}
+
 /************************************************************************************************************/
 
- void  LoadTemperature(){
-union                                                                       // union used to allow access to each byte of 32 bit float     
-    {float Val32; 
-        uint8_t  Val8[4];
-    }TemperatureUnion;   
-    TemperatureUnion.Val32   =  SavedTemperature;
-    AckPayload.Byte1         =  TemperatureUnion.Val8[0];                        // These values are herewith delivered to Transmitter in Ack Payload
-    AckPayload.Byte2         =  TemperatureUnion.Val8[1]; 
-    AckPayload.Byte3         =  TemperatureUnion.Val8[2]; 
-    AckPayload.Byte4         =  TemperatureUnion.Val8[3]; 
- }
+void LoadTemperature()
+{
+    union // union used to allow access to each byte of 32 bit float
+    {
+        float   Val32;
+        uint8_t Val8[4];
+    } TemperatureUnion;
+    TemperatureUnion.Val32 = SavedTemperature;
+    AckPayload.Byte1       = TemperatureUnion.Val8[0]; // These values are herewith delivered to Transmitter in Ack Payload
+    AckPayload.Byte2       = TemperatureUnion.Val8[1];
+    AckPayload.Byte3       = TemperatureUnion.Val8[2];
+    AckPayload.Byte4       = TemperatureUnion.Val8[3];
+}
 
 /************************************************************************************************************/
 
 void LoadAckPayload()
 {
-    AckPayload.Purpose &= 0x7F;                         // Clear hi bit ( = do not ignore)
-    ++AckPayload.Purpose;                               // 0 = ...
-                                                        // 1 =  Version number
-                                                        // 2 =  Time stamp for FHSS
-                                                        // 3 =  RX lipo Voltage
-                                                        // More later ... CAN EXPAND TO 127 if needed :-)!
-                                        
-    if (AckPayload.Purpose > 7) AckPayload.Purpose = 0;    // 7 is currently the max 
-    
-    switch (AckPayload.Purpose){
-            case 0:                                         //  if 0 send synch time stamp
-                LoadTimeStamp();                             
-                break;                                       
-            case 1:                                         //  if 1 send version info AND RX number
-                LoadVersioNumber();                         
-                break;
-            case 2:                                         //  if 2 send synch time stamp
-                LoadTimeStamp();                           
-                break;
-            case 3:                                         //  if 3 send send rx lipo volts
-                LoadRXVolts();                             
-                break;
-            case 4:                                         //  if 4 send synch time stamp
-                LoadTimeStamp();                             
-                break;
-            case 5:                                         //  if 5 send synch time stamp
-                LoadAltitude();
-                break;
-            case 6:                                         //  if 4 send synch time stamp
-                LoadTimeStamp();                             
-                break;
-            case 7:                                         //  if 5 send synch time stamp
-                LoadTemperature();
-                break;
-           
-            default:
-                break;
+    AckPayload.Purpose &= 0x7F; // Clear hi bit ( = do not ignore)
+    ++AckPayload.Purpose;       // 0 = ...
+                                // 1 =  Version number
+                                // 2 =  Time stamp for FHSS
+                                // 3 =  RX lipo Voltage
+                                // More later ... CAN EXPAND TO 127 if needed :-)!
+
+    if (AckPayload.Purpose > 7) AckPayload.Purpose = 0; // 7 is currently the max
+
+    switch (AckPayload.Purpose) {
+        case 0: //  if 0 send synch time stamp
+            LoadTimeStamp();
+            break;
+        case 1: //  if 1 send version info AND RX number
+            LoadVersioNumber();
+            break;
+        case 2: //  if 2 send synch time stamp
+            LoadTimeStamp();
+            break;
+        case 3: //  if 3 send send rx lipo volts
+            LoadRXVolts();
+            break;
+        case 4: //  if 4 send synch time stamp
+            LoadTimeStamp();
+            break;
+        case 5: //  if 5 send synch time stamp
+            LoadAltitude();
+            break;
+        case 6: //  if 4 send synch time stamp
+            LoadTimeStamp();
+            break;
+        case 7: //  if 5 send synch time stamp
+            LoadTemperature();
+            break;
+
+        default:
+            break;
     }
 }
 /**

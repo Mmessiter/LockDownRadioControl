@@ -72,8 +72,8 @@ void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, int uncompre
 
 void TryOtherPipe()
 {
-    if (TotalledRecentPacketsLost > 10 || (!BoundFlag))  {        // This avoids needless pipe swapping during poor connection
-        if (BoundFlag == true) {  
+    if (TotalledRecentPacketsLost > 10 || (!BoundFlag)) { // This avoids needless pipe swapping during poor connection
+        if (BoundFlag == true) {
             BoundFlag = false;
             SetThePipe(DefaultPipe);
         }
@@ -81,86 +81,85 @@ void TryOtherPipe()
         {
             BoundFlag = true;
             SetThePipe(NewPipe);
-        }    
-   }
+        }
+    }
 }
-
 
 /************************************************************************************************************/
 
 void BufferNewPipe()
 {
-            SendBuffer[0] = (uint8_t)((NewPipe >> 56) & 0xFF); // if not yet bound, send pipe
-            SendBuffer[1] = (uint8_t)((NewPipe >> 48) & 0xFF);
-            SendBuffer[2] = (uint8_t)((NewPipe >> 40) & 0xFF);
-            SendBuffer[3] = (uint8_t)((NewPipe >> 32) & 0xFF);
-            SendBuffer[4] = (uint8_t)((NewPipe >> 24) & 0xFF);
-            SendBuffer[5] = (uint8_t)((NewPipe >> 16) & 0xFF);
-            SendBuffer[6] = (uint8_t)((NewPipe >> 8) & 0xFF);
-            SendBuffer[7] = (uint8_t)((NewPipe)&0xFF);
+    SendBuffer[0] = (uint8_t)((NewPipe >> 56) & 0xFF); // if not yet bound, send pipe
+    SendBuffer[1] = (uint8_t)((NewPipe >> 48) & 0xFF);
+    SendBuffer[2] = (uint8_t)((NewPipe >> 40) & 0xFF);
+    SendBuffer[3] = (uint8_t)((NewPipe >> 32) & 0xFF);
+    SendBuffer[4] = (uint8_t)((NewPipe >> 24) & 0xFF);
+    SendBuffer[5] = (uint8_t)((NewPipe >> 16) & 0xFF);
+    SendBuffer[6] = (uint8_t)((NewPipe >> 8) & 0xFF);
+    SendBuffer[7] = (uint8_t)((NewPipe)&0xFF);
 }
 /************************************************************************************************************/
 
 void SendData()
 {
-    if (Nextion.available()) return;   // was a button pressed?
-   
+    if (Nextion.available()) return; // was a button pressed?
+
     if ((millis() - TxPace) >= PACEMAKER) {
         TxPace = millis();
         get_new_channels_values(); // Load SendBuffer with new servo positions
-        
-        if (DoSbusSendOnly)       // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
+
+        if (DoSbusSendOnly) // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
         {
             ReadSwitches();
-            MapToSBUS(); 
+            MapToSBUS();
             ShowComms();
-            return;               // no more to do here!
+            return; // no more to do here!
         }
 
-        if (BuddyMaster)          // If buddy master, check where student's sticks etc. are.
+        if (BuddyMaster) // If buddy master, check where student's sticks etc. are.
         {
-           GetSlaveChannelValues();
+            GetSlaveChannelValues();
         }
-     
-        if (!BoundFlag && !(CurrentView == CalibrateView) && !(CurrentView == SticksView)) 
-            {
-            BufferNewPipe();       // if not yet bound, send our pipe
-            }
-        LoadPacketData();          // extra parameters appended to the data packet    
+
+        if (!BoundFlag && !(CurrentView == CalibrateView) && !(CurrentView == SticksView))
+        {
+            BufferNewPipe(); // if not yet bound, send our pipe
+        }
+        LoadPacketData(); // extra parameters appended to the data packet
         if (LostContactFlag) {
-                if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {
-                        TryOtherPipe();
-                        PipeTimeout=millis();
-                }
-                NextFrequency = RECONNECT_CH;
-                HopToNextFrequency();
+            if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {
+                TryOtherPipe();
+                PipeTimeout = millis();
+            }
+            NextFrequency = RECONNECT_CH;
+            HopToNextFrequency();
         }
-        Connected = false;      
-        Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);        // Compress 32 bytes down to 24
-        Radio1.flush_rx();                                              // This avoids a lockup that happens when the FIFO gets full.
-        Radio1.flush_tx();                                              // This avoids a lockup that happens when the FIFO gets full.
-//  *************************************** SEND *************************************************************************************
-        Radio1.write(&CompressedData, SizeOfCompressedData);  //  ****************************** !SEND! ******************************     
-//  *************************************** SEND *************************************************************************************
-        if (Radio1.isAckPayloadAvailable()) 
-               {
-                    Radio1.read(&AckPayload, AckPayloadSize);         //  "sizeof" doesn't work with externs, hence 2 new vars.
-                    ++RangeTestGoodPackets;
-                    LostContactFlag = false;
-                    ++PacketNumber;
-                    ParseAckPayload();
-                    RecentPacketsLost = 0;
-                    TotalledRecentPacketsLost =0;
-                    Connected = true;
-                    if (BoundFlag) GreenLedOn();    
-                    CheckGapsLength();
-                    StartInactvityTimeout();
-               }
-        else 
-               {
-                    FailedPacket();  
-               }
-    } 
+        Connected = false;
+        Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24
+        Radio1.flush_rx();                                       // This avoids a lockup that happens when the FIFO gets full.
+        Radio1.flush_tx();                                       // This avoids a lockup that happens when the FIFO gets full.
+                                                                 //  *************************************** SEND *************************************************************************************
+        Radio1.write(&CompressedData, SizeOfCompressedData);     //  ****************************** !SEND! ******************************
+                                                                 //  *************************************** SEND *************************************************************************************
+        if (Radio1.isAckPayloadAvailable())
+        {
+            Radio1.read(&AckPayload, AckPayloadSize); //  "sizeof" doesn't work with externs, hence 2 new vars.
+            ++RangeTestGoodPackets;
+            LostContactFlag = false;
+            ++PacketNumber;
+            ParseAckPayload();
+            RecentPacketsLost         = 0;
+            TotalledRecentPacketsLost = 0;
+            Connected                 = true;
+            if (BoundFlag) GreenLedOn();
+            CheckGapsLength();
+            StartInactvityTimeout();
+        }
+        else
+        {
+            FailedPacket();
+        }
+    }
 }
 
 /************************************************************************************************************/
@@ -214,16 +213,13 @@ void ScanAllChannels()
     }
 }
 
-
-
 /************************************************************************************************************/
 
 void HopToNextFrequency()
 {
-  
-    
+
     Radio1.setChannel(NextFrequency);
-    Radio1.stopListening(); 
+    Radio1.stopListening();
     delay(1);
     ReadSwitches();
     CheckTimer(); // update timer if on
@@ -243,8 +239,8 @@ void HopToNextFrequency()
     Serial.println(ThisRadio);
     PStartTime = millis();
 #endif
-    ThisFrequency  = NextFrequency;
-    PacketNumber = 0;
+    ThisFrequency = NextFrequency;
+    PacketNumber  = 0;
 }
 
 /*********************************************************************************************************************************/
@@ -254,17 +250,17 @@ void InitRadio(uint64_t Pipe)
     Radio1.begin();
     Radio1.setPALevel(RF24_PA_MAX);
     Radio1.setDataRate(RF24_250KBPS);
-    Radio1.enableAckPayload();                        
-    Radio1.openWritingPipe(Pipe);                     // Current Pipe address used for Binding
-    Radio1.setRetries(RETRYCOUNT, RETRYWAIT);         // automatic retries and pauses *** WAS 15,15 *** !! 
-    Radio1.stopListening();          
+    Radio1.enableAckPayload();
+    Radio1.openWritingPipe(Pipe);             // Current Pipe address used for Binding
+    Radio1.setRetries(RETRYCOUNT, RETRYWAIT); // automatic retries and pauses *** WAS 15,15 *** !!
+    Radio1.stopListening();
     delay(1);
-    Radio1.enableDynamicPayloads();  
+    Radio1.enableDynamicPayloads();
     Radio1.setAddressWidth(5);       // was 4, is now 5
     Radio1.setCRCLength(RF24_CRC_8); // could be 16
     PipeTimeout = millis();          // Initialise timeout
     GapSum      = 0;
-    HopStart = millis()+2;
+    HopStart    = millis() + 2;
 }
 /*********************************************************************************************************************************/
 
@@ -272,8 +268,8 @@ void SetThePipe(uint64_t WhichPipe)
 {
     Radio1.openWritingPipe(WhichPipe);
     Radio1.stopListening();
-    delay (1);  // alllow things to happen
- }
+    delay(1); // alllow things to happen
+}
 
 /*********************************************************************************************************************************/
 
@@ -281,7 +277,7 @@ void DoScanInit()
 {
     Radio1.setDataRate(RF24_1MBPS); // Scan only works at this default rate
     CurrentMode = SCANWAVEBAND;     // Fhss == No transmitting please, we are scanning.
-    BoundFlag = false;
+    BoundFlag   = false;
     SendCommand(NoSleeping);
     for (i = 0; i < 125; i++) {
         NoCarrier[i]   = 0;

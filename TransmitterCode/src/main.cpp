@@ -43,7 +43,7 @@
  * | 3  LED    | GREEN |
  * | 4  LED    | BLUE |
  * | 5  POLOLU | 2808 ALL POWER OFF SIGNAL (When high) |
- * | 6  (!! SPARE !!)   
+ * | 6  (!! SPARE !!)
  * | 7  (RX2)  | SBUS IN    ------> BUDDY BOX SYSTEM (still under developement) |
  * | 8  (TX2)  | SBUS OUT   ------> BUDDY BOX SYSTEM (still under developement) |
  * | 9  (CE)   | nRF24l01 (CE) |
@@ -61,7 +61,7 @@
  * | 21 (A7)   | POT KNOB CH6 |
  * | 22 (A8)   | POT KNOB CH7 |
  * | 23 (A9)   | POT KNOB CH8 |
- * | 24 (!! SPARE !!)   
+ * | 24 (!! SPARE !!)
  * | 25        | Switch 1 |
  * | 26        | Switch 1 |
  * | 27        | Switch 2 |
@@ -70,15 +70,15 @@
  * | 30        | Switch 3 |
  * | 31        | Switch 4 |
  * | 32        | Switch 4 |
- * | 33 (!! SPARE !!)   
- * | 34 (!! SPARE !! RX8)   
- * | 35 (!! SPARE !! TX8)   
- * | 36 (!! SPARE !!)  
- * | 37 (!! SPARE !!)  
- * | 38 (!! SPARE !!)  
- * | 39 (!! SPARE !!) 
- * | 40 (!! SPARE !!)  
- * | 41 (!! SPARE !!)   
+ * | 33 (!! SPARE !!)
+ * | 34 (!! SPARE !! RX8)
+ * | 35 (!! SPARE !! TX8)
+ * | 36 (!! SPARE !!)
+ * | 37 (!! SPARE !!)
+ * | 38 (!! SPARE !!)
+ * | 39 (!! SPARE !!)
+ * | 40 (!! SPARE !!)
+ * | 41 (!! SPARE !!)
  * @see TransmitterCode/src/main.cpp
  */
 // ************************************************** TRANSMITTER CODE **************************************************
@@ -94,7 +94,7 @@
 #define CE_PIN             9                   // for SPI to nRF24L01
 #define CSN_PIN            10                  // for SPI to nRF24L01
 #define INACTIVITYTIMEOUT  10                  // Default time after which to switch off
-#define INACTIVITYMINIMUM  5  * TICKSPERMINUTE // Inactivity timeout minimum is 5 minutes
+#define INACTIVITYMINIMUM  5 * TICKSPERMINUTE  // Inactivity timeout minimum is 5 minutes
 #define INACTIVITYMAXIMUM  30 * TICKSPERMINUTE // Inactivity timeout maximum is 30 minutes
 #define DS1307_ADDRESS     0x68
 
@@ -108,8 +108,8 @@
 
 // VALUES FOR MAX SERVO RESOLUTION
 
-#define MINMICROS       500 
-#define MAXMICROS       2500 
+#define MINMICROS       500
+#define MAXMICROS       2500
 #define HALFMICROSRANGE (MAXMICROS - MINMICROS) / 2 //  = 500
 #define MIDMICROS       MINMICROS + HALFMICROSRANGE
 
@@ -201,7 +201,6 @@ WDT_T4<WDT3>  TeensyWatchDog;
 WDT_timings_t WatchDogConfig;
 #endif
 
-
 SBUS     MySbus(SBUSPORT);
 uint16_t SbusChannels[CHANNELSUSED + 2]; // a few spare
 uint32_t SBUSTimer = 0;
@@ -229,7 +228,7 @@ uint8_t       PacketNumber     = 0;
 
 // ************************************* AckPayload structure ******************************************************
 
-  /**
+/**
      * This byte (Purpose) determines what the remainder represent.
      * @warning Highest BIT of Purpose means **IGNORE IF ON**
      * @note If Purpose = 1 then ...
@@ -238,32 +237,32 @@ uint8_t       PacketNumber     = 0;
      * AckPayload.Byte3           =  RXVERSION_MAJOR;
      * AckPayload.Byte4           =  RXVERSION_MINOR;
      * AckPayload.Byte5           =  RXVERSION_MINIMUS;
-    
-     * 
+
+     *
      * @note If Purpose = 2 then ...
      * @code
      * AckPayload.Byte1     = Time.Val8[0];       // Time stamp is 32 BIT divided up here.
-     * AckPayload.Byte2     = Time.Val8[1]; 
-     * AckPayload.Byte3     = Time.Val8[2]; 
-     * AckPayload.Byte4     = Time.Val8[3]; 
+     * AckPayload.Byte2     = Time.Val8[1];
+     * AckPayload.Byte3     = Time.Val8[2];
+     * AckPayload.Byte4     = Time.Val8[3];
      * AckPayload.Byte5     = Next array pointer for next channel
-     * 
+     *
      * * @note If Purpose = 3 then ...
      * @code
      * AckPayload.Byte1  ... Byte4   = Volts (float)      Byte5 is free
-    
+
      * @endcode
      **/
 
 struct Payload
 {
-    uint8_t Purpose;                   // Defines meaning of the remainder
-                                       // Highest BIT of Purpose means Ignore IF ON
-    uint8_t Byte1;                     // (was volt)
-    uint8_t Byte2;                     // (was CurrentAltitude)
-    uint8_t Byte3;                     // (was Pitch)
-    uint8_t Byte4;                     // (was Roll)
-    uint8_t Byte5;                     // (was Yaw)
+    uint8_t Purpose; // Defines meaning of the remainder
+                     // Highest BIT of Purpose means Ignore IF ON
+    uint8_t Byte1;   // (was volt)
+    uint8_t Byte2;   // (was CurrentAltitude)
+    uint8_t Byte3;   // (was Pitch)
+    uint8_t Byte4;   // (was Roll)
+    uint8_t Byte5;   // (was Yaw)
 };
 Payload AckPayload;
 
@@ -282,11 +281,11 @@ uint8_t  MidLowDegrees[5][CHANNELSUSED + 1]; //    MidLow Degrees (45?)
 uint8_t  MinDegrees[5][CHANNELSUSED + 1];    //    Max Degrees (0?)
 uint8_t  FlightMode         = 1;
 uint8_t  PreviousFlightMode = 1;
-int      ChannelMax[CHANNELSUSED + 1];       //    output of pots at max
-int      ChannelMidHi[CHANNELSUSED + 1];     //    output of pots at MidHi
-int      ChannelCentre[CHANNELSUSED + 1];    //    output of pots at Centre
-int      ChannelMidLow[CHANNELSUSED + 1];    //    output of pots at MidLow
-int      ChannelMin[CHANNELSUSED + 1];       //    output of pots at min
+int      ChannelMax[CHANNELSUSED + 1];    //    output of pots at max
+int      ChannelMidHi[CHANNELSUSED + 1];  //    output of pots at MidHi
+int      ChannelCentre[CHANNELSUSED + 1]; //    output of pots at Centre
+int      ChannelMidLow[CHANNELSUSED + 1]; //    output of pots at MidLow
+int      ChannelMin[CHANNELSUSED + 1];    //    output of pots at min
 int      ChanneltoSet     = 0;
 bool     Connected        = false;
 uint8_t  ShowCommsCounter = 0;
@@ -297,19 +296,19 @@ double yPoints[5];
 double xPoint = 0;
 double yPoint = 0;
 
-int     BoxOffset = 35;
-int     BoxSize   = 395;
-int     BoxBottom;
-int     BoxTop;
-int     BoxLeft;
-int     BoxRight;
-int     ClickX;
-int     ClickY;
-bool    CalibratedYet                = false;
-int     AnalogueInput[PROPOCHANNELS] = {A0, A1, A2, A3, A6, A7, A8, A9}; // PROPO Channels for transmission
-uint8_t CurrentMode                  = NORMAL;
-uint8_t AllChannels[127]; /// for scanning
-uint8_t NoCarrier[127];
+int           BoxOffset = 35;
+int           BoxSize   = 395;
+int           BoxBottom;
+int           BoxTop;
+int           BoxLeft;
+int           BoxRight;
+int           ClickX;
+int           ClickY;
+bool          CalibratedYet                = false;
+int           AnalogueInput[PROPOCHANNELS] = {A0, A1, A2, A3, A6, A7, A8, A9}; // PROPO Channels for transmission
+uint8_t       CurrentMode                  = NORMAL;
+uint8_t       AllChannels[127]; /// for scanning
+uint8_t       NoCarrier[127];
 uint8_t       ScanStart   = 1;
 uint8_t       ScanEnd     = 125;
 unsigned long TimerMillis = 0;
@@ -328,52 +327,51 @@ unsigned int txm  = 0; // SD memory for tx
 unsigned int mxm  = 0; // SD memory per model
 unsigned int addr = 0; // for SD
 
-char     FrontView_Hours[]            = "Hours";
-char     FrontView_Mins[]             = "Mins";
-char     FrontView_Secs[]             = "Secs";
-char     page_FrontView[]             = "page FrontView";
-char     page_FhssView[]              = "page FhssView";
-char     FhssView_Rlow[]              = "FHSSLow";
-char     FhssView_Rhigh[]             = "FHSSHigh";
-char     BindScreenBox[]              = "BindStatus";
-char     NextionSleepTime[]           = "thsp=";
-char     NextionWakeOnTouch[]         = "thup=1";
-char     NextionSleepNow[]            = "sleep=1";
-char     NextionWakeUp[]              = "sleep=0";
-char     ScreenViewTimeout[]          = "Sto";
-char     NoSleeping[]                 = "thsp=0";
-int      ScreenTimeout                = 120; // Screen has two minute timeout by default
-char     HtextCMD[]                   = "click HelpText,0";
-int      LastLinePosition             = 0;
-uint8_t  RXCellCount                  = 2;
-bool     JustHoppedFlag               = true;
-bool     LostContactFlag              = true;
-uint8_t  RecentPacketsLost            = 0;
-uint32_t TotalledRecentPacketsLost    = 0;
-long int RecoveryTimer                = 0;
-bool     ReconnectingFlag             = true;
-int      ReconnectTime                = 0;
-uint32_t GapSum                       = 0;
-uint32_t GapLongest                   = 0;
-uint32_t GapStart                     = 0;
-uint32_t ThisGap                      = 0;
-uint32_t GapAverage                   = 0;
-uint32_t GapCount                     = 0;
-uint32_t GapShortest                  = 0;
-char     CalibrateNow[]               = "touch_j";
+char     FrontView_Hours[]           = "Hours";
+char     FrontView_Mins[]            = "Mins";
+char     FrontView_Secs[]            = "Secs";
+char     page_FrontView[]            = "page FrontView";
+char     page_FhssView[]             = "page FhssView";
+char     FhssView_Rlow[]             = "FHSSLow";
+char     FhssView_Rhigh[]            = "FHSSHigh";
+char     BindScreenBox[]             = "BindStatus";
+char     NextionSleepTime[]          = "thsp=";
+char     NextionWakeOnTouch[]        = "thup=1";
+char     NextionSleepNow[]           = "sleep=1";
+char     NextionWakeUp[]             = "sleep=0";
+char     ScreenViewTimeout[]         = "Sto";
+char     NoSleeping[]                = "thsp=0";
+int      ScreenTimeout               = 120; // Screen has two minute timeout by default
+char     HtextCMD[]                  = "click HelpText,0";
+int      LastLinePosition            = 0;
+uint8_t  RXCellCount                 = 2;
+bool     JustHoppedFlag              = true;
+bool     LostContactFlag             = true;
+uint8_t  RecentPacketsLost           = 0;
+uint32_t TotalledRecentPacketsLost   = 0;
+long int RecoveryTimer               = 0;
+bool     ReconnectingFlag            = true;
+int      ReconnectTime               = 0;
+uint32_t GapSum                      = 0;
+uint32_t GapLongest                  = 0;
+uint32_t GapStart                    = 0;
+uint32_t ThisGap                     = 0;
+uint32_t GapAverage                  = 0;
+uint32_t GapCount                    = 0;
+uint32_t GapShortest                 = 0;
+char     CalibrateNow[]              = "touch_j";
 char     ModelVolts[8]               = " ";
-float    RXModelVolts                 = 0;
-int      RXModelAltitude              = 0;
-int      RXMAXModelAltitude           = 0;
-float    RXModelTemperature           = 0;
+float    RXModelVolts                = 0;
+int      RXModelAltitude             = 0;
+int      RXMAXModelAltitude          = 0;
+float    RXModelTemperature          = 0;
 char     ModelTemperature[8]         = " ";
 char     ModelAltitude[8]            = " ";
 char     MaxAltitude[8]              = " ";
-float    MaxAlt                       = 0;
+float    MaxAlt                      = 0;
 char     ReceiverVersionNumber[8]    = " ";
 char     TransmitterVersionNumber[8] = " ";
-char     deletedmodel[]               = "Deleted";
-
+char     deletedmodel[]              = "Deleted";
 
 File ModelsFileNumber;
 
@@ -404,7 +402,6 @@ char TrimView_r1[]  = "r1";
 char TrimView_r2[]  = "r2";
 char TrimView_r3[]  = "r3";
 char TrimView_r4[]  = "r4";
-
 
 uint8_t FMSwitch   = FLIGHTMODESWITCH;
 uint8_t AutoSwitch = AUTOSWITCH;
@@ -447,9 +444,9 @@ bool     FailSafeChannel[CHANNELSUSED];
 bool     SaveFailSafeNow                = false;
 char     ChannelNames[CHANNELSUSED][11] = {{"Aileron"}, {"Elevator"}, {"Throttle"}, {"Rudder"}, {"Gear"}, {"AUX1"}, {"AUX2"}, {"AUX3"}, {"AUX4"}, {"AUX5"}, {"AUX6"}, {"AUX7"}, {"AUX8"}, {"AUX9"}, {"AUX10"}, {"AUX11"}};
 
-bool     VoltsDetected = false;
-bool     TXWarningFlag = false;
-bool     RXWarningFlag = false;
+bool VoltsDetected = false;
+bool TXWarningFlag = false;
+bool RXWarningFlag = false;
 
 uint32_t TxOnTime      = 0;
 uint32_t TxPace        = 0;
@@ -467,14 +464,14 @@ int          LastDogKick  = 0;
 uint8_t      MacAddress[6];
 char         DateTime[] = "DateTime";
 
-int      XtouchPlace = 0;     // Clicked X
-int      YtouchPlace = 0;     // Clicked Y
-uint8_t  zero        = 0x00;  
+int      XtouchPlace = 0; // Clicked X
+int      YtouchPlace = 0; // Clicked Y
+uint8_t  zero        = 0x00;
 bool     BindButton  = false;
 uint32_t TXTimeStamp;
 uint32_t HopStart;
-uint8_t  PreviousChannelNumber = 0 ;
-uint8_t  NextChannelNumber = 0;
+uint8_t  PreviousChannelNumber = 0;
+uint8_t  NextChannelNumber     = 0;
 
 // changing these four valiables controls LED blink and speed
 
@@ -483,53 +480,52 @@ float    BlinkHertz    = 1;
 uint32_t BlinkTimer    = 0;
 uint8_t  BlinkOnPhase  = 1;
 bool     LedWasGreen   = false;
-char     ThisRadio[4] = "0 ";
+char     ThisRadio[4]  = "0 ";
 
-uint8_t  NextFrequency    = RECONNECT_CH;
-uint8_t  ThisFrequency    = RECONNECT_CH;
-bool     DoSbusSendOnly   = false;
-bool     BuddyMaster      = false;
-bool     SlaveHasControl  = false;
+uint8_t NextFrequency   = RECONNECT_CH;
+uint8_t ThisFrequency   = RECONNECT_CH;
+bool    DoSbusSendOnly  = false;
+bool    BuddyMaster     = false;
+bool    SlaveHasControl = false;
 
-
-
-#ifndef NOISYWIFI // Use this for UK legal flying 
-uint8_t FHSS_Channels[84] = {28,24,61,64,28,55,66,19,76,21,59,67,15,71,82,32,49,69,13, 2,34,47,20,
-                             34,69,16, 2,72,35,76,35,57,45,29,76,75,49,59, 3,57,20,16,41,59,62,59,
-                             67,11, 3, 9,77,37, 8,31,36,34,18,75,17, 9,50,78,77,73,30,50,79, 6,36,
-                             20,23,79,40,54,51,19,69,12,18,80,53,41,24};
+#ifndef NOISYWIFI // Use this for UK legal flying
+uint8_t FHSS_Channels[84] = {28, 24, 61, 64, 28, 55, 66, 19, 76, 21, 59, 67, 15, 71, 82, 32, 49, 69, 13, 2, 34, 47, 20,
+                             34, 69, 16, 2, 72, 35, 76, 35, 57, 45, 29, 76, 75, 49, 59, 3, 57, 20, 16, 41, 59, 62, 59,
+                             67, 11, 3, 9, 77, 37, 8, 31, 36, 34, 18, 75, 17, 9, 50, 78, 77, 73, 30, 50, 79, 6, 36,
+                             20, 23, 79, 40, 54, 51, 19, 69, 12, 18, 80, 53, 41, 24};
 #endif
 
-#ifdef NOISYWIFI  // Use this for testing where very noisy 2.4 ghz wifi abounds!
+#ifdef NOISYWIFI // Use this for testing where very noisy 2.4 ghz wifi abounds!
 
- uint8_t FHSS_Channels[84] = {93,111,107,103,106,111,97,108,102,118,104,101,109,98,113,113,
-                             124,115,91,111,96,85,117,89,103,117,111,99,85,114,118,118,118,
-                             99,87,112,118,117,91,101,86,99,103,99,124,101,104,101,109,94,
-                             86,92,119,120,91,114,119,117,101,117,100,92,92,120,119,115,113,
-                             92,121,89,119,103,106,121,123,96,93,102,111,95,101,122,95};
+uint8_t FHSS_Channels[84] = {93, 111, 107, 103, 106, 111, 97, 108, 102, 118, 104, 101, 109, 98, 113, 113,
+                             124, 115, 91, 111, 96, 85, 117, 89, 103, 117, 111, 99, 85, 114, 118, 118, 118,
+                             99, 87, 112, 118, 117, 91, 101, 86, 99, 103, 99, 124, 101, 104, 101, 109, 94,
+                             86, 92, 119, 120, 91, 114, 119, 117, 101, 117, 100, 92, 92, 120, 119, 115, 113,
+                             92, 121, 89, 119, 103, 106, 121, 123, 96, 93, 102, 111, 95, 101, 122, 95};
 #endif
 
 /************************************************************************************************************/
 // This function reads data from BUDDY (Slave) BUT uses it ONLY WHILE the channel 12 switch is in the ON position ( > 1000)
 
-void GetSlaveChannelValues (){
+void GetSlaveChannelValues()
+{
 
-    bool failSafeM;                                                                          // These flags not used, yet.     
+    bool failSafeM; // These flags not used, yet.
     bool lostFrameM;
     SlaveHasControl = false;
-    if(SendBuffer[11] > 1000)
-    {                                                                                        // MASTER'S CHANNEL 12 (500 - 2500) used here as switch.
-        if (MySbus.read(&SbusChannels[0],&failSafeM,&lostFrameM))
+    if (SendBuffer[11] > 1000)
+    { // MASTER'S CHANNEL 12 (500 - 2500) used here as switch.
+        if (MySbus.read(&SbusChannels[0], &failSafeM, &lostFrameM))
         {
-            SBUSTimer = millis();                                                            // RESET timeout when data comes in
-        }                                                                                    // Even if there's no new data, re-use old data                                    
-        if(millis() - SBUSTimer < 500)                                                       // Ignore data more than 500ms old
+            SBUSTimer = millis();       // RESET timeout when data comes in
+        }                               // Even if there's no new data, re-use old data
+        if (millis() - SBUSTimer < 500) // Ignore data more than 500ms old
         {
             SlaveHasControl = true;
-            for (int j = 0; j < CHANNELSUSED; ++j)                                           // While slave has control, his stick data replaces all ours
+            for (int j = 0; j < CHANNELSUSED; ++j) // While slave has control, his stick data replaces all ours
             {
-                SendBuffer[j] = map(SbusChannels[j],RANGEMIN,RANGEMAX,MINMICROS,MAXMICROS);  // Put re-mapped data where we use it.
-            } 
+                SendBuffer[j] = map(SbusChannels[j], RANGEMIN, RANGEMAX, MINMICROS, MAXMICROS); // Put re-mapped data where we use it.
+            }
         }
     }
 }
@@ -540,15 +536,15 @@ void GetSlaveChannelValues (){
 // This funtion is used by the BUDDY slave to send it's controls out down a wire using SBUS
 void MapToSBUS()
 {
-       if (millis() - SBUSTimer >= SBUSRATE) 
-       {
-         SBUSTimer = millis();
-            for (int j = 0; j < CHANNELSUSED; ++j) 
-            {
-                SbusChannels[j] = map(SendBuffer[j], MINMICROS,MAXMICROS,RANGEMIN,RANGEMAX);
-            }
-       MySbus.write(&SbusChannels[0]);
-       }
+    if (millis() - SBUSTimer >= SBUSRATE)
+    {
+        SBUSTimer = millis();
+        for (int j = 0; j < CHANNELSUSED; ++j)
+        {
+            SbusChannels[j] = map(SendBuffer[j], MINMICROS, MAXMICROS, RANGEMIN, RANGEMAX);
+        }
+        MySbus.write(&SbusChannels[0]);
+    }
 }
 /************************************************************************************************************/
 
@@ -888,33 +884,33 @@ bool MayBeAddZero(uint8_t nn)
 
 void ReadTime()
 {
-    static char month[12][15] = {"January", "February", "March", "April", "May", "June", "July", "August", "Sept", "October", "November", "December"};
+    static char month[12][15]     = {"January", "February", "March", "April", "May", "June", "July", "August", "Sept", "October", "November", "December"};
     static char ShortMonth[12][7] = {"Jan. ", "Feb. ", "Mar. ", "Apr. ", "May  ", "June ", "July ", "Aug. ", "Sept ", "Oct. ", "Nov. ", "Dec. "};
-   
-    
-    char        NB[10];
-    char        TimeString[50];
-    char        Space[] = " ";
-    char        colon[] = ":";
-    char        zero[]  = "0";
+
+    char NB[10];
+    char TimeString[50];
+    char Space[] = " ";
+    char colon[] = ":";
+    char zero[]  = "0";
 
     char Owner[] = "Owner";
-   
+
     if (CurrentView == FrontView || CurrentView == Options_View) {
         if (RTC.read(tm)) {
             strcpy(TimeString, Str(NB, tm.Day, 0));
-            if (CurrentView == Options_View)  
+            if (CurrentView == Options_View)
             {
                 if ((tm.Day) < 10) {
-                    strcat(TimeString,Space); // to align better the rest of the data
-                    strcat(TimeString,Space);
-                    }
+                    strcat(TimeString, Space); // to align better the rest of the data
+                    strcat(TimeString, Space);
+                }
             }
             strcat(TimeString, Space);
-            if (CurrentView == Options_View)  
+            if (CurrentView == Options_View)
             {
                 strcat(TimeString, ShortMonth[tm.Month - 1]);
-            } else 
+            }
+            else
             {
                 strcat(TimeString, month[tm.Month - 1]);
             }
@@ -956,7 +952,7 @@ uint8_t GetBrightness()
         BlinkOnPhase = 1;
     }
     if (BlinkOnPhase) {
-         return 32;
+        return 32;
     }
     else {
         return 0;
@@ -973,13 +969,14 @@ void RedLedOn()
     analogWrite(REDLED, GetBrightness()); // Brightness is a function of blinking
 }
 
- void MakeBindButtonInvisible(){
-    char bbiv[]= "vis bind,0";
-    if (BindButton){
-     SendCommand(bbiv);
-     BindButton=false;
+void MakeBindButtonInvisible()
+{
+    char bbiv[] = "vis bind,0";
+    if (BindButton) {
+        SendCommand(bbiv);
+        BindButton = false;
     }
- }
+}
 
 /*********************************************************************************************************************************/
 
@@ -1137,7 +1134,7 @@ void SendValue1(char* nbox, int value)
 
 /*********************************************************************************************************************************/
 
-uint8_t um(uint16_t bv)                             // convert to lower resolution
+uint8_t um(uint16_t bv) // convert to lower resolution
 {
     return (map(bv, MINMICROS, MAXMICROS, 0, 100)); // lower res is enough on display
 }
@@ -1321,8 +1318,8 @@ void ShowServoPos()
 
 /** @brief SHOW COMMS */
 void ShowComms()
-{ 
-    if (Nextion.available()) return;   // was a button pressed?
+{
+    if (Nextion.available()) return; // was a button pressed?
     bool  ShowNow                = false;
     char  na[]                   = "";
     char  FrontView_Connected[]  = "Connected";
@@ -1346,7 +1343,7 @@ void ShowComms()
     char  DataView_Rx[]          = "rx";
     char  DataView_Sg[]          = "Sg";
     char  DataView_Ag[]          = "Ag";
-    char  DataView_Gc[]          = "Gc"; 
+    char  DataView_Gc[]          = "Gc";
     char  WarnNow[]              = "vis Warning,1";
     char  WarnOff[]              = "vis Warning,0";
     char  TXVolts[]              = "t21";
@@ -1367,13 +1364,12 @@ void ShowComms()
     char  RXBattNA[] = "(No data)";
     char  RXBattNV[] = "    ";
     char  TXBattInfo[65];
-    float ReadVolts    = 0;
-    float VoltsPerCell = 0;
-    char BindButtonVisible[]  = "vis bind,1";
-
+    float ReadVolts           = 0;
+    float VoltsPerCell        = 0;
+    char  BindButtonVisible[] = "vis bind,1";
 
     if (CurrentView == FrontView || CurrentView == DataView) {
-        if (millis() - LastShowTime > 1000) {  // update this lot only once per second
+        if (millis() - LastShowTime > 1000) { // update this lot only once per second
             ShowNow = true;
         }
     }
@@ -1381,15 +1377,15 @@ void ShowComms()
     {
         LastShowTime = millis();
         if (USE_INA219) {
-            txv = (ina219.getBusVoltage_V()) * 100;
+            txv  = (ina219.getBusVoltage_V()) * 100;
             txpc = map(txv, 512, 670, 0, 100); // LiFePo4 Battery 2.6 ->3.5  volts per cell
             if (txpc < LOWBATTERY) TXWarningFlag = true;
-            if (txpc > 100) txpc = 100;        // avoid showing > 100% !
+            if (txpc > 100) txpc = 100; // avoid showing > 100% !
             dtostrf(txpc, 0, 0, Vbuf);
             strcat(Vbuf, pc);
             if (CurrentView == FrontView) SendText(TXVolts, Vbuf);
             txv /= 100;
-            snprintf (Vbuf, 5, "%f", txv);   // float to string...
+            snprintf(Vbuf, 5, "%f", txv); // float to string...
             strcpy(TXBattInfo, Vbuf);
             strcat(TXBattInfo, v);
             txv /= 2;
@@ -1401,15 +1397,15 @@ void ShowComms()
             if (CurrentView == DataView) SendText(DataView_txv, TransmitterVersionNumber); // TX Version Number
                                                                                            // if (CurrentView == DataView) SendText(DataView_txv, Vbuf);
         }
-        if (!LostContactFlag) 
-            {
+        if (!LostContactFlag)
+        {
             if ((CurrentView == FrontView)) {
                 if (!BoundFlag) {
                     SendCommand(BindButtonVisible);
-                    BindButton=true; 
+                    BindButton = true;
                 }
                 else {
-                    if (BoundFlag) 
+                    if (BoundFlag)
                     {
                         if (!BuddyMaster)
                         {
@@ -1419,32 +1415,33 @@ void ShowComms()
                         {
                             if (!SlaveHasControl)
                             {
-                                SendText(FrontView_Connected, Msg_CnctdBuddyMast); 
-                            }else  
+                                SendText(FrontView_Connected, Msg_CnctdBuddyMast);
+                            }
+                            else
                             {
-                                SendText(FrontView_Connected, Msg_CnctdBuddySlave); 
+                                SendText(FrontView_Connected, Msg_CnctdBuddySlave);
                             }
                         }
                         GreenLedOn();
                         StartInactvityTimeout();
                     }
-                } 
-            }         
-            if (CurrentView == DataView) {
-                    SendValue(DataView_pps,  PacketsPerSecond);
-                    SendValue(DataView_lps,  LostPackets);
-                    SendText(DataView_Alt,   ModelAltitude);
-                    SendText(DataView_MaxAlt,MaxAltitude);    
-                    SendText(DataView_Temp,  ModelTemperature);
-                    SendText(DataView_Rx,    ThisRadio);
-                    SendText(DataView_rxv,   ReceiverVersionNumber);
-                    SendValue(DataView_Ls,   GapLongest);
-                    SendValue(DataView_Ts,   GapSum);
-                    SendValue(DataView_Sg,   GapShortest);
-                    SendValue(DataView_Ag,   GapAverage);
-                    SendValue(DataView_Gc,   GapCount);
+                }
             }
-            ReadVolts = RXModelVolts * 10; 
+            if (CurrentView == DataView) {
+                SendValue(DataView_pps, PacketsPerSecond);
+                SendValue(DataView_lps, LostPackets);
+                SendText(DataView_Alt, ModelAltitude);
+                SendText(DataView_MaxAlt, MaxAltitude);
+                SendText(DataView_Temp, ModelTemperature);
+                SendText(DataView_Rx, ThisRadio);
+                SendText(DataView_rxv, ReceiverVersionNumber);
+                SendValue(DataView_Ls, GapLongest);
+                SendValue(DataView_Ts, GapSum);
+                SendValue(DataView_Sg, GapShortest);
+                SendValue(DataView_Ag, GapAverage);
+                SendValue(DataView_Gc, GapCount);
+            }
+            ReadVolts = RXModelVolts * 10;
             // 6s Max 25.2 -> 20.4
             // 5s Max 21.0 -> 17.0
             // 4s Max 16.8 -> 13.6
@@ -1469,7 +1466,7 @@ void ShowComms()
                 dtostrf(Volts, 0, 0, Vbuf);
                 strcat(Vbuf, pc);
                 if (BoundFlag && CurrentView == FrontView) SendText(FrontView_AckPayload, Vbuf);
-                
+
                 strcpy(RXBattInfo, ModelVolts);
 
                 strcat(RXBattInfo, v);
@@ -1504,14 +1501,15 @@ void ShowComms()
                 }
             }
             else // i.e. contact is lost
-            {             
+            {
                 if (CurrentView == FrontView)
                 {
-                     if (DoSbusSendOnly) {
+                    if (DoSbusSendOnly) {
                         SendText(FrontView_Connected, MsgBuddying);
-                     } else {
+                    }
+                    else {
                         SendText(FrontView_Connected, Not_Connected);
-                     }
+                    }
                 }
             }
         }
@@ -1534,22 +1532,22 @@ void FailedPacket()
 {
     int secondsRemaining;
     if (GapStart == 0) {
-        GapStart = millis();   // To keep track of gaps' length
+        GapStart = millis(); // To keep track of gaps' length
     }
     ++RecentPacketsLost;
-    ++TotalledRecentPacketsLost;                  // this is to keep track of events when receiver is off
-      if (RecentPacketsLost > LOSTCONTACTCUTOFF) {
-         LostContactFlag   = true;
-         RecentPacketsLost = 0;
-         if ((millis() - GapStart) > 100)         // there's no need to blink red for every single lost packet. Only after 1/10th second of no connection.
-         {
-           RedLedOn();
-         }
+    ++TotalledRecentPacketsLost; // this is to keep track of events when receiver is off
+    if (RecentPacketsLost > LOSTCONTACTCUTOFF) {
+        LostContactFlag   = true;
+        RecentPacketsLost = 0;
+        if ((millis() - GapStart) > 100) // there's no need to blink red for every single lost packet. Only after 1/10th second of no connection.
+        {
+            RedLedOn();
+        }
     }
     ++LostPackets;
     ShowComms();
     secondsRemaining = (Inactivity_Timeout / 1000) - (millis() - Inactivity_Start) / 1000;
-    if (secondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH);     // INACTIVITY POWER OFF
+    if (secondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH); // INACTIVITY POWER OFF
 }
 
 /*********************************************************************************************************************************/
@@ -1699,26 +1697,26 @@ short unsigned int GetStickInput(uint8_t l)
     short unsigned int k = 0;
 
     if (l == 8) {
-        if (Channel9SwitchValue == 0)   k = mp(MinDegrees[FlightMode][8]);
-        if (Channel9SwitchValue == 90)  k = mp(CentreDegrees[FlightMode][8]);
+        if (Channel9SwitchValue == 0) k = mp(MinDegrees[FlightMode][8]);
+        if (Channel9SwitchValue == 90) k = mp(CentreDegrees[FlightMode][8]);
         if (Channel9SwitchValue == 180) k = mp(MaxDegrees[FlightMode][8]);
     }
 
     if (l == 9) {
-        if (Channel10SwitchValue == 0)   k = mp(MinDegrees[FlightMode][9]);
-        if (Channel10SwitchValue == 90)  k = mp(CentreDegrees[FlightMode][9]);
+        if (Channel10SwitchValue == 0) k = mp(MinDegrees[FlightMode][9]);
+        if (Channel10SwitchValue == 90) k = mp(CentreDegrees[FlightMode][9]);
         if (Channel10SwitchValue == 180) k = mp(MaxDegrees[FlightMode][9]);
     }
 
     if (l == 10) {
-        if (Channel11SwitchValue == 0)   k = mp(MinDegrees[FlightMode][10]);
-        if (Channel11SwitchValue == 90)  k = mp(CentreDegrees[FlightMode][10]);
+        if (Channel11SwitchValue == 0) k = mp(MinDegrees[FlightMode][10]);
+        if (Channel11SwitchValue == 90) k = mp(CentreDegrees[FlightMode][10]);
         if (Channel11SwitchValue == 180) k = mp(MaxDegrees[FlightMode][10]);
     }
 
     if (l == 11) {
-        if (Channel12SwitchValue == 0)   k = mp(MinDegrees[FlightMode][11]);
-        if (Channel12SwitchValue == 90)  k = mp(CentreDegrees[FlightMode][11]);
+        if (Channel12SwitchValue == 0) k = mp(MinDegrees[FlightMode][11]);
+        if (Channel12SwitchValue == 90) k = mp(CentreDegrees[FlightMode][11]);
         if (Channel12SwitchValue == 180) k = mp(MaxDegrees[FlightMode][11]);
     }
     return k;
@@ -1774,18 +1772,17 @@ void get_new_channels_values()
 {
     short unsigned int k = 0, l = 0, m = 0, n = 0;
     for (n = 0; n < CHANNELSUSED; ++n) {
-        l = InPutStick[n];                            // input sticks knobs & switches are now mapped by user
-        if (l <= 7) 
-            {
-                m = analogRead(AnalogueInput[l]);     // Get values from sticks' pots
-            }
-       
-       
-        if (l > 7 ) 
-            {                                          // Switch ?
-                k = GetStickInput(l);                  // Four 3 postion switches
-            }
-        else {                                         // Map the eight analogue inputs
+        l = InPutStick[n]; // input sticks knobs & switches are now mapped by user
+        if (l <= 7)
+        {
+            m = analogRead(AnalogueInput[l]); // Get values from sticks' pots
+        }
+
+        if (l > 7)
+        {                         // Switch ?
+            k = GetStickInput(l); // Four 3 postion switches
+        }
+        else {                                            // Map the eight analogue inputs
             if (InterpolationTypes[FlightMode][n] == 0) { // Linear
                 if (m >= ChannelMidHi[l]) k = map(m, ChannelMidHi[l], ChannelMax[l], mp(MidHiDegrees[FlightMode][n]), mp(MaxDegrees[FlightMode][n]));
                 if (m >= ChannelCentre[l] && m <= (ChannelMidHi[l])) k = map(m, ChannelCentre[l], ChannelMidHi[l], mp(CentreDegrees[FlightMode][n]), mp(MidHiDegrees[FlightMode][n]));
@@ -2026,7 +2023,6 @@ void UpdateModelsNameEveryWhere()
             UpdateTrimView();
         }
         if (CurrentView == FrontView) SendValue(FrontView_fm1, 1);
-     
     }
     if (FlightMode == 2) {
         if (CurrentView == SticksView) SendText(SticksView_t1, fm2);
@@ -2036,7 +2032,6 @@ void UpdateModelsNameEveryWhere()
             UpdateTrimView();
         }
         if (CurrentView == FrontView) SendValue(FrontView_fm2, 1);
- 
     }
     if (FlightMode == 3) {
         if (CurrentView == SticksView) SendText(SticksView_t1, fm3);
@@ -2046,7 +2041,6 @@ void UpdateModelsNameEveryWhere()
             UpdateTrimView();
         }
         if (CurrentView == FrontView) SendValue(FrontView_fm3, 1);
-       
     }
     if (FlightMode == 4) {
         if (CurrentView == SticksView) SendText(SticksView_t1, fm4);
@@ -2056,7 +2050,6 @@ void UpdateModelsNameEveryWhere()
             UpdateTrimView();
         }
         if (CurrentView == FrontView) SendValue(FrontView_fm4, 1);
-       
     }
 }
 
@@ -2128,23 +2121,23 @@ void ChannelCentres()
 
 void UpdateButtonLabels()
 {
-    char InPutStick_c1[]       = "c1";
-    char InPutStick_c2[]       = "c2";
-    char InPutStick_c3[]       = "c3";
-    char InPutStick_c4[]       = "c4";
-    char InPutStick_c5[]       = "c5";
-    char InPutStick_c6[]       = "c6";
-    char InPutStick_c7[]       = "c7";
-    char InPutStick_c8[]       = "c8";
-    char InPutStick_c9[]       = "c9";
-    char InPutStick_c10[]      = "c10";
-    char InPutStick_c11[]      = "c11";
-    char InPutStick_c12[]      = "c12";
-    char InPutStick_c13[]      = "c13";
-    char InPutStick_c14[]      = "c14";
-    char InPutStick_c15[]      = "c15";
-    char InPutStick_c16[]      = "c16";
-    
+    char InPutStick_c1[]  = "c1";
+    char InPutStick_c2[]  = "c2";
+    char InPutStick_c3[]  = "c3";
+    char InPutStick_c4[]  = "c4";
+    char InPutStick_c5[]  = "c5";
+    char InPutStick_c6[]  = "c6";
+    char InPutStick_c7[]  = "c7";
+    char InPutStick_c8[]  = "c8";
+    char InPutStick_c9[]  = "c9";
+    char InPutStick_c10[] = "c10";
+    char InPutStick_c11[] = "c11";
+    char InPutStick_c12[] = "c12";
+    char InPutStick_c13[] = "c13";
+    char InPutStick_c14[] = "c14";
+    char InPutStick_c15[] = "c15";
+    char InPutStick_c16[] = "c16";
+
     char fsch1[]   = "ch1";
     char fsch2[]   = "ch2";
     char fsch3[]   = "ch3";
@@ -2262,7 +2255,7 @@ void UpdateButtonLabels()
         strcat(BoxOffsetLabel, ChannelNames[15]);
         SendText(SticksViewButton16, BoxOffsetLabel);
     }
-    if (CurrentView == Inputs_View || CurrentView == FailSafe_View) { 
+    if (CurrentView == Inputs_View || CurrentView == FailSafe_View) {
         SendText(fsch1, ChannelNames[0]);
         SendText(fsch2, ChannelNames[1]);
         SendText(fsch3, ChannelNames[2]);
@@ -2279,22 +2272,22 @@ void UpdateButtonLabels()
         SendText(fsch14, ChannelNames[13]);
         SendText(fsch15, ChannelNames[14]);
         SendText(fsch16, ChannelNames[15]);
-        SendValue(InPutStick_c1,InPutStick[0]+1);
-        SendValue(InPutStick_c2,InPutStick[1]+1);
-        SendValue(InPutStick_c3,InPutStick[2]+1);
-        SendValue(InPutStick_c4,InPutStick[3]+1);
-        SendValue(InPutStick_c5,InPutStick[4]+1);
-        SendValue(InPutStick_c6,InPutStick[5]+1);
-        SendValue(InPutStick_c7,InPutStick[6]+1);
-        SendValue(InPutStick_c8,InPutStick[7]+1);
-        SendValue(InPutStick_c9,InPutStick[8]+1);
-        SendValue(InPutStick_c10,InPutStick[9]+1);
-        SendValue(InPutStick_c11,InPutStick[10]+1);
-        SendValue(InPutStick_c12,InPutStick[11]+1);
-        SendValue(InPutStick_c13,InPutStick[12]+1);
-        SendValue(InPutStick_c14,InPutStick[13]+1);
-        SendValue(InPutStick_c15,InPutStick[14]+1);
-        SendValue(InPutStick_c16,InPutStick[15]+1);
+        SendValue(InPutStick_c1, InPutStick[0] + 1);
+        SendValue(InPutStick_c2, InPutStick[1] + 1);
+        SendValue(InPutStick_c3, InPutStick[2] + 1);
+        SendValue(InPutStick_c4, InPutStick[3] + 1);
+        SendValue(InPutStick_c5, InPutStick[4] + 1);
+        SendValue(InPutStick_c6, InPutStick[5] + 1);
+        SendValue(InPutStick_c7, InPutStick[6] + 1);
+        SendValue(InPutStick_c8, InPutStick[7] + 1);
+        SendValue(InPutStick_c9, InPutStick[8] + 1);
+        SendValue(InPutStick_c10, InPutStick[9] + 1);
+        SendValue(InPutStick_c11, InPutStick[10] + 1);
+        SendValue(InPutStick_c12, InPutStick[11] + 1);
+        SendValue(InPutStick_c13, InPutStick[12] + 1);
+        SendValue(InPutStick_c14, InPutStick[13] + 1);
+        SendValue(InPutStick_c15, InPutStick[14] + 1);
+        SendValue(InPutStick_c16, InPutStick[15] + 1);
     }
 }
 
@@ -2350,8 +2343,8 @@ bool ReadOneModel(uint8_t Mnum)
     }
     RXCellCount = SDReadByte(addr);
     ++addr;
-    addr += 30;  // 30 Spare Bytes here (PID stuff gone)
-    ++addr;      // another Spare byte
+    addr += 30; // 30 Spare Bytes here (PID stuff gone)
+    ++addr;     // another Spare byte
     for (i = 0; i < CHANNELSUSED; ++i) {
         InPutStick[i] = SDReadByte(addr);
         if (InPutStick[i] > 16) InPutStick[i] = i; // reset if nothing was saved!
@@ -2413,7 +2406,6 @@ bool ReadOneModel(uint8_t Mnum)
 
     // **************************************
 
-   
     OneModelMemory = addr - StartLocation;
 
 #ifdef DB_NEXTION
@@ -2464,9 +2456,9 @@ bool LoadAllParameters()
             ChannelMax[i] = SDReadInt(addr);
             addr += 2;
         }
-        DoSbusSendOnly = SDReadByte(addr); 
+        DoSbusSendOnly = SDReadByte(addr);
         ++addr;
-        BuddyMaster = SDReadByte(addr); 
+        BuddyMaster = SDReadByte(addr);
         ++addr;
         ModelNumber = SDReadByte(addr);
         ++addr;
@@ -2560,7 +2552,7 @@ void setup()
     char FrontView_Connected[] = "FrontView.Connected";
     char Initialising[]        = "Initialising ... ";
 
-    char OptionsViewTXname[]   = "OptionsView.TxName";
+    char OptionsViewTXname[] = "OptionsView.TxName";
     Nextion.begin(115200); // BAUD rate also set in display code
 
     teensyMAC(MacAddress); // Get MAC address and use it as pipe address
@@ -2586,8 +2578,8 @@ void setup()
     InitMaxMin();        // in case not yet calibrated
     InitCentreDegrees(); // In case not yet calibrated
     CentreTrims();
-    CalibratedYet = LoadAllParameters(); // If they exist, read saved SD card settings. 
-    InitRadio(DefaultPipe); 
+    CalibratedYet = LoadAllParameters(); // If they exist, read saved SD card settings.
+    InitRadio(DefaultPipe);
     SendCommand(page_FrontView); // Let's start at the beginning. Why not?
     SendText(FrontView_Connected, Initialising);
     SendValue1(NextionSleepTime, ScreenTimeout); // Setup Screen timeout (No .val needed)
@@ -2595,11 +2587,11 @@ void setup()
     SendValue(FrontView_Hours, 0);
     SendValue(FrontView_Mins, 0);
     SendValue(FrontView_Secs, 0);
-  
-                                    //  ***************************************************************************************
+
+    //  ***************************************************************************************
     //SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
-                                    //  **   BUT then re-comment it!! Otherwise it will reset to same time on every boot up! **
-                                    //  ***************************************************************************************
+    //  **   BUT then re-comment it!! Otherwise it will reset to same time on every boot up! **
+    //  ***************************************************************************************
     RecoveryTimer = millis();
     BoundFlag     = false;
     TxOnTime      = millis();
@@ -2616,7 +2608,6 @@ void setup()
     SizeOfCompressedData = sizeof(CompressedData);
     GetTXVersionNumber();
     MySbus.begin();
-
 }
 
 /*********************************************************************************************************************************/
@@ -2624,7 +2615,7 @@ void setup()
 void GetStatistics()
 {
     PacketsPerSecond     = RangeTestGoodPackets;
-    RangeTestGoodPackets = 0; 
+    RangeTestGoodPackets = 0;
 }
 
 /*********************************************************************************************************************************/
@@ -2670,7 +2661,7 @@ void SaveTXStuff()
         SDUpdateInt(addr, ChannelMax[i]); // Stick max output of pot
         addr += 2;
     }
-    SDUpdateByte(addr, DoSbusSendOnly); 
+    SDUpdateByte(addr, DoSbusSendOnly);
     ++addr;
     SDUpdateByte(addr, BuddyMaster);
     ++addr;
@@ -2748,8 +2739,8 @@ void SaveOneModel(int mnum)
     ++addr;
 
     addr += 30; // 30 Spare Bytes here (PID stuff gone)
-  
-    ++addr;     // another Spare
+
+    ++addr; // another Spare
 
     for (i = 0; i < CHANNELSUSED; ++i) {
         SDUpdateByte(addr, InPutStick[i]);
@@ -3091,7 +3082,7 @@ void ShowDirectory()
 
 /*********************************************************************************************************************************/
 
-void SetDefaultValues() 
+void SetDefaultValues()
 {
     int  j;
     char ProgressStart[]                       = "vis Progress,1";
@@ -3139,7 +3130,7 @@ void SetDefaultValues()
         }
     }
     RXCellCount = 3;
-    
+
     SendValue(Progress, 45);
     delay(10);
     for (i = 0; i < CHANNELSUSED; ++i) {
@@ -3472,7 +3463,7 @@ void DisplayCurve()
     }
 
     if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == 2) { //EXPO  ************************************************************************************************
-        #define APPROXIMATION     8  // This is for the approximation of the screen curve
+#define APPROXIMATION 8                                          // This is for the approximation of the screen curve
 
         SendCommand(b3off);
         SendCommand(b4off);
@@ -3664,7 +3655,7 @@ void ReceiveModelFile()
 #endif
     SendText(ModelsView_filename, Waiting);
     RXPipe = FILEPIPEADDRESS;
-    Radio1.setRetries(15, 15);   
+    Radio1.setRetries(15, 15);
     Radio1.setChannel(FILECHANNEL);
     Radio1.flush_tx();
     Radio1.openReadingPipe(1, RXPipe);
@@ -3742,7 +3733,7 @@ void ReceiveModelFile()
     SendText(ModelsView_filename, Success);
     delay(2000);
     SendText(ModelsView_filename, SingleModelFile);
-    Radio1.setRetries(RETRYCOUNT, RETRYWAIT); 
+    Radio1.setRetries(RETRYCOUNT, RETRYWAIT);
     // **************************************** Below Here the new model is imported for immediate use
     SingleModelFlag = true;
     CloseModelsFile();
@@ -3789,7 +3780,7 @@ void SendModelFile()
 #endif
     Radio1.setChannel(FILECHANNEL);
     Radio1.setPALevel(FILEPALEVEL);
-    Radio1.setRetries(15, 15); 
+    Radio1.setRetries(15, 15);
     Radio1.openWritingPipe(TXPipe);
     Radio1.stopListening();
     delay(4);
@@ -3814,7 +3805,7 @@ void SendModelFile()
         Radio1.flush_tx();
         Radio1.flush_rx();
         if (Radio1.write(&Fbuffer, BUFFERSIZE + 4)) {
-            delay(25);                                   // allow time for receive and write
+            delay(25); // allow time for receive and write
             if (Radio1.isAckPayloadAvailable()) {
                 Radio1.read(&Fack, sizeof(Fack));
             }
@@ -3837,7 +3828,7 @@ void SendModelFile()
     SendValue(Progress, 100);
     delay(100);
     SetThePipe(DefaultPipe);
-    Radio1.setRetries(RETRYCOUNT, RETRYWAIT); 
+    Radio1.setRetries(RETRYCOUNT, RETRYWAIT);
     Radio1.setCRCLength(RF24_CRC_8);
     SendCommand(ProgressEnd);
 }
@@ -3973,7 +3964,7 @@ void Button_was_pressed()
     char Sticks_View[]             = "SticksView";
     char Graph_View[]              = "GraphView";
     char Mixes_View[]              = "MixesView";
-    char SetupView[]               = "MainSetup"; 
+    char SetupView[]               = "MainSetup";
     char Scan_End[]                = "ScanEnd";
     char DataEnd[]                 = "DataEnd";
     char SetupViewFM[]             = "SetupViewFM:";
@@ -3982,7 +3973,7 @@ void Button_was_pressed()
     char Calibrate_View[]          = "CalibrateView";
     char Trim[]                    = "Trim";
     char TrimView[]                = "TrimView";
-    char TR1[]                     = "TR1"; 
+    char TR1[]                     = "TR1";
     char TR2[]                     = "TR2";
     char TR3[]                     = "TR3";
     char TR4[]                     = "TR4";
@@ -4032,118 +4023,118 @@ void Button_was_pressed()
     char r4s[]                     = "r4s";
     char r5s[]                     = "r5s";
     char r6s[]                     = "r6s";
-    char SwitchesView[]        = "SwitchesView";
-    char SwitchesView1[]       = "SwitchesView1";
-    char OneSwitchView[]       = "OneSwitchView";
-    char PageOneSwitchView[]   = "page OneSwitchView";
-    char PageSwitchView[]      = "page SwitchesView";
-    char InputsView[]          = "InputsView";
-    char InputsDone[]          = "InputsDone";
-    char InPutStick_c1[]       = "c1";
-    char InPutStick_c2[]       = "c2";
-    char InPutStick_c3[]       = "c3";
-    char InPutStick_c4[]       = "c4";
-    char InPutStick_c5[]       = "c5";
-    char InPutStick_c6[]       = "c6";
-    char InPutStick_c7[]       = "c7";
-    char InPutStick_c8[]       = "c8";
-    char InPutStick_c9[]       = "c9";
-    char InPutStick_c10[]      = "c10";
-    char InPutStick_c11[]      = "c11";
-    char InPutStick_c12[]      = "c12";
-    char InPutStick_c13[]      = "c13";
-    char InPutStick_c14[]      = "c14";
-    char InPutStick_c15[]      = "c15";
-    char InPutStick_c16[]      = "c16";
-    char Export[]              = "Export";
-    char Import[]              = "Import";
-    char ListFiles[]           = "ListFiles";
-    char Nextfile[]            = "Nextfile";
-    char Prevfile[]            = "Prevfile";
-    char DelFile[]             = "DelFile";
-    char ModExt[]              = ".MOD";
-    char FailSAVE[]            = "FailSAVE";
-    char FailSafe[]            = "FailSafe";
-    char fs1[]                 = "fs1";
-    char fs2[]                 = "fs2";
-    char fs3[]                 = "fs3";
-    char fs4[]                 = "fs4";
-    char fs5[]                 = "fs5";
-    char fs6[]                 = "fs6";
-    char fs7[]                 = "fs7";
-    char fs8[]                 = "fs8";
-    char fs9[]                 = "fs9";
-    char fs10[]                = "fs10";
-    char fs11[]                = "fs11";
-    char fs12[]                = "fs12";
-    char fs13[]                = "fs13";
-    char fs14[]                = "fs14";
-    char fs15[]                = "fs15";
-    char fs16[]                = "fs16";
-    char CH1NAME[]             = "CH1NAME=";
-    char CH2NAME[]             = "CH2NAME=";
-    char CH3NAME[]             = "CH3NAME=";
-    char CH4NAME[]             = "CH4NAME=";
-    char CH5NAME[]             = "CH5NAME=";
-    char CH6NAME[]             = "CH6NAME=";
-    char CH7NAME[]             = "CH7NAME=";
-    char CH8NAME[]             = "CH8NAME=";
-    char CH9NAME[]             = "CH9NAME=";
-    char CH10NAME[]            = "CH10NAME=";
-    char CH11NAME[]            = "CH11NAME=";
-    char CH12NAME[]            = "CH12NAME=";
-    char CH13NAME[]            = "CH13NAME=";
-    char CH14NAME[]            = "CH14NAME=";
-    char CH15NAME[]            = "CH15NAME=";
-    char CH16NAME[]            = "CH16NAME=";
-    char MixesView_chM[]       = "chM";
-    char MixesView_chS[]       = "chS";
-    char ProgressStart[]       = "vis Progress,1";
-    char ProgressEnd[]         = "vis Progress,0";
-    char Progress[]            = "Progress";
-    char HelpView[]            = "HelpView";
-    char ModelsView_filename[] = "filename";
-    char ReceiveModel[]        = "ReceiveModel";
-    char SendModel[]           = "SendModel";
-    char PowerOff[]            = "PowerOff";
-    char OffNow[]              = "OffNow"; // force power off
-    char StillConnected[]      = "vis StillConnected,1";
-    char NotStillConnected[]   = "vis StillConnected,0";
-    char OptionsView[]         = "OptionsView";
-    char OptionsViewS[]        = "OptionsViewS";
-    char Pto[]                 = "Pto";
-    char Tx_Name[]             = "TxName";
-    char Exrite[]              = "Exrite";
-    char ExpR[]                = "Exp";
-    char Smooth[]              = "Smooth";
-    char Lines[]               = "Lines";
-    char Expon[]               = "Expo"; // number display
-    char GOTO[]                = "GOTO:";
-    char WhichPage[]           = "page                            "; // excessive spaces for page name
-    char AddMinute[]           = "IncMinute";
-    char Dec_Minute[]          = "DecMinute";
-    char Dec_Hour[]            = "DecHour";
-    char Inc_Hour[]            = "IncHour";
-    char Inc_Year[]            = "IncYear";
-    char Dec_Year[]            = "DecYear";
-    char Inc_Date[]            = "IncDate";
-    char Dec_Date[]            = "DecDate";
-    char Inc_Month[]           = "IncMonth";
-    char Dec_Month[]           = "DecMonth";
-    char pDataView[]           = "page DataView";
-    char pSwitchesView[]       = "page SwitchesView";
-    char pInputsView[]         = "page InputsView";
-    char pOptionsViewS[]       = "page OptionsView";
-    char pModelsView[]         = "page ModelsView";
-    char pTrimView[]           = "page TrimView";
-    char pMixesView[]          = "page MixesView";
-    char pTypeView[]           = "page TypeView";
-    char pCalibrateView[]      = "page CalibrateView";
-    char pFailSafe[]           = "page FailSafeView";
-    char DataView_Clear[]      = "Clear";
-    char BuddyM[]              = "BuddyM";
-    char BuddyP[]              = "BuddyP";
-    char OptionsEnd[]          = "OptionsEnd";
+    char SwitchesView[]            = "SwitchesView";
+    char SwitchesView1[]           = "SwitchesView1";
+    char OneSwitchView[]           = "OneSwitchView";
+    char PageOneSwitchView[]       = "page OneSwitchView";
+    char PageSwitchView[]          = "page SwitchesView";
+    char InputsView[]              = "InputsView";
+    char InputsDone[]              = "InputsDone";
+    char InPutStick_c1[]           = "c1";
+    char InPutStick_c2[]           = "c2";
+    char InPutStick_c3[]           = "c3";
+    char InPutStick_c4[]           = "c4";
+    char InPutStick_c5[]           = "c5";
+    char InPutStick_c6[]           = "c6";
+    char InPutStick_c7[]           = "c7";
+    char InPutStick_c8[]           = "c8";
+    char InPutStick_c9[]           = "c9";
+    char InPutStick_c10[]          = "c10";
+    char InPutStick_c11[]          = "c11";
+    char InPutStick_c12[]          = "c12";
+    char InPutStick_c13[]          = "c13";
+    char InPutStick_c14[]          = "c14";
+    char InPutStick_c15[]          = "c15";
+    char InPutStick_c16[]          = "c16";
+    char Export[]                  = "Export";
+    char Import[]                  = "Import";
+    char ListFiles[]               = "ListFiles";
+    char Nextfile[]                = "Nextfile";
+    char Prevfile[]                = "Prevfile";
+    char DelFile[]                 = "DelFile";
+    char ModExt[]                  = ".MOD";
+    char FailSAVE[]                = "FailSAVE";
+    char FailSafe[]                = "FailSafe";
+    char fs1[]                     = "fs1";
+    char fs2[]                     = "fs2";
+    char fs3[]                     = "fs3";
+    char fs4[]                     = "fs4";
+    char fs5[]                     = "fs5";
+    char fs6[]                     = "fs6";
+    char fs7[]                     = "fs7";
+    char fs8[]                     = "fs8";
+    char fs9[]                     = "fs9";
+    char fs10[]                    = "fs10";
+    char fs11[]                    = "fs11";
+    char fs12[]                    = "fs12";
+    char fs13[]                    = "fs13";
+    char fs14[]                    = "fs14";
+    char fs15[]                    = "fs15";
+    char fs16[]                    = "fs16";
+    char CH1NAME[]                 = "CH1NAME=";
+    char CH2NAME[]                 = "CH2NAME=";
+    char CH3NAME[]                 = "CH3NAME=";
+    char CH4NAME[]                 = "CH4NAME=";
+    char CH5NAME[]                 = "CH5NAME=";
+    char CH6NAME[]                 = "CH6NAME=";
+    char CH7NAME[]                 = "CH7NAME=";
+    char CH8NAME[]                 = "CH8NAME=";
+    char CH9NAME[]                 = "CH9NAME=";
+    char CH10NAME[]                = "CH10NAME=";
+    char CH11NAME[]                = "CH11NAME=";
+    char CH12NAME[]                = "CH12NAME=";
+    char CH13NAME[]                = "CH13NAME=";
+    char CH14NAME[]                = "CH14NAME=";
+    char CH15NAME[]                = "CH15NAME=";
+    char CH16NAME[]                = "CH16NAME=";
+    char MixesView_chM[]           = "chM";
+    char MixesView_chS[]           = "chS";
+    char ProgressStart[]           = "vis Progress,1";
+    char ProgressEnd[]             = "vis Progress,0";
+    char Progress[]                = "Progress";
+    char HelpView[]                = "HelpView";
+    char ModelsView_filename[]     = "filename";
+    char ReceiveModel[]            = "ReceiveModel";
+    char SendModel[]               = "SendModel";
+    char PowerOff[]                = "PowerOff";
+    char OffNow[]                  = "OffNow"; // force power off
+    char StillConnected[]          = "vis StillConnected,1";
+    char NotStillConnected[]       = "vis StillConnected,0";
+    char OptionsView[]             = "OptionsView";
+    char OptionsViewS[]            = "OptionsViewS";
+    char Pto[]                     = "Pto";
+    char Tx_Name[]                 = "TxName";
+    char Exrite[]                  = "Exrite";
+    char ExpR[]                    = "Exp";
+    char Smooth[]                  = "Smooth";
+    char Lines[]                   = "Lines";
+    char Expon[]                   = "Expo"; // number display
+    char GOTO[]                    = "GOTO:";
+    char WhichPage[]               = "page                            "; // excessive spaces for page name
+    char AddMinute[]               = "IncMinute";
+    char Dec_Minute[]              = "DecMinute";
+    char Dec_Hour[]                = "DecHour";
+    char Inc_Hour[]                = "IncHour";
+    char Inc_Year[]                = "IncYear";
+    char Dec_Year[]                = "DecYear";
+    char Inc_Date[]                = "IncDate";
+    char Dec_Date[]                = "DecDate";
+    char Inc_Month[]               = "IncMonth";
+    char Dec_Month[]               = "DecMonth";
+    char pDataView[]               = "page DataView";
+    char pSwitchesView[]           = "page SwitchesView";
+    char pInputsView[]             = "page InputsView";
+    char pOptionsViewS[]           = "page OptionsView";
+    char pModelsView[]             = "page ModelsView";
+    char pTrimView[]               = "page TrimView";
+    char pMixesView[]              = "page MixesView";
+    char pTypeView[]               = "page TypeView";
+    char pCalibrateView[]          = "page CalibrateView";
+    char pFailSafe[]               = "page FailSafeView";
+    char DataView_Clear[]          = "Clear";
+    char BuddyM[]                  = "BuddyM";
+    char BuddyP[]                  = "BuddyP";
+    char OptionsEnd[]              = "OptionsEnd";
 
     if (strlen(WordsIn) > 0) {
         StartInactvityTimeout();
@@ -4152,34 +4143,31 @@ void Button_was_pressed()
         Serial.println(WordsIn);
 #endif
 
-        if (InStrng(SetupView, WordsIn) > 0) {    // default goto setup screen
+        if (InStrng(SetupView, WordsIn) > 0) { // default goto setup screen
             ClearText();
-            SaveAllParameters();     
+            SaveAllParameters();
             SendCommand(page_SetupView);
             CurrentMode = NORMAL;
             CurrentView = MainSetupView;
             return;
         }
 
-        if (InStrng(OptionsEnd, WordsIn) > 0) {    // Options screen end
-            DoSbusSendOnly = GetValue(BuddyP);     // Pupil, wired 
-            BuddyMaster    = GetValue(BuddyM);     // Master, either.
-            if(DoSbusSendOnly)
+        if (InStrng(OptionsEnd, WordsIn) > 0) { // Options screen end
+            DoSbusSendOnly = GetValue(BuddyP);  // Pupil, wired
+            BuddyMaster    = GetValue(BuddyM);  // Master, either.
+            if (DoSbusSendOnly)
             {
-                Connected =  false;
+                Connected       = false;
                 LostContactFlag = true;
                 BlueLedOn();
             }
             ClearText();
-            SaveAllParameters();     
+            SaveAllParameters();
             SendCommand(page_SetupView);
             CurrentMode = NORMAL;
             CurrentView = MainSetupView;
             return;
         }
-
-
-
 
         if (InStrng(DataEnd, WordsIn) > 0) { //  goto setup screen from Data screen
             CurrentView = MainSetupView;
@@ -4188,27 +4176,26 @@ void Button_was_pressed()
             return;
         }
         if (InStrng(DataView_Clear, WordsIn) > 0) { //  goto setup screen from Data screen
-           LostPackets  = 0;
-           GapShortest  = 0;
-           GapLongest   = 0;
-           GapSum       = 0;
-           GapAverage   = 0;
-           GapCount     = 0;
-           RXMAXModelAltitude = 0;
-           ClearText();
-           return;
+            LostPackets        = 0;
+            GapShortest        = 0;
+            GapLongest         = 0;
+            GapSum             = 0;
+            GapAverage         = 0;
+            GapCount           = 0;
+            RXMAXModelAltitude = 0;
+            ClearText();
+            return;
         }
-         if (InStrng(GoFrontView, WordsIn) > 0) {
+        if (InStrng(GoFrontView, WordsIn) > 0) {
             CurrentView = FrontView;
             SendCommand(page_FrontView);
             UpdateModelsNameEveryWhere();
             ShowFlightMode();
             LastShowTime = 0; // this is to make redisplay sooner (in ShowComms())
-            LastTimeRead = 0; 
+            LastTimeRead = 0;
             ClearText();
             return;
         }
-
 
         if (InStrng(Scan_End, WordsIn) > 0) { //  goto setup screen from Scan screen
             CurrentView = MainSetupView;
@@ -4262,7 +4249,6 @@ void Button_was_pressed()
             DecDate();
             ClearText();
             return;
-
         }
         if (InStrng(Inc_Date, WordsIn) > 0) {
             IncDate();
@@ -4284,8 +4270,8 @@ void Button_was_pressed()
         if (InStrng(OptionsViewS, WordsIn) > 0) {
             SendCommand(pOptionsViewS);
             SendValue(ScreenViewTimeout, ScreenTimeout);
-            SendValue(BuddyM,BuddyMaster);
-            SendValue(BuddyP,DoSbusSendOnly);
+            SendValue(BuddyM, BuddyMaster);
+            SendValue(BuddyP, DoSbusSendOnly);
             SendValue(Pto, (Inactivity_Timeout / TICKSPERMINUTE));
             SendText(Tx_Name, TxName);
             CurrentView = Options_View;
@@ -4345,7 +4331,7 @@ void Button_was_pressed()
                 ++i;
                 TxName[j] = 0;
             }
-          
+
             ScreenTimeout      = GetValue(ScreenViewTimeout);
             Inactivity_Timeout = GetValue(Pto) * TICKSPERMINUTE;
             if (Inactivity_Timeout < INACTIVITYMINIMUM) Inactivity_Timeout = INACTIVITYMINIMUM;
@@ -4463,7 +4449,7 @@ void Button_was_pressed()
             SendValue(fs14, FailSafeChannel[13]);
             SendValue(fs15, FailSafeChannel[14]);
             SendValue(fs16, FailSafeChannel[15]);
-            CurrentView = FailSafe_View; 
+            CurrentView = FailSafe_View;
             UpdateButtonLabels();
             ClearText();
             return;
@@ -4606,14 +4592,14 @@ void Button_was_pressed()
             return;
         }
         if (InStrng(CH1NAME, WordsIn) > 0) {
-            p = InStrng (CH1NAME, WordsIn);
+            p = InStrng(CH1NAME, WordsIn);
             i = p + 7;
             DoNewChannelName(1, i);
             ClearText();
             return;
         }
         if (InStrng(CH2NAME, WordsIn) > 0) {
-            p = InStrng (CH2NAME, WordsIn);
+            p = InStrng(CH2NAME, WordsIn);
             i = p + 7;
             DoNewChannelName(2, i);
             ClearText();
@@ -4718,7 +4704,7 @@ void Button_was_pressed()
             return;
         }
 
-        if (InStrng(DelFile, WordsIn) > 0) { // Delete a file 
+        if (InStrng(DelFile, WordsIn) > 0) { // Delete a file
             j = 0;
             p = InStrng(DelFile, WordsIn);
             i = p + 6;
@@ -4761,7 +4747,7 @@ void Button_was_pressed()
             return;
         }
 
-        if  (InStrng(Calibrate_View, WordsIn)) {
+        if (InStrng(Calibrate_View, WordsIn)) {
             SendCommand(pCalibrateView);
             Force_ReDisplay();
             CurrentView = CalibrateView;
@@ -4783,7 +4769,7 @@ void Button_was_pressed()
                 ++i;
                 SingleModelFile[j] = 0;
             }
-            
+
             if ((InStrng(ModExt, SingleModelFile) == 0) && (strlen(SingleModelFile) <= 8)) {
                 strcat(SingleModelFile, ModExt);
             }
@@ -4812,7 +4798,8 @@ void Button_was_pressed()
                 SendValue(Progress, 100);
                 delay(10);
                 SendCommand(ProgressEnd);
-            } else {
+            }
+            else {
                 FileError = true;
             }
 
@@ -4904,11 +4891,11 @@ void Button_was_pressed()
         if (InStrng(GoSetupView, WordsIn) > 0) {
             ClearText();
             CurrentView = MainSetupView;
-            SendCommand(page_SetupView); 
+            SendCommand(page_SetupView);
             ClearText();
             return;
         }
-     
+
         if (InStrng(TypeView, WordsIn) > 0) {
             SendCommand(pTypeView);
             SendValue(r2s, 0); // Zero all RX batt cell count
@@ -4924,7 +4911,6 @@ void Button_was_pressed()
             ClearText();
             return;
         }
-
 
         if (InStrng(RXBAT, WordsIn) > 0) { // UPdate RX batt cell count
             if (GetValue(r2s) == 1) RXCellCount = 2;
@@ -5063,21 +5049,21 @@ void Button_was_pressed()
             return;
         }
 
-      if (InStrng(Fhss_View, WordsIn))
-         if (!BoundFlag){                 // no scan while connected!!!
-            {
-                SendCommand (page_FhssView); 
-                DrawFhssBox();
-                DoScanInit();
-                CurrentMode = SCANWAVEBAND; 
-                BlueLedOn();
-                ClearText();
+        if (InStrng(Fhss_View, WordsIn))
+            if (!BoundFlag) { // no scan while connected!!!
+                {
+                    SendCommand(page_FhssView);
+                    DrawFhssBox();
+                    DoScanInit();
+                    CurrentMode = SCANWAVEBAND;
+                    BlueLedOn();
+                    ClearText();
+                }
+                return;
             }
-            return;
-         }
 
-         if (InStrng(ReScan, WordsIn))
-       {
+        if (InStrng(ReScan, WordsIn))
+        {
             DrawFhssBox();
             DoScanInit();
             ClearText();
@@ -5119,15 +5105,15 @@ void Button_was_pressed()
             return;
         }
 
-       if (InStrng(Graph_View, WordsIn))
+        if (InStrng(Graph_View, WordsIn))
         {
             CurrentView = GraphView;
             ClearText();
             return;
         }
 
-         if (InStrng(Data_View, WordsIn))
-         {
+        if (InStrng(Data_View, WordsIn))
+        {
             CurrentMode  = NORMAL;
             CurrentView  = DataView;
             LastShowTime = 0;
@@ -5153,13 +5139,13 @@ void Button_was_pressed()
         }
 
         if (InStrng(FM2, WordsIn))
-        if (p > 0) {
-            FlightMode         = 2;
-            PreviousFlightMode = 2;
-            UpdateModelsNameEveryWhere();
-            ClearText();
-            return;
-        }
+            if (p > 0) {
+                FlightMode         = 2;
+                PreviousFlightMode = 2;
+                UpdateModelsNameEveryWhere();
+                ClearText();
+                return;
+            }
 
         if (InStrng(FM3, WordsIn))
         {
@@ -5178,23 +5164,23 @@ void Button_was_pressed()
             ClearText();
             return;
         }
-         if (InStrng(midyup, WordsIn)) // midy up?
-         {
+        if (InStrng(midyup, WordsIn)) // midy up?
+        {
             CentreDegrees[FlightMode][ChanneltoSet - 1]++;
             DisplayCurve();
             ClearText();
             return;
         }
 
-         if (InStrng(midydown, WordsIn)) // midy down?
-         {
+        if (InStrng(midydown, WordsIn)) // midy down?
+        {
             CentreDegrees[FlightMode][ChanneltoSet - 1]--;
             DisplayCurve();
             ClearText();
             return;
         }
 
-        if (InStrng(midhiyup, WordsIn))  // midhiy up?
+        if (InStrng(midhiyup, WordsIn)) // midhiy up?
         {
             MidHiDegrees[FlightMode][ChanneltoSet - 1]++;
             DisplayCurve();
@@ -5211,15 +5197,15 @@ void Button_was_pressed()
         }
 
         if (InStrng(midlowyup, WordsIn)) // midlowy up?
-       {
+        {
             MidLowDegrees[FlightMode][ChanneltoSet - 1]++;
             DisplayCurve();
             ClearText();
             return;
         }
 
-       if (InStrng(midlowydown, WordsIn)) // midlowy down?
-         {
+        if (InStrng(midlowydown, WordsIn)) // midlowy down?
+        {
             MidLowDegrees[FlightMode][ChanneltoSet - 1]--;
             DisplayCurve();
             ClearText();
@@ -5227,7 +5213,7 @@ void Button_was_pressed()
         }
 
         if (InStrng(yy1up, WordsIn)) // yy1 up?
-         {
+        {
             MaxDegrees[FlightMode][ChanneltoSet - 1]++;
             DisplayCurve();
             ClearText();
@@ -5243,7 +5229,7 @@ void Button_was_pressed()
         }
 
         if (InStrng(yy2up, WordsIn)) // yy1 up?
-         {
+        {
             MinDegrees[FlightMode][ChanneltoSet - 1]++;
             DisplayCurve();
             ClearText();
@@ -5258,7 +5244,7 @@ void Button_was_pressed()
             return;
         }
 
-        if  (InStrng(Reset, WordsIn)) // RESET?
+        if (InStrng(Reset, WordsIn)) // RESET?
         {
             MinDegrees[FlightMode][ChanneltoSet - 1]         = 30;
             MidLowDegrees[FlightMode][ChanneltoSet - 1]      = 60;
@@ -5288,10 +5274,10 @@ void Button_was_pressed()
             ClearText();
             return;
         }
-         p = (InStrng(ClickX, WordsIn)); // Clicked to move point?
+        p = (InStrng(ClickX, WordsIn)); // Clicked to move point?
         if (p > 0) {
             XtouchPlace = GetNextNumber(p + 7, WordsIn);
-           // This drops through to get Y as well before moving the point
+            // This drops through to get Y as well before moving the point
         }
         p = (InStrng(ClickY, WordsIn)); // Clicked to move point?
         if (p > 0) {
@@ -5351,41 +5337,41 @@ uint16_t MakeTwobytes(bool* f)
 /************************************************************************************************************/
 
 void LoadPacketData()
-{ 
+{
     uint16_t Twobytes = 0; // Extra data can be send using the last four bytes of each data packet. These are defined by the packet number
     uint8_t  uint8_t1;
     uint8_t  uint8_t2;
-    SendBuffer[CHANNELSUSED] = PacketNumber;  
-    Twobytes = MakeTwobytes(FailSafeChannel); // 16 bool values compressed to 16 bits
-    uint8_t1 = uint8_t(Twobytes >> 8);        // sent as two bytes
-    uint8_t2 = uint8_t(Twobytes & 0x00FF);
+    SendBuffer[CHANNELSUSED] = PacketNumber;
+    Twobytes                 = MakeTwobytes(FailSafeChannel); // 16 bool values compressed to 16 bits
+    uint8_t1                 = uint8_t(Twobytes >> 8);        // sent as two bytes
+    uint8_t2                 = uint8_t(Twobytes & 0x00FF);
     switch (PacketNumber) {
-        case 0:  
+        case 0:
             SendBuffer[CHANNELSUSED + 2] = BindingNow;
             if (BindingNow == 1) {
                 BindingTimer = millis(); // start a timer
                 BindingNow   = 2;
             }
             SendBuffer[CHANNELSUSED + 1] = SaveFailSafeNow; // FailSafeSaveMoment
-            SaveFailSafeNow    = false;                     // once should do it.
+            SaveFailSafeNow              = false;           // once should do it.
             break;
         case 1:
-             SendBuffer[CHANNELSUSED + 1] = uint8_t2; // these are failsafe flags
-             SendBuffer[CHANNELSUSED + 2] = uint8_t1; // these are failsafe flags
+            SendBuffer[CHANNELSUSED + 1] = uint8_t2; // these are failsafe flags
+            SendBuffer[CHANNELSUSED + 2] = uint8_t1; // these are failsafe flags
             break;
-        default: 
+        default:
             break;
     }
 }
 
-void GetNextHopChannelNumber() 
+void GetNextHopChannelNumber()
 {
     if (NextChannelNumber == 0) {
-        NextChannelNumber = PreviousChannelNumber + 1;                     // if error inc it
-        if (NextChannelNumber >= FREQUENCYSCOUNT) NextChannelNumber = 1;   // wrap to 1, not zero which means error
-    } 
-    PreviousChannelNumber =  NextChannelNumber;   
-    NextFrequency = FHSS_Channels[NextChannelNumber];                      
+        NextChannelNumber = PreviousChannelNumber + 1;                   // if error inc it
+        if (NextChannelNumber >= FREQUENCYSCOUNT) NextChannelNumber = 1; // wrap to 1, not zero which means error
+    }
+    PreviousChannelNumber = NextChannelNumber;
+    NextFrequency         = FHSS_Channels[NextChannelNumber];
 }
 
 /************************************************************************************************************/
@@ -5504,100 +5490,102 @@ void GetRXVersionNumber()
     strcat(ReceiverVersionNumber, nbuf);
     Str(nbuf, AckPayload.Byte5, 0);
     strcat(ReceiverVersionNumber, nbuf);
-    Str(nbuf, AckPayload.Byte2,0);
-    strcpy(ThisRadio,nbuf);
+    Str(nbuf, AckPayload.Byte2, 0);
+    strcpy(ThisRadio, nbuf);
 }
-
 
 /************************************************************************************************************/
 
 void ClearAckPayload()
 {
-    AckPayload.Byte1            = 0;
-    AckPayload.Byte2            = 0;
-    AckPayload.Byte3            = 0;
-    AckPayload.Byte4            = 0;
-    AckPayload.Byte5            = 0;
-    AckPayload.Purpose         |= 0x80;
+    AckPayload.Byte1 = 0;
+    AckPayload.Byte2 = 0;
+    AckPayload.Byte3 = 0;
+    AckPayload.Byte4 = 0;
+    AckPayload.Byte5 = 0;
+    AckPayload.Purpose |= 0x80;
 }
 
 /************************************************************************************************************/
 
-void GetRXTime(){  // This gets the time from Receivier to enable FHSS synch
+void GetRXTime()
+{ // This gets the time from Receivier to enable FHSS synch
     union
-    {uint32_t Val32; 
-        uint8_t Val8[4];
-    }RXTimeUnion;                             // union used to allow access to each byte of 32 bit value     
-    if (AckPayload.Byte5){                    // Good data? (Zero means no data)
-        RXTimeUnion.Val8[0]    = AckPayload.Byte1;
-        RXTimeUnion.Val8[1]    = AckPayload.Byte2;
-        RXTimeUnion.Val8[2]    = AckPayload.Byte3; 
-        RXTimeUnion.Val8[3]    = AckPayload.Byte4;  
-        NextChannelNumber      = AckPayload.Byte5;  
-        HopStart               =  millis() - RXTimeUnion.Val32;
-        TXTimeStamp            =  millis() - HopStart; 
-    }
-if ((TXTimeStamp == 0) || (TXTimeStamp > HOPTIME )) { // is it time (or indeed it is overdue?) to hop frequency?
-        GetNextHopChannelNumber();       // Also gets actual channel number
-        HopStart = millis(); 
-        HopToNextFrequency();
-}
-      ClearAckPayload();
-      CheckTimer();
-      ReadSwitches();
-      ShowComms();
-}
-
-/************************************************************************************************************/
-
-void GetRXVolts()   
-{
-  union                                                                       // union used to allow access to each byte of 32 bit float     
-    {float Val32; 
+    {
+        uint32_t Val32;
         uint8_t  Val8[4];
-    }RXVoltsUnion;   
-    RXVoltsUnion.Val8[0] = AckPayload.Byte1;                      
-    RXVoltsUnion.Val8[1] = AckPayload.Byte2; 
-    RXVoltsUnion.Val8[2] = AckPayload.Byte3;   
+    } RXTimeUnion;          // union used to allow access to each byte of 32 bit value
+    if (AckPayload.Byte5) { // Good data? (Zero means no data)
+        RXTimeUnion.Val8[0] = AckPayload.Byte1;
+        RXTimeUnion.Val8[1] = AckPayload.Byte2;
+        RXTimeUnion.Val8[2] = AckPayload.Byte3;
+        RXTimeUnion.Val8[3] = AckPayload.Byte4;
+        NextChannelNumber   = AckPayload.Byte5;
+        HopStart            = millis() - RXTimeUnion.Val32;
+        TXTimeStamp         = millis() - HopStart;
+    }
+    if ((TXTimeStamp == 0) || (TXTimeStamp > HOPTIME)) { // is it time (or indeed it is overdue?) to hop frequency?
+        GetNextHopChannelNumber();                       // Also gets actual channel number
+        HopStart = millis();
+        HopToNextFrequency();
+    }
+    ClearAckPayload();
+    CheckTimer();
+    ReadSwitches();
+    ShowComms();
+}
+
+/************************************************************************************************************/
+
+void GetRXVolts()
+{
+    union // union used to allow access to each byte of 32 bit float
+    {
+        float   Val32;
+        uint8_t Val8[4];
+    } RXVoltsUnion;
+    RXVoltsUnion.Val8[0] = AckPayload.Byte1;
+    RXVoltsUnion.Val8[1] = AckPayload.Byte2;
+    RXVoltsUnion.Val8[2] = AckPayload.Byte3;
     RXVoltsUnion.Val8[3] = AckPayload.Byte4;
-    RXModelVolts         = RXVoltsUnion.Val32 ;
-   
+    RXModelVolts         = RXVoltsUnion.Val32;
 }
 /************************************************************************************************************/
- void GetAltitude(){
+void GetAltitude()
+{
 
-  union                                                              // union used to allow access to each byte of 32 bit float     
-    {float Val32; 
-        uint8_t  Val8[4];   
-    }AltitudeUnion;   
-    AltitudeUnion.Val8[0] = AckPayload.Byte1;                       // These values are herewith delivered to Transmitter in Ack Payload
-    AltitudeUnion.Val8[1] = AckPayload.Byte2; 
-    AltitudeUnion.Val8[2] = AckPayload.Byte3; 
-    AltitudeUnion.Val8[3] = AckPayload.Byte4; 
-    RXModelAltitude       = int(AltitudeUnion.Val32);  
+    union // union used to allow access to each byte of 32 bit float
+    {
+        float   Val32;
+        uint8_t Val8[4];
+    } AltitudeUnion;
+    AltitudeUnion.Val8[0] = AckPayload.Byte1; // These values are herewith delivered to Transmitter in Ack Payload
+    AltitudeUnion.Val8[1] = AckPayload.Byte2;
+    AltitudeUnion.Val8[2] = AckPayload.Byte3;
+    AltitudeUnion.Val8[3] = AckPayload.Byte4;
+    RXModelAltitude       = int(AltitudeUnion.Val32);
     if (RXMAXModelAltitude < RXModelAltitude) RXMAXModelAltitude = RXModelAltitude;
-    snprintf (MaxAltitude , 5, "%d", RXMAXModelAltitude);
-    snprintf (ModelAltitude, 5, "%d", RXModelAltitude);
- }
-
+    snprintf(MaxAltitude, 5, "%d", RXMAXModelAltitude);
+    snprintf(ModelAltitude, 5, "%d", RXModelAltitude);
+}
 
 /************************************************************************************************************/
-  void GetTemperature()
-  {
+void GetTemperature()
+{
 
-    union                                                              // union used to allow access to each byte of 32 bit float     
-    {float Val32; 
-        uint8_t  Val8[4];   
-    }TemperatureUnion;   
+    union // union used to allow access to each byte of 32 bit float
+    {
+        float   Val32;
+        uint8_t Val8[4];
+    } TemperatureUnion;
 
-    TemperatureUnion.Val8[0] = AckPayload.Byte1;                       // These values are herewith delivered to Transmitter in Ack Payload
-    TemperatureUnion.Val8[1] = AckPayload.Byte2; 
-    TemperatureUnion.Val8[2] = AckPayload.Byte3; 
-    TemperatureUnion.Val8[3] = AckPayload.Byte4; 
-    RXModelTemperature       = TemperatureUnion.Val32;  
-    snprintf (ModelTemperature, 5, "%f", RXModelTemperature);
-   
- }
+    TemperatureUnion.Val8[0] = AckPayload.Byte1; // These values are herewith delivered to Transmitter in Ack Payload
+    TemperatureUnion.Val8[1] = AckPayload.Byte2;
+    TemperatureUnion.Val8[2] = AckPayload.Byte3;
+    TemperatureUnion.Val8[3] = AckPayload.Byte4;
+    RXModelTemperature       = TemperatureUnion.Val32;
+    snprintf(ModelTemperature, 5, "%f", RXModelTemperature);
+}
 
 /************************************************************************************************************/
 void ParseAckPayload()
@@ -5608,32 +5596,32 @@ void ParseAckPayload()
                                     // High BIT is guaranteed LOW by this point, so no "& 0x7F" is needed.
         {
             case 0:
-                GetRXTime();      // Synch very frequently!
+                GetRXTime(); // Synch very frequently!
                 break;
             case 1:
                 GetRXVersionNumber();
                 break;
-            case 2:              
-                GetRXTime();     // Synch very frequently!
+            case 2:
+                GetRXTime(); // Synch very frequently!
                 break;
             case 3:
                 GetRXVolts();
                 if (RXModelVolts > 0) {
                     VoltsDetected = true;
-                    snprintf (ModelVolts, 5, "%f", RXModelVolts);
+                    snprintf(ModelVolts, 5, "%f", RXModelVolts);
                 }
             case 4:
-                GetRXTime();      // Synch very frequently!
+                GetRXTime(); // Synch very frequently!
                 break;
             case 5:
                 GetAltitude();
-                 break;
+                break;
             case 6:
-                GetRXTime();      // Synch very frequently!
+                GetRXTime(); // Synch very frequently!
                 break;
             case 7:
                 GetTemperature();
-                 break;
+                break;
             default:
                 break;
         }
@@ -5642,34 +5630,33 @@ void ParseAckPayload()
 /************************************************************************************************************/
 void CheckGapsLength()
 {
-    if (GapStart > 0) {                          // when reconnected, how long was connection lost?
-       ++GapCount;
-       ThisGap = (millis() - GapStart);          // AND in fact RX sends no data for 20 ms after reconnection        
-       if (!GapShortest) GapShortest = ThisGap;
-       if (ThisGap > GapLongest) {
-                GapLongest = ThisGap;
+    if (GapStart > 0) { // when reconnected, how long was connection lost?
+        ++GapCount;
+        ThisGap = (millis() - GapStart); // AND in fact RX sends no data for 20 ms after reconnection
+        if (!GapShortest) GapShortest = ThisGap;
+        if (ThisGap > GapLongest) {
+            GapLongest = ThisGap;
         }
-       
-       if (ThisGap < GapShortest) {
-                GapShortest = ThisGap; 
+
+        if (ThisGap < GapShortest) {
+            GapShortest = ThisGap;
         }
         GapSum += ThisGap;
-        GapStart = 0;
+        GapStart   = 0;
         GapAverage = GapSum / GapCount;
-#ifdef DB_GAPS 
-        Serial.print ("GapCount: ") ;
-        Serial.println (GapCount) ;
-        Serial.print ("GapAverage: ") ;
-        Serial.println (GapAverage) ;
-        Serial.print ("GapShortest: ") ;
-        Serial.println (GapShortest) ;
-        Serial.print ("GapLongest: ") ;
-        Serial.println (GapLongest) ;
-        Serial.println (" ") ;
+#ifdef DB_GAPS
+        Serial.print("GapCount: ");
+        Serial.println(GapCount);
+        Serial.print("GapAverage: ");
+        Serial.println(GapAverage);
+        Serial.print("GapShortest: ");
+        Serial.println(GapShortest);
+        Serial.print("GapLongest: ");
+        Serial.println(GapLongest);
+        Serial.println(" ");
 #endif
     }
 }
-
 
 /************************************************************************************************************/
 // LOOP
@@ -5679,26 +5666,26 @@ void loop()
 {
     KickTheDog(); // Watchdog
     if (GetButtonPress()) {
-        Button_was_pressed();     // Deal with button
-    } 
+        Button_was_pressed(); // Deal with button
+    }
 
     if (millis() - LastTimeRead >= 1000) {
-        ReadTime();                // Do the clock
+        ReadTime(); // Do the clock
         LastTimeRead = millis();
-    } 
+    }
     if (millis() - RangeTestStart >= 1000) {
-        GetStatistics();           // Do stats
+        GetStatistics(); // Do stats
         RangeTestStart = millis();
-    } 
+    }
     if ((millis() - ShowServoTimer >= 100) && (CurrentView != FrontView)) {
-        ShowServoPos();            // Show servos positions
+        ShowServoPos(); // Show servos positions
         ShowServoTimer = millis();
-    } 
+    }
     if ((millis() - TxOnTime) > 2000) { // Transmit nothing for first 2 seconds
-        
+
         switch (CurrentMode) {
             case 0:
-                SendData();  
+                SendData();
                 break;
             case 1:
                 CalibrateSticks();
@@ -5720,14 +5707,14 @@ void loop()
             Serial.println("Binding now");
 #endif
             SetThePipe(NewPipe);
-            BindingNow = 0;
-            BoundFlag  = true;
-            LostPackets  = 0;
-            GapShortest  = 0;
-            GapLongest   = 0;
-            GapSum       = 0;
-            GapAverage   = 0;
-            GapCount     = 0;  
+            BindingNow  = 0;
+            BoundFlag   = true;
+            LostPackets = 0;
+            GapShortest = 0;
+            GapLongest  = 0;
+            GapSum      = 0;
+            GapAverage  = 0;
+            GapCount    = 0;
             GreenLedOn();
             MakeBindButtonInvisible();
         }

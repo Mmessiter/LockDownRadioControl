@@ -2,80 +2,80 @@
 #ifndef RadioFunctions_H
 #define RadioFunctions_H
 
- // **************************************************************************
- //                     TX VERSION NUMBER   (January 6 2021 Malcolm Messiter) *
- //***************************************************************************
-#define TXVERSION_MAJOR   1  
+// **************************************************************************
+//                     TX VERSION NUMBER   (January 6 2021 Malcolm Messiter) *
+//***************************************************************************
+#define TXVERSION_MAJOR   1
 #define TXVERSION_MINOR   4
 #define TXVERSION_MINIMUS 7
- 
- // **************************************************************************
- //                            SBUS PARAMETERS   (FOR BUDDY BOXING)          *
- //***************************************************************************
 
-#define SBUSRATE        10        // SBUS frame every 10 milliseconds ( = 100 Hz)
-#define SBUSPORT        Serial2
-#define RANGEMAX        2047      // = Frsky at 150 %
-#define RANGEMIN        0         // = Frsky at 0 %
+// **************************************************************************
+//                            SBUS PARAMETERS   (FOR BUDDY BOXING)          *
+//***************************************************************************
 
- // **************************************************************************
- //                            SERVO RANGE PARAMETERS                        *
- //***************************************************************************
+#define SBUSRATE 10 // SBUS frame every 10 milliseconds ( = 100 Hz)
+#define SBUSPORT Serial2
+#define RANGEMAX 2047 // = Frsky at 150 %
+#define RANGEMIN 0    // = Frsky at 0 %
 
-#define MINMICROS   500 
-#define MAXMICROS   2500 
+// **************************************************************************
+//                            SERVO RANGE PARAMETERS                        *
+//***************************************************************************
 
- // **************************************************************************
- //                            FHSS PARAMETERS                               *
- //***************************************************************************
+#define MINMICROS 500
+#define MAXMICROS 2500
 
-#define HOPTIME           55    // A New frequency hop every 55 ms (must match receiver setting)
-#define PACEMAKER         2     // MINIMUM Ms between packets of data.
-#define FREQUENCYSCOUNT   82    // How many frequencies to use before wrapping to first
-#define RETRYCOUNT        3     // auto retries from nRF24L01
-#define RETRYWAIT         1     // Wait between retries is RetryWait+1 * 250us. A failed packet therefore takes (RetryWait+1 * 250us) * RetryCount 
-#define LOSTCONTACTCUTOFF 1     // How many packets to lose before reconnect triggers  (>1)
-#define RECONNECT_CH     83
+// **************************************************************************
+//                            FHSS PARAMETERS                               *
+//***************************************************************************
 
- // **************************************************************************
- //                            SEND MODE PARAMETERS                          * 
- //***************************************************************************
+#define HOPTIME           55 // A New frequency hop every 55 ms (must match receiver setting)
+#define PACEMAKER         2  // MINIMUM Ms between packets of data.
+#define FREQUENCYSCOUNT   82 // How many frequencies to use before wrapping to first
+#define RETRYCOUNT        3  // auto retries from nRF24L01
+#define RETRYWAIT         1  // Wait between retries is RetryWait+1 * 250us. A failed packet therefore takes (RetryWait+1 * 250us) * RetryCount
+#define LOSTCONTACTCUTOFF 1  // How many packets to lose before reconnect triggers  (>1)
+#define RECONNECT_CH      83
+
+// **************************************************************************
+//                            SEND MODE PARAMETERS                          *
+//***************************************************************************
 
 #define NORMAL          0 // Normal for transmit as usual
 #define CALIBRATELIMITS 1 // Calibrate limits
 #define CENTRESTICKS    2 // Calibrate Centres
 #define SCANWAVEBAND    3 // Scan waveband
 #define SENDNOTHING     4 // Transmission off
- // **************************************************************************
+                          // **************************************************************************
 
- // **************************************************************************
- //                          NEXTION SERIAL CONNECTION                       *
- //***************************************************************************
-#define Nextion         Serial1 // Nextion is connected to Serial1
+// **************************************************************************
+//                          NEXTION SERIAL CONNECTION                       *
+//***************************************************************************
+#define Nextion Serial1 // Nextion is connected to Serial1
 // ***************************************************************************
 
- // **************************************************************************
- //                            WATCHDOG PARAMETERS                           *
- //***************************************************************************
- 
-#define USE_WATCHDOG         
-#define WATCHDOGTIMEOUT   10000 // 10 Seconds before reboot (32ms -> 500 seconds)
-#define KICKRATE          1000  // Kick once a second (must be between WATCHDOGMAXRATE and WATCHDOGTIMEOUT)
-#define WATCHDOGMAXRATE   500   // 500 ms secs between kicks is max rate allowed
+// **************************************************************************
+//                            WATCHDOG PARAMETERS                           *
+//***************************************************************************
+
+#define USE_WATCHDOG
+#define WATCHDOGTIMEOUT 10000 // 10 Seconds before reboot (32ms -> 500 seconds)
+#define KICKRATE        1000  // Kick once a second (must be between WATCHDOGMAXRATE and WATCHDOGTIMEOUT)
+#define WATCHDOGMAXRATE 500   // 500 ms secs between kicks is max rate allowed
 
 // **************************************************************************
 
- // **************************************************************************
- //                     DEBUG OPTIONS                                        *
- //             UNCOMMENT ANY OF THESE for that bit of debug info            *
- //***************************************************************************
+// **************************************************************************
+//                     DEBUG OPTIONS                                        *
+//             UNCOMMENT ANY OF THESE for that bit of debug info            *
+//***************************************************************************
 
 // #define DB_NEXTION        // Debug Nextion and SD card data
 // #define DB_FHSS           // Debug real time FHSS data
 // #define DB_SENSORS        // Debug Sensors
 // #define DB_BIND           // Debug Binding
 // #define DB_SWITCHES       // Debug Switches
-// #define DB_MODEL_EXCHANGE // Debug MODEL EXCHANGE (by RF link) 
+// #define DB_MODEL_EXCHANGE // Debug MODEL EXCHANGE (by RF link)
 // #define DB_GAPS           // Debug Connection Gap assessment
 
 #include <RF24.h>
@@ -128,7 +128,6 @@ extern uint32_t       RXTimeStamp;
 extern bool           DoSbusSendOnly;
 extern bool           BuddyMaster;
 
-
 extern void  GetSlaveChannelValues();
 extern void  KickTheDog();
 extern void  SendCommand(char* tbox);
@@ -148,10 +147,6 @@ extern void  StartInactvityTimeout();
 extern void  ShowServoPos();
 extern void  MapToSBUS();
 
-
-
-
-
 /*********************************************************************************************************************************/
 // function prototypes
 
@@ -165,6 +160,5 @@ void ScanAllChannels();
 void SendData();
 
 /*********************************************************************************************************************************/
-
 
 #endif

@@ -42,54 +42,53 @@
 
 // ************************************************** Receiver code **************************************************
 
-#define RECEIVE_TIMEOUT 25    // 25 milliseconds seems an optimal value
+#define RECEIVE_TIMEOUT 25 // 25 milliseconds seems an optimal value
 #define CHANNELSUSED    16
-#define SERVOSUSED      10    // All 16 are available via SBUS
-#define SBUSRATE        10    // SBUS frame every 10 milliseconds
+#define SERVOSUSED      10 // All 16 are available via SBUS
+#define SBUSRATE        10 // SBUS frame every 10 milliseconds
 #define SBUSPORT        Serial3
-#define RECONNECTGAP    20    // Send no data to servos for 20 ms after a reconnect (10 was not quite enough)
-#define MINMICROS       500 
-#define MAXMICROS       2500 
+#define RECONNECTGAP    20 // Send no data to servos for 20 ms after a reconnect (10 was not quite enough)
+#define MINMICROS       500
+#define MAXMICROS       2500
 #define LED_PIN         1
 #define RANGEMAX        2047 // = Frsky at 150 %
 #define RANGEMIN        0
 
-
 #include <Servo.h>
 #include <EEPROM.h>
 #include <SBUS.h>
-#include <Adafruit_INA219.h>   // new library used here±
+#include <Adafruit_INA219.h> // new library used here±
 #include <Adafruit_BMP280.h>
 #include "utilities/radio.h"
 
-bool USE_BMP280 = false;    /** is BMP280 sensor connected */
-bool USE_INA219  = false;   //  Volts from INA219
+bool            USE_BMP280 = false; /** is BMP280 sensor connected */
+bool            USE_INA219 = false; //  Volts from INA219
 Adafruit_INA219 ina219;
-Adafruit_BMP280 bmp280;      
+Adafruit_BMP280 bmp280;
 Servo           MCMServo[SERVOSUSED];
 uint8_t         PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 16}; // ten now, last 6 only via sbus
 SBUS            MySbus(SBUSPORT);
-float    PacketStartTime;
-float    temperature280, pressure, altitude, StartAltitude;
-uint8_t  BindNow        = 0;     /** indicates that the receiver should start the binding/pairing process */
-bool     BoundFlag      = false; /** indicates if receiver paired with transmitter */
-int      BindOKTimer    = 0;
-bool     ServosAttached = false;
-uint16_t SbusChannels[CHANNELSUSED + 8]; // a few spare
-int      SBUSTimer = 0;
-bool     FailSafeChannel[17];
-bool     FailSafeDataLoaded = false;
-bool     ReInit             = false;
-uint8_t  FS_byte1              = 0;    // All 16 failsafe channel flags are in these two bytes
-uint8_t  FS_byte2              = 0;
-uint32_t ReconnectedMoment;
-float    SavedAltitude;
-float    SavedTemperature;
-float    SavedVolts;
-bool     Radio1Exists = false;
-bool     Radio2Exists = false;
-uint32_t SensorTime = 0;
-float    Qnh = 1018;                   //Pressure at sea level here and now
+float           PacketStartTime;
+float           temperature280, pressure, altitude, StartAltitude;
+uint8_t         BindNow        = 0;     /** indicates that the receiver should start the binding/pairing process */
+bool            BoundFlag      = false; /** indicates if receiver paired with transmitter */
+int             BindOKTimer    = 0;
+bool            ServosAttached = false;
+uint16_t        SbusChannels[CHANNELSUSED + 8]; // a few spare
+int             SBUSTimer = 0;
+bool            FailSafeChannel[17];
+bool            FailSafeDataLoaded = false;
+bool            ReInit             = false;
+uint8_t         FS_byte1           = 0; // All 16 failsafe channel flags are in these two bytes
+uint8_t         FS_byte2           = 0;
+uint32_t        ReconnectedMoment;
+float           SavedAltitude;
+float           SavedTemperature;
+float           SavedVolts;
+bool            Radio1Exists = false;
+bool            Radio2Exists = false;
+uint32_t        SensorTime   = 0;
+float           Qnh          = 1018; //Pressure at sea level here and now
 
 /************************************************************************************************************/
 
@@ -118,7 +117,7 @@ void LoadFailSafeData()
 /** Map servo channels' data from ReceivedData buffer into SbusChannels buffer */
 void MapToSBUS()
 {
-    if (Connected){
+    if (Connected) {
         for (int j = 0; j < CHANNELSUSED; ++j) {
             SbusChannels[j] = map(ReceivedData[j], MINMICROS, MAXMICROS, RANGEMIN, RANGEMAX);
         }
@@ -129,12 +128,14 @@ void MapToSBUS()
 
 void MoveServos()
 {
-    if (!Connected){return;}                                        // avoid sending rubbish
-    MySbus.write(&SbusChannels[0]);                                 // Send SBUS data
+    if (!Connected) {
+        return;
+    }                               // avoid sending rubbish
+    MySbus.write(&SbusChannels[0]); // Send SBUS data
     for (int j = 0; j < SERVOSUSED; ++j) {
-        if (PreviousData[j] != ReceivedData[j]) {                   // if same as last time, don't bother sending again.
-            MCMServo[j].writeMicroseconds(ReceivedData[j]);             
-             PreviousData[j] = ReceivedData[j];
+        if (PreviousData[j] != ReceivedData[j]) { // if same as last time, don't bother sending again.
+            MCMServo[j].writeMicroseconds(ReceivedData[j]);
+            PreviousData[j] = ReceivedData[j];
         }
     }
 }
@@ -146,10 +147,10 @@ void FailSafe()
 {
     if (BoundFlag) {
         LoadFailSafeData();
-        Connected = true;   // to force sending this data!
+        Connected = true; // to force sending this data!
         MapToSBUS();
         MoveServos();
-        Connected = false;  // I lied earlier - we're not really connected.
+        Connected = false; // I lied earlier - we're not really connected.
     }
 }
 
@@ -165,14 +166,14 @@ void ShowHopDurationEtc()
     Serial.print("Hop duration: ");
     Serial.print((millis() - PacketStartTime) / 1000);
     Serial.print("s  Packets per hop: ");
-    Serial.print(PacketNumber); 
+    Serial.print(PacketNumber);
     Serial.print("  Average Time per packet: ");
     Serial.print(OnePacketTime);
     Serial.print("ms  Next channel: ");
     Serial.print(FHSS_Channels[NextChannelNumber]);
     Serial.print(BoundFlag ? " Bound!" : " NOT Bound");
     Serial.print("  Radio: ");
-    Serial.println (ThisRadio);
+    Serial.println(ThisRadio);
     PacketStartTime = millis();
 }
 
@@ -180,12 +181,12 @@ void ShowHopDurationEtc()
 
 void ClearAckPayload()
 {
-    AckPayload.Byte1              = 0;
-    AckPayload.Byte2              = 0;
-    AckPayload.Byte3              = 0;
-    AckPayload.Byte4              = 0;
-    AckPayload.Byte5              = 0;
-    AckPayload.Purpose           |= 0x80;
+    AckPayload.Byte1 = 0;
+    AckPayload.Byte2 = 0;
+    AckPayload.Byte3 = 0;
+    AckPayload.Byte4 = 0;
+    AckPayload.Byte5 = 0;
+    AckPayload.Purpose |= 0x80;
 }
 
 /************************************************************************************************************/
@@ -196,20 +197,20 @@ bool ReadData()
     Connected = false;
     if (CurrentRadio->available()) {
         LoadAckPayload();
-        Connected            = true;
+        Connected = true;
         CurrentRadio->flush_tx();                                      // This avoids a lockup that happens when the FIFO gets full.**************
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // Send telemetry (actual length plus 0)
         CurrentRadio->read(&CompressedData, sizeof(CompressedData));   // Get Data
         Decompress(ReceivedData, CompressedData, UNCOMPRESSEDWORDS);   // decompress data
         MapToSBUS();
-        CurrentRadio->flush_rx();                                      // This avoids a lockup that happens when the FIFO gets full. **************
+        CurrentRadio->flush_rx(); // This avoids a lockup that happens when the FIFO gets full. **************
         ClearAckPayload();
         LastConnectionMoment = millis();
-        if (HopNow) {                                                  // this flag gets set in LoadAckPayload();
-            FailSafeDataLoaded = false;                                // Ack payload instructed to Hop at next opportunity...
-            HopToNextFrequency();                                      // So hop now
-            HopNow = false;                                            // and clear the flag.
-            DoSensors();                                               // read sensors while TX hops an catches up
+        if (HopNow) {                   // this flag gets set in LoadAckPayload();
+            FailSafeDataLoaded = false; // Ack payload instructed to Hop at next opportunity...
+            HopToNextFrequency();       // So hop now
+            HopNow = false;             // and clear the flag.
+            DoSensors();                // read sensors while TX hops an catches up
         }
     }
     return Connected;
@@ -224,7 +225,7 @@ void AttachServos()
             MCMServo[i].attach(PWMPins[i]);
         }
         ServosAttached = true;
-    } 
+    }
     MySbus.begin();
 }
 
@@ -267,13 +268,13 @@ void RebuildFlags(bool* f, uint16_t tb)
  */
 void CheckParams()
 {
-    uint16_t TwoBytes = 0;      
-    PacketNumber = ReceivedData[CHANNELSUSED];     
-    switch (PacketNumber) {     
+    uint16_t TwoBytes = 0;
+    PacketNumber      = ReceivedData[CHANNELSUSED];
+    switch (PacketNumber) {
         case 0:
-             BindNow = ReceivedData[CHANNELSUSED + 2];
-             FailSafeSave = bool(ReceivedData[CHANNELSUSED + 1]);
-                if (FailSafeSave) {
+            BindNow      = ReceivedData[CHANNELSUSED + 2];
+            FailSafeSave = bool(ReceivedData[CHANNELSUSED + 1]);
+            if (FailSafeSave) {
                 TwoBytes = uint16_t(FS_byte2) + uint16_t(FS_byte1 << 8);
                 RebuildFlags(FailSafeChannel, TwoBytes);
             }
@@ -283,7 +284,7 @@ void CheckParams()
             FS_byte2 = ReceivedData[CHANNELSUSED + 2]; // These 2 bytes are 16 failsafe flags
             break;
         default:
-            break; 
+            break;
     }
     return;
 }
@@ -307,32 +308,35 @@ void Sensors_Status()
 /************************************************************************************************************/
 void DoSensors()
 {
-    if ((millis()-SensorTime) < 2000) return;  // no need to measure too often
+    if ((millis() - SensorTime) < 2000) return; // no need to measure too often
     SensorTime = millis();
     if (USE_BMP280) {
-             if (BoundFlag) {
-                 SavedTemperature = bmp280.readTemperature();
-                 SavedAltitude    = (bmp280.readAltitude(Qnh) * 3.28084) - StartAltitude;  // TODO: Qnh needs user entry on startup
-                 if (SavedAltitude < 0) SavedAltitude = 0;
-             }
-    }    
+        if (BoundFlag) {
+            SavedTemperature = bmp280.readTemperature();
+            SavedAltitude    = (bmp280.readAltitude(Qnh) * 3.28084) - StartAltitude; // TODO: Qnh needs user entry on startup
+            if (SavedAltitude < 0) SavedAltitude = 0;
+        }
+    }
     if (USE_INA219) {
-             if (BoundFlag) SavedVolts = ina219.getBusVoltage_V();     
+        if (BoundFlag) SavedVolts = ina219.getBusVoltage_V();
     }
 #ifdef DB_SENSORS
-           Sensors_Status(); // does nothing if DB_SENSORS is not defined
+    Sensors_Status(); // does nothing if DB_SENSORS is not defined
 #endif
 }
 /************************************************************************************************************/
 
 FASTRUN void ReceiveData()
-{   Connected = false;
-    if (CurrentRadio->available()) {Connected = true;}
+{
+    Connected = false;
+    if (CurrentRadio->available()) {
+        Connected = true;
+    }
     if (!Connected)
-      if (millis() - LastConnectionMoment >= RECEIVE_TIMEOUT) {
-         Reconnect();
-      }
-    if (ReadData()) { 
+        if (millis() - LastConnectionMoment >= RECEIVE_TIMEOUT) {
+            Reconnect();
+        }
+    if (ReadData()) {
         CheckParams();
     }
 }
@@ -343,7 +347,7 @@ void ScanI2c()
     for (uint8_t i = 1; i < 127; ++i) {
         Wire.beginTransmission(i);
         if (Wire.endTransmission() == 0) {
-             if (i == 0x40) {
+            if (i == 0x40) {
                 USE_INA219 = true;
 #ifdef DB_SENSORS
                 Serial.println("INA219 voltage meter detected!");
@@ -368,13 +372,13 @@ void ScanI2c()
 void InitBMP280()
 {
     bmp280.begin(0x76);
-    bmp280.setSampling(Adafruit_BMP280::MODE_NORMAL,        /* Operating Mode. */
-    Adafruit_BMP280::SAMPLING_X2,                           /* Temp. oversampling */
-    Adafruit_BMP280::SAMPLING_X16,                          /* Pressure oversampling */
-    Adafruit_BMP280::FILTER_X16,                            /* Filtering. */ 
-    Adafruit_BMP280::STANDBY_MS_500);                       /* Standby time. */
+    bmp280.setSampling(Adafruit_BMP280::MODE_NORMAL,     /* Operating Mode. */
+                       Adafruit_BMP280::SAMPLING_X2,     /* Temp. oversampling */
+                       Adafruit_BMP280::SAMPLING_X16,    /* Pressure oversampling */
+                       Adafruit_BMP280::FILTER_X16,      /* Filtering. */
+                       Adafruit_BMP280::STANDBY_MS_500); /* Standby time. */
 
-    StartAltitude    = (bmp280.readAltitude(Qnh) * 3.28084);
+    StartAltitude = (bmp280.readAltitude(Qnh) * 3.28084);
 }
 
 /************************************************************************************************************/
@@ -414,7 +418,7 @@ void DoBinding()
         if (BindOKTimer == 0) {
             BindOKTimer = millis();
         }
-        else if ((millis() - BindOKTimer) > 400) {  // allow .4 of a second for the TX to bind
+        else if ((millis() - BindOKTimer) > 400) { // allow .4 of a second for the TX to bind
             BindNow = 1;
         }
     }
@@ -458,8 +462,8 @@ void loop()
     if (BoundFlag && Connected) {
         if (millis() - SBUSTimer >= SBUSRATE) {                  // SBUS rate is also good enough for servo rate
             SBUSTimer = millis();                                // timer starts before send starts....
-            if ((millis()- ReconnectedMoment) > RECONNECTGAP)  { // Don't send data for 10 ms after reconnect
-                      MoveServos();
+            if ((millis() - ReconnectedMoment) > RECONNECTGAP) { // Don't send data for 10 ms after reconnect
+                MoveServos();
             }
         }
         if (FailSafeSave) SaveFailSafeData();
