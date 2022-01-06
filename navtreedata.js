@@ -87,9 +87,13 @@ var NAVTREE =
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],
+      [ "Class Hierarchy", "hierarchy.html", "hierarchy" ],
       [ "Class Members", "functions.html", [
         [ "All", "functions.html", null ],
-        [ "Variables", "functions_vars.html", null ]
+        [ "Functions", "functions_func.html", null ],
+        [ "Variables", "functions_vars.html", null ],
+        [ "Enumerations", "functions_enum.html", null ],
+        [ "Enumerator", "functions_eval.html", null ]
       ] ]
     ] ],
     [ "Files", "files.html", [
@@ -98,6 +102,7 @@ var NAVTREE =
         [ "All", "globals.html", "globals_dup" ],
         [ "Functions", "globals_func.html", "globals_func" ],
         [ "Variables", "globals_vars.html", "globals_vars" ],
+        [ "Enumerator", "globals_eval.html", null ],
         [ "Macros", "globals_defs.html", null ]
       ] ]
     ] ]
@@ -106,10 +111,10 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"_r_x_c_o_d_e.html",
-"_transmitter_code_2src_2main_8cpp.html#a1d2c1a7c2e532457f8a16284d4560094",
-"_transmitter_code_2src_2main_8cpp.html#aad727ec0b0f9f34487a535eaa4a83172",
-"imu_8h.html#a440cead796442e3ec67f07b13662f2b8"
+"_adafruit___b_m_p280_8cpp.html",
+"_transmitter_code_2src_2main_8cpp.html#a16a7235629cfd2dec33802caa95dc16d",
+"_transmitter_code_2src_2main_8cpp.html#aa67b661e0a71a9cce5c2903953b8b8bf",
+"globals_func_i.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

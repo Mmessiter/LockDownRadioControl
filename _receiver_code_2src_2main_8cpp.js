@@ -34,7 +34,7 @@ var _receiver_code_2src_2main_8cpp =
     [ "altitude", "_receiver_code_2src_2main_8cpp.html#a0e13a4b4ae0cefdac2a413284239caa6", null ],
     [ "BindNow", "_receiver_code_2src_2main_8cpp.html#ac629a0e239d1c27f33584d6ac3e841f8", null ],
     [ "BindOKTimer", "_receiver_code_2src_2main_8cpp.html#a547d518da80d9f29dde20e14880e250c", null ],
-    [ "bmp280", "_receiver_code_2src_2main_8cpp.html#a8092a3b74009262a2486ed8d7e7d9864", null ],
+    [ "bmp280", "_receiver_code_2src_2main_8cpp.html#a1eeadec20c253385fe11f15108d783c8", null ],
     [ "BoundFlag", "_receiver_code_2src_2main_8cpp.html#a44d37e4e8af884bf172344c0835a5593", null ],
     [ "FailSafeChannel", "_receiver_code_2src_2main_8cpp.html#aeda79da3882f657a3eaefc5800122da5", null ],
     [ "FailSafeDataLoaded", "_receiver_code_2src_2main_8cpp.html#a08ed7a870be8e84ae26ee0b972866bb3", null ],
