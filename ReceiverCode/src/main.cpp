@@ -299,7 +299,7 @@ void Sensors_Status()
     }
     if (USE_BMP280) {
         Serial.print("  Altitude=");
-        Serial.print(SavedAltitude); // convert from meters
+        Serial.print(SavedAltitude);
         Serial.print(" Temp=");
         Serial.print(SavedTemperature);
     }
