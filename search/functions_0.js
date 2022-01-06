@@ -1,8 +1,5 @@
 var searchData=
 [
-  ['adafruit_5fbmp280_681',['Adafruit_BMP280',['../class_adafruit___b_m_p280.html#a9294299e2a298d78cd7af8292c278aa8',1,'Adafruit_BMP280::Adafruit_BMP280(TwoWire *theWire=&amp;Wire)'],['../class_adafruit___b_m_p280.html#a7dff36c69914477fbd090361ee8fb456',1,'Adafruit_BMP280::Adafruit_BMP280(int8_t cspin, SPIClass *theSPI=&amp;SPI)'],['../class_adafruit___b_m_p280.html#af81318fd0e2b7aab136462d371be9068',1,'Adafruit_BMP280::Adafruit_BMP280(int8_t cspin, int8_t mosipin, int8_t misopin, int8_t sckpin)']]],
-  ['adafruit_5fbmp280_5fpressure_682',['Adafruit_BMP280_Pressure',['../class_adafruit___b_m_p280___pressure.html#a0ddd5bd3a4a69c59fae2b93978734076',1,'Adafruit_BMP280_Pressure']]],
-  ['adafruit_5fbmp280_5ftemp_683',['Adafruit_BMP280_Temp',['../class_adafruit___b_m_p280___temp.html#a1e40806cdd754133bc0bd3adead3a50b',1,'Adafruit_BMP280_Temp']]],
-  ['adjustdatetime_684',['AdjustDateTime',['../_transmitter_code_2src_2main_8cpp.html#a9de4ea8e761b5f0e537f6f326f9ad429',1,'main.cpp']]],
-  ['attachservos_685',['AttachServos',['../_receiver_code_2src_2main_8cpp.html#a0cbfd712ab3bd8f654bc19400fd704bd',1,'main.cpp']]]
+  ['adjustdatetime_590',['AdjustDateTime',['../_transmitter_code_2src_2main_8cpp.html#a9de4ea8e761b5f0e537f6f326f9ad429',1,'main.cpp']]],
+  ['attachservos_591',['AttachServos',['../_receiver_code_2src_2main_8cpp.html#a0cbfd712ab3bd8f654bc19400fd704bd',1,'main.cpp']]]
 ];
