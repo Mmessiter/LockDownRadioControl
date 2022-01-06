@@ -299,9 +299,9 @@ void Sensors_Status()
     }
     if (USE_BMP280) {
         Serial.print("  Altitude=");
-        Serial.print(int(AckPayload.CurrentAltitude * 3.28084)); // convert from meters
+        Serial.print(bmp280.readAltitude(Qnh) * 3.28084); // convert from meters
         Serial.print(" Temp=");
-        Serial.print(int(temperature280));
+        Serial.print(bmp280.readTemperature());
     }
     Serial.println(" ");
 }
@@ -366,6 +366,7 @@ void ScanI2c()
 }
 /************************************************************************************************************/
 /** Initialize the BMP280 sensor */
+
 void InitBMP280()
 {
     bmp280.begin(0x76);
@@ -377,6 +378,7 @@ void InitBMP280()
 
     StartAltitude    = (bmp280.readAltitude(Qnh) * 3.28084);
 }
+
 /************************************************************************************************************/
 void SaveFailSafeData()
 {
