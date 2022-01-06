@@ -299,9 +299,9 @@ void Sensors_Status()
     }
     if (USE_BMP280) {
         Serial.print("  Altitude=");
-        Serial.print(bmp280.readAltitude(Qnh) * 3.28084); // convert from meters
+        Serial.print(SavedAltitude); // convert from meters
         Serial.print(" Temp=");
-        Serial.print(bmp280.readTemperature());
+        Serial.print(SavedTemperature);
     }
     Serial.println(" ");
 }
