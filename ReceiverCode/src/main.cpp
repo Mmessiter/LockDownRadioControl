@@ -281,8 +281,8 @@ void CheckParams()
             }
             break;
         case 2:
-            FS_byte1 = ReceivedData[CHANNELSUSED + 2]; // These bytes are failsafe flags
-            FS_byte2 = ReceivedData[CHANNELSUSED + 3]; // These bytes are failsafe flags
+            FS_byte1 = ReceivedData[CHANNELSUSED + 2]; // These 2 bytes are 16 failsafe flags
+            FS_byte2 = ReceivedData[CHANNELSUSED + 3]; // These 2 bytes are 16 failsafe flags
             break;
         default:
             break; 
