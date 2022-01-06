@@ -1,22 +1,10 @@
 var searchData=
 [
-  ['d_1000',['D',['../struct_p_i_d.html#ac64494c2d6b8874248baec5328cfa63f',1,'PID']]],
-  ['datetime_1001',['DateTime',['../_transmitter_code_2src_2main_8cpp.html#a4a2edd187b3a0bc44a2b755546b8f144',1,'main.cpp']]],
-  ['defaultpipe_1002',['DefaultPipe',['../_radio_functions_8h.html#a0b9fd9f8e85725c128617f006132ea57',1,'DefaultPipe():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a0b9fd9f8e85725c128617f006132ea57',1,'DefaultPipe():&#160;main.cpp']]],
-  ['deletedmodel_1003',['deletedmodel',['../_transmitter_code_2src_2main_8cpp.html#ac99744bc17a7d6aebbd08b1341e8fd31',1,'main.cpp']]],
-  ['deltatime_1004',['DeltaTime',['../imu_8h.html#aee7bf8704cf620ca631ca72215dbc932',1,'imu.h']]],
-  ['dig_5fp1_1005',['dig_P1',['../structbmp280__calib__data.html#aadffbb78b62b6b52d952c89bf78286e0',1,'bmp280_calib_data']]],
-  ['dig_5fp2_1006',['dig_P2',['../structbmp280__calib__data.html#a8e8f4e91586272463abf5e7ca3d2a371',1,'bmp280_calib_data']]],
-  ['dig_5fp3_1007',['dig_P3',['../structbmp280__calib__data.html#a088f2845708e76334f4a441c01977766',1,'bmp280_calib_data']]],
-  ['dig_5fp4_1008',['dig_P4',['../structbmp280__calib__data.html#a73f05510565c594116b2074ab0ff73d7',1,'bmp280_calib_data']]],
-  ['dig_5fp5_1009',['dig_P5',['../structbmp280__calib__data.html#a37e51f1053d031cc747e8700093719e6',1,'bmp280_calib_data']]],
-  ['dig_5fp6_1010',['dig_P6',['../structbmp280__calib__data.html#a9a76e6e6a0ae74859a2f4ecc7b04f0a7',1,'bmp280_calib_data']]],
-  ['dig_5fp7_1011',['dig_P7',['../structbmp280__calib__data.html#a65d0abb061f85a294731e4466f28e5c9',1,'bmp280_calib_data']]],
-  ['dig_5fp8_1012',['dig_P8',['../structbmp280__calib__data.html#a84831980d460c469926abee7e4230714',1,'bmp280_calib_data']]],
-  ['dig_5fp9_1013',['dig_P9',['../structbmp280__calib__data.html#a75facb42146d3294c4b3502429bb11ff',1,'bmp280_calib_data']]],
-  ['dig_5ft1_1014',['dig_T1',['../structbmp280__calib__data.html#a512563b392052c4d687d92e0fa4c69fc',1,'bmp280_calib_data']]],
-  ['dig_5ft2_1015',['dig_T2',['../structbmp280__calib__data.html#a110637cd80d4c20cbf018370b1687a19',1,'bmp280_calib_data']]],
-  ['dig_5ft3_1016',['dig_T3',['../structbmp280__calib__data.html#ab47d67ad2a52c66956c7c6aa7a5006d3',1,'bmp280_calib_data']]],
-  ['dof9_5fdata_1017',['dof9_data',['../imu_8h.html#a01447dc9da9fcb377b073955056ffec2',1,'imu.h']]],
-  ['dosbussendonly_1018',['DoSbusSendOnly',['../_radio_functions_8h.html#a2f95a8628ae27f3acb9b1598b8321781',1,'DoSbusSendOnly():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a2f95a8628ae27f3acb9b1598b8321781',1,'DoSbusSendOnly():&#160;main.cpp']]]
+  ['d_892',['D',['../struct_p_i_d.html#ac64494c2d6b8874248baec5328cfa63f',1,'PID']]],
+  ['datetime_893',['DateTime',['../_transmitter_code_2src_2main_8cpp.html#a4a2edd187b3a0bc44a2b755546b8f144',1,'main.cpp']]],
+  ['defaultpipe_894',['DefaultPipe',['../_radio_functions_8h.html#a0b9fd9f8e85725c128617f006132ea57',1,'DefaultPipe():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a0b9fd9f8e85725c128617f006132ea57',1,'DefaultPipe():&#160;main.cpp']]],
+  ['deletedmodel_895',['deletedmodel',['../_transmitter_code_2src_2main_8cpp.html#ac99744bc17a7d6aebbd08b1341e8fd31',1,'main.cpp']]],
+  ['deltatime_896',['DeltaTime',['../imu_8h.html#aee7bf8704cf620ca631ca72215dbc932',1,'imu.h']]],
+  ['dof9_5fdata_897',['dof9_data',['../imu_8h.html#a01447dc9da9fcb377b073955056ffec2',1,'imu.h']]],
+  ['dosbussendonly_898',['DoSbusSendOnly',['../_radio_functions_8h.html#a2f95a8628ae27f3acb9b1598b8321781',1,'DoSbusSendOnly():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a2f95a8628ae27f3acb9b1598b8321781',1,'DoSbusSendOnly():&#160;main.cpp']]]
 ];
