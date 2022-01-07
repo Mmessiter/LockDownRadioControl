@@ -364,6 +364,7 @@ char     ModelVolts[8]               = " ";
 float    RXModelVolts                = 0;
 int      RXModelAltitude             = 0;
 int      RXMAXModelAltitude          = 0;
+int      GroundModelAltitude         = 0;
 float    RXModelTemperature          = 0;
 char     ModelTemperature[8]         = " ";
 char     ModelAltitude[8]            = " ";
@@ -4174,7 +4175,7 @@ void Button_was_pressed()
             CurrentMode = NORMAL;
             return;
         }
-        if (InStrng(DataView_Clear, WordsIn) > 0) { //  goto setup screen from Data screen
+        if (InStrng(DataView_Clear, WordsIn) > 0) { //  goto setup screen from Data screen // heer
             LostPackets        = 0;
             GapShortest        = 0;
             GapLongest         = 0;
@@ -4182,6 +4183,14 @@ void Button_was_pressed()
             GapAverage         = 0;
             GapCount           = 0;
             RXMAXModelAltitude = 0;
+            if (!GroundModelAltitude)                        // this allows the Clear button to toggle between relative and absolute atitude
+                {
+                GroundModelAltitude = RXModelAltitude;
+                }
+                else 
+                {
+                GroundModelAltitude ^= GroundModelAltitude;   // set it to zero by XORing it with itself  :=)
+                }
             ClearText();
             return;
         }
@@ -5569,7 +5578,7 @@ void GetAltitude()
     AltitudeUnion.Val8[1] = AckPayload.Byte2;
     AltitudeUnion.Val8[2] = AckPayload.Byte3;
     AltitudeUnion.Val8[3] = AckPayload.Byte4;
-    RXModelAltitude       = int(AltitudeUnion.Val32);
+    RXModelAltitude       = int(AltitudeUnion.Val32) - GroundModelAltitude;
     if (RXMAXModelAltitude < RXModelAltitude) RXMAXModelAltitude = RXModelAltitude;
     snprintf(MaxAltitude, 5, "%d", RXMAXModelAltitude);
     snprintf(ModelAltitude, 5, "%d", RXModelAltitude);
