@@ -88,7 +88,7 @@ float           SavedVolts;
 bool            Radio1Exists = false;
 bool            Radio2Exists = false;
 uint32_t        SensorTime   = 0;
-float           Qnh          = 1018; //Pressure at sea level here and now
+uint16_t        Qnh          = 0;    //Pressure at sea level here and now (defined by TX option)
 
 /************************************************************************************************************/
 
@@ -283,6 +283,9 @@ void CheckParams()
             FS_byte1 = ReceivedData[CHANNELSUSED + 1]; // These 2 bytes are 16 failsafe flags
             FS_byte2 = ReceivedData[CHANNELSUSED + 2]; // These 2 bytes are 16 failsafe flags
             break;
+        case 2:
+              Qnh = (ReceivedData[CHANNELSUSED + 1]) << 8; // 16 bits sent as two bytes for pressure here at sea level
+              Qnh += ReceivedData[CHANNELSUSED + 2];
         default:
             break;
     }
@@ -313,7 +316,7 @@ void DoSensors()
     if (USE_BMP280) {
         if (BoundFlag) {
             SavedTemperature = bmp280.readTemperature();
-            SavedAltitude    = (bmp280.readAltitude(Qnh) * 3.28084) - StartAltitude; // TODO: Qnh needs user entry on startup
+            SavedAltitude    = (bmp280.readAltitude(Qnh) * 3.28084); // - StartAltitude; // TODO: Qnh needs user entry on startup
             if (SavedAltitude < 0) SavedAltitude = 0;
         }
     }

@@ -487,22 +487,14 @@ uint8_t ThisFrequency   = RECONNECT_CH;
 bool    DoSbusSendOnly  = false;
 bool    BuddyMaster     = false;
 bool    SlaveHasControl = false;
+uint16_t Qnh            = 1009;               // pressure at sea level here
 
-#ifndef NOISYWIFI // Use this for UK legal flying
+
 uint8_t FHSS_Channels[84] = {28, 24, 61, 64, 28, 55, 66, 19, 76, 21, 59, 67, 15, 71, 82, 32, 49, 69, 13, 2, 34, 47, 20,
                              34, 69, 16, 2, 72, 35, 76, 35, 57, 45, 29, 76, 75, 49, 59, 3, 57, 20, 16, 41, 59, 62, 59,
                              67, 11, 3, 9, 77, 37, 8, 31, 36, 34, 18, 75, 17, 9, 50, 78, 77, 73, 30, 50, 79, 6, 36,
                              20, 23, 79, 40, 54, 51, 19, 69, 12, 18, 80, 53, 41, 24};
-#endif
 
-#ifdef NOISYWIFI // Use this for testing where very noisy 2.4 ghz wifi abounds!
-
-uint8_t FHSS_Channels[84] = {93, 111, 107, 103, 106, 111, 97, 108, 102, 118, 104, 101, 109, 98, 113, 113,
-                             124, 115, 91, 111, 96, 85, 117, 89, 103, 117, 111, 99, 85, 114, 118, 118, 118,
-                             99, 87, 112, 118, 117, 91, 101, 86, 99, 103, 99, 124, 101, 104, 101, 109, 94,
-                             86, 92, 119, 120, 91, 114, 119, 117, 101, 117, 100, 92, 92, 120, 119, 115, 113,
-                             92, 121, 89, 119, 103, 106, 121, 123, 96, 93, 102, 111, 95, 101, 122, 95};
-#endif
 
 /************************************************************************************************************/
 // This function reads data from BUDDY (Slave) BUT uses it ONLY WHILE the channel 12 switch is in the ON position ( > 1000)
@@ -5356,13 +5348,19 @@ void LoadPacketData()
             SaveFailSafeNow              = false;           // once should do it.
             break;
         case 1:
-            SendBuffer[CHANNELSUSED + 1] = uint8_t2; // these are failsafe flags
-            SendBuffer[CHANNELSUSED + 2] = uint8_t1; // these are failsafe flags
+            SendBuffer[CHANNELSUSED + 1] = uint8_t2;       // these are failsafe flags
+            SendBuffer[CHANNELSUSED + 2] = uint8_t1;       // these are failsafe flags
+            break;
+        case 2: 
+            SendBuffer[CHANNELSUSED + 1] = Qnh >> 8;       // (HiByte)   Qnh is current atmospheric pressure at sea level here (an aviation term)
+            SendBuffer[CHANNELSUSED + 2] = Qnh & 0x00ff;   // (LowByte)  Qnh is current atmospheric pressure at sea level here (an aviation term)
             break;
         default:
             break;
     }
 }
+
+/************************************************************************************************************/
 
 void GetNextHopChannelNumber()
 {
