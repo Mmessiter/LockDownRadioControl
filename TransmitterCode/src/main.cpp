@@ -5574,7 +5574,7 @@ void GetAltitude()
         float   Val32;
         uint8_t Val8[4];
     } AltitudeUnion;
-    AltitudeUnion.Val8[0] = AckPayload.Byte1; // These values are herewith delivered to Transmitter in Ack Payload
+    AltitudeUnion.Val8[0] = AckPayload.Byte1; // These values were obtained from RX in Ack Payload
     AltitudeUnion.Val8[1] = AckPayload.Byte2;
     AltitudeUnion.Val8[2] = AckPayload.Byte3;
     AltitudeUnion.Val8[3] = AckPayload.Byte4;
