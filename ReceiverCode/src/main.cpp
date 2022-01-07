@@ -22,8 +22,8 @@
  * | 12    | SPI MISO (FOR BOTH RADIOS)  |
  * | 13    | SPI SCK  (FOR BOTH RADIOS) |
  * | 14    | SBUS output (TX3) |
- * | 15    | N/A (RX3) |
- * | 16    | RX4 for GPS |  to be implemented.....
+ * | 15    | Don't use. SBUS driver takes it (RX3) |
+ * | 16    | RX4 for GPS | (Still to be implemented ...)
  * | 17    | TX4 for GPS |
  * | 18    | I2C SDA (FOR I2C) |
  * | 19    | I2C SCK (FOR I2C) |
