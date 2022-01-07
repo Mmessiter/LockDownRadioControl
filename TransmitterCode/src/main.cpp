@@ -5574,12 +5574,12 @@ void GetAltitude()
         float   Val32;
         uint8_t Val8[4];
     } AltitudeUnion;
-    AltitudeUnion.Val8[0] = AckPayload.Byte1; // These values were obtained from RX in Ack Payload
-    AltitudeUnion.Val8[1] = AckPayload.Byte2;
-    AltitudeUnion.Val8[2] = AckPayload.Byte3;
-    AltitudeUnion.Val8[3] = AckPayload.Byte4;
-    RXModelAltitude       = int(AltitudeUnion.Val32) - GroundModelAltitude;
-    if (RXModelAltitude<0) RXModelAltitude = 0;
+    AltitudeUnion.Val8[0] =  AckPayload.Byte1; // These values were obtained from RX in Ack Payload
+    AltitudeUnion.Val8[1] =  AckPayload.Byte2;
+    AltitudeUnion.Val8[2] =  AckPayload.Byte3;
+    AltitudeUnion.Val8[3] =  AckPayload.Byte4;
+    RXModelAltitude       =  int(AltitudeUnion.Val32) - GroundModelAltitude;
+    if (RXModelAltitude<0)   RXModelAltitude = 0;
     if (RXMAXModelAltitude < RXModelAltitude) RXMAXModelAltitude = RXModelAltitude;
     snprintf(MaxAltitude, 5, "%d", RXMAXModelAltitude);
     snprintf(ModelAltitude, 5, "%d", RXModelAltitude);
