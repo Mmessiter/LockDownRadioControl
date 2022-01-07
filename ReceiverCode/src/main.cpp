@@ -267,14 +267,13 @@ void RebuildFlags(bool* f, uint16_t tb)
  * the parameter sent is defined by the packet number.
  */
 void CheckParams()
-{
-    uint16_t TwoBytes = 0;
-    PacketNumber      = ReceivedData[CHANNELSUSED];
-    switch (PacketNumber) {
+{ uint16_t TwoBytes = 0;      
+    PacketNumber = ReceivedData[CHANNELSUSED];     
+    switch (PacketNumber) {     
         case 0:
-            BindNow      = ReceivedData[CHANNELSUSED + 2];
-            FailSafeSave = bool(ReceivedData[CHANNELSUSED + 1]);
-            if (FailSafeSave) {
+             BindNow = ReceivedData[CHANNELSUSED + 2];
+             FailSafeSave = bool(ReceivedData[CHANNELSUSED + 1]);
+                if (FailSafeSave) {
                 TwoBytes = uint16_t(FS_byte2) + uint16_t(FS_byte1 << 8);
                 RebuildFlags(FailSafeChannel, TwoBytes);
             }

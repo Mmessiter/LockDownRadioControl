@@ -5341,24 +5341,23 @@ void LoadPacketData()
     uint16_t Twobytes = 0; // Extra data can be send using the last four bytes of each data packet. These are defined by the packet number
     uint8_t  uint8_t1;
     uint8_t  uint8_t2;
-    SendBuffer[CHANNELSUSED] = PacketNumber;
-    Twobytes                 = MakeTwobytes(FailSafeChannel); // 16 bool values compressed to 16 bits
-    uint8_t1                 = uint8_t(Twobytes >> 8);        // sent as two bytes
-    uint8_t2                 = uint8_t(Twobytes & 0x00FF);
-    
+    SendBuffer[CHANNELSUSED] = PacketNumber;  
+    Twobytes = MakeTwobytes(FailSafeChannel); // 16 bool values compressed to 16 bits
+    uint8_t1 = uint8_t(Twobytes >> 8);        // sent as two bytes
+    uint8_t2 = uint8_t(Twobytes & 0x00FF);
     switch (PacketNumber) {
-        case 0:
+        case 0:  
             SendBuffer[CHANNELSUSED + 2] = BindingNow;
             if (BindingNow == 1) {
                 BindingTimer = millis(); // start a timer
                 BindingNow   = 2;
             }
             SendBuffer[CHANNELSUSED + 1] = SaveFailSafeNow; // FailSafeSaveMoment
-            SaveFailSafeNow              = false;           // once should do it.
+            SaveFailSafeNow    = false;                     // once should do it.
             break;
         case 1:
-            SendBuffer[CHANNELSUSED + 1] = uint8_t2;       // these are failsafe flags
-            SendBuffer[CHANNELSUSED + 2] = uint8_t1;       // these are failsafe flags
+             SendBuffer[CHANNELSUSED + 1] = uint8_t2; // these are failsafe flags
+             SendBuffer[CHANNELSUSED + 2] = uint8_t1; // these are failsafe flags
             break;
         case 2: 
             SendBuffer[CHANNELSUSED + 1] = Qnh >> 8;       // (HiByte)   Qnh is current atmospheric pressure at sea level here (an aviation term)
