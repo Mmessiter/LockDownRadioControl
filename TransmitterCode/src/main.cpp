@@ -2464,6 +2464,9 @@ bool LoadAllParameters()
             TxName[j] = SDReadByte(addr);
             ++addr;
         }
+        Qnh = SDReadInt(addr);
+        ++addr;
+        ++addr;
         txm = addr;
         ReadOneModel(ModelNumber);
         return true;
@@ -2581,7 +2584,7 @@ void setup()
     SendValue(FrontView_Secs, 0);
 
     //  ***************************************************************************************
-    //SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
+    //  SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
     //  **   BUT then re-comment it!! Otherwise it will reset to same time on every boot up! **
     //  ***************************************************************************************
     RecoveryTimer = millis();
@@ -2670,7 +2673,9 @@ void SaveTXStuff()
         if (TxName[j] == 0) EON = true;
         ++addr;
     }
-
+    SDUpdateInt(addr,Qnh);
+    ++addr;
+    ++addr;
     CloseModelsFile();
 }
 
@@ -4127,6 +4132,7 @@ void Button_was_pressed()
     char BuddyM[]                  = "BuddyM";
     char BuddyP[]                  = "BuddyP";
     char OptionsEnd[]              = "OptionsEnd";
+    char QNH[]                     = "Qnh";
 
     if (strlen(WordsIn) > 0) {
         StartInactvityTimeout();
@@ -4147,6 +4153,7 @@ void Button_was_pressed()
         if (InStrng(OptionsEnd, WordsIn) > 0) { // Options screen end
             DoSbusSendOnly = GetValue(BuddyP);  // Pupil, wired
             BuddyMaster    = GetValue(BuddyM);  // Master, either.
+            Qnh            = GetValue(QNH);
             if (DoSbusSendOnly)
             {
                 Connected       = false;
@@ -4266,6 +4273,7 @@ void Button_was_pressed()
             SendValue(BuddyP, DoSbusSendOnly);
             SendValue(Pto, (Inactivity_Timeout / TICKSPERMINUTE));
             SendText(Tx_Name, TxName);
+            SendValue(QNH,Qnh);
             CurrentView = Options_View;
             CurrentMode = NORMAL;
             ClearText();
@@ -5337,6 +5345,7 @@ void LoadPacketData()
     Twobytes                 = MakeTwobytes(FailSafeChannel); // 16 bool values compressed to 16 bits
     uint8_t1                 = uint8_t(Twobytes >> 8);        // sent as two bytes
     uint8_t2                 = uint8_t(Twobytes & 0x00FF);
+    
     switch (PacketNumber) {
         case 0:
             SendBuffer[CHANNELSUSED + 2] = BindingNow;

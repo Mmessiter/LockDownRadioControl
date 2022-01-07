@@ -230,7 +230,7 @@ void HopToNextFrequency()
     Serial.print("Hop duration: ");
     Serial.print(Pduration);
     Serial.print(" seconds. Good packets per hop: ");
-    Serial.print(PacketNumber);
+    Serial.print(PacketNumber+1);  // because counting starts at zero
     Serial.print(" Next channel: ");
     Serial.print(FHSS_Channels[NextChannelNumber]);
     if ((FHSS_Channels[NextChannelNumber]) < 10) Serial.print(" ");

@@ -69,7 +69,7 @@ Servo           MCMServo[SERVOSUSED];
 uint8_t         PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 16}; // ten now, last 6 only via sbus
 SBUS            MySbus(SBUSPORT);
 float           PacketStartTime;
-float           temperature280, pressure, altitude, StartAltitude;
+float           temperature280, pressure, altitude;
 uint8_t         BindNow        = 0;     /** indicates that the receiver should start the binding/pairing process */
 bool            BoundFlag      = false; /** indicates if receiver paired with transmitter */
 int             BindOKTimer    = 0;
@@ -316,7 +316,7 @@ void DoSensors()
     if (USE_BMP280) {
         if (BoundFlag) {
             SavedTemperature = bmp280.readTemperature();
-            SavedAltitude    = (bmp280.readAltitude(Qnh) * 3.28084); // - StartAltitude; // TODO: Qnh needs user entry on startup
+            SavedAltitude    = bmp280.readAltitude(Qnh) * 3.28084; 
             if (SavedAltitude < 0) SavedAltitude = 0;
         }
     }
@@ -381,7 +381,7 @@ void InitBMP280()
                        Adafruit_BMP280::FILTER_X16,      /* Filtering. */
                        Adafruit_BMP280::STANDBY_MS_500); /* Standby time. */
 
-    StartAltitude = (bmp280.readAltitude(Qnh) * 3.28084);
+    
 }
 
 /************************************************************************************************************/
@@ -454,7 +454,6 @@ void setup()
     if (USE_BMP280) InitBMP280();
     GetOldPipe();
     digitalWrite(LED_PIN, LOW);
-    LoadVersioNumber();
 }
 /************************************************************************************************************/
 // LOOP
