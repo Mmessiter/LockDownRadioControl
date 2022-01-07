@@ -57,7 +57,6 @@ var _receiver_code_2src_2main_8cpp =
     [ "SBUSTimer", "_receiver_code_2src_2main_8cpp.html#ab2bf977dee28aac3f049d578d8433f0b", null ],
     [ "SensorTime", "_receiver_code_2src_2main_8cpp.html#a1e9e8116136abd96cf87d7f0fd20a3d8", null ],
     [ "ServosAttached", "_receiver_code_2src_2main_8cpp.html#a95b22fb572f7a91a89a431c7f1236575", null ],
-    [ "StartAltitude", "_receiver_code_2src_2main_8cpp.html#a803d7b39ac894b6340d68e152e902c19", null ],
     [ "temperature280", "_receiver_code_2src_2main_8cpp.html#a7cc84074d4166c6512a2d479b6f12e30", null ],
     [ "USE_BMP280", "_receiver_code_2src_2main_8cpp.html#a4be5c27bea3c82b0a4ec92191052d946", null ],
     [ "USE_INA219", "_receiver_code_2src_2main_8cpp.html#a87ae50e2ac4507568cbf98072f174a1b", null ]
