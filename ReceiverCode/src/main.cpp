@@ -4,17 +4,12 @@
  * @section rxFeatures Features List
  * - WORKS ON TEENSY 4.0
  * - Detects and uses INA219 to read volts
- * - Detects and uses uses MPU6050 gyro
  * - Detects and uses BMP280 pressure sensor for altitude
- * - Detects and uses BNO055 gyro at 28 (Adafruit) or 29 (Cheapo) hex
- * - Add Simple Kalman filter for PID.
- * - Gyro Angular velocity used for Quadcopter... a work in progress
  * - Binding implemented
  * - SBUS implemented
  * - Failsafe implemented (after two seconds)
- * - MODEL MEMORY AUTO SELECTION (REMOVED LATER)
  * - RESOLUTION INCREASED TO 12 BITS
- * - Channels incleased to 16, but only 10 PWM outputs.  SBUS can handle all.
+ * - Channels increased to 16, 9 PWM outputs.  SBUS can handle all.
  * - Exponential implemented (at TX end)
  *
  * @section rxpinout TEENSY 4.0 PINS
@@ -29,7 +24,8 @@
  * | 13    | SPI SCK  (FOR BOTH RADIOS) |
  * | 14    | SBUS output (TX3) |
  * | 15    | N/A (RX3) |
- * | 16    | PWM SERVO Channel 10 |
+ * | 16    | RX4 for GPS |  to be implemented.....
+ * | 17    | TX4 for GPS |
  * | 18    | I2C SDA (FOR I2C) |
  * | 19    | I2C SCK (FOR I2C) |
  * | 20    | SPI CSN2 (FOR RADIO2)  |
@@ -44,7 +40,7 @@
 
 #define RECEIVE_TIMEOUT 25 // 25 milliseconds seems an optimal value
 #define CHANNELSUSED    16
-#define SERVOSUSED      10 // All 16 are available via SBUS
+#define SERVOSUSED      9  // All 16 are available via SBUS
 #define SBUSRATE        10 // SBUS frame every 10 milliseconds
 #define SBUSPORT        Serial3
 #define RECONNECTGAP    20 // Send no data to servos for 20 ms after a reconnect (10 was not quite enough)
@@ -66,7 +62,7 @@ bool            USE_INA219 = false; //  Volts from INA219
 Adafruit_INA219 ina219;
 Adafruit_BMP280 bmp280;
 Servo           MCMServo[SERVOSUSED];
-uint8_t         PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 16}; // ten now, last 6 only via sbus
+uint8_t         PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8}; // ten now, last 6 only via sbus
 SBUS            MySbus(SBUSPORT);
 float           PacketStartTime;
 float           temperature280, pressure, altitude;
