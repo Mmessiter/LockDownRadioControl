@@ -198,7 +198,7 @@ bool ReadData()
         CurrentRadio->read(&CompressedData, sizeof(CompressedData));   // Get Data
         Decompress(ReceivedData, CompressedData, UNCOMPRESSEDWORDS);   // decompress data
         MapToSBUS();
-        CurrentRadio->flush_rx(); // This avoids a lockup that happens when the FIFO gets full. **************
+        CurrentRadio->flush_rx();       // This avoids a lockup that happens when the FIFO gets full. **************
         ClearAckPayload();
         LastConnectionMoment = millis();
         if (HopNow) {                   // this flag gets set in LoadAckPayload();
