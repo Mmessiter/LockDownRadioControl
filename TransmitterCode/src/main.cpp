@@ -5339,12 +5339,12 @@ uint16_t MakeTwobytes(bool* f)
 void LoadPacketData()
 {
     uint16_t Twobytes = 0; // Extra data can be send using the last four bytes of each data packet. These are defined by the packet number
-    uint8_t  uint8_t1;
-    uint8_t  uint8_t2;
+    uint8_t  FS_Byte1;
+    uint8_t  FS_Byte2;
     SendBuffer[CHANNELSUSED] = PacketNumber;  
     Twobytes = MakeTwobytes(FailSafeChannel); // 16 bool values compressed to 16 bits
-    uint8_t1 = uint8_t(Twobytes >> 8);        // sent as two bytes
-    uint8_t2 = uint8_t(Twobytes & 0x00FF);
+    FS_Byte1 = uint8_t(Twobytes >> 8);        // sent as two bytes
+    FS_Byte2 = uint8_t(Twobytes & 0x00FF);
     switch (PacketNumber) {
         case 0:  
             SendBuffer[CHANNELSUSED + 2] = BindingNow;
@@ -5356,8 +5356,8 @@ void LoadPacketData()
             SaveFailSafeNow    = false;                     // once should do it.
             break;
         case 1:
-             SendBuffer[CHANNELSUSED + 1] = uint8_t2;      // these are failsafe flags
-             SendBuffer[CHANNELSUSED + 2] = uint8_t1;      // these are failsafe flags
+             SendBuffer[CHANNELSUSED + 1] = FS_Byte2;      // these are failsafe flags
+             SendBuffer[CHANNELSUSED + 2] = FS_Byte1;      // these are failsafe flags
             break;
         case 2: 
             SendBuffer[CHANNELSUSED + 1] = Qnh >> 8;       // (HiByte)   Qnh is current atmospheric pressure at sea level here (an aviation term)
