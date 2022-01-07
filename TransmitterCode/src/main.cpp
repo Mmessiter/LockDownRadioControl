@@ -5356,8 +5356,8 @@ void LoadPacketData()
             SaveFailSafeNow    = false;                     // once should do it.
             break;
         case 1:
-             SendBuffer[CHANNELSUSED + 1] = uint8_t2; // these are failsafe flags
-             SendBuffer[CHANNELSUSED + 2] = uint8_t1; // these are failsafe flags
+             SendBuffer[CHANNELSUSED + 1] = uint8_t2;      // these are failsafe flags
+             SendBuffer[CHANNELSUSED + 2] = uint8_t1;      // these are failsafe flags
             break;
         case 2: 
             SendBuffer[CHANNELSUSED + 1] = Qnh >> 8;       // (HiByte)   Qnh is current atmospheric pressure at sea level here (an aviation term)
