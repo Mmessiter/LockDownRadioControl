@@ -101,17 +101,12 @@ Features List</h1>
 <ul>
 <li>WORKS ON TEENSY 4.0</li>
 <li>Detects and uses INA219 to read volts</li>
-<li>Detects and uses uses MPU6050 gyro</li>
 <li>Detects and uses BMP280 pressure sensor for altitude</li>
-<li>Detects and uses BNO055 gyro at 28 (Adafruit) or 29 (Cheapo) hex</li>
-<li>Add Simple Kalman filter for PID.</li>
-<li>Gyro Angular velocity used for Quadcopter... a work in progress</li>
 <li>Binding implemented</li>
 <li>SBUS implemented</li>
 <li>Failsafe implemented (after two seconds)</li>
-<li>MODEL MEMORY AUTO SELECTION (REMOVED LATER)</li>
 <li>RESOLUTION INCREASED TO 12 BITS</li>
-<li>Channels incleased to 16, but only 10 PWM outputs. SBUS can handle all.</li>
+<li>Channels increased to 16, 9 PWM outputs. SBUS can handle all.</li>
 <li>Exponential implemented (at TX end)</li>
 </ul>
 <h1><a class="anchor" id="rxpinout"></a>
@@ -136,22 +131,9 @@ TEENSY 4.0 PINS</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">14   </td><td class="markdownTableBodyNone">SBUS output (TX3)    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">15   </td><td class="markdownTableBodyNone">N/A (RX3)    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">16   </td><td class="markdownTableBodyNone">PWM SERVO Channel 10    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">18   </td><td class="markdownTableBodyNone">I2C SDA (FOR I2C)    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">19   </td><td class="markdownTableBodyNone">I2C SCK (FOR I2C)    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">20   </td><td class="markdownTableBodyNone">SPI CSN2 (FOR RADIO2)    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">21   </td><td class="markdownTableBodyNone">SPI CE2 (FOR RADIO2)    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">22   </td><td class="markdownTableBodyNone">IRQ1 (FOR RADIO1)    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">23   </td><td class="markdownTableBodyNone">IRQ2 (FOR RADIO2)   </td></tr>
+<td class="markdownTableBodyNone">15   </td><td class="markdownTableBodyNone">N/A (RX3)   </td></tr>
 </table>
+<p>| 16 | RX4 for GPS | to be implemented..... | 17 | TX4 for GPS | | 18 | I2C SDA (FOR I2C) | | 19 | I2C SCK (FOR I2C) | | 20 | SPI CSN2 (FOR RADIO2) | | 21 | SPI CE2 (FOR RADIO2) | | 22 | IRQ1 (FOR RADIO1) | | 23 | IRQ2 (FOR RADIO2) |</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="_receiver_code_2src_2main_8cpp.html">ReceiverCode/src/main.cpp</a> </dd></dl>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
