@@ -291,6 +291,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "GapShortest", "_transmitter_code_2src_2main_8cpp.html#a4ebbce56831362208cc9e88795f492d3", null ],
     [ "GapStart", "_transmitter_code_2src_2main_8cpp.html#aefd589330e26c925a4c6f97b6a8cf98e", null ],
     [ "GapSum", "_transmitter_code_2src_2main_8cpp.html#a9942132c4d194a03fc9791cfdf876ac3", null ],
+    [ "GroundModelAltitude", "_transmitter_code_2src_2main_8cpp.html#ab50929c4d3d76c3a37ab817e0022d57a", null ],
     [ "HopStart", "_transmitter_code_2src_2main_8cpp.html#a937fc53e966c6b5c66b9d66c01cec13f", null ],
     [ "Hours", "_transmitter_code_2src_2main_8cpp.html#a3063ebc6f2f9d4e13a209f9fb43587c5", null ],
     [ "HtextCMD", "_transmitter_code_2src_2main_8cpp.html#a81be91332c626ad94acd328facf875be", null ],

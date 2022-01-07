@@ -1,5 +1,6 @@
 var NAVTREEINDEX3 =
 {
+"index.html#autotoc_md42":[0,4],
 "index.html#autotoc_md43":[0,5],
 "md__docs__l_d_r_c1_____user__manual.html":[2],
 "md__docs__l_d_r_c1_____user__manual.html#autotoc_md18":[2,0],
