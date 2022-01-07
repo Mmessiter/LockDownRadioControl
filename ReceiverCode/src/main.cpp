@@ -15,8 +15,7 @@
  * @section rxpinout TEENSY 4.0 PINS
  * | pin number(s) | purpose |
  * |---------------|---------|
- * | 0...7 | PWM SERVOS Channels 1 - 8 |
- * | 8     | PWM SERVO Channel 9 |
+ * | 0...8 | PWM SERVOS Channels 1 - 9 |
  * | 9     | SPI CE1  (FOR RADIO1) |
  * | 10    | SPI CSN1 (FOR RADIO1)  |
  * | 11    | SPI MOSI (FOR BOTH RADIOS)  |
@@ -62,7 +61,7 @@ bool            USE_INA219 = false; //  Volts from INA219
 Adafruit_INA219 ina219;
 Adafruit_BMP280 bmp280;
 Servo           MCMServo[SERVOSUSED];
-uint8_t         PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8}; // ten now, last 6 only via sbus
+uint8_t         PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8}; // 9 PWMs, remaining 7 via sbus
 SBUS            MySbus(SBUSPORT);
 float           PacketStartTime;
 float           temperature280, pressure, altitude;
