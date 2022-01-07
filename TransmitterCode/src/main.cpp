@@ -5579,7 +5579,7 @@ void GetAltitude()
     AltitudeUnion.Val8[2] = AckPayload.Byte3;
     AltitudeUnion.Val8[3] = AckPayload.Byte4;
     RXModelAltitude       = int(AltitudeUnion.Val32) - GroundModelAltitude;
-    if (RXModelAltitude<0) {RXModelAltitude = 0;}
+    if (RXModelAltitude<0) RXModelAltitude = 0;
     if (RXMAXModelAltitude < RXModelAltitude) RXMAXModelAltitude = RXModelAltitude;
     snprintf(MaxAltitude, 5, "%d", RXMAXModelAltitude);
     snprintf(ModelAltitude, 5, "%d", RXModelAltitude);
