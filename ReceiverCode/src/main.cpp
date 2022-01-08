@@ -45,7 +45,7 @@
 #define RECONNECTGAP    20 // Send no data to servos for 20 ms after a reconnect (10 was not quite enough)
 #define MINMICROS       500
 #define MAXMICROS       2500
-#define LED_PIN         13
+#define LED_PIN         LED_BUILTIN
 #define RANGEMAX        2047 // = Frsky at 150 %
 #define RANGEMIN        0
 
