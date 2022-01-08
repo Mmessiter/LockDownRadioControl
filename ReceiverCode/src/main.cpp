@@ -45,7 +45,7 @@
 #define RECONNECTGAP    20 // Send no data to servos for 20 ms after a reconnect (10 was not quite enough)
 #define MINMICROS       500
 #define MAXMICROS       2500
-#define LED_PIN         1
+#define LED_PIN         13
 #define RANGEMAX        2047 // = Frsky at 150 %
 #define RANGEMIN        0
 
@@ -432,6 +432,8 @@ void DoBinding()
 /************************************************************************************************************/
 void setup()
 {
+ pinMode(LED_PIN, OUTPUT);
+    digitalWrite(LED_PIN, HIGH);
     Wire.begin();
     delay(2000); // Needed ! - possibly for stabilising capacitors.
     ScanI2c();   // see what's connected
@@ -445,6 +447,7 @@ void setup()
     if (USE_INA219) ina219.begin();
     if (USE_BMP280) InitBMP280();
     GetOldPipe();
+    digitalWrite(LED_PIN, LOW);
 }
 /************************************************************************************************************/
 // LOOP
