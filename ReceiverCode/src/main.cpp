@@ -432,8 +432,6 @@ void DoBinding()
 /************************************************************************************************************/
 void setup()
 {
-    pinMode(LED_PIN, OUTPUT);
-    digitalWrite(LED_PIN, HIGH);
     Wire.begin();
     delay(2000); // Needed ! - possibly for stabilising capacitors.
     ScanI2c();   // see what's connected
@@ -447,7 +445,6 @@ void setup()
     if (USE_INA219) ina219.begin();
     if (USE_BMP280) InitBMP280();
     GetOldPipe();
-    digitalWrite(LED_PIN, LOW);
 }
 /************************************************************************************************************/
 // LOOP
