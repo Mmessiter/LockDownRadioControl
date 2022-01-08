@@ -25,6 +25,7 @@ var radio_8h =
     [ "LoadTemperature", "radio_8h.html#afd3957dcfa0fc56901c2b9ce3519f511", null ],
     [ "LoadTimeStamp", "radio_8h.html#a3830d14fd002f2ec6d0843b15139360a", null ],
     [ "LoadVersioNumber", "radio_8h.html#af067d2e9e8981a59af86ec75a0db36b4", null ],
+    [ "ProdRadio", "radio_8h.html#a99f0389cf05f26f8c76aab69eb7d9529", null ],
     [ "Radio1", "radio_8h.html#a6e2d4126d864c50e7c23c988c2bfdd1a", null ],
     [ "Radio2", "radio_8h.html#a8b76f3c338025926421c7b308405bbfd", null ],
     [ "ReadSavedPipe", "radio_8h.html#a56ee137fc60749fa274236bc239c3291", null ],
