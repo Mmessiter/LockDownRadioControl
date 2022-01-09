@@ -1,8 +1,7 @@
 var searchData=
 [
-  ['dataview_101',['DataView',['../_transmitter_code_2src_2main_8cpp.html#a0dc37f97eb00bb5b63ccbef3acd7f8ed',1,'DataView():&#160;main.cpp'],['../_radio_functions_8cpp.html#a0dc37f97eb00bb5b63ccbef3acd7f8ed',1,'DataView():&#160;RadioFunctions.cpp']]],
-  ['datetime_102',['DateTime',['../_transmitter_code_2src_2main_8cpp.html#a4a2edd187b3a0bc44a2b755546b8f144',1,'main.cpp']]],
-  ['db_5fnextion_103',['DB_NEXTION',['../_radio_functions_8h.html#a37c149666ecf7d90765ce2a9df4b8fb8',1,'RadioFunctions.h']]],
+  ['dataview_102',['DataView',['../_transmitter_code_2src_2main_8cpp.html#a0dc37f97eb00bb5b63ccbef3acd7f8ed',1,'DataView():&#160;main.cpp'],['../_radio_functions_8cpp.html#a0dc37f97eb00bb5b63ccbef3acd7f8ed',1,'DataView():&#160;RadioFunctions.cpp']]],
+  ['datetime_103',['DateTime',['../_transmitter_code_2src_2main_8cpp.html#a4a2edd187b3a0bc44a2b755546b8f144',1,'main.cpp']]],
   ['decdate_104',['DecDate',['../_transmitter_code_2src_2main_8cpp.html#ac00389a3b76e3ced4517c6ad4147e86a',1,'main.cpp']]],
   ['dechour_105',['DecHour',['../_transmitter_code_2src_2main_8cpp.html#a053bee2e90b7d0bacffe990847973d4a',1,'main.cpp']]],
   ['decminute_106',['DecMinute',['../_transmitter_code_2src_2main_8cpp.html#a87fe692c91177cb3eddffaae43ad6d4d',1,'main.cpp']]],
