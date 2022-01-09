@@ -489,6 +489,10 @@ bool    DoSbusSendOnly  = false;
 bool    BuddyMaster     = false;
 bool    SlaveHasControl = false;
 uint16_t Qnh            = 1009;               // pressure at sea level here
+uint16_t ModelNumberOffset = 0;
+uint32_t ModelNameTimeCheck = 0;
+uint16_t LastModelLoaded    = 0;
+
 
 
 uint8_t FHSS_Channels[84] = {28, 24, 61, 64, 28, 55, 66, 19, 76, 21, 59, 67, 15, 71, 82, 32, 49, 69, 13, 2, 34, 47, 20,
@@ -1092,7 +1096,9 @@ void GetWordsIn()
     }
 }
 
+
 /*********************************************************************************************************************************/
+
 
 bool GetButtonPress()
 {
@@ -2454,6 +2460,7 @@ bool LoadAllParameters()
         BuddyMaster = SDReadByte(addr);
         ++addr;
         ModelNumber = SDReadByte(addr);
+        ModelNumberOffset = addr;         // remember offset!
         ++addr;
         ScreenTimeout = SDReadInt(addr);
         ++addr;
@@ -2662,6 +2669,7 @@ void SaveTXStuff()
     SDUpdateByte(addr, BuddyMaster);
     ++addr;
     SDUpdateByte(addr, ModelNumber);
+    ModelNumberOffset = addr;                // remember offset!
     ++addr;
     SDUpdateInt(addr, ScreenTimeout);
     ++addr;
@@ -4175,7 +4183,7 @@ void Button_was_pressed()
             CurrentMode = NORMAL;
             return;
         }
-        if (InStrng(DataView_Clear, WordsIn) > 0) { //  goto setup screen from Data screen // heer
+        if (InStrng(DataView_Clear, WordsIn) > 0) { //  goto setup screen from Data screen 
             LostPackets        = 0;
             GapShortest        = 0;
             GapLongest         = 0;
@@ -4985,10 +4993,10 @@ void Button_was_pressed()
                 ModelNumber = 1;
                 SendValue(ModelsView_ModelNumber, ModelNumber);
             }
-            ReadOneModel(ModelNumber);
-            UpdateModelsNameEveryWhere();
-            SaveTXStuff();
-            ClearText();
+            if (!ModelsFileOpen) OpenModelsFile();
+            SDUpdateByte(ModelNumberOffset, ModelNumber);  // the offset was grabbed when loading file 
+            CloseModelsFile();
+            ClearText(); 
         }
 
         if (InStrng(Delete, WordsIn) > 0) {
@@ -5675,6 +5683,22 @@ void CheckGapsLength()
 }
 
 /************************************************************************************************************/
+
+void CheckModelName(){  
+char ModelsView_ModelNumber[]  = "ModelNumber";
+    if ((millis()-ModelNameTimeCheck) > 500) {
+        ModelNameTimeCheck  = millis();
+        ModelNumber = GetValue(ModelsView_ModelNumber);
+        if (LastModelLoaded != ModelNumber) {
+            LastModelLoaded = ModelNumber;
+            if (ModelNumber < 1) ModelNumber = 1; 
+            ReadOneModel(ModelNumber);
+            UpdateModelsNameEveryWhere();   
+        }
+    }
+}
+
+/************************************************************************************************************/
 // LOOP
 /************************************************************************************************************/
 
@@ -5684,6 +5708,10 @@ void loop()
     if (GetButtonPress()) {
         Button_was_pressed(); // Deal with button
     }
+
+    if (CurrentView == ModelsView){ // temporary fix for wrong model name displayed
+        CheckModelName();
+     }
 
     if (millis() - LastTimeRead >= 1000) {
         ReadTime(); // Do the clock
