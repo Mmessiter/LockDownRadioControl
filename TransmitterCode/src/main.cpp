@@ -4893,14 +4893,20 @@ void Button_was_pressed()
             return;
         }
 
-        if (InStrng(ModelNMSave, WordsIn) > 0) { // Save modelname without exiting screen
+        if (InStrng(ModelNMSave, WordsIn) > 0) { // Save modelname without exiting screen // heer!!!!!
             i = 0;
             while (WordsIn[i + 12] > 0) {
                 ModelName[i]     = WordsIn[i + 12];
                 ModelName[i + 1] = 0;
                 ++i;
             } // copy new name
+            Serial.println (ModelName);
             SaveOneModel(ModelNumber);
+            delay(9000);
+            LastModelLoaded = 100;
+            ReadOneModel(ModelNumber);
+            UpdateModelsNameEveryWhere();   
+
             ClearText();
             return;
         }
