@@ -4905,6 +4905,7 @@ void Button_was_pressed()
             ModelNumber = GetValue(ModelsView_ModelNumber);
             SaveOneModel(ModelNumber);
             ClearText();
+            delay (1000);                        // allow time for SD write to happen
             InhibitNameCheck = false;
             return;
         }
