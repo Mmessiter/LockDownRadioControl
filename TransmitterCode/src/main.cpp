@@ -473,6 +473,7 @@ uint32_t TXTimeStamp;
 uint32_t HopStart;
 uint8_t  PreviousChannelNumber = 0;
 uint8_t  NextChannelNumber     = 0;
+bool     InhibitNameCheck      = false;
 
 // changing these four valiables controls LED blink and speed
 
@@ -4890,7 +4891,8 @@ void Button_was_pressed()
             return;
         }
 
-        if (InStrng(ModelNMSave, WordsIn) > 0) { // Save modelname without exiting screen // heer!!!!!
+        if (InStrng(ModelNMSave, WordsIn) > 0) { // edit modelname  // heer!!!!!
+            InhibitNameCheck =  true;
             i = 0;
             while (WordsIn[i + 12] > 0) {
                 ModelName[i]     = WordsIn[i + 12];
@@ -4900,6 +4902,7 @@ void Button_was_pressed()
             ModelNumber = GetValue(ModelsView_ModelNumber);
             SaveOneModel(ModelNumber);
             ClearText();
+            InhibitNameCheck =  false;
             return;
         }
 
@@ -5681,11 +5684,11 @@ void CheckGapsLength()
 }
 
 /************************************************************************************************************/
-
-void CheckModelName(){  
-char ModelsView_ModelNumber[]  = "ModelNumber"; // heer
-        if ((millis()-ModelNameTimeCheck) > 500) {  
-            ModelNameTimeCheck  = millis();
+void CheckModelName(){                        // In ModelsView, this function checks correct name is displayed.
+char ModelsView_ModelNumber[]  = "ModelNumber"; 
+    if ((millis()-ModelNameTimeCheck) > 500) {  
+        ModelNameTimeCheck  = millis();
+        if (!InhibitNameCheck){
             ModelNumber = GetValue(ModelsView_ModelNumber);
             if (LastModelLoaded != ModelNumber) {
                 LastModelLoaded = ModelNumber;
@@ -5694,9 +5697,8 @@ char ModelsView_ModelNumber[]  = "ModelNumber"; // heer
                 UpdateModelsNameEveryWhere();   
             }
         }
-
+    }
 }
-
 /************************************************************************************************************/
 // LOOP
 /************************************************************************************************************/
@@ -5705,23 +5707,21 @@ void loop()
 {
     KickTheDog(); // Watchdog
     if (GetButtonPress()) {
-        Button_was_pressed(); // Deal with button
+        Button_was_pressed();       // Deal with button
     }
-
-    if (CurrentView == ModelsView){ // temporary fix for wrong model name displayed
-        CheckModelName();
-     }
-
+    if (CurrentView == ModelsView){ 
+        CheckModelName();           // In ModelsView, this function checks correct name is displayed.
+    }
     if (millis() - LastTimeRead >= 1000) {
-        ReadTime(); // Do the clock
+        ReadTime();                 // Do the clock
         LastTimeRead = millis();
     }
     if (millis() - RangeTestStart >= 1000) {
-        GetStatistics(); // Do stats
+        GetStatistics();            // Do stats
         RangeTestStart = millis();
     }
     if ((millis() - ShowServoTimer >= 100) && (CurrentView != FrontView)) {
-        ShowServoPos(); // Show servos positions
+        ShowServoPos();            // Show servos positions
         ShowServoTimer = millis();
     }
     if ((millis() - TxOnTime) > 2000) { // Transmit nothing for first 2 seconds
