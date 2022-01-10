@@ -5688,7 +5688,7 @@ void CheckModelName(){                        // In ModelsView, this function ch
 char ModelsView_ModelNumber[]  = "ModelNumber"; 
     if ((millis()-ModelNameTimeCheck) > 500) {  
         ModelNameTimeCheck  = millis();
-        if (!InhibitNameCheck){
+        if (!InhibitNameCheck){               // if name is being edited, do not try to check it yet.
             ModelNumber = GetValue(ModelsView_ModelNumber);
             if (LastModelLoaded != ModelNumber) {
                 LastModelLoaded = ModelNumber;
