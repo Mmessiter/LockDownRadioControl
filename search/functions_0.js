@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['adjustdatetime_594',['AdjustDateTime',['../_transmitter_code_2src_2main_8cpp.html#a9de4ea8e761b5f0e537f6f326f9ad429',1,'main.cpp']]],
-  ['attachservos_595',['AttachServos',['../_receiver_code_2src_2main_8cpp.html#a0cbfd712ab3bd8f654bc19400fd704bd',1,'main.cpp']]]
+  ['adjustdatetime_595',['AdjustDateTime',['../_transmitter_code_2src_2main_8cpp.html#a9de4ea8e761b5f0e537f6f326f9ad429',1,'main.cpp']]],
+  ['attachservos_596',['AttachServos',['../_receiver_code_2src_2main_8cpp.html#a0cbfd712ab3bd8f654bc19400fd704bd',1,'main.cpp']]]
 ];
