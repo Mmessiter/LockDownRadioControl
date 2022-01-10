@@ -817,6 +817,8 @@ void SendText1(char* tbox, char* NewWord)
 
 /*********************************************************************************************************************************/
 
+// This function converts an "int" to a string, AND then adds a comma, a dot, or nothing at the end
+
 char* Str(char* s, int n, int comma) // comma = 0 for nothing, 1 for a comma, 2 for a dot.
 {
     int  r, i, m, flag;
