@@ -4892,17 +4892,17 @@ void Button_was_pressed()
         }
 
         if (InStrng(ModelNMSave, WordsIn) > 0) { // edit modelname  // heer!!!!!
-            InhibitNameCheck =  true;
+            InhibitNameCheck = true;
             i = 0;
             while (WordsIn[i + 12] > 0) {
-                ModelName[i]     = WordsIn[i + 12];
+                ModelName[i] = WordsIn[i + 12];  // copy new user supplied name
                 ModelName[i + 1] = 0;
                 ++i;
-            } // copy new name
+            } 
             ModelNumber = GetValue(ModelsView_ModelNumber);
             SaveOneModel(ModelNumber);
             ClearText();
-            InhibitNameCheck =  false;
+            InhibitNameCheck = false;
             return;
         }
 
