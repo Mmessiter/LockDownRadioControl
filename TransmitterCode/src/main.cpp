@@ -494,7 +494,6 @@ uint32_t ModelNameTimeCheck = 0;
 uint16_t LastModelLoaded    = 0;
 
 
-
 uint8_t FHSS_Channels[84] = {28, 24, 61, 64, 28, 55, 66, 19, 76, 21, 59, 67, 15, 71, 82, 32, 49, 69, 13, 2, 34, 47, 20,
                              34, 69, 16, 2, 72, 35, 76, 35, 57, 45, 29, 76, 75, 49, 59, 3, 57, 20, 16, 41, 59, 62, 59,
                              67, 11, 3, 9, 77, 37, 8, 31, 36, 34, 18, 75, 17, 9, 50, 78, 77, 73, 30, 50, 79, 6, 36,
@@ -4900,13 +4899,8 @@ void Button_was_pressed()
                 ModelName[i + 1] = 0;
                 ++i;
             } // copy new name
-            Serial.println (ModelName);
+            ModelNumber = GetValue(ModelsView_ModelNumber);
             SaveOneModel(ModelNumber);
-            delay(9000);
-            LastModelLoaded = 100;
-            ReadOneModel(ModelNumber);
-            UpdateModelsNameEveryWhere();   
-
             ClearText();
             return;
         }
@@ -5691,17 +5685,18 @@ void CheckGapsLength()
 /************************************************************************************************************/
 
 void CheckModelName(){  
-char ModelsView_ModelNumber[]  = "ModelNumber";
-    if ((millis()-ModelNameTimeCheck) > 500) {
-        ModelNameTimeCheck  = millis();
-        ModelNumber = GetValue(ModelsView_ModelNumber);
-        if (LastModelLoaded != ModelNumber) {
-            LastModelLoaded = ModelNumber;
-            if (ModelNumber < 1) ModelNumber = 1; 
-            ReadOneModel(ModelNumber);
-            UpdateModelsNameEveryWhere();   
+char ModelsView_ModelNumber[]  = "ModelNumber"; // heer
+        if ((millis()-ModelNameTimeCheck) > 500) {  
+            ModelNameTimeCheck  = millis();
+            ModelNumber = GetValue(ModelsView_ModelNumber);
+            if (LastModelLoaded != ModelNumber) {
+                LastModelLoaded = ModelNumber;
+                if (ModelNumber < 1) ModelNumber = 1; 
+                ReadOneModel(ModelNumber);
+                UpdateModelsNameEveryWhere();   
+            }
         }
-    }
+
 }
 
 /************************************************************************************************************/
