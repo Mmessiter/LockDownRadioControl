@@ -109,8 +109,8 @@ double HowFar(double latitude_new, double longitude_new, double latitude_old, do
         double  lng_diff = (longitude_new-longitude_old) *  DegreesToRadians;
         double  a = sin(lat_diff/2) * sin(lat_diff/2) + cos(lat_new) * cos(lat_old) *  sin(lng_diff/2) * sin(lng_diff/2);
         double  c = 2 * atan2(sqrt(a), sqrt(1-a));
-        double  distance = RadiusOfTheEarth * c;
-        return  distance;
+        double  distance = (RadiusOfTheEarth * c * 3.28084) / 1760;
+        return  distance; // in MILES now
    }
 /************************************************************************************************************/
 // This function reads the GPS module into global vars, if it's connected
@@ -118,19 +118,18 @@ double HowFar(double latitude_new, double longitude_new, double latitude_old, do
 void ReadGPS(){
     GPS.read();
     SatellitesGPS = GPS.satellites;
-    if (GPS.fix) 
-    {
-            LatitudeGPS  = GPS.latitudeDegrees; 
-            LongitudeGPS = GPS.longitudeDegrees;
-            SpeedGPS     = GPS.speed * 1.15;                     // in MPH
-            AngleGPS     = GPS.angle;
-            AltitudeGPS  = GPS.altitude * 3.28084;               // in Feet
-    } else {                                                     // no fix so zero the lot
-            LatitudeGPS  = 0; 
-            LongitudeGPS = 0;
-            SpeedGPS     = 0;                
-            AngleGPS     = 0;
-            AltitudeGPS  = 0;               
+    if (GPS.fix){
+                LatitudeGPS  = GPS.latitudeDegrees; 
+                LongitudeGPS = GPS.longitudeDegrees;
+                SpeedGPS     = GPS.speed * 1.15;                     // in MPH
+                AngleGPS     = GPS.angle;
+                AltitudeGPS  = GPS.altitude * 3.28084;               // in Feet
+    } else {                                                         // no fix so zero the lot
+                LatitudeGPS  = 0; 
+                LongitudeGPS = 0;
+                SpeedGPS     = 0;                
+                AngleGPS     = 0;
+                AltitudeGPS  = 0;               
     }
 }
 /************************************************************************************************************/
