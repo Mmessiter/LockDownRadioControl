@@ -97,10 +97,9 @@ uint16_t        SatellitesGPS;
 
 
 /************************************************************************************************************/
-// This function gets distance (in meters) between two GPS coordinates (in degrees)
+// This function returns distance (in MILES) between two GPS coordinates (in degrees)
 
-double HowFar(double latitude_new, double longitude_new, double latitude_old, double longitude_old)
-    {
+double HowFar(double latitude_new, double longitude_new, double latitude_old, double longitude_old) {
         double  RadiusOfTheEarth = 6372797.56085;                 // Meters by the way
         double  DegreesToRadians = 3.14159265358979323846 / 180;
         double  lat_new = latitude_old * DegreesToRadians;
