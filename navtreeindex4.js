@@ -1,5 +1,7 @@
 var NAVTREEINDEX4 =
 {
+"globals_type.html":[9,1,3],
+"globals_u.html":[9,1,0,21],
 "globals_v.html":[9,1,0,22],
 "globals_vars.html":[9,1,2],
 "globals_vars.html":[9,1,2,0],
