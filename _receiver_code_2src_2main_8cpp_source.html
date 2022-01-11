@@ -173,7 +173,7 @@ $(document).ready(function(){initNavTree('_receiver_code_2src_2main_8cpp_source.
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        <span class="keywordflow">return</span>  distance; <span class="comment">// in MILES now</span></div>
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;   }</div>
 <div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;<span class="comment">/************************************************************************************************************/</span></div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;<span class="comment">// This function reads the GPS module into global vars, if it&#39;s connected</span></div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;<span class="comment">// This function reads the Adafruit Ultimate GPS module into our global vars, if it&#39;s connected. </span></div>
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160; </div>
 <div class="line"><a name="l00116"></a><span class="lineno"><a class="line" href="_receiver_code_2src_2main_8cpp.html#a54dbbc1f0fa82970fffd7672df451ee1">  116</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="_receiver_code_2src_2main_8cpp.html#a54dbbc1f0fa82970fffd7672df451ee1">ReadGPS</a>(){</div>
 <div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    GPS.read();</div>
@@ -184,7 +184,7 @@ $(document).ready(function(){initNavTree('_receiver_code_2src_2main_8cpp_source.
 <div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;                <a class="code" href="_receiver_code_2src_2main_8cpp.html#ae16763432ff6353a6e61ba98d119b8f9">SpeedGPS</a>     = GPS.speed * 1.15;                     <span class="comment">// in MPH</span></div>
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;                <a class="code" href="_receiver_code_2src_2main_8cpp.html#af4460897c7ef555de2670488abb90260">AngleGPS</a>     = GPS.angle;</div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;                <a class="code" href="_receiver_code_2src_2main_8cpp.html#ab8ac848f850a53b1ef9f966d972e4216">AltitudeGPS</a>  = GPS.altitude * 3.28084;               <span class="comment">// in Feet</span></div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    } <span class="keywordflow">else</span> {                                                         <span class="comment">// no fix so zero the lot</span></div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    } <span class="keywordflow">else</span> {                                                         <span class="comment">// no fix, so zero the lot.</span></div>
 <div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;                <a class="code" href="_receiver_code_2src_2main_8cpp.html#a3e82bc1d96f0423cf3ee60bdf9878044">LatitudeGPS</a>  = 0; </div>
 <div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;                <a class="code" href="_receiver_code_2src_2main_8cpp.html#a292b2bc83214f3188bd096c35389461b">LongitudeGPS</a> = 0;</div>
 <div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;                <a class="code" href="_receiver_code_2src_2main_8cpp.html#ae16763432ff6353a6e61ba98d119b8f9">SpeedGPS</a>     = 0;                </div>
@@ -437,7 +437,7 @@ $(document).ready(function(){initNavTree('_receiver_code_2src_2main_8cpp_source.
 <div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="_receiver_code_2src_2main_8cpp.html#a44d37e4e8af884bf172344c0835a5593">BoundFlag</a>) <a class="code" href="_receiver_code_2src_2main_8cpp.html#a32813d560b4d1b8a228df20f9b80649f">SavedVolts</a> = <a class="code" href="_receiver_code_2src_2main_8cpp.html#a69393b86406e49dbacfbabd283877495">ina219</a>.getBusVoltage_V();</div>
 <div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;    }</div>
 <div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="_receiver_code_2src_2main_8cpp.html#a50bd80a7728cf3e3699b0e52ce4ed035">USE_AdafruitUltimateGps</a>){</div>
-<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;         <a class="code" href="_receiver_code_2src_2main_8cpp.html#a54dbbc1f0fa82970fffd7672df451ee1">ReadGPS</a>();</div>
+<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;        <a class="code" href="_receiver_code_2src_2main_8cpp.html#a54dbbc1f0fa82970fffd7672df451ee1">ReadGPS</a>();</div>
 <div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;    } </div>
 <div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160; </div>
 <div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;<span class="preprocessor">#ifdef DB_SENSORS</span></div>
