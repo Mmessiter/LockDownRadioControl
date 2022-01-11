@@ -111,7 +111,7 @@ double HowFar(double latitude_new, double longitude_new, double latitude_old, do
         return  distance; // in MILES now
    }
 /************************************************************************************************************/
-// This function reads the GPS module into global vars, if it's connected
+// This function reads the Adafruit Ultimate GPS module into our global vars, if it's connected. 
 
 void ReadGPS(){
     GPS.read();
@@ -122,7 +122,7 @@ void ReadGPS(){
                 SpeedGPS     = GPS.speed * 1.15;                     // in MPH
                 AngleGPS     = GPS.angle;
                 AltitudeGPS  = GPS.altitude * 3.28084;               // in Feet
-    } else {                                                         // no fix so zero the lot
+    } else {                                                         // no fix, so zero the lot.
                 LatitudeGPS  = 0; 
                 LongitudeGPS = 0;
                 SpeedGPS     = 0;                
@@ -385,7 +385,7 @@ void DoSensors()
         if (BoundFlag) SavedVolts = ina219.getBusVoltage_V();
     }
     if (USE_AdafruitUltimateGps){
-         ReadGPS();
+        ReadGPS();
     } 
 
 #ifdef DB_SENSORS
