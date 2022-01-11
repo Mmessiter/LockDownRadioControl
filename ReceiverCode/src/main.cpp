@@ -55,9 +55,13 @@
 #include <Adafruit_INA219.h> // new library used here±
 #include <Adafruit_BMP280.h>
 #include "utilities/radio.h"
+#include <Adafruit_GPS.h>
 
-bool            USE_BMP280 = false; /** is BMP280 sensor connected */
-bool            USE_INA219 = false; //  Volts from INA219
+Adafruit_GPS GPS(&Wire);
+
+bool            USE_BMP280 = false;                   //  BMP280 sensor connected ?
+bool            USE_INA219 = false;                   //  Volts from INA219 ?
+bool            USE_AdafruitUltimateGps = false;      //  GPS (Adafruit Ultimate GPS) ?
 Adafruit_INA219 ina219;
 Adafruit_BMP280 bmp280;
 Servo           MCMServo[SERVOSUSED];
@@ -84,7 +88,51 @@ bool            Radio1Exists = false;
 bool            Radio2Exists = false;
 uint32_t        SensorTime   = 0;
 uint16_t        Qnh          = 0;    //Pressure at sea level here and now (defined by TX option)
+double          LatitudeGPS;
+double          LongitudeGPS;
+double          SpeedGPS;
+double          AngleGPS;
+double          AltitudeGPS;
+uint16_t        SatellitesGPS;
 
+
+/************************************************************************************************************/
+// This function gets distance (in meters) between two GPS coordinates (in degrees)
+
+double HowFar(double latitude_new, double longitude_new, double latitude_old, double longitude_old)
+    {
+        double  RadiusOfTheEarth = 6372797.56085;                 // Meters by the way
+        double  DegreesToRadians = 3.14159265358979323846 / 180;
+        double  lat_new = latitude_old * DegreesToRadians;
+        double  lat_old = latitude_new * DegreesToRadians;
+        double  lat_diff = (latitude_new-latitude_old) *  DegreesToRadians;
+        double  lng_diff = (longitude_new-longitude_old) *  DegreesToRadians;
+        double  a = sin(lat_diff/2) * sin(lat_diff/2) + cos(lat_new) * cos(lat_old) *  sin(lng_diff/2) * sin(lng_diff/2);
+        double  c = 2 * atan2(sqrt(a), sqrt(1-a));
+        double  distance = RadiusOfTheEarth * c;
+        return  distance;
+   }
+/************************************************************************************************************/
+// This function reads the GPS module into global vars, if it's connected
+
+void ReadGPS(){
+    GPS.read();
+    SatellitesGPS = GPS.satellites;
+    if (GPS.fix) 
+    {
+            LatitudeGPS  = GPS.latitudeDegrees; 
+            LongitudeGPS = GPS.longitudeDegrees;
+            SpeedGPS     = GPS.speed * 1.15;                     // in MPH
+            AngleGPS     = GPS.angle;
+            AltitudeGPS  = GPS.altitude * 3.28084;               // in Feet
+    } else {                                                     // no fix so zero the lot
+            LatitudeGPS  = 0; 
+            LongitudeGPS = 0;
+            SpeedGPS     = 0;                
+            AngleGPS     = 0;
+            AltitudeGPS  = 0;               
+    }
+}
 /************************************************************************************************************/
 
 void LoadFailSafeData()
@@ -344,7 +392,14 @@ void ScanI2c()
     for (uint8_t i = 1; i < 127; ++i) {
         Wire.beginTransmission(i);
         if (Wire.endTransmission() == 0) {
-            if (i == 0x40) {
+            
+            if (i == 0x10) {
+                USE_AdafruitUltimateGps = true;
+#ifdef DB_SENSORS
+                Serial.println("Adafruit Ultimate GPS detected!");
+#endif
+            }
+            else if (i == 0x40) {
                 USE_INA219 = true;
 #ifdef DB_SENSORS
                 Serial.println("INA219 voltage meter detected!");
@@ -427,6 +482,15 @@ void DoBinding()
         BindModel();
     }
 }
+void AdafruitUltimateGpsInit(){
+  GPS.begin(0x10);       
+  GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA);
+  GPS.sendCommand(PMTK_SET_NMEA_UPDATE_1HZ);
+  GPS.sendCommand(PGCMD_ANTENNA);
+  delay(1000);
+}
+
+
 /************************************************************************************************************/
 // SETUP
 /************************************************************************************************************/
@@ -446,6 +510,7 @@ void setup()
     ThisRadio = 1;
     if (USE_INA219) ina219.begin();
     if (USE_BMP280) InitBMP280();
+    if (USE_AdafruitUltimateGps)  AdafruitUltimateGpsInit();
     GetOldPipe();
     digitalWrite(LED_PIN, LOW);
 }
