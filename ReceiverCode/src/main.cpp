@@ -116,6 +116,7 @@ double HowFar(double latitude_new, double longitude_new, double latitude_old, do
 
 void ReadGPS(){
     GPS.read();
+    if (GPS.newNMEAreceived()) GPS.parse(GPS.lastNMEA()); 
     SatellitesGPS = GPS.satellites;
     if (GPS.fix){
                 LatitudeGPS  = GPS.latitudeDegrees; 
