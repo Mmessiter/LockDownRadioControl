@@ -1,0 +1,9 @@
+<map id="Adafruit_GPS::parse" name="Adafruit_GPS::parse">
+<area shape="rect" id="node1" title="Parse a standard NMEA string and update the relevant variables. Sentences start with a $,..." alt="" coords="5,56,145,83"/>
+<area shape="rect" id="node2" href="$class_adafruit___g_p_s.html#ae4abe9822d8ca59866bbb44de7910881" title="Check an NMEA string for basic format, valid source ID and valid and valid sentence ID...." alt="" coords="218,19,361,45"/>
+<area shape="rect" id="node4" href="$class_adafruit___g_p_s.html#adc65b4561fbde5b33497df8bded60d5c" title="Update the value and history information with a new value. Call whenever a new data value is received..." alt="" coords="193,81,385,108"/>
+<area shape="rect" id="node3" href="$class_adafruit___g_p_s.html#aabc3fe099a15bc672047f40e96270293" title="Parse a hex character and return the appropriate decimal value." alt="" coords="449,5,612,32"/>
+<area shape="rect" id="node5" href="$class_adafruit___g_p_s.html#a911b6b32cac6cf3b24f865c820b5072e" title="Estimate a direction in &#45;180 to 180 degree range from the values of the sine and cosine of the compou..." alt="" coords="676,81,843,108"/>
+<area shape="rect" id="node6" href="$class_adafruit___g_p_s.html#a06b7e12e38f1b00df058a253364215db" title="Estimate a direction in 0 to 360 degree range from the values of the sine and cosine of the compound ..." alt="" coords="433,107,628,133"/>
+<area shape="rect" id="node7" href="$class_adafruit___g_p_s.html#a6d13e7c81f124ca8809c02fe048b1218" title="Check if it is a compound angle." alt="" coords="441,158,621,199"/>
+</map>

@@ -1,5 +1,23 @@
 var searchData=
 [
-  ['nextion_1108',['Nextion',['../_radio_functions_8h.html#a7280be66ef406b699db09f0a70e26ef7',1,'Nextion():&#160;RadioFunctions.h'],['../_transmitter_code_2src_2main_8cpp.html#a7280be66ef406b699db09f0a70e26ef7',1,'Nextion():&#160;main.cpp']]],
-  ['normal_1109',['NORMAL',['../_radio_functions_8h.html#a1291f416b069313021b519eea62d5bf1',1,'NORMAL():&#160;RadioFunctions.h'],['../_transmitter_code_2src_2main_8cpp.html#a1291f416b069313021b519eea62d5bf1',1,'NORMAL():&#160;main.cpp']]]
+  ['m_5fenabled_1564',['M_Enabled',['../_transmitter_code_2src_2main_8cpp.html#ad2b2fe49829868cf9b49c2e65dfaa006',1,'main.cpp']]],
+  ['m_5fflightmode_1565',['M_FlightMode',['../_transmitter_code_2src_2main_8cpp.html#a0d44a2f20bda277d503359ced2a28145',1,'main.cpp']]],
+  ['m_5fmasterchannel_1566',['M_MasterChannel',['../_transmitter_code_2src_2main_8cpp.html#ad6c3cb6bd50690ce1867594d589cc727',1,'main.cpp']]],
+  ['m_5fpercent_1567',['M_Percent',['../_transmitter_code_2src_2main_8cpp.html#a1d2c1a7c2e532457f8a16284d4560094',1,'main.cpp']]],
+  ['m_5fr1_1568',['M_R1',['../_transmitter_code_2src_2main_8cpp.html#a25c000282c221bb28fa3fac74ccb1eae',1,'main.cpp']]],
+  ['m_5fr2_1569',['M_R2',['../_transmitter_code_2src_2main_8cpp.html#a4a4b6ec654cebc103b3e88037cf29de8',1,'main.cpp']]],
+  ['m_5freversed_1570',['M_Reversed',['../_transmitter_code_2src_2main_8cpp.html#a0cfa6a19316c6fd6dc867618db62bbe0',1,'main.cpp']]],
+  ['m_5fslavechannel_1571',['M_SlaveChannel',['../_transmitter_code_2src_2main_8cpp.html#af4336a5f819b0e4442cad77a362e97d9',1,'main.cpp']]],
+  ['mainsetupview_1572',['MainSetupView',['../_radio_functions_8cpp.html#a181cefce0c5a5742da657d03ba82f618',1,'MainSetupView():&#160;RadioFunctions.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a181cefce0c5a5742da657d03ba82f618',1,'MainSetupView():&#160;main.cpp']]],
+  ['maxfilelen_1573',['MAXFILELEN',['../_transmitter_code_2src_2main_8cpp.html#aa67b661e0a71a9cce5c2903953b8b8bf',1,'main.cpp']]],
+  ['maxlinelength_1574',['MAXLINELENGTH',['../_adafruit___g_p_s_8h.html#a083ec68ee7d55f29605714c8cc4b17f3',1,'Adafruit_GPS.h']]],
+  ['maxmicros_1575',['MAXMICROS',['../_transmitter_code_2src_2main_8cpp.html#a843e3db36f734b45096220f7ca4b8d9f',1,'MAXMICROS():&#160;main.cpp'],['../_radio_functions_8h.html#a843e3db36f734b45096220f7ca4b8d9f',1,'MAXMICROS():&#160;RadioFunctions.h'],['../_receiver_code_2src_2main_8cpp.html#a843e3db36f734b45096220f7ca4b8d9f',1,'MAXMICROS():&#160;main.cpp']]],
+  ['maxmixes_1576',['MAXMIXES',['../_transmitter_code_2src_2main_8cpp.html#a78eca4e2f9590ad626beb2486d11610d',1,'main.cpp']]],
+  ['maxwaitsentence_1577',['MAXWAITSENTENCE',['../_adafruit___p_m_t_k_8h.html#aeebf6a58258596ef38bd7ea07e056a94',1,'Adafruit_PMTK.h']]],
+  ['midmicros_1578',['MIDMICROS',['../_transmitter_code_2src_2main_8cpp.html#aa4dd4979e290d977d813a5a4af263b0d',1,'main.cpp']]],
+  ['minmicros_1579',['MINMICROS',['../_receiver_code_2src_2main_8cpp.html#ac67e087c11a86a3790c656a29f8c7195',1,'MINMICROS():&#160;main.cpp'],['../_radio_functions_8h.html#ac67e087c11a86a3790c656a29f8c7195',1,'MINMICROS():&#160;RadioFunctions.h'],['../_transmitter_code_2src_2main_8cpp.html#ac67e087c11a86a3790c656a29f8c7195',1,'MINMICROS():&#160;main.cpp']]],
+  ['mixesview_1580',['MixesView',['../_radio_functions_8cpp.html#a03e3c421b2e35fea82680e94bee73916',1,'MixesView():&#160;RadioFunctions.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a03e3c421b2e35fea82680e94bee73916',1,'MixesView():&#160;main.cpp']]],
+  ['mode_5fview_1581',['Mode_View',['../_radio_functions_8cpp.html#af97b5a7f4ae9db044fb9c214e0b929a8',1,'Mode_View():&#160;RadioFunctions.cpp'],['../_transmitter_code_2src_2main_8cpp.html#af97b5a7f4ae9db044fb9c214e0b929a8',1,'Mode_View():&#160;main.cpp']]],
+  ['modelsize_1582',['MODELSIZE',['../_transmitter_code_2src_2main_8cpp.html#a9c26d80f6f18d6a999a1a464e92192ef',1,'main.cpp']]],
+  ['modelsview_1583',['ModelsView',['../_radio_functions_8cpp.html#aeed7d902ff232b52159751c98fe8563f',1,'ModelsView():&#160;RadioFunctions.cpp'],['../_transmitter_code_2src_2main_8cpp.html#aeed7d902ff232b52159751c98fe8563f',1,'ModelsView():&#160;main.cpp']]]
 ];

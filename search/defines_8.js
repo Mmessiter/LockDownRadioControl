@@ -1,4 +1,7 @@
 var searchData=
 [
-  ['kickrate_1086',['KICKRATE',['../_radio_functions_8h.html#a639fb69a9b4f236e3b1a16435b82bb81',1,'RadioFunctions.h']]]
+  ['inactivitymaximum_1554',['INACTIVITYMAXIMUM',['../_transmitter_code_2src_2main_8cpp.html#a6f6e4e8e296f81b3dd22980c49168662',1,'main.cpp']]],
+  ['inactivityminimum_1555',['INACTIVITYMINIMUM',['../_transmitter_code_2src_2main_8cpp.html#a0da025fab2b31f5ffb073d6e12fe7fde',1,'main.cpp']]],
+  ['inactivitytimeout_1556',['INACTIVITYTIMEOUT',['../_transmitter_code_2src_2main_8cpp.html#afc6ed518e5867e4d7095ec597eae9443',1,'main.cpp']]],
+  ['inputs_5fview_1557',['Inputs_View',['../_transmitter_code_2src_2main_8cpp.html#a7a40aeaf7436d33790723c244446ca0a',1,'main.cpp']]]
 ];

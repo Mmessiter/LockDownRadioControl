@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['building_20the_20lockdownradiocontrol_1165',['Building the LockDownRadioControl',['../md__docs__l_d_r_c2____building__the__radio.html',1,'']]]
+  ['adafruit_20community_20code_20of_20conduct_1683',['Adafruit Community Code of Conduct',['../md__receiver_code_lib__adafruit__g_p_s__library_code_of_conduct.html',1,'']]]
 ];

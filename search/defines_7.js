@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['inactivitymaximum_1082',['INACTIVITYMAXIMUM',['../_transmitter_code_2src_2main_8cpp.html#a6f6e4e8e296f81b3dd22980c49168662',1,'main.cpp']]],
-  ['inactivityminimum_1083',['INACTIVITYMINIMUM',['../_transmitter_code_2src_2main_8cpp.html#a0da025fab2b31f5ffb073d6e12fe7fde',1,'main.cpp']]],
-  ['inactivitytimeout_1084',['INACTIVITYTIMEOUT',['../_transmitter_code_2src_2main_8cpp.html#afc6ed518e5867e4d7095ec597eae9443',1,'main.cpp']]],
-  ['inputs_5fview_1085',['Inputs_View',['../_transmitter_code_2src_2main_8cpp.html#a7a40aeaf7436d33790723c244446ca0a',1,'main.cpp']]]
+  ['halfmicrosrange_1551',['HALFMICROSRANGE',['../_transmitter_code_2src_2main_8cpp.html#aa0f99ed9c5fd16fa7deba8d4f0336b3a',1,'main.cpp']]],
+  ['help_5fview_1552',['Help_View',['../_radio_functions_8cpp.html#a05037ba2042b6e261c7f9aca80b34b34',1,'Help_View():&#160;RadioFunctions.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a05037ba2042b6e261c7f9aca80b34b34',1,'Help_View():&#160;main.cpp']]],
+  ['hoptime_1553',['HOPTIME',['../radio_8h.html#a57d506b5f34172770c8d645c12cb5ba2',1,'HOPTIME():&#160;radio.h'],['../_radio_functions_8h.html#a57d506b5f34172770c8d645c12cb5ba2',1,'HOPTIME():&#160;RadioFunctions.h']]]
 ];

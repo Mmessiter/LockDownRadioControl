@@ -1,21 +1,8 @@
 var searchData=
 [
-  ['m_5fenabled_1090',['M_Enabled',['../_transmitter_code_2src_2main_8cpp.html#ad2b2fe49829868cf9b49c2e65dfaa006',1,'main.cpp']]],
-  ['m_5fflightmode_1091',['M_FlightMode',['../_transmitter_code_2src_2main_8cpp.html#a0d44a2f20bda277d503359ced2a28145',1,'main.cpp']]],
-  ['m_5fmasterchannel_1092',['M_MasterChannel',['../_transmitter_code_2src_2main_8cpp.html#ad6c3cb6bd50690ce1867594d589cc727',1,'main.cpp']]],
-  ['m_5fpercent_1093',['M_Percent',['../_transmitter_code_2src_2main_8cpp.html#a1d2c1a7c2e532457f8a16284d4560094',1,'main.cpp']]],
-  ['m_5fr1_1094',['M_R1',['../_transmitter_code_2src_2main_8cpp.html#a25c000282c221bb28fa3fac74ccb1eae',1,'main.cpp']]],
-  ['m_5fr2_1095',['M_R2',['../_transmitter_code_2src_2main_8cpp.html#a4a4b6ec654cebc103b3e88037cf29de8',1,'main.cpp']]],
-  ['m_5freversed_1096',['M_Reversed',['../_transmitter_code_2src_2main_8cpp.html#a0cfa6a19316c6fd6dc867618db62bbe0',1,'main.cpp']]],
-  ['m_5fslavechannel_1097',['M_SlaveChannel',['../_transmitter_code_2src_2main_8cpp.html#af4336a5f819b0e4442cad77a362e97d9',1,'main.cpp']]],
-  ['mainsetupview_1098',['MainSetupView',['../_radio_functions_8cpp.html#a181cefce0c5a5742da657d03ba82f618',1,'MainSetupView():&#160;RadioFunctions.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a181cefce0c5a5742da657d03ba82f618',1,'MainSetupView():&#160;main.cpp']]],
-  ['maxfilelen_1099',['MAXFILELEN',['../_transmitter_code_2src_2main_8cpp.html#aa67b661e0a71a9cce5c2903953b8b8bf',1,'main.cpp']]],
-  ['maxmicros_1100',['MAXMICROS',['../_transmitter_code_2src_2main_8cpp.html#a843e3db36f734b45096220f7ca4b8d9f',1,'MAXMICROS():&#160;main.cpp'],['../_radio_functions_8h.html#a843e3db36f734b45096220f7ca4b8d9f',1,'MAXMICROS():&#160;RadioFunctions.h'],['../_receiver_code_2src_2main_8cpp.html#a843e3db36f734b45096220f7ca4b8d9f',1,'MAXMICROS():&#160;main.cpp']]],
-  ['maxmixes_1101',['MAXMIXES',['../_transmitter_code_2src_2main_8cpp.html#a78eca4e2f9590ad626beb2486d11610d',1,'main.cpp']]],
-  ['midmicros_1102',['MIDMICROS',['../_transmitter_code_2src_2main_8cpp.html#aa4dd4979e290d977d813a5a4af263b0d',1,'main.cpp']]],
-  ['minmicros_1103',['MINMICROS',['../_receiver_code_2src_2main_8cpp.html#ac67e087c11a86a3790c656a29f8c7195',1,'MINMICROS():&#160;main.cpp'],['../_radio_functions_8h.html#ac67e087c11a86a3790c656a29f8c7195',1,'MINMICROS():&#160;RadioFunctions.h'],['../_transmitter_code_2src_2main_8cpp.html#ac67e087c11a86a3790c656a29f8c7195',1,'MINMICROS():&#160;main.cpp']]],
-  ['mixesview_1104',['MixesView',['../_radio_functions_8cpp.html#a03e3c421b2e35fea82680e94bee73916',1,'MixesView():&#160;RadioFunctions.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a03e3c421b2e35fea82680e94bee73916',1,'MixesView():&#160;main.cpp']]],
-  ['mode_5fview_1105',['Mode_View',['../_radio_functions_8cpp.html#af97b5a7f4ae9db044fb9c214e0b929a8',1,'Mode_View():&#160;RadioFunctions.cpp'],['../_transmitter_code_2src_2main_8cpp.html#af97b5a7f4ae9db044fb9c214e0b929a8',1,'Mode_View():&#160;main.cpp']]],
-  ['modelsize_1106',['MODELSIZE',['../_transmitter_code_2src_2main_8cpp.html#a9c26d80f6f18d6a999a1a464e92192ef',1,'main.cpp']]],
-  ['modelsview_1107',['ModelsView',['../_radio_functions_8cpp.html#aeed7d902ff232b52159751c98fe8563f',1,'ModelsView():&#160;RadioFunctions.cpp'],['../_transmitter_code_2src_2main_8cpp.html#aeed7d902ff232b52159751c98fe8563f',1,'ModelsView():&#160;main.cpp']]]
+  ['led_5fpin_1559',['LED_PIN',['../_receiver_code_2src_2main_8cpp.html#ab4553be4db9860d940f81d7447173b2f',1,'main.cpp']]],
+  ['locus_5ffullstop_1560',['LOCUS_FULLSTOP',['../_adafruit___p_m_t_k_8h.html#ac61d2228d947ef7e4999a21a99d4df2f',1,'Adafruit_PMTK.h']]],
+  ['locus_5foverlap_1561',['LOCUS_OVERLAP',['../_adafruit___p_m_t_k_8h.html#ac3306296913b929db8cc8e0947ac5622',1,'Adafruit_PMTK.h']]],
+  ['lostcontactcutoff_1562',['LOSTCONTACTCUTOFF',['../_radio_functions_8h.html#ac5b4f54697bc5a8d58ef0c92c094c6b6',1,'RadioFunctions.h']]],
+  ['lowbattery_1563',['LOWBATTERY',['../_transmitter_code_2src_2main_8cpp.html#adca16f7a43b448d4584dcb62897068a5',1,'main.cpp']]]
 ];

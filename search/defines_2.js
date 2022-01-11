@@ -1,10 +1,9 @@
 var searchData=
 [
-  ['calibratelimits_1050',['CALIBRATELIMITS',['../_radio_functions_8h.html#a8d671ce93ba33f2f6b5c314108d3592d',1,'CALIBRATELIMITS():&#160;RadioFunctions.h'],['../_transmitter_code_2src_2main_8cpp.html#a8d671ce93ba33f2f6b5c314108d3592d',1,'CALIBRATELIMITS():&#160;main.cpp']]],
-  ['calibrateview_1051',['CalibrateView',['../_radio_functions_8cpp.html#a6acbadf0efce9bd09fe2ad80f293f74e',1,'CalibrateView():&#160;RadioFunctions.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a6acbadf0efce9bd09fe2ad80f293f74e',1,'CalibrateView():&#160;main.cpp']]],
-  ['ce_5fpin_1052',['CE_PIN',['../_transmitter_code_2src_2main_8cpp.html#abb388c9dfbdca89b280a12c4af1a030f',1,'main.cpp']]],
-  ['centresticks_1053',['CENTRESTICKS',['../_radio_functions_8h.html#a53bc52cfc1253f58c2f3835aa39205a3',1,'CENTRESTICKS():&#160;RadioFunctions.h'],['../_transmitter_code_2src_2main_8cpp.html#a53bc52cfc1253f58c2f3835aa39205a3',1,'CENTRESTICKS():&#160;main.cpp']]],
-  ['channelsused_1054',['CHANNELSUSED',['../_receiver_code_2src_2main_8cpp.html#ad143c01c2b36424b292b568f48cbe014',1,'CHANNELSUSED():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#ad143c01c2b36424b292b568f48cbe014',1,'CHANNELSUSED():&#160;main.cpp']]],
-  ['compressedwords_1055',['COMPRESSEDWORDS',['../radio_8h.html#a461caf7198eaa60ce589088ff38b97cb',1,'COMPRESSEDWORDS():&#160;radio.h'],['../_radio_functions_8cpp.html#a461caf7198eaa60ce589088ff38b97cb',1,'COMPRESSEDWORDS():&#160;RadioFunctions.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a461caf7198eaa60ce589088ff38b97cb',1,'COMPRESSEDWORDS():&#160;main.cpp']]],
-  ['csn_5fpin_1056',['CSN_PIN',['../_transmitter_code_2src_2main_8cpp.html#a6c4d73944fe1bd2ff7ceee867c315ac1',1,'main.cpp']]]
+  ['bindpipetimeout_1513',['BINDPIPETIMEOUT',['../_radio_functions_8cpp.html#ab78495430313aff0f45726425e8d31d3',1,'RadioFunctions.cpp']]],
+  ['black_1514',['Black',['../_transmitter_code_2src_2main_8cpp.html#a68eb1f80b4df2818e5a0774106748141',1,'main.cpp']]],
+  ['blue_1515',['Blue',['../_transmitter_code_2src_2main_8cpp.html#a6208a194d702872fdbe1d3c7d7a7c879',1,'main.cpp']]],
+  ['blueled_1516',['BLUELED',['../_transmitter_code_2src_2main_8cpp.html#a0cc50e8ab2356e8108bbb4376c02119e',1,'main.cpp']]],
+  ['brown_1517',['Brown',['../_transmitter_code_2src_2main_8cpp.html#a3057a3f4d88842d385cd5ad6c5ddf80f',1,'main.cpp']]],
+  ['buffersize_1518',['BUFFERSIZE',['../_transmitter_code_2src_2main_8cpp.html#ac3146f1e9227301bb4aa518f4d336cee',1,'main.cpp']]]
 ];

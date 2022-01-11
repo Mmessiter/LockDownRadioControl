@@ -1,6 +1,11 @@
 var searchData=
 [
-  ['halfmicrosrange_1079',['HALFMICROSRANGE',['../_transmitter_code_2src_2main_8cpp.html#aa0f99ed9c5fd16fa7deba8d4f0336b3a',1,'main.cpp']]],
-  ['help_5fview_1080',['Help_View',['../_radio_functions_8cpp.html#a05037ba2042b6e261c7f9aca80b34b34',1,'Help_View():&#160;RadioFunctions.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a05037ba2042b6e261c7f9aca80b34b34',1,'Help_View():&#160;main.cpp']]],
-  ['hoptime_1081',['HOPTIME',['../radio_8h.html#a57d506b5f34172770c8d645c12cb5ba2',1,'HOPTIME():&#160;radio.h'],['../_radio_functions_8h.html#a57d506b5f34172770c8d645c12cb5ba2',1,'HOPTIME():&#160;RadioFunctions.h']]]
+  ['gainsview_1543',['GainsView',['../_radio_functions_8cpp.html#a4e83b7abec31f2eb6f7c06662c83f0d4',1,'GainsView():&#160;RadioFunctions.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a4e83b7abec31f2eb6f7c06662c83f0d4',1,'GainsView():&#160;main.cpp']]],
+  ['gps_5fdefault_5fi2c_5faddr_1544',['GPS_DEFAULT_I2C_ADDR',['../_adafruit___g_p_s_8h.html#a09a011d0f9a94852f1cf93de299f6152',1,'Adafruit_GPS.h']]],
+  ['gps_5fmax_5fi2c_5ftransfer_1545',['GPS_MAX_I2C_TRANSFER',['../_adafruit___g_p_s_8h.html#aa4f51a6693bb8e084e5b879528dee0bf',1,'Adafruit_GPS.h']]],
+  ['gps_5fmax_5fspi_5ftransfer_1546',['GPS_MAX_SPI_TRANSFER',['../_adafruit___g_p_s_8h.html#a2a9a79e8518d2e3ca5791a112a1976a5',1,'Adafruit_GPS.h']]],
+  ['graphview_1547',['GraphView',['../_radio_functions_8cpp.html#a878a10eaefbcf00325bcf0931da89e7c',1,'GraphView():&#160;RadioFunctions.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a878a10eaefbcf00325bcf0931da89e7c',1,'GraphView():&#160;main.cpp']]],
+  ['gray_1548',['Gray',['../_transmitter_code_2src_2main_8cpp.html#aab957a0fe1c92d227cced2922967fb97',1,'main.cpp']]],
+  ['green_1549',['Green',['../_transmitter_code_2src_2main_8cpp.html#aa429cd977709122166b6e31fa10903d1',1,'main.cpp']]],
+  ['greenled_1550',['GREENLED',['../_transmitter_code_2src_2main_8cpp.html#aef42a90443e2cce65762788edcbfb8ee',1,'main.cpp']]]
 ];
