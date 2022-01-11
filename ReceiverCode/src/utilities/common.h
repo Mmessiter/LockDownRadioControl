@@ -15,7 +15,7 @@
     #define RXVERSION_MINIMUS 8 // Jan 10th 2022
 
 // #define DEBUG
-// #define DB_SENSORS
+ #define DB_SENSORS
 // #define DB_BIND
 // #define DB_FAILSAFE
 

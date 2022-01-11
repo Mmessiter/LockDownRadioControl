@@ -95,7 +95,6 @@ double          AngleGPS;
 double          AltitudeGPS;
 uint16_t        SatellitesGPS;
 
-
 /************************************************************************************************************/
 // This function returns distance (in MILES) between two GPS coordinates (in degrees)
 
@@ -335,6 +334,28 @@ void CheckParams()
 #ifdef DB_SENSORS
 void Sensors_Status()
 {
+    if (USE_AdafruitUltimateGps){
+        Serial.print ("GPS.fix: ");
+        if (GPS.fix) {
+            Serial.println ("** YES! **");
+        } else {
+            Serial.println ("Not yet ...");
+        }
+        Serial.print ("Satellites: ");
+        Serial.println (SatellitesGPS);
+        if (GPS.fix){
+            Serial.print ("Latitude: ");
+            Serial.println (LatitudeGPS);
+            Serial.print ("Longitude: ");
+            Serial.println (LongitudeGPS);
+            Serial.print ("Speed (MPH): ");
+            Serial.println (SpeedGPS);
+            Serial.print ("Angle: ");
+            Serial.println (AngleGPS);
+            Serial.print ("Altitude: ");
+            Serial.println (AltitudeGPS);
+        }
+    }
     if (USE_INA219) {
         Serial.print("     Volts=");
         Serial.print(SavedVolts);
@@ -363,6 +384,10 @@ void DoSensors()
     if (USE_INA219) {
         if (BoundFlag) SavedVolts = ina219.getBusVoltage_V();
     }
+    if (USE_AdafruitUltimateGps){
+         ReadGPS();
+    } 
+
 #ifdef DB_SENSORS
     Sensors_Status(); // does nothing if DB_SENSORS is not defined
 #endif
