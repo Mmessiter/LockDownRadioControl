@@ -5749,13 +5749,13 @@ void ParseAckPayload()
                                     // High BIT is guaranteed LOW by this point, so no "& 0x7F" is needed.
         {
             case 0:
-                GetRXTime(); // Synch very frequently!
+                GetRXTime(); // Synch 
                 break;
             case 1:
                 GetRXVersionNumber();
                 break;
             case 2:
-                GetRXTime(); // Synch very frequently!
+                GetRXTime(); // Synch 
                 break;
             case 3:
                 GetRXVolts();
@@ -5764,55 +5764,56 @@ void ParseAckPayload()
                     snprintf(ModelVolts, 5, "%f", RXModelVolts);
                 }
             case 4:
-                GetRXTime(); // Synch very frequently!
+                GetRXTime(); // Synch 
                 break;
             case 5:
                 GetAltitude();
                 break;
             case 6:
-                GetRXTime(); // Synch very frequently!
+                GetRXTime(); // Synch 
                 break;
             case 7:
                 GetTemperature();
                 break;
             case 8:
-                GetRXTime(); // Synch very frequently!
+                GetRXTime(); // Synch 
                 break;
             case 9:
                 GetGPSLatitude(); 
                 break;
             case 10:
-                 GetRXTime(); // Synch very frequently!
+                 GetRXTime(); // Synch 
                  break;
             case 11:
                 GetGPSLongitude(); 
+                Serial.println (GPSLongitude,14);
                 break;
             case 12:
-                 GetRXTime(); // Synch very frequently!
+                 GetRXTime(); // Synch 
                  break;
             case 13:
                 GetGPSAngle(); 
                 break;
             case 14:
-                 GetRXTime(); // Synch very frequently!
+                 GetRXTime(); // Synch 
                  break;
             case 15:
                 GetGPSSpeed(); 
                 break;
             case 16:
-                GetRXTime(); // Synch very frequently!
+                GetRXTime(); // Synch 
                 break;               
             case 17:
                 GetGPSSatellites();
                 break;
             case 18:
-                GetRXTime(); // Synch very frequently!
+                GetRXTime(); // Synch 
                 break;
             case 19:
                 GetGPSFix();
                 break;
             case 20:
-                GetRXTime(); // Synch very frequently!
+                GetRXTime(); // Synch 
                 break;
             default:
                 break;
