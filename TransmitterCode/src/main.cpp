@@ -5786,7 +5786,6 @@ void ParseAckPayload()
                  break;
             case 11:
                 GetGPSLongitude(); 
-                Serial.println (GPSLongitude,14);
                 break;
             case 12:
                  GetRXTime(); // Synch 
