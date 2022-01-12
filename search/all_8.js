@@ -11,6 +11,6 @@ var searchData=
   ['hoptonextfrequency_247',['HopToNextFrequency',['../radio_8h.html#aa48ea4c5d47aa93d17dbc7d7b19238d8',1,'HopToNextFrequency():&#160;radio.h'],['../_radio_functions_8cpp.html#aa48ea4c5d47aa93d17dbc7d7b19238d8',1,'HopToNextFrequency():&#160;RadioFunctions.cpp'],['../_radio_functions_8h.html#aa48ea4c5d47aa93d17dbc7d7b19238d8',1,'HopToNextFrequency():&#160;radio.h']]],
   ['hour_248',['hour',['../class_adafruit___g_p_s.html#a6030cb60c15e0b8a6f55655e8df94a2f',1,'Adafruit_GPS']]],
   ['hours_249',['Hours',['../_transmitter_code_2src_2main_8cpp.html#a3063ebc6f2f9d4e13a209f9fb43587c5',1,'main.cpp']]],
-  ['howfar_250',['HowFar',['../_receiver_code_2src_2main_8cpp.html#a395e40df6744803cbf3e99ea9aa3ba40',1,'main.cpp']]],
+  ['howfar_250',['HowFar',['../_receiver_code_2src_2main_8cpp.html#a17212fe94445cc556d947614fbf2176c',1,'main.cpp']]],
   ['htextcmd_251',['HtextCMD',['../_transmitter_code_2src_2main_8cpp.html#a81be91332c626ad94acd328facf875be',1,'main.cpp']]]
 ];
