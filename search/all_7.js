@@ -48,7 +48,7 @@ var searchData=
   ['gps_5fmax_5fspi_5ftransfer_239',['GPS_MAX_SPI_TRANSFER',['../_adafruit___g_p_s_8h.html#a2a9a79e8518d2e3ca5791a112a1976a5',1,'Adafruit_GPS.h']]],
   ['gpsaltitude_240',['GPSAltitude',['../_transmitter_code_2src_2main_8cpp.html#a8918ed2130e1a6692821e5a1dacf3fd6',1,'main.cpp']]],
   ['gpsangle_241',['GPSAngle',['../_transmitter_code_2src_2main_8cpp.html#ac7add4705b89032ed9fe3c5be3286915',1,'main.cpp']]],
-  ['gpsfix_242',['GpsFix',['../_receiver_code_2src_2main_8cpp.html#a86c2722f6c671747562cc504a440e243',1,'GpsFix():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a83066f7cd013847718c3cfedda10fc6e',1,'GpsFix():&#160;main.cpp']]],
+  ['gpsfix_242',['GpsFix',['../_receiver_code_2src_2main_8cpp.html#a86c2722f6c671747562cc504a440e243',1,'GpsFix():&#160;main.cpp'],['../radio_8h.html#a86c2722f6c671747562cc504a440e243',1,'GpsFix():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a83066f7cd013847718c3cfedda10fc6e',1,'GpsFix():&#160;main.cpp']]],
   ['gpslatitude_243',['GPSLatitude',['../_transmitter_code_2src_2main_8cpp.html#a52f2c43b38c596d3fb567a8abfa86782',1,'main.cpp']]],
   ['gpslongitude_244',['GPSLongitude',['../_transmitter_code_2src_2main_8cpp.html#aa6e33f286808412f23d57b633205ffe3',1,'main.cpp']]],
   ['gpssatellites_245',['GPSSatellites',['../_transmitter_code_2src_2main_8cpp.html#abb91acc4607fbc69baec9116f8b5e11b',1,'main.cpp']]],
