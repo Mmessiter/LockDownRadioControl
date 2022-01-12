@@ -1411,7 +1411,6 @@ void ShowComms()
     char  Bear[]              = "Bear";
     char  Dist[]              = "Dist";
     char  Sped[]              = "Sped";
-    char  NA[]                = "N/A";
 
     if (CurrentView == FrontView || CurrentView == DataView) {
         if (millis() - LastShowTime > 1000) { // update this lot only once per second
@@ -1504,12 +1503,13 @@ void ShowComms()
                     snprintf(Vbuf, 4,"%f",  GPSSpeed);
                     SendText(Sped,Vbuf);
                 } else {
-                    SendText(Lon,NA);
-                    SendText(Lat,NA);
-                    SendText(GAlt,NA);
-                    SendText(Bear,NA);
-                    SendText(Dist,NA);
-                    SendText(Sped,NA);
+                    SendText(Lon,na);
+                    SendText(Lat,na);
+                    SendText(GAlt,na);
+                    SendText(GMAlt,na);
+                    SendText(Bear,na);
+                    SendText(Dist,na);
+                    SendText(Sped,na);
                 }
             }
             ReadVolts = RXModelVolts * 10;
