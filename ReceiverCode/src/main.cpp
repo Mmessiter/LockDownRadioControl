@@ -94,6 +94,7 @@ double          SpeedGPS;
 double          AngleGPS;
 double          AltitudeGPS;
 uint16_t        SatellitesGPS;
+bool            GpsFix = false;
 
 /************************************************************************************************************/
 // This function returns distance (in MILES) between two GPS coordinates (in degrees)
@@ -120,8 +121,9 @@ FASTRUN void ReadGPS(){
     {
         GPS.parse(GPS.lastNMEA()); 
     }
-    SatellitesGPS = GPS.satellites;
-    if (GPS.fix){
+    GpsFix = GPS.fix;
+    SatellitesGPS = GPS.satellites;  
+    if (GpsFix){
                 LatitudeGPS  = GPS.latitudeDegrees; 
                 LongitudeGPS = GPS.longitudeDegrees;
                 SpeedGPS     = GPS.speed * 1.15;                     // in MPH
@@ -341,14 +343,14 @@ void Sensors_Status()
 {
     if (USE_AdafruitUltimateGps){
         Serial.print ("GPS.fix: ");
-        if (GPS.fix) {
+        if (GpsFix) {
             Serial.println ("** YES! **");
         } else {
             Serial.println ("Not yet ...");
         }
         Serial.print ("Satellites: ");
         Serial.println (SatellitesGPS);
-        if (GPS.fix){
+        if (GpsFix){
             Serial.print ("Latitude: ");
             Serial.println (LatitudeGPS);
             Serial.print ("Longitude: ");
