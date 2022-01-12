@@ -365,6 +365,8 @@ double   GPSLatitude                 = 0;  // data from GPS at receiver
 double   GPSLongitude                = 0;
 double   GPSAngle                    = 0;
 double   GPSAltitude                 = 0;
+double   GPSDistance                 = 0;
+double   GPSMAXAltitude              = 0;
 double   GPSSatellites               = 0;
 double   GpsFix                      = 0;
 double   GPSSpeed                    = 0;
@@ -1355,7 +1357,7 @@ void ShowComms()
     char  WarnOff[]              = "vis Warning,0";
     char  TXVolts[]              = "t21";
     float Volts                  = 0;
-    char  Vbuf[12];
+    char  Vbuf[16];
     char  pc[]      = "%";
     char  v[]       = "V, ";
     float txv       = 0;
@@ -1374,6 +1376,17 @@ void ShowComms()
     float ReadVolts           = 0;
     float VoltsPerCell        = 0;
     char  BindButtonVisible[] = "vis bind,1";
+    char  Fix[]               = "Fix";
+    char  Yes[]               = "Yes";
+    char  No[]                = "No";
+    char  Lon[]               = "Lon";
+    char  Lat[]               = "Lat";
+    char  GAlt[]              = "GAlt";
+    char  GMAlt[]             = "GMAlt";
+    char  Bear[]              = "Bear";
+    char  Dist[]              = "Dist";
+    char  Sped[]              = "Sped";
+    char  NA[]                = "N/A";
 
     if (CurrentView == FrontView || CurrentView == DataView) {
         if (millis() - LastShowTime > 1000) { // update this lot only once per second
@@ -1447,6 +1460,32 @@ void ShowComms()
                 SendValue(DataView_Sg, GapShortest);
                 SendValue(DataView_Ag, GapAverage);
                 SendValue(DataView_Gc, GapCount);
+                
+                if (GpsFix){   // heer
+                    SendText(Fix, Yes);
+                    snprintf(Vbuf, 10,"%f", GPSLongitude);
+                    SendText(Lon,Vbuf);
+                    snprintf(Vbuf, 10,"%f", GPSLatitude);
+                    SendText(Lat,Vbuf);
+                    snprintf(Vbuf, 5,"%f",  GPSAltitude);
+                    SendText(GAlt,Vbuf);
+                    snprintf(Vbuf, 5,"%f",  GPSMAXAltitude);
+                    SendText(GMAlt,Vbuf);
+                    snprintf(Vbuf, 6,"%f",  GPSAngle);
+                    SendText(Bear,Vbuf);
+                    snprintf(Vbuf, 4,"%f",  GPSDistance);
+                    SendText(Dist,Vbuf);
+                    snprintf(Vbuf, 4,"%f",  GPSSpeed);
+                    SendText(Sped,Vbuf);
+                } else {
+                    SendText(Fix, No);
+                    SendText(Lon,NA);
+                    SendText(Lat,NA);
+                    SendText(GAlt,NA);
+                    SendText(Bear,NA);
+                    SendText(Dist,NA);
+                    SendText(Sped,NA);
+                }
             }
             ReadVolts = RXModelVolts * 10;
             // 6s Max 25.2 -> 20.4
@@ -4901,7 +4940,7 @@ void Button_was_pressed()
             return;
         }
 
-        if (InStrng(ModelNMSave, WordsIn) > 0) { // edit modelname  // heer!!!!!
+        if (InStrng(ModelNMSave, WordsIn) > 0) { // edit modelname  
             InhibitNameCheck = true;
             i = 0;
             while (WordsIn[i + 12] > 0) {
@@ -5617,6 +5656,7 @@ void GetGPSAltitude()
     ThisUnion.Val8[2] = AckPayload.Byte3;
     ThisUnion.Val8[3] = AckPayload.Byte4;
     GPSAltitude       = ThisUnion.Val32;
+    if (GPSMAXAltitude < GPSAltitude) GPSMAXAltitude = GPSAltitude;
 }
 
 /************************************************************************************************************/
