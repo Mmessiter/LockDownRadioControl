@@ -1484,9 +1484,9 @@ void ShowComms()
                 SendValue(DataView_Sg,    GapShortest);
                 SendValue(DataView_Ag,    GapAverage);
                 SendValue(DataView_Gc,    GapCount);
-                if (GpsFix){   // heer
-                    snprintf(Vbuf, 3,"%d",GPSSatellites); // was FIX, now count.
-                    SendText(Fix, Vbuf);
+                snprintf(Vbuf, 3,"%d",GPSSatellites); 
+                SendText(Fix, Vbuf);
+                if (GpsFix && GPSSatellites){   // heer
                     snprintf(Vbuf, 10,"%f", GPSLongitude);
                     SendText(Lon,Vbuf);
                     snprintf(Vbuf, 10,"%f", GPSLatitude);
