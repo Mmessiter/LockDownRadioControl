@@ -543,8 +543,8 @@ void setup()
     CurrentRadio = &Radio1;
     if (InitCurrentRadio()) Radio1Exists = true;
     ThisRadio = 1;
-    if (USE_INA219) ina219.begin();
-    if (USE_BMP280) InitBMP280();
+    if (USE_INA219)               ina219.begin();
+    if (USE_BMP280)               InitBMP280();
     if (USE_AdafruitUltimateGps)  AdafruitUltimateGpsInit();
     GetOldPipe();
     digitalWrite(LED_PIN, LOW);
