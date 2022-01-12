@@ -99,7 +99,7 @@ uint16_t        SatellitesGPS;
 // This function returns distance (in MILES) between two GPS coordinates (in degrees)
 // it was essentially cribbed from the internet, then tested and adjusted a little. 
 
-double HowFar(double latitude_new, double longitude_new, double latitude_old, double longitude_old) {
+FASTRUN double HowFar(double latitude_new, double longitude_new, double latitude_old, double longitude_old) {
         double  RadiusOfTheEarth = 6372797.56085;                 // Meters by the way
         double  DegreesToRadians = 3.14159265358979323846 / 180;
         double  lat_new = latitude_old * DegreesToRadians;
@@ -114,9 +114,12 @@ double HowFar(double latitude_new, double longitude_new, double latitude_old, do
 /************************************************************************************************************/
 // This function reads the Adafruit Ultimate GPS module into our global vars, if it's connected. 
 
-void ReadGPS(){
+FASTRUN void ReadGPS(){
     GPS.read();
-    if (GPS.newNMEAreceived()) GPS.parse(GPS.lastNMEA()); 
+    if (GPS.newNMEAreceived())
+    {
+        GPS.parse(GPS.lastNMEA()); 
+    }
     SatellitesGPS = GPS.satellites;
     if (GPS.fix){
                 LatitudeGPS  = GPS.latitudeDegrees; 
@@ -252,7 +255,7 @@ bool ReadData()
             FailSafeDataLoaded = false; // Ack payload instructed to Hop at next opportunity...
             HopToNextFrequency();       // So hop now
             HopNow = false;             // and clear the flag.
-            DoSensors();                // read sensors while TX hops an catches up
+            DoSensors();                // read sensors (takes about 2 ms) while TX hops an catches up
         }
     }
     return Connected;
@@ -372,27 +375,33 @@ void Sensors_Status()
 }
 #endif // defined DB_SENSORS
 /************************************************************************************************************/
-void DoSensors()
+FASTRUN void DoSensors()
 {
+    uint32_t test = millis();
     if ((millis() - SensorTime) < 2000) return; // no need to measure too often
     SensorTime = millis();
     if (USE_BMP280) {
-        if (BoundFlag) {
+        if (BoundFlag && Connected) {
             SavedTemperature = bmp280.readTemperature();
             SavedAltitude    = bmp280.readAltitude(Qnh) * 3.28084; 
             if (SavedAltitude < 0) SavedAltitude = 0;
         }
     }
     if (USE_INA219) {
-        if (BoundFlag) SavedVolts = ina219.getBusVoltage_V();
+        if (BoundFlag && Connected) { 
+            SavedVolts = ina219.getBusVoltage_V();
+        }
     }
-    if (USE_AdafruitUltimateGps){
-        ReadGPS();
+    if (USE_AdafruitUltimateGps) {
+       // if (BoundFlag && Connected){ 
+             ReadGPS(); 
+       // }
     } 
 
 #ifdef DB_SENSORS
     Sensors_Status(); // does nothing if DB_SENSORS is not defined
 #endif
+ Serial.println (millis()-test);
 }
 /************************************************************************************************************/
 
