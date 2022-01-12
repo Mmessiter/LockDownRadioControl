@@ -342,24 +342,24 @@ void CheckParams()
 void Sensors_Status()
 {
     if (USE_AdafruitUltimateGps){
-        Serial.print ("GPS.fix: ");
+        Serial.print ("GPS FIX?  ");
         if (GpsFix) {
             Serial.println ("** YES! **");
         } else {
-            Serial.println ("Not yet ...");
+            Serial.println ("(Waiting ...)");
         }
         Serial.print ("Satellites: ");
         Serial.println (SatellitesGPS);
         if (GpsFix){
-            Serial.print ("Latitude: ");
-            Serial.println (LatitudeGPS);
-            Serial.print ("Longitude: ");
-            Serial.println (LongitudeGPS);
-            Serial.print ("Speed (MPH): ");
+            Serial.print ("GPS Latitude: ");
+            Serial.println (LatitudeGPS,14);
+            Serial.print ("GPS Longitude: ");
+            Serial.println (LongitudeGPS,14);
+            Serial.print ("GPS Speed (MPH): ");
             Serial.println (SpeedGPS);
-            Serial.print ("Angle: ");
+            Serial.print ("GPS Angle: ");
             Serial.println (AngleGPS);
-            Serial.print ("Altitude: ");
+            Serial.print ("GPS Altitude: ");
             Serial.println (AltitudeGPS);
         }
     }
@@ -395,9 +395,9 @@ FASTRUN void DoSensors()
         }
     }
     if (USE_AdafruitUltimateGps) {
-       // if (BoundFlag && Connected){ 
+        if (BoundFlag && Connected){ 
              ReadGPS(); 
-       // }
+        }
     } 
 
 #ifdef DB_SENSORS

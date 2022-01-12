@@ -34,13 +34,20 @@ uint8_t  NextChannelNumber = 0;
 uint32_t RXTimeStamp;
 bool     HopNow = false;
 
-extern void  ShowHopDurationEtc();
-extern void  DoSensors();
-extern bool  Radio1Exists;
-extern bool  Radio2Exists;
-extern float SavedAltitude;
-extern float SavedVolts;
-extern float SavedTemperature;
+extern void     ShowHopDurationEtc();
+extern void     DoSensors();
+extern bool     Radio1Exists;
+extern bool     Radio2Exists;
+extern float    SavedAltitude;
+extern float    SavedVolts;
+extern float    SavedTemperature;
+extern double   LatitudeGPS;
+extern double   LongitudeGPS;
+extern double   SpeedGPS;
+extern double   AngleGPS;
+extern double   AltitudeGPS;
+extern uint16_t SatellitesGPS;
+extern bool     GpsFix;
 
 /** AckPayload Stucture for data returned to transmitter. */
 struct Payload
@@ -316,6 +323,127 @@ void LoadTimeStamp()
     AckPayload.Byte5 = NextChannelNumber;
 }
 
+
+/************************************************************************************************************/
+
+void LoadGPSLongitude()
+{
+    union // union used to allow access to each byte of 32 bit float
+    {
+        float   Val32;
+        uint8_t Val8[4];
+    } ThisUnion;
+
+    ThisUnion.Val32     = LongitudeGPS;
+    AckPayload.Byte1    = ThisUnion.Val8[0];    // These values are herewith delivered to Transmitter in Ack Payload
+    AckPayload.Byte2    = ThisUnion.Val8[1];
+    AckPayload.Byte3    = ThisUnion.Val8[2];
+    AckPayload.Byte4    = ThisUnion.Val8[3];
+}
+
+/************************************************************************************************************/
+
+void LoadGPSLatitude()
+{
+    union // union used to allow access to each byte of 32 bit float
+    {
+        float   Val32;
+        uint8_t Val8[4];
+    } ThisUnion;
+
+    ThisUnion.Val32     = LatitudeGPS;
+    AckPayload.Byte1    = ThisUnion.Val8[0];    // These values are herewith delivered to Transmitter in Ack Payload
+    AckPayload.Byte2    = ThisUnion.Val8[1];
+    AckPayload.Byte3    = ThisUnion.Val8[2];
+    AckPayload.Byte4    = ThisUnion.Val8[3];
+}
+
+/************************************************************************************************************/
+
+void LoadGPSAngle()
+{
+    union // union used to allow access to each byte of 32 bit float
+    {
+        float   Val32;
+        uint8_t Val8[4];
+    } ThisUnion;
+
+    ThisUnion.Val32     = AngleGPS;
+    AckPayload.Byte1    = ThisUnion.Val8[0];    // These values are herewith delivered to Transmitter in Ack Payload
+    AckPayload.Byte2    = ThisUnion.Val8[1];
+    AckPayload.Byte3    = ThisUnion.Val8[2];
+    AckPayload.Byte4    = ThisUnion.Val8[3];
+}
+
+/************************************************************************************************************/
+
+void LoadGPSSpeed()
+{
+    union // union used to allow access to each byte of 32 bit float
+    {
+        float   Val32;
+        uint8_t Val8[4];
+    } ThisUnion;
+
+    ThisUnion.Val32     = SpeedGPS;
+    AckPayload.Byte1    = ThisUnion.Val8[0];    // These values are herewith delivered to Transmitter in Ack Payload
+    AckPayload.Byte2    = ThisUnion.Val8[1];
+    AckPayload.Byte3    = ThisUnion.Val8[2];
+    AckPayload.Byte4    = ThisUnion.Val8[3];
+}
+
+
+/************************************************************************************************************/
+
+void LoadGPSAltitude()
+{
+    union // union used to allow access to each byte of 32 bit float
+    {
+        float   Val32;
+        uint8_t Val8[4];
+    } ThisUnion;
+
+    ThisUnion.Val32     = AltitudeGPS;
+    AckPayload.Byte1    = ThisUnion.Val8[0];    // These values are herewith delivered to Transmitter in Ack Payload
+    AckPayload.Byte2    = ThisUnion.Val8[1];
+    AckPayload.Byte3    = ThisUnion.Val8[2];
+    AckPayload.Byte4    = ThisUnion.Val8[3];
+}
+
+
+/************************************************************************************************************/
+
+void LoadGPSSatellites()
+{
+    union // union used to allow access to each byte of 32 bit float
+    {
+        float   Val32;
+        uint8_t Val8[4];
+    } ThisUnion;
+
+    ThisUnion.Val32     = SatellitesGPS;
+    AckPayload.Byte1    = ThisUnion.Val8[0];    // These values are herewith delivered to Transmitter in Ack Payload
+    AckPayload.Byte2    = ThisUnion.Val8[1];
+    AckPayload.Byte3    = ThisUnion.Val8[2];
+    AckPayload.Byte4    = ThisUnion.Val8[3];
+}
+
+/************************************************************************************************************/
+
+void LoadGPSFix()
+{
+    union // union used to allow access to each byte of 32 bit float
+    {
+        float   Val32;
+        uint8_t Val8[4];
+    } ThisUnion;
+
+    ThisUnion.Val32     = GpsFix;
+    AckPayload.Byte1    = ThisUnion.Val8[0];    // These values are herewith delivered to Transmitter in Ack Payload
+    AckPayload.Byte2    = ThisUnion.Val8[1];
+    AckPayload.Byte3    = ThisUnion.Val8[2];
+    AckPayload.Byte4    = ThisUnion.Val8[3];
+}
 /************************************************************************************************************/
 
 void LoadRXVolts()
@@ -327,7 +455,7 @@ void LoadRXVolts()
     } RXVolts;
 
     RXVolts.Val32    = SavedVolts;
-    AckPayload.Byte1 = RXVolts.Val8[0]; // These values are herewith delivered to Transmitter in Ack Payload
+    AckPayload.Byte1 = RXVolts.Val8[0];    // These values are herewith delivered to Transmitter in Ack Payload
     AckPayload.Byte2 = RXVolts.Val8[1];
     AckPayload.Byte3 = RXVolts.Val8[2];
     AckPayload.Byte4 = RXVolts.Val8[3];
@@ -375,36 +503,73 @@ void LoadAckPayload()
                                 // 1 =  Version number
                                 // 2 =  Time stamp for FHSS
                                 // 3 =  RX lipo Voltage
-                                // More later ... CAN EXPAND TO 127 if needed :-)!
+                                // ... etc.
 
-    if (AckPayload.Purpose > 7) AckPayload.Purpose = 0; // 7 is currently the max
+    if (AckPayload.Purpose > 20) AckPayload.Purpose = 0; // 14 is currently the max
 
     switch (AckPayload.Purpose) {
         case 0: //  if 0 send synch time stamp
             LoadTimeStamp();
             break;
-        case 1: //  if 1 send version info AND RX number
+        case 1: 
             LoadVersioNumber();
             break;
-        case 2: //  if 2 send synch time stamp
+        case 2: 
             LoadTimeStamp();
             break;
-        case 3: //  if 3 send send rx lipo volts
+        case 3: 
             LoadRXVolts();
             break;
-        case 4: //  if 4 send synch time stamp
+        case 4: 
             LoadTimeStamp();
             break;
-        case 5: //  if 5 send synch time stamp
+        case 5:
             LoadAltitude();
             break;
-        case 6: //  if 4 send synch time stamp
+        case 6: 
             LoadTimeStamp();
             break;
-        case 7: //  if 5 send synch time stamp
+        case 7: 
             LoadTemperature();
             break;
-
+        case 8: 
+            LoadTimeStamp();
+            break;
+        case 9: 
+            LoadGPSLatitude();    // ********* GPS *******************
+            break;
+        case 10: 
+            LoadTimeStamp();
+            break;
+        case 11: 
+            LoadGPSLongitude();   // ********* GPS *******************
+            break;
+        case 12: 
+            LoadTimeStamp();
+            break;
+        case 13: 
+            LoadGPSAngle();       // ********* GPS *******************
+            break;
+        case 14: 
+            LoadTimeStamp();
+            break;
+        case 15: 
+            LoadGPSSpeed();       // ********* GPS *******************
+            break;
+        case 16:
+            LoadTimeStamp();
+            break;
+        case 17: 
+            LoadGPSSatellites();  // ********* GPS *******************
+            break;
+        case 18:
+            LoadTimeStamp();
+            break;
+        case 19: 
+            LoadGPSFix();         // ********* GPS *******************
+        case 20: 
+            LoadTimeStamp();
+            break;
         default:
             break;
     }
