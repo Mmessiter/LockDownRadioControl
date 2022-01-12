@@ -5782,20 +5782,20 @@ void ParseAckPayload()
                 GetGPSLatitude(); 
                 break;
             case 10:
-                 GetRXTime(); // Synch 
-                 break;
+                GetRXTime(); // Synch 
+                break;
             case 11:
                 GetGPSLongitude(); 
                 break;
             case 12:
-                 GetRXTime(); // Synch 
-                 break;
+                GetRXTime(); // Synch 
+                break;
             case 13:
                 GetGPSAngle(); 
                 break;
             case 14:
-                 GetRXTime(); // Synch 
-                 break;
+                GetRXTime(); // Synch 
+                break;
             case 15:
                 GetGPSSpeed(); 
                 break;
