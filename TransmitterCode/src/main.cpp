@@ -1448,19 +1448,18 @@ void ShowComms()
                 }
             }
             if (CurrentView == DataView) {
-                SendValue(DataView_pps, PacketsPerSecond);
-                SendValue(DataView_lps, LostPackets);
-                SendText(DataView_Alt, ModelAltitude);
+                SendValue(DataView_pps,   PacketsPerSecond);
+                SendValue(DataView_lps,   LostPackets);
+                SendText(DataView_Alt,    ModelAltitude);
                 SendText(DataView_MaxAlt, MaxAltitude);
-                SendText(DataView_Temp, ModelTemperature);
-                SendText(DataView_Rx, ThisRadio);
-                SendText(DataView_rxv, ReceiverVersionNumber);
-                SendValue(DataView_Ls, GapLongest);
-                SendValue(DataView_Ts, GapSum);
-                SendValue(DataView_Sg, GapShortest);
-                SendValue(DataView_Ag, GapAverage);
-                SendValue(DataView_Gc, GapCount);
-                
+                SendText(DataView_Temp,   ModelTemperature);
+                SendText(DataView_Rx,     ThisRadio);
+                SendText(DataView_rxv,    ReceiverVersionNumber);
+                SendValue(DataView_Ls,    GapLongest);
+                SendValue(DataView_Ts,    GapSum);
+                SendValue(DataView_Sg,    GapShortest);
+                SendValue(DataView_Ag,    GapAverage);
+                SendValue(DataView_Gc,    GapCount);
                 if (GpsFix){   // heer
                     SendText(Fix, Yes);
                     snprintf(Vbuf, 10,"%f", GPSLongitude);
