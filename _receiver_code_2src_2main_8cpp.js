@@ -32,7 +32,6 @@ var _receiver_code_2src_2main_8cpp =
     [ "ReceiveData", "_receiver_code_2src_2main_8cpp.html#a06807a4f185694d37f774702ba74db0a", null ],
     [ "SaveFailSafeData", "_receiver_code_2src_2main_8cpp.html#a96891035aa9f064462b6a614c5878f51", null ],
     [ "ScanI2c", "_receiver_code_2src_2main_8cpp.html#a20ffd6680226b1e058002512386e7770", null ],
-    [ "Sensors_Status", "_receiver_code_2src_2main_8cpp.html#a83351fb373e8bd3b3bcb259e25886440", null ],
     [ "setup", "_receiver_code_2src_2main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d", null ],
     [ "ShowHopDurationEtc", "_receiver_code_2src_2main_8cpp.html#a2863e7455e30e6fddc0fcf56f62d6564", null ],
     [ "altitude", "_receiver_code_2src_2main_8cpp.html#a0e13a4b4ae0cefdac2a413284239caa6", null ],
