@@ -377,7 +377,7 @@ void Sensors_Status()
 /************************************************************************************************************/
 FASTRUN void DoSensors()
 {
-    uint32_t test = millis();
+   
     if ((millis() - SensorTime) < 2000) return; // no need to measure too often
     SensorTime = millis();
     if (USE_BMP280) {
@@ -400,8 +400,9 @@ FASTRUN void DoSensors()
 
 #ifdef DB_SENSORS
     Sensors_Status(); // does nothing if DB_SENSORS is not defined
+    Serial.println (millis()-SensorTime);
 #endif
- Serial.println (millis()-test);
+ 
 }
 /************************************************************************************************************/
 
