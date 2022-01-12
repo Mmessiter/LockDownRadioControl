@@ -19,7 +19,7 @@ var searchData=
   ['anglegps_17',['AngleGPS',['../_receiver_code_2src_2main_8cpp.html#af4460897c7ef555de2670488abb90260',1,'main.cpp']]],
   ['approximation_18',['APPROXIMATION',['../_transmitter_code_2src_2main_8cpp.html#aee8c3c363eab49d6a90d3f74587694d5',1,'main.cpp']]],
   ['attachservos_19',['AttachServos',['../_receiver_code_2src_2main_8cpp.html#a0cbfd712ab3bd8f654bc19400fd704bd',1,'main.cpp']]],
-  ['autoswitch_20',['AUTOSWITCH',['../_transmitter_code_2src_2main_8cpp.html#aa4414f3ff790f01b8bb41a0f51d1518f',1,'main.cpp']]],
-  ['autoswitch_21',['AutoSwitch',['../_transmitter_code_2src_2main_8cpp.html#a6d1c8ca21c8826267f5687d3799c6a1f',1,'main.cpp']]],
+  ['autoswitch_20',['AutoSwitch',['../_transmitter_code_2src_2main_8cpp.html#a6d1c8ca21c8826267f5687d3799c6a1f',1,'main.cpp']]],
+  ['autoswitch_21',['AUTOSWITCH',['../_transmitter_code_2src_2main_8cpp.html#aa4414f3ff790f01b8bb41a0f51d1518f',1,'main.cpp']]],
   ['available_22',['available',['../class_adafruit___g_p_s.html#abe6399af00c0047527ea20e3f35a0182',1,'Adafruit_GPS']]]
 ];

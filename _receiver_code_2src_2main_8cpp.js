@@ -46,6 +46,7 @@ var _receiver_code_2src_2main_8cpp =
     [ "FailSafeDataLoaded", "_receiver_code_2src_2main_8cpp.html#a08ed7a870be8e84ae26ee0b972866bb3", null ],
     [ "FS_byte1", "_receiver_code_2src_2main_8cpp.html#a3be9019b72265fa9443e1f1132fd9bc7", null ],
     [ "FS_byte2", "_receiver_code_2src_2main_8cpp.html#a9949c81d8f6abc28616445945c5d24ba", null ],
+    [ "GpsFix", "_receiver_code_2src_2main_8cpp.html#a86c2722f6c671747562cc504a440e243", null ],
     [ "ina219", "_receiver_code_2src_2main_8cpp.html#a69393b86406e49dbacfbabd283877495", null ],
     [ "LatitudeGPS", "_receiver_code_2src_2main_8cpp.html#a3e82bc1d96f0423cf3ee60bdf9878044", null ],
     [ "LongitudeGPS", "_receiver_code_2src_2main_8cpp.html#a292b2bc83214f3188bd096c35389461b", null ],
