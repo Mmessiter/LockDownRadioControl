@@ -361,13 +361,15 @@ uint32_t GapCount                    = 0;
 uint32_t GapShortest                 = 0;
 char     CalibrateNow[]              = "touch_j";
 char     ModelVolts[8]               = " ";
-double   GPSLatitude                 = 0;  // data from GPS at receiver
+double   GPSLatitude                 = 0;  
 double   GPSLongitude                = 0;
+double   GPSMarkLatitude               = 0;  
+double   GPSMarkLongitude              = 0;
 double   GPSAngle                    = 0;
 double   GPSAltitude                 = 0;
 double   GPSDistance                 = 0;
 double   GPSMAXAltitude              = 0;
-double   GPSSatellites               = 0;
+uint16_t GPSSatellites               = 0;
 double   GpsFix                      = 0;
 double   GPSSpeed                    = 0;
 float    RXModelVolts                = 0;
@@ -508,6 +510,31 @@ uint8_t FHSS_Channels[84] = {28, 24, 61, 64, 28, 55, 66, 19, 76, 21, 59, 67, 15,
                              20, 23, 79, 40, 54, 51, 19, 69, 12, 18, 80, 53, 41, 24};
 
 
+
+/************************************************************************************************************/
+// This function returns distance (in MILES) between two GPS coordinates (in degrees)
+// it was essentially cribbed from the internet, then tested and adjusted a little. 
+
+FASTRUN double HowFar(double latitude_new, double longitude_new, double latitude_old, double longitude_old) {
+        double  RadiusOfTheEarth = 6372797.56085;                 // Meters by the way
+        double  DegreesToRadians = 3.14159265358979323846 / 180;
+        double  lat_new = latitude_old * DegreesToRadians;
+        double  lat_old = latitude_new * DegreesToRadians;
+        double  lat_diff = (latitude_new-latitude_old) *  DegreesToRadians;
+        double  lng_diff = (longitude_new-longitude_old) *  DegreesToRadians;
+        double  a = sin(lat_diff/2) * sin(lat_diff/2) + cos(lat_new) * cos(lat_old) *  sin(lng_diff/2) * sin(lng_diff/2);
+        double  c = 2 * atan2(sqrt(a), sqrt(1-a));
+        double  distance = (RadiusOfTheEarth * c * 3.28084) / 1760;
+        return  distance; // in MILES now
+   }
+/************************************************************************************************************/
+void GetDistance(){
+
+if ((GPSMarkLatitude > 0) && (GPSLatitude > 0)) {
+        GPSDistance = HowFar(GPSLatitude,GPSLongitude,GPSMarkLatitude,GPSMarkLongitude);}
+else {
+        GPSDistance =  0;}
+}
 /************************************************************************************************************/
 // This function reads data from BUDDY (Slave) BUT uses it ONLY WHILE the channel 12 switch is in the ON position ( > 1000)
 
@@ -1377,8 +1404,6 @@ void ShowComms()
     float VoltsPerCell        = 0;
     char  BindButtonVisible[] = "vis bind,1";
     char  Fix[]               = "Fix";
-    char  Yes[]               = "Yes";
-    char  No[]                = "No";
     char  Lon[]               = "Lon";
     char  Lat[]               = "Lat";
     char  GAlt[]              = "GAlt";
@@ -1461,7 +1486,8 @@ void ShowComms()
                 SendValue(DataView_Ag,    GapAverage);
                 SendValue(DataView_Gc,    GapCount);
                 if (GpsFix){   // heer
-                    SendText(Fix, Yes);
+                    snprintf(Vbuf, 3,"%d",GPSSatellites); // was FIX, now count.
+                    SendText(Fix, Vbuf);
                     snprintf(Vbuf, 10,"%f", GPSLongitude);
                     SendText(Lon,Vbuf);
                     snprintf(Vbuf, 10,"%f", GPSLatitude);
@@ -1472,12 +1498,12 @@ void ShowComms()
                     SendText(GMAlt,Vbuf);
                     snprintf(Vbuf, 6,"%f",  GPSAngle);
                     SendText(Bear,Vbuf);
+                    GetDistance();
                     snprintf(Vbuf, 4,"%f",  GPSDistance);
                     SendText(Dist,Vbuf);
                     snprintf(Vbuf, 4,"%f",  GPSSpeed);
                     SendText(Sped,Vbuf);
                 } else {
-                    SendText(Fix, No);
                     SendText(Lon,NA);
                     SendText(Lat,NA);
                     SendText(GAlt,NA);
@@ -4188,6 +4214,7 @@ void Button_was_pressed()
     char BuddyP[]                  = "BuddyP";
     char OptionsEnd[]              = "OptionsEnd";
     char QNH[]                     = "Qnh";
+    char Mark[]                    = "Mark";
 
     if (strlen(WordsIn) > 0) {
         StartInactvityTimeout();
@@ -4204,7 +4231,12 @@ void Button_was_pressed()
             CurrentView = MainSetupView;
             return;
         }
-
+        
+        if (InStrng(Mark, WordsIn) > 0) {           
+            GPSMarkLongitude = GPSLongitude;        // remember where Mark was pressed!
+            GPSMarkLatitude  = GPSLatitude; 
+        }
+        
         if (InStrng(OptionsEnd, WordsIn) > 0) { // Options screen end
             DoSbusSendOnly = GetValue(BuddyP);  // Pupil, wired
             BuddyMaster    = GetValue(BuddyM);  // Master, either.
@@ -5718,7 +5750,7 @@ void GetGPSSatellites()
     ThisUnion.Val8[1] = AckPayload.Byte2;
     ThisUnion.Val8[2] = AckPayload.Byte3;
     ThisUnion.Val8[3] = AckPayload.Byte4;
-    GPSSatellites     = ThisUnion.Val32;
+    GPSSatellites     = (int) ThisUnion.Val32;
 }
 
 
