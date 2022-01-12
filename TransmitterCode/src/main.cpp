@@ -361,17 +361,13 @@ uint32_t GapCount                    = 0;
 uint32_t GapShortest                 = 0;
 char     CalibrateNow[]              = "touch_j";
 char     ModelVolts[8]               = " ";
-
-double   GPSLatitude                 = 0;
+double   GPSLatitude                 = 0;  // data from GPS at receiver
 double   GPSLongitude                = 0;
 double   GPSAngle                    = 0;
 double   GPSAltitude                 = 0;
 double   GPSSatellites               = 0;
 double   GpsFix                      = 0;
 double   GPSSpeed                    = 0;
-
-
-
 float    RXModelVolts                = 0;
 int      RXModelAltitude             = 0;
 int      RXMAXModelAltitude          = 0;
