@@ -1,10 +1,10 @@
 /** @file ReceiverCode/src/utilities/common.h */
 
 //**************************************************************************************************************************
- // #define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<<<<<< **
+//       #define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<<<<<< **
 //**************************************************************************************************************************
 
-#ifndef _SRC_UTILITIES_COMMON_H
+    #ifndef _SRC_UTILITIES_COMMON_H
     #define _SRC_UTILITIES_COMMON_H
 
     #include <stdint.h>
@@ -12,7 +12,7 @@
 
     #define RXVERSION_MAJOR   1
     #define RXVERSION_MINOR   4
-    #define RXVERSION_MINIMUS 8 // Jan 10th 2022
+    #define RXVERSION_MINIMUS 9 // Jan 13th 2022
 
 // #define DEBUG
 // #define DB_SENSORS

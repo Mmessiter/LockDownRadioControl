@@ -109,18 +109,15 @@ FASTRUN double HowFar(double latitude_new, double longitude_new, double latitude
         double  lng_diff = (longitude_new-longitude_old) *  DegreesToRadians;
         double  a = sin(lat_diff/2) * sin(lat_diff/2) + cos(lat_new) * cos(lat_old) *  sin(lng_diff/2) * sin(lng_diff/2);
         double  c = 2 * atan2(sqrt(a), sqrt(1-a));
-        double  distance = (RadiusOfTheEarth * c * 3.28084) / 1760;
-        return  distance; // in MILES now
+        double  distance = RadiusOfTheEarth * c;
+        return  distance; 
    }
 /************************************************************************************************************/
 // This function reads the Adafruit Ultimate GPS module into our global vars, if it's connected. 
 
 FASTRUN void ReadGPS(){
     GPS.read();
-    if (GPS.newNMEAreceived())
-    {
-        GPS.parse(GPS.lastNMEA()); 
-    }
+    if (GPS.newNMEAreceived()) GPS.parse(GPS.lastNMEA()); 
     GpsFix = GPS.fix;
     SatellitesGPS = GPS.satellites;  
     if (GpsFix){
