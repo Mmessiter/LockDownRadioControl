@@ -139,7 +139,7 @@ void SendData()
         Radio1.flush_rx();                                       // This avoids a lockup that happens when the FIFO gets full.
         Radio1.flush_tx();                                       // This avoids a lockup that happens when the FIFO gets full.
                                                                  //  *************************************** SEND *************************************************************************************
-        Radio1.write(&CompressedData, SizeOfCompressedData);     //  ****************************** !SEND! ******************************
+        Radio1.write(&CompressedData, SizeOfCompressedData);     //  ************************************** !SEND! *********************************************
                                                                  //  *************************************** SEND *************************************************************************************
         if (Radio1.isAckPayloadAvailable())
         {

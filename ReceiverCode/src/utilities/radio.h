@@ -510,7 +510,7 @@ void LoadAckPayload()
                                 // ... etc ...
       if (USE_BMP280) MaxAckP              = 4;                     // 4 + volts
       if (USE_INA219) MaxAckP              = 8;                     // 8 + Baro
-      if (USE_AdafruitUltimateGps) MaxAckP = 20;                    // 20 + GPS
+      if (USE_AdafruitUltimateGps) MaxAckP = 22;                    // 22 + GPS
       if (AckPayload.Purpose > MaxAckP) AckPayload.Purpose = 0;     // wrap after max
 
     switch (AckPayload.Purpose) {
@@ -574,6 +574,12 @@ void LoadAckPayload()
         case 19: 
             LoadGPSFix();         // ********* GPS *******************
         case 20: 
+            LoadTimeStamp();
+            break;
+        case 21:
+            LoadGPSAltitude();   // ********* GPS *******************
+            break;
+        case 22: 
             LoadTimeStamp();
             break;
         default:

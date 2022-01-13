@@ -5874,6 +5874,12 @@ void ParseAckPayload()
             case 20:
                 GetRXTime(); // Synch 
                 break;
+            case 21:
+                GetGPSAltitude();  
+                break;
+            case 22:
+                GetRXTime(); // Synch 
+                break;
             default:
                 break;
         }
