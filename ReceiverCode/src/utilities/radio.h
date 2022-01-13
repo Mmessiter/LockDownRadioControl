@@ -48,6 +48,10 @@ extern double   AngleGPS;
 extern double   AltitudeGPS;
 extern uint16_t SatellitesGPS;
 extern bool     GpsFix;
+extern bool     USE_AdafruitUltimateGps;    
+extern bool     USE_BMP280;
+extern bool     USE_INA219;
+ 
 
 /** AckPayload Stucture for data returned to transmitter. */
 struct Payload
@@ -498,17 +502,19 @@ void LoadTemperature()
 
 void LoadAckPayload()
 {
+    uint8_t MaxAckP = 2;        // 2 if only RX
     AckPayload.Purpose &= 0x7F; // Clear hi bit ( = do not ignore)
     ++AckPayload.Purpose;       // 0 = ...
                                 // 1 =  Version number
                                 // 2 =  Time stamp for FHSS
-                                // 3 =  RX lipo Voltage
                                 // ... etc.
-
-    if (AckPayload.Purpose > 20) AckPayload.Purpose = 0; // 14 is currently the max
+      if (USE_BMP280) MaxAckP              = 4;                     // 4 + volts
+      if (USE_INA219) MaxAckP              = 8;                     // 8 + Baro
+      if (USE_AdafruitUltimateGps) MaxAckP = 20;                    // 20 + GPS
+      if (AckPayload.Purpose > MaxAckP) AckPayload.Purpose = 0;     // wrap after max
 
     switch (AckPayload.Purpose) {
-        case 0: //  if 0 send synch time stamp
+        case 0: 
             LoadTimeStamp();
             break;
         case 1: 
