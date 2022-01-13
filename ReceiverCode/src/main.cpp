@@ -114,26 +114,25 @@ FASTRUN double HowFar(double latitude_new, double longitude_new, double latitude
    }
 /************************************************************************************************************/
 // This function reads the Adafruit Ultimate GPS module into our global vars, if it's connected. 
-// It returns false if it cannot yet parse a whole sentence, true if parseable  - even WITHOUT a fix.
+// It returns false if it cannot yet parse a whole sentence - it returns true if parseable  - even WITHOUT a fix.
 
-FASTRUN bool ReadGPS(){                               // Call VERY often because this gets only one character per call.
-    GPS.read();                                       // Get ONLY ONE char
-    if (GPS.newNMEAreceived()) {                      // Whole sentence?
+FASTRUN bool ReadGPS(){                               // Call this VERY often because this gets only one character per call.
+    GPS.read();                                       // Gets ONLY ONE character
+    if (GPS.newNMEAreceived()) {                      // Whole sentence yet?
         if (!GPS.parse(GPS.lastNMEA())) return false; // Can't parse it
     } else {
         return false;                                 // No sentence yet
-    }
-                                                      // Must have parsed OK ...
-    GpsFix = GPS.fix;
-    SatellitesGPS = GPS.satellites;  
-    if (GpsFix){
-                LatitudeGPS  = GPS.latitudeDegrees;                  // Update these if a fix was obtained 
+    }                                          
+    GpsFix = GPS.fix;                                 // Must have parsed OK ...
+    SatellitesGPS = GPS.satellites;                   // How many satellites?
+    if (GpsFix){                                      // Got fix yet? 
+                LatitudeGPS  = GPS.latitudeDegrees;   // Update these if a fix was obtained 
                 LongitudeGPS = GPS.longitudeDegrees;
-                SpeedGPS     = GPS.speed * 1.15;                     // in MPH
+                SpeedGPS     = GPS.speed * 1.15;      // in MPH
                 AngleGPS     = GPS.angle;
-                AltitudeGPS  = GPS.altitude * 3.28084;               // in Feet
-                return true;                                         // got parseable sentance         
+                AltitudeGPS  = GPS.altitude * 3.28084; // in Feet          
     }
+    return true;                                       // got parseable sentence but no fix
 }
 /************************************************************************************************************/
 
