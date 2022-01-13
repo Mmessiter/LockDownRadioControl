@@ -135,7 +135,6 @@ var _transmitter_code_2src_2main_8cpp =
     [ "GetChannel", "_transmitter_code_2src_2main_8cpp.html#aeb87480505eb543d9a7d85f7b15bd563", null ],
     [ "getDate", "_transmitter_code_2src_2main_8cpp.html#a100af87d91fcaa6f23f2ca6a2fe146cc", null ],
     [ "GetDifference", "_transmitter_code_2src_2main_8cpp.html#ab0fbc217177ad0a97b822eb78a17010d", null ],
-    [ "GetDistance", "_transmitter_code_2src_2main_8cpp.html#a71d0e367bdd1f7b193f34f2d4a86dc41", null ],
     [ "GetDotPositions", "_transmitter_code_2src_2main_8cpp.html#a9faf4d94aad5656651bf8719d901fa06", null ],
     [ "GetFlightMode", "_transmitter_code_2src_2main_8cpp.html#adf35f0ced7990f813a783d0ecd33bf64", null ],
     [ "GetGPSAltitude", "_transmitter_code_2src_2main_8cpp.html#a07bc4803bfd1768cd1a38c3c4d3cdfd4", null ],
