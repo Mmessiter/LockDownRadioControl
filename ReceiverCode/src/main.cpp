@@ -377,7 +377,11 @@ void Sensors_Status()
 FASTRUN void DoSensors()
 {
     if (USE_AdafruitUltimateGps) {
-        if(!ReadGPS()) ReadGPS();              // If no parseable sentence yet, get one more char in...   
+        if(!ReadGPS()){               // if no parse, read another char. but if parse happened, skip the rest and resume comms.
+            if(ReadGPS()){return;}
+         } else {
+            return;
+         }              
     }
 
     if ((millis() - SensorTime) < 2000) return; // no need to measure too often
