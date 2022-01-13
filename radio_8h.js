@@ -72,5 +72,8 @@ var radio_8h =
     [ "SpeedGPS", "radio_8h.html#ae16763432ff6353a6e61ba98d119b8f9", null ],
     [ "StillSearchingTime", "radio_8h.html#a1d0b7743e2015fe687146524466e4794", null ],
     [ "ThisPipe", "radio_8h.html#a88d2add9e7ca58e7218870f887b25859", null ],
-    [ "ThisRadio", "radio_8h.html#a25cc3bb5cb94f4bbef0f2c5b79140c20", null ]
+    [ "ThisRadio", "radio_8h.html#a25cc3bb5cb94f4bbef0f2c5b79140c20", null ],
+    [ "USE_AdafruitUltimateGps", "radio_8h.html#a50bd80a7728cf3e3699b0e52ce4ed035", null ],
+    [ "USE_BMP280", "radio_8h.html#a4be5c27bea3c82b0a4ec92191052d946", null ],
+    [ "USE_INA219", "radio_8h.html#a87ae50e2ac4507568cbf98072f174a1b", null ]
 ];
