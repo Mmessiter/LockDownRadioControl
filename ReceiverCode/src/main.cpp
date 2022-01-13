@@ -114,24 +114,25 @@ FASTRUN double HowFar(double latitude_new, double longitude_new, double latitude
    }
 /************************************************************************************************************/
 // This function reads the Adafruit Ultimate GPS module into our global vars, if it's connected. 
+// It returns false if it cannot yet parse a whole sentence, true if parseable  - even WITHOUT a fix.
 
-FASTRUN void ReadGPS(){    // call very often because gets only one character per call.
-    GPS.read();
-    if (GPS.newNMEAreceived()) {if (!GPS.parse(GPS.lastNMEA())) return;} 
+FASTRUN bool ReadGPS(){                               // Call VERY often because this gets only one character per call.
+    GPS.read();                                       // Get ONLY ONE char
+    if (GPS.newNMEAreceived()) {                      // Whole sentence?
+        if (!GPS.parse(GPS.lastNMEA())) return false; // Can't parse it
+    } else {
+        return false;                                 // No sentence yet
+    }
+                                                      // Must have parsed OK ...
     GpsFix = GPS.fix;
     SatellitesGPS = GPS.satellites;  
     if (GpsFix){
-                LatitudeGPS  = GPS.latitudeDegrees; 
+                LatitudeGPS  = GPS.latitudeDegrees;                  // Update these if a fix was obtained 
                 LongitudeGPS = GPS.longitudeDegrees;
                 SpeedGPS     = GPS.speed * 1.15;                     // in MPH
                 AngleGPS     = GPS.angle;
                 AltitudeGPS  = GPS.altitude * 3.28084;               // in Feet
-    } else {                                                         // no fix, so zero the lot.
-                LatitudeGPS  = 0; 
-                LongitudeGPS = 0;
-                SpeedGPS     = 0;                
-                AngleGPS     = 0;
-                AltitudeGPS  = 0;               
+                return true;                                         // got parseable sentance         
     }
 }
 /************************************************************************************************************/
@@ -254,7 +255,7 @@ bool ReadData()
             FailSafeDataLoaded = false; // Ack payload instructed to Hop at next opportunity...
             HopToNextFrequency();       // So hop now
             HopNow = false;             // and clear the flag.
-            DoSensors();                // read sensors (takes about 2 ms) while TX hops an catches up
+            DoSensors();                // read sensors (takes about 2 ms) while TX hops and catches up
         }
     }
     return Connected;
@@ -376,7 +377,10 @@ void Sensors_Status()
 /************************************************************************************************************/
 FASTRUN void DoSensors()
 {
-    if (USE_AdafruitUltimateGps) ReadGPS();     // must be called VERY often
+    if (USE_AdafruitUltimateGps) {
+        if(!ReadGPS()) ReadGPS();              // If no parseable sentence yet, get one more char in...   
+    }
+
     if ((millis() - SensorTime) < 2000) return; // no need to measure too often
     SensorTime = millis();
     if (USE_BMP280) {
