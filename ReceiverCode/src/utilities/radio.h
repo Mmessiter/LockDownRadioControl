@@ -502,12 +502,12 @@ void LoadTemperature()
 
 void LoadAckPayload()
 {
-    uint8_t MaxAckP = 2;        // 2 if only RX
+    uint8_t MaxAckP     = 2;    // 2 if only RX
     AckPayload.Purpose &= 0x7F; // Clear hi bit ( = do not ignore)
     ++AckPayload.Purpose;       // 0 = ...
                                 // 1 =  Version number
                                 // 2 =  Time stamp for FHSS
-                                // ... etc.
+                                // ... etc ...
       if (USE_BMP280) MaxAckP              = 4;                     // 4 + volts
       if (USE_INA219) MaxAckP              = 8;                     // 8 + Baro
       if (USE_AdafruitUltimateGps) MaxAckP = 20;                    // 20 + GPS
