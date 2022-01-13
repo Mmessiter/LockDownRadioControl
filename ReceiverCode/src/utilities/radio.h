@@ -38,9 +38,9 @@ extern void     ShowHopDurationEtc();
 extern void     DoSensors();
 extern bool     Radio1Exists;
 extern bool     Radio2Exists;
-extern float    SavedAltitude;
+extern float    BaroAltitude;
 extern float    SavedVolts;
-extern float    SavedTemperature;
+extern float    BaroTemperature;
 extern double   LatitudeGPS;
 extern double   LongitudeGPS;
 extern double   SpeedGPS;
@@ -475,7 +475,7 @@ void LoadAltitude()
         uint8_t Val8[4];
     } AltitudeUnion;
 
-    AltitudeUnion.Val32 = SavedAltitude;
+    AltitudeUnion.Val32 = BaroAltitude;
     AckPayload.Byte1    = AltitudeUnion.Val8[0]; // These values are herewith delivered to Transmitter in Ack Payload
     AckPayload.Byte2    = AltitudeUnion.Val8[1];
     AckPayload.Byte3    = AltitudeUnion.Val8[2];
@@ -491,7 +491,7 @@ void LoadTemperature()
         float   Val32;
         uint8_t Val8[4];
     } TemperatureUnion;
-    TemperatureUnion.Val32 = SavedTemperature;
+    TemperatureUnion.Val32 = BaroTemperature;
     AckPayload.Byte1       = TemperatureUnion.Val8[0]; // These values are herewith delivered to Transmitter in Ack Payload
     AckPayload.Byte2       = TemperatureUnion.Val8[1];
     AckPayload.Byte3       = TemperatureUnion.Val8[2];

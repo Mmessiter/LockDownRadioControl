@@ -81,8 +81,8 @@ bool            ReInit             = false;
 uint8_t         FS_byte1           = 0; // All 16 failsafe channel flags are in these two bytes
 uint8_t         FS_byte2           = 0;
 uint32_t        ReconnectedMoment;
-float           SavedAltitude;
-float           SavedTemperature;
+float           BaroAltitude;
+float           BaroTemperature;
 float           SavedVolts;
 bool            Radio1Exists = false;
 bool            Radio2Exists = false;
@@ -366,9 +366,9 @@ void Sensors_Status()
     }
     if (USE_BMP280) {
         Serial.print("  Altitude=");
-        Serial.print(SavedAltitude);
+        Serial.print(BaroAltitude);
         Serial.print(" Temp=");
-        Serial.print(SavedTemperature);
+        Serial.print(BaroTemperature);
     }
     Serial.println(" ");
 }
@@ -377,20 +377,17 @@ void Sensors_Status()
 FASTRUN void DoSensors()
 {
     if (USE_AdafruitUltimateGps) {
-        if(!ReadGPS()){               // if no parse, read another char. but if parse happened, skip the rest and resume comms.
-            if(ReadGPS()){return;}
-         } else {
-            return;
-         }              
+        if (!ReadGPS()){                        // if no parse yet, read another char. But if parse happened, skip the rest and resume comms.
+            if (ReadGPS()) return;
+         } else return;                  
     }
-
     if ((millis() - SensorTime) < 2000) return; // no need to measure too often
     SensorTime = millis();
     if (USE_BMP280) {
         if (BoundFlag && Connected) {
-            SavedTemperature = bmp280.readTemperature();
-            SavedAltitude    = bmp280.readAltitude(Qnh) * 3.28084; 
-            if (SavedAltitude < 0) SavedAltitude = 0;
+            BaroTemperature = bmp280.readTemperature();
+            BaroAltitude    = bmp280.readAltitude(Qnh) * 3.28084; 
+            if (BaroAltitude < 0) BaroAltitude = 0;
         }
     }
     if (USE_INA219) {
