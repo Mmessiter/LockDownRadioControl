@@ -1477,16 +1477,16 @@ void ShowComms()
                 SendValue(DataView_Sg,    GapShortest);
                 SendValue(DataView_Ag,    GapAverage);
                 SendValue(DataView_Gc,    GapCount);
-                if (GpsFix && GPSSatellites){   // heer
-                    snprintf(Vbuf, 3,"%d",GPSSatellites); 
+                if (GpsFix){                               // heer
+                    snprintf(Vbuf, 3,"%d",  GPSSatellites); 
                     SendText(Fix, Vbuf);
                     snprintf(Vbuf, 10,"%f", GPSLongitude);
                     SendText(Lon,Vbuf);
                     snprintf(Vbuf, 10,"%f", GPSLatitude);
                     SendText(Lat,Vbuf);
-                    snprintf(Vbuf, 5,"%f",  GPSAltitude);
+                    snprintf(Vbuf, 7,"%f",  GPSAltitude);
                     SendText(GAlt,Vbuf);
-                    snprintf(Vbuf, 5,"%f",  GPSMAXAltitude);
+                    snprintf(Vbuf, 7,"%f",  GPSMAXAltitude);
                     SendText(GMAlt,Vbuf);
                     snprintf(Vbuf, 6,"%f",  GPSAngle);
                     SendText(Bear,Vbuf);
@@ -1495,15 +1495,7 @@ void ShowComms()
                     SendText(Dist,Vbuf);
                     snprintf(Vbuf, 4,"%f",  GPSSpeed);
                     SendText(Sped,Vbuf);
-                } else {
-                    SendText(Lon,na);
-                    SendText(Lat,na);
-                    SendText(GAlt,na);
-                    SendText(GMAlt,na);
-                    SendText(Bear,na);
-                    SendText(Dist,na);
-                    SendText(Sped,na);
-                }
+                } 
             }
             ReadVolts = RXModelVolts * 10;
             // 6s Max 25.2 -> 20.4
