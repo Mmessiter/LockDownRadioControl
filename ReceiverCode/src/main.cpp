@@ -115,11 +115,9 @@ FASTRUN double HowFar(double latitude_new, double longitude_new, double latitude
 /************************************************************************************************************/
 // This function reads the Adafruit Ultimate GPS module into our global vars, if it's connected. 
 
-FASTRUN void ReadGPS(){
+FASTRUN void ReadGPS(){    // call ofter because gets only one char per call.
     GPS.read();
-    if (GPS.newNMEAreceived()) {
-        if (!GPS.parse(GPS.lastNMEA())) return; 
-    } 
+    if (GPS.newNMEAreceived()) {if (!GPS.parse(GPS.lastNMEA())) return;} 
     GpsFix = GPS.fix;
     SatellitesGPS = GPS.satellites;  
     if (GpsFix){
@@ -379,7 +377,7 @@ void Sensors_Status()
 FASTRUN void DoSensors()
 {
     if (USE_AdafruitUltimateGps) {
-             ReadGPS();             // must be called often
+             ReadGPS();                         // must be called very often
     } 
     if ((millis() - SensorTime) < 2000) return; // no need to measure too often
     SensorTime = millis();
