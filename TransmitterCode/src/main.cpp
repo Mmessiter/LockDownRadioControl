@@ -524,17 +524,10 @@ FASTRUN double HowFar(double latitude_new, double longitude_new, double latitude
         double  lng_diff = (longitude_new-longitude_old) *  DegreesToRadians;
         double  a = sin(lat_diff/2) * sin(lat_diff/2) + cos(lat_new) * cos(lat_old) *  sin(lng_diff/2) * sin(lng_diff/2);
         double  c = 2 * atan2(sqrt(a), sqrt(1-a));
-        double  distance = (RadiusOfTheEarth * c * 3.28084) / 1760;
+        double  distance = (RadiusOfTheEarth * c ) ; //* 3.28084) / 1760;
         return  distance; // in MILES now
    }
-/************************************************************************************************************/
-void GetDistance(){
 
-if ((GPSMarkLatitude > 0) && (GPSLatitude > 0)) {
-        GPSDistance = HowFar(GPSLatitude,GPSLongitude,GPSMarkLatitude,GPSMarkLongitude);}
-else {
-        GPSDistance =  0;}
-}
 /************************************************************************************************************/
 // This function reads data from BUDDY (Slave) BUT uses it ONLY WHILE the channel 12 switch is in the ON position ( > 1000)
 
@@ -1486,7 +1479,7 @@ void ShowComms()
                 SendValue(DataView_Gc,    GapCount);
                 snprintf(Vbuf, 3,"%d",GPSSatellites); 
                 SendText(Fix, Vbuf);
-                if (GpsFix && GPSSatellites){   // heer
+               // if (GpsFix && GPSSatellites){   // heer
                     snprintf(Vbuf, 10,"%f", GPSLongitude);
                     SendText(Lon,Vbuf);
                     snprintf(Vbuf, 10,"%f", GPSLatitude);
@@ -1497,20 +1490,20 @@ void ShowComms()
                     SendText(GMAlt,Vbuf);
                     snprintf(Vbuf, 6,"%f",  GPSAngle);
                     SendText(Bear,Vbuf);
-                    GetDistance();
+                    GPSDistance = HowFar(GPSLatitude,GPSLongitude,GPSMarkLatitude,GPSMarkLongitude);
                     snprintf(Vbuf, 4,"%f",  GPSDistance);
                     SendText(Dist,Vbuf);
                     snprintf(Vbuf, 4,"%f",  GPSSpeed);
                     SendText(Sped,Vbuf);
-                } else {
-                    SendText(Lon,na);
-                    SendText(Lat,na);
-                    SendText(GAlt,na);
-                    SendText(GMAlt,na);
-                    SendText(Bear,na);
-                    SendText(Dist,na);
-                    SendText(Sped,na);
-                }
+               // } else {
+               //     SendText(Lon,na);
+               //     SendText(Lat,na);
+               //     SendText(GAlt,na);
+               //     SendText(GMAlt,na);
+               //     SendText(Bear,na);
+               //     SendText(Dist,na);
+               //     SendText(Sped,na);
+               // }
             }
             ReadVolts = RXModelVolts * 10;
             // 6s Max 25.2 -> 20.4
