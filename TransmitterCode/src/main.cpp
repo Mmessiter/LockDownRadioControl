@@ -363,8 +363,8 @@ char     CalibrateNow[]              = "touch_j";
 char     ModelVolts[8]               = " ";
 double   GPSLatitude                 = 0;  
 double   GPSLongitude                = 0;
-double   GPSMarkLatitude               = 0;  
-double   GPSMarkLongitude              = 0;
+double   GPSMarkLatitude             = 0;  
+double   GPSMarkLongitude            = 0;
 double   GPSAngle                    = 0;
 double   GPSAltitude                 = 0;
 double   GPSDistance                 = 0;
@@ -1479,7 +1479,7 @@ void ShowComms()
                 SendValue(DataView_Gc,    GapCount);
                 snprintf(Vbuf, 3,"%d",GPSSatellites); 
                 SendText(Fix, Vbuf);
-               // if (GpsFix && GPSSatellites){   // heer
+                if (GpsFix && GPSSatellites){   // heer
                     snprintf(Vbuf, 10,"%f", GPSLongitude);
                     SendText(Lon,Vbuf);
                     snprintf(Vbuf, 10,"%f", GPSLatitude);
@@ -1495,15 +1495,15 @@ void ShowComms()
                     SendText(Dist,Vbuf);
                     snprintf(Vbuf, 4,"%f",  GPSSpeed);
                     SendText(Sped,Vbuf);
-               // } else {
-               //     SendText(Lon,na);
-               //     SendText(Lat,na);
-               //     SendText(GAlt,na);
-               //     SendText(GMAlt,na);
-               //     SendText(Bear,na);
-               //     SendText(Dist,na);
-               //     SendText(Sped,na);
-               // }
+                } else {
+                    SendText(Lon,na);
+                    SendText(Lat,na);
+                    SendText(GAlt,na);
+                    SendText(GMAlt,na);
+                    SendText(Bear,na);
+                    SendText(Dist,na);
+                    SendText(Sped,na);
+                }
             }
             ReadVolts = RXModelVolts * 10;
             // 6s Max 25.2 -> 20.4
