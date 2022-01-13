@@ -117,7 +117,9 @@ FASTRUN double HowFar(double latitude_new, double longitude_new, double latitude
 
 FASTRUN void ReadGPS(){
     GPS.read();
-    if (GPS.newNMEAreceived()) GPS.parse(GPS.lastNMEA()); 
+    if (GPS.newNMEAreceived()) {
+        if (!GPS.parse(GPS.lastNMEA())) return; 
+    } 
     GpsFix = GPS.fix;
     SatellitesGPS = GPS.satellites;  
     if (GpsFix){
@@ -376,7 +378,9 @@ void Sensors_Status()
 /************************************************************************************************************/
 FASTRUN void DoSensors()
 {
-   
+    if (USE_AdafruitUltimateGps) {
+             ReadGPS();             // must be called often
+    } 
     if ((millis() - SensorTime) < 2000) return; // no need to measure too often
     SensorTime = millis();
     if (USE_BMP280) {
@@ -391,11 +395,8 @@ FASTRUN void DoSensors()
             SavedVolts = ina219.getBusVoltage_V();
         }
     }
-    if (USE_AdafruitUltimateGps) {
-        if (BoundFlag && Connected){ 
-             ReadGPS(); 
-        }
-    } 
+    
+    
 
 #ifdef DB_SENSORS
     Sensors_Status(); // does nothing if DB_SENSORS is not defined
