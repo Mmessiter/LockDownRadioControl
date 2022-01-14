@@ -121,9 +121,9 @@ var NAVTREEINDEX =
 [
 "_adafruit___g_p_s_8cpp.html",
 "_radio_functions_8h.html#aa8cb091644f8785e060422c38a5ee334",
-"_transmitter_code_2src_2main_8cpp.html#a54977872c85f09f2b15f657c83df9300",
-"_transmitter_code_2src_2main_8cpp.html#ad6c3cb6bd50690ce1867594d589cc727",
-"globals_func_t.html"
+"_transmitter_code_2src_2main_8cpp.html#a53bc52cfc1253f58c2f3835aa39205a3",
+"_transmitter_code_2src_2main_8cpp.html#ad61c470de31a7d84669a8170b5d68718",
+"globals_func_r.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
