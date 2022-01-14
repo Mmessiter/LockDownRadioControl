@@ -140,7 +140,7 @@ FASTRUN bool ReadGPS(){                               // Call this VERY often be
                 AngleGPS     = GPS.angle;
                 AltitudeGPS  = GPS.altitude * 3.28084; // in Feet                          
     }
-     CurrentRadio->flush_rx();                         // fifo overflow here???? 
+    CurrentRadio->flush_rx();                          // fifo overflow here???? 
     return true;                                       // got parseable sentence but no fix
 }
 /************************************************************************************************************/
