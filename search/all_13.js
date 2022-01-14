@@ -1,12 +1,11 @@
 var searchData=
 [
-  ['satellites_679',['satellites',['../class_adafruit___g_p_s.html#a31e4d48939f3b9e5f62933afc117d04d',1,'Adafruit_GPS']]],
-  ['satellitesgps_680',['SatellitesGPS',['../_receiver_code_2src_2main_8cpp.html#a79afc47fa5c195aa71b8f0137eebd553',1,'SatellitesGPS():&#160;main.cpp'],['../radio_8h.html#a79afc47fa5c195aa71b8f0137eebd553',1,'SatellitesGPS():&#160;main.cpp']]],
-  ['saveallparameters_681',['SaveAllParameters',['../_transmitter_code_2src_2main_8cpp.html#a92c5dada5e5ef70261391557464f2d19',1,'main.cpp']]],
-  ['savebutton_682',['SaveButton',['../_transmitter_code_2src_2main_8cpp.html#acfd58819eed72b51ae74b059736d9104',1,'main.cpp']]],
-  ['savedcurrentview_683',['SavedCurrentView',['../_transmitter_code_2src_2main_8cpp.html#a9f535eadbf4eb2d6975105c406c1206f',1,'main.cpp']]],
-  ['savedpipeaddress_684',['SavedPipeAddress',['../radio_8h.html#a3398d00540e610ad35ff3f4f85478833',1,'radio.h']]],
-  ['savedvolts_685',['SavedVolts',['../radio_8h.html#a32813d560b4d1b8a228df20f9b80649f',1,'SavedVolts():&#160;main.cpp'],['../_receiver_code_2src_2main_8cpp.html#a32813d560b4d1b8a228df20f9b80649f',1,'SavedVolts():&#160;main.cpp']]],
+  ['satellites_680',['satellites',['../class_adafruit___g_p_s.html#a31e4d48939f3b9e5f62933afc117d04d',1,'Adafruit_GPS']]],
+  ['satellitesgps_681',['SatellitesGPS',['../radio_8h.html#a79afc47fa5c195aa71b8f0137eebd553',1,'SatellitesGPS():&#160;main.cpp'],['../_receiver_code_2src_2main_8cpp.html#a79afc47fa5c195aa71b8f0137eebd553',1,'SatellitesGPS():&#160;main.cpp']]],
+  ['saveallparameters_682',['SaveAllParameters',['../_transmitter_code_2src_2main_8cpp.html#a92c5dada5e5ef70261391557464f2d19',1,'main.cpp']]],
+  ['savebutton_683',['SaveButton',['../_transmitter_code_2src_2main_8cpp.html#acfd58819eed72b51ae74b059736d9104',1,'main.cpp']]],
+  ['savedcurrentview_684',['SavedCurrentView',['../_transmitter_code_2src_2main_8cpp.html#a9f535eadbf4eb2d6975105c406c1206f',1,'main.cpp']]],
+  ['savedpipeaddress_685',['SavedPipeAddress',['../radio_8h.html#a3398d00540e610ad35ff3f4f85478833',1,'radio.h']]],
   ['savefailsafedata_686',['SaveFailSafeData',['../_receiver_code_2src_2main_8cpp.html#a96891035aa9f064462b6a614c5878f51',1,'main.cpp']]],
   ['savefailsafenow_687',['SaveFailSafeNow',['../_transmitter_code_2src_2main_8cpp.html#acd6754de95b605bb65a52a86e96121f7',1,'main.cpp']]],
   ['saveflightmode_688',['SaveFlightMode',['../_transmitter_code_2src_2main_8cpp.html#a6e7a073d216762b73caa5e1c1a384f1a',1,'main.cpp']]],

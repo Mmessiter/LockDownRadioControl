@@ -1,11 +1,10 @@
 var searchData=
 [
-  ['satellites_1372',['satellites',['../class_adafruit___g_p_s.html#a31e4d48939f3b9e5f62933afc117d04d',1,'Adafruit_GPS']]],
-  ['satellitesgps_1373',['SatellitesGPS',['../_receiver_code_2src_2main_8cpp.html#a79afc47fa5c195aa71b8f0137eebd553',1,'SatellitesGPS():&#160;main.cpp'],['../radio_8h.html#a79afc47fa5c195aa71b8f0137eebd553',1,'SatellitesGPS():&#160;main.cpp']]],
-  ['savebutton_1374',['SaveButton',['../_transmitter_code_2src_2main_8cpp.html#acfd58819eed72b51ae74b059736d9104',1,'main.cpp']]],
-  ['savedcurrentview_1375',['SavedCurrentView',['../_transmitter_code_2src_2main_8cpp.html#a9f535eadbf4eb2d6975105c406c1206f',1,'main.cpp']]],
-  ['savedpipeaddress_1376',['SavedPipeAddress',['../radio_8h.html#a3398d00540e610ad35ff3f4f85478833',1,'radio.h']]],
-  ['savedvolts_1377',['SavedVolts',['../_receiver_code_2src_2main_8cpp.html#a32813d560b4d1b8a228df20f9b80649f',1,'SavedVolts():&#160;main.cpp'],['../radio_8h.html#a32813d560b4d1b8a228df20f9b80649f',1,'SavedVolts():&#160;main.cpp']]],
+  ['satellites_1373',['satellites',['../class_adafruit___g_p_s.html#a31e4d48939f3b9e5f62933afc117d04d',1,'Adafruit_GPS']]],
+  ['satellitesgps_1374',['SatellitesGPS',['../_receiver_code_2src_2main_8cpp.html#a79afc47fa5c195aa71b8f0137eebd553',1,'SatellitesGPS():&#160;main.cpp'],['../radio_8h.html#a79afc47fa5c195aa71b8f0137eebd553',1,'SatellitesGPS():&#160;main.cpp']]],
+  ['savebutton_1375',['SaveButton',['../_transmitter_code_2src_2main_8cpp.html#acfd58819eed72b51ae74b059736d9104',1,'main.cpp']]],
+  ['savedcurrentview_1376',['SavedCurrentView',['../_transmitter_code_2src_2main_8cpp.html#a9f535eadbf4eb2d6975105c406c1206f',1,'main.cpp']]],
+  ['savedpipeaddress_1377',['SavedPipeAddress',['../radio_8h.html#a3398d00540e610ad35ff3f4f85478833',1,'radio.h']]],
   ['savefailsafenow_1378',['SaveFailSafeNow',['../_transmitter_code_2src_2main_8cpp.html#acd6754de95b605bb65a52a86e96121f7',1,'main.cpp']]],
   ['saveflightmode_1379',['SaveFlightMode',['../_transmitter_code_2src_2main_8cpp.html#a6e7a073d216762b73caa5e1c1a384f1a',1,'main.cpp']]],
   ['savenewbind_1380',['SaveNewBind',['../radio_8h.html#a34f8e085f5589c915f292bbf5b0aa513',1,'radio.h']]],
