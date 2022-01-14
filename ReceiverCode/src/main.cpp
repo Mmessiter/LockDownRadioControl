@@ -120,6 +120,7 @@ FASTRUN double HowFar(double latitude_new, double longitude_new, double latitude
 
 FASTRUN bool ReadGPS(){                               // Call this VERY often because this gets only one character per call.
     GPS.read();                                       // Gets ONLY ONE character
+    CurrentRadio->flush_rx();                         // fifo overflow here????
     if (GPS.newNMEAreceived()) {                      // Whole sentence yet?
         if (!GPS.parse(GPS.lastNMEA())) return false; // Can't parse it
     } else {
@@ -132,7 +133,8 @@ FASTRUN bool ReadGPS(){                               // Call this VERY often be
                 LongitudeGPS = GPS.longitudeDegrees;
                 SpeedGPS     = GPS.speed * 1.15;      // in MPH
                 AngleGPS     = GPS.angle;
-                AltitudeGPS  = GPS.altitude * 3.28084; // in Feet          
+                AltitudeGPS  = GPS.altitude * 3.28084; // in Feet 
+                CurrentRadio->flush_rx();              // fifo overflow here????                
     }
     return true;                                       // got parseable sentence but no fix
 }
@@ -237,7 +239,7 @@ void ClearAckPayload()
 /************************************************************************************************************/
 
 void UseReceivedData(){
-        Decompress(ReceivedData, CompressedData, UNCOMPRESSEDWORDS);   // decompress data
+        Decompress(ReceivedData, CompressedData, UNCOMPRESSEDWORDS);   // Decompress only the most recent data
         MapToSBUS();
         ClearAckPayload();
         LastConnectionMoment = millis();
@@ -247,14 +249,13 @@ void UseReceivedData(){
             HopNow = false;             // and clear the flag.
             DoSensors();                // read sensors (takes about 2 ms) while TX hops and catches up
         }
-
 }
 /************************************************************************************************************/
 
 bool ReadData()
 {
     Connected = false;
-    while (CurrentRadio->available()) {                                // Get all ... using only the latest
+    while (CurrentRadio->available()) {                                // Get all, but use only the latest
         LoadAckPayload();
         Connected = true;
         CurrentRadio->flush_tx();                                      // This maybe avoids a lockup that happens when the FIFO gets full.**************
@@ -262,7 +263,6 @@ bool ReadData()
         CurrentRadio->read(&CompressedData, sizeof(CompressedData));   // Get Data  
     }
     if (Connected) UseReceivedData();  
-    //CurrentRadio->flush_rx();           // Just in case! ... (This avoids a lockup that happens when the FIFO gets full.)
     return Connected;
 }
 
