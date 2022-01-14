@@ -95,6 +95,8 @@ double          AngleGPS;
 double          AltitudeGPS;
 uint16_t        SatellitesGPS;
 bool            GpsFix = false;
+uint16_t        CompressedData[COMPRESSEDWORDS]; // 30 bytes -> 40 bytes when uncompressed
+      
 
 /************************************************************************************************************/
 // This function returns distance (in meters) between two GPS coordinates (in degrees)
@@ -232,22 +234,11 @@ void ClearAckPayload()
     AckPayload.Byte5 = 0;
     AckPayload.Purpose |= 0x80;
 }
-
 /************************************************************************************************************/
 
-bool ReadData()
-{
-    uint16_t CompressedData[COMPRESSEDWORDS]; // 30 bytes -> 40 bytes when uncompressed
-    Connected = false;
-    if (CurrentRadio->available()) {
-        LoadAckPayload();
-        Connected = true;
-        CurrentRadio->flush_tx();                                      // This avoids a lockup that happens when the FIFO gets full.**************
-        CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // Send telemetry (actual length plus 0)
-        CurrentRadio->read(&CompressedData, sizeof(CompressedData));   // Get Data
+void UseReceivedData(){
         Decompress(ReceivedData, CompressedData, UNCOMPRESSEDWORDS);   // decompress data
         MapToSBUS();
-        CurrentRadio->flush_rx();       // This avoids a lockup that happens when the FIFO gets full. **************
         ClearAckPayload();
         LastConnectionMoment = millis();
         if (HopNow) {                   // this flag gets set in LoadAckPayload();
@@ -256,7 +247,22 @@ bool ReadData()
             HopNow = false;             // and clear the flag.
             DoSensors();                // read sensors (takes about 2 ms) while TX hops and catches up
         }
+
+}
+/************************************************************************************************************/
+
+bool ReadData()
+{
+    Connected = false;
+    while (CurrentRadio->available()) {                                // Get all ... using only the latest
+        LoadAckPayload();
+        Connected = true;
+        CurrentRadio->flush_tx();                                      // This maybe avoids a lockup that happens when the FIFO gets full.**************
+        CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // Send telemetry (actual length plus 0)
+        CurrentRadio->read(&CompressedData, sizeof(CompressedData));   // Get Data  
     }
+    if (Connected) UseReceivedData();  
+    //CurrentRadio->flush_rx();           // Just in case! ... (This avoids a lockup that happens when the FIFO gets full.)
     return Connected;
 }
 

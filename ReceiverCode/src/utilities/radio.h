@@ -234,9 +234,6 @@ void ProdRadio()
 
 void Reconnect()
 {
-    // if (Radio1Exists) Serial.println ("R1 OK") ;
-    // if (Radio2Exists) Serial.println ("R2 OK") ;
-
     uint32_t TryTimer;
     uint8_t  ReconnectAttempts = 0;
 
