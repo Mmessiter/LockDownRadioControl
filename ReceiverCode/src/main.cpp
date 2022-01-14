@@ -83,7 +83,7 @@ uint8_t         FS_byte2           = 0;
 uint32_t        ReconnectedMoment;
 float           BaroAltitude;
 float           BaroTemperature;
-float           SavedVolts;
+float           INA219Volts;
 bool            Radio1Exists = false;
 bool            Radio2Exists = false;
 uint32_t        SensorTime   = 0;
@@ -97,7 +97,7 @@ uint16_t        SatellitesGPS;
 bool            GpsFix = false;
 
 /************************************************************************************************************/
-// This function returns distance (in MILES) between two GPS coordinates (in degrees)
+// This function returns distance (in meters) between two GPS coordinates (in degrees)
 // it was essentially cribbed from the internet, then tested and adjusted a little. 
 
 FASTRUN double HowFar(double latitude_new, double longitude_new, double latitude_old, double longitude_old) {
@@ -362,7 +362,7 @@ void Sensors_Status()
     }
     if (USE_INA219) {
         Serial.print("     Volts=");
-        Serial.print(SavedVolts);
+        Serial.print(INA219Volts);
     }
     if (USE_BMP280) {
         Serial.print("  Altitude=");
@@ -377,9 +377,9 @@ void Sensors_Status()
 FASTRUN void DoSensors()
 {
     if (USE_AdafruitUltimateGps) {
-        if (!ReadGPS()){                        // if no parse yet, read another char. But if parse happened, skip the rest and resume comms.
-            if (ReadGPS()) return;
-         } else return;                  
+        for (int k = 0; k < 4; ++k){
+            if (ReadGPS()) return;              // if a parse hapened, skip the rest this time, and resume comms.
+        }                                  
     }
     if ((millis() - SensorTime) < 2000) return; // no need to measure too often
     SensorTime = millis();
@@ -392,7 +392,7 @@ FASTRUN void DoSensors()
     }
     if (USE_INA219) {
         if (BoundFlag && Connected) { 
-            SavedVolts = ina219.getBusVoltage_V();
+            INA219Volts = ina219.getBusVoltage_V();
         }
     }
 

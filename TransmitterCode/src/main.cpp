@@ -1406,7 +1406,7 @@ void ShowComms()
     char  Sped[]              = "Sped";
 
     if (CurrentView == FrontView || CurrentView == DataView) {
-        if (millis() - LastShowTime > 1000) { // update this lot only once per second
+        if (millis() - LastShowTime > 3500) { // update this lot once per 3.5 seconds
             ShowNow = true;
         }
     }

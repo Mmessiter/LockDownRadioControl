@@ -39,7 +39,7 @@ extern void     DoSensors();
 extern bool     Radio1Exists;
 extern bool     Radio2Exists;
 extern float    BaroAltitude;
-extern float    SavedVolts;
+extern float    INA219Volts;
 extern float    BaroTemperature;
 extern double   LatitudeGPS;
 extern double   LongitudeGPS;
@@ -458,7 +458,7 @@ void LoadRXVolts()
         uint8_t Val8[4];
     } RXVolts;
 
-    RXVolts.Val32    = SavedVolts;
+    RXVolts.Val32    = INA219Volts;
     AckPayload.Byte1 = RXVolts.Val8[0];    // These values are herewith delivered to Transmitter in Ack Payload
     AckPayload.Byte2 = RXVolts.Val8[1];
     AckPayload.Byte3 = RXVolts.Val8[2];
