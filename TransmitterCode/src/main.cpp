@@ -1477,7 +1477,7 @@ void ShowComms()
                 SendValue(DataView_Sg,    GapShortest);
                 SendValue(DataView_Ag,    GapAverage);
                 SendValue(DataView_Gc,    GapCount);
-                if (GpsFix){                               // heer
+                if (GpsFix){                               // if no fix, then leave display as before
                     snprintf(Vbuf, 3,"%d",  GPSSatellites); 
                     SendText(Fix, Vbuf);
                     snprintf(Vbuf, 10,"%f", GPSLongitude);
@@ -1488,10 +1488,10 @@ void ShowComms()
                     SendText(GAlt,Vbuf);
                     snprintf(Vbuf, 7,"%f",  GPSMAXAltitude);
                     SendText(GMAlt,Vbuf);
-                    snprintf(Vbuf, 6,"%f",  GPSAngle);
+                    snprintf(Vbuf, 7,"%f",  GPSAngle);
                     SendText(Bear,Vbuf);
                     GPSDistance = HowFar(GPSLatitude,GPSLongitude,GPSMarkLatitude,GPSMarkLongitude);
-                    snprintf(Vbuf, 4,"%f",  GPSDistance);
+                    snprintf(Vbuf, 5,"%f",  GPSDistance);
                     SendText(Dist,Vbuf);
                     snprintf(Vbuf, 4,"%f",  GPSSpeed);
                     SendText(Sped,Vbuf);
