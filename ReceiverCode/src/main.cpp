@@ -122,8 +122,13 @@ FASTRUN bool ReadGPS(){                               // Call this VERY often be
     GPS.read();                                       // Gets ONLY ONE character
     CurrentRadio->flush_rx();                         // fifo overflow here????
     if (GPS.newNMEAreceived()) {                      // Whole sentence yet?
-        if (!GPS.parse(GPS.lastNMEA())) return false; // Can't parse it
+            CurrentRadio->flush_rx(); 
+        if (!GPS.parse(GPS.lastNMEA())) { 
+            CurrentRadio->flush_rx(); 
+            return false;
+            } // Can't parse it
     } else {
+        CurrentRadio->flush_rx(); 
         return false;                                 // No sentence yet
     }                                          
     GpsFix = GPS.fix;                                 // Must have parsed OK ...
@@ -133,9 +138,9 @@ FASTRUN bool ReadGPS(){                               // Call this VERY often be
                 LongitudeGPS = GPS.longitudeDegrees;
                 SpeedGPS     = GPS.speed * 1.15;      // in MPH
                 AngleGPS     = GPS.angle;
-                AltitudeGPS  = GPS.altitude * 3.28084; // in Feet 
-                CurrentRadio->flush_rx();              // fifo overflow here????                
+                AltitudeGPS  = GPS.altitude * 3.28084; // in Feet                          
     }
+     CurrentRadio->flush_rx();                         // fifo overflow here???? 
     return true;                                       // got parseable sentence but no fix
 }
 /************************************************************************************************************/
