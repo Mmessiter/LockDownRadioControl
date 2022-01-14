@@ -421,10 +421,10 @@ FASTRUN void ReceiveData()
     if (CurrentRadio->available()) {
         Connected = true;
     }
-    if (!Connected)
-        if (millis() - LastConnectionMoment >= RECEIVE_TIMEOUT) {
-            Reconnect();
-        }
+    if (!Connected) if (millis() - LastConnectionMoment >= RECEIVE_TIMEOUT) {
+        Reconnect();
+    }
+
     if (ReadData()) {
         CheckParams();
     }
