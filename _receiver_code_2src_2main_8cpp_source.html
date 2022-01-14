@@ -473,10 +473,10 @@ $(document).ready(function(){initNavTree('_receiver_code_2src_2main_8cpp_source.
 <div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="radio_8h.html#a7bca81159d93f215060f40f45f19b0de">CurrentRadio</a>-&gt;available()) {</div>
 <div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;        <a class="code" href="_transmitter_code_2src_2main_8cpp.html#a5318db734c71b1b08208ef690f1f0146">Connected</a> = <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;    }</div>
-<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;    <span class="keywordflow">if</span> (!<a class="code" href="_transmitter_code_2src_2main_8cpp.html#a5318db734c71b1b08208ef690f1f0146">Connected</a>)</div>
-<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;        <span class="keywordflow">if</span> (millis() - <a class="code" href="common_8h.html#ae6d822db2ca02c3f6fa690311b580c93">LastConnectionMoment</a> &gt;= <a class="code" href="_receiver_code_2src_2main_8cpp.html#a4c69942f01447fa7563c5726c7d8abf2">RECEIVE_TIMEOUT</a>) {</div>
-<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;            <a class="code" href="radio_8h.html#a692b8b0727e0db358f99c7bf4e8235c0">Reconnect</a>();</div>
-<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;        }</div>
+<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;    <span class="keywordflow">if</span> (!<a class="code" href="_transmitter_code_2src_2main_8cpp.html#a5318db734c71b1b08208ef690f1f0146">Connected</a>) <span class="keywordflow">if</span> (millis() - <a class="code" href="common_8h.html#ae6d822db2ca02c3f6fa690311b580c93">LastConnectionMoment</a> &gt;= <a class="code" href="_receiver_code_2src_2main_8cpp.html#a4c69942f01447fa7563c5726c7d8abf2">RECEIVE_TIMEOUT</a>) {</div>
+<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;        <a class="code" href="radio_8h.html#a692b8b0727e0db358f99c7bf4e8235c0">Reconnect</a>();</div>
+<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;    }</div>
+<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160; </div>
 <div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="_receiver_code_2src_2main_8cpp.html#a07ca94db0e305e9c01ec51e417576308">ReadData</a>()) {</div>
 <div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;        <a class="code" href="_receiver_code_2src_2main_8cpp.html#abd09fca8fe7cb7240846989f1ccd6a94">CheckParams</a>();</div>
 <div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;    }</div>
