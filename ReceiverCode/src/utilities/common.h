@@ -11,8 +11,8 @@
     #include <EEPROM.h>
 
     #define RXVERSION_MAJOR   1
-    #define RXVERSION_MINOR   4
-    #define RXVERSION_MINIMUS 9 // Jan 13th 2022
+    #define RXVERSION_MINOR   5
+    #define RXVERSION_MINIMUS 0 // Jan 15th 2022
 
 // #define DEBUG
 // #define DB_SENSORS
