@@ -120,11 +120,11 @@ FASTRUN double HowFar(double latitude_new, double longitude_new, double latitude
 
 FASTRUN bool ReadGPS(){                               // Call this VERY often because this gets only one character per call.
     GPS.read();                                       // Gets ONLY ONE character
-    CurrentRadio->flush_rx();                         // fifo overflow here????
+   // CurrentRadio->flush_rx();                       // fifo overflow here????
     if (GPS.newNMEAreceived()) {                      // Whole sentence yet?
             CurrentRadio->flush_rx(); 
         if (!GPS.parse(GPS.lastNMEA())) { 
-            CurrentRadio->flush_rx(); 
+            //CurrentRadio->flush_rx(); 
             return false;
             } // Can't parse it
     } else {
@@ -140,8 +140,8 @@ FASTRUN bool ReadGPS(){                               // Call this VERY often be
                 AngleGPS     = GPS.angle;
                 AltitudeGPS  = GPS.altitude * 3.28084; // in Feet                          
     }
-    CurrentRadio->flush_rx();                          // fifo overflow here???? 
-    return true;                                       // got parseable sentence but no fix
+    //CurrentRadio->flush_rx();                         // fifo overflow here???? 
+    return true;                                        // got parseable sentence but no fix
 }
 /************************************************************************************************************/
 
@@ -389,13 +389,12 @@ FASTRUN void DoSensors()
 {      
     CurrentRadio->stopListening();              // Don't listen to radio while reading sensors because RX FIFO might fill up.
     if (USE_AdafruitUltimateGps) {
-        for (int k = 0; k < 4; ++k){
+        for (int k = 0; k < 2; ++k){            // Get up to 3 chars bytes per call.
             if (ReadGPS()) {
                 CurrentRadio->startListening(); // Must resume listening before returning
                 return;
             }                                   // if a parse happened, skip the rest this time, and resume comms.
-        }  
-                                  
+        }             
     }
     if ((millis() - SensorTime) < 2000) { 
         CurrentRadio->startListening();        // Must now resume listening before returning
