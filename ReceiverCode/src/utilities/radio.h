@@ -530,7 +530,6 @@ void LoadAckPayload()
         case 18:
             LoadTimeStamp();
             break;
-        
         default:
             break;
     }
