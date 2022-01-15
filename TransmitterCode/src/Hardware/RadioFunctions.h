@@ -30,7 +30,7 @@
 //***************************************************************************
 
 #define HOPTIME           55 // A New frequency hop every 55 ms (must match receiver setting)
-#define PACEMAKER         4  // MINIMUM ms between packets of data.
+#define PACEMAKER         7  // MINIMUM ms between packets of data.
 #define FREQUENCYSCOUNT   82 // How many frequencies to use before wrapping to first
 #define RETRYCOUNT        3  // auto retries from nRF24L01
 #define RETRYWAIT         1  // Wait between retries is RetryWait+1 * 250us. A failed packet therefore takes (RetryWait+1 * 250us) * RetryCount
