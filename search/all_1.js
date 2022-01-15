@@ -12,14 +12,13 @@ var searchData=
   ['addr_10',['addr',['../_transmitter_code_2src_2main_8cpp.html#ab36863a07751ac73459d46b677c33b57',1,'main.cpp']]],
   ['adjustdatetime_11',['AdjustDateTime',['../_transmitter_code_2src_2main_8cpp.html#a9de4ea8e761b5f0e537f6f326f9ad429',1,'main.cpp']]],
   ['allchannels_12',['AllChannels',['../_radio_functions_8h.html#a340f5f74a3364594ad9b460d4b5b04d5',1,'AllChannels():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a1d18aaaa3cc4ba52bd309c88815c60a7',1,'AllChannels():&#160;main.cpp']]],
-  ['altitude_13',['altitude',['../class_adafruit___g_p_s.html#af2f85392c61445b1f9c17ede5f83d6c4',1,'Adafruit_GPS::altitude()'],['../_receiver_code_2src_2main_8cpp.html#a0e13a4b4ae0cefdac2a413284239caa6',1,'altitude():&#160;main.cpp']]],
-  ['altitudegps_14',['AltitudeGPS',['../radio_8h.html#ab8ac848f850a53b1ef9f966d972e4216',1,'AltitudeGPS():&#160;main.cpp'],['../_receiver_code_2src_2main_8cpp.html#ab8ac848f850a53b1ef9f966d972e4216',1,'AltitudeGPS():&#160;main.cpp']]],
-  ['analogueinput_15',['AnalogueInput',['../_transmitter_code_2src_2main_8cpp.html#a0c2eb3050c13378578402202c6290391',1,'main.cpp']]],
-  ['angle_16',['angle',['../class_adafruit___g_p_s.html#a0f60908101d728cfa3c12f7ae6a31018',1,'Adafruit_GPS']]],
-  ['anglegps_17',['AngleGPS',['../_receiver_code_2src_2main_8cpp.html#af4460897c7ef555de2670488abb90260',1,'AngleGPS():&#160;main.cpp'],['../radio_8h.html#af4460897c7ef555de2670488abb90260',1,'AngleGPS():&#160;main.cpp']]],
-  ['approximation_18',['APPROXIMATION',['../_transmitter_code_2src_2main_8cpp.html#aee8c3c363eab49d6a90d3f74587694d5',1,'main.cpp']]],
-  ['attachservos_19',['AttachServos',['../_receiver_code_2src_2main_8cpp.html#a0cbfd712ab3bd8f654bc19400fd704bd',1,'main.cpp']]],
+  ['altitude_13',['altitude',['../_receiver_code_2src_2main_8cpp.html#a0e13a4b4ae0cefdac2a413284239caa6',1,'altitude():&#160;main.cpp'],['../class_adafruit___g_p_s.html#af2f85392c61445b1f9c17ede5f83d6c4',1,'Adafruit_GPS::altitude()']]],
+  ['analogueinput_14',['AnalogueInput',['../_transmitter_code_2src_2main_8cpp.html#a0c2eb3050c13378578402202c6290391',1,'main.cpp']]],
+  ['angle_15',['angle',['../class_adafruit___g_p_s.html#a0f60908101d728cfa3c12f7ae6a31018',1,'Adafruit_GPS']]],
+  ['anglegps_16',['AngleGPS',['../_receiver_code_2src_2main_8cpp.html#af4460897c7ef555de2670488abb90260',1,'AngleGPS():&#160;main.cpp'],['../radio_8h.html#af4460897c7ef555de2670488abb90260',1,'AngleGPS():&#160;main.cpp']]],
+  ['approximation_17',['APPROXIMATION',['../_transmitter_code_2src_2main_8cpp.html#aee8c3c363eab49d6a90d3f74587694d5',1,'main.cpp']]],
+  ['attachservos_18',['AttachServos',['../_receiver_code_2src_2main_8cpp.html#a0cbfd712ab3bd8f654bc19400fd704bd',1,'main.cpp']]],
+  ['autoswitch_19',['AUTOSWITCH',['../_transmitter_code_2src_2main_8cpp.html#aa4414f3ff790f01b8bb41a0f51d1518f',1,'main.cpp']]],
   ['autoswitch_20',['AutoSwitch',['../_transmitter_code_2src_2main_8cpp.html#a6d1c8ca21c8826267f5687d3799c6a1f',1,'main.cpp']]],
-  ['autoswitch_21',['AUTOSWITCH',['../_transmitter_code_2src_2main_8cpp.html#aa4414f3ff790f01b8bb41a0f51d1518f',1,'main.cpp']]],
-  ['available_22',['available',['../class_adafruit___g_p_s.html#abe6399af00c0047527ea20e3f35a0182',1,'Adafruit_GPS']]]
+  ['available_21',['available',['../class_adafruit___g_p_s.html#abe6399af00c0047527ea20e3f35a0182',1,'Adafruit_GPS']]]
 ];
