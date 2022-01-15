@@ -389,7 +389,7 @@ FASTRUN void DoSensors()
 {
     if (USE_AdafruitUltimateGps) {
         for (int k = 0; k < 4; ++k){
-            if (ReadGPS()) return;              // if a parse hapened, skip the rest this time, and resume comms.
+            if (ReadGPS()) return;              // if a parse happened, skip the rest this time, and resume comms.
         }                                  
     }
     if ((millis() - SensorTime) < 2000) return; // no need to measure too often
