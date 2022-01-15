@@ -366,10 +366,10 @@ double   GPSLongitude                = 0;
 double   GPSMarkLatitude             = 0;  
 double   GPSMarkLongitude            = 0;
 double   GPSAngle                    = 0;
-double   GPSAltitude                 = 0;
+//double   GPSAltitude                 = 0;
 double   GPSDistance                 = 0;
-double   GPSMAXAltitude              = 0;
-uint16_t GPSSatellites               = 0;
+//double   GPSMAXAltitude              = 0;
+//uint16_t GPSSatellites               = 0;
 double   GpsFix                      = 0;
 double   GPSSpeed                    = 0;
 float    RXModelVolts                = 0;
@@ -1399,11 +1399,11 @@ void ShowComms()
     char  Fix[]               = "Fix";
     char  Lon[]               = "Lon";
     char  Lat[]               = "Lat";
-    char  GAlt[]              = "GAlt";
-    char  GMAlt[]             = "GMAlt";
     char  Bear[]              = "Bear";
     char  Dist[]              = "Dist";
     char  Sped[]              = "Sped";
+    char  yes[]               = "Yes";
+    char   no[]               = "no";
 
     if (CurrentView == FrontView || CurrentView == DataView) {
         if (millis() - LastShowTime > ShowCommsDelay) { 
@@ -1477,17 +1477,12 @@ void ShowComms()
                 SendValue(DataView_Sg,    GapShortest);
                 SendValue(DataView_Ag,    GapAverage);
                 SendValue(DataView_Gc,    GapCount);
-                if (GpsFix){                               // if no fix, then leave display as before
-                    snprintf(Vbuf, 3,"%d",  GPSSatellites); 
-                    SendText(Fix, Vbuf);
+                if (GpsFix){                               // if no fix, then leave display as before 
+                    SendText(Fix, yes);
                     snprintf(Vbuf, 10,"%f", GPSLongitude);
                     SendText(Lon,Vbuf);
                     snprintf(Vbuf, 10,"%f", GPSLatitude);
                     SendText(Lat,Vbuf);
-                    snprintf(Vbuf, 7,"%f",  GPSAltitude);
-                    SendText(GAlt,Vbuf);
-                    snprintf(Vbuf, 7,"%f",  GPSMAXAltitude);
-                    SendText(GMAlt,Vbuf);
                     snprintf(Vbuf, 7,"%f",  GPSAngle);
                     SendText(Bear,Vbuf);
                     GPSDistance = HowFar(GPSLatitude,GPSLongitude,GPSMarkLatitude,GPSMarkLongitude);
@@ -1495,7 +1490,9 @@ void ShowComms()
                     SendText(Dist,Vbuf);
                     snprintf(Vbuf, 4,"%f",  GPSSpeed);
                     SendText(Sped,Vbuf);
-                } 
+                } else {
+                    SendText(Fix, no);
+                }
             }
             ReadVolts = RXModelVolts * 10;
             // 6s Max 25.2 -> 20.4
@@ -5660,23 +5657,6 @@ void GetGPSLongitude()
 
 /************************************************************************************************************/
 
-void GetGPSAltitude()
-{
-    union // union used to allow access to each byte of 32 bit float
-    {
-        float   Val32;
-        uint8_t Val8[4];
-    } ThisUnion;
-    ThisUnion.Val8[0] = AckPayload.Byte1;
-    ThisUnion.Val8[1] = AckPayload.Byte2;
-    ThisUnion.Val8[2] = AckPayload.Byte3;
-    ThisUnion.Val8[3] = AckPayload.Byte4;
-    GPSAltitude       = ThisUnion.Val32;
-    if (GPSMAXAltitude < GPSAltitude) GPSMAXAltitude = GPSAltitude;
-}
-
-/************************************************************************************************************/
-
 void GetGPSAngle()
 {
     union // union used to allow access to each byte of 32 bit float
@@ -5721,23 +5701,6 @@ void GetGPSSpeed()
     ThisUnion.Val8[3] = AckPayload.Byte4;
     GPSSpeed          = ThisUnion.Val32;
 }
-
-/************************************************************************************************************/
-
-void GetGPSSatellites()
-{
-    union // union used to allow access to each byte of 32 bit float
-    {
-        float   Val32;
-        uint8_t Val8[4];
-    } ThisUnion;
-    ThisUnion.Val8[0] = AckPayload.Byte1;
-    ThisUnion.Val8[1] = AckPayload.Byte2;
-    ThisUnion.Val8[2] = AckPayload.Byte3;
-    ThisUnion.Val8[3] = AckPayload.Byte4;
-    GPSSatellites     = (int) ThisUnion.Val32;
-}
-
 
 /************************************************************************************************************/
 
@@ -5855,21 +5818,9 @@ void ParseAckPayload()
                 GetRXTime(); // Synch 
                 break;               
             case 17:
-                GetGPSSatellites();
-                break;
-            case 18:
-                GetRXTime(); // Synch 
-                break;
-            case 19:
                 GetGPSFix();
                 break;
-            case 20:
-                GetRXTime(); // Synch 
-                break;
-            case 21:
-                GetGPSAltitude();  
-                break;
-            case 22:
+            case 18:
                 GetRXTime(); // Synch 
                 break;
             default:

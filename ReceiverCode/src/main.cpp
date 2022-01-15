@@ -92,8 +92,6 @@ double          LatitudeGPS;
 double          LongitudeGPS;
 double          SpeedGPS;
 double          AngleGPS;
-double          AltitudeGPS;
-uint16_t        SatellitesGPS;
 bool            GpsFix = false;
 uint16_t        CompressedData[COMPRESSEDWORDS]; // 30 bytes -> 40 bytes when uncompressed
       
@@ -132,13 +130,11 @@ FASTRUN bool ReadGPS(){                               // Call this VERY often be
         return false;                                 // No sentence yet
     }                                          
     GpsFix = GPS.fix;                                 // Must have parsed OK ...
-    SatellitesGPS = GPS.satellites;                   // How many satellites?
     if (GpsFix){                                      // Got fix yet? 
                 LatitudeGPS  = GPS.latitudeDegrees;   // Update these if a fix was obtained 
                 LongitudeGPS = GPS.longitudeDegrees;
                 SpeedGPS     = GPS.speed * 1.15;      // in MPH
-                AngleGPS     = GPS.angle;
-                AltitudeGPS  = GPS.altitude * 3.28084; // in Feet                          
+                AngleGPS     = GPS.angle;                        
     }
     CurrentRadio->flush_rx();                         // fifo overflow here???? 
     return true;                                        // got parseable sentence but no fix
@@ -357,8 +353,7 @@ void Sensors_Status()
         } else {
             Serial.println ("(Waiting ...)");
         }
-        Serial.print ("Satellites: ");
-        Serial.println (SatellitesGPS);
+        
         if (GpsFix){
             Serial.print ("GPS Latitude: ");
             Serial.println (LatitudeGPS,14);
@@ -368,8 +363,6 @@ void Sensors_Status()
             Serial.println (SpeedGPS);
             Serial.print ("GPS Angle: ");
             Serial.println (AngleGPS);
-            Serial.print ("GPS Altitude: ");
-            Serial.println (AltitudeGPS);
         }
     }
     if (USE_INA219) {
@@ -539,7 +532,6 @@ void DoBinding()
 }
 void AdafruitUltimateGpsInit(){
   GPS.begin(0x10);       
- // GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA);
   GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCONLY);
   GPS.sendCommand(PMTK_SET_NMEA_UPDATE_1HZ);
   GPS.sendCommand(PGCMD_NOANTENNA);

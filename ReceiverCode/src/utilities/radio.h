@@ -45,8 +45,6 @@ extern double   LatitudeGPS;
 extern double   LongitudeGPS;
 extern double   SpeedGPS;
 extern double   AngleGPS;
-extern double   AltitudeGPS;
-extern uint16_t SatellitesGPS;
 extern bool     GpsFix;
 extern bool     USE_AdafruitUltimateGps;    
 extern bool     USE_BMP280;
@@ -393,42 +391,6 @@ void LoadGPSSpeed()
     AckPayload.Byte4    = ThisUnion.Val8[3];
 }
 
-
-/************************************************************************************************************/
-
-void LoadGPSAltitude()
-{
-    union // union used to allow access to each byte of 32 bit float
-    {
-        float   Val32;
-        uint8_t Val8[4];
-    } ThisUnion;
-
-    ThisUnion.Val32     = AltitudeGPS;
-    AckPayload.Byte1    = ThisUnion.Val8[0];    // These values are herewith delivered to Transmitter in Ack Payload
-    AckPayload.Byte2    = ThisUnion.Val8[1];
-    AckPayload.Byte3    = ThisUnion.Val8[2];
-    AckPayload.Byte4    = ThisUnion.Val8[3];
-}
-
-
-/************************************************************************************************************/
-
-void LoadGPSSatellites()
-{
-    union // union used to allow access to each byte of 32 bit float
-    {
-        float   Val32;
-        uint8_t Val8[4];
-    } ThisUnion;
-
-    ThisUnion.Val32     = SatellitesGPS;
-    AckPayload.Byte1    = ThisUnion.Val8[0];    // These values are herewith delivered to Transmitter in Ack Payload
-    AckPayload.Byte2    = ThisUnion.Val8[1];
-    AckPayload.Byte3    = ThisUnion.Val8[2];
-    AckPayload.Byte4    = ThisUnion.Val8[3];
-}
-
 /************************************************************************************************************/
 
 void LoadGPSFix()
@@ -507,7 +469,7 @@ void LoadAckPayload()
                                 // ... etc ...
       if (USE_BMP280) MaxAckP              = 4;                     // 4 + volts
       if (USE_INA219) MaxAckP              = 8;                     // 8 + Baro
-      if (USE_AdafruitUltimateGps) MaxAckP = 22;                    // 22 + GPS
+      if (USE_AdafruitUltimateGps) MaxAckP = 18;                    // 18 + GPS
       if (AckPayload.Purpose > MaxAckP) AckPayload.Purpose = 0;     // wrap after max
 
     switch (AckPayload.Purpose) {
@@ -563,22 +525,12 @@ void LoadAckPayload()
             LoadTimeStamp();
             break;
         case 17: 
-            LoadGPSSatellites();  // ********* GPS *******************
+            LoadGPSFix();         // ********* GPS *******************
             break;
         case 18:
             LoadTimeStamp();
             break;
-        case 19: 
-            LoadGPSFix();         // ********* GPS *******************
-        case 20: 
-            LoadTimeStamp();
-            break;
-        case 21:
-            LoadGPSAltitude();   // ********* GPS *******************
-            break;
-        case 22: 
-            LoadTimeStamp();
-            break;
+        
         default:
             break;
     }
