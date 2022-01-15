@@ -120,11 +120,11 @@ FASTRUN double HowFar(double latitude_new, double longitude_new, double latitude
 
 FASTRUN bool ReadGPS(){                               // Call this VERY often because this gets only one character per call.
     GPS.read();                                       // Gets ONLY ONE character
-   // CurrentRadio->flush_rx();                       // fifo overflow here????
+    CurrentRadio->flush_rx();                       // fifo overflow here????
     if (GPS.newNMEAreceived()) {                      // Whole sentence yet?
             CurrentRadio->flush_rx(); 
         if (!GPS.parse(GPS.lastNMEA())) { 
-            //CurrentRadio->flush_rx(); 
+            CurrentRadio->flush_rx(); 
             return false;
             } // Can't parse it
     } else {
@@ -140,7 +140,7 @@ FASTRUN bool ReadGPS(){                               // Call this VERY often be
                 AngleGPS     = GPS.angle;
                 AltitudeGPS  = GPS.altitude * 3.28084; // in Feet                          
     }
-    //CurrentRadio->flush_rx();                         // fifo overflow here???? 
+    CurrentRadio->flush_rx();                         // fifo overflow here???? 
     return true;                                        // got parseable sentence but no fix
 }
 /************************************************************************************************************/
@@ -247,6 +247,7 @@ void UseReceivedData(){
         Decompress(ReceivedData, CompressedData, UNCOMPRESSEDWORDS);   // Decompress only the most recent data
         MapToSBUS();
         ClearAckPayload();
+        CurrentRadio->flush_rx();
         LastConnectionMoment = millis();
         if (HopNow) {                   // this flag gets set in LoadAckPayload();
             FailSafeDataLoaded = false; // Ack payload instructed to Hop at next opportunity...
@@ -388,6 +389,8 @@ void Sensors_Status()
 FASTRUN void DoSensors()
 {      
     CurrentRadio->stopListening();              // Don't listen to radio while reading sensors because RX FIFO might fill up.
+    CurrentRadio->flush_rx();
+    CurrentRadio->flush_tx();
     if (USE_AdafruitUltimateGps) {
         for (int k = 0; k < 2; ++k){            // Get up to 3 chars bytes per call.
             if (ReadGPS()) {
