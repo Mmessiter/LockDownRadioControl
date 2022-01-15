@@ -316,7 +316,7 @@ void RebuildFlags(bool* f, uint16_t tb)
 
 /**
  * extra parameters can be sent using the last four bytes in every data packet.
- * the parameter sent is defined by the packet number.
+ * the parameter sent is defined by the packet number ... which goes only upto about 5!
  */
 void CheckParams()
 { uint16_t TwoBytes = 0;      
