@@ -542,7 +542,7 @@ void AdafruitUltimateGpsInit(){
  // GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA);
   GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCONLY);
   GPS.sendCommand(PMTK_SET_NMEA_UPDATE_1HZ);
-  GPS.sendCommand(PGCMD_ANTENNA);
+  GPS.sendCommand(PGCMD_NOANTENNA);
   delay(1000);
 }
 
