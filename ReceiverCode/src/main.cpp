@@ -386,13 +386,21 @@ void Sensors_Status()
 #endif // defined DB_SENSORS
 /************************************************************************************************************/
 FASTRUN void DoSensors()
-{
+{      
+    CurrentRadio->stopListening();              // Don't listen to radio while reading sensors because RX FIFO might fill up.
     if (USE_AdafruitUltimateGps) {
         for (int k = 0; k < 4; ++k){
-            if (ReadGPS()) return;              // if a parse happened, skip the rest this time, and resume comms.
-        }                                  
+            if (ReadGPS()) {
+                CurrentRadio->startListening(); // Must resume listening before returning
+                return;
+            }                                   // if a parse happened, skip the rest this time, and resume comms.
+        }  
+                                  
     }
-    if ((millis() - SensorTime) < 2000) return; // no need to measure too often
+    if ((millis() - SensorTime) < 2000) { 
+        CurrentRadio->startListening();        // Must now resume listening before returning
+        return;                                // no need to measure too often
+        }
     SensorTime = millis();
     if (USE_BMP280) {
         if (BoundFlag && Connected) {
@@ -405,13 +413,14 @@ FASTRUN void DoSensors()
         if (BoundFlag && Connected) { 
             INA219Volts = ina219.getBusVoltage_V();
         }
+        
     }
 
 #ifdef DB_SENSORS
     Sensors_Status(); // does nothing if DB_SENSORS is not defined
     Serial.println (millis()-SensorTime);
 #endif
- 
+      CurrentRadio->startListening();    // Must resume listening before returning    
 }
 /************************************************************************************************************/
 
