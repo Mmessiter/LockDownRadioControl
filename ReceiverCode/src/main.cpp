@@ -118,7 +118,7 @@ FASTRUN double HowFar(double latitude_new, double longitude_new, double latitude
 
 FASTRUN bool ReadGPS(){                               // Call this VERY often because this gets only one character per call.
     GPS.read();                                       // Gets ONLY ONE character
-    CurrentRadio->flush_rx();                       // fifo overflow here????
+    CurrentRadio->flush_rx();                       
     if (GPS.newNMEAreceived()) {                      // Whole sentence yet?
             CurrentRadio->flush_rx(); 
         if (!GPS.parse(GPS.lastNMEA())) { 
@@ -136,7 +136,7 @@ FASTRUN bool ReadGPS(){                               // Call this VERY often be
                 SpeedGPS     = GPS.speed * 1.15;      // in MPH
                 AngleGPS     = GPS.angle;                        
     }
-    CurrentRadio->flush_rx();                         // fifo overflow here???? 
+    CurrentRadio->flush_rx();                          
     return true;                                        // got parseable sentence but no fix
 }
 /************************************************************************************************************/
