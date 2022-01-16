@@ -424,7 +424,7 @@ void LoadRXVolts()
 }
 
 /************************************************************************************************************/
-void LoadAltitude()
+void LoadAltitude()  // Baro (not GPS)
 {
 
     union // union used to allow access to each byte of 32 bit float
