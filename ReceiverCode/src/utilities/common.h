@@ -14,7 +14,7 @@
     #define RXVERSION_MINOR   5
     #define RXVERSION_MINIMUS 0 // Jan 15th 2022
 
-// #define DEBUG // for FHSS
+// #define DEBUG           // for FHSS
 // #define DB_SENSORS
 // #define DB_BIND
 // #define DB_FAILSAFE
