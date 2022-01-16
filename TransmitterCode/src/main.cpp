@@ -366,10 +366,7 @@ double   GPSLongitude                = 0;
 double   GPSMarkLatitude             = 0;  
 double   GPSMarkLongitude            = 0;
 double   GPSAngle                    = 0;
-//double   GPSAltitude                 = 0;
 double   GPSDistance                 = 0;
-//double   GPSMAXAltitude              = 0;
-//uint16_t GPSSatellites               = 0;
 double   GpsFix                      = 0;
 double   GPSSpeed                    = 0;
 float    RXModelVolts                = 0;
@@ -1403,7 +1400,8 @@ void ShowComms()
     char  Dist[]              = "Dist";
     char  Sped[]              = "Sped";
     char  yes[]               = "Yes";
-    char   no[]               = "no";
+    char  no[]                = "no";
+  
 
     if (CurrentView == FrontView || CurrentView == DataView) {
         if (millis() - LastShowTime > ShowCommsDelay) { 
