@@ -185,7 +185,6 @@ void HopToNextFrequency()
     CurrentRadio->stopListening();
     CurrentRadio->setChannel(NextFrequency);
     CurrentRadio->startListening();
-    delay(2); // here we allow one EXTRA ms because tx will hop 1 ms or so later
 #ifdef DEBUG
     ShowHopDurationEtc();
 #endif
