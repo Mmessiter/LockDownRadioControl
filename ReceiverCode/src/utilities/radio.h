@@ -533,7 +533,8 @@ void LoadAckPayload()
             break;
     }
 }
-/**
+/************************************************************************************************************/
+/*
  * Decompresses uint16_t* buffer values (each with 12 bit resolution - the lower 12 bits).
  * @param uncompressed_buf[in]
  * @param compressed_buf[out] Must have allocated 3/4 the size of uncompressed_buf
@@ -553,5 +554,5 @@ void Decompress(uint16_t* uncompressed_buf, uint16_t* compressed_buf, int uncomp
         ++p;
     }
 }
-
+/************************************************************************************************************/
 #endif // defined (_SRC_UTILITIES_RADIO_H)
