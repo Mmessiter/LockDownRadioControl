@@ -68,7 +68,6 @@ var _receiver_code_2src_2main_8cpp =
     [ "ServosAttached", "_receiver_code_2src_2main_8cpp.html#a95b22fb572f7a91a89a431c7f1236575", null ],
     [ "SpeedGPS", "_receiver_code_2src_2main_8cpp.html#ae16763432ff6353a6e61ba98d119b8f9", null ],
     [ "temperature280", "_receiver_code_2src_2main_8cpp.html#a7cc84074d4166c6512a2d479b6f12e30", null ],
-    [ "USE_AdafruitUltimateGps", "_receiver_code_2src_2main_8cpp.html#a50bd80a7728cf3e3699b0e52ce4ed035", null ],
     [ "USE_BMP280", "_receiver_code_2src_2main_8cpp.html#a4be5c27bea3c82b0a4ec92191052d946", null ],
     [ "USE_INA219", "_receiver_code_2src_2main_8cpp.html#a87ae50e2ac4507568cbf98072f174a1b", null ],
     [ "Wire", "_receiver_code_2src_2main_8cpp.html#addbd2ff8fb4d61f9e52d70a48dd29259", null ]
