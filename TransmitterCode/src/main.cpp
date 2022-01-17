@@ -5718,7 +5718,6 @@ void GetRXVolts()
 /************************************************************************************************************/
 void GetAltitude()
 {
-
     union // union used to allow access to each byte of 32 bit float
     {
         float   Val32;
@@ -5738,7 +5737,6 @@ void GetAltitude()
 /************************************************************************************************************/
 void GetTemperature()
 {
-
     union // union used to allow access to each byte of 32 bit float
     {
         float   Val32;
@@ -5752,7 +5750,6 @@ void GetTemperature()
     RXModelTemperature       = TemperatureUnion.Val32;
     snprintf(ModelTemperature, 5, "%f", RXModelTemperature);
 }
-
 /************************************************************************************************************/
 void ParseAckPayload()
 {
