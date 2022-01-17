@@ -427,7 +427,7 @@ FASTRUN void ReceiveData()
     Connected = false;                          // Assume not connected until we know better  
     
     if (CurrentRadio->available()) {
-        Connected = true;                        // ... we know better ! 
+        Connected = true;                        // ... ok we now know better ! 
     }
     if (!Connected) {
         if (millis() - LastConnectionMoment >= RECEIVE_TIMEOUT) { // Has transmitter died? 
