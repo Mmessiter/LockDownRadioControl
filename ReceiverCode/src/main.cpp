@@ -249,7 +249,6 @@ void UseReceivedData(){
             FailSafeDataLoaded = false; // Ack payload instructed to Hop at next opportunity...
             HopToNextFrequency();       // So hop now
             HopNow = false;             // and clear the flag.
-            DoSensors();                // read sensors (takes about 2 ms) while TX hops and catches up
         }
 }
 /************************************************************************************************************/
@@ -420,15 +419,21 @@ FASTRUN void DoSensors()
 /************************************************************************************************************/
 
 FASTRUN void ReceiveData()
-{
-    Connected = false;
-    if (CurrentRadio->available()) {
-        Connected = true;
-    }
-    if (!Connected) if (millis() - LastConnectionMoment >= RECEIVE_TIMEOUT) {
-        Reconnect();
+{ 
+    if (millis() - LastConnectionMoment <=1 ) { // If we have still loads of time, read the sensors. But not the GPS.
+       DoSensors();                             // This must take less than 24 ms to avoid a timeout, or < 7 ms when all's going well.
     }
 
+    Connected = false;                          // Assume not connected until we know better  
+    
+    if (CurrentRadio->available()) {
+        Connected = true;                        // ... we know better ! 
+    }
+    if (!Connected) {
+        if (millis() - LastConnectionMoment >= RECEIVE_TIMEOUT) { // Has transmitter died? 
+        Reconnect();                            // Try to reconnect.
+        }
+    }
     if (ReadData()) {
         CheckParams();
     }
@@ -442,7 +447,7 @@ void ScanI2c()
         if (Wire.endTransmission() == 0) {
             
             if (i == 0x10) {
-                USE_AdafruitUltimateGps = true;
+              //  USE_AdafruitUltimateGps = true;
 #ifdef DB_SENSORS
                 Serial.println("Adafruit Ultimate GPS detected!");
 #endif
