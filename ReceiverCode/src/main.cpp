@@ -380,17 +380,15 @@ void Sensors_Status()
 /************************************************************************************************************/
 FASTRUN void DoSensors()
 {      
-    CurrentRadio->stopListening();              // Don't listen to radio while reading sensors because RX FIFO might fill up.
-    CurrentRadio->flush_rx();
-    CurrentRadio->flush_tx();
-    if (USE_AdafruitUltimateGps) {
-        for (int k = 0; k < 2; ++k){            // Get up to 3 chars bytes per call.
-            if (ReadGPS()) {
-                CurrentRadio->startListening(); // Must resume listening before returning
-                return;
-            }                                   // if a parse happened, skip the rest this time, and resume comms.
-        }             
-    }
+       // if (USE_AdafruitUltimateGps) {
+       // for (int k = 0; k < 2; ++k){            // Get up to 3 chars bytes per call.
+       //     if (ReadGPS()) {
+       //         CurrentRadio->startListening(); // Must resume listening before returning
+       //         return;
+       //     }                                   // if a parse happened, skip the rest this time, and resume comms.
+       // }             
+       // }
+
     if ((millis() - SensorTime) < 2000) { 
         CurrentRadio->startListening();        // Must now resume listening before returning
         return;                                // no need to measure too often
