@@ -412,7 +412,7 @@ FASTRUN void DoSensors()
     Sensors_Status(); // does nothing if DB_SENSORS is not defined
     Serial.println (millis()-SensorTime);
 #endif
-      CurrentRadio->startListening();    // Must resume listening before returning    
+
 }
 /************************************************************************************************************/
 
