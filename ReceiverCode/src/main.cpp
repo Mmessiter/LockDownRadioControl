@@ -61,7 +61,7 @@ Adafruit_GPS GPS(&Wire);
 
 bool            USE_BMP280 = false;                   //  BMP280 sensor connected ?
 bool            USE_INA219 = false;                   //  Volts from INA219 ?
-bool            USE_AdafruitUltimateGps = false;      //  GPS (Adafruit Ultimate GPS) ?
+//bool            USE_AdafruitUltimateGps = false;      //  GPS (Adafruit Ultimate GPS) ?
 Adafruit_INA219 ina219;
 Adafruit_BMP280 bmp280;
 Servo           MCMServo[SERVOSUSED];
@@ -444,13 +444,13 @@ void ScanI2c()
         Wire.beginTransmission(i);
         if (Wire.endTransmission() == 0) {
             
-            if (i == 0x10) {
+           // if (i == 0x10) {
               //  USE_AdafruitUltimateGps = true;
 #ifdef DB_SENSORS
-                Serial.println("Adafruit Ultimate GPS detected!");
+             //   Serial.println("Adafruit Ultimate GPS detected!");
 #endif
-            }
-            else if (i == 0x40) {
+        //    }
+             if (i == 0x40) {
                 USE_INA219 = true;
 #ifdef DB_SENSORS
                 Serial.println("INA219 voltage meter detected!");
@@ -561,7 +561,7 @@ void setup()
     ThisRadio = 1;
     if (USE_INA219)               ina219.begin();
     if (USE_BMP280)               InitBMP280();
-    if (USE_AdafruitUltimateGps)  AdafruitUltimateGpsInit();
+   // if (USE_AdafruitUltimateGps)  AdafruitUltimateGpsInit();
     GetOldPipe();
     digitalWrite(LED_PIN, LOW);
 }

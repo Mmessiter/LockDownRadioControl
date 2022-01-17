@@ -46,7 +46,7 @@ extern double   LongitudeGPS;
 extern double   SpeedGPS;
 extern double   AngleGPS;
 extern bool     GpsFix;
-extern bool     USE_AdafruitUltimateGps;    
+//extern bool     USE_AdafruitUltimateGps;    
 extern bool     USE_BMP280;
 extern bool     USE_INA219;
  
@@ -468,7 +468,7 @@ void LoadAckPayload()
                                 // ... etc ...
       if (USE_BMP280) MaxAckP              = 4;                     // 4 + volts
       if (USE_INA219) MaxAckP              = 8;                     // 8 + Baro
-      if (USE_AdafruitUltimateGps) MaxAckP = 18;                    // 18 + GPS
+    //  if (USE_AdafruitUltimateGps) MaxAckP = 18;                    // 18 + GPS
       if (AckPayload.Purpose > MaxAckP) AckPayload.Purpose = 0;     // wrap after max
 
     switch (AckPayload.Purpose) {
