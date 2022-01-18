@@ -2608,7 +2608,7 @@ void setup()
     char Initialising[]        = "Initialising ... ";
 
     char OptionsViewTXname[] = "OptionsView.TxName";
-    Nextion.begin(115200); // BAUD rate also set in display code
+    Nextion.begin(921600);   // BAUD rate also set in display code THIS IS THE MAX (was 115200)
 
     teensyMAC(MacAddress); // Get MAC address and use it as pipe address
     NewPipe = (uint64_t)MacAddress[0] << 40;
