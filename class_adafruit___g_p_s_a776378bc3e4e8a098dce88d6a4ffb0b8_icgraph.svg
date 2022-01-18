@@ -13,86 +13,101 @@
 <g id="node1" class="node">
 <title>Node1</title>
 <g id="a_node1"><a xlink:title="Read one character from the GPS device.">
-<polygon fill="#bfbfbf" stroke="black" points="343,-68.5 343,-87.5 443,-87.5 443,-68.5 343,-68.5"/>
-<text text-anchor="middle" x="393" y="-75.5" font-family="Helvetica,sans-Serif" font-size="10.00">Adafruit_GPS::read</text>
+<polygon fill="#bfbfbf" stroke="black" points="343,-87.5 343,-106.5 443,-106.5 443,-87.5 343,-87.5"/>
+<text text-anchor="middle" x="393" y="-94.5" font-family="Helvetica,sans-Serif" font-size="10.00">Adafruit_GPS::read</text>
 </a>
 </g>
 </g>
 <!-- Node2 -->
 <g id="node2" class="node">
 <title>Node2</title>
-<g id="a_node2"><a xlink:href="class_adafruit___g_p_s.html#a13d67a0055576c31de0ca3db0641ca1d" target="_top" xlink:title="Wait for a specified sentence from the device.">
-<polygon fill="white" stroke="black" points="152,-68.5 152,-87.5 307,-87.5 307,-68.5 152,-68.5"/>
-<text text-anchor="middle" x="229.5" y="-75.5" font-family="Helvetica,sans-Serif" font-size="10.00">Adafruit_GPS::waitForSentence</text>
+<g id="a_node2"><a xlink:href="_hub_reader_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="black" points="212,-106.5 212,-125.5 247,-125.5 247,-106.5 212,-106.5"/>
+<text text-anchor="middle" x="229.5" y="-113.5" font-family="Helvetica,sans-Serif" font-size="10.00">loop</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node2 -->
 <g id="edge1" class="edge">
 <title>Node1&#45;&gt;Node2</title>
-<path fill="none" stroke="midnightblue" d="M332.45,-78C324.22,-78 315.68,-78 307.2,-78"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="332.67,-81.5 342.67,-78 332.67,-74.5 332.67,-81.5"/>
+<path fill="none" stroke="midnightblue" d="M332.55,-103.99C302.16,-107.57 267.43,-111.65 247.33,-114.02"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="333.14,-107.45 342.67,-102.8 332.33,-100.5 333.14,-107.45"/>
 </g>
 <!-- Node3 -->
 <g id="node3" class="node">
 <title>Node3</title>
-<g id="a_node3"><a xlink:href="class_adafruit___g_p_s.html#adb6139e84c64156b5654dfce2a2e6e3f" target="_top" xlink:title="Read the logger status.">
+<g id="a_node3"><a xlink:href="class_adafruit___g_p_s.html#a13d67a0055576c31de0ca3db0641ca1d" target="_top" xlink:title="Wait for a specified sentence from the device.">
+<polygon fill="white" stroke="black" points="152,-68.5 152,-87.5 307,-87.5 307,-68.5 152,-68.5"/>
+<text text-anchor="middle" x="229.5" y="-75.5" font-family="Helvetica,sans-Serif" font-size="10.00">Adafruit_GPS::waitForSentence</text>
+</a>
+</g>
+</g>
+<!-- Node1&#45;&gt;Node3 -->
+<g id="edge2" class="edge">
+<title>Node1&#45;&gt;Node3</title>
+<path fill="none" stroke="midnightblue" d="M332.72,-90.03C324.41,-89.05 315.77,-88.03 307.2,-87.02"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="332.33,-93.5 342.67,-91.2 333.14,-86.55 332.33,-93.5"/>
+</g>
+<!-- Node4 -->
+<g id="node4" class="node">
+<title>Node4</title>
+<g id="a_node4"><a xlink:href="class_adafruit___g_p_s.html#adb6139e84c64156b5654dfce2a2e6e3f" target="_top" xlink:title="Read the logger status.">
 <polygon fill="white" stroke="black" points="0,-137 0,-167 116,-167 116,-137 0,-137"/>
 <text text-anchor="start" x="8" y="-155" font-family="Helvetica,sans-Serif" font-size="10.00">Adafruit_GPS::LOCUS</text>
 <text text-anchor="middle" x="58" y="-144" font-family="Helvetica,sans-Serif" font-size="10.00">_ReadStatus</text>
 </a>
 </g>
 </g>
-<!-- Node2&#45;&gt;Node3 -->
-<g id="edge2" class="edge">
-<title>Node2&#45;&gt;Node3</title>
-<path fill="none" stroke="midnightblue" d="M198.01,-91.75C175.42,-101.88 143.85,-115.95 116,-128 109.3,-130.9 102.14,-133.95 95.23,-136.87"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="199.72,-94.82 207.41,-87.52 196.85,-88.43 199.72,-94.82"/>
+<!-- Node3&#45;&gt;Node4 -->
+<g id="edge3" class="edge">
+<title>Node3&#45;&gt;Node4</title>
+<path fill="none" stroke="midnightblue" d="M166.28,-90.79C161.34,-92.61 156.52,-94.66 152,-97 133.24,-106.7 133.95,-116.88 116,-128 110.8,-131.22 105.09,-134.2 99.35,-136.88"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="167.48,-94.08 175.87,-87.6 165.27,-87.44 167.48,-94.08"/>
 </g>
-<!-- Node4 -->
-<g id="node4" class="node">
-<title>Node4</title>
-<g id="a_node4"><a xlink:href="class_adafruit___g_p_s.html#a325d15c43c09fa1bedcdadb39706e72b" target="_top" xlink:title="Start the LOCUS logger.">
+<!-- Node5 -->
+<g id="node5" class="node">
+<title>Node5</title>
+<g id="a_node5"><a xlink:href="class_adafruit___g_p_s.html#a325d15c43c09fa1bedcdadb39706e72b" target="_top" xlink:title="Start the LOCUS logger.">
 <polygon fill="white" stroke="black" points="0,-88 0,-118 116,-118 116,-88 0,-88"/>
 <text text-anchor="start" x="8" y="-106" font-family="Helvetica,sans-Serif" font-size="10.00">Adafruit_GPS::LOCUS</text>
 <text text-anchor="middle" x="58" y="-95" font-family="Helvetica,sans-Serif" font-size="10.00">_StartLogger</text>
 </a>
 </g>
 </g>
-<!-- Node2&#45;&gt;Node4 -->
-<g id="edge3" class="edge">
-<title>Node2&#45;&gt;Node4</title>
+<!-- Node3&#45;&gt;Node5 -->
+<g id="edge4" class="edge">
+<title>Node3&#45;&gt;Node5</title>
 <path fill="none" stroke="midnightblue" d="M153.88,-89.01C141.23,-90.87 128.28,-92.78 116.17,-94.57"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="154.55,-92.44 163.94,-87.52 153.53,-85.52 154.55,-92.44"/>
 </g>
-<!-- Node5 -->
-<g id="node5" class="node">
-<title>Node5</title>
-<g id="a_node5"><a xlink:href="class_adafruit___g_p_s.html#a48eaf7f5b46e3682b058a7f8f44fa385" target="_top" xlink:title="Stop the LOCUS logger.">
+<!-- Node6 -->
+<g id="node6" class="node">
+<title>Node6</title>
+<g id="a_node6"><a xlink:href="class_adafruit___g_p_s.html#a48eaf7f5b46e3682b058a7f8f44fa385" target="_top" xlink:title="Stop the LOCUS logger.">
 <polygon fill="white" stroke="black" points="0,-39 0,-69 116,-69 116,-39 0,-39"/>
 <text text-anchor="start" x="8" y="-57" font-family="Helvetica,sans-Serif" font-size="10.00">Adafruit_GPS::LOCUS</text>
 <text text-anchor="middle" x="58" y="-46" font-family="Helvetica,sans-Serif" font-size="10.00">_StopLogger</text>
 </a>
 </g>
 </g>
-<!-- Node2&#45;&gt;Node5 -->
-<g id="edge4" class="edge">
-<title>Node2&#45;&gt;Node5</title>
+<!-- Node3&#45;&gt;Node6 -->
+<g id="edge5" class="edge">
+<title>Node3&#45;&gt;Node6</title>
 <path fill="none" stroke="midnightblue" d="M150.83,-67C139.15,-65.35 127.29,-63.67 116.15,-62.09"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="150.63,-70.51 161.02,-68.45 151.61,-63.58 150.63,-70.51"/>
 </g>
-<!-- Node6 -->
-<g id="node6" class="node">
-<title>Node6</title>
-<g id="a_node6"><a xlink:href="class_adafruit___g_p_s.html#afc67f26f7b14d5cc851e13eb7f6aeae3" target="_top" xlink:title="Wake the sensor up.">
+<!-- Node7 -->
+<g id="node7" class="node">
+<title>Node7</title>
+<g id="a_node7"><a xlink:href="class_adafruit___g_p_s.html#afc67f26f7b14d5cc851e13eb7f6aeae3" target="_top" xlink:title="Wake the sensor up.">
 <polygon fill="white" stroke="black" points="0.5,-0.5 0.5,-19.5 115.5,-19.5 115.5,-0.5 0.5,-0.5"/>
 <text text-anchor="middle" x="58" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">Adafruit_GPS::wakeup</text>
 </a>
 </g>
 </g>
-<!-- Node2&#45;&gt;Node6 -->
-<g id="edge5" class="edge">
-<title>Node2&#45;&gt;Node6</title>
+<!-- Node3&#45;&gt;Node7 -->
+<g id="edge6" class="edge">
+<title>Node3&#45;&gt;Node7</title>
 <path fill="none" stroke="midnightblue" d="M197.74,-64.23C175.26,-54.32 143.93,-40.85 116,-30 106.71,-26.39 96.47,-22.71 87.26,-19.5"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="196.54,-67.53 207.11,-68.37 199.38,-61.13 196.54,-67.53"/>
 </g>
