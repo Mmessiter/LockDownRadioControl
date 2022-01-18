@@ -1,10 +1,9 @@
 var searchData=
 [
-  ['adafruit_5fgps_959',['Adafruit_GPS',['../class_adafruit___g_p_s.html#a3dd74265015def9c893170f38bab1b61',1,'Adafruit_GPS::Adafruit_GPS(HardwareSerial *ser)'],['../class_adafruit___g_p_s.html#a2a7f90b64349dca658dbc8e0c79c9938',1,'Adafruit_GPS::Adafruit_GPS(TwoWire *theWire)'],['../class_adafruit___g_p_s.html#a8422d8a2c060c172c179ebefb03bb67a',1,'Adafruit_GPS::Adafruit_GPS(SPIClass *theSPI, int8_t cspin)'],['../class_adafruit___g_p_s.html#af226e78bbf45802c02c61493c66f4989',1,'Adafruit_GPS::Adafruit_GPS()']]],
-  ['adafruitultimategpsinit_960',['AdafruitUltimateGpsInit',['../_receiver_code_2src_2main_8cpp.html#acb6166442d01c48d1826386267767dbe',1,'main.cpp']]],
-  ['addchecksum_961',['addChecksum',['../class_adafruit___g_p_s.html#a1b9f2a5d34f47bf3b8410e63154eca80',1,'Adafruit_GPS']]],
-  ['adjustdatetime_962',['AdjustDateTime',['../_transmitter_code_2src_2main_8cpp.html#a9de4ea8e761b5f0e537f6f326f9ad429',1,'main.cpp']]],
-  ['age_963',['age',['../struct_tiny_g_p_s_location.html#ae5da08aba335d0515b7a84ce57b80179',1,'TinyGPSLocation::age()'],['../struct_tiny_g_p_s_date.html#af8b9c057a28dcb490081fcfde2a0ee11',1,'TinyGPSDate::age()'],['../struct_tiny_g_p_s_time.html#ae0aba0cbd875a3e1fe5d7872171e79fc',1,'TinyGPSTime::age()'],['../struct_tiny_g_p_s_decimal.html#a041cada3e406205d0878c9819eddbbbb',1,'TinyGPSDecimal::age()'],['../struct_tiny_g_p_s_integer.html#aabd55511befbd769155c69e0c1208691',1,'TinyGPSInteger::age()'],['../class_tiny_g_p_s_custom.html#af5347ee2785bca9acb5a0f16fcc68ea0',1,'TinyGPSCustom::age()']]],
-  ['attachservos_964',['AttachServos',['../_receiver_code_2src_2main_8cpp.html#a0cbfd712ab3bd8f654bc19400fd704bd',1,'main.cpp']]],
-  ['available_965',['available',['../class_adafruit___g_p_s.html#abe6399af00c0047527ea20e3f35a0182',1,'Adafruit_GPS']]]
+  ['adafruit_5fgps_880',['Adafruit_GPS',['../class_adafruit___g_p_s.html#a3dd74265015def9c893170f38bab1b61',1,'Adafruit_GPS::Adafruit_GPS(HardwareSerial *ser)'],['../class_adafruit___g_p_s.html#a2a7f90b64349dca658dbc8e0c79c9938',1,'Adafruit_GPS::Adafruit_GPS(TwoWire *theWire)'],['../class_adafruit___g_p_s.html#a8422d8a2c060c172c179ebefb03bb67a',1,'Adafruit_GPS::Adafruit_GPS(SPIClass *theSPI, int8_t cspin)'],['../class_adafruit___g_p_s.html#af226e78bbf45802c02c61493c66f4989',1,'Adafruit_GPS::Adafruit_GPS()']]],
+  ['adafruitultimategpsinit_881',['AdafruitUltimateGpsInit',['../_receiver_code_2src_2main_8cpp.html#acb6166442d01c48d1826386267767dbe',1,'main.cpp']]],
+  ['addchecksum_882',['addChecksum',['../class_adafruit___g_p_s.html#a1b9f2a5d34f47bf3b8410e63154eca80',1,'Adafruit_GPS']]],
+  ['adjustdatetime_883',['AdjustDateTime',['../_transmitter_code_2src_2main_8cpp.html#a9de4ea8e761b5f0e537f6f326f9ad429',1,'main.cpp']]],
+  ['attachservos_884',['AttachServos',['../_receiver_code_2src_2main_8cpp.html#a0cbfd712ab3bd8f654bc19400fd704bd',1,'main.cpp']]],
+  ['available_885',['available',['../class_adafruit___g_p_s.html#abe6399af00c0047527ea20e3f35a0182',1,'Adafruit_GPS']]]
 ];

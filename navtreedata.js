@@ -25,7 +25,14 @@
 var NAVTREE =
 [
   [ "LockDownRadioControl Project", "index.html", [
-    [ "TinyGPSPlus", "index.html", null ],
+    [ "LockDownRadioControl", "index.html#autotoc_md37", [
+      [ "Highlights", "index.html#autotoc_md38", null ],
+      [ "Safety Precautions", "index.html#autotoc_md39", null ],
+      [ "The skills you will learn", "index.html#autotoc_md40", null ],
+      [ "What you will need", "index.html#autotoc_md41", null ],
+      [ "Things that can help", "index.html#autotoc_md42", null ],
+      [ "To Do", "index.html#autotoc_md43", null ]
+    ] ],
     [ "Lockdown Radio", "md__docs__l_d_r_c__user__manual__ver_0_1.html", [
       [ "Part one: Introduction", "md__docs__l_d_r_c__user__manual__ver_0_1.html#autotoc_md1", null ],
       [ "Part two: User manual", "md__docs__l_d_r_c__user__manual__ver_0_1.html#autotoc_md2", [
@@ -70,12 +77,12 @@ var NAVTREE =
     ] ],
     [ "LDRC3 - Software developement", "md__docs__l_d_r_c3____software_developement.html", null ],
     [ "Adafruit Community Code of Conduct", "md__receiver_code_lib__adafruit__g_p_s__library_code_of_conduct.html", [
-      [ "Our Pledge", "md__receiver_code_lib__adafruit__g_p_s__library_code_of_conduct.html#autotoc_md46", null ],
-      [ "Our Standards", "md__receiver_code_lib__adafruit__g_p_s__library_code_of_conduct.html#autotoc_md47", null ],
-      [ "Our Responsibilities", "md__receiver_code_lib__adafruit__g_p_s__library_code_of_conduct.html#autotoc_md48", null ],
-      [ "Moderation", "md__receiver_code_lib__adafruit__g_p_s__library_code_of_conduct.html#autotoc_md49", null ],
-      [ "Scope", "md__receiver_code_lib__adafruit__g_p_s__library_code_of_conduct.html#autotoc_md50", null ],
-      [ "Attribution", "md__receiver_code_lib__adafruit__g_p_s__library_code_of_conduct.html#autotoc_md51", null ]
+      [ "Our Pledge", "md__receiver_code_lib__adafruit__g_p_s__library_code_of_conduct.html#autotoc_md45", null ],
+      [ "Our Standards", "md__receiver_code_lib__adafruit__g_p_s__library_code_of_conduct.html#autotoc_md46", null ],
+      [ "Our Responsibilities", "md__receiver_code_lib__adafruit__g_p_s__library_code_of_conduct.html#autotoc_md47", null ],
+      [ "Moderation", "md__receiver_code_lib__adafruit__g_p_s__library_code_of_conduct.html#autotoc_md48", null ],
+      [ "Scope", "md__receiver_code_lib__adafruit__g_p_s__library_code_of_conduct.html#autotoc_md49", null ],
+      [ "Attribution", "md__receiver_code_lib__adafruit__g_p_s__library_code_of_conduct.html#autotoc_md50", null ]
     ] ],
     [ "RecieverCode", "_r_x_c_o_d_e.html", [
       [ "Features List", "_r_x_c_o_d_e.html#rxFeatures", null ],
@@ -92,8 +99,7 @@ var NAVTREE =
       [ "Class Members", "functions.html", [
         [ "All", "functions.html", null ],
         [ "Functions", "functions_func.html", null ],
-        [ "Variables", "functions_vars.html", null ],
-        [ "Related Functions", "functions_rela.html", null ]
+        [ "Variables", "functions_vars.html", null ]
       ] ]
     ] ],
     [ "Files", "files.html", [
@@ -114,11 +120,10 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "_adafruit___g_p_s_8cpp.html",
-"_radio_functions_8h.html#a992a1c7536f872bdfd833e282cf3b4e4",
-"_transmitter_code_2src_2main_8cpp.html#a497bcfa9783d5fba829ae70b5cd2f883",
-"_transmitter_code_2src_2main_8cpp.html#acd6754de95b605bb65a52a86e96121f7",
-"globals.html",
-"struct_tiny_g_p_s_decimal.html#a6501fd5ef19ae166d43e0e5781609ee2"
+"_radio_functions_8h.html#aa82f9d8a298740acdbaa5c78a9e9f50c",
+"_transmitter_code_2src_2main_8cpp.html#a54a3133087523f6dc1d418f09f75e06c",
+"_transmitter_code_2src_2main_8cpp.html#ad7b8aa834c87265667a5687b1787a1cc",
+"globals_i.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
