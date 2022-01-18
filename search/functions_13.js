@@ -1,7 +1,4 @@
 var searchData=
 [
-  ['waitforsentence_1099',['waitForSentence',['../class_adafruit___g_p_s.html#a13d67a0055576c31de0ca3db0641ca1d',1,'Adafruit_GPS']]],
-  ['wakeup_1100',['wakeup',['../class_adafruit___g_p_s.html#afc67f26f7b14d5cc851e13eb7f6aeae3',1,'Adafruit_GPS']]],
-  ['watchdogcallback_1101',['WatchDogCallBack',['../_transmitter_code_2src_2main_8cpp.html#ae410be09c6f449451d8f2327fd895c7d',1,'main.cpp']]],
-  ['write_1102',['write',['../class_adafruit___g_p_s.html#a079d9990da5971f336fab880cd141445',1,'Adafruit_GPS']]]
+  ['value_1222',['value',['../struct_tiny_g_p_s_date.html#a718150ae16f68afa9ae81f9d1b3ce3f4',1,'TinyGPSDate::value()'],['../struct_tiny_g_p_s_time.html#afcdb632fee9d144b1414c9d7b95719f1',1,'TinyGPSTime::value()'],['../struct_tiny_g_p_s_decimal.html#ac3ce80976e5d8456e9f211b910a6cb19',1,'TinyGPSDecimal::value()'],['../struct_tiny_g_p_s_integer.html#a67de7e76d61dbd25eb32f701d8ce867b',1,'TinyGPSInteger::value()'],['../class_tiny_g_p_s_custom.html#ac5ad40a3d9b6fe386b2309f972566674',1,'TinyGPSCustom::value()']]]
 ];
