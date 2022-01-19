@@ -115,9 +115,13 @@ var NAVTREEINDEX1 =
 "_receiver_code_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f":[9,0,2,1,1,22],
 "_receiver_code_2src_2main_8cpp_source.html":[9,0,2,1,1],
 "_sensor_hub_2src_2main_8cpp.html":[9,0,3,0,0],
-"_sensor_hub_2src_2main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d":[9,0,3,0,0,2],
-"_sensor_hub_2src_2main_8cpp.html#ac10b80b8aaeaf66cecbf0bb5eff5ae33":[9,0,3,0,0,1],
-"_sensor_hub_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f":[9,0,3,0,0,0],
+"_sensor_hub_2src_2main_8cpp.html#a261956de5f5776a325cd400e7cb4d152":[9,0,3,0,0,5],
+"_sensor_hub_2src_2main_8cpp.html#a372295c11945751efdddfd98372e4aa7":[9,0,3,0,0,0],
+"_sensor_hub_2src_2main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d":[9,0,3,0,0,6],
+"_sensor_hub_2src_2main_8cpp.html#a6ee9f32cf8cccca5a7e078c303afee94":[9,0,3,0,0,1],
+"_sensor_hub_2src_2main_8cpp.html#adf4ab5f33d1ca1e1dd96454622f105d7":[9,0,3,0,0,3],
+"_sensor_hub_2src_2main_8cpp.html#ae8f856dd3cc2dae9023cbdc49710c111":[9,0,3,0,0,4],
+"_sensor_hub_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f":[9,0,3,0,0,2],
 "_sensor_hub_2src_2main_8cpp_source.html":[9,0,3,0,0],
 "_transmitter_code.html":[7],
 "_transmitter_code.html#txFeatures":[7,0],
@@ -245,9 +249,5 @@ var NAVTREEINDEX1 =
 "_transmitter_code_2src_2main_8cpp.html#a4e83b7abec31f2eb6f7c06662c83f0d4":[9,0,4,0,1,28],
 "_transmitter_code_2src_2main_8cpp.html#a4e93c6d21a52ae42832359ee0e4c8b2d":[9,0,4,0,1,322],
 "_transmitter_code_2src_2main_8cpp.html#a4ebbce56831362208cc9e88795f492d3":[9,0,4,0,1,295],
-"_transmitter_code_2src_2main_8cpp.html#a4f813935d8fe58355228cbbf25e12f96":[9,0,4,0,1,145],
-"_transmitter_code_2src_2main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d":[9,0,4,0,1,210],
-"_transmitter_code_2src_2main_8cpp.html#a50960b7cfe9381a081ce980c346faadf":[9,0,4,0,1,334],
-"_transmitter_code_2src_2main_8cpp.html#a5168ce33eb581e85fbfa454e89012bfb":[9,0,4,0,1,65],
-"_transmitter_code_2src_2main_8cpp.html#a52357cbf68af66972047f7aed7a45218":[9,0,4,0,1,428]
+"_transmitter_code_2src_2main_8cpp.html#a4f813935d8fe58355228cbbf25e12f96":[9,0,4,0,1,145]
 };
