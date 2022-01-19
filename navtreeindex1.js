@@ -115,6 +115,7 @@ var NAVTREEINDEX1 =
 "_receiver_code_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f":[9,0,2,1,1,22],
 "_receiver_code_2src_2main_8cpp_source.html":[9,0,2,1,1],
 "_sensor_hub_2src_2main_8cpp.html":[9,0,3,1,0],
+"_sensor_hub_2src_2main_8cpp.html#a169c53997a7da1d0fb99aec1b4675ce8":[9,0,3,1,0,7],
 "_sensor_hub_2src_2main_8cpp.html#a261956de5f5776a325cd400e7cb4d152":[9,0,3,1,0,5],
 "_sensor_hub_2src_2main_8cpp.html#a372295c11945751efdddfd98372e4aa7":[9,0,3,1,0,0],
 "_sensor_hub_2src_2main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d":[9,0,3,1,0,6],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1 =
 "_transmitter_code_2src_2main_8cpp.html#a40219e66b010dcf762b96491c9e668ec":[9,0,4,0,1,400],
 "_transmitter_code_2src_2main_8cpp.html#a4037de0ea0fc7cd3c7cd3c40eee10a98":[9,0,4,0,1,412],
 "_transmitter_code_2src_2main_8cpp.html#a408d676a265b82c355fb6d68d131432c":[9,0,4,0,1,262],
-"_transmitter_code_2src_2main_8cpp.html#a419ee6bf72350585041578e743b6113a":[9,0,4,0,1,419],
-"_transmitter_code_2src_2main_8cpp.html#a42f848041eda5cd5b98d334ab44a15a1":[9,0,4,0,1,312]
+"_transmitter_code_2src_2main_8cpp.html#a419ee6bf72350585041578e743b6113a":[9,0,4,0,1,419]
 };
