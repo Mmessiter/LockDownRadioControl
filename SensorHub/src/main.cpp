@@ -24,13 +24,25 @@ void ReceiveEvent(int q) {
     char c = Wire.read(); 
     Serial.print(c);        
   }      
-   Serial.println("");    
+  Serial.println("");    
+  Serial.println(gps.location.lat());
+  Serial.println(gps.location.lng());
+  Serial.println(gps.satellites.value());
 }
 //*************************************** READ GPS DEVICE ***************************************************
  void ReadGps() {
+
+   int c = 0;
     while (GPSDEVICE.available()){
+      ++c; 
+      delay(10);
     gps.encode(GPSDEVICE.read());
    }
+   if (c) {
+      Serial.print ("bytes encoded: ");
+      Serial.println (c);
+      }
+   
  }
 //*************************************** MAIN LOOP **********************************************************
 void loop() {
