@@ -8,5 +8,6 @@ var _sensor_hub_2src_2main_8cpp =
     [ "ReceiveEvent", "_sensor_hub_2src_2main_8cpp.html#ae8f856dd3cc2dae9023cbdc49710c111", null ],
     [ "SendEvent", "_sensor_hub_2src_2main_8cpp.html#a261956de5f5776a325cd400e7cb4d152", null ],
     [ "setup", "_sensor_hub_2src_2main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d", null ],
-    [ "gps", "_sensor_hub_2src_2main_8cpp.html#a169c53997a7da1d0fb99aec1b4675ce8", null ]
+    [ "gps", "_sensor_hub_2src_2main_8cpp.html#a169c53997a7da1d0fb99aec1b4675ce8", null ],
+    [ "t", "_sensor_hub_2src_2main_8cpp.html#ac310d9181e916ba43604099aee272c71", null ]
 ];
