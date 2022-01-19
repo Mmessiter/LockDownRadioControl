@@ -8,7 +8,7 @@
 #define I2CADDRESS  8
 #define GPSBAUDRATE 9600
 #define GPSDEVICE Serial1
-
+ int t = 0;
 TinyGPSPlus gps;  
 
 //************************************* SEND DATA INTERRUPT HANDLER ******************************************
@@ -21,31 +21,38 @@ void SendEvent() {
 void ReceiveEvent(int q) {
   while(Wire.available()) 
   {
-    char c = Wire.read(); 
-    Serial.print(c);        
+    Wire.read(); 
+   // char c = Wire.read(); 
+   // Serial.print(c);        
   }      
-  Serial.println("");    
-  Serial.println(gps.location.lat());
-  Serial.println(gps.location.lng());
-  Serial.println(gps.satellites.value());
+ 
 }
 //*************************************** READ GPS DEVICE ***************************************************
  void ReadGps() {
-   int c = 0;
+   
     while (GPSDEVICE.available()){
-      ++c; 
-      delay(4);
      gps.encode(GPSDEVICE.read());
    }
-   if (c) {
-     Serial.print ("bytes encoded: ");
-     Serial.println (c);
-    }
-   
+
  }
 //*************************************** MAIN LOOP **********************************************************
 void loop() {
-    ReadGps();
+ 
+  ReadGps();
+  if ((millis() - t) > 5000) {
+      t = millis();
+      Serial.println("");  
+      Serial.print ("  Latitude: ");
+      Serial.println(gps.location.lat(),8);
+      Serial.print (" Longitude: ");
+      Serial.println(gps.location.lng(),8);
+      Serial.print ("Satellites: ");
+      Serial.println(gps.satellites.value());
+      Serial.print ("  Altitude: ");
+      Serial.println(gps.altitude.feet());
+
+  }
+
 }
 //**************************************** SETUP *************************************************************
 void setup() {
