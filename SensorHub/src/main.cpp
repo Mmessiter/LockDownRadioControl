@@ -7,7 +7,10 @@
 #include <TinyGPS++.h>
 #define I2CADDRESS  8
 #define GPSBAUDRATE 9600
+#define GPSDEVICE Serial1
+
 TinyGPSPlus gps;  
+
 //************************************* SEND DATA INTERRUPT HANDLER ******************************************
 
 void SendEvent() {
@@ -25,8 +28,8 @@ void ReceiveEvent(int q) {
 }
 //*************************************** READ GPS DEVICE ***************************************************
  void ReadGps() {
-    while (Serial1.available()){
-    gps.encode(Serial1.read());
+    while (GPSDEVICE.available()){
+    gps.encode(GPSDEVICE.read());
    }
  }
 //*************************************** MAIN LOOP **********************************************************
@@ -35,7 +38,7 @@ void loop() {
 }
 //**************************************** SETUP *************************************************************
 void setup() {
-  Serial1.begin(GPSBAUDRATE);
+  GPSDEVICE.begin(GPSBAUDRATE);
   Wire.begin(I2CADDRESS);             
   Wire.onRequest(SendEvent);    
   Wire.onReceive(ReceiveEvent);
