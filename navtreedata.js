@@ -99,7 +99,8 @@ var NAVTREE =
       [ "Class Members", "functions.html", [
         [ "All", "functions.html", null ],
         [ "Functions", "functions_func.html", null ],
-        [ "Variables", "functions_vars.html", null ]
+        [ "Variables", "functions_vars.html", null ],
+        [ "Related Functions", "functions_rela.html", null ]
       ] ]
     ] ],
     [ "Files", "files.html", [
@@ -121,9 +122,10 @@ var NAVTREEINDEX =
 [
 "_adafruit___g_p_s_8cpp.html",
 "_radio_functions_8h.html#a992a1c7536f872bdfd833e282cf3b4e4",
-"_transmitter_code_2src_2main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d",
-"_transmitter_code_2src_2main_8cpp.html#acfc3c327c23f3721361e4ff9076d8704",
-"globals_func_d.html"
+"_transmitter_code_2src_2main_8cpp.html#a4393363c9c49046456530deae8ac980e",
+"_transmitter_code_2src_2main_8cpp.html#ac8d7ac69a7e7a6b90792e640742b2097",
+"dir_cf2617b2f451d485c6872b95fd1adbbe.html",
+"struct_tiny_g_p_s_altitude.html#a5ae68d990ea08d4e21cfa6aefb46cc03"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
