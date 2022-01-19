@@ -4,7 +4,7 @@
 //***********************************************************************************************************
 #include <Arduino.h>
 #include <Wire.h>
-#define I2CADDRESS 8
+#define I2CADDRESS  8
 #define GPSBAUDRATE 9600
 //************************************* SEND DATA INTERRUPT HANDLER ******************************************
 
