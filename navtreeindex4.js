@@ -1,5 +1,12 @@
 var NAVTREEINDEX4 =
 {
+"dir_11e633d95fdd997ad0ca9952673a4d28.html":[9,0,3,0,0],
+"dir_1e5325fb9db72685aaa9935987dae637.html":[9,0,1,0],
+"dir_24172c16c2a03dfffefa47af27bb36c2.html":[9,0,2,0,0,0],
+"dir_25061517341c4cd99c170271a90b5899.html":[9,0,2],
+"dir_5baf679cf4943df8904dce5d41d4d3dc.html":[9,0,0],
+"dir_72bc84470c841a84a9741754d8fe5245.html":[9,0,2,1],
+"dir_815082f0a2cc6d9a29fc5fe1b81d5838.html":[9,0,4],
 "dir_8771fa0dd1905997e4623130d5085e35.html":[9,0,3,0,0,0],
 "dir_9bc2b467c10f4c24b8168531d6cac9f2.html":[9,0,4,0],
 "dir_9d760d2e2817508ac4f4e405219ebec7.html":[9,0,3],
@@ -46,8 +53,8 @@ var NAVTREEINDEX4 =
 "globals_enum.html":[9,1,4],
 "globals_eval.html":[9,1,5],
 "globals_f.html":[9,1,0,6],
-"globals_func.html":[9,1,1],
 "globals_func.html":[9,1,1,0],
+"globals_func.html":[9,1,1],
 "globals_func_b.html":[9,1,1,1],
 "globals_func_c.html":[9,1,1,2],
 "globals_func_d.html":[9,1,1,3],
@@ -83,8 +90,8 @@ var NAVTREEINDEX4 =
 "globals_type.html":[9,1,3],
 "globals_u.html":[9,1,0,21],
 "globals_v.html":[9,1,0,22],
-"globals_vars.html":[9,1,2],
 "globals_vars.html":[9,1,2,0],
+"globals_vars.html":[9,1,2],
 "globals_vars_b.html":[9,1,2,1],
 "globals_vars_c.html":[9,1,2,2],
 "globals_vars_d.html":[9,1,2,3],
@@ -242,12 +249,5 @@ var NAVTREEINDEX4 =
 "struct_payload.html#a31d05bdbdf85fe184cc7f806d3391fa9":[8,0,3,2],
 "struct_payload.html#a654bdf192bbe0cc64dc8280527c2da20":[8,0,3,3],
 "struct_payload.html#ab1cbe4c4b9ee9ce839084b274f3ea494":[8,0,3,0],
-"struct_payload.html#ac18701f2aa35ebd8402f45f840d5c445":[8,0,3,5],
-"struct_payload.html#ae28220045a0918bdb0fc6484dbff55f9":[8,0,3,4],
-"struct_payload.html#ae7106f2efa1bb9f4ebb720c7c9fc54b8":[8,0,3,1],
-"struct_raw_degrees.html":[8,0,4],
-"struct_raw_degrees.html#a11831d9220f303bd716d9412af28e84e":[8,0,4,2],
-"struct_raw_degrees.html#a13564009c60e20dbf03b158114d1c0e2":[8,0,4,1],
-"struct_raw_degrees.html#a156d5ced092fa1473b9b669a29be3509":[8,0,4,0],
-"struct_raw_degrees.html#a39c31d2d0332155a4d2c975cec0a796f":[8,0,4,3]
+"struct_payload.html#ac18701f2aa35ebd8402f45f840d5c445":[8,0,3,5]
 };
