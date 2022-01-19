@@ -1,6 +1,7 @@
 var _sensor_hub_2src_2main_8cpp =
 [
     [ "GPSBAUDRATE", "_sensor_hub_2src_2main_8cpp.html#a372295c11945751efdddfd98372e4aa7", null ],
+    [ "GPSDEVICE", "_sensor_hub_2src_2main_8cpp.html#ac5dd8c90defc2c0d78e99d2d5c1a0fd1", null ],
     [ "I2CADDRESS", "_sensor_hub_2src_2main_8cpp.html#a6ee9f32cf8cccca5a7e078c303afee94", null ],
     [ "loop", "_sensor_hub_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f", null ],
     [ "ReadGps", "_sensor_hub_2src_2main_8cpp.html#adf4ab5f33d1ca1e1dd96454622f105d7", null ],

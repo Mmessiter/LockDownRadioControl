@@ -1,5 +1,6 @@
 var NAVTREEINDEX4 =
 {
+"dir_9bc2b467c10f4c24b8168531d6cac9f2.html":[9,0,4,0],
 "dir_9d760d2e2817508ac4f4e405219ebec7.html":[9,0,3],
 "dir_cf2617b2f451d485c6872b95fd1adbbe.html":[9,0,4,0,0],
 "dir_d7a36f133efb43b0c0b23ef6bf75db77.html":[9,0,1],
@@ -11,8 +12,8 @@ var NAVTREEINDEX4 =
 "functions_func.html":[8,3,1],
 "functions_rela.html":[8,3,3],
 "functions_vars.html":[8,3,2],
-"globals.html":[9,1,0],
 "globals.html":[9,1,0,0],
+"globals.html":[9,1,0],
 "globals_a.html":[9,1,0,1],
 "globals_b.html":[9,1,0,2],
 "globals_c.html":[9,1,0,3],
@@ -44,8 +45,8 @@ var NAVTREEINDEX4 =
 "globals_enum.html":[9,1,4],
 "globals_eval.html":[9,1,5],
 "globals_f.html":[9,1,0,6],
-"globals_func.html":[9,1,1],
 "globals_func.html":[9,1,1,0],
+"globals_func.html":[9,1,1],
 "globals_func_b.html":[9,1,1,1],
 "globals_func_c.html":[9,1,1,2],
 "globals_func_d.html":[9,1,1,3],
@@ -81,8 +82,8 @@ var NAVTREEINDEX4 =
 "globals_type.html":[9,1,3],
 "globals_u.html":[9,1,0,21],
 "globals_v.html":[9,1,0,22],
-"globals_vars.html":[9,1,2],
 "globals_vars.html":[9,1,2,0],
+"globals_vars.html":[9,1,2],
 "globals_vars_b.html":[9,1,2,1],
 "globals_vars_c.html":[9,1,2,2],
 "globals_vars_d.html":[9,1,2,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX4 =
 "struct_raw_degrees.html#a13564009c60e20dbf03b158114d1c0e2":[8,0,4,1],
 "struct_raw_degrees.html#a156d5ced092fa1473b9b669a29be3509":[8,0,4,0],
 "struct_raw_degrees.html#a39c31d2d0332155a4d2c975cec0a796f":[8,0,4,3],
-"struct_tiny_g_p_s_altitude.html":[8,0,5],
-"struct_tiny_g_p_s_altitude.html#a1eb3e5b425784fc0db3e9ffe0f77f741":[8,0,5,1]
+"struct_tiny_g_p_s_altitude.html":[8,0,5]
 };
