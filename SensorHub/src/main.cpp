@@ -10,20 +10,33 @@
 #define GPSDEVICE Serial1
  int t = 0;
 TinyGPSPlus gps;  
+float   GPSLatitude;
+float   GPSLongitude;
+uint8_t GPSSatellites;
+float   GPSSpeed;
+uint8_t Hours;
+uint8_t Mins;
+uint8_t Secs;
 
 //************************************* SEND DATA INTERRUPT HANDLER ******************************************
+
+
+// Here Send data response:  (LAT + float etc ...
 
 void SendEvent() {
       Wire.write("Hi There! "); 
 }
 //************************************* RECEIVE DATA INTERRUPT HANDLER ***************************************
 
+// Here receive request for data:  (SAT,LAT,LON,SPE,MIN,TIM,FAR)
+
 void ReceiveEvent(int q) {
+  
   while(Wire.available()) 
   {
-    Wire.read(); 
-   // char c = Wire.read(); 
-   // Serial.print(c);        
+    Wire.read(); // one byte at a time
+   
+        
   }      
  
 }
@@ -31,7 +44,7 @@ void ReceiveEvent(int q) {
  void ReadGps() {
    
     while (GPSDEVICE.available()){
-     gps.encode(GPSDEVICE.read());
+     gps.encode(GPSDEVICE.read());  // send data to library for processing
    }
 
  }
