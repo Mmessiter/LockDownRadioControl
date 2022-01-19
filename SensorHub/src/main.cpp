@@ -31,17 +31,16 @@ void ReceiveEvent(int q) {
 }
 //*************************************** READ GPS DEVICE ***************************************************
  void ReadGps() {
-
    int c = 0;
     while (GPSDEVICE.available()){
       ++c; 
-      delay(10);
-    gps.encode(GPSDEVICE.read());
+      delay(4);
+     gps.encode(GPSDEVICE.read());
    }
    if (c) {
-      Serial.print ("bytes encoded: ");
-      Serial.println (c);
-      }
+     Serial.print ("bytes encoded: ");
+     Serial.println (c);
+    }
    
  }
 //*************************************** MAIN LOOP **********************************************************
