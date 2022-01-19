@@ -48,78 +48,78 @@
 <path fill="none" stroke="midnightblue" d="M293.08,-199.6C277.89,-224.99 247.27,-270.17 209,-295 203.04,-298.87 196.28,-301.96 189.41,-304.43"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="296.29,-201.03 298.29,-190.63 290.24,-197.52 296.29,-201.03"/>
 </g>
+<!-- Node4 -->
+<g id="node4" class="node">
+<title>Node4</title>
+<g id="a_node4"><a xlink:href="struct_tiny_g_p_s_h_d_o_p.html#a27cd35588c96eefb690bba46497d20d7" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="black" points="85,-266.5 85,-285.5 195,-285.5 195,-266.5 85,-266.5"/>
+<text text-anchor="middle" x="140" y="-273.5" font-family="Helvetica,sans-Serif" font-size="10.00">TinyGPSHDOP::hdop</text>
+</a>
+</g>
+</g>
+<!-- Node1&#45;&gt;Node4 -->
+<g id="edge3" class="edge">
+<title>Node1&#45;&gt;Node4</title>
+<path fill="none" stroke="midnightblue" d="M286.96,-197.86C269.18,-215.06 239.36,-241.39 209,-257 201.59,-260.81 193.31,-263.94 185.16,-266.48"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="289.58,-200.18 294.24,-190.66 284.66,-195.2 289.58,-200.18"/>
+</g>
 <!-- Node5 -->
 <g id="node5" class="node">
 <title>Node5</title>
-<g id="a_node5"><a xlink:href="struct_tiny_g_p_s_h_d_o_p.html#a27cd35588c96eefb690bba46497d20d7" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="black" points="85,-266.5 85,-285.5 195,-285.5 195,-266.5 85,-266.5"/>
-<text text-anchor="middle" x="140" y="-273.5" font-family="Helvetica,sans-Serif" font-size="10.00">TinyGPSHDOP::hdop</text>
+<g id="a_node5"><a xlink:href="struct_tiny_g_p_s_altitude.html#a1eb3e5b425784fc0db3e9ffe0f77f741" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="black" points="71,-228.5 71,-247.5 209,-247.5 209,-228.5 71,-228.5"/>
+<text text-anchor="middle" x="140" y="-235.5" font-family="Helvetica,sans-Serif" font-size="10.00">TinyGPSAltitude::kilometers</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node5 -->
 <g id="edge4" class="edge">
 <title>Node1&#45;&gt;Node5</title>
-<path fill="none" stroke="midnightblue" d="M286.96,-197.86C269.18,-215.06 239.36,-241.39 209,-257 201.59,-260.81 193.31,-263.94 185.16,-266.48"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="289.58,-200.18 294.24,-190.66 284.66,-195.2 289.58,-200.18"/>
+<path fill="none" stroke="midnightblue" d="M272.32,-194.54C254.06,-202.22 230.43,-211.72 209,-219 199.02,-222.39 188.07,-225.65 177.93,-228.48"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="273.77,-197.73 281.61,-190.6 271.04,-191.29 273.77,-197.73"/>
 </g>
 <!-- Node6 -->
 <g id="node6" class="node">
 <title>Node6</title>
-<g id="a_node6"><a xlink:href="struct_tiny_g_p_s_altitude.html#a1eb3e5b425784fc0db3e9ffe0f77f741" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="black" points="71,-228.5 71,-247.5 209,-247.5 209,-228.5 71,-228.5"/>
-<text text-anchor="middle" x="140" y="-235.5" font-family="Helvetica,sans-Serif" font-size="10.00">TinyGPSAltitude::kilometers</text>
+<g id="a_node6"><a xlink:href="struct_tiny_g_p_s_speed.html#a7fee3c8f9f2fcc5f4a517bd6108f79dd" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="black" points="84,-190.5 84,-209.5 196,-209.5 196,-190.5 84,-190.5"/>
+<text text-anchor="middle" x="140" y="-197.5" font-family="Helvetica,sans-Serif" font-size="10.00">TinyGPSSpeed::kmph</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node6 -->
 <g id="edge5" class="edge">
 <title>Node1&#45;&gt;Node6</title>
-<path fill="none" stroke="midnightblue" d="M272.32,-194.54C254.06,-202.22 230.43,-211.72 209,-219 199.02,-222.39 188.07,-225.65 177.93,-228.48"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="273.77,-197.73 281.61,-190.6 271.04,-191.29 273.77,-197.73"/>
+<path fill="none" stroke="midnightblue" d="M234.62,-189.05C221.75,-190.56 208.45,-192.11 196.06,-193.56"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="235.31,-192.5 244.83,-187.86 234.49,-185.54 235.31,-192.5"/>
 </g>
 <!-- Node7 -->
 <g id="node7" class="node">
 <title>Node7</title>
-<g id="a_node7"><a xlink:href="struct_tiny_g_p_s_speed.html#a7fee3c8f9f2fcc5f4a517bd6108f79dd" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="black" points="84,-190.5 84,-209.5 196,-209.5 196,-190.5 84,-190.5"/>
-<text text-anchor="middle" x="140" y="-197.5" font-family="Helvetica,sans-Serif" font-size="10.00">TinyGPSSpeed::kmph</text>
+<g id="a_node7"><a xlink:href="struct_tiny_g_p_s_speed.html#aa3a38ce4ece3d8062c794b73f260395e" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="black" points="84,-152.5 84,-171.5 196,-171.5 196,-152.5 84,-152.5"/>
+<text text-anchor="middle" x="140" y="-159.5" font-family="Helvetica,sans-Serif" font-size="10.00">TinyGPSSpeed::knots</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node7 -->
 <g id="edge6" class="edge">
 <title>Node1&#45;&gt;Node7</title>
-<path fill="none" stroke="midnightblue" d="M234.62,-189.05C221.75,-190.56 208.45,-192.11 196.06,-193.56"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="235.31,-192.5 244.83,-187.86 234.49,-185.54 235.31,-192.5"/>
+<path fill="none" stroke="midnightblue" d="M234.62,-172.95C221.75,-171.44 208.45,-169.89 196.06,-168.44"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="234.49,-176.46 244.83,-174.14 235.31,-169.5 234.49,-176.46"/>
 </g>
 <!-- Node8 -->
 <g id="node8" class="node">
 <title>Node8</title>
-<g id="a_node8"><a xlink:href="struct_tiny_g_p_s_speed.html#aa3a38ce4ece3d8062c794b73f260395e" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="black" points="84,-152.5 84,-171.5 196,-171.5 196,-152.5 84,-152.5"/>
-<text text-anchor="middle" x="140" y="-159.5" font-family="Helvetica,sans-Serif" font-size="10.00">TinyGPSSpeed::knots</text>
+<g id="a_node8"><a xlink:href="struct_tiny_g_p_s_altitude.html#a5a39d145bb1778814007206c765189f7" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="black" points="78.5,-114.5 78.5,-133.5 201.5,-133.5 201.5,-114.5 78.5,-114.5"/>
+<text text-anchor="middle" x="140" y="-121.5" font-family="Helvetica,sans-Serif" font-size="10.00">TinyGPSAltitude::meters</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node8 -->
 <g id="edge7" class="edge">
 <title>Node1&#45;&gt;Node8</title>
-<path fill="none" stroke="midnightblue" d="M234.62,-172.95C221.75,-171.44 208.45,-169.89 196.06,-168.44"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="234.49,-176.46 244.83,-174.14 235.31,-169.5 234.49,-176.46"/>
-</g>
-<!-- Node9 -->
-<g id="node9" class="node">
-<title>Node9</title>
-<g id="a_node9"><a xlink:href="struct_tiny_g_p_s_altitude.html#a5a39d145bb1778814007206c765189f7" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="black" points="78.5,-114.5 78.5,-133.5 201.5,-133.5 201.5,-114.5 78.5,-114.5"/>
-<text text-anchor="middle" x="140" y="-121.5" font-family="Helvetica,sans-Serif" font-size="10.00">TinyGPSAltitude::meters</text>
-</a>
-</g>
-</g>
-<!-- Node1&#45;&gt;Node9 -->
-<g id="edge8" class="edge">
-<title>Node1&#45;&gt;Node9</title>
 <path fill="none" stroke="midnightblue" d="M272.32,-167.46C254.06,-159.78 230.43,-150.28 209,-143 199.02,-139.61 188.07,-136.35 177.93,-133.52"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="271.04,-170.71 281.61,-171.4 273.77,-164.27 271.04,-170.71"/>
 </g>
@@ -163,25 +163,31 @@
 </g>
 </g>
 <!-- Node1&#45;&gt;Node12 -->
-<g id="edge11" class="edge">
+<g id="edge12" class="edge">
 <title>Node1&#45;&gt;Node12</title>
 <path fill="none" stroke="midnightblue" d="M296.89,-161.83C284.72,-129.44 255.68,-64.01 209,-29 203.8,-25.1 197.84,-22 191.66,-19.54"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="293.68,-163.24 300.37,-171.45 300.26,-160.86 293.68,-163.24"/>
 </g>
-<!-- Node4 -->
-<g id="node4" class="node">
-<title>Node4</title>
-<g id="a_node4"><a xlink:href="_sensor_hub_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="black" points="0,-304.5 0,-323.5 35,-323.5 35,-304.5 0,-304.5"/>
-<text text-anchor="middle" x="17.5" y="-311.5" font-family="Helvetica,sans-Serif" font-size="10.00">loop</text>
+<!-- Node9 -->
+<g id="node9" class="node">
+<title>Node9</title>
+<g id="a_node9"><a xlink:href="_sensor_hub_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="black" points="0,-76.5 0,-95.5 35,-95.5 35,-76.5 0,-76.5"/>
+<text text-anchor="middle" x="17.5" y="-83.5" font-family="Helvetica,sans-Serif" font-size="10.00">loop</text>
 </a>
 </g>
 </g>
-<!-- Node3&#45;&gt;Node4 -->
-<g id="edge3" class="edge">
-<title>Node3&#45;&gt;Node4</title>
-<path fill="none" stroke="midnightblue" d="M74.59,-314C59.94,-314 45.62,-314 35.11,-314"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="74.74,-317.5 84.74,-314 74.74,-310.5 74.74,-317.5"/>
+<!-- Node8&#45;&gt;Node9 -->
+<g id="edge8" class="edge">
+<title>Node8&#45;&gt;Node9</title>
+<path fill="none" stroke="midnightblue" d="M93.21,-111.71C85.76,-109.57 78.14,-107.29 71,-105 59,-101.16 45.65,-96.32 35.41,-92.49"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="92.28,-115.09 102.85,-114.44 94.19,-108.35 92.28,-115.09"/>
+</g>
+<!-- Node11&#45;&gt;Node9 -->
+<g id="edge11" class="edge">
+<title>Node11&#45;&gt;Node9</title>
+<path fill="none" stroke="midnightblue" d="M93.21,-60.29C85.76,-62.43 78.14,-64.71 71,-67 59,-70.84 45.65,-75.68 35.41,-79.51"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="94.19,-63.65 102.85,-57.56 92.28,-56.91 94.19,-63.65"/>
 </g>
 </g>
 </svg>
