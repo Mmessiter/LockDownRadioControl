@@ -49,7 +49,17 @@ void loop() {
       Serial.print ("Satellites: ");
       Serial.println(gps.satellites.value());
       Serial.print ("  Altitude: ");
-      Serial.println(gps.altitude.feet());
+      Serial.println(gps.altitude.meters());
+      Serial.print (" Speed MPH: ");
+      Serial.println(gps.speed.mph());
+      Serial.print ("      Time: ");
+      Serial.print(gps.time.hour());
+      Serial.print(".");
+      Serial.print(gps.time.minute());
+      Serial.print(".");
+      Serial.print(gps.time.second());
+      Serial.println("");
+
 
   }
 
