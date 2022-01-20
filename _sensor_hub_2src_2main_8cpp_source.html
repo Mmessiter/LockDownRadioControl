@@ -163,17 +163,17 @@ $(document).ready(function(){initNavTree('_sensor_hub_2src_2main_8cpp_source.htm
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;  <span class="keywordflow">if</span> ((millis() - <a class="code" href="_sensor_hub_2src_2main_8cpp.html#a7867e45e2d19ce05cda4ef2692ee0dbe">DebugTimer</a>) &gt; 1000) {</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;      <a class="code" href="_sensor_hub_2src_2main_8cpp.html#a7867e45e2d19ce05cda4ef2692ee0dbe">DebugTimer</a> = millis();</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;      Serial.println(<span class="stringliteral">&quot;&quot;</span>);</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;      Serial.print (<span class="stringliteral">&quot;Satellites: &quot;</span>);</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;      Serial.print (<span class="stringliteral">&quot; Satellites: &quot;</span>);</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;      Serial.println(<a class="code" href="_sensor_hub_2src_2main_8cpp.html#a00e31bab157367fcde9712d63a57a778">GPSSatellites</a>);    </div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;      Serial.print (<span class="stringliteral">&quot;  Latitude: &quot;</span>);</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;      Serial.print (<span class="stringliteral">&quot;   Latitude: &quot;</span>);</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;      Serial.println(<a class="code" href="_sensor_hub_2src_2main_8cpp.html#a4cde9fb46783d84afce8e92931ce51a3">GPSLatitude</a>,8);</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;      Serial.print (<span class="stringliteral">&quot;  Longitude: &quot;</span>);</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;      Serial.println(<a class="code" href="_sensor_hub_2src_2main_8cpp.html#a86b9aef762f5ecd22b5902d1ded5dec2">GPSLongitude</a>,8);</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;      Serial.print (<span class="stringliteral">&quot;  Altitude: &quot;</span>);</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;      Serial.print (<span class="stringliteral">&quot;Altitude ft: &quot;</span>);</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;      Serial.println(<a class="code" href="_sensor_hub_2src_2main_8cpp.html#adf4aff982f0b96491848cb8c7d4359d2">GPSAltitude</a>);</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;      Serial.print (<span class="stringliteral">&quot; Speed MPH: &quot;</span>);</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;      Serial.print (<span class="stringliteral">&quot;  Speed MPH: &quot;</span>);</div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;      Serial.println(<a class="code" href="_sensor_hub_2src_2main_8cpp.html#adaf7d2f41cc620fadcab0862e060126c">GPSSpeed</a>);</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;      Serial.print (<span class="stringliteral">&quot;      Time: &quot;</span>);</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;      Serial.print (<span class="stringliteral">&quot;       Time: &quot;</span>);</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;      Serial.print (<a class="code" href="_sensor_hub_2src_2main_8cpp.html#a51b2b206ccc31e2626ee3770cce9fb36">GPSHours</a>);</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;      Serial.print (<span class="stringliteral">&quot;.&quot;</span>);</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;      Serial.print (<a class="code" href="_sensor_hub_2src_2main_8cpp.html#a2131fc80cbc2e4d7966a837fd6232ac4">GPSMins</a>);</div>
