@@ -22,12 +22,12 @@ var _sensor_hub_2src_2main_8cpp =
     [ "GPSDistanceTo", "_sensor_hub_2src_2main_8cpp.html#a74d389153f3f579cc48d28e24587b24e", null ],
     [ "GPSHours", "_sensor_hub_2src_2main_8cpp.html#a51b2b206ccc31e2626ee3770cce9fb36", null ],
     [ "GPSLatitude", "_sensor_hub_2src_2main_8cpp.html#a4cde9fb46783d84afce8e92931ce51a3", null ],
+    [ "GPSLibVersion", "_sensor_hub_2src_2main_8cpp.html#acfa52f9c8cf5500ff86e33dd65b8eeaa", null ],
     [ "GPSLongitude", "_sensor_hub_2src_2main_8cpp.html#a86b9aef762f5ecd22b5902d1ded5dec2", null ],
     [ "GPSMins", "_sensor_hub_2src_2main_8cpp.html#a2131fc80cbc2e4d7966a837fd6232ac4", null ],
     [ "GPSMonth", "_sensor_hub_2src_2main_8cpp.html#ae14b3cfd9feec9e865cc5bd203c220f6", null ],
     [ "GPSSatellites", "_sensor_hub_2src_2main_8cpp.html#a00e31bab157367fcde9712d63a57a778", null ],
     [ "GPSSecs", "_sensor_hub_2src_2main_8cpp.html#af92d3280f8b2a0ff5023e4a7505491d9", null ],
     [ "GPSSpeed", "_sensor_hub_2src_2main_8cpp.html#adaf7d2f41cc620fadcab0862e060126c", null ],
-    [ "GPSVersion", "_sensor_hub_2src_2main_8cpp.html#a78166054bfd3a40a3e4a8ccb62279fd4", null ],
     [ "GPSYear", "_sensor_hub_2src_2main_8cpp.html#abc801729e599fbe5b84d088ead6fae1a", null ]
 ];
