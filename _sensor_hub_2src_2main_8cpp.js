@@ -14,6 +14,7 @@ var _sensor_hub_2src_2main_8cpp =
     [ "DebugTimer", "_sensor_hub_2src_2main_8cpp.html#a7867e45e2d19ce05cda4ef2692ee0dbe", null ],
     [ "gps", "_sensor_hub_2src_2main_8cpp.html#a169c53997a7da1d0fb99aec1b4675ce8", null ],
     [ "GPSAltitude", "_sensor_hub_2src_2main_8cpp.html#adf4aff982f0b96491848cb8c7d4359d2", null ],
+    [ "GPSCourse", "_sensor_hub_2src_2main_8cpp.html#aa111fdf18410d5ea9db7bba30eb3867b", null ],
     [ "GPSDay", "_sensor_hub_2src_2main_8cpp.html#a882e41768b06234c5a87749be672ea06", null ],
     [ "GPSHours", "_sensor_hub_2src_2main_8cpp.html#a51b2b206ccc31e2626ee3770cce9fb36", null ],
     [ "GPSLatitude", "_sensor_hub_2src_2main_8cpp.html#a4cde9fb46783d84afce8e92931ce51a3", null ],

@@ -1,11 +1,11 @@
 var searchData=
 [
-  ['tinygpscustom_1230',['TinyGPSCustom',['../class_tiny_g_p_s_custom.html#ac82fa99f3bcd9811377dd5fa3e9e98c7',1,'TinyGPSCustom::TinyGPSCustom()'],['../class_tiny_g_p_s_custom.html#a29b2a658bf95d8e6265e983b1c0251b5',1,'TinyGPSCustom::TinyGPSCustom(TinyGPSPlus &amp;gps, const char *sentenceName, int termNumber)']]],
-  ['tinygpsdate_1231',['TinyGPSDate',['../struct_tiny_g_p_s_date.html#a4d5f23eb008cbfd385343687bf902003',1,'TinyGPSDate']]],
-  ['tinygpsdecimal_1232',['TinyGPSDecimal',['../struct_tiny_g_p_s_decimal.html#ae09cbb1856cd57c7dcee52fb5fb1ba16',1,'TinyGPSDecimal']]],
-  ['tinygpsinteger_1233',['TinyGPSInteger',['../struct_tiny_g_p_s_integer.html#a017a71970fa652964a9e71b7ec945cec',1,'TinyGPSInteger']]],
-  ['tinygpslocation_1234',['TinyGPSLocation',['../struct_tiny_g_p_s_location.html#a9bc435af16c3c5224fcd4b5c40d0c70f',1,'TinyGPSLocation']]],
-  ['tinygpsplus_1235',['TinyGPSPlus',['../class_tiny_g_p_s_plus.html#a3d9173312d514abf50bd43efe6bf6af3',1,'TinyGPSPlus']]],
-  ['tinygpstime_1236',['TinyGPSTime',['../struct_tiny_g_p_s_time.html#abd6dd7a576fd42cd6980c92eec77ab1d',1,'TinyGPSTime']]],
-  ['tryotherpipe_1237',['TryOtherPipe',['../_radio_functions_8cpp.html#a7051e235b8f694c6b01bb5edf3925dc7',1,'RadioFunctions.cpp']]]
+  ['tinygpscustom_1231',['TinyGPSCustom',['../class_tiny_g_p_s_custom.html#ac82fa99f3bcd9811377dd5fa3e9e98c7',1,'TinyGPSCustom::TinyGPSCustom()'],['../class_tiny_g_p_s_custom.html#a29b2a658bf95d8e6265e983b1c0251b5',1,'TinyGPSCustom::TinyGPSCustom(TinyGPSPlus &amp;gps, const char *sentenceName, int termNumber)']]],
+  ['tinygpsdate_1232',['TinyGPSDate',['../struct_tiny_g_p_s_date.html#a4d5f23eb008cbfd385343687bf902003',1,'TinyGPSDate']]],
+  ['tinygpsdecimal_1233',['TinyGPSDecimal',['../struct_tiny_g_p_s_decimal.html#ae09cbb1856cd57c7dcee52fb5fb1ba16',1,'TinyGPSDecimal']]],
+  ['tinygpsinteger_1234',['TinyGPSInteger',['../struct_tiny_g_p_s_integer.html#a017a71970fa652964a9e71b7ec945cec',1,'TinyGPSInteger']]],
+  ['tinygpslocation_1235',['TinyGPSLocation',['../struct_tiny_g_p_s_location.html#a9bc435af16c3c5224fcd4b5c40d0c70f',1,'TinyGPSLocation']]],
+  ['tinygpsplus_1236',['TinyGPSPlus',['../class_tiny_g_p_s_plus.html#a3d9173312d514abf50bd43efe6bf6af3',1,'TinyGPSPlus']]],
+  ['tinygpstime_1237',['TinyGPSTime',['../struct_tiny_g_p_s_time.html#abd6dd7a576fd42cd6980c92eec77ab1d',1,'TinyGPSTime']]],
+  ['tryotherpipe_1238',['TryOtherPipe',['../_radio_functions_8cpp.html#a7051e235b8f694c6b01bb5edf3925dc7',1,'RadioFunctions.cpp']]]
 ];
