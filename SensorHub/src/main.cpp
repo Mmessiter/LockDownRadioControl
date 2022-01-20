@@ -65,17 +65,17 @@ void ShowGPS(){
   if ((millis() - DebugTimer) > 1000) {
       DebugTimer = millis();
       Serial.println("");
-      Serial.print ("Satellites: ");
+      Serial.print (" Satellites: ");
       Serial.println(GPSSatellites);    
-      Serial.print ("  Latitude: ");
+      Serial.print ("   Latitude: ");
       Serial.println(GPSLatitude,8);
       Serial.print ("  Longitude: ");
       Serial.println(GPSLongitude,8);
-      Serial.print ("  Altitude: ");
+      Serial.print ("Altitude ft: ");
       Serial.println(GPSAltitude);
-      Serial.print (" Speed MPH: ");
+      Serial.print ("  Speed MPH: ");
       Serial.println(GPSSpeed);
-      Serial.print ("      Time: ");
+      Serial.print ("       Time: ");
       Serial.print (GPSHours);
       Serial.print (".");
       Serial.print (GPSMins);
