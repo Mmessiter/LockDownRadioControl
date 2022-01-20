@@ -42,7 +42,7 @@ void SendEvent() {
 // Here receive request for data:  (SAT,LAT,LON,SPE,MIN,TIM,FAR,MRK,BER)
 void ReceiveEvent(int q) {  
  char c ;
-  while(1 < Wire.available())
+  while( Wire.available())
   {
     c = Wire.read(); // one byte at a time
     Serial.print (c);

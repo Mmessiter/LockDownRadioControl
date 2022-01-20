@@ -15,11 +15,10 @@ void GetI2CData(){
 }
 
 void SendI2CData(){
-
+  char request[4] = "LAT";
   Wire.beginTransmission(8);   
-  Wire.write("This is a test message ...  ");
+  Wire.write(request);
   Wire.endTransmission();   
-
 }
 
 void loop()
@@ -27,7 +26,6 @@ void loop()
   SendI2CData();
   delay(250);
   GetI2CData();
-
 }
 void setup()
 {
