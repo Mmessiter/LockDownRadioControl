@@ -1,9 +1,9 @@
 var searchData=
 [
   ['lastnmea_1115',['lastNMEA',['../class_adafruit___g_p_s.html#a6938dadca5d72ec6e89e86a5b01b9b67',1,'Adafruit_GPS']]],
-  ['lat_1116',['lat',['../struct_tiny_g_p_s_location.html#a86c3acea4f317b427eebb667e4d05a49',1,'TinyGPSLocation']]],
-  ['libraryversion_1117',['libraryVersion',['../class_tiny_g_p_s_plus.html#a1ec39648e1c80c59f4fded642fdb88ae',1,'TinyGPSPlus']]],
-  ['lng_1118',['lng',['../struct_tiny_g_p_s_location.html#a544e9009a5580b2fd5466821a5e5b782',1,'TinyGPSLocation']]],
+  ['lat_1116',['lat',['../struct_tiny_g_p_s_location.html#a86c3acea4f317b427eebb667e4d05a49',1,'TinyGPSLocation::lat()'],['../struct_tiny_g_p_s_location.html#a86c3acea4f317b427eebb667e4d05a49',1,'TinyGPSLocation::lat()']]],
+  ['libraryversion_1117',['libraryVersion',['../class_tiny_g_p_s_plus.html#a1ec39648e1c80c59f4fded642fdb88ae',1,'TinyGPSPlus::libraryVersion()'],['../class_tiny_g_p_s_plus.html#a1ec39648e1c80c59f4fded642fdb88ae',1,'TinyGPSPlus::libraryVersion()']]],
+  ['lng_1118',['lng',['../struct_tiny_g_p_s_location.html#a544e9009a5580b2fd5466821a5e5b782',1,'TinyGPSLocation::lng()'],['../struct_tiny_g_p_s_location.html#a544e9009a5580b2fd5466821a5e5b782',1,'TinyGPSLocation::lng()']]],
   ['loadackpayload_1119',['LoadAckPayload',['../radio_8h.html#a664f409561bfcf119e0379dd991217e5',1,'radio.h']]],
   ['loadallparameters_1120',['LoadAllParameters',['../_transmitter_code_2src_2main_8cpp.html#a909acb7ed667a5cc9c4ec6191fc33e75',1,'main.cpp']]],
   ['loadaltitude_1121',['LoadAltitude',['../radio_8h.html#ae7c02edb19bdc7bb0dc66f4b4d698b04',1,'radio.h']]],
@@ -21,5 +21,5 @@ var searchData=
   ['locus_5freadstatus_1133',['LOCUS_ReadStatus',['../class_adafruit___g_p_s.html#adb6139e84c64156b5654dfce2a2e6e3f',1,'Adafruit_GPS']]],
   ['locus_5fstartlogger_1134',['LOCUS_StartLogger',['../class_adafruit___g_p_s.html#a325d15c43c09fa1bedcdadb39706e72b',1,'Adafruit_GPS']]],
   ['locus_5fstoplogger_1135',['LOCUS_StopLogger',['../class_adafruit___g_p_s.html#a48eaf7f5b46e3682b058a7f8f44fa385',1,'Adafruit_GPS']]],
-  ['loop_1136',['loop',['../_hub_reader_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../_receiver_code_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../_sensor_hub_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp']]]
+  ['loop_1136',['loop',['../_hub_reader_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../_receiver_code_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../_sensor_hub_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../_sensor_hub_teensy3__6_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp']]]
 ];

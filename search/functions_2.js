@@ -1,14 +1,14 @@
 var searchData=
 [
   ['calibratesticks_1004',['CalibrateSticks',['../_transmitter_code_2src_2main_8cpp.html#ae1b8cef371d26fca2b4f5a101be7a8ba',1,'main.cpp']]],
-  ['cardinal_1005',['cardinal',['../class_tiny_g_p_s_plus.html#a8c9e9444552ff85a505ffc6933dda03c',1,'TinyGPSPlus']]],
-  ['centisecond_1006',['centisecond',['../struct_tiny_g_p_s_time.html#a1f74ad4a2a53e0ee19f8e3a6b2bc985f',1,'TinyGPSTime']]],
+  ['cardinal_1005',['cardinal',['../class_tiny_g_p_s_plus.html#a68029db9475edf20c750eb0b7a6f1118',1,'TinyGPSPlus::cardinal(double course)'],['../class_tiny_g_p_s_plus.html#a8c9e9444552ff85a505ffc6933dda03c',1,'TinyGPSPlus::cardinal(double course)']]],
+  ['centisecond_1006',['centisecond',['../struct_tiny_g_p_s_time.html#a1f74ad4a2a53e0ee19f8e3a6b2bc985f',1,'TinyGPSTime::centisecond()'],['../struct_tiny_g_p_s_time.html#a1f74ad4a2a53e0ee19f8e3a6b2bc985f',1,'TinyGPSTime::centisecond()']]],
   ['centremaxmins_1007',['CentreMaxMins',['../_transmitter_code_2src_2main_8cpp.html#a722d74e72a1a749c6b215e982657c618',1,'main.cpp']]],
   ['centretrims_1008',['CentreTrims',['../_transmitter_code_2src_2main_8cpp.html#a608cf928b58a8597d2411a3482365abd',1,'main.cpp']]],
   ['channelcentres_1009',['ChannelCentres',['../_transmitter_code_2src_2main_8cpp.html#a0e7ca9043d8fa769e8a9290df885e594',1,'main.cpp']]],
-  ['charsprocessed_1010',['charsProcessed',['../class_tiny_g_p_s_plus.html#addfc1fdbfddfeef2774dda1be42cdd55',1,'TinyGPSPlus']]],
+  ['charsprocessed_1010',['charsProcessed',['../class_tiny_g_p_s_plus.html#addfc1fdbfddfeef2774dda1be42cdd55',1,'TinyGPSPlus::charsProcessed() const'],['../class_tiny_g_p_s_plus.html#addfc1fdbfddfeef2774dda1be42cdd55',1,'TinyGPSPlus::charsProcessed() const']]],
   ['check_1011',['check',['../class_adafruit___g_p_s.html#ae4abe9822d8ca59866bbb44de7910881',1,'Adafruit_GPS']]],
-  ['checkgapslength_1012',['CheckGapsLength',['../_transmitter_code_2src_2main_8cpp.html#aa60c9cac090f6965b4223d5caf84e2f1',1,'CheckGapsLength():&#160;main.cpp'],['../_radio_functions_8h.html#aa60c9cac090f6965b4223d5caf84e2f1',1,'CheckGapsLength():&#160;main.cpp']]],
+  ['checkgapslength_1012',['CheckGapsLength',['../_radio_functions_8h.html#aa60c9cac090f6965b4223d5caf84e2f1',1,'CheckGapsLength():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#aa60c9cac090f6965b4223d5caf84e2f1',1,'CheckGapsLength():&#160;main.cpp']]],
   ['checkmodelname_1013',['CheckModelName',['../_transmitter_code_2src_2main_8cpp.html#a984cb52354a84c45e9e41f396a1c5e92',1,'main.cpp']]],
   ['checkparams_1014',['CheckParams',['../_receiver_code_2src_2main_8cpp.html#abd09fca8fe7cb7240846989f1ccd6a94',1,'main.cpp']]],
   ['checkrange_5f0_5f16_1015',['CheckRange_0_16',['../_transmitter_code_2src_2main_8cpp.html#a962a0c149ba58563ca3bad19e999e027',1,'main.cpp']]],
@@ -21,5 +21,5 @@ var searchData=
   ['common_5finit_1022',['common_init',['../class_adafruit___g_p_s.html#ab8a2fe20ce1874b10a6e9f007c236b30',1,'Adafruit_GPS']]],
   ['compassangle_1023',['compassAngle',['../class_adafruit___g_p_s.html#a06b7e12e38f1b00df058a253364215db',1,'Adafruit_GPS']]],
   ['compress_1024',['Compress',['../_radio_functions_8cpp.html#ab46df249e949de237fc3bacdc5225934',1,'RadioFunctions.cpp']]],
-  ['courseto_1025',['courseTo',['../class_tiny_g_p_s_plus.html#af338c18ccf58a47659be1ffc8259541d',1,'TinyGPSPlus']]]
+  ['courseto_1025',['courseTo',['../class_tiny_g_p_s_plus.html#af338c18ccf58a47659be1ffc8259541d',1,'TinyGPSPlus::courseTo(double lat1, double long1, double lat2, double long2)'],['../class_tiny_g_p_s_plus.html#a82b8fff820573de45c9ae98df3abbdfa',1,'TinyGPSPlus::courseTo(double lat1, double long1, double lat2, double long2)']]]
 ];

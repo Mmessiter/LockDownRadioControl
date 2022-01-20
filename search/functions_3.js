@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['day_1026',['day',['../struct_tiny_g_p_s_date.html#ae8cc5f80c49e328f792d168a44062000',1,'TinyGPSDate']]],
+  ['day_1026',['day',['../struct_tiny_g_p_s_date.html#ae8cc5f80c49e328f792d168a44062000',1,'TinyGPSDate::day()'],['../struct_tiny_g_p_s_date.html#ae8cc5f80c49e328f792d168a44062000',1,'TinyGPSDate::day()']]],
   ['decdate_1027',['DecDate',['../_transmitter_code_2src_2main_8cpp.html#ac00389a3b76e3ced4517c6ad4147e86a',1,'main.cpp']]],
   ['dechour_1028',['DecHour',['../_transmitter_code_2src_2main_8cpp.html#a053bee2e90b7d0bacffe990847973d4a',1,'main.cpp']]],
   ['decminute_1029',['DecMinute',['../_transmitter_code_2src_2main_8cpp.html#a87fe692c91177cb3eddffaae43ad6d4d',1,'main.cpp']]],
@@ -9,10 +9,10 @@ var searchData=
   ['decompress_1032',['Decompress',['../radio_8h.html#a8e1f4879c351e462d6bca620ae4279e2',1,'radio.h']]],
   ['dectobcd_1033',['decToBcd',['../_transmitter_code_2src_2main_8cpp.html#aa55ce3dfb919da5cebf61d1f2d2a96b7',1,'main.cpp']]],
   ['decyear_1034',['DecYear',['../_transmitter_code_2src_2main_8cpp.html#ad712237b8d367326a7f460181dade102',1,'main.cpp']]],
-  ['deg_1035',['deg',['../struct_tiny_g_p_s_course.html#a76dc8ae6c2fe5ead9b44c8d53a3272ca',1,'TinyGPSCourse']]],
+  ['deg_1035',['deg',['../struct_tiny_g_p_s_course.html#a76dc8ae6c2fe5ead9b44c8d53a3272ca',1,'TinyGPSCourse::deg()'],['../struct_tiny_g_p_s_course.html#a76dc8ae6c2fe5ead9b44c8d53a3272ca',1,'TinyGPSCourse::deg()']]],
   ['degstopercent_1036',['DegsToPercent',['../_transmitter_code_2src_2main_8cpp.html#a68b36025c7478c0710565b4fb059d9bc',1,'main.cpp']]],
   ['displaycurve_1037',['DisplayCurve',['../_transmitter_code_2src_2main_8cpp.html#af941d3a33327b2cee79e058ba9cd65f6',1,'main.cpp']]],
-  ['distancebetween_1038',['distanceBetween',['../class_tiny_g_p_s_plus.html#ace607cf3a6d49628e44eae1232237138',1,'TinyGPSPlus']]],
+  ['distancebetween_1038',['distanceBetween',['../class_tiny_g_p_s_plus.html#add9aef227cf2836b53cbdfed5133bb4d',1,'TinyGPSPlus::distanceBetween(double lat1, double long1, double lat2, double long2)'],['../class_tiny_g_p_s_plus.html#ace607cf3a6d49628e44eae1232237138',1,'TinyGPSPlus::distanceBetween(double lat1, double long1, double lat2, double long2)']]],
   ['dobinding_1039',['DoBinding',['../_receiver_code_2src_2main_8cpp.html#af4a2e182cd3b86ca9765a08100cfb14a',1,'main.cpp']]],
   ['domixes_1040',['DoMixes',['../_transmitter_code_2src_2main_8cpp.html#ac182a99befc8d4d83532a6c38571a222',1,'main.cpp']]],
   ['donewchannelname_1041',['DoNewChannelName',['../_transmitter_code_2src_2main_8cpp.html#aba44d61ea51411cb5c601beb94b6fef4',1,'main.cpp']]],

@@ -97,7 +97,7 @@ var NAVTREE =
       [ "Class Index", "classes.html", null ],
       [ "Class Hierarchy", "hierarchy.html", "hierarchy" ],
       [ "Class Members", "functions.html", [
-        [ "All", "functions.html", null ],
+        [ "All", "functions.html", "functions_dup" ],
         [ "Functions", "functions_func.html", null ],
         [ "Variables", "functions_vars.html", null ],
         [ "Related Functions", "functions_rela.html", null ]
@@ -122,10 +122,10 @@ var NAVTREEINDEX =
 [
 "_adafruit___g_p_s_8cpp.html",
 "_radio_functions_8h.html#a992a1c7536f872bdfd833e282cf3b4e4",
-"_transmitter_code_2src_2main_8cpp.html#a2feea4e42b19e3b7f6656c60f05fd191",
-"_transmitter_code_2src_2main_8cpp.html#abc8fa11262dc227a1bd6eba957fcf95c",
-"classes.html",
-"radio_8h.html#ae7c02edb19bdc7bb0dc66f4b4d698b04"
+"_transmitter_code_2src_2main_8cpp.html#a26157c4e738ba5e87d374d18cd0aa46a",
+"_transmitter_code_2src_2main_8cpp.html#ab50929c4d3d76c3a37ab817e0022d57a",
+"class_tiny_g_p_s_custom.html#ac735cdd0adb996de1d86bdcc15090977",
+"md__docs__l_d_r_c2____building__the__radio.html#autotoc_md36"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

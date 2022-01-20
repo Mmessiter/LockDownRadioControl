@@ -1,7 +1,7 @@
 var searchData=
 [
   ['bcdtodec_992',['bcdToDec',['../_transmitter_code_2src_2main_8cpp.html#a5e5cbc12559842867d90e19b7ecf4a8c',1,'main.cpp']]],
-  ['begin_993',['begin',['../class_adafruit___g_p_s.html#ab86462ef1409d2bd8ff7a8405c70ff34',1,'Adafruit_GPS::begin()'],['../class_tiny_g_p_s_custom.html#a3bf972f7e2e7e3f483071630e5ca8355',1,'TinyGPSCustom::begin()']]],
+  ['begin_993',['begin',['../class_adafruit___g_p_s.html#ab86462ef1409d2bd8ff7a8405c70ff34',1,'Adafruit_GPS::begin()'],['../class_tiny_g_p_s_custom.html#a3bf972f7e2e7e3f483071630e5ca8355',1,'TinyGPSCustom::begin(TinyGPSPlus &amp;gps, const char *_sentenceName, int _termNumber)'],['../class_tiny_g_p_s_custom.html#a3bf972f7e2e7e3f483071630e5ca8355',1,'TinyGPSCustom::begin(TinyGPSPlus &amp;gps, const char *_sentenceName, int _termNumber)']]],
   ['bindmodel_994',['BindModel',['../_receiver_code_2src_2main_8cpp.html#aa0c6905579a33aef28d737d43676cbbd',1,'main.cpp']]],
   ['bindnow_995',['BindNow',['../_transmitter_code_2src_2main_8cpp.html#a7b8f152779a09d867292d3a8e7f76d85',1,'main.cpp']]],
   ['blueledon_996',['BlueLedOn',['../_transmitter_code_2src_2main_8cpp.html#aa1f9aec467eb00917ad9ffdc0bd5b20d',1,'main.cpp']]],
