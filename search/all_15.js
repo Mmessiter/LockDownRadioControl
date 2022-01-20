@@ -1,17 +1,17 @@
 var searchData=
 [
-  ['um_902',['um',['../_transmitter_code_2src_2main_8cpp.html#a9f83d3bf4d2c0b217e0e461d0c2f3e71',1,'main.cpp']]],
-  ['uncompressedwords_903',['UNCOMPRESSEDWORDS',['../radio_8h.html#a0c40a351a0c0e01fbd5e5b1b0187eb48',1,'UNCOMPRESSEDWORDS():&#160;radio.h'],['../_radio_functions_8cpp.html#a0c40a351a0c0e01fbd5e5b1b0187eb48',1,'UNCOMPRESSEDWORDS():&#160;RadioFunctions.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a0c40a351a0c0e01fbd5e5b1b0187eb48',1,'UNCOMPRESSEDWORDS():&#160;main.cpp']]],
-  ['unit_904',['unit',['../structnmea__datavalue__t.html#a904af9df777122471b3358c1af5e5aac',1,'nmea_datavalue_t']]],
-  ['updatebuttonlabels_905',['UpdateButtonLabels',['../_transmitter_code_2src_2main_8cpp.html#abf59862cf6c4e3df5a76f0bfea8919ef',1,'main.cpp']]],
-  ['updateinterpolationtypes_906',['updateInterpolationTypes',['../_transmitter_code_2src_2main_8cpp.html#ab07d91dcd72f515d2d80b1d18f95ece5',1,'main.cpp']]],
-  ['updatemodelsnameeverywhere_907',['UpdateModelsNameEveryWhere',['../_transmitter_code_2src_2main_8cpp.html#a9e1de754e1d2d483fb15957f70cf0488',1,'main.cpp']]],
-  ['updateoneswitchview_908',['updateOneSwitchView',['../_transmitter_code_2src_2main_8cpp.html#a14dcac76ed8a048041fdc6e6f5d5d000',1,'main.cpp']]],
-  ['updateswitchesdisplay_909',['UpdateSwitchesDisplay',['../_transmitter_code_2src_2main_8cpp.html#a789078ba3c1d92997ab8764eb20cce4f',1,'main.cpp']]],
-  ['updatetrimview_910',['UpdateTrimView',['../_transmitter_code_2src_2main_8cpp.html#ac78966debc2cdc13d8ca958ce3b20c78',1,'main.cpp']]],
-  ['use_5fbmp280_911',['USE_BMP280',['../_receiver_code_2src_2main_8cpp.html#a4be5c27bea3c82b0a4ec92191052d946',1,'USE_BMP280():&#160;main.cpp'],['../radio_8h.html#a4be5c27bea3c82b0a4ec92191052d946',1,'USE_BMP280():&#160;main.cpp']]],
-  ['use_5fina219_912',['USE_INA219',['../_receiver_code_2src_2main_8cpp.html#a87ae50e2ac4507568cbf98072f174a1b',1,'USE_INA219():&#160;main.cpp'],['../radio_8h.html#a87ae50e2ac4507568cbf98072f174a1b',1,'USE_INA219():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a87ae50e2ac4507568cbf98072f174a1b',1,'USE_INA219():&#160;main.cpp']]],
-  ['use_5fsw_5fserial_913',['USE_SW_SERIAL',['../_adafruit___g_p_s_8h.html#a7d44b2886944eb862b51948f2acc8d23',1,'Adafruit_GPS.h']]],
-  ['use_5fwatchdog_914',['USE_WATCHDOG',['../_radio_functions_8h.html#a71be4a990011c7b00830abf5f3b2190d',1,'RadioFunctions.h']]],
-  ['usereceiveddata_915',['UseReceivedData',['../_receiver_code_2src_2main_8cpp.html#abb1997c589abc6432f612eaedf985e38',1,'main.cpp']]]
+  ['um_903',['um',['../_transmitter_code_2src_2main_8cpp.html#a9f83d3bf4d2c0b217e0e461d0c2f3e71',1,'main.cpp']]],
+  ['uncompressedwords_904',['UNCOMPRESSEDWORDS',['../radio_8h.html#a0c40a351a0c0e01fbd5e5b1b0187eb48',1,'UNCOMPRESSEDWORDS():&#160;radio.h'],['../_radio_functions_8cpp.html#a0c40a351a0c0e01fbd5e5b1b0187eb48',1,'UNCOMPRESSEDWORDS():&#160;RadioFunctions.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a0c40a351a0c0e01fbd5e5b1b0187eb48',1,'UNCOMPRESSEDWORDS():&#160;main.cpp']]],
+  ['unit_905',['unit',['../structnmea__datavalue__t.html#a904af9df777122471b3358c1af5e5aac',1,'nmea_datavalue_t']]],
+  ['updatebuttonlabels_906',['UpdateButtonLabels',['../_transmitter_code_2src_2main_8cpp.html#abf59862cf6c4e3df5a76f0bfea8919ef',1,'main.cpp']]],
+  ['updateinterpolationtypes_907',['updateInterpolationTypes',['../_transmitter_code_2src_2main_8cpp.html#ab07d91dcd72f515d2d80b1d18f95ece5',1,'main.cpp']]],
+  ['updatemodelsnameeverywhere_908',['UpdateModelsNameEveryWhere',['../_transmitter_code_2src_2main_8cpp.html#a9e1de754e1d2d483fb15957f70cf0488',1,'main.cpp']]],
+  ['updateoneswitchview_909',['updateOneSwitchView',['../_transmitter_code_2src_2main_8cpp.html#a14dcac76ed8a048041fdc6e6f5d5d000',1,'main.cpp']]],
+  ['updateswitchesdisplay_910',['UpdateSwitchesDisplay',['../_transmitter_code_2src_2main_8cpp.html#a789078ba3c1d92997ab8764eb20cce4f',1,'main.cpp']]],
+  ['updatetrimview_911',['UpdateTrimView',['../_transmitter_code_2src_2main_8cpp.html#ac78966debc2cdc13d8ca958ce3b20c78',1,'main.cpp']]],
+  ['use_5fbmp280_912',['USE_BMP280',['../_receiver_code_2src_2main_8cpp.html#a4be5c27bea3c82b0a4ec92191052d946',1,'USE_BMP280():&#160;main.cpp'],['../radio_8h.html#a4be5c27bea3c82b0a4ec92191052d946',1,'USE_BMP280():&#160;main.cpp']]],
+  ['use_5fina219_913',['USE_INA219',['../_receiver_code_2src_2main_8cpp.html#a87ae50e2ac4507568cbf98072f174a1b',1,'USE_INA219():&#160;main.cpp'],['../radio_8h.html#a87ae50e2ac4507568cbf98072f174a1b',1,'USE_INA219():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a87ae50e2ac4507568cbf98072f174a1b',1,'USE_INA219():&#160;main.cpp']]],
+  ['use_5fsw_5fserial_914',['USE_SW_SERIAL',['../_adafruit___g_p_s_8h.html#a7d44b2886944eb862b51948f2acc8d23',1,'Adafruit_GPS.h']]],
+  ['use_5fwatchdog_915',['USE_WATCHDOG',['../_radio_functions_8h.html#a71be4a990011c7b00830abf5f3b2190d',1,'RadioFunctions.h']]],
+  ['usereceiveddata_916',['UseReceivedData',['../_receiver_code_2src_2main_8cpp.html#abb1997c589abc6432f612eaedf985e38',1,'main.cpp']]]
 ];

@@ -23,5 +23,6 @@ var _sensor_hub_2src_2main_8cpp =
     [ "GPSSatellites", "_sensor_hub_2src_2main_8cpp.html#a00e31bab157367fcde9712d63a57a778", null ],
     [ "GPSSecs", "_sensor_hub_2src_2main_8cpp.html#af92d3280f8b2a0ff5023e4a7505491d9", null ],
     [ "GPSSpeed", "_sensor_hub_2src_2main_8cpp.html#adaf7d2f41cc620fadcab0862e060126c", null ],
+    [ "GPSVersion", "_sensor_hub_2src_2main_8cpp.html#a78166054bfd3a40a3e4a8ccb62279fd4", null ],
     [ "GPSYear", "_sensor_hub_2src_2main_8cpp.html#abc801729e599fbe5b84d088ead6fae1a", null ]
 ];
