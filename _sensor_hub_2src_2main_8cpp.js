@@ -12,6 +12,8 @@ var _sensor_hub_2src_2main_8cpp =
     [ "setup", "_sensor_hub_2src_2main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d", null ],
     [ "ShowGPS", "_sensor_hub_2src_2main_8cpp.html#a6dfb0fe1b733dfc8e9d989a321596850", null ],
     [ "DebugTimer", "_sensor_hub_2src_2main_8cpp.html#a7867e45e2d19ce05cda4ef2692ee0dbe", null ],
+    [ "DestinationLat", "_sensor_hub_2src_2main_8cpp.html#a8c2d07492cf82a17c5cd61777bed8b63", null ],
+    [ "DestinationLng", "_sensor_hub_2src_2main_8cpp.html#a68d045f3a8018e98f4701013f7ac0a64", null ],
     [ "gps", "_sensor_hub_2src_2main_8cpp.html#a169c53997a7da1d0fb99aec1b4675ce8", null ],
     [ "GPSAltitude", "_sensor_hub_2src_2main_8cpp.html#adf4aff982f0b96491848cb8c7d4359d2", null ],
     [ "GPSCourse", "_sensor_hub_2src_2main_8cpp.html#aa111fdf18410d5ea9db7bba30eb3867b", null ],
