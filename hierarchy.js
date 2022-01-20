@@ -12,10 +12,14 @@ var hierarchy =
     [ "TinyGPSDecimal", "struct_tiny_g_p_s_decimal.html", [
       [ "TinyGPSAltitude", "struct_tiny_g_p_s_altitude.html", null ],
       [ "TinyGPSAltitude", "struct_tiny_g_p_s_altitude.html", null ],
+      [ "TinyGPSAltitude", "struct_tiny_g_p_s_altitude.html", null ],
+      [ "TinyGPSCourse", "struct_tiny_g_p_s_course.html", null ],
       [ "TinyGPSCourse", "struct_tiny_g_p_s_course.html", null ],
       [ "TinyGPSCourse", "struct_tiny_g_p_s_course.html", null ],
       [ "TinyGPSHDOP", "struct_tiny_g_p_s_h_d_o_p.html", null ],
       [ "TinyGPSHDOP", "struct_tiny_g_p_s_h_d_o_p.html", null ],
+      [ "TinyGPSHDOP", "struct_tiny_g_p_s_h_d_o_p.html", null ],
+      [ "TinyGPSSpeed", "struct_tiny_g_p_s_speed.html", null ],
       [ "TinyGPSSpeed", "struct_tiny_g_p_s_speed.html", null ],
       [ "TinyGPSSpeed", "struct_tiny_g_p_s_speed.html", null ]
     ] ],
