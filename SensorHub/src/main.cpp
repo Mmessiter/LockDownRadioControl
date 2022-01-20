@@ -63,21 +63,21 @@ void ReceiveEvent(int q) {
      gps.encode(GPSDEVICE.read());  // send data to library for processing
    }
 
-      GPSLatitude   = gps.location.lat();
-      GPSLongitude  = gps.location.lng();
-      GPSSatellites = gps.satellites.value(); 
-      GPSAltitude   = gps.altitude.feet();
-      GPSSpeed      = gps.speed.mph();
-      GPSHours      = gps.time.hour();   
-      GPSMins       = gps.time.minute(); 
-      GPSSecs       = gps.time.second(); 
-      GPSDay        = gps.date.day();
-      GPSMonth      = gps.date.month();
-      GPSYear       = gps.date.year();
-      *GPSLibVersion   = gps.libraryVersion();
-      GPSCourse     = gps.course.deg();
-      GPSDistanceTo = gps.distanceBetween(GPSLatitude,GPSLongitude,DestinationLat,DestinationLng);
-      GPSCourseTo   = gps.courseTo(GPSLatitude,GPSLongitude,DestinationLat,DestinationLng);
+      GPSLatitude    = gps.location.lat();
+      GPSLongitude   = gps.location.lng();
+      GPSSatellites  = gps.satellites.value(); 
+      GPSAltitude    = gps.altitude.feet();
+      GPSSpeed       = gps.speed.mph();
+      GPSHours       = gps.time.hour();   
+      GPSMins        = gps.time.minute(); 
+      GPSSecs        = gps.time.second(); 
+      GPSDay         = gps.date.day();
+      GPSMonth       = gps.date.month();
+      GPSYear        = gps.date.year();
+      *GPSLibVersion = gps.libraryVersion();
+      GPSCourse      = gps.course.deg();
+      GPSDistanceTo  = gps.distanceBetween(GPSLatitude,GPSLongitude,DestinationLat,DestinationLng);
+      GPSCourseTo    = gps.courseTo(GPSLatitude,GPSLongitude,DestinationLat,DestinationLng);
 
  }
 // *********************************************** DEBUG DATA ***********************************************
