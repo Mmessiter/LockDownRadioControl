@@ -9,6 +9,7 @@
 #define GPSBAUDRATE 9600
 #define GPSDEVICE Serial1
 #define DEBUG
+#define DEBUGTIMER 1000
 
 int DebugTimer = 0;
 TinyGPSPlus gps;  
@@ -20,6 +21,9 @@ float   GPSSpeed;
 uint8_t GPSHours;
 uint8_t GPSMins;
 uint8_t GPSSecs;
+uint8_t GPSDay;
+uint8_t GPSMonth;
+uint8_t GPSYear;
 
 //************************************* SEND DATA INTERRUPT HANDLER ******************************************
 
@@ -39,7 +43,7 @@ void ReceiveEvent(int q) {
   {
     Wire.read(); // one byte at a time
    
-        
+  
   }      
  
 }
@@ -58,11 +62,14 @@ void ReceiveEvent(int q) {
       GPSHours      = gps.time.hour();   
       GPSMins       = gps.time.minute(); 
       GPSSecs       = gps.time.second(); 
+      GPSDay        = gps.date.day();
+      GPSDay        = gps.date.month();
+      GPSDay        = gps.date.year();
    }
  }
 
 void ShowGPS(){
-  if ((millis() - DebugTimer) > 1000) {
+  if ((millis() - DebugTimer) > DEBUGTIMER) {
       DebugTimer = millis();
       Serial.println("");
       Serial.print (" Satellites: ");
@@ -80,7 +87,13 @@ void ShowGPS(){
       Serial.print (".");
       Serial.print (GPSMins);
       Serial.print (".");
-      Serial.print (GPSSecs);
+      Serial.println (GPSSecs);
+      Serial.print ("       Date: ");
+      Serial.print (GPSDay);
+      Serial.print (":");
+      Serial.print (GPSMonth);
+      Serial.print (":");
+      Serial.print (GPSYear);
       Serial.println ("");
   }
 }
