@@ -28,7 +28,8 @@ const char *  GPSVersion[20];
 float   GPSCourse;
 double  GPSDistanceTo;
 double  GPSCourseTo; 
-static  const double MAYSLANE_LAT = 51.638963994850364, MAYSLANE_LON = -0.22926821753992477;
+static  const double MAYSLANE_LAT = 51.638963994850364;
+static  const double MAYSLANE_LON = -0.22926821753992477;
 float  DestinationLat = MAYSLANE_LAT;
 float  DestinationLng = MAYSLANE_LON;
 
