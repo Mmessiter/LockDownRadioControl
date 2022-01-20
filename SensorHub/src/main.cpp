@@ -29,7 +29,8 @@ float   GPSCourse;
 double  GPSDistanceTo;
 double  GPSCourseTo; 
 static  const double LONDON_LAT = 51.508131, LONDON_LON = -0.128002;
-
+float  DestinationLat = LONDON_LAT;
+float  DestinationLng = LONDON_LON;
 
 
 //************************************* SEND DATA INTERRUPT HANDLER ******************************************
@@ -74,8 +75,8 @@ void ReceiveEvent(int q) {
       GPSYear       = gps.date.year();
       *GPSVersion   = gps.libraryVersion();
       GPSCourse     = gps.course.deg();
-      GPSDistanceTo = TinyGPSPlus::distanceBetween(gps.location.lat(),gps.location.lng(),LONDON_LAT,LONDON_LON);
-      GPSCourseTo   = TinyGPSPlus::courseTo(gps.location.lat(),gps.location.lng(),LONDON_LAT,LONDON_LON);
+      GPSDistanceTo = TinyGPSPlus::distanceBetween(gps.location.lat(),gps.location.lng(),DestinationLat,DestinationLng);
+      GPSCourseTo   = TinyGPSPlus::courseTo(gps.location.lat(),gps.location.lng(),DestinationLat,DestinationLng);
 
 
  }
@@ -83,7 +84,6 @@ void ReceiveEvent(int q) {
 void ShowGPS(){
   if ((millis() - DebugTimer) > DEBUGTIMER) {
       DebugTimer = millis();
-      Serial.println("");
       Serial.print (" Satellites: ");
       Serial.println(GPSSatellites);    
       Serial.print ("   Latitude: ");
@@ -96,14 +96,10 @@ void ShowGPS(){
       Serial.println(GPSSpeed);
       Serial.print ("     Course: ");
       Serial.println(GPSCourse);
-
       Serial.print ("  Course To: ");
       Serial.println(GPSCourseTo);
-
       Serial.print ("Distance To: ");
       Serial.println(GPSDistanceTo);
-
-
       Serial.print ("       Time: ");
       Serial.print (GPSHours);
       Serial.print (".");
@@ -118,7 +114,7 @@ void ShowGPS(){
       Serial.println (GPSYear+1792);
       Serial.print ("Lib version: ");
       Serial.println (*GPSVersion);
-      Serial.println ("");
+      Serial.println ("-------------------------");
   
   }
 }
