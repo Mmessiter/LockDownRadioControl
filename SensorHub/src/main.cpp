@@ -28,7 +28,7 @@ void SendEvent() {
 }
 //************************************* RECEIVE DATA INTERRUPT HANDLER ***************************************
 
-// Here receive request for data:  (SAT,LAT,LON,SPE,MIN,TIM,FAR)
+// Here receive request for data:  (SAT,LAT,LON,SPE,MIN,TIM,FAR,MRK,BER)
 
 void ReceiveEvent(int q) {
   
