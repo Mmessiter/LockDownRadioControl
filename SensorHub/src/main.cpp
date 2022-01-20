@@ -28,9 +28,9 @@ const char *  GPSVersion[20];
 float   GPSCourse;
 double  GPSDistanceTo;
 double  GPSCourseTo; 
-static  const double LONDON_LAT = 51.508131, LONDON_LON = -0.128002;
-float  DestinationLat = LONDON_LAT;
-float  DestinationLng = LONDON_LON;
+static  const double MAYSLANE_LAT = 51.638963994850364, MAYSLANE_LON = -0.22926821753992477;
+float  DestinationLat = MAYSLANE_LAT;
+float  DestinationLng = MAYSLANE_LON;
 
 
 //************************************* SEND DATA INTERRUPT HANDLER ******************************************
@@ -99,7 +99,7 @@ void ShowGPS(){
       Serial.print ("  Course To: ");
       Serial.println(GPSCourseTo);
       Serial.print ("Distance To: ");
-      Serial.println(GPSDistanceTo);
+      Serial.println(GPSDistanceTo/1000,6);
       Serial.print ("       Time: ");
       Serial.print (GPSHours);
       Serial.print (".");
