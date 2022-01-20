@@ -24,6 +24,8 @@ uint8_t GPSSecs;
 uint8_t GPSDay;
 uint8_t GPSMonth;
 uint8_t GPSYear;
+const char *  GPSVersion[20];
+
 
 //************************************* SEND DATA INTERRUPT HANDLER ******************************************
 
@@ -65,9 +67,10 @@ void ReceiveEvent(int q) {
       GPSDay        = gps.date.day();
       GPSMonth      = gps.date.month();
       GPSYear       = gps.date.year();
+      * GPSVersion  =  (gps.libraryVersion());
    }
  }
-
+// *********************************************** DEBUG DATA ***********************************************
 void ShowGPS(){
   if ((millis() - DebugTimer) > DEBUGTIMER) {
       DebugTimer = millis();
@@ -93,17 +96,18 @@ void ShowGPS(){
       Serial.print (":");
       Serial.print (GPSMonth);
       Serial.print (":");
-      Serial.print (GPSYear);
+      Serial.println (GPSYear+1792);
+      
+      Serial.print ("Lib Version: ");
+      Serial.println (*GPSVersion);
       Serial.println ("");
+  
   }
 }
 
-
 //*************************************** MAIN LOOP **********************************************************
 void loop() {
- 
-   ReadGps();
-
+     ReadGps();
 
 #ifdef DEBUG
     ShowGPS();
