@@ -24,7 +24,7 @@ uint8_t GPSSecs;
 uint8_t GPSDay;
 uint8_t GPSMonth;
 uint8_t GPSYear;
-const char *  GPSVersion[20];
+const char *  GPSLibVersion[20];
 float   GPSCourse;
 double  GPSDistanceTo;
 double  GPSCourseTo; 
@@ -74,7 +74,7 @@ void ReceiveEvent(int q) {
       GPSDay        = gps.date.day();
       GPSMonth      = gps.date.month();
       GPSYear       = gps.date.year();
-      *GPSVersion   = gps.libraryVersion();
+      *GPSLibVersion   = gps.libraryVersion();
       GPSCourse     = gps.course.deg();
       GPSDistanceTo = gps.distanceBetween(GPSLatitude,GPSLongitude,DestinationLat,DestinationLng);
       GPSCourseTo   = gps.courseTo(GPSLatitude,GPSLongitude,DestinationLat,DestinationLng);
@@ -113,7 +113,7 @@ void ShowGPS(){
       Serial.print (":");
       Serial.println (GPSYear+1792);
       Serial.print ("Lib version: ");
-      Serial.println (*GPSVersion);
+      Serial.println (*GPSLibVersion);
       Serial.println ("-------------------------");
   
   }
