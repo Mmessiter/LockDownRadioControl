@@ -25,6 +25,8 @@ uint8_t GPSDay;
 uint8_t GPSMonth;
 uint8_t GPSYear;
 const char *  GPSVersion[20];
+float   GPSCourse;
+
 
 
 //************************************* SEND DATA INTERRUPT HANDLER ******************************************
@@ -55,7 +57,7 @@ void ReceiveEvent(int q) {
     while (GPSDEVICE.available()){
      gps.encode(GPSDEVICE.read());  // send data to library for processing
    }
-   if (gps.sentencesWithFix()) {
+  // if (gps.sentencesWithFix()) {
       GPSLatitude   = gps.location.lat();
       GPSLongitude  = gps.location.lng();
       GPSSatellites = gps.satellites.value(); 
@@ -68,7 +70,9 @@ void ReceiveEvent(int q) {
       GPSMonth      = gps.date.month();
       GPSYear       = gps.date.year();
       *GPSVersion   = gps.libraryVersion();
-   }
+      GPSCourse     = gps.course.deg();
+     
+  // }
  }
 // *********************************************** DEBUG DATA ***********************************************
 void ShowGPS(){
@@ -85,6 +89,8 @@ void ShowGPS(){
       Serial.println(GPSAltitude);
       Serial.print ("  Speed MPH: ");
       Serial.println(GPSSpeed);
+      Serial.print ("     Course: ");
+      Serial.println(GPSCourse);
       Serial.print ("       Time: ");
       Serial.print (GPSHours);
       Serial.print (".");
