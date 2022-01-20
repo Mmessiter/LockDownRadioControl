@@ -26,6 +26,9 @@ uint8_t GPSMonth;
 uint8_t GPSYear;
 const char *  GPSVersion[20];
 float   GPSCourse;
+double  GPSDistanceTo;
+double  GPSCourseTo; 
+static  const double LONDON_LAT = 51.508131, LONDON_LON = -0.128002;
 
 
 
@@ -57,7 +60,7 @@ void ReceiveEvent(int q) {
     while (GPSDEVICE.available()){
      gps.encode(GPSDEVICE.read());  // send data to library for processing
    }
-  // if (gps.sentencesWithFix()) {
+
       GPSLatitude   = gps.location.lat();
       GPSLongitude  = gps.location.lng();
       GPSSatellites = gps.satellites.value(); 
@@ -71,8 +74,10 @@ void ReceiveEvent(int q) {
       GPSYear       = gps.date.year();
       *GPSVersion   = gps.libraryVersion();
       GPSCourse     = gps.course.deg();
-     
-  // }
+      GPSDistanceTo = TinyGPSPlus::distanceBetween(gps.location.lat(),gps.location.lng(),LONDON_LAT,LONDON_LON);
+      GPSCourseTo   = TinyGPSPlus::courseTo(gps.location.lat(),gps.location.lng(),LONDON_LAT,LONDON_LON);
+
+
  }
 // *********************************************** DEBUG DATA ***********************************************
 void ShowGPS(){
@@ -91,6 +96,14 @@ void ShowGPS(){
       Serial.println(GPSSpeed);
       Serial.print ("     Course: ");
       Serial.println(GPSCourse);
+
+      Serial.print ("  Course To: ");
+      Serial.println(GPSCourseTo);
+
+      Serial.print ("Distance To: ");
+      Serial.println(GPSDistanceTo);
+
+
       Serial.print ("       Time: ");
       Serial.print (GPSHours);
       Serial.print (".");
