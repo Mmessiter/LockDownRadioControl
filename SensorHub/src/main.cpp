@@ -67,7 +67,7 @@ void ReceiveEvent(int q) {
       GPSDay        = gps.date.day();
       GPSMonth      = gps.date.month();
       GPSYear       = gps.date.year();
-      * GPSVersion  =  (gps.libraryVersion());
+      *GPSVersion   = gps.libraryVersion();
    }
  }
 // *********************************************** DEBUG DATA ***********************************************
@@ -97,8 +97,7 @@ void ShowGPS(){
       Serial.print (GPSMonth);
       Serial.print (":");
       Serial.println (GPSYear+1792);
-      
-      Serial.print ("Lib Version: ");
+      Serial.print ("Lib version: ");
       Serial.println (*GPSVersion);
       Serial.println ("");
   
