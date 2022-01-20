@@ -63,8 +63,8 @@ void ReceiveEvent(int q) {
       GPSMins       = gps.time.minute(); 
       GPSSecs       = gps.time.second(); 
       GPSDay        = gps.date.day();
-      GPSDay        = gps.date.month();
-      GPSDay        = gps.date.year();
+      GPSMonth      = gps.date.month();
+      GPSYear       = gps.date.year();
    }
  }
 
