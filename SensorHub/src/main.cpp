@@ -1,4 +1,3 @@
-
 //***********************************************************************************************************
 //************************************* SENSOR HUB CODE *****************************************************
 //***********************************************************************************************************
@@ -24,45 +23,34 @@ uint8_t GPSSecs;
 uint8_t GPSDay;
 uint8_t GPSMonth;
 uint8_t GPSYear;
-const char *  GPSLibVersion[20];
+const   char *  GPSLibVersion[20];
 float   GPSCourse;
 double  GPSDistanceTo;
 double  GPSCourseTo; 
 static  const double MAYSLANE_LAT = 51.638963994850364;
 static  const double MAYSLANE_LON = -0.22926821753992477;
-float  DestinationLat = MAYSLANE_LAT;
-float  DestinationLng = MAYSLANE_LON;
-
+float   DestinationLat = MAYSLANE_LAT;
+float   DestinationLng = MAYSLANE_LON;
 
 //************************************* SEND DATA INTERRUPT HANDLER ******************************************
-
-
 // Here Send data response:  (LAT + float etc ...
-
 void SendEvent() {
       Wire.write("Hi There! "); 
 }
 //************************************* RECEIVE DATA INTERRUPT HANDLER ***************************************
 
 // Here receive request for data:  (SAT,LAT,LON,SPE,MIN,TIM,FAR,MRK,BER)
-
-void ReceiveEvent(int q) {
-  
+void ReceiveEvent(int q) {  
   while(Wire.available()) 
   {
     Wire.read(); // one byte at a time
-   
-  
   }      
- 
 }
 //*************************************** READ GPS DEVICE ***************************************************
  void ReadGps() {
-   
     while (GPSDEVICE.available()){
      gps.encode(GPSDEVICE.read());  // send data to library for processing
    }
-
       GPSLatitude    = gps.location.lat();
       GPSLongitude   = gps.location.lng();
       GPSSatellites  = gps.satellites.value(); 
@@ -78,7 +66,6 @@ void ReceiveEvent(int q) {
       GPSCourse      = gps.course.deg();
       GPSDistanceTo  = gps.distanceBetween(GPSLatitude,GPSLongitude,DestinationLat,DestinationLng);
       GPSCourseTo    = gps.courseTo(GPSLatitude,GPSLongitude,DestinationLat,DestinationLng);
-
  }
 // *********************************************** DEBUG DATA ***********************************************
 void ShowGPS(){
@@ -111,22 +98,18 @@ void ShowGPS(){
       Serial.print (":");
       Serial.print (GPSMonth);
       Serial.print (":");
-      Serial.println (GPSYear+1792);
+      Serial.println (GPSYear+1792);  // ?????????
       Serial.print ("Lib version: ");
       Serial.println (*GPSLibVersion);
       Serial.println ("-------------------------");
-  
   }
 }
-
 //*************************************** MAIN LOOP **********************************************************
 void loop() {
      ReadGps();
-
 #ifdef DEBUG
     ShowGPS();
 #endif
-
 }
 //**************************************** SETUP *************************************************************
 void setup() {
