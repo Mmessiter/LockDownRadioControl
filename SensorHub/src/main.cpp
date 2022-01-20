@@ -75,8 +75,8 @@ void ReceiveEvent(int q) {
       GPSYear       = gps.date.year();
       *GPSVersion   = gps.libraryVersion();
       GPSCourse     = gps.course.deg();
-      GPSDistanceTo = TinyGPSPlus::distanceBetween(gps.location.lat(),gps.location.lng(),DestinationLat,DestinationLng);
-      GPSCourseTo   = TinyGPSPlus::courseTo(gps.location.lat(),gps.location.lng(),DestinationLat,DestinationLng);
+      GPSDistanceTo = gps.distanceBetween(gps.location.lat(),gps.location.lng(),DestinationLat,DestinationLng);
+      GPSCourseTo   = gps.courseTo(gps.location.lat(),gps.location.lng(),DestinationLat,DestinationLng);
 
 
  }
