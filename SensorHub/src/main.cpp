@@ -76,9 +76,8 @@ void ReceiveEvent(int q) {
       GPSYear       = gps.date.year();
       *GPSVersion   = gps.libraryVersion();
       GPSCourse     = gps.course.deg();
-      GPSDistanceTo = gps.distanceBetween(gps.location.lat(),gps.location.lng(),DestinationLat,DestinationLng);
-      GPSCourseTo   = gps.courseTo(gps.location.lat(),gps.location.lng(),DestinationLat,DestinationLng);
-
+      GPSDistanceTo = gps.distanceBetween(GPSLatitude,GPSLongitude,DestinationLat,DestinationLng);
+      GPSCourseTo   = gps.courseTo(GPSLatitude,GPSLongitude,DestinationLat,DestinationLng);
 
  }
 // *********************************************** DEBUG DATA ***********************************************
