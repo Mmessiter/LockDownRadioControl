@@ -8,15 +8,18 @@
 #define I2CADDRESS  8
 #define GPSBAUDRATE 9600
 #define GPSDEVICE Serial1
- int t = 0;
+#define DEBUG
+
+int DebugTimer = 0;
 TinyGPSPlus gps;  
 float   GPSLatitude;
 float   GPSLongitude;
+float   GPSAltitude;
 uint8_t GPSSatellites;
 float   GPSSpeed;
-uint8_t Hours;
-uint8_t Mins;
-uint8_t Secs;
+uint8_t GPSHours;
+uint8_t GPSMins;
+uint8_t GPSSecs;
 
 //************************************* SEND DATA INTERRUPT HANDLER ******************************************
 
@@ -46,35 +49,52 @@ void ReceiveEvent(int q) {
     while (GPSDEVICE.available()){
      gps.encode(GPSDEVICE.read());  // send data to library for processing
    }
-
+   if (gps.sentencesWithFix()) {
+      GPSLatitude   = gps.location.lat();
+      GPSLongitude  = gps.location.lng();
+      GPSSatellites = gps.satellites.value(); 
+      GPSAltitude   = gps.altitude.feet();
+      GPSSpeed      = gps.speed.mph();
+      GPSHours      = gps.time.hour();   
+      GPSMins       = gps.time.minute(); 
+      GPSSecs       = gps.time.second(); 
+   }
  }
+
+void ShowGPS(){
+  if ((millis() - DebugTimer) > 1000) {
+      DebugTimer = millis();
+      Serial.println("");
+      Serial.print ("Satellites: ");
+      Serial.println(GPSSatellites);    
+      Serial.print ("  Latitude: ");
+      Serial.println(GPSLatitude,8);
+      Serial.print ("  Longitude: ");
+      Serial.println(GPSLongitude,8);
+      Serial.print ("  Altitude: ");
+      Serial.println(GPSAltitude);
+      Serial.print (" Speed MPH: ");
+      Serial.println(GPSSpeed);
+      Serial.print ("      Time: ");
+      Serial.print (GPSHours);
+      Serial.print (".");
+      Serial.print (GPSMins);
+      Serial.print (".");
+      Serial.print (GPSSecs);
+      Serial.println ("");
+  }
+}
+
+
 //*************************************** MAIN LOOP **********************************************************
 void loop() {
  
-  ReadGps();
-  if ((millis() - t) > 5000) {
-      t = millis();
-      Serial.println("");  
-      Serial.print ("  Latitude: ");
-      Serial.println(gps.location.lat(),8);
-      Serial.print (" Longitude: ");
-      Serial.println(gps.location.lng(),8);
-      Serial.print ("Satellites: ");
-      Serial.println(gps.satellites.value());
-      Serial.print ("  Altitude: ");
-      Serial.println(gps.altitude.meters());
-      Serial.print (" Speed MPH: ");
-      Serial.println(gps.speed.mph());
-      Serial.print ("      Time: ");
-      Serial.print(gps.time.hour());
-      Serial.print(".");
-      Serial.print(gps.time.minute());
-      Serial.print(".");
-      Serial.print(gps.time.second());
-      Serial.println("");
+   ReadGps();
 
 
-  }
+#ifdef DEBUG
+    ShowGPS();
+#endif
 
 }
 //**************************************** SETUP *************************************************************
