@@ -1,5 +1,7 @@
 var NAVTREEINDEX5 =
 {
+"functions_~.html":[8,3,0,22],
+"globals.html":[9,1,0],
 "globals.html":[9,1,0,0],
 "globals_a.html":[9,1,0,1],
 "globals_b.html":[9,1,0,2],
@@ -247,7 +249,5 @@ var NAVTREEINDEX5 =
 "struct_payload.html#ab1cbe4c4b9ee9ce839084b274f3ea494":[8,0,3,0],
 "struct_payload.html#ac18701f2aa35ebd8402f45f840d5c445":[8,0,3,5],
 "struct_payload.html#ae28220045a0918bdb0fc6484dbff55f9":[8,0,3,4],
-"struct_payload.html#ae7106f2efa1bb9f4ebb720c7c9fc54b8":[8,0,3,1],
-"struct_raw_degrees.html":[8,0,4],
-"struct_raw_degrees.html#a11831d9220f303bd716d9412af28e84e":[8,0,4,4]
+"struct_payload.html#ae7106f2efa1bb9f4ebb720c7c9fc54b8":[8,0,3,1]
 };
