@@ -5,10 +5,10 @@
 #include <Wire.h>
 #include <TinyGPS++.h>
 
-#define I2CADDRESS  8
-#define GPSBAUDRATE 9600
-#define GPSDEVICE Serial1
-#define DEBUG
+#define I2CADDRESS  8       // i2c address of this slave
+#define GPSBAUDRATE 9600    // didn't work any faster
+#define GPSDEVICE Serial1   // Device is connected to Serial1
+#define DEBUG               // local console debug only
 #define DEBUGTIMER 1000
 
 int DebugTimer = 0;
@@ -24,6 +24,8 @@ uint8_t GPSSecs;
 uint8_t GPSDay;
 uint8_t GPSMonth;
 uint8_t GPSYear;
+uint8_t GPSFix;
+double  GPSAge;
 const   char *  GPSLibVersion[20];
 float   GPSCourse;
 double  GPSDistanceTo;
@@ -35,7 +37,7 @@ float   DestinationLng = MAYSLANE_LON;
 char    PMTK_API_SET_FIX_CTL_1HZ[]       =  "$PMTK300,1000,0,0,0,0*1C";     // < 1 Hz
 char    PMTK_API_SET_FIX_CTL_5HZ[]       =  "$PMTK300,200,0,0,0,0*2F" ;    // < 5 Hz
 char    PMTK_SET_NMEA_OUTPUT_ALLDATA[]   =  "$PMTK314,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0*28"; ///< turn on ALL THE DATA
-char    PMTK_SET_NMEA_OUTPUT_RMCGGAGSA[] =  "$PMTK314,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0*29"; ///< turn on GPRMC, GPGGA
+char    PMTK_SET_NMEA_OUTPUT_RMCGGAGSA[] =  "$PMTK314,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0*29"; ///< turn on GPRMC, GPGGA and GPGSA
 char    PMTK_SET_BAUD_115200[]           =  "$PMTK251,115200*1F";   // < 115200 bps
 char    PMTK_SET_BAUD_57600[]            =  "$PMTK251,57600*2C";    // <  57600 bps
 char    PMTK_SET_BAUD_9600[]             =  "$PMTK251,9600*17";     // <   9600 bps     
@@ -54,6 +56,7 @@ void ReceiveEvent(int q) {
   while( Wire.available())
   {
     c = Wire.read(); // one byte at a time
+    c &= c; // !!
   //  Serial.print (c);
   }   
  //  Serial.println (" ");   
@@ -67,6 +70,9 @@ void ReceiveEvent(int q) {
      // Serial.print (a);
       gps.encode(a);  // send data to library for processing
    }
+
+      GPSAge         = gps.location.age();
+      GPSFix         = gps.location.isValid();
       GPSLatitude    = gps.location.lat();
       GPSLongitude   = gps.location.lng();
       GPSSatellites  = gps.satellites.value(); 
@@ -87,8 +93,12 @@ void ReceiveEvent(int q) {
 void ShowGPS(){
   if ((millis() - DebugTimer) > DEBUGTIMER) {
       DebugTimer = millis();
+      Serial.print ("        Fix: ");
+      if (GPSFix) {Serial.println ("Yes");}else {Serial.println ("No");} 
       Serial.print (" Satellites: ");
       Serial.println(GPSSatellites);    
+      Serial.print ("        Age: ");  
+      Serial.println(GPSAge/1000,3);  
       Serial.print ("   Latitude: ");
       Serial.println(GPSLatitude,8);
       Serial.print ("  Longitude: ");
