@@ -122,11 +122,11 @@ var NAVTREEINDEX =
 [
 "_adafruit___g_p_s_8cpp.html",
 "_radio_functions_8h.html#ac99b4fb4d71fa95d1ee8ab0a81696a4d",
-"_sensor_hub_teensy3__6_2src_2main_8cpp.html#a00e31bab157367fcde9712d63a57a778",
-"_transmitter_code_2src_2main_8cpp.html#a7a40aeaf7436d33790723c244446ca0a",
-"class_adafruit___g_p_s.html#a06b7e12e38f1b00df058a253364215db",
-"functions_~.html",
-"struct_raw_degrees.html"
+"_sensor_hub_teensy3__6_2src_2main_8cpp.html",
+"_transmitter_code_2src_2main_8cpp.html#a7a15f8648d39393c4a49c627976f1fce",
+"class_adafruit___g_p_s.html",
+"functions_y.html",
+"struct_payload.html#ae7106f2efa1bb9f4ebb720c7c9fc54b8"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

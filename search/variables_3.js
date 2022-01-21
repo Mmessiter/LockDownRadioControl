@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['data_1333',['data',['../structnmea__history__t.html#a59f3003809801affc387b54971f5d32b',1,'nmea_history_t']]],
+  ['data_1332',['data',['../structnmea__history__t.html#a59f3003809801affc387b54971f5d32b',1,'nmea_history_t']]],
+  ['dataretured_1333',['DataRetured',['../_sensor_hub_l_c_2src_2main_8cpp.html#a84635e1312373c2bdf1eea8774866863',1,'main.cpp']]],
   ['date_1334',['date',['../class_tiny_g_p_s_plus.html#a83a70812b432d7f51c7c735bfe7be0f0',1,'TinyGPSPlus']]],
   ['datetime_1335',['DateTime',['../_transmitter_code_2src_2main_8cpp.html#a4a2edd187b3a0bc44a2b755546b8f144',1,'main.cpp']]],
   ['day_1336',['day',['../class_adafruit___g_p_s.html#ab572eee91c6ede2c20fbe29a61b81c1c',1,'Adafruit_GPS']]],

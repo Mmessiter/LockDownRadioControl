@@ -1,5 +1,6 @@
 var NAVTREEINDEX4 =
 {
+"class_adafruit___g_p_s.html":[8,0,0],
 "class_adafruit___g_p_s.html#a06b7e12e38f1b00df058a253364215db":[8,0,0,12],
 "class_adafruit___g_p_s.html#a0780becacadd5c8f1566eb598dac6f02":[8,0,0,25],
 "class_adafruit___g_p_s.html#a079d9990da5971f336fab880cd141445":[8,0,0,39],
@@ -103,8 +104,8 @@ var NAVTREEINDEX4 =
 "class_tiny_g_p_s_custom.html#a6cc9903b3c45a321962642440204afeb":[8,0,7,15],
 "class_tiny_g_p_s_custom.html#a6cc9903b3c45a321962642440204afeb":[8,0,7,16],
 "class_tiny_g_p_s_custom.html#a6cc9903b3c45a321962642440204afeb":[8,0,7,17],
-"class_tiny_g_p_s_custom.html#ac5ad40a3d9b6fe386b2309f972566674":[8,0,7,18],
 "class_tiny_g_p_s_custom.html#ac5ad40a3d9b6fe386b2309f972566674":[8,0,7,19],
+"class_tiny_g_p_s_custom.html#ac5ad40a3d9b6fe386b2309f972566674":[8,0,7,18],
 "class_tiny_g_p_s_custom.html#ac5ad40a3d9b6fe386b2309f972566674":[8,0,7,20],
 "class_tiny_g_p_s_custom.html#ac735cdd0adb996de1d86bdcc15090977":[8,0,7,12],
 "class_tiny_g_p_s_custom.html#ac735cdd0adb996de1d86bdcc15090977":[8,0,7,13],
@@ -126,8 +127,8 @@ var NAVTREEINDEX4 =
 "class_tiny_g_p_s_plus.html#a3d9173312d514abf50bd43efe6bf6af3":[8,0,13,2],
 "class_tiny_g_p_s_plus.html#a3d9173312d514abf50bd43efe6bf6af3":[8,0,13,1],
 "class_tiny_g_p_s_plus.html#a54c027a84bdeed40ac25bb54010d7c96":[8,0,13,17],
-"class_tiny_g_p_s_plus.html#a54c027a84bdeed40ac25bb54010d7c96":[8,0,13,16],
 "class_tiny_g_p_s_plus.html#a54c027a84bdeed40ac25bb54010d7c96":[8,0,13,15],
+"class_tiny_g_p_s_plus.html#a54c027a84bdeed40ac25bb54010d7c96":[8,0,13,16],
 "class_tiny_g_p_s_plus.html#a5fb47066d1d03f4bb5853529053aab48":[8,0,13,27],
 "class_tiny_g_p_s_plus.html#a6f87e988a456e2555f824c6e5c8b3c97":[8,0,13,21],
 "class_tiny_g_p_s_plus.html#a8093eef1ee9f97b5293f1048320756e3":[8,0,13,18],
@@ -248,6 +249,5 @@ var NAVTREEINDEX4 =
 "functions_u.html":[8,3,0,18],
 "functions_v.html":[8,3,0,19],
 "functions_vars.html":[8,3,2],
-"functions_w.html":[8,3,0,20],
-"functions_y.html":[8,3,0,21]
+"functions_w.html":[8,3,0,20]
 };
