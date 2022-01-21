@@ -4,10 +4,11 @@
 #include <Arduino.h>
 #include <Wire.h>
 #include <TinyGPS++.h>
+
 #define I2CADDRESS  8
 #define GPSBAUDRATE 9600
 #define GPSDEVICE Serial1
-// #define DEBUG
+#define DEBUG
 #define DEBUGTIMER 1000
 
 int DebugTimer = 0;
@@ -31,6 +32,13 @@ static  const double MAYSLANE_LAT = 51.638963994850364;
 static  const double MAYSLANE_LON = -0.22926821753992477;
 float   DestinationLat = MAYSLANE_LAT;
 float   DestinationLng = MAYSLANE_LON;
+char    PMTK_API_SET_FIX_CTL_1HZ[]       =  "$PMTK300,1000,0,0,0,0*1C";     // < 1 Hz
+char    PMTK_API_SET_FIX_CTL_5HZ[]       =  "$PMTK300,200,0,0,0,0*2F" ;    // < 5 Hz
+char    PMTK_SET_NMEA_OUTPUT_ALLDATA[]   =  "$PMTK314,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0*28"; ///< turn on ALL THE DATA
+char    PMTK_SET_NMEA_OUTPUT_RMCGGAGSA[] =  "$PMTK314,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0*29"; ///< turn on GPRMC, GPGGA
+char    PMTK_SET_BAUD_115200[]           =  "$PMTK251,115200*1F";   // < 115200 bps
+char    PMTK_SET_BAUD_57600[]            =  "$PMTK251,57600*2C";    // <  57600 bps
+char    PMTK_SET_BAUD_9600[]             =  "$PMTK251,9600*17";     // <   9600 bps     
 
 //************************************* SEND DATA INTERRUPT HANDLER ******************************************
 // Here Send data response:  (LAT + float etc ...
@@ -45,14 +53,18 @@ void ReceiveEvent(int q) {
   while( Wire.available())
   {
     c = Wire.read(); // one byte at a time
-    Serial.print (c);
+  //  Serial.print (c);
   }   
-   Serial.println (" ");   
+ //  Serial.println (" ");   
 }
 //*************************************** READ GPS DEVICE ***************************************************
  void ReadGps() {
+
+   char a;
     while (GPSDEVICE.available()){
-     gps.encode(GPSDEVICE.read());  // send data to library for processing
+      a = GPSDEVICE.read();
+     // Serial.print (a);
+      gps.encode(a);  // send data to library for processing
    }
       GPSLatitude    = gps.location.lat();
       GPSLongitude   = gps.location.lng();
@@ -107,6 +119,19 @@ void ShowGPS(){
       Serial.println ("-------------------------");
   }
 }
+
+//*************************************** SendToGPS  **********************************************************
+void SendToGPS(char Cmd[80]){
+char a = 0;
+uint8_t i = 0;
+  while (i < strlen(Cmd)) {
+     a = char (Cmd[i]) ;
+     if (!a) return;
+     GPSDEVICE.write(a);
+     ++i;
+    }
+ }
+
 //*************************************** MAIN LOOP **********************************************************
 void loop() {
      ReadGps();
@@ -120,4 +145,9 @@ void setup() {
   Wire.begin(I2CADDRESS);             
   Wire.onRequest(SendEvent);    
   Wire.onReceive(ReceiveEvent);
+  delay (200);
+  SendToGPS(PMTK_API_SET_FIX_CTL_1HZ);
+  delay (200);
+  SendToGPS(PMTK_SET_NMEA_OUTPUT_RMCGGAGSA);
+  delay (200);
 }
