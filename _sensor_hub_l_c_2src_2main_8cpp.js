@@ -1,5 +1,6 @@
 var _sensor_hub_l_c_2src_2main_8cpp =
 [
+    [ "DEBUG", "_sensor_hub_l_c_2src_2main_8cpp.html#ad72dbcf6d0153db1b8d8a58001feed83", null ],
     [ "DEBUGTIMER", "_sensor_hub_l_c_2src_2main_8cpp.html#a6d8ac148d16fbe92176033a667d3ef8a", null ],
     [ "GPSBAUDRATE", "_sensor_hub_l_c_2src_2main_8cpp.html#a372295c11945751efdddfd98372e4aa7", null ],
     [ "GPSDEVICE", "_sensor_hub_l_c_2src_2main_8cpp.html#ac5dd8c90defc2c0d78e99d2d5c1a0fd1", null ],
@@ -8,6 +9,7 @@ var _sensor_hub_l_c_2src_2main_8cpp =
     [ "ReadGps", "_sensor_hub_l_c_2src_2main_8cpp.html#adf4ab5f33d1ca1e1dd96454622f105d7", null ],
     [ "ReceiveEvent", "_sensor_hub_l_c_2src_2main_8cpp.html#ae8f856dd3cc2dae9023cbdc49710c111", null ],
     [ "SendEvent", "_sensor_hub_l_c_2src_2main_8cpp.html#a261956de5f5776a325cd400e7cb4d152", null ],
+    [ "SendToGPS", "_sensor_hub_l_c_2src_2main_8cpp.html#a18c4f8439b510a2e7274d0a6165021d2", null ],
     [ "setup", "_sensor_hub_l_c_2src_2main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d", null ],
     [ "ShowGPS", "_sensor_hub_l_c_2src_2main_8cpp.html#a6dfb0fe1b733dfc8e9d989a321596850", null ],
     [ "DebugTimer", "_sensor_hub_l_c_2src_2main_8cpp.html#a7867e45e2d19ce05cda4ef2692ee0dbe", null ],
@@ -28,5 +30,12 @@ var _sensor_hub_l_c_2src_2main_8cpp =
     [ "GPSSatellites", "_sensor_hub_l_c_2src_2main_8cpp.html#a00e31bab157367fcde9712d63a57a778", null ],
     [ "GPSSecs", "_sensor_hub_l_c_2src_2main_8cpp.html#af92d3280f8b2a0ff5023e4a7505491d9", null ],
     [ "GPSSpeed", "_sensor_hub_l_c_2src_2main_8cpp.html#adaf7d2f41cc620fadcab0862e060126c", null ],
-    [ "GPSYear", "_sensor_hub_l_c_2src_2main_8cpp.html#abc801729e599fbe5b84d088ead6fae1a", null ]
+    [ "GPSYear", "_sensor_hub_l_c_2src_2main_8cpp.html#abc801729e599fbe5b84d088ead6fae1a", null ],
+    [ "PMTK_API_SET_FIX_CTL_1HZ", "_sensor_hub_l_c_2src_2main_8cpp.html#abb8b0387db0515eec168511ea9facd34", null ],
+    [ "PMTK_API_SET_FIX_CTL_5HZ", "_sensor_hub_l_c_2src_2main_8cpp.html#aebd822b8158e52de583952d807a7f200", null ],
+    [ "PMTK_SET_BAUD_115200", "_sensor_hub_l_c_2src_2main_8cpp.html#a43ed11b7ab7e7301052941cb9edf2e97", null ],
+    [ "PMTK_SET_BAUD_57600", "_sensor_hub_l_c_2src_2main_8cpp.html#a74a7fb49c01bbaf8bb6fdbc8f79a1f57", null ],
+    [ "PMTK_SET_BAUD_9600", "_sensor_hub_l_c_2src_2main_8cpp.html#a2f6cf549dcffc0d1688542f2d6061773", null ],
+    [ "PMTK_SET_NMEA_OUTPUT_ALLDATA", "_sensor_hub_l_c_2src_2main_8cpp.html#a9e66319eb62ac284544d36d69f59bda5", null ],
+    [ "PMTK_SET_NMEA_OUTPUT_RMCGGAGSA", "_sensor_hub_l_c_2src_2main_8cpp.html#a25a3b2af4ac29d0f76a20362319394a8", null ]
 ];
