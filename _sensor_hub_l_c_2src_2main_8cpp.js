@@ -31,6 +31,7 @@ var _sensor_hub_l_c_2src_2main_8cpp =
     [ "GPSSecs", "_sensor_hub_l_c_2src_2main_8cpp.html#af92d3280f8b2a0ff5023e4a7505491d9", null ],
     [ "GPSSpeed", "_sensor_hub_l_c_2src_2main_8cpp.html#adaf7d2f41cc620fadcab0862e060126c", null ],
     [ "GPSYear", "_sensor_hub_l_c_2src_2main_8cpp.html#abc801729e599fbe5b84d088ead6fae1a", null ],
+    [ "PGCMD_NOANTENNA", "_sensor_hub_l_c_2src_2main_8cpp.html#af5f2a2a78189687a7055abd054ac6058", null ],
     [ "PMTK_API_SET_FIX_CTL_1HZ", "_sensor_hub_l_c_2src_2main_8cpp.html#abb8b0387db0515eec168511ea9facd34", null ],
     [ "PMTK_API_SET_FIX_CTL_5HZ", "_sensor_hub_l_c_2src_2main_8cpp.html#aebd822b8158e52de583952d807a7f200", null ],
     [ "PMTK_SET_BAUD_115200", "_sensor_hub_l_c_2src_2main_8cpp.html#a43ed11b7ab7e7301052941cb9edf2e97", null ],

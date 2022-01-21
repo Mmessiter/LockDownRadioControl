@@ -1,5 +1,6 @@
 var NAVTREEINDEX5 =
 {
+"globals.html":[9,1,0,0],
 "globals_a.html":[9,1,0,1],
 "globals_b.html":[9,1,0,2],
 "globals_c.html":[9,1,0,3],
@@ -31,8 +32,8 @@ var NAVTREEINDEX5 =
 "globals_enum.html":[9,1,4],
 "globals_eval.html":[9,1,5],
 "globals_f.html":[9,1,0,6],
-"globals_func.html":[9,1,1],
 "globals_func.html":[9,1,1,0],
+"globals_func.html":[9,1,1],
 "globals_func_b.html":[9,1,1,1],
 "globals_func_c.html":[9,1,1,2],
 "globals_func_d.html":[9,1,1,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX5 =
 "struct_payload.html#ae28220045a0918bdb0fc6484dbff55f9":[8,0,3,4],
 "struct_payload.html#ae7106f2efa1bb9f4ebb720c7c9fc54b8":[8,0,3,1],
 "struct_raw_degrees.html":[8,0,4],
-"struct_raw_degrees.html#a11831d9220f303bd716d9412af28e84e":[8,0,4,4],
-"struct_raw_degrees.html#a13564009c60e20dbf03b158114d1c0e2":[8,0,4,3]
+"struct_raw_degrees.html#a11831d9220f303bd716d9412af28e84e":[8,0,4,4]
 };

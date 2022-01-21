@@ -1,5 +1,6 @@
 var NAVTREEINDEX2 =
 {
+"_sensor_hub_teensy3__6_2src_2main_8cpp.html#a2131fc80cbc2e4d7966a837fd6232ac4":[9,0,5,1,0,24],
 "_sensor_hub_teensy3__6_2src_2main_8cpp.html#a261956de5f5776a325cd400e7cb4d152":[9,0,5,1,0,8],
 "_sensor_hub_teensy3__6_2src_2main_8cpp.html#a372295c11945751efdddfd98372e4aa7":[9,0,5,1,0,2],
 "_sensor_hub_teensy3__6_2src_2main_8cpp.html#a4cde9fb46783d84afce8e92931ce51a3":[9,0,5,1,0,21],
@@ -248,6 +249,5 @@ var NAVTREEINDEX2 =
 "_transmitter_code_2src_2main_8cpp.html#a79ef591b711372e0f452e2afe8d2a718":[9,0,6,0,1,240],
 "_transmitter_code_2src_2main_8cpp.html#a7a15f8648d39393c4a49c627976f1fce":[9,0,6,0,1,324],
 "_transmitter_code_2src_2main_8cpp.html#a7a40aeaf7436d33790723c244446ca0a":[9,0,6,0,1,38],
-"_transmitter_code_2src_2main_8cpp.html#a7a63dbfa61afc677b54d95ae815af072":[9,0,6,0,1,245],
-"_transmitter_code_2src_2main_8cpp.html#a7b76a0c3310e4ddc51665aee884428c7":[9,0,6,0,1,336]
+"_transmitter_code_2src_2main_8cpp.html#a7a63dbfa61afc677b54d95ae815af072":[9,0,6,0,1,245]
 };
