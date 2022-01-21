@@ -42,11 +42,17 @@ char    PMTK_SET_BAUD_115200[]           =  "$PMTK251,115200*1F";   // < 115200 
 char    PMTK_SET_BAUD_57600[]            =  "$PMTK251,57600*2C";    // <  57600 bps
 char    PMTK_SET_BAUD_9600[]             =  "$PMTK251,9600*17";     // <   9600 bps     
 char    PGCMD_NOANTENNA[]                =  "$PGCMD,33,0*6D" ;      // < don't show antenna status messages
+float   DataRetured[10][5];  // ...
+
+
 
 //************************************* SEND DATA INTERRUPT HANDLER ******************************************
 // Here Send data response:  (LAT + float etc ...
 void SendEvent() {
       Wire.write("Hi There! "); 
+
+
+
 }
 //************************************* RECEIVE DATA INTERRUPT HANDLER ***************************************
 
