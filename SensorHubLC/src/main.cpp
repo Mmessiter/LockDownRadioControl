@@ -39,6 +39,7 @@ char    PMTK_SET_NMEA_OUTPUT_RMCGGAGSA[] =  "$PMTK314,0,1,0,1,1,0,0,0,0,0,0,0,0,
 char    PMTK_SET_BAUD_115200[]           =  "$PMTK251,115200*1F";   // < 115200 bps
 char    PMTK_SET_BAUD_57600[]            =  "$PMTK251,57600*2C";    // <  57600 bps
 char    PMTK_SET_BAUD_9600[]             =  "$PMTK251,9600*17";     // <   9600 bps     
+char    PGCMD_NOANTENNA[]                =  "$PGCMD,33,0*6D" ;      // < don't show antenna status messages
 
 //************************************* SEND DATA INTERRUPT HANDLER ******************************************
 // Here Send data response:  (LAT + float etc ...
@@ -145,9 +146,11 @@ void setup() {
   Wire.begin(I2CADDRESS);             
   Wire.onRequest(SendEvent);    
   Wire.onReceive(ReceiveEvent);
-  delay (200);
+  delay (100);
+  SendToGPS(PGCMD_NOANTENNA);           // These setup commands are for Adafruit Ulimate GPS only
+  delay (100);
   SendToGPS(PMTK_API_SET_FIX_CTL_1HZ);
-  delay (200);
+  delay (100);
   SendToGPS(PMTK_SET_NMEA_OUTPUT_RMCGGAGSA);
-  delay (200);
+  delay (100);
 }
