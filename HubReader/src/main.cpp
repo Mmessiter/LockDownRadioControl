@@ -16,13 +16,14 @@ void GetI2CData(){
    union {double Val64;uint8_t Val8[8];} Rdata;
 
   Wire.requestFrom(GPSI2CHUB, GPSI2CBYTES);  // Ask hub for data
-  while(Wire.available()) {                  // Listen to HUB
+  for (j = 0; j < GPSI2CBYTES; ++j ){
+    if (Wire.available()) {                  // Listen to HUB
       if (j < 3){
              RdataID[j]      = Wire.read();  // This gets the three-char data id (eg LAT)
       }else{
              Rdata.Val8[j-3] = Wire.read();  //  This gets the 64 bit value for that data ID
       }
-      ++j;
+    }
   }
   RdataIn = Rdata.Val64;
   Serial.println(RdataID);
