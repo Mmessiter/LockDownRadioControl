@@ -2,6 +2,7 @@
 #include <Arduino.h>
 #include <Wire.h>
 int led = LED_BUILTIN;
+int count = 0;
 
 
 // ***************************************************************************************************************************************************
@@ -32,20 +33,19 @@ void GetI2CData(){
   Serial.println(RdataIn,8);
 }
 // ***************************************************************************************************************************************************
-void    SendDataToI2C(char request[4]){
-  Wire.beginTransmission(8);   
-  Wire.write(request);
+void  SendDataToI2C(char m[]){
+  Wire.beginTransmission(GPSI2CHUB);   
+  Wire.write(m);
   Wire.endTransmission();   
 }
 
 void loop()
 {
-  int count = 0;
-  char MRK[] = "MRK";
-  if (count == 100){
-      SendDataToI2C(MRK);
-  }
-  delay(2000);
+  char MRK[4] = "MRK";
+ // if (count == 10){
+    SendDataToI2C(MRK);
+ // }
+  delay(1000);
   GetI2CData();
   ++count;
 

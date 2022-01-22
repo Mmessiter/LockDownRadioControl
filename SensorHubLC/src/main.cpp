@@ -8,7 +8,7 @@
 #define I2CADDRESS  8       // i2c address of this slave
 #define GPSBAUDRATE 9600    // didn't work any faster
 #define GPSDEVICE Serial1   // Device is connected to Serial1
-#define DEBUG               // local console debug only
+//#define DEBUG               // local console debug only
 #define DEBUGTIMER 1000
 
 int DebugTimer = 0;
@@ -139,15 +139,20 @@ char c ;
 char MRK[] = "MRK";
 char RCV[5];
 uint8_t i = 0;
-  while( Wire.available())
+  while(Wire.available())
   {
     c = Wire.read(); // one byte at a time
     RCV[i] = c;
     ++i;
-    if (i>3) break;
+    if (i > 3) break;
+    
   }   
-  RCV[3] = 0;
+ //RCV[3] = 0;
+  
+  //Serial.println (RCV); 
   if (strcmp(MRK,RCV)) {
+ // Serial.println ("OK"); 
+
      DestinationLat = GPSLatitude;
      DestinationLng = GPSLongitude;
   }
