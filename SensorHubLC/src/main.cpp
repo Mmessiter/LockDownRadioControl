@@ -30,7 +30,7 @@ const   char *  GPSLibVersion[20];
 float   GPSCourse;
 double  GPSDistanceTo;
 double  GPSCourseTo; 
-static  const double MAYSLANE_LAT = 51.638963994850364;
+static  const double MAYSLANE_LAT = 51.638963994850364;  // Mays Lane
 static  const double MAYSLANE_LON = -0.22926821753992477;
 float   DestinationLat = MAYSLANE_LAT;
 float   DestinationLng = MAYSLANE_LON;
@@ -135,14 +135,23 @@ void SendDataToReceiver() {
 //************************************* RECEIVE DATA INTERRUPT HANDLER ***************************************
 
 void ReceiveEvent(int q) {  
- char c ;
+char c ;
+char MRK[] = "MRK";
+char RCV[5];
+uint8_t i = 0;
   while( Wire.available())
   {
     c = Wire.read(); // one byte at a time
-    c &= c; // !!
-  //  Serial.print (c);
+    RCV[i] = c;
+    ++i;
+    if (i>3) break;
   }   
- //  Serial.println (" ");   
+  RCV[3] = 0;
+  if (strcmp(MRK,RCV)) {
+     DestinationLat = GPSLatitude;
+     DestinationLng = GPSLongitude;
+  }
+   
 }
 //*************************************** READ GPS DEVICE ***************************************************
  void ReadGps() {

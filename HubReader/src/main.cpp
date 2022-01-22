@@ -25,15 +25,14 @@ void GetI2CData(){
       }
     }
   }
-  RdataID[3] = 0;             // to terminate the string.
+  RdataID[3] = 0;                                   // To terminate the string.
   RdataIn = Rdata.Val64;
   Serial.print(RdataID);
   Serial.print(" = ");
   Serial.println(RdataIn,8);
 }
 // ***************************************************************************************************************************************************
-void SendI2CData(){
-  char request[4] = "LAT";
+void    SendDataToI2C(char request[4]){
   Wire.beginTransmission(8);   
   Wire.write(request);
   Wire.endTransmission();   
@@ -41,9 +40,15 @@ void SendI2CData(){
 
 void loop()
 {
-  SendI2CData();
-  delay(1000);
+  int count = 0;
+  char MRK[] = "MRK";
+  if (count == 100){
+      SendDataToI2C(MRK);
+  }
+  delay(2000);
   GetI2CData();
+  ++count;
+
 }
 void setup()
 {
