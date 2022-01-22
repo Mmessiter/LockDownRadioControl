@@ -42,36 +42,100 @@ char    PMTK_SET_BAUD_115200[]           =  "$PMTK251,115200*1F";   // < 115200 
 char    PMTK_SET_BAUD_57600[]            =  "$PMTK251,57600*2C";    // <  57600 bps
 char    PMTK_SET_BAUD_9600[]             =  "$PMTK251,9600*17";     // <   9600 bps     
 char    PGCMD_NOANTENNA[]                =  "$PGCMD,33,0*6D" ;      // < don't show antenna status messages
-float   RData[9];
-uint8_t RDataIndex = 0 ;
-char    RDataID[9] = {'A',
-                     'B',
-                     'C',
-                     'D',
-                     'E',
-                     'F',
-                     'G' };
+uint8_t ParameterNumber                  = 0;
+
 
 
 
 //************************************* SEND DATA INTERRUPT HANDLER ******************************************
-// Here Send data response:  (LAT + float etc ...
-void SendEvent() {
-   union { double   Val64;
-           uint8_t Val8[8];
-         } ThisUnion;
+// 
+void SendDataToReceiver() {
+  #define IDLEN 3
+  #define GPSI2CBYTES IDLEN + 8
+  #define MAXPARAMS 11
+  uint8_t i;
+  char RdataID[IDLEN+1] = "NUL";
+  char  LAT[IDLEN+1]    = "LAT";
+  char  LON[IDLEN+1]    = "LON";
+  char  FIX[IDLEN+1]    = "FIX";
+  char  SAT[IDLEN+1]    = "SAT";
+  char  ALT[IDLEN+1]    = "ALT";
+  char  SPD[IDLEN+1]    = "SPD";
+  char  COR[IDLEN+1]    = "COR";
+  char  CTO[IDLEN+1]    = "CTO";
+  char  DTO[IDLEN+1]    = "DTO";
+  char  HRS[IDLEN+1]    = "HRS";
+  char  MNS[IDLEN+1]    = "MNS";
+  char  SEC[IDLEN+1]    = "SEC";
+  double RdataOut = 42;
+  union { double   Val64;uint8_t Val8[8]; } Rdata;
 
-    ThisUnion.Val64 = GPSLatitude;
-    Wire.write("LAT"); 
-    for (uint8_t i = 0; i <= 7; ++i) {
-      Wire.write(ThisUnion.Val8[i]); 
+
+  switch (ParameterNumber) {
+      case  0:
+        RdataOut = GPSLatitude;     // Latitiude
+        strcpy (RdataID,LAT);
+        break;
+      case  1:
+        RdataOut = GPSLongitude;   // Longitude
+        strcpy (RdataID,LON);
+        break;
+      case  2:
+        RdataOut = GPSFix;          // Fix
+        strcpy (RdataID,FIX);
+        break;
+      case  3:
+        RdataOut = GPSAltitude;     // Altitude
+        strcpy (RdataID,ALT);
+        break;
+      case  4:
+        RdataOut = GPSSpeed;        // Speed
+        strcpy (RdataID,SPD);
+        break;
+      case  5:
+        RdataOut = GPSCourse;       // Course
+        strcpy (RdataID,COR);
+        break;
+      case  6:
+        RdataOut = GPSCourseTo;     // Course to
+        strcpy (RdataID,CTO);
+        break;
+      case  7:
+        RdataOut = GPSDistanceTo;   // Distance to
+        strcpy (RdataID,DTO);
+        break;
+      case  8:
+        RdataOut = GPSHours;        // Hours
+        strcpy (RdataID,HRS);
+        break;
+      case  9:
+        RdataOut = GPSMins;        // Hours
+        strcpy (RdataID,MNS);
+        break;
+      case  10:
+        RdataOut = GPSSecs;        // Secs
+        strcpy (RdataID,SEC);
+        break;
+      case  11:
+        RdataOut = GPSSatellites;  // Sats
+        strcpy (RdataID,SAT);
+        break;
+    
+  }
+
+   Rdata.Val64 = RdataOut;
+   for (i = 0; i < IDLEN; ++i) {
+      Wire.write(RdataID[i]); 
+   }
+    for (i = 0; i < 8; ++i) {
+       Wire.write(Rdata.Val8[i]); 
     }
 
-
+    ParameterNumber++;
+    if (ParameterNumber > MAXPARAMS) ParameterNumber = 0; 
 }
 //************************************* RECEIVE DATA INTERRUPT HANDLER ***************************************
 
-// Here receive request for data:  (SAT,LAT,LON,SPE,MIN,TIM,FAR,MRK,BER)
 void ReceiveEvent(int q) {  
  char c ;
   while( Wire.available())
@@ -175,10 +239,10 @@ void loop() {
 void setup() {
   GPSDEVICE.begin(GPSBAUDRATE);
   Wire.begin(I2CADDRESS);             
-  Wire.onRequest(SendEvent);    
+  Wire.onRequest(SendDataToReceiver);    
   Wire.onReceive(ReceiveEvent);
   delay (100);
-  SendToGPS(PGCMD_NOANTENNA);           // These setup commands are for Adafruit Ulimate GPS only
+  SendToGPS(PGCMD_NOANTENNA);                     // These setup commands are for Adafruit Ulimate GPS only
   delay (100);
   SendToGPS(PMTK_API_SET_FIX_CTL_1HZ);
   delay (100);
