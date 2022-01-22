@@ -12,10 +12,9 @@ int count = 0;
 void GetI2CData(){
   #define IDLEN 3
   #define GPSI2CBYTES IDLEN + 8
-   char RdataID[IDLEN+1];
-   double RdataIn;
-   union { double Val64; uint8_t Val8[8]; } Rdata;  // 'union' allows access to every byte
-
+  char RdataID[IDLEN+1];
+  double RdataIn;
+  union { double Val64; uint8_t Val8[8]; } Rdata;   // 'union' allows access to every byte
   Wire.requestFrom(GPSI2CHUB, GPSI2CBYTES);         // Ask hub for data
   for (int j = 0; j < GPSI2CBYTES; ++j ){
     if (Wire.available()) {                         // Listen to HUB
@@ -42,9 +41,9 @@ void  SendDataToI2C(char m[]){
 void loop()
 {
   char MRK[4] = "MRK";
- // if (count == 10){
+  if (count > 20){
     SendDataToI2C(MRK);
- // }
+  }
   delay(1000);
   GetI2CData();
   ++count;

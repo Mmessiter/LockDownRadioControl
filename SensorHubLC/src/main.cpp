@@ -144,19 +144,12 @@ uint8_t i = 0;
     c = Wire.read(); // one byte at a time
     RCV[i] = c;
     ++i;
-    if (i > 3) break;
-    
-  }   
- //RCV[3] = 0;
-  
-  //Serial.println (RCV); 
+    if (i > 3) break; 
+  } 
   if (strcmp(MRK,RCV)) {
- // Serial.println ("OK"); 
-
-     DestinationLat = GPSLatitude;
-     DestinationLng = GPSLongitude;
+     DestinationLat = GPSLatitude;  // Mark current location
+     DestinationLng = GPSLongitude; // Mark current location
   }
-   
 }
 //*************************************** READ GPS DEVICE ***************************************************
  void ReadGps() {
