@@ -11,24 +11,25 @@ int led = LED_BUILTIN;
 void GetI2CData(){
   #define IDLEN 3
   #define GPSI2CBYTES IDLEN + 8
-
-   char RdataID[IDLEN];
+   char RdataID[IDLEN+1];
    double RdataIn;
    union { double Val64; uint8_t Val8[8]; } Rdata;  // 'union' allows access to every byte
 
   Wire.requestFrom(GPSI2CHUB, GPSI2CBYTES);         // Ask hub for data
   for (int j = 0; j < GPSI2CBYTES; ++j ){
     if (Wire.available()) {                         // Listen to HUB
-      if (j < 3){
+      if (j < IDLEN){
              RdataID[j]          = Wire.read();     // This gets the three-char data id (eg LAT)
       }else{
              Rdata.Val8[j-IDLEN] = Wire.read();     // This gets the 64 bit value for that data ID
       }
     }
   }
+  RdataID[3] = 0;             // to terminate the string.
   RdataIn = Rdata.Val64;
-  Serial.println(RdataID);
-  Serial.println(RdataIn,18);
+  Serial.print(RdataID);
+  Serial.print(" = ");
+  Serial.println(RdataIn,8);
 }
 // ***************************************************************************************************************************************************
 void SendI2CData(){
@@ -41,7 +42,7 @@ void SendI2CData(){
 void loop()
 {
   SendI2CData();
-  delay(250);
+  delay(1000);
   GetI2CData();
 }
 void setup()

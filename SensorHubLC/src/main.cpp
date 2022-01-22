@@ -69,8 +69,6 @@ void SendDataToReceiver() {
   char  SEC[IDLEN+1]    = "SEC";
   double RdataOut = 42;
   union { double   Val64;uint8_t Val8[8]; } Rdata;
-
-
   switch (ParameterNumber) {
       case  0:
         RdataOut = GPSLatitude;     // Latitiude
@@ -122,8 +120,8 @@ void SendDataToReceiver() {
         break;
     
   }
-
    Rdata.Val64 = RdataOut;
+   
    for (i = 0; i < IDLEN; ++i) {
       Wire.write(RdataID[i]); 
    }
