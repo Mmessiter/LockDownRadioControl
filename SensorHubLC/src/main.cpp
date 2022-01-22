@@ -42,15 +42,30 @@ char    PMTK_SET_BAUD_115200[]           =  "$PMTK251,115200*1F";   // < 115200 
 char    PMTK_SET_BAUD_57600[]            =  "$PMTK251,57600*2C";    // <  57600 bps
 char    PMTK_SET_BAUD_9600[]             =  "$PMTK251,9600*17";     // <   9600 bps     
 char    PGCMD_NOANTENNA[]                =  "$PGCMD,33,0*6D" ;      // < don't show antenna status messages
-float   DataRetured[10][5];  // ...
+float   RData[9];
+uint8_t RDataIndex = 0 ;
+char    RDataID[9] = {'A',
+                     'B',
+                     'C',
+                     'D',
+                     'E',
+                     'F',
+                     'G' };
 
 
 
 //************************************* SEND DATA INTERRUPT HANDLER ******************************************
 // Here Send data response:  (LAT + float etc ...
 void SendEvent() {
-      Wire.write("Hi There! "); 
+   union { double   Val64;
+           uint8_t Val8[8];
+         } ThisUnion;
 
+    ThisUnion.Val64 = GPSLatitude;
+    Wire.write("LAT"); 
+    for (uint8_t i = 0; i <= 7; ++i) {
+      Wire.write(ThisUnion.Val8[i]); 
+    }
 
 
 }
