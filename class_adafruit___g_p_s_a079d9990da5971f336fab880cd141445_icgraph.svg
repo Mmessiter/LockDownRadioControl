@@ -36,39 +36,39 @@
 <!-- Node15 -->
 <g id="node15" class="node">
 <title>Node15</title>
-<g id="a_node15"><a xlink:href="_sensor_hub_l_c_2src_2main_8cpp.html#aac529433269b7b52ef0a627716a70aea" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="black" points="314,-76.5 314,-95.5 423,-95.5 423,-76.5 314,-76.5"/>
-<text text-anchor="middle" x="368.5" y="-83.5" font-family="Helvetica,sans-Serif" font-size="10.00">SendDataToReceiver</text>
+<g id="a_node15"><a xlink:href="_hub_reader_2src_2main_8cpp.html#a29029b3ac986c6540b9473c577bdf515" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="black" points="325.5,-76.5 325.5,-95.5 411.5,-95.5 411.5,-76.5 325.5,-76.5"/>
+<text text-anchor="middle" x="368.5" y="-83.5" font-family="Helvetica,sans-Serif" font-size="10.00">SendDataToI2C</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node15 -->
 <g id="edge23" class="edge">
 <title>Node1&#45;&gt;Node15</title>
-<path fill="none" stroke="midnightblue" d="M448.46,-75.25C440.02,-76.4 431.39,-77.57 423.09,-78.7"/>
+<path fill="none" stroke="midnightblue" d="M448.71,-75.21C436.17,-76.92 423.22,-78.68 411.52,-80.28"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="449.2,-78.68 458.64,-73.86 448.26,-71.74 449.2,-78.68"/>
 </g>
 <!-- Node17 -->
 <g id="node17" class="node">
 <title>Node17</title>
-<g id="a_node17"><a xlink:href="_sensor_hub_2src_2main_8cpp.html#a261956de5f5776a325cd400e7cb4d152" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="black" points="336.5,-38.5 336.5,-57.5 400.5,-57.5 400.5,-38.5 336.5,-38.5"/>
-<text text-anchor="middle" x="368.5" y="-45.5" font-family="Helvetica,sans-Serif" font-size="10.00">SendEvent</text>
+<g id="a_node17"><a xlink:href="_sensor_hub_l_c_2src_2main_8cpp.html#aac529433269b7b52ef0a627716a70aea" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="black" points="314,-38.5 314,-57.5 423,-57.5 423,-38.5 314,-38.5"/>
+<text text-anchor="middle" x="368.5" y="-45.5" font-family="Helvetica,sans-Serif" font-size="10.00">SendDataToReceiver</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node17 -->
 <g id="edge25" class="edge">
 <title>Node1&#45;&gt;Node17</title>
-<path fill="none" stroke="midnightblue" d="M448.5,-58.76C432.02,-56.51 414.83,-54.17 400.72,-52.25"/>
+<path fill="none" stroke="midnightblue" d="M448.46,-58.75C440.02,-57.6 431.39,-56.43 423.09,-55.3"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="448.26,-62.26 458.64,-60.14 449.2,-55.32 448.26,-62.26"/>
 </g>
 <!-- Node19 -->
 <g id="node19" class="node">
 <title>Node19</title>
-<g id="a_node19"><a xlink:href="_hub_reader_2src_2main_8cpp.html#a87774a55ad34f9ec44357e62d45e5bb2" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="black" points="331.5,-0.5 331.5,-19.5 405.5,-19.5 405.5,-0.5 331.5,-0.5"/>
-<text text-anchor="middle" x="368.5" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">SendI2CData</text>
+<g id="a_node19"><a xlink:href="_sensor_hub_2src_2main_8cpp.html#a261956de5f5776a325cd400e7cb4d152" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="black" points="336.5,-0.5 336.5,-19.5 400.5,-19.5 400.5,-0.5 336.5,-0.5"/>
+<text text-anchor="middle" x="368.5" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">SendEvent</text>
 </a>
 </g>
 </g>
@@ -315,22 +315,22 @@
 <!-- Node16 -->
 <g id="node16" class="node">
 <title>Node16</title>
-<g id="a_node16"><a xlink:href="_sensor_hub_l_c_2src_2main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="black" points="226,-76.5 226,-95.5 267,-95.5 267,-76.5 226,-76.5"/>
-<text text-anchor="middle" x="246.5" y="-83.5" font-family="Helvetica,sans-Serif" font-size="10.00">setup</text>
+<g id="a_node16"><a xlink:href="_hub_reader_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="black" points="229,-76.5 229,-95.5 264,-95.5 264,-76.5 229,-76.5"/>
+<text text-anchor="middle" x="246.5" y="-83.5" font-family="Helvetica,sans-Serif" font-size="10.00">loop</text>
 </a>
 </g>
 </g>
 <!-- Node15&#45;&gt;Node16 -->
 <g id="edge24" class="edge">
 <title>Node15&#45;&gt;Node16</title>
-<path fill="none" stroke="midnightblue" d="M303.66,-86C290.4,-86 277.38,-86 267.22,-86"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="303.82,-89.5 313.82,-86 303.82,-82.5 303.82,-89.5"/>
+<path fill="none" stroke="midnightblue" d="M315.13,-86C296.77,-86 277.44,-86 264.17,-86"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="315.19,-89.5 325.19,-86 315.19,-82.5 315.19,-89.5"/>
 </g>
 <!-- Node18 -->
 <g id="node18" class="node">
 <title>Node18</title>
-<g id="a_node18"><a xlink:href="_sensor_hub_2src_2main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d" target="_top" xlink:title=" ">
+<g id="a_node18"><a xlink:href="_sensor_hub_l_c_2src_2main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="black" points="226,-38.5 226,-57.5 267,-57.5 267,-38.5 226,-38.5"/>
 <text text-anchor="middle" x="246.5" y="-45.5" font-family="Helvetica,sans-Serif" font-size="10.00">setup</text>
 </a>
@@ -339,23 +339,23 @@
 <!-- Node17&#45;&gt;Node18 -->
 <g id="edge26" class="edge">
 <title>Node17&#45;&gt;Node18</title>
-<path fill="none" stroke="midnightblue" d="M326.19,-48C306.25,-48 283.24,-48 267.28,-48"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="326.28,-51.5 336.28,-48 326.28,-44.5 326.28,-51.5"/>
+<path fill="none" stroke="midnightblue" d="M303.66,-48C290.4,-48 277.38,-48 267.22,-48"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="303.82,-51.5 313.82,-48 303.82,-44.5 303.82,-51.5"/>
 </g>
 <!-- Node20 -->
 <g id="node20" class="node">
 <title>Node20</title>
-<g id="a_node20"><a xlink:href="_hub_reader_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="black" points="229,-0.5 229,-19.5 264,-19.5 264,-0.5 229,-0.5"/>
-<text text-anchor="middle" x="246.5" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">loop</text>
+<g id="a_node20"><a xlink:href="_sensor_hub_2src_2main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="black" points="226,-0.5 226,-19.5 267,-19.5 267,-0.5 226,-0.5"/>
+<text text-anchor="middle" x="246.5" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">setup</text>
 </a>
 </g>
 </g>
 <!-- Node19&#45;&gt;Node20 -->
 <g id="edge28" class="edge">
 <title>Node19&#45;&gt;Node20</title>
-<path fill="none" stroke="midnightblue" d="M321.23,-10C301.13,-10 278.86,-10 264.11,-10"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="321.5,-13.5 331.5,-10 321.5,-6.5 321.5,-13.5"/>
+<path fill="none" stroke="midnightblue" d="M326.19,-10C306.25,-10 283.24,-10 267.28,-10"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="326.28,-13.5 336.28,-10 326.28,-6.5 326.28,-13.5"/>
 </g>
 </g>
 </svg>
