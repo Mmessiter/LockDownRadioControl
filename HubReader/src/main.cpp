@@ -13,9 +13,8 @@ void GetI2CData(){
    int j = 0;
    char RdataID[3];
    double RdataIn;
-   union { double Val64;
-           uint8_t Val8[8];
-         } Rdata;
+   union {double Val64;uint8_t Val8[8];} Rdata;
+
   Wire.requestFrom(GPSI2CHUB, GPSI2CBYTES);  // Ask hub for data
   while(Wire.available()) {                  // Listen to HUB
       if (j < 3){
