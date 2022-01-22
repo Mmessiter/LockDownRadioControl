@@ -5,24 +5,24 @@ int led = LED_BUILTIN;
 
 
 // ***************************************************************************************************************************************************
-// The GPS HUB is asked for 11 bytes of data over I2C. The first 3 are the ID (LAT, LNG, etc...)
-// The next 8 are the value - as a double.
+// The GPS HUB is asked for 11 bytes of data over I2C. The first IDLEN bytes are the ID (LAT, LNG, etc...)
+// The next 8 bytes are the value (as a double).
 
 void GetI2CData(){
   #define IDLEN 3
   #define GPSI2CBYTES IDLEN + 8
-  
+
    char RdataID[IDLEN];
    double RdataIn;
-   union { double Val64; uint8_t Val8[8]; } Rdata;
+   union { double Val64; uint8_t Val8[8]; } Rdata;  // 'union' allows access to every byte
 
-  Wire.requestFrom(GPSI2CHUB, GPSI2CBYTES);  // Ask hub for data
+  Wire.requestFrom(GPSI2CHUB, GPSI2CBYTES);         // Ask hub for data
   for (int j = 0; j < GPSI2CBYTES; ++j ){
-    if (Wire.available()) {                  // Listen to HUB
+    if (Wire.available()) {                         // Listen to HUB
       if (j < 3){
-             RdataID[j]          = Wire.read();  // This gets the three-char data id (eg LAT)
+             RdataID[j]          = Wire.read();     // This gets the three-char data id (eg LAT)
       }else{
-             Rdata.Val8[j-IDLEN] = Wire.read();  // This gets the 64 bit value for that data ID
+             Rdata.Val8[j-IDLEN] = Wire.read();     // This gets the 64 bit value for that data ID
       }
     }
   }
