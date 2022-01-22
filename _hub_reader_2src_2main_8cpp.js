@@ -5,7 +5,8 @@ var _hub_reader_2src_2main_8cpp =
     [ "IDLEN", "_hub_reader_2src_2main_8cpp.html#a472646a6b1f959aa3b4261a8247c2015", null ],
     [ "GetI2CData", "_hub_reader_2src_2main_8cpp.html#a2a75154c3b19275a186d2a9303f87f09", null ],
     [ "loop", "_hub_reader_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f", null ],
-    [ "SendDataToI2C", "_hub_reader_2src_2main_8cpp.html#a29029b3ac986c6540b9473c577bdf515", null ],
+    [ "SendDataToI2C", "_hub_reader_2src_2main_8cpp.html#a1d60be7f1d028ff20d3871b6e3686ed1", null ],
     [ "setup", "_hub_reader_2src_2main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d", null ],
+    [ "count", "_hub_reader_2src_2main_8cpp.html#ad43c3812e6d13e0518d9f8b8f463ffcf", null ],
     [ "led", "_hub_reader_2src_2main_8cpp.html#a8c935df72ad1a7236c9879fb14aa0d43", null ]
 ];

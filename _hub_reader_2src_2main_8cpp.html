@@ -124,8 +124,8 @@ Macros</h2></td></tr>
 Functions</h2></td></tr>
 <tr class="memitem:a2a75154c3b19275a186d2a9303f87f09"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_hub_reader_2src_2main_8cpp.html#a2a75154c3b19275a186d2a9303f87f09">GetI2CData</a> ()</td></tr>
 <tr class="separator:a2a75154c3b19275a186d2a9303f87f09"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a29029b3ac986c6540b9473c577bdf515"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_hub_reader_2src_2main_8cpp.html#a29029b3ac986c6540b9473c577bdf515">SendDataToI2C</a> (char request[4])</td></tr>
-<tr class="separator:a29029b3ac986c6540b9473c577bdf515"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d60be7f1d028ff20d3871b6e3686ed1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_hub_reader_2src_2main_8cpp.html#a1d60be7f1d028ff20d3871b6e3686ed1">SendDataToI2C</a> (char m[])</td></tr>
+<tr class="separator:a1d60be7f1d028ff20d3871b6e3686ed1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afe461d27b9c48d5921c00d521181f12f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_hub_reader_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f">loop</a> ()</td></tr>
 <tr class="separator:afe461d27b9c48d5921c00d521181f12f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4fc01d736fe50cf5b977f755b675f11d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_hub_reader_2src_2main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d">setup</a> ()</td></tr>
@@ -135,6 +135,8 @@ Functions</h2></td></tr>
 Variables</h2></td></tr>
 <tr class="memitem:a8c935df72ad1a7236c9879fb14aa0d43"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_hub_reader_2src_2main_8cpp.html#a8c935df72ad1a7236c9879fb14aa0d43">led</a> = LED_BUILTIN</td></tr>
 <tr class="separator:a8c935df72ad1a7236c9879fb14aa0d43"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad43c3812e6d13e0518d9f8b8f463ffcf"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_hub_reader_2src_2main_8cpp.html#ad43c3812e6d13e0518d9f8b8f463ffcf">count</a> = 0</td></tr>
+<tr class="separator:ad43c3812e6d13e0518d9f8b8f463ffcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="ab92133bc8cbae639e681505e0679bc28"></a>
@@ -197,7 +199,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_hub_reader_2src_2main_8cpp_source.html#l00011">11</a> of file <a class="el" href="_hub_reader_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_hub_reader_2src_2main_8cpp_source.html#l00012">12</a> of file <a class="el" href="_hub_reader_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -228,7 +230,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_hub_reader_2src_2main_8cpp_source.html#l00041">41</a> of file <a class="el" href="_hub_reader_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_hub_reader_2src_2main_8cpp_source.html#l00042">42</a> of file <a class="el" href="_hub_reader_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -238,8 +240,8 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
-<a id="a29029b3ac986c6540b9473c577bdf515"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a29029b3ac986c6540b9473c577bdf515">&#9670;&nbsp;</a></span>SendDataToI2C()</h2>
+<a id="a1d60be7f1d028ff20d3871b6e3686ed1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d60be7f1d028ff20d3871b6e3686ed1">&#9670;&nbsp;</a></span>SendDataToI2C()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -248,23 +250,23 @@ Here is the call graph for this function:</div>
           <td class="memname">void SendDataToI2C </td>
           <td>(</td>
           <td class="paramtype">char&#160;</td>
-          <td class="paramname"><em>request</em>[4]</td><td>)</td>
+          <td class="paramname"><em>m</em>[]</td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_hub_reader_2src_2main_8cpp_source.html#l00035">35</a> of file <a class="el" href="_hub_reader_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_hub_reader_2src_2main_8cpp_source.html#l00036">36</a> of file <a class="el" href="_hub_reader_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="_hub_reader_2src_2main_8cpp_a29029b3ac986c6540b9473c577bdf515_cgraph.svg" width="310" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="_hub_reader_2src_2main_8cpp_a1d60be7f1d028ff20d3871b6e3686ed1_cgraph.svg" width="310" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="_hub_reader_2src_2main_8cpp_a29029b3ac986c6540b9473c577bdf515_icgraph.svg" width="220" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="_hub_reader_2src_2main_8cpp_a1d60be7f1d028ff20d3871b6e3686ed1_icgraph.svg" width="220" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 
@@ -296,6 +298,22 @@ Here is the call graph for this function:</div>
 </div>
 </div>
 <h2 class="groupheader">Variable Documentation</h2>
+<a id="ad43c3812e6d13e0518d9f8b8f463ffcf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad43c3812e6d13e0518d9f8b8f463ffcf">&#9670;&nbsp;</a></span>count</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int count = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="_hub_reader_2src_2main_8cpp_source.html#l00005">5</a> of file <a class="el" href="_hub_reader_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+
+</div>
+</div>
 <a id="a8c935df72ad1a7236c9879fb14aa0d43"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8c935df72ad1a7236c9879fb14aa0d43">&#9670;&nbsp;</a></span>led</h2>
 
