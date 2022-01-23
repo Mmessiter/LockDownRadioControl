@@ -487,8 +487,8 @@ void  SendDataToI2C(char m[]){
 /************************************************************************************************************/
 FASTRUN void DoSensors()
 {      
-    if ((millis() - SensorTime) < 250) return;              // no need to measure too often
-    SensorTime = millis();
+    if ((millis() - SensorTime) < 1000) return;              // no need to measure too often
+        SensorTime = millis();
     
     if (USE_AdafruitUltimateGps) {
             GetI2CData();                                    // Sensor now has its own MCU   
@@ -529,7 +529,7 @@ FASTRUN void ReceiveData()
     }
     if (!Connected) {
         if (millis() - LastConnectionMoment >= RECEIVE_TIMEOUT) { // Has transmitter died? 
-        Reconnect();                            // Try to reconnect.
+        Reconnect();                                              // Try to reconnect.
         }
     }
     if (ReadData()) {
