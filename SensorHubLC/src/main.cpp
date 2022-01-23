@@ -158,7 +158,7 @@ uint8_t i = 0;
     while (GPSDEVICE.available()){
       a = GPSDEVICE.read();
      // Serial.print (a);
-      gps.encode(a);  // send data to library for processing
+      gps.encode(a);  // Simply send every byte library 
    }
 
       GPSAge         = gps.location.age();
