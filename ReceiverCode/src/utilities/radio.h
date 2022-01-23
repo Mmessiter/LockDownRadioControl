@@ -45,8 +45,9 @@ extern double   LatitudeGPS;
 extern double   LongitudeGPS;
 extern double   SpeedGPS;
 extern double   AngleGPS;
+extern double   AltitudeGPS;
 extern bool     GpsFix;
-//extern bool     USE_AdafruitUltimateGps;    
+extern bool     USE_AdafruitUltimateGps;    
 extern bool     USE_BMP280;
 extern bool     USE_INA219;
  
@@ -433,7 +434,7 @@ void LoadAltitude()  // Baro (not GPS)
         uint8_t Val8[4];
     } AltitudeUnion;
 
-    AltitudeUnion.Val32 = BaroAltitude;
+    AltitudeUnion.Val32 = AltitudeGPS ;        // BaroAltitude;
     AckPayload.Byte1    = AltitudeUnion.Val8[0]; // These values are herewith delivered to Transmitter in Ack Payload
     AckPayload.Byte2    = AltitudeUnion.Val8[1];
     AckPayload.Byte3    = AltitudeUnion.Val8[2];
@@ -468,7 +469,7 @@ void LoadAckPayload()
                                 // ... etc ...
       if (USE_BMP280) MaxAckP              = 4;                     // 4 + volts
       if (USE_INA219) MaxAckP              = 8;                     // 8 + Baro
-    //  if (USE_AdafruitUltimateGps) MaxAckP = 18;                    // 18 + GPS
+      if (USE_AdafruitUltimateGps) MaxAckP = 18;                    // 18 + GPS
       if (AckPayload.Purpose > MaxAckP) AckPayload.Purpose = 0;     // wrap after max
 
     switch (AckPayload.Purpose) {

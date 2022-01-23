@@ -3,6 +3,11 @@
 #include <Wire.h>
 int led = LED_BUILTIN;
 int count = 0;
+double          LatitudeGPS;
+double          LongitudeGPS;
+double          SpeedGPS;
+double          AngleGPS;
+bool            GpsFix = false;
 
 
 // ***************************************************************************************************************************************************
@@ -46,11 +51,22 @@ void GetI2CData(){
 
 
   if (strncmp(FIX,RdataID,3) == 0) {     
-      if (RdataIn == 1) {
+      if (int(RdataIn) == 1) {
         Serial.println ("GOT FIX!"); 
         return;
       }
   }
+
+  if (strncmp(LAT,RdataID,3) == 0) {     
+     LatitudeGPS =  RdataIn;
+     return;
+  }
+  
+  if (strncmp(LON,RdataID,3) == 0) {     
+     LongitudeGPS =  RdataIn;
+     return;
+  }
+  
 
   Serial.print(RdataID);
   Serial.print(" = ");

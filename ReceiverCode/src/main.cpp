@@ -61,7 +61,7 @@ Adafruit_GPS GPS(&Wire);
 
 bool            USE_BMP280 = false;                   //  BMP280 sensor connected ?
 bool            USE_INA219 = false;                   //  Volts from INA219 ?
-//bool            USE_AdafruitUltimateGps = false;      //  GPS (Adafruit Ultimate GPS) ?
+bool            USE_AdafruitUltimateGps = false;      //  GPS (Adafruit Ultimate GPS) ?
 Adafruit_INA219 ina219;
 Adafruit_BMP280 bmp280;
 Servo           MCMServo[SERVOSUSED];
@@ -88,11 +88,20 @@ bool            Radio1Exists = false;
 bool            Radio2Exists = false;
 uint32_t        SensorTime   = 0;
 uint16_t        Qnh          = 0;    //Pressure at sea level here and now (defined by TX option)
+uint8_t         SatellitesGPS; 
 double          LatitudeGPS;
 double          LongitudeGPS;
 double          SpeedGPS;
 double          AngleGPS;
 bool            GpsFix = false;
+double          AltitudeGPS;
+double          DistanceGPS;
+double          CourseToGPS;
+uint8_t         HoursGPS;
+uint8_t         MinsGPS;
+uint8_t         SecsGPS;
+
+
 uint16_t        CompressedData[COMPRESSEDWORDS]; // 30 bytes -> 40 bytes when uncompressed
       
 
@@ -112,34 +121,6 @@ FASTRUN double HowFar(double latitude_new, double longitude_new, double latitude
         double  distance = RadiusOfTheEarth * c;
         return  distance; 
    }
-/************************************************************************************************************/
-// This function reads the Adafruit Ultimate GPS module into our global vars, if it's connected. 
-// It returns false if it cannot yet parse a whole sentence - it returns true if parseable  - even WITHOUT a fix.
-
-FASTRUN bool ReadGPS(){                               // Call this VERY often because this gets only one character per call.
-    GPS.read();                                       // Gets ONLY ONE character
-    CurrentRadio->flush_rx();                       
-    if (GPS.newNMEAreceived()) {                      // Whole sentence yet?
-            CurrentRadio->flush_rx(); 
-        if (!GPS.parse(GPS.lastNMEA())) { 
-            CurrentRadio->flush_rx(); 
-            return false;
-            } // Can't parse it
-    } else {
-        CurrentRadio->flush_rx(); 
-        return false;                                 // No sentence yet
-    }                                          
-    GpsFix = GPS.fix;                                 // Must have parsed OK ...
-    if (GpsFix){                                      // Got fix yet? 
-                LatitudeGPS  = GPS.latitudeDegrees;   // Update these if a fix was obtained 
-                LongitudeGPS = GPS.longitudeDegrees;
-                SpeedGPS     = GPS.speed * 1.15;      // in MPH
-                AngleGPS     = GPS.angle;                        
-    }
-    CurrentRadio->flush_rx();                          
-    return true;                                        // got parseable sentence but no fix
-}
-/************************************************************************************************************/
 
 void LoadFailSafeData()
 {
@@ -348,12 +329,13 @@ void Sensors_Status()
     if (USE_AdafruitUltimateGps){
         Serial.print ("GPS FIX?  ");
         if (GpsFix) {
-            Serial.println ("** YES! **");
+            Serial.println ("YES");
         } else {
-            Serial.println ("(Waiting ...)");
+            Serial.println ("No");
         }
-        
         if (GpsFix){
+            Serial.print ("GPS Satellites: ");
+            Serial.println (SatellitesGPS);
             Serial.print ("GPS Latitude: ");
             Serial.println (LatitudeGPS,14);
             Serial.print ("GPS Longitude: ");
@@ -362,7 +344,19 @@ void Sensors_Status()
             Serial.println (SpeedGPS);
             Serial.print ("GPS Angle: ");
             Serial.println (AngleGPS);
-        }
+            Serial.print ("GPS distance: ");
+            Serial.println (DistanceGPS);
+            Serial.print ("GPS course to: ");
+            Serial.println (CourseToGPS);
+            Serial.print ("GPS Altitude: ");
+            Serial.println (AltitudeGPS);
+            Serial.print ("Hours GPS: ");
+            Serial.println (HoursGPS);
+            Serial.print ("Minutes GPS: ");
+            Serial.println (MinsGPS);
+            Serial.print ("Seconds GPS: ");
+            Serial.println (SecsGPS);
+            }
     }
     if (USE_INA219) {
         Serial.print("     Volts=");
@@ -377,23 +371,129 @@ void Sensors_Status()
     Serial.println(" ");
 }
 #endif // defined DB_SENSORS
+
+
+
+// ***************************************************************************************************************************************************
+// Here the GPS HUB is asked for 11 bytes of data over I2C. 
+// The first IDLEN (=3) bytes are the ID (LAT, LNG, etc...)
+// The next 8 bytes are the value (as a double).
+// The ID changes with each call
+
+FASTRUN void GetI2CData(){
+  #define IDLEN 3
+  #define GPSI2CBYTES IDLEN + 8
+  char  LAT[IDLEN+1]    = "LAT";  // Latitude
+  char  LON[IDLEN+1]    = "LON";  // Longitude
+  char  FIX[IDLEN+1]    = "FIX";  // Fix ?
+  char  SAT[IDLEN+1]    = "SAT";  // How many satellites
+  char  ALT[IDLEN+1]    = "ALT";  // Altitude
+  char  SPD[IDLEN+1]    = "SPD";  // Speed
+  char  COR[IDLEN+1]    = "COR";  // Course
+  char  CTO[IDLEN+1]    = "CTO";  // Course to
+  char  DTO[IDLEN+1]    = "DTO";  // Distance to
+  char  HRS[IDLEN+1]    = "HRS";  // GMT Hours  
+  char  MNS[IDLEN+1]    = "MNS";  // GMT Minutes  
+  char  SEC[IDLEN+1]    = "SEC";  // GMT Seconds
+
+
+  char RdataID[IDLEN+1];
+  double RdataIn;
+  union { double Val64; uint8_t Val8[8]; } Rdata;   // 'union' allows access to every byte
+  Wire.requestFrom(GPSI2CHUB, GPSI2CBYTES);         // Ask hub for data
+  for (int j = 0; j < GPSI2CBYTES; ++j ){
+    if (Wire.available()) {                         // Listen to HUB
+      if (j < IDLEN){
+             RdataID[j]          = Wire.read();     // This gets the three-char data id (eg LAT)
+      }else{
+             Rdata.Val8[j-IDLEN] = Wire.read();     // This gets the 64 bit value for that data ID
+      }
+    }
+  }
+  RdataID[3] = 0;                                   // To terminate the ID string.
+  RdataIn = Rdata.Val64;                            // To re-assemble the 64 BIT data to a double
+
+
+  if (strncmp(FIX,RdataID,3) == 0) {     
+      if (int(RdataIn) == 1) {
+       GpsFix = true;
+        return;
+      }
+  }
+
+  if (strncmp(LAT,RdataID,3) == 0) {     
+     LatitudeGPS =  RdataIn;
+     return;
+  }
+  
+  if (strncmp(LON,RdataID,3) == 0) {     
+     LongitudeGPS =  RdataIn;
+     return;
+  }
+
+  if (strncmp(SPD,RdataID,3) == 0) {     
+     SpeedGPS =  RdataIn;
+     return;
+  }
+
+  if (strncmp(COR,RdataID,3) == 0) {     
+     AngleGPS =  RdataIn;
+     return;
+  }
+  
+  if (strncmp(ALT,RdataID,3) == 0) {     
+     AltitudeGPS =  RdataIn;
+     return;
+  }
+  if (strncmp(DTO,RdataID,3) == 0) {     
+     DistanceGPS =  RdataIn;
+     return;
+  }
+
+   if (strncmp(SAT,RdataID,3) == 0) {     
+     SatellitesGPS =  uint8_t(RdataIn);
+     return;
+  }
+  if (strncmp(CTO,RdataID,3) == 0) {     
+     CourseToGPS =  uint8_t(RdataIn);
+     return;
+  }
+  if (strncmp(HRS,RdataID,3) == 0) {     
+     HoursGPS =  uint8_t(RdataIn);
+     return;
+  }
+  if (strncmp(MNS,RdataID,3) == 0) {     
+     MinsGPS =  uint8_t(RdataIn);
+     return;
+  }
+  if (strncmp(SEC,RdataID,3) == 0) {     
+     SecsGPS =  uint8_t(RdataIn);
+     return;
+  }
+
+  
+
+}
+// ***************************************************************************************************************************************************
+
+void  SendDataToI2C(char m[]){
+  Wire.beginTransmission(GPSI2CHUB);   
+  Wire.write(m);
+  Wire.endTransmission();   
+}
+
+
+
 /************************************************************************************************************/
 FASTRUN void DoSensors()
 {      
-       // if (USE_AdafruitUltimateGps) {
-       // for (int k = 0; k < 2; ++k){            // Get up to 3 chars bytes per call.
-       //     if (ReadGPS()) {
-       //         CurrentRadio->startListening(); // Must resume listening before returning
-       //         return;
-       //     }                                   // if a parse happened, skip the rest this time, and resume comms.
-       // }             
-       // }
-
-    if ((millis() - SensorTime) < 2000) { 
-        CurrentRadio->startListening();        // Must now resume listening before returning
-        return;                                // no need to measure too often
-        }
+    if ((millis() - SensorTime) < 250) return;              // no need to measure too often
     SensorTime = millis();
+    
+    if (USE_AdafruitUltimateGps) {
+            GetI2CData();                                    // Sensor now has its own MCU   
+    }
+    
     if (USE_BMP280) {
         if (BoundFlag && Connected) {
             BaroTemperature = bmp280.readTemperature();
@@ -418,7 +518,7 @@ FASTRUN void DoSensors()
 
 FASTRUN void ReceiveData()
 { 
-    if (millis() - LastConnectionMoment <=1 ) { // If we have still loads of time, read the sensors. But not the GPS.
+    if (millis() - LastConnectionMoment < 1 ) { // If we have still loads of time, read the sensors. But not the GPS.
        DoSensors();                             // This must take less than 24 ms to avoid a timeout, or < 7 ms when all's going well.
     }
 
@@ -444,12 +544,12 @@ void ScanI2c()
         Wire.beginTransmission(i);
         if (Wire.endTransmission() == 0) {
             
-           // if (i == 0x10) {
-              //  USE_AdafruitUltimateGps = true;
+            if (i == 8) {
+                USE_AdafruitUltimateGps = true;
 #ifdef DB_SENSORS
-             //   Serial.println("Adafruit Ultimate GPS detected!");
+                Serial.println("Adafruit Ultimate GPS detected!");
 #endif
-        //    }
+              }
              if (i == 0x40) {
                 USE_INA219 = true;
 #ifdef DB_SENSORS
