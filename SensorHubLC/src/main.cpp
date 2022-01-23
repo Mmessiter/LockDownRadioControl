@@ -153,7 +153,7 @@ char RCV[4];
 
  if (strncmp(MAY,RCV,3) == 0) {      // Match first 3 chars with MAY?
      DestinationLat = MAYSLANE_LAT;  // Mark MAYS LANE location
-     DestinationLng = MAYSLANE_LON;  // Mark MAYS LANE  location
+     DestinationLng = MAYSLANE_LON;  // Mark MAYS LANE location
      return;
   }
 
