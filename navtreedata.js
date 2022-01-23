@@ -121,13 +121,13 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "32_2lib_2_tiny_g_p_s_plus-master_2src_2_tiny_g_p_s_09_09_8cpp.html",
-"_radio_functions_8h.html#a9942132c4d194a03fc9791cfdf876ac3",
-"_sensor_hub_l_c_2src_2main_8cpp.html#a882e41768b06234c5a87749be672ea06",
-"_transmitter_code_2src_2main_8cpp.html#a408d676a265b82c355fb6d68d131432c",
-"_transmitter_code_2src_2main_8cpp.html#ac78966debc2cdc13d8ca958ce3b20c78",
-"class_tiny_g_p_s_plus.html#a5fb47066d1d03f4bb5853529053aab48",
-"lib_2_tiny_g_p_s_plus-master_2src_2_tiny_g_p_s_09_09_8h.html#a210404d704c58b910ecee5bd7e97a7dc",
-"struct_tiny_g_p_s_location.html#a86c3acea4f317b427eebb667e4d05a49"
+"_radio_functions_8h.html#a8d671ce93ba33f2f6b5c314108d3592d",
+"_sensor_hub_l_c_2src_2main_8cpp.html#a2f6cf549dcffc0d1688542f2d6061773",
+"_transmitter_code_2src_2main_8cpp.html#a30a079d60b4731ce1531091ffe56a703",
+"_transmitter_code_2src_2main_8cpp.html#abf59862cf6c4e3df5a76f0bfea8919ef",
+"class_tiny_g_p_s_plus.html",
+"index.html",
+"struct_tiny_g_p_s_integer.html#a35234fdeeffdb934a93740db1aefa6a5"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

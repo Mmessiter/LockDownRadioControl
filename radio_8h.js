@@ -38,6 +38,7 @@ var radio_8h =
     [ "ShowHopDurationEtc", "radio_8h.html#a2863e7455e30e6fddc0fcf56f62d6564", null ],
     [ "AckPayload", "radio_8h.html#a30a079d60b4731ce1531091ffe56a703", null ],
     [ "AckPayloadSize", "radio_8h.html#a6dc99d00582ef356ea3d57700dca6dab", null ],
+    [ "AltitudeGPS", "radio_8h.html#ab8ac848f850a53b1ef9f966d972e4216", null ],
     [ "AngleGPS", "radio_8h.html#af4460897c7ef555de2670488abb90260", null ],
     [ "BaroAltitude", "radio_8h.html#af2ae1ded0446ef84d7f1606cb647ac25", null ],
     [ "BaroTemperature", "radio_8h.html#abda84b8cbebce00b7d4b0ea759b8d07f", null ],
@@ -69,6 +70,7 @@ var radio_8h =
     [ "StillSearchingTime", "radio_8h.html#a1d0b7743e2015fe687146524466e4794", null ],
     [ "ThisPipe", "radio_8h.html#a88d2add9e7ca58e7218870f887b25859", null ],
     [ "ThisRadio", "radio_8h.html#a25cc3bb5cb94f4bbef0f2c5b79140c20", null ],
+    [ "USE_AdafruitUltimateGps", "radio_8h.html#a50bd80a7728cf3e3699b0e52ce4ed035", null ],
     [ "USE_BMP280", "radio_8h.html#a4be5c27bea3c82b0a4ec92191052d946", null ],
     [ "USE_INA219", "radio_8h.html#a87ae50e2ac4507568cbf98072f174a1b", null ]
 ];
