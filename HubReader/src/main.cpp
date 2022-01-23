@@ -7,7 +7,7 @@ int count = 0;
 
 // ***************************************************************************************************************************************************
 // Here the GPS HUB is asked for 11 bytes of data over I2C. 
-// The first IDLEN bytes are the ID (LAT, LNG, etc...)
+// The first IDLEN (=3) bytes are the ID (LAT, LNG, etc...)
 // The next 8 bytes are the value (as a double).
 // The ID changes with each call
 
@@ -49,7 +49,6 @@ void GetI2CData(){
       if (RdataIn == 1) Serial.println ("GOT FIX!");
   //return;
   }
-
 
   Serial.print(RdataID);
   Serial.print(" = ");
