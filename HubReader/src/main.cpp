@@ -14,6 +14,20 @@ int count = 0;
 void GetI2CData(){
   #define IDLEN 3
   #define GPSI2CBYTES IDLEN + 8
+  char  LAT[IDLEN+1]    = "LAT";
+  char  LON[IDLEN+1]    = "LON";
+  char  FIX[IDLEN+1]    = "FIX";
+  char  SAT[IDLEN+1]    = "SAT";
+  char  ALT[IDLEN+1]    = "ALT";
+  char  SPD[IDLEN+1]    = "SPD";
+  char  COR[IDLEN+1]    = "COR";
+  char  CTO[IDLEN+1]    = "CTO";
+  char  DTO[IDLEN+1]    = "DTO";
+  char  HRS[IDLEN+1]    = "HRS";
+  char  MNS[IDLEN+1]    = "MNS";
+  char  SEC[IDLEN+1]    = "SEC";
+
+
   char RdataID[IDLEN+1];
   double RdataIn;
   union { double Val64; uint8_t Val8[8]; } Rdata;   // 'union' allows access to every byte
@@ -29,6 +43,14 @@ void GetI2CData(){
   }
   RdataID[3] = 0;                                   // To terminate the string.
   RdataIn = Rdata.Val64;
+
+
+  if (strncmp(FIX,RdataID,3) == 0) {     
+      if (RdataIn == 1) Serial.println ("GOT FIX!");
+  //return;
+  }
+
+
   Serial.print(RdataID);
   Serial.print(" = ");
   Serial.println(RdataIn,8);
@@ -45,7 +67,7 @@ void loop()
   char MAY[4] = "MAY";
 
   if (count > 20){
-    SendDataToI2C(MRK);
+    SendDataToI2C(MAY);
     }
   delay(750);
   GetI2CData();
