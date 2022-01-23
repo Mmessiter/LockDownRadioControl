@@ -41,8 +41,8 @@ void GetI2CData(){
       }
     }
   }
-  RdataID[3] = 0;                                   // To terminate the string.
-  RdataIn = Rdata.Val64;
+  RdataID[3] = 0;                                   // To terminate the ID string.
+  RdataIn = Rdata.Val64;                            // To re-assemble the 64 BIT data to a double
 
 
   if (strncmp(FIX,RdataID,3) == 0) {     
