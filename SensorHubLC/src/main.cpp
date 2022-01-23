@@ -146,7 +146,7 @@ uint8_t i = 0;
     ++i;
     if (i > 3) break; 
   } 
-  if (strcmp(MRK,RCV)) {
+  if (strncmp(MRK,RCV,3) == 0) {    // Match 3 chars?
      DestinationLat = GPSLatitude;  // Mark current location
      DestinationLng = GPSLongitude; // Mark current location
   }

@@ -37,7 +37,6 @@ void  SendDataToI2C(char m[]){
   Wire.write(m);
   Wire.endTransmission();   
 }
-
 void loop()
 {
   char MRK[4] = "MRK";
@@ -47,7 +46,6 @@ void loop()
   delay(1000);
   GetI2CData();
   ++count;
-
 }
 void setup()
 {
