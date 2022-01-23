@@ -55,9 +55,6 @@
 #include <Adafruit_INA219.h> // new library used here±
 #include <Adafruit_BMP280.h>
 #include "utilities/radio.h"
-#include <Adafruit_GPS.h>
-
-Adafruit_GPS GPS(&Wire);
 
 bool            USE_BMP280 = false;                   //  BMP280 sensor connected ?
 bool            USE_INA219 = false;                   //  Volts from INA219 ?
@@ -633,13 +630,7 @@ void DoBinding()
         BindModel();
     }
 }
-void AdafruitUltimateGpsInit(){
-  GPS.begin(0x10);       
-  GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCONLY);
-  GPS.sendCommand(PMTK_SET_NMEA_UPDATE_1HZ);
-  GPS.sendCommand(PGCMD_NOANTENNA);
-  delay(1000);
-}
+
 
 
 /************************************************************************************************************/
