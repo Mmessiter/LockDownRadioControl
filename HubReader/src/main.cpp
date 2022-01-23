@@ -46,8 +46,10 @@ void GetI2CData(){
 
 
   if (strncmp(FIX,RdataID,3) == 0) {     
-      if (RdataIn == 1) Serial.println ("GOT FIX!");
-  //return;
+      if (RdataIn == 1) {
+        Serial.println ("GOT FIX!"); 
+        return;
+      }
   }
 
   Serial.print(RdataID);
