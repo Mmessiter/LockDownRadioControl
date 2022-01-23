@@ -6,8 +6,10 @@ int count = 0;
 
 
 // ***************************************************************************************************************************************************
-// The GPS HUB is asked for 11 bytes of data over I2C. The first IDLEN bytes are the ID (LAT, LNG, etc...)
+// Here the GPS HUB is asked for 11 bytes of data over I2C. 
+// The first IDLEN bytes are the ID (LAT, LNG, etc...)
 // The next 8 bytes are the value (as a double).
+// The ID changes with each call
 
 void GetI2CData(){
   #define IDLEN 3
