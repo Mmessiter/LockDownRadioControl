@@ -122,12 +122,12 @@ var NAVTREEINDEX =
 [
 "32_2lib_2_tiny_g_p_s_plus-master_2src_2_tiny_g_p_s_09_09_8cpp.html",
 "_radio_functions_8h.html#a8d671ce93ba33f2f6b5c314108d3592d",
-"_sensor_hub_l_c_2src_2main_8cpp.html#a2f6cf549dcffc0d1688542f2d6061773",
-"_transmitter_code_2src_2main_8cpp.html#a30a079d60b4731ce1531091ffe56a703",
-"_transmitter_code_2src_2main_8cpp.html#abf59862cf6c4e3df5a76f0bfea8919ef",
-"class_tiny_g_p_s_plus.html",
-"index.html",
-"struct_tiny_g_p_s_integer.html#a35234fdeeffdb934a93740db1aefa6a5"
+"_sensor_hub_l_c_2src_2main_8cpp.html#a43ed11b7ab7e7301052941cb9edf2e97",
+"_transmitter_code_2src_2main_8cpp.html#a31cbd43a34f258e0078a06b2d07a4b72",
+"_transmitter_code_2src_2main_8cpp.html#ac00389a3b76e3ced4517c6ad4147e86a",
+"class_tiny_g_p_s_plus.html#a0bb6a7eb2d0261095911d71c8c067546",
+"index.html#autotoc_md38",
+"struct_tiny_g_p_s_integer.html#a3a76131645f7604b3f3e759b90f9373f"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

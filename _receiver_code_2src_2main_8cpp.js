@@ -13,7 +13,6 @@ var _receiver_code_2src_2main_8cpp =
     [ "SBUSPORT", "_receiver_code_2src_2main_8cpp.html#aa82f9d8a298740acdbaa5c78a9e9f50c", null ],
     [ "SBUSRATE", "_receiver_code_2src_2main_8cpp.html#a39848a06498c1e6444c458f25542b252", null ],
     [ "SERVOSUSED", "_receiver_code_2src_2main_8cpp.html#ab1515f8a159ef919c7afb5a1d71f55a3", null ],
-    [ "AdafruitUltimateGpsInit", "_receiver_code_2src_2main_8cpp.html#acb6166442d01c48d1826386267767dbe", null ],
     [ "AttachServos", "_receiver_code_2src_2main_8cpp.html#a0cbfd712ab3bd8f654bc19400fd704bd", null ],
     [ "BindModel", "_receiver_code_2src_2main_8cpp.html#aa0c6905579a33aef28d737d43676cbbd", null ],
     [ "CheckParams", "_receiver_code_2src_2main_8cpp.html#abd09fca8fe7cb7240846989f1ccd6a94", null ],
@@ -80,6 +79,5 @@ var _receiver_code_2src_2main_8cpp =
     [ "temperature280", "_receiver_code_2src_2main_8cpp.html#a7cc84074d4166c6512a2d479b6f12e30", null ],
     [ "USE_AdafruitUltimateGps", "_receiver_code_2src_2main_8cpp.html#a50bd80a7728cf3e3699b0e52ce4ed035", null ],
     [ "USE_BMP280", "_receiver_code_2src_2main_8cpp.html#a4be5c27bea3c82b0a4ec92191052d946", null ],
-    [ "USE_INA219", "_receiver_code_2src_2main_8cpp.html#a87ae50e2ac4507568cbf98072f174a1b", null ],
-    [ "Wire", "_receiver_code_2src_2main_8cpp.html#addbd2ff8fb4d61f9e52d70a48dd29259", null ]
+    [ "USE_INA219", "_receiver_code_2src_2main_8cpp.html#a87ae50e2ac4507568cbf98072f174a1b", null ]
 ];
