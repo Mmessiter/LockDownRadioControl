@@ -40,10 +40,12 @@ void  SendDataToI2C(char m[]){
 void loop()
 {
   char MRK[4] = "MRK";
+  char MAY[4] = "MAY";
+
   if (count > 20){
     SendDataToI2C(MRK);
-  }
-  delay(1000);
+    }
+  delay(750);
   GetI2CData();
   ++count;
 }

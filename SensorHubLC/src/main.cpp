@@ -135,21 +135,28 @@ void SendDataToReceiver() {
 //************************************* RECEIVE DATA INTERRUPT HANDLER ***************************************
 
 void ReceiveEvent(int q) {  
-char c ;
 char MRK[] = "MRK";
-char RCV[5];
-uint8_t i = 0;
-  while(Wire.available())
-  {
-    c = Wire.read(); // one byte at a time
-    RCV[i] = c;
-    ++i;
-    if (i > 3) break; 
-  } 
-  if (strncmp(MRK,RCV,3) == 0) {    // Match 3 chars?
-     DestinationLat = GPSLatitude;  // Mark current location
-     DestinationLng = GPSLongitude; // Mark current location
+char MAY[] = "MAY";
+char RCV[4];
+    for (uint8_t i = 0; i < 3; ++i) {
+        if (Wire.available()) {
+            RCV[i]= Wire.read();    // Get one byte at a time
+        }
+    } 
+  RCV[3] = 0; // Add a terminator
+
+  if (strncmp(MRK,RCV,3) == 0) {     // Match first 3 chars with MRK?
+     DestinationLat = GPSLatitude;   // Mark current location
+     DestinationLng = GPSLongitude;  // Mark current location
+     return;
   }
+
+ if (strncmp(MAY,RCV,3) == 0) {      // Match first 3 chars with MAY?
+     DestinationLat = MAYSLANE_LAT;  // Mark MAYS LANE location
+     DestinationLng = MAYSLANE_LON;  // Mark MAYS LANE  location
+     return;
+  }
+
 }
 //*************************************** READ GPS DEVICE ***************************************************
  void ReadGps() {
@@ -157,7 +164,6 @@ uint8_t i = 0;
    char a;
     while (GPSDEVICE.available()){
       a = GPSDEVICE.read();
-     // Serial.print (a);
       gps.encode(a);  // Simply send every byte library 
    }
 
