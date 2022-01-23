@@ -14,18 +14,18 @@ int count = 0;
 void GetI2CData(){
   #define IDLEN 3
   #define GPSI2CBYTES IDLEN + 8
-  char  LAT[IDLEN+1]    = "LAT";
-  char  LON[IDLEN+1]    = "LON";
-  char  FIX[IDLEN+1]    = "FIX";
-  char  SAT[IDLEN+1]    = "SAT";
-  char  ALT[IDLEN+1]    = "ALT";
-  char  SPD[IDLEN+1]    = "SPD";
-  char  COR[IDLEN+1]    = "COR";
-  char  CTO[IDLEN+1]    = "CTO";
-  char  DTO[IDLEN+1]    = "DTO";
-  char  HRS[IDLEN+1]    = "HRS";
-  char  MNS[IDLEN+1]    = "MNS";
-  char  SEC[IDLEN+1]    = "SEC";
+  char  LAT[IDLEN+1]    = "LAT";  // Latitude
+  char  LON[IDLEN+1]    = "LON";  // Longitude
+  char  FIX[IDLEN+1]    = "FIX";  // Fix ?
+  char  SAT[IDLEN+1]    = "SAT";  // How many satellites
+  char  ALT[IDLEN+1]    = "ALT";  // Altitude
+  char  SPD[IDLEN+1]    = "SPD";  // Speed
+  char  COR[IDLEN+1]    = "COR";  // Course
+  char  CTO[IDLEN+1]    = "CTO";  // Course to
+  char  DTO[IDLEN+1]    = "DTO";  // Distance to
+  char  HRS[IDLEN+1]    = "HRS";  // GMT Hours  
+  char  MNS[IDLEN+1]    = "MNS";  // GMT Minutes  
+  char  SEC[IDLEN+1]    = "SEC";  // GMT Seconds
 
 
   char RdataID[IDLEN+1];
@@ -67,7 +67,7 @@ void loop()
   char MAY[4] = "MAY";
 
   if (count > 20){
-    SendDataToI2C(MAY);
+    SendDataToI2C(MRK);
     }
   delay(750);
   GetI2CData();
