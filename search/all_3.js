@@ -57,7 +57,7 @@ var searchData=
   ['connectionstart_135',['ConnectionStart',['../radio_8h.html#a11cd5dd0a4f9438c7e7e387349d8636d',1,'radio.h']]],
   ['course_136',['course',['../class_tiny_g_p_s_plus.html#ad7800d3decbe58e355f5229bba231868',1,'TinyGPSPlus']]],
   ['courseto_137',['courseTo',['../class_tiny_g_p_s_plus.html#a82b8fff820573de45c9ae98df3abbdfa',1,'TinyGPSPlus::courseTo(double lat1, double long1, double lat2, double long2)'],['../class_tiny_g_p_s_plus.html#af338c18ccf58a47659be1ffc8259541d',1,'TinyGPSPlus::courseTo(double lat1, double long1, double lat2, double long2)'],['../class_tiny_g_p_s_plus.html#a82b8fff820573de45c9ae98df3abbdfa',1,'TinyGPSPlus::courseTo(double lat1, double long1, double lat2, double long2)'],['../class_tiny_g_p_s_plus.html#a82b8fff820573de45c9ae98df3abbdfa',1,'TinyGPSPlus::courseTo(double lat1, double long1, double lat2, double long2)']]],
-  ['coursetogps_138',['CourseToGPS',['../_receiver_code_2src_2main_8cpp.html#adc0c1d3ffc20a999f658920527a4183e',1,'main.cpp']]],
+  ['coursetogps_138',['CourseToGPS',['../_receiver_code_2src_2main_8cpp.html#adc0c1d3ffc20a999f658920527a4183e',1,'CourseToGPS():&#160;main.cpp'],['../radio_8h.html#adc0c1d3ffc20a999f658920527a4183e',1,'CourseToGPS():&#160;main.cpp']]],
   ['csn_5fpin_139',['CSN_PIN',['../_transmitter_code_2src_2main_8cpp.html#a6c4d73944fe1bd2ff7ceee867c315ac1',1,'main.cpp']]],
   ['currentmode_140',['CurrentMode',['../_radio_functions_8h.html#aacabee92eb3ddd2e3cf31695c00a912e',1,'CurrentMode():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#aacabee92eb3ddd2e3cf31695c00a912e',1,'CurrentMode():&#160;main.cpp']]],
   ['currentradio_141',['CurrentRadio',['../radio_8h.html#a7bca81159d93f215060f40f45f19b0de',1,'radio.h']]],
