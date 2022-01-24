@@ -4274,6 +4274,9 @@ void Button_was_pressed()
             GapAverage         = 0;
             GapCount           = 0;
             RXMAXModelAltitude = 0;
+            GPSMaxAltitude     = 0;
+            GPSMaxDistance     = 0;
+            GPSMaxSpeed        = 0;
             if (!GroundModelAltitude)                        // this allows the Clear button to toggle between relative and absolute atitude
                 {
                 GroundModelAltitude = RXModelAltitude;
