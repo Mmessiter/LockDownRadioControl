@@ -123,11 +123,11 @@ var NAVTREEINDEX =
 "32_2lib_2_tiny_g_p_s_plus-master_2src_2_tiny_g_p_s_09_09_8cpp.html",
 "_radio_functions_8h.html#ab0af36f3442ad4f2d0b716c14c7d6085",
 "_sensor_hub_l_c_2src_2main_8cpp.html#aa111fdf18410d5ea9db7bba30eb3867b",
-"_transmitter_code_2src_2main_8cpp.html#a452f6aed1252d3f1da8a0ceb07552c07",
-"_transmitter_code_2src_2main_8cpp.html#ac8936188af0c1d2f8b9d0cd25fde43b2",
-"class_tiny_g_p_s_plus.html#a5fb47066d1d03f4bb5853529053aab48",
-"lib_2_tiny_g_p_s_plus-master_2src_2_tiny_g_p_s_09_09_8h.html#a49b3ac6a23c4f78931942c51810e3439",
-"struct_tiny_g_p_s_integer.html#aabd55511befbd769155c69e0c1208691"
+"_transmitter_code_2src_2main_8cpp.html#a42f848041eda5cd5b98d334ab44a15a1",
+"_transmitter_code_2src_2main_8cpp.html#ac6156efad98d22f44766714a565ccf2f",
+"class_tiny_g_p_s_plus.html#a3d9173312d514abf50bd43efe6bf6af3",
+"lib_2_tiny_g_p_s_plus-master_2src_2_tiny_g_p_s_09_09_8cpp.html#ae8b0c7d4f4c61109a44d953e5bd22e4f",
+"struct_tiny_g_p_s_integer.html#a3a76131645f7604b3f3e759b90f9373f"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

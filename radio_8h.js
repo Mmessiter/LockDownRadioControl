@@ -30,6 +30,7 @@ var radio_8h =
     [ "LoadGPSLongitude", "radio_8h.html#a984e4fc699e2cdb932f86e0ae1e20bca", null ],
     [ "LoadGPSSpeed", "radio_8h.html#aefbca1484a5df773af5c76e12a646238", null ],
     [ "LoadRXVolts", "radio_8h.html#ad5c9d0f57db506102e8363427892186a", null ],
+    [ "LoadSatellitesGPS", "radio_8h.html#a3b0db767856d357517f9f2188d4c543b", null ],
     [ "LoadTemperature", "radio_8h.html#afd3957dcfa0fc56901c2b9ce3519f511", null ],
     [ "LoadTimeStamp", "radio_8h.html#a3830d14fd002f2ec6d0843b15139360a", null ],
     [ "LoadVersioNumber", "radio_8h.html#af067d2e9e8981a59af86ec75a0db36b4", null ],
