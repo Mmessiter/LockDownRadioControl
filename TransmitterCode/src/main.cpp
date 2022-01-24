@@ -1500,7 +1500,7 @@ void ShowComms()
                     snprintf(Vbuf, 4,"%d",  (int) GPSSpeed);
                     SendText(Sped,Vbuf);
                     snprintf(Vbuf, 4,"%d",  (int) GPSMaxSpeed);
-                    SendText(MxS,Vbuf);   // heer!
+                    SendText(MxS,Vbuf);   // heer to do : Max distance, CourseTo, GPSAltitude, GPSMaxAltitude.....
 
 
                 } else {
@@ -5610,11 +5610,8 @@ void ClearAckPayload()
 
 void GetRXTime()
 { // This gets the time from Receivier to enable FHSS synch
-    union
-    {
-        uint32_t Val32;
-        uint8_t  Val8[4];
-    } RXTimeUnion;          // union used to allow access to each byte of 32 bit value
+
+    union  {uint32_t Val32; uint8_t Val8[4];} RXTimeUnion;         
     if (AckPayload.Byte5) { // Good data? (Zero means no data)
         RXTimeUnion.Val8[0] = AckPayload.Byte1;
         RXTimeUnion.Val8[1] = AckPayload.Byte2;
