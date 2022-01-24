@@ -369,6 +369,7 @@ double   GPSAngle                    = 0;
 double   GPSDistance                 = 0;
 double   GpsFix                      = 0;
 double   GPSSpeed                    = 0;
+double   GPSMaxSpeed                 = 0;
 float    RXModelVolts                = 0;
 int      RXModelAltitude             = 0;
 int      RXMAXModelAltitude          = 0;
@@ -1399,6 +1400,7 @@ void ShowComms()
     char  Bear[]              = "Bear";
     char  Dist[]              = "Dist";
     char  Sped[]              = "Sped";
+    char  MxS[]               = "MxS";
     char  yes[]               = "Yes";
     char  no[]                = "no";
   
@@ -1481,13 +1483,19 @@ void ShowComms()
                     SendText(Lon,Vbuf);
                     snprintf(Vbuf, 10,"%f", GPSLatitude);
                     SendText(Lat,Vbuf);
-                    snprintf(Vbuf, 7,"%f",  GPSAngle);
+                    snprintf(Vbuf, 7,"%d",  int(GPSAngle));
                     SendText(Bear,Vbuf);
-                    GPSDistance = HowFar(GPSLatitude,GPSLongitude,GPSMarkLatitude,GPSMarkLongitude);
-                    snprintf(Vbuf, 5,"%f",  GPSDistance);
+
+                    // GPSDistance = HowFar(GPSLatitude,GPSLongitude,GPSMarkLatitude,GPSMarkLongitude);
+
+                    snprintf(Vbuf, 5,"%d", (int) GPSDistance);
                     SendText(Dist,Vbuf);
-                    snprintf(Vbuf, 4,"%f",  GPSSpeed);
+                    snprintf(Vbuf, 4,"%d",  (int) GPSSpeed);
                     SendText(Sped,Vbuf);
+                    snprintf(Vbuf, 4,"%d",  (int) GPSMaxSpeed);
+                    SendText(MxS,Vbuf);   // heer!
+
+
                 } else {
                     SendText(Fix, no);
                 }
@@ -5698,6 +5706,7 @@ void GetGPSSpeed()
     ThisUnion.Val8[2] = AckPayload.Byte3;
     ThisUnion.Val8[3] = AckPayload.Byte4;
     GPSSpeed          = ThisUnion.Val32;
+    if (GPSSpeed > GPSMaxSpeed) GPSMaxSpeed = GPSSpeed; 
 }
 
 /************************************************************************************************************/
