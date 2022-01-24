@@ -5,10 +5,10 @@
 #include <Wire.h>
 #include <TinyGPS++.h>
 
-#define I2CADDRESS  8       // i2c address of this slave
-#define GPSBAUDRATE 9600    // didn't work any faster
-#define GPSDEVICE Serial1   // Device is connected to Serial1
-#define DEBUG               // local console debug only
+#define I2CADDRESS  8       // Address of this I2C slave
+#define GPSBAUDRATE 9600    // Didn't work any faster
+#define GPSDEVICE Serial1   // GPS is connected to Serial1
+#define DEBUG               // Local console debug only
 #define DEBUGTIMER 1000
 
 int DebugTimer = 0;
@@ -25,7 +25,6 @@ uint8_t GPSDay;
 uint8_t GPSMonth;
 uint8_t GPSYear;
 uint8_t GPSFix;
-double  GPSAge;
 const   char *  GPSLibVersion[20];
 float   GPSCourse;
 double  GPSDistanceTo;
@@ -38,13 +37,9 @@ char    PMTK_API_SET_FIX_CTL_1HZ[]       =  "$PMTK300,1000,0,0,0,0*1C";     // <
 char    PMTK_API_SET_FIX_CTL_5HZ[]       =  "$PMTK300,200,0,0,0,0*2F" ;    // < 5 Hz
 char    PMTK_SET_NMEA_OUTPUT_ALLDATA[]   =  "$PMTK314,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0*28"; ///< turn on ALL THE DATA
 char    PMTK_SET_NMEA_OUTPUT_RMCGGAGSA[] =  "$PMTK314,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0*29"; ///< turn on GPRMC, GPGGA and GPGSA
-char    PMTK_SET_BAUD_115200[]           =  "$PMTK251,115200*1F";   // < 115200 bps
-char    PMTK_SET_BAUD_57600[]            =  "$PMTK251,57600*2C";    // <  57600 bps
 char    PMTK_SET_BAUD_9600[]             =  "$PMTK251,9600*17";     // <   9600 bps     
 char    PGCMD_NOANTENNA[]                =  "$PGCMD,33,0*6D" ;      // < don't show antenna status messages
 uint8_t ParameterNumber                  = 0;
-
-
 
 
 //************************************* SEND DATA INTERRUPT HANDLER ******************************************
@@ -145,13 +140,13 @@ char RCV[4];
     } 
   RCV[3] = 0; // Add a terminator
 
-  if (strncmp(MRK,RCV,3) == 0) {     // Match first 3 chars with MRK?
+  if (strcmp(MRK,RCV) == 0) {     // Match first 3 chars with MRK?
      DestinationLat = GPSLatitude;   // Mark current location
      DestinationLng = GPSLongitude;  // Mark current location
      return;
   }
 
- if (strncmp(MAY,RCV,3) == 0) {      // Match first 3 chars with MAY?
+ if (strcmp(MAY,RCV) == 0) {      // Match first 3 chars with MAY?
      DestinationLat = MAYSLANE_LAT;  // Mark MAYS LANE location
      DestinationLng = MAYSLANE_LON;  // Mark MAYS LANE location
      return;
@@ -166,8 +161,6 @@ char RCV[4];
       a = GPSDEVICE.read();
       gps.encode(a);  // Simply send every byte library 
    }
-
-      GPSAge         = gps.location.age();
       GPSFix         = gps.location.isValid();
       GPSLatitude    = gps.location.lat();
       GPSLongitude   = gps.location.lng();
@@ -192,9 +185,7 @@ void ShowGPS(){
       Serial.print ("        Fix: ");
       if (GPSFix) {Serial.println ("Yes");}else {Serial.println ("No");} 
       Serial.print (" Satellites: ");
-      Serial.println(GPSSatellites);    
-      Serial.print ("        Age: ");  
-      Serial.println(GPSAge/1000,3);  
+      Serial.println(GPSSatellites);      
       Serial.print ("   Latitude: ");
       Serial.println(GPSLatitude,8);
       Serial.print ("  Longitude: ");
@@ -255,8 +246,8 @@ void setup() {
   delay (100);
   SendToGPS(PGCMD_NOANTENNA);                     // These setup commands are for Adafruit Ulimate GPS only
   delay (100);
-  SendToGPS(PMTK_API_SET_FIX_CTL_1HZ);
+  SendToGPS(PMTK_API_SET_FIX_CTL_1HZ);            // These setup commands are for Adafruit Ulimate GPS only
   delay (100);
-  SendToGPS(PMTK_SET_NMEA_OUTPUT_RMCGGAGSA);
+  SendToGPS(PMTK_SET_NMEA_OUTPUT_RMCGGAGSA);       // These setup commands are for Adafruit Ulimate GPS only
   delay (100);
 }

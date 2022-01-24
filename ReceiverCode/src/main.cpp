@@ -463,13 +463,11 @@ FASTRUN void ReadTheNewGPSHub(){
 }
 // ***************************************************************************************************************************************************
 
-void  SendDataToI2C(char m[]){
+void  SendToTheNewGPSHub(char m[]){
   Wire.beginTransmission(GPSI2CHUB);   
   Wire.write(m);
   Wire.endTransmission();   
 }
-
-
 
 /************************************************************************************************************/
 FASTRUN void DoSensors()
