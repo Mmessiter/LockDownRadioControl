@@ -32,7 +32,7 @@ var _receiver_code_2src_2main_8cpp =
     [ "ReceiveData", "_receiver_code_2src_2main_8cpp.html#a06807a4f185694d37f774702ba74db0a", null ],
     [ "SaveFailSafeData", "_receiver_code_2src_2main_8cpp.html#a96891035aa9f064462b6a614c5878f51", null ],
     [ "ScanI2c", "_receiver_code_2src_2main_8cpp.html#a20ffd6680226b1e058002512386e7770", null ],
-    [ "SendDataToI2C", "_receiver_code_2src_2main_8cpp.html#a1d60be7f1d028ff20d3871b6e3686ed1", null ],
+    [ "SendToTheNewGPSHub", "_receiver_code_2src_2main_8cpp.html#af5a21ef36cbe9f8a4dd5c509e8b93892", null ],
     [ "setup", "_receiver_code_2src_2main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d", null ],
     [ "ShowHopDurationEtc", "_receiver_code_2src_2main_8cpp.html#a2863e7455e30e6fddc0fcf56f62d6564", null ],
     [ "UseReceivedData", "_receiver_code_2src_2main_8cpp.html#abb1997c589abc6432f612eaedf985e38", null ],

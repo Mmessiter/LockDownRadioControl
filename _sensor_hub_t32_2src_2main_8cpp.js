@@ -19,7 +19,6 @@ var _sensor_hub_t32_2src_2main_8cpp =
     [ "DestinationLat", "_sensor_hub_t32_2src_2main_8cpp.html#a8c2d07492cf82a17c5cd61777bed8b63", null ],
     [ "DestinationLng", "_sensor_hub_t32_2src_2main_8cpp.html#a68d045f3a8018e98f4701013f7ac0a64", null ],
     [ "gps", "_sensor_hub_t32_2src_2main_8cpp.html#a169c53997a7da1d0fb99aec1b4675ce8", null ],
-    [ "GPSAge", "_sensor_hub_t32_2src_2main_8cpp.html#ae6dabb559ef88bb2d7d686a6be8af9f8", null ],
     [ "GPSAltitude", "_sensor_hub_t32_2src_2main_8cpp.html#adf4aff982f0b96491848cb8c7d4359d2", null ],
     [ "GPSCourse", "_sensor_hub_t32_2src_2main_8cpp.html#aa111fdf18410d5ea9db7bba30eb3867b", null ],
     [ "GPSCourseTo", "_sensor_hub_t32_2src_2main_8cpp.html#ad8139c93310246277e2c68a4c74effd3", null ],
@@ -40,8 +39,6 @@ var _sensor_hub_t32_2src_2main_8cpp =
     [ "PGCMD_NOANTENNA", "_sensor_hub_t32_2src_2main_8cpp.html#af5f2a2a78189687a7055abd054ac6058", null ],
     [ "PMTK_API_SET_FIX_CTL_1HZ", "_sensor_hub_t32_2src_2main_8cpp.html#abb8b0387db0515eec168511ea9facd34", null ],
     [ "PMTK_API_SET_FIX_CTL_5HZ", "_sensor_hub_t32_2src_2main_8cpp.html#aebd822b8158e52de583952d807a7f200", null ],
-    [ "PMTK_SET_BAUD_115200", "_sensor_hub_t32_2src_2main_8cpp.html#a43ed11b7ab7e7301052941cb9edf2e97", null ],
-    [ "PMTK_SET_BAUD_57600", "_sensor_hub_t32_2src_2main_8cpp.html#a74a7fb49c01bbaf8bb6fdbc8f79a1f57", null ],
     [ "PMTK_SET_BAUD_9600", "_sensor_hub_t32_2src_2main_8cpp.html#a2f6cf549dcffc0d1688542f2d6061773", null ],
     [ "PMTK_SET_NMEA_OUTPUT_ALLDATA", "_sensor_hub_t32_2src_2main_8cpp.html#a9e66319eb62ac284544d36d69f59bda5", null ],
     [ "PMTK_SET_NMEA_OUTPUT_RMCGGAGSA", "_sensor_hub_t32_2src_2main_8cpp.html#a25a3b2af4ac29d0f76a20362319394a8", null ]
