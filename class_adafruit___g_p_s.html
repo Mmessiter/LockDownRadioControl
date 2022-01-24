@@ -1492,7 +1492,7 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 
 <p>Read one character from the GPS device. </p>
-<p>Call very frequently and multiple times per opportunity or the buffer may overflow if there are frequent NMEA sentences. An 82 character NMEA sentence 10 times per second will require 820 calls per second, and once a <a class="el" href="_hub_reader_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f">loop()</a> may not be enough. Check for <a class="el" href="class_adafruit___g_p_s.html#ac44f7d0517543bdd1c22a89d2d11ea78" title="Check to see if a new NMEA line has been received.">newNMEAreceived()</a> after at least every 10 calls, or you may miss some short sentences. </p><dl class="section return"><dt>Returns</dt><dd>The character that we received, or 0 if nothing was available </dd></dl>
+<p>Call very frequently and multiple times per opportunity or the buffer may overflow if there are frequent NMEA sentences. An 82 character NMEA sentence 10 times per second will require 820 calls per second, and once a <a class="el" href="_receiver_code_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f">loop()</a> may not be enough. Check for <a class="el" href="class_adafruit___g_p_s.html#ac44f7d0517543bdd1c22a89d2d11ea78" title="Check to see if a new NMEA line has been received.">newNMEAreceived()</a> after at least every 10 calls, or you may miss some short sentences. </p><dl class="section return"><dt>Returns</dt><dd>The character that we received, or 0 if nothing was available </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="_adafruit___g_p_s_8cpp_source.html#l00362">362</a> of file <a class="el" href="_adafruit___g_p_s_8cpp_source.html">Adafruit_GPS.cpp</a>.</p>
 <div class="dynheader">
