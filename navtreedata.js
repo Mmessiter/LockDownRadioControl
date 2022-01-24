@@ -122,11 +122,11 @@ var NAVTREEINDEX =
 [
 "32_2lib_2_tiny_g_p_s_plus-master_2src_2_tiny_g_p_s_09_09_8cpp.html",
 "_radio_functions_8h.html#ab0af36f3442ad4f2d0b716c14c7d6085",
-"_sensor_hub_l_c_2src_2main_8cpp.html#aa111fdf18410d5ea9db7bba30eb3867b",
-"_transmitter_code_2src_2main_8cpp.html#a42f848041eda5cd5b98d334ab44a15a1",
-"_transmitter_code_2src_2main_8cpp.html#ac6156efad98d22f44766714a565ccf2f",
+"_sensor_hub_l_c_2src_2main_8cpp.html#a9e66319eb62ac284544d36d69f59bda5",
+"_transmitter_code_2src_2main_8cpp.html#a419ee6bf72350585041578e743b6113a",
+"_transmitter_code_2src_2main_8cpp.html#ac57deb5507c3835634b98d51b5d13c9b",
 "class_tiny_g_p_s_plus.html#a3d9173312d514abf50bd43efe6bf6af3",
-"lib_2_tiny_g_p_s_plus-master_2src_2_tiny_g_p_s_09_09_8cpp.html#ae8b0c7d4f4c61109a44d953e5bd22e4f",
+"lib_2_tiny_g_p_s_plus-master_2src_2_tiny_g_p_s_09_09_8cpp.html#ae28873e01fa28eec31295762b3f55337",
 "struct_tiny_g_p_s_integer.html#a3a76131645f7604b3f3e759b90f9373f"
 ];
 
