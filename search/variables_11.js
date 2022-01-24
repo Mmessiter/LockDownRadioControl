@@ -1,7 +1,7 @@
 var searchData=
 [
   ['satellites_1580',['satellites',['../class_tiny_g_p_s_plus.html#a5fb47066d1d03f4bb5853529053aab48',1,'TinyGPSPlus::satellites()'],['../class_adafruit___g_p_s.html#a31e4d48939f3b9e5f62933afc117d04d',1,'Adafruit_GPS::satellites()']]],
-  ['satellitesgps_1581',['SatellitesGPS',['../_receiver_code_2src_2main_8cpp.html#a7dc81a3982ee72ef15b460b4bbf32818',1,'main.cpp']]],
+  ['satellitesgps_1581',['SatellitesGPS',['../radio_8h.html#a7dc81a3982ee72ef15b460b4bbf32818',1,'SatellitesGPS():&#160;main.cpp'],['../_receiver_code_2src_2main_8cpp.html#a7dc81a3982ee72ef15b460b4bbf32818',1,'SatellitesGPS():&#160;main.cpp']]],
   ['savebutton_1582',['SaveButton',['../_transmitter_code_2src_2main_8cpp.html#acfd58819eed72b51ae74b059736d9104',1,'main.cpp']]],
   ['savedcurrentview_1583',['SavedCurrentView',['../_transmitter_code_2src_2main_8cpp.html#a9f535eadbf4eb2d6975105c406c1206f',1,'main.cpp']]],
   ['savedpipeaddress_1584',['SavedPipeAddress',['../radio_8h.html#a3398d00540e610ad35ff3f4f85478833',1,'radio.h']]],
@@ -12,7 +12,7 @@ var searchData=
   ['sbustimer_1589',['SBUSTimer',['../_receiver_code_2src_2main_8cpp.html#ab2bf977dee28aac3f049d578d8433f0b',1,'SBUSTimer():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a2e121251691466f81a2f540f00e7141e',1,'SBUSTimer():&#160;main.cpp']]],
   ['scale_1590',['scale',['../structnmea__history__t.html#a4c98f18694ee688d7c4ff2d4d6941739',1,'nmea_history_t']]],
   ['scanend_1591',['ScanEnd',['../_radio_functions_8h.html#a6fde7bc3d03bda84c33abdbe1ed7b5bf',1,'ScanEnd():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a6fde7bc3d03bda84c33abdbe1ed7b5bf',1,'ScanEnd():&#160;main.cpp']]],
-  ['scanstart_1592',['ScanStart',['../_transmitter_code_2src_2main_8cpp.html#a40219e66b010dcf762b96491c9e668ec',1,'ScanStart():&#160;main.cpp'],['../_radio_functions_8h.html#a40219e66b010dcf762b96491c9e668ec',1,'ScanStart():&#160;main.cpp']]],
+  ['scanstart_1592',['ScanStart',['../_radio_functions_8h.html#a40219e66b010dcf762b96491c9e668ec',1,'ScanStart():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a40219e66b010dcf762b96491c9e668ec',1,'ScanStart():&#160;main.cpp']]],
   ['screentimeout_1593',['ScreenTimeout',['../_transmitter_code_2src_2main_8cpp.html#a99a6fe87dc49be7754f7ec441aa780ec',1,'main.cpp']]],
   ['screenviewtimeout_1594',['ScreenViewTimeout',['../_transmitter_code_2src_2main_8cpp.html#aa978945d40efd5dcb653649588c922ac',1,'main.cpp']]],
   ['searchstarttime_1595',['SearchStartTime',['../radio_8h.html#ab92d51a6cbfc38d73a79a4c4db7a338e',1,'radio.h']]],
