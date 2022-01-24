@@ -366,10 +366,19 @@ double   GPSLongitude                = 0;
 double   GPSMarkLatitude             = 0;  
 double   GPSMarkLongitude            = 0;
 double   GPSAngle                    = 0;
-double   GPSDistance                 = 0;
+//double   GPSDistance                 = 0;
 double   GpsFix                      = 0;
 double   GPSSpeed                    = 0;
 double   GPSMaxSpeed                 = 0;
+
+double   GPSAltitude                 = 0;
+double   GPSDistanceTo               = 0;
+double   GPSCourseTo                 = 0;
+
+
+
+
+
 float    RXModelVolts                = 0;
 int      RXModelAltitude             = 0;
 int      RXMAXModelAltitude          = 0;
@@ -1486,9 +1495,7 @@ void ShowComms()
                     snprintf(Vbuf, 7,"%d",  int(GPSAngle));
                     SendText(Bear,Vbuf);
 
-                    // GPSDistance = HowFar(GPSLatitude,GPSLongitude,GPSMarkLatitude,GPSMarkLongitude);
-
-                    snprintf(Vbuf, 5,"%d", (int) GPSDistance);
+                    snprintf(Vbuf, 5,"%d", (int) GPSDistanceTo);
                     SendText(Dist,Vbuf);
                     snprintf(Vbuf, 4,"%d",  (int) GPSSpeed);
                     SendText(Sped,Vbuf);
@@ -5627,65 +5634,40 @@ void GetRXTime()
     ReadSwitches();
     ShowComms();
 }
-
-
 /************************************************************************************************************/
-
 void GetGPSLatitude()
 {
-    union // union used to allow access to each byte of 32 bit float
-    {
-        float   Val32;
-        uint8_t Val8[4];
-    } ThisUnion;
+    union  {float Val32;uint8_t Val8[4];} ThisUnion;
     ThisUnion.Val8[0] = AckPayload.Byte1;
     ThisUnion.Val8[1] = AckPayload.Byte2;
     ThisUnion.Val8[2] = AckPayload.Byte3;
     ThisUnion.Val8[3] = AckPayload.Byte4;
     GPSLatitude       = ThisUnion.Val32;
 }
-
 /************************************************************************************************************/
-
 void GetGPSLongitude()
 {
-    union // union used to allow access to each byte of 32 bit float
-    {
-        float   Val32;
-        uint8_t Val8[4];
-    } ThisUnion;
+    union {float Val32; uint8_t Val8[4];} ThisUnion;
     ThisUnion.Val8[0] = AckPayload.Byte1;
     ThisUnion.Val8[1] = AckPayload.Byte2;
     ThisUnion.Val8[2] = AckPayload.Byte3;
     ThisUnion.Val8[3] = AckPayload.Byte4;
     GPSLongitude      = ThisUnion.Val32;
 }
-
 /************************************************************************************************************/
-
 void GetGPSAngle()
 {
-    union // union used to allow access to each byte of 32 bit float
-    {
-        float   Val32;
-        uint8_t Val8[4];
-    } ThisUnion;
+    union {float Val32; uint8_t Val8[4];} ThisUnion;
     ThisUnion.Val8[0] = AckPayload.Byte1;
     ThisUnion.Val8[1] = AckPayload.Byte2;
     ThisUnion.Val8[2] = AckPayload.Byte3;
     ThisUnion.Val8[3] = AckPayload.Byte4;
     GPSAngle          = ThisUnion.Val32;
 }
-
 /************************************************************************************************************/
-
 void GetGPSFix()
 {
-    union // union used to allow access to each byte of 32 bit float
-    {
-        float   Val32;
-        uint8_t Val8[4];
-    } ThisUnion;
+    union  {float Val32;uint8_t Val8[4];} ThisUnion;
     ThisUnion.Val8[0] = AckPayload.Byte1;
     ThisUnion.Val8[1] = AckPayload.Byte2;
     ThisUnion.Val8[2] = AckPayload.Byte3;
@@ -5693,14 +5675,9 @@ void GetGPSFix()
     GpsFix            = ThisUnion.Val32;
 }
 /************************************************************************************************************/
-
 void GetGPSSpeed()
 {
-    union // union used to allow access to each byte of 32 bit float
-    {
-        float   Val32;
-        uint8_t Val8[4];
-    } ThisUnion;
+    union  {float Val32;uint8_t Val8[4];} ThisUnion;
     ThisUnion.Val8[0] = AckPayload.Byte1;
     ThisUnion.Val8[1] = AckPayload.Byte2;
     ThisUnion.Val8[2] = AckPayload.Byte3;
@@ -5708,16 +5685,10 @@ void GetGPSSpeed()
     GPSSpeed          = ThisUnion.Val32;
     if (GPSSpeed > GPSMaxSpeed) GPSMaxSpeed = GPSSpeed; 
 }
-
 /************************************************************************************************************/
-
 void GetRXVolts()
 {
-    union // union used to allow access to each byte of 32 bit float
-    {
-        float   Val32;
-        uint8_t Val8[4];
-    } RXVoltsUnion;
+    union  {float Val32; uint8_t Val8[4];} RXVoltsUnion;
     RXVoltsUnion.Val8[0] = AckPayload.Byte1;
     RXVoltsUnion.Val8[1] = AckPayload.Byte2;
     RXVoltsUnion.Val8[2] = AckPayload.Byte3;
@@ -5727,11 +5698,7 @@ void GetRXVolts()
 /************************************************************************************************************/
 void GetAltitude()
 {
-    union // union used to allow access to each byte of 32 bit float
-    {
-        float   Val32;
-        uint8_t Val8[4];
-    } AltitudeUnion;
+    union {float Val32; uint8_t Val8[4];} AltitudeUnion;
     AltitudeUnion.Val8[0] =  AckPayload.Byte1; // These values were obtained from RX in Ack Payload
     AltitudeUnion.Val8[1] =  AckPayload.Byte2;
     AltitudeUnion.Val8[2] =  AckPayload.Byte3;
@@ -5742,16 +5709,40 @@ void GetAltitude()
     snprintf(MaxAltitude, 5, "%d", RXMAXModelAltitude);
     snprintf(ModelAltitude, 5, "%d", RXModelAltitude);
 }
-
+/************************************************************************************************************/
+void GetCourseTo()
+{
+    union {float Val32; uint8_t Val8[4];} ThisUnion;
+    ThisUnion.Val8[0] = AckPayload.Byte1; 
+    ThisUnion.Val8[1] = AckPayload.Byte2;
+    ThisUnion.Val8[2] = AckPayload.Byte3;
+    ThisUnion.Val8[3] = AckPayload.Byte4;
+    GPSCourseTo       = ThisUnion.Val32;
+}
+/************************************************************************************************************/
+void GetDistanceToGPS()
+{
+    union {float Val32; uint8_t Val8[4];} ThisUnion;
+    ThisUnion.Val8[0] = AckPayload.Byte1; 
+    ThisUnion.Val8[1] = AckPayload.Byte2;
+    ThisUnion.Val8[2] = AckPayload.Byte3;
+    ThisUnion.Val8[3] = AckPayload.Byte4;
+    GPSDistanceTo     = ThisUnion.Val32;
+}
+/************************************************************************************************************/
+void GetAltitudeGPS()
+{
+    union {float Val32; uint8_t Val8[4];} ThisUnion;
+    ThisUnion.Val8[0] = AckPayload.Byte1; 
+    ThisUnion.Val8[1] = AckPayload.Byte2;
+    ThisUnion.Val8[2] = AckPayload.Byte3;
+    ThisUnion.Val8[3] = AckPayload.Byte4;
+    GPSAltitude       = ThisUnion.Val32;
+}
 /************************************************************************************************************/
 void GetTemperature()
 {
-    union // union used to allow access to each byte of 32 bit float
-    {
-        float   Val32;
-        uint8_t Val8[4];
-    } TemperatureUnion;
-
+    union {float Val32;uint8_t Val8[4];} TemperatureUnion;
     TemperatureUnion.Val8[0] = AckPayload.Byte1; // These values are herewith delivered to Transmitter in Ack Payload
     TemperatureUnion.Val8[1] = AckPayload.Byte2;
     TemperatureUnion.Val8[2] = AckPayload.Byte3;
@@ -5825,6 +5816,24 @@ void ParseAckPayload()
                 GetGPSFix();
                 break;
             case 18:
+                GetRXTime(); // Synch 
+                break;
+            case 19:
+                GetAltitudeGPS();
+                break;
+            case 20:
+                GetRXTime(); // Synch 
+                break;
+            case 21:
+                GetDistanceToGPS();
+                break;
+            case 22:
+                GetRXTime(); // Synch 
+                break;
+            case 23:
+                GetCourseTo();
+                break;
+            case 24:
                 GetRXTime(); // Synch 
                 break;
             default:

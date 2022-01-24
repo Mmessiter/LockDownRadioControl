@@ -45,7 +45,14 @@ extern double   LatitudeGPS;
 extern double   LongitudeGPS;
 extern double   SpeedGPS;
 extern double   AngleGPS;
+
 extern double   AltitudeGPS;
+extern double   DistanceGPS;
+extern double   CourseToGPS;
+extern uint8_t  HoursGPS;
+extern uint8_t  MinsGPS;
+extern uint8_t  SecsGPS;
+
 extern bool     GpsFix;
 extern bool     USE_AdafruitUltimateGps;    
 extern bool     USE_BMP280;
@@ -295,15 +302,11 @@ void LoadTimeStamp()
 
 #define HOPTIME         55 // ms between channel changes
 #define FREQUENCYSCOUNT 82 // use 82 different channels
-
-    union // union used to allow access to each byte of 32 bit value
-    {
-        uint32_t Stamp32;
-        uint8_t  Stamp8[4];
-    } Time;
+union  {uint32_t Stamp32; uint8_t  Stamp8[4];} Time;
 
     Time.Stamp32 = millis() - HopStart;
     RXTimeStamp  = Time.Stamp32;
+   
     if (RXTimeStamp >= HOPTIME) {
         HopStart     = millis();
         Time.Stamp32 = 0;
@@ -319,6 +322,7 @@ void LoadTimeStamp()
     AckPayload.Byte2 = Time.Stamp8[1];
     AckPayload.Byte3 = Time.Stamp8[2];
     AckPayload.Byte4 = Time.Stamp8[3];
+    
     AckPayload.Byte5 = NextChannelNumber;
 }
 
@@ -327,12 +331,7 @@ void LoadTimeStamp()
 
 void LoadGPSLongitude()
 {
-    union // union used to allow access to each byte of 32 bit float
-    {
-        float   Val32;
-        uint8_t Val8[4];
-    } ThisUnion;
-
+    union  {float Val32; uint8_t Val8[4];} ThisUnion;
     ThisUnion.Val32     = LongitudeGPS;
     AckPayload.Byte1    = ThisUnion.Val8[0];    // These values are herewith delivered to Transmitter in Ack Payload
     AckPayload.Byte2    = ThisUnion.Val8[1];
@@ -344,12 +343,7 @@ void LoadGPSLongitude()
 
 void LoadGPSLatitude()
 {
-    union // union used to allow access to each byte of 32 bit float
-    {
-        float   Val32;
-        uint8_t Val8[4];
-    } ThisUnion;
-
+    union{float Val32;uint8_t Val8[4];} ThisUnion;
     ThisUnion.Val32     = LatitudeGPS;
     AckPayload.Byte1    = ThisUnion.Val8[0];    // These values are herewith delivered to Transmitter in Ack Payload
     AckPayload.Byte2    = ThisUnion.Val8[1];
@@ -361,12 +355,7 @@ void LoadGPSLatitude()
 
 void LoadGPSAngle()
 {
-    union // union used to allow access to each byte of 32 bit float
-    {
-        float   Val32;
-        uint8_t Val8[4];
-    } ThisUnion;
-
+    union  {float Val32; uint8_t Val8[4];} ThisUnion;
     ThisUnion.Val32     = AngleGPS;
     AckPayload.Byte1    = ThisUnion.Val8[0];    // These values are herewith delivered to Transmitter in Ack Payload
     AckPayload.Byte2    = ThisUnion.Val8[1];
@@ -378,12 +367,7 @@ void LoadGPSAngle()
 
 void LoadGPSSpeed()
 {
-    union // union used to allow access to each byte of 32 bit float
-    {
-        float   Val32;
-        uint8_t Val8[4];
-    } ThisUnion;
-
+    union  {float Val32; uint8_t Val8[4]; } ThisUnion;
     ThisUnion.Val32     = SpeedGPS;
     AckPayload.Byte1    = ThisUnion.Val8[0];    // These values are herewith delivered to Transmitter in Ack Payload
     AckPayload.Byte2    = ThisUnion.Val8[1];
@@ -395,12 +379,7 @@ void LoadGPSSpeed()
 
 void LoadGPSFix()
 {
-    union // union used to allow access to each byte of 32 bit float
-    {
-        float   Val32;
-        uint8_t Val8[4];
-    } ThisUnion;
-
+    union  {float Val32;  uint8_t Val8[4];} ThisUnion;
     ThisUnion.Val32     = GpsFix;
     AckPayload.Byte1    = ThisUnion.Val8[0];    // These values are herewith delivered to Transmitter in Ack Payload
     AckPayload.Byte2    = ThisUnion.Val8[1];
@@ -411,31 +390,52 @@ void LoadGPSFix()
 
 void LoadRXVolts()
 {
-    union // union used to allow access to each byte of 32 bit float
-    {
-        float   Val32;
-        uint8_t Val8[4];
-    } RXVolts;
-
+    union  {float Val32;uint8_t Val8[4];} RXVolts;
     RXVolts.Val32    = INA219Volts;
     AckPayload.Byte1 = RXVolts.Val8[0];    // These values are herewith delivered to Transmitter in Ack Payload
     AckPayload.Byte2 = RXVolts.Val8[1];
     AckPayload.Byte3 = RXVolts.Val8[2];
     AckPayload.Byte4 = RXVolts.Val8[3];
 }
+/************************************************************************************************************/
+void LoadCourseToGPS()  
+{
+    union {float Val32; uint8_t Val8[4];} ThisUnion;
+    ThisUnion.Val32     = (float)CourseToGPS;        
+    AckPayload.Byte1    = ThisUnion.Val8[0]; // These values are herewith delivered to Transmitter in Ack Payload
+    AckPayload.Byte2    = ThisUnion.Val8[1];
+    AckPayload.Byte3    = ThisUnion.Val8[2];
+    AckPayload.Byte4    = ThisUnion.Val8[3];
+}
+/************************************************************************************************************/
+void LoadDistanceGPS()  
+{
+    union {float Val32; uint8_t Val8[4];} ThisUnion;
+
+    ThisUnion.Val32     = (float)DistanceGPS;        
+    AckPayload.Byte1    = ThisUnion.Val8[0]; // These values are herewith delivered to Transmitter in Ack Payload
+    AckPayload.Byte2    = ThisUnion.Val8[1];
+    AckPayload.Byte3    = ThisUnion.Val8[2];
+    AckPayload.Byte4    = ThisUnion.Val8[3];
+}
+/************************************************************************************************************/
+void LoadAltitudeGPS()  
+{
+    union   {float Val32;uint8_t Val8[4]; } AltitudeUnion;
+
+    AltitudeUnion.Val32 = (float)AltitudeGPS;        
+    AckPayload.Byte1    = AltitudeUnion.Val8[0]; // These values are herewith delivered to Transmitter in Ack Payload
+    AckPayload.Byte2    = AltitudeUnion.Val8[1];
+    AckPayload.Byte3    = AltitudeUnion.Val8[2];
+    AckPayload.Byte4    = AltitudeUnion.Val8[3];
+}
 
 /************************************************************************************************************/
 void LoadAltitude()  // Baro (not GPS)
 {
-
-    union // union used to allow access to each byte of 32 bit float
-    {
-        float   Val32;
-        uint8_t Val8[4];
-    } AltitudeUnion;
-
-    AltitudeUnion.Val32 = AltitudeGPS ;        // BaroAltitude;
-    AckPayload.Byte1    = AltitudeUnion.Val8[0]; // These values are herewith delivered to Transmitter in Ack Payload
+    union  {float   Val32;  uint8_t Val8[4];} AltitudeUnion;
+    AltitudeUnion.Val32 = BaroAltitude;            // BaroAltitude;
+    AckPayload.Byte1    = AltitudeUnion.Val8[0];   // These values are herewith delivered to Transmitter in Ack Payload
     AckPayload.Byte2    = AltitudeUnion.Val8[1];
     AckPayload.Byte3    = AltitudeUnion.Val8[2];
     AckPayload.Byte4    = AltitudeUnion.Val8[3];
@@ -445,11 +445,7 @@ void LoadAltitude()  // Baro (not GPS)
 
 void LoadTemperature()
 {
-    union // union used to allow access to each byte of 32 bit float
-    {
-        float   Val32;
-        uint8_t Val8[4];
-    } TemperatureUnion;
+    union  { float   Val32; uint8_t Val8[4]; } TemperatureUnion;
     TemperatureUnion.Val32 = BaroTemperature;
     AckPayload.Byte1       = TemperatureUnion.Val8[0]; // These values are herewith delivered to Transmitter in Ack Payload
     AckPayload.Byte2       = TemperatureUnion.Val8[1];
@@ -469,7 +465,7 @@ void LoadAckPayload()
                                 // ... etc ...
       if (USE_BMP280) MaxAckP              = 4;                     // 4 + volts
       if (USE_INA219) MaxAckP              = 8;                     // 8 + Baro
-      if (USE_AdafruitUltimateGps) MaxAckP = 18;                    // 18 + GPS
+      if (USE_AdafruitUltimateGps) MaxAckP = 24;                    // 18 + GPS
       if (AckPayload.Purpose > MaxAckP) AckPayload.Purpose = 0;     // wrap after max
 
     switch (AckPayload.Purpose) {
@@ -528,6 +524,24 @@ void LoadAckPayload()
             LoadGPSFix();         // ********* GPS *******************
             break;
         case 18:
+            LoadTimeStamp();
+            break;
+        case 19: 
+            LoadAltitudeGPS();        // ********* GPS *******************
+            break;
+        case 20:
+            LoadTimeStamp();
+            break;
+        case 21: 
+            LoadDistanceGPS();        // ********* GPS *******************
+            break;
+        case 22:
+            LoadTimeStamp();
+            break; 
+        case 23: 
+            LoadCourseToGPS();        // ********* GPS *******************
+            break;
+        case 24:
             LoadTimeStamp();
             break;
         default:
