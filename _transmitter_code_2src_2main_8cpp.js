@@ -305,6 +305,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "GPSLongitude", "_transmitter_code_2src_2main_8cpp.html#aa6e33f286808412f23d57b633205ffe3", null ],
     [ "GPSMarkLatitude", "_transmitter_code_2src_2main_8cpp.html#ace5c99d2141ad60a066c5f86ec7cff17", null ],
     [ "GPSMarkLongitude", "_transmitter_code_2src_2main_8cpp.html#ac7240d9c9323f933238440f742a9e17d", null ],
+    [ "GPSMaxSpeed", "_transmitter_code_2src_2main_8cpp.html#a462317976087cbd5089230fa2ff12348", null ],
     [ "GPSSpeed", "_transmitter_code_2src_2main_8cpp.html#a0090b19a9b5c3b1d5093452c7b7ee62d", null ],
     [ "GroundModelAltitude", "_transmitter_code_2src_2main_8cpp.html#ab50929c4d3d76c3a37ab817e0022d57a", null ],
     [ "HopStart", "_transmitter_code_2src_2main_8cpp.html#a937fc53e966c6b5c66b9d66c01cec13f", null ],
