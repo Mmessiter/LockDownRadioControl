@@ -484,7 +484,7 @@ FASTRUN void ReadTheNewGPSHub(){
 /************************************************************************************************************/
 FASTRUN void DoSensors()
 {      
-    if ((millis() - SensorTime) < 1000) return;              // no need to measure too often
+    if ((millis() - SensorTime) < 50) return;              // no need to measure too often
         SensorTime = millis();
     
     if (USE_AdafruitUltimateGps) {
