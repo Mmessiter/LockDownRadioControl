@@ -122,11 +122,11 @@ var NAVTREEINDEX =
 [
 "32_2lib_2_tiny_g_p_s_plus-master_2src_2_tiny_g_p_s_09_09_8cpp.html",
 "_radio_functions_8h.html#a8d671ce93ba33f2f6b5c314108d3592d",
-"_sensor_hub_l_c_2src_2main_8cpp.html#a43ed11b7ab7e7301052941cb9edf2e97",
-"_transmitter_code_2src_2main_8cpp.html#a31cbd43a34f258e0078a06b2d07a4b72",
-"_transmitter_code_2src_2main_8cpp.html#ac00389a3b76e3ced4517c6ad4147e86a",
-"class_tiny_g_p_s_plus.html#a0bb6a7eb2d0261095911d71c8c067546",
-"index.html#autotoc_md38",
+"_sensor_hub_l_c_2src_2main_8cpp.html#a472646a6b1f959aa3b4261a8247c2015",
+"_transmitter_code_2src_2main_8cpp.html#a324fd33f9933254079efa1cc42c05e1f",
+"_transmitter_code_2src_2main_8cpp.html#ac182a99befc8d4d83532a6c38571a222",
+"class_tiny_g_p_s_plus.html#a32a0b61a25ce0c490216cb2b4ea19ced",
+"index.html#autotoc_md39",
 "struct_tiny_g_p_s_integer.html#a3a76131645f7604b3f3e759b90f9373f"
 ];
 
