@@ -52,6 +52,7 @@ extern double   CourseToGPS;
 extern uint8_t  HoursGPS;
 extern uint8_t  MinsGPS;
 extern uint8_t  SecsGPS;
+extern uint8_t  SatellitesGPS; // Heer .. todo
 
 extern bool     GpsFix;
 extern bool     USE_AdafruitUltimateGps;    
