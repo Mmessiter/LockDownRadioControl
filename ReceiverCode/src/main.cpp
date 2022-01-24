@@ -279,6 +279,21 @@ void BindModel()
 #endif
 }
 
+// ***************************************************************************************************************************************************
+
+void  SendToTheNewGPSHub(char m[]){
+  Wire.beginTransmission(GPSI2CHUB);   
+  Wire.write(m);
+  Wire.endTransmission();   
+}
+
+// ***************************************************************************************************************************************************
+
+void MarkHere(){
+        char MRK[4] = "MRK";
+        SendToTheNewGPSHub(MRK);  // Mark this spot
+}
+
 /************************************************************************************************************/
 
 void RebuildFlags(bool* f, uint16_t tb)
@@ -314,6 +329,10 @@ void CheckParams()
         case 2:
               Qnh = (ReceivedData[CHANNELSUSED + 1]) << 8; // 16 bits sent as two bytes for pressure here at sea level
               Qnh += ReceivedData[CHANNELSUSED + 2];
+              break;
+         case 3:
+              if   ((ReceivedData[CHANNELSUSED + 2]) == 255) MarkHere(); // Mark this spot!
+              break;
         default:
             break;
     }
@@ -460,13 +479,6 @@ FASTRUN void ReadTheNewGPSHub(){
      SecsGPS =  uint8_t(RdataIn);
      return;
   }
-}
-// ***************************************************************************************************************************************************
-
-void  SendToTheNewGPSHub(char m[]){
-  Wire.beginTransmission(GPSI2CHUB);   
-  Wire.write(m);
-  Wire.endTransmission();   
 }
 
 /************************************************************************************************************/

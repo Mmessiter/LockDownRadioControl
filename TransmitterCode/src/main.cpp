@@ -5468,7 +5468,7 @@ void LoadPacketData()
             SendBuffer[CHANNELSUSED + 2] = Qnh & 0x00ff;   // (LowByte)  Qnh is current atmospheric pressure at sea level here (an aviation term)
             break;
         case 3: 
-            SendBuffer[CHANNELSUSED + 1] = GPSMarkHere;
+            SendBuffer[CHANNELSUSED + 1] = 0;
             SendBuffer[CHANNELSUSED + 2] = GPSMarkHere;
             GPSMarkHere = 0;
             break;
