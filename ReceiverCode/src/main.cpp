@@ -106,18 +106,18 @@ uint16_t        CompressedData[COMPRESSEDWORDS]; // 30 bytes -> 40 bytes when un
 // This function returns distance (in meters) between two GPS coordinates (in degrees)
 // it was essentially cribbed from the internet, then tested and adjusted a little. 
 
-FASTRUN double HowFar(double latitude_new, double longitude_new, double latitude_old, double longitude_old) {
-        double  RadiusOfTheEarth = 6372797.56085;                 // Meters by the way
-        double  DegreesToRadians = 3.14159265358979323846 / 180;
-        double  lat_new = latitude_old * DegreesToRadians;
-        double  lat_old = latitude_new * DegreesToRadians;
-        double  lat_diff = (latitude_new-latitude_old) *  DegreesToRadians;
-        double  lng_diff = (longitude_new-longitude_old) *  DegreesToRadians;
-        double  a = sin(lat_diff/2) * sin(lat_diff/2) + cos(lat_new) * cos(lat_old) *  sin(lng_diff/2) * sin(lng_diff/2);
-        double  c = 2 * atan2(sqrt(a), sqrt(1-a));
-        double  distance = RadiusOfTheEarth * c;
-        return  distance; 
-   }
+//FASTRUN double HowFar(double latitude_new, double longitude_new, double latitude_old, double longitude_old) {
+//        double  RadiusOfTheEarth = 6372797.56085;                 // Meters by the way
+//        double  DegreesToRadians = 3.14159265358979323846 / 180;
+//        double  lat_new = latitude_old * DegreesToRadians;
+//        double  lat_old = latitude_new * DegreesToRadians;
+//        double  lat_diff = (latitude_new-latitude_old) *  DegreesToRadians;
+//        double  lng_diff = (longitude_new-longitude_old) *  DegreesToRadians;
+//        double  a = sin(lat_diff/2) * sin(lat_diff/2) + cos(lat_new) * cos(lat_old) *  sin(lng_diff/2) * sin(lng_diff/2);
+//        double  c = 2 * atan2(sqrt(a), sqrt(1-a));
+//        double  distance = RadiusOfTheEarth * c;
+//        return  distance; 
+//   }
 
 void LoadFailSafeData()
 {
@@ -377,7 +377,7 @@ void Sensors_Status()
 // The next 8 bytes are the value (as a double).
 // The ID changes with each call
 
-FASTRUN void GetI2CData(){
+FASTRUN void ReadTheNewGPSHub(){
   #define IDLEN 3
   #define GPSI2CBYTES IDLEN + 8
   char  LAT[IDLEN+1]    = "LAT";  // Latitude
@@ -410,66 +410,56 @@ FASTRUN void GetI2CData(){
   RdataID[3] = 0;                                   // To terminate the ID string.
   RdataIn = Rdata.Val64;                            // To re-assemble the 64 BIT data to a double
 
-
-  if (strncmp(FIX,RdataID,3) == 0) {     
+  if (strcmp(FIX,RdataID) == 0) {     
       if (int(RdataIn) == 1) {
        GpsFix = true;
-        return;
+       return;
       }
   }
-
-  if (strncmp(LAT,RdataID,3) == 0) {     
+  if (strcmp(LAT,RdataID) == 0) {     
      LatitudeGPS =  RdataIn;
      return;
   }
-  
-  if (strncmp(LON,RdataID,3) == 0) {     
+  if (strcmp(LON,RdataID) == 0) {     
      LongitudeGPS =  RdataIn;
      return;
   }
-
-  if (strncmp(SPD,RdataID,3) == 0) {     
+  if (strcmp(SPD,RdataID) == 0) {     
      SpeedGPS =  RdataIn;
      return;
   }
-
-  if (strncmp(COR,RdataID,3) == 0) {     
+  if (strcmp(COR,RdataID) == 0) {     
      AngleGPS =  RdataIn;
      return;
   }
-  
-  if (strncmp(ALT,RdataID,3) == 0) {     
+  if (strcmp(ALT,RdataID) == 0) {     
      AltitudeGPS =  RdataIn;
      return;
   }
-  if (strncmp(DTO,RdataID,3) == 0) {     
+  if (strcmp(DTO,RdataID) == 0) {     
      DistanceGPS =  RdataIn;
      return;
   }
-
-   if (strncmp(SAT,RdataID,3) == 0) {     
+   if (strcmp(SAT,RdataID) == 0) {     
      SatellitesGPS =  uint8_t(RdataIn);
      return;
   }
-  if (strncmp(CTO,RdataID,3) == 0) {     
+  if (strcmp(CTO,RdataID) == 0) {     
      CourseToGPS =  uint8_t(RdataIn);
      return;
   }
-  if (strncmp(HRS,RdataID,3) == 0) {     
+  if (strcmp(HRS,RdataID) == 0) {     
      HoursGPS =  uint8_t(RdataIn);
      return;
   }
-  if (strncmp(MNS,RdataID,3) == 0) {     
+  if (strcmp(MNS,RdataID) == 0) {     
      MinsGPS =  uint8_t(RdataIn);
      return;
   }
-  if (strncmp(SEC,RdataID,3) == 0) {     
+  if (strcmp(SEC,RdataID) == 0) {     
      SecsGPS =  uint8_t(RdataIn);
      return;
   }
-
-  
-
 }
 // ***************************************************************************************************************************************************
 
@@ -484,13 +474,12 @@ void  SendDataToI2C(char m[]){
 /************************************************************************************************************/
 FASTRUN void DoSensors()
 {      
-    if ((millis() - SensorTime) < 1000) return;              // no need to measure too often
+    if ((millis() - SensorTime) < 500) return;              // no need to measure too often
         SensorTime = millis();
     
     if (USE_AdafruitUltimateGps) {
-            GetI2CData();                                    // Sensor now has its own MCU   
+            ReadTheNewGPSHub();                             // Sensor now has its own MCU   
     }
-    
     if (USE_BMP280) {
         if (BoundFlag && Connected) {
             BaroTemperature = bmp280.readTemperature();
