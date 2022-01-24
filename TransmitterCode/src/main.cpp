@@ -225,6 +225,7 @@ unsigned int  i;
 unsigned int  PacketsPerSecond = 0;
 unsigned int  LostPackets      = 0;
 uint8_t       PacketNumber     = 0;
+uint8_t       GPSMarkHere      = 0;
 
 // ************************************* AckPayload structure ******************************************************
 
@@ -361,24 +362,20 @@ uint32_t GapCount                    = 0;
 uint32_t GapShortest                 = 0;
 char     CalibrateNow[]              = "touch_j";
 char     ModelVolts[8]               = " ";
-double   GPSLatitude                 = 0;  
-double   GPSLongitude                = 0;
-double   GPSMarkLatitude             = 0;  
-double   GPSMarkLongitude            = 0;
-double   GPSAngle                    = 0;
-//double   GPSDistance                 = 0;
-double   GpsFix                      = 0;
-double   GPSSpeed                    = 0;
-double   GPSMaxSpeed                 = 0;
-
-double   GPSAltitude                 = 0;
-double   GPSDistanceTo               = 0;
-double   GPSCourseTo                 = 0;
-
-
-
-
-
+float    GPSLatitude                 = 0;  
+float    GPSLongitude                = 0;
+float    GPSMarkLatitude             = 0;  
+float    GPSMarkLongitude            = 0;
+float    GPSAngle                    = 0;
+bool     GpsFix                      = 0;
+uint8_t  GPSSatellites               = 0;
+uint16_t GPSSpeed                    = 0;
+uint16_t GPSMaxSpeed                 = 0;
+float    GPSAltitude                 = 0;
+float    GPSMaxAltitude              = 0;
+float    GPSDistanceTo               = 0;
+float    GPSCourseTo                 = 0;
+float    GPSMaxDistance              = 0;
 float    RXModelVolts                = 0;
 int      RXModelAltitude             = 0;
 int      RXMAXModelAltitude          = 0;
@@ -1409,9 +1406,14 @@ void ShowComms()
     char  Bear[]              = "Bear";
     char  Dist[]              = "Dist";
     char  Sped[]              = "Sped";
-    char  MxS[]               = "MxS";
     char  yes[]               = "Yes";
     char  no[]                = "no";
+    char  ALT[]               = "ALT";
+    char  MALT[]              = "MALT";
+    char  MxS[]               = "MxS";
+    char  Mxd[]               = "Mxd";
+    char  BTo[]               = "BTo";
+    char  Sat[]               = "Sat";
   
 
     if (CurrentView == FrontView || CurrentView == DataView) {
@@ -1488,21 +1490,30 @@ void ShowComms()
                 SendValue(DataView_Gc,    GapCount);
                 if (GpsFix){                               // if no fix, then leave display as before 
                     SendText(Fix, yes);
+                    snprintf(Vbuf, 3,"%d", GPSSatellites);
+                    SendText(Sat,Vbuf);
                     snprintf(Vbuf, 10,"%f", GPSLongitude);
                     SendText(Lon,Vbuf);
                     snprintf(Vbuf, 10,"%f", GPSLatitude);
                     SendText(Lat,Vbuf);
                     snprintf(Vbuf, 7,"%d",  int(GPSAngle));
                     SendText(Bear,Vbuf);
-
-                    snprintf(Vbuf, 5,"%d", (int) GPSDistanceTo);
+                    snprintf(Vbuf, 6,"%d", (int) GPSDistanceTo);
+                    if (GPSDistanceTo > GPSMaxDistance) GPSMaxDistance = GPSDistanceTo;
                     SendText(Dist,Vbuf);
                     snprintf(Vbuf, 4,"%d",  (int) GPSSpeed);
                     SendText(Sped,Vbuf);
                     snprintf(Vbuf, 4,"%d",  (int) GPSMaxSpeed);
-                    SendText(MxS,Vbuf);   // heer to do : Max distance, CourseTo, GPSAltitude, GPSMaxAltitude.....
-
-
+                    SendText(MxS,Vbuf);   
+                    snprintf(Vbuf, 4,"%d",  (int) GPSAltitude);
+                    if (GPSMaxAltitude < GPSAltitude) GPSMaxAltitude = GPSAltitude;
+                    SendText(ALT,Vbuf);   
+                    snprintf(Vbuf, 4,"%d",  (int) GPSMaxAltitude);
+                    SendText(MALT,Vbuf);   
+                    snprintf(Vbuf, 4,"%d",  (int) GPSCourseTo);
+                    SendText(BTo,Vbuf);   
+                    snprintf(Vbuf, 6,"%d",  (int) GPSMaxDistance);
+                    SendText(Mxd,Vbuf);   
                 } else {
                     SendText(Fix, no);
                 }
@@ -4228,8 +4239,7 @@ void Button_was_pressed()
         }
         
         if (InStrng(Mark, WordsIn) > 0) {           
-            GPSMarkLongitude = GPSLongitude;        // remember where Mark was pressed!
-            GPSMarkLatitude  = GPSLatitude; 
+             GPSMarkHere = 255;
         }
         
         if (InStrng(OptionsEnd, WordsIn) > 0) { // Options screen end
@@ -5457,6 +5467,12 @@ void LoadPacketData()
             SendBuffer[CHANNELSUSED + 1] = Qnh >> 8;       // (HiByte)   Qnh is current atmospheric pressure at sea level here (an aviation term)
             SendBuffer[CHANNELSUSED + 2] = Qnh & 0x00ff;   // (LowByte)  Qnh is current atmospheric pressure at sea level here (an aviation term)
             break;
+        case 3: 
+            SendBuffer[CHANNELSUSED + 1] = GPSMarkHere;
+            SendBuffer[CHANNELSUSED + 2] = GPSMarkHere;
+            GPSMarkHere = 0;
+            break;
+
         default:
             break;
     }
@@ -5640,6 +5656,17 @@ void GetGPSLatitude()
     ThisUnion.Val8[2] = AckPayload.Byte3;
     ThisUnion.Val8[3] = AckPayload.Byte4;
     GPSLatitude       = ThisUnion.Val32;
+}
+
+/************************************************************************************************************/
+void GetGPSSatellites()
+{
+    union  {float Val32;uint8_t Val8[4];} ThisUnion;
+    ThisUnion.Val8[0] = AckPayload.Byte1;
+    ThisUnion.Val8[1] = AckPayload.Byte2;
+    ThisUnion.Val8[2] = AckPayload.Byte3;
+    ThisUnion.Val8[3] = AckPayload.Byte4;
+    GPSSatellites     = ThisUnion.Val32;
 }
 /************************************************************************************************************/
 void GetGPSLongitude()
@@ -5831,6 +5858,12 @@ void ParseAckPayload()
                 GetCourseTo();
                 break;
             case 24:
+                GetRXTime(); // Synch 
+                break;
+            case 25:
+                GetGPSSatellites();
+                break;
+            case 26:
                 GetRXTime(); // Synch 
                 break;
             default:

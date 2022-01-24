@@ -398,6 +398,17 @@ void LoadRXVolts()
     AckPayload.Byte3 = RXVolts.Val8[2];
     AckPayload.Byte4 = RXVolts.Val8[3];
 }
+
+/************************************************************************************************************/
+void LoadSatellitesGPS()  
+{
+    union {float Val32; uint8_t Val8[4];} ThisUnion;
+    ThisUnion.Val32     = (float)SatellitesGPS;        
+    AckPayload.Byte1    = ThisUnion.Val8[0]; // These values are herewith delivered to Transmitter in Ack Payload
+    AckPayload.Byte2    = ThisUnion.Val8[1];
+    AckPayload.Byte3    = ThisUnion.Val8[2];
+    AckPayload.Byte4    = ThisUnion.Val8[3];
+}
 /************************************************************************************************************/
 void LoadCourseToGPS()  
 {
@@ -466,7 +477,7 @@ void LoadAckPayload()
                                 // ... etc ...
       if (USE_BMP280) MaxAckP              = 4;                     // 4 + volts
       if (USE_INA219) MaxAckP              = 8;                     // 8 + Baro
-      if (USE_AdafruitUltimateGps) MaxAckP = 24;                    // 18 + GPS
+      if (USE_AdafruitUltimateGps) MaxAckP = 26;                    // 26 + GPS
       if (AckPayload.Purpose > MaxAckP) AckPayload.Purpose = 0;     // wrap after max
 
     switch (AckPayload.Purpose) {
@@ -543,6 +554,12 @@ void LoadAckPayload()
             LoadCourseToGPS();        // ********* GPS *******************
             break;
         case 24:
+            LoadTimeStamp();
+            break;    
+        case 25: 
+            LoadSatellitesGPS();       // ********* GPS *******************
+            break;
+        case 26:
             LoadTimeStamp();
             break;
         default:
