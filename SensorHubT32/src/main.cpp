@@ -1,5 +1,7 @@
 //***********************************************************************************************************
 //************************************* SENSOR HUB CODE *****************************************************
+// 
+//                                   Version 1.0 Jan 25th 2022
 //***********************************************************************************************************
 #include <Arduino.h>
 #include <Wire.h>
@@ -8,7 +10,7 @@
 #define I2CADDRESS  8       // Address of this I2C slave
 #define GPSBAUDRATE 9600    // Didn't work any faster
 #define GPSDEVICE Serial1   // GPS is connected to Serial1
-#define DEBUG               // Local console debug only
+//#define DEBUG               // Local console debug only
 #define DEBUGTIMER 1000
 
 int DebugTimer = 0;
@@ -29,8 +31,8 @@ const   char *  GPSLibVersion[20];
 float   GPSCourse;
 double  GPSDistanceTo;
 double  GPSCourseTo; 
-static  const double MAYSLANE_LAT = 51.638963994850364;  // Mays Lane
-static  const double MAYSLANE_LON = -0.22926821753992477;
+static  const double MAYSLANE_LAT = 51.638963994850364;       // Mays Lane location
+static  const double MAYSLANE_LON = -0.22926821753992477;     // Mays Lane location
 float   DestinationLat = MAYSLANE_LAT;
 float   DestinationLng = MAYSLANE_LON;
 char    PMTK_API_SET_FIX_CTL_1HZ[]       =  "$PMTK300,1000,0,0,0,0*1C";     // < 1 Hz
