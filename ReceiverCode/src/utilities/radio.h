@@ -327,144 +327,15 @@ union  {uint32_t Stamp32; uint8_t  Stamp8[4];} Time;
     AckPayload.Byte5 = NextChannelNumber;
 }
 
-
 /************************************************************************************************************/
-
-void LoadGPSLongitude()
-{
+void MakeUnion(double U){                        // This function now works with most parameters
     union  {float Val32; uint8_t Val8[4];} ThisUnion;
-    ThisUnion.Val32     = LongitudeGPS;
+    ThisUnion.Val32     = U;
     AckPayload.Byte1    = ThisUnion.Val8[0];    // These values are herewith delivered to Transmitter in Ack Payload
     AckPayload.Byte2    = ThisUnion.Val8[1];
     AckPayload.Byte3    = ThisUnion.Val8[2];
     AckPayload.Byte4    = ThisUnion.Val8[3];
 }
-
-/************************************************************************************************************/
-
-void LoadGPSLatitude()
-{
-    union{float Val32;uint8_t Val8[4];} ThisUnion;
-    ThisUnion.Val32     = LatitudeGPS;
-    AckPayload.Byte1    = ThisUnion.Val8[0];    // These values are herewith delivered to Transmitter in Ack Payload
-    AckPayload.Byte2    = ThisUnion.Val8[1];
-    AckPayload.Byte3    = ThisUnion.Val8[2];
-    AckPayload.Byte4    = ThisUnion.Val8[3];
-}
-
-/************************************************************************************************************/
-
-void LoadGPSAngle()
-{
-    union  {float Val32; uint8_t Val8[4];} ThisUnion;
-    ThisUnion.Val32     = AngleGPS;
-    AckPayload.Byte1    = ThisUnion.Val8[0];    // These values are herewith delivered to Transmitter in Ack Payload
-    AckPayload.Byte2    = ThisUnion.Val8[1];
-    AckPayload.Byte3    = ThisUnion.Val8[2];
-    AckPayload.Byte4    = ThisUnion.Val8[3];
-}
-
-/************************************************************************************************************/
-
-void LoadGPSSpeed()
-{
-    union  {float Val32; uint8_t Val8[4]; } ThisUnion;
-    ThisUnion.Val32     = SpeedGPS;
-    AckPayload.Byte1    = ThisUnion.Val8[0];    // These values are herewith delivered to Transmitter in Ack Payload
-    AckPayload.Byte2    = ThisUnion.Val8[1];
-    AckPayload.Byte3    = ThisUnion.Val8[2];
-    AckPayload.Byte4    = ThisUnion.Val8[3];
-}
-
-/************************************************************************************************************/
-
-void LoadGPSFix()
-{
-    union  {float Val32;  uint8_t Val8[4];} ThisUnion;
-    ThisUnion.Val32     = GpsFix;
-    AckPayload.Byte1    = ThisUnion.Val8[0];    // These values are herewith delivered to Transmitter in Ack Payload
-    AckPayload.Byte2    = ThisUnion.Val8[1];
-    AckPayload.Byte3    = ThisUnion.Val8[2];
-    AckPayload.Byte4    = ThisUnion.Val8[3];
-}
-/************************************************************************************************************/
-
-void LoadRXVolts()
-{
-    union  {float Val32;uint8_t Val8[4];} RXVolts;
-    RXVolts.Val32    = INA219Volts;
-    AckPayload.Byte1 = RXVolts.Val8[0];    // These values are herewith delivered to Transmitter in Ack Payload
-    AckPayload.Byte2 = RXVolts.Val8[1];
-    AckPayload.Byte3 = RXVolts.Val8[2];
-    AckPayload.Byte4 = RXVolts.Val8[3];
-}
-
-/************************************************************************************************************/
-void LoadSatellitesGPS()  
-{
-    union {float Val32; uint8_t Val8[4];} ThisUnion;
-    ThisUnion.Val32     = (float)SatellitesGPS;        
-    AckPayload.Byte1    = ThisUnion.Val8[0]; // These values are herewith delivered to Transmitter in Ack Payload
-    AckPayload.Byte2    = ThisUnion.Val8[1];
-    AckPayload.Byte3    = ThisUnion.Val8[2];
-    AckPayload.Byte4    = ThisUnion.Val8[3];
-}
-/************************************************************************************************************/
-void LoadCourseToGPS()  
-{
-    union {float Val32; uint8_t Val8[4];} ThisUnion;
-    ThisUnion.Val32     = (float)CourseToGPS;        
-    AckPayload.Byte1    = ThisUnion.Val8[0]; // These values are herewith delivered to Transmitter in Ack Payload
-    AckPayload.Byte2    = ThisUnion.Val8[1];
-    AckPayload.Byte3    = ThisUnion.Val8[2];
-    AckPayload.Byte4    = ThisUnion.Val8[3];
-}
-/************************************************************************************************************/
-void LoadDistanceGPS()  
-{
-    union {float Val32; uint8_t Val8[4];} ThisUnion;
-
-    ThisUnion.Val32     = (float)DistanceGPS;        
-    AckPayload.Byte1    = ThisUnion.Val8[0]; // These values are herewith delivered to Transmitter in Ack Payload
-    AckPayload.Byte2    = ThisUnion.Val8[1];
-    AckPayload.Byte3    = ThisUnion.Val8[2];
-    AckPayload.Byte4    = ThisUnion.Val8[3];
-}
-/************************************************************************************************************/
-void LoadAltitudeGPS()  
-{
-    union   {float Val32;uint8_t Val8[4]; } AltitudeUnion;
-
-    AltitudeUnion.Val32 = (float)AltitudeGPS;        
-    AckPayload.Byte1    = AltitudeUnion.Val8[0]; // These values are herewith delivered to Transmitter in Ack Payload
-    AckPayload.Byte2    = AltitudeUnion.Val8[1];
-    AckPayload.Byte3    = AltitudeUnion.Val8[2];
-    AckPayload.Byte4    = AltitudeUnion.Val8[3];
-}
-
-/************************************************************************************************************/
-void LoadAltitude()  // Baro (not GPS)
-{
-    union  {float   Val32;  uint8_t Val8[4];} AltitudeUnion;
-    AltitudeUnion.Val32 = BaroAltitude;            // BaroAltitude;
-    AckPayload.Byte1    = AltitudeUnion.Val8[0];   // These values are herewith delivered to Transmitter in Ack Payload
-    AckPayload.Byte2    = AltitudeUnion.Val8[1];
-    AckPayload.Byte3    = AltitudeUnion.Val8[2];
-    AckPayload.Byte4    = AltitudeUnion.Val8[3];
-}
-
-/************************************************************************************************************/
-
-void LoadTemperature()
-{
-    union  { float   Val32; uint8_t Val8[4]; } TemperatureUnion;
-    TemperatureUnion.Val32 = BaroTemperature;
-    AckPayload.Byte1       = TemperatureUnion.Val8[0]; // These values are herewith delivered to Transmitter in Ack Payload
-    AckPayload.Byte2       = TemperatureUnion.Val8[1];
-    AckPayload.Byte3       = TemperatureUnion.Val8[2];
-    AckPayload.Byte4       = TemperatureUnion.Val8[3];
-}
-
 /************************************************************************************************************/
 
 void LoadAckPayload()
@@ -491,73 +362,73 @@ void LoadAckPayload()
             LoadTimeStamp();
             break;
         case 3: 
-            LoadRXVolts();
+            MakeUnion(INA219Volts);
             break;
         case 4: 
             LoadTimeStamp();
             break;
         case 5:
-            LoadAltitude();
+            MakeUnion(BaroAltitude);
             break;
         case 6: 
             LoadTimeStamp();
             break;
         case 7: 
-            LoadTemperature();
+            MakeUnion(BaroTemperature);
             break;
         case 8: 
             LoadTimeStamp();
             break;
         case 9: 
-            LoadGPSLatitude();    // ********* GPS *******************
+            MakeUnion (LatitudeGPS);     // ********* GPS *******************
             break;
         case 10: 
             LoadTimeStamp();
             break;
         case 11: 
-            LoadGPSLongitude();   // ********* GPS *******************
+             MakeUnion (LongitudeGPS);  // ********* GPS *******************
             break;
         case 12: 
             LoadTimeStamp();
             break;
         case 13: 
-            LoadGPSAngle();       // ********* GPS *******************
+             MakeUnion (AngleGPS);     // ********* GPS *******************
             break;
         case 14: 
             LoadTimeStamp();
             break;
         case 15: 
-            LoadGPSSpeed();       // ********* GPS *******************
+             MakeUnion(SpeedGPS);      // ********* GPS *******************
             break;
         case 16:
             LoadTimeStamp();
             break;
         case 17: 
-            LoadGPSFix();         // ********* GPS *******************
+            MakeUnion(GpsFix);          // ********* GPS *******************
             break;
         case 18:
             LoadTimeStamp();
             break;
         case 19: 
-            LoadAltitudeGPS();        // ********* GPS *******************
+            MakeUnion(AltitudeGPS);      // ********* GPS *******************
             break;
         case 20:
             LoadTimeStamp();
             break;
         case 21: 
-            LoadDistanceGPS();        // ********* GPS *******************
+            MakeUnion(DistanceGPS);       // ********* GPS *******************
             break;
         case 22:
             LoadTimeStamp();
             break; 
         case 23: 
-            LoadCourseToGPS();        // ********* GPS *******************
+            MakeUnion(CourseToGPS);        // ********* GPS *******************
             break;
         case 24:
             LoadTimeStamp();
             break;    
         case 25: 
-            LoadSatellitesGPS();       // ********* GPS *******************
+            MakeUnion(SatellitesGPS);       // ********* GPS *******************
             break;
         case 26:
             LoadTimeStamp();
