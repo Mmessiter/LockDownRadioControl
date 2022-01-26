@@ -1,13 +1,5 @@
 var NAVTREEINDEX5 =
 {
-"class_tiny_g_p_s_plus.html#addfc1fdbfddfeef2774dda1be42cdd55":[8,0,13,4],
-"class_tiny_g_p_s_plus.html#addfc1fdbfddfeef2774dda1be42cdd55":[8,0,13,5],
-"class_tiny_g_p_s_plus.html#addfc1fdbfddfeef2774dda1be42cdd55":[8,0,13,3],
-"class_tiny_g_p_s_plus.html#af7dc415ad7cf13f01ca2eaead8a4ade2":[8,0,13,9],
-"class_tiny_g_p_s_plus.html#af7dc415ad7cf13f01ca2eaead8a4ade2":[8,0,13,10],
-"class_tiny_g_p_s_plus.html#af7dc415ad7cf13f01ca2eaead8a4ade2":[8,0,13,11],
-"classes.html":[8,1],
-"common_8h.html":[9,0,1,1,0,0],
 "common_8h.html#a2b147d5155fcf962e9f1c4885b32c67d":[9,0,1,1,0,0,2],
 "common_8h.html#a332eaa61dd85cd649cf62de2345e246e":[9,0,1,1,0,0,5],
 "common_8h.html#a46d5105ccf92f7e44b10af6fd51772a8":[9,0,1,1,0,0,3],
@@ -44,8 +36,8 @@ var NAVTREEINDEX5 =
 "dir_f3433e26411b8b5b6b990f1ec8ef8a7a.html":[9,0,1,0],
 "dir_f4a416e20b33f36e9e4ccc17423b29f0.html":[9,0,3,0,0,0],
 "files.html":[9,0],
-"functions.html":[8,3,0],
 "functions.html":[8,3,0,0],
+"functions.html":[8,3,0],
 "functions_b.html":[8,3,0,1],
 "functions_c.html":[8,3,0,2],
 "functions_d.html":[8,3,0,3],
@@ -99,8 +91,8 @@ var NAVTREEINDEX5 =
 "globals_b.html":[9,1,0,2],
 "globals_c.html":[9,1,0,3],
 "globals_d.html":[9,1,0,4],
-"globals_defs.html":[9,1,6],
 "globals_defs.html":[9,1,6,0],
+"globals_defs.html":[9,1,6],
 "globals_defs_a.html":[9,1,6,1],
 "globals_defs_b.html":[9,1,6,2],
 "globals_defs_c.html":[9,1,6,3],
@@ -249,5 +241,13 @@ var NAVTREEINDEX5 =
 "radio_8h.html":[9,0,1,1,0,1],
 "radio_8h.html#a00e93a7779cf3932c07c78c4d58c91ce":[9,0,1,1,0,1,18],
 "radio_8h.html#a047f5702802c2bbf4918e9318f3e6a56":[9,0,1,1,0,1,7],
-"radio_8h.html#a0634ad724c86cd2b4ac7cfebbb622a9c":[9,0,1,1,0,1,2]
+"radio_8h.html#a0634ad724c86cd2b4ac7cfebbb622a9c":[9,0,1,1,0,1,2],
+"radio_8h.html#a09cb370d93005b5a43e932a3d6093ea2":[9,0,1,1,0,1,53],
+"radio_8h.html#a0c40a351a0c0e01fbd5e5b1b0187eb48":[9,0,1,1,0,1,9],
+"radio_8h.html#a11cd5dd0a4f9438c7e7e387349d8636d":[9,0,1,1,0,1,37],
+"radio_8h.html#a18deaf2fdca68c6ec65dec52de4a4e75":[9,0,1,1,0,1,40],
+"radio_8h.html#a1d0b7743e2015fe687146524466e4794":[9,0,1,1,0,1,66],
+"radio_8h.html#a25cc3bb5cb94f4bbef0f2c5b79140c20":[9,0,1,1,0,1,68],
+"radio_8h.html#a2863e7455e30e6fddc0fcf56f62d6564":[9,0,1,1,0,1,28],
+"radio_8h.html#a292b2bc83214f3188bd096c35389461b":[9,0,1,1,0,1,47]
 };
