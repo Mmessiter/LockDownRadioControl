@@ -373,6 +373,7 @@ uint16_t GPSSpeed                    = 0;
 uint16_t GPSMaxSpeed                 = 0;
 float    GPSAltitude                 = 0;
 float    GPSMaxAltitude              = 0;
+float    GPSGroundAltitude           = 0;
 float    GPSDistanceTo               = 0;
 float    GPSCourseTo                 = 0;
 float    GPSMaxDistance              = 0;
@@ -1364,7 +1365,7 @@ void ShowComms()
     char  Msg_CnctdBuddyMast[]   = "Connected BUDDY MASTER";
     char  Msg_CnctdBuddySlave[]  = "Connected BUDDY SLAVE";
     char  MsgBuddying[]          = "Buddy";
-    char  DataView_pps[]         = "pps";
+    char  DataView_pps[]         = "pps";       // These are all label names in the Nextion data screen. They are best kept short.
     char  DataView_lps[]         = "lps";
     char  DataView_Alt[]         = "alt";
     char  DataView_Temp[]        = "Temp";
@@ -1400,21 +1401,20 @@ void ShowComms()
     float ReadVolts           = 0;
     float VoltsPerCell        = 0;
     char  BindButtonVisible[] = "vis bind,1";
-    char  Fix[]               = "Fix";
+    char  Fix[]               = "Fix";   // These are all label names in the Nextion data screen. They are best kept short.
     char  Lon[]               = "Lon";
     char  Lat[]               = "Lat";
     char  Bear[]              = "Bear";
     char  Dist[]              = "Dist";
     char  Sped[]              = "Sped";
     char  yes[]               = "Yes";
-    char  no[]                = "no";
+    char  no[]                = "No";
     char  ALT[]               = "ALT";
     char  MALT[]              = "MALT";
     char  MxS[]               = "MxS";
     char  Mxd[]               = "Mxd";
     char  BTo[]               = "BTo";
     char  Sat[]               = "Sat";
-  
 
     if (CurrentView == FrontView || CurrentView == DataView) {
         if (millis() - LastShowTime > ShowCommsDelay) { 
@@ -1499,14 +1499,12 @@ void ShowComms()
                     snprintf(Vbuf, 7,"%d",  int(GPSAngle));
                     SendText(Bear,Vbuf);
                     snprintf(Vbuf, 6,"%d", (int) GPSDistanceTo);
-                    if (GPSDistanceTo > GPSMaxDistance) GPSMaxDistance = GPSDistanceTo;
                     SendText(Dist,Vbuf);
                     snprintf(Vbuf, 4,"%d",  (int) GPSSpeed);
                     SendText(Sped,Vbuf);
                     snprintf(Vbuf, 4,"%d",  (int) GPSMaxSpeed);
                     SendText(MxS,Vbuf);   
                     snprintf(Vbuf, 4,"%d",  (int) GPSAltitude);
-                    if (GPSMaxAltitude < GPSAltitude) GPSMaxAltitude = GPSAltitude;
                     SendText(ALT,Vbuf);   
                     snprintf(Vbuf, 4,"%d",  (int) GPSMaxAltitude);
                     SendText(MALT,Vbuf);   
@@ -4277,14 +4275,14 @@ void Button_was_pressed()
             GPSMaxAltitude     = 0;
             GPSMaxDistance     = 0;
             GPSMaxSpeed        = 0;
-            if (!GroundModelAltitude)                        // this allows the Clear button to toggle between relative and absolute atitude
-                {
-                GroundModelAltitude = RXModelAltitude;
-                }
-                else 
-                {
-                GroundModelAltitude ^= GroundModelAltitude;   // set it to zero by XORing it with itself  :=)
-                }
+            if (!GroundModelAltitude) {
+                GroundModelAltitude = RXModelAltitude;}
+            else {
+                GroundModelAltitude = 0 ; }
+            if (!GPSGroundAltitude){
+                GPSGroundAltitude = GPSAltitude;}
+            else{
+                GPSGroundAltitude = 0; } 
             ClearText();
             return;
         }
@@ -5650,131 +5648,30 @@ void GetRXTime()
     ReadSwitches();
     ShowComms();
 }
-/************************************************************************************************************/
-void GetGPSLatitude()
-{
-    union  {float Val32;uint8_t Val8[4];} ThisUnion;
-    ThisUnion.Val8[0] = AckPayload.Byte1;
-    ThisUnion.Val8[1] = AckPayload.Byte2;
-    ThisUnion.Val8[2] = AckPayload.Byte3;
-    ThisUnion.Val8[3] = AckPayload.Byte4;
-    GPSLatitude       = ThisUnion.Val32;
-}
 
 /************************************************************************************************************/
-void GetGPSSatellites()
-{
+
+float GetUnion(){
     union  {float Val32;uint8_t Val8[4];} ThisUnion;
     ThisUnion.Val8[0] = AckPayload.Byte1;
     ThisUnion.Val8[1] = AckPayload.Byte2;
     ThisUnion.Val8[2] = AckPayload.Byte3;
     ThisUnion.Val8[3] = AckPayload.Byte4;
-    GPSSatellites     = ThisUnion.Val32;
-}
-/************************************************************************************************************/
-void GetGPSLongitude()
-{
-    union {float Val32; uint8_t Val8[4];} ThisUnion;
-    ThisUnion.Val8[0] = AckPayload.Byte1;
-    ThisUnion.Val8[1] = AckPayload.Byte2;
-    ThisUnion.Val8[2] = AckPayload.Byte3;
-    ThisUnion.Val8[3] = AckPayload.Byte4;
-    GPSLongitude      = ThisUnion.Val32;
-}
-/************************************************************************************************************/
-void GetGPSAngle()
-{
-    union {float Val32; uint8_t Val8[4];} ThisUnion;
-    ThisUnion.Val8[0] = AckPayload.Byte1;
-    ThisUnion.Val8[1] = AckPayload.Byte2;
-    ThisUnion.Val8[2] = AckPayload.Byte3;
-    ThisUnion.Val8[3] = AckPayload.Byte4;
-    GPSAngle          = ThisUnion.Val32;
-}
-/************************************************************************************************************/
-void GetGPSFix()
-{
-    union  {float Val32;uint8_t Val8[4];} ThisUnion;
-    ThisUnion.Val8[0] = AckPayload.Byte1;
-    ThisUnion.Val8[1] = AckPayload.Byte2;
-    ThisUnion.Val8[2] = AckPayload.Byte3;
-    ThisUnion.Val8[3] = AckPayload.Byte4;
-    GpsFix            = ThisUnion.Val32;
-}
-/************************************************************************************************************/
-void GetGPSSpeed()
-{
-    union  {float Val32;uint8_t Val8[4];} ThisUnion;
-    ThisUnion.Val8[0] = AckPayload.Byte1;
-    ThisUnion.Val8[1] = AckPayload.Byte2;
-    ThisUnion.Val8[2] = AckPayload.Byte3;
-    ThisUnion.Val8[3] = AckPayload.Byte4;
-    GPSSpeed          = ThisUnion.Val32;
-    if (GPSSpeed > GPSMaxSpeed) GPSMaxSpeed = GPSSpeed; 
-}
-/************************************************************************************************************/
-void GetRXVolts()
-{
-    union  {float Val32; uint8_t Val8[4];} RXVoltsUnion;
-    RXVoltsUnion.Val8[0] = AckPayload.Byte1;
-    RXVoltsUnion.Val8[1] = AckPayload.Byte2;
-    RXVoltsUnion.Val8[2] = AckPayload.Byte3;
-    RXVoltsUnion.Val8[3] = AckPayload.Byte4;
-    RXModelVolts         = RXVoltsUnion.Val32;
+    return ThisUnion.Val32;
 }
 /************************************************************************************************************/
 void GetAltitude()
 {
-    union {float Val32; uint8_t Val8[4];} AltitudeUnion;
-    AltitudeUnion.Val8[0] =  AckPayload.Byte1; // These values were obtained from RX in Ack Payload
-    AltitudeUnion.Val8[1] =  AckPayload.Byte2;
-    AltitudeUnion.Val8[2] =  AckPayload.Byte3;
-    AltitudeUnion.Val8[3] =  AckPayload.Byte4;
-    RXModelAltitude       =  int(AltitudeUnion.Val32) - GroundModelAltitude;
+    RXModelAltitude       =  int(GetUnion()) - GroundModelAltitude;
     if (RXModelAltitude<0)   RXModelAltitude = 0;
     if (RXMAXModelAltitude < RXModelAltitude) RXMAXModelAltitude = RXModelAltitude;
     snprintf(MaxAltitude, 5, "%d", RXMAXModelAltitude);
     snprintf(ModelAltitude, 5, "%d", RXModelAltitude);
 }
 /************************************************************************************************************/
-void GetCourseTo()
-{
-    union {float Val32; uint8_t Val8[4];} ThisUnion;
-    ThisUnion.Val8[0] = AckPayload.Byte1; 
-    ThisUnion.Val8[1] = AckPayload.Byte2;
-    ThisUnion.Val8[2] = AckPayload.Byte3;
-    ThisUnion.Val8[3] = AckPayload.Byte4;
-    GPSCourseTo       = ThisUnion.Val32;
-}
-/************************************************************************************************************/
-void GetDistanceToGPS()
-{
-    union {float Val32; uint8_t Val8[4];} ThisUnion;
-    ThisUnion.Val8[0] = AckPayload.Byte1; 
-    ThisUnion.Val8[1] = AckPayload.Byte2;
-    ThisUnion.Val8[2] = AckPayload.Byte3;
-    ThisUnion.Val8[3] = AckPayload.Byte4;
-    GPSDistanceTo     = ThisUnion.Val32;
-}
-/************************************************************************************************************/
-void GetAltitudeGPS()
-{
-    union {float Val32; uint8_t Val8[4];} ThisUnion;
-    ThisUnion.Val8[0] = AckPayload.Byte1; 
-    ThisUnion.Val8[1] = AckPayload.Byte2;
-    ThisUnion.Val8[2] = AckPayload.Byte3;
-    ThisUnion.Val8[3] = AckPayload.Byte4;
-    GPSAltitude       = ThisUnion.Val32;
-}
-/************************************************************************************************************/
 void GetTemperature()
 {
-    union {float Val32;uint8_t Val8[4];} TemperatureUnion;
-    TemperatureUnion.Val8[0] = AckPayload.Byte1; // These values are herewith delivered to Transmitter in Ack Payload
-    TemperatureUnion.Val8[1] = AckPayload.Byte2;
-    TemperatureUnion.Val8[2] = AckPayload.Byte3;
-    TemperatureUnion.Val8[3] = AckPayload.Byte4;
-    RXModelTemperature       = TemperatureUnion.Val32;
+    RXModelTemperature       = GetUnion();
     snprintf(ModelTemperature, 5, "%f", RXModelTemperature);
 }
 /************************************************************************************************************/
@@ -5795,7 +5692,7 @@ void ParseAckPayload()
                 GetRXTime(); // Synch 
                 break;
             case 3:
-                GetRXVolts();
+                RXModelVolts = GetUnion();
                 if (RXModelVolts > 0) {
                     VoltsDetected = true;
                     snprintf(ModelVolts, 5, "%f", RXModelVolts);
@@ -5816,55 +5713,59 @@ void ParseAckPayload()
                 GetRXTime(); // Synch 
                 break;
             case 9:
-                GetGPSLatitude(); 
+                GPSLatitude = GetUnion(); 
                 break;
             case 10:
                 GetRXTime(); // Synch 
                 break;
             case 11:
-                GetGPSLongitude(); 
+                GPSLongitude = GetUnion(); 
                 break;
             case 12:
                 GetRXTime(); // Synch 
                 break;
             case 13:
-                GetGPSAngle(); 
+                GPSAngle = GetUnion();
                 break;
             case 14:
                 GetRXTime(); // Synch 
                 break;
             case 15:
-                GetGPSSpeed(); 
+                GPSSpeed = GetUnion(); 
+                if (GPSMaxSpeed < GPSSpeed) GPSMaxSpeed = GPSSpeed;
                 break;
             case 16:
                 GetRXTime(); // Synch 
                 break;               
             case 17:
-                GetGPSFix();
+                GpsFix =  GetUnion();
                 break;
             case 18:
                 GetRXTime(); // Synch 
                 break;
             case 19:
-                GetAltitudeGPS();
+                GPSAltitude = GetUnion() - GPSGroundAltitude;
+                if (GPSAltitude < 0) GPSAltitude = 0;
+                if (GPSMaxAltitude < GPSAltitude) GPSMaxAltitude = GPSAltitude;
                 break;
             case 20:
                 GetRXTime(); // Synch 
                 break;
             case 21:
-                GetDistanceToGPS();
+                 GPSDistanceTo = GetUnion();
+                 if (GPSMaxDistance < GPSDistanceTo) GPSMaxDistance = GPSDistanceTo;
                 break;
             case 22:
                 GetRXTime(); // Synch 
                 break;
             case 23:
-                GetCourseTo();
+                GPSCourseTo = GetUnion();  
                 break;
             case 24:
                 GetRXTime(); // Synch 
                 break;
             case 25:
-                GetGPSSatellites();
+                GPSSatellites = (uint8_t) GetUnion();
                 break;
             case 26:
                 GetRXTime(); // Synch 
