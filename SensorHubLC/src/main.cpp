@@ -242,7 +242,7 @@ void loop() {
 //**************************************** SETUP *************************************************************
 void setup() {
   GPSDEVICE.begin(GPSBAUDRATE);
-  Wire.begin(I2CADDRESS);             
+  Wire.begin(I2CADDRESS);    
   Wire.onRequest(SendDataToReceiver);    
   Wire.onReceive(ReceiveEvent);
   delay (100);
