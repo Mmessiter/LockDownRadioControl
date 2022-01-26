@@ -501,11 +501,10 @@ FASTRUN void DoSensors()
         if (BoundFlag && Connected) { 
             INA219Volts = ina219.getBusVoltage_V();
         }
-        
     }
 
 #ifdef DB_SENSORS
-    Sensors_Status(); // does nothing if DB_SENSORS is not defined
+    Sensors_Status();    // does nothing if DB_SENSORS is not defined
     Serial.println (millis()-SensorTime);
 #endif
 
@@ -535,15 +534,15 @@ FASTRUN void ReceiveData()
 /************************************************************************************************************/
 void ScanI2c()
 {
-    delay(500); // allow time to wake things up
+    delay(5000); // allow time to wake things up
     for (uint8_t i = 1; i < 127; ++i) {
         Wire.beginTransmission(i);
         if (Wire.endTransmission() == 0) {
             
-            if (i == 8) {
+            if (i == GPSI2CHUB) {
                 USE_AdafruitUltimateGps = true;
 #ifdef DB_SENSORS
-                Serial.println("Adafruit Ultimate GPS detected!");
+                Serial.println("Sensor Hub with Adafruit Ultimate GPS etc. detected!");
 #endif
               }
              if (i == 0x40) {
@@ -651,7 +650,6 @@ void setup()
     ThisRadio = 1;
     if (USE_INA219)               ina219.begin();
     if (USE_BMP280)               InitBMP280();
-   // if (USE_AdafruitUltimateGps)  AdafruitUltimateGpsInit();
     GetOldPipe();
     digitalWrite(LED_PIN, LOW);
 }

@@ -24,7 +24,6 @@
  * - Input sources definable
  * - Model memories export and import
  * - Model memory files alphabetically sorted
- * - Model memory automatically corrected on connection if was wrong. (REMOVED)
  * - Timer goes on and off with motor to keep track of motor use.
  * - Model memories can be sent between transmitters by RF link.
  * - DS1307 RTC added
