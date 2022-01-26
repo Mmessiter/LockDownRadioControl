@@ -31,6 +31,7 @@
  * - MAC address now used as unique TX ID for pipe and binding.
  * - Failsafe channel flags compressed to two bytes
  * - Exponential added
+ * - GPS support added using another MCU and Adafruit Ultimate GPS
  *
  * @section txPinout Teensy 4.1 Pins
  * | Teensy 4.1 Pins | Connections |
