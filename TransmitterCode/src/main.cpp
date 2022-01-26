@@ -5651,7 +5651,7 @@ void GetRXTime()
 
 /************************************************************************************************************/
 
-float GetUnion(){
+float GetFromAckPayload(){
     union  {float Val32;uint8_t Val8[4];} ThisUnion;
     ThisUnion.Val8[0] = AckPayload.Byte1;
     ThisUnion.Val8[1] = AckPayload.Byte2;
@@ -5662,7 +5662,7 @@ float GetUnion(){
 /************************************************************************************************************/
 void GetAltitude()
 {
-    RXModelAltitude       =  int(GetUnion()) - GroundModelAltitude;
+    RXModelAltitude       =  int(GetFromAckPayload()) - GroundModelAltitude;
     if (RXModelAltitude<0)   RXModelAltitude = 0;
     if (RXMAXModelAltitude < RXModelAltitude) RXMAXModelAltitude = RXModelAltitude;
     snprintf(MaxAltitude, 5, "%d", RXMAXModelAltitude);
@@ -5671,7 +5671,7 @@ void GetAltitude()
 /************************************************************************************************************/
 void GetTemperature()
 {
-    RXModelTemperature       = GetUnion();
+    RXModelTemperature       = GetFromAckPayload();
     snprintf(ModelTemperature, 5, "%f", RXModelTemperature);
 }
 /************************************************************************************************************/
@@ -5692,7 +5692,7 @@ void ParseAckPayload()
                 GetRXTime(); // Synch 
                 break;
             case 3:
-                RXModelVolts = GetUnion();
+                RXModelVolts = GetFromAckPayload();
                 if (RXModelVolts > 0) {
                     VoltsDetected = true;
                     snprintf(ModelVolts, 5, "%f", RXModelVolts);
@@ -5713,38 +5713,38 @@ void ParseAckPayload()
                 GetRXTime(); // Synch 
                 break;
             case 9:
-                GPSLatitude = GetUnion(); 
+                GPSLatitude = GetFromAckPayload(); 
                 break;
             case 10:
                 GetRXTime(); // Synch 
                 break;
             case 11:
-                GPSLongitude = GetUnion(); 
+                GPSLongitude = GetFromAckPayload(); 
                 break;
             case 12:
                 GetRXTime(); // Synch 
                 break;
             case 13:
-                GPSAngle = GetUnion();
+                GPSAngle = GetFromAckPayload();
                 break;
             case 14:
                 GetRXTime(); // Synch 
                 break;
             case 15:
-                GPSSpeed = GetUnion(); 
+                GPSSpeed = GetFromAckPayload(); 
                 if (GPSMaxSpeed < GPSSpeed) GPSMaxSpeed = GPSSpeed;
                 break;
             case 16:
                 GetRXTime(); // Synch 
                 break;               
             case 17:
-                GpsFix =  GetUnion();
+                GpsFix =  GetFromAckPayload();
                 break;
             case 18:
                 GetRXTime(); // Synch 
                 break;
             case 19:
-                GPSAltitude = GetUnion() - GPSGroundAltitude;
+                GPSAltitude = GetFromAckPayload() - GPSGroundAltitude;
                 if (GPSAltitude < 0) GPSAltitude = 0;
                 if (GPSMaxAltitude < GPSAltitude) GPSMaxAltitude = GPSAltitude;
                 break;
@@ -5752,20 +5752,20 @@ void ParseAckPayload()
                 GetRXTime(); // Synch 
                 break;
             case 21:
-                 GPSDistanceTo = GetUnion();
+                 GPSDistanceTo = GetFromAckPayload();
                  if (GPSMaxDistance < GPSDistanceTo) GPSMaxDistance = GPSDistanceTo;
                 break;
             case 22:
                 GetRXTime(); // Synch 
                 break;
             case 23:
-                GPSCourseTo = GetUnion();  
+                GPSCourseTo = GetFromAckPayload();  
                 break;
             case 24:
                 GetRXTime(); // Synch 
                 break;
             case 25:
-                GPSSatellites = (uint8_t) GetUnion();
+                GPSSatellites = (uint8_t) GetFromAckPayload();
                 break;
             case 26:
                 GetRXTime(); // Synch 

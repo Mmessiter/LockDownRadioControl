@@ -328,7 +328,7 @@ union  {uint32_t Stamp32; uint8_t  Stamp8[4];} Time;
 }
 
 /************************************************************************************************************/
-void MakeUnion(double U){                        // This function now works with most parameters
+void SendToAckPayload(double U){                        // This function now works with most parameters
     union  {float Val32; uint8_t Val8[4];} ThisUnion;
     ThisUnion.Val32     = U;
     AckPayload.Byte1    = ThisUnion.Val8[0];    // These values are herewith delivered to Transmitter in Ack Payload
@@ -362,73 +362,73 @@ void LoadAckPayload()
             LoadTimeStamp();
             break;
         case 3: 
-            MakeUnion(INA219Volts);
+            SendToAckPayload(INA219Volts);
             break;
         case 4: 
             LoadTimeStamp();
             break;
         case 5:
-            MakeUnion(BaroAltitude);
+            SendToAckPayload(BaroAltitude);
             break;
         case 6: 
             LoadTimeStamp();
             break;
         case 7: 
-            MakeUnion(BaroTemperature);
+            SendToAckPayload(BaroTemperature);
             break;
         case 8: 
             LoadTimeStamp();
             break;
         case 9: 
-            MakeUnion (LatitudeGPS);     // ********* GPS *******************
+            SendToAckPayload (LatitudeGPS);     // ********* GPS *******************
             break;
         case 10: 
             LoadTimeStamp();
             break;
         case 11: 
-             MakeUnion (LongitudeGPS);  // ********* GPS *******************
+             SendToAckPayload (LongitudeGPS);  // ********* GPS *******************
             break;
         case 12: 
             LoadTimeStamp();
             break;
         case 13: 
-             MakeUnion (AngleGPS);     // ********* GPS *******************
+             SendToAckPayload (AngleGPS);     // ********* GPS *******************
             break;
         case 14: 
             LoadTimeStamp();
             break;
         case 15: 
-             MakeUnion(SpeedGPS);      // ********* GPS *******************
+             SendToAckPayload(SpeedGPS);      // ********* GPS *******************
             break;
         case 16:
             LoadTimeStamp();
             break;
         case 17: 
-            MakeUnion(GpsFix);          // ********* GPS *******************
+            SendToAckPayload(GpsFix);          // ********* GPS *******************
             break;
         case 18:
             LoadTimeStamp();
             break;
         case 19: 
-            MakeUnion(AltitudeGPS);      // ********* GPS *******************
+            SendToAckPayload(AltitudeGPS);      // ********* GPS *******************
             break;
         case 20:
             LoadTimeStamp();
             break;
         case 21: 
-            MakeUnion(DistanceGPS);       // ********* GPS *******************
+            SendToAckPayload(DistanceGPS);       // ********* GPS *******************
             break;
         case 22:
             LoadTimeStamp();
             break; 
         case 23: 
-            MakeUnion(CourseToGPS);        // ********* GPS *******************
+            SendToAckPayload(CourseToGPS);        // ********* GPS *******************
             break;
         case 24:
             LoadTimeStamp();
             break;    
         case 25: 
-            MakeUnion(SatellitesGPS);       // ********* GPS *******************
+            SendToAckPayload(SatellitesGPS);       // ********* GPS *******************
             break;
         case 26:
             LoadTimeStamp();
