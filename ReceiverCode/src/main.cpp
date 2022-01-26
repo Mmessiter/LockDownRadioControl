@@ -513,7 +513,7 @@ FASTRUN void DoSensors()
 
 FASTRUN void ReceiveData()
 { 
-    if (millis() - LastConnectionMoment < 1 ) { // If we have still loads of time, read the sensors. But not the GPS.
+    if (millis() - LastConnectionMoment < 1 ) { // If we have still loads of time, read the sensors.
        DoSensors();                             // This must take less than 24 ms to avoid a timeout, or < 7 ms when all's going well.
     }
 
