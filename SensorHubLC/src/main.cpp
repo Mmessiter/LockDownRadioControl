@@ -4,14 +4,24 @@
 //                                   Version 1.0 Jan 25th 2022
 //***********************************************************************************************************
 #include <Arduino.h>
-#include <Wire.h>
 #include <TinyGPS++.h>
+
+//#define NEW_I2C_LIBRARY
+
 
 #define I2CADDRESS  8       // Address of this I2C slave
 #define GPSBAUDRATE 9600    // Didn't work any faster
 #define GPSDEVICE Serial1   // GPS is connected to Serial1
-//#define DEBUG               // Local console debug only
+#define DEBUG               // Local console debug only
 #define DEBUGTIMER 1000
+
+
+#ifdef NEW_I2C_LIBRARY
+  #include <i2c_t3.h>
+#else
+  #include <Wire.h>
+#endif
+
 
 int DebugTimer = 0;
 TinyGPSPlus gps;  
@@ -131,7 +141,13 @@ void SendDataToReceiver() {
 }
 //************************************* RECEIVE DATA INTERRUPT HANDLER ***************************************
 
-void ReceiveEvent(int q) {  
+#ifdef NEW_I2C_LIBRARY
+      void ReceiveEvent(size_t count) 
+#else
+      void ReceiveEvent(int q) 
+#endif
+
+{
 char MRK[] = "MRK";
 char MAY[] = "MAY";
 char RCV[4];
@@ -242,9 +258,24 @@ void loop() {
 //**************************************** SETUP *************************************************************
 void setup() {
   GPSDEVICE.begin(GPSBAUDRATE);
-  Wire.begin(I2CADDRESS);    
+  
+  #ifdef NEW_I2C_LIBRARY
+  
+  Wire.begin(I2CADDRESS);  
+  
   Wire.onRequest(SendDataToReceiver);    
+  
   Wire.onReceive(ReceiveEvent);
+
+
+  #else
+    Wire.begin(I2CADDRESS);    
+    Wire.onRequest(SendDataToReceiver);    
+    Wire.onReceive(ReceiveEvent);
+  #endif
+
+
+  
   delay (100);
   SendToGPS(PGCMD_NOANTENNA);                     // These setup commands are for Adafruit Ulimate GPS only
   delay (100);

@@ -485,12 +485,12 @@ FASTRUN void ReadTheNewGPSHub(){
 FASTRUN void DoSensors()
 {      
     if (USE_AdafruitUltimateGps) {
-            if ((millis() - SensorTime) < 50) return;        // no need to measure too often
+            if ((millis() - SensorTime) < 500) return;       // no need to measure too often
             SensorTime = millis();
             ReadTheNewGPSHub();                              // Sensor now has its own MCU. Don't combine it with i2c connected sensors.   
             return;                                     
       }
-    if ((millis() - SensorTime) < 2000) return;               // must not try to measure these too often
+    if ((millis() - SensorTime) < 2000) return;              // must NOT try to measure these too often
     SensorTime = millis();
     if (USE_BMP280) {
         if (BoundFlag && Connected) {
@@ -536,7 +536,7 @@ FASTRUN void ReceiveData()
 /************************************************************************************************************/
 void ScanI2c()
 {
-    delay(5000); // allow time to wake things up
+    delay(1000); // allow time to wake things up
     for (uint8_t i = 1; i < 127; ++i) {
         Wire.beginTransmission(i);
         if (Wire.endTransmission() == 0) {

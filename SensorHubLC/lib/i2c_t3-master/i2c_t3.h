@@ -72,7 +72,7 @@
 // I2C_BUS_ENABLE 3   (enable Wire & Wire1 & Wire2)
 // I2C_BUS_ENABLE 4   (enable Wire & Wire1 & Wire2 & Wire3)
 //
-#define I2C_BUS_ENABLE 4
+#define I2C_BUS_ENABLE 2 // MCM (WAS 4)
 
 // ------------------------------------------------------------------------------------------------------
 // Tx/Rx buffer sizes - modify these as needed.  Buffers should be large enough to hold:
