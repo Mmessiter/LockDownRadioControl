@@ -269,7 +269,7 @@ void setup() {
 
 
   #else
-    Wire.begin(I2CADDRESS);    
+    Wire.begin(I2CADDRESS);     
     Wire.onRequest(SendDataToReceiver);    
     Wire.onReceive(ReceiveEvent);
   #endif
