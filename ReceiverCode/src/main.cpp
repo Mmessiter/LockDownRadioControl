@@ -489,7 +489,11 @@ FASTRUN void DoSensors()
     
     if (USE_AdafruitUltimateGps) {
             ReadTheNewGPSHub();                             // Sensor now has its own MCU   
+            // return;                                      // I'll put that "return;" back, when semnsor hub done.
     }
+  if ((millis() - SensorTime) < 2000) return;               // must not try to measure these too often
+        SensorTime = millis();
+
     if (USE_BMP280) {
         if (BoundFlag && Connected) {
             BaroTemperature = bmp280.readTemperature();
