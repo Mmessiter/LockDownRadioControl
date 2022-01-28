@@ -54,6 +54,7 @@ var _receiver_code_2src_2main_8cpp =
     [ "FS_byte1", "_receiver_code_2src_2main_8cpp.html#a3be9019b72265fa9443e1f1132fd9bc7", null ],
     [ "FS_byte2", "_receiver_code_2src_2main_8cpp.html#a9949c81d8f6abc28616445945c5d24ba", null ],
     [ "GpsFix", "_receiver_code_2src_2main_8cpp.html#a86c2722f6c671747562cc504a440e243", null ],
+    [ "GPSSensorTime", "_receiver_code_2src_2main_8cpp.html#a5e7382f5239d90088ed4222625909ade", null ],
     [ "HoursGPS", "_receiver_code_2src_2main_8cpp.html#acbe14cc301f6ba68e2431684bf688916", null ],
     [ "ina219", "_receiver_code_2src_2main_8cpp.html#a69393b86406e49dbacfbabd283877495", null ],
     [ "INA219Volts", "_receiver_code_2src_2main_8cpp.html#ad84d94b7259bcf40213f0af9be706ee7", null ],

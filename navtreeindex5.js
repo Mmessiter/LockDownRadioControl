@@ -1,5 +1,6 @@
 var NAVTREEINDEX5 =
 {
+"class_tiny_g_p_s_plus.html#a886255f412f8e01f84e5104d36315fb3":[8,0,13,26],
 "class_tiny_g_p_s_plus.html#aa085c3e72a399a829dd92af52b373404":[8,0,13,28],
 "class_tiny_g_p_s_plus.html#ad7800d3decbe58e355f5229bba231868":[8,0,13,23],
 "class_tiny_g_p_s_plus.html#ad7b78320b7e4967df17c6a27008a5154":[8,0,13,6],
@@ -104,14 +105,14 @@ var NAVTREEINDEX5 =
 "functions_w.html":[8,3,0,20],
 "functions_y.html":[8,3,0,21],
 "functions_~.html":[8,3,0,22],
-"globals.html":[9,1,0,0],
 "globals.html":[9,1,0],
+"globals.html":[9,1,0,0],
 "globals_a.html":[9,1,0,1],
 "globals_b.html":[9,1,0,2],
 "globals_c.html":[9,1,0,3],
 "globals_d.html":[9,1,0,4],
-"globals_defs.html":[9,1,6,0],
 "globals_defs.html":[9,1,6],
+"globals_defs.html":[9,1,6,0],
 "globals_defs_a.html":[9,1,6,1],
 "globals_defs_b.html":[9,1,6,2],
 "globals_defs_c.html":[9,1,6,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX5 =
 "md__docs__l_d_r_c__user__manual__ver_0_1.html#autotoc_md6":[1,4],
 "md__docs__l_d_r_c__user__manual__ver_0_1.html#autotoc_md7":[1,5],
 "md__docs__l_d_r_c__user__manual__ver_0_1.html#autotoc_md8":[1,6],
-"md__docs__l_d_r_c__user__manual__ver_0_1.html#autotoc_md9":[1,7],
-"md__receiver_code_lib__adafruit__g_p_s__library_code_of_conduct.html":[5]
+"md__docs__l_d_r_c__user__manual__ver_0_1.html#autotoc_md9":[1,7]
 };
