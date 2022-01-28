@@ -415,7 +415,8 @@ FASTRUN void ReadTheNewGPSHub(){
 
   char RdataID[IDLEN+1];
   double RdataIn;
-  union { double Val64; uint8_t Val8[8]; } Rdata;   // 'union' allows access to every byte
+  union {double Val64; uint8_t Val8[8];} Rdata;   // 'union' allows access to every byte
+  
   Wire.requestFrom(GPSI2CHUB, GPSI2CBYTES);         // Ask hub for data
   for (int j = 0; j < GPSI2CBYTES; ++j ){
     if (Wire.available()) {                         // Listen to HUB
