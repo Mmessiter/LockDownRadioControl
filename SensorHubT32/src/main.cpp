@@ -105,7 +105,7 @@ void SendDataToReceiver() {
         strcpy (RdataID,HRS);
         break;
       case  9:
-        RdataOut = GPSMins;        // Hours
+        RdataOut = GPSMins;        // Mins
         strcpy (RdataID,MNS);
         break;
       case  10:
