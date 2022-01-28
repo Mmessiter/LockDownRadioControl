@@ -8,6 +8,7 @@
 
 #include <TinyGPS++.h>
 
+
 #define I2CADDRESS  8       // Address of this I2C slave
 #define GPSBAUDRATE 9600    // Didn't work any faster
 #define GPSDEVICE Serial1   // GPS is connected to Serial1
