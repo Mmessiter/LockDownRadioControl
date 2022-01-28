@@ -15,7 +15,7 @@
     #define RXVERSION_MINIMUS 0 // Jan 25th 2022
     #define GPSI2CHUB         8
 
-// #define DEBUG           // for FHSS
+// #define DEBUG         // for FHSS
 // #define DB_SENSORS
 // #define DB_BIND
 // #define DB_FAILSAFE

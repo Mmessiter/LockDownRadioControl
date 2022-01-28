@@ -190,18 +190,23 @@ void FailSafe()
  */
 void ShowHopDurationEtc()
 {
-    float OnePacketTime = (millis() - PacketStartTime) / PacketNumber;
+    uint8_t OnePacketTime = (millis() - PacketStartTime) / PacketNumber;
     Serial.print("Hop duration: ");
-    Serial.print((millis() - PacketStartTime) / 1000);
-    Serial.print("s  Packets per hop: ");
+    Serial.print( int (millis() - PacketStartTime));
+    Serial.print("ms.  Packets per hop: ");
+    if (PacketNumber<10) Serial.print (" ");
     Serial.print(PacketNumber);
+    
     Serial.print("  Average Time per packet: ");
     Serial.print(OnePacketTime);
-    Serial.print("ms  Next channel: ");
+    if (OnePacketTime<10) Serial.print (" ");
+    Serial.print("ms.  Next channel: ");
     Serial.print(FHSS_Channels[NextChannelNumber]);
+    if (FHSS_Channels[NextChannelNumber] < 10) Serial.print (" ");
     Serial.print(BoundFlag ? " Bound!" : " NOT Bound");
     Serial.print("  Radio: ");
-    Serial.println(ThisRadio);
+    Serial.print(ThisRadio);
+    Serial.println("");
     PacketStartTime = millis();
 }
 
