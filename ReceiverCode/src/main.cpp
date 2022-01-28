@@ -234,6 +234,9 @@ void UseReceivedData(){
 bool ReadData()
 {
     Connected = false;
+
+   // if (CurrentRadio->available()) Serial.println (millis() - LastConnectionMoment); // heer
+
     while (CurrentRadio->available()) {                                // Get all, but use only the latest
         LoadAckPayload();
         Connected = true;
