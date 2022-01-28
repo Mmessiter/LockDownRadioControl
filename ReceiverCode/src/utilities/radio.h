@@ -35,7 +35,7 @@ uint32_t RXTimeStamp;
 bool     HopNow = false;
 
 extern void     ShowHopDurationEtc();
-extern void     DoSensors();
+extern void     ReadSensors();
 extern bool     Radio1Exists;
 extern bool     Radio2Exists;
 extern float    BaroAltitude;

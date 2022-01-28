@@ -486,7 +486,7 @@ FASTRUN void ReadTheNewGPSHub(){
 }
 
 /************************************************************************************************************/
-FASTRUN void DoSensors()
+FASTRUN void ReadSensors()
 {      
     if (USE_AdafruitUltimateGps) {
             if ((millis() - SensorTime) < 500) return;       // no need to measure too often
@@ -494,20 +494,15 @@ FASTRUN void DoSensors()
             ReadTheNewGPSHub();                              // Sensor now has its own MCU. Don't combine it with i2c connected sensors.   
             return;                                     
       }
-    if ((millis() - SensorTime) < 2000) return;              // must NOT try to measure these too often
+    if ((millis() - SensorTime) < 3000) return;              // must NOT try to measure these too often  
+    if ((!BoundFlag) || (!Connected))   return;
     SensorTime = millis();
+
     if (USE_BMP280) {
-        if (BoundFlag && Connected) {
-            BaroTemperature = bmp280.readTemperature();
-            BaroAltitude    = bmp280.readAltitude(Qnh) * 3.28084; 
-            if (BaroAltitude < 0) BaroAltitude = 0;
-        }
+        BaroTemperature = bmp280.readTemperature();
+        BaroAltitude    = bmp280.readAltitude(Qnh) * 3.28084; 
     }
-    if (USE_INA219) {
-        if (BoundFlag && Connected) { 
-            INA219Volts = ina219.getBusVoltage_V();
-        }
-    }
+    if (USE_INA219) INA219Volts = ina219.getBusVoltage_V();
 
 #ifdef DB_SENSORS
     Sensors_Status();    // does nothing if DB_SENSORS is not defined
@@ -519,8 +514,9 @@ FASTRUN void DoSensors()
 
 FASTRUN void ReceiveData()
 { 
-    if (millis() - LastConnectionMoment < 1 ) { // If we have still loads of time, read the sensors.
-       DoSensors();                             // This must take less than 24 ms to avoid a timeout, or < 7 ms when all's going well.
+    if (millis() - LastConnectionMoment < 1 ) { // If, and only if, we have still absolutely loads of time, read the sensors now while waiting for next data packet.
+       ReadSensors();                           // This must return in less than < 7 ms when next packet is due.
+      // if ((millis() - LastConnectionMoment) > 1) Serial.println (millis() - LastConnectionMoment);   // (we can current expect to lose about 2 - 5 ms here if all are connected.)
     }
 
     Connected = false;                          // Assume not connected until we know better  
