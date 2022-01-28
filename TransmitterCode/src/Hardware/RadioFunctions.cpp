@@ -217,11 +217,11 @@ void ScanAllChannels()
 
 void HopToNextFrequency()
 {
-    Radio1.setChannel(NextFrequency);
-    Radio1.stopListening();
-    ReadSwitches();
-    CheckTimer(); // update timer if on
-    ShowComms();
+    Radio1.setChannel(NextFrequency);  // Hop !
+    Radio1.stopListening();            // Transmit only (no need for a delay() as this is here followed by housekeeping tasks)
+    ReadSwitches();                    // Check switch positions
+    CheckTimer();                      // update on-screen timer
+    ShowComms();                       // Display user info
 #ifdef DB_FHSS
     PEndTime  = millis();
     Pduration = (PEndTime - PStartTime) / 1000;
