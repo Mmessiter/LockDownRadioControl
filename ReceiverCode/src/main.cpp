@@ -520,10 +520,10 @@ FASTRUN void ReadSensors()
 
 FASTRUN void ReceiveData()
 { 
-    if (millis() - LastConnectionMoment < 1 ) { // If, and only if, we have still absolutely loads of time, read the sensors now while waiting for next data packet.
-       ReadSensors();                           // This must return in less than < 7 ms when next packet is due.
-      // if ((millis() - LastConnectionMoment) > 1) Serial.println (millis() - LastConnectionMoment);   // We can expect to lose about 2 - 4 ms here if all are connected. 
-                                                                                                        // It MUST not exceed 6 ms!
+    if (millis() - LastConnectionMoment < 1 ) { // If, and only if, we have still absolutely loads of time, read the sensors NOW while waiting for next data packet.
+       ReadSensors();                           // This MUST return in < 6 ms when next packet is due.
+      // if ((millis() - LastConnectionMoment) > 1) Serial.println (millis() - LastConnectionMoment);   // We can expect to lose about 2 - 4 ms here if all sensors are connected. 
+                                                                                                        // The delay MUST NOT exceed 6 ms!
     }
     Connected = false;                          // Assume not connected until we know better  
     if (CurrentRadio->available()) {
