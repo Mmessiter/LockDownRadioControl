@@ -83,7 +83,8 @@ float           BaroTemperature;
 float           INA219Volts;
 bool            Radio1Exists = false;
 bool            Radio2Exists = false;
-uint32_t        SensorTime   = 0;
+uint32_t        SensorTime       = 0;
+uint32_t        GPSSensorTime   = 0;
 uint16_t        Qnh          = 0;    //Pressure at sea level here and now (defined by TX option)
 uint8_t         SatellitesGPS; 
 double          LatitudeGPS;
@@ -489,11 +490,11 @@ FASTRUN void ReadTheNewGPSHub(){
 FASTRUN void ReadSensors()
 {      
     if (USE_AdafruitUltimateGps) {
-            if ((millis() - SensorTime) < 500) return;       // no need to measure too often
-            SensorTime = millis();
-            ReadTheNewGPSHub();                              // Sensor now has its own MCU. Don't combine it with i2c connected sensors.   
-            return;                                     
+            if ((millis() - GPSSensorTime) < 500) return;       // no need to measure too often
+            GPSSensorTime = millis();
+            ReadTheNewGPSHub();                              // Sensor now has its own MCU.                                    
       }
+ 
     if ((millis() - SensorTime) < 3000) return;              // must NOT try to measure these too often  
     if ((!BoundFlag) || (!Connected))   return;
     SensorTime = millis();
