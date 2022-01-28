@@ -1,5 +1,6 @@
 var _sensor_hub_l_c_2src_2main_8cpp =
 [
+    [ "DEBUG", "_sensor_hub_l_c_2src_2main_8cpp.html#ad72dbcf6d0153db1b8d8a58001feed83", null ],
     [ "DEBUGTIMER", "_sensor_hub_l_c_2src_2main_8cpp.html#a6d8ac148d16fbe92176033a667d3ef8a", null ],
     [ "GPSBAUDRATE", "_sensor_hub_l_c_2src_2main_8cpp.html#a372295c11945751efdddfd98372e4aa7", null ],
     [ "GPSDEVICE", "_sensor_hub_l_c_2src_2main_8cpp.html#ac5dd8c90defc2c0d78e99d2d5c1a0fd1", null ],

@@ -1,8 +1,7 @@
 var searchData=
 [
-  ['makebindbuttoninvisible_1132',['MakeBindButtonInvisible',['../_transmitter_code_2src_2main_8cpp.html#a2e38b32674344cfc06b09a71dfcaf3f1',1,'main.cpp']]],
-  ['maketwobytes_1133',['MakeTwobytes',['../_transmitter_code_2src_2main_8cpp.html#a5aa4888b924a4f1d95e9cedc3004f2b6',1,'main.cpp']]],
-  ['makeunion_1134',['MakeUnion',['../radio_8h.html#aab047277e3f8b0690ccd9feb464afe86',1,'radio.h']]],
+  ['makebindbuttoninvisible_1133',['MakeBindButtonInvisible',['../_transmitter_code_2src_2main_8cpp.html#a2e38b32674344cfc06b09a71dfcaf3f1',1,'main.cpp']]],
+  ['maketwobytes_1134',['MakeTwobytes',['../_transmitter_code_2src_2main_8cpp.html#a5aa4888b924a4f1d95e9cedc3004f2b6',1,'main.cpp']]],
   ['mapexp_1135',['MapExp',['../_transmitter_code_2src_2main_8cpp.html#a66f68b74166e81ad0ecb8fc3a1670eb5',1,'main.cpp']]],
   ['maptosbus_1136',['MapToSBUS',['../_receiver_code_2src_2main_8cpp.html#a6a495c5560f12cc3fd3df9454927d681',1,'MapToSBUS():&#160;main.cpp'],['../_radio_functions_8h.html#a6a495c5560f12cc3fd3df9454927d681',1,'MapToSBUS():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a6a495c5560f12cc3fd3df9454927d681',1,'MapToSBUS():&#160;main.cpp']]],
   ['markhere_1137',['MarkHere',['../_receiver_code_2src_2main_8cpp.html#a5ae8a2aa29e834880ccf370c7547961b',1,'main.cpp']]],
