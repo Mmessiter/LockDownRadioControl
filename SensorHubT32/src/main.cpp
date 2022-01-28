@@ -6,8 +6,6 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-//#include <i2c_t3.h>
-
 #include <TinyGPS++.h>
 
 #define I2CADDRESS  8       // Address of this I2C slave
