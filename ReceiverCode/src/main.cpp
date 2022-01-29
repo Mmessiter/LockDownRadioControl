@@ -4,7 +4,7 @@
  * @section rxFeatures Features List
  * - WORKS ON TEENSY 4.0
  * - Detects and uses INA219 to read volts
- * - Detects and uses BMP280 pressure sensor for altitude
+ * - Detects and uses BMP280 pressure sensor for altitude (NOW IN SENSOR HUB)
  * - Binding implemented
  * - SBUS implemented
  * - Failsafe implemented (after two seconds)
@@ -49,18 +49,13 @@
 #define RANGEMAX        2047 // = Frsky at 150 %
 #define RANGEMIN        0
 
+#include <Wire.h>
 #include <Servo.h>
 #include <EEPROM.h>
 #include <SBUS.h>
-#include <Adafruit_INA219.h> // new library used here±
-#include <Adafruit_BMP280.h>
 #include "utilities/radio.h"
 
-bool            USE_BMP280 = false;                   //  BMP280 sensor connected ?
-bool            USE_INA219 = false;                   //  Volts from INA219 ?
 bool            USE_AdafruitUltimateGps = false;      //  GPS (Adafruit Ultimate GPS) ?
-Adafruit_INA219 ina219;
-Adafruit_BMP280 bmp280;
 Servo           MCMServo[SERVOSUSED];
 uint8_t         PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8}; // 9 PWMs, remaining 7 via sbus
 SBUS            MySbus(SBUSPORT);
@@ -383,17 +378,7 @@ void Sensors_Status()
             Serial.println (SecsGPS);
             }
     }
-    if (USE_INA219) {
-        Serial.print("     Volts=");
-        Serial.print(INA219Volts);
-    }
-    if (USE_BMP280) {
-        Serial.print("  Altitude=");
-        Serial.print(BaroAltitude);
-        Serial.print(" Temp=");
-        Serial.print(BaroTemperature);
-    }
-    Serial.println(" ");
+   
 }
 #endif // defined DB_SENSORS
 
@@ -504,12 +489,6 @@ FASTRUN void ReadSensors()
     if ((!BoundFlag) || (!Connected))   return;
     SensorTime = millis();
 
-    if (USE_BMP280) {
-        BaroTemperature = bmp280.readTemperature();
-        BaroAltitude    = bmp280.readAltitude(Qnh) * 3.28084; 
-    }
-    if (USE_INA219) INA219Volts = ina219.getBusVoltage_V();
-
 #ifdef DB_SENSORS
     Sensors_Status();    // does nothing if DB_SENSORS is not defined
     Serial.println (millis()-SensorTime);
@@ -552,39 +531,9 @@ void ScanI2c()
                 Serial.println("Sensor Hub with Adafruit Ultimate GPS etc. detected!");
 #endif
               }
-             if (i == 0x40) {
-                USE_INA219 = true;
-#ifdef DB_SENSORS
-                Serial.println("INA219 voltage meter detected!");
-#endif
-            }
-            else if (i == 0x76) {
-                USE_BMP280 = true;
-#ifdef DB_SENSORS
-                Serial.println("BMP280 barometer detected!");
-            }
-            else {
-                Serial.print(i, HEX);
-                Serial.print("   "); // in case some new device shows up
-#endif
-            }
+          
         }
     }
-}
-
-/************************************************************************************************************/
-/** Initialize the BMP280 sensor */
-
-void InitBMP280()
-{
-    bmp280.begin(0x76);
-    bmp280.setSampling(Adafruit_BMP280::MODE_NORMAL,     /* Operating Mode. */
-                       Adafruit_BMP280::SAMPLING_X2,     /* Temp. oversampling */
-                       Adafruit_BMP280::SAMPLING_X16,    /* Pressure oversampling */
-                       Adafruit_BMP280::FILTER_X16,      /* Filtering. */
-                       Adafruit_BMP280::STANDBY_MS_500); /* Standby time. */
-
-    
 }
 
 /************************************************************************************************************/
@@ -656,8 +605,6 @@ void setup()
     CurrentRadio = &Radio1;
     if (InitCurrentRadio()) Radio1Exists = true;
     ThisRadio = 1;
-    if (USE_INA219)               ina219.begin();
-    if (USE_BMP280)               InitBMP280();
     GetOldPipe();
     digitalWrite(LED_PIN, LOW);
 }

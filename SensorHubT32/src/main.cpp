@@ -12,8 +12,7 @@
 #define I2CADDRESS  8       // Address of this I2C slave
 #define GPSBAUDRATE 9600    // Didn't work any faster
 #define GPSDEVICE Serial1   // GPS is connected to Serial1
-#define DEBUG               // Local console debug only
-
+//#define DEBUG               // Local console debug only
 #define DEBUGTIMER 1000
 
 int DebugTimer = 0;
@@ -148,6 +147,9 @@ void ReceiveEvent(int q) {
 char MRK[] = "MRK";
 char MAY[] = "MAY";
 char RCV[4];
+
+Serial.println ("MSG RECEIVED!");
+
     for (uint8_t i = 0; i < 3; ++i) {
         if (Wire1.available()) {
             RCV[i]= Wire1.read();    // Get one byte at a time

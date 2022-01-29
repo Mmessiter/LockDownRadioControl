@@ -1,17 +1,13 @@
 /** @file ReceiverCode/src/utilities/radio.h */
 #ifndef _SRC_UTILITIES_RADIO_H
 #define _SRC_UTILITIES_RADIO_H
-
 #include <SPI.h>
 #include <RF24.h>
 #include "common.h"
-
 #define pinCE1  9  // NRF1
 #define pinCSN1 10 // NRF1
-
 #define pinCSN2 20 // NRF2
 #define pinCE2  21 // NRF2
-
 #define FAILSAFE_TIMEOUT 2000
 
 RF24    Radio1(pinCE1, pinCSN1);
@@ -22,11 +18,9 @@ uint8_t ThisRadio    = 1;
 uint64_t ThisPipe = 0xBABE1E5420LL; // default startup
 uint64_t NewPipe  = 0;
 uint64_t OldPipe  = 0;
-
-bool Connected          = false;
-int  SearchStartTime    = 0;
-int  StillSearchingTime = 0;
-
+bool     Connected          = false;
+int      SearchStartTime    = 0;
+int      StillSearchingTime = 0;
 bool     SaveNewBind = true;
 uint8_t  SavedPipeAddress[8];
 uint32_t HopStart;
@@ -45,19 +39,15 @@ extern double   LatitudeGPS;
 extern double   LongitudeGPS;
 extern double   SpeedGPS;
 extern double   AngleGPS;
-
 extern double   AltitudeGPS;
 extern double   DistanceGPS;
 extern double   CourseToGPS;
 extern uint8_t  HoursGPS;
 extern uint8_t  MinsGPS;
 extern uint8_t  SecsGPS;
-extern uint8_t  SatellitesGPS; // Heer .. todo
-
+extern uint8_t  SatellitesGPS; 
 extern bool     GpsFix;
 extern bool     USE_AdafruitUltimateGps;    
-extern bool     USE_BMP280;
-extern bool     USE_INA219;
  
 
 /** AckPayload Stucture for data returned to transmitter. */
@@ -342,12 +332,8 @@ void LoadAckPayload()
 {
     uint8_t MaxAckP     = 2;    // 2 if only RX
     AckPayload.Purpose &= 0x7F; // Clear hi bit ( = do not ignore)
-    ++AckPayload.Purpose;       // 0 = ...
-                                // 1 =  Version number
-                                // 2 =  Time stamp for FHSS
-                                // ... etc ...
-      if (USE_BMP280) MaxAckP              = 4;                     // 4 + volts
-      if (USE_INA219) MaxAckP              = 8;                     // 8 + Baro
+    ++AckPayload.Purpose;      
+
       if (USE_AdafruitUltimateGps) MaxAckP = 26;                    // 26 + GPS
       if (AckPayload.Purpose > MaxAckP) AckPayload.Purpose = 0;     // wrap after max
 
