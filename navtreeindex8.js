@@ -1,13 +1,5 @@
 var NAVTREEINDEX8 =
 {
-"structsensors__event__t.html#a456259aaeb265913281d7ffbd8ad8697":[9,0,17,4],
-"structsensors__event__t.html#a56b4d05fbf47013727ec1a0a94db91e6":[9,0,17,1],
-"structsensors__event__t.html#a577b73698368fb061382ce9f31052417":[9,0,17,10],
-"structsensors__event__t.html#a58401dd7f3400d9eb96c71b8fba9f8e8":[9,0,17,15],
-"structsensors__event__t.html#a6b06d35b17afbee79de7f45d9d71ed0b":[9,0,17,12],
-"structsensors__event__t.html#a8be4dc00344f46abf29e06251bf9fad9":[9,0,17,11],
-"structsensors__event__t.html#a914f76beb75bd99aa3c13d3a8e56e21c":[9,0,17,13],
-"structsensors__event__t.html#a91a4325f468d3155e6921358a6f61baa":[9,0,17,0],
 "structsensors__event__t.html#aa634d41a024e1cacdceecf85ec326698":[9,0,17,7],
 "structsensors__event__t.html#ab01b52f6b83f390a6370d319ded97b28":[9,0,17,17],
 "structsensors__event__t.html#acbe3c50a256fa9423bc9e3a6e0da7ebf":[9,0,17,8],

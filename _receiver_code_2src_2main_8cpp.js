@@ -19,7 +19,6 @@ var _receiver_code_2src_2main_8cpp =
     [ "ClearAckPayload", "_receiver_code_2src_2main_8cpp.html#a5a26715a721e1073d6ae00498282c056", null ],
     [ "DoBinding", "_receiver_code_2src_2main_8cpp.html#af4a2e182cd3b86ca9765a08100cfb14a", null ],
     [ "FailSafe", "_receiver_code_2src_2main_8cpp.html#a42318598726782ebb2e1857f167c8cda", null ],
-    [ "InitBMP280", "_receiver_code_2src_2main_8cpp.html#aa2c448c0ec510ffaaecbc5991e726b53", null ],
     [ "LoadFailSafeData", "_receiver_code_2src_2main_8cpp.html#a7b232e8049c83655363495df07fc96d9", null ],
     [ "loop", "_receiver_code_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f", null ],
     [ "MapToSBUS", "_receiver_code_2src_2main_8cpp.html#a6a495c5560f12cc3fd3df9454927d681", null ],
@@ -44,7 +43,6 @@ var _receiver_code_2src_2main_8cpp =
     [ "BaroTemperature", "_receiver_code_2src_2main_8cpp.html#abda84b8cbebce00b7d4b0ea759b8d07f", null ],
     [ "BindNow", "_receiver_code_2src_2main_8cpp.html#ac629a0e239d1c27f33584d6ac3e841f8", null ],
     [ "BindOKTimer", "_receiver_code_2src_2main_8cpp.html#a547d518da80d9f29dde20e14880e250c", null ],
-    [ "bmp280", "_receiver_code_2src_2main_8cpp.html#a1eeadec20c253385fe11f15108d783c8", null ],
     [ "BoundFlag", "_receiver_code_2src_2main_8cpp.html#a44d37e4e8af884bf172344c0835a5593", null ],
     [ "CompressedData", "_receiver_code_2src_2main_8cpp.html#aa16611ba89205c8cb9e75353ce1ad032", null ],
     [ "CourseToGPS", "_receiver_code_2src_2main_8cpp.html#adc0c1d3ffc20a999f658920527a4183e", null ],
@@ -56,7 +54,6 @@ var _receiver_code_2src_2main_8cpp =
     [ "GpsFix", "_receiver_code_2src_2main_8cpp.html#a86c2722f6c671747562cc504a440e243", null ],
     [ "GPSSensorTime", "_receiver_code_2src_2main_8cpp.html#a5e7382f5239d90088ed4222625909ade", null ],
     [ "HoursGPS", "_receiver_code_2src_2main_8cpp.html#acbe14cc301f6ba68e2431684bf688916", null ],
-    [ "ina219", "_receiver_code_2src_2main_8cpp.html#a69393b86406e49dbacfbabd283877495", null ],
     [ "INA219Volts", "_receiver_code_2src_2main_8cpp.html#ad84d94b7259bcf40213f0af9be706ee7", null ],
     [ "LatitudeGPS", "_receiver_code_2src_2main_8cpp.html#a3e82bc1d96f0423cf3ee60bdf9878044", null ],
     [ "LongitudeGPS", "_receiver_code_2src_2main_8cpp.html#a292b2bc83214f3188bd096c35389461b", null ],
@@ -78,7 +75,5 @@ var _receiver_code_2src_2main_8cpp =
     [ "ServosAttached", "_receiver_code_2src_2main_8cpp.html#a95b22fb572f7a91a89a431c7f1236575", null ],
     [ "SpeedGPS", "_receiver_code_2src_2main_8cpp.html#ae16763432ff6353a6e61ba98d119b8f9", null ],
     [ "temperature280", "_receiver_code_2src_2main_8cpp.html#a7cc84074d4166c6512a2d479b6f12e30", null ],
-    [ "USE_AdafruitUltimateGps", "_receiver_code_2src_2main_8cpp.html#a50bd80a7728cf3e3699b0e52ce4ed035", null ],
-    [ "USE_BMP280", "_receiver_code_2src_2main_8cpp.html#a4be5c27bea3c82b0a4ec92191052d946", null ],
-    [ "USE_INA219", "_receiver_code_2src_2main_8cpp.html#a87ae50e2ac4507568cbf98072f174a1b", null ]
+    [ "USE_AdafruitUltimateGps", "_receiver_code_2src_2main_8cpp.html#a50bd80a7728cf3e3699b0e52ce4ed035", null ]
 ];

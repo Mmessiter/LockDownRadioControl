@@ -23,7 +23,7 @@ var searchData=
   ['blue_87',['Blue',['../_transmitter_code_2src_2main_8cpp.html#a6208a194d702872fdbe1d3c7d7a7c879',1,'main.cpp']]],
   ['blueled_88',['BLUELED',['../_transmitter_code_2src_2main_8cpp.html#a0cc50e8ab2356e8108bbb4376c02119e',1,'main.cpp']]],
   ['blueledon_89',['BlueLedOn',['../_transmitter_code_2src_2main_8cpp.html#aa1f9aec467eb00917ad9ffdc0bd5b20d',1,'main.cpp']]],
-  ['bmp280_90',['bmp280',['../_sensor_hub_t32_2src_2main_8cpp.html#a1eeadec20c253385fe11f15108d783c8',1,'bmp280():&#160;main.cpp'],['../_receiver_code_2src_2main_8cpp.html#a1eeadec20c253385fe11f15108d783c8',1,'bmp280():&#160;main.cpp']]],
+  ['bmp280_90',['bmp280',['../_sensor_hub_t32_2src_2main_8cpp.html#a1eeadec20c253385fe11f15108d783c8',1,'main.cpp']]],
   ['bmp280_5faddress_91',['BMP280_ADDRESS',['../_adafruit___b_m_p280_8h.html#a94135ecef3017d3b36c9af92bb8a79e6',1,'Adafruit_BMP280.h']]],
   ['bmp280_5faddress_5falt_92',['BMP280_ADDRESS_ALT',['../_adafruit___b_m_p280_8h.html#a4d1dfa4bfff5aefee277a473744dc405',1,'Adafruit_BMP280.h']]],
   ['bmp280_5fcalib_5fdata_93',['bmp280_calib_data',['../structbmp280__calib__data.html',1,'']]],
