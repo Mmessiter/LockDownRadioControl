@@ -48,6 +48,7 @@ bool    USE_BMP280 = false;                   //  BMP280 sensor connected ?
 bool    USE_INA219 = false;                   //  Volts from INA219 ?
 Adafruit_INA219 ina219;
 Adafruit_BMP280 bmp280;
+uint32_t LoopTimer;
 
 float    BaroTemperature ;
 float    BaroAltitude ;
@@ -231,9 +232,23 @@ void ShowGPS(){
       Serial.println (GPSYear+1792);  // ?????????
       Serial.print ("Lib version: ");
       Serial.println (*GPSLibVersion);
+      Serial.print ("B. Altitude: ");
+      Serial.println (BaroAltitude);
+      Serial.print  ("B. Temp.   : ");
+      Serial.println (BaroTemperature);
       Serial.println ("-------------------------");
   }
 }
+// ***********************************************************************************************************
+void ReadOtherSensors(){
+    if (USE_BMP280) {
+        BaroTemperature = bmp280.readTemperature();
+        BaroAltitude    = bmp280.readAltitude(Qnh) * 3.28084; 
+    }
+    if (USE_INA219) INA219Volts = ina219.getBusVoltage_V();
+}
+
+
 //*************************************** SendToGPS  **********************************************************
 void SendToGPS(char Cmd[80]){
 char a = 0;
@@ -247,9 +262,12 @@ uint8_t i = 0;
  }
 //*************************************** MAIN LOOP **********************************************************
 void loop() {
+
      ReadGps();
+     ReadOtherSensors();
+
 #ifdef DEBUG
-    ShowGPS();
+      ShowGPS();
 #endif
 }
 // **************************************************************************************
@@ -283,14 +301,7 @@ void ScanI2c()
         }
     }
 }
-// ***********************************************************************************************************
-void ReadOtherSensors(){
-    if (USE_BMP280) {
-        BaroTemperature = bmp280.readTemperature();
-        BaroAltitude    = bmp280.readAltitude(Qnh) * 3.28084; 
-    }
-    if (USE_INA219) INA219Volts = ina219.getBusVoltage_V();
-}
+
 //**************************************** SETUP *************************************************************
 void setup() {
   GPSDEVICE.begin(GPSBAUDRATE);
