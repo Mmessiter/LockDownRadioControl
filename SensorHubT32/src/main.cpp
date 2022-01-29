@@ -262,13 +262,15 @@ uint8_t i = 0;
  }
 //*************************************** MAIN LOOP **********************************************************
 void loop() {
-
-     ReadGps();
-     ReadOtherSensors();
-
+ if ((millis()-LoopTimer) > 100)  // 10x per second is enough
+  {
+    LoopTimer = millis();
+    ReadGps();
+    ReadOtherSensors();
 #ifdef DEBUG
-      ShowGPS();
+    ShowGPS();
 #endif
+  }
 }
 // **************************************************************************************
 void InitBMP280()
