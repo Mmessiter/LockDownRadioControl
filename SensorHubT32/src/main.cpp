@@ -7,10 +7,13 @@
 #include <Arduino.h>
 #include <Wire.h>
 #include <TinyGPS++.h>
+#include <Adafruit_INA219.h> 
+#include <Adafruit_BMP280.h>
 #define I2CADDRESS  8       // Address of this I2C slave
 #define GPSBAUDRATE 9600    // Didn't work any faster
 #define GPSDEVICE Serial1   // GPS is connected to Serial1
 #define DEBUG               // Local console debug only
+
 #define DEBUGTIMER 1000
 
 int DebugTimer = 0;
@@ -42,6 +45,16 @@ char    PMTK_SET_NMEA_OUTPUT_RMCGGAGSA[] =  "$PMTK314,0,1,0,1,1,0,0,0,0,0,0,0,0,
 char    PMTK_SET_BAUD_9600[]             =  "$PMTK251,9600*17";     // <   9600 bps     
 char    PGCMD_NOANTENNA[]                =  "$PGCMD,33,0*6D" ;      // < don't show antenna status messages
 uint8_t ParameterNumber                  = 0;
+bool    USE_BMP280 = false;                   //  BMP280 sensor connected ?
+bool    USE_INA219 = false;                   //  Volts from INA219 ?
+Adafruit_INA219 ina219;
+Adafruit_BMP280 bmp280;
+
+float    BaroTemperature ;
+float    BaroAltitude ;
+float    INA219Volts;
+uint16_t Qnh = 1033;
+
 
 
 //************************************* SEND DATA INTERRUPT HANDLER ******************************************
@@ -241,6 +254,53 @@ void loop() {
     ShowGPS();
 #endif
 }
+// **************************************************************************************
+
+void InitBMP280()
+{
+    bmp280.begin(0x76);
+    bmp280.setSampling(Adafruit_BMP280::MODE_NORMAL,     /* Operating Mode. */
+                       Adafruit_BMP280::SAMPLING_X2,     /* Temp. oversampling */
+                       Adafruit_BMP280::SAMPLING_X16,    /* Pressure oversampling */
+                       Adafruit_BMP280::FILTER_X16,      /* Filtering. */
+                       Adafruit_BMP280::STANDBY_MS_500); /* Standby time. */
+}
+/***********************************************************************************************************/
+void ScanI2c()
+{
+    delay(1000); // allow time to wake things up
+    for (uint8_t i = 1; i < 127; ++i) {
+        Wire.beginTransmission(i);
+        if (Wire.endTransmission() == 0) {
+             if (i == 0x40) {
+                USE_INA219 = true;
+#ifdef DEBUG
+                Serial.println("INA219 voltage meter detected!");
+#endif
+            }
+            else if (i == 0x76) {
+                USE_BMP280 = true;
+#ifdef DEBUG
+                Serial.println("BMP280 barometer detected!");
+            }
+            else {
+                Serial.print(i, HEX);
+                Serial.print("   "); // in case some new device shows up
+#endif
+            }
+        }
+    }
+}
+// ***********************************************************************************************************
+
+void ReadOtherSensors(){
+    if (USE_BMP280) {
+        BaroTemperature = bmp280.readTemperature();
+        BaroAltitude    = bmp280.readAltitude(Qnh) * 3.28084; 
+    }
+    if (USE_INA219) INA219Volts = ina219.getBusVoltage_V();
+}
+
 //**************************************** SETUP *************************************************************
 void setup() {
   GPSDEVICE.begin(GPSBAUDRATE);
@@ -254,4 +314,6 @@ void setup() {
   delay (100);
   SendToGPS(PMTK_SET_NMEA_OUTPUT_RMCGGAGSA);       // These setup commands are for Adafruit Ulimate GPS only
   delay (100);
+  if (USE_BMP280) InitBMP280();
+  if (USE_INA219) ina219.begin();
 }
