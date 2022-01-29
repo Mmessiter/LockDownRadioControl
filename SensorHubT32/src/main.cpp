@@ -12,7 +12,7 @@
 #define I2CADDRESS  8       // Address of this I2C slave
 #define GPSBAUDRATE 9600    // Didn't work any faster
 #define GPSDEVICE Serial1   // GPS is connected to Serial1
-#define DEBUG               // Local console debug only
+//#define DEBUG               // Local console debug only
 #define DEBUGTIMER 1000
 
 int DebugTimer = 0;
@@ -292,11 +292,15 @@ void ScanI2c()
         if (Wire.endTransmission() == 0) {
              if (i == 0x40) {
                 USE_INA219 = true;
+#ifdef DEBUG
                 Serial.println("INA219 voltage meter detected!");
+#endif
               }
              if (i == 0x76) {
                 USE_BMP280 = true;
+#ifdef DEBUG
                 Serial.println("BMP280 barometer detected!");
+#endif
               }
          // Serial.print(i, HEX);
          // Serial.println("   "); // in case some new device shows up  
@@ -307,12 +311,10 @@ void ScanI2c()
 //**************************************** SETUP *************************************************************
 void setup() {
   GPSDEVICE.begin(GPSBAUDRATE);
- 
-   Wire.begin();
+  Wire.begin();
   ScanI2c();
-   if (USE_BMP280) InitBMP280();
-   if (USE_INA219) ina219.begin();
-
+  if (USE_BMP280) InitBMP280();
+  if (USE_INA219) ina219.begin();
   delay (100);
   SendToGPS(PGCMD_NOANTENNA);                     // These setup commands are for Adafruit Ulimate GPS only
   delay (100);
@@ -320,7 +322,6 @@ void setup() {
   delay (100);
   SendToGPS(PMTK_SET_NMEA_OUTPUT_RMCGGAGSA);      
   delay (100);
-  
   Wire1.begin(I2CADDRESS);             
   Wire1.onRequest(SendDataToReceiver);    
   Wire1.onReceive(ReceiveEvent);
