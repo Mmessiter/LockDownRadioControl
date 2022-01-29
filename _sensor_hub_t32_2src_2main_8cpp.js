@@ -43,6 +43,7 @@ var _sensor_hub_t32_2src_2main_8cpp =
     [ "GPSYear", "_sensor_hub_t32_2src_2main_8cpp.html#abc801729e599fbe5b84d088ead6fae1a", null ],
     [ "ina219", "_sensor_hub_t32_2src_2main_8cpp.html#a69393b86406e49dbacfbabd283877495", null ],
     [ "INA219Volts", "_sensor_hub_t32_2src_2main_8cpp.html#ad84d94b7259bcf40213f0af9be706ee7", null ],
+    [ "LoopTimer", "_sensor_hub_t32_2src_2main_8cpp.html#a46536419f1b2ee88934f4f812fd6140c", null ],
     [ "ParameterNumber", "_sensor_hub_t32_2src_2main_8cpp.html#ae1460f6669589cc4881aad0fd6440030", null ],
     [ "PGCMD_NOANTENNA", "_sensor_hub_t32_2src_2main_8cpp.html#af5f2a2a78189687a7055abd054ac6058", null ],
     [ "PMTK_API_SET_FIX_CTL_1HZ", "_sensor_hub_t32_2src_2main_8cpp.html#abb8b0387db0515eec168511ea9facd34", null ],

@@ -63,8 +63,9 @@ var searchData=
   ['longitudedegrees_559',['longitudeDegrees',['../class_adafruit___g_p_s.html#a2a1d1e5e89b46270d8d3ff82bb68666a',1,'Adafruit_GPS']]],
   ['longitudegps_560',['LongitudeGPS',['../radio_8h.html#a292b2bc83214f3188bd096c35389461b',1,'LongitudeGPS():&#160;main.cpp'],['../_receiver_code_2src_2main_8cpp.html#a292b2bc83214f3188bd096c35389461b',1,'LongitudeGPS():&#160;main.cpp']]],
   ['loop_561',['loop',['../_sensor_hub_l_c_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../_sensor_hub_t32_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../_sensor_hub_teensy3__6_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../_receiver_code_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp']]],
-  ['lostcontactcutoff_562',['LOSTCONTACTCUTOFF',['../_radio_functions_8h.html#ac5b4f54697bc5a8d58ef0c92c094c6b6',1,'RadioFunctions.h']]],
-  ['lostcontactflag_563',['LostContactFlag',['../_radio_functions_8h.html#ad5f463902789a79fc622b3befd9409b9',1,'LostContactFlag():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#ad5f463902789a79fc622b3befd9409b9',1,'LostContactFlag():&#160;main.cpp']]],
-  ['lostpackets_564',['LostPackets',['../_transmitter_code_2src_2main_8cpp.html#ace8651c9c20dd6ea531190d34d35e1fc',1,'main.cpp']]],
-  ['lowbattery_565',['LOWBATTERY',['../_transmitter_code_2src_2main_8cpp.html#adca16f7a43b448d4584dcb62897068a5',1,'main.cpp']]]
+  ['looptimer_562',['LoopTimer',['../_sensor_hub_t32_2src_2main_8cpp.html#a46536419f1b2ee88934f4f812fd6140c',1,'main.cpp']]],
+  ['lostcontactcutoff_563',['LOSTCONTACTCUTOFF',['../_radio_functions_8h.html#ac5b4f54697bc5a8d58ef0c92c094c6b6',1,'RadioFunctions.h']]],
+  ['lostcontactflag_564',['LostContactFlag',['../_radio_functions_8h.html#ad5f463902789a79fc622b3befd9409b9',1,'LostContactFlag():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#ad5f463902789a79fc622b3befd9409b9',1,'LostContactFlag():&#160;main.cpp']]],
+  ['lostpackets_565',['LostPackets',['../_transmitter_code_2src_2main_8cpp.html#ace8651c9c20dd6ea531190d34d35e1fc',1,'main.cpp']]],
+  ['lowbattery_566',['LOWBATTERY',['../_transmitter_code_2src_2main_8cpp.html#adca16f7a43b448d4584dcb62897068a5',1,'main.cpp']]]
 ];
