@@ -1,17 +1,16 @@
 //***********************************************************************************************************
 //************************************* SENSOR HUB CODE FOR TEENSY 3.2  *************************************
 // 
-//                                   Version 1.0 Jan 25th 2022
+//                                   Version 1.1 Jan 29th 2022
+//                                   Uses Wire2 in Slave Mode ...
 //***********************************************************************************************************
 #include <Arduino.h>
 #include <Wire.h>
-
 #include <TinyGPS++.h>
-
 #define I2CADDRESS  8       // Address of this I2C slave
 #define GPSBAUDRATE 9600    // Didn't work any faster
 #define GPSDEVICE Serial1   // GPS is connected to Serial1
-//#define DEBUG               // Local console debug only
+#define DEBUG               // Local console debug only
 #define DEBUGTIMER 1000
 
 int DebugTimer = 0;
@@ -121,10 +120,10 @@ void SendDataToReceiver() {
    Rdata.Val64 = RdataOut;
    
    for (i = 0; i < IDLEN; ++i) {
-      Wire.write(RdataID[i]); 
+      Wire1.write(RdataID[i]); 
    }
     for (i = 0; i < 8; ++i) {
-       Wire.write(Rdata.Val8[i]); 
+       Wire1.write(Rdata.Val8[i]); 
     }
 
     ParameterNumber++;
@@ -137,8 +136,8 @@ char MRK[] = "MRK";
 char MAY[] = "MAY";
 char RCV[4];
     for (uint8_t i = 0; i < 3; ++i) {
-        if (Wire.available()) {
-            RCV[i]= Wire.read();    // Get one byte at a time
+        if (Wire1.available()) {
+            RCV[i]= Wire1.read();    // Get one byte at a time
         }
     } 
   RCV[3] = 0; // Add a terminator
@@ -245,9 +244,9 @@ void loop() {
 //**************************************** SETUP *************************************************************
 void setup() {
   GPSDEVICE.begin(GPSBAUDRATE);
-  Wire.begin(I2CADDRESS);             
-  Wire.onRequest(SendDataToReceiver);    
-  Wire.onReceive(ReceiveEvent);
+  Wire1.begin(I2CADDRESS);             
+  Wire1.onRequest(SendDataToReceiver);    
+  Wire1.onReceive(ReceiveEvent);
   delay (100);
   SendToGPS(PGCMD_NOANTENNA);                     // These setup commands are for Adafruit Ulimate GPS only
   delay (100);
