@@ -308,10 +308,10 @@ void ScanI2c()
 void setup() {
   GPSDEVICE.begin(GPSBAUDRATE);
  
-  Wire.begin();
+   Wire.begin();
   ScanI2c();
-  if (USE_BMP280) InitBMP280();
-  if (USE_INA219) ina219.begin();
+   if (USE_BMP280) InitBMP280();
+   if (USE_INA219) ina219.begin();
 
   delay (100);
   SendToGPS(PGCMD_NOANTENNA);                     // These setup commands are for Adafruit Ulimate GPS only
