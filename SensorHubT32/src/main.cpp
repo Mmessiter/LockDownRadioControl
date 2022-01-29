@@ -236,6 +236,8 @@ void ShowGPS(){
       Serial.println (BaroAltitude);
       Serial.print  ("B. Temp.   : ");
       Serial.println (BaroTemperature);
+      Serial.print  ("Voltage:   : ");
+      Serial.println (INA219Volts);
       Serial.println ("-------------------------");
   }
 }
@@ -247,8 +249,6 @@ void ReadOtherSensors(){
     }
     if (USE_INA219) INA219Volts = ina219.getBusVoltage_V();
 }
-
-
 //*************************************** SendToGPS  **********************************************************
 void SendToGPS(char Cmd[80]){
 char a = 0;
@@ -285,7 +285,7 @@ void InitBMP280()
 /***********************************************************************************************************/
 void ScanI2c()
 {
-    delay(1000); // allow time to wake things up
+    delay(5000); // allow time to wake things up
     for (uint8_t i = 1; i < 127; ++i) {
         Wire.beginTransmission(i);
         delay(10);
@@ -298,8 +298,8 @@ void ScanI2c()
                 USE_BMP280 = true;
                 Serial.println("BMP280 barometer detected!");
               }
-          Serial.print(i, HEX);
-          Serial.print("   "); // in case some new device shows up  
+         // Serial.print(i, HEX);
+         // Serial.println("   "); // in case some new device shows up  
         }
     }
 }
