@@ -1,6 +1,5 @@
 var NAVTREEINDEX4 =
 {
-"_transmitter_code_2src_2main_8cpp.html#a9557f718b9a7dd41a441c12555167908":[10,0,5,0,1,295],
 "_transmitter_code_2src_2main_8cpp.html#a962a0c149ba58563ca3bad19e999e027":[10,0,5,0,1,104],
 "_transmitter_code_2src_2main_8cpp.html#a967f3c9b0fd867928c55d75d65cfcd8c":[10,0,5,0,1,449],
 "_transmitter_code_2src_2main_8cpp.html#a97290be0c518c6c918c843e88a7f3640":[10,0,5,0,1,82],
@@ -249,5 +248,6 @@ var NAVTREEINDEX4 =
 "class_adafruit___b_m_p280___pressure.html#a0fc7718d96d01e8f68be1f19c01d75d2":[9,0,1,2],
 "class_adafruit___b_m_p280___temp.html":[9,0,2],
 "class_adafruit___b_m_p280___temp.html#a1e40806cdd754133bc0bd3adead3a50b":[9,0,2,0],
-"class_adafruit___b_m_p280___temp.html#a403166e48337783265ce40fef8de51df":[9,0,2,1]
+"class_adafruit___b_m_p280___temp.html#a403166e48337783265ce40fef8de51df":[9,0,2,1],
+"class_adafruit___b_m_p280___temp.html#a4ea067e213cc789e945bc9ab22c028a5":[9,0,2,2]
 };
