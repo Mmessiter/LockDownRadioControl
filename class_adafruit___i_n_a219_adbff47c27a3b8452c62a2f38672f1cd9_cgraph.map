@@ -1,0 +1,8 @@
+<map id="Adafruit_INA219::setCalibration_32V_1A" name="Adafruit_INA219::setCalibration_32V_1A">
+<area shape="rect" id="node1" title="Configures to INA219 to be able to measure up to 32V and 1A of current. Each unit of current correspo..." alt="" coords="5,39,208,80"/>
+<area shape="rect" id="node2" href="$class_adafruit___bus_i_o___register.html#aa418dced5301a1d8c1776a1941c8bc64" title="Write a buffer of data to the register location." alt="" coords="256,39,423,80"/>
+<area shape="rect" id="node3" href="$class_adafruit___i2_c_device.html#a382834acac211d47b471de3180327c06" title="Write a buffer or two to the I2C device. Cannot be more than maxBufferSize() bytes." alt="" coords="471,5,606,47"/>
+<area shape="rect" id="node5" href="$class_adafruit___s_p_i_device.html#a98bc2e396650883935a5cb432716956a" title="Write a buffer or two to the SPI device." alt="" coords="471,71,607,112"/>
+<area shape="rect" id="node4" href="$class_adafruit___i2_c_device.html#a20c6ac28cbaa9e5f63ef6d4687fd4e60" title="How many bytes we can read in a transaction." alt="" coords="655,5,790,47"/>
+<area shape="rect" id="node6" href="$class_adafruit___s_p_i_device.html#ac60964386f37b2c498fc1b1540f61889" title="Transfer (send/receive) one byte over hard/soft SPI." alt="" coords="655,71,791,112"/>
+</map>

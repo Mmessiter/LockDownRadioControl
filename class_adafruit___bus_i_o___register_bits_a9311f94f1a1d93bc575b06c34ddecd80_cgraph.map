@@ -1,0 +1,13 @@
+<map id="Adafruit_BusIO_RegisterBits::write" name="Adafruit_BusIO_RegisterBits::write">
+<area shape="rect" id="node1" title="Write 4 bytes of data to the register." alt="" coords="5,132,195,173"/>
+<area shape="rect" id="node2" href="$class_adafruit___bus_i_o___register.html#a2b48e23dacbb7cffc0eb07dcebcfba6f" title="Read a buffer of data from the register location." alt="" coords="243,132,409,173"/>
+<area shape="rect" id="node9" href="$class_adafruit___bus_i_o___register.html#abf1eaeb0ae836be082a73dae14e7e352" title="The width of the register data, helpful for doing calculations." alt="" coords="243,197,409,239"/>
+<area shape="rect" id="node10" href="$class_adafruit___bus_i_o___register.html#aa418dced5301a1d8c1776a1941c8bc64" title="Write a buffer of data to the register location." alt="" coords="243,67,409,108"/>
+<area shape="rect" id="node3" href="$class_adafruit___i2_c_device.html#a7161ce0c7136103d0704fb3ce858c6f7" title="Write some data, then read some data from I2C into another buffer. Cannot be more than maxBufferSize(..." alt="" coords="458,64,593,105"/>
+<area shape="rect" id="node7" href="$class_adafruit___s_p_i_device.html#a8128f7d67b3e0e56717279deb64227e7" title="Write some data, then read some data from SPI into another buffer. The buffers can point to same/over..." alt="" coords="457,195,593,236"/>
+<area shape="rect" id="node4" href="$class_adafruit___i2_c_device.html#afeeccb3147b2f0340c65d2c0c1ce3ea6" title="Read from I2C into a buffer from the I2C device. Cannot be more than maxBufferSize() bytes." alt="" coords="642,71,777,112"/>
+<area shape="rect" id="node6" href="$class_adafruit___i2_c_device.html#a382834acac211d47b471de3180327c06" title="Write a buffer or two to the I2C device. Cannot be more than maxBufferSize() bytes." alt="" coords="642,5,777,47"/>
+<area shape="rect" id="node5" href="$class_adafruit___i2_c_device.html#a20c6ac28cbaa9e5f63ef6d4687fd4e60" title="How many bytes we can read in a transaction." alt="" coords="825,39,960,80"/>
+<area shape="rect" id="node8" href="$class_adafruit___s_p_i_device.html#ac60964386f37b2c498fc1b1540f61889" title="Transfer (send/receive) one byte over hard/soft SPI." alt="" coords="641,165,777,207"/>
+<area shape="rect" id="node11" href="$class_adafruit___s_p_i_device.html#a98bc2e396650883935a5cb432716956a" title="Write a buffer or two to the SPI device." alt="" coords="457,129,593,171"/>
+</map>

@@ -88,6 +88,14 @@ var NAVTREE =
       [ "Features List", "_r_x_c_o_d_e.html#rxFeatures", null ],
       [ "TEENSY 4.0 PINS", "_r_x_c_o_d_e.html#rxpinout", null ]
     ] ],
+    [ "Adafruit Community Code of Conduct", "md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html", [
+      [ "Our Pledge", "md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md59", null ],
+      [ "Our Standards", "md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md60", null ],
+      [ "Our Responsibilities", "md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md61", null ],
+      [ "Moderation", "md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md62", null ],
+      [ "Scope", "md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md63", null ],
+      [ "Attribution", "md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md64", null ]
+    ] ],
     [ "TransmitterCode", "_transmitter_code.html", [
       [ "Features list", "_transmitter_code.html#txFeatures", null ],
       [ "Teensy 4.1 Pins", "_transmitter_code.html#txPinout", null ]
@@ -100,6 +108,8 @@ var NAVTREE =
         [ "All", "functions.html", "functions_dup" ],
         [ "Functions", "functions_func.html", "functions_func" ],
         [ "Variables", "functions_vars.html", null ],
+        [ "Enumerations", "functions_enum.html", null ],
+        [ "Enumerator", "functions_eval.html", null ],
         [ "Related Functions", "functions_rela.html", null ]
       ] ]
     ] ],
@@ -120,14 +130,15 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"_adafruit___g_p_s_8cpp.html",
-"_receiver_code_2lib_2_adafruit___g_p_s___library_2src_2_adafruit___p_m_t_k_8h.html#a1a07d9f206b33f00eb3ea26af4496f8b",
-"_sensor_hub_t32_2lib_2_adafruit___p_m_t_k_8h.html#ac61d2228d947ef7e4999a21a99d4df2f",
-"_transmitter_code_2src_2main_8cpp.html#a4037de0ea0fc7cd3c7cd3c40eee10a98",
-"_transmitter_code_2src_2main_8cpp.html#ac6e0db167f018387da880dd95ab198e7",
-"class_tiny_g_p_s_plus.html#ad7b78320b7e4967df17c6a27008a5154",
-"md__receiver_code_lib__adafruit__g_p_s__library_code_of_conduct.html#autotoc_md50",
-"structnmea__history__t.html#a2c672bfbc9e54c4f202a75fed5f3fd11"
+"_adafruit___b_m_p280_8cpp.html",
+"_radio_functions_8h.html#a3d7322e78f097d02d476f17a6306997c",
+"_sensor_hub_l_c_2lib_2_tiny_g_p_s_plus-master_2src_2_tiny_g_p_s_09_09_8h.html#a15c78046c05b411cbcb3f93b7a452a97",
+"_transmitter_code_2src_2main_8cpp.html#a0bca236cb88a38219ece770757adcbb2",
+"_transmitter_code_2src_2main_8cpp.html#a92c5dada5e5ef70261391557464f2d19",
+"class_adafruit___b_m_p280___pressure.html#a0fc7718d96d01e8f68be1f19c01d75d2",
+"dir_f4a416e20b33f36e9e4ccc17423b29f0.html",
+"radio_8h.html#a664f409561bfcf119e0379dd991217e5",
+"structsensors__event__t.html#a456259aaeb265913281d7ffbd8ad8697"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
