@@ -12,7 +12,7 @@
 #define I2CADDRESS  8       // Address of this I2C slave
 #define GPSBAUDRATE 9600    // Didn't work any faster
 #define GPSDEVICE Serial1   // GPS is connected to Serial1
-//#define DEBUG               // Local console debug only
+#define DEBUG               // Local console debug only
 #define DEBUGTIMER 1000
 
 int DebugTimer = 0;
@@ -148,8 +148,6 @@ char MRK[] = "MRK";
 char MAY[] = "MAY";
 char RCV[4];
 
-Serial.println ("MSG RECEIVED!");
-
     for (uint8_t i = 0; i < 3; ++i) {
         if (Wire1.available()) {
             RCV[i]= Wire1.read();    // Get one byte at a time
@@ -236,7 +234,6 @@ void ShowGPS(){
       Serial.println ("-------------------------");
   }
 }
-
 //*************************************** SendToGPS  **********************************************************
 void SendToGPS(char Cmd[80]){
 char a = 0;
@@ -248,7 +245,6 @@ uint8_t i = 0;
      ++i;
     }
  }
-
 //*************************************** MAIN LOOP **********************************************************
 void loop() {
      ReadGps();
@@ -257,7 +253,6 @@ void loop() {
 #endif
 }
 // **************************************************************************************
-
 void InitBMP280()
 {
     bmp280.begin(0x76);
@@ -273,28 +268,22 @@ void ScanI2c()
     delay(1000); // allow time to wake things up
     for (uint8_t i = 1; i < 127; ++i) {
         Wire.beginTransmission(i);
+        delay(10);
         if (Wire.endTransmission() == 0) {
              if (i == 0x40) {
                 USE_INA219 = true;
-#ifdef DEBUG
                 Serial.println("INA219 voltage meter detected!");
-#endif
-            }
-            else if (i == 0x76) {
+              }
+             if (i == 0x76) {
                 USE_BMP280 = true;
-#ifdef DEBUG
                 Serial.println("BMP280 barometer detected!");
-            }
-            else {
-                Serial.print(i, HEX);
-                Serial.print("   "); // in case some new device shows up
-#endif
-            }
+              }
+          Serial.print(i, HEX);
+          Serial.print("   "); // in case some new device shows up  
         }
     }
 }
 // ***********************************************************************************************************
-
 void ReadOtherSensors(){
     if (USE_BMP280) {
         BaroTemperature = bmp280.readTemperature();
@@ -302,20 +291,24 @@ void ReadOtherSensors(){
     }
     if (USE_INA219) INA219Volts = ina219.getBusVoltage_V();
 }
-
 //**************************************** SETUP *************************************************************
 void setup() {
   GPSDEVICE.begin(GPSBAUDRATE);
-  Wire1.begin(I2CADDRESS);             
-  Wire1.onRequest(SendDataToReceiver);    
-  Wire1.onReceive(ReceiveEvent);
+ 
+  Wire.begin();
+  ScanI2c();
+  if (USE_BMP280) InitBMP280();
+  if (USE_INA219) ina219.begin();
+
   delay (100);
   SendToGPS(PGCMD_NOANTENNA);                     // These setup commands are for Adafruit Ulimate GPS only
   delay (100);
-  SendToGPS(PMTK_API_SET_FIX_CTL_1HZ);            // These setup commands are for Adafruit Ulimate GPS only
+  SendToGPS(PMTK_API_SET_FIX_CTL_1HZ);           
   delay (100);
-  SendToGPS(PMTK_SET_NMEA_OUTPUT_RMCGGAGSA);       // These setup commands are for Adafruit Ulimate GPS only
+  SendToGPS(PMTK_SET_NMEA_OUTPUT_RMCGGAGSA);      
   delay (100);
-  if (USE_BMP280) InitBMP280();
-  if (USE_INA219) ina219.begin();
+  
+  Wire1.begin(I2CADDRESS);             
+  Wire1.onRequest(SendDataToReceiver);    
+  Wire1.onReceive(ReceiveEvent);
 }

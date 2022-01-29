@@ -3,7 +3,7 @@
  *
  * @section rxFeatures Features List
  * - WORKS ON TEENSY 4.0
- * - Detects and uses INA219 to read volts
+ * - Detects and uses INA219 to read volts (NOW IN SENSOR HUB)
  * - Detects and uses BMP280 pressure sensor for altitude (NOW IN SENSOR HUB)
  * - Binding implemented
  * - SBUS implemented
@@ -93,27 +93,9 @@ double          CourseToGPS;
 uint8_t         HoursGPS;
 uint8_t         MinsGPS;
 uint8_t         SecsGPS;
-
-
 uint16_t        CompressedData[COMPRESSEDWORDS]; // 30 bytes -> 40 bytes when uncompressed
-      
-
+  
 /************************************************************************************************************/
-// This function returns distance (in meters) between two GPS coordinates (in degrees)
-// it was essentially cribbed from the internet, then tested and adjusted a little. 
-
-//FASTRUN double HowFar(double latitude_new, double longitude_new, double latitude_old, double longitude_old) {
-//        double  RadiusOfTheEarth = 6372797.56085;                 // Meters by the way
-//        double  DegreesToRadians = 3.14159265358979323846 / 180;
-//        double  lat_new = latitude_old * DegreesToRadians;
-//        double  lat_old = latitude_new * DegreesToRadians;
-//        double  lat_diff = (latitude_new-latitude_old) *  DegreesToRadians;
-//        double  lng_diff = (longitude_new-longitude_old) *  DegreesToRadians;
-//        double  a = sin(lat_diff/2) * sin(lat_diff/2) + cos(lat_new) * cos(lat_old) *  sin(lng_diff/2) * sin(lng_diff/2);
-//        double  c = 2 * atan2(sqrt(a), sqrt(1-a));
-//        double  distance = RadiusOfTheEarth * c;
-//        return  distance; 
-//   }
 
 void LoadFailSafeData()
 {
