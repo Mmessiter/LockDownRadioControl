@@ -102,24 +102,21 @@ void BufferNewPipe()
 
 void SendData()
 {
-    if (Nextion.available()) return; // was a button pressed?
-    if (millis() - TxPace < 3) ShowComms(); // This call takes about 4 ms, so there is *JUST* time to fit in the call!
+    if (Nextion.available()) return;              // was a button pressed?
+    if (millis() - TxPace < 3) ShowComms();       // This call takes about 4 ms, so there is *JUST* time to fit in the call!
     if ((millis() - TxPace) >= PACEMAKER) {
         TxPace = millis();
-        get_new_channels_values(); // Load SendBuffer with new servo positions
-
-        if (DoSbusSendOnly) // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
+        get_new_channels_values();                // Load SendBuffer with new servo positions
+        if (DoSbusSendOnly)                       // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
         {
             ReadSwitches();
             MapToSBUS();
-            return; // no more to do here!
+            return;                               // no more to do here!
         }
-
-        if (BuddyMaster) // If buddy master, check where student's sticks etc. are.
+        if (BuddyMaster)                          // If buddy master, check where student's sticks etc. are.
         {
             GetSlaveChannelValues();
         }
-
         if (!BoundFlag && !(CurrentView == CalibrateView) && !(CurrentView == SticksView))
         {
             BufferNewPipe(); // if not yet bound, send our pipe
