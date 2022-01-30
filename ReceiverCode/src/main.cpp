@@ -387,9 +387,11 @@ FASTRUN void ReadTheNewGPSHub(){
   char  HRS[IDLEN+1]    = "HRS";  // GMT Hours  
   char  MNS[IDLEN+1]    = "MNS";  // GMT Minutes  
   char  SEC[IDLEN+1]    = "SEC";  // GMT Seconds
-
-
-  char RdataID[IDLEN+1];
+  char  BLT[IDLEN+1]    = "BLT";  // Altitiude from BMP280
+  char  TMP[IDLEN+1]    = "TMP";  // Temperature from BMP280
+  char  VLT[IDLEN+1]    = "VLT";  // Volts from INA219
+  char  RdataID[IDLEN+1];
+  
   double RdataIn;
   union {double Val64; uint8_t Val8[8];} Rdata;   // 'union' allows access to every byte
   
@@ -454,6 +456,18 @@ FASTRUN void ReadTheNewGPSHub(){
   }
   if (strcmp(SEC,RdataID) == 0) {     
      SecsGPS =  uint8_t(RdataIn);
+     return;
+  }
+  if (strcmp(BLT,RdataID) == 0) {     
+     BaroAltitude =  uint8_t(RdataIn);
+     return;
+  }
+  if (strcmp(TMP,RdataID) == 0) {     
+     BaroTemperature =  uint8_t(RdataIn);
+     return;
+  }
+  if (strcmp(VLT,RdataID) == 0) {     
+     INA219Volts =  uint8_t(RdataIn);
      return;
   }
 }
