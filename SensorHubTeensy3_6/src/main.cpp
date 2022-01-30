@@ -1,15 +1,17 @@
 //***********************************************************************************************************
 //************************************* SENSOR HUB CODE FOR TEENSY 3.6  *************************************
 // 
-//                                   Version 1.0 Jan 25th 2022
+//                                   Version 1.1 Jan 29th 2022
+//                                   Uses Wire2 in Slave Mode ...
 //***********************************************************************************************************
 #include <Arduino.h>
 #include <Wire.h>
 #include <TinyGPS++.h>
-
+#include <Adafruit_INA219.h> 
+#include <Adafruit_BMP280.h>
 #define I2CADDRESS  8       // Address of this I2C slave
 #define GPSBAUDRATE 9600    // Didn't work any faster
-#define GPSDEVICE Serial1   // GPS is connected to Serial1//
+#define GPSDEVICE Serial1   // GPS is connected to Serial1
 //#define DEBUG               // Local console debug only
 #define DEBUGTIMER 1000
 
@@ -42,6 +44,17 @@ char    PMTK_SET_NMEA_OUTPUT_RMCGGAGSA[] =  "$PMTK314,0,1,0,1,1,0,0,0,0,0,0,0,0,
 char    PMTK_SET_BAUD_9600[]             =  "$PMTK251,9600*17";     // <   9600 bps     
 char    PGCMD_NOANTENNA[]                =  "$PGCMD,33,0*6D" ;      // < don't show antenna status messages
 uint8_t ParameterNumber                  = 0;
+bool    USE_BMP280 = false;                   //  BMP280 sensor connected ?
+bool    USE_INA219 = false;                   //  Volts from INA219 ?
+Adafruit_INA219 ina219;
+Adafruit_BMP280 bmp280;
+uint32_t LoopTimer;
+
+float    BaroTemperature ;
+float    BaroAltitude ;
+float    INA219Volts;
+uint16_t Qnh = 1033;
+
 
 
 //************************************* SEND DATA INTERRUPT HANDLER ******************************************
@@ -49,7 +62,7 @@ uint8_t ParameterNumber                  = 0;
 void SendDataToReceiver() {
   #define IDLEN 3
   #define GPSI2CBYTES IDLEN + 8
-  #define MAXPARAMS 11
+  #define MAXPARAMS 14
   uint8_t i;
   char RdataID[IDLEN+1] = "NUL";
   char  LAT[IDLEN+1]    = "LAT";
@@ -64,6 +77,11 @@ void SendDataToReceiver() {
   char  HRS[IDLEN+1]    = "HRS";
   char  MNS[IDLEN+1]    = "MNS";
   char  SEC[IDLEN+1]    = "SEC";
+  char  BLT[IDLEN+1]    = "BLT";
+  char  TMP[IDLEN+1]    = "TMP";
+  char  VLT[IDLEN+1]    = "VLT";
+
+
   double RdataOut = 42;
   union { double   Val64;uint8_t Val8[8]; } Rdata;
   switch (ParameterNumber) {
@@ -104,7 +122,7 @@ void SendDataToReceiver() {
         strcpy (RdataID,HRS);
         break;
       case  9:
-        RdataOut = GPSMins;        // Hours
+        RdataOut = GPSMins;        // Mins
         strcpy (RdataID,MNS);
         break;
       case  10:
@@ -115,15 +133,29 @@ void SendDataToReceiver() {
         RdataOut = GPSSatellites;  // Sats
         strcpy (RdataID,SAT);
         break;
+      case  12:
+        RdataOut = BaroAltitude;  // ALT FROM BMP280
+        strcpy (RdataID,BLT);
+        break;
+      case  13:
+        RdataOut = BaroTemperature;  // TEMPERATURE FROM BMP280
+        strcpy (RdataID,TMP);
+        break;
+      case  14:
+        RdataOut = INA219Volts;     // VOLTAGE FROM INA219
+        strcpy (RdataID,VLT);
+        break;
+      default:
+        break;
     
   }
    Rdata.Val64 = RdataOut;
    
    for (i = 0; i < IDLEN; ++i) {
-      Wire.write(RdataID[i]); 
+      Wire1.write(RdataID[i]); 
    }
     for (i = 0; i < 8; ++i) {
-       Wire.write(Rdata.Val8[i]); 
+       Wire1.write(Rdata.Val8[i]); 
     }
 
     ParameterNumber++;
@@ -135,9 +167,10 @@ void ReceiveEvent(int q) {
 char MRK[] = "MRK";
 char MAY[] = "MAY";
 char RCV[4];
+
     for (uint8_t i = 0; i < 3; ++i) {
-        if (Wire.available()) {
-            RCV[i]= Wire.read();    // Get one byte at a time
+        if (Wire1.available()) {
+            RCV[i]= Wire1.read();    // Get one byte at a time
         }
     } 
   RCV[3] = 0; // Add a terminator
@@ -164,21 +197,23 @@ char RCV[4];
       gps.encode(a);  // Simply send every byte library 
    }
       GPSFix         = gps.location.isValid();
-      GPSLatitude    = gps.location.lat();
-      GPSLongitude   = gps.location.lng();
-      GPSSatellites  = gps.satellites.value(); 
-      GPSAltitude    = gps.altitude.feet();
-      GPSSpeed       = gps.speed.mph();
-      GPSHours       = gps.time.hour();   
-      GPSMins        = gps.time.minute(); 
-      GPSSecs        = gps.time.second(); 
-      GPSDay         = gps.date.day();
-      GPSMonth       = gps.date.month();
-      GPSYear        = gps.date.year();
-      *GPSLibVersion = gps.libraryVersion();
-      GPSCourse      = gps.course.deg();
-      GPSDistanceTo  = gps.distanceBetween(GPSLatitude,GPSLongitude,DestinationLat,DestinationLng);
-      GPSCourseTo    = gps.courseTo(GPSLatitude,GPSLongitude,DestinationLat,DestinationLng);
+      if (GPSFix) {
+        GPSLatitude    = gps.location.lat();
+        GPSLongitude   = gps.location.lng();
+        GPSSatellites  = gps.satellites.value(); 
+        GPSAltitude    = gps.altitude.feet();
+        GPSSpeed       = gps.speed.mph();
+        GPSHours       = gps.time.hour();   
+        GPSMins        = gps.time.minute(); 
+        GPSSecs        = gps.time.second(); 
+        GPSDay         = gps.date.day();
+        GPSMonth       = gps.date.month();
+        GPSYear        = gps.date.year();
+        *GPSLibVersion = gps.libraryVersion();
+        GPSCourse      = gps.course.deg();
+        GPSDistanceTo  = gps.distanceBetween(GPSLatitude,GPSLongitude,DestinationLat,DestinationLng);
+        GPSCourseTo    = gps.courseTo(GPSLatitude,GPSLongitude,DestinationLat,DestinationLng);
+      }
  }
 // *********************************************** DEBUG DATA ***********************************************
 void ShowGPS(){
@@ -216,10 +251,23 @@ void ShowGPS(){
       Serial.println (GPSYear+1792);  // ?????????
       Serial.print ("Lib version: ");
       Serial.println (*GPSLibVersion);
+      Serial.print ("B. Altitude: ");
+      Serial.println (BaroAltitude);
+      Serial.print  ("B. Temp.   : ");
+      Serial.println (BaroTemperature);
+      Serial.print  ("Voltage:   : ");
+      Serial.println (INA219Volts);
       Serial.println ("-------------------------");
   }
 }
-
+// ***********************************************************************************************************
+void ReadOtherSensors(){
+    if (USE_BMP280) {
+        BaroTemperature = bmp280.readTemperature();
+        BaroAltitude    = bmp280.readAltitude(Qnh) * 3.28084; 
+    }
+    if (USE_INA219) INA219Volts = ina219.getBusVoltage_V();
+}
 //*************************************** SendToGPS  **********************************************************
 void SendToGPS(char Cmd[80]){
 char a = 0;
@@ -231,25 +279,69 @@ uint8_t i = 0;
      ++i;
     }
  }
-
 //*************************************** MAIN LOOP **********************************************************
 void loop() {
-     ReadGps();
+ if ((millis()-LoopTimer) > 100)  // 10x per second is enough
+  {
+    LoopTimer = millis();
+    ReadGps();
+    ReadOtherSensors();
 #ifdef DEBUG
     ShowGPS();
 #endif
+  }
 }
+// **************************************************************************************
+void InitBMP280()
+{
+    bmp280.begin(0x76);
+    bmp280.setSampling(Adafruit_BMP280::MODE_NORMAL,     /* Operating Mode. */
+                       Adafruit_BMP280::SAMPLING_X2,     /* Temp. oversampling */
+                       Adafruit_BMP280::SAMPLING_X16,    /* Pressure oversampling */
+                       Adafruit_BMP280::FILTER_X16,      /* Filtering. */
+                       Adafruit_BMP280::STANDBY_MS_500); /* Standby time. */
+}
+/***********************************************************************************************************/
+void ScanI2c()
+{
+    delay(200); // allow time to wake things up ... BUT NOT EXCESSIVELY - MUST BOOT BEFORE RECEIVER LOOKS FOR!
+    for (uint8_t i = 1; i < 127; ++i) {
+        Wire.beginTransmission(i);
+        delay(10);
+        if (Wire.endTransmission() == 0) {
+             if (i == 0x40) {
+                USE_INA219 = true;
+#ifdef DEBUG
+                Serial.println("INA219 voltage meter detected!");
+#endif
+              }
+             if (i == 0x76) {
+                USE_BMP280 = true;
+#ifdef DEBUG
+                Serial.println("BMP280 barometer detected!");
+#endif
+              }
+         // Serial.print(i, HEX);
+         // Serial.println("   "); // in case some new device shows up  
+        }
+    }
+}
+
 //**************************************** SETUP *************************************************************
 void setup() {
+  Wire1.begin(I2CADDRESS);                        // Wire1 MUST boot up BEFORE the receiver in order to be found by it.
+  Wire1.onRequest(SendDataToReceiver);    
+  Wire1.onReceive(ReceiveEvent);
   GPSDEVICE.begin(GPSBAUDRATE);
-  Wire.begin(I2CADDRESS);             
-  Wire.onRequest(SendDataToReceiver);    
-  Wire.onReceive(ReceiveEvent);
+  Wire.begin();                                   // Wire used to read locally attached i2c sensors
+  ScanI2c();
+  if (USE_BMP280) InitBMP280();
+  if (USE_INA219) ina219.begin();
   delay (100);
   SendToGPS(PGCMD_NOANTENNA);                     // These setup commands are for Adafruit Ulimate GPS only
   delay (100);
-  SendToGPS(PMTK_API_SET_FIX_CTL_1HZ);            // These setup commands are for Adafruit Ulimate GPS only
+  SendToGPS(PMTK_API_SET_FIX_CTL_1HZ);           
   delay (100);
-  SendToGPS(PMTK_SET_NMEA_OUTPUT_RMCGGAGSA);       // These setup commands are for Adafruit Ulimate GPS only
+  SendToGPS(PMTK_SET_NMEA_OUTPUT_RMCGGAGSA);      
   delay (100);
 }
