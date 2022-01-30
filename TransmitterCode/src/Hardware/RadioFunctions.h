@@ -52,7 +52,7 @@
 //                          NEXTION SERIAL CONNECTION                       *
 //***************************************************************************
 #define Nextion Serial1      // Nextion is connected to Serial1
-#define ShowCommsDelay 1000  // ms pauses between updated info on Nextion
+#define ShowCommsDelay 250   // ms pauses between updated info on Nextion
 // ***************************************************************************
 
 // **************************************************************************
