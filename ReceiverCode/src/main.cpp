@@ -462,15 +462,11 @@ FASTRUN void ReadTheNewGPSHub(){
 FASTRUN void ReadSensors()
 {      
     if (USE_AdafruitUltimateGps) {
-            if ((millis() - GPSSensorTime) < 500) return;       // no need to measure too often
+            if ((millis() - GPSSensorTime) < 10) return;     // no need to measure too often
             GPSSensorTime = millis();
-            ReadTheNewGPSHub();                              // Sensor now has its own MCU.                                    
+            ReadTheNewGPSHub();                             // Sensor now has its own MCU.                                    
       }
  
-    if ((millis() - SensorTime) < 3000) return;              // must NOT try to measure these too often  
-    if ((!BoundFlag) || (!Connected))   return;
-    SensorTime = millis();
-
 #ifdef DB_SENSORS
     Sensors_Status();    // does nothing if DB_SENSORS is not defined
     Serial.println (millis()-SensorTime);
