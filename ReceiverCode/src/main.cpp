@@ -374,18 +374,20 @@ void Sensors_Status()
 
 // TODO: Doubles are all converted later to floats. So only four bytes need to be sent, not 8! 
 
+// TODO: Correct time!
+
 FASTRUN void ReadTheNewGPSHub(){
   #define IDLEN 3
   #define GPSI2CBYTES IDLEN + 8
+  char  FIX[IDLEN+1]    = "FIX";  // Fix 
+  char  SAT[IDLEN+1]    = "SAT";  // How many satellites
   char  LAT[IDLEN+1]    = "LAT";  // Latitude
   char  LON[IDLEN+1]    = "LON";  // Longitude
-  char  FIX[IDLEN+1]    = "FIX";  // Fix ?
-  char  SAT[IDLEN+1]    = "SAT";  // How many satellites
-  char  ALT[IDLEN+1]    = "ALT";  // Altitude
+  char  ALT[IDLEN+1]    = "ALT";  // GPS Altitude
   char  SPD[IDLEN+1]    = "SPD";  // Speed
   char  COR[IDLEN+1]    = "COR";  // Course
-  char  CTO[IDLEN+1]    = "CTO";  // Course to
-  char  DTO[IDLEN+1]    = "DTO";  // Distance to
+  char  CTO[IDLEN+1]    = "CTO";  // Course to Mark
+  char  DTO[IDLEN+1]    = "DTO";  // Distance to Mark
   char  HRS[IDLEN+1]    = "HRS";  // GMT Hours  
   char  MNS[IDLEN+1]    = "MNS";  // GMT Minutes  
   char  SEC[IDLEN+1]    = "SEC";  // GMT Seconds
