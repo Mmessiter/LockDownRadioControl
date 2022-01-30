@@ -459,14 +459,13 @@ FASTRUN void ReadTheNewGPSHub(){
 }
 
 /************************************************************************************************************/
-FASTRUN void ReadSensors()
+FASTRUN void ReadSensorHub()
 {      
     if (USE_AdafruitUltimateGps) {
-            if ((millis() - GPSSensorTime) < 10) return;     // no need to measure too often
+            if ((millis() - GPSSensorTime) < 50) return;     // no need to measure too often
             GPSSensorTime = millis();
             ReadTheNewGPSHub();                             // Sensor now has its own MCU.                                    
       }
- 
 #ifdef DB_SENSORS
     Sensors_Status();    // does nothing if DB_SENSORS is not defined
     Serial.println (millis()-SensorTime);
@@ -478,7 +477,7 @@ FASTRUN void ReadSensors()
 FASTRUN void ReceiveData()
 { 
     if (millis() - LastConnectionMoment < 1 ) { // If, and only if, we have still absolutely loads of time, read the sensors NOW while waiting for next data packet.
-       ReadSensors();                           // This MUST return in < 6 ms when next packet is due.
+       ReadSensorHub();                           // This MUST return in < 6 ms when next packet is due.
       // if ((millis() - LastConnectionMoment) > 1) Serial.println (millis() - LastConnectionMoment);   // We can expect to lose about 2 - 4 ms here if all sensors are connected. 
                                                                                                         // The delay MUST NOT exceed 6 ms!
     }
@@ -559,9 +558,6 @@ void DoBinding()
         BindModel();
     }
 }
-
-
-
 /************************************************************************************************************/
 // SETUP
 /************************************************************************************************************/
