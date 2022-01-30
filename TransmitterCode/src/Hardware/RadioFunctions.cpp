@@ -103,7 +103,7 @@ void BufferNewPipe()
 void SendData()
 {
     if (Nextion.available()) return; // was a button pressed?
-
+    if (millis() - TxPace < 3) ShowComms(); // This call takes about 4 ms, so there is *JUST* time to fit in the call!
     if ((millis() - TxPace) >= PACEMAKER) {
         TxPace = millis();
         get_new_channels_values(); // Load SendBuffer with new servo positions
@@ -112,7 +112,6 @@ void SendData()
         {
             ReadSwitches();
             MapToSBUS();
-            ShowComms();
             return; // no more to do here!
         }
 
@@ -221,7 +220,6 @@ void HopToNextFrequency()
     Radio1.stopListening();            // Transmit only (no need for a delay() as this is here followed by housekeeping tasks)
     ReadSwitches();                    // Check switch positions
     CheckTimer();                      // update on-screen timer
-    ShowComms();                       // Display user info
 #ifdef DB_FHSS
     PEndTime  = millis();
     Pduration = (PEndTime - PStartTime) / 1000;

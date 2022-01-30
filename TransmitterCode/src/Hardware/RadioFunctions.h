@@ -30,7 +30,7 @@
 //***************************************************************************
 
 #define HOPTIME           55 // A New frequency hop every 55 ms (must match receiver setting)
-#define PACEMAKER         6  // MINIMUM ms between packets of data. These brief pauses allow the receiver to poll it's i2c slaves.
+#define PACEMAKER         7  // MINIMUM ms between packets of data. These brief pauses allow the receiver to poll its i2c slaves, and TX to ShowComms();
 #define FREQUENCYSCOUNT   82 // How many frequencies to use before wrapping to first
 #define RETRYCOUNT        3  // auto retries from nRF24L01
 #define RETRYWAIT         1  // Wait between retries is RetryWait+1 * 250us. A failed packet therefore takes (RetryWait+1 * 250us) * RetryCount

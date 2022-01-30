@@ -1351,7 +1351,7 @@ void ShowServoPos()
 /*********************************************************************************************************************************/
 
 /** @brief SHOW COMMS */
-void ShowComms()
+FASTRUN void ShowComms()
 {
     if (Nextion.available()) return; // was a button pressed?
     bool  ShowNow                = false;
@@ -1620,7 +1620,6 @@ void FailedPacket()
         }
     }
     ++LostPackets;
-    ShowComms();
     secondsRemaining = (Inactivity_Timeout / 1000) - (millis() - Inactivity_Start) / 1000;
     if (secondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH); // INACTIVITY POWER OFF
 }
@@ -5629,6 +5628,7 @@ void ClearAckPayload()
 void GetRXTime()
 { // This gets the time from Receivier to enable FHSS synch
 
+
     union  {uint32_t Val32; uint8_t Val8[4];} RXTimeUnion;         
     if (AckPayload.Byte5) { // Good data? (Zero means no data)
         RXTimeUnion.Val8[0] = AckPayload.Byte1;
@@ -5647,7 +5647,6 @@ void GetRXTime()
     ClearAckPayload();
     CheckTimer();
     ReadSwitches();
-    ShowComms();
 }
 
 /************************************************************************************************************/
