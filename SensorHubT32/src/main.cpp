@@ -62,7 +62,7 @@ uint16_t Qnh = 1033;
 void SendDataToReceiver() {
   #define IDLEN 3
   #define GPSI2CBYTES IDLEN + 8
-  #define MAXPARAMS 11
+  #define MAXPARAMS 14
   uint8_t i;
   char RdataID[IDLEN+1] = "NUL";
   char  LAT[IDLEN+1]    = "LAT";
@@ -77,6 +77,11 @@ void SendDataToReceiver() {
   char  HRS[IDLEN+1]    = "HRS";
   char  MNS[IDLEN+1]    = "MNS";
   char  SEC[IDLEN+1]    = "SEC";
+  char  BLT[IDLEN+1]    = "BLT";
+  char  TMP[IDLEN+1]    = "TMP";
+  char  VLT[IDLEN+1]    = "VLT";
+
+
   double RdataOut = 42;
   union { double   Val64;uint8_t Val8[8]; } Rdata;
   switch (ParameterNumber) {
@@ -127,6 +132,20 @@ void SendDataToReceiver() {
       case  11:
         RdataOut = GPSSatellites;  // Sats
         strcpy (RdataID,SAT);
+        break;
+      case  12:
+        RdataOut = BaroAltitude;  // ALT FROM BMP280
+        strcpy (RdataID,BLT);
+        break;
+      case  13:
+        RdataOut = BaroTemperature;  // TEMPERATURE FROM BMP280
+        strcpy (RdataID,TMP);
+        break;
+      case  14:
+        RdataOut = INA219Volts;     // VOLTAGE FROM INA219
+        strcpy (RdataID,VLT);
+        break;
+      default:
         break;
     
   }
@@ -285,7 +304,7 @@ void InitBMP280()
 /***********************************************************************************************************/
 void ScanI2c()
 {
-    delay(200); // allow time to wake things up ... But not excessively!
+    delay(200); // allow time to wake things up ... BUT NOT EXCESSIVELY - MUST BOOT BEFORE RECEIVER LOOKS FOR!
     for (uint8_t i = 1; i < 127; ++i) {
         Wire.beginTransmission(i);
         delay(10);
@@ -310,8 +329,11 @@ void ScanI2c()
 
 //**************************************** SETUP *************************************************************
 void setup() {
+  Wire1.begin(I2CADDRESS);                        // Wire1 MUST boot up BEFORE the receiver in order to be found by it.
+  Wire1.onRequest(SendDataToReceiver);    
+  Wire1.onReceive(ReceiveEvent);
   GPSDEVICE.begin(GPSBAUDRATE);
-  Wire.begin();
+  Wire.begin();                                   // Wire used to read locally attached i2c sensors
   ScanI2c();
   if (USE_BMP280) InitBMP280();
   if (USE_INA219) ina219.begin();
@@ -322,7 +344,4 @@ void setup() {
   delay (100);
   SendToGPS(PMTK_SET_NMEA_OUTPUT_RMCGGAGSA);      
   delay (100);
-  Wire1.begin(I2CADDRESS);             
-  Wire1.onRequest(SendDataToReceiver);    
-  Wire1.onReceive(ReceiveEvent);
 }
