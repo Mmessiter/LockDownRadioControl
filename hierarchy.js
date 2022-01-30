@@ -7,6 +7,10 @@ var hierarchy =
     [ "Adafruit_INA219", "class_adafruit___i_n_a219.html", null ],
     [ "Adafruit_Sensor", "class_adafruit___sensor.html", [
       [ "Adafruit_BMP280_Pressure", "class_adafruit___b_m_p280___pressure.html", null ],
+      [ "Adafruit_BMP280_Pressure", "class_adafruit___b_m_p280___pressure.html", null ],
+      [ "Adafruit_BMP280_Pressure", "class_adafruit___b_m_p280___pressure.html", null ],
+      [ "Adafruit_BMP280_Temp", "class_adafruit___b_m_p280___temp.html", null ],
+      [ "Adafruit_BMP280_Temp", "class_adafruit___b_m_p280___temp.html", null ],
       [ "Adafruit_BMP280_Temp", "class_adafruit___b_m_p280___temp.html", null ]
     ] ],
     [ "Adafruit_SPIDevice", "class_adafruit___s_p_i_device.html", null ],

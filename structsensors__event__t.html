@@ -100,7 +100,7 @@ $(document).ready(function(){initNavTree('structsensors__event__t.html',''); ini
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="_adafruit___sensor_8h_source.html">Adafruit_Sensor.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h_source.html">Adafruit_Sensor.h</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for sensors_event_t:</div>
 <div class="dyncontent">
@@ -120,45 +120,139 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a8be4dc00344f46abf29e06251bf9fad9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acd3be1560458b3e3bf52f93f744e8238"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structsensors__event__t.html#acd3be1560458b3e3bf52f93f744e8238">timestamp</a></td></tr>
 <tr class="separator:acd3be1560458b3e3bf52f93f744e8238"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a625c2fc4c2d5abee99796afddb0b5679"><td class="memItemLeft" >union {</td></tr>
-<tr class="memitem:a8dccba2e78ff0fdc6079d6b9ef27cf65"><td class="memItemLeft" >&#160;&#160;&#160;float&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#addee33a715123e16eb463e5cc9024fe2">data</a> [4]</td></tr>
-<tr class="memdesc:a8dccba2e78ff0fdc6079d6b9ef27cf65"><td class="mdescLeft">&#160;</td><td class="mdescRight">Raw data.  <a href="unionsensors__event__t_1_1_0d17.html#a8dccba2e78ff0fdc6079d6b9ef27cf65">More...</a><br /></td></tr>
-<tr class="separator:a8dccba2e78ff0fdc6079d6b9ef27cf65"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a74840955dbbd61863f37b0751fe3aff6"><td class="memItemLeft" >&#160;&#160;&#160;<a class="el" href="structsensors__vec__t.html">sensors_vec_t</a>&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#a91a4325f468d3155e6921358a6f61baa">acceleration</a></td></tr>
-<tr class="separator:a74840955dbbd61863f37b0751fe3aff6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8ba44288895444fd03b9fdda2bef7e13"><td class="memItemLeft" >&#160;&#160;&#160;<a class="el" href="structsensors__vec__t.html">sensors_vec_t</a>&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#aa634d41a024e1cacdceecf85ec326698">magnetic</a></td></tr>
-<tr class="separator:a8ba44288895444fd03b9fdda2bef7e13"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adacc4ab5a1f5a0444b1db6ee677857ca"><td class="memItemLeft" >&#160;&#160;&#160;<a class="el" href="structsensors__vec__t.html">sensors_vec_t</a>&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#acbe3c50a256fa9423bc9e3a6e0da7ebf">orientation</a></td></tr>
-<tr class="separator:adacc4ab5a1f5a0444b1db6ee677857ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2f5a5b76c771f07612d0694ab8556596"><td class="memItemLeft" >&#160;&#160;&#160;<a class="el" href="structsensors__vec__t.html">sensors_vec_t</a>&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#ad108ea8c3a18d02cfc674ba27e94a2c4">gyro</a></td></tr>
-<tr class="separator:a2f5a5b76c771f07612d0694ab8556596"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7adf2934792a63c1fbcf2201832f62ba"><td class="memItemLeft" >&#160;&#160;&#160;float&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#a914f76beb75bd99aa3c13d3a8e56e21c">temperature</a></td></tr>
-<tr class="separator:a7adf2934792a63c1fbcf2201832f62ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adf791e2a6b81c31cde8d5456efbb7523"><td class="memItemLeft" >&#160;&#160;&#160;float&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#a456259aaeb265913281d7ffbd8ad8697">distance</a></td></tr>
-<tr class="separator:adf791e2a6b81c31cde8d5456efbb7523"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9f8b417abef1c05489be965f79822b35"><td class="memItemLeft" >&#160;&#160;&#160;float&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#adefd2ce2da44e4449ef7cadeaecc6cfd">light</a></td></tr>
-<tr class="separator:a9f8b417abef1c05489be965f79822b35"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae2ad85bc8218713c13cd60680e3f776f"><td class="memItemLeft" >&#160;&#160;&#160;float&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#a2ec6e34e1a6cf832d85ca19066bd38f0">pressure</a></td></tr>
-<tr class="separator:ae2ad85bc8218713c13cd60680e3f776f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1ad6ecb1364ec3e999555fe3da28ba0f"><td class="memItemLeft" >&#160;&#160;&#160;float&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#a577b73698368fb061382ce9f31052417">relative_humidity</a></td></tr>
-<tr class="separator:a1ad6ecb1364ec3e999555fe3da28ba0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a70af82a03a53c24b2550b1a8b1028128"><td class="memItemLeft" >&#160;&#160;&#160;float&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#ad34303af57d6bce18c34862a887fc005">current</a></td></tr>
-<tr class="separator:a70af82a03a53c24b2550b1a8b1028128"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2860cd6115d5444beeb813574c5744c1"><td class="memItemLeft" >&#160;&#160;&#160;float&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#ab01b52f6b83f390a6370d319ded97b28">voltage</a></td></tr>
-<tr class="separator:a2860cd6115d5444beeb813574c5744c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8adeff64064377fb660ff85c706669ff"><td class="memItemLeft" >&#160;&#160;&#160;<a class="el" href="structsensors__color__t.html">sensors_color_t</a>&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#a56b4d05fbf47013727ec1a0a94db91e6">color</a></td></tr>
-<tr class="separator:a8adeff64064377fb660ff85c706669ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a625c2fc4c2d5abee99796afddb0b5679"><td class="memItemLeft" valign="top">};&#160;</td><td class="memItemRight" valign="bottom"></td></tr>
-<tr class="memdesc:a625c2fc4c2d5abee99796afddb0b5679"><td class="mdescLeft">&#160;</td><td class="mdescRight">Union for the wide ranges of data we can carry.  <a href="structsensors__event__t.html#a625c2fc4c2d5abee99796afddb0b5679">More...</a><br /></td></tr>
-<tr class="separator:a625c2fc4c2d5abee99796afddb0b5679"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6edb5e9f78e0b57ef6de6ea076c655f8"><td class="memItemLeft" >union {</td></tr>
+<tr class="memitem:a73f75a0719e86111e41ccdc4669662bf"><td class="memItemLeft" >&#160;&#160;&#160;float&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#addee33a715123e16eb463e5cc9024fe2">data</a> [4]</td></tr>
+<tr class="memdesc:a73f75a0719e86111e41ccdc4669662bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Raw data.  <a href="unionsensors__event__t_1_1_0d16.html#a73f75a0719e86111e41ccdc4669662bf">More...</a><br /></td></tr>
+<tr class="separator:a73f75a0719e86111e41ccdc4669662bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab64809e1b9313bccbe8e8e1a65cedb1a"><td class="memItemLeft" >&#160;&#160;&#160;<a class="el" href="structsensors__vec__t.html">sensors_vec_t</a>&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#a91a4325f468d3155e6921358a6f61baa">acceleration</a></td></tr>
+<tr class="separator:ab64809e1b9313bccbe8e8e1a65cedb1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f96f6239df4610ddfda446353af11f4"><td class="memItemLeft" >&#160;&#160;&#160;<a class="el" href="structsensors__vec__t.html">sensors_vec_t</a>&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#aa634d41a024e1cacdceecf85ec326698">magnetic</a></td></tr>
+<tr class="separator:a2f96f6239df4610ddfda446353af11f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64575be342dd95d3c092e889dbcf4205"><td class="memItemLeft" >&#160;&#160;&#160;<a class="el" href="structsensors__vec__t.html">sensors_vec_t</a>&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#acbe3c50a256fa9423bc9e3a6e0da7ebf">orientation</a></td></tr>
+<tr class="separator:a64575be342dd95d3c092e889dbcf4205"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac3ad1ae40532953fea3f39bf5d52ade"><td class="memItemLeft" >&#160;&#160;&#160;<a class="el" href="structsensors__vec__t.html">sensors_vec_t</a>&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#ad108ea8c3a18d02cfc674ba27e94a2c4">gyro</a></td></tr>
+<tr class="separator:aac3ad1ae40532953fea3f39bf5d52ade"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab560dd7bfeb792d06744263924fad36f"><td class="memItemLeft" >&#160;&#160;&#160;float&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#a914f76beb75bd99aa3c13d3a8e56e21c">temperature</a></td></tr>
+<tr class="separator:ab560dd7bfeb792d06744263924fad36f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad16058b7a0d19a83af95af8441da3a59"><td class="memItemLeft" >&#160;&#160;&#160;float&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#a456259aaeb265913281d7ffbd8ad8697">distance</a></td></tr>
+<tr class="separator:ad16058b7a0d19a83af95af8441da3a59"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac0e2a031bf57baf203d7fa4232b503a"><td class="memItemLeft" >&#160;&#160;&#160;float&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#adefd2ce2da44e4449ef7cadeaecc6cfd">light</a></td></tr>
+<tr class="separator:aac0e2a031bf57baf203d7fa4232b503a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e0b7de5b0e10fcda276026b0e1db0a6"><td class="memItemLeft" >&#160;&#160;&#160;float&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#a2ec6e34e1a6cf832d85ca19066bd38f0">pressure</a></td></tr>
+<tr class="separator:a9e0b7de5b0e10fcda276026b0e1db0a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0b96912ad5807daaaaf5b34a610b6cf"><td class="memItemLeft" >&#160;&#160;&#160;float&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#a577b73698368fb061382ce9f31052417">relative_humidity</a></td></tr>
+<tr class="separator:ac0b96912ad5807daaaaf5b34a610b6cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8bed51b60c89d57ab28c6b51d1298af8"><td class="memItemLeft" >&#160;&#160;&#160;float&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#ad34303af57d6bce18c34862a887fc005">current</a></td></tr>
+<tr class="separator:a8bed51b60c89d57ab28c6b51d1298af8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a52792c4d37384340507e0e6068cef9ba"><td class="memItemLeft" >&#160;&#160;&#160;float&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#ab01b52f6b83f390a6370d319ded97b28">voltage</a></td></tr>
+<tr class="separator:a52792c4d37384340507e0e6068cef9ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9eabb7c7ebea561cad96be57e300846f"><td class="memItemLeft" >&#160;&#160;&#160;<a class="el" href="structsensors__color__t.html">sensors_color_t</a>&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#a56b4d05fbf47013727ec1a0a94db91e6">color</a></td></tr>
+<tr class="separator:a9eabb7c7ebea561cad96be57e300846f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6edb5e9f78e0b57ef6de6ea076c655f8"><td class="memItemLeft" valign="top">};&#160;</td><td class="memItemRight" valign="bottom"></td></tr>
+<tr class="memdesc:a6edb5e9f78e0b57ef6de6ea076c655f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Union for the wide ranges of data we can carry.  <a href="structsensors__event__t.html#a6edb5e9f78e0b57ef6de6ea076c655f8">More...</a><br /></td></tr>
+<tr class="separator:a6edb5e9f78e0b57ef6de6ea076c655f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1adf1326d6ba9a2872bcf7067409911b"><td class="memItemLeft" >union {</td></tr>
+<tr class="memitem:a790432606b5813c72ccc02c798d5d1ab"><td class="memItemLeft" >&#160;&#160;&#160;float&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#addee33a715123e16eb463e5cc9024fe2">data</a> [4]</td></tr>
+<tr class="memdesc:a790432606b5813c72ccc02c798d5d1ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Raw data.  <a href="unionsensors__event__t_1_1_0d35.html#a790432606b5813c72ccc02c798d5d1ab">More...</a><br /></td></tr>
+<tr class="separator:a790432606b5813c72ccc02c798d5d1ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a37329fd9f9ad85ea3c4fd7e64eea97da"><td class="memItemLeft" >&#160;&#160;&#160;<a class="el" href="structsensors__vec__t.html">sensors_vec_t</a>&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#a91a4325f468d3155e6921358a6f61baa">acceleration</a></td></tr>
+<tr class="separator:a37329fd9f9ad85ea3c4fd7e64eea97da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea8788563ef92da566e0498cf3269fc7"><td class="memItemLeft" >&#160;&#160;&#160;<a class="el" href="structsensors__vec__t.html">sensors_vec_t</a>&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#aa634d41a024e1cacdceecf85ec326698">magnetic</a></td></tr>
+<tr class="separator:aea8788563ef92da566e0498cf3269fc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5378a0ec993624826c79dcea44abe9f"><td class="memItemLeft" >&#160;&#160;&#160;<a class="el" href="structsensors__vec__t.html">sensors_vec_t</a>&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#acbe3c50a256fa9423bc9e3a6e0da7ebf">orientation</a></td></tr>
+<tr class="separator:ae5378a0ec993624826c79dcea44abe9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa30de3281428923c20b2dd3384c5e2ba"><td class="memItemLeft" >&#160;&#160;&#160;<a class="el" href="structsensors__vec__t.html">sensors_vec_t</a>&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#ad108ea8c3a18d02cfc674ba27e94a2c4">gyro</a></td></tr>
+<tr class="separator:aa30de3281428923c20b2dd3384c5e2ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c3872f37fca09c5c0b08b8ae0a470bf"><td class="memItemLeft" >&#160;&#160;&#160;float&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#a914f76beb75bd99aa3c13d3a8e56e21c">temperature</a></td></tr>
+<tr class="separator:a8c3872f37fca09c5c0b08b8ae0a470bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a219175b85cd72b5f72d6db654bef62eb"><td class="memItemLeft" >&#160;&#160;&#160;float&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#a456259aaeb265913281d7ffbd8ad8697">distance</a></td></tr>
+<tr class="separator:a219175b85cd72b5f72d6db654bef62eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a483c05318ab5ff3769ad13a1ea572ebc"><td class="memItemLeft" >&#160;&#160;&#160;float&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#adefd2ce2da44e4449ef7cadeaecc6cfd">light</a></td></tr>
+<tr class="separator:a483c05318ab5ff3769ad13a1ea572ebc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aefdf24616a3a1ea785648081f1d111a8"><td class="memItemLeft" >&#160;&#160;&#160;float&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#a2ec6e34e1a6cf832d85ca19066bd38f0">pressure</a></td></tr>
+<tr class="separator:aefdf24616a3a1ea785648081f1d111a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6bbb9aa3ea6c11df908fe6d2dcfecb7"><td class="memItemLeft" >&#160;&#160;&#160;float&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#a577b73698368fb061382ce9f31052417">relative_humidity</a></td></tr>
+<tr class="separator:ad6bbb9aa3ea6c11df908fe6d2dcfecb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95af0a58c3b92f1e35bc177906a59506"><td class="memItemLeft" >&#160;&#160;&#160;float&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#ad34303af57d6bce18c34862a887fc005">current</a></td></tr>
+<tr class="separator:a95af0a58c3b92f1e35bc177906a59506"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a087ea64d92e19b58b58d83e8e84d0d5a"><td class="memItemLeft" >&#160;&#160;&#160;float&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#ab01b52f6b83f390a6370d319ded97b28">voltage</a></td></tr>
+<tr class="separator:a087ea64d92e19b58b58d83e8e84d0d5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81b5748535114495b8d7f8b6cba8eccb"><td class="memItemLeft" >&#160;&#160;&#160;<a class="el" href="structsensors__color__t.html">sensors_color_t</a>&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#a56b4d05fbf47013727ec1a0a94db91e6">color</a></td></tr>
+<tr class="separator:a81b5748535114495b8d7f8b6cba8eccb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1adf1326d6ba9a2872bcf7067409911b"><td class="memItemLeft" valign="top">};&#160;</td><td class="memItemRight" valign="bottom"></td></tr>
+<tr class="memdesc:a1adf1326d6ba9a2872bcf7067409911b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Union for the wide ranges of data we can carry.  <a href="structsensors__event__t.html#a1adf1326d6ba9a2872bcf7067409911b">More...</a><br /></td></tr>
+<tr class="separator:a1adf1326d6ba9a2872bcf7067409911b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac49ace1262839a42c03680276b109c84"><td class="memItemLeft" >union {</td></tr>
+<tr class="memitem:aa97ece730e25033f6a212453fcb21651"><td class="memItemLeft" >&#160;&#160;&#160;float&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#addee33a715123e16eb463e5cc9024fe2">data</a> [4]</td></tr>
+<tr class="memdesc:aa97ece730e25033f6a212453fcb21651"><td class="mdescLeft">&#160;</td><td class="mdescRight">Raw data.  <a href="unionsensors__event__t_1_1_0d54.html#aa97ece730e25033f6a212453fcb21651">More...</a><br /></td></tr>
+<tr class="separator:aa97ece730e25033f6a212453fcb21651"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2053ad879e640fdee1799397e4c0f968"><td class="memItemLeft" >&#160;&#160;&#160;<a class="el" href="structsensors__vec__t.html">sensors_vec_t</a>&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#a91a4325f468d3155e6921358a6f61baa">acceleration</a></td></tr>
+<tr class="separator:a2053ad879e640fdee1799397e4c0f968"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64e4d93d259c9f10eedefd36a890a2ae"><td class="memItemLeft" >&#160;&#160;&#160;<a class="el" href="structsensors__vec__t.html">sensors_vec_t</a>&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#aa634d41a024e1cacdceecf85ec326698">magnetic</a></td></tr>
+<tr class="separator:a64e4d93d259c9f10eedefd36a890a2ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6fb7523b0b13b44142366a9c5f778c61"><td class="memItemLeft" >&#160;&#160;&#160;<a class="el" href="structsensors__vec__t.html">sensors_vec_t</a>&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#acbe3c50a256fa9423bc9e3a6e0da7ebf">orientation</a></td></tr>
+<tr class="separator:a6fb7523b0b13b44142366a9c5f778c61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab846e127595982cfc505193d39841e41"><td class="memItemLeft" >&#160;&#160;&#160;<a class="el" href="structsensors__vec__t.html">sensors_vec_t</a>&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#ad108ea8c3a18d02cfc674ba27e94a2c4">gyro</a></td></tr>
+<tr class="separator:ab846e127595982cfc505193d39841e41"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a94c6f9e1a7f7cc4807766f0874435c25"><td class="memItemLeft" >&#160;&#160;&#160;float&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#a914f76beb75bd99aa3c13d3a8e56e21c">temperature</a></td></tr>
+<tr class="separator:a94c6f9e1a7f7cc4807766f0874435c25"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a550f07935944f2c80e18dec969032255"><td class="memItemLeft" >&#160;&#160;&#160;float&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#a456259aaeb265913281d7ffbd8ad8697">distance</a></td></tr>
+<tr class="separator:a550f07935944f2c80e18dec969032255"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a309baa9744359f35879da8bc949f79f2"><td class="memItemLeft" >&#160;&#160;&#160;float&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#adefd2ce2da44e4449ef7cadeaecc6cfd">light</a></td></tr>
+<tr class="separator:a309baa9744359f35879da8bc949f79f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b763152bb789661f3bb88c843287341"><td class="memItemLeft" >&#160;&#160;&#160;float&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#a2ec6e34e1a6cf832d85ca19066bd38f0">pressure</a></td></tr>
+<tr class="separator:a8b763152bb789661f3bb88c843287341"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aff47707c531e363b52d7d19f30d1e921"><td class="memItemLeft" >&#160;&#160;&#160;float&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#a577b73698368fb061382ce9f31052417">relative_humidity</a></td></tr>
+<tr class="separator:aff47707c531e363b52d7d19f30d1e921"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a299665ff7de5373ba852de9058887873"><td class="memItemLeft" >&#160;&#160;&#160;float&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#ad34303af57d6bce18c34862a887fc005">current</a></td></tr>
+<tr class="separator:a299665ff7de5373ba852de9058887873"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73aac046048d6610cf5b901e0da9eb0a"><td class="memItemLeft" >&#160;&#160;&#160;float&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#ab01b52f6b83f390a6370d319ded97b28">voltage</a></td></tr>
+<tr class="separator:a73aac046048d6610cf5b901e0da9eb0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49639c21064f643d1b880f4788598cec"><td class="memItemLeft" >&#160;&#160;&#160;<a class="el" href="structsensors__color__t.html">sensors_color_t</a>&#160;&#160;&#160;<a class="el" href="structsensors__event__t.html#a56b4d05fbf47013727ec1a0a94db91e6">color</a></td></tr>
+<tr class="separator:a49639c21064f643d1b880f4788598cec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac49ace1262839a42c03680276b109c84"><td class="memItemLeft" valign="top">};&#160;</td><td class="memItemRight" valign="bottom"></td></tr>
+<tr class="memdesc:ac49ace1262839a42c03680276b109c84"><td class="mdescLeft">&#160;</td><td class="mdescRight">Union for the wide ranges of data we can carry.  <a href="structsensors__event__t.html#ac49ace1262839a42c03680276b109c84">More...</a><br /></td></tr>
+<tr class="separator:ac49ace1262839a42c03680276b109c84"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>struct sensor_event_s is used to provide a single sensor event in a common format. </p>
 
-<p class="definition">Definition at line <a class="el" href="_adafruit___sensor_8h_source.html#l00116">116</a> of file <a class="el" href="_adafruit___sensor_8h_source.html">Adafruit_Sensor.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h_source.html#l00116">116</a> of file <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h_source.html">Adafruit_Sensor.h</a>.</p>
 </div><h2 class="groupheader">Member Data Documentation</h2>
-<a id="a625c2fc4c2d5abee99796afddb0b5679"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a625c2fc4c2d5abee99796afddb0b5679">&#9670;&nbsp;</a></span></h2>
+<a id="a6edb5e9f78e0b57ef6de6ea076c655f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6edb5e9f78e0b57ef6de6ea076c655f8">&#9670;&nbsp;</a></span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">union { ... } </td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Union for the wide ranges of data we can carry. </p>
+
+</div>
+</div>
+<a id="a1adf1326d6ba9a2872bcf7067409911b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1adf1326d6ba9a2872bcf7067409911b">&#9670;&nbsp;</a></span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">union { ... } </td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Union for the wide ranges of data we can carry. </p>
+
+</div>
+</div>
+<a id="ac49ace1262839a42c03680276b109c84"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac49ace1262839a42c03680276b109c84">&#9670;&nbsp;</a></span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -186,7 +280,7 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 <p>acceleration values are in meter per second per second (m/s^2) </p>
 
-<p class="definition">Definition at line <a class="el" href="_adafruit___sensor_8h_source.html#l00124">124</a> of file <a class="el" href="_adafruit___sensor_8h_source.html">Adafruit_Sensor.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h_source.html#l00124">124</a> of file <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h_source.html">Adafruit_Sensor.h</a>.</p>
 
 </div>
 </div>
@@ -203,7 +297,7 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 <p>color in RGB component values </p>
 
-<p class="definition">Definition at line <a class="el" href="_adafruit___sensor_8h_source.html#l00137">137</a> of file <a class="el" href="_adafruit___sensor_8h_source.html">Adafruit_Sensor.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h_source.html#l00137">137</a> of file <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h_source.html">Adafruit_Sensor.h</a>.</p>
 
 </div>
 </div>
@@ -220,7 +314,7 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 <p>current in milliamps (mA) </p>
 
-<p class="definition">Definition at line <a class="el" href="_adafruit___sensor_8h_source.html#l00135">135</a> of file <a class="el" href="_adafruit___sensor_8h_source.html">Adafruit_Sensor.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h_source.html#l00135">135</a> of file <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h_source.html">Adafruit_Sensor.h</a>.</p>
 
 </div>
 </div>
@@ -238,7 +332,7 @@ Public Attributes</h2></td></tr>
 
 <p>Raw data. </p>
 
-<p class="definition">Definition at line <a class="el" href="_adafruit___sensor_8h_source.html#l00123">123</a> of file <a class="el" href="_adafruit___sensor_8h_source.html">Adafruit_Sensor.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h_source.html#l00123">123</a> of file <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h_source.html">Adafruit_Sensor.h</a>.</p>
 
 </div>
 </div>
@@ -255,7 +349,7 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 <p>distance in centimeters </p>
 
-<p class="definition">Definition at line <a class="el" href="_adafruit___sensor_8h_source.html#l00131">131</a> of file <a class="el" href="_adafruit___sensor_8h_source.html">Adafruit_Sensor.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h_source.html#l00131">131</a> of file <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h_source.html">Adafruit_Sensor.h</a>.</p>
 
 </div>
 </div>
@@ -272,7 +366,7 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 <p>gyroscope values are in rad/s </p>
 
-<p class="definition">Definition at line <a class="el" href="_adafruit___sensor_8h_source.html#l00129">129</a> of file <a class="el" href="_adafruit___sensor_8h_source.html">Adafruit_Sensor.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h_source.html#l00129">129</a> of file <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h_source.html">Adafruit_Sensor.h</a>.</p>
 
 </div>
 </div>
@@ -289,7 +383,7 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 <p>light in SI lux units </p>
 
-<p class="definition">Definition at line <a class="el" href="_adafruit___sensor_8h_source.html#l00132">132</a> of file <a class="el" href="_adafruit___sensor_8h_source.html">Adafruit_Sensor.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h_source.html#l00132">132</a> of file <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h_source.html">Adafruit_Sensor.h</a>.</p>
 
 </div>
 </div>
@@ -306,7 +400,7 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 <p>magnetic vector values are in micro-Tesla (uT) </p>
 
-<p class="definition">Definition at line <a class="el" href="_adafruit___sensor_8h_source.html#l00127">127</a> of file <a class="el" href="_adafruit___sensor_8h_source.html">Adafruit_Sensor.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h_source.html#l00127">127</a> of file <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h_source.html">Adafruit_Sensor.h</a>.</p>
 
 </div>
 </div>
@@ -323,7 +417,7 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 <p>orientation values are in degrees </p>
 
-<p class="definition">Definition at line <a class="el" href="_adafruit___sensor_8h_source.html#l00128">128</a> of file <a class="el" href="_adafruit___sensor_8h_source.html">Adafruit_Sensor.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h_source.html#l00128">128</a> of file <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h_source.html">Adafruit_Sensor.h</a>.</p>
 
 </div>
 </div>
@@ -340,7 +434,7 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 <p>pressure in hectopascal (hPa) </p>
 
-<p class="definition">Definition at line <a class="el" href="_adafruit___sensor_8h_source.html#l00133">133</a> of file <a class="el" href="_adafruit___sensor_8h_source.html">Adafruit_Sensor.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h_source.html#l00133">133</a> of file <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h_source.html">Adafruit_Sensor.h</a>.</p>
 
 </div>
 </div>
@@ -357,7 +451,7 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 <p>relative humidity in percent </p>
 
-<p class="definition">Definition at line <a class="el" href="_adafruit___sensor_8h_source.html#l00134">134</a> of file <a class="el" href="_adafruit___sensor_8h_source.html">Adafruit_Sensor.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h_source.html#l00134">134</a> of file <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h_source.html">Adafruit_Sensor.h</a>.</p>
 
 </div>
 </div>
@@ -374,7 +468,7 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 <p>reserved </p>
 
-<p class="definition">Definition at line <a class="el" href="_adafruit___sensor_8h_source.html#l00120">120</a> of file <a class="el" href="_adafruit___sensor_8h_source.html">Adafruit_Sensor.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h_source.html#l00120">120</a> of file <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h_source.html">Adafruit_Sensor.h</a>.</p>
 
 </div>
 </div>
@@ -391,7 +485,7 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 <p>unique sensor identifier </p>
 
-<p class="definition">Definition at line <a class="el" href="_adafruit___sensor_8h_source.html#l00118">118</a> of file <a class="el" href="_adafruit___sensor_8h_source.html">Adafruit_Sensor.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h_source.html#l00118">118</a> of file <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h_source.html">Adafruit_Sensor.h</a>.</p>
 
 </div>
 </div>
@@ -408,7 +502,7 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 <p>temperature is in degrees centigrade (Celsius) </p>
 
-<p class="definition">Definition at line <a class="el" href="_adafruit___sensor_8h_source.html#l00130">130</a> of file <a class="el" href="_adafruit___sensor_8h_source.html">Adafruit_Sensor.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h_source.html#l00130">130</a> of file <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h_source.html">Adafruit_Sensor.h</a>.</p>
 
 </div>
 </div>
@@ -425,7 +519,7 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 <p>time is in milliseconds </p>
 
-<p class="definition">Definition at line <a class="el" href="_adafruit___sensor_8h_source.html#l00121">121</a> of file <a class="el" href="_adafruit___sensor_8h_source.html">Adafruit_Sensor.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h_source.html#l00121">121</a> of file <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h_source.html">Adafruit_Sensor.h</a>.</p>
 
 </div>
 </div>
@@ -442,7 +536,7 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 <p>sensor type </p>
 
-<p class="definition">Definition at line <a class="el" href="_adafruit___sensor_8h_source.html#l00119">119</a> of file <a class="el" href="_adafruit___sensor_8h_source.html">Adafruit_Sensor.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h_source.html#l00119">119</a> of file <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h_source.html">Adafruit_Sensor.h</a>.</p>
 
 </div>
 </div>
@@ -459,7 +553,7 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 <p>must be sizeof(struct sensors_event_t) </p>
 
-<p class="definition">Definition at line <a class="el" href="_adafruit___sensor_8h_source.html#l00117">117</a> of file <a class="el" href="_adafruit___sensor_8h_source.html">Adafruit_Sensor.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h_source.html#l00117">117</a> of file <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h_source.html">Adafruit_Sensor.h</a>.</p>
 
 </div>
 </div>
@@ -476,12 +570,12 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 <p>voltage in volts (V) </p>
 
-<p class="definition">Definition at line <a class="el" href="_adafruit___sensor_8h_source.html#l00136">136</a> of file <a class="el" href="_adafruit___sensor_8h_source.html">Adafruit_Sensor.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h_source.html#l00136">136</a> of file <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h_source.html">Adafruit_Sensor.h</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>SensorHubT32/lib/Adafruit_Unified_Sensor/<a class="el" href="_adafruit___sensor_8h_source.html">Adafruit_Sensor.h</a></li>
+<li>SensorHubLC/lib/Adafruit_Unified_Sensor/<a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h_source.html">Adafruit_Sensor.h</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

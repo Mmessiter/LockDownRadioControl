@@ -88,13 +88,29 @@ var NAVTREE =
       [ "Features List", "_r_x_c_o_d_e.html#rxFeatures", null ],
       [ "TEENSY 4.0 PINS", "_r_x_c_o_d_e.html#rxpinout", null ]
     ] ],
+    [ "Adafruit Community Code of Conduct", "md__sensor_hub_l_c_lib__adafruit__i_n_a219_code_of_conduct.html", [
+      [ "Our Pledge", "md__sensor_hub_l_c_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md58", null ],
+      [ "Our Standards", "md__sensor_hub_l_c_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md59", null ],
+      [ "Our Responsibilities", "md__sensor_hub_l_c_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md60", null ],
+      [ "Moderation", "md__sensor_hub_l_c_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md61", null ],
+      [ "Scope", "md__sensor_hub_l_c_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md62", null ],
+      [ "Attribution", "md__sensor_hub_l_c_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md63", null ]
+    ] ],
     [ "Adafruit Community Code of Conduct", "md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html", [
-      [ "Our Pledge", "md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md59", null ],
-      [ "Our Standards", "md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md60", null ],
-      [ "Our Responsibilities", "md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md61", null ],
-      [ "Moderation", "md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md62", null ],
-      [ "Scope", "md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md63", null ],
-      [ "Attribution", "md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md64", null ]
+      [ "Our Pledge", "md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md135", null ],
+      [ "Our Standards", "md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md136", null ],
+      [ "Our Responsibilities", "md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md137", null ],
+      [ "Moderation", "md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md138", null ],
+      [ "Scope", "md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md139", null ],
+      [ "Attribution", "md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md140", null ]
+    ] ],
+    [ "Adafruit Community Code of Conduct", "md__sensor_hub_teensy3_6_lib__adafruit__i_n_a219_code_of_conduct.html", [
+      [ "Our Pledge", "md__sensor_hub_teensy3_6_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md212", null ],
+      [ "Our Standards", "md__sensor_hub_teensy3_6_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md213", null ],
+      [ "Our Responsibilities", "md__sensor_hub_teensy3_6_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md214", null ],
+      [ "Moderation", "md__sensor_hub_teensy3_6_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md215", null ],
+      [ "Scope", "md__sensor_hub_teensy3_6_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md216", null ],
+      [ "Attribution", "md__sensor_hub_teensy3_6_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md217", null ]
     ] ],
     [ "TransmitterCode", "_transmitter_code.html", [
       [ "Features list", "_transmitter_code.html#txFeatures", null ],
@@ -121,7 +137,7 @@ var NAVTREE =
         [ "Variables", "globals_vars.html", "globals_vars" ],
         [ "Typedefs", "globals_type.html", null ],
         [ "Enumerations", "globals_enum.html", null ],
-        [ "Enumerator", "globals_eval.html", null ],
+        [ "Enumerator", "globals_eval.html", "globals_eval" ],
         [ "Macros", "globals_defs.html", "globals_defs" ]
       ] ]
     ] ]
@@ -130,15 +146,17 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"_adafruit___b_m_p280_8cpp.html",
-"_radio_functions_8h.html#a3d7322e78f097d02d476f17a6306997c",
-"_sensor_hub_l_c_2lib_2_tiny_g_p_s_plus-master_2src_2_tiny_g_p_s_09_09_8h.html#ad31ceaaeae16e1ff8e13640e3b012de3",
-"_transmitter_code_2src_2main_8cpp.html#a0d282903963a177c43890298809943aa",
-"_transmitter_code_2src_2main_8cpp.html#a967f3c9b0fd867928c55d75d65cfcd8c",
-"class_adafruit___bus_i_o___register.html#a2b48e23dacbb7cffc0eb07dcebcfba6f",
-"functions_d.html",
-"radio_8h.html#a7dc81a3982ee72ef15b460b4bbf32818",
-"structsensors__event__t.html#aa634d41a024e1cacdceecf85ec326698"
+"_adafruit___g_p_s_8cpp.html",
+"_receiver_code_2lib_2_adafruit___g_p_s___library_2src_2_adafruit___p_m_t_k_8h.html#a1a07d9f206b33f00eb3ea26af4496f8b",
+"_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h.html#af0bc43b5dae696582a77176e6e4ff643ac7d364262029cc21bc865577d5288a1e",
+"_sensor_hub_t32_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h.html#af0bc43b5dae696582a77176e6e4ff643ae41c2d95d02910a0e15266a9f4f1ed63",
+"_sensor_hub_teensy3__6_2src_2main_8cpp.html#a6ee9f32cf8cccca5a7e078c303afee94",
+"_transmitter_code_2src_2main_8cpp.html#a78e0e3b7ed8385dd9fdbd0d0b6836054",
+"_transmitter_code_2src_2main_8cpp.html#aff92977de1d532b82ebb3650a790f099",
+"class_adafruit___b_m_p280.html#ab28e689ef7620d2b9f0c9e03116dde8fa9917ece791af05f886dbb08a5947e5bb",
+"class_adafruit___s_p_i_device.html#a6aa3c0bebb1d2d58516bce4f2dd1423f",
+"globals_func_t.html",
+"struct_tiny_g_p_s_date.html#af8b9c057a28dcb490081fcfde2a0ee11"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

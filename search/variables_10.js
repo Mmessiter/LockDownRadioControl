@@ -16,7 +16,7 @@ var searchData=
   ['recoverytimer_1891',['RecoveryTimer',['../_transmitter_code_2src_2main_8cpp.html#ac6156efad98d22f44766714a565ccf2f',1,'RecoveryTimer():&#160;main.cpp'],['../_radio_functions_8h.html#ac6156efad98d22f44766714a565ccf2f',1,'RecoveryTimer():&#160;main.cpp']]],
   ['reinit_1892',['ReInit',['../_receiver_code_2src_2main_8cpp.html#aace5dda203af973b33a46413f02d9f9a',1,'main.cpp']]],
   ['relative_5fhumidity_1893',['relative_humidity',['../structsensors__event__t.html#a577b73698368fb061382ce9f31052417',1,'sensors_event_t']]],
-  ['reserved_1894',['reserved',['../structsensors__vec__t.html#acb78c50bdd894d4dd4015f144c4a4488',1,'sensors_vec_t']]],
+  ['reserved_1894',['reserved',['../structsensors__vec__t.html#a8991b7e181ed3cbf3ad0e54da3d8e6c9',1,'sensors_vec_t']]],
   ['reserved0_1895',['reserved0',['../structsensors__event__t.html#a8be4dc00344f46abf29e06251bf9fad9',1,'sensors_event_t']]],
   ['resolution_1896',['resolution',['../structsensor__t.html#a926aba3216afd50e62c0a6cdbcc7433a',1,'sensor_t']]],
   ['response_1897',['response',['../structnmea__datavalue__t.html#a0fc893fd25c28ff4ee9f5142f4c309c0',1,'nmea_datavalue_t']]],

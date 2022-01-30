@@ -40,7 +40,7 @@ var searchData=
   ['longitude_5ffixed_1792',['longitude_fixed',['../class_adafruit___g_p_s.html#a8010f253b2708e05547c452cb5368837',1,'Adafruit_GPS']]],
   ['longitudedegrees_1793',['longitudeDegrees',['../class_adafruit___g_p_s.html#a2a1d1e5e89b46270d8d3ff82bb68666a',1,'Adafruit_GPS']]],
   ['longitudegps_1794',['LongitudeGPS',['../_receiver_code_2src_2main_8cpp.html#a292b2bc83214f3188bd096c35389461b',1,'LongitudeGPS():&#160;main.cpp'],['../radio_8h.html#a292b2bc83214f3188bd096c35389461b',1,'LongitudeGPS():&#160;main.cpp']]],
-  ['looptimer_1795',['LoopTimer',['../_sensor_hub_t32_2src_2main_8cpp.html#a46536419f1b2ee88934f4f812fd6140c',1,'main.cpp']]],
+  ['looptimer_1795',['LoopTimer',['../_sensor_hub_l_c_2src_2main_8cpp.html#a46536419f1b2ee88934f4f812fd6140c',1,'LoopTimer():&#160;main.cpp'],['../_sensor_hub_t32_2src_2main_8cpp.html#a46536419f1b2ee88934f4f812fd6140c',1,'LoopTimer():&#160;main.cpp'],['../_sensor_hub_teensy3__6_2src_2main_8cpp.html#a46536419f1b2ee88934f4f812fd6140c',1,'LoopTimer():&#160;main.cpp']]],
   ['lostcontactflag_1796',['LostContactFlag',['../_radio_functions_8h.html#ad5f463902789a79fc622b3befd9409b9',1,'LostContactFlag():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#ad5f463902789a79fc622b3befd9409b9',1,'LostContactFlag():&#160;main.cpp']]],
   ['lostpackets_1797',['LostPackets',['../_transmitter_code_2src_2main_8cpp.html#ace8651c9c20dd6ea531190d34d35e1fc',1,'main.cpp']]]
 ];
