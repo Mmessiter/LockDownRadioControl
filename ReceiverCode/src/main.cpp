@@ -79,8 +79,8 @@ float           INA219Volts;
 bool            Radio1Exists = false;
 bool            Radio2Exists = false;
 uint32_t        SensorTime       = 0;
-uint32_t        GPSSensorTime   = 0;
-uint16_t        Qnh          = 0;    //Pressure at sea level here and now (defined by TX option)
+uint32_t        GPSSensorTime    = 0;
+uint16_t        Qnh              = 0;    //Pressure at sea level here and now (defined by TX option)
 uint8_t         SatellitesGPS; 
 double          LatitudeGPS;
 double          LongitudeGPS;
@@ -372,6 +372,8 @@ void Sensors_Status()
 // The next 8 bytes are the value (as a double).
 // The ID changes with each call
 
+// TODO: Doubles are all converted later to floats. So only four bytes need to be sent, not 8! 
+
 FASTRUN void ReadTheNewGPSHub(){
   #define IDLEN 3
   #define GPSI2CBYTES IDLEN + 8
@@ -471,30 +473,22 @@ FASTRUN void ReadTheNewGPSHub(){
      return;
   }
 }
-
-/************************************************************************************************************/
-FASTRUN void ReadSensorHub()
-{      
-    if (USE_AdafruitUltimateGps) {
-            if ((millis() - GPSSensorTime) < 50) return;     // no need to measure too often
-            GPSSensorTime = millis();
-            ReadTheNewGPSHub();                             // Sensor now has its own MCU.                                    
-      }
-#ifdef DB_SENSORS
-    Sensors_Status();    // does nothing if DB_SENSORS is not defined
-    Serial.println (millis()-SensorTime);
-#endif
-
-}
-/************************************************************************************************************/
-
+// ******************************************************************************************************************************************************************
 FASTRUN void ReceiveData()
 { 
-    if (millis() - LastConnectionMoment < 1 ) { // If, and only if, we have still absolutely loads of time, read the sensors NOW while waiting for next data packet.
-       ReadSensorHub();                           // This MUST return in < 6 ms when next packet is due.
-      // if ((millis() - LastConnectionMoment) > 1) Serial.println (millis() - LastConnectionMoment);   // We can expect to lose about 2 - 4 ms here if all sensors are connected. 
-                                                                                                        // The delay MUST NOT exceed 6 ms!
+      if (millis() - LastConnectionMoment < 1 ) {    // If, and only if, we have still absolutely loads of time, read the sensors NOW while waiting for next data packet.
+        if (USE_AdafruitUltimateGps) {
+            if ((millis() - GPSSensorTime) > 50){ 
+                GPSSensorTime = millis();
+                ReadTheNewGPSHub();                  // Sensor now has its own MCU.
+#ifdef DB_SENSORS
+                Sensors_Status();                    // does nothing if DB_SENSORS is not defined
+                Serial.println (millis()-SensorTime);
+#endif
+            }                                                                     
+        }
     }
+
     Connected = false;                          // Assume not connected until we know better  
     if (CurrentRadio->available()) {
         Connected = true;                        // ... ok we now know better ! 
