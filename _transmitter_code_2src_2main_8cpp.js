@@ -206,7 +206,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "SetDefaultValues", "_transmitter_code_2src_2main_8cpp.html#acbd0460ea44a7d07e4d77878411febb4", null ],
     [ "SetDS1307ToCompilerTime", "_transmitter_code_2src_2main_8cpp.html#acdffc5c21069895c016206af61816b47", null ],
     [ "setup", "_transmitter_code_2src_2main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d", null ],
-    [ "ShowComms", "_transmitter_code_2src_2main_8cpp.html#aac472b3398ab38e7f54b1a2cae96ba62", null ],
+    [ "ShowComms", "_transmitter_code_2src_2main_8cpp.html#a5d3a46c21927cf7a3031a1e68e0b7b48", null ],
     [ "ShowDirectory", "_transmitter_code_2src_2main_8cpp.html#ad1800b78308843897cf7bd9f8e0a3a69", null ],
     [ "ShowFileErrorMsg", "_transmitter_code_2src_2main_8cpp.html#a1e7673fa1ef97d68711edd0da2abed9b", null ],
     [ "ShowFileNumber", "_transmitter_code_2src_2main_8cpp.html#aa337d6e5cf496fbca7cdc61818f8239a", null ],
