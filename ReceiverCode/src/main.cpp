@@ -500,24 +500,20 @@ FASTRUN void ReceiveData()
     }
 }
 /************************************************************************************************************/
-void ScanI2c()
-{
-    delay(1000); // allow time to wake things up
+void ScanI2c(){
+
     for (uint8_t i = 1; i < 127; ++i) {
         Wire.beginTransmission(i);
         if (Wire.endTransmission() == 0) {
-            
             if (i == GPSI2CHUB) {
                 USE_AdafruitUltimateGps = true;
 #ifdef DB_SENSORS
                 Serial.println("Sensor Hub with Adafruit Ultimate GPS etc. detected!");
 #endif
-              }
-          
+            }
         }
     }
 }
-
 /************************************************************************************************************/
 void SaveFailSafeData()
 {
@@ -578,7 +574,7 @@ void setup()
  pinMode(LED_PIN, OUTPUT);
     digitalWrite(LED_PIN, HIGH);
     Wire.begin();
-    delay(2000); // Needed ! - possibly for stabilising capacitors.
+    delay(2500); // Needed ! - possibly for stabilising capacitors.
     ScanI2c();   // see what's connected
 #ifdef SECOND_TRANSCEIVER
     CurrentRadio = &Radio2;

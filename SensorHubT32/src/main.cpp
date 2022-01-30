@@ -285,7 +285,7 @@ void InitBMP280()
 /***********************************************************************************************************/
 void ScanI2c()
 {
-    delay(5000); // allow time to wake things up
+    delay(200); // allow time to wake things up ... But not excessively!
     for (uint8_t i = 1; i < 127; ++i) {
         Wire.beginTransmission(i);
         delay(10);
