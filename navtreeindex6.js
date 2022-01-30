@@ -214,7 +214,6 @@ var NAVTREEINDEX6 =
 "radio_8h.html#a00e93a7779cf3932c07c78c4d58c91ce":[10,0,1,1,0,1,17],
 "radio_8h.html#a047f5702802c2bbf4918e9318f3e6a56":[10,0,1,1,0,1,7],
 "radio_8h.html#a0634ad724c86cd2b4ac7cfebbb622a9c":[10,0,1,1,0,1,2],
-"radio_8h.html#a086d3a02a7bdc1f7096c04b69c0b6e1c":[10,0,1,1,0,1,24],
 "radio_8h.html#a09cb370d93005b5a43e932a3d6093ea2":[10,0,1,1,0,1,53],
 "radio_8h.html#a0c40a351a0c0e01fbd5e5b1b0187eb48":[10,0,1,1,0,1,9],
 "radio_8h.html#a11cd5dd0a4f9438c7e7e387349d8636d":[10,0,1,1,0,1,37],
@@ -249,5 +248,6 @@ var NAVTREEINDEX6 =
 "radio_8h.html#a6dc99d00582ef356ea3d57700dca6dab":[10,0,1,1,0,1,30],
 "radio_8h.html#a6e2d4126d864c50e7c23c988c2bfdd1a":[10,0,1,1,0,1,21],
 "radio_8h.html#a6f54969e66375decc44723b141b78766":[10,0,1,1,0,1,27],
-"radio_8h.html#a76971ffb50fdfd6bc8e2c3c6ac339459":[10,0,1,1,0,1,8]
+"radio_8h.html#a76971ffb50fdfd6bc8e2c3c6ac339459":[10,0,1,1,0,1,8],
+"radio_8h.html#a79832b04c40823abb496f503a264e7d5":[10,0,1,1,0,1,64]
 };

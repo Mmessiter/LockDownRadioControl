@@ -16,7 +16,7 @@ var searchData=
   ['readothersensors_1474',['ReadOtherSensors',['../_sensor_hub_t32_2src_2main_8cpp.html#a8ace27b0e3d8efecd55ad071506aa86d',1,'main.cpp']]],
   ['readpressure_1475',['readPressure',['../class_adafruit___b_m_p280.html#aa17b6d5005079cee6e85a7a4d99814b6',1,'Adafruit_BMP280']]],
   ['readsavedpipe_1476',['ReadSavedPipe',['../radio_8h.html#a56ee137fc60749fa274236bc239c3291',1,'radio.h']]],
-  ['readsensors_1477',['ReadSensors',['../_receiver_code_2src_2main_8cpp.html#a7e4bf5ec989da8bef561e11b315f2373',1,'ReadSensors():&#160;main.cpp'],['../radio_8h.html#a086d3a02a7bdc1f7096c04b69c0b6e1c',1,'ReadSensors():&#160;main.cpp']]],
+  ['readsensorhub_1477',['ReadSensorHub',['../_receiver_code_2src_2main_8cpp.html#abc1128518a35fb3b8d31156eceee6478',1,'ReadSensorHub():&#160;main.cpp'],['../radio_8h.html#a8fff0fd6eb9e23721d9e06f3f44bd3c9',1,'ReadSensorHub():&#160;main.cpp']]],
   ['readswitches_1478',['ReadSwitches',['../_transmitter_code_2src_2main_8cpp.html#ab0af36f3442ad4f2d0b716c14c7d6085',1,'ReadSwitches():&#160;main.cpp'],['../_radio_functions_8h.html#ab0af36f3442ad4f2d0b716c14c7d6085',1,'ReadSwitches():&#160;main.cpp']]],
   ['readtemperature_1479',['readTemperature',['../class_adafruit___b_m_p280.html#a8511efd594618dea5f1e52d6bd149795',1,'Adafruit_BMP280']]],
   ['readthenewgpshub_1480',['ReadTheNewGPSHub',['../_receiver_code_2src_2main_8cpp.html#ad446bbf28a88bff77a93ab753c7f15d3',1,'main.cpp']]],
