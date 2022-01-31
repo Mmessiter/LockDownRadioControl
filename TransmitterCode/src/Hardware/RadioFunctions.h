@@ -7,7 +7,7 @@
 //***************************************************************************
 #define TXVERSION_MAJOR   1
 #define TXVERSION_MINOR   5
-#define TXVERSION_MINIMUS 0
+#define TXVERSION_MINIMUS 2
 
 // **************************************************************************
 //                            SBUS PARAMETERS   (FOR BUDDY BOXING)          *
@@ -52,7 +52,7 @@
 //                          NEXTION SERIAL CONNECTION                       *
 //***************************************************************************
 #define Nextion Serial1      // Nextion is connected to Serial1
-#define ShowCommsDelay 150   // ms pauses between updated info on Nextion (was 1000)
+#define ShowCommsDelay 100   // ms pauses between updated info on Nextion (was 1000)
 // ***************************************************************************
 
 // **************************************************************************

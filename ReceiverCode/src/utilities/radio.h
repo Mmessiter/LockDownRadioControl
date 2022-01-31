@@ -47,7 +47,7 @@ extern uint8_t  MinsGPS;
 extern uint8_t  SecsGPS;
 extern uint8_t  SatellitesGPS; 
 extern bool     GpsFix;
-extern bool     USE_AdafruitUltimateGps;    
+extern bool     USE_SENSOR_HUB;    
  
 
 /** AckPayload Stucture for data returned to transmitter. */
@@ -334,7 +334,7 @@ void LoadAckPayload()
     AckPayload.Purpose &= 0x7F; // Clear hi bit ( = do not ignore)
     ++AckPayload.Purpose;      
 
-      if (USE_AdafruitUltimateGps) MaxAckP = 26;                    // 26 + GPS
+      if (USE_SENSOR_HUB) MaxAckP = 26;                    // 26 + GPS
       if (AckPayload.Purpose > MaxAckP) AckPayload.Purpose = 0;     // wrap after max
 
     switch (AckPayload.Purpose) {

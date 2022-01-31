@@ -55,7 +55,7 @@
 #include <SBUS.h>
 #include "utilities/radio.h"
 
-bool            USE_AdafruitUltimateGps = false;      //  GPS (Adafruit Ultimate GPS) ?
+bool            USE_SENSOR_HUB = false;      //  GPS (Adafruit Ultimate GPS) ?
 Servo           MCMServo[SERVOSUSED];
 uint8_t         PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8}; // 9 PWMs, remaining 7 via sbus
 SBUS            MySbus(SBUSPORT);
@@ -268,7 +268,7 @@ void BindModel()
 // ***************************************************************************************************************************************************
 
 void  SendToTheNewGPSHub(char m[]){
-  Wire.beginTransmission(GPSI2CHUB);   
+  Wire.beginTransmission(SENSOR_HUB_I2C_ADDRESS);   
   Wire.write(m);
   Wire.endTransmission();   
 }
@@ -328,7 +328,7 @@ void CheckParams()
 #ifdef DB_SENSORS
 void Sensors_Status()
 {
-    if (USE_AdafruitUltimateGps){
+    if (USE_SENSOR_HUB){
         Serial.print ("GPS FIX?  ");
         if (GpsFix) {
             Serial.println ("YES");
@@ -375,10 +375,15 @@ void Sensors_Status()
 // TODO: Doubles are all converted later to floats. So only four bytes need to be sent, not 8! 
 
 // TODO: Correct time!
+#define MAXTIMEALLOWED 3
 
 FASTRUN void ReadTheNewGPSHub(){
+
+
   #define IDLEN 3
   #define GPSI2CBYTES IDLEN + 8
+  uint32_t SafetyTimer;
+  
   char  FIX[IDLEN+1]    = "FIX";  // Fix 
   char  SAT[IDLEN+1]    = "SAT";  // How many satellites
   char  LAT[IDLEN+1]    = "LAT";  // Latitude
@@ -399,8 +404,11 @@ FASTRUN void ReadTheNewGPSHub(){
   double RdataIn;
   union {double Val64; uint8_t Val8[8];} Rdata;   // 'union' allows access to every byte
   
-  Wire.requestFrom(GPSI2CHUB, GPSI2CBYTES);         // Ask hub for data
+
+  SafetyTimer = millis();
+  Wire.requestFrom(SENSOR_HUB_I2C_ADDRESS, GPSI2CBYTES);         // Ask hub for data
   for (int j = 0; j < GPSI2CBYTES; ++j ){
+    if ((millis()- SafetyTimer) > MAXTIMEALLOWED)   return;  
     if (Wire.available()) {                         // Listen to HUB
       if (j < IDLEN){
              RdataID[j]          = Wire.read();     // This gets the three-char data id (eg LAT)
@@ -478,11 +486,15 @@ FASTRUN void ReadTheNewGPSHub(){
 // ******************************************************************************************************************************************************************
 FASTRUN void ReceiveData()
 { 
+  //  uint32_t test;
+    
       if (millis() - LastConnectionMoment < 1 ) {    // If, and only if, we have still absolutely loads of time, read the sensors NOW while waiting for next data packet.
-        if (USE_AdafruitUltimateGps) {
-            if ((millis() - GPSSensorTime) > 50){ 
+        if (USE_SENSOR_HUB) {
+            if ((millis() - GPSSensorTime) > 10){ 
                 GPSSensorTime = millis();
+               // test =  millis();
                 ReadTheNewGPSHub();                  // Sensor now has its own MCU.
+               // Serial.println (millis() - test);
 #ifdef DB_SENSORS
                 Sensors_Status();                    // does nothing if DB_SENSORS is not defined
                 Serial.println (millis()-SensorTime);
@@ -510,8 +522,8 @@ void ScanI2c(){
     for (uint8_t i = 1; i < 127; ++i) {
         Wire.beginTransmission(i);
         if (Wire.endTransmission() == 0) {
-            if (i == GPSI2CHUB) {
-                USE_AdafruitUltimateGps = true;
+            if (i == SENSOR_HUB_I2C_ADDRESS) {
+                USE_SENSOR_HUB = true;
 #ifdef DB_SENSORS
                 Serial.println("Sensor Hub with Adafruit Ultimate GPS etc. detected!");
 #endif
