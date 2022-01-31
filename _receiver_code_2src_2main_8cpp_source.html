@@ -438,7 +438,7 @@ $(document).ready(function(){initNavTree('_receiver_code_2src_2main_8cpp_source.
 <div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;<span class="comment">// The next 4 bytes are the value (as a float).</span></div>
 <div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;<span class="comment">// The ID changes with each call</span></div>
 <div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160; </div>
-<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;<span class="comment">// TODO: Correct time using GPS data!</span></div>
+<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;<span class="comment">// TODO: Correct the RTC time using GPS data!</span></div>
 <div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160; </div>
 <div class="line"><a name="l00391"></a><span class="lineno"><a class="line" href="_receiver_code_2src_2main_8cpp.html#a5d2350b2507883d3644251013370bc5b">  391</a></span>&#160;FASTRUN <span class="keywordtype">void</span> <a class="code" href="_receiver_code_2src_2main_8cpp.html#a5d2350b2507883d3644251013370bc5b">ReadTheSensorHub</a>(){</div>
 <div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160; </div>
@@ -543,7 +543,7 @@ $(document).ready(function(){initNavTree('_receiver_code_2src_2main_8cpp_source.
 <div class="line"><a name="l00491"></a><span class="lineno">  491</span>&#160;}</div>
 <div class="line"><a name="l00492"></a><span class="lineno">  492</span>&#160; </div>
 <div class="line"><a name="l00493"></a><span class="lineno">  493</span>&#160;<span class="comment">// ******************************************************************************************************************************************************************</span></div>
-<div class="line"><a name="l00494"></a><span class="lineno"><a class="line" href="_receiver_code_2src_2main_8cpp.html#ad8b70060a07f5323c3e1011dd6b1dd6f">  494</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="_receiver_code_2src_2main_8cpp.html#ad8b70060a07f5323c3e1011dd6b1dd6f">SensorHubHasFailed</a>(){  </div>
+<div class="line"><a name="l00494"></a><span class="lineno"><a class="line" href="_receiver_code_2src_2main_8cpp.html#ad8b70060a07f5323c3e1011dd6b1dd6f">  494</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="_receiver_code_2src_2main_8cpp.html#ad8b70060a07f5323c3e1011dd6b1dd6f">SensorHubHasFailed</a>(){       <span class="comment">// If the I2C gets its knickers in a twist, it can lock up the reciever, so DON&#39;T call it until landed and reset.</span></div>
 <div class="line"><a name="l00495"></a><span class="lineno">  495</span>&#160;<span class="preprocessor">#define Failed  0</span></div>
 <div class="line"><a name="l00496"></a><span class="lineno">  496</span>&#160;     <a class="code" href="_receiver_code_2src_2main_8cpp.html#a79c2bfabc0682301ec238954845e1e81">LatitudeGPS</a>     = <a class="code" href="_receiver_code_2src_2main_8cpp.html#aed7f6b5b10b7b8235e38d72a5dfc20d8">Failed</a>; </div>
 <div class="line"><a name="l00497"></a><span class="lineno">  497</span>&#160;     <a class="code" href="_receiver_code_2src_2main_8cpp.html#afabe4c9d9760f8606aa408474e3d626c">LongitudeGPS</a>    = <a class="code" href="_receiver_code_2src_2main_8cpp.html#aed7f6b5b10b7b8235e38d72a5dfc20d8">Failed</a>;</div>
