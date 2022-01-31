@@ -31,8 +31,8 @@ uint8_t GPSYear;
 uint8_t GPSFix;
 const   char *  GPSLibVersion[20];
 float   GPSCourse;
-double  GPSDistanceTo;
-double  GPSCourseTo; 
+float   GPSDistanceTo;
+float   GPSCourseTo; 
 static  const double MAYSLANE_LAT = 51.638963994850364;       // Mays Lane location
 static  const double MAYSLANE_LON = -0.22926821753992477;     // Mays Lane location
 float   DestinationLat = MAYSLANE_LAT;
@@ -61,7 +61,7 @@ uint16_t Qnh = 0;
 // 
 void SendDataToReceiver() {
   #define IDLEN 3
-  #define GPSI2CBYTES IDLEN + 8
+  #define GPSI2CBYTES IDLEN + 4
   #define MAXPARAMS 14
   uint8_t i;
   char RdataID[IDLEN+1] = "NUL";
@@ -81,80 +81,79 @@ void SendDataToReceiver() {
   char  TMP[IDLEN+1]    = "TMP";
   char  VLT[IDLEN+1]    = "VLT";
 
-
-  double RdataOut = 42;
-  union { double   Val64;uint8_t Val8[8]; } Rdata;
+  float RdataOut = 42;
+  union { float   Val32;uint8_t Val8[4]; } Rdata;
   switch (ParameterNumber) {
       case  0:
-        RdataOut = (double) GPSLatitude;     // Latitiude
+        RdataOut =  GPSLatitude;    // Latitiude
         strcpy (RdataID,LAT);
         break;
       case  1:
-        RdataOut = (double) GPSLongitude;   // Longitude
+        RdataOut = GPSLongitude;   // Longitude
         strcpy (RdataID,LON);
         break;
       case  2:
-        RdataOut = (double) GPSFix;          // Fix
+        RdataOut = (float) GPSFix;          // Fix
         strcpy (RdataID,FIX);
         break;
       case  3:
-        RdataOut = (double) GPSAltitude;     // Altitude
+        RdataOut =  GPSAltitude;     // Altitude
         strcpy (RdataID,ALT);
         break;
       case  4:
-        RdataOut = (double) GPSSpeed;        // Speed
+        RdataOut = GPSSpeed;        // Speed
         strcpy (RdataID,SPD);
         break;
       case  5:
-        RdataOut = (double) GPSCourse;       // Course
+        RdataOut = GPSCourse;       // Course
         strcpy (RdataID,COR);
         break;
       case  6:
-        RdataOut = (double) GPSCourseTo;     // Course to
+        RdataOut =  GPSCourseTo;     // Course to
         strcpy (RdataID,CTO);
         break;
       case  7:
-        RdataOut = (double) GPSDistanceTo;   // Distance to
+        RdataOut =  GPSDistanceTo;   // Distance to
         strcpy (RdataID,DTO);
         break;
       case  8:
-        RdataOut = (double) GPSHours;        // Hours
+        RdataOut = (float) GPSHours;        // Hours
         strcpy (RdataID,HRS);
         break;
       case  9:
-        RdataOut = (double) GPSMins;        // Mins
+        RdataOut = (float) GPSMins;        // Mins
         strcpy (RdataID,MNS);
         break;
       case  10:
-        RdataOut = (double) GPSSecs;        // Secs
+        RdataOut = (float) GPSSecs;        // Secs
         strcpy (RdataID,SEC);
         break;
       case  11:
-        RdataOut = (double) GPSSatellites;  // Sats
+        RdataOut =  (float) GPSSatellites;  // Sats
         strcpy (RdataID,SAT);
         break;
       case  12:
-        RdataOut = (double) BaroAltitude;  // ALT FROM BMP280
+        RdataOut = BaroAltitude;  // ALT FROM BMP280
         strcpy (RdataID,BLT);
         break;
       case  13:
-        RdataOut = (double) BaroTemperature;  // TEMPERATURE FROM BMP280
+        RdataOut =  BaroTemperature;  // TEMPERATURE FROM BMP280
         strcpy (RdataID,TMP);
         break;
       case  14:
-        RdataOut = (double) INA219Volts;     // VOLTAGE FROM INA219
+        RdataOut =  INA219Volts;     // VOLTAGE FROM INA219
         strcpy (RdataID,VLT);
         break;
       default:
         break;
     
   }
-   Rdata.Val64 = RdataOut;
+   Rdata.Val32 = RdataOut;
    
    for (i = 0; i < IDLEN; ++i) {
       Wire1.write(RdataID[i]); 
    }
-    for (i = 0; i < 8; ++i) {
+    for (i = 0; i < 4; ++i) {
        Wire1.write(Rdata.Val8[i]); 
     }
 
@@ -207,21 +206,21 @@ char RCV[10];
    }
       GPSFix         = gps.location.isValid();
       if (GPSFix) {
-        GPSLatitude    = gps.location.lat();
-        GPSLongitude   = gps.location.lng();
-        GPSSatellites  = gps.satellites.value(); 
-        GPSAltitude    = gps.altitude.feet();
-        GPSSpeed       = gps.speed.mph();
-        GPSHours       = gps.time.hour();   
-        GPSMins        = gps.time.minute(); 
-        GPSSecs        = gps.time.second(); 
-        GPSDay         = gps.date.day();
-        GPSMonth       = gps.date.month();
-        GPSYear        = gps.date.year();
+        GPSLatitude    = (float) gps.location.lat();
+        GPSLongitude   = (float) gps.location.lng();
+        GPSSatellites  = (uint8_t) gps.satellites.value(); 
+        GPSAltitude    = (uint8_t) gps.altitude.feet();
+        GPSSpeed       = (float) gps.speed.mph();
+        GPSHours       = (uint8_t) gps.time.hour();   
+        GPSMins        = (uint8_t) gps.time.minute(); 
+        GPSSecs        = (uint8_t) gps.time.second(); 
+        GPSDay         = (uint8_t) gps.date.day();
+        GPSMonth       = (uint8_t) gps.date.month();
+        GPSYear        = (uint8_t) gps.date.year();
         *GPSLibVersion = gps.libraryVersion();
-        GPSCourse      = gps.course.deg();
-        GPSDistanceTo  = gps.distanceBetween(GPSLatitude,GPSLongitude,DestinationLat,DestinationLng);
-        GPSCourseTo    = gps.courseTo(GPSLatitude,GPSLongitude,DestinationLat,DestinationLng);
+        GPSCourse      = (float) gps.course.deg();
+        GPSDistanceTo  = (float) gps.distanceBetween(GPSLatitude,GPSLongitude,DestinationLat,DestinationLng);
+        GPSCourseTo    = (float) gps.courseTo(GPSLatitude,GPSLongitude,DestinationLat,DestinationLng);
       }
  }
 // *********************************************** DEBUG DATA ***********************************************

@@ -73,7 +73,7 @@ bool            ReInit             = false;
 uint8_t         FS_byte1           = 0; // All 16 failsafe channel flags are in these two bytes
 uint8_t         FS_byte2           = 0;
 uint32_t        ReconnectedMoment;
-float           BaroAltitude;
+uint16_t        BaroAltitude;
 float           BaroTemperature;
 float           INA219Volts;
 bool            Radio1Exists = false;
@@ -83,14 +83,14 @@ uint32_t        GPSSensorTime    = 0;
 uint16_t        Qnh              = 0;    //Pressure at sea level here and now (defined by TX option)
 uint16_t        OldQnh           = 0;
 uint8_t         SatellitesGPS; 
-double          LatitudeGPS;
-double          LongitudeGPS;
-double          SpeedGPS;
-double          AngleGPS;
+float           LatitudeGPS;
+float           LongitudeGPS;
+float           SpeedGPS;
+float           AngleGPS;
 bool            GpsFix = false;
-double          AltitudeGPS;
-double          DistanceGPS;
-double          CourseToGPS;
+float           AltitudeGPS;
+float           DistanceGPS;
+float           CourseToGPS;
 uint8_t         HoursGPS;
 uint8_t         MinsGPS;
 uint8_t         SecsGPS;
@@ -381,12 +381,10 @@ void Sensors_Status()
 
 
 // ***************************************************************************************************************************************************
-// Here the GPS HUB is asked for 11 bytes of data over I2C. 
+// Here the GPS HUB is asked for 7 bytes of data over I2C. 
 // The first IDLEN (=3) bytes are the ID (LAT, LNG, etc...)
-// The next 8 bytes are the value (as a double).
+// The next 4 bytes are the value (as a float).
 // The ID changes with each call
-
-// TODO: Doubles are all converted later to floats. So only four bytes need to be sent, not 8! 
 
 // TODO: Correct time!
 
@@ -395,10 +393,9 @@ FASTRUN void ReadTheNewGPSHub(){
 
 
   #define IDLEN 3
-  #define GPSI2CBYTES IDLEN + 8
+  #define GPSI2CBYTES IDLEN + 4   // = 7 (only floats now)
   
-  
-  char  FIX[IDLEN+1]    = "FIX";  // Fix 
+  char  FIX[IDLEN+1]    = "FIX";  // GPS Fix 
   char  SAT[IDLEN+1]    = "SAT";  // How many satellites
   char  LAT[IDLEN+1]    = "LAT";  // Latitude
   char  LON[IDLEN+1]    = "LON";  // Longitude
@@ -415,8 +412,8 @@ FASTRUN void ReadTheNewGPSHub(){
   char  VLT[IDLEN+1]    = "VLT";  // Volts from INA219
   char  RdataID[IDLEN+1];
   
-  double RdataIn;
-  union {double Val64; uint8_t Val8[8];} Rdata;   // 'union' allows access to every byte
+  float RdataIn;
+  union {float Val32; uint8_t Val8[4];} Rdata;      // 'union' allows access to every byte
   
   Wire.requestFrom(SENSOR_HUB_I2C_ADDRESS, GPSI2CBYTES);         // Ask hub for data
   for (int j = 0; j < GPSI2CBYTES; ++j ){
@@ -429,7 +426,7 @@ FASTRUN void ReadTheNewGPSHub(){
     }
   }
   RdataID[3] = 0;                                   // To terminate the ID string.
-  RdataIn = Rdata.Val64;                            // To re-assemble the 64 BIT data to a double
+  RdataIn = Rdata.Val32;                            // To re-assemble the 64 BIT data to a double
 
   if (strcmp(FIX,RdataID) == 0) {     
       if (int(RdataIn) == 1) {
@@ -466,7 +463,7 @@ FASTRUN void ReadTheNewGPSHub(){
      return;
   }
   if (strcmp(CTO,RdataID) == 0) {     
-     CourseToGPS =  uint8_t(RdataIn);
+     CourseToGPS =  RdataIn;
      return;
   }
   if (strcmp(HRS,RdataID) == 0) {     
@@ -486,7 +483,7 @@ FASTRUN void ReadTheNewGPSHub(){
      return;
   }
   if (strcmp(TMP,RdataID) == 0) {     
-     BaroTemperature =  uint8_t(RdataIn);
+     BaroTemperature =  RdataIn;
      return;
   }
   if (strcmp(VLT,RdataID) == 0) {     
