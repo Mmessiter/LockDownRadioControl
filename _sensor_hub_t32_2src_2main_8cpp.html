@@ -212,10 +212,10 @@ Variables</h2></td></tr>
 <tr class="separator:af5f2a2a78189687a7055abd054ac6058"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae1460f6669589cc4881aad0fd6440030"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_sensor_hub_t32_2src_2main_8cpp.html#ae1460f6669589cc4881aad0fd6440030">ParameterNumber</a> = 0</td></tr>
 <tr class="separator:ae1460f6669589cc4881aad0fd6440030"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4be5c27bea3c82b0a4ec92191052d946"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_sensor_hub_t32_2src_2main_8cpp.html#a4be5c27bea3c82b0a4ec92191052d946">USE_BMP280</a> = false</td></tr>
-<tr class="separator:a4be5c27bea3c82b0a4ec92191052d946"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a87ae50e2ac4507568cbf98072f174a1b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_sensor_hub_t32_2src_2main_8cpp.html#a87ae50e2ac4507568cbf98072f174a1b">USE_INA219</a> = false</td></tr>
-<tr class="separator:a87ae50e2ac4507568cbf98072f174a1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2aebb34fd4fbec2d3ac925f8cc7a7bee"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_sensor_hub_t32_2src_2main_8cpp.html#a2aebb34fd4fbec2d3ac925f8cc7a7bee">FOUND_BMP280</a> = false</td></tr>
+<tr class="separator:a2aebb34fd4fbec2d3ac925f8cc7a7bee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af1b5290b72a9f9bc5d1d70c7c14df9b0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_sensor_hub_t32_2src_2main_8cpp.html#af1b5290b72a9f9bc5d1d70c7c14df9b0">FOUND_INA219</a> = false</td></tr>
+<tr class="separator:af1b5290b72a9f9bc5d1d70c7c14df9b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a69393b86406e49dbacfbabd283877495"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_adafruit___i_n_a219.html">Adafruit_INA219</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_sensor_hub_t32_2src_2main_8cpp.html#a69393b86406e49dbacfbabd283877495">ina219</a></td></tr>
 <tr class="separator:a69393b86406e49dbacfbabd283877495"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1eeadec20c253385fe11f15108d783c8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_adafruit___b_m_p280.html">Adafruit_BMP280</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_sensor_hub_t32_2src_2main_8cpp.html#a1eeadec20c253385fe11f15108d783c8">bmp280</a></td></tr>
@@ -228,7 +228,7 @@ Variables</h2></td></tr>
 <tr class="separator:af2ae1ded0446ef84d7f1606cb647ac25"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad84d94b7259bcf40213f0af9be706ee7"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_sensor_hub_t32_2src_2main_8cpp.html#ad84d94b7259bcf40213f0af9be706ee7">INA219Volts</a></td></tr>
 <tr class="separator:ad84d94b7259bcf40213f0af9be706ee7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae3495ca407a0a3ea570ce0af7a3447a3"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_sensor_hub_t32_2src_2main_8cpp.html#ae3495ca407a0a3ea570ce0af7a3447a3">Qnh</a> = 1033</td></tr>
+<tr class="memitem:ae3495ca407a0a3ea570ce0af7a3447a3"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_sensor_hub_t32_2src_2main_8cpp.html#ae3495ca407a0a3ea570ce0af7a3447a3">Qnh</a> = 0</td></tr>
 <tr class="separator:ae3495ca407a0a3ea570ce0af7a3447a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
@@ -354,7 +354,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00301">301</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00304">304</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -379,7 +379,7 @@ Here is the call graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00289">289</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00292">292</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -404,7 +404,7 @@ Here is the call graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00198">198</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00201">201</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -429,7 +429,7 @@ Here is the call graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00270">270</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00273">273</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -474,7 +474,7 @@ Here is the call graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00311">311</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00314">314</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -513,7 +513,7 @@ Here is the call graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00278">278</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00281">281</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -532,7 +532,7 @@ Here is the call graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00337">337</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00340">340</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -557,7 +557,7 @@ Here is the call graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00225">225</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00228">228</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -655,6 +655,38 @@ Here is the call graph for this function:</div>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00039">39</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a2aebb34fd4fbec2d3ac925f8cc7a7bee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2aebb34fd4fbec2d3ac925f8cc7a7bee">&#9670;&nbsp;</a></span>FOUND_BMP280</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool FOUND_BMP280 = false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00047">47</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+
+</div>
+</div>
+<a id="af1b5290b72a9f9bc5d1d70c7c14df9b0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af1b5290b72a9f9bc5d1d70c7c14df9b0">&#9670;&nbsp;</a></span>FOUND_INA219</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool FOUND_INA219 = false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00048">48</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1101,44 +1133,12 @@ Here is the call graph for this function:</div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint16_t Qnh = 1033</td>
+          <td class="memname">uint16_t Qnh = 0</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00056">56</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
-
-</div>
-</div>
-<a id="a4be5c27bea3c82b0a4ec92191052d946"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4be5c27bea3c82b0a4ec92191052d946">&#9670;&nbsp;</a></span>USE_BMP280</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool USE_BMP280 = false</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00047">47</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
-
-</div>
-</div>
-<a id="a87ae50e2ac4507568cbf98072f174a1b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a87ae50e2ac4507568cbf98072f174a1b">&#9670;&nbsp;</a></span>USE_INA219</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool USE_INA219 = false</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00048">48</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
