@@ -482,7 +482,7 @@ FASTRUN void ReadTheNewGPSHub(){
      return;
   }
   if (strcmp(BLT,RdataID) == 0) {     
-     BaroAltitude =  uint8_t(RdataIn);
+     BaroAltitude =  uint16_t(RdataIn);
      return;
   }
   if (strcmp(TMP,RdataID) == 0) {     

@@ -86,63 +86,63 @@ void SendDataToReceiver() {
   union { double   Val64;uint8_t Val8[8]; } Rdata;
   switch (ParameterNumber) {
       case  0:
-        RdataOut = GPSLatitude;     // Latitiude
+        RdataOut = (double) GPSLatitude;     // Latitiude
         strcpy (RdataID,LAT);
         break;
       case  1:
-        RdataOut = GPSLongitude;   // Longitude
+        RdataOut = (double) GPSLongitude;   // Longitude
         strcpy (RdataID,LON);
         break;
       case  2:
-        RdataOut = GPSFix;          // Fix
+        RdataOut = (double) GPSFix;          // Fix
         strcpy (RdataID,FIX);
         break;
       case  3:
-        RdataOut = GPSAltitude;     // Altitude
+        RdataOut = (double) GPSAltitude;     // Altitude
         strcpy (RdataID,ALT);
         break;
       case  4:
-        RdataOut = GPSSpeed;        // Speed
+        RdataOut = (double) GPSSpeed;        // Speed
         strcpy (RdataID,SPD);
         break;
       case  5:
-        RdataOut = GPSCourse;       // Course
+        RdataOut = (double) GPSCourse;       // Course
         strcpy (RdataID,COR);
         break;
       case  6:
-        RdataOut = GPSCourseTo;     // Course to
+        RdataOut = (double) GPSCourseTo;     // Course to
         strcpy (RdataID,CTO);
         break;
       case  7:
-        RdataOut = GPSDistanceTo;   // Distance to
+        RdataOut = (double) GPSDistanceTo;   // Distance to
         strcpy (RdataID,DTO);
         break;
       case  8:
-        RdataOut = GPSHours;        // Hours
+        RdataOut = (double) GPSHours;        // Hours
         strcpy (RdataID,HRS);
         break;
       case  9:
-        RdataOut = GPSMins;        // Mins
+        RdataOut = (double) GPSMins;        // Mins
         strcpy (RdataID,MNS);
         break;
       case  10:
-        RdataOut = GPSSecs;        // Secs
+        RdataOut = (double) GPSSecs;        // Secs
         strcpy (RdataID,SEC);
         break;
       case  11:
-        RdataOut = GPSSatellites;  // Sats
+        RdataOut = (double) GPSSatellites;  // Sats
         strcpy (RdataID,SAT);
         break;
       case  12:
-        RdataOut = BaroAltitude;  // ALT FROM BMP280
+        RdataOut = (double) BaroAltitude;  // ALT FROM BMP280
         strcpy (RdataID,BLT);
         break;
       case  13:
-        RdataOut = BaroTemperature;  // TEMPERATURE FROM BMP280
+        RdataOut = (double) BaroTemperature;  // TEMPERATURE FROM BMP280
         strcpy (RdataID,TMP);
         break;
       case  14:
-        RdataOut = INA219Volts;     // VOLTAGE FROM INA219
+        RdataOut = (double) INA219Volts;     // VOLTAGE FROM INA219
         strcpy (RdataID,VLT);
         break;
       default:
@@ -190,7 +190,7 @@ char RCV[10];
   }
 
   if (strcmp(QNH,RCV) == 0) {      // Match first 3 chars with QNH?
-      Uqnh.Val8[0] = RCV[4]; 
+      Uqnh.Val8[0] = RCV[4];       // 16 bit value for Qnh sent in bytes 4 and 5
       Uqnh.Val8[1] = RCV[5]; 
       Qnh = Uqnh.Val16;
       return;
