@@ -44,8 +44,8 @@ char    PMTK_SET_NMEA_OUTPUT_RMCGGAGSA[] =  "$PMTK314,0,1,0,1,1,0,0,0,0,0,0,0,0,
 char    PMTK_SET_BAUD_9600[]             =  "$PMTK251,9600*17";     // <   9600 bps     
 char    PGCMD_NOANTENNA[]                =  "$PGCMD,33,0*6D" ;      // < don't show antenna status messages
 uint8_t ParameterNumber                  = 0;
-bool    USE_BMP280 = false;                   //  BMP280 sensor connected ?
-bool    USE_INA219 = false;                   //  Volts from INA219 ?
+bool    FOUND_BMP280 = false;                   //  BMP280 sensor connected ?
+bool    FOUND_INA219 = false;                   //  Volts from INA219 ?
 Adafruit_INA219 ina219;
 Adafruit_BMP280 bmp280;
 uint32_t LoopTimer;
@@ -53,7 +53,7 @@ uint32_t LoopTimer;
 float    BaroTemperature ;
 float    BaroAltitude ;
 float    INA219Volts;
-uint16_t Qnh = 1033;
+uint16_t Qnh = 0;
 
 
 
@@ -167,9 +167,10 @@ void ReceiveEvent(int q) {
 char MRK[] = "MRK";
 char MAY[] = "MAY";
 char QNH[] = "QNH";
-char RCV[4];
+char RCV[10];
+ union {uint16_t Val16; uint8_t Val8[2];} Uqnh;  
 
-    for (uint8_t i = 0; i < 3; ++i) {
+    for (uint8_t i = 0; i < 6; ++i) {
         if (Wire1.available()) {
             RCV[i]= Wire1.read();    // Get one byte at a time
         }
@@ -183,14 +184,16 @@ char RCV[4];
   }
 
  if (strcmp(MAY,RCV) == 0) {      // Match first 3 chars with MAY?
-     DestinationLat = MAYSLANE_LAT;  // Mark MAYS LANE location
-     DestinationLng = MAYSLANE_LON;  // Mark MAYS LANE location
-     return;
+      DestinationLat = MAYSLANE_LAT;  // Mark MAYS LANE location
+      DestinationLng = MAYSLANE_LON;  // Mark MAYS LANE location
+      return;
   }
 
-  if (strcmp(QNH,RCV) == 0) {      // Match first 3 chars with MAY?
-     Serial.println ("Whoopee!!");
-     return;
+  if (strcmp(QNH,RCV) == 0) {      // Match first 3 chars with QNH?
+      Uqnh.Val8[0] = RCV[4]; 
+      Uqnh.Val8[1] = RCV[5]; 
+      Qnh = Uqnh.Val16;
+      return;
   }
 
 }
@@ -268,11 +271,11 @@ void ShowGPS(){
 }
 // ***********************************************************************************************************
 void ReadOtherSensors(){
-    if (USE_BMP280) {
+    if (FOUND_BMP280) {
         BaroTemperature = bmp280.readTemperature();
-        BaroAltitude    = bmp280.readAltitude(Qnh) * 3.28084; 
+        BaroAltitude    = (bmp280.readAltitude(Qnh)) * 3.28084; 
     }
-    if (USE_INA219) INA219Volts = ina219.getBusVoltage_V();
+    if (FOUND_INA219) INA219Volts = ina219.getBusVoltage_V();
 }
 //*************************************** SendToGPS  **********************************************************
 void SendToGPS(char Cmd[80]){
@@ -316,13 +319,13 @@ void ScanI2c()
         delay(10);
         if (Wire.endTransmission() == 0) {
              if (i == 0x40) {
-                USE_INA219 = true;
+                FOUND_INA219 = true;
 #ifdef DEBUG
                 Serial.println("INA219 voltage meter detected!");
 #endif
               }
              if (i == 0x76) {
-                USE_BMP280 = true;
+                FOUND_BMP280 = true;
 #ifdef DEBUG
                 Serial.println("BMP280 barometer detected!");
 #endif
@@ -341,8 +344,8 @@ void setup() {
   GPSDEVICE.begin(GPSBAUDRATE);
   Wire.begin();                                   // Wire used to read locally attached i2c sensors
   ScanI2c();
-  if (USE_BMP280) InitBMP280();
-  if (USE_INA219) ina219.begin();
+  if (FOUND_BMP280) InitBMP280();
+  if (FOUND_INA219) ina219.begin();
   delay (100);
   SendToGPS(PGCMD_NOANTENNA);                     // These setup commands are for Adafruit Ulimate GPS only
   delay (100);
