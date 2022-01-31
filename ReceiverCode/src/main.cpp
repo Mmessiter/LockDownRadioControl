@@ -338,47 +338,6 @@ void CheckParams()
     }
     return;
 }
-/************************************************************************************************************/
-#ifdef DB_SENSORS
-void Sensors_Status()
-{
-    if (USE_SENSOR_HUB){
-        Serial.print ("GPS FIX?  ");
-        if (GpsFix) {
-            Serial.println ("YES");
-        } else {
-            Serial.println ("No");
-        }
-        if (GpsFix){
-            Serial.print ("GPS Satellites: ");
-            Serial.println (SatellitesGPS);
-            Serial.print ("GPS Latitude: ");
-            Serial.println (LatitudeGPS,14);
-            Serial.print ("GPS Longitude: ");
-            Serial.println (LongitudeGPS,14);
-            Serial.print ("GPS Speed (MPH): ");
-            Serial.println (SpeedGPS);
-            Serial.print ("GPS Angle: ");
-            Serial.println (AngleGPS);
-            Serial.print ("GPS distance: ");
-            Serial.println (DistanceGPS);
-            Serial.print ("GPS course to: ");
-            Serial.println (CourseToGPS);
-            Serial.print ("GPS Altitude: ");
-            Serial.println (AltitudeGPS);
-            Serial.print ("Hours GPS: ");
-            Serial.println (HoursGPS);
-            Serial.print ("Minutes GPS: ");
-            Serial.println (MinsGPS);
-            Serial.print ("Seconds GPS: ");
-            Serial.println (SecsGPS);
-            }
-    }
-   
-}
-#endif // defined DB_SENSORS
-
-
 
 // ***************************************************************************************************************************************************
 // Here the GPS HUB is asked for 7 bytes of data over I2C. 
@@ -511,27 +470,18 @@ void SensorHubHasFailed(){       // If the I2C gets its knickers in a twist, it 
      SensorHubDead   = true;    // This flag inhibits further attempts to contact hub.
 }
 // ******************************************************************************************************************************************************************
-FASTRUN void ReceiveData()
-{ 
+FASTRUN void ReceiveData(){ 
       uint32_t TimeTest;
-    
-      if (millis() - LastConnectionMoment < 1 ) {                        // If, and only if, we have still absolutely loads of time, 
-                                                                         // read the sensors NOW while waiting for next data packet.
+      if (millis() - LastConnectionMoment < 1 ) {                        // If, and only if, we have still absolutely loads of time, do stuff now...                                                                  // read the sensors NOW while waiting for next data packet.
         if (USE_SENSOR_HUB) {
             if ((millis() - GPSSensorTime) > 10){ 
                 GPSSensorTime = millis();
-                TimeTest =  millis();
+                TimeTest =  millis();                                    //  Time the I2C calls. If too long, don't repeat.
                 if (!SensorHubDead) ReadTheSensorHub();                  //  Sensor now has its own MCU. Calls return in far less that 6 ms unless it lost I2C synch
-                if ((millis() - TimeTest) > 6)  SensorHubHasFailed();    //  So if sensor hub fails, don't bother calling it again (It normally returns within 2 ms. )
-
-#ifdef DB_SENSORS
-                Sensors_Status();                                         // does nothing if DB_SENSORS is not defined
-                Serial.println (millis()-SensorTime);
-#endif
+                if ((millis() - TimeTest) > 4)  SensorHubHasFailed();    //  So if sensor hub fails, don't bother calling it again (It normally returns within 2 ms. )
             }                                                                     
         }
     }
-
     Connected = false;                          // Assume not connected until we know better  
     if (CurrentRadio->available()) {
         Connected = true;                        // ... ok we now know better ! 
