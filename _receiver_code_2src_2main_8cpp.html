@@ -138,6 +138,8 @@ Macros</h2></td></tr>
 <tr class="separator:a152ff5774ac656fc5f23664a214a8b53"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2279f0fac9f7362b46f3c53ae91a5ce8"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_receiver_code_2src_2main_8cpp.html#a2279f0fac9f7362b46f3c53ae91a5ce8">RANGEMIN</a>&#160;&#160;&#160;0</td></tr>
 <tr class="separator:a2279f0fac9f7362b46f3c53ae91a5ce8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a818d80fdba80f9dce731321ffe0051e8"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_receiver_code_2src_2main_8cpp.html#a818d80fdba80f9dce731321ffe0051e8">MAXTIMEALLOWED</a>&#160;&#160;&#160;3</td></tr>
+<tr class="separator:a818d80fdba80f9dce731321ffe0051e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a472646a6b1f959aa3b4261a8247c2015"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_receiver_code_2src_2main_8cpp.html#a472646a6b1f959aa3b4261a8247c2015">IDLEN</a>&#160;&#160;&#160;3</td></tr>
 <tr class="separator:a472646a6b1f959aa3b4261a8247c2015"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab92133bc8cbae639e681505e0679bc28"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_receiver_code_2src_2main_8cpp.html#ab92133bc8cbae639e681505e0679bc28">GPSI2CBYTES</a>&#160;&#160;&#160;<a class="el" href="_sensor_hub_teensy3__6_2src_2main_8cpp.html#a472646a6b1f959aa3b4261a8247c2015">IDLEN</a> + 8</td></tr>
@@ -192,8 +194,8 @@ Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:a50bd80a7728cf3e3699b0e52ce4ed035"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_receiver_code_2src_2main_8cpp.html#a50bd80a7728cf3e3699b0e52ce4ed035">USE_AdafruitUltimateGps</a> = false</td></tr>
-<tr class="separator:a50bd80a7728cf3e3699b0e52ce4ed035"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a899b3e42b04d535e4c6898c302fa4842"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_receiver_code_2src_2main_8cpp.html#a899b3e42b04d535e4c6898c302fa4842">USE_SENSOR_HUB</a> = false</td></tr>
+<tr class="separator:a899b3e42b04d535e4c6898c302fa4842"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aea43f0afa386a593269762fb00bc6c77"><td class="memItemLeft" align="right" valign="top">Servo&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_receiver_code_2src_2main_8cpp.html#aea43f0afa386a593269762fb00bc6c77">MCMServo</a> [<a class="el" href="_receiver_code_2src_2main_8cpp.html#ab1515f8a159ef919c7afb5a1d71f55a3">SERVOSUSED</a>]</td></tr>
 <tr class="separator:aea43f0afa386a593269762fb00bc6c77"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a19f864fa6bdea0867325f70e162c92ef"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_receiver_code_2src_2main_8cpp.html#a19f864fa6bdea0867325f70e162c92ef">PWMPins</a> [<a class="el" href="_receiver_code_2src_2main_8cpp.html#ab1515f8a159ef919c7afb5a1d71f55a3">SERVOSUSED</a>] = {0, 1, 2, 3, 4, 5, 6, 7, 8}</td></tr>
@@ -347,6 +349,22 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="_receiver_code_2src_2main_8cpp_source.html#l00047">47</a> of file <a class="el" href="_receiver_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a818d80fdba80f9dce731321ffe0051e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a818d80fdba80f9dce731321ffe0051e8">&#9670;&nbsp;</a></span>MAXTIMEALLOWED</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define MAXTIMEALLOWED&#160;&#160;&#160;3</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="_receiver_code_2src_2main_8cpp_source.html#l00378">378</a> of file <a class="el" href="_receiver_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -613,7 +631,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_receiver_code_2src_2main_8cpp_source.html#l00540">540</a> of file <a class="el" href="_receiver_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_receiver_code_2src_2main_8cpp_source.html#l00552">552</a> of file <a class="el" href="_receiver_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -701,7 +719,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_receiver_code_2src_2main_8cpp_source.html#l00594">594</a> of file <a class="el" href="_receiver_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_receiver_code_2src_2main_8cpp_source.html#l00606">606</a> of file <a class="el" href="_receiver_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -869,7 +887,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_receiver_code_2src_2main_8cpp_source.html#l00379">379</a> of file <a class="el" href="_receiver_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_receiver_code_2src_2main_8cpp_source.html#l00380">380</a> of file <a class="el" href="_receiver_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -930,7 +948,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_receiver_code_2src_2main_8cpp_source.html#l00479">479</a> of file <a class="el" href="_receiver_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_receiver_code_2src_2main_8cpp_source.html#l00487">487</a> of file <a class="el" href="_receiver_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -961,7 +979,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_receiver_code_2src_2main_8cpp_source.html#l00523">523</a> of file <a class="el" href="_receiver_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_receiver_code_2src_2main_8cpp_source.html#l00535">535</a> of file <a class="el" href="_receiver_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -986,7 +1004,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_receiver_code_2src_2main_8cpp_source.html#l00508">508</a> of file <a class="el" href="_receiver_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_receiver_code_2src_2main_8cpp_source.html#l00520">520</a> of file <a class="el" href="_receiver_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -1037,7 +1055,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_receiver_code_2src_2main_8cpp_source.html#l00574">574</a> of file <a class="el" href="_receiver_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_receiver_code_2src_2main_8cpp_source.html#l00586">586</a> of file <a class="el" href="_receiver_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -1736,14 +1754,14 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="a50bd80a7728cf3e3699b0e52ce4ed035"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a50bd80a7728cf3e3699b0e52ce4ed035">&#9670;&nbsp;</a></span>USE_AdafruitUltimateGps</h2>
+<a id="a899b3e42b04d535e4c6898c302fa4842"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a899b3e42b04d535e4c6898c302fa4842">&#9670;&nbsp;</a></span>USE_SENSOR_HUB</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool USE_AdafruitUltimateGps = false</td>
+          <td class="memname">bool USE_SENSOR_HUB = false</td>
         </tr>
       </table>
 </div><div class="memdoc">

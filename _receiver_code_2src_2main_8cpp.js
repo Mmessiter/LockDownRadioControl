@@ -5,6 +5,7 @@ var _receiver_code_2src_2main_8cpp =
     [ "IDLEN", "_receiver_code_2src_2main_8cpp.html#a472646a6b1f959aa3b4261a8247c2015", null ],
     [ "LED_PIN", "_receiver_code_2src_2main_8cpp.html#ab4553be4db9860d940f81d7447173b2f", null ],
     [ "MAXMICROS", "_receiver_code_2src_2main_8cpp.html#a843e3db36f734b45096220f7ca4b8d9f", null ],
+    [ "MAXTIMEALLOWED", "_receiver_code_2src_2main_8cpp.html#a818d80fdba80f9dce731321ffe0051e8", null ],
     [ "MINMICROS", "_receiver_code_2src_2main_8cpp.html#ac67e087c11a86a3790c656a29f8c7195", null ],
     [ "RANGEMAX", "_receiver_code_2src_2main_8cpp.html#a152ff5774ac656fc5f23664a214a8b53", null ],
     [ "RANGEMIN", "_receiver_code_2src_2main_8cpp.html#a2279f0fac9f7362b46f3c53ae91a5ce8", null ],
@@ -74,5 +75,5 @@ var _receiver_code_2src_2main_8cpp =
     [ "ServosAttached", "_receiver_code_2src_2main_8cpp.html#a95b22fb572f7a91a89a431c7f1236575", null ],
     [ "SpeedGPS", "_receiver_code_2src_2main_8cpp.html#ae16763432ff6353a6e61ba98d119b8f9", null ],
     [ "temperature280", "_receiver_code_2src_2main_8cpp.html#a7cc84074d4166c6512a2d479b6f12e30", null ],
-    [ "USE_AdafruitUltimateGps", "_receiver_code_2src_2main_8cpp.html#a50bd80a7728cf3e3699b0e52ce4ed035", null ]
+    [ "USE_SENSOR_HUB", "_receiver_code_2src_2main_8cpp.html#a899b3e42b04d535e4c6898c302fa4842", null ]
 ];

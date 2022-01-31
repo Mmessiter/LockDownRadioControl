@@ -69,5 +69,5 @@ var radio_8h =
     [ "StillSearchingTime", "radio_8h.html#a1d0b7743e2015fe687146524466e4794", null ],
     [ "ThisPipe", "radio_8h.html#a88d2add9e7ca58e7218870f887b25859", null ],
     [ "ThisRadio", "radio_8h.html#a25cc3bb5cb94f4bbef0f2c5b79140c20", null ],
-    [ "USE_AdafruitUltimateGps", "radio_8h.html#a50bd80a7728cf3e3699b0e52ce4ed035", null ]
+    [ "USE_SENSOR_HUB", "radio_8h.html#a899b3e42b04d535e4c6898c302fa4842", null ]
 ];
