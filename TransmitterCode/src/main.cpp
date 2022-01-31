@@ -5829,23 +5829,26 @@ char ModelsView_ModelNumber[]  = "ModelNumber";
 
 void loop()
 {
-    KickTheDog(); // Watchdog
+
+    
+
+    KickTheDog();                    // Watchdog
     if (GetButtonPress()) {
-        Button_was_pressed();       // Deal with button
+        Button_was_pressed();        // Deal with button
     }
     if (CurrentView == ModelsView){ 
-        CheckModelName();           // In ModelsView, this function checks correct name is displayed.
+        CheckModelName();            // In ModelsView, this function checks correct name is displayed.
     }
     if (millis() - LastTimeRead >= 1000) {
-        ReadTime();                 // Do the clock
+        ReadTime();                  // Do the clock
         LastTimeRead = millis();
     }
     if (millis() - RangeTestStart >= 1000) {
-        GetStatistics();            // Do stats
+        GetStatistics();             // Do stats
         RangeTestStart = millis();
     }
     if ((millis() - ShowServoTimer >= 100) && (CurrentView != FrontView)) {
-        ShowServoPos();            // Show servos positions
+        ShowServoPos();              // Show servos positions
         ShowServoTimer = millis();
     }
     if ((millis() - TxOnTime) > 2000) { // Transmit nothing for first 2 seconds
@@ -5853,6 +5856,7 @@ void loop()
         switch (CurrentMode) {
             case 0:
                 SendData();
+                if (!LedWasGreen) ShowComms();   // Show when not connected
                 break;
             case 1:
                 CalibrateSticks();

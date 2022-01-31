@@ -484,7 +484,6 @@ FASTRUN void ReadTheNewGPSHub(){
 
 // ******************************************************************************************************************************************************************
 void SensorHubHasFailed(){  
-
 #define Failed  0
      LatitudeGPS     = Failed; 
      LongitudeGPS    = Failed;
@@ -501,24 +500,24 @@ void SensorHubHasFailed(){
      BaroTemperature = Failed;   
      INA219Volts     = Failed;
      GpsFix          = Failed;
-     SensorHubDead   = true;
+     SensorHubDead   = true;    // This flag inhibits further attempts to contact hub.
 }
-
 // ******************************************************************************************************************************************************************
 FASTRUN void ReceiveData()
 { 
       uint32_t TimeTest;
     
-      if (millis() - LastConnectionMoment < 1 ) {    // If, and only if, we have still absolutely loads of time, read the sensors NOW while waiting for next data packet.
+      if (millis() - LastConnectionMoment < 1 ) {                        // If, and only if, we have still absolutely loads of time, 
+                                                                         // read the sensors NOW while waiting for next data packet.
         if (USE_SENSOR_HUB) {
             if ((millis() - GPSSensorTime) > 10){ 
                 GPSSensorTime = millis();
                 TimeTest =  millis();
-                if (!SensorHubDead) ReadTheNewGPSHub();                  // Sensor now has its own MCU.
-                if ((millis() - TimeTest) > 6)  SensorHubHasFailed();    // ... if hub fails, don't call it again.
+                if (!SensorHubDead) ReadTheNewGPSHub();                  //  Sensor now has its own MCU. Calls return in far less that 6 ms unless it lost I2C synch
+                if ((millis() - TimeTest) > 6)  SensorHubHasFailed();    //  So if sensor hub fails, don't bother calling it again (It normally returns within 2 ms. )
 
 #ifdef DB_SENSORS
-                Sensors_Status();                    // does nothing if DB_SENSORS is not defined
+                Sensors_Status();                                         // does nothing if DB_SENSORS is not defined
                 Serial.println (millis()-SensorTime);
 #endif
             }                                                                     
