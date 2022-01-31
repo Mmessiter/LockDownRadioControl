@@ -94,6 +94,7 @@ uint8_t         HoursGPS;
 uint8_t         MinsGPS;
 uint8_t         SecsGPS;
 uint16_t        CompressedData[COMPRESSEDWORDS]; // 30 bytes -> 40 bytes when uncompressed
+bool            SensorHubDead = false;
   
 /************************************************************************************************************/
 
@@ -375,14 +376,14 @@ void Sensors_Status()
 // TODO: Doubles are all converted later to floats. So only four bytes need to be sent, not 8! 
 
 // TODO: Correct time!
-#define MAXTIMEALLOWED 3
+
 
 FASTRUN void ReadTheNewGPSHub(){
 
 
   #define IDLEN 3
   #define GPSI2CBYTES IDLEN + 8
-  uint32_t SafetyTimer;
+  
   
   char  FIX[IDLEN+1]    = "FIX";  // Fix 
   char  SAT[IDLEN+1]    = "SAT";  // How many satellites
@@ -404,11 +405,8 @@ FASTRUN void ReadTheNewGPSHub(){
   double RdataIn;
   union {double Val64; uint8_t Val8[8];} Rdata;   // 'union' allows access to every byte
   
-
-  SafetyTimer = millis();
   Wire.requestFrom(SENSOR_HUB_I2C_ADDRESS, GPSI2CBYTES);         // Ask hub for data
   for (int j = 0; j < GPSI2CBYTES; ++j ){
-    if ((millis()- SafetyTimer) > MAXTIMEALLOWED)   return;  
     if (Wire.available()) {                         // Listen to HUB
       if (j < IDLEN){
              RdataID[j]          = Wire.read();     // This gets the three-char data id (eg LAT)
@@ -483,18 +481,42 @@ FASTRUN void ReadTheNewGPSHub(){
      return;
   }
 }
+
+// ******************************************************************************************************************************************************************
+void SensorHubHasFailed(){  
+
+#define Failed  0
+     LatitudeGPS     = Failed; 
+     LongitudeGPS    = Failed;
+     SpeedGPS        = Failed;
+     AngleGPS        = Failed;    
+     AltitudeGPS     = Failed;
+     DistanceGPS     = Failed;   
+     SatellitesGPS   = Failed;
+     CourseToGPS     = Failed;
+     HoursGPS        = Failed;
+     MinsGPS         = Failed;
+     SecsGPS         = Failed;
+     BaroAltitude    = Failed;
+     BaroTemperature = Failed;   
+     INA219Volts     = Failed;
+     GpsFix          = Failed;
+     SensorHubDead   = true;
+}
+
 // ******************************************************************************************************************************************************************
 FASTRUN void ReceiveData()
 { 
-  //  uint32_t test;
+      uint32_t TimeTest;
     
       if (millis() - LastConnectionMoment < 1 ) {    // If, and only if, we have still absolutely loads of time, read the sensors NOW while waiting for next data packet.
         if (USE_SENSOR_HUB) {
             if ((millis() - GPSSensorTime) > 10){ 
                 GPSSensorTime = millis();
-               // test =  millis();
-                ReadTheNewGPSHub();                  // Sensor now has its own MCU.
-               // Serial.println (millis() - test);
+                TimeTest =  millis();
+                if (!SensorHubDead) ReadTheNewGPSHub();                  // Sensor now has its own MCU.
+                if ((millis() - TimeTest) > 6)  SensorHubHasFailed();    // ... if hub fails, don't call it again.
+
 #ifdef DB_SENSORS
                 Sensors_Status();                    // does nothing if DB_SENSORS is not defined
                 Serial.println (millis()-SensorTime);

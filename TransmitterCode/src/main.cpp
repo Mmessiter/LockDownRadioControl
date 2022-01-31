@@ -1490,31 +1490,32 @@ FASTRUN void ShowComms()
                 SendValue(DataView_Gc,    GapCount);
                 if (GpsFix){                               // if no fix, then leave display as before 
                     SendText(Fix, yes);
-                    snprintf(Vbuf, 3,"%d", GPSSatellites);
-                    SendText(Sat,Vbuf);
-                    snprintf(Vbuf, 10,"%f", GPSLongitude);
-                    SendText(Lon,Vbuf);
-                    snprintf(Vbuf, 10,"%f", GPSLatitude);
-                    SendText(Lat,Vbuf);
-                    snprintf(Vbuf, 7,"%d",  int(GPSAngle));
-                    SendText(Bear,Vbuf);
-                    snprintf(Vbuf, 6,"%d", (int) GPSDistanceTo);
-                    SendText(Dist,Vbuf);
-                    snprintf(Vbuf, 4,"%d",  (int) GPSSpeed);
-                    SendText(Sped,Vbuf);
-                    snprintf(Vbuf, 4,"%d",  (int) GPSMaxSpeed);
-                    SendText(MxS,Vbuf);   
-                    snprintf(Vbuf, 4,"%d",  (int) GPSAltitude);
-                    SendText(ALT,Vbuf);   
-                    snprintf(Vbuf, 4,"%d",  (int) GPSMaxAltitude);
-                    SendText(MALT,Vbuf);   
-                    snprintf(Vbuf, 4,"%d",  (int) GPSCourseTo);
-                    SendText(BTo,Vbuf);   
-                    snprintf(Vbuf, 6,"%d",  (int) GPSMaxDistance);
-                    SendText(Mxd,Vbuf);   
                 } else {
                     SendText(Fix, no);
-                }
+                }                   
+                snprintf(Vbuf, 3,"%d", GPSSatellites);
+                SendText(Sat,Vbuf);
+                snprintf(Vbuf, 10,"%f", GPSLongitude);
+                SendText(Lon,Vbuf);
+                snprintf(Vbuf, 10,"%f", GPSLatitude);
+                SendText(Lat,Vbuf);
+                snprintf(Vbuf, 7,"%d",  int(GPSAngle));
+                SendText(Bear,Vbuf);
+                snprintf(Vbuf, 6,"%d", (int) GPSDistanceTo);
+                SendText(Dist,Vbuf);
+                snprintf(Vbuf, 4,"%d",  (int) GPSSpeed);
+                SendText(Sped,Vbuf);
+                snprintf(Vbuf, 4,"%d",  (int) GPSMaxSpeed);
+                SendText(MxS,Vbuf);   
+                snprintf(Vbuf, 4,"%d",  (int) GPSAltitude);
+                SendText(ALT,Vbuf);   
+                snprintf(Vbuf, 4,"%d",  (int) GPSMaxAltitude);
+                SendText(MALT,Vbuf);   
+                snprintf(Vbuf, 4,"%d",  (int) GPSCourseTo);
+                SendText(BTo,Vbuf);   
+                snprintf(Vbuf, 6,"%d",  (int) GPSMaxDistance);
+                SendText(Mxd,Vbuf);   
+                
             }
             ReadVolts = RXModelVolts * 10;
             // 6s Max 25.2 -> 20.4
