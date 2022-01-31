@@ -8,5 +8,5 @@ var common_8h =
     [ "FailSafeSave", "common_8h.html#a332eaa61dd85cd649cf62de2345e246e", null ],
     [ "FailSafeSent", "common_8h.html#a97bbae82012a7c41f47dcb8ce8a48a90", null ],
     [ "FHSS_Channels", "common_8h.html#a79ed13ac413de8a0a1767615afccbe2f", null ],
-    [ "LastConnectionMoment", "common_8h.html#ae6d822db2ca02c3f6fa690311b580c93", null ]
+    [ "LastPacketArrivalTime", "common_8h.html#a9ac62185b964d18f5843146fce5b0063", null ]
 ];
