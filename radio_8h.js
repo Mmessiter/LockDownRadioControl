@@ -65,9 +65,9 @@ var radio_8h =
     [ "SaveNewBind", "radio_8h.html#a34f8e085f5589c915f292bbf5b0aa513", null ],
     [ "SearchStartTime", "radio_8h.html#ab92d51a6cbfc38d73a79a4c4db7a338e", null ],
     [ "SecsGPS", "radio_8h.html#a79832b04c40823abb496f503a264e7d5", null ],
+    [ "SENSOR_HUB_CONNECTED", "radio_8h.html#a20d437b81f88442e5cb998557d1f9cea", null ],
     [ "SpeedGPS", "radio_8h.html#af02319a1e0d8c0c651f23e49acc228f8", null ],
     [ "StillSearchingTime", "radio_8h.html#a1d0b7743e2015fe687146524466e4794", null ],
     [ "ThisPipe", "radio_8h.html#a88d2add9e7ca58e7218870f887b25859", null ],
-    [ "ThisRadio", "radio_8h.html#a25cc3bb5cb94f4bbef0f2c5b79140c20", null ],
-    [ "USE_SENSOR_HUB", "radio_8h.html#a899b3e42b04d535e4c6898c302fa4842", null ]
+    [ "ThisRadio", "radio_8h.html#a25cc3bb5cb94f4bbef0f2c5b79140c20", null ]
 ];

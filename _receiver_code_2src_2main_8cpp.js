@@ -74,10 +74,10 @@ var _receiver_code_2src_2main_8cpp =
     [ "SbusChannels", "_receiver_code_2src_2main_8cpp.html#ac403118b879ce75447959bba12e261eb", null ],
     [ "SBUSTimer", "_receiver_code_2src_2main_8cpp.html#ab2bf977dee28aac3f049d578d8433f0b", null ],
     [ "SecsGPS", "_receiver_code_2src_2main_8cpp.html#a79832b04c40823abb496f503a264e7d5", null ],
+    [ "SENSOR_HUB_CONNECTED", "_receiver_code_2src_2main_8cpp.html#a20d437b81f88442e5cb998557d1f9cea", null ],
     [ "SensorHubDead", "_receiver_code_2src_2main_8cpp.html#a659690e0af000763b022ee0a915a162b", null ],
     [ "SensorTime", "_receiver_code_2src_2main_8cpp.html#a1e9e8116136abd96cf87d7f0fd20a3d8", null ],
     [ "ServosAttached", "_receiver_code_2src_2main_8cpp.html#a95b22fb572f7a91a89a431c7f1236575", null ],
     [ "SpeedGPS", "_receiver_code_2src_2main_8cpp.html#af02319a1e0d8c0c651f23e49acc228f8", null ],
-    [ "temperature280", "_receiver_code_2src_2main_8cpp.html#a7cc84074d4166c6512a2d479b6f12e30", null ],
-    [ "USE_SENSOR_HUB", "_receiver_code_2src_2main_8cpp.html#a899b3e42b04d535e4c6898c302fa4842", null ]
+    [ "temperature280", "_receiver_code_2src_2main_8cpp.html#a7cc84074d4166c6512a2d479b6f12e30", null ]
 ];
