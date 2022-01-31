@@ -55,7 +55,7 @@
 #include <SBUS.h>
 #include "utilities/radio.h"
 
-bool            USE_SENSOR_HUB = false;      //  GPS (Adafruit Ultimate GPS) ?
+bool            SENSOR_HUB_CONNECTED = false;      //  GPS (Adafruit Ultimate GPS) ?
 Servo           MCMServo[SERVOSUSED];
 uint8_t         PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8}; // 9 PWMs, remaining 7 via sbus
 SBUS            MySbus(SBUSPORT);
@@ -473,7 +473,7 @@ void SensorHubHasFailed(){       // If the I2C gets its knickers in a twist, it 
 FASTRUN void ReceiveData(){ 
       uint32_t TimeTest;
       if (millis() - LastPacketArrivalTime < 1 ) {                        // If, and only if, we have still absolutely loads of time, do stuff now while waiting ...                                                                  // read the sensors NOW while waiting for next data packet.
-        if (USE_SENSOR_HUB) {
+        if (SENSOR_HUB_CONNECTED) {
             if ((millis() - GPSSensorTime) > 10){ 
                 GPSSensorTime = millis();
                 TimeTest =  millis();                                    //  Time the I2C calls. If too long, don't repeat.
@@ -502,7 +502,7 @@ void ScanI2c(){
         Wire.beginTransmission(i);
         if (Wire.endTransmission() == 0) {
             if (i == SENSOR_HUB_I2C_ADDRESS) {
-                USE_SENSOR_HUB = true;
+                SENSOR_HUB_CONNECTED = true;
 #ifdef DB_SENSORS
                 Serial.println("Sensor Hub with Adafruit Ultimate GPS etc. detected!");
 #endif
