@@ -1,7 +1,7 @@
 //***********************************************************************************************************
 //************************************* SENSOR HUB CODE FOR TEENSY 3.2  *************************************
 // 
-//                                   Version 1.1 Jan 29th 2022
+//                                   Version 1.2 Jan 31st 2022
 //                                   Uses Wire2 in Slave Mode ...
 //***********************************************************************************************************
 #include <Arduino.h>
@@ -49,16 +49,13 @@ bool    FOUND_INA219 = false;                   //  Volts from INA219 ?
 Adafruit_INA219 ina219;
 Adafruit_BMP280 bmp280;
 uint32_t LoopTimer;
-
 float    BaroTemperature ;
 float    BaroAltitude ;
 float    INA219Volts;
 uint16_t Qnh = 0;
 
-
-
 //************************************* SEND DATA INTERRUPT HANDLER ******************************************
-// 
+ 
 void SendDataToReceiver() {
   #define IDLEN 3
   #define GPSI2CBYTES IDLEN + 4
@@ -93,11 +90,11 @@ void SendDataToReceiver() {
         strcpy (RdataID,LON);
         break;
       case  2:
-        RdataOut = (float) GPSFix;          // Fix
+        RdataOut = (float) GPSFix;  // Fix
         strcpy (RdataID,FIX);
         break;
       case  3:
-        RdataOut =  GPSAltitude;     // Altitude
+        RdataOut =  GPSAltitude;    // Altitude
         strcpy (RdataID,ALT);
         break;
       case  4:
@@ -117,7 +114,7 @@ void SendDataToReceiver() {
         strcpy (RdataID,DTO);
         break;
       case  8:
-        RdataOut = (float) GPSHours;        // Hours
+        RdataOut = (float) GPSHours;  // Hours
         strcpy (RdataID,HRS);
         break;
       case  9:
@@ -133,11 +130,11 @@ void SendDataToReceiver() {
         strcpy (RdataID,SAT);
         break;
       case  12:
-        RdataOut = BaroAltitude;  // ALT FROM BMP280
+        RdataOut = BaroAltitude;            // ALT FROM BMP280
         strcpy (RdataID,BLT);
         break;
       case  13:
-        RdataOut =  BaroTemperature;  // TEMPERATURE FROM BMP280
+        RdataOut =  BaroTemperature;        // TEMPERATURE FROM BMP280
         strcpy (RdataID,TMP);
         break;
       case  14:
@@ -146,17 +143,14 @@ void SendDataToReceiver() {
         break;
       default:
         break;
-    
   }
    Rdata.Val32 = RdataOut;
-   
    for (i = 0; i < IDLEN; ++i) {
       Wire1.write(RdataID[i]); 
    }
     for (i = 0; i < 4; ++i) {
        Wire1.write(Rdata.Val8[i]); 
     }
-
     ParameterNumber++;
     if (ParameterNumber > MAXPARAMS) ParameterNumber = 0; 
 }
@@ -333,7 +327,6 @@ void ScanI2c()
         }
     }
 }
-
 //**************************************** SETUP *************************************************************
 void setup() {
   Wire1.begin(I2CADDRESS);                        // Wire1 MUST boot up BEFORE the receiver in order to be found by it.
