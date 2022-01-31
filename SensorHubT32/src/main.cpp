@@ -194,7 +194,7 @@ char RCV[4];
    char a;
     while (GPSDEVICE.available()){
       a = GPSDEVICE.read();
-      gps.encode(a);  // Simply send every byte library 
+      gps.encode(a);  // Simply send every byte to the library 
    }
       GPSFix         = gps.location.isValid();
       if (GPSFix) {
