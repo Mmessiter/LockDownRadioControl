@@ -40,7 +40,7 @@ var searchData=
   ['displaycurve_241',['DisplayCurve',['../_transmitter_code_2src_2main_8cpp.html#af941d3a33327b2cee79e058ba9cd65f6',1,'main.cpp']]],
   ['distance_242',['distance',['../structsensors__event__t.html#a456259aaeb265913281d7ffbd8ad8697',1,'sensors_event_t']]],
   ['distancebetween_243',['distanceBetween',['../class_tiny_g_p_s_plus.html#add9aef227cf2836b53cbdfed5133bb4d',1,'TinyGPSPlus::distanceBetween(double lat1, double long1, double lat2, double long2)'],['../class_tiny_g_p_s_plus.html#ace607cf3a6d49628e44eae1232237138',1,'TinyGPSPlus::distanceBetween(double lat1, double long1, double lat2, double long2)'],['../class_tiny_g_p_s_plus.html#add9aef227cf2836b53cbdfed5133bb4d',1,'TinyGPSPlus::distanceBetween(double lat1, double long1, double lat2, double long2)']]],
-  ['distancegps_244',['DistanceGPS',['../_receiver_code_2src_2main_8cpp.html#a18deaf2fdca68c6ec65dec52de4a4e75',1,'DistanceGPS():&#160;main.cpp'],['../radio_8h.html#a18deaf2fdca68c6ec65dec52de4a4e75',1,'DistanceGPS():&#160;main.cpp']]],
+  ['distancegps_244',['DistanceGPS',['../_receiver_code_2src_2main_8cpp.html#a6f76c248ca5e727e482873f5328587e1',1,'DistanceGPS():&#160;main.cpp'],['../radio_8h.html#a6f76c248ca5e727e482873f5328587e1',1,'DistanceGPS():&#160;main.cpp']]],
   ['dobinding_245',['DoBinding',['../_receiver_code_2src_2main_8cpp.html#af4a2e182cd3b86ca9765a08100cfb14a',1,'main.cpp']]],
   ['domixes_246',['DoMixes',['../_transmitter_code_2src_2main_8cpp.html#ac182a99befc8d4d83532a6c38571a222',1,'main.cpp']]],
   ['donewchannelname_247',['DoNewChannelName',['../_transmitter_code_2src_2main_8cpp.html#aba44d61ea51411cb5c601beb94b6fef4',1,'main.cpp']]],

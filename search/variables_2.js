@@ -28,7 +28,7 @@ var searchData=
   ['connected_1649',['Connected',['../radio_8h.html#a5318db734c71b1b08208ef690f1f0146',1,'Connected():&#160;radio.h'],['../_radio_functions_8h.html#a5318db734c71b1b08208ef690f1f0146',1,'Connected():&#160;radio.h'],['../_transmitter_code_2src_2main_8cpp.html#a5318db734c71b1b08208ef690f1f0146',1,'Connected():&#160;main.cpp']]],
   ['connectionstart_1650',['ConnectionStart',['../radio_8h.html#a11cd5dd0a4f9438c7e7e387349d8636d',1,'radio.h']]],
   ['course_1651',['course',['../class_tiny_g_p_s_plus.html#ad7800d3decbe58e355f5229bba231868',1,'TinyGPSPlus']]],
-  ['coursetogps_1652',['CourseToGPS',['../_receiver_code_2src_2main_8cpp.html#adc0c1d3ffc20a999f658920527a4183e',1,'CourseToGPS():&#160;main.cpp'],['../radio_8h.html#adc0c1d3ffc20a999f658920527a4183e',1,'CourseToGPS():&#160;main.cpp']]],
+  ['coursetogps_1652',['CourseToGPS',['../_receiver_code_2src_2main_8cpp.html#a1a4e211f9858a5d6d61d11e5679a71f3',1,'CourseToGPS():&#160;main.cpp'],['../radio_8h.html#a1a4e211f9858a5d6d61d11e5679a71f3',1,'CourseToGPS():&#160;main.cpp']]],
   ['current_1653',['current',['../structsensors__event__t.html#ad34303af57d6bce18c34862a887fc005',1,'sensors_event_t']]],
   ['currentmode_1654',['CurrentMode',['../_radio_functions_8h.html#aacabee92eb3ddd2e3cf31695c00a912e',1,'CurrentMode():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#aacabee92eb3ddd2e3cf31695c00a912e',1,'CurrentMode():&#160;main.cpp']]],
   ['currentradio_1655',['CurrentRadio',['../radio_8h.html#a7bca81159d93f215060f40f45f19b0de',1,'radio.h']]],

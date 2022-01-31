@@ -33,7 +33,7 @@ var searchData=
   ['slavehascontrol_1949',['SlaveHasControl',['../_transmitter_code_2src_2main_8cpp.html#afd042feb8b8e181cbff0d5f27fde063e',1,'main.cpp']]],
   ['smoothed_1950',['smoothed',['../structnmea__datavalue__t.html#a067a769e6b0ef402b3bf01b0c333e269',1,'nmea_datavalue_t']]],
   ['speed_1951',['speed',['../class_tiny_g_p_s_plus.html#aa085c3e72a399a829dd92af52b373404',1,'TinyGPSPlus::speed()'],['../class_adafruit___g_p_s.html#a449f4a33ecbe0fdf656f6663c74e6cce',1,'Adafruit_GPS::speed()']]],
-  ['speedgps_1952',['SpeedGPS',['../_receiver_code_2src_2main_8cpp.html#ae16763432ff6353a6e61ba98d119b8f9',1,'SpeedGPS():&#160;main.cpp'],['../radio_8h.html#ae16763432ff6353a6e61ba98d119b8f9',1,'SpeedGPS():&#160;main.cpp']]],
+  ['speedgps_1952',['SpeedGPS',['../_receiver_code_2src_2main_8cpp.html#af02319a1e0d8c0c651f23e49acc228f8',1,'SpeedGPS():&#160;main.cpp'],['../radio_8h.html#af02319a1e0d8c0c651f23e49acc228f8',1,'SpeedGPS():&#160;main.cpp']]],
   ['spi_1953',['SPI',['../_sensor_hub_l_c_2lib_2_adafruit___b_m_p280___library_2_adafruit___b_m_p280_8h.html#a56953eb3affc2a9f56e1680bbc537bf7',1,'SPI():&#160;Adafruit_BMP280.h'],['../_sensor_hub_t32_2lib_2_adafruit___b_m_p280___library_2_adafruit___b_m_p280_8h.html#a56953eb3affc2a9f56e1680bbc537bf7',1,'SPI():&#160;Adafruit_BMP280.h'],['../_sensor_hub_teensy3__6_2lib_2_adafruit___b_m_p280___library_2_adafruit___b_m_p280_8h.html#a56953eb3affc2a9f56e1680bbc537bf7',1,'SPI():&#160;Adafruit_BMP280.h']]],
   ['startlocation_1954',['StartLocation',['../_transmitter_code_2src_2main_8cpp.html#a4037de0ea0fc7cd3c7cd3c40eee10a98',1,'main.cpp']]],
   ['status_1955',['status',['../structsensors__vec__t.html#af75d491f35f979932de5609d6ef6c363',1,'sensors_vec_t']]],

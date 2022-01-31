@@ -25,6 +25,6 @@ var searchData=
   ['dig_5ft2_1679',['dig_T2',['../structbmp280__calib__data.html#a110637cd80d4c20cbf018370b1687a19',1,'bmp280_calib_data']]],
   ['dig_5ft3_1680',['dig_T3',['../structbmp280__calib__data.html#ab47d67ad2a52c66956c7c6aa7a5006d3',1,'bmp280_calib_data']]],
   ['distance_1681',['distance',['../structsensors__event__t.html#a456259aaeb265913281d7ffbd8ad8697',1,'sensors_event_t']]],
-  ['distancegps_1682',['DistanceGPS',['../_receiver_code_2src_2main_8cpp.html#a18deaf2fdca68c6ec65dec52de4a4e75',1,'DistanceGPS():&#160;main.cpp'],['../radio_8h.html#a18deaf2fdca68c6ec65dec52de4a4e75',1,'DistanceGPS():&#160;main.cpp']]],
+  ['distancegps_1682',['DistanceGPS',['../_receiver_code_2src_2main_8cpp.html#a6f76c248ca5e727e482873f5328587e1',1,'DistanceGPS():&#160;main.cpp'],['../radio_8h.html#a6f76c248ca5e727e482873f5328587e1',1,'DistanceGPS():&#160;main.cpp']]],
   ['dosbussendonly_1683',['DoSbusSendOnly',['../_radio_functions_8h.html#a2f95a8628ae27f3acb9b1598b8321781',1,'DoSbusSendOnly():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a2f95a8628ae27f3acb9b1598b8321781',1,'DoSbusSendOnly():&#160;main.cpp']]]
 ];
