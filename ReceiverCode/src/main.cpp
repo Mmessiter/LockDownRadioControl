@@ -386,11 +386,9 @@ void Sensors_Status()
 // The next 4 bytes are the value (as a float).
 // The ID changes with each call
 
-// TODO: Correct time!
+// TODO: Correct time using GPS data!
 
-
-FASTRUN void ReadTheNewGPSHub(){
-
+FASTRUN void ReadTheSensorHub(){
 
   #define IDLEN 3
   #define GPSI2CBYTES IDLEN + 4   // = 7 (only floats now)
@@ -523,7 +521,7 @@ FASTRUN void ReceiveData()
             if ((millis() - GPSSensorTime) > 10){ 
                 GPSSensorTime = millis();
                 TimeTest =  millis();
-                if (!SensorHubDead) ReadTheNewGPSHub();                  //  Sensor now has its own MCU. Calls return in far less that 6 ms unless it lost I2C synch
+                if (!SensorHubDead) ReadTheSensorHub();                  //  Sensor now has its own MCU. Calls return in far less that 6 ms unless it lost I2C synch
                 if ((millis() - TimeTest) > 6)  SensorHubHasFailed();    //  So if sensor hub fails, don't bother calling it again (It normally returns within 2 ms. )
 
 #ifdef DB_SENSORS
