@@ -1,11 +1,11 @@
 var _receiver_code_2src_2main_8cpp =
 [
     [ "CHANNELSUSED", "_receiver_code_2src_2main_8cpp.html#ad143c01c2b36424b292b568f48cbe014", null ],
+    [ "Failed", "_receiver_code_2src_2main_8cpp.html#aed7f6b5b10b7b8235e38d72a5dfc20d8", null ],
     [ "GPSI2CBYTES", "_receiver_code_2src_2main_8cpp.html#ab92133bc8cbae639e681505e0679bc28", null ],
     [ "IDLEN", "_receiver_code_2src_2main_8cpp.html#a472646a6b1f959aa3b4261a8247c2015", null ],
     [ "LED_PIN", "_receiver_code_2src_2main_8cpp.html#ab4553be4db9860d940f81d7447173b2f", null ],
     [ "MAXMICROS", "_receiver_code_2src_2main_8cpp.html#a843e3db36f734b45096220f7ca4b8d9f", null ],
-    [ "MAXTIMEALLOWED", "_receiver_code_2src_2main_8cpp.html#a818d80fdba80f9dce731321ffe0051e8", null ],
     [ "MINMICROS", "_receiver_code_2src_2main_8cpp.html#ac67e087c11a86a3790c656a29f8c7195", null ],
     [ "RANGEMAX", "_receiver_code_2src_2main_8cpp.html#a152ff5774ac656fc5f23664a214a8b53", null ],
     [ "RANGEMIN", "_receiver_code_2src_2main_8cpp.html#a2279f0fac9f7362b46f3c53ae91a5ce8", null ],
@@ -33,6 +33,7 @@ var _receiver_code_2src_2main_8cpp =
     [ "SaveFailSafeData", "_receiver_code_2src_2main_8cpp.html#a96891035aa9f064462b6a614c5878f51", null ],
     [ "ScanI2c", "_receiver_code_2src_2main_8cpp.html#a20ffd6680226b1e058002512386e7770", null ],
     [ "SendToTheNewGPSHub", "_receiver_code_2src_2main_8cpp.html#af5a21ef36cbe9f8a4dd5c509e8b93892", null ],
+    [ "SensorHubHasFailed", "_receiver_code_2src_2main_8cpp.html#ad8b70060a07f5323c3e1011dd6b1dd6f", null ],
     [ "setup", "_receiver_code_2src_2main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d", null ],
     [ "ShowHopDurationEtc", "_receiver_code_2src_2main_8cpp.html#a2863e7455e30e6fddc0fcf56f62d6564", null ],
     [ "UseReceivedData", "_receiver_code_2src_2main_8cpp.html#abb1997c589abc6432f612eaedf985e38", null ],
@@ -71,6 +72,7 @@ var _receiver_code_2src_2main_8cpp =
     [ "SbusChannels", "_receiver_code_2src_2main_8cpp.html#ac403118b879ce75447959bba12e261eb", null ],
     [ "SBUSTimer", "_receiver_code_2src_2main_8cpp.html#ab2bf977dee28aac3f049d578d8433f0b", null ],
     [ "SecsGPS", "_receiver_code_2src_2main_8cpp.html#a79832b04c40823abb496f503a264e7d5", null ],
+    [ "SensorHubDead", "_receiver_code_2src_2main_8cpp.html#a659690e0af000763b022ee0a915a162b", null ],
     [ "SensorTime", "_receiver_code_2src_2main_8cpp.html#a1e9e8116136abd96cf87d7f0fd20a3d8", null ],
     [ "ServosAttached", "_receiver_code_2src_2main_8cpp.html#a95b22fb572f7a91a89a431c7f1236575", null ],
     [ "SpeedGPS", "_receiver_code_2src_2main_8cpp.html#ae16763432ff6353a6e61ba98d119b8f9", null ],
