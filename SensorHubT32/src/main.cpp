@@ -189,7 +189,7 @@ char RCV[10];
   }
 
   if (strcmp(QNH,RCV) == 0) {      // Match first 3 chars with QNH?
-      Uqnh.Val8[0] = RCV[4];       // 16 bit value for Qnh sent in bytes 4 and 5
+      Uqnh.Val8[0] = RCV[4];       // 16 bit value for "Qnh" sent in bytes 4 and 5
       Uqnh.Val8[1] = RCV[5]; 
       Qnh = Uqnh.Val16;
       return;
@@ -198,13 +198,12 @@ char RCV[10];
 }
 //*************************************** READ GPS DEVICE ***************************************************
  void ReadGps() {
-
    char a;
     while (GPSDEVICE.available()){
       a = GPSDEVICE.read();
       gps.encode(a);  // Simply send every byte to the library 
    }
-      GPSFix         = gps.location.isValid();
+      GPSFix           = gps.location.isValid();
       if (GPSFix) {
         GPSLatitude    = (float) gps.location.lat();
         GPSLongitude   = (float) gps.location.lng();
