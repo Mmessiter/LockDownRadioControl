@@ -81,6 +81,7 @@ bool            Radio2Exists = false;
 uint32_t        SensorTime       = 0;
 uint32_t        GPSSensorTime    = 0;
 uint16_t        Qnh              = 0;    //Pressure at sea level here and now (defined by TX option)
+uint16_t        OldQnh           = 0;
 uint8_t         SatellitesGPS; 
 double          LatitudeGPS;
 double          LongitudeGPS;
@@ -219,7 +220,7 @@ bool ReadData()
 {
     Connected = false;
 
-   // if (CurrentRadio->available()) Serial.println (millis() - LastConnectionMoment); // heer
+   // if (CurrentRadio->available()) Serial.println (millis() - LastConnectionMoment); 
 
     while (CurrentRadio->available()) {                                // Get all, but use only the latest
         LoadAckPayload();
@@ -268,7 +269,7 @@ void BindModel()
 
 // ***************************************************************************************************************************************************
 
-void  SendToTheNewGPSHub(char m[]){
+void  SendToSensorHubHub(char m[]){
   Wire.beginTransmission(SENSOR_HUB_I2C_ADDRESS);   
   Wire.write(m);
   Wire.endTransmission();   
@@ -278,7 +279,7 @@ void  SendToTheNewGPSHub(char m[]){
 
 void MarkHere(){
         char MRK[4] = "MRK";
-        SendToTheNewGPSHub(MRK);  // Mark this spot
+        SendToSensorHubHub(MRK);  // Mark this spot
 }
 
 /************************************************************************************************************/
@@ -290,7 +291,17 @@ void RebuildFlags(bool* f, uint16_t tb)
         if (tb & 1 << i) f[15 - i] = true; // sets true if bit was on
     }
 }
+/************************************************************************************************************/
 
+void SendQnhToSensorHub(){ // Heer
+
+  union {uint16_t Val16; uint8_t Val8[2];} Uqnh;  
+        char QNH[] = "QNH=??";
+        Uqnh.Val16 = Qnh;
+        QNH[4] = Uqnh.Val8[0];    
+        QNH[5] = Uqnh.Val8[1];  
+        SendToSensorHubHub(QNH);  
+}
 /************************************************************************************************************/
 
 /**
@@ -302,26 +313,28 @@ void CheckParams()
     PacketNumber = ReceivedData[CHANNELSUSED];     
     switch (PacketNumber) {     
         case 0:
-             BindNow = ReceivedData[CHANNELSUSED + 2];
-             FailSafeSave = bool(ReceivedData[CHANNELSUSED + 1]);
+                BindNow = ReceivedData[CHANNELSUSED + 2];
+                FailSafeSave = bool(ReceivedData[CHANNELSUSED + 1]);
                 if (FailSafeSave) {
-                TwoBytes = uint16_t(FS_byte2) + uint16_t(FS_byte1 << 8);
-                RebuildFlags(FailSafeChannel, TwoBytes);
-            }
-            break;
+                    TwoBytes = uint16_t(FS_byte2) + uint16_t(FS_byte1 << 8);
+                    RebuildFlags(FailSafeChannel, TwoBytes);
+                }
+                break;
         case 1:
-            FS_byte1 = ReceivedData[CHANNELSUSED + 1]; // These 2 bytes are 16 failsafe flags
-            FS_byte2 = ReceivedData[CHANNELSUSED + 2]; // These 2 bytes are 16 failsafe flags
-            break;
+                FS_byte1 = ReceivedData[CHANNELSUSED + 1]; // These 2 bytes are 16 failsafe flags
+                FS_byte2 = ReceivedData[CHANNELSUSED + 2]; // These 2 bytes are 16 failsafe flags
+                break;
         case 2:
-              Qnh = (ReceivedData[CHANNELSUSED + 1]) << 8; // 16 bits sent as two bytes for pressure here at sea level
-              Qnh += ReceivedData[CHANNELSUSED + 2];
-              break;
+                Qnh = (ReceivedData[CHANNELSUSED + 1]) << 8; // 16 bits sent as two bytes for pressure here at sea level
+                Qnh += ReceivedData[CHANNELSUSED + 2];
+                if (OldQnh != Qnh) SendQnhToSensorHub();
+                OldQnh = Qnh; // Send new one once only
+                break;
          case 3:
-              if   ((ReceivedData[CHANNELSUSED + 2]) == 255) MarkHere(); // Mark this spot!
-              break;
+                if   ((ReceivedData[CHANNELSUSED + 2]) == 255) MarkHere(); // Mark this spot!
+                break;
         default:
-            break;
+                break;
     }
     return;
 }

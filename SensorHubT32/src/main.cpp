@@ -166,6 +166,7 @@ void SendDataToReceiver() {
 void ReceiveEvent(int q) {  
 char MRK[] = "MRK";
 char MAY[] = "MAY";
+char QNH[] = "QNH";
 char RCV[4];
 
     for (uint8_t i = 0; i < 3; ++i) {
@@ -184,6 +185,11 @@ char RCV[4];
  if (strcmp(MAY,RCV) == 0) {      // Match first 3 chars with MAY?
      DestinationLat = MAYSLANE_LAT;  // Mark MAYS LANE location
      DestinationLng = MAYSLANE_LON;  // Mark MAYS LANE location
+     return;
+  }
+
+  if (strcmp(QNH,RCV) == 0) {      // Match first 3 chars with MAY?
+     Serial.println ("Whoopee!!");
      return;
   }
 
