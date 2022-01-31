@@ -20,7 +20,7 @@
 // #define DB_BIND
 // #define DB_FAILSAFE
 
-int  LastConnectionMoment = 0;
+uint32_t  LastPacketArrivalTime = 0;
 bool FailSafeSave         = false;
 bool FailSafeSent         = false;
 

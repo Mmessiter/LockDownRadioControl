@@ -207,7 +207,7 @@ void UseReceivedData(){
         MapToSBUS();
         ClearAckPayload();
         CurrentRadio->flush_rx();
-        LastConnectionMoment = millis();
+        LastPacketArrivalTime = millis();
         if (HopNow) {                   // this flag gets set in LoadAckPayload();
             FailSafeDataLoaded = false; // Ack payload instructed to Hop at next opportunity...
             HopToNextFrequency();       // So hop now
@@ -220,7 +220,7 @@ bool ReadData()
 {
     Connected = false;
 
-   // if (CurrentRadio->available()) Serial.println (millis() - LastConnectionMoment); 
+   // if (CurrentRadio->available()) Serial.println (millis() - LastPacketArrivalTime); 
 
     while (CurrentRadio->available()) {                                // Get all, but use only the latest
         LoadAckPayload();
@@ -472,7 +472,7 @@ void SensorHubHasFailed(){       // If the I2C gets its knickers in a twist, it 
 // ******************************************************************************************************************************************************************
 FASTRUN void ReceiveData(){ 
       uint32_t TimeTest;
-      if (millis() - LastConnectionMoment < 1 ) {                        // If, and only if, we have still absolutely loads of time, do stuff now...                                                                  // read the sensors NOW while waiting for next data packet.
+      if (millis() - LastPacketArrivalTime < 1 ) {                        // If, and only if, we have still absolutely loads of time, do stuff now while waiting ...                                                                  // read the sensors NOW while waiting for next data packet.
         if (USE_SENSOR_HUB) {
             if ((millis() - GPSSensorTime) > 10){ 
                 GPSSensorTime = millis();
@@ -487,7 +487,7 @@ FASTRUN void ReceiveData(){
         Connected = true;                        // ... ok we now know better ! 
     }
     if (!Connected) {
-        if (millis() - LastConnectionMoment >= RECEIVE_TIMEOUT) { // Has transmitter died? 
+        if (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT) { // Has transmitter died? 
         Reconnect();                                              // Try to reconnect.
         }
     }
