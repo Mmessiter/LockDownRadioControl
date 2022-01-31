@@ -247,7 +247,7 @@ var NAVTREEINDEX7 =
 "class_adafruit___s_p_i_device.html#a155f5efd84dbc240c987f4066265b840":[11,0,9,13],
 "class_adafruit___s_p_i_device.html#a155f5efd84dbc240c987f4066265b840":[11,0,9,14],
 "class_adafruit___s_p_i_device.html#a155f5efd84dbc240c987f4066265b840":[11,0,9,12],
+"class_adafruit___s_p_i_device.html#a5c4fce15c92a0210c0872a827f239ab1":[11,0,9,10],
 "class_adafruit___s_p_i_device.html#a5c4fce15c92a0210c0872a827f239ab1":[11,0,9,9],
-"class_adafruit___s_p_i_device.html#a5c4fce15c92a0210c0872a827f239ab1":[11,0,9,11],
-"class_adafruit___s_p_i_device.html#a5c4fce15c92a0210c0872a827f239ab1":[11,0,9,10]
+"class_adafruit___s_p_i_device.html#a5c4fce15c92a0210c0872a827f239ab1":[11,0,9,11]
 };

@@ -27,7 +27,7 @@ var _receiver_code_2src_2main_8cpp =
     [ "MoveServos", "_receiver_code_2src_2main_8cpp.html#a6f2443a0666140cf4d8b7352bb3b793c", null ],
     [ "MySbus", "_receiver_code_2src_2main_8cpp.html#a5424788640aaa8d535d6ea077949ef82", null ],
     [ "ReadData", "_receiver_code_2src_2main_8cpp.html#a07ca94db0e305e9c01ec51e417576308", null ],
-    [ "ReadTheNewGPSHub", "_receiver_code_2src_2main_8cpp.html#ad446bbf28a88bff77a93ab753c7f15d3", null ],
+    [ "ReadTheSensorHub", "_receiver_code_2src_2main_8cpp.html#a5d2350b2507883d3644251013370bc5b", null ],
     [ "RebuildFlags", "_receiver_code_2src_2main_8cpp.html#ad86a39e4cba19592c760833870f6f69c", null ],
     [ "ReceiveData", "_receiver_code_2src_2main_8cpp.html#a06807a4f185694d37f774702ba74db0a", null ],
     [ "SaveFailSafeData", "_receiver_code_2src_2main_8cpp.html#a96891035aa9f064462b6a614c5878f51", null ],
