@@ -209,7 +209,7 @@ char RCV[10];
         GPSLatitude    = (float) gps.location.lat();
         GPSLongitude   = (float) gps.location.lng();
         GPSSatellites  = (uint8_t) gps.satellites.value(); 
-        GPSAltitude    = (uint8_t) gps.altitude.feet();
+        GPSAltitude    = (float) gps.altitude.feet();
         GPSSpeed       = (float) gps.speed.mph();
         GPSHours       = (uint8_t) gps.time.hour();   
         GPSMins        = (uint8_t) gps.time.minute(); 
