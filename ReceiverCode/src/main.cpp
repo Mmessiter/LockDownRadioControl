@@ -79,7 +79,7 @@ float           INA219Volts;
 bool            Radio1Exists = false;
 bool            Radio2Exists = false;
 uint32_t        SensorTime       = 0;
-uint32_t        GPSSensorTime    = 0;
+uint32_t        SensorHubAccessed    = 0;
 uint16_t        Qnh              = 0;    //Pressure at sea level here and now (defined by TX option)
 uint16_t        OldQnh           = 0;
 uint8_t         SatellitesGPS; 
@@ -474,8 +474,8 @@ FASTRUN void ReceiveData(){
       uint32_t TimeTest;
       if (millis() - LastPacketArrivalTime < 1 ) {                        // If, and only if, we have still absolutely loads of time, do stuff now while waiting ...                                                                  // read the sensors NOW while waiting for next data packet.
         if (SENSOR_HUB_CONNECTED) {
-            if ((millis() - GPSSensorTime) > 10){ 
-                GPSSensorTime = millis();
+            if ((millis() - SensorHubAccessed) > 10){ 
+                SensorHubAccessed = millis();
                 TimeTest =  millis();                                    //  Time the I2C calls. If too long, don't repeat.
                 if (!SensorHubDead) ReadTheSensorHub();                  //  Sensor now has its own MCU. Calls return in far less that 6 ms unless it lost I2C synch
                 if ((millis() - TimeTest) > 4)  SensorHubHasFailed();    //  So if sensor hub fails, don't bother calling it again (It normally returns within 2 ms. )
