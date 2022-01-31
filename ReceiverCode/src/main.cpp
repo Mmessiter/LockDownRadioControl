@@ -386,7 +386,7 @@ void Sensors_Status()
 // The next 4 bytes are the value (as a float).
 // The ID changes with each call
 
-// TODO: Correct time using GPS data!
+// TODO: Correct the RTC time using GPS data!
 
 FASTRUN void ReadTheSensorHub(){
 
@@ -491,7 +491,7 @@ FASTRUN void ReadTheSensorHub(){
 }
 
 // ******************************************************************************************************************************************************************
-void SensorHubHasFailed(){  
+void SensorHubHasFailed(){       // If the I2C gets its knickers in a twist, it can lock up the reciever, so DON'T call it until landed and reset.
 #define Failed  0
      LatitudeGPS     = Failed; 
      LongitudeGPS    = Failed;
