@@ -282,7 +282,7 @@ uint8_t i = 0;
  }
 //*************************************** MAIN LOOP **********************************************************
 void loop() {
- if ((millis()-LoopTimer) > 100)  // 10x per second is enough
+ if ((millis()-LoopTimer) > 10)  // 100x per second is enough
   {
     LoopTimer = millis();
     ReadGps();
