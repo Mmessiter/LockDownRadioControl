@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['rawdegrees_1225',['RawDegrees',['../struct_raw_degrees.html',1,'']]]
+  ['rawdegrees_1224',['RawDegrees',['../struct_raw_degrees.html',1,'']]]
 ];

@@ -23,12 +23,14 @@ var _sensor_hub_teensy3__6_2src_2main_8cpp =
     [ "DebugTimer", "_sensor_hub_teensy3__6_2src_2main_8cpp.html#a7867e45e2d19ce05cda4ef2692ee0dbe", null ],
     [ "DestinationLat", "_sensor_hub_teensy3__6_2src_2main_8cpp.html#a8c2d07492cf82a17c5cd61777bed8b63", null ],
     [ "DestinationLng", "_sensor_hub_teensy3__6_2src_2main_8cpp.html#a68d045f3a8018e98f4701013f7ac0a64", null ],
+    [ "FOUND_BMP280", "_sensor_hub_teensy3__6_2src_2main_8cpp.html#a2aebb34fd4fbec2d3ac925f8cc7a7bee", null ],
+    [ "FOUND_INA219", "_sensor_hub_teensy3__6_2src_2main_8cpp.html#af1b5290b72a9f9bc5d1d70c7c14df9b0", null ],
     [ "gps", "_sensor_hub_teensy3__6_2src_2main_8cpp.html#a169c53997a7da1d0fb99aec1b4675ce8", null ],
     [ "GPSAltitude", "_sensor_hub_teensy3__6_2src_2main_8cpp.html#adf4aff982f0b96491848cb8c7d4359d2", null ],
     [ "GPSCourse", "_sensor_hub_teensy3__6_2src_2main_8cpp.html#aa111fdf18410d5ea9db7bba30eb3867b", null ],
-    [ "GPSCourseTo", "_sensor_hub_teensy3__6_2src_2main_8cpp.html#ad8139c93310246277e2c68a4c74effd3", null ],
+    [ "GPSCourseTo", "_sensor_hub_teensy3__6_2src_2main_8cpp.html#a9557f718b9a7dd41a441c12555167908", null ],
     [ "GPSDay", "_sensor_hub_teensy3__6_2src_2main_8cpp.html#a882e41768b06234c5a87749be672ea06", null ],
-    [ "GPSDistanceTo", "_sensor_hub_teensy3__6_2src_2main_8cpp.html#a74d389153f3f579cc48d28e24587b24e", null ],
+    [ "GPSDistanceTo", "_sensor_hub_teensy3__6_2src_2main_8cpp.html#a54a01db3255a3557b936ef1b8907adce", null ],
     [ "GPSFix", "_sensor_hub_teensy3__6_2src_2main_8cpp.html#a0c32781a3efa57d89a067a024d9e00b9", null ],
     [ "GPSHours", "_sensor_hub_teensy3__6_2src_2main_8cpp.html#a51b2b206ccc31e2626ee3770cce9fb36", null ],
     [ "GPSLatitude", "_sensor_hub_teensy3__6_2src_2main_8cpp.html#a4cde9fb46783d84afce8e92931ce51a3", null ],
@@ -50,7 +52,5 @@ var _sensor_hub_teensy3__6_2src_2main_8cpp =
     [ "PMTK_SET_BAUD_9600", "_sensor_hub_teensy3__6_2src_2main_8cpp.html#a2f6cf549dcffc0d1688542f2d6061773", null ],
     [ "PMTK_SET_NMEA_OUTPUT_ALLDATA", "_sensor_hub_teensy3__6_2src_2main_8cpp.html#a9e66319eb62ac284544d36d69f59bda5", null ],
     [ "PMTK_SET_NMEA_OUTPUT_RMCGGAGSA", "_sensor_hub_teensy3__6_2src_2main_8cpp.html#a25a3b2af4ac29d0f76a20362319394a8", null ],
-    [ "Qnh", "_sensor_hub_teensy3__6_2src_2main_8cpp.html#ae3495ca407a0a3ea570ce0af7a3447a3", null ],
-    [ "USE_BMP280", "_sensor_hub_teensy3__6_2src_2main_8cpp.html#a4be5c27bea3c82b0a4ec92191052d946", null ],
-    [ "USE_INA219", "_sensor_hub_teensy3__6_2src_2main_8cpp.html#a87ae50e2ac4507568cbf98072f174a1b", null ]
+    [ "Qnh", "_sensor_hub_teensy3__6_2src_2main_8cpp.html#ae3495ca407a0a3ea570ce0af7a3447a3", null ]
 ];
