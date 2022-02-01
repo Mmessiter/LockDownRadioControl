@@ -12,7 +12,7 @@
 #define I2CADDRESS  8       // Address of this I2C slave
 #define GPSBAUDRATE 9600    // Didn't work any faster
 #define GPSDEVICE Serial1   // GPS is connected to Serial1
-//#define DEBUG               // Local console debug only
+//#define DEBUG             // Local console debug only
 #define DEBUGTIMER 1000
 
 int DebugTimer = 0;
@@ -138,7 +138,7 @@ void SendDataToReceiver() {
         strcpy (RdataID,TMP);
         break;
       case  14:
-        RdataOut =  INA219Volts;     // VOLTAGE FROM INA219
+        RdataOut =  INA219Volts;             // VOLTAGE FROM INA219
         strcpy (RdataID,VLT);
         break;
       default:
@@ -170,7 +170,7 @@ char RCV[10];
     } 
   RCV[3] = 0; // Add a terminator
 
-  if (strcmp(MRK,RCV) == 0) {     // Match first 3 chars with MRK?
+  if (strcmp(MRK,RCV) == 0) {        // Match first 3 chars with MRK?
      DestinationLat = GPSLatitude;   // Mark current location
      DestinationLng = GPSLongitude;  // Mark current location
      return;
