@@ -5861,7 +5861,6 @@ void CheckGapsLength()
 #endif
     }
 }
-
 /************************************************************************************************************/
 void CheckModelName(){                        // In ModelsView, this function checks correct name is displayed.
 char ModelsView_ModelNumber[]  = "ModelNumber"; 
@@ -5881,12 +5880,8 @@ char ModelsView_ModelNumber[]  = "ModelNumber";
 /************************************************************************************************************/
 // LOOP
 /************************************************************************************************************/
-
 void loop()
 {
-
-    
-
     KickTheDog();                    // Watchdog
     if (GetButtonPress()) {
         Button_was_pressed();        // Deal with button
