@@ -5822,7 +5822,7 @@ void ParseAckPayload()
                 break;
             case 31:
                 GPSSecs = (uint8_t) GetFromAckPayload();
-                if (Connected && BoundFlag){
+                if (LedWasGreen){
                     if (GPSSecs) SynchRTCwithGPSTime();
                 }
                 break;
