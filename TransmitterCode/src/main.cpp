@@ -635,15 +635,15 @@ void ReadTheRTC(){
     Gyear            = year-30; 
 }
 /*********************************************************************************************************************************/
-void SynchRTCwithGPSTime(){     
-        if (!GPSTimeSynched){    // Once is plenty!
-            GPSTimeSynched = true;
-            ReadTheRTC();
-            Gsecond = GPSSecs;
-            Gminute = GPSMins;
-            Ghour   = GPSHours;
-            SetTheRTC();
-        }
+void SynchRTCwithGPSTime(){            // This function corrects the time, but not the date. 
+    if (!GPSTimeSynched){              // Once per boot up is plenty!
+        GPSTimeSynched = true;
+        ReadTheRTC();
+        Gsecond = GPSSecs;
+        Gminute = GPSMins;
+        Ghour   = GPSHours;
+        SetTheRTC();
+    }
 }
 /*********************************************************************************************************************************/
 
@@ -675,7 +675,6 @@ void AdjustDateTime(uint8_t MinChange, uint8_t HourChange, uint8_t YearChange, u
     GmonthDay += DateChange;
     if (GmonthDay < 1) GmonthDay = 1;
     if (GmonthDay > 31) GmonthDay = 31;
-  
     SetTheRTC();
 }
 /*********************************************************************************************************************************/
