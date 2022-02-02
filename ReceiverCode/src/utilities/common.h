@@ -12,7 +12,8 @@
 
     #define RXVERSION_MAJOR            1
     #define RXVERSION_MINOR            5
-    #define RXVERSION_MINIMUS          2               // Jan 31st 2022
+    #define RXVERSION_MINIMUS          2               // February 2nd 2022
+    
     #define SENSOR_HUB_I2C_ADDRESS     8
 
 // #define DEBUG         // for FHSS

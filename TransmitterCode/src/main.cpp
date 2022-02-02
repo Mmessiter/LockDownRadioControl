@@ -371,6 +371,9 @@ bool     GpsFix                      = 0;
 uint8_t  GPSSatellites               = 0;
 uint16_t GPSSpeed                    = 0;
 uint16_t GPSMaxSpeed                 = 0;
+uint8_t  GPSHours                    = 0;
+uint8_t  GPSMins                     = 0;
+uint8_t  GPSSecs                     = 0;
 float    GPSAltitude                 = 0;
 float    GPSMaxAltitude              = 0;
 float    GPSGroundAltitude           = 0;
@@ -514,24 +517,31 @@ uint8_t FHSS_Channels[84] = {28, 24, 61, 64, 28, 55, 66, 19, 76, 21, 59, 67, 15,
                              67, 11, 3, 9, 77, 37, 8, 31, 36, 34, 18, 75, 17, 9, 50, 78, 77, 73, 30, 50, 79, 6, 36,
                              20, 23, 79, 40, 54, 51, 19, 69, 12, 18, 80, 53, 41, 24};
 
-
+uint8_t Gsecond;  // = tm.Second; // 0-59
+uint8_t Gminute;  // = tm.Minute; // 0-59
+uint8_t Ghour;    // = tm.Hour;   // 0-23
+uint8_t GweekDay; // = tm.Wday;   // 1-7
+uint8_t GmonthDay;// = tm.Day;    // 1-31
+uint8_t Gmonth;   // = tm.Month;  // 1-12
+uint8_t Gyear;    // = tm.Year;   // 0-99
+bool    GPSTimeSynched  =   false;
 
 /************************************************************************************************************/
 // This function returns distance (in MILES) between two GPS coordinates (in degrees)
 // it was essentially cribbed from the internet, then tested and adjusted a little. 
 
-FASTRUN double HowFar(double latitude_new, double longitude_new, double latitude_old, double longitude_old) {
-        double  RadiusOfTheEarth = 6372797.56085;                 // Meters by the way
-        double  DegreesToRadians = 3.14159265358979323846 / 180;
-        double  lat_new = latitude_old * DegreesToRadians;
-        double  lat_old = latitude_new * DegreesToRadians;
-        double  lat_diff = (latitude_new-latitude_old) *  DegreesToRadians;
-        double  lng_diff = (longitude_new-longitude_old) *  DegreesToRadians;
-        double  a = sin(lat_diff/2) * sin(lat_diff/2) + cos(lat_new) * cos(lat_old) *  sin(lng_diff/2) * sin(lng_diff/2);
-        double  c = 2 * atan2(sqrt(a), sqrt(1-a));
-        double  distance = (RadiusOfTheEarth * c ) ; //* 3.28084) / 1760;
-        return  distance; // in MILES now
-   }
+//FASTRUN double HowFar(double latitude_new, double longitude_new, double latitude_old, double longitude_old) {
+//        double  RadiusOfTheEarth = 6372797.56085;                 // Meters by the way
+//        double  DegreesToRadians = 3.14159265358979323846 / 180;
+//        double  lat_new = latitude_old * DegreesToRadians;
+//        double  lat_old = latitude_new * DegreesToRadians;
+//        double  lat_diff = (latitude_new-latitude_old) *  DegreesToRadians;
+//        double  lng_diff = (longitude_new-longitude_old) *  DegreesToRadians;
+//        double  a = sin(lat_diff/2) * sin(lat_diff/2) + cos(lat_new) * cos(lat_old) *  sin(lng_diff/2) * sin(lng_diff/2);
+//        double  c = 2 * atan2(sqrt(a), sqrt(1-a));
+//        double  distance = (RadiusOfTheEarth * c ) ; //* 3.28084) / 1760;
+//        return  distance; // in MILES now
+//   }
 
 /************************************************************************************************************/
 // This function reads data from BUDDY (Slave) BUT uses it ONLY WHILE the channel 12 switch is in the ON position ( > 1000)
@@ -590,10 +600,25 @@ uint8_t bcdToDec(uint8_t val)
 {
     return ((val / 16 * 10) + (val % 16));
 }
+
 /*********************************************************************************************************************************/
 
-void AdjustDateTime(uint8_t MinChange, uint8_t HourChange, uint8_t YearChange, uint8_t MonthChange, uint8_t DateChange)
-{
+void SetTheRTC(){
+    Wire.beginTransmission(DS1307_ADDRESS);
+    Wire.write(zero);                               // Stop the oscillator
+    Wire.write(decToBcd(Gsecond));
+    Wire.write(decToBcd(Gminute));
+    Wire.write(decToBcd(Ghour));
+    Wire.write(decToBcd(GweekDay));
+    Wire.write(decToBcd(GmonthDay));
+    Wire.write(decToBcd(Gmonth));
+    Wire.write(decToBcd(Gyear));
+    Wire.write(zero);                               //  Re-start it
+    Wire.endTransmission();
+}
+
+/*********************************************************************************************************************************/
+void ReadTheRTC(){
     uint8_t second   = tm.Second; // 0-59
     uint8_t minute   = tm.Minute; // 0-59
     uint8_t hour     = tm.Hour;   // 0-23
@@ -601,46 +626,58 @@ void AdjustDateTime(uint8_t MinChange, uint8_t HourChange, uint8_t YearChange, u
     uint8_t monthDay = tm.Day;    // 1-31
     uint8_t month    = tm.Month;  // 1-12
     uint8_t year     = tm.Year;   // 0-99
-    minute += MinChange;
-    if (minute > 59) {
-        minute = 0;
-        if (hour < 23) {
-            ++hour;
-        }
-    }
-    if (minute < 1) {
-        minute = 0;
-        if (hour > 0) {
-            --hour;
-        }
-    }
-    hour += HourChange;
-    if (hour < 0) hour = 0;
-    if (hour > 23) hour = 23;
-    year += YearChange;
-    if (year < 0) year = 0;
-    if (year > 99) year = 99;
-    month += MonthChange;
-    if (month < 1) month = 1;
-    if (month > 12) month = 12;
-    monthDay += DateChange;
-    if (monthDay < 1) monthDay = 1;
-    if (monthDay > 31) monthDay = 31;
-    year -= 30;
-    second = 0;
-    Wire.beginTransmission(DS1307_ADDRESS);
-    Wire.write(zero); //stop Oscillator
-    Wire.write(decToBcd(second));
-    Wire.write(decToBcd(minute));
-    Wire.write(decToBcd(hour));
-    Wire.write(decToBcd(weekDay));
-    Wire.write(decToBcd(monthDay));
-    Wire.write(decToBcd(month));
-    Wire.write(decToBcd(year));
-    Wire.write(zero); //start
-    Wire.endTransmission();
+    Gsecond          = second; 
+    Gminute          = minute;  
+    Ghour            = hour;   
+    GweekDay         = weekDay;
+    GmonthDay        = monthDay;
+    Gmonth           = month;  
+    Gyear            = year-30; 
 }
+/*********************************************************************************************************************************/
+void SynchRTCwithGPSTime(){     
+        if (!GPSTimeSynched){    // Once is plenty!
+            GPSTimeSynched = true;
+            ReadTheRTC();
+            Gsecond = GPSSecs;
+            Gminute = GPSMins;
+            Ghour   = GPSHours;
+            SetTheRTC();
+        }
+}
+/*********************************************************************************************************************************/
 
+void AdjustDateTime(uint8_t MinChange, uint8_t HourChange, uint8_t YearChange, uint8_t MonthChange, uint8_t DateChange) 
+{
+   ReadTheRTC();
+    Gminute += MinChange;
+    if (Gminute > 59) {
+        Gminute = 0;
+        if (Ghour < 23) {
+            ++Ghour;
+        }
+    }
+    if (Gminute < 1) {
+        Gminute = 0;
+        if (Ghour > 0) {
+            --Ghour;
+        }
+    }
+    Ghour += HourChange;
+    if (Ghour < 0) Ghour = 0;
+    if (Ghour > 23) Ghour = 23;
+    Gyear += YearChange;
+    if (Gyear < 0) Gyear = 0;
+    if (Gyear > 99) Gyear = 99;
+    Gmonth += MonthChange;
+    if (Gmonth < 1) Gmonth = 1;
+    if (Gmonth > 12) Gmonth = 12;
+    GmonthDay += DateChange;
+    if (GmonthDay < 1) GmonthDay = 1;
+    if (GmonthDay > 31) GmonthDay = 31;
+  
+    SetTheRTC();
+}
 /*********************************************************************************************************************************/
 
 void IncMinute()
@@ -2668,7 +2705,7 @@ void setup()
     SendValue(FrontView_Secs, 0);
 
     //  ***************************************************************************************
-    //  SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
+     // SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
     //  **   BUT then re-comment it!! Otherwise it will reset to same time on every boot up! **
     //  ***************************************************************************************
     RecoveryTimer = millis();
@@ -5769,6 +5806,27 @@ void ParseAckPayload()
                 GPSSatellites = (uint8_t) GetFromAckPayload();
                 break;
             case 26:
+                GetRXTime(); // Synch 
+                break;
+            case 27:
+                GPSHours = (uint8_t) GetFromAckPayload();
+                break;
+            case 28:
+                GetRXTime(); // Synch 
+                break;
+            case 29:
+                GPSMins = (uint8_t) GetFromAckPayload();
+                break;
+            case 30:
+                GetRXTime(); // Synch 
+                break;
+            case 31:
+                GPSSecs = (uint8_t) GetFromAckPayload();
+                if (Connected && BoundFlag){
+                    if (GPSSecs) SynchRTCwithGPSTime();
+                }
+                break;
+            case 32:
                 GetRXTime(); // Synch 
                 break;
             default:

@@ -334,7 +334,7 @@ void LoadAckPayload()
     AckPayload.Purpose &= 0x7F; // Clear hi bit ( = do not ignore)
     ++AckPayload.Purpose;      
 
-      if (SENSOR_HUB_CONNECTED) MaxAckP = 26;                    // 26 + GPS
+      if (SENSOR_HUB_CONNECTED) MaxAckP = 32;                      // 32 + GPS
       if (AckPayload.Purpose > MaxAckP) AckPayload.Purpose = 0;     // wrap after max
 
     switch (AckPayload.Purpose) {
@@ -417,6 +417,24 @@ void LoadAckPayload()
             SendToAckPayload(SatellitesGPS);       // ********* GPS *******************
             break;
         case 26:
+            LoadTimeStamp();
+            break;
+        case 27: 
+            SendToAckPayload(HoursGPS);         // ********* GPS *******************
+            break;
+        case 28:
+            LoadTimeStamp();
+            break;
+        case 29: 
+            SendToAckPayload(MinsGPS);         // ********* GPS *******************
+            break;
+        case 30:
+            LoadTimeStamp();
+            break;
+        case 31: 
+            SendToAckPayload(SecsGPS);         // ********* GPS *******************
+            break;
+        case 32:
             LoadTimeStamp();
             break;
         default:
