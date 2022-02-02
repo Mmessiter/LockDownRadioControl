@@ -362,9 +362,9 @@ uint32_t GapCount                    = 0;
 uint32_t GapShortest                 = 0;
 char     CalibrateNow[]              = "touch_j";
 char     ModelVolts[8]               = " ";
-float    GPSLatitude                 = 0;  
+float    GPSLatitude                 = 0;
 float    GPSLongitude                = 0;
-float    GPSMarkLatitude             = 0;  
+float    GPSMarkLatitude             = 0;
 float    GPSMarkLongitude            = 0;
 float    GPSAngle                    = 0;
 bool     GpsFix                      = 0;
@@ -503,32 +503,32 @@ uint8_t  BlinkOnPhase  = 1;
 bool     LedWasGreen   = false;
 char     ThisRadio[4]  = "0 ";
 
-uint8_t NextFrequency   = RECONNECT_CH;
-uint8_t ThisFrequency   = RECONNECT_CH;
-bool    DoSbusSendOnly  = false;
-bool    BuddyMaster     = false;
-bool    SlaveHasControl = false;
-uint16_t Qnh            = 1009;               // pressure at sea level here
-uint16_t ModelNumberOffset = 0;
+uint8_t  NextFrequency      = RECONNECT_CH;
+uint8_t  ThisFrequency      = RECONNECT_CH;
+bool     DoSbusSendOnly     = false;
+bool     BuddyMaster        = false;
+bool     SlaveHasControl    = false;
+uint16_t Qnh                = 1009; // pressure at sea level here
+uint16_t ModelNumberOffset  = 0;
 uint32_t ModelNameTimeCheck = 0;
 uint16_t LastModelLoaded    = 0;
-uint8_t FHSS_Channels[84] = {28, 24, 61, 64, 28, 55, 66, 19, 76, 21, 59, 67, 15, 71, 82, 32, 49, 69, 13, 2, 34, 47, 20,
+uint8_t  FHSS_Channels[84]  = {28, 24, 61, 64, 28, 55, 66, 19, 76, 21, 59, 67, 15, 71, 82, 32, 49, 69, 13, 2, 34, 47, 20,
                              34, 69, 16, 2, 72, 35, 76, 35, 57, 45, 29, 76, 75, 49, 59, 3, 57, 20, 16, 41, 59, 62, 59,
                              67, 11, 3, 9, 77, 37, 8, 31, 36, 34, 18, 75, 17, 9, 50, 78, 77, 73, 30, 50, 79, 6, 36,
                              20, 23, 79, 40, 54, 51, 19, 69, 12, 18, 80, 53, 41, 24};
 
-uint8_t Gsecond;  // = tm.Second; // 0-59
-uint8_t Gminute;  // = tm.Minute; // 0-59
-uint8_t Ghour;    // = tm.Hour;   // 0-23
-uint8_t GweekDay; // = tm.Wday;   // 1-7
-uint8_t GmonthDay;// = tm.Day;    // 1-31
-uint8_t Gmonth;   // = tm.Month;  // 1-12
-uint8_t Gyear;    // = tm.Year;   // 0-99
-bool    GPSTimeSynched  =   false;
+uint8_t Gsecond;   // = tm.Second; // 0-59
+uint8_t Gminute;   // = tm.Minute; // 0-59
+uint8_t Ghour;     // = tm.Hour;   // 0-23
+uint8_t GweekDay;  // = tm.Wday;   // 1-7
+uint8_t GmonthDay; // = tm.Day;    // 1-31
+uint8_t Gmonth;    // = tm.Month;  // 1-12
+uint8_t Gyear;     // = tm.Year;   // 0-99
+bool    GPSTimeSynched = false;
 
 /************************************************************************************************************/
 // This function returns distance (in MILES) between two GPS coordinates (in degrees)
-// it was essentially cribbed from the internet, then tested and adjusted a little. 
+// it was essentially cribbed from the internet, then tested and adjusted a little.
 
 //FASTRUN double HowFar(double latitude_new, double longitude_new, double latitude_old, double longitude_old) {
 //        double  RadiusOfTheEarth = 6372797.56085;                 // Meters by the way
@@ -603,9 +603,10 @@ uint8_t bcdToDec(uint8_t val)
 
 /*********************************************************************************************************************************/
 
-void SetTheRTC(){
+void SetTheRTC()
+{
     Wire.beginTransmission(DS1307_ADDRESS);
-    Wire.write(zero);                               // Stop the oscillator
+    Wire.write(zero); // Stop the oscillator
     Wire.write(decToBcd(Gsecond));
     Wire.write(decToBcd(Gminute));
     Wire.write(decToBcd(Ghour));
@@ -613,12 +614,13 @@ void SetTheRTC(){
     Wire.write(decToBcd(GmonthDay));
     Wire.write(decToBcd(Gmonth));
     Wire.write(decToBcd(Gyear));
-    Wire.write(zero);                               //  Re-start it
+    Wire.write(zero); //  Re-start it
     Wire.endTransmission();
 }
 
 /*********************************************************************************************************************************/
-void ReadTheRTC(){
+void ReadTheRTC()
+{
     uint8_t second   = tm.Second; // 0-59
     uint8_t minute   = tm.Minute; // 0-59
     uint8_t hour     = tm.Hour;   // 0-23
@@ -626,17 +628,18 @@ void ReadTheRTC(){
     uint8_t monthDay = tm.Day;    // 1-31
     uint8_t month    = tm.Month;  // 1-12
     uint8_t year     = tm.Year;   // 0-99
-    Gsecond          = second; 
-    Gminute          = minute;  
-    Ghour            = hour;   
+    Gsecond          = second;
+    Gminute          = minute;
+    Ghour            = hour;
     GweekDay         = weekDay;
     GmonthDay        = monthDay;
-    Gmonth           = month;  
-    Gyear            = year-30; 
+    Gmonth           = month;
+    Gyear            = year - 30;
 }
 /*********************************************************************************************************************************/
-void SynchRTCwithGPSTime(){            // This function corrects the time, but not the date.    
-    if (!GPSTimeSynched){              // Once per boot up is plenty!
+void SynchRTCwithGPSTime()
+{                          // This function corrects the time, but not the date.
+    if (!GPSTimeSynched) { // Once per boot up is plenty!
         GPSTimeSynched = true;
         ReadTheRTC();
         Gsecond = GPSSecs;
@@ -647,9 +650,9 @@ void SynchRTCwithGPSTime(){            // This function corrects the time, but n
 }
 /*********************************************************************************************************************************/
 
-void AdjustDateTime(uint8_t MinChange, uint8_t HourChange, uint8_t YearChange, uint8_t MonthChange, uint8_t DateChange) 
+void AdjustDateTime(uint8_t MinChange, uint8_t HourChange, uint8_t YearChange, uint8_t MonthChange, uint8_t DateChange)
 {
-   ReadTheRTC();
+    ReadTheRTC();
     Gminute += MinChange;
     if (Gminute > 59) {
         Gminute = 0;
@@ -1167,9 +1170,7 @@ void GetWordsIn()
     }
 }
 
-
 /*********************************************************************************************************************************/
-
 
 bool GetButtonPress()
 {
@@ -1401,7 +1402,7 @@ FASTRUN void ShowComms()
     char  Msg_CnctdBuddyMast[]   = "Connected BUDDY MASTER";
     char  Msg_CnctdBuddySlave[]  = "Connected BUDDY SLAVE";
     char  MsgBuddying[]          = "Buddy";
-    char  DataView_pps[]         = "pps";       // These are all label names in the Nextion data screen. They are best kept short.
+    char  DataView_pps[]         = "pps"; // These are all label names in the Nextion data screen. They are best kept short.
     char  DataView_lps[]         = "lps";
     char  DataView_Alt[]         = "alt";
     char  DataView_Temp[]        = "Temp";
@@ -1437,7 +1438,7 @@ FASTRUN void ShowComms()
     float ReadVolts           = 0;
     float VoltsPerCell        = 0;
     char  BindButtonVisible[] = "vis bind,1";
-    char  Fix[]               = "Fix";   // These are all label names in the Nextion data screen. They are best kept short.
+    char  Fix[]               = "Fix"; // These are all label names in the Nextion data screen. They are best kept short.
     char  Lon[]               = "Lon";
     char  Lat[]               = "Lat";
     char  Bear[]              = "Bear";
@@ -1453,7 +1454,7 @@ FASTRUN void ShowComms()
     char  Sat[]               = "Sat";
 
     if (CurrentView == FrontView || CurrentView == DataView) {
-        if (millis() - LastShowTime > ShowCommsDelay) { 
+        if (millis() - LastShowTime > ShowCommsDelay) {
             ShowNow = true;
         }
     }
@@ -1512,46 +1513,46 @@ FASTRUN void ShowComms()
                 }
             }
             if (CurrentView == DataView) {
-                SendValue(DataView_pps,   PacketsPerSecond);
-                SendValue(DataView_lps,   LostPackets);
-                SendText(DataView_Alt,    ModelAltitude);
+                SendValue(DataView_pps, PacketsPerSecond);
+                SendValue(DataView_lps, LostPackets);
+                SendText(DataView_Alt, ModelAltitude);
                 SendText(DataView_MaxAlt, MaxAltitude);
-                SendText(DataView_Temp,   ModelTemperature);
-                SendText(DataView_Rx,     ThisRadio);
-                SendText(DataView_rxv,    ReceiverVersionNumber);
-                SendValue(DataView_Ls,    GapLongest);
-                SendValue(DataView_Ts,    GapSum);
-                SendValue(DataView_Sg,    GapShortest);
-                SendValue(DataView_Ag,    GapAverage);
-                SendValue(DataView_Gc,    GapCount);
-                if (GpsFix){                               // if no fix, then leave display as before 
+                SendText(DataView_Temp, ModelTemperature);
+                SendText(DataView_Rx, ThisRadio);
+                SendText(DataView_rxv, ReceiverVersionNumber);
+                SendValue(DataView_Ls, GapLongest);
+                SendValue(DataView_Ts, GapSum);
+                SendValue(DataView_Sg, GapShortest);
+                SendValue(DataView_Ag, GapAverage);
+                SendValue(DataView_Gc, GapCount);
+                if (GpsFix) { // if no fix, then leave display as before
                     SendText(Fix, yes);
-                } else {
+                }
+                else {
                     SendText(Fix, no);
-                }                   
-                snprintf(Vbuf, 3,"%d", GPSSatellites);
-                SendText(Sat,Vbuf);
-                snprintf(Vbuf, 10,"%f", GPSLongitude);
-                SendText(Lon,Vbuf);
-                snprintf(Vbuf, 10,"%f", GPSLatitude);
-                SendText(Lat,Vbuf);
-                snprintf(Vbuf, 7,"%d",  int(GPSAngle));
-                SendText(Bear,Vbuf);
-                snprintf(Vbuf, 6,"%d", (int) GPSDistanceTo);
-                SendText(Dist,Vbuf);
-                snprintf(Vbuf, 4,"%d",  (int) GPSSpeed);
-                SendText(Sped,Vbuf);
-                snprintf(Vbuf, 4,"%d",  (int) GPSMaxSpeed);
-                SendText(MxS,Vbuf);   
-                snprintf(Vbuf, 4,"%d",  (int) GPSAltitude);
-                SendText(ALT,Vbuf);   
-                snprintf(Vbuf, 4,"%d",  (int) GPSMaxAltitude);
-                SendText(MALT,Vbuf);   
-                snprintf(Vbuf, 4,"%d",  (int) GPSCourseTo);
-                SendText(BTo,Vbuf);   
-                snprintf(Vbuf, 6,"%d",  (int) GPSMaxDistance);
-                SendText(Mxd,Vbuf);   
-                
+                }
+                snprintf(Vbuf, 3, "%d", GPSSatellites);
+                SendText(Sat, Vbuf);
+                snprintf(Vbuf, 10, "%f", GPSLongitude);
+                SendText(Lon, Vbuf);
+                snprintf(Vbuf, 10, "%f", GPSLatitude);
+                SendText(Lat, Vbuf);
+                snprintf(Vbuf, 7, "%d", int(GPSAngle));
+                SendText(Bear, Vbuf);
+                snprintf(Vbuf, 6, "%d", (int)GPSDistanceTo);
+                SendText(Dist, Vbuf);
+                snprintf(Vbuf, 4, "%d", (int)GPSSpeed);
+                SendText(Sped, Vbuf);
+                snprintf(Vbuf, 4, "%d", (int)GPSMaxSpeed);
+                SendText(MxS, Vbuf);
+                snprintf(Vbuf, 4, "%d", (int)GPSAltitude);
+                SendText(ALT, Vbuf);
+                snprintf(Vbuf, 4, "%d", (int)GPSMaxAltitude);
+                SendText(MALT, Vbuf);
+                snprintf(Vbuf, 4, "%d", (int)GPSCourseTo);
+                SendText(BTo, Vbuf);
+                snprintf(Vbuf, 6, "%d", (int)GPSMaxDistance);
+                SendText(Mxd, Vbuf);
             }
             ReadVolts = RXModelVolts * 10;
             // 6s Max 25.2 -> 20.4
@@ -2571,8 +2572,8 @@ bool LoadAllParameters()
         ++addr;
         BuddyMaster = SDReadByte(addr);
         ++addr;
-        ModelNumber = SDReadByte(addr);
-        ModelNumberOffset = addr;         // remember offset!
+        ModelNumber       = SDReadByte(addr);
+        ModelNumberOffset = addr; // remember offset!
         ++addr;
         ScreenTimeout = SDReadInt(addr);
         ++addr;
@@ -2668,7 +2669,7 @@ void setup()
     char Initialising[]        = "Initialising ... ";
 
     char OptionsViewTXname[] = "OptionsView.TxName";
-    Nextion.begin(921600);   // BAUD rate also set in display code THIS IS THE MAX (was 115200)
+    Nextion.begin(921600); // BAUD rate also set in display code THIS IS THE MAX (was 115200)
 
     teensyMAC(MacAddress); // Get MAC address and use it as pipe address
     NewPipe = (uint64_t)MacAddress[0] << 40;
@@ -2704,7 +2705,7 @@ void setup()
     SendValue(FrontView_Secs, 0);
 
     //  ***************************************************************************************
-     // SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
+    // SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
     //  **   BUT then re-comment it!! Otherwise it will reset to same time on every boot up! **
     //  ***************************************************************************************
     RecoveryTimer = millis();
@@ -2781,7 +2782,7 @@ void SaveTXStuff()
     SDUpdateByte(addr, BuddyMaster);
     ++addr;
     SDUpdateByte(addr, ModelNumber);
-    ModelNumberOffset = addr;                // remember offset!
+    ModelNumberOffset = addr; // remember offset!
     ++addr;
     SDUpdateInt(addr, ScreenTimeout);
     ++addr;
@@ -2794,7 +2795,7 @@ void SaveTXStuff()
         if (TxName[j] == 0) EON = true;
         ++addr;
     }
-    SDUpdateInt(addr,Qnh);
+    SDUpdateInt(addr, Qnh);
     ++addr;
     ++addr;
     CloseModelsFile();
@@ -4271,12 +4272,12 @@ void Button_was_pressed()
             CurrentView = MainSetupView;
             return;
         }
-        
-        if (InStrng(Mark, WordsIn) > 0) {           
-             GPSMarkHere = 255;                // Mark this location
-             GPSMaxDistance = 0;               // Max distance starts at zero for newly marked location
+
+        if (InStrng(Mark, WordsIn) > 0) {
+            GPSMarkHere    = 255; // Mark this location
+            GPSMaxDistance = 0;   // Max distance starts at zero for newly marked location
         }
-        
+
         if (InStrng(OptionsEnd, WordsIn) > 0) { // Options screen end
             DoSbusSendOnly = GetValue(BuddyP);  // Pupil, wired
             BuddyMaster    = GetValue(BuddyM);  // Master, either.
@@ -4301,7 +4302,7 @@ void Button_was_pressed()
             CurrentMode = NORMAL;
             return;
         }
-        if (InStrng(DataView_Clear, WordsIn) > 0) { //  goto setup screen from Data screen 
+        if (InStrng(DataView_Clear, WordsIn) > 0) { //  goto setup screen from Data screen
             LostPackets        = 0;
             GapShortest        = 0;
             GapLongest         = 0;
@@ -4313,13 +4314,17 @@ void Button_was_pressed()
             GPSMaxDistance     = 0;
             GPSMaxSpeed        = 0;
             if (!GroundModelAltitude) {
-                GroundModelAltitude = RXModelAltitude;}
+                GroundModelAltitude = RXModelAltitude;
+            }
             else {
-                GroundModelAltitude = 0 ; }
-            if (!GPSGroundAltitude){
-                GPSGroundAltitude = GPSAltitude;}
-            else{
-                GPSGroundAltitude = 0; } 
+                GroundModelAltitude = 0;
+            }
+            if (!GPSGroundAltitude) {
+                GPSGroundAltitude = GPSAltitude;
+            }
+            else {
+                GPSGroundAltitude = 0;
+            }
             ClearText();
             return;
         }
@@ -4411,7 +4416,7 @@ void Button_was_pressed()
             SendValue(BuddyP, DoSbusSendOnly);
             SendValue(Pto, (Inactivity_Timeout / TICKSPERMINUTE));
             SendText(Tx_Name, TxName);
-            SendValue(QNH,Qnh);
+            SendValue(QNH, Qnh);
             CurrentView = Options_View;
             CurrentMode = NORMAL;
             ClearText();
@@ -5014,18 +5019,18 @@ void Button_was_pressed()
             return;
         }
 
-        if (InStrng(ModelNMSave, WordsIn) > 0) { // edit modelname  
+        if (InStrng(ModelNMSave, WordsIn) > 0) { // edit modelname
             InhibitNameCheck = true;
-            i = 0;
+            i                = 0;
             while (WordsIn[i + 12] > 0) {
-                ModelName[i] = WordsIn[i + 12];  // copy new user supplied name
+                ModelName[i]     = WordsIn[i + 12]; // copy new user supplied name
                 ModelName[i + 1] = 0;
                 ++i;
-            } 
+            }
             ModelNumber = GetValue(ModelsView_ModelNumber);
             SaveOneModel(ModelNumber);
             ClearText();
-            delay (1000);                        // allow time for SD write to happen
+            delay(1000); // allow time for SD write to happen
             InhibitNameCheck = false;
             return;
         }
@@ -5119,9 +5124,9 @@ void Button_was_pressed()
                 SendValue(ModelsView_ModelNumber, ModelNumber);
             }
             if (!ModelsFileOpen) OpenModelsFile();
-            SDUpdateByte(ModelNumberOffset, ModelNumber);  // the offset was grabbed when loading file 
+            SDUpdateByte(ModelNumberOffset, ModelNumber); // the offset was grabbed when loading file
             CloseModelsFile();
-            ClearText(); 
+            ClearText();
         }
 
         if (InStrng(Delete, WordsIn) > 0) {
@@ -5483,32 +5488,32 @@ void LoadPacketData()
     uint16_t Twobytes = 0; // Extra data can be send using the last four bytes of each data packet. These are defined by the packet number
     uint8_t  FS_Byte1;
     uint8_t  FS_Byte2;
-    SendBuffer[CHANNELSUSED] = PacketNumber;  
-    Twobytes = MakeTwobytes(FailSafeChannel); // 16 bool values compressed to 16 bits
-    FS_Byte1 = uint8_t(Twobytes >> 8);        // sent as two bytes
-    FS_Byte2 = uint8_t(Twobytes & 0x00FF);
+    SendBuffer[CHANNELSUSED] = PacketNumber;
+    Twobytes                 = MakeTwobytes(FailSafeChannel); // 16 bool values compressed to 16 bits
+    FS_Byte1                 = uint8_t(Twobytes >> 8);        // sent as two bytes
+    FS_Byte2                 = uint8_t(Twobytes & 0x00FF);
     switch (PacketNumber) {
-        case 0:  
+        case 0:
             SendBuffer[CHANNELSUSED + 2] = BindingNow;
             if (BindingNow == 1) {
                 BindingTimer = millis(); // start a timer
                 BindingNow   = 2;
             }
             SendBuffer[CHANNELSUSED + 1] = SaveFailSafeNow; // FailSafeSaveMoment
-            SaveFailSafeNow    = false;                     // once should do it.
+            SaveFailSafeNow              = false;           // once should do it.
             break;
         case 1:
-             SendBuffer[CHANNELSUSED + 1] = FS_Byte2;      // these are failsafe flags
-             SendBuffer[CHANNELSUSED + 2] = FS_Byte1;      // these are failsafe flags
+            SendBuffer[CHANNELSUSED + 1] = FS_Byte2; // these are failsafe flags
+            SendBuffer[CHANNELSUSED + 2] = FS_Byte1; // these are failsafe flags
             break;
-        case 2: 
-            SendBuffer[CHANNELSUSED + 1] = Qnh >> 8;       // (HiByte)   Qnh is current atmospheric pressure at sea level here (an aviation term)
-            SendBuffer[CHANNELSUSED + 2] = Qnh & 0x00ff;   // (LowByte)  Qnh is current atmospheric pressure at sea level here (an aviation term)
+        case 2:
+            SendBuffer[CHANNELSUSED + 1] = Qnh >> 8;     // (HiByte)   Qnh is current atmospheric pressure at sea level here (an aviation term)
+            SendBuffer[CHANNELSUSED + 2] = Qnh & 0x00ff; // (LowByte)  Qnh is current atmospheric pressure at sea level here (an aviation term)
             break;
-        case 3: 
+        case 3:
             SendBuffer[CHANNELSUSED + 1] = 0;
             SendBuffer[CHANNELSUSED + 2] = GPSMarkHere;
-            GPSMarkHere = 0;
+            GPSMarkHere                  = 0;
             break;
 
         default:
@@ -5665,8 +5670,11 @@ void ClearAckPayload()
 void GetRXTime()
 { // This gets the time from Receivier to enable FHSS synch
 
-
-    union  {uint32_t Val32; uint8_t Val8[4];} RXTimeUnion;         
+    union
+    {
+        uint32_t Val32;
+        uint8_t  Val8[4];
+    } RXTimeUnion;
     if (AckPayload.Byte5) { // Good data? (Zero means no data)
         RXTimeUnion.Val8[0] = AckPayload.Byte1;
         RXTimeUnion.Val8[1] = AckPayload.Byte2;
@@ -5688,8 +5696,13 @@ void GetRXTime()
 
 /************************************************************************************************************/
 
-float GetFromAckPayload(){
-    union  {float Val32;uint8_t Val8[4];} ThisUnion;
+float GetFromAckPayload()
+{
+    union
+    {
+        float   Val32;
+        uint8_t Val8[4];
+    } ThisUnion;
     ThisUnion.Val8[0] = AckPayload.Byte1;
     ThisUnion.Val8[1] = AckPayload.Byte2;
     ThisUnion.Val8[2] = AckPayload.Byte3;
@@ -5699,8 +5712,8 @@ float GetFromAckPayload(){
 /************************************************************************************************************/
 void GetAltitude()
 {
-    RXModelAltitude       =  int(GetFromAckPayload()) - GroundModelAltitude;
-    if (RXModelAltitude<0)   RXModelAltitude = 0;
+    RXModelAltitude = int(GetFromAckPayload()) - GroundModelAltitude;
+    if (RXModelAltitude < 0) RXModelAltitude = 0;
     if (RXMAXModelAltitude < RXModelAltitude) RXMAXModelAltitude = RXModelAltitude;
     snprintf(MaxAltitude, 5, "%d", RXMAXModelAltitude);
     snprintf(ModelAltitude, 5, "%d", RXModelAltitude);
@@ -5708,7 +5721,7 @@ void GetAltitude()
 /************************************************************************************************************/
 void GetTemperature()
 {
-    RXModelTemperature       = GetFromAckPayload();
+    RXModelTemperature = GetFromAckPayload();
     snprintf(ModelTemperature, 5, "%f", RXModelTemperature);
 }
 /************************************************************************************************************/
@@ -5720,13 +5733,13 @@ void ParseAckPayload()
                                     // High BIT is guaranteed LOW by this point, so no "& 0x7F" is needed.
         {
             case 0:
-                GetRXTime(); // Synch 
+                GetRXTime(); // Synch
                 break;
             case 1:
                 GetRXVersionNumber();
                 break;
             case 2:
-                GetRXTime(); // Synch 
+                GetRXTime(); // Synch
                 break;
             case 3:
                 RXModelVolts = GetFromAckPayload();
@@ -5735,50 +5748,50 @@ void ParseAckPayload()
                     snprintf(ModelVolts, 5, "%f", RXModelVolts);
                 }
             case 4:
-                GetRXTime(); // Synch 
+                GetRXTime(); // Synch
                 break;
             case 5:
                 GetAltitude();
                 break;
             case 6:
-                GetRXTime(); // Synch 
+                GetRXTime(); // Synch
                 break;
             case 7:
                 GetTemperature();
                 break;
             case 8:
-                GetRXTime(); // Synch 
+                GetRXTime(); // Synch
                 break;
             case 9:
-                GPSLatitude = GetFromAckPayload(); 
+                GPSLatitude = GetFromAckPayload();
                 break;
             case 10:
-                GetRXTime(); // Synch 
+                GetRXTime(); // Synch
                 break;
             case 11:
-                GPSLongitude = GetFromAckPayload(); 
+                GPSLongitude = GetFromAckPayload();
                 break;
             case 12:
-                GetRXTime(); // Synch 
+                GetRXTime(); // Synch
                 break;
             case 13:
                 GPSAngle = GetFromAckPayload();
                 break;
             case 14:
-                GetRXTime(); // Synch 
+                GetRXTime(); // Synch
                 break;
             case 15:
-                GPSSpeed = GetFromAckPayload(); 
+                GPSSpeed = GetFromAckPayload();
                 if (GPSMaxSpeed < GPSSpeed) GPSMaxSpeed = GPSSpeed;
                 break;
             case 16:
-                GetRXTime(); // Synch 
-                break;               
+                GetRXTime(); // Synch
+                break;
             case 17:
-                GpsFix =  GetFromAckPayload();
+                GpsFix = GetFromAckPayload();
                 break;
             case 18:
-                GetRXTime(); // Synch 
+                GetRXTime(); // Synch
                 break;
             case 19:
                 GPSAltitude = GetFromAckPayload() - GPSGroundAltitude;
@@ -5786,49 +5799,49 @@ void ParseAckPayload()
                 if (GPSMaxAltitude < GPSAltitude) GPSMaxAltitude = GPSAltitude;
                 break;
             case 20:
-                GetRXTime(); // Synch 
+                GetRXTime(); // Synch
                 break;
             case 21:
-                 GPSDistanceTo = GetFromAckPayload();
-                 if (GPSMaxDistance < GPSDistanceTo) GPSMaxDistance = GPSDistanceTo;
+                GPSDistanceTo = GetFromAckPayload();
+                if (GPSMaxDistance < GPSDistanceTo) GPSMaxDistance = GPSDistanceTo;
                 break;
             case 22:
-                GetRXTime(); // Synch 
+                GetRXTime(); // Synch
                 break;
             case 23:
-                GPSCourseTo = GetFromAckPayload();  
+                GPSCourseTo = GetFromAckPayload();
                 break;
             case 24:
-                GetRXTime(); // Synch 
+                GetRXTime(); // Synch
                 break;
             case 25:
-                GPSSatellites = (uint8_t) GetFromAckPayload();
+                GPSSatellites = (uint8_t)GetFromAckPayload();
                 break;
             case 26:
-                GetRXTime(); // Synch 
+                GetRXTime(); // Synch
                 break;
             case 27:
-                GPSHours = (uint8_t) GetFromAckPayload();
+                GPSHours = (uint8_t)GetFromAckPayload();
                 break;
             case 28:
-                GetRXTime(); // Synch 
+                GetRXTime(); // Synch
                 break;
             case 29:
-                GPSMins = (uint8_t) GetFromAckPayload();
+                GPSMins = (uint8_t)GetFromAckPayload();
                 ReadTheRTC();
                 if (GPSMins != Gminute) GPSTimeSynched = false;
                 if (GPSHours != Ghour) GPSTimeSynched = false;
                 break;
             case 30:
-                GetRXTime(); // Synch 
+                GetRXTime(); // Synch
                 break;
             case 31:
-                GPSSecs = (uint8_t) GetFromAckPayload();
+                GPSSecs = (uint8_t)GetFromAckPayload();
                 if (GPSSecs != Gsecond) GPSTimeSynched = false;
-                if (GpsFix)  SynchRTCwithGPSTime();
+                if (GpsFix) SynchRTCwithGPSTime();
                 break;
             case 32:
-                GetRXTime(); // Synch 
+                GetRXTime(); // Synch
                 break;
             default:
                 break;
@@ -5866,17 +5879,18 @@ void CheckGapsLength()
     }
 }
 /************************************************************************************************************/
-void CheckModelName(){                        // In ModelsView, this function checks correct name is displayed.
-char ModelsView_ModelNumber[]  = "ModelNumber"; 
-    if ((millis()-ModelNameTimeCheck) > 500) {  
-        ModelNameTimeCheck  = millis();
-        if (!InhibitNameCheck){               // if name is being edited, do not check it.
+void CheckModelName()
+{ // In ModelsView, this function checks correct name is displayed.
+    char ModelsView_ModelNumber[] = "ModelNumber";
+    if ((millis() - ModelNameTimeCheck) > 500) {
+        ModelNameTimeCheck = millis();
+        if (!InhibitNameCheck) { // if name is being edited, do not check it.
             ModelNumber = GetValue(ModelsView_ModelNumber);
             if (LastModelLoaded != ModelNumber) {
                 LastModelLoaded = ModelNumber;
-                if (ModelNumber < 1) ModelNumber = 1; 
+                if (ModelNumber < 1) ModelNumber = 1;
                 ReadOneModel(ModelNumber);
-                UpdateModelsNameEveryWhere();   
+                UpdateModelsNameEveryWhere();
             }
         }
     }
@@ -5886,23 +5900,23 @@ char ModelsView_ModelNumber[]  = "ModelNumber";
 /************************************************************************************************************/
 void loop()
 {
-    KickTheDog();                    // Watchdog
+    KickTheDog(); // Watchdog
     if (GetButtonPress()) {
-        Button_was_pressed();        // Deal with button
+        Button_was_pressed(); // Deal with button
     }
-    if (CurrentView == ModelsView){ 
-        CheckModelName();            // In ModelsView, this function checks correct name is displayed.
+    if (CurrentView == ModelsView) {
+        CheckModelName(); // In ModelsView, this function checks correct name is displayed.
     }
     if (millis() - LastTimeRead >= 1000) {
-        ReadTime();                  // Do the clock
+        ReadTime(); // Do the clock
         LastTimeRead = millis();
     }
     if (millis() - RangeTestStart >= 1000) {
-        GetStatistics();             // Do stats
+        GetStatistics(); // Do stats
         RangeTestStart = millis();
     }
     if ((millis() - ShowServoTimer >= 100) && (CurrentView != FrontView)) {
-        ShowServoPos();              // Show servos positions
+        ShowServoPos(); // Show servos positions
         ShowServoTimer = millis();
     }
     if ((millis() - TxOnTime) > 2000) { // Transmit nothing for first 2 seconds
@@ -5910,7 +5924,7 @@ void loop()
         switch (CurrentMode) {
             case 0:
                 SendData();
-                if (!LedWasGreen) ShowComms();   // Show when not connected
+                if (!LedWasGreen) ShowComms(); // Show when not connected
                 break;
             case 1:
                 CalibrateSticks();

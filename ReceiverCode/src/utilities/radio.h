@@ -4,10 +4,10 @@
 #include <SPI.h>
 #include <RF24.h>
 #include "common.h"
-#define pinCE1  9  // NRF1
-#define pinCSN1 10 // NRF1
-#define pinCSN2 20 // NRF2
-#define pinCE2  21 // NRF2
+#define pinCE1           9  // NRF1
+#define pinCSN1          10 // NRF1
+#define pinCSN2          20 // NRF2
+#define pinCE2           21 // NRF2
 #define FAILSAFE_TIMEOUT 2000
 
 RF24    Radio1(pinCE1, pinCSN1);
@@ -15,13 +15,13 @@ RF24    Radio2(pinCE2, pinCSN2);
 RF24*   CurrentRadio = &Radio1;
 uint8_t ThisRadio    = 1;
 
-uint64_t ThisPipe = 0xBABE1E5420LL; // default startup
-uint64_t NewPipe  = 0;
-uint64_t OldPipe  = 0;
+uint64_t ThisPipe           = 0xBABE1E5420LL; // default startup
+uint64_t NewPipe            = 0;
+uint64_t OldPipe            = 0;
 bool     Connected          = false;
 int      SearchStartTime    = 0;
 int      StillSearchingTime = 0;
-bool     SaveNewBind = true;
+bool     SaveNewBind        = true;
 uint8_t  SavedPipeAddress[8];
 uint32_t HopStart;
 uint8_t  NextChannelNumber = 0;
@@ -45,10 +45,9 @@ extern float    CourseToGPS;
 extern uint8_t  HoursGPS;
 extern uint8_t  MinsGPS;
 extern uint8_t  SecsGPS;
-extern uint8_t  SatellitesGPS; 
+extern uint8_t  SatellitesGPS;
 extern bool     GpsFix;
-extern bool     SENSOR_HUB_CONNECTED;    
- 
+extern bool     SENSOR_HUB_CONNECTED;
 
 /** AckPayload Stucture for data returned to transmitter. */
 struct Payload
@@ -293,11 +292,15 @@ void LoadTimeStamp()
 
 #define HOPTIME         55 // ms between channel changes
 #define FREQUENCYSCOUNT 82 // use 82 different channels
-union  {uint32_t Stamp32; uint8_t  Stamp8[4];} Time;
+    union
+    {
+        uint32_t Stamp32;
+        uint8_t  Stamp8[4];
+    } Time;
 
     Time.Stamp32 = millis() - HopStart;
     RXTimeStamp  = Time.Stamp32;
-   
+
     if (RXTimeStamp >= HOPTIME) {
         HopStart     = millis();
         Time.Stamp32 = 0;
@@ -313,126 +316,131 @@ union  {uint32_t Stamp32; uint8_t  Stamp8[4];} Time;
     AckPayload.Byte2 = Time.Stamp8[1];
     AckPayload.Byte3 = Time.Stamp8[2];
     AckPayload.Byte4 = Time.Stamp8[3];
-    
+
     AckPayload.Byte5 = NextChannelNumber;
 }
 
 /************************************************************************************************************/
-void SendToAckPayload(double U){                        // This function now works with most parameters
-    union  {float Val32; uint8_t Val8[4];} ThisUnion;
-    ThisUnion.Val32     = U;
-    AckPayload.Byte1    = ThisUnion.Val8[0];    // These values are herewith delivered to Transmitter in Ack Payload
-    AckPayload.Byte2    = ThisUnion.Val8[1];
-    AckPayload.Byte3    = ThisUnion.Val8[2];
-    AckPayload.Byte4    = ThisUnion.Val8[3];
+void SendToAckPayload(double U)
+{ // This function now works with most parameters
+    union
+    {
+        float   Val32;
+        uint8_t Val8[4];
+    } ThisUnion;
+    ThisUnion.Val32  = U;
+    AckPayload.Byte1 = ThisUnion.Val8[0]; // These values are herewith delivered to Transmitter in Ack Payload
+    AckPayload.Byte2 = ThisUnion.Val8[1];
+    AckPayload.Byte3 = ThisUnion.Val8[2];
+    AckPayload.Byte4 = ThisUnion.Val8[3];
 }
 /************************************************************************************************************/
 
 void LoadAckPayload()
 {
-    uint8_t MaxAckP     = 2;    // 2 if only RX
+    uint8_t MaxAckP = 2;        // 2 if only RX
     AckPayload.Purpose &= 0x7F; // Clear hi bit ( = do not ignore)
-    ++AckPayload.Purpose;      
+    ++AckPayload.Purpose;
 
-      if (SENSOR_HUB_CONNECTED) MaxAckP = 32;                      // 32 + GPS
-      if (AckPayload.Purpose > MaxAckP) AckPayload.Purpose = 0;     // wrap after max
+    if (SENSOR_HUB_CONNECTED) MaxAckP = 32;                   // 32 + GPS
+    if (AckPayload.Purpose > MaxAckP) AckPayload.Purpose = 0; // wrap after max
 
     switch (AckPayload.Purpose) {
-        case 0: 
+        case 0:
             LoadTimeStamp();
             break;
-        case 1: 
+        case 1:
             LoadVersioNumber();
             break;
-        case 2: 
+        case 2:
             LoadTimeStamp();
             break;
-        case 3: 
+        case 3:
             SendToAckPayload(INA219Volts);
             break;
-        case 4: 
+        case 4:
             LoadTimeStamp();
             break;
         case 5:
             SendToAckPayload(BaroAltitude);
             break;
-        case 6: 
+        case 6:
             LoadTimeStamp();
             break;
-        case 7: 
+        case 7:
             SendToAckPayload(BaroTemperature);
             break;
-        case 8: 
+        case 8:
             LoadTimeStamp();
             break;
-        case 9: 
-            SendToAckPayload (LatitudeGPS);     // ********* GPS *******************
+        case 9:
+            SendToAckPayload(LatitudeGPS); // ********* GPS *******************
             break;
-        case 10: 
+        case 10:
             LoadTimeStamp();
             break;
-        case 11: 
-             SendToAckPayload (LongitudeGPS);  // ********* GPS *******************
+        case 11:
+            SendToAckPayload(LongitudeGPS); // ********* GPS *******************
             break;
-        case 12: 
+        case 12:
             LoadTimeStamp();
             break;
-        case 13: 
-             SendToAckPayload (AngleGPS);     // ********* GPS *******************
+        case 13:
+            SendToAckPayload(AngleGPS); // ********* GPS *******************
             break;
-        case 14: 
+        case 14:
             LoadTimeStamp();
             break;
-        case 15: 
-             SendToAckPayload(SpeedGPS);      // ********* GPS *******************
+        case 15:
+            SendToAckPayload(SpeedGPS); // ********* GPS *******************
             break;
         case 16:
             LoadTimeStamp();
             break;
-        case 17: 
-            SendToAckPayload(GpsFix);          // ********* GPS *******************
+        case 17:
+            SendToAckPayload(GpsFix); // ********* GPS *******************
             break;
         case 18:
             LoadTimeStamp();
             break;
-        case 19: 
-            SendToAckPayload(AltitudeGPS);      // ********* GPS *******************
+        case 19:
+            SendToAckPayload(AltitudeGPS); // ********* GPS *******************
             break;
         case 20:
             LoadTimeStamp();
             break;
-        case 21: 
-            SendToAckPayload(DistanceGPS);       // ********* GPS *******************
+        case 21:
+            SendToAckPayload(DistanceGPS); // ********* GPS *******************
             break;
         case 22:
             LoadTimeStamp();
-            break; 
-        case 23: 
-            SendToAckPayload(CourseToGPS);        // ********* GPS *******************
+            break;
+        case 23:
+            SendToAckPayload(CourseToGPS); // ********* GPS *******************
             break;
         case 24:
             LoadTimeStamp();
-            break;    
-        case 25: 
-            SendToAckPayload(SatellitesGPS);       // ********* GPS *******************
+            break;
+        case 25:
+            SendToAckPayload(SatellitesGPS); // ********* GPS *******************
             break;
         case 26:
             LoadTimeStamp();
             break;
-        case 27: 
-            SendToAckPayload(HoursGPS);         // ********* GPS *******************
+        case 27:
+            SendToAckPayload(HoursGPS); // ********* GPS *******************
             break;
         case 28:
             LoadTimeStamp();
             break;
-        case 29: 
-            SendToAckPayload(MinsGPS);         // ********* GPS *******************
+        case 29:
+            SendToAckPayload(MinsGPS); // ********* GPS *******************
             break;
         case 30:
             LoadTimeStamp();
             break;
-        case 31: 
-            SendToAckPayload(SecsGPS);         // ********* GPS *******************
+        case 31:
+            SendToAckPayload(SecsGPS); // ********* GPS *******************
             break;
         case 32:
             LoadTimeStamp();
