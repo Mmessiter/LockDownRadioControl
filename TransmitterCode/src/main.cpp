@@ -635,7 +635,7 @@ void ReadTheRTC(){
     Gyear            = year-30; 
 }
 /*********************************************************************************************************************************/
-void SynchRTCwithGPSTime(){            // This function corrects the time, but not the date. 
+void SynchRTCwithGPSTime(){            // This function corrects the time, but not the date.    
     if (!GPSTimeSynched){              // Once per boot up is plenty!
         GPSTimeSynched = true;
         ReadTheRTC();
