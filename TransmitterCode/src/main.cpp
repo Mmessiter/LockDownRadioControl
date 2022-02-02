@@ -5821,9 +5821,7 @@ void ParseAckPayload()
                 break;
             case 31:
                 GPSSecs = (uint8_t) GetFromAckPayload();
-                if (LedWasGreen){
-                    if (GPSSecs) SynchRTCwithGPSTime();
-                }
+                if (GpsFix & GPSSecs & GPSHours & GPSMins) SynchRTCwithGPSTime();
                 break;
             case 32:
                 GetRXTime(); // Synch 
