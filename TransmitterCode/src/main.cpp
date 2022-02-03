@@ -371,9 +371,16 @@ bool     GpsFix                      = 0;
 uint8_t  GPSSatellites               = 0;
 uint16_t GPSSpeed                    = 0;
 uint16_t GPSMaxSpeed                 = 0;
+
 uint8_t  GPSHours                    = 0;
 uint8_t  GPSMins                     = 0;
 uint8_t  GPSSecs                     = 0;
+
+uint8_t  GPSDay                      = 0;
+uint8_t  GPSMonth                    = 0;
+uint8_t  GPSYear                     = 0;
+
+
 float    GPSAltitude                 = 0;
 float    GPSMaxAltitude              = 0;
 float    GPSGroundAltitude           = 0;
@@ -632,16 +639,19 @@ void ReadTheRTC(){
     GweekDay         = weekDay;
     GmonthDay        = monthDay;
     Gmonth           = month;  
-    Gyear            = year-30; 
+    Gyear            = year-30;  // ???
 }
 /*********************************************************************************************************************************/
-void SynchRTCwithGPSTime(){            // This function corrects the time, but not the date.    
-    if (!GPSTimeSynched){              // Once per boot up is plenty!
+void SynchRTCwithGPSTime(){            // This function corrects the time and the date.    
+    if (!GPSTimeSynched){              
         GPSTimeSynched = true;
-        ReadTheRTC();
-        Gsecond = GPSSecs;
-        Gminute = GPSMins;
-        Ghour   = GPSHours;
+       // ReadTheRTC();
+        Gsecond   = GPSSecs;
+        Gminute   = GPSMins;
+        Ghour     = GPSHours;
+        GmonthDay = GPSDay;
+        Gmonth    = GPSMonth;
+        Gyear     = GPSYear + 1744; // ????
         SetTheRTC();
     }
 }
@@ -5697,6 +5707,18 @@ float GetFromAckPayload(){
     return ThisUnion.Val32;
 }
 /************************************************************************************************************/
+void GetTimeFromAckPayload(){
+    GPSSecs  = AckPayload.Byte1;    
+    GPSMins  = AckPayload.Byte2;   
+    GPSHours = AckPayload.Byte3;
+}
+/************************************************************************************************************/
+void GetDateFromAckPayload(){
+    GPSDay    = AckPayload.Byte1;    
+    GPSMonth  = AckPayload.Byte2;   
+    GPSYear   = AckPayload.Byte3;
+}
+/************************************************************************************************************/
 void GetAltitude()
 {
     RXModelAltitude       =  int(GetFromAckPayload()) - GroundModelAltitude;
@@ -5808,26 +5830,22 @@ void ParseAckPayload()
                 GetRXTime(); // Synch 
                 break;
             case 27:
-                GPSHours = (uint8_t) GetFromAckPayload();
+                GetDateFromAckPayload();
                 break;
             case 28:
                 GetRXTime(); // Synch 
                 break;
             case 29:
-                GPSMins = (uint8_t) GetFromAckPayload();
+                GetTimeFromAckPayload();
                 ReadTheRTC();
-                if (GPSMins != Gminute) GPSTimeSynched = false;
-                if (GPSHours != Ghour) GPSTimeSynched = false;
-                break;
-            case 30:
-                GetRXTime(); // Synch 
-                break;
-            case 31:
-                GPSSecs = (uint8_t) GetFromAckPayload();
-                if (GPSSecs != Gsecond) GPSTimeSynched = false;
+                if (GPSDay   != GmonthDay) GPSTimeSynched = false;
+                if (GPSMonth != GPSMonth)  GPSTimeSynched = false;
+                if (GPSMins  != Gminute)   GPSTimeSynched = false;
+                if (GPSHours != Ghour)     GPSTimeSynched = false;
+                if (GPSSecs  != Gsecond)   GPSTimeSynched = false;
                 if (GpsFix)  SynchRTCwithGPSTime();
                 break;
-            case 32:
+            case 30:
                 GetRXTime(); // Synch 
                 break;
             default:
