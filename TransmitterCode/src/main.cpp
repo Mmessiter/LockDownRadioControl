@@ -645,7 +645,6 @@ void ReadTheRTC(){
 void SynchRTCwithGPSTime(){            // This function corrects the time and the date.    
     if (!GPSTimeSynched){              
         GPSTimeSynched = true;
-       // ReadTheRTC();
         Gsecond   = GPSSecs;
         Gminute   = GPSMins;
         Ghour     = GPSHours;
