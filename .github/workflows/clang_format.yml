@@ -24,7 +24,6 @@ jobs:
           files-changed-only: false
           # lines-changed-only: true
           thread-comments: false
-          ignore: "ReceiverCode/lib|SensorHubLC/lib|SensorHubTeensy3_6/lib|SensorHubT32/lib"
 
       - name: Code needs attention?
         if: steps.linter.outputs.checks-failed > 0

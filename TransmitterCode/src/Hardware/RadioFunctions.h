@@ -45,14 +45,14 @@
 #define CALIBRATELIMITS 1 // Calibrate limits
 #define CENTRESTICKS    2 // Calibrate Centres
 #define SCANWAVEBAND    3 // Scan waveband
-#define SENDNOTHING     4 // Transmission off \
+#define SENDNOTHING     4 // Transmission off
                           // ************************************************
 
 // **************************************************************************
 //                          NEXTION SERIAL CONNECTION                       *
 //***************************************************************************
-#define Nextion        Serial1 // Nextion is connected to Serial1
-#define ShowCommsDelay 100     // ms pauses between updated info on Nextion (was 1000)
+#define Nextion Serial1      // Nextion is connected to Serial1
+#define ShowCommsDelay 100   // ms pauses between updated info on Nextion (was 1000)
 // ***************************************************************************
 
 // **************************************************************************

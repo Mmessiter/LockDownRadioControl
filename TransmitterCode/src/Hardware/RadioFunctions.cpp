@@ -102,18 +102,18 @@ void BufferNewPipe()
 
 void SendData()
 {
-    if (Nextion.available()) return;        // was a button pressed?
-    if (millis() - TxPace < 3) ShowComms(); // This call takes about 4 ms, so there is *JUST* time to fit in the call!
+    if (Nextion.available()) return;              // was a button pressed?
+    if (millis() - TxPace < 3) ShowComms();       // This call takes about 4 ms, so there is *JUST* time to fit in the call!
     if ((millis() - TxPace) >= PACEMAKER) {
         TxPace = millis();
-        get_new_channels_values(); // Load SendBuffer with new servo positions
-        if (DoSbusSendOnly)        // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
+        get_new_channels_values();                // Load SendBuffer with new servo positions
+        if (DoSbusSendOnly)                       // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
         {
             ReadSwitches();
             MapToSBUS();
-            return; // no more to do here!
+            return;                               // no more to do here!
         }
-        if (BuddyMaster) // If buddy master, check where student's sticks etc. are.
+        if (BuddyMaster)                          // If buddy master, check where student's sticks etc. are.
         {
             GetSlaveChannelValues();
         }
@@ -213,17 +213,17 @@ void ScanAllChannels()
 
 void HopToNextFrequency()
 {
-    Radio1.setChannel(NextFrequency); // Hop !
-    Radio1.stopListening();           // Transmit only (no need for a delay() as this is here followed by housekeeping tasks)
-    ReadSwitches();                   // Check switch positions
-    CheckTimer();                     // update on-screen timer
+    Radio1.setChannel(NextFrequency);  // Hop !
+    Radio1.stopListening();            // Transmit only (no need for a delay() as this is here followed by housekeeping tasks)
+    ReadSwitches();                    // Check switch positions
+    CheckTimer();                      // update on-screen timer
 #ifdef DB_FHSS
     PEndTime  = millis();
     Pduration = (PEndTime - PStartTime) / 1000;
     Serial.print("Hop duration: ");
     Serial.print(Pduration);
     Serial.print(" seconds. Good packets per hop: ");
-    Serial.print(PacketNumber + 1); // because counting starts at zero
+    Serial.print(PacketNumber+1);  // because counting starts at zero
     Serial.print(" Next channel: ");
     Serial.print(FHSS_Channels[NextChannelNumber]);
     if ((FHSS_Channels[NextChannelNumber]) < 10) Serial.print(" ");

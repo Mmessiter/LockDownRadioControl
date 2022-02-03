@@ -55,48 +55,48 @@
 #include <SBUS.h>
 #include "utilities/radio.h"
 
-bool     SENSOR_HUB_CONNECTED = false; //  GPS (Adafruit Ultimate GPS) ?
-Servo    MCMServo[SERVOSUSED];
-uint8_t  PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8}; // 9 PWMs, remaining 7 via sbus
-SBUS     MySbus(SBUSPORT);
-float    PacketStartTime;
-float    temperature280, pressure, altitude;
-uint8_t  BindNow        = 0;     /** indicates that the receiver should start the binding/pairing process */
-bool     BoundFlag      = false; /** indicates if receiver paired with transmitter */
-int      BindOKTimer    = 0;
-bool     ServosAttached = false;
-uint16_t SbusChannels[CHANNELSUSED + 8]; // a few spare
-int      SBUSTimer = 0;
-bool     FailSafeChannel[17];
-bool     FailSafeDataLoaded = false;
-bool     ReInit             = false;
-uint8_t  FS_byte1           = 0; // All 16 failsafe channel flags are in these two bytes
-uint8_t  FS_byte2           = 0;
-uint32_t ReconnectedMoment;
-uint16_t BaroAltitude;
-float    BaroTemperature;
-float    INA219Volts;
-bool     Radio1Exists      = false;
-bool     Radio2Exists      = false;
-uint32_t SensorTime        = 0;
-uint32_t SensorHubAccessed = 0;
-uint16_t Qnh               = 0; //Pressure at sea level here and now (defined by TX option)
-uint16_t OldQnh            = 0;
-uint8_t  SatellitesGPS;
-float    LatitudeGPS;
-float    LongitudeGPS;
-float    SpeedGPS;
-float    AngleGPS;
-bool     GpsFix = false;
-float    AltitudeGPS;
-float    DistanceGPS;
-float    CourseToGPS;
-uint8_t  HoursGPS;
-uint8_t  MinsGPS;
-uint8_t  SecsGPS;
-uint16_t CompressedData[COMPRESSEDWORDS]; // 30 bytes -> 40 bytes when uncompressed
-bool     SensorHubDead = false;
-
+bool            SENSOR_HUB_CONNECTED = false;      //  GPS (Adafruit Ultimate GPS) ?
+Servo           MCMServo[SERVOSUSED];
+uint8_t         PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8}; // 9 PWMs, remaining 7 via sbus
+SBUS            MySbus(SBUSPORT);
+float           PacketStartTime;
+float           temperature280, pressure, altitude;
+uint8_t         BindNow        = 0;     /** indicates that the receiver should start the binding/pairing process */
+bool            BoundFlag      = false; /** indicates if receiver paired with transmitter */
+int             BindOKTimer    = 0;
+bool            ServosAttached = false;
+uint16_t        SbusChannels[CHANNELSUSED + 8]; // a few spare
+int             SBUSTimer = 0;
+bool            FailSafeChannel[17];
+bool            FailSafeDataLoaded = false;
+bool            ReInit             = false;
+uint8_t         FS_byte1           = 0; // All 16 failsafe channel flags are in these two bytes
+uint8_t         FS_byte2           = 0;
+uint32_t        ReconnectedMoment;
+uint16_t        BaroAltitude;
+float           BaroTemperature;
+float           INA219Volts;
+bool            Radio1Exists = false;
+bool            Radio2Exists = false;
+uint32_t        SensorTime       = 0;
+uint32_t        SensorHubAccessed    = 0;
+uint16_t        Qnh              = 0;    //Pressure at sea level here and now (defined by TX option)
+uint16_t        OldQnh           = 0;
+uint8_t         SatellitesGPS; 
+float           LatitudeGPS;
+float           LongitudeGPS;
+float           SpeedGPS;
+float           AngleGPS;
+bool            GpsFix = false;
+float           AltitudeGPS;
+float           DistanceGPS;
+float           CourseToGPS;
+uint8_t         HoursGPS;
+uint8_t         MinsGPS;
+uint8_t         SecsGPS;
+uint16_t        CompressedData[COMPRESSEDWORDS]; // 30 bytes -> 40 bytes when uncompressed
+bool            SensorHubDead = false;
+  
 /************************************************************************************************************/
 
 void LoadFailSafeData()
@@ -171,17 +171,17 @@ void ShowHopDurationEtc()
 {
     uint8_t OnePacketTime = (millis() - PacketStartTime) / PacketNumber;
     Serial.print("Hop duration: ");
-    Serial.print(int(millis() - PacketStartTime));
+    Serial.print( int (millis() - PacketStartTime));
     Serial.print("ms.  Packets per hop: ");
-    if (PacketNumber < 10) Serial.print(" ");
+    if (PacketNumber<10) Serial.print (" ");
     Serial.print(PacketNumber);
-
+    
     Serial.print("  Average Time per packet: ");
     Serial.print(OnePacketTime);
-    if (OnePacketTime < 10) Serial.print(" ");
+    if (OnePacketTime<10) Serial.print (" ");
     Serial.print("ms.  Next channel: ");
     Serial.print(FHSS_Channels[NextChannelNumber]);
-    if (FHSS_Channels[NextChannelNumber] < 10) Serial.print(" ");
+    if (FHSS_Channels[NextChannelNumber] < 10) Serial.print (" ");
     Serial.print(BoundFlag ? " Bound!" : " NOT Bound");
     Serial.print("  Radio: ");
     Serial.print(ThisRadio);
@@ -202,18 +202,17 @@ void ClearAckPayload()
 }
 /************************************************************************************************************/
 
-void UseReceivedData()
-{
-    Decompress(ReceivedData, CompressedData, UNCOMPRESSEDWORDS); // Decompress only the most recent data
-    MapToSBUS();
-    ClearAckPayload();
-    CurrentRadio->flush_rx();
-    LastPacketArrivalTime = millis();
-    if (HopNow) {                   // this flag gets set in LoadAckPayload();
-        FailSafeDataLoaded = false; // Ack payload instructed to Hop at next opportunity...
-        HopToNextFrequency();       // So hop now
-        HopNow = false;             // and clear the flag.
-    }
+void UseReceivedData(){
+        Decompress(ReceivedData, CompressedData, UNCOMPRESSEDWORDS);   // Decompress only the most recent data
+        MapToSBUS();
+        ClearAckPayload();
+        CurrentRadio->flush_rx();
+        LastPacketArrivalTime = millis();
+        if (HopNow) {                   // this flag gets set in LoadAckPayload();
+            FailSafeDataLoaded = false; // Ack payload instructed to Hop at next opportunity...
+            HopToNextFrequency();       // So hop now
+            HopNow = false;             // and clear the flag.
+        }
 }
 /************************************************************************************************************/
 
@@ -221,16 +220,16 @@ bool ReadData()
 {
     Connected = false;
 
-    // if (CurrentRadio->available()) Serial.println (millis() - LastPacketArrivalTime);
+   // if (CurrentRadio->available()) Serial.println (millis() - LastPacketArrivalTime); 
 
-    while (CurrentRadio->available()) { // Get all, but use only the latest
+    while (CurrentRadio->available()) {                                // Get all, but use only the latest
         LoadAckPayload();
         Connected = true;
         CurrentRadio->flush_tx();                                      // This maybe avoids a lockup that happens when the FIFO gets full.**************
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // Send telemetry (actual length plus 0)
-        CurrentRadio->read(&CompressedData, sizeof(CompressedData));   // Get Data
+        CurrentRadio->read(&CompressedData, sizeof(CompressedData));   // Get Data  
     }
-    if (Connected) UseReceivedData();
+    if (Connected) UseReceivedData();  
     return Connected;
 }
 
@@ -270,19 +269,17 @@ void BindModel()
 
 // ***************************************************************************************************************************************************
 
-void SendToSensorHubHub(char m[])
-{
-    Wire.beginTransmission(SENSOR_HUB_I2C_ADDRESS);
-    Wire.write(m);
-    Wire.endTransmission();
+void  SendToSensorHubHub(char m[]){
+  Wire.beginTransmission(SENSOR_HUB_I2C_ADDRESS);   
+  Wire.write(m);
+  Wire.endTransmission();   
 }
 
 // ***************************************************************************************************************************************************
 
-void MarkHere()
-{
-    char MRK[4] = "MRK";
-    SendToSensorHubHub(MRK); // Mark this spot
+void MarkHere(){
+        char MRK[4] = "MRK";
+        SendToSensorHubHub(MRK);  // Mark this spot
 }
 
 /************************************************************************************************************/
@@ -296,19 +293,14 @@ void RebuildFlags(bool* f, uint16_t tb)
 }
 /************************************************************************************************************/
 
-void SendQnhToSensorHub()
-{ // Heer
+void SendQnhToSensorHub(){ // Heer
 
-    union
-    {
-        uint16_t Val16;
-        uint8_t  Val8[2];
-    } Uqnh;
-    char QNH[] = "QNH=??";
-    Uqnh.Val16 = Qnh;
-    QNH[4]     = Uqnh.Val8[0];
-    QNH[5]     = Uqnh.Val8[1];
-    SendToSensorHubHub(QNH);
+  union {uint16_t Val16; uint8_t Val8[2];} Uqnh;  
+        char QNH[] = "QNH=??";
+        Uqnh.Val16 = Qnh;
+        QNH[4] = Uqnh.Val8[0];    
+        QNH[5] = Uqnh.Val8[1];  
+        SendToSensorHubHub(QNH);  
 }
 /************************************************************************************************************/
 
@@ -317,195 +309,186 @@ void SendQnhToSensorHub()
  * the parameter sent is defined by the packet number ... which goes only upto about 5!
  */
 void CheckParams()
-{
-    uint16_t TwoBytes = 0;
-    PacketNumber      = ReceivedData[CHANNELSUSED];
-    switch (PacketNumber) {
+{ uint16_t TwoBytes = 0;      
+    PacketNumber = ReceivedData[CHANNELSUSED];     
+    switch (PacketNumber) {     
         case 0:
-            BindNow      = ReceivedData[CHANNELSUSED + 2];
-            FailSafeSave = bool(ReceivedData[CHANNELSUSED + 1]);
-            if (FailSafeSave) {
-                TwoBytes = uint16_t(FS_byte2) + uint16_t(FS_byte1 << 8);
-                RebuildFlags(FailSafeChannel, TwoBytes);
-            }
-            break;
+                BindNow = ReceivedData[CHANNELSUSED + 2];
+                FailSafeSave = bool(ReceivedData[CHANNELSUSED + 1]);
+                if (FailSafeSave) {
+                    TwoBytes = uint16_t(FS_byte2) + uint16_t(FS_byte1 << 8);
+                    RebuildFlags(FailSafeChannel, TwoBytes);
+                }
+                break;
         case 1:
-            FS_byte1 = ReceivedData[CHANNELSUSED + 1]; // These 2 bytes are 16 failsafe flags
-            FS_byte2 = ReceivedData[CHANNELSUSED + 2]; // These 2 bytes are 16 failsafe flags
-            break;
+                FS_byte1 = ReceivedData[CHANNELSUSED + 1]; // These 2 bytes are 16 failsafe flags
+                FS_byte2 = ReceivedData[CHANNELSUSED + 2]; // These 2 bytes are 16 failsafe flags
+                break;
         case 2:
-            Qnh = (ReceivedData[CHANNELSUSED + 1]) << 8; // 16 bits sent as two bytes for pressure here at sea level
-            Qnh += ReceivedData[CHANNELSUSED + 2];
-            if (OldQnh != Qnh) SendQnhToSensorHub();
-            OldQnh = Qnh; // Send new one once only
-            break;
-        case 3:
-            if ((ReceivedData[CHANNELSUSED + 2]) == 255) MarkHere(); // Mark this spot!
-            break;
+                Qnh = (ReceivedData[CHANNELSUSED + 1]) << 8; // 16 bits sent as two bytes for pressure here at sea level
+                Qnh += ReceivedData[CHANNELSUSED + 2];
+                if (OldQnh != Qnh) SendQnhToSensorHub();
+                OldQnh = Qnh; // Send new one once only
+                break;
+         case 3:
+                if   ((ReceivedData[CHANNELSUSED + 2]) == 255) MarkHere(); // Mark this spot!
+                break;
         default:
-            break;
+                break;
     }
     return;
 }
 
 // ***************************************************************************************************************************************************
-// Here the GPS HUB is asked for 7 bytes of data over I2C.
+// Here the GPS HUB is asked for 7 bytes of data over I2C. 
 // The first IDLEN (=3) bytes are the ID (LAT, LNG, etc...)
 // The next 4 bytes are the value (as a float).
 // The ID changes with each call
 
 // TODO: Correct the RTC time using GPS data!
 
-FASTRUN void ReadTheSensorHub()
-{
+FASTRUN void ReadTheSensorHub(){
 
-#define IDLEN       3
-#define GPSI2CBYTES IDLEN + 4 // = 7 (only floats now)
+  #define IDLEN 3
+  #define GPSI2CBYTES IDLEN + 4   // = 7 (only floats now)
+  
+  char  FIX[IDLEN+1]    = "FIX";  // GPS Fix 
+  char  SAT[IDLEN+1]    = "SAT";  // How many satellites
+  char  LAT[IDLEN+1]    = "LAT";  // Latitude
+  char  LON[IDLEN+1]    = "LON";  // Longitude
+  char  ALT[IDLEN+1]    = "ALT";  // GPS Altitude
+  char  SPD[IDLEN+1]    = "SPD";  // Speed
+  char  COR[IDLEN+1]    = "COR";  // Course
+  char  CTO[IDLEN+1]    = "CTO";  // Course to Mark
+  char  DTO[IDLEN+1]    = "DTO";  // Distance to Mark
+  char  HRS[IDLEN+1]    = "HRS";  // GMT Hours  
+  char  MNS[IDLEN+1]    = "MNS";  // GMT Minutes  
+  char  SEC[IDLEN+1]    = "SEC";  // GMT Seconds
+  char  BLT[IDLEN+1]    = "BLT";  // Altitiude from BMP280
+  char  TMP[IDLEN+1]    = "TMP";  // Temperature from BMP280
+  char  VLT[IDLEN+1]    = "VLT";  // Volts from INA219
+  char  RdataID[IDLEN+1];
+  
+  float RdataIn;
+  union {float Val32; uint8_t Val8[4];} Rdata;      // 'union' allows access to every byte
+  
+  Wire.requestFrom(SENSOR_HUB_I2C_ADDRESS, GPSI2CBYTES);         // Ask hub for data
+  for (int j = 0; j < GPSI2CBYTES; ++j ){
+    if (Wire.available()) {                         // Listen to HUB
+      if (j < IDLEN){
+             RdataID[j]          = Wire.read();     // This gets the three-char data id (eg LAT)
+      }else{
+             Rdata.Val8[j-IDLEN] = Wire.read();     // This gets the 64 bit value for that data ID
+      }
+    }
+  }
+  RdataID[3] = 0;                                   // To terminate the ID string.
+  RdataIn = Rdata.Val32;                            // To re-assemble the 64 BIT data to a double
 
-    char FIX[IDLEN + 1] = "FIX"; // GPS Fix
-    char SAT[IDLEN + 1] = "SAT"; // How many satellites
-    char LAT[IDLEN + 1] = "LAT"; // Latitude
-    char LON[IDLEN + 1] = "LON"; // Longitude
-    char ALT[IDLEN + 1] = "ALT"; // GPS Altitude
-    char SPD[IDLEN + 1] = "SPD"; // Speed
-    char COR[IDLEN + 1] = "COR"; // Course
-    char CTO[IDLEN + 1] = "CTO"; // Course to Mark
-    char DTO[IDLEN + 1] = "DTO"; // Distance to Mark
-    char HRS[IDLEN + 1] = "HRS"; // GMT Hours
-    char MNS[IDLEN + 1] = "MNS"; // GMT Minutes
-    char SEC[IDLEN + 1] = "SEC"; // GMT Seconds
-    char BLT[IDLEN + 1] = "BLT"; // Altitiude from BMP280
-    char TMP[IDLEN + 1] = "TMP"; // Temperature from BMP280
-    char VLT[IDLEN + 1] = "VLT"; // Volts from INA219
-    char RdataID[IDLEN + 1];
-
-    float RdataIn;
-    union
-    {
-        float   Val32;
-        uint8_t Val8[4];
-    } Rdata; // 'union' allows access to every byte
-
-    Wire.requestFrom(SENSOR_HUB_I2C_ADDRESS, GPSI2CBYTES); // Ask hub for data
-    for (int j = 0; j < GPSI2CBYTES; ++j) {
-        if (Wire.available()) { // Listen to HUB
-            if (j < IDLEN) {
-                RdataID[j] = Wire.read(); // This gets the three-char data id (eg LAT)
-            }
-            else {
-                Rdata.Val8[j - IDLEN] = Wire.read(); // This gets the 64 bit value for that data ID
-            }
-        }
-    }
-    RdataID[3] = 0;           // To terminate the ID string.
-    RdataIn    = Rdata.Val32; // To re-assemble the 64 BIT data to a double
-
-    if (strcmp(FIX, RdataID) == 0) {
-        if (int(RdataIn) == 1) {
-            GpsFix = true;
-            return;
-        }
-    }
-    if (strcmp(LAT, RdataID) == 0) {
-        LatitudeGPS = RdataIn;
-        return;
-    }
-    if (strcmp(LON, RdataID) == 0) {
-        LongitudeGPS = RdataIn;
-        return;
-    }
-    if (strcmp(SPD, RdataID) == 0) {
-        SpeedGPS = RdataIn;
-        return;
-    }
-    if (strcmp(COR, RdataID) == 0) {
-        AngleGPS = RdataIn;
-        return;
-    }
-    if (strcmp(ALT, RdataID) == 0) {
-        AltitudeGPS = RdataIn;
-        return;
-    }
-    if (strcmp(DTO, RdataID) == 0) {
-        DistanceGPS = RdataIn;
-        return;
-    }
-    if (strcmp(SAT, RdataID) == 0) {
-        SatellitesGPS = uint8_t(RdataIn);
-        return;
-    }
-    if (strcmp(CTO, RdataID) == 0) {
-        CourseToGPS = RdataIn;
-        return;
-    }
-    if (strcmp(HRS, RdataID) == 0) {
-        HoursGPS = uint8_t(RdataIn);
-        return;
-    }
-    if (strcmp(MNS, RdataID) == 0) {
-        MinsGPS = uint8_t(RdataIn);
-        return;
-    }
-    if (strcmp(SEC, RdataID) == 0) {
-        SecsGPS = uint8_t(RdataIn);
-        return;
-    }
-    if (strcmp(BLT, RdataID) == 0) {
-        BaroAltitude = uint16_t(RdataIn);
-        return;
-    }
-    if (strcmp(TMP, RdataID) == 0) {
-        BaroTemperature = RdataIn;
-        return;
-    }
-    if (strcmp(VLT, RdataID) == 0) {
-        INA219Volts = uint8_t(RdataIn);
-        return;
-    }
+  if (strcmp(FIX,RdataID) == 0) {     
+      if (int(RdataIn) == 1) {
+       GpsFix = true;
+       return;
+      }
+  }
+  if (strcmp(LAT,RdataID) == 0) {     
+     LatitudeGPS =  RdataIn;
+     return;
+  }
+  if (strcmp(LON,RdataID) == 0) {     
+     LongitudeGPS =  RdataIn;
+     return;
+  }
+  if (strcmp(SPD,RdataID) == 0) {     
+     SpeedGPS =  RdataIn;
+     return;
+  }
+  if (strcmp(COR,RdataID) == 0) {     
+     AngleGPS =  RdataIn;
+     return;
+  }
+  if (strcmp(ALT,RdataID) == 0) {     
+     AltitudeGPS =  RdataIn;
+     return;
+  }
+  if (strcmp(DTO,RdataID) == 0) {     
+     DistanceGPS =  RdataIn;
+     return;
+  }
+   if (strcmp(SAT,RdataID) == 0) {     
+     SatellitesGPS =  uint8_t(RdataIn);
+     return;
+  }
+  if (strcmp(CTO,RdataID) == 0) {     
+     CourseToGPS =  RdataIn;
+     return;
+  }
+  if (strcmp(HRS,RdataID) == 0) {     
+     HoursGPS =  uint8_t(RdataIn);
+     return;
+  }
+  if (strcmp(MNS,RdataID) == 0) {     
+     MinsGPS =  uint8_t(RdataIn);
+     return;
+  }
+  if (strcmp(SEC,RdataID) == 0) {     
+     SecsGPS =  uint8_t(RdataIn);
+     return;
+  }
+  if (strcmp(BLT,RdataID) == 0) {     
+     BaroAltitude =  uint16_t(RdataIn);
+     return;
+  }
+  if (strcmp(TMP,RdataID) == 0) {     
+     BaroTemperature =  RdataIn;
+     return;
+  }
+  if (strcmp(VLT,RdataID) == 0) {     
+     INA219Volts =  uint8_t(RdataIn);
+     return;
+  }
 }
 
 // ******************************************************************************************************************************************************************
-void SensorHubHasFailed()
-{ // If the I2C gets its knickers in a twist, it can lock up the reciever, so DON'T call it until landed and reset.
-#define Failed 0
-    LatitudeGPS     = Failed;
-    LongitudeGPS    = Failed;
-    SpeedGPS        = Failed;
-    AngleGPS        = Failed;
-    AltitudeGPS     = Failed;
-    DistanceGPS     = Failed;
-    SatellitesGPS   = Failed;
-    CourseToGPS     = Failed;
-    HoursGPS        = Failed;
-    MinsGPS         = Failed;
-    SecsGPS         = Failed;
-    BaroAltitude    = Failed;
-    BaroTemperature = Failed;
-    INA219Volts     = Failed;
-    GpsFix          = Failed;
-    SensorHubDead   = true; // This flag inhibits further attempts to contact hub.
+void SensorHubHasFailed(){       // If the I2C gets its knickers in a twist, it can lock up the reciever, so DON'T call it until landed and reset.
+#define Failed  0
+     LatitudeGPS     = Failed; 
+     LongitudeGPS    = Failed;
+     SpeedGPS        = Failed;
+     AngleGPS        = Failed;    
+     AltitudeGPS     = Failed;
+     DistanceGPS     = Failed;   
+     SatellitesGPS   = Failed;
+     CourseToGPS     = Failed;
+     HoursGPS        = Failed;
+     MinsGPS         = Failed;
+     SecsGPS         = Failed;
+     BaroAltitude    = Failed;
+     BaroTemperature = Failed;   
+     INA219Volts     = Failed;
+     GpsFix          = Failed;
+     SensorHubDead   = true;    // This flag inhibits further attempts to contact hub.
 }
 // ******************************************************************************************************************************************************************
-FASTRUN void ReceiveData()
-{
-    uint32_t TimeTest;
-    if (millis() - LastPacketArrivalTime < 1) { // If, and only if, we have still absolutely loads of time, do stuff now while waiting ...                                                                  // read the sensors NOW while waiting for next data packet.
+FASTRUN void ReceiveData(){ 
+      uint32_t TimeTest;
+      if (millis() - LastPacketArrivalTime < 1 ) {                        // If, and only if, we have still absolutely loads of time, do stuff now while waiting ...                                                                  // read the sensors NOW while waiting for next data packet.
         if (SENSOR_HUB_CONNECTED) {
-            if ((millis() - SensorHubAccessed) > 10) {
+            if ((millis() - SensorHubAccessed) > 10){ 
                 SensorHubAccessed = millis();
-                TimeTest          = millis();                        //  Time the I2C calls. If too long, don't repeat.
-                if (!SensorHubDead) ReadTheSensorHub();              //  Sensor now has its own MCU. Calls return in far less that 6 ms unless it lost I2C synch
-                if ((millis() - TimeTest) > 4) SensorHubHasFailed(); //  So if sensor hub fails, don't bother calling it again (It normally returns within 2 ms. )
-            }
+                TimeTest =  millis();                                    //  Time the I2C calls. If too long, don't repeat.
+                if (!SensorHubDead) ReadTheSensorHub();                  //  Sensor now has its own MCU. Calls return in far less that 6 ms unless it lost I2C synch
+                if ((millis() - TimeTest) > 4)  SensorHubHasFailed();    //  So if sensor hub fails, don't bother calling it again (It normally returns within 2 ms. )
+            }                                                                     
         }
     }
-    Connected = false; // Assume not connected until we know better
+    Connected = false;                          // Assume not connected until we know better  
     if (CurrentRadio->available()) {
-        Connected = true; // ... ok we now know better !
+        Connected = true;                        // ... ok we now know better ! 
     }
     if (!Connected) {
-        if (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT) { // Has transmitter died?
-            Reconnect();                                           // Try to reconnect.
+        if (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT) { // Has transmitter died? 
+        Reconnect();                                              // Try to reconnect.
         }
     }
     if (ReadData()) {
@@ -513,8 +496,7 @@ FASTRUN void ReceiveData()
     }
 }
 /************************************************************************************************************/
-void ScanI2c()
-{
+void ScanI2c(){
 
     for (uint8_t i = 1; i < 127; ++i) {
         Wire.beginTransmission(i);
@@ -582,7 +564,7 @@ void DoBinding()
 /************************************************************************************************************/
 void setup()
 {
-    pinMode(LED_PIN, OUTPUT);
+ pinMode(LED_PIN, OUTPUT);
     digitalWrite(LED_PIN, HIGH);
     Wire.begin();
     delay(2500); // Needed ! - possibly for stabilising capacitors.
