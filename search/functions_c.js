@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['newdatavalue_1455',['newDataValue',['../class_adafruit___g_p_s.html#adc65b4561fbde5b33497df8bded60d5c',1,'Adafruit_GPS']]],
-  ['newnmeareceived_1456',['newNMEAreceived',['../class_adafruit___g_p_s.html#ac44f7d0517543bdd1c22a89d2d11ea78',1,'Adafruit_GPS']]]
+  ['newdatavalue_1457',['newDataValue',['../class_adafruit___g_p_s.html#adc65b4561fbde5b33497df8bded60d5c',1,'Adafruit_GPS']]],
+  ['newnmeareceived_1458',['newNMEAreceived',['../class_adafruit___g_p_s.html#ac44f7d0517543bdd1c22a89d2d11ea78',1,'Adafruit_GPS']]]
 ];
