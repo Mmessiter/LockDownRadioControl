@@ -26,6 +26,8 @@ var radio_8h =
     [ "ReadSavedPipe", "radio_8h.html#a56ee137fc60749fa274236bc239c3291", null ],
     [ "ReadSensorHub", "radio_8h.html#a8fff0fd6eb9e23721d9e06f3f44bd3c9", null ],
     [ "Reconnect", "radio_8h.html#a692b8b0727e0db358f99c7bf4e8235c0", null ],
+    [ "SendDateToAckPayload", "radio_8h.html#affa2dcc4341b8daecac77e6e0a354b2d", null ],
+    [ "SendTimeToAckPayload", "radio_8h.html#a8162c1748e39496c4adf88c55d1c49b8", null ],
     [ "SendToAckPayload", "radio_8h.html#a18c826138f01a3dde332cc6e0f98d3e0", null ],
     [ "SetNewPipe", "radio_8h.html#a6f54969e66375decc44723b141b78766", null ],
     [ "ShowHopDurationEtc", "radio_8h.html#a2863e7455e30e6fddc0fcf56f62d6564", null ],
@@ -40,6 +42,7 @@ var radio_8h =
     [ "ConnectionStart", "radio_8h.html#a11cd5dd0a4f9438c7e7e387349d8636d", null ],
     [ "CourseToGPS", "radio_8h.html#a1a4e211f9858a5d6d61d11e5679a71f3", null ],
     [ "CurrentRadio", "radio_8h.html#a7bca81159d93f215060f40f45f19b0de", null ],
+    [ "DayGPS", "radio_8h.html#a4c722ec4fa2ff675bd4a2d511e80cd6e", null ],
     [ "DistanceGPS", "radio_8h.html#a6f76c248ca5e727e482873f5328587e1", null ],
     [ "GpsFix", "radio_8h.html#a86c2722f6c671747562cc504a440e243", null ],
     [ "HopNow", "radio_8h.html#a8f6625d513c0e3887659968a39ddc325", null ],
@@ -49,6 +52,7 @@ var radio_8h =
     [ "LatitudeGPS", "radio_8h.html#a79c2bfabc0682301ec238954845e1e81", null ],
     [ "LongitudeGPS", "radio_8h.html#afabe4c9d9760f8606aa408474e3d626c", null ],
     [ "MinsGPS", "radio_8h.html#ad3b8d1f00f2046a53bd3c5c997af2abb", null ],
+    [ "MonthGPS", "radio_8h.html#a0944456d2dbd7c1deb2abba2532afe24", null ],
     [ "NewPipe", "radio_8h.html#a594f07765a7ed90e0830d4e2f69a7112", null ],
     [ "NextChannelNumber", "radio_8h.html#a372b457a109ccee3253b219df1a47412", null ],
     [ "NextFrequency", "radio_8h.html#a97e43b2285fba75691d8bef36902b9d8", null ],
@@ -69,5 +73,6 @@ var radio_8h =
     [ "SpeedGPS", "radio_8h.html#af02319a1e0d8c0c651f23e49acc228f8", null ],
     [ "StillSearchingTime", "radio_8h.html#a1d0b7743e2015fe687146524466e4794", null ],
     [ "ThisPipe", "radio_8h.html#a88d2add9e7ca58e7218870f887b25859", null ],
-    [ "ThisRadio", "radio_8h.html#a25cc3bb5cb94f4bbef0f2c5b79140c20", null ]
+    [ "ThisRadio", "radio_8h.html#a25cc3bb5cb94f4bbef0f2c5b79140c20", null ],
+    [ "YearGPS", "radio_8h.html#a4a1012a9dfe5632ac326ce712f311472", null ]
 ];

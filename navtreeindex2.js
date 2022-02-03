@@ -1,5 +1,8 @@
 var NAVTREEINDEX2 =
 {
+"_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h.html#af0bc43b5dae696582a77176e6e4ff643abd9779b04292b5e8054485b10fccb99c":[12,0,2,0,3,1,15,0],
+"_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h.html#af0bc43b5dae696582a77176e6e4ff643abd9779b04292b5e8054485b10fccb99c":[12,0,3,0,3,1,15,0],
+"_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h.html#af0bc43b5dae696582a77176e6e4ff643abd9779b04292b5e8054485b10fccb99c":[12,0,4,0,3,1,15,0],
 "_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h.html#af0bc43b5dae696582a77176e6e4ff643ac407aca03c7ce72ea55e52f40477561b":[12,0,2,0,3,1,15,9],
 "_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h.html#af0bc43b5dae696582a77176e6e4ff643ac407aca03c7ce72ea55e52f40477561b":[12,0,3,0,3,1,15,9],
 "_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h.html#af0bc43b5dae696582a77176e6e4ff643ac407aca03c7ce72ea55e52f40477561b":[12,0,4,0,3,1,15,9],
@@ -246,8 +249,5 @@ var NAVTREEINDEX2 =
 "_sensor_hub_t32_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h.html#af0bc43b5dae696582a77176e6e4ff643ad9ebf0d3f835c55738b4d4e915768875":[12,0,2,0,3,1,15,26],
 "_sensor_hub_t32_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h.html#af0bc43b5dae696582a77176e6e4ff643ad9ebf0d3f835c55738b4d4e915768875":[12,0,3,0,3,1,15,26],
 "_sensor_hub_t32_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h.html#af0bc43b5dae696582a77176e6e4ff643ad9ebf0d3f835c55738b4d4e915768875":[12,0,4,0,3,1,15,26],
-"_sensor_hub_t32_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h.html#af0bc43b5dae696582a77176e6e4ff643adc01250dcba5642d294f74ba4d115c28":[12,0,2,0,3,1,15,19],
-"_sensor_hub_t32_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h.html#af0bc43b5dae696582a77176e6e4ff643adc01250dcba5642d294f74ba4d115c28":[12,0,3,0,3,1,15,19],
-"_sensor_hub_t32_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h.html#af0bc43b5dae696582a77176e6e4ff643adc01250dcba5642d294f74ba4d115c28":[12,0,4,0,3,1,15,19],
-"_sensor_hub_t32_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h.html#af0bc43b5dae696582a77176e6e4ff643ae19c28b874a4ef6706d44af6f373f743":[12,0,2,0,3,1,15,20]
+"_sensor_hub_t32_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h.html#af0bc43b5dae696582a77176e6e4ff643adc01250dcba5642d294f74ba4d115c28":[12,0,2,0,3,1,15,19]
 };

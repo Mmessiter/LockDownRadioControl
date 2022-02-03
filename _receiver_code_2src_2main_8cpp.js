@@ -48,6 +48,7 @@ var _receiver_code_2src_2main_8cpp =
     [ "BoundFlag", "_receiver_code_2src_2main_8cpp.html#a44d37e4e8af884bf172344c0835a5593", null ],
     [ "CompressedData", "_receiver_code_2src_2main_8cpp.html#aa16611ba89205c8cb9e75353ce1ad032", null ],
     [ "CourseToGPS", "_receiver_code_2src_2main_8cpp.html#a1a4e211f9858a5d6d61d11e5679a71f3", null ],
+    [ "DayGPS", "_receiver_code_2src_2main_8cpp.html#a4c722ec4fa2ff675bd4a2d511e80cd6e", null ],
     [ "DistanceGPS", "_receiver_code_2src_2main_8cpp.html#a6f76c248ca5e727e482873f5328587e1", null ],
     [ "FailSafeChannel", "_receiver_code_2src_2main_8cpp.html#aeda79da3882f657a3eaefc5800122da5", null ],
     [ "FailSafeDataLoaded", "_receiver_code_2src_2main_8cpp.html#a08ed7a870be8e84ae26ee0b972866bb3", null ],
@@ -60,6 +61,7 @@ var _receiver_code_2src_2main_8cpp =
     [ "LongitudeGPS", "_receiver_code_2src_2main_8cpp.html#afabe4c9d9760f8606aa408474e3d626c", null ],
     [ "MCMServo", "_receiver_code_2src_2main_8cpp.html#aea43f0afa386a593269762fb00bc6c77", null ],
     [ "MinsGPS", "_receiver_code_2src_2main_8cpp.html#ad3b8d1f00f2046a53bd3c5c997af2abb", null ],
+    [ "MonthGPS", "_receiver_code_2src_2main_8cpp.html#a0944456d2dbd7c1deb2abba2532afe24", null ],
     [ "OldQnh", "_receiver_code_2src_2main_8cpp.html#a9457ea1945cb317c212c8cb98a829f39", null ],
     [ "PacketStartTime", "_receiver_code_2src_2main_8cpp.html#ac479139b01668992bdccae3c508df1df", null ],
     [ "pressure", "_receiver_code_2src_2main_8cpp.html#ac870e1249bab4a2a68cc4126761d24ef", null ],
@@ -79,5 +81,6 @@ var _receiver_code_2src_2main_8cpp =
     [ "SensorTime", "_receiver_code_2src_2main_8cpp.html#a1e9e8116136abd96cf87d7f0fd20a3d8", null ],
     [ "ServosAttached", "_receiver_code_2src_2main_8cpp.html#a95b22fb572f7a91a89a431c7f1236575", null ],
     [ "SpeedGPS", "_receiver_code_2src_2main_8cpp.html#af02319a1e0d8c0c651f23e49acc228f8", null ],
-    [ "temperature280", "_receiver_code_2src_2main_8cpp.html#a7cc84074d4166c6512a2d479b6f12e30", null ]
+    [ "temperature280", "_receiver_code_2src_2main_8cpp.html#a7cc84074d4166c6512a2d479b6f12e30", null ],
+    [ "YearGPS", "_receiver_code_2src_2main_8cpp.html#a4a1012a9dfe5632ac326ce712f311472", null ]
 ];
