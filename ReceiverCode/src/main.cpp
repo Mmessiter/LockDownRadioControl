@@ -91,9 +91,15 @@ bool            GpsFix = false;
 float           AltitudeGPS;
 float           DistanceGPS;
 float           CourseToGPS;
+
+uint8_t         DayGPS;
+uint8_t         MonthGPS;
+uint8_t         YearGPS;
+
 uint8_t         HoursGPS;
 uint8_t         MinsGPS;
 uint8_t         SecsGPS;
+
 uint16_t        CompressedData[COMPRESSEDWORDS]; // 30 bytes -> 40 bytes when uncompressed
 bool            SensorHubDead = false;
   
@@ -345,7 +351,6 @@ void CheckParams()
 // The next 4 bytes are the value (as a float).
 // The ID changes with each call
 
-// TODO: Correct the RTC time using GPS data!
 
 FASTRUN void ReadTheSensorHub(){
 
@@ -367,6 +372,11 @@ FASTRUN void ReadTheSensorHub(){
   char  BLT[IDLEN+1]    = "BLT";  // Altitiude from BMP280
   char  TMP[IDLEN+1]    = "TMP";  // Temperature from BMP280
   char  VLT[IDLEN+1]    = "VLT";  // Volts from INA219
+
+  char  DAY[IDLEN+1]    = "DAY";  // DAY
+  char  MTH[IDLEN+1]    = "MTH";  // MONTH
+  char  YER[IDLEN+1]    = "YER";  // YEAR
+
   char  RdataID[IDLEN+1];
   
   float RdataIn;
@@ -444,8 +454,20 @@ FASTRUN void ReadTheSensorHub(){
      return;
   }
   if (strcmp(VLT,RdataID) == 0) {     
-     INA219Volts =  uint8_t(RdataIn);
+     INA219Volts = uint8_t(RdataIn);
      return;
+  }
+  if (strcmp(DAY,RdataID) == 0) {     
+     DayGPS = uint8_t(RdataIn);
+     return;
+  }
+   if (strcmp(MTH,RdataID) == 0) {     
+     MonthGPS = uint8_t(RdataIn);
+     return;
+  }
+   if (strcmp(YER,RdataID) == 0) {     
+    YearGPS = uint8_t(RdataIn);
+    return;
   }
 }
 
@@ -478,7 +500,8 @@ FASTRUN void ReceiveData(){
                 SensorHubAccessed = millis();
                 TimeTest =  millis();                                    //  Time the I2C calls. If too long, don't repeat.
                 if (!SensorHubDead) ReadTheSensorHub();                  //  Sensor now has its own MCU. Calls return in far less that 6 ms unless it lost I2C synch
-                if ((millis() - TimeTest) > 4)  SensorHubHasFailed();    //  So if sensor hub fails, don't bother calling it again (It normally returns within 2 ms. )
+                if ((millis() - TimeTest) > 6)  SensorHubHasFailed();    //  So if sensor hub fails, don't bother calling it again (It normally returns within 2 ms. )
+               // Serial.println (YearGPS+1792);
             }                                                                     
         }
     }

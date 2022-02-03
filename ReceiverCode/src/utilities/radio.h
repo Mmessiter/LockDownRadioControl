@@ -45,6 +45,9 @@ extern float    CourseToGPS;
 extern uint8_t  HoursGPS;
 extern uint8_t  MinsGPS;
 extern uint8_t  SecsGPS;
+extern uint8_t  YearGPS;
+extern uint8_t  MonthGPS;
+extern uint8_t  DayGPS;
 extern uint8_t  SatellitesGPS; 
 extern bool     GpsFix;
 extern bool     SENSOR_HUB_CONNECTED;    
@@ -326,6 +329,22 @@ void SendToAckPayload(double U){                        // This function now wor
     AckPayload.Byte3    = ThisUnion.Val8[2];
     AckPayload.Byte4    = ThisUnion.Val8[3];
 }
+
+/************************************************************************************************************/
+void SendTimeToAckPayload(){                       
+    AckPayload.Byte1    = SecsGPS;    
+    AckPayload.Byte2    = MinsGPS;
+    AckPayload.Byte3    = HoursGPS;
+    AckPayload.Byte4    = 0;
+}
+
+/************************************************************************************************************/
+void SendDateToAckPayload(){                       
+    AckPayload.Byte1    = DayGPS;  
+    AckPayload.Byte2    = MonthGPS;
+    AckPayload.Byte3    = YearGPS;
+    AckPayload.Byte4    = 0;
+}
 /************************************************************************************************************/
 
 void LoadAckPayload()
@@ -334,7 +353,7 @@ void LoadAckPayload()
     AckPayload.Purpose &= 0x7F; // Clear hi bit ( = do not ignore)
     ++AckPayload.Purpose;      
 
-      if (SENSOR_HUB_CONNECTED) MaxAckP = 32;                      // 32 + GPS
+      if (SENSOR_HUB_CONNECTED) MaxAckP = 30;                      // 32 + GPS
       if (AckPayload.Purpose > MaxAckP) AckPayload.Purpose = 0;     // wrap after max
 
     switch (AckPayload.Purpose) {
@@ -420,21 +439,15 @@ void LoadAckPayload()
             LoadTimeStamp();
             break;
         case 27: 
-            SendToAckPayload(HoursGPS);         // ********* GPS *******************
+            SendDateToAckPayload();
             break;
         case 28:
             LoadTimeStamp();
             break;
         case 29: 
-            SendToAckPayload(MinsGPS);         // ********* GPS *******************
+            SendTimeToAckPayload();
             break;
         case 30:
-            LoadTimeStamp();
-            break;
-        case 31: 
-            SendToAckPayload(SecsGPS);         // ********* GPS *******************
-            break;
-        case 32:
             LoadTimeStamp();
             break;
         default:
