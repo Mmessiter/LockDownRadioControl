@@ -554,7 +554,7 @@ int     DeltaGMT        = 0;
 
 /******************* DeltaGMT is a user defined representation of time zone. It should never exceed 24. Not on this planet. **********/
 void FixDeltaGMTSign(){
-    if (DeltaGMT < -24) DeltaGMT = 0;  // Undefined value?
+    if (DeltaGMT < -24) DeltaGMT = 0;  // Undefined value?f
     if (DeltaGMT > 24){                // This fixes the sign bit if negative !!!! (There's surely a better way !!!)
         DeltaGMT ^= 0xffff;            // toggle every bit! :-)
         ++DeltaGMT;                    // Add one
@@ -2080,20 +2080,6 @@ int SDReadInt(int p_address)
     r += ModelsFileNumber.read() << 8;
     return r;
 }
-
-/*********************************************************************************************************************************/
-
-
-int SDReadInt1(int p_address)
-{
-    union {int v16; uint8_t v8[2];} v;
-    ModelsFileNumber.seek(p_address);
-    v.v8[0] = ModelsFileNumber.read();
-    v.v8[1] = ModelsFileNumber.read();
-    Serial.println (v.v16);
-    return v.v16;
-}
-
 /*********************************************************************************************************************************/
 
 uint8_t SDReadByte(int p_address)
