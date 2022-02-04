@@ -496,24 +496,24 @@ void SensorHubHasFailed(){       // If the I2C gets its knickers in a twist, it 
 // ******************************************************************************************************************************************************************
 FASTRUN void ReceiveData(){ 
       uint32_t TimeTest;
-      if ((millis() - SensorHubAccessed) > 10){                                //  Reading Sensor hub 100 x per second might be enough
-        if (millis() - LastPacketArrivalTime < 1 ) {                           //  If, and only if, we have still absolutely loads of time, do stuff now while waiting ...           
+      if ((millis() - SensorHubAccessed) > 10){                                         //  Reading Sensor hub 100 x per second might be enough
+        if (millis() - LastPacketArrivalTime < 1 ) {                                    //  If, and only if, we have still absolutely loads of time, do stuff now while waiting ...           
              SensorHubAccessed = millis();
-             if (!SensorHubDead){                                              //  Better check it hasn't died.
-                TimeTest =  millis();                                          //  Time the I2C calls. If too long, don't repeat ... save the model.                                                       
-                if (SENSOR_HUB_CONNECTED) ReadTheSensorHub();                  //  Sensor now has its own MCU. Calls return in far less that 6 ms unless it lost I2C synch  
-                if (INA219_CONNECTED) INA219Volts = ina219.getBusVoltage_V();      //  Get RX LIPO volts (if connected separately)  
-                if ((millis() - TimeTest) > 6)  SensorHubHasFailed();          //  So if sensor hub and/or INA219 fails, don't bother calling either again (It normally returns within 2 ms.    
+             if (!SensorHubDead){                                                       //  Better check it hasn't died.
+                TimeTest =  millis();                                                   //  Time the I2C calls. If too long, don't repeat ... save the model.                                                       
+                if (SENSOR_HUB_CONNECTED)       ReadTheSensorHub();                     //  Sensor now has its own MCU. Calls return in far less that 6 ms unless it lost I2C synch  
+                if (INA219_CONNECTED)           INA219Volts = ina219.getBusVoltage_V(); //  Get RX LIPO volts (if connected separately)  
+                if ((millis() - TimeTest) > 6)  SensorHubHasFailed();                   //  So if sensor hub and/or INA219 fails, don't bother calling either again (It normally returns within 2 ms.    
             } 
          }
       }
-    Connected = false;                                                          // Assume not connected until we know better  
+    Connected = false;                                                                  // Assume not connected until we know better  
     if (CurrentRadio->available()) {
-        Connected = true;                                                       // ... ok we now know better ! 
+        Connected = true;                                                               // ... ok we now know better ! 
     }
     if (!Connected) {
-        if (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT) {              // Has transmitter died? 
-        Reconnect();                                                            // Try to reconnect.
+        if (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT) {                      // Has transmitter died? 
+        Reconnect();                                                                    // Try to reconnect.
         }
     }
     if (ReadData()) {
