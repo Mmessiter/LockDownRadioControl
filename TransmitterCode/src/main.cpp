@@ -552,8 +552,7 @@ int     DeltaGMT        = 0;
 //        return  distance; // in MILES now
 //   }
 
-
-/**************************** DELTAGMT is a representation of the time zone ********************************************/
+/******************* DeltaGMT is a user defined representation of time zone. It should never exceed 24. Not on this planet. **********/
 void FixDeltaGMTSign(){
     if (DeltaGMT > 200 ){        // This fixes the sign bit if negative !!!! (There's surely a better way !!!)
         DeltaGMT ^= 0xffff;      // toggle every bit! :-)
