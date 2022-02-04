@@ -552,6 +552,15 @@ int     DeltaGMT        = 0;
 //        return  distance; // in MILES now
 //   }
 
+
+/**************************** DELTAGMT is a representation of the time zone ********************************************/
+void FixDeltaGMTSign(){
+    if (DeltaGMT > 200 ){        // This fixes the sign bit if negative !!!! (There's surely a better way !!!)
+        DeltaGMT ^= 0xffff;      // toggle every bit! :-)
+        ++DeltaGMT;              // Add one
+        DeltaGMT =- DeltaGMT;    // its definately meant to be negative!
+    }
+}
 /************************************************************************************************************/
 // This function reads data from BUDDY (Slave) BUT uses it ONLY WHILE the channel 12 switch is in the ON position ( > 1000)
 
@@ -974,6 +983,8 @@ void ReadTime()
 
     char Owner[] = "Owner";
 
+    FixDeltaGMTSign();
+
     if (CurrentView == FrontView || CurrentView == Options_View) {
         if (RTC.read(tm)) {
             strcpy(TimeString, Str(NB, tm.Day, 0));
@@ -1154,7 +1165,7 @@ int GetValue(char* nbox)
     if (TextIn[0] == 'q') {
         ValueIn = TextIn[1]; // Collect and build 32 bit value from 4 bytes
         ValueIn += (TextIn[2] << 8);
-        ValueIn += (TextIn[3] << 16);  // heer
+        ValueIn += (TextIn[3] << 16);  
         ValueIn += (TextIn[4] << 24);
     }
     return ValueIn;
@@ -4313,7 +4324,9 @@ void Button_was_pressed()
             BuddyMaster    = GetValue(BuddyM);  // Master, either.
             Qnh            = GetValue(QNH);
             DeltaGMT       = GetValue(dGMT);
-         
+            
+            FixDeltaGMTSign();
+            
             if (DoSbusSendOnly)
             {
                 Connected       = false;
@@ -4438,11 +4451,7 @@ void Button_was_pressed()
         }
 
         if (InStrng(OptionsViewS, WordsIn) > 0) { 
-            if (DeltaGMT > 200 ){        // This fixes the sign bit !!!! There's surely a better way !!!
-                DeltaGMT ^= 0xffff;      // toggle every bit :-)
-                ++DeltaGMT;              // Add one
-                DeltaGMT =- DeltaGMT;    // its negative!
-            }
+            FixDeltaGMTSign();
             SendCommand(pOptionsViewS);
             SendValue(ScreenViewTimeout, ScreenTimeout);
             SendValue(BuddyM, BuddyMaster);
@@ -4498,7 +4507,7 @@ void Button_was_pressed()
             return;
         }
 
-        p = InStrng(OptionsView, WordsIn);
+        p = InStrng(OptionsView, WordsIn); // heer
         if (p > 0) {
             i = strlen(OptionsView);
             j = 0;
@@ -4514,6 +4523,15 @@ void Button_was_pressed()
             if (Inactivity_Timeout < INACTIVITYMINIMUM) Inactivity_Timeout = INACTIVITYMINIMUM;
             if (Inactivity_Timeout > INACTIVITYMAXIMUM) Inactivity_Timeout = INACTIVITYMAXIMUM;
 
+
+            SendValue(ScreenViewTimeout, ScreenTimeout);
+            SendValue(BuddyM, BuddyMaster);
+            SendValue(BuddyP, DoSbusSendOnly);
+            SendValue(Pto, (Inactivity_Timeout / TICKSPERMINUTE));
+            SendText(Tx_Name, TxName);
+            SendValue(QNH,Qnh);
+            CurrentView = Options_View;
+            CurrentMode = NORMAL;
             SaveTXStuff();
             ClearText();
             return;
