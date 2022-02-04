@@ -532,6 +532,8 @@ uint8_t GmonthDay;// = tm.Day;    // 1-31
 uint8_t Gmonth;   // = tm.Month;  // 1-12
 uint8_t Gyear;    // = tm.Year;   // 0-99
 bool    GPSTimeSynched  =   false;
+int     DeltaGMT        = 0;
+
 
 /************************************************************************************************************/
 // This function returns distance (in MILES) between two GPS coordinates (in degrees)
@@ -995,7 +997,7 @@ void ReadTime()
             strcat(TimeString, (Str(NB, tmYearToCalendar(tm.Year), 0)));
             strcat(TimeString, Space);
             if (MayBeAddZero(tm.Hour)) strcat(TimeString, zero);
-            strcat(TimeString, Str(NB, tm.Hour, 0));
+            strcat(TimeString, Str(NB, tm.Hour+DeltaGMT, 0));
             strcat(TimeString, colon);
             if (MayBeAddZero(tm.Minute)) strcat(TimeString, zero);
             strcat(TimeString, Str(NB, tm.Minute, 0));
@@ -1152,7 +1154,7 @@ int GetValue(char* nbox)
     if (TextIn[0] == 'q') {
         ValueIn = TextIn[1]; // Collect and build 32 bit value from 4 bytes
         ValueIn += (TextIn[2] << 8);
-        ValueIn += (TextIn[3] << 16);
+        ValueIn += (TextIn[3] << 16);  // heer
         ValueIn += (TextIn[4] << 24);
     }
     return ValueIn;
@@ -2071,6 +2073,19 @@ int SDReadInt(int p_address)
 
 /*********************************************************************************************************************************/
 
+
+int SDReadInt1(int p_address)
+{
+    union {int v16; uint8_t v8[2];} v;
+    ModelsFileNumber.seek(p_address);
+    v.v8[0] = ModelsFileNumber.read();
+    v.v8[1] = ModelsFileNumber.read();
+    Serial.println (v.v16);
+    return v.v16;
+}
+
+/*********************************************************************************************************************************/
+
 uint8_t SDReadByte(int p_address)
 {
     ModelsFileNumber.seek(p_address);
@@ -2596,6 +2611,9 @@ bool LoadAllParameters()
         Qnh = SDReadInt(addr);
         ++addr;
         ++addr;
+        DeltaGMT = SDReadInt(addr);
+        ++addr;
+        ++addr;
         txm = addr;
         ReadOneModel(ModelNumber);
         return true;
@@ -2804,6 +2822,9 @@ void SaveTXStuff()
         ++addr;
     }
     SDUpdateInt(addr,Qnh);
+    ++addr;
+    ++addr;
+    SDUpdateInt(addr,DeltaGMT);
     ++addr;
     ++addr;
     CloseModelsFile();
@@ -4264,6 +4285,7 @@ void Button_was_pressed()
     char OptionsEnd[]              = "OptionsEnd";
     char QNH[]                     = "Qnh";
     char Mark[]                    = "Mark";
+    char dGMT[]                    = "dGMT";
 
     if (strlen(WordsIn) > 0) {
         StartInactvityTimeout();
@@ -4290,6 +4312,8 @@ void Button_was_pressed()
             DoSbusSendOnly = GetValue(BuddyP);  // Pupil, wired
             BuddyMaster    = GetValue(BuddyM);  // Master, either.
             Qnh            = GetValue(QNH);
+            DeltaGMT       = GetValue(dGMT);
+         
             if (DoSbusSendOnly)
             {
                 Connected       = false;
@@ -4413,7 +4437,12 @@ void Button_was_pressed()
             return;
         }
 
-        if (InStrng(OptionsViewS, WordsIn) > 0) {
+        if (InStrng(OptionsViewS, WordsIn) > 0) { 
+            if (DeltaGMT > 200 ){        // This fixes the sign bit !!!! There's surely a better way !!!
+                DeltaGMT ^= 0xffff;      // toggle every bit :-)
+                ++DeltaGMT;              // Add one
+                DeltaGMT =- DeltaGMT;    // its negative!
+            }
             SendCommand(pOptionsViewS);
             SendValue(ScreenViewTimeout, ScreenTimeout);
             SendValue(BuddyM, BuddyMaster);
@@ -4421,6 +4450,7 @@ void Button_was_pressed()
             SendValue(Pto, (Inactivity_Timeout / TICKSPERMINUTE));
             SendText(Tx_Name, TxName);
             SendValue(QNH,Qnh);
+            SendValue(dGMT,DeltaGMT);
             CurrentView = Options_View;
             CurrentMode = NORMAL;
             ClearText();
