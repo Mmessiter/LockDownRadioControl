@@ -103,7 +103,7 @@ $(document).ready(function(){initNavTree('common_8h_source.html',''); initResiza
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160; </div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">    #ifndef _SRC_UTILITIES_COMMON_H</span></div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">    #define _SRC_UTILITIES_COMMON_H</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">    #include &lt;Adafruit_INA219.h&gt;</span> </div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">    #include &lt;stdint.h&gt;</span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">    #include &lt;EEPROM.h&gt;</span></div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
@@ -121,20 +121,22 @@ $(document).ready(function(){initNavTree('common_8h_source.html',''); initResiza
 <div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="common_8h.html#a9ac62185b964d18f5843146fce5b0063">   24</a></span>&#160;uint32_t  <a class="code" href="common_8h.html#a9ac62185b964d18f5843146fce5b0063">LastPacketArrivalTime</a> = 0;</div>
 <div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="common_8h.html#a332eaa61dd85cd649cf62de2345e246e">   25</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="common_8h.html#a332eaa61dd85cd649cf62de2345e246e">FailSafeSave</a>         = <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="common_8h.html#a97bbae82012a7c41f47dcb8ce8a48a90">   26</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="common_8h.html#a97bbae82012a7c41f47dcb8ce8a48a90">FailSafeSent</a>         = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="common_8h.html#ad3c239265016482b6850360b3dc51a50">   28</a></span>&#160;<span class="preprocessor">#define RECONNECT_CH 83</span></div>
-<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="common_8h.html#a79ed13ac413de8a0a1767615afccbe2f">   29</a></span>&#160;uint8_t <a class="code" href="common_8h.html#a79ed13ac413de8a0a1767615afccbe2f">FHSS_Channels</a>[84] = {28, 24, 61, 64, 28, 55, 66, 19, 76, 21, 59, 67, 15, 71, 82, 32, 49, 69, 13, 2, 34, 47, 20, 34, 69, </div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;                             16, 2, 72, 35, 76, 35, 57, 45, 29, 76, 75, 49, 59, 3, 57, 20, 16, 41, 59, 62, 59, 67, 11, 3, 9, 77, </div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;                             37, 8, 31, 36, 34, 18, 75, 17, 9, 50, 78, 77, 73, 30, 50, 79, 6, 36, 20, 23, 79, 40, 54, 51, 19, 69, </div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;                             12, 18, 80, 53, 41, 24};</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="comment">/************************************************************************************************************/</span></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// defined (_SRC_UTILITIES_COMMON_H)</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="common_8h.html#af1b5290b72a9f9bc5d1d70c7c14df9b0">   27</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="common_8h.html#af1b5290b72a9f9bc5d1d70c7c14df9b0">FOUND_INA219</a>         = <span class="keyword">false</span>;                   <span class="comment">//  Volts from INA219 ?</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
+<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="common_8h.html#ad3c239265016482b6850360b3dc51a50">   29</a></span>&#160;<span class="preprocessor">#define RECONNECT_CH 83</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="common_8h.html#a79ed13ac413de8a0a1767615afccbe2f">   30</a></span>&#160;uint8_t <a class="code" href="common_8h.html#a79ed13ac413de8a0a1767615afccbe2f">FHSS_Channels</a>[84] = {28, 24, 61, 64, 28, 55, 66, 19, 76, 21, 59, 67, 15, 71, 82, 32, 49, 69, 13, 2, 34, 47, 20, 34, 69, </div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;                             16, 2, 72, 35, 76, 35, 57, 45, 29, 76, 75, 49, 59, 3, 57, 20, 16, 41, 59, 62, 59, 67, 11, 3, 9, 77, </div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;                             37, 8, 31, 36, 34, 18, 75, 17, 9, 50, 78, 77, 73, 30, 50, 79, 6, 36, 20, 23, 79, 40, 54, 51, 19, 69, </div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;                             12, 18, 80, 53, 41, 24};</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="comment">/************************************************************************************************************/</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// defined (_SRC_UTILITIES_COMMON_H)</span></div>
 <div class="ttc" id="acommon_8h_html_a332eaa61dd85cd649cf62de2345e246e"><div class="ttname"><a href="common_8h.html#a332eaa61dd85cd649cf62de2345e246e">FailSafeSave</a></div><div class="ttdeci">bool FailSafeSave</div><div class="ttdef"><b>Definition:</b> <a href="common_8h_source.html#l00025">common.h:25</a></div></div>
-<div class="ttc" id="acommon_8h_html_a79ed13ac413de8a0a1767615afccbe2f"><div class="ttname"><a href="common_8h.html#a79ed13ac413de8a0a1767615afccbe2f">FHSS_Channels</a></div><div class="ttdeci">uint8_t FHSS_Channels[84]</div><div class="ttdef"><b>Definition:</b> <a href="common_8h_source.html#l00029">common.h:29</a></div></div>
+<div class="ttc" id="acommon_8h_html_a79ed13ac413de8a0a1767615afccbe2f"><div class="ttname"><a href="common_8h.html#a79ed13ac413de8a0a1767615afccbe2f">FHSS_Channels</a></div><div class="ttdeci">uint8_t FHSS_Channels[84]</div><div class="ttdef"><b>Definition:</b> <a href="common_8h_source.html#l00030">common.h:30</a></div></div>
 <div class="ttc" id="acommon_8h_html_a97bbae82012a7c41f47dcb8ce8a48a90"><div class="ttname"><a href="common_8h.html#a97bbae82012a7c41f47dcb8ce8a48a90">FailSafeSent</a></div><div class="ttdeci">bool FailSafeSent</div><div class="ttdef"><b>Definition:</b> <a href="common_8h_source.html#l00026">common.h:26</a></div></div>
 <div class="ttc" id="acommon_8h_html_a9ac62185b964d18f5843146fce5b0063"><div class="ttname"><a href="common_8h.html#a9ac62185b964d18f5843146fce5b0063">LastPacketArrivalTime</a></div><div class="ttdeci">uint32_t LastPacketArrivalTime</div><div class="ttdef"><b>Definition:</b> <a href="common_8h_source.html#l00024">common.h:24</a></div></div>
+<div class="ttc" id="acommon_8h_html_af1b5290b72a9f9bc5d1d70c7c14df9b0"><div class="ttname"><a href="common_8h.html#af1b5290b72a9f9bc5d1d70c7c14df9b0">FOUND_INA219</a></div><div class="ttdeci">bool FOUND_INA219</div><div class="ttdef"><b>Definition:</b> <a href="common_8h_source.html#l00027">common.h:27</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
