@@ -4517,19 +4517,11 @@ void Button_was_pressed()
                 ++i;
                 TxName[j] = 0;
             }
-
             ScreenTimeout      = GetValue(ScreenViewTimeout);
             Inactivity_Timeout = GetValue(Pto) * TICKSPERMINUTE;
             if (Inactivity_Timeout < INACTIVITYMINIMUM) Inactivity_Timeout = INACTIVITYMINIMUM;
             if (Inactivity_Timeout > INACTIVITYMAXIMUM) Inactivity_Timeout = INACTIVITYMAXIMUM;
-
-
-            SendValue(ScreenViewTimeout, ScreenTimeout);
-            SendValue(BuddyM, BuddyMaster);
-            SendValue(BuddyP, DoSbusSendOnly);
-            SendValue(Pto, (Inactivity_Timeout / TICKSPERMINUTE));
             SendText(Tx_Name, TxName);
-            SendValue(QNH,Qnh);
             CurrentView = Options_View;
             CurrentMode = NORMAL;
             SaveTXStuff();
