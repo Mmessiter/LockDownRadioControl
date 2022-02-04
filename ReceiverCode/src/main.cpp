@@ -502,7 +502,7 @@ FASTRUN void ReceiveData(){
              if (!SensorHubDead){                                                       //  Better check it hasn't died.
                 TimeTest =  millis();                                                   //  Time the I2C calls. If too long, don't repeat ... save the model.                                                       
                 if (SENSOR_HUB_CONNECTED)       ReadTheSensorHub();                     //  Sensor now has its own MCU. Calls return in far less that 6 ms unless it lost I2C synch  
-                if (INA219_CONNECTED)           INA219Volts = ina219.getBusVoltage_V(); //  Get RX LIPO volts (if connected separately)  
+                if (INA219_CONNECTED)           INA219Volts = ina219.getBusVoltage_V(); //  Get RX LIPO volts if connected separately (as will be needed on 'planes with no GPS fitted.)  
                 if ((millis() - TimeTest) > 6)  SensorHubHasFailed();                   //  So if sensor hub and/or INA219 fails, don't bother calling either again (It normally returns within 2 ms.    
             } 
          }
