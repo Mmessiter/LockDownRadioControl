@@ -516,8 +516,8 @@ FASTRUN void ReceiveData(){
         Reconnect();                                                                    // Try to reconnect.
         }
     }
-    if (ReadData()) {
-        CheckParams();
+    if (ReadData()) {                                                                   // Finally, get some data from TX
+        CheckParams();                                                                  // and check the extra parameters
     }
 }
 /************************************************************************************************************/
