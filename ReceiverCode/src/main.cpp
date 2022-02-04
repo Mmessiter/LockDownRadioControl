@@ -55,6 +55,7 @@
 #include <SBUS.h>
 #include "utilities/radio.h"
 
+Adafruit_INA219 ina219;
 bool            SENSOR_HUB_CONNECTED = false;      //  GPS (Adafruit Ultimate GPS) ?
 Servo           MCMServo[SERVOSUSED];
 uint8_t         PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8}; // 9 PWMs, remaining 7 via sbus
@@ -102,6 +103,7 @@ uint8_t         SecsGPS;
 
 uint16_t        CompressedData[COMPRESSEDWORDS]; // 30 bytes -> 40 bytes when uncompressed
 bool            SensorHubDead = false;
+
   
 /************************************************************************************************************/
 
@@ -494,14 +496,15 @@ void SensorHubHasFailed(){       // If the I2C gets its knickers in a twist, it 
 // ******************************************************************************************************************************************************************
 FASTRUN void ReceiveData(){ 
       uint32_t TimeTest;
-      if (millis() - LastPacketArrivalTime < 1 ) {                        // If, and only if, we have still absolutely loads of time, do stuff now while waiting ...                                                                  // read the sensors NOW while waiting for next data packet.
+      if (millis() - LastPacketArrivalTime < 1 ) {                          // If, and only if, we have still absolutely loads of time, do stuff now while waiting ...                                                                  // read the sensors NOW while waiting for next data packet.
         if (SENSOR_HUB_CONNECTED) {
             if ((millis() - SensorHubAccessed) > 10){ 
                 SensorHubAccessed = millis();
-                TimeTest =  millis();                                    //  Time the I2C calls. If too long, don't repeat.
-                if (!SensorHubDead) ReadTheSensorHub();                  //  Sensor now has its own MCU. Calls return in far less that 6 ms unless it lost I2C synch
-                if ((millis() - TimeTest) > 6)  SensorHubHasFailed();    //  So if sensor hub fails, don't bother calling it again (It normally returns within 2 ms. )
-               // Serial.println (YearGPS+1792);
+                TimeTest =  millis();                                       //  Time the I2C calls. If too long, don't repeat.
+                if (!SensorHubDead) ReadTheSensorHub();                     //  Sensor now has its own MCU. Calls return in far less that 6 ms unless it lost I2C synch
+                if ((millis() - TimeTest) > 6)  SensorHubHasFailed();       //  So if sensor hub fails, don't bother calling it again (It normally returns within 2 ms. )
+               
+                if (FOUND_INA219) INA219Volts = ina219.getBusVoltage_V();   // Get volts if connected separately
             }                                                                     
         }
     }
@@ -520,7 +523,6 @@ FASTRUN void ReceiveData(){
 }
 /************************************************************************************************************/
 void ScanI2c(){
-
     for (uint8_t i = 1; i < 127; ++i) {
         Wire.beginTransmission(i);
         if (Wire.endTransmission() == 0) {
@@ -530,6 +532,12 @@ void ScanI2c(){
                 Serial.println("Sensor Hub with Adafruit Ultimate GPS etc. detected!");
 #endif
             }
+            if (i == 0x40) {
+                FOUND_INA219 = true;
+#ifdef DB_SENSORS
+                Serial.println("INA219 voltage meter detected!");
+#endif
+              }
         }
     }
 }
@@ -592,6 +600,7 @@ void setup()
     Wire.begin();
     delay(2500); // Needed ! - possibly for stabilising capacitors.
     ScanI2c();   // see what's connected
+      if (FOUND_INA219) ina219.begin();
 #ifdef SECOND_TRANSCEIVER
     CurrentRadio = &Radio2;
     if (InitCurrentRadio()) Radio2Exists = true;
