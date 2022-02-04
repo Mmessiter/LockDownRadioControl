@@ -24,7 +24,7 @@
 uint32_t  LastPacketArrivalTime = 0;
 bool FailSafeSave         = false;
 bool FailSafeSent         = false;
-bool FOUND_INA219         = false;                   //  Volts from INA219 ?
+bool INA219_CONNECTED     = false;                   //  Volts from INA219 ?
 
 #define RECONNECT_CH 83
 uint8_t FHSS_Channels[84] = {28, 24, 61, 64, 28, 55, 66, 19, 76, 21, 59, 67, 15, 71, 82, 32, 49, 69, 13, 2, 34, 47, 20, 34, 69, 

@@ -499,10 +499,10 @@ FASTRUN void ReceiveData(){
       if ((millis() - SensorHubAccessed) > 10){                                //  Reading Sensor hub 100 x per second might be enough
         if (millis() - LastPacketArrivalTime < 1 ) {                           //  If, and only if, we have still absolutely loads of time, do stuff now while waiting ...           
              SensorHubAccessed = millis();
-             if (!SensorHubDead){
-                TimeTest =  millis();                                          //  Time the I2C calls. If too long, don't repeat.                                                       
-                if (SENSOR_HUB_CONNECTED) ReadTheSensorHub();                                        //  Sensor now has its own MCU. Calls return in far less that 6 ms unless it lost I2C synch  
-                if (FOUND_INA219) INA219Volts = ina219.getBusVoltage_V();      //  Get RX LIPO volts (if connected separately)  
+             if (!SensorHubDead){                                              //  Better check it hasn't died.
+                TimeTest =  millis();                                          //  Time the I2C calls. If too long, don't repeat ... save the model.                                                       
+                if (SENSOR_HUB_CONNECTED) ReadTheSensorHub();                  //  Sensor now has its own MCU. Calls return in far less that 6 ms unless it lost I2C synch  
+                if (INA219_CONNECTED) INA219Volts = ina219.getBusVoltage_V();      //  Get RX LIPO volts (if connected separately)  
                 if ((millis() - TimeTest) > 6)  SensorHubHasFailed();          //  So if sensor hub and/or INA219 fails, don't bother calling either again (It normally returns within 2 ms.    
             } 
          }
@@ -532,7 +532,7 @@ void ScanI2c(){
 #endif
             }
             if (i == 0x40) {
-                FOUND_INA219 = true;
+                INA219_CONNECTED = true;
 #ifdef DB_SENSORS
                 Serial.println("INA219 voltage meter detected!");
 #endif
@@ -599,7 +599,7 @@ void setup()
     Wire.begin();
     delay(2500); // Needed ! - possibly for stabilising capacitors.
     ScanI2c();   // see what's connected
-      if (FOUND_INA219) ina219.begin();
+      if (INA219_CONNECTED) ina219.begin();
 #ifdef SECOND_TRANSCEIVER
     CurrentRadio = &Radio2;
     if (InitCurrentRadio()) Radio2Exists = true;
