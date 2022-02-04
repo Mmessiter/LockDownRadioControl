@@ -195,7 +195,6 @@ var _transmitter_code_2src_2main_8cpp =
     [ "ScanI2c", "_transmitter_code_2src_2main_8cpp.html#a20ffd6680226b1e058002512386e7770", null ],
     [ "SDReadByte", "_transmitter_code_2src_2main_8cpp.html#af5db4d6f5f17a24fc08503a4e14de200", null ],
     [ "SDReadInt", "_transmitter_code_2src_2main_8cpp.html#ab6670478c40dbf268914a0bfc6831085", null ],
-    [ "SDReadInt1", "_transmitter_code_2src_2main_8cpp.html#ad2f5a5238a2b85a9b53e5b00cdc33248", null ],
     [ "SDUpdateByte", "_transmitter_code_2src_2main_8cpp.html#aead4267a5769c2ae9feb2917c3d77db0", null ],
     [ "SDUpdateInt", "_transmitter_code_2src_2main_8cpp.html#a653ff5fd975f7ed9e38a790af206aa97", null ],
     [ "SendCharArray", "_transmitter_code_2src_2main_8cpp.html#acd617ff93ca893aa7d65aaf2898dfc3d", null ],
