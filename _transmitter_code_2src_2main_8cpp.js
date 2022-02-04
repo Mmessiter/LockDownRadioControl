@@ -127,6 +127,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "DrawLine", "_transmitter_code_2src_2main_8cpp.html#acbef1d41e1bd646b60a6e8afd9c66880", null ],
     [ "EndSend", "_transmitter_code_2src_2main_8cpp.html#ad7b8aa834c87265667a5687b1787a1cc", null ],
     [ "FailedPacket", "_transmitter_code_2src_2main_8cpp.html#a783a0141bea15d8539730afd4b3b06a3", null ],
+    [ "FixDeltaGMTSign", "_transmitter_code_2src_2main_8cpp.html#a493eeacfcf61a53db5933a893f7d94a6", null ],
     [ "Force_ReDisplay", "_transmitter_code_2src_2main_8cpp.html#aa1e81e58421a34fdfd7bfb31925f5a90", null ],
     [ "get_new_channels_values", "_transmitter_code_2src_2main_8cpp.html#a59e4c37585e1187976dd5342ec883aef", null ],
     [ "GetAltitude", "_transmitter_code_2src_2main_8cpp.html#a75fa77e7bbb1cfe8fe6e1a216fbdc17e", null ],
