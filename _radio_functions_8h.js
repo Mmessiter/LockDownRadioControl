@@ -52,7 +52,7 @@ var _radio_functions_8h =
     [ "ShowComms", "_radio_functions_8h.html#aac472b3398ab38e7f54b1a2cae96ba62", null ],
     [ "ShowServoPos", "_radio_functions_8h.html#ad959eec03b0151ade81dc088593d816c", null ],
     [ "StartInactvityTimeout", "_radio_functions_8h.html#a793b7bcd77531c95fe72ed4356d421c8", null ],
-    [ "Str", "_radio_functions_8h.html#ab399ea9eaf21f0d7d034a8e2dcaa6e39", null ],
+    [ "Str", "_radio_functions_8h.html#a6bac145d5df31efb9c90e2a60a4cbca5", null ],
     [ "AckPayload", "_radio_functions_8h.html#aec532bb9df7f865e6612fabf46895e6c", null ],
     [ "AckPayloadSize", "_radio_functions_8h.html#a6dc99d00582ef356ea3d57700dca6dab", null ],
     [ "AllChannels", "_radio_functions_8h.html#a340f5f74a3364594ad9b460d4b5b04d5", null ],

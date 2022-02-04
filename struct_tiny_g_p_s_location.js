@@ -18,11 +18,11 @@ var struct_tiny_g_p_s_location =
     [ "lng", "struct_tiny_g_p_s_location.html#a544e9009a5580b2fd5466821a5e5b782", null ],
     [ "lng", "struct_tiny_g_p_s_location.html#a544e9009a5580b2fd5466821a5e5b782", null ],
     [ "lng", "struct_tiny_g_p_s_location.html#a544e9009a5580b2fd5466821a5e5b782", null ],
-    [ "rawLat", "struct_tiny_g_p_s_location.html#abe2a4fbfe28299aae87c5b4c3c58bcad", null ],
-    [ "rawLat", "struct_tiny_g_p_s_location.html#abe2a4fbfe28299aae87c5b4c3c58bcad", null ],
-    [ "rawLat", "struct_tiny_g_p_s_location.html#abe2a4fbfe28299aae87c5b4c3c58bcad", null ],
-    [ "rawLng", "struct_tiny_g_p_s_location.html#a9fe126feca0bdcfa9224a428b86d68db", null ],
-    [ "rawLng", "struct_tiny_g_p_s_location.html#a9fe126feca0bdcfa9224a428b86d68db", null ],
-    [ "rawLng", "struct_tiny_g_p_s_location.html#a9fe126feca0bdcfa9224a428b86d68db", null ],
+    [ "rawLat", "struct_tiny_g_p_s_location.html#abe5f28b0d636a1031af3cd98af863af6", null ],
+    [ "rawLat", "struct_tiny_g_p_s_location.html#abe5f28b0d636a1031af3cd98af863af6", null ],
+    [ "rawLat", "struct_tiny_g_p_s_location.html#abe5f28b0d636a1031af3cd98af863af6", null ],
+    [ "rawLng", "struct_tiny_g_p_s_location.html#a4e20b4067a448ca0003fc65a3d3864d2", null ],
+    [ "rawLng", "struct_tiny_g_p_s_location.html#a4e20b4067a448ca0003fc65a3d3864d2", null ],
+    [ "rawLng", "struct_tiny_g_p_s_location.html#a4e20b4067a448ca0003fc65a3d3864d2", null ],
     [ "TinyGPSPlus", "struct_tiny_g_p_s_location.html#a2bcf8d5290fbef8c44b415e281b8c6f2", null ]
 ];

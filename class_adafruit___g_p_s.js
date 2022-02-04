@@ -9,7 +9,7 @@ var class_adafruit___g_p_s =
     [ "available", "class_adafruit___g_p_s.html#abe6399af00c0047527ea20e3f35a0182", null ],
     [ "begin", "class_adafruit___g_p_s.html#ab86462ef1409d2bd8ff7a8405c70ff34", null ],
     [ "boatAngle", "class_adafruit___g_p_s.html#a911b6b32cac6cf3b24f865c820b5072e", null ],
-    [ "build", "class_adafruit___g_p_s.html#a4b2f8f3830a72b38fa7d3483bc737536", null ],
+    [ "build", "class_adafruit___g_p_s.html#aa98fd519cac1b6f0dd93b7b74e619616", null ],
     [ "check", "class_adafruit___g_p_s.html#ae4abe9822d8ca59866bbb44de7910881", null ],
     [ "common_init", "class_adafruit___g_p_s.html#ab8a2fe20ce1874b10a6e9f007c236b30", null ],
     [ "compassAngle", "class_adafruit___g_p_s.html#a06b7e12e38f1b00df058a253364215db", null ],
