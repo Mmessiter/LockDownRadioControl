@@ -8,7 +8,7 @@
  * - 32 Mixes
  * - 4 Flight modes, or 3 plus autorotation
  * - User defined Channel names
- * - 64 editable 5-point curves (16 channels x 4 flight modes)
+ * - 64 editable 5-point curves (16 channels x 4 flight modes) Plus expo
  * - FailSafe on any channel(s)
  * - 2.4 GHz RF scan
  * - Motor Timer
@@ -16,11 +16,9 @@
  * - Trims on screen saved per flight mode and model.
  * - Screen timeout.
  * - FFHS fast recovery on lost packet
- * - Scans at startup for FHSS frequencies to dodge.
  * - Use 32 GIG SD card for model memories
- * - Binding - Each TX must has unique pipe address.
+ * - Binding - uses Mac address as unique pipe address.
  * - Four User definable three position switches
- * - PID Gains implemented and stored to SD indepentently per flight mode and per model
  * - Input sources definable
  * - Model memories export and import
  * - Model memory files alphabetically sorted
