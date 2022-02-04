@@ -554,10 +554,11 @@ int     DeltaGMT        = 0;
 
 /******************* DeltaGMT is a user defined representation of time zone. It should never exceed 24. Not on this planet. **********/
 void FixDeltaGMTSign(){
-    if (DeltaGMT > 24){          // This fixes the sign bit if negative !!!! (There's surely a better way !!!)
-        DeltaGMT ^= 0xffff;      // toggle every bit! :-)
-        ++DeltaGMT;              // Add one
-        DeltaGMT =- DeltaGMT;    // it's definately meant to be negative!
+    if (DeltaGMT < -24) DeltaGMT = 0;  // Undefined value?
+    if (DeltaGMT > 24){                // This fixes the sign bit if negative !!!! (There's surely a better way !!!)
+        DeltaGMT ^= 0xffff;            // toggle every bit! :-)
+        ++DeltaGMT;                    // Add one
+        DeltaGMT =- DeltaGMT;          // it's definately meant to be negative!
     }
 }
 /************************************************************************************************************/
