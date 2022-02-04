@@ -497,8 +497,8 @@ void SensorHubHasFailed(){       // If the I2C gets its knickers in a twist, it 
 FASTRUN void ReceiveData(){ 
       uint32_t TimeTest;
       if ((millis() - SensorHubAccessed) > 10){                                //  Reading Sensor hub 100 x per second might be enough
-        SensorHubAccessed = millis();
         if (millis() - LastPacketArrivalTime < 1 ) {                           //  If, and only if, we have still absolutely loads of time, do stuff now while waiting ...           
+             SensorHubAccessed = millis();
              if (!SensorHubDead){
                 TimeTest =  millis();                                          //  Time the I2C calls. If too long, don't repeat.                                                       
                 if (SENSOR_HUB_CONNECTED) ReadTheSensorHub();                                        //  Sensor now has its own MCU. Calls return in far less that 6 ms unless it lost I2C synch  
