@@ -5884,6 +5884,8 @@ void loop()
         }
     }
 
+
+
     if (BindingNow == 2 && (millis() - BindingTimer) > 100) {
         if (!BoundFlag) {
 #ifdef DB_BIND

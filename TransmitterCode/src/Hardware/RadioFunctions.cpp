@@ -121,7 +121,7 @@ void SendData()
         {
             BufferNewPipe(); // if not yet bound, send our pipe
         }
-        ++PacketNumber;
+        
        
 
         LoadPacketData(); // extra parameters appended to the data packet
@@ -144,6 +144,7 @@ void SendData()
         {
             Radio1.read(&AckPayload, AckPayloadSize); //  "sizeof" doesn't work with externs, hence 2 new vars.
             ++RangeTestGoodPackets;
+            ++PacketNumber;
             LostContactFlag = false;
             ParseAckPayload();
             RecentPacketsLost         = 0;
