@@ -20,7 +20,7 @@
     #define HOPTIME         30 // ms between channel changes (= 4 packets per hop)
     #define FREQUENCYSCOUNT 82 // use 82 different channels
 
- //  #define DEBUG         // for FHSS
+// #define DEBUG         // for FHSS
 // #define DB_SENSORS
 // #define DB_BIND
 // #define DB_FAILSAFE
