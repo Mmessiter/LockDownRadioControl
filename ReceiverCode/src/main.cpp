@@ -3,7 +3,7 @@
  *
  * @section rxFeatures Features List
  * - WORKS ON TEENSY 4.0
- * - Detects and uses INA219 to read volts (NOW IN SENSOR HUB)
+ * - Detects and uses INA219 to read volts (NOW IN SENSOR HUB as well)
  * - Detects and uses BMP280 pressure sensor for altitude (NOW IN SENSOR HUB)
  * - Binding implemented
  * - SBUS implemented
@@ -103,6 +103,7 @@ uint8_t         SecsGPS;
 
 uint16_t        CompressedData[COMPRESSEDWORDS]; // 30 bytes -> 40 bytes when uncompressed
 bool            SensorHubDead = false;
+u_int32_t       BootupMoment = 0;
 
   
 /************************************************************************************************************/
@@ -301,7 +302,7 @@ void RebuildFlags(bool* f, uint16_t tb)
 }
 /************************************************************************************************************/
 
-void SendQnhToSensorHub(){ // Heer
+void SendQnhToSensorHub(){ 
 
   union {uint16_t Val16; uint8_t Val8[2];} Uqnh;  
         char QNH[] = "QNH=??";
@@ -374,7 +375,6 @@ FASTRUN void ReadTheSensorHub(){
   char  BLT[IDLEN+1]    = "BLT";  // Altitiude from BMP280
   char  TMP[IDLEN+1]    = "TMP";  // Temperature from BMP280
   char  VLT[IDLEN+1]    = "VLT";  // Volts from INA219
-
   char  DAY[IDLEN+1]    = "DAY";  // DAY
   char  MTH[IDLEN+1]    = "MTH";  // MONTH
   char  YER[IDLEN+1]    = "YER";  // YEAR
@@ -383,7 +383,8 @@ FASTRUN void ReadTheSensorHub(){
   
   float RdataIn;
   union {float Val32; uint8_t Val8[4];} Rdata;      // 'union' allows access to every byte
-  
+
+
   Wire.requestFrom(SENSOR_HUB_I2C_ADDRESS, GPSI2CBYTES);         // Ask hub for data
   for (int j = 0; j < GPSI2CBYTES; ++j ){
     if (Wire.available()) {                         // Listen to HUB
@@ -456,7 +457,8 @@ FASTRUN void ReadTheSensorHub(){
      return;
   }
   if (strcmp(VLT,RdataID) == 0) {     
-      if (!INA219_CONNECTED) INA219Volts = uint8_t(RdataIn);
+      if (!INA219_CONNECTED) INA219Volts = RdataIn;
+      Serial.println(INA219Volts);
      return;
   }
   if (strcmp(DAY,RdataID) == 0) {     
@@ -489,8 +491,8 @@ void SensorHubHasFailed(){       // If the I2C gets its knickers in a twist, it 
      SecsGPS         = Failed;
      BaroAltitude    = Failed;
      BaroTemperature = Failed;   
-     INA219Volts     = Failed;
-     GpsFix          = Failed;
+     INA219Volts     = 0;
+     GpsFix          = 0;
      SensorHubDead   = true;    // This flag inhibits further attempts to contact hub.
 }
 // ******************************************************************************************************************************************************************
@@ -503,7 +505,9 @@ FASTRUN void ReceiveData(){
                 TimeTest =  millis();                                                   //  Time the I2C calls. If too long, don't repeat it ... save the model.                                                       
                 if (SENSOR_HUB_CONNECTED)       ReadTheSensorHub();                     //  Sensor now has its own MCU. Calls return in far less that 6 ms unless it lost I2C synch  
                 if (INA219_CONNECTED)           INA219Volts = ina219.getBusVoltage_V(); //  Get RX LIPO volts if connected separately (as will be needed on 'planes with no GPS fitted.)  
-                if ((millis() - TimeTest) > 6)  SensorHubHasFailed();                   //  So if sensor hub and/or INA219 fails, don't bother calling either again (It normally returns within 2 ms.    
+                if ((millis() - BootupMoment) > 5000) {
+                        if ((millis() - TimeTest) > 6)  SensorHubHasFailed();           //  So if sensor hub and/or INA219 fails, don't bother calling either again (It normally returns within 2 ms.    
+                }
             } 
          }
       }
@@ -608,6 +612,7 @@ void setup()
     if (InitCurrentRadio()) Radio1Exists = true;
     ThisRadio = 1;
     GetOldPipe();
+    BootupMoment = millis();
     digitalWrite(LED_PIN, LOW);
 }
 /************************************************************************************************************/
