@@ -351,12 +351,13 @@ void SendDateToAckPayload(){
 
 void LoadAckPayload()
 {
-    uint8_t MaxAckP     = 2;                                      // 2 if only RX
+  
+    uint8_t MaxAckP     = 4;                                      // 2 if only RX
     AckPayload.Purpose &= 0x7F;                                   // Clear hi bit ( = do not ignore)
     ++AckPayload.Purpose;   
     if (SENSOR_HUB_CONNECTED) MaxAckP = 30;                       // its 30 + GPS
     if (AckPayload.Purpose > MaxAckP) AckPayload.Purpose = 0;     // wrap after max
-    switch (AckPayload.Purpose) {
+        switch (AckPayload.Purpose) {
         case 0: 
             LoadTimeStamp();
             break;
