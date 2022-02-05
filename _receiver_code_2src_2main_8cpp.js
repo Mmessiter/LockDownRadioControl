@@ -45,6 +45,7 @@ var _receiver_code_2src_2main_8cpp =
     [ "BaroTemperature", "_receiver_code_2src_2main_8cpp.html#abda84b8cbebce00b7d4b0ea759b8d07f", null ],
     [ "BindNow", "_receiver_code_2src_2main_8cpp.html#ac629a0e239d1c27f33584d6ac3e841f8", null ],
     [ "BindOKTimer", "_receiver_code_2src_2main_8cpp.html#a547d518da80d9f29dde20e14880e250c", null ],
+    [ "BootupMoment", "_receiver_code_2src_2main_8cpp.html#a99c599f52b4638868adf3cfd0c988d80", null ],
     [ "BoundFlag", "_receiver_code_2src_2main_8cpp.html#a44d37e4e8af884bf172344c0835a5593", null ],
     [ "CompressedData", "_receiver_code_2src_2main_8cpp.html#aa16611ba89205c8cb9e75353ce1ad032", null ],
     [ "CourseToGPS", "_receiver_code_2src_2main_8cpp.html#a1a4e211f9858a5d6d61d11e5679a71f3", null ],
