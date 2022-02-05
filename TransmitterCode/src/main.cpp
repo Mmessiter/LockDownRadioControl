@@ -5705,12 +5705,10 @@ void GetDateFromAckPayload(){
 /************************************************************************************************************/
 void GetAltitude()
 {
-  if(int(GetFromAckPayload())) {  // oddly sometimes returns zero??
     RXModelAltitude = int(GetFromAckPayload()) - GroundModelAltitude;
     if (RXMAXModelAltitude < RXModelAltitude) RXMAXModelAltitude = RXModelAltitude;
     snprintf(MaxAltitude, 5, "%d", RXMAXModelAltitude);
     snprintf(ModelAltitude, 5, "%d", RXModelAltitude);
-    }
 }
 /************************************************************************************************************/
 void GetTemperature()
@@ -5726,9 +5724,8 @@ void ParseAckPayload()
         NextChannelNumber   = AckPayload.Byte5;
         GetNextHopChannelNumber();                       // Also gets actual channel number
         HopToNextFrequency();
-    }
-  
         AckPayload.Purpose &= 0x7f;
+    }    
         switch (AckPayload.Purpose) // Only look at the low 7 BITS
                                     // High BIT is guaranteed LOW by this point, so no "& 0x7F" is needed.
         {
@@ -5740,60 +5737,48 @@ void ParseAckPayload()
                 if (RXModelVolts > 0) {
                     VoltsDetected = true;
                     snprintf(ModelVolts, 5, "%f", RXModelVolts);
+                    break;
                 }
-            
             case 2:
                 GetAltitude();
                 break;
-           
             case 3:
                 GetTemperature();
                 break;
-           
             case 4:
                 GPSLatitude = GetFromAckPayload(); 
                 break;
-          
             case 5:
                 GPSLongitude = GetFromAckPayload(); 
                 break;
-           
             case 6:
                 GPSAngle = GetFromAckPayload();
                 break;
-           
             case 7:
                 GPSSpeed = GetFromAckPayload(); 
                 if (GPSMaxSpeed < GPSSpeed) GPSMaxSpeed = GPSSpeed;
                 break;
-                      
             case 8:
-              GpsFix =  GetFromAckPayload();
+                GpsFix =  GetFromAckPayload();
                 break;
-           
             case 9:
                 GPSAltitude = GetFromAckPayload() - GPSGroundAltitude;
                 if (GPSAltitude < 0) GPSAltitude = 0;
                 if (GPSMaxAltitude < GPSAltitude) GPSMaxAltitude = GPSAltitude;
                 break;
-          
             case 10:
                  GPSDistanceTo = GetFromAckPayload();
                  if (GPSMaxDistance < GPSDistanceTo) GPSMaxDistance = GPSDistanceTo;
                 break;
-           
             case 11:
                 GPSCourseTo = GetFromAckPayload();  
                 break;
-            
             case 12:
                 GPSSatellites = (uint8_t) GetFromAckPayload();
                 break;
-           
             case 13:
                 GetDateFromAckPayload();
                 break;
-            
             case 14:
                 GetTimeFromAckPayload();
                 ReadTheRTC();
@@ -5803,11 +5788,9 @@ void ParseAckPayload()
                 if (GPSHours != Ghour)     GPSTimeSynched = false;
                 if (GPSSecs  != Gsecond)   GPSTimeSynched = false;
                 if (GpsFix)  SynchRTCwithGPSTime();
-            break;
-            
+                break;
             default:
                 break;
-     
     }
 }
 /************************************************************************************************************/
