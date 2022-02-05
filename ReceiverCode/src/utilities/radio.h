@@ -291,9 +291,6 @@ void Reconnect()
     ReconnectedMoment  = ConnectionStart; // Save this moment, then don't move a servo for a few ms ...
 }
 /************************************************************************************************************/
-
-
-
 void CheckIfItsHopTime(){
     AckPayload.Purpose  &= 0x7f;                    // Clear the HOP flag
     if((millis() - HopStart) >= HOPTIME){
@@ -305,7 +302,6 @@ void CheckIfItsHopTime(){
          HopNow = true;                            // Set local flag and hop when ready *** BUT NOT BEFORE ****  !!!!!
     }
 }
-
 /************************************************************************************************************/
 void SendToAckPayload(double U){                        // This function now works with most parameters
     union  {float Val32; uint8_t Val8[4];} ThisUnion;
@@ -341,68 +337,52 @@ void LoadAckPayload()
     if (INA219_CONNECTED) MaxAckP = 1;
     if (SENSOR_HUB_CONNECTED) MaxAckP = 14;                       // its 14 + GPS
     if (AckPayload.Purpose > MaxAckP) AckPayload.Purpose = 0;     // wrap after max
-        switch (AckPayload.Purpose) {
-       
+    switch (AckPayload.Purpose) {
         case 0: 
             LoadVersioNumber();
-            break;
-        
+            break;  
         case 1: 
             SendToAckPayload(INA219Volts);
             break;
-        
         case 2:
             SendToAckPayload(BaroAltitude);
             break;
-        
         case 3: 
             SendToAckPayload(BaroTemperature);
             break;
-        
         case 4: 
             SendToAckPayload (LatitudeGPS);     // ********* GPS *******************    
             break;
-       
         case 5: 
              SendToAckPayload (LongitudeGPS);  // ********* GPS *******************
             break;
-       
         case 6: 
              SendToAckPayload (AngleGPS);     // ********* GPS *******************
             break;
-       
         case 7: 
              SendToAckPayload(SpeedGPS);      // ********* GPS *******************
             break;
-        
         case 8: 
             SendToAckPayload(GpsFix);          // ********* GPS *******************
             break;
-       
         case 9: 
             SendToAckPayload(AltitudeGPS);      // ********* GPS *******************
             break;
-       
         case 10: 
             SendToAckPayload(DistanceGPS);       // ********* GPS *******************
             break;
-       
         case 11: 
             SendToAckPayload(CourseToGPS);        // ********* GPS *******************
             break;
-          
         case 12: 
             SendToAckPayload(SatellitesGPS);       // ********* GPS *******************
             break;
-        
         case 13: 
             SendDateToAckPayload();
             break;
-        
         case 14: 
             SendTimeToAckPayload();
             break;
-       
         default:
             break;
     }

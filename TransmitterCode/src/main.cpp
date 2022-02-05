@@ -5752,17 +5752,17 @@ void ParseAckPayload()
                 GPSLongitude = GetFromAckPayload(); 
                 break;
             case 6:
-                GPSAngle = GetFromAckPayload();
+                GPSAngle     = GetFromAckPayload();
                 break;
             case 7:
-                GPSSpeed = GetFromAckPayload(); 
+                GPSSpeed     = GetFromAckPayload(); 
                 if (GPSMaxSpeed < GPSSpeed) GPSMaxSpeed = GPSSpeed;
                 break;
             case 8:
-                GpsFix =  GetFromAckPayload();
+                GpsFix       =  GetFromAckPayload();
                 break;
             case 9:
-                GPSAltitude = GetFromAckPayload() - GPSGroundAltitude;
+                GPSAltitude  = GetFromAckPayload() - GPSGroundAltitude;
                 if (GPSAltitude < 0) GPSAltitude = 0;
                 if (GPSMaxAltitude < GPSAltitude) GPSMaxAltitude = GPSAltitude;
                 break;
