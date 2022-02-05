@@ -509,7 +509,7 @@ $(document).ready(function(){initNavTree('_receiver_code_2src_2main_8cpp_source.
 <div class="line"><a id="l00457" name="l00457"></a><span class="lineno">  457</span>     <span class="keywordflow">return</span>;</div>
 <div class="line"><a id="l00458" name="l00458"></a><span class="lineno">  458</span>  }</div>
 <div class="line"><a id="l00459" name="l00459"></a><span class="lineno">  459</span>  <span class="keywordflow">if</span> (strcmp(VLT,RdataID) == 0) {     </div>
-<div class="line"><a id="l00460" name="l00460"></a><span class="lineno">  460</span>      <span class="keywordflow">if</span> (!<a class="code hl_variable" href="common_8h.html#a8d0889feaf5beb5db1e50a266ea7b0a5">INA219_CONNECTED</a>) <a class="code hl_variable" href="_receiver_code_2src_2main_8cpp.html#ad84d94b7259bcf40213f0af9be706ee7">INA219Volts</a> = RdataIn;</div>
+<div class="line"><a id="l00460" name="l00460"></a><span class="lineno">  460</span>      <span class="keywordflow">if</span> (!<a class="code hl_variable" href="common_8h.html#a8d0889feaf5beb5db1e50a266ea7b0a5">INA219_CONNECTED</a>) <a class="code hl_variable" href="_receiver_code_2src_2main_8cpp.html#ad84d94b7259bcf40213f0af9be706ee7">INA219Volts</a> = RdataIn; <span class="comment">// if there&#39;s a locally connected sensor, use it.</span></div>
 <div class="line"><a id="l00461" name="l00461"></a><span class="lineno">  461</span>     <span class="keywordflow">return</span>;</div>
 <div class="line"><a id="l00462" name="l00462"></a><span class="lineno">  462</span>  }</div>
 <div class="line"><a id="l00463" name="l00463"></a><span class="lineno">  463</span>  <span class="keywordflow">if</span> (strcmp(DAY,RdataID) == 0) {     </div>
