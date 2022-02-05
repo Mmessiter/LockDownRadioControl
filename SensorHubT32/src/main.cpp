@@ -12,7 +12,7 @@
 #define I2CADDRESS  8       // Address of this I2C slave
 #define GPSBAUDRATE 9600    // Didn't work any faster
 #define GPSDEVICE Serial1   // GPS is connected to Serial1
-//#define DEBUG               // Local console debug only
+#define DEBUG             // Local console debug only
 #define DEBUGTIMER 1000
 
 int DebugTimer = 0;
@@ -59,7 +59,7 @@ uint16_t Qnh = 0;
 void SendDataToReceiver() {
   #define IDLEN 3
   #define GPSI2CBYTES IDLEN + 4
-  #define MAXPARAMS 14
+  #define MAXPARAMS 17
   uint8_t i;
   char RdataID[IDLEN+1] = "NUL";
   char  LAT[IDLEN+1]    = "LAT";
@@ -77,6 +77,9 @@ void SendDataToReceiver() {
   char  BLT[IDLEN+1]    = "BLT";
   char  TMP[IDLEN+1]    = "TMP";
   char  VLT[IDLEN+1]    = "VLT";
+  char  DAY[IDLEN+1]    = "DAY";
+  char  MTH[IDLEN+1]    = "MTH";
+  char  YER[IDLEN+1]    = "YER";
 
   float RdataOut = 42;
   union { float   Val32;uint8_t Val8[4]; } Rdata;
@@ -114,7 +117,7 @@ void SendDataToReceiver() {
         strcpy (RdataID,DTO);
         break;
       case  8:
-        RdataOut = (float) GPSHours;  // Hours
+        RdataOut = (float) GPSHours;       // Hours
         strcpy (RdataID,HRS);
         break;
       case  9:
@@ -138,8 +141,20 @@ void SendDataToReceiver() {
         strcpy (RdataID,TMP);
         break;
       case  14:
-        RdataOut =  INA219Volts;     // VOLTAGE FROM INA219
+        RdataOut =  INA219Volts;             // VOLTAGE FROM INA219
         strcpy (RdataID,VLT);
+        break;
+      case  15:
+        RdataOut =  GPSDay;                  // DATE
+        strcpy (RdataID,DAY);
+        break;
+      case  16:
+        RdataOut =  GPSMonth;                // Month
+        strcpy (RdataID,MTH);
+        break;
+      case  17:
+        RdataOut =  GPSYear;                  // YEAR
+        strcpy (RdataID,YER);
         break;
       default:
         break;
@@ -170,7 +185,7 @@ char RCV[10];
     } 
   RCV[3] = 0; // Add a terminator
 
-  if (strcmp(MRK,RCV) == 0) {     // Match first 3 chars with MRK?
+  if (strcmp(MRK,RCV) == 0) {        // Match first 3 chars with MRK?
      DestinationLat = GPSLatitude;   // Mark current location
      DestinationLng = GPSLongitude;  // Mark current location
      return;
@@ -199,11 +214,11 @@ char RCV[10];
    }
       GPSFix           = gps.location.isValid();
       if (GPSFix) {
-        GPSLatitude    = (float) gps.location.lat();
-        GPSLongitude   = (float) gps.location.lng();
+        GPSLatitude    = (float)   gps.location.lat();
+        GPSLongitude   = (float)   gps.location.lng();
         GPSSatellites  = (uint8_t) gps.satellites.value(); 
-        GPSAltitude    = (float) gps.altitude.feet();
-        GPSSpeed       = (float) gps.speed.mph();
+        GPSAltitude    = (float)   gps.altitude.feet();
+        GPSSpeed       = (float)   gps.speed.mph();
         GPSHours       = (uint8_t) gps.time.hour();   
         GPSMins        = (uint8_t) gps.time.minute(); 
         GPSSecs        = (uint8_t) gps.time.second(); 
