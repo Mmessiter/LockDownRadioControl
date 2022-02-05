@@ -221,6 +221,7 @@ void UseReceivedData(){
             FailSafeDataLoaded = false; // Ack payload instructed to Hop at next opportunity...
             HopToNextFrequency();       // So hop now
             HopNow = false;             // and clear the flag.
+            HopStart = millis();
         }
 }
 /************************************************************************************************************/
@@ -289,6 +290,7 @@ void  SendToSensorHubHub(char m[]){
 void MarkHere(){
         char MRK[4] = "MRK";
         SendToSensorHubHub(MRK);  // Mark this spot
+        
 }
 
 /************************************************************************************************************/
@@ -449,7 +451,7 @@ FASTRUN void ReadTheSensorHub(){
      return;
   }
   if (strcmp(BLT,RdataID) == 0) {     
-     BaroAltitude =  uint16_t(RdataIn);
+     BaroAltitude =  RdataIn;
      return;
   }
   if (strcmp(TMP,RdataID) == 0) {     

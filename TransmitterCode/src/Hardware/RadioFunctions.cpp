@@ -121,6 +121,9 @@ void SendData()
         {
             BufferNewPipe(); // if not yet bound, send our pipe
         }
+        ++PacketNumber;
+       
+
         LoadPacketData(); // extra parameters appended to the data packet
         if (LostContactFlag) {
             if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {
@@ -142,7 +145,6 @@ void SendData()
             Radio1.read(&AckPayload, AckPayloadSize); //  "sizeof" doesn't work with externs, hence 2 new vars.
             ++RangeTestGoodPackets;
             LostContactFlag = false;
-            ++PacketNumber;
             ParseAckPayload();
             RecentPacketsLost         = 0;
             TotalledRecentPacketsLost = 0;
@@ -253,7 +255,6 @@ void InitRadio(uint64_t Pipe)
     Radio1.setCRCLength(RF24_CRC_8); // could be 16
     PipeTimeout = millis();          // Initialise timeout
     GapSum      = 0;
-    HopStart    = millis() + 2;
 }
 /*********************************************************************************************************************************/
 

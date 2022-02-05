@@ -29,7 +29,6 @@
 //                            FHSS PARAMETERS                               *
 //***************************************************************************
 
-#define HOPTIME           55 // A New frequency hop every 55 ms (must match receiver setting)
 #define PACEMAKER         7  // MINIMUM ms between packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
 #define FREQUENCYSCOUNT   82 // How many frequencies to use before wrapping to first
 #define RETRYCOUNT        3  // auto retries from nRF24L01
@@ -72,7 +71,7 @@
 //***************************************************************************
 
 // #define DB_NEXTION        // Debug Nextion and SD card data
-// #define DB_FHSS           // Debug real time FHSS data
+ // #define DB_FHSS           // Debug real time FHSS data
 // #define DB_SENSORS        // Debug Sensors
 // #define DB_BIND           // Debug Binding
 // #define DB_SWITCHES       // Debug Switches

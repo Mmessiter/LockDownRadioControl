@@ -292,8 +292,7 @@ void Reconnect()
 }
 /************************************************************************************************************/
 
-#define HOPTIME         55 // ms between channel changes
-#define FREQUENCYSCOUNT 82 // use 82 different channels
+
 
 void CheckIfItsHopTime(){
     AckPayload.Purpose  &= 0x7f;                    // Clear the HOP flag
@@ -317,7 +316,6 @@ void SendToAckPayload(double U){                        // This function now wor
     AckPayload.Byte3    = ThisUnion.Val8[2];
     AckPayload.Byte4    = ThisUnion.Val8[3];
 }
-
 /************************************************************************************************************/
 void SendTimeToAckPayload(){    
     CheckIfItsHopTime();                  

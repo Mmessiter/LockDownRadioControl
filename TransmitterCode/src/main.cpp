@@ -493,8 +493,7 @@ int      XtouchPlace = 0; // Clicked X
 int      YtouchPlace = 0; // Clicked Y
 uint8_t  zero        = 0x00;
 bool     BindButton  = false;
-uint32_t TXTimeStamp;
-uint32_t HopStart;
+
 uint8_t  PreviousChannelNumber = 0;
 uint8_t  NextChannelNumber     = 0;
 bool     InhibitNameCheck      = false;
@@ -5540,6 +5539,7 @@ void LoadPacketData()
         case 3: 
             SendBuffer[CHANNELSUSED + 1] = 0;
             SendBuffer[CHANNELSUSED + 2] = GPSMarkHere;
+            
             GPSMarkHere = 0;
             break;
 
@@ -5682,18 +5682,6 @@ void GetRXVersionNumber()
 
 /************************************************************************************************************/
 
-void ClearAckPayload()
-{
-    AckPayload.Byte1 = 0;
-    AckPayload.Byte2 = 0;
-    AckPayload.Byte3 = 0;
-    AckPayload.Byte4 = 0;
-    AckPayload.Byte5 = 0;
-    AckPayload.Purpose = 0; 
-}
-
-/************************************************************************************************************/
-
 float GetFromAckPayload(){
     union  {float Val32;uint8_t Val8[4];} ThisUnion;
     ThisUnion.Val8[0] = AckPayload.Byte1;
@@ -5734,7 +5722,6 @@ void ParseAckPayload()
 {
     if (AckPayload.Purpose & 0x80)                       // Hi bit is now the **HOP NOW!!** flag
     {
-        HopStart = millis();
         NextChannelNumber   = AckPayload.Byte5;
         GetNextHopChannelNumber();                       // Also gets actual channel number
         HopToNextFrequency();
