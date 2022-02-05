@@ -5727,7 +5727,6 @@ void ParseAckPayload()
         AckPayload.Purpose &= 0x7f;
     }    
         switch (AckPayload.Purpose) // Only look at the low 7 BITS
-                                    // High BIT is guaranteed LOW by this point, so no "& 0x7F" is needed.
         {
             case 0:
                 GetRXVersionNumber();
@@ -5737,8 +5736,8 @@ void ParseAckPayload()
                 if (RXModelVolts > 0) {
                     VoltsDetected = true;
                     snprintf(ModelVolts, 5, "%f", RXModelVolts);
-                    break;
                 }
+                break;
             case 2:
                 GetAltitude();
                 break;
@@ -5769,26 +5768,26 @@ void ParseAckPayload()
             case 10:
                  GPSDistanceTo = GetFromAckPayload();
                  if (GPSMaxDistance < GPSDistanceTo) GPSMaxDistance = GPSDistanceTo;
-                break;
+                 break;
             case 11:
-                GPSCourseTo = GetFromAckPayload();  
-                break;
+                 GPSCourseTo = GetFromAckPayload();  
+                 break;
             case 12:
-                GPSSatellites = (uint8_t) GetFromAckPayload();
-                break;
+                 GPSSatellites = (uint8_t) GetFromAckPayload();
+                 break;
             case 13:
-                GetDateFromAckPayload();
-                break;
+                 GetDateFromAckPayload();
+                 break;
             case 14:
-                GetTimeFromAckPayload();
-                ReadTheRTC();
-                if (GPSDay   != GmonthDay) GPSTimeSynched = false;
-                if (GPSMonth != GPSMonth)  GPSTimeSynched = false;
-                if (GPSMins  != Gminute)   GPSTimeSynched = false;
-                if (GPSHours != Ghour)     GPSTimeSynched = false;
-                if (GPSSecs  != Gsecond)   GPSTimeSynched = false;
-                if (GpsFix)  SynchRTCwithGPSTime();
-                break;
+                 GetTimeFromAckPayload();
+                 ReadTheRTC();
+                 if (GPSDay   != GmonthDay) GPSTimeSynched = false;
+                 if (GPSMonth != GPSMonth)  GPSTimeSynched = false;
+                 if (GPSMins  != Gminute)   GPSTimeSynched = false;
+                 if (GPSHours != Ghour)     GPSTimeSynched = false;
+                 if (GPSSecs  != Gsecond)   GPSTimeSynched = false;
+                 if (GpsFix)  SynchRTCwithGPSTime();
+                 break;
             default:
                 break;
     }

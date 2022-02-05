@@ -3,11 +3,11 @@
 #define RadioFunctions_H
 
 // **************************************************************************
-//                   TX VERSION NUMBER   (February 3 2022 Malcolm Messiter) *
+//                   TX VERSION NUMBER   (February 5 2022 Malcolm Messiter) *
 //***************************************************************************
 #define TXVERSION_MAJOR   1
 #define TXVERSION_MINOR   5
-#define TXVERSION_MINIMUS 3
+#define TXVERSION_MINIMUS 4
 
 // **************************************************************************
 //                            SBUS PARAMETERS   (FOR BUDDY BOXING)          *
@@ -124,7 +124,6 @@ extern uint32_t       HopStart;
 extern char           ThisRadio[4];
 extern uint32_t       GapSum;
 extern uint32_t       GapStart;
-extern uint32_t       RXTimeStamp;
 extern bool           DoSbusSendOnly;
 extern bool           BuddyMaster;
 

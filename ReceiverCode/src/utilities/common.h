@@ -12,7 +12,7 @@
 
     #define RXVERSION_MAJOR            1
     #define RXVERSION_MINOR            5
-    #define RXVERSION_MINIMUS          3               // February 3rd 2022
+    #define RXVERSION_MINIMUS          4               // February 5th 2022
     
     #define SENSOR_HUB_I2C_ADDRESS     8
 
