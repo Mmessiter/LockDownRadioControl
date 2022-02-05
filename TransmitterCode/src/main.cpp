@@ -4490,7 +4490,7 @@ void Button_was_pressed()
             return;
         }
 
-        p = InStrng(OptionsView, WordsIn); // heer
+        p = InStrng(OptionsView, WordsIn); 
         if (p > 0) {
             i = strlen(OptionsView);
             j = 0;
@@ -5761,8 +5761,8 @@ void GetTemperature()
 /************************************************************************************************************/
 void ParseAckPayload()
 {
-  //  if (!(AckPayload.Purpose & 0x80)) // Hi bit was always ignored!
-   
+   // if (!(AckPayload.Purpose & 0x80)) // Hi bit was always ignored!
+   // {
         switch (AckPayload.Purpose) // Only looking at the low 7 BITS
                                     // High BIT is guaranteed LOW by this point, so no "& 0x7F" is needed.
         {
@@ -5875,6 +5875,7 @@ void ParseAckPayload()
                 break;
             default:
                 break;
+      // } 
     }
 }
 /************************************************************************************************************/

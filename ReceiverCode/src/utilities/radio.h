@@ -305,7 +305,7 @@ union  {uint32_t Stamp32; uint8_t  Stamp8[4];} Time;
         HopStart     = millis();
         Time.Stamp32 = 0;
         RXTimeStamp  = 0;
-        AckPayload.Purpose |= 0x80;        // set hi bit on?? test .... heer
+      //  AckPayload.Purpose |= 0x80;        // set hi bit on?? test .... heer
         ++NextChannelNumber;
         if (NextChannelNumber >= FREQUENCYSCOUNT) {
             NextChannelNumber = 1;
@@ -351,13 +351,11 @@ void SendDateToAckPayload(){
 
 void LoadAckPayload()
 {
-    uint8_t MaxAckP     = 2;    // 2 if only RX
-    AckPayload.Purpose &= 0x7F; // Clear hi bit ( = do not ignore)
-    ++AckPayload.Purpose;      
-
-      if (SENSOR_HUB_CONNECTED) MaxAckP = 30;                      // 32 + GPS
-      if (AckPayload.Purpose > MaxAckP) AckPayload.Purpose = 0;     // wrap after max
-
+    uint8_t MaxAckP     = 2;                                      // 2 if only RX
+    AckPayload.Purpose &= 0x7F;                                   // Clear hi bit ( = do not ignore)
+    ++AckPayload.Purpose;   
+    if (SENSOR_HUB_CONNECTED) MaxAckP = 30;                       // its 30 + GPS
+    if (AckPayload.Purpose > MaxAckP) AckPayload.Purpose = 0;     // wrap after max
     switch (AckPayload.Purpose) {
         case 0: 
             LoadTimeStamp();
@@ -387,7 +385,7 @@ void LoadAckPayload()
             LoadTimeStamp();
             break;
         case 9: 
-            SendToAckPayload (LatitudeGPS);     // ********* GPS *******************
+            SendToAckPayload (LatitudeGPS);     // ********* GPS *******************    
             break;
         case 10: 
             LoadTimeStamp();
