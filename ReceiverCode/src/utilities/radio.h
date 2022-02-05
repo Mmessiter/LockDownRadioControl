@@ -352,9 +352,6 @@ void SendDateToAckPayload(){
 void LoadAckPayload()
 {
     uint8_t MaxAckP     = 2;                                      // 2 if only RX
-    
-    
-    Serial.println (SENSOR_HUB_CONNECTED);
     AckPayload.Purpose &= 0x7F;                                   // Clear hi bit ( = do not ignore)
     ++AckPayload.Purpose;   
     if (INA219_CONNECTED) MaxAckP = 4;
