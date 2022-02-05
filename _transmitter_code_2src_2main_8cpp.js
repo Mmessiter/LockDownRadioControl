@@ -142,7 +142,6 @@ var _transmitter_code_2src_2main_8cpp =
     [ "GetFromAckPayload", "_transmitter_code_2src_2main_8cpp.html#a152eb4c62f6b770bc56d10268907b0cb", null ],
     [ "GetNextHopChannelNumber", "_transmitter_code_2src_2main_8cpp.html#ac352f1ace4062c07baf98c19a979153c", null ],
     [ "GetNextNumber", "_transmitter_code_2src_2main_8cpp.html#a5b456468ac6be5e872b327e0d03a9f7a", null ],
-    [ "GetRXTime", "_transmitter_code_2src_2main_8cpp.html#acd508e422b616377d0f0cdb44e4cfae0", null ],
     [ "GetRXVersionNumber", "_transmitter_code_2src_2main_8cpp.html#a4f813935d8fe58355228cbbf25e12f96", null ],
     [ "GetSlaveChannelValues", "_transmitter_code_2src_2main_8cpp.html#a4635a8fc77c9f57fca53a5206cd5e571", null ],
     [ "GetStatistics", "_transmitter_code_2src_2main_8cpp.html#a1d43600764a34cbda9c2fa211a12ed2e", null ],
