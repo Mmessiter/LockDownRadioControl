@@ -5694,35 +5694,6 @@ void ClearAckPayload()
 
 /************************************************************************************************************/
 
-void GetRXTime()
-{ // This gets the time from Receiver to enable FHSS synch
-
-
-    union  {uint32_t Val32; uint8_t Val8[4];} RXTimeUnion;         
-    if (AckPayload.Byte5) { // Good data? (Zero means no data)
-        RXTimeUnion.Val8[0] = AckPayload.Byte1;
-        RXTimeUnion.Val8[1] = AckPayload.Byte2;
-        RXTimeUnion.Val8[2] = AckPayload.Byte3;
-        RXTimeUnion.Val8[3] = AckPayload.Byte4;
-        NextChannelNumber   = AckPayload.Byte5;
-        HopStart            = millis() - RXTimeUnion.Val32;
-        TXTimeStamp         = millis() - HopStart;
-    }
-    if ((TXTimeStamp == 0) || (TXTimeStamp > HOPTIME)) { // is it time (or indeed it is overdue?) to hop frequency?
-
-         
-     
-        GetNextHopChannelNumber();                       // Also gets actual channel number
-        HopStart = millis();
-        HopToNextFrequency();
-    }
-   // ClearAckPayload();
-    CheckTimer();
-    ReadSwitches();
-}
-
-/************************************************************************************************************/
-
 float GetFromAckPayload(){
     union  {float Val32;uint8_t Val8[4];} ThisUnion;
     ThisUnion.Val8[0] = AckPayload.Byte1;
@@ -5761,106 +5732,81 @@ void GetTemperature()
 /************************************************************************************************************/
 void ParseAckPayload()
 {
-   // if (!(AckPayload.Purpose & 0x80)) // Hi bit was always ignored!
-   // {
-        switch (AckPayload.Purpose) // Only looking at the low 7 BITS
+    if (AckPayload.Purpose & 0x80)                       // Hi bit is now the **HOP NOW!!** flag
+    {
+        HopStart = millis();
+        NextChannelNumber   = AckPayload.Byte5;
+        GetNextHopChannelNumber();                       // Also gets actual channel number
+        HopToNextFrequency();
+    }
+  
+        AckPayload.Purpose &= 0x7f;
+        switch (AckPayload.Purpose) // Only look at the low 7 BITS
                                     // High BIT is guaranteed LOW by this point, so no "& 0x7F" is needed.
         {
             case 0:
-                GetRXTime(); // Synch 
-                break;
-            case 1:
                 GetRXVersionNumber();
                 break;
-            case 2:
-                GetRXTime(); // Synch 
-                break;
-            case 3:
+            case 1:
                 RXModelVolts = GetFromAckPayload();
                 if (RXModelVolts > 0) {
                     VoltsDetected = true;
                     snprintf(ModelVolts, 5, "%f", RXModelVolts);
                 }
-            case 4:
-                GetRXTime(); // Synch 
-                break;
-            case 5:
+            
+            case 2:
                 GetAltitude();
                 break;
-            case 6:
-                GetRXTime(); // Synch 
-                break;
-            case 7:
+           
+            case 3:
                 GetTemperature();
                 break;
-            case 8:
-                GetRXTime(); // Synch 
-                break;
-            case 9:
+           
+            case 4:
                 GPSLatitude = GetFromAckPayload(); 
                 break;
-            case 10:
-                GetRXTime(); // Synch 
-                break;
-            case 11:
+          
+            case 5:
                 GPSLongitude = GetFromAckPayload(); 
                 break;
-            case 12:
-                GetRXTime(); // Synch 
-                break;
-            case 13:
+           
+            case 6:
                 GPSAngle = GetFromAckPayload();
                 break;
-            case 14:
-                GetRXTime(); // Synch 
-                break;
-            case 15:
+           
+            case 7:
                 GPSSpeed = GetFromAckPayload(); 
                 if (GPSMaxSpeed < GPSSpeed) GPSMaxSpeed = GPSSpeed;
                 break;
-            case 16:
-                GetRXTime(); // Synch 
-                break;               
-            case 17:
-                GpsFix =  GetFromAckPayload();
+                      
+            case 8:
+              GpsFix =  GetFromAckPayload();
                 break;
-            case 18:
-                GetRXTime(); // Synch 
-                break;
-            case 19:
+           
+            case 9:
                 GPSAltitude = GetFromAckPayload() - GPSGroundAltitude;
                 if (GPSAltitude < 0) GPSAltitude = 0;
                 if (GPSMaxAltitude < GPSAltitude) GPSMaxAltitude = GPSAltitude;
                 break;
-            case 20:
-                GetRXTime(); // Synch 
-                break;
-            case 21:
+          
+            case 10:
                  GPSDistanceTo = GetFromAckPayload();
                  if (GPSMaxDistance < GPSDistanceTo) GPSMaxDistance = GPSDistanceTo;
                 break;
-            case 22:
-                GetRXTime(); // Synch 
-                break;
-            case 23:
+           
+            case 11:
                 GPSCourseTo = GetFromAckPayload();  
                 break;
-            case 24:
-                GetRXTime(); // Synch 
-                break;
-            case 25:
+            
+            case 12:
                 GPSSatellites = (uint8_t) GetFromAckPayload();
                 break;
-            case 26:
-                GetRXTime(); // Synch 
-                break;
-            case 27:
+           
+            case 13:
                 GetDateFromAckPayload();
                 break;
-            case 28:
-                GetRXTime(); // Synch 
-                break;
-            case 29:
+            
+            case 14:
                 GetTimeFromAckPayload();
                 ReadTheRTC();
                 if (GPSDay   != GmonthDay) GPSTimeSynched = false;
@@ -5869,13 +5815,11 @@ void ParseAckPayload()
                 if (GPSHours != Ghour)     GPSTimeSynched = false;
                 if (GPSSecs  != Gsecond)   GPSTimeSynched = false;
                 if (GpsFix)  SynchRTCwithGPSTime();
-                break;
-            case 30:
-                GetRXTime(); // Synch 
-                break;
+            break;
+            
             default:
                 break;
-      // } 
+     
     }
 }
 /************************************************************************************************************/

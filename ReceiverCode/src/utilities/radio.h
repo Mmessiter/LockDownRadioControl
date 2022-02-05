@@ -291,166 +291,120 @@ void Reconnect()
     ReconnectedMoment  = ConnectionStart; // Save this moment, then don't move a servo for a few ms ...
 }
 /************************************************************************************************************/
-void LoadTimeStamp()
-{ // This will load time stamp and array index for return to TX for synch purposes
 
 #define HOPTIME         55 // ms between channel changes
 #define FREQUENCYSCOUNT 82 // use 82 different channels
-union  {uint32_t Stamp32; uint8_t  Stamp8[4];} Time;
 
-    Time.Stamp32 = millis() - HopStart;
-    RXTimeStamp  = Time.Stamp32;
-   
-    if (RXTimeStamp >= HOPTIME) {
-        HopStart     = millis();
-        Time.Stamp32 = 0;
-        RXTimeStamp  = 0;
-      //  AckPayload.Purpose |= 0x80;        // set hi bit on?? test .... heer
-        ++NextChannelNumber;
-        if (NextChannelNumber >= FREQUENCYSCOUNT) {
-            NextChannelNumber = 1;
-        } // Zero will mean error (so that element not used)
-        GetNextFrequency();
-        HopNow = true; // Set flag and hop when ready *** BUT NOT BEFORE ****  !!!!!
+void CheckIfItsHopTime(){
+    AckPayload.Purpose  &= 0x7f;                    // Clear the HOP flag
+    if((millis() - HopStart) >= HOPTIME){
+         AckPayload.Purpose |= 0x80;               //  Set the HOP flag
+         ++NextChannelNumber;
+         if (NextChannelNumber >= FREQUENCYSCOUNT)  NextChannelNumber = 1;
+         AckPayload.Byte5 = NextChannelNumber;
+         GetNextFrequency();
+         HopNow = true;                            // Set local flag and hop when ready *** BUT NOT BEFORE ****  !!!!!
     }
-    
-    AckPayload.Byte1 = Time.Stamp8[0]; // These values are herewith delivered to Transmitter in Ack Payload
-    AckPayload.Byte2 = Time.Stamp8[1];
-    AckPayload.Byte3 = Time.Stamp8[2];
-    AckPayload.Byte4 = Time.Stamp8[3];
-    
-    AckPayload.Byte5 = NextChannelNumber;
 }
 
 /************************************************************************************************************/
 void SendToAckPayload(double U){                        // This function now works with most parameters
     union  {float Val32; uint8_t Val8[4];} ThisUnion;
+    CheckIfItsHopTime();
     ThisUnion.Val32     = U;
-    AckPayload.Byte1    = ThisUnion.Val8[0];    // These values are herewith delivered to Transmitter in Ack Payload
+    AckPayload.Byte1    = ThisUnion.Val8[0];            // These values are herewith delivered to Transmitter in Ack Payload
     AckPayload.Byte2    = ThisUnion.Val8[1];
     AckPayload.Byte3    = ThisUnion.Val8[2];
     AckPayload.Byte4    = ThisUnion.Val8[3];
 }
 
 /************************************************************************************************************/
-void SendTimeToAckPayload(){                       
+void SendTimeToAckPayload(){    
+    CheckIfItsHopTime();                  
     AckPayload.Byte1    = SecsGPS;    
     AckPayload.Byte2    = MinsGPS;
     AckPayload.Byte3    = HoursGPS;
     AckPayload.Byte4    = 0;
 }
-
 /************************************************************************************************************/
-void SendDateToAckPayload(){                       
+void SendDateToAckPayload(){   
+    CheckIfItsHopTime();                         
     AckPayload.Byte1    = DayGPS;  
     AckPayload.Byte2    = MonthGPS;
     AckPayload.Byte3    = YearGPS;
     AckPayload.Byte4    = 0;
 }
 /************************************************************************************************************/
-
 void LoadAckPayload()
 {
-    uint8_t MaxAckP     = 2;                                      // 2 if only RX
+    uint8_t MaxAckP     = 0;                                      // 0 if only RX
     AckPayload.Purpose &= 0x7F;                                   // Clear hi bit ( = do not ignore)
     ++AckPayload.Purpose;   
-    if (INA219_CONNECTED) MaxAckP = 4;
-    if (SENSOR_HUB_CONNECTED) MaxAckP = 30;                       // its 30 + GPS
+    if (INA219_CONNECTED) MaxAckP = 1;
+    if (SENSOR_HUB_CONNECTED) MaxAckP = 14;                       // its 14 + GPS
     if (AckPayload.Purpose > MaxAckP) AckPayload.Purpose = 0;     // wrap after max
         switch (AckPayload.Purpose) {
+       
         case 0: 
-            LoadTimeStamp();
-            break;
-        case 1: 
             LoadVersioNumber();
             break;
-        case 2: 
-            LoadTimeStamp();
-            break;
-        case 3: 
+        
+        case 1: 
             SendToAckPayload(INA219Volts);
             break;
-        case 4: 
-            LoadTimeStamp();
-            break;
-        case 5:
+        
+        case 2:
             SendToAckPayload(BaroAltitude);
             break;
-        case 6: 
-            LoadTimeStamp();
-            break;
-        case 7: 
+        
+        case 3: 
             SendToAckPayload(BaroTemperature);
             break;
-        case 8: 
-            LoadTimeStamp();
-            break;
-        case 9: 
+        
+        case 4: 
             SendToAckPayload (LatitudeGPS);     // ********* GPS *******************    
             break;
-        case 10: 
-            LoadTimeStamp();
-            break;
-        case 11: 
+       
+        case 5: 
              SendToAckPayload (LongitudeGPS);  // ********* GPS *******************
             break;
-        case 12: 
-            LoadTimeStamp();
-            break;
-        case 13: 
+       
+        case 6: 
              SendToAckPayload (AngleGPS);     // ********* GPS *******************
             break;
-        case 14: 
-            LoadTimeStamp();
-            break;
-        case 15: 
+       
+        case 7: 
              SendToAckPayload(SpeedGPS);      // ********* GPS *******************
             break;
-        case 16:
-            LoadTimeStamp();
-            break;
-        case 17: 
+        
+        case 8: 
             SendToAckPayload(GpsFix);          // ********* GPS *******************
             break;
-        case 18:
-            LoadTimeStamp();
-            break;
-        case 19: 
+       
+        case 9: 
             SendToAckPayload(AltitudeGPS);      // ********* GPS *******************
             break;
-        case 20:
-            LoadTimeStamp();
-            break;
-        case 21: 
+       
+        case 10: 
             SendToAckPayload(DistanceGPS);       // ********* GPS *******************
             break;
-        case 22:
-            LoadTimeStamp();
-            break; 
-        case 23: 
+       
+        case 11: 
             SendToAckPayload(CourseToGPS);        // ********* GPS *******************
             break;
-        case 24:
-            LoadTimeStamp();
-            break;    
-        case 25: 
+          
+        case 12: 
             SendToAckPayload(SatellitesGPS);       // ********* GPS *******************
             break;
-        case 26:
-            LoadTimeStamp();
-            break;
-        case 27: 
+        
+        case 13: 
             SendDateToAckPayload();
             break;
-        case 28:
-            LoadTimeStamp();
-            break;
-        case 29: 
+        
+        case 14: 
             SendTimeToAckPayload();
             break;
-        case 30:
-            LoadTimeStamp();
-            break;
+       
         default:
             break;
     }
