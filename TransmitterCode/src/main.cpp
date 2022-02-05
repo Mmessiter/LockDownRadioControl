@@ -5705,11 +5705,12 @@ void GetDateFromAckPayload(){
 /************************************************************************************************************/
 void GetAltitude()
 {
-    RXModelAltitude       =  int(GetFromAckPayload()) - GroundModelAltitude;
-    if (RXModelAltitude<0)   RXModelAltitude = 0;
+  if(int(GetFromAckPayload())) {  // oddly sometimes returns zero??
+    RXModelAltitude = int(GetFromAckPayload()) - GroundModelAltitude;
     if (RXMAXModelAltitude < RXModelAltitude) RXMAXModelAltitude = RXModelAltitude;
     snprintf(MaxAltitude, 5, "%d", RXMAXModelAltitude);
     snprintf(ModelAltitude, 5, "%d", RXModelAltitude);
+    }
 }
 /************************************************************************************************************/
 void GetTemperature()
