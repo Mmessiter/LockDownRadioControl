@@ -27,6 +27,6 @@ var searchData=
   ['rxmodelaltitude_24',['RXModelAltitude',['../_transmitter_code_2src_2main_8cpp.html#a60096f1f0ec75fa673207d2d11cfd123',1,'main.cpp']]],
   ['rxmodeltemperature_25',['RXModelTemperature',['../_transmitter_code_2src_2main_8cpp.html#ac8d7ac69a7e7a6b90792e640742b2097',1,'main.cpp']]],
   ['rxmodelvolts_26',['RXModelVolts',['../_transmitter_code_2src_2main_8cpp.html#a5f56f32c16498a3547635bda86c49428',1,'main.cpp']]],
-  ['rxtimestamp_27',['RXTimeStamp',['../radio_8h.html#ac2f93a82721081619ce2f3b497efbc1b',1,'RXTimeStamp():&#160;radio.h'],['../_radio_functions_8h.html#ac2f93a82721081619ce2f3b497efbc1b',1,'RXTimeStamp():&#160;radio.h']]],
+  ['rxtimestamp_27',['RXTimeStamp',['../radio_8h.html#ac2f93a82721081619ce2f3b497efbc1b',1,'radio.h']]],
   ['rxwarningflag_28',['RXWarningFlag',['../_transmitter_code_2src_2main_8cpp.html#a2b1c0a2b8f5dff27cb4baae5b07956a0',1,'main.cpp']]]
 ];

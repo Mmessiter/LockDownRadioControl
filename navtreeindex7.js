@@ -1,14 +1,13 @@
 var NAVTREEINDEX7 =
 {
+"class_adafruit___b_m_p280.html#ab28e689ef7620d2b9f0c9e03116dde8fa544ab88771584cea12877d3338eef96d":[11,0,0,5,1],
+"class_adafruit___b_m_p280.html#ab28e689ef7620d2b9f0c9e03116dde8fa544ab88771584cea12877d3338eef96d":[11,0,0,5,5],
+"class_adafruit___b_m_p280.html#ab28e689ef7620d2b9f0c9e03116dde8fa544ab88771584cea12877d3338eef96d":[11,0,0,5,9],
 "class_adafruit___b_m_p280.html#ab28e689ef7620d2b9f0c9e03116dde8fa544ab88771584cea12877d3338eef96d":[11,0,0,4,9],
 "class_adafruit___b_m_p280.html#ab28e689ef7620d2b9f0c9e03116dde8fa544ab88771584cea12877d3338eef96d":[11,0,0,4,5],
 "class_adafruit___b_m_p280.html#ab28e689ef7620d2b9f0c9e03116dde8fa544ab88771584cea12877d3338eef96d":[11,0,0,4,1],
 "class_adafruit___b_m_p280.html#ab28e689ef7620d2b9f0c9e03116dde8fa544ab88771584cea12877d3338eef96d":[11,0,0,3,9],
-"class_adafruit___b_m_p280.html#ab28e689ef7620d2b9f0c9e03116dde8fa544ab88771584cea12877d3338eef96d":[11,0,0,5,9],
 "class_adafruit___b_m_p280.html#ab28e689ef7620d2b9f0c9e03116dde8fa544ab88771584cea12877d3338eef96d":[11,0,0,3,5],
-"class_adafruit___b_m_p280.html#ab28e689ef7620d2b9f0c9e03116dde8fa544ab88771584cea12877d3338eef96d":[11,0,0,5,5],
-"class_adafruit___b_m_p280.html#ab28e689ef7620d2b9f0c9e03116dde8fa544ab88771584cea12877d3338eef96d":[11,0,0,5,1],
-"class_adafruit___b_m_p280.html#ab28e689ef7620d2b9f0c9e03116dde8fa544ab88771584cea12877d3338eef96d":[11,0,0,3,1],
 "class_adafruit___b_m_p280.html#ab28e689ef7620d2b9f0c9e03116dde8fa9917ece791af05f886dbb08a5947e5bb":[11,0,0,5,0],
 "class_adafruit___b_m_p280.html#ab28e689ef7620d2b9f0c9e03116dde8fa9917ece791af05f886dbb08a5947e5bb":[11,0,0,5,4],
 "class_adafruit___b_m_p280.html#ab28e689ef7620d2b9f0c9e03116dde8fa9917ece791af05f886dbb08a5947e5bb":[11,0,0,3,0],
@@ -249,5 +248,6 @@ var NAVTREEINDEX7 =
 "class_adafruit___i_n_a219.html#abddaac33a988562fd416cb9949d0c030":[11,0,7,16],
 "class_adafruit___i_n_a219.html#abddaac33a988562fd416cb9949d0c030":[11,0,7,15],
 "class_adafruit___i_n_a219.html#abddaac33a988562fd416cb9949d0c030":[11,0,7,17],
-"class_adafruit___i_n_a219.html#adbff47c27a3b8452c62a2f38672f1cd9":[11,0,7,25]
+"class_adafruit___i_n_a219.html#adbff47c27a3b8452c62a2f38672f1cd9":[11,0,7,25],
+"class_adafruit___i_n_a219.html#adbff47c27a3b8452c62a2f38672f1cd9":[11,0,7,26]
 };
