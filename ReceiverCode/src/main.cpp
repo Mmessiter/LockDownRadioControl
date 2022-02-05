@@ -458,7 +458,6 @@ FASTRUN void ReadTheSensorHub(){
   }
   if (strcmp(VLT,RdataID) == 0) {     
       if (!INA219_CONNECTED) INA219Volts = RdataIn;
-      Serial.println(INA219Volts);
      return;
   }
   if (strcmp(DAY,RdataID) == 0) {     
