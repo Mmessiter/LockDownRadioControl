@@ -305,6 +305,7 @@ union  {uint32_t Stamp32; uint8_t  Stamp8[4];} Time;
         HopStart     = millis();
         Time.Stamp32 = 0;
         RXTimeStamp  = 0;
+        AckPayload.Purpose |= 0x80;        // set hi bit on?? test .... heer
         ++NextChannelNumber;
         if (NextChannelNumber >= FREQUENCYSCOUNT) {
             NextChannelNumber = 1;
@@ -312,6 +313,7 @@ union  {uint32_t Stamp32; uint8_t  Stamp8[4];} Time;
         GetNextFrequency();
         HopNow = true; // Set flag and hop when ready *** BUT NOT BEFORE ****  !!!!!
     }
+    
     AckPayload.Byte1 = Time.Stamp8[0]; // These values are herewith delivered to Transmitter in Ack Payload
     AckPayload.Byte2 = Time.Stamp8[1];
     AckPayload.Byte3 = Time.Stamp8[2];

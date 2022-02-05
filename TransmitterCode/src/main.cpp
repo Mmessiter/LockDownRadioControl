@@ -5689,13 +5689,13 @@ void ClearAckPayload()
     AckPayload.Byte3 = 0;
     AckPayload.Byte4 = 0;
     AckPayload.Byte5 = 0;
-    AckPayload.Purpose |= 0x80;
+    AckPayload.Purpose = 0; 
 }
 
 /************************************************************************************************************/
 
 void GetRXTime()
-{ // This gets the time from Receivier to enable FHSS synch
+{ // This gets the time from Receiver to enable FHSS synch
 
 
     union  {uint32_t Val32; uint8_t Val8[4];} RXTimeUnion;         
@@ -5709,11 +5709,14 @@ void GetRXTime()
         TXTimeStamp         = millis() - HopStart;
     }
     if ((TXTimeStamp == 0) || (TXTimeStamp > HOPTIME)) { // is it time (or indeed it is overdue?) to hop frequency?
+
+         
+     
         GetNextHopChannelNumber();                       // Also gets actual channel number
         HopStart = millis();
         HopToNextFrequency();
     }
-    ClearAckPayload();
+   // ClearAckPayload();
     CheckTimer();
     ReadSwitches();
 }
@@ -5758,8 +5761,8 @@ void GetTemperature()
 /************************************************************************************************************/
 void ParseAckPayload()
 {
-    if (!(AckPayload.Purpose & 0x80)) // High BIT ON = IGNORE i.e. skip the whole thing
-    {
+  //  if (!(AckPayload.Purpose & 0x80)) // Hi bit was always ignored!
+   
         switch (AckPayload.Purpose) // Only looking at the low 7 BITS
                                     // High BIT is guaranteed LOW by this point, so no "& 0x7F" is needed.
         {
@@ -5872,7 +5875,6 @@ void ParseAckPayload()
                 break;
             default:
                 break;
-        }
     }
 }
 /************************************************************************************************************/

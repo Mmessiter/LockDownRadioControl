@@ -206,7 +206,7 @@ void ClearAckPayload()
     AckPayload.Byte3 = 0;
     AckPayload.Byte4 = 0;
     AckPayload.Byte5 = 0;
-    AckPayload.Purpose |= 0x80;
+    AckPayload.Purpose = 0;
 }
 /************************************************************************************************************/
 
