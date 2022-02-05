@@ -457,7 +457,7 @@ FASTRUN void ReadTheSensorHub(){
      return;
   }
   if (strcmp(VLT,RdataID) == 0) {     
-      if (!INA219_CONNECTED) INA219Volts = RdataIn;
+      if (!INA219_CONNECTED) INA219Volts = RdataIn; // if there's a locally connected sensor, use it.
      return;
   }
   if (strcmp(DAY,RdataID) == 0) {     
