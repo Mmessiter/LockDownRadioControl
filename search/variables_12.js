@@ -38,7 +38,7 @@ var searchData=
   ['txontime_35',['TxOnTime',['../_radio_functions_8h.html#a992a1c7536f872bdfd833e282cf3b4e4',1,'TxOnTime():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a992a1c7536f872bdfd833e282cf3b4e4',1,'TxOnTime():&#160;main.cpp']]],
   ['txpace_36',['TxPace',['../_radio_functions_8h.html#a97c9afd7483ad56e7a2aa63db252d616',1,'TxPace():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a97c9afd7483ad56e7a2aa63db252d616',1,'TxPace():&#160;main.cpp']]],
   ['txtid_37',['txtID',['../class_adafruit___g_p_s.html#ad32955a01923ef7bc47535f32657e66c',1,'Adafruit_GPS']]],
-  ['txtimestamp_38',['TXTimeStamp',['../_radio_functions_8h.html#afd020f35b9f4a1aa2643c4fdcc46f5db',1,'TXTimeStamp():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#afd020f35b9f4a1aa2643c4fdcc46f5db',1,'TXTimeStamp():&#160;main.cpp']]],
+  ['txtimestamp_38',['TXTimeStamp',['../_radio_functions_8h.html#afd020f35b9f4a1aa2643c4fdcc46f5db',1,'RadioFunctions.h']]],
   ['txtn_39',['txtN',['../class_adafruit___g_p_s.html#aad5682d8705240af58b22ca430adc8ae',1,'Adafruit_GPS']]],
   ['txttot_40',['txtTot',['../class_adafruit___g_p_s.html#a6dc609e12336547d76ae984f0df4257b',1,'Adafruit_GPS']]],
   ['txttxt_41',['txtTXT',['../class_adafruit___g_p_s.html#ad293e1b1f3d1c2c35f24d56f41983876',1,'Adafruit_GPS']]],

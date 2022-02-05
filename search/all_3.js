@@ -41,7 +41,7 @@ var searchData=
   ['checkswitch_38',['CheckSwitch',['../_transmitter_code_2src_2main_8cpp.html#afcd616e96ae28694a7fa2197ad74c6fe',1,'main.cpp']]],
   ['checktimer_39',['CheckTimer',['../_radio_functions_8h.html#addfc131a271de92cb52d869fde35729e',1,'CheckTimer():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#addfc131a271de92cb52d869fde35729e',1,'CheckTimer():&#160;main.cpp']]],
   ['chipselect_40',['chipSelect',['../_transmitter_code_2src_2main_8cpp.html#a266db0f4dbdfbc06ea34c96f66bebed3',1,'main.cpp']]],
-  ['clearackpayload_41',['ClearAckPayload',['../_receiver_code_2src_2main_8cpp.html#a5a26715a721e1073d6ae00498282c056',1,'ClearAckPayload():&#160;main.cpp'],['../radio_8h.html#a5a26715a721e1073d6ae00498282c056',1,'ClearAckPayload():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a5a26715a721e1073d6ae00498282c056',1,'ClearAckPayload():&#160;main.cpp']]],
+  ['clearackpayload_41',['ClearAckPayload',['../_receiver_code_2src_2main_8cpp.html#a5a26715a721e1073d6ae00498282c056',1,'ClearAckPayload():&#160;main.cpp'],['../radio_8h.html#a5a26715a721e1073d6ae00498282c056',1,'ClearAckPayload():&#160;main.cpp']]],
   ['clearbox_42',['ClearBox',['../_transmitter_code_2src_2main_8cpp.html#a5aeea47b9d855ae9911bae1115d02de7',1,'main.cpp']]],
   ['cleartext_43',['ClearText',['../_transmitter_code_2src_2main_8cpp.html#af0852678d8e89501acee8951f09d3b43',1,'main.cpp']]],
   ['clickx_44',['ClickX',['../_transmitter_code_2src_2main_8cpp.html#a26157c4e738ba5e87d374d18cd0aa46a',1,'main.cpp']]],

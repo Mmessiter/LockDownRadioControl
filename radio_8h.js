@@ -3,8 +3,6 @@ var radio_8h =
     [ "Payload", "struct_payload.html", "struct_payload" ],
     [ "COMPRESSEDWORDS", "radio_8h.html#a461caf7198eaa60ce589088ff38b97cb", null ],
     [ "FAILSAFE_TIMEOUT", "radio_8h.html#a0634ad724c86cd2b4ac7cfebbb622a9c", null ],
-    [ "FREQUENCYSCOUNT", "radio_8h.html#afe5bce36baf737bd284d43cd0e805fdb", null ],
-    [ "HOPTIME", "radio_8h.html#a57d506b5f34172770c8d645c12cb5ba2", null ],
     [ "pinCE1", "radio_8h.html#a29eb13cced8716c95cf23e18ac99ffc7", null ],
     [ "pinCE2", "radio_8h.html#a86715d66aa5d1363f2db07ae6428eb90", null ],
     [ "pinCSN1", "radio_8h.html#a047f5702802c2bbf4918e9318f3e6a56", null ],

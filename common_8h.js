@@ -1,5 +1,7 @@
 var common_8h =
 [
+    [ "FREQUENCYSCOUNT", "common_8h.html#afe5bce36baf737bd284d43cd0e805fdb", null ],
+    [ "HOPTIME", "common_8h.html#a57d506b5f34172770c8d645c12cb5ba2", null ],
     [ "RECONNECT_CH", "common_8h.html#ad3c239265016482b6850360b3dc51a50", null ],
     [ "RXVERSION_MAJOR", "common_8h.html#a2b147d5155fcf962e9f1c4885b32c67d", null ],
     [ "RXVERSION_MINIMUS", "common_8h.html#a46d5105ccf92f7e44b10af6fd51772a8", null ],
