@@ -152,10 +152,10 @@ var NAVTREEINDEX =
 "_sensor_hub_t32_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h.html#af0bc43b5dae696582a77176e6e4ff643ae19c28b874a4ef6706d44af6f373f743",
 "_sensor_hub_teensy3__6_2src_2main_8cpp.html#a8c2d07492cf82a17c5cd61777bed8b63",
 "_transmitter_code_2src_2main_8cpp.html#a783a0141bea15d8539730afd4b3b06a3",
-"_transmitter_code_2src_2main_8cpp.html#af941d3a33327b2cee79e058ba9cd65f6",
+"_transmitter_code_2src_2main_8cpp.html#af97b5a7f4ae9db044fb9c214e0b929a8",
 "class_adafruit___b_m_p280.html#ab28e689ef7620d2b9f0c9e03116dde8fa544ab88771584cea12877d3338eef96d",
 "class_adafruit___s_p_i_device.html#a155f5efd84dbc240c987f4066265b840",
-"globals_func_k.html",
+"globals_func_l.html",
 "struct_tiny_g_p_s_date.html#a718150ae16f68afa9ae81f9d1b3ce3f4"
 ];
 

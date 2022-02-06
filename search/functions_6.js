@@ -37,6 +37,5 @@ var searchData=
   ['gettimefromackpayload_34',['GetTimeFromAckPayload',['../_transmitter_code_2src_2main_8cpp.html#a86523345ecdd52f3d93dccd6fcf4370a',1,'main.cpp']]],
   ['gettxversionnumber_35',['GetTXVersionNumber',['../_transmitter_code_2src_2main_8cpp.html#a39e1bbcbd0591a8e354b3c5c999a8882',1,'main.cpp']]],
   ['getvalue_36',['GetValue',['../_transmitter_code_2src_2main_8cpp.html#ad957c44f88874b35bd11323a86408e59',1,'main.cpp']]],
-  ['getwordsin_37',['GetWordsIn',['../_transmitter_code_2src_2main_8cpp.html#a8ebd89bf15e2498080ac9ac69bba4c28',1,'main.cpp']]],
-  ['greenledon_38',['GreenLedOn',['../_radio_functions_8h.html#a62e53eb9359c32b666e3386d62c57037',1,'GreenLedOn():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a62e53eb9359c32b666e3386d62c57037',1,'GreenLedOn():&#160;main.cpp']]]
+  ['greenledon_37',['GreenLedOn',['../_radio_functions_8h.html#a62e53eb9359c32b666e3386d62c57037',1,'GreenLedOn():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a62e53eb9359c32b666e3386d62c57037',1,'GreenLedOn():&#160;main.cpp']]]
 ];

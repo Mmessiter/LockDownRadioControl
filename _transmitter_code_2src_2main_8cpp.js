@@ -151,7 +151,6 @@ var _transmitter_code_2src_2main_8cpp =
     [ "GetTimeFromAckPayload", "_transmitter_code_2src_2main_8cpp.html#a86523345ecdd52f3d93dccd6fcf4370a", null ],
     [ "GetTXVersionNumber", "_transmitter_code_2src_2main_8cpp.html#a39e1bbcbd0591a8e354b3c5c999a8882", null ],
     [ "GetValue", "_transmitter_code_2src_2main_8cpp.html#ad957c44f88874b35bd11323a86408e59", null ],
-    [ "GetWordsIn", "_transmitter_code_2src_2main_8cpp.html#a8ebd89bf15e2498080ac9ac69bba4c28", null ],
     [ "GreenLedOn", "_transmitter_code_2src_2main_8cpp.html#a62e53eb9359c32b666e3386d62c57037", null ],
     [ "IncDate", "_transmitter_code_2src_2main_8cpp.html#ac3f1d629a53f2b8bb9aa5bdc2b0a730d", null ],
     [ "IncHour", "_transmitter_code_2src_2main_8cpp.html#aee918002ab8f85e66499b048b6ce722b", null ],
