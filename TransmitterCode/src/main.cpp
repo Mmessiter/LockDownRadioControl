@@ -1139,6 +1139,7 @@ void GetTextIn()
         delay(10);
         while (Nextion.available()) {
             TextIn[i] = uint8_t(Nextion.read());
+            if (TextIn[i] == '$') TextIn[i] = 0; // heer?
             if (i < CharsMax) ++i;
         }
     }
@@ -1169,26 +1170,6 @@ int GetValue(char* nbox)
 
 /*********************************************************************************************************************************/
 
-void GetWordsIn()
-{
-    char a = 0;
-    ClearText();
-    if (Nextion.available()) {
-        delay(10);
-        while (Nextion.available()) {
-            a          = char(Nextion.read());
-            TextIn[i]  = a;
-            WordsIn[i] = char(a);
-            if (i < CharsMax) ++i;
-        }
-        WordsIn[i] = char(0);
-    }
-}
-
-
-/*********************************************************************************************************************************/
-
-
 bool GetButtonPress()
 {
     bool ButtonPressed = false;
@@ -1201,6 +1182,7 @@ bool GetButtonPress()
             a = char(Nextion.read());
             if (a > 31 && a < 128) {
                 WordsIn[i]     = a;
+                if (WordsIn[i] == '$') WordsIn[i] = 0;  // heer??
                 WordsIn[i + 1] = char(0);
             }
             if (i < CharsMax) ++i;
@@ -2686,10 +2668,14 @@ void setup()
 {
     char FrontView_Connected[] = "FrontView.Connected";
     char Initialising[]        = "Initialising ... ";
-
     char OptionsViewTXname[] = "OptionsView.TxName";
     Nextion.begin(921600);   // BAUD rate also set in display code THIS IS THE MAX (was 115200)
-
+    //115200
+    //230400
+    //250000
+    //256000
+    //512000
+    //921600
     teensyMAC(MacAddress); // Get MAC address and use it as pipe address
     NewPipe = (uint64_t)MacAddress[0] << 40;
     NewPipe += (uint64_t)MacAddress[1] << 32;
@@ -5466,6 +5452,8 @@ void Button_was_pressed()
                 SendText1(SvT11, CMsg1);
                 SendText(SvB0, CMsg2);
                 ClearText();
+               // Serial.println ("ZERO");
+               // Serial.println (CurrentMode);
                 return;
             }
         }
@@ -5476,6 +5464,8 @@ void Button_was_pressed()
                 SendText(SvT11, Cmsg3);
                 SendText(SvB0, Cmsg4);
                 ClearText();
+                //Serial.println ("ONE");
+                //Serial.println (CurrentMode);
                 return;
             }
         }
@@ -5487,6 +5477,8 @@ void Button_was_pressed()
                 SendText(SvB0, Cmsg6);
                 SendValue1(NextionSleepTime, ScreenTimeout); // Re enable timeout
                 ClearText();
+                //Serial.println ("TWO");
+               // Serial.println (CurrentMode);
                 return;
             }
         }
