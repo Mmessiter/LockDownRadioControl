@@ -38,7 +38,6 @@ var _receiver_code_2src_2main_8cpp =
     [ "setup", "_receiver_code_2src_2main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d", null ],
     [ "ShowHopDurationEtc", "_receiver_code_2src_2main_8cpp.html#a2863e7455e30e6fddc0fcf56f62d6564", null ],
     [ "UseReceivedData", "_receiver_code_2src_2main_8cpp.html#abb1997c589abc6432f612eaedf985e38", null ],
-    [ "altitude", "_receiver_code_2src_2main_8cpp.html#a0e13a4b4ae0cefdac2a413284239caa6", null ],
     [ "AltitudeGPS", "_receiver_code_2src_2main_8cpp.html#a9690c7445dbd0530fa729af6bac11044", null ],
     [ "AngleGPS", "_receiver_code_2src_2main_8cpp.html#a9cb6617428d513efc095336972632da6", null ],
     [ "BaroAltitude", "_receiver_code_2src_2main_8cpp.html#acec349590f33af1fb88040ed4d12e53f", null ],
@@ -66,7 +65,6 @@ var _receiver_code_2src_2main_8cpp =
     [ "MonthGPS", "_receiver_code_2src_2main_8cpp.html#a0944456d2dbd7c1deb2abba2532afe24", null ],
     [ "OldQnh", "_receiver_code_2src_2main_8cpp.html#a9457ea1945cb317c212c8cb98a829f39", null ],
     [ "PacketStartTime", "_receiver_code_2src_2main_8cpp.html#ac479139b01668992bdccae3c508df1df", null ],
-    [ "pressure", "_receiver_code_2src_2main_8cpp.html#ac870e1249bab4a2a68cc4126761d24ef", null ],
     [ "PWMPins", "_receiver_code_2src_2main_8cpp.html#a19f864fa6bdea0867325f70e162c92ef", null ],
     [ "Qnh", "_receiver_code_2src_2main_8cpp.html#ae3495ca407a0a3ea570ce0af7a3447a3", null ],
     [ "Radio1Exists", "_receiver_code_2src_2main_8cpp.html#a455437a61ec8c1b1f4078cfae168b407", null ],
@@ -83,6 +81,5 @@ var _receiver_code_2src_2main_8cpp =
     [ "SensorTime", "_receiver_code_2src_2main_8cpp.html#a1e9e8116136abd96cf87d7f0fd20a3d8", null ],
     [ "ServosAttached", "_receiver_code_2src_2main_8cpp.html#a95b22fb572f7a91a89a431c7f1236575", null ],
     [ "SpeedGPS", "_receiver_code_2src_2main_8cpp.html#af02319a1e0d8c0c651f23e49acc228f8", null ],
-    [ "temperature280", "_receiver_code_2src_2main_8cpp.html#a7cc84074d4166c6512a2d479b6f12e30", null ],
     [ "YearGPS", "_receiver_code_2src_2main_8cpp.html#a4a1012a9dfe5632ac326ce712f311472", null ]
 ];
