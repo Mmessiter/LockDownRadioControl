@@ -351,31 +351,31 @@ void LoadAckPayload()
             SendToAckPayload(BaroTemperature);
             break;
         case 4: 
-            SendToAckPayload (LatitudeGPS);     // ********* GPS *******************    
+            SendToAckPayload (LatitudeGPS);       
             break;
         case 5: 
-             SendToAckPayload (LongitudeGPS);  // ********* GPS *******************
+             SendToAckPayload (LongitudeGPS);
             break;
         case 6: 
-             SendToAckPayload (AngleGPS);     // ********* GPS *******************
+             SendToAckPayload (AngleGPS); 
             break;
         case 7: 
-             SendToAckPayload(SpeedGPS);      // ********* GPS *******************
+             SendToAckPayload(SpeedGPS);  
             break;
         case 8: 
-            SendToAckPayload(GpsFix);          // ********* GPS *******************
+            SendToAckPayload(GpsFix);    
             break;
         case 9: 
-            SendToAckPayload(AltitudeGPS);      // ********* GPS *******************
+            SendToAckPayload(AltitudeGPS);      
             break;
         case 10: 
-            SendToAckPayload(DistanceGPS);       // ********* GPS *******************
+            SendToAckPayload(DistanceGPS);    
             break;
         case 11: 
-            SendToAckPayload(CourseToGPS);        // ********* GPS *******************
+            SendToAckPayload(CourseToGPS);       
             break;
         case 12: 
-            SendToAckPayload(SatellitesGPS);       // ********* GPS *******************
+            SendToAckPayload(SatellitesGPS);     
             break;
         case 13: 
             SendDateToAckPayload();
