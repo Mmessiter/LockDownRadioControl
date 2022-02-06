@@ -313,7 +313,7 @@ void SendToAckPayload(float U){                        // This one function now 
     union  {float Val32; uint8_t Val8[4];} ThisUnion;
     CheckIfItsHopTime();
     ThisUnion.Val32     = U;
-    AckPayload.Byte1    = ThisUnion.Val8[0];            // These values are herewith delivered to Transmitter in Ack Payload
+    AckPayload.Byte1    = ThisUnion.Val8[0];           // These values are herewith delivered to Transmitter in Ack Payload
     AckPayload.Byte2    = ThisUnion.Val8[1];
     AckPayload.Byte3    = ThisUnion.Val8[2];
     AckPayload.Byte4    = ThisUnion.Val8[3];
@@ -324,7 +324,6 @@ void SendTimeToAckPayload(){
     AckPayload.Byte1    = SecsGPS;    
     AckPayload.Byte2    = MinsGPS;
     AckPayload.Byte3    = HoursGPS;
-    AckPayload.Byte4    = 0;
 }
 /************************************************************************************************************/
 void SendDateToAckPayload(){   
@@ -332,7 +331,6 @@ void SendDateToAckPayload(){
     AckPayload.Byte1    = DayGPS;  
     AckPayload.Byte2    = MonthGPS;
     AckPayload.Byte3    = YearGPS;
-    AckPayload.Byte4    = 0;
 }
 /************************************************************************************************************/
 void LoadAckPayload()
