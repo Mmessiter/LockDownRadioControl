@@ -61,7 +61,6 @@ Servo           MCMServo[SERVOSUSED];
 uint8_t         PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8}; // 9 PWMs, remaining 7 via sbus
 SBUS            MySbus(SBUSPORT);
 float           PacketStartTime;
-float           temperature280, pressure, altitude;
 uint8_t         BindNow        = 0;     /** indicates that the receiver should start the binding/pairing process */
 bool            BoundFlag      = false; /** indicates if receiver paired with transmitter */
 int             BindOKTimer    = 0;
