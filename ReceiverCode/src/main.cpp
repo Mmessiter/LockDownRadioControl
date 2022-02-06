@@ -91,20 +91,16 @@ bool            GpsFix = false;
 float           AltitudeGPS;
 float           DistanceGPS;
 float           CourseToGPS;
-
 uint8_t         DayGPS;
 uint8_t         MonthGPS;
 uint8_t         YearGPS;
-
 uint8_t         HoursGPS;
 uint8_t         MinsGPS;
 uint8_t         SecsGPS;
-
 uint16_t        CompressedData[COMPRESSEDWORDS]; // 30 bytes -> 40 bytes when uncompressed
 bool            SensorHubDead = false;
 u_int32_t       BootupMoment = 0;
 
-  
 /************************************************************************************************************/
 
 void LoadFailSafeData()
@@ -168,9 +164,7 @@ void FailSafe()
         Connected = false; // I lied earlier - we're not really connected.
     }
 }
-
 /************************************************************************************************************/
-
 /**
  * Print out some debugging information about the channel hopping implementation
  * @param freq The next frequency to be used.
@@ -183,7 +177,6 @@ void ShowHopDurationEtc()
     Serial.print("ms.  Packets per hop: ");
     if (PacketNumber<10) Serial.print (" ");
     Serial.print(PacketNumber);
-    
     Serial.print("  Average Time per packet: ");
     Serial.print(OnePacketTime);
     if (OnePacketTime<10) Serial.print (" ");
@@ -196,7 +189,6 @@ void ShowHopDurationEtc()
     Serial.println("");
     PacketStartTime = millis();
 }
-
 /************************************************************************************************************/
 
 void ClearAckPayload()
@@ -206,7 +198,6 @@ void ClearAckPayload()
     AckPayload.Byte3 = 0;
     AckPayload.Byte4 = 0;
     AckPayload.Byte5 = 0;
-    //AckPayload.Purpose &=0x7f;
 }
 /************************************************************************************************************/
 
@@ -228,9 +219,6 @@ void UseReceivedData(){
 bool ReadData()
 {
     Connected = false;
-
-   // if (CurrentRadio->available()) Serial.println (millis() - LastPacketArrivalTime); 
-
     while (CurrentRadio->available()) {                                // Get all, but use only the latest
         LoadAckPayload();
         Connected = true;
@@ -316,7 +304,10 @@ void SendQnhToSensorHub(){
 
 /**
  * extra parameters can be sent using the last four bytes in every data packet.
- * the parameter sent is defined by the packet number ... which goes only upto about 5!
+ * the parameter sent is defined by the packet number ... which goes only upto about 5
+ * 
+ * Note: If extra parameters are needed, the "HOPTIME" duration can be increased.
+ * It's 50ms right now, which gives about 7 packets between hops.
  */
 void CheckParams()
 { uint16_t TwoBytes = 0;      
@@ -379,12 +370,9 @@ FASTRUN void ReadTheSensorHub(){
   char  DAY[IDLEN+1]    = "DAY";  // DAY
   char  MTH[IDLEN+1]    = "MTH";  // MONTH
   char  YER[IDLEN+1]    = "YER";  // YEAR
-
   char  RdataID[IDLEN+1];
-  
   float RdataIn;
   union {float Val32; uint8_t Val8[4];} Rdata;      // 'union' allows access to every byte
-
 
   Wire.requestFrom(SENSOR_HUB_I2C_ADDRESS, GPSI2CBYTES);         // Ask hub for data
   for (int j = 0; j < GPSI2CBYTES; ++j ){
@@ -493,12 +481,12 @@ void SensorHubHasFailed(){       // If the I2C gets its knickers in a twist, it 
      BaroTemperature = Failed;   
      INA219Volts     = 0;
      GpsFix          = 0;
-     SensorHubDead   = true;    // This flag inhibits further attempts to contact hub.
+     SensorHubDead   = true;    // This flag inhibits further attempts to call the hub, which might save a model.
 }
 // ******************************************************************************************************************************************************************
 FASTRUN void ReceiveData(){ 
       uint32_t TimeTest;
-      if ((millis() - SensorHubAccessed) > 10){                                         //  Reading Sensor hub 100 x per second might be enough
+      if ((millis() - SensorHubAccessed) > 10){                                         //  Reading Sensor hub 100 x per second should be enough
         if (millis() - LastPacketArrivalTime < 1 ) {                                    //  If, and only if, we have still absolutely loads of time, do stuff now while waiting ...           
              SensorHubAccessed = millis();                                              //  Note the moment of last attempted read. 
              if (!SensorHubDead){                                                       //  Better check it hasn't died.
@@ -506,7 +494,7 @@ FASTRUN void ReceiveData(){
                 if (SENSOR_HUB_CONNECTED)       ReadTheSensorHub();                     //  Sensor now has its own MCU. Calls return in far less that 6 ms unless it lost I2C synch  
                 if (INA219_CONNECTED)           INA219Volts = ina219.getBusVoltage_V(); //  Get RX LIPO volts if connected separately (as will be needed on 'planes with no GPS fitted.)  
                 if ((millis() - BootupMoment) > 5000) {
-                        if ((millis() - TimeTest) > 6)  SensorHubHasFailed();           //  So if sensor hub and/or INA219 fails, don't bother calling either again (It normally returns within 2 ms.    
+                        if ((millis() - TimeTest) > 6)  SensorHubHasFailed();           //  If sensor hub and/or INA219 fails, don't bother calling either again (It normally returns within 2 ms.    
                 }
             } 
          }
