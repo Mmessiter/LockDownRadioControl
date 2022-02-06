@@ -309,7 +309,7 @@ void CheckIfItsHopTime(){
     }
 }
 /************************************************************************************************************/
-void SendToAckPayload(float U){                        // This function now works with most parameters
+void SendToAckPayload(float U){                        // This one function now works with most parameters
     union  {float Val32; uint8_t Val8[4];} ThisUnion;
     CheckIfItsHopTime();
     ThisUnion.Val32     = U;
