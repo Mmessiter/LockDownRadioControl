@@ -80,7 +80,7 @@ bool            Radio1Exists = false;
 bool            Radio2Exists = false;
 uint32_t        SensorTime       = 0;
 uint32_t        SensorHubAccessed    = 0;
-uint16_t        Qnh              = 0;    //Pressure at sea level here and now (defined by TX option)
+uint16_t        Qnh              = 0;    //Pressure at sea level here and now (defined at TX)
 uint16_t        OldQnh           = 0;
 uint8_t         SatellitesGPS; 
 float           LatitudeGPS;
