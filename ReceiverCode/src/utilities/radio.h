@@ -291,15 +291,21 @@ void Reconnect()
     ReconnectedMoment  = ConnectionStart; // Save this moment, then don't move a servo for a few ms ...
 }
 /************************************************************************************************************/
+// This function checks the time since last hop. 
+// If it's time to HOP, it sets the high bit in AckPayload.Purpose and both ends then HOP to new channel before next packet.
+// The other 7 BITS of AckPayload.Purpose still dictate the Payload's function ( < 127 possibities. )
+// This now happens for *every* AckPayload, which can and does return telemetry data as well as this hoptime information.
+// Hence a single BIT now directs the transmitter to hop.
+
 void CheckIfItsHopTime(){
-    AckPayload.Purpose  &= 0x7f;                    // Clear the HOP flag
-    if((millis() - HopStart) >= HOPTIME){
-         AckPayload.Purpose |= 0x80;               //  Set the HOP flag
-         ++NextChannelNumber;
-         if (NextChannelNumber >= FREQUENCYSCOUNT)  NextChannelNumber = 1;
-         AckPayload.Byte5 = NextChannelNumber;
-         GetNextFrequency();
-         HopNow = true;                            // Set local flag and hop when ready *** BUT NOT BEFORE ****  !!!!!
+    AckPayload.Purpose  &= 0x7f;                   // Clear the HOP flag
+    if ((millis() - HopStart) >= HOPTIME){         // Time to hop?? 
+         AckPayload.Purpose |= 0x80;               // Yes. So set the HOP flag leaving lower 7 bits unchanged
+         ++NextChannelNumber;                      // Move up the channels' array
+         if (NextChannelNumber >= FREQUENCYSCOUNT)  NextChannelNumber = 1; // If needed, wrap the channels' array pointer
+         AckPayload.Byte5 = NextChannelNumber;     // Tell the transmitter which element of the array to use next.
+         GetNextFrequency();                       // Get the actual channel number from the array.
+         HopNow = true;                            // Set local flag and hop when ready BUT NOT BEFORE.
     }
 }
 /************************************************************************************************************/
@@ -332,7 +338,7 @@ void SendDateToAckPayload(){
 void LoadAckPayload()
 {
     uint8_t MaxAckP     = 0;                                      // 0 if only RX
-    AckPayload.Purpose &= 0x7F;                                   // Clear hi bit ( = do not ignore)
+    AckPayload.Purpose &= 0x7F;                                   // NOTE: The HIGH BIT of "purpose" bit is the HOPNOW flag. It gets set only when it's time to hop.
     ++AckPayload.Purpose;   
     if (INA219_CONNECTED) MaxAckP = 1;
     if (SENSOR_HUB_CONNECTED) MaxAckP = 14;                       // its 14 + GPS
