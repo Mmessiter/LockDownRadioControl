@@ -191,6 +191,9 @@ ReceiveRequestFlag = false;
     } 
 
    RCV[3] = 0; // Add a terminator
+   
+  // Serial.println (RCV);
+
    if (strcmp(LastRequest, RCV) == 0) return;  // temp bug fix!! (lots of phantom repeat calls?????)
    strcpy(LastRequest,RCV);
 

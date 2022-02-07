@@ -270,7 +270,7 @@ void BindModel()
 void  SendToSensorHub(char m[]){
   Wire.beginTransmission(SENSOR_HUB_I2C_ADDRESS);   
   Wire.write(m);
-  Wire.endTransmission();   
+  Wire.endTransmission(true);   
 }
 
 // ***************************************************************************************************************************************************
