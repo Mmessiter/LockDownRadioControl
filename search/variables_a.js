@@ -9,7 +9,7 @@ var searchData=
   ['lastmixnumber_6',['LastMixNumber',['../_transmitter_code_2src_2main_8cpp.html#a4e93c6d21a52ae42832359ee0e4c8b2d',1,'main.cpp']]],
   ['lastmodelloaded_7',['LastModelLoaded',['../_transmitter_code_2src_2main_8cpp.html#a23f3d76e747ca641d7cb1549fb775e40',1,'main.cpp']]],
   ['lastpacketarrivaltime_8',['LastPacketArrivalTime',['../common_8h.html#a9ac62185b964d18f5843146fce5b0063',1,'common.h']]],
-  ['lastrequest_9',['LastRequest',['../_sensor_hub_l_c_2src_2main_8cpp.html#adbb5e7e51f306d8f77d46702d3df4fe3',1,'main.cpp']]],
+  ['lastrequest_9',['LastRequest',['../_sensor_hub_t32_2src_2main_8cpp.html#adbb5e7e51f306d8f77d46702d3df4fe3',1,'LastRequest():&#160;main.cpp'],['../_sensor_hub_l_c_2src_2main_8cpp.html#adbb5e7e51f306d8f77d46702d3df4fe3',1,'LastRequest():&#160;main.cpp']]],
   ['lastseconds_10',['LastSeconds',['../_transmitter_code_2src_2main_8cpp.html#a7a15f8648d39393c4a49c627976f1fce',1,'main.cpp']]],
   ['lastsentence_11',['lastSentence',['../class_adafruit___g_p_s.html#a35d9d4c069a8ac93cbcbc98cf1c86ba0',1,'Adafruit_GPS']]],
   ['lastshowtime_12',['LastShowTime',['../_transmitter_code_2src_2main_8cpp.html#a75924ddf3462d9a4761c1261e0dfbaad',1,'main.cpp']]],

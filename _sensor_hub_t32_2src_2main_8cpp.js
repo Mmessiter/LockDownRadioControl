@@ -1,6 +1,5 @@
 var _sensor_hub_t32_2src_2main_8cpp =
 [
-    [ "DEBUG", "_sensor_hub_t32_2src_2main_8cpp.html#ad72dbcf6d0153db1b8d8a58001feed83", null ],
     [ "DEBUGTIMER", "_sensor_hub_t32_2src_2main_8cpp.html#a6d8ac148d16fbe92176033a667d3ef8a", null ],
     [ "GPSBAUDRATE", "_sensor_hub_t32_2src_2main_8cpp.html#a372295c11945751efdddfd98372e4aa7", null ],
     [ "GPSDEVICE", "_sensor_hub_t32_2src_2main_8cpp.html#ac5dd8c90defc2c0d78e99d2d5c1a0fd1", null ],
@@ -8,6 +7,7 @@ var _sensor_hub_t32_2src_2main_8cpp =
     [ "I2CADDRESS", "_sensor_hub_t32_2src_2main_8cpp.html#a6ee9f32cf8cccca5a7e078c303afee94", null ],
     [ "IDLEN", "_sensor_hub_t32_2src_2main_8cpp.html#a472646a6b1f959aa3b4261a8247c2015", null ],
     [ "MAXPARAMS", "_sensor_hub_t32_2src_2main_8cpp.html#a5fdce82727e278d6647e0addafcd6db6", null ],
+    [ "DoTheRequest", "_sensor_hub_t32_2src_2main_8cpp.html#aa813a4b38095c6683d78bdf2baa33f69", null ],
     [ "InitBMP280", "_sensor_hub_t32_2src_2main_8cpp.html#aa2c448c0ec510ffaaecbc5991e726b53", null ],
     [ "loop", "_sensor_hub_t32_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f", null ],
     [ "ReadGps", "_sensor_hub_t32_2src_2main_8cpp.html#adf4ab5f33d1ca1e1dd96454622f105d7", null ],
@@ -45,6 +45,7 @@ var _sensor_hub_t32_2src_2main_8cpp =
     [ "GPSYear", "_sensor_hub_t32_2src_2main_8cpp.html#abc801729e599fbe5b84d088ead6fae1a", null ],
     [ "ina219", "_sensor_hub_t32_2src_2main_8cpp.html#a69393b86406e49dbacfbabd283877495", null ],
     [ "INA219Volts", "_sensor_hub_t32_2src_2main_8cpp.html#ad84d94b7259bcf40213f0af9be706ee7", null ],
+    [ "LastRequest", "_sensor_hub_t32_2src_2main_8cpp.html#adbb5e7e51f306d8f77d46702d3df4fe3", null ],
     [ "LoopTimer", "_sensor_hub_t32_2src_2main_8cpp.html#a46536419f1b2ee88934f4f812fd6140c", null ],
     [ "ParameterNumber", "_sensor_hub_t32_2src_2main_8cpp.html#ae1460f6669589cc4881aad0fd6440030", null ],
     [ "PGCMD_NOANTENNA", "_sensor_hub_t32_2src_2main_8cpp.html#af5f2a2a78189687a7055abd054ac6058", null ],
@@ -53,5 +54,6 @@ var _sensor_hub_t32_2src_2main_8cpp =
     [ "PMTK_SET_BAUD_9600", "_sensor_hub_t32_2src_2main_8cpp.html#a2f6cf549dcffc0d1688542f2d6061773", null ],
     [ "PMTK_SET_NMEA_OUTPUT_ALLDATA", "_sensor_hub_t32_2src_2main_8cpp.html#a9e66319eb62ac284544d36d69f59bda5", null ],
     [ "PMTK_SET_NMEA_OUTPUT_RMCGGAGSA", "_sensor_hub_t32_2src_2main_8cpp.html#a25a3b2af4ac29d0f76a20362319394a8", null ],
-    [ "Qnh", "_sensor_hub_t32_2src_2main_8cpp.html#ae3495ca407a0a3ea570ce0af7a3447a3", null ]
+    [ "Qnh", "_sensor_hub_t32_2src_2main_8cpp.html#ae3495ca407a0a3ea570ce0af7a3447a3", null ],
+    [ "ReceiveRequestFlag", "_sensor_hub_t32_2src_2main_8cpp.html#a5ac604cfd226554c62738bdbabf09f5f", null ]
 ];

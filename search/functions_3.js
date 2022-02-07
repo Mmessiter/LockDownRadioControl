@@ -19,7 +19,7 @@ var searchData=
   ['donewchannelname_16',['DoNewChannelName',['../_transmitter_code_2src_2main_8cpp.html#aba44d61ea51411cb5c601beb94b6fef4',1,'main.cpp']]],
   ['doscanend_17',['DoScanEnd',['../_radio_functions_8cpp.html#a31fb6a46af68482e107cddee58dfb677',1,'DoScanEnd():&#160;RadioFunctions.cpp'],['../_radio_functions_8h.html#a31fb6a46af68482e107cddee58dfb677',1,'DoScanEnd():&#160;RadioFunctions.cpp']]],
   ['doscaninit_18',['DoScanInit',['../_radio_functions_8cpp.html#a77c4a4ffa609df08830ccece07bf283b',1,'DoScanInit():&#160;RadioFunctions.cpp'],['../_radio_functions_8h.html#a77c4a4ffa609df08830ccece07bf283b',1,'DoScanInit():&#160;RadioFunctions.cpp']]],
-  ['dotherequest_19',['DoTheRequest',['../_sensor_hub_l_c_2src_2main_8cpp.html#aa813a4b38095c6683d78bdf2baa33f69',1,'main.cpp']]],
+  ['dotherequest_19',['DoTheRequest',['../_sensor_hub_l_c_2src_2main_8cpp.html#aa813a4b38095c6683d78bdf2baa33f69',1,'DoTheRequest():&#160;main.cpp'],['../_sensor_hub_t32_2src_2main_8cpp.html#aa813a4b38095c6683d78bdf2baa33f69',1,'DoTheRequest():&#160;main.cpp']]],
   ['drawbox_20',['DrawBox',['../_transmitter_code_2src_2main_8cpp.html#a705c97485d6142131c03577ec14134e7',1,'main.cpp']]],
   ['drawdot_21',['DrawDot',['../_transmitter_code_2src_2main_8cpp.html#a711945ac5f6948657463708863748432',1,'main.cpp']]],
   ['drawfhssbox_22',['DrawFhssBox',['../_transmitter_code_2src_2main_8cpp.html#a6bdc6419b47dda71d0d2c8faf652adc2',1,'main.cpp']]],

@@ -8,7 +8,7 @@ var searchData=
   ['rangetestlostpackets_5',['RangeTestLostPackets',['../_radio_functions_8h.html#a8e396337a72c148bea7bf1856578c140',1,'RangeTestLostPackets():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a8e396337a72c148bea7bf1856578c140',1,'RangeTestLostPackets():&#160;main.cpp']]],
   ['rangeteststart_6',['RangeTestStart',['../_transmitter_code_2src_2main_8cpp.html#aee35e643eabc1ed932fa3886c912a8a3',1,'main.cpp']]],
   ['receiveddata_7',['ReceivedData',['../radio_8h.html#ae5bff5a2375f932e5653e5d3659330d3',1,'radio.h']]],
-  ['receiverequestflag_8',['ReceiveRequestFlag',['../_sensor_hub_l_c_2src_2main_8cpp.html#a5ac604cfd226554c62738bdbabf09f5f',1,'main.cpp']]],
+  ['receiverequestflag_8',['ReceiveRequestFlag',['../_sensor_hub_t32_2src_2main_8cpp.html#a5ac604cfd226554c62738bdbabf09f5f',1,'ReceiveRequestFlag():&#160;main.cpp'],['../_sensor_hub_l_c_2src_2main_8cpp.html#a5ac604cfd226554c62738bdbabf09f5f',1,'ReceiveRequestFlag():&#160;main.cpp']]],
   ['receiverversionnumber_9',['ReceiverVersionNumber',['../_transmitter_code_2src_2main_8cpp.html#a54977872c85f09f2b15f657c83df9300',1,'main.cpp']]],
   ['recentpacketslost_10',['RecentPacketsLost',['../_transmitter_code_2src_2main_8cpp.html#abf6b6613bda2b08b3e07a231a23f38c2',1,'RecentPacketsLost():&#160;main.cpp'],['../_radio_functions_8h.html#abf6b6613bda2b08b3e07a231a23f38c2',1,'RecentPacketsLost():&#160;main.cpp']]],
   ['reconnectedmoment_11',['ReconnectedMoment',['../_receiver_code_2src_2main_8cpp.html#ae6657a547a79d8e304b8ddeb3f6a38e0',1,'ReconnectedMoment():&#160;main.cpp'],['../radio_8h.html#ae6657a547a79d8e304b8ddeb3f6a38e0',1,'ReconnectedMoment():&#160;main.cpp']]],

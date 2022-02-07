@@ -122,8 +122,6 @@ Macros</h2></td></tr>
 <tr class="separator:a372295c11945751efdddfd98372e4aa7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac5dd8c90defc2c0d78e99d2d5c1a0fd1"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_sensor_hub_t32_2src_2main_8cpp.html#ac5dd8c90defc2c0d78e99d2d5c1a0fd1">GPSDEVICE</a>&#160;&#160;&#160;Serial1</td></tr>
 <tr class="separator:ac5dd8c90defc2c0d78e99d2d5c1a0fd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad72dbcf6d0153db1b8d8a58001feed83"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_sensor_hub_t32_2src_2main_8cpp.html#ad72dbcf6d0153db1b8d8a58001feed83">DEBUG</a></td></tr>
-<tr class="separator:ad72dbcf6d0153db1b8d8a58001feed83"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6d8ac148d16fbe92176033a667d3ef8a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_sensor_hub_t32_2src_2main_8cpp.html#a6d8ac148d16fbe92176033a667d3ef8a">DEBUGTIMER</a>&#160;&#160;&#160;1000</td></tr>
 <tr class="separator:a6d8ac148d16fbe92176033a667d3ef8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a472646a6b1f959aa3b4261a8247c2015"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_sensor_hub_t32_2src_2main_8cpp.html#a472646a6b1f959aa3b4261a8247c2015">IDLEN</a>&#160;&#160;&#160;3</td></tr>
@@ -137,6 +135,8 @@ Macros</h2></td></tr>
 Functions</h2></td></tr>
 <tr class="memitem:aac529433269b7b52ef0a627716a70aea"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_sensor_hub_t32_2src_2main_8cpp.html#aac529433269b7b52ef0a627716a70aea">SendDataToReceiver</a> ()</td></tr>
 <tr class="separator:aac529433269b7b52ef0a627716a70aea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa813a4b38095c6683d78bdf2baa33f69"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_sensor_hub_t32_2src_2main_8cpp.html#aa813a4b38095c6683d78bdf2baa33f69">DoTheRequest</a> ()</td></tr>
+<tr class="separator:aa813a4b38095c6683d78bdf2baa33f69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae8f856dd3cc2dae9023cbdc49710c111"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_sensor_hub_t32_2src_2main_8cpp.html#ae8f856dd3cc2dae9023cbdc49710c111">ReceiveEvent</a> (int q)</td></tr>
 <tr class="separator:ae8f856dd3cc2dae9023cbdc49710c111"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adf4ab5f33d1ca1e1dd96454622f105d7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_sensor_hub_t32_2src_2main_8cpp.html#adf4ab5f33d1ca1e1dd96454622f105d7">ReadGps</a> ()</td></tr>
@@ -232,24 +232,12 @@ Variables</h2></td></tr>
 <tr class="separator:ad84d94b7259bcf40213f0af9be706ee7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae3495ca407a0a3ea570ce0af7a3447a3"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_sensor_hub_t32_2src_2main_8cpp.html#ae3495ca407a0a3ea570ce0af7a3447a3">Qnh</a> = 0</td></tr>
 <tr class="separator:ae3495ca407a0a3ea570ce0af7a3447a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ac604cfd226554c62738bdbabf09f5f"><td class="memItemLeft" align="right" valign="top">volatile bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_sensor_hub_t32_2src_2main_8cpp.html#a5ac604cfd226554c62738bdbabf09f5f">ReceiveRequestFlag</a> = false</td></tr>
+<tr class="separator:a5ac604cfd226554c62738bdbabf09f5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adbb5e7e51f306d8f77d46702d3df4fe3"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_sensor_hub_t32_2src_2main_8cpp.html#adbb5e7e51f306d8f77d46702d3df4fe3">LastRequest</a> [10]</td></tr>
+<tr class="separator:adbb5e7e51f306d8f77d46702d3df4fe3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
-<a id="ad72dbcf6d0153db1b8d8a58001feed83" name="ad72dbcf6d0153db1b8d8a58001feed83"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad72dbcf6d0153db1b8d8a58001feed83">&#9670;&nbsp;</a></span>DEBUG</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define DEBUG</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00015">15</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
-
-</div>
-</div>
 <a id="a6d8ac148d16fbe92176033a667d3ef8a" name="a6d8ac148d16fbe92176033a667d3ef8a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6d8ac148d16fbe92176033a667d3ef8a">&#9670;&nbsp;</a></span>DEBUGTIMER</h2>
 
@@ -357,6 +345,25 @@ Variables</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="aa813a4b38095c6683d78bdf2baa33f69" name="aa813a4b38095c6683d78bdf2baa33f69"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa813a4b38095c6683d78bdf2baa33f69">&#9670;&nbsp;</a></span>DoTheRequest()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void DoTheRequest </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00177">177</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+
+</div>
+</div>
 <a id="aa2c448c0ec510ffaaecbc5991e726b53" name="aa2c448c0ec510ffaaecbc5991e726b53"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa2c448c0ec510ffaaecbc5991e726b53">&#9670;&nbsp;</a></span>InitBMP280()</h2>
 
@@ -372,7 +379,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00311">311</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00328">328</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -397,11 +404,11 @@ Here is the call graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00299">299</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00313">313</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="_sensor_hub_t32_2src_2main_8cpp_afe461d27b9c48d5921c00d521181f12f_cgraph.svg" width="1042" height="1016"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="_sensor_hub_t32_2src_2main_8cpp_afe461d27b9c48d5921c00d521181f12f_cgraph.svg" width="1042" height="1036"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 
@@ -422,7 +429,7 @@ Here is the call graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00209">209</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00223">223</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -447,7 +454,7 @@ Here is the call graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00280">280</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00294">294</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -473,7 +480,7 @@ Here is the call graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00174">174</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00219">219</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -492,7 +499,7 @@ Here is the call graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00321">321</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00338">338</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -511,7 +518,7 @@ Here is the call graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00059">59</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00062">62</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -531,7 +538,7 @@ Here is the call graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00288">288</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00302">302</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -550,7 +557,7 @@ Here is the call graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00346">346</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00363">363</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -575,7 +582,7 @@ Here is the call graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00235">235</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00249">249</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1012,6 +1019,22 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
+<a id="adbb5e7e51f306d8f77d46702d3df4fe3" name="adbb5e7e51f306d8f77d46702d3df4fe3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adbb5e7e51f306d8f77d46702d3df4fe3">&#9670;&nbsp;</a></span>LastRequest</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char LastRequest[10]</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00057">57</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+
+</div>
+</div>
 <a id="a46536419f1b2ee88934f4f812fd6140c" name="a46536419f1b2ee88934f4f812fd6140c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a46536419f1b2ee88934f4f812fd6140c">&#9670;&nbsp;</a></span>LoopTimer</h2>
 
@@ -1157,6 +1180,22 @@ Here is the call graph for this function:</div>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00055">55</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a5ac604cfd226554c62738bdbabf09f5f" name="a5ac604cfd226554c62738bdbabf09f5f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ac604cfd226554c62738bdbabf09f5f">&#9670;&nbsp;</a></span>ReceiveRequestFlag</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">volatile bool ReceiveRequestFlag = false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html#l00056">56</a> of file <a class="el" href="_sensor_hub_t32_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
