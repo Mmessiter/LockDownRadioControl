@@ -293,7 +293,6 @@ void RebuildFlags(bool* f, uint16_t tb)
 /************************************************************************************************************/
 
 void SendQnhToSensorHub(){ 
-
   union {uint16_t Val16; uint8_t Val8[2];} Uqnh;  
         char QNH[] = "QNH=??";
         Uqnh.Val16 = Qnh;
