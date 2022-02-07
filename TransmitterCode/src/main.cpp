@@ -5510,6 +5510,8 @@ void LoadPacketData()
     Twobytes = MakeTwobytes(FailSafeChannel); // 16 bool values compressed to 16 bits
     FS_Byte1 = uint8_t(Twobytes >> 8);        // sent as two bytes
     FS_Byte2 = uint8_t(Twobytes & 0x00FF);
+    SendBuffer[CHANNELSUSED + 1] = 0;
+    SendBuffer[CHANNELSUSED + 2] = 0;
     switch (PacketNumber) {
         case 0:  
             SendBuffer[CHANNELSUSED + 2] = BindingNow;
@@ -5529,9 +5531,11 @@ void LoadPacketData()
             SendBuffer[CHANNELSUSED + 2] = Qnh & 0x00ff;   // (LowByte)  Qnh is current atmospheric pressure at sea level here (an aviation term)
             break;
         case 3: 
-            SendBuffer[CHANNELSUSED + 1] = 0;
-            SendBuffer[CHANNELSUSED + 2] = GPSMarkHere;
-            GPSMarkHere = 0;
+            if (GPSMarkHere) {
+                SendBuffer[CHANNELSUSED + 1] = 0;
+                SendBuffer[CHANNELSUSED + 2] = GPSMarkHere;
+                GPSMarkHere = 0;
+            }
             break;
 
         default:

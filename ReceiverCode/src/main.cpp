@@ -100,6 +100,7 @@ uint8_t         SecsGPS;
 uint16_t        CompressedData[COMPRESSEDWORDS]; // 30 bytes -> 40 bytes when uncompressed
 bool            SensorHubDead = false;
 u_int32_t       BootupMoment = 0;
+bool QNHSent    = false;
 
 /************************************************************************************************************/
 
@@ -266,7 +267,7 @@ void BindModel()
 
 // ***************************************************************************************************************************************************
 
-void  SendToSensorHubHub(char m[]){
+void  SendToSensorHub(char m[]){
   Wire.beginTransmission(SENSOR_HUB_I2C_ADDRESS);   
   Wire.write(m);
   Wire.endTransmission();   
@@ -276,7 +277,7 @@ void  SendToSensorHubHub(char m[]){
 
 void MarkHere(){
         char MRK[4] = "MRK";
-        SendToSensorHubHub(MRK);  // Mark this spot
+        SendToSensorHub(MRK);  // Mark this spot
         
 }
 
@@ -298,7 +299,7 @@ void SendQnhToSensorHub(){
         Uqnh.Val16 = Qnh;
         QNH[4] = Uqnh.Val8[0];    
         QNH[5] = Uqnh.Val8[1];  
-        SendToSensorHubHub(QNH);  
+        SendToSensorHub(QNH);  
 }
 /************************************************************************************************************/
 
@@ -331,8 +332,11 @@ void CheckParams()
                 if (OldQnh != Qnh) SendQnhToSensorHub();
                 OldQnh = Qnh; // Send new one once only
                 break;
-         case 3:
-                if   ((ReceivedData[CHANNELSUSED + 2]) == 255) MarkHere(); // Mark this spot!
+         case 3: 
+                if  ((ReceivedData[CHANNELSUSED + 2]) == 255) {    // Mark this location
+                    MarkHere();
+                    ReceivedData[CHANNELSUSED + 2] = 0;             // ... Once only
+                }
                 break;
         default:
                 break;

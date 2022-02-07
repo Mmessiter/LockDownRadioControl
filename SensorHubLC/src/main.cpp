@@ -53,6 +53,9 @@ float    BaroTemperature ;
 float    BaroAltitude ;
 float    INA219Volts;
 uint16_t Qnh = 0;
+volatile bool ReceiveRequestFlag = false;
+char     LastRequest[10];
+
 
 //************************************* SEND DATA INTERRUPT HANDLER ******************************************
  
@@ -169,21 +172,27 @@ void SendDataToReceiver() {
     ParameterNumber++;
     if (ParameterNumber > MAXPARAMS) ParameterNumber = 0; 
 }
-//************************************* RECEIVE DATA INTERRUPT HANDLER ***************************************
+// *******************************************************************************************************
 
-void ReceiveEvent(int q) {  
+void DoTheRequest(){
 char MRK[] = "MRK";
 char MAY[] = "MAY";
 char QNH[] = "QNH";
 char RCV[10];
- union {uint16_t Val16; uint8_t Val8[2];} Uqnh;  
+
+union {uint16_t Val16; uint8_t Val8[2];} Uqnh;  
+   
+ReceiveRequestFlag = false;
 
     for (uint8_t i = 0; i < 6; ++i) {
         if (Wire1.available()) {
             RCV[i]= Wire1.read();    // Get one byte at a time
         }
     } 
-  RCV[3] = 0; // Add a terminator
+
+   RCV[3] = 0; // Add a terminator
+   if (strcmp(LastRequest, RCV) == 0) return;  // temp bug fix!! (lots of phantom repeat calls?????)
+   strcpy(LastRequest,RCV);
 
   if (strcmp(MRK,RCV) == 0) {        // Match first 3 chars with MRK?
      DestinationLat = GPSLatitude;   // Mark current location
@@ -203,7 +212,11 @@ char RCV[10];
       Qnh = Uqnh.Val16;
       return;
   }
+}
 
+//************************************* RECEIVE DATA INTERRUPT HANDLER ***************************************
+void ReceiveEvent(int q) { 
+  ReceiveRequestFlag = true;
 }
 //*************************************** READ GPS DEVICE ***************************************************
  void ReadGps() {
@@ -297,7 +310,10 @@ uint8_t i = 0;
  }
 //*************************************** MAIN LOOP **********************************************************
 void loop() {
- if ((millis()-LoopTimer) > 10)  // 100x per second is enough
+
+ if (ReceiveRequestFlag) DoTheRequest();
+
+ if ((millis()-LoopTimer) > 10)        // 100x per second is enough
   {
     LoopTimer = millis();
     ReadGps();
