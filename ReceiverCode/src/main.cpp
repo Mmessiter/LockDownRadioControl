@@ -291,7 +291,7 @@ void SendQnhToSensorHub(){
         Uqnh.Val16 = Qnh;
         QNH[4] = Uqnh.Val8[0];    
         QNH[5] = Uqnh.Val8[1];  
-        SendToSensorHub(QNH);  
+        SendToSensorHub(QNH);   
 }
 /************************************************************************************************************/
 /**

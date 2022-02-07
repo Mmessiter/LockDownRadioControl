@@ -178,7 +178,7 @@ void DoTheRequest(){
 char MRK[] = "MRK";
 char MAY[] = "MAY";
 char QNH[] = "QNH";
-char RCV[10];
+char RCV[10] = "???????";
 
 union {uint16_t Val16; uint8_t Val8[2];} Uqnh;  
    
@@ -191,8 +191,9 @@ ReceiveRequestFlag = false;
     } 
 
    RCV[3] = 0; // Add a terminator
-   
-  // Serial.println (RCV);
+   Serial.print (millis());
+   Serial.print (" ");
+   Serial.println (RCV);
 
    if (strcmp(LastRequest, RCV) == 0) return;  // temp bug fix!! (lots of phantom repeat calls?????)
    strcpy(LastRequest,RCV);
