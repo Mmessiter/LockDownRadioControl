@@ -60,7 +60,7 @@ var searchData=
   ['sendtimetoackpayload_57',['SendTimeToAckPayload',['../radio_8h.html#a8162c1748e39496c4adf88c55d1c49b8',1,'radio.h']]],
   ['sendtoackpayload_58',['SendToAckPayload',['../radio_8h.html#a632401c7e72610ff0a0678358b6877ad',1,'radio.h']]],
   ['sendtogps_59',['SendToGPS',['../_sensor_hub_l_c_2src_2main_8cpp.html#a18c4f8439b510a2e7274d0a6165021d2',1,'SendToGPS(char Cmd[80]):&#160;main.cpp'],['../_sensor_hub_t32_2src_2main_8cpp.html#a18c4f8439b510a2e7274d0a6165021d2',1,'SendToGPS(char Cmd[80]):&#160;main.cpp'],['../_sensor_hub_teensy3__6_2src_2main_8cpp.html#a18c4f8439b510a2e7274d0a6165021d2',1,'SendToGPS(char Cmd[80]):&#160;main.cpp']]],
-  ['sendtosensorhubhub_60',['SendToSensorHubHub',['../_receiver_code_2src_2main_8cpp.html#ada9bd8b8c8e3ba5410e36a9e0f4ba2d2',1,'main.cpp']]],
+  ['sendtosensorhub_60',['SendToSensorHub',['../_receiver_code_2src_2main_8cpp.html#a3f80da71956ba53fcff126bfe2296e65',1,'main.cpp']]],
   ['sendvalue_61',['SendValue',['../_transmitter_code_2src_2main_8cpp.html#a1e20efc1e419b252b50d36f9924503fc',1,'main.cpp']]],
   ['sendvalue1_62',['SendValue1',['../_transmitter_code_2src_2main_8cpp.html#a7e5f9fa724c65cc0f0c56bc85b2b6273',1,'main.cpp']]],
   ['sensor_5ffilter_63',['sensor_filter',['../class_adafruit___b_m_p280.html#a7e817dd76c6b5c92b7f4166556bb3d4e',1,'Adafruit_BMP280::sensor_filter()'],['../class_adafruit___b_m_p280.html#a7e817dd76c6b5c92b7f4166556bb3d4e',1,'Adafruit_BMP280::sensor_filter()'],['../class_adafruit___b_m_p280.html#a7e817dd76c6b5c92b7f4166556bb3d4e',1,'Adafruit_BMP280::sensor_filter()']]],

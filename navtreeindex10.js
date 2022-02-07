@@ -1,5 +1,9 @@
 var NAVTREEINDEX10 =
 {
+"struct_tiny_g_p_s_date.html#a6f3c5b4e72ef28b010f94ac9016315f3":[11,0,22,17],
+"struct_tiny_g_p_s_date.html#a6f3c5b4e72ef28b010f94ac9016315f3":[11,0,22,16],
+"struct_tiny_g_p_s_date.html#a6f3c5b4e72ef28b010f94ac9016315f3":[11,0,22,15],
+"struct_tiny_g_p_s_date.html#a718150ae16f68afa9ae81f9d1b3ce3f4":[11,0,22,20],
 "struct_tiny_g_p_s_date.html#a718150ae16f68afa9ae81f9d1b3ce3f4":[11,0,22,19],
 "struct_tiny_g_p_s_date.html#a718150ae16f68afa9ae81f9d1b3ce3f4":[11,0,22,18],
 "struct_tiny_g_p_s_date.html#ae2cc914fec377b429d99f01204f50d60":[11,0,22,23],
