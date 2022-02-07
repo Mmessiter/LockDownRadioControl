@@ -216,7 +216,7 @@ ReceiveRequestFlag = false;
 
 //************************************* RECEIVE DATA INTERRUPT HANDLER ***************************************
 void ReceiveEvent(int q) { 
-  ReceiveRequestFlag = true;
+  ReceiveRequestFlag = true;  // Set the flag and return immediately
 }
 //*************************************** READ GPS DEVICE ***************************************************
  void ReadGps() {
