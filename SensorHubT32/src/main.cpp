@@ -2,7 +2,7 @@
 //************************************* SENSOR HUB CODE FOR TEENSY 3.2....   ********************************
 // 
 //                                   Version 1.3 Feb 7 2022
-//                                   Uses Wire2 in Slave Mode ... This works. Don't use Teensy LC. IT DOESN'T
+//                                   Uses Wire2 in Slave Mode ... This works. Don't use Teensy LC. IT DOESN'T!!
 //***********************************************************************************************************
 #include <Arduino.h>
 #include <Wire.h>
@@ -54,7 +54,7 @@ float    BaroAltitude ;
 float    INA219Volts;
 uint16_t Qnh = 0;
 volatile bool ReceiveRequestFlag = false;
-char     LastRequest[10];
+
 
 
 //************************************* SEND DATA INTERRUPT HANDLER ******************************************
@@ -181,32 +181,23 @@ char QNH[] = "QNH";
 char RCV[10];
 
 union {uint16_t Val16; uint8_t Val8[2];} Uqnh;  
-   
 ReceiveRequestFlag = false;
-
     for (uint8_t i = 0; i < 6; ++i) {
         if (Wire1.available()) {
             RCV[i]= Wire1.read();    // Get one byte at a time
         }
     } 
-
    RCV[3] = 0; // Add a terminator
-
-   if (strcmp(LastRequest, RCV) == 0) return;  // temp bug fix!! (lots of phantom repeat calls?????)
-   strcpy(LastRequest,RCV);
-
   if (strcmp(MRK,RCV) == 0) {        // Match first 3 chars with MRK?
      DestinationLat = GPSLatitude;   // Mark current location
      DestinationLng = GPSLongitude;  // Mark current location
      return;
   }
-
  if (strcmp(MAY,RCV) == 0) {      // Match first 3 chars with MAY?
       DestinationLat = MAYSLANE_LAT;  // Mark MAYS LANE location
       DestinationLng = MAYSLANE_LON;  // Mark MAYS LANE location
       return;
   }
-
   if (strcmp(QNH,RCV) == 0) {      // Match first 3 chars with QNH?
       Uqnh.Val8[0] = RCV[4];       // 16 bit value for "Qnh" sent in bytes 4 and 5
       Uqnh.Val8[1] = RCV[5]; 
@@ -214,7 +205,6 @@ ReceiveRequestFlag = false;
       return;
   }
 }
-
 //************************************* RECEIVE DATA INTERRUPT HANDLER ***************************************
 void ReceiveEvent(int q) { 
   ReceiveRequestFlag = true;  // Set the flag and return immediately
