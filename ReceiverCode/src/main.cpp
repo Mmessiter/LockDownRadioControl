@@ -264,25 +264,19 @@ void BindModel()
     Serial.println("BINDING NOW");
 #endif
 }
-
 // ***************************************************************************************************************************************************
-
 void  SendToSensorHub(char m[]){
   Wire.beginTransmission(SENSOR_HUB_I2C_ADDRESS);   
   Wire.write(m);
   Wire.endTransmission(true);   
 }
-
 // ***************************************************************************************************************************************************
 
 void MarkHere(){
         char MRK[4] = "MRK";
-        SendToSensorHub(MRK);  // Mark this spot
-        
+        SendToSensorHub(MRK);  // Mark this spot  
 }
-
 /************************************************************************************************************/
-
 void RebuildFlags(bool* f, uint16_t tb)
 { // Pass arraypointer and the two bytes to be decoded
     for (uint8_t i = 0; i < 16; ++i) {
@@ -291,7 +285,6 @@ void RebuildFlags(bool* f, uint16_t tb)
     }
 }
 /************************************************************************************************************/
-
 void SendQnhToSensorHub(){ 
   union {uint16_t Val16; uint8_t Val8[2];} Uqnh;  
         char QNH[] = "QNH=??";
@@ -301,7 +294,6 @@ void SendQnhToSensorHub(){
         SendToSensorHub(QNH);  
 }
 /************************************************************************************************************/
-
 /**
  * extra parameters can be sent using the last four bytes in every data packet.
  * the parameter sent is defined by the packet number ... which goes only upto about 5
