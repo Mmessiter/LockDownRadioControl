@@ -4279,12 +4279,14 @@ void Button_was_pressed()
             SendCommand(page_SetupView);
             CurrentMode = NORMAL;
             CurrentView = MainSetupView;
+            ClearText();
             return;
         }
         
         if (InStrng(Mark, WordsIn) > 0) {           
-             GPSMarkHere = 255;                // Mark this location
-             GPSMaxDistance = 0;               // Max distance starts at zero for newly marked location
+            GPSMarkHere = 255;                // Mark this location
+            ClearText();
+            return;
         }
         
         if (InStrng(OptionsEnd, WordsIn) > 0) { // Options screen end
@@ -4292,9 +4294,7 @@ void Button_was_pressed()
             BuddyMaster    = GetValue(BuddyM);  // Master, either.
             Qnh            = GetValue(QNH);
             DeltaGMT       = GetValue(dGMT);
-            
             FixDeltaGMTSign();
-            
             if (DoSbusSendOnly)
             {
                 Connected       = false;
@@ -5531,7 +5531,6 @@ void LoadPacketData()
         case 3: 
             SendBuffer[CHANNELSUSED + 1] = 0;
             SendBuffer[CHANNELSUSED + 2] = GPSMarkHere;
-            
             GPSMarkHere = 0;
             break;
 
