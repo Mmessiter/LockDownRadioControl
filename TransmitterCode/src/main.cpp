@@ -1139,7 +1139,7 @@ void GetTextIn()
         delay(10);
         while (Nextion.available()) {
             TextIn[i] = uint8_t(Nextion.read());
-            if (TextIn[i] == '$') TextIn[i] = 0; // heer?
+            if (TextIn[i] == '$') TextIn[i] = 0; 
             if (i < CharsMax) ++i;
         }
     }
@@ -1182,7 +1182,7 @@ bool GetButtonPress()
             a = char(Nextion.read());
             if (a > 31 && a < 128) {
                 WordsIn[i]     = a;
-                if (WordsIn[i] == '$') WordsIn[i] = 0;  // heer??
+                if (WordsIn[i] == '$') WordsIn[i] = 0; 
                 WordsIn[i + 1] = char(0);
             }
             if (i < CharsMax) ++i;
@@ -5039,10 +5039,11 @@ void Button_was_pressed()
                 ModelName[i + 1] = 0;
                 ++i;
             } 
-            ModelNumber = GetValue(ModelsView_ModelNumber);
+            ModelNumber = GetValue(ModelsView_ModelNumber);   
+            Serial.println (ModelNumber);
             SaveOneModel(ModelNumber);
             ClearText();
-            delay (1000);                        // allow time for SD write to happen
+            delay (1500);                        // allow time for SD write to happen
             InhibitNameCheck = false;
             return;
         }
@@ -5123,6 +5124,9 @@ void Button_was_pressed()
         if (InStrng(Models_View, WordsIn) > 0) {
             SendCommand(pModelsView);
             ReadOneModel(ModelNumber);
+
+           // Serial.println ("HERE?????????????");
+
             CurrentView = ModelsView;
             UpdateModelsNameEveryWhere();
             SendValue(ModelsView_ModelNumber, ModelNumber);
@@ -5144,7 +5148,9 @@ void Button_was_pressed()
         if (InStrng(Delete, WordsIn) > 0) {
             ModelNumber = GetValue(ModelsView_ModelNumber);
             SetDefaultValues();
+            SaveOneModel(ModelNumber);
             ClearText();
+            return;
         }
 
         if (InStrng(Write, WordsIn) > 0) { //  write new data to SD
@@ -5826,9 +5832,10 @@ char ModelsView_ModelNumber[]  = "ModelNumber";
             ModelNumber = GetValue(ModelsView_ModelNumber);
             if (LastModelLoaded != ModelNumber) {
                 LastModelLoaded = ModelNumber;
-                if (ModelNumber < 1) ModelNumber = 1; 
-                ReadOneModel(ModelNumber);
-                UpdateModelsNameEveryWhere();   
+                if (ModelNumber >= 1) { 
+                    ReadOneModel(ModelNumber);
+                    UpdateModelsNameEveryWhere();  
+                }
             }
         }
     }
