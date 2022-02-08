@@ -1,5 +1,6 @@
 var _sensor_hub_t32_2src_2main_8cpp =
 [
+    [ "DEBUG", "_sensor_hub_t32_2src_2main_8cpp.html#ad72dbcf6d0153db1b8d8a58001feed83", null ],
     [ "DEBUGTIMER", "_sensor_hub_t32_2src_2main_8cpp.html#a6d8ac148d16fbe92176033a667d3ef8a", null ],
     [ "GPSBAUDRATE", "_sensor_hub_t32_2src_2main_8cpp.html#a372295c11945751efdddfd98372e4aa7", null ],
     [ "GPSDEVICE", "_sensor_hub_t32_2src_2main_8cpp.html#ac5dd8c90defc2c0d78e99d2d5c1a0fd1", null ],
@@ -12,7 +13,7 @@ var _sensor_hub_t32_2src_2main_8cpp =
     [ "loop", "_sensor_hub_t32_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f", null ],
     [ "ReadGps", "_sensor_hub_t32_2src_2main_8cpp.html#adf4ab5f33d1ca1e1dd96454622f105d7", null ],
     [ "ReadOtherSensors", "_sensor_hub_t32_2src_2main_8cpp.html#a8ace27b0e3d8efecd55ad071506aa86d", null ],
-    [ "ReceiveEvent", "_sensor_hub_t32_2src_2main_8cpp.html#ae8f856dd3cc2dae9023cbdc49710c111", null ],
+    [ "ReceiveEventInterrupt", "_sensor_hub_t32_2src_2main_8cpp.html#a2be9d0838709dc3a88a9a54108bd2b4a", null ],
     [ "ScanI2c", "_sensor_hub_t32_2src_2main_8cpp.html#a20ffd6680226b1e058002512386e7770", null ],
     [ "SendDataToReceiver", "_sensor_hub_t32_2src_2main_8cpp.html#aac529433269b7b52ef0a627716a70aea", null ],
     [ "SendToGPS", "_sensor_hub_t32_2src_2main_8cpp.html#a18c4f8439b510a2e7274d0a6165021d2", null ],
