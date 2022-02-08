@@ -102,8 +102,8 @@ void BufferNewPipe()
 
 void SendData()
 {
-    if (Nextion.available()) return;              // was a button pressed?
-    if (millis() - TxPace < 3) ShowComms();       // This call takes about 4 ms, so there is *JUST* time to fit in the call!
+    if (Nextion.available()) return;               // was a button pressed?
+    if (millis() - TxPace <= 2) ShowComms();       // This call takes <2  ms, so there is time to fit in the call because there are about 5 ms spare still.
     if ((millis() - TxPace) >= PACEMAKER) {
         TxPace = millis();
         get_new_channels_values();                // Load SendBuffer with new servo positions
