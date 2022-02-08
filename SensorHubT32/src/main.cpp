@@ -12,7 +12,7 @@
 #define I2CADDRESS  8       // Address of this I2C slave
 #define GPSBAUDRATE 9600    // Didn't work any faster
 #define GPSDEVICE Serial1   // GPS is connected to Serial1
-//#define DEBUG             // Local console debug only
+ #define DEBUG             // Local console debug only
 #define DEBUGTIMER 1000
 
 int DebugTimer = 0;
@@ -55,10 +55,11 @@ float    INA219Volts;
 uint16_t Qnh = 0;
 volatile bool ReceiveRequestFlag = false;
 
-
-
-//************************************* SEND DATA INTERRUPT HANDLER ******************************************
- 
+//************************************* RECEIVE DATA INTERRUPT HANDLER ***************************************
+void ReceiveEventInterrupt(int q) { 
+     ReceiveRequestFlag = true;  // Set the flag and return immediately
+}
+// ***********************************************************************************************************
 void SendDataToReceiver() {
   #define IDLEN 3
   #define GPSI2CBYTES IDLEN + 4
@@ -86,6 +87,7 @@ void SendDataToReceiver() {
 
   float RdataOut = 42;
   union { float   Val32;uint8_t Val8[4]; } Rdata;
+
   switch (ParameterNumber) {
       case  0:
         RdataOut =  GPSLatitude;    // Latitiude
@@ -181,7 +183,9 @@ char QNH[] = "QNH";
 char RCV[10];
 
 union {uint16_t Val16; uint8_t Val8[2];} Uqnh;  
-ReceiveRequestFlag = false;
+    
+    ReceiveRequestFlag = false;
+    
     for (uint8_t i = 0; i < 6; ++i) {
         if (Wire1.available()) {
             RCV[i]= Wire1.read();    // Get one byte at a time
@@ -205,10 +209,7 @@ ReceiveRequestFlag = false;
       return;
   }
 }
-//************************************* RECEIVE DATA INTERRUPT HANDLER ***************************************
-void ReceiveEvent(int q) { 
-  ReceiveRequestFlag = true;  // Set the flag and return immediately
-}
+
 //*************************************** READ GPS DEVICE ***************************************************
  void ReadGps() {
    char a;
@@ -353,7 +354,7 @@ void ScanI2c()
 void setup() {
   Wire1.begin(I2CADDRESS);                        // Wire1 MUST boot up BEFORE the receiver in order to be found by it.
   Wire1.onRequest(SendDataToReceiver);    
-  Wire1.onReceive(ReceiveEvent);
+  Wire1.onReceive(ReceiveEventInterrupt);
   GPSDEVICE.begin(GPSBAUDRATE);
   Wire.begin();                                   // Wire used to read locally attached i2c sensors
   ScanI2c();
