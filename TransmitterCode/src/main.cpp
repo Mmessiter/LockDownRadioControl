@@ -5831,10 +5831,10 @@ char ModelsView_ModelNumber[]  = "ModelNumber";
         if (!InhibitNameCheck){               // if name is being edited, do not check it.
             ModelNumber = GetValue(ModelsView_ModelNumber);
             if (LastModelLoaded != ModelNumber) {
-                LastModelLoaded = ModelNumber;
-                if (ModelNumber >= 1) { 
-                    ReadOneModel(ModelNumber);
-                    UpdateModelsNameEveryWhere();  
+                if (ModelNumber >= 1) {      // Don't use number zero
+                     ReadOneModel(ModelNumber);
+                     LastModelLoaded = ModelNumber;
+                     UpdateModelsNameEveryWhere();  
                 }
             }
         }
