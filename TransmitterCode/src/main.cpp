@@ -4541,51 +4541,35 @@ void Button_was_pressed()
             ClearText();
             return;
         }
-
         if (InStrng(FailSAVE, WordsIn) > 0) {
             SendCommand(ProgressStart);
-            SendValue(Progress, 0);
             FailSafeChannel[0] = GetValue(fs1);
             SendValue(Progress, 5);
             FailSafeChannel[1] = GetValue(fs2);
-            SendValue(Progress, 15);
             FailSafeChannel[2] = GetValue(fs3);
             SendValue(Progress, 25);
             FailSafeChannel[3] = GetValue(fs4);
-            SendValue(Progress, 35);
             FailSafeChannel[4] = GetValue(fs5);
-            SendValue(Progress, 45);
             FailSafeChannel[5] = GetValue(fs6);
             SendValue(Progress, 50);
             FailSafeChannel[6] = GetValue(fs7);
-            SendValue(Progress, 55);
             FailSafeChannel[7] = GetValue(fs8);
-            SendValue(Progress, 60);
             FailSafeChannel[8] = GetValue(fs9);
-            SendValue(Progress, 65);
             FailSafeChannel[9] = GetValue(fs10);
-            SendValue(Progress, 70);
-            FailSafeChannel[10] = GetValue(fs11);
-            SendValue(Progress, 71);
-            FailSafeChannel[11] = GetValue(fs12);
-            SendValue(Progress, 72);
-            FailSafeChannel[12] = GetValue(fs13);
             SendValue(Progress, 75);
-            FailSafeChannel[13] = GetValue(fs14);
-            SendValue(Progress, 80);
-            FailSafeChannel[14] = GetValue(fs15);
-            SendValue(Progress, 85);
-            FailSafeChannel[15] = GetValue(fs16);
-            SendValue(Progress, 90);
-            SaveOneModel(ModelNumber);
+            FailSafeChannel[10] = GetValue(fs11);
+            FailSafeChannel[11] = GetValue(fs12);
+            FailSafeChannel[12] = GetValue(fs13);
             SendValue(Progress, 100);
-            delay(200);
+            FailSafeChannel[13] = GetValue(fs14);
+            FailSafeChannel[14] = GetValue(fs15);
+            FailSafeChannel[15] = GetValue(fs16);
+            SaveOneModel(ModelNumber);
             SaveFailSafeNow = true;
             SendCommand(ProgressEnd);
             ClearText();
             return;
         }
-
         if (InStrng(FailSafe, WordsIn) > 0) {
             SendCommand(pFailSafe);
             SendValue(fs1, FailSafeChannel[0]);

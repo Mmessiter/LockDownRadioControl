@@ -304,6 +304,7 @@ void SendQnhToSensorHub(){
 void CheckParams()
 { uint16_t TwoBytes = 0;      
     PacketNumber = ReceivedData[CHANNELSUSED];     
+  
     switch (PacketNumber) {     
         case 0:
                 BindNow = ReceivedData[CHANNELSUSED + 2];
