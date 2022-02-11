@@ -588,20 +588,16 @@ void setup()
     delay(2000); // Needed for several reasons
     ScanI2c();   // Detect what's connected
     if (INA219_CONNECTED) ina219.begin();
-
     CurrentRadio = &Radio1;
     if (InitCurrentRadio()) Radio1Exists = true;
     ThisRadio = 1;
     delay(300);
-
-
 #ifdef SECOND_TRANSCEIVER
     CurrentRadio = &Radio2;
     if (InitCurrentRadio()) Radio2Exists = true;
     ThisRadio = 2;
     delay(300);
 #endif
-
     GetOldPipe();
     BootupMoment = millis();
     digitalWrite(LED_PIN, LOW);

@@ -231,9 +231,10 @@ void ProdRadio()
 
 /************************************************************************************************************/
 
-void Reconnect()
-{
+void Reconnect(){
+    
     uint32_t TryTimer;
+
     SearchStartTime = millis();
     FailSafeSent    = false;
     CurrentRadio->stopListening();
