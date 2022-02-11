@@ -36,23 +36,6 @@
  */
 
 // ************************************************** Receiver code **************************************************
-
-#define RECEIVE_TIMEOUT 25 // 25 milliseconds seems an optimal value
-#define CHANNELSUSED    16
-#define SERVOSUSED      9  // All 16 are available via SBUS
-#define SBUSRATE        10 // SBUS frame every 10 milliseconds
-#define SBUSPORT        Serial3
-#define RECONNECTGAP    20 // Send no data to servos for 20 ms after a reconnect (10 was not quite enough)
-#define MINMICROS       500
-#define MAXMICROS       2500
-#define LED_PIN         LED_BUILTIN
-#define RANGEMAX        2047 // = Frsky at 150 %
-#define RANGEMIN        0
-
-#include <Wire.h>
-#include <Servo.h>
-#include <EEPROM.h>
-#include <SBUS.h>
 #include "utilities/radio.h"
 
 Adafruit_INA219 ina219;

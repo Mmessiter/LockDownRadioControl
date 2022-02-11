@@ -1,8 +1,7 @@
 /** @file ReceiverCode/src/utilities/radio.h */
 #ifndef _SRC_UTILITIES_RADIO_H
 #define _SRC_UTILITIES_RADIO_H
-#include <SPI.h>
-#include <RF24.h>
+
 #include "common.h"
 #define pinCE1  9  // NRF1
 #define pinCSN1 10 // NRF1
