@@ -28,7 +28,7 @@ var searchData=
   ['channelmidlow_25',['ChannelMidLow',['../_transmitter_code_2src_2main_8cpp.html#a47996d94bafda4b3c29fc33c03a21dd1',1,'main.cpp']]],
   ['channelmin_26',['ChannelMin',['../_transmitter_code_2src_2main_8cpp.html#ae5a402dadb7e03199a0bb3fa666e74ad',1,'main.cpp']]],
   ['channelnames_27',['ChannelNames',['../_transmitter_code_2src_2main_8cpp.html#a0c9a9276cbc69bce973fabbed4a9686b',1,'main.cpp']]],
-  ['channelsused_28',['CHANNELSUSED',['../_receiver_code_2src_2main_8cpp.html#ad143c01c2b36424b292b568f48cbe014',1,'CHANNELSUSED():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#ad143c01c2b36424b292b568f48cbe014',1,'CHANNELSUSED():&#160;main.cpp']]],
+  ['channelsused_28',['CHANNELSUSED',['../common_8h.html#ad143c01c2b36424b292b568f48cbe014',1,'CHANNELSUSED():&#160;common.h'],['../_transmitter_code_2src_2main_8cpp.html#ad143c01c2b36424b292b568f48cbe014',1,'CHANNELSUSED():&#160;main.cpp']]],
   ['channeltoset_29',['ChanneltoSet',['../_transmitter_code_2src_2main_8cpp.html#a2d9e9fe5729ce12d1caf2a32c5539d73',1,'main.cpp']]],
   ['charsmax_30',['CharsMax',['../_transmitter_code_2src_2main_8cpp.html#a7df8609202eabf48c025d5f71f3f80d1',1,'main.cpp']]],
   ['charsprocessed_31',['charsProcessed',['../class_tiny_g_p_s_plus.html#addfc1fdbfddfeef2774dda1be42cdd55',1,'TinyGPSPlus::charsProcessed() const'],['../class_tiny_g_p_s_plus.html#addfc1fdbfddfeef2774dda1be42cdd55',1,'TinyGPSPlus::charsProcessed() const'],['../class_tiny_g_p_s_plus.html#addfc1fdbfddfeef2774dda1be42cdd55',1,'TinyGPSPlus::charsProcessed() const']]],
