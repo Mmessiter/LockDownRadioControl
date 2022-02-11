@@ -234,8 +234,6 @@ void ProdRadio()
 void Reconnect()
 {
     uint32_t TryTimer;
-    uint8_t  ReconnectAttempts = 0;
-
     SearchStartTime = millis();
     FailSafeSent    = false;
     CurrentRadio->stopListening();
@@ -243,35 +241,31 @@ void Reconnect()
     CurrentRadio->setChannel(RECONNECT_CH);
     CurrentRadio->startListening();
     delay(1);
-    if (CurrentRadio->available())
-    {
-        Connected = true;
-    }
-    while (!Connected)
-    {
-        ++ReconnectAttempts;
+    if (CurrentRadio->available()) Connected = true;
+    while (!Connected) {
+
 #ifdef SECOND_TRANSCEIVER
-        if (ReconnectAttempts > 2)
-        {
             CurrentRadio->stopListening();
             delay(1);
             if (ThisRadio == 2)
             {
                 CurrentRadio = &Radio1;
                 ThisRadio    = 1;
-            }
-            else
-            {
+#ifdef DB_SECOND_TRANSCEIVER
+                Serial.println ("Radio 1");
+#endif
+            } else {
                 CurrentRadio = &Radio2;
                 ThisRadio    = 2;
+#ifdef DB_SECOND_TRANSCEIVER
+                Serial.println ("Radio 2");
+#endif
             }
             ProdRadio();
-            ReconnectAttempts = 0;
-        }
 #endif // defined (SECOND_TRANSCEIVER)
         TryTimer = millis();
-        while ((!CurrentRadio->available()) && (millis() - TryTimer) < 100) {
-        } // wait a mo during attempt to connect ...
+        while ((!CurrentRadio->available()) && (millis() - TryTimer) < 10) {
+        } 
         if (CurrentRadio->available()) Connected = true;
         if (!Connected)
         {
