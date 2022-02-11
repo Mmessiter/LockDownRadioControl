@@ -589,12 +589,12 @@ void setup()
     ScanI2c();   // Detect what's connected
     if (INA219_CONNECTED) ina219.begin();
     CurrentRadio = &Radio1;
-    if (InitCurrentRadio()) Radio1Exists = true;
+    InitCurrentRadio();
     ThisRadio = 1;
     delay(300);
 #ifdef SECOND_TRANSCEIVER
     CurrentRadio = &Radio2;
-    if (InitCurrentRadio()) Radio2Exists = true;
+    InitCurrentRadio();
     ThisRadio = 2;
     delay(300);
 #endif

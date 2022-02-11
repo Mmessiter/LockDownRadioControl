@@ -195,7 +195,7 @@ void HopToNextFrequency()
 /************************************************************************************************************/
 
 /** Initialize a radio transceiver. */
-bool InitCurrentRadio()
+void InitCurrentRadio()
 {
     CurrentRadio->begin();
     CurrentRadio->enableAckPayload();       // needed
@@ -207,7 +207,7 @@ bool InitCurrentRadio()
     CurrentRadio->openReadingPipe(1, ThisPipe);
     SaveNewBind = true;
     HopStart    = millis();
-    return true; // let's assume its connected
+    return;
 }
 
 /************************************************************************************************************/
@@ -225,7 +225,7 @@ void ProdRadio()
     CurrentRadio->openReadingPipe(1, ThisPipe);
     CurrentRadio->setChannel(RECONNECT_CH);
     CurrentRadio->startListening();
-    delay(3); 
+    delay(2); 
 }
 #endif // defined (SECOND_TRANSCEIVER)
 
