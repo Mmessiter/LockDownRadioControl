@@ -10,15 +10,13 @@
     #include <stdint.h>
     #include <EEPROM.h>
 
-    #define RXVERSION_MAJOR            1
-    #define RXVERSION_MINOR            5
-    #define RXVERSION_MINIMUS          5               // February 8th 2022
-    
-    #define SENSOR_HUB_I2C_ADDRESS     8
-
-
-    #define HOPTIME         50 // ms between channel changes ( >5 packets per hop)
-    #define FREQUENCYSCOUNT 82 // use 82 different channels
+    #define RXVERSION_MAJOR             1
+    #define RXVERSION_MINOR             5
+    #define RXVERSION_MINIMUS           5    // February 11th 2022
+    #define SENSOR_HUB_I2C_ADDRESS      8
+    #define HOPTIME                     50   // ms between channel changes ( >5 packets per hop)
+    #define LISTEN_PERIOD               15   // ms to listen for TX in Reconnect() before switching over to try the other transceiver
+    #define FREQUENCYSCOUNT             82   // use 82 different channels
 
 // #define DEBUG         // for FHSS
 // #define DB_SENSORS
@@ -26,9 +24,9 @@
 // #define DB_FAILSAFE
 
 uint32_t  LastPacketArrivalTime = 0;
-bool FailSafeSave         = false;
-bool FailSafeSent         = false;
-bool INA219_CONNECTED     = false;                   //  Volts from INA219 ?
+bool FailSafeSave               = false;
+bool FailSafeSent               = false;
+bool INA219_CONNECTED           = false;                   //  Volts from INA219 ?
 
 #define RECONNECT_CH 83
 uint8_t FHSS_Channels[84] = {28, 24, 61, 64, 28, 55, 66, 19, 76, 21, 59, 67, 15, 71, 82, 32, 49, 69, 13, 2, 34, 47, 20, 34, 69, 

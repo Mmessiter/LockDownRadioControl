@@ -257,7 +257,7 @@ void Reconnect(){
                 ProdRadio();
 #endif // defined (SECOND_TRANSCEIVER)
                 TryTimer = millis();
-                while ((!CurrentRadio->available()) && (millis() - TryTimer) < 10) { } 
+                while ((!CurrentRadio->available()) && (millis() - TryTimer) < LISTEN_PERIOD) { } 
                 if (CurrentRadio->available()) Connected = true;
                 if (!Connected) {
                     StillSearchingTime = millis() - SearchStartTime;
