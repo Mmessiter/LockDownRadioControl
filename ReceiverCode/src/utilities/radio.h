@@ -244,46 +244,40 @@ void Reconnect(){
     delay(1);
     if (CurrentRadio->available()) Connected = true;
     while (!Connected) {
-
 #ifdef SECOND_TRANSCEIVER
-            CurrentRadio->stopListening();
-            delay(1);
-            if (ThisRadio == 2)
-            {
-                CurrentRadio = &Radio1;
-                ThisRadio    = 1;
+                CurrentRadio->stopListening();
+                delay(1);
+                if (ThisRadio == 2) {
+                    CurrentRadio = &Radio1;
+                    ThisRadio    = 1;
 #ifdef DB_SECOND_TRANSCEIVER
-                Serial.println ("Radio 1");
+                    Serial.println ("Radio 1");
 #endif
-            } else {
-                CurrentRadio = &Radio2;
-                ThisRadio    = 2;
+                } else {
+                    CurrentRadio = &Radio2;
+                    ThisRadio    = 2;
 #ifdef DB_SECOND_TRANSCEIVER
-                Serial.println ("Radio 2");
+                    Serial.println ("Radio 2");
 #endif
-            }
-            ProdRadio();
-#endif // defined (SECOND_TRANSCEIVER)
-        TryTimer = millis();
-        while ((!CurrentRadio->available()) && (millis() - TryTimer) < 10) {
-        } 
-        if (CurrentRadio->available()) Connected = true;
-        if (!Connected)
-        {
-            StillSearchingTime = millis() - SearchStartTime;
-            if (StillSearchingTime > FAILSAFE_TIMEOUT)
-            {
-                if (!FailSafeSent)
-                {
-                    FailSafe();
-                    FailSafeSent = true; // Once is enough
                 }
-            }
+                ProdRadio();
+#endif // defined (SECOND_TRANSCEIVER)
+                TryTimer = millis();
+                while ((!CurrentRadio->available()) && (millis() - TryTimer) < 10) { } 
+                if (CurrentRadio->available()) Connected = true;
+                if (!Connected) {
+                    StillSearchingTime = millis() - SearchStartTime;
+                    if (StillSearchingTime > FAILSAFE_TIMEOUT){
+                        if (!FailSafeSent){
+                            FailSafe();
+                            FailSafeSent = true; // Once is enough
+                         }
+                    }
+                }
         }
-    }
-    ConnectionStart    = millis();
-    StillSearchingTime = 0;
-    ReconnectedMoment  = ConnectionStart; // Save this moment, then don't move a servo for a few ms ...
+        ConnectionStart    = millis();
+        StillSearchingTime = 0;
+        ReconnectedMoment  = ConnectionStart; // Save this moment, then don't move a servo for a few ms ...
 }
 /************************************************************************************************************/
 // This function checks the time since last hop. 
