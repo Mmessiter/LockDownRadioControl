@@ -76,8 +76,6 @@ uint32_t        ReconnectedMoment;
 uint16_t        BaroAltitude;
 float           BaroTemperature;
 float           INA219Volts;
-bool            Radio1Exists = false;
-bool            Radio2Exists = false;
 uint32_t        SensorTime       = 0;
 uint32_t        SensorHubAccessed    = 0;
 uint16_t        Qnh              = 0;    //Pressure at sea level here and now (defined at TX)
