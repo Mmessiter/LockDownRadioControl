@@ -230,7 +230,7 @@ void Reconnect(){
     delay(1);
     CurrentRadio->setChannel(RECONNECT_CH);
     CurrentRadio->startListening();
-    delay(1);
+    delay(1);   // ****************************************** Maybe longer?
     if (CurrentRadio->available()) Connected = true;
     while (!Connected) {
 #ifdef SECOND_TRANSCEIVER
