@@ -68,8 +68,6 @@ var _receiver_code_2src_2main_8cpp =
     [ "PWMPins", "_receiver_code_2src_2main_8cpp.html#a19f864fa6bdea0867325f70e162c92ef", null ],
     [ "Qnh", "_receiver_code_2src_2main_8cpp.html#ae3495ca407a0a3ea570ce0af7a3447a3", null ],
     [ "QNHSent", "_receiver_code_2src_2main_8cpp.html#a85141adc0aa19e8a8d1d9b3e5796500f", null ],
-    [ "Radio1Exists", "_receiver_code_2src_2main_8cpp.html#a455437a61ec8c1b1f4078cfae168b407", null ],
-    [ "Radio2Exists", "_receiver_code_2src_2main_8cpp.html#ae3a898698571e8efd9b57c123ea4242a", null ],
     [ "ReconnectedMoment", "_receiver_code_2src_2main_8cpp.html#ae6657a547a79d8e304b8ddeb3f6a38e0", null ],
     [ "ReInit", "_receiver_code_2src_2main_8cpp.html#aace5dda203af973b33a46413f02d9f9a", null ],
     [ "SatellitesGPS", "_receiver_code_2src_2main_8cpp.html#a7dc81a3982ee72ef15b460b4bbf32818", null ],

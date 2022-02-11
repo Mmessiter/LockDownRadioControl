@@ -2,8 +2,8 @@ var searchData=
 [
   ['r_0',['r',['../structsensors__color__t.html#acdeed981e7df8c701e09d4b2fdb9a40c',1,'sensors_color_t']]],
   ['radio1_1',['Radio1',['../_radio_functions_8h.html#aae23a8374f487a46c5fcb1fb02fadc69',1,'RadioFunctions.h']]],
-  ['radio1exists_2',['Radio1Exists',['../radio_8h.html#a455437a61ec8c1b1f4078cfae168b407',1,'Radio1Exists():&#160;main.cpp'],['../_receiver_code_2src_2main_8cpp.html#a455437a61ec8c1b1f4078cfae168b407',1,'Radio1Exists():&#160;main.cpp']]],
-  ['radio2exists_3',['Radio2Exists',['../radio_8h.html#ae3a898698571e8efd9b57c123ea4242a',1,'Radio2Exists():&#160;main.cpp'],['../_receiver_code_2src_2main_8cpp.html#ae3a898698571e8efd9b57c123ea4242a',1,'Radio2Exists():&#160;main.cpp']]],
+  ['radio1exists_2',['Radio1Exists',['../radio_8h.html#a455437a61ec8c1b1f4078cfae168b407',1,'radio.h']]],
+  ['radio2exists_3',['Radio2Exists',['../radio_8h.html#ae3a898698571e8efd9b57c123ea4242a',1,'radio.h']]],
   ['rangetestgoodpackets_4',['RangeTestGoodPackets',['../_radio_functions_8h.html#ae8902f278cb496929c9e323774b4374e',1,'RangeTestGoodPackets():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#ae8902f278cb496929c9e323774b4374e',1,'RangeTestGoodPackets():&#160;main.cpp']]],
   ['rangetestlostpackets_5',['RangeTestLostPackets',['../_radio_functions_8h.html#a8e396337a72c148bea7bf1856578c140',1,'RangeTestLostPackets():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a8e396337a72c148bea7bf1856578c140',1,'RangeTestLostPackets():&#160;main.cpp']]],
   ['rangeteststart_6',['RangeTestStart',['../_transmitter_code_2src_2main_8cpp.html#aee35e643eabc1ed932fa3886c912a8a3',1,'main.cpp']]],
