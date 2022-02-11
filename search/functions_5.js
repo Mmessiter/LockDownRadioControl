@@ -5,5 +5,6 @@ var searchData=
   ['failsafe_2',['FailSafe',['../_receiver_code_2src_2main_8cpp.html#a42318598726782ebb2e1857f167c8cda',1,'FailSafe():&#160;main.cpp'],['../radio_8h.html#a42318598726782ebb2e1857f167c8cda',1,'FailSafe():&#160;main.cpp']]],
   ['feet_3',['feet',['../struct_tiny_g_p_s_altitude.html#ac782babc0c485d47e6f57384e88b8cc8',1,'TinyGPSAltitude::feet()'],['../struct_tiny_g_p_s_altitude.html#ac782babc0c485d47e6f57384e88b8cc8',1,'TinyGPSAltitude::feet()'],['../struct_tiny_g_p_s_altitude.html#ac782babc0c485d47e6f57384e88b8cc8',1,'TinyGPSAltitude::feet()']]],
   ['fixdeltagmtsign_4',['FixDeltaGMTSign',['../_transmitter_code_2src_2main_8cpp.html#a493eeacfcf61a53db5933a893f7d94a6',1,'main.cpp']]],
-  ['force_5fredisplay_5',['Force_ReDisplay',['../_transmitter_code_2src_2main_8cpp.html#aa1e81e58421a34fdfd7bfb31925f5a90',1,'main.cpp']]]
+  ['force_5fredisplay_5',['Force_ReDisplay',['../_transmitter_code_2src_2main_8cpp.html#aa1e81e58421a34fdfd7bfb31925f5a90',1,'main.cpp']]],
+  ['fshowhopdurationetc_6',['fShowHopDurationEtc',['../_receiver_code_2src_2main_8cpp.html#a65cc7ddae0635d33052414a6acad7938',1,'main.cpp']]]
 ];
