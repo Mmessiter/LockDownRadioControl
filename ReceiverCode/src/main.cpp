@@ -587,13 +587,15 @@ void setup()
     Wire.begin();
     delay(2500); // Needed ! - possibly for stabilising capacitors.
     ScanI2c();   // see what's connected
-      if (INA219_CONNECTED) ina219.begin();
+    if (INA219_CONNECTED) ina219.begin();
 #ifdef SECOND_TRANSCEIVER
     CurrentRadio = &Radio2;
     if (InitCurrentRadio()) Radio2Exists = true;
+    delay(100);
 #endif
     CurrentRadio = &Radio1;
     if (InitCurrentRadio()) Radio1Exists = true;
+    delay(100);
     ThisRadio = 1;
     GetOldPipe();
     BootupMoment = millis();

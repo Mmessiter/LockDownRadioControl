@@ -225,7 +225,7 @@ void ProdRadio()
     CurrentRadio->openReadingPipe(1, ThisPipe);
     CurrentRadio->setChannel(RECONNECT_CH);
     CurrentRadio->startListening();
-    delay(1); // This might help
+    delay(2); // This might help
 }
 #endif // defined (SECOND_TRANSCEIVER)
 
