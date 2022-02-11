@@ -25,27 +25,27 @@
     #define HOPTIME                     50   // ms between channel changes ( >5 packets per hop)
     #define LISTEN_PERIOD               15   // ms to listen for TX in Reconnect() before switching over to try the other transceiver
     #define FREQUENCYSCOUNT             82   // use 82 different channels
-    #define RECEIVE_TIMEOUT             25 // 25 milliseconds seems an optimal value
+    #define RECEIVE_TIMEOUT             25   // 25 milliseconds seems an optimal value
     #define CHANNELSUSED                16
-    #define SERVOSUSED                  9  // All 16 are available via SBUS
-    #define SBUSRATE                    10 // SBUS frame every 10 milliseconds
+    #define SERVOSUSED                  9    // All 16 are available via SBUS
+    #define SBUSRATE                    10   // SBUS frame every 10 milliseconds
     #define SBUSPORT                    Serial3
-    #define RECONNECTGAP                20 // Send no data to servos for 20 ms after a reconnect (10 was not quite enough)
+    #define RECONNECTGAP                20   // Send no data to servos for 20 ms after a reconnect (10 was not quite enough)
     #define MINMICROS                   500
     #define MAXMICROS                   2500
     #define LED_PIN                     LED_BUILTIN
     #define RANGEMAX                    2047 // = Frsky at 150 %
     #define RANGEMIN                    0
+    #define pinCE1                      9    // NRF1
+    #define pinCSN1                     10   // NRF1
+    #define pinCSN2                     20   // NRF2
+    #define pinCE2                      21   // NRF2
+    #define FAILSAFE_TIMEOUT            2000 // two seconds until failsafe
 
-
-// #define DEBUG         // for FHSS
-// #define DB_SENSORS
-// #define DB_BIND
-// #define DB_FAILSAFE
-
-
-
-
+    // #define DEBUG         // for FHSS
+    // #define DB_SENSORS
+    // #define DB_BIND
+    // #define DB_FAILSAFE
 
 uint32_t  LastPacketArrivalTime = 0;
 bool FailSafeSave               = false;

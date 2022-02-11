@@ -3,11 +3,7 @@
 #define _SRC_UTILITIES_RADIO_H
 
 #include "common.h"
-#define pinCE1  9  // NRF1
-#define pinCSN1 10 // NRF1
-#define pinCSN2 20 // NRF2
-#define pinCE2  21 // NRF2
-#define FAILSAFE_TIMEOUT 2000
+
 
 RF24    Radio1(pinCE1, pinCSN1);
 RF24    Radio2(pinCE2, pinCSN2);
