@@ -585,8 +585,8 @@ void setup()
  pinMode(LED_PIN, OUTPUT);
     digitalWrite(LED_PIN, HIGH);
     Wire.begin();
-    delay(2000); // Needed ! - possibly for stabilising capacitors.
-    ScanI2c();   // see what's connected
+    delay(2000); // Needed for several reasons
+    ScanI2c();   // Detect what's connected
     if (INA219_CONNECTED) ina219.begin();
 
     CurrentRadio = &Radio1;
@@ -601,7 +601,6 @@ void setup()
     ThisRadio = 2;
     delay(300);
 #endif
-
 
     GetOldPipe();
     BootupMoment = millis();
