@@ -24,7 +24,6 @@
 // #define DB_SENSORS
 // #define DB_BIND
 // #define DB_FAILSAFE
-// #define DB_SECOND_TRANSCEIVER
 
 uint32_t  LastPacketArrivalTime = 0;
 bool FailSafeSave         = false;

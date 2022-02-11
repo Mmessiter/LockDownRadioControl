@@ -250,15 +250,9 @@ void Reconnect(){
                 if (ThisRadio == 2) {
                     CurrentRadio = &Radio1;
                     ThisRadio    = 1;
-#ifdef DB_SECOND_TRANSCEIVER
-                    Serial.println ("Radio 1");
-#endif
                 } else {
                     CurrentRadio = &Radio2;
                     ThisRadio    = 2;
-#ifdef DB_SECOND_TRANSCEIVER
-                    Serial.println ("Radio 2");
-#endif
                 }
                 ProdRadio();
 #endif // defined (SECOND_TRANSCEIVER)
