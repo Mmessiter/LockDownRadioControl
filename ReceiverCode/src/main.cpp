@@ -151,7 +151,7 @@ void FailSafe()
  * Print out some debugging information about the channel hopping implementation
  * @param freq The next frequency to be used.
  */
-void ShowHopDurationEtc()
+void fShowHopDurationEtc()
 {
     uint8_t OnePacketTime = (millis() - PacketStartTime) / PacketNumber;
     Serial.print("Hop duration: ");

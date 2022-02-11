@@ -5,28 +5,22 @@
 #include "common.h"
 
 
-RF24    Radio1(pinCE1, pinCSN1);
-RF24    Radio2(pinCE2, pinCSN2);
-RF24*   CurrentRadio = &Radio1;
-uint8_t ThisRadio    = 1;
-
-uint64_t ThisPipe = 0xBABE1E5420LL; // default startup
-uint64_t NewPipe  = 0;
-uint64_t OldPipe  = 0;
-bool     Connected          = false;
-int      SearchStartTime    = 0;
-int      StillSearchingTime = 0;
-bool     SaveNewBind = true;
-uint8_t  SavedPipeAddress[8];
-uint32_t HopStart;
-uint8_t  NextChannelNumber = 0;
-uint32_t RXTimeStamp;
-bool     HopNow = false;
+RF24            Radio1(pinCE1, pinCSN1);
+RF24            Radio2(pinCE2, pinCSN2);
+RF24*           CurrentRadio = &Radio1;
+uint8_t         ThisRadio    = 1;
+uint64_t        ThisPipe = 0xBABE1E5420LL; // default startup
+uint64_t        NewPipe  = 0;
+uint64_t        OldPipe  = 0;
+bool            Connected          = false;
+bool            SaveNewBind = true;
+uint8_t         SavedPipeAddress[8];
+uint32_t        HopStart;
+uint8_t         NextChannelNumber = 0;
+bool            HopNow = false;
 
 extern void     ShowHopDurationEtc();
 extern void     ReadSensorHub();
-extern bool     Radio1Exists;
-extern bool     Radio2Exists;
 extern uint16_t BaroAltitude;
 extern float    INA219Volts;
 extern float    BaroTemperature;
@@ -88,8 +82,6 @@ Payload AckPayload;                          /** object allocated for returned A
 uint8_t AckPayloadSize = sizeof(AckPayload); // Size for later externs if needed etc.
 
 uint8_t PacketNumber; /** A counter for packets between channel hops. */
-
-uint32_t ConnectionStart;
 
 #define UNCOMPRESSEDWORDS 20                        //   16 Channels plus extra 4 16 BIT values
 #define COMPRESSEDWORDS   UNCOMPRESSEDWORDS * 3 / 4 // = 16 WORDS  with no extra
@@ -229,6 +221,8 @@ void ProdRadio()
 void Reconnect(){
 
     uint32_t TryTimer;
+    uint32_t StillSearchingTime = 0;
+    uint32_t SearchStartTime    = 0;
 
     SearchStartTime = millis();
     FailSafeSent    = false;
@@ -264,9 +258,7 @@ void Reconnect(){
                     }
                 }
         }
-        ConnectionStart    = millis();
-        StillSearchingTime = 0;
-        ReconnectedMoment  = ConnectionStart; // Save this moment, then don't move a servo for a few ms ...
+    ReconnectedMoment    = millis();  // Save this moment, then don't move a servo for a few ms ...
 }
 /************************************************************************************************************/
 // This function checks the time since last hop. 
