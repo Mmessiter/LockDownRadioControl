@@ -155,7 +155,7 @@ var NAVTREEINDEX =
 "_transmitter_code_2src_2main_8cpp.html#af83cef6905713757f73ce14cefc41433",
 "class_adafruit___b_m_p280.html#ab28e689ef7620d2b9f0c9e03116dde8fa0ca3424e205a422a7b5a614722afc55e",
 "class_adafruit___i_n_a219.html#adbff47c27a3b8452c62a2f38672f1cd9",
-"globals_func_d.html",
+"globals_func_c.html",
 "struct_tiny_g_p_s_date.html#a3ae7825f840ef4ba0ecddbc22f741817"
 ];
 
