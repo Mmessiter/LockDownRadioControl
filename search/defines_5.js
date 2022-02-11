@@ -1,7 +1,7 @@
 var searchData=
 [
   ['failed_0',['Failed',['../_receiver_code_2src_2main_8cpp.html#aed7f6b5b10b7b8235e38d72a5dfc20d8',1,'main.cpp']]],
-  ['failsafe_5ftimeout_1',['FAILSAFE_TIMEOUT',['../radio_8h.html#a0634ad724c86cd2b4ac7cfebbb622a9c',1,'radio.h']]],
+  ['failsafe_5ftimeout_1',['FAILSAFE_TIMEOUT',['../common_8h.html#a0634ad724c86cd2b4ac7cfebbb622a9c',1,'common.h']]],
   ['failsafe_5fview_2',['FailSafe_View',['../_transmitter_code_2src_2main_8cpp.html#aed2442e1c08957981a20002ae4a12307',1,'main.cpp']]],
   ['fhss_5frescue_5fbottom_3',['FHSS_RESCUE_BOTTOM',['../_radio_functions_8cpp.html#ae3ff62396efcffeead62e0403efbd6de',1,'RadioFunctions.cpp']]],
   ['fhss_5frescue_5ftop_4',['FHSS_RESCUE_TOP',['../_radio_functions_8cpp.html#ab269c2e7db5187ffd777d443dc486b7f',1,'RadioFunctions.cpp']]],

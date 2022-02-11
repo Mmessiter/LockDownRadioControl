@@ -2,11 +2,6 @@ var radio_8h =
 [
     [ "Payload", "struct_payload.html", "struct_payload" ],
     [ "COMPRESSEDWORDS", "radio_8h.html#a461caf7198eaa60ce589088ff38b97cb", null ],
-    [ "FAILSAFE_TIMEOUT", "radio_8h.html#a0634ad724c86cd2b4ac7cfebbb622a9c", null ],
-    [ "pinCE1", "radio_8h.html#a29eb13cced8716c95cf23e18ac99ffc7", null ],
-    [ "pinCE2", "radio_8h.html#a86715d66aa5d1363f2db07ae6428eb90", null ],
-    [ "pinCSN1", "radio_8h.html#a047f5702802c2bbf4918e9318f3e6a56", null ],
-    [ "pinCSN2", "radio_8h.html#a76971ffb50fdfd6bc8e2c3c6ac339459", null ],
     [ "UNCOMPRESSEDWORDS", "radio_8h.html#a0c40a351a0c0e01fbd5e5b1b0187eb48", null ],
     [ "CheckIfItsHopTime", "radio_8h.html#a105743cec5ef6e3db78f5a0aa5a7f2a2", null ],
     [ "ClearAckPayload", "radio_8h.html#a5a26715a721e1073d6ae00498282c056", null ],

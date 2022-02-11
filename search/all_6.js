@@ -4,7 +4,7 @@ var searchData=
   ['failedchecksum_1',['failedChecksum',['../class_tiny_g_p_s_plus.html#af7dc415ad7cf13f01ca2eaead8a4ade2',1,'TinyGPSPlus::failedChecksum() const'],['../class_tiny_g_p_s_plus.html#af7dc415ad7cf13f01ca2eaead8a4ade2',1,'TinyGPSPlus::failedChecksum() const'],['../class_tiny_g_p_s_plus.html#af7dc415ad7cf13f01ca2eaead8a4ade2',1,'TinyGPSPlus::failedChecksum() const']]],
   ['failedpacket_2',['FailedPacket',['../_transmitter_code_2src_2main_8cpp.html#a783a0141bea15d8539730afd4b3b06a3',1,'FailedPacket():&#160;main.cpp'],['../_radio_functions_8h.html#a783a0141bea15d8539730afd4b3b06a3',1,'FailedPacket():&#160;main.cpp']]],
   ['failsafe_3',['FailSafe',['../radio_8h.html#a42318598726782ebb2e1857f167c8cda',1,'FailSafe():&#160;main.cpp'],['../_receiver_code_2src_2main_8cpp.html#a42318598726782ebb2e1857f167c8cda',1,'FailSafe():&#160;main.cpp']]],
-  ['failsafe_5ftimeout_4',['FAILSAFE_TIMEOUT',['../radio_8h.html#a0634ad724c86cd2b4ac7cfebbb622a9c',1,'radio.h']]],
+  ['failsafe_5ftimeout_4',['FAILSAFE_TIMEOUT',['../common_8h.html#a0634ad724c86cd2b4ac7cfebbb622a9c',1,'common.h']]],
   ['failsafe_5fview_5',['FailSafe_View',['../_transmitter_code_2src_2main_8cpp.html#aed2442e1c08957981a20002ae4a12307',1,'main.cpp']]],
   ['failsafechannel_6',['FailSafeChannel',['../_transmitter_code_2src_2main_8cpp.html#a5a547d8417a6f90c0b2bdd5d836274b2',1,'FailSafeChannel():&#160;main.cpp'],['../_receiver_code_2src_2main_8cpp.html#aeda79da3882f657a3eaefc5800122da5',1,'FailSafeChannel():&#160;main.cpp']]],
   ['failsafedataloaded_7',['FailSafeDataLoaded',['../_receiver_code_2src_2main_8cpp.html#a08ed7a870be8e84ae26ee0b972866bb3',1,'main.cpp']]],

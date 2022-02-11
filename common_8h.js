@@ -1,12 +1,17 @@
 var common_8h =
 [
     [ "CHANNELSUSED", "common_8h.html#ad143c01c2b36424b292b568f48cbe014", null ],
+    [ "FAILSAFE_TIMEOUT", "common_8h.html#a0634ad724c86cd2b4ac7cfebbb622a9c", null ],
     [ "FREQUENCYSCOUNT", "common_8h.html#afe5bce36baf737bd284d43cd0e805fdb", null ],
     [ "HOPTIME", "common_8h.html#a57d506b5f34172770c8d645c12cb5ba2", null ],
     [ "LED_PIN", "common_8h.html#ab4553be4db9860d940f81d7447173b2f", null ],
     [ "LISTEN_PERIOD", "common_8h.html#a66ccb27c237c105f63ffa01c67d6eed9", null ],
     [ "MAXMICROS", "common_8h.html#a843e3db36f734b45096220f7ca4b8d9f", null ],
     [ "MINMICROS", "common_8h.html#ac67e087c11a86a3790c656a29f8c7195", null ],
+    [ "pinCE1", "common_8h.html#a29eb13cced8716c95cf23e18ac99ffc7", null ],
+    [ "pinCE2", "common_8h.html#a86715d66aa5d1363f2db07ae6428eb90", null ],
+    [ "pinCSN1", "common_8h.html#a047f5702802c2bbf4918e9318f3e6a56", null ],
+    [ "pinCSN2", "common_8h.html#a76971ffb50fdfd6bc8e2c3c6ac339459", null ],
     [ "RANGEMAX", "common_8h.html#a152ff5774ac656fc5f23664a214a8b53", null ],
     [ "RANGEMIN", "common_8h.html#a2279f0fac9f7362b46f3c53ae91a5ce8", null ],
     [ "RECEIVE_TIMEOUT", "common_8h.html#a4c69942f01447fa7563c5726c7d8abf2", null ],
