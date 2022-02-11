@@ -585,18 +585,24 @@ void setup()
  pinMode(LED_PIN, OUTPUT);
     digitalWrite(LED_PIN, HIGH);
     Wire.begin();
-    delay(2500); // Needed ! - possibly for stabilising capacitors.
+    delay(2000); // Needed ! - possibly for stabilising capacitors.
     ScanI2c();   // see what's connected
     if (INA219_CONNECTED) ina219.begin();
+
+    CurrentRadio = &Radio1;
+    if (InitCurrentRadio()) Radio1Exists = true;
+    ThisRadio = 1;
+    delay(300);
+
+
 #ifdef SECOND_TRANSCEIVER
     CurrentRadio = &Radio2;
     if (InitCurrentRadio()) Radio2Exists = true;
-    delay(100);
+    ThisRadio = 2;
+    delay(300);
 #endif
-    CurrentRadio = &Radio1;
-    if (InitCurrentRadio()) Radio1Exists = true;
-    delay(100);
-    ThisRadio = 1;
+
+
     GetOldPipe();
     BootupMoment = millis();
     digitalWrite(LED_PIN, LOW);
