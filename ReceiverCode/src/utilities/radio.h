@@ -225,14 +225,14 @@ void ProdRadio()
     CurrentRadio->openReadingPipe(1, ThisPipe);
     CurrentRadio->setChannel(RECONNECT_CH);
     CurrentRadio->startListening();
-    delay(2); // This might help
+    delay(2); 
 }
 #endif // defined (SECOND_TRANSCEIVER)
 
 /************************************************************************************************************/
 
 void Reconnect(){
-    
+
     uint32_t TryTimer;
 
     SearchStartTime = millis();
