@@ -16,7 +16,7 @@ var radio_8h =
     [ "GetNextFrequency", "radio_8h.html#a5cbe0c69c07d5818a956b9155820cf76", null ],
     [ "GetOldPipe", "radio_8h.html#a2cce213711b7a34bc80eec167dffcb8f", null ],
     [ "HopToNextFrequency", "radio_8h.html#aa48ea4c5d47aa93d17dbc7d7b19238d8", null ],
-    [ "InitCurrentRadio", "radio_8h.html#a00e93a7779cf3932c07c78c4d58c91ce", null ],
+    [ "InitCurrentRadio", "radio_8h.html#a9c6678b1449ea8eaaab6a3a53cbb3d65", null ],
     [ "LoadAckPayload", "radio_8h.html#a664f409561bfcf119e0379dd991217e5", null ],
     [ "LoadVersioNumber", "radio_8h.html#af067d2e9e8981a59af86ec75a0db36b4", null ],
     [ "ProdRadio", "radio_8h.html#a99f0389cf05f26f8c76aab69eb7d9529", null ],

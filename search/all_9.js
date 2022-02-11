@@ -69,7 +69,7 @@ var searchData=
   ['inhibitnamecheck_66',['InhibitNameCheck',['../_transmitter_code_2src_2main_8cpp.html#aff92977de1d532b82ebb3650a790f099',1,'main.cpp']]],
   ['initbmp280_67',['InitBMP280',['../_sensor_hub_l_c_2src_2main_8cpp.html#aa2c448c0ec510ffaaecbc5991e726b53',1,'InitBMP280():&#160;main.cpp'],['../_sensor_hub_t32_2src_2main_8cpp.html#aa2c448c0ec510ffaaecbc5991e726b53',1,'InitBMP280():&#160;main.cpp'],['../_sensor_hub_teensy3__6_2src_2main_8cpp.html#aa2c448c0ec510ffaaecbc5991e726b53',1,'InitBMP280():&#160;main.cpp']]],
   ['initcentredegrees_68',['InitCentreDegrees',['../_transmitter_code_2src_2main_8cpp.html#a2342451905454b70cecc7707b58f96bc',1,'main.cpp']]],
-  ['initcurrentradio_69',['InitCurrentRadio',['../radio_8h.html#a00e93a7779cf3932c07c78c4d58c91ce',1,'radio.h']]],
+  ['initcurrentradio_69',['InitCurrentRadio',['../radio_8h.html#a9c6678b1449ea8eaaab6a3a53cbb3d65',1,'radio.h']]],
   ['initdatavalue_70',['initDataValue',['../class_adafruit___g_p_s.html#a160e187e03ea22b22379dfd25b86bd2d',1,'Adafruit_GPS']]],
   ['inithistory_71',['initHistory',['../class_adafruit___g_p_s.html#a39a2aecda4b5dcf8cab72ef93bdcc103',1,'Adafruit_GPS']]],
   ['initmaxmin_72',['InitMaxMin',['../_transmitter_code_2src_2main_8cpp.html#a1704b259882e35bc7581539d95ca3214',1,'main.cpp']]],
