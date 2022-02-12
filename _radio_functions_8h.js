@@ -2,7 +2,6 @@ var _radio_functions_8h =
 [
     [ "CALIBRATELIMITS", "_radio_functions_8h.html#a8d671ce93ba33f2f6b5c314108d3592d", null ],
     [ "CENTRESTICKS", "_radio_functions_8h.html#a53bc52cfc1253f58c2f3835aa39205a3", null ],
-    [ "DB_NEXTION", "_radio_functions_8h.html#a37c149666ecf7d90765ce2a9df4b8fb8", null ],
     [ "FREQUENCYSCOUNT", "_radio_functions_8h.html#afe5bce36baf737bd284d43cd0e805fdb", null ],
     [ "KICKRATE", "_radio_functions_8h.html#a639fb69a9b4f236e3b1a16435b82bb81", null ],
     [ "LOSTCONTACTCUTOFF", "_radio_functions_8h.html#ac5b4f54697bc5a8d58ef0c92c094c6b6", null ],
