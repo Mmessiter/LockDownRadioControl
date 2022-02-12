@@ -197,13 +197,22 @@ void InitCurrentRadio()
     return;
 }
 
+/************************************ Try to connect  ... ************************************************************************/
+
+void ListenALittle(uint32_t HowLong){
+    uint32_t ATimer = millis();
+    while ((!CurrentRadio->available()) && (millis() - ATimer) < HowLong) { }    //  Return as soon as connected; or wait a bit...
+    if (CurrentRadio->available()) Connected = true;
+}
+
 /************************************************************************************************************/
+
 #ifdef SECOND_TRANSCEIVER
 void ProdRadio()
 { // After switching radios, this prod allows EITHER to connect. Don't know why - yet!
     // Re-setting up the radio may be required on power failure or unsufficient current supply. While this function
     // addresses a power "drop-out" during Reconnect(), there may be times that require this while connected.
-    uint32_t TryTimer1;
+   // uint32_t TryTimer1;
     CurrentRadio->enableAckPayload();
     CurrentRadio->enableDynamicPayloads();
     CurrentRadio->maskIRQ(1, 1, 1);                                                        // no interrupts - seems NEEDED at the moment - (line *IS* connected)
@@ -213,8 +222,7 @@ void ProdRadio()
     CurrentRadio->openReadingPipe(1, ThisPipe);
     CurrentRadio->setChannel(RECONNECT_CH);
     CurrentRadio->startListening();
-    TryTimer1 = millis();
-    while ((!CurrentRadio->available()) && (millis() - TryTimer1) < PROD_LISTEN_PERIOD) { } //  Return as soon as connected or wait a bit
+    ListenALittle(PROD_LISTEN_PERIOD);
 }
 #endif // defined (SECOND_TRANSCEIVER)
 
@@ -222,7 +230,6 @@ void ProdRadio()
 
 void Reconnect(){
 
-    uint32_t TryTimer;
     uint32_t StillSearchingTime = 0;
     uint32_t SearchStartTime    = 0;
 
@@ -232,9 +239,7 @@ void Reconnect(){
     delay(1);
     CurrentRadio->setChannel(RECONNECT_CH);
     CurrentRadio->startListening();
-    TryTimer = millis();
-    while ((!CurrentRadio->available()) && (millis() - TryTimer) < START_LISTEN_PERIOD) { } //  
-    if (CurrentRadio->available()) Connected = true;
+    ListenALittle(START_LISTEN_PERIOD);
     while (!Connected) {
 #ifdef SECOND_TRANSCEIVER
                 CurrentRadio->stopListening();
@@ -248,9 +253,7 @@ void Reconnect(){
                 }
                 ProdRadio();
 #endif // defined (SECOND_TRANSCEIVER)
-                TryTimer = millis();
-                while ((!CurrentRadio->available()) && (millis() - TryTimer) < LISTEN_PERIOD) { } //  
-                if (CurrentRadio->available()) Connected = true;
+                ListenALittle(LISTEN_PERIOD);
                 if (!Connected) {
                     StillSearchingTime = millis() - SearchStartTime;
                     if (StillSearchingTime > FAILSAFE_TIMEOUT){
