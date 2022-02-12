@@ -227,12 +227,9 @@ void ProdRadio()
 #endif // defined (SECOND_TRANSCEIVER)
 
 /************************************************************************************************************/
-
 void Reconnect(){
-
     uint32_t StillSearchingTime = 0;
     uint32_t SearchStartTime    = 0;
-
     SearchStartTime = millis();
     FailSafeSent    = false;
     CurrentRadio->stopListening();
@@ -242,28 +239,28 @@ void Reconnect(){
     ListenALittle(START_LISTEN_PERIOD);
     while (!Connected) {
 #ifdef SECOND_TRANSCEIVER
-                CurrentRadio->stopListening();
-                delay(1);
-                if (ThisRadio == 2) {
-                    CurrentRadio = &Radio1;
-                    ThisRadio    = 1;
-                } else {
-                    CurrentRadio = &Radio2;
-                    ThisRadio    = 2;
-                }
-                ProdRadio();
-#endif // defined (SECOND_TRANSCEIVER)
-                ListenALittle(LISTEN_PERIOD);
-                if (!Connected) {
-                    StillSearchingTime = millis() - SearchStartTime;
-                    if (StillSearchingTime > FAILSAFE_TIMEOUT){
-                        if (!FailSafeSent){
-                            FailSafe();
-                            FailSafeSent = true; // Once is enough
-                         }
-                    }
-                }
+        CurrentRadio->stopListening();
+        delay(1);
+        if (ThisRadio == 2) {
+            CurrentRadio = &Radio1;
+            ThisRadio    = 1;
+        } else {
+            CurrentRadio = &Radio2;
+            ThisRadio    = 2;
         }
+        ProdRadio();
+#endif // defined (SECOND_TRANSCEIVER)
+        ListenALittle(LISTEN_PERIOD);
+        if (!Connected) {
+            StillSearchingTime = millis() - SearchStartTime;
+            if (StillSearchingTime > FAILSAFE_TIMEOUT){
+                if (!FailSafeSent){
+                    FailSafe();
+                    FailSafeSent = true; // Once is enough
+                }
+            }
+        }
+    }
     ReconnectedMoment    = millis();  // Save this moment, then don't move a servo for a few ms ...
 }
 /************************************************************************************************************/
