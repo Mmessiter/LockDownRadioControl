@@ -203,16 +203,18 @@ void ProdRadio()
 { // After switching radios, this prod allows EITHER to connect. Don't know why - yet!
     // Re-setting up the radio may be required on power failure or unsufficient current supply. While this function
     // addresses a power "drop-out" during Reconnect(), there may be times that require this while connected.
+    uint32_t TryTimer1;
     CurrentRadio->enableAckPayload();
     CurrentRadio->enableDynamicPayloads();
-    CurrentRadio->maskIRQ(1, 1, 1); // no interrupts - seems NEEDED at the moment - (line *IS* connected)
+    CurrentRadio->maskIRQ(1, 1, 1);                                                        // no interrupts - seems NEEDED at the moment - (line *IS* connected)
     CurrentRadio->setCRCLength(RF24_CRC_8);
     CurrentRadio->setPALevel(RF24_PA_MAX);
     CurrentRadio->setDataRate(RF24_250KBPS);
     CurrentRadio->openReadingPipe(1, ThisPipe);
     CurrentRadio->setChannel(RECONNECT_CH);
     CurrentRadio->startListening();
-    delay(2); 
+    TryTimer1 = millis();
+    while ((!CurrentRadio->available()) && (millis() - TryTimer1) < PROD_LISTEN_PERIOD) { } //  Return as soon as connected or wait a bit
 }
 #endif // defined (SECOND_TRANSCEIVER)
 
@@ -230,7 +232,8 @@ void Reconnect(){
     delay(1);
     CurrentRadio->setChannel(RECONNECT_CH);
     CurrentRadio->startListening();
-    delay(1);   // ****************************************** Maybe longer?
+    TryTimer = millis();
+    while ((!CurrentRadio->available()) && (millis() - TryTimer) < START_LISTEN_PERIOD) { } //  
     if (CurrentRadio->available()) Connected = true;
     while (!Connected) {
 #ifdef SECOND_TRANSCEIVER
@@ -246,7 +249,7 @@ void Reconnect(){
                 ProdRadio();
 #endif // defined (SECOND_TRANSCEIVER)
                 TryTimer = millis();
-                while ((!CurrentRadio->available()) && (millis() - TryTimer) < LISTEN_PERIOD) { } 
+                while ((!CurrentRadio->available()) && (millis() - TryTimer) < LISTEN_PERIOD) { } //  
                 if (CurrentRadio->available()) Connected = true;
                 if (!Connected) {
                     StillSearchingTime = millis() - SearchStartTime;
