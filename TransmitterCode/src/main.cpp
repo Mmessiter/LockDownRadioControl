@@ -226,42 +226,30 @@ uint8_t       PacketNumber     = 0;
 uint8_t       GPSMarkHere      = 0;
 
 // ************************************* AckPayload structure ******************************************************
-
 /**
-     * This byte (Purpose) determines what the remainder represent.
-     * @warning Highest BIT of Purpose means **IGNORE IF ON**
-     * @note If Purpose = 1 then ...
-     * @code
+     * This first byte "Purpose" defines what all the other bytes mean, AND ...
+     * the highest BIT of Purpose means ** HOP TO NEXT CHANNEL A.S.A.P. (IF ON) **
+     * the lower 7 BITs then define the meaning of the remainder of the ackpayload bytes
+     * If Purpose = 1 then ...
+     * 
      * AckPayload.Byte2           =  ThisRadio;            // Radio in current use  Byte1 and Byte2 are free
      * AckPayload.Byte3           =  RXVERSION_MAJOR;
      * AckPayload.Byte4           =  RXVERSION_MINOR;
      * AckPayload.Byte5           =  RXVERSION_MINIMUS;
-
      *
-     * @note If Purpose = 2 then ...
-     * @code
-     * AckPayload.Byte1     = Time.Val8[0];       // Time stamp is 32 BIT divided up here.
-     * AckPayload.Byte2     = Time.Val8[1];
-     * AckPayload.Byte3     = Time.Val8[2];
-     * AckPayload.Byte4     = Time.Val8[3];
-     * AckPayload.Byte5     = Next array pointer for next channel
-     *
-     * * @note If Purpose = 3 then ...
-     * @code
-     * AckPayload.Byte1  ... Byte4   = Volts (float)      Byte5 is free
-
-     * @endcode
+     *  If Purpose = 2 then ...
      **/
+
 
 struct Payload
 {
     uint8_t Purpose; // Defines meaning of the remainder
-                     // Highest BIT of Purpose means Ignore IF ON
-    uint8_t Byte1;   // (was volt)
-    uint8_t Byte2;   // (was CurrentAltitude)
-    uint8_t Byte3;   // (was Pitch)
-    uint8_t Byte4;   // (was Roll)
-    uint8_t Byte5;   // (was Yaw)
+                     // Highest BIT of Purpose means HOP NOW! IF ON
+    uint8_t Byte1;   // 
+    uint8_t Byte2;   // 
+    uint8_t Byte3;   // 
+    uint8_t Byte4;   // 
+    uint8_t Byte5;   // 
 };
 Payload AckPayload;
 
@@ -5655,14 +5643,13 @@ void ReadSwitches()
 void GetRXVersionNumber()
 {
     char nbuf[5];
-
-    Str(ReceiverVersionNumber, AckPayload.Byte3, 2);
-    Str(nbuf, AckPayload.Byte4, 2);
-    strcat(ReceiverVersionNumber, nbuf);
-    Str(nbuf, AckPayload.Byte5, 0);
-    strcat(ReceiverVersionNumber, nbuf);
-    Str(nbuf, AckPayload.Byte2, 0);
+    Str(nbuf,AckPayload.Byte1, 0);
     strcpy(ThisRadio, nbuf);
+    Str(ReceiverVersionNumber, AckPayload.Byte2, 2);
+    Str(nbuf, AckPayload.Byte3, 2);
+    strcat(ReceiverVersionNumber, nbuf);
+    Str(nbuf, AckPayload.Byte4, 0);
+    strcat(ReceiverVersionNumber, nbuf);
 }
 
 /************************************************************************************************************/

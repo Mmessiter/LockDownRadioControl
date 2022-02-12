@@ -19,7 +19,7 @@
 
     #define RXVERSION_MAJOR             1
     #define RXVERSION_MINOR             5
-    #define RXVERSION_MINIMUS           5    // February 11th 2022
+    #define RXVERSION_MINIMUS           6    // February 12th 2022
     #define SENSOR_HUB_I2C_ADDRESS      8
     #define HOPTIME                     50   // ms between channel changes ( >5 packets per hop)
     #define START_LISTEN_PERIOD         2    // ms to listen for TX in Reconnect() before FIRST switching over to try the other transceiver

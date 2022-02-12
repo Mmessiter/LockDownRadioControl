@@ -1,9 +1,7 @@
 /** @file ReceiverCode/src/utilities/radio.h */
 #ifndef _SRC_UTILITIES_RADIO_H
 #define _SRC_UTILITIES_RADIO_H
-
 #include "common.h"
-
 
 RF24            Radio1(pinCE1, pinCSN1);
 RF24            Radio2(pinCE2, pinCSN2);
@@ -18,7 +16,6 @@ uint8_t         SavedPipeAddress[8];
 uint32_t        HopStart;
 uint8_t         NextChannelNumber = 0;
 bool            HopNow = false;
-
 extern void     ShowHopDurationEtc();
 extern void     ReadSensorHub();
 extern uint16_t BaroAltitude;
@@ -41,55 +38,42 @@ extern uint8_t  SatellitesGPS;
 extern bool     GpsFix;
 extern bool     SENSOR_HUB_CONNECTED;    
  
-
 /** AckPayload Stucture for data returned to transmitter. */
 struct Payload
 {
     /**
-     * This byte (Purpose) determines what the remainder (offset 19) represent.
-     * @warning Highest BIT of Purpose means **IGNORE IF ON**
-     * @note If Purpose = 1 then ...
-     * @code
+     * This first byte "Purpose" defines what all the other bytes mean, AND ...
+     * the highest BIT of Purpose means ** HOP TO NEXT CHANNEL A.S.A.P. (IF ON) **
+     * the lower 7 BITs then define the meaning of the remainder of the ackpayload bytes
+     * If Purpose = 1 then ...
+     * 
      * AckPayload.Byte2           =  ThisRadio;            // Radio in current use  Byte1 and Byte2 are free
      * AckPayload.Byte3           =  RXVERSION_MAJOR;
      * AckPayload.Byte4           =  RXVERSION_MINOR;
      * AckPayload.Byte5           =  RXVERSION_MINIMUS;
-
      *
-     * @note If Purpose = 2 then ...
-     * @code
-     * AckPayload.Byte1     = Time.Stamp8[0];       // Time stamp is 32 BIT divided up here.
-     * AckPayload.Byte2     = Time.Stamp8[1];
-     * AckPayload.Byte3     = Time.Stamp8[2];
-     * AckPayload.Byte4     = Time.Stamp8[3];
-     * AckPayload.Byte5     = Next array pointer for next channel
-     *
-     * * @note If Purpose = 3 then ...
-     * @code
-     * AckPayload.Byte1  ... Byte4   = Volts (float)      Byte5 is free
-
-     * @endcode
+     *  If Purpose = 2 then ...
      **/
 
     uint8_t Purpose = 0; // 0  Purpose
-    uint8_t Byte1   = 0; // 1  (was volt)
-    uint8_t Byte2   = 0; // 2  (was CurrentAltitude)
-    uint8_t Byte3   = 0; // 3  (was ReportedPitch)
-    uint8_t Byte4   = 0; // 4  (was ReportedRoll)
-    uint8_t Byte5   = 0; // 5  (was ReportedYaw)
+    uint8_t Byte1   = 0; // 1  
+    uint8_t Byte2   = 0; // 2 
+    uint8_t Byte3   = 0; // 3 
+    uint8_t Byte4   = 0; // 4  
+    uint8_t Byte5   = 0; // 5 
 };
-Payload AckPayload;                          /** object allocated for returned ACK data. */
-uint8_t AckPayloadSize = sizeof(AckPayload); // Size for later externs if needed etc.
+Payload AckPayload;                         
+uint8_t AckPayloadSize = sizeof(AckPayload);        // Size for later externs if needed etc. (=6)
 
-uint8_t PacketNumber; /** A counter for packets between channel hops. */
+uint8_t PacketNumber;                               /** A counter for packets between channel hops. */
 
 #define UNCOMPRESSEDWORDS 20                        //   16 Channels plus extra 4 16 BIT values
 #define COMPRESSEDWORDS   UNCOMPRESSEDWORDS * 3 / 4 // = 16 WORDS  with no extra
 
-uint16_t ReceivedData[UNCOMPRESSEDWORDS]; //  20  words
-uint16_t PreviousData[UNCOMPRESSEDWORDS]; /** Previously received data (used for servos. Hence not used if unchanged) */
+uint16_t ReceivedData[UNCOMPRESSEDWORDS];           //  20 x 16 BIT words
+uint16_t PreviousData[UNCOMPRESSEDWORDS];           /** Previously received data (used for servos. Hence not sent if unchanged) */
 
-extern void     FailSafe(); // defined in main.cpp
+extern void     FailSafe();                          // defined in main.cpp
 extern uint32_t ReconnectedMoment;
 extern bool     BoundFlag;
 extern void     ClearAckPayload();
@@ -114,10 +98,10 @@ void ReadSavedPipe()
 
 void LoadVersioNumber() // and which radio is currently in use
 {
-    AckPayload.Byte2 = ThisRadio;
-    AckPayload.Byte3 = RXVERSION_MAJOR;
-    AckPayload.Byte4 = RXVERSION_MINOR;
-    AckPayload.Byte5 = RXVERSION_MINIMUS;
+    AckPayload.Byte1 = ThisRadio;
+    AckPayload.Byte2 = RXVERSION_MAJOR;
+    AckPayload.Byte3 = RXVERSION_MINOR;
+    AckPayload.Byte4 = RXVERSION_MINIMUS;
 }
 
 /************************************************************************************************************/
@@ -212,7 +196,6 @@ void ProdRadio()
 { // After switching radios, this prod allows EITHER to connect. Don't know why - yet!
     // Re-setting up the radio may be required on power failure or unsufficient current supply. While this function
     // addresses a power "drop-out" during Reconnect(), there may be times that require this while connected.
-   // uint32_t TryTimer1;
     CurrentRadio->enableAckPayload();
     CurrentRadio->enableDynamicPayloads();
     CurrentRadio->maskIRQ(1, 1, 1);                                                        // no interrupts - seems NEEDED at the moment - (line *IS* connected)
