@@ -228,7 +228,6 @@ void ProdRadio()
 
 /************************************************************************************************************/
 void Reconnect(){
-    uint32_t StillSearchingTime = 0;
     uint32_t SearchStartTime    = 0;
     SearchStartTime = millis();
     FailSafeSent    = false;
@@ -252,8 +251,7 @@ void Reconnect(){
 #endif // defined (SECOND_TRANSCEIVER)
         ListenALittle(LISTEN_PERIOD);
         if (!Connected) {
-            StillSearchingTime = millis() - SearchStartTime;
-            if (StillSearchingTime > FAILSAFE_TIMEOUT){
+            if ((millis() - SearchStartTime) > FAILSAFE_TIMEOUT){
                 if (!FailSafeSent){
                     FailSafe();
                     FailSafeSent = true; // Once is enough
