@@ -5532,7 +5532,7 @@ void GetNextHopChannelNumber()
         if (NextChannelNumber >= FREQUENCYSCOUNT) NextChannelNumber = 1; // wrap to 1, not zero which means error
     }
     PreviousChannelNumber = NextChannelNumber;
-    NextFrequency         = FHSS_Channels[NextChannelNumber];
+    NextFrequency         = FHSS_Channels[NextChannelNumber];             // heer!
 }
 
 /************************************************************************************************************/

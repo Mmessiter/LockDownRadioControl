@@ -192,7 +192,7 @@ void ListenALittle(uint32_t HowLong){
 /************************************************************************************************************/
 
 #ifdef SECOND_TRANSCEIVER
-void ProdRadio()
+void ProdRadio(uint8_t Recon_Ch)
 { // After switching radios, this prod allows EITHER to connect. Don't know why - yet!
     // Re-setting up the radio may be required on power failure or unsufficient current supply. While this function
     // addresses a power "drop-out" during Reconnect(), there may be times that require this while connected.
@@ -203,7 +203,7 @@ void ProdRadio()
     CurrentRadio->setPALevel(RF24_PA_MAX);
     CurrentRadio->setDataRate(RF24_250KBPS);
     CurrentRadio->openReadingPipe(1, ThisPipe);
-    CurrentRadio->setChannel(Reconnect_Channels[random(7)]);
+    CurrentRadio->setChannel(Recon_Ch);
     CurrentRadio->startListening();
     ListenALittle(PROD_LISTEN_PERIOD);
 }
@@ -214,12 +214,15 @@ void ProdRadio()
 
 void Reconnect(){
     uint32_t SearchStartTime    = 0;
+    uint8_t ReconnectChannel;
+
     SearchStartTime = millis();
     FailSafeSent    = false;
     while (!Connected) {
         CurrentRadio->stopListening();
         delay(1);
-        CurrentRadio->setChannel(Reconnect_Channels[random(7)]);  // Get a *random* reconnect channel - not always same one - one of 6.
+        ReconnectChannel = Reconnect_Channels[random(7)];
+        CurrentRadio->setChannel(ReconnectChannel);  // Get a *random* reconnect channel - not always same one - one of 6.
         CurrentRadio->startListening();
         ListenALittle(START_LISTEN_PERIOD);
 #ifdef SECOND_TRANSCEIVER
@@ -232,7 +235,7 @@ void Reconnect(){
             CurrentRadio = &Radio2;
             ThisRadio    = 2;
         }
-        ProdRadio();
+        ProdRadio(ReconnectChannel);
 #endif // defined (SECOND_TRANSCEIVER)
         ListenALittle(LISTEN_PERIOD);
         if (!Connected) {
