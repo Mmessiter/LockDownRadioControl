@@ -3,11 +3,11 @@
 #define RadioFunctions_H
 
 // **************************************************************************
-//                  TX VERSION NUMBER   (February 12 2022 Malcolm Messiter) *
+//                  TX VERSION NUMBER   (February 13 2022 Malcolm Messiter) *
 //***************************************************************************
 #define TXVERSION_MAJOR   1
 #define TXVERSION_MINOR   5
-#define TXVERSION_MINIMUS 6
+#define TXVERSION_MINIMUS 7
 
 // **************************************************************************
 //                            SBUS PARAMETERS   (FOR BUDDY BOXING)          *
@@ -34,7 +34,7 @@
 #define RETRYCOUNT        3  // auto retries from nRF24L01
 #define RETRYWAIT         1  // Wait between retries is RetryWait+1 * 250us. A failed packet therefore takes (RetryWait+1 * 250us) * RetryCount
 #define LOSTCONTACTCUTOFF 1  // How many packets to lose before reconnect triggers  (>1)
-#define RECONNECT_CH      83
+
 
 // **************************************************************************
 //                            SEND MODE PARAMETERS                          *
@@ -110,6 +110,7 @@ extern long int       RecoveryTimer;
 extern bool           Connected;
 extern uint16_t       CompressedData[];
 extern uint8_t        FHSS_Channels[];
+extern uint8_t        Reconnect_Channels[];
 extern struct Payload AckPayload;
 extern int            RangeTestLostPackets;
 extern uint8_t        RecentPacketsLost;

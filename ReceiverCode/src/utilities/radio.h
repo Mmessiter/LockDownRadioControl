@@ -181,7 +181,7 @@ void InitCurrentRadio()
     return;
 }
 
-/************************************ Try to connect  ... ************************************************************************/
+/************************************ Try to connect  ... *********************************************/
 
 void ListenALittle(uint32_t HowLong){
     uint32_t ATimer = millis();
@@ -203,23 +203,25 @@ void ProdRadio()
     CurrentRadio->setPALevel(RF24_PA_MAX);
     CurrentRadio->setDataRate(RF24_250KBPS);
     CurrentRadio->openReadingPipe(1, ThisPipe);
-    CurrentRadio->setChannel(RECONNECT_CH);
+    CurrentRadio->setChannel(Reconnect_Channels[random(7)]);
     CurrentRadio->startListening();
     ListenALittle(PROD_LISTEN_PERIOD);
 }
 #endif // defined (SECOND_TRANSCEIVER)
 
 /************************************************************************************************************/
+
+
 void Reconnect(){
     uint32_t SearchStartTime    = 0;
     SearchStartTime = millis();
     FailSafeSent    = false;
-    CurrentRadio->stopListening();
-    delay(1);
-    CurrentRadio->setChannel(RECONNECT_CH);
-    CurrentRadio->startListening();
-    ListenALittle(START_LISTEN_PERIOD);
     while (!Connected) {
+        CurrentRadio->stopListening();
+        delay(1);
+        CurrentRadio->setChannel(Reconnect_Channels[random(7)]);  // Get a *random* reconnect channel - not always same one - one of 6.
+        CurrentRadio->startListening();
+        ListenALittle(START_LISTEN_PERIOD);
 #ifdef SECOND_TRANSCEIVER
         CurrentRadio->stopListening();
         delay(1);

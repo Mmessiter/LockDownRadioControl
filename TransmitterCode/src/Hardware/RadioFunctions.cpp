@@ -121,16 +121,13 @@ void SendData()
         {
             BufferNewPipe(); // if not yet bound, send our pipe
         }
-        
-       
-
         LoadPacketData(); // extra parameters appended to the data packet
         if (LostContactFlag) {
             if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {
                 TryOtherPipe();
                 PipeTimeout = millis();
             }
-            NextFrequency = RECONNECT_CH;
+            NextFrequency = Reconnect_Channels[random(7)];       // a **random** reconnect channel 
             HopToNextFrequency();
         }
         Connected = false;
