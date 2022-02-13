@@ -221,8 +221,8 @@ void Reconnect(){
     while (!Connected) {
         CurrentRadio->stopListening();
         delay(1);
-        ReconnectChannel = Reconnect_Channels[random(7)];
-        CurrentRadio->setChannel(ReconnectChannel);  // Get a *random* reconnect channel - not always same one - one of 6.
+        ReconnectChannel = Reconnect_Channels[random(7)];   // Get a *random* reconnect channel - not always the same one - one of 6.
+        CurrentRadio->setChannel(ReconnectChannel);  
         CurrentRadio->startListening();
         ListenALittle(START_LISTEN_PERIOD);
 #ifdef SECOND_TRANSCEIVER
