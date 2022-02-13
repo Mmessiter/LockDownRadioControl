@@ -107,7 +107,6 @@ void SendData()
     ShowComms();                                   // there is time to fit in these calls because there are about 5 ms spare still. ONLY WHEN CONNECTED
     ReadSwitches();                                // Check switch positions
     CheckTimer();  
-     if ((millis() - TxPace)>4) Serial.println (millis() - TxPace); // this never exceeds 5 ms !
     }
     if ((millis() - TxPace) >= PACEMAKER) {
         TxPace = millis();
