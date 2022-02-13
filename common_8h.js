@@ -16,7 +16,6 @@ var common_8h =
     [ "RANGEMAX", "common_8h.html#a152ff5774ac656fc5f23664a214a8b53", null ],
     [ "RANGEMIN", "common_8h.html#a2279f0fac9f7362b46f3c53ae91a5ce8", null ],
     [ "RECEIVE_TIMEOUT", "common_8h.html#a4c69942f01447fa7563c5726c7d8abf2", null ],
-    [ "RECONNECT_CH", "common_8h.html#ad3c239265016482b6850360b3dc51a50", null ],
     [ "RECONNECTGAP", "common_8h.html#a00a419fbe253e6e9cb4d716d02d0b2b7", null ],
     [ "RXVERSION_MAJOR", "common_8h.html#a2b147d5155fcf962e9f1c4885b32c67d", null ],
     [ "RXVERSION_MINIMUS", "common_8h.html#a46d5105ccf92f7e44b10af6fd51772a8", null ],
@@ -31,5 +30,6 @@ var common_8h =
     [ "FailSafeSent", "common_8h.html#a97bbae82012a7c41f47dcb8ce8a48a90", null ],
     [ "FHSS_Channels", "common_8h.html#a79ed13ac413de8a0a1767615afccbe2f", null ],
     [ "INA219_CONNECTED", "common_8h.html#a8d0889feaf5beb5db1e50a266ea7b0a5", null ],
-    [ "LastPacketArrivalTime", "common_8h.html#a9ac62185b964d18f5843146fce5b0063", null ]
+    [ "LastPacketArrivalTime", "common_8h.html#a9ac62185b964d18f5843146fce5b0063", null ],
+    [ "Reconnect_Channels", "common_8h.html#a1483ff2c39a7f6383bec5125355a35de", null ]
 ];

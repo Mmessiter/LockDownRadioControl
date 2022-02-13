@@ -45,7 +45,7 @@ var searchData=
   ['recentpacketslost_42',['RecentPacketsLost',['../_transmitter_code_2src_2main_8cpp.html#abf6b6613bda2b08b3e07a231a23f38c2',1,'RecentPacketsLost():&#160;main.cpp'],['../_radio_functions_8h.html#abf6b6613bda2b08b3e07a231a23f38c2',1,'RecentPacketsLost():&#160;main.cpp']]],
   ['recievercode_43',['RecieverCode',['../_r_x_c_o_d_e.html',1,'']]],
   ['reconnect_44',['Reconnect',['../radio_8h.html#a692b8b0727e0db358f99c7bf4e8235c0',1,'radio.h']]],
-  ['reconnect_5fch_45',['RECONNECT_CH',['../common_8h.html#ad3c239265016482b6850360b3dc51a50',1,'RECONNECT_CH():&#160;common.h'],['../_radio_functions_8h.html#ad3c239265016482b6850360b3dc51a50',1,'RECONNECT_CH():&#160;RadioFunctions.h']]],
+  ['reconnect_5fchannels_45',['Reconnect_Channels',['../common_8h.html#a1483ff2c39a7f6383bec5125355a35de',1,'Reconnect_Channels():&#160;common.h'],['../_radio_functions_8h.html#ac4f6842e2fef7a8eb0da5b798192754d',1,'Reconnect_Channels():&#160;common.h'],['../_transmitter_code_2src_2main_8cpp.html#a1483ff2c39a7f6383bec5125355a35de',1,'Reconnect_Channels():&#160;main.cpp']]],
   ['reconnectedmoment_46',['ReconnectedMoment',['../radio_8h.html#ae6657a547a79d8e304b8ddeb3f6a38e0',1,'ReconnectedMoment():&#160;main.cpp'],['../_receiver_code_2src_2main_8cpp.html#ae6657a547a79d8e304b8ddeb3f6a38e0',1,'ReconnectedMoment():&#160;main.cpp']]],
   ['reconnectgap_47',['RECONNECTGAP',['../common_8h.html#a00a419fbe253e6e9cb4d716d02d0b2b7',1,'common.h']]],
   ['reconnectingflag_48',['ReconnectingFlag',['../_transmitter_code_2src_2main_8cpp.html#a1502d75a5bafae6f9508fbe1f34e5bf0',1,'main.cpp']]],
