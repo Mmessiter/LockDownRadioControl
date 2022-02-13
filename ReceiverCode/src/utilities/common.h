@@ -47,6 +47,7 @@
     #define pinCSN2                     20   // NRF2
     #define pinCE2                      21   // NRF2
     #define FAILSAFE_TIMEOUT            2000 // two seconds until failsafe
+    #define RECONNECT_CHANNELS_COUNT    9
 
     // #define DEBUG         // for FHSS
     // #define DB_SENSORS
@@ -59,7 +60,9 @@ bool FailSafeSent               = false;
 bool INA219_CONNECTED           = false;                   //  Volts from INA219 ?
 
 
-uint8_t Reconnect_Channels[6] = {83, 2, 75, 18, 80, 11};
+ uint8_t Reconnect_Channels[RECONNECT_CHANNELS_COUNT] = {83, 2, 75, 18, 80, 11, 70, 14 ,42};
+
+
 
 uint8_t FHSS_Channels[84] = {28, 24, 61, 64, 28, 55, 66, 19, 76, 21, 59, 67, 15, 71, 82, 32, 49, 69, 13, 2, 34, 47, 20, 34, 69, 
                              16, 2, 72, 35, 76, 35, 57, 45, 29, 76, 75, 49, 59, 3, 57, 20, 16, 41, 59, 62, 59, 67, 11, 3, 9, 77, 

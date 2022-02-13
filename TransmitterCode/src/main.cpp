@@ -494,9 +494,7 @@ uint32_t BlinkTimer    = 0;
 uint8_t  BlinkOnPhase  = 1;
 bool     LedWasGreen   = false;
 char     ThisRadio[4]  = "0 ";
-
 uint8_t NextFrequency   = 0;
-uint8_t ThisFrequency   = 0;
 bool    DoSbusSendOnly  = false;
 bool    BuddyMaster     = false;
 bool    SlaveHasControl = false;
@@ -505,7 +503,9 @@ uint16_t ModelNumberOffset = 0;
 uint32_t ModelNameTimeCheck = 0;
 uint16_t LastModelLoaded    = 0;
 
-uint8_t Reconnect_Channels[6] = {83, 2, 75, 18, 80, 11};
+
+uint8_t Reconnect_Channels[RECONNECT_CHANNELS_COUNT] = {83, 2, 75, 18, 80, 11, 70, 14 ,42};
+
 uint8_t FHSS_Channels[84] = {28, 24, 61, 64, 28, 55, 66, 19, 76, 21, 59, 67, 15, 71, 82, 32, 49, 69, 13, 2, 34, 47, 20,
                              34, 69, 16, 2, 72, 35, 76, 35, 57, 45, 29, 76, 75, 49, 59, 3, 57, 20, 16, 41, 59, 62, 59,
                              67, 11, 3, 9, 77, 37, 8, 31, 36, 34, 18, 75, 17, 9, 50, 78, 77, 73, 30, 50, 79, 6, 36,

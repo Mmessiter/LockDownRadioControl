@@ -103,7 +103,12 @@ void BufferNewPipe()
 void SendData()
 {
     if (Nextion.available()) return;               // was a button pressed?
-    if (millis() - TxPace <= 2) ShowComms();       // This call takes <2  ms, so there is time to fit in the call because there are about 5 ms spare still.
+    if (millis() - TxPace <= 2) {
+    ShowComms();                                   // there is time to fit in these calls because there are about 5 ms spare still. ONLY WHEN CONNECTED
+    ReadSwitches();                                // Check switch positions
+    CheckTimer();  
+     if ((millis() - TxPace)>4) Serial.println (millis() - TxPace); // this never exceeds 5 ms !
+    }
     if ((millis() - TxPace) >= PACEMAKER) {
         TxPace = millis();
         get_new_channels_values();                // Load SendBuffer with new servo positions
@@ -127,7 +132,10 @@ void SendData()
                 TryOtherPipe();
                 PipeTimeout = millis();
             }
-            NextFrequency = Reconnect_Channels[random(7)];       // a **random** reconnect channel 
+            NextFrequency = Reconnect_Channels[random(RECONNECT_CHANNELS_COUNT)];       // a **random** reconnect channel 
+            ShowComms();         // NEEDED WHEN NOT CONNECTED                        
+            ReadSwitches();                                
+            CheckTimer();  
             HopToNextFrequency();
         }
         Connected = false;
@@ -214,9 +222,9 @@ void ScanAllChannels()
 void HopToNextFrequency()
 {
     Radio1.setChannel(NextFrequency);  // Hop !
-    Radio1.stopListening();            // Transmit only (no need for a delay() as this is here followed by housekeeping tasks)
-    ReadSwitches();                    // Check switch positions
-    CheckTimer();                      // update on-screen timer
+    Radio1.stopListening();            // Transmit only (no need for a delay() as this is here followed by several tasks)
+    PacketNumber  = 0;
+
 #ifdef DB_FHSS
     PEndTime  = millis();
     Pduration = (PEndTime - PStartTime) / 1000;
@@ -232,8 +240,6 @@ void HopToNextFrequency()
     Serial.println(ThisRadio);
     PStartTime = millis();
 #endif
-    ThisFrequency = NextFrequency;
-    PacketNumber  = 0;
 }
 
 /*********************************************************************************************************************************/
