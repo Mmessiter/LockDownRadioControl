@@ -582,6 +582,8 @@ void setup()
     GetOldPipe();
     BootupMoment = millis();
     digitalWrite(LED_PIN, LOW);
+    ReConPointer  = &Reconnect_Channels[0];
+    FHSSChPointer = &FHSS_Channels[0];
 }
 /************************************************************************************************************/
 // LOOP

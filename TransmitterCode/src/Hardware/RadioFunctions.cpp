@@ -130,9 +130,9 @@ void SendData()
             if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {
                 TryOtherPipe();
                 PipeTimeout = millis();
-            }
-            NextFrequency = Reconnect_Channels[random(RECONNECT_CHANNELS_COUNT)];       // a **random** reconnect channel 
-            ShowComms();         // NEEDED WHEN NOT CONNECTED                        
+            }     
+            NextFrequency = * (ReConPointer + random(RECONNECT_CHANNELS_COUNT));    // a **random** reconnect channel 
+            ShowComms();                       // NEEDED WHEN NOT CONNECTED                        
             ReadSwitches();                                
             CheckTimer();  
             HopToNextFrequency();

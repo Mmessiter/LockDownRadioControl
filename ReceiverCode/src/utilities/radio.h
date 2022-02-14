@@ -16,6 +16,7 @@ uint8_t         SavedPipeAddress[8];
 uint32_t        HopStart;
 uint8_t         NextChannelNumber = 0;
 bool            HopNow = false;
+uint8_t         ReconnectIndex = 0;
 extern void     ShowHopDurationEtc();
 extern void     ReadSensorHub();
 extern uint16_t BaroAltitude;
@@ -148,7 +149,7 @@ void GetOldPipe()
 
 void GetNextFrequency()
 {
-    NextFrequency = FHSS_Channels[NextChannelNumber];
+    NextFrequency =  * (FHSSChPointer + NextChannelNumber);
 }
 
 /************************************************************************************************************/
@@ -221,7 +222,9 @@ void Reconnect(){
     while (!Connected) {
         CurrentRadio->stopListening();
         delay(1);
-        ReconnectChannel = Reconnect_Channels[random(RECONNECT_CHANNELS_COUNT)];   // Get a *random* reconnect channel - not always the same one - one of 9.
+        ++ReconnectIndex;
+        if (ReconnectIndex >= RECONNECT_CHANNELS_COUNT) ReconnectIndex = 0;               
+        ReconnectChannel = * (ReConPointer + ReconnectIndex);                     // Get a reconnect channel - not always the same one - one of 5 now.
         CurrentRadio->setChannel(ReconnectChannel);  
         CurrentRadio->startListening();
         ListenALittle(START_LISTEN_PERIOD);

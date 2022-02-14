@@ -504,7 +504,10 @@ uint32_t ModelNameTimeCheck = 0;
 uint16_t LastModelLoaded    = 0;
 
 
-uint8_t Reconnect_Channels[RECONNECT_CHANNELS_COUNT] = {83, 2, 75, 18, 80, 11, 70, 14 ,42};
+uint8_t * ReConPointer;                                                                                   // pointer for recovery channels array
+uint8_t * FHSSChPointer;                                                                                  // pointer for main channels array
+
+uint8_t Reconnect_Channels[RECONNECT_CHANNELS_COUNT] = {83, 2, 75, 18, 80};
 
 uint8_t FHSS_Channels[84] = {28, 24, 61, 64, 28, 55, 66, 19, 76, 21, 59, 67, 15, 71, 82, 32, 49, 69, 13, 2, 34, 47, 20,
                              34, 69, 16, 2, 72, 35, 76, 35, 57, 45, 29, 76, 75, 49, 59, 3, 57, 20, 16, 41, 59, 62, 59,
@@ -2637,6 +2640,14 @@ void SetDS1307ToCompilerTime()
 
 /************************************************************************************************************/
 
+void SetUKFrequencies(){
+    
+    ReConPointer  = &Reconnect_Channels[0];   // Point to arrays of channels that are OK to use in the UK
+    FHSSChPointer = &FHSS_Channels[0]; 
+}
+
+/************************************************************************************************************/
+
 void GetTXVersionNumber()
 {
     char    nbuf[5];
@@ -2719,6 +2730,7 @@ void setup()
     SizeOfCompressedData = sizeof(CompressedData);
     GetTXVersionNumber();
     MySbus.begin();
+    SetUKFrequencies();
 }
 
 /*********************************************************************************************************************************/
@@ -5532,7 +5544,7 @@ void GetNextHopChannelNumber()
         if (NextChannelNumber >= FREQUENCYSCOUNT) NextChannelNumber = 1; // wrap to 1, not zero which means error
     }
     PreviousChannelNumber = NextChannelNumber;
-    NextFrequency         = FHSS_Channels[NextChannelNumber];             // heer!
+    NextFrequency         =  * (FHSSChPointer + NextChannelNumber);
 }
 
 /************************************************************************************************************/
