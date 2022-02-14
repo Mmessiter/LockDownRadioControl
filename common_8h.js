@@ -1,6 +1,7 @@
 var common_8h =
 [
     [ "CHANNELSUSED", "common_8h.html#ad143c01c2b36424b292b568f48cbe014", null ],
+    [ "DB_SENSORS", "common_8h.html#a8f4f1ebcda33e1f49537d5359517842f", null ],
     [ "FAILSAFE_TIMEOUT", "common_8h.html#a0634ad724c86cd2b4ac7cfebbb622a9c", null ],
     [ "FREQUENCYSCOUNT", "common_8h.html#afe5bce36baf737bd284d43cd0e805fdb", null ],
     [ "FREQUENCYSCOUNT1", "common_8h.html#a71a3cc3c3b499cb9329172835e5a1df8", null ],
@@ -24,7 +25,6 @@ var common_8h =
     [ "RXVERSION_MINOR", "common_8h.html#adeb76229aa4087c3bc1e1fd17bd865b2", null ],
     [ "SBUSPORT", "common_8h.html#aa82f9d8a298740acdbaa5c78a9e9f50c", null ],
     [ "SBUSRATE", "common_8h.html#a39848a06498c1e6444c458f25542b252", null ],
-    [ "SECOND_TRANSCEIVER", "common_8h.html#a2894a289b91f0bc795407decb6e4c39d", null ],
     [ "SENSOR_HUB_I2C_ADDRESS", "common_8h.html#a07a2f33887ffa40ffbc3b895fcfc1999", null ],
     [ "SERVOSUSED", "common_8h.html#ab1515f8a159ef919c7afb5a1d71f55a3", null ],
     [ "START_LISTEN_PERIOD", "common_8h.html#a22b5ab9c1ef39cc9365d6773fe535aba", null ],
