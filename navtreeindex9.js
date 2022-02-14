@@ -1,7 +1,5 @@
 var NAVTREEINDEX9 =
 {
-"globals_enum.html":[12,1,4],
-"globals_eval.html":[12,1,5,0],
 "globals_eval.html":[12,1,5],
 "globals_eval_b.html":[12,1,5,1],
 "globals_eval_i.html":[12,1,5,2],
@@ -249,5 +247,7 @@ var NAVTREEINDEX9 =
 "struct_tiny_g_p_s_date.html":[11,0,22],
 "struct_tiny_g_p_s_date.html#a1b913837130bb49ecd309eaf6bc205b1":[11,0,22,10],
 "struct_tiny_g_p_s_date.html#a1b913837130bb49ecd309eaf6bc205b1":[11,0,22,9],
-"struct_tiny_g_p_s_date.html#a1b913837130bb49ecd309eaf6bc205b1":[11,0,22,11]
+"struct_tiny_g_p_s_date.html#a1b913837130bb49ecd309eaf6bc205b1":[11,0,22,11],
+"struct_tiny_g_p_s_date.html#a2bcf8d5290fbef8c44b415e281b8c6f2":[11,0,22,24],
+"struct_tiny_g_p_s_date.html#a3ae7825f840ef4ba0ecddbc22f741817":[11,0,22,14]
 };

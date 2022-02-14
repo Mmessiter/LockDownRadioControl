@@ -32,7 +32,6 @@ var _radio_functions_8h =
     [ "DoScanInit", "_radio_functions_8h.html#a77c4a4ffa609df08830ccece07bf283b", null ],
     [ "FailedPacket", "_radio_functions_8h.html#a783a0141bea15d8539730afd4b3b06a3", null ],
     [ "get_new_channels_values", "_radio_functions_8h.html#a59e4c37585e1187976dd5342ec883aef", null ],
-    [ "GetNextHopChannelNumber", "_radio_functions_8h.html#ac352f1ace4062c07baf98c19a979153c", null ],
     [ "GetSlaveChannelValues", "_radio_functions_8h.html#a4635a8fc77c9f57fca53a5206cd5e571", null ],
     [ "GreenLedOn", "_radio_functions_8h.html#a62e53eb9359c32b666e3386d62c57037", null ],
     [ "HopToNextFrequency", "_radio_functions_8h.html#aa48ea4c5d47aa93d17dbc7d7b19238d8", null ],

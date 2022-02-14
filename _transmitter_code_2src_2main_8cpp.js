@@ -139,7 +139,6 @@ var _transmitter_code_2src_2main_8cpp =
     [ "GetDotPositions", "_transmitter_code_2src_2main_8cpp.html#a9faf4d94aad5656651bf8719d901fa06", null ],
     [ "GetFlightMode", "_transmitter_code_2src_2main_8cpp.html#adf35f0ced7990f813a783d0ecd33bf64", null ],
     [ "GetFromAckPayload", "_transmitter_code_2src_2main_8cpp.html#a152eb4c62f6b770bc56d10268907b0cb", null ],
-    [ "GetNextHopChannelNumber", "_transmitter_code_2src_2main_8cpp.html#ac352f1ace4062c07baf98c19a979153c", null ],
     [ "GetNextNumber", "_transmitter_code_2src_2main_8cpp.html#a5b456468ac6be5e872b327e0d03a9f7a", null ],
     [ "GetRXVersionNumber", "_transmitter_code_2src_2main_8cpp.html#a4f813935d8fe58355228cbbf25e12f96", null ],
     [ "GetSlaveChannelValues", "_transmitter_code_2src_2main_8cpp.html#a4635a8fc77c9f57fca53a5206cd5e571", null ],
