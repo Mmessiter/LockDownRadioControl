@@ -5879,7 +5879,7 @@ void loop()
     KickTheDog();                    // Watchdog
 
     if (SwapWaveBand > 0) {
-        if (millis() - WaveBandTimer > 1000){
+        if (micros() - WaveBandTimer > 1000){ // ???
           if (SwapWaveBand == 1) SwitchtoUK();
           if (SwapWaveBand == 2) SwitchFromUK(); 
         }         
