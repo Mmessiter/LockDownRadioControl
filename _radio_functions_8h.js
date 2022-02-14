@@ -85,6 +85,7 @@ var _radio_functions_8h =
     [ "RangeTestLostPackets", "_radio_functions_8h.html#a8e396337a72c148bea7bf1856578c140", null ],
     [ "RecentPacketsLost", "_radio_functions_8h.html#abf6b6613bda2b08b3e07a231a23f38c2", null ],
     [ "Reconnect_Channels", "_radio_functions_8h.html#ac4f6842e2fef7a8eb0da5b798192754d", null ],
+    [ "ReConPointer", "_radio_functions_8h.html#ab2f97e0b984ebbe078a33a6ca43dc4d1", null ],
     [ "RecoveryTimer", "_radio_functions_8h.html#ac6156efad98d22f44766714a565ccf2f", null ],
     [ "ScanEnd", "_radio_functions_8h.html#a6fde7bc3d03bda84c33abdbe1ed7b5bf", null ],
     [ "ScanStart", "_radio_functions_8h.html#a40219e66b010dcf762b96491c9e668ec", null ],

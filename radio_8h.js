@@ -55,6 +55,7 @@ var radio_8h =
     [ "PreviousData", "radio_8h.html#a54007b635670b351453013425e7f2814", null ],
     [ "ReceivedData", "radio_8h.html#ae5bff5a2375f932e5653e5d3659330d3", null ],
     [ "ReconnectedMoment", "radio_8h.html#ae6657a547a79d8e304b8ddeb3f6a38e0", null ],
+    [ "ReconnectIndex", "radio_8h.html#a90d98310365e78ee5ec06aaa7a4092f1", null ],
     [ "SatellitesGPS", "radio_8h.html#a7dc81a3982ee72ef15b460b4bbf32818", null ],
     [ "SavedPipeAddress", "radio_8h.html#a3398d00540e610ad35ff3f4f85478833", null ],
     [ "SaveNewBind", "radio_8h.html#a34f8e085f5589c915f292bbf5b0aa513", null ],
