@@ -558,6 +558,22 @@ void DoBinding()
         BindModel();
     }
 }
+
+/************************************************************************************************************/
+
+void SetTestFrequencies(){
+    
+    ReConPointer  = &Reconnect_Channels1[0];   // Point to arrays of channels that are OK to use in the UK
+    FHSSChPointer = &FHSS_Channels1[0]; 
+}
+
+/************************************************************************************************************/
+
+void SetUKFrequencies(){
+    
+    ReConPointer  = &Reconnect_Channels[0];   // Point to arrays of channels that are OK to use in the UK
+    FHSSChPointer = &FHSS_Channels[0]; 
+}
 /************************************************************************************************************/
 // SETUP
 /************************************************************************************************************/
@@ -582,8 +598,9 @@ void setup()
     GetOldPipe();
     BootupMoment = millis();
     digitalWrite(LED_PIN, LOW);
-    ReConPointer  = &Reconnect_Channels[0];
-    FHSSChPointer = &FHSS_Channels[0];
+
+    SetUKFrequencies();
+   
 }
 /************************************************************************************************************/
 // LOOP
