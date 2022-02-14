@@ -244,7 +244,6 @@ void Reconnect(){
                     TryOtherFrequencies();
                     Interations = 0;
                 }
-                Serial.println (Interations);
         } 
         ReconnectChannel = * (ReConPointer + ReconnectIndex);                     // Get a reconnect channel - not always the same one - one of 5 now.
         CurrentRadio->setChannel(ReconnectChannel);  
