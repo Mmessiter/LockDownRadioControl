@@ -138,7 +138,6 @@ extern void  SendCharArray(char* ch0, char* ch1, char* ch2, char* ch3, char* ch4
 extern char* Str(char* s, int n, int comma);
 extern void  get_new_channels_values();
 extern void  LoadPacketData();
-extern void  GetNextHopChannelNumber();
 extern void  GreenLedOn();
 extern void  CheckGapsLength();
 extern void  ParseAckPayload();

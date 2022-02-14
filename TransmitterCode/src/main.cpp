@@ -5537,18 +5537,6 @@ void LoadPacketData()
 
 /************************************************************************************************************/
 
-void GetNextHopChannelNumber()
-{
-    if (NextChannelNumber == 0) {
-        NextChannelNumber = PreviousChannelNumber + 1;                   // if error inc it
-        if (NextChannelNumber >= FREQUENCYSCOUNT) NextChannelNumber = 1; // wrap to 1, not zero which means error
-    }
-    PreviousChannelNumber = NextChannelNumber;
-    NextFrequency         =  * (FHSSChPointer + NextChannelNumber);
-}
-
-/************************************************************************************************************/
-
 void ReadFMSwitch(bool sw1, bool sw2, bool rev)
 {
     if (sw1 == false && sw2 == false) FlightMode = 2;
@@ -5707,8 +5695,8 @@ void ParseAckPayload()
 {
     if (AckPayload.Purpose & 0x80)                       // Hi bit is now the **HOP NOW!!** flag
     {
-        NextChannelNumber   = AckPayload.Byte5;
-        GetNextHopChannelNumber();                       // Also gets actual channel number
+        NextChannelNumber   =  AckPayload.Byte5;
+        NextFrequency       =  * (FHSSChPointer + NextChannelNumber);
         HopToNextFrequency();
         AckPayload.Purpose &= 0x7f;
     }    
