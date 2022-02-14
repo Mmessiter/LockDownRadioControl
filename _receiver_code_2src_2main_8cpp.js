@@ -25,6 +25,8 @@ var _receiver_code_2src_2main_8cpp =
     [ "SendQnhToSensorHub", "_receiver_code_2src_2main_8cpp.html#af2b1ba43295661243b7bb78004d470d8", null ],
     [ "SendToSensorHub", "_receiver_code_2src_2main_8cpp.html#a3f80da71956ba53fcff126bfe2296e65", null ],
     [ "SensorHubHasFailed", "_receiver_code_2src_2main_8cpp.html#ad8b70060a07f5323c3e1011dd6b1dd6f", null ],
+    [ "SetTestFrequencies", "_receiver_code_2src_2main_8cpp.html#a31a35307bbac88ceda244272f25d399a", null ],
+    [ "SetUKFrequencies", "_receiver_code_2src_2main_8cpp.html#a2eabdb233653fa02f0b899e26b5e8ce7", null ],
     [ "setup", "_receiver_code_2src_2main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d", null ],
     [ "UseReceivedData", "_receiver_code_2src_2main_8cpp.html#abb1997c589abc6432f612eaedf985e38", null ],
     [ "AltitudeGPS", "_receiver_code_2src_2main_8cpp.html#a9690c7445dbd0530fa729af6bac11044", null ],

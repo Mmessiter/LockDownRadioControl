@@ -1,5 +1,12 @@
 var NAVTREEINDEX10 =
 {
+"struct_tiny_g_p_s_course.html#a76dc8ae6c2fe5ead9b44c8d53a3272ca":[11,0,20,2],
+"struct_tiny_g_p_s_date.html":[11,0,22],
+"struct_tiny_g_p_s_date.html#a1b913837130bb49ecd309eaf6bc205b1":[11,0,22,10],
+"struct_tiny_g_p_s_date.html#a1b913837130bb49ecd309eaf6bc205b1":[11,0,22,9],
+"struct_tiny_g_p_s_date.html#a1b913837130bb49ecd309eaf6bc205b1":[11,0,22,11],
+"struct_tiny_g_p_s_date.html#a2bcf8d5290fbef8c44b415e281b8c6f2":[11,0,22,24],
+"struct_tiny_g_p_s_date.html#a3ae7825f840ef4ba0ecddbc22f741817":[11,0,22,14],
 "struct_tiny_g_p_s_date.html#a3ae7825f840ef4ba0ecddbc22f741817":[11,0,22,13],
 "struct_tiny_g_p_s_date.html#a3ae7825f840ef4ba0ecddbc22f741817":[11,0,22,12],
 "struct_tiny_g_p_s_date.html#a4d5f23eb008cbfd385343687bf902003":[11,0,22,0],

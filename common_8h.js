@@ -29,10 +29,12 @@ var common_8h =
     [ "START_LISTEN_PERIOD", "common_8h.html#a22b5ab9c1ef39cc9365d6773fe535aba", null ],
     [ "FailSafeSave", "common_8h.html#a332eaa61dd85cd649cf62de2345e246e", null ],
     [ "FailSafeSent", "common_8h.html#a97bbae82012a7c41f47dcb8ce8a48a90", null ],
-    [ "FHSS_Channels", "common_8h.html#a79ed13ac413de8a0a1767615afccbe2f", null ],
+    [ "FHSS_Channels", "common_8h.html#ad8056611eb984e8cacf9f0e526815a99", null ],
+    [ "FHSS_Channels1", "common_8h.html#aeea38114c49f6b6dbe375b7a64acdccb", null ],
     [ "FHSSChPointer", "common_8h.html#a76b48a1dfbe2bd97ee5e0479ff16e8ef", null ],
     [ "INA219_CONNECTED", "common_8h.html#a8d0889feaf5beb5db1e50a266ea7b0a5", null ],
     [ "LastPacketArrivalTime", "common_8h.html#a9ac62185b964d18f5843146fce5b0063", null ],
     [ "Reconnect_Channels", "common_8h.html#a56c0ced13b1134bb2ce891a6553fa70a", null ],
+    [ "Reconnect_Channels1", "common_8h.html#ac38323d76e7fcd55b9a2e5ce786c4132", null ],
     [ "ReConPointer", "common_8h.html#ab2f97e0b984ebbe078a33a6ca43dc4d1", null ]
 ];
