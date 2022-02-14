@@ -8,5 +8,6 @@ var searchData=
   ['inactivity_5ftimeout_5',['Inactivity_Timeout',['../_transmitter_code_2src_2main_8cpp.html#ae99f193f5a3e06508bbe4b32ee91a963',1,'main.cpp']]],
   ['inhibitnamecheck_6',['InhibitNameCheck',['../_transmitter_code_2src_2main_8cpp.html#aff92977de1d532b82ebb3650a790f099',1,'main.cpp']]],
   ['inputstick_7',['InPutStick',['../_transmitter_code_2src_2main_8cpp.html#ab9d98ee9d26a1af8f20291fd0b717056',1,'main.cpp']]],
-  ['interpolationtypes_8',['InterpolationTypes',['../_transmitter_code_2src_2main_8cpp.html#a1f7d844f7fbac889b01f7ce3e6eeab9a',1,'main.cpp']]]
+  ['interations_8',['Interations',['../radio_8h.html#ac8e10a08e9da70138c4a8459c6902d7d',1,'radio.h']]],
+  ['interpolationtypes_9',['InterpolationTypes',['../_transmitter_code_2src_2main_8cpp.html#a1f7d844f7fbac889b01f7ce3e6eeab9a',1,'main.cpp']]]
 ];
