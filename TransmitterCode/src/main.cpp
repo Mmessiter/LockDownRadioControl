@@ -533,6 +533,8 @@ int     DeltaGMT        = 0;
 uint32_t HelpTimer = 0;
 uint8_t  HelpCounter = 0;
 bool     UkRules = true;
+uint32_t WaveBandTimer = 0;
+uint8_t  SwapWaveBand = 0;  
 
 
 /************************************************************************************************************/
@@ -2984,16 +2986,16 @@ void ReadHelpFile(char* fname, char* htext)
     fnumber.close();
 }
 /************************************************************************************************************/
-void TryOtherFrequencies(){
-  if (!UkRules){
+void SwitchtoUK(){
             ReConPointer  = &Reconnect_Channels[0];   // Point to arrays of channels that are OK to use in the UK
             FHSSChPointer = &FHSS_Channels[0]; 
-            UkRules = true;
-            } else {
-            ReConPointer  = &Reconnect_Channels1[0];   // Point to the other arrays
+            UkRules = true;     
+}
+/************************************************************************************************************/
+void SwitchFromUK(){
+            ReConPointer  = &Reconnect_Channels1[0];   // Point to arrays of channels that are KO to use in the UK
             FHSSChPointer = &FHSS_Channels1[0]; 
-            UkRules = false;
-            }
+            UkRules = false;     
 }
 /*********************************************************************************************************************************/
 void SendHelp()
@@ -3014,8 +3016,15 @@ void SendHelp()
     ++ HelpCounter;
     if (HelpCounter == 1) HelpTimer = millis();
     if (HelpCounter == 3 ) {
-            if ((millis() - HelpTimer) < 20000){    // heer (Help summoned three times in under 20 seconds)
-                  TryOtherFrequencies();            // :-)
+            if ((millis() - HelpTimer) < 20000){    // heer 
+                 WaveBandTimer = millis(); // start timer
+                 if (!UkRules){
+                    SwapWaveBand  = 1;
+                    UkRules = true;
+                 }else{
+                    SwapWaveBand  = 2;
+                    UkRules = false;
+                 }  
             }
             HelpCounter = 0 ;
     }
@@ -5573,6 +5582,11 @@ void LoadPacketData()
                 GPSMarkHere = 0;
             }
             break;
+        case 4: 
+                SendBuffer[CHANNELSUSED + 1] = 0;
+                SendBuffer[CHANNELSUSED + 2] = SwapWaveBand;
+                SwapWaveBand = 0;
+            break;
 
         default:
             break;
@@ -5863,6 +5877,14 @@ char ModelsView_ModelNumber[]  = "ModelNumber";
 void loop()
 {
     KickTheDog();                    // Watchdog
+
+    if (SwapWaveBand > 0) {
+        if (micros() - WaveBandTimer > 2000){
+          if (SwapWaveBand == 1) SwitchtoUK();
+          if (SwapWaveBand == 2) SwitchFromUK(); 
+        }         
+    }
+
     if (GetButtonPress()) {
         Button_was_pressed();        // Deal with button
     }

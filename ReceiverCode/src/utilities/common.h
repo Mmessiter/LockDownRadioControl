@@ -51,7 +51,7 @@
     #define RECONNECT_CHANNELS_COUNT    5
 
     // #define DEBUG         // for FHSS
-    #define DB_SENSORS
+    // #define DB_SENSORS
     // #define DB_BIND
     // #define DB_FAILSAFE
 

@@ -151,7 +151,7 @@ void FailSafe()
  * Print out some debugging information about the channel hopping implementation
  * @param freq The next frequency to be used.
  */
-void fShowHopDurationEtc()
+void ShowHopDurationEtc()
 {
     uint8_t OnePacketTime = (millis() - PacketStartTime) / PacketNumber;
     Serial.print("Hop duration: ");
@@ -274,6 +274,19 @@ void SendQnhToSensorHub(){
         QNH[5] = Uqnh.Val8[1];  
         SendToSensorHub(QNH);   
 }
+
+/************************************************************************************************************/
+void SwitchToUK(){
+            ReConPointer  = &Reconnect_Channels[0];   // Point to arrays of channels that are OK to use in the UK
+            FHSSChPointer = &FHSS_Channels[0]; 
+            FrequencyCount = FREQUENCYSCOUNT;
+}
+/************************************************************************************************************/
+void SwitchFromUK(){
+            ReConPointer  = &Reconnect_Channels1[0];   // Point to the other arrays
+            FHSSChPointer = &FHSS_Channels1[0]; 
+            FrequencyCount = FREQUENCYSCOUNT1;
+            }
 /************************************************************************************************************/
 /**
  * extra parameters can be sent using the last four bytes in every data packet.
@@ -283,7 +296,9 @@ void SendQnhToSensorHub(){
  * It's 50ms right now, which gives about 7 packets between hops.
  */
 void CheckParams()
-{ uint16_t TwoBytes = 0;      
+{ uint16_t TwoBytes = 0; 
+  uint8_t SwapWaveBand;
+       
     PacketNumber = ReceivedData[CHANNELSUSED];     
   
     switch (PacketNumber) {     
@@ -311,6 +326,12 @@ void CheckParams()
                     ReceivedData[CHANNELSUSED + 2] = 0;             // ... Once only
                 }
                 break;
+         case 4:
+               SwapWaveBand =  ReceivedData[CHANNELSUSED + 2] ;
+               if (SwapWaveBand > 0 ) {
+                    if (SwapWaveBand == 1) SwitchToUK();
+                    if (SwapWaveBand == 2) SwitchFromUK();
+               } 
         default:
                 break;
     }
@@ -602,7 +623,7 @@ void setup()
     digitalWrite(LED_PIN, LOW);
 
     SetUKFrequencies();
-   // SetTestFrequencies();
+   
 
    
 }

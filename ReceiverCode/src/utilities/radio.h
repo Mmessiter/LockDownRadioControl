@@ -214,20 +214,6 @@ void ProdRadio(uint8_t Recon_Ch)
 
 /************************************************************************************************************/
 
-void TryOtherFrequencies(){
- 
-  if (FrequencyCount == FREQUENCYSCOUNT1){
-            ReConPointer  = &Reconnect_Channels[0];   // Point to arrays of channels that are OK to use in the UK
-            FHSSChPointer = &FHSS_Channels[0]; 
-            FrequencyCount = FREQUENCYSCOUNT;
-            } else {
-            ReConPointer  = &Reconnect_Channels1[0];   // Point to the other arrays
-            FHSSChPointer = &FHSS_Channels1[0]; 
-            FrequencyCount = FREQUENCYSCOUNT1;
-            }
-}
-/************************************************************************************************************/
-
 void Reconnect(){
     uint32_t SearchStartTime    = 0;
     uint8_t ReconnectChannel;
@@ -236,15 +222,6 @@ void Reconnect(){
     while (!Connected) {
         CurrentRadio->stopListening();
         delay(1);
-        ++ReconnectIndex;
-        if (ReconnectIndex >= RECONNECT_CHANNELS_COUNT) {
-                ReconnectIndex = 0; 
-                ++Interations;
-                if (Interations > 10) {
-                    TryOtherFrequencies();
-                    Interations = 0;
-                }
-        } 
         ReconnectChannel = * (ReConPointer + ReconnectIndex);                     // Get a reconnect channel - not always the same one - one of 5 now.
         CurrentRadio->setChannel(ReconnectChannel);  
         CurrentRadio->startListening();
