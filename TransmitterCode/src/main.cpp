@@ -455,6 +455,7 @@ float    success              = 0; // percent of packets that  succeed
 uint8_t  SaveFlightMode       = 0;
 bool     FailSafeChannel[CHANNELSUSED];
 bool     SaveFailSafeNow                = false;
+uint32_t FailSafeTimer;
 char     ChannelNames[CHANNELSUSED][11] = {{"Aileron"}, {"Elevator"}, {"Throttle"}, {"Rudder"}, {"Gear"}, {"AUX1"}, {"AUX2"}, {"AUX3"}, {"AUX4"}, {"AUX5"}, {"AUX6"}, {"AUX7"}, {"AUX8"}, {"AUX9"}, {"AUX10"}, {"AUX11"}};
 
 bool VoltsDetected = false;
@@ -529,6 +530,9 @@ uint8_t Gmonth;   // = tm.Month;  // 1-12
 uint8_t Gyear;    // = tm.Year;   // 0-99
 bool    GPSTimeSynched  =   false;
 int     DeltaGMT        = 0;
+uint32_t HelpTimer = 0;
+uint8_t  HelpCounter = 0;
+bool     UkRules = true;
 
 
 /************************************************************************************************************/
@@ -973,7 +977,8 @@ void ReadTime()
     char NB[10];
     char TimeString[50];
     char Space[] = " ";
-    char colon[] = ":";
+    char colon[]  = ":";
+    char colon1[] = ".";
     char zero[]  = "0";
 
     char Owner[] = "Owner";
@@ -1004,10 +1009,15 @@ void ReadTime()
             strcat(TimeString, Space);
             if (MayBeAddZero(tm.Hour)) strcat(TimeString, zero);
             strcat(TimeString, Str(NB, tm.Hour+DeltaGMT, 0));
-            strcat(TimeString, colon);
+            
+            if (UkRules) strcat(TimeString, colon);
+            if (!UkRules) strcat(TimeString, colon1);
+
             if (MayBeAddZero(tm.Minute)) strcat(TimeString, zero);
             strcat(TimeString, Str(NB, tm.Minute, 0));
-            strcat(TimeString, colon);
+
+             if (UkRules)strcat(TimeString, colon);
+            if (!UkRules) strcat(TimeString, colon1);
             if (MayBeAddZero(tm.Second)) strcat(TimeString, zero);
             strcat(TimeString, Str(NB, tm.Second, 0));
             SendText(DateTime, TimeString);
@@ -2744,9 +2754,8 @@ void setup()
     SizeOfCompressedData = sizeof(CompressedData);
     GetTXVersionNumber();
     MySbus.begin();
-    SetUKFrequencies();
+    SetUKFrequencies(); 
 }
-
 /*********************************************************************************************************************************/
 
 void GetStatistics()
@@ -2977,6 +2986,21 @@ void ReadHelpFile(char* fname, char* htext)
     fnumber.close();
 }
 
+/************************************************************************************************************/
+
+void TryOtherFrequencies(){
+ 
+  if (!UkRules){
+            ReConPointer  = &Reconnect_Channels[0];   // Point to arrays of channels that are OK to use in the UK
+            FHSSChPointer = &FHSS_Channels[0]; 
+            UkRules = true;
+            } else {
+            ReConPointer  = &Reconnect_Channels1[0];   // Point to the other arrays
+            FHSSChPointer = &FHSS_Channels1[0]; 
+            UkRules = false;
+            }
+}
+
 /*********************************************************************************************************************************/
 
 void SendHelp()
@@ -2984,7 +3008,7 @@ void SendHelp()
     char HelpView[] = "HelpView.HelpText";
     char HelpFile[20];
     char HelpText[MAXFILELEN + 10]; // MAX = 1200
-    i     = 9;
+    i = 9;
     int j = 0;
     while (WordsIn[i] != 0 && j < 19) {
         HelpFile[j] = WordsIn[i];
@@ -2994,6 +3018,15 @@ void SendHelp()
     }
     ReadHelpFile(HelpFile, HelpText);
     SendText1(HelpView, HelpText);
+    
+    ++ HelpCounter;
+    if (HelpCounter == 1) HelpTimer = millis();
+    if (HelpCounter == 3 ) {
+            if ((millis() - HelpTimer) < 20000){    // heer
+                  TryOtherFrequencies();            // :-)
+            }
+            HelpCounter = 0 ;
+    }
 }
 
 /*********************************************************************************************************************************/
@@ -4581,9 +4614,10 @@ void Button_was_pressed()
             FailSafeChannel[14] = GetValue(fs15);
             FailSafeChannel[15] = GetValue(fs16);
             SaveOneModel(ModelNumber);
-            SaveFailSafeNow = true;
-            SendCommand(ProgressEnd);
+          //  SendCommand(ProgressEnd);
             ClearText();
+            FailSafeTimer= millis();
+            SaveFailSafeNow = true;
             return;
         }
         if (InStrng(FailSafe, WordsIn) > 0) {
@@ -5512,6 +5546,7 @@ void LoadPacketData()
     uint16_t Twobytes = 0; // Extra data can be send using the last four bytes of each data packet. These are defined by the packet number
     uint8_t  FS_Byte1;
     uint8_t  FS_Byte2;
+    char ProgressEnd[]                         = "vis Progress,0";
     SendBuffer[CHANNELSUSED] = PacketNumber;  
     Twobytes = MakeTwobytes(FailSafeChannel); // 16 bool values compressed to 16 bits
     FS_Byte1 = uint8_t(Twobytes >> 8);        // sent as two bytes
@@ -5525,8 +5560,13 @@ void LoadPacketData()
                 BindingTimer = millis(); // start a timer
                 BindingNow   = 2;
             }
-            SendBuffer[CHANNELSUSED + 1] = SaveFailSafeNow; // FailSafeSaveMoment
-            SaveFailSafeNow    = false;                     // once should do it.
+            
+            if (((millis() - FailSafeTimer) > 1500) && SaveFailSafeNow) {
+                    SendBuffer[CHANNELSUSED + 1] = SaveFailSafeNow; // FailSafeSaveMoment
+                    SaveFailSafeNow    = false;                     // once should do it.
+                    SendCommand(ProgressEnd);
+            }
+            
             break;
         case 1:
              SendBuffer[CHANNELSUSED + 1] = FS_Byte2;      // these are failsafe flags

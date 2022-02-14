@@ -31,6 +31,7 @@
     #define LISTEN_PERIOD               5    // ms to listen for TX in Reconnect() before SUBSEQUENT switching over to try the other transceiver
     #define PROD_LISTEN_PERIOD          1    // ms to listen for TX in Reconnect() after radio prod
     #define FREQUENCYSCOUNT             82   // use 82 different channels
+    #define FREQUENCYSCOUNT1            41   // use 41 different channels
     #define RECEIVE_TIMEOUT             25   // 25 milliseconds seems an optimal value
     #define CHANNELSUSED                16
     #define SERVOSUSED                  9    // All 16 are available via SBUS
@@ -62,7 +63,7 @@ bool INA219_CONNECTED           = false;                   //  Volts from INA219
 uint8_t * ReConPointer;                                                                                    // pointer for recovery channels array
 uint8_t * FHSSChPointer;                                                                                   // pointer for FHSS channels
 
-
+uint8_t FrequencyCount = FREQUENCYSCOUNT;
 uint8_t Reconnect_Channels[RECONNECT_CHANNELS_COUNT] = {83, 2, 75, 18, 80};                                // recovery channels (UK legal)
 uint8_t FHSS_Channels[83] = {51,28,24,61,64,55,66,19,76,21,59,67,15,71,82,32,49,69,13,2,34,47,20,16,72,
 35,57,45,29,75,3,41,62,11,9,77,37,8,31,36,18,17,50,78,73,30,79,6,23,40,

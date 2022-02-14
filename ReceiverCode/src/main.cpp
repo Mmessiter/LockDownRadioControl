@@ -565,6 +565,7 @@ void SetTestFrequencies(){
     
     ReConPointer  = &Reconnect_Channels1[0];   // Point to arrays of channels that are OK to use in the UK
     FHSSChPointer = &FHSS_Channels1[0]; 
+    FrequencyCount = FREQUENCYSCOUNT1;
 }
 
 /************************************************************************************************************/
@@ -573,6 +574,7 @@ void SetUKFrequencies(){
     
     ReConPointer  = &Reconnect_Channels[0];   // Point to arrays of channels that are OK to use in the UK
     FHSSChPointer = &FHSS_Channels[0]; 
+    FrequencyCount = FREQUENCYSCOUNT;
 }
 /************************************************************************************************************/
 // SETUP
@@ -600,6 +602,8 @@ void setup()
     digitalWrite(LED_PIN, LOW);
 
     SetUKFrequencies();
+   // SetTestFrequencies();
+
    
 }
 /************************************************************************************************************/

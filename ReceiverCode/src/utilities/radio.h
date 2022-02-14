@@ -79,6 +79,8 @@ extern uint32_t ReconnectedMoment;
 extern bool     BoundFlag;
 extern void     ClearAckPayload();
 byte            NextFrequency;
+uint16_t        Interations = 0;
+
 /************************************************************************************************************/
 
 void SetNewPipe()
@@ -212,18 +214,38 @@ void ProdRadio(uint8_t Recon_Ch)
 
 /************************************************************************************************************/
 
+void TryOtherFrequencies(){
+ 
+  if (FrequencyCount == FREQUENCYSCOUNT1){
+            ReConPointer  = &Reconnect_Channels[0];   // Point to arrays of channels that are OK to use in the UK
+            FHSSChPointer = &FHSS_Channels[0]; 
+            FrequencyCount = FREQUENCYSCOUNT;
+            } else {
+            ReConPointer  = &Reconnect_Channels1[0];   // Point to the other arrays
+            FHSSChPointer = &FHSS_Channels1[0]; 
+            FrequencyCount = FREQUENCYSCOUNT1;
+            }
+}
+/************************************************************************************************************/
 
 void Reconnect(){
     uint32_t SearchStartTime    = 0;
     uint8_t ReconnectChannel;
-
     SearchStartTime = millis();
     FailSafeSent    = false;
     while (!Connected) {
         CurrentRadio->stopListening();
         delay(1);
         ++ReconnectIndex;
-        if (ReconnectIndex >= RECONNECT_CHANNELS_COUNT) ReconnectIndex = 0;               
+        if (ReconnectIndex >= RECONNECT_CHANNELS_COUNT) {
+                ReconnectIndex = 0; 
+                ++Interations;
+                if (Interations > 10) {
+                    TryOtherFrequencies();
+                    Interations = 0;
+                }
+                Serial.println (Interations);
+        } 
         ReconnectChannel = * (ReConPointer + ReconnectIndex);                     // Get a reconnect channel - not always the same one - one of 5 now.
         CurrentRadio->setChannel(ReconnectChannel);  
         CurrentRadio->startListening();
@@ -251,6 +273,7 @@ void Reconnect(){
         }
     }
     ReconnectedMoment    = millis();  // Save this moment, then don't move a servo for a few ms ...
+   
 }
 /************************************************************************************************************/
 // This function checks the time since last hop. 
@@ -264,7 +287,7 @@ void CheckIfItsHopTime(){
     if ((millis() - HopStart) >= HOPTIME){         // Time to hop?? 
          AckPayload.Purpose |= 0x80;               // Yes. So set the HOP flag leaving lower 7 bits unchanged
          ++NextChannelNumber;                      // Move up the channels' array
-         if (NextChannelNumber >= FREQUENCYSCOUNT)  NextChannelNumber = 1; // If needed, wrap the channels' array pointer
+         if (NextChannelNumber >= FrequencyCount)  NextChannelNumber = 1; // If needed, wrap the channels' array pointer
          AckPayload.Byte5 = NextChannelNumber;     // Tell the transmitter which element of the array to use next.
          GetNextFrequency();                       // Get the actual channel number from the array.
          HopNow = true;                            // Set local flag and hop when ready BUT NOT BEFORE.
