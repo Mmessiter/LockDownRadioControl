@@ -53,6 +53,5 @@ var searchData=
   ['frontview_5fmins_50',['FrontView_Mins',['../_transmitter_code_2src_2main_8cpp.html#a60f4339de362e3a16c844e1325523c90',1,'main.cpp']]],
   ['frontview_5fsecs_51',['FrontView_Secs',['../_transmitter_code_2src_2main_8cpp.html#a9a8581d01528b71e16b6b9e0a18f9193',1,'main.cpp']]],
   ['fs_5fbyte1_52',['FS_byte1',['../_receiver_code_2src_2main_8cpp.html#a3be9019b72265fa9443e1f1132fd9bc7',1,'main.cpp']]],
-  ['fs_5fbyte2_53',['FS_byte2',['../_receiver_code_2src_2main_8cpp.html#a9949c81d8f6abc28616445945c5d24ba',1,'main.cpp']]],
-  ['fshowhopdurationetc_54',['fShowHopDurationEtc',['../_receiver_code_2src_2main_8cpp.html#a65cc7ddae0635d33052414a6acad7938',1,'main.cpp']]]
+  ['fs_5fbyte2_53',['FS_byte2',['../_receiver_code_2src_2main_8cpp.html#a9949c81d8f6abc28616445945c5d24ba',1,'main.cpp']]]
 ];

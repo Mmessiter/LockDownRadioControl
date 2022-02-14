@@ -1,7 +1,6 @@
 var common_8h =
 [
     [ "CHANNELSUSED", "common_8h.html#ad143c01c2b36424b292b568f48cbe014", null ],
-    [ "DB_SENSORS", "common_8h.html#a8f4f1ebcda33e1f49537d5359517842f", null ],
     [ "FAILSAFE_TIMEOUT", "common_8h.html#a0634ad724c86cd2b4ac7cfebbb622a9c", null ],
     [ "FREQUENCYSCOUNT", "common_8h.html#afe5bce36baf737bd284d43cd0e805fdb", null ],
     [ "FREQUENCYSCOUNT1", "common_8h.html#a71a3cc3c3b499cb9329172835e5a1df8", null ],
