@@ -108,7 +108,7 @@ void SendData()
     ReadSwitches();                                // Check switch positions
     CheckTimer();  
     }
-    if ((millis() - TxPace) >= PACEMAKER) {
+    if (((millis() - TxPace) >= PACEMAKER) || (LostContactFlag)){
         TxPace = millis();
         get_new_channels_values();                // Load SendBuffer with new servo positions
         if (DoSbusSendOnly)                       // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
@@ -117,15 +117,12 @@ void SendData()
             MapToSBUS();
             return;                               // no more to do here!
         }
-        if (BuddyMaster)                          // If buddy master, check where student's sticks etc. are.
-        {
-            GetSlaveChannelValues();
-        }
+        if (BuddyMaster)  GetSlaveChannelValues(); // If buddy master, check where student's sticks etc. are.
         if (!BoundFlag && !(CurrentView == CalibrateView) && !(CurrentView == SticksView))
         {
             BufferNewPipe(); // if not yet bound, send our pipe
         }
-        LoadPacketData(); // extra parameters appended to the data packet
+        LoadPacketData();    // extra parameters appended to the data packet
         if (LostContactFlag) {
             if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {
                 TryOtherPipe();
@@ -142,11 +139,11 @@ void SendData()
         Radio1.flush_rx();                                       // This avoids a lockup that happens when the FIFO gets full.
         Radio1.flush_tx();                                       // This avoids a lockup that happens when the FIFO gets full.
                                                                  //  *************************************** SEND *************************************************************************************
-        Radio1.write(&CompressedData, SizeOfCompressedData);     //  ************************************** !SEND! *********************************************
+        Radio1.write(&CompressedData, SizeOfCompressedData);     //  **************************** ! ACTUALLY SEND DATA ! *********************************************
                                                                  //  *************************************** SEND *************************************************************************************
         if (Radio1.isAckPayloadAvailable())
         {
-            Radio1.read(&AckPayload, AckPayloadSize); //  "sizeof" doesn't work with externs, hence 2 new vars.
+            Radio1.read(&AckPayload, AckPayloadSize);        //  "sizeof" doesn't work with externs,
             ++RangeTestGoodPackets;
             ++PacketNumber;
             LostContactFlag = false;
