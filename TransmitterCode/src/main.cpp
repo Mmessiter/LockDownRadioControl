@@ -2959,9 +2959,7 @@ void SaveOneModel(int mnum)
 #endif // defined DB_NEXTION
     CloseModelsFile();
 }
-
 /*********************************************************************************************************************************/
-
 void ReadHelpFile(char* fname, char* htext)
 {
     char errormsg[] = "Help file was not found.";
@@ -2985,11 +2983,8 @@ void ReadHelpFile(char* fname, char* htext)
     }
     fnumber.close();
 }
-
 /************************************************************************************************************/
-
 void TryOtherFrequencies(){
- 
   if (!UkRules){
             ReConPointer  = &Reconnect_Channels[0];   // Point to arrays of channels that are OK to use in the UK
             FHSSChPointer = &FHSS_Channels[0]; 
@@ -3000,9 +2995,7 @@ void TryOtherFrequencies(){
             UkRules = false;
             }
 }
-
 /*********************************************************************************************************************************/
-
 void SendHelp()
 {
     char HelpView[] = "HelpView.HelpText";
@@ -3018,19 +3011,16 @@ void SendHelp()
     }
     ReadHelpFile(HelpFile, HelpText);
     SendText1(HelpView, HelpText);
-    
     ++ HelpCounter;
     if (HelpCounter == 1) HelpTimer = millis();
     if (HelpCounter == 3 ) {
-            if ((millis() - HelpTimer) < 20000){    // heer
+            if ((millis() - HelpTimer) < 20000){    // heer (Help summoned three times in under 20 seconds)
                   TryOtherFrequencies();            // :-)
             }
             HelpCounter = 0 ;
     }
 }
-
 /*********************************************************************************************************************************/
-
 /** @brief Discover which channel to setup */
 int GetChannel()
 {

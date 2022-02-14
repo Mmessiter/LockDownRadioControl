@@ -3,11 +3,11 @@
 #define RadioFunctions_H
 
 // **************************************************************************
-//                  TX VERSION NUMBER   (February 13 2022 Malcolm Messiter) *
+//                  TX VERSION NUMBER   (February 14 2022 Malcolm Messiter) *
 //***************************************************************************
 #define TXVERSION_MAJOR   1
 #define TXVERSION_MINOR   5
-#define TXVERSION_MINIMUS 7
+#define TXVERSION_MINIMUS 8
 
 // **************************************************************************
 //                            SBUS PARAMETERS   (FOR BUDDY BOXING)          *
