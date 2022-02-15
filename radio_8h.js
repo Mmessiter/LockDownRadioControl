@@ -8,7 +8,6 @@ var radio_8h =
     [ "Decompress", "radio_8h.html#a8e1f4879c351e462d6bca620ae4279e2", null ],
     [ "FailSafe", "radio_8h.html#a42318598726782ebb2e1857f167c8cda", null ],
     [ "GetNewPipe", "radio_8h.html#ad8b2470258da4e397b34d67ffce9ebaf", null ],
-    [ "GetNextFrequency", "radio_8h.html#a5cbe0c69c07d5818a956b9155820cf76", null ],
     [ "GetOldPipe", "radio_8h.html#a2cce213711b7a34bc80eec167dffcb8f", null ],
     [ "HopToNextFrequency", "radio_8h.html#aa48ea4c5d47aa93d17dbc7d7b19238d8", null ],
     [ "InitCurrentRadio", "radio_8h.html#a9c6678b1449ea8eaaab6a3a53cbb3d65", null ],
