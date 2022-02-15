@@ -3015,7 +3015,7 @@ void SendHelp()
     ++ HelpCounter;
     if (HelpCounter == 1) HelpTimer = millis();
     if (HelpCounter == 3 ) {
-            if ((millis() - HelpTimer) < 20000){    // heer 
+            if ((millis() - HelpTimer) < 30000){    // heer (Pressing *Help* 3 times in less that 30 seconds switches wave band over.
                  if (!UkRules){
                     SwapWaveBand  = 1;
                     UkRules = true;
@@ -5580,7 +5580,7 @@ void LoadPacketData()
             break;
         case 4: 
                 SendBuffer[CHANNELSUSED + 1] = 0;
-                SendBuffer[CHANNELSUSED + 2] = SwapWaveBand;
+                SendBuffer[CHANNELSUSED + 2] = SwapWaveBand;   // This feature allows the switching on/off of UK rules 
                 if (SwapWaveBand == 2) SwitchFromUK();
                 if (SwapWaveBand == 1) SwitchtoUK();
                 SwapWaveBand = 0;
