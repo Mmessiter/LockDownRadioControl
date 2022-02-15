@@ -7,5 +7,7 @@ var searchData=
   ['updateoneswitchview_4',['updateOneSwitchView',['../_transmitter_code_2src_2main_8cpp.html#a14dcac76ed8a048041fdc6e6f5d5d000',1,'main.cpp']]],
   ['updateswitchesdisplay_5',['UpdateSwitchesDisplay',['../_transmitter_code_2src_2main_8cpp.html#a789078ba3c1d92997ab8764eb20cce4f',1,'main.cpp']]],
   ['updatetrimview_6',['UpdateTrimView',['../_transmitter_code_2src_2main_8cpp.html#ac78966debc2cdc13d8ca958ce3b20c78',1,'main.cpp']]],
-  ['usereceiveddata_7',['UseReceivedData',['../_receiver_code_2src_2main_8cpp.html#abb1997c589abc6432f612eaedf985e38',1,'main.cpp']]]
+  ['usereceiveddata_7',['UseReceivedData',['../_receiver_code_2src_2main_8cpp.html#abb1997c589abc6432f612eaedf985e38',1,'main.cpp']]],
+  ['usetestfrequencies_8',['UseTestFrequencies',['../_transmitter_code_2src_2main_8cpp.html#a5da99d06e19aa7aecf29939565bacf96',1,'main.cpp']]],
+  ['useukfrequencies_9',['UseUKFrequencies',['../_transmitter_code_2src_2main_8cpp.html#a627afc14c8b5b9f2a27abf0e937a71a6',1,'main.cpp']]]
 ];

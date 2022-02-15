@@ -13,5 +13,7 @@ var searchData=
   ['use_5fina219_10',['USE_INA219',['../_transmitter_code_2src_2main_8cpp.html#a87ae50e2ac4507568cbf98072f174a1b',1,'main.cpp']]],
   ['use_5fsw_5fserial_11',['USE_SW_SERIAL',['../_adafruit___g_p_s_8h.html#a7d44b2886944eb862b51948f2acc8d23',1,'Adafruit_GPS.h']]],
   ['use_5fwatchdog_12',['USE_WATCHDOG',['../_radio_functions_8h.html#a71be4a990011c7b00830abf5f3b2190d',1,'RadioFunctions.h']]],
-  ['usereceiveddata_13',['UseReceivedData',['../_receiver_code_2src_2main_8cpp.html#abb1997c589abc6432f612eaedf985e38',1,'main.cpp']]]
+  ['usereceiveddata_13',['UseReceivedData',['../_receiver_code_2src_2main_8cpp.html#abb1997c589abc6432f612eaedf985e38',1,'main.cpp']]],
+  ['usetestfrequencies_14',['UseTestFrequencies',['../_transmitter_code_2src_2main_8cpp.html#a5da99d06e19aa7aecf29939565bacf96',1,'main.cpp']]],
+  ['useukfrequencies_15',['UseUKFrequencies',['../_transmitter_code_2src_2main_8cpp.html#a627afc14c8b5b9f2a27abf0e937a71a6',1,'main.cpp']]]
 ];

@@ -151,12 +151,12 @@ var NAVTREEINDEX =
 "_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h.html#af0bc43b5dae696582a77176e6e4ff643ad9ebf0d3f835c55738b4d4e915768875",
 "_sensor_hub_t32_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h.html#af0bc43b5dae696582a77176e6e4ff643aea45b19cb567b213ad9e4d703ef00ac0",
 "_sensor_hub_teensy3__6_2src_2main_8cpp.html#aac529433269b7b52ef0a627716a70aea",
-"_transmitter_code_2src_2main_8cpp.html#a76b48a1dfbe2bd97ee5e0479ff16e8ef",
-"_transmitter_code_2src_2main_8cpp.html#af6a160e01ed51c4dc04e697954b5f0b4",
-"class_adafruit___b_m_p280.html#ab28e689ef7620d2b9f0c9e03116dde8fa0ca3424e205a422a7b5a614722afc55e",
-"class_adafruit___i_n_a219.html#abddaac33a988562fd416cb9949d0c030",
-"globals_defs_i.html",
-"struct_tiny_g_p_s_altitude.html#a5a39d145bb1778814007206c765189f7"
+"_transmitter_code_2src_2main_8cpp.html#a783a0141bea15d8539730afd4b3b06a3",
+"_transmitter_code_2src_2main_8cpp.html#af8400c0c2d5c4779f32223055a12336d",
+"class_adafruit___b_m_p280.html#ab28e689ef7620d2b9f0c9e03116dde8fa544ab88771584cea12877d3338eef96d",
+"class_adafruit___i_n_a219.html#adbff47c27a3b8452c62a2f38672f1cd9",
+"globals_defs_l.html",
+"struct_tiny_g_p_s_altitude.html#a5ae68d990ea08d4e21cfa6aefb46cc03"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
