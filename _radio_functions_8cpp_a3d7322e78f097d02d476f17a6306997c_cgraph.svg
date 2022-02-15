@@ -471,9 +471,9 @@
 <!-- Node24 -->
 <g id="node24" class="node">
 <title>Node24</title>
-<g id="a_node24"><a xlink:href="_transmitter_code_2src_2main_8cpp.html#a5da99d06e19aa7aecf29939565bacf96" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="black" points="293,-684.5 293,-703.5 400,-703.5 400,-684.5 293,-684.5"/>
-<text text-anchor="middle" x="346.5" y="-691.5" font-family="Helvetica,sans-Serif" font-size="10.00">UseTestFrequencies</text>
+<g id="a_node24"><a xlink:href="_receiver_code_2src_2main_8cpp.html#a31a35307bbac88ceda244272f25d399a" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="black" points="294.5,-684.5 294.5,-703.5 398.5,-703.5 398.5,-684.5 294.5,-684.5"/>
+<text text-anchor="middle" x="346.5" y="-691.5" font-family="Helvetica,sans-Serif" font-size="10.00">SetTestFrequencies</text>
 </a>
 </g>
 </g>
@@ -486,17 +486,17 @@
 <!-- Node25 -->
 <g id="node25" class="node">
 <title>Node25</title>
-<g id="a_node25"><a xlink:href="_transmitter_code_2src_2main_8cpp.html#a627afc14c8b5b9f2a27abf0e937a71a6" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="black" points="295.5,-646.5 295.5,-665.5 397.5,-665.5 397.5,-646.5 295.5,-646.5"/>
-<text text-anchor="middle" x="346.5" y="-653.5" font-family="Helvetica,sans-Serif" font-size="10.00">UseUKFrequencies</text>
+<g id="a_node25"><a xlink:href="_receiver_code_2src_2main_8cpp.html#a2eabdb233653fa02f0b899e26b5e8ce7" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="black" points="297,-646.5 297,-665.5 396,-665.5 396,-646.5 297,-646.5"/>
+<text text-anchor="middle" x="346.5" y="-653.5" font-family="Helvetica,sans-Serif" font-size="10.00">SetUKFrequencies</text>
 </a>
 </g>
 </g>
 <!-- Node22&#45;&gt;Node25 -->
 <g id="edge29" class="edge">
 <title>Node22&#45;&gt;Node25</title>
-<path fill="none" stroke="midnightblue" d="M205.11,-656C229.03,-656 259.06,-656 285.19,-656"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="285.38,-659.5 295.38,-656 285.37,-652.5 285.38,-659.5"/>
+<path fill="none" stroke="midnightblue" d="M205.11,-656C229.4,-656 260,-656 286.42,-656"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="286.7,-659.5 296.7,-656 286.7,-652.5 286.7,-659.5"/>
 </g>
 <!-- Node28 -->
 <g id="node28" class="node">
