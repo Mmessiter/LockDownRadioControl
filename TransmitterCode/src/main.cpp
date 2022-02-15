@@ -533,7 +533,6 @@ int     DeltaGMT        = 0;
 uint32_t HelpTimer = 0;
 uint8_t  HelpCounter = 0;
 bool     UkRules = true;
-uint32_t WaveBandTimer = 0;
 uint8_t  SwapWaveBand = 0;  
 
 
@@ -3017,7 +3016,6 @@ void SendHelp()
     if (HelpCounter == 1) HelpTimer = millis();
     if (HelpCounter == 3 ) {
             if ((millis() - HelpTimer) < 20000){    // heer 
-                 WaveBandTimer = millis(); // start timer
                  if (!UkRules){
                     SwapWaveBand  = 1;
                     UkRules = true;
@@ -5516,8 +5514,6 @@ void Button_was_pressed()
                 SendText(SvB0, Cmsg6);
                 SendValue1(NextionSleepTime, ScreenTimeout); // Re enable timeout
                 ClearText();
-                //Serial.println ("TWO");
-               // Serial.println (CurrentMode);
                 return;
             }
         }
@@ -5585,9 +5581,10 @@ void LoadPacketData()
         case 4: 
                 SendBuffer[CHANNELSUSED + 1] = 0;
                 SendBuffer[CHANNELSUSED + 2] = SwapWaveBand;
+                if (SwapWaveBand == 2) SwitchFromUK();
+                if (SwapWaveBand == 1) SwitchtoUK();
                 SwapWaveBand = 0;
             break;
-
         default:
             break;
     }
@@ -5877,14 +5874,6 @@ char ModelsView_ModelNumber[]  = "ModelNumber";
 void loop()
 {
     KickTheDog();                    // Watchdog
-
-    if (SwapWaveBand > 0) {
-        if (micros() - WaveBandTimer > 1000){ // ???
-          if (SwapWaveBand == 1) SwitchtoUK();
-          if (SwapWaveBand == 2) SwitchFromUK(); 
-        }         
-    }
-
     if (GetButtonPress()) {
         Button_was_pressed();        // Deal with button
     }
