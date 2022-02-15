@@ -2670,13 +2670,13 @@ void GetTXVersionNumber()
     strcat(TransmitterVersionNumber, nbuf);
 }
 /************************************************************************************************************/
-void UseUKFrequencies(){
+void SetUKFrequencies(){
             ReConPointer  = Reconnect_Channels;    // Point to arrays of channels that are OK to use in the UK
             FHSSChPointer = FHSS_Channels; 
             UkRules = true;     
 }
 /************************************************************************************************************/
-void UseTestFrequencies(){
+void SetTestFrequencies(){
             ReConPointer  = Reconnect_Channels1;   // Point to arrays of channels that are KO to use in the UK
             FHSSChPointer = FHSS_Channels1; 
             UkRules = false;     
@@ -2749,7 +2749,7 @@ void setup()
     SizeOfCompressedData = sizeof(CompressedData);
     GetTXVersionNumber();
     MySbus.begin();
-    UseUKFrequencies(); 
+    SetUKFrequencies(); 
 }
 /*********************************************************************************************************************************/
 
@@ -5565,8 +5565,8 @@ void LoadPacketData()
         case 4: 
                 SendBuffer[CHANNELSUSED + 1] = 0;
                 SendBuffer[CHANNELSUSED + 2] = SwapWaveBand;   // This feature allows the quiet switching between 2.400-2.4830 and 2.4840-2.525 (press HELP three times)
-                if (SwapWaveBand == 2) UseTestFrequencies();
-                if (SwapWaveBand == 1) UseUKFrequencies();
+                if (SwapWaveBand == 2) SetTestFrequencies();
+                if (SwapWaveBand == 1) SetUKFrequencies();
                 SwapWaveBand = 0;
             break;
         default:
