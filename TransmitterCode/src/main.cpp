@@ -2986,7 +2986,7 @@ void ReadHelpFile(char* fname, char* htext)
 }
 /************************************************************************************************************/
 void SwitchToUK(){
-            ReConPointer  = &Reconnect_Channels[0];   // Point to arrays of channels that are OK to use in the UK
+            ReConPointer  = &Reconnect_Channels[0];    // Point to arrays of channels that are OK to use in the UK
             FHSSChPointer = &FHSS_Channels[0]; 
             UkRules = true;     
 }
