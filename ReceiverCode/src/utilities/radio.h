@@ -19,6 +19,7 @@ bool            HopNow = false;
 uint8_t         ReconnectIndex = 0;
 extern void     ShowHopDurationEtc();
 extern void     ReadSensorHub();
+extern void     SetUKFrequencies();
 extern uint16_t BaroAltitude;
 extern float    INA219Volts;
 extern float    BaroTemperature;
@@ -234,6 +235,7 @@ void Reconnect(){
                 if (!FailSafeSent){
                     FailSafe();
                     FailSafeSent = true; // Once is enough
+                    SetUKFrequencies();
                 }
             }
         }

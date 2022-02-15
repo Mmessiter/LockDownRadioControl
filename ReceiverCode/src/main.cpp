@@ -274,19 +274,18 @@ void SendQnhToSensorHub(){
         QNH[5] = Uqnh.Val8[1];  
         SendToSensorHub(QNH);   
 }
-
 /************************************************************************************************************/
-void SwitchToUK(){
-            ReConPointer  = &Reconnect_Channels[0];   // Point to arrays of channels that are OK to use in the UK
-            FHSSChPointer = &FHSS_Channels[0]; 
-            FrequencyCount = FREQUENCYSCOUNT;
+void SetTestFrequencies(){
+    ReConPointer  = Reconnect_Channels1;   // Point to arrays of channels that are OK to use in the UK
+    FHSSChPointer = FHSS_Channels1; 
+    FrequencyCount = FREQUENCYSCOUNT1;
 }
 /************************************************************************************************************/
-void SwitchFromUK(){
-            ReConPointer  = &Reconnect_Channels1[0];   // Point to the other arrays
-            FHSSChPointer = &FHSS_Channels1[0]; 
-            FrequencyCount = FREQUENCYSCOUNT1;
-            }
+void SetUKFrequencies(){
+    ReConPointer  = Reconnect_Channels;   // Point to arrays of channels that are OK to use in the UK
+    FHSSChPointer = FHSS_Channels; 
+    FrequencyCount = FREQUENCYSCOUNT;
+}
 /************************************************************************************************************/
 /**
  * extra parameters can be sent using the last four bytes in every data packet.
@@ -329,8 +328,8 @@ void CheckParams()
          case 4:
                SwapWaveBand =  ReceivedData[CHANNELSUSED + 2] ;
                if (SwapWaveBand > 0 ) {
-                    if (SwapWaveBand == 1) SwitchToUK();
-                    if (SwapWaveBand == 2) SwitchFromUK();
+                    if (SwapWaveBand == 1) SetUKFrequencies();
+                    if (SwapWaveBand == 2) SetTestFrequencies();
                } 
         default:
                 break;
@@ -580,23 +579,6 @@ void DoBinding()
     }
 }
 
-/************************************************************************************************************/
-
-void SetTestFrequencies(){
-    
-    ReConPointer  = &Reconnect_Channels1[0];   // Point to arrays of channels that are OK to use in the UK
-    FHSSChPointer = &FHSS_Channels1[0]; 
-    FrequencyCount = FREQUENCYSCOUNT1;
-}
-
-/************************************************************************************************************/
-
-void SetUKFrequencies(){
-    
-    ReConPointer  = &Reconnect_Channels[0];   // Point to arrays of channels that are OK to use in the UK
-    FHSSChPointer = &FHSS_Channels[0]; 
-    FrequencyCount = FREQUENCYSCOUNT;
-}
 /************************************************************************************************************/
 // SETUP
 /************************************************************************************************************/
