@@ -5580,7 +5580,7 @@ void LoadPacketData()
             break;
         case 4: 
                 SendBuffer[CHANNELSUSED + 1] = 0;
-                SendBuffer[CHANNELSUSED + 2] = SwapWaveBand;   // This feature allows the switching on/off of UK rules 
+                SendBuffer[CHANNELSUSED + 2] = SwapWaveBand;   // This feature allows the quiet switching between 2.400-2.4830 and 2.4840-2.525 (press help three times)
                 if (SwapWaveBand == 2) SwitchFromUK();
                 if (SwapWaveBand == 1) SwitchtoUK();
                 SwapWaveBand = 0;
