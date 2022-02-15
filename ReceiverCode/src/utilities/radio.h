@@ -203,8 +203,10 @@ void ProdRadio(uint8_t Recon_Ch)
 /************************************************************************************************************/
 
 void Reconnect(){
-    uint32_t SearchStartTime    = 0;
-    uint8_t ReconnectChannel;
+
+    uint32_t SearchStartTime  = 0;
+    uint8_t  ReconnectChannel = 0;
+
     SearchStartTime = millis();
     FailSafeSent    = false;
     while (!Connected) {
