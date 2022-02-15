@@ -218,7 +218,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "StartInactvityTimeout", "_transmitter_code_2src_2main_8cpp.html#a793b7bcd77531c95fe72ed4356d421c8", null ],
     [ "Str", "_transmitter_code_2src_2main_8cpp.html#a6bac145d5df31efb9c90e2a60a4cbca5", null ],
     [ "SwitchFromUK", "_transmitter_code_2src_2main_8cpp.html#a208ffcbf60d99654c53de1cd5f419449", null ],
-    [ "SwitchtoUK", "_transmitter_code_2src_2main_8cpp.html#a0c0e8c12a13e74cbd2215554a805497c", null ],
+    [ "SwitchToUK", "_transmitter_code_2src_2main_8cpp.html#aa22fd016b81c7b72d260c7651467eac6", null ],
     [ "SynchRTCwithGPSTime", "_transmitter_code_2src_2main_8cpp.html#abb1ea95b6b3f033883aa87682d3240ab", null ],
     [ "um", "_transmitter_code_2src_2main_8cpp.html#a9f83d3bf4d2c0b217e0e461d0c2f3e71", null ],
     [ "UpdateButtonLabels", "_transmitter_code_2src_2main_8cpp.html#abf59862cf6c4e3df5a76f0bfea8919ef", null ],

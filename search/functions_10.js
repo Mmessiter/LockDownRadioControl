@@ -63,7 +63,6 @@ var searchData=
   ['startinactvitytimeout_60',['StartInactvityTimeout',['../_radio_functions_8h.html#a793b7bcd77531c95fe72ed4356d421c8',1,'StartInactvityTimeout():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a793b7bcd77531c95fe72ed4356d421c8',1,'StartInactvityTimeout():&#160;main.cpp']]],
   ['str_61',['Str',['../_radio_functions_8h.html#a6bac145d5df31efb9c90e2a60a4cbca5',1,'Str(char *s, int n, int comma):&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a6bac145d5df31efb9c90e2a60a4cbca5',1,'Str(char *s, int n, int comma):&#160;main.cpp']]],
   ['switchfromuk_62',['SwitchFromUK',['../_receiver_code_2src_2main_8cpp.html#a208ffcbf60d99654c53de1cd5f419449',1,'SwitchFromUK():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a208ffcbf60d99654c53de1cd5f419449',1,'SwitchFromUK():&#160;main.cpp']]],
-  ['switchtouk_63',['SwitchtoUK',['../_transmitter_code_2src_2main_8cpp.html#a0c0e8c12a13e74cbd2215554a805497c',1,'main.cpp']]],
-  ['switchtouk_64',['SwitchToUK',['../_receiver_code_2src_2main_8cpp.html#aa22fd016b81c7b72d260c7651467eac6',1,'main.cpp']]],
-  ['synchrtcwithgpstime_65',['SynchRTCwithGPSTime',['../_transmitter_code_2src_2main_8cpp.html#abb1ea95b6b3f033883aa87682d3240ab',1,'main.cpp']]]
+  ['switchtouk_63',['SwitchToUK',['../_receiver_code_2src_2main_8cpp.html#aa22fd016b81c7b72d260c7651467eac6',1,'SwitchToUK():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#aa22fd016b81c7b72d260c7651467eac6',1,'SwitchToUK():&#160;main.cpp']]],
+  ['synchrtcwithgpstime_64',['SynchRTCwithGPSTime',['../_transmitter_code_2src_2main_8cpp.html#abb1ea95b6b3f033883aa87682d3240ab',1,'main.cpp']]]
 ];

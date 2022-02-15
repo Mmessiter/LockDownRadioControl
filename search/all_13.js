@@ -180,7 +180,6 @@ var searchData=
   ['switches_5fview_177',['Switches_View',['../_radio_functions_8cpp.html#ad16a6b359f59fa52101e30d233fb030f',1,'Switches_View():&#160;RadioFunctions.cpp'],['../_transmitter_code_2src_2main_8cpp.html#ad16a6b359f59fa52101e30d233fb030f',1,'Switches_View():&#160;main.cpp']]],
   ['switchfromuk_178',['SwitchFromUK',['../_receiver_code_2src_2main_8cpp.html#a208ffcbf60d99654c53de1cd5f419449',1,'SwitchFromUK():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a208ffcbf60d99654c53de1cd5f419449',1,'SwitchFromUK():&#160;main.cpp']]],
   ['switchnumber_179',['SwitchNumber',['../_transmitter_code_2src_2main_8cpp.html#a2bd909f3b6a6e46bd5fcecb296800e9e',1,'main.cpp']]],
-  ['switchtouk_180',['SwitchtoUK',['../_transmitter_code_2src_2main_8cpp.html#a0c0e8c12a13e74cbd2215554a805497c',1,'main.cpp']]],
-  ['switchtouk_181',['SwitchToUK',['../_receiver_code_2src_2main_8cpp.html#aa22fd016b81c7b72d260c7651467eac6',1,'main.cpp']]],
-  ['synchrtcwithgpstime_182',['SynchRTCwithGPSTime',['../_transmitter_code_2src_2main_8cpp.html#abb1ea95b6b3f033883aa87682d3240ab',1,'main.cpp']]]
+  ['switchtouk_180',['SwitchToUK',['../_receiver_code_2src_2main_8cpp.html#aa22fd016b81c7b72d260c7651467eac6',1,'SwitchToUK():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#aa22fd016b81c7b72d260c7651467eac6',1,'SwitchToUK():&#160;main.cpp']]],
+  ['synchrtcwithgpstime_181',['SynchRTCwithGPSTime',['../_transmitter_code_2src_2main_8cpp.html#abb1ea95b6b3f033883aa87682d3240ab',1,'main.cpp']]]
 ];
