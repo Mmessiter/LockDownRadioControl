@@ -5539,13 +5539,11 @@ void LoadPacketData()
                 BindingTimer = millis(); // start a timer
                 BindingNow   = 2;
             }
-            
             if (((millis() - FailSafeTimer) > 1500) && SaveFailSafeNow) {
                     SendBuffer[CHANNELSUSED + 1] = SaveFailSafeNow; // FailSafeSaveMoment
                     SaveFailSafeNow    = false;                     // once should do it.
                     SendCommand(ProgressEnd);
             }
-            
             break;
         case 1:
              SendBuffer[CHANNELSUSED + 1] = FS_Byte2;      // these are failsafe flags
@@ -5563,11 +5561,11 @@ void LoadPacketData()
             }
             break;
         case 4: 
-                SendBuffer[CHANNELSUSED + 1] = 0;
-                SendBuffer[CHANNELSUSED + 2] = SwapWaveBand;   // This feature allows the quiet switching between 2.400-2.4830 and 2.4840-2.525 (press HELP three times)
-                if (SwapWaveBand == 2) SetTestFrequencies();
-                if (SwapWaveBand == 1) SetUKFrequencies();
-                SwapWaveBand = 0;
+            SendBuffer[CHANNELSUSED + 1] = 0;
+            SendBuffer[CHANNELSUSED + 2] = SwapWaveBand;   // This feature allows the quiet switching between 2.400-2.4830 and 2.4840-2.525 (press HELP three times)
+            if (SwapWaveBand == 2) SetTestFrequencies();
+            if (SwapWaveBand == 1) SetUKFrequencies();
+            SwapWaveBand = 0;
             break;
         default:
             break;
