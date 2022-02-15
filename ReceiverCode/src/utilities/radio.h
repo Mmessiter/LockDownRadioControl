@@ -209,14 +209,16 @@ void Reconnect(){
     FailSafeSent    = false;
     while (!Connected) {
         CurrentRadio->stopListening();
-        delay(1);
+       // delay(1);
         ReconnectChannel = * (ReConPointer + ReconnectIndex);                     // Get a reconnect channel - not always the same one - one of 5 now.
+        ++ ReconnectIndex;
+        if (ReconnectIndex > RECONNECT_CHANNELS_COUNT) ReconnectIndex = 0;
         CurrentRadio->setChannel(ReconnectChannel);  
         CurrentRadio->startListening();
         ListenALittle(START_LISTEN_PERIOD);
 #ifdef SECOND_TRANSCEIVER
         CurrentRadio->stopListening();
-        delay(1);
+       // delay(1);
         if (ThisRadio == 2) {
             CurrentRadio = &Radio1;
             ThisRadio    = 1;
@@ -237,7 +239,6 @@ void Reconnect(){
         }
     }
     ReconnectedMoment    = millis();  // Save this moment, then don't move a servo for a few ms ...
-   
 }
 /************************************************************************************************************/
 // This function checks the time since last hop. 
