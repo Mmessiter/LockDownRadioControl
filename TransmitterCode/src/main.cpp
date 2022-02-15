@@ -3015,7 +3015,7 @@ void SendHelp()
     ++ HelpCounter;
     if (HelpCounter == 1) HelpTimer = millis();
     if (HelpCounter == 3 ) {
-            if ((millis() - HelpTimer) < 30000){    // heer (Pressing *Help* 3 times in less that 30 seconds switches wave band over.
+            if ((millis() - HelpTimer) < 30000){   
                  if (!UkRules){
                     SwapWaveBand  = 1;
                     UkRules = true;
