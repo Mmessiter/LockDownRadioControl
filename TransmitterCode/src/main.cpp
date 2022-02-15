@@ -2657,22 +2657,6 @@ void SetDS1307ToCompilerTime()
 
 /************************************************************************************************************/
 
-void SetUKFrequencies(){
-    
-    ReConPointer  = &Reconnect_Channels[0];   // Point to arrays of channels that are OK to use in the UK
-    FHSSChPointer = &FHSS_Channels[0]; 
-}
-
-/************************************************************************************************************/
-
-void SetTestFrequencies(){
-    
-    ReConPointer  = &Reconnect_Channels1[0];   // Point to arrays of channels that are OK to use in the UK
-    FHSSChPointer = &FHSS_Channels1[0]; 
-}
-
-/************************************************************************************************************/
-
 void GetTXVersionNumber()
 {
     char    nbuf[5];
@@ -2685,11 +2669,21 @@ void GetTXVersionNumber()
     Str(nbuf, Txv3, 0);
     strcat(TransmitterVersionNumber, nbuf);
 }
-
+/************************************************************************************************************/
+void UseUKFrequencies(){
+            ReConPointer  = Reconnect_Channels;    // Point to arrays of channels that are OK to use in the UK
+            FHSSChPointer = FHSS_Channels; 
+            UkRules = true;     
+}
+/************************************************************************************************************/
+void UseTestFrequencies(){
+            ReConPointer  = Reconnect_Channels1;   // Point to arrays of channels that are KO to use in the UK
+            FHSSChPointer = FHSS_Channels1; 
+            UkRules = false;     
+}
 /*********************************************************************************************************************************/
 // SETUP
 /*********************************************************************************************************************************/
-
 void setup()
 {
     char FrontView_Connected[] = "FrontView.Connected";
@@ -2755,7 +2749,7 @@ void setup()
     SizeOfCompressedData = sizeof(CompressedData);
     GetTXVersionNumber();
     MySbus.begin();
-    SetUKFrequencies(); 
+    UseUKFrequencies(); 
 }
 /*********************************************************************************************************************************/
 
@@ -2984,18 +2978,7 @@ void ReadHelpFile(char* fname, char* htext)
     }
     fnumber.close();
 }
-/************************************************************************************************************/
-void SwitchToUK(){
-            ReConPointer  = &Reconnect_Channels[0];    // Point to arrays of channels that are OK to use in the UK
-            FHSSChPointer = &FHSS_Channels[0]; 
-            UkRules = true;     
-}
-/************************************************************************************************************/
-void SwitchFromUK(){
-            ReConPointer  = &Reconnect_Channels1[0];   // Point to arrays of channels that are KO to use in the UK
-            FHSSChPointer = &FHSS_Channels1[0]; 
-            UkRules = false;     
-}
+
 /*********************************************************************************************************************************/
 void SendHelp()
 {
@@ -4501,6 +4484,7 @@ void Button_was_pressed()
             if (CurrentView == ModelsView) {
                 SendValue(ModelsView_ModelNumber, ModelNumber);
             }
+            UpdateModelsNameEveryWhere();
             ClearText();
             return;
         }
@@ -5581,8 +5565,8 @@ void LoadPacketData()
         case 4: 
                 SendBuffer[CHANNELSUSED + 1] = 0;
                 SendBuffer[CHANNELSUSED + 2] = SwapWaveBand;   // This feature allows the quiet switching between 2.400-2.4830 and 2.4840-2.525 (press help three times)
-                if (SwapWaveBand == 2) SwitchFromUK();
-                if (SwapWaveBand == 1) SwitchToUK();
+                if (SwapWaveBand == 2) UseTestFrequencies();
+                if (SwapWaveBand == 1) UseUKFrequencies();
                 SwapWaveBand = 0;
             break;
         default:
