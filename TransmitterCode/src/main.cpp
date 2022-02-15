@@ -2985,7 +2985,7 @@ void ReadHelpFile(char* fname, char* htext)
     fnumber.close();
 }
 /************************************************************************************************************/
-void SwitchtoUK(){
+void SwitchToUK(){
             ReConPointer  = &Reconnect_Channels[0];   // Point to arrays of channels that are OK to use in the UK
             FHSSChPointer = &FHSS_Channels[0]; 
             UkRules = true;     
@@ -3015,16 +3015,16 @@ void SendHelp()
     ++ HelpCounter;
     if (HelpCounter == 1) HelpTimer = millis();
     if (HelpCounter == 3 ) {
-            if ((millis() - HelpTimer) < 30000){   
-                 if (!UkRules){
-                    SwapWaveBand  = 1;
-                    UkRules = true;
-                 }else{
-                    SwapWaveBand  = 2;
-                    UkRules = false;
-                 }  
-            }
-            HelpCounter = 0 ;
+        if ((millis() - HelpTimer) < 30000){   // Help pressed three times in under 30 seconds?!
+             if (!UkRules){
+                SwapWaveBand  = 1;
+                UkRules = true;
+             }else{
+                SwapWaveBand  = 2;
+                UkRules = false;
+             }  
+        }
+        HelpCounter = 0 ;
     }
 }
 /*********************************************************************************************************************************/
@@ -5582,7 +5582,7 @@ void LoadPacketData()
                 SendBuffer[CHANNELSUSED + 1] = 0;
                 SendBuffer[CHANNELSUSED + 2] = SwapWaveBand;   // This feature allows the quiet switching between 2.400-2.4830 and 2.4840-2.525 (press help three times)
                 if (SwapWaveBand == 2) SwitchFromUK();
-                if (SwapWaveBand == 1) SwitchtoUK();
+                if (SwapWaveBand == 1) SwitchToUK();
                 SwapWaveBand = 0;
             break;
         default:
