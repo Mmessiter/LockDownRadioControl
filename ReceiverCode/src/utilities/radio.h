@@ -144,18 +144,6 @@ void GetOldPipe()
 
 /************************************************************************************************************/
 
-/**
- * Make radio transceiver "hop" over to the new frequency.
- * @param freq The next frequency to use.
- */
-
-void GetNextFrequency()
-{
-    NextFrequency =  * (FHSSChPointer + NextChannelNumber);
-}
-
-/************************************************************************************************************/
-
 void HopToNextFrequency()
 {
     CurrentRadio->stopListening();
@@ -265,7 +253,7 @@ void CheckIfItsHopTime(){
          ++NextChannelNumber;                      // Move up the channels' array
          if (NextChannelNumber >= FrequencyCount)  NextChannelNumber = 1; // If needed, wrap the channels' array pointer
          AckPayload.Byte5 = NextChannelNumber;     // Tell the transmitter which element of the array to use next.
-         GetNextFrequency();                       // Get the actual channel number from the array.
+         NextFrequency =  * (FHSSChPointer + NextChannelNumber);   // Get the actual channel number from the array.
          HopNow = true;                            // Set local flag and hop when ready BUT NOT BEFORE.
     }
 }
