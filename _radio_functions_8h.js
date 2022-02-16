@@ -12,6 +12,7 @@ var _radio_functions_8h =
     [ "RANGEMAX", "_radio_functions_8h.html#a152ff5774ac656fc5f23664a214a8b53", null ],
     [ "RANGEMIN", "_radio_functions_8h.html#a2279f0fac9f7362b46f3c53ae91a5ce8", null ],
     [ "RECONNECT_CHANNELS_COUNT", "_radio_functions_8h.html#a2e43bf9a06b03c08517e35fb1c553350", null ],
+    [ "RED_LED_ON_TIME", "_radio_functions_8h.html#ab939b00b86d17d03b6fdfe585f06396d", null ],
     [ "RETRYCOUNT", "_radio_functions_8h.html#a0cf4668725c06b3a6d64a2895c906379", null ],
     [ "RETRYWAIT", "_radio_functions_8h.html#aadc879b4b6396135d31e22c22955a753", null ],
     [ "SBUSPORT", "_radio_functions_8h.html#aa82f9d8a298740acdbaa5c78a9e9f50c", null ],
