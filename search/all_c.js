@@ -11,7 +11,7 @@ var searchData=
   ['lastnmea_8',['lastNMEA',['../class_adafruit___g_p_s.html#a6938dadca5d72ec6e89e86a5b01b9b67',1,'Adafruit_GPS']]],
   ['lastpacketarrivaltime_9',['LastPacketArrivalTime',['../common_8h.html#a9ac62185b964d18f5843146fce5b0063',1,'common.h']]],
   ['lastrequest_10',['LastRequest',['../_sensor_hub_l_c_2src_2main_8cpp.html#adbb5e7e51f306d8f77d46702d3df4fe3',1,'main.cpp']]],
-  ['lastseconds_11',['LastSeconds',['../_transmitter_code_2src_2main_8cpp.html#a7a15f8648d39393c4a49c627976f1fce',1,'main.cpp']]],
+  ['lastseconds_11',['LastSeconds',['../_transmitter_code_2src_2main_8cpp.html#a461bdfbe0df771f541b8872ac04bb717',1,'main.cpp']]],
   ['lastsentence_12',['lastSentence',['../class_adafruit___g_p_s.html#a35d9d4c069a8ac93cbcbc98cf1c86ba0',1,'Adafruit_GPS']]],
   ['lastshowtime_13',['LastShowTime',['../_transmitter_code_2src_2main_8cpp.html#a75924ddf3462d9a4761c1261e0dfbaad',1,'main.cpp']]],
   ['lastsource_14',['lastSource',['../class_adafruit___g_p_s.html#a8c44f113dda3b54b41a7d05f516c9ec0',1,'Adafruit_GPS']]],

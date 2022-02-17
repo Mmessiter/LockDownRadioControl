@@ -152,10 +152,10 @@ var NAVTREEINDEX =
 "_sensor_hub_t32_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h.html#af0bc43b5dae696582a77176e6e4ff643af2ccaca19bdabe513c45c058003ed596",
 "_sensor_hub_teensy3__6_2src_2main_8cpp.html#ab92133bc8cbae639e681505e0679bc28",
 "_transmitter_code_2src_2main_8cpp.html#a783a0141bea15d8539730afd4b3b06a3",
-"_transmitter_code_2src_2main_8cpp.html#af8780871d49e8fd8f36c74c6cb434f46",
+"_transmitter_code_2src_2main_8cpp.html#af8795de08ab0ad1ab1a8679eae6c617a",
 "class_adafruit___b_m_p280.html#ab28e689ef7620d2b9f0c9e03116dde8fa544ab88771584cea12877d3338eef96d",
-"class_adafruit___i_n_a219.html#adbff47c27a3b8452c62a2f38672f1cd9",
-"globals_defs_m.html",
+"class_adafruit___s_p_i_device.html",
+"globals_defs_n.html",
 "struct_tiny_g_p_s_altitude.html#a5ae68d990ea08d4e21cfa6aefb46cc03"
 ];
 
