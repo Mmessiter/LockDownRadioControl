@@ -212,6 +212,7 @@ void Reconnect(){
     FailSafeSent    = false;
     while (!Connected) {
         CurrentRadio->stopListening();
+        delay (1);
         ReconnectChannel = * (ReConPointer + ReconnectIndex);                     // Get a reconnect channel - not always the same one - one of 5 now.
         ++ ReconnectIndex;
         if (ReconnectIndex >= RECONNECT_CHANNELS_COUNT) ReconnectIndex = 0;
@@ -220,6 +221,7 @@ void Reconnect(){
         ListenALittle(START_LISTEN_PERIOD);
 #ifdef SECOND_TRANSCEIVER
         CurrentRadio->stopListening();
+        delay (1);
         if (ThisRadio == 2) {
             CurrentRadio = &Radio1;
             ThisRadio    = 1;
