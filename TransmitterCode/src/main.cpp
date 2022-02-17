@@ -433,9 +433,6 @@ bool Switch3Reversed = false;
 bool Switch4Reversed = false;
 
 int      StartLocation       = 0;
-char     OKButton[]          = "b10";
-char     SaveButton[]        = "b0";
-char     OKTypeButton[]      = "b10";
 bool     ValueSent           = false;
 int      SwitchEditNumber    = 0; // number of switch being edited
 uint32_t ShowServoTimer      = 0;
@@ -527,7 +524,7 @@ uint8_t Gmonth;   // = tm.Month;  // 1-12
 uint8_t Gyear;    // = tm.Year;   // 0-99
 bool    GPSTimeSynched  =   false;
 int     DeltaGMT        = 0;
-uint32_t HelpTimer = 0;
+uint32_t SwapWaveBandTimer = 0;
 uint8_t  UkRulesCounter = 0;
 bool     UkRules = true;
 uint8_t  SwapWaveBand = 0;  
@@ -4275,6 +4272,10 @@ void Button_was_pressed()
     char Mark[]                    = "Mark";
     char dGMT[]                    = "dGMT";
     char UKRules[]                 = "UKRULES";
+    char Htext0[]                  = "HELP";
+    char Htext1[]                  = "Help";
+    char b17[]                     = "b17";
+
 
     if (strlen(WordsIn) > 0) {
         StartInactvityTimeout();
@@ -4298,18 +4299,19 @@ void Button_was_pressed()
             ClearText();
             return;
         }
-
         if (InStrng(UKRules, WordsIn) > 0) { // UK? heer
             ++ UkRulesCounter;
-            if (UkRulesCounter == 1) HelpTimer = millis();
+            if (UkRulesCounter == 1) SwapWaveBandTimer = millis();
             if (UkRulesCounter == 3 ) {
-                if ((millis() - HelpTimer) < 5000){   // pressed three times in under 5 seconds?!
+                if ((millis() - SwapWaveBandTimer) < 5000){   // pressed three times in under 5 seconds?!
                     if (!UkRules){
                         SwapWaveBand  = 1;
                         UkRules = true;
+                        SendText(b17,Htext1);
                     }else{
                         SwapWaveBand  = 2;
                         UkRules = false;
+                        SendText(b17,Htext0);
                     }  
                 }
                 UkRulesCounter = 0 ;
