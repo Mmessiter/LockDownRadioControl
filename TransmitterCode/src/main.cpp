@@ -298,21 +298,19 @@ uint8_t       AllChannels[127]; /// for scanning
 uint8_t       NoCarrier[127];
 uint8_t       ScanStart   = 1;
 uint8_t       ScanEnd     = 125;
-unsigned long TimerMillis = 0;
-unsigned long LastSeconds = 0;
-unsigned long Secs        = 0;
-unsigned long PausedSecs  = 0;
-unsigned long Mins        = 0;
-unsigned long Hours       = 0;
-
-uint8_t NameCount     = 0;
-char    ModelName[30] = "Undefined";
-uint8_t ModelNumber   = 1;
-uint8_t ModelDefined  = 0;
-
-unsigned int MemoryForTransmtter  = 0; // SD memory for tx
-unsigned int MemoryForOneModel  = 0; // SD memory per model
-unsigned int SDCardAddress = 0; // for SD
+uint32_t      TimerMillis = 0;
+uint32_t      LastSeconds = 0;
+uint32_t      Secs        = 0;
+uint32_t      PausedSecs  = 0;
+uint32_t      Mins        = 0;
+uint32_t      Hours       = 0;
+uint8_t       NameCount     = 0;
+char          ModelName[30] = "Undefined";
+uint8_t       ModelNumber   = 1;
+uint8_t       ModelDefined  = 0;
+uint16_t      MemoryForTransmtter  = 0;   // SD space for transmitter parameters
+uint16_t      OneModelMemory       = 0;   // SD space for every model's parameters
+uint16_t      SDCardAddress        = 0;   // Address on SD card (offset from zero)
 
 char     FrontView_Hours[]           = "Hours";
 char     FrontView_Mins[]            = "Mins";
@@ -434,7 +432,6 @@ bool Switch2Reversed = false;
 bool Switch3Reversed = false;
 bool Switch4Reversed = false;
 
-int      OneModelMemory      = 0;
 int      StartLocation       = 0;
 char     OKButton[]          = "b10";
 char     SaveButton[]        = "b0";
