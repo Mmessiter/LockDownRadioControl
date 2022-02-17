@@ -531,7 +531,7 @@ uint8_t Gyear;    // = tm.Year;   // 0-99
 bool    GPSTimeSynched  =   false;
 int     DeltaGMT        = 0;
 uint32_t HelpTimer = 0;
-uint8_t  HelpCounter = 0;
+uint8_t  UkRulesCounter = 0;
 bool     UkRules = true;
 uint8_t  SwapWaveBand = 0;  
 
@@ -2995,20 +2995,6 @@ void SendHelp()
     }
     ReadHelpFile(HelpFile, HelpText);
     SendText1(HelpView, HelpText);
-    ++ HelpCounter;
-    if (HelpCounter == 1) HelpTimer = millis();
-    if (HelpCounter == 3 ) {
-        if ((millis() - HelpTimer) < 30000){   // Help pressed three times in under 30 seconds?!
-             if (!UkRules){
-                SwapWaveBand  = 1;
-                UkRules = true;
-             }else{
-                SwapWaveBand  = 2;
-                UkRules = false;
-             }  
-        }
-        HelpCounter = 0 ;
-    }
 }
 /*********************************************************************************************************************************/
 /** @brief Discover which channel to setup */
@@ -4294,6 +4280,7 @@ void Button_was_pressed()
     char QNH[]                     = "Qnh";
     char Mark[]                    = "Mark";
     char dGMT[]                    = "dGMT";
+    char UKRules[]                 = "UKRULES";
 
     if (strlen(WordsIn) > 0) {
         StartInactvityTimeout();
@@ -4316,6 +4303,25 @@ void Button_was_pressed()
             GPSMarkHere = 255;                // Mark this location
             ClearText();
             return;
+        }
+
+        if (InStrng(UKRules, WordsIn) > 0) { // UK? heer
+            ++ UkRulesCounter;
+            if (UkRulesCounter == 1) HelpTimer = millis();
+            if (UkRulesCounter == 3 ) {
+                if ((millis() - HelpTimer) < 5000){   // pressed three times in under 5 seconds?!
+                    if (!UkRules){
+                        SwapWaveBand  = 1;
+                        UkRules = true;
+                    }else{
+                        SwapWaveBand  = 2;
+                        UkRules = false;
+                    }  
+                }
+                UkRulesCounter = 0 ;
+            }
+        ClearText();
+        return;
         }
         
         if (InStrng(OptionsEnd, WordsIn) > 0) { // Options screen end
