@@ -191,7 +191,7 @@ void UseReceivedData(){
         LastPacketArrivalTime = millis();
         if (HopNow) {                   // this flag gets set in LoadAckPayload();
             FailSafeDataLoaded = false; // Ack payload instructed to Hop at next opportunity...
-            HopToNextFrequency();       // So hop now
+            HopToNextChannel();         // So hop now
             HopNow = false;             // and clear the flag.
             HopStart = millis();
         }

@@ -17,6 +17,13 @@ uint32_t        HopStart;
 uint8_t         NextChannelNumber = 0;
 bool            HopNow = false;
 uint8_t         ReconnectIndex = 0;
+uint8_t         PacketNumber;                              /** A counter for packets between channel hops. */
+uint16_t        ReceivedData[UNCOMPRESSEDWORDS];           //  20 x 16 BIT words
+uint16_t        PreviousData[UNCOMPRESSEDWORDS];           /** Previously received data (used for servos. Hence not sent if unchanged) */
+uint8_t         NextChannel;
+uint16_t        Interations = 0;
+
+
 extern void     ShowHopDurationEtc();
 extern void     ReadSensorHub();
 extern void     SetUKFrequencies();
@@ -39,6 +46,11 @@ extern uint8_t  DayGPS;
 extern uint8_t  SatellitesGPS; 
 extern bool     GpsFix;
 extern bool     SENSOR_HUB_CONNECTED;    
+extern void     FailSafe();                               // defined in main.cpp
+extern uint32_t ReconnectedMoment;
+extern bool     BoundFlag;
+extern void     ClearAckPayload();
+
  
 /** AckPayload Stucture for data returned to transmitter. */
 struct Payload
@@ -67,20 +79,6 @@ struct Payload
 Payload AckPayload;                         
 uint8_t AckPayloadSize = sizeof(AckPayload);        // Size for later externs if needed etc. (=6)
 
-uint8_t PacketNumber;                               /** A counter for packets between channel hops. */
-
-#define UNCOMPRESSEDWORDS 20                        //   16 Channels plus extra 4 16 BIT values
-#define COMPRESSEDWORDS   UNCOMPRESSEDWORDS * 3 / 4 // = 16 WORDS  with no extra
-
-uint16_t ReceivedData[UNCOMPRESSEDWORDS];           //  20 x 16 BIT words
-uint16_t PreviousData[UNCOMPRESSEDWORDS];           /** Previously received data (used for servos. Hence not sent if unchanged) */
-
-extern void     FailSafe();                          // defined in main.cpp
-extern uint32_t ReconnectedMoment;
-extern bool     BoundFlag;
-extern void     ClearAckPayload();
-byte            NextFrequency;
-uint16_t        Interations = 0;
 
 /************************************************************************************************************/
 
@@ -145,11 +143,11 @@ void GetOldPipe()
 
 /************************************************************************************************************/
 
-void HopToNextFrequency()
+void HopToNextChannel()
 {
     CurrentRadio->stopListening();
     delay(1);
-    CurrentRadio->setChannel(NextFrequency);
+    CurrentRadio->setChannel(NextChannel);
     CurrentRadio->startListening();
 #ifdef DEBUG
     ShowHopDurationEtc();
@@ -259,7 +257,7 @@ void CheckIfItsHopTime(){
          ++NextChannelNumber;                      // Move up the channels' array
          if (NextChannelNumber >= FrequencyCount)  NextChannelNumber = 1; // If needed, wrap the channels' array pointer
          AckPayload.Byte5 = NextChannelNumber;     // Tell the transmitter which element of the array to use next.
-         NextFrequency =  * (FHSSChPointer + NextChannelNumber);   // Get the actual channel number from the array.
+         NextChannel =  * (FHSSChPointer + NextChannelNumber);   // Get the actual channel number from the array.
          HopNow = true;                            // Set local flag and hop when ready BUT NOT BEFORE.
     }
 }
