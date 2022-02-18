@@ -146,9 +146,11 @@ void FailSafe()
         Connected = false; // I lied earlier - we're not really connected.
     }
 }
+
+#ifdef DB_FHSS
 /************************************************************************************************************/
 /**
- * Print out some debugging information about the channel hopping implementation
+ * Print out some DB_FHSSging information about the channel hopping implementation
  * @param freq The next frequency to be used.
  */
 void ShowHopDurationEtc()
@@ -171,6 +173,7 @@ void ShowHopDurationEtc()
     Serial.println("");
     PacketStartTime = millis();
 }
+#endif
 /************************************************************************************************************/
 
 void ClearAckPayload()
