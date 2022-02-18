@@ -91,7 +91,7 @@ void LoadFailSafeData()
     uint16_t s[CHANNELSUSED];
 
     for (uint8_t i = 0; i < CHANNELSUSED; ++i) {
-        s[i] = map(EEPROM.read(i + FS_Offset), 0, 180, MINMICROS, MAXMICROS); // load failsafe values and simulate better resloution
+        s[i] = map(EEPROM.read(i + FS_Offset), 0, 180, MINMICROS, MAXMICROS); // load failsafe values and simulate better resolution
     }
     FS_Offset += CHANNELSUSED;
     for (uint8_t i = 0; i < CHANNELSUSED; ++i) {
