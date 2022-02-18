@@ -1,6 +1,7 @@
 var common_8h =
 [
     [ "CHANNELSUSED", "common_8h.html#ad143c01c2b36424b292b568f48cbe014", null ],
+    [ "COMPRESSEDWORDS", "common_8h.html#a461caf7198eaa60ce589088ff38b97cb", null ],
     [ "FAILSAFE_TIMEOUT", "common_8h.html#a0634ad724c86cd2b4ac7cfebbb622a9c", null ],
     [ "FREQUENCYSCOUNT", "common_8h.html#afe5bce36baf737bd284d43cd0e805fdb", null ],
     [ "FREQUENCYSCOUNT1", "common_8h.html#a71a3cc3c3b499cb9329172835e5a1df8", null ],
@@ -28,6 +29,7 @@ var common_8h =
     [ "SENSOR_HUB_I2C_ADDRESS", "common_8h.html#a07a2f33887ffa40ffbc3b895fcfc1999", null ],
     [ "SERVOSUSED", "common_8h.html#ab1515f8a159ef919c7afb5a1d71f55a3", null ],
     [ "START_LISTEN_PERIOD", "common_8h.html#a22b5ab9c1ef39cc9365d6773fe535aba", null ],
+    [ "UNCOMPRESSEDWORDS", "common_8h.html#a0c40a351a0c0e01fbd5e5b1b0187eb48", null ],
     [ "FailSafeSave", "common_8h.html#a332eaa61dd85cd649cf62de2345e246e", null ],
     [ "FailSafeSent", "common_8h.html#a97bbae82012a7c41f47dcb8ce8a48a90", null ],
     [ "FHSS_Channels", "common_8h.html#ad8056611eb984e8cacf9f0e526815a99", null ],
