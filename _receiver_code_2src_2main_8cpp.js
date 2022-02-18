@@ -27,7 +27,6 @@ var _receiver_code_2src_2main_8cpp =
     [ "SetTestFrequencies", "_receiver_code_2src_2main_8cpp.html#a31a35307bbac88ceda244272f25d399a", null ],
     [ "SetUKFrequencies", "_receiver_code_2src_2main_8cpp.html#a2eabdb233653fa02f0b899e26b5e8ce7", null ],
     [ "setup", "_receiver_code_2src_2main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d", null ],
-    [ "ShowHopDurationEtc", "_receiver_code_2src_2main_8cpp.html#a2863e7455e30e6fddc0fcf56f62d6564", null ],
     [ "UseReceivedData", "_receiver_code_2src_2main_8cpp.html#abb1997c589abc6432f612eaedf985e38", null ],
     [ "AltitudeGPS", "_receiver_code_2src_2main_8cpp.html#a9690c7445dbd0530fa729af6bac11044", null ],
     [ "AngleGPS", "_receiver_code_2src_2main_8cpp.html#a9cb6617428d513efc095336972632da6", null ],
