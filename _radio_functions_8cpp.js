@@ -27,7 +27,7 @@ var _radio_functions_8cpp =
     [ "DeComp", "_radio_functions_8cpp.html#a287a5bee7563781398fb98de9e039371", null ],
     [ "DoScanEnd", "_radio_functions_8cpp.html#a31fb6a46af68482e107cddee58dfb677", null ],
     [ "DoScanInit", "_radio_functions_8cpp.html#a77c4a4ffa609df08830ccece07bf283b", null ],
-    [ "HopToNextFrequency", "_radio_functions_8cpp.html#aa48ea4c5d47aa93d17dbc7d7b19238d8", null ],
+    [ "HopToNextChannel", "_radio_functions_8cpp.html#a62ec0168b1eea5f5c14f663d9217574d", null ],
     [ "InitRadio", "_radio_functions_8cpp.html#a86ce6c54618629a61b8502786d2ce82c", null ],
     [ "ScanAllChannels", "_radio_functions_8cpp.html#a3856ba0adae43d089f08c7b7f653b306", null ],
     [ "SendData", "_radio_functions_8cpp.html#a3d7322e78f097d02d476f17a6306997c", null ],
