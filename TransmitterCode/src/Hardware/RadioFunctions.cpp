@@ -218,7 +218,7 @@ void ScanAllChannels()
 void HopToNextFrequency()
 {
     Radio1.setChannel(NextFrequency);  // Hop !
-    Radio1.stopListening();            // Transmit only (no need for a delay() as this is here followed by several tasks)
+    Radio1.stopListening();            // Transmit only (no need for any extra delay() as this is here followed by several tasks)
     PacketNumber  = 0;
 
 #ifdef DB_FHSS
