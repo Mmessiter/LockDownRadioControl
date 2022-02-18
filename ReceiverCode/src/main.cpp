@@ -236,6 +236,7 @@ void BindModel()
         }
     }
     CurrentRadio->stopListening();
+    delayMicroseconds(250);
     SetNewPipe();
     BoundFlag   = true;
     BindNow     = 0;
