@@ -5732,10 +5732,10 @@ void GetTemperature()
 /************************************************************************************************************/
 void ParseAckPayload()
 {
-    if (AckPayload.Purpose & 0x80)                       // Hi bit is now the **HOP NOW!!** flag
+    if (AckPayload.Purpose & 0x80)                                       // Hi bit is now the **HOP NOW!!** flag
     {
-        NextChannelNumber   =  AckPayload.Byte5;
-        NextChannel       =  * (FHSSChPointer + NextChannelNumber);
+        NextChannelNumber   =  AckPayload.Byte5;                         // This is just the array pointer or offset  
+        NextChannel       =  * (FHSSChPointer + NextChannelNumber);      // The actual channel number pointed to.
         HopToNextChannel();
         AckPayload.Purpose &= 0x7f;
     }    
