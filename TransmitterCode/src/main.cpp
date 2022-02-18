@@ -489,7 +489,7 @@ uint32_t BlinkTimer    = 0;
 uint8_t  BlinkOnPhase  = 1;
 bool     LedWasGreen   = false;
 char     ThisRadio[4]  = "0 ";
-uint8_t NextFrequency   = 0;
+uint8_t NextChannel   = 0;
 bool    DoSbusSendOnly  = false;
 bool    BuddyMaster     = false;
 bool    SlaveHasControl = false;
@@ -5735,8 +5735,8 @@ void ParseAckPayload()
     if (AckPayload.Purpose & 0x80)                       // Hi bit is now the **HOP NOW!!** flag
     {
         NextChannelNumber   =  AckPayload.Byte5;
-        NextFrequency       =  * (FHSSChPointer + NextChannelNumber);
-        HopToNextFrequency();
+        NextChannel       =  * (FHSSChPointer + NextChannelNumber);
+        HopToNextChannel();
         AckPayload.Purpose &= 0x7f;
     }    
         switch (AckPayload.Purpose) // Only look at the low 7 BITS

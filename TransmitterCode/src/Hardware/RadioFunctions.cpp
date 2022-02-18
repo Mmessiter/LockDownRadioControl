@@ -128,11 +128,11 @@ void SendData()
                 TryOtherPipe();
                 PipeTimeout = millis();
             }     
-            NextFrequency = * (ReConPointer + random(RECONNECT_CHANNELS_COUNT));    // a **random** reconnect channel 
+            NextChannel = * (ReConPointer + random(RECONNECT_CHANNELS_COUNT));    // a **random** reconnect channel 
             ShowComms();                       // NEEDED WHEN NOT CONNECTED                        
             ReadSwitches();                                
             CheckTimer();  
-            HopToNextFrequency();
+            HopToNextChannel();
         }
         Connected = false;
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24
@@ -215,9 +215,9 @@ void ScanAllChannels()
 
 /************************************************************************************************************/
 
-void HopToNextFrequency()
+void HopToNextChannel()
 {
-    Radio1.setChannel(NextFrequency);  // Hop !
+    Radio1.setChannel(NextChannel);    // Hop !
     Radio1.stopListening();            // Transmit only (no need for any extra delay() as this is here followed by several tasks)
     PacketNumber  = 0;
 

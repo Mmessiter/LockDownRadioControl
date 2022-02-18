@@ -95,7 +95,7 @@ extern uint8_t        ScanStart;
 extern uint8_t        ScanEnd;
 extern uint8_t        BadChannelPointer;
 extern uint8_t        BadChannels[];
-extern uint8_t        NextFrequency;
+extern uint8_t        NextChannel;
 extern uint8_t        PacketNumber;
 extern bool           JustHoppedFlag;
 extern uint32_t       TxPace;
@@ -154,7 +154,7 @@ void SetThePipe(uint64_t WhichPipe);
 void DoScanInit();
 void DoScanEnd();
 void PreScan();
-void HopToNextFrequency();
+void HopToNextChannel();
 void ScanAllChannels();
 void SendData();
 
