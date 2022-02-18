@@ -178,7 +178,7 @@ void InitCurrentRadio()
 
 void ListenALittle(uint32_t HowLong){
     uint32_t ATimer = millis();
-    while ((!CurrentRadio->available()) && (millis() - ATimer) < HowLong) { }    //  Return as soon as connected; or wait a bit...
+    while ((!CurrentRadio->available()) && (millis() - ATimer) < HowLong) { }    // Wait here until connected, or timeout
     if (CurrentRadio->available()) Connected = true;
 }
 
