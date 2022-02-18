@@ -6,28 +6,36 @@
 RF24            Radio1(pinCE1, pinCSN1);
 RF24            Radio2(pinCE2, pinCSN2);
 RF24*           CurrentRadio = &Radio1;
+bool            Connected   = false;
+bool            SaveNewBind = true;
+bool            HopNow      = false;
 uint8_t         ThisRadio    = 1;
+uint8_t         SavedPipeAddress[8];
+uint8_t         NextChannelNumber = 0;
+uint8_t         NextChannel;
+uint8_t         ReconnectIndex = 0;
+uint8_t         PacketNumber; 
+uint16_t        ReceivedData[UNCOMPRESSEDWORDS];           //  20 x 16 BIT words
+uint16_t        PreviousData[UNCOMPRESSEDWORDS];           /** Previously received data (used for servos. Hence not sent if unchanged) */
+uint16_t        Interations = 0;
+uint32_t        HopStart;
 uint64_t        ThisPipe = 0xBABE1E5420LL; // default startup
 uint64_t        NewPipe  = 0;
 uint64_t        OldPipe  = 0;
-bool            Connected          = false;
-bool            SaveNewBind = true;
-uint8_t         SavedPipeAddress[8];
-uint32_t        HopStart;
-uint8_t         NextChannelNumber = 0;
-bool            HopNow = false;
-uint8_t         ReconnectIndex = 0;
-uint8_t         PacketNumber;                              /** A counter for packets between channel hops. */
-uint16_t        ReceivedData[UNCOMPRESSEDWORDS];           //  20 x 16 BIT words
-uint16_t        PreviousData[UNCOMPRESSEDWORDS];           /** Previously received data (used for servos. Hence not sent if unchanged) */
-uint8_t         NextChannel;
-uint16_t        Interations = 0;
 
 
-extern void     ShowHopDurationEtc();
-extern void     ReadSensorHub();
-extern void     SetUKFrequencies();
+extern bool     BoundFlag;
+extern bool     GpsFix;
+extern bool     SENSOR_HUB_CONNECTED;  
+extern uint8_t  HoursGPS;
+extern uint8_t  MinsGPS;
+extern uint8_t  SecsGPS;
+extern uint8_t  YearGPS;
+extern uint8_t  MonthGPS;
+extern uint8_t  DayGPS;
+extern uint8_t  SatellitesGPS; 
 extern uint16_t BaroAltitude;
+extern uint32_t ReconnectedMoment;
 extern float    INA219Volts;
 extern float    BaroTemperature;
 extern float    LatitudeGPS;
@@ -37,19 +45,12 @@ extern float    AngleGPS;
 extern float    AltitudeGPS;
 extern float    DistanceGPS;
 extern float    CourseToGPS;
-extern uint8_t  HoursGPS;
-extern uint8_t  MinsGPS;
-extern uint8_t  SecsGPS;
-extern uint8_t  YearGPS;
-extern uint8_t  MonthGPS;
-extern uint8_t  DayGPS;
-extern uint8_t  SatellitesGPS; 
-extern bool     GpsFix;
-extern bool     SENSOR_HUB_CONNECTED;    
+  
 extern void     FailSafe();                               // defined in main.cpp
-extern uint32_t ReconnectedMoment;
-extern bool     BoundFlag;
 extern void     ClearAckPayload();
+extern void     ShowHopDurationEtc();
+extern void     ReadSensorHub();
+extern void     SetUKFrequencies();
 
  
 /** AckPayload Stucture for data returned to transmitter. */
