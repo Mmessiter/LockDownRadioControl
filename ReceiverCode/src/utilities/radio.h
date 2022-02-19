@@ -218,16 +218,18 @@ void Reconnect(){
         CurrentRadio->setChannel(ReconnectChannel);  
         ListenALittle(START_LISTEN_PERIOD);
 #ifdef SECOND_TRANSCEIVER
-        CurrentRadio->stopListening();
-        delay(1);
-        if (ThisRadio == 2) {
-            CurrentRadio = &Radio1;
-            ThisRadio    = 1;
-        } else {
-            CurrentRadio = &Radio2;
-            ThisRadio    = 2;
+        if (!Connected) {
+            CurrentRadio->stopListening();
+            delay(1);
+            if (ThisRadio == 2) {
+                CurrentRadio = &Radio1;
+                ThisRadio    = 1;
+            } else {
+                CurrentRadio = &Radio2;
+                ThisRadio    = 2;
+            }
+            ProdRadio(ReconnectChannel);
         }
-        ProdRadio(ReconnectChannel);
 #endif // defined (SECOND_TRANSCEIVER)
         if (!Connected) {
             if ((millis() - SearchStartTime) > FAILSAFE_TIMEOUT){
