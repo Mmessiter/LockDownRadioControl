@@ -12,6 +12,7 @@ var radio_8h =
     [ "ListenALittle", "radio_8h.html#a3aa62621c20e39d37f01b29a3fc947e9", null ],
     [ "LoadAckPayload", "radio_8h.html#a664f409561bfcf119e0379dd991217e5", null ],
     [ "LoadVersioNumber", "radio_8h.html#af067d2e9e8981a59af86ec75a0db36b4", null ],
+    [ "ProdRadio", "radio_8h.html#a62f1498f67d7e438905ae486bc27044f", null ],
     [ "Radio1", "radio_8h.html#a6e2d4126d864c50e7c23c988c2bfdd1a", null ],
     [ "Radio2", "radio_8h.html#a8b76f3c338025926421c7b308405bbfd", null ],
     [ "ReadSavedPipe", "radio_8h.html#a56ee137fc60749fa274236bc239c3291", null ],
