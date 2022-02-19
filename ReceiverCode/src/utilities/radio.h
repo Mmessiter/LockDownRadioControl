@@ -177,6 +177,7 @@ void InitCurrentRadio()
 
 void ListenALittle(uint32_t HowLong){
     uint32_t ATimer = millis();
+    CurrentRadio->startListening();
     while ((!CurrentRadio->available()) && (millis() - ATimer) < HowLong) { }    // Wait here until connected, or timeout
     if (CurrentRadio->available()) Connected = true;
 }
@@ -196,7 +197,6 @@ void ProdRadio(uint8_t Recon_Ch)
     CurrentRadio->setDataRate(RF24_250KBPS);
     CurrentRadio->openReadingPipe(1, ThisPipe);
     CurrentRadio->setChannel(Recon_Ch);
-    CurrentRadio->startListening();
     ListenALittle(PROD_LISTEN_PERIOD);
 }
 #endif // defined (SECOND_TRANSCEIVER)
@@ -217,7 +217,6 @@ void Reconnect(){
         ++ ReconnectIndex;
         if (ReconnectIndex >= RECONNECT_CHANNELS_COUNT) ReconnectIndex = 0;
         CurrentRadio->setChannel(ReconnectChannel);  
-        CurrentRadio->startListening();
         ListenALittle(START_LISTEN_PERIOD);
 #ifdef SECOND_TRANSCEIVER
         CurrentRadio->stopListening();
@@ -231,7 +230,6 @@ void Reconnect(){
         }
         ProdRadio(ReconnectChannel);
 #endif // defined (SECOND_TRANSCEIVER)
-        ListenALittle(LISTEN_PERIOD);
         if (!Connected) {
             if ((millis() - SearchStartTime) > FAILSAFE_TIMEOUT){
                 if (!FailSafeSent){
