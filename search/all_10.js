@@ -72,9 +72,8 @@ var searchData=
   ['println_69',['println',['../class_adafruit___bus_i_o___register.html#aebb1d9dd6520ba1a20b3952c434d7a47',1,'Adafruit_BusIO_Register::println(Stream *s=&amp;Serial)'],['../class_adafruit___bus_i_o___register.html#aebb1d9dd6520ba1a20b3952c434d7a47',1,'Adafruit_BusIO_Register::println(Stream *s=&amp;Serial)'],['../class_adafruit___bus_i_o___register.html#aebb1d9dd6520ba1a20b3952c434d7a47',1,'Adafruit_BusIO_Register::println(Stream *s=&amp;Serial)']]],
   ['printsensordetails_70',['printSensorDetails',['../class_adafruit___sensor.html#af994cc1147831134ad7bf7b2c99d7478',1,'Adafruit_Sensor::printSensorDetails(void)'],['../class_adafruit___sensor.html#af994cc1147831134ad7bf7b2c99d7478',1,'Adafruit_Sensor::printSensorDetails(void)'],['../class_adafruit___sensor.html#af994cc1147831134ad7bf7b2c99d7478',1,'Adafruit_Sensor::printSensorDetails(void)']]],
   ['prod_5flisten_5fperiod_71',['PROD_LISTEN_PERIOD',['../common_8h.html#a7346cacfe2c75a142ec42dbac3a53261',1,'common.h']]],
-  ['prodradio_72',['ProdRadio',['../radio_8h.html#a62f1498f67d7e438905ae486bc27044f',1,'radio.h']]],
-  ['propochannels_73',['PROPOCHANNELS',['../_transmitter_code_2src_2main_8cpp.html#a19677884790860fea7a21dae72e1b862',1,'main.cpp']]],
-  ['purple_74',['Purple',['../_transmitter_code_2src_2main_8cpp.html#a5168ce33eb581e85fbfa454e89012bfb',1,'main.cpp']]],
-  ['purpose_75',['Purpose',['../struct_payload.html#ac18701f2aa35ebd8402f45f840d5c445',1,'Payload']]],
-  ['pwmpins_76',['PWMPins',['../_receiver_code_2src_2main_8cpp.html#a19f864fa6bdea0867325f70e162c92ef',1,'main.cpp']]]
+  ['propochannels_72',['PROPOCHANNELS',['../_transmitter_code_2src_2main_8cpp.html#a19677884790860fea7a21dae72e1b862',1,'main.cpp']]],
+  ['purple_73',['Purple',['../_transmitter_code_2src_2main_8cpp.html#a5168ce33eb581e85fbfa454e89012bfb',1,'main.cpp']]],
+  ['purpose_74',['Purpose',['../struct_payload.html#ac18701f2aa35ebd8402f45f840d5c445',1,'Payload']]],
+  ['pwmpins_75',['PWMPins',['../_receiver_code_2src_2main_8cpp.html#a19f864fa6bdea0867325f70e162c92ef',1,'main.cpp']]]
 ];
