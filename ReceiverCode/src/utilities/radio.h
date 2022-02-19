@@ -211,7 +211,7 @@ void Reconnect(){
     FailSafeSent    = false;
     while (!Connected) {
         CurrentRadio->stopListening();
-        delay(1);           
+        delay(1);                                                                  // NEEDED!
         ReconnectChannel = * (FHSSChPointer + ReconnectIndex);                     // Get a reconnect channel - not always the same one - one of 5 now.
         ++ ReconnectIndex;
         if (ReconnectIndex >= RECONNECT_CHANNELS_COUNT) ReconnectIndex = 0;
