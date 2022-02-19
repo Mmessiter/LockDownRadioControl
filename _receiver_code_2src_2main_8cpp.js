@@ -1,5 +1,8 @@
 var _receiver_code_2src_2main_8cpp =
 [
+    [ "Failed", "_receiver_code_2src_2main_8cpp.html#aed7f6b5b10b7b8235e38d72a5dfc20d8", null ],
+    [ "GPSI2CBYTES", "_receiver_code_2src_2main_8cpp.html#ab92133bc8cbae639e681505e0679bc28", null ],
+    [ "IDLEN", "_receiver_code_2src_2main_8cpp.html#a472646a6b1f959aa3b4261a8247c2015", null ],
     [ "AttachServos", "_receiver_code_2src_2main_8cpp.html#a0cbfd712ab3bd8f654bc19400fd704bd", null ],
     [ "BindModel", "_receiver_code_2src_2main_8cpp.html#aa0c6905579a33aef28d737d43676cbbd", null ],
     [ "CheckParams", "_receiver_code_2src_2main_8cpp.html#abd09fca8fe7cb7240846989f1ccd6a94", null ],
@@ -24,7 +27,6 @@ var _receiver_code_2src_2main_8cpp =
     [ "SetTestFrequencies", "_receiver_code_2src_2main_8cpp.html#a31a35307bbac88ceda244272f25d399a", null ],
     [ "SetUKFrequencies", "_receiver_code_2src_2main_8cpp.html#a2eabdb233653fa02f0b899e26b5e8ce7", null ],
     [ "setup", "_receiver_code_2src_2main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d", null ],
-    [ "ShowHopDurationEtc", "_receiver_code_2src_2main_8cpp.html#a2863e7455e30e6fddc0fcf56f62d6564", null ],
     [ "UseReceivedData", "_receiver_code_2src_2main_8cpp.html#abb1997c589abc6432f612eaedf985e38", null ],
     [ "AltitudeGPS", "_receiver_code_2src_2main_8cpp.html#a9690c7445dbd0530fa729af6bac11044", null ],
     [ "AngleGPS", "_receiver_code_2src_2main_8cpp.html#a9cb6617428d513efc095336972632da6", null ],

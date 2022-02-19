@@ -55,7 +55,7 @@ var searchData=
   ['showfilenumber_52',['ShowFileNumber',['../_transmitter_code_2src_2main_8cpp.html#aa337d6e5cf496fbca7cdc61818f8239a',1,'main.cpp']]],
   ['showflightmode_53',['ShowFlightMode',['../_transmitter_code_2src_2main_8cpp.html#a61f4d39b42cd6199d0ad2f97bb7f80e2',1,'main.cpp']]],
   ['showgps_54',['ShowGPS',['../_sensor_hub_l_c_2src_2main_8cpp.html#a6dfb0fe1b733dfc8e9d989a321596850',1,'ShowGPS():&#160;main.cpp'],['../_sensor_hub_t32_2src_2main_8cpp.html#a6dfb0fe1b733dfc8e9d989a321596850',1,'ShowGPS():&#160;main.cpp'],['../_sensor_hub_teensy3__6_2src_2main_8cpp.html#a6dfb0fe1b733dfc8e9d989a321596850',1,'ShowGPS():&#160;main.cpp']]],
-  ['showhopdurationetc_55',['ShowHopDurationEtc',['../radio_8h.html#a2863e7455e30e6fddc0fcf56f62d6564',1,'ShowHopDurationEtc():&#160;main.cpp'],['../_receiver_code_2src_2main_8cpp.html#a2863e7455e30e6fddc0fcf56f62d6564',1,'ShowHopDurationEtc():&#160;main.cpp']]],
+  ['showhopdurationetc_55',['ShowHopDurationEtc',['../radio_8h.html#a2863e7455e30e6fddc0fcf56f62d6564',1,'radio.h']]],
   ['showservopos_56',['ShowServoPos',['../_radio_functions_8h.html#ad959eec03b0151ade81dc088593d816c',1,'ShowServoPos():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#ad959eec03b0151ade81dc088593d816c',1,'ShowServoPos():&#160;main.cpp']]],
   ['sortdirectory_57',['SortDirectory',['../_transmitter_code_2src_2main_8cpp.html#a113f8bee0942b732f19881466ef0f42d',1,'main.cpp']]],
   ['standby_58',['standby',['../class_adafruit___g_p_s.html#a32ddd41152a08354d2ee2b4311bbf013',1,'Adafruit_GPS']]],
