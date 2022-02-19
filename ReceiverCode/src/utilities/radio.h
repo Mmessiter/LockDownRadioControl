@@ -199,10 +199,21 @@ void ProdRadio(uint8_t Recon_Ch)
     CurrentRadio->setChannel(Recon_Ch);
     ListenALittle();
 }
-#endif // defined (SECOND_TRANSCEIVER)
-
 /************************************************************************************************************/
-
+void TryTheOtherTransceiver(uint8_t Recon_Ch){
+            CurrentRadio->stopListening();
+            delay(1);                                                              // NEEDED!
+            if (ThisRadio == 2) {
+                CurrentRadio = &Radio1;
+                ThisRadio    = 1;
+            } else {
+                CurrentRadio = &Radio2;
+                ThisRadio    = 2;
+            }
+            ProdRadio(Recon_Ch);
+}
+#endif // defined (SECOND_TRANSCEIVER)
+/************************************************************************************************************
 void Reconnect(){
 
     uint32_t SearchStartTime  = millis();;
@@ -218,19 +229,8 @@ void Reconnect(){
         CurrentRadio->setChannel(ReconnectChannel);  
         ListenALittle();
 #ifdef SECOND_TRANSCEIVER
-        if (!Connected) {
-            CurrentRadio->stopListening();
-            delay(1);                                                              // NEEDED!
-            if (ThisRadio == 2) {
-                CurrentRadio = &Radio1;
-                ThisRadio    = 1;
-            } else {
-                CurrentRadio = &Radio2;
-                ThisRadio    = 2;
-            }
-            ProdRadio(ReconnectChannel);
-        }
-#endif // defined (SECOND_TRANSCEIVER)
+        if (!Connected) TryTheOtherTransceiver(ReconnectChannel);
+#endif 
         if (!Connected) {
             if ((millis() - SearchStartTime) > FAILSAFE_TIMEOUT){
                 if (!FailSafeSent){
