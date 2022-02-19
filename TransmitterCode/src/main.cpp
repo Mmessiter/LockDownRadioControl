@@ -498,8 +498,7 @@ uint16_t ModelNumberOffset = 0;
 uint32_t ModelNameTimeCheck = 0;
 uint16_t LastModelLoaded    = 0;
 
-
-uint8_t * FHSSChPointer;                                                                                  // pointer for main channels array
+uint8_t * FHSSChPointer;                      // pointer for channels array (first five only used for reconnect)
 
 uint8_t FHSS_Channels1[42] = {93,111,107,103,106,97,108,102,118,104,101,109,98,
 113,124,115,91,96,85,117,89,99,114,87,112,
