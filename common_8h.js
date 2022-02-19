@@ -36,8 +36,5 @@ var common_8h =
     [ "FHSSChPointer", "common_8h.html#a76b48a1dfbe2bd97ee5e0479ff16e8ef", null ],
     [ "FrequencyCount", "common_8h.html#a2cecb6d8a82a88635e2c10438fedf092", null ],
     [ "INA219_CONNECTED", "common_8h.html#a8d0889feaf5beb5db1e50a266ea7b0a5", null ],
-    [ "LastPacketArrivalTime", "common_8h.html#a9ac62185b964d18f5843146fce5b0063", null ],
-    [ "Reconnect_Channels", "common_8h.html#a56c0ced13b1134bb2ce891a6553fa70a", null ],
-    [ "Reconnect_Channels1", "common_8h.html#ac38323d76e7fcd55b9a2e5ce786c4132", null ],
-    [ "ReConPointer", "common_8h.html#ab2f97e0b984ebbe078a33a6ca43dc4d1", null ]
+    [ "LastPacketArrivalTime", "common_8h.html#a9ac62185b964d18f5843146fce5b0063", null ]
 ];
