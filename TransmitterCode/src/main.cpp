@@ -498,13 +498,13 @@ uint16_t ModelNumberOffset = 0;
 uint32_t ModelNameTimeCheck = 0;
 uint16_t LastModelLoaded    = 0;
 
-uint8_t * FHSSChPointer;                      // pointer for channels array (first five only used for reconnect)
+uint8_t * FHSSChPointer;                                                              // pointer for channels array (first five only used for reconnect)
 
-uint8_t FHSS_Channels1[42] = {93,111,107,103,106,97,108,102,118,104,101,109,98,
+uint8_t FHSS_Channels1[42] = {93,111,107,103,106,97,108,102,118,104,101,109,98,      // TEST array
 113,124,115,91,96,85,117,89,99,114,87,112,
 86,94,92,119,120,100,121,123,95,122,105,84,116,90,110,88};
 
-uint8_t FHSS_Channels[83] = {51,28,24,61,64,55,66,19,76,21,59,67,15,71,82,32,49,69,13,2,34,47,20,16,72,
+uint8_t FHSS_Channels[83] = {51,28,24,61,64,55,66,19,76,21,59,67,15,71,82,32,49,69,13,2,34,47,20,16,72,  // UK array
 35,57,45,29,75,3,41,62,11,9,77,37,8,31,36,18,17,50,78,73,30,79,6,23,40,
 54,12,80,53,22,1,74,39,58,63,70,52,42,25,43,26,14,38,48,68,33,27,60,44,46,
 56,7,81,5,65,4,10};
@@ -972,7 +972,7 @@ void ReadTime()
 
     char Owner[] = "Owner";
 
-    FixDeltaGMTSign();
+    FixDeltaGMTSign();  // TODO Fix the time and date when it goes past midnight in either direction owing to time zone
 
     if (CurrentView == FrontView || CurrentView == Options_View) {
         if (RTC.read(tm)) {
