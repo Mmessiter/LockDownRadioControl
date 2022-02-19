@@ -16,7 +16,7 @@ var searchData=
   ['fhss_5fchannels1_13',['FHSS_Channels1',['../common_8h.html#aeea38114c49f6b6dbe375b7a64acdccb',1,'FHSS_Channels1():&#160;common.h'],['../_transmitter_code_2src_2main_8cpp.html#aeea38114c49f6b6dbe375b7a64acdccb',1,'FHSS_Channels1():&#160;main.cpp']]],
   ['fhss_5frescue_5fbottom_14',['FHSS_RESCUE_BOTTOM',['../_radio_functions_8cpp.html#ae3ff62396efcffeead62e0403efbd6de',1,'RadioFunctions.cpp']]],
   ['fhss_5frescue_5ftop_15',['FHSS_RESCUE_TOP',['../_radio_functions_8cpp.html#ab269c2e7db5187ffd777d443dc486b7f',1,'RadioFunctions.cpp']]],
-  ['fhsschpointer_16',['FHSSChPointer',['../common_8h.html#a76b48a1dfbe2bd97ee5e0479ff16e8ef',1,'FHSSChPointer():&#160;common.h'],['../_transmitter_code_2src_2main_8cpp.html#a76b48a1dfbe2bd97ee5e0479ff16e8ef',1,'FHSSChPointer():&#160;main.cpp']]],
+  ['fhsschpointer_16',['FHSSChPointer',['../common_8h.html#a76b48a1dfbe2bd97ee5e0479ff16e8ef',1,'FHSSChPointer():&#160;common.h'],['../_radio_functions_8h.html#a76b48a1dfbe2bd97ee5e0479ff16e8ef',1,'FHSSChPointer():&#160;common.h'],['../_transmitter_code_2src_2main_8cpp.html#a76b48a1dfbe2bd97ee5e0479ff16e8ef',1,'FHSSChPointer():&#160;main.cpp']]],
   ['fhssview_17',['FhssView',['../_transmitter_code_2src_2main_8cpp.html#a878e0e1e38b67ffd5e1de07170efba1c',1,'FhssView():&#160;main.cpp'],['../_radio_functions_8cpp.html#a878e0e1e38b67ffd5e1de07170efba1c',1,'FhssView():&#160;RadioFunctions.cpp']]],
   ['fhssview_5frhigh_18',['FhssView_Rhigh',['../_transmitter_code_2src_2main_8cpp.html#adb9a7a221fbbaa115b355493f8d94dd1',1,'main.cpp']]],
   ['fhssview_5frlow_19',['FhssView_Rlow',['../_transmitter_code_2src_2main_8cpp.html#a07c5647132fc5f6bcdf9333b10dc40a6',1,'main.cpp']]],

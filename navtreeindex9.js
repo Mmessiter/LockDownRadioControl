@@ -1,8 +1,5 @@
 var NAVTREEINDEX9 =
 {
-"globals_defs_r.html":[12,1,6,15],
-"globals_defs_s.html":[12,1,6,16],
-"globals_defs_t.html":[12,1,6,17],
 "globals_defs_u.html":[12,1,6,18],
 "globals_defs_w.html":[12,1,6,19],
 "globals_defs_x.html":[12,1,6,20],
@@ -249,5 +246,8 @@ var NAVTREEINDEX9 =
 "struct_tiny_g_p_s_altitude.html#ac782babc0c485d47e6f57384e88b8cc8":[11,0,19,1],
 "struct_tiny_g_p_s_altitude.html#ac782babc0c485d47e6f57384e88b8cc8":[11,0,19,0],
 "struct_tiny_g_p_s_course.html":[11,0,20],
-"struct_tiny_g_p_s_course.html#a76dc8ae6c2fe5ead9b44c8d53a3272ca":[11,0,20,2]
+"struct_tiny_g_p_s_course.html#a76dc8ae6c2fe5ead9b44c8d53a3272ca":[11,0,20,2],
+"struct_tiny_g_p_s_course.html#a76dc8ae6c2fe5ead9b44c8d53a3272ca":[11,0,20,1],
+"struct_tiny_g_p_s_course.html#a76dc8ae6c2fe5ead9b44c8d53a3272ca":[11,0,20,0],
+"struct_tiny_g_p_s_date.html":[11,0,22]
 };
