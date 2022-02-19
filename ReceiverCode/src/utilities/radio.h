@@ -220,7 +220,7 @@ void Reconnect(){
 #ifdef SECOND_TRANSCEIVER
         if (!Connected) {
             CurrentRadio->stopListening();
-            delay(1);
+            delay(1);                                                              // NEEDED!
             if (ThisRadio == 2) {
                 CurrentRadio = &Radio1;
                 ThisRadio    = 1;
