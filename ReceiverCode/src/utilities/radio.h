@@ -197,7 +197,7 @@ void ProdRadio(uint8_t Recon_Ch)
     CurrentRadio->setDataRate(RF24_250KBPS);
     CurrentRadio->openReadingPipe(1, ThisPipe);
     CurrentRadio->setChannel(Recon_Ch);
-    ListenALittle(PROD_LISTEN_PERIOD);
+    ListenALittle(LISTEN_PERIOD);
 }
 #endif // defined (SECOND_TRANSCEIVER)
 
@@ -216,7 +216,7 @@ void Reconnect(){
         ++ ReconnectIndex;
         if (ReconnectIndex >= RECONNECT_CHANNELS_COUNT) ReconnectIndex = 0;
         CurrentRadio->setChannel(ReconnectChannel);  
-        ListenALittle(START_LISTEN_PERIOD);
+        ListenALittle(LISTEN_PERIOD);
 #ifdef SECOND_TRANSCEIVER
         if (!Connected) {
             CurrentRadio->stopListening();
