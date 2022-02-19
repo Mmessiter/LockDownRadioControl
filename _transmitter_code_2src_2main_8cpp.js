@@ -452,6 +452,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "tm", "_transmitter_code_2src_2main_8cpp.html#a52357cbf68af66972047f7aed7a45218", null ],
     [ "TotalledRecentPacketsLost", "_transmitter_code_2src_2main_8cpp.html#a7f485e1361fb90bec75e06944665686d", null ],
     [ "TransmitterVersionNumber", "_transmitter_code_2src_2main_8cpp.html#a60227ba657b591c1f0123978897e60aa", null ],
+    [ "TrimFactor", "_transmitter_code_2src_2main_8cpp.html#a9a5554921fdc9aa1218a50b8754e3934", null ],
     [ "Trims", "_transmitter_code_2src_2main_8cpp.html#a0d77de5a9683eac2f6b0c4a93b907432", null ],
     [ "TrimsReversed", "_transmitter_code_2src_2main_8cpp.html#aa39c75ab51f6174dac09a2fc7fdff741", null ],
     [ "TrimView_ch1", "_transmitter_code_2src_2main_8cpp.html#a6728e94da032c4b0ef63b2eb6dd72721", null ],
