@@ -17,11 +17,11 @@
 
     #define RXVERSION_MAJOR             1
     #define RXVERSION_MINOR             5
-    #define RXVERSION_MINIMUS           8    // February 14th 2022
+    #define RXVERSION_MINIMUS           8    // February 19th 2022
 
 
 //**************************************************************************************************************************
- #define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< **
+// #define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< **
 //**************************************************************************************************************************
 
 
