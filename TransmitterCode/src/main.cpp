@@ -522,6 +522,7 @@ uint32_t SwapWaveBandTimer = 0;
 uint8_t  UkRulesCounter = 0;
 bool     UkRules = true;
 uint8_t  SwapWaveBand = 0;  
+uint16_t TrimFactor   = 2;   // How much to multiply trim by
 
 
 /************************************************************************************************************/
@@ -1879,7 +1880,9 @@ float MapExp(float xx, float Xxmin, float Xxmax, float Yymin, float Yymax, float
 /** @brief GET NEW SERVO POSITIONS */
 void get_new_channels_values()
 {
-    short unsigned int k = 0, l = 0, m = 0, n = 0;
+    
+    uint16_t k = 0, l = 0, m = 0, n = 0, TrimAmount;
+
     for (n = 0; n < CHANNELSUSED; ++n) {
         l = InPutStick[n]; // input sticks knobs & switches are now mapped by user
         if (l <= 7)
@@ -1922,11 +1925,12 @@ void get_new_channels_values()
             }
         }
         if (n < 4) {
-            if (TrimsReversed[FlightMode][n] == 0) {
-                k += (Trims[FlightMode][n] - 80); // TRIMS on lower four channels 80 is mid point (40 - 120)
+            TrimAmount = (Trims[FlightMode][n] - 80) * TrimFactor;  // TRIMS on lower four channels (80 is mid point !! (range 40 - 120))
+            if (!TrimsReversed[FlightMode][n]) {
+                k += TrimAmount; 
             }
             else {
-                k -= (Trims[FlightMode][n] - 80);
+                k -= TrimAmount;
             }
         }
 
