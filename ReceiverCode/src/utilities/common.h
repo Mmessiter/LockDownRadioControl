@@ -13,17 +13,13 @@
     #include <SBUS.h>
     #include "utilities/radio.h"
 
-
-
     #define RXVERSION_MAJOR             1
     #define RXVERSION_MINOR             5
     #define RXVERSION_MINIMUS           9    // February 19th 2022
 
-
 //**************************************************************************************************************************
 // #define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< **
 //**************************************************************************************************************************
-
 
     #define SENSOR_HUB_I2C_ADDRESS      8
     #define HOPTIME                     50   // ms between channel changes ( >5 packets per hop)
@@ -51,7 +47,6 @@
     #define RECONNECT_CHANNELS_COUNT    5
     #define UNCOMPRESSEDWORDS           20              //   16 Channels plus extra 4 16 BIT values
     #define COMPRESSEDWORDS   UNCOMPRESSEDWORDS * 3 / 4 // = 16 WORDS  with no extra
-
 
     // #define DB_FHSS        
     // #define DB_SENSORS
