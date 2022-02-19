@@ -175,7 +175,7 @@ void InitCurrentRadio()
 
 /************************************ Try to connect  ... *********************************************/
 
-void ListenALittle(){
+void TryToConnectNow(){
     uint32_t ATimer = millis();
     CurrentRadio->startListening();
     while ((!CurrentRadio->available()) && (millis() - ATimer) < LISTEN_PERIOD) { }    // Wait here until connected, or very short timeout (3 ms)
@@ -197,7 +197,7 @@ void ProdRadio(uint8_t Recon_Ch)
     CurrentRadio->setDataRate(RF24_250KBPS);
     CurrentRadio->openReadingPipe(1, ThisPipe);
     CurrentRadio->setChannel(Recon_Ch);
-    ListenALittle();
+    TryToConnectNow();
 }
 
 /************************************************************************************************************/
@@ -218,7 +218,7 @@ void TryTheOtherTransceiver(uint8_t Recon_Ch){
 
 /************************************************************************************************************/
 
-void Reconnect(){
+void Reconnect(){                                                                 // This is called when contact is lost, to reconnect ASAP
 
     uint32_t SearchStartTime  = millis();;
     uint8_t  ReconnectChannel = 0;
@@ -231,7 +231,7 @@ void Reconnect(){
         ++ ReconnectIndex;
         if (ReconnectIndex >= RECONNECT_CHANNELS_COUNT) ReconnectIndex = 0;
         CurrentRadio->setChannel(ReconnectChannel);  
-        ListenALittle();
+        TryToConnectNow();
 #ifdef SECOND_TRANSCEIVER
         if (!Connected) TryTheOtherTransceiver(ReconnectChannel);
 #endif 
