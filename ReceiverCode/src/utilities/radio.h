@@ -178,7 +178,7 @@ void InitCurrentRadio()
 void ListenALittle(){
     uint32_t ATimer = millis();
     CurrentRadio->startListening();
-    while ((!CurrentRadio->available()) && (millis() - ATimer) < LISTEN_PERIOD) { }    // Wait here until connected, or timeout
+    while ((!CurrentRadio->available()) && (millis() - ATimer) < LISTEN_PERIOD) { }    // Wait here until connected, or very short timeout (3 ms)
     if (CurrentRadio->available()) Connected = true;
 }
 
@@ -199,7 +199,9 @@ void ProdRadio(uint8_t Recon_Ch)
     CurrentRadio->setChannel(Recon_Ch);
     ListenALittle();
 }
+
 /************************************************************************************************************/
+
 void TryTheOtherTransceiver(uint8_t Recon_Ch){
             CurrentRadio->stopListening();
             delay(1);                                                              // NEEDED!
@@ -213,7 +215,9 @@ void TryTheOtherTransceiver(uint8_t Recon_Ch){
             ProdRadio(Recon_Ch);
 }
 #endif // defined (SECOND_TRANSCEIVER)
-/************************************************************************************************************
+
+/************************************************************************************************************/
+
 void Reconnect(){
 
     uint32_t SearchStartTime  = millis();;
