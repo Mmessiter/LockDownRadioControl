@@ -58,18 +58,14 @@ bool FailSafeSave               = false;
 bool FailSafeSent               = false;
 bool INA219_CONNECTED           = false;                   //  Volts from INA219 ?
 
-uint8_t * ReConPointer;                                                                                    // pointer for recovery channels array
-uint8_t * FHSSChPointer;                                                                                   // pointer for FHSS channels
-
+uint8_t * FHSSChPointer;                                                                                   // Pointer for FHSS channels' array
 uint8_t FrequencyCount = FREQUENCYSCOUNT;
-uint8_t Reconnect_Channels[RECONNECT_CHANNELS_COUNT] = {83, 2, 75, 18, 80};                                // recovery channels (UK legal)
-uint8_t FHSS_Channels[83] = {51,28,24,61,64,55,66,19,76,21,59,67,15,71,82,32,49,69,13,2,34,47,20,16,72,
+uint8_t FHSS_Channels[83] = {51,28,24,61,64,55,66,19,76,21,59,67,15,71,82,32,49,69,13,2,34,47,20,16,72,    // These are good for UK
 35,57,45,29,75,3,41,62,11,9,77,37,8,31,36,18,17,50,78,73,30,79,6,23,40,
 54,12,80,53,22,1,74,39,58,63,70,52,42,25,43,26,14,38,48,68,33,27,60,44,46,
 56,7,81,5,65,4,10};
 
-uint8_t Reconnect_Channels1[RECONNECT_CHANNELS_COUNT] = {123, 114, 87, 94, 119};
-uint8_t FHSS_Channels1[42] = {93,111,107,103,106,97,108,102,118,104,101,109,98,
+uint8_t FHSS_Channels1[42] = {93,111,107,103,106,97,108,102,118,104,101,109,98,                             // These are good for tests where WiFi is overpowering
 113,124,115,91,96,85,117,89,99,114,87,112,
 86,94,92,119,120,100,121,123,95,122,105,84,116,90,110,88};
 

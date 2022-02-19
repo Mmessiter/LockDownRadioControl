@@ -213,7 +213,7 @@ void Reconnect(){
     while (!Connected) {
         CurrentRadio->stopListening();
         delay(1);           
-        ReconnectChannel = * (ReConPointer + ReconnectIndex);                     // Get a reconnect channel - not always the same one - one of 5 now.
+        ReconnectChannel = * (FHSSChPointer + ReconnectIndex);                     // Get a reconnect channel - not always the same one - one of 5 now.
         ++ ReconnectIndex;
         if (ReconnectIndex >= RECONNECT_CHANNELS_COUNT) ReconnectIndex = 0;
         CurrentRadio->setChannel(ReconnectChannel);  
