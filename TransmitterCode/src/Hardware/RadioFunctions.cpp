@@ -128,7 +128,7 @@ void SendData()
                 TryOtherPipe();
                 PipeTimeout = millis();
             }     
-            NextChannel = * (ReConPointer + random(RECONNECT_CHANNELS_COUNT));    // a **random** reconnect channel 
+            NextChannel = * (FHSSChPointer + random(RECONNECT_CHANNELS_COUNT));    // a **random** reconnect channel (from first five)
             ShowComms();                       // NEEDED WHEN NOT CONNECTED                        
             ReadSwitches();                                
             CheckTimer();  

@@ -499,12 +499,7 @@ uint32_t ModelNameTimeCheck = 0;
 uint16_t LastModelLoaded    = 0;
 
 
-uint8_t * ReConPointer;                                                                                   // pointer for recovery channels array
 uint8_t * FHSSChPointer;                                                                                  // pointer for main channels array
-
-uint8_t Reconnect_Channels[RECONNECT_CHANNELS_COUNT] = {83, 2, 75, 18, 80};
-
-uint8_t Reconnect_Channels1[RECONNECT_CHANNELS_COUNT] = {123, 114, 87, 94, 119};
 
 uint8_t FHSS_Channels1[42] = {93,111,107,103,106,97,108,102,118,104,101,109,98,
 113,124,115,91,96,85,117,89,99,114,87,112,
@@ -515,15 +510,15 @@ uint8_t FHSS_Channels[83] = {51,28,24,61,64,55,66,19,76,21,59,67,15,71,82,32,49,
 54,12,80,53,22,1,74,39,58,63,70,52,42,25,43,26,14,38,48,68,33,27,60,44,46,
 56,7,81,5,65,4,10};
 
-uint8_t Gsecond;  // = tm.Second; // 0-59
-uint8_t Gminute;  // = tm.Minute; // 0-59
-uint8_t Ghour;    // = tm.Hour;   // 0-23
-uint8_t GweekDay; // = tm.Wday;   // 1-7
-uint8_t GmonthDay;// = tm.Day;    // 1-31
-uint8_t Gmonth;   // = tm.Month;  // 1-12
-uint8_t Gyear;    // = tm.Year;   // 0-99
-bool    GPSTimeSynched  =   false;
-int     DeltaGMT        = 0;
+uint8_t  Gsecond;  // = tm.Second; // 0-59
+uint8_t  Gminute;  // = tm.Minute; // 0-59
+uint8_t  Ghour;    // = tm.Hour;   // 0-23
+uint8_t  GweekDay; // = tm.Wday;   // 1-7
+uint8_t  GmonthDay;// = tm.Day;    // 1-31
+uint8_t  Gmonth;   // = tm.Month;  // 1-12
+uint8_t  Gyear;    // = tm.Year;   // 0-99
+bool     GPSTimeSynched  =   false;
+int      DeltaGMT        = 0;
 uint32_t SwapWaveBandTimer = 0;
 uint8_t  UkRulesCounter = 0;
 bool     UkRules = true;
@@ -2665,13 +2660,11 @@ void GetTXVersionNumber()
 }
 /************************************************************************************************************/
 void SetUKFrequencies(){
-            ReConPointer  = Reconnect_Channels;    // Point to arrays of channels that are OK to use in the UK
             FHSSChPointer = FHSS_Channels; 
             UkRules = true;     
 }
 /************************************************************************************************************/
 void SetTestFrequencies(){
-            ReConPointer  = Reconnect_Channels1;   // Point to arrays of channels that are KO to use in the UK
             FHSSChPointer = FHSS_Channels1; 
             UkRules = false;     
 }
@@ -4299,7 +4292,7 @@ void Button_was_pressed()
             ClearText();
             return;
         }
-        if (InStrng(UKRules, WordsIn) > 0) { // UK? heer
+        if (InStrng(UKRules, WordsIn) > 0) { // UK Offcom regulations? 
             ++ UkRulesCounter;
             if (UkRulesCounter == 1) SwapWaveBandTimer = millis();
             if (UkRulesCounter == 3 ) {

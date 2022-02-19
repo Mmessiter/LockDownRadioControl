@@ -282,12 +282,18 @@ void SendQnhToSensorHub(){
 void SetTestFrequencies(){
     ReConPointer  = Reconnect_Channels1;   // Point to arrays of channels that are OK to use in the UK
     FHSSChPointer = FHSS_Channels1; 
+
+    ReConPointer  = FHSS_Channels1; 
+    
     FrequencyCount = FREQUENCYSCOUNT1;
 }
 /************************************************************************************************************/
 void SetUKFrequencies(){
     ReConPointer  = Reconnect_Channels;   // Point to arrays of channels that are OK to use in the UK
     FHSSChPointer = FHSS_Channels; 
+
+    ReConPointer  = FHSS_Channels;  
+
     FrequencyCount = FREQUENCYSCOUNT;
 }
 /************************************************************************************************************/
