@@ -974,7 +974,7 @@ void ReadTime()
     uint8_t DisplayedHour;
    
 
-    FixDeltaGMTSign();  // TODO Fix the time and date when it goes past midnight in either direction owing to time zone
+    FixDeltaGMTSign();  
 
     if (CurrentView == FrontView || CurrentView == Options_View) {
         if (RTC.read(tm)) { 
@@ -1938,7 +1938,7 @@ void get_new_channels_values()
             }
         }
         if (n < 4) {
-            TrimAmount = (Trims[FlightMode][n] - 80) * TrimFactor;  // TRIMS on lower four channels (80 is mid point !! (range 40 - 120)) TODO: Define trim factor
+            TrimAmount = (Trims[FlightMode][n] - 80) * TrimFactor;  // TRIMS on lower four channels (80 is mid point !! (range 40 - 120)) 
             if (!TrimsReversed[FlightMode][n]) {
                 k += TrimAmount; 
             }
