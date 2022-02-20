@@ -523,7 +523,7 @@ uint8_t  UkRulesCounter = 0;
 bool     UkRules = true;
 uint8_t  SwapWaveBand = 0;  
 uint16_t TrimFactor   = 2;   // How much to multiply trim by
-
+ uint8_t DateFix = 0;
 
 /************************************************************************************************************/
 // This function returns distance (in MILES) between two GPS coordinates (in degrees)
@@ -970,14 +970,15 @@ void ReadTime()
     char colon[]  = ":";
     char colon1[] = ".";
     char zero[]  = "0";
-
     char Owner[] = "Owner";
+    uint8_t DisplayedHour;
+   
 
     FixDeltaGMTSign();  // TODO Fix the time and date when it goes past midnight in either direction owing to time zone
 
     if (CurrentView == FrontView || CurrentView == Options_View) {
-        if (RTC.read(tm)) {
-            strcpy(TimeString, Str(NB, tm.Day, 0));
+        if (RTC.read(tm)) { 
+            strcpy(TimeString, Str(NB, tm.Day + DateFix, 0));
             if (CurrentView == Options_View)
             {
                 if ((tm.Day) < 10) {
@@ -997,8 +998,20 @@ void ReadTime()
             strcat(TimeString, Space);
             strcat(TimeString, (Str(NB, tmYearToCalendar(tm.Year), 0)));
             strcat(TimeString, Space);
-            if (MayBeAddZero(tm.Hour)) strcat(TimeString, zero);
-            strcat(TimeString, Str(NB, tm.Hour+DeltaGMT, 0));
+            DisplayedHour = tm.Hour+DeltaGMT;
+            DateFix = 0;
+            if (DisplayedHour > 24) {
+                DisplayedHour -= 24;
+                DateFix = 1;
+                }
+            if (DisplayedHour < 0) {
+                DisplayedHour += 24;
+                DateFix = -1;
+            }
+               
+            if (MayBeAddZero(DisplayedHour)) strcat(TimeString, zero);
+
+            strcat(TimeString, Str(NB, DisplayedHour, 0));
             
             if (UkRules) strcat(TimeString, colon);
             if (!UkRules) strcat(TimeString, colon1);
