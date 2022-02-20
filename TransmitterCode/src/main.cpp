@@ -4267,7 +4267,7 @@ void Button_was_pressed()
     char QNH[]                     = "Qnh";
     char Mark[]                    = "Mark";
     char dGMT[]                    = "dGMT";
-    char UKRules[]                 = "UKRULES";
+    char UKRULES[]                 = "UKRULES";
     char Htext0[]                  = "HELP";
     char Htext1[]                  = "Help";
     char b17[]                     = "b17";
@@ -4295,7 +4295,7 @@ void Button_was_pressed()
             ClearText();
             return;
         }
-        if (InStrng(UKRules, WordsIn) > 0) { // UK Offcom regulations? 
+        if (InStrng(UKRULES, WordsIn) > 0) { // UK Offcom regulations? 
             ++ UkRulesCounter;
             if (UkRulesCounter == 1) SwapWaveBandTimer = millis();
             if (UkRulesCounter == 3 ) {
@@ -5100,6 +5100,11 @@ void Button_was_pressed()
             SendCommand(pTrimView);
             CurrentView = Trim_View;
             UpdateModelsNameEveryWhere(); // also updates trimview
+            if (!UkRules){
+                    SendText(b17,Htext0);
+                }else{
+                    SendText(b17,Htext1);
+                } 
             ClearText();
             return;
         }
