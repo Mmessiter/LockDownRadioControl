@@ -190,8 +190,8 @@ RF24 Radio1(CE_PIN, CSN_PIN);
 // SDCARD MODEL MEMORY CONSTANTS
 
 #define RENEWDATA  8787 // Change these to rewrite all
-#define TXSIZE     250  // reserved spaces bigger than needed
-#define MODELSIZE  1600 // MEMORY for one model
+#define TXSIZE     250  // SD space reserved for transmitter
+#define MODELSIZE  1600 // SD space reserved for each model
 #define MAXFILELEN 1021 // MAX SIZE FOR HELP FILE
 
 #ifdef USE_WATCHDOG
