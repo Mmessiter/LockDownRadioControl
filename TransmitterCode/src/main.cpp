@@ -2455,14 +2455,12 @@ bool ReadOneModel(uint8_t Mnum)
     }
     RXCellCount = SDReadByte(SDCardAddress);
     ++SDCardAddress;
-    
     TrimFactor = SDReadInt(SDCardAddress); 
     ++SDCardAddress;
     ++SDCardAddress;
 
+    SDCardAddress += 29; // 29 Spare Bytes here (PID stuff gone)
 
-    SDCardAddress += 28; // 28 Spare Bytes here (PID stuff gone)
-    ++SDCardAddress;     // another Spare byte
     for (i = 0; i < CHANNELSUSED; ++i) {
         InPutStick[i] = SDReadByte(SDCardAddress);
         if (InPutStick[i] > 16) InPutStick[i] = i; // reset if nothing was saved!
@@ -2885,9 +2883,8 @@ void SaveOneModel(int mnum)
     ++SDCardAddress;
     ++SDCardAddress;
         
+    SDCardAddress += 29; // 29 Spare Bytes here (PID stuff gone)
 
-    SDCardAddress += 28; // 28 Spare Bytes here (PID stuff gone)
-   ++SDCardAddress;
     for (i = 0; i < CHANNELSUSED; ++i) {
         SDUpdateByte(SDCardAddress, InPutStick[i]);
         ++SDCardAddress;
