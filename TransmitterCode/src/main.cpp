@@ -2455,7 +2455,13 @@ bool ReadOneModel(uint8_t Mnum)
     }
     RXCellCount = SDReadByte(SDCardAddress);
     ++SDCardAddress;
-    SDCardAddress += 30; // 30 Spare Bytes here (PID stuff gone)
+    
+    TrimFactor = SDReadInt(SDCardAddress); 
+    ++SDCardAddress;
+    ++SDCardAddress;
+
+
+    SDCardAddress += 28; // 28 Spare Bytes here (PID stuff gone)
     ++SDCardAddress;     // another Spare byte
     for (i = 0; i < CHANNELSUSED; ++i) {
         InPutStick[i] = SDReadByte(SDCardAddress);
@@ -2875,10 +2881,13 @@ void SaveOneModel(int mnum)
     SDUpdateByte(SDCardAddress, RXCellCount);
     ++SDCardAddress;
 
-    SDCardAddress += 30; // 30 Spare Bytes here (PID stuff gone)
+    SDUpdateInt(SDCardAddress, TrimFactor); 
+    ++SDCardAddress;
+    ++SDCardAddress;
+        
 
-    ++SDCardAddress; // another Spare
-
+    SDCardAddress += 28; // 28 Spare Bytes here (PID stuff gone)
+   ++SDCardAddress;
     for (i = 0; i < CHANNELSUSED; ++i) {
         SDUpdateByte(SDCardAddress, InPutStick[i]);
         ++SDCardAddress;
@@ -4271,6 +4280,7 @@ void Button_was_pressed()
     char Htext0[]                  = "HELP";
     char Htext1[]                  = "Help";
     char b17[]                     = "b17";
+    char trf[]                     = "trf"; // Trim factor 
 
 
     if (strlen(WordsIn) > 0) {
@@ -4321,6 +4331,7 @@ void Button_was_pressed()
             BuddyMaster    = GetValue(BuddyM);  // Master, either.
             Qnh            = GetValue(QNH);
             DeltaGMT       = GetValue(dGMT);
+            TrimFactor     = GetValue(trf);
             FixDeltaGMTSign();
             if (DoSbusSendOnly)
             {
@@ -4455,6 +4466,7 @@ void Button_was_pressed()
             SendText(Tx_Name, TxName);
             SendValue(QNH,Qnh);
             SendValue(dGMT,DeltaGMT);
+            SendValue(trf,TrimFactor);
             CurrentView = Options_View;
             CurrentMode = NORMAL;
             ClearText();
