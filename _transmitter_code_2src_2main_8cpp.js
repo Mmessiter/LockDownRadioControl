@@ -272,6 +272,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "Connected", "_transmitter_code_2src_2main_8cpp.html#a5318db734c71b1b08208ef690f1f0146", null ],
     [ "CurrentMode", "_transmitter_code_2src_2main_8cpp.html#aacabee92eb3ddd2e3cf31695c00a912e", null ],
     [ "CurrentView", "_transmitter_code_2src_2main_8cpp.html#a2c76c41cd62573eb7227882fc9b9e557", null ],
+    [ "DateFix", "_transmitter_code_2src_2main_8cpp.html#af963d49af3aeb834d322601d3c3e3d04", null ],
     [ "DateTime", "_transmitter_code_2src_2main_8cpp.html#a4a2edd187b3a0bc44a2b755546b8f144", null ],
     [ "DefaultPipe", "_transmitter_code_2src_2main_8cpp.html#a0b9fd9f8e85725c128617f006132ea57", null ],
     [ "deletedmodel", "_transmitter_code_2src_2main_8cpp.html#ac99744bc17a7d6aebbd08b1341e8fd31", null ],
