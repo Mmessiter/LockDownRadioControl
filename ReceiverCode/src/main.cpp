@@ -206,7 +206,6 @@ bool ReadData()
     while (CurrentRadio->available()) {                                // Get all, but use only the latest
         LoadAckPayload();
         Connected = true;
-        
         CurrentRadio->flush_tx();                                      // This maybe avoids a lockup that happens when the FIFO gets full.**************
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // Send telemetry
         CurrentRadio->read(&CompressedData, sizeof(CompressedData));   // Get Data  
