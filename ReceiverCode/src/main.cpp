@@ -162,11 +162,11 @@ void ShowHopDurationEtc()
     if (PacketNumber<10) Serial.print (" ");
     Serial.print(PacketNumber);
     Serial.print("  Average Time per packet: ");
-    Serial.print(OnePacketTime);
     if (OnePacketTime<10) Serial.print (" ");
+    Serial.print(OnePacketTime);
     Serial.print("ms.  Next channel: ");
-    Serial.print(FHSS_Channels[NextChannelNumber]);
     if (FHSS_Channels[NextChannelNumber] < 10) Serial.print (" ");
+    Serial.print(FHSS_Channels[NextChannelNumber]);
     Serial.print(BoundFlag ? " Bound!" : " NOT Bound");
     Serial.print("  Radio: ");
     Serial.print(ThisRadio);
