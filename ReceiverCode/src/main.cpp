@@ -176,7 +176,7 @@ void ShowHopDurationEtc()
 #endif
 /************************************************************************************************************/
 
-void ClearAckPayload()
+void ClearAckPayload()  // left in, redundant, might be wanted again ...
 {
     AckPayload.Byte1 = 0;
     AckPayload.Byte2 = 0;
@@ -188,15 +188,14 @@ void ClearAckPayload()
 
 void UseReceivedData(){
         Decompress(ReceivedData, CompressedData, UNCOMPRESSEDWORDS);   // Decompress only the most recent data
-        MapToSBUS();
-        ClearAckPayload();
-        CurrentRadio->flush_rx();
-        LastPacketArrivalTime = millis();
-        if (HopNow) {                   // this flag gets set in LoadAckPayload();
-            FailSafeDataLoaded = false; // Ack payload instructed to Hop at next opportunity...
-            HopToNextChannel();         // So hop now
-            HopNow = false;             // and clear the flag.
-            HopStart = millis();
+        MapToSBUS();                        // Get SBUS data ready 
+       // ClearAckPayload();                // No longer required??
+        CurrentRadio->flush_rx();           // Flush FIFO to avoid a lock up
+        LastPacketArrivalTime = millis();   // Note the arival time
+        if (HopNow) {                       // This flag gets set in LoadAckPayload();
+            HopToNextChannel();             // Ack payload instructed us to Hop at next opportunity. So hop now ...
+            HopNow = false;                 // ... and clear the flag,
+            HopStart = millis();            // ... and start the timer.
         }
 }
 /************************************************************************************************************/
@@ -259,7 +258,7 @@ void  SendToSensorHub(char m[]){
 
 void MarkHere(){
         char MRK[4] = "MRK";
-        SendToSensorHub(MRK);  // Mark this spot  
+        SendToSensorHub(MRK);  // Mark this GPS location  
 }
 /************************************************************************************************************/
 void RebuildFlags(bool* f, uint16_t tb)
@@ -465,7 +464,7 @@ FASTRUN void ReadTheSensorHub(){
 }
 
 // ******************************************************************************************************************************************************************
-void SensorHubHasFailed(){       // If the I2C gets its knickers in a twist, it can lock up the reciever, so DON'T call it until landed and reset.
+void SensorHubHasFailed(){       // If the I2C bus gets its knickers in a twist, it can lock up the reciever, so DON'T call it until landed and reset.
 #define Failed  42
      LatitudeGPS     = Failed; 
      LongitudeGPS    = Failed;
