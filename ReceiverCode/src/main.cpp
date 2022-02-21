@@ -500,17 +500,12 @@ FASTRUN void ReceiveData(){
             } 
          }
       }
-    Connected = false;                                                                  // Assume not connected until we know better  
-    if (CurrentRadio->available()) {
-        Connected = true;                                                               // ... ok we now know better ! 
-    }
-    if (!Connected) {
+    if (ReadData()) {
+         CheckParams();
+    } else {                                                                            // and check the extra parameters
         if (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT) {                      // Has transmitter died? 
         Reconnect();                                                                    // Try to reconnect.
         }
-    }
-    if (ReadData()) {                                                                   // Finally, get some data from TX
-        CheckParams();                                                                  // and check the extra parameters
     }
 }
 /************************************************************************************************************/
