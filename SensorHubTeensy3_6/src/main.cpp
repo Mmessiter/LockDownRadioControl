@@ -1,8 +1,8 @@
 //***********************************************************************************************************
-//************************************* SENSOR HUB CODE FOR TEENSY 3.6  *************************************
+//************************************* SENSOR HUB CODE FOR TEENSY 3.6....   ********************************
 // 
-//                                   Version 1.2 Jan 31st 2022
-//                                   Uses Wire2 in Slave Mode ...
+//                                   Version 1.3 Feb 7 2022
+//                                   Uses Wire2 in Slave Mode ... This works. Don't use Teensy LC. IT DOESN'T!!
 //***********************************************************************************************************
 #include <Arduino.h>
 #include <Wire.h>
@@ -12,7 +12,7 @@
 #define I2CADDRESS  8       // Address of this I2C slave
 #define GPSBAUDRATE 9600    // Didn't work any faster
 #define GPSDEVICE Serial1   // GPS is connected to Serial1
-//#define DEBUG               // Local console debug only
+ #define DEBUG             // Local console debug only
 #define DEBUGTIMER 1000
 
 int DebugTimer = 0;
@@ -53,13 +53,17 @@ float    BaroTemperature ;
 float    BaroAltitude ;
 float    INA219Volts;
 uint16_t Qnh = 0;
+volatile bool ReceiveRequestFlag = false;
 
-//************************************* SEND DATA INTERRUPT HANDLER ******************************************
- 
+//************************************* RECEIVE DATA INTERRUPT HANDLER ***************************************
+void ReceiveEventInterrupt(int q) { 
+     ReceiveRequestFlag = true;  // Set the flag and return immediately
+}
+// ***********************************************************************************************************
 void SendDataToReceiver() {
   #define IDLEN 3
   #define GPSI2CBYTES IDLEN + 4
-  #define MAXPARAMS 14
+  #define MAXPARAMS 17
   uint8_t i;
   char RdataID[IDLEN+1] = "NUL";
   char  LAT[IDLEN+1]    = "LAT";
@@ -77,9 +81,13 @@ void SendDataToReceiver() {
   char  BLT[IDLEN+1]    = "BLT";
   char  TMP[IDLEN+1]    = "TMP";
   char  VLT[IDLEN+1]    = "VLT";
+  char  DAY[IDLEN+1]    = "DAY";
+  char  MTH[IDLEN+1]    = "MTH";
+  char  YER[IDLEN+1]    = "YER";
 
   float RdataOut = 42;
   union { float   Val32;uint8_t Val8[4]; } Rdata;
+
   switch (ParameterNumber) {
       case  0:
         RdataOut =  GPSLatitude;    // Latitiude
@@ -114,7 +122,7 @@ void SendDataToReceiver() {
         strcpy (RdataID,DTO);
         break;
       case  8:
-        RdataOut = (float) GPSHours;  // Hours
+        RdataOut = (float) GPSHours;       // Hours
         strcpy (RdataID,HRS);
         break;
       case  9:
@@ -138,8 +146,20 @@ void SendDataToReceiver() {
         strcpy (RdataID,TMP);
         break;
       case  14:
-        RdataOut =  INA219Volts;     // VOLTAGE FROM INA219
+        RdataOut =  INA219Volts;             // VOLTAGE FROM INA219
         strcpy (RdataID,VLT);
+        break;
+      case  15:
+        RdataOut =  GPSDay;                  // DATE
+        strcpy (RdataID,DAY);
+        break;
+      case  16:
+        RdataOut =  GPSMonth;                // Month
+        strcpy (RdataID,MTH);
+        break;
+      case  17:
+        RdataOut =  GPSYear;                  // YEAR
+        strcpy (RdataID,YER);
         break;
       default:
         break;
@@ -154,42 +174,42 @@ void SendDataToReceiver() {
     ParameterNumber++;
     if (ParameterNumber > MAXPARAMS) ParameterNumber = 0; 
 }
-//************************************* RECEIVE DATA INTERRUPT HANDLER ***************************************
+// *******************************************************************************************************
 
-void ReceiveEvent(int q) {  
+void DoTheRequest(){
 char MRK[] = "MRK";
 char MAY[] = "MAY";
 char QNH[] = "QNH";
 char RCV[10];
- union {uint16_t Val16; uint8_t Val8[2];} Uqnh;  
 
+union {uint16_t Val16; uint8_t Val8[2];} Uqnh;  
+    
+    ReceiveRequestFlag = false;
+    
     for (uint8_t i = 0; i < 6; ++i) {
         if (Wire1.available()) {
             RCV[i]= Wire1.read();    // Get one byte at a time
         }
     } 
-  RCV[3] = 0; // Add a terminator
-
-  if (strcmp(MRK,RCV) == 0) {     // Match first 3 chars with MRK?
+   RCV[3] = 0; // Add a terminator
+  if (strcmp(MRK,RCV) == 0) {        // Match first 3 chars with MRK?
      DestinationLat = GPSLatitude;   // Mark current location
      DestinationLng = GPSLongitude;  // Mark current location
      return;
   }
-
  if (strcmp(MAY,RCV) == 0) {      // Match first 3 chars with MAY?
       DestinationLat = MAYSLANE_LAT;  // Mark MAYS LANE location
       DestinationLng = MAYSLANE_LON;  // Mark MAYS LANE location
       return;
   }
-
   if (strcmp(QNH,RCV) == 0) {      // Match first 3 chars with QNH?
       Uqnh.Val8[0] = RCV[4];       // 16 bit value for "Qnh" sent in bytes 4 and 5
       Uqnh.Val8[1] = RCV[5]; 
       Qnh = Uqnh.Val16;
       return;
   }
-
 }
+
 //*************************************** READ GPS DEVICE ***************************************************
  void ReadGps() {
    char a;
@@ -199,11 +219,11 @@ char RCV[10];
    }
       GPSFix           = gps.location.isValid();
       if (GPSFix) {
-        GPSLatitude    = (float) gps.location.lat();
-        GPSLongitude   = (float) gps.location.lng();
+        GPSLatitude    = (float)   gps.location.lat();
+        GPSLongitude   = (float)   gps.location.lng();
         GPSSatellites  = (uint8_t) gps.satellites.value(); 
-        GPSAltitude    = (float) gps.altitude.feet();
-        GPSSpeed       = (float) gps.speed.mph();
+        GPSAltitude    = (float)   gps.altitude.feet();
+        GPSSpeed       = (float)   gps.speed.mph();
         GPSHours       = (uint8_t) gps.time.hour();   
         GPSMins        = (uint8_t) gps.time.minute(); 
         GPSSecs        = (uint8_t) gps.time.second(); 
@@ -282,7 +302,10 @@ uint8_t i = 0;
  }
 //*************************************** MAIN LOOP **********************************************************
 void loop() {
- if ((millis()-LoopTimer) > 100)  // 10x per second is enough
+
+ if (ReceiveRequestFlag) DoTheRequest();
+
+ if ((millis()-LoopTimer) > 10)        // 100x per second is enough
   {
     LoopTimer = millis();
     ReadGps();
@@ -331,7 +354,7 @@ void ScanI2c()
 void setup() {
   Wire1.begin(I2CADDRESS);                        // Wire1 MUST boot up BEFORE the receiver in order to be found by it.
   Wire1.onRequest(SendDataToReceiver);    
-  Wire1.onReceive(ReceiveEvent);
+  Wire1.onReceive(ReceiveEventInterrupt);
   GPSDEVICE.begin(GPSBAUDRATE);
   Wire.begin();                                   // Wire used to read locally attached i2c sensors
   ScanI2c();
