@@ -502,7 +502,7 @@ FASTRUN void ReceiveData(){
       }
     if (ReadData()) {
          CheckParams();                                                                 // Check the extra parameters
-    } else {                                                                           
+    } else {                                                                            // ReadData() returns false when not connected                                                                       
         if (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT) {                      // Has transmitter died? 
         Reconnect();                                                                    // Try to reconnect.
         }
