@@ -178,7 +178,7 @@ void InitCurrentRadio()
 void TryToConnectNow(){
     uint32_t ATimer = millis();
     CurrentRadio->startListening();
-    while ((!CurrentRadio->available()) && (millis() - ATimer) < LISTEN_PERIOD) { }    // Wait here until connected, on short timeout (20 ms)
+    while ((!CurrentRadio->available()) && (millis() - ATimer) < LISTEN_PERIOD) { }    // Wait here until connected, on short timeout (10 ms)
     if (CurrentRadio->available()) Connected = true;
 }
 
@@ -222,8 +222,12 @@ void Reconnect(){                                                               
 
     uint32_t SearchStartTime  = millis();;
     uint8_t  ReconnectChannel = 0;
-
     FailSafeSent    = false;
+
+#ifdef SECOND_TRANSCEIVER
+        TryTheOtherTransceiver(ReconnectChannel);                                  // Just lost it on this one - try the other
+#endif 
+
     while (!Connected) {
         CurrentRadio->stopListening();
         delay(1);                                                                  // NEEDED!
@@ -244,7 +248,6 @@ void Reconnect(){                                                               
                 }
             }
         }
-      //  if (ThisRadio == 2) Connected = false;
     }
     ReconnectedMoment    = millis();  // Save this moment, then don't move a servo for a few ms ...
 }

@@ -23,12 +23,12 @@
 
     #define SENSOR_HUB_I2C_ADDRESS      8
     #define HOPTIME                     50   // ms between channel changes ( >5 packets per hop)
-    #define LISTEN_PERIOD               20   // ms to listen for TX in Reconnect()
+    #define LISTEN_PERIOD               10   // ms to listen for TX in Reconnect()
     #define FREQUENCYSCOUNT             82   // use 82 different channels
     #define FREQUENCYSCOUNT1            41   // use 41 different channels
     #define RECEIVE_TIMEOUT             25   // 25 milliseconds seems an optimal value
     #define CHANNELSUSED                16
-    #define SERVOSUSED                  9    // All 16 are available via SBUS
+    #define SERVOSUSED                  9    // But all 16 are available via SBUS
     #define SBUSRATE                    10   // SBUS frame every 10 milliseconds
     #define SBUSPORT                    Serial3
     #define RECONNECTGAP                20   // Send no data to servos for 20 ms after a reconnect (10 was not quite enough)
