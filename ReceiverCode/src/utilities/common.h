@@ -18,12 +18,12 @@
     #define RXVERSION_MINIMUS           9    // February 19th 2022
 
 //**************************************************************************************************************************
- // #define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< **
+  #define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< **
 //**************************************************************************************************************************
 
     #define SENSOR_HUB_I2C_ADDRESS      8
     #define HOPTIME                     50   // ms between channel changes ( >5 packets per hop)
-    #define LISTEN_PERIOD               3    // ms to listen for TX in Reconnect()
+    #define LISTEN_PERIOD               20   // ms to listen for TX in Reconnect()
     #define FREQUENCYSCOUNT             82   // use 82 different channels
     #define FREQUENCYSCOUNT1            41   // use 41 different channels
     #define RECEIVE_TIMEOUT             25   // 25 milliseconds seems an optimal value

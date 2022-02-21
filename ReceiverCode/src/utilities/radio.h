@@ -178,7 +178,7 @@ void InitCurrentRadio()
 void TryToConnectNow(){
     uint32_t ATimer = millis();
     CurrentRadio->startListening();
-    while ((!CurrentRadio->available()) && (millis() - ATimer) < LISTEN_PERIOD) { }    // Wait here until connected, or very short timeout (3 ms)
+    while ((!CurrentRadio->available()) && (millis() - ATimer) < LISTEN_PERIOD) { }    // Wait here until connected, on short timeout (20 ms)
     if (CurrentRadio->available()) Connected = true;
 }
 
@@ -244,6 +244,7 @@ void Reconnect(){                                                               
                 }
             }
         }
+      //  if (ThisRadio == 2) Connected = false;
     }
     ReconnectedMoment    = millis();  // Save this moment, then don't move a servo for a few ms ...
 }
