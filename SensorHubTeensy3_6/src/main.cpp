@@ -2,7 +2,7 @@
 //************************************* SENSOR HUB CODE FOR TEENSY 3.6....   ********************************
 // 
 //                                   Version 1.3 Feb 7 2022
-//                                   Uses Wire2 in Slave Mode ... This works. Don't use Teensy LC. IT DOESN'T!!
+//                                   Uses Wire1 in Slave Mode ... This works. Don't use Teensy LC. IT DOESN'T!!
 //***********************************************************************************************************
 #include <Arduino.h>
 #include <Wire.h>
