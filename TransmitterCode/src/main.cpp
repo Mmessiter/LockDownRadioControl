@@ -529,7 +529,7 @@ uint8_t DateFix = 0;
 uint16_t BackGroundColour = 214;
 uint16_t ForeGroundColour = 65535;
 uint16_t HighlightColour = Yellow;
-uint16_t ChannelColour = Red;
+uint16_t FlightModeColour = Red;
 
 
 
@@ -2727,7 +2727,7 @@ void SetPco2s(char* Element)
     SendCommand(TheCommand);
     strcpy(TheCommand, Element);
     strcat(TheCommand, frg);
-    Str(NumberBuffer,ChannelColour,0);
+    Str(NumberBuffer,FlightModeColour,0);
     strcat(TheCommand, NumberBuffer);
     SendCommand(TheCommand);
 }
@@ -2754,7 +2754,7 @@ char HighElements[6][15] = {"fm1","fm2","fm3","fm4","ModelName","Owner"};
    // HighlightColour  = Green;
    // ForeGroundColour = Black;
    // BackGroundColour = Gray ;
-   // ChannelColour    = Purple;
+   // FlightModeColour    = Purple;
 
     for (int cc = 0; cc < 26; ++cc){
             SetColour(Elements[cc],BackGroundColour, 1);
