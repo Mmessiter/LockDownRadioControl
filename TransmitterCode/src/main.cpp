@@ -1513,7 +1513,8 @@ FASTRUN void ShowComms()
                     {
                         if (!BuddyMaster)
                         {
-                            SendText(FrontView_Connected, Msg_Connected);
+                            MakeBindButtonInvisible();
+                            SendText(FrontView_Connected, Msg_Connected); 
                         }
                         else
                         {
