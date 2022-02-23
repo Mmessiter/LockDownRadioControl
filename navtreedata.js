@@ -113,7 +113,7 @@ var NAVTREE =
       [ "Attribution", "md__sensor_hub_teensy3_6_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md99", null ]
     ] ],
     [ "TransmitterCode", "_transmitter_code.html", [
-      [ "Features list", "_transmitter_code.html#txFeatures", null ],
+      [ "Radio Control Features list, so far:", "_transmitter_code.html#LockDown", null ],
       [ "Teensy 4.1 Pins", "_transmitter_code.html#txPinout", null ]
     ] ],
     [ "Classes", "annotated.html", [

@@ -24,7 +24,7 @@ var NAVTREEINDEX4 =
 "_sensor_hub_teensy3__6_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f":[12,0,4,1,0,10],
 "_sensor_hub_teensy3__6_2src_2main_8cpp_source.html":[12,0,4,1,0],
 "_transmitter_code.html":[10],
-"_transmitter_code.html#txFeatures":[10,0],
+"_transmitter_code.html#LockDown":[10,0],
 "_transmitter_code.html#txPinout":[10,1],
 "_transmitter_code_2src_2main_8cpp.html":[12,0,5,0,1],
 "_transmitter_code_2src_2main_8cpp.html#a00e31bab157367fcde9712d63a57a778":[12,0,5,0,1,322],
