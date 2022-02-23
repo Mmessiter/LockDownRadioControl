@@ -1,6 +1,6 @@
 var NAVTREEINDEX3 =
 {
-"_sensor_hub_t32_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h.html#af0bc43b5dae696582a77176e6e4ff643af2ccaca19bdabe513c45c058003ed596":[12,0,4,0,3,1,15,18],
+"_sensor_hub_t32_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h.html#af0bc43b5dae696582a77176e6e4ff643af2ccaca19bdabe513c45c058003ed596":[12,0,3,0,3,1,15,18],
 "_sensor_hub_t32_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h.html#af0bc43b5dae696582a77176e6e4ff643af2ccaca19bdabe513c45c058003ed596":[12,0,2,0,3,1,15,18],
 "_sensor_hub_t32_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h.html#afc1d6f5819b7a1e3436af6948f5bcc80":[12,0,3,0,3,1,14],
 "_sensor_hub_t32_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h_source.html":[12,0,3,0,3,1],
