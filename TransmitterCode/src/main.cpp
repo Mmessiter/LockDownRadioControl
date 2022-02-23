@@ -132,7 +132,17 @@
 RF24 Radio1(CE_PIN, CSN_PIN);
 
 #define Nextion         Serial1 // Nextion is connected to Serial1
-
+#define Black           0
+#define Blue            31
+#define Brown           48192
+#define Green           2016
+#define Yellow          65504
+#define Red             63488
+#define Gray            33840
+#define SkyBlue         2047
+#define Purple          39070
+#define Orange          64512
+#define White           65535
 #define FlightModesUsed 4
 #define M_Enabled       0 // Offsets for Mixes array
 #define M_FlightMode    1
@@ -515,17 +525,6 @@ uint8_t  SwapWaveBand = 0;
 uint16_t TrimFactor   = 2;   // How much to multiply trim by
 uint8_t DateFix = 0;
 
-#define Black           0
-#define Blue            31
-#define Brown           48192
-#define Green           2016
-#define Yellow          65504
-#define Red             63488
-#define Gray            33840
-#define SkyBlue         2047
-#define Purple          39070
-#define Orange          64512
-#define White           65535
 
 uint16_t BackGroundColour = 214;
 uint16_t ForeGroundColour = 65535;
@@ -2734,16 +2733,28 @@ void SetPco2s(char* Element)
 }
 /************************************************************************************************************/
 
+//#define Black           0
+//#define Blue            31
+//#define Brown           48192
+//#define Green           2016
+//#define Yellow          65504
+//#define Red             63488
+//#define Gray            33840
+//#define SkyBlue         2047
+//#define Purple          39070
+//#define Orange          64512
+//#define White           65535
+
 void SetFrontScreenColours(){ // heer
 char elements[26][15] = {"FrontView","b17","fm1","fm2","fm3","fm4","Title","t10","AckPayload","RXBV", 
                         "TXBV","t20","t21","Hours","Mins","Secs","t3","t2","Bind","b0",
                         "ModelName","Connected","PowerOff","StillConnected","DateTime","Owner" };
 char HighElements[6][15] = {"fm1","fm2","fm3","fm4","ModelName","Owner"};
 
-// HighlightColour  = White;
-// ForeGroundColour = White;
-// BackGroundColour = Black ;
- //  ChannelColour    = Black;
+ //HighlightColour  = Orange;
+ //ForeGroundColour = Yellow;
+ //BackGroundColour = Green ;
+ //ChannelColour    = Blue;
 
     for (int cc = 0; cc < 26; ++cc){
             SetColour(elements[cc],BackGroundColour, 1);
