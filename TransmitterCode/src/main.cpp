@@ -30,6 +30,7 @@
  * - Failsafe channel flags compressed to two bytes
  * - Exponential added
  * - GPS support added using another MCU and Adafruit Ultimate GPS
+ * - Model memory sharing between transmitters wirelessly.
  *
  * @section txPinout Teensy 4.1 Pins
  * | Teensy 4.1 Pins | Connections |
