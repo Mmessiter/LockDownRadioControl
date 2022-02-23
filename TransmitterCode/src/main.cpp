@@ -1075,6 +1075,8 @@ void RedLedOn()
     analogWrite(REDLED, GetBrightness()); // Brightness is a function of blinking
 }
 
+/*********************************************************************************************************************************/
+
 void MakeBindButtonInvisible()
 {
     char bbiv[] = "vis bind,0";
