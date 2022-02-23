@@ -2,7 +2,7 @@
  * // Malcolm Messiter 2022
  *
  * @page TransmitterCode
- * @section txFeatures Features list
+ * @section LockDown Radio Control Features list, so far:
  * - Works on Teensy 4.1
  * - 16 channels
  * - 12 BIT servo resolution (11 BIT via SBUS)
@@ -20,7 +20,7 @@
  * - Trims on screen saved per flight mode and model.
  * - Screen timeout.
  * - FFHS fast recovery on lost packet
- * - Use 32 GIG SD card for model memories
+ * - Uses 32 GIG SD card for model memories
  * - Binding - uses Mac address as unique pipe address.
  * - Four User definable three position switches
  * - Input sources definable
