@@ -9,6 +9,9 @@
  * - 32 Mixes
  * - 4 Flight modes, or 3 plus autorotation
  * - User defined Channel names
+ * - 2.4 Ghz FHSS ISM band approved licence free in UK and most other countries.
+ * - 2 Km range approx.
+ * - Telemetry including GPS, volts, temperature & barometric pressure, using custom I2C sensor hub
  * - 64 editable 5-point curves (16 channels x 4 flight modes) Plus expo
  * - FailSafe on any channel(s)
  * - 2.4 GHz RF scan
