@@ -9,30 +9,25 @@
  * - 32 Mixes
  * - 4 Flight modes, or 3 plus autorotation
  * - User defined Channel names
- * - 2.4 Ghz FHSS ISM band approved licence free in UK and most other countries.
+ * - 2.4 Ghz FHSS ISM band licence free in UK and most other countries.
  * - 2.5 Km range (approx.)
  * - Telemetry including GPS, volts, temperature & barometric pressure, using custom I2C sensor hub
- * - 64 editable 5-point curves (16 channels x 4 flight modes) Plus expo
- * - FailSafe on any channel(s)
+ * - 64 editable 5-point curves (16 channels x 4 flight modes): straight, smoothed or exponential.
+ * - FailSafe on any or all channel(s)
  * - 2.4 GHz RF scan
  * - Motor Timer
  * - Lossless data compression.
- * - Trims on screen saved per flight mode and model.
+ * - Trims on screen saved per flight mode per model.
  * - Screen timeout.
  * - FFHS fast recovery on lost packet
- * - Uses 32 GIG SD card for model memories
- * - Binding - uses Mac address as unique pipe address.
+ * - Uses 32 GIG SD card for model memories and help files
+ * - Binding - uses unique Mac address as pipe address.
  * - Four User definable three position switches
- * - Input sources definable
- * - Model memories export and import
+ * - Input sources definable - any stick or switch can be mapped to any function.
+ * - Model memories export and import to backup files on SD card
  * - Model memory files alphabetically sorted
  * - Timer goes on and off with motor to keep track of motor use.
- * - Model memories can be sent between transmitters by RF link.
  * - DS1307 Real time clock auto synched to exact GPS time.
- * - MAC address now used as unique TX ID for pipe and binding.
- * - Failsafe channel flags compressed to two bytes
- * - Exponential added
- * - GPS support added using another MCU and Adafruit Ultimate GPS
  * - Model memory sharing between transmitters wirelessly.
  *
  * @section txPinout Teensy 4.1 Pins
