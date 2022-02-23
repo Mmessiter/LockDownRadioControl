@@ -2733,32 +2733,32 @@ void SetPco2s(char* Element)
 }
 /************************************************************************************************************/
 
-//#define Black           0
-//#define Blue            31
-//#define Brown           48192
-//#define Green           2016
-//#define Yellow          65504
-//#define Red             63488
-//#define Gray            33840
-//#define SkyBlue         2047
-//#define Purple          39070
-//#define Orange          64512
-//#define White           65535
-
 void SetFrontScreenColours(){ // heer
-char elements[26][15] = {"FrontView","b17","fm1","fm2","fm3","fm4","Title","t10","AckPayload","RXBV", 
-                        "TXBV","t20","t21","Hours","Mins","Secs","t3","t2","Bind","b0",
-                        "ModelName","Connected","PowerOff","StillConnected","DateTime","Owner" };
+char Elements[26][15] = {"FrontView","b17","fm1","fm2","fm3","fm4","Title","t10","AckPayload","RXBV", 
+                         "TXBV","t20","t21","Hours","Mins","Secs","t3","t2","Bind","b0",
+                         "ModelName","Connected","PowerOff","StillConnected","DateTime","Owner" };
 char HighElements[6][15] = {"fm1","fm2","fm3","fm4","ModelName","Owner"};
 
- //HighlightColour  = Orange;
- //ForeGroundColour = Yellow;
- //BackGroundColour = Green ;
- //ChannelColour    = Blue;
+ // #define Black           0
+ // #define Blue            31
+ // #define Brown           48192
+ // #define Green           2016
+ // #define Yellow          65504
+ // #define Red             63488
+ // #define Gray            33840
+ // #define SkyBlue         2047
+ // #define Purple          39070
+ // #define Orange          64512
+ // #define White           65535
+ 
+   // HighlightColour  = Green;
+   // ForeGroundColour = Black;
+   // BackGroundColour = Gray ;
+   // ChannelColour    = Purple;
 
     for (int cc = 0; cc < 26; ++cc){
-            SetColour(elements[cc],BackGroundColour, 1);
-            SetColour(elements[cc],ForeGroundColour, 0);
+            SetColour(Elements[cc],BackGroundColour, 1);
+            SetColour(Elements[cc],ForeGroundColour, 0);
         }
     for (int cc = 0; cc < 6; ++cc){
             SetColour(HighElements[cc],HighlightColour, 0);
@@ -4472,6 +4472,7 @@ void Button_was_pressed()
         if (InStrng(GoFrontView, WordsIn) > 0) {
             CurrentView = FrontView;
             SendCommand(page_FrontView);
+            SetFrontScreenColours();
             UpdateModelsNameEveryWhere();
             ShowFlightMode();
             LastShowTime = 0; // this is to make redisplay sooner (in ShowComms())
