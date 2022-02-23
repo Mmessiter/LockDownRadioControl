@@ -10,7 +10,7 @@
  * - 4 Flight modes, or 3 plus autorotation
  * - User defined Channel names
  * - 2.4 Ghz FHSS ISM band approved licence free in UK and most other countries.
- * - 2 Km range approx.
+ * - 2.5 Km range (approx.)
  * - Telemetry including GPS, volts, temperature & barometric pressure, using custom I2C sensor hub
  * - 64 editable 5-point curves (16 channels x 4 flight modes) Plus expo
  * - FailSafe on any channel(s)
@@ -28,7 +28,7 @@
  * - Model memory files alphabetically sorted
  * - Timer goes on and off with motor to keep track of motor use.
  * - Model memories can be sent between transmitters by RF link.
- * - DS1307 RTC added
+ * - DS1307 Real time clock auto synched to exact GPS time.
  * - MAC address now used as unique TX ID for pipe and binding.
  * - Failsafe channel flags compressed to two bytes
  * - Exponential added
