@@ -3,7 +3,7 @@
  *
  * @page TransmitterCode
  * @section LockDown Radio Control Features list, so far:
- * - Works on Teensy 4.1
+ * - Uses Teensy 4.1 MCU (at 600 Mhz) with nRF24L01+ transceiver
  * - 16 channels
  * - 12 BIT servo resolution (11 BIT via SBUS)
  * - 32 Mixes
