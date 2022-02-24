@@ -2797,14 +2797,23 @@ void setup()
     char Initialising[]            = "Initialising ... ";
     char OptionsViewTXname[]       = "OptionsView.TxName";
     char FrontView_Connected[]     = "FrontView.Connected";
-
-    Nextion.begin(921600);   // BAUD rate also set in display code THIS IS THE MAX (was 115200)
-    //115200
-    //230400
-    //250000
-    //256000
-    //512000
-    //921600
+    char FrontView_BackGround[]    = "FrontView.BackGround";
+    char FrontView_ForeGround[]    = "FrontView.ForeGround";
+    char FrontView_Special[]       = "FrontView.Special";
+    char FrontView_Highlight[]     = "FrontView.Highlight";
+    pinMode(REDLED, OUTPUT);
+    pinMode(GREENLED, OUTPUT);
+    pinMode(BLUELED, OUTPUT);
+    pinMode(POWER_OFF_PIN, OUTPUT);
+    BlueLedOn();
+    SD.begin(chipSelect);
+    CalibratedYet = LoadAllParameters(); // If they exist, read saved SD card settings.
+    Nextion.begin(921600);   // BAUD rate also set in display code THIS IS THE MAX (was 115200)  
+    SendValue(FrontView_BackGround,BackGroundColour);
+    SendValue(FrontView_ForeGround,ForeGroundColour);
+    SendValue(FrontView_Special,FlightModeColour);
+    SendValue(FrontView_Highlight,HighlightColour);
+    SendCommand(NextionWakeUp);
     teensyMAC(MacAddress); // Get MAC address and use it as pipe address
     NewPipe = (uint64_t)MacAddress[0] << 40;
     NewPipe += (uint64_t)MacAddress[1] << 32;
@@ -2812,30 +2821,18 @@ void setup()
     NewPipe += (uint64_t)MacAddress[3] << 16;
     NewPipe += (uint64_t)MacAddress[4] << 8;
     NewPipe += (uint64_t)MacAddress[5];
-
-    pinMode(REDLED, OUTPUT);
-    pinMode(GREENLED, OUTPUT);
-    pinMode(BLUELED, OUTPUT);
-    pinMode(POWER_OFF_PIN, OUTPUT);
-    BlueLedOn();
-    Serial.begin(115200);
     Wire.begin();
     ScanI2c();
     if (USE_INA219) ina219.begin();
-    SD.begin(chipSelect);
     InitSwitches();
-    SendCommand(NextionWakeUp);
     InitMaxMin();        // in case not yet calibrated
     InitCentreDegrees(); // In case not yet calibrated
     CentreTrims();
-    CalibratedYet = LoadAllParameters(); // If they exist, read saved SD card settings.
     InitRadio(DefaultPipe);
     SendCommand(page_FrontView); // Let's start at the beginning. Why not?
     SendText(FrontView_Connected, Initialising);
     SendValue1(NextionSleepTime, ScreenTimeout); // Setup Screen timeout (No .val needed)
     SendCommand(NextionWakeOnTouch);             // Wake on touch
-    
-    
     SendValue(FrontView_Hours, 0);
     SendValue(FrontView_Mins, 0);
     SendValue(FrontView_Secs, 0);
