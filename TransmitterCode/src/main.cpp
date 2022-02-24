@@ -2805,15 +2805,18 @@ void setup()
     pinMode(BLUELED, OUTPUT);
     pinMode(POWER_OFF_PIN, OUTPUT);
     BlueLedOn();
+    InitMaxMin();        // in case not yet calibrated
+    InitCentreDegrees(); // In case not yet calibrated
+    CentreTrims();
     SD.begin(chipSelect);
-    CalibratedYet = LoadAllParameters(); // If they exist, read saved SD card settings.
-    Nextion.begin(921600);   // BAUD rate also set in display code THIS IS THE MAX (was 115200)  
-    SendValue(FrontView_BackGround,BackGroundColour);
+    CalibratedYet = LoadAllParameters();                  // If they exist, read saved SD card settings.
+    Nextion.begin(921600);                                // BAUD rate also set in display code THIS IS THE MAX (was 115200)  
+    SendValue(FrontView_BackGround,BackGroundColour);     // Get colours ready
     SendValue(FrontView_ForeGround,ForeGroundColour);
     SendValue(FrontView_Special,FlightModeColour);
     SendValue(FrontView_Highlight,HighlightColour);
     SendCommand(NextionWakeUp);
-    teensyMAC(MacAddress); // Get MAC address and use it as pipe address
+    teensyMAC(MacAddress);                                // Get MAC address and use it as pipe address
     NewPipe = (uint64_t)MacAddress[0] << 40;
     NewPipe += (uint64_t)MacAddress[1] << 32;
     NewPipe += (uint64_t)MacAddress[2] << 24;
@@ -2824,9 +2827,6 @@ void setup()
     ScanI2c();
     if (USE_INA219) ina219.begin();
     InitSwitches();
-    InitMaxMin();        // in case not yet calibrated
-    InitCentreDegrees(); // In case not yet calibrated
-    CentreTrims();
     InitRadio(DefaultPipe);
     SendCommand(page_FrontView); // Let's start at the beginning. Why not?
     SendText(FrontView_Connected, Initialising);
