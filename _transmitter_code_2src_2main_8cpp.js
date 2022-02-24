@@ -208,7 +208,6 @@ var _transmitter_code_2src_2main_8cpp =
     [ "SetColour", "_transmitter_code_2src_2main_8cpp.html#acbf191793a3e8f2b68239358e35557b3", null ],
     [ "SetDefaultValues", "_transmitter_code_2src_2main_8cpp.html#acbd0460ea44a7d07e4d77878411febb4", null ],
     [ "SetDS1307ToCompilerTime", "_transmitter_code_2src_2main_8cpp.html#acdffc5c21069895c016206af61816b47", null ],
-    [ "SetFrontScreenColours", "_transmitter_code_2src_2main_8cpp.html#a9721a4194fa33564392525e2b981a33a", null ],
     [ "SetPco2s", "_transmitter_code_2src_2main_8cpp.html#a378660478726345c8b1bbd5626563667", null ],
     [ "SetTestFrequencies", "_transmitter_code_2src_2main_8cpp.html#a31a35307bbac88ceda244272f25d399a", null ],
     [ "SetTheRTC", "_transmitter_code_2src_2main_8cpp.html#a12d5a2fc981085112cd6b885f22247e8", null ],
