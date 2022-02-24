@@ -2815,6 +2815,7 @@ void setup()
     SendValue(FrontView_ForeGround,ForeGroundColour);
     SendValue(FrontView_Special,FlightModeColour);
     SendValue(FrontView_Highlight,HighlightColour);
+    SendCommand(page_FrontView); // Let's start at the beginning. Why not?
     SendCommand(NextionWakeUp);
     teensyMAC(MacAddress);                                // Get MAC address and use it as pipe address
     NewPipe  = (uint64_t)MacAddress[0] << 40;
@@ -2828,7 +2829,6 @@ void setup()
     if (USE_INA219) ina219.begin();
     InitSwitches();
     InitRadio(DefaultPipe);
-    SendCommand(page_FrontView); // Let's start at the beginning. Why not?
     SendText(FrontView_Connected, Initialising);
     SendValue1(NextionSleepTime, ScreenTimeout); // Setup Screen timeout (No .val needed)
     SendCommand(NextionWakeOnTouch);             // Wake on touch
