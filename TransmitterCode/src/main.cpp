@@ -2815,7 +2815,7 @@ void setup()
     SendValue(FrontView_ForeGround,ForeGroundColour);
     SendValue(FrontView_Special,FlightModeColour);
     SendValue(FrontView_Highlight,HighlightColour);
-    SendCommand(page_FrontView); // Let's start at the beginning. Why not?
+    SendCommand(page_FrontView);
     SendCommand(NextionWakeUp);
     teensyMAC(MacAddress);                                // Get MAC address and use it as pipe address
     NewPipe  = (uint64_t)MacAddress[0] << 40;
