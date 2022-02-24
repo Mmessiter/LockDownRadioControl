@@ -2658,6 +2658,22 @@ bool LoadAllParameters()
         DeltaGMT = SDReadInt(SDCardAddress);
         ++SDCardAddress;
         ++SDCardAddress;
+        BackGroundColour=SDReadInt(SDCardAddress);
+       if(BackGroundColour == 0) BackGroundColour = 214;
+        ++SDCardAddress;
+        ++SDCardAddress;
+        ForeGroundColour=SDReadInt(SDCardAddress);
+        if(ForeGroundColour == 0) ForeGroundColour = 65535;
+       ++SDCardAddress;
+       ++SDCardAddress;
+       FlightModeColour=SDReadInt(SDCardAddress);
+       if(FlightModeColour == 0) FlightModeColour = Red;
+       ++SDCardAddress;
+       ++SDCardAddress;
+       HighlightColour=SDReadInt(SDCardAddress);
+      if(HighlightColour == 0) HighlightColour = Yellow;
+       ++SDCardAddress;
+       ++SDCardAddress;
         MemoryForTransmtter = SDCardAddress;
         ReadOneModel(ModelNumber);
         return true;
@@ -2773,38 +2789,6 @@ void SetPco2s(char* Element)
     strcat(TheCommand, NumberBuffer);
     SendCommand(TheCommand);
 }
-/************************************************************************************************************/
-
-void SetFrontScreenColours(){ 
-
-    char FrontView_BackGround[]    = "FrontView.BackGround";
-    char FrontView_ForeGround[]    = "FrontView.ForeGround";
-    char FrontView_Special[]       = "FrontView.Special";
-    char FrontView_Highlight[]     = "FrontView.Highlight";
-   
-    char Elements[26][15] = {"FrontView","b17","fm1","fm2","fm3","fm4","Title","t10","AckPayload","RXBV", 
-                         "TXBV","t20","t21","Hours","Mins","Secs","t3","t2","Bind","b0",
-                         "ModelName","Connected","PowerOff","StillConnected","DateTime","Owner" };
-    char HighElements[6][15] = {"fm1","fm2","fm3","fm4","ModelName","Owner"};
- 
-
-    SendValue(FrontView_BackGround,BackGroundColour);
-    SendValue(FrontView_ForeGround,ForeGroundColour);
-    SendValue(FrontView_Special,FlightModeColour);
-    SendValue(FrontView_Highlight,HighlightColour);
-
-    for (int cc = 0; cc < 26; ++cc){
-            SetColour(Elements[cc],BackGroundColour, 1);
-            SetColour(Elements[cc],ForeGroundColour, 0);
-        }
-    for (int cc = 0; cc < 6; ++cc){
-            SetColour(HighElements[cc],HighlightColour, 0);
-        }
-    for (int cc = 0; cc < 4; ++cc){
-        SetPco2s(HighElements[cc]);
-     }
-}
-
 /*********************************************************************************************************************************/
 // SETUP
 /*********************************************************************************************************************************/
@@ -2877,9 +2861,6 @@ void setup()
     GetTXVersionNumber();
     MySbus.begin();
     SetUKFrequencies(); 
-
-
-    SetFrontScreenColours();
 }
 /*********************************************************************************************************************************/
 
@@ -2956,6 +2937,19 @@ void SaveTXStuff()
     SDUpdateInt(SDCardAddress,DeltaGMT);
     ++SDCardAddress;
     ++SDCardAddress;
+     SDUpdateInt(SDCardAddress,BackGroundColour);
+    ++SDCardAddress;
+    ++SDCardAddress;
+     SDUpdateInt(SDCardAddress,ForeGroundColour);
+    ++SDCardAddress;
+    ++SDCardAddress;
+     SDUpdateInt(SDCardAddress,FlightModeColour);
+    ++SDCardAddress;
+    ++SDCardAddress;
+     SDUpdateInt(SDCardAddress,HighlightColour);
+    ++SDCardAddress;
+    ++SDCardAddress;
+
     CloseModelsFile();
 }
 
@@ -4523,7 +4517,6 @@ void Button_was_pressed()
         if (InStrng(GoFrontView, WordsIn) > 0) {
             CurrentView = FrontView;
             SendCommand(page_FrontView);
-            SetFrontScreenColours();
             UpdateModelsNameEveryWhere();
             ShowFlightMode();
             LastShowTime = 0; // this is to make redisplay sooner (in ShowComms())
@@ -5245,6 +5238,7 @@ void Button_was_pressed()
             SendValue(FrontView_ForeGround,ForeGroundColour);
             SendValue(FrontView_Special,FlightModeColour);
             SendValue(FrontView_Highlight,HighlightColour);
+            SaveTXStuff();
             CurrentView = MainSetupView;
             SendCommand(page_SetupView);
             ClearText();
