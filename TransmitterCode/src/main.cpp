@@ -170,6 +170,7 @@ RF24 Radio1(CE_PIN, CSN_PIN);
 #define Options_View    15
 #define Inputs_View     16
 #define FailSafe_View   17
+#define Colours_View    18
 
 #define UNCOMPRESSEDWORDS 20                        // DATA TO SEND = 40  bytes
 #define COMPRESSEDWORDS   UNCOMPRESSEDWORDS * 3 / 4 // COMPRESSED DATA SENT = 30  bytes
@@ -1152,6 +1153,22 @@ void SendValue(char* nbox, int value)
     ValueSent = true;
 }
 
+
+/*********************************************************************************************************************************/
+
+void SendOtherValue(char* nbox, int value)
+{
+    char Val[] = "=";
+    char CB[100];
+    char NB[25];
+    strcpy(CB, nbox);
+    strcat(CB, Val);
+    strcat(CB, Str(NB, value, 0));
+    SendCommand(CB);
+    ValueSent = true;
+}
+
+
 /*********************************************************************************************************************************/
 
 void GetTextIn()
@@ -1189,6 +1206,28 @@ int GetValue(char* nbox)
     }
     return ValueIn;
 }
+
+/*********************************************************************************************************************************/
+
+int GetOtherValue(char* nbox)  // don't add .val as other thingy is already there ...
+{
+    double ValueIn = 0;
+    char   GET[]   = "get ";
+    char   CB[100];
+    strcpy(CB, GET);
+    strcat(CB, nbox);
+    Nextion.print(CB);
+    EndSend();
+    GetTextIn();
+    if (TextIn[0] == 'q') {
+        ValueIn = TextIn[1]; // Collect and build 32 bit value from 4 bytes
+        ValueIn += (TextIn[2] << 8);
+        ValueIn += (TextIn[3] << 16);  
+        ValueIn += (TextIn[4] << 24);
+    }
+    return ValueIn;
+}
+
 
 /*********************************************************************************************************************************/
 
@@ -2736,28 +2775,23 @@ void SetPco2s(char* Element)
 }
 /************************************************************************************************************/
 
-void SetFrontScreenColours(){ // heer
-char Elements[26][15] = {"FrontView","b17","fm1","fm2","fm3","fm4","Title","t10","AckPayload","RXBV", 
+void SetFrontScreenColours(){ 
+
+    char FrontView_BackGround[]    = "FrontView.BackGround";
+    char FrontView_ForeGround[]    = "FrontView.ForeGround";
+    char FrontView_Special[]       = "FrontView.Special";
+    char FrontView_Highlight[]     = "FrontView.Highlight";
+   
+    char Elements[26][15] = {"FrontView","b17","fm1","fm2","fm3","fm4","Title","t10","AckPayload","RXBV", 
                          "TXBV","t20","t21","Hours","Mins","Secs","t3","t2","Bind","b0",
                          "ModelName","Connected","PowerOff","StillConnected","DateTime","Owner" };
-char HighElements[6][15] = {"fm1","fm2","fm3","fm4","ModelName","Owner"};
-
- // #define Black           0
- // #define Blue            31
- // #define Brown           48192
- // #define Green           2016
- // #define Yellow          65504
- // #define Red             63488
- // #define Gray            33840
- // #define SkyBlue         2047
- // #define Purple          39070
- // #define Orange          64512
- // #define White           65535
+    char HighElements[6][15] = {"fm1","fm2","fm3","fm4","ModelName","Owner"};
  
-   // HighlightColour  = Green;
-   // ForeGroundColour = Black;
-   // BackGroundColour = Gray ;
-   // FlightModeColour    = Purple;
+
+    SendValue(FrontView_BackGround,BackGroundColour);
+    SendValue(FrontView_ForeGround,ForeGroundColour);
+    SendValue(FrontView_Special,FlightModeColour);
+    SendValue(FrontView_Highlight,HighlightColour);
 
     for (int cc = 0; cc < 26; ++cc){
             SetColour(Elements[cc],BackGroundColour, 1);
@@ -2776,9 +2810,10 @@ char HighElements[6][15] = {"fm1","fm2","fm3","fm4","ModelName","Owner"};
 /*********************************************************************************************************************************/
 void setup()
 {
-    char FrontView_Connected[] = "FrontView.Connected";
-    char Initialising[]        = "Initialising ... ";
-    char OptionsViewTXname[] = "OptionsView.TxName";
+    char Initialising[]            = "Initialising ... ";
+    char OptionsViewTXname[]       = "OptionsView.TxName";
+    char FrontView_Connected[]     = "FrontView.Connected";
+
     Nextion.begin(921600);   // BAUD rate also set in display code THIS IS THE MAX (was 115200)
     //115200
     //230400
@@ -2842,6 +2877,7 @@ void setup()
     GetTXVersionNumber();
     MySbus.begin();
     SetUKFrequencies(); 
+
 
     SetFrontScreenColours();
 }
@@ -4239,7 +4275,9 @@ void Button_was_pressed()
     char MixesView_Percent[]       = "Percent";
     char page_SetupView[]          = "page SetupView";
     char page_FrontView[]          = "page FrontView";
+    char page_ColoursView[]        = "page ColoursView";
     char GoSetupView[]             = "GoSetupView";
+    char ColoursView[]             = "ColoursView";
     char GoFrontView[]             = "GoFrontView";
     char SvT11[]                   = "t11";
     char CMsg1[]                   = "Move all controls\r\nto their full extent several times,\r\nthen press the button again.";
@@ -4378,6 +4416,16 @@ void Button_was_pressed()
     char Htext1[]                  = "Help";
     char b17[]                     = "b17";
     char trf[]                     = "trf"; // Trim factor 
+    char SetupCol[]                = "SetupCol";
+    char b0_bco[]                  = "b0.bco";
+    char b0_pco[]                  = "b0.pco";
+    char High_pco[]                = "High.pco";
+    char Fm_pco[]                  = "Fm.pco";
+    char FrontView_BackGround[]    = "FrontView.BackGround";
+    char FrontView_ForeGround[]    = "FrontView.ForeGround";
+    char FrontView_Special[]       = "FrontView.Special";
+    char FrontView_Highlight[]     = "FrontView.Highlight";
+
 
 
     if (strlen(WordsIn) > 0) {
@@ -5172,7 +5220,31 @@ void Button_was_pressed()
         }
 
         if (InStrng(GoSetupView, WordsIn) > 0) {
+            CurrentView = MainSetupView;
+            SendCommand(page_SetupView);
             ClearText();
+            return;
+        }
+
+         if (InStrng(ColoursView, WordsIn) > 0) {  
+            CurrentView = Colours_View;
+
+
+
+            SendCommand(page_ColoursView);
+            ClearText();
+            return;
+        }
+        
+          if (InStrng(SetupCol, WordsIn) > 0) {  // This is the return from Colours setup  // heer
+            HighlightColour  = GetOtherValue(High_pco);
+            ForeGroundColour = GetOtherValue(b0_pco);
+            BackGroundColour = GetOtherValue(b0_bco);
+            FlightModeColour = GetOtherValue(Fm_pco);
+            SendValue(FrontView_BackGround,BackGroundColour);
+            SendValue(FrontView_ForeGround,ForeGroundColour);
+            SendValue(FrontView_Special,FlightModeColour);
+            SendValue(FrontView_Highlight,HighlightColour);
             CurrentView = MainSetupView;
             SendCommand(page_SetupView);
             ClearText();
