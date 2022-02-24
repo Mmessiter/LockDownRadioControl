@@ -2795,7 +2795,6 @@ void SetPco2s(char* Element)
 void setup()
 {
     char Initialising[]            = "Initialising ... ";
-    char OptionsViewTXname[]       = "OptionsView.TxName";
     char FrontView_Connected[]     = "FrontView.Connected";
     char FrontView_BackGround[]    = "FrontView.BackGround";
     char FrontView_ForeGround[]    = "FrontView.ForeGround";
@@ -2845,7 +2844,6 @@ void setup()
     BoundFlag     = false;
     TxOnTime      = millis();
     UpdateModelsNameEveryWhere();
-    SendText(OptionsViewTXname, TxName);
 #ifdef USE_WATCHDOG
     WatchDogConfig.window   = WATCHDOGMAXRATE; //  = MINIMUM RATE in milli seconds, (32ms to 522.232s) must be MUCH smaller than timeout
     WatchDogConfig.timeout  = WATCHDOGTIMEOUT; //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s)
