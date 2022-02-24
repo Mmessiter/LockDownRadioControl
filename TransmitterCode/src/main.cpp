@@ -2817,7 +2817,7 @@ void setup()
     SendValue(FrontView_Highlight,HighlightColour);
     SendCommand(NextionWakeUp);
     teensyMAC(MacAddress);                                // Get MAC address and use it as pipe address
-    NewPipe = (uint64_t)MacAddress[0] << 40;
+    NewPipe  = (uint64_t)MacAddress[0] << 40;
     NewPipe += (uint64_t)MacAddress[1] << 32;
     NewPipe += (uint64_t)MacAddress[2] << 24;
     NewPipe += (uint64_t)MacAddress[3] << 16;
