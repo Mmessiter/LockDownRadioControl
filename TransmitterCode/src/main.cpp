@@ -3445,8 +3445,13 @@ void SetDefaultValues()
 
 void ClearBox()
 {
-    char fillcmd[] = "fill 30,30,380,365,214";
-    SendCommand(fillcmd);
+    char nb[10];
+    char cmd[50];
+    char fillcmd[] = "fill 30,30,380,365,";
+    strcpy(cmd,fillcmd);
+    Str(nb,BackGroundColour,0);
+    strcat(cmd,nb);
+    SendCommand(cmd);
 }
 
 /*********************************************************************************************************************************/
@@ -3668,19 +3673,19 @@ void DisplayCurve()
     SendValue(Gn3, DegsToPercent(CentreDegrees[FlightMode][ChanneltoSet - 1]));
     SendValue(Gn4, DegsToPercent(MidHiDegrees[FlightMode][ChanneltoSet - 1]));
     SendValue(Gn5, DegsToPercent(MaxDegrees[FlightMode][ChanneltoSet - 1]));
-    DrawBox(BoxLeft, BoxTop, BoxRight - BoxLeft, BoxBottom - BoxTop, Green);
+    DrawBox(BoxLeft, BoxTop, BoxRight - BoxLeft, BoxBottom - BoxTop, HighlightColour);
 
     xDot1 = xPoints[0];
     yDot1 = ((BoxBottom - BoxTop) / 2) + 20; // ?
     xDot2 = BoxRight - BoxOffset;
     yDot2 = yDot1;
-    DrawLine(xDot1, yDot1, xDot2, yDot1, Red);
+    DrawLine(xDot1, yDot1, xDot2, yDot1, FlightModeColour);
 
     xDot1 = xPoints[2];
     yDot1 = BoxTop;
     xDot2 = xDot1;
     yDot2 = BoxBottom - BoxOffset;
-    DrawLine(xDot1, yDot1, xDot2, yDot2, Red);
+    DrawLine(xDot1, yDot1, xDot2, yDot2, FlightModeColour);
 
     if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == 0) {
         SendCommand(b3on);
