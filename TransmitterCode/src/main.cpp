@@ -3694,10 +3694,10 @@ void DisplayCurve()
         SendCommand(b8on);
         SendCommand(n2on);
         SendCommand(n4on);
-        DrawLine(xPoints[0], yPoints[0], xPoints[1], yPoints[1], White); // this adds the straight version of the curve
-        DrawLine(xPoints[1], yPoints[1], xPoints[2], yPoints[2], White);
-        DrawLine(xPoints[2], yPoints[2], xPoints[3], yPoints[3], White);
-        DrawLine(xPoints[3], yPoints[3], xPoints[4], yPoints[4], White);
+        DrawLine(xPoints[0], yPoints[0], xPoints[1], yPoints[1], ForeGroundColour); // this adds the straight version of the curve
+        DrawLine(xPoints[1], yPoints[1], xPoints[2], yPoints[2], ForeGroundColour);
+        DrawLine(xPoints[2], yPoints[2], xPoints[3], yPoints[3], ForeGroundColour);
+        DrawLine(xPoints[3], yPoints[3], xPoints[4], yPoints[4], ForeGroundColour);
     }
     delay(250);
     if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == 1) {
@@ -3720,7 +3720,7 @@ void DisplayCurve()
                 xDot2 = xDot1;
                 yDot2 = yDot1;
             }
-            DrawLine(xDot1, yDot1, xDot2, yDot2, White);
+            DrawLine(xDot1, yDot1, xDot2, yDot2, ForeGroundColour);
             xDot2 = xDot1;
             yDot2 = yDot1;
         }
@@ -3752,7 +3752,7 @@ void DisplayCurve()
                 xDot2 = xDot1;
                 yDot2 = yDot1;
             }
-            DrawLine(xDot1, yDot1, xDot2, yDot2, White); // Draw short line from this point to previous point
+            DrawLine(xDot1, yDot1, xDot2, yDot2, ForeGroundColour); // Draw short line from this point to previous point
             xDot2 = xDot1;
             yDot2 = yDot1;
         }
@@ -3770,7 +3770,7 @@ void DisplayCurve()
                 xDot2 = xDot1;
                 yDot2 = yDot1;
             }
-            DrawLine(xDot1, yDot1, xDot2, yDot2, White); // Draw short line from this point to previous point
+            DrawLine(xDot1, yDot1, xDot2, yDot2, ForeGroundColour); // Draw short line from this point to previous point
             xDot2 = xDot1;
             yDot2 = yDot1;
         }
