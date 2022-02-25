@@ -4361,7 +4361,6 @@ void Button_was_pressed()
     char OffNow[]                  = "OffNow"; // force power off
     char StillConnected[]          = "vis StillConnected,1";
     char NotStillConnected[]       = "vis StillConnected,0";
-    char OptionsView[]             = "OptionsView";
     char OptionsViewS[]            = "OptionsViewS";
     char Pto[]                     = "Pto";
     char Tx_Name[]                 = "TxName";
@@ -4460,11 +4459,23 @@ void Button_was_pressed()
         }
         
         if (InStrng(OptionsEnd, WordsIn) > 0) { // Options screen end
-            DoSbusSendOnly = GetValue(BuddyP);  // Pupil, wired
-            BuddyMaster    = GetValue(BuddyM);  // Master, either.
-            Qnh            = GetValue(QNH);
-            DeltaGMT       = GetValue(dGMT);
-            TrimFactor     = GetValue(trf);
+            i = strlen(OptionsEnd);
+            j = 0;
+            while (uint8_t(WordsIn[i]) > 0 && i < 100) {
+                TxName[j] = WordsIn[i];
+                ++j;
+                ++i;
+                TxName[j] = 0;
+            }
+            DoSbusSendOnly      = GetValue(BuddyP);  // Pupil, wired
+            BuddyMaster         = GetValue(BuddyM);  // Master, either.
+            Qnh                 = GetValue(QNH);
+            DeltaGMT            = GetValue(dGMT);
+            TrimFactor          = GetValue(trf);
+            ScreenTimeout       = GetValue(ScreenViewTimeout);
+            Inactivity_Timeout  = GetValue(Pto) * TICKSPERMINUTE;
+            if (Inactivity_Timeout < INACTIVITYMINIMUM) Inactivity_Timeout = INACTIVITYMINIMUM;
+            if (Inactivity_Timeout > INACTIVITYMAXIMUM) Inactivity_Timeout = INACTIVITYMAXIMUM;
             FixDeltaGMTSign();
             if (DoSbusSendOnly)
             {
@@ -4473,7 +4484,7 @@ void Button_was_pressed()
                 BlueLedOn();
             }
             ClearText();
-            SaveAllParameters();
+            SaveTXStuff();
             SendCommand(page_SetupView);
             CurrentMode = NORMAL;
             CurrentView = MainSetupView;
@@ -4645,28 +4656,6 @@ void Button_was_pressed()
             Exponential[FlightMode][ChanneltoSet - 1] = (GetValue(Expon));
             ClearText();
             DisplayCurve();
-            return;
-        }
-
-        p = InStrng(OptionsView, WordsIn); 
-        if (p > 0) {
-            i = strlen(OptionsView);
-            j = 0;
-            while (uint8_t(WordsIn[i]) > 0 && i < 100) {
-                TxName[j] = WordsIn[i];
-                ++j;
-                ++i;
-                TxName[j] = 0;
-            }
-            ScreenTimeout      = GetValue(ScreenViewTimeout);
-            Inactivity_Timeout = GetValue(Pto) * TICKSPERMINUTE;
-            if (Inactivity_Timeout < INACTIVITYMINIMUM) Inactivity_Timeout = INACTIVITYMINIMUM;
-            if (Inactivity_Timeout > INACTIVITYMAXIMUM) Inactivity_Timeout = INACTIVITYMAXIMUM;
-            SendText(Tx_Name, TxName);
-            CurrentView = Options_View;
-            CurrentMode = NORMAL;
-            SaveTXStuff();
-            ClearText();
             return;
         }
 
