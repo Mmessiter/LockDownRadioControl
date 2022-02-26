@@ -329,6 +329,7 @@ char     ScreenViewTimeout[]         = "Sto";
 char     NoSleeping[]                = "thsp=0";
 int      ScreenTimeout               = 120; // Screen has two minute timeout by default
 char     HtextCMD[]                  = "click HelpText,0";
+char     StartBackGround[]           = "click Background,0";
 int      LastLinePosition            = 0;
 uint8_t  RXCellCount                 = 2;
 bool     JustHoppedFlag              = true;
@@ -530,7 +531,7 @@ uint8_t DateFix = 0;
 uint16_t BackGroundColour = 214;
 uint16_t ForeGroundColour = 65535;
 uint16_t HighlightColour = Yellow;
-uint16_t FlightModeColour = Red;
+uint16_t SpecialColour = Red;
 
 
 
@@ -2666,8 +2667,8 @@ bool LoadAllParameters()
         if(ForeGroundColour == 0) ForeGroundColour = 65535;
        ++SDCardAddress;
        ++SDCardAddress;
-       FlightModeColour=SDReadInt(SDCardAddress);
-       if(FlightModeColour == 0) FlightModeColour = Red;
+       SpecialColour=SDReadInt(SDCardAddress);
+       if(SpecialColour == 0) SpecialColour = Red;
        ++SDCardAddress;
        ++SDCardAddress;
        HighlightColour=SDReadInt(SDCardAddress);
@@ -2785,7 +2786,7 @@ void SetPco2s(char* Element)
     SendCommand(TheCommand);
     strcpy(TheCommand, Element);
     strcat(TheCommand, frg);
-    Str(NumberBuffer,FlightModeColour,0);
+    Str(NumberBuffer,SpecialColour,0);
     strcat(TheCommand, NumberBuffer);
     SendCommand(TheCommand);
 }
@@ -2813,7 +2814,7 @@ void setup()
     Nextion.begin(921600);                                // BAUD rate also set in display code THIS IS THE MAX (was 115200)  
     SendValue(FrontView_BackGround,BackGroundColour);     // Get colours ready
     SendValue(FrontView_ForeGround,ForeGroundColour);
-    SendValue(FrontView_Special,FlightModeColour);
+    SendValue(FrontView_Special,SpecialColour);
     SendValue(FrontView_Highlight,HighlightColour);
     SendCommand(page_FrontView);
     SendCommand(NextionWakeUp);
@@ -2937,7 +2938,7 @@ void SaveTXStuff()
      SDUpdateInt(SDCardAddress,ForeGroundColour);
     ++SDCardAddress;
     ++SDCardAddress;
-     SDUpdateInt(SDCardAddress,FlightModeColour);
+     SDUpdateInt(SDCardAddress,SpecialColour);
     ++SDCardAddress;
     ++SDCardAddress;
      SDUpdateInt(SDCardAddress,HighlightColour);
@@ -3077,7 +3078,7 @@ void SaveOneModel(int mnum)
 /*********************************************************************************************************************************/
 void ReadHelpFile(char* fname, char* htext)
 {
-    char errormsg[] = "Help file was not found.";
+    char errormsg[] = "Sorry! The Help file was not found.";
     File fnumber;
     char a[] = " ";
 
@@ -3679,13 +3680,13 @@ void DisplayCurve()
     yDot1 = ((BoxBottom - BoxTop) / 2) + 20; // ?
     xDot2 = BoxRight - BoxOffset;
     yDot2 = yDot1;
-    DrawLine(xDot1, yDot1, xDot2, yDot1, FlightModeColour);
+    DrawLine(xDot1, yDot1, xDot2, yDot1, SpecialColour);
 
     xDot1 = xPoints[2];
     yDot1 = BoxTop;
     xDot2 = xDot1;
     yDot2 = BoxBottom - BoxOffset;
-    DrawLine(xDot1, yDot1, xDot2, yDot2, FlightModeColour);
+    DrawLine(xDot1, yDot1, xDot2, yDot2, SpecialColour);
 
     if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == 0) {
         SendCommand(b3on);
@@ -4462,8 +4463,8 @@ void Button_was_pressed()
         ClearText();
         return;
         }
-        
-        if (InStrng(OptionsEnd, WordsIn) > 0) { // Options screen end
+        if (InStrng(OptionsEnd, WordsIn) > 0) { // Options screen end heer
+            SendCommand(ProgressStart);
             i = strlen(OptionsEnd);
             j = 0;
             while (uint8_t(WordsIn[i]) > 0 && i < 100) {
@@ -4472,12 +4473,16 @@ void Button_was_pressed()
                 ++i;
                 TxName[j] = 0;
             }
+            SendValue(Progress,25);
             DoSbusSendOnly      = GetValue(BuddyP);  // Pupil, wired
             BuddyMaster         = GetValue(BuddyM);  // Master, either.
+            SendValue(Progress,35);
             Qnh                 = GetValue(QNH);
             DeltaGMT            = GetValue(dGMT);
+            SendValue(Progress,45);
             TrimFactor          = GetValue(trf);
             ScreenTimeout       = GetValue(ScreenViewTimeout);
+            SendValue(Progress,100);
             Inactivity_Timeout  = GetValue(Pto) * TICKSPERMINUTE;
             if (Inactivity_Timeout < INACTIVITYMINIMUM) Inactivity_Timeout = INACTIVITYMINIMUM;
             if (Inactivity_Timeout > INACTIVITYMAXIMUM) Inactivity_Timeout = INACTIVITYMAXIMUM;
@@ -4493,6 +4498,7 @@ void Button_was_pressed()
             SendCommand(page_SetupView);
             CurrentMode = NORMAL;
             CurrentView = MainSetupView;
+            SendCommand(ProgressEnd);
             return;
         }
 
@@ -5209,22 +5215,20 @@ void Button_was_pressed()
 
          if (InStrng(ColoursView, WordsIn) > 0) {  
             CurrentView = Colours_View;
-
-
-
             SendCommand(page_ColoursView);
+            SendCommand(StartBackGround);      
             ClearText();
             return;
         }
         
-          if (InStrng(SetupCol, WordsIn) > 0) {  // This is the return from Colours setup  // heer
+          if (InStrng(SetupCol, WordsIn) > 0) {  // This is the return from Colours setup 
             HighlightColour  = GetOtherValue(High_pco);
             ForeGroundColour = GetOtherValue(b0_pco);
             BackGroundColour = GetOtherValue(b0_bco);
-            FlightModeColour = GetOtherValue(Fm_pco);
+            SpecialColour    = GetOtherValue(Fm_pco);
             SendValue(FrontView_BackGround,BackGroundColour);
             SendValue(FrontView_ForeGround,ForeGroundColour);
-            SendValue(FrontView_Special,FlightModeColour);
+            SendValue(FrontView_Special,SpecialColour);
             SendValue(FrontView_Highlight,HighlightColour);
             SaveTXStuff();
             CurrentView = MainSetupView;
