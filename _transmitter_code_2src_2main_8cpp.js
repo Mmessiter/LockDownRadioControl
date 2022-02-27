@@ -188,6 +188,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "Reboot", "_transmitter_code_2src_2main_8cpp.html#a374524dc113357d2ed6b8622f6ea85a8", null ],
     [ "ReceiveModelFile", "_transmitter_code_2src_2main_8cpp.html#ab7c9edf843c732d7fe296564f39bc0dc", null ],
     [ "RedLedOn", "_transmitter_code_2src_2main_8cpp.html#a7d34cec6e8edc20c8b50424e15dcc7c7", null ],
+    [ "ReEnableScanButton", "_transmitter_code_2src_2main_8cpp.html#a0a3d89dfcfab70c6cbc50401fff1afeb", null ],
     [ "SaveAllParameters", "_transmitter_code_2src_2main_8cpp.html#a92c5dada5e5ef70261391557464f2d19", null ],
     [ "SaveOneModel", "_transmitter_code_2src_2main_8cpp.html#a6717bc5d0d10c1fb5379fc2d0d8c10fb", null ],
     [ "SaveTXStuff", "_transmitter_code_2src_2main_8cpp.html#a9214716193ab9843267fc070ebfa12ff", null ],
