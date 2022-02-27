@@ -5375,15 +5375,15 @@ void Button_was_pressed()
         }
 
         if (InStrng(Fhss_View, WordsIn)) {
-             if (!BoundFlag)  // no scan while connected!!!
+             if (!b5isGrey)  // no scan while connected!!!
                {
                     SendCommand(page_FhssView);
                     DrawFhssBox();
                     DoScanInit();
                     CurrentMode = SCANWAVEBAND;
-                    BlueLedOn();
-                    ClearText();
+                    BlueLedOn();        
                 }
+            ClearText();
             return;
         }
 
@@ -5997,10 +5997,11 @@ char ModelsView_ModelNumber[]  = "ModelNumber";
 
 void  CheckScanButton(){
         char b5Greyed[]= "b5.pco=33840";
-        if (!LostContactFlag & !b5isGrey ){
+        if (!LostContactFlag & !b5isGrey){
              SendCommand(b5Greyed);
              b5isGrey = true;
-        }
+            //Serial.println ("GREY");
+        }   
 }
 /************************************************************************************************************/
 // LOOP
