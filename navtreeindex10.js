@@ -1,5 +1,7 @@
 var NAVTREEINDEX10 =
 {
+"struct_tiny_g_p_s_altitude.html#a5ae68d990ea08d4e21cfa6aefb46cc03":[11,0,19,9],
+"struct_tiny_g_p_s_altitude.html#a5ae68d990ea08d4e21cfa6aefb46cc03":[11,0,19,10],
 "struct_tiny_g_p_s_altitude.html#a5ae68d990ea08d4e21cfa6aefb46cc03":[11,0,19,11],
 "struct_tiny_g_p_s_altitude.html#ac782babc0c485d47e6f57384e88b8cc8":[11,0,19,0],
 "struct_tiny_g_p_s_altitude.html#ac782babc0c485d47e6f57384e88b8cc8":[11,0,19,2],
