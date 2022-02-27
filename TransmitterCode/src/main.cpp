@@ -5368,9 +5368,9 @@ void Button_was_pressed()
             return;
         }
 
-        if (InStrng(Fhss_View, WordsIn))
-            if (!BoundFlag) { // no scan while connected!!!
-                {
+        if (InStrng(Fhss_View, WordsIn)) {
+             if (!BoundFlag)  // no scan while connected!!!
+               {
                     SendCommand(page_FhssView);
                     DrawFhssBox();
                     DoScanInit();
@@ -5378,8 +5378,8 @@ void Button_was_pressed()
                     BlueLedOn();
                     ClearText();
                 }
-                return;
-            }
+            return;
+        }
 
         if (InStrng(ReScan, WordsIn))
         {
