@@ -526,8 +526,7 @@ bool     UkRules = true;
 uint8_t  SwapWaveBand = 0;  
 uint16_t TrimFactor   = 2;   // How much to multiply trim by
 uint8_t DateFix = 0;
-
-
+bool b5isGrey = false;
 uint16_t BackGroundColour = 214;
 uint16_t ForeGroundColour = 65535;
 uint16_t HighlightColour = Yellow;
@@ -1714,6 +1713,7 @@ void FailedPacket()
     if (RecentPacketsLost > LOSTCONTACTCUTOFF) {
         LostContactFlag   = true;
         RecentPacketsLost = 0;
+        b5isGrey = false; // re-enable SCAN button
         if ((millis() - GapStart) > RED_LED_ON_TIME) // there's no need to blink red for every single lost packet. Only after 1/2 second of no connection.
         {
             RedLedOn();
@@ -4386,8 +4386,7 @@ void Button_was_pressed()
     char FrontView_ForeGround[]    = "FrontView.ForeGround";
     char FrontView_Special[]       = "FrontView.Special";
     char FrontView_Highlight[]     = "FrontView.Highlight";
-
-
+   
 
     if (strlen(WordsIn) > 0) {
         StartInactvityTimeout();
@@ -4402,6 +4401,7 @@ void Button_was_pressed()
             SendCommand(page_SetupView);
             CurrentMode = NORMAL;
             CurrentView = MainSetupView;
+            b5isGrey = false; 
             ClearText();
             return;
         }
@@ -4466,12 +4466,14 @@ void Button_was_pressed()
             SendCommand(page_SetupView);
             CurrentMode = NORMAL;
             CurrentView = MainSetupView;
+            b5isGrey = false;
             SendCommand(ProgressEnd);
             return;
         }
 
         if (InStrng(DataEnd, WordsIn) > 0) { //  goto setup screen from Data screen
             CurrentView = MainSetupView;
+            b5isGrey = false;
             ClearText();
             CurrentMode = NORMAL;
             return;
@@ -4511,6 +4513,7 @@ void Button_was_pressed()
 
         if (InStrng(Scan_End, WordsIn) > 0) { //  goto setup screen from Scan screen
             CurrentView = MainSetupView;
+            b5isGrey = false;
             ClearText();
             SendCommand(page_SetupView);
             DoScanEnd();
@@ -5153,6 +5156,7 @@ void Button_was_pressed()
             SendCommand(page_SetupView);
             CurrentMode = NORMAL; // Send data again
             CurrentView = MainSetupView;
+            b5isGrey = false;
             ClearText();
             return;
         }
@@ -5176,6 +5180,7 @@ void Button_was_pressed()
 
         if (InStrng(GoSetupView, WordsIn) > 0) {
             CurrentView = MainSetupView;
+            b5isGrey = false;
             SendCommand(page_SetupView);
             ClearText();
             return;
@@ -5200,6 +5205,7 @@ void Button_was_pressed()
             SendValue(FrontView_Highlight,HighlightColour);
             SaveTXStuff();
             CurrentView = MainSetupView;
+            b5isGrey = false;
             SendCommand(page_SetupView);
             ClearText();
             return;
@@ -5972,22 +5978,29 @@ void CheckGapsLength()
 #endif
     }
 }
+
 /************************************************************************************************************/
 void CheckModelName(){                        // In ModelsView, this function checks correct name is displayed.
-char ModelsView_ModelNumber[]  = "ModelNumber"; 
-    if ((millis()-ModelNameTimeCheck) > 500) {  
-        ModelNameTimeCheck  = millis();
-        if (!InhibitNameCheck){               // if name is being edited, do not check it.
-            ModelNumber = GetValue(ModelsView_ModelNumber);
-            if (LastModelLoaded != ModelNumber) {
-                if (ModelNumber >= 1) {      // Don't use number zero
-                     ReadOneModel(ModelNumber);
-                     LastModelLoaded = ModelNumber;
-                     UpdateModelsNameEveryWhere();  
-                }
+char ModelsView_ModelNumber[]  = "ModelNumber";    
+    if (!InhibitNameCheck){               // if name is being edited, do not check it.
+        ModelNumber = GetValue(ModelsView_ModelNumber);
+        if (LastModelLoaded != ModelNumber) {
+            if (ModelNumber >= 1) {      // Don't use number zero
+                 ReadOneModel(ModelNumber);
+                 LastModelLoaded = ModelNumber;
+                 UpdateModelsNameEveryWhere();  
             }
         }
     }
+}
+/************************************************************************************************************/
+
+void  CheckScanButton(){
+        char b5Greyed[]= "b5.pco=33840";
+        if (!LostContactFlag & !b5isGrey ){
+             SendCommand(b5Greyed);
+             b5isGrey = true;
+        }
 }
 /************************************************************************************************************/
 // LOOP
@@ -5998,8 +6011,16 @@ void loop()
     if (GetButtonPress()) {
         Button_was_pressed();        // Deal with button
     }
-    if (CurrentView == ModelsView){ 
-        CheckModelName();            // In ModelsView, this function checks correct name is displayed.
+
+    if ((millis()-ModelNameTimeCheck) > 500) {  
+        ModelNameTimeCheck  = millis();
+
+        if (CurrentView == MainSetupView){ 
+            CheckScanButton();           
+        }
+        if (CurrentView == ModelsView){ 
+            CheckModelName();            // In ModelsView, this function checks correct name is displayed.
+        }
     }
     if (millis() - LastTimeRead >= 1000) {
         ReadTime();                  // Do the clock
