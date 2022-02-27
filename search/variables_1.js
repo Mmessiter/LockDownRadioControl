@@ -1,7 +1,7 @@
 var searchData=
 [
   ['b_0',['b',['../structsensors__color__t.html#a1bf461b5c728e323f8883a3785c7c60b',1,'sensors_color_t']]],
-  ['backgroundcolour_1',['BackGroundColour',['../_transmitter_code_2src_2main_8cpp.html#a59c3d8b001e63150ebf11e3d9d6dca5b',1,'main.cpp']]],
+  ['backgroundcolour_1',['BackGroundColour',['../_radio_functions_8h.html#a59c3d8b001e63150ebf11e3d9d6dca5b',1,'BackGroundColour():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a59c3d8b001e63150ebf11e3d9d6dca5b',1,'BackGroundColour():&#160;main.cpp']]],
   ['badchannelpointer_2',['BadChannelPointer',['../_radio_functions_8h.html#adbcabfb5f32b82ef68af292eaa2c8669',1,'RadioFunctions.h']]],
   ['badchannels_3',['BadChannels',['../_radio_functions_8h.html#a5824d45baec8c549c63ff8a7fa8ac9d8',1,'RadioFunctions.h']]],
   ['baroaltitude_4',['BaroAltitude',['../_sensor_hub_teensy3__6_2src_2main_8cpp.html#af2ae1ded0446ef84d7f1606cb647ac25',1,'BaroAltitude():&#160;main.cpp'],['../_sensor_hub_t32_2src_2main_8cpp.html#af2ae1ded0446ef84d7f1606cb647ac25',1,'BaroAltitude():&#160;main.cpp'],['../_sensor_hub_l_c_2src_2main_8cpp.html#af2ae1ded0446ef84d7f1606cb647ac25',1,'BaroAltitude():&#160;main.cpp'],['../_receiver_code_2src_2main_8cpp.html#acec349590f33af1fb88040ed4d12e53f',1,'BaroAltitude():&#160;main.cpp'],['../radio_8h.html#acec349590f33af1fb88040ed4d12e53f',1,'BaroAltitude():&#160;main.cpp']]],
