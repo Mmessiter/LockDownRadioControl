@@ -1707,10 +1707,10 @@ void  ReEnableScanButton(){
     char nb[15];
     char cmd[30];
      if (CurrentView == MainSetupView){
-        Str(nb,ForeGroundColour,0);
-        strcpy(cmd,b5NOTGreyed);
-        strcat(cmd,nb);
-        if (b5isGrey){
+         if (b5isGrey){
+            Str(nb,ForeGroundColour,0);
+            strcpy(cmd,b5NOTGreyed);
+            strcat(cmd,nb);
             SendCommand(cmd);
             b5isGrey = false;
         }   
