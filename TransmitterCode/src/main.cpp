@@ -1700,6 +1700,23 @@ FASTRUN void ShowComms()
     }
 } // end ShowComms()
 
+/************************************************************************************************************/
+
+void  ReEnableScanButton(){ 
+    char b5NOTGreyed[]= "b5.pco=";
+    char nb[15];
+    char cmd[30];
+     if (CurrentView == MainSetupView){
+        Str(nb,ForeGroundColour,0);
+        strcpy(cmd,b5NOTGreyed);
+        strcat(cmd,nb);
+        if (b5isGrey){
+            SendCommand(cmd);
+            b5isGrey = false;
+        }   
+    }
+}
+
 /*********************************************************************************************************************************/
 
 void FailedPacket()
@@ -1713,10 +1730,10 @@ void FailedPacket()
     if (RecentPacketsLost > LOSTCONTACTCUTOFF) {
         LostContactFlag   = true;
         RecentPacketsLost = 0;
-        b5isGrey = false; // re-enable SCAN button
         if ((millis() - GapStart) > RED_LED_ON_TIME) // there's no need to blink red for every single lost packet. Only after 1/2 second of no connection.
         {
             RedLedOn();
+            ReEnableScanButton();
         }
     }
     ++LostPackets;
@@ -6000,9 +6017,10 @@ void  CheckScanButton(){
         if (!LostContactFlag & !b5isGrey){
              SendCommand(b5Greyed);
              b5isGrey = true;
-            //Serial.println ("GREY");
         }   
 }
+
+
 /************************************************************************************************************/
 // LOOP
 /************************************************************************************************************/
