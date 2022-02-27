@@ -127,6 +127,8 @@ extern uint32_t       GapStart;
 extern uint8_t *      FHSSChPointer;
 extern bool           DoSbusSendOnly;
 extern bool           BuddyMaster;
+extern uint16_t       BackGroundColour;
+extern uint16_t       HighlightColour;
 
 extern void  GetSlaveChannelValues();
 extern void  KickTheDog();

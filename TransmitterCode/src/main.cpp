@@ -1749,7 +1749,7 @@ void SendCharArray(char* ch0, char* ch1, char* ch2, char* ch3, char* ch4, char* 
 #define xx1 90 // was 75
 #define yy1 90 // Needed below... Edit xx1,yy1 to move box
 
-void DrawFhssBox()
+void DrawFhssBox() // heer
 {
     int  x1          = xx1;
     int  y1          = yy1;
@@ -1783,23 +1783,26 @@ void DrawFhssBox()
     char NB7[12];
     char NB8[12];
     char NA[1]    = ""; // blank one
-    char whyte[]  = "WHITE";
-    char whyte1[] = "WHITE,"; // ... with a comma
+    char NewWhite[15];
+    char NewWhite1[15];
+   
+    Str(NewWhite,ForeGroundColour,0);
+    Str(NewWhite1,ForeGroundColour,1);
 
-    SendCharArray(CB, draw, Str(NB1, x1, 1), Str(NB2, y1, 1), Str(NB3, x2, 1), Str(NB4, y2, 1), whyte, NA, NA, NA, NA, NA, NA);
-    SendCharArray(CB, xstr, Str(NB, x1 - xd, 1), Str(NB1, y2 + 4, 1), Str(NB2, 40, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), whyte1, Str(NB5, 214, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR1);
-    SendCharArray(CB, xstr, Str(NB, 30, 1), Str(NB1, y2 + 4, 1), Str(NB2, 40, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), whyte1, Str(NB5, 214, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), CH);
-    SendCharArray(CB, xstr, Str(NB, 16, 1), Str(NB1, y2 + 25, 1), Str(NB2, 50, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), whyte1, Str(NB5, 214, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), GHZ);
-    SendCharArray(CB, xstr, Str(NB, x1 - xd1, 1), Str(NB1, y2 + 25, 1), Str(NB2, 60, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), whyte1, Str(NB5, 214, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR1GHZ);
-    SendCharArray(CB, xstr, Str(NB, x1 + ((x2 - x1) / 4) - xd, 1), Str(NB1, y2 + 4, 1), Str(NB2, 40, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), whyte1, Str(NB5, 214, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR32);
-    SendCharArray(CB, xstr, Str(NB, (x1 + ((x2 - x1) / 4) - xd1), 1), Str(NB1, y2 + 25, 1), Str(NB2, 60, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), whyte1, Str(NB5, 214, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR32GHZ);
-    SendCharArray(CB, xstr, Str(NB, (x1 + ((x2 - x1) / 2) - xd), 1), Str(NB1, y2 + 4, 1), Str(NB2, 40, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), whyte1, Str(NB5, 214, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR64);
-    SendCharArray(CB, xstr, Str(NB, (x1 + ((x2 - x1) / 2) - xd1), 1), Str(NB1, y2 + 25, 1), Str(NB2, 60, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), whyte1, Str(NB5, 214, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR64GHZ);
-    SendCharArray(CB, xstr, Str(NB, (x1 + (((x2 - x1) / 4) * 3) - xd), 1), Str(NB1, y2 + 4, 1), Str(NB2, 40, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), whyte1, Str(NB5, 214, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR96);
-    SendCharArray(CB, xstr, Str(NB, (x1 + (((x2 - x1) / 4) * 3) - xd1), 1), Str(NB1, y2 + 25, 1), Str(NB2, 60, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), whyte1, Str(NB5, 214, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR96GHZ);
-    SendCharArray(CB, xstr, Str(NB, (x2 - xd), 1), Str(NB1, y2 + 4, 1), Str(NB2, 40, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), whyte1, Str(NB5, 214, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR126);
-    SendCharArray(CB, xstr, Str(NB, (x2 - xd1), 1), Str(NB1, y2 + 25, 1), Str(NB2, 60, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), whyte1, Str(NB5, 214, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR126GHZ);
-    SendCharArray(CB, fyll, Str(NB, (x1 + 1), 1), Str(NB1, (y1 + 1), 1), Str(NB2, ((128 * 5) - 2), 1), Str(NB3, 254, 1), Str(NB4, 214, 0), NA, NA, NA, NA, NA, NA);
+    SendCharArray(CB, draw, Str(NB1, x1, 1), Str(NB2, y1, 1), Str(NB3, x2, 1), Str(NB4, y2, 1), NewWhite, NA, NA, NA, NA, NA, NA);
+    SendCharArray(CB, xstr, Str(NB, x1 - xd, 1), Str(NB1, y2 + 4, 1), Str(NB2, 40, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR1);
+    SendCharArray(CB, xstr, Str(NB, 30, 1), Str(NB1, y2 + 4, 1), Str(NB2, 40, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), CH);
+    SendCharArray(CB, xstr, Str(NB, 16, 1), Str(NB1, y2 + 25, 1), Str(NB2, 50, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), GHZ);
+    SendCharArray(CB, xstr, Str(NB, x1 - xd1, 1), Str(NB1, y2 + 25, 1), Str(NB2, 60, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR1GHZ);
+    SendCharArray(CB, xstr, Str(NB, x1 + ((x2 - x1) / 4) - xd, 1), Str(NB1, y2 + 4, 1), Str(NB2, 40, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR32);
+    SendCharArray(CB, xstr, Str(NB, (x1 + ((x2 - x1) / 4) - xd1), 1), Str(NB1, y2 + 25, 1), Str(NB2, 60, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR32GHZ);
+    SendCharArray(CB, xstr, Str(NB, (x1 + ((x2 - x1) / 2) - xd), 1), Str(NB1, y2 + 4, 1), Str(NB2, 40, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR64);
+    SendCharArray(CB, xstr, Str(NB, (x1 + ((x2 - x1) / 2) - xd1), 1), Str(NB1, y2 + 25, 1), Str(NB2, 60, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR64GHZ);
+    SendCharArray(CB, xstr, Str(NB, (x1 + (((x2 - x1) / 4) * 3) - xd), 1), Str(NB1, y2 + 4, 1), Str(NB2, 40, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR96);
+    SendCharArray(CB, xstr, Str(NB, (x1 + (((x2 - x1) / 4) * 3) - xd1), 1), Str(NB1, y2 + 25, 1), Str(NB2, 60, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR96GHZ);
+    SendCharArray(CB, xstr, Str(NB, (x2 - xd), 1), Str(NB1, y2 + 4, 1), Str(NB2, 40, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR126);
+    SendCharArray(CB, xstr, Str(NB, (x2 - xd1), 1), Str(NB1, y2 + 25, 1), Str(NB2, 60, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR126GHZ);
+    SendCharArray(CB, fyll, Str(NB, (x1 + 1), 1), Str(NB1, (y1 + 1), 1), Str(NB2, ((128 * 5) - 2), 1), Str(NB3, 254, 1), Str(NB4, BackGroundColour, 0), NA, NA, NA, NA, NA, NA);
 }
 
 /*********************************************************************************************************************************/
@@ -2754,41 +2757,6 @@ void SetUKFrequencies(){
 void SetTestFrequencies(){
             FHSSChPointer = FHSS_Channels1; 
             UkRules = false;     
-}
-/*********************************************************************************************************************************/
-// These functions sent colours on the Nextion Screen so that evenually they will all be definable by user.
-
-void SetColour(char* Element, int Colour, uint8_t BackGround)
-{
-    char TheCommand[70];
-    char bak[] = ".bco=";
-    char frg[] = ".pco=";
-    char NumberBuffer[10];
-    strcpy(TheCommand, Element);
-    if (BackGround) {strcat(TheCommand, bak);}
-    else {strcat(TheCommand,frg); }
-    Str(NumberBuffer,Colour,0);
-    strcat(TheCommand, NumberBuffer);
-    SendCommand(TheCommand);
-}
-
-/*********************************************************************************************************************************/
-void SetPco2s(char* Element)
-{
-    char TheCommand[70];
-    char bak[] = ".bco2=";
-    char frg[] = ".pco2=";
-    char NumberBuffer[10];
-    strcpy(TheCommand, Element);
-    strcat(TheCommand, bak);
-    Str(NumberBuffer,HighlightColour,0);
-    strcat(TheCommand, NumberBuffer);
-    SendCommand(TheCommand);
-    strcpy(TheCommand, Element);
-    strcat(TheCommand, frg);
-    Str(NumberBuffer,SpecialColour,0);
-    strcat(TheCommand, NumberBuffer);
-    SendCommand(TheCommand);
 }
 /*********************************************************************************************************************************/
 // SETUP
@@ -4463,7 +4431,7 @@ void Button_was_pressed()
         ClearText();
         return;
         }
-        if (InStrng(OptionsEnd, WordsIn) > 0) { // Options screen end heer
+        if (InStrng(OptionsEnd, WordsIn) > 0) { // Options screen end
             SendCommand(ProgressStart);
             i = strlen(OptionsEnd);
             j = 0;

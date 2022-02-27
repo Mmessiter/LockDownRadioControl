@@ -183,8 +183,10 @@ void ScanAllChannels()
     char NB4[12];
     char CB[100]; // COMMAND BUFFER
     char fyll[]   = "fill ";
-    char IELLOW[] = "YELLOW";
+    char NewYellow[15];
     char NA[1]    = ""; // blank one
+
+    Str(NewYellow,HighlightColour,0);
     for (Sc = ScanStart; Sc <= ScanEnd; ++Sc) {
         if (Nextion.available()) return; // in case someone wants to stop!
         Radio1.setChannel(Sc);
@@ -198,14 +200,14 @@ void ScanAllChannels()
         if (Radio1.testCarrier()) {
             if (AllChannels[Sc] < (250)) {
                 AllChannels[Sc] += BlobHeight;
-                SendCharArray(CB, fyll, Str(NB, x2, 1), Str(NB1, (y2), 1), Str(NB2, 5, 1), Str(NB3, BlobHeight, 1), IELLOW, NA, NA, NA, NA, NA, NA);
+                SendCharArray(CB, fyll, Str(NB, x2, 1), Str(NB1, (y2), 1), Str(NB2, 5, 1), Str(NB3, BlobHeight, 1), NewYellow, NA, NA, NA, NA, NA, NA);
             }
         }
         else {
             ++NoCarrier[Sc];
             if (NoCarrier[Sc] > 15) { // must see no carrier >15 times before reducing the trace
                 if (AllChannels[Sc] >= (BlobHeight)) {
-                    SendCharArray(CB, fyll, Str(NB, x2, 1), Str(NB1, (y2 + BlobHeight), 1), Str(NB2, 5, 1), Str(NB3, BlobHeight, 1), Str(NB4, 214, 0), NA, NA, NA, NA, NA, NA);
+                    SendCharArray(CB, fyll, Str(NB, x2, 1), Str(NB1, (y2 + BlobHeight), 1), Str(NB2, 5, 1), Str(NB3, BlobHeight, 1), Str(NB4, BackGroundColour, 0), NA, NA, NA, NA, NA, NA);
                     AllChannels[Sc] -= (BlobHeight);
                     NoCarrier[Sc] = 0;
                 }
