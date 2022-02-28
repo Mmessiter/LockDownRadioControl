@@ -1,3 +1,12 @@
-This screen has two functions:
-(1) A channels input can be remapped to another device.
+This screen has two main functions:
+
+(1) Each input can be mapped to any channel
 (2) The name of any channel can be editied.
+
+One input device can have multiple outputs. Traditional
+helicopters use input 3 ('Throttle') for both throttle 
+and collective pitch. Although these share an input,
+each uses its own curve. 
+
+Inputs 9,10,11 and 12 (and switches) offer three positions.
+Inputs 13,14,15 and 16 don't exist at all.

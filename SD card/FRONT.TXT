@@ -1,9 +1,11 @@
-This screen is visible by default while flying a model.
+This screen is usually visible while flying a model because
+it has the timer and battery voltages.
 
-The timer runs automaticaly when the model is not in Flight Mode 4 
-in order to time only the motor use. So it's recommended to setup
+The timer runs automaticaly when the model is NOT in Flight Mode 4 
+(in order to time only the motor use). So it's recommended to setup
 the model such that the motor is off in Flight Mode 4.
 
-Press 'Setup' to change all settings. All help screens exit 
-back to the setup menu, including this one.
- 
+The timer pauses while in Flight mode 4 and is reset when the 
+transmitter is turned on.
+
+Press 'Setup' to change all settings. 

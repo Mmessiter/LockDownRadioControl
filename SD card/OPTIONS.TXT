@@ -1,0 +1,11 @@
+'QNH'means atmospheric pressure at sea level for
+the current time and location. This is needed for 
+more accurate altitude readings from the BMP280
+barometer, assuming one was fitted. Aviation web 
+sites will give this information for nearby airports.
+
+Trim factor selects how much trim to apply.
+Hours from GMT selects your time zone. This is needed
+if GPS is connected as it will corrent the Real Time Clock
+to GMT if zone is not known. 
+

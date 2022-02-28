@@ -1,2 +1,9 @@
 This screen shows some information about the quality of the
-current connection and other data.
+current connection and other data including GPS if
+connected.
+
+Units are milliseconds, feet, and centigrade.
+
+Pressing 'Clear' will zero many parameters, and also toggles
+between altitude relative to sea level, and altitude
+relative to where the model was when 'Clear' was pressed.
