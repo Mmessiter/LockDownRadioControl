@@ -4,8 +4,6 @@ var _radio_functions_8cpp =
     [ "CalibrateView", "_radio_functions_8cpp.html#a6acbadf0efce9bd09fe2ad80f293f74e", null ],
     [ "COMPRESSEDWORDS", "_radio_functions_8cpp.html#a461caf7198eaa60ce589088ff38b97cb", null ],
     [ "DataView", "_radio_functions_8cpp.html#a0dc37f97eb00bb5b63ccbef3acd7f8ed", null ],
-    [ "FHSS_RESCUE_BOTTOM", "_radio_functions_8cpp.html#ae3ff62396efcffeead62e0403efbd6de", null ],
-    [ "FHSS_RESCUE_TOP", "_radio_functions_8cpp.html#ab269c2e7db5187ffd777d443dc486b7f", null ],
     [ "FhssView", "_radio_functions_8cpp.html#a878e0e1e38b67ffd5e1de07170efba1c", null ],
     [ "GainsView", "_radio_functions_8cpp.html#a4e83b7abec31f2eb6f7c06662c83f0d4", null ],
     [ "GraphView", "_radio_functions_8cpp.html#a878a10eaefbcf00325bcf0931da89e7c", null ],
