@@ -531,6 +531,7 @@ uint16_t BackGroundColour = 214;
 uint16_t ForeGroundColour = 65535;
 uint16_t HighlightColour = Yellow;
 uint16_t SpecialColour = Red;
+bool     Reconnected = false;
 
 
 
@@ -1554,8 +1555,11 @@ FASTRUN void ShowComms()
                     {
                         if (!BuddyMaster)
                         {
-                            MakeBindButtonInvisible();
-                            SendText(FrontView_Connected, Msg_Connected); 
+                            if (!Reconnected){
+                                MakeBindButtonInvisible();
+                                SendText(FrontView_Connected, Msg_Connected); // heer
+                                Reconnected = true;
+                            }
                         }
                         else
                         {
@@ -1729,6 +1733,7 @@ void FailedPacket()
     ++TotalledRecentPacketsLost; // this is to keep track of events when receiver is off
     if (RecentPacketsLost > LOSTCONTACTCUTOFF) {
         LostContactFlag   = true;
+        Reconnected = false;
         RecentPacketsLost = 0;
         if ((millis() - GapStart) > RED_LED_ON_TIME) // there's no need to blink red for every single lost packet. Only after 1/2 second of no connection.
         {
@@ -6081,6 +6086,7 @@ void loop()
 #ifdef DB_BIND
             Serial.println("Binding now");
 #endif
+            MakeBindButtonInvisible();
             SetThePipe(NewPipe);
             BindingNow  = 0;
             BoundFlag   = true;
@@ -6091,7 +6097,7 @@ void loop()
             GapAverage  = 0;
             GapCount    = 0;
             GreenLedOn();
-            MakeBindButtonInvisible();
+          
         }
     }
 } // end loop()
