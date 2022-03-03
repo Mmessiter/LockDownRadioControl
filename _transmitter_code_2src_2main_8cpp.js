@@ -414,6 +414,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "RangeTestStart", "_transmitter_code_2src_2main_8cpp.html#aee35e643eabc1ed932fa3886c912a8a3", null ],
     [ "ReceiverVersionNumber", "_transmitter_code_2src_2main_8cpp.html#a54977872c85f09f2b15f657c83df9300", null ],
     [ "RecentPacketsLost", "_transmitter_code_2src_2main_8cpp.html#abf6b6613bda2b08b3e07a231a23f38c2", null ],
+    [ "Reconnected", "_transmitter_code_2src_2main_8cpp.html#a0f8aa0f6f0fca3b57e848eec8d23724e", null ],
     [ "ReconnectingFlag", "_transmitter_code_2src_2main_8cpp.html#a1502d75a5bafae6f9508fbe1f34e5bf0", null ],
     [ "ReconnectTime", "_transmitter_code_2src_2main_8cpp.html#a7cfc66c705193f7d65f7c9029df13fad", null ],
     [ "RecoveryTimer", "_transmitter_code_2src_2main_8cpp.html#ac6156efad98d22f44766714a565ccf2f", null ],
