@@ -1557,7 +1557,7 @@ FASTRUN void ShowComms()
                         {
                             if (!Reconnected){
                                 MakeBindButtonInvisible();
-                                SendText(FrontView_Connected, Msg_Connected); // heer
+                                SendText(FrontView_Connected, Msg_Connected);
                                 Reconnected = true;
                             }
                         }
