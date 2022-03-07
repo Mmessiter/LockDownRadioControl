@@ -1042,6 +1042,17 @@ void StartInactvityTimeout()
 
 /*********************************************************************************************************************************/
 
+void MakeBindButtonInvisible()
+{
+    char bbiv[] = "vis bind,0";
+    if (BindButton) {
+        SendCommand(bbiv);
+        BindButton = false;
+    }
+}
+
+/*********************************************************************************************************************************/
+
 uint8_t GetBrightness()
 {
     if (LedIsBlinking) {
@@ -1066,21 +1077,9 @@ uint8_t GetBrightness()
 void RedLedOn()
 {
     LedWasGreen = false;
-    LedIsBlinking=true;
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, 0);
     analogWrite(REDLED, GetBrightness()); // Brightness is a function of blinking
-}
-
-/*********************************************************************************************************************************/
-
-void MakeBindButtonInvisible()
-{
-    char bbiv[] = "vis bind,0";
-    if (BindButton) {
-        SendCommand(bbiv);
-        BindButton = false;
-    }
 }
 
 /*********************************************************************************************************************************/
@@ -1091,7 +1090,6 @@ void GreenLedOn()
         LedWasGreen = true;
         analogWrite(BLUELED, 0);
         analogWrite(REDLED, 0); 
-        LedIsBlinking=false;
         analogWrite(GREENLED, GetBrightness()); // Brightness is a function of maybe blinking
         LastShowTime = 0;
         MakeBindButtonInvisible();
@@ -1569,6 +1567,7 @@ FASTRUN void ShowComms()
                                 SendText(FrontView_Connected, Msg_CnctdBuddySlave);
                             }
                         }
+                        LedIsBlinking=false;
                         GreenLedOn();
                         StartInactvityTimeout();
                     }
@@ -1734,6 +1733,7 @@ void FailedPacket()
         RecentPacketsLost = 0;
         if ((millis() - GapStart) > RED_LED_ON_TIME) // there's no need to blink red for every single lost packet. Only after 1/2 second of no connection.
         {
+           // LedIsBlinking=true;
             RedLedOn();
             ReEnableScanButton();
         }
@@ -5400,6 +5400,7 @@ void Button_was_pressed()
                     DrawFhssBox();
                     DoScanInit();
                     CurrentMode = SCANWAVEBAND;
+                    LedIsBlinking=false;
                     BlueLedOn();        
                 }
             ClearText();
@@ -6093,6 +6094,7 @@ void loop()
             GapSum      = 0;
             GapAverage  = 0;
             GapCount    = 0;
+            LedIsBlinking=false;
             GreenLedOn();
           
         }
