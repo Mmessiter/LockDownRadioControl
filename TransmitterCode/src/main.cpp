@@ -486,7 +486,7 @@ bool     InhibitNameCheck      = false;
 // changing these four valiables controls LED blink and speed
 
 bool     LedIsBlinking = false;
-float    BlinkHertz    = 1.5;
+float    BlinkHertz    = 0.75;
 uint32_t BlinkTimer    = 0;
 uint8_t  BlinkOnPhase  = 1;
 bool     LedWasGreen   = false;
@@ -660,7 +660,7 @@ void SynchRTCwithGPSTime(){            // This function corrects the time and th
         Ghour     = GPSHours;
         GmonthDay = GPSDay;
         Gmonth    = GPSMonth;
-        Gyear     = GPSYear + 1744; // ????
+        Gyear     = GPSYear + 1744;     // ????
         SetTheRTC();
     }
 }
@@ -1066,6 +1066,7 @@ uint8_t GetBrightness()
 void RedLedOn()
 {
     LedWasGreen = false;
+    LedIsBlinking=true;
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, 0);
     analogWrite(REDLED, GetBrightness()); // Brightness is a function of blinking
@@ -1089,7 +1090,8 @@ void GreenLedOn()
     if (!LedWasGreen || LedIsBlinking) { // no need to repeat unless it is blinking
         LedWasGreen = true;
         analogWrite(BLUELED, 0);
-        analogWrite(REDLED, 0);
+        analogWrite(REDLED, 0); 
+        LedIsBlinking=false;
         analogWrite(GREENLED, GetBrightness()); // Brightness is a function of maybe blinking
         LastShowTime = 0;
         MakeBindButtonInvisible();
