@@ -1059,6 +1059,8 @@ uint8_t GetBrightness()
     else {
         BlinkOnPhase = 1;
     }
+
+
     if (BlinkOnPhase) {
         return 32;
     }
@@ -1092,7 +1094,7 @@ void MakeBindButtonInvisible()
 
 void GreenLedOn()
 {
-    if (!LedWasGreen) {
+    if (!LedWasGreen || LedIsBlinking) {
         LedWasGreen = true;
         analogWrite(BLUELED, 0);
         analogWrite(REDLED, 0);
