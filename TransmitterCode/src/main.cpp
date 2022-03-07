@@ -486,7 +486,7 @@ bool     InhibitNameCheck      = false;
 // changing these four valiables controls LED blink and speed
 
 bool     LedIsBlinking = false;
-float    BlinkHertz    = 1;
+float    BlinkHertz    = 1.5;
 uint32_t BlinkTimer    = 0;
 uint8_t  BlinkOnPhase  = 1;
 bool     LedWasGreen   = false;
@@ -906,8 +906,10 @@ void SendText1(char* tbox, char* NewWord)
 
 /*********************************************************************************************************************************/
 
-// This function converts an "int" to a string, AND then adds a comma, a dot, or nothing at the end
-// It dates for a time when I didn't know about standard library functions! But it works just fine, so it says in.
+// This function converts an int to a char[] array, then adds a comma, a dot, or nothing at the end.
+// It builds the char[] array at a pointer (*s) Where there MUST be enough space for all characters plus a zero terminator.
+// It dates for a very early time when I didn't know about standard library functions! 
+// But it works just fine, so it says in.
 
 char* Str(char* s, int n, int comma) // comma = 0 for nothing, 1 for a comma, 2 for a dot.
 {
@@ -982,10 +984,7 @@ void ReadTime()
     char zero[]  = "0";
     char Owner[] = "Owner";
     uint8_t DisplayedHour;
-   
-
     FixDeltaGMTSign();  
-
     if (CurrentView == FrontView || CurrentView == Options_View) {
         if (RTC.read(tm)) { 
             strcpy(TimeString, Str(NB, tm.Day + DateFix, 0));
@@ -1018,18 +1017,13 @@ void ReadTime()
                 DisplayedHour += 24;
                 DateFix = -1;
             }
-               
             if (MayBeAddZero(DisplayedHour)) strcat(TimeString, zero);
-
             strcat(TimeString, Str(NB, DisplayedHour, 0));
-            
             if (UkRules) strcat(TimeString, colon);
             if (!UkRules) strcat(TimeString, colon1);
-
             if (MayBeAddZero(tm.Minute)) strcat(TimeString, zero);
             strcat(TimeString, Str(NB, tm.Minute, 0));
-
-             if (UkRules)strcat(TimeString, colon);
+            if (UkRules)strcat(TimeString, colon);
             if (!UkRules) strcat(TimeString, colon1);
             if (MayBeAddZero(tm.Second)) strcat(TimeString, zero);
             strcat(TimeString, Str(NB, tm.Second, 0));
@@ -1059,8 +1053,6 @@ uint8_t GetBrightness()
     else {
         BlinkOnPhase = 1;
     }
-
-
     if (BlinkOnPhase) {
         return 32;
     }
@@ -1094,11 +1086,11 @@ void MakeBindButtonInvisible()
 
 void GreenLedOn()
 {
-    if (!LedWasGreen || LedIsBlinking) {
+    if (!LedWasGreen || LedIsBlinking) { // no need to repeat unless it is blinking
         LedWasGreen = true;
         analogWrite(BLUELED, 0);
         analogWrite(REDLED, 0);
-        analogWrite(GREENLED, GetBrightness()); // Brightness is a function maybe blinking
+        analogWrite(GREENLED, GetBrightness()); // Brightness is a function of maybe blinking
         LastShowTime = 0;
         MakeBindButtonInvisible();
         Reconnected=false;
@@ -1112,7 +1104,7 @@ void BlueLedOn()
     LedWasGreen = false;
     analogWrite(REDLED, 0);
     analogWrite(GREENLED, 0);
-    analogWrite(BLUELED, GetBrightness()); // Brightness is a function of blinking
+    analogWrite(BLUELED, GetBrightness()); // Brightness is a function of maybe blinking
 }
 
 /*********************************************************************************************************************************/
