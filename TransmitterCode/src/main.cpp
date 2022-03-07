@@ -1099,6 +1099,7 @@ void GreenLedOn()
         analogWrite(GREENLED, GetBrightness()); // Brightness is a function maybe blinking
         LastShowTime = 0;
         MakeBindButtonInvisible();
+        Reconnected=true;
     }
 }
 
