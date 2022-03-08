@@ -92,7 +92,7 @@
 #define CE_PIN             9                   // for SPI to nRF24L01
 #define CSN_PIN            10                  // for SPI to nRF24L01
 #define INACTIVITYTIMEOUT  10                  // Default time after which to switch off
-#define INACTIVITYMINIMUM  5 * TICKSPERMINUTE  // Inactivity timeout minimum is 5 minutes
+#define INACTIVITYMINIMUM  1 * TICKSPERMINUTE  // Inactivity timeout minimum is 5 minutes
 #define INACTIVITYMAXIMUM  30 * TICKSPERMINUTE // Inactivity timeout maximum is 30 minutes
 #define DS1307_ADDRESS     0x68
 
@@ -1644,9 +1644,7 @@ FASTRUN void ShowComms()
                 dtostrf(Volts, 0, 0, Vbuf);
                 strcat(Vbuf, pc);
                 if (BoundFlag && CurrentView == FrontView) SendText(FrontView_AckPayload, Vbuf);
-
                 strcpy(RXBattInfo, ModelVolts);
-
                 strcat(RXBattInfo, v);
                 if (RXCellCount == 6) strcat(RXBattInfo, LiPo6s);
                 if (RXCellCount == 5) strcat(RXBattInfo, LiPo5s);
@@ -1726,7 +1724,7 @@ void  ReEnableScanButton(){
 
 void FailedPacket()
 {
-    int secondsRemaining;
+    int SecondsRemaining;
     if (GapStart == 0) {
         GapStart = millis(); // To keep track of gaps' length
     }
@@ -1743,8 +1741,9 @@ void FailedPacket()
         }
     }
     ++LostPackets;
-    secondsRemaining = (Inactivity_Timeout / 1000) - (millis() - Inactivity_Start) / 1000;
-    if (secondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH); // INACTIVITY POWER OFF
+    SecondsRemaining = (Inactivity_Timeout / 1000) - (millis() - Inactivity_Start) / 1000;
+   // Serial.println (secondsRemaining);
+    if (SecondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH);             // INACTIVITY POWER OFF HERE!!
 }
 
 /*********************************************************************************************************************************/
@@ -2673,7 +2672,8 @@ bool LoadAllParameters()
         ++SDCardAddress;
         ++SDCardAddress;
         Inactivity_Timeout = SDReadByte(SDCardAddress) * TICKSPERMINUTE;
-
+        if (Inactivity_Timeout < INACTIVITYMINIMUM) Inactivity_Timeout = INACTIVITYMINIMUM;
+        if (Inactivity_Timeout > INACTIVITYMAXIMUM) Inactivity_Timeout = INACTIVITYMAXIMUM;
         ++SDCardAddress;
         for (j = 0; j < 30; ++j) {
             TxName[j] = SDReadByte(SDCardAddress);
