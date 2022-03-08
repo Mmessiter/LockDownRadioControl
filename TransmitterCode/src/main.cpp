@@ -92,7 +92,7 @@
 #define CE_PIN             9                   // for SPI to nRF24L01
 #define CSN_PIN            10                  // for SPI to nRF24L01
 #define INACTIVITYTIMEOUT  10                  // Default time after which to switch off
-#define INACTIVITYMINIMUM  1 * TICKSPERMINUTE  // Inactivity timeout minimum is 5 minutes
+#define INACTIVITYMINIMUM  5 * TICKSPERMINUTE  // Inactivity timeout minimum is 5 minutes
 #define INACTIVITYMAXIMUM  30 * TICKSPERMINUTE // Inactivity timeout maximum is 30 minutes
 #define DS1307_ADDRESS     0x68
 
@@ -1742,7 +1742,7 @@ void FailedPacket()
     }
     ++LostPackets;
     SecondsRemaining = (Inactivity_Timeout / 1000) - (millis() - Inactivity_Start) / 1000;
-   // Serial.println (secondsRemaining);
+   // Serial.println (SecondsRemaining);
     if (SecondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH);             // INACTIVITY POWER OFF HERE!!
 }
 
