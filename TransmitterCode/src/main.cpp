@@ -88,7 +88,7 @@
 #define FLIGHTMODESWITCH   4                   // Default MODE switch
 #define AUTOSWITCH         1                   // Default AUTO switch
 #define DEFAULTPIPEADDRESS 0xBABE1E5420LL      // Pipe address for startup - any value but MUST match RX
-#define LOWBATTERY         40                  // percent for warning
+#define LOWBATTERY         50                  // percent for warning
 #define CE_PIN             9                   // for SPI to nRF24L01
 #define CSN_PIN            10                  // for SPI to nRF24L01
 #define INACTIVITYTIMEOUT  10                  // Default time after which to switch off
@@ -1520,7 +1520,10 @@ FASTRUN void ShowComms()
         if (USE_INA219) {
             txv  = (ina219.getBusVoltage_V()) * 100;
             txpc = map(txv, 512, 670, 0, 100); // LiFePo4 Battery 2.6 ->3.5  volts per cell
-            if (txpc < LOWBATTERY) TXWarningFlag = true;
+            if (txpc < LOWBATTERY) {
+                TXWarningFlag = true;
+                LedIsBlinking = true;   // Make LED Blink as a warning
+             }
             if (txpc > 100) txpc = 100; // avoid showing > 100% !
             dtostrf(txpc, 0, 0, Vbuf);
             strcat(Vbuf, pc);
@@ -1567,7 +1570,6 @@ FASTRUN void ShowComms()
                                 SendText(FrontView_Connected, Msg_CnctdBuddySlave);
                             }
                         }
-                        LedIsBlinking=false;
                         GreenLedOn();
                         StartInactvityTimeout();
                     }
@@ -1631,9 +1633,11 @@ FASTRUN void ShowComms()
                 Volts = constrain(Volts, 0, 100);
                 if (Volts <= LOWBATTERY && Volts > 0) {
                     RXWarningFlag = true;
+                    LedIsBlinking = true;    // Make LED Blink as a warning
                 }
                 else {
                     RXWarningFlag = false;
+                    LedIsBlinking = false;   // Make LED not blink
                 }
             }
             if (VoltsDetected) {
@@ -1695,6 +1699,7 @@ FASTRUN void ShowComms()
         if (!RXWarningFlag) {
             if (!TXWarningFlag) {
                 SendCommand(WarnOff);
+                LedIsBlinking = false;
             }
         }
     }
@@ -1732,8 +1737,7 @@ void FailedPacket()
         Reconnected = false;
         RecentPacketsLost = 0;
         if ((millis() - GapStart) > RED_LED_ON_TIME) // there's no need to blink red for every single lost packet. Only after 1/2 second of no connection.
-        {
-           // LedIsBlinking=true;
+        {  
             RedLedOn();
             ReEnableScanButton();
         }
@@ -5400,7 +5404,6 @@ void Button_was_pressed()
                     DrawFhssBox();
                     DoScanInit();
                     CurrentMode = SCANWAVEBAND;
-                    LedIsBlinking=false;
                     BlueLedOn();        
                 }
             ClearText();
@@ -6094,7 +6097,6 @@ void loop()
             GapSum      = 0;
             GapAverage  = 0;
             GapCount    = 0;
-            LedIsBlinking=false;
             GreenLedOn();
           
         }
