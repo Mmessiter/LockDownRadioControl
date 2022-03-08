@@ -88,7 +88,7 @@
 #define FLIGHTMODESWITCH   4                   // Default MODE switch
 #define AUTOSWITCH         1                   // Default AUTO switch
 #define DEFAULTPIPEADDRESS 0xBABE1E5420LL      // Pipe address for startup - any value but MUST match RX
-#define LOWBATTERY         50                  // percent for warning
+#define LOWBATTERY         70                  // percent for warning
 #define CE_PIN             9                   // for SPI to nRF24L01
 #define CSN_PIN            10                  // for SPI to nRF24L01
 #define INACTIVITYTIMEOUT  10                  // Default time after which to switch off
