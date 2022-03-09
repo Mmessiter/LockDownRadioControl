@@ -254,7 +254,7 @@ struct Payload
 };
 Payload AckPayload;
 
-uint8_t AckPayloadSize = sizeof(AckPayload); // i.e. 6
+uint8_t AckPayloadSize = sizeof(AckPayload);   // i.e. 6
 
 // *****************************************************************************************************************
 
