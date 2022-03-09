@@ -81,7 +81,7 @@
  */
 // ************************************************** TRANSMITTER CODE **************************************************
 
-#define CHANNELSUSED       16                  // 16 Channels
+#define CHANNELSUSED       16                  //   16 Channels
 #define MAXMIXES           32                  // 32 mixes
 #define TICKSPERMINUTE     60000               // millis() += 60000 per minute
 #define PROPOCHANNELS      8                   // Only 4 have knobs / 2 sticks (= 4 hall sensors)
