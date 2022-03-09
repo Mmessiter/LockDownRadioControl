@@ -460,7 +460,6 @@ bool RXWarningFlag = false;
 
 uint32_t TxOnTime      = 0;
 uint32_t TxPace        = 0;
-bool     ModelDetected = false;
 uint16_t CompressedData[COMPRESSEDWORDS]; // = 20
 uint8_t  SizeOfCompressedData;
 uint32_t Inactivity_Timeout = 10 * TICKSPERMINUTE;
@@ -2120,8 +2119,11 @@ void OpenModelsFile()
     else {
         ModelsFileNumber = SD.open(ModelsFile, FILE_WRITE);
     }
-    if (ModelsFileNumber == 0) FileError = true;
-    ModelsFileOpen = true;
+    if (ModelsFileNumber == 0) {
+        FileError = true;
+    }else{
+        ModelsFileOpen = true;
+        }
 }
 
 /*********************************************************************************************************************************/
@@ -2497,8 +2499,8 @@ void UpdateButtonLabels()
 bool ReadOneModel(uint8_t Mnum)
 {
     unsigned int j;
-    ModelDetected = true;
     if (!ModelsFileOpen) OpenModelsFile();
+    if (!ModelsFileOpen) OpenModelsFile();     // sometimes it's slow to awake
     SDCardAddress = TXSIZE;                    //  spare bytes for TX stuff
     SDCardAddress += ((Mnum - 1) * MODELSIZE); //  spare bytes for Model params
     StartLocation = SDCardAddress;
@@ -3790,7 +3792,6 @@ void BindNow()
     Serial.println("Binding");
 #endif
     BindingNow    = 1;
-    ModelDetected = true; // just to stop auto model switching
 }
 
 /*********************************************************************************************************************************/
