@@ -2802,7 +2802,9 @@ void setup()
     InitMaxMin();        // in case not yet calibrated
     InitCentreDegrees(); // In case not yet calibrated
     CentreTrims();
+    delay(250);
     SD.begin(chipSelect);
+    delay(250);
     CalibratedYet = LoadAllParameters();                  // If they exist, read saved SD card settings.
     Nextion.begin(921600);                                // BAUD rate also set in display code THIS IS THE MAX (was 115200)  
     SendValue(FrontView_BackGround,BackGroundColour);     // Get colours ready
