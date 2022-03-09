@@ -377,7 +377,6 @@ var _transmitter_code_2src_2main_8cpp =
     [ "MixNumber", "_transmitter_code_2src_2main_8cpp.html#a0d282903963a177c43890298809943aa", null ],
     [ "ModelAltitude", "_transmitter_code_2src_2main_8cpp.html#a7cf0e4bc317527d0695a7832f2c9f0e5", null ],
     [ "ModelDefined", "_transmitter_code_2src_2main_8cpp.html#a7de8ce7890864d7765fca744338c4759", null ],
-    [ "ModelDetected", "_transmitter_code_2src_2main_8cpp.html#a8a6641cf7119ea101beea1014dc228fd", null ],
     [ "ModelName", "_transmitter_code_2src_2main_8cpp.html#ad61c470de31a7d84669a8170b5d68718", null ],
     [ "ModelNameTimeCheck", "_transmitter_code_2src_2main_8cpp.html#af8780871d49e8fd8f36c74c6cb434f46", null ],
     [ "ModelNumber", "_transmitter_code_2src_2main_8cpp.html#af83cef6905713757f73ce14cefc41433", null ],
