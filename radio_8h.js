@@ -39,6 +39,7 @@ var radio_8h =
     [ "CurrentRadio", "radio_8h.html#a7bca81159d93f215060f40f45f19b0de", null ],
     [ "DayGPS", "radio_8h.html#a4c722ec4fa2ff675bd4a2d511e80cd6e", null ],
     [ "DistanceGPS", "radio_8h.html#a6f76c248ca5e727e482873f5328587e1", null ],
+    [ "FailSafeSent", "radio_8h.html#a97bbae82012a7c41f47dcb8ce8a48a90", null ],
     [ "GpsFix", "radio_8h.html#a86c2722f6c671747562cc504a440e243", null ],
     [ "HopNow", "radio_8h.html#a8f6625d513c0e3887659968a39ddc325", null ],
     [ "HopStart", "radio_8h.html#a937fc53e966c6b5c66b9d66c01cec13f", null ],
