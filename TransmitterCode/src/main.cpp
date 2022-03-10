@@ -4532,9 +4532,9 @@ void Button_was_pressed()
             SendCommand(page_FrontView);
             UpdateModelsNameEveryWhere();
             ShowFlightMode();
-            LastShowTime = 0; // this is to make redisplay sooner (in ShowComms())
+            LastShowTime = 0;     // this is to make redisplay sooner (in ShowComms())
             LastTimeRead = 0;
-            Reconnected = false;
+            Reconnected = false;  // this is to make '** Connected! **' redisplay (in ShowComms())
             ClearText();
             return;
         }
