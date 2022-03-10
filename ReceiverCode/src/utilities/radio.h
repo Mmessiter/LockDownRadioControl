@@ -223,12 +223,12 @@ void TryTheOtherTransceiver(uint8_t Recon_Ch){
 /************************************************************************************************************/
 
 void KeepSbusHappy(){
- if (millis() - SBUSTimer >= SBUSRATE) {  
-            Connected  = true;  // not really!           
-            SBUSTimer = millis();                                
-            MoveServos();
-            Connected = false; // really!
-        }
+    if (millis() - SBUSTimer >= SBUSRATE) {  
+        SBUSTimer = millis(); 
+        Connected  = true;  // not really ...                                    
+        MoveServos();
+        Connected = false;  // really!
+    }
 }
 
 /************************************************************************************************************/
@@ -238,13 +238,12 @@ void Reconnect(){                                                               
     bool FailSafeSent         = false;
     uint32_t SearchStartTime  = millis();;
     uint8_t  ReconnectChannel = * (FHSSChPointer + ReconnectIndex);                // Get a reconnect channel - not always the same one - one of 5 now.;
- 
+
 #ifdef SECOND_TRANSCEIVER
         TryTheOtherTransceiver(ReconnectChannel);                                  // Just lost it on this one - try the other
 #endif 
-
     while (!Connected) {
-        if (BoundFlag) KeepSbusHappy();  
+        if (BoundFlag) KeepSbusHappy();                                            // Some SBUS systems timeout FAST!
         CurrentRadio->stopListening();
         delay(1);                                                                  // NEEDED!
         ReconnectChannel = * (FHSSChPointer + ReconnectIndex);                     // Get a reconnect channel - not always the same one - one of 5 now.
