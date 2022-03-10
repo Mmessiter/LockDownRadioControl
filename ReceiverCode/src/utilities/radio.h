@@ -181,8 +181,8 @@ void InitCurrentRadio()
 /************************************ Try to connect  ... *********************************************/
 
 void TryToConnectNow(){
-    uint32_t ATimer = millis();
     CurrentRadio->startListening();
+    uint32_t ATimer = millis();
     while ((!CurrentRadio->available()) && (millis() - ATimer) < LISTEN_PERIOD) { }    // Wait here until connected, on short timeout (10 ms)
     if (CurrentRadio->available()) Connected = true;
 }
