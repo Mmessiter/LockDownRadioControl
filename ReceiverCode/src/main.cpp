@@ -50,7 +50,7 @@ bool            BoundFlag      = false; /** indicates if receiver paired with tr
 int             BindOKTimer    = 0;
 bool            ServosAttached = false;
 uint16_t        SbusChannels[CHANNELSUSED + 8]; // a few spare
-int             SBUSTimer = 0;
+uint32_t        SBUSTimer = 0;
 bool            FailSafeChannel[17];
 bool            FailSafeDataLoaded = false;
 bool            ReInit             = false;

@@ -37,6 +37,7 @@ extern uint8_t  DayGPS;
 extern uint8_t  SatellitesGPS; 
 extern uint16_t BaroAltitude;
 extern uint32_t ReconnectedMoment;
+extern uint32_t SBUSTimer;
 extern float    INA219Volts;
 extern float    BaroTemperature;
 extern float    LatitudeGPS;
@@ -52,6 +53,8 @@ extern void     ClearAckPayload();
 extern void     ShowHopDurationEtc();
 extern void     ReadSensorHub();
 extern void     SetUKFrequencies();
+extern void     MoveServos();
+
 
  
 /** AckPayload Stucture for data returned to transmitter. */
@@ -219,6 +222,17 @@ void TryTheOtherTransceiver(uint8_t Recon_Ch){
 
 /************************************************************************************************************/
 
+void KeepSbusHappy(){
+ if (millis() - SBUSTimer >= SBUSRATE) {  
+            Connected  = true;  // not really!           
+            SBUSTimer = millis();                                
+            MoveServos();
+            Connected = false; // really!
+        }
+}
+
+/************************************************************************************************************/
+
 void Reconnect(){                                                                  // This is called when contact is lost, to reconnect ASAP
 
     bool FailSafeSent         = false;
@@ -230,6 +244,7 @@ void Reconnect(){                                                               
 #endif 
 
     while (!Connected) {
+        if (BoundFlag) KeepSbusHappy();  
         CurrentRadio->stopListening();
         delay(1);                                                                  // NEEDED!
         ReconnectChannel = * (FHSSChPointer + ReconnectIndex);                     // Get a reconnect channel - not always the same one - one of 5 now.
