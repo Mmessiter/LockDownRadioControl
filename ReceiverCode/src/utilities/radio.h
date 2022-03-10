@@ -246,7 +246,7 @@ void Reconnect(){                                                               
         TryTheOtherTransceiver(ReconnectChannel);                                  // Just lost it on this one - try the other
 #endif 
     while (!Connected) {
-        if (BoundFlag) KeepSbusHappy();                                            // Some SBUS systems timeout FAST!
+        if (BoundFlag) KeepSbusHappy();                                            // Some SBUS systems timeout FAST, so resend old data ... !
         CurrentRadio->stopListening();
         delay(1);                                                                  // NEEDED!
         ReconnectChannel = * (FHSSChPointer + ReconnectIndex);                     // Get a reconnect channel - not always the same one - one of 5 now.
