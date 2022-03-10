@@ -62,7 +62,7 @@ var _receiver_code_2src_2main_8cpp =
     [ "ReInit", "_receiver_code_2src_2main_8cpp.html#aace5dda203af973b33a46413f02d9f9a", null ],
     [ "SatellitesGPS", "_receiver_code_2src_2main_8cpp.html#a7dc81a3982ee72ef15b460b4bbf32818", null ],
     [ "SbusChannels", "_receiver_code_2src_2main_8cpp.html#ac403118b879ce75447959bba12e261eb", null ],
-    [ "SBUSTimer", "_receiver_code_2src_2main_8cpp.html#ab2bf977dee28aac3f049d578d8433f0b", null ],
+    [ "SBUSTimer", "_receiver_code_2src_2main_8cpp.html#a2e121251691466f81a2f540f00e7141e", null ],
     [ "SecsGPS", "_receiver_code_2src_2main_8cpp.html#a79832b04c40823abb496f503a264e7d5", null ],
     [ "SENSOR_HUB_CONNECTED", "_receiver_code_2src_2main_8cpp.html#a20d437b81f88442e5cb998557d1f9cea", null ],
     [ "SensorHubAccessed", "_receiver_code_2src_2main_8cpp.html#a33e2d12487048464f2747493b1ae27e3", null ],
