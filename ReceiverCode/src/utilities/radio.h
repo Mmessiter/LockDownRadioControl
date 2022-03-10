@@ -227,7 +227,10 @@ void KeepSbusHappy(){
     if (millis() - SBUSTimer >= SBUSRATE) {  
         SBUSTimer = millis(); 
         Connected  = true;  // to force re-sending this older data!                                   
-        if (!FailSafeSent) MoveServos();
+        if (!FailSafeSent) 
+        {
+            MoveServos();
+        }
         Connected = false;  
     }
 }
