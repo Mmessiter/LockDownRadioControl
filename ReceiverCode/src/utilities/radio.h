@@ -225,13 +225,13 @@ void TryTheOtherTransceiver(uint8_t Recon_Ch){
 
 void KeepSbusHappy(){
     if (millis() - SBUSTimer >= SBUSRATE) {  
-        SBUSTimer = millis(); 
-        Connected  = true;  // to force re-sending this older data!                                   
+        SBUSTimer = millis();                                
         if (!FailSafeSent) 
         {
+            Connected  = true;  // to force re-sending this older data!  
             MoveServos();
+            Connected = false;  
         }
-        Connected = false;  
     }
 }
 
