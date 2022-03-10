@@ -260,6 +260,7 @@ void Reconnect(){                                                               
                     FailSafe();
                     FailSafeSent = true; // Once is enough
                     SetUKFrequencies();
+                    BoundFlag = false;
                 }
             }
         }

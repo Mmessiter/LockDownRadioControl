@@ -4534,6 +4534,7 @@ void Button_was_pressed()
             ShowFlightMode();
             LastShowTime = 0; // this is to make redisplay sooner (in ShowComms())
             LastTimeRead = 0;
+            Reconnected = false;
             ClearText();
             return;
         }
