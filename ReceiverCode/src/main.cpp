@@ -122,12 +122,10 @@ void MapToSBUS()
 
 void MoveServos()
 {
-    if (!Connected) {
-        return;
-    }                               // avoid sending rubbish
-    MySbus.write(&SbusChannels[0]); // Send SBUS data
+    if (!Connected) return;                         // Avoid sending rubbish
+    MySbus.write(&SbusChannels[0]);                 // Send SBUS data
     for (int j = 0; j < SERVOSUSED; ++j) {
-        if (PreviousData[j] != ReceivedData[j]) { // if same as last time, don't bother sending again.
+        if (PreviousData[j] != ReceivedData[j]) {   // if same as last time, don't send again.
             MCMServo[j].writeMicroseconds(ReceivedData[j]);
             PreviousData[j] = ReceivedData[j];
         }
