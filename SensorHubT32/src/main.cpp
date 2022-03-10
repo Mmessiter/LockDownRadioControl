@@ -191,7 +191,7 @@ union {uint16_t Val16; uint8_t Val8[2];} Uqnh;
             RCV[i]= Wire1.read();    // Get one byte at a time
         }
     } 
-   RCV[3] = 0; // Add a terminator
+  RCV[3] = 0; // Add a terminator
   if (strcmp(MRK,RCV) == 0) {        // Match first 3 chars with MRK?
      DestinationLat = GPSLatitude;   // Mark current location
      DestinationLng = GPSLongitude;  // Mark current location
