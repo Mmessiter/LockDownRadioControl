@@ -23,6 +23,7 @@ uint32_t        HopStart;
 uint64_t        ThisPipe = 0xBABE1E5420LL; // default startup
 uint64_t        NewPipe  = 0;
 uint64_t        OldPipe  = 0;
+bool            FailSafeSent         = false;
 
 
 extern bool     BoundFlag;
@@ -226,7 +227,7 @@ void KeepSbusHappy(){
     if (millis() - SBUSTimer >= SBUSRATE) {  
         SBUSTimer = millis(); 
         Connected  = true;  // to force re-sending this older data!                                   
-        MoveServos();
+        if (!FailSafeSent) MoveServos();
         Connected = false;  
     }
 }
@@ -235,7 +236,6 @@ void KeepSbusHappy(){
 
 void Reconnect(){                                                                  // This is called when contact is lost, to reconnect ASAP
 
-    bool FailSafeSent         = false;
     uint32_t SearchStartTime  = millis();;
     uint8_t  ReconnectChannel = * (FHSSChPointer + ReconnectIndex);                // Get a reconnect channel - not always the same one - one of 5 now.;
 
@@ -260,11 +260,11 @@ void Reconnect(){                                                               
                     FailSafe();
                     FailSafeSent = true; // Once is enough
                     SetUKFrequencies();
-                    BoundFlag = false;
                 }
             }
         }
     }
+    FailSafeSent = false;
     ReconnectedMoment    = millis();  // Save this moment, then don't move a servo for a few ms ...
 }
 /************************************************************************************************************/
