@@ -2500,7 +2500,7 @@ bool ReadOneModel(uint8_t Mnum)
 {
     unsigned int j;
     if (!ModelsFileOpen) OpenModelsFile();
-    if (!ModelsFileOpen) OpenModelsFile();     // sometimes it's slow to awake
+    if (!ModelsFileOpen) return false;
     SDCardAddress = TXSIZE;                    //  spare bytes for TX stuff
     SDCardAddress += ((Mnum - 1) * MODELSIZE); //  spare bytes for Model params
     StartLocation = SDCardAddress;
@@ -2647,6 +2647,7 @@ bool LoadAllParameters()
     int p;
     int j = 0;
     if (!ModelsFileOpen) OpenModelsFile();
+    if (!ModelsFileOpen) return false;
     SDCardAddress = 0;
     p    = SDReadInt(SDCardAddress);
     if (p == RENEWDATA) {
@@ -2948,10 +2949,10 @@ void SaveTXStuff()
 /** MODEL Specific */
 void SaveOneModel(int mnum)
 {
-    bool EndOfName = false;
-
-    if (!ModelsFileOpen) OpenModelsFile();
     unsigned int j;
+    bool EndOfName = false;
+    
+    if (!ModelsFileOpen) OpenModelsFile();
     SDCardAddress = TXSIZE;                  //  spare bytes for TX stuff
     SDCardAddress += (mnum - 1) * MODELSIZE; //  spare bytes for Model params
     StartLocation = SDCardAddress;
