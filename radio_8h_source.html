@@ -301,13 +301,13 @@ $(document).ready(function(){initNavTree('radio_8h_source.html',''); initResizab
 <div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span> </div>
 <div class="line"><a id="l00226" name="l00226"></a><span class="lineno"><a class="line" href="radio_8h.html#a6f74cdb7b32a3aa9e9342661bd44ad1a">  226</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="radio_8h.html#a6f74cdb7b32a3aa9e9342661bd44ad1a">KeepSbusHappy</a>(){</div>
 <div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>    <span class="keywordflow">if</span> (millis() - <a class="code hl_variable" href="radio_8h.html#a2e121251691466f81a2f540f00e7141e">SBUSTimer</a> &gt;= <a class="code hl_define" href="common_8h.html#a39848a06498c1e6444c458f25542b252">SBUSRATE</a>) {  </div>
-<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>        <a class="code hl_variable" href="radio_8h.html#a2e121251691466f81a2f540f00e7141e">SBUSTimer</a> = millis(); </div>
-<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>        <a class="code hl_variable" href="radio_8h.html#a5318db734c71b1b08208ef690f1f0146">Connected</a>  = <span class="keyword">true</span>;  <span class="comment">// to force re-sending this older data!                                   </span></div>
-<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>        <span class="keywordflow">if</span> (!<a class="code hl_variable" href="radio_8h.html#a97bbae82012a7c41f47dcb8ce8a48a90">FailSafeSent</a>) </div>
-<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>        {</div>
+<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>        <a class="code hl_variable" href="radio_8h.html#a2e121251691466f81a2f540f00e7141e">SBUSTimer</a> = millis();                                </div>
+<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>        <span class="keywordflow">if</span> (!<a class="code hl_variable" href="radio_8h.html#a97bbae82012a7c41f47dcb8ce8a48a90">FailSafeSent</a>) </div>
+<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>        {</div>
+<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>            <a class="code hl_variable" href="radio_8h.html#a5318db734c71b1b08208ef690f1f0146">Connected</a>  = <span class="keyword">true</span>;  <span class="comment">// to force re-sending this older data!  </span></div>
 <div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>            <a class="code hl_function" href="radio_8h.html#a6f2443a0666140cf4d8b7352bb3b793c">MoveServos</a>();</div>
-<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>        }</div>
-<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>        <a class="code hl_variable" href="radio_8h.html#a5318db734c71b1b08208ef690f1f0146">Connected</a> = <span class="keyword">false</span>;  </div>
+<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>            <a class="code hl_variable" href="radio_8h.html#a5318db734c71b1b08208ef690f1f0146">Connected</a> = <span class="keyword">false</span>;  </div>
+<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>        }</div>
 <div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>    }</div>
 <div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>}</div>
 <div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span> </div>
