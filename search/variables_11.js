@@ -7,7 +7,7 @@ var searchData=
   ['savefailsafenow_4',['SaveFailSafeNow',['../_transmitter_code_2src_2main_8cpp.html#acd6754de95b605bb65a52a86e96121f7',1,'main.cpp']]],
   ['saveflightmode_5',['SaveFlightMode',['../_transmitter_code_2src_2main_8cpp.html#a6e7a073d216762b73caa5e1c1a384f1a',1,'main.cpp']]],
   ['savenewbind_6',['SaveNewBind',['../radio_8h.html#a34f8e085f5589c915f292bbf5b0aa513',1,'radio.h']]],
-  ['sbuschannels_7',['SbusChannels',['../_receiver_code_2src_2main_8cpp.html#ac403118b879ce75447959bba12e261eb',1,'SbusChannels():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a87e7fa21a42bf74b127c8be8860d93a6',1,'SbusChannels():&#160;main.cpp']]],
+  ['sbuschannels_7',['SbusChannels',['../_receiver_code_2src_2main_8cpp.html#a8331e76046c0a5dfd554712b1e54507c',1,'SbusChannels():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a87e7fa21a42bf74b127c8be8860d93a6',1,'SbusChannels():&#160;main.cpp']]],
   ['sbustimer_8',['SBUSTimer',['../_transmitter_code_2src_2main_8cpp.html#a2e121251691466f81a2f540f00e7141e',1,'SBUSTimer():&#160;main.cpp'],['../_receiver_code_2src_2main_8cpp.html#a2e121251691466f81a2f540f00e7141e',1,'SBUSTimer():&#160;main.cpp'],['../radio_8h.html#a2e121251691466f81a2f540f00e7141e',1,'SBUSTimer():&#160;main.cpp']]],
   ['scale_9',['scale',['../structnmea__history__t.html#a4c98f18694ee688d7c4ff2d4d6941739',1,'nmea_history_t']]],
   ['scanend_10',['ScanEnd',['../_transmitter_code_2src_2main_8cpp.html#a6fde7bc3d03bda84c33abdbe1ed7b5bf',1,'ScanEnd():&#160;main.cpp'],['../_radio_functions_8h.html#a6fde7bc3d03bda84c33abdbe1ed7b5bf',1,'ScanEnd():&#160;main.cpp']]],
