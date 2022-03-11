@@ -363,6 +363,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "LedWasGreen", "_transmitter_code_2src_2main_8cpp.html#abe57ee67b36530a7bde7680e5b6e40f8", null ],
     [ "LostContactFlag", "_transmitter_code_2src_2main_8cpp.html#ad5f463902789a79fc622b3befd9409b9", null ],
     [ "LostPackets", "_transmitter_code_2src_2main_8cpp.html#ace8651c9c20dd6ea531190d34d35e1fc", null ],
+    [ "LowBattery", "_transmitter_code_2src_2main_8cpp.html#a841a740574f81e5bb80ea1a16f704be5", null ],
     [ "MacAddress", "_transmitter_code_2src_2main_8cpp.html#afa96b8a8e9de30ff51fef920111b8275", null ],
     [ "MaxAlt", "_transmitter_code_2src_2main_8cpp.html#af6a160e01ed51c4dc04e697954b5f0b4", null ],
     [ "MaxAltitude", "_transmitter_code_2src_2main_8cpp.html#aad1c48b5e974f02a1966772a4ca8a484", null ],
