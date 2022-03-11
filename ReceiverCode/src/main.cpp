@@ -49,7 +49,7 @@ uint8_t         BindNow        = 0;     /** indicates that the receiver should s
 bool            BoundFlag      = false; /** indicates if receiver paired with transmitter */
 int             BindOKTimer    = 0;
 bool            ServosAttached = false;
-uint16_t        SbusChannels[CHANNELSUSED + 8]; // a few spare
+uint16_t        SbusChannels[CHANNELSUSED + 1]; // one spare
 uint32_t        SBUSTimer = 0;
 bool            FailSafeChannel[17];
 bool            FailSafeDataLoaded = false;
@@ -113,7 +113,7 @@ void MapToSBUS()
 {
     if (Connected) {
         for (int j = 0; j < CHANNELSUSED; ++j) {
-            SbusChannels[j] = map(ReceivedData[j], MINMICROS, MAXMICROS, RANGEMIN, RANGEMAX);
+            SbusChannels[j] = static_cast<uint16_t> (map(ReceivedData[j], MINMICROS, MAXMICROS, RANGEMIN, RANGEMAX));
         }
     }
 }
@@ -123,7 +123,7 @@ void MapToSBUS()
 void MoveServos()
 {
     if (!Connected) return;                         // Avoid sending rubbish
-    MySbus.write(&SbusChannels[0]);                 // Send SBUS data
+    MySbus.write(SbusChannels);                     // Send SBUS data
     for (int j = 0; j < SERVOSUSED; ++j) {
         if (PreviousData[j] != ReceivedData[j]) {   // if same as last time, don't send again.
             MCMServo[j].writeMicroseconds(ReceivedData[j]);
