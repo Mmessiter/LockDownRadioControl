@@ -88,7 +88,7 @@
 #define FLIGHTMODESWITCH   4                   // Default MODE switch
 #define AUTOSWITCH         1                   // Default AUTO switch
 #define DEFAULTPIPEADDRESS 0xBABE1E5420LL      // Pipe address for startup - any value but MUST match RX
-#define LOWBATTERY         75                  // percent for warning
+#define LOWBATTERY         42                  // percent for warning
 #define CE_PIN             9                   // for SPI to nRF24L01
 #define CSN_PIN            10                  // for SPI to nRF24L01
 #define INACTIVITYTIMEOUT  10                  // Default time after which to switch off
@@ -531,6 +531,7 @@ uint16_t ForeGroundColour = 65535;
 uint16_t HighlightColour = Yellow;
 uint16_t SpecialColour = Red;
 bool     Reconnected = false;
+uint8_t  LowBattery =  LOWBATTERY;
 
 
 
@@ -1519,7 +1520,7 @@ FASTRUN void ShowComms()
         if (USE_INA219) {
             txv  = (ina219.getBusVoltage_V()) * 100;
             txpc = map(txv, 512, 670, 0, 100); // LiFePo4 Battery 2.6 ->3.5  volts per cell
-            if (txpc < LOWBATTERY) {
+            if (txpc < LowBattery) {
                 TXWarningFlag = true;
                 LedIsBlinking = true;   // Make LED Blink as a warning
              }
@@ -1630,7 +1631,7 @@ FASTRUN void ShowComms()
 
             if (VoltsDetected) {
                 Volts = constrain(Volts, 0, 100);
-                if (Volts <= LOWBATTERY && Volts > 0) {
+                if (Volts <= LowBattery && Volts > 0) {
                     RXWarningFlag = true;
                     LedIsBlinking = true;    // Make LED Blink as a warning
                 }
@@ -2546,12 +2547,14 @@ bool ReadOneModel(uint8_t Mnum)
     }
     RXCellCount = SDReadByte(SDCardAddress);
     ++SDCardAddress;
-    TrimFactor = SDReadInt(SDCardAddress); 
+    TrimFactor = SDReadInt(SDCardAddress);  
     ++SDCardAddress;
     ++SDCardAddress;
-
-    SDCardAddress += 29; // 29 Spare Bytes here (PID stuff gone)
-
+    LowBattery = SDReadByte(SDCardAddress);  
+    if (LowBattery>100) LowBattery = LOWBATTERY;
+    if (LowBattery<10) LowBattery = LOWBATTERY;
+    ++SDCardAddress;
+    SDCardAddress += 28; // 28 Spare Bytes here (PID stuff gone)
     for (i = 0; i < CHANNELSUSED; ++i) {
         InPutStick[i] = SDReadByte(SDCardAddress);
         if (InPutStick[i] > 16) InPutStick[i] = i; // reset if nothing was saved!
@@ -3003,8 +3006,10 @@ void SaveOneModel(int mnum)
     SDUpdateInt(SDCardAddress, TrimFactor); 
     ++SDCardAddress;
     ++SDCardAddress;
+    SDUpdateByte(SDCardAddress, LowBattery); 
+    ++SDCardAddress;
         
-    SDCardAddress += 29; // 29 Spare Bytes here (PID stuff gone)
+    SDCardAddress += 28; // 28 Spare Bytes here (PID stuff gone)
 
     for (i = 0; i < CHANNELSUSED; ++i) {
         SDUpdateByte(SDCardAddress, InPutStick[i]);
@@ -4404,6 +4409,7 @@ void Button_was_pressed()
     char Htext1[]                  = "Help";
     char b17[]                     = "b17";
     char trf[]                     = "trf"; // Trim factor 
+    char Bwn[]                     = "Bwn"; 
     char SetupCol[]                = "SetupCol";
     char b0_bco[]                  = "b0.bco";
     char b0_pco[]                  = "b0.pco";
@@ -4476,6 +4482,7 @@ void Button_was_pressed()
             DeltaGMT            = GetValue(dGMT);
             SendValue(Progress,45);
             TrimFactor          = GetValue(trf);
+            LowBattery          = GetValue(Bwn);
             ScreenTimeout       = GetValue(ScreenViewTimeout);
             SendValue(Progress,100);
             Inactivity_Timeout  = GetValue(Pto) * TICKSPERMINUTE;
@@ -4489,7 +4496,7 @@ void Button_was_pressed()
                 BlueLedOn();
             }
             ClearText();
-            SaveTXStuff();
+            SaveAllParameters();
             SendCommand(page_SetupView);
             CurrentMode = NORMAL;
             CurrentView = MainSetupView;
@@ -4620,7 +4627,8 @@ void Button_was_pressed()
             SendText(Tx_Name, TxName);
             SendValue(QNH,Qnh);
             SendValue(dGMT,DeltaGMT);
-            SendValue(trf,TrimFactor);
+            SendValue(trf,TrimFactor); // heer
+            SendValue(Bwn,LowBattery);
             CurrentView = Options_View;
             CurrentMode = NORMAL;
             ClearText();
