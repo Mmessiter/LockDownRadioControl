@@ -18,7 +18,7 @@ var searchData=
   ['blinkonphase_15',['BlinkOnPhase',['../_transmitter_code_2src_2main_8cpp.html#a324fd33f9933254079efa1cc42c05e1f',1,'main.cpp']]],
   ['blinktimer_16',['BlinkTimer',['../_transmitter_code_2src_2main_8cpp.html#a79ef591b711372e0f452e2afe8d2a718',1,'main.cpp']]],
   ['bmp280_17',['bmp280',['../_sensor_hub_teensy3__6_2src_2main_8cpp.html#a1eeadec20c253385fe11f15108d783c8',1,'bmp280():&#160;main.cpp'],['../_sensor_hub_t32_2src_2main_8cpp.html#a1eeadec20c253385fe11f15108d783c8',1,'bmp280():&#160;main.cpp'],['../_sensor_hub_l_c_2src_2main_8cpp.html#a1eeadec20c253385fe11f15108d783c8',1,'bmp280():&#160;main.cpp']]],
-  ['bootupmoment_18',['BootupMoment',['../_receiver_code_2src_2main_8cpp.html#a99c599f52b4638868adf3cfd0c988d80',1,'main.cpp']]],
+  ['bootupmoment_18',['BootupMoment',['../_receiver_code_2src_2main_8cpp.html#a1883c8c3aad38ab8955bd5de6971c9a7',1,'main.cpp']]],
   ['boundflag_19',['BoundFlag',['../radio_8h.html#a44d37e4e8af884bf172344c0835a5593',1,'BoundFlag():&#160;main.cpp'],['../_receiver_code_2src_2main_8cpp.html#a44d37e4e8af884bf172344c0835a5593',1,'BoundFlag():&#160;main.cpp'],['../_radio_functions_8h.html#a44d37e4e8af884bf172344c0835a5593',1,'BoundFlag():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a44d37e4e8af884bf172344c0835a5593',1,'BoundFlag():&#160;main.cpp']]],
   ['boxbottom_20',['BoxBottom',['../_transmitter_code_2src_2main_8cpp.html#a1340a45a8a76cd8fa84cda37b5a6deb9',1,'main.cpp']]],
   ['boxleft_21',['BoxLeft',['../_transmitter_code_2src_2main_8cpp.html#a528e5b9a8bfd443ca33e1b0a47626c68',1,'main.cpp']]],
