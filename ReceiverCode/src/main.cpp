@@ -49,7 +49,7 @@ uint8_t         BindNow        = 0;     /** indicates that the receiver should s
 bool            BoundFlag      = false; /** indicates if receiver paired with transmitter */
 int             BindOKTimer    = 0;
 bool            ServosAttached = false;
-uint16_t        SbusChannels[CHANNELSUSED + 1]; // one spare
+uint16_t        SbusChannels[CHANNELSUSED + 1]; // Just one spare
 uint32_t        SBUSTimer = 0;
 bool            FailSafeChannel[17];
 bool            FailSafeDataLoaded = false;
