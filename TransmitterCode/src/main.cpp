@@ -1771,7 +1771,7 @@ void SendCharArray(char* ch0, char* ch1, char* ch2, char* ch3, char* ch4, char* 
 #define xx1 90 // was 75
 #define yy1 90 // Needed below... Edit xx1,yy1 to move box
 
-void DrawFhssBox() // heer
+void DrawFhssBox() 
 {
     int  x1          = xx1;
     int  y1          = yy1;
@@ -4627,7 +4627,7 @@ void Button_was_pressed()
             SendText(Tx_Name, TxName);
             SendValue(QNH,Qnh);
             SendValue(dGMT,DeltaGMT);
-            SendValue(trf,TrimFactor); // heer
+            SendValue(trf,TrimFactor); 
             SendValue(Bwn,LowBattery);
             CurrentView = Options_View;
             CurrentMode = NORMAL;

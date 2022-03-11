@@ -12,6 +12,7 @@
  * - RESOLUTION INCREASED TO 12 BITS
  * - Channels increased to 16, 9 PWM outputs.  SBUS can handle all.
  * - Exponential implemented (at TX end)
+ * - Sensor Hub added with GPS and more sensors
  *
  * @section rxpinout TEENSY 4.0 PINS
  * | pin number(s) | purpose |
@@ -81,8 +82,8 @@ uint8_t         MinsGPS;
 uint8_t         SecsGPS;
 uint16_t        CompressedData[COMPRESSEDWORDS]; // 30 bytes -> 40 bytes when uncompressed
 bool            SensorHubDead = false;
-u_int32_t       BootupMoment = 0;
-bool QNHSent    = false;
+uint32_t        BootupMoment  = 0;
+bool            QNHSent       = false;
 
 /************************************************************************************************************/
 

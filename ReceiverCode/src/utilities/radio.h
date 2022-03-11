@@ -273,8 +273,8 @@ void Reconnect(){                                                               
 /************************************************************************************************************/
 // This function checks the time since last hop. 
 // If it's time to HOP, it sets the high bit in AckPayload.Purpose and both ends then HOP to new channel before next packet.
-// The other 7 BITS of AckPayload.Purpose still dictate the Payload's function ( < 127 possibities. )
-// This now happens for *every* AckPayload, which can and does return telemetry data as well as this hoptime information.
+// The other 7 BITS of AckPayload.Purpose dictate the Payload's function (therefore 127 possibities.)
+// This happens for *every* AckPayload, which return telemetry data as well as this hoptime information.
 // Hence a single BIT now directs the transmitter to hop.
 
 void CheckIfItsHopTime(){
