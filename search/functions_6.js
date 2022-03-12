@@ -31,10 +31,11 @@ var searchData=
   ['getstickinput_28',['GetStickInput',['../_transmitter_code_2src_2main_8cpp.html#a1eb1b5f9139051cef03943c3620c7d81',1,'main.cpp']]],
   ['gettemperature_29',['GetTemperature',['../_transmitter_code_2src_2main_8cpp.html#a19f6fc09d690832e74fd3c679207f07f',1,'main.cpp']]],
   ['gettemperaturesensor_30',['getTemperatureSensor',['../class_adafruit___b_m_p280.html#a191f291cb5eb59777b6040571d42ca5f',1,'Adafruit_BMP280::getTemperatureSensor(void)'],['../class_adafruit___b_m_p280.html#a191f291cb5eb59777b6040571d42ca5f',1,'Adafruit_BMP280::getTemperatureSensor(void)'],['../class_adafruit___b_m_p280.html#a191f291cb5eb59777b6040571d42ca5f',1,'Adafruit_BMP280::getTemperatureSensor(void)']]],
-  ['gettextin_31',['GetTextIn',['../_transmitter_code_2src_2main_8cpp.html#a6fe457db5d6bc71ccb447dee824abf6a',1,'main.cpp']]],
-  ['gettime_32',['getTime',['../_transmitter_code_2src_2main_8cpp.html#ae96ca3df2e8b9eef75d400de6ef06db3',1,'main.cpp']]],
-  ['gettimefromackpayload_33',['GetTimeFromAckPayload',['../_transmitter_code_2src_2main_8cpp.html#a86523345ecdd52f3d93dccd6fcf4370a',1,'main.cpp']]],
-  ['gettxversionnumber_34',['GetTXVersionNumber',['../_transmitter_code_2src_2main_8cpp.html#a39e1bbcbd0591a8e354b3c5c999a8882',1,'main.cpp']]],
-  ['getvalue_35',['GetValue',['../_transmitter_code_2src_2main_8cpp.html#ad957c44f88874b35bd11323a86408e59',1,'main.cpp']]],
-  ['greenledon_36',['GreenLedOn',['../_radio_functions_8h.html#a62e53eb9359c32b666e3386d62c57037',1,'GreenLedOn():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a62e53eb9359c32b666e3386d62c57037',1,'GreenLedOn():&#160;main.cpp']]]
+  ['gettext_31',['GetText',['../_transmitter_code_2src_2main_8cpp.html#a8e271ca29dc3c90bcf0e465b41bd71ff',1,'main.cpp']]],
+  ['gettextin_32',['GetTextIn',['../_transmitter_code_2src_2main_8cpp.html#a6fe457db5d6bc71ccb447dee824abf6a',1,'main.cpp']]],
+  ['gettime_33',['getTime',['../_transmitter_code_2src_2main_8cpp.html#ae96ca3df2e8b9eef75d400de6ef06db3',1,'main.cpp']]],
+  ['gettimefromackpayload_34',['GetTimeFromAckPayload',['../_transmitter_code_2src_2main_8cpp.html#a86523345ecdd52f3d93dccd6fcf4370a',1,'main.cpp']]],
+  ['gettxversionnumber_35',['GetTXVersionNumber',['../_transmitter_code_2src_2main_8cpp.html#a39e1bbcbd0591a8e354b3c5c999a8882',1,'main.cpp']]],
+  ['getvalue_36',['GetValue',['../_transmitter_code_2src_2main_8cpp.html#ad957c44f88874b35bd11323a86408e59',1,'main.cpp']]],
+  ['greenledon_37',['GreenLedOn',['../_radio_functions_8h.html#a62e53eb9359c32b666e3386d62c57037',1,'GreenLedOn():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a62e53eb9359c32b666e3386d62c57037',1,'GreenLedOn():&#160;main.cpp']]]
 ];

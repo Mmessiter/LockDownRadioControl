@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['nextion_0',['Nextion',['../_radio_functions_8h.html#a7280be66ef406b699db09f0a70e26ef7',1,'Nextion():&#160;RadioFunctions.h'],['../_transmitter_code_2src_2main_8cpp.html#a7280be66ef406b699db09f0a70e26ef7',1,'Nextion():&#160;main.cpp']]],
+  ['nextion_0',['NEXTION',['../_radio_functions_8h.html#a8faf90f81afc68086a4b47c2e94cd519',1,'NEXTION():&#160;RadioFunctions.h'],['../_transmitter_code_2src_2main_8cpp.html#a8faf90f81afc68086a4b47c2e94cd519',1,'NEXTION():&#160;main.cpp']]],
   ['nmea_5fextensions_1',['NMEA_EXTENSIONS',['../_adafruit___g_p_s_8h.html#aca54bdead693302e0ed647eaa65c56af',1,'Adafruit_GPS.h']]],
   ['nmea_5ffloat_5ft_2',['NMEA_FLOAT_T',['../_n_m_e_a__data_8h.html#a0c423588a466231e5a996377c5b652e1',1,'NMEA_data.h']]],
   ['nmea_5fmax_5fsentence_5fid_3',['NMEA_MAX_SENTENCE_ID',['../_adafruit___g_p_s_8h.html#aaec49a2365b37bf9aa5c063076818a98',1,'NMEA_MAX_SENTENCE_ID():&#160;Adafruit_GPS.h'],['../_n_m_e_a__data_8h.html#aaec49a2365b37bf9aa5c063076818a98',1,'NMEA_MAX_SENTENCE_ID():&#160;NMEA_data.h']]],
