@@ -185,7 +185,6 @@ void ClearAckPayload()  // left in, redundant, might be wanted again ...
     AckPayload.Byte5 = 0;
 }
 /************************************************************************************************************/
-
 void UseReceivedData(){
         Decompress(ReceivedData, CompressedData, UNCOMPRESSEDWORDS);   // Decompress only the most recent data
         MapToSBUS();                        // Get SBUS data ready 
@@ -199,7 +198,6 @@ void UseReceivedData(){
         }
 }
 /************************************************************************************************************/
-
 bool ReadData()
 {
     Connected = false;
@@ -226,9 +224,7 @@ void AttachServos()
     }
     MySbus.begin();
 }
-
 /************************************************************************************************************/
-
 void BindModel()
 {
     ThisPipe = NewPipe;
@@ -339,13 +335,11 @@ void CheckParams()
     }
     return;
 }
-
 // ***************************************************************************************************************************************************
 // Here the GPS HUB is asked for 7 bytes of data over I2C. 
 // The first IDLEN (=3) bytes are the ID (LAT, LNG, etc...)
 // The next 4 bytes are the value (as a float).
 // The ID changes with each call
-
 
 FASTRUN void ReadTheSensorHub(){
 
@@ -601,11 +595,7 @@ void setup()
     GetOldPipe();
     BootupMoment = millis();
     digitalWrite(LED_PIN, LOW);
-
     SetUKFrequencies();
-   
-
-   
 }
 /************************************************************************************************************/
 // LOOP
