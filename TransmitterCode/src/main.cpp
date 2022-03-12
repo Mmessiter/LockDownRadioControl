@@ -35,8 +35,8 @@
  * |-----------------|-------------|
  * | GND       | GND |
  * | Vin       | + 5.0 VDC |
- * | 0  (RX1)  | Nextion  (TX) |
- * | 1  (TX2)  | Nextion  (RX) |
+ * | 0  (RX1)  | NEXTION  (TX) |
+ * | 1  (TX2)  | NEXTION  (RX) |
  * | 2  LED    | RED |
  * | 3  LED    | GREEN |
  * | 4  LED    | BLUE |
@@ -131,7 +131,7 @@
 
 RF24 Radio1(CE_PIN, CSN_PIN);
 
-#define Nextion         Serial1 // Nextion is connected to Serial1
+#define NEXTION         Serial1 // NEXTION is connected to Serial1
 #define Black           0
 #define Blue            31
 #define Brown           48192
@@ -321,10 +321,10 @@ char     page_FhssView[]             = "page FhssView";
 char     FhssView_Rlow[]             = "FHSSLow";
 char     FhssView_Rhigh[]            = "FHSSHigh";
 char     BindScreenBox[]             = "BindStatus";
-char     NextionSleepTime[]          = "thsp=";
-char     NextionWakeOnTouch[]        = "thup=1";
-char     NextionSleepNow[]           = "sleep=1";
-char     NextionWakeUp[]             = "sleep=0";
+char     NEXTIONSleepTime[]          = "thsp=";
+char     NEXTIONWakeOnTouch[]        = "thup=1";
+char     NEXTIONSleepNow[]           = "sleep=1";
+char     NEXTIONWakeUp[]             = "sleep=0";
 char     ScreenViewTimeout[]         = "Sto";
 char     NoSleeping[]                = "thsp=0";
 int      ScreenTimeout               = 120; // Screen has two minute timeout by default
@@ -856,13 +856,13 @@ void Reboot()
 
 void SendCommand(char* tbox)
 {
-    Nextion.print(tbox);
+    NEXTION.print(tbox);
 
-    // Serial.print (" Nextion TEST COMMAND: ");  // For wierd session
+    // Serial.print (" NEXTION TEST COMMAND: ");  // For wierd session
     // Serial.println(tbox);
 
     for (i = 0; i < 3; ++i) {
-        Nextion.write(0xff);
+        NEXTION.write(0xff);
     } // Send end of Input message
 }
 
@@ -1119,19 +1119,19 @@ uint16_t mp(uint8_t lowres)
 void ClearText()
 {
     for (i = 0; i < CharsMax; ++i) {
-        WordsIn[i] = char(0);
+        WordsIn[i] = 0;
         TextIn[i]  = 0;
     }
     i = 0;
 }
 
 /*********************************************************************************************************************************/
-// Nextion functions
+// NEXTION functions
 /*********************************************************************************************************************************/
 
 void EndSend()
 {
-    for (int pp = 0; pp < 3; ++pp) Nextion.write(0xff); // Send end of Input message
+    for (int pp = 0; pp < 3; ++pp) NEXTION.write(0xff); // Send end of Input message
     delay(65);                                          // ** A DELAY ** (>=50 ms) is needed if an answer might come!
 }
 
@@ -1170,10 +1170,10 @@ void SendOtherValue(char* nbox, int value)
 void GetTextIn()
 {
     ClearText();
-    if (Nextion.available()) {
+    if (NEXTION.available()) {
         delay(10);
-        while (Nextion.available()) {
-            TextIn[i] = uint8_t(Nextion.read());
+        while (NEXTION.available()) {
+            TextIn[i] = uint8_t(NEXTION.read());
             if (TextIn[i] == '$') TextIn[i] = 0; 
             if (i < CharsMax) ++i;
         }
@@ -1191,7 +1191,7 @@ int GetValue(char* nbox)
     strcpy(CB, GET);
     strcat(CB, nbox);
     strcat(CB, VAL);
-    Nextion.print(CB);
+    NEXTION.print(CB);
     EndSend();
     GetTextIn();
     if (TextIn[0] == 'q') {
@@ -1203,6 +1203,35 @@ int GetValue(char* nbox)
     return ValueIn;
 }
 
+// ***************************************************************************************************************
+
+// This function gets NEXTION textbox Text into a char array pointed to by * TheText. There better be room!
+
+uint16_t GetText(char* TextBoxName, char* TheText)
+{
+    char   get[]   = "get ";
+    char   _txt[]   = ".txt";
+    uint8_t   c;
+    char   CB[100];
+    strcpy(CB, get);
+    strcat(CB, TextBoxName);
+    strcat(CB, _txt);
+    NEXTION.print(CB);
+    EndSend();
+    GetTextIn();
+    if (TextIn[0] == 'p') {
+      i = 0;
+      c = 42;
+      while (c < 0xFF){
+        c = TextIn[i+1];
+        TheText[i] = c;
+        ++i;
+      }
+       TheText[i-1] = 0;
+    }
+    return  strlen(TheText);
+}
+
 /*********************************************************************************************************************************/
 
 int GetOtherValue(char* nbox)  // don't add .val as other thingy is already there ...
@@ -1212,7 +1241,7 @@ int GetOtherValue(char* nbox)  // don't add .val as other thingy is already ther
     char   CB[100];
     strcpy(CB, GET);
     strcat(CB, nbox);
-    Nextion.print(CB);
+    NEXTION.print(CB);
     EndSend();
     GetTextIn();
     if (TextIn[0] == 'q') {
@@ -1232,11 +1261,11 @@ bool GetButtonPress()
     bool ButtonPressed = false;
     char a;
     i = 0;
-    if (Nextion.available()) {
+    if (NEXTION.available()) {
         ButtonPressed = true;
         delay(10);
-        while (Nextion.available()) {
-            a = char(Nextion.read());
+        while (NEXTION.available()) {
+            a = char(NEXTION.read());
             if (a > 31 && a < 128) {
                 WordsIn[i]     = a;
                 if (WordsIn[i] == '$') WordsIn[i] = 0; 
@@ -1446,7 +1475,7 @@ void ShowServoPos()
 /** @brief SHOW COMMS */
 FASTRUN void ShowComms()
 {
-    if (Nextion.available()) return; // was a button pressed?
+    if (NEXTION.available()) return; // was a button pressed?
     bool  ShowNow                = false;
     char  na[]                   = "";
     char  FrontView_Connected[]  = "Connected";
@@ -1458,7 +1487,7 @@ FASTRUN void ShowComms()
     char  Msg_CnctdBuddyMast[]   = "Connected BUDDY MASTER";
     char  Msg_CnctdBuddySlave[]  = "Connected BUDDY SLAVE";
     char  MsgBuddying[]          = "Buddy";
-    char  DataView_pps[]         = "pps";       // These are all label names in the Nextion data screen. They are best kept short.
+    char  DataView_pps[]         = "pps";       // These are all label names in the NEXTION data screen. They are best kept short.
     char  DataView_lps[]         = "lps";
     char  DataView_Alt[]         = "alt";
     char  DataView_Temp[]        = "Temp";
@@ -1494,7 +1523,7 @@ FASTRUN void ShowComms()
     float ReadVolts           = 0;
     float VoltsPerCell        = 0;
     char  BindButtonVisible[] = "vis bind,1";
-    char  Fix[]               = "Fix";   // These are all label names in the Nextion data screen. They are best kept short.
+    char  Fix[]               = "Fix";   // These are all label names in the NEXTION data screen. They are best kept short.
     char  Lon[]               = "Lon";
     char  Lat[]               = "Lat";
     char  Bear[]              = "Bear";
@@ -1748,7 +1777,7 @@ void FailedPacket()
 
 /*********************************************************************************************************************************/
 
-/** Send 13 joined together char arrays to Nextion */
+/** Send 13 joined together char arrays to NEXTION */
 void SendCharArray(char* ch0, char* ch1, char* ch2, char* ch3, char* ch4, char* ch5, char* ch6, char* ch7, char* ch8, char* ch9, char* ch10, char* ch11, char* ch12)
 {
     strcpy(ch0, ch1);
@@ -2810,13 +2839,13 @@ void setup()
     SD.begin(chipSelect);
     delay(250);
     CalibratedYet = LoadAllParameters();                  // If they exist, read saved SD card settings.
-    Nextion.begin(921600);                                // BAUD rate also set in display code THIS IS THE MAX (was 115200)  
+    NEXTION.begin(921600);                                // BAUD rate also set in display code THIS IS THE MAX (was 115200)  
     SendValue(FrontView_BackGround,BackGroundColour);     // Get colours ready
     SendValue(FrontView_ForeGround,ForeGroundColour);
     SendValue(FrontView_Special,SpecialColour);
     SendValue(FrontView_Highlight,HighlightColour);
     SendCommand(page_FrontView);
-    SendCommand(NextionWakeUp);
+    SendCommand(NEXTIONWakeUp);
     teensyMAC(MacAddress);                                // Get MAC address and use it as pipe address
     NewPipe  = (uint64_t)MacAddress[0] << 40;
     NewPipe += (uint64_t)MacAddress[1] << 32;
@@ -2830,8 +2859,8 @@ void setup()
     InitSwitches();
     InitRadio(DefaultPipe);
     SendText(FrontView_Connected, Initialising);
-    SendValue1(NextionSleepTime, ScreenTimeout); // Setup Screen timeout (No .val needed)
-    SendCommand(NextionWakeOnTouch);             // Wake on touch
+    SendValue1(NEXTIONSleepTime, ScreenTimeout); // Setup Screen timeout (No .val needed)
+    SendCommand(NEXTIONWakeOnTouch);             // Wake on touch
     SendValue(FrontView_Hours, 0);
     SendValue(FrontView_Mins, 0);
     SendValue(FrontView_Secs, 0);
@@ -4281,7 +4310,7 @@ void Button_was_pressed()
     char Cmsg4[]                   = "CENTRE ALL!";
     char Cmsg5[]                   = "To calibrate TX sticks,\r\npress the button below\r\nthen follow instructions here... ";
     char Cmsg6[]                   = "Calibrate TX sticks";
-    char CaliNextion[]             = "CaliNextion";
+    char CaliNEXTION[]             = "CaliNEXTION";
     char TypeView[]                = "TypeView";
     char CopyToAllFlightModes[]    = "callfm";
     char RXBAT[]                   = "RXBAT";
@@ -4424,7 +4453,7 @@ void Button_was_pressed()
     if (strlen(WordsIn) > 0) {
         StartInactvityTimeout();
 #ifdef DB_NEXTION
-        Serial.print("From Nextion: ");
+        Serial.print("From NEXTION: ");
         Serial.println(WordsIn);
 #endif
 
@@ -5174,7 +5203,7 @@ void Button_was_pressed()
             return;
         }
 
-        if (InStrng(CaliNextion, WordsIn) > 0) {
+        if (InStrng(CaliNEXTION, WordsIn) > 0) {
             SendCommand(CalibrateNow);
             ClearText();
             return;
@@ -5677,7 +5706,7 @@ void Button_was_pressed()
                 SaveAllParameters();
                 SendText(SvT11, Cmsg5);
                 SendText(SvB0, Cmsg6);
-                SendValue1(NextionSleepTime, ScreenTimeout); // Re enable timeout
+                SendValue1(NEXTIONSleepTime, ScreenTimeout); // Re enable timeout
                 ClearText();
                 return;
             }
@@ -5816,7 +5845,7 @@ void GetFlightMode()
     Channel12SwitchValue = CheckSwitch(Channel12Switch);
 
     if (FlightMode != PreviousFlightMode) {
-        SendCommand(NextionWakeUp);    // wake screen up if flight mode changes
+        SendCommand(NEXTIONWakeUp);    // wake screen up if flight mode changes
         LastSeconds = 0;               // Just to force redisplay of timer
         if (PreviousFlightMode == 4) { // Start or restart timer when auto goes off
             TimerMillis = millis();

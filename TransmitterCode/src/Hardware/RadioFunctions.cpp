@@ -101,7 +101,7 @@ void BufferNewPipe()
 
 void SendData()
 {
-    if (Nextion.available()) return;               // was a button pressed?
+    if (NEXTION.available()) return;               // was a button pressed?
     if (millis() - TxPace <= 2) {
     ShowComms();                                   // there is time to fit in these calls because there are about 5 ms spare still. ONLY WHEN CONNECTED
     ReadSwitches();                                // Check switch positions
@@ -186,7 +186,7 @@ void ScanAllChannels()
 
     Str(NewYellow,HighlightColour,0);
     for (Sc = ScanStart; Sc <= ScanEnd; ++Sc) {
-        if (Nextion.available()) return; // in case someone wants to stop!
+        if (NEXTION.available()) return; // in case someone wants to stop!
         Radio1.setChannel(Sc);
         Radio1.startListening();
         x2 = x1 + (Sc * 5);
@@ -284,7 +284,7 @@ void DoScanInit()
 
 void DoScanEnd()
 {
-    SendCommand(NextionSleepTime);
+    SendCommand(NEXTIONSleepTime);
     Radio1.setDataRate(RF24_250KBPS);
     Radio1.openWritingPipe(DefaultPipe);
     CurrentMode = NORMAL;

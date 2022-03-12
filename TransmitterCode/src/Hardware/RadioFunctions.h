@@ -50,8 +50,8 @@
 // **************************************************************************
 //                          NEXTION SERIAL CONNECTION                       *
 //***************************************************************************
-#define Nextion Serial1      // Nextion is connected to Serial1
-#define ShowCommsDelay 250   // ms pauses between updated info on Nextion
+#define NEXTION Serial1      // NEXTION is connected to Serial1
+#define ShowCommsDelay 250   // ms pauses between updated info on NEXTION
 // ***************************************************************************
 
 // **************************************************************************
@@ -70,7 +70,7 @@
 //             UNCOMMENT ANY OF THESE for that bit of debug info            *
 //***************************************************************************
 
-// #define DB_NEXTION        // Debug Nextion and SD card data
+// #define DB_NEXTION        // Debug NEXTION and SD card data
 // #define DB_FHSS           // Debug real time FHSS data
 // #define DB_SENSORS        // Debug Sensors
 // #define DB_BIND           // Debug Binding
@@ -90,7 +90,7 @@ extern uint8_t        NoCarrier[];
 extern uint8_t        AllChannels[];
 extern unsigned int   i;
 extern char           NoSleeping[];
-extern char           NextionSleepTime[];
+extern char           NEXTIONSleepTime[];
 extern uint8_t        ScanStart;
 extern uint8_t        ScanEnd;
 extern uint8_t        BadChannelPointer;
