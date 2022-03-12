@@ -1204,15 +1204,15 @@ int GetValue(char* nbox)
 }
 
 // ***************************************************************************************************************
-
-// This function gets NEXTION textbox Text into a char array pointed to by * TheText. There better be room!
+// This function gets Nextion textbox Text into a char array pointed to by * TheText. There better be room!
+// It returns the length of array
 
 uint16_t GetText(char* TextBoxName, char* TheText)
 {
     char   get[]   = "get ";
     char   _txt[]   = ".txt";
-    uint8_t   c;
     char   CB[100];
+    uint8_t j = 0;
     strcpy(CB, get);
     strcat(CB, TextBoxName);
     strcat(CB, _txt);
@@ -1220,14 +1220,11 @@ uint16_t GetText(char* TextBoxName, char* TheText)
     EndSend();
     GetTextIn();
     if (TextIn[0] == 'p') {
-      i = 0;
-      c = 42;
-      while (c < 0xFF){
-        c = TextIn[i+1];
-        TheText[i] = c;
-        ++i;
+      while (TextIn[j+1] < 0xFF){
+        TheText[j] = TextIn[j+1];
+        ++j;
       }
-       TheText[i-1] = 0;
+       TheText[j] = 0;
     }
     return  strlen(TheText);
 }
