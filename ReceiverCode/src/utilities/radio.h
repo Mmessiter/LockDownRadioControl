@@ -224,7 +224,7 @@ void TryTheOtherTransceiver(uint8_t Recon_Ch){
 /************************************************************************************************************/
 
 void KeepSbusHappy(){
-    if (millis() < 5000) return;   // let things settle down for 5 seconds or so before using this
+    if (millis() < 5000) return;   // Let things settle down for 5 seconds or so before using this
     if (millis() - SBUSTimer >= SBUSRATE) {  
         SBUSTimer = millis();                                
         if (!FailSafeSent) 
