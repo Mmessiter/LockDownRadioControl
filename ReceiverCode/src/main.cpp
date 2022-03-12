@@ -174,21 +174,11 @@ void ShowHopDurationEtc()
     PacketStartTime = millis();
 }
 #endif
-/************************************************************************************************************/
 
-void ClearAckPayload()  // left in, redundant, might be wanted again ...
-{
-    AckPayload.Byte1 = 0;
-    AckPayload.Byte2 = 0;
-    AckPayload.Byte3 = 0;
-    AckPayload.Byte4 = 0;
-    AckPayload.Byte5 = 0;
-}
 /************************************************************************************************************/
 void UseReceivedData(){
         Decompress(ReceivedData, CompressedData, UNCOMPRESSEDWORDS);   // Decompress only the most recent data
         MapToSBUS();                        // Get SBUS data ready 
-       // ClearAckPayload();                // No longer required??
         CurrentRadio->flush_rx();           // Flush FIFO to avoid a lock up
         LastPacketArrivalTime = millis();   // Note the arival time
         if (HopNow) {                       // This flag gets set in LoadAckPayload();
