@@ -10,7 +10,6 @@
     #include <EEPROM.h>
     #include <Wire.h>
     #include <Servo.h> 
-    #include <EEPROM.h>
     #include <SBUS.h>
     #include "utilities/radio.h"
 
