@@ -454,9 +454,6 @@ bool     SaveFailSafeNow                = false;
 uint32_t FailSafeTimer;
 char     ChannelNames[CHANNELSUSED][11] = {{"Aileron"}, {"Elevator"}, {"Throttle"}, {"Rudder"}, {"Gear"}, {"AUX1"}, {"AUX2"}, {"AUX3"}, {"AUX4"}, {"AUX5"}, {"AUX6"}, {"AUX7"}, {"AUX8"}, {"AUX9"}, {"AUX10"}, {"AUX11"}};
 
-bool VoltsDetected = false;
-bool TXWarningFlag = false;
-bool RXWarningFlag = false;
 
 uint32_t TxOnTime      = 0;
 uint32_t TxPace        = 0;
@@ -485,7 +482,7 @@ bool     InhibitNameCheck      = false;
 // changing these four valiables controls LED blink and speed
 
 bool     LedIsBlinking = false;
-float    BlinkHertz    = 0.75;
+float    BlinkHertz    = 2;
 uint32_t BlinkTimer    = 0;
 uint8_t  BlinkOnPhase  = 1;
 bool     LedWasGreen   = false;
@@ -533,6 +530,7 @@ uint16_t SpecialColour = Red;
 bool     Reconnected = false;
 uint8_t  LowBattery =  LOWBATTERY;
 uint32_t SbusRepeats = 0;
+bool VoltsDetected = false;
 
 
 
@@ -1486,6 +1484,8 @@ void ShowServoPos()
 FASTRUN void ShowComms()
 {
     if (NEXTION.available()) return; // was a button pressed?
+    bool  TXWarningFlag          = false;
+    bool  RXWarningFlag          = false;
     bool  ShowNow                = false;
     char  na[]                   = "";
     char  FrontView_Connected[]  = "Connected";
@@ -1562,7 +1562,6 @@ FASTRUN void ShowComms()
             txpc = map(txv, 512, 670, 0, 100); // LiFePo4 Battery 2.6 ->3.5  volts per cell
             if (txpc < LowBattery) {
                 TXWarningFlag = true;
-                LedIsBlinking = true;   // Make LED Blink as a warning
              }
             if (txpc > 100) txpc = 100; // avoid showing > 100% !
             dtostrf(txpc, 0, 0, Vbuf);
@@ -1676,11 +1675,6 @@ FASTRUN void ShowComms()
                 Volts = constrain(Volts, 0, 100);
                 if (Volts <= LowBattery && Volts > 0) {
                     RXWarningFlag = true;
-                    LedIsBlinking = true;    // Make LED Blink as a warning
-                }
-                else {
-                    RXWarningFlag = false;
-                    LedIsBlinking = false;   // Make LED not blink
                 }
             }
             if (VoltsDetected) {
@@ -1732,15 +1726,16 @@ FASTRUN void ShowComms()
                 }
             }
         }
-    }
-    if (CurrentView == FrontView) {
-        if (RXWarningFlag || TXWarningFlag) {
-            SendCommand(WarnNow);
-        }
-        if (!RXWarningFlag) {
-            if (!TXWarningFlag) {
+        if (CurrentView == FrontView) {
+            if (RXWarningFlag || TXWarningFlag) {
+                SendCommand(WarnNow);
+                LedIsBlinking = true; 
+                Serial.println ("Warn");
+            } else {
                 SendCommand(WarnOff);
-                LedIsBlinking = false;
+                LedIsBlinking = false; 
+                LedWasGreen = false;
+                Serial.println ("OK");
             }
         }
     }
