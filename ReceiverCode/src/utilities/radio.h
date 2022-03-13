@@ -24,6 +24,7 @@ uint64_t        ThisPipe = 0xBABE1E5420LL; // default startup
 uint64_t        NewPipe  = 0;
 uint64_t        OldPipe  = 0;
 bool            FailSafeSent         = false;
+uint32_t        SbusRepeats = 0;
 
 
 extern bool     BoundFlag;
@@ -231,6 +232,7 @@ void KeepSbusHappy(){
         {
             Connected  = true;  // to force re-sending this older data!  
             MoveServos();
+            ++SbusRepeats;
             Connected = false;  
         }
     }
@@ -316,58 +318,62 @@ void SendDateToAckPayload(){
 /************************************************************************************************************/
 void LoadAckPayload()
 {
-    uint8_t MaxAckP     = 0;                                      // 0 if only RX
+    uint8_t MaxAckP     = 1;                                      // 0 if only RX
     AckPayload.Purpose &= 0x7F;                                   // NOTE: The HIGH BIT of "purpose" bit is the HOPNOW flag. It gets set only when it's time to hop.
     ++AckPayload.Purpose;   
-    if (INA219_CONNECTED) MaxAckP = 1;
-    if (SENSOR_HUB_CONNECTED) MaxAckP = 14;                       // its 14 + GPS
+    if (INA219_CONNECTED) MaxAckP = 2;
+    if (SENSOR_HUB_CONNECTED) MaxAckP = 15;                       // its 14 + GPS
     if (AckPayload.Purpose > MaxAckP) AckPayload.Purpose = 0;     // wrap after max
     switch (AckPayload.Purpose) {
         case 0: 
             LoadVersioNumber();
             break;  
-        case 1: 
-            SendToAckPayload(INA219Volts);
+        case 1:
+            SendToAckPayload (SbusRepeats);
+             break;
+        case 2: 
+            SendToAckPayload (INA219Volts);
             break;
-        case 2:
-            SendToAckPayload(BaroAltitude);
-            break;
-        case 3: 
-            SendToAckPayload(BaroTemperature);
+        case 3:
+            SendToAckPayload (BaroAltitude);
             break;
         case 4: 
-            SendToAckPayload (LatitudeGPS);       
+            SendToAckPayload (BaroTemperature);
             break;
         case 5: 
-             SendToAckPayload (LongitudeGPS);
+            SendToAckPayload (LatitudeGPS);       
             break;
         case 6: 
-             SendToAckPayload (AngleGPS); 
+             SendToAckPayload (LongitudeGPS);
             break;
         case 7: 
-             SendToAckPayload(SpeedGPS);  
+             SendToAckPayload (AngleGPS); 
             break;
         case 8: 
-            SendToAckPayload(GpsFix);    
+             SendToAckPayload (SpeedGPS);  
             break;
         case 9: 
-            SendToAckPayload(AltitudeGPS);      
+            SendToAckPayload (GpsFix);    
             break;
         case 10: 
-            SendToAckPayload(DistanceGPS);    
+            SendToAckPayload (AltitudeGPS);      
             break;
         case 11: 
-            SendToAckPayload(CourseToGPS);       
+            SendToAckPayload (DistanceGPS);    
             break;
         case 12: 
-            SendToAckPayload(SatellitesGPS);     
+            SendToAckPayload (CourseToGPS);       
             break;
         case 13: 
-            SendDateToAckPayload();
+            SendToAckPayload (SatellitesGPS);     
             break;
         case 14: 
+            SendDateToAckPayload();
+            break;
+        case 15: 
             SendTimeToAckPayload();
             break;
+        
         default:
             break;
     }

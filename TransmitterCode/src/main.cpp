@@ -532,6 +532,8 @@ uint16_t HighlightColour = Yellow;
 uint16_t SpecialColour = Red;
 bool     Reconnected = false;
 uint8_t  LowBattery =  LOWBATTERY;
+uint32_t SbusRepeats = 0;
+
 
 
 
@@ -1545,6 +1547,7 @@ FASTRUN void ShowComms()
     char  Mxd[]               = "Mxd";
     char  BTo[]               = "BTo";
     char  Sat[]               = "Sat";
+    char  Sbs[]              = "Sbus";
 
     if (CurrentView == FrontView || CurrentView == DataView) {
         if (millis() - LastShowTime > ShowCommsDelay) { 
@@ -1651,7 +1654,10 @@ FASTRUN void ShowComms()
                 snprintf(Vbuf, 4,"%d",  (int) GPSCourseTo);
                 SendText(BTo,Vbuf);   
                 snprintf(Vbuf, 6,"%d",  (int) GPSMaxDistance);
-                SendText(Mxd,Vbuf);   
+                SendText(Mxd,Vbuf);  
+                snprintf(Vbuf, 6,"%d",  (int) SbusRepeats);
+                SendText(Sbs,Vbuf);   
+                 
                 
             }
             ReadVolts = RXModelVolts * 10;
@@ -4435,6 +4441,7 @@ void Button_was_pressed()
     char pCalibrateView[]          = "page CalibrateView";
     char pFailSafe[]               = "page FailSafeView";
     char DataView_Clear[]          = "Clear";
+    char DataView_AltZero[]        = "AltZero";
     char BuddyM[]                  = "BuddyM";
     char BuddyP[]                  = "BuddyP";
     char OptionsEnd[]              = "OptionsEnd";
@@ -4560,6 +4567,10 @@ void Button_was_pressed()
             GPSMaxAltitude     = 0;
             GPSMaxDistance     = 0;
             GPSMaxSpeed        = 0;
+            ClearText();
+            return;
+        }
+         if (InStrng(DataView_AltZero, WordsIn) > 0) { //  goto setup screen from Data screen 
             if (!GroundModelAltitude) {
                 GroundModelAltitude = RXModelAltitude;}
             else {
@@ -4567,7 +4578,9 @@ void Button_was_pressed()
             if (!GPSGroundAltitude){
                 GPSGroundAltitude = GPSAltitude;}
             else{
-                GPSGroundAltitude = 0; } 
+                 GPSGroundAltitude = 0; }
+            GPSMaxAltitude     = 0;
+            RXMAXModelAltitude = 0;
             ClearText();
             return;
         }
@@ -5959,53 +5972,56 @@ void ParseAckPayload()
                 GetRXVersionNumber();
                 break;
             case 1:
-                RXModelVolts = GetFromAckPayload();
+                SbusRepeats   = GetFromAckPayload(); 
+                break;
+            case 2:
+                 RXModelVolts = GetFromAckPayload();
                 if (RXModelVolts > 0) {
                     VoltsDetected = true;
                     snprintf(ModelVolts, 5, "%f", RXModelVolts);
                 }
                 break;
-            case 2:
+            case 3:
                 GetAltitude();
                 break;
-            case 3:
+            case 4:
                 GetTemperature();
                 break;
-            case 4:
+            case 5:
                 GPSLatitude = GetFromAckPayload(); 
                 break;
-            case 5:
+            case 6:
                 GPSLongitude = GetFromAckPayload(); 
                 break;
-            case 6:
+            case 7:
                 GPSAngle     = GetFromAckPayload();
                 break;
-            case 7:
+            case 8:
                 GPSSpeed     = GetFromAckPayload(); 
                 if (GPSMaxSpeed < GPSSpeed) GPSMaxSpeed = GPSSpeed;
                 break;
-            case 8:
+            case 9:
                 GpsFix       =  GetFromAckPayload();
                 break;
-            case 9:
+            case 10:
                 GPSAltitude  = GetFromAckPayload() - GPSGroundAltitude;
                 if (GPSAltitude < 0) GPSAltitude = 0;
                 if (GPSMaxAltitude < GPSAltitude) GPSMaxAltitude = GPSAltitude;
                 break;
-            case 10:
+            case 11:
                  GPSDistanceTo = GetFromAckPayload();
                  if (GPSMaxDistance < GPSDistanceTo) GPSMaxDistance = GPSDistanceTo;
                  break;
-            case 11:
+            case 12:
                  GPSCourseTo = GetFromAckPayload();  
                  break;
-            case 12:
+            case 13:
                  GPSSatellites = (uint8_t) GetFromAckPayload();
                  break;
-            case 13:
+            case 14:
                  GetDateFromAckPayload();
                  break;
-            case 14:
+            case 15:
                  GetTimeFromAckPayload();
                  ReadTheRTC();
                  if (GPSDay   != GmonthDay) GPSTimeSynched = false;

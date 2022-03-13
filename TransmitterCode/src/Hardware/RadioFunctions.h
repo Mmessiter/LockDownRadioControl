@@ -7,7 +7,7 @@
 //***************************************************************************
 #define TXVERSION_MAJOR   1
 #define TXVERSION_MINOR   6
-#define TXVERSION_MINIMUS 1
+#define TXVERSION_MINIMUS 2
 
 // **************************************************************************
 //                            SBUS PARAMETERS   (FOR BUDDY BOXING)          *
