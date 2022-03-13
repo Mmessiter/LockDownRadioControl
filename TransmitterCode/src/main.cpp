@@ -475,7 +475,7 @@ char         DateTime[] = "DateTime";
 
 int      XtouchPlace = 0; // Clicked X
 int      YtouchPlace = 0; // Clicked Y
-uint8_t  zero        = 0x00;
+
 bool     BindButton  = false;
 
 uint8_t  PreviousChannelNumber = 0;
@@ -621,6 +621,7 @@ uint8_t bcdToDec(uint8_t val)
 /*********************************************************************************************************************************/
 
 void SetTheRTC(){
+    uint8_t  zero        = 0x00;
     Wire.beginTransmission(DS1307_ADDRESS);
     Wire.write(zero);                               // Stop the oscillator
     Wire.write(decToBcd(Gsecond));
@@ -700,7 +701,8 @@ void AdjustDateTime(uint8_t MinChange, uint8_t HourChange, uint8_t YearChange, u
 
 void IncMinute()
 {
-    uint8_t c = 1;
+      uint8_t  zero = 0x00;
+      uint8_t  c    = 1;
     if (RTC.read(tm)) {
         AdjustDateTime(c, zero, zero, zero, zero);
     }
@@ -710,7 +712,8 @@ void IncMinute()
 
 void DecMinute()
 {
-    uint8_t c = -1;
+     uint8_t  zero = 0x00;
+     uint8_t c = -1;
     if (RTC.read(tm)) {
         AdjustDateTime(c, zero, zero, zero, zero);
     }
@@ -721,6 +724,7 @@ void DecMinute()
 void IncHour()
 {
     uint8_t c = 1;
+    uint8_t  zero = 0x00;
     if (RTC.read(tm)) {
         AdjustDateTime(zero, c, zero, zero, zero);
     }
@@ -731,6 +735,7 @@ void IncHour()
 void DecHour()
 {
     uint8_t c = -1;
+    uint8_t  zero = 0x00;
     if (RTC.read(tm)) {
         AdjustDateTime(zero, c, zero, zero, zero);
     }
@@ -741,6 +746,7 @@ void DecHour()
 void IncYear()
 {
     uint8_t c = 1;
+    uint8_t  zero = 0x00;
     if (RTC.read(tm)) {
         AdjustDateTime(zero, zero, c, zero, zero);
     }
@@ -751,6 +757,7 @@ void IncYear()
 void DecYear()
 {
     uint8_t c = -1;
+    uint8_t  zero = 0x00;
     if (RTC.read(tm)) {
         AdjustDateTime(zero, zero, c, zero, zero);
     }
@@ -761,6 +768,7 @@ void DecYear()
 void IncMonth()
 {
     uint8_t c = 1;
+    uint8_t  zero = 0x00;
     if (RTC.read(tm)) {
         AdjustDateTime(zero, zero, zero, c, zero);
     }
@@ -771,6 +779,7 @@ void IncMonth()
 void DecMonth()
 {
     uint8_t c = -1;
+    uint8_t  zero = 0x00;
     if (RTC.read(tm)) {
         AdjustDateTime(zero, zero, zero, c, zero);
     }
@@ -781,6 +790,7 @@ void DecMonth()
 void IncDate()
 {
     uint8_t c = 1;
+    uint8_t  zero = 0x00;
     if (RTC.read(tm)) {
         AdjustDateTime(zero, zero, zero, zero, c);
     }
@@ -791,6 +801,7 @@ void IncDate()
 void DecDate()
 {
     uint8_t c = -1;
+    uint8_t  zero = 0x00;
     if (RTC.read(tm)) {
         AdjustDateTime(zero, zero, zero, zero, c);
     }
@@ -5680,8 +5691,6 @@ void Button_was_pressed()
                 SendText1(SvT11, CMsg1);
                 SendText(SvB0, CMsg2);
                 ClearText();
-               // Serial.println ("ZERO");
-               // Serial.println (CurrentMode);
                 return;
             }
         }
