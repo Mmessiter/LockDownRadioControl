@@ -1730,12 +1730,10 @@ FASTRUN void ShowComms()
             if (RXWarningFlag || TXWarningFlag) {
                 SendCommand(WarnNow);
                 LedIsBlinking = true; 
-                Serial.println ("Warn");
             } else {
                 SendCommand(WarnOff);
                 LedIsBlinking = false; 
                 LedWasGreen = false;
-                Serial.println ("OK");
             }
         }
     }
