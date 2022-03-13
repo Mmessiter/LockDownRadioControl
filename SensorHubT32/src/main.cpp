@@ -1,8 +1,8 @@
 //***********************************************************************************************************
 //************************************* SENSOR HUB CODE FOR TEENSY 3.2....   ********************************
 // // Malcolm Messiter 2022
-//                                   Version 1.3 Feb 7 2022
-//                                   Uses Wire1 in Slave Mode ... This works. Don't use Teensy LC. IT DOESN'T!!
+//                                   Version 1.3 March 13th 2022
+//     Uses Wire1 in Slave Mode ... This works only on Teensy 3.2
 //***********************************************************************************************************
 #include <Arduino.h>
 #include <Wire.h>
@@ -12,7 +12,7 @@
 #define I2CADDRESS  8       // Address of this I2C slave
 #define GPSBAUDRATE 9600    // Didn't work any faster
 #define GPSDEVICE Serial1   // GPS is connected to Serial1
-// #define DEBUG             // Local console debug only
+//#define DEBUG               // Local console debug only
 #define DEBUGTIMER 1000
 
 int DebugTimer = 0;
