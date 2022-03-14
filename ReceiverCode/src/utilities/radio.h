@@ -157,6 +157,7 @@ void HopToNextChannel()
     delay(1);
     CurrentRadio->setChannel(NextChannel);
     CurrentRadio->startListening();
+
 #ifdef DB_FHSS
     ShowHopDurationEtc();
 #endif
