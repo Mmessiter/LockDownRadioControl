@@ -23,7 +23,7 @@ uint32_t        HopStart;
 uint64_t        ThisPipe = 0xBABE1E5420LL; // default startup
 uint64_t        NewPipe  = 0;
 uint64_t        OldPipe  = 0;
-bool            FailSafeSent         = false;
+bool            FailSafeSent         = true;
 uint32_t        SbusRepeats = 0;
 
 
@@ -39,6 +39,7 @@ extern uint8_t  DayGPS;
 extern uint8_t  SatellitesGPS; 
 extern uint16_t BaroAltitude;
 extern uint32_t ReconnectedMoment;
+extern uint32_t FirstConnectMoment;
 extern uint32_t SBUSTimer;
 extern float    INA219Volts;
 extern float    BaroTemperature;
@@ -225,7 +226,7 @@ void TryTheOtherTransceiver(uint8_t Recon_Ch){
 /************************************************************************************************************/
 
 void KeepSbusHappy(){
-    if (millis() < 5000) return;   // Let things settle down for 5 seconds or so before using this
+    if (FirstConnectMoment - millis() < 5000) return;   // Let things settle down after connection for 5 seconds or so before using this
     if (millis() - SBUSTimer >= SBUSRATE) {  
         SBUSTimer = millis();                                
         if (!FailSafeSent) 
@@ -233,7 +234,7 @@ void KeepSbusHappy(){
             Connected  = true;  // to force re-sending this older data!  
             MoveServos();
             ++SbusRepeats;
-            Connected = false;  
+            Connected = false; 
         }
     }
 }
@@ -269,6 +270,9 @@ void Reconnect(){                                                               
                 }
             }
         }
+    }
+    if (FailSafeSent) { 
+    FirstConnectMoment = millis();
     }
     FailSafeSent = false;
     ReconnectedMoment    = millis();  // Save this moment, then don't move a servo for a few ms ...
