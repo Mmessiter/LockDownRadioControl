@@ -487,7 +487,7 @@ FASTRUN void ReceiveData(){
     if (ReadData()) {
          CheckParams();                                                                 // Check the extra parameters
     } else {        
-         if (millis() - SBUSTimer >= SBUSRATE) {                                        // no new packet - but maybe time to dispatch the last?
+         if (millis() - SBUSTimer >= SBUSRATE) {                                        // No new packet yet - but maybe it's time to dispatch the last?
             if (BoundFlag) {
                 KeepSbusHappy();                                                        // if it's time - send a SBUS packet. It might be new data.
                -- SbusRepeats;                                                          // It's not really a "repeat".
