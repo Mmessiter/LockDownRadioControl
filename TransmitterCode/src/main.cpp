@@ -1090,7 +1090,7 @@ void RedLedOn()
     LedWasGreen = false;
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, 0);
-    analogWrite(REDLED, GetBrightness()); // Brightness is a function of blinking
+    analogWrite(REDLED, GetBrightness()); // Brightness is a function of maybe blinking
 }
 
 /*********************************************************************************************************************************/
@@ -1584,7 +1584,7 @@ FASTRUN void ShowComms()
         {
             if ((CurrentView == FrontView)) {
                 if (!BoundFlag) {
-                    SendCommand(BindButtonVisible);
+                    SendCommand(BindButtonVisible); // heer
                     BindButton = true;
                 }
                 else {
@@ -1777,8 +1777,7 @@ void FailedPacket()
         }
     }
     ++LostPackets;
-    SecondsRemaining = (Inactivity_Timeout / 1000) - (millis() - Inactivity_Start) / 1000;
-   // Serial.println (SecondsRemaining);
+     SecondsRemaining = (Inactivity_Timeout / 1000) - (millis() - Inactivity_Start) / 1000;
     if (SecondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH);             // INACTIVITY POWER OFF HERE!!
 }
 
