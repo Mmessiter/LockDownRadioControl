@@ -3,11 +3,11 @@
 #define RadioFunctions_H
 
 // **************************************************************************
-//                TX VERSION NUMBER   (March 13th 2022 Malcolm Messiter) *
+//                TX VERSION NUMBER   (March 14th 2022 Malcolm Messiter) *
 //***************************************************************************
 #define TXVERSION_MAJOR   1
 #define TXVERSION_MINOR   6
-#define TXVERSION_MINIMUS 2
+#define TXVERSION_MINIMUS 3
 // **************************************************************************
 //                            SBUS PARAMETERS   (FOR BUDDY BOXING)          *
 //***************************************************************************
@@ -27,7 +27,7 @@
 #define RETRYCOUNT                  3   // auto retries from nRF24L01
 #define RETRYWAIT                   1   // Wait between retries is RetryWait+1 * 250us. A failed packet therefore takes (RetryWait+1 * 250us) * RetryCount
 #define LOSTCONTACTCUTOFF           2   // How many packets to lose before reconnect triggers  (>2)
-#define RECONNECT_CHANNELS_COUNT    5   // How many channels to try when reconnecting
+#define RECONNECT_CHANNELS_COUNT    4   // How many channels to try when reconnecting
 #define RED_LED_ON_TIME             500 // How many ms of no connection before RED led comes on
 // **************************************************************************
 //                            SEND MODE PARAMETERS                          *

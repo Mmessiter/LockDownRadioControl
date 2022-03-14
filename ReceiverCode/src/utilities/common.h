@@ -15,7 +15,7 @@
 
     #define RXVERSION_MAJOR             1
     #define RXVERSION_MINOR             6
-    #define RXVERSION_MINIMUS           2    // March 13th 2022
+    #define RXVERSION_MINIMUS           3    // March 14th 2022
 
 //**************************************************************************************************************************
   #define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< **
@@ -23,10 +23,10 @@
 
     #define SENSOR_HUB_I2C_ADDRESS      8
     #define HOPTIME                     50   // ms between channel changes ( >5 packets per hop)
-    #define LISTEN_PERIOD               7    // ms to listen for TX in Reconnect()
+    #define LISTEN_PERIOD               9    // 9 (7?) ms to listen for TX in Reconnect()
     #define FREQUENCYSCOUNT             82   // use 82 different channels
-    #define FREQUENCYSCOUNT1            41   // use 41 different channels
-    #define RECEIVE_TIMEOUT             25   // 25 milliseconds seems an optimal value
+    #define FREQUENCYSCOUNT1            41   // use 41 different test channels
+    #define RECEIVE_TIMEOUT             25   // <=16 fails, >=20 OK, 25 - 40 milliseconds seems an optimal value?
     #define CHANNELSUSED                16
     #define SERVOSUSED                  9    // But all 16 are available via SBUS
     #define SBUSRATE                    10   // SBUS frame every 10 milliseconds
@@ -42,7 +42,7 @@
     #define pinCSN2                     20   // NRF2
     #define pinCE2                      21   // NRF2
     #define FAILSAFE_TIMEOUT            2000 // two seconds until failsafe
-    #define RECONNECT_CHANNELS_COUNT    5
+    #define RECONNECT_CHANNELS_COUNT    4
     #define UNCOMPRESSEDWORDS           20              //   16 Channels plus extra 4 16 BIT values
     #define COMPRESSEDWORDS   UNCOMPRESSEDWORDS * 3 / 4 // = 16 WORDS  with no extra
 

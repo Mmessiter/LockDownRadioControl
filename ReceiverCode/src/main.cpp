@@ -486,8 +486,9 @@ FASTRUN void ReceiveData(){
       }
     if (ReadData()) {
          CheckParams();                                                                 // Check the extra parameters
-    } else {                                                                            // ReadData() returns false when not connected                                                                       
+    } else {                                                                            // ReadData() returns false when not connected                                                                                                                                             
         if (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT) {                      // Has transmitter died? 
+        if (BoundFlag) KeepSbusHappy();
         Reconnect();                                                                    // Try to reconnect.
         }
     }
