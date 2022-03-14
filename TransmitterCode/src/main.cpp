@@ -4477,6 +4477,7 @@ void Button_was_pressed()
         
         if (InStrng(Mark, WordsIn) > 0) {           
             GPSMarkHere = 255;                // Mark this location
+            GPSMaxDistance = 0;
             ClearText();
             return;
         }
