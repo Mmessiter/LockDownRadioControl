@@ -485,14 +485,14 @@ FASTRUN void ReceiveData(){
          }
       }
     if (ReadData()) {
-         ReadExtraParameters();                                                         // Check the extra parameters
+        ReadExtraParameters();                                                         // Check the extra parameters
     } else {        
-         if (millis() - SBUSTimer >= SBUSRATE) {                                        // No new packet yet - but maybe it's time to dispatch the last?
+        if (millis() - SBUSTimer >= SBUSRATE) {                                        // No new packet yet - but maybe it's time to dispatch the last?
             if (BoundFlag) {
                 KeepSbusHappy();                                                        // if it's time - send a SBUS packet. It might be new data.
                -- SbusRepeats;                                                          // It's not really a "repeat".
             }                                          
-         }                                                                                                                                           
+        }                                                                                                                                           
         if (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT) {                      
         Reconnect();                                                                    // Try to reconnect.
         }
@@ -573,7 +573,7 @@ void DoBinding()
 /************************************************************************************************************/
 void setup()
 {
- pinMode(LED_PIN, OUTPUT);
+    pinMode(LED_PIN, OUTPUT);
     digitalWrite(LED_PIN, HIGH);
     Wire.begin();
     delay(2000); // Needed for several reasons
@@ -591,8 +591,8 @@ void setup()
 #endif
     GetOldPipe();
     BootupMoment = millis();
-    digitalWrite(LED_PIN, LOW);
     SetUKFrequencies();
+    digitalWrite(LED_PIN, LOW);
 }
 /************************************************************************************************************/
 // LOOP
