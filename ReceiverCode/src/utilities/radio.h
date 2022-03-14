@@ -234,7 +234,7 @@ void KeepSbusHappy(){
         {
             Connected  = true;  // To force re-sending this older data 
             MoveServos();       // This call also sends an SBUS packet
-            ++SbusRepeats;
+           // ++SbusRepeats;    // :-) !!
             Connected = false; 
         }
     }
