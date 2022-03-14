@@ -493,7 +493,7 @@ FASTRUN void ReceiveData(){
                -- SbusRepeats;                                                          // It's not really a "repeat".
             }                                          
          }                                                                                                                                           
-        if (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT) {                      // Has transmitter died? 
+        if (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT) {                      
         Reconnect();                                                                    // Try to reconnect.
         }
     }
