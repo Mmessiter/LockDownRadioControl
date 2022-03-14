@@ -284,7 +284,7 @@ void SetUKFrequencies(){
  * Note: If extra parameters are needed, the "HOPTIME" duration can be increased.
  * It's 50ms right now, which gives about 7 packets between hops.
  */
-void CheckParams()
+void ReadExtraParameters()
 { uint16_t TwoBytes = 0; 
   uint8_t SwapWaveBand;
        
@@ -485,7 +485,7 @@ FASTRUN void ReceiveData(){
          }
       }
     if (ReadData()) {
-         CheckParams();                                                                 // Check the extra parameters
+         ReadExtraParameters();                                                         // Check the extra parameters
     } else {        
          if (millis() - SBUSTimer >= SBUSRATE) {                                        // No new packet yet - but maybe it's time to dispatch the last?
             if (BoundFlag) {
