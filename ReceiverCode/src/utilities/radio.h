@@ -24,7 +24,7 @@ uint64_t        ThisPipe = 0xBABE1E5420LL; // default startup
 uint64_t        NewPipe  = 0;
 uint64_t        OldPipe  = 0;
 bool            FailSafeSent         = true;
-uint32_t        SbusRepeats = 0;
+uint16_t        SbusRepeats = 0;
 
 
 extern bool     BoundFlag;
@@ -234,7 +234,7 @@ void KeepSbusHappy(){
         {
             Connected  = true;  // To force re-sending this older data 
             MoveServos();       // This call also sends an SBUS packet
-           // ++SbusRepeats;    // :-) !!
+            ++SbusRepeats;      // :-) !!
             Connected = false; 
         }
     }

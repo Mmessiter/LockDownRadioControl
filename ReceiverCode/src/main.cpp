@@ -487,9 +487,11 @@ FASTRUN void ReceiveData(){
     if (ReadData()) {
          CheckParams();                                                                 // Check the extra parameters
     } else {        
-         if (millis() - SBUSTimer >= SBUSRATE) { 
-            if (BoundFlag) KeepSbusHappy();                                             // if it's time - send a SBUS packet. It might be new data.
-            //Serial.println(millis());
+         if (millis() - SBUSTimer >= SBUSRATE) {                                        // no new packet - but maybe time to dispatch the last?
+            if (BoundFlag) {
+                KeepSbusHappy();                                                        // if it's time - send a SBUS packet. It might be new data.
+               -- SbusRepeats;                                                          // It's not really a "repeat".
+            }                                          
          }                                                                                                                                           
         if (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT) {                      // Has transmitter died? 
         Reconnect();                                                                    // Try to reconnect.
