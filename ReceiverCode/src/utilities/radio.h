@@ -231,8 +231,8 @@ void KeepSbusHappy(){
         SBUSTimer = millis();                                
         if (!FailSafeSent) 
         {
-            Connected  = true;  // to force re-sending this older data!  
-            MoveServos();
+            Connected  = true;  // To force re-sending this older data 
+            MoveServos();       // This call also sends an SBUS packet
             ++SbusRepeats;
             Connected = false; 
         }
