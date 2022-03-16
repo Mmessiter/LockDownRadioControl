@@ -4316,7 +4316,7 @@ void Button_was_pressed()
     char Cmsg4[]                   = "CENTRE ALL!";
     char Cmsg5[]                   = "To calibrate TX sticks,\r\npress the button below\r\nthen follow instructions here... ";
     char Cmsg6[]                   = "Calibrate TX sticks";
-   // char CaliNEXTION[]             = "CaliNEXTION";
+    char CaliNEXTION[]             = "CaliNEXTION";
     char TypeView[]                = "TypeView";
     char CopyToAllFlightModes[]    = "callfm";
     char RXBAT[]                   = "RXBAT";
@@ -5217,13 +5217,11 @@ void Button_was_pressed()
             return;
         }
 
-      //  if (InStrng(CaliNEXTION, WordsIn) > 0) {
-      //      CurrentView = FrontView;
-      //      SendCommand(page_FrontView);
-      //      UpdateModelsNameEveryWhere();
-      //      ClearText();
-      //      return;
-      //  }
+        if (InStrng(CaliNEXTION, WordsIn) > 0) {
+            SendCommand(CalibrateNow);
+            ClearText();
+            return;
+        }
 
         if (InStrng(SetupViewFM, WordsIn) > 0) { // New model name occurs at offset 12 in WordsIn
             i = 0;

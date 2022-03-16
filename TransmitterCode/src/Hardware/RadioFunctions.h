@@ -3,58 +3,73 @@
 #define RadioFunctions_H
 
 // **************************************************************************
-//                TX VERSION NUMBER   (March 16th 2022 Malcolm Messiter)    *
+//                TX VERSION NUMBER   (March 11th 2022 Malcolm Messiter) *
 //***************************************************************************
 #define TXVERSION_MAJOR   1
 #define TXVERSION_MINOR   6
-#define TXVERSION_MINIMUS 3
+#define TXVERSION_MINIMUS 1
+
 // **************************************************************************
 //                            SBUS PARAMETERS   (FOR BUDDY BOXING)          *
 //***************************************************************************
+
 #define SBUSRATE 10 // SBUS frame every 10 milliseconds ( = 100 Hz)
 #define SBUSPORT Serial2
 #define RANGEMAX 2047 // = Frsky at 150 %
 #define RANGEMIN 0    // = Frsky at 0 %
+
 // **************************************************************************
 //                            SERVO RANGE PARAMETERS                        *
 //***************************************************************************
+
 #define MINMICROS 500
 #define MAXMICROS 2500
+
 // **************************************************************************
 //                            FHSS PARAMETERS                               *
 //***************************************************************************
+
 #define PACEMAKER                   7   // MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
 #define RETRYCOUNT                  3   // auto retries from nRF24L01
 #define RETRYWAIT                   1   // Wait between retries is RetryWait+1 * 250us. A failed packet therefore takes (RetryWait+1 * 250us) * RetryCount
 #define LOSTCONTACTCUTOFF           2   // How many packets to lose before reconnect triggers  (>2)
-#define RECONNECT_CHANNELS_COUNT    4   // How many channels to try when reconnecting
+#define RECONNECT_CHANNELS_COUNT    5   // How many channels to try when reconnecting
 #define RED_LED_ON_TIME             500 // How many ms of no connection before RED led comes on
+
 // **************************************************************************
 //                            SEND MODE PARAMETERS                          *
 //***************************************************************************
+
 #define NORMAL          0 // Normal for transmit as usual
 #define CALIBRATELIMITS 1 // Calibrate limits
 #define CENTRESTICKS    2 // Calibrate Centres
 #define SCANWAVEBAND    3 // Scan waveband
 #define SENDNOTHING     4 // Transmission off
+                          // ************************************************
+
 // **************************************************************************
 //                          NEXTION SERIAL CONNECTION                       *
 //***************************************************************************
 #define NEXTION Serial1      // NEXTION is connected to Serial1
 #define ShowCommsDelay 250   // ms pauses between updated info on NEXTION
 // ***************************************************************************
+
 // **************************************************************************
 //                            WATCHDOG PARAMETERS                           *
 //***************************************************************************
+
 #define USE_WATCHDOG
 #define WATCHDOGTIMEOUT 10000 // 10 Seconds before reboot (32ms -> 500 seconds)
 #define KICKRATE        1000  // Kick once a second (must be between WATCHDOGMAXRATE and WATCHDOGTIMEOUT)
 #define WATCHDOGMAXRATE 500   // 500 ms secs between kicks is max rate allowed
+
 // **************************************************************************
+
 // **************************************************************************
 //                     DEBUG OPTIONS                                        *
 //             UNCOMMENT ANY OF THESE for that bit of debug info            *
 //***************************************************************************
+
 // #define DB_NEXTION        // Debug NEXTION and SD card data
 // #define DB_FHSS           // Debug real time FHSS data
 // #define DB_SENSORS        // Debug Sensors
@@ -62,9 +77,12 @@
 // #define DB_SWITCHES       // Debug Switches
 // #define DB_MODEL_EXCHANGE // Debug MODEL EXCHANGE (by RF link)
 // #define DB_GAPS           // Debug Connection Gap assessment
+
 #include <RF24.h>
+
 /*********************************************************************************************************************************/
 // external (global vars) needed here
+
 extern RF24           Radio1;
 extern int            PipeTimeout;
 extern uint8_t        CurrentMode;
