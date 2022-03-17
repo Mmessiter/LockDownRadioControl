@@ -14,7 +14,7 @@ uint8_t         ThisRadio    = 1;
 uint8_t         SavedPipeAddress[8];
 uint8_t         NextChannelNumber = 0;
 uint8_t         NextChannel;
-uint8_t         ReconnectIndex = 0;
+uint8_t         ReconnectIndex = RECONNECT_CHANNELS_START;
 uint8_t         PacketNumber; 
 uint16_t        ReceivedData[UNCOMPRESSEDWORDS];           //  20 x 16 BIT words
 uint16_t        PreviousData[UNCOMPRESSEDWORDS];           /** Previously received data (used for servos. Hence not sent if unchanged) */
@@ -256,7 +256,7 @@ void Reconnect(){                                                               
         delay(1);                                                                  // NEEDED!
         ReconnectChannel = * (FHSSChPointer + ReconnectIndex);                     // Get a reconnect channel - not always the same one - one of 5 now.
         ++ ReconnectIndex;
-        if (ReconnectIndex >= RECONNECT_CHANNELS_COUNT) ReconnectIndex = 0;
+        if (ReconnectIndex >= RECONNECT_CHANNELS_COUNT+RECONNECT_CHANNELS_START) ReconnectIndex = RECONNECT_CHANNELS_START;
         CurrentRadio->setChannel(ReconnectChannel);  
         TryToConnectNow();
 #ifdef SECOND_TRANSCEIVER

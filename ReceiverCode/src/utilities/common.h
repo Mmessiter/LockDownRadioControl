@@ -15,7 +15,7 @@
 
     #define RXVERSION_MAJOR             1
     #define RXVERSION_MINOR             6
-    #define RXVERSION_MINIMUS           3    // March 14th 2022
+    #define RXVERSION_MINIMUS           4    // March 17th 2022
 
 //**************************************************************************************************************************
  // #define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< **
@@ -43,6 +43,7 @@
     #define pinCE2                      21   // NRF2
     #define FAILSAFE_TIMEOUT            2000 // two seconds until failsafe
     #define RECONNECT_CHANNELS_COUNT    3
+    #define RECONNECT_CHANNELS_START    12
     #define UNCOMPRESSEDWORDS           20              //   16 Channels plus extra 4 16 BIT values
     #define COMPRESSEDWORDS   UNCOMPRESSEDWORDS * 3 / 4 // = 16 WORDS  with no extra
 
