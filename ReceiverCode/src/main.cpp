@@ -154,7 +154,7 @@ void FailSafe()
  * Print out some DB_FHSSging information about the channel hopping implementation
  * @param freq The next frequency to be used.
  */
-void ShowHopDurationEtc()
+void ShowHopDurationEtc() // heer
 {
     uint8_t OnePacketTime = (millis() - PacketStartTime) / PacketNumber;
     Serial.print("Hop duration: ");
@@ -166,8 +166,9 @@ void ShowHopDurationEtc()
     if (OnePacketTime<10) Serial.print (" ");
     Serial.print(OnePacketTime);
     Serial.print("ms.  Next channel: ");
-    if (FHSS_Channels[NextChannelNumber] < 10) Serial.print (" ");
-    Serial.print(FHSS_Channels[NextChannelNumber]);
+    if (NextChannel < 10) Serial.print (" ");
+    if (NextChannel < 100) Serial.print (" "); // :-)
+    Serial.print(NextChannel);
     Serial.print(BoundFlag ? " Bound!" : " NOT Bound");
     Serial.print("  Radio: ");
     Serial.print(ThisRadio);

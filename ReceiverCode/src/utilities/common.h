@@ -47,7 +47,7 @@
     #define UNCOMPRESSEDWORDS           20              //   16 Channels plus extra 4 16 BIT values
     #define COMPRESSEDWORDS   UNCOMPRESSEDWORDS * 3 / 4 // = 16 WORDS  with no extra
 
-    // #define DB_FHSS        
+   //  #define DB_FHSS        
     // #define DB_SENSORS
     // #define DB_BIND
     // #define DB_FAILSAFE
