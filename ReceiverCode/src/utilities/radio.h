@@ -256,7 +256,7 @@ void Reconnect(){                                                               
         delay(1);                                                                  // NEEDED!
         ReconnectChannel = * (FHSSChPointer + ReconnectIndex);                     // Get a reconnect channel - not always the same one - one of 5 now.
         ++ ReconnectIndex;
-        if (ReconnectIndex >= RECONNECT_CHANNELS_COUNT+RECONNECT_CHANNELS_START) ReconnectIndex = RECONNECT_CHANNELS_START;
+        if (ReconnectIndex >= RECONNECT_CHANNELS_COUNT + RECONNECT_CHANNELS_START) ReconnectIndex = RECONNECT_CHANNELS_START;
         CurrentRadio->setChannel(ReconnectChannel);  
         TryToConnectNow();
 #ifdef SECOND_TRANSCEIVER
@@ -267,7 +267,7 @@ void Reconnect(){                                                               
                 if (!FailSafeSent){
                     FailSafe();
                     FailSafeSent = true; // Once is enough
-                    SetUKFrequencies();
+                    SetUKFrequencies();  // In case this was changed
                 }
             }
         }
