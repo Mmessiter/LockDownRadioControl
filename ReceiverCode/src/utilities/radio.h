@@ -157,7 +157,6 @@ void HopToNextChannel()
     delay(1);
     CurrentRadio->setChannel(NextChannel);
     CurrentRadio->startListening();
-
 #ifdef DB_FHSS
     ShowHopDurationEtc();
 #endif
@@ -212,7 +211,7 @@ void ProdRadio(uint8_t Recon_Ch)
 
 void TryTheOtherTransceiver(uint8_t Recon_Ch){
             CurrentRadio->stopListening();
-            delay(1);                                                              // NEEDED!
+            delay(1);                             // NEEDED!
             if (ThisRadio == 2) {
                 CurrentRadio = &Radio1;
                 ThisRadio    = 1;
