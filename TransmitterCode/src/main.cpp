@@ -532,9 +532,6 @@ uint8_t  LowBattery =  LOWBATTERY;
 uint32_t SbusRepeats = 0;
 bool VoltsDetected = false;
 
-
-
-
 /************************************************************************************************************/
 // This function returns distance (in MILES) between two GPS coordinates (in degrees)
 // it was essentially cribbed from the internet, then tested and adjusted a little. 
