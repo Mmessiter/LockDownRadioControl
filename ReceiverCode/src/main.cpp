@@ -58,7 +58,7 @@ bool            ReInit             = false;
 uint8_t         FS_byte1           = 0; // All 16 failsafe channel flags are in these two bytes
 uint8_t         FS_byte2           = 0;
 uint32_t        ReconnectedMoment;
-uint32_t        FirstConnectMoment;
+uint32_t        FirstConnectMoment = 0;
 uint16_t        BaroAltitude;
 float           BaroTemperature;
 float           INA219Volts;
