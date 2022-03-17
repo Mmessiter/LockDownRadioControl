@@ -5215,7 +5215,8 @@ void Button_was_pressed()
         }
 
         if (InStrng(CaliNEXTION, WordsIn) > 0) {
-            SendCommand(CalibrateNow);
+          //  SendCommand(page_FrontView);  // not working yet
+          //  CurrentView = FrontView;
             ClearText();
             return;
         }
