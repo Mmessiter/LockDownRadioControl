@@ -40,6 +40,5 @@ var searchData=
   ['txtn_37',['txtN',['../class_adafruit___g_p_s.html#aad5682d8705240af58b22ca430adc8ae',1,'Adafruit_GPS']]],
   ['txttot_38',['txtTot',['../class_adafruit___g_p_s.html#a6dc609e12336547d76ae984f0df4257b',1,'Adafruit_GPS']]],
   ['txttxt_39',['txtTXT',['../class_adafruit___g_p_s.html#ad293e1b1f3d1c2c35f24d56f41983876',1,'Adafruit_GPS']]],
-  ['txwarningflag_40',['TXWarningFlag',['../_transmitter_code_2src_2main_8cpp.html#a31cbd43a34f258e0078a06b2d07a4b72',1,'main.cpp']]],
-  ['type_41',['type',['../structnmea__datavalue__t.html#a519cb117696d382f6366260f683008fd',1,'nmea_datavalue_t::type()'],['../structsensors__event__t.html#a58401dd7f3400d9eb96c71b8fba9f8e8',1,'sensors_event_t::type()'],['../structsensor__t.html#ae1d59df64438923d3bd95f2416c32203',1,'sensor_t::type()']]]
+  ['type_40',['type',['../structnmea__datavalue__t.html#a519cb117696d382f6366260f683008fd',1,'nmea_datavalue_t::type()'],['../structsensors__event__t.html#a58401dd7f3400d9eb96c71b8fba9f8e8',1,'sensors_event_t::type()'],['../structsensor__t.html#ae1d59df64438923d3bd95f2416c32203',1,'sensor_t::type()']]]
 ];

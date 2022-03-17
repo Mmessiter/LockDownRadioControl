@@ -3,10 +3,10 @@ var searchData=
   ['r_0',['r',['../structsensors__color__t.html#acdeed981e7df8c701e09d4b2fdb9a40c',1,'sensors_color_t']]],
   ['radio1_1',['Radio1',['../_radio_functions_8h.html#aae23a8374f487a46c5fcb1fb02fadc69',1,'RadioFunctions.h']]],
   ['rangetestgoodpackets_2',['RangeTestGoodPackets',['../_transmitter_code_2src_2main_8cpp.html#ae8902f278cb496929c9e323774b4374e',1,'RangeTestGoodPackets():&#160;main.cpp'],['../_radio_functions_8h.html#ae8902f278cb496929c9e323774b4374e',1,'RangeTestGoodPackets():&#160;main.cpp']]],
-  ['rangetestlostpackets_3',['RangeTestLostPackets',['../_transmitter_code_2src_2main_8cpp.html#a8e396337a72c148bea7bf1856578c140',1,'RangeTestLostPackets():&#160;main.cpp'],['../_radio_functions_8h.html#a8e396337a72c148bea7bf1856578c140',1,'RangeTestLostPackets():&#160;main.cpp']]],
+  ['rangetestlostpackets_3',['RangeTestLostPackets',['../_radio_functions_8h.html#a8e396337a72c148bea7bf1856578c140',1,'RangeTestLostPackets():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a8e396337a72c148bea7bf1856578c140',1,'RangeTestLostPackets():&#160;main.cpp']]],
   ['rangeteststart_4',['RangeTestStart',['../_transmitter_code_2src_2main_8cpp.html#aee35e643eabc1ed932fa3886c912a8a3',1,'main.cpp']]],
   ['receiveddata_5',['ReceivedData',['../radio_8h.html#ae5bff5a2375f932e5653e5d3659330d3',1,'radio.h']]],
-  ['receiverequestflag_6',['ReceiveRequestFlag',['../_sensor_hub_l_c_2src_2main_8cpp.html#a5ac604cfd226554c62738bdbabf09f5f',1,'ReceiveRequestFlag():&#160;main.cpp'],['../_sensor_hub_t32_2src_2main_8cpp.html#a5ac604cfd226554c62738bdbabf09f5f',1,'ReceiveRequestFlag():&#160;main.cpp'],['../_sensor_hub_teensy3__6_2src_2main_8cpp.html#a5ac604cfd226554c62738bdbabf09f5f',1,'ReceiveRequestFlag():&#160;main.cpp']]],
+  ['receiverequestflag_6',['ReceiveRequestFlag',['../_sensor_hub_t32_2src_2main_8cpp.html#a5ac604cfd226554c62738bdbabf09f5f',1,'main.cpp']]],
   ['receiverversionnumber_7',['ReceiverVersionNumber',['../_transmitter_code_2src_2main_8cpp.html#a54977872c85f09f2b15f657c83df9300',1,'main.cpp']]],
   ['recentpacketslost_8',['RecentPacketsLost',['../_transmitter_code_2src_2main_8cpp.html#abf6b6613bda2b08b3e07a231a23f38c2',1,'RecentPacketsLost():&#160;main.cpp'],['../_radio_functions_8h.html#abf6b6613bda2b08b3e07a231a23f38c2',1,'RecentPacketsLost():&#160;main.cpp']]],
   ['reconnect_5fchannels_9',['Reconnect_Channels',['../_radio_functions_8h.html#ac4f6842e2fef7a8eb0da5b798192754d',1,'RadioFunctions.h']]],
@@ -18,7 +18,7 @@ var searchData=
   ['recoverytimer_15',['RecoveryTimer',['../_transmitter_code_2src_2main_8cpp.html#ac6156efad98d22f44766714a565ccf2f',1,'RecoveryTimer():&#160;main.cpp'],['../_radio_functions_8h.html#ac6156efad98d22f44766714a565ccf2f',1,'RecoveryTimer():&#160;main.cpp']]],
   ['reinit_16',['ReInit',['../_receiver_code_2src_2main_8cpp.html#aace5dda203af973b33a46413f02d9f9a',1,'main.cpp']]],
   ['relative_5fhumidity_17',['relative_humidity',['../structsensors__event__t.html#a577b73698368fb061382ce9f31052417',1,'sensors_event_t']]],
-  ['reserved_18',['reserved',['../structsensors__vec__t.html#a8991b7e181ed3cbf3ad0e54da3d8e6c9',1,'sensors_vec_t']]],
+  ['reserved_18',['reserved',['../structsensors__vec__t.html#acb78c50bdd894d4dd4015f144c4a4488',1,'sensors_vec_t']]],
   ['reserved0_19',['reserved0',['../structsensors__event__t.html#a8be4dc00344f46abf29e06251bf9fad9',1,'sensors_event_t']]],
   ['resolution_20',['resolution',['../structsensor__t.html#a926aba3216afd50e62c0a6cdbcc7433a',1,'sensor_t']]],
   ['response_21',['response',['../structnmea__datavalue__t.html#a0fc893fd25c28ff4ee9f5142f4c309c0',1,'nmea_datavalue_t']]],
@@ -28,6 +28,5 @@ var searchData=
   ['rxmaxmodelaltitude_25',['RXMAXModelAltitude',['../_transmitter_code_2src_2main_8cpp.html#aac60f398ee9f5f9f89459014e003f68d',1,'main.cpp']]],
   ['rxmodelaltitude_26',['RXModelAltitude',['../_transmitter_code_2src_2main_8cpp.html#a60096f1f0ec75fa673207d2d11cfd123',1,'main.cpp']]],
   ['rxmodeltemperature_27',['RXModelTemperature',['../_transmitter_code_2src_2main_8cpp.html#ac8d7ac69a7e7a6b90792e640742b2097',1,'main.cpp']]],
-  ['rxmodelvolts_28',['RXModelVolts',['../_transmitter_code_2src_2main_8cpp.html#a5f56f32c16498a3547635bda86c49428',1,'main.cpp']]],
-  ['rxwarningflag_29',['RXWarningFlag',['../_transmitter_code_2src_2main_8cpp.html#a2b1c0a2b8f5dff27cb4baae5b07956a0',1,'main.cpp']]]
+  ['rxmodelvolts_28',['RXModelVolts',['../_transmitter_code_2src_2main_8cpp.html#a5f56f32c16498a3547635bda86c49428',1,'main.cpp']]]
 ];

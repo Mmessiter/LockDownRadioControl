@@ -23,7 +23,6 @@
 /* @license-end */
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
-<link href="darker_doxygen.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="side-nav" class="ui-resizable side-nav-resizable"><!-- do not remove this div, it is closed by doxygen! -->
@@ -103,11 +102,11 @@ $(document).ready(function(){initNavTree('class_adafruit___i2_c_device.html','')
 <p>&lt; The class which defines how we will talk to this device over I2C  
  <a href="class_adafruit___i2_c_device.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___bus_i_o_2_adafruit___i2_c_device_8h_source.html">Adafruit_I2CDevice.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="_adafruit___i2_c_device_8h_source.html">Adafruit_I2CDevice.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:afea8ccedd8c77bff545c97520d8ec31c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___i2_c_device.html#afea8ccedd8c77bff545c97520d8ec31c">Adafruit_I2CDevice</a> (uint8_t addr, TwoWire *theWire=&amp;<a class="el" href="_sensor_hub_teensy3__6_2lib_2_adafruit___b_m_p280___library_2_adafruit___b_m_p280_8h.html#a35bd3de386d23ba02c35f820303db472">Wire</a>)</td></tr>
+<tr class="memitem:afea8ccedd8c77bff545c97520d8ec31c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___i2_c_device.html#afea8ccedd8c77bff545c97520d8ec31c">Adafruit_I2CDevice</a> (uint8_t addr, TwoWire *theWire=&amp;<a class="el" href="_adafruit___b_m_p280_8h.html#a35bd3de386d23ba02c35f820303db472">Wire</a>)</td></tr>
 <tr class="memdesc:afea8ccedd8c77bff545c97520d8ec31c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create an I2C device at a given address.  <a href="class_adafruit___i2_c_device.html#afea8ccedd8c77bff545c97520d8ec31c">More...</a><br /></td></tr>
 <tr class="separator:afea8ccedd8c77bff545c97520d8ec31c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae02c4691dbe893c3a5a3de478d776062"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___i2_c_device.html#ae02c4691dbe893c3a5a3de478d776062">address</a> (void)</td></tr>
@@ -134,52 +133,14 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a20c6ac28cbaa9e5f63ef6d4687fd4e60"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___i2_c_device.html#a20c6ac28cbaa9e5f63ef6d4687fd4e60">maxBufferSize</a> ()</td></tr>
 <tr class="memdesc:a20c6ac28cbaa9e5f63ef6d4687fd4e60"><td class="mdescLeft">&#160;</td><td class="mdescRight">How many bytes we can read in a transaction.  <a href="class_adafruit___i2_c_device.html#a20c6ac28cbaa9e5f63ef6d4687fd4e60">More...</a><br /></td></tr>
 <tr class="separator:a20c6ac28cbaa9e5f63ef6d4687fd4e60"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afea8ccedd8c77bff545c97520d8ec31c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___i2_c_device.html#afea8ccedd8c77bff545c97520d8ec31c">Adafruit_I2CDevice</a> (uint8_t addr, TwoWire *theWire=&amp;<a class="el" href="_sensor_hub_teensy3__6_2lib_2_adafruit___b_m_p280___library_2_adafruit___b_m_p280_8h.html#a35bd3de386d23ba02c35f820303db472">Wire</a>)</td></tr>
-<tr class="separator:afea8ccedd8c77bff545c97520d8ec31c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae02c4691dbe893c3a5a3de478d776062"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___i2_c_device.html#ae02c4691dbe893c3a5a3de478d776062">address</a> (void)</td></tr>
-<tr class="separator:ae02c4691dbe893c3a5a3de478d776062"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ada579d107621ac5f5e56f91f94a93be3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___i2_c_device.html#ada579d107621ac5f5e56f91f94a93be3">begin</a> (bool addr_detect=true)</td></tr>
-<tr class="separator:ada579d107621ac5f5e56f91f94a93be3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7492b543fe4c0bb0d94a7bf1915cb2a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___i2_c_device.html#ac7492b543fe4c0bb0d94a7bf1915cb2a">detected</a> (void)</td></tr>
-<tr class="separator:ac7492b543fe4c0bb0d94a7bf1915cb2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afeeccb3147b2f0340c65d2c0c1ce3ea6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___i2_c_device.html#afeeccb3147b2f0340c65d2c0c1ce3ea6">read</a> (uint8_t *buffer, size_t len, bool stop=true)</td></tr>
-<tr class="separator:afeeccb3147b2f0340c65d2c0c1ce3ea6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a382834acac211d47b471de3180327c06"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___i2_c_device.html#a382834acac211d47b471de3180327c06">write</a> (uint8_t *buffer, size_t len, bool stop=true, uint8_t *prefix_buffer=NULL, size_t prefix_len=0)</td></tr>
-<tr class="separator:a382834acac211d47b471de3180327c06"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7161ce0c7136103d0704fb3ce858c6f7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___i2_c_device.html#a7161ce0c7136103d0704fb3ce858c6f7">write_then_read</a> (uint8_t *write_buffer, size_t write_len, uint8_t *read_buffer, size_t read_len, bool stop=false)</td></tr>
-<tr class="separator:a7161ce0c7136103d0704fb3ce858c6f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a784c398626837ef911ce7e69b0807be7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___i2_c_device.html#a784c398626837ef911ce7e69b0807be7">setSpeed</a> (uint32_t desiredclk)</td></tr>
-<tr class="separator:a784c398626837ef911ce7e69b0807be7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a20c6ac28cbaa9e5f63ef6d4687fd4e60"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___i2_c_device.html#a20c6ac28cbaa9e5f63ef6d4687fd4e60">maxBufferSize</a> ()</td></tr>
-<tr class="memdesc:a20c6ac28cbaa9e5f63ef6d4687fd4e60"><td class="mdescLeft">&#160;</td><td class="mdescRight">How many bytes we can read in a transaction.  <a href="class_adafruit___i2_c_device.html#a20c6ac28cbaa9e5f63ef6d4687fd4e60">More...</a><br /></td></tr>
-<tr class="separator:a20c6ac28cbaa9e5f63ef6d4687fd4e60"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afea8ccedd8c77bff545c97520d8ec31c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___i2_c_device.html#afea8ccedd8c77bff545c97520d8ec31c">Adafruit_I2CDevice</a> (uint8_t addr, TwoWire *theWire=&amp;<a class="el" href="_sensor_hub_teensy3__6_2lib_2_adafruit___b_m_p280___library_2_adafruit___b_m_p280_8h.html#a35bd3de386d23ba02c35f820303db472">Wire</a>)</td></tr>
-<tr class="separator:afea8ccedd8c77bff545c97520d8ec31c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae02c4691dbe893c3a5a3de478d776062"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___i2_c_device.html#ae02c4691dbe893c3a5a3de478d776062">address</a> (void)</td></tr>
-<tr class="separator:ae02c4691dbe893c3a5a3de478d776062"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ada579d107621ac5f5e56f91f94a93be3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___i2_c_device.html#ada579d107621ac5f5e56f91f94a93be3">begin</a> (bool addr_detect=true)</td></tr>
-<tr class="separator:ada579d107621ac5f5e56f91f94a93be3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7492b543fe4c0bb0d94a7bf1915cb2a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___i2_c_device.html#ac7492b543fe4c0bb0d94a7bf1915cb2a">detected</a> (void)</td></tr>
-<tr class="separator:ac7492b543fe4c0bb0d94a7bf1915cb2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afeeccb3147b2f0340c65d2c0c1ce3ea6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___i2_c_device.html#afeeccb3147b2f0340c65d2c0c1ce3ea6">read</a> (uint8_t *buffer, size_t len, bool stop=true)</td></tr>
-<tr class="separator:afeeccb3147b2f0340c65d2c0c1ce3ea6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a382834acac211d47b471de3180327c06"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___i2_c_device.html#a382834acac211d47b471de3180327c06">write</a> (uint8_t *buffer, size_t len, bool stop=true, uint8_t *prefix_buffer=NULL, size_t prefix_len=0)</td></tr>
-<tr class="separator:a382834acac211d47b471de3180327c06"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7161ce0c7136103d0704fb3ce858c6f7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___i2_c_device.html#a7161ce0c7136103d0704fb3ce858c6f7">write_then_read</a> (uint8_t *write_buffer, size_t write_len, uint8_t *read_buffer, size_t read_len, bool stop=false)</td></tr>
-<tr class="separator:a7161ce0c7136103d0704fb3ce858c6f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a784c398626837ef911ce7e69b0807be7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___i2_c_device.html#a784c398626837ef911ce7e69b0807be7">setSpeed</a> (uint32_t desiredclk)</td></tr>
-<tr class="separator:a784c398626837ef911ce7e69b0807be7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a20c6ac28cbaa9e5f63ef6d4687fd4e60"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___i2_c_device.html#a20c6ac28cbaa9e5f63ef6d4687fd4e60">maxBufferSize</a> ()</td></tr>
-<tr class="memdesc:a20c6ac28cbaa9e5f63ef6d4687fd4e60"><td class="mdescLeft">&#160;</td><td class="mdescRight">How many bytes we can read in a transaction.  <a href="class_adafruit___i2_c_device.html#a20c6ac28cbaa9e5f63ef6d4687fd4e60">More...</a><br /></td></tr>
-<tr class="separator:a20c6ac28cbaa9e5f63ef6d4687fd4e60"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >&lt; The class which defines how we will talk to this device over I2C </p>
 
-<p class="definition">Definition at line <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___bus_i_o_2_adafruit___i2_c_device_8h_source.html#l00007">7</a> of file <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___bus_i_o_2_adafruit___i2_c_device_8h_source.html">Adafruit_I2CDevice.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_adafruit___i2_c_device_8h_source.html#l00007">7</a> of file <a class="el" href="_adafruit___i2_c_device_8h_source.html">Adafruit_I2CDevice.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="afea8ccedd8c77bff545c97520d8ec31c" name="afea8ccedd8c77bff545c97520d8ec31c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afea8ccedd8c77bff545c97520d8ec31c">&#9670;&nbsp;</a></span>Adafruit_I2CDevice() <span class="overload">[1/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#afea8ccedd8c77bff545c97520d8ec31c">&#9670;&nbsp;</a></span>Adafruit_I2CDevice()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -194,7 +155,7 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">TwoWire *&#160;</td>
-          <td class="paramname"><em>theWire</em> = <code>&amp;<a class="el" href="_sensor_hub_teensy3__6_2lib_2_adafruit___b_m_p280___library_2_adafruit___b_m_p280_8h.html#a35bd3de386d23ba02c35f820303db472">Wire</a></code>&#160;</td>
+          <td class="paramname"><em>theWire</em> = <code>&amp;<a class="el" href="_adafruit___b_m_p280_8h.html#a35bd3de386d23ba02c35f820303db472">Wire</a></code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -213,69 +174,13 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___bus_i_o_2_adafruit___i2_c_device_8cpp_source.html#l00011">11</a> of file <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___bus_i_o_2_adafruit___i2_c_device_8cpp_source.html">Adafruit_I2CDevice.cpp</a>.</p>
-
-</div>
-</div>
-<a id="afea8ccedd8c77bff545c97520d8ec31c" name="afea8ccedd8c77bff545c97520d8ec31c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afea8ccedd8c77bff545c97520d8ec31c">&#9670;&nbsp;</a></span>Adafruit_I2CDevice() <span class="overload">[2/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">Adafruit_I2CDevice::Adafruit_I2CDevice </td>
-          <td>(</td>
-          <td class="paramtype">uint8_t&#160;</td>
-          <td class="paramname"><em>addr</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">TwoWire *&#160;</td>
-          <td class="paramname"><em>theWire</em> = <code>&amp;<a class="el" href="_sensor_hub_teensy3__6_2lib_2_adafruit___b_m_p280___library_2_adafruit___b_m_p280_8h.html#a35bd3de386d23ba02c35f820303db472">Wire</a></code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="afea8ccedd8c77bff545c97520d8ec31c" name="afea8ccedd8c77bff545c97520d8ec31c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afea8ccedd8c77bff545c97520d8ec31c">&#9670;&nbsp;</a></span>Adafruit_I2CDevice() <span class="overload">[3/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">Adafruit_I2CDevice::Adafruit_I2CDevice </td>
-          <td>(</td>
-          <td class="paramtype">uint8_t&#160;</td>
-          <td class="paramname"><em>addr</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">TwoWire *&#160;</td>
-          <td class="paramname"><em>theWire</em> = <code>&amp;<a class="el" href="_sensor_hub_teensy3__6_2lib_2_adafruit___b_m_p280___library_2_adafruit___b_m_p280_8h.html#a35bd3de386d23ba02c35f820303db472">Wire</a></code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
+<p class="definition">Definition at line <a class="el" href="_adafruit___i2_c_device_8cpp_source.html#l00011">11</a> of file <a class="el" href="_adafruit___i2_c_device_8cpp_source.html">Adafruit_I2CDevice.cpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="ae02c4691dbe893c3a5a3de478d776062" name="ae02c4691dbe893c3a5a3de478d776062"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae02c4691dbe893c3a5a3de478d776062">&#9670;&nbsp;</a></span>address() <span class="overload">[1/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ae02c4691dbe893c3a5a3de478d776062">&#9670;&nbsp;</a></span>address()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -293,48 +198,12 @@ Public Member Functions</h2></td></tr>
 <p>Returns the 7-bit address of this device. </p>
 <dl class="section return"><dt>Returns</dt><dd>The 7-bit address of this device </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___bus_i_o_2_adafruit___i2_c_device_8cpp_source.html#l00217">217</a> of file <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___bus_i_o_2_adafruit___i2_c_device_8cpp_source.html">Adafruit_I2CDevice.cpp</a>.</p>
-
-</div>
-</div>
-<a id="ae02c4691dbe893c3a5a3de478d776062" name="ae02c4691dbe893c3a5a3de478d776062"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae02c4691dbe893c3a5a3de478d776062">&#9670;&nbsp;</a></span>address() <span class="overload">[2/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">uint8_t Adafruit_I2CDevice::address </td>
-          <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ae02c4691dbe893c3a5a3de478d776062" name="ae02c4691dbe893c3a5a3de478d776062"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae02c4691dbe893c3a5a3de478d776062">&#9670;&nbsp;</a></span>address() <span class="overload">[3/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">uint8_t Adafruit_I2CDevice::address </td>
-          <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
+<p class="definition">Definition at line <a class="el" href="_adafruit___i2_c_device_8cpp_source.html#l00217">217</a> of file <a class="el" href="_adafruit___i2_c_device_8cpp_source.html">Adafruit_I2CDevice.cpp</a>.</p>
 
 </div>
 </div>
 <a id="ada579d107621ac5f5e56f91f94a93be3" name="ada579d107621ac5f5e56f91f94a93be3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ada579d107621ac5f5e56f91f94a93be3">&#9670;&nbsp;</a></span>begin() <span class="overload">[1/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ada579d107621ac5f5e56f91f94a93be3">&#9670;&nbsp;</a></span>begin()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -358,7 +227,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if I2C initialized and a device with the addr found </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___bus_i_o_2_adafruit___i2_c_device_8cpp_source.html#l00029">29</a> of file <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___bus_i_o_2_adafruit___i2_c_device_8cpp_source.html">Adafruit_I2CDevice.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_adafruit___i2_c_device_8cpp_source.html#l00029">29</a> of file <a class="el" href="_adafruit___i2_c_device_8cpp_source.html">Adafruit_I2CDevice.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -374,44 +243,8 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="ada579d107621ac5f5e56f91f94a93be3" name="ada579d107621ac5f5e56f91f94a93be3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ada579d107621ac5f5e56f91f94a93be3">&#9670;&nbsp;</a></span>begin() <span class="overload">[2/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Adafruit_I2CDevice::begin </td>
-          <td>(</td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>addr_detect</em> = <code>true</code></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ada579d107621ac5f5e56f91f94a93be3" name="ada579d107621ac5f5e56f91f94a93be3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ada579d107621ac5f5e56f91f94a93be3">&#9670;&nbsp;</a></span>begin() <span class="overload">[3/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Adafruit_I2CDevice::begin </td>
-          <td>(</td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>addr_detect</em> = <code>true</code></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="ac7492b543fe4c0bb0d94a7bf1915cb2a" name="ac7492b543fe4c0bb0d94a7bf1915cb2a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac7492b543fe4c0bb0d94a7bf1915cb2a">&#9670;&nbsp;</a></span>detected() <span class="overload">[1/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7492b543fe4c0bb0d94a7bf1915cb2a">&#9670;&nbsp;</a></span>detected()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -429,7 +262,7 @@ Here is the caller graph for this function:</div>
 <p>Scans I2C for the address - note will give a false-positive if there's no pullups on I2C. </p>
 <dl class="section return"><dt>Returns</dt><dd>True if I2C initialized and a device with the addr found </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___bus_i_o_2_adafruit___i2_c_device_8cpp_source.html#l00044">44</a> of file <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___bus_i_o_2_adafruit___i2_c_device_8cpp_source.html">Adafruit_I2CDevice.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_adafruit___i2_c_device_8cpp_source.html#l00044">44</a> of file <a class="el" href="_adafruit___i2_c_device_8cpp_source.html">Adafruit_I2CDevice.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -445,44 +278,8 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="ac7492b543fe4c0bb0d94a7bf1915cb2a" name="ac7492b543fe4c0bb0d94a7bf1915cb2a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac7492b543fe4c0bb0d94a7bf1915cb2a">&#9670;&nbsp;</a></span>detected() <span class="overload">[2/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Adafruit_I2CDevice::detected </td>
-          <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ac7492b543fe4c0bb0d94a7bf1915cb2a" name="ac7492b543fe4c0bb0d94a7bf1915cb2a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac7492b543fe4c0bb0d94a7bf1915cb2a">&#9670;&nbsp;</a></span>detected() <span class="overload">[3/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Adafruit_I2CDevice::detected </td>
-          <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a20c6ac28cbaa9e5f63ef6d4687fd4e60" name="a20c6ac28cbaa9e5f63ef6d4687fd4e60"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a20c6ac28cbaa9e5f63ef6d4687fd4e60">&#9670;&nbsp;</a></span>maxBufferSize() <span class="overload">[1/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a20c6ac28cbaa9e5f63ef6d4687fd4e60">&#9670;&nbsp;</a></span>maxBufferSize()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -507,7 +304,7 @@ Here is the caller graph for this function:</div>
 <p>How many bytes we can read in a transaction. </p>
 <dl class="section return"><dt>Returns</dt><dd>The size of the Wire receive/transmit buffer </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___bus_i_o_2_adafruit___i2_c_device_8h_source.html#l00024">24</a> of file <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___bus_i_o_2_adafruit___i2_c_device_8h_source.html">Adafruit_I2CDevice.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_adafruit___i2_c_device_8h_source.html#l00024">24</a> of file <a class="el" href="_adafruit___i2_c_device_8h_source.html">Adafruit_I2CDevice.h</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -517,68 +314,8 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="a20c6ac28cbaa9e5f63ef6d4687fd4e60" name="a20c6ac28cbaa9e5f63ef6d4687fd4e60"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a20c6ac28cbaa9e5f63ef6d4687fd4e60">&#9670;&nbsp;</a></span>maxBufferSize() <span class="overload">[2/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">size_t Adafruit_I2CDevice::maxBufferSize </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>How many bytes we can read in a transaction. </p>
-<dl class="section return"><dt>Returns</dt><dd>The size of the Wire receive/transmit buffer </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="_sensor_hub_t32_2lib_2_adafruit___bus_i_o_2_adafruit___i2_c_device_8h_source.html#l00024">24</a> of file <a class="el" href="_sensor_hub_t32_2lib_2_adafruit___bus_i_o_2_adafruit___i2_c_device_8h_source.html">Adafruit_I2CDevice.h</a>.</p>
-
-</div>
-</div>
-<a id="a20c6ac28cbaa9e5f63ef6d4687fd4e60" name="a20c6ac28cbaa9e5f63ef6d4687fd4e60"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a20c6ac28cbaa9e5f63ef6d4687fd4e60">&#9670;&nbsp;</a></span>maxBufferSize() <span class="overload">[3/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">size_t Adafruit_I2CDevice::maxBufferSize </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>How many bytes we can read in a transaction. </p>
-<dl class="section return"><dt>Returns</dt><dd>The size of the Wire receive/transmit buffer </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="_sensor_hub_teensy3__6_2lib_2_adafruit___bus_i_o_2_adafruit___i2_c_device_8h_source.html#l00024">24</a> of file <a class="el" href="_sensor_hub_teensy3__6_2lib_2_adafruit___bus_i_o_2_adafruit___i2_c_device_8h_source.html">Adafruit_I2CDevice.h</a>.</p>
-
-</div>
-</div>
 <a id="afeeccb3147b2f0340c65d2c0c1ce3ea6" name="afeeccb3147b2f0340c65d2c0c1ce3ea6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afeeccb3147b2f0340c65d2c0c1ce3ea6">&#9670;&nbsp;</a></span>read() <span class="overload">[1/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#afeeccb3147b2f0340c65d2c0c1ce3ea6">&#9670;&nbsp;</a></span>read()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -620,7 +357,7 @@ Here is the caller graph for this function:</div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if read was successful, otherwise false. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___bus_i_o_2_adafruit___i2_c_device_8cpp_source.html#l00149">149</a> of file <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___bus_i_o_2_adafruit___i2_c_device_8cpp_source.html">Adafruit_I2CDevice.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_adafruit___i2_c_device_8cpp_source.html#l00149">149</a> of file <a class="el" href="_adafruit___i2_c_device_8cpp_source.html">Adafruit_I2CDevice.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -636,76 +373,8 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="afeeccb3147b2f0340c65d2c0c1ce3ea6" name="afeeccb3147b2f0340c65d2c0c1ce3ea6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afeeccb3147b2f0340c65d2c0c1ce3ea6">&#9670;&nbsp;</a></span>read() <span class="overload">[2/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Adafruit_I2CDevice::read </td>
-          <td>(</td>
-          <td class="paramtype">uint8_t *&#160;</td>
-          <td class="paramname"><em>buffer</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>len</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>stop</em> = <code>true</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="afeeccb3147b2f0340c65d2c0c1ce3ea6" name="afeeccb3147b2f0340c65d2c0c1ce3ea6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afeeccb3147b2f0340c65d2c0c1ce3ea6">&#9670;&nbsp;</a></span>read() <span class="overload">[3/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Adafruit_I2CDevice::read </td>
-          <td>(</td>
-          <td class="paramtype">uint8_t *&#160;</td>
-          <td class="paramname"><em>buffer</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>len</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>stop</em> = <code>true</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a784c398626837ef911ce7e69b0807be7" name="a784c398626837ef911ce7e69b0807be7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a784c398626837ef911ce7e69b0807be7">&#9670;&nbsp;</a></span>setSpeed() <span class="overload">[1/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a784c398626837ef911ce7e69b0807be7">&#9670;&nbsp;</a></span>setSpeed()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -729,48 +398,12 @@ Here is the caller graph for this function:</div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if this platform supports changing I2C speed. Not necessarily that the speed was achieved! </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___bus_i_o_2_adafruit___i2_c_device_8cpp_source.html#l00226">226</a> of file <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___bus_i_o_2_adafruit___i2_c_device_8cpp_source.html">Adafruit_I2CDevice.cpp</a>.</p>
-
-</div>
-</div>
-<a id="a784c398626837ef911ce7e69b0807be7" name="a784c398626837ef911ce7e69b0807be7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a784c398626837ef911ce7e69b0807be7">&#9670;&nbsp;</a></span>setSpeed() <span class="overload">[2/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Adafruit_I2CDevice::setSpeed </td>
-          <td>(</td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>desiredclk</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a784c398626837ef911ce7e69b0807be7" name="a784c398626837ef911ce7e69b0807be7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a784c398626837ef911ce7e69b0807be7">&#9670;&nbsp;</a></span>setSpeed() <span class="overload">[3/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Adafruit_I2CDevice::setSpeed </td>
-          <td>(</td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>desiredclk</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
+<p class="definition">Definition at line <a class="el" href="_adafruit___i2_c_device_8cpp_source.html#l00226">226</a> of file <a class="el" href="_adafruit___i2_c_device_8cpp_source.html">Adafruit_I2CDevice.cpp</a>.</p>
 
 </div>
 </div>
 <a id="a382834acac211d47b471de3180327c06" name="a382834acac211d47b471de3180327c06"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a382834acac211d47b471de3180327c06">&#9670;&nbsp;</a></span>write() <span class="overload">[1/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a382834acac211d47b471de3180327c06">&#9670;&nbsp;</a></span>write()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -826,7 +459,7 @@ Here is the caller graph for this function:</div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if write was successful, otherwise false. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___bus_i_o_2_adafruit___i2_c_device_8cpp_source.html#l00069">69</a> of file <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___bus_i_o_2_adafruit___i2_c_device_8cpp_source.html">Adafruit_I2CDevice.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_adafruit___i2_c_device_8cpp_source.html#l00069">69</a> of file <a class="el" href="_adafruit___i2_c_device_8cpp_source.html">Adafruit_I2CDevice.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -842,100 +475,8 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="a382834acac211d47b471de3180327c06" name="a382834acac211d47b471de3180327c06"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a382834acac211d47b471de3180327c06">&#9670;&nbsp;</a></span>write() <span class="overload">[2/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Adafruit_I2CDevice::write </td>
-          <td>(</td>
-          <td class="paramtype">uint8_t *&#160;</td>
-          <td class="paramname"><em>buffer</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>len</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>stop</em> = <code>true</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8_t *&#160;</td>
-          <td class="paramname"><em>prefix_buffer</em> = <code>NULL</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>prefix_len</em> = <code>0</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a382834acac211d47b471de3180327c06" name="a382834acac211d47b471de3180327c06"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a382834acac211d47b471de3180327c06">&#9670;&nbsp;</a></span>write() <span class="overload">[3/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Adafruit_I2CDevice::write </td>
-          <td>(</td>
-          <td class="paramtype">uint8_t *&#160;</td>
-          <td class="paramname"><em>buffer</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>len</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>stop</em> = <code>true</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8_t *&#160;</td>
-          <td class="paramname"><em>prefix_buffer</em> = <code>NULL</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>prefix_len</em> = <code>0</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a7161ce0c7136103d0704fb3ce858c6f7" name="a7161ce0c7136103d0704fb3ce858c6f7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7161ce0c7136103d0704fb3ce858c6f7">&#9670;&nbsp;</a></span>write_then_read() <span class="overload">[1/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a7161ce0c7136103d0704fb3ce858c6f7">&#9670;&nbsp;</a></span>write_then_read()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -991,7 +532,7 @@ Here is the caller graph for this function:</div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if write &amp; read was successful, otherwise false. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___bus_i_o_2_adafruit___i2_c_device_8cpp_source.html#l00203">203</a> of file <a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___bus_i_o_2_adafruit___i2_c_device_8cpp_source.html">Adafruit_I2CDevice.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_adafruit___i2_c_device_8cpp_source.html#l00203">203</a> of file <a class="el" href="_adafruit___i2_c_device_8cpp_source.html">Adafruit_I2CDevice.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -1007,105 +548,9 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="a7161ce0c7136103d0704fb3ce858c6f7" name="a7161ce0c7136103d0704fb3ce858c6f7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7161ce0c7136103d0704fb3ce858c6f7">&#9670;&nbsp;</a></span>write_then_read() <span class="overload">[2/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Adafruit_I2CDevice::write_then_read </td>
-          <td>(</td>
-          <td class="paramtype">uint8_t *&#160;</td>
-          <td class="paramname"><em>write_buffer</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>write_len</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8_t *&#160;</td>
-          <td class="paramname"><em>read_buffer</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>read_len</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>stop</em> = <code>false</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a7161ce0c7136103d0704fb3ce858c6f7" name="a7161ce0c7136103d0704fb3ce858c6f7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7161ce0c7136103d0704fb3ce858c6f7">&#9670;&nbsp;</a></span>write_then_read() <span class="overload">[3/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Adafruit_I2CDevice::write_then_read </td>
-          <td>(</td>
-          <td class="paramtype">uint8_t *&#160;</td>
-          <td class="paramname"><em>write_buffer</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>write_len</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8_t *&#160;</td>
-          <td class="paramname"><em>read_buffer</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>read_len</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>stop</em> = <code>false</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>SensorHubLC/lib/Adafruit_BusIO/<a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___bus_i_o_2_adafruit___i2_c_device_8h_source.html">Adafruit_I2CDevice.h</a></li>
-<li>SensorHubT32/lib/Adafruit_BusIO/<a class="el" href="_sensor_hub_t32_2lib_2_adafruit___bus_i_o_2_adafruit___i2_c_device_8h_source.html">Adafruit_I2CDevice.h</a></li>
-<li>SensorHubTeensy3_6/lib/Adafruit_BusIO/<a class="el" href="_sensor_hub_teensy3__6_2lib_2_adafruit___bus_i_o_2_adafruit___i2_c_device_8h_source.html">Adafruit_I2CDevice.h</a></li>
-<li>SensorHubLC/lib/Adafruit_BusIO/<a class="el" href="_sensor_hub_l_c_2lib_2_adafruit___bus_i_o_2_adafruit___i2_c_device_8cpp_source.html">Adafruit_I2CDevice.cpp</a></li>
-<li>SensorHubT32/lib/Adafruit_BusIO/<a class="el" href="_sensor_hub_t32_2lib_2_adafruit___bus_i_o_2_adafruit___i2_c_device_8cpp_source.html">Adafruit_I2CDevice.cpp</a></li>
-<li>SensorHubTeensy3_6/lib/Adafruit_BusIO/<a class="el" href="_sensor_hub_teensy3__6_2lib_2_adafruit___bus_i_o_2_adafruit___i2_c_device_8cpp_source.html">Adafruit_I2CDevice.cpp</a></li>
+<li>SensorHubT32/lib/Adafruit_BusIO/<a class="el" href="_adafruit___i2_c_device_8h_source.html">Adafruit_I2CDevice.h</a></li>
+<li>SensorHubT32/lib/Adafruit_BusIO/<a class="el" href="_adafruit___i2_c_device_8cpp_source.html">Adafruit_I2CDevice.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

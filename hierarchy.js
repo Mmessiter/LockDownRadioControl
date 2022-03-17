@@ -7,10 +7,6 @@ var hierarchy =
     [ "Adafruit_INA219", "class_adafruit___i_n_a219.html", null ],
     [ "Adafruit_Sensor", "class_adafruit___sensor.html", [
       [ "Adafruit_BMP280_Pressure", "class_adafruit___b_m_p280___pressure.html", null ],
-      [ "Adafruit_BMP280_Pressure", "class_adafruit___b_m_p280___pressure.html", null ],
-      [ "Adafruit_BMP280_Pressure", "class_adafruit___b_m_p280___pressure.html", null ],
-      [ "Adafruit_BMP280_Temp", "class_adafruit___b_m_p280___temp.html", null ],
-      [ "Adafruit_BMP280_Temp", "class_adafruit___b_m_p280___temp.html", null ],
       [ "Adafruit_BMP280_Temp", "class_adafruit___b_m_p280___temp.html", null ]
     ] ],
     [ "Adafruit_SPIDevice", "class_adafruit___s_p_i_device.html", null ],
@@ -30,16 +26,8 @@ var hierarchy =
     [ "TinyGPSDate", "struct_tiny_g_p_s_date.html", null ],
     [ "TinyGPSDecimal", "struct_tiny_g_p_s_decimal.html", [
       [ "TinyGPSAltitude", "struct_tiny_g_p_s_altitude.html", null ],
-      [ "TinyGPSAltitude", "struct_tiny_g_p_s_altitude.html", null ],
-      [ "TinyGPSAltitude", "struct_tiny_g_p_s_altitude.html", null ],
-      [ "TinyGPSCourse", "struct_tiny_g_p_s_course.html", null ],
-      [ "TinyGPSCourse", "struct_tiny_g_p_s_course.html", null ],
       [ "TinyGPSCourse", "struct_tiny_g_p_s_course.html", null ],
       [ "TinyGPSHDOP", "struct_tiny_g_p_s_h_d_o_p.html", null ],
-      [ "TinyGPSHDOP", "struct_tiny_g_p_s_h_d_o_p.html", null ],
-      [ "TinyGPSHDOP", "struct_tiny_g_p_s_h_d_o_p.html", null ],
-      [ "TinyGPSSpeed", "struct_tiny_g_p_s_speed.html", null ],
-      [ "TinyGPSSpeed", "struct_tiny_g_p_s_speed.html", null ],
       [ "TinyGPSSpeed", "struct_tiny_g_p_s_speed.html", null ]
     ] ],
     [ "TinyGPSInteger", "struct_tiny_g_p_s_integer.html", null ],

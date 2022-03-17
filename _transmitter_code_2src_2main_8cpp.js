@@ -424,11 +424,11 @@ var _transmitter_code_2src_2main_8cpp =
     [ "RXModelAltitude", "_transmitter_code_2src_2main_8cpp.html#a60096f1f0ec75fa673207d2d11cfd123", null ],
     [ "RXModelTemperature", "_transmitter_code_2src_2main_8cpp.html#ac8d7ac69a7e7a6b90792e640742b2097", null ],
     [ "RXModelVolts", "_transmitter_code_2src_2main_8cpp.html#a5f56f32c16498a3547635bda86c49428", null ],
-    [ "RXWarningFlag", "_transmitter_code_2src_2main_8cpp.html#a2b1c0a2b8f5dff27cb4baae5b07956a0", null ],
     [ "SavedCurrentView", "_transmitter_code_2src_2main_8cpp.html#a9f535eadbf4eb2d6975105c406c1206f", null ],
     [ "SaveFailSafeNow", "_transmitter_code_2src_2main_8cpp.html#acd6754de95b605bb65a52a86e96121f7", null ],
     [ "SaveFlightMode", "_transmitter_code_2src_2main_8cpp.html#a6e7a073d216762b73caa5e1c1a384f1a", null ],
     [ "SbusChannels", "_transmitter_code_2src_2main_8cpp.html#a87e7fa21a42bf74b127c8be8860d93a6", null ],
+    [ "SbusRepeats", "_transmitter_code_2src_2main_8cpp.html#ac54ff969ff9525ab2a5d83ca6387618c", null ],
     [ "SBUSTimer", "_transmitter_code_2src_2main_8cpp.html#a2e121251691466f81a2f540f00e7141e", null ],
     [ "ScanEnd", "_transmitter_code_2src_2main_8cpp.html#a6fde7bc3d03bda84c33abdbe1ed7b5bf", null ],
     [ "ScanStart", "_transmitter_code_2src_2main_8cpp.html#a40219e66b010dcf762b96491c9e668ec", null ],
@@ -484,7 +484,6 @@ var _transmitter_code_2src_2main_8cpp =
     [ "TxName", "_transmitter_code_2src_2main_8cpp.html#a967f3c9b0fd867928c55d75d65cfcd8c", null ],
     [ "TxOnTime", "_transmitter_code_2src_2main_8cpp.html#a992a1c7536f872bdfd833e282cf3b4e4", null ],
     [ "TxPace", "_transmitter_code_2src_2main_8cpp.html#a97c9afd7483ad56e7a2aa63db252d616", null ],
-    [ "TXWarningFlag", "_transmitter_code_2src_2main_8cpp.html#a31cbd43a34f258e0078a06b2d07a4b72", null ],
     [ "UkRules", "_transmitter_code_2src_2main_8cpp.html#a7847cc790a939f378993691ae7d40a2f", null ],
     [ "UkRulesCounter", "_transmitter_code_2src_2main_8cpp.html#a29883074027da47422a24b04284728db", null ],
     [ "USE_INA219", "_transmitter_code_2src_2main_8cpp.html#a87ae50e2ac4507568cbf98072f174a1b", null ],
@@ -497,6 +496,5 @@ var _transmitter_code_2src_2main_8cpp =
     [ "XtouchPlace", "_transmitter_code_2src_2main_8cpp.html#a5339146bea48f821a6abbf680f5fe09b", null ],
     [ "yPoint", "_transmitter_code_2src_2main_8cpp.html#ac57deb5507c3835634b98d51b5d13c9b", null ],
     [ "yPoints", "_transmitter_code_2src_2main_8cpp.html#aff20e4985ae632d4c59eeb3d772874c9", null ],
-    [ "YtouchPlace", "_transmitter_code_2src_2main_8cpp.html#a6e7d01bfa867cd7da9aba15150bc258b", null ],
-    [ "zero", "_transmitter_code_2src_2main_8cpp.html#a09777e6a5ad91ffd82a9975efe33de2e", null ]
+    [ "YtouchPlace", "_transmitter_code_2src_2main_8cpp.html#a6e7d01bfa867cd7da9aba15150bc258b", null ]
 ];
