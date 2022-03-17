@@ -18,7 +18,7 @@
     #define RXVERSION_MINIMUS           3    // March 14th 2022
 
 //**************************************************************************************************************************
-  #define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< **
+ // #define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< **
 //**************************************************************************************************************************
 
     #define SENSOR_HUB_I2C_ADDRESS      8
@@ -42,7 +42,7 @@
     #define pinCSN2                     20   // NRF2
     #define pinCE2                      21   // NRF2
     #define FAILSAFE_TIMEOUT            2000 // two seconds until failsafe
-    #define RECONNECT_CHANNELS_COUNT    4
+    #define RECONNECT_CHANNELS_COUNT    3
     #define UNCOMPRESSEDWORDS           20              //   16 Channels plus extra 4 16 BIT values
     #define COMPRESSEDWORDS   UNCOMPRESSEDWORDS * 3 / 4 // = 16 WORDS  with no extra
 
