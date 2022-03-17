@@ -377,7 +377,6 @@ void LoadAckPayload()
         case 15: 
             SendTimeToAckPayload();
             break;
-        
         default:
             break;
     }
