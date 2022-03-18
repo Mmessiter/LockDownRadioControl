@@ -255,7 +255,7 @@ void Reconnect(){                                                               
         if (BoundFlag) KeepSbusHappy();                                            // Some SBUS systems timeout FAST, so resend old data to keep it happy
         CurrentRadio->stopListening();
         delay(1);                                                                  // NEEDED!
-        ReconnectChannel = * (FHSSChPointer + ReconnectIndex);                     // Get a reconnect channel - not always the same one - one of 5 now.
+        ReconnectChannel = * (FHSSChPointer + ReconnectIndex);                     // Get a reconnect channel 
         ++ ReconnectIndex;
         if (ReconnectIndex >= RECONNECT_CHANNELS_COUNT + RECONNECT_CHANNELS_START) 
         { 
