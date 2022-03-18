@@ -289,7 +289,7 @@ void Reconnect(){                                                               
 // This happens for *every* AckPayload, which return telemetry data as well as this hoptime information.
 // Hence a single BIT now directs the transmitter to hop.
 
-void CheckIfItsHopTime(){
+void CheckWhetherItsTimeToHop(){
     AckPayload.Purpose  &= 0x7f;                   // Clear the HOP flag
     if ((millis() - HopStart) >= HOPTIME){         // Time to hop?? 
          AckPayload.Purpose |= 0x80;               // Yes. So set the HOP flag leaving lower 7 bits unchanged
@@ -303,7 +303,7 @@ void CheckIfItsHopTime(){
 /************************************************************************************************************/
 void SendToAckPayload(float U){                        // This one function now works with most float parameters
     union  {float Val32; uint8_t Val8[4];} ThisUnion;
-    CheckIfItsHopTime();
+    CheckWhetherItsTimeToHop();
     ThisUnion.Val32     = U;
     AckPayload.Byte1    = ThisUnion.Val8[0];           // These values are herewith delivered to Transmitter in Ack Payload
     AckPayload.Byte2    = ThisUnion.Val8[1];
@@ -312,14 +312,14 @@ void SendToAckPayload(float U){                        // This one function now 
 }
 /************************************************************************************************************/
 void SendTimeToAckPayload(){    
-    CheckIfItsHopTime();                  
+    CheckWhetherItsTimeToHop();                  
     AckPayload.Byte1    = SecsGPS;    
     AckPayload.Byte2    = MinsGPS;
     AckPayload.Byte3    = HoursGPS;
 }
 /************************************************************************************************************/
 void SendDateToAckPayload(){   
-    CheckIfItsHopTime();                         
+    CheckWhetherItsTimeToHop();                         
     AckPayload.Byte1    = DayGPS;  
     AckPayload.Byte2    = MonthGPS;
     AckPayload.Byte3    = YearGPS;
