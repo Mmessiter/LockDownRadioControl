@@ -246,7 +246,7 @@ void KeepSbusHappy(){
 void Reconnect(){                                                                  // This is called when contact is lost, to reconnect ASAP
 
     uint32_t SearchStartTime  = millis();;
-    uint8_t  ReconnectChannel = * (FHSSChPointer + ReconnectIndex);                // Get a reconnect channel - not always the same one - one of 3 now.
+    uint8_t  ReconnectChannel = * (FHSSChPointer + ReconnectIndex);                // Get a reconnect channel 
 
 #ifdef SECOND_TRANSCEIVER
         TryTheOtherTransceiver(ReconnectChannel);                                  // Just lost it on this one - so try the other
