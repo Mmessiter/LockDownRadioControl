@@ -225,17 +225,18 @@ void TryTheOtherTransceiver(uint8_t Recon_Ch){
 
 /************************************************************************************************************/
 
+// This function is called when the system is busy but not receiving - to preempt very short SBUS timeouts (eg DJI).
+
 void KeepSbusHappy(){
-    if (millis() < 10000) return;   // Let things settle down after connection for 10 seconds or so before using this
-    if (millis() - SBUSTimer >= SBUSRATE) {  
-        SBUSTimer = millis();                                
-        if (!FailSafeSent) 
+    if (millis() < 10000) return;               // Let things settle down after connection for 10 seconds or so before using this
+    if (millis() - SBUSTimer >= SBUSRATE) {     // Does SBUS expect a packet? 
+        SBUSTimer = millis();                   // Yes...             
+        if (!FailSafeSent)                      // But don't send after failsafe
         {
-            ++ SbusRepeats;
-            Connected  = true;  // To force re-sending this older data 
-            MoveServos();       // This call also sends an SBUS packet
-            
-            Connected = false; 
+            ++ SbusRepeats;                     // Count these repeats out of pure curiosity
+            Connected  = true;                  // To force re-sending this older data 
+            MoveServos();                       // This call also sends an SBUS packet
+            Connected = false;                  // Not in fact connnected of course
         }
     }
 }
@@ -248,15 +249,18 @@ void Reconnect(){                                                               
     uint8_t  ReconnectChannel = * (FHSSChPointer + ReconnectIndex);                // Get a reconnect channel - not always the same one - one of 5 now.
 
 #ifdef SECOND_TRANSCEIVER
-        TryTheOtherTransceiver(ReconnectChannel);                                  // Just lost it on this one - try the other
+        TryTheOtherTransceiver(ReconnectChannel);                                  // Just lost it on this one - so try the other
 #endif 
     while (!Connected) {
-        if (BoundFlag) KeepSbusHappy();                                            // Some SBUS systems timeout FAST, so resend old data ... !
+        if (BoundFlag) KeepSbusHappy();                                            // Some SBUS systems timeout FAST, so resend old data to keep it happy
         CurrentRadio->stopListening();
         delay(1);                                                                  // NEEDED!
         ReconnectChannel = * (FHSSChPointer + ReconnectIndex);                     // Get a reconnect channel - not always the same one - one of 5 now.
         ++ ReconnectIndex;
-        if (ReconnectIndex >= RECONNECT_CHANNELS_COUNT + RECONNECT_CHANNELS_START) ReconnectIndex = RECONNECT_CHANNELS_START;
+        if (ReconnectIndex >= RECONNECT_CHANNELS_COUNT + RECONNECT_CHANNELS_START) 
+        { 
+            ReconnectIndex = RECONNECT_CHANNELS_START;
+        }
         CurrentRadio->setChannel(ReconnectChannel);  
         TryToConnectNow();
 #ifdef SECOND_TRANSCEIVER
@@ -266,8 +270,8 @@ void Reconnect(){                                                               
             if ((millis() - SearchStartTime) > FAILSAFE_TIMEOUT){
                 if (!FailSafeSent){
                     FailSafe();
-                    FailSafeSent = true; // Once is enough
-                    SetUKFrequencies();  // In case this was changed
+                    FailSafeSent = true;                                        // Once is enough
+                    SetUKFrequencies();                                         // In case this had been changed
                 }
             }
         }
@@ -276,7 +280,7 @@ void Reconnect(){                                                               
     FirstConnectMoment = millis();
     }
     FailSafeSent = false;
-    ReconnectedMoment    = millis();  // Save this moment, then don't move a servo for a few ms ...
+    ReconnectedMoment    = millis();  // Save this moment, then don't move a servo for 20 ms ...
 }
 /************************************************************************************************************/
 // This function checks the time since last hop. 
