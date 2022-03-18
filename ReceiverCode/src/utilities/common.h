@@ -12,7 +12,7 @@
     #include <Servo.h> 
     #include <SBUS.h>
     #include "utilities/radio.h"
-
+    
     #define RXVERSION_MAJOR             1
     #define RXVERSION_MINOR             6
     #define RXVERSION_MINIMUS           4    // March 17th 2022
@@ -27,7 +27,7 @@
     #define FREQUENCYSCOUNT             82   // use 82 different channels
     #define FREQUENCYSCOUNT1            41   // use 41 different test channels
     #define RECEIVE_TIMEOUT             25   // <=16 fails, >=20 OK, 25 - 40 milliseconds seems an optimal value?
-    #define CHANNELSUSED                16
+    #define CHANNELSUSED                16   
     #define SERVOSUSED                  9    // But all 16 are available via SBUS
     #define SBUSRATE                    10   // SBUS frame every 10 milliseconds
     #define SBUSPORT                    Serial3
@@ -35,15 +35,15 @@
     #define MINMICROS                   500
     #define MAXMICROS                   2500
     #define LED_PIN                     LED_BUILTIN
-    #define RANGEMAX                    2047 // = Frsky at 150 %
+    #define RANGEMAX                    2047   // = Frsky at 150 %
     #define RANGEMIN                    0
     #define pinCE1                      9    // NRF1
     #define pinCSN1                     10   // NRF1
     #define pinCSN2                     20   // NRF2
     #define pinCE2                      21   // NRF2
     #define FAILSAFE_TIMEOUT            2000 // two seconds until failsafe
-    #define RECONNECT_CHANNELS_COUNT    3
-    #define RECONNECT_CHANNELS_START    12
+    #define RECONNECT_CHANNELS_COUNT    3    // How many channels to try when reconnecting
+    #define RECONNECT_CHANNELS_START    12   // Offset in the array to begin getting reconnect channels
     #define UNCOMPRESSEDWORDS           20              //   16 Channels plus extra 4 16 BIT values
     #define COMPRESSEDWORDS   UNCOMPRESSEDWORDS * 3 / 4 // = 16 WORDS  with no extra
 

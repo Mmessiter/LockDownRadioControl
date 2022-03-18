@@ -1,3 +1,6 @@
+
+// ************************************************** Receiver code **************************************************
+
 /** @file ReceiverCode/src/main.cpp
  * // Malcolm Messiter 2022
  * @page RXCODE RecieverCode
@@ -36,10 +39,7 @@
  *
  * @see ReceiverCode/src/main.cpp
  */
-
-// ************************************************** Receiver code **************************************************
 #include "utilities/radio.h"
-
 Adafruit_INA219 ina219;
 bool            SENSOR_HUB_CONNECTED = false;      //  GPS (Adafruit Ultimate GPS) ?
 Servo           MCMServo[SERVOSUSED];
