@@ -214,7 +214,7 @@ void AttachServos()
         }
         ServosAttached = true;
     }
-    MySbus.begin();
+    MySbus.begin();   // AND START SBUS!!!
 }
 /************************************************************************************************************/
 void BindModel()
@@ -266,12 +266,20 @@ void SendQnhToSensorHub(){
         SendToSensorHub(QNH);   
 }
 /************************************************************************************************************/
+
+// This allows a new array of pseudo-random channel numbers to be used. 
+// "FHSSChPointer" and "FrequencyCount" simply need to be set appropriately.
+
 void SetTestFrequencies(){
    
     FHSSChPointer  = FHSS_Channels1; 
     FrequencyCount = FREQUENCYSCOUNT1;
 }
 /************************************************************************************************************/
+
+// This allows a new array of pseudo-random channel numbers to be used. 
+// "FHSSChPointer" and "FrequencyCount" simply need to be set appropriately.
+
 void SetUKFrequencies(){
     
     FHSSChPointer  = FHSS_Channels;     
@@ -501,6 +509,9 @@ FASTRUN void ReceiveData(){
     }
 }
 /************************************************************************************************************/
+
+// Discover what was connected on I2C
+
 void ScanI2c(){
     for (uint8_t i = 1; i < 127; ++i) {
         Wire.beginTransmission(i);
@@ -524,6 +535,7 @@ void ScanI2c(){
 void SaveFailSafeData()
 {
     // FailSafe data occupies EEPROM from offset 10 to 26
+
     uint8_t FS_Offset = 10;
     for (uint8_t i = 0; i < CHANNELSUSED; ++i) {
         EEPROM.update(i + FS_Offset, (map(ReceivedData[i], MINMICROS, MAXMICROS, 0, 180))); // save servo positions lower res: 8 bits
@@ -605,7 +617,7 @@ void loop()
     if (BoundFlag && Connected) {
         if (millis() - SBUSTimer >= SBUSRATE) {                  // SBUS rate is also good enough for servo rate
             SBUSTimer = millis();                                // timer starts before send starts....
-            if ((millis() - ReconnectedMoment) > RECONNECTGAP) { // Don't send data for 10 ms after reconnect
+            if ((millis() - ReconnectedMoment) > RECONNECTGAP) { // Don't send data for 20 ms after reconnect
                 MoveServos();
             }
         }
