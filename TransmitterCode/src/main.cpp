@@ -1094,7 +1094,7 @@ void RedLedOn()
 
 void GreenLedOn()
 {
-    if (!LedWasGreen || LedIsBlinking) { // no need to repeat unless it is blinking
+    if (!LedWasGreen || LedIsBlinking) {         // no need to repeat unless it is blinking
         LedWasGreen = true;
         analogWrite(BLUELED, 0);
         analogWrite(REDLED, 0); 
