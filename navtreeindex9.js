@@ -1,6 +1,5 @@
 var NAVTREEINDEX9 =
 {
-"globals_defs_f.html":[12,1,6,5],
 "globals_defs_g.html":[12,1,6,6],
 "globals_defs_h.html":[12,1,6,7],
 "globals_defs_i.html":[12,1,6,8],
@@ -249,5 +248,6 @@ var NAVTREEINDEX9 =
 "struct_raw_degrees.html#a13564009c60e20dbf03b158114d1c0e2":[11,0,14,3],
 "struct_raw_degrees.html#a156d5ced092fa1473b9b669a29be3509":[11,0,14,0],
 "struct_raw_degrees.html#a156d5ced092fa1473b9b669a29be3509":[11,0,14,1],
-"struct_raw_degrees.html#a156d5ced092fa1473b9b669a29be3509":[11,0,14,2]
+"struct_raw_degrees.html#a156d5ced092fa1473b9b669a29be3509":[11,0,14,2],
+"struct_raw_degrees.html#a39c31d2d0332155a4d2c975cec0a796f":[11,0,14,5]
 };
