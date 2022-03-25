@@ -152,6 +152,7 @@ RF24 Radio1(CE_PIN, CSN_PIN);
 #define M_Percent       5
 #define M_R1            6
 #define M_R2            7
+
 #define FrontView       0
 #define SticksView      1
 #define GraphView       2
@@ -171,6 +172,8 @@ RF24 Radio1(CE_PIN, CSN_PIN);
 #define Inputs_View     16
 #define FailSafe_View   17
 #define Colours_View    18
+
+#define CharsMax        120 
 
 #define UNCOMPRESSEDWORDS 20                        // DATA TO SEND = 40  bytes
 #define COMPRESSEDWORDS   UNCOMPRESSEDWORDS * 3 / 4 // COMPRESSED DATA SENT = 30  bytes
@@ -214,7 +217,6 @@ uint8_t       LastMixNumber      = 1;
 uint8_t       MixNumber          = 0;
 uint8_t       CurrentView        = FrontView;
 uint8_t       SavedCurrentView   = FrontView;
-const uint8_t CharsMax           = 120;                // 80;
 const uint8_t MaxDataTransferred = UNCOMPRESSEDWORDS;  // = 40 bytes     A few extra bytes sent after channels' values
 uint64_t      DefaultPipe        = DEFAULTPIPEADDRESS; //          Default Radio pipe address
 uint64_t      NewPipe            = 0xBABE1E5420LL;     //             New Radio pipe address for binding will come from MAC address
