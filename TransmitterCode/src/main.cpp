@@ -2682,6 +2682,8 @@ bool LoadAllParameters()
     int p;
     int j = 0;
     if (!ModelsFileOpen) OpenModelsFile();
+    if (!ModelsFileOpen) {delay (500);OpenModelsFile();}  
+    if (!ModelsFileOpen) {delay (500);OpenModelsFile();}  // try twice more as it might be a bit unreliable !
     if (!ModelsFileOpen) return false;
     SDCardAddress = 0;
     p    = SDReadInt(SDCardAddress);
