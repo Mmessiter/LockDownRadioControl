@@ -198,6 +198,8 @@ RF24 Radio1(CE_PIN, CSN_PIN);
 #define TXSIZE     250  // SD space reserved for transmitter
 #define MODELSIZE  1600 // SD space reserved for each model
 #define MAXFILELEN 1021 // MAX SIZE FOR HELP FILE
+#define BOXOFFSET    35
+#define BOXSIZE     395
 
 #ifdef USE_WATCHDOG
 WDT_T4<WDT3>  TeensyWatchDog;
@@ -286,8 +288,7 @@ double yPoints[5];
 double xPoint = 0;
 double yPoint = 0;
 
-int           BoxOffset = 35;
-int           BoxSize   = 395;
+
 int           BoxBottom;
 int           BoxTop;
 int           BoxLeft;
@@ -3558,26 +3559,26 @@ void DrawBox(int x1, int y1, int x2, int y2, int c)
 void GetDotPositions()
 {
     int p      = 0;
-    BoxOffset  = 35;
-    BoxLeft    = BoxOffset;
-    BoxTop     = BoxOffset;
-    BoxRight   = BoxLeft + 395;
+   
+    BoxLeft    = BOXOFFSET;
+    BoxTop     = BOXOFFSET;
+    BoxRight   = BOXOFFSET + 395;
     BoxBottom  = BoxRight;
     xPoints[0] = BoxLeft;
-    xPoints[4] = BoxRight - BoxOffset;
+    xPoints[4] = BoxRight - BOXOFFSET;
 
-    p          = map(MinDegrees[FlightMode][ChanneltoSet - 1], 0, 180, BoxSize, BoxOffset);
+    p          = map(MinDegrees[FlightMode][ChanneltoSet - 1], 0, 180, BOXSIZE, BOXOFFSET);
     yPoints[0] = constrain(p, 39, 391);
-    p          = map(MidLowDegrees[FlightMode][ChanneltoSet - 1], 0, 180, BoxSize, BoxOffset);
+    p          = map(MidLowDegrees[FlightMode][ChanneltoSet - 1], 0, 180, BOXSIZE, BOXOFFSET);
     yPoints[1] = constrain(p, 39, 391);
-    xPoints[1] = BoxOffset + 90;
-    xPoints[2] = BoxOffset + 180;
-    p          = map(CentreDegrees[FlightMode][ChanneltoSet - 1], 0, 180, BoxSize, BoxOffset);
+    xPoints[1] = BOXOFFSET + 90;
+    xPoints[2] = BOXOFFSET + 180;
+    p          = map(CentreDegrees[FlightMode][ChanneltoSet - 1], 0, 180, BOXSIZE, BOXOFFSET);
     yPoints[2] = constrain(p, 39, 391);
-    xPoints[3] = BoxOffset + 270;
-    p          = map(MidHiDegrees[FlightMode][ChanneltoSet - 1], 0, 180, BoxSize, BoxOffset);
+    xPoints[3] = BOXOFFSET + 270;
+    p          = map(MidHiDegrees[FlightMode][ChanneltoSet - 1], 0, 180, BOXSIZE, BOXOFFSET);
     yPoints[3] = constrain(p, 39, 391);
-    p          = map(MaxDegrees[FlightMode][ChanneltoSet - 1], 0, 180, BoxSize, BoxOffset);
+    p          = map(MaxDegrees[FlightMode][ChanneltoSet - 1], 0, 180, BOXSIZE, BOXOFFSET);
     yPoints[4] = constrain(p, 39, 391);
 }
 
@@ -3719,14 +3720,14 @@ void DisplayCurve()
 
     xDot1 = xPoints[0];
     yDot1 = ((BoxBottom - BoxTop) / 2) + 20; // ?
-    xDot2 = BoxRight - BoxOffset;
+    xDot2 = BoxRight - BOXOFFSET;
     yDot2 = yDot1;
     DrawLine(xDot1, yDot1, xDot2, yDot1, SpecialColour);
 
     xDot1 = xPoints[2];
     yDot1 = BoxTop;
     xDot2 = xDot1;
-    yDot2 = BoxBottom - BoxOffset;
+    yDot2 = BoxBottom - BOXOFFSET;
     DrawLine(xDot1, yDot1, xDot2, yDot2, SpecialColour);
 
     if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == 0) {
@@ -3742,6 +3743,8 @@ void DisplayCurve()
         DrawLine(xPoints[3], yPoints[3], xPoints[4], yPoints[4], ForeGroundColour);
     }
     Procrastinate(250); 
+    GetDotPositions();
+    
     if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == 1) {
         SendCommand(b3on);
         SendCommand(b4on);
@@ -3858,12 +3861,12 @@ void MovePoint()
 {
     int rjump = 0;
     GetDotPositions();                               // current
-    if (XtouchPlace > BoxRight - BoxOffset) return;  // out of range
-    if (XtouchPlace < BoxOffset) return;             // out of range
+    if (XtouchPlace > BoxRight - BOXOFFSET) return;  // out of range
+    if (XtouchPlace < BOXOFFSET) return;             // out of range
     if (YtouchPlace < BoxTop) return;                // out of range
-    if (YtouchPlace > BoxBottom - BoxOffset) return; // out of range
+    if (YtouchPlace > BoxBottom - BOXOFFSET) return; // out of range
 
-    if (XtouchPlace < BoxOffset + xPoints[0]) { // do leftmost point  ?
+    if (XtouchPlace < BOXOFFSET+ xPoints[0]) { // do leftmost point  ?
         rjump = GetDifference(YtouchPlace, yPoints[0]);
         if (YtouchPlace > yPoints[0]) {
             if (MinDegrees[FlightMode][ChanneltoSet - 1] >= rjump) MinDegrees[FlightMode][ChanneltoSet - 1] -= rjump;
@@ -3873,7 +3876,7 @@ void MovePoint()
         }
     }
 
-    if (XtouchPlace > xPoints[1] - BoxOffset && XtouchPlace < xPoints[1] + BoxOffset) { // do next point  ?
+    if (XtouchPlace > xPoints[1] - BOXOFFSET&& XtouchPlace < xPoints[1] + BOXOFFSET) { // do next point  ?
         if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == 2) return;              //  expo = ignore this area
         rjump = GetDifference(YtouchPlace, yPoints[1]);
         if (YtouchPlace > yPoints[1]) {
@@ -3884,7 +3887,7 @@ void MovePoint()
         }
     }
 
-    if (XtouchPlace > xPoints[2] - BoxOffset && XtouchPlace < xPoints[2] + BoxOffset) { // do next point  ?
+    if (XtouchPlace > xPoints[2] - BOXOFFSET && XtouchPlace < xPoints[2] + BOXOFFSET) { // do next point  ?
         rjump = GetDifference(YtouchPlace, yPoints[2]);
         if (YtouchPlace > yPoints[2]) {
             if (CentreDegrees[FlightMode][ChanneltoSet - 1] >= rjump) CentreDegrees[FlightMode][ChanneltoSet - 1] -= rjump;
@@ -3894,7 +3897,7 @@ void MovePoint()
         }
     }
 
-    if (XtouchPlace > xPoints[3] - BoxOffset && XtouchPlace < xPoints[3] + BoxOffset) { // do next point  ?
+    if (XtouchPlace > xPoints[3] - BOXOFFSET && XtouchPlace < xPoints[3] + BOXOFFSET) { // do next point  ?
         if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == 2) return;              //  expo = ignore this area
         rjump = GetDifference(YtouchPlace, yPoints[3]);
         if (YtouchPlace > yPoints[3]) {
@@ -3904,7 +3907,7 @@ void MovePoint()
             if (MidHiDegrees[FlightMode][ChanneltoSet - 1] <= 180 - rjump) MidHiDegrees[FlightMode][ChanneltoSet - 1] += rjump;
         }
     }
-    if (XtouchPlace > xPoints[3] + BoxOffset) // do hi point  ?
+    if (XtouchPlace > xPoints[3] + BOXOFFSET) // do hi point  ?
     {
         rjump = GetDifference(YtouchPlace, yPoints[4]);
         if (YtouchPlace > yPoints[4]) {

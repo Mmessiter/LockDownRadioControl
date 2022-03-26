@@ -102,7 +102,8 @@ void BufferNewPipe()
 void Procrastinate(uint32_t HowLong){
 uint32_t ThisMoment = millis();
     while ((millis()-ThisMoment) < HowLong){
-         KickTheDog();                                               // keep watchdog happy
+         KickTheDog();                 // keep watchdog happy  
+        if (BoundFlag) SendData();                                       
     }
 }
 /************************************************************************************************************/
