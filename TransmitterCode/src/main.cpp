@@ -3123,6 +3123,8 @@ void ReadHelpFile(char* fname, char* htext)
     htext[0] = 0;
     i        = 0;
     fnumber  = SD.open(fname, FILE_READ);
+    if (!fnumber) {Procrastinate(500); fnumber  = SD.open(fname, FILE_READ);}
+    if (!fnumber) {Procrastinate(500); fnumber  = SD.open(fname, FILE_READ);}  // try 3 times before giving up
     if (fnumber) {
         while (fnumber.available() && i < MAXFILELEN) {
             a[0] = fnumber.read();
