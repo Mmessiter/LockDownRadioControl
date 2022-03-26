@@ -238,8 +238,9 @@ void HopToNextChannel()
     Serial.print(" seconds. Good packets per hop: ");
     Serial.print(PacketNumber); 
     Serial.print(" Next channel: ");
-    Serial.print(FHSS_Channels[NextChannelNumber]);
-    if ((FHSS_Channels[NextChannelNumber]) < 10) Serial.print(" ");
+    Serial.print( * (FHSSChPointer + NextChannelNumber));
+    if ( * (FHSSChPointer + NextChannelNumber) < 100) Serial.print(" ");
+    if ( * (FHSSChPointer + NextChannelNumber) < 10) Serial.print(" ");
     Serial.print(BoundFlag ? " Bound!" : " NOT BOUND.");
     Serial.print(" RX Radio: ");
     Serial.println(ThisRadio);
