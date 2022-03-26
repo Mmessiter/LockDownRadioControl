@@ -226,11 +226,12 @@ void ScanAllChannels()
 
 void HopToNextChannel()
 {
+    
     Radio1.setChannel(NextChannel);    // Hop !
     Radio1.stopListening();            // Transmit only (no need for any extra delay() as this is here followed by several tasks)
-    
 
 #ifdef DB_FHSS
+    uint8_t ch =  * (FHSSChPointer + NextChannelNumber);
     PEndTime  = millis();
     Pduration = (PEndTime - PStartTime) / 1000;
     Serial.print("Hop duration: ");
@@ -238,9 +239,9 @@ void HopToNextChannel()
     Serial.print(" seconds. Good packets per hop: ");
     Serial.print(PacketNumber); 
     Serial.print(" Next channel: ");
-    Serial.print( * (FHSSChPointer + NextChannelNumber));
-    if ( * (FHSSChPointer + NextChannelNumber) < 100) Serial.print(" ");
-    if ( * (FHSSChPointer + NextChannelNumber) < 10) Serial.print(" ");
+    Serial.print(ch);
+    if (ch < 100) Serial.print(" ");
+    if (ch <  10) Serial.print(" ");
     Serial.print(BoundFlag ? " Bound!" : " NOT BOUND.");
     Serial.print(" RX Radio: ");
     Serial.println(ThisRadio);
