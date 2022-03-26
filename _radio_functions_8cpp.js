@@ -27,6 +27,7 @@ var _radio_functions_8cpp =
     [ "DoScanInit", "_radio_functions_8cpp.html#a77c4a4ffa609df08830ccece07bf283b", null ],
     [ "HopToNextChannel", "_radio_functions_8cpp.html#a62ec0168b1eea5f5c14f663d9217574d", null ],
     [ "InitRadio", "_radio_functions_8cpp.html#a86ce6c54618629a61b8502786d2ce82c", null ],
+    [ "Procrastinate", "_radio_functions_8cpp.html#a760609a682300dfe6bfaac737fd4d5eb", null ],
     [ "ScanAllChannels", "_radio_functions_8cpp.html#a3856ba0adae43d089f08c7b7f653b306", null ],
     [ "SendData", "_radio_functions_8cpp.html#a3d7322e78f097d02d476f17a6306997c", null ],
     [ "SetThePipe", "_radio_functions_8cpp.html#a70dc6f8d2e5ccef6b8e4a2b9b0afb2ce", null ],
