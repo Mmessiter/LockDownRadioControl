@@ -149,6 +149,7 @@ extern void  StartInactvityTimeout();
 extern void  ShowServoPos();
 extern void  MapToSBUS();
 
+
 /*********************************************************************************************************************************/
 // function prototypes
 
@@ -160,6 +161,7 @@ void PreScan();
 void HopToNextChannel();
 void ScanAllChannels();
 void SendData();
+void Procrastinate(uint32_t HowLong);
 
 /*********************************************************************************************************************************/
 

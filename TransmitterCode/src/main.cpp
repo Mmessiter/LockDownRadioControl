@@ -129,7 +129,6 @@
     #include <Watchdog_t4.h>
 #endif
 
-extern void Procrastinate(uint32_t HowLong);
 
 RF24 Radio1(CE_PIN, CSN_PIN);
 
