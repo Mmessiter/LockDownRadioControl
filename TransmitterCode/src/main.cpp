@@ -3268,8 +3268,7 @@ void BuildDirectory()
     char MOD[] = ".MOD";
     char Entry1[20];
     char fn[18];
-    File dir;
-    dir                 = SD.open("/");
+    File dir  = SD.open("/");
     ExportedFileCounter = 0;
     while (true) {
         File entry = dir.openNextFile();
