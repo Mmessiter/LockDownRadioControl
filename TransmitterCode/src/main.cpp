@@ -2839,25 +2839,21 @@ void setup()
     pinMode(BLUELED, OUTPUT);
     pinMode(POWER_OFF_PIN, OUTPUT);
     BlueLedOn();
-    InitMaxMin();        // in case not yet calibrated
-    InitCentreDegrees(); // In case not yet calibrated
+    NEXTION.begin(921600);      // BAUD rate also set in display code THIS IS THE MAX (was 115200)  
+    InitMaxMin();               // in case not yet calibrated
+    InitCentreDegrees();        // In case not yet calibrated
     CentreTrims();
-    #ifdef USE_WATCHDOG
+#ifdef USE_WATCHDOG
     WatchDogConfig.window   = WATCHDOGMAXRATE; //  = MINIMUM RATE in milli seconds, (32ms to 522.232s) must be MUCH smaller than timeout
     WatchDogConfig.timeout  = WATCHDOGTIMEOUT; //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s)
     WatchDogConfig.callback = WatchDogCallBack;
     TeensyWatchDog.begin(WatchDogConfig);
     LastDogKick = millis(); // needed? - yes!
 #endif
-
-
-
-
     Procrastinate(250);
     SD.begin(chipSelect);
     Procrastinate(250);
-    CalibratedYet = LoadAllParameters();                  // If they exist, read saved SD card settings.
-    NEXTION.begin(921600);                                // BAUD rate also set in display code THIS IS THE MAX (was 115200)  
+    CalibratedYet = LoadAllParameters();                  // If they exist, read saved SD card settings.                                  
     SendValue(FrontView_BackGround,BackGroundColour);     // Get colours ready
     SendValue(FrontView_ForeGround,ForeGroundColour);
     SendValue(FrontView_Special,SpecialColour);
