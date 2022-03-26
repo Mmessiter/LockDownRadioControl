@@ -3740,7 +3740,7 @@ void DisplayCurve()
         DrawLine(xPoints[2], yPoints[2], xPoints[3], yPoints[3], ForeGroundColour);
         DrawLine(xPoints[3], yPoints[3], xPoints[4], yPoints[4], ForeGroundColour);
     }
-       // delay(250);
+      //  delay(250);
     if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == 1) {                // CatmullSpline
        
         SendCommand(b3on);
