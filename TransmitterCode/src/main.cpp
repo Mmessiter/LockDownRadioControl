@@ -220,6 +220,7 @@ uint8_t       LastMixNumber      = 1;
 uint8_t       MixNumber          = 0;
 uint8_t       CurrentView        = FrontView;
 uint8_t       SavedCurrentView   = FrontView;
+//const uint8_t MaxDataTransferred = UNCOMPRESSEDWORDS;  // = 40 bytes     A few extra bytes sent after channels' values
 uint64_t      DefaultPipe        = DEFAULTPIPEADDRESS; //          Default Radio pipe address
 uint64_t      NewPipe            = 0xBABE1E5420LL;     //             New Radio pipe address for binding comes from MAC address
 char          TextIn[CharsMax];
