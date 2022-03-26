@@ -99,19 +99,12 @@ void BufferNewPipe()
 }
 /************************************************************************************************************/
 // This function replaces delay() without freezing needed tasks
-
 void Procrastinate(uint32_t HowLong){
-
 uint32_t ThisMoment = millis();
-
-   
     while ((millis()-ThisMoment) < HowLong){
-         KickTheDog();                        // keep watchdog happy
-        // if (BoundFlag) SendData();           // keep receiver happy if bound to one // heer????
+         KickTheDog();                                               // keep watchdog happy
     }
-   
 }
-
 /************************************************************************************************************/
 
 void SendData()
@@ -235,7 +228,7 @@ void HopToNextChannel()
 {
     Radio1.setChannel(NextChannel);    // Hop !
     Radio1.stopListening();            // Transmit only (no need for any extra delay() as this is here followed by several tasks)
-    PacketNumber  = 0;
+    
 
 #ifdef DB_FHSS
     PEndTime  = millis();
@@ -243,7 +236,7 @@ void HopToNextChannel()
     Serial.print("Hop duration: ");
     Serial.print(Pduration);
     Serial.print(" seconds. Good packets per hop: ");
-    Serial.print(PacketNumber+1);  // because counting starts at zero
+    Serial.print(PacketNumber); 
     Serial.print(" Next channel: ");
     Serial.print(FHSS_Channels[NextChannelNumber]);
     if ((FHSS_Channels[NextChannelNumber]) < 10) Serial.print(" ");
@@ -252,6 +245,7 @@ void HopToNextChannel()
     Serial.println(ThisRadio);
     PStartTime = millis();
 #endif
+    PacketNumber  = 0;
 }
 
 /*********************************************************************************************************************************/

@@ -18,7 +18,7 @@
     #define RXVERSION_MINIMUS           4    // March 17th 2022
 
 //**************************************************************************************************************************
-  #define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< **
+ // #define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< **
 //**************************************************************************************************************************
 
     #define SENSOR_HUB_I2C_ADDRESS      8
@@ -47,7 +47,7 @@
     #define UNCOMPRESSEDWORDS           20              //   16 Channels plus extra 4 16 BIT values
     #define COMPRESSEDWORDS   UNCOMPRESSEDWORDS * 3 / 4 // = 16 WORDS  with no extra
 
-   //  #define DB_FHSS        
+    // #define DB_FHSS        
     // #define DB_SENSORS
     // #define DB_BIND
     // #define DB_FAILSAFE
