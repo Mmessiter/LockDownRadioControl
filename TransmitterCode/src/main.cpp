@@ -3119,7 +3119,6 @@ void ReadHelpFile(char* fname, char* htext)
     char errormsg[] = "The Help file was not found.";
     File fnumber;
     char a[] = " ";
-
     htext[0] = 0;
     i        = 0;
     fnumber  = SD.open(fname, FILE_READ);
@@ -3233,7 +3232,7 @@ void DoNewChannelName(int ch, int k)
     while (uint8_t(TextIn[k]) > 0) {
         ChannelNames[ch - 1][j] = TextIn[k];
         ++j;
-        k++;
+        ++k;
         ChannelNames[ch - 1][j] = 0;
     }
     SaveOneModel(ModelNumber);
