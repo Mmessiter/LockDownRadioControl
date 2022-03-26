@@ -3728,7 +3728,7 @@ void DisplayCurve()
     yDot2 = BoxBottom - BOXOFFSET;
     DrawLine(xDot1, yDot1, xDot2, yDot2, SpecialColour);
 
-    if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == 0) {
+    if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == 0) {                // Linear
         SendCommand(b3on);
         SendCommand(b4on);
         SendCommand(b7on);
@@ -3740,10 +3740,9 @@ void DisplayCurve()
         DrawLine(xPoints[2], yPoints[2], xPoints[3], yPoints[3], ForeGroundColour);
         DrawLine(xPoints[3], yPoints[3], xPoints[4], yPoints[4], ForeGroundColour);
     }
-    Procrastinate(250); 
-    GetDotPositions();
-    
-    if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == 1) {
+       // delay(250);
+    if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == 1) {                // CatmullSpline
+       
         SendCommand(b3on);
         SendCommand(b4on);
         SendCommand(b7on);
