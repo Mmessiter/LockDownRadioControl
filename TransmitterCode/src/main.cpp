@@ -6141,7 +6141,7 @@ void loop()
 
 
 
-    if (BindingNow == 2 && (millis() - BindingTimer) > 100) {
+    if (BindingNow == 2 && (millis() - BindingTimer) > 100) { // heer
         if (!BoundFlag) {
 #ifdef DB_BIND
             Serial.println("Binding now");
