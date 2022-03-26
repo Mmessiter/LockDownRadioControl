@@ -3116,7 +3116,7 @@ void SaveOneModel(int mnum)
 /*********************************************************************************************************************************/
 void ReadHelpFile(char* fname, char* htext)
 {
-    char errormsg[] = "Sorry! The Help file was not found.";
+    char errormsg[] = "The Help file was not found.";
     File fnumber;
     char a[] = " ";
 
