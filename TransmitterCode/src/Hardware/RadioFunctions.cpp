@@ -98,13 +98,14 @@ void BufferNewPipe()
     SendBuffer[7] = (uint8_t)((NewPipe)&0xFF);
 }
 /************************************************************************************************************/
+// This function replaces delay() without freezing needed tasks
+
 void Procrastinate(uint32_t HowLong){
 
 uint32_t ThisMoment = millis();
-
     while ((millis()-ThisMoment) < HowLong){
-         KickTheDog();
-         if (BoundFlag) SendData();
+         KickTheDog();                        // keep watchdog happy
+         if (BoundFlag) SendData();           // keep receiver happy if bound to one
     }
 }
 

@@ -4521,16 +4521,13 @@ void Button_was_pressed()
             DoSbusSendOnly      = GetValue(BuddyP);  // Pupil, wired
             BuddyMaster         = GetValue(BuddyM);  // Master, either.
             SendValue(Progress,35);
-            Procrastinate(1);
             Qnh                 = GetValue(QNH);
             DeltaGMT            = GetValue(dGMT);
             SendValue(Progress,45);
-            Procrastinate(1);
             TrimFactor          = GetValue(trf);
             LowBattery          = GetValue(Bwn);
             ScreenTimeout       = GetValue(ScreenViewTimeout);
             SendValue(Progress,100);
-            Procrastinate(1);
             Inactivity_Timeout  = GetValue(Pto) * TICKSPERMINUTE;
             if (Inactivity_Timeout < INACTIVITYMINIMUM) Inactivity_Timeout = INACTIVITYMINIMUM;
             if (Inactivity_Timeout > INACTIVITYMAXIMUM) Inactivity_Timeout = INACTIVITYMAXIMUM;
@@ -4548,7 +4545,6 @@ void Button_was_pressed()
             CurrentView = MainSetupView;
             b5isGrey = false;
             SendCommand(ProgressEnd);
-            Procrastinate(1);
             return;
         }
 
