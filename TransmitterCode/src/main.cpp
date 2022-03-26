@@ -3559,14 +3559,12 @@ void DrawBox(int x1, int y1, int x2, int y2, int c)
 void GetDotPositions()
 {
     int p      = 0;
-   
     BoxLeft    = BOXOFFSET;
     BoxTop     = BOXOFFSET;
-    BoxRight   = BOXOFFSET + 395;
+    BoxRight   = BOXOFFSET + BOXSIZE;
     BoxBottom  = BoxRight;
     xPoints[0] = BoxLeft;
     xPoints[4] = BoxRight - BOXOFFSET;
-
     p          = map(MinDegrees[FlightMode][ChanneltoSet - 1], 0, 180, BOXSIZE, BOXOFFSET);
     yPoints[0] = constrain(p, 39, 391);
     p          = map(MidLowDegrees[FlightMode][ChanneltoSet - 1], 0, 180, BOXSIZE, BOXOFFSET);
