@@ -129,6 +129,8 @@
     #include <Watchdog_t4.h>
 #endif
 
+extern void Procrastinate(uint32_t HowLong);
+
 RF24 Radio1(CE_PIN, CSN_PIN);
 
 #define NEXTION         Serial1 // NEXTION is connected to Serial1
@@ -1140,7 +1142,7 @@ void ClearText()
 void EndSend()
 {
     for (int pp = 0; pp < 3; ++pp) NEXTION.write(0xff); // Send end of Input message
-    delay(65);                                          // ** A DELAY ** (>=50 ms) is needed if an answer might come!
+    Procrastinate(65);                                          // ** A DELAY ** (>=50 ms) is needed if an answer might come!
 }
 
 /*********************************************************************************************************************************/
@@ -1179,7 +1181,7 @@ void GetTextIn()
 {
     ClearText();
     if (NEXTION.available()) {
-        delay(10);
+        Procrastinate(10);
         while (NEXTION.available()) {
             TextIn[i] = uint8_t(NEXTION.read());
             if (TextIn[i] == '$') TextIn[i] = 0; 
@@ -1268,7 +1270,7 @@ bool GetButtonPress()
     i = 0;
     if (NEXTION.available()) {
         ButtonPressed = true;
-        delay(10);
+        Procrastinate(10);
         while (NEXTION.available()) {
             a = char(NEXTION.read());
             if (a > 31 && a < 128) {
@@ -2682,8 +2684,8 @@ bool LoadAllParameters()
     int p;
     int j = 0;
     if (!ModelsFileOpen) OpenModelsFile();
-    if (!ModelsFileOpen) {delay (500);OpenModelsFile();}  
-    if (!ModelsFileOpen) {delay (500);OpenModelsFile();}  // try twice more as it might be a bit unreliable !
+    if (!ModelsFileOpen) {Procrastinate (500);OpenModelsFile();}  
+    if (!ModelsFileOpen) {Procrastinate (500);OpenModelsFile();}  // try twice more as it might be a bit unreliable !
     if (!ModelsFileOpen) return false;
     SDCardAddress = 0;
     p    = SDReadInt(SDCardAddress);
@@ -2840,9 +2842,20 @@ void setup()
     InitMaxMin();        // in case not yet calibrated
     InitCentreDegrees(); // In case not yet calibrated
     CentreTrims();
-    delay(250);
+    #ifdef USE_WATCHDOG
+    WatchDogConfig.window   = WATCHDOGMAXRATE; //  = MINIMUM RATE in milli seconds, (32ms to 522.232s) must be MUCH smaller than timeout
+    WatchDogConfig.timeout  = WATCHDOGTIMEOUT; //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s)
+    WatchDogConfig.callback = WatchDogCallBack;
+    TeensyWatchDog.begin(WatchDogConfig);
+    LastDogKick = millis(); // needed? - yes!
+#endif
+
+
+
+
+    Procrastinate(250);
     SD.begin(chipSelect);
-    delay(250);
+    Procrastinate(250);
     CalibratedYet = LoadAllParameters();                  // If they exist, read saved SD card settings.
     NEXTION.begin(921600);                                // BAUD rate also set in display code THIS IS THE MAX (was 115200)  
     SendValue(FrontView_BackGround,BackGroundColour);     // Get colours ready
@@ -2877,13 +2890,7 @@ void setup()
     BoundFlag     = false;
     TxOnTime      = millis();
     UpdateModelsNameEveryWhere();
-#ifdef USE_WATCHDOG
-    WatchDogConfig.window   = WATCHDOGMAXRATE; //  = MINIMUM RATE in milli seconds, (32ms to 522.232s) must be MUCH smaller than timeout
-    WatchDogConfig.timeout  = WATCHDOGTIMEOUT; //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s)
-    WatchDogConfig.callback = WatchDogCallBack;
-    TeensyWatchDog.begin(WatchDogConfig);
-    LastDogKick = millis(); // needed? - yes!
-#endif
+
     StartInactvityTimeout();
     SizeOfCompressedData = sizeof(CompressedData);
     GetTXVersionNumber();
@@ -3308,9 +3315,9 @@ void ShowFileErrorMsg()
     char ErrorOff[] = "vis error,0";
     for (int pp = 0; pp < 3; pp++) {
         SendCommand(ErrorOn);
-        delay(200);
+        Procrastinate(200);
         SendCommand(ErrorOff);
-        delay(100);
+        Procrastinate(100);
     }
     FileError = false;
 }
@@ -3387,7 +3394,7 @@ void SetDefaultValues()
     char DefaultChannelNames[CHANNELSUSED][11] = {{"Aileron"}, {"Elevator"}, {"Throttle"}, {"Rudder"}, {"Ch 5"}, {"Ch 6"}, {"Ch 7"}, {"Ch 8"}, {"Ch 9"}, {"Ch 10"}, {"Ch 11"}, {"Ch 12"}, {"Ch 13"}, {"Ch 14"}, {"Ch 15"}, {"Ch 16"}};
     SendCommand(ProgressStart);
     SendValue(Progress, 5);
-    delay(10);
+    Procrastinate(10);
     strcpy(ModelName, defaultName);
 
     for (i = 0; i < CHANNELSUSED; ++i) {
@@ -3409,14 +3416,14 @@ void SetDefaultValues()
         }
     }
     SendValue(Progress, 15);
-    delay(10);
+    Procrastinate(10);
     for (j = 0; j < MAXMIXES; ++j) {
         for (i = 0; i < CHANNELSUSED; ++i) {
             Mixes[j][i] = 0;
         }
     }
     SendValue(Progress, 25);
-    delay(10);
+    Procrastinate(10);
 
     for (j = 0; j < FlightModesUsed + 1; ++j) { // must have fudged this somewhere.... 5?!
         for (i = 0; i < CHANNELSUSED; ++i) {
@@ -3427,7 +3434,7 @@ void SetDefaultValues()
     RXCellCount = 3;
 
     SendValue(Progress, 45);
-    delay(10);
+    Procrastinate(10);
     for (i = 0; i < CHANNELSUSED; ++i) {
         InPutStick[i] = i;
     }
@@ -3442,12 +3449,12 @@ void SetDefaultValues()
     Switch3Reversed = false;
     Switch4Reversed = false;
     SendValue(Progress, 65);
-    delay(10);
+    Procrastinate(10);
     for (i = 0; i < CHANNELSUSED; ++i) {
         FailSafeChannel[i] = false;
     }
     SendValue(Progress, 75);
-    delay(10);
+    Procrastinate(10);
     for (i = 0; i < CHANNELSUSED; ++i) {
         for (j = 0; j < 10; ++j) {
             ChannelNames[i][j] = DefaultChannelNames[i][j];
@@ -3469,11 +3476,11 @@ void SetDefaultValues()
     }
 
     SendValue(Progress, 95);
-    delay(10);
+    Procrastinate(10);
     SaveOneModel(ModelNumber);
     UpdateModelsNameEveryWhere();
     SendValue(Progress, 100);
-    delay(100);
+    Procrastinate(100);
     SendCommand(ProgressEnd);
 }
 
@@ -3735,7 +3742,7 @@ void DisplayCurve()
         DrawLine(xPoints[2], yPoints[2], xPoints[3], yPoints[3], ForeGroundColour);
         DrawLine(xPoints[3], yPoints[3], xPoints[4], yPoints[4], ForeGroundColour);
     }
-    delay(250);
+    Procrastinate(250);
     if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == 1) {
         SendCommand(b3on);
         SendCommand(b4on);
@@ -3961,7 +3968,7 @@ void ReceiveModelFile()
     Radio1.startListening();
     RXTimer = millis();           // Start timer
     while (!Radio1.available()) { // Await the sender....
-        delay(5);
+        Procrastinate(5);
         KickTheDog(); // Watchdog
         if ((millis() - RXTimer) / 1000 >= FILETIMEOUT) {
 #ifdef DB_MODEL_EXCHANGE
@@ -4014,7 +4021,7 @@ void ReceiveModelFile()
             Fposition += BUFFERSIZE;
             p = ((float)Fposition / (float)Fsize) * 100;
             SendValue(Progress, p);
-            delay(5);
+            Procrastinate(5);
 #ifdef DB_MODEL_EXCHANGE
             PacketNumber = Fbuffer[25];
             Serial.print("PacketNumber: ");
@@ -4030,7 +4037,7 @@ void ReceiveModelFile()
     ModelsFileNumber.close();
     BuildDirectory();
     SendText(ModelsView_filename, Success);
-    delay(2000);
+    Procrastinate(2000);
     SendText(ModelsView_filename, SingleModelFile);
     Radio1.setRetries(RETRYCOUNT, RETRYWAIT);
     // **************************************** Below Here the new model is imported for immediate use
@@ -4064,7 +4071,7 @@ void SendModelFile()
     int           p            = 5;
     SendCommand(ProgressStart);
     SendValue(Progress, p);
-    delay(10);
+    Procrastinate(10);
 #ifdef DB_MODEL_EXCHANGE
     Serial.print("Sending model: ");
     Serial.println(SingleModelFile);
@@ -4082,7 +4089,7 @@ void SendModelFile()
     Radio1.setRetries(15, 15);
     Radio1.openWritingPipe(TXPipe);
     Radio1.stopListening();
-    delay(4);
+    Procrastinate(4);
     while (Fposition < Fsize) {
         KickTheDog(); // Watchdog
         p = ((float)Fposition / (float)Fsize) * 100;
@@ -4104,7 +4111,7 @@ void SendModelFile()
         Radio1.flush_tx();
         Radio1.flush_rx();
         if (Radio1.write(&Fbuffer, BUFFERSIZE + 4)) {
-            delay(25); // allow time for receive and write
+            Procrastinate(25); // allow time for receive and write
             if (Radio1.isAckPayloadAvailable()) {
                 Radio1.read(&Fack, sizeof(Fack));
             }
@@ -4125,7 +4132,7 @@ void SendModelFile()
     Serial.println("ALL SENT.");
 #endif
     SendValue(Progress, 100);
-    delay(100);
+    Procrastinate(100);
     SetThePipe(DefaultPipe);
     Radio1.setRetries(RETRYCOUNT, RETRYWAIT);
     Radio1.setCRCLength(RF24_CRC_8);
@@ -4514,13 +4521,16 @@ void Button_was_pressed()
             DoSbusSendOnly      = GetValue(BuddyP);  // Pupil, wired
             BuddyMaster         = GetValue(BuddyM);  // Master, either.
             SendValue(Progress,35);
+            Procrastinate(1);
             Qnh                 = GetValue(QNH);
             DeltaGMT            = GetValue(dGMT);
             SendValue(Progress,45);
+            Procrastinate(1);
             TrimFactor          = GetValue(trf);
             LowBattery          = GetValue(Bwn);
             ScreenTimeout       = GetValue(ScreenViewTimeout);
             SendValue(Progress,100);
+            Procrastinate(1);
             Inactivity_Timeout  = GetValue(Pto) * TICKSPERMINUTE;
             if (Inactivity_Timeout < INACTIVITYMINIMUM) Inactivity_Timeout = INACTIVITYMINIMUM;
             if (Inactivity_Timeout > INACTIVITYMAXIMUM) Inactivity_Timeout = INACTIVITYMAXIMUM;
@@ -4538,6 +4548,7 @@ void Button_was_pressed()
             CurrentView = MainSetupView;
             b5isGrey = false;
             SendCommand(ProgressEnd);
+            Procrastinate(1);
             return;
         }
 
@@ -4735,7 +4746,7 @@ void Button_was_pressed()
         if (InStrng(PowerOff, TextIn) > 0) {
             if (!LostContactFlag && BoundFlag) {
                 SendCommand(StillConnected);
-                delay(750); // 3/4 second
+                Procrastinate(750); // 3/4 second
                 SendCommand(NotStillConnected);
             }
             else {
@@ -5139,26 +5150,26 @@ void Button_was_pressed()
             {
                 SendText(ModelsView_filename, SingleModelFile);
                 SendCommand(ProgressStart);
-                delay(20);
+                Procrastinate(20);
                 SendValue(Progress, 10);
-                delay(20);
+                Procrastinate(20);
                 CloseModelsFile();
                 for (uint8_t WriteTwice = 1; WriteTwice <= 2; ++WriteTwice) { // if a new file, write twice seems to be needed!!
                     SingleModelFlag = true;
                     OpenModelsFile();
                     SendValue(Progress, 25);
-                    delay(10);
+                    Procrastinate(10);
                     SaveOneModel(1);
                     SendValue(Progress, 50);
-                    delay(10);
+                    Procrastinate(10);
                     CloseModelsFile();
                 }
                 SingleModelFlag = false;
                 SendValue(Progress, 75);
-                delay(10);
+                Procrastinate(10);
                 BuildDirectory();
                 SendValue(Progress, 100);
-                delay(10);
+                Procrastinate(10);
                 SendCommand(ProgressEnd);
             }
             else {
@@ -5173,9 +5184,9 @@ void Button_was_pressed()
         p = InStrng(Import, TextIn);
         if (p > 0) {
             SendCommand(ProgressStart);
-            delay(10);
+            Procrastinate(10);
             SendValue(Progress, 5);
-            delay(10);
+            Procrastinate(10);
             j = 0;
             i = p + 5;
             while (TextIn[i] > 0) {
@@ -5190,20 +5201,20 @@ void Button_was_pressed()
             if (InStrng(ModExt, SingleModelFile) == 0) strcat(SingleModelFile, ModExt);
             SingleModelFlag = true;
             SendValue(Progress, 10);
-            delay(10);
+            Procrastinate(10);
             CloseModelsFile();
             ReadOneModel(1);
             SendValue(Progress, 50);
-            delay(10);
+            Procrastinate(10);
             SingleModelFlag = false;
             CloseModelsFile();
             SendValue(Progress, 75);
-            delay(10);
+            Procrastinate(10);
             SaveAllParameters();
             CloseModelsFile();
             UpdateModelsNameEveryWhere();
             SendValue(Progress, 100);
-            delay(10);
+            Procrastinate(10);
             SendCommand(ProgressEnd);
             if (FileError) ShowFileErrorMsg();
             ClearText();
@@ -5252,7 +5263,7 @@ void Button_was_pressed()
             Serial.println (ModelNumber);
             SaveOneModel(ModelNumber);
             ClearText();
-            delay (1500);                        // allow time for SD write to happen
+            Procrastinate (1500);                        // allow time for SD write to happen
             InhibitNameCheck = false;
             return;
         }

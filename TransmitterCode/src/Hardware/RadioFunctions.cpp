@@ -98,6 +98,17 @@ void BufferNewPipe()
     SendBuffer[7] = (uint8_t)((NewPipe)&0xFF);
 }
 /************************************************************************************************************/
+void Procrastinate(uint32_t HowLong){
+
+uint32_t ThisMoment = millis();
+
+    while ((millis()-ThisMoment) < HowLong){
+         KickTheDog();
+         if (BoundFlag) SendData();
+    }
+}
+
+/************************************************************************************************************/
 
 void SendData()
 {
@@ -250,7 +261,7 @@ void InitRadio(uint64_t Pipe)
     Radio1.openWritingPipe(Pipe);             // Current Pipe address used for Binding
     Radio1.setRetries(RETRYCOUNT, RETRYWAIT); // automatic retries and pauses *** WAS 15,15 *** !!
     Radio1.stopListening();
-    delay(1);
+    Procrastinate(1);
     Radio1.enableDynamicPayloads();
     Radio1.setAddressWidth(5);       // was 4, is now 5
     Radio1.setCRCLength(RF24_CRC_8); // could be 16
@@ -263,7 +274,7 @@ void SetThePipe(uint64_t WhichPipe)
 {
     Radio1.openWritingPipe(WhichPipe);
     Radio1.stopListening();
-    delay(1); // alllow things to happen
+    Procrastinate(1); // alllow things to happen
 }
 
 /*********************************************************************************************************************************/
