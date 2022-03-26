@@ -220,9 +220,8 @@ uint8_t       LastMixNumber      = 1;
 uint8_t       MixNumber          = 0;
 uint8_t       CurrentView        = FrontView;
 uint8_t       SavedCurrentView   = FrontView;
-const uint8_t MaxDataTransferred = UNCOMPRESSEDWORDS;  // = 40 bytes     A few extra bytes sent after channels' values
 uint64_t      DefaultPipe        = DEFAULTPIPEADDRESS; //          Default Radio pipe address
-uint64_t      NewPipe            = 0xBABE1E5420LL;     //             New Radio pipe address for binding will come from MAC address
+uint64_t      NewPipe            = 0xBABE1E5420LL;     //             New Radio pipe address for binding comes from MAC address
 char          TextIn[CharsMax];
 unsigned int  i;
 unsigned int  PacketsPerSecond = 0;
@@ -262,8 +261,8 @@ uint8_t AckPayloadSize = sizeof(AckPayload);   // i.e. 6
 
 // *****************************************************************************************************************
 
-uint16_t SendBuffer[MaxDataTransferred];     //    Data to send to rx (16 words)
-uint16_t ShownBuffer[MaxDataTransferred];    //    Data shown before
+uint16_t SendBuffer[UNCOMPRESSEDWORDS];      //    Data to send to rx (16 words)
+uint16_t ShownBuffer[UNCOMPRESSEDWORDS];     //    Data shown before
 uint16_t LastBuffer[CHANNELSUSED + 1];       //    Used to spot any change
 uint16_t PreMixBuffer[CHANNELSUSED + 1];     //    Data collected from sticks
 uint8_t  MaxDegrees[5][CHANNELSUSED + 1];    //    Max degrees (180?)
