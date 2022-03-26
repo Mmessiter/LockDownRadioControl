@@ -42,6 +42,7 @@ var _radio_functions_8h =
     [ "MapToSBUS", "_radio_functions_8h.html#a6a495c5560f12cc3fd3df9454927d681", null ],
     [ "ParseAckPayload", "_radio_functions_8h.html#a230e862a4da0f66746b6b3afba6bd77a", null ],
     [ "PreScan", "_radio_functions_8h.html#a5e3e764f8311564f5e20c3a838b25c07", null ],
+    [ "Procrastinate", "_radio_functions_8h.html#a760609a682300dfe6bfaac737fd4d5eb", null ],
     [ "ReadSwitches", "_radio_functions_8h.html#ab0af36f3442ad4f2d0b716c14c7d6085", null ],
     [ "ScanAllChannels", "_radio_functions_8h.html#a3856ba0adae43d089f08c7b7f653b306", null ],
     [ "SendCharArray", "_radio_functions_8h.html#acd617ff93ca893aa7d65aaf2898dfc3d", null ],

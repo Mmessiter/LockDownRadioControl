@@ -179,7 +179,6 @@ var _transmitter_code_2src_2main_8cpp =
     [ "MySbus", "_transmitter_code_2src_2main_8cpp.html#a5424788640aaa8d535d6ea077949ef82", null ],
     [ "OpenModelsFile", "_transmitter_code_2src_2main_8cpp.html#ae7618f38a148877bc5681be58cba8354", null ],
     [ "ParseAckPayload", "_transmitter_code_2src_2main_8cpp.html#a230e862a4da0f66746b6b3afba6bd77a", null ],
-    [ "Procrastinate", "_transmitter_code_2src_2main_8cpp.html#a760609a682300dfe6bfaac737fd4d5eb", null ],
     [ "Radio1", "_transmitter_code_2src_2main_8cpp.html#a621c346e4b1d9b24b9a5bda63d0f0f52", null ],
     [ "ReadCHSwitch", "_transmitter_code_2src_2main_8cpp.html#aeed3be7dfc45cde2e9e9d3578c104760", null ],
     [ "ReadFMSwitch", "_transmitter_code_2src_2main_8cpp.html#ae0f54c30ea92041b69cdccb888cb86b8", null ],
