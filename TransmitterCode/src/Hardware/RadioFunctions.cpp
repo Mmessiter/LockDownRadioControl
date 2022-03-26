@@ -107,7 +107,7 @@ uint32_t ThisMoment = millis();
    
     while ((millis()-ThisMoment) < HowLong){
          KickTheDog();                        // keep watchdog happy
-         if (BoundFlag) SendData();           // keep receiver happy if bound to one // heer????
+        // if (BoundFlag) SendData();           // keep receiver happy if bound to one // heer????
     }
    
 }
