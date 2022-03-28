@@ -1173,7 +1173,6 @@ void SendOtherValue(char* nbox, int value)
     ValueSent = true;
 }
 
-
 /*********************************************************************************************************************************/
 
 void GetTextIn()
@@ -1961,7 +1960,7 @@ short unsigned int GetStickInput(uint8_t l)
 
 void DoMixes()
 {
-    int m, c, p, mindeg, maxdeg, TheSum, Result;
+int m, c, p, mindeg, maxdeg, TheSum, Result;
     for (m = 1; m <= MAXMIXES; ++m) {
         if (Mixes[m][M_FlightMode] == FlightMode || Mixes[m][M_FlightMode] == 0) {
             if (Mixes[m][M_Enabled] == 1) {
