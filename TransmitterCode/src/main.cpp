@@ -1900,7 +1900,6 @@ int GetNextNumber(int p1, char text1[CharsMax])
     char text2[CharsMax];
     int  j = 0;
     int  i = p1 - 1;
-    j      = 0;
     while (isDigit(text1[i]) && i < CharsMax) {
         text2[j] = text1[i];
         ++i;
