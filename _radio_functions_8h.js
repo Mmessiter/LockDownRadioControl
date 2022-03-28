@@ -73,7 +73,6 @@ var _radio_functions_8h =
     [ "GapSum", "_radio_functions_8h.html#a9942132c4d194a03fc9791cfdf876ac3", null ],
     [ "HighlightColour", "_radio_functions_8h.html#a0008024e40c8e90017f18745d34b6224", null ],
     [ "HopStart", "_radio_functions_8h.html#a937fc53e966c6b5c66b9d66c01cec13f", null ],
-    [ "i", "_radio_functions_8h.html#ac8936188af0c1d2f8b9d0cd25fde43b2", null ],
     [ "JustHoppedFlag", "_radio_functions_8h.html#ae768cbeda38b92908ae481b943893e3b", null ],
     [ "LostContactFlag", "_radio_functions_8h.html#ad5f463902789a79fc622b3befd9409b9", null ],
     [ "NewPipe", "_radio_functions_8h.html#a594f07765a7ed90e0830d4e2f69a7112", null ],

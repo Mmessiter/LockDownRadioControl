@@ -343,7 +343,6 @@ var _transmitter_code_2src_2main_8cpp =
     [ "HighlightColour", "_transmitter_code_2src_2main_8cpp.html#a0008024e40c8e90017f18745d34b6224", null ],
     [ "Hours", "_transmitter_code_2src_2main_8cpp.html#aad0ac7c3fa58b68dbc76618d993683ee", null ],
     [ "HtextCMD", "_transmitter_code_2src_2main_8cpp.html#a81be91332c626ad94acd328facf875be", null ],
-    [ "i", "_transmitter_code_2src_2main_8cpp.html#ac8936188af0c1d2f8b9d0cd25fde43b2", null ],
     [ "ina219", "_transmitter_code_2src_2main_8cpp.html#a69393b86406e49dbacfbabd283877495", null ],
     [ "Inactivity_Start", "_transmitter_code_2src_2main_8cpp.html#a42f848041eda5cd5b98d334ab44a15a1", null ],
     [ "Inactivity_Timeout", "_transmitter_code_2src_2main_8cpp.html#ae99f193f5a3e06508bbe4b32ee91a963", null ],
