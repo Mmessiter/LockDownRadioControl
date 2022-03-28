@@ -220,11 +220,9 @@ uint8_t       LastMixNumber      = 1;
 uint8_t       MixNumber          = 0;
 uint8_t       CurrentView        = FrontView;
 uint8_t       SavedCurrentView   = FrontView;
-//const uint8_t MaxDataTransferred = UNCOMPRESSEDWORDS;  // = 40 bytes     A few extra bytes sent after channels' values
 uint64_t      DefaultPipe        = DEFAULTPIPEADDRESS; //          Default Radio pipe address
 uint64_t      NewPipe            = 0xBABE1E5420LL;     //             New Radio pipe address for binding comes from MAC address
 char          TextIn[CharsMax];
-unsigned int  i;
 unsigned int  PacketsPerSecond = 0;
 unsigned int  LostPackets      = 0;
 uint8_t       PacketNumber     = 0;
@@ -857,7 +855,7 @@ void KickTheDog()
 void Reboot()
 {
 #ifdef USE_WATCHDOG
-    for (i = 0; i < 30; ++i) {
+    for (int i = 0; i < 30; ++i) {
         TeensyWatchDog.feed();
     } // Dog will explode when overfed
 #endif
@@ -872,7 +870,7 @@ void SendCommand(char* tbox)
     // Serial.print (" NEXTION TEST COMMAND: ");  // For wierd session
     // Serial.println(tbox);
 
-    for (i = 0; i < 3; ++i) {
+    for (int i = 0; i < 3; ++i) {
         NEXTION.write(0xff);
     } // Send end of Input message
 }
@@ -1129,6 +1127,7 @@ uint16_t mp(uint8_t lowres)
 
 void ClearText()
 {
+    int i;
     for (i = 0; i < CharsMax; ++i) {
         TextIn[i] = 0;
     }
@@ -1179,13 +1178,14 @@ void SendOtherValue(char* nbox, int value)
 
 void GetTextIn()
 {
+    int j = 0;
     ClearText();
     if (NEXTION.available()) {
         Procrastinate(10);
         while (NEXTION.available()) {
-            TextIn[i] = uint8_t(NEXTION.read());
-            if (TextIn[i] == '$') TextIn[i] = 0; 
-            if (i < CharsMax) ++i;
+            TextIn[j] = uint8_t(NEXTION.read());
+            if (TextIn[j] == '$') TextIn[j] = 0; 
+            if (j < CharsMax) ++j;
         }
     }
 }
@@ -1267,7 +1267,7 @@ bool GetButtonPress()
 {
     bool ButtonPressed = false;
     char a;
-    i = 0;
+    int i = 0;
     if (NEXTION.available()) {
         ButtonPressed = true;
         Procrastinate(10);
@@ -1583,7 +1583,7 @@ FASTRUN void ShowComms()
         {
             if ((CurrentView == FrontView)) {
                 if (!BoundFlag) {
-                    SendCommand(BindButtonVisible); // heer
+                    SendCommand(BindButtonVisible); 
                     BindButton = true;
                 }
                 else {
@@ -1900,7 +1900,7 @@ int GetNextNumber(int p1, char text1[CharsMax])
 {
     char text2[CharsMax];
     int  j = 0;
-    i      = p1 - 1;
+    int  i = p1 - 1;
     j      = 0;
     while (isDigit(text1[i]) && i < CharsMax) {
         text2[j] = text1[i];
@@ -2070,7 +2070,7 @@ void get_new_channels_values()
 void CalibrateSticks()
 {
     int j;
-    for (i = 0; i < PROPOCHANNELS; ++i)
+    for (int i = 0; i < PROPOCHANNELS; ++i)
     {
         j = analogRead(AnalogueInput[i]);
         if (ChannelMax[i] < j) ChannelMax[i] = j;
@@ -2085,7 +2085,7 @@ void CalibrateSticks()
 
 void CentreMaxMins()
 {
-    for (i = 0; i < CHANNELSUSED; ++i)
+    for (int i = 0; i < CHANNELSUSED; ++i)
     {
         ChannelMax[i]    = 512; // halfway up
         ChannelMin[i]    = 512; // halfway down
@@ -2295,7 +2295,7 @@ void UpdateModelsNameEveryWhere()
 
 void InitSwitches()
 {
-    for (i = 0; i < 8; ++i) {
+    for (int i = 0; i < 8; ++i) {
         pinMode(SwitchNumber[i], INPUT_PULLUP);
     }
 }
@@ -2305,7 +2305,7 @@ void InitSwitches()
 /** @brief STICKS CALIBRATION */
 void InitMaxMin()
 {
-    for (i = 0; i < CHANNELSUSED; ++i) {
+    for (int i = 0; i < CHANNELSUSED; ++i) {
         ChannelMax[i]    = 1024;
         ChannelMidHi[i]  = 512 + 256;
         ChannelCentre[i] = 512;
@@ -2319,7 +2319,7 @@ void InitMaxMin()
 void CentreTrims()
 {
     for (int j = 0; j <= FlightModesUsed; ++j) {
-        for (i = 0; i < CHANNELSUSED; ++i) {
+        for (int i = 0; i < CHANNELSUSED; ++i) {
             Trims[j][i] = 80;
         }
     }
@@ -2329,9 +2329,9 @@ void CentreTrims()
 
 void InitCentreDegrees()
 {
-    int j;
-    for (j = 1; j <= 4; ++j) {
-        for (i = 0; i < CHANNELSUSED; ++i) {
+  
+    for (int j = 1; j <= 4; ++j) {
+        for (int i = 0; i < CHANNELSUSED; ++i) {
             MaxDegrees[j][i]    = 180; //  180 degrees
             MidHiDegrees[j][i]  = 135;
             CentreDegrees[j][i] = 90; //  90 degrees
@@ -2346,7 +2346,7 @@ void InitCentreDegrees()
 /** @brief Get centre as 90 degrees */
 void ChannelCentres()
 {
-    for (i = 0; i < 8; ++i) {
+    for (int i = 0; i < 8; ++i) {
         ChannelCentre[i] = analogRead(AnalogueInput[i]);
         ChannelMidHi[i]  = ChannelCentre[i] + ((ChannelMax[i] - ChannelCentre[i]) / 2);
         ChannelMidLow[i] = ChannelMin[i] + ((ChannelCentre[i] - ChannelMin[i]) / 2);
@@ -2534,6 +2534,7 @@ void UpdateButtonLabels()
 bool ReadOneModel(uint8_t Mnum)
 {
     unsigned int j;
+    unsigned int i;
     if (!ModelsFileOpen) OpenModelsFile();
     if (!ModelsFileOpen) return false;
     SDCardAddress = TXSIZE;                    //  spare bytes for TX stuff
@@ -2683,6 +2684,7 @@ bool LoadAllParameters()
 {
     int p;
     int j = 0;
+    int i = 0;
     if (!ModelsFileOpen) OpenModelsFile();
     if (!ModelsFileOpen) {Procrastinate (500);OpenModelsFile();}  
     if (!ModelsFileOpen) {Procrastinate (500);OpenModelsFile();}  // try twice more as it might be a bit unreliable !
@@ -2907,6 +2909,7 @@ void GetStatistics()
 int InStrng(char text1[CharsMax], char text2[CharsMax])
 {
     unsigned int j;
+    unsigned int i;
     unsigned int flag;
     for (j = 0; j < strlen(text2); ++j) {
         flag = 0;
@@ -2925,6 +2928,7 @@ void SaveTXStuff()
     int  rd  = 0;
     bool EON = false;
     int  j   = 0;
+    int  i   = 0;
 
     if (!ModelsFileOpen) OpenModelsFile();
     rd            = RENEWDATA;
@@ -2990,6 +2994,7 @@ void SaveTXStuff()
 void SaveOneModel(int mnum)
 {
     unsigned int j;
+    unsigned int i;
     bool EndOfName = false;
     
     if (!ModelsFileOpen) OpenModelsFile();
@@ -3118,9 +3123,9 @@ void ReadHelpFile(char* fname, char* htext)
 {
     char errormsg[] = "The Help file was not found.";
     File fnumber;
+    int i  = 0;
     char a[] = " ";
     htext[0] = 0;
-    i        = 0;
     fnumber  = SD.open(fname, FILE_READ);
     if (!fnumber) {Procrastinate(500); fnumber  = SD.open(fname, FILE_READ);}
     if (!fnumber) {Procrastinate(500); fnumber  = SD.open(fname, FILE_READ);}  // try 3 times before giving up
@@ -3145,7 +3150,7 @@ void SendHelp()
     char HelpView[] = "HelpView.HelpText";
     char HelpFile[20];
     char HelpText[MAXFILELEN + 10]; // MAX = 1200
-    i = 9;
+    int i = 9;
     int j = 0;
     while (TextIn[i] != 0 && j < 19) {
         HelpFile[j] = TextIn[i];
@@ -3160,6 +3165,7 @@ void SendHelp()
 /** @brief Discover which channel to setup */
 int GetChannel()
 {
+    unsigned int i ;
     for (i = 0; i < sizeof(TextIn); ++i) {
         if (isdigit(TextIn[i])) break;
     }
@@ -3268,6 +3274,7 @@ void BuildDirectory()
     char MOD[] = ".MOD";
     char Entry1[20];
     char fn[18];
+    int i = 0;
     File dir  = SD.open("/");
     ExportedFileCounter = 0;
     while (true) {
@@ -3295,7 +3302,7 @@ void ShowFileNumber()
     char newfname[17];
     if (FileNumberInView >= ExportedFileCounter) FileNumberInView = 0;
     if (FileNumberInView < 0) FileNumberInView = ExportedFileCounter - 1;
-    for (i = 0; i < 12; ++i) {
+    for (int i = 0; i < 12; ++i) {
         newfname[i]     = TheFilesList[FileNumberInView][i];
         newfname[i + 1] = 0;
         if (newfname[i] <= 32 || newfname[i] > 127) break;
@@ -3355,7 +3362,7 @@ void ShowDirectory()
     uint8_t n              = 0;
     uint8_t nlp            = 0;
     strcpy(filelistbuf, nul);
-    for (i = 0; i < ExportedFileCounter; ++i) {
+    for (int i = 0; i < ExportedFileCounter; ++i) {
         nlp = 13;
         for (int z = 0; z < 12; z++) {
             t[0] = TheFilesList[i][z];
@@ -3383,6 +3390,7 @@ void ShowDirectory()
 void SetDefaultValues()
 {
     int  j;
+    int  i;
     char ProgressStart[]                       = "vis Progress,1";
     char ProgressEnd[]                         = "vis Progress,0";
     char Progress[]                            = "Progress";
@@ -4234,10 +4242,10 @@ void updateOneSwitchView()
 /**
  * BUTTON WAS PRESSED (DEAL WITH INPUT FROM NEXTION DISPLAY)
  *
- * This function is 1000+ lines long
  */
 void Button_was_pressed()
 {
+    int i;
     char OneSwitchView_r1[]        = "r1";     // Flight modes
     char OneSwitchView_r2[]        = "r2";     // Auto
     char OneSwitchView_r3[]        = "r3";     // Ch9
@@ -5734,7 +5742,7 @@ void Button_was_pressed()
 uint16_t MakeTwobytes(bool* f)
 {                    // Pass arraypointer. Returns the two bytes
     uint16_t tb = 0; // all false is default
-    for (i = 0; i < 16; ++i) {
+    for (int i = 0; i < 16; ++i) {
         if (f[15 - i] == true) {
             tb |= 1 << (i);
         } // sets a bit if true
@@ -5884,7 +5892,7 @@ void GetFlightMode()
 
 void ReadSwitches()
 {
-    for (i = 0; i < 8; ++i) {
+    for (int i = 0; i < 8; ++i) {
         if (!digitalRead(SwitchNumber[i])) {
             Switch[i] = true;
         }
@@ -6141,7 +6149,7 @@ void loop()
 
 
 
-    if (BindingNow == 2 && (millis() - BindingTimer) > 100) { // heer
+    if (BindingNow == 2 && (millis() - BindingTimer) > 100) {
         if (!BoundFlag) {
 #ifdef DB_BIND
             Serial.println("Binding now");

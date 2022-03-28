@@ -89,7 +89,6 @@ extern int            PipeTimeout;
 extern uint8_t        CurrentMode;
 extern uint8_t        NoCarrier[];
 extern uint8_t        AllChannels[];
-extern unsigned int   i;
 extern char           NoSleeping[];
 extern char           NEXTIONSleepTime[];
 extern uint8_t        ScanStart;

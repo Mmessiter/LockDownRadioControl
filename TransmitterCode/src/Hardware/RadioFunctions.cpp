@@ -286,7 +286,7 @@ void DoScanInit()
     CurrentMode = SCANWAVEBAND;     // Fhss == No transmitting please, we are scanning.
     BoundFlag   = false;
     SendCommand(NoSleeping);
-    for (i = 0; i < 125; i++) {
+    for (int i = 0; i < 125; i++) {
         NoCarrier[i]   = 0;
         AllChannels[i] = 0;
     }
