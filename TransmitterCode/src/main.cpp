@@ -5401,7 +5401,7 @@ void Button_was_pressed()
         }
         if (InStrng(TR3, TextIn) > 0) { // TR3 ->3
             Trims[FlightMode][3] = TextIn[3];
-             ClearText(); 
+            ClearText(); 
             return;
         }
 
@@ -5418,14 +5418,14 @@ void Button_was_pressed()
         if (InStrng(Models_View, TextIn) > 0) {
             SendCommand(pModelsView);
             ReadOneModel(ModelNumber);
-
-           // Serial.println ("HERE?????????????");
-
             CurrentView = ModelsView;
             UpdateModelsNameEveryWhere();
             SendValue(ModelsView_ModelNumber, ModelNumber);
             BuildDirectory(); // of SD card
             ShowFileNumber();
+            ClearText(); 
+            return;
+
         }
         if (InStrng(LoadModel, TextIn) > 0) {
             ModelNumber = GetValue(ModelsView_ModelNumber);
