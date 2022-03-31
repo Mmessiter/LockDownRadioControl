@@ -4489,6 +4489,8 @@ void Button_was_pressed()
     char TrimView_r2[]             = "r2";
     char TrimView_r3[]             = "r3";
     char TrimView_r4[]             = "r4";
+    char Md1[]                     = "Md1";
+    char Md2[]                     = "Md2";
 
    
 
@@ -4509,7 +4511,16 @@ void Button_was_pressed()
             ClearText();
             return;
         }
-        
+        if (InStrng(Md1, TextIn) > 0) {           
+            SticksMode = 1;
+            ClearText();
+            return;
+        }  
+        if (InStrng(Md2, TextIn) > 0) {           
+            SticksMode = 2;
+            ClearText();
+            return;
+        }
         if (InStrng(Mark, TextIn) > 0) {           
             GPSMarkHere = 255;                // Mark this location
             GPSMaxDistance = 0;
