@@ -5339,13 +5339,13 @@ void Button_was_pressed()
 
         if (InStrng(TrimView, TextIn) > 0) { // TrimView just appeared, so update it. heer
             SendCommand(pTrimView);
-            UpdateModelsNameEveryWhere(); // also updates trimview
+            CurrentView = Trim_View;
+            UpdateModelsNameEveryWhere(); // also updates trimview (If CurrentView = Trim_View!)
             if (!UkRules){
                     SendText(b17,Htext0);
                 }else{
                     SendText(b17,Htext1);
                 } 
-            CurrentView = Trim_View;
             if (SticksMode == 2) {
                 SendValue(Mode2,1);
                 SendValue(Mode1,0);}
