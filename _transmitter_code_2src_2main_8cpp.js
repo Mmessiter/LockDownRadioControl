@@ -445,6 +445,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "SpecialColour", "_transmitter_code_2src_2main_8cpp.html#ad573af1737d71953a0301a82b1bee22d", null ],
     [ "StartBackGround", "_transmitter_code_2src_2main_8cpp.html#a4c274dbafec73d54251779fa8640d290", null ],
     [ "StartLocation", "_transmitter_code_2src_2main_8cpp.html#a4037de0ea0fc7cd3c7cd3c40eee10a98", null ],
+    [ "SticksMode", "_transmitter_code_2src_2main_8cpp.html#a5624a3289e95022504382c0d5a194b61", null ],
     [ "success", "_transmitter_code_2src_2main_8cpp.html#a78e0e3b7ed8385dd9fdbd0d0b6836054", null ],
     [ "SwapWaveBand", "_transmitter_code_2src_2main_8cpp.html#aaa4402c66bda6731ffa04b970e1eaeea", null ],
     [ "SwapWaveBandTimer", "_transmitter_code_2src_2main_8cpp.html#a8dbdaf66b1bf538b3c1aea4b6ce6c8c2", null ],
