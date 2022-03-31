@@ -1,17 +1,5 @@
 var NAVTREEINDEX9 =
 {
-"globals_defs_h.html":[12,1,6,7],
-"globals_defs_i.html":[12,1,6,8],
-"globals_defs_k.html":[12,1,6,9],
-"globals_defs_l.html":[12,1,6,10],
-"globals_defs_m.html":[12,1,6,11],
-"globals_defs_n.html":[12,1,6,12],
-"globals_defs_o.html":[12,1,6,13],
-"globals_defs_p.html":[12,1,6,14],
-"globals_defs_r.html":[12,1,6,15],
-"globals_defs_s.html":[12,1,6,16],
-"globals_defs_t.html":[12,1,6,17],
-"globals_defs_u.html":[12,1,6,18],
 "globals_defs_w.html":[12,1,6,19],
 "globals_defs_x.html":[12,1,6,20],
 "globals_defs_y.html":[12,1,6,21],
@@ -249,5 +237,17 @@ var NAVTREEINDEX9 =
 "struct_raw_degrees.html#a156d5ced092fa1473b9b669a29be3509":[11,0,14,1],
 "struct_raw_degrees.html#a156d5ced092fa1473b9b669a29be3509":[11,0,14,2],
 "struct_raw_degrees.html#a39c31d2d0332155a4d2c975cec0a796f":[11,0,14,5],
-"struct_tiny_g_p_s_altitude.html":[11,0,19]
+"struct_tiny_g_p_s_altitude.html":[11,0,19],
+"struct_tiny_g_p_s_altitude.html#a1eb3e5b425784fc0db3e9ffe0f77f741":[11,0,19,5],
+"struct_tiny_g_p_s_altitude.html#a1eb3e5b425784fc0db3e9ffe0f77f741":[11,0,19,4],
+"struct_tiny_g_p_s_altitude.html#a1eb3e5b425784fc0db3e9ffe0f77f741":[11,0,19,3],
+"struct_tiny_g_p_s_altitude.html#a5a39d145bb1778814007206c765189f7":[11,0,19,8],
+"struct_tiny_g_p_s_altitude.html#a5a39d145bb1778814007206c765189f7":[11,0,19,7],
+"struct_tiny_g_p_s_altitude.html#a5a39d145bb1778814007206c765189f7":[11,0,19,6],
+"struct_tiny_g_p_s_altitude.html#a5ae68d990ea08d4e21cfa6aefb46cc03":[11,0,19,11],
+"struct_tiny_g_p_s_altitude.html#a5ae68d990ea08d4e21cfa6aefb46cc03":[11,0,19,10],
+"struct_tiny_g_p_s_altitude.html#a5ae68d990ea08d4e21cfa6aefb46cc03":[11,0,19,9],
+"struct_tiny_g_p_s_altitude.html#ac782babc0c485d47e6f57384e88b8cc8":[11,0,19,2],
+"struct_tiny_g_p_s_altitude.html#ac782babc0c485d47e6f57384e88b8cc8":[11,0,19,1],
+"struct_tiny_g_p_s_altitude.html#ac782babc0c485d47e6f57384e88b8cc8":[11,0,19,0]
 };
