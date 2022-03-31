@@ -531,7 +531,8 @@ uint16_t SpecialColour = Red;
 bool     Reconnected = false;
 uint8_t  LowBattery =  LOWBATTERY;
 uint32_t SbusRepeats = 0;
-bool VoltsDetected = false;
+bool     VoltsDetected = false;
+uint8_t  SticksMode = 2;
 
 /************************************************************************************************************/
 // This function returns distance (in MILES) between two GPS coordinates (in degrees)
@@ -2587,7 +2588,10 @@ bool ReadOneModel(uint8_t Mnum)
     if (LowBattery>100) LowBattery = LOWBATTERY;
     if (LowBattery<10) LowBattery = LOWBATTERY;
     ++SDCardAddress;
-    SDCardAddress += 28; // 28 Spare Bytes here (PID stuff gone)
+   // SticksMode = SDReadByte(SDCardAddress);   // Spare
+    ++SDCardAddress;
+
+    SDCardAddress += 27; // 27 Spare Bytes here (PID stuff gone)
     for (i = 0; i < CHANNELSUSED; ++i) {
         InPutStick[i] = SDReadByte(SDCardAddress);
         if (InPutStick[i] > 16) InPutStick[i] = i; // reset if nothing was saved!
@@ -2743,6 +2747,8 @@ bool LoadAllParameters()
       if(HighlightColour == 0) HighlightColour = Yellow;
        ++SDCardAddress;
        ++SDCardAddress;
+        SticksMode=SDReadByte(SDCardAddress);
+        ++SDCardAddress;
         MemoryForTransmtter = SDCardAddress;
         ReadOneModel(ModelNumber);
         return true;
@@ -2982,7 +2988,8 @@ void SaveTXStuff()
      SDUpdateInt(SDCardAddress,HighlightColour);
     ++SDCardAddress;
     ++SDCardAddress;
-
+     SDUpdateByte(SDCardAddress,SticksMode);
+    ++SDCardAddress;
     CloseModelsFile();
 }
 
@@ -3042,14 +3049,16 @@ void SaveOneModel(int mnum)
     }
     SDUpdateByte(SDCardAddress, RXCellCount);
     ++SDCardAddress;
-
     SDUpdateInt(SDCardAddress, TrimFactor); 
     ++SDCardAddress;
     ++SDCardAddress;
     SDUpdateByte(SDCardAddress, LowBattery); 
     ++SDCardAddress;
+   // SDUpdateByte(SDCardAddress, SticksMode); // Spare!!
+    ++SDCardAddress;
+    
         
-    SDCardAddress += 28; // 28 Spare Bytes here (PID stuff gone)
+    SDCardAddress += 27; // 27 Spare Bytes here (PID stuff gone)
 
     for (i = 0; i < CHANNELSUSED; ++i) {
         SDUpdateByte(SDCardAddress, InPutStick[i]);
@@ -4462,6 +4471,9 @@ void Button_was_pressed()
     char FrontView_ForeGround[]    = "FrontView.ForeGround";
     char FrontView_Special[]       = "FrontView.Special";
     char FrontView_Highlight[]     = "FrontView.Highlight";
+    char Mode1[]                   = "Mode1";
+    char Mode2[]                   = "Mode2";
+
    
 
     if (strlen(TextIn) > 0) {
@@ -5325,15 +5337,22 @@ void Button_was_pressed()
             return;
         }
 
-        if (InStrng(TrimView, TextIn) > 0) { // TrimView just appeared, so update it.
+        if (InStrng(TrimView, TextIn) > 0) { // TrimView just appeared, so update it. heer
             SendCommand(pTrimView);
-            CurrentView = Trim_View;
             UpdateModelsNameEveryWhere(); // also updates trimview
             if (!UkRules){
                     SendText(b17,Htext0);
                 }else{
                     SendText(b17,Htext1);
                 } 
+            CurrentView = Trim_View;
+            if (SticksMode == 2) {
+                SendValue(Mode2,1);
+                SendValue(Mode1,0);}
+            else {
+                SendValue(Mode1,1);
+                SendValue(Mode2,0);
+                }
             ClearText();
             return;
         }
@@ -5351,22 +5370,41 @@ void Button_was_pressed()
             for (i = 0; i < 4; ++i) {
                 Trims[FlightMode][i] = 80; // Mid value is 80
             }
+            ClearText(); 
+            return;
         }
         if (InStrng(TR1, TextIn) > 0) { //  TR1->0
             Trims[FlightMode][0] = TextIn[3];
+            ClearText(); 
+            return;
         }
         if (InStrng(TR4, TextIn) > 0) { // TR4 ->1
-            Trims[FlightMode][1] = TextIn[3];
+            if (SticksMode == 1)  Trims[FlightMode][1] = TextIn[3];
+            if (SticksMode == 2)  Trims[FlightMode][2] = TextIn[3];
+            ClearText(); 
+            return;
         }
         if (InStrng(TR2, TextIn) > 0) { // TR2 ->2
-            Trims[FlightMode][2] = TextIn[3];
+            if (SticksMode == 1)  Trims[FlightMode][2] = TextIn[3];
+            if (SticksMode == 2)  Trims[FlightMode][1] = TextIn[3];
+            ClearText(); 
+            return;
         }
         if (InStrng(TR3, TextIn) > 0) { // TR3 ->3
             Trims[FlightMode][3] = TextIn[3];
+             ClearText(); 
+            return;
         }
 
-        if (InStrng(Trim, TextIn) > 0) {
-            SaveOneModel(ModelNumber); // save trims to SDcard
+        if (InStrng(Trim, TextIn) > 0) {  // heer
+            if (GetValue(Mode1)==1) SticksMode = 1;
+            if (GetValue(Mode2)==1) SticksMode = 2; 
+            SaveAllParameters(); // save trims to SDcard
+            SendCommand(page_SetupView);
+            CurrentMode = NORMAL;
+            CurrentView = MainSetupView;
+            ClearText(); 
+            return;
         }
         if (InStrng(Models_View, TextIn) > 0) {
             SendCommand(pModelsView);
@@ -5390,6 +5428,8 @@ void Button_was_pressed()
             SDUpdateByte(ModelNumberOffset, ModelNumber);  // the offset was grabbed when loading file 
             CloseModelsFile();
             ClearText(); 
+            return;
+
         }
 
         if (InStrng(Delete, TextIn) > 0) {
