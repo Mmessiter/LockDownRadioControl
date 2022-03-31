@@ -5367,7 +5367,7 @@ void Button_was_pressed()
         }
 
         if (InStrng(RTRIM, TextIn) > 0) {
-            TrimsReversed[FlightMode][0] = GetValue(TrimView_r1); // Fudged as I'd numbered differently!
+            TrimsReversed[FlightMode][0] = GetValue(TrimView_r1); 
             TrimsReversed[FlightMode][1] = GetValue(TrimView_r4);
             TrimsReversed[FlightMode][2] = GetValue(TrimView_r2);
             TrimsReversed[FlightMode][3] = GetValue(TrimView_r3);
