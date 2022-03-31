@@ -404,18 +404,6 @@ int       PipeTimeout     = 0;
 bool      Switch[8];
 uint8_t   SwitchNumber[8] = {Switch0, Switch1, Switch2, Switch3, Switch4, Switch5, Switch6, Switch7};
 
-char TrimView_ch1[] = "ch1";
-char TrimView_ch2[] = "ch2";
-char TrimView_ch3[] = "ch3";
-char TrimView_ch4[] = "ch4";
-char TrimView_n1[]  = "n1";
-char TrimView_n2[]  = "n2";
-char TrimView_n3[]  = "n3";
-char TrimView_n4[]  = "n4";
-char TrimView_r1[]  = "r1";
-char TrimView_r2[]  = "r2";
-char TrimView_r3[]  = "r3";
-char TrimView_r4[]  = "r4";
 
 uint8_t FMSwitch   = FLIGHTMODESWITCH;
 uint8_t AutoSwitch = AUTOSWITCH;
@@ -2096,6 +2084,22 @@ void CentreMaxMins()
 
 void UpdateTrimView()
 {
+    char Mode1[]        = "Mode1";
+    char Mode2[]        = "Mode2";
+    char TrimView_ch1[] = "ch1";
+    char TrimView_ch2[] = "ch2";
+    char TrimView_ch3[] = "ch3";
+    char TrimView_ch4[] = "ch4"; 
+    char TrimView_n1[]  = "n1";
+    char TrimView_n2[]  = "n2";
+    char TrimView_n3[]  = "n3";
+    char TrimView_n4[]  = "n4";
+    char TrimView_r1[]  = "r1";
+    char TrimView_r2[]  = "r2";
+    char TrimView_r3[]  = "r3";
+    char TrimView_r4[]  = "r4";
+    
+    
     SendValue(TrimView_ch1, (Trims[FlightMode][0]));
     SendValue(TrimView_ch4, (Trims[FlightMode][1]));
     SendValue(TrimView_ch2, (Trims[FlightMode][2]));
@@ -2110,6 +2114,14 @@ void UpdateTrimView()
     SendValue(TrimView_r4, TrimsReversed[FlightMode][1]);
     SendValue(TrimView_r2, TrimsReversed[FlightMode][2]);
     SendValue(TrimView_r3, TrimsReversed[FlightMode][3]);
+
+    if (SticksMode == 2) {
+                SendValue(Mode2,1);
+                SendValue(Mode1,0);}
+            else {
+                SendValue(Mode1,1);
+                SendValue(Mode2,0);
+                }
 }
 
 /*********************************************************************************************************************************/
@@ -4473,6 +4485,10 @@ void Button_was_pressed()
     char FrontView_Highlight[]     = "FrontView.Highlight";
     char Mode1[]                   = "Mode1";
     char Mode2[]                   = "Mode2";
+    char TrimView_r1[]             = "r1";
+    char TrimView_r2[]             = "r2";
+    char TrimView_r3[]             = "r3";
+    char TrimView_r4[]             = "r4";
 
    
 
@@ -5340,19 +5356,12 @@ void Button_was_pressed()
         if (InStrng(TrimView, TextIn) > 0) { // TrimView just appeared, so update it. heer
             SendCommand(pTrimView);
             CurrentView = Trim_View;
-            UpdateModelsNameEveryWhere(); // also updates trimview (If CurrentView = Trim_View!)
+            UpdateModelsNameEveryWhere(); // also updates trimview (If CurrentView == Trim_View!! :-)
             if (!UkRules){
-                    SendText(b17,Htext0);
-                }else{
-                    SendText(b17,Htext1);
-                } 
-            if (SticksMode == 2) {
-                SendValue(Mode2,1);
-                SendValue(Mode1,0);}
-            else {
-                SendValue(Mode1,1);
-                SendValue(Mode2,0);
-                }
+                SendText(b17,Htext0);
+            }else{
+                SendText(b17,Htext1);
+            } 
             ClearText();
             return;
         }
