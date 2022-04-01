@@ -15,10 +15,10 @@
     
     #define RXVERSION_MAJOR             1
     #define RXVERSION_MINOR             6
-    #define RXVERSION_MINIMUS           4    // March 17th 2022
+    #define RXVERSION_MINIMUS           5    // April 1st 2022
 
 //**************************************************************************************************************************
- #define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< **
+    #define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< **
 //**************************************************************************************************************************
 
     #define SENSOR_HUB_I2C_ADDRESS      8
