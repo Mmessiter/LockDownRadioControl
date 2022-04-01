@@ -59,7 +59,7 @@ uint32_t  LastPacketArrivalTime = 0;
 bool FailSafeSave               = false;
 bool INA219_CONNECTED           = false;                   //  Volts from INA219 ?
 
-uint8_t * FHSSChPointer;                                                       // Pointer for FHSS channels' array
+uint8_t * FHSSChPointer;                                   // Pointer for FHSS channels' array
 uint8_t FrequencyCount = FREQUENCYSCOUNT;
 uint8_t FHSS_Channels[83] = {51,28,24,61,64,55,66,19,76,21,59,67,15,71,82,32,49,69,13,2,34,47,20,16,72,    // These are good for UK
 35,57,45,29,75,3,41,62,11,9,77,37,8,31,36,18,17,50,78,73,30,79,6,23,40,

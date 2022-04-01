@@ -3719,7 +3719,7 @@ void DisplayCurve()
     int   xDot2     = 0;
     int   yDot2     = 0;
     int   DotSize   = 2;
-    int   DotColour = Yellow;
+    int   DotColour = HighlightColour; 
     ClearBox();
     p                                           = constrain(MinDegrees[FlightMode][ChanneltoSet - 1], 0, 180);
     MinDegrees[FlightMode][ChanneltoSet - 1]    = p;
@@ -5364,7 +5364,7 @@ void Button_was_pressed()
             return;
         }
 
-        if (InStrng(TrimView, TextIn) > 0) { // TrimView just appeared, so update it. heer
+        if (InStrng(TrimView, TextIn) > 0) { // TrimView just appeared, so update it. 
             SendCommand(pTrimView);
             CurrentView = Trim_View;
             UpdateModelsNameEveryWhere(); // also updates trimview (If CurrentView == Trim_View!! :-)
@@ -5416,7 +5416,7 @@ void Button_was_pressed()
             return;
         }
 
-        if (InStrng(Trim, TextIn) > 0) {  // heer
+        if (InStrng(Trim, TextIn) > 0) {  
             if (GetValue(Mode1)==1) SticksMode = 1;
             if (GetValue(Mode2)==1) SticksMode = 2; 
             SaveAllParameters(); // save trims to SDcard
