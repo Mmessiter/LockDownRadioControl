@@ -24,7 +24,7 @@
     #define SENSOR_HUB_I2C_ADDRESS      8
     #define HOPTIME                     50   // ms between channel changes ( >5 packets per hop)
     
-    #define LISTEN_PERIOD               16   // How many ms to listen for TX in Reconnect()
+    #define LISTEN_PERIOD               18   // How many ms to listen for TX in Reconnect()
     #define RECEIVE_TIMEOUT             30   // <=16 fails, >=20 OK, 25 - 40 milliseconds seems an optimal value?
 
     #define FREQUENCYSCOUNT             82   // use 82 different channels
