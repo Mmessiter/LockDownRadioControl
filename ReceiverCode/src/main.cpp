@@ -590,6 +590,8 @@ void setup()
     pinMode(LED_PIN, OUTPUT);
     digitalWrite(LED_PIN, HIGH);
     CurrentRadio = &Radio1;
+    digitalWrite(pinCSN2,HIGH);
+    delay(4);
     InitCurrentRadio();
     ThisRadio = 1;
     Wire.begin();
@@ -598,6 +600,8 @@ void setup()
     if (INA219_CONNECTED) ina219.begin();
 #ifdef SECOND_TRANSCEIVER
     CurrentRadio = &Radio2;
+    digitalWrite(pinCSN1,HIGH);
+    delay(4);
     InitCurrentRadio();
     ThisRadio = 2;
 #endif

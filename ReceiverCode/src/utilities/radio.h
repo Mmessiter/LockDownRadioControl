@@ -192,11 +192,12 @@ void TryToConnectNow(){
 /************************************************************************************************************/
 
 #ifdef SECOND_TRANSCEIVER
+
 void ProdRadio(uint8_t Recon_Ch)
-{ // After switching radios, this prod allows EITHER to connect. Don't know why - yet!
-    // Re-setting up the radio may be required on power failure or unsufficient current supply. While this function
-    // addresses a power "drop-out" during Reconnect(), there may be times that require this while connected.
-    
+{  // After switching radios, this prod allows EITHER to connect. Don't know why - yet!
+   // Re-setting up the radio may be required on power failure or unsufficient current supply. While this function
+   // addresses a power "drop-out" during Reconnect(), there may be times that require this while connected.
+   
     CurrentRadio->enableAckPayload();       // needed
     CurrentRadio->enableDynamicPayloads();  // needed
     CurrentRadio->maskIRQ(1, 1, 1);         // no interrupts - seems NEEDED at the moment - (line *IS* connected)
@@ -205,21 +206,26 @@ void ProdRadio(uint8_t Recon_Ch)
     CurrentRadio->setDataRate(RF24_250KBPS);
     CurrentRadio->openReadingPipe(1, ThisPipe);
     CurrentRadio->setChannel(Recon_Ch);
-    delay(4);                              // 4 SEEMS NEEDED!!
+    delay(3);                               // SEEMS NEEDED!!
     TryToConnectNow();
 }
 
 /************************************************************************************************************/
-
+ 
 void TryTheOtherTransceiver(uint8_t Recon_Ch){
             CurrentRadio->stopListening();
-            delay(1);                             // NEEDED!
             if (ThisRadio == 2) {
                 CurrentRadio = &Radio1;
                 ThisRadio    = 1;
+                digitalWrite(pinCSN2,HIGH);      // swap over chip select enables ...
+                digitalWrite(pinCSN1,LOW);    
+                delay(1);                        // Allow swap over to be noticed ...
             } else {
                 CurrentRadio = &Radio2;
                 ThisRadio    = 2;
+                digitalWrite(pinCSN1,HIGH);      // swap over chip select enables ...
+                digitalWrite(pinCSN2,LOW);
+                delay(1);                        // Allow swap over to be noticed ...
             }
             ProdRadio(Recon_Ch);
 }
@@ -251,8 +257,9 @@ void Reconnect(){                                                               
     uint8_t  ReconnectChannel = * (FHSSChPointer + ReconnectIndex);                // Get a reconnect channel 
 
 #ifdef SECOND_TRANSCEIVER
-        TryTheOtherTransceiver(ReconnectChannel);                                  // Just lost it on this one - so try the other
+        TryTheOtherTransceiver(ReconnectChannel);                                // Just lost it on this one - so try the other
 #endif 
+    
     while (!Connected) {
         if (BoundFlag) KeepSbusHappy();                                            // Some SBUS systems timeout FAST, so resend old data to keep it happy
         CurrentRadio->stopListening();
