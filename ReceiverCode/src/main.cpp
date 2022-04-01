@@ -589,19 +589,17 @@ void setup()
 {
     pinMode(LED_PIN, OUTPUT);
     digitalWrite(LED_PIN, HIGH);
+    CurrentRadio = &Radio1;
+    InitCurrentRadio();
+    ThisRadio = 1;
     Wire.begin();
     delay(2000); // Needed for several reasons
     ScanI2c();   // Detect what's connected
     if (INA219_CONNECTED) ina219.begin();
-    CurrentRadio = &Radio1;
-    InitCurrentRadio();
-    ThisRadio = 1;
-    delay(300);
 #ifdef SECOND_TRANSCEIVER
     CurrentRadio = &Radio2;
     InitCurrentRadio();
     ThisRadio = 2;
-    delay(300);
 #endif
     GetOldPipe();
     BootupMoment = millis();
