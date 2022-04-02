@@ -206,7 +206,7 @@ void ProdRadio(uint8_t Recon_Ch)
     CurrentRadio->setDataRate(RF24_250KBPS);
     CurrentRadio->openReadingPipe(1, ThisPipe);
     CurrentRadio->setChannel(Recon_Ch);
-    delay(3);                               // SEEMS NEEDED!!
+    delay(3);                               
     TryToConnectNow();
 }
 
