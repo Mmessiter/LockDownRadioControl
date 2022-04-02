@@ -224,6 +224,7 @@ void SwapLines(){
         digitalWrite(pinCSN2,CSN_ON);
         digitalWrite(pinCE2, CE_ON);  
     }
+    delay(1);                            // Allow swap over a little time to be noticed ...
 }
 
 /************************************************************************************************************/
@@ -238,7 +239,6 @@ void TryTheOtherTransceiver(uint8_t Recon_Ch){
                 ThisRadio    = 2;
             }
             SwapLines();
-            delay(1);                            // Allow swap over a little time to be noticed ...
             ProdRadio(Recon_Ch);          
 }
 #endif // defined (SECOND_TRANSCEIVER)
