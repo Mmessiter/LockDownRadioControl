@@ -233,12 +233,11 @@ void TryTheOtherTransceiver(uint8_t Recon_Ch){
             if (ThisRadio == 2) {
                 CurrentRadio = &Radio1;
                 ThisRadio    = 1;
-                SwapLines();
             } else {
                 CurrentRadio = &Radio2;
                 ThisRadio    = 2;
-                SwapLines();
             }
+            SwapLines();
             delay(1);                            // Allow swap over a little time to be noticed ...
             ProdRadio(Recon_Ch);          
 }
