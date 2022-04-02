@@ -217,17 +217,19 @@ void TryTheOtherTransceiver(uint8_t Recon_Ch){
             if (ThisRadio == 2) {
                 CurrentRadio = &Radio1;
                 ThisRadio    = 1;
-                digitalWrite(pinCSN2,HIGH);      // swap over chip select  ... 
-                digitalWrite(pinCSN1,LOW);    
-                digitalWrite(pinCE1,HIGH);       // swap over chip enable  ... 
-                digitalWrite(pinCE2,LOW);
+                digitalWrite(pinCE2,CE_OFF);
+                digitalWrite(pinCSN2,CSN_OFF);      
+                digitalWrite(pinCE1,CE_ON);        
+                digitalWrite(pinCSN1,CSN_ON);
+                
             } else {
                 CurrentRadio = &Radio2;
                 ThisRadio    = 2;
-                digitalWrite(pinCSN1,HIGH);      // swap over chip select  ...
-                digitalWrite(pinCSN2,LOW);
-                digitalWrite(pinCE2,HIGH);       // swap over chip enable  ... 
-                digitalWrite(pinCE1,LOW);
+                digitalWrite(pinCSN1,CSN_OFF);     
+                digitalWrite(pinCE1,CE_OFF); 
+                digitalWrite(pinCSN2,CSN_ON);
+                digitalWrite(pinCE2,CE_ON);       
+              
             }
             delay(1);                            // Allow swap over a little time to be noticed ...
             ProdRadio(Recon_Ch);          

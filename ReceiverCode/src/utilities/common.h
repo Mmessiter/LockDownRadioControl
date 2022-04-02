@@ -49,6 +49,11 @@
     #define RECONNECT_CHANNELS_START    12   // Offset in the array to begin getting reconnect channels
     #define UNCOMPRESSEDWORDS           20              //   16 Channels plus extra 4 16 BIT values
     #define COMPRESSEDWORDS   UNCOMPRESSEDWORDS * 3 / 4 // = 16 WORDS  with no extra
+    #define CSN_ON  LOW
+    #define CSN_OFF HIGH
+    #define CE_ON   HIGH
+    #define CE_OFF  LOW
+
 
     // #define DB_FHSS        
     // #define DB_SENSORS
