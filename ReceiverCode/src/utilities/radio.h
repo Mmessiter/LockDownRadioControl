@@ -221,7 +221,6 @@ void TryTheOtherTransceiver(uint8_t Recon_Ch){
                 digitalWrite(pinCSN1,LOW);    
                 digitalWrite(pinCE1,HIGH);       // swap over chip enable  ... 
                 digitalWrite(pinCE2,LOW);
-                delay(1);                        // Allow swap over to be noticed ...
             } else {
                 CurrentRadio = &Radio2;
                 ThisRadio    = 2;
@@ -229,8 +228,8 @@ void TryTheOtherTransceiver(uint8_t Recon_Ch){
                 digitalWrite(pinCSN2,LOW);
                 digitalWrite(pinCE2,HIGH);       // swap over chip enable  ... 
                 digitalWrite(pinCE1,LOW);
-                delay(1);                        // Allow swap over to be noticed ...
             }
+            delay(1);                        // Allow swap over to be noticed ...
             ProdRadio(Recon_Ch);          
 }
 #endif // defined (SECOND_TRANSCEIVER)
