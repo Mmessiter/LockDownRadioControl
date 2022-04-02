@@ -1,7 +1,11 @@
 var common_8h =
 [
+    [ "CE_OFF", "common_8h.html#a45f36ff4dbd4f62c8d80b9cd22a05e75", null ],
+    [ "CE_ON", "common_8h.html#af59ccf587172ff1ab593f7a51276a720", null ],
     [ "CHANNELSUSED", "common_8h.html#ad143c01c2b36424b292b568f48cbe014", null ],
     [ "COMPRESSEDWORDS", "common_8h.html#a461caf7198eaa60ce589088ff38b97cb", null ],
+    [ "CSN_OFF", "common_8h.html#a834c4941fd9b037a25a8053912995e61", null ],
+    [ "CSN_ON", "common_8h.html#ab22ef6e01ad09b637ca55f3fcd3cae94", null ],
     [ "FAILSAFE_TIMEOUT", "common_8h.html#a0634ad724c86cd2b4ac7cfebbb622a9c", null ],
     [ "FREQUENCYSCOUNT", "common_8h.html#afe5bce36baf737bd284d43cd0e805fdb", null ],
     [ "FREQUENCYSCOUNT1", "common_8h.html#a71a3cc3c3b499cb9329172835e5a1df8", null ],
