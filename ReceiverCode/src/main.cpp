@@ -588,6 +588,10 @@ void DoBinding()
 void setup()
 {
     pinMode(LED_PIN, OUTPUT);
+    pinMode(pinCSN1, OUTPUT);
+    pinMode(pinCSN2, OUTPUT);
+    pinMode(pinCE1,  OUTPUT);
+    pinMode(pinCE2,  OUTPUT);
     digitalWrite(LED_PIN, HIGH);
     delay(2500);                           // Needed so that the Sensor hub can boot first and be detected
     CurrentRadio = &Radio1;
