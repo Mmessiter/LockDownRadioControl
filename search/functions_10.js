@@ -62,6 +62,6 @@ var searchData=
   ['standby_59',['standby',['../class_adafruit___g_p_s.html#a32ddd41152a08354d2ee2b4311bbf013',1,'Adafruit_GPS']]],
   ['startinactvitytimeout_60',['StartInactvityTimeout',['../_radio_functions_8h.html#a793b7bcd77531c95fe72ed4356d421c8',1,'StartInactvityTimeout():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a793b7bcd77531c95fe72ed4356d421c8',1,'StartInactvityTimeout():&#160;main.cpp']]],
   ['str_61',['Str',['../_radio_functions_8h.html#a6bac145d5df31efb9c90e2a60a4cbca5',1,'Str(char *s, int n, int comma):&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a6bac145d5df31efb9c90e2a60a4cbca5',1,'Str(char *s, int n, int comma):&#160;main.cpp']]],
-  ['swaplines_62',['SwapLines',['../radio_8h.html#a0edac10c5a779a3827f949d8ed9adfe9',1,'radio.h']]],
+  ['swapchipenablelines_62',['SwapChipEnableLines',['../radio_8h.html#ac980be068a45a1406b0e244304741ac6',1,'radio.h']]],
   ['synchrtcwithgpstime_63',['SynchRTCwithGPSTime',['../_transmitter_code_2src_2main_8cpp.html#abb1ea95b6b3f033883aa87682d3240ab',1,'main.cpp']]]
 ];

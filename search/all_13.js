@@ -166,7 +166,7 @@ var searchData=
   ['sticksview_163',['SticksView',['../_radio_functions_8cpp.html#ab7abdd2877694598578f0c4d717f46e8',1,'SticksView():&#160;RadioFunctions.cpp'],['../_transmitter_code_2src_2main_8cpp.html#ab7abdd2877694598578f0c4d717f46e8',1,'SticksView():&#160;main.cpp']]],
   ['str_164',['Str',['../_radio_functions_8h.html#a6bac145d5df31efb9c90e2a60a4cbca5',1,'Str(char *s, int n, int comma):&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a6bac145d5df31efb9c90e2a60a4cbca5',1,'Str(char *s, int n, int comma):&#160;main.cpp']]],
   ['success_165',['success',['../_transmitter_code_2src_2main_8cpp.html#a78e0e3b7ed8385dd9fdbd0d0b6836054',1,'main.cpp']]],
-  ['swaplines_166',['SwapLines',['../radio_8h.html#a0edac10c5a779a3827f949d8ed9adfe9',1,'radio.h']]],
+  ['swapchipenablelines_166',['SwapChipEnableLines',['../radio_8h.html#ac980be068a45a1406b0e244304741ac6',1,'radio.h']]],
   ['swapwaveband_167',['SwapWaveBand',['../_transmitter_code_2src_2main_8cpp.html#aaa4402c66bda6731ffa04b970e1eaeea',1,'main.cpp']]],
   ['swapwavebandtimer_168',['SwapWaveBandTimer',['../_transmitter_code_2src_2main_8cpp.html#a8dbdaf66b1bf538b3c1aea4b6ce6c8c2',1,'main.cpp']]],
   ['switch_169',['Switch',['../_transmitter_code_2src_2main_8cpp.html#a93ac0e6bbb965111abd01e393a21fcfe',1,'main.cpp']]],
