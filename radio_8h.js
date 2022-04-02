@@ -58,6 +58,7 @@ var radio_8h =
     [ "OldPipe", "radio_8h.html#a8d3c194b5406bff33ef9357f8b1666cc", null ],
     [ "PacketNumber", "radio_8h.html#a09cb370d93005b5a43e932a3d6093ea2", null ],
     [ "PreviousData", "radio_8h.html#a54007b635670b351453013425e7f2814", null ],
+    [ "RadioSwaps", "radio_8h.html#a2f472b4c6d8312622d666f82bc1c78fb", null ],
     [ "ReceivedData", "radio_8h.html#ae5bff5a2375f932e5653e5d3659330d3", null ],
     [ "ReconnectedMoment", "radio_8h.html#ae6657a547a79d8e304b8ddeb3f6a38e0", null ],
     [ "ReconnectIndex", "radio_8h.html#a90d98310365e78ee5ec06aaa7a4092f1", null ],
