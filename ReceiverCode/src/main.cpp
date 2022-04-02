@@ -28,8 +28,8 @@
  * | 13    | SPI SCK  (FOR BOTH RADIOS) |
  * | 14    | SBUS output (TX3) |
  * | 15    | Don't use. SBUS driver takes it (RX3) |
- * | 16    | RX4 for GPS | (Still to be implemented ...)
- * | 17    | TX4 for GPS |
+ * | 16    | SPARE
+ * | 17    | SPARE
  * | 18    | I2C SDA (FOR I2C) |
  * | 19    | I2C SCK (FOR I2C) |
  * | 20    | SPI CSN2 (FOR RADIO2)  |
