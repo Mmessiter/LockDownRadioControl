@@ -591,6 +591,7 @@ void setup()
     digitalWrite(LED_PIN, HIGH);
     CurrentRadio = &Radio1;
     digitalWrite(pinCSN2,HIGH);
+    digitalWrite(pinCE2,LOW);
     delay(4);
     InitCurrentRadio();
     ThisRadio = 1;
@@ -601,6 +602,7 @@ void setup()
 #ifdef SECOND_TRANSCEIVER
     CurrentRadio = &Radio2;
     digitalWrite(pinCSN1,HIGH);
+    digitalWrite(pinCE1,LOW);
     delay(4);
     InitCurrentRadio();
     ThisRadio = 2;
