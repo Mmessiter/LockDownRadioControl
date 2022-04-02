@@ -231,7 +231,7 @@ void TryTheOtherTransceiver(uint8_t Recon_Ch){
                 digitalWrite(pinCE1,LOW);
                 delay(1);                        // Allow swap over to be noticed ...
             }
-            ProdRadio(Recon_Ch);
+            ProdRadio(Recon_Ch);          
 }
 #endif // defined (SECOND_TRANSCEIVER)
 
