@@ -25,6 +25,7 @@ uint64_t        NewPipe  = 0;
 uint64_t        OldPipe  = 0;
 bool            FailSafeSent         = true;
 uint16_t        SbusRepeats = 0;
+uint16_t        RadioSwaps = 0;
 
 
 extern bool     BoundFlag;
@@ -267,6 +268,7 @@ void Reconnect(){                                                               
 
     uint32_t SearchStartTime  = millis();;
     uint8_t  ReconnectChannel = * (FHSSChPointer + ReconnectIndex);                // Get a reconnect channel 
+    uint8_t  PreviousRadio    =  ThisRadio;
 
 #ifdef SECOND_TRANSCEIVER
         TryTheOtherTransceiver(ReconnectChannel);                                // Just lost it on this one - so try the other
@@ -302,6 +304,10 @@ void Reconnect(){                                                               
     FirstConnectMoment = millis();
     }
     FailSafeSent = false;
+    if (PreviousRadio != ThisRadio) {
+        ++ RadioSwaps;                                                           // Count the radio swaps
+       // Serial.println (RadioSwaps);
+    }
     ReconnectedMoment    = millis();  // Save this moment, then don't move a servo for 20 ms ...
 }
 /************************************************************************************************************/
