@@ -151,8 +151,8 @@ void FailSafe()
 #ifdef DB_FHSS
 /************************************************************************************************************/
 /**
- * Print out some DB_FHSSging information about the channel hopping implementation
- * @param freq The next frequency to be used.
+ * Print out some FHSS information about the channel hopping implementation
+ * 
  */
 void ShowHopDurationEtc() // heer
 {
