@@ -589,6 +589,7 @@ void setup()
 {
     pinMode(LED_PIN, OUTPUT);
     digitalWrite(LED_PIN, HIGH);
+    delay(2500);                           // Needed so that the Sensor hub can boot first and be detected
     CurrentRadio = &Radio1;
     digitalWrite(pinCSN2,HIGH);
     digitalWrite(pinCE2,LOW);
@@ -596,8 +597,8 @@ void setup()
     InitCurrentRadio();
     ThisRadio = 1;
     Wire.begin();
-    delay(2000); // Needed for several reasons
-    ScanI2c();   // Detect what's connected
+    delay(20); 
+    ScanI2c();                             // Detect what's connected
     if (INA219_CONNECTED) ina219.begin();
 #ifdef SECOND_TRANSCEIVER
     CurrentRadio = &Radio2;
