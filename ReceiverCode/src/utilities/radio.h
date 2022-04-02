@@ -212,24 +212,32 @@ void ProdRadio(uint8_t Recon_Ch)
 
 /************************************************************************************************************/
  
+void SwapLines(){
+    if (ThisRadio == 1){
+        digitalWrite(pinCE2, CE_OFF);
+        digitalWrite(pinCSN2,CSN_OFF);      
+        digitalWrite(pinCE1, CE_ON);        
+        digitalWrite(pinCSN1,CSN_ON);
+    } else {
+        digitalWrite(pinCSN1,CSN_OFF);     
+        digitalWrite(pinCE1, CE_OFF); 
+        digitalWrite(pinCSN2,CSN_ON);
+        digitalWrite(pinCE2, CE_ON);  
+    }
+}
+
+/************************************************************************************************************/
+ 
 void TryTheOtherTransceiver(uint8_t Recon_Ch){
             CurrentRadio->stopListening();
             if (ThisRadio == 2) {
                 CurrentRadio = &Radio1;
                 ThisRadio    = 1;
-                digitalWrite(pinCE2,CE_OFF);
-                digitalWrite(pinCSN2,CSN_OFF);      
-                digitalWrite(pinCE1,CE_ON);        
-                digitalWrite(pinCSN1,CSN_ON);
-                
+                SwapLines();
             } else {
                 CurrentRadio = &Radio2;
                 ThisRadio    = 2;
-                digitalWrite(pinCSN1,CSN_OFF);     
-                digitalWrite(pinCE1,CE_OFF); 
-                digitalWrite(pinCSN2,CSN_ON);
-                digitalWrite(pinCE2,CE_ON);       
-              
+                SwapLines();
             }
             delay(1);                            // Allow swap over a little time to be noticed ...
             ProdRadio(Recon_Ch);          
