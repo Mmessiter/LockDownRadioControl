@@ -19,7 +19,7 @@ var searchData=
   ['sendcommand_16',['sendCommand',['../class_adafruit___g_p_s.html#abd7e2f17f11188dfc99fff55e3560dfb',1,'Adafruit_GPS']]],
   ['sendcommand_17',['SendCommand',['../_radio_functions_8h.html#aecac2f0c289f02ef3c92b85be82eacac',1,'SendCommand(char *tbox):&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#aecac2f0c289f02ef3c92b85be82eacac',1,'SendCommand(char *tbox):&#160;main.cpp']]],
   ['senddata_18',['SendData',['../_radio_functions_8h.html#a3d7322e78f097d02d476f17a6306997c',1,'SendData():&#160;RadioFunctions.cpp'],['../_radio_functions_8cpp.html#a3d7322e78f097d02d476f17a6306997c',1,'SendData():&#160;RadioFunctions.cpp']]],
-  ['senddatatoreceiver_19',['SendDataToReceiver',['../_sensor_hub_teensy3__6_2src_2main_8cpp.html#aac529433269b7b52ef0a627716a70aea',1,'SendDataToReceiver():&#160;main.cpp'],['../_sensor_hub_l_c_2src_2main_8cpp.html#aac529433269b7b52ef0a627716a70aea',1,'SendDataToReceiver():&#160;main.cpp'],['../_sensor_hub_t32_2src_2main_8cpp.html#aac529433269b7b52ef0a627716a70aea',1,'SendDataToReceiver():&#160;main.cpp']]],
+  ['senddatatoreceiver_19',['SendDataToReceiver',['../_sensor_hub_t32_2src_2main_8cpp.html#aac529433269b7b52ef0a627716a70aea',1,'SendDataToReceiver():&#160;main.cpp'],['../_sensor_hub_l_c_2src_2main_8cpp.html#aac529433269b7b52ef0a627716a70aea',1,'SendDataToReceiver():&#160;main.cpp'],['../_sensor_hub_teensy3__6_2src_2main_8cpp.html#aac529433269b7b52ef0a627716a70aea',1,'SendDataToReceiver():&#160;main.cpp']]],
   ['senddatetoackpayload_20',['SendDateToAckPayload',['../radio_8h.html#affa2dcc4341b8daecac77e6e0a354b2d',1,'radio.h']]],
   ['sendhelp_21',['SendHelp',['../_transmitter_code_2src_2main_8cpp.html#a038111bf598c53ad7b9a62ca45259356',1,'main.cpp']]],
   ['sendmixvalues_22',['SendMixValues',['../_transmitter_code_2src_2main_8cpp.html#a5616f31633181a5cefde5d7cb6210d3f',1,'main.cpp']]],
@@ -62,5 +62,6 @@ var searchData=
   ['standby_59',['standby',['../class_adafruit___g_p_s.html#a32ddd41152a08354d2ee2b4311bbf013',1,'Adafruit_GPS']]],
   ['startinactvitytimeout_60',['StartInactvityTimeout',['../_radio_functions_8h.html#a793b7bcd77531c95fe72ed4356d421c8',1,'StartInactvityTimeout():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a793b7bcd77531c95fe72ed4356d421c8',1,'StartInactvityTimeout():&#160;main.cpp']]],
   ['str_61',['Str',['../_radio_functions_8h.html#a6bac145d5df31efb9c90e2a60a4cbca5',1,'Str(char *s, int n, int comma):&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a6bac145d5df31efb9c90e2a60a4cbca5',1,'Str(char *s, int n, int comma):&#160;main.cpp']]],
-  ['synchrtcwithgpstime_62',['SynchRTCwithGPSTime',['../_transmitter_code_2src_2main_8cpp.html#abb1ea95b6b3f033883aa87682d3240ab',1,'main.cpp']]]
+  ['swaplines_62',['SwapLines',['../radio_8h.html#a0edac10c5a779a3827f949d8ed9adfe9',1,'radio.h']]],
+  ['synchrtcwithgpstime_63',['SynchRTCwithGPSTime',['../_transmitter_code_2src_2main_8cpp.html#abb1ea95b6b3f033883aa87682d3240ab',1,'main.cpp']]]
 ];
