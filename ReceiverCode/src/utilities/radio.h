@@ -212,7 +212,7 @@ void ProdRadio(uint8_t Recon_Ch)
 
 /************************************************************************************************************/
  
-void SwapLines(){
+void SwapChipEnableLines(){
     if (ThisRadio == 1){
         digitalWrite(pinCE2, CE_OFF);
         digitalWrite(pinCSN2,CSN_OFF);      
@@ -238,7 +238,7 @@ void TryTheOtherTransceiver(uint8_t Recon_Ch){
                 CurrentRadio = &Radio2;
                 ThisRadio    = 2;
             }
-            SwapLines();
+            SwapChipEnableLines();
             ProdRadio(Recon_Ch);          
 }
 #endif // defined (SECOND_TRANSCEIVER)
