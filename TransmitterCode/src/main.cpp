@@ -6030,9 +6030,9 @@ void ParseAckPayload()
     if (AckPayload.Purpose & 0x80)                                       // Hi bit is now the **HOP NOW!!** flag
     {
         NextChannelNumber   =  AckPayload.Byte5;                         // This is just the array pointer or offset  
-        NextChannel       =  * (FHSSChPointer + NextChannelNumber);      // The actual channel number pointed to.
+        NextChannel         =  * (FHSSChPointer + NextChannelNumber);    // The actual channel number pointed to.
         HopToNextChannel();
-        AckPayload.Purpose &= 0x7f;
+        AckPayload.Purpose &= 0x7f;                                      // Clear the high BIT, use the remainder ...
     }    
         switch (AckPayload.Purpose) // Only look at the low 7 BITS
         {
