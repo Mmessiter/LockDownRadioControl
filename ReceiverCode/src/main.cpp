@@ -620,6 +620,7 @@ void setup()
     BootupMoment = millis();
     SetUKFrequencies();
     digitalWrite(LED_PIN, LOW);
+    ReconnectedMoment = millis();
 }
 /************************************************************************************************************/
 // LOOP
