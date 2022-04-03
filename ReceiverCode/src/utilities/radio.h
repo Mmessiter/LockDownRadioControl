@@ -306,7 +306,6 @@ void Reconnect(){                                                               
     FailSafeSent = false;
     if (PreviousRadio != ThisRadio) {
         ++ RadioSwaps;                                                           // Count the radio swaps
-       // Serial.println (RadioSwaps);
     }
     ReconnectedMoment    = millis();  // Save this moment, then don't move a servo for 20 ms ...
 }
@@ -366,7 +365,8 @@ void LoadAckPayload()
             LoadVersioNumber();
             break;  
         case 1:
-            SendToAckPayload (SbusRepeats);
+            //SendToAckPayload (SbusRepeats);
+            SendToAckPayload (RadioSwaps);
              break;
         case 2: 
             SendToAckPayload (INA219Volts);
