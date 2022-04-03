@@ -25,6 +25,10 @@ uint64_t        NewPipe  = 0;
 uint64_t        OldPipe  = 0;
 bool            FailSafeSent         = true;
 uint16_t        SbusRepeats = 0;
+uint32_t        RX1TotalTime = 0;
+uint32_t        RX2TotalTime = 0;
+uint32_t        RadioSwaps = 0;
+
 
 
 extern bool     BoundFlag;
@@ -263,10 +267,14 @@ void KeepSbusHappy(){
 
 /************************************************************************************************************/
 
-void Reconnect(){                                                                  // This is called when contact is lost, to reconnect ASAP
+void Reconnect(){                                                                // This is called when contact is lost, to reconnect ASAP
 
     uint32_t SearchStartTime  = millis();;
-    uint8_t  ReconnectChannel = * (FHSSChPointer + ReconnectIndex);                // Get a reconnect channel 
+    uint8_t  ReconnectChannel = * (FHSSChPointer + ReconnectIndex);              // Get a reconnect channel 
+    uint8_t  PreviousRadio    =  ThisRadio;
+
+    if (ThisRadio == 1) RX1TotalTime += (millis()-ReconnectedMoment);               // keep track of how long on each
+    if (ThisRadio == 2) RX2TotalTime += (millis()-ReconnectedMoment);
 
 #ifdef SECOND_TRANSCEIVER
         TryTheOtherTransceiver(ReconnectChannel);                                // Just lost it on this one - so try the other
@@ -302,7 +310,24 @@ void Reconnect(){                                                               
     FirstConnectMoment = millis();
     }
     FailSafeSent = false;
+    if (PreviousRadio != ThisRadio) {
+        ++ RadioSwaps;                                                           // Count the radio swaps
+    }
     ReconnectedMoment    = millis();  // Save this moment, then don't move a servo for 20 ms ...
+#ifdef DB_RXTIMERS
+   Serial.print ("Transceiver1 use so far: ");
+   Serial.print (RX1TotalTime/1000);
+   Serial.println (" seconds");
+   Serial.print ("Transceiver2 use so far: ");
+   Serial.print (RX2TotalTime/1000);
+   Serial.println (" seconds");
+   Serial.print ("Now connected on transceiver number: ");
+   Serial.print (ThisRadio);
+   Serial.println (" ...");
+   Serial.println ("");
+#endif
+
+
 }
 /************************************************************************************************************/
 // This function checks the time since last hop. 
@@ -360,8 +385,9 @@ void LoadAckPayload()
             LoadVersioNumber();
             break;  
         case 1:
-            SendToAckPayload (SbusRepeats);
-             break;
+           // SendToAckPayload (SbusRepeats);
+            SendToAckPayload (RadioSwaps);
+            break;
         case 2: 
             SendToAckPayload (INA219Volts);
             break;
