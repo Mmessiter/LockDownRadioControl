@@ -450,89 +450,97 @@ $(document).ready(function(){initNavTree('radio_8h_source.html',''); initResizab
 <div class="line"><a id="l00374" name="l00374"></a><span class="lineno">  374</span><span class="comment">/************************************************************************************************************/</span></div>
 <div class="line"><a id="l00375" name="l00375"></a><span class="lineno"><a class="line" href="radio_8h.html#a664f409561bfcf119e0379dd991217e5">  375</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="radio_8h.html#a664f409561bfcf119e0379dd991217e5">LoadAckPayload</a>()</div>
 <div class="line"><a id="l00376" name="l00376"></a><span class="lineno">  376</span>{</div>
-<div class="line"><a id="l00377" name="l00377"></a><span class="lineno">  377</span>    uint8_t MaxAckP     = 1;                                      <span class="comment">// 0 if only RX</span></div>
+<div class="line"><a id="l00377" name="l00377"></a><span class="lineno">  377</span>    uint8_t MaxAckP     = 4;                                      <span class="comment">// 4 if only RX</span></div>
 <div class="line"><a id="l00378" name="l00378"></a><span class="lineno">  378</span>    <a class="code hl_variable" href="radio_8h.html#a30a079d60b4731ce1531091ffe56a703">AckPayload</a>.<a class="code hl_variable" href="struct_payload.html#ac18701f2aa35ebd8402f45f840d5c445">Purpose</a> &amp;= 0x7F;                                   <span class="comment">// NOTE: The HIGH BIT of &quot;purpose&quot; bit is the HOPNOW flag. It gets set only when it&#39;s time to hop.</span></div>
 <div class="line"><a id="l00379" name="l00379"></a><span class="lineno">  379</span>    ++<a class="code hl_variable" href="radio_8h.html#a30a079d60b4731ce1531091ffe56a703">AckPayload</a>.<a class="code hl_variable" href="struct_payload.html#ac18701f2aa35ebd8402f45f840d5c445">Purpose</a>;   </div>
-<div class="line"><a id="l00380" name="l00380"></a><span class="lineno">  380</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="common_8h.html#a8d0889feaf5beb5db1e50a266ea7b0a5">INA219_CONNECTED</a>) MaxAckP = 2;</div>
-<div class="line"><a id="l00381" name="l00381"></a><span class="lineno">  381</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="radio_8h.html#a20d437b81f88442e5cb998557d1f9cea">SENSOR_HUB_CONNECTED</a>) MaxAckP = 15;                       <span class="comment">// its 14 + GPS</span></div>
+<div class="line"><a id="l00380" name="l00380"></a><span class="lineno">  380</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="common_8h.html#a8d0889feaf5beb5db1e50a266ea7b0a5">INA219_CONNECTED</a>) MaxAckP = 5;</div>
+<div class="line"><a id="l00381" name="l00381"></a><span class="lineno">  381</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="radio_8h.html#a20d437b81f88442e5cb998557d1f9cea">SENSOR_HUB_CONNECTED</a>) MaxAckP = 18;                       <span class="comment">// its 14 + GPS</span></div>
 <div class="line"><a id="l00382" name="l00382"></a><span class="lineno">  382</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="radio_8h.html#a30a079d60b4731ce1531091ffe56a703">AckPayload</a>.<a class="code hl_variable" href="struct_payload.html#ac18701f2aa35ebd8402f45f840d5c445">Purpose</a> &gt; MaxAckP) <a class="code hl_variable" href="radio_8h.html#a30a079d60b4731ce1531091ffe56a703">AckPayload</a>.<a class="code hl_variable" href="struct_payload.html#ac18701f2aa35ebd8402f45f840d5c445">Purpose</a> = 0;     <span class="comment">// wrap after max</span></div>
 <div class="line"><a id="l00383" name="l00383"></a><span class="lineno">  383</span>    <span class="keywordflow">switch</span> (<a class="code hl_variable" href="radio_8h.html#a30a079d60b4731ce1531091ffe56a703">AckPayload</a>.<a class="code hl_variable" href="struct_payload.html#ac18701f2aa35ebd8402f45f840d5c445">Purpose</a>) {</div>
 <div class="line"><a id="l00384" name="l00384"></a><span class="lineno">  384</span>        <span class="keywordflow">case</span> 0: </div>
 <div class="line"><a id="l00385" name="l00385"></a><span class="lineno">  385</span>            <a class="code hl_function" href="radio_8h.html#af067d2e9e8981a59af86ec75a0db36b4">LoadVersioNumber</a>();</div>
 <div class="line"><a id="l00386" name="l00386"></a><span class="lineno">  386</span>            <span class="keywordflow">break</span>;  </div>
 <div class="line"><a id="l00387" name="l00387"></a><span class="lineno">  387</span>        <span class="keywordflow">case</span> 1:</div>
-<div class="line"><a id="l00388" name="l00388"></a><span class="lineno">  388</span>           <span class="comment">// SendToAckPayload (SbusRepeats);</span></div>
-<div class="line"><a id="l00389" name="l00389"></a><span class="lineno">  389</span>            <a class="code hl_function" href="radio_8h.html#a632401c7e72610ff0a0678358b6877ad">SendToAckPayload</a> (<a class="code hl_variable" href="radio_8h.html#aff48e1463bf663c156032302d0161c98">RadioSwaps</a>);</div>
-<div class="line"><a id="l00390" name="l00390"></a><span class="lineno">  390</span>            <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l00391" name="l00391"></a><span class="lineno">  391</span>        <span class="keywordflow">case</span> 2: </div>
-<div class="line"><a id="l00392" name="l00392"></a><span class="lineno">  392</span>            <a class="code hl_function" href="radio_8h.html#a632401c7e72610ff0a0678358b6877ad">SendToAckPayload</a> (<a class="code hl_variable" href="radio_8h.html#ad84d94b7259bcf40213f0af9be706ee7">INA219Volts</a>);</div>
-<div class="line"><a id="l00393" name="l00393"></a><span class="lineno">  393</span>            <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l00394" name="l00394"></a><span class="lineno">  394</span>        <span class="keywordflow">case</span> 3:</div>
-<div class="line"><a id="l00395" name="l00395"></a><span class="lineno">  395</span>            <a class="code hl_function" href="radio_8h.html#a632401c7e72610ff0a0678358b6877ad">SendToAckPayload</a> (<a class="code hl_variable" href="radio_8h.html#acec349590f33af1fb88040ed4d12e53f">BaroAltitude</a>);</div>
-<div class="line"><a id="l00396" name="l00396"></a><span class="lineno">  396</span>            <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l00397" name="l00397"></a><span class="lineno">  397</span>        <span class="keywordflow">case</span> 4: </div>
-<div class="line"><a id="l00398" name="l00398"></a><span class="lineno">  398</span>            <a class="code hl_function" href="radio_8h.html#a632401c7e72610ff0a0678358b6877ad">SendToAckPayload</a> (<a class="code hl_variable" href="radio_8h.html#abda84b8cbebce00b7d4b0ea759b8d07f">BaroTemperature</a>);</div>
-<div class="line"><a id="l00399" name="l00399"></a><span class="lineno">  399</span>            <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l00400" name="l00400"></a><span class="lineno">  400</span>        <span class="keywordflow">case</span> 5: </div>
-<div class="line"><a id="l00401" name="l00401"></a><span class="lineno">  401</span>            <a class="code hl_function" href="radio_8h.html#a632401c7e72610ff0a0678358b6877ad">SendToAckPayload</a> (<a class="code hl_variable" href="radio_8h.html#a79c2bfabc0682301ec238954845e1e81">LatitudeGPS</a>);       </div>
-<div class="line"><a id="l00402" name="l00402"></a><span class="lineno">  402</span>            <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l00403" name="l00403"></a><span class="lineno">  403</span>        <span class="keywordflow">case</span> 6: </div>
-<div class="line"><a id="l00404" name="l00404"></a><span class="lineno">  404</span>             <a class="code hl_function" href="radio_8h.html#a632401c7e72610ff0a0678358b6877ad">SendToAckPayload</a> (<a class="code hl_variable" href="radio_8h.html#afabe4c9d9760f8606aa408474e3d626c">LongitudeGPS</a>);</div>
-<div class="line"><a id="l00405" name="l00405"></a><span class="lineno">  405</span>            <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l00406" name="l00406"></a><span class="lineno">  406</span>        <span class="keywordflow">case</span> 7: </div>
-<div class="line"><a id="l00407" name="l00407"></a><span class="lineno">  407</span>             <a class="code hl_function" href="radio_8h.html#a632401c7e72610ff0a0678358b6877ad">SendToAckPayload</a> (<a class="code hl_variable" href="radio_8h.html#a9cb6617428d513efc095336972632da6">AngleGPS</a>); </div>
-<div class="line"><a id="l00408" name="l00408"></a><span class="lineno">  408</span>            <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l00409" name="l00409"></a><span class="lineno">  409</span>        <span class="keywordflow">case</span> 8: </div>
-<div class="line"><a id="l00410" name="l00410"></a><span class="lineno">  410</span>             <a class="code hl_function" href="radio_8h.html#a632401c7e72610ff0a0678358b6877ad">SendToAckPayload</a> (<a class="code hl_variable" href="radio_8h.html#af02319a1e0d8c0c651f23e49acc228f8">SpeedGPS</a>);  </div>
-<div class="line"><a id="l00411" name="l00411"></a><span class="lineno">  411</span>            <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l00412" name="l00412"></a><span class="lineno">  412</span>        <span class="keywordflow">case</span> 9: </div>
-<div class="line"><a id="l00413" name="l00413"></a><span class="lineno">  413</span>            <a class="code hl_function" href="radio_8h.html#a632401c7e72610ff0a0678358b6877ad">SendToAckPayload</a> (<a class="code hl_variable" href="radio_8h.html#a86c2722f6c671747562cc504a440e243">GpsFix</a>);    </div>
-<div class="line"><a id="l00414" name="l00414"></a><span class="lineno">  414</span>            <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l00415" name="l00415"></a><span class="lineno">  415</span>        <span class="keywordflow">case</span> 10: </div>
-<div class="line"><a id="l00416" name="l00416"></a><span class="lineno">  416</span>            <a class="code hl_function" href="radio_8h.html#a632401c7e72610ff0a0678358b6877ad">SendToAckPayload</a> (<a class="code hl_variable" href="radio_8h.html#a9690c7445dbd0530fa729af6bac11044">AltitudeGPS</a>);      </div>
-<div class="line"><a id="l00417" name="l00417"></a><span class="lineno">  417</span>            <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l00418" name="l00418"></a><span class="lineno">  418</span>        <span class="keywordflow">case</span> 11: </div>
-<div class="line"><a id="l00419" name="l00419"></a><span class="lineno">  419</span>            <a class="code hl_function" href="radio_8h.html#a632401c7e72610ff0a0678358b6877ad">SendToAckPayload</a> (<a class="code hl_variable" href="radio_8h.html#a6f76c248ca5e727e482873f5328587e1">DistanceGPS</a>);    </div>
-<div class="line"><a id="l00420" name="l00420"></a><span class="lineno">  420</span>            <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l00421" name="l00421"></a><span class="lineno">  421</span>        <span class="keywordflow">case</span> 12: </div>
-<div class="line"><a id="l00422" name="l00422"></a><span class="lineno">  422</span>            <a class="code hl_function" href="radio_8h.html#a632401c7e72610ff0a0678358b6877ad">SendToAckPayload</a> (<a class="code hl_variable" href="radio_8h.html#a1a4e211f9858a5d6d61d11e5679a71f3">CourseToGPS</a>);       </div>
-<div class="line"><a id="l00423" name="l00423"></a><span class="lineno">  423</span>            <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l00424" name="l00424"></a><span class="lineno">  424</span>        <span class="keywordflow">case</span> 13: </div>
-<div class="line"><a id="l00425" name="l00425"></a><span class="lineno">  425</span>            <a class="code hl_function" href="radio_8h.html#a632401c7e72610ff0a0678358b6877ad">SendToAckPayload</a> (<a class="code hl_variable" href="radio_8h.html#a7dc81a3982ee72ef15b460b4bbf32818">SatellitesGPS</a>);     </div>
-<div class="line"><a id="l00426" name="l00426"></a><span class="lineno">  426</span>            <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l00427" name="l00427"></a><span class="lineno">  427</span>        <span class="keywordflow">case</span> 14: </div>
-<div class="line"><a id="l00428" name="l00428"></a><span class="lineno">  428</span>            <a class="code hl_function" href="radio_8h.html#affa2dcc4341b8daecac77e6e0a354b2d">SendDateToAckPayload</a>();</div>
-<div class="line"><a id="l00429" name="l00429"></a><span class="lineno">  429</span>            <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l00430" name="l00430"></a><span class="lineno">  430</span>        <span class="keywordflow">case</span> 15: </div>
-<div class="line"><a id="l00431" name="l00431"></a><span class="lineno">  431</span>            <a class="code hl_function" href="radio_8h.html#a8162c1748e39496c4adf88c55d1c49b8">SendTimeToAckPayload</a>();</div>
-<div class="line"><a id="l00432" name="l00432"></a><span class="lineno">  432</span>            <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l00433" name="l00433"></a><span class="lineno">  433</span>        <span class="keywordflow">default</span>:</div>
+<div class="line"><a id="l00388" name="l00388"></a><span class="lineno">  388</span>            <a class="code hl_function" href="radio_8h.html#a632401c7e72610ff0a0678358b6877ad">SendToAckPayload</a> (<a class="code hl_variable" href="radio_8h.html#a62cc4d43d463897ef0d417150d6e7f3f">SbusRepeats</a>);</div>
+<div class="line"><a id="l00389" name="l00389"></a><span class="lineno">  389</span>            <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00390" name="l00390"></a><span class="lineno">  390</span>        <span class="keywordflow">case</span> 2:</div>
+<div class="line"><a id="l00391" name="l00391"></a><span class="lineno">  391</span>            <a class="code hl_function" href="radio_8h.html#a632401c7e72610ff0a0678358b6877ad">SendToAckPayload</a> (<a class="code hl_variable" href="radio_8h.html#aff48e1463bf663c156032302d0161c98">RadioSwaps</a>);</div>
+<div class="line"><a id="l00392" name="l00392"></a><span class="lineno">  392</span>            <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00393" name="l00393"></a><span class="lineno">  393</span>        <span class="keywordflow">case</span> 3:</div>
+<div class="line"><a id="l00394" name="l00394"></a><span class="lineno">  394</span>            <a class="code hl_function" href="radio_8h.html#a632401c7e72610ff0a0678358b6877ad">SendToAckPayload</a> (<a class="code hl_variable" href="radio_8h.html#aa1850e21b7988ec8784a0a6a89077df0">RX1TotalTime</a>/1000);</div>
+<div class="line"><a id="l00395" name="l00395"></a><span class="lineno">  395</span>            <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00396" name="l00396"></a><span class="lineno">  396</span>         <span class="keywordflow">case</span> 4:</div>
+<div class="line"><a id="l00397" name="l00397"></a><span class="lineno">  397</span>            <a class="code hl_function" href="radio_8h.html#a632401c7e72610ff0a0678358b6877ad">SendToAckPayload</a> (<a class="code hl_variable" href="radio_8h.html#aabc8c01b8e9f9b91a3575bf7052dc4de">RX2TotalTime</a>/1000);</div>
+<div class="line"><a id="l00398" name="l00398"></a><span class="lineno">  398</span>            <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00399" name="l00399"></a><span class="lineno">  399</span>        <span class="keywordflow">case</span> 5: </div>
+<div class="line"><a id="l00400" name="l00400"></a><span class="lineno">  400</span>            <a class="code hl_function" href="radio_8h.html#a632401c7e72610ff0a0678358b6877ad">SendToAckPayload</a> (<a class="code hl_variable" href="radio_8h.html#ad84d94b7259bcf40213f0af9be706ee7">INA219Volts</a>);</div>
+<div class="line"><a id="l00401" name="l00401"></a><span class="lineno">  401</span>            <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00402" name="l00402"></a><span class="lineno">  402</span>        <span class="keywordflow">case</span> 6:</div>
+<div class="line"><a id="l00403" name="l00403"></a><span class="lineno">  403</span>            <a class="code hl_function" href="radio_8h.html#a632401c7e72610ff0a0678358b6877ad">SendToAckPayload</a> (<a class="code hl_variable" href="radio_8h.html#acec349590f33af1fb88040ed4d12e53f">BaroAltitude</a>);</div>
+<div class="line"><a id="l00404" name="l00404"></a><span class="lineno">  404</span>            <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00405" name="l00405"></a><span class="lineno">  405</span>        <span class="keywordflow">case</span> 7: </div>
+<div class="line"><a id="l00406" name="l00406"></a><span class="lineno">  406</span>            <a class="code hl_function" href="radio_8h.html#a632401c7e72610ff0a0678358b6877ad">SendToAckPayload</a> (<a class="code hl_variable" href="radio_8h.html#abda84b8cbebce00b7d4b0ea759b8d07f">BaroTemperature</a>);</div>
+<div class="line"><a id="l00407" name="l00407"></a><span class="lineno">  407</span>            <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00408" name="l00408"></a><span class="lineno">  408</span>        <span class="keywordflow">case</span> 8: </div>
+<div class="line"><a id="l00409" name="l00409"></a><span class="lineno">  409</span>            <a class="code hl_function" href="radio_8h.html#a632401c7e72610ff0a0678358b6877ad">SendToAckPayload</a> (<a class="code hl_variable" href="radio_8h.html#a79c2bfabc0682301ec238954845e1e81">LatitudeGPS</a>);       </div>
+<div class="line"><a id="l00410" name="l00410"></a><span class="lineno">  410</span>            <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00411" name="l00411"></a><span class="lineno">  411</span>        <span class="keywordflow">case</span> 9: </div>
+<div class="line"><a id="l00412" name="l00412"></a><span class="lineno">  412</span>             <a class="code hl_function" href="radio_8h.html#a632401c7e72610ff0a0678358b6877ad">SendToAckPayload</a> (<a class="code hl_variable" href="radio_8h.html#afabe4c9d9760f8606aa408474e3d626c">LongitudeGPS</a>);</div>
+<div class="line"><a id="l00413" name="l00413"></a><span class="lineno">  413</span>            <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00414" name="l00414"></a><span class="lineno">  414</span>        <span class="keywordflow">case</span> 10: </div>
+<div class="line"><a id="l00415" name="l00415"></a><span class="lineno">  415</span>             <a class="code hl_function" href="radio_8h.html#a632401c7e72610ff0a0678358b6877ad">SendToAckPayload</a> (<a class="code hl_variable" href="radio_8h.html#a9cb6617428d513efc095336972632da6">AngleGPS</a>); </div>
+<div class="line"><a id="l00416" name="l00416"></a><span class="lineno">  416</span>            <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00417" name="l00417"></a><span class="lineno">  417</span>        <span class="keywordflow">case</span> 11: </div>
+<div class="line"><a id="l00418" name="l00418"></a><span class="lineno">  418</span>             <a class="code hl_function" href="radio_8h.html#a632401c7e72610ff0a0678358b6877ad">SendToAckPayload</a> (<a class="code hl_variable" href="radio_8h.html#af02319a1e0d8c0c651f23e49acc228f8">SpeedGPS</a>);  </div>
+<div class="line"><a id="l00419" name="l00419"></a><span class="lineno">  419</span>            <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00420" name="l00420"></a><span class="lineno">  420</span>        <span class="keywordflow">case</span> 12: </div>
+<div class="line"><a id="l00421" name="l00421"></a><span class="lineno">  421</span>            <a class="code hl_function" href="radio_8h.html#a632401c7e72610ff0a0678358b6877ad">SendToAckPayload</a> (<a class="code hl_variable" href="radio_8h.html#a86c2722f6c671747562cc504a440e243">GpsFix</a>);    </div>
+<div class="line"><a id="l00422" name="l00422"></a><span class="lineno">  422</span>            <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00423" name="l00423"></a><span class="lineno">  423</span>        <span class="keywordflow">case</span> 13: </div>
+<div class="line"><a id="l00424" name="l00424"></a><span class="lineno">  424</span>            <a class="code hl_function" href="radio_8h.html#a632401c7e72610ff0a0678358b6877ad">SendToAckPayload</a> (<a class="code hl_variable" href="radio_8h.html#a9690c7445dbd0530fa729af6bac11044">AltitudeGPS</a>);      </div>
+<div class="line"><a id="l00425" name="l00425"></a><span class="lineno">  425</span>            <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00426" name="l00426"></a><span class="lineno">  426</span>        <span class="keywordflow">case</span> 14: </div>
+<div class="line"><a id="l00427" name="l00427"></a><span class="lineno">  427</span>            <a class="code hl_function" href="radio_8h.html#a632401c7e72610ff0a0678358b6877ad">SendToAckPayload</a> (<a class="code hl_variable" href="radio_8h.html#a6f76c248ca5e727e482873f5328587e1">DistanceGPS</a>);    </div>
+<div class="line"><a id="l00428" name="l00428"></a><span class="lineno">  428</span>            <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00429" name="l00429"></a><span class="lineno">  429</span>        <span class="keywordflow">case</span> 15: </div>
+<div class="line"><a id="l00430" name="l00430"></a><span class="lineno">  430</span>            <a class="code hl_function" href="radio_8h.html#a632401c7e72610ff0a0678358b6877ad">SendToAckPayload</a> (<a class="code hl_variable" href="radio_8h.html#a1a4e211f9858a5d6d61d11e5679a71f3">CourseToGPS</a>);       </div>
+<div class="line"><a id="l00431" name="l00431"></a><span class="lineno">  431</span>            <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00432" name="l00432"></a><span class="lineno">  432</span>        <span class="keywordflow">case</span> 16: </div>
+<div class="line"><a id="l00433" name="l00433"></a><span class="lineno">  433</span>            <a class="code hl_function" href="radio_8h.html#a632401c7e72610ff0a0678358b6877ad">SendToAckPayload</a> (<a class="code hl_variable" href="radio_8h.html#a7dc81a3982ee72ef15b460b4bbf32818">SatellitesGPS</a>);     </div>
 <div class="line"><a id="l00434" name="l00434"></a><span class="lineno">  434</span>            <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l00435" name="l00435"></a><span class="lineno">  435</span>    }</div>
-<div class="line"><a id="l00436" name="l00436"></a><span class="lineno">  436</span>}</div>
-<div class="line"><a id="l00437" name="l00437"></a><span class="lineno">  437</span><span class="comment">/************************************************************************************************************/</span></div>
-<div class="line"><a id="l00438" name="l00438"></a><span class="lineno">  438</span><span class="comment">/*</span></div>
-<div class="line"><a id="l00439" name="l00439"></a><span class="lineno">  439</span><span class="comment"> * Decompresses uint16_t* buffer values (each with 12 bit resolution - the lower 12 bits).</span></div>
-<div class="line"><a id="l00440" name="l00440"></a><span class="lineno">  440</span><span class="comment"> * @param uncompressed_buf[in]</span></div>
-<div class="line"><a id="l00441" name="l00441"></a><span class="lineno">  441</span><span class="comment"> * @param compressed_buf[out] Must have allocated 3/4 the size of uncompressed_buf</span></div>
-<div class="line"><a id="l00442" name="l00442"></a><span class="lineno">  442</span><span class="comment"> * @param uncompressed_size Size is in units of uint16_t (aka word or unsigned short)</span></div>
-<div class="line"><a id="l00443" name="l00443"></a><span class="lineno">  443</span><span class="comment"> */</span></div>
-<div class="line"><a id="l00444" name="l00444"></a><span class="lineno"><a class="line" href="radio_8h.html#a8e1f4879c351e462d6bca620ae4279e2">  444</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="radio_8h.html#a8e1f4879c351e462d6bca620ae4279e2">Decompress</a>(uint16_t* uncompressed_buf, uint16_t* compressed_buf, <span class="keywordtype">int</span> uncompressed_size)</div>
-<div class="line"><a id="l00445" name="l00445"></a><span class="lineno">  445</span>{</div>
-<div class="line"><a id="l00446" name="l00446"></a><span class="lineno">  446</span>    <span class="keywordtype">int</span> p = 0;</div>
-<div class="line"><a id="l00447" name="l00447"></a><span class="lineno">  447</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> l = 0; l &lt; (uncompressed_size * 3 / 4); l += 3) {</div>
-<div class="line"><a id="l00448" name="l00448"></a><span class="lineno">  448</span>        uncompressed_buf[p] = compressed_buf[l] &gt;&gt; 4;</div>
-<div class="line"><a id="l00449" name="l00449"></a><span class="lineno">  449</span>        ++p;</div>
-<div class="line"><a id="l00450" name="l00450"></a><span class="lineno">  450</span>        uncompressed_buf[p] = (compressed_buf[l] &amp; 0xf) &lt;&lt; 8 | compressed_buf[l + 1] &gt;&gt; 8;</div>
-<div class="line"><a id="l00451" name="l00451"></a><span class="lineno">  451</span>        ++p;</div>
-<div class="line"><a id="l00452" name="l00452"></a><span class="lineno">  452</span>        uncompressed_buf[p] = (compressed_buf[l + 1] &amp; 0xff) &lt;&lt; 4 | compressed_buf[l + 2] &gt;&gt; 12;</div>
-<div class="line"><a id="l00453" name="l00453"></a><span class="lineno">  453</span>        ++p;</div>
-<div class="line"><a id="l00454" name="l00454"></a><span class="lineno">  454</span>        uncompressed_buf[p] = compressed_buf[l + 2] &amp; 0xfff;</div>
-<div class="line"><a id="l00455" name="l00455"></a><span class="lineno">  455</span>        ++p;</div>
-<div class="line"><a id="l00456" name="l00456"></a><span class="lineno">  456</span>    }</div>
-<div class="line"><a id="l00457" name="l00457"></a><span class="lineno">  457</span>}</div>
-<div class="line"><a id="l00458" name="l00458"></a><span class="lineno">  458</span><span class="comment">/************************************************************************************************************/</span></div>
-<div class="line"><a id="l00459" name="l00459"></a><span class="lineno">  459</span><span class="preprocessor">#endif </span><span class="comment">// defined (_SRC_UTILITIES_RADIO_H)</span></div>
+<div class="line"><a id="l00435" name="l00435"></a><span class="lineno">  435</span>        <span class="keywordflow">case</span> 17: </div>
+<div class="line"><a id="l00436" name="l00436"></a><span class="lineno">  436</span>            <a class="code hl_function" href="radio_8h.html#affa2dcc4341b8daecac77e6e0a354b2d">SendDateToAckPayload</a>();</div>
+<div class="line"><a id="l00437" name="l00437"></a><span class="lineno">  437</span>            <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00438" name="l00438"></a><span class="lineno">  438</span>        <span class="keywordflow">case</span> 18: </div>
+<div class="line"><a id="l00439" name="l00439"></a><span class="lineno">  439</span>            <a class="code hl_function" href="radio_8h.html#a8162c1748e39496c4adf88c55d1c49b8">SendTimeToAckPayload</a>();</div>
+<div class="line"><a id="l00440" name="l00440"></a><span class="lineno">  440</span>            <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00441" name="l00441"></a><span class="lineno">  441</span>        <span class="keywordflow">default</span>:</div>
+<div class="line"><a id="l00442" name="l00442"></a><span class="lineno">  442</span>            <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00443" name="l00443"></a><span class="lineno">  443</span>    }</div>
+<div class="line"><a id="l00444" name="l00444"></a><span class="lineno">  444</span>}</div>
+<div class="line"><a id="l00445" name="l00445"></a><span class="lineno">  445</span><span class="comment">/************************************************************************************************************/</span></div>
+<div class="line"><a id="l00446" name="l00446"></a><span class="lineno">  446</span><span class="comment">/*</span></div>
+<div class="line"><a id="l00447" name="l00447"></a><span class="lineno">  447</span><span class="comment"> * Decompresses uint16_t* buffer values (each with 12 bit resolution - the lower 12 bits).</span></div>
+<div class="line"><a id="l00448" name="l00448"></a><span class="lineno">  448</span><span class="comment"> * @param uncompressed_buf[in]</span></div>
+<div class="line"><a id="l00449" name="l00449"></a><span class="lineno">  449</span><span class="comment"> * @param compressed_buf[out] Must have allocated 3/4 the size of uncompressed_buf</span></div>
+<div class="line"><a id="l00450" name="l00450"></a><span class="lineno">  450</span><span class="comment"> * @param uncompressed_size Size is in units of uint16_t (aka word or unsigned short)</span></div>
+<div class="line"><a id="l00451" name="l00451"></a><span class="lineno">  451</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00452" name="l00452"></a><span class="lineno"><a class="line" href="radio_8h.html#a8e1f4879c351e462d6bca620ae4279e2">  452</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="radio_8h.html#a8e1f4879c351e462d6bca620ae4279e2">Decompress</a>(uint16_t* uncompressed_buf, uint16_t* compressed_buf, <span class="keywordtype">int</span> uncompressed_size)</div>
+<div class="line"><a id="l00453" name="l00453"></a><span class="lineno">  453</span>{</div>
+<div class="line"><a id="l00454" name="l00454"></a><span class="lineno">  454</span>    <span class="keywordtype">int</span> p = 0;</div>
+<div class="line"><a id="l00455" name="l00455"></a><span class="lineno">  455</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> l = 0; l &lt; (uncompressed_size * 3 / 4); l += 3) {</div>
+<div class="line"><a id="l00456" name="l00456"></a><span class="lineno">  456</span>        uncompressed_buf[p] = compressed_buf[l] &gt;&gt; 4;</div>
+<div class="line"><a id="l00457" name="l00457"></a><span class="lineno">  457</span>        ++p;</div>
+<div class="line"><a id="l00458" name="l00458"></a><span class="lineno">  458</span>        uncompressed_buf[p] = (compressed_buf[l] &amp; 0xf) &lt;&lt; 8 | compressed_buf[l + 1] &gt;&gt; 8;</div>
+<div class="line"><a id="l00459" name="l00459"></a><span class="lineno">  459</span>        ++p;</div>
+<div class="line"><a id="l00460" name="l00460"></a><span class="lineno">  460</span>        uncompressed_buf[p] = (compressed_buf[l + 1] &amp; 0xff) &lt;&lt; 4 | compressed_buf[l + 2] &gt;&gt; 12;</div>
+<div class="line"><a id="l00461" name="l00461"></a><span class="lineno">  461</span>        ++p;</div>
+<div class="line"><a id="l00462" name="l00462"></a><span class="lineno">  462</span>        uncompressed_buf[p] = compressed_buf[l + 2] &amp; 0xfff;</div>
+<div class="line"><a id="l00463" name="l00463"></a><span class="lineno">  463</span>        ++p;</div>
+<div class="line"><a id="l00464" name="l00464"></a><span class="lineno">  464</span>    }</div>
+<div class="line"><a id="l00465" name="l00465"></a><span class="lineno">  465</span>}</div>
+<div class="line"><a id="l00466" name="l00466"></a><span class="lineno">  466</span><span class="comment">/************************************************************************************************************/</span></div>
+<div class="line"><a id="l00467" name="l00467"></a><span class="lineno">  467</span><span class="preprocessor">#endif </span><span class="comment">// defined (_SRC_UTILITIES_RADIO_H)</span></div>
 <div class="ttc" id="acommon_8h_html"><div class="ttname"><a href="common_8h.html">common.h</a></div></div>
 <div class="ttc" id="acommon_8h_html_a047f5702802c2bbf4918e9318f3e6a56"><div class="ttname"><a href="common_8h.html#a047f5702802c2bbf4918e9318f3e6a56">pinCSN1</a></div><div class="ttdeci">#define pinCSN1</div><div class="ttdef"><b>Definition:</b> <a href="common_8h_source.html#l00044">common.h:44</a></div></div>
 <div class="ttc" id="acommon_8h_html_a0634ad724c86cd2b4ac7cfebbb622a9c"><div class="ttname"><a href="common_8h.html#a0634ad724c86cd2b4ac7cfebbb622a9c">FAILSAFE_TIMEOUT</a></div><div class="ttdeci">#define FAILSAFE_TIMEOUT</div><div class="ttdef"><b>Definition:</b> <a href="common_8h_source.html#l00047">common.h:47</a></div></div>
@@ -601,7 +609,7 @@ $(document).ready(function(){initNavTree('radio_8h_source.html',''); initResizab
 <div class="ttc" id="aradio_8h_html_a88d2add9e7ca58e7218870f887b25859"><div class="ttname"><a href="radio_8h.html#a88d2add9e7ca58e7218870f887b25859">ThisPipe</a></div><div class="ttdeci">uint64_t ThisPipe</div><div class="ttdef"><b>Definition:</b> <a href="radio_8h_source.html#l00023">radio.h:23</a></div></div>
 <div class="ttc" id="aradio_8h_html_a8b76f3c338025926421c7b308405bbfd"><div class="ttname"><a href="radio_8h.html#a8b76f3c338025926421c7b308405bbfd">Radio2</a></div><div class="ttdeci">RF24 Radio2(pinCE2, pinCSN2)</div></div>
 <div class="ttc" id="aradio_8h_html_a8d3c194b5406bff33ef9357f8b1666cc"><div class="ttname"><a href="radio_8h.html#a8d3c194b5406bff33ef9357f8b1666cc">OldPipe</a></div><div class="ttdeci">uint64_t OldPipe</div><div class="ttdef"><b>Definition:</b> <a href="radio_8h_source.html#l00025">radio.h:25</a></div></div>
-<div class="ttc" id="aradio_8h_html_a8e1f4879c351e462d6bca620ae4279e2"><div class="ttname"><a href="radio_8h.html#a8e1f4879c351e462d6bca620ae4279e2">Decompress</a></div><div class="ttdeci">void Decompress(uint16_t *uncompressed_buf, uint16_t *compressed_buf, int uncompressed_size)</div><div class="ttdef"><b>Definition:</b> <a href="radio_8h_source.html#l00444">radio.h:444</a></div></div>
+<div class="ttc" id="aradio_8h_html_a8e1f4879c351e462d6bca620ae4279e2"><div class="ttname"><a href="radio_8h.html#a8e1f4879c351e462d6bca620ae4279e2">Decompress</a></div><div class="ttdeci">void Decompress(uint16_t *uncompressed_buf, uint16_t *compressed_buf, int uncompressed_size)</div><div class="ttdef"><b>Definition:</b> <a href="radio_8h_source.html#l00452">radio.h:452</a></div></div>
 <div class="ttc" id="aradio_8h_html_a8f6625d513c0e3887659968a39ddc325"><div class="ttname"><a href="radio_8h.html#a8f6625d513c0e3887659968a39ddc325">HopNow</a></div><div class="ttdeci">bool HopNow</div><div class="ttdef"><b>Definition:</b> <a href="radio_8h_source.html#l00012">radio.h:12</a></div></div>
 <div class="ttc" id="aradio_8h_html_a8fff0fd6eb9e23721d9e06f3f44bd3c9"><div class="ttname"><a href="radio_8h.html#a8fff0fd6eb9e23721d9e06f3f44bd3c9">ReadSensorHub</a></div><div class="ttdeci">void ReadSensorHub()</div></div>
 <div class="ttc" id="aradio_8h_html_a90d98310365e78ee5ec06aaa7a4092f1"><div class="ttname"><a href="radio_8h.html#a90d98310365e78ee5ec06aaa7a4092f1">ReconnectIndex</a></div><div class="ttdeci">uint8_t ReconnectIndex</div><div class="ttdef"><b>Definition:</b> <a href="radio_8h_source.html#l00017">radio.h:17</a></div></div>
