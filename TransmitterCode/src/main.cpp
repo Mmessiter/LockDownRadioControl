@@ -521,7 +521,13 @@ uint8_t  LowBattery =  LOWBATTERY;
 uint32_t SbusRepeats = 0;
 bool     VoltsDetected = false;
 uint8_t  SticksMode = 2;
+uint32_t RadioSwaps;
+uint32_t RX1TotalTime;
+uint32_t RX2TotalTime;
 
+   
+                 
+                 
 /************************************************************************************************************/
 // This function returns distance (in MILES) between two GPS coordinates (in degrees)
 // it was essentially cribbed from the internet, then tested and adjusted a little. 
@@ -1601,6 +1607,7 @@ FASTRUN void ShowComms()
                     }
                 }
             }
+
             if (CurrentView == DataView) {
                 SendValue(DataView_pps,   PacketsPerSecond);
                 SendValue(DataView_lps,   LostPackets);
@@ -1610,10 +1617,10 @@ FASTRUN void ShowComms()
                 SendText(DataView_Rx,     ThisRadio);
                 SendText(DataView_rxv,    ReceiverVersionNumber);
                 SendValue(DataView_Ls,    GapLongest);
-                SendValue(DataView_Ts,    GapSum);
-                SendValue(DataView_Sg,    GapShortest);
+                SendValue(DataView_Ts,    RadioSwaps);
+                SendValue(DataView_Sg,    RX1TotalTime);
                 SendValue(DataView_Ag,    GapAverage);
-                SendValue(DataView_Gc,    GapCount);
+                SendValue(DataView_Gc,    RX2TotalTime);
                 if (GpsFix){                               // if no fix, then leave display as before 
                     SendText(Fix, yes);
                 } else {
@@ -6036,53 +6043,62 @@ void ParseAckPayload()
                 SbusRepeats   = GetFromAckPayload(); 
                 break;
             case 2:
+                RadioSwaps     = GetFromAckPayload(); 
+                break;
+            case 3:
+                RX1TotalTime   = GetFromAckPayload(); 
+                break;
+            case 4:
+                RX2TotalTime   = GetFromAckPayload(); 
+                break;
+            case 5:
                  RXModelVolts = GetFromAckPayload();
                 if (RXModelVolts > 0) {
                     VoltsDetected = true;
                     snprintf(ModelVolts, 5, "%f", RXModelVolts);
                 }
                 break;
-            case 3:
+            case 6:
                 GetAltitude();
                 break;
-            case 4:
+            case 7:
                 GetTemperature();
                 break;
-            case 5:
+            case 8:
                 GPSLatitude = GetFromAckPayload(); 
                 break;
-            case 6:
+            case 9:
                 GPSLongitude = GetFromAckPayload(); 
                 break;
-            case 7:
+            case 10:
                 GPSAngle     = GetFromAckPayload();
                 break;
-            case 8:
+            case 11:
                 GPSSpeed     = GetFromAckPayload(); 
                 if (GPSMaxSpeed < GPSSpeed) GPSMaxSpeed = GPSSpeed;
                 break;
-            case 9:
+            case 12:
                 GpsFix       =  GetFromAckPayload();
                 break;
-            case 10:
+            case 13:
                 GPSAltitude  = GetFromAckPayload() - GPSGroundAltitude;
                 if (GPSAltitude < 0) GPSAltitude = 0;
                 if (GPSMaxAltitude < GPSAltitude) GPSMaxAltitude = GPSAltitude;
                 break;
-            case 11:
+            case 14:
                  GPSDistanceTo = GetFromAckPayload();
                  if (GPSMaxDistance < GPSDistanceTo) GPSMaxDistance = GPSDistanceTo;
                  break;
-            case 12:
+            case 15:
                  GPSCourseTo = GetFromAckPayload();  
                  break;
-            case 13:
+            case 16:
                  GPSSatellites = (uint8_t) GetFromAckPayload();
                  break;
-            case 14:
+            case 17:
                  GetDateFromAckPayload();
                  break;
-            case 15:
+            case 18:
                  GetTimeFromAckPayload();
                  ReadTheRTC();
                  if (GPSDay   != GmonthDay) GPSTimeSynched = false;
