@@ -151,12 +151,12 @@ var NAVTREEINDEX =
 "_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h.html#af0bc43b5dae696582a77176e6e4ff643ad9ebf0d3f835c55738b4d4e915768875",
 "_sensor_hub_t32_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8h.html#af0bc43b5dae696582a77176e6e4ff643af2ccaca19bdabe513c45c058003ed596",
 "_sensor_hub_teensy3__6_2src_2main_8cpp.html#aa2c448c0ec510ffaaecbc5991e726b53",
-"_transmitter_code_2src_2main_8cpp.html#a7847cc790a939f378993691ae7d40a2f",
-"_transmitter_code_2src_2main_8cpp.html#af963d49af3aeb834d322601d3c3e3d04",
+"_transmitter_code_2src_2main_8cpp.html#a75fa77e7bbb1cfe8fe6e1a216fbdc17e",
+"_transmitter_code_2src_2main_8cpp.html#af8780871d49e8fd8f36c74c6cb434f46",
 "class_adafruit___b_m_p280.html#ab28e689ef7620d2b9f0c9e03116dde8fa544ab88771584cea12877d3338eef96d",
-"class_adafruit___s_p_i_device.html#a155f5efd84dbc240c987f4066265b840",
-"globals_defs_n.html",
-"struct_tiny_g_p_s_altitude.html#a1eb3e5b425784fc0db3e9ffe0f77f741"
+"class_adafruit___i_n_a219.html#adbff47c27a3b8452c62a2f38672f1cd9",
+"globals_defs_k.html",
+"struct_raw_degrees.html#a39c31d2d0332155a4d2c975cec0a796f"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
