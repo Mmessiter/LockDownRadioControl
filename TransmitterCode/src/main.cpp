@@ -4612,7 +4612,7 @@ void Button_was_pressed()
             GPSMaxAltitude     = 0;
             GPSMaxDistance     = 0;
             GPSMaxSpeed        = 0;
-            SavedRadioSwaps    = RadioSwaps;
+            SavedRadioSwaps    = RadioSwaps;    // Cannot easily zero these, so do a subtraction
             SavedRX1TotalTime  = RX1TotalTime;
             SavedRX2TotalTime  = RX2TotalTime;
             SavedSbusRepeats   = SbusRepeats;
