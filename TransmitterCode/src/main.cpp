@@ -519,6 +519,7 @@ uint16_t SpecialColour      = Red;
 bool     Reconnected        = false;
 uint8_t  LowBattery         = LOWBATTERY;
 uint16_t SbusRepeats        = 0;
+uint16_t SavedSbusRepeats   = 0;
 bool     VoltsDetected      = false;
 uint8_t  SticksMode         = 2;
 uint16_t RadioSwaps         = 0 ;
@@ -1648,7 +1649,7 @@ FASTRUN void ShowComms()
                 SendText(BTo,Vbuf);   
                 snprintf(Vbuf, 6,"%d",  (int) GPSMaxDistance);
                 SendText(Mxd,Vbuf);  
-                snprintf(Vbuf, 6,"%d",  (int) SbusRepeats);
+                snprintf(Vbuf, 6,"%d",  (int) SbusRepeats - SavedSbusRepeats);
                 SendText(Sbs,Vbuf);   
                  
                 
@@ -4614,6 +4615,7 @@ void Button_was_pressed()
             SavedRadioSwaps    = RadioSwaps;
             SavedRX1TotalTime  = RX1TotalTime;
             SavedRX2TotalTime  = RX2TotalTime;
+            SavedSbusRepeats   = SbusRepeats;
             ClearText();
             return;
         }
