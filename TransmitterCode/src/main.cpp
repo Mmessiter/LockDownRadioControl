@@ -504,30 +504,30 @@ uint8_t  GmonthDay;// = tm.Day;    // 1-31
 uint8_t  Gmonth;   // = tm.Month;  // 1-12
 uint8_t  Gyear;    // = tm.Year;   // 0-99
 bool     GPSTimeSynched  =   false;
-int      DeltaGMT        = 0;
-uint32_t SwapWaveBandTimer = 0;
-uint8_t  UkRulesCounter = 0;
-bool     UkRules = true;
-uint8_t  SwapWaveBand = 0;  
-uint16_t TrimFactor   = 2;   // How much to multiply trim by
-uint8_t DateFix = 0;
-bool b5isGrey = false;
-uint16_t BackGroundColour = 214;
-uint16_t ForeGroundColour = 65535;
-uint16_t HighlightColour = Yellow;
-uint16_t SpecialColour = Red;
-bool     Reconnected = false;
-uint8_t  LowBattery =  LOWBATTERY;
-uint32_t SbusRepeats = 0;
-bool     VoltsDetected = false;
-uint8_t  SticksMode = 2;
-uint32_t RadioSwaps;
-uint32_t RX1TotalTime;
-uint32_t RX2TotalTime;
-
+int      DeltaGMT           = 0;
+uint32_t SwapWaveBandTimer  = 0;
+uint8_t  UkRulesCounter     = 0;
+bool     UkRules            = true;
+uint8_t  SwapWaveBand       = 0;  
+uint16_t TrimFactor         = 2;   // How much to multiply trim by
+uint8_t  DateFix            = 0;
+bool     b5isGrey           = false;
+uint16_t BackGroundColour   = 214;
+uint16_t ForeGroundColour   = 65535;
+uint16_t HighlightColour    = Yellow;
+uint16_t SpecialColour      = Red;
+bool     Reconnected        = false;
+uint8_t  LowBattery         = LOWBATTERY;
+uint16_t SbusRepeats        = 0;
+bool     VoltsDetected      = false;
+uint8_t  SticksMode         = 2;
+uint16_t RadioSwaps         = 0 ;
+uint16_t RX1TotalTime       = 0 ;
+uint16_t RX2TotalTime       = 0 ;
+uint16_t SavedRadioSwaps    = 0;
+uint16_t SavedRX1TotalTime  = 0;
+uint16_t SavedRX2TotalTime  = 0;
    
-                 
-                 
 /************************************************************************************************************/
 // This function returns distance (in MILES) between two GPS coordinates (in degrees)
 // it was essentially cribbed from the internet, then tested and adjusted a little. 
@@ -1617,10 +1617,10 @@ FASTRUN void ShowComms()
                 SendText(DataView_Rx,     ThisRadio);
                 SendText(DataView_rxv,    ReceiverVersionNumber);
                 SendValue(DataView_Ls,    GapLongest);
-                SendValue(DataView_Ts,    RadioSwaps);
-                SendValue(DataView_Sg,    RX1TotalTime);
+                SendValue(DataView_Ts,    RadioSwaps - SavedRadioSwaps);
+                SendValue(DataView_Sg,    RX1TotalTime - SavedRX1TotalTime);
                 SendValue(DataView_Ag,    GapAverage);
-                SendValue(DataView_Gc,    RX2TotalTime);
+                SendValue(DataView_Gc,    RX2TotalTime - SavedRX2TotalTime);
                 if (GpsFix){                               // if no fix, then leave display as before 
                     SendText(Fix, yes);
                 } else {
@@ -2875,9 +2875,7 @@ void setup()
     TeensyWatchDog.begin(WatchDogConfig);
     LastDogKick = millis(); // needed? - yes!
 #endif
-   //  Procrastinate(250);
     SD.begin(chipSelect);
-   // Procrastinate(250);
     CalibratedYet = LoadAllParameters();                  // If they exist, read saved SD card settings.                                  
     SendValue(FrontView_BackGround,BackGroundColour);     // Get colours ready
     SendValue(FrontView_ForeGround,ForeGroundColour);
@@ -4613,6 +4611,9 @@ void Button_was_pressed()
             GPSMaxAltitude     = 0;
             GPSMaxDistance     = 0;
             GPSMaxSpeed        = 0;
+            SavedRadioSwaps    = RadioSwaps;
+            SavedRX1TotalTime  = RX1TotalTime;
+            SavedRX2TotalTime  = RX2TotalTime;
             ClearText();
             return;
         }
