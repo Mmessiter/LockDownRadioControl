@@ -429,6 +429,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "SavedRadioSwaps", "_transmitter_code_2src_2main_8cpp.html#a21fd924b5a9be3c2eaa7d6fa80edffd0", null ],
     [ "SavedRX1TotalTime", "_transmitter_code_2src_2main_8cpp.html#a92340ce5ec923466feb97fc24573d64e", null ],
     [ "SavedRX2TotalTime", "_transmitter_code_2src_2main_8cpp.html#aafbc525923c23d3cd46b59ac13f91dca", null ],
+    [ "SavedSbusRepeats", "_transmitter_code_2src_2main_8cpp.html#ac3404e7b5c5628ea17545ccdc3428114", null ],
     [ "SaveFailSafeNow", "_transmitter_code_2src_2main_8cpp.html#acd6754de95b605bb65a52a86e96121f7", null ],
     [ "SaveFlightMode", "_transmitter_code_2src_2main_8cpp.html#a6e7a073d216762b73caa5e1c1a384f1a", null ],
     [ "SbusChannels", "_transmitter_code_2src_2main_8cpp.html#a87e7fa21a42bf74b127c8be8860d93a6", null ],
