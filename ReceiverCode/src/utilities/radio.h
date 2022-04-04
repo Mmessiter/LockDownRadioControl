@@ -267,28 +267,21 @@ void KeepSbusHappy(){
 /************************************************************************************************************/
 
 void Reconnect(){                                                                // This is called when contact is lost, to reconnect ASAP
-
     uint32_t SearchStartTime  = millis();;
     uint8_t  ReconnectChannel = * (FHSSChPointer + ReconnectIndex);              // Get a reconnect channel 
     uint8_t  PreviousRadio    =  ThisRadio;
-
     if (ThisRadio == 1) RX1TotalTime += (millis() - ReconnectedMoment);               // keep track of how long on each
     if (ThisRadio == 2) RX2TotalTime += (millis() - ReconnectedMoment);
-
 #ifdef SECOND_TRANSCEIVER
         TryTheOtherTransceiver(ReconnectChannel);                                // Just lost it on this one - so try the other
 #endif 
-    
     while (!Connected) {
         if (BoundFlag) KeepSbusHappy();                                            // Some SBUS systems timeout FAST, so resend old data to keep it happy
         CurrentRadio->stopListening();
         delay(1);                                                                  // NEEDED!
         ReconnectChannel = * (FHSSChPointer + ReconnectIndex);                     // Get a reconnect channel 
         ++ ReconnectIndex;
-        if (ReconnectIndex >= RECONNECT_CHANNELS_COUNT + RECONNECT_CHANNELS_START) 
-        { 
-            ReconnectIndex = RECONNECT_CHANNELS_START;
-        }
+        if (ReconnectIndex >= RECONNECT_CHANNELS_COUNT + RECONNECT_CHANNELS_START) ReconnectIndex = RECONNECT_CHANNELS_START;
         CurrentRadio->setChannel(ReconnectChannel);  
         TryToConnectNow();
 #ifdef SECOND_TRANSCEIVER
