@@ -109,7 +109,7 @@ void ReadSavedPipe()
 
 /************************************************************************************************************/
 
-void LoadVersioNumber() // and which radio is currently in use
+void SendVersionNumberToAckPayload() // AND which radio transceiver is currently in use
 {
     AckPayload.Byte1 = ThisRadio;
     AckPayload.Byte2 = RXVERSION_MAJOR;
@@ -376,7 +376,7 @@ void LoadAckPayload()
     if (AckPayload.Purpose > MaxAckP) AckPayload.Purpose = 0;     // wrap after max
     switch (AckPayload.Purpose) {
         case 0: 
-            LoadVersioNumber();
+            SendVersionNumberToAckPayload();
             break;  
         case 1:
             SendToAckPayload (SbusRepeats);
