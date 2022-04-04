@@ -1660,11 +1660,11 @@ FASTRUN void ShowComms()
             // 4s Max 16.8 -> 13.6
             // 3s Max 12.6 -> 10.2
             // 2s Max 8.4  -> 6.8
-            if (RXCellCount == 6) Volts = map(ReadVolts, 204, 252, 0, 100); // works for 6s batteries (*10)
-            if (RXCellCount == 5) Volts = map(ReadVolts, 170, 210, 0, 100); // works for 5s batteries (*10)
-            if (RXCellCount == 4) Volts = map(ReadVolts, 136, 168, 0, 100); // works for 4s batteries (*10)
-            if (RXCellCount == 3) Volts = map(ReadVolts, 102, 126, 0, 100); // works for 3s batteries (*10)
-            if (RXCellCount == 2) Volts = map(ReadVolts, 68, 84, 0, 100);   // works for 2s batteries (*10)
+            if (RXCellCount == 6) Volts = map(ReadVolts, 204, 252, 0, 100);  // works for 6s batteries (*10)
+            if (RXCellCount == 5) Volts = map(ReadVolts, 170, 210, 0, 100);  // works for 5s batteries (*10)
+            if (RXCellCount == 4) Volts = map(ReadVolts, 136, 168, 0, 100);  // works for 4s batteries (*10)
+            if (RXCellCount == 3) Volts = map(ReadVolts, 102, 126, 0, 100);  // works for 3s batteries (*10)
+            if (RXCellCount == 2) Volts = map(ReadVolts,  68,  84, 0, 100);  // works for 2s batteries (*10)
 
             if (VoltsDetected) {
                 Volts = constrain(Volts, 0, 100);
