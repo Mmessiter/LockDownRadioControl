@@ -235,6 +235,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "UpdateSwitchesDisplay", "_transmitter_code_2src_2main_8cpp.html#a789078ba3c1d92997ab8764eb20cce4f", null ],
     [ "UpdateTrimView", "_transmitter_code_2src_2main_8cpp.html#ac78966debc2cdc13d8ca958ce3b20c78", null ],
     [ "WatchDogCallBack", "_transmitter_code_2src_2main_8cpp.html#ae410be09c6f449451d8f2327fd895c7d", null ],
+    [ "ZeroDataScreen", "_transmitter_code_2src_2main_8cpp.html#a6da9a1fd0b003151f79eabc702ba80ff", null ],
     [ "AckPayload", "_transmitter_code_2src_2main_8cpp.html#a30a079d60b4731ce1531091ffe56a703", null ],
     [ "AckPayloadSize", "_transmitter_code_2src_2main_8cpp.html#a6dc99d00582ef356ea3d57700dca6dab", null ],
     [ "AllChannels", "_transmitter_code_2src_2main_8cpp.html#a1d18aaaa3cc4ba52bd309c88815c60a7", null ],

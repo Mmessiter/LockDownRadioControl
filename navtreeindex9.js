@@ -1,5 +1,6 @@
 var NAVTREEINDEX9 =
 {
+"globals_defs_h.html":[12,1,6,7],
 "globals_defs_i.html":[12,1,6,8],
 "globals_defs_k.html":[12,1,6,9],
 "globals_defs_l.html":[12,1,6,10],
@@ -16,8 +17,8 @@ var NAVTREEINDEX9 =
 "globals_defs_y.html":[12,1,6,21],
 "globals_e.html":[12,1,0,5],
 "globals_enum.html":[12,1,4],
-"globals_eval.html":[12,1,5],
 "globals_eval.html":[12,1,5,0],
+"globals_eval.html":[12,1,5],
 "globals_eval_b.html":[12,1,5,1],
 "globals_eval_i.html":[12,1,5,2],
 "globals_eval_n.html":[12,1,5,3],
@@ -43,6 +44,7 @@ var NAVTREEINDEX9 =
 "globals_func_t.html":[12,1,1,16],
 "globals_func_u.html":[12,1,1,17],
 "globals_func_w.html":[12,1,1,18],
+"globals_func_z.html":[12,1,1,19],
 "globals_g.html":[12,1,0,7],
 "globals_h.html":[12,1,0,8],
 "globals_i.html":[12,1,0,9],
@@ -60,8 +62,8 @@ var NAVTREEINDEX9 =
 "globals_type.html":[12,1,3],
 "globals_u.html":[12,1,0,21],
 "globals_v.html":[12,1,0,22],
-"globals_vars.html":[12,1,2],
 "globals_vars.html":[12,1,2,0],
+"globals_vars.html":[12,1,2],
 "globals_vars_b.html":[12,1,2,1],
 "globals_vars_c.html":[12,1,2,2],
 "globals_vars_d.html":[12,1,2,3],
@@ -88,6 +90,7 @@ var NAVTREEINDEX9 =
 "globals_w.html":[12,1,0,23],
 "globals_x.html":[12,1,0,24],
 "globals_y.html":[12,1,0,25],
+"globals_z.html":[12,1,0,26],
 "hierarchy.html":[11,2],
 "index.html":[],
 "index.html#autotoc_md37":[0],
@@ -246,8 +249,5 @@ var NAVTREEINDEX9 =
 "struct_payload.html#ae28220045a0918bdb0fc6484dbff55f9":[11,0,13,4],
 "struct_payload.html#ae7106f2efa1bb9f4ebb720c7c9fc54b8":[11,0,13,1],
 "struct_raw_degrees.html":[11,0,14],
-"struct_raw_degrees.html#a11831d9220f303bd716d9412af28e84e":[11,0,14,4],
-"struct_raw_degrees.html#a13564009c60e20dbf03b158114d1c0e2":[11,0,14,3],
-"struct_raw_degrees.html#a156d5ced092fa1473b9b669a29be3509":[11,0,14,1],
-"struct_raw_degrees.html#a156d5ced092fa1473b9b669a29be3509":[11,0,14,2]
+"struct_raw_degrees.html#a11831d9220f303bd716d9412af28e84e":[11,0,14,4]
 };
