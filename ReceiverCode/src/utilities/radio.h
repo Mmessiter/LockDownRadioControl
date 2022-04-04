@@ -306,9 +306,7 @@ void Reconnect(){                                                               
         }
     }
     FailSafeSent = false;
-    if (PreviousRadio != ThisRadio) {
-        ++ RadioSwaps;                                                           // Count the radio swaps
-    }
+    if (PreviousRadio != ThisRadio) ++ RadioSwaps;                                                           // Count the radio swaps
     ReconnectedMoment    = millis();  // Save this moment, then don't move a servo for 20 ms ...
 #ifdef DB_RXTIMERS
    Serial.print ("Transceiver1 use so far: ");
