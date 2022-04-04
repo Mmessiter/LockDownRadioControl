@@ -41,7 +41,6 @@ var _receiver_code_2src_2main_8cpp =
     [ "DistanceGPS", "_receiver_code_2src_2main_8cpp.html#a6f76c248ca5e727e482873f5328587e1", null ],
     [ "FailSafeChannel", "_receiver_code_2src_2main_8cpp.html#aeda79da3882f657a3eaefc5800122da5", null ],
     [ "FailSafeDataLoaded", "_receiver_code_2src_2main_8cpp.html#a08ed7a870be8e84ae26ee0b972866bb3", null ],
-    [ "FirstConnectMoment", "_receiver_code_2src_2main_8cpp.html#a63426fbd2027b29f27965c15983ead4d", null ],
     [ "FS_byte1", "_receiver_code_2src_2main_8cpp.html#a3be9019b72265fa9443e1f1132fd9bc7", null ],
     [ "FS_byte2", "_receiver_code_2src_2main_8cpp.html#a9949c81d8f6abc28616445945c5d24ba", null ],
     [ "GpsFix", "_receiver_code_2src_2main_8cpp.html#a86c2722f6c671747562cc504a440e243", null ],
