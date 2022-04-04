@@ -4261,7 +4261,24 @@ void updateOneSwitchView()
     }
     SendValue(SwNum, SwitchEditNumber); // show switch number
 }
+/*********************************************************************************************************************************/
 
+void ZeroDataScreen(){             // ZERO Those parameters that are zeroable
+            LostPackets        = 0;
+            GapShortest        = 0;
+            GapLongest         = 0;
+            GapSum             = 0;
+            GapAverage         = 0;
+            GapCount           = 0;
+            RXMAXModelAltitude = 0;
+            GPSMaxAltitude     = 0;
+            GPSMaxDistance     = 0;
+            GPSMaxSpeed        = 0;
+            SavedRadioSwaps    = RadioSwaps;    // Cannot easily zero these, so do a subtraction
+            SavedRX1TotalTime  = RX1TotalTime;
+            SavedRX2TotalTime  = RX2TotalTime;
+            SavedSbusRepeats   = SbusRepeats;
+}
 /*********************************************************************************************************************************/
 
 /**
@@ -4601,21 +4618,8 @@ void Button_was_pressed()
             CurrentMode = NORMAL;
             return;
         }
-        if (InStrng(DataView_Clear, TextIn) > 0) { //  goto setup screen from Data screen 
-            LostPackets        = 0;
-            GapShortest        = 0;
-            GapLongest         = 0;
-            GapSum             = 0;
-            GapAverage         = 0;
-            GapCount           = 0;
-            RXMAXModelAltitude = 0;
-            GPSMaxAltitude     = 0;
-            GPSMaxDistance     = 0;
-            GPSMaxSpeed        = 0;
-            SavedRadioSwaps    = RadioSwaps;    // Cannot easily zero these, so do a subtraction
-            SavedRX1TotalTime  = RX1TotalTime;
-            SavedRX2TotalTime  = RX2TotalTime;
-            SavedSbusRepeats   = SbusRepeats;
+        if (InStrng(DataView_Clear, TextIn) > 0) { 
+            ZeroDataScreen();
             ClearText();
             return;
         }
