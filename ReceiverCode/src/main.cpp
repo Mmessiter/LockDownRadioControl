@@ -136,8 +136,7 @@ void MoveServos()
 /************************************************************************************************************/
 
 /** Execute FailSafe data from EEPROM. */
-void FailSafe()
-{
+void FailSafe(){
     if (BoundFlag) {
         LoadFailSafeData();
         Connected = true; // to force sending this data!
@@ -145,6 +144,9 @@ void FailSafe()
         MoveServos();
         Connected = false; // I lied earlier - we're not really connected.
     }
+    FailSafeSent = true;                                        // Once is enough
+    SbusRepeats = 0;                                            // Reset this count for next connection
+    SetUKFrequencies();                                         // In case this had been changed
 }
 
 #ifdef DB_FHSS

@@ -296,12 +296,7 @@ void Reconnect(){                                                               
 #endif 
         if (!Connected) {
             if ((millis() - SearchStartTime) > FAILSAFE_TIMEOUT){
-                if (!FailSafeSent){
-                    FailSafe();
-                    FailSafeSent = true;                                        // Once is enough
-                    SbusRepeats = 0;                                            // Reset this count for next connection
-                    SetUKFrequencies();                                         // In case this had been changed
-                }
+                if (!FailSafeSent) FailSafe();
             }
         }
     }
