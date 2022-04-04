@@ -43,7 +43,6 @@ extern uint8_t  DayGPS;
 extern uint8_t  SatellitesGPS; 
 extern uint16_t BaroAltitude;
 extern uint32_t ReconnectedMoment;
-extern uint32_t FirstConnectMoment;
 extern uint32_t SBUSTimer;
 extern float    INA219Volts;
 extern float    BaroTemperature;
@@ -305,9 +304,6 @@ void Reconnect(){                                                               
                 }
             }
         }
-    }
-    if (FailSafeSent) { 
-    FirstConnectMoment = millis();
     }
     FailSafeSent = false;
     if (PreviousRadio != ThisRadio) {
