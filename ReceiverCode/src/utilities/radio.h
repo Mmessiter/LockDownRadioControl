@@ -272,8 +272,8 @@ void Reconnect(){                                                               
     uint8_t  ReconnectChannel = * (FHSSChPointer + ReconnectIndex);              // Get a reconnect channel 
     uint8_t  PreviousRadio    =  ThisRadio;
 
-    if (ThisRadio == 1) RX1TotalTime += (millis()-ReconnectedMoment);               // keep track of how long on each
-    if (ThisRadio == 2) RX2TotalTime += (millis()-ReconnectedMoment);
+    if (ThisRadio == 1) RX1TotalTime += (millis() - ReconnectedMoment);               // keep track of how long on each
+    if (ThisRadio == 2) RX2TotalTime += (millis() - ReconnectedMoment);
 
 #ifdef SECOND_TRANSCEIVER
         TryTheOtherTransceiver(ReconnectChannel);                                // Just lost it on this one - so try the other
