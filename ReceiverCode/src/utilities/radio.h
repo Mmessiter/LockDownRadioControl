@@ -43,7 +43,6 @@ extern uint8_t  DayGPS;
 extern uint8_t  SatellitesGPS; 
 extern uint16_t BaroAltitude;
 extern uint32_t ReconnectedMoment;
-extern uint32_t FirstConnectMoment;
 extern uint32_t SBUSTimer;
 extern float    INA219Volts;
 extern float    BaroTemperature;
@@ -110,7 +109,7 @@ void ReadSavedPipe()
 
 /************************************************************************************************************/
 
-void LoadVersioNumber() // and which radio is currently in use
+void SendVersionNumberToAckPayload() // AND which radio transceiver is currently in use
 {
     AckPayload.Byte1 = ThisRadio;
     AckPayload.Byte2 = RXVERSION_MAJOR;
@@ -268,28 +267,21 @@ void KeepSbusHappy(){
 /************************************************************************************************************/
 
 void Reconnect(){                                                                // This is called when contact is lost, to reconnect ASAP
-
     uint32_t SearchStartTime  = millis();;
     uint8_t  ReconnectChannel = * (FHSSChPointer + ReconnectIndex);              // Get a reconnect channel 
     uint8_t  PreviousRadio    =  ThisRadio;
-
-    if (ThisRadio == 1) RX1TotalTime += (millis()-ReconnectedMoment);               // keep track of how long on each
-    if (ThisRadio == 2) RX2TotalTime += (millis()-ReconnectedMoment);
-
+    if (ThisRadio == 1) RX1TotalTime += (millis() - ReconnectedMoment);               // keep track of how long on each
+    if (ThisRadio == 2) RX2TotalTime += (millis() - ReconnectedMoment);
 #ifdef SECOND_TRANSCEIVER
         TryTheOtherTransceiver(ReconnectChannel);                                // Just lost it on this one - so try the other
 #endif 
-    
     while (!Connected) {
         if (BoundFlag) KeepSbusHappy();                                            // Some SBUS systems timeout FAST, so resend old data to keep it happy
         CurrentRadio->stopListening();
         delay(1);                                                                  // NEEDED!
         ReconnectChannel = * (FHSSChPointer + ReconnectIndex);                     // Get a reconnect channel 
         ++ ReconnectIndex;
-        if (ReconnectIndex >= RECONNECT_CHANNELS_COUNT + RECONNECT_CHANNELS_START) 
-        { 
-            ReconnectIndex = RECONNECT_CHANNELS_START;
-        }
+        if (ReconnectIndex >= RECONNECT_CHANNELS_COUNT + RECONNECT_CHANNELS_START) ReconnectIndex = RECONNECT_CHANNELS_START;
         CurrentRadio->setChannel(ReconnectChannel);  
         TryToConnectNow();
 #ifdef SECOND_TRANSCEIVER
@@ -297,22 +289,12 @@ void Reconnect(){                                                               
 #endif 
         if (!Connected) {
             if ((millis() - SearchStartTime) > FAILSAFE_TIMEOUT){
-                if (!FailSafeSent){
-                    FailSafe();
-                    FailSafeSent = true;                                        // Once is enough
-                    SbusRepeats = 0;                                            // Reset this count for next connection
-                    SetUKFrequencies();                                         // In case this had been changed
-                }
+                if (!FailSafeSent) FailSafe();
             }
         }
     }
-    if (FailSafeSent) { 
-    FirstConnectMoment = millis();
-    }
     FailSafeSent = false;
-    if (PreviousRadio != ThisRadio) {
-        ++ RadioSwaps;                                                           // Count the radio swaps
-    }
+    if (PreviousRadio != ThisRadio) ++ RadioSwaps;                                                           // Count the radio swaps
     ReconnectedMoment    = millis();  // Save this moment, then don't move a servo for 20 ms ...
 #ifdef DB_RXTIMERS
    Serial.print ("Transceiver1 use so far: ");
@@ -374,60 +356,68 @@ void SendDateToAckPayload(){
 /************************************************************************************************************/
 void LoadAckPayload()
 {
-    uint8_t MaxAckP     = 1;                                      // 0 if only RX
+    uint8_t MaxAckP     = 4;                                      // 4 if only RX
     AckPayload.Purpose &= 0x7F;                                   // NOTE: The HIGH BIT of "purpose" bit is the HOPNOW flag. It gets set only when it's time to hop.
     ++AckPayload.Purpose;   
-    if (INA219_CONNECTED) MaxAckP = 2;
-    if (SENSOR_HUB_CONNECTED) MaxAckP = 15;                       // its 14 + GPS
+    if (INA219_CONNECTED) MaxAckP = 5;
+    if (SENSOR_HUB_CONNECTED) MaxAckP = 18;                       // its 14 + GPS
     if (AckPayload.Purpose > MaxAckP) AckPayload.Purpose = 0;     // wrap after max
     switch (AckPayload.Purpose) {
         case 0: 
-            LoadVersioNumber();
+            SendVersionNumberToAckPayload();
             break;  
         case 1:
-           // SendToAckPayload (SbusRepeats);
+            SendToAckPayload (SbusRepeats);
+            break;
+        case 2:
             SendToAckPayload (RadioSwaps);
             break;
-        case 2: 
-            SendToAckPayload (INA219Volts);
-            break;
         case 3:
-            SendToAckPayload (BaroAltitude);
+            SendToAckPayload (RX1TotalTime/1000);
             break;
-        case 4: 
-            SendToAckPayload (BaroTemperature);
+         case 4:
+            SendToAckPayload (RX2TotalTime/1000);
             break;
         case 5: 
-            SendToAckPayload (LatitudeGPS);       
+            SendToAckPayload (INA219Volts);
             break;
-        case 6: 
-             SendToAckPayload (LongitudeGPS);
+        case 6:
+            SendToAckPayload (BaroAltitude);
             break;
         case 7: 
-             SendToAckPayload (AngleGPS); 
+            SendToAckPayload (BaroTemperature);
             break;
         case 8: 
-             SendToAckPayload (SpeedGPS);  
+            SendToAckPayload (LatitudeGPS);       
             break;
         case 9: 
-            SendToAckPayload (GpsFix);    
+             SendToAckPayload (LongitudeGPS);
             break;
         case 10: 
-            SendToAckPayload (AltitudeGPS);      
+             SendToAckPayload (AngleGPS); 
             break;
         case 11: 
-            SendToAckPayload (DistanceGPS);    
+             SendToAckPayload (SpeedGPS);  
             break;
         case 12: 
-            SendToAckPayload (CourseToGPS);       
+            SendToAckPayload (GpsFix);    
             break;
         case 13: 
-            SendToAckPayload (SatellitesGPS);     
+            SendToAckPayload (AltitudeGPS);      
             break;
         case 14: 
-            SendDateToAckPayload();
+            SendToAckPayload (DistanceGPS);    
             break;
         case 15: 
+            SendToAckPayload (CourseToGPS);       
+            break;
+        case 16: 
+            SendToAckPayload (SatellitesGPS);     
+            break;
+        case 17: 
+            SendDateToAckPayload();
+            break;
+        case 18: 
             SendTimeToAckPayload();
             break;
         default:

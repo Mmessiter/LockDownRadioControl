@@ -504,24 +504,31 @@ uint8_t  GmonthDay;// = tm.Day;    // 1-31
 uint8_t  Gmonth;   // = tm.Month;  // 1-12
 uint8_t  Gyear;    // = tm.Year;   // 0-99
 bool     GPSTimeSynched  =   false;
-int      DeltaGMT        = 0;
-uint32_t SwapWaveBandTimer = 0;
-uint8_t  UkRulesCounter = 0;
-bool     UkRules = true;
-uint8_t  SwapWaveBand = 0;  
-uint16_t TrimFactor   = 2;   // How much to multiply trim by
-uint8_t DateFix = 0;
-bool b5isGrey = false;
-uint16_t BackGroundColour = 214;
-uint16_t ForeGroundColour = 65535;
-uint16_t HighlightColour = Yellow;
-uint16_t SpecialColour = Red;
-bool     Reconnected = false;
-uint8_t  LowBattery =  LOWBATTERY;
-uint32_t SbusRepeats = 0;
-bool     VoltsDetected = false;
-uint8_t  SticksMode = 2;
-
+int      DeltaGMT           = 0;
+uint32_t SwapWaveBandTimer  = 0;
+uint8_t  UkRulesCounter     = 0;
+bool     UkRules            = true;
+uint8_t  SwapWaveBand       = 0;  
+uint16_t TrimFactor         = 2;   // How much to multiply trim by
+uint8_t  DateFix            = 0;
+bool     b5isGrey           = false;
+uint16_t BackGroundColour   = 214;
+uint16_t ForeGroundColour   = 65535;
+uint16_t HighlightColour    = Yellow;
+uint16_t SpecialColour      = Red;
+bool     Reconnected        = false;
+uint8_t  LowBattery         = LOWBATTERY;
+uint16_t SbusRepeats        = 0;
+uint16_t SavedSbusRepeats   = 0;
+bool     VoltsDetected      = false;
+uint8_t  SticksMode         = 2;
+uint16_t RadioSwaps         = 0 ;
+uint16_t RX1TotalTime       = 0 ;
+uint16_t RX2TotalTime       = 0 ;
+uint16_t SavedRadioSwaps    = 0;
+uint16_t SavedRX1TotalTime  = 0;
+uint16_t SavedRX2TotalTime  = 0;
+   
 /************************************************************************************************************/
 // This function returns distance (in MILES) between two GPS coordinates (in degrees)
 // it was essentially cribbed from the internet, then tested and adjusted a little. 
@@ -1601,6 +1608,7 @@ FASTRUN void ShowComms()
                     }
                 }
             }
+
             if (CurrentView == DataView) {
                 SendValue(DataView_pps,   PacketsPerSecond);
                 SendValue(DataView_lps,   LostPackets);
@@ -1610,10 +1618,10 @@ FASTRUN void ShowComms()
                 SendText(DataView_Rx,     ThisRadio);
                 SendText(DataView_rxv,    ReceiverVersionNumber);
                 SendValue(DataView_Ls,    GapLongest);
-                SendValue(DataView_Ts,    GapSum);
-                SendValue(DataView_Sg,    GapShortest);
+                SendValue(DataView_Ts,    RadioSwaps - SavedRadioSwaps);
+                SendValue(DataView_Sg,    RX1TotalTime - SavedRX1TotalTime);
                 SendValue(DataView_Ag,    GapAverage);
-                SendValue(DataView_Gc,    GapCount);
+                SendValue(DataView_Gc,    RX2TotalTime - SavedRX2TotalTime);
                 if (GpsFix){                               // if no fix, then leave display as before 
                     SendText(Fix, yes);
                 } else {
@@ -1641,7 +1649,7 @@ FASTRUN void ShowComms()
                 SendText(BTo,Vbuf);   
                 snprintf(Vbuf, 6,"%d",  (int) GPSMaxDistance);
                 SendText(Mxd,Vbuf);  
-                snprintf(Vbuf, 6,"%d",  (int) SbusRepeats);
+                snprintf(Vbuf, 6,"%d",  (int) SbusRepeats - SavedSbusRepeats);
                 SendText(Sbs,Vbuf);   
                  
                 
@@ -1652,11 +1660,11 @@ FASTRUN void ShowComms()
             // 4s Max 16.8 -> 13.6
             // 3s Max 12.6 -> 10.2
             // 2s Max 8.4  -> 6.8
-            if (RXCellCount == 6) Volts = map(ReadVolts, 204, 252, 0, 100); // works for 6s batteries (*10)
-            if (RXCellCount == 5) Volts = map(ReadVolts, 170, 210, 0, 100); // works for 5s batteries (*10)
-            if (RXCellCount == 4) Volts = map(ReadVolts, 136, 168, 0, 100); // works for 4s batteries (*10)
-            if (RXCellCount == 3) Volts = map(ReadVolts, 102, 126, 0, 100); // works for 3s batteries (*10)
-            if (RXCellCount == 2) Volts = map(ReadVolts, 68, 84, 0, 100);   // works for 2s batteries (*10)
+            if (RXCellCount == 6) Volts = map(ReadVolts, 204, 252, 0, 100);  // works for 6s batteries (*10)
+            if (RXCellCount == 5) Volts = map(ReadVolts, 170, 210, 0, 100);  // works for 5s batteries (*10)
+            if (RXCellCount == 4) Volts = map(ReadVolts, 136, 168, 0, 100);  // works for 4s batteries (*10)
+            if (RXCellCount == 3) Volts = map(ReadVolts, 102, 126, 0, 100);  // works for 3s batteries (*10)
+            if (RXCellCount == 2) Volts = map(ReadVolts,  68,  84, 0, 100);  // works for 2s batteries (*10)
 
             if (VoltsDetected) {
                 Volts = constrain(Volts, 0, 100);
@@ -2868,9 +2876,7 @@ void setup()
     TeensyWatchDog.begin(WatchDogConfig);
     LastDogKick = millis(); // needed? - yes!
 #endif
-   //  Procrastinate(250);
     SD.begin(chipSelect);
-   // Procrastinate(250);
     CalibratedYet = LoadAllParameters();                  // If they exist, read saved SD card settings.                                  
     SendValue(FrontView_BackGround,BackGroundColour);     // Get colours ready
     SendValue(FrontView_ForeGround,ForeGroundColour);
@@ -4255,7 +4261,24 @@ void updateOneSwitchView()
     }
     SendValue(SwNum, SwitchEditNumber); // show switch number
 }
+/*********************************************************************************************************************************/
 
+void ZeroDataScreen(){             // ZERO Those parameters that are zeroable
+            LostPackets        = 0;
+            GapShortest        = 0;
+            GapLongest         = 0;
+            GapSum             = 0;
+            GapAverage         = 0;
+            GapCount           = 0;
+            RXMAXModelAltitude = 0;
+            GPSMaxAltitude     = 0;
+            GPSMaxDistance     = 0;
+            GPSMaxSpeed        = 0;
+            SavedRadioSwaps    = RadioSwaps;    // Cannot easily zero these, so do a subtraction
+            SavedRX1TotalTime  = RX1TotalTime;
+            SavedRX2TotalTime  = RX2TotalTime;
+            SavedSbusRepeats   = SbusRepeats;
+}
 /*********************************************************************************************************************************/
 
 /**
@@ -4595,17 +4618,8 @@ void Button_was_pressed()
             CurrentMode = NORMAL;
             return;
         }
-        if (InStrng(DataView_Clear, TextIn) > 0) { //  goto setup screen from Data screen 
-            LostPackets        = 0;
-            GapShortest        = 0;
-            GapLongest         = 0;
-            GapSum             = 0;
-            GapAverage         = 0;
-            GapCount           = 0;
-            RXMAXModelAltitude = 0;
-            GPSMaxAltitude     = 0;
-            GPSMaxDistance     = 0;
-            GPSMaxSpeed        = 0;
+        if (InStrng(DataView_Clear, TextIn) > 0) { 
+            ZeroDataScreen();
             ClearText();
             return;
         }
@@ -6023,9 +6037,9 @@ void ParseAckPayload()
     if (AckPayload.Purpose & 0x80)                                       // Hi bit is now the **HOP NOW!!** flag
     {
         NextChannelNumber   =  AckPayload.Byte5;                         // This is just the array pointer or offset  
-        NextChannel       =  * (FHSSChPointer + NextChannelNumber);      // The actual channel number pointed to.
+        NextChannel         =  * (FHSSChPointer + NextChannelNumber);    // The actual channel number pointed to.
         HopToNextChannel();
-        AckPayload.Purpose &= 0x7f;
+        AckPayload.Purpose &= 0x7f;                                      // Clear the high BIT, use the remainder ...
     }    
         switch (AckPayload.Purpose) // Only look at the low 7 BITS
         {
@@ -6036,53 +6050,62 @@ void ParseAckPayload()
                 SbusRepeats   = GetFromAckPayload(); 
                 break;
             case 2:
+                RadioSwaps     = GetFromAckPayload(); 
+                break;
+            case 3:
+                RX1TotalTime   = GetFromAckPayload(); 
+                break;
+            case 4:
+                RX2TotalTime   = GetFromAckPayload(); 
+                break;
+            case 5:
                  RXModelVolts = GetFromAckPayload();
                 if (RXModelVolts > 0) {
                     VoltsDetected = true;
                     snprintf(ModelVolts, 5, "%f", RXModelVolts);
                 }
                 break;
-            case 3:
+            case 6:
                 GetAltitude();
                 break;
-            case 4:
+            case 7:
                 GetTemperature();
                 break;
-            case 5:
+            case 8:
                 GPSLatitude = GetFromAckPayload(); 
                 break;
-            case 6:
+            case 9:
                 GPSLongitude = GetFromAckPayload(); 
                 break;
-            case 7:
+            case 10:
                 GPSAngle     = GetFromAckPayload();
                 break;
-            case 8:
+            case 11:
                 GPSSpeed     = GetFromAckPayload(); 
                 if (GPSMaxSpeed < GPSSpeed) GPSMaxSpeed = GPSSpeed;
                 break;
-            case 9:
+            case 12:
                 GpsFix       =  GetFromAckPayload();
                 break;
-            case 10:
+            case 13:
                 GPSAltitude  = GetFromAckPayload() - GPSGroundAltitude;
                 if (GPSAltitude < 0) GPSAltitude = 0;
                 if (GPSMaxAltitude < GPSAltitude) GPSMaxAltitude = GPSAltitude;
                 break;
-            case 11:
+            case 14:
                  GPSDistanceTo = GetFromAckPayload();
                  if (GPSMaxDistance < GPSDistanceTo) GPSMaxDistance = GPSDistanceTo;
                  break;
-            case 12:
+            case 15:
                  GPSCourseTo = GetFromAckPayload();  
                  break;
-            case 13:
+            case 16:
                  GPSSatellites = (uint8_t) GetFromAckPayload();
                  break;
-            case 14:
+            case 17:
                  GetDateFromAckPayload();
                  break;
-            case 15:
+            case 18:
                  GetTimeFromAckPayload();
                  ReadTheRTC();
                  if (GPSDay   != GmonthDay) GPSTimeSynched = false;

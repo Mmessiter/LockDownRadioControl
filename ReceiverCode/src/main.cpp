@@ -58,7 +58,6 @@ bool            ReInit             = false;
 uint8_t         FS_byte1           = 0; // All 16 failsafe channel flags are in these two bytes
 uint8_t         FS_byte2           = 0;
 uint32_t        ReconnectedMoment;
-uint32_t        FirstConnectMoment = 0;
 uint16_t        BaroAltitude;
 float           BaroTemperature;
 float           INA219Volts;
@@ -137,8 +136,7 @@ void MoveServos()
 /************************************************************************************************************/
 
 /** Execute FailSafe data from EEPROM. */
-void FailSafe()
-{
+void FailSafe(){
     if (BoundFlag) {
         LoadFailSafeData();
         Connected = true; // to force sending this data!
@@ -146,6 +144,9 @@ void FailSafe()
         MoveServos();
         Connected = false; // I lied earlier - we're not really connected.
     }
+    FailSafeSent = true;                                        // Once is enough
+    SbusRepeats = 0;                                            // Reset this count for next connection
+    SetUKFrequencies();                                         // In case this had been changed
 }
 
 #ifdef DB_FHSS
