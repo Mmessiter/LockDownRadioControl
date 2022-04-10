@@ -4175,26 +4175,18 @@ void ShowFlightMode()
     char FMPress2[]  = "click fm2,1";
     char FMPress3[]  = "click fm3,1";
     char FMPress4[]  = "click fm4,1";
-    char FMPress10[] = "click fm1,0";
-    char FMPress20[] = "click fm2,0";
-    char FMPress30[] = "click fm3,0";
-    char FMPress40[] = "click fm4,0";
     switch (FlightMode) {
         case 1:
             SendCommand(FMPress1);
-            SendCommand(FMPress10);
             break;
         case 2:
             SendCommand(FMPress2);
-            SendCommand(FMPress20);
             break;
         case 3:
             SendCommand(FMPress3);
-            SendCommand(FMPress30);
             break;
         case 4:
             SendCommand(FMPress4);
-            SendCommand(FMPress40);
             break;
         default:
             break;
@@ -5939,21 +5931,19 @@ void GetFlightMode()
     Channel12SwitchValue = CheckSwitch(Channel12Switch);
 
     if (FlightMode != PreviousFlightMode) {
+
         SendCommand(NEXTIONWakeUp);    // wake screen up if flight mode changes
+        if (CurrentView == FrontView) {
+            ShowFlightMode();
+        }
         LastSeconds = 0;               // Just to force redisplay of timer
         if (PreviousFlightMode == 4) { // Start or restart timer when auto goes off
             TimerMillis = millis();
         }
-
         if (FlightMode == 4) {                                // Pause timer when auto on
             PausedSecs = Secs + (Mins * 60) + (Hours * 3600); // Remember how long so far
         }
-
         CheckTimer(); // update timer
-
-        if (CurrentView == FrontView) {
-            ShowFlightMode();
-        }
         UpdateModelsNameEveryWhere();
         if (CurrentView == GraphView) DisplayCurve();
     }
@@ -5964,20 +5954,7 @@ void GetFlightMode()
 
 void ReadSwitches()
 {
-    for (int i = 0; i < 8; ++i) {
-        if (!digitalRead(SwitchNumber[i])) {
-            Switch[i] = true;
-        }
-        else {
-            Switch[i] = false;
-        }
-#ifdef DB_SWITCHES
-        Serial.print("Switch ");
-        Serial.print(i);
-        Serial.print(" = ");
-        Serial.println(Switch[i]);
-#endif
-    }
+    for (int i = 0; i < 8; ++i) Switch[i] = !digitalRead(SwitchNumber[i]);
     GetFlightMode();
 }
 
