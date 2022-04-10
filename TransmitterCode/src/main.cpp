@@ -857,7 +857,6 @@ void Reboot()
 #endif
 }
 
-
 /*********************************************************************************************************************************/
 void GetReturnCode(){  // currently absorbed but ignored.
     while (NEXTION.available()){
