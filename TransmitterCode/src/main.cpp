@@ -857,20 +857,23 @@ void Reboot()
 #endif
 }
 
+
+/*********************************************************************************************************************************/
+void GetReturnCode(){  // currently absorbed but ignored.
+    while (NEXTION.available()){
+            NEXTION.read();
+     }
+}
 /*********************************************************************************************************************************/
 
 void SendCommand(char* tbox)
 {
     NEXTION.print(tbox);
-
-    // Serial.print (" NEXTION TEST COMMAND: ");  // For wierd session
-    // Serial.println(tbox);
-
     for (int i = 0; i < 3; ++i) {
         NEXTION.write(0xff);
-    } // Send end of Input message
+    } 
+    GetReturnCode();
 }
-
 /*********************************************************************************************************************************/
 
 void SendText(char* tbox, char* NewWord)
@@ -888,6 +891,7 @@ void SendText(char* tbox, char* NewWord)
     strcat(CB, NewWord);
     strcat(CB, quote);
     SendCommand(CB);
+    GetReturnCode();
 }
 
 /*********************************************************************************************************************************/
@@ -907,6 +911,7 @@ void SendText1(char* tbox, char* NewWord)
     strcat(CB, NewWord);
     strcat(CB, quote);
     SendCommand(CB);
+    GetReturnCode();
 }
 
 /*********************************************************************************************************************************/
@@ -1152,6 +1157,7 @@ void SendValue(char* nbox, int value)
     strcat(CB, Str(NB, value, 0));
     SendCommand(CB);
     ValueSent = true;
+    GetReturnCode();
 }
 
 
@@ -1167,6 +1173,7 @@ void SendOtherValue(char* nbox, int value)
     strcat(CB, Str(NB, value, 0));
     SendCommand(CB);
     ValueSent = true;
+    GetReturnCode();
 }
 
 /*********************************************************************************************************************************/
