@@ -858,19 +858,40 @@ void Reboot()
 }
 
 /*********************************************************************************************************************************/
+void GetReturnCode(){  // currently absorbed but ignored.
+    while (NEXTION.available()){
+            NEXTION.read();
+     }
+}
+
+
+/*********************************************************************************************************************************/
+
+void PlayWaveFile(char* tbox){
+    char path[]   = "wav0.path=\"sd0/";
+    char CB[130];
+    char wav[]= ".wav\"";
+    char en[] ="wav0.en=1";
+    char vol[]="volume=90";
+    strcpy(CB, path);
+    strcat(CB, tbox);
+    strcat(CB, wav);
+    SendCommand(vol);
+    SendCommand(CB);
+    SendCommand(en);
+}
+
+/*********************************************************************************************************************************/
 
 void SendCommand(char* tbox)
 {
     NEXTION.print(tbox);
-
-    // Serial.print (" NEXTION TEST COMMAND: ");  // For wierd session
-    // Serial.println(tbox);
-
     for (int i = 0; i < 3; ++i) {
         NEXTION.write(0xff);
-    } // Send end of Input message
+    } 
+    GetReturnCode();
+    
 }
-
 /*********************************************************************************************************************************/
 
 void SendText(char* tbox, char* NewWord)
@@ -888,6 +909,7 @@ void SendText(char* tbox, char* NewWord)
     strcat(CB, NewWord);
     strcat(CB, quote);
     SendCommand(CB);
+    GetReturnCode();
 }
 
 /*********************************************************************************************************************************/
@@ -907,6 +929,7 @@ void SendText1(char* tbox, char* NewWord)
     strcat(CB, NewWord);
     strcat(CB, quote);
     SendCommand(CB);
+    GetReturnCode();
 }
 
 /*********************************************************************************************************************************/
@@ -1096,7 +1119,7 @@ void GreenLedOn()
         analogWrite(BLUELED, 0);
         analogWrite(REDLED, 0); 
         analogWrite(GREENLED, GetBrightness()); // Brightness is a function of maybe blinking
-        LastShowTime = 0;
+        //LastShowTime = 0;
         MakeBindButtonInvisible();
         Reconnected=false;
     }
@@ -1152,6 +1175,7 @@ void SendValue(char* nbox, int value)
     strcat(CB, Str(NB, value, 0));
     SendCommand(CB);
     ValueSent = true;
+    GetReturnCode();
 }
 
 
@@ -1167,6 +1191,7 @@ void SendOtherValue(char* nbox, int value)
     strcat(CB, Str(NB, value, 0));
     SendCommand(CB);
     ValueSent = true;
+    GetReturnCode();
 }
 
 /*********************************************************************************************************************************/
@@ -1731,6 +1756,7 @@ FASTRUN void ShowComms()
                 LedWasGreen = false;
             }
         }
+   
     }
 } // end ShowComms()
 
@@ -2866,6 +2892,7 @@ void setup()
     pinMode(POWER_OFF_PIN, OUTPUT);
     BlueLedOn();
     NEXTION.begin(921600);      // BAUD rate also set in display code THIS IS THE MAX (was 115200)  
+    delay(1000);
     InitMaxMin();               // in case not yet calibrated
     InitCentreDegrees();        // In case not yet calibrated
     CentreTrims();
@@ -2910,12 +2937,13 @@ void setup()
     BoundFlag     = false;
     TxOnTime      = millis();
     UpdateModelsNameEveryWhere();
-
     StartInactvityTimeout();
     SizeOfCompressedData = sizeof(CompressedData);
     GetTXVersionNumber();
     MySbus.begin();
     SetUKFrequencies(); 
+    char test[] =  "fanfare2";
+    PlayWaveFile(test);
 }
 /*********************************************************************************************************************************/
 
@@ -4175,26 +4203,18 @@ void ShowFlightMode()
     char FMPress2[]  = "click fm2,1";
     char FMPress3[]  = "click fm3,1";
     char FMPress4[]  = "click fm4,1";
-    char FMPress10[] = "click fm1,0";
-    char FMPress20[] = "click fm2,0";
-    char FMPress30[] = "click fm3,0";
-    char FMPress40[] = "click fm4,0";
     switch (FlightMode) {
         case 1:
             SendCommand(FMPress1);
-            SendCommand(FMPress10);
             break;
         case 2:
             SendCommand(FMPress2);
-            SendCommand(FMPress20);
             break;
         case 3:
             SendCommand(FMPress3);
-            SendCommand(FMPress30);
             break;
         case 4:
             SendCommand(FMPress4);
-            SendCommand(FMPress40);
             break;
         default:
             break;
@@ -5939,21 +5959,19 @@ void GetFlightMode()
     Channel12SwitchValue = CheckSwitch(Channel12Switch);
 
     if (FlightMode != PreviousFlightMode) {
+
         SendCommand(NEXTIONWakeUp);    // wake screen up if flight mode changes
+        if (CurrentView == FrontView) {
+            ShowFlightMode();
+        }
         LastSeconds = 0;               // Just to force redisplay of timer
         if (PreviousFlightMode == 4) { // Start or restart timer when auto goes off
             TimerMillis = millis();
         }
-
         if (FlightMode == 4) {                                // Pause timer when auto on
             PausedSecs = Secs + (Mins * 60) + (Hours * 3600); // Remember how long so far
         }
-
         CheckTimer(); // update timer
-
-        if (CurrentView == FrontView) {
-            ShowFlightMode();
-        }
         UpdateModelsNameEveryWhere();
         if (CurrentView == GraphView) DisplayCurve();
     }
@@ -5964,20 +5982,7 @@ void GetFlightMode()
 
 void ReadSwitches()
 {
-    for (int i = 0; i < 8; ++i) {
-        if (!digitalRead(SwitchNumber[i])) {
-            Switch[i] = true;
-        }
-        else {
-            Switch[i] = false;
-        }
-#ifdef DB_SWITCHES
-        Serial.print("Switch ");
-        Serial.print(i);
-        Serial.print(" = ");
-        Serial.println(Switch[i]);
-#endif
-    }
+    for (int i = 0; i < 8; ++i) Switch[i] = !digitalRead(SwitchNumber[i]);
     GetFlightMode();
 }
 
