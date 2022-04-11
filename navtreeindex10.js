@@ -1,5 +1,6 @@
 var NAVTREEINDEX10 =
 {
+"struct_raw_degrees.html#a13564009c60e20dbf03b158114d1c0e2":[11,0,14,3],
 "struct_raw_degrees.html#a156d5ced092fa1473b9b669a29be3509":[11,0,14,2],
 "struct_raw_degrees.html#a156d5ced092fa1473b9b669a29be3509":[11,0,14,1],
 "struct_raw_degrees.html#a156d5ced092fa1473b9b669a29be3509":[11,0,14,0],
