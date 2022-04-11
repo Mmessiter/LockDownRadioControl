@@ -863,6 +863,24 @@ void GetReturnCode(){  // currently absorbed but ignored.
             NEXTION.read();
      }
 }
+
+
+/*********************************************************************************************************************************/
+
+void PlayWaveFile(char* tbox){
+    char path[]   = "wav0.path=\"sd0/";
+    char CB[130];
+    char wav[]= ".wav\"";
+    char en[] ="wav0.en=1";
+    char vol[]="volume=90";
+    strcpy(CB, path);
+    strcat(CB, tbox);
+    strcat(CB, wav);
+    SendCommand(vol);
+    SendCommand(CB);
+    SendCommand(en);
+}
+
 /*********************************************************************************************************************************/
 
 void SendCommand(char* tbox)
@@ -872,6 +890,7 @@ void SendCommand(char* tbox)
         NEXTION.write(0xff);
     } 
     GetReturnCode();
+    
 }
 /*********************************************************************************************************************************/
 
@@ -1100,7 +1119,7 @@ void GreenLedOn()
         analogWrite(BLUELED, 0);
         analogWrite(REDLED, 0); 
         analogWrite(GREENLED, GetBrightness()); // Brightness is a function of maybe blinking
-        LastShowTime = 0;
+        //LastShowTime = 0;
         MakeBindButtonInvisible();
         Reconnected=false;
     }
@@ -1737,6 +1756,7 @@ FASTRUN void ShowComms()
                 LedWasGreen = false;
             }
         }
+   
     }
 } // end ShowComms()
 
@@ -2872,6 +2892,7 @@ void setup()
     pinMode(POWER_OFF_PIN, OUTPUT);
     BlueLedOn();
     NEXTION.begin(921600);      // BAUD rate also set in display code THIS IS THE MAX (was 115200)  
+    delay(1000);
     InitMaxMin();               // in case not yet calibrated
     InitCentreDegrees();        // In case not yet calibrated
     CentreTrims();
@@ -2916,12 +2937,13 @@ void setup()
     BoundFlag     = false;
     TxOnTime      = millis();
     UpdateModelsNameEveryWhere();
-
     StartInactvityTimeout();
     SizeOfCompressedData = sizeof(CompressedData);
     GetTXVersionNumber();
     MySbus.begin();
     SetUKFrequencies(); 
+    char test[] =  "fanfare2";
+    PlayWaveFile(test);
 }
 /*********************************************************************************************************************************/
 
