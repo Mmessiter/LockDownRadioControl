@@ -81,7 +81,7 @@
  */
 // ************************************************** TRANSMITTER CODE **************************************************
 
-#define CHANNELSUSED       16                  //   16 Channels
+#define CHANNELSUSED       16                  // 16 Channels
 #define MAXMIXES           32                  // 32 mixes
 #define TICKSPERMINUTE     60000               // millis() += 60000 per minute
 #define PROPOCHANNELS      8                   // Only 4 have knobs / 2 sticks (= 4 hall sensors)
@@ -160,7 +160,7 @@ RF24 Radio1(CE_PIN, CSN_PIN);
 #define MixesView       3
 #define FhssView        4
 #define ModelsView      5
-#define CalibrateView   6
+#define CALIBRATEVIEW   6
 #define MainSetupView   7
 #define GainsView       8
 #define DataView        9
@@ -209,7 +209,6 @@ WDT_timings_t WatchDogConfig;
 SBUS     MySbus(SBUSPORT);
 uint16_t SbusChannels[CHANNELSUSED + 2]; // a few spare
 uint32_t SBUSTimer = 0;
-
 uint8_t Mixes[MAXMIXES + 1][CHANNELSUSED + 1];                // Channel mixes' 2D array store
 int     Trims[FlightModesUsed + 1][CHANNELSUSED + 1];         // Trims to store
 uint8_t TrimsReversed[FlightModesUsed + 1][CHANNELSUSED + 1]; // Trim directions to store
@@ -868,6 +867,8 @@ void GetReturnCode(){  // currently absorbed but ignored.
 /*********************************************************************************************************************************/
 
 void PlayWaveFile(char* tbox){
+
+    #ifdef USEAUDIO
     char path[]   = "wav0.path=\"sd0/";
     char CB[130];
     char wav[]= ".wav\"";
@@ -879,6 +880,7 @@ void PlayWaveFile(char* tbox){
     SendCommand(vol);
     SendCommand(CB);
     SendCommand(en);
+    #endif
 }
 
 /*********************************************************************************************************************************/
@@ -1378,7 +1380,7 @@ void ShowServoPos()
     int l1            = 0;
     int LeastDistance = 2; // if the change is small, don't re-display anything - to reduce flashing.
 
-    if (CurrentView == CalibrateView) {
+    if (CurrentView == CALIBRATEVIEW) {
         if (abs(SendBuffer[0] - ShownBuffer[0]) > LeastDistance) {
             SendValue(CalibrateView_Ch1, um(SendBuffer[0]));
             ShownBuffer[0] = SendBuffer[0];
@@ -1827,7 +1829,7 @@ void SendCharArray(char* ch0, char* ch1, char* ch2, char* ch3, char* ch4, char* 
 #define xx1 90 // was 75
 #define yy1 90 // Needed below... Edit xx1,yy1 to move box ....
 
-void DrawFhssBox() // heer
+void DrawFhssBox() 
 {
     int  x1          = xx1;
     int  y1          = yy1;
@@ -2011,9 +2013,7 @@ float MapExp(float xx, float Xxmin, float Xxmax, float Yymin, float Yymax, float
 /** @brief GET NEW SERVO POSITIONS */
 void get_new_channels_values()
 {
-    
     uint16_t k = 0, l = 0, m = 0, n = 0, TrimAmount;
-
     for (n = 0; n < CHANNELSUSED; ++n) {
         l = InPutStick[n]; // input sticks knobs & switches are now mapped by user
         if (l <= 7)
@@ -2075,31 +2075,31 @@ void get_new_channels_values()
 
 /*********************************************************************************************************************************/
 
-void CalibrateSticks()
+void CalibrateSticks() // heer
 {
-    int j;
+    int p;
     for (int i = 0; i < PROPOCHANNELS; ++i)
     {
-        j = analogRead(AnalogueInput[i]);
-        if (ChannelMax[i] < j) ChannelMax[i] = j;
-        if (ChannelMin[i] > j) ChannelMin[i] = j;
-    }
-    get_new_channels_values();
-    ShowServoPos();
-    SendCommand(NoSleeping); // no screen timeout while calibrating
+        p = analogRead(AnalogueInput[i]);
+       if (ChannelMax[i] < p) ChannelMax[i] = p;
+       if (ChannelMin[i] > p) ChannelMin[i] = p;
+   }
+        get_new_channels_values();
 }
 
 /*********************************************************************************************************************************/
 
-void CentreMaxMins()
+/** @brief Get centre as 90 degrees */
+void ChannelCentres()
 {
-    for (int i = 0; i < CHANNELSUSED; ++i)
-    {
-        ChannelMax[i]    = 512; // halfway up
-        ChannelMin[i]    = 512; // halfway down
-        ChannelCentre[i] = 512;
+    for (int i = 0; i < PROPOCHANNELS; ++i) {
+        ChannelCentre[i] = analogRead(AnalogueInput[i]);
+        ChannelMidHi[i]  = ChannelCentre[i] + ((ChannelMax[i] - ChannelCentre[i]) / 2);
+        ChannelMidLow[i] = ChannelMin[i] + ((ChannelCentre[i] - ChannelMin[i]) / 2);
     }
+    get_new_channels_values();
 }
+
 
 /*********************************************************************************************************************************/
 
@@ -2373,19 +2373,6 @@ void InitCentreDegrees()
     }
 }
 
-/*********************************************************************************************************************************/
-
-/** @brief Get centre as 90 degrees */
-void ChannelCentres()
-{
-    for (int i = 0; i < 8; ++i) {
-        ChannelCentre[i] = analogRead(AnalogueInput[i]);
-        ChannelMidHi[i]  = ChannelCentre[i] + ((ChannelMax[i] - ChannelCentre[i]) / 2);
-        ChannelMidLow[i] = ChannelMin[i] + ((ChannelCentre[i] - ChannelMin[i]) / 2);
-    }
-    get_new_channels_values();
-    ShowServoPos();
-}
 
 /*********************************************************************************************************************************/
 
@@ -2929,8 +2916,8 @@ void setup()
     GetTXVersionNumber();
     MySbus.begin();
     SetUKFrequencies(); 
-    char test[] =  "fanfare2";
-    PlayWaveFile(test);
+    char fanfare[] =  "fanfare2";
+    PlayWaveFile(fanfare);
 }
 /*********************************************************************************************************************************/
 
@@ -4190,18 +4177,29 @@ void ShowFlightMode()
     char FMPress2[]  = "click fm2,1";
     char FMPress3[]  = "click fm3,1";
     char FMPress4[]  = "click fm4,1";
+    char b1[] = "b1";
+    char b2[] = "b2";
+    char b3[] = "b3";
+    char b4[] = "b4";
+
+
+
     switch (FlightMode) {
         case 1:
             SendCommand(FMPress1);
+            PlayWaveFile(b1);
             break;
         case 2:
             SendCommand(FMPress2);
+            PlayWaveFile(b2);
             break;
         case 3:
             SendCommand(FMPress3);
+            PlayWaveFile(b3);
             break;
         case 4:
             SendCommand(FMPress4);
+            PlayWaveFile(b4);
             break;
         default:
             break;
@@ -4328,7 +4326,7 @@ void Button_was_pressed()
     char SetupViewFM[]             = "SetupViewFM:";
     char ModelNMSave[]             = "ModelNMSave";
     char Data_View[]               = "DataView";
-    char Calibrate_View[]          = "CalibrateView";
+    char CalibrateView[]           = "CalibrateView";
     char Trim[]                    = "Trim";
     char TrimView[]                = "TrimView";
     char TR1[]                     = "TR1";
@@ -5177,10 +5175,10 @@ void Button_was_pressed()
             return;
         }
 
-        if (InStrng(Calibrate_View, TextIn)) {
+        if (InStrng(CalibrateView, TextIn)) { //heer
             SendCommand(pCalibrateView);
             Force_ReDisplay();
-            CurrentView = CalibrateView;
+            CurrentView = CALIBRATEVIEW;
             ClearText();
             return;
         }
@@ -5779,10 +5777,10 @@ void Button_was_pressed()
             ClearText();
             return;
         }
-        if (CurrentMode == 0) {
+        if (CurrentMode == NORMAL) { 
             if (strcmp(TextIn, "Calibrate1") == 0) {
                 CurrentMode = CALIBRATELIMITS;
-                CentreMaxMins();
+                CurrentView = CALIBRATEVIEW ;
                 SendText1(SvT11, CMsg1);
                 SendText(SvB0, CMsg2);
                 ClearText();
@@ -5790,18 +5788,17 @@ void Button_was_pressed()
             }
         }
 
-        if (CurrentMode == 1) {
+        if (CurrentMode == CALIBRATELIMITS) {
             if (strcmp(TextIn, "Calibrate1") == 0) {
                 CurrentMode = CENTRESTICKS;
+                CurrentView = CALIBRATEVIEW ;
                 SendText(SvT11, Cmsg3);
                 SendText(SvB0, Cmsg4);
                 ClearText();
-                //Serial.println ("ONE");
-                //Serial.println (CurrentMode);
                 return;
             }
         }
-        if (CurrentMode == 2) {
+        if (CurrentMode == CENTRESTICKS) {
             if (strcmp(TextIn, "Calibrate1") == 0) {
                 CurrentMode = NORMAL;
                 SaveAllParameters();
@@ -5946,7 +5943,8 @@ void GetFlightMode()
     Channel12SwitchValue = CheckSwitch(Channel12Switch);
 
     if (FlightMode != PreviousFlightMode) {
-
+       
+   
         SendCommand(NEXTIONWakeUp);    // wake screen up if flight mode changes
         if (CurrentView == FrontView) {
             ShowFlightMode();
@@ -6202,14 +6200,14 @@ void loop()
     if ((millis() - TxOnTime) > 2000) { // Transmit nothing for first 2 seconds
 
         switch (CurrentMode) {
-            case 0:
+            case NORMAL:            // 0
                 SendData();
                 if (!LedWasGreen) ShowComms();   // Show when not connected
                 break;
-            case 1:
+            case CALIBRATELIMITS:   // 1
                 CalibrateSticks();
                 break;
-            case 2:
+            case CENTRESTICKS:      // 2
                 ChannelCentres();
                 break;
             case 3:

@@ -3,11 +3,13 @@
 #define RadioFunctions_H
 
 // **************************************************************************
-//                TX VERSION NUMBER   (April 3rd 2022 Malcolm Messiter) *
+//                TX VERSION NUMBER   (April 12th 2022 Malcolm Messiter) *
 //***************************************************************************
 #define TXVERSION_MAJOR   1
-#define TXVERSION_MINOR   6
-#define TXVERSION_MINIMUS 7
+#define TXVERSION_MINOR   7
+#define TXVERSION_MINIMUS 0
+
+//#define USEAUDIO
 
 // **************************************************************************
 //                            SBUS PARAMETERS   (FOR BUDDY BOXING)          *
@@ -71,8 +73,8 @@
 //             UNCOMMENT ANY OF THESE for that bit of debug info            *
 //***************************************************************************
 
-// #define DB_NEXTION        // Debug NEXTION and SD card data
- // #define DB_FHSS           // Debug real time FHSS data
+ #define DB_NEXTION        // Debug NEXTION and SD card data
+// #define DB_FHSS           // Debug real time FHSS data
 // #define DB_SENSORS        // Debug Sensors
 // #define DB_BIND           // Debug Binding
 // #define DB_SWITCHES       // Debug Switches
