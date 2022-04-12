@@ -14,5 +14,6 @@ var searchData=
   ['use_5fina219_11',['USE_INA219',['../_transmitter_code_2src_2main_8cpp.html#a87ae50e2ac4507568cbf98072f174a1b',1,'main.cpp']]],
   ['use_5fsw_5fserial_12',['USE_SW_SERIAL',['../_adafruit___g_p_s_8h.html#a7d44b2886944eb862b51948f2acc8d23',1,'Adafruit_GPS.h']]],
   ['use_5fwatchdog_13',['USE_WATCHDOG',['../_radio_functions_8h.html#a71be4a990011c7b00830abf5f3b2190d',1,'RadioFunctions.h']]],
-  ['usereceiveddata_14',['UseReceivedData',['../_receiver_code_2src_2main_8cpp.html#abb1997c589abc6432f612eaedf985e38',1,'main.cpp']]]
+  ['useaudio_14',['USEAUDIO',['../_radio_functions_8h.html#a1a522582f7918d462403b1e4724a2c9d',1,'RadioFunctions.h']]],
+  ['usereceiveddata_15',['UseReceivedData',['../_receiver_code_2src_2main_8cpp.html#abb1997c589abc6432f612eaedf985e38',1,'main.cpp']]]
 ];
