@@ -9,7 +9,11 @@
 #define TXVERSION_MINOR   7
 #define TXVERSION_MINIMUS 0
 
-//#define USEAUDIO
+
+// **************************************************************************
+//                    AUDIO (ie  INTELLIGENT NEXTION)                       *
+//***************************************************************************
+#define USEAUDIO
 
 // **************************************************************************
 //                            SBUS PARAMETERS   (FOR BUDDY BOXING)          *

@@ -154,9 +154,9 @@ RF24 Radio1(CE_PIN, CSN_PIN);
 #define M_R1            6
 #define M_R2            7
 
-#define FrontView       0
-#define SticksView      1
-#define GraphView       2
+#define FRONTVIEW       0
+#define STICKSVIEW      1
+#define GRAPHVIEW       2
 #define MixesView       3
 #define FhssView        4
 #define ModelsView      5
@@ -217,8 +217,8 @@ uint8_t InterpolationTypes[FlightModesUsed + 1][CHANNELSUSED + 1];
 
 uint8_t       LastMixNumber      = 1;
 uint8_t       MixNumber          = 0;
-uint8_t       CurrentView        = FrontView;
-uint8_t       SavedCurrentView   = FrontView;
+uint8_t       CurrentView        = FRONTVIEW;
+uint8_t       SavedCurrentView   = FRONTVIEW;
 uint64_t      DefaultPipe        = DEFAULTPIPEADDRESS; //          Default Radio pipe address
 uint64_t      NewPipe            = 0xBABE1E5420LL;     //             New Radio pipe address for binding comes from MAC address
 char          TextIn[CharsMax];
@@ -1015,7 +1015,7 @@ void ReadTime()
     char Owner[] = "Owner";
     uint8_t DisplayedHour;
     FixDeltaGMTSign();  
-    if (CurrentView == FrontView || CurrentView == Options_View) {
+    if (CurrentView == FRONTVIEW || CurrentView == Options_View) {
         if (RTC.read(tm)) { 
             strcpy(TimeString, Str(NB, tm.Day + DateFix, 0));
             if (CurrentView == Options_View)
@@ -1335,7 +1335,7 @@ void CheckTimer()
         Mins = Secs / 60;
         Secs %= 60;
     }
-    if (CurrentView == FrontView) {
+    if (CurrentView == FRONTVIEW) {
         if (LastSeconds != Secs) {
             SendValue(FrontView_Secs, Secs);
             SendValue(FrontView_Mins, Mins);
@@ -1414,7 +1414,7 @@ void ShowServoPos()
             ShownBuffer[7] = SendBuffer[7];
         }
     }
-    if (CurrentView == SticksView) {
+    if (CurrentView == STICKSVIEW) {
         if (abs(SendBuffer[0] - ShownBuffer[0]) > LeastDistance) {
             SendValue(SticksView_Ch1, um(SendBuffer[0]));
             ShownBuffer[0] = SendBuffer[0];
@@ -1480,7 +1480,7 @@ void ShowServoPos()
             ShownBuffer[15] = SendBuffer[15];
         }
     }
-    if (CurrentView == GraphView) { // Display current stick and output values
+    if (CurrentView == GRAPHVIEW) { // Display current stick and output values
         if (ChanneltoSet <= 8) {
             l  = (InPutStick[ChanneltoSet - 1]);
             l1 = analogRead(AnalogueInput[l]);
@@ -1570,7 +1570,7 @@ FASTRUN void ShowComms()
     char  Sat[]               = "Sat";
     char  Sbs[]              = "Sbus";
 
-    if (CurrentView == FrontView || CurrentView == DataView) {
+    if (CurrentView == FRONTVIEW || CurrentView == DataView) {
         if (millis() - LastShowTime > ShowCommsDelay) { 
             ShowNow = true;
         }
@@ -1587,7 +1587,7 @@ FASTRUN void ShowComms()
             if (txpc > 100) txpc = 100; // avoid showing > 100% !
             dtostrf(txpc, 0, 0, Vbuf);
             strcat(Vbuf, pc);
-            if (CurrentView == FrontView) SendText(TXVolts, Vbuf);
+            if (CurrentView == FRONTVIEW) SendText(TXVolts, Vbuf);
             txv /= 100;
             snprintf(Vbuf, 5, "%f", txv); // float to string...
             strcpy(TXBattInfo, Vbuf);
@@ -1597,13 +1597,13 @@ FASTRUN void ShowComms()
             dtostrf(txv, 2, 2, Vbuf);
             strcat(TXBattInfo, Vbuf);
             strcat(TXBattInfo, PerCell);
-            if (CurrentView == FrontView) SendText(FrontView_TXBV, TXBattInfo);
+            if (CurrentView == FRONTVIEW) SendText(FrontView_TXBV, TXBattInfo);
             if (CurrentView == DataView) SendText(DataView_txv, TransmitterVersionNumber); // TX Version Number
                                                                                            // if (CurrentView == DataView) SendText(DataView_txv, Vbuf);
         }
         if (!LostContactFlag)
         {
-            if ((CurrentView == FrontView)) {
+            if ((CurrentView == FRONTVIEW)) {
                 if (!BoundFlag) {
                     SendCommand(BindButtonVisible); 
                     BindButton = true;
@@ -1702,7 +1702,7 @@ FASTRUN void ShowComms()
             if (VoltsDetected) {
                 dtostrf(Volts, 0, 0, Vbuf);
                 strcat(Vbuf, pc);
-                if (BoundFlag && CurrentView == FrontView) SendText(FrontView_AckPayload, Vbuf);
+                if (BoundFlag && CurrentView == FRONTVIEW) SendText(FrontView_AckPayload, Vbuf);
                 strcpy(RXBattInfo, ModelVolts);
                 strcat(RXBattInfo, v);
                 if (RXCellCount == 6) strcat(RXBattInfo, LiPo6s);
@@ -1714,11 +1714,11 @@ FASTRUN void ShowComms()
                 dtostrf(VoltsPerCell, 2, 2, Vbuf);
                 strcat(RXBattInfo, Vbuf);
                 strcat(RXBattInfo, PerCell);
-                if (BoundFlag && CurrentView == FrontView) SendText(FrontView_RXBV, RXBattInfo);
+                if (BoundFlag && CurrentView == FRONTVIEW) SendText(FrontView_RXBV, RXBattInfo);
             }
             if (!VoltsDetected) {
-                if (BoundFlag && CurrentView == FrontView) SendText(FrontView_RXBV, RXBattNA);
-                if (BoundFlag && CurrentView == FrontView) SendText(FrontView_AckPayload, RXBattNV);
+                if (BoundFlag && CurrentView == FRONTVIEW) SendText(FrontView_RXBV, RXBattNA);
+                if (BoundFlag && CurrentView == FRONTVIEW) SendText(FrontView_AckPayload, RXBattNV);
             }
         }
         else {
@@ -1729,7 +1729,7 @@ FASTRUN void ShowComms()
                     SendValue(DataView_lps, LostPackets);
                 }
 
-                if (CurrentView == FrontView) {
+                if (CurrentView == FRONTVIEW) {
                     SendText(FrontView_Connected, Not_Connected);
                     SendText(FrontView_RXBV, na); // data not available
                     SendText(FrontView_AckPayload, na);
@@ -1737,7 +1737,7 @@ FASTRUN void ShowComms()
             }
             else // i.e. contact is lost
             {
-                if (CurrentView == FrontView)
+                if (CurrentView == FRONTVIEW)
                 {
                     if (DoSbusSendOnly) {
                         SendText(FrontView_Connected, MsgBuddying);
@@ -1748,7 +1748,7 @@ FASTRUN void ShowComms()
                 }
             }
         }
-        if (CurrentView == FrontView) {
+        if (CurrentView == FRONTVIEW) {
             if (RXWarningFlag || TXWarningFlag) {
                 SendCommand(WarnNow);
                 LedIsBlinking = true; 
@@ -2255,16 +2255,16 @@ void UpdateModelsNameEveryWhere()
     char Nbuf[7];
 
     switch (CurrentView) {
-        case FrontView:
+        case FRONTVIEW:
             SendText(FrontView_ModelName, ModelName);
             break;
-        case SticksView:
+        case STICKSVIEW:
             SendText(SticksView_ModelName, ModelName);
             break;
         case MixesView:
             SendText(MixesView_ModelName, ModelName);
             break;
-        case GraphView:
+        case GRAPHVIEW:
             SendText(GraphView_ModelName, ModelName);
             if (strlen(ChannelNames[ChanneltoSet - 1]) < 2) { // if no name, just show the channel number
                 strcpy(NoName, Ch);
@@ -2286,40 +2286,40 @@ void UpdateModelsNameEveryWhere()
     }
 
     if (FlightMode == 1) {
-        if (CurrentView == SticksView) SendText(SticksView_t1, fm1);
-        if (CurrentView == GraphView) SendText(GraphView_fmode, fm1);
+        if (CurrentView == STICKSVIEW) SendText(SticksView_t1, fm1);
+        if (CurrentView == GRAPHVIEW) SendText(GraphView_fmode, fm1);
         if (CurrentView == Trim_View) {
             SendText(TrimView_FlightMode, fm1);
             UpdateTrimView();
         }
-        if (CurrentView == FrontView) SendValue(FrontView_fm1, 1);
+        if (CurrentView == FRONTVIEW) SendValue(FrontView_fm1, 1);
     }
     if (FlightMode == 2) {
-        if (CurrentView == SticksView) SendText(SticksView_t1, fm2);
-        if (CurrentView == GraphView) SendText(GraphView_fmode, fm2);
+        if (CurrentView == STICKSVIEW) SendText(SticksView_t1, fm2);
+        if (CurrentView == GRAPHVIEW) SendText(GraphView_fmode, fm2);
         if (CurrentView == Trim_View) {
             SendText(TrimView_FlightMode, fm2);
             UpdateTrimView();
         }
-        if (CurrentView == FrontView) SendValue(FrontView_fm2, 1);
+        if (CurrentView == FRONTVIEW) SendValue(FrontView_fm2, 1);
     }
     if (FlightMode == 3) {
-        if (CurrentView == SticksView) SendText(SticksView_t1, fm3);
-        if (CurrentView == GraphView) SendText(GraphView_fmode, fm3);
+        if (CurrentView == STICKSVIEW) SendText(SticksView_t1, fm3);
+        if (CurrentView == GRAPHVIEW) SendText(GraphView_fmode, fm3);
         if (CurrentView == Trim_View) {
             SendText(TrimView_FlightMode, fm3);
             UpdateTrimView();
         }
-        if (CurrentView == FrontView) SendValue(FrontView_fm3, 1);
+        if (CurrentView == FRONTVIEW) SendValue(FrontView_fm3, 1);
     }
     if (FlightMode == 4) {
-        if (CurrentView == SticksView) SendText(SticksView_t1, fm4);
-        if (CurrentView == GraphView) SendText(GraphView_fmode, fm4);
+        if (CurrentView == STICKSVIEW) SendText(SticksView_t1, fm4);
+        if (CurrentView == GRAPHVIEW) SendText(GraphView_fmode, fm4);
         if (CurrentView == Trim_View) {
             SendText(TrimView_FlightMode, fm4);
             UpdateTrimView();
         }
-        if (CurrentView == FrontView) SendValue(FrontView_fm4, 1);
+        if (CurrentView == FRONTVIEW) SendValue(FrontView_fm4, 1);
     }
 }
 
@@ -2446,7 +2446,7 @@ void UpdateButtonLabels()
     char fourteen[]           = "(14) ";
     char fifteen[]            = " (15)";
     char sixteen[]            = "(16) ";
-    if (CurrentView == SticksView) {
+    if (CurrentView == STICKSVIEW) {
         strcpy(BoxOffsetLabel, ChannelNames[0]);
         strcat(BoxOffsetLabel, one);
         strcat(BoxOffsetLabel, arrowrh);
@@ -4643,7 +4643,7 @@ void Button_was_pressed()
             return;
         }
         if (InStrng(GoFrontView, TextIn) > 0) {
-            CurrentView = FrontView;
+            CurrentView = FRONTVIEW;
             SendCommand(page_FrontView);
             UpdateModelsNameEveryWhere();
             ShowFlightMode();
@@ -4751,7 +4751,7 @@ void Button_was_pressed()
             } // Get page name to which to return
             SendCommand(WhichPage);
             CurrentView = SavedCurrentView;
-            if (CurrentView == GraphView) {
+            if (CurrentView == GRAPHVIEW) {
                 DisplayCurve();
                 SendValue(CopyToAllFlightModes, 0);
             }
@@ -5284,7 +5284,7 @@ void Button_was_pressed()
 
         if (InStrng(CaliNEXTION, TextIn) > 0) {
           //  SendCommand(page_FrontView);  // not working yet
-          //  CurrentView = FrontView;
+          //  CurrentView = FRONTVIEW;
             ClearText();
             return;
         }
@@ -5498,7 +5498,7 @@ void Button_was_pressed()
             SaveOneModel(ModelNumber);
             Force_ReDisplay();
             SendCommand(page_SticksView); // Set to SticksView
-            CurrentView = SticksView;
+            CurrentView = STICKSVIEW;
             UpdateModelsNameEveryWhere();
             ClearText();
             return;
@@ -5508,7 +5508,7 @@ void Button_was_pressed()
             ChanneltoSet = GetChannel();
             ClearText();
             SendCommand(page_GraphView); // Set to GraphView
-            CurrentView = GraphView;
+            CurrentView = GRAPHVIEW;
             DisplayCurve(); // redisplay curve
             updateInterpolationTypes();
             UpdateModelsNameEveryWhere();
@@ -5519,7 +5519,7 @@ void Button_was_pressed()
 
         p = (InStrng(Front_View, TextIn)); //which screen is in view?
         if (p > 0) {
-            CurrentView = FrontView;
+            CurrentView = FRONTVIEW;
             ClearText();
             PreviousFlightMode = 250; // sure to be different
             CurrentMode        = NORMAL;
@@ -5532,7 +5532,7 @@ void Button_was_pressed()
         if (p > 0) {
             SendCommand(page_SticksView);
             Force_ReDisplay();
-            CurrentView = SticksView;
+            CurrentView = STICKSVIEW;
             SendCommand(page_SticksView); // Set to SticksView
             UpdateModelsNameEveryWhere();
             UpdateButtonLabels();
@@ -5598,7 +5598,7 @@ void Button_was_pressed()
 
         if (InStrng(Graph_View, TextIn))
         {
-            CurrentView = GraphView;
+            CurrentView = GRAPHVIEW;
             ClearText();
             return;
         }
@@ -5946,7 +5946,7 @@ void GetFlightMode()
        
    
         SendCommand(NEXTIONWakeUp);    // wake screen up if flight mode changes
-        if (CurrentView == FrontView) {
+        if (CurrentView == FRONTVIEW) {
             ShowFlightMode();
         }
         LastSeconds = 0;               // Just to force redisplay of timer
@@ -5958,7 +5958,7 @@ void GetFlightMode()
         }
         CheckTimer(); // update timer
         UpdateModelsNameEveryWhere();
-        if (CurrentView == GraphView) DisplayCurve();
+        if (CurrentView == GRAPHVIEW) DisplayCurve();
     }
     PreviousFlightMode = FlightMode;
 }
@@ -6193,7 +6193,7 @@ void loop()
         GetStatistics();             // Do stats
         RangeTestStart = millis();
     }
-    if ((millis() - ShowServoTimer >= 100) && (CurrentView != FrontView)) {
+    if ((millis() - ShowServoTimer >= 100) && (CurrentView != FRONTVIEW)) {
         ShowServoPos();              // Show servos positions
         ShowServoTimer = millis();
     }
