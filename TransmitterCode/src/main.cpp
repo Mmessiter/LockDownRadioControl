@@ -2877,7 +2877,11 @@ void setup()
     TeensyWatchDog.begin(WatchDogConfig);
     LastDogKick = millis(); // needed? - yes!
 #endif
-    SD.begin(chipSelect);
+    delay (100);
+    if (!SD.begin(chipSelect)){    // heer - MUST return true or all is lost! 
+       delay (500);
+       SD.begin(chipSelect);       // a second attempt for iffy sd cards ?!
+    }                                
     CalibratedYet = LoadAllParameters();                  // If they exist, read saved SD card settings.                                  
     SendValue(FrontView_BackGround,BackGroundColour);     // Get colours ready
     SendValue(FrontView_ForeGround,ForeGroundColour);
