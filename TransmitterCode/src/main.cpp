@@ -2878,7 +2878,7 @@ void setup()
     LastDogKick = millis(); // needed? - yes!
 #endif
     delay (100);
-    if (!SD.begin(chipSelect)){    // heer - MUST return true or all is lost! 
+    if (!SD.begin(chipSelect)){    // heer - MUST return true or all is lost! (todo: create error page)
        delay (500);
        SD.begin(chipSelect);       // a second attempt for iffy sd cards ?!
     }                                
