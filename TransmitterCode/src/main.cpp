@@ -855,34 +855,12 @@ void Reboot()
     } // Dog will explode when overfed
 #endif
 }
-
 /*********************************************************************************************************************************/
 void GetReturnCode(){  // currently absorbed but ignored.
     while (NEXTION.available()){
             NEXTION.read();
      }
 }
-
-
-/*********************************************************************************************************************************/
-
-void PlayWaveFile(char* tbox){  // heer
-
-    #ifdef USEAUDIO
-    char path[]   = "FrontView.wav0.path=\"sd0/";
-    char CB[130];
-    char wav[]= ".wav\"";
-    char en[] ="FrontView.wav0.en=1";
-    char vol[]="volume=90";
-    strcpy(CB, path);
-    strcat(CB, tbox);
-    strcat(CB, wav);
-    SendCommand(vol);
-    SendCommand(CB);
-    SendCommand(en);
-    #endif
-}
-
 /*********************************************************************************************************************************/
 
 void SendCommand(char* tbox)
@@ -892,7 +870,32 @@ void SendCommand(char* tbox)
         NEXTION.write(0xff);
     } 
     GetReturnCode();
-    
+}
+/*********************************************************************************************************************************/
+
+void SetAudioVolume(uint16_t v){   // sets audio volume v (0-100)
+    char vol[]="volume=";
+    char cmd[20];
+    char nb[6];
+    strcpy(cmd,vol);
+    Str(nb,v,0);
+    strcat (cmd,nb);
+    SendCommand(cmd);
+}
+/*********************************************************************************************************************************/
+
+void PlayWaveFile(char* tbox){  // heer
+#ifdef USEAUDIO
+    char path[]   = "wav0.path=\"sd0/";
+    char wav[]    = ".wav\"";
+    char en[]     = "wav0.en=1";
+    char CB[70];
+    strcpy(CB, path);
+    strcat(CB, tbox);
+    strcat(CB, wav);
+    SendCommand(CB);
+    SendCommand(en);
+#endif
 }
 /*********************************************************************************************************************************/
 
@@ -2920,6 +2923,7 @@ void setup()
     GetTXVersionNumber();
     MySbus.begin();
     SetUKFrequencies(); 
+    SetAudioVolume(80);
     char fanfare[] =  "fanfare2";
     PlayWaveFile(fanfare);
 }
