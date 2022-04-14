@@ -866,13 +866,13 @@ void GetReturnCode(){  // currently absorbed but ignored.
 
 /*********************************************************************************************************************************/
 
-void PlayWaveFile(char* tbox){
+void PlayWaveFile(char* tbox){  // heer
 
     #ifdef USEAUDIO
-    char path[]   = "wav0.path=\"sd0/";
+    char path[]   = "FrontView.wav0.path=\"sd0/";
     char CB[130];
     char wav[]= ".wav\"";
-    char en[] ="wav0.en=1";
+    char en[] ="FrontView.wav0.en=1";
     char vol[]="volume=90";
     strcpy(CB, path);
     strcat(CB, tbox);
@@ -2075,7 +2075,7 @@ void get_new_channels_values()
 
 /*********************************************************************************************************************************/
 
-void CalibrateSticks() // heer
+void CalibrateSticks() 
 {
     int p;
     for (int i = 0; i < PROPOCHANNELS; ++i)
@@ -4175,35 +4175,52 @@ void SendModelFile()
 
 /*********************************************************************************************************************************/
 
+void SoundFlightMode()
+{
+    char b1[] = "b1";
+    char b2[] = "b2";
+    char b3[] = "b3";
+    char b4[] = "b4";
+
+    switch (FlightMode) {
+        case 1:
+            PlayWaveFile(b1);
+            break;
+        case 2:
+            PlayWaveFile(b2);
+            break;
+        case 3:
+            PlayWaveFile(b3);
+            break;
+        case 4:
+            PlayWaveFile(b4);
+            break;
+        default:
+            break;
+    }
+
+}
+/*********************************************************************************************************************************/
+
 void ShowFlightMode()
 {
     char FMPress1[]  = "click fm1,1";
     char FMPress2[]  = "click fm2,1";
     char FMPress3[]  = "click fm3,1";
     char FMPress4[]  = "click fm4,1";
-    char b1[] = "b1";
-    char b2[] = "b2";
-    char b3[] = "b3";
-    char b4[] = "b4";
-
-
 
     switch (FlightMode) {
         case 1:
             SendCommand(FMPress1);
-            PlayWaveFile(b1);
             break;
         case 2:
             SendCommand(FMPress2);
-            PlayWaveFile(b2);
             break;
         case 3:
             SendCommand(FMPress3);
-            PlayWaveFile(b3);
             break;
         case 4:
             SendCommand(FMPress4);
-            PlayWaveFile(b4);
             break;
         default:
             break;
@@ -5179,7 +5196,7 @@ void Button_was_pressed()
             return;
         }
 
-        if (InStrng(CalibrateView, TextIn)) { //heer
+        if (InStrng(CalibrateView, TextIn)) { 
             SendCommand(pCalibrateView);
             Force_ReDisplay();
             CurrentView = CALIBRATEVIEW;
@@ -5948,8 +5965,8 @@ void GetFlightMode()
 
     if (FlightMode != PreviousFlightMode) {
        
-   
-        SendCommand(NEXTIONWakeUp);    // wake screen up if flight mode changes
+        SoundFlightMode();
+        SendCommand(NEXTIONWakeUp);    // wake screen up if flight mode changes 
         if (CurrentView == FRONTVIEW) {
             ShowFlightMode();
         }
