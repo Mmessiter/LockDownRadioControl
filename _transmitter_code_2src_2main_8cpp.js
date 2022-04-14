@@ -225,6 +225,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "ShowFlightMode", "_transmitter_code_2src_2main_8cpp.html#a61f4d39b42cd6199d0ad2f97bb7f80e2", null ],
     [ "ShowServoPos", "_transmitter_code_2src_2main_8cpp.html#ad959eec03b0151ade81dc088593d816c", null ],
     [ "SortDirectory", "_transmitter_code_2src_2main_8cpp.html#a113f8bee0942b732f19881466ef0f42d", null ],
+    [ "SoundFlightMode", "_transmitter_code_2src_2main_8cpp.html#afd8df260b5cc99e246c0e3c23cff81d1", null ],
     [ "StartInactvityTimeout", "_transmitter_code_2src_2main_8cpp.html#a793b7bcd77531c95fe72ed4356d421c8", null ],
     [ "Str", "_transmitter_code_2src_2main_8cpp.html#a6bac145d5df31efb9c90e2a60a4cbca5", null ],
     [ "SynchRTCwithGPSTime", "_transmitter_code_2src_2main_8cpp.html#abb1ea95b6b3f033883aa87682d3240ab", null ],
