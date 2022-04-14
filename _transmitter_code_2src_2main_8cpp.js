@@ -212,6 +212,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "SendText1", "_transmitter_code_2src_2main_8cpp.html#a27dff58ae433cc3b32b7007757195c6d", null ],
     [ "SendValue", "_transmitter_code_2src_2main_8cpp.html#a1e20efc1e419b252b50d36f9924503fc", null ],
     [ "SendValue1", "_transmitter_code_2src_2main_8cpp.html#a7e5f9fa724c65cc0f0c56bc85b2b6273", null ],
+    [ "SetAudioVolume", "_transmitter_code_2src_2main_8cpp.html#a9f7ebc44d49714174b6be3085e6a36ab", null ],
     [ "SetDefaultValues", "_transmitter_code_2src_2main_8cpp.html#acbd0460ea44a7d07e4d77878411febb4", null ],
     [ "SetDS1307ToCompilerTime", "_transmitter_code_2src_2main_8cpp.html#acdffc5c21069895c016206af61816b47", null ],
     [ "SetTestFrequencies", "_transmitter_code_2src_2main_8cpp.html#a31a35307bbac88ceda244272f25d399a", null ],
