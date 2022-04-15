@@ -2985,7 +2985,7 @@ void SaveTXStuff()
     SDUpdateByte(SDCardAddress, BuddyMaster);
     ++SDCardAddress;
     SDUpdateByte(SDCardAddress, ModelNumber);
-    ModelNumberOffset = SDCardAddress;                // remember offset!
+    ModelNumberOffset = SDCardAddress;                    // remember offset!
     ++SDCardAddress;
     SDUpdateInt(SDCardAddress, ScreenTimeout);
     ++SDCardAddress;
