@@ -69,14 +69,15 @@
  * | 31        | Switch 4 |
  * | 32        | Switch 4 |
  * | 33 (!! SPARE !!)
- * | 34 (!! SPARE !! RX8)
- * | 35 (!! SPARE !! TX8)
- * | 36 (!! SPARE !!)
- * | 37 (!! SPARE !!)
- * | 38 (!! SPARE !!)
- * | 39 (!! SPARE !!)
- * | 40 (!! SPARE !!)
- * | 41 (!! SPARE !!)
+ * | 34 TRIM (AILERON LEFT)
+ * | 35 TRIM (AILERON RIGHT)
+ * | 36 TRIM (ELEVATOR UP)
+ * | 37 TRIM (ELEVATOR DOWN)
+ * | 38 TRIM (THROTTLE UP)
+ * | 39 TRIM (THROTTLE DOWN)
+ * | 40 TRIM (RUDDER LEFT)
+ * | 41 TRIM (RUDDER RIGHT)
+ * | 53 NOT USED
  * @see TransmitterCode/src/main.cpp
  */
 // ************************************************** TRANSMITTER CODE **************************************************
@@ -179,14 +180,25 @@ RF24 Radio1(CE_PIN, CSN_PIN);
 #define UNCOMPRESSEDWORDS 20                        // DATA TO SEND = 40  bytes
 #define COMPRESSEDWORDS   UNCOMPRESSEDWORDS * 3 / 4 // COMPRESSED DATA SENT = 30  bytes
 
-#define Switch0       32 // SWITCHES' PIN NUMBERS ...
-#define Switch1       31
-#define Switch2       30
-#define Switch3       29
-#define Switch4       28
-#define Switch5       27
-#define Switch6       26
-#define Switch7       25
+#define SWITCH0       32   // SWITCHES' PIN NUMBERS ...
+#define SWITCH1       31
+#define SWITCH2       30
+#define SWITCH3       29
+#define SWITCH4       28
+#define SWITCH5       27
+#define SWITCH6       26
+#define SWITCH7       25
+
+#define TRIM0         34   // Digital trims pins
+#define TRIM1         35
+#define TRIM2         36
+#define TRIM3         37
+#define TRIM4         38
+#define TRIM5         39
+#define TRIM6         40
+#define TRIM7         41
+
+
 #define REDLED        2 // COLOURED LEDS' PIN NUMBERS ...
 #define GREENLED      3
 #define BLUELED       4
@@ -401,7 +413,9 @@ int       BindingTimer    = 0;
 bool      BoundFlag       = false;
 int       PipeTimeout     = 0;
 bool      Switch[8];
-uint8_t   SwitchNumber[8] = {Switch0, Switch1, Switch2, Switch3, Switch4, Switch5, Switch6, Switch7};
+bool      TrimSwitch[8];
+uint8_t   SwitchNumber[8] = {SWITCH0, SWITCH1, SWITCH2, SWITCH3, SWITCH4, SWITCH5, SWITCH6, SWITCH7};
+uint8_t   TrimNumber[8] = {TRIM0, TRIM1, TRIM2, TRIM3, TRIM4, TRIM5, TRIM6, TRIM7};
 
 
 uint8_t FMSwitch   = FLIGHTMODESWITCH;
@@ -417,10 +431,10 @@ uint8_t Channel10SwitchValue = 0;
 uint8_t Channel11SwitchValue = 0;
 uint8_t Channel12SwitchValue = 0;
 
-bool Switch1Reversed = false;
-bool Switch2Reversed = false;
-bool Switch3Reversed = false;
-bool Switch4Reversed = false;
+bool SWITCH1Reversed = false;
+bool SWITCH2Reversed = false;
+bool SWITCH3Reversed = false;
+bool SWITCH4Reversed = false;
 
 int      StartLocation       = 0;
 bool     ValueSent           = false;
@@ -855,34 +869,12 @@ void Reboot()
     } // Dog will explode when overfed
 #endif
 }
-
 /*********************************************************************************************************************************/
 void GetReturnCode(){  // currently absorbed but ignored.
     while (NEXTION.available()){
             NEXTION.read();
      }
 }
-
-
-/*********************************************************************************************************************************/
-
-void PlayWaveFile(char* tbox){
-
-    #ifdef USEAUDIO
-    char path[]   = "wav0.path=\"sd0/";
-    char CB[130];
-    char wav[]= ".wav\"";
-    char en[] ="wav0.en=1";
-    char vol[]="volume=90";
-    strcpy(CB, path);
-    strcat(CB, tbox);
-    strcat(CB, wav);
-    SendCommand(vol);
-    SendCommand(CB);
-    SendCommand(en);
-    #endif
-}
-
 /*********************************************************************************************************************************/
 
 void SendCommand(char* tbox)
@@ -892,7 +884,32 @@ void SendCommand(char* tbox)
         NEXTION.write(0xff);
     } 
     GetReturnCode();
-    
+}
+/*********************************************************************************************************************************/
+
+void SetAudioVolume(uint16_t v){   // sets audio volume v (0-100)
+    char vol[]="volume=";
+    char cmd[20];
+    char nb[6];
+    strcpy(cmd,vol);
+    Str(nb,v,0);
+    strcat (cmd,nb);
+    SendCommand(cmd);
+}
+/*********************************************************************************************************************************/
+
+void PlayWaveFile(char* tbox){  // heer
+#ifdef USEAUDIO
+    char path[]   = "wav0.path=\"sd0/";
+    char wav[]    = ".wav\"";
+    char en[]     = "wav0.en=1";
+    char CB[70];
+    strcpy(CB, path);
+    strcat(CB, tbox);
+    strcat(CB, wav);
+    SendCommand(CB);
+    SendCommand(en);
+#endif
 }
 /*********************************************************************************************************************************/
 
@@ -2075,7 +2092,7 @@ void get_new_channels_values()
 
 /*********************************************************************************************************************************/
 
-void CalibrateSticks() // heer
+void CalibrateSticks() 
 {
     int p;
     for (int i = 0; i < PROPOCHANNELS; ++i)
@@ -2325,10 +2342,11 @@ void UpdateModelsNameEveryWhere()
 
 /*********************************************************************************************************************************/
 
-void InitSwitches()
+void InitSwitchesAndTrims()
 {
     for (int i = 0; i < 8; ++i) {
         pinMode(SwitchNumber[i], INPUT_PULLUP);
+        pinMode(TrimNumber[i], INPUT_PULLUP);
     }
 }
 
@@ -2632,13 +2650,13 @@ bool ReadOneModel(uint8_t Mnum)
     ++SDCardAddress;
     Channel12Switch = SDReadByte(SDCardAddress);
     ++SDCardAddress;
-    Switch1Reversed = bool(SDReadByte(SDCardAddress));
+    SWITCH1Reversed = bool(SDReadByte(SDCardAddress));
     ++SDCardAddress;
-    Switch2Reversed = bool(SDReadByte(SDCardAddress));
+    SWITCH2Reversed = bool(SDReadByte(SDCardAddress));
     ++SDCardAddress;
-    Switch3Reversed = bool(SDReadByte(SDCardAddress));
+    SWITCH3Reversed = bool(SDReadByte(SDCardAddress));
     ++SDCardAddress;
-    Switch4Reversed = bool(SDReadByte(SDCardAddress));
+    SWITCH4Reversed = bool(SDReadByte(SDCardAddress));
     ++SDCardAddress;
     for (i = 0; i < CHANNELSUSED; ++i) {
         FailSafeChannel[i] = bool(SDReadByte(SDCardAddress));
@@ -2877,7 +2895,11 @@ void setup()
     TeensyWatchDog.begin(WatchDogConfig);
     LastDogKick = millis(); // needed? - yes!
 #endif
-    SD.begin(chipSelect);
+    delay (100);
+    if (!SD.begin(chipSelect)){    // heer - MUST return true or all is lost! (todo: create error page)
+       delay (500);
+       SD.begin(chipSelect);       // a second attempt for iffy sd cards ?!
+    }                                
     CalibratedYet = LoadAllParameters();                  // If they exist, read saved SD card settings.                                  
     SendValue(FrontView_BackGround,BackGroundColour);     // Get colours ready
     SendValue(FrontView_ForeGround,ForeGroundColour);
@@ -2895,7 +2917,7 @@ void setup()
     Wire.begin();
     ScanI2c();
     if (USE_INA219) ina219.begin();
-    InitSwitches();
+    InitSwitchesAndTrims();
     InitRadio(DefaultPipe);
     SendText(FrontView_Connected, Initialising);
     SendValue1(NEXTIONSleepTime, ScreenTimeout); // Setup Screen timeout (No .val needed)
@@ -2916,6 +2938,7 @@ void setup()
     GetTXVersionNumber();
     MySbus.begin();
     SetUKFrequencies(); 
+    SetAudioVolume(80);
     char fanfare[] =  "fanfare2";
     PlayWaveFile(fanfare);
 }
@@ -2977,7 +3000,7 @@ void SaveTXStuff()
     SDUpdateByte(SDCardAddress, BuddyMaster);
     ++SDCardAddress;
     SDUpdateByte(SDCardAddress, ModelNumber);
-    ModelNumberOffset = SDCardAddress;                // remember offset!
+    ModelNumberOffset = SDCardAddress;                    // remember offset!
     ++SDCardAddress;
     SDUpdateInt(SDCardAddress, ScreenTimeout);
     ++SDCardAddress;
@@ -3097,13 +3120,13 @@ void SaveOneModel(int mnum)
     ++SDCardAddress;
     SDUpdateByte(SDCardAddress, Channel12Switch);
     ++SDCardAddress;
-    SDUpdateByte(SDCardAddress, Switch1Reversed);
+    SDUpdateByte(SDCardAddress, SWITCH1Reversed);
     ++SDCardAddress;
-    SDUpdateByte(SDCardAddress, Switch2Reversed);
+    SDUpdateByte(SDCardAddress, SWITCH2Reversed);
     ++SDCardAddress;
-    SDUpdateByte(SDCardAddress, Switch3Reversed);
+    SDUpdateByte(SDCardAddress, SWITCH3Reversed);
     ++SDCardAddress;
-    SDUpdateByte(SDCardAddress, Switch4Reversed);
+    SDUpdateByte(SDCardAddress, SWITCH4Reversed);
     ++SDCardAddress;
     for (i = 0; i < CHANNELSUSED; ++i) {
         SDUpdateByte(SDCardAddress, FailSafeChannel[i]);
@@ -3475,10 +3498,10 @@ void SetDefaultValues()
     Channel10Switch = 3;
     Channel11Switch = 0;
     Channel12Switch = 0;
-    Switch1Reversed = false;
-    Switch2Reversed = false;
-    Switch3Reversed = false;
-    Switch4Reversed = false;
+    SWITCH1Reversed = false;
+    SWITCH2Reversed = false;
+    SWITCH3Reversed = false;
+    SWITCH4Reversed = false;
     SendValue(Progress, 65);
     Procrastinate(10);
     for (i = 0; i < CHANNELSUSED; ++i) {
@@ -4171,35 +4194,52 @@ void SendModelFile()
 
 /*********************************************************************************************************************************/
 
+void SoundFlightMode()
+{
+    char b1[] = "b1";
+    char b2[] = "b2";
+    char b3[] = "b3";
+    char b4[] = "b4";
+
+    switch (FlightMode) {
+        case 1:
+            PlayWaveFile(b1);
+            break;
+        case 2:
+            PlayWaveFile(b2);
+            break;
+        case 3:
+            PlayWaveFile(b3);
+            break;
+        case 4:
+            PlayWaveFile(b4);
+            break;
+        default:
+            break;
+    }
+
+}
+/*********************************************************************************************************************************/
+
 void ShowFlightMode()
 {
     char FMPress1[]  = "click fm1,1";
     char FMPress2[]  = "click fm2,1";
     char FMPress3[]  = "click fm3,1";
     char FMPress4[]  = "click fm4,1";
-    char b1[] = "b1";
-    char b2[] = "b2";
-    char b3[] = "b3";
-    char b4[] = "b4";
-
-
 
     switch (FlightMode) {
         case 1:
             SendCommand(FMPress1);
-            PlayWaveFile(b1);
             break;
         case 2:
             SendCommand(FMPress2);
-            PlayWaveFile(b2);
             break;
         case 3:
             SendCommand(FMPress3);
-            PlayWaveFile(b3);
             break;
         case 4:
             SendCommand(FMPress4);
-            PlayWaveFile(b4);
             break;
         default:
             break;
@@ -4229,7 +4269,7 @@ void updateOneSwitchView()
         if (Channel11Switch == 1) SendValue(OneSwitchView_r5, 1);
         if (Channel12Switch == 1) SendValue(OneSwitchView_r6, 1);
         if (!ValueSent) SendValue(OneSwitchView_r0, 1); // nothing yet, so not used
-        if (Switch1Reversed) SendValue(OneSwitchViewc_revd, 1);
+        if (SWITCH1Reversed) SendValue(OneSwitchViewc_revd, 1);
     }
     if (SwitchEditNumber == 2) {
         ValueSent = false;
@@ -4240,7 +4280,7 @@ void updateOneSwitchView()
         if (Channel11Switch == 2) SendValue(OneSwitchView_r5, 1);
         if (Channel12Switch == 2) SendValue(OneSwitchView_r6, 1);
         if (!ValueSent) SendValue(OneSwitchView_r0, 1); // nothing yet, so not used
-        if (Switch2Reversed) SendValue(OneSwitchViewc_revd, 1);
+        if (SWITCH2Reversed) SendValue(OneSwitchViewc_revd, 1);
     }
     if (SwitchEditNumber == 3) {
         ValueSent = false;
@@ -4251,7 +4291,7 @@ void updateOneSwitchView()
         if (Channel11Switch == 3) SendValue(OneSwitchView_r5, 1);
         if (Channel12Switch == 3) SendValue(OneSwitchView_r6, 1);
         if (!ValueSent) SendValue(OneSwitchView_r0, 1); // nothing yet, so not used
-        if (Switch3Reversed) SendValue(OneSwitchViewc_revd, 1);
+        if (SWITCH3Reversed) SendValue(OneSwitchViewc_revd, 1);
     }
     if (SwitchEditNumber == 4) {
         ValueSent = false;
@@ -4262,7 +4302,7 @@ void updateOneSwitchView()
         if (Channel11Switch == 4) SendValue(OneSwitchView_r5, 1);
         if (Channel12Switch == 4) SendValue(OneSwitchView_r6, 1);
         if (!ValueSent) SendValue(OneSwitchView_r0, 1); // nothing yet, so not used
-        if (Switch4Reversed) SendValue(OneSwitchViewc_revd, 1);
+        if (SWITCH4Reversed) SendValue(OneSwitchViewc_revd, 1);
     }
     SendValue(SwNum, SwitchEditNumber); // show switch number
 }
@@ -4932,34 +4972,34 @@ void Button_was_pressed()
 
             if (SwitchEditNumber == 1) {
                 if (GetValue(OneSwitchViewc_revd)) {
-                    Switch1Reversed = true;
+                    SWITCH1Reversed = true;
                 }
                 else {
-                    Switch1Reversed = false;
+                    SWITCH1Reversed = false;
                 }
             }
             if (SwitchEditNumber == 2) {
                 if (GetValue(OneSwitchViewc_revd)) {
-                    Switch2Reversed = true;
+                    SWITCH2Reversed = true;
                 }
                 else {
-                    Switch2Reversed = false;
+                    SWITCH2Reversed = false;
                 }
             }
             if (SwitchEditNumber == 3) {
                 if (GetValue(OneSwitchViewc_revd)) {
-                    Switch3Reversed = true;
+                    SWITCH3Reversed = true;
                 }
                 else {
-                    Switch3Reversed = false;
+                    SWITCH3Reversed = false;
                 }
             }
             if (SwitchEditNumber == 4) {
                 if (GetValue(OneSwitchViewc_revd)) {
-                    Switch4Reversed = true;
+                    SWITCH4Reversed = true;
                 }
                 else {
-                    Switch4Reversed = false;
+                    SWITCH4Reversed = false;
                 }
             }
             SaveOneModel(ModelNumber);
@@ -5175,7 +5215,7 @@ void Button_was_pressed()
             return;
         }
 
-        if (InStrng(CalibrateView, TextIn)) { //heer
+        if (InStrng(CalibrateView, TextIn)) { 
             SendCommand(pCalibrateView);
             Force_ReDisplay();
             CurrentView = CALIBRATEVIEW;
@@ -5917,10 +5957,10 @@ uint8_t ReadCHSwitch(bool sw1, bool sw2, bool rev)
 uint8_t CheckSwitch(uint8_t swt)
 {
     uint8_t rtv = 90;
-    if (swt == 1) rtv = ReadCHSwitch(Switch[7], Switch[6], Switch1Reversed);
-    if (swt == 2) rtv = ReadCHSwitch(Switch[5], Switch[4], Switch2Reversed);
-    if (swt == 3) rtv = ReadCHSwitch(Switch[0], Switch[1], Switch3Reversed);
-    if (swt == 4) rtv = ReadCHSwitch(Switch[2], Switch[3], Switch4Reversed);
+    if (swt == 1) rtv = ReadCHSwitch(Switch[7], Switch[6], SWITCH1Reversed);
+    if (swt == 2) rtv = ReadCHSwitch(Switch[5], Switch[4], SWITCH2Reversed);
+    if (swt == 3) rtv = ReadCHSwitch(Switch[0], Switch[1], SWITCH3Reversed);
+    if (swt == 4) rtv = ReadCHSwitch(Switch[2], Switch[3], SWITCH4Reversed);
     return rtv;
 }
 /************************************************************************************************************/
@@ -5928,14 +5968,14 @@ uint8_t CheckSwitch(uint8_t swt)
 void GetFlightMode()
 { //  and AUTO and other switchy things ...
 
-    if (FMSwitch == 4) ReadFMSwitch(Switch[2], Switch[3], Switch4Reversed);
-    if (FMSwitch == 3) ReadFMSwitch(Switch[0], Switch[1], Switch3Reversed);
-    if (FMSwitch == 2) ReadFMSwitch(Switch[4], Switch[5], Switch2Reversed);
-    if (FMSwitch == 1) ReadFMSwitch(Switch[6], Switch[7], Switch1Reversed);
-    if (AutoSwitch == 1 && Switch[6] == Switch1Reversed) FlightMode = 4; // Flight mode 4 (Auto) overrides modes 1,2,3.
-    if (AutoSwitch == 2 && Switch[4] == Switch2Reversed) FlightMode = 4;
-    if (AutoSwitch == 3 && Switch[1] == Switch3Reversed) FlightMode = 4;
-    if (AutoSwitch == 4 && Switch[3] == Switch4Reversed) FlightMode = 4;
+    if (FMSwitch == 4) ReadFMSwitch(Switch[2], Switch[3], SWITCH4Reversed);
+    if (FMSwitch == 3) ReadFMSwitch(Switch[0], Switch[1], SWITCH3Reversed);
+    if (FMSwitch == 2) ReadFMSwitch(Switch[4], Switch[5], SWITCH2Reversed);
+    if (FMSwitch == 1) ReadFMSwitch(Switch[6], Switch[7], SWITCH1Reversed);
+    if (AutoSwitch == 1 && Switch[6] == SWITCH1Reversed) FlightMode = 4; // Flight mode 4 (Auto) overrides modes 1,2,3.
+    if (AutoSwitch == 2 && Switch[4] == SWITCH2Reversed) FlightMode = 4;
+    if (AutoSwitch == 3 && Switch[1] == SWITCH3Reversed) FlightMode = 4;
+    if (AutoSwitch == 4 && Switch[3] == SWITCH4Reversed) FlightMode = 4;
 
     Channel9SwitchValue  = CheckSwitch(Channel9Switch);
     Channel10SwitchValue = CheckSwitch(Channel10Switch);
@@ -5944,8 +5984,8 @@ void GetFlightMode()
 
     if (FlightMode != PreviousFlightMode) {
        
-   
-        SendCommand(NEXTIONWakeUp);    // wake screen up if flight mode changes
+        SoundFlightMode();
+        SendCommand(NEXTIONWakeUp);    // wake screen up if flight mode changes 
         if (CurrentView == FRONTVIEW) {
             ShowFlightMode();
         }
@@ -5964,13 +6004,21 @@ void GetFlightMode()
 }
 
 /************************************************************************************************************/
+void CheckHardwareTrims(){  // TODO when new PCBs arrive!! // heer
+
+
+}
+/************************************************************************************************************/
 
 void ReadSwitches()
 {
-    for (int i = 0; i < 8; ++i) Switch[i] = !digitalRead(SwitchNumber[i]);
+    for (int i = 0; i < 8; ++i) {
+        Switch[i]     = !digitalRead(SwitchNumber[i]);
+        TrimSwitch[i] = !digitalRead(TrimNumber[i]);
+    }
     GetFlightMode();
+    CheckHardwareTrims();
 }
-
 /************************************************************************************************************/
 
 void GetRXVersionNumber()
