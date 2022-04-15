@@ -73,7 +73,7 @@ var searchData=
   ['inithistory_70',['initHistory',['../class_adafruit___g_p_s.html#a39a2aecda4b5dcf8cab72ef93bdcc103',1,'Adafruit_GPS']]],
   ['initmaxmin_71',['InitMaxMin',['../_transmitter_code_2src_2main_8cpp.html#a1704b259882e35bc7581539d95ca3214',1,'main.cpp']]],
   ['initradio_72',['InitRadio',['../_radio_functions_8h.html#a86ce6c54618629a61b8502786d2ce82c',1,'InitRadio(uint64_t Pipe):&#160;RadioFunctions.cpp'],['../_radio_functions_8cpp.html#a86ce6c54618629a61b8502786d2ce82c',1,'InitRadio(uint64_t Pipe):&#160;RadioFunctions.cpp']]],
-  ['initswitches_73',['InitSwitches',['../_transmitter_code_2src_2main_8cpp.html#a829bff3e7581affe84e42017bfe733fa',1,'main.cpp']]],
+  ['initswitchesandtrims_73',['InitSwitchesAndTrims',['../_transmitter_code_2src_2main_8cpp.html#afcf8508f9739c35e0c793d178cdc3e79',1,'main.cpp']]],
   ['inputs_5fview_74',['Inputs_View',['../_transmitter_code_2src_2main_8cpp.html#a7a40aeaf7436d33790723c244446ca0a',1,'main.cpp']]],
   ['inputstick_75',['InPutStick',['../_transmitter_code_2src_2main_8cpp.html#ab9d98ee9d26a1af8f20291fd0b717056',1,'main.cpp']]],
   ['instrng_76',['InStrng',['../_transmitter_code_2src_2main_8cpp.html#a535cbca5c4743cf3ffe444846d21113e',1,'main.cpp']]],

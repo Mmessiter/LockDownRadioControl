@@ -50,10 +50,10 @@ var searchData=
   ['swapwaveband_47',['SwapWaveBand',['../_transmitter_code_2src_2main_8cpp.html#aaa4402c66bda6731ffa04b970e1eaeea',1,'main.cpp']]],
   ['swapwavebandtimer_48',['SwapWaveBandTimer',['../_transmitter_code_2src_2main_8cpp.html#a8dbdaf66b1bf538b3c1aea4b6ce6c8c2',1,'main.cpp']]],
   ['switch_49',['Switch',['../_transmitter_code_2src_2main_8cpp.html#a93ac0e6bbb965111abd01e393a21fcfe',1,'main.cpp']]],
-  ['switch1reversed_50',['Switch1Reversed',['../_transmitter_code_2src_2main_8cpp.html#a0184337dc456630bfe72dc6961364b44',1,'main.cpp']]],
-  ['switch2reversed_51',['Switch2Reversed',['../_transmitter_code_2src_2main_8cpp.html#a5ac4beb76750a14a3d820df4c7e2a604',1,'main.cpp']]],
-  ['switch3reversed_52',['Switch3Reversed',['../_transmitter_code_2src_2main_8cpp.html#aaed2032ca48a28b92c539371b698a7f9',1,'main.cpp']]],
-  ['switch4reversed_53',['Switch4Reversed',['../_transmitter_code_2src_2main_8cpp.html#aa224efc575b5d609e660163fae234068',1,'main.cpp']]],
+  ['switch1reversed_50',['SWITCH1Reversed',['../_transmitter_code_2src_2main_8cpp.html#a4fed4d0e78c591b5b833523e7a5446cc',1,'main.cpp']]],
+  ['switch2reversed_51',['SWITCH2Reversed',['../_transmitter_code_2src_2main_8cpp.html#ae72c3f4af9982867946efecba70e5269',1,'main.cpp']]],
+  ['switch3reversed_52',['SWITCH3Reversed',['../_transmitter_code_2src_2main_8cpp.html#a69b7a73aa29db9ddf810c9a0b56ef8e7',1,'main.cpp']]],
+  ['switch4reversed_53',['SWITCH4Reversed',['../_transmitter_code_2src_2main_8cpp.html#a792e2df85286cbba76e2f1f2f5db9768',1,'main.cpp']]],
   ['switcheditnumber_54',['SwitchEditNumber',['../_transmitter_code_2src_2main_8cpp.html#a419ee6bf72350585041578e743b6113a',1,'main.cpp']]],
   ['switchnumber_55',['SwitchNumber',['../_transmitter_code_2src_2main_8cpp.html#a2bd909f3b6a6e46bd5fcecb296800e9e',1,'main.cpp']]]
 ];
