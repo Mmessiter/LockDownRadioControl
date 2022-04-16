@@ -162,7 +162,7 @@ RF24 Radio1(CE_PIN, CSN_PIN);
 #define FhssView        4
 #define ModelsView      5
 #define CALIBRATEVIEW   6
-#define MainSetupView   7
+#define MAINSETUPVIEW   7
 #define GainsView       8
 #define DataView        9
 #define Trim_View       10
@@ -1788,7 +1788,7 @@ void  ReEnableScanButton(){
     char b5NOTGreyed[]= "b5.pco=";
     char nb[15];
     char cmd[30];
-     if (CurrentView == MainSetupView){
+     if (CurrentView == MAINSETUPVIEW){
          if (b5isGrey){
             Str(nb,ForeGroundColour,0);
             strcpy(cmd,b5NOTGreyed);
@@ -4604,7 +4604,7 @@ void Button_was_pressed()
         }
         if (InStrng(SetupAud, TextIn) > 0) { 
             CurrentMode = NORMAL;
-            CurrentView = MainSetupView;
+            CurrentView = MAINSETUPVIEW;
             AudioVolume = GetValue(n0);
             GetText (cb0,OpeningFanfare); // heer
             SendCommand(page_SetupView);
@@ -4618,7 +4618,7 @@ void Button_was_pressed()
             SaveAllParameters();
             SendCommand(page_SetupView);
             CurrentMode = NORMAL;
-            CurrentView = MainSetupView;
+            CurrentView = MAINSETUPVIEW;
             b5isGrey = false; 
             ClearText();
             return;
@@ -4694,14 +4694,14 @@ void Button_was_pressed()
             SaveAllParameters();
             SendCommand(page_SetupView);
             CurrentMode = NORMAL;
-            CurrentView = MainSetupView;
+            CurrentView = MAINSETUPVIEW;
             b5isGrey = false;
             SendCommand(ProgressEnd);
             return;
         }
 
         if (InStrng(DataEnd, TextIn) > 0) { //  goto setup screen from Data screen
-            CurrentView = MainSetupView;
+            CurrentView = MAINSETUPVIEW;
             b5isGrey = false;
             ClearText();
             CurrentMode = NORMAL;
@@ -4739,7 +4739,7 @@ void Button_was_pressed()
         }
 
         if (InStrng(Scan_End, TextIn) > 0) { //  goto setup screen from Scan screen
-            CurrentView = MainSetupView;
+            CurrentView = MAINSETUPVIEW;
             b5isGrey = false;
             ClearText();
             SendCommand(page_SetupView);
@@ -5384,7 +5384,7 @@ void Button_was_pressed()
             ClearText();
             SendCommand(page_SetupView);
             CurrentMode = NORMAL; // Send data again
-            CurrentView = MainSetupView;
+            CurrentView = MAINSETUPVIEW;
             b5isGrey = false;
             ClearText();
             return;
@@ -5408,7 +5408,7 @@ void Button_was_pressed()
         }
 
         if (InStrng(GoSetupView, TextIn) > 0) {
-            CurrentView = MainSetupView;
+            CurrentView = MAINSETUPVIEW;
             b5isGrey = false;
             SendCommand(page_SetupView);
             ClearText();
@@ -5433,7 +5433,7 @@ void Button_was_pressed()
             SendValue(FrontView_Special,SpecialColour);
             SendValue(FrontView_Highlight,HighlightColour);
             SaveTXStuff();
-            CurrentView = MainSetupView;
+            CurrentView = MAINSETUPVIEW;
             b5isGrey = false;
             SendCommand(page_SetupView);
             ClearText();
@@ -5525,7 +5525,7 @@ void Button_was_pressed()
             SaveAllParameters(); // save trims to SDcard
             SendCommand(page_SetupView);
             CurrentMode = NORMAL;
-            CurrentView = MainSetupView;
+            CurrentView = MAINSETUPVIEW;
             ClearText(); 
             return;
         }
@@ -6270,7 +6270,7 @@ void loop()
     if ((millis()-ModelNameTimeCheck) > 500) {  
         ModelNameTimeCheck  = millis();
 
-        if (CurrentView == MainSetupView){ 
+        if (CurrentView == MAINSETUPVIEW){ 
             CheckScanButton();           
         }
         if (CurrentView == ModelsView){ 
