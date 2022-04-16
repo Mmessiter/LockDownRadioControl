@@ -162,7 +162,7 @@ RF24 Radio1(CE_PIN, CSN_PIN);
 #define FhssView        4
 #define ModelsView      5
 #define CALIBRATEVIEW   6
-#define MainSetupView   7
+#define MAINSETUPVIEW   7
 #define GainsView       8
 #define DataView        9
 #define Trim_View       10
@@ -174,6 +174,7 @@ RF24 Radio1(CE_PIN, CSN_PIN);
 #define Inputs_View     16
 #define FailSafe_View   17
 #define Colours_View    18
+#define AUDIOVIEW       19
 
 #define CharsMax        120 
 
@@ -541,6 +542,8 @@ uint16_t RX2TotalTime       = 0 ;
 uint16_t SavedRadioSwaps    = 0;
 uint16_t SavedRX1TotalTime  = 0;
 uint16_t SavedRX2TotalTime  = 0;
+uint8_t  AudioVolume        = 10;
+char     OpeningFanfare[20];
    
 /************************************************************************************************************/
 // This function returns distance (in MILES) between two GPS coordinates (in degrees)
@@ -1785,7 +1788,7 @@ void  ReEnableScanButton(){
     char b5NOTGreyed[]= "b5.pco=";
     char nb[15];
     char cmd[30];
-     if (CurrentView == MainSetupView){
+     if (CurrentView == MAINSETUPVIEW){
          if (b5isGrey){
             Str(nb,ForeGroundColour,0);
             strcpy(cmd,b5NOTGreyed);
@@ -2787,6 +2790,13 @@ bool LoadAllParameters()
        ++SDCardAddress;
         SticksMode=SDReadByte(SDCardAddress);
         ++SDCardAddress;
+        AudioVolume=SDReadByte(SDCardAddress);
+         ++SDCardAddress;
+    for (i = 0;i < 19; ++i){
+         OpeningFanfare[i]= SDReadByte(SDCardAddress);
+        if (!OpeningFanfare[i]) break;
+        ++SDCardAddress;
+    }   
         MemoryForTransmtter = SDCardAddress;
         ReadOneModel(ModelNumber);
         return true;
@@ -2938,9 +2948,9 @@ void setup()
     GetTXVersionNumber();
     MySbus.begin();
     SetUKFrequencies(); 
-    SetAudioVolume(80);
-    char fanfare[] =  "fanfare2";
-    PlayWaveFile(fanfare);
+    SetAudioVolume(AudioVolume);
+  //  strcpy (OpeningFanfare,"fanfare2");
+    PlayWaveFile(OpeningFanfare);
 }
 /*********************************************************************************************************************************/
 
@@ -3033,6 +3043,12 @@ void SaveTXStuff()
     ++SDCardAddress;
      SDUpdateByte(SDCardAddress,SticksMode);
     ++SDCardAddress;
+     SDUpdateByte(SDCardAddress,AudioVolume);
+    ++SDCardAddress;
+    for (i=0;i < 19; ++i){
+         SDUpdateByte(SDCardAddress,OpeningFanfare[i]);
+        ++SDCardAddress;
+    }
     CloseModelsFile();
 }
 
@@ -4399,6 +4415,7 @@ void Button_was_pressed()
     char MixesView_Reversed[]      = "Reversed";
     char MixesView_Percent[]       = "Percent";
     char page_SetupView[]          = "page SetupView";
+    char page_AudioView[]          = "page AudioView";
     char page_FrontView[]          = "page FrontView";
     char page_ColoursView[]        = "page ColoursView";
     char GoSetupView[]             = "GoSetupView";
@@ -4559,6 +4576,11 @@ void Button_was_pressed()
     char TrimView_r4[]             = "r4";
     char Md1[]                     = "Md1";
     char Md2[]                     = "Md2";
+    char SetupAud[]                = "SetupAud";
+    char n0[]                      = "n0";
+    char Ex1[]                     = "Ex1";
+    char AudioView[]               = "AudioView";
+    char cb0[]                     = "cb0";
 
    
 
@@ -4569,12 +4591,34 @@ void Button_was_pressed()
         Serial.println(TextIn);
 #endif
 
+
+        if (InStrng(AudioView, TextIn) > 0) { 
+            ClearText();
+            CurrentMode = NORMAL;
+            CurrentView = AUDIOVIEW;
+            SendCommand(page_AudioView);
+            SendValue(n0,AudioVolume);
+            SendValue(Ex1,AudioVolume);
+            SendText (cb0,OpeningFanfare);
+            return;
+        }
+        if (InStrng(SetupAud, TextIn) > 0) { 
+            CurrentMode = NORMAL;
+            CurrentView = MAINSETUPVIEW;
+            AudioVolume = GetValue(n0);
+            GetText (cb0,OpeningFanfare); // heer
+            SendCommand(page_SetupView);
+            ClearText();
+            SaveTXStuff();
+            return;
+        }
+
         if (InStrng(SetupView, TextIn) > 0) { // default goto setup screen
             ClearText();
             SaveAllParameters();
             SendCommand(page_SetupView);
             CurrentMode = NORMAL;
-            CurrentView = MainSetupView;
+            CurrentView = MAINSETUPVIEW;
             b5isGrey = false; 
             ClearText();
             return;
@@ -4650,14 +4694,14 @@ void Button_was_pressed()
             SaveAllParameters();
             SendCommand(page_SetupView);
             CurrentMode = NORMAL;
-            CurrentView = MainSetupView;
+            CurrentView = MAINSETUPVIEW;
             b5isGrey = false;
             SendCommand(ProgressEnd);
             return;
         }
 
         if (InStrng(DataEnd, TextIn) > 0) { //  goto setup screen from Data screen
-            CurrentView = MainSetupView;
+            CurrentView = MAINSETUPVIEW;
             b5isGrey = false;
             ClearText();
             CurrentMode = NORMAL;
@@ -4695,7 +4739,7 @@ void Button_was_pressed()
         }
 
         if (InStrng(Scan_End, TextIn) > 0) { //  goto setup screen from Scan screen
-            CurrentView = MainSetupView;
+            CurrentView = MAINSETUPVIEW;
             b5isGrey = false;
             ClearText();
             SendCommand(page_SetupView);
@@ -5340,7 +5384,7 @@ void Button_was_pressed()
             ClearText();
             SendCommand(page_SetupView);
             CurrentMode = NORMAL; // Send data again
-            CurrentView = MainSetupView;
+            CurrentView = MAINSETUPVIEW;
             b5isGrey = false;
             ClearText();
             return;
@@ -5364,7 +5408,7 @@ void Button_was_pressed()
         }
 
         if (InStrng(GoSetupView, TextIn) > 0) {
-            CurrentView = MainSetupView;
+            CurrentView = MAINSETUPVIEW;
             b5isGrey = false;
             SendCommand(page_SetupView);
             ClearText();
@@ -5389,7 +5433,7 @@ void Button_was_pressed()
             SendValue(FrontView_Special,SpecialColour);
             SendValue(FrontView_Highlight,HighlightColour);
             SaveTXStuff();
-            CurrentView = MainSetupView;
+            CurrentView = MAINSETUPVIEW;
             b5isGrey = false;
             SendCommand(page_SetupView);
             ClearText();
@@ -5481,7 +5525,7 @@ void Button_was_pressed()
             SaveAllParameters(); // save trims to SDcard
             SendCommand(page_SetupView);
             CurrentMode = NORMAL;
-            CurrentView = MainSetupView;
+            CurrentView = MAINSETUPVIEW;
             ClearText(); 
             return;
         }
@@ -6226,7 +6270,7 @@ void loop()
     if ((millis()-ModelNameTimeCheck) > 500) {  
         ModelNameTimeCheck  = millis();
 
-        if (CurrentView == MainSetupView){ 
+        if (CurrentView == MAINSETUPVIEW){ 
             CheckScanButton();           
         }
         if (CurrentView == ModelsView){ 
