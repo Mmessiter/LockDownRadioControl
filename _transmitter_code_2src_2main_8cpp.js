@@ -53,7 +53,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "M_R2", "_transmitter_code_2src_2main_8cpp.html#a4a4b6ec654cebc103b3e88037cf29de8", null ],
     [ "M_Reversed", "_transmitter_code_2src_2main_8cpp.html#a0cfa6a19316c6fd6dc867618db62bbe0", null ],
     [ "M_SlaveChannel", "_transmitter_code_2src_2main_8cpp.html#af4336a5f819b0e4442cad77a362e97d9", null ],
-    [ "MainSetupView", "_transmitter_code_2src_2main_8cpp.html#a181cefce0c5a5742da657d03ba82f618", null ],
+    [ "MAINSETUPVIEW", "_transmitter_code_2src_2main_8cpp.html#a0de9a27687c5d129d1184703edb30e1f", null ],
     [ "MAXFILELEN", "_transmitter_code_2src_2main_8cpp.html#aa67b661e0a71a9cce5c2903953b8b8bf", null ],
     [ "MAXMICROS", "_transmitter_code_2src_2main_8cpp.html#a843e3db36f734b45096220f7ca4b8d9f", null ],
     [ "MAXMIXES", "_transmitter_code_2src_2main_8cpp.html#a78eca4e2f9590ad626beb2486d11610d", null ],
