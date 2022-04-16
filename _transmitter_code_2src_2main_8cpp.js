@@ -2,6 +2,7 @@ var _transmitter_code_2src_2main_8cpp =
 [
     [ "Payload", "struct_payload.html", "struct_payload" ],
     [ "APPROXIMATION", "_transmitter_code_2src_2main_8cpp.html#aee8c3c363eab49d6a90d3f74587694d5", null ],
+    [ "AUDIOVIEW", "_transmitter_code_2src_2main_8cpp.html#a445cfbf06ed74188fcf3965b4cab9533", null ],
     [ "AUTOSWITCH", "_transmitter_code_2src_2main_8cpp.html#aa4414f3ff790f01b8bb41a0f51d1518f", null ],
     [ "Black", "_transmitter_code_2src_2main_8cpp.html#a68eb1f80b4df2818e5a0774106748141", null ],
     [ "Blue", "_transmitter_code_2src_2main_8cpp.html#a6208a194d702872fdbe1d3c7d7a7c879", null ],
@@ -252,6 +253,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "AckPayloadSize", "_transmitter_code_2src_2main_8cpp.html#a6dc99d00582ef356ea3d57700dca6dab", null ],
     [ "AllChannels", "_transmitter_code_2src_2main_8cpp.html#a1d18aaaa3cc4ba52bd309c88815c60a7", null ],
     [ "AnalogueInput", "_transmitter_code_2src_2main_8cpp.html#a0c2eb3050c13378578402202c6290391", null ],
+    [ "AudioVolume", "_transmitter_code_2src_2main_8cpp.html#adddcbca54e7b49592c3f6c360bf04494", null ],
     [ "AutoSwitch", "_transmitter_code_2src_2main_8cpp.html#a6d1c8ca21c8826267f5687d3799c6a1f", null ],
     [ "b5isGrey", "_transmitter_code_2src_2main_8cpp.html#a2cacff4290d454b1134b62c183e4e17a", null ],
     [ "BackGroundColour", "_transmitter_code_2src_2main_8cpp.html#a59c3d8b001e63150ebf11e3d9d6dca5b", null ],
@@ -410,6 +412,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "NoCarrier", "_transmitter_code_2src_2main_8cpp.html#a740b6b60d941238e8a8cd6caa083a7ca", null ],
     [ "NoSleeping", "_transmitter_code_2src_2main_8cpp.html#aa336d2e589396e246b779e7ed2b097c0", null ],
     [ "OneModelMemory", "_transmitter_code_2src_2main_8cpp.html#af41e1522d47ccad6267f971f13cb6f79", null ],
+    [ "OpeningFanfare", "_transmitter_code_2src_2main_8cpp.html#a0532a8399c276be54eb143f56bd5bbf9", null ],
     [ "PacketNumber", "_transmitter_code_2src_2main_8cpp.html#a09cb370d93005b5a43e932a3d6093ea2", null ],
     [ "PacketsPerSecond", "_transmitter_code_2src_2main_8cpp.html#a69eb851d1cea4186c53854c5009ecb25", null ],
     [ "page_FhssView", "_transmitter_code_2src_2main_8cpp.html#abb0c124b134df44ba1d408d719ab6b75", null ],

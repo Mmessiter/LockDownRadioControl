@@ -9,5 +9,6 @@ var searchData=
   ['analogueinput_6',['AnalogueInput',['../_transmitter_code_2src_2main_8cpp.html#a0c2eb3050c13378578402202c6290391',1,'main.cpp']]],
   ['angle_7',['angle',['../class_adafruit___g_p_s.html#a0f60908101d728cfa3c12f7ae6a31018',1,'Adafruit_GPS']]],
   ['anglegps_8',['AngleGPS',['../_receiver_code_2src_2main_8cpp.html#a9cb6617428d513efc095336972632da6',1,'AngleGPS():&#160;main.cpp'],['../radio_8h.html#a9cb6617428d513efc095336972632da6',1,'AngleGPS():&#160;main.cpp']]],
-  ['autoswitch_9',['AutoSwitch',['../_transmitter_code_2src_2main_8cpp.html#a6d1c8ca21c8826267f5687d3799c6a1f',1,'main.cpp']]]
+  ['audiovolume_9',['AudioVolume',['../_transmitter_code_2src_2main_8cpp.html#adddcbca54e7b49592c3f6c360bf04494',1,'main.cpp']]],
+  ['autoswitch_10',['AutoSwitch',['../_transmitter_code_2src_2main_8cpp.html#a6d1c8ca21c8826267f5687d3799c6a1f',1,'main.cpp']]]
 ];
