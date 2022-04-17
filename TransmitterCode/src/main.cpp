@@ -42,8 +42,8 @@
  * | 4  LED    | BLUE |
  * | 5  POLOLU | 2808 ALL POWER OFF SIGNAL (When high) |
  * | 6  (!! SPARE !!)
- * | 7  (RX2)  | SBUS IN    ------> BUDDY BOX SYSTEM (still under developement) |
- * | 8  (TX2)  | SBUS OUT   ------> BUDDY BOX SYSTEM (still under developement) |
+ * | 7  (RX2)  | SBUS IN    ------> BUDDY BOX SYSTEM |
+ * | 8  (TX2)  | SBUS OUT   ------> BUDDY BOX SYSTEM |
  * | 9  (CE)   | nRF24l01 (CE) |
  * | 10 (CS)   | nRF24l01 (CSN) |
  * | 11 (MOSI) | nRF24l01 (MOSI) |
@@ -69,14 +69,14 @@
  * | 31        | Switch 4 |
  * | 32        | Switch 4 |
  * | 33 (!! SPARE !!)
- * | 34 TRIM (AILERON LEFT)
- * | 35 TRIM (AILERON RIGHT)
- * | 36 TRIM (ELEVATOR UP)
- * | 37 TRIM (ELEVATOR DOWN)
- * | 38 TRIM (THROTTLE UP)
- * | 39 TRIM (THROTTLE DOWN)
- * | 40 TRIM (RUDDER LEFT)
- * | 41 TRIM (RUDDER RIGHT)
+ * | 34 TRIM (CH1a)
+ * | 35 TRIM (CH1b)
+ * | 36 TRIM (CH2a)
+ * | 37 TRIM (CH2b)
+ * | 38 TRIM (CH3a)
+ * | 39 TRIM (CH3b)
+ * | 40 TRIM (CH4a)
+ * | 41 TRIM (CH4b)
  * | 53 NOT USED
  * @see TransmitterCode/src/main.cpp
  */
@@ -190,14 +190,14 @@ RF24 Radio1(CE_PIN, CSN_PIN);
 #define SWITCH6       26
 #define SWITCH7       25
 
-#define TRIM0         34   // Digital trims pins
-#define TRIM1         35
-#define TRIM2         36
-#define TRIM3         37
-#define TRIM4         38
-#define TRIM5         39
-#define TRIM6         40
-#define TRIM7         41
+#define TRIM1A         34   // Digital trims pins
+#define TRIM1B         35
+#define TRIM2A         36
+#define TRIM2B         37
+#define TRIM3A         38
+#define TRIM3B         39
+#define TRIM4A         40
+#define TRIM4B         41
 
 
 #define REDLED        2 // COLOURED LEDS' PIN NUMBERS ...
@@ -416,8 +416,7 @@ int       PipeTimeout     = 0;
 bool      Switch[8];
 bool      TrimSwitch[8];
 uint8_t   SwitchNumber[8] = {SWITCH0, SWITCH1, SWITCH2, SWITCH3, SWITCH4, SWITCH5, SWITCH6, SWITCH7};
-uint8_t   TrimNumber[8] = {TRIM0, TRIM1, TRIM2, TRIM3, TRIM4, TRIM5, TRIM6, TRIM7};
-
+uint8_t   TrimNumber[8]   = {TRIM1A, TRIM1B, TRIM2A, TRIM2B, TRIM3A, TRIM3B, TRIM4A, TRIM4B};
 
 uint8_t FMSwitch   = FLIGHTMODESWITCH;
 uint8_t AutoSwitch = AUTOSWITCH;
