@@ -2949,7 +2949,6 @@ void setup()
     MySbus.begin();
     SetUKFrequencies(); 
     SetAudioVolume(AudioVolume);
-  //  strcpy (OpeningFanfare,"fanfare2");
     PlayWaveFile(OpeningFanfare);
 }
 /*********************************************************************************************************************************/
@@ -4592,7 +4591,7 @@ void Button_was_pressed()
 #endif
 
 
-        if (InStrng(AudioView, TextIn) > 0) { 
+        if (InStrng(AudioView, TextIn) > 0) {  // Display screen with audio options
             ClearText();
             CurrentMode = NORMAL;
             CurrentView = AUDIOVIEW;
@@ -4602,10 +4601,11 @@ void Button_was_pressed()
             SendText (cb0,OpeningFanfare);
             return;
         }
-        if (InStrng(SetupAud, TextIn) > 0) { 
+        if (InStrng(SetupAud, TextIn) > 0) {  // Exit from screen with audio options
             CurrentMode = NORMAL;
             CurrentView = MAINSETUPVIEW;
             AudioVolume = GetValue(n0);
+            SetAudioVolume(AudioVolume);
             GetText (cb0,OpeningFanfare); // heer
             SendCommand(page_SetupView);
             ClearText();
@@ -4613,7 +4613,7 @@ void Button_was_pressed()
             return;
         }
 
-        if (InStrng(SetupView, TextIn) > 0) { // default goto setup screen
+        if (InStrng(SetupView, TextIn) > 0) { //  goto main setup screen
             ClearText();
             SaveAllParameters();
             SendCommand(page_SetupView);
@@ -4623,12 +4623,12 @@ void Button_was_pressed()
             ClearText();
             return;
         }
-        if (InStrng(Md1, TextIn) > 0) {           
+        if (InStrng(Md1, TextIn) > 0) {           // Mode 1 for trims
             SticksMode = 1;
             ClearText();
             return;
         }  
-        if (InStrng(Md2, TextIn) > 0) {           
+        if (InStrng(Md2, TextIn) > 0) {           // Mode 2 for trims
             SticksMode = 2;
             ClearText();
             return;
@@ -4659,7 +4659,7 @@ void Button_was_pressed()
         ClearText();
         return;
         }
-        if (InStrng(OptionsEnd, TextIn) > 0) { // Options screen end
+        if (InStrng(OptionsEnd, TextIn) > 0) { // Exit from Options screen
             SendCommand(ProgressStart);
             i = strlen(OptionsEnd);
             j = 0;
@@ -4700,19 +4700,19 @@ void Button_was_pressed()
             return;
         }
 
-        if (InStrng(DataEnd, TextIn) > 0) { //  goto setup screen from Data screen
+        if (InStrng(DataEnd, TextIn) > 0) { //  Exit from Data screen
             CurrentView = MAINSETUPVIEW;
             b5isGrey = false;
             ClearText();
             CurrentMode = NORMAL;
             return;
         }
-        if (InStrng(DataView_Clear, TextIn) > 0) { 
+        if (InStrng(DataView_Clear, TextIn) > 0) { //  Clear Data screen
             ZeroDataScreen();
             ClearText();
             return;
         }
-         if (InStrng(DataView_AltZero, TextIn) > 0) { //  goto setup screen from Data screen 
+         if (InStrng(DataView_AltZero, TextIn) > 0) { //  Set zero altitude on data screen
             if (!GroundModelAltitude) {
                 GroundModelAltitude = RXModelAltitude;}
             else {
@@ -4726,7 +4726,7 @@ void Button_was_pressed()
             ClearText();
             return;
         }
-        if (InStrng(GoFrontView, TextIn) > 0) {
+        if (InStrng(GoFrontView, TextIn) > 0) { // GOTO frontview
             CurrentView = FRONTVIEW;
             SendCommand(page_FrontView);
             UpdateModelsNameEveryWhere();
@@ -4747,7 +4747,7 @@ void Button_was_pressed()
             return;
         }
 
-        if (InStrng(HelpView, TextIn) > 0) {
+        if (InStrng(HelpView, TextIn) > 0) { // Display Help screen(s)
             SavedCurrentView = CurrentView;
             CurrentView      = Help_View;
             SendHelp();
