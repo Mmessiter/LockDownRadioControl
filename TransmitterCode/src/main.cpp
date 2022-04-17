@@ -606,7 +606,8 @@ void MapToSBUS()
         SBUSTimer = millis();
         for (int j = 0; j < CHANNELSUSED; ++j)
         {
-            SbusChannels[j] = map(SendBuffer[j], MINMICROS, MAXMICROS, RANGEMIN, RANGEMAX);
+           // SbusChannels[j] =                      map(SendBuffer[j], MINMICROS, MAXMICROS, RANGEMIN, RANGEMAX);
+            SbusChannels[j] = static_cast<uint16_t> (map(SendBuffer[j], MINMICROS, MAXMICROS, RANGEMIN, RANGEMAX)); // Improved version of the above ?!
         }
         MySbus.write(&SbusChannels[0]);
     }
