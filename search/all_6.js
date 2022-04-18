@@ -40,7 +40,7 @@ var searchData=
   ['fmswitch_37',['FMSwitch',['../_transmitter_code_2src_2main_8cpp.html#a452f6aed1252d3f1da8a0ceb07552c07',1,'main.cpp']]],
   ['fmt_38',['fmt',['../structnmea__datavalue__t.html#a144e0518233b217c001da1df4d69c243',1,'nmea_datavalue_t']]],
   ['force_5fredisplay_39',['Force_ReDisplay',['../_transmitter_code_2src_2main_8cpp.html#aa1e81e58421a34fdfd7bfb31925f5a90',1,'main.cpp']]],
-  ['foregroundcolour_40',['ForeGroundColour',['../_transmitter_code_2src_2main_8cpp.html#a029840d27a3c9954aa481d494df4ace6',1,'main.cpp']]],
+  ['foregroundcolour_40',['ForeGroundColour',['../_radio_functions_8h.html#a029840d27a3c9954aa481d494df4ace6',1,'ForeGroundColour():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a029840d27a3c9954aa481d494df4ace6',1,'ForeGroundColour():&#160;main.cpp']]],
   ['found_5fbmp280_41',['FOUND_BMP280',['../_sensor_hub_l_c_2src_2main_8cpp.html#a2aebb34fd4fbec2d3ac925f8cc7a7bee',1,'FOUND_BMP280():&#160;main.cpp'],['../_sensor_hub_t32_2src_2main_8cpp.html#a2aebb34fd4fbec2d3ac925f8cc7a7bee',1,'FOUND_BMP280():&#160;main.cpp'],['../_sensor_hub_teensy3__6_2src_2main_8cpp.html#a2aebb34fd4fbec2d3ac925f8cc7a7bee',1,'FOUND_BMP280():&#160;main.cpp']]],
   ['found_5fina219_42',['FOUND_INA219',['../_sensor_hub_l_c_2src_2main_8cpp.html#af1b5290b72a9f9bc5d1d70c7c14df9b0',1,'FOUND_INA219():&#160;main.cpp'],['../_sensor_hub_t32_2src_2main_8cpp.html#af1b5290b72a9f9bc5d1d70c7c14df9b0',1,'FOUND_INA219():&#160;main.cpp'],['../_sensor_hub_teensy3__6_2src_2main_8cpp.html#af1b5290b72a9f9bc5d1d70c7c14df9b0',1,'FOUND_INA219():&#160;main.cpp']]],
   ['frequencycount_43',['FrequencyCount',['../common_8h.html#a2cecb6d8a82a88635e2c10438fedf092',1,'common.h']]],

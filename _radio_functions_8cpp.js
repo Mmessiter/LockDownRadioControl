@@ -30,6 +30,7 @@ var _radio_functions_8cpp =
     [ "DeComp", "_radio_functions_8cpp.html#a287a5bee7563781398fb98de9e039371", null ],
     [ "DoScanEnd", "_radio_functions_8cpp.html#a31fb6a46af68482e107cddee58dfb677", null ],
     [ "DoScanInit", "_radio_functions_8cpp.html#a77c4a4ffa609df08830ccece07bf283b", null ],
+    [ "DrawFhssBox", "_radio_functions_8cpp.html#a6bdc6419b47dda71d0d2c8faf652adc2", null ],
     [ "HopToNextChannel", "_radio_functions_8cpp.html#a62ec0168b1eea5f5c14f663d9217574d", null ],
     [ "InitRadio", "_radio_functions_8cpp.html#a86ce6c54618629a61b8502786d2ce82c", null ],
     [ "Procrastinate", "_radio_functions_8cpp.html#a760609a682300dfe6bfaac737fd4d5eb", null ],
