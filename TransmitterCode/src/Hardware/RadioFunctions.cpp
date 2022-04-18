@@ -5,21 +5,32 @@
 // Malcolm Messiter 2022
 #include "RadioFunctions.h"
 
-#define SticksView         1
-#define GraphView          2
-#define MixesView          3
-#define FhssView           4
-#define ModelsView         5
-#define CalibrateView      6
-#define MainSetupView      7
-#define GainsView          8
-#define DataView           9
-#define Trim_View          10
-#define Mode_View          11
-#define Switches_View      12
-#define One_Switch_View    13
-#define Help_View          14
-#define Options_View       15
+
+
+#define FRONTVIEW       0
+#define STICKSVIEW      1
+#define GRAPHVIEW       2
+#define MixesView       3
+#define FhssView        4
+#define ModelsView      5
+#define CALIBRATEVIEW   6
+#define MAINSETUPVIEW   7
+#define GainsView       8
+#define DataView        9
+#define Trim_View       10
+#define Mode_View       11
+#define Switches_View   12
+#define One_Switch_View 13
+#define Help_View       14
+#define Options_View    15
+#define Inputs_View     16
+#define FailSafe_View   17
+#define Colours_View    18
+#define AUDIOVIEW       19
+
+
+
+
 #define BINDPIPETIMEOUT    1000                      // timeout for switching from Bound to Default pipe
 #define UNCOMPRESSEDWORDS  20                        // DATA TO SEND = 40  Bytes
 #define COMPRESSEDWORDS    UNCOMPRESSEDWORDS * 3 / 4 // COMPRESSED DATA SENT = 30  Bytes
@@ -126,7 +137,7 @@ void SendData()
             return;                               // no more to do here!
         }
         if (BuddyMaster)  GetSlaveChannelValues(); // If buddy master, check where student's sticks etc. are.
-        if (!BoundFlag && !(CurrentView == CalibrateView) && !(CurrentView == SticksView))
+        if (!BoundFlag && !(CurrentView == CALIBRATEVIEW) && !(CurrentView == STICKSVIEW))
         {
             BufferNewPipe(); // if not yet bound, send our pipe
         }
