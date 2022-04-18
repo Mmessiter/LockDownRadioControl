@@ -134,6 +134,7 @@ extern bool           DoSbusSendOnly;
 extern bool           BuddyMaster;
 extern uint16_t       BackGroundColour;
 extern uint16_t       HighlightColour;
+extern uint16_t       ForeGroundColour;
 
 extern void  GetSlaveChannelValues();
 extern void  KickTheDog();
@@ -166,6 +167,7 @@ void HopToNextChannel();
 void ScanAllChannels();
 void SendData();
 void Procrastinate(uint32_t HowLong);
+void DrawFhssBox(); 
 
 /*********************************************************************************************************************************/
 

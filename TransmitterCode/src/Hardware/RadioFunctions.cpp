@@ -181,10 +181,69 @@ void SendData()
     }
 }
 
-/************************************************************************************************************/
-
 #define xx1 90 // was 75
-#define yy1 90 // Needed below... Edit xx1,yy1 to move box
+#define yy1 65 // Needed below... Edit xx1,yy1 to move box ....
+
+void DrawFhssBox() 
+{
+    int  x1          = xx1;
+    int  y1          = yy1;
+    int  x2          = x1 + (128 * 5);
+    int  y2          = y1 + 255;
+    int  xd          = 20; // half of 40 which is character width
+    int  xd1         = 24;
+    char STR126[]    = "\"127\"";
+    char STR126GHZ[] = "\"2.527\"";
+    char STR96[]     = "\"96\"";
+    char STR96GHZ[]  = "\"2.496\"";
+    char STR64[]     = "\"64\"";
+    char STR64GHZ[]  = "\"2.464\"";
+    char STR32[]     = "\"32\"";
+    char STR32GHZ[]  = "\"2.432\"";
+    char STR1[]      = "\"0\"";
+    char STR1GHZ[]   = "\"2.400\"";
+    char GHZ[]       = "\"GHz:\"";
+    char CH[]        = "\"Ch:\"";
+    char CB[150]; // COMMAND BUFFER
+    char draw[] = "draw ";
+    char xstr[] = "xstr ";
+    char fyll[] = "fill ";
+    char NB[12]; // Number Buffers
+    char NB1[12];
+    char NB2[12];
+    char NB3[12];
+    char NB4[12];
+    char NB5[12];
+    char NB6[12];
+    char NB7[12];
+    char NB8[12];
+    char NA[1]    = ""; // blank one
+    char NewWhite[15];
+    char NewWhite1[15];
+   
+    Str(NewWhite,ForeGroundColour,0);
+    Str(NewWhite1,ForeGroundColour,1);
+
+    SendCharArray(CB, draw, Str(NB1, x1, 1), Str(NB2, y1, 1), Str(NB3, x2, 1), Str(NB4, y2, 1), NewWhite, NA, NA, NA, NA, NA, NA);
+    SendCharArray(CB, xstr, Str(NB, x1 - xd, 1), Str(NB1, y2 + 4, 1), Str(NB2, 40, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR1);
+    SendCharArray(CB, xstr, Str(NB, 30, 1), Str(NB1, y2 + 4, 1), Str(NB2, 40, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), CH);
+    SendCharArray(CB, xstr, Str(NB, 16, 1), Str(NB1, y2 + 30, 1), Str(NB2, 50, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), GHZ);
+    SendCharArray(CB, xstr, Str(NB, x1 - xd1, 1), Str(NB1, y2 + 30, 1), Str(NB2, 60, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR1GHZ);
+    SendCharArray(CB, xstr, Str(NB, x1 + ((x2 - x1) / 4) - xd, 1), Str(NB1, y2 + 4, 1), Str(NB2, 40, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR32);
+    SendCharArray(CB, xstr, Str(NB, (x1 + ((x2 - x1) / 4) - xd1), 1), Str(NB1, y2 + 30, 1), Str(NB2, 60, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR32GHZ);
+    SendCharArray(CB, xstr, Str(NB, (x1 + ((x2 - x1) / 2) - xd), 1), Str(NB1, y2 + 4, 1), Str(NB2, 40, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR64);
+    SendCharArray(CB, xstr, Str(NB, (x1 + ((x2 - x1) / 2) - xd1), 1), Str(NB1, y2 + 30, 1), Str(NB2, 60, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR64GHZ);
+    SendCharArray(CB, xstr, Str(NB, (x1 + (((x2 - x1) / 4) * 3) - xd), 1), Str(NB1, y2 + 4, 1), Str(NB2, 40, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR96);
+    SendCharArray(CB, xstr, Str(NB, (x1 + (((x2 - x1) / 4) * 3) - xd1), 1), Str(NB1, y2 + 30, 1), Str(NB2, 60, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR96GHZ);
+    SendCharArray(CB, xstr, Str(NB, (x2 - xd), 1), Str(NB1, y2 + 4, 1), Str(NB2, 40, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR126);
+    SendCharArray(CB, xstr, Str(NB, (x2 - xd1), 1), Str(NB1, y2 + 30, 1), Str(NB2, 60, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR126GHZ);
+    SendCharArray(CB, fyll, Str(NB, (x1 + 1), 1), Str(NB1, (y1 + 1), 1), Str(NB2, ((128 * 5) - 2), 1), Str(NB3, 254, 1), Str(NB4, BackGroundColour, 0), NA, NA, NA, NA, NA, NA);
+}
+
+/*********************************************************************************************************************************/
+
+
+/************************************************************************************************************/
 
 /** @brief This scans and displays result */
 void ScanAllChannels()
