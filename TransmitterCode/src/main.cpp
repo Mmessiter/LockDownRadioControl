@@ -163,10 +163,10 @@ RF24 Radio1(CE_PIN, CSN_PIN);
 #define MODELSVIEW      5
 #define CALIBRATEVIEW   6
 #define MAINSETUPVIEW   7
-//#define GainsView       8
+//#define SPARE!        8
 #define DATAVIEW        9
 #define TRIM_VIEW       10
-//#define Mode_View       11
+//#define SPARE!        11
 #define SWITCHES_VIEW   12
 #define ONE_SWITCH_VIEW 13
 #define HELP_VIEW       14
