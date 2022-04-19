@@ -181,6 +181,11 @@ void SendData()
     }
 }
 
+
+/************************************************************************************************************/
+
+// This function draws or re-draws and clears the box that display wave band scanning information
+
 #define xx1 90 // Needed below... Edit xx1,yy1 to move box ....
 #define yy1 65 // Needed below... Edit xx1,yy1 to move box ....
 
@@ -240,12 +245,10 @@ void DrawFhssBox()
     SendCharArray(CB, fyll, Str(NB, (x1 + 1), 1), Str(NB1, (y1 + 1), 1), Str(NB2, ((128 * 5) - 2), 1), Str(NB3, 254, 1), Str(NB4, BackGroundColour, 0), NA, NA, NA, NA, NA, NA);
 }
 
-/*********************************************************************************************************************************/
-
-
 /************************************************************************************************************/
 
-/** @brief This scans and displays result */
+// This function scans the waveband and displays result in the box that was drawn by the function above.
+
 void ScanAllChannels()
 {
     int  x1 = xx1;
@@ -294,6 +297,8 @@ void ScanAllChannels()
 }
 
 /************************************************************************************************************/
+
+ // This function hops to the next channel in the FFHS array (about 16 times a second)
 
 void HopToNextChannel()
 {
