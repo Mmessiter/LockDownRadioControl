@@ -3134,36 +3134,84 @@ void SaveOneModel(int mnum)
 #endif // defined DB_NEXTION
     CloseModelsFile();
 }
+
 /*********************************************************************************************************************************/
-void ReadHelpFile(char* fname, char* htext)
+
+/** Bubble sort */
+void SortDirectory()
 {
+    int  f      = 0;
+    bool flag   = true;
+    int  Scount = 0;
+    char BoxOffset[18];
+    while (flag && Scount < 10000) {
+        flag = false;
+        for (f = 0; f < ExportedFileCounter - 1; f++) {
+            if (strcmp(TheFilesList[f], TheFilesList[f + 1]) > 0) {
+                strcpy(BoxOffset, TheFilesList[f]);
+                strcpy(TheFilesList[f], TheFilesList[f + 1]);
+                strcpy(TheFilesList[f + 1], BoxOffset);
+                flag = true;
+                Scount++;
+            }
+        }
+    }
+}
+/*********************************************************************************************************************************/
+void BuildDirectory(){
+    char MOD[] = ".MOD";
+    char Entry1[20];
+    char fn[18];
+    int i = 0;
+    File dir  = SD.open("/");
+    ExportedFileCounter = 0;
+    while (true) {
+        File entry = dir.openNextFile();
+        if (!entry || ExportedFileCounter > 18) break;
+        strcpy(Entry1, entry.name());
+        if (InStrng(MOD, Entry1) > 0) {
+            strcpy(fn, entry.name());
+            for (i = 0; i < 12; ++i) {
+                TheFilesList[ExportedFileCounter][i] = fn[i];
+            }
+            ExportedFileCounter++;
+        }
+        entry.close();
+    }
+    SortDirectory();
+}
+/*********************************************************************************************************************************/
+void ReadHelpFile(char* fname, char* htext){
     char errormsg[] = "The Help file was not found.";
     File fnumber;
     int i  = 0;
     char a[] = " ";
     htext[0] = 0;
-    fnumber  = SD.open(fname, FILE_READ);
-    if (!fnumber) {Procrastinate(500); fnumber  = SD.open(fname, FILE_READ);}
-    if (!fnumber) {Procrastinate(500); fnumber  = SD.open(fname, FILE_READ);}  // try 3 times before giving up
-    if (fnumber) {
-        while (fnumber.available() && i < MAXFILELEN) {
-            a[0] = fnumber.read();
-            if (a[0] != 34) {
-                strcat(htext, a);
-                ++i;
+    char searchfile[30];
+    char slash[] =  "/";
+    strcpy (searchfile,slash);
+    strcat (searchfile,fname);
+        Serial.println (searchfile);
+        fnumber  = SD.open(searchfile, FILE_READ); 
+        if (!fnumber) {Procrastinate(500); fnumber  = SD.open(fname, FILE_READ);}
+        if (fnumber) {
+            while (fnumber.available() && i < MAXFILELEN) {
+                a[0] = fnumber.read();
+                if (a[0] != 34) {
+                     strcat(htext, a);
+                    ++i;
+                 }
             }
         }
-    }
     else {
         strcpy(htext, errormsg);
     }
     fnumber.close();
 }
-
 /*********************************************************************************************************************************/
 void SendHelp()
 {
-    char HelpView[] = "HelpView.HelpText";
+    char HelpView[] = "HelpText";
     char HelpFile[20];
     char HelpText[MAXFILELEN + 10]; // MAX = 1200
     int i = 9;
@@ -3258,55 +3306,6 @@ void DoNewChannelName(int ch, int k)
         ChannelNames[ch - 1][j] = 0;
     }
     SaveOneModel(ModelNumber);
-}
-
-/*********************************************************************************************************************************/
-
-/** Bubble sort */
-void SortDirectory()
-{
-    int  f      = 0;
-    bool flag   = true;
-    int  Scount = 0;
-    char BoxOffset[18];
-    while (flag && Scount < 10000) {
-        flag = false;
-        for (f = 0; f < ExportedFileCounter - 1; f++) {
-            if (strcmp(TheFilesList[f], TheFilesList[f + 1]) > 0) {
-                strcpy(BoxOffset, TheFilesList[f]);
-                strcpy(TheFilesList[f], TheFilesList[f + 1]);
-                strcpy(TheFilesList[f + 1], BoxOffset);
-                flag = true;
-                Scount++;
-            }
-        }
-    }
-}
-
-/*********************************************************************************************************************************/
-
-void BuildDirectory()
-{
-    char MOD[] = ".MOD";
-    char Entry1[20];
-    char fn[18];
-    int i = 0;
-    File dir  = SD.open("/");
-    ExportedFileCounter = 0;
-    while (true) {
-        File entry = dir.openNextFile();
-        if (!entry || ExportedFileCounter > 18) break;
-        strcpy(Entry1, entry.name());
-        if (InStrng(MOD, Entry1) > 0) {
-            strcpy(fn, entry.name());
-            for (i = 0; i < 12; ++i) {
-                TheFilesList[ExportedFileCounter][i] = fn[i];
-            }
-            ExportedFileCounter++;
-        }
-        entry.close();
-    }
-    SortDirectory();
 }
 
 /*********************************************************************************************************************************/
@@ -6217,7 +6216,7 @@ void loop()
             CheckScanButton();           
         }
         if (CurrentView == ModelsView){ 
-            CheckModelName();            // In ModelsView, this function checks correct name is displayed. heer
+            CheckModelName();            // In ModelsView, this function checks correct name is displayed.
         }
     }
     if (millis() - LastTimeRead >= 1000) {
