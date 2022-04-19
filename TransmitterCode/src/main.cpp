@@ -2204,10 +2204,10 @@ uint8_t SDReadByte(int p_address)
 
 void UpdateModelsNameEveryWhere()
 { // ... and flight mode ... and trim settings etc...
-    char fm1[]                  = "Flight mode 1";
-    char fm2[]                  = "Flight mode 2";
-    char fm3[]                  = "Flight mode 3";
-    char fm4[]                  = "Flight mode 4";
+    char fm1[]                  = "Bank 1";
+    char fm2[]                  = "Bank 2";
+    char fm3[]                  = "Bank 3";
+    char fm4[]                  = "Bank 4";
     char FrontView_ModelName[]  = "ModelName";
     char SticksView_ModelName[] = "ModelName";
     char MixesView_ModelName[]  = "ModelName";
