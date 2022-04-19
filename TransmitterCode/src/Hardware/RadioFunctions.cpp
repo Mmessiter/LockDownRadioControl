@@ -181,7 +181,7 @@ void SendData()
     }
 }
 
-#define xx1 90 // was 75
+#define xx1 90 // Needed below... Edit xx1,yy1 to move box ....
 #define yy1 65 // Needed below... Edit xx1,yy1 to move box ....
 
 void DrawFhssBox() 
@@ -190,7 +190,7 @@ void DrawFhssBox()
     int  y1          = yy1;
     int  x2          = x1 + (128 * 5);
     int  y2          = y1 + 255;
-    int  xd          = 30; // half of 60 which is character width
+    int  xd          = 30; 
     int  xd1         = 20;
     char STR125[]    = "\"125\"";
     char STR125GHZ[] = "\"2.525\"";
@@ -204,19 +204,19 @@ void DrawFhssBox()
     char STR1GHZ[]   = "\"2.400\"";
     char GHZ[]       = "\"GHz\"";
     char CH[]        = "\"Ch\"";
-    char CB[150]; // COMMAND BUFFER
+    char CB[150];       // COMMAND BUFFER
     char draw[] = "draw ";
     char xstr[] = "xstr ";
     char fyll[] = "fill ";
-    char NB[12]; // Number Buffers
-    char NB1[12];
-    char NB2[12];
-    char NB3[12];
-    char NB4[12];
-    char NB5[12];
-    char NB6[12];
-    char NB7[12];
-    char NB8[12];
+    char NB[9];        // Number Buffers...
+    char NB1[9];
+    char NB2[9];
+    char NB3[9];
+    char NB4[9];
+    char NB5[9];
+    char NB6[9];
+    char NB7[9];
+    char NB8[9];
     char NA[1]    = ""; // blank one
     char NewWhite[15];
     char NewWhite1[15];
