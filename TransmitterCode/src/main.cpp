@@ -158,22 +158,22 @@ RF24 Radio1(CE_PIN, CSN_PIN);
 #define FRONTVIEW       0
 #define STICKSVIEW      1
 #define GRAPHVIEW       2
-#define MixesView       3
-#define FhssView        4
-#define ModelsView      5
+#define MIXESVIEW       3
+#define SCANVIEW        4
+#define MODELSVIEW      5
 #define CALIBRATEVIEW   6
 #define MAINSETUPVIEW   7
-#define GainsView       8
-#define DataView        9
-#define Trim_View       10
-#define Mode_View       11
-#define Switches_View   12
-#define One_Switch_View 13
-#define Help_View       14
-#define Options_View    15
-#define Inputs_View     16
-#define FailSafe_View   17
-#define Colours_View    18
+//#define GainsView       8
+#define DATAVIEW        9
+#define TRIM_VIEW       10
+//#define Mode_View       11
+#define SWITCHES_VIEW   12
+#define ONE_SWITCH_VIEW 13
+#define HELP_VIEW       14
+#define OPTIONS_VIEW    15
+#define INPUTS_VIEW     16
+#define FAILSAFE_VIEW   17
+#define COLOURS_VIEW    18
 #define AUDIOVIEW       19
 #define FILESVIEW       20
 
@@ -1027,10 +1027,10 @@ void ReadTime()
     char Owner[] = "Owner";
     uint8_t DisplayedHour;
     FixDeltaGMTSign();  
-    if (CurrentView == FRONTVIEW || CurrentView == Options_View) {
+    if (CurrentView == FRONTVIEW || CurrentView == OPTIONS_VIEW) {
         if (RTC.read(tm)) { 
             strcpy(TimeString, Str(NB, tm.Day + DateFix, 0));
-            if (CurrentView == Options_View)
+            if (CurrentView == OPTIONS_VIEW)
             {
                 if ((tm.Day) < 10) {
                     strcat(TimeString, Space); // to align better the rest of the data
@@ -1038,7 +1038,7 @@ void ReadTime()
                 }
             }
             strcat(TimeString, Space);
-            if (CurrentView == Options_View)
+            if (CurrentView == OPTIONS_VIEW)
             {
                 strcat(TimeString, ShortMonth[tm.Month - 1]);
             }
@@ -1590,7 +1590,7 @@ FASTRUN void ShowComms()
     char  Sat[]               = "Sat";
     char  Sbs[]              = "Sbus";
 
-    if (CurrentView == FRONTVIEW || CurrentView == DataView) {
+    if (CurrentView == FRONTVIEW || CurrentView == DATAVIEW) {
         if (millis() - LastShowTime > ShowCommsDelay) { 
             ShowNow = true;
         }
@@ -1618,8 +1618,8 @@ FASTRUN void ShowComms()
             strcat(TXBattInfo, Vbuf);
             strcat(TXBattInfo, PerCell);
             if (CurrentView == FRONTVIEW) SendText(FrontView_TXBV, TXBattInfo);
-            if (CurrentView == DataView) SendText(DataView_txv, TransmitterVersionNumber); // TX Version Number
-                                                                                           // if (CurrentView == DataView) SendText(DataView_txv, Vbuf);
+            if (CurrentView == DATAVIEW) SendText(DataView_txv, TransmitterVersionNumber); // TX Version Number
+                                                                                           // if (CurrentView == DATAVIEW) SendText(DataView_txv, Vbuf);
         }
         if (!LostContactFlag)
         {
@@ -1656,7 +1656,7 @@ FASTRUN void ShowComms()
                 }
             }
 
-            if (CurrentView == DataView) {
+            if (CurrentView == DATAVIEW) {
                 SendValue(DataView_pps,   PacketsPerSecond);
                 SendValue(DataView_lps,   LostPackets);
                 SendText(DataView_Alt,    ModelAltitude);
@@ -1743,7 +1743,7 @@ FASTRUN void ShowComms()
         }
         else {
             if (BoundFlag) {
-                if (CurrentView == DataView) {
+                if (CurrentView == DATAVIEW) {
                     PacketsPerSecond = 0;
                     SendValue(DataView_pps, PacketsPerSecond);
                     SendValue(DataView_lps, LostPackets);
@@ -2233,7 +2233,7 @@ void UpdateModelsNameEveryWhere()
         case STICKSVIEW:
             SendText(SticksView_ModelName, ModelName);
             break;
-        case MixesView:
+        case MIXESVIEW:
             SendText(MixesView_ModelName, ModelName);
             break;
         case GRAPHVIEW:
@@ -2246,10 +2246,10 @@ void UpdateModelsNameEveryWhere()
                 SendText(GraphView_Channel, ChannelNames[ChanneltoSet - 1]);
             }
             break;
-        case ModelsView:
+        case MODELSVIEW:
             SendText(ModelsView_ModelName, ModelName);
             break;
-        case Trim_View:
+        case TRIM_VIEW:
             SendText(TrimView_ModelName, ModelName);
             UpdateTrimView();
             break;
@@ -2260,7 +2260,7 @@ void UpdateModelsNameEveryWhere()
     if (FlightMode == 1) {
         if (CurrentView == STICKSVIEW) SendText(SticksView_t1, fm1);
         if (CurrentView == GRAPHVIEW) SendText(GraphView_fmode, fm1);
-        if (CurrentView == Trim_View) {
+        if (CurrentView == TRIM_VIEW) {
             SendText(TrimView_FlightMode, fm1);
             UpdateTrimView();
         }
@@ -2269,7 +2269,7 @@ void UpdateModelsNameEveryWhere()
     if (FlightMode == 2) {
         if (CurrentView == STICKSVIEW) SendText(SticksView_t1, fm2);
         if (CurrentView == GRAPHVIEW) SendText(GraphView_fmode, fm2);
-        if (CurrentView == Trim_View) {
+        if (CurrentView == TRIM_VIEW) {
             SendText(TrimView_FlightMode, fm2);
             UpdateTrimView();
         }
@@ -2278,7 +2278,7 @@ void UpdateModelsNameEveryWhere()
     if (FlightMode == 3) {
         if (CurrentView == STICKSVIEW) SendText(SticksView_t1, fm3);
         if (CurrentView == GRAPHVIEW) SendText(GraphView_fmode, fm3);
-        if (CurrentView == Trim_View) {
+        if (CurrentView == TRIM_VIEW) {
             SendText(TrimView_FlightMode, fm3);
             UpdateTrimView();
         }
@@ -2287,7 +2287,7 @@ void UpdateModelsNameEveryWhere()
     if (FlightMode == 4) {
         if (CurrentView == STICKSVIEW) SendText(SticksView_t1, fm4);
         if (CurrentView == GRAPHVIEW) SendText(GraphView_fmode, fm4);
-        if (CurrentView == Trim_View) {
+        if (CurrentView == TRIM_VIEW) {
             SendText(TrimView_FlightMode, fm4);
             UpdateTrimView();
         }
@@ -2485,7 +2485,7 @@ void UpdateButtonLabels()
         strcat(BoxOffsetLabel, ChannelNames[15]);
         SendText(SticksViewButton16, BoxOffsetLabel);
     }
-    if (CurrentView == Inputs_View || CurrentView == FailSafe_View) {
+    if (CurrentView == INPUTS_VIEW || CurrentView == FAILSAFE_VIEW) {
         SendText(fsch1, ChannelNames[0]);
         SendText(fsch2, ChannelNames[1]);
         SendText(fsch3, ChannelNames[2]);
@@ -4717,7 +4717,7 @@ void ButtonWasPressed()
 
         if (InStrng(HelpView, TextIn) > 0) { // Display Help screen(s)
             SavedCurrentView = CurrentView;
-            CurrentView      = Help_View;
+            CurrentView      = HELP_VIEW;
             SendHelp();
             ClearText();
             return;
@@ -4789,7 +4789,7 @@ void ButtonWasPressed()
             SendValue(dGMT,DeltaGMT);
             SendValue(trf,TrimFactor); 
             SendValue(Bwn,LowBattery);
-            CurrentView = Options_View;
+            CurrentView = OPTIONS_VIEW;
             CurrentMode = NORMAL;
             ClearText();
             return;
@@ -4812,13 +4812,13 @@ void ButtonWasPressed()
                 DisplayCurve();
                 SendValue(CopyToAllFlightModes, 0);
             }
-            if (CurrentView == Switches_View) {
+            if (CurrentView == SWITCHES_VIEW) {
                 UpdateSwitchesDisplay();
             }
-            if (CurrentView == One_Switch_View) {
+            if (CurrentView == ONE_SWITCH_VIEW) {
                 updateOneSwitchView();
             }
-            if (CurrentView == ModelsView) {
+            if (CurrentView == MODELSVIEW) {
                 SendValue(ModelsView_ModelNumber, ModelNumber);
             }
             UpdateModelsNameEveryWhere();
@@ -4934,7 +4934,7 @@ void ButtonWasPressed()
             SendValue(fs14, FailSafeChannel[13]);
             SendValue(fs15, FailSafeChannel[14]);
             SendValue(fs16, FailSafeChannel[15]);
-            CurrentView = FailSafe_View;
+            CurrentView = FAILSAFE_VIEW;
             UpdateButtonLabels();
             ClearText();
             return;
@@ -4942,7 +4942,7 @@ void ButtonWasPressed()
 
         if (InStrng(OneSwitchView, TextIn) > 0) {
             SwitchEditNumber = GetChannel(); // which switch?
-            CurrentView      = One_Switch_View;
+            CurrentView      = ONE_SWITCH_VIEW;
             SendCommand(PageOneSwitchView); // edit one switch - could be 1-4
             updateOneSwitchView();
             ClearText();
@@ -5027,7 +5027,7 @@ void ButtonWasPressed()
         }
         if (InStrng(InputsView, TextIn) > 0) {
             SendCommand(pInputsView);
-            CurrentView = Inputs_View;
+            CurrentView = INPUTS_VIEW;
             UpdateButtonLabels();
             ClearText();
             return;
@@ -5227,7 +5227,7 @@ void ButtonWasPressed()
         if (InStrng(SwitchesView, TextIn)) {
             SendCommand(pSwitchesView);
             UpdateSwitchesDisplay(); // display saved values
-            CurrentView = Switches_View;
+            CurrentView = SWITCHES_VIEW;
             ClearText();
             return;
         }
@@ -5287,12 +5287,10 @@ void ButtonWasPressed()
             else {
                 FileError = true;
             }
-
             if (FileError) ShowFileErrorMsg();
             ClearText();
             return;
         }
-
         p = InStrng(Import, TextIn);
         if (p > 0) {
             SendCommand(ProgressStart);
@@ -5382,7 +5380,7 @@ void ButtonWasPressed()
         }
 
          if (InStrng(ColoursView, TextIn) > 0) {  
-            CurrentView = Colours_View;
+            CurrentView = COLOURS_VIEW;
             SendCommand(page_ColoursView);
             SendCommand(StartBackGround);      
             ClearText();
@@ -5435,8 +5433,8 @@ void ButtonWasPressed()
 
         if (InStrng(TrimView, TextIn) > 0) { // TrimView just appeared, so update it. 
             SendCommand(pTrimView);
-            CurrentView = Trim_View;
-            UpdateModelsNameEveryWhere(); // also updates trimview (If CurrentView == Trim_View!! :-)
+            CurrentView = TRIM_VIEW;
+            UpdateModelsNameEveryWhere(); // also updates trimview (If CurrentView == TRIM_VIEW!! :-)
             if (!UkRules){
                 SendText(b17,Htext0);
             }else{
@@ -5498,7 +5496,7 @@ void ButtonWasPressed()
         if (InStrng(Models_View, TextIn) > 0) { 
             SendCommand(pModelsView);
             ReadOneModel(ModelNumber);
-            CurrentView = ModelsView;
+            CurrentView = MODELSVIEW;
             UpdateModelsNameEveryWhere();
             SendValue(ModelsView_ModelNumber, ModelNumber);
             BuildDirectory(); // of SD card
@@ -5597,6 +5595,7 @@ void ButtonWasPressed()
                     DrawFhssBox();
                     DoScanInit();
                     CurrentMode = SCANWAVEBAND;
+                    CurrentView = SCANVIEW;
                     BlueLedOn();        
                 }
             ClearText();
@@ -5614,7 +5613,7 @@ void ButtonWasPressed()
         p = (InStrng(MIXES_VIEW, TextIn)); //
         if (p > 0) {
             SendCommand(pMixesView);
-            CurrentView = MixesView;
+            CurrentView = MIXESVIEW;
             UpdateModelsNameEveryWhere();
             if (MixNumber == 0) MixNumber = 1;
             LastMixNumber = 33;                        // just to be differernt
@@ -5625,7 +5624,7 @@ void ButtonWasPressed()
 
         p = (InStrng(Mixes_View, TextIn)); // Get New Mixes!
         if (p > 0) {
-            CurrentView = MixesView;
+            CurrentView = MIXESVIEW;
             UpdateModelsNameEveryWhere();
             MixNumber = GetValue(MixesView_MixNumber);
             if (LastMixNumber != MixNumber) { // Did it change?
@@ -5656,7 +5655,7 @@ void ButtonWasPressed()
         if (InStrng(Data_View, TextIn))
         {
             CurrentMode  = NORMAL;
-            CurrentView  = DataView;
+            CurrentView  = DATAVIEW;
             LastShowTime = 0;
             SendCommand(pDataView);
             ClearText();
@@ -6240,8 +6239,8 @@ void loop()
         if (CurrentView == MAINSETUPVIEW){ 
             CheckScanButton();           
         }
-        if (CurrentView == ModelsView){ 
-            CheckModelName();            // In ModelsView, this function checks correct name is displayed.
+        if (CurrentView == MODELSVIEW){ 
+            CheckModelName();            // In MODELSVIEW, this function checks correct name is displayed.
         }
     }
     if (millis() - LastTimeRead >= 1000) {
