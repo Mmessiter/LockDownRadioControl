@@ -9,7 +9,7 @@ var searchData=
   ['buffernewpipe_6',['BufferNewPipe',['../_radio_functions_8cpp.html#aa37950d8ffe471beabe0f25c1e671808',1,'RadioFunctions.cpp']]],
   ['build_7',['build',['../class_adafruit___g_p_s.html#aa98fd519cac1b6f0dd93b7b74e619616',1,'Adafruit_GPS']]],
   ['builddirectory_8',['BuildDirectory',['../_transmitter_code_2src_2main_8cpp.html#affc6c0de18db71aa5ad8b4d241339731',1,'main.cpp']]],
-  ['button_5fwas_5fpressed_9',['Button_was_pressed',['../_transmitter_code_2src_2main_8cpp.html#aed6c682ed45951f95e0b02cf6b570da2',1,'main.cpp']]],
-  ['buttonred_10',['ButtonRed',['../_transmitter_code_2src_2main_8cpp.html#a5bf7a964da96991a9ca3a1eb3d2d9d09',1,'main.cpp']]],
+  ['buttonred_9',['ButtonRed',['../_transmitter_code_2src_2main_8cpp.html#a5bf7a964da96991a9ca3a1eb3d2d9d09',1,'main.cpp']]],
+  ['buttonwaspressed_10',['ButtonWasPressed',['../_transmitter_code_2src_2main_8cpp.html#a8e7ccbf842764fd85cc578be263f7202',1,'main.cpp']]],
   ['buttonwhite_11',['ButtonWhite',['../_transmitter_code_2src_2main_8cpp.html#a1864beba7616666b0f27dac30975673e',1,'main.cpp']]]
 ];

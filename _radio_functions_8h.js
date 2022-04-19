@@ -2,6 +2,7 @@ var _radio_functions_8h =
 [
     [ "CALIBRATELIMITS", "_radio_functions_8h.html#a8d671ce93ba33f2f6b5c314108d3592d", null ],
     [ "CENTRESTICKS", "_radio_functions_8h.html#a53bc52cfc1253f58c2f3835aa39205a3", null ],
+    [ "DB_NEXTION", "_radio_functions_8h.html#a37c149666ecf7d90765ce2a9df4b8fb8", null ],
     [ "KICKRATE", "_radio_functions_8h.html#a639fb69a9b4f236e3b1a16435b82bb81", null ],
     [ "LOSTCONTACTCUTOFF", "_radio_functions_8h.html#ac5b4f54697bc5a8d58ef0c92c094c6b6", null ],
     [ "MAXMICROS", "_radio_functions_8h.html#a843e3db36f734b45096220f7ca4b8d9f", null ],
@@ -34,7 +35,7 @@ var _radio_functions_8h =
     [ "DoScanInit", "_radio_functions_8h.html#a77c4a4ffa609df08830ccece07bf283b", null ],
     [ "DrawFhssBox", "_radio_functions_8h.html#a6bdc6419b47dda71d0d2c8faf652adc2", null ],
     [ "FailedPacket", "_radio_functions_8h.html#a783a0141bea15d8539730afd4b3b06a3", null ],
-    [ "get_new_channels_values", "_radio_functions_8h.html#a59e4c37585e1187976dd5342ec883aef", null ],
+    [ "GetNewChannelValues", "_radio_functions_8h.html#a1a11fabb6c953055a80c5df5eebbfb0d", null ],
     [ "GetSlaveChannelValues", "_radio_functions_8h.html#a4635a8fc77c9f57fca53a5206cd5e571", null ],
     [ "GreenLedOn", "_radio_functions_8h.html#a62e53eb9359c32b666e3386d62c57037", null ],
     [ "HopToNextChannel", "_radio_functions_8h.html#a62ec0168b1eea5f5c14f663d9217574d", null ],
