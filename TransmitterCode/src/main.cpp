@@ -892,7 +892,7 @@ void SetAudioVolume(uint16_t v){   // sets audio volume v (0-100)
 }
 /*********************************************************************************************************************************/
 
-void PlayWaveFile(char* tbox){  // heer
+void PlayWaveFile(char* tbox){  
 #ifdef USEAUDIO
     char path[]   = "wav0.path=\"sd0/";
     char wav[]    = ".wav\"";
@@ -1982,7 +1982,7 @@ float MapExp(float xx, float Xxmin, float Xxmax, float Yymin, float Yymax, float
 /*********************************************************************************************************************************/
 
 /** @brief GET NEW SERVO POSITIONS */
-void get_new_channels_values()
+void GetNewChannelValues()
 {
     uint16_t k = 0, l = 0, m = 0, n = 0, TrimAmount;
     for (n = 0; n < CHANNELSUSED; ++n) {
@@ -2055,7 +2055,7 @@ void CalibrateSticks()
        if (ChannelMax[i] < p) ChannelMax[i] = p;
        if (ChannelMin[i] > p) ChannelMin[i] = p;
    }
-        get_new_channels_values();
+        GetNewChannelValues();
 }
 
 /*********************************************************************************************************************************/
@@ -2068,7 +2068,7 @@ void ChannelCentres()
         ChannelMidHi[i]  = ChannelCentre[i] + ((ChannelMax[i] - ChannelCentre[i]) / 2);
         ChannelMidLow[i] = ChannelMin[i] + ((ChannelCentre[i] - ChannelMin[i]) / 2);
     }
-    get_new_channels_values();
+    GetNewChannelValues();
 }
 
 
@@ -2857,7 +2857,7 @@ void setup()
     LastDogKick = millis(); // needed? - yes!
 #endif
     delay (100);
-    if (!SD.begin(chipSelect)){    // heer - MUST return true or all is lost! (todo: create error page)
+    if (!SD.begin(chipSelect)){    // MUST return true or all is lost! (todo: create error page)
        delay (500);
        SD.begin(chipSelect);       // a second attempt for iffy sd cards ?!
     }                                
@@ -4296,7 +4296,7 @@ void ZeroDataScreen(){             // ZERO Those parameters that are zeroable
  * BUTTON WAS PRESSED (DEAL WITH INPUT FROM NEXTION DISPLAY)
  *
  */
-void Button_was_pressed()
+void ButtonWasPressed()
 {
     int i;
     char OneSwitchView_r1[]        = "r1";     // Flight modes
@@ -4379,7 +4379,6 @@ void Button_was_pressed()
     char Cmsg4[]                   = "CENTRE ALL!";
     char Cmsg5[]                   = "To calibrate TX sticks,\r\npress the button below\r\nthen follow instructions here... ";
     char Cmsg6[]                   = "Calibrate TX sticks";
-    char CaliNEXTION[]             = "CaliNEXTION";
     char TypeView[]                = "TypeView";
     char CopyToAllFlightModes[]    = "callfm";
     char RXBAT[]                   = "RXBAT";
@@ -4558,7 +4557,7 @@ void Button_was_pressed()
             CurrentView = MAINSETUPVIEW;
             AudioVolume = GetValue(n0);
             SetAudioVolume(AudioVolume);
-            GetText (cb0,OpeningFanfare); // heer
+            GetText (cb0,OpeningFanfare);
             SendCommand(page_SetupView);
             ClearText();
             SaveTXStuff();
@@ -5180,7 +5179,7 @@ void Button_was_pressed()
             }
             SD.remove(SingleModelFile);
             BuildDirectory();
-            FileNumberInView--;
+            -- FileNumberInView;
             ShowFileNumber();
             CloseModelsFile();
             ClearText();
@@ -5311,20 +5310,11 @@ void Button_was_pressed()
             ClearText();
             return;
         }
-
         if (InStrng(ListFiles, TextIn) > 0) {
             ShowDirectory(); //
             ClearText();
             return;
         }
-
-        if (InStrng(CaliNEXTION, TextIn) > 0) {
-          //  SendCommand(page_FrontView);  // not working yet
-          //  CurrentView = FRONTVIEW;
-            ClearText();
-            return;
-        }
-
         if (InStrng(SetupViewFM, TextIn) > 0) { // New model name occurs at offset 12 in TextIn
             i = 0;
             while (TextIn[i + 12] > 0) {
@@ -5481,7 +5471,7 @@ void Button_was_pressed()
             ClearText(); 
             return;
         }
-        if (InStrng(Models_View, TextIn) > 0) {
+        if (InStrng(Models_View, TextIn) > 0) { 
             SendCommand(pModelsView);
             ReadOneModel(ModelNumber);
             CurrentView = ModelsView;
@@ -5847,7 +5837,7 @@ void Button_was_pressed()
         }
     }
     ClearText(); // Let's have cleared text for next one!
-} // end Button_was_pressed()
+} // end ButtonWasPressed()
 
 /************************************************************************************************************/
 
@@ -6188,7 +6178,7 @@ void CheckGapsLength()
 void CheckModelName(){                        // In ModelsView, this function checks correct name is displayed.
 char ModelsView_ModelNumber[]  = "ModelNumber";    
     if (!InhibitNameCheck){               // if name is being edited, do not check it.
-        ModelNumber = GetValue(ModelsView_ModelNumber);
+        ModelNumber = GetValue(ModelsView_ModelNumber);    
         if (LastModelLoaded != ModelNumber) {
             if (ModelNumber >= 1) {      // Don't use number zero
                  ReadOneModel(ModelNumber);
@@ -6196,6 +6186,7 @@ char ModelsView_ModelNumber[]  = "ModelNumber";
                  UpdateModelsNameEveryWhere();  
             }
         }
+    ClearText(); 
     }
 }
 /************************************************************************************************************/
@@ -6216,7 +6207,7 @@ void loop()
 {
     KickTheDog();                    // Watchdog
     if (GetButtonPress()) {
-        Button_was_pressed();        // Deal with button
+        ButtonWasPressed();        // Deal with button
     }
 
     if ((millis()-ModelNameTimeCheck) > 500) {  
@@ -6226,7 +6217,7 @@ void loop()
             CheckScanButton();           
         }
         if (CurrentView == ModelsView){ 
-            CheckModelName();            // In ModelsView, this function checks correct name is displayed.
+            CheckModelName();            // In ModelsView, this function checks correct name is displayed. heer
         }
     }
     if (millis() - LastTimeRead >= 1000) {

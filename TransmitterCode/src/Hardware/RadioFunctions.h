@@ -77,7 +77,7 @@
 //             UNCOMMENT ANY OF THESE for that bit of debug info            *
 //***************************************************************************
 
- // #define DB_NEXTION        // Debug NEXTION and SD card data
+  #define DB_NEXTION        // Debug NEXTION and SD card data
 // #define DB_FHSS           // Debug real time FHSS data
 // #define DB_SENSORS        // Debug Sensors
 // #define DB_BIND           // Debug Binding
@@ -144,7 +144,7 @@ extern void  ShowComms();
 extern void  CheckTimer();
 extern void  SendCharArray(char* ch0, char* ch1, char* ch2, char* ch3, char* ch4, char* ch5, char* ch6, char* ch7, char* ch8, char* ch9, char* ch10, char* ch11, char* ch12);
 extern char* Str(char* s, int n, int comma);
-extern void  get_new_channels_values();
+extern void  GetNewChannelValues();
 extern void  LoadPacketData();
 extern void  GreenLedOn();
 extern void  CheckGapsLength();
