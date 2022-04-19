@@ -217,7 +217,7 @@ void DrawFhssBox()
     char NB6[9];
     char NB7[9];
     char NB8[9];
-    char NA[1]    = ""; // blank one
+    char NA[2]    = ""; // blank one
     char NewWhite[15];
     char NewWhite1[15];
    
