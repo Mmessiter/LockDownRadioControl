@@ -4550,6 +4550,7 @@ void Button_was_pressed()
             SendValue(n0,AudioVolume);
             SendValue(Ex1,AudioVolume);
             SendText (cb0,OpeningFanfare);
+            SetAudioVolume(AudioVolume);
             return;
         }
         if (InStrng(SetupAud, TextIn) > 0) {  // Exit from screen with audio options
