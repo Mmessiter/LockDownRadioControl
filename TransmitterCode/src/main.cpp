@@ -3182,23 +3182,38 @@ void BuildDirectory(){
 }
 /*********************************************************************************************************************************/
 void ReadHelpFile(char* fname, char* htext){
+    #define MaxWidth 60
     char errormsg[] = "The Help file was not found.";
     File fnumber;
     int i  = 0;
+    byte Column = 0;
+    char crlf[] = {13,10,0};
+    char Sentance[] = ". ";
     char a[] = " ";
     htext[0] = 0;
-    char searchfile[30];
+    char SearchFile[30];
     char slash[] =  "/";
-    strcpy (searchfile,slash);
-    strcat (searchfile,fname);
-        Serial.println (searchfile);
-        fnumber  = SD.open(searchfile, FILE_READ); 
+    strcpy (SearchFile,slash);
+    strcat (SearchFile,fname);
+        fnumber  = SD.open(SearchFile, FILE_READ); 
         if (!fnumber) {Procrastinate(500); fnumber  = SD.open(fname, FILE_READ);}
         if (fnumber) {
             while (fnumber.available() && i < MAXFILELEN) {
                 a[0] = fnumber.read();
+                 if (a[0] == '.') { // add a space after a full stop.
+                     strcat(htext, Sentance);
+                     Column += 2;
+                     a[0] = 34;
+                 }
+                if ((Column > MaxWidth) && (a[0] == 32)){   // Don't go too wide
+                        strcat(htext, crlf);
+                        a[0] = 34;
+                        Column = 0;
+                } 
+                if ((a[0] == 13) || (a[0] == 10)) a[0] = 34; // ignore CrLfs
                 if (a[0] != 34) {
                      strcat(htext, a);
+                     ++ Column;
                     ++i;
                  }
             }
