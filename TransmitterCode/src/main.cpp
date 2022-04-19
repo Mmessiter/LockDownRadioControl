@@ -175,6 +175,7 @@ RF24 Radio1(CE_PIN, CSN_PIN);
 #define FailSafe_View   17
 #define Colours_View    18
 #define AUDIOVIEW       19
+#define FILESVIEW       20
 
 #define CharsMax        120 
 
@@ -3231,6 +3232,8 @@ void SendHelp()
     char HelpText[MAXFILELEN + 10]; // MAX = 1200
     int i = 9;
     int j = 0;
+    char nf[]= "Searching for file ...";
+    SendText1(HelpView, nf);
     while (TextIn[i] != 0 && j < 19) {
         HelpFile[j] = TextIn[i];
         ++i;
@@ -4799,7 +4802,12 @@ void ButtonWasPressed()
                 WhichPage[i] = 0;
             } // Get page name to which to return
             SendCommand(WhichPage);
-            CurrentView = SavedCurrentView;
+            CurrentView = SavedCurrentView; 
+            if (CurrentView == FILESVIEW) { 
+                 ShowDirectory();    
+                 ClearText();
+                 return;
+            }
             if (CurrentView == GRAPHVIEW) {
                 DisplayCurve();
                 SendValue(CopyToAllFlightModes, 0);
@@ -5324,8 +5332,10 @@ void ButtonWasPressed()
             ClearText();
             return;
         }
-        if (InStrng(ListFiles, TextIn) > 0) {
-            ShowDirectory(); //
+        if (InStrng(ListFiles, TextIn) > 0) {  
+            CurrentView = FILESVIEW;
+            SavedCurrentView = FILESVIEW;
+            ShowDirectory();      
             ClearText();
             return;
         }
