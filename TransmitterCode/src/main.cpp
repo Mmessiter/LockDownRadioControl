@@ -3235,18 +3235,18 @@ void SendHelp()
     char HelpView[] = "HelpText";
     char hcmd[] = "page HelpView";
     char HelpFile[20];
-    char HelpText[MAXFILELEN + 10]; // MAX = 1200
+    char HelpText[MAXFILELEN + 10];      // MAX = 3K or so
     int i = 9;
     int j = 0;
-    SendCommand(hcmd); 
+    SendCommand(hcmd);                   // first load the right screen
     while (TextIn[i] != 0 && j < 19) {
         HelpFile[j] = TextIn[i];
         ++i;
         ++j;
         HelpFile[j] = 0;
     }
-    ReadHelpFile(HelpFile, HelpText);
-    SendText1(HelpView, HelpText);
+    ReadHelpFile(HelpFile, HelpText);  // Then load help text
+    SendText1(HelpView, HelpText);     // Then send it
 }
 /*********************************************************************************************************************************/
 /** @brief Discover which channel to setup */
