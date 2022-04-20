@@ -211,7 +211,7 @@ RF24 Radio1(CE_PIN, CSN_PIN);
 #define RENEWDATA  8787 // Change these to rewrite all
 #define TXSIZE     250  // SD space reserved for transmitter
 #define MODELSIZE  1600 // SD space reserved for each model
-#define MAXFILELEN 1021 // MAX SIZE FOR HELP FILE
+#define MAXFILELEN 3021 // MAX SIZE FOR HELP FILE
 #define BOXOFFSET    35
 #define BOXSIZE     395
 
@@ -935,7 +935,7 @@ void SendText1(char* tbox, char* NewWord)
     char CB[1300];
     char TooLong[] = "Too long!";
 
-    if (strlen(NewWord) > 1250) {
+    if (strlen(NewWord) > MAXFILELEN) {
         strcpy(NewWord, TooLong);
     }
     strcpy(CB, tbox);
