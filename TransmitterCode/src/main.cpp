@@ -546,6 +546,10 @@ uint16_t SavedRX2TotalTime  = 0;
 uint8_t  AudioVolume        = 10;
 char     OpeningFanfare[20];
    
+
+
+void SendText(char* tbox, char* NewWord); // needed a prototype here!
+
 /************************************************************************************************************/
 // This function returns distance (in MILES) between two GPS coordinates (in degrees)
 // it was essentially cribbed from the internet, then tested and adjusted a little. 
@@ -875,12 +879,7 @@ void Reboot()
     } // Dog will explode when overfed
 #endif
 }
-/*********************************************************************************************************************************/
-void GetReturnCode(){  // currently absorbed but ignored.
-    while (NEXTION.available()){
-            NEXTION.read();
-     }
-}
+
 /*********************************************************************************************************************************/
 
 void SetAudioVolume(uint16_t v){   // sets audio volume v (0-100)
@@ -907,46 +906,6 @@ void PlayWaveFile(char* tbox){
     SendCommand(en);
 #endif
 }
-/*********************************************************************************************************************************/
-
-void SendText(char* tbox, char* NewWord)
-{
-    char txt[]   = ".txt=\"";
-    char quote[] = "\"";
-    char CB[100];
-    char TooLong[] = "Too long!";
-
-    if (strlen(NewWord) > 90) {
-        strcpy(NewWord, TooLong);
-    }
-    strcpy(CB, tbox);
-    strcat(CB, txt);
-    strcat(CB, NewWord);
-    strcat(CB, quote);
-    SendCommand(CB);
-    GetReturnCode();
-}
-
-/*********************************************************************************************************************************/
-
-void SendText1(char* tbox, char* NewWord)
-{
-    char txt[]   = ".txt=\"";
-    char quote[] = "\"";
-    char CB[1300];
-    char TooLong[] = "Too long!";
-
-    if (strlen(NewWord) > MAXFILELEN) {
-        strcpy(NewWord, TooLong);
-    }
-    strcpy(CB, tbox);
-    strcat(CB, txt);
-    strcat(CB, NewWord);
-    strcat(CB, quote);
-    SendCommand(CB);
-    GetReturnCode();
-}
-
 /*********************************************************************************************************************************/
 
 // This function converts an int to a char[] array, then adds a comma, a dot, or nothing at the end.
@@ -1169,7 +1128,13 @@ void ClearText()
 }
 
 /*********************************************************************************************************************************/
-// NEXTION functions
+//                        NEXTION functions
+/*********************************************************************************************************************************/
+void GetReturnCode(){  // currently absorbed but ignored.
+    while (NEXTION.available()){
+            NEXTION.read();
+     }
+}
 /*********************************************************************************************************************************/
 void SendCommand(char* tbox)
 {
@@ -1180,14 +1145,48 @@ void SendCommand(char* tbox)
     GetReturnCode();
 }
 /*********************************************************************************************************************************/
+void SendText(char* tbox, char* NewWord)
+{
+    char txt[]   = ".txt=\"";
+    char quote[] = "\"";
+    char CB[100];
+    char TooLong[] = "Too long!";
+
+    if (strlen(NewWord) > 90) {
+        strcpy(NewWord, TooLong);
+    }
+    strcpy(CB, tbox);
+    strcat(CB, txt);
+    strcat(CB, NewWord);
+    strcat(CB, quote);
+    SendCommand(CB);
+    GetReturnCode();
+}
+/*********************************************************************************************************************************/
+void SendText1(char* tbox, char* NewWord)
+{
+    char txt[]   = ".txt=\"";
+    char quote[] = "\"";
+    char CB[1300];
+    char TooLong[] = "Too long!";
+
+    if (strlen(NewWord) > MAXFILELEN) {
+        strcpy(NewWord, TooLong);
+    }
+    strcpy(CB, tbox);
+    strcat(CB, txt);
+    strcat(CB, NewWord);
+    strcat(CB, quote);
+    SendCommand(CB);
+    GetReturnCode();
+}
+/*********************************************************************************************************************************/
 void EndSend()
 {
     for (int pp = 0; pp < 3; ++pp) NEXTION.write(0xff); // Send end of Input message
     Procrastinate(65);                                          // ** A DELAY ** (>=50 ms) is needed if an answer might come!
 }
-
 /*********************************************************************************************************************************/
-
 void SendValue(char* nbox, int value)
 {
     char Val[] = ".val=";
@@ -1200,10 +1199,7 @@ void SendValue(char* nbox, int value)
     ValueSent = true;
     GetReturnCode();
 }
-
-
 /*********************************************************************************************************************************/
-
 void SendOtherValue(char* nbox, int value)
 {
     char Val[] = "=";
@@ -1216,9 +1212,7 @@ void SendOtherValue(char* nbox, int value)
     ValueSent = true;
     GetReturnCode();
 }
-
 /*********************************************************************************************************************************/
-
 void GetTextIn()
 {
     int j = 0;
@@ -1232,9 +1226,7 @@ void GetTextIn()
         }
     }
 }
-
 /*********************************************************************************************************************************/
-
 int GetValue(char* nbox)
 {
     double ValueIn = 0;
@@ -1255,11 +1247,9 @@ int GetValue(char* nbox)
     }
     return ValueIn;
 }
-
 // ***************************************************************************************************************
 // This function gets Nextion textbox Text into a char array pointed to by * TheText. There better be room!
 // It returns the length of array
-
 uint16_t GetText(char* TextBoxName, char* TheText)
 {
     char   get[]   = "get ";
@@ -1281,9 +1271,7 @@ uint16_t GetText(char* TextBoxName, char* TheText)
     }
     return  strlen(TheText);
 }
-
 /*********************************************************************************************************************************/
-
 int GetOtherValue(char* nbox)  // don't add .val as other thingy is already there ...
 {
     double ValueIn = 0;
@@ -1302,10 +1290,7 @@ int GetOtherValue(char* nbox)  // don't add .val as other thingy is already ther
     }
     return ValueIn;
 }
-
-
 /*********************************************************************************************************************************/
-
 bool GetButtonPress()
 {
     bool ButtonPressed = false;
@@ -1326,9 +1311,7 @@ bool GetButtonPress()
     }
     return ButtonPressed;
 }
-
 /*********************************************************************************************************************************/
-
 void SendValue1(char* nbox, int value)
 {
     char CB[100];
@@ -1337,7 +1320,8 @@ void SendValue1(char* nbox, int value)
     strcat(CB, Str(NB, value, 0));
     SendCommand(CB);
 }
-
+/*********************************************************************************************************************************/
+//             END OF NEXTION FUNCTIONS
 /*********************************************************************************************************************************/
 
 uint8_t um(uint16_t bv) // convert to lower resolution
