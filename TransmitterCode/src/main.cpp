@@ -240,6 +240,7 @@ unsigned int  PacketsPerSecond = 0;
 unsigned int  LostPackets      = 0;
 uint8_t       PacketNumber     = 0;
 uint8_t       GPSMarkHere      = 0;
+bool          SaveNothing      = true;  // flag failure to read sd card. if happens, don't write either.
 
 // ************************************* AckPayload structure ******************************************************
 /**
@@ -2751,7 +2752,8 @@ bool LoadAllParameters()
     }   
         MemoryForTransmtter = SDCardAddress;
         ReadOneModel(ModelNumber);
-        return true;
+        SaveNothing = false;           // loading worked ok so it's ok to save stuff now!!
+         return true;
     }
     else {
         return false;
@@ -2867,6 +2869,8 @@ void setup()
     if (!CalibratedYet)     { Procrastinate(250); CalibratedYet = LoadAllParameters(); } 
     if (!CalibratedYet)     { Procrastinate(250); CalibratedYet = LoadAllParameters(); } 
     if (!CalibratedYet)     { Procrastinate(250); CalibratedYet = LoadAllParameters(); }   
+    
+
     SendValue(FrontView_BackGround,BackGroundColour);     // Get colours ready
     SendValue(FrontView_ForeGround,ForeGroundColour);
     SendValue(FrontView_Special,SpecialColour);
@@ -2941,7 +2945,7 @@ void SaveTXStuff()
     bool EON = false;
     int  j   = 0;
     int  i   = 0;
-
+    if (SaveNothing) return;
     if (!ModelsFileOpen) OpenModelsFile();
     rd            = RENEWDATA;
     SDCardAddress          = 0;
@@ -3015,7 +3019,7 @@ void SaveOneModel(int mnum)
     unsigned int j;
     unsigned int i;
     bool EndOfName = false;
-    
+     if (SaveNothing) return;
     if (!ModelsFileOpen) OpenModelsFile();
     SDCardAddress = TXSIZE;                  //  spare bytes for TX stuff
     SDCardAddress += (mnum - 1) * MODELSIZE; //  spare bytes for Model params
@@ -3371,6 +3375,9 @@ void ShowFileErrorMsg()
 
 void SaveAllParameters()
 {
+
+    if (SaveNothing) return;
+
     if (!ModelsFileOpen) OpenModelsFile();
     SaveTXStuff();
     MemoryForTransmtter = SDCardAddress - 2;
