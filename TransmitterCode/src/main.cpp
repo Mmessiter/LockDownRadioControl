@@ -33,50 +33,50 @@
  * @section txPinout Teensy 4.1 Pins
  * | Teensy 4.1 Pins | Connections |
  * |-----------------|-------------|
- * | GND       | GND |
- * | Vin       | + 5.0 VDC |
- * | 0  (RX1)  | NEXTION  (TX) |
- * | 1  (TX2)  | NEXTION  (RX) |
- * | 2  LED    | RED |
- * | 3  LED    | GREEN |
- * | 4  LED    | BLUE |
- * | 5  POLOLU | 2808 ALL POWER OFF SIGNAL (When high) |
+ * | GND        | GND |
+ * | Vin        | + 5.0 VDC |
+ * | 0  (RX1)   | NEXTION  (TX) |
+ * | 1  (TX2)   | NEXTION  (RX) |
+ * | 2  LED     | RED |
+ * | 3  LED     | GREEN |
+ * | 4  LED     | BLUE |
+ * | 5  POLOLU  | 2808 ALL POWER OFF SIGNAL (When high) |
  * | 6  (!! SPARE !!)
- * | 7  (RX2)  | SBUS IN    ------> BUDDY BOX SYSTEM |
- * | 8  (TX2)  | SBUS OUT   ------> BUDDY BOX SYSTEM |
- * | 9  (CE)   | nRF24l01 (CE) |
- * | 10 (CS)   | nRF24l01 (CSN) |
- * | 11 (MOSI) | nRF24l01 (MOSI) |
- * | 12 (MISO) | nRF24l01 (MISO) |
- * | 13 (SCK)  | nRF24l01 (SCK) |
- * | 14 (A0)   | Joystick POT CH1 |
- * | 15 (A1)   | Joystick POT CH2 |
- * | 16 (A2)   | Joystick POT CH3 |
- * | 17 (A3)   | Joystick POT CH4 |
- * | 18        | I2C bus  SDA |
- * | 19        | I2C bus  SCL |
- * | 20 (A6)   | POT KNOB CH5 |
- * | 21 (A7)   | POT KNOB CH6 |
- * | 22 (A8)   | POT KNOB CH7 |
- * | 23 (A9)   | POT KNOB CH8 |
+ * | 7  (RX2)   | SBUS IN    ------> BUDDY BOX SYSTEM |
+ * | 8  (TX2)   | SBUS OUT   ------> BUDDY BOX SYSTEM |
+ * | 9  (CE)    | nRF24l01 (CE) |
+ * | 10 (CS)    | nRF24l01 (CSN) |
+ * | 11 (MOSI)  | nRF24l01 (MOSI) |
+ * | 12 (MISO)  | nRF24l01 (MISO) |
+ * | 13 (SCK)   | nRF24l01 (SCK) |
+ * | 14 (A0)    | Joystick POT CH1 |
+ * | 15 (A1)    | Joystick POT CH2 |
+ * | 16 (A2)    | Joystick POT CH3 |
+ * | 17 (A3)    | Joystick POT CH4 |
+ * | 18         | I2C bus  SDA |
+ * | 19         | I2C bus  SCL |
+ * | 20 (A6)    | POT KNOB CH5 |
+ * | 21 (A7)    | POT KNOB CH6 |
+ * | 22 (A8)    | POT KNOB CH7 |
+ * | 23 (A9)    | POT KNOB CH8 |
  * | 24 (!! SPARE !!)
- * | 25        | Switch 1 |
- * | 26        | Switch 1 |
- * | 27        | Switch 2 |
- * | 28        | Switch 2 |
- * | 29        | Switch 3 |
- * | 30        | Switch 3 |
- * | 31        | Switch 4 |
- * | 32        | Switch 4 |
+ * | 25         | Switch 1 |
+ * | 26         | Switch 1 |
+ * | 27         | Switch 2 |
+ * | 28         | Switch 2 |
+ * | 29         | Switch 3 |
+ * | 30         | Switch 3 |
+ * | 31         | Switch 4 |
+ * | 32         | Switch 4 |
  * | 33 (!! SPARE !!)
- * | 34 TRIM (CH1a)
- * | 35 TRIM (CH1b)
- * | 36 TRIM (CH2a)
- * | 37 TRIM (CH2b)
- * | 38 TRIM (CH3a)
- * | 39 TRIM (CH3b)
- * | 40 TRIM (CH4a)
- * | 41 TRIM (CH4b)
+ * | 34         |TRIM (CH1a)|
+ * | 35         |TRIM (CH1b)|
+ * | 36         |TRIM (CH2a)|
+ * | 37         |TRIM (CH2b)|
+ * | 38         |TRIM (CH3a)|
+ * | 39         |TRIM (CH3b)|
+ * | 40         |TRIM (CH4a)|
+ * | 41         |TRIM (CH4b)|
  * | 53 NOT USED
  * @see TransmitterCode/src/main.cpp
  */
@@ -92,8 +92,8 @@
 #define LOWBATTERY         42                  // percent for warning
 #define CE_PIN             9                   // for SPI to nRF24L01
 #define CSN_PIN            10                  // for SPI to nRF24L01
-#define INACTIVITYTIMEOUT  10                  // Default time after which to switch off
-#define INACTIVITYMINIMUM  5 * TICKSPERMINUTE  // Inactivity timeout minimum is 5 minutes
+#define INACTIVITYTIMEOUT  10 * TICKSPERMINUTE // Default time after which to switch off
+#define INACTIVITYMINIMUM  5  * TICKSPERMINUTE // Inactivity timeout minimum is 5 minutes
 #define INACTIVITYMAXIMUM  30 * TICKSPERMINUTE // Inactivity timeout maximum is 30 minutes
 #define DS1307_ADDRESS     0x68
 
@@ -163,10 +163,10 @@ RF24 Radio1(CE_PIN, CSN_PIN);
 #define MODELSVIEW      5
 #define CALIBRATEVIEW   6
 #define MAINSETUPVIEW   7
-//#define SPARE!        8
+
 #define DATAVIEW        9
 #define TRIM_VIEW       10
-//#define SPARE!        11
+
 #define SWITCHES_VIEW   12
 #define ONE_SWITCH_VIEW 13
 #define HELP_VIEW       14
@@ -204,7 +204,7 @@ RF24 Radio1(CE_PIN, CSN_PIN);
 #define REDLED        2 // COLOURED LEDS' PIN NUMBERS ...
 #define GREENLED      3
 #define BLUELED       4
-#define POWER_OFF_PIN 5 //should be 5
+#define POWER_OFF_PIN 5 
 
 // SDCARD MODEL MEMORY CONSTANTS
 
@@ -235,7 +235,7 @@ uint8_t       CurrentView        = FRONTVIEW;
 uint8_t       SavedCurrentView   = FRONTVIEW;
 uint64_t      DefaultPipe        = DEFAULTPIPEADDRESS; //          Default Radio pipe address
 uint64_t      NewPipe            = 0xBABE1E5420LL;     //             New Radio pipe address for binding comes from MAC address
-char          TextIn[CharsMax];
+char          TextIn[CharsMax+2];  // spare space
 unsigned int  PacketsPerSecond = 0;
 unsigned int  LostPackets      = 0;
 uint8_t       PacketNumber     = 0;
@@ -458,12 +458,11 @@ bool     SaveFailSafeNow                = false;
 uint32_t FailSafeTimer;
 char     ChannelNames[CHANNELSUSED][11] = {{"Aileron"}, {"Elevator"}, {"Throttle"}, {"Rudder"}, {"Gear"}, {"AUX1"}, {"AUX2"}, {"AUX3"}, {"AUX4"}, {"AUX5"}, {"AUX6"}, {"AUX7"}, {"AUX8"}, {"AUX9"}, {"AUX10"}, {"AUX11"}};
 
-
 uint32_t TxOnTime      = 0;
 uint32_t TxPace        = 0;
 uint16_t CompressedData[COMPRESSEDWORDS]; // = 20
 uint8_t  SizeOfCompressedData;
-uint32_t Inactivity_Timeout = 10 * TICKSPERMINUTE;
+uint32_t Inactivity_Timeout = INACTIVITYTIMEOUT ;
 uint32_t Inactivity_Start   = 0;
 
 tmElements_t tm;
@@ -602,9 +601,9 @@ void GetSlaveChannelValues()
 }
 
 /************************************************************************************************************/
-
 /** Map servo channels' data from SendBuffer into SbusChannels buffer */
 // This funtion is used by the BUDDY slave to send it's controls out down a wire using SBUS
+
 void MapToSBUS()
 {
     if (millis() - SBUSTimer >= SBUSRATE)
@@ -612,15 +611,11 @@ void MapToSBUS()
         SBUSTimer = millis();
         for (int j = 0; j < CHANNELSUSED; ++j)
         {
-         // SbusChannels[j] =                        map(SendBuffer[j], MINMICROS, MAXMICROS, RANGEMIN, RANGEMAX);
-            SbusChannels[j] = static_cast<uint16_t> (map(SendBuffer[j], MINMICROS, MAXMICROS, RANGEMIN, RANGEMAX)); // Improved version of the above ?!
+            SbusChannels[j] = static_cast<uint16_t> (map(SendBuffer[j], MINMICROS, MAXMICROS, RANGEMIN, RANGEMAX)); 
         }
-     // MySbus.write(&SbusChannels[0]);
-        MySbus.write(SbusChannels);                                                                                 // Improved version of the above ?!
+        MySbus.write(SbusChannels);        
     }
 }
-/************************************************************************************************************/
-
 /*********************************************************************************************************************************/
 
 uint8_t decToBcd(uint8_t val)
@@ -1093,7 +1088,6 @@ void GreenLedOn()
         analogWrite(BLUELED, 0);
         analogWrite(REDLED, 0); 
         analogWrite(GREENLED, GetBrightness()); // Brightness is a function of maybe blinking
-        //LastShowTime = 0;
         MakeBindButtonInvisible();
         Reconnected=false;
     }
