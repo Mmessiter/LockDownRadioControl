@@ -3226,12 +3226,12 @@ $(document).ready(function(){initNavTree('_transmitter_code_2src_2main_8cpp_sour
 <div class="line"><a id="l03233" name="l03233"></a><span class="lineno"><a class="line" href="_transmitter_code_2src_2main_8cpp.html#a038111bf598c53ad7b9a62ca45259356"> 3233</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="_transmitter_code_2src_2main_8cpp.html#a038111bf598c53ad7b9a62ca45259356">SendHelp</a>()</div>
 <div class="line"><a id="l03234" name="l03234"></a><span class="lineno"> 3234</span>{</div>
 <div class="line"><a id="l03235" name="l03235"></a><span class="lineno"> 3235</span>    <span class="keywordtype">char</span> HelpView[] = <span class="stringliteral">&quot;HelpText&quot;</span>;</div>
-<div class="line"><a id="l03236" name="l03236"></a><span class="lineno"> 3236</span>    <span class="keywordtype">char</span> HelpFile[20];</div>
-<div class="line"><a id="l03237" name="l03237"></a><span class="lineno"> 3237</span>    <span class="keywordtype">char</span> HelpText[<a class="code hl_define" href="_transmitter_code_2src_2main_8cpp.html#aa67b661e0a71a9cce5c2903953b8b8bf">MAXFILELEN</a> + 10]; <span class="comment">// MAX = 1200</span></div>
-<div class="line"><a id="l03238" name="l03238"></a><span class="lineno"> 3238</span>    <span class="keywordtype">int</span> i = 9;</div>
-<div class="line"><a id="l03239" name="l03239"></a><span class="lineno"> 3239</span>    <span class="keywordtype">int</span> j = 0;</div>
-<div class="line"><a id="l03240" name="l03240"></a><span class="lineno"> 3240</span>    <span class="keywordtype">char</span> nf[]= <span class="stringliteral">&quot;Searching for file ...&quot;</span>;</div>
-<div class="line"><a id="l03241" name="l03241"></a><span class="lineno"> 3241</span>    <a class="code hl_function" href="_transmitter_code_2src_2main_8cpp.html#a27dff58ae433cc3b32b7007757195c6d">SendText1</a>(HelpView, nf);</div>
+<div class="line"><a id="l03236" name="l03236"></a><span class="lineno"> 3236</span>    <span class="keywordtype">char</span> hcmd[] = <span class="stringliteral">&quot;page HelpView&quot;</span>;</div>
+<div class="line"><a id="l03237" name="l03237"></a><span class="lineno"> 3237</span>    <span class="keywordtype">char</span> HelpFile[20];</div>
+<div class="line"><a id="l03238" name="l03238"></a><span class="lineno"> 3238</span>    <span class="keywordtype">char</span> HelpText[<a class="code hl_define" href="_transmitter_code_2src_2main_8cpp.html#aa67b661e0a71a9cce5c2903953b8b8bf">MAXFILELEN</a> + 10]; <span class="comment">// MAX = 1200</span></div>
+<div class="line"><a id="l03239" name="l03239"></a><span class="lineno"> 3239</span>    <span class="keywordtype">int</span> i = 9;</div>
+<div class="line"><a id="l03240" name="l03240"></a><span class="lineno"> 3240</span>    <span class="keywordtype">int</span> j = 0;</div>
+<div class="line"><a id="l03241" name="l03241"></a><span class="lineno"> 3241</span>    <a class="code hl_function" href="_transmitter_code_2src_2main_8cpp.html#aecac2f0c289f02ef3c92b85be82eacac">SendCommand</a>(hcmd); </div>
 <div class="line"><a id="l03242" name="l03242"></a><span class="lineno"> 3242</span>    <span class="keywordflow">while</span> (<a class="code hl_variable" href="_transmitter_code_2src_2main_8cpp.html#a745cd6bf32f9e64693a63c1b1d64c18f">TextIn</a>[i] != 0 &amp;&amp; j &lt; 19) {</div>
 <div class="line"><a id="l03243" name="l03243"></a><span class="lineno"> 3243</span>        HelpFile[j] = <a class="code hl_variable" href="_transmitter_code_2src_2main_8cpp.html#a745cd6bf32f9e64693a63c1b1d64c18f">TextIn</a>[i];</div>
 <div class="line"><a id="l03244" name="l03244"></a><span class="lineno"> 3244</span>        ++i;</div>
