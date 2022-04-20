@@ -2862,7 +2862,11 @@ void setup()
        delay (500);
        SD.begin(chipSelect);       // a second attempt for iffy sd cards ?!
     }                                
-    CalibratedYet = LoadAllParameters();                  // If they exist, read saved SD card settings.                                  
+    CalibratedYet = LoadAllParameters();                  // If they exist, read saved SD card settings.   
+    if (!CalibratedYet)     { Procrastinate(250); CalibratedYet = LoadAllParameters(); }   // try several times!!
+    if (!CalibratedYet)     { Procrastinate(250); CalibratedYet = LoadAllParameters(); } 
+    if (!CalibratedYet)     { Procrastinate(250); CalibratedYet = LoadAllParameters(); } 
+    if (!CalibratedYet)     { Procrastinate(250); CalibratedYet = LoadAllParameters(); }   
     SendValue(FrontView_BackGround,BackGroundColour);     // Get colours ready
     SendValue(FrontView_ForeGround,ForeGroundColour);
     SendValue(FrontView_Special,SpecialColour);
