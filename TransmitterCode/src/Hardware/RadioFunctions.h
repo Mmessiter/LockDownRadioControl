@@ -134,6 +134,7 @@ extern bool           DoSbusSendOnly;
 extern bool           BuddyMaster;
 extern uint16_t       BackGroundColour;
 extern uint16_t       HighlightColour;
+extern uint16_t       ForeGroundColour;
 
 extern void  GetSlaveChannelValues();
 extern void  KickTheDog();
@@ -143,7 +144,7 @@ extern void  ShowComms();
 extern void  CheckTimer();
 extern void  SendCharArray(char* ch0, char* ch1, char* ch2, char* ch3, char* ch4, char* ch5, char* ch6, char* ch7, char* ch8, char* ch9, char* ch10, char* ch11, char* ch12);
 extern char* Str(char* s, int n, int comma);
-extern void  get_new_channels_values();
+extern void  GetNewChannelValues();
 extern void  LoadPacketData();
 extern void  GreenLedOn();
 extern void  CheckGapsLength();
@@ -166,6 +167,7 @@ void HopToNextChannel();
 void ScanAllChannels();
 void SendData();
 void Procrastinate(uint32_t HowLong);
+void DrawFhssBox(); 
 
 /*********************************************************************************************************************************/
 

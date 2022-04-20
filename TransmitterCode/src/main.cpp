@@ -42,8 +42,8 @@
  * | 4  LED    | BLUE |
  * | 5  POLOLU | 2808 ALL POWER OFF SIGNAL (When high) |
  * | 6  (!! SPARE !!)
- * | 7  (RX2)  | SBUS IN    ------> BUDDY BOX SYSTEM (still under developement) |
- * | 8  (TX2)  | SBUS OUT   ------> BUDDY BOX SYSTEM (still under developement) |
+ * | 7  (RX2)  | SBUS IN    ------> BUDDY BOX SYSTEM |
+ * | 8  (TX2)  | SBUS OUT   ------> BUDDY BOX SYSTEM |
  * | 9  (CE)   | nRF24l01 (CE) |
  * | 10 (CS)   | nRF24l01 (CSN) |
  * | 11 (MOSI) | nRF24l01 (MOSI) |
@@ -69,14 +69,14 @@
  * | 31        | Switch 4 |
  * | 32        | Switch 4 |
  * | 33 (!! SPARE !!)
- * | 34 TRIM (AILERON LEFT)
- * | 35 TRIM (AILERON RIGHT)
- * | 36 TRIM (ELEVATOR UP)
- * | 37 TRIM (ELEVATOR DOWN)
- * | 38 TRIM (THROTTLE UP)
- * | 39 TRIM (THROTTLE DOWN)
- * | 40 TRIM (RUDDER LEFT)
- * | 41 TRIM (RUDDER RIGHT)
+ * | 34 TRIM (CH1a)
+ * | 35 TRIM (CH1b)
+ * | 36 TRIM (CH2a)
+ * | 37 TRIM (CH2b)
+ * | 38 TRIM (CH3a)
+ * | 39 TRIM (CH3b)
+ * | 40 TRIM (CH4a)
+ * | 41 TRIM (CH4b)
  * | 53 NOT USED
  * @see TransmitterCode/src/main.cpp
  */
@@ -158,23 +158,24 @@ RF24 Radio1(CE_PIN, CSN_PIN);
 #define FRONTVIEW       0
 #define STICKSVIEW      1
 #define GRAPHVIEW       2
-#define MixesView       3
-#define FhssView        4
-#define ModelsView      5
+#define MIXESVIEW       3
+#define SCANVIEW        4
+#define MODELSVIEW      5
 #define CALIBRATEVIEW   6
 #define MAINSETUPVIEW   7
-#define GainsView       8
-#define DataView        9
-#define Trim_View       10
-#define Mode_View       11
-#define Switches_View   12
-#define One_Switch_View 13
-#define Help_View       14
-#define Options_View    15
-#define Inputs_View     16
-#define FailSafe_View   17
-#define Colours_View    18
+//#define SPARE!        8
+#define DATAVIEW        9
+#define TRIM_VIEW       10
+//#define SPARE!        11
+#define SWITCHES_VIEW   12
+#define ONE_SWITCH_VIEW 13
+#define HELP_VIEW       14
+#define OPTIONS_VIEW    15
+#define INPUTS_VIEW     16
+#define FAILSAFE_VIEW   17
+#define COLOURS_VIEW    18
 #define AUDIOVIEW       19
+#define FILESVIEW       20
 
 #define CharsMax        120 
 
@@ -190,14 +191,14 @@ RF24 Radio1(CE_PIN, CSN_PIN);
 #define SWITCH6       26
 #define SWITCH7       25
 
-#define TRIM0         34   // Digital trims pins
-#define TRIM1         35
-#define TRIM2         36
-#define TRIM3         37
-#define TRIM4         38
-#define TRIM5         39
-#define TRIM6         40
-#define TRIM7         41
+#define TRIM1A         34   // Digital trims pins
+#define TRIM1B         35
+#define TRIM2A         36
+#define TRIM2B         37
+#define TRIM3A         38
+#define TRIM3B         39
+#define TRIM4A         40
+#define TRIM4B         41
 
 
 #define REDLED        2 // COLOURED LEDS' PIN NUMBERS ...
@@ -416,8 +417,7 @@ int       PipeTimeout     = 0;
 bool      Switch[8];
 bool      TrimSwitch[8];
 uint8_t   SwitchNumber[8] = {SWITCH0, SWITCH1, SWITCH2, SWITCH3, SWITCH4, SWITCH5, SWITCH6, SWITCH7};
-uint8_t   TrimNumber[8] = {TRIM0, TRIM1, TRIM2, TRIM3, TRIM4, TRIM5, TRIM6, TRIM7};
-
+uint8_t   TrimNumber[8]   = {TRIM1A, TRIM1B, TRIM2A, TRIM2B, TRIM3A, TRIM3B, TRIM4A, TRIM4B};
 
 uint8_t FMSwitch   = FLIGHTMODESWITCH;
 uint8_t AutoSwitch = AUTOSWITCH;
@@ -607,9 +607,11 @@ void MapToSBUS()
         SBUSTimer = millis();
         for (int j = 0; j < CHANNELSUSED; ++j)
         {
-            SbusChannels[j] = map(SendBuffer[j], MINMICROS, MAXMICROS, RANGEMIN, RANGEMAX);
+         // SbusChannels[j] =                        map(SendBuffer[j], MINMICROS, MAXMICROS, RANGEMIN, RANGEMAX);
+            SbusChannels[j] = static_cast<uint16_t> (map(SendBuffer[j], MINMICROS, MAXMICROS, RANGEMIN, RANGEMAX)); // Improved version of the above ?!
         }
-        MySbus.write(&SbusChannels[0]);
+     // MySbus.write(&SbusChannels[0]);
+        MySbus.write(SbusChannels);                                                                                 // Improved version of the above ?!
     }
 }
 /************************************************************************************************************/
@@ -880,16 +882,6 @@ void GetReturnCode(){  // currently absorbed but ignored.
 }
 /*********************************************************************************************************************************/
 
-void SendCommand(char* tbox)
-{
-    NEXTION.print(tbox);
-    for (int i = 0; i < 3; ++i) {
-        NEXTION.write(0xff);
-    } 
-    GetReturnCode();
-}
-/*********************************************************************************************************************************/
-
 void SetAudioVolume(uint16_t v){   // sets audio volume v (0-100)
     char vol[]="volume=";
     char cmd[20];
@@ -901,7 +893,7 @@ void SetAudioVolume(uint16_t v){   // sets audio volume v (0-100)
 }
 /*********************************************************************************************************************************/
 
-void PlayWaveFile(char* tbox){  // heer
+void PlayWaveFile(char* tbox){  
 #ifdef USEAUDIO
     char path[]   = "wav0.path=\"sd0/";
     char wav[]    = ".wav\"";
@@ -1035,10 +1027,10 @@ void ReadTime()
     char Owner[] = "Owner";
     uint8_t DisplayedHour;
     FixDeltaGMTSign();  
-    if (CurrentView == FRONTVIEW || CurrentView == Options_View) {
+    if (CurrentView == FRONTVIEW || CurrentView == OPTIONS_VIEW) {
         if (RTC.read(tm)) { 
             strcpy(TimeString, Str(NB, tm.Day + DateFix, 0));
-            if (CurrentView == Options_View)
+            if (CurrentView == OPTIONS_VIEW)
             {
                 if ((tm.Day) < 10) {
                     strcat(TimeString, Space); // to align better the rest of the data
@@ -1046,7 +1038,7 @@ void ReadTime()
                 }
             }
             strcat(TimeString, Space);
-            if (CurrentView == Options_View)
+            if (CurrentView == OPTIONS_VIEW)
             {
                 strcat(TimeString, ShortMonth[tm.Month - 1]);
             }
@@ -1178,7 +1170,15 @@ void ClearText()
 /*********************************************************************************************************************************/
 // NEXTION functions
 /*********************************************************************************************************************************/
-
+void SendCommand(char* tbox)
+{
+    NEXTION.print(tbox);
+    for (int i = 0; i < 3; ++i) {
+        NEXTION.write(0xff);
+    } 
+    GetReturnCode();
+}
+/*********************************************************************************************************************************/
 void EndSend()
 {
     for (int pp = 0; pp < 3; ++pp) NEXTION.write(0xff); // Send end of Input message
@@ -1590,7 +1590,7 @@ FASTRUN void ShowComms()
     char  Sat[]               = "Sat";
     char  Sbs[]              = "Sbus";
 
-    if (CurrentView == FRONTVIEW || CurrentView == DataView) {
+    if (CurrentView == FRONTVIEW || CurrentView == DATAVIEW) {
         if (millis() - LastShowTime > ShowCommsDelay) { 
             ShowNow = true;
         }
@@ -1618,8 +1618,8 @@ FASTRUN void ShowComms()
             strcat(TXBattInfo, Vbuf);
             strcat(TXBattInfo, PerCell);
             if (CurrentView == FRONTVIEW) SendText(FrontView_TXBV, TXBattInfo);
-            if (CurrentView == DataView) SendText(DataView_txv, TransmitterVersionNumber); // TX Version Number
-                                                                                           // if (CurrentView == DataView) SendText(DataView_txv, Vbuf);
+            if (CurrentView == DATAVIEW) SendText(DataView_txv, TransmitterVersionNumber); // TX Version Number
+                                                                                           // if (CurrentView == DATAVIEW) SendText(DataView_txv, Vbuf);
         }
         if (!LostContactFlag)
         {
@@ -1656,7 +1656,7 @@ FASTRUN void ShowComms()
                 }
             }
 
-            if (CurrentView == DataView) {
+            if (CurrentView == DATAVIEW) {
                 SendValue(DataView_pps,   PacketsPerSecond);
                 SendValue(DataView_lps,   LostPackets);
                 SendText(DataView_Alt,    ModelAltitude);
@@ -1743,7 +1743,7 @@ FASTRUN void ShowComms()
         }
         else {
             if (BoundFlag) {
-                if (CurrentView == DataView) {
+                if (CurrentView == DATAVIEW) {
                     PacketsPerSecond = 0;
                     SendValue(DataView_pps, PacketsPerSecond);
                     SendValue(DataView_lps, LostPackets);
@@ -1842,54 +1842,6 @@ void SendCharArray(char* ch0, char* ch1, char* ch2, char* ch3, char* ch4, char* 
     strcat(ch0, ch11);
     strcat(ch0, ch12);
     SendCommand(ch0);
-}
-
-/*********************************************************************************************************************************/
-
-#define xx1 90 // was 75
-#define yy1 90 // Needed below... Edit xx1,yy1 to move box ....
-
-void DrawFhssBox() 
-{
-    int  x1          = xx1;
-    int  y1          = yy1;
-    int  x2          = x1 + (128 * 5);
-    int  y2          = y1 + 255;
-    int  xd          = 20; // half of 40 which is character width
-    char STR126[]    = "\"125\"";
-    char STR96[]     = "\"96\"";
-    char STR64[]     = "\"64\"";
-    char STR32[]     = "\"32\"";
-    char STR1[]      = "\"0\"";
-    char CH[]        = "\"Ch.\"";
-    char CB[150]; // COMMAND BUFFER
-    char draw[] = "draw ";
-    char xstr[] = "xstr ";
-    char fyll[] = "fill ";
-    char NB[12]; // Number Buffers
-    char NB1[12];
-    char NB2[12];
-    char NB3[12];
-    char NB4[12];
-    char NB5[12];
-    char NB6[12];
-    char NB7[12];
-    char NB8[12];
-    char NA[1]    = ""; // blank one
-    char NewWhite[15];
-    char NewWhite1[15];
-   
-    Str(NewWhite,ForeGroundColour,0);
-    Str(NewWhite1,ForeGroundColour,1);
-
-    SendCharArray(CB, draw, Str(NB1, x1, 1), Str(NB2, y1, 1), Str(NB3, x2, 1), Str(NB4, y2, 1), NewWhite, NA, NA, NA, NA, NA, NA);
-    SendCharArray(CB, xstr, Str(NB, x1 - xd, 1), Str(NB1, y2 + 4, 1), Str(NB2, 40, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR1);
-    SendCharArray(CB, xstr, Str(NB, 25, 1), Str(NB1, y2 + 4, 1), Str(NB2, 50, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), CH);
-    SendCharArray(CB, xstr, Str(NB, x1 + ((x2 - x1) / 4) - xd, 1), Str(NB1, y2 + 4, 1), Str(NB2, 40, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR32);
-    SendCharArray(CB, xstr, Str(NB, (x1 + ((x2 - x1) / 2) - xd), 1), Str(NB1, y2 + 4, 1), Str(NB2, 40, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR64);
-    SendCharArray(CB, xstr, Str(NB, (x1 + (((x2 - x1) / 4) * 3) - xd), 1), Str(NB1, y2 + 4, 1), Str(NB2, 40, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR96);
-    SendCharArray(CB, xstr, Str(NB, (x2 - xd), 1), Str(NB1, y2 + 4, 1), Str(NB2, 50, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR126);
-    SendCharArray(CB, fyll, Str(NB, (x1 + 1), 1), Str(NB1, (y1 + 1), 1), Str(NB2, ((128 * 5) - 2), 1), Str(NB3, 254, 1), Str(NB4, BackGroundColour, 0), NA, NA, NA, NA, NA, NA);
 }
 
 /*********************************************************************************************************************************/
@@ -2031,7 +1983,7 @@ float MapExp(float xx, float Xxmin, float Xxmax, float Yymin, float Yymax, float
 /*********************************************************************************************************************************/
 
 /** @brief GET NEW SERVO POSITIONS */
-void get_new_channels_values()
+void GetNewChannelValues()
 {
     uint16_t k = 0, l = 0, m = 0, n = 0, TrimAmount;
     for (n = 0; n < CHANNELSUSED; ++n) {
@@ -2104,7 +2056,7 @@ void CalibrateSticks()
        if (ChannelMax[i] < p) ChannelMax[i] = p;
        if (ChannelMin[i] > p) ChannelMin[i] = p;
    }
-        get_new_channels_values();
+        GetNewChannelValues();
 }
 
 /*********************************************************************************************************************************/
@@ -2117,7 +2069,7 @@ void ChannelCentres()
         ChannelMidHi[i]  = ChannelCentre[i] + ((ChannelMax[i] - ChannelCentre[i]) / 2);
         ChannelMidLow[i] = ChannelMin[i] + ((ChannelCentre[i] - ChannelMin[i]) / 2);
     }
-    get_new_channels_values();
+    GetNewChannelValues();
 }
 
 
@@ -2252,10 +2204,10 @@ uint8_t SDReadByte(int p_address)
 
 void UpdateModelsNameEveryWhere()
 { // ... and flight mode ... and trim settings etc...
-    char fm1[]                  = "Flight mode 1";
-    char fm2[]                  = "Flight mode 2";
-    char fm3[]                  = "Flight mode 3";
-    char fm4[]                  = "Flight mode 4";
+    char fm1[]                  = "Bank 1";
+    char fm2[]                  = "Bank 2";
+    char fm3[]                  = "Bank 3";
+    char fm4[]                  = "Bank 4";
     char FrontView_ModelName[]  = "ModelName";
     char SticksView_ModelName[] = "ModelName";
     char MixesView_ModelName[]  = "ModelName";
@@ -2281,7 +2233,7 @@ void UpdateModelsNameEveryWhere()
         case STICKSVIEW:
             SendText(SticksView_ModelName, ModelName);
             break;
-        case MixesView:
+        case MIXESVIEW:
             SendText(MixesView_ModelName, ModelName);
             break;
         case GRAPHVIEW:
@@ -2294,10 +2246,10 @@ void UpdateModelsNameEveryWhere()
                 SendText(GraphView_Channel, ChannelNames[ChanneltoSet - 1]);
             }
             break;
-        case ModelsView:
+        case MODELSVIEW:
             SendText(ModelsView_ModelName, ModelName);
             break;
-        case Trim_View:
+        case TRIM_VIEW:
             SendText(TrimView_ModelName, ModelName);
             UpdateTrimView();
             break;
@@ -2308,7 +2260,7 @@ void UpdateModelsNameEveryWhere()
     if (FlightMode == 1) {
         if (CurrentView == STICKSVIEW) SendText(SticksView_t1, fm1);
         if (CurrentView == GRAPHVIEW) SendText(GraphView_fmode, fm1);
-        if (CurrentView == Trim_View) {
+        if (CurrentView == TRIM_VIEW) {
             SendText(TrimView_FlightMode, fm1);
             UpdateTrimView();
         }
@@ -2317,7 +2269,7 @@ void UpdateModelsNameEveryWhere()
     if (FlightMode == 2) {
         if (CurrentView == STICKSVIEW) SendText(SticksView_t1, fm2);
         if (CurrentView == GRAPHVIEW) SendText(GraphView_fmode, fm2);
-        if (CurrentView == Trim_View) {
+        if (CurrentView == TRIM_VIEW) {
             SendText(TrimView_FlightMode, fm2);
             UpdateTrimView();
         }
@@ -2326,7 +2278,7 @@ void UpdateModelsNameEveryWhere()
     if (FlightMode == 3) {
         if (CurrentView == STICKSVIEW) SendText(SticksView_t1, fm3);
         if (CurrentView == GRAPHVIEW) SendText(GraphView_fmode, fm3);
-        if (CurrentView == Trim_View) {
+        if (CurrentView == TRIM_VIEW) {
             SendText(TrimView_FlightMode, fm3);
             UpdateTrimView();
         }
@@ -2335,7 +2287,7 @@ void UpdateModelsNameEveryWhere()
     if (FlightMode == 4) {
         if (CurrentView == STICKSVIEW) SendText(SticksView_t1, fm4);
         if (CurrentView == GRAPHVIEW) SendText(GraphView_fmode, fm4);
-        if (CurrentView == Trim_View) {
+        if (CurrentView == TRIM_VIEW) {
             SendText(TrimView_FlightMode, fm4);
             UpdateTrimView();
         }
@@ -2533,7 +2485,7 @@ void UpdateButtonLabels()
         strcat(BoxOffsetLabel, ChannelNames[15]);
         SendText(SticksViewButton16, BoxOffsetLabel);
     }
-    if (CurrentView == Inputs_View || CurrentView == FailSafe_View) {
+    if (CurrentView == INPUTS_VIEW || CurrentView == FAILSAFE_VIEW) {
         SendText(fsch1, ChannelNames[0]);
         SendText(fsch2, ChannelNames[1]);
         SendText(fsch3, ChannelNames[2]);
@@ -2906,7 +2858,7 @@ void setup()
     LastDogKick = millis(); // needed? - yes!
 #endif
     delay (100);
-    if (!SD.begin(chipSelect)){    // heer - MUST return true or all is lost! (todo: create error page)
+    if (!SD.begin(chipSelect)){    // MUST return true or all is lost! (todo: create error page)
        delay (500);
        SD.begin(chipSelect);       // a second attempt for iffy sd cards ?!
     }                                
@@ -2949,7 +2901,6 @@ void setup()
     MySbus.begin();
     SetUKFrequencies(); 
     SetAudioVolume(AudioVolume);
-  //  strcpy (OpeningFanfare,"fanfare2");
     PlayWaveFile(OpeningFanfare);
 }
 /*********************************************************************************************************************************/
@@ -3184,40 +3135,105 @@ void SaveOneModel(int mnum)
 #endif // defined DB_NEXTION
     CloseModelsFile();
 }
+
 /*********************************************************************************************************************************/
-void ReadHelpFile(char* fname, char* htext)
+
+/** Bubble sort */
+void SortDirectory()
 {
-    char errormsg[] = "The Help file was not found.";
-    File fnumber;
-    int i  = 0;
-    char a[] = " ";
-    htext[0] = 0;
-    fnumber  = SD.open(fname, FILE_READ);
-    if (!fnumber) {Procrastinate(500); fnumber  = SD.open(fname, FILE_READ);}
-    if (!fnumber) {Procrastinate(500); fnumber  = SD.open(fname, FILE_READ);}  // try 3 times before giving up
-    if (fnumber) {
-        while (fnumber.available() && i < MAXFILELEN) {
-            a[0] = fnumber.read();
-            if (a[0] != 34) {
-                strcat(htext, a);
-                ++i;
+    int  f      = 0;
+    bool flag   = true;
+    int  Scount = 0;
+    char BoxOffset[18];
+    while (flag && Scount < 10000) {
+        flag = false;
+        for (f = 0; f < ExportedFileCounter - 1; f++) {
+            if (strcmp(TheFilesList[f], TheFilesList[f + 1]) > 0) {
+                strcpy(BoxOffset, TheFilesList[f]);
+                strcpy(TheFilesList[f], TheFilesList[f + 1]);
+                strcpy(TheFilesList[f + 1], BoxOffset);
+                flag = true;
+                Scount++;
             }
         }
     }
+}
+/*********************************************************************************************************************************/
+void BuildDirectory(){
+    char MOD[] = ".MOD";
+    char Entry1[20];
+    char fn[18];
+    int i = 0;
+    File dir  = SD.open("/");
+    ExportedFileCounter = 0;
+    while (true) {
+        File entry = dir.openNextFile();
+        if (!entry || ExportedFileCounter > 18) break;
+        strcpy(Entry1, entry.name());
+        if (InStrng(MOD, Entry1) > 0) {
+            strcpy(fn, entry.name());
+            for (i = 0; i < 12; ++i) {
+                TheFilesList[ExportedFileCounter][i] = fn[i];
+            }
+            ExportedFileCounter++;
+        }
+        entry.close();
+    }
+    SortDirectory();
+}
+/*********************************************************************************************************************************/
+void ReadHelpFile(char* fname, char* htext){
+    #define MaxWidth 60
+    char errormsg[] = "The Help file was not found.";
+    File fnumber;
+    int i  = 0;
+    byte Column = 0;
+    char crlf[] = {13,10,0};
+    char Sentance[] = ". ";
+    char a[] = " ";
+    htext[0] = 0;
+    char SearchFile[30];
+    char slash[] =  "/";
+    strcpy (SearchFile,slash);
+    strcat (SearchFile,fname);
+        fnumber  = SD.open(SearchFile, FILE_READ); 
+        if (!fnumber) {Procrastinate(500); fnumber  = SD.open(fname, FILE_READ);}
+        if (fnumber) {
+            while (fnumber.available() && i < MAXFILELEN) {
+                a[0] = fnumber.read();
+                 if (a[0] == '.') { // add a space after a full stop.
+                     strcat(htext, Sentance);
+                     Column += 2;
+                     a[0] = 34;
+                 }
+                if ((Column > MaxWidth) && (a[0] == 32)){   // Don't go too wide
+                        strcat(htext, crlf);
+                        a[0] = 34;
+                        Column = 0;
+                } 
+                if ((a[0] == 13) || (a[0] == 10)) a[0] = 34; // ignore CrLfs
+                if (a[0] != 34) {
+                     strcat(htext, a);
+                     ++ Column;
+                    ++i;
+                 }
+            }
+        }
     else {
         strcpy(htext, errormsg);
     }
     fnumber.close();
 }
-
 /*********************************************************************************************************************************/
 void SendHelp()
 {
-    char HelpView[] = "HelpView.HelpText";
+    char HelpView[] = "HelpText";
     char HelpFile[20];
     char HelpText[MAXFILELEN + 10]; // MAX = 1200
     int i = 9;
     int j = 0;
+    char nf[]= "Searching for file ...";
+    SendText1(HelpView, nf);
     while (TextIn[i] != 0 && j < 19) {
         HelpFile[j] = TextIn[i];
         ++i;
@@ -3247,7 +3263,7 @@ void UpdateSwitchesDisplay()
     char SwitchesView_sw3[] = "sw3";
     char SwitchesView_sw4[] = "sw4";
     char NotUsed[]          = "Not used";
-    char FlightModes123[]   = "Flight modes 1 2 3";
+    char FlightModes123[]   = "Banks 1 2 3";
     char Auto[]             = "Auto (FM 4)";
     char Channel_9[]        = "Channel 9";
     char Channel_10[]       = "Channel 10";
@@ -3308,55 +3324,6 @@ void DoNewChannelName(int ch, int k)
         ChannelNames[ch - 1][j] = 0;
     }
     SaveOneModel(ModelNumber);
-}
-
-/*********************************************************************************************************************************/
-
-/** Bubble sort */
-void SortDirectory()
-{
-    int  f      = 0;
-    bool flag   = true;
-    int  Scount = 0;
-    char BoxOffset[18];
-    while (flag && Scount < 10000) {
-        flag = false;
-        for (f = 0; f < ExportedFileCounter - 1; f++) {
-            if (strcmp(TheFilesList[f], TheFilesList[f + 1]) > 0) {
-                strcpy(BoxOffset, TheFilesList[f]);
-                strcpy(TheFilesList[f], TheFilesList[f + 1]);
-                strcpy(TheFilesList[f + 1], BoxOffset);
-                flag = true;
-                Scount++;
-            }
-        }
-    }
-}
-
-/*********************************************************************************************************************************/
-
-void BuildDirectory()
-{
-    char MOD[] = ".MOD";
-    char Entry1[20];
-    char fn[18];
-    int i = 0;
-    File dir  = SD.open("/");
-    ExportedFileCounter = 0;
-    while (true) {
-        File entry = dir.openNextFile();
-        if (!entry || ExportedFileCounter > 18) break;
-        strcpy(Entry1, entry.name());
-        if (InStrng(MOD, Entry1) > 0) {
-            strcpy(fn, entry.name());
-            for (i = 0; i < 12; ++i) {
-                TheFilesList[ExportedFileCounter][i] = fn[i];
-            }
-            ExportedFileCounter++;
-        }
-        entry.close();
-    }
-    SortDirectory();
 }
 
 /*********************************************************************************************************************************/
@@ -3839,7 +3806,7 @@ void DisplayCurve()
     }
 
     if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == 2) { //EXPO  ************************************************************************************************
-#define APPROXIMATION 8                                          // This is for the approximation of the screen curve
+#define APPROXIMATION 5                                         // This is for the approximation of the screen curve
 
         SendCommand(b3off);
         SendCommand(b4off);
@@ -4346,7 +4313,7 @@ void ZeroDataScreen(){             // ZERO Those parameters that are zeroable
  * BUTTON WAS PRESSED (DEAL WITH INPUT FROM NEXTION DISPLAY)
  *
  */
-void Button_was_pressed()
+void ButtonWasPressed()
 {
     int i;
     char OneSwitchView_r1[]        = "r1";     // Flight modes
@@ -4429,7 +4396,6 @@ void Button_was_pressed()
     char Cmsg4[]                   = "CENTRE ALL!";
     char Cmsg5[]                   = "To calibrate TX sticks,\r\npress the button below\r\nthen follow instructions here... ";
     char Cmsg6[]                   = "Calibrate TX sticks";
-    char CaliNEXTION[]             = "CaliNEXTION";
     char TypeView[]                = "TypeView";
     char CopyToAllFlightModes[]    = "callfm";
     char RXBAT[]                   = "RXBAT";
@@ -4592,7 +4558,7 @@ void Button_was_pressed()
 #endif
 
 
-        if (InStrng(AudioView, TextIn) > 0) { 
+        if (InStrng(AudioView, TextIn) > 0) {  // Display screen with audio options
             ClearText();
             CurrentMode = NORMAL;
             CurrentView = AUDIOVIEW;
@@ -4600,20 +4566,22 @@ void Button_was_pressed()
             SendValue(n0,AudioVolume);
             SendValue(Ex1,AudioVolume);
             SendText (cb0,OpeningFanfare);
+            SetAudioVolume(AudioVolume);
             return;
         }
-        if (InStrng(SetupAud, TextIn) > 0) { 
+        if (InStrng(SetupAud, TextIn) > 0) {  // Exit from screen with audio options
             CurrentMode = NORMAL;
             CurrentView = MAINSETUPVIEW;
             AudioVolume = GetValue(n0);
-            GetText (cb0,OpeningFanfare); // heer
+            SetAudioVolume(AudioVolume);
+            GetText (cb0,OpeningFanfare);
             SendCommand(page_SetupView);
             ClearText();
             SaveTXStuff();
             return;
         }
 
-        if (InStrng(SetupView, TextIn) > 0) { // default goto setup screen
+        if (InStrng(SetupView, TextIn) > 0) { //  goto main setup screen
             ClearText();
             SaveAllParameters();
             SendCommand(page_SetupView);
@@ -4623,12 +4591,12 @@ void Button_was_pressed()
             ClearText();
             return;
         }
-        if (InStrng(Md1, TextIn) > 0) {           
+        if (InStrng(Md1, TextIn) > 0) {           // Mode 1 for trims
             SticksMode = 1;
             ClearText();
             return;
         }  
-        if (InStrng(Md2, TextIn) > 0) {           
+        if (InStrng(Md2, TextIn) > 0) {           // Mode 2 for trims
             SticksMode = 2;
             ClearText();
             return;
@@ -4659,7 +4627,7 @@ void Button_was_pressed()
         ClearText();
         return;
         }
-        if (InStrng(OptionsEnd, TextIn) > 0) { // Options screen end
+        if (InStrng(OptionsEnd, TextIn) > 0) { // Exit from Options screen
             SendCommand(ProgressStart);
             i = strlen(OptionsEnd);
             j = 0;
@@ -4700,19 +4668,19 @@ void Button_was_pressed()
             return;
         }
 
-        if (InStrng(DataEnd, TextIn) > 0) { //  goto setup screen from Data screen
+        if (InStrng(DataEnd, TextIn) > 0) { //  Exit from Data screen
             CurrentView = MAINSETUPVIEW;
             b5isGrey = false;
             ClearText();
             CurrentMode = NORMAL;
             return;
         }
-        if (InStrng(DataView_Clear, TextIn) > 0) { 
+        if (InStrng(DataView_Clear, TextIn) > 0) { //  Clear Data screen
             ZeroDataScreen();
             ClearText();
             return;
         }
-         if (InStrng(DataView_AltZero, TextIn) > 0) { //  goto setup screen from Data screen 
+         if (InStrng(DataView_AltZero, TextIn) > 0) { //  Set zero altitude on data screen
             if (!GroundModelAltitude) {
                 GroundModelAltitude = RXModelAltitude;}
             else {
@@ -4726,7 +4694,7 @@ void Button_was_pressed()
             ClearText();
             return;
         }
-        if (InStrng(GoFrontView, TextIn) > 0) {
+        if (InStrng(GoFrontView, TextIn) > 0) { // GOTO frontview
             CurrentView = FRONTVIEW;
             SendCommand(page_FrontView);
             UpdateModelsNameEveryWhere();
@@ -4747,9 +4715,9 @@ void Button_was_pressed()
             return;
         }
 
-        if (InStrng(HelpView, TextIn) > 0) {
+        if (InStrng(HelpView, TextIn) > 0) { // Display Help screen(s)
             SavedCurrentView = CurrentView;
-            CurrentView      = Help_View;
+            CurrentView      = HELP_VIEW;
             SendHelp();
             ClearText();
             return;
@@ -4821,7 +4789,7 @@ void Button_was_pressed()
             SendValue(dGMT,DeltaGMT);
             SendValue(trf,TrimFactor); 
             SendValue(Bwn,LowBattery);
-            CurrentView = Options_View;
+            CurrentView = OPTIONS_VIEW;
             CurrentMode = NORMAL;
             ClearText();
             return;
@@ -4834,18 +4802,23 @@ void Button_was_pressed()
                 WhichPage[i] = 0;
             } // Get page name to which to return
             SendCommand(WhichPage);
-            CurrentView = SavedCurrentView;
+            CurrentView = SavedCurrentView; 
+            if (CurrentView == FILESVIEW) { 
+                 ShowDirectory();    
+                 ClearText();
+                 return;
+            }
             if (CurrentView == GRAPHVIEW) {
                 DisplayCurve();
                 SendValue(CopyToAllFlightModes, 0);
             }
-            if (CurrentView == Switches_View) {
+            if (CurrentView == SWITCHES_VIEW) {
                 UpdateSwitchesDisplay();
             }
-            if (CurrentView == One_Switch_View) {
+            if (CurrentView == ONE_SWITCH_VIEW) {
                 updateOneSwitchView();
             }
-            if (CurrentView == ModelsView) {
+            if (CurrentView == MODELSVIEW) {
                 SendValue(ModelsView_ModelNumber, ModelNumber);
             }
             UpdateModelsNameEveryWhere();
@@ -4961,7 +4934,7 @@ void Button_was_pressed()
             SendValue(fs14, FailSafeChannel[13]);
             SendValue(fs15, FailSafeChannel[14]);
             SendValue(fs16, FailSafeChannel[15]);
-            CurrentView = FailSafe_View;
+            CurrentView = FAILSAFE_VIEW;
             UpdateButtonLabels();
             ClearText();
             return;
@@ -4969,7 +4942,7 @@ void Button_was_pressed()
 
         if (InStrng(OneSwitchView, TextIn) > 0) {
             SwitchEditNumber = GetChannel(); // which switch?
-            CurrentView      = One_Switch_View;
+            CurrentView      = ONE_SWITCH_VIEW;
             SendCommand(PageOneSwitchView); // edit one switch - could be 1-4
             updateOneSwitchView();
             ClearText();
@@ -5054,7 +5027,7 @@ void Button_was_pressed()
         }
         if (InStrng(InputsView, TextIn) > 0) {
             SendCommand(pInputsView);
-            CurrentView = Inputs_View;
+            CurrentView = INPUTS_VIEW;
             UpdateButtonLabels();
             ClearText();
             return;
@@ -5228,7 +5201,7 @@ void Button_was_pressed()
             }
             SD.remove(SingleModelFile);
             BuildDirectory();
-            FileNumberInView--;
+            -- FileNumberInView;
             ShowFileNumber();
             CloseModelsFile();
             ClearText();
@@ -5254,7 +5227,7 @@ void Button_was_pressed()
         if (InStrng(SwitchesView, TextIn)) {
             SendCommand(pSwitchesView);
             UpdateSwitchesDisplay(); // display saved values
-            CurrentView = Switches_View;
+            CurrentView = SWITCHES_VIEW;
             ClearText();
             return;
         }
@@ -5314,12 +5287,10 @@ void Button_was_pressed()
             else {
                 FileError = true;
             }
-
             if (FileError) ShowFileErrorMsg();
             ClearText();
             return;
         }
-
         p = InStrng(Import, TextIn);
         if (p > 0) {
             SendCommand(ProgressStart);
@@ -5359,20 +5330,13 @@ void Button_was_pressed()
             ClearText();
             return;
         }
-
-        if (InStrng(ListFiles, TextIn) > 0) {
-            ShowDirectory(); //
+        if (InStrng(ListFiles, TextIn) > 0) {  
+            CurrentView = FILESVIEW;
+            SavedCurrentView = FILESVIEW;
+            ShowDirectory();      
             ClearText();
             return;
         }
-
-        if (InStrng(CaliNEXTION, TextIn) > 0) {
-          //  SendCommand(page_FrontView);  // not working yet
-          //  CurrentView = FRONTVIEW;
-            ClearText();
-            return;
-        }
-
         if (InStrng(SetupViewFM, TextIn) > 0) { // New model name occurs at offset 12 in TextIn
             i = 0;
             while (TextIn[i + 12] > 0) {
@@ -5416,7 +5380,7 @@ void Button_was_pressed()
         }
 
          if (InStrng(ColoursView, TextIn) > 0) {  
-            CurrentView = Colours_View;
+            CurrentView = COLOURS_VIEW;
             SendCommand(page_ColoursView);
             SendCommand(StartBackGround);      
             ClearText();
@@ -5469,8 +5433,8 @@ void Button_was_pressed()
 
         if (InStrng(TrimView, TextIn) > 0) { // TrimView just appeared, so update it. 
             SendCommand(pTrimView);
-            CurrentView = Trim_View;
-            UpdateModelsNameEveryWhere(); // also updates trimview (If CurrentView == Trim_View!! :-)
+            CurrentView = TRIM_VIEW;
+            UpdateModelsNameEveryWhere(); // also updates trimview (If CurrentView == TRIM_VIEW!! :-)
             if (!UkRules){
                 SendText(b17,Htext0);
             }else{
@@ -5529,10 +5493,10 @@ void Button_was_pressed()
             ClearText(); 
             return;
         }
-        if (InStrng(Models_View, TextIn) > 0) {
+        if (InStrng(Models_View, TextIn) > 0) { 
             SendCommand(pModelsView);
             ReadOneModel(ModelNumber);
-            CurrentView = ModelsView;
+            CurrentView = MODELSVIEW;
             UpdateModelsNameEveryWhere();
             SendValue(ModelsView_ModelNumber, ModelNumber);
             BuildDirectory(); // of SD card
@@ -5631,6 +5595,7 @@ void Button_was_pressed()
                     DrawFhssBox();
                     DoScanInit();
                     CurrentMode = SCANWAVEBAND;
+                    CurrentView = SCANVIEW;
                     BlueLedOn();        
                 }
             ClearText();
@@ -5648,7 +5613,7 @@ void Button_was_pressed()
         p = (InStrng(MIXES_VIEW, TextIn)); //
         if (p > 0) {
             SendCommand(pMixesView);
-            CurrentView = MixesView;
+            CurrentView = MIXESVIEW;
             UpdateModelsNameEveryWhere();
             if (MixNumber == 0) MixNumber = 1;
             LastMixNumber = 33;                        // just to be differernt
@@ -5659,7 +5624,7 @@ void Button_was_pressed()
 
         p = (InStrng(Mixes_View, TextIn)); // Get New Mixes!
         if (p > 0) {
-            CurrentView = MixesView;
+            CurrentView = MIXESVIEW;
             UpdateModelsNameEveryWhere();
             MixNumber = GetValue(MixesView_MixNumber);
             if (LastMixNumber != MixNumber) { // Did it change?
@@ -5690,7 +5655,7 @@ void Button_was_pressed()
         if (InStrng(Data_View, TextIn))
         {
             CurrentMode  = NORMAL;
-            CurrentView  = DataView;
+            CurrentView  = DATAVIEW;
             LastShowTime = 0;
             SendCommand(pDataView);
             ClearText();
@@ -5895,7 +5860,7 @@ void Button_was_pressed()
         }
     }
     ClearText(); // Let's have cleared text for next one!
-} // end Button_was_pressed()
+} // end ButtonWasPressed()
 
 /************************************************************************************************************/
 
@@ -6236,7 +6201,7 @@ void CheckGapsLength()
 void CheckModelName(){                        // In ModelsView, this function checks correct name is displayed.
 char ModelsView_ModelNumber[]  = "ModelNumber";    
     if (!InhibitNameCheck){               // if name is being edited, do not check it.
-        ModelNumber = GetValue(ModelsView_ModelNumber);
+        ModelNumber = GetValue(ModelsView_ModelNumber);    
         if (LastModelLoaded != ModelNumber) {
             if (ModelNumber >= 1) {      // Don't use number zero
                  ReadOneModel(ModelNumber);
@@ -6244,6 +6209,7 @@ char ModelsView_ModelNumber[]  = "ModelNumber";
                  UpdateModelsNameEveryWhere();  
             }
         }
+    ClearText(); 
     }
 }
 /************************************************************************************************************/
@@ -6264,17 +6230,17 @@ void loop()
 {
     KickTheDog();                    // Watchdog
     if (GetButtonPress()) {
-        Button_was_pressed();        // Deal with button
+        ButtonWasPressed();        // Deal with button
     }
 
-    if ((millis()-ModelNameTimeCheck) > 500) {  
+    if ((millis()-ModelNameTimeCheck) > 300) {  
         ModelNameTimeCheck  = millis();
 
         if (CurrentView == MAINSETUPVIEW){ 
             CheckScanButton();           
         }
-        if (CurrentView == ModelsView){ 
-            CheckModelName();            // In ModelsView, this function checks correct name is displayed.
+        if (CurrentView == MODELSVIEW){ 
+            CheckModelName();            // In MODELSVIEW, this function checks correct name is displayed.
         }
     }
     if (millis() - LastTimeRead >= 1000) {

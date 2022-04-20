@@ -14,8 +14,8 @@
     #include "utilities/radio.h"
     
     #define RXVERSION_MAJOR             1
-    #define RXVERSION_MINOR             6
-    #define RXVERSION_MINIMUS           7    // April 3rd 2022
+    #define RXVERSION_MINOR             7
+    #define RXVERSION_MINIMUS           0    // April 18th 2022
 
 //**************************************************************************************************************************
     #define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< **
