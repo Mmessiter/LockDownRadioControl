@@ -3263,7 +3263,7 @@ void UpdateSwitchesDisplay()
     char SwitchesView_sw3[] = "sw3";
     char SwitchesView_sw4[] = "sw4";
     char NotUsed[]          = "Not used";
-    char FlightModes123[]   = "Flight modes 1 2 3";
+    char FlightModes123[]   = "Banks 1 2 3";
     char Auto[]             = "Auto (FM 4)";
     char Channel_9[]        = "Channel 9";
     char Channel_10[]       = "Channel 10";
@@ -3806,7 +3806,7 @@ void DisplayCurve()
     }
 
     if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == 2) { //EXPO  ************************************************************************************************
-#define APPROXIMATION 8                                          // This is for the approximation of the screen curve
+#define APPROXIMATION 5                                         // This is for the approximation of the screen curve
 
         SendCommand(b3off);
         SendCommand(b4off);
@@ -6233,7 +6233,7 @@ void loop()
         ButtonWasPressed();        // Deal with button
     }
 
-    if ((millis()-ModelNameTimeCheck) > 500) {  
+    if ((millis()-ModelNameTimeCheck) > 300) {  
         ModelNameTimeCheck  = millis();
 
         if (CurrentView == MAINSETUPVIEW){ 
