@@ -3201,7 +3201,12 @@ void ReadHelpFile(char* fname, char* htext){
         if (fnumber) {
             while (fnumber.available() && i < MAXFILELEN) {
                 a[0] = fnumber.read();
-                 if (a[0] == '.') { // add a space after a full stop.
+                 if (a[0] == '|') {              //  New Line character = '|'   
+                     strcat(htext, crlf);
+                     Column = 0;
+                     a[0] = 34;
+                 }
+                 if (a[0] == '.') {             // add a space after a full stop.
                      strcat(htext, Sentance);
                      Column += 2;
                      a[0] = 34;
@@ -4868,6 +4873,8 @@ void ButtonWasPressed()
         }
 
         if (InStrng(OffNow, TextIn) > 0) {
+            PlayWaveFile(OpeningFanfare); // heer
+            delay(3500);
             digitalWrite(POWER_OFF_PIN, HIGH); // force OFF in Options View
             ClearText();
             return;
