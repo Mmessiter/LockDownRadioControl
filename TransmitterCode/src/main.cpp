@@ -3233,12 +3233,12 @@ void ReadHelpFile(char* fname, char* htext){
 void SendHelp()
 {
     char HelpView[] = "HelpText";
+    char hcmd[] = "page HelpView";
     char HelpFile[20];
     char HelpText[MAXFILELEN + 10]; // MAX = 1200
     int i = 9;
     int j = 0;
-    char nf[]= "Searching for file ...";
-    SendText1(HelpView, nf);
+    SendCommand(hcmd); 
     while (TextIn[i] != 0 && j < 19) {
         HelpFile[j] = TextIn[i];
         ++i;
