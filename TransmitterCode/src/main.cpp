@@ -4424,6 +4424,7 @@ void ButtonWasPressed()
     char Export[]                  = "Export";
     char Import[]                  = "Import";
     char ListFiles[]               = "ListFiles";
+    char PageFilesView[]           = "page FilesView";
     char Nextfile[]                = "Nextfile";
     char Prevfile[]                = "Prevfile";
     char DelFile[]                 = "DelFile";
@@ -5327,6 +5328,7 @@ void ButtonWasPressed()
             return;
         }
         if (InStrng(ListFiles, TextIn) > 0) {  
+            SendCommand(PageFilesView);
             CurrentView = FILESVIEW;
             SavedCurrentView = FILESVIEW;
             ShowDirectory();      
