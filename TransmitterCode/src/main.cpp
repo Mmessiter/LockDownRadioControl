@@ -1287,12 +1287,13 @@ int GetOtherValue(char* nbox)  // don't add .val as other thingy is already ther
 /*********************************************************************************************************************************/
 bool GetButtonPress()
 {
-    bool ButtonPressed = false;
+    
     char a;
     int i = 0;
+    delayMicroseconds(20);                // 20 seems best so far value here
+    bool ButtonPressed = false;
     if (NEXTION.available()) {
         ButtonPressed = true;
-        Procrastinate(10);
         while (NEXTION.available()) {
             a = char(NEXTION.read());
             if (a > 31 && a < 128) {
@@ -1300,7 +1301,8 @@ bool GetButtonPress()
                 if (TextIn[i] == '$') TextIn[i] = 0; 
                 TextIn[i + 1] = char(0);
             }
-            if (i < CharsMax) ++i;
+            if (i < CharsMax) ++i; 
+            delayMicroseconds(20);      // 20 seems best so far value here
         }
     }
     return ButtonPressed;
@@ -4548,7 +4550,7 @@ void ButtonWasPressed()
     if (strlen(TextIn) > 0) {
         StartInactvityTimeout();
 #ifdef DB_NEXTION
-        Serial.print("From NEXTION: ");
+        Serial.print("From NEXTION -> ");
         Serial.println(TextIn);
 #endif
 
@@ -5288,7 +5290,7 @@ void ButtonWasPressed()
             ClearText();
             return;
         }
-        p = InStrng(Import, TextIn);
+        p = InStrng(Import, TextIn); // HEER
         if (p > 0) {
             SendCommand(ProgressStart);
             Procrastinate(10);
@@ -5516,7 +5518,7 @@ void ButtonWasPressed()
 
         }
 
-        if (InStrng(Delete, TextIn) > 0) {
+        if (InStrng(Delete, TextIn) > 0) { // HEER
             ModelNumber = GetValue(ModelsView_ModelNumber);
             SetDefaultValues();
             SaveOneModel(ModelNumber);
