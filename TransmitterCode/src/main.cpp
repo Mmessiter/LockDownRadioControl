@@ -5343,7 +5343,6 @@ void ButtonWasPressed()
                 ++i;
             } // copy new name
             SaveOneModel(ModelNumber);
-            ClearText();
             SendCommand(page_SetupView);
             CurrentMode = NORMAL; // Send data again
             CurrentView = MAINSETUPVIEW;
