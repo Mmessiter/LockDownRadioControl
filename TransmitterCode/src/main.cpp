@@ -4863,8 +4863,8 @@ void ButtonWasPressed()
         }
 
         if (InStrng(OffNow, TextIn) > 0) {
-            PlayWaveFile(OpeningFanfare); // heer
-            delay(3500);
+           // PlayWaveFile(OpeningFanfare); // heer
+           // delay(3500);
             digitalWrite(POWER_OFF_PIN, HIGH); // force OFF in Options View
             ClearText();
             return;
