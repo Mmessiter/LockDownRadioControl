@@ -1286,8 +1286,7 @@ int GetOtherValue(char* nbox)  // don't add .val as other thingy is already ther
 }
 /*********************************************************************************************************************************/
 bool GetButtonPress()
-{
-    
+{ 
     char a;
     int i = 0;
     delayMicroseconds(20);                // 20 seems best so far value here
