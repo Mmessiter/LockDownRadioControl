@@ -4554,6 +4554,32 @@ void ButtonWasPressed()
 #endif
 
 
+        if (InStrng(Nextfile, TextIn)) { // show next file  
+            FileNumberInView++;
+            ShowFileNumber();
+            CloseModelsFile();
+            ClearText();
+            return;
+        }
+
+        if (InStrng(Prevfile, TextIn)) { // show prev file
+            FileNumberInView--;
+            ShowFileNumber();
+            CloseModelsFile();
+            ClearText();
+            return;
+        }
+
+
+        if (InStrng(Delete, TextIn) > 0) { // HEER
+            ModelNumber = GetValue(ModelsView_ModelNumber);
+            SetDefaultValues();
+            SaveOneModel(ModelNumber);
+            ClearText();
+            return;
+        }
+
+
         if (InStrng(AudioView, TextIn) > 0) {  // Display screen with audio options
             ClearText();
             CurrentMode = NORMAL;
@@ -5206,21 +5232,6 @@ void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(Nextfile, TextIn)) { // show next file
-            FileNumberInView++;
-            ShowFileNumber();
-            CloseModelsFile();
-            ClearText();
-            return;
-        }
-
-        if (InStrng(Prevfile, TextIn)) { // show prev file
-            FileNumberInView--;
-            ShowFileNumber();
-            CloseModelsFile();
-            ClearText();
-            return;
-        }
 
         if (InStrng(SwitchesView, TextIn)) {
             SendCommand(pSwitchesView);
@@ -5515,14 +5526,6 @@ void ButtonWasPressed()
             ClearText(); 
             return;
 
-        }
-
-        if (InStrng(Delete, TextIn) > 0) { // HEER
-            ModelNumber = GetValue(ModelsView_ModelNumber);
-            SetDefaultValues();
-            SaveOneModel(ModelNumber);
-            ClearText();
-            return;
         }
 
         if (InStrng(Write, TextIn) > 0) { //  write new data to SD
