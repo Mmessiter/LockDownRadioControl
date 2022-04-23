@@ -243,8 +243,8 @@ uint8_t       GPSMarkHere      = 0;
 bool          SaveNothing      = true;  // flag failure to read sd card. if happens, don't write either.
 uint8_t       PreviousTrim     = 255;   
 uint32_t      TrimTimer        = 0;  
-uint16_t      TrimRepeatSpeed  = 330;   
-uint16_t      DefaultTrimRepeatSpeed  = 330;   
+uint16_t      TrimRepeatSpeed  = 300;   
+uint16_t      DefaultTrimRepeatSpeed  = 300;   
 
 // ************************************* AckPayload structure ******************************************************
 /**
@@ -1308,7 +1308,8 @@ bool GetButtonPress()
             delayMicroseconds(20);      // 20 seems best so far value here
         }
     }
-    return ButtonPressed;
+   if(!(strlen(TextIn))) ButtonPressed = false;
+   return ButtonPressed;
 }
 /*********************************************************************************************************************************/
 void SendValue1(char* nbox, int value)
@@ -6018,21 +6019,47 @@ void GetFlightMode()
 // *************************************************************************************************************
 
 void IncTrim(uint8_t t){
+        char Complete[] = "Complete";
+        char BeepMiddle[] = "BeepMiddle";
         Trims[FlightMode][t] += 1;
-        if (Trims[FlightMode][t] > 120) Trims[FlightMode][t] = 120;
-        if (Trims[FlightMode][t] == 80)  TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed at centre
+        if (Trims[FlightMode][t] > 120) {
+            Trims[FlightMode][t] = 120;
+            if (CurrentView == TRIM_VIEW) UpdateTrimView();
+            PlayWaveFile(Complete);
+            Procrastinate(600);
+        }
+        if (Trims[FlightMode][t] == 80)  {
+            TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed at centre
+            if (CurrentView == TRIM_VIEW) UpdateTrimView();
+            PlayWaveFile(BeepMiddle);
+            Procrastinate(300);
+        }
 }
 // *************************************************************************************************************
 
 void DecTrim(uint8_t t){
+        char Complete[] = "Complete";
+        char BeepMiddle[] = "BeepMiddle";
          Trims[FlightMode][t] -= 1;
-         if (Trims[FlightMode][t] < 40) Trims[FlightMode][t] = 40;
-         if (Trims[FlightMode][t] == 80)  TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed at centre
+         if (Trims[FlightMode][t] < 40) {
+             Trims[FlightMode][t] = 40;
+            if (CurrentView == TRIM_VIEW) UpdateTrimView();
+             PlayWaveFile(Complete);
+             Procrastinate(700);
+
+         }
+         if (Trims[FlightMode][t] == 80)  {
+             TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed at centre
+             if (CurrentView == TRIM_VIEW) UpdateTrimView();
+             PlayWaveFile(BeepMiddle);
+             Procrastinate(700);
+         }
 }
 
 // *************************************************************************************************************
 
 void  MoveaTrim(uint8_t i){
+   
     uint8_t Elevator = 1; 
     uint8_t Throttle = 2; 
     if (SticksMode == 2) {
@@ -6077,8 +6104,8 @@ void CheckHardwareTrims(){
     for (i = 0; i < 8; ++i) if (TrimSwitch[i]) break;
     if (i < 8) {
         MoveaTrim(i);
-        TrimRepeatSpeed -= (TrimRepeatSpeed/10);
-        if (TrimRepeatSpeed < 50) TrimRepeatSpeed = 50;
+        TrimRepeatSpeed -= (TrimRepeatSpeed/6);
+        if (TrimRepeatSpeed < 20) TrimRepeatSpeed = 20;
     }
 }
 /************************************************************************************************************/

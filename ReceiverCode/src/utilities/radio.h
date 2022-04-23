@@ -280,6 +280,9 @@ void Reconnect(){                                                               
         CurrentRadio->stopListening();
         delay(1);                                                                  // NEEDED!
         ReconnectChannel = * (FHSSChPointer + ReconnectIndex);                     // Get a reconnect channel 
+
+       //Serial.println(ReconnectChannel);
+
         ++ ReconnectIndex;
         if (ReconnectIndex >= RECONNECT_CHANNELS_COUNT + RECONNECT_CHANNELS_START) ReconnectIndex = RECONNECT_CHANNELS_START;
         CurrentRadio->setChannel(ReconnectChannel);  
