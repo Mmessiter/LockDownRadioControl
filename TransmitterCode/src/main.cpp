@@ -1210,7 +1210,7 @@ void SendOtherValue(char* nbox, int value)
 void GetTextIn()
 {
     int j = 0;
-    ClearText();
+   // ClearText();
     if (NEXTION.available()) {
         Procrastinate(10);
         while (NEXTION.available()) {
