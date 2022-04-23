@@ -6101,11 +6101,12 @@ void CheckHardwareTrims(){
     int i;
     if ((millis() - TrimTimer) < TrimRepeatSpeed) return;
     TrimTimer = millis();
-    for (i = 0; i < 8; ++i) if (TrimSwitch[i]) break;
-    if (i < 8) {
-        MoveaTrim(i);
-        TrimRepeatSpeed -= (TrimRepeatSpeed/6);
-        if (TrimRepeatSpeed < 20) TrimRepeatSpeed = 20;
+    for (i = 0; i < 8; ++i) {
+        if (TrimSwitch[i]) {
+            MoveaTrim(i);
+            TrimRepeatSpeed -= (TrimRepeatSpeed/6);
+            if (TrimRepeatSpeed < 20) TrimRepeatSpeed = 20;
+        }
     }
 }
 /************************************************************************************************************/
@@ -6122,9 +6123,8 @@ void ReadSwitches()  // and indeed read digital trims if these are fitted
             PreviousTrim = i;                             // remember which trim it was  
         }
     }
-    if (flag > 1 ){                                       // one at a time please!!
-        for (int i = 0; i < 8; ++i) TrimSwitch[i] = 0;
-        flag = 0;
+    if (flag > 1 ){                                      
+        TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed
     }
 
     if (!flag) { 
