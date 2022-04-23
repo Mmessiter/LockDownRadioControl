@@ -1210,8 +1210,8 @@ void SendOtherValue(char* nbox, int value)
 void GetTextIn()
 {
     int j = 0;
+    delayMicroseconds(20);
     if (NEXTION.available()) {
-        delayMicroseconds(20);
         while (NEXTION.available()) {
             TextIn[j] = uint8_t(NEXTION.read());
             if (TextIn[j] == '$') TextIn[j] = 0; 
