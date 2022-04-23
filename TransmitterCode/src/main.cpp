@@ -241,6 +241,8 @@ unsigned int  LostPackets      = 0;
 uint8_t       PacketNumber     = 0;
 uint8_t       GPSMarkHere      = 0;
 bool          SaveNothing      = true;  // flag failure to read sd card. if happens, don't write either.
+uint8_t       PreviousTrim     = 255;   
+uint32_t      TrimTimer        = 0;    
 
 // ************************************* AckPayload structure ******************************************************
 /**
@@ -4571,7 +4573,7 @@ void ButtonWasPressed()
         }
 
 
-        if (InStrng(Delete, TextIn) > 0) { // HEER
+        if (InStrng(Delete, TextIn) > 0) { 
             ModelNumber = GetValue(ModelsView_ModelNumber);
             SetDefaultValues();
             SaveOneModel(ModelNumber);
@@ -4890,8 +4892,6 @@ void ButtonWasPressed()
         }
 
         if (InStrng(OffNow, TextIn) > 0) {
-           // PlayWaveFile(OpeningFanfare); // heer
-           // delay(3500);
             digitalWrite(POWER_OFF_PIN, HIGH); // force OFF in Options View
             ClearText();
             return;
@@ -5300,7 +5300,7 @@ void ButtonWasPressed()
             ClearText();
             return;
         }
-        p = InStrng(Import, TextIn); // HEER
+        p = InStrng(Import, TextIn); 
         if (p > 0) {
             SendCommand(ProgressStart);
             Procrastinate(10);
@@ -6014,18 +6014,28 @@ void GetFlightMode()
 }
 
 /************************************************************************************************************/
-void CheckHardwareTrims(){  // TODO when new PCBs arrive!! // heer
-
-
+void CheckHardwareTrims(){  
+    int i;
+    if ((millis() - TrimTimer) < 200) return;
+    TrimTimer = millis();
+    for (i = 0; i < 8; ++i) if (TrimSwitch[i]) break;
+    if (i < 8) Serial.println(i); // TODO: inc trim heer 
 }
 /************************************************************************************************************/
 
-void ReadSwitches()
+void ReadSwitches()  // and indeed read digital trims if these are fitted
 {
+    bool flag = false;
     for (int i = 0; i < 8; ++i) {
         Switch[i]     = !digitalRead(SwitchNumber[i]);
-        TrimSwitch[i] = !digitalRead(TrimNumber[i]);
+        TrimSwitch[i] = !digitalRead(TrimNumber[i]); 
+        if (TrimSwitch[i])  flag = true;                  // a finger is on a trim lever...   
+        if ((TrimSwitch[i]) &&  (PreviousTrim != i)) {    // is it a new one?
+            TrimTimer    = 0;                             // it IS a new one, so no delay please.  
+            PreviousTrim = i;                             // remember which trim it was  
+        }
     }
+    if (!flag) PreviousTrim = 254;                        // Previous trim must now match none
     GetFlightMode();
     CheckHardwareTrims();
 }
