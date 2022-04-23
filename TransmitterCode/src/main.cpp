@@ -242,7 +242,9 @@ uint8_t       PacketNumber     = 0;
 uint8_t       GPSMarkHere      = 0;
 bool          SaveNothing      = true;  // flag failure to read sd card. if happens, don't write either.
 uint8_t       PreviousTrim     = 255;   
-uint32_t      TrimTimer        = 0;    
+uint32_t      TrimTimer        = 0;  
+uint16_t      TrimRepeatSpeed  = 330;   
+uint16_t      DefaultTrimRepeatSpeed  = 330;   
 
 // ************************************* AckPayload structure ******************************************************
 /**
@@ -2877,7 +2879,7 @@ void setup()
     SendValue(FrontView_Mins, 0);
     SendValue(FrontView_Secs, 0);
     //  ***************************************************************************************
-    // SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
+    //  SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
     //  **   BUT then re-comment it!! Otherwise it will reset to same time on every boot up! **
     //  ***************************************************************************************
     RecoveryTimer = millis();
@@ -6013,29 +6015,133 @@ void GetFlightMode()
     PreviousFlightMode = FlightMode;
 }
 
+
+/*
+          if (InStrng(TR1, TextIn) > 0) { //  TR1->0
+            Trims[FlightMode][0] = TextIn[3];
+            ClearText(); 
+            return;
+        }
+        if (InStrng(TR4, TextIn) > 0) { // TR4 ->1
+            if (SticksMode == 1)  Trims[FlightMode][1] = TextIn[3];
+            if (SticksMode == 2)  Trims[FlightMode][2] = TextIn[3];
+            ClearText(); 
+            return;
+        }
+        if (InStrng(TR2, TextIn) > 0) { // TR2 ->2
+            if (SticksMode == 1)  Trims[FlightMode][2] = TextIn[3];
+            if (SticksMode == 2)  Trims[FlightMode][1] = TextIn[3];
+            ClearText(); 
+            return;
+        }
+        if (InStrng(TR3, TextIn) > 0) { // TR3 ->3
+            Trims[FlightMode][3] = TextIn[3];
+            ClearText(); 
+            return;
+*/
+void  MoveaTrim(uint8_t i){
+
+ // 40 ... 80 ... 120 is the range
+    switch(i){
+     
+    case 0:
+        Trims[FlightMode][0] += 1;
+        if (Trims[FlightMode][0] > 120) Trims[FlightMode][0] = 120;
+        if (Trims[FlightMode][0] == 80)  TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed at centre
+    break;
+    case 1: 
+          Trims[FlightMode][0] -= 1;
+         if (Trims[FlightMode][0] < 40) Trims[FlightMode][0] = 40;
+         if (Trims[FlightMode][0] == 80)  TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed at centre
+    break;
+    
+    case 2:
+          Trims[FlightMode][1] += 1;
+          if (Trims[FlightMode][1] > 120) Trims[FlightMode][1] = 120;
+          if (Trims[FlightMode][1] == 80)  TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed at centre
+    break;
+    case 3: 
+          Trims[FlightMode][1] -= 1;
+          if (Trims[FlightMode][1] < 40) Trims[FlightMode][1] = 40;
+          if (Trims[FlightMode][1] == 80)  TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed at centre
+    break;
+
+    case 4:
+     Trims[FlightMode][2] -= 1;
+          if (Trims[FlightMode][2] < 40) Trims[FlightMode][2] = 40;
+          if (Trims[FlightMode][2] == 80)  TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed at centre
+         
+    break;
+   
+   
+    case 5: 
+           Trims[FlightMode][2] += 1;
+          if (Trims[FlightMode][2] > 120) Trims[FlightMode][2] = 120;
+          if (Trims[FlightMode][2] == 80)  TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed at centre
+
+    break;
+    
+    case 6:
+        Trims[FlightMode][3] += 1;
+        if (Trims[FlightMode][3] > 120) Trims[FlightMode][3] = 120;
+        if (Trims[FlightMode][3] == 80)  TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed at centre
+
+    break;
+    
+    case 7: 
+         Trims[FlightMode][3] -= 1;
+         if (Trims[FlightMode][3] < 40) Trims[FlightMode][3] = 40;
+         if (Trims[FlightMode][3] == 80)  TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed at centre
+
+    break;
+
+    default:
+    break;
+    
+   
+    }
+
+
+   if (CurrentView == TRIM_VIEW)   UpdateTrimView();
+
+}
+
 /************************************************************************************************************/
 void CheckHardwareTrims(){  
     int i;
-    if ((millis() - TrimTimer) < 200) return;
+    if ((millis() - TrimTimer) < TrimRepeatSpeed) return;
     TrimTimer = millis();
     for (i = 0; i < 8; ++i) if (TrimSwitch[i]) break;
-    if (i < 8) Serial.println(i); // TODO: inc trim heer 
+    if (i < 8) {
+        MoveaTrim(i);
+       // Serial.println (i);
+        TrimRepeatSpeed -= (TrimRepeatSpeed/10);
+        if (TrimRepeatSpeed < 50) TrimRepeatSpeed = 50;
+    }
 }
 /************************************************************************************************************/
 
 void ReadSwitches()  // and indeed read digital trims if these are fitted
 {
-    bool flag = false;
+    byte flag = 0;
     for (int i = 0; i < 8; ++i) {
-        Switch[i]     = !digitalRead(SwitchNumber[i]);
-        TrimSwitch[i] = !digitalRead(TrimNumber[i]); 
-        if (TrimSwitch[i])  flag = true;                  // a finger is on a trim lever...   
+        Switch[i]     = !digitalRead(SwitchNumber[i]);    // These are reversed because they are active low
+        TrimSwitch[i] = !digitalRead(TrimNumber[i]);      // These are reversed because they are active low
+        if (TrimSwitch[i])  ++flag;                       // a finger is on a trim lever...   
         if ((TrimSwitch[i]) &&  (PreviousTrim != i)) {    // is it a new one?
             TrimTimer    = 0;                             // it IS a new one, so no delay please.  
             PreviousTrim = i;                             // remember which trim it was  
         }
     }
-    if (!flag) PreviousTrim = 254;                        // Previous trim must now match none
+    if (flag > 1 ){                                       // one at a time please!!
+        for (int i = 0; i < 8; ++i) TrimSwitch[i] = 0;
+        flag = 0;
+    }
+
+    if (!flag) { 
+        PreviousTrim = 254;                               // Previous trim must now match none
+        TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed
+    }
     GetFlightMode();
     CheckHardwareTrims();
 }
