@@ -6015,97 +6015,60 @@ void GetFlightMode()
     PreviousFlightMode = FlightMode;
 }
 
+// *************************************************************************************************************
 
-/*
-          if (InStrng(TR1, TextIn) > 0) { //  TR1->0
-            Trims[FlightMode][0] = TextIn[3];
-            ClearText(); 
-            return;
-        }
-        if (InStrng(TR4, TextIn) > 0) { // TR4 ->1
-            if (SticksMode == 1)  Trims[FlightMode][1] = TextIn[3];
-            if (SticksMode == 2)  Trims[FlightMode][2] = TextIn[3];
-            ClearText(); 
-            return;
-        }
-        if (InStrng(TR2, TextIn) > 0) { // TR2 ->2
-            if (SticksMode == 1)  Trims[FlightMode][2] = TextIn[3];
-            if (SticksMode == 2)  Trims[FlightMode][1] = TextIn[3];
-            ClearText(); 
-            return;
-        }
-        if (InStrng(TR3, TextIn) > 0) { // TR3 ->3
-            Trims[FlightMode][3] = TextIn[3];
-            ClearText(); 
-            return;
-*/
-void  MoveaTrim(uint8_t i){
+void IncTrim(uint8_t t){
+        Trims[FlightMode][t] += 1;
+        if (Trims[FlightMode][t] > 120) Trims[FlightMode][t] = 120;
+        if (Trims[FlightMode][t] == 80)  TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed at centre
+}
+// *************************************************************************************************************
 
- // 40 ... 80 ... 120 is the range
-    switch(i){
-     
-    case 0:
-        Trims[FlightMode][0] += 1;
-        if (Trims[FlightMode][0] > 120) Trims[FlightMode][0] = 120;
-        if (Trims[FlightMode][0] == 80)  TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed at centre
-    break;
-    case 1: 
-          Trims[FlightMode][0] -= 1;
-         if (Trims[FlightMode][0] < 40) Trims[FlightMode][0] = 40;
-         if (Trims[FlightMode][0] == 80)  TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed at centre
-    break;
-    
-    case 2:
-          Trims[FlightMode][1] += 1;
-          if (Trims[FlightMode][1] > 120) Trims[FlightMode][1] = 120;
-          if (Trims[FlightMode][1] == 80)  TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed at centre
-    break;
-    case 3: 
-          Trims[FlightMode][1] -= 1;
-          if (Trims[FlightMode][1] < 40) Trims[FlightMode][1] = 40;
-          if (Trims[FlightMode][1] == 80)  TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed at centre
-    break;
-
-    case 4:
-     Trims[FlightMode][2] -= 1;
-          if (Trims[FlightMode][2] < 40) Trims[FlightMode][2] = 40;
-          if (Trims[FlightMode][2] == 80)  TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed at centre
-         
-    break;
-   
-   
-    case 5: 
-           Trims[FlightMode][2] += 1;
-          if (Trims[FlightMode][2] > 120) Trims[FlightMode][2] = 120;
-          if (Trims[FlightMode][2] == 80)  TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed at centre
-
-    break;
-    
-    case 6:
-        Trims[FlightMode][3] += 1;
-        if (Trims[FlightMode][3] > 120) Trims[FlightMode][3] = 120;
-        if (Trims[FlightMode][3] == 80)  TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed at centre
-
-    break;
-    
-    case 7: 
-         Trims[FlightMode][3] -= 1;
-         if (Trims[FlightMode][3] < 40) Trims[FlightMode][3] = 40;
-         if (Trims[FlightMode][3] == 80)  TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed at centre
-
-    break;
-
-    default:
-    break;
-    
-   
-    }
-
-
-   if (CurrentView == TRIM_VIEW)   UpdateTrimView();
-
+void DecTrim(uint8_t t){
+         Trims[FlightMode][t] -= 1;
+         if (Trims[FlightMode][t] < 40) Trims[FlightMode][t] = 40;
+         if (Trims[FlightMode][t] == 80)  TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed at centre
 }
 
+// *************************************************************************************************************
+
+void  MoveaTrim(uint8_t i){
+    uint8_t Elevator = 1; 
+    uint8_t Throttle = 2; 
+    if (SticksMode == 2) {
+        Elevator = 2; 
+        Throttle = 1; 
+    }
+    switch(i){
+    case 0:
+            IncTrim(0);
+            break;
+    case 1: 
+            DecTrim(0);  
+            break;
+    case 2:
+            IncTrim(Elevator); 
+            break;
+    case 3: 
+            DecTrim(Elevator);
+            break;
+    case 4:
+            DecTrim(Throttle); 
+            break;
+    case 5: 
+            IncTrim(Throttle);
+            break;
+    case 6:
+            IncTrim(3);
+            break;
+    case 7: 
+            DecTrim(3);
+            break;
+    default:
+    break;
+    }
+   if (CurrentView == TRIM_VIEW)   UpdateTrimView();
+}
 /************************************************************************************************************/
 void CheckHardwareTrims(){  
     int i;
@@ -6114,7 +6077,6 @@ void CheckHardwareTrims(){
     for (i = 0; i < 8; ++i) if (TrimSwitch[i]) break;
     if (i < 8) {
         MoveaTrim(i);
-       // Serial.println (i);
         TrimRepeatSpeed -= (TrimRepeatSpeed/10);
         if (TrimRepeatSpeed < 50) TrimRepeatSpeed = 50;
     }
