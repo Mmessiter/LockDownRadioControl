@@ -1333,6 +1333,18 @@ uint8_t um(uint16_t bv) // convert to lower resolution
 
 void CheckTimer()
 {
+
+   char Min1[] = "1Min";
+   char Min2[] = "2Min";
+   char Min3[] = "3Min";
+   char Min4[] = "4Min";
+   char Min5[] = "5Min";
+   char Min6[] = "6Min";
+   char Min7[] = "7Min";
+   char Min8[] = "8Min";
+   char Min9[] = "9Min";
+   char Min10[] = "10Min";
+
     if (FlightMode < 4 && !LostContactFlag) {
         Secs  = ((millis() - TimerMillis) / 1000) + PausedSecs;
         Hours = Secs / 3600;
@@ -1345,10 +1357,47 @@ void CheckTimer()
             SendValue(FrontView_Secs, Secs);
             SendValue(FrontView_Mins, Mins);
             SendValue(FrontView_Hours, Hours);
-            LastSeconds = Secs;
+        }
+    }
+    LastSeconds = Secs;
+    if (!Secs){
+               switch (Mins) {
+               case 1:
+                    PlayWaveFile(Min1);
+                    break;
+                case 2:
+                    PlayWaveFile(Min2);
+                    break;
+                case 3:
+                    PlayWaveFile(Min3); 
+                    break;
+                case 4:
+                    PlayWaveFile(Min4); 
+                    break;
+                 case 5:
+                    PlayWaveFile(Min5); 
+                    break;
+                case 6:
+                    PlayWaveFile(Min6); 
+                    break;
+                case 7:
+                    PlayWaveFile(Min7); 
+                    break;
+                  case 8:
+                    PlayWaveFile(Min8); 
+                    break;
+                case 9:
+                    PlayWaveFile(Min9); 
+                    break;
+                 case 10:
+                    PlayWaveFile(Min10); 
+                    break;
+               default:
+                   break;
         }
     }
 }
+
 
 /*********************************************************************************************************************************/
 
