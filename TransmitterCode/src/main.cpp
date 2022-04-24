@@ -548,9 +548,8 @@ uint16_t SavedRX1TotalTime  = 0;
 uint16_t SavedRX2TotalTime  = 0;
 uint8_t  AudioVolume        = 10;
 char     OpeningFanfare[20];
-   
-
-
+char     click0[] = "play 0,0,0";  //  = channel, noiseID ,loop
+char     click1[] = "play 0,1,0";  //  = channel, noiseID ,loop
 void SendText(char* tbox, char* NewWord); // needed a prototype here!
 
 /************************************************************************************************************/
@@ -901,7 +900,7 @@ void PlayWaveFile(char* tbox){
     strcpy(CB, path);
     strcat(CB, tbox);
     strcat(CB, wav);
-    SendCommand(CB);
+    SendCommand(CB);    
     SendCommand(en);
 #endif
 }
@@ -1309,6 +1308,7 @@ bool GetButtonPress()
         }
     }
    if(!(strlen(TextIn))) ButtonPressed = false;
+   if (ButtonPressed) SendCommand(click1);
    return ButtonPressed;
 }
 /*********************************************************************************************************************************/
@@ -6059,13 +6059,14 @@ void DecTrim(uint8_t t){
 // *************************************************************************************************************
 
 void  MoveaTrim(uint8_t i){
-   
     uint8_t Elevator = 1; 
     uint8_t Throttle = 2; 
+    
     if (SticksMode == 2) {
         Elevator = 2; 
         Throttle = 1; 
     }
+    SendCommand (click0);
     switch(i){
     case 0:
             IncTrim(0);
@@ -6105,7 +6106,7 @@ void CheckHardwareTrims(){
         if (TrimSwitch[i]) {
             MoveaTrim(i);
             TrimRepeatSpeed -= (TrimRepeatSpeed/6);
-            if (TrimRepeatSpeed < 20) TrimRepeatSpeed = 20;
+            if (TrimRepeatSpeed < 40) TrimRepeatSpeed = 40;
         }
     }
 }
@@ -6123,7 +6124,7 @@ void ReadSwitches()  // and indeed read digital trims if these are fitted
             PreviousTrim = i;                             // remember which trim it was  
         }
     }
-    if (flag > 1 ){                                      
+    if (flag > 1 ){                                       // one at a time please!!
         TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed
     }
 
