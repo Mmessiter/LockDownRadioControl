@@ -243,8 +243,8 @@ uint8_t       GPSMarkHere      = 0;
 bool          SaveNothing      = true;  // flag failure to read sd card. if happens, don't write either.
 uint8_t       PreviousTrim     = 255;   
 uint32_t      TrimTimer        = 0;  
-uint16_t      TrimRepeatSpeed  = 300;   
-uint16_t      DefaultTrimRepeatSpeed  = 300;   
+uint16_t      TrimRepeatSpeed  = 600;   
+uint16_t      DefaultTrimRepeatSpeed  = 600;   
 
 // ************************************* AckPayload structure ******************************************************
 /**
@@ -6068,12 +6068,13 @@ void IncTrim(uint8_t t){
             if ((CurrentView == TRIM_VIEW)  || (CurrentView == FRONTVIEW))    UpdateTrimViewPart(t);
             PlayWaveFile(Complete);
             Procrastinate(500);
+          
         }
         if (Trims[FlightMode][t] == 80)  {
             TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed at centre
             if ((CurrentView == TRIM_VIEW)  || (CurrentView == FRONTVIEW))   UpdateTrimViewPart(t);
             PlayWaveFile(BeepMiddle);
-            Procrastinate(500);
+ 
         }
         
 }
@@ -6090,12 +6091,13 @@ void DecTrim(uint8_t t){
              if ((CurrentView == TRIM_VIEW)  || (CurrentView == FRONTVIEW))   UpdateTrimViewPart(t);
              PlayWaveFile(Complete);
              Procrastinate(500);
+        
          }
          if (Trims[FlightMode][t] == 80)  {
              TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed at centre
             if ((CurrentView == TRIM_VIEW)  || (CurrentView == FRONTVIEW))   UpdateTrimViewPart(t);
              PlayWaveFile(BeepMiddle);
-             Procrastinate(500);
+          
          }
 }
 // *************************************************************************************************************
