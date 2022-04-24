@@ -547,7 +547,7 @@ uint16_t SavedRadioSwaps    = 0;
 uint16_t SavedRX1TotalTime  = 0;
 uint16_t SavedRX2TotalTime  = 0;
 uint8_t  AudioVolume        = 10;
-char     OpeningFanfare[20];
+char     OpeningFanfare[] = "fanfare2";
 char     click0[] = "play 0,0,0";  //  = channel, noiseID ,loop
 char     click1[] = "play 0,1,0";  //  = channel, noiseID ,loop
 void SendText(char* tbox, char* NewWord); // needed a prototype here!
@@ -2077,31 +2077,31 @@ void UpdateTrimView()
     char TrimView_r3[]  = "r3";
     char TrimView_r4[]  = "r4";
     
-    
     SendValue(TrimView_ch1, (Trims[FlightMode][0]));
     SendValue(TrimView_ch4, (Trims[FlightMode][1]));
     SendValue(TrimView_ch2, (Trims[FlightMode][2]));
     SendValue(TrimView_ch3, (Trims[FlightMode][3]));
 
-    SendValue(TrimView_n1, (Trims[FlightMode][0] - 80));
-    SendValue(TrimView_n4, (Trims[FlightMode][1] - 80));
-    SendValue(TrimView_n2, (Trims[FlightMode][2] - 80));
-    SendValue(TrimView_n3, (Trims[FlightMode][3] - 80));
+    if (CurrentView == TRIM_VIEW) 
+    {
+        SendValue(TrimView_n1, (Trims[FlightMode][0] - 80));
+        SendValue(TrimView_n4, (Trims[FlightMode][1] - 80));
+        SendValue(TrimView_n2, (Trims[FlightMode][2] - 80));
+        SendValue(TrimView_n3, (Trims[FlightMode][3] - 80));
 
-    SendValue(TrimView_r1, TrimsReversed[FlightMode][0]);
-    SendValue(TrimView_r4, TrimsReversed[FlightMode][1]);
-    SendValue(TrimView_r2, TrimsReversed[FlightMode][2]);
-    SendValue(TrimView_r3, TrimsReversed[FlightMode][3]);
-
-    if (SticksMode == 2) {
+        SendValue(TrimView_r1, TrimsReversed[FlightMode][0]);
+        SendValue(TrimView_r4, TrimsReversed[FlightMode][1]);
+        SendValue(TrimView_r2, TrimsReversed[FlightMode][2]);
+        SendValue(TrimView_r3, TrimsReversed[FlightMode][3]);
+        if (SticksMode == 2) {
                 SendValue(Mode2,1);
                 SendValue(Mode1,0);}
             else {
                 SendValue(Mode1,1);
                 SendValue(Mode2,0);
                 }
+        }
 }
-
 /*********************************************************************************************************************************/
 
 void ScanI2c()
@@ -2214,6 +2214,7 @@ void UpdateModelsNameEveryWhere()
     switch (CurrentView) {
         case FRONTVIEW:
             SendText(FrontView_ModelName, ModelName);
+            UpdateTrimView();
             break;
         case STICKSVIEW:
             SendText(SticksView_ModelName, ModelName);
@@ -2238,6 +2239,9 @@ void UpdateModelsNameEveryWhere()
             SendText(TrimView_ModelName, ModelName);
             UpdateTrimView();
             break;
+
+
+
         default:
             break;
     }
@@ -2730,8 +2734,8 @@ bool LoadAllParameters()
         AudioVolume=SDReadByte(SDCardAddress);
          ++SDCardAddress;
     for (i = 0;i < 19; ++i){
-         OpeningFanfare[i]= SDReadByte(SDCardAddress);
-        if (!OpeningFanfare[i]) break;
+       //  OpeningFanfare[i]= SDReadByte(SDCardAddress);
+       // if (!OpeningFanfare[i]) break;
         ++SDCardAddress;
     }   
         MemoryForTransmtter = SDCardAddress;
@@ -2989,8 +2993,8 @@ void SaveTXStuff()
      SDUpdateByte(SDCardAddress,AudioVolume);
     ++SDCardAddress;
     for (i=0;i < 19; ++i){
-         SDUpdateByte(SDCardAddress,OpeningFanfare[i]);
-        ++SDCardAddress;
+       //  SDUpdateByte(SDCardAddress,OpeningFanfare[i]);
+       // ++SDCardAddress;
     }
     CloseModelsFile();
 }
@@ -6058,18 +6062,18 @@ void IncTrim(uint8_t t){
         char Complete[] = "Complete";
         char BeepMiddle[] = "BeepMiddle";
         Trims[FlightMode][t] += 1;
-        if (CurrentView == TRIM_VIEW)   UpdateTrimViewPart(t);
+        if ((CurrentView == TRIM_VIEW)  || (CurrentView == FRONTVIEW))  UpdateTrimViewPart(t);
         if (Trims[FlightMode][t] > 120) {
             Trims[FlightMode][t] = 120;
-            if (CurrentView == TRIM_VIEW)   UpdateTrimViewPart(t);
+            if ((CurrentView == TRIM_VIEW)  || (CurrentView == FRONTVIEW))    UpdateTrimViewPart(t);
             PlayWaveFile(Complete);
-            Procrastinate(600);
+            Procrastinate(500);
         }
         if (Trims[FlightMode][t] == 80)  {
             TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed at centre
-            if (CurrentView == TRIM_VIEW)   UpdateTrimViewPart(t);
+            if ((CurrentView == TRIM_VIEW)  || (CurrentView == FRONTVIEW))   UpdateTrimViewPart(t);
             PlayWaveFile(BeepMiddle);
-            Procrastinate(300);
+            Procrastinate(500);
         }
         
 }
@@ -6080,18 +6084,18 @@ void DecTrim(uint8_t t){
         char Complete[] = "Complete";
         char BeepMiddle[] = "BeepMiddle";
          Trims[FlightMode][t] -= 1;
-         if (CurrentView == TRIM_VIEW)   UpdateTrimViewPart(t);
+         if ((CurrentView == TRIM_VIEW)  || (CurrentView == FRONTVIEW))    UpdateTrimViewPart(t);
          if (Trims[FlightMode][t] < 40) {
              Trims[FlightMode][t] = 40;
-             if (CurrentView == TRIM_VIEW)   UpdateTrimViewPart(t);
+             if ((CurrentView == TRIM_VIEW)  || (CurrentView == FRONTVIEW))   UpdateTrimViewPart(t);
              PlayWaveFile(Complete);
-             Procrastinate(700);
+             Procrastinate(500);
          }
          if (Trims[FlightMode][t] == 80)  {
              TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed at centre
-            if (CurrentView == TRIM_VIEW)   UpdateTrimViewPart(t);
+            if ((CurrentView == TRIM_VIEW)  || (CurrentView == FRONTVIEW))   UpdateTrimViewPart(t);
              PlayWaveFile(BeepMiddle);
-             Procrastinate(700);
+             Procrastinate(500);
          }
 }
 // *************************************************************************************************************
