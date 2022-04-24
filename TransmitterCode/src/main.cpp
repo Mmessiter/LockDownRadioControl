@@ -6061,13 +6061,13 @@ void IncTrim(uint8_t t){
         if (CurrentView == TRIM_VIEW)   UpdateTrimViewPart(t);
         if (Trims[FlightMode][t] > 120) {
             Trims[FlightMode][t] = 120;
-            if (CurrentView == TRIM_VIEW) UpdateTrimView();
+            if (CurrentView == TRIM_VIEW)   UpdateTrimViewPart(t);
             PlayWaveFile(Complete);
             Procrastinate(600);
         }
         if (Trims[FlightMode][t] == 80)  {
             TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed at centre
-            if (CurrentView == TRIM_VIEW) UpdateTrimView();
+            if (CurrentView == TRIM_VIEW)   UpdateTrimViewPart(t);
             PlayWaveFile(BeepMiddle);
             Procrastinate(300);
         }
@@ -6086,14 +6086,14 @@ void DecTrim(uint8_t t){
          if (CurrentView == TRIM_VIEW)   UpdateTrimViewPart(t);
          if (Trims[FlightMode][t] < 40) {
              Trims[FlightMode][t] = 40;
-            if (CurrentView == TRIM_VIEW) UpdateTrimView();
+             if (CurrentView == TRIM_VIEW)   UpdateTrimViewPart(t);
              PlayWaveFile(Complete);
              Procrastinate(700);
 
          }
          if (Trims[FlightMode][t] == 80)  {
              TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed at centre
-             if (CurrentView == TRIM_VIEW) UpdateTrimView();
+            if (CurrentView == TRIM_VIEW)   UpdateTrimViewPart(t);
              PlayWaveFile(BeepMiddle);
              Procrastinate(700);
          }
