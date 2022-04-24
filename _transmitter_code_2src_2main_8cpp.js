@@ -289,6 +289,8 @@ var _transmitter_code_2src_2main_8cpp =
     [ "ChannelNames", "_transmitter_code_2src_2main_8cpp.html#a0c9a9276cbc69bce973fabbed4a9686b", null ],
     [ "ChanneltoSet", "_transmitter_code_2src_2main_8cpp.html#a2d9e9fe5729ce12d1caf2a32c5539d73", null ],
     [ "chipSelect", "_transmitter_code_2src_2main_8cpp.html#a266db0f4dbdfbc06ea34c96f66bebed3", null ],
+    [ "click0", "_transmitter_code_2src_2main_8cpp.html#a41a899bc554a080e04c55338e7ade94c", null ],
+    [ "click1", "_transmitter_code_2src_2main_8cpp.html#a74768585521a40ed4ede577710f746c0", null ],
     [ "ClickX", "_transmitter_code_2src_2main_8cpp.html#a26157c4e738ba5e87d374d18cd0aa46a", null ],
     [ "ClickY", "_transmitter_code_2src_2main_8cpp.html#ac94f63840cc59ef9f981bd2bc2cacde8", null ],
     [ "CompressedData", "_transmitter_code_2src_2main_8cpp.html#aa16611ba89205c8cb9e75353ce1ad032", null ],
