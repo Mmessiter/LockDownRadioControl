@@ -34,7 +34,7 @@ var searchData=
   ['scanstart_31',['ScanStart',['../_transmitter_code_2src_2main_8cpp.html#a40219e66b010dcf762b96491c9e668ec',1,'ScanStart():&#160;main.cpp'],['../_radio_functions_8h.html#a40219e66b010dcf762b96491c9e668ec',1,'ScanStart():&#160;main.cpp']]],
   ['scanview_32',['SCANVIEW',['../_transmitter_code_2src_2main_8cpp.html#a6f1464e66db944aef96d5617811acb8b',1,'main.cpp']]],
   ['scanwaveband_33',['SCANWAVEBAND',['../_radio_functions_8h.html#af8400c0c2d5c4779f32223055a12336d',1,'SCANWAVEBAND():&#160;RadioFunctions.h'],['../_transmitter_code_2src_2main_8cpp.html#af8400c0c2d5c4779f32223055a12336d',1,'SCANWAVEBAND():&#160;main.cpp']]],
-  ['screentimeout_34',['ScreenTimeout',['../_transmitter_code_2src_2main_8cpp.html#a99a6fe87dc49be7754f7ec441aa780ec',1,'main.cpp']]],
+  ['screentimeout_34',['ScreenTimeout',['../_transmitter_code_2src_2main_8cpp.html#a3c8096a17fd0f8dbb05f47be54fd7637',1,'main.cpp']]],
   ['screenviewtimeout_35',['ScreenViewTimeout',['../_transmitter_code_2src_2main_8cpp.html#aa978945d40efd5dcb653649588c922ac',1,'main.cpp']]],
   ['sdcardaddress_36',['SDCardAddress',['../_transmitter_code_2src_2main_8cpp.html#a6e25a9d2695338313b2978f6a04c165d',1,'main.cpp']]],
   ['sdreadbyte_37',['SDReadByte',['../_transmitter_code_2src_2main_8cpp.html#af5db4d6f5f17a24fc08503a4e14de200',1,'main.cpp']]],

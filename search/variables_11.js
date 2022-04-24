@@ -18,7 +18,7 @@ var searchData=
   ['scale_15',['scale',['../structnmea__history__t.html#a4c98f18694ee688d7c4ff2d4d6941739',1,'nmea_history_t']]],
   ['scanend_16',['ScanEnd',['../_radio_functions_8h.html#a6fde7bc3d03bda84c33abdbe1ed7b5bf',1,'ScanEnd():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a6fde7bc3d03bda84c33abdbe1ed7b5bf',1,'ScanEnd():&#160;main.cpp']]],
   ['scanstart_17',['ScanStart',['../_radio_functions_8h.html#a40219e66b010dcf762b96491c9e668ec',1,'ScanStart():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a40219e66b010dcf762b96491c9e668ec',1,'ScanStart():&#160;main.cpp']]],
-  ['screentimeout_18',['ScreenTimeout',['../_transmitter_code_2src_2main_8cpp.html#a99a6fe87dc49be7754f7ec441aa780ec',1,'main.cpp']]],
+  ['screentimeout_18',['ScreenTimeout',['../_transmitter_code_2src_2main_8cpp.html#a3c8096a17fd0f8dbb05f47be54fd7637',1,'main.cpp']]],
   ['screenviewtimeout_19',['ScreenViewTimeout',['../_transmitter_code_2src_2main_8cpp.html#aa978945d40efd5dcb653649588c922ac',1,'main.cpp']]],
   ['sdcardaddress_20',['SDCardAddress',['../_transmitter_code_2src_2main_8cpp.html#a6e25a9d2695338313b2978f6a04c165d',1,'main.cpp']]],
   ['seconds_21',['seconds',['../class_adafruit___g_p_s.html#a839da762454da25e2076a453706d5553',1,'Adafruit_GPS']]],

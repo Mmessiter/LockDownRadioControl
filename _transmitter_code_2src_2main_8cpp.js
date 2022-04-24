@@ -459,7 +459,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "SBUSTimer", "_transmitter_code_2src_2main_8cpp.html#a2e121251691466f81a2f540f00e7141e", null ],
     [ "ScanEnd", "_transmitter_code_2src_2main_8cpp.html#a6fde7bc3d03bda84c33abdbe1ed7b5bf", null ],
     [ "ScanStart", "_transmitter_code_2src_2main_8cpp.html#a40219e66b010dcf762b96491c9e668ec", null ],
-    [ "ScreenTimeout", "_transmitter_code_2src_2main_8cpp.html#a99a6fe87dc49be7754f7ec441aa780ec", null ],
+    [ "ScreenTimeout", "_transmitter_code_2src_2main_8cpp.html#a3c8096a17fd0f8dbb05f47be54fd7637", null ],
     [ "ScreenViewTimeout", "_transmitter_code_2src_2main_8cpp.html#aa978945d40efd5dcb653649588c922ac", null ],
     [ "SDCardAddress", "_transmitter_code_2src_2main_8cpp.html#a6e25a9d2695338313b2978f6a04c165d", null ],
     [ "Secs", "_transmitter_code_2src_2main_8cpp.html#a80df3d83e93a9ae7e2711eac4c42f033", null ],
