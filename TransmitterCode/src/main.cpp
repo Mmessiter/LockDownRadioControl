@@ -6016,12 +6016,49 @@ void GetFlightMode()
     PreviousFlightMode = FlightMode;
 }
 
+/*********************************************************************************************************************************/
+
+void UpdateTrimViewPart(uint8_t ch)
+{
+    char TrimView_ch1[] = "ch1";
+    char TrimView_ch2[] = "ch2";
+    char TrimView_ch3[] = "ch3";
+    char TrimView_ch4[] = "ch4"; 
+    char TrimView_n1[]  = "n1";
+    char TrimView_n2[]  = "n2";
+    char TrimView_n3[]  = "n3";
+    char TrimView_n4[]  = "n4";
+
+switch(ch){
+
+    case 0:
+     SendValue(TrimView_ch1, (Trims[FlightMode][0]));
+     SendValue(TrimView_n1, (Trims[FlightMode][0] - 80));
+     break;
+    case 1:
+    SendValue(TrimView_ch4, (Trims[FlightMode][1]));
+    SendValue(TrimView_n4, (Trims[FlightMode][1] - 80));
+    break;
+    case 2:
+    SendValue(TrimView_ch2, (Trims[FlightMode][2]));
+    SendValue(TrimView_n2, (Trims[FlightMode][2] - 80));
+    break;
+    case 3:
+    SendValue(TrimView_ch3, (Trims[FlightMode][3]));
+    SendValue(TrimView_n3, (Trims[FlightMode][3] - 80));
+    break;
+    default:
+    break;
+    }
+}
+
 // *************************************************************************************************************
 
 void IncTrim(uint8_t t){
         char Complete[] = "Complete";
         char BeepMiddle[] = "BeepMiddle";
         Trims[FlightMode][t] += 1;
+        if (CurrentView == TRIM_VIEW)   UpdateTrimViewPart(t);
         if (Trims[FlightMode][t] > 120) {
             Trims[FlightMode][t] = 120;
             if (CurrentView == TRIM_VIEW) UpdateTrimView();
@@ -6034,13 +6071,19 @@ void IncTrim(uint8_t t){
             PlayWaveFile(BeepMiddle);
             Procrastinate(300);
         }
+        
 }
+
+
+
+
 // *************************************************************************************************************
 
 void DecTrim(uint8_t t){
         char Complete[] = "Complete";
         char BeepMiddle[] = "BeepMiddle";
          Trims[FlightMode][t] -= 1;
+         if (CurrentView == TRIM_VIEW)   UpdateTrimViewPart(t);
          if (Trims[FlightMode][t] < 40) {
              Trims[FlightMode][t] = 40;
             if (CurrentView == TRIM_VIEW) UpdateTrimView();
@@ -6095,7 +6138,7 @@ void  MoveaTrim(uint8_t i){
     default:
     break;
     }
-   if (CurrentView == TRIM_VIEW)   UpdateTrimView();
+   //if (CurrentView == TRIM_VIEW)   UpdateTrimViewPart();
 }
 /************************************************************************************************************/
 void CheckHardwareTrims(){  
