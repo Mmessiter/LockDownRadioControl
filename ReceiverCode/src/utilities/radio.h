@@ -278,10 +278,10 @@ void Reconnect(){                                                               
     while (!Connected) {
         if (BoundFlag) KeepSbusHappy();                                           // Some SBUS systems timeout FAST, so resend old data to keep it happy
         CurrentRadio->stopListening();
-        delay(1);                                                                 // NEEDED!
+        delayMicroseconds(500);                                                   // NEEDED!
         ReconnectChannel = * (FHSSChPointer + ReconnectIndex);                    // Get a reconnect channel 
 
-       Serial.println(ReconnectChannel);
+                      Serial.println(ReconnectChannel);  // ****************************
 
         ++ ReconnectIndex;
         if (ReconnectIndex >= RECONNECT_CHANNELS_COUNT + RECONNECT_CHANNELS_START) ReconnectIndex = RECONNECT_CHANNELS_START;
