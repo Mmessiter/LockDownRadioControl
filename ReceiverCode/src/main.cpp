@@ -480,7 +480,8 @@ void SensorHubHasFailed(){       // If the I2C bus gets its knickers in a twist,
 }
 // ******************************************************************************************************************************************************************
 FASTRUN void ReceiveData(){ 
-      uint32_t TimeTest;
+    uint32_t TimeTest; 
+    if (Connected) {
       if ((millis() - SensorHubAccessed) > 10){                                         //  Reading Sensor hub 100 x per second should be enough
         if (millis() - LastPacketArrivalTime < 1 ) {                                    //  If, and only if, we have still absolutely loads of time, do stuff now while waiting ...           
              SensorHubAccessed = millis();                                              //  Note the moment of last attempted read. 
@@ -494,6 +495,7 @@ FASTRUN void ReceiveData(){
             } 
          }
       }
+    }
     if (ReadData()) {
         ReadExtraParameters();                                                        // Check the extra parameters
     } else {        
