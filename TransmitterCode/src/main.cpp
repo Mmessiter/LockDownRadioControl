@@ -6074,9 +6074,6 @@ void IncTrim(uint8_t t){
         
 }
 
-
-
-
 // *************************************************************************************************************
 
 void DecTrim(uint8_t t){
@@ -6089,7 +6086,6 @@ void DecTrim(uint8_t t){
              if (CurrentView == TRIM_VIEW)   UpdateTrimViewPart(t);
              PlayWaveFile(Complete);
              Procrastinate(700);
-
          }
          if (Trims[FlightMode][t] == 80)  {
              TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed at centre
@@ -6098,7 +6094,6 @@ void DecTrim(uint8_t t){
              Procrastinate(700);
          }
 }
-
 // *************************************************************************************************************
 
 void  MoveaTrim(uint8_t i){
@@ -6138,7 +6133,6 @@ void  MoveaTrim(uint8_t i){
     default:
     break;
     }
-   //if (CurrentView == TRIM_VIEW)   UpdateTrimViewPart();
 }
 /************************************************************************************************************/
 void CheckHardwareTrims(){  
