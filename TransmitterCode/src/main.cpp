@@ -346,7 +346,7 @@ char     NEXTIONSleepNow[]           = "sleep=1";
 char     NEXTIONWakeUp[]             = "sleep=0";
 char     ScreenViewTimeout[]         = "Sto";
 char     NoSleeping[]                = "thsp=0";
-int      ScreenTimeout               = 120; // Screen has two minute timeout by default
+uint16_t ScreenTimeout               = 120; // Screen has two minute timeout by default
 char     HtextCMD[]                  = "click HelpText,0";
 char     StartBackGround[]           = "click Background,0";
 int      LastLinePosition            = 0;
@@ -2927,7 +2927,7 @@ void setup()
     InitSwitchesAndTrims();
     InitRadio(DefaultPipe);
     SendText(FrontView_Connected, Initialising);
-    SendValue1(NEXTIONSleepTime, ScreenTimeout); // Setup Screen timeout (No .val needed)
+   // SendValue1(NEXTIONSleepTime, ScreenTimeout); // Setup Screen timeout (No .val needed)
     SendCommand(NEXTIONWakeOnTouch);             // Wake on touch
     SendValue(FrontView_Hours, 0);
     SendValue(FrontView_Mins, 0);
@@ -5910,7 +5910,7 @@ void ButtonWasPressed()
                 SaveAllParameters();
                 SendText(SvT11, Cmsg5);
                 SendText(SvB0, Cmsg6);
-                SendValue1(NEXTIONSleepTime, ScreenTimeout); // Re enable timeout
+               // SendValue1(NEXTIONSleepTime, ScreenTimeout); // Re enable timeout
                 ClearText();
                 return;
             }
