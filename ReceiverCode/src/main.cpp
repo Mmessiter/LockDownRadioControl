@@ -182,8 +182,7 @@ void ShowHopDurationEtc() // heer
 void UseReceivedData(){
         Decompress(ReceivedData, CompressedData, UNCOMPRESSEDWORDS);   // Decompress only the most recent data
         MapToSBUS();                        // Get SBUS data ready 
-        CurrentRadio->flush_rx();           // Flush FIFO to avoid a lock up
-        LastPacketArrivalTime = millis();   // Note the arival time
+        LastPacketArrivalTime = millis();   // Note the arrival time
         if (HopNow) {                       // This flag gets set in LoadAckPayload();
             HopToNextChannel();             // Ack payload instructed us to Hop at next opportunity. So hop now ...
             HopNow = false;                 // ... and clear the flag,
@@ -200,6 +199,7 @@ bool ReadData()
         CurrentRadio->flush_tx();                                      // This maybe avoids a lockup that happens when the FIFO gets full.**************
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // Send telemetry
         CurrentRadio->read(&CompressedData, sizeof(CompressedData));   // Get Data  
+        CurrentRadio->flush_rx();                                      // Flush FIFO to avoid a lock up
     }
     if (Connected) UseReceivedData();  
     return Connected;
