@@ -60,7 +60,7 @@ uint8_t         FS_byte2           = 0;
 uint32_t        ReconnectedMoment;
 uint16_t        BaroAltitude;
 float           BaroTemperature;
-float           INA219Volts;
+float           INA219Volts = 0;
 uint32_t        SensorTime       = 0;
 uint32_t        SensorHubAccessed    = 0;
 uint16_t        Qnh              = 0;    //Pressure at sea level here and now (defined at TX)
