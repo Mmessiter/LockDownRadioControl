@@ -11,9 +11,10 @@ var searchData=
   ['updateoneswitchview_8',['updateOneSwitchView',['../_transmitter_code_2src_2main_8cpp.html#a14dcac76ed8a048041fdc6e6f5d5d000',1,'main.cpp']]],
   ['updateswitchesdisplay_9',['UpdateSwitchesDisplay',['../_transmitter_code_2src_2main_8cpp.html#a789078ba3c1d92997ab8764eb20cce4f',1,'main.cpp']]],
   ['updatetrimview_10',['UpdateTrimView',['../_transmitter_code_2src_2main_8cpp.html#ac78966debc2cdc13d8ca958ce3b20c78',1,'main.cpp']]],
-  ['use_5fina219_11',['USE_INA219',['../_transmitter_code_2src_2main_8cpp.html#a87ae50e2ac4507568cbf98072f174a1b',1,'main.cpp']]],
-  ['use_5fsw_5fserial_12',['USE_SW_SERIAL',['../_adafruit___g_p_s_8h.html#a7d44b2886944eb862b51948f2acc8d23',1,'Adafruit_GPS.h']]],
-  ['use_5fwatchdog_13',['USE_WATCHDOG',['../_radio_functions_8h.html#a71be4a990011c7b00830abf5f3b2190d',1,'RadioFunctions.h']]],
-  ['useaudio_14',['USEAUDIO',['../_radio_functions_8h.html#a1a522582f7918d462403b1e4724a2c9d',1,'RadioFunctions.h']]],
-  ['usereceiveddata_15',['UseReceivedData',['../_receiver_code_2src_2main_8cpp.html#abb1997c589abc6432f612eaedf985e38',1,'main.cpp']]]
+  ['updatetrimviewpart_11',['UpdateTrimViewPart',['../_transmitter_code_2src_2main_8cpp.html#a3cd4694d58bd7a9f56e973d20270722f',1,'main.cpp']]],
+  ['use_5fina219_12',['USE_INA219',['../_transmitter_code_2src_2main_8cpp.html#a87ae50e2ac4507568cbf98072f174a1b',1,'main.cpp']]],
+  ['use_5fsw_5fserial_13',['USE_SW_SERIAL',['../_adafruit___g_p_s_8h.html#a7d44b2886944eb862b51948f2acc8d23',1,'Adafruit_GPS.h']]],
+  ['use_5fwatchdog_14',['USE_WATCHDOG',['../_radio_functions_8h.html#a71be4a990011c7b00830abf5f3b2190d',1,'RadioFunctions.h']]],
+  ['useaudio_15',['USEAUDIO',['../_radio_functions_8h.html#a1a522582f7918d462403b1e4724a2c9d',1,'RadioFunctions.h']]],
+  ['usereceiveddata_16',['UseReceivedData',['../_receiver_code_2src_2main_8cpp.html#abb1997c589abc6432f612eaedf985e38',1,'main.cpp']]]
 ];
