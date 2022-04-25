@@ -1551,18 +1551,14 @@ void ShowServoPos()
 }
 
 /*********************************************************************************************************************************/
-
- void CheckScreenTime(){
-
- char ScreenOff[] = "dim=0";
+  void CheckScreenTime(){
+  char ScreenOff[] = "dim=0";
   if ((millis() - ScreenTimeTimer) > ScreenTimeout * 1000) {
       SendCommand(ScreenOff);
       ScreenTimeTimer = millis();
       ScreenIsOff = true;
   }
  }
-
-
 /*********************************************************************************************************************************/
 
 /** @brief SHOW COMMS */
@@ -4624,6 +4620,7 @@ void ButtonWasPressed()
      ScreenTimeTimer = millis();  // reset screen counter
      if (ScreenIsOff) {
          SendCommand (ScreenOn);
+         ScreenIsOff = false;
      }
 
     if (strlen(TextIn) > 0) {
@@ -6070,8 +6067,12 @@ void GetFlightMode()
     Channel12SwitchValue = CheckSwitch(Channel12Switch);
 
     if (FlightMode != PreviousFlightMode) {
-       
         SoundFlightMode();
+        ScreenTimeTimer = millis();  // reset screen counter
+        if (ScreenIsOff) {
+           SendCommand (ScreenOn);
+           ScreenIsOff = false;
+        }
         if (CurrentView == FRONTVIEW) {
             ShowFlightMode();
         }
