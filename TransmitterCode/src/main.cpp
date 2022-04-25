@@ -4720,6 +4720,7 @@ void ButtonWasPressed()
             CurrentMode = NORMAL;
             CurrentView = MAINSETUPVIEW;
             AudioVolume   = GetValue(n0);
+            if (AudioVolume < 5) AudioVolume = 5;
             Brightness    = GetValue(n1);
             PlayFanfare   = GetValue(c0);
             TrimClicks    = GetValue(c1);
@@ -6120,8 +6121,7 @@ void GetFlightMode()
     Channel12SwitchValue = CheckSwitch(Channel12Switch);
 
     if (FlightMode != PreviousFlightMode) {
-        SoundFlightMode();
-       
+        if (SpeakingClock) SoundFlightMode();
         if (CurrentView == FRONTVIEW) {
             ShowFlightMode();
         }
