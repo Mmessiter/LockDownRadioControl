@@ -554,7 +554,7 @@ bool     ButtonClicks       = true;
 bool     PlayFanfare        = true;
 bool     TrimClicks         = true;
 bool     SpeakingClock      = true;
-
+bool     AnnounceBanks      = true;
 
 // ***************************************** Extra Prototypes **********************************************
 
@@ -2808,6 +2808,9 @@ bool LoadAllParameters()
         ++SDCardAddress;
         SpeakingClock = SDReadByte(SDCardAddress);
         ++SDCardAddress;
+        SpeakingClock = SDReadByte(AnnounceBanks);
+        ++SDCardAddress;
+
         MemoryForTransmtter = SDCardAddress;
         ReadOneModel(ModelNumber);
         SaveNothing = false;           // loading worked ok so it's ok to save stuff now!!
@@ -3074,6 +3077,10 @@ void SaveTXStuff()
     ++SDCardAddress;
     SDUpdateByte(SDCardAddress,SpeakingClock);
     ++SDCardAddress;
+    SDUpdateByte(SDCardAddress,AnnounceBanks);
+    ++SDCardAddress;
+
+
 
     CloseModelsFile();
 }
@@ -4654,9 +4661,7 @@ void ButtonWasPressed()
     char c1[]                      = "c1";
     char c2[]                      = "c2";
     char c3[]                      = "c3";
-   
-   
-
+    char c4[]                      = "c4";
 
      ScreenTimeTimer = millis();  // reset screen counter
      if (ScreenIsOff) {
@@ -4711,7 +4716,8 @@ void ButtonWasPressed()
             SendValue(c0,PlayFanfare);
             SendValue(c1,TrimClicks);
             SendValue(c2,ButtonClicks);
-            SendValue(c3,SpeakingClock);    
+            SendValue(c3,SpeakingClock);   
+            SendValue(c4,AnnounceBanks);  
             SetAudioVolume(AudioVolume);
             RestoreBrightness();
             return;
@@ -4726,6 +4732,7 @@ void ButtonWasPressed()
             TrimClicks    = GetValue(c1);
             ButtonClicks  = GetValue(c2);
             SpeakingClock = GetValue(c3);
+            AnnounceBanks = GetValue(c4);
             RestoreBrightness();
             SetAudioVolume(AudioVolume);
             SendCommand(page_SetupView);
@@ -6121,7 +6128,7 @@ void GetFlightMode()
     Channel12SwitchValue = CheckSwitch(Channel12Switch);
 
     if (FlightMode != PreviousFlightMode) {
-        if (SpeakingClock) SoundFlightMode();
+        if (AnnounceBanks) SoundFlightMode();
         if (CurrentView == FRONTVIEW) {
             ShowFlightMode();
         }
