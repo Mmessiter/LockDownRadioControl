@@ -255,6 +255,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "AckPayloadSize", "_transmitter_code_2src_2main_8cpp.html#a6dc99d00582ef356ea3d57700dca6dab", null ],
     [ "AllChannels", "_transmitter_code_2src_2main_8cpp.html#a1d18aaaa3cc4ba52bd309c88815c60a7", null ],
     [ "AnalogueInput", "_transmitter_code_2src_2main_8cpp.html#a0c2eb3050c13378578402202c6290391", null ],
+    [ "AnnounceBanks", "_transmitter_code_2src_2main_8cpp.html#ae9add7064c6a555558088c4f67560535", null ],
     [ "AudioVolume", "_transmitter_code_2src_2main_8cpp.html#adddcbca54e7b49592c3f6c360bf04494", null ],
     [ "AutoSwitch", "_transmitter_code_2src_2main_8cpp.html#a6d1c8ca21c8826267f5687d3799c6a1f", null ],
     [ "b5isGrey", "_transmitter_code_2src_2main_8cpp.html#a2cacff4290d454b1134b62c183e4e17a", null ],

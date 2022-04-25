@@ -46,11 +46,12 @@ var searchData=
   ['analogueinput_43',['AnalogueInput',['../_transmitter_code_2src_2main_8cpp.html#a0c2eb3050c13378578402202c6290391',1,'main.cpp']]],
   ['angle_44',['angle',['../class_adafruit___g_p_s.html#a0f60908101d728cfa3c12f7ae6a31018',1,'Adafruit_GPS']]],
   ['anglegps_45',['AngleGPS',['../_receiver_code_2src_2main_8cpp.html#a9cb6617428d513efc095336972632da6',1,'AngleGPS():&#160;main.cpp'],['../radio_8h.html#a9cb6617428d513efc095336972632da6',1,'AngleGPS():&#160;main.cpp']]],
-  ['approximation_46',['APPROXIMATION',['../_transmitter_code_2src_2main_8cpp.html#aee8c3c363eab49d6a90d3f74587694d5',1,'main.cpp']]],
-  ['attachservos_47',['AttachServos',['../_receiver_code_2src_2main_8cpp.html#a0cbfd712ab3bd8f654bc19400fd704bd',1,'main.cpp']]],
-  ['audioview_48',['AUDIOVIEW',['../_transmitter_code_2src_2main_8cpp.html#a445cfbf06ed74188fcf3965b4cab9533',1,'AUDIOVIEW():&#160;main.cpp'],['../_radio_functions_8cpp.html#a445cfbf06ed74188fcf3965b4cab9533',1,'AUDIOVIEW():&#160;RadioFunctions.cpp']]],
-  ['audiovolume_49',['AudioVolume',['../_transmitter_code_2src_2main_8cpp.html#adddcbca54e7b49592c3f6c360bf04494',1,'main.cpp']]],
-  ['autoswitch_50',['AutoSwitch',['../_transmitter_code_2src_2main_8cpp.html#a6d1c8ca21c8826267f5687d3799c6a1f',1,'main.cpp']]],
-  ['autoswitch_51',['AUTOSWITCH',['../_transmitter_code_2src_2main_8cpp.html#aa4414f3ff790f01b8bb41a0f51d1518f',1,'main.cpp']]],
-  ['available_52',['available',['../class_adafruit___g_p_s.html#abe6399af00c0047527ea20e3f35a0182',1,'Adafruit_GPS']]]
+  ['announcebanks_46',['AnnounceBanks',['../_transmitter_code_2src_2main_8cpp.html#ae9add7064c6a555558088c4f67560535',1,'main.cpp']]],
+  ['approximation_47',['APPROXIMATION',['../_transmitter_code_2src_2main_8cpp.html#aee8c3c363eab49d6a90d3f74587694d5',1,'main.cpp']]],
+  ['attachservos_48',['AttachServos',['../_receiver_code_2src_2main_8cpp.html#a0cbfd712ab3bd8f654bc19400fd704bd',1,'main.cpp']]],
+  ['audioview_49',['AUDIOVIEW',['../_transmitter_code_2src_2main_8cpp.html#a445cfbf06ed74188fcf3965b4cab9533',1,'AUDIOVIEW():&#160;main.cpp'],['../_radio_functions_8cpp.html#a445cfbf06ed74188fcf3965b4cab9533',1,'AUDIOVIEW():&#160;RadioFunctions.cpp']]],
+  ['audiovolume_50',['AudioVolume',['../_transmitter_code_2src_2main_8cpp.html#adddcbca54e7b49592c3f6c360bf04494',1,'main.cpp']]],
+  ['autoswitch_51',['AutoSwitch',['../_transmitter_code_2src_2main_8cpp.html#a6d1c8ca21c8826267f5687d3799c6a1f',1,'main.cpp']]],
+  ['autoswitch_52',['AUTOSWITCH',['../_transmitter_code_2src_2main_8cpp.html#aa4414f3ff790f01b8bb41a0f51d1518f',1,'main.cpp']]],
+  ['available_53',['available',['../class_adafruit___g_p_s.html#abe6399af00c0047527ea20e3f35a0182',1,'Adafruit_GPS']]]
 ];
