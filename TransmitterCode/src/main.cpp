@@ -542,7 +542,7 @@ uint16_t RX2TotalTime       = 0 ;
 uint16_t SavedRadioSwaps    = 0;
 uint16_t SavedRX1TotalTime  = 0;
 uint16_t SavedRX2TotalTime  = 0;
-uint8_t  AudioVolume        = 10;
+uint8_t  AudioVolume        = 90;
 char     OpeningFanfare[]   = "fanfare2";
 char     click0[]           = "play 0,0,0";  //  = channel, noiseID ,loop
 char     click1[]           = "play 0,1,0";  //  = channel, noiseID ,loop
@@ -6188,7 +6188,7 @@ switch(ch){
 void IncTrim(uint8_t t){
         char Complete[] = "Complete";      // end noise
         char BeepMiddle[] = "BeepMiddle";  // centre noise
-        bool sounded = false;
+        bool Sounded = false;
         Trims[FlightMode][t] += 1;
         if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimViewPart(t);
         if (Trims[FlightMode][t] > 120) {
@@ -6196,7 +6196,7 @@ void IncTrim(uint8_t t){
             if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimViewPart(t);
             if (TrimClicks) {
                 PlayWaveFile(Complete);
-                sounded = true;
+                Sounded = true;
                 Procrastinate(500);
              }
         }
@@ -6205,17 +6205,17 @@ void IncTrim(uint8_t t){
             if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimViewPart(t);
              if (TrimClicks) {
                 PlayWaveFile(BeepMiddle);
-                sounded = true;
+                Sounded = true;
             }
         }
-        if ((TrimClicks) && (!sounded)) SendCommand (click0);
+        if ((TrimClicks) && (!Sounded)) SendCommand (click0);
 }
 // *************************************************************************************************************
 
 void DecTrim(uint8_t t){
         char Complete[] = "Complete";
         char BeepMiddle[] = "BeepMiddle";
-        bool sounded = false;
+        bool Sounded = false;
          Trims[FlightMode][t] -= 1;
          if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimViewPart(t);
          if (Trims[FlightMode][t] < 40) {
@@ -6223,7 +6223,7 @@ void DecTrim(uint8_t t){
              if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimViewPart(t);
              if (TrimClicks) {
                 PlayWaveFile(Complete);
-                sounded = true;
+                Sounded = true;
                 Procrastinate(500);
              }
         
@@ -6233,10 +6233,10 @@ void DecTrim(uint8_t t){
             if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimViewPart(t);
             if (TrimClicks) {
                 PlayWaveFile(BeepMiddle);
-                sounded = true;
+                Sounded = true;
             }
          }
-         if ((TrimClicks) && (!sounded)) SendCommand (click0);
+         if ((TrimClicks) && (!Sounded)) SendCommand (click0);
 }
 // *************************************************************************************************************
 
