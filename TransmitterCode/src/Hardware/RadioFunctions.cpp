@@ -371,7 +371,7 @@ void DoScanInit()
 
 void DoScanEnd()
 {
-    SendCommand(NEXTIONSleepTime);
+    //SendCommand(NEXTIONSleepTime);
     Radio1.setDataRate(RF24_250KBPS);
     Radio1.openWritingPipe(DefaultPipe);
     CurrentMode = NORMAL;

@@ -89,7 +89,7 @@
 #define FLIGHTMODESWITCH   4                   // Default MODE switch
 #define AUTOSWITCH         1                   // Default AUTO switch
 #define DEFAULTPIPEADDRESS 0xBABE1E5420LL      // Pipe address for startup - any value but MUST match RX
-#define LOWBATTERY         42                  // percent for warning
+#define LOWBATTERY         42                  // percent for warning (User definable now)
 #define CE_PIN             9                   // for SPI to nRF24L01
 #define CSN_PIN            10                  // for SPI to nRF24L01
 #define INACTIVITYTIMEOUT  10 * TICKSPERMINUTE // Default time after which to switch off
@@ -340,13 +340,13 @@ char     page_FhssView[]             = "page FhssView";
 char     FhssView_Rlow[]             = "FHSSLow";
 char     FhssView_Rhigh[]            = "FHSSHigh";
 char     BindScreenBox[]             = "BindStatus";
-char     NEXTIONSleepTime[]          = "thsp=";
-char     NEXTIONWakeOnTouch[]        = "thup=1";
-char     NEXTIONSleepNow[]           = "sleep=1";
-char     NEXTIONWakeUp[]             = "sleep=0";
-char     ScreenViewTimeout[]         = "Sto";
+//char     NEXTIONSleepTime[]          = "thsp=";
+//char     NEXTIONWakeOnTouch[]        = "thup=1";
+//char     NEXTIONWakeUp[]             = "sleep=0";
+
+char     ScreenViewTimeout[]         = "Sto";                  // needed for display info
 char     NoSleeping[]                = "thsp=0";
-uint16_t ScreenTimeout               = 120; // Screen has two minute timeout by default
+uint16_t ScreenTimeout               = 120;                     // Screen has two minute timeout by default
 char     HtextCMD[]                  = "click HelpText,0";
 char     StartBackGround[]           = "click Background,0";
 int      LastLinePosition            = 0;
@@ -547,9 +547,14 @@ uint16_t SavedRadioSwaps    = 0;
 uint16_t SavedRX1TotalTime  = 0;
 uint16_t SavedRX2TotalTime  = 0;
 uint8_t  AudioVolume        = 10;
-char     OpeningFanfare[] = "fanfare2";
-char     click0[] = "play 0,0,0";  //  = channel, noiseID ,loop
-char     click1[] = "play 0,1,0";  //  = channel, noiseID ,loop
+char     OpeningFanfare[]   = "fanfare2";
+char     click0[]           = "play 0,0,0";  //  = channel, noiseID ,loop
+char     click1[]           = "play 0,1,0";  //  = channel, noiseID ,loop
+uint32_t WarningTimer       = 0;
+uint32_t ScreenTimeTimer    = 0;
+bool     ScreenIsOff        = false;
+char     ScreenOn[]                = "dim=100";
+
 void SendText(char* tbox, char* NewWord); // needed a prototype here!
 
 /************************************************************************************************************/
@@ -1311,15 +1316,7 @@ bool GetButtonPress()
    if (ButtonPressed) SendCommand(click1);
    return ButtonPressed;
 }
-/*********************************************************************************************************************************/
-void SendValue1(char* nbox, int value)
-{
-    char CB[100];
-    char NB[25];
-    strcpy(CB, nbox);
-    strcat(CB, Str(NB, value, 0));
-    SendCommand(CB);
-}
+
 /*********************************************************************************************************************************/
 //             END OF NEXTION FUNCTIONS
 /*********************************************************************************************************************************/
@@ -1555,6 +1552,19 @@ void ShowServoPos()
 
 /*********************************************************************************************************************************/
 
+ void CheckScreenTime(){
+
+ char ScreenOff[] = "dim=0";
+  if ((millis() - ScreenTimeTimer) > ScreenTimeout * 1000) {
+      SendCommand(ScreenOff);
+      ScreenTimeTimer = millis();
+      ScreenIsOff = true;
+  }
+ }
+
+
+/*********************************************************************************************************************************/
+
 /** @brief SHOW COMMS */
 FASTRUN void ShowComms()
 {
@@ -1622,7 +1632,8 @@ FASTRUN void ShowComms()
     char  Mxd[]               = "Mxd";
     char  BTo[]               = "BTo";
     char  Sat[]               = "Sat";
-    char  Sbs[]              = "Sbus";
+    char  Sbs[]               = "Sbus";
+    char  LowBat[]            = "LowBat";
 
     if (CurrentView == FRONTVIEW || CurrentView == DATAVIEW) {
         if (millis() - LastShowTime > ShowCommsDelay) { 
@@ -1802,17 +1813,21 @@ FASTRUN void ShowComms()
                 }
             }
         }
+        CheckScreenTime();
         if (CurrentView == FRONTVIEW) {
             if (RXWarningFlag || TXWarningFlag) {
                 SendCommand(WarnNow);
                 LedIsBlinking = true; 
+                    if((millis() - WarningTimer) > 10000) {
+                        WarningTimer = millis();
+                        PlayWaveFile(LowBat);                // issue audible warning every 10 seconds
+                    }
             } else {
                 SendCommand(WarnOff);
                 LedIsBlinking = false; 
                 LedWasGreen = false;
             }
         }
-   
     }
 } // end ShowComms()
 
@@ -2913,7 +2928,7 @@ void setup()
     SendValue(FrontView_Special,SpecialColour);
     SendValue(FrontView_Highlight,HighlightColour);
     SendCommand(page_FrontView);
-    SendCommand(NEXTIONWakeUp);
+   // SendCommand(NEXTIONWakeUp);
     teensyMAC(MacAddress);                                // Get MAC address and use it as pipe address
     NewPipe  = (uint64_t)MacAddress[0] << 40;
     NewPipe += (uint64_t)MacAddress[1] << 32;
@@ -2928,7 +2943,7 @@ void setup()
     InitRadio(DefaultPipe);
     SendText(FrontView_Connected, Initialising);
    // SendValue1(NEXTIONSleepTime, ScreenTimeout); // Setup Screen timeout (No .val needed)
-    SendCommand(NEXTIONWakeOnTouch);             // Wake on touch
+   // SendCommand(NEXTIONWakeOnTouch);             // Wake on touch
     SendValue(FrontView_Hours, 0);
     SendValue(FrontView_Mins, 0);
     SendValue(FrontView_Secs, 0);
@@ -2947,6 +2962,8 @@ void setup()
     SetUKFrequencies(); 
     SetAudioVolume(AudioVolume);
     PlayWaveFile(OpeningFanfare);
+    ScreenTimeTimer = millis();
+     SendCommand (ScreenOn);
 }
 /*********************************************************************************************************************************/
 
@@ -4601,8 +4618,13 @@ void ButtonWasPressed()
     char Ex1[]                     = "Ex1";
     char AudioView[]               = "AudioView";
     char cb0[]                     = "cb0";
-
    
+
+
+     ScreenTimeTimer = millis();  // reset screen counter
+     if (ScreenIsOff) {
+         SendCommand (ScreenOn);
+     }
 
     if (strlen(TextIn) > 0) {
         StartInactvityTimeout();
@@ -5910,7 +5932,6 @@ void ButtonWasPressed()
                 SaveAllParameters();
                 SendText(SvT11, Cmsg5);
                 SendText(SvB0, Cmsg6);
-               // SendValue1(NEXTIONSleepTime, ScreenTimeout); // Re enable timeout
                 ClearText();
                 return;
             }
@@ -6051,7 +6072,6 @@ void GetFlightMode()
     if (FlightMode != PreviousFlightMode) {
        
         SoundFlightMode();
-        SendCommand(NEXTIONWakeUp);    // wake screen up if flight mode changes 
         if (CurrentView == FRONTVIEW) {
             ShowFlightMode();
         }
