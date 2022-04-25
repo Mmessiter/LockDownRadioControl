@@ -6188,41 +6188,55 @@ switch(ch){
 void IncTrim(uint8_t t){
         char Complete[] = "Complete";      // end noise
         char BeepMiddle[] = "BeepMiddle";  // centre noise
+        bool sounded = false;
         Trims[FlightMode][t] += 1;
         if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimViewPart(t);
         if (Trims[FlightMode][t] > 120) {
             Trims[FlightMode][t] = 120;
             if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimViewPart(t);
-            if (TrimClicks) PlayWaveFile(Complete);
-            Procrastinate(500);
+            if (TrimClicks) {
+                PlayWaveFile(Complete);
+                sounded = true;
+                Procrastinate(500);
+             }
         }
         if (Trims[FlightMode][t] == 80)  {
             TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed at centre
             if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimViewPart(t);
-            if (TrimClicks) PlayWaveFile(BeepMiddle);
- 
+             if (TrimClicks) {
+                PlayWaveFile(BeepMiddle);
+                sounded = true;
+            }
         }
+        if ((TrimClicks) && (!sounded)) SendCommand (click0);
 }
 // *************************************************************************************************************
 
 void DecTrim(uint8_t t){
         char Complete[] = "Complete";
         char BeepMiddle[] = "BeepMiddle";
+        bool sounded = false;
          Trims[FlightMode][t] -= 1;
          if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimViewPart(t);
          if (Trims[FlightMode][t] < 40) {
              Trims[FlightMode][t] = 40;
              if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimViewPart(t);
-             if (TrimClicks) PlayWaveFile(Complete);
-             Procrastinate(500);
+             if (TrimClicks) {
+                PlayWaveFile(Complete);
+                sounded = true;
+                Procrastinate(500);
+             }
         
          }
          if (Trims[FlightMode][t] == 80)  {
              TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed at centre
             if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimViewPart(t);
-            if (TrimClicks) PlayWaveFile(BeepMiddle);
-          
+            if (TrimClicks) {
+                PlayWaveFile(BeepMiddle);
+                sounded = true;
+            }
          }
+         if ((TrimClicks) && (!sounded)) SendCommand (click0);
 }
 // *************************************************************************************************************
 
@@ -6234,7 +6248,7 @@ void  MoveaTrim(uint8_t i){
         Elevator = 2; 
         Throttle = 1; 
     }
-   if (TrimClicks) SendCommand (click0);
+  
     switch(i){
     case 0:
             IncTrim(0);   // Aileron
