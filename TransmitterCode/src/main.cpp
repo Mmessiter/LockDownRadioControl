@@ -4266,6 +4266,11 @@ void SoundFlightMode()
         default:
             break;
     }
+    ScreenTimeTimer = millis();  // reset screen counter
+    if (ScreenIsOff) {
+        SendCommand (ScreenOn);
+        ScreenIsOff = false;
+    }
 
 }
 /*********************************************************************************************************************************/
@@ -6068,11 +6073,7 @@ void GetFlightMode()
 
     if (FlightMode != PreviousFlightMode) {
         SoundFlightMode();
-        ScreenTimeTimer = millis();  // reset screen counter
-        if (ScreenIsOff) {
-           SendCommand (ScreenOn);
-           ScreenIsOff = false;
-        }
+       
         if (CurrentView == FRONTVIEW) {
             ShowFlightMode();
         }
