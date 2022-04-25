@@ -340,10 +340,6 @@ char     page_FhssView[]             = "page FhssView";
 char     FhssView_Rlow[]             = "FHSSLow";
 char     FhssView_Rhigh[]            = "FHSSHigh";
 char     BindScreenBox[]             = "BindStatus";
-//char     NEXTIONSleepTime[]          = "thsp=";
-//char     NEXTIONWakeOnTouch[]        = "thup=1";
-//char     NEXTIONWakeUp[]             = "sleep=0";
-
 char     ScreenViewTimeout[]         = "Sto";                  // needed for display info
 char     NoSleeping[]                = "thsp=0";
 uint16_t ScreenTimeout               = 120;                     // Screen has two minute timeout by default
@@ -553,9 +549,10 @@ char     click1[]           = "play 0,1,0";  //  = channel, noiseID ,loop
 uint32_t WarningTimer       = 0;
 uint32_t ScreenTimeTimer    = 0;
 bool     ScreenIsOff        = false;
-char     ScreenOn[]                = "dim=100";
+uint8_t  Brightness         =  100;
 
-void SendText(char* tbox, char* NewWord); // needed a prototype here!
+void SendText(char* tbox, char* NewWord); // needed a prototype or two here!
+void RestoreBrightness();
 
 /************************************************************************************************************/
 // This function returns distance (in MILES) between two GPS coordinates (in degrees)
@@ -2793,11 +2790,10 @@ bool LoadAllParameters()
         ++SDCardAddress;
         AudioVolume=SDReadByte(SDCardAddress);
          ++SDCardAddress;
-    for (i = 0;i < 19; ++i){
-       //  OpeningFanfare[i]= SDReadByte(SDCardAddress);
-       // if (!OpeningFanfare[i]) break;
-        ++SDCardAddress;
-    }   
+        Brightness = SDReadByte(SDCardAddress);
+        if (Brightness < 15) Brightness = 15;
+         ++SDCardAddress;
+ 
         MemoryForTransmtter = SDCardAddress;
         ReadOneModel(ModelNumber);
         SaveNothing = false;           // loading worked ok so it's ok to save stuff now!!
@@ -2959,7 +2955,7 @@ void setup()
     SetAudioVolume(AudioVolume);
     PlayWaveFile(OpeningFanfare);
     ScreenTimeTimer = millis();
-     SendCommand (ScreenOn);
+    RestoreBrightness();
 }
 /*********************************************************************************************************************************/
 
@@ -3054,10 +3050,10 @@ void SaveTXStuff()
     ++SDCardAddress;
      SDUpdateByte(SDCardAddress,AudioVolume);
     ++SDCardAddress;
-    for (i=0;i < 19; ++i){
-       //  SDUpdateByte(SDCardAddress,OpeningFanfare[i]);
-       // ++SDCardAddress;
-    }
+     SDUpdateByte(SDCardAddress,Brightness);
+    ++SDCardAddress;
+
+    
     CloseModelsFile();
 }
 
@@ -4268,8 +4264,8 @@ void SoundFlightMode()
     }
     ScreenTimeTimer = millis();  // reset screen counter
     if (ScreenIsOff) {
-        SendCommand (ScreenOn);
-        ScreenIsOff = false;
+       RestoreBrightness();
+       ScreenIsOff = false;
     }
 
 }
@@ -4359,6 +4355,18 @@ void updateOneSwitchView()
         if (SWITCH4Reversed) SendValue(OneSwitchViewc_revd, 1);
     }
     SendValue(SwNum, SwitchEditNumber); // show switch number
+}
+
+/*********************************************************************************************************************************/
+
+void RestoreBrightness(){
+    char cmd[20];
+    char dim[] = "dim=";
+    char nb[10];
+    strcpy(cmd,dim);
+    Str(nb,Brightness,0);
+    strcat(cmd,nb);
+    SendCommand(cmd);
 }
 /*********************************************************************************************************************************/
 
@@ -4619,12 +4627,14 @@ void ButtonWasPressed()
     char Ex1[]                     = "Ex1";
     char AudioView[]               = "AudioView";
     char cb0[]                     = "cb0";
+    char n1[]                      = "n1";
+    char h0[]                      = "h0";
    
 
 
      ScreenTimeTimer = millis();  // reset screen counter
      if (ScreenIsOff) {
-         SendCommand (ScreenOn);
+         RestoreBrightness();
          ScreenIsOff = false;
      }
 
@@ -4662,7 +4672,7 @@ void ButtonWasPressed()
         }
 
 
-        if (InStrng(AudioView, TextIn) > 0) {  // Display screen with audio options
+        if (InStrng(AudioView, TextIn) > 0) {  // Display screen with audio options // HEER!!
             ClearText();
             CurrentMode = NORMAL;
             CurrentView = AUDIOVIEW;
@@ -4670,13 +4680,18 @@ void ButtonWasPressed()
             SendValue(n0,AudioVolume);
             SendValue(Ex1,AudioVolume);
             SendText (cb0,OpeningFanfare);
+            SendValue(n1,Brightness);
+            SendValue(h0,Brightness);
             SetAudioVolume(AudioVolume);
+            RestoreBrightness();
             return;
         }
         if (InStrng(SetupAud, TextIn) > 0) {  // Exit from screen with audio options
             CurrentMode = NORMAL;
             CurrentView = MAINSETUPVIEW;
             AudioVolume = GetValue(n0);
+            Brightness = GetValue(n1);
+            RestoreBrightness();
             SetAudioVolume(AudioVolume);
             GetText (cb0,OpeningFanfare);
             SendCommand(page_SetupView);
