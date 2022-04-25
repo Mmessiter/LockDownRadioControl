@@ -6155,9 +6155,9 @@ void UpdateTrimViewPart(uint8_t ch)
 
 switch(ch){
     case 0:
-     SendValue(TrimView_ch1, (Trims[FlightMode][0]));
-     SendValue(TrimView_n1,  (Trims[FlightMode][0] - 80));
-     break;
+    SendValue(TrimView_ch1, (Trims[FlightMode][0]));
+    SendValue(TrimView_n1,  (Trims[FlightMode][0] - 80));
+    break;
     case 1:
     SendValue(TrimView_ch4, (Trims[FlightMode][1]));
     SendValue(TrimView_n4,  (Trims[FlightMode][1] - 80));
