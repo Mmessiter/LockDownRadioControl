@@ -19,16 +19,17 @@ var searchData=
   ['blinktimer_16',['BlinkTimer',['../_transmitter_code_2src_2main_8cpp.html#a79ef591b711372e0f452e2afe8d2a718',1,'main.cpp']]],
   ['bmp280_17',['bmp280',['../_sensor_hub_teensy3__6_2src_2main_8cpp.html#a1eeadec20c253385fe11f15108d783c8',1,'bmp280():&#160;main.cpp'],['../_sensor_hub_t32_2src_2main_8cpp.html#a1eeadec20c253385fe11f15108d783c8',1,'bmp280():&#160;main.cpp'],['../_sensor_hub_l_c_2src_2main_8cpp.html#a1eeadec20c253385fe11f15108d783c8',1,'bmp280():&#160;main.cpp']]],
   ['bootupmoment_18',['BootupMoment',['../_receiver_code_2src_2main_8cpp.html#a1883c8c3aad38ab8955bd5de6971c9a7',1,'main.cpp']]],
-  ['boundflag_19',['BoundFlag',['../_receiver_code_2src_2main_8cpp.html#a44d37e4e8af884bf172344c0835a5593',1,'BoundFlag():&#160;main.cpp'],['../radio_8h.html#a44d37e4e8af884bf172344c0835a5593',1,'BoundFlag():&#160;main.cpp'],['../_radio_functions_8h.html#a44d37e4e8af884bf172344c0835a5593',1,'BoundFlag():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a44d37e4e8af884bf172344c0835a5593',1,'BoundFlag():&#160;main.cpp']]],
+  ['boundflag_19',['BoundFlag',['../radio_8h.html#a44d37e4e8af884bf172344c0835a5593',1,'BoundFlag():&#160;main.cpp'],['../_receiver_code_2src_2main_8cpp.html#a44d37e4e8af884bf172344c0835a5593',1,'BoundFlag():&#160;main.cpp'],['../_radio_functions_8h.html#a44d37e4e8af884bf172344c0835a5593',1,'BoundFlag():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a44d37e4e8af884bf172344c0835a5593',1,'BoundFlag():&#160;main.cpp']]],
   ['boxbottom_20',['BoxBottom',['../_transmitter_code_2src_2main_8cpp.html#a1340a45a8a76cd8fa84cda37b5a6deb9',1,'main.cpp']]],
   ['boxleft_21',['BoxLeft',['../_transmitter_code_2src_2main_8cpp.html#a528e5b9a8bfd443ca33e1b0a47626c68',1,'main.cpp']]],
   ['boxright_22',['BoxRight',['../_transmitter_code_2src_2main_8cpp.html#a7a63dbfa61afc677b54d95ae815af072',1,'main.cpp']]],
   ['boxtop_23',['BoxTop',['../_transmitter_code_2src_2main_8cpp.html#a8f75203206238880b26aea4eef57bb11',1,'main.cpp']]],
   ['brightness_24',['Brightness',['../_transmitter_code_2src_2main_8cpp.html#adb3b4a5ffa0c290576c837177b5385a0',1,'main.cpp']]],
   ['buddymaster_25',['BuddyMaster',['../_radio_functions_8h.html#a26a52012e307147a99289fff5c492358',1,'BuddyMaster():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a26a52012e307147a99289fff5c492358',1,'BuddyMaster():&#160;main.cpp']]],
-  ['byte1_26',['Byte1',['../struct_payload.html#ab1cbe4c4b9ee9ce839084b274f3ea494',1,'Payload']]],
-  ['byte2_27',['Byte2',['../struct_payload.html#ae7106f2efa1bb9f4ebb720c7c9fc54b8',1,'Payload']]],
-  ['byte3_28',['Byte3',['../struct_payload.html#a31d05bdbdf85fe184cc7f806d3391fa9',1,'Payload']]],
-  ['byte4_29',['Byte4',['../struct_payload.html#a654bdf192bbe0cc64dc8280527c2da20',1,'Payload']]],
-  ['byte5_30',['Byte5',['../struct_payload.html#ae28220045a0918bdb0fc6484dbff55f9',1,'Payload']]]
+  ['buttonclicks_26',['ButtonClicks',['../_transmitter_code_2src_2main_8cpp.html#a0955aa08f4b43e6f78ff256fc6ccf421',1,'main.cpp']]],
+  ['byte1_27',['Byte1',['../struct_payload.html#ab1cbe4c4b9ee9ce839084b274f3ea494',1,'Payload']]],
+  ['byte2_28',['Byte2',['../struct_payload.html#ae7106f2efa1bb9f4ebb720c7c9fc54b8',1,'Payload']]],
+  ['byte3_29',['Byte3',['../struct_payload.html#a31d05bdbdf85fe184cc7f806d3391fa9',1,'Payload']]],
+  ['byte4_30',['Byte4',['../struct_payload.html#a654bdf192bbe0cc64dc8280527c2da20',1,'Payload']]],
+  ['byte5_31',['Byte5',['../struct_payload.html#ae28220045a0918bdb0fc6484dbff55f9',1,'Payload']]]
 ];
