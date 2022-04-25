@@ -550,6 +550,13 @@ uint32_t WarningTimer       = 0;
 uint32_t ScreenTimeTimer    = 0;
 bool     ScreenIsOff        = false;
 uint8_t  Brightness         =  100;
+bool     ButtonClicks       = true;
+bool     PlayFanfare        = true;
+bool     TrimClicks         = true;
+bool     SpeakingClock      = true;
+
+
+// ***************************************** Extra Prototypes **********************************************
 
 void SendText(char* tbox, char* NewWord); // needed a prototype or two here!
 void RestoreBrightness();
@@ -1310,7 +1317,7 @@ bool GetButtonPress()
         }
     }
    if(!(strlen(TextIn))) ButtonPressed = false;
-   if (ButtonPressed) SendCommand(click1);
+   if (ButtonPressed && ButtonClicks) SendCommand(click1);
    return ButtonPressed;
 }
 
@@ -1354,7 +1361,7 @@ void CheckTimer()
         }
     }
     LastSeconds = Secs;
-    if (!Secs){
+    if (!Secs && SpeakingClock){
                switch (Mins) {
                case 1:
                     PlayWaveFile(Min1);
@@ -2793,7 +2800,14 @@ bool LoadAllParameters()
         Brightness = SDReadByte(SDCardAddress);
         if (Brightness < 15) Brightness = 15;
          ++SDCardAddress;
- 
+        PlayFanfare = SDReadByte(SDCardAddress);
+        ++SDCardAddress;
+        TrimClicks = SDReadByte(SDCardAddress);
+        ++SDCardAddress;
+        ButtonClicks = SDReadByte(SDCardAddress);
+        ++SDCardAddress;
+        SpeakingClock = SDReadByte(SDCardAddress);
+        ++SDCardAddress;
         MemoryForTransmtter = SDCardAddress;
         ReadOneModel(ModelNumber);
         SaveNothing = false;           // loading worked ok so it's ok to save stuff now!!
@@ -2953,7 +2967,7 @@ void setup()
     MySbus.begin();
     SetUKFrequencies(); 
     SetAudioVolume(AudioVolume);
-    PlayWaveFile(OpeningFanfare);
+    if (PlayFanfare) PlayWaveFile(OpeningFanfare);
     ScreenTimeTimer = millis();
     RestoreBrightness();
 }
@@ -3052,8 +3066,15 @@ void SaveTXStuff()
     ++SDCardAddress;
      SDUpdateByte(SDCardAddress,Brightness);
     ++SDCardAddress;
+    SDUpdateByte(SDCardAddress,PlayFanfare);
+    ++SDCardAddress;
+    SDUpdateByte(SDCardAddress,TrimClicks);
+    ++SDCardAddress;
+    SDUpdateByte(SDCardAddress,ButtonClicks);
+    ++SDCardAddress;
+    SDUpdateByte(SDCardAddress,SpeakingClock);
+    ++SDCardAddress;
 
-    
     CloseModelsFile();
 }
 
@@ -4629,6 +4650,11 @@ void ButtonWasPressed()
     char cb0[]                     = "cb0";
     char n1[]                      = "n1";
     char h0[]                      = "h0";
+    char c0[]                      = "c0";
+    char c1[]                      = "c1";
+    char c2[]                      = "c2";
+    char c3[]                      = "c3";
+   
    
 
 
@@ -4682,6 +4708,10 @@ void ButtonWasPressed()
             SendText (cb0,OpeningFanfare);
             SendValue(n1,Brightness);
             SendValue(h0,Brightness);
+            SendValue(c0,PlayFanfare);
+            SendValue(c1,TrimClicks);
+            SendValue(c2,ButtonClicks);
+            SendValue(c3,SpeakingClock);    
             SetAudioVolume(AudioVolume);
             RestoreBrightness();
             return;
@@ -4689,11 +4719,14 @@ void ButtonWasPressed()
         if (InStrng(SetupAud, TextIn) > 0) {  // Exit from screen with audio options
             CurrentMode = NORMAL;
             CurrentView = MAINSETUPVIEW;
-            AudioVolume = GetValue(n0);
-            Brightness = GetValue(n1);
+            AudioVolume   = GetValue(n0);
+            Brightness    = GetValue(n1);
+            PlayFanfare   = GetValue(c0);
+            TrimClicks    = GetValue(c1);
+            ButtonClicks  = GetValue(c2);
+            SpeakingClock = GetValue(c3);
             RestoreBrightness();
             SetAudioVolume(AudioVolume);
-            GetText (cb0,OpeningFanfare);
             SendCommand(page_SetupView);
             ClearText();
             SaveTXStuff();
@@ -6152,14 +6185,14 @@ void IncTrim(uint8_t t){
         if (Trims[FlightMode][t] > 120) {
             Trims[FlightMode][t] = 120;
             if ((CurrentView == TRIM_VIEW)  || (CurrentView == FRONTVIEW))    UpdateTrimViewPart(t);
-            PlayWaveFile(Complete);
+            if (TrimClicks) PlayWaveFile(Complete);
             Procrastinate(500);
           
         }
         if (Trims[FlightMode][t] == 80)  {
             TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed at centre
             if ((CurrentView == TRIM_VIEW)  || (CurrentView == FRONTVIEW))   UpdateTrimViewPart(t);
-            PlayWaveFile(BeepMiddle);
+            if (TrimClicks) PlayWaveFile(BeepMiddle);
  
         }
         
@@ -6175,14 +6208,14 @@ void DecTrim(uint8_t t){
          if (Trims[FlightMode][t] < 40) {
              Trims[FlightMode][t] = 40;
              if ((CurrentView == TRIM_VIEW)  || (CurrentView == FRONTVIEW))   UpdateTrimViewPart(t);
-             PlayWaveFile(Complete);
+             if (TrimClicks) PlayWaveFile(Complete);
              Procrastinate(500);
         
          }
          if (Trims[FlightMode][t] == 80)  {
              TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed at centre
             if ((CurrentView == TRIM_VIEW)  || (CurrentView == FRONTVIEW))   UpdateTrimViewPart(t);
-             PlayWaveFile(BeepMiddle);
+            if (TrimClicks) PlayWaveFile(BeepMiddle);
           
          }
 }
@@ -6196,7 +6229,7 @@ void  MoveaTrim(uint8_t i){
         Elevator = 2; 
         Throttle = 1; 
     }
-    SendCommand (click0);
+   if (TrimClicks) SendCommand (click0);
     switch(i){
     case 0:
             IncTrim(0);
