@@ -4391,6 +4391,7 @@ void RestoreBrightness(){
     char cmd[20];
     char dim[] = "dim=";
     char nb[10];
+    if (Brightness < 10) Brightness = 10;
     strcpy(cmd,dim);
     Str(nb,Brightness,0);
     strcat(cmd,nb);
