@@ -6140,6 +6140,7 @@ void GetFlightMode()
 }
 
 /*********************************************************************************************************************************/
+ // This updates only the trim that was editied - for extra speed.
 
 void UpdateTrimViewPart(uint8_t ch)
 {
@@ -6153,22 +6154,21 @@ void UpdateTrimViewPart(uint8_t ch)
     char TrimView_n4[]  = "n4";
 
 switch(ch){
-
     case 0:
      SendValue(TrimView_ch1, (Trims[FlightMode][0]));
-     SendValue(TrimView_n1, (Trims[FlightMode][0] - 80));
+     SendValue(TrimView_n1,  (Trims[FlightMode][0] - 80));
      break;
     case 1:
     SendValue(TrimView_ch4, (Trims[FlightMode][1]));
-    SendValue(TrimView_n4, (Trims[FlightMode][1] - 80));
+    SendValue(TrimView_n4,  (Trims[FlightMode][1] - 80));
     break;
     case 2:
     SendValue(TrimView_ch2, (Trims[FlightMode][2]));
-    SendValue(TrimView_n2, (Trims[FlightMode][2] - 80));
+    SendValue(TrimView_n2,  (Trims[FlightMode][2] - 80));
     break;
     case 3:
     SendValue(TrimView_ch3, (Trims[FlightMode][3]));
-    SendValue(TrimView_n3, (Trims[FlightMode][3] - 80));
+    SendValue(TrimView_n3,  (Trims[FlightMode][3] - 80));
     break;
     default:
     break;
@@ -6178,43 +6178,40 @@ switch(ch){
 // *************************************************************************************************************
 
 void IncTrim(uint8_t t){
-        char Complete[] = "Complete";
-        char BeepMiddle[] = "BeepMiddle";
+        char Complete[] = "Complete";      // end noise
+        char BeepMiddle[] = "BeepMiddle";  // centre noise
         Trims[FlightMode][t] += 1;
-        if ((CurrentView == TRIM_VIEW)  || (CurrentView == FRONTVIEW))  UpdateTrimViewPart(t);
+        if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimViewPart(t);
         if (Trims[FlightMode][t] > 120) {
             Trims[FlightMode][t] = 120;
-            if ((CurrentView == TRIM_VIEW)  || (CurrentView == FRONTVIEW))    UpdateTrimViewPart(t);
+            if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimViewPart(t);
             if (TrimClicks) PlayWaveFile(Complete);
             Procrastinate(500);
-          
         }
         if (Trims[FlightMode][t] == 80)  {
             TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed at centre
-            if ((CurrentView == TRIM_VIEW)  || (CurrentView == FRONTVIEW))   UpdateTrimViewPart(t);
+            if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimViewPart(t);
             if (TrimClicks) PlayWaveFile(BeepMiddle);
  
         }
-        
 }
-
 // *************************************************************************************************************
 
 void DecTrim(uint8_t t){
         char Complete[] = "Complete";
         char BeepMiddle[] = "BeepMiddle";
          Trims[FlightMode][t] -= 1;
-         if ((CurrentView == TRIM_VIEW)  || (CurrentView == FRONTVIEW))    UpdateTrimViewPart(t);
+         if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimViewPart(t);
          if (Trims[FlightMode][t] < 40) {
              Trims[FlightMode][t] = 40;
-             if ((CurrentView == TRIM_VIEW)  || (CurrentView == FRONTVIEW))   UpdateTrimViewPart(t);
+             if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimViewPart(t);
              if (TrimClicks) PlayWaveFile(Complete);
              Procrastinate(500);
         
          }
          if (Trims[FlightMode][t] == 80)  {
              TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed at centre
-            if ((CurrentView == TRIM_VIEW)  || (CurrentView == FRONTVIEW))   UpdateTrimViewPart(t);
+            if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimViewPart(t);
             if (TrimClicks) PlayWaveFile(BeepMiddle);
           
          }
@@ -6232,10 +6229,10 @@ void  MoveaTrim(uint8_t i){
    if (TrimClicks) SendCommand (click0);
     switch(i){
     case 0:
-            IncTrim(0);
+            IncTrim(0);   // Aileron
             break;
     case 1: 
-            DecTrim(0);  
+            DecTrim(0);  // Aileron
             break;
     case 2:
             IncTrim(Elevator); 
@@ -6250,10 +6247,10 @@ void  MoveaTrim(uint8_t i){
             IncTrim(Throttle);
             break;
     case 6:
-            IncTrim(3);
+            IncTrim(3); // Rudder
             break;
     case 7: 
-            DecTrim(3);
+            DecTrim(3); // Rudder
             break;
     default:
     break;
