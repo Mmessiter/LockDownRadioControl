@@ -900,7 +900,7 @@ void SetAudioVolume(uint16_t v){   // sets audio volume v (0-100)
 }
 /*********************************************************************************************************************************/
 
-//void PlayWaveFile(char* tbox){  
+//void PlayWaveFile(char* tbox){  // Now removed. All audio is now in RAM. An issue with the FAT on SD card made this unsafe.
 //#ifdef USEAUDIO
 //    char path[]   = "wav0.path=\"sd0/";
 //    char wav[]    = ".wav\"";
