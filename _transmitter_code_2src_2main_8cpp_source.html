@@ -1359,44 +1359,44 @@ $(document).ready(function(){initNavTree('_transmitter_code_2src_2main_8cpp_sour
 <div class="line"><a id="l01358" name="l01358"></a><span class="lineno"> 1358</span>            <a class="code hl_function" href="_transmitter_code_2src_2main_8cpp.html#a1e20efc1e419b252b50d36f9924503fc">SendValue</a>(<a class="code hl_variable" href="_transmitter_code_2src_2main_8cpp.html#a9a8581d01528b71e16b6b9e0a18f9193">FrontView_Secs</a>, <a class="code hl_variable" href="_transmitter_code_2src_2main_8cpp.html#a80df3d83e93a9ae7e2711eac4c42f033">Secs</a>);</div>
 <div class="line"><a id="l01359" name="l01359"></a><span class="lineno"> 1359</span>            <a class="code hl_function" href="_transmitter_code_2src_2main_8cpp.html#a1e20efc1e419b252b50d36f9924503fc">SendValue</a>(<a class="code hl_variable" href="_transmitter_code_2src_2main_8cpp.html#a60f4339de362e3a16c844e1325523c90">FrontView_Mins</a>, <a class="code hl_variable" href="_transmitter_code_2src_2main_8cpp.html#af83a33c9409bb08a8ad79497b8daa37f">Mins</a>);</div>
 <div class="line"><a id="l01360" name="l01360"></a><span class="lineno"> 1360</span>            <a class="code hl_function" href="_transmitter_code_2src_2main_8cpp.html#a1e20efc1e419b252b50d36f9924503fc">SendValue</a>(<a class="code hl_variable" href="_transmitter_code_2src_2main_8cpp.html#aedaf1495391d83b1ff10ad2192fffc93">FrontView_Hours</a>, <a class="code hl_variable" href="_transmitter_code_2src_2main_8cpp.html#aad0ac7c3fa58b68dbc76618d993683ee">Hours</a>);</div>
-<div class="line"><a id="l01361" name="l01361"></a><span class="lineno"> 1361</span>        }</div>
-<div class="line"><a id="l01362" name="l01362"></a><span class="lineno"> 1362</span>    }</div>
-<div class="line"><a id="l01363" name="l01363"></a><span class="lineno"> 1363</span>    <a class="code hl_variable" href="_transmitter_code_2src_2main_8cpp.html#a461bdfbe0df771f541b8872ac04bb717">LastSeconds</a> = <a class="code hl_variable" href="_transmitter_code_2src_2main_8cpp.html#a80df3d83e93a9ae7e2711eac4c42f033">Secs</a>;</div>
-<div class="line"><a id="l01364" name="l01364"></a><span class="lineno"> 1364</span>    <span class="keywordflow">if</span> (!<a class="code hl_variable" href="_transmitter_code_2src_2main_8cpp.html#a80df3d83e93a9ae7e2711eac4c42f033">Secs</a> &amp;&amp; <a class="code hl_variable" href="_transmitter_code_2src_2main_8cpp.html#ad6ee693920610731a7b3b3627219fbfc">SpeakingClock</a>){   <span class="comment">// todo: stop multiple calls!!! HEER!!!!</span></div>
-<div class="line"><a id="l01365" name="l01365"></a><span class="lineno"> 1365</span>               <span class="keywordflow">switch</span> (<a class="code hl_variable" href="_transmitter_code_2src_2main_8cpp.html#af83a33c9409bb08a8ad79497b8daa37f">Mins</a>) {</div>
-<div class="line"><a id="l01366" name="l01366"></a><span class="lineno"> 1366</span>               <span class="keywordflow">case</span> 1:</div>
-<div class="line"><a id="l01367" name="l01367"></a><span class="lineno"> 1367</span>                    <a class="code hl_function" href="_transmitter_code_2src_2main_8cpp.html#aecac2f0c289f02ef3c92b85be82eacac">SendCommand</a>(Min1);</div>
-<div class="line"><a id="l01368" name="l01368"></a><span class="lineno"> 1368</span>                    <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l01369" name="l01369"></a><span class="lineno"> 1369</span>                <span class="keywordflow">case</span> 2:</div>
-<div class="line"><a id="l01370" name="l01370"></a><span class="lineno"> 1370</span>                    <a class="code hl_function" href="_transmitter_code_2src_2main_8cpp.html#aecac2f0c289f02ef3c92b85be82eacac">SendCommand</a>(Min2);</div>
-<div class="line"><a id="l01371" name="l01371"></a><span class="lineno"> 1371</span>                    <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l01372" name="l01372"></a><span class="lineno"> 1372</span>                <span class="keywordflow">case</span> 3:</div>
-<div class="line"><a id="l01373" name="l01373"></a><span class="lineno"> 1373</span>                    <a class="code hl_function" href="_transmitter_code_2src_2main_8cpp.html#aecac2f0c289f02ef3c92b85be82eacac">SendCommand</a>(Min3); </div>
-<div class="line"><a id="l01374" name="l01374"></a><span class="lineno"> 1374</span>                    <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l01375" name="l01375"></a><span class="lineno"> 1375</span>                <span class="keywordflow">case</span> 4:</div>
-<div class="line"><a id="l01376" name="l01376"></a><span class="lineno"> 1376</span>                    <a class="code hl_function" href="_transmitter_code_2src_2main_8cpp.html#aecac2f0c289f02ef3c92b85be82eacac">SendCommand</a>(Min4); </div>
-<div class="line"><a id="l01377" name="l01377"></a><span class="lineno"> 1377</span>                    <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l01378" name="l01378"></a><span class="lineno"> 1378</span>                 <span class="keywordflow">case</span> 5:</div>
-<div class="line"><a id="l01379" name="l01379"></a><span class="lineno"> 1379</span>                    <a class="code hl_function" href="_transmitter_code_2src_2main_8cpp.html#aecac2f0c289f02ef3c92b85be82eacac">SendCommand</a>(Min5); </div>
-<div class="line"><a id="l01380" name="l01380"></a><span class="lineno"> 1380</span>                    <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l01381" name="l01381"></a><span class="lineno"> 1381</span>                <span class="keywordflow">case</span> 6:</div>
-<div class="line"><a id="l01382" name="l01382"></a><span class="lineno"> 1382</span>                    <a class="code hl_function" href="_transmitter_code_2src_2main_8cpp.html#aecac2f0c289f02ef3c92b85be82eacac">SendCommand</a>(Min6); </div>
-<div class="line"><a id="l01383" name="l01383"></a><span class="lineno"> 1383</span>                    <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l01384" name="l01384"></a><span class="lineno"> 1384</span>                <span class="keywordflow">case</span> 7:</div>
-<div class="line"><a id="l01385" name="l01385"></a><span class="lineno"> 1385</span>                    <a class="code hl_function" href="_transmitter_code_2src_2main_8cpp.html#aecac2f0c289f02ef3c92b85be82eacac">SendCommand</a>(Min7); </div>
-<div class="line"><a id="l01386" name="l01386"></a><span class="lineno"> 1386</span>                    <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l01387" name="l01387"></a><span class="lineno"> 1387</span>                  <span class="keywordflow">case</span> 8:</div>
-<div class="line"><a id="l01388" name="l01388"></a><span class="lineno"> 1388</span>                    <a class="code hl_function" href="_transmitter_code_2src_2main_8cpp.html#aecac2f0c289f02ef3c92b85be82eacac">SendCommand</a>(Min8); </div>
-<div class="line"><a id="l01389" name="l01389"></a><span class="lineno"> 1389</span>                    <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l01390" name="l01390"></a><span class="lineno"> 1390</span>                <span class="keywordflow">case</span> 9:</div>
-<div class="line"><a id="l01391" name="l01391"></a><span class="lineno"> 1391</span>                    <a class="code hl_function" href="_transmitter_code_2src_2main_8cpp.html#aecac2f0c289f02ef3c92b85be82eacac">SendCommand</a>(Min9); </div>
-<div class="line"><a id="l01392" name="l01392"></a><span class="lineno"> 1392</span>                    <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l01393" name="l01393"></a><span class="lineno"> 1393</span>                 <span class="keywordflow">case</span> 10:</div>
-<div class="line"><a id="l01394" name="l01394"></a><span class="lineno"> 1394</span>                    <a class="code hl_function" href="_transmitter_code_2src_2main_8cpp.html#aecac2f0c289f02ef3c92b85be82eacac">SendCommand</a>(Min10); </div>
-<div class="line"><a id="l01395" name="l01395"></a><span class="lineno"> 1395</span>                    <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l01396" name="l01396"></a><span class="lineno"> 1396</span>               <span class="keywordflow">default</span>:</div>
-<div class="line"><a id="l01397" name="l01397"></a><span class="lineno"> 1397</span>                   <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l01398" name="l01398"></a><span class="lineno"> 1398</span>        }</div>
+<div class="line"><a id="l01361" name="l01361"></a><span class="lineno"> 1361</span>            <a class="code hl_variable" href="_transmitter_code_2src_2main_8cpp.html#a461bdfbe0df771f541b8872ac04bb717">LastSeconds</a> = <a class="code hl_variable" href="_transmitter_code_2src_2main_8cpp.html#a80df3d83e93a9ae7e2711eac4c42f033">Secs</a>;</div>
+<div class="line"><a id="l01362" name="l01362"></a><span class="lineno"> 1362</span>            <span class="keywordflow">if</span> (!<a class="code hl_variable" href="_transmitter_code_2src_2main_8cpp.html#a80df3d83e93a9ae7e2711eac4c42f033">Secs</a> &amp;&amp; <a class="code hl_variable" href="_transmitter_code_2src_2main_8cpp.html#ad6ee693920610731a7b3b3627219fbfc">SpeakingClock</a>){   <span class="comment">// todo: stop multiple calls!!! HEER!!!!</span></div>
+<div class="line"><a id="l01363" name="l01363"></a><span class="lineno"> 1363</span>               <span class="keywordflow">switch</span> (<a class="code hl_variable" href="_transmitter_code_2src_2main_8cpp.html#af83a33c9409bb08a8ad79497b8daa37f">Mins</a>) {</div>
+<div class="line"><a id="l01364" name="l01364"></a><span class="lineno"> 1364</span>               <span class="keywordflow">case</span> 1:</div>
+<div class="line"><a id="l01365" name="l01365"></a><span class="lineno"> 1365</span>                    <a class="code hl_function" href="_transmitter_code_2src_2main_8cpp.html#aecac2f0c289f02ef3c92b85be82eacac">SendCommand</a>(Min1);</div>
+<div class="line"><a id="l01366" name="l01366"></a><span class="lineno"> 1366</span>                    <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l01367" name="l01367"></a><span class="lineno"> 1367</span>                <span class="keywordflow">case</span> 2:</div>
+<div class="line"><a id="l01368" name="l01368"></a><span class="lineno"> 1368</span>                    <a class="code hl_function" href="_transmitter_code_2src_2main_8cpp.html#aecac2f0c289f02ef3c92b85be82eacac">SendCommand</a>(Min2);</div>
+<div class="line"><a id="l01369" name="l01369"></a><span class="lineno"> 1369</span>                    <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l01370" name="l01370"></a><span class="lineno"> 1370</span>                <span class="keywordflow">case</span> 3:</div>
+<div class="line"><a id="l01371" name="l01371"></a><span class="lineno"> 1371</span>                    <a class="code hl_function" href="_transmitter_code_2src_2main_8cpp.html#aecac2f0c289f02ef3c92b85be82eacac">SendCommand</a>(Min3); </div>
+<div class="line"><a id="l01372" name="l01372"></a><span class="lineno"> 1372</span>                    <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l01373" name="l01373"></a><span class="lineno"> 1373</span>                <span class="keywordflow">case</span> 4:</div>
+<div class="line"><a id="l01374" name="l01374"></a><span class="lineno"> 1374</span>                    <a class="code hl_function" href="_transmitter_code_2src_2main_8cpp.html#aecac2f0c289f02ef3c92b85be82eacac">SendCommand</a>(Min4); </div>
+<div class="line"><a id="l01375" name="l01375"></a><span class="lineno"> 1375</span>                    <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l01376" name="l01376"></a><span class="lineno"> 1376</span>                 <span class="keywordflow">case</span> 5:</div>
+<div class="line"><a id="l01377" name="l01377"></a><span class="lineno"> 1377</span>                    <a class="code hl_function" href="_transmitter_code_2src_2main_8cpp.html#aecac2f0c289f02ef3c92b85be82eacac">SendCommand</a>(Min5); </div>
+<div class="line"><a id="l01378" name="l01378"></a><span class="lineno"> 1378</span>                    <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l01379" name="l01379"></a><span class="lineno"> 1379</span>                <span class="keywordflow">case</span> 6:</div>
+<div class="line"><a id="l01380" name="l01380"></a><span class="lineno"> 1380</span>                    <a class="code hl_function" href="_transmitter_code_2src_2main_8cpp.html#aecac2f0c289f02ef3c92b85be82eacac">SendCommand</a>(Min6); </div>
+<div class="line"><a id="l01381" name="l01381"></a><span class="lineno"> 1381</span>                    <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l01382" name="l01382"></a><span class="lineno"> 1382</span>                <span class="keywordflow">case</span> 7:</div>
+<div class="line"><a id="l01383" name="l01383"></a><span class="lineno"> 1383</span>                    <a class="code hl_function" href="_transmitter_code_2src_2main_8cpp.html#aecac2f0c289f02ef3c92b85be82eacac">SendCommand</a>(Min7); </div>
+<div class="line"><a id="l01384" name="l01384"></a><span class="lineno"> 1384</span>                    <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l01385" name="l01385"></a><span class="lineno"> 1385</span>                  <span class="keywordflow">case</span> 8:</div>
+<div class="line"><a id="l01386" name="l01386"></a><span class="lineno"> 1386</span>                    <a class="code hl_function" href="_transmitter_code_2src_2main_8cpp.html#aecac2f0c289f02ef3c92b85be82eacac">SendCommand</a>(Min8); </div>
+<div class="line"><a id="l01387" name="l01387"></a><span class="lineno"> 1387</span>                    <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l01388" name="l01388"></a><span class="lineno"> 1388</span>                <span class="keywordflow">case</span> 9:</div>
+<div class="line"><a id="l01389" name="l01389"></a><span class="lineno"> 1389</span>                    <a class="code hl_function" href="_transmitter_code_2src_2main_8cpp.html#aecac2f0c289f02ef3c92b85be82eacac">SendCommand</a>(Min9); </div>
+<div class="line"><a id="l01390" name="l01390"></a><span class="lineno"> 1390</span>                    <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l01391" name="l01391"></a><span class="lineno"> 1391</span>                 <span class="keywordflow">case</span> 10:</div>
+<div class="line"><a id="l01392" name="l01392"></a><span class="lineno"> 1392</span>                    <a class="code hl_function" href="_transmitter_code_2src_2main_8cpp.html#aecac2f0c289f02ef3c92b85be82eacac">SendCommand</a>(Min10); </div>
+<div class="line"><a id="l01393" name="l01393"></a><span class="lineno"> 1393</span>                    <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l01394" name="l01394"></a><span class="lineno"> 1394</span>               <span class="keywordflow">default</span>:</div>
+<div class="line"><a id="l01395" name="l01395"></a><span class="lineno"> 1395</span>                   <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l01396" name="l01396"></a><span class="lineno"> 1396</span>               }</div>
+<div class="line"><a id="l01397" name="l01397"></a><span class="lineno"> 1397</span>            }</div>
+<div class="line"><a id="l01398" name="l01398"></a><span class="lineno"> 1398</span>        }  </div>
 <div class="line"><a id="l01399" name="l01399"></a><span class="lineno"> 1399</span>    }</div>
 <div class="line"><a id="l01400" name="l01400"></a><span class="lineno"> 1400</span>}</div>
 <div class="line"><a id="l01401" name="l01401"></a><span class="lineno"> 1401</span> </div>
