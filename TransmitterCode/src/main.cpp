@@ -543,7 +543,7 @@ uint16_t SavedRadioSwaps    = 0;
 uint16_t SavedRX1TotalTime  = 0;
 uint16_t SavedRX2TotalTime  = 0;
 uint8_t  AudioVolume        = 90;
-char     OpeningFanfare[]   = "fanfare2";
+char     OpeningFanfare[]   = "play 0,18,0";
 char     click0[]           = "play 0,0,0";  //  = channel, noiseID ,loop
 char     click1[]           = "play 0,1,0";  //  = channel, noiseID ,loop
 uint32_t WarningTimer       = 0;
@@ -900,19 +900,19 @@ void SetAudioVolume(uint16_t v){   // sets audio volume v (0-100)
 }
 /*********************************************************************************************************************************/
 
-void PlayWaveFile(char* tbox){  
-#ifdef USEAUDIO
-    char path[]   = "wav0.path=\"sd0/";
-    char wav[]    = ".wav\"";
-    char en[]     = "wav0.en=1";
-    char CB[70];
-    strcpy(CB, path);
-    strcat(CB, tbox);
-    strcat(CB, wav);
-    SendCommand(CB);    
-    SendCommand(en);
-#endif
-}
+//void PlayWaveFile(char* tbox){  
+//#ifdef USEAUDIO
+//    char path[]   = "wav0.path=\"sd0/";
+//    char wav[]    = ".wav\"";
+//    char en[]     = "wav0.en=1";
+//    char CB[70];
+//    strcpy(CB, path);
+//    strcat(CB, tbox);
+//    strcat(CB, wav);
+//    SendCommand(CB);    
+//    SendCommand(en);
+//#endif//
+//}
 /*********************************************************************************************************************************/
 
 // This function converts an int to a char[] array, then adds a comma, a dot, or nothing at the end.
@@ -1335,16 +1335,16 @@ uint8_t um(uint16_t bv) // convert to lower resolution
 void CheckTimer()
 {
 
-   char Min1[] = "1Min";
-   char Min2[] = "2Min";
-   char Min3[] = "3Min";
-   char Min4[] = "4Min";
-   char Min5[] = "5Min";
-   char Min6[] = "6Min";
-   char Min7[] = "7Min";
-   char Min8[] = "8Min";
-   char Min9[] = "9Min";
-   char Min10[] = "10Min";
+   char Min1[] = "play 0,2,0";
+   char Min2[] = "play 0,3,0";
+   char Min3[] = "play 0,4,0";
+   char Min4[] = "play 0,5,0";
+   char Min5[] = "play 0,6,0";
+   char Min6[] = "play 0,7,0";
+   char Min7[] = "play 0,8,0";
+   char Min8[] = "play 0,9,0";
+   char Min9[] = "play 0,10,0";
+   char Min10[] = "play 0,11,0";
 
     if (FlightMode < 4 && !LostContactFlag) {
         Secs  = ((millis() - TimerMillis) / 1000) + PausedSecs;
@@ -1364,34 +1364,34 @@ void CheckTimer()
     if (!Secs && SpeakingClock){
                switch (Mins) {
                case 1:
-                    PlayWaveFile(Min1);
+                    SendCommand(Min1);
                     break;
                 case 2:
-                    PlayWaveFile(Min2);
+                    SendCommand(Min2);
                     break;
                 case 3:
-                    PlayWaveFile(Min3); 
+                    SendCommand(Min3); 
                     break;
                 case 4:
-                    PlayWaveFile(Min4); 
+                    SendCommand(Min4); 
                     break;
                  case 5:
-                    PlayWaveFile(Min5); 
+                    SendCommand(Min5); 
                     break;
                 case 6:
-                    PlayWaveFile(Min6); 
+                    SendCommand(Min6); 
                     break;
                 case 7:
-                    PlayWaveFile(Min7); 
+                    SendCommand(Min7); 
                     break;
                   case 8:
-                    PlayWaveFile(Min8); 
+                    SendCommand(Min8); 
                     break;
                 case 9:
-                    PlayWaveFile(Min9); 
+                    SendCommand(Min9); 
                     break;
                  case 10:
-                    PlayWaveFile(Min10); 
+                    SendCommand(Min10); 
                     break;
                default:
                    break;
@@ -1633,7 +1633,7 @@ FASTRUN void ShowComms()
     char  BTo[]               = "BTo";
     char  Sat[]               = "Sat";
     char  Sbs[]               = "Sbus";
-    char  LowBat[]            = "LowBat";
+    char  LowBat[]            = "play 0,19,0";
 
     if (CurrentView == FRONTVIEW || CurrentView == DATAVIEW) {
         if (millis() - LastShowTime > ShowCommsDelay) { 
@@ -1820,7 +1820,7 @@ FASTRUN void ShowComms()
                 LedIsBlinking = true; 
                     if((millis() - WarningTimer) > 10000) {
                         WarningTimer = millis();
-                        PlayWaveFile(LowBat);                // issue audible warning every 10 seconds
+                        SendCommand(LowBat);                // issue audible warning every 10 seconds
                     }
             } else {
                 SendCommand(WarnOff);
@@ -2970,7 +2970,7 @@ void setup()
     MySbus.begin();
     SetUKFrequencies(); 
     SetAudioVolume(AudioVolume);
-    if (PlayFanfare) PlayWaveFile(OpeningFanfare);
+    if (PlayFanfare) SendCommand(OpeningFanfare);
     ScreenTimeTimer = millis();
     RestoreBrightness();
 }
@@ -4269,23 +4269,23 @@ void SendModelFile()
 
 void SoundFlightMode()
 {
-    char b1[] = "b1";
-    char b2[] = "b2";
-    char b3[] = "b3";
-    char b4[] = "b4";
+    char b1[] = "play 0,12,0";
+    char b2[] = "play 0,13,0";
+    char b3[] = "play 0,14,0";
+    char b4[] = "play 0,15,0";
 
     switch (FlightMode) {
         case 1:
-            PlayWaveFile(b1);
+            SendCommand(b1);
             break;
         case 2:
-            PlayWaveFile(b2);
+            SendCommand(b2);
             break;
         case 3:
-            PlayWaveFile(b3);
+            SendCommand(b3);
             break;
         case 4:
-            PlayWaveFile(b4);
+            SendCommand(b4);
             break;
         default:
             break;
@@ -6186,8 +6186,8 @@ switch(ch){
 // *************************************************************************************************************
 
 void IncTrim(uint8_t t){
-        char Complete[] = "Complete";      // end noise
-        char BeepMiddle[] = "BeepMiddle";  // centre noise
+        char Complete[] = "play 0,17,0";      // end noise
+        char BeepMiddle[] = "play 0,16,0";    // centre noise
         bool Sounded = false;
         Trims[FlightMode][t] += 1;
         if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimViewPart(t);
@@ -6195,16 +6195,16 @@ void IncTrim(uint8_t t){
             Trims[FlightMode][t] = 120;
             if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimViewPart(t);
             if (TrimClicks) {
-                PlayWaveFile(Complete);
+                SendCommand(Complete);
                 Sounded = true;
-                Procrastinate(500);
+                 TrimRepeatSpeed = DefaultTrimRepeatSpeed; 
              }
         }
         if (Trims[FlightMode][t] == 80)  {
             TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed at centre
             if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimViewPart(t);
              if (TrimClicks) {
-                PlayWaveFile(BeepMiddle);
+                SendCommand(BeepMiddle);
                 Sounded = true;
             }
         }
@@ -6213,8 +6213,8 @@ void IncTrim(uint8_t t){
 // *************************************************************************************************************
 
 void DecTrim(uint8_t t){
-        char Complete[] = "Complete";
-        char BeepMiddle[] = "BeepMiddle";
+        char Complete[] = "play 0,17,0";      // end noise
+        char BeepMiddle[] = "play 0,16,0";    // centre noise
         bool Sounded = false;
          Trims[FlightMode][t] -= 1;
          if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimViewPart(t);
@@ -6222,9 +6222,9 @@ void DecTrim(uint8_t t){
              Trims[FlightMode][t] = 40;
              if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimViewPart(t);
              if (TrimClicks) {
-                PlayWaveFile(Complete);
+                SendCommand(Complete);
                 Sounded = true;
-                Procrastinate(500);
+                 TrimRepeatSpeed = DefaultTrimRepeatSpeed; 
              }
         
          }
@@ -6232,7 +6232,7 @@ void DecTrim(uint8_t t){
              TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed at centre
             if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimViewPart(t);
             if (TrimClicks) {
-                PlayWaveFile(BeepMiddle);
+                SendCommand(BeepMiddle);
                 Sounded = true;
             }
          }
