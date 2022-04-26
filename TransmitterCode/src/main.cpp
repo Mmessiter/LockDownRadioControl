@@ -1361,7 +1361,7 @@ void CheckTimer()
         }
     }
     LastSeconds = Secs;
-    if (!Secs && SpeakingClock){
+    if (!Secs && SpeakingClock){   // todo: stop multiple calls!!! HEER!!!!
                switch (Mins) {
                case 1:
                     SendCommand(Min1);
