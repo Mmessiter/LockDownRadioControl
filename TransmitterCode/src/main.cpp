@@ -1358,10 +1358,8 @@ void CheckTimer()
             SendValue(FrontView_Secs, Secs);
             SendValue(FrontView_Mins, Mins);
             SendValue(FrontView_Hours, Hours);
-        }
-    }
-    LastSeconds = Secs;
-    if (!Secs && SpeakingClock){   // todo: stop multiple calls!!! HEER!!!!
+            LastSeconds = Secs;
+            if (!Secs && SpeakingClock){   // todo: stop multiple calls!!! HEER!!!!
                switch (Mins) {
                case 1:
                     SendCommand(Min1);
@@ -1395,7 +1393,9 @@ void CheckTimer()
                     break;
                default:
                    break;
-        }
+               }
+            }
+        }  
     }
 }
 
