@@ -1359,7 +1359,7 @@ void CheckTimer()
             SendValue(FrontView_Mins, Mins);
             SendValue(FrontView_Hours, Hours);
             LastSeconds = Secs;
-            if (!Secs && SpeakingClock){   // todo: stop multiple calls!!! HEER!!!!
+            if (!Secs && SpeakingClock){  
                switch (Mins) {
                case 1:
                     SendCommand(Min1);
