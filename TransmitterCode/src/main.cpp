@@ -1335,15 +1335,15 @@ uint8_t um(uint16_t bv) // convert to lower resolution
 void CheckTimer()
 {
 
-   char Min1[] = "play 0,2,0";
-   char Min2[] = "play 0,3,0";
-   char Min3[] = "play 0,4,0";
-   char Min4[] = "play 0,5,0";
-   char Min5[] = "play 0,6,0";
-   char Min6[] = "play 0,7,0";
-   char Min7[] = "play 0,8,0";
-   char Min8[] = "play 0,9,0";
-   char Min9[] = "play 0,10,0";
+   char Min1[]  = "play 0,2,0";
+   char Min2[]  = "play 0,3,0";
+   char Min3[]  = "play 0,4,0";
+   char Min4[]  = "play 0,5,0";
+   char Min5[]  = "play 0,6,0";
+   char Min6[]  = "play 0,7,0";
+   char Min7[]  = "play 0,8,0";
+   char Min8[]  = "play 0,9,0";
+   char Min9[]  = "play 0,10,0";
    char Min10[] = "play 0,11,0";
 
     if (FlightMode < 4 && !LostContactFlag) {
@@ -1361,7 +1361,7 @@ void CheckTimer()
             LastSeconds = Secs;
             if (!Secs && SpeakingClock){  
                switch (Mins) {
-               case 1:
+                case 1:
                     SendCommand(Min1);
                     break;
                 case 2:
@@ -1373,7 +1373,7 @@ void CheckTimer()
                 case 4:
                     SendCommand(Min4); 
                     break;
-                 case 5:
+                case 5:
                     SendCommand(Min5); 
                     break;
                 case 6:
@@ -1382,13 +1382,13 @@ void CheckTimer()
                 case 7:
                     SendCommand(Min7); 
                     break;
-                  case 8:
+                case 8:
                     SendCommand(Min8); 
                     break;
                 case 9:
                     SendCommand(Min9); 
                     break;
-                 case 10:
+                case 10:
                     SendCommand(Min10); 
                     break;
                default:
