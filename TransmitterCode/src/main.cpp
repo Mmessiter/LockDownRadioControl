@@ -1557,7 +1557,7 @@ void ShowServoPos()
 
 /*********************************************************************************************************************************/
   void CheckScreenTime(){
-  char ScreenOff[] = "dim=0";
+  char ScreenOff[] = "dim=10";
   if ((millis() - ScreenTimeTimer) > ScreenTimeout * 1000) {
       SendCommand(ScreenOff);
       ScreenTimeTimer = millis();
@@ -2799,7 +2799,7 @@ bool LoadAllParameters()
         AudioVolume=SDReadByte(SDCardAddress);
          ++SDCardAddress;
         Brightness = SDReadByte(SDCardAddress);
-        if (Brightness < 15) Brightness = 15;
+        if (Brightness < 10) Brightness = 10;
          ++SDCardAddress;
         PlayFanfare = SDReadByte(SDCardAddress);
         ++SDCardAddress;
@@ -6350,8 +6350,11 @@ void ReadSwitches()  // and indeed read digital trims if these are fitted
     }
     if (flag > 1 ){                                       // one at a time please!!
         TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed
+        for (int i = 0; i < 8; ++i) {
+           (TrimSwitch[i]) = 0;
+           flag = 0;
+        }
     }
-
     if (!flag) { 
         PreviousTrim = 254;                               // Previous trim must now match none
         TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed
