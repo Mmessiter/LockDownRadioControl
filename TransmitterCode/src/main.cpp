@@ -4661,6 +4661,7 @@ void ButtonWasPressed()
     char c2[]                      = "c2";
     char c3[]                      = "c3";
     char c4[]                      = "c4";
+    
 
      ScreenTimeTimer = millis();  // reset screen counter
      if (ScreenIsOff) {
@@ -4806,6 +4807,7 @@ void ButtonWasPressed()
             TrimFactor          = GetValue(trf);
             LowBattery          = GetValue(Bwn);
             ScreenTimeout       = GetValue(ScreenViewTimeout);
+            CopyTrimsToAll      = GetValue(c0);
             SendValue(Progress,100);
             Inactivity_Timeout  = GetValue(Pto) * TICKSPERMINUTE;
             if (Inactivity_Timeout < INACTIVITYMINIMUM) Inactivity_Timeout = INACTIVITYMINIMUM;
@@ -4948,6 +4950,7 @@ void ButtonWasPressed()
             SendValue(dGMT,DeltaGMT);
             SendValue(trf,TrimFactor); 
             SendValue(Bwn,LowBattery);
+            SendValue(c0,CopyTrimsToAll);
             CurrentView = OPTIONS_VIEW;
             CurrentMode = NORMAL;
             ClearText();
