@@ -4394,6 +4394,7 @@ void RestoreBrightness(){
     Str(nb,Brightness,0);
     strcat(cmd,nb);
     SendCommand(cmd);
+    ScreenTimeTimer = millis();  // reset screen counter
 }
 /*********************************************************************************************************************************/
 
@@ -6225,57 +6226,52 @@ switch(ch){
 // *************************************************************************************************************
 
 void IncTrim(uint8_t t){
-        char Complete[] = "play 0,17,0";      // end noise
-        char BeepMiddle[] = "play 0,16,0";    // centre noise
+        char Complete[]   = "play 0,17,0";      // end noise
+        char BeepMiddle[] = "play 0,16,0";      // centre noise
         bool Sounded = false;
         Trims[FlightMode][t] += 1;
-        if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimViewPart(t);
-        if (Trims[FlightMode][t] > 120) {
-            Trims[FlightMode][t] = 120;
-            if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimViewPart(t);
+        if (Trims[FlightMode][t] >= 120) {
+            Trims[FlightMode][t]  = 120;
             if (TrimClicks) {
                 SendCommand(Complete);
                 Sounded = true;
-                 TrimRepeatSpeed = DefaultTrimRepeatSpeed; 
+                TrimRepeatSpeed = DefaultTrimRepeatSpeed; 
              }
         }
         if (Trims[FlightMode][t] == 80)  {
             TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed at centre
-            if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimViewPart(t);
              if (TrimClicks) {
                 SendCommand(BeepMiddle);
                 Sounded = true;
             }
         }
+        if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimViewPart(t);
         if ((TrimClicks) && (!Sounded)) SendCommand (click0);
 }
 // *************************************************************************************************************
 
 void DecTrim(uint8_t t){
-        char Complete[] = "play 0,17,0";      // end noise
-        char BeepMiddle[] = "play 0,16,0";    // centre noise
+        char Complete[]   = "play 0,17,0";      // end noise
+        char BeepMiddle[] = "play 0,16,0";      // centre noise
         bool Sounded = false;
          Trims[FlightMode][t] -= 1;
-         if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimViewPart(t);
-         if (Trims[FlightMode][t] < 40) {
+         if (Trims[FlightMode][t] <= 40) {
              Trims[FlightMode][t] = 40;
-             if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimViewPart(t);
              if (TrimClicks) {
                 SendCommand(Complete);
                 Sounded = true;
                  TrimRepeatSpeed = DefaultTrimRepeatSpeed; 
              }
-        
          }
          if (Trims[FlightMode][t] == 80)  {
              TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed at centre
-            if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimViewPart(t);
             if (TrimClicks) {
                 SendCommand(BeepMiddle);
                 Sounded = true;
             }
          }
-         if ((TrimClicks) && (!Sounded)) SendCommand (click0);
+        if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimViewPart(t);
+        if ((TrimClicks) && (!Sounded)) SendCommand (click0);
 }
 // *************************************************************************************************************
 
@@ -6316,6 +6312,7 @@ void  MoveaTrim(uint8_t i){
     default:
     break;
     }
+    if (ScreenIsOff) RestoreBrightness();
     if (CopyTrimsToAll){  
       for (i = 0;i < 4; ++i)
          for (int fm = 1; fm < 5; ++fm) {
