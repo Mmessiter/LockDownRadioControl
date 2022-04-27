@@ -555,6 +555,7 @@ bool     PlayFanfare        = true;
 bool     TrimClicks         = true;
 bool     SpeakingClock      = true;
 bool     AnnounceBanks      = true;
+bool     CopyTrimsToAll     = true;
 
 // ***************************************** Extra Prototypes **********************************************
 
@@ -2634,7 +2635,7 @@ bool ReadOneModel(uint8_t Mnum)
     if (LowBattery>100) LowBattery = LOWBATTERY;
     if (LowBattery<10) LowBattery = LOWBATTERY;
     ++SDCardAddress;
-   // SticksMode = SDReadByte(SDCardAddress);   // Spare
+    CopyTrimsToAll = SDReadByte(SDCardAddress); 
     ++SDCardAddress;
 
     SDCardAddress += 27; // 27 Spare Bytes here (PID stuff gone)
@@ -2937,7 +2938,6 @@ void setup()
     SendValue(FrontView_Special,SpecialColour);
     SendValue(FrontView_Highlight,HighlightColour);
     SendCommand(page_FrontView);
-   // SendCommand(NEXTIONWakeUp);
     teensyMAC(MacAddress);                                // Get MAC address and use it as pipe address
     NewPipe  = (uint64_t)MacAddress[0] << 40;
     NewPipe += (uint64_t)MacAddress[1] << 32;
@@ -2951,8 +2951,6 @@ void setup()
     InitSwitchesAndTrims();
     InitRadio(DefaultPipe);
     SendText(FrontView_Connected, Initialising);
-   // SendValue1(NEXTIONSleepTime, ScreenTimeout); // Setup Screen timeout (No .val needed)
-   // SendCommand(NEXTIONWakeOnTouch);             // Wake on touch
     SendValue(FrontView_Hours, 0);
     SendValue(FrontView_Mins, 0);
     SendValue(FrontView_Secs, 0);
@@ -3146,7 +3144,7 @@ void SaveOneModel(int mnum)
     ++SDCardAddress;
     SDUpdateByte(SDCardAddress, LowBattery); 
     ++SDCardAddress;
-   // SDUpdateByte(SDCardAddress, SticksMode); // Spare!!
+    SDUpdateByte(SDCardAddress, CopyTrimsToAll); 
     ++SDCardAddress;
     
         
@@ -4704,7 +4702,7 @@ void ButtonWasPressed()
         }
 
 
-        if (InStrng(AudioView, TextIn) > 0) {  // Display screen with audio options // HEER!!
+        if (InStrng(AudioView, TextIn) > 0) {  // Display screen with audio options
             ClearText();
             CurrentMode = NORMAL;
             CurrentView = AUDIOVIEW;
@@ -5591,7 +5589,7 @@ void ButtonWasPressed()
         }
 
         if (InStrng(RTRIM, TextIn) > 0) {
-            TrimsReversed[FlightMode][0] = GetValue(TrimView_r1); 
+            TrimsReversed[FlightMode][0] = GetValue(TrimView_r1);  // heer
             TrimsReversed[FlightMode][1] = GetValue(TrimView_r4);
             TrimsReversed[FlightMode][2] = GetValue(TrimView_r2);
             TrimsReversed[FlightMode][3] = GetValue(TrimView_r3);
@@ -5599,32 +5597,70 @@ void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(TRIMS50, TextIn) > 0) {
+        if (InStrng(TRIMS50, TextIn) > 0) {  // heer
             for (i = 0; i < 4; ++i) {
                 Trims[FlightMode][i] = 80; // Mid value is 80
+                if (CopyTrimsToAll){
+                  for (i = 0; i < 4; ++i) {
+                      for (int fm = 1; fm < 5;++fm)
+                      Trims[fm][i] = 80; 
+                  }
+                }
             }
             ClearText(); 
             return;
         }
         if (InStrng(TR1, TextIn) > 0) { //  TR1->0
             Trims[FlightMode][0] = TextIn[3];
+            if (CopyTrimsToAll){
+            for (int fm = 1; fm < 5;++fm)
+                      Trims[fm][0] = TextIn[3]; 
+            }
             ClearText(); 
             return;
         }
         if (InStrng(TR4, TextIn) > 0) { // TR4 ->1
-            if (SticksMode == 1)  Trims[FlightMode][1] = TextIn[3];
-            if (SticksMode == 2)  Trims[FlightMode][2] = TextIn[3];
+            if (SticksMode == 1)  {
+                Trims[FlightMode][1] = TextIn[3];
+                if (CopyTrimsToAll){
+                    for (int fm = 1; fm < 5;++fm)
+                      Trims[fm][1] = TextIn[3];
+                }
+            }
+            if (SticksMode == 2)  {
+                Trims[FlightMode][2] = TextIn[3];
+                if (CopyTrimsToAll){
+                        for (int fm = 0; fm < 5;++fm)
+                        Trims[fm][2] = TextIn[3]; 
+                }
+            }
             ClearText(); 
             return;
         }
         if (InStrng(TR2, TextIn) > 0) { // TR2 ->2
-            if (SticksMode == 1)  Trims[FlightMode][2] = TextIn[3];
-            if (SticksMode == 2)  Trims[FlightMode][1] = TextIn[3];
+            if (SticksMode == 1) {
+                Trims[FlightMode][2] = TextIn[3];
+                if (CopyTrimsToAll){
+                        for (int fm = 1; fm < 5;++fm)
+                        Trims[fm][2] = TextIn[3]; 
+                }
+            }
+            if (SticksMode == 2)  { 
+                Trims[FlightMode][1] = TextIn[3];
+                if (CopyTrimsToAll){
+                    for (int fm = 1; fm < 5;++fm)
+                    Trims[fm][1] = TextIn[3]; 
+                }
+            }
             ClearText(); 
             return;
         }
         if (InStrng(TR3, TextIn) > 0) { // TR3 ->3
             Trims[FlightMode][3] = TextIn[3];
+            if (CopyTrimsToAll){
+            for (int fm = 0; fm < 5;++fm)
+                    Trims[fm][3] = TextIn[3]; 
+            }
             ClearText(); 
             return;
         }
@@ -6277,7 +6313,14 @@ void  MoveaTrim(uint8_t i){
     default:
     break;
     }
-}
+    if (CopyTrimsToAll){  
+      for (i = 0;i < 4; ++i)
+         for (int fm = 1; fm < 5; ++fm) {
+                      Trims[fm][i] = Trims[FlightMode][i];  // heer
+            }
+        }
+} 
+
 /************************************************************************************************************/
 void CheckHardwareTrims(){  
     int i;
