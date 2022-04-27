@@ -299,6 +299,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "ClickY", "_transmitter_code_2src_2main_8cpp.html#ac94f63840cc59ef9f981bd2bc2cacde8", null ],
     [ "CompressedData", "_transmitter_code_2src_2main_8cpp.html#aa16611ba89205c8cb9e75353ce1ad032", null ],
     [ "Connected", "_transmitter_code_2src_2main_8cpp.html#a5318db734c71b1b08208ef690f1f0146", null ],
+    [ "CopyTrimsToAll", "_transmitter_code_2src_2main_8cpp.html#ae737f11637caa631c30255f614800ba6", null ],
     [ "CurrentMode", "_transmitter_code_2src_2main_8cpp.html#aacabee92eb3ddd2e3cf31695c00a912e", null ],
     [ "CurrentView", "_transmitter_code_2src_2main_8cpp.html#a2c76c41cd62573eb7227882fc9b9e557", null ],
     [ "DateFix", "_transmitter_code_2src_2main_8cpp.html#af963d49af3aeb834d322601d3c3e3d04", null ],
