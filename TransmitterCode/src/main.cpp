@@ -2735,12 +2735,8 @@ bool LoadAllParameters()
     int j = 0;
     int i = 0;
     if (!ModelsFileOpen) OpenModelsFile();
-    if (!ModelsFileOpen) {Procrastinate (500);OpenModelsFile();}  
-    if (!ModelsFileOpen) {Procrastinate (500);OpenModelsFile();}  // try twice more as it might be a bit unreliable !
-    if (!ModelsFileOpen) return false;
     SDCardAddress = 0;
     p    = SDReadInt(SDCardAddress);
-    p = RENEWDATA;             // force it for now
     if (p == RENEWDATA) {
         SDCardAddress += 2;
         for (i = 0; i < CHANNELSUSED; ++i) {
