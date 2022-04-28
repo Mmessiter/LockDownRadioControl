@@ -1534,7 +1534,7 @@ void ShowServoPos()
             ShownBuffer[15] = SendBuffer[15];
         }
     }
-    if (CurrentView == GRAPHVIEW) { // Display current stick and output values // heer
+    if (CurrentView == GRAPHVIEW) { // Display current stick and output values 
         if (ChanneltoSet <= 8) {
             l  = (InPutStick[ChanneltoSet - 1]);
             l1 = analogRead(AnalogueInput[l]);
@@ -1544,7 +1544,12 @@ void ShowServoPos()
             else {
                 SendValue(ChannelInput, map(l1, ChannelCentre[l], ChannelMax[l], 0, 100));
             }
-             SendValue(ChannelOutput, map(SendBuffer[ChanneltoSet - 1], MINMICROS, MAXMICROS, -100, 100));
+            if (Connected){
+                SendValue(ChannelOutput, map(SendBuffer[ChanneltoSet - 1], MINMICROS, MAXMICROS, -100, 100));
+            }else{
+                SendValue(ChannelOutput,0);   // because when not connected nothing is sent
+             }
+
         }
     }
     else {
