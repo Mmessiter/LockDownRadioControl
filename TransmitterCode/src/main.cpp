@@ -240,7 +240,6 @@ unsigned int  PacketsPerSecond = 0;
 unsigned int  LostPackets      = 0;
 uint8_t       PacketNumber     = 0;
 uint8_t       GPSMarkHere      = 0;
-bool          SaveNothing      = true;  // flag failure to read sd card. if happens, don't write either.
 uint8_t       PreviousTrim     = 255;   
 uint32_t      TrimTimer        = 0;  
 uint16_t      TrimRepeatSpeed  = 600;   
@@ -2740,6 +2739,7 @@ bool LoadAllParameters()
     if (!ModelsFileOpen) return false;
     SDCardAddress = 0;
     p    = SDReadInt(SDCardAddress);
+    p = RENEWDATA;             // force it for now
     if (p == RENEWDATA) {
         SDCardAddress += 2;
         for (i = 0; i < CHANNELSUSED; ++i) {
@@ -2811,11 +2811,9 @@ bool LoadAllParameters()
         ++SDCardAddress;
         SpeakingClock = SDReadByte(AnnounceBanks);
         ++SDCardAddress;
-
         MemoryForTransmtter = SDCardAddress;
         ReadOneModel(ModelNumber);
-        SaveNothing = false;           // loading worked ok so it's ok to save stuff now!!
-         return true;
+        return true;
     }
     else {
         return false;
@@ -3006,7 +3004,6 @@ void SaveTXStuff()
     bool EON = false;
     int  j   = 0;
     int  i   = 0;
-    if (SaveNothing) return;
     if (!ModelsFileOpen) OpenModelsFile();
     rd            = RENEWDATA;
     SDCardAddress          = 0;
@@ -3091,7 +3088,6 @@ void SaveOneModel(int mnum)
     unsigned int j;
     unsigned int i;
     bool EndOfName = false;
-     if (SaveNothing) return;
     if (!ModelsFileOpen) OpenModelsFile();
     SDCardAddress = TXSIZE;                  //  spare bytes for TX stuff
     SDCardAddress += (mnum - 1) * MODELSIZE; //  spare bytes for Model params
@@ -3448,7 +3444,6 @@ void ShowFileErrorMsg()
 void SaveAllParameters()
 {
 
-    if (SaveNothing) return;
 
     if (!ModelsFileOpen) OpenModelsFile();
     SaveTXStuff();
@@ -4678,6 +4673,24 @@ void ButtonWasPressed()
 #endif
 
 
+ if (InStrng(SetupViewFM, TextIn) > 0) { // New model name occurs at offset 12 in TextIn
+            i = 0;
+            while (TextIn[i + 12] > 0) {
+                ModelName[i]     = TextIn[i + 12];     // copy new name
+                ModelName[i + 1] = 0;
+                ++i;
+            } 
+            //SaveOneModel(ModelNumber);
+            SaveTXStuff();
+            SendCommand(page_SetupView);
+            CurrentMode = NORMAL; // Send data again
+            CurrentView = MAINSETUPVIEW;
+            b5isGrey = false;
+            ClearText();
+            return;
+        }
+
+
         if (InStrng(Nextfile, TextIn)) { // show next file  
             FileNumberInView++;
             ShowFileNumber();
@@ -5486,21 +5499,7 @@ void ButtonWasPressed()
             ClearText();
             return;
         }
-        if (InStrng(SetupViewFM, TextIn) > 0) { // New model name occurs at offset 12 in TextIn
-            i = 0;
-            while (TextIn[i + 12] > 0) {
-                ModelName[i]     = TextIn[i + 12];
-                ModelName[i + 1] = 0;
-                ++i;
-            } // copy new name
-            SaveOneModel(ModelNumber);
-            SendCommand(page_SetupView);
-            CurrentMode = NORMAL; // Send data again
-            CurrentView = MAINSETUPVIEW;
-            b5isGrey = false;
-            ClearText();
-            return;
-        }
+       
 
         if (InStrng(ModelNMSave, TextIn) > 0) { // edit modelname  
             InhibitNameCheck = true;
