@@ -493,8 +493,7 @@ uint8_t NextChannel   = 0;
 bool    DoSbusSendOnly  = false;
 bool    BuddyMaster     = false;
 bool    SlaveHasControl = false;
-uint16_t Qnh            = 1009;               // pressure at sea level here
-uint16_t ModelNumberOffset = 0;
+uint16_t Qnh            = 1009;               // pressure at sea level here/
 uint32_t ModelNameTimeCheck = 0;
 uint16_t LastModelLoaded    = 0;
 
@@ -2761,7 +2760,6 @@ bool LoadAllParameters()
         BuddyMaster = SDReadByte(SDCardAddress);
         ++SDCardAddress;
         ModelNumber = SDReadByte(SDCardAddress);
-        ModelNumberOffset = SDCardAddress;         // remember offset!
         ++SDCardAddress;
         ScreenTimeout = SDReadInt(SDCardAddress);
         ++SDCardAddress;
@@ -3028,7 +3026,6 @@ void SaveTXStuff()
     SDUpdateByte(SDCardAddress, BuddyMaster);
     ++SDCardAddress;
     SDUpdateByte(SDCardAddress, ModelNumber);
-    ModelNumberOffset = SDCardAddress;                    // remember offset!
     ++SDCardAddress;
     SDUpdateInt(SDCardAddress, ScreenTimeout);
     ++SDCardAddress;
@@ -4418,7 +4415,7 @@ void ZeroDataScreen(){             // ZERO Those parameters that are zeroable
  */
 void ButtonWasPressed()
 {
-    int i;
+    int i = 0;
     char OneSwitchView_r1[]        = "r1";     // Flight modes
     char OneSwitchView_r2[]        = "r2";     // Auto
     char OneSwitchView_r3[]        = "r3";     // Ch9
@@ -5591,34 +5588,44 @@ void ButtonWasPressed()
             ClearText();
             return;
         }
-
         if (InStrng(RTRIM, TextIn) > 0) {
             TrimsReversed[FlightMode][0] = GetValue(TrimView_r1);  // heer
             TrimsReversed[FlightMode][1] = GetValue(TrimView_r4);
             TrimsReversed[FlightMode][2] = GetValue(TrimView_r2);
             TrimsReversed[FlightMode][3] = GetValue(TrimView_r3);
+            if (CopyTrimsToAll){
+                for (j = 0; j < 4;++j){
+                    for (i = 1; i < 5; ++i){
+                         TrimsReversed[i][j] = TrimsReversed[FlightMode][j];
+                    }
+                }
+            }
             ClearText();
             return;
         }
-
         if (InStrng(TRIMS50, TextIn) > 0) {  // heer
             for (i = 0; i < 4; ++i) {
                 Trims[FlightMode][i] = 80; // Mid value is 80
                 if (CopyTrimsToAll){
                   for (i = 0; i < 4; ++i) {
-                      for (int fm = 1; fm < 5;++fm)
+                      for (int fm = 1; fm < 5;++fm){
                       Trims[fm][i] = 80; 
+                      TrimsReversed[fm][i] =  TrimsReversed[FlightMode][i];
                   }
                 }
             }
-            ClearText(); 
-            return;
+         }
+        ClearText(); 
+        return;
         }
+
         if (InStrng(TR1, TextIn) > 0) { //  TR1->0
             Trims[FlightMode][0] = TextIn[3];
             if (CopyTrimsToAll){
-            for (int fm = 1; fm < 5;++fm)
+            for (int fm = 1; fm < 5;++fm){
                       Trims[fm][0] = TextIn[3]; 
+                      TrimsReversed[fm][i] =  TrimsReversed[FlightMode][i];
+            }
             }
             ClearText(); 
             return;
@@ -5627,15 +5634,19 @@ void ButtonWasPressed()
             if (SticksMode == 1)  {
                 Trims[FlightMode][1] = TextIn[3];
                 if (CopyTrimsToAll){
-                    for (int fm = 1; fm < 5;++fm)
+                    for (int fm = 1; fm < 5;++fm){
                       Trims[fm][1] = TextIn[3];
+                      TrimsReversed[fm][i] =  TrimsReversed[FlightMode][i];
+                    }
                 }
             }
             if (SticksMode == 2)  {
                 Trims[FlightMode][2] = TextIn[3];
                 if (CopyTrimsToAll){
-                        for (int fm = 0; fm < 5;++fm)
+                        for (int fm = 0; fm < 5;++fm){
                         Trims[fm][2] = TextIn[3]; 
+                        TrimsReversed[fm][i] =  TrimsReversed[FlightMode][i];
+                        }
                 }
             }
             ClearText(); 
@@ -5652,8 +5663,10 @@ void ButtonWasPressed()
             if (SticksMode == 2)  { 
                 Trims[FlightMode][1] = TextIn[3];
                 if (CopyTrimsToAll){
-                    for (int fm = 1; fm < 5;++fm)
-                    Trims[fm][1] = TextIn[3]; 
+                    for (int fm = 1; fm < 5;++fm){
+                        Trims[fm][1] = TextIn[3]; 
+                        TrimsReversed[fm][i] =  TrimsReversed[FlightMode][i];
+                    }
                 }
             }
             ClearText(); 
@@ -5662,8 +5675,10 @@ void ButtonWasPressed()
         if (InStrng(TR3, TextIn) > 0) { // TR3 ->3
             Trims[FlightMode][3] = TextIn[3];
             if (CopyTrimsToAll){
-            for (int fm = 0; fm < 5;++fm)
+            for (int fm = 0; fm < 5;++fm){
                     Trims[fm][3] = TextIn[3]; 
+                    TrimsReversed[fm][i] =  TrimsReversed[FlightMode][i];
+                }
             }
             ClearText(); 
             return;
@@ -5698,7 +5713,7 @@ void ButtonWasPressed()
                 SendValue(ModelsView_ModelNumber, ModelNumber);
             }
             if (!ModelsFileOpen) OpenModelsFile();
-            SDUpdateByte(ModelNumberOffset, ModelNumber);  // the offset was grabbed when loading file 
+            SaveTXStuff();
             CloseModelsFile();
             ClearText(); 
             return;
@@ -6317,6 +6332,7 @@ void  MoveaTrim(uint8_t i){
       for (i = 0;i < 4; ++i)
          for (int fm = 1; fm < 5; ++fm) {
                       Trims[fm][i] = Trims[FlightMode][i];  // heer
+                      TrimsReversed[fm][i] =  TrimsReversed[FlightMode][i];
             }
         }
 } 
