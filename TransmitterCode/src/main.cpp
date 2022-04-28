@@ -1061,7 +1061,7 @@ void MakeBindButtonInvisible()
 
 /*********************************************************************************************************************************/
 
-uint8_t GetBrightness()
+uint8_t GetLEDBrightness()
 {
     if (LedIsBlinking) {
         if ((millis() - BlinkTimer) > (500 / BlinkHertz)) {
@@ -1087,7 +1087,7 @@ void RedLedOn()
     LedWasGreen = false;
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, 0);
-    analogWrite(REDLED, GetBrightness()); // Brightness is a function of maybe blinking
+    analogWrite(REDLED, GetLEDBrightness()); // Brightness is a function of maybe blinking
 }
 
 /*********************************************************************************************************************************/
@@ -1098,7 +1098,7 @@ void GreenLedOn()
         LedWasGreen = true;
         analogWrite(BLUELED, 0);
         analogWrite(REDLED, 0); 
-        analogWrite(GREENLED, GetBrightness()); // Brightness is a function of maybe blinking
+        analogWrite(GREENLED, GetLEDBrightness()); // Brightness is a function of maybe blinking
         MakeBindButtonInvisible();
         Reconnected=false;
     }
@@ -1111,7 +1111,7 @@ void BlueLedOn()
     LedWasGreen = false;
     analogWrite(REDLED, 0);
     analogWrite(GREENLED, 0);
-    analogWrite(BLUELED, GetBrightness()); // Brightness is a function of maybe blinking
+    analogWrite(BLUELED, GetLEDBrightness()); // Brightness is a function of maybe blinking
 }
 
 /*********************************************************************************************************************************/
