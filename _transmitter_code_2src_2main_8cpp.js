@@ -454,7 +454,6 @@ var _transmitter_code_2src_2main_8cpp =
     [ "SavedSbusRepeats", "_transmitter_code_2src_2main_8cpp.html#ac3404e7b5c5628ea17545ccdc3428114", null ],
     [ "SaveFailSafeNow", "_transmitter_code_2src_2main_8cpp.html#acd6754de95b605bb65a52a86e96121f7", null ],
     [ "SaveFlightMode", "_transmitter_code_2src_2main_8cpp.html#a6e7a073d216762b73caa5e1c1a384f1a", null ],
-    [ "SaveNothing", "_transmitter_code_2src_2main_8cpp.html#aa9c2ae5d134f349859df4eeadc870165", null ],
     [ "SbusChannels", "_transmitter_code_2src_2main_8cpp.html#a87e7fa21a42bf74b127c8be8860d93a6", null ],
     [ "SbusRepeats", "_transmitter_code_2src_2main_8cpp.html#a62cc4d43d463897ef0d417150d6e7f3f", null ],
     [ "SBUSTimer", "_transmitter_code_2src_2main_8cpp.html#a2e121251691466f81a2f540f00e7141e", null ],
