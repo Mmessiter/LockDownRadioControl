@@ -1535,7 +1535,7 @@ void ShowServoPos()
             ShownBuffer[15] = SendBuffer[15];
         }
     }
-    if (CurrentView == GRAPHVIEW) { // Display current stick and output values
+    if (CurrentView == GRAPHVIEW) { // Display current stick and output values // heer
         if (ChanneltoSet <= 8) {
             l  = (InPutStick[ChanneltoSet - 1]);
             l1 = analogRead(AnalogueInput[l]);
@@ -1545,7 +1545,7 @@ void ShowServoPos()
             else {
                 SendValue(ChannelInput, map(l1, ChannelCentre[l], ChannelMax[l], 0, 100));
             }
-            SendValue(ChannelOutput, map(SendBuffer[ChanneltoSet - 1], MINMICROS, MAXMICROS, -100, 100));
+             SendValue(ChannelOutput, map(SendBuffer[ChanneltoSet - 1], MINMICROS, MAXMICROS, -100, 100));
         }
     }
     else {
@@ -2628,6 +2628,8 @@ bool ReadOneModel(uint8_t Mnum)
     RXCellCount = SDReadByte(SDCardAddress);
     ++SDCardAddress;
     TrimFactor = SDReadInt(SDCardAddress);  
+    if (TrimFactor < 1) TrimFactor = 1;
+    if (TrimFactor > 10) TrimFactor = 10;
     ++SDCardAddress;
     ++SDCardAddress;
     LowBattery = SDReadByte(SDCardAddress);  
@@ -2979,9 +2981,8 @@ void GetStatistics()
 }
 
 /*********************************************************************************************************************************/
-
 /** @returns position of text1 within text2 or 0 if not found */
-int InStrng(char text1[CharsMax], char text2[CharsMax])
+int InStrng(char * text1, char * text2)
 {
     unsigned int j;
     unsigned int i;
