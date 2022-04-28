@@ -1432,7 +1432,7 @@ void ShowServoPos()
 
     int l             = 0;
     int l1            = 0;
-    int LeastDistance = 2; // if the change is small, don't re-display anything - to reduce flashing.
+    int LeastDistance = 2; // if the change is very small, don't re-display anything - to reduce flashing.
 
     if (CurrentView == CALIBRATEVIEW) {
         if (abs(SendBuffer[0] - ShownBuffer[0]) > LeastDistance) {
