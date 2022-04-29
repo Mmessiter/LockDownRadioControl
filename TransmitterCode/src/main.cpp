@@ -4705,12 +4705,12 @@ void ButtonWasPressed()
         }
 
 
-        if (InStrng(StEND, TextIn)) { 
+        if (InStrng(StEND, TextIn)) {                  // Subtrim view exit
             SendCommand(page_SetupView);
             ClearText();
             return;
         }
-        if (InStrng(StCH, TextIn)) { 
+        if (InStrng(StCH, TextIn)) {                   // select sub trim channel
             SubTrimToEdit = GetValue(select0);
             SendText(t2,ChannelNames[SubTrimToEdit]);  // heer
             SendValue(n0,SubTrims[SubTrimToEdit]-127);
@@ -4719,9 +4719,8 @@ void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(StEDIT, TextIn)) { 
-            SubTrims[SubTrimToEdit] = GetValue(n0)+127; // 127 is mid point in byte value 0 - 254
-            Serial.println (SubTrims[SubTrimToEdit]);
+        if (InStrng(StEDIT, TextIn)) {                  // edit sub trim value
+            SubTrims[SubTrimToEdit] = GetValue(n0)+127; // 127 is mid point in 8 bit value 0 - 254
             ClearText();
             return;
         }
