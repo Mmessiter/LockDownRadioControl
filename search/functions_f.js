@@ -35,5 +35,6 @@ var searchData=
   ['removehistory_32',['removeHistory',['../class_adafruit___g_p_s.html#aea92bf75e742154517db75d1d30087d9',1,'Adafruit_GPS']]],
   ['reset_33',['reset',['../class_adafruit___b_m_p280.html#a6ef79c9cc7ed5d3548ed69785bf627ed',1,'Adafruit_BMP280::reset(void)'],['../class_adafruit___b_m_p280.html#a6ef79c9cc7ed5d3548ed69785bf627ed',1,'Adafruit_BMP280::reset(void)'],['../class_adafruit___b_m_p280.html#a6ef79c9cc7ed5d3548ed69785bf627ed',1,'Adafruit_BMP280::reset(void)']]],
   ['resetsenttime_34',['resetSentTime',['../class_adafruit___g_p_s.html#a1194f23fada702be6e58b24a62402d39',1,'Adafruit_GPS']]],
-  ['restorebrightness_35',['RestoreBrightness',['../_transmitter_code_2src_2main_8cpp.html#a49da3478d89a22069e29c7f00cb46a5f',1,'main.cpp']]]
+  ['resetsubtrims_35',['ResetSubTrims',['../_transmitter_code_2src_2main_8cpp.html#a0b5bf6a4444e93f7c2f99264c414037d',1,'main.cpp']]],
+  ['restorebrightness_36',['RestoreBrightness',['../_transmitter_code_2src_2main_8cpp.html#a49da3478d89a22069e29c7f00cb46a5f',1,'main.cpp']]]
 ];
