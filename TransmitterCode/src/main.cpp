@@ -286,6 +286,9 @@ uint8_t  MidHiDegrees[5][CHANNELSUSED + 1];  //    MidHi degrees (135?)
 uint8_t  CentreDegrees[5][CHANNELSUSED + 1]; //    Degrees (90)
 uint8_t  MidLowDegrees[5][CHANNELSUSED + 1]; //    MidLow Degrees (45?)
 uint8_t  MinDegrees[5][CHANNELSUSED + 1];    //    Max Degrees (0?)
+uint8_t  SubTrims[CHANNELSUSED + 1];         //    Sub Trims
+uint8_t  SubTrimToEdit = 0;
+
 uint8_t  FlightMode         = 1;
 uint8_t  PreviousFlightMode = 1;
 int      ChannelMax[CHANNELSUSED + 1];    //    output of pots at max
@@ -611,6 +614,12 @@ void GetSlaveChannelValues()
     }
 }
 
+/************************************************************************************************************/
+void ResetSubTrims(){
+    for (int i = 0;i<16;++i){
+            SubTrims[i]= 127;
+    }
+}
 /************************************************************************************************************/
 /** Map servo channels' data from SendBuffer into SbusChannels buffer */
 // This funtion is used by the BUDDY slave to send it's controls out down a wire using SBUS
@@ -2912,6 +2921,7 @@ void setup()
     delay(1000);
     InitMaxMin();               // in case not yet calibrated
     InitCentreDegrees();        // In case not yet calibrated
+    ResetSubTrims();
     CentreTrims();
 #ifdef USE_WATCHDOG
     WatchDogConfig.window   = WATCHDOGMAXRATE; //  = MINIMUM RATE in milli seconds, (32ms to 522.232s) must be MUCH smaller than timeout
@@ -4656,6 +4666,11 @@ void ButtonWasPressed()
     char c2[]                      = "c2";
     char c3[]                      = "c3";
     char c4[]                      = "c4";
+    char StEND[]                   = "StEND";
+    char StCH[]                    = "StCH";
+    char select0[]                 = "select0";
+    char t2[]                      = "t2";
+    char StEDIT[]                  = "StEDIT";             
     
 
      ScreenTimeTimer = millis();  // reset screen counter
@@ -4689,6 +4704,27 @@ void ButtonWasPressed()
             return;
         }
 
+
+        if (InStrng(StEND, TextIn)) { 
+            SendCommand(page_SetupView);
+            ClearText();
+            return;
+        }
+        if (InStrng(StCH, TextIn)) { 
+            SubTrimToEdit = GetValue(select0);
+            SendText(t2,ChannelNames[SubTrimToEdit]);  // heer
+            SendValue(n0,SubTrims[SubTrimToEdit]-127);
+            SendValue(h0,SubTrims[SubTrimToEdit]);
+            ClearText();
+            return;
+        }
+
+        if (InStrng(StEDIT, TextIn)) { 
+            SubTrims[SubTrimToEdit] = GetValue(n0)+127; // 127 is mid point in byte value 0 - 254
+            Serial.println (SubTrims[SubTrimToEdit]);
+            ClearText();
+            return;
+        }
 
         if (InStrng(Nextfile, TextIn)) { // show next file  
             FileNumberInView++;
@@ -5590,7 +5626,7 @@ void ButtonWasPressed()
             return;
         }
         if (InStrng(RTRIM, TextIn) > 0) {
-            TrimsReversed[FlightMode][0] = GetValue(TrimView_r1);  // heer
+            TrimsReversed[FlightMode][0] = GetValue(TrimView_r1);  
             TrimsReversed[FlightMode][1] = GetValue(TrimView_r4);
             TrimsReversed[FlightMode][2] = GetValue(TrimView_r2);
             TrimsReversed[FlightMode][3] = GetValue(TrimView_r3);
@@ -5604,7 +5640,7 @@ void ButtonWasPressed()
             ClearText();
             return;
         }
-        if (InStrng(TRIMS50, TextIn) > 0) {  // heer
+        if (InStrng(TRIMS50, TextIn) > 0) {  
             for (i = 0; i < 4; ++i) {
                 Trims[FlightMode][i] = 80; // Mid value is 80
                 if (CopyTrimsToAll){
@@ -6332,7 +6368,7 @@ void  MoveaTrim(uint8_t i){
     if (CopyTrimsToAll){  
       for (i = 0;i < 4; ++i)
          for (int fm = 1; fm < 5; ++fm) {
-                      Trims[fm][i] = Trims[FlightMode][i];  // heer
+                      Trims[fm][i] = Trims[FlightMode][i];  
                       TrimsReversed[fm][i] =  TrimsReversed[FlightMode][i];
             }
         }
