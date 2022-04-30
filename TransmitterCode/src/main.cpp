@@ -5548,7 +5548,7 @@ void ButtonWasPressed()
         }
         if (InStrng(ListFiles, TextIn) > 0) {  
             SendCommand(PageFilesView);
-            CurrentView = FILESVIEW;
+           // CurrentView = FILESVIEW;  // can't change as won't change back :-)
             SavedCurrentView = FILESVIEW;
             ShowDirectory();      
             ClearText();
