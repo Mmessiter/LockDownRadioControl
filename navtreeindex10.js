@@ -1,5 +1,6 @@
 var NAVTREEINDEX10 =
 {
+"radio_8h.html#a88d2add9e7ca58e7218870f887b25859":[12,0,1,1,0,1,71],
 "radio_8h.html#a8b76f3c338025926421c7b308405bbfd":[12,0,1,1,0,1,14],
 "radio_8h.html#a8d3c194b5406bff33ef9357f8b1666cc":[12,0,1,1,0,1,54],
 "radio_8h.html#a8e1f4879c351e462d6bca620ae4279e2":[12,0,1,1,0,1,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX10 =
 "structsensors__event__t.html#a577b73698368fb061382ce9f31052417":[11,0,17,10],
 "structsensors__event__t.html#a58401dd7f3400d9eb96c71b8fba9f8e8":[11,0,17,15],
 "structsensors__event__t.html#a6b06d35b17afbee79de7f45d9d71ed0b":[11,0,17,12],
-"structsensors__event__t.html#a8be4dc00344f46abf29e06251bf9fad9":[11,0,17,11],
-"structsensors__event__t.html#a914f76beb75bd99aa3c13d3a8e56e21c":[11,0,17,13]
+"structsensors__event__t.html#a8be4dc00344f46abf29e06251bf9fad9":[11,0,17,11]
 };

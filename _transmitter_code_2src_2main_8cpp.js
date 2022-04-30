@@ -78,6 +78,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "SENDNOTHING", "_transmitter_code_2src_2main_8cpp.html#aa8cb091644f8785e060422c38a5ee334", null ],
     [ "SkyBlue", "_transmitter_code_2src_2main_8cpp.html#a8a431faef1cf5f8d166b51cd97ee08bf", null ],
     [ "STICKSVIEW", "_transmitter_code_2src_2main_8cpp.html#abfc5f0d31f80fc812b9c44a55fe3134e", null ],
+    [ "SUBTRIMVIEW", "_transmitter_code_2src_2main_8cpp.html#a489f04d8af51ba47e5032937dc23a330", null ],
     [ "SWITCH0", "_transmitter_code_2src_2main_8cpp.html#a5ad241ff204c1ff242cb95c222a4b8c1", null ],
     [ "SWITCH1", "_transmitter_code_2src_2main_8cpp.html#a744dee59d95ae6f4dece38e44bb145f9", null ],
     [ "SWITCH2", "_transmitter_code_2src_2main_8cpp.html#a11a39c528453f3bb820fc5be8dc5b18f", null ],
