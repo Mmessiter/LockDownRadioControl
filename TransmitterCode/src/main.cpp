@@ -2651,8 +2651,12 @@ bool ReadOneModel(uint8_t Mnum)
     ++SDCardAddress;
     CopyTrimsToAll = SDReadByte(SDCardAddress); 
     ++SDCardAddress;
-
-    SDCardAddress += 27; // 27 Spare Bytes here (PID stuff gone)
+    
+    for (i = 0; i < CHANNELSUSED; ++i) {
+        SubTrims[i] = SDReadByte(SDCardAddress);   
+        ++SDCardAddress;                
+    }
+    SDCardAddress += 11; // 11 Spare Bytes here (PID stuff gone)
     for (i = 0; i < CHANNELSUSED; ++i) {
         InPutStick[i] = SDReadByte(SDCardAddress);
         if (InPutStick[i] > 16) InPutStick[i] = i; // reset if nothing was saved!
@@ -3151,15 +3155,15 @@ void SaveOneModel(int mnum)
     ++SDCardAddress;
     SDUpdateByte(SDCardAddress, CopyTrimsToAll); 
     ++SDCardAddress;
-    
-        
-    SDCardAddress += 27; // 27 Spare Bytes here (PID stuff gone) heer - use 16 for sub trims. 11 remain
-
+    for (i = 0; i < CHANNELSUSED; ++i) {
+            SDUpdateByte(SDCardAddress,SubTrims[i]);   
+            ++SDCardAddress;                
+        }
+    SDCardAddress += 11; // 11 remain
     for (i = 0; i < CHANNELSUSED; ++i) {
         SDUpdateByte(SDCardAddress, InPutStick[i]);
         ++SDCardAddress;
     }
-
     SDUpdateByte(SDCardAddress, FMSwitch);
     ++SDCardAddress;
     SDUpdateByte(SDCardAddress, AutoSwitch);
@@ -3592,17 +3596,17 @@ void SetDefaultValues()
 
     for (j = 0; j < FlightModesUsed + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
-            Exponential[j][i] = 0; // 20% expo = defaul
+            Exponential[j][i] = 0;                // 0% expo = default
         }
     }
     for (j = 0; j < FlightModesUsed + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
-            InterpolationTypes[j][i] = 2; // Expo is default
+            InterpolationTypes[j][i] = 2;        // Expo is default
         }
     }
 
     for (i = 0; i < CHANNELSUSED + 1; ++i) {
-            SubTrims[i] = 127;  // centre
+            SubTrims[i] = 127;                    // centre (0 - 254)
         }
 
 
@@ -4625,6 +4629,7 @@ void ButtonWasPressed()
     char pTypeView[]               = "page TypeView";
     char pCalibrateView[]          = "page CalibrateView";
     char pFailSafe[]               = "page FailSafeView";
+    char pSubTrimView[]            = "page SubTrimView";
     char DataView_Clear[]          = "Clear";
     char DataView_AltZero[]        = "AltZero";
     char BuddyM[]                  = "BuddyM";
@@ -4669,6 +4674,7 @@ void ButtonWasPressed()
     char c3[]                      = "c3";
     char c4[]                      = "c4";
     char StEND[]                   = "StEND";
+    char STgo[]                    = "STgo";
     char StCH[]                    = "StCH";
     char s0[]                      = "s0";
     char t2[]                      = "t2";
@@ -4705,16 +4711,25 @@ void ButtonWasPressed()
             ClearText();
             return;
         }
-
+          if (InStrng(STgo, TextIn)) {                  // Subtrim view start
+            SendCommand(pSubTrimView);
+            SubTrimToEdit = 0;
+            SendText(t2,ChannelNames[SubTrimToEdit]);  // heer
+            SendValue(n0,SubTrims[SubTrimToEdit]-127);
+            SendValue(h0,SubTrims[SubTrimToEdit]);
+            ClearText();
+            return;
+        }
 
         if (InStrng(StEND, TextIn)) {                  // Subtrim view exit
+            SaveOneModel(ModelNumber);
             SendCommand(page_SetupView);
             ClearText();
             return;
         }
         if (InStrng(StCH, TextIn)) {                   // select sub trim channel
             SubTrimToEdit = GetValue(s0);
-            SendText(t2,ChannelNames[SubTrimToEdit]);  // heer
+            SendText(t2,ChannelNames[SubTrimToEdit]); 
             SendValue(n0,SubTrims[SubTrimToEdit]-127);
             SendValue(h0,SubTrims[SubTrimToEdit]);
             ClearText();
