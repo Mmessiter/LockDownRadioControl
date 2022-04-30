@@ -4668,7 +4668,7 @@ void ButtonWasPressed()
     char c4[]                      = "c4";
     char StEND[]                   = "StEND";
     char StCH[]                    = "StCH";
-    char select0[]                 = "select0";
+    char s0[]                      = "s0";
     char t2[]                      = "t2";
     char StEDIT[]                  = "StEDIT";             
     
@@ -4711,7 +4711,7 @@ void ButtonWasPressed()
             return;
         }
         if (InStrng(StCH, TextIn)) {                   // select sub trim channel
-            SubTrimToEdit = GetValue(select0);
+            SubTrimToEdit = GetValue(s0);
             SendText(t2,ChannelNames[SubTrimToEdit]);  // heer
             SendValue(n0,SubTrims[SubTrimToEdit]-127);
             SendValue(h0,SubTrims[SubTrimToEdit]);
