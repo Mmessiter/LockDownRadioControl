@@ -164,7 +164,6 @@ RF24 Radio1(CE_PIN, CSN_PIN);
 #define CALIBRATEVIEW   6
 #define MAINSETUPVIEW   7
 #define SUBTRIMVIEW     8
-
 #define DATAVIEW        9
 #define TRIM_VIEW       10
 
