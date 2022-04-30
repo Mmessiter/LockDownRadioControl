@@ -2654,6 +2654,7 @@ bool ReadOneModel(uint8_t Mnum)
     
     for (i = 0; i < CHANNELSUSED; ++i) {
         SubTrims[i] = SDReadByte(SDCardAddress);   
+        if ((SubTrims[i] < 10) ||  (SubTrims[i] > 244))  SubTrims[i] = 127; // centre if undefined or zero
         ++SDCardAddress;                
     }
     SDCardAddress += 11; // 11 Spare Bytes here (PID stuff gone)
@@ -4702,7 +4703,6 @@ void ButtonWasPressed()
                 ModelName[i + 1] = 0;
                 ++i;
             } 
-            //SaveOneModel(ModelNumber);
             SaveTXStuff();
             SendCommand(page_SetupView);
             CurrentMode = NORMAL; // Send data again
