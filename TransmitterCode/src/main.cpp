@@ -3153,7 +3153,7 @@ void SaveOneModel(int mnum)
     ++SDCardAddress;
     
         
-    SDCardAddress += 27; // 27 Spare Bytes here (PID stuff gone)
+    SDCardAddress += 27; // 27 Spare Bytes here (PID stuff gone) heer - use 16 for sub trims. 11 remain
 
     for (i = 0; i < CHANNELSUSED; ++i) {
         SDUpdateByte(SDCardAddress, InPutStick[i]);
@@ -3587,22 +3587,24 @@ void SetDefaultValues()
     for (i = 0; i < CHANNELSUSED; ++i) {
         for (j = 0; j < 10; ++j) {
             ChannelNames[i][j] = DefaultChannelNames[i][j];
-            ++SDCardAddress;
         }
     }
 
     for (j = 0; j < FlightModesUsed + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
-            Exponential[j][i] = 0; // 20% expo = default
-            ++SDCardAddress;
+            Exponential[j][i] = 0; // 20% expo = defaul
         }
     }
     for (j = 0; j < FlightModesUsed + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             InterpolationTypes[j][i] = 2; // Expo is default
-            ++SDCardAddress;
         }
     }
+
+    for (i = 0; i < CHANNELSUSED + 1; ++i) {
+            SubTrims[i] = 127;  // centre
+        }
+
 
     SendValue(Progress, 95);
     Procrastinate(10);
