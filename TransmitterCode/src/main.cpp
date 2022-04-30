@@ -163,6 +163,7 @@ RF24 Radio1(CE_PIN, CSN_PIN);
 #define MODELSVIEW      5
 #define CALIBRATEVIEW   6
 #define MAINSETUPVIEW   7
+#define SUBTRIMVIEW     8
 
 #define DATAVIEW        9
 #define TRIM_VIEW       10
@@ -4715,6 +4716,7 @@ void ButtonWasPressed()
           if (InStrng(STgo, TextIn)) {                  // Subtrim view start
             SendCommand(pSubTrimView);
             SubTrimToEdit = 0;
+            CurrentView =  SUBTRIMVIEW;
             SendText(t2,ChannelNames[SubTrimToEdit]);  // heer
             SendValue(n0,SubTrims[SubTrimToEdit]-127);
             SendValue(h0,SubTrims[SubTrimToEdit]);
@@ -4724,6 +4726,8 @@ void ButtonWasPressed()
 
         if (InStrng(StEND, TextIn)) {                  // Subtrim view exit
             SaveOneModel(ModelNumber);
+            CurrentView = MAINSETUPVIEW;
+            b5isGrey = false;
             SendCommand(page_SetupView);
             ClearText();
             return;
