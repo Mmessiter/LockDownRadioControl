@@ -4805,6 +4805,7 @@ void ButtonWasPressed()
             SendCommand(page_SetupView);
             ClearText();
             SaveTXStuff();
+            b5isGrey = false;
             return;
         }
 
