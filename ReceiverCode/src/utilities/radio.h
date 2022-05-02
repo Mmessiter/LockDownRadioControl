@@ -251,7 +251,7 @@ void TryTheOtherTransceiver(uint8_t Recon_Ch){
 // This function is called when the system is busy but not receiving - to preempt very short SBUS timeouts (eg DJI).
 
 void KeepSbusHappy(){
-    if (millis() < 10000) return;               // Let things settle down after connection for 10 seconds or so before using this
+    if (millis() < 20000) return;               // Let things settle down after connection for 20 seconds or so before using this
     if (millis() - SBUSTimer >= SBUSRATE) {     // Does SBUS expect a packet? 
         SBUSTimer = millis();                   // Yes...             
         if (!FailSafeSent)                      // But don't send after failsafe
