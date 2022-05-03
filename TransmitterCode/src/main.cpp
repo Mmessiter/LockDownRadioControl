@@ -2819,7 +2819,7 @@ bool LoadAllParameters()
         ++SDCardAddress;
         SpeakingClock = SDReadByte(SDCardAddress);
         ++SDCardAddress;
-        SpeakingClock = SDReadByte(AnnounceBanks);
+        AnnounceBanks= SDReadByte(SDCardAddress);
         ++SDCardAddress;
         MemoryForTransmtter = SDCardAddress;
         ReadOneModel(ModelNumber);
