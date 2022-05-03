@@ -1994,6 +1994,9 @@ short unsigned int GetStickInput(uint8_t l)
         if (Channel12SwitchValue == 90) k = mp(CentreDegrees[FlightMode][11]);
         if (Channel12SwitchValue == 180) k = mp(MaxDegrees[FlightMode][11]);
     }
+    if (l > 11){
+           k = mp(CentreDegrees[FlightMode][11]);
+    }
     return k;
 }
 
