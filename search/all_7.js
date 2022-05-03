@@ -38,7 +38,7 @@ var searchData=
   ['getsmoothed_35',['getSmoothed',['../class_adafruit___g_p_s.html#a272df8380267fd53ff611f552409e86d',1,'Adafruit_GPS']]],
   ['getstatistics_36',['GetStatistics',['../_transmitter_code_2src_2main_8cpp.html#a1d43600764a34cbda9c2fa211a12ed2e',1,'main.cpp']]],
   ['getstatus_37',['getStatus',['../class_adafruit___b_m_p280.html#a1b7ddc6a57525e0c8a0e4b6487a3598d',1,'Adafruit_BMP280::getStatus(void)'],['../class_adafruit___b_m_p280.html#a1b7ddc6a57525e0c8a0e4b6487a3598d',1,'Adafruit_BMP280::getStatus(void)'],['../class_adafruit___b_m_p280.html#a1b7ddc6a57525e0c8a0e4b6487a3598d',1,'Adafruit_BMP280::getStatus(void)']]],
-  ['getstickinput_38',['GetStickInput',['../_transmitter_code_2src_2main_8cpp.html#a1eb1b5f9139051cef03943c3620c7d81',1,'main.cpp']]],
+  ['getstickinput_38',['GetStickInput',['../_transmitter_code_2src_2main_8cpp.html#af065c70531320b19dbb5f54a714e186a',1,'main.cpp']]],
   ['gettemperature_39',['GetTemperature',['../_transmitter_code_2src_2main_8cpp.html#a19f6fc09d690832e74fd3c679207f07f',1,'main.cpp']]],
   ['gettemperaturesensor_40',['getTemperatureSensor',['../class_adafruit___b_m_p280.html#a191f291cb5eb59777b6040571d42ca5f',1,'Adafruit_BMP280::getTemperatureSensor(void)'],['../class_adafruit___b_m_p280.html#a191f291cb5eb59777b6040571d42ca5f',1,'Adafruit_BMP280::getTemperatureSensor(void)'],['../class_adafruit___b_m_p280.html#a191f291cb5eb59777b6040571d42ca5f',1,'Adafruit_BMP280::getTemperatureSensor(void)']]],
   ['gettext_41',['GetText',['../_transmitter_code_2src_2main_8cpp.html#a8e271ca29dc3c90bcf0e465b41bd71ff',1,'main.cpp']]],
