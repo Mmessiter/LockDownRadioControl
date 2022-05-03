@@ -1990,7 +1990,7 @@ int GetNextNumber(int p1, char text1[CharsMax])
         if (Channel12SwitchValue == 180) k = mp(MaxDegrees[FlightMode][11]);
         break;
     default:
-           k = mp(CentreDegrees[FlightMode][15]);
+           k = mp(CentreDegrees[FlightMode][15]); // channels 13,14,15,16 are simply centred
     }
     return k;
 }
