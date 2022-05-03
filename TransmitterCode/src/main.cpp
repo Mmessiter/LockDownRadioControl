@@ -1134,11 +1134,9 @@ uint16_t mp(uint8_t lowres)
 
 void ClearText()
 {
-    int i;
-    for (i = 0; i < CharsMax; ++i) {
+    for (int i = 0; i < CharsMax; ++i) {
         TextIn[i] = 0;
     }
-    i = 0;
 }
 
 /*********************************************************************************************************************************/
@@ -2089,10 +2087,10 @@ void GetNewChannelValues()
                 }
             }
         }
-        k += (SubTrims[l]-127) * (TrimFactor/2); // heer ADDED SUBTRIM (Range 0 - 127 - 254)
-        if (n < 4) {
-            TrimAmount = (Trims[FlightMode][n] - 80) * TrimFactor;  // TRIMS on lower four channels (80 is mid point !! (range 40 - 80 - 120)) 
-            if (!TrimsReversed[FlightMode][n]) {
+        k += (SubTrims[l]-127) * (TrimFactor/2); //  ADDED SUBTRIM (Range 0 - 127 - 254)
+        if (l < 4) {
+            TrimAmount = (Trims[FlightMode][l] - 80) * TrimFactor;  // TRIMS on lower four channels (80 is mid point !! (range 40 - 80 - 120)) 
+            if (!TrimsReversed[FlightMode][l]) {
                 k += TrimAmount; 
             }
             else {
@@ -3103,6 +3101,7 @@ void SaveOneModel(int mnum)
     unsigned int j;
     unsigned int i;
     bool EndOfName = false;
+    if ((mnum < 1) || (mnum > 99))  return;  // There is no model zero!
     if (!ModelsFileOpen) OpenModelsFile();
     SDCardAddress = TXSIZE;                  //  spare bytes for TX stuff
     SDCardAddress += (mnum - 1) * MODELSIZE; //  spare bytes for Model params
@@ -4466,7 +4465,7 @@ void ButtonWasPressed()
     char Scan_End[]                = "ScanEnd";
     char DataEnd[]                 = "DataEnd";
     char SetupViewFM[]             = "SetupViewFM:";
-    char ModelNMSave[]             = "ModelNMSave";
+   // char ModelNMSave[]             = "ModelNMSave";
     char Data_View[]               = "DataView";
     char CalibrateView[]           = "CalibrateView";
     char Trim[]                    = "Trim";
@@ -4704,7 +4703,7 @@ void ButtonWasPressed()
                 ModelName[i + 1] = 0;
                 ++i;
             } 
-            SaveTXStuff();
+            SaveAllParameters();
             SendCommand(page_SetupView);
             CurrentMode = NORMAL; // Send data again
             CurrentView = MAINSETUPVIEW;
@@ -4716,7 +4715,7 @@ void ButtonWasPressed()
             SendCommand(pSubTrimView);
             SubTrimToEdit = 0;
             CurrentView =  SUBTRIMVIEW;
-            SendText(t2,ChannelNames[SubTrimToEdit]);  // heer
+            SendText(t2,ChannelNames[SubTrimToEdit]);  // 
             SendValue(n0,SubTrims[SubTrimToEdit]-127);
             SendValue(h0,SubTrims[SubTrimToEdit]);
             ClearText();
@@ -4807,6 +4806,7 @@ void ButtonWasPressed()
             SendCommand(page_SetupView);
             ClearText();
             SaveTXStuff();
+            b5isGrey = false;
             return;
         }
 
@@ -5548,28 +5548,10 @@ void ButtonWasPressed()
         }
         if (InStrng(ListFiles, TextIn) > 0) {  
             SendCommand(PageFilesView);
-            CurrentView = FILESVIEW;
+           // CurrentView = FILESVIEW;  // Can't change this until I can change it back!  :-)
             SavedCurrentView = FILESVIEW;
             ShowDirectory();      
             ClearText();
-            return;
-        }
-       
-
-        if (InStrng(ModelNMSave, TextIn) > 0) { // edit modelname  
-            InhibitNameCheck = true;
-            i = 0;
-            while (TextIn[i + 12] > 0) {
-                ModelName[i] = TextIn[i + 12];  // copy new user supplied name
-                ModelName[i + 1] = 0;
-                ++i;
-            } 
-            ModelNumber = GetValue(ModelsView_ModelNumber);   
-            Serial.println (ModelNumber);
-            SaveOneModel(ModelNumber);
-            ClearText();
-            Procrastinate (1500);                        // allow time for SD write to happen
-            InhibitNameCheck = false;
             return;
         }
 
@@ -5862,19 +5844,21 @@ void ButtonWasPressed()
 
         p = (InStrng(MIXES_VIEW, TextIn)); //
         if (p > 0) {
-            SendCommand(pMixesView);
+            SendCommand(pMixesView); // heer
             CurrentView = MIXESVIEW;
             UpdateModelsNameEveryWhere();
             if (MixNumber == 0) MixNumber = 1;
             LastMixNumber = 33;                        // just to be differernt
             SendValue(MixesView_MixNumber, MixNumber); // New load of mix window
+            SendMixValues();
             ClearText();
             return;
         }
 
-        p = (InStrng(Mixes_View, TextIn)); // Get New Mixes!
+        p = (InStrng(Mixes_View, TextIn));    // Get New Mixes!
         if (p > 0) {
             CurrentView = MIXESVIEW;
+            Procrastinate(100);               // allow screen changes to appear
             UpdateModelsNameEveryWhere();
             MixNumber = GetValue(MixesView_MixNumber);
             if (LastMixNumber != MixNumber) { // Did it change?
