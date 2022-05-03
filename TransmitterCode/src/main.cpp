@@ -1965,41 +1965,35 @@ int GetNextNumber(int p1, char text1[CharsMax])
 }
 
 /*********************************************************************************************************************************/
-
-short unsigned int GetStickInput(uint8_t l)
+ uint16_t GetStickInput(uint8_t l)
 {
-    // This bit needs to be optimised but it works well enough.
-    short unsigned int k = 0;
-
-    if (l == 8) {
+   uint16_t k = 0;
+   switch (l) {
+    case 8:
         if (Channel9SwitchValue == 0) k = mp(MinDegrees[FlightMode][8]);
         if (Channel9SwitchValue == 90) k = mp(CentreDegrees[FlightMode][8]);
         if (Channel9SwitchValue == 180) k = mp(MaxDegrees[FlightMode][8]);
-    }
-
-    if (l == 9) {
+        break;
+    case 9:
         if (Channel10SwitchValue == 0) k = mp(MinDegrees[FlightMode][9]);
         if (Channel10SwitchValue == 90) k = mp(CentreDegrees[FlightMode][9]);
         if (Channel10SwitchValue == 180) k = mp(MaxDegrees[FlightMode][9]);
-    }
-
-    if (l == 10) {
+        break;
+    case 10:
         if (Channel11SwitchValue == 0) k = mp(MinDegrees[FlightMode][10]);
         if (Channel11SwitchValue == 90) k = mp(CentreDegrees[FlightMode][10]);
         if (Channel11SwitchValue == 180) k = mp(MaxDegrees[FlightMode][10]);
-    }
-
-    if (l == 11) {
+        break;
+    case 11:
         if (Channel12SwitchValue == 0) k = mp(MinDegrees[FlightMode][11]);
         if (Channel12SwitchValue == 90) k = mp(CentreDegrees[FlightMode][11]);
         if (Channel12SwitchValue == 180) k = mp(MaxDegrees[FlightMode][11]);
-    }
-    if (l > 11){
-           k = mp(CentreDegrees[FlightMode][11]);
+        break;
+    default:
+           k = mp(CentreDegrees[FlightMode][15]);
     }
     return k;
 }
-
 /*********************************************************************************************************************************/
 // MIXES
 /*********************************************************************************************************************************/
@@ -5847,7 +5841,7 @@ void ButtonWasPressed()
 
         p = (InStrng(MIXES_VIEW, TextIn)); //
         if (p > 0) {
-            SendCommand(pMixesView); // heer
+            SendCommand(pMixesView); 
             CurrentView = MIXESVIEW;
             UpdateModelsNameEveryWhere();
             if (MixNumber == 0) MixNumber = 1;
