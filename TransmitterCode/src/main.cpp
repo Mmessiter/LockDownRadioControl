@@ -2088,9 +2088,9 @@ void GetNewChannelValues()
             }
         }
         k += (SubTrims[l]-127) * (TrimFactor/2); // heer ADDED SUBTRIM (Range 0 - 127 - 254)
-        if (n < 4) {
-            TrimAmount = (Trims[FlightMode][n] - 80) * TrimFactor;  // TRIMS on lower four channels (80 is mid point !! (range 40 - 80 - 120)) 
-            if (!TrimsReversed[FlightMode][n]) {
+        if (l < 4) {
+            TrimAmount = (Trims[FlightMode][l] - 80) * TrimFactor;  // TRIMS on lower four channels (80 is mid point !! (range 40 - 80 - 120)) 
+            if (!TrimsReversed[FlightMode][l]) {
                 k += TrimAmount; 
             }
             else {
