@@ -3436,7 +3436,7 @@ void ShowFileErrorMsg()
 {
     char ErrorOn[]  = "vis error,1";
     char ErrorOff[] = "vis error,0";
-    for (int pp = 0; pp < 3; pp++) {
+    for (int pp = 0; pp < 3; ++pp) {
         SendCommand(ErrorOn);
         Procrastinate(200);
         SendCommand(ErrorOff);
@@ -3486,7 +3486,7 @@ void ShowDirectory()
     strcpy(filelistbuf, nul);
     for (int i = 0; i < ExportedFileCounter; ++i) {
         nlp = 13;
-        for (int z = 0; z < 12; z++) {
+        for (int z = 0; z < 12; ++z) {
             t[0] = TheFilesList[i][z];
             if (t[0] == 0) break;
             nlp--;
@@ -3499,7 +3499,7 @@ void ShowDirectory()
         }
         else
         {
-            for (int q = 0; q < nlp; q++) {
+            for (int q = 0; q < nlp; ++q) {
                 strcat(filelistbuf, space);
             }
         }
@@ -5754,7 +5754,7 @@ void ButtonWasPressed()
         if (InStrng(Write, TextIn) > 0) { //  write new data to SD
             p = GetValue(CopyToAllFlightModes);
             if (p == 1) {
-                for (p = 1; p <= 4; p++) {
+                for (p = 1; p <= 4; ++p) {
                     if (p != FlightMode) {
                         MinDegrees[p][ChanneltoSet - 1]         = MinDegrees[FlightMode][ChanneltoSet - 1];
                         MidLowDegrees[p][ChanneltoSet - 1]      = MidLowDegrees[FlightMode][ChanneltoSet - 1];
