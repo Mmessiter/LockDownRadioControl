@@ -1,5 +1,14 @@
-To move a point up or down, click on the screen above or below the point. That point will move close to where you clicked. For very fine adjustment, use the buttons at the bottom left.||
+To move a point up or down, click on the screen 
+above or below the point. ||
 
-Three type of interpolation are supported: ||(1) Straight: 4 straight lines joining 5 points.|(2) Smooth: Smooth curve between the 5 points.|(3) Exponential: 3 points joined by 2 exponential curves with expo values beween 0% and 100%.
+That point will move 
+close to where you clicked. For very fine adjustment,
+use the buttons at the bottom left.||
+
+Three type of interpolation are supported:||
+1. Straight: 4 straight lines joining 5 points.||
+2. Smooth: Smooth curve between the 5 points.||
+3. Exponential: 3 points joined by 2 exponential 
+curves with values beween 0% (linear or x=y) and 100%.
   
 

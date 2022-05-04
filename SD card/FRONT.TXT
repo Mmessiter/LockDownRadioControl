@@ -1,1 +1,13 @@
-Its best to have this screen visible while flying a model because it has the motor timer and battery voltages. ||The timer runs automaticaly when the model is NOT in Bank 4. So it's recommended to setup the model such that the motor is off in Bank 4. ||The timer pauses while in Bank 4 and is reset when the transmitter is turned on. ||Press 'Setup' to change settings. 
+This screen should usually be visible while flying a model because it shows the Bank, time, trims, motor timer and battery voltages. ||
+
+The motor timer runs automaticaly when the model is NOT in Bank 4 in order to time the motor use. So it's recommended to setup the model such that the motor is always off in Bank 4.||
+
+The timer pauses while in Bank 4 and is reset when the transmitter is turned on.||
+
+The LED is Blue when the radio is not even trying to connect.|
+The LED is RED when the radio is trying to connect.
+The LED is GREEN when a connection exists.
+
+When the LED is green, the 'Off' button is disabled to prevent accidental disconnection. If you really what to switch off when still connected, you can from the Options screen.
+
+Press 'Setup' to change all settings. 
