@@ -2043,25 +2043,25 @@ void GetNewChannelValues()
 {
     uint16_t k = 0, l = 0, m = 0, n = 0, TrimAmount;
     for (n = 0; n < CHANNELSUSED; ++n) {
-        l = InPutStick[n]; // input sticks knobs & switches are now mapped by user
+        l = InPutStick[n];                                  // input sticks knobs & switches are now mapped by user
         if (l <= 7)
         {
-            m = analogRead(AnalogueInput[l]); // Get values from sticks' pots
+            m = analogRead(AnalogueInput[l]);               // Get values from sticks' pots
         }
 
         if (l > 7)
-        {                         // Switch ?
-            k = GetStickInput(l); // Four 3 postion switches
+        {                                                       // Switch ?
+            k = GetStickInput(l);                               // Four 3 postion switches
         }
-        else {                                            // Map the eight analogue inputs
-            if (InterpolationTypes[FlightMode][n] == 0) { // Linear
+        else {                                                  // Map the eight analogue inputs
+            if (InterpolationTypes[FlightMode][n] == 0) {       // Linear  THIS 'n' should be 'l' ?!?! <<< ***** TEST LATER **********
                 if (m >= ChannelMidHi[l]) k = map(m, ChannelMidHi[l], ChannelMax[l], mp(MidHiDegrees[FlightMode][n]), mp(MaxDegrees[FlightMode][n]));
                 if (m >= ChannelCentre[l] && m <= (ChannelMidHi[l])) k = map(m, ChannelCentre[l], ChannelMidHi[l], mp(CentreDegrees[FlightMode][n]), mp(MidHiDegrees[FlightMode][n]));
                 if (m >= ChannelMidLow[l] && m <= ChannelCentre[l]) k = map(m, ChannelMidLow[l], ChannelCentre[l], mp(MidLowDegrees[FlightMode][n]), mp(CentreDegrees[FlightMode][n]));
                 if (m <= ChannelMidLow[l]) k = map(m, ChannelMin[l], ChannelMidLow[l], mp(MinDegrees[FlightMode][n]), mp(MidLowDegrees[FlightMode][n]));
             }
 
-            if (InterpolationTypes[FlightMode][n] == 1) { // CatmullSpline (!)
+            if (InterpolationTypes[FlightMode][n] == 1) {           // CatmullSpline (!)
                 xPoints[0] = ChannelMin[l];
                 xPoints[1] = ChannelMidLow[l];
                 xPoints[2] = ChannelCentre[l];
@@ -2074,7 +2074,7 @@ void GetNewChannelValues()
                 yPoints[0] = mp(MinDegrees[FlightMode][n]);
                 k          = Interpolation::CatmullSpline(xPoints, yPoints, PointsCount, m);
             }
-            if (InterpolationTypes[FlightMode][n] == 2) { // EXPONENTIAL (!!)
+            if (InterpolationTypes[FlightMode][n] == 2) {               // EXPONENTIAL (!!)
                 if (m >= ChannelCentre[l]) {
                     k = MapExp(m - ChannelCentre[l], 0, ChannelMax[l] - ChannelCentre[l], 0, mp(MaxDegrees[FlightMode][n]) - mp(CentreDegrees[FlightMode][n]), Exponential[FlightMode][n]) + mp(CentreDegrees[FlightMode][n]);
                 }
@@ -2083,9 +2083,9 @@ void GetNewChannelValues()
                 }
             }
         }
-        k += (SubTrims[l]-127) * (TrimFactor/2); //  ADDED SUBTRIM (Range 0 - 127 - 254)
+        k += (SubTrims[l]-127) * (TrimFactor/2);                        //  ADDED SUBTRIM (Range 0 - 127 - 254)
         if (l < 4) {
-            TrimAmount = (Trims[FlightMode][l] - 80) * TrimFactor;  // TRIMS on lower four channels (80 is mid point !! (range 40 - 80 - 120)) 
+            TrimAmount = (Trims[FlightMode][l] - 80) * TrimFactor;      // TRIMS on lower four channels (80 is mid point !! (range 40 - 80 - 120)) 
             if (!TrimsReversed[FlightMode][l]) {
                 k += TrimAmount; 
             }
@@ -2099,7 +2099,7 @@ void GetNewChannelValues()
         k               = 1500;
         SendBuffer[n]   = PreMixBuffer[n];
     }
-    if (CurrentMode == NORMAL) DoMixes(); // not while calibrating
+    if (CurrentMode == NORMAL) DoMixes();                               // not while calibrating
 }
 
 /*********************************************************************************************************************************/
