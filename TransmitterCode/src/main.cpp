@@ -3265,15 +3265,29 @@ void BuildDirectory(){
 }
 
 /*********************************************************************************************************************************/
-void WordWrap(char* htext){  // find space then break line there
 
- //char crlf[] = {13,10,0};
-
-
+void WordWrap(char * htext){
+char crlf[]= {13,10,0};
+char temp1[MAXFILELEN] = "";
+char a[]= " ";
+uint16_t i,j;
+        for (i = strlen(htext)-1; i > 1; --i){   
+            if (htext[i] == ' ') {break;}       // 'i' now has last space pointer
+        }
+        for (j=0;j<i;++j){                      // get text to i ...
+            a[0] = htext[j];
+            strcat(temp1,a);
+        }
+        strcat(temp1, crlf);                     // add crlf ...
+        for (j=i+1;j<strlen(htext);++j){         // then last word on next line.
+            a[0] = htext[j];
+            strcat(temp1,a);
+        }
+        strcpy (htext,temp1);
 }
 /*********************************************************************************************************************************/
 void ReadHelpFile(char* fname, char* htext){
-    #define MAXWIDTH 59
+    #define MAXWIDTH 63
     char errormsg[] = "The Help file was not found.";
     File fnumber;
     int i  = 0;
@@ -3309,7 +3323,7 @@ void ReadHelpFile(char* fname, char* htext){
                         Column = 0;
                 } 
 
-                if ((Column >= MAXWIDTH) && (a[0] >= 32)) {   // Call word wrap function if not space.
+                if ((Column >= MAXWIDTH) && (a[0] != 32)) {   // Call word wrap function if not space.
                         WordWrap(htext);
                         Column = 0;
                 } 
