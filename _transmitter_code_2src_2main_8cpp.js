@@ -251,6 +251,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "UpdateTrimView", "_transmitter_code_2src_2main_8cpp.html#ac78966debc2cdc13d8ca958ce3b20c78", null ],
     [ "UpdateTrimViewPart", "_transmitter_code_2src_2main_8cpp.html#a3cd4694d58bd7a9f56e973d20270722f", null ],
     [ "WatchDogCallBack", "_transmitter_code_2src_2main_8cpp.html#ae410be09c6f449451d8f2327fd895c7d", null ],
+    [ "WordWrap", "_transmitter_code_2src_2main_8cpp.html#a68bfe20869353998a277b62ddcca4042", null ],
     [ "ZeroDataScreen", "_transmitter_code_2src_2main_8cpp.html#a6da9a1fd0b003151f79eabc702ba80ff", null ],
     [ "AckPayload", "_transmitter_code_2src_2main_8cpp.html#a30a079d60b4731ce1531091ffe56a703", null ],
     [ "AckPayloadSize", "_transmitter_code_2src_2main_8cpp.html#a6dc99d00582ef356ea3d57700dca6dab", null ],
