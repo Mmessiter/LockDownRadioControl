@@ -3263,6 +3263,14 @@ void BuildDirectory(){
     }
     SortDirectory();
 }
+
+/*********************************************************************************************************************************/
+void WordWrap(char* htext){  // find space then break line there
+
+ //char crlf[] = {13,10,0};
+
+
+}
 /*********************************************************************************************************************************/
 void ReadHelpFile(char* fname, char* htext){
     #define MAXWIDTH 59
@@ -3294,9 +3302,15 @@ void ReadHelpFile(char* fname, char* htext){
                      Column += 2;
                      a[0] = 34;
                  }
-                if ((Column >= MAXWIDTH) && (a[0] <= 32)) {   // Don't go too wide
+
+                if ((Column >= MAXWIDTH) && (a[0] <= 32)) {   // Don't go too wide if space
                         strcat(htext, crlf);
                         a[0] = 34;
+                        Column = 0;
+                } 
+
+                if ((Column >= MAXWIDTH) && (a[0] >= 32)) {   // Call word wrap function if not space.
+                        WordWrap(htext);
                         Column = 0;
                 } 
                 if ((a[0] == 13) || (a[0] == 10)) a[0] = 34; // ignore CrLfs
