@@ -2043,10 +2043,10 @@ void GetNewChannelValues()
 {
     uint16_t k = 0, l = 0, m = 0, n = 0, TrimAmount;
     for (n = 0; n < CHANNELSUSED; ++n) {
-        l = InPutStick[n];                                  // input sticks knobs & switches are now mapped by user
+        l = InPutStick[n];                                      // input sticks knobs & switches are now mapped by user
         if (l <= 7)
         {
-            m = analogRead(AnalogueInput[l]);               // Get values from sticks' pots
+            m = analogRead(AnalogueInput[l]);                   // Get values from sticks' pots
         }
 
         if (l > 7)
@@ -2104,16 +2104,33 @@ void GetNewChannelValues()
 
 /*********************************************************************************************************************************/
 
+void ReduceLimits(){ // heer
+
+ for (int i = 0; i < PROPOCHANNELS; ++i)
+    {
+        ChannelMax[i] = 512;
+        ChannelMin[i] = 512;
+    }
+}
+/*********************************************************************************************************************************/
+
 void CalibrateSticks() 
 {
     int p;
     for (int i = 0; i < PROPOCHANNELS; ++i)
     {
         p = analogRead(AnalogueInput[i]);
-       if (ChannelMax[i] < p) ChannelMax[i] = p;
-       if (ChannelMin[i] > p) ChannelMin[i] = p;
-   }
+       if (ChannelMax[i] < p) {
+           ChannelMax[i] = p;
+           if (i == 2) Serial.println(p);
+           }
+       if (ChannelMin[i] > p) {
+           ChannelMin[i] = p;
+            if (i == 2) Serial.println(p);
+           
+           }
         GetNewChannelValues();
+    }
 }
 
 /*********************************************************************************************************************************/
@@ -5967,7 +5984,7 @@ void ButtonWasPressed()
 
         if (InStrng(midydown, TextIn)) // midy down?
         {
-            CentreDegrees[FlightMode][ChanneltoSet - 1]--;
+            if (CentreDegrees[FlightMode][ChanneltoSet - 1] > 0 ) {CentreDegrees[FlightMode][ChanneltoSet - 1]--;}
             DisplayCurve();
             ClearText();
             return;
@@ -5983,7 +6000,7 @@ void ButtonWasPressed()
 
         if (InStrng(midhiydown, TextIn)) // midhiy down?
         {
-            MidHiDegrees[FlightMode][ChanneltoSet - 1]--;
+            if (MidHiDegrees[FlightMode][ChanneltoSet - 1] > 0) {MidHiDegrees[FlightMode][ChanneltoSet - 1]--;}
             DisplayCurve();
             ClearText();
             return;
@@ -5999,7 +6016,7 @@ void ButtonWasPressed()
 
         if (InStrng(midlowydown, TextIn)) // midlowy down?
         {
-            MidLowDegrees[FlightMode][ChanneltoSet - 1]--;
+            if (MidLowDegrees[FlightMode][ChanneltoSet - 1] > 0 ) {MidLowDegrees[FlightMode][ChanneltoSet - 1]--;}
             DisplayCurve();
             ClearText();
             return;
@@ -6015,7 +6032,7 @@ void ButtonWasPressed()
 
         if (InStrng(yy1down, TextIn)) // yy1 down?
         {
-            MaxDegrees[FlightMode][ChanneltoSet - 1]--;
+            if(MaxDegrees[FlightMode][ChanneltoSet - 1] > 0) {MaxDegrees[FlightMode][ChanneltoSet - 1]--;}
             DisplayCurve();
             ClearText();
             return;
@@ -6031,7 +6048,8 @@ void ButtonWasPressed()
 
         if (InStrng(yy2down, TextIn)) // yy1 down?
         {
-            MinDegrees[FlightMode][ChanneltoSet - 1]--;
+            Serial.println (MinDegrees[FlightMode][ChanneltoSet - 1]);
+            if (MinDegrees[FlightMode][ChanneltoSet - 1] > 0) {MinDegrees[FlightMode][ChanneltoSet - 1]--;}
             DisplayCurve();
             ClearText();
             return;
@@ -6081,6 +6099,8 @@ void ButtonWasPressed()
         }
         if (CurrentMode == NORMAL) { 
             if (strcmp(TextIn, "Calibrate1") == 0) {
+
+                ReduceLimits();
                 CurrentMode = CALIBRATELIMITS;
                 CurrentView = CALIBRATEVIEW ;
                 SendText1(SvT11, CMsg1);
