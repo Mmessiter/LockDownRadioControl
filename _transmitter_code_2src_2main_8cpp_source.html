@@ -3275,7 +3275,7 @@ $(document).ready(function(){initNavTree('_transmitter_code_2src_2main_8cpp_sour
 <div class="line"><a id="l03282" name="l03282"></a><span class="lineno"> 3282</span>        <span class="keywordflow">if</span> (!fnumber) {<a class="code hl_function" href="_radio_functions_8cpp.html#a760609a682300dfe6bfaac737fd4d5eb">Procrastinate</a>(500); fnumber  = SD.open(fname, FILE_READ);}</div>
 <div class="line"><a id="l03283" name="l03283"></a><span class="lineno"> 3283</span>        <span class="keywordflow">if</span> (fnumber) {</div>
 <div class="line"><a id="l03284" name="l03284"></a><span class="lineno"> 3284</span>            <span class="keywordflow">while</span> (fnumber.available() &amp;&amp; i &lt; <a class="code hl_define" href="_transmitter_code_2src_2main_8cpp.html#aa67b661e0a71a9cce5c2903953b8b8bf">MAXFILELEN</a>) {</div>
-<div class="line"><a id="l03285" name="l03285"></a><span class="lineno"> 3285</span>                a[0] = fnumber.read();</div>
+<div class="line"><a id="l03285" name="l03285"></a><span class="lineno"> 3285</span>                a[0] = fnumber.read();           <span class="comment">//  Read in one byte at a time.</span></div>
 <div class="line"><a id="l03286" name="l03286"></a><span class="lineno"> 3286</span>                 <span class="keywordflow">if</span> (a[0] == <span class="charliteral">&#39;|&#39;</span>) {              <span class="comment">//  New Line character = &#39;|&#39;   </span></div>
 <div class="line"><a id="l03287" name="l03287"></a><span class="lineno"> 3287</span>                     strcat(htext, crlf);</div>
 <div class="line"><a id="l03288" name="l03288"></a><span class="lineno"> 3288</span>                     Column = 0;</div>
