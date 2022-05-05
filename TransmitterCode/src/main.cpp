@@ -2117,7 +2117,6 @@ void ReduceLimits(){                              // Get things setup for sticks
     }
 }
 /*********************************************************************************************************************************/
-
 void CalibrateSticks()   // This discovers end of travel place for sticks etc. 
 {
     uint16_t p;
@@ -2135,9 +2134,7 @@ void CalibrateSticks()   // This discovers end of travel place for sticks etc.
        GetNewChannelValues();
     }
 }
-
 /*********************************************************************************************************************************/
-
 /** @brief Get centre as 90 degrees */
 void ChannelCentres()
 {
@@ -2148,10 +2145,7 @@ void ChannelCentres()
     }
     GetNewChannelValues();
 }
-
-
 /*********************************************************************************************************************************/
-
 void UpdateTrimView()
 {
     char Mode1[]        = "Mode1";
