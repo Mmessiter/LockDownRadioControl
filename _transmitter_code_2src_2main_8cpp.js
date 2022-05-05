@@ -204,6 +204,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "Reboot", "_transmitter_code_2src_2main_8cpp.html#a374524dc113357d2ed6b8622f6ea85a8", null ],
     [ "ReceiveModelFile", "_transmitter_code_2src_2main_8cpp.html#ab7c9edf843c732d7fe296564f39bc0dc", null ],
     [ "RedLedOn", "_transmitter_code_2src_2main_8cpp.html#a7d34cec6e8edc20c8b50424e15dcc7c7", null ],
+    [ "ReduceLimits", "_transmitter_code_2src_2main_8cpp.html#ad875fe28566f35ffc5f90e73d0089fc6", null ],
     [ "ReEnableScanButton", "_transmitter_code_2src_2main_8cpp.html#a0a3d89dfcfab70c6cbc50401fff1afeb", null ],
     [ "ResetSubTrims", "_transmitter_code_2src_2main_8cpp.html#a0b5bf6a4444e93f7c2f99264c414037d", null ],
     [ "RestoreBrightness", "_transmitter_code_2src_2main_8cpp.html#a49da3478d89a22069e29c7f00cb46a5f", null ],
