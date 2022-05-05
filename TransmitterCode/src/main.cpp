@@ -281,12 +281,12 @@ uint16_t SendBuffer[UNCOMPRESSEDWORDS];      //    Data to send to rx (16 words)
 uint16_t ShownBuffer[UNCOMPRESSEDWORDS];     //    Data shown before
 uint16_t LastBuffer[CHANNELSUSED + 1];       //    Used to spot any change
 uint16_t PreMixBuffer[CHANNELSUSED + 1];     //    Data collected from sticks
-uint8_t  MaxDegrees[5][CHANNELSUSED + 1];    //    Max degrees (180?)
-uint8_t  MidHiDegrees[5][CHANNELSUSED + 1];  //    MidHi degrees (135?)
-uint8_t  CentreDegrees[5][CHANNELSUSED + 1]; //    Degrees (90)
-uint8_t  MidLowDegrees[5][CHANNELSUSED + 1]; //    MidLow Degrees (45?)
-uint8_t  MinDegrees[5][CHANNELSUSED + 1];    //    Max Degrees (0?)
-uint8_t  SubTrims[CHANNELSUSED + 1];         //    Sub Trims
+uint8_t  MaxDegrees[5][CHANNELSUSED + 1];    //    Max degrees (180)
+uint8_t  MidHiDegrees[5][CHANNELSUSED + 1];  //    MidHi degrees (135)
+uint8_t  CentreDegrees[5][CHANNELSUSED + 1]; //    Middle degrees (90)
+uint8_t  MidLowDegrees[5][CHANNELSUSED + 1]; //    MidLow Degrees (45)
+uint8_t  MinDegrees[5][CHANNELSUSED + 1];    //    Min Degrees (0)
+uint8_t  SubTrims[CHANNELSUSED + 1];         //    Subtrims
 uint8_t  SubTrimToEdit = 0;
 
 uint8_t  FlightMode         = 1;
