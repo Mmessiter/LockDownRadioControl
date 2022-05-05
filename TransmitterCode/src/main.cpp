@@ -6100,7 +6100,7 @@ void ButtonWasPressed()
         }
         if (CurrentMode == NORMAL) { 
             if (strcmp(TextIn, "Calibrate1") == 0) {
-                ReduceLimits();
+                ReduceLimits();                       // Get setup for sticks calibration
                 CurrentMode = CALIBRATELIMITS;
                 CurrentView = CALIBRATEVIEW ;
                 SendText1(SvT11, CMsg1);
