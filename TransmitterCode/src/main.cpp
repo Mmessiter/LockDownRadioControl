@@ -3282,7 +3282,7 @@ void ReadHelpFile(char* fname, char* htext){
         if (!fnumber) {Procrastinate(500); fnumber  = SD.open(fname, FILE_READ);}
         if (fnumber) {
             while (fnumber.available() && i < MAXFILELEN) {
-                a[0] = fnumber.read();
+                a[0] = fnumber.read();           //  Read in one byte at a time.
                  if (a[0] == '|') {              //  New Line character = '|'   
                      strcat(htext, crlf);
                      Column = 0;
