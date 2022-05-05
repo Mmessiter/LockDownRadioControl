@@ -3265,13 +3265,13 @@ void BuildDirectory(){
 }
 /*********************************************************************************************************************************/
 void ReadHelpFile(char* fname, char* htext){
-    #define MaxWidth 60
+    #define MAXWIDTH 59
     char errormsg[] = "The Help file was not found.";
     File fnumber;
     int i  = 0;
     byte Column = 0;
     char crlf[] = {13,10,0};
-    char Sentance[] = ". ";
+    char Space[] = " ";
     char a[] = " ";
     htext[0] = 0;
     char SearchFile[30];
@@ -3288,12 +3288,13 @@ void ReadHelpFile(char* fname, char* htext){
                      Column = 0;
                      a[0] = 34;
                  }
-                 if (a[0] == '.') {             // add a space after a full stop.
-                     strcat(htext, Sentance);
+                 if ((a[0] == '.') || (a[0] == '!')) {             // add a space after a full stop.
+                     strcat(htext, a);
+                     strcat(htext, Space);
                      Column += 2;
                      a[0] = 34;
                  }
-                if ((Column > MaxWidth) && (a[0] == 32)){   // Don't go too wide
+                if ((Column >= MAXWIDTH) && (a[0] <= 32)) {   // Don't go too wide
                         strcat(htext, crlf);
                         a[0] = 34;
                         Column = 0;
