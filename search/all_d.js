@@ -30,7 +30,7 @@ var searchData=
   ['maxmixes_27',['MAXMIXES',['../_transmitter_code_2src_2main_8cpp.html#a78eca4e2f9590ad626beb2486d11610d',1,'main.cpp']]],
   ['maxparams_28',['MAXPARAMS',['../_sensor_hub_l_c_2src_2main_8cpp.html#a5fdce82727e278d6647e0addafcd6db6',1,'MAXPARAMS():&#160;main.cpp'],['../_sensor_hub_t32_2src_2main_8cpp.html#a5fdce82727e278d6647e0addafcd6db6',1,'MAXPARAMS():&#160;main.cpp'],['../_sensor_hub_teensy3__6_2src_2main_8cpp.html#a5fdce82727e278d6647e0addafcd6db6',1,'MAXPARAMS():&#160;main.cpp']]],
   ['maxwaitsentence_29',['MAXWAITSENTENCE',['../_receiver_code_2lib_2_adafruit___g_p_s___library_2src_2_adafruit___p_m_t_k_8h.html#aeebf6a58258596ef38bd7ea07e056a94',1,'MAXWAITSENTENCE():&#160;Adafruit_PMTK.h'],['../_sensor_hub_l_c_2lib_2_adafruit___p_m_t_k_8h.html#aeebf6a58258596ef38bd7ea07e056a94',1,'MAXWAITSENTENCE():&#160;Adafruit_PMTK.h'],['../_sensor_hub_t32_2lib_2_adafruit___p_m_t_k_8h.html#aeebf6a58258596ef38bd7ea07e056a94',1,'MAXWAITSENTENCE():&#160;Adafruit_PMTK.h']]],
-  ['maxwidth_30',['MaxWidth',['../_transmitter_code_2src_2main_8cpp.html#a8415b7bb2e3e24a90035547234df4c3d',1,'main.cpp']]],
+  ['maxwidth_30',['MAXWIDTH',['../_transmitter_code_2src_2main_8cpp.html#ac101c663138f79260b6d5ea00140fa22',1,'main.cpp']]],
   ['maybeaddzero_31',['MayBeAddZero',['../_transmitter_code_2src_2main_8cpp.html#ae310e7fc6397929ae886869c05cbc334',1,'main.cpp']]],
   ['mcmservo_32',['MCMServo',['../_receiver_code_2src_2main_8cpp.html#aea43f0afa386a593269762fb00bc6c77',1,'main.cpp']]],
   ['memoryfortransmtter_33',['MemoryForTransmtter',['../_transmitter_code_2src_2main_8cpp.html#a4693f77df28f9d6032c4292b0275f53a',1,'main.cpp']]],

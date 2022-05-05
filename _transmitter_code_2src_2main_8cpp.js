@@ -56,7 +56,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "MAXFILELEN", "_transmitter_code_2src_2main_8cpp.html#aa67b661e0a71a9cce5c2903953b8b8bf", null ],
     [ "MAXMICROS", "_transmitter_code_2src_2main_8cpp.html#a843e3db36f734b45096220f7ca4b8d9f", null ],
     [ "MAXMIXES", "_transmitter_code_2src_2main_8cpp.html#a78eca4e2f9590ad626beb2486d11610d", null ],
-    [ "MaxWidth", "_transmitter_code_2src_2main_8cpp.html#a8415b7bb2e3e24a90035547234df4c3d", null ],
+    [ "MAXWIDTH", "_transmitter_code_2src_2main_8cpp.html#ac101c663138f79260b6d5ea00140fa22", null ],
     [ "MIDMICROS", "_transmitter_code_2src_2main_8cpp.html#aa4dd4979e290d977d813a5a4af263b0d", null ],
     [ "MINMICROS", "_transmitter_code_2src_2main_8cpp.html#ac67e087c11a86a3790c656a29f8c7195", null ],
     [ "MIXESVIEW", "_transmitter_code_2src_2main_8cpp.html#aaa7f851829299cf35b8f281e6d76e27c", null ],
