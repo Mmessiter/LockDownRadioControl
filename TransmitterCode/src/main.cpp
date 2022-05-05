@@ -6123,8 +6123,8 @@ void ButtonWasPressed()
         if (CurrentMode == CENTRESTICKS) {
             if (strcmp(TextIn, "Calibrate1") == 0) {
                 CurrentMode = NORMAL;
-                SaveTXStuff();
-                LoadAllParameters();               // heer
+                SaveTXStuff();                     // Save calibrations
+                LoadAllParameters();               // Restore all current model settings
                 SendCommand(page_SetupView);
                 ClearText();
                 return;
