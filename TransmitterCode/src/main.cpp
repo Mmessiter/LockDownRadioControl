@@ -145,7 +145,7 @@ RF24 Radio1(CE_PIN, CSN_PIN);
 #define Purple          39070
 #define Orange          64512
 #define White           65535
-#define FlightModesUsed 4
+#define FLIGHTMODESUSED 4
 #define M_Enabled       0 // Offsets for Mixes array
 #define M_FlightMode    1
 #define M_MasterChannel 2
@@ -224,10 +224,10 @@ SBUS     MySbus(SBUSPORT);
 uint16_t SbusChannels[CHANNELSUSED + 2]; // a few spare
 uint32_t SBUSTimer = 0;
 uint8_t Mixes[MAXMIXES + 1][CHANNELSUSED + 1];                // Channel mixes' 2D array store
-int     Trims[FlightModesUsed + 1][CHANNELSUSED + 1];         // Trims to store
-uint8_t TrimsReversed[FlightModesUsed + 1][CHANNELSUSED + 1]; // Trim directions to store
-uint8_t Exponential[FlightModesUsed + 1][CHANNELSUSED + 1];   // Exponential
-uint8_t InterpolationTypes[FlightModesUsed + 1][CHANNELSUSED + 1];
+int     Trims[FLIGHTMODESUSED + 1][CHANNELSUSED + 1];         // Trims to store
+uint8_t TrimsReversed[FLIGHTMODESUSED + 1][CHANNELSUSED + 1]; // Trim directions to store
+uint8_t Exponential[FLIGHTMODESUSED + 1][CHANNELSUSED + 1];   // Exponential
+uint8_t InterpolationTypes[FLIGHTMODESUSED + 1][CHANNELSUSED + 1];
 
 uint8_t       LastMixNumber      = 1;
 uint8_t       MixNumber          = 0;
@@ -2054,7 +2054,7 @@ void GetNewChannelValues()
             k = GetStickInput(l);                               // Four 3 postion switches
         }
         else {                                                  // Map the eight analogue inputs
-            if (InterpolationTypes[FlightMode][n] == 0) {       // Linear  THIS 'n' should be 'l' ?!?! <<< ***** TEST LATER **********
+            if (InterpolationTypes[FlightMode][n] == 0) {       
                 if (m >= ChannelMidHi[l]) k = map(m, ChannelMidHi[l], ChannelMax[l], mp(MidHiDegrees[FlightMode][n]), mp(MaxDegrees[FlightMode][n]));
                 if (m >= ChannelCentre[l] && m <= (ChannelMidHi[l])) k = map(m, ChannelCentre[l], ChannelMidHi[l], mp(CentreDegrees[FlightMode][n]), mp(MidHiDegrees[FlightMode][n]));
                 if (m >= ChannelMidLow[l] && m <= ChannelCentre[l]) k = map(m, ChannelMidLow[l], ChannelCentre[l], mp(MidLowDegrees[FlightMode][n]), mp(CentreDegrees[FlightMode][n]));
@@ -2104,32 +2104,35 @@ void GetNewChannelValues()
 
 /*********************************************************************************************************************************/
 
-void ReduceLimits(){ // heer
-
- for (int i = 0; i < PROPOCHANNELS; ++i)
+void ReduceLimits(){                              // Get things setup for sticks calibration
+ for (uint8_t i = 0; i < PROPOCHANNELS; ++i)
     {
         ChannelMax[i] = 512;
         ChannelMin[i] = 512;
     }
+    for (uint8_t i = 0; i < CHANNELSUSED; ++i) {
+        MaxDegrees[FlightMode][i]       = 180;
+        CentreDegrees[FlightMode][i]    = 90;
+        MinDegrees[FlightMode][i]       = 0;
+    }
 }
 /*********************************************************************************************************************************/
 
-void CalibrateSticks() 
+void CalibrateSticks()   // This  sets extreme limits
 {
-    int p;
-    for (int i = 0; i < PROPOCHANNELS; ++i)
+    uint16_t p;
+    for (uint8_t i = 0; i < PROPOCHANNELS; ++i)
     {
-        p = analogRead(AnalogueInput[i]);
-       if (ChannelMax[i] < p) {
+       p = analogRead(AnalogueInput[i]);
+       if (ChannelMax[i] < p) 
+        {
            ChannelMax[i] = p;
-           if (i == 2) Serial.println(p);
-           }
-       if (ChannelMin[i] > p) {
+        }
+       if (ChannelMin[i] > p) 
+       {
            ChannelMin[i] = p;
-            if (i == 2) Serial.println(p);
-           
-           }
-        GetNewChannelValues();
+       }
+       GetNewChannelValues();
     }
 }
 
@@ -2401,7 +2404,7 @@ void InitMaxMin()
 
 void CentreTrims()
 {
-    for (int j = 0; j <= FlightModesUsed; ++j) {
+    for (int j = 0; j <= FLIGHTMODESUSED; ++j) {
         for (int i = 0; i < CHANNELSUSED; ++i) {
             Trims[j][i] = 80;
         }
@@ -2638,13 +2641,13 @@ bool ReadOneModel(uint8_t Mnum)
         }
     }
 
-    for (j = 0; j < FlightModesUsed + 1; ++j) {
+    for (j = 0; j < FLIGHTMODESUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             Trims[j][i] = SDReadByte(SDCardAddress);
             ++SDCardAddress;
         }
     }
-    for (j = 0; j < FlightModesUsed + 1; ++j) {
+    for (j = 0; j < FLIGHTMODESUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             TrimsReversed[j][i] = SDReadByte(SDCardAddress);
             ++SDCardAddress;
@@ -2710,7 +2713,7 @@ bool ReadOneModel(uint8_t Mnum)
         }
     }
 
-    for (j = 0; j < FlightModesUsed + 1; ++j) {
+    for (j = 0; j < FLIGHTMODESUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             Exponential[j][i] = SDReadByte(SDCardAddress);
             if (Exponential[j][i] > 200 || Exponential[j][i] < 0) {
@@ -2719,7 +2722,7 @@ bool ReadOneModel(uint8_t Mnum)
             ++SDCardAddress;
         }
     }
-    for (j = 0; j < FlightModesUsed + 1; ++j) {
+    for (j = 0; j < FLIGHTMODESUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             InterpolationTypes[j][i] = SDReadByte(SDCardAddress);
             if (InterpolationTypes[j][i] < 0 || InterpolationTypes[j][i] > 2) {
@@ -3144,13 +3147,13 @@ void SaveOneModel(int mnum)
             ++SDCardAddress;
         }
     }
-    for (j = 0; j < FlightModesUsed + 1; ++j) {
+    for (j = 0; j < FLIGHTMODESUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             SDUpdateByte(SDCardAddress, Trims[j][i]);
             ++SDCardAddress;
         }
     }
-    for (j = 0; j < FlightModesUsed + 1; ++j) {
+    for (j = 0; j < FLIGHTMODESUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             SDUpdateByte(SDCardAddress, TrimsReversed[j][i]);
             ++SDCardAddress;
@@ -3204,14 +3207,14 @@ void SaveOneModel(int mnum)
             ++SDCardAddress;
         }
     }
-    for (j = 0; j < FlightModesUsed + 1; ++j) {
+    for (j = 0; j < FLIGHTMODESUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             SDUpdateByte(SDCardAddress, Exponential[j][i]);
             ++SDCardAddress;
         }
     }
 
-    for (j = 0; j < FlightModesUsed + 1; ++j) {
+    for (j = 0; j < FLIGHTMODESUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             SDUpdateByte(SDCardAddress, InterpolationTypes[j][i]);
             ++SDCardAddress;
@@ -3595,7 +3598,7 @@ void SetDefaultValues()
     SendValue(Progress, 25);
     Procrastinate(10);
 
-    for (j = 0; j < FlightModesUsed + 1; ++j) { // must have fudged this somewhere.... 5?!
+    for (j = 0; j < FLIGHTMODESUSED + 1; ++j) { // must have fudged this somewhere.... 5?!
         for (i = 0; i < CHANNELSUSED; ++i) {
             Trims[j][i]         = 80; // MIDPOINT is 80 !
             TrimsReversed[j][i] = 0;
@@ -3631,12 +3634,12 @@ void SetDefaultValues()
         }
     }
 
-    for (j = 0; j < FlightModesUsed + 1; ++j) {
+    for (j = 0; j < FLIGHTMODESUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             Exponential[j][i] = 0;                // 0% expo = default
         }
     }
-    for (j = 0; j < FlightModesUsed + 1; ++j) {
+    for (j = 0; j < FLIGHTMODESUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             InterpolationTypes[j][i] = 2;        // Expo is default
         }
@@ -4548,8 +4551,6 @@ void ButtonWasPressed()
     char CMsg2[]                   = "Wiggle, then press!";
     char Cmsg3[]                   = "Please CENTRE all controls,\r\nWait a moment,\r\nthen press again...";
     char Cmsg4[]                   = "CENTRE ALL!";
-    char Cmsg5[]                   = "To calibrate TX sticks,\r\npress the button below\r\nthen follow instructions here... ";
-    char Cmsg6[]                   = "Calibrate TX sticks";
     char TypeView[]                = "TypeView";
     char CopyToAllFlightModes[]    = "callfm";
     char RXBAT[]                   = "RXBAT";
@@ -6099,7 +6100,6 @@ void ButtonWasPressed()
         }
         if (CurrentMode == NORMAL) { 
             if (strcmp(TextIn, "Calibrate1") == 0) {
-
                 ReduceLimits();
                 CurrentMode = CALIBRATELIMITS;
                 CurrentView = CALIBRATEVIEW ;
@@ -6123,9 +6123,9 @@ void ButtonWasPressed()
         if (CurrentMode == CENTRESTICKS) {
             if (strcmp(TextIn, "Calibrate1") == 0) {
                 CurrentMode = NORMAL;
-                SaveAllParameters();
-                SendText(SvT11, Cmsg5);
-                SendText(SvB0, Cmsg6);
+                SaveTXStuff();
+                LoadAllParameters();               // heer
+                SendCommand(page_SetupView);
                 ClearText();
                 return;
             }
