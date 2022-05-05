@@ -2118,7 +2118,7 @@ void ReduceLimits(){                              // Get things setup for sticks
 }
 /*********************************************************************************************************************************/
 
-void CalibrateSticks()   // This  sets extreme limits
+void CalibrateSticks()   // This discovers end of travel place for sticks etc. 
 {
     uint16_t p;
     for (uint8_t i = 0; i < PROPOCHANNELS; ++i)
