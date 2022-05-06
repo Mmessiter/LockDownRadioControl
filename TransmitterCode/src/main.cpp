@@ -5745,7 +5745,7 @@ void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(Trim, TextIn) > 0) {  
+        if (InStrng(Trim, TextIn) > 0) {                       // This is the return from Trim view
             if (GetValue(Mode1)==1) SticksMode = 1;
             if (GetValue(Mode2)==1) SticksMode = 2; 
             SaveAllParameters(); // save trims to SDcard
@@ -5753,7 +5753,7 @@ void ButtonWasPressed()
             CurrentMode = NORMAL;
             CurrentView = MAINSETUPVIEW;
             b5isGrey = false;
-            ClearText(); // heer
+            ClearText(); 
             return;
         }
         if (InStrng(Models_View, TextIn) > 0) { 
