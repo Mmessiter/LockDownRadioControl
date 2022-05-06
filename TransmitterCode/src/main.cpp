@@ -3278,10 +3278,12 @@ void BuildDirectory(){
     SortDirectory();
 }
 /*********************************************************************************************************************************/
-void WordWrap(char * htext){
+uint16_t WordWrap(char * htext){
 char crlf[]= {13,10,0};
 char temp1[MAXFILELEN] = "";
 char a[]= " ";
+uint16_t len = 0;
+
 uint16_t i,j;
         for (i = strlen(htext)-1; i > 1; --i){   
             if ((htext[i] == ' ') || (htext[i] == '-')) break;   // 'i' now has last space pointer
@@ -3294,12 +3296,14 @@ uint16_t i,j;
         for (j = i + 1; j < strlen(htext); ++j){                 // then last word on next line by-passing the space
             a[0] = htext[j];
             strcat(temp1,a);
+            ++ len;                                              // length onto next line
         }
         strcpy (htext,temp1);
+        return len;
 }
 /*********************************************************************************************************************************/
 void ReadHelpFile(char* fname, char* htext){
-    #define MAXWIDTH 64
+    #define MAXWIDTH 68
     char errormsg[] = "Help file not found.";
     File fnumber;
     uint16_t i  = 0;
@@ -3321,10 +3325,7 @@ void ReadHelpFile(char* fname, char* htext){
                      Column = 0;
                      a[0] = 34;
                  }
-                 if (Column >= MAXWIDTH) {                         //  Word wrap if wide
-                        WordWrap(htext);
-                        Column = 0;
-                 } 
+                 if (Column >= MAXWIDTH) Column =  WordWrap(htext);       
                  if ((a[0] == 13) || (a[0] == 10)) a[0] = 34;      // Ignore CrLfs
                  if (a[0] != 34) {
                      strcat(htext, a);
