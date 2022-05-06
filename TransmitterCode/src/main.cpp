@@ -5042,7 +5042,7 @@ void ButtonWasPressed()
             ClearText();
             return;
         }
-        if (InStrng(GOTO, TextIn) > 0) {
+        if (InStrng(GOTO, TextIn) > 0) {                     // Help screen returns here to relevent config screen
             i = 5;
             while (uint8_t(TextIn[i]) > 0 && i < 30) {
                 WhichPage[i] = TextIn[i];
