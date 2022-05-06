@@ -3292,7 +3292,7 @@ uint16_t i,j;
             strcat(temp1,a);
         }
         strcat(temp1, crlf);                         // add crlf ...
-        for (j = i+1; j < strlen(htext); ++j){         // then last word on next line.
+        for (j = i + 1; j < strlen(htext); ++j){     // then last word on next line by-passing the space
             a[0] = htext[j];
             strcat(temp1,a);
         }
