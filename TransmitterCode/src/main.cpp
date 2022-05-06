@@ -3284,14 +3284,15 @@ char temp1[MAXFILELEN] = "";
 char a[]= " ";
 uint16_t i,j;
         for (i = strlen(htext)-1; i > 1; --i){   
-            if (htext[i] == ' ') {break;}       // 'i' now has last space pointer
+            if (htext[i] == ' ') {break;}             // 'i' now has last space pointer
+            if (htext[i] == '-') {break;}             // or 'i' now has last - pointer
         }
-        for (j=0;j<i;++j){                      // get text to i ...
+        for (j = 0; j < i; ++j){                      // get text to i ...
             a[0] = htext[j];
             strcat(temp1,a);
         }
-        strcat(temp1, crlf);                     // add crlf ...
-        for (j=i+1;j<strlen(htext);++j){         // then last word on next line.
+        strcat(temp1, crlf);                         // add crlf ...
+        for (j = i+1; j < strlen(htext); ++j){         // then last word on next line.
             a[0] = htext[j];
             strcat(temp1,a);
         }
