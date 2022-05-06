@@ -3283,8 +3283,8 @@ char crlf[]= {13,10,0};
 char temp1[MAXFILELEN] = "";
 char a[]= " ";
 uint16_t len = 0;
-
 uint16_t i,j;
+
         for (i = strlen(htext)-1; i > 1; --i){   
             if ((htext[i] == ' ') || (htext[i] == '-')) break;   // 'i' now has last space pointer
         }
@@ -3316,7 +3316,6 @@ void ReadHelpFile(char* fname, char* htext){
     strcpy (SearchFile,slash);
     strcat (SearchFile,fname);
         fnumber  = SD.open(SearchFile, FILE_READ); 
-        if (!fnumber) {Procrastinate(500); fnumber  = SD.open(fname, FILE_READ);}
         if (fnumber) {
             while (fnumber.available() && i < MAXFILELEN) {
                 a[0] = fnumber.read();                             //  Read in one byte at a time.
@@ -4713,6 +4712,7 @@ void ButtonWasPressed()
         Serial.println(TextIn);
 #endif
 
+ // Serial.println(atoi(TextIn));           // TODO: This massive function will be divided by sending numbers 
 
  if (InStrng(SetupViewFM, TextIn) > 0) { // New model name occurs at offset 12 in TextIn
             i = 0;
