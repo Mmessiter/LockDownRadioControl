@@ -2325,9 +2325,6 @@ void UpdateModelsNameEveryWhere()
             SendText(TrimView_ModelName, ModelName);
             UpdateTrimView();
             break;
-
-
-
         default:
             break;
     }
@@ -4707,14 +4704,14 @@ void ButtonWasPressed()
 
     if (strlen(TextIn) > 0) {
         StartInactvityTimeout();
-#ifdef DB_NEXTION
+ #ifdef DB_NEXTION
         Serial.print("From NEXTION -> ");
         Serial.println(TextIn);
-#endif
+ #endif
 
  // Serial.println(atoi(TextIn));           // TODO: This massive function will be divided by sending numbers 
 
- if (InStrng(SetupViewFM, TextIn) > 0) { // New model name occurs at offset 12 in TextIn
+ if (InStrng(SetupViewFM, TextIn) > 0) {                // New model name occurs at offset 12 in TextIn
             i = 0;
             while (TextIn[i + 12] > 0) {
                 ModelName[i]     = TextIn[i + 12];     // copy new name
@@ -4790,7 +4787,6 @@ void ButtonWasPressed()
 
 
         if (InStrng(AudioView, TextIn) > 0) {  // Display screen with audio options
-            ClearText();
             CurrentMode = NORMAL;
             CurrentView = AUDIOVIEW;
             SendCommand(page_AudioView);
@@ -4806,6 +4802,7 @@ void ButtonWasPressed()
             SendValue(c4,AnnounceBanks);  
             SetAudioVolume(AudioVolume);
             RestoreBrightness();
+            ClearText();
             return;
         }
         if (InStrng(SetupAud, TextIn) > 0) {  // Exit from screen with audio options
@@ -4822,9 +4819,9 @@ void ButtonWasPressed()
             RestoreBrightness();
             SetAudioVolume(AudioVolume);
             SendCommand(page_SetupView);
-            ClearText();
             SaveTXStuff();
             b5isGrey = false;
+            ClearText();
             return;
         }
 
@@ -4906,21 +4903,21 @@ void ButtonWasPressed()
                 LostContactFlag = true;
                 BlueLedOn();
             }
-            ClearText();
             SaveAllParameters();
             SendCommand(page_SetupView);
             CurrentMode = NORMAL;
             CurrentView = MAINSETUPVIEW;
             b5isGrey = false;
             SendCommand(ProgressEnd);
+            ClearText();
             return;
         }
 
         if (InStrng(DataEnd, TextIn) > 0) { //  Exit from Data screen
             CurrentView = MAINSETUPVIEW;
             b5isGrey = false;
-            ClearText();
             CurrentMode = NORMAL;
+            ClearText();
             return;
         }
         if (InStrng(DataView_Clear, TextIn) > 0) { //  Clear Data screen
@@ -4957,9 +4954,9 @@ void ButtonWasPressed()
         if (InStrng(Scan_End, TextIn) > 0) { //  goto setup screen from Scan screen
             CurrentView = MAINSETUPVIEW;
             b5isGrey = false;
-            ClearText();
             SendCommand(page_SetupView);
             DoScanEnd();
+            ClearText();
             return;
         }
 
@@ -5119,6 +5116,7 @@ void ButtonWasPressed()
             else {
                 digitalWrite(POWER_OFF_PIN, HIGH);
             }
+            ClearText();
             return;
         }
 
@@ -5166,9 +5164,9 @@ void ButtonWasPressed()
             FailSafeChannel[15] = GetValue(fs16);
             SaveOneModel(ModelNumber);
           //  SendCommand(ProgressEnd);
-            ClearText();
             FailSafeTimer= millis();
             SaveFailSafeNow = true;
+            ClearText();
             return;
         }
         if (InStrng(FailSafe, TextIn) > 0) {
@@ -5754,7 +5752,8 @@ void ButtonWasPressed()
             SendCommand(page_SetupView);
             CurrentMode = NORMAL;
             CurrentView = MAINSETUPVIEW;
-            ClearText(); 
+            b5isGrey = false;
+            ClearText(); // heer
             return;
         }
         if (InStrng(Models_View, TextIn) > 0) { 
@@ -6118,7 +6117,7 @@ void ButtonWasPressed()
             }
         }
     }
-    ClearText(); // Let's have cleared text for next one!
+   //ClearText(); // Let's have cleared text for next one!
 } // end ButtonWasPressed()
 
 /************************************************************************************************************/
