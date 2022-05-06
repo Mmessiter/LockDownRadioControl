@@ -3284,15 +3284,14 @@ char temp1[MAXFILELEN] = "";
 char a[]= " ";
 uint16_t i,j;
         for (i = strlen(htext)-1; i > 1; --i){   
-            if (htext[i] == ' ') {break;}             // 'i' now has last space pointer
-            if (htext[i] == '-') {break;}             // or 'i' now has last - pointer
+            if ((htext[i] == ' ') || (htext[i] == '-')) break;   // 'i' now has last space pointer
         }
-        for (j = 0; j < i; ++j){                      // get text to i ...
+        for (j = 0; j < i; ++j){                                 // get text to i ...
             a[0] = htext[j];
             strcat(temp1,a);
         }
-        strcat(temp1, crlf);                         // add crlf ...
-        for (j = i + 1; j < strlen(htext); ++j){     // then last word on next line by-passing the space
+        strcat(temp1, crlf);                                     // add crlf ...
+        for (j = i + 1; j < strlen(htext); ++j){                 // then last word on next line by-passing the space
             a[0] = htext[j];
             strcat(temp1,a);
         }
@@ -3300,13 +3299,12 @@ uint16_t i,j;
 }
 /*********************************************************************************************************************************/
 void ReadHelpFile(char* fname, char* htext){
-    #define MAXWIDTH 63
-    char errormsg[] = "The Help file was not found.";
+    #define MAXWIDTH 64
+    char errormsg[] = "Help file not found.";
     File fnumber;
-    int i  = 0;
+    uint16_t i  = 0;
     byte Column = 0;
     char crlf[] = {13,10,0};
-    char Space[] = " ";
     char a[] = " ";
     htext[0] = 0;
     char SearchFile[30];
@@ -3317,34 +3315,21 @@ void ReadHelpFile(char* fname, char* htext){
         if (!fnumber) {Procrastinate(500); fnumber  = SD.open(fname, FILE_READ);}
         if (fnumber) {
             while (fnumber.available() && i < MAXFILELEN) {
-                a[0] = fnumber.read();           //  Read in one byte at a time.
-                 if (a[0] == '|') {              //  New Line character = '|'   
+                a[0] = fnumber.read();                             //  Read in one byte at a time.
+                 if (a[0] == '|') {                                //  New Line character = '|'   
                      strcat(htext, crlf);
                      Column = 0;
                      a[0] = 34;
                  }
-                 if ((a[0] == '.') || (a[0] == '!')) {             // add a space after a full stop.
-                     strcat(htext, a);
-                     strcat(htext, Space);
-                     Column += 2;
-                     a[0] = 34;
-                 }
-
-                if ((Column >= MAXWIDTH) && (a[0] <= 32)) {   // Don't go too wide if space
-                        strcat(htext, crlf);
-                        a[0] = 34;
-                        Column = 0;
-                } 
-
-                if ((Column >= MAXWIDTH) && (a[0] != 32)) {   // Call word wrap function if not space.
+                 if (Column >= MAXWIDTH) {                         //  Word wrap if wide
                         WordWrap(htext);
                         Column = 0;
-                } 
-                if ((a[0] == 13) || (a[0] == 10)) a[0] = 34; // ignore CrLfs
-                if (a[0] != 34) {
+                 } 
+                 if ((a[0] == 13) || (a[0] == 10)) a[0] = 34;      // Ignore CrLfs
+                 if (a[0] != 34) {
                      strcat(htext, a);
                      ++ Column;
-                    ++i;
+                     ++ i;
                  }
             }
         }
