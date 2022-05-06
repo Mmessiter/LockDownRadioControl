@@ -5069,6 +5069,12 @@ void ButtonWasPressed()
             if (CurrentView == MODELSVIEW) {
                 SendValue(ModelsView_ModelNumber, ModelNumber);
             }
+            if (CurrentView == MIXESVIEW) {
+                if (MixNumber == 0) MixNumber = 1;
+                LastMixNumber = 33;                        // just to be differernt
+                SendValue(MixesView_MixNumber, MixNumber); // New load of mix window
+                SendMixValues();
+            }
             UpdateModelsNameEveryWhere();
             ClearText();
             return;
