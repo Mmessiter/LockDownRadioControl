@@ -3325,7 +3325,7 @@ void ReadHelpFile(char* fname, char* htext){
                      Column = 0;
                      a[0] = 34;
                  }
-                 if (Column >= MAXWIDTH) Column =  WordWrap(htext);       
+                 if (Column >= MAXWIDTH) Column = WordWrap(htext);       
                  if ((a[0] == 13) || (a[0] == 10)) a[0] = 34;      // Ignore CrLfs
                  if (a[0] != 34) {
                      strcat(htext, a);
