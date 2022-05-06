@@ -291,12 +291,12 @@ uint8_t  SubTrimToEdit = 0;
 
 uint8_t  FlightMode         = 1;
 uint8_t  PreviousFlightMode = 1;
-int      ChannelMax[CHANNELSUSED + 1];    //    output of pots at max
-int      ChannelMidHi[CHANNELSUSED + 1];  //    output of pots at MidHi
-int      ChannelCentre[CHANNELSUSED + 1]; //    output of pots at Centre
-int      ChannelMidLow[CHANNELSUSED + 1]; //    output of pots at MidLow
-int      ChannelMin[CHANNELSUSED + 1];    //    output of pots at min
-int      ChanneltoSet     = 0;
+uint16_t ChannelMax[CHANNELSUSED + 1];       //    output of pots at max
+uint16_t ChannelMidHi[CHANNELSUSED + 1];     //    output of pots at MidHi
+uint16_t ChannelCentre[CHANNELSUSED + 1];    //    output of pots at Centre
+uint16_t ChannelMidLow[CHANNELSUSED + 1];    //    output of pots at MidLow
+uint16_t ChannelMin[CHANNELSUSED + 1];       //    output of pots at min
+uint16_t ChanneltoSet     = 0;
 bool     Connected        = false;
 uint8_t  ShowCommsCounter = 0;
 
