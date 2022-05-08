@@ -6120,7 +6120,7 @@ void ButtonWasPressed()
             }
         }
     }
-   //ClearText(); // Let's have cleared text for next one!
+    ClearText(); // Let's have cleared text for next one!
 } // end ButtonWasPressed()
 
 /************************************************************************************************************/
