@@ -4140,6 +4140,7 @@ void ReceiveModelFile()
             }
         }
     } // *First* packet must have arrived!
+
     SendCommand(ProgressStart);
     SendValue(Progress, p);
     SendText(ModelsView_filename, Receiving);
@@ -4149,7 +4150,7 @@ void ReceiveModelFile()
     Fsize = Fbuffer[BUFFERSIZE];
     Fsize += Fbuffer[BUFFERSIZE + 1] << 8;
     Fsize += Fbuffer[BUFFERSIZE + 2] << 16;
-    Fsize += Fbuffer[BUFFERSIZE + 3] << 24; // Get file size
+    Fsize += Fbuffer[BUFFERSIZE + 3] << 24;         // Get file size
 #ifdef DB_MODEL_EXCHANGE
     Serial.println("CONNECTED!");
     Serial.print("FileName=");
@@ -4159,6 +4160,9 @@ void ReceiveModelFile()
 #endif
     Fposition        = 0;
     ModelsFileNumber = SD.open(SingleModelFile, FILE_WRITE);                    // Open file to receive
+    
+  
+    
     RXTimer          = millis();                                                // zero timeout
     while ((Fposition < Fsize) && (millis() - RXTimer) / 1000 <= FILETIMEOUT) { //  (Fposition<Fsize) ********************
         KickTheDog();                                                           // Watchdog
@@ -4172,17 +4176,15 @@ void ReceiveModelFile()
             Fposition += BUFFERSIZE;
             p = ((float)Fposition / (float)Fsize) * 100;
             SendValue(Progress, p);
-            Procrastinate(5);
+            Procrastinate(100);
 #ifdef DB_MODEL_EXCHANGE
             PacketNumber = Fbuffer[25];
             Serial.print("PacketNumber: ");
             Serial.println(PacketNumber);
-            Serial.print("Local checksum: ");
-            Serial.print(LCheckSum);
-            Serial.print("  Remote checksum: ");
-            Serial.println(RCheckSum);
 #endif
+        
         }
+        Procrastinate(70);
     }
     SendValue(Progress, 100);
     ModelsFileNumber.close();
@@ -4259,10 +4261,11 @@ void SendModelFile()
             ModelsFileNumber.read(Fbuffer, BUFFERSIZE); // Read part of file
             Fposition += BUFFERSIZE;
         }
+        Procrastinate(10); // allow time for receive and write
         Radio1.flush_tx();
         Radio1.flush_rx();
         if (Radio1.write(&Fbuffer, BUFFERSIZE + 4)) {
-            Procrastinate(25); // allow time for receive and write
+            
             if (Radio1.isAckPayloadAvailable()) {
                 Radio1.read(&Fack, sizeof(Fack));
             }
