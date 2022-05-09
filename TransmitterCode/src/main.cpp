@@ -1309,21 +1309,21 @@ int GetOtherValue(char* nbox)  // don't add .val as other thingy is already ther
 /*********************************************************************************************************************************/
 bool GetButtonPress()
 { 
-    char a;
-    int i = 0;
+    uint8_t a   = 0;
+    int i       = 0;
     delayMicroseconds(20);                // 20 seems best so far value here
     bool ButtonPressed = false;
     if (NEXTION.available()) {
         ButtonPressed = true;
         while (NEXTION.available()) {
-            a = char(NEXTION.read());
-        //  if (a < 31) Serial.println (uint8_t(a));   // to detect errors
+            a = NEXTION.read();
+          //  if (a > 127) Serial.println (a);   // to detect errors 
             if (a > 31 && a < 254) {
                 TextIn[i]     = a;
                 if (TextIn[i] == '$') TextIn[i] = 0; 
-                TextIn[i + 1] = char(0);
+                TextIn[i + 1] = 0;
             }
-            if (i < CharsMax) ++i; 
+            if (i < CharsMax-1) ++i; 
             delayMicroseconds(20);      // 20 seems best so far value here
         }
     }
@@ -4756,7 +4756,7 @@ void ButtonWasPressed()
 
       NumberCommand = uint8_t(TextIn[0]);
   if (NumberCommand > 127 ){
-          DoNumberedCommands(NumberCommand &=127); // send number without high bit on.
+          DoNumberedCommands(NumberCommand ^=128);      // send number without the high bit on.
      return;
   }                     
 
@@ -5104,6 +5104,9 @@ void ButtonWasPressed()
                 LastMixNumber = 33;                        // just to be differernt
                 SendValue(MixesView_MixNumber, MixNumber); // New load of mix window
                 SendMixValues();
+            }
+            if (CurrentView == FILESVIEW) { 
+                ShowDirectory();  
             }
             UpdateModelsNameEveryWhere();
             ClearText();
@@ -5602,7 +5605,7 @@ void ButtonWasPressed()
         }
         if (InStrng(ListFiles, TextIn) > 0) {  
             SendCommand(PageFilesView);
-           // CurrentView = FILESVIEW;  // Can't change this until I can change it back!  :-)
+            CurrentView = FILESVIEW;  // Can't change this until I can change it back!  :-)
             SavedCurrentView = FILESVIEW;
             ShowDirectory();      
             ClearText();
