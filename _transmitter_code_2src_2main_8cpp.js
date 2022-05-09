@@ -135,6 +135,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "DisplayCurve", "_transmitter_code_2src_2main_8cpp.html#af941d3a33327b2cee79e058ba9cd65f6", null ],
     [ "DoMixes", "_transmitter_code_2src_2main_8cpp.html#ac182a99befc8d4d83532a6c38571a222", null ],
     [ "DoNewChannelName", "_transmitter_code_2src_2main_8cpp.html#aba44d61ea51411cb5c601beb94b6fef4", null ],
+    [ "DoNumberedCommands", "_transmitter_code_2src_2main_8cpp.html#a463a07d516b046c17a66b486dbcacb68", null ],
     [ "DrawBox", "_transmitter_code_2src_2main_8cpp.html#a705c97485d6142131c03577ec14134e7", null ],
     [ "DrawDot", "_transmitter_code_2src_2main_8cpp.html#a711945ac5f6948657463708863748432", null ],
     [ "DrawLine", "_transmitter_code_2src_2main_8cpp.html#acbef1d41e1bd646b60a6e8afd9c66880", null ],
