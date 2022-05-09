@@ -4458,7 +4458,7 @@ void ZeroDataScreen(){             // ZERO Those parameters that are zeroable
 
 void  DoNumberedCommands(uint8_t nc){
   
-    char pModelsView[]             = "page ModelsView";
+    char pModelsView[] = "page ModelsView";
     
     switch(nc){
           case 1:                      // Previous file (modelsview)
