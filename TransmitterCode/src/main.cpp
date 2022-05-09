@@ -4457,7 +4457,9 @@ void ZeroDataScreen(){             // ZERO Those parameters that are zeroable
 /*********************************************************************************************************************************/
 
 void  DoNumberedCommands(uint8_t nc){
-    char ModelsView_ModelNumber[]  = "ModelNumber";
+  
+    char pModelsView[]             = "page ModelsView";
+    
     switch(nc){
           case 1:                      // Previous file (modelsview)
             FileNumberInView--;
@@ -4469,20 +4471,18 @@ void  DoNumberedCommands(uint8_t nc){
             ShowFileNumber();
             CloseModelsFile();
             break;
-        case 3:                        // Load model (modelsview) ... not really needed now
-            ModelNumber = GetValue(ModelsView_ModelNumber);
-            if (ModelNumber >= 99) {
-                ModelNumber = 1;
-                SendValue(ModelsView_ModelNumber, ModelNumber);
-            }
-            if (!ModelsFileOpen) OpenModelsFile();
-            SaveTXStuff();
-            ReadOneModel(ModelNumber);
-            CloseModelsFile();
+
+//      case 3: is spare
+        //  break;
+        
+        case 4:                              // goto models view heer
+            SendCommand(pModelsView);
+            CurrentView = MODELSVIEW;
+            UpdateModelsNameEveryWhere();
+            BuildDirectory();                 // of SD card
+            ShowFileNumber();
             break;
        
-
-
         default:
            break;
     }
@@ -4548,7 +4548,6 @@ void ButtonWasPressed()
     char FM3[]                     = "FM 3";
     char FM4[]                     = "FM 4";
     char ReScan[]                  = "ReScan";
-    char Models_View[]             = "ModelsView";
     char Delete[]                  = "Delete";
     int  j                         = 0;
     int  p                         = 0;
@@ -4683,7 +4682,6 @@ void ButtonWasPressed()
     char pSwitchesView[]           = "page SwitchesView";
     char pInputsView[]             = "page InputsView";
     char pOptionsViewS[]           = "page OptionsView";
-    char pModelsView[]             = "page ModelsView";
     char pTrimView[]               = "page TrimView";
     char pMixesView[]              = "page MixesView";
     char pTypeView[]               = "page TypeView";
@@ -5081,11 +5079,7 @@ void ButtonWasPressed()
             } // Get page name to which to return
             SendCommand(WhichPage);
             CurrentView = SavedCurrentView; 
-            if (CurrentView == FILESVIEW) { 
-                 ShowDirectory();    
-                 ClearText();
-                 return;
-            }
+   
             if (CurrentView == GRAPHVIEW) {
                 DisplayCurve();
                 SendValue(CopyToAllFlightModes, 0);
@@ -5791,19 +5785,7 @@ void ButtonWasPressed()
             ClearText(); 
             return;
         }
-        if (InStrng(Models_View, TextIn) > 0) { 
-            SendCommand(pModelsView);
-            ReadOneModel(ModelNumber);
-            CurrentView = MODELSVIEW;
-            UpdateModelsNameEveryWhere();
-            SendValue(ModelsView_ModelNumber, ModelNumber);
-            BuildDirectory(); // of SD card
-            ShowFileNumber();
-            ClearText(); 
-            return;
-
-        }
-       
+     
 
         if (InStrng(Write, TextIn) > 0) { //  write new data to SD
             p = GetValue(CopyToAllFlightModes);
