@@ -4497,7 +4497,7 @@ void  DoNumberedCommands(uint8_t nc){
 void ButtonWasPressed()
 {
   if (TextIn[0] & 128 ){                                // first byte hi bit indicates a numbered command
-          DoNumberedCommands(TextIn[0] ^=128);          // send number with the high bit off.
+          DoNumberedCommands(TextIn[0] & 127);          // send number with the high bit off.
           return;                                       // skip the rest!
   }         
 
