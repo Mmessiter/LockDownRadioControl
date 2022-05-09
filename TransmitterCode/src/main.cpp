@@ -555,6 +555,7 @@ bool     ButtonClicks       = true;
 bool     PlayFanfare        = true;
 bool     TrimClicks         = true;
 bool     SpeakingClock      = true;
+bool     ClockSpoken        = false;
 bool     AnnounceBanks      = true;
 bool     CopyTrimsToAll     = true;
 
@@ -990,6 +991,7 @@ bool MayBeAddZero(uint8_t nn)
 
 void ReadTime()
 {
+ 
     static char month[12][15]     = {"January", "February", "March", "April", "May", "June", "July", "August", "Sept", "October", "November", "December"};
     static char ShortMonth[12][7] = {"Jan. ", "Feb. ", "Mar. ", "Apr. ", "May  ", "June ", "July ", "Aug. ", "Sept ", "Oct. ", "Nov. ", "Dec. "};
 
@@ -1061,11 +1063,13 @@ void StartInactvityTimeout()
 
 void MakeBindButtonInvisible()
 {
+  if (CurrentView == FRONTVIEW){
     char bbiv[] = "vis bind,0";
     if (BindButton) {
         SendCommand(bbiv);
         BindButton = false;
     }
+   }
 }
 
 /*********************************************************************************************************************************/
@@ -1313,6 +1317,7 @@ bool GetButtonPress()
         ButtonPressed = true;
         while (NEXTION.available()) {
             a = char(NEXTION.read());
+        //  if (a < 31) Serial.println (uint8_t(a));   // to detect errors
             if (a > 31 && a < 254) {
                 TextIn[i]     = a;
                 if (TextIn[i] == '$') TextIn[i] = 0; 
@@ -1340,7 +1345,7 @@ uint8_t um(uint16_t bv) // convert to lower resolution
 
 void CheckTimer()
 {
-
+   
    char Min1[]  = "play 0,2,0";
    char Min2[]  = "play 0,3,0";
    char Min3[]  = "play 0,4,0";
@@ -1361,46 +1366,48 @@ void CheckTimer()
     }
     if (CurrentView == FRONTVIEW) {
         if (LastSeconds != Secs) {
+            ClockSpoken = false;
             SendValue(FrontView_Secs, Secs);
             SendValue(FrontView_Mins, Mins);
             SendValue(FrontView_Hours, Hours);
             LastSeconds = Secs;
-            if (!Secs && SpeakingClock){  
-               switch (Mins) {
-                case 1:
-                    SendCommand(Min1);
-                    break;
-                case 2:
-                    SendCommand(Min2);
-                    break;
-                case 3:
-                    SendCommand(Min3); 
-                    break;
-                case 4:
-                    SendCommand(Min4); 
-                    break;
-                case 5:
-                    SendCommand(Min5); 
-                    break;
-                case 6:
-                    SendCommand(Min6); 
-                    break;
-                case 7:
-                    SendCommand(Min7); 
-                    break;
-                case 8:
-                    SendCommand(Min8); 
-                    break;
-                case 9:
-                    SendCommand(Min9); 
-                    break;
-                case 10:
-                    SendCommand(Min10); 
-                    break;
-               default:
-                   break;
-               }
             }
+    }
+    if (!Secs && SpeakingClock && !ClockSpoken){   
+        ClockSpoken = true;
+        switch (Mins) {
+        case 1:
+            SendCommand(Min1);
+            break;
+        case 2:
+            SendCommand(Min2);
+            break;
+        case 3:
+            SendCommand(Min3); 
+            break;
+        case 4:
+            SendCommand(Min4); 
+            break;
+        case 5:
+            SendCommand(Min5); 
+            break;
+        case 6:
+            SendCommand(Min6); 
+            break;
+        case 7:
+            SendCommand(Min7); 
+            break;
+        case 8:
+            SendCommand(Min8); 
+            break;
+        case 9:
+            SendCommand(Min9); 
+            break;
+        case 10:
+            SendCommand(Min10); 
+            break;
+        default:
+            break;   
         }  
     }
 }
@@ -1555,14 +1562,12 @@ void ShowServoPos()
                 SendValue(ChannelOutput, map(SendBuffer[ChanneltoSet - 1], MINMICROS, MAXMICROS, -100, 100));
             }else{
                 SendValue(ChannelOutput,0);   // because when not connected nothing is sent
-             }
-
-        }
+            }
+        }else{
+    SendValue(ChannelInput, 0);
+    SendValue(ChannelOutput, 0);
     }
-    else {
-        SendValue(ChannelInput, 0);
-        SendValue(ChannelOutput, 0);
-    }
+   }
 }
 
 /*********************************************************************************************************************************/
@@ -1580,6 +1585,7 @@ void ShowServoPos()
 FASTRUN void ShowComms()
 {
     if (NEXTION.available()) return; // was a button pressed?
+
     bool  TXWarningFlag          = false;
     bool  RXWarningFlag          = false;
     bool  ShowNow                = false;
@@ -6660,7 +6666,7 @@ void loop()
 {
     KickTheDog();                    // Watchdog
     if (GetButtonPress()) {
-        ButtonWasPressed();        // Deal with button
+        ButtonWasPressed();          // Deal with button
     }
 
     if ((millis()-ModelNameTimeCheck) > 300) {  
