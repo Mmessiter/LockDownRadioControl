@@ -4496,8 +4496,11 @@ void  DoNumberedCommands(uint8_t nc){
  */
 void ButtonWasPressed()
 {
-    uint8_t NumberCommand          = 0;        // use numbers in stead of words
-    
+  if (TextIn[0] & 128 ){                                // first byte hi bit indicates a numbered command
+          DoNumberedCommands(TextIn[0] ^=128);          // send number with the high bit off.
+          return;                                       // skip the rest!
+  }         
+
     int i = 0;
     char OneSwitchView_r1[]        = "r1";     // Flight modes
     char OneSwitchView_r2[]        = "r2";     // Auto
@@ -4751,12 +4754,7 @@ void ButtonWasPressed()
         Serial.print("From NEXTION -> ");
         Serial.println(TextIn);
  #endif
-
-      NumberCommand = uint8_t(TextIn[0]);
-  if (NumberCommand > 127 ){
-          DoNumberedCommands(NumberCommand ^=128);      // send number without the high bit on.
-     return;
-  }                     
+            
 
  if (InStrng(SetupViewFM, TextIn) > 0) {                // New model name occurs at offset 12 in TextIn
             i = 0;
