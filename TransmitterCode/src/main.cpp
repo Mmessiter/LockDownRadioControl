@@ -1313,7 +1313,7 @@ bool GetButtonPress()
         ButtonPressed = true;
         while (NEXTION.available()) {
             a = char(NEXTION.read());
-            if (a > 31 && a < 128) {
+            if (a > 31 && a < 254) {
                 TextIn[i]     = a;
                 if (TextIn[i] == '$') TextIn[i] = 0; 
                 TextIn[i + 1] = char(0);
@@ -4444,6 +4444,44 @@ void ZeroDataScreen(){             // ZERO Those parameters that are zeroable
             SavedRX2TotalTime  = RX2TotalTime;
             SavedSbusRepeats   = SbusRepeats;
 }
+
+
+
+
+/*********************************************************************************************************************************/
+
+void  DoNumberedCommands(uint8_t nc){
+    char ModelsView_ModelNumber[]  = "ModelNumber";
+    switch(nc){
+          case 1:                      // Previous file (modelsview)
+            FileNumberInView--;
+            ShowFileNumber();
+            CloseModelsFile();
+            break;
+        case 2:                        // Next file (modelsview)
+            FileNumberInView++;
+            ShowFileNumber();
+            CloseModelsFile();
+            break;
+        case 3:                        // Load model (modelsview) ... not really needed now
+            ModelNumber = GetValue(ModelsView_ModelNumber);
+            if (ModelNumber >= 99) {
+                ModelNumber = 1;
+                SendValue(ModelsView_ModelNumber, ModelNumber);
+            }
+            if (!ModelsFileOpen) OpenModelsFile();
+            SaveTXStuff();
+            ReadOneModel(ModelNumber);
+            CloseModelsFile();
+            break;
+       
+
+
+        default:
+           break;
+    }
+            ClearText();
+}
 /*********************************************************************************************************************************/
 
 /**
@@ -4452,6 +4490,8 @@ void ZeroDataScreen(){             // ZERO Those parameters that are zeroable
  */
 void ButtonWasPressed()
 {
+    uint8_t NumberCommand          = 0;        // use numbers in stead of words
+    
     int i = 0;
     char OneSwitchView_r1[]        = "r1";     // Flight modes
     char OneSwitchView_r2[]        = "r2";     // Auto
@@ -4484,7 +4524,6 @@ void ButtonWasPressed()
     char Scan_End[]                = "ScanEnd";
     char DataEnd[]                 = "DataEnd";
     char SetupViewFM[]             = "SetupViewFM:";
-   // char ModelNMSave[]             = "ModelNMSave";
     char Data_View[]               = "DataView";
     char CalibrateView[]           = "CalibrateView";
     char Trim[]                    = "Trim";
@@ -4503,7 +4542,6 @@ void ButtonWasPressed()
     char FM3[]                     = "FM 3";
     char FM4[]                     = "FM 4";
     char ReScan[]                  = "ReScan";
-    char LoadModel[]               = "LoadModel";
     char Models_View[]             = "ModelsView";
     char Delete[]                  = "Delete";
     int  j                         = 0;
@@ -4566,8 +4604,6 @@ void ButtonWasPressed()
     char Import[]                  = "Import";
     char ListFiles[]               = "ListFiles";
     char PageFilesView[]           = "page FilesView";
-    char Nextfile[]                = "Nextfile";
-    char Prevfile[]                = "Prevfile";
     char DelFile[]                 = "DelFile";
     char ModExt[]                  = ".MOD";
     char FailSAVE[]                = "FailSAVE";
@@ -4712,7 +4748,11 @@ void ButtonWasPressed()
         Serial.println(TextIn);
  #endif
 
- // Serial.println(atoi(TextIn));           // TODO: This massive function will be divided by sending numbers 
+      NumberCommand = uint8_t(TextIn[0]);
+  if (NumberCommand > 127 ){
+          DoNumberedCommands(NumberCommand &=127); // send number without high bit on.
+     return;
+  }                     
 
  if (InStrng(SetupViewFM, TextIn) > 0) {                // New model name occurs at offset 12 in TextIn
             i = 0;
@@ -4762,23 +4802,6 @@ void ButtonWasPressed()
             ClearText();
             return;
         }
-
-        if (InStrng(Nextfile, TextIn)) { // show next file  
-            FileNumberInView++;
-            ShowFileNumber();
-            CloseModelsFile();
-            ClearText();
-            return;
-        }
-
-        if (InStrng(Prevfile, TextIn)) { // show prev file
-            FileNumberInView--;
-            ShowFileNumber();
-            CloseModelsFile();
-            ClearText();
-            return;
-        }
-
 
         if (InStrng(Delete, TextIn) > 0) { 
             ModelNumber = GetValue(ModelsView_ModelNumber);
@@ -5771,19 +5794,7 @@ void ButtonWasPressed()
             return;
 
         }
-        if (InStrng(LoadModel, TextIn) > 0) {
-            ModelNumber = GetValue(ModelsView_ModelNumber);
-            if (ModelNumber >= 99) {
-                ModelNumber = 1;
-                SendValue(ModelsView_ModelNumber, ModelNumber);
-            }
-            if (!ModelsFileOpen) OpenModelsFile();
-            SaveTXStuff();
-            CloseModelsFile();
-            ClearText(); 
-            return;
-
-        }
+       
 
         if (InStrng(Write, TextIn) > 0) { //  write new data to SD
             p = GetValue(CopyToAllFlightModes);
