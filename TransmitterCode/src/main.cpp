@@ -4115,6 +4115,7 @@ void ReceiveModelFile()
     Serial.println("Receiving model ...");
     Serial.println(Waiting);
 #endif
+    BlueLedOn();
     SendText(ModelsView_filename, Waiting);
     RXPipe = FILEPIPEADDRESS;
     Radio1.setRetries(15, 15);
@@ -4203,6 +4204,7 @@ void ReceiveModelFile()
     SetThePipe(DefaultPipe);
     Radio1.setCRCLength(RF24_CRC_8);
     SendCommand(ProgressEnd);
+    RedLedOn();
 }
 
 /*********************************************************************************************************************************/
@@ -4220,6 +4222,7 @@ void SendModelFile()
     char          Fbuffer[BUFFERSIZE + 8]; // spare space
     uint8_t       PacketNumber = 0;
     int           p            = 5;
+    BlueLedOn();
     SendCommand(ProgressStart);
     SendValue(Progress, p);
     Procrastinate(10);
@@ -4294,6 +4297,7 @@ void SendModelFile()
     Radio1.setRetries(RETRYCOUNT, RETRYWAIT);
     Radio1.setCRCLength(RF24_CRC_8);
     SendCommand(ProgressEnd);
+    RedLedOn();
 }
 
 /*********************************************************************************************************************************/
