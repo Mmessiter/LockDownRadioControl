@@ -4166,9 +4166,6 @@ void ReceiveModelFile()
 #endif
     Fposition        = 0;
     ModelsFileNumber = SD.open(SingleModelFile, FILE_WRITE);                    // Open file to receive
-    
-  
-    
     RXTimer          = millis();                                                // zero timeout
     while ((Fposition < Fsize) && (millis() - RXTimer) / 1000 <= FILETIMEOUT) { //  (Fposition<Fsize) ********************
         KickTheDog();                                                           // Watchdog
@@ -4176,13 +4173,12 @@ void ReceiveModelFile()
             Radio1.flush_tx();
             Radio1.writeAckPayload(1, &Fack, sizeof(Fack));
             Radio1.read(&Fbuffer, BUFFERSIZE + 4);
-            ModelsFileNumber.seek(Fposition);            // Move filepointer
+          //  ModelsFileNumber.seek(Fposition);            // Move filepointer NOT NEEDED?!?!?
             ModelsFileNumber.write(Fbuffer, BUFFERSIZE); // Write part of file
             Radio1.flush_rx();
             Fposition += BUFFERSIZE;
             p = ((float)Fposition / (float)Fsize) * 100;
             SendValue(Progress, p);
-            Procrastinate(100);
 #ifdef DB_MODEL_EXCHANGE
             PacketNumber = Fbuffer[25];
             Serial.print("PacketNumber: ");
@@ -4190,7 +4186,6 @@ void ReceiveModelFile()
 #endif
         
         }
-        Procrastinate(70);
     }
     SendValue(Progress, 100);
     ModelsFileNumber.close();
@@ -4215,7 +4210,7 @@ void ReceiveModelFile()
 
 /*********************************************************************************************************************************/
 
-/** @brief SEND A MODEL FILE */
+/** @brief SEND A MODEL FILE */ // heer
 void SendModelFile()
 {
     char          ProgressStart[] = "vis Progress,1";
@@ -4262,19 +4257,25 @@ void SendModelFile()
             Fbuffer[BUFFERSIZE + 3] = Fsize >> 24; // SEND FILE SIZE (four bytes)
         }
         else {
-
             ModelsFileNumber.seek(Fposition);           // Move filepointer
             ModelsFileNumber.read(Fbuffer, BUFFERSIZE); // Read part of file
             Fposition += BUFFERSIZE;
         }
-        Procrastinate(10); // allow time for receive and write
-        Radio1.flush_tx();
-        Radio1.flush_rx();
+         Radio1.flush_tx();
+         Radio1.flush_rx();
+         Procrastinate(2);
         if (Radio1.write(&Fbuffer, BUFFERSIZE + 4)) {
-            
+              Procrastinate(2);
             if (Radio1.isAckPayloadAvailable()) {
                 Radio1.read(&Fack, sizeof(Fack));
+               // Serial.println ("ACK received");
+               // Serial.println (Fposition);
+                Procrastinate(1);
+            }else{
+               // Serial.println ("NO ACK received");
+                Procrastinate(1);
             }
+             
         }
         else {
             if (PacketNumber == 2) { // error - no connection
