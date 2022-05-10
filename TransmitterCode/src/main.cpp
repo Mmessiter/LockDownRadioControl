@@ -4093,7 +4093,6 @@ void ReceiveModelFile()
 {
     uint64_t RXPipe;
     uint32_t RXTimer = 0;
-
     char          ModelsView_filename[] = "filename";
     char          ProgressStart[]       = "vis Progress,1";
     char          ProgressEnd[]         = "vis Progress,0";
@@ -4146,7 +4145,6 @@ void ReceiveModelFile()
             }
         }
     } // *First* packet must have arrived!
-
     SendCommand(ProgressStart);
     SendValue(Progress, p);
     SendText(ModelsView_filename, Receiving);
@@ -4173,7 +4171,7 @@ void ReceiveModelFile()
             Radio1.flush_tx();
             Radio1.writeAckPayload(1, &Fack, sizeof(Fack));
             Radio1.read(&Fbuffer, BUFFERSIZE + 4);
-          //  ModelsFileNumber.seek(Fposition);            // Move filepointer NOT NEEDED?!?!?
+        //  ModelsFileNumber.seek(Fposition);            // Move filepointer NOT NEEDED?!?!?
             ModelsFileNumber.write(Fbuffer, BUFFERSIZE); // Write part of file
             Radio1.flush_rx();
             Fposition += BUFFERSIZE;
@@ -4184,7 +4182,6 @@ void ReceiveModelFile()
             Serial.print("PacketNumber: ");
             Serial.println(PacketNumber);
 #endif
-        
         }
     }
     SendValue(Progress, 100);
@@ -4275,7 +4272,6 @@ void SendModelFile()
                // Serial.println ("NO ACK received");
                 Procrastinate(1);
             }
-             
         }
         else {
             if (PacketNumber == 2) { // error - no connection
