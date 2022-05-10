@@ -4118,14 +4118,20 @@ void ReceiveModelFile()
     BlueLedOn();
     SendText(ModelsView_filename, Waiting);
     RXPipe = FILEPIPEADDRESS;
-    Radio1.setRetries(15, 15);
+    Radio1.setRetries(15, 15);   // heer!!
     Radio1.setChannel(FILECHANNEL);
     Radio1.flush_tx();
     Radio1.openReadingPipe(1, RXPipe);
     Radio1.startListening();
     RXTimer = millis();           // Start timer
     while (!Radio1.available()) { // Await the sender....
-        Procrastinate(5);
+          Procrastinate(5);
+          if (GetButtonPress()){
+            SetThePipe(DefaultPipe);
+            Radio1.setCRCLength(RF24_CRC_8);
+            RedLedOn();
+            return;
+           }
         KickTheDog(); // Watchdog
         if ((millis() - RXTimer) / 1000 >= FILETIMEOUT) {
 #ifdef DB_MODEL_EXCHANGE
