@@ -4087,13 +4087,9 @@ void NormaliseTheRadio() {
 
 
 /*********************************************************************************************************************************/
-
 void ShowFileProgress(char * Msg){
-
 char t1[] = "t1";
-
     SendText(t1,Msg);
-
 }
 /*********************************************************************************************************************************/
 // SEND AND RECEIVE A MODEL FILE
@@ -4135,9 +4131,8 @@ void ReceiveModelFile()
     char          Received[] = "Received ";
     char          of[]   = " of ";
     char          msg[50];  
-    char          AllDone[] = "File received OK!"; 
-
-
+    char          bytes[] = " bytes.";
+   
 #ifdef DB_MODEL_EXCHANGE
     uint8_t PacketNumber = 0;
     Serial.println("Receiving model ...");
@@ -4146,7 +4141,7 @@ void ReceiveModelFile()
     BlueLedOn();
     SendText(ModelsView_filename, Waiting);
     RXPipe = FILEPIPEADDRESS;
-    Radio1.setRetries(15, 15);   // heer!!
+    Radio1.setRetries(15, 15);  
     Radio1.setChannel(FILECHANNEL);
     Radio1.flush_tx();
     Radio1.openReadingPipe(1, RXPipe);
@@ -4232,10 +4227,11 @@ void ReceiveModelFile()
     Procrastinate(2000);
     SendText(ModelsView_filename, SingleModelFile);
     Radio1.setRetries(RETRYCOUNT, RETRYWAIT);
-    // **************************************** Below Here the new model is imported for immediate use
+    // **************************************** Below Here the new model is imported for immediate use  // heer
     SingleModelFlag = true;
     CloseModelsFile();
     ReadOneModel(1);
+  //  SD.remove(SingleModelFile);
     SingleModelFlag = false;
     CloseModelsFile();
     SaveAllParameters();
@@ -4244,13 +4240,16 @@ void ReceiveModelFile()
     NormaliseTheRadio();
     SendCommand(ProgressEnd);
     RedLedOn();
-    ShowFileProgress(AllDone);
+    strcpy (msg,Received);
+    strcat(msg, Str(nb1,Fsize,0));  
+    strcat(msg,bytes);     
+    ShowFileProgress(msg);
     SendCommand(Complete);
 }
 
 /*********************************************************************************************************************************/
 
-/** @brief SEND A MODEL FILE */ // heer
+/** @brief SEND A MODEL FILE */ 
 void SendModelFile()
 {
     char Complete[]   = "play 0,17,0";      // end noise
@@ -4269,7 +4268,8 @@ void SendModelFile()
     char          Sent[] = "Sent ";
     char          of[]   = " of ";
     char          msg[50];  
-    char          AllDone[] = "File sent OK!"; 
+    char          bytes[] = " bytes.";
+  
 
 
     BlueLedOn();
@@ -4305,7 +4305,7 @@ void SendModelFile()
         SendValue(Progress, p);
         PacketNumber++;
         if (PacketNumber == 1) {
-            strcpy(Fbuffer, SingleModelFile); // Filename in first packet
+            strcpy(Fbuffer, SingleModelFile);      // Filename in first packet
             Fbuffer[BUFFERSIZE]     = Fsize;
             Fbuffer[BUFFERSIZE + 1] = Fsize >> 8;
             Fbuffer[BUFFERSIZE + 2] = Fsize >> 16;
@@ -4351,7 +4351,10 @@ void SendModelFile()
     NormaliseTheRadio();
     SendCommand(ProgressEnd);
     RedLedOn();
-    ShowFileProgress(AllDone);
+    strcpy (msg,Sent);
+    strcat(msg, Str(nb1,Fsize,0));
+    strcat(msg,bytes);
+    ShowFileProgress(msg);
     SendCommand(Complete);
 }
 
@@ -4531,7 +4534,7 @@ void  DoNumberedCommands(uint8_t nc){
 //      case 3: is spare
         //  break;
         
-        case 4:                              // goto models view heer
+        case 4:                              // goto models view 
             SendCommand(pModelsView);
             CurrentView = MODELSVIEW;
             UpdateModelsNameEveryWhere();
