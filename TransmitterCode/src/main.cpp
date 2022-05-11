@@ -4222,7 +4222,7 @@ void ReceiveModelFile()
     ModelsFileNumber.close();
     BuildDirectory();
     SendText(ModelsView_filename, Success);
-    Procrastinate(2000);
+    Procrastinate(750);
     SendText(ModelsView_filename, SingleModelFile);
     Radio1.setRetries(RETRYCOUNT, RETRYWAIT);
     // **************************************** Below Here the new model is imported for immediate use  // heer
@@ -4277,7 +4277,6 @@ void SendModelFile()
     TXPipe           = FILEPIPEADDRESS;
     ModelsFileNumber = SD.open(SingleModelFile, O_READ); // Open file for reading
     Fsize            = ModelsFileNumber.size();          // Get file size
-   // if (Fsize > 2048) Fsize = 2048;                      // This prevents the file size creeping up oddly!
 #ifdef DB_MODEL_EXCHANGE
     Serial.print("File Size: ");
     Serial.print(Fsize);
@@ -4342,7 +4341,7 @@ void SendModelFile()
     Serial.println("ALL SENT.");
 #endif
     SendValue(Progress, 100);
-    Procrastinate(100);
+    Procrastinate(750);
     NormaliseTheRadio();
     SendCommand(ProgressEnd);
     RedLedOn();
