@@ -3381,8 +3381,8 @@ void UpdateSwitchesDisplay()
     char SwitchesView_sw3[] = "sw3";
     char SwitchesView_sw4[] = "sw4";
     char NotUsed[]          = "Not used";
-    char FlightModes123[]   = "Banks 1 2 3";
-    char Auto[]             = "Auto (FM 4)";
+    char FlightModes123[]   = "Banks 1 - 2 - 3";
+    char Auto[]             = "Auto (Bank 4)";
     char Channel_9[]        = "Channel 9";
     char Channel_10[]       = "Channel 10";
     char Channel_11[]       = "Channel 11";
