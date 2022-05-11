@@ -4085,6 +4085,16 @@ void NormaliseTheRadio() {
               Radio1.setRetries(RETRYCOUNT, RETRYWAIT);
 }
 
+
+/*********************************************************************************************************************************/
+
+void ShowFileProgress(char * Msg){
+
+char t1[] = "t1";
+
+    SendText(t1,Msg);
+
+}
 /*********************************************************************************************************************************/
 // SEND AND RECEIVE A MODEL FILE
 /*********************************************************************************************************************************/
@@ -4121,6 +4131,13 @@ void ReceiveModelFile()
     unsigned long Fposition      = 0;
     float         SecondsElapsed = 0;
     uint8_t       p              = 5;
+    char          nb1[20];
+    char          Received[] = "Received ";
+    char          of[]   = " of ";
+    char          msg[50];  
+    char          AllDone[] = "File received OK!"; 
+
+
 #ifdef DB_MODEL_EXCHANGE
     uint8_t PacketNumber = 0;
     Serial.println("Receiving model ...");
@@ -4194,6 +4211,13 @@ void ReceiveModelFile()
             Fposition += BUFFERSIZE;
             p = ((float)Fposition / (float)Fsize) * 100;
             SendValue(Progress, p);
+            
+            strcpy (msg,Received);
+            strcat(msg, Str(nb1,Fposition,0));
+            strcat(msg, of);
+            strcat(msg, Str(nb1,Fsize,0));
+            ShowFileProgress(msg);
+
 #ifdef DB_MODEL_EXCHANGE
             PacketNumber = Fbuffer[25];
             Serial.print("PacketNumber: ");
@@ -4220,6 +4244,7 @@ void ReceiveModelFile()
     NormaliseTheRadio();
     SendCommand(ProgressEnd);
     RedLedOn();
+    ShowFileProgress(AllDone);
     SendCommand(Complete);
 }
 
@@ -4239,6 +4264,14 @@ void SendModelFile()
     char          Fbuffer[BUFFERSIZE + 8]; // spare space
     uint8_t       PacketNumber = 0;
     int           p            = 5;
+
+    char          nb1[20];
+    char          Sent[] = "Sent ";
+    char          of[]   = " of ";
+    char          msg[50];  
+    char          AllDone[] = "File sent OK!"; 
+
+
     BlueLedOn();
     SendCommand(ProgressStart);
     SendValue(Progress, p);
@@ -4264,6 +4297,11 @@ void SendModelFile()
     while (Fposition < Fsize) {
         KickTheDog(); // Watchdog
         p = ((float)Fposition / (float)Fsize) * 100;
+        strcpy (msg,Sent);
+        strcat(msg, Str(nb1,Fposition,0));
+        strcat(msg, of);
+        strcat(msg, Str(nb1,Fsize,0));
+        ShowFileProgress(msg);
         SendValue(Progress, p);
         PacketNumber++;
         if (PacketNumber == 1) {
@@ -4285,11 +4323,11 @@ void SendModelFile()
               Procrastinate(2);
             if (Radio1.isAckPayloadAvailable()) {
                 Radio1.read(&Fack, sizeof(Fack));
-               // Serial.println ("ACK received");
-               // Serial.println (Fposition);
+                Serial.println ("ACK received");
+                Serial.println (Fposition);
                 Procrastinate(1);
             }else{
-               // Serial.println ("NO ACK received");
+                Serial.println ("NO ACK received");
                 Procrastinate(1);
             }
         }
@@ -4313,6 +4351,7 @@ void SendModelFile()
     NormaliseTheRadio();
     SendCommand(ProgressEnd);
     RedLedOn();
+    ShowFileProgress(AllDone);
     SendCommand(Complete);
 }
 
