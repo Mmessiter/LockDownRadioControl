@@ -563,6 +563,7 @@ bool     CopyTrimsToAll     = true;
 
 void SendText(char* tbox, char* NewWord); // needed a prototype or two here!
 void RestoreBrightness();
+void ButtonWasPressed();
 
 /************************************************************************************************************/
 // This function returns distance (in MILES) between two GPS coordinates (in degrees)
@@ -4075,6 +4076,15 @@ void MovePoint()
     DisplayCurve();
 }
 
+
+/*********************************************************************************************************************************/
+
+void NormaliseTheRadio() {
+              SetThePipe(DefaultPipe); 
+              Radio1.setCRCLength(RF24_CRC_8);
+              Radio1.setRetries(RETRYCOUNT, RETRYWAIT);
+}
+
 /*********************************************************************************************************************************/
 // SEND AND RECEIVE A MODEL FILE
 /*********************************************************************************************************************************/
@@ -4093,6 +4103,7 @@ void ReceiveModelFile()
 {
     uint64_t RXPipe;
     uint32_t RXTimer = 0;
+    char     Complete[]   = "play 0,17,0";      // end noise
     char          ModelsView_filename[] = "filename";
     char          ProgressStart[]       = "vis Progress,1";
     char          ProgressEnd[]         = "vis Progress,0";
@@ -4127,12 +4138,10 @@ void ReceiveModelFile()
     while (!Radio1.available()) { // Await the sender....
           Procrastinate(5);
           if (GetButtonPress()){
-            SetThePipe(DefaultPipe); // heer!!
-
-            
-            Radio1.setCRCLength(RF24_CRC_8);
-            RedLedOn();
-            return;
+              NormaliseTheRadio();
+              RedLedOn();
+              ButtonWasPressed();
+              return;
            }
         KickTheDog(); // Watchdog
         if ((millis() - RXTimer) / 1000 >= FILETIMEOUT) {
@@ -4140,8 +4149,7 @@ void ReceiveModelFile()
             Serial.println("Timeout");
 #endif
             SendText(ModelsView_filename, TimeoutMsg);
-            SetThePipe(DefaultPipe);
-            Radio1.setCRCLength(RF24_CRC_8);
+            NormaliseTheRadio();
             return; // Give up waiting
         }
         else {
@@ -4209,10 +4217,10 @@ void ReceiveModelFile()
     SaveAllParameters();
     CloseModelsFile();
     UpdateModelsNameEveryWhere();
-    SetThePipe(DefaultPipe);
-    Radio1.setCRCLength(RF24_CRC_8);
+    NormaliseTheRadio();
     SendCommand(ProgressEnd);
     RedLedOn();
+    SendCommand(Complete);
 }
 
 /*********************************************************************************************************************************/
@@ -4220,6 +4228,7 @@ void ReceiveModelFile()
 /** @brief SEND A MODEL FILE */ // heer
 void SendModelFile()
 {
+    char Complete[]   = "play 0,17,0";      // end noise
     char          ProgressStart[] = "vis Progress,1";
     char          ProgressEnd[]   = "vis Progress,0";
     char          Progress[]      = "Progress";
@@ -4301,11 +4310,10 @@ void SendModelFile()
 #endif
     SendValue(Progress, 100);
     Procrastinate(100);
-    SetThePipe(DefaultPipe);
-    Radio1.setRetries(RETRYCOUNT, RETRYWAIT);
-    Radio1.setCRCLength(RF24_CRC_8);
+    NormaliseTheRadio();
     SendCommand(ProgressEnd);
     RedLedOn();
+    SendCommand(Complete);
 }
 
 /*********************************************************************************************************************************/
