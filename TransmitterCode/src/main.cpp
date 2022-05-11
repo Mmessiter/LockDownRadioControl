@@ -563,6 +563,7 @@ bool     CopyTrimsToAll     = true;
 
 void SendText(char* tbox, char* NewWord); // needed a prototype or two here!
 void RestoreBrightness();
+void ButtonWasPressed();
 
 /************************************************************************************************************/
 // This function returns distance (in MILES) between two GPS coordinates (in degrees)
@@ -4075,6 +4076,21 @@ void MovePoint()
     DisplayCurve();
 }
 
+
+/*********************************************************************************************************************************/
+
+void NormaliseTheRadio() {
+              SetThePipe(DefaultPipe); 
+              Radio1.setCRCLength(RF24_CRC_8);
+              Radio1.setRetries(RETRYCOUNT, RETRYWAIT);
+}
+
+
+/*********************************************************************************************************************************/
+void ShowFileProgress(char * Msg){
+char t1[] = "t1";
+    SendText(t1,Msg);
+}
 /*********************************************************************************************************************************/
 // SEND AND RECEIVE A MODEL FILE
 /*********************************************************************************************************************************/
@@ -4091,9 +4107,9 @@ void MovePoint()
 /** @brief RECEIVE A MODEL FILE */
 void ReceiveModelFile()
 {
-    uint64_t RXPipe;
-    uint32_t RXTimer = 0;
-
+    uint64_t      RXPipe;
+    uint32_t      RXTimer = 0;
+    char          Complete[]   = "play 0,17,0";      // end noise
     char          ModelsView_filename[] = "filename";
     char          ProgressStart[]       = "vis Progress,1";
     char          ProgressEnd[]         = "vis Progress,0";
@@ -4111,29 +4127,41 @@ void ReceiveModelFile()
     unsigned long Fposition      = 0;
     float         SecondsElapsed = 0;
     uint8_t       p              = 5;
+    char          nb1[20];
+    char          Received[] = "Received ";
+    char          of[]   = " of ";
+    char          msg[50];  
+    char          bytes[] = " bytes.";
+   
 #ifdef DB_MODEL_EXCHANGE
     uint8_t PacketNumber = 0;
     Serial.println("Receiving model ...");
     Serial.println(Waiting);
 #endif
+    BlueLedOn();
     SendText(ModelsView_filename, Waiting);
     RXPipe = FILEPIPEADDRESS;
-    Radio1.setRetries(15, 15);
+    Radio1.setRetries(15, 15);  
     Radio1.setChannel(FILECHANNEL);
     Radio1.flush_tx();
     Radio1.openReadingPipe(1, RXPipe);
     Radio1.startListening();
     RXTimer = millis();           // Start timer
     while (!Radio1.available()) { // Await the sender....
-        Procrastinate(5);
+          Procrastinate(5);
+          if (GetButtonPress()){
+              NormaliseTheRadio();
+              RedLedOn();
+              ButtonWasPressed();
+              return;
+           }
         KickTheDog(); // Watchdog
         if ((millis() - RXTimer) / 1000 >= FILETIMEOUT) {
 #ifdef DB_MODEL_EXCHANGE
             Serial.println("Timeout");
 #endif
             SendText(ModelsView_filename, TimeoutMsg);
-            SetThePipe(DefaultPipe);
-            Radio1.setCRCLength(RF24_CRC_8);
+            NormaliseTheRadio();
             return; // Give up waiting
         }
         else {
@@ -4146,17 +4174,16 @@ void ReceiveModelFile()
             }
         }
     } // *First* packet must have arrived!
-
     SendCommand(ProgressStart);
     SendValue(Progress, p);
     SendText(ModelsView_filename, Receiving);
-    Radio1.writeAckPayload(1, &Fack, sizeof(Fack)); // Ack first packet
+    Radio1.writeAckPayload(1, &Fack, sizeof(Fack)); //  Ack first packet
     Radio1.read(&Fbuffer, BUFFERSIZE + 4);          //  Read it was 12
-    strcpy(SingleModelFile, Fbuffer);               // Get filename
+    strcpy(SingleModelFile, Fbuffer);               //  Get filename
     Fsize = Fbuffer[BUFFERSIZE];
     Fsize += Fbuffer[BUFFERSIZE + 1] << 8;
     Fsize += Fbuffer[BUFFERSIZE + 2] << 16;
-    Fsize += Fbuffer[BUFFERSIZE + 3] << 24;         // Get file size
+    Fsize += Fbuffer[BUFFERSIZE + 3] << 24;         //  Get file size
 #ifdef DB_MODEL_EXCHANGE
     Serial.println("CONNECTED!");
     Serial.print("FileName=");
@@ -4165,41 +4192,40 @@ void ReceiveModelFile()
     Serial.println(Fsize);
 #endif
     Fposition        = 0;
-    ModelsFileNumber = SD.open(SingleModelFile, FILE_WRITE);                    // Open file to receive
-    
-  
-    
-    RXTimer          = millis();                                                // zero timeout
+    ModelsFileNumber = SD.open(SingleModelFile, FILE_WRITE);                    //  Open file to receive
+    RXTimer          = millis();                                                //  zero timeout
     while ((Fposition < Fsize) && (millis() - RXTimer) / 1000 <= FILETIMEOUT) { //  (Fposition<Fsize) ********************
-        KickTheDog();                                                           // Watchdog
+        KickTheDog();                                                           //  Watchdog
         if (Radio1.available()) {
             Radio1.flush_tx();
             Radio1.writeAckPayload(1, &Fack, sizeof(Fack));
             Radio1.read(&Fbuffer, BUFFERSIZE + 4);
-            ModelsFileNumber.seek(Fposition);            // Move filepointer
+            ModelsFileNumber.seek(Fposition);            // Move filepointer IS NEEDED!!
             ModelsFileNumber.write(Fbuffer, BUFFERSIZE); // Write part of file
             Radio1.flush_rx();
             Fposition += BUFFERSIZE;
             p = ((float)Fposition / (float)Fsize) * 100;
             SendValue(Progress, p);
-            Procrastinate(100);
+            strcpy (msg,Received);
+            strcat(msg, Str(nb1,Fposition,0));
+            strcat(msg, of);
+            strcat(msg, Str(nb1,Fsize,0));
+            ShowFileProgress(msg);
 #ifdef DB_MODEL_EXCHANGE
             PacketNumber = Fbuffer[25];
             Serial.print("PacketNumber: ");
             Serial.println(PacketNumber);
 #endif
-        
         }
-        Procrastinate(70);
     }
     SendValue(Progress, 100);
     ModelsFileNumber.close();
     BuildDirectory();
     SendText(ModelsView_filename, Success);
-    Procrastinate(2000);
+    Procrastinate(750);
     SendText(ModelsView_filename, SingleModelFile);
     Radio1.setRetries(RETRYCOUNT, RETRYWAIT);
-    // **************************************** Below Here the new model is imported for immediate use
+    // **************************************** Below Here the new model is imported for immediate use  // heer
     SingleModelFlag = true;
     CloseModelsFile();
     ReadOneModel(1);
@@ -4208,16 +4234,22 @@ void ReceiveModelFile()
     SaveAllParameters();
     CloseModelsFile();
     UpdateModelsNameEveryWhere();
-    SetThePipe(DefaultPipe);
-    Radio1.setCRCLength(RF24_CRC_8);
+    NormaliseTheRadio();
     SendCommand(ProgressEnd);
+    RedLedOn();
+    strcpy (msg,Received);
+    strcat(msg, Str(nb1,Fsize,0));  
+    strcat(msg,bytes);     
+    ShowFileProgress(msg);
+    SendCommand(Complete);
 }
 
 /*********************************************************************************************************************************/
 
-/** @brief SEND A MODEL FILE */
+/** @brief SEND A MODEL FILE */ 
 void SendModelFile()
 {
+    char          Complete[]      = "play 0,17,0";      // end noise
     char          ProgressStart[] = "vis Progress,1";
     char          ProgressEnd[]   = "vis Progress,0";
     char          Progress[]      = "Progress";
@@ -4228,6 +4260,13 @@ void SendModelFile()
     char          Fbuffer[BUFFERSIZE + 8]; // spare space
     uint8_t       PacketNumber = 0;
     int           p            = 5;
+    char          nb1[20];
+    char          Sent[] = "Sent ";
+    char          of[]   = " of ";
+    char          msg[50];  
+    char          bytes[] = " bytes.";
+  
+    BlueLedOn();
     SendCommand(ProgressStart);
     SendValue(Progress, p);
     Procrastinate(10);
@@ -4252,28 +4291,38 @@ void SendModelFile()
     while (Fposition < Fsize) {
         KickTheDog(); // Watchdog
         p = ((float)Fposition / (float)Fsize) * 100;
+        strcpy (msg,Sent);
+        strcat(msg, Str(nb1,Fposition,0));
+        strcat(msg, of);
+        strcat(msg, Str(nb1,Fsize,0));
+        ShowFileProgress(msg);
         SendValue(Progress, p);
         PacketNumber++;
         if (PacketNumber == 1) {
-            strcpy(Fbuffer, SingleModelFile); // Filename in first packet
+            strcpy(Fbuffer, SingleModelFile);      // Filename in first packet
             Fbuffer[BUFFERSIZE]     = Fsize;
             Fbuffer[BUFFERSIZE + 1] = Fsize >> 8;
             Fbuffer[BUFFERSIZE + 2] = Fsize >> 16;
             Fbuffer[BUFFERSIZE + 3] = Fsize >> 24; // SEND FILE SIZE (four bytes)
         }
         else {
-
             ModelsFileNumber.seek(Fposition);           // Move filepointer
             ModelsFileNumber.read(Fbuffer, BUFFERSIZE); // Read part of file
             Fposition += BUFFERSIZE;
         }
-        Procrastinate(10); // allow time for receive and write
-        Radio1.flush_tx();
-        Radio1.flush_rx();
+         Radio1.flush_tx();
+         Radio1.flush_rx();
+         Procrastinate(2);
         if (Radio1.write(&Fbuffer, BUFFERSIZE + 4)) {
-            
+              Procrastinate(2);
             if (Radio1.isAckPayloadAvailable()) {
                 Radio1.read(&Fack, sizeof(Fack));
+                Serial.println ("ACK received");
+                Serial.println (Fposition);
+                Procrastinate(1);
+            }else{
+                Serial.println ("NO ACK received");
+                Procrastinate(1);
             }
         }
         else {
@@ -4292,11 +4341,15 @@ void SendModelFile()
     Serial.println("ALL SENT.");
 #endif
     SendValue(Progress, 100);
-    Procrastinate(100);
-    SetThePipe(DefaultPipe);
-    Radio1.setRetries(RETRYCOUNT, RETRYWAIT);
-    Radio1.setCRCLength(RF24_CRC_8);
+    Procrastinate(750);
+    NormaliseTheRadio();
     SendCommand(ProgressEnd);
+    RedLedOn();
+    strcpy (msg,Sent);
+    strcat (msg, Str(nb1,Fsize,0));
+    strcat (msg,bytes);
+    ShowFileProgress(msg);
+    SendCommand(Complete);
 }
 
 /*********************************************************************************************************************************/
@@ -4475,7 +4528,7 @@ void  DoNumberedCommands(uint8_t nc){
 //      case 3: is spare
         //  break;
         
-        case 4:                              // goto models view heer
+        case 4:                              // goto models view 
             SendCommand(pModelsView);
             CurrentView = MODELSVIEW;
             UpdateModelsNameEveryWhere();
