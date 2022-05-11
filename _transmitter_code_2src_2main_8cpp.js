@@ -192,6 +192,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "MovePoint", "_transmitter_code_2src_2main_8cpp.html#aad727ec0b0f9f34487a535eaa4a83172", null ],
     [ "mp", "_transmitter_code_2src_2main_8cpp.html#a23f912b672279a759ae7c65c51011160", null ],
     [ "MySbus", "_transmitter_code_2src_2main_8cpp.html#a5424788640aaa8d535d6ea077949ef82", null ],
+    [ "NormaliseTheRadio", "_transmitter_code_2src_2main_8cpp.html#a0708fa5166a126be25283b6cfaff6227", null ],
     [ "OpenModelsFile", "_transmitter_code_2src_2main_8cpp.html#ae7618f38a148877bc5681be58cba8354", null ],
     [ "ParseAckPayload", "_transmitter_code_2src_2main_8cpp.html#a230e862a4da0f66746b6b3afba6bd77a", null ],
     [ "Radio1", "_transmitter_code_2src_2main_8cpp.html#a621c346e4b1d9b24b9a5bda63d0f0f52", null ],

@@ -1,5 +1,7 @@
 var NAVTREEINDEX11 =
 {
+"structsensors__event__t.html#a56b4d05fbf47013727ec1a0a94db91e6":[11,0,17,1],
+"structsensors__event__t.html#a577b73698368fb061382ce9f31052417":[11,0,17,10],
 "structsensors__event__t.html#a58401dd7f3400d9eb96c71b8fba9f8e8":[11,0,17,15],
 "structsensors__event__t.html#a6b06d35b17afbee79de7f45d9d71ed0b":[11,0,17,12],
 "structsensors__event__t.html#a8be4dc00344f46abf29e06251bf9fad9":[11,0,17,11],
