@@ -4107,9 +4107,9 @@ char t1[] = "t1";
 /** @brief RECEIVE A MODEL FILE */
 void ReceiveModelFile()
 {
-    uint64_t RXPipe;
-    uint32_t RXTimer = 0;
-    char     Complete[]   = "play 0,17,0";      // end noise
+    uint64_t      RXPipe;
+    uint32_t      RXTimer = 0;
+    char          Complete[]   = "play 0,17,0";      // end noise
     char          ModelsView_filename[] = "filename";
     char          ProgressStart[]       = "vis Progress,1";
     char          ProgressEnd[]         = "vis Progress,0";
@@ -4177,13 +4177,13 @@ void ReceiveModelFile()
     SendCommand(ProgressStart);
     SendValue(Progress, p);
     SendText(ModelsView_filename, Receiving);
-    Radio1.writeAckPayload(1, &Fack, sizeof(Fack)); // Ack first packet
+    Radio1.writeAckPayload(1, &Fack, sizeof(Fack)); //  Ack first packet
     Radio1.read(&Fbuffer, BUFFERSIZE + 4);          //  Read it was 12
-    strcpy(SingleModelFile, Fbuffer);               // Get filename
+    strcpy(SingleModelFile, Fbuffer);               //  Get filename
     Fsize = Fbuffer[BUFFERSIZE];
     Fsize += Fbuffer[BUFFERSIZE + 1] << 8;
     Fsize += Fbuffer[BUFFERSIZE + 2] << 16;
-    Fsize += Fbuffer[BUFFERSIZE + 3] << 24;         // Get file size
+    Fsize += Fbuffer[BUFFERSIZE + 3] << 24;         //  Get file size
 #ifdef DB_MODEL_EXCHANGE
     Serial.println("CONNECTED!");
     Serial.print("FileName=");
@@ -4192,10 +4192,10 @@ void ReceiveModelFile()
     Serial.println(Fsize);
 #endif
     Fposition        = 0;
-    ModelsFileNumber = SD.open(SingleModelFile, FILE_WRITE);                    // Open file to receive
-    RXTimer          = millis();                                                // zero timeout
+    ModelsFileNumber = SD.open(SingleModelFile, FILE_WRITE);                    //  Open file to receive
+    RXTimer          = millis();                                                //  zero timeout
     while ((Fposition < Fsize) && (millis() - RXTimer) / 1000 <= FILETIMEOUT) { //  (Fposition<Fsize) ********************
-        KickTheDog();                                                           // Watchdog
+        KickTheDog();                                                           //  Watchdog
         if (Radio1.available()) {
             Radio1.flush_tx();
             Radio1.writeAckPayload(1, &Fack, sizeof(Fack));
@@ -4206,13 +4206,11 @@ void ReceiveModelFile()
             Fposition += BUFFERSIZE;
             p = ((float)Fposition / (float)Fsize) * 100;
             SendValue(Progress, p);
-            
             strcpy (msg,Received);
             strcat(msg, Str(nb1,Fposition,0));
             strcat(msg, of);
             strcat(msg, Str(nb1,Fsize,0));
             ShowFileProgress(msg);
-
 #ifdef DB_MODEL_EXCHANGE
             PacketNumber = Fbuffer[25];
             Serial.print("PacketNumber: ");
@@ -4231,7 +4229,6 @@ void ReceiveModelFile()
     SingleModelFlag = true;
     CloseModelsFile();
     ReadOneModel(1);
-  //  SD.remove(SingleModelFile);
     SingleModelFlag = false;
     CloseModelsFile();
     SaveAllParameters();
@@ -4252,7 +4249,7 @@ void ReceiveModelFile()
 /** @brief SEND A MODEL FILE */ 
 void SendModelFile()
 {
-    char Complete[]   = "play 0,17,0";      // end noise
+    char          Complete[]      = "play 0,17,0";      // end noise
     char          ProgressStart[] = "vis Progress,1";
     char          ProgressEnd[]   = "vis Progress,0";
     char          Progress[]      = "Progress";
@@ -4263,15 +4260,12 @@ void SendModelFile()
     char          Fbuffer[BUFFERSIZE + 8]; // spare space
     uint8_t       PacketNumber = 0;
     int           p            = 5;
-
     char          nb1[20];
     char          Sent[] = "Sent ";
     char          of[]   = " of ";
     char          msg[50];  
     char          bytes[] = " bytes.";
   
-
-
     BlueLedOn();
     SendCommand(ProgressStart);
     SendValue(Progress, p);
@@ -4283,6 +4277,7 @@ void SendModelFile()
     TXPipe           = FILEPIPEADDRESS;
     ModelsFileNumber = SD.open(SingleModelFile, O_READ); // Open file for reading
     Fsize            = ModelsFileNumber.size();          // Get file size
+    if (Fsize > 2048) Fsize = 2048;                      // This prevents the file size creeping up oddly!
 #ifdef DB_MODEL_EXCHANGE
     Serial.print("File Size: ");
     Serial.print(Fsize);
@@ -4352,8 +4347,8 @@ void SendModelFile()
     SendCommand(ProgressEnd);
     RedLedOn();
     strcpy (msg,Sent);
-    strcat(msg, Str(nb1,Fsize,0));
-    strcat(msg,bytes);
+    strcat (msg, Str(nb1,Fsize,0));
+    strcat (msg,bytes);
     ShowFileProgress(msg);
     SendCommand(Complete);
 }
