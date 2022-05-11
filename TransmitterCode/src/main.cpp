@@ -4200,7 +4200,7 @@ void ReceiveModelFile()
             Radio1.flush_tx();
             Radio1.writeAckPayload(1, &Fack, sizeof(Fack));
             Radio1.read(&Fbuffer, BUFFERSIZE + 4);
-        //  ModelsFileNumber.seek(Fposition);            // Move filepointer NOT NEEDED?!?!?
+            ModelsFileNumber.seek(Fposition);            // Move filepointer IS NEEDED!!
             ModelsFileNumber.write(Fbuffer, BUFFERSIZE); // Write part of file
             Radio1.flush_rx();
             Fposition += BUFFERSIZE;
@@ -4277,7 +4277,7 @@ void SendModelFile()
     TXPipe           = FILEPIPEADDRESS;
     ModelsFileNumber = SD.open(SingleModelFile, O_READ); // Open file for reading
     Fsize            = ModelsFileNumber.size();          // Get file size
-    if (Fsize > 2048) Fsize = 2048;                      // This prevents the file size creeping up oddly!
+   // if (Fsize > 2048) Fsize = 2048;                      // This prevents the file size creeping up oddly!
 #ifdef DB_MODEL_EXCHANGE
     Serial.print("File Size: ");
     Serial.print(Fsize);
