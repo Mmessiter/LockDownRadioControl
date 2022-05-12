@@ -564,6 +564,7 @@ bool     CopyTrimsToAll     = true;
 void SendText(char* tbox, char* NewWord); // needed a prototype or two here!
 void RestoreBrightness();
 void ButtonWasPressed();
+void CalibrateEdgeSwitches();
 
 /************************************************************************************************************/
 // This function returns distance (in MILES) between two GPS coordinates (in degrees)
@@ -2127,6 +2128,9 @@ void ReduceLimits(){                              // Get things setup for sticks
 void CalibrateSticks()   // This discovers end of travel place for sticks etc. 
 {
     uint16_t p;
+
+    CalibrateEdgeSwitches();        // These are now calibrated too in case some are reversed.
+
     for (uint8_t i = 0; i < PROPOCHANNELS; ++i)
     {
        p = analogRead(AnalogueInput[i]);
@@ -2839,6 +2843,11 @@ bool LoadAllParameters()
         ++SDCardAddress;
         AnnounceBanks= SDReadByte(SDCardAddress);
         ++SDCardAddress;
+        for (i = 0; i < 8; ++i){
+            j = SDReadByte(SDCardAddress);
+            if ((j >= SWITCH7) && (j <= SWITCH0))  {SwitchNumber[i] = j;} // heer 
+            ++SDCardAddress;
+        }
         MemoryForTransmtter = SDCardAddress;
         ReadOneModel(ModelNumber);
         return true;
@@ -3097,9 +3106,10 @@ void SaveTXStuff()
     ++SDCardAddress;
     SDUpdateByte(SDCardAddress,AnnounceBanks);
     ++SDCardAddress;
-
-
-
+    for (i = 0; i < 8; ++i){
+        SDUpdateByte(SDCardAddress,SwitchNumber[i]);
+        ++SDCardAddress;
+    }
     CloseModelsFile();
 }
 
@@ -4226,7 +4236,7 @@ void ReceiveModelFile()
     Procrastinate(750);
     SendText(ModelsView_filename, SingleModelFile);
     Radio1.setRetries(RETRYCOUNT, RETRYWAIT);
-    // **************************************** Below Here the new model is imported for immediate use  // heer
+    // **************************************** Below Here the new model is imported for immediate use 
     SingleModelFlag = true;
     CloseModelsFile();
     ReadOneModel(1);
@@ -6473,6 +6483,33 @@ void CheckHardwareTrims(){
             if (TrimRepeatSpeed < 40) TrimRepeatSpeed = 40;
         }
     }
+}
+
+/************************************************************************************************************/
+void swap(uint8_t *a, uint8_t *b){                                                      // Just swap over two bytes, a & b :-)
+    uint8_t c; 
+     c = *a;
+    *a = *b;
+    *b = c;
+}
+/************************************************************************************************************/
+void CalibrateEdgeSwitches(){                                                             // This function avoids the need to rotate the four edge switches if installed backwards
+    for (int i = 0; i < 8; ++i) {
+        if (!digitalRead(SwitchNumber[i])){
+           if (i == 0) {
+                if ((SwitchNumber[i]) == 32) swap(&SwitchNumber[i],&SwitchNumber[i+1]);   // swap over switches if wrongly installed
+           }
+           if (i == 2) {
+                if ((SwitchNumber[i]) == 29) swap(&SwitchNumber[i],&SwitchNumber[i+1]);   // swap over switches if wrongly installed         
+           }
+           if (i == 4) {
+                if ((SwitchNumber[i]) == 28) swap(&SwitchNumber[i],&SwitchNumber[i+1]);   // swap over switches if wrongly installed           
+           }
+           if (i == 6) {
+                if ((SwitchNumber[i]) == 25) swap(&SwitchNumber[i],&SwitchNumber[i+1]);   // swap over switches if wrongly installed             
+           } 
+         }  
+       }
 }
 /************************************************************************************************************/
 
