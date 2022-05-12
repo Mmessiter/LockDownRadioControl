@@ -6497,16 +6497,16 @@ void CalibrateEdgeSwitches(){                                                   
     for (int i = 0; i < 8; ++i) {
         if (!digitalRead(SwitchNumber[i])){
            if (i == 0) {
-                if ((SwitchNumber[i]) == 32) swap(&SwitchNumber[i],&SwitchNumber[i+1]);   // swap over switches if wrongly installed
+                if ((SwitchNumber[i]) == 32) swap(&SwitchNumber[i],&SwitchNumber[i+1]);   // swap over switches' pin number if wrongly installed
            }
            if (i == 2) {
-                if ((SwitchNumber[i]) == 29) swap(&SwitchNumber[i],&SwitchNumber[i+1]);   // swap over switches if wrongly installed         
+                if ((SwitchNumber[i]) == 29) swap(&SwitchNumber[i],&SwitchNumber[i+1]);   // swap over switches' pin number if wrongly installed      
            }
            if (i == 4) {
-                if ((SwitchNumber[i]) == 28) swap(&SwitchNumber[i],&SwitchNumber[i+1]);   // swap over switches if wrongly installed           
+                if ((SwitchNumber[i]) == 28) swap(&SwitchNumber[i],&SwitchNumber[i+1]);   // swap over switches' pin number if wrongly installed      
            }
            if (i == 6) {
-                if ((SwitchNumber[i]) == 25) swap(&SwitchNumber[i],&SwitchNumber[i+1]);   // swap over switches if wrongly installed             
+                if ((SwitchNumber[i]) == 25) swap(&SwitchNumber[i],&SwitchNumber[i+1]);   // swap over switches' pin number if wrongly installed           
            } 
          }  
        }
