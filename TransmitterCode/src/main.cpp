@@ -2129,7 +2129,7 @@ void CalibrateSticks()   // This discovers end of travel place for sticks etc.
 {
     uint16_t p;
 
-    CalibrateEdgeSwitches();        // These are now calibrated too in case some are reversed.
+   // CalibrateEdgeSwitches();        // These are now calibrated too in case some are reversed.
 
     for (uint8_t i = 0; i < PROPOCHANNELS; ++i)
     {
@@ -2845,7 +2845,7 @@ bool LoadAllParameters()
         ++SDCardAddress;
         for (i = 0; i < 8; ++i){
             j = SDReadByte(SDCardAddress);
-            if ((j >= SWITCH7) && (j <= SWITCH0))  {SwitchNumber[i] = j;} 
+          //  if ((j >= SWITCH7) && (j <= SWITCH0))  {SwitchNumber[i] = j;} 
             ++SDCardAddress;
         }
         MemoryForTransmtter = SDCardAddress;
