@@ -6484,16 +6484,15 @@ void CheckHardwareTrims(){
         }
     }
 }
-
 /************************************************************************************************************/
-void swap(uint8_t *a, uint8_t *b){                                                      // Just swap over two bytes, a & b :-)
+void swap(uint8_t *a, uint8_t *b){                                  // Just swap over two bytes, a & b :-)
     uint8_t c; 
      c = *a;
     *a = *b;
     *b = c;
 }
 /************************************************************************************************************/
-void CalibrateEdgeSwitches(){                                                             // This function avoids the need to rotate the four edge switches if installed backwards
+void CalibrateEdgeSwitches(){                                        // This function avoids the need to rotate the four edge switches if installed backwards
     for (int i = 0; i < 8; ++i) {
         if (digitalRead(SwitchNumber[i])){
             if (i == 0) swap(&SwitchNumber[i],&SwitchNumber[i+1]);   // swap over switches' pin number if wrongly installed    
@@ -6503,7 +6502,6 @@ void CalibrateEdgeSwitches(){                                                   
         }         
     }
 }  
-       
 /************************************************************************************************************/
 
 void ReadSwitches()  // and indeed read digital trims if these are fitted
