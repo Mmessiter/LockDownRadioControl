@@ -6474,13 +6474,13 @@ void  MoveaTrim(uint8_t i){
 /************************************************************************************************************/
 void CheckHardwareTrims(){  
     int i;
-    if ((millis() - TrimTimer) < TrimRepeatSpeed) return;
+    if ((millis() - TrimTimer) < TrimRepeatSpeed) return;    // check occasionally for trim press
     TrimTimer = millis();
     for (i = 0; i < 8; ++i) {
         if (TrimSwitch[i]) {
             MoveaTrim(i);
-            TrimRepeatSpeed -= (TrimRepeatSpeed/6);
-            if (TrimRepeatSpeed < 40) TrimRepeatSpeed = 40;
+            TrimRepeatSpeed -= (TrimRepeatSpeed/6);           // accelerate repeat...
+            if (TrimRepeatSpeed < 40) TrimRepeatSpeed = 40;   // ... up to a point... 
         }
     }
 }
