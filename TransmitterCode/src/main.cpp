@@ -2845,7 +2845,7 @@ bool LoadAllParameters()
         ++SDCardAddress;
         for (i = 0; i < 8; ++i){
             j = SDReadByte(SDCardAddress);
-            if ((j >= SWITCH7) && (j <= SWITCH0))  {SwitchNumber[i] = j;} // heer 
+            if ((j >= SWITCH7) && (j <= SWITCH0))  {SwitchNumber[i] = j;} 
             ++SDCardAddress;
         }
         MemoryForTransmtter = SDCardAddress;
