@@ -509,7 +509,10 @@ FASTRUN void ReceiveData(){
         }                                                                                                                                           
         if (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT) {                      
         Reconnect();                                                                  // Try to reconnect.
-        }
+        } 
+       // else {
+       // Serial.println ("Waiting...");    
+       // }
     }
 }
 /************************************************************************************************************/

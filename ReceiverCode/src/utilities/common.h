@@ -15,7 +15,7 @@
     
     #define RXVERSION_MAJOR             1
     #define RXVERSION_MINOR             7
-    #define RXVERSION_MINIMUS           2   // May 10th 2022
+    #define RXVERSION_MINIMUS           3   // May 12th 2022
 
 //**************************************************************************************************************************
     #define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< **
@@ -25,7 +25,7 @@
     #define HOPTIME                     91   // ms between channel changes ( >12 packets per hop)
     
     #define LISTEN_PERIOD               15    // 10 How many ms to listen for TX in Reconnect()
-    #define RECEIVE_TIMEOUT             30   // <=16 fails, >=20 OK, 25 - 40 milliseconds seems an optimal value?
+    #define RECEIVE_TIMEOUT             40   // <=16 fails, >=20 OK, 25 - 40 milliseconds seems an optimal value?
 
     #define FREQUENCYSCOUNT             82   // use 82 different channels
     #define FREQUENCYSCOUNT1            41   // use 41 different test channels
