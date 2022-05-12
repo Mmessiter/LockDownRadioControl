@@ -2129,7 +2129,7 @@ void CalibrateSticks()   // This discovers end of travel place for sticks etc.
 {
     uint16_t p;
 
-   // CalibrateEdgeSwitches();        // These are now calibrated too in case some are reversed.
+    CalibrateEdgeSwitches();        // These are now calibrated too in case some are reversed.
 
     for (uint8_t i = 0; i < PROPOCHANNELS; ++i)
     {
@@ -2845,7 +2845,7 @@ bool LoadAllParameters()
         ++SDCardAddress;
         for (i = 0; i < 8; ++i){
             j = SDReadByte(SDCardAddress);
-          //  if ((j >= SWITCH7) && (j <= SWITCH0))  {SwitchNumber[i] = j;} 
+            if ((j >= SWITCH7) && (j <= SWITCH0))  {SwitchNumber[i] = j;} 
             ++SDCardAddress;
         }
         MemoryForTransmtter = SDCardAddress;
@@ -6495,22 +6495,15 @@ void swap(uint8_t *a, uint8_t *b){                                              
 /************************************************************************************************************/
 void CalibrateEdgeSwitches(){                                                             // This function avoids the need to rotate the four edge switches if installed backwards
     for (int i = 0; i < 8; ++i) {
-        if (!digitalRead(SwitchNumber[i])){
-           if (i == 0) {
-                if ((SwitchNumber[i]) == 32) swap(&SwitchNumber[i],&SwitchNumber[i+1]);   // swap over switches' pin number if wrongly installed
-           }
-           if (i == 2) {
-                if ((SwitchNumber[i]) == 29) swap(&SwitchNumber[i],&SwitchNumber[i+1]);   // swap over switches' pin number if wrongly installed      
-           }
-           if (i == 4) {
-                if ((SwitchNumber[i]) == 28) swap(&SwitchNumber[i],&SwitchNumber[i+1]);   // swap over switches' pin number if wrongly installed      
-           }
-           if (i == 6) {
-                if ((SwitchNumber[i]) == 25) swap(&SwitchNumber[i],&SwitchNumber[i+1]);   // swap over switches' pin number if wrongly installed           
-           } 
-         }  
-       }
-}
+        if (digitalRead(SwitchNumber[i])){
+            if (i == 0) swap(&SwitchNumber[i],&SwitchNumber[i+1]);   // swap over switches' pin number if wrongly installed    
+            if (i == 2) swap(&SwitchNumber[i],&SwitchNumber[i+1]);   // swap over switches' pin number if wrongly installed        
+            if (i == 4) swap(&SwitchNumber[i],&SwitchNumber[i+1]);   // swap over switches' pin number if wrongly installed      
+            if (i == 6) swap(&SwitchNumber[i],&SwitchNumber[i+1]);   // swap over switches' pin number if wrongly installed           
+        }         
+    }
+}  
+       
 /************************************************************************************************************/
 
 void ReadSwitches()  // and indeed read digital trims if these are fitted
@@ -6739,6 +6732,9 @@ void  CheckScanButton(){
 /************************************************************************************************************/
 void loop()
 {
+    
+  //  CalibrateEdgeSwitches();
+    
     KickTheDog();                    // Watchdog
     if (GetButtonPress()) {
         ButtonWasPressed();          // Deal with button
