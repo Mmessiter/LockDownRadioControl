@@ -4204,6 +4204,7 @@ void ReceiveModelFile()
             ModelsFileNumber.write(Fbuffer, BUFFERSIZE); // Write part of file
             Radio1.flush_rx();
             Fposition += BUFFERSIZE;
+            if (Fposition > Fsize) Fposition = Fsize;
             p = ((float)Fposition / (float)Fsize) * 100;
             SendValue(Progress, p);
             strcpy (msg,Received);
@@ -4309,6 +4310,7 @@ void SendModelFile()
             ModelsFileNumber.seek(Fposition);           // Move filepointer
             ModelsFileNumber.read(Fbuffer, BUFFERSIZE); // Read part of file
             Fposition += BUFFERSIZE;
+            if (Fposition > Fsize) Fposition = Fsize;
         }
          Radio1.flush_tx();
          Radio1.flush_rx();
