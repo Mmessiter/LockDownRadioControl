@@ -4534,7 +4534,7 @@ void  DoNumberedCommands(uint8_t nc){
         //  break;
         
         case 4:                              // goto models view 
-           Serial.println (ModelNumber);  // heer  
+           Serial.println (ModelNumber);   
             SendCommand(pModelsView);
             CurrentView = MODELSVIEW;
             UpdateModelsNameEveryWhere();
@@ -6697,12 +6697,21 @@ void CheckGapsLength()
 }
 
 /************************************************************************************************************/
-void CheckModelName(){                        // In ModelsView, this function checks correct name is displayed.
-char ModelsView_ModelNumber[]  = "ModelNumber";    
-    if (!InhibitNameCheck){               // if name is being edited, do not check it.
-        ModelNumber = GetValue(ModelsView_ModelNumber);    
+void CheckModelName(){                               // In ModelsView, this function checks correct name is displayed.
+char ModelsView_ModelNumber[]   = "ModelNumber";    
+char ModelsView_ModelName[]     = "ModelName";
+char NewName[35];
+    if (!InhibitNameCheck){                          // If name is being edited, do not check it.
+        ModelNumber = GetValue(ModelsView_ModelNumber); 
+        GetText(ModelsView_ModelName,NewName);
+        if (strlen(NewName) > 3)  {                   // Short texts come in from kbd screen
+                if (strcmp(ModelName,NewName) != 0) { // Change?
+                    strcpy(ModelName,NewName);        // Edited name!
+                    SaveOneModel(ModelNumber);        // Save it!
+                }
+        }
         if (LastModelLoaded != ModelNumber) {
-            if (ModelNumber >= 1) {      // Don't use number zero
+            if (ModelNumber >= 1) {                   // Don't use number zero
                  ReadOneModel(ModelNumber);
                  LastModelLoaded = ModelNumber;
                  UpdateModelsNameEveryWhere();  
