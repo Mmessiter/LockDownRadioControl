@@ -6152,6 +6152,7 @@ void ButtonWasPressed()
                 SendText1(SvT11, CMsg1);
                 SendText(SvB0, CMsg2);
                 ClearText();
+                BlueLedOn();
                 return;
             }
         }
