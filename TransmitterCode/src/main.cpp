@@ -2128,33 +2128,25 @@ void ReduceLimits(){                              // Get things setup for sticks
 void CalibrateSticks()   // This discovers end of travel place for sticks etc. 
 {
     uint16_t p;
-
-    CalibrateEdgeSwitches();        // These are now calibrated too in case some are reversed.
-
     for (uint8_t i = 0; i < PROPOCHANNELS; ++i)
     {
        p = analogRead(AnalogueInput[i]);
-       if (ChannelMax[i] < p) 
-        {
-           ChannelMax[i] = p;
-        }
-       if (ChannelMin[i] > p) 
-       {
-           ChannelMin[i] = p;
-       }
-       GetNewChannelValues();
+       if (ChannelMax[i] < p)   ChannelMax[i] = p;
+       if (ChannelMin[i] > p)   ChannelMin[i] = p;
     }
+    GetNewChannelValues();
 }
 /*********************************************************************************************************************************/
 /** @brief Get centre as 90 degrees */
 void ChannelCentres()
-{
+{ 
     for (int i = 0; i < PROPOCHANNELS; ++i) {
         ChannelCentre[i] = analogRead(AnalogueInput[i]);
         ChannelMidHi[i]  = ChannelCentre[i] + ((ChannelMax[i] - ChannelCentre[i]) / 2);
         ChannelMidLow[i] = ChannelMin[i] + ((ChannelCentre[i] - ChannelMin[i]) / 2);
     }
     GetNewChannelValues();
+    CalibrateEdgeSwitches();        // These are now calibrated too in case some are reversed.
 }
 /*********************************************************************************************************************************/
 void UpdateTrimView()
@@ -4637,11 +4629,11 @@ void ButtonWasPressed()
     char ColoursView[]             = "ColoursView";
     char GoFrontView[]             = "GoFrontView";
     char SvT11[]                   = "t11";
-    char CMsg1[]                   = "Move all controls\r\nto their full extent several times,\r\nthen press the button again.";
+    char CMsg1[]                   = "Move all controls to their full\r\nextent several times,\r\nthen press Next.";
     char SvB0[]                    = "b0";
-    char CMsg2[]                   = "Wiggle, then press!";
-    char Cmsg3[]                   = "Please CENTRE all controls,\r\nWait a moment,\r\nthen press again...";
-    char Cmsg4[]                   = "CENTRE ALL!";
+    char CMsg2[]                   = "Next ...";
+    char Cmsg3[]                   = "Centre all channels,\r\nPush edge switches fully back,\r\nthen press Finish.";
+    char Cmsg4[]                   = "Finish";
     char TypeView[]                = "TypeView";
     char CopyToAllFlightModes[]    = "callfm";
     char RXBAT[]                   = "RXBAT";
@@ -6730,8 +6722,6 @@ void  CheckScanButton(){
 /************************************************************************************************************/
 void loop()
 {
-    
-  //  CalibrateEdgeSwitches();
     
     KickTheDog();                    // Watchdog
     if (GetButtonPress()) {
