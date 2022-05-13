@@ -564,6 +564,7 @@ bool     CopyTrimsToAll     = true;
 void SendText(char* tbox, char* NewWord); // needed a prototype or two here!
 void RestoreBrightness();
 void ButtonWasPressed();
+void CalibrateEdgeSwitches();
 
 /************************************************************************************************************/
 // This function returns distance (in MILES) between two GPS coordinates (in degrees)
@@ -2130,27 +2131,22 @@ void CalibrateSticks()   // This discovers end of travel place for sticks etc.
     for (uint8_t i = 0; i < PROPOCHANNELS; ++i)
     {
        p = analogRead(AnalogueInput[i]);
-       if (ChannelMax[i] < p) 
-        {
-           ChannelMax[i] = p;
-        }
-       if (ChannelMin[i] > p) 
-       {
-           ChannelMin[i] = p;
-       }
-       GetNewChannelValues();
+       if (ChannelMax[i] < p)   ChannelMax[i] = p;
+       if (ChannelMin[i] > p)   ChannelMin[i] = p;
     }
+    GetNewChannelValues();
 }
 /*********************************************************************************************************************************/
 /** @brief Get centre as 90 degrees */
 void ChannelCentres()
-{
+{ 
     for (int i = 0; i < PROPOCHANNELS; ++i) {
         ChannelCentre[i] = analogRead(AnalogueInput[i]);
         ChannelMidHi[i]  = ChannelCentre[i] + ((ChannelMax[i] - ChannelCentre[i]) / 2);
         ChannelMidLow[i] = ChannelMin[i] + ((ChannelCentre[i] - ChannelMin[i]) / 2);
     }
     GetNewChannelValues();
+    CalibrateEdgeSwitches();        // These are now calibrated too in case some are reversed.
 }
 /*********************************************************************************************************************************/
 void UpdateTrimView()
@@ -2839,6 +2835,11 @@ bool LoadAllParameters()
         ++SDCardAddress;
         AnnounceBanks= SDReadByte(SDCardAddress);
         ++SDCardAddress;
+        for (i = 0; i < 8; ++i){
+            j = SDReadByte(SDCardAddress);
+            if ((j >= SWITCH7) && (j <= SWITCH0))  {SwitchNumber[i] = j;} 
+            ++SDCardAddress;
+        }
         MemoryForTransmtter = SDCardAddress;
         ReadOneModel(ModelNumber);
         return true;
@@ -3097,9 +3098,10 @@ void SaveTXStuff()
     ++SDCardAddress;
     SDUpdateByte(SDCardAddress,AnnounceBanks);
     ++SDCardAddress;
-
-
-
+    for (i = 0; i < 8; ++i){
+        SDUpdateByte(SDCardAddress,SwitchNumber[i]);
+        ++SDCardAddress;
+    }
     CloseModelsFile();
 }
 
@@ -4226,7 +4228,7 @@ void ReceiveModelFile()
     Procrastinate(750);
     SendText(ModelsView_filename, SingleModelFile);
     Radio1.setRetries(RETRYCOUNT, RETRYWAIT);
-    // **************************************** Below Here the new model is imported for immediate use  // heer
+    // **************************************** Below Here the new model is imported for immediate use 
     SingleModelFlag = true;
     CloseModelsFile();
     ReadOneModel(1);
@@ -4514,6 +4516,7 @@ void ZeroDataScreen(){             // ZERO Those parameters that are zeroable
 void  DoNumberedCommands(uint8_t nc){
   
     char pModelsView[] = "page ModelsView";
+    char mn[] = "ModelNumber";
     
     switch(nc){
           case 1:                      // Previous file (modelsview)
@@ -4531,11 +4534,14 @@ void  DoNumberedCommands(uint8_t nc){
         //  break;
         
         case 4:                              // goto models view 
+           Serial.println (ModelNumber);  // heer  
             SendCommand(pModelsView);
             CurrentView = MODELSVIEW;
             UpdateModelsNameEveryWhere();
             BuildDirectory();                 // of SD card
             ShowFileNumber();
+            Serial.println (ModelNumber); 
+            SendValue(mn,ModelNumber);
             break;
        
         default:
@@ -4627,11 +4633,11 @@ void ButtonWasPressed()
     char ColoursView[]             = "ColoursView";
     char GoFrontView[]             = "GoFrontView";
     char SvT11[]                   = "t11";
-    char CMsg1[]                   = "Move all controls\r\nto their full extent several times,\r\nthen press the button again.";
+    char CMsg1[]                   = "Move all controls to their full\r\nextent several times,\r\nthen press Next.";
     char SvB0[]                    = "b0";
-    char CMsg2[]                   = "Wiggle, then press!";
-    char Cmsg3[]                   = "Please CENTRE all controls,\r\nWait a moment,\r\nthen press again...";
-    char Cmsg4[]                   = "CENTRE ALL!";
+    char CMsg2[]                   = "Next ...";
+    char Cmsg3[]                   = "Centre all channels,\r\nPush edge switches fully back,\r\nthen press Finish.";
+    char Cmsg4[]                   = "Finish";
     char TypeView[]                = "TypeView";
     char CopyToAllFlightModes[]    = "callfm";
     char RXBAT[]                   = "RXBAT";
@@ -6150,6 +6156,7 @@ void ButtonWasPressed()
                 SendText1(SvT11, CMsg1);
                 SendText(SvB0, CMsg2);
                 ClearText();
+                BlueLedOn();
                 return;
             }
         }
@@ -6464,16 +6471,34 @@ void  MoveaTrim(uint8_t i){
 /************************************************************************************************************/
 void CheckHardwareTrims(){  
     int i;
-    if ((millis() - TrimTimer) < TrimRepeatSpeed) return;
+    if ((millis() - TrimTimer) < TrimRepeatSpeed) return;    // check occasionally for trim press
     TrimTimer = millis();
     for (i = 0; i < 8; ++i) {
         if (TrimSwitch[i]) {
             MoveaTrim(i);
-            TrimRepeatSpeed -= (TrimRepeatSpeed/6);
-            if (TrimRepeatSpeed < 40) TrimRepeatSpeed = 40;
+            TrimRepeatSpeed -= (TrimRepeatSpeed/6);           // accelerate repeat...
+            if (TrimRepeatSpeed < 40) TrimRepeatSpeed = 40;   // ... up to a point... 
         }
     }
 }
+/************************************************************************************************************/
+void swap(uint8_t *a, uint8_t *b){                                  // Just swap over two bytes, a & b :-)
+    uint8_t c; 
+     c = *a;
+    *a = *b;
+    *b = c;
+}
+/************************************************************************************************************/
+void CalibrateEdgeSwitches(){                                        // This function avoids the need to rotate the four edge switches if installed backwards
+    for (int i = 0; i < 8; ++i) {
+        if (digitalRead(SwitchNumber[i])){
+            if (i == 0) swap(&SwitchNumber[i],&SwitchNumber[i+1]);   // swap over switches' pin number if wrongly installed    
+            if (i == 2) swap(&SwitchNumber[i],&SwitchNumber[i+1]);   // swap over switches' pin number if wrongly installed        
+            if (i == 4) swap(&SwitchNumber[i],&SwitchNumber[i+1]);   // swap over switches' pin number if wrongly installed      
+            if (i == 6) swap(&SwitchNumber[i],&SwitchNumber[i+1]);   // swap over switches' pin number if wrongly installed           
+        }         
+    }
+}  
 /************************************************************************************************************/
 
 void ReadSwitches()  // and indeed read digital trims if these are fitted
@@ -6702,6 +6727,7 @@ void  CheckScanButton(){
 /************************************************************************************************************/
 void loop()
 {
+    
     KickTheDog();                    // Watchdog
     if (GetButtonPress()) {
         ButtonWasPressed();          // Deal with button
