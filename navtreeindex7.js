@@ -1,5 +1,6 @@
 var NAVTREEINDEX7 =
 {
+"class_adafruit___b_m_p280.html#a7e817dd76c6b5c92b7f4166556bb3d4ea4e71b55e9c751664aec49e918192740f":[11,0,0,2,4],
 "class_adafruit___b_m_p280.html#a7e817dd76c6b5c92b7f4166556bb3d4ea547f80b02c1ad9fd4935a933a65d8b3e":[11,0,0,2,10],
 "class_adafruit___b_m_p280.html#a7e817dd76c6b5c92b7f4166556bb3d4ea547f80b02c1ad9fd4935a933a65d8b3e":[11,0,0,2,5],
 "class_adafruit___b_m_p280.html#a7e817dd76c6b5c92b7f4166556bb3d4ea547f80b02c1ad9fd4935a933a65d8b3e":[11,0,0,2,0],
@@ -21,9 +22,9 @@ var NAVTREEINDEX7 =
 "class_adafruit___b_m_p280.html#a7e817dd76c6b5c92b7f4166556bb3d4eaf31c5a3d16e29b172a6ca3759e12c478":[11,0,0,1,13],
 "class_adafruit___b_m_p280.html#a7e817dd76c6b5c92b7f4166556bb3d4eaf31c5a3d16e29b172a6ca3759e12c478":[11,0,0,2,3],
 "class_adafruit___b_m_p280.html#a7e817dd76c6b5c92b7f4166556bb3d4eaf31c5a3d16e29b172a6ca3759e12c478":[11,0,0,2,13],
+"class_adafruit___b_m_p280.html#a7e817dd76c6b5c92b7f4166556bb3d4eaf31c5a3d16e29b172a6ca3759e12c478":[11,0,0,2,8],
 "class_adafruit___b_m_p280.html#a7e817dd76c6b5c92b7f4166556bb3d4eaf31c5a3d16e29b172a6ca3759e12c478":[11,0,0,0,3],
 "class_adafruit___b_m_p280.html#a7e817dd76c6b5c92b7f4166556bb3d4eaf31c5a3d16e29b172a6ca3759e12c478":[11,0,0,0,8],
-"class_adafruit___b_m_p280.html#a7e817dd76c6b5c92b7f4166556bb3d4eaf31c5a3d16e29b172a6ca3759e12c478":[11,0,0,2,8],
 "class_adafruit___b_m_p280.html#a7e817dd76c6b5c92b7f4166556bb3d4eaf31c5a3d16e29b172a6ca3759e12c478":[11,0,0,0,13],
 "class_adafruit___b_m_p280.html#a7e817dd76c6b5c92b7f4166556bb3d4eaf31c5a3d16e29b172a6ca3759e12c478":[11,0,0,1,3],
 "class_adafruit___b_m_p280.html#a7e817dd76c6b5c92b7f4166556bb3d4eaf31c5a3d16e29b172a6ca3759e12c478":[11,0,0,1,8],
@@ -245,9 +246,8 @@ var NAVTREEINDEX7 =
 "class_adafruit___g_p_s.html#afc67f26f7b14d5cc851e13eb7f6aeae3":[11,0,5,38],
 "class_adafruit___g_p_s.html#afe5b0d9d8cdd4351e9ef1be98192249f":[11,0,5,75],
 "class_adafruit___i2_c_device.html":[11,0,6],
-"class_adafruit___i2_c_device.html#a20c6ac28cbaa9e5f63ef6d4687fd4e60":[11,0,6,14],
-"class_adafruit___i2_c_device.html#a20c6ac28cbaa9e5f63ef6d4687fd4e60":[11,0,6,13],
 "class_adafruit___i2_c_device.html#a20c6ac28cbaa9e5f63ef6d4687fd4e60":[11,0,6,12],
-"class_adafruit___i2_c_device.html#a382834acac211d47b471de3180327c06":[11,0,6,23],
-"class_adafruit___i2_c_device.html#a382834acac211d47b471de3180327c06":[11,0,6,22]
+"class_adafruit___i2_c_device.html#a20c6ac28cbaa9e5f63ef6d4687fd4e60":[11,0,6,13],
+"class_adafruit___i2_c_device.html#a20c6ac28cbaa9e5f63ef6d4687fd4e60":[11,0,6,14],
+"class_adafruit___i2_c_device.html#a382834acac211d47b471de3180327c06":[11,0,6,23]
 };
