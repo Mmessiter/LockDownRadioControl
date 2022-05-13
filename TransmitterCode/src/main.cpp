@@ -4516,6 +4516,7 @@ void ZeroDataScreen(){             // ZERO Those parameters that are zeroable
 void  DoNumberedCommands(uint8_t nc){
   
     char pModelsView[] = "page ModelsView";
+    char mn[] = "ModelNumber";
     
     switch(nc){
           case 1:                      // Previous file (modelsview)
@@ -4533,11 +4534,14 @@ void  DoNumberedCommands(uint8_t nc){
         //  break;
         
         case 4:                              // goto models view 
+           Serial.println (ModelNumber);  // heer  
             SendCommand(pModelsView);
             CurrentView = MODELSVIEW;
             UpdateModelsNameEveryWhere();
             BuildDirectory();                 // of SD card
             ShowFileNumber();
+            Serial.println (ModelNumber); 
+            SendValue(mn,ModelNumber);
             break;
        
         default:
