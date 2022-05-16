@@ -4530,8 +4530,9 @@ void  DoNumberedCommands(uint8_t nc){
             CloseModelsFile();
             break;
 
-//      case 3: is spare
-        //  break;
+         case 3:                      // heer
+            ModelNameTimeCheck = 0 ;
+            break;
         
         case 4:                              // goto models view 
            Serial.println (ModelNumber);   
@@ -4828,6 +4829,7 @@ void ButtonWasPressed()
             SendCommand(page_SetupView);
             CurrentMode = NORMAL; // Send data again
             CurrentView = MAINSETUPVIEW;
+            ModelNameTimeCheck = 0;
             b5isGrey = false;
             ClearText();
             return;
@@ -4848,6 +4850,7 @@ void ButtonWasPressed()
             CurrentView = MAINSETUPVIEW;
             b5isGrey = false;
             SendCommand(page_SetupView);
+            ModelNameTimeCheck = 0;
             ClearText();
             return;
         }
@@ -4908,6 +4911,7 @@ void ButtonWasPressed()
             RestoreBrightness();
             SetAudioVolume(AudioVolume);
             SendCommand(page_SetupView);
+            ModelNameTimeCheck = 0;
             SaveTXStuff();
             b5isGrey = false;
             ClearText();
@@ -4918,6 +4922,7 @@ void ButtonWasPressed()
             ClearText();
             SaveAllParameters();
             SendCommand(page_SetupView);
+            ModelNameTimeCheck = 0;
             CurrentMode = NORMAL;
             CurrentView = MAINSETUPVIEW;
             b5isGrey = false; 
@@ -4994,6 +4999,7 @@ void ButtonWasPressed()
             }
             SaveAllParameters();
             SendCommand(page_SetupView);
+            ModelNameTimeCheck = 0;
             CurrentMode = NORMAL;
             CurrentView = MAINSETUPVIEW;
             b5isGrey = false;
@@ -5044,6 +5050,7 @@ void ButtonWasPressed()
             CurrentView = MAINSETUPVIEW;
             b5isGrey = false;
             SendCommand(page_SetupView);
+            ModelNameTimeCheck = 0;
             DoScanEnd();
             ClearText();
             return;
@@ -5414,6 +5421,7 @@ void ButtonWasPressed()
             SendCommand(ProgressEnd);
             UpdateButtonLabels();
             SendCommand(page_SetupView);
+            ModelNameTimeCheck = 0;
             ClearText();
             return;
         }
@@ -5669,6 +5677,7 @@ void ButtonWasPressed()
             CurrentView = MAINSETUPVIEW;
             b5isGrey = false;
             SendCommand(page_SetupView);
+            ModelNameTimeCheck = 0;
             ClearText();
             return;
         }
@@ -5694,6 +5703,7 @@ void ButtonWasPressed()
             CurrentView = MAINSETUPVIEW;
             b5isGrey = false;
             SendCommand(page_SetupView);
+            ModelNameTimeCheck = 0;
             ClearText();
             return;
         }
@@ -5838,6 +5848,7 @@ void ButtonWasPressed()
             if (GetValue(Mode2)==1) SticksMode = 2; 
             SaveAllParameters(); // save trims to SDcard
             SendCommand(page_SetupView);
+            ModelNameTimeCheck = 0;
             CurrentMode = NORMAL;
             CurrentView = MAINSETUPVIEW;
             b5isGrey = false;
@@ -6177,6 +6188,7 @@ void ButtonWasPressed()
                 SaveTXStuff();                     // Save calibrations
                 LoadAllParameters();               // Restore all current model settings
                 SendCommand(page_SetupView);
+                ModelNameTimeCheck = 0;
                 ClearText();
                 return;
             }
@@ -6704,12 +6716,14 @@ char NewName[35];
     if (!InhibitNameCheck){                          // If name is being edited, do not check it.
         ModelNumber = GetValue(ModelsView_ModelNumber); 
         GetText(ModelsView_ModelName,NewName);
+        if (GetButtonPress()) ButtonWasPressed();     // Deal with button ... don't want to miss one!
         if (strlen(NewName) > 3)  {                   // Short texts come in from kbd screen
                 if (strcmp(ModelName,NewName) != 0) { // Change?
                     strcpy(ModelName,NewName);        // Edited name!
                     SaveOneModel(ModelNumber);        // Save it!
                 }
         }
+        if (GetButtonPress()) ButtonWasPressed();     // Deal with button ... don't want to miss one!
         if (LastModelLoaded != ModelNumber) {
             if (ModelNumber >= 1) {                   // Don't use number zero
                  ReadOneModel(ModelNumber);
@@ -6742,14 +6756,15 @@ void loop()
         ButtonWasPressed();          // Deal with button
     }
 
-    if ((millis()-ModelNameTimeCheck) > 300) {  
+    if ((millis()-ModelNameTimeCheck) > 5000) {  
         ModelNameTimeCheck  = millis();
 
         if (CurrentView == MAINSETUPVIEW){ 
             CheckScanButton();           
         }
         if (CurrentView == MODELSVIEW){ 
-            CheckModelName();            // In MODELSVIEW, this function checks correct name is displayed.
+            CheckModelName();                                  // In MODELSVIEW, this function checks correct name is displayed.
+            if (GetButtonPress()) ButtonWasPressed();          // Deal with button
         }
     }
     if (millis() - LastTimeRead >= 1000) {
