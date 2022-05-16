@@ -4808,6 +4808,8 @@ void ButtonWasPressed()
      if (ScreenIsOff) {
          RestoreBrightness();
          ScreenIsOff = false;
+         ClearText();
+         return;
      }
 
     if (strlen(TextIn) > 0) {
