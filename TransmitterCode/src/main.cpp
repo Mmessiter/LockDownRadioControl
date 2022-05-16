@@ -6764,7 +6764,7 @@ void loop()
         }
         if (CurrentView == MODELSVIEW){ 
             CheckModelName();                                  // In MODELSVIEW, this function checks correct name is displayed.
-            if (GetButtonPress()) ButtonWasPressed();          // Deal with button
+            if (GetButtonPress()) ButtonWasPressed();          // Deal with button ... don't want to miss one!
         }
     }
     if (millis() - LastTimeRead >= 1000) {
@@ -6799,8 +6799,6 @@ void loop()
                 break; // CurrentMode >= 4 for no action at all.
         }
     }
-
-
 
     if (BindingNow == 2 && (millis() - BindingTimer) > 100) {
         if (!BoundFlag) {
