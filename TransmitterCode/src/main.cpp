@@ -2002,7 +2002,7 @@ int GetNextNumber(int p1, char text1[CharsMax])
     return k;
 }
 /*********************************************************************************************************************************/
-// MIXES
+// MIXES  (Channel mixes)
 /*********************************************************************************************************************************/
 
 void DoMixes()
@@ -2034,7 +2034,9 @@ int m, c, p, mindeg, maxdeg, TheSum, Result;
 }
 
 /*********************************************************************************************************************************/
-
+//                  My new version of the the traditional "map()" function -- but here with exponential added.
+/*********************************************************************************************************************************/
+ 
 float MapExp(float xx, float Xxmin, float Xxmax, float Yymin, float Yymax, float Expo)
 {
     Expo  = map(Expo, -100, 100, 0, 1);
@@ -2091,7 +2093,7 @@ void GetNewChannelValues()
                 }
             }
         }
-        k += (SubTrims[n]-127) * (TrimFactor/2);                        //  ADDED SUBTRIM (just to output channel, ignoring input channel) (Range 0 - 127 - 254)
+        k += (SubTrims[n]-127) * (TrimFactor/2);                        //  ADD SUBTRIM (just to output channel, ignoring any mapped input channel) (Range 0 - 127 - 254)
         if (l < 4) {
             TrimAmount = (Trims[FlightMode][l] - 80) * TrimFactor;      // TRIMS on lower four channels (80 is mid point !! (range 40 - 80 - 120)) 
             if (!TrimsReversed[FlightMode][l]) {
