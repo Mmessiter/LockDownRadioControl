@@ -2,8 +2,8 @@ var searchData=
 [
   ['failed_0',['Failed',['../_receiver_code_2src_2main_8cpp.html#aed7f6b5b10b7b8235e38d72a5dfc20d8',1,'main.cpp']]],
   ['failsafe_5ftimeout_1',['FAILSAFE_TIMEOUT',['../common_8h.html#a0634ad724c86cd2b4ac7cfebbb622a9c',1,'common.h']]],
-  ['failsafe_5fview_2',['FAILSAFE_VIEW',['../_transmitter_code_2src_2main_8cpp.html#a1ef5fc5af54a467bfc4d8fd805081e3c',1,'main.cpp']]],
-  ['failsafe_5fview_3',['FailSafe_View',['../_radio_functions_8cpp.html#aed2442e1c08957981a20002ae4a12307',1,'RadioFunctions.cpp']]],
+  ['failsafe_5fview_2',['FailSafe_View',['../_radio_functions_8cpp.html#aed2442e1c08957981a20002ae4a12307',1,'RadioFunctions.cpp']]],
+  ['failsafe_5fview_3',['FAILSAFE_VIEW',['../_transmitter_code_2src_2main_8cpp.html#a1ef5fc5af54a467bfc4d8fd805081e3c',1,'main.cpp']]],
   ['fhssview_4',['FhssView',['../_radio_functions_8cpp.html#a878e0e1e38b67ffd5e1de07170efba1c',1,'RadioFunctions.cpp']]],
   ['filechannel_5',['FILECHANNEL',['../_transmitter_code_2src_2main_8cpp.html#a25a02fd19ba6092af59f73a9de071bd2',1,'main.cpp']]],
   ['filedatarate_6',['FILEDATARATE',['../_transmitter_code_2src_2main_8cpp.html#a632cdd81885fffa95960e573cc6b42b3',1,'main.cpp']]],

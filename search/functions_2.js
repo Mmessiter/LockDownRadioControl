@@ -19,10 +19,11 @@ var searchData=
   ['checkwhetheritstimetohop_16',['CheckWhetherItsTimeToHop',['../radio_8h.html#ad21c5c00ff554736e4e21cee13773cd5',1,'radio.h']]],
   ['clearackpayload_17',['ClearAckPayload',['../radio_8h.html#a5a26715a721e1073d6ae00498282c056',1,'radio.h']]],
   ['clearbox_18',['ClearBox',['../_transmitter_code_2src_2main_8cpp.html#a5aeea47b9d855ae9911bae1115d02de7',1,'main.cpp']]],
-  ['cleartext_19',['ClearText',['../_transmitter_code_2src_2main_8cpp.html#af0852678d8e89501acee8951f09d3b43',1,'main.cpp']]],
-  ['closemodelsfile_20',['CloseModelsFile',['../_transmitter_code_2src_2main_8cpp.html#a6922974b734cfe3a511e074a2d6ac33c',1,'main.cpp']]],
-  ['common_5finit_21',['common_init',['../class_adafruit___g_p_s.html#ab8a2fe20ce1874b10a6e9f007c236b30',1,'Adafruit_GPS']]],
-  ['compassangle_22',['compassAngle',['../class_adafruit___g_p_s.html#a06b7e12e38f1b00df058a253364215db',1,'Adafruit_GPS']]],
-  ['compress_23',['Compress',['../_radio_functions_8cpp.html#ab46df249e949de237fc3bacdc5225934',1,'RadioFunctions.cpp']]],
-  ['courseto_24',['courseTo',['../class_tiny_g_p_s_plus.html#a82b8fff820573de45c9ae98df3abbdfa',1,'TinyGPSPlus::courseTo(double lat1, double long1, double lat2, double long2)'],['../class_tiny_g_p_s_plus.html#a82b8fff820573de45c9ae98df3abbdfa',1,'TinyGPSPlus::courseTo(double lat1, double long1, double lat2, double long2)'],['../class_tiny_g_p_s_plus.html#af338c18ccf58a47659be1ffc8259541d',1,'TinyGPSPlus::courseTo(double lat1, double long1, double lat2, double long2)']]]
+  ['clearmacrosbuffer_19',['ClearMacrosBuffer',['../_transmitter_code_2src_2main_8cpp.html#acd961f945e20131f2c5204962c22fa7b',1,'main.cpp']]],
+  ['cleartext_20',['ClearText',['../_transmitter_code_2src_2main_8cpp.html#af0852678d8e89501acee8951f09d3b43',1,'main.cpp']]],
+  ['closemodelsfile_21',['CloseModelsFile',['../_transmitter_code_2src_2main_8cpp.html#a6922974b734cfe3a511e074a2d6ac33c',1,'main.cpp']]],
+  ['common_5finit_22',['common_init',['../class_adafruit___g_p_s.html#ab8a2fe20ce1874b10a6e9f007c236b30',1,'Adafruit_GPS']]],
+  ['compassangle_23',['compassAngle',['../class_adafruit___g_p_s.html#a06b7e12e38f1b00df058a253364215db',1,'Adafruit_GPS']]],
+  ['compress_24',['Compress',['../_radio_functions_8cpp.html#ab46df249e949de237fc3bacdc5225934',1,'RadioFunctions.cpp']]],
+  ['courseto_25',['courseTo',['../class_tiny_g_p_s_plus.html#a82b8fff820573de45c9ae98df3abbdfa',1,'TinyGPSPlus::courseTo(double lat1, double long1, double lat2, double long2)'],['../class_tiny_g_p_s_plus.html#a82b8fff820573de45c9ae98df3abbdfa',1,'TinyGPSPlus::courseTo(double lat1, double long1, double lat2, double long2)'],['../class_tiny_g_p_s_plus.html#af338c18ccf58a47659be1ffc8259541d',1,'TinyGPSPlus::courseTo(double lat1, double long1, double lat2, double long2)']]]
 ];
