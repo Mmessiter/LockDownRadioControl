@@ -548,16 +548,6 @@ bool     CopyTrimsToAll     = true;
 bool     MacroRunning       = false;
 
 
-// Macros definitions
-#define MAXMACROS               8
-#define BYTESPERMACRO           6
-// offsets into macros' buffer
-#define MACROTRIGGERCHANNEL     0                       // 1 - 16. 0 = dissabled.
-#define MACROSTARTTIME          1                       // In ** >> 10ths << ** of a second since trigger. ( = millis() * 100 ) up to 25.4 seconds
-#define MACRODURATION           2                       // In ** >> 10ths << ** of a second since start    ( = millis() * 100 ) up to 25.4 seconds
-#define MACROMOVECHANNEL        3                       // Which channel to move.
-#define MACROMOVETOPOSITION     4                       // Where to put said channel for said duration.
-
 uint8_t  MacrosBuffer[MAXMACROS][BYTESPERMACRO];        // macros' buffer
 
 
@@ -648,7 +638,7 @@ void ClearMacrosBuffer(){
 
 
 void LoadDummyMacro(){
-      MacrosBuffer[0][MACROTRIGGERCHANNEL]      = 15;   // Use channel 15 as trigger
+      MacrosBuffer[0][MACROTRIGGERCHANNEL]      = 11;   // Use channel 15 as trigger
       MacrosBuffer[0][MACROSTARTTIME]           = 0;    // Start immediately
       MacrosBuffer[0][MACRODURATION]            = 10;   // Sustain for one second
       MacrosBuffer[0][MACROMOVECHANNEL]         = 5;    // Move Channel 5

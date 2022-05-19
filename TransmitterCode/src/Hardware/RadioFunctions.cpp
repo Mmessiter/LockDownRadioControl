@@ -122,14 +122,25 @@ uint32_t ThisMoment = millis();
 // ***************** Function to run macro if defined **************(****************************************
 /************************************************************************************************************/
 void ExecuteMacro(){
- 
-   //#define MINMICROS 500
-   //#define MAXMICROS 2500
-   
-   //SendBuffer[0] = MINMICROS + ((MAXMICROS-MINMICROS)/2); 
+
+    //  MacrosBuffer[0][MACROTRIGGERCHANNEL]      = 15;   // Use channel 15 as trigger
+    //  MacrosBuffer[0][MACROSTARTTIME]           = 0;    // Start immediately
+    //  MacrosBuffer[0][MACRODURATION]            = 10;   // Sustain for one second
+    //  MacrosBuffer[0][MACROMOVECHANNEL]         = 5;    // Move Channel 5
+    //  MacrosBuffer[0][MACROMOVETOPOSITION]      = 180;  // Put it fully on
+    //  #define MINMICROS 500
+    //  #define MAXMICROS 2500
+
+   for (u_int8_t i = 0; i < MAXMACROS; ++i){
+                if (MacrosBuffer[0][MACROTRIGGERCHANNEL]) {
+                            if (SendBuffer[MACROTRIGGERCHANNEL] >= (MAXMICROS - 20)){
+                                Serial.println( "MACRO!");
+                            }
+                }
+   }
 }
 /************************************************************************************************************/
-// ***************** Function to send data to receiver ******************************************************
+//****************** Function to send data to receiver ******************************************************
 /************************************************************************************************************/
 
 void SendData()
@@ -143,7 +154,7 @@ void SendData()
     if (((millis() - TxPace) >= PACEMAKER) || (LostContactFlag)){
         TxPace = millis();
         GetNewChannelValues();                    // Load SendBuffer with new servo positions
-        if (MacroRunning) ExecuteMacro();         // Modify it if macro is running
+        if (!MacroRunning) ExecuteMacro();         // Modify it if macro is running
         if (DoSbusSendOnly)                       // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
         {
             ReadSwitches();
