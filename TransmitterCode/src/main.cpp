@@ -545,23 +545,20 @@ bool     SpeakingClock      = true;
 bool     ClockSpoken        = false;
 bool     AnnounceBanks      = true;
 bool     CopyTrimsToAll     = true;
-
-bool     MacroRunning     = false;
+bool     MacroRunning       = false;
 
 
 // Macros definitions
 #define MAXMACROS               8
-#define BYTESPERMACRO           16
+#define BYTESPERMACRO           6
 // offsets into macros' buffer
-#define MacroTriggerChannel     0                       // 1 - 16. 0 = dissabled.
-#define MacroStartTime          1                       // in 100s of a second since trigger.
-#define MacroDuration           2                       // in 100s of a second.
-#define MacroMoveChannel        3                       // Which channel to move.
-#define MacroMoveExtent         4                       // where to put it.
+#define MACROTRIGGERCHANNEL     0                       // 1 - 16. 0 = dissabled.
+#define MACROSTARTTIME          1                       // In ** >> 10ths << ** of a second since trigger. ( = millis() * 100 ) up to 25.4 seconds
+#define MACRODURATION           2                       // In ** >> 10ths << ** of a second since start    ( = millis() * 100 ) up to 25.4 seconds
+#define MACROMOVECHANNEL        3                       // Which channel to move.
+#define MACROMOVETOPOSITION     4                       // Where to put said channel for said duration.
 
 uint8_t  MacrosBuffer[MAXMACROS][BYTESPERMACRO];        // macros' buffer
-
-
 
 
 
@@ -631,6 +628,31 @@ void ClearMacrosBuffer(){
                 MacrosBuffer[i][j] = 0;
     } 
   }
+}
+
+
+/**************************************************** LoadDummyMacro() ********************************************************/
+
+// Macros definitions
+//#define MAXMACROS               8
+//#define BYTESPERMACRO           6
+
+// offsets into macros' buffer
+
+//#define MACROTRIGGERCHANNEL     0                       // 1 - 16. 0 = dissabled.
+//#define MACROSTARTTIME          1                       // In ** >> 10ths << ** of a second since trigger. ( = millis() * 100 ) up to 25.4 seconds
+//#define MACRODURATION           2                       // In ** >> 10ths << ** of a second since start    ( = millis() * 100 ) up to 25.4 seconds
+//#define MACROMOVECHANNEL        3                       // Which channel to move.
+//#define MACROMOVETOPOSITION     4                       // Where to put said channel for said duration.
+//uint8_t  MacrosBuffer[MAXMACROS][BYTESPERMACRO];        // macros' buffer
+
+
+void LoadDummyMacro(){
+      MacrosBuffer[0][MACROTRIGGERCHANNEL]      = 15;   // Use channel 15 as trigger
+      MacrosBuffer[0][MACROSTARTTIME]           = 0;    // Start immediately
+      MacrosBuffer[0][MACRODURATION]            = 10;   // Sustain for one second
+      MacrosBuffer[0][MACROMOVECHANNEL]         = 5;    // Move Channel 5
+      MacrosBuffer[0][MACROMOVETOPOSITION]      = 180;  // Put it fully on
 }
 
 /************************************************************************************************************/
@@ -3019,6 +3041,8 @@ void setup()
     SetAudioVolume(AudioVolume);
     if (PlayFanfare) SendCommand(OpeningFanfare);
     ScreenTimeTimer = millis();
+    ClearMacrosBuffer();
+    LoadDummyMacro();
     RestoreBrightness();
 }
 /*********************************************************************************************************************************/
