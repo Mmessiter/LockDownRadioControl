@@ -230,7 +230,7 @@ uint8_t       PreviousTrim     = 255;
 uint32_t      TrimTimer        = 0;  
 uint16_t      TrimRepeatSpeed  = 600;   
 uint16_t      DefaultTrimRepeatSpeed  = 600;   
-bool          MacroRunning     = false;
+
 
 // ************************************* AckPayload structure ******************************************************
 /**
@@ -546,6 +546,25 @@ bool     ClockSpoken        = false;
 bool     AnnounceBanks      = true;
 bool     CopyTrimsToAll     = true;
 
+bool     MacroRunning     = false;
+
+
+// Macros definitions
+#define MAXMACROS               8
+#define BYTESPERMACRO           16
+// offsets into macros' buffer
+#define MacroTriggerChannel     0                       // 1 - 16. 0 = dissabled.
+#define MacroStartTime          1                       // in 100s of a second since trigger.
+#define MacroDuration           2                       // in 100s of a second.
+#define MacroMoveChannel        3                       // Which channel to move.
+#define MacroMoveExtent         4                       // where to put it.
+
+uint8_t  MacrosBuffer[MAXMACROS][BYTESPERMACRO];        // macros' buffer
+
+
+
+
+
 // ***************************************** Extra Prototypes **********************************************
 
 void SendText(char* tbox, char* NewWord); // needed a prototype or two here!
@@ -602,6 +621,16 @@ void GetSlaveChannelValues()
             }
         }
     }
+}
+
+/**************************** Clear any Macros ********************************************************************************/
+
+void ClearMacrosBuffer(){
+ for (uint8_t j = 0; j < BYTESPERMACRO; ++j){
+    for (uint8_t i = 0; i < MAXMACROS; ++i){
+                MacrosBuffer[i][j] = 0;
+    } 
+  }
 }
 
 /************************************************************************************************************/
