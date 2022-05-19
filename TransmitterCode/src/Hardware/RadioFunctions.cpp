@@ -129,7 +129,7 @@ void SendData()
     }
     if (((millis() - TxPace) >= PACEMAKER) || (LostContactFlag)){
         TxPace = millis();
-        GetNewChannelValues();                // Load SendBuffer with new servo positions
+        GetNewChannelValues();                    // Load SendBuffer with new servo positions
         if (DoSbusSendOnly)                       // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
         {
             ReadSwitches();
