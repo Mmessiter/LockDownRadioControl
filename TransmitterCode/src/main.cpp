@@ -82,20 +82,6 @@
  */
 // ************************************************** TRANSMITTER CODE **************************************************
 
-#define CHANNELSUSED       16                  // 16 Channels
-#define MAXMIXES           32                  // 32 mixes
-#define TICKSPERMINUTE     60000               // millis() += 60000 per minute
-#define PROPOCHANNELS      8                   // Only 4 have knobs / 2 sticks (= 4 hall sensors)
-#define FLIGHTMODESWITCH   4                   // Default MODE switch
-#define AUTOSWITCH         1                   // Default AUTO switch
-#define DEFAULTPIPEADDRESS 0xBABE1E5420LL      // Pipe address for startup - any value but MUST match RX
-#define LOWBATTERY         42                  // percent for warning (User definable now)
-#define CE_PIN             9                   // for SPI to nRF24L01
-#define CSN_PIN            10                  // for SPI to nRF24L01
-#define INACTIVITYTIMEOUT  10 * TICKSPERMINUTE // Default time after which to switch off
-#define INACTIVITYMINIMUM  5  * TICKSPERMINUTE // Inactivity timeout minimum is 5 minutes
-#define INACTIVITYMAXIMUM  30 * TICKSPERMINUTE // Inactivity timeout maximum is 30 minutes
-#define DS1307_ADDRESS     0x68
 
 // CurrentMode values (=WHETHER TO SEND DATA)
 
@@ -244,6 +230,7 @@ uint8_t       PreviousTrim     = 255;
 uint32_t      TrimTimer        = 0;  
 uint16_t      TrimRepeatSpeed  = 600;   
 uint16_t      DefaultTrimRepeatSpeed  = 600;   
+bool          MacroRunning     = false;
 
 // ************************************* AckPayload structure ******************************************************
 /**
@@ -2052,6 +2039,13 @@ float MapExp(float xx, float Xxmin, float Xxmax, float Yymin, float Yymax, float
 void GetNewChannelValues()
 {
     uint16_t k = 0, l = 0, m = 0, n = 0, TrimAmount;
+    // key: -
+    // m = input value
+    // l = input channel
+    // n = output channel
+    // k = interim output result
+    // TrimAmount = TrimAmount :-)
+
     for (n = 0; n < CHANNELSUSED; ++n) {
         l = InPutStick[n];                                      // input sticks knobs & switches are now mapped by user
         if (l <= 7)

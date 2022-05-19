@@ -10,6 +10,24 @@
 #define TXVERSION_MINIMUS 4
 
 
+
+#define CHANNELSUSED       16                  // 16 Channels
+#define MAXMIXES           32                  // 32 mixes
+#define TICKSPERMINUTE     60000               // millis() += 60000 per minute
+#define PROPOCHANNELS      8                   // Only 4 have knobs / 2 sticks (= 4 hall sensors)
+#define FLIGHTMODESWITCH   4                   // Default MODE switch
+#define AUTOSWITCH         1                   // Default AUTO switch
+#define DEFAULTPIPEADDRESS 0xBABE1E5420LL      // Pipe address for startup - any value but MUST match RX
+#define LOWBATTERY         42                  // percent for warning (User definable now)
+#define CE_PIN             9                   // for SPI to nRF24L01
+#define CSN_PIN            10                  // for SPI to nRF24L01
+#define INACTIVITYTIMEOUT  10 * TICKSPERMINUTE // Default time after which to switch off
+#define INACTIVITYMINIMUM  5  * TICKSPERMINUTE // Inactivity timeout minimum is 5 minutes
+#define INACTIVITYMAXIMUM  30 * TICKSPERMINUTE // Inactivity timeout maximum is 30 minutes
+#define DS1307_ADDRESS     0x68
+
+
+
 // **************************************************************************
 //                    AUDIO (ie  INTELLIGENT NEXTION)                       *
 //***************************************************************************
@@ -30,6 +48,7 @@
 
 #define MINMICROS 500
 #define MAXMICROS 2500
+
 
 // **************************************************************************
 //                            FHSS PARAMETERS                               *
@@ -135,6 +154,12 @@ extern bool           BuddyMaster;
 extern uint16_t       BackGroundColour;
 extern uint16_t       HighlightColour;
 extern uint16_t       ForeGroundColour;
+extern bool           MacroRunning;
+extern uint16_t ChannelMax[CHANNELSUSED + 1];       //    output of pots at max
+extern uint16_t ChannelMidHi[CHANNELSUSED + 1];     //    output of pots at MidHi
+extern uint16_t ChannelCentre[CHANNELSUSED + 1];    //    output of pots at Centre
+extern uint16_t ChannelMidLow[CHANNELSUSED + 1];    //    output of pots at MidLow
+extern uint16_t ChannelMin[CHANNELSUSED + 1];       //    output of pots at min
 
 extern void  GetSlaveChannelValues();
 extern void  KickTheDog();

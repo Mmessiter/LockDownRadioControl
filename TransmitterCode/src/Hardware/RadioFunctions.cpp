@@ -117,6 +117,21 @@ uint32_t ThisMoment = millis();
       // if (BoundFlag) SendData();                                       
     }
 }
+
+
+
+/************************************************************************************************************/
+// ***************** Function to run macro if defined **************(****************************************
+/************************************************************************************************************/
+void ExecuteMacro(){
+ 
+   //#define MINMICROS 500
+   //#define MAXMICROS 2500
+   
+   //SendBuffer[0] = MINMICROS + ((MAXMICROS-MINMICROS)/2); 
+}
+/************************************************************************************************************/
+// ***************** Function to send data to receiver ******************************************************
 /************************************************************************************************************/
 
 void SendData()
@@ -130,6 +145,7 @@ void SendData()
     if (((millis() - TxPace) >= PACEMAKER) || (LostContactFlag)){
         TxPace = millis();
         GetNewChannelValues();                    // Load SendBuffer with new servo positions
+        if (MacroRunning) ExecuteMacro();         // Modify it if macro is running
         if (DoSbusSendOnly)                       // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
         {
             ReadSwitches();
