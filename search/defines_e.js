@@ -42,6 +42,6 @@ var searchData=
   ['pmtk_5fstandby_39',['PMTK_STANDBY',['../_receiver_code_2lib_2_adafruit___g_p_s___library_2src_2_adafruit___p_m_t_k_8h.html#a9772abe32307f50632edef118f08454a',1,'PMTK_STANDBY():&#160;Adafruit_PMTK.h'],['../_sensor_hub_l_c_2lib_2_adafruit___p_m_t_k_8h.html#a9772abe32307f50632edef118f08454a',1,'PMTK_STANDBY():&#160;Adafruit_PMTK.h'],['../_sensor_hub_t32_2lib_2_adafruit___p_m_t_k_8h.html#a9772abe32307f50632edef118f08454a',1,'PMTK_STANDBY():&#160;Adafruit_PMTK.h']]],
   ['pmtk_5fstandby_5fsuccess_40',['PMTK_STANDBY_SUCCESS',['../_receiver_code_2lib_2_adafruit___g_p_s___library_2src_2_adafruit___p_m_t_k_8h.html#a1a07d9f206b33f00eb3ea26af4496f8b',1,'PMTK_STANDBY_SUCCESS():&#160;Adafruit_PMTK.h'],['../_sensor_hub_l_c_2lib_2_adafruit___p_m_t_k_8h.html#a1a07d9f206b33f00eb3ea26af4496f8b',1,'PMTK_STANDBY_SUCCESS():&#160;Adafruit_PMTK.h'],['../_sensor_hub_t32_2lib_2_adafruit___p_m_t_k_8h.html#a1a07d9f206b33f00eb3ea26af4496f8b',1,'PMTK_STANDBY_SUCCESS():&#160;Adafruit_PMTK.h']]],
   ['power_5foff_5fpin_41',['POWER_OFF_PIN',['../_transmitter_code_2src_2main_8cpp.html#aac8f9c268e406507be95a1255281323c',1,'main.cpp']]],
-  ['propochannels_42',['PROPOCHANNELS',['../_transmitter_code_2src_2main_8cpp.html#a19677884790860fea7a21dae72e1b862',1,'main.cpp']]],
+  ['propochannels_42',['PROPOCHANNELS',['../_radio_functions_8h.html#a19677884790860fea7a21dae72e1b862',1,'RadioFunctions.h']]],
   ['purple_43',['Purple',['../_transmitter_code_2src_2main_8cpp.html#a5168ce33eb581e85fbfa454e89012bfb',1,'main.cpp']]]
 ];

@@ -38,7 +38,7 @@ var searchData=
   ['fixquality_5f3d_35',['fixquality_3d',['../class_adafruit___g_p_s.html#a95ed044ee9661cd7afd1b81595cb8dd0',1,'Adafruit_GPS']]],
   ['flightmode_36',['FlightMode',['../_transmitter_code_2src_2main_8cpp.html#a932ba83a0eaedd0b0237c0005a77e508',1,'main.cpp']]],
   ['flightmodesused_37',['FLIGHTMODESUSED',['../_transmitter_code_2src_2main_8cpp.html#a29485fb8e0e98e37e333f2954f50e541',1,'main.cpp']]],
-  ['flightmodeswitch_38',['FLIGHTMODESWITCH',['../_transmitter_code_2src_2main_8cpp.html#a360ae40b5dcb40c9beb3fd1af7134f99',1,'main.cpp']]],
+  ['flightmodeswitch_38',['FLIGHTMODESWITCH',['../_radio_functions_8h.html#a360ae40b5dcb40c9beb3fd1af7134f99',1,'RadioFunctions.h']]],
   ['fmswitch_39',['FMSwitch',['../_transmitter_code_2src_2main_8cpp.html#a452f6aed1252d3f1da8a0ceb07552c07',1,'main.cpp']]],
   ['fmt_40',['fmt',['../structnmea__datavalue__t.html#a144e0518233b217c001da1df4d69c243',1,'nmea_datavalue_t']]],
   ['force_5fredisplay_41',['Force_ReDisplay',['../_transmitter_code_2src_2main_8cpp.html#aa1e81e58421a34fdfd7bfb31925f5a90',1,'main.cpp']]],

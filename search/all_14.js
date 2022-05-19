@@ -10,7 +10,7 @@ var searchData=
   ['thisradio_7',['ThisRadio',['../radio_8h.html#a25cc3bb5cb94f4bbef0f2c5b79140c20',1,'ThisRadio():&#160;radio.h'],['../_radio_functions_8h.html#a2e695c7565eda3b02ff77324e274772b',1,'ThisRadio():&#160;radio.h'],['../_transmitter_code_2src_2main_8cpp.html#a2e695c7565eda3b02ff77324e274772b',1,'ThisRadio():&#160;main.cpp']]],
   ['thissentence_8',['thisSentence',['../class_adafruit___g_p_s.html#a5cc24c3c10eb383289db357cd69d14cc',1,'Adafruit_GPS']]],
   ['thissource_9',['thisSource',['../class_adafruit___g_p_s.html#a8db833810cb80048d883db2f4186bb3e',1,'Adafruit_GPS']]],
-  ['ticksperminute_10',['TICKSPERMINUTE',['../_transmitter_code_2src_2main_8cpp.html#a97290be0c518c6c918c843e88a7f3640',1,'main.cpp']]],
+  ['ticksperminute_10',['TICKSPERMINUTE',['../_radio_functions_8h.html#a97290be0c518c6c918c843e88a7f3640',1,'RadioFunctions.h']]],
   ['time_11',['time',['../class_tiny_g_p_s_plus.html#a377c975527fa24b45fb86356505eb134',1,'TinyGPSPlus']]],
   ['timermillis_12',['TimerMillis',['../_transmitter_code_2src_2main_8cpp.html#a648c27b8c8c314b32a3e2f1c11601e91',1,'main.cpp']]],
   ['timestamp_13',['timestamp',['../structsensors__event__t.html#acd3be1560458b3e3bf52f93f744e8238',1,'sensors_event_t']]],

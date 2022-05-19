@@ -1,5 +1,13 @@
 var NAVTREEINDEX11 =
 {
+"structsensor__t.html#ae1d59df64438923d3bd95f2416c32203":[11,0,15,6],
+"structsensors__color__t.html":[11,0,16],
+"structsensors__color__t.html#a0afbff980c17fbacdab1666735f3d3e6":[11,0,16,4],
+"structsensors__color__t.html#a1bf461b5c728e323f8883a3785c7c60b":[11,0,16,0],
+"structsensors__color__t.html#a4d76803c2e83303f611cf2a7910eaf17":[11,0,16,1],
+"structsensors__color__t.html#ac91ecea980718cf134f60c497d2a0049":[11,0,16,2],
+"structsensors__color__t.html#acdeed981e7df8c701e09d4b2fdb9a40c":[11,0,16,3],
+"structsensors__event__t.html":[11,0,17],
 "structsensors__event__t.html#a2134d60fdb21e3495c595a2df2f5cece":[11,0,17,16],
 "structsensors__event__t.html#a2ec6e34e1a6cf832d85ca19066bd38f0":[11,0,17,9],
 "structsensors__event__t.html#a456259aaeb265913281d7ffbd8ad8697":[11,0,17,4],

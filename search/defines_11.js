@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['ticksperminute_0',['TICKSPERMINUTE',['../_transmitter_code_2src_2main_8cpp.html#a97290be0c518c6c918c843e88a7f3640',1,'main.cpp']]],
+  ['ticksperminute_0',['TICKSPERMINUTE',['../_radio_functions_8h.html#a97290be0c518c6c918c843e88a7f3640',1,'RadioFunctions.h']]],
   ['trim1a_1',['TRIM1A',['../_transmitter_code_2src_2main_8cpp.html#a311ab302366bcdb533945702481ef679',1,'main.cpp']]],
   ['trim1b_2',['TRIM1B',['../_transmitter_code_2src_2main_8cpp.html#a1b7055703e32abc23ae73c9f0c6c218f',1,'main.cpp']]],
   ['trim2a_3',['TRIM2A',['../_transmitter_code_2src_2main_8cpp.html#a705e6cd0d0b7db4698cd2b94dd78b131',1,'main.cpp']]],

@@ -12,7 +12,7 @@ var searchData=
   ['filesview_9',['FILESVIEW',['../_transmitter_code_2src_2main_8cpp.html#aaed5fa6e1bbaac4e862e2acad1cb145d',1,'main.cpp']]],
   ['filetimeout_10',['FILETIMEOUT',['../_transmitter_code_2src_2main_8cpp.html#ac23f3d9653dfa68ab2f39567096545e6',1,'main.cpp']]],
   ['flightmodesused_11',['FLIGHTMODESUSED',['../_transmitter_code_2src_2main_8cpp.html#a29485fb8e0e98e37e333f2954f50e541',1,'main.cpp']]],
-  ['flightmodeswitch_12',['FLIGHTMODESWITCH',['../_transmitter_code_2src_2main_8cpp.html#a360ae40b5dcb40c9beb3fd1af7134f99',1,'main.cpp']]],
+  ['flightmodeswitch_12',['FLIGHTMODESWITCH',['../_radio_functions_8h.html#a360ae40b5dcb40c9beb3fd1af7134f99',1,'RadioFunctions.h']]],
   ['frequencyscount_13',['FREQUENCYSCOUNT',['../common_8h.html#afe5bce36baf737bd284d43cd0e805fdb',1,'common.h']]],
   ['frequencyscount1_14',['FREQUENCYSCOUNT1',['../common_8h.html#a71a3cc3c3b499cb9329172835e5a1df8',1,'common.h']]],
   ['frontview_15',['FRONTVIEW',['../_radio_functions_8cpp.html#a8204cbed1c612a522a43c80f071eee2a',1,'FRONTVIEW():&#160;RadioFunctions.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a8204cbed1c612a522a43c80f071eee2a',1,'FRONTVIEW():&#160;main.cpp']]]
