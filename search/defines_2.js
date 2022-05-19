@@ -11,5 +11,5 @@ var searchData=
   ['boxsize_8',['BOXSIZE',['../_transmitter_code_2src_2main_8cpp.html#a4f84c7cd953e90b218a9baa12f6e5e35',1,'main.cpp']]],
   ['brown_9',['Brown',['../_transmitter_code_2src_2main_8cpp.html#a3057a3f4d88842d385cd5ad6c5ddf80f',1,'main.cpp']]],
   ['buffersize_10',['BUFFERSIZE',['../_transmitter_code_2src_2main_8cpp.html#ac3146f1e9227301bb4aa518f4d336cee',1,'main.cpp']]],
-  ['bytespermacro_11',['BYTESPERMACRO',['../_transmitter_code_2src_2main_8cpp.html#acb6ba8383362a5f2efee8416bc4300c9',1,'main.cpp']]]
+  ['bytespermacro_11',['BYTESPERMACRO',['../_radio_functions_8h.html#acb6ba8383362a5f2efee8416bc4300c9',1,'RadioFunctions.h']]]
 ];

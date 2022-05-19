@@ -1,6 +1,7 @@
 var _radio_functions_8h =
 [
     [ "AUTOSWITCH", "_radio_functions_8h.html#aa4414f3ff790f01b8bb41a0f51d1518f", null ],
+    [ "BYTESPERMACRO", "_radio_functions_8h.html#acb6ba8383362a5f2efee8416bc4300c9", null ],
     [ "CALIBRATELIMITS", "_radio_functions_8h.html#a8d671ce93ba33f2f6b5c314108d3592d", null ],
     [ "CE_PIN", "_radio_functions_8h.html#abb388c9dfbdca89b280a12c4af1a030f", null ],
     [ "CENTRESTICKS", "_radio_functions_8h.html#a53bc52cfc1253f58c2f3835aa39205a3", null ],
@@ -15,6 +16,12 @@ var _radio_functions_8h =
     [ "KICKRATE", "_radio_functions_8h.html#a639fb69a9b4f236e3b1a16435b82bb81", null ],
     [ "LOSTCONTACTCUTOFF", "_radio_functions_8h.html#ac5b4f54697bc5a8d58ef0c92c094c6b6", null ],
     [ "LOWBATTERY", "_radio_functions_8h.html#adca16f7a43b448d4584dcb62897068a5", null ],
+    [ "MACRODURATION", "_radio_functions_8h.html#a8babc15294184f1b08694b6e9a5d36be", null ],
+    [ "MACROMOVECHANNEL", "_radio_functions_8h.html#afc89d706ecd6b404393785f7b755303d", null ],
+    [ "MACROMOVETOPOSITION", "_radio_functions_8h.html#aece95f4a89ade64076cbe91357d64b45", null ],
+    [ "MACROSTARTTIME", "_radio_functions_8h.html#a0ed0c416beb6781a8c8a52c37d059957", null ],
+    [ "MACROTRIGGERCHANNEL", "_radio_functions_8h.html#af8ab3c768a28f2a28475c81309bcf379", null ],
+    [ "MAXMACROS", "_radio_functions_8h.html#af9fb1b689f62242b5e960b18dbe76761", null ],
     [ "MAXMICROS", "_radio_functions_8h.html#a843e3db36f734b45096220f7ca4b8d9f", null ],
     [ "MAXMIXES", "_radio_functions_8h.html#a78eca4e2f9590ad626beb2486d11610d", null ],
     [ "MINMICROS", "_radio_functions_8h.html#ac67e087c11a86a3790c656a29f8c7195", null ],
@@ -98,6 +105,7 @@ var _radio_functions_8h =
     [ "JustHoppedFlag", "_radio_functions_8h.html#ae768cbeda38b92908ae481b943893e3b", null ],
     [ "LostContactFlag", "_radio_functions_8h.html#ad5f463902789a79fc622b3befd9409b9", null ],
     [ "MacroRunning", "_radio_functions_8h.html#ab41024c54f4fc919aa0d036c388aef23", null ],
+    [ "MacrosBuffer", "_radio_functions_8h.html#a961efaa3441c7a8fc7ecea83b2cd3260", null ],
     [ "NewPipe", "_radio_functions_8h.html#a594f07765a7ed90e0830d4e2f69a7112", null ],
     [ "NextChannel", "_radio_functions_8h.html#a4c9fbf66b2c98730d43dc9dfe573a998", null ],
     [ "NextChannelNumber", "_radio_functions_8h.html#a372b457a109ccee3253b219df1a47412", null ],

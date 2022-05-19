@@ -2,7 +2,7 @@ var searchData=
 [
   ['macaddress_0',['MacAddress',['../_transmitter_code_2src_2main_8cpp.html#afa96b8a8e9de30ff51fef920111b8275',1,'main.cpp']]],
   ['macrorunning_1',['MacroRunning',['../_radio_functions_8h.html#ab41024c54f4fc919aa0d036c388aef23',1,'MacroRunning():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#ab41024c54f4fc919aa0d036c388aef23',1,'MacroRunning():&#160;main.cpp']]],
-  ['macrosbuffer_2',['MacrosBuffer',['../_transmitter_code_2src_2main_8cpp.html#a961efaa3441c7a8fc7ecea83b2cd3260',1,'main.cpp']]],
+  ['macrosbuffer_2',['MacrosBuffer',['../_radio_functions_8h.html#a961efaa3441c7a8fc7ecea83b2cd3260',1,'MacrosBuffer():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a961efaa3441c7a8fc7ecea83b2cd3260',1,'MacrosBuffer():&#160;main.cpp']]],
   ['mag_3',['mag',['../class_adafruit___g_p_s.html#a13af36459c90392c2378ce14248cfcfb',1,'Adafruit_GPS']]],
   ['magnetic_4',['magnetic',['../structsensors__event__t.html#aa634d41a024e1cacdceecf85ec326698',1,'sensors_event_t']]],
   ['magvariation_5',['magvariation',['../class_adafruit___g_p_s.html#a2c53f008694ebee3871583cb44842033',1,'Adafruit_GPS']]],
