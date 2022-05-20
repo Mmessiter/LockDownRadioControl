@@ -28,16 +28,21 @@
 
 
 
-// Macros definitions
-#define MAXMACROS               8
-#define BYTESPERMACRO           7                       // 1 spare just in case
-// offsets into macros' buffer
-#define MACROTRIGGERCHANNEL     0                       // 1 - 16. 0 = dissabled.
+// **************************************************************************
+//                              Macros                                      *
+// **************************************************************************
+
+#define MAXMACROS               4                       // 4 macros enough for now?
+#define BYTESPERMACRO           6                       // 6 bytes each         
+
+// ********************* Offsets within macros' buffer ***********************
+
+#define MACROTRIGGERCHANNEL     0                       // 1 - 16. 0 means dissabled.
 #define MACROSTARTTIME          1                       // In ** >> 10ths << ** of a second since trigger. ( = millis() * 100 ) up to 25.4 seconds
 #define MACRODURATION           2                       // In ** >> 10ths << ** of a second since start    ( = millis() * 100 ) up to 25.4 seconds
 #define MACROMOVECHANNEL        3                       // Which channel to move.
-#define MACROMOVETOPOSITION     4                       // Where to put said channel for said duration.
-#define MACRORUNNINGNOW         5                       // Running flag (BIT 0 running but timer OFF,  BIT 1 running and timer ON)
+#define MACROMOVETOPOSITION     4                       // Where to put said channel for said duration. (0 -180)
+#define MACRORUNNINGNOW         5                       // Running flag (BIT 0 running/not running,  BIT 1 = Timer active / inactive)
 
 // **************************************************************************
 //                    AUDIO (ie  INTELLIGENT NEXTION)                       *
@@ -107,7 +112,7 @@
 //             UNCOMMENT ANY OF THESE for that bit of debug info            *
 //***************************************************************************
 
- //#define DB_NEXTION        // Debug NEXTION and SD card data
+   #define DB_NEXTION        // Debug NEXTION and SD card data
 // #define DB_FHSS           // Debug real time FHSS data
 // #define DB_SENSORS        // Debug Sensors
 // #define DB_BIND           // Debug Binding

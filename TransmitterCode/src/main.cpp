@@ -612,9 +612,7 @@ void GetSlaveChannelValues()
         }
     }
 }
-
 /**************************** Clear any Macros ********************************************************************************/
-
 void ClearMacrosBuffer(){
  for (uint8_t j = 0; j < BYTESPERMACRO; ++j){
     for (uint8_t i = 0; i < MAXMACROS; ++i){
@@ -622,27 +620,8 @@ void ClearMacrosBuffer(){
     } 
   }
 }
-
-
 /**************************************************** LoadDummyMacro() ********************************************************/
-
-// Macros definitions heer
-//#define MAXMACROS               8
-//#define BYTESPERMACRO           6
-
-// offsets into macros' buffer
-
-//#define MACROTRIGGERCHANNEL     0                       // 1 - 16. 0 = dissabled.
-//#define MACROSTARTTIME          1                       // In ** >> 10ths << ** of a second since trigger. ( = millis() * 100 ) up to 25.4 seconds
-//#define MACRODURATION           2                       // In ** >> 10ths << ** of a second since start    ( = millis() * 100 ) up to 25.4 seconds
-//#define MACROMOVECHANNEL        3                       // Which channel to move.
-//#define MACROMOVETOPOSITION     4                       // Where to put said channel for said duration.
-//#define MACRORUNNINGNOW         5
-//uint8_t MacrosBuffer[MAXMACROS][BYTESPERMACRO];         // macros' buffer
-
-
 void LoadDummyMacro(){
-
       uint8_t i = 1;
       MacrosBuffer[i][MACROTRIGGERCHANNEL]      = 12;   // Use channel 12 as trigger
       MacrosBuffer[i][MACROSTARTTIME]           = 5;    // Start immediately
@@ -652,7 +631,6 @@ void LoadDummyMacro(){
       MacrosBuffer[i][MACRORUNNINGNOW]          = 0;    // Currently not running
 
 }
-
 /************************************************************************************************************/
 void ResetSubTrims(){
     for (int i = 0;i<16;++i){
@@ -3040,7 +3018,7 @@ void setup()
     if (PlayFanfare) SendCommand(OpeningFanfare);
     ScreenTimeTimer = millis();
     ClearMacrosBuffer();
-    LoadDummyMacro();
+   // LoadDummyMacro();
     RestoreBrightness();
 }
 /*********************************************************************************************************************************/
@@ -3219,7 +3197,8 @@ void SaveOneModel(int mnum)
             SDUpdateByte(SDCardAddress,SubTrims[i]);   
             ++SDCardAddress;                
         }
-    SDCardAddress += 11; // 11 remain
+    SDCardAddress += 11; // *********************** 11 spare here remaining
+
     for (i = 0; i < CHANNELSUSED; ++i) {
         SDUpdateByte(SDCardAddress, InPutStick[i]);
         ++SDCardAddress;
@@ -3267,7 +3246,7 @@ void SaveOneModel(int mnum)
             ++SDCardAddress;
         }
     }
-    // **********************
+    // ********************** Add more heer
 
     OneModelMemory = SDCardAddress - StartLocation;
 #ifdef DB_NEXTION
@@ -4577,7 +4556,7 @@ void  DoNumberedCommands(uint8_t nc){
             CloseModelsFile();
             break;
 
-         case 3:                      // heer
+         case 3:                    
             ModelNameTimeCheck = 0 ;
             break;
         
