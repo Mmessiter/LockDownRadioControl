@@ -35,8 +35,11 @@ var _radio_functions_8cpp =
     [ "HopToNextChannel", "_radio_functions_8cpp.html#a62ec0168b1eea5f5c14f663d9217574d", null ],
     [ "InitRadio", "_radio_functions_8cpp.html#a86ce6c54618629a61b8502786d2ce82c", null ],
     [ "Procrastinate", "_radio_functions_8cpp.html#a760609a682300dfe6bfaac737fd4d5eb", null ],
+    [ "RunMacro", "_radio_functions_8cpp.html#a91fb686ba2d3111821721ab33b442918", null ],
     [ "ScanAllChannels", "_radio_functions_8cpp.html#a3856ba0adae43d089f08c7b7f653b306", null ],
     [ "SendData", "_radio_functions_8cpp.html#a3d7322e78f097d02d476f17a6306997c", null ],
     [ "SetThePipe", "_radio_functions_8cpp.html#a70dc6f8d2e5ccef6b8e4a2b9b0afb2ce", null ],
+    [ "StartMacro", "_radio_functions_8cpp.html#aff7f985af10a021196ae5c9bf188c445", null ],
+    [ "StopMacro", "_radio_functions_8cpp.html#ae1e0755ae9441b2835ac027a98707caa", null ],
     [ "TryOtherPipe", "_radio_functions_8cpp.html#a7051e235b8f694c6b01bb5edf3925dc7", null ]
 ];
