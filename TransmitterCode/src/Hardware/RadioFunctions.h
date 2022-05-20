@@ -150,7 +150,7 @@ extern long int       RecoveryTimer;
 extern bool           Connected;
 extern uint16_t       CompressedData[];
 extern uint8_t        FHSS_Channels[];
-extern struct Payload AckPayload;
+extern struct         Payload AckPayload;
 extern int            RangeTestLostPackets;
 extern uint8_t        RecentPacketsLost;
 extern uint8_t        AckPayloadSize;
