@@ -200,8 +200,8 @@ var searchData=
   ['switch6_197',['SWITCH6',['../_transmitter_code_2src_2main_8cpp.html#a76f238185a1051be3f529e233e5367e9',1,'main.cpp']]],
   ['switch7_198',['SWITCH7',['../_transmitter_code_2src_2main_8cpp.html#a34cc45470bb24099949911a2a08040bf',1,'main.cpp']]],
   ['switcheditnumber_199',['SwitchEditNumber',['../_transmitter_code_2src_2main_8cpp.html#a419ee6bf72350585041578e743b6113a',1,'main.cpp']]],
-  ['switches_5fview_200',['Switches_View',['../_radio_functions_8cpp.html#ad16a6b359f59fa52101e30d233fb030f',1,'RadioFunctions.cpp']]],
-  ['switches_5fview_201',['SWITCHES_VIEW',['../_transmitter_code_2src_2main_8cpp.html#ace2d3514934b21f0e469528e292f2584',1,'main.cpp']]],
+  ['switches_5fview_200',['SWITCHES_VIEW',['../_transmitter_code_2src_2main_8cpp.html#ace2d3514934b21f0e469528e292f2584',1,'main.cpp']]],
+  ['switches_5fview_201',['Switches_View',['../_radio_functions_8cpp.html#ad16a6b359f59fa52101e30d233fb030f',1,'RadioFunctions.cpp']]],
   ['switchnumber_202',['SwitchNumber',['../_transmitter_code_2src_2main_8cpp.html#a2bd909f3b6a6e46bd5fcecb296800e9e',1,'main.cpp']]],
   ['synchrtcwithgpstime_203',['SynchRTCwithGPSTime',['../_transmitter_code_2src_2main_8cpp.html#abb1ea95b6b3f033883aa87682d3240ab',1,'main.cpp']]]
 ];

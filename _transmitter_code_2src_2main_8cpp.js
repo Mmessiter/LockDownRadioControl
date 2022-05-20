@@ -128,6 +128,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "DrawDot", "_transmitter_code_2src_2main_8cpp.html#a711945ac5f6948657463708863748432", null ],
     [ "DrawLine", "_transmitter_code_2src_2main_8cpp.html#acbef1d41e1bd646b60a6e8afd9c66880", null ],
     [ "EndSend", "_transmitter_code_2src_2main_8cpp.html#ad7b8aa834c87265667a5687b1787a1cc", null ],
+    [ "ExitMacrosView", "_transmitter_code_2src_2main_8cpp.html#a488388f6430a0fc7bec57074ba750a2d", null ],
     [ "FailedPacket", "_transmitter_code_2src_2main_8cpp.html#a783a0141bea15d8539730afd4b3b06a3", null ],
     [ "FixDeltaGMTSign", "_transmitter_code_2src_2main_8cpp.html#a493eeacfcf61a53db5933a893f7d94a6", null ],
     [ "Force_ReDisplay", "_transmitter_code_2src_2main_8cpp.html#aa1e81e58421a34fdfd7bfb31925f5a90", null ],
