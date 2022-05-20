@@ -4556,7 +4556,7 @@ void PopulateMacrosView(){
     char Duration[]         =   "Dur";
     uint8_t n               =   PreviousMacroNumber;
       
-    if (n) {  // get previous values   
+    if (n) {                                                                        // Read previous values before moveing to next  
         MacrosBuffer[n][MACROTRIGGERCHANNEL]    = GetValue(TriggerChannel);
         MacrosBuffer[n][MACROMOVECHANNEL]       = GetValue(MoveToChannel);
         MacrosBuffer[n][MACROMOVETOPOSITION]    = GetValue(MoveToPosition);
@@ -4571,6 +4571,26 @@ void PopulateMacrosView(){
     SendValue(Duration,MacrosBuffer[n][MACRODURATION]);
     PreviousMacroNumber = n;
 
+}
+
+/*********************************************************************************************************************************/
+
+void ExitMacrosView(){
+    char pSetupView[]       = "page SetupView";
+    char MacroNumber[]      =   "Mno";
+    char TriggerChannel[]   =   "Tch";
+    char MoveToChannel[]    =   "Mch";
+    char MoveToPosition[]   =   "Pos";
+    char Delay[]            =   "Del";
+    char Duration[]         =   "Dur";
+    uint8_t n;
+    n = GetValue(MacroNumber);
+    MacrosBuffer[n][MACROTRIGGERCHANNEL]    = GetValue(TriggerChannel);
+    MacrosBuffer[n][MACROMOVECHANNEL]       = GetValue(MoveToChannel);
+    MacrosBuffer[n][MACROMOVETOPOSITION]    = GetValue(MoveToPosition);
+    MacrosBuffer[n][MACROSTARTTIME]         = GetValue(Delay);
+    MacrosBuffer[n][MACRODURATION]          = GetValue(Duration);
+    SendCommand (pSetupView);
 }
 /*********************************************************************************************************************************/
 
@@ -4605,15 +4625,17 @@ void  DoNumberedCommands(uint8_t nc){
             SendValue(mn,ModelNumber);
             break;
         case 5:
-            SendCommand(pMacrosView);         // Display MacroView
             PreviousMacroNumber = 0;          // i.e. none!
+            SendCommand(pMacrosView);         // Display MacroView
+            delay(200);
             PopulateMacrosView();
             break;
         case 6:
-            PopulateMacrosView();
+            PopulateMacrosView();             // Macros view has moved to new macro
+            break;
 
-
-
+        case 7:
+            ExitMacrosView();
             break;
 
         default:
