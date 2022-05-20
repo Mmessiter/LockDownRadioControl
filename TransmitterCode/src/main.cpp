@@ -546,14 +546,10 @@ bool     ClockSpoken        = false;
 bool     AnnounceBanks      = true;
 bool     CopyTrimsToAll     = true;
 
-
-
 uint8_t  MacrosBuffer[MAXMACROS][BYTESPERMACRO];        // macros' buffer
 uint32_t MacroStartTime[MAXMACROS];
 uint32_t MacroStopTime[MAXMACROS];
-
-
-
+uint8_t  PreviousMacroNumber = 1;
 
 // ***************************************** Extra Prototypes **********************************************
 
@@ -4558,17 +4554,7 @@ void ZeroDataScreen(){             // ZERO Those parameters that are zeroable
             SavedSbusRepeats   = SbusRepeats;
 }
 
-
-uint8_t PreviousMacroNumber = 1;
-
 /***************************************************** Populate Macros View ****************************************************************************/
-
-//#define MACROTRIGGERCHANNEL     0                       // 1 - 16. 0 means dissabled.//
-//#define MACROSTARTTIME          1                       // In ** >> 10ths << ** of a second since trigger. ( = millis() * 100 ) up to 25.4 seconds
-//#define MACRODURATION           2                       // In ** >> 10ths << ** of a second since start    ( = millis() * 100 ) up to 25.4 seconds
-//#define MACROMOVECHANNEL        3                       // Which channel to move.
-//#define MACROMOVETOPOSITION     4                       // Where to put said channel for said duration. (0 -180)
-//#define MACRORUNNINGNOW         5                       // Running flag (BIT 0 running/not running,  BIT 1 = Timer active / inactive)
 
 void PopulateMacrosView(){
 
