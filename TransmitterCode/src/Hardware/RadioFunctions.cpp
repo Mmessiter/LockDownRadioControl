@@ -117,35 +117,22 @@ uint32_t ThisMoment = millis();
       // if (BoundFlag) SendData();     // cannot safely send data                                   
     }
 }
-
-
 //***********************************************************************************************************
 // *************************************** Functions to run macros  *****************************************
 // **********************************************************************************************************
-void StartMacro(uint8_t m){
-    Serial.println("START!");                                                                  // Start a macro    
+void StartMacro(uint8_t m){                                                                    // Start a macro    
     MacrosBuffer[m][MACRORUNNINGNOW] |= 1 ;                                                    // LOW BIT = "running now" flag
-    MacroStartTime[m] = millis() + (MacrosBuffer[m][MACROSTARTTIME]) * 100;                    // Note its start time
-    MacroStopTime[m]  = MacroStartTime[m] + ((MacrosBuffer[m][MACRODURATION]) * 100);
-}
-
-/************************************************************************************************************/
-void RunMacro(uint8_t m){                // Move a servo to a place                                            
-    if (millis() >= MacroStartTime[m]) {         //     Has it started yet?
-          MacrosBuffer[m][MACRORUNNINGNOW] |= 2 ; //    Yes! Set the ACTIVE Bit (BIT 2)
-    }
-
-    if (millis() >= MacroStopTime[m]) {         //      Has it Expired yet?
-          MacrosBuffer[m][MACRORUNNINGNOW] &= 1 ; //    Yes! Clear the ACTIVE Bit (BIT 2)
-    }
-    
-    if (MacrosBuffer[m][MACRORUNNINGNOW] & 2) {
-            SendBuffer[(MacrosBuffer[m][MACROMOVECHANNEL])-1] = map(MacrosBuffer[m][MACROMOVETOPOSITION],0,180,MINMICROS,MAXMICROS);
-    }
+    MacroStartTime[m] = millis()          + ((MacrosBuffer[m][MACROSTARTTIME]) * 100);         // Note its Start moment
+    MacroStopTime[m]  = MacroStartTime[m] + ((MacrosBuffer[m][MACRODURATION])  * 100);         // Note its Stop moment
 }
 /************************************************************************************************************/
-void StopMacro(uint8_t m){
-    Serial.println("STOP!");                                                                    // Stop a macro    
+void RunMacro(uint8_t m){                           //    Move a servo to a place                                            
+    if (millis() >= MacroStartTime[m])  MacrosBuffer[m][MACRORUNNINGNOW] |= 2 ;                 // Set the ACTIVE Bit if started (BIT 1)
+    if (millis() >= MacroStopTime[m])   MacrosBuffer[m][MACRORUNNINGNOW] &= 1 ;                 // Clear the ACTIVE Bit if expired (BIT 1)
+    if (MacrosBuffer[m][MACRORUNNINGNOW] & 2) SendBuffer[(MacrosBuffer[m][MACROMOVECHANNEL])-1] = map(MacrosBuffer[m][MACROMOVETOPOSITION],0,180,MINMICROS,MAXMICROS); // Do it if currently active!
+}
+/************************************************************************************************************/
+void StopMacro(uint8_t m){                                                                      // Stop a macro    
     MacrosBuffer[m][MACRORUNNINGNOW] = 0;
 }
 /************************************************************************************************************/
@@ -161,13 +148,14 @@ void ExecuteMacro(){                                                            
                 if (MacrosBuffer[i][MACRORUNNINGNOW])  StopMacro(i);                            // No. Stop it it was running 
             }
  // ****************************  RUN ****************************************
-            if (MacrosBuffer[i][MACRORUNNINGNOW]) {                                             // If running, move the servo.
-             RunMacro(i);
+            if (MacrosBuffer[i][MACRORUNNINGNOW]) {                                             // If running, move the servo ... if timer agrees.
+                  RunMacro(i);
             }
         }
    }
 }
 // *************** END OF MACROS ZONE ************************************************
+
 
 /************************************************************************************************************/
 //****************** Function to send data to receiver ******************************************************

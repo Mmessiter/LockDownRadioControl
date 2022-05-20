@@ -645,8 +645,8 @@ void LoadDummyMacro(){
 
       uint8_t i = 1;
       MacrosBuffer[i][MACROTRIGGERCHANNEL]      = 12;   // Use channel 12 as trigger
-      MacrosBuffer[i][MACROSTARTTIME]           = 10;   // Start immediately
-      MacrosBuffer[i][MACRODURATION]            = 10;   // Sustain for one second
+      MacrosBuffer[i][MACROSTARTTIME]           = 5;    // Start immediately
+      MacrosBuffer[i][MACRODURATION]            = 5;    // Sustain for one second
       MacrosBuffer[i][MACROMOVECHANNEL]         = 5;    // Move Channel 5
       MacrosBuffer[i][MACROMOVETOPOSITION]      = 180;  // Put it fully on
       MacrosBuffer[i][MACRORUNNINGNOW]          = 0;    // Currently not running
