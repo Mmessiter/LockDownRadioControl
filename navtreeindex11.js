@@ -1,5 +1,6 @@
 var NAVTREEINDEX11 =
 {
+"structnmea__datavalue__t.html#aa6e709073decb4b329756e910110e602":[11,0,11,4],
 "structnmea__datavalue__t.html#ad19f5539f1b0524e3e8b2df9e3a07ae8":[11,0,11,3],
 "structnmea__datavalue__t.html#ad69698d60e94d53ad38c9b2b6f74547f":[11,0,11,2],
 "structnmea__history__t.html":[11,0,12],
