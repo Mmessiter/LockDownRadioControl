@@ -4587,6 +4587,7 @@ void ExitMacrosView(){
     MacrosBuffer[n][MACROMOVETOPOSITION]    = GetValue(MoveToPosition);
     MacrosBuffer[n][MACROSTARTTIME]         = GetValue(Delay);
     MacrosBuffer[n][MACRODURATION]          = GetValue(Duration);
+    UseMacros = true;
     SaveOneModel(ModelNumber);
     SendCommand (pSetupView);
 }
