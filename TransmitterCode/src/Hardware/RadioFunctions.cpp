@@ -130,11 +130,21 @@ void ExecuteMacro(){
     //  MacrosBuffer[0][MACROMOVETOPOSITION]      = 180;  // Put it fully on
     //  #define MINMICROS 500
     //  #define MAXMICROS 2500
+    
+   uint8_t TriggerChannel = 0;
 
    for (u_int8_t i = 0; i < MAXMACROS; ++i){
-                if (MacrosBuffer[0][MACROTRIGGERCHANNEL]) {
-                            if (SendBuffer[MACROTRIGGERCHANNEL] >= (MAXMICROS - 20)){
-                                Serial.println( "MACRO!");
+            
+            
+                if (MacrosBuffer[i][MACROTRIGGERCHANNEL]) {
+                    TriggerChannel = MacrosBuffer[i][MACROTRIGGERCHANNEL];
+                            if (SendBuffer[TriggerChannel]  >= (MAXMICROS - 20)){
+                                Serial.println("ON!");
+                                MacrosBuffer[i][MACRORUNNINGNOW] = 1 ;
+                                
+                            } else {
+                                Serial.println("OFF!");
+                                MacrosBuffer[i][MACRORUNNINGNOW] = 0 ;
                             }
                 }
    }
@@ -154,7 +164,9 @@ void SendData()
     if (((millis() - TxPace) >= PACEMAKER) || (LostContactFlag)){
         TxPace = millis();
         GetNewChannelValues();                    // Load SendBuffer with new servo positions
-        if (!MacroRunning) ExecuteMacro();         // Modify it if macro is running
+        
+        ExecuteMacro();                           // Modify it if macro is running
+        
         if (DoSbusSendOnly)                       // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
         {
             ReadSwitches();

@@ -30,16 +30,14 @@
 
 // Macros definitions
 #define MAXMACROS               8
-#define BYTESPERMACRO           6
+#define BYTESPERMACRO           7                       // 1 spare just in case
 // offsets into macros' buffer
 #define MACROTRIGGERCHANNEL     0                       // 1 - 16. 0 = dissabled.
 #define MACROSTARTTIME          1                       // In ** >> 10ths << ** of a second since trigger. ( = millis() * 100 ) up to 25.4 seconds
 #define MACRODURATION           2                       // In ** >> 10ths << ** of a second since start    ( = millis() * 100 ) up to 25.4 seconds
 #define MACROMOVECHANNEL        3                       // Which channel to move.
 #define MACROMOVETOPOSITION     4                       // Where to put said channel for said duration.
-
-
-
+#define MACRORUNNINGNOW         5                       // Currently running flag
 
 // **************************************************************************
 //                    AUDIO (ie  INTELLIGENT NEXTION)                       *
@@ -109,7 +107,7 @@
 //             UNCOMMENT ANY OF THESE for that bit of debug info            *
 //***************************************************************************
 
-// #define DB_NEXTION        // Debug NEXTION and SD card data
+ //#define DB_NEXTION        // Debug NEXTION and SD card data
 // #define DB_FHSS           // Debug real time FHSS data
 // #define DB_SENSORS        // Debug Sensors
 // #define DB_BIND           // Debug Binding
