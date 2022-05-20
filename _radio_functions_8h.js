@@ -19,6 +19,7 @@ var _radio_functions_8h =
     [ "MACRODURATION", "_radio_functions_8h.html#a8babc15294184f1b08694b6e9a5d36be", null ],
     [ "MACROMOVECHANNEL", "_radio_functions_8h.html#afc89d706ecd6b404393785f7b755303d", null ],
     [ "MACROMOVETOPOSITION", "_radio_functions_8h.html#aece95f4a89ade64076cbe91357d64b45", null ],
+    [ "MACRORUNNINGNOW", "_radio_functions_8h.html#a20b56099fe1fdbd5605a91af95c5a50b", null ],
     [ "MACROSTARTTIME", "_radio_functions_8h.html#a0ed0c416beb6781a8c8a52c37d059957", null ],
     [ "MACROTRIGGERCHANNEL", "_radio_functions_8h.html#af8ab3c768a28f2a28475c81309bcf379", null ],
     [ "MAXMACROS", "_radio_functions_8h.html#af9fb1b689f62242b5e960b18dbe76761", null ],
