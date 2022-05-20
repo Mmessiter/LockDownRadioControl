@@ -119,59 +119,56 @@ uint32_t ThisMoment = millis();
 }
 
 
+//***********************************************************************************************************
+// *************************************** Functions to run macros  *****************************************
 // **********************************************************************************************************
-// These are called from Execute Macro()
-
 void StartMacro(uint8_t m){
-    Serial.println("START!");                                           // Start macro    
-    MacrosBuffer[m][MACRORUNNINGNOW] = 1 ;
+    Serial.println("START!");                                                                  // Start a macro    
+    MacrosBuffer[m][MACRORUNNINGNOW] |= 1 ;                                                    // LOW BIT = "running now" flag
+    MacroStartTime[m] = millis() + (MacrosBuffer[m][MACROSTARTTIME]) * 100;                    // Note its start time
+    MacroStopTime[m]  = MacroStartTime[m] + ((MacrosBuffer[m][MACRODURATION]) * 100);
 }
 
-void RunMacro(uint8_t m){                                              // Move a servo to a place
-    SendBuffer[(MacrosBuffer[m][MACROMOVECHANNEL])-1] = map(MacrosBuffer[m][MACROMOVETOPOSITION],0,180,MINMICROS,MAXMICROS);
-}
+/************************************************************************************************************/
+void RunMacro(uint8_t m){                // Move a servo to a place                                            
+    if (millis() >= MacroStartTime[m]) {         //     Has it started yet?
+          MacrosBuffer[m][MACRORUNNINGNOW] |= 2 ; //    Yes! Set the ACTIVE Bit (BIT 2)
+    }
 
+    if (millis() >= MacroStopTime[m]) {         //      Has it Expired yet?
+          MacrosBuffer[m][MACRORUNNINGNOW] &= 1 ; //    Yes! Clear the ACTIVE Bit (BIT 2)
+    }
+    
+    if (MacrosBuffer[m][MACRORUNNINGNOW] & 2) {
+            SendBuffer[(MacrosBuffer[m][MACROMOVECHANNEL])-1] = map(MacrosBuffer[m][MACROMOVETOPOSITION],0,180,MINMICROS,MAXMICROS);
+    }
+}
+/************************************************************************************************************/
 void StopMacro(uint8_t m){
-    Serial.println("STOP!");                                           // STOP macro    
+    Serial.println("STOP!");                                                                    // Stop a macro    
     MacrosBuffer[m][MACRORUNNINGNOW] = 0;
 }
-
-
 /************************************************************************************************************/
-// ***************** Function to run macro  (Called from SendData)  *****************************************
-/************************************************************************************************************/
-void ExecuteMacro(){
-
-    //  MacrosBuffer[0][MACROTRIGGERCHANNEL]      = 15;   // Use channel 15 as trigger
-    //  MacrosBuffer[0][MACROSTARTTIME]           = 0;    // Start immediately
-    //  MacrosBuffer[0][MACRODURATION]            = 10;   // Sustain for one second
-    //  MacrosBuffer[0][MACROMOVECHANNEL]         = 5;    // Move Channel 5
-    //  MacrosBuffer[0][MACROMOVETOPOSITION]      = 180;  // Put it fully on
-    //  #define MINMICROS 500
-    //  #define MAXMICROS 2500
-    
+void ExecuteMacro(){                                                                            // Main entry point from SendData()  ... START/STOP/RUN
    uint8_t TriggerChannel = 0;
    for (u_int8_t i = 0; i < MAXMACROS; ++i){        
-    
-    // START OR STOP
-        if (MacrosBuffer[i][MACROTRIGGERCHANNEL]) {                                             // is trigger channel non-zero? 
-            TriggerChannel = MacrosBuffer[i][MACROTRIGGERCHANNEL];
-            if (SendBuffer[TriggerChannel] >= MAXMICROS-1){                                     // Trigger point is close to highest value
-                if (!MacrosBuffer[i][MACRORUNNINGNOW]) StartMacro(i);
-            } else {
-                if (MacrosBuffer[i][MACRORUNNINGNOW])  StopMacro(i); 
+// ***************************** START OR STOP ******************************
+        TriggerChannel = (MacrosBuffer[i][MACROTRIGGERCHANNEL])-1;                              // Down by one as channels are really 0 - 15
+        if (TriggerChannel) {                                                                   // Is trigger channel non-zero? 
+            if (SendBuffer[TriggerChannel] >= MAXMICROS-1){                                     // Is the trigger point is close to its highest value?
+                if (!MacrosBuffer[i][MACRORUNNINGNOW]) StartMacro(i);                           // Yes. Start if not already started
+            } else {                                            
+                if (MacrosBuffer[i][MACRORUNNINGNOW])  StopMacro(i);                            // No. Stop it it was running 
             }
-         
-    // RUN IT
-         if (MacrosBuffer[i][MACRORUNNINGNOW]) {
+ // ****************************  RUN ****************************************
+            if (MacrosBuffer[i][MACRORUNNINGNOW]) {                                             // If running, move the servo.
              RunMacro(i);
-
-         }
-         
-         
-         }
+            }
+        }
    }
 }
+// *************** END OF MACROS ZONE ************************************************
+
 /************************************************************************************************************/
 //****************** Function to send data to receiver ******************************************************
 /************************************************************************************************************/

@@ -37,7 +37,7 @@
 #define MACRODURATION           2                       // In ** >> 10ths << ** of a second since start    ( = millis() * 100 ) up to 25.4 seconds
 #define MACROMOVECHANNEL        3                       // Which channel to move.
 #define MACROMOVETOPOSITION     4                       // Where to put said channel for said duration.
-#define MACRORUNNINGNOW         5                       // Currently running flag
+#define MACRORUNNINGNOW         5                       // Running flag (BIT 0 running but timer OFF,  BIT 1 running and timer ON)
 
 // **************************************************************************
 //                    AUDIO (ie  INTELLIGENT NEXTION)                       *
@@ -165,13 +165,14 @@ extern bool           BuddyMaster;
 extern uint16_t       BackGroundColour;
 extern uint16_t       HighlightColour;
 extern uint16_t       ForeGroundColour;
-extern bool           MacroRunning;
 extern uint16_t       ChannelMax[CHANNELSUSED + 1];       //    output of pots at max
 extern uint16_t       ChannelMidHi[CHANNELSUSED + 1];     //    output of pots at MidHi
 extern uint16_t       ChannelCentre[CHANNELSUSED + 1];    //    output of pots at Centre
 extern uint16_t       ChannelMidLow[CHANNELSUSED + 1];    //    output of pots at MidLow
 extern uint16_t       ChannelMin[CHANNELSUSED + 1];       //    output of pots at min
 extern uint8_t        MacrosBuffer[MAXMACROS][BYTESPERMACRO];    // macros' buffer
+extern uint32_t       MacroStartTime[MAXMACROS];
+extern uint32_t       MacroStopTime[MAXMACROS];
 
 
 
