@@ -4535,15 +4535,51 @@ void ZeroDataScreen(){             // ZERO Those parameters that are zeroable
 }
 
 
+uint8_t PreviousMacroNumber = 1;
 
+/***************************************************** Populate Macros View ****************************************************************************/
 
+//#define MACROTRIGGERCHANNEL     0                       // 1 - 16. 0 means dissabled.//
+//#define MACROSTARTTIME          1                       // In ** >> 10ths << ** of a second since trigger. ( = millis() * 100 ) up to 25.4 seconds
+//#define MACRODURATION           2                       // In ** >> 10ths << ** of a second since start    ( = millis() * 100 ) up to 25.4 seconds
+//#define MACROMOVECHANNEL        3                       // Which channel to move.
+//#define MACROMOVETOPOSITION     4                       // Where to put said channel for said duration. (0 -180)
+//#define MACRORUNNINGNOW         5                       // Running flag (BIT 0 running/not running,  BIT 1 = Timer active / inactive)
+
+void PopulateMacrosView(){
+
+    char MacroNumber[]      =   "Mno";
+    char TriggerChannel[]   =   "Tch";
+    char MoveToChannel[]    =   "Mch";
+    char MoveToPosition[]   =   "Pos";
+    char Delay[]            =   "Del";
+    char Duration[]         =   "Dur";
+    uint8_t n               =   PreviousMacroNumber;
+      
+    if (n) {  // get previous values   
+        MacrosBuffer[n][MACROTRIGGERCHANNEL]    = GetValue(TriggerChannel);
+        MacrosBuffer[n][MACROMOVECHANNEL]       = GetValue(MoveToChannel);
+        MacrosBuffer[n][MACROMOVETOPOSITION]    = GetValue(MoveToPosition);
+        MacrosBuffer[n][MACROSTARTTIME]         = GetValue(Delay);
+        MacrosBuffer[n][MACRODURATION]          = GetValue(Duration);
+    }
+    n = GetValue(MacroNumber);
+    SendValue(TriggerChannel,MacrosBuffer[n][MACROTRIGGERCHANNEL]);
+    SendValue(MoveToChannel,MacrosBuffer[n][MACROMOVECHANNEL]);
+    SendValue(MoveToPosition,MacrosBuffer[n][MACROMOVETOPOSITION]);
+    SendValue(Delay,MacrosBuffer[n][MACROSTARTTIME]);
+    SendValue(Duration,MacrosBuffer[n][MACRODURATION]);
+    PreviousMacroNumber = n;
+
+}
 /*********************************************************************************************************************************/
 
 void  DoNumberedCommands(uint8_t nc){
   
-    char pModelsView[] = "page ModelsView";
-    char mn[] = "ModelNumber";
-    
+    char pModelsView[]  = "page ModelsView";
+    char mn[]           = "ModelNumber";
+    char pMacrosView[]  = "page MacrosView";
+
     switch(nc){
           case 1:                      // Previous file (modelsview)
             FileNumberInView--;
@@ -4560,17 +4596,26 @@ void  DoNumberedCommands(uint8_t nc){
             ModelNameTimeCheck = 0 ;
             break;
         
-        case 4:                              // goto models view 
-           Serial.println (ModelNumber);   
+        case 4:                              // goto models view   
             SendCommand(pModelsView);
             CurrentView = MODELSVIEW;
             UpdateModelsNameEveryWhere();
             BuildDirectory();                 // of SD card
             ShowFileNumber();
-            Serial.println (ModelNumber); 
             SendValue(mn,ModelNumber);
             break;
-       
+        case 5:
+            SendCommand(pMacrosView);         // Display MacroView
+            PreviousMacroNumber = 0;          // i.e. none!
+            PopulateMacrosView();
+            break;
+        case 6:
+            PopulateMacrosView();
+
+
+
+            break;
+
         default:
            break;
     }
