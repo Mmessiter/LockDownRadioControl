@@ -32,7 +32,7 @@
 //                              Macros                                      *
 // **************************************************************************
 
-#define MAXMACROS               4                       // 4 macros enough for now?
+#define MAXMACROS               8                       // 8 macros enough for now?
 #define BYTESPERMACRO           6                       // 6 bytes each         
 
 // ********************* Offsets within macros' buffer ***********************

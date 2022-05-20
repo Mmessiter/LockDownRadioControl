@@ -613,7 +613,17 @@ void GetSlaveChannelValues()
     }
 }
 /**************************** Clear any Macros ********************************************************************************/
-void ClearMacrosBuffer(){
+void CheckMacrosBuffer(){
+
+    bool junk = false;
+
+for (uint8_t j = 0; j < BYTESPERMACRO; ++j){
+    for (uint8_t i = 0; i < MAXMACROS; ++i){
+               if ((MacrosBuffer[i][j] > 16)  && (j == MACROTRIGGERCHANNEL)) junk = true;
+    } 
+  }
+ if (junk == false) return;
+
  for (uint8_t j = 0; j < BYTESPERMACRO; ++j){
     for (uint8_t i = 0; i < MAXMACROS; ++i){
                 MacrosBuffer[i][j] = 0;
@@ -2748,6 +2758,12 @@ bool ReadOneModel(uint8_t Mnum)
             ++SDCardAddress;
         }
     }
+    for ( j = 0; j < BYTESPERMACRO; ++j){
+        for ( i = 0; i < MAXMACROS; ++i){
+                MacrosBuffer[i][j] = SDReadByte(SDCardAddress);
+                ++SDCardAddress;
+        } 
+    }
 
     // **************************************
 
@@ -3017,7 +3033,7 @@ void setup()
     SetAudioVolume(AudioVolume);
     if (PlayFanfare) SendCommand(OpeningFanfare);
     ScreenTimeTimer = millis();
-    ClearMacrosBuffer();
+    CheckMacrosBuffer();
    // LoadDummyMacro();
     RestoreBrightness();
 }
@@ -3246,6 +3262,14 @@ void SaveOneModel(int mnum)
             ++SDCardAddress;
         }
     }
+
+    for ( j = 0; j < BYTESPERMACRO; ++j){
+        for ( i = 0; i < MAXMACROS; ++i){
+                SDUpdateByte(SDCardAddress,MacrosBuffer[i][j]);
+                ++SDCardAddress;
+        } 
+    }
+
     // ********************** Add more heer
 
     OneModelMemory = SDCardAddress - StartLocation;
@@ -4556,14 +4580,14 @@ void PopulateMacrosView(){
     char Duration[]         =   "Dur";
     uint8_t n               =   PreviousMacroNumber;
       
-    if (n) {                                                                        // Read previous values before moveing to next  
+    if (n < 100) {                                                                        // Read previous values before moveing to next  
         MacrosBuffer[n][MACROTRIGGERCHANNEL]    = GetValue(TriggerChannel);
         MacrosBuffer[n][MACROMOVECHANNEL]       = GetValue(MoveToChannel);
         MacrosBuffer[n][MACROMOVETOPOSITION]    = GetValue(MoveToPosition);
         MacrosBuffer[n][MACROSTARTTIME]         = GetValue(Delay);
         MacrosBuffer[n][MACRODURATION]          = GetValue(Duration);
     }
-    n = GetValue(MacroNumber);
+    n = GetValue(MacroNumber)-1;
     SendValue(TriggerChannel,MacrosBuffer[n][MACROTRIGGERCHANNEL]);
     SendValue(MoveToChannel,MacrosBuffer[n][MACROMOVECHANNEL]);
     SendValue(MoveToPosition,MacrosBuffer[n][MACROMOVETOPOSITION]);
@@ -4584,12 +4608,13 @@ void ExitMacrosView(){
     char Delay[]            =   "Del";
     char Duration[]         =   "Dur";
     uint8_t n;
-    n = GetValue(MacroNumber);
+    n = GetValue(MacroNumber)-1;
     MacrosBuffer[n][MACROTRIGGERCHANNEL]    = GetValue(TriggerChannel);
     MacrosBuffer[n][MACROMOVECHANNEL]       = GetValue(MoveToChannel);
     MacrosBuffer[n][MACROMOVETOPOSITION]    = GetValue(MoveToPosition);
     MacrosBuffer[n][MACROSTARTTIME]         = GetValue(Delay);
     MacrosBuffer[n][MACRODURATION]          = GetValue(Duration);
+    SaveOneModel(ModelNumber);
     SendCommand (pSetupView);
 }
 /*********************************************************************************************************************************/
@@ -4625,13 +4650,13 @@ void  DoNumberedCommands(uint8_t nc){
             SendValue(mn,ModelNumber);
             break;
         case 5:
-            PreviousMacroNumber = 0;          // i.e. none!
+            PreviousMacroNumber = 200;        // i.e. no usable number
             SendCommand(pMacrosView);         // Display MacroView
-            delay(200);
+            Procrastinate(50);
             PopulateMacrosView();
             break;
         case 6:
-            PopulateMacrosView();             // Macros view has moved to new macro
+            PopulateMacrosView();             // Macros view number has moved to new macro
             break;
 
         case 7:
