@@ -1,5 +1,6 @@
 var NAVTREEINDEX1 =
 {
+"_radio_functions_8h.html#aadc879b4b6396135d31e22c22955a753":[12,0,5,0,0,1,36],
 "_radio_functions_8h.html#aae23a8374f487a46c5fcb1fb02fadc69":[12,0,5,0,0,1,116],
 "_radio_functions_8h.html#ab0af36f3442ad4f2d0b716c14c7d6085":[12,0,5,0,0,1,67],
 "_radio_functions_8h.html#ab939b00b86d17d03b6fdfe585f06396d":[12,0,5,0,0,1,34],
@@ -164,15 +165,15 @@ var NAVTREEINDEX1 =
 "_sensor_hub_l_c_2lib_2_adafruit___bus_i_o_2_adafruit___bus_i_o___register_8h.html":[12,0,2,0,1,1],
 "_sensor_hub_l_c_2lib_2_adafruit___bus_i_o_2_adafruit___bus_i_o___register_8h.html#a071c4a820b1ac412da2d42c7c61cb219":[12,0,2,0,1,1,2],
 "_sensor_hub_l_c_2lib_2_adafruit___bus_i_o_2_adafruit___bus_i_o___register_8h.html#aab8187a2a7855dbdafc14106289f7c52":[12,0,2,0,1,1,3],
+"_sensor_hub_l_c_2lib_2_adafruit___bus_i_o_2_adafruit___bus_i_o___register_8h.html#aab8187a2a7855dbdafc14106289f7c52a33287651889968168c65b8bb3c1ff9d0":[12,0,2,0,1,1,3,1],
 "_sensor_hub_l_c_2lib_2_adafruit___bus_i_o_2_adafruit___bus_i_o___register_8h.html#aab8187a2a7855dbdafc14106289f7c52a33287651889968168c65b8bb3c1ff9d0":[12,0,3,0,1,1,3,1],
 "_sensor_hub_l_c_2lib_2_adafruit___bus_i_o_2_adafruit___bus_i_o___register_8h.html#aab8187a2a7855dbdafc14106289f7c52a33287651889968168c65b8bb3c1ff9d0":[12,0,4,0,1,1,3,1],
-"_sensor_hub_l_c_2lib_2_adafruit___bus_i_o_2_adafruit___bus_i_o___register_8h.html#aab8187a2a7855dbdafc14106289f7c52a33287651889968168c65b8bb3c1ff9d0":[12,0,2,0,1,1,3,1],
-"_sensor_hub_l_c_2lib_2_adafruit___bus_i_o_2_adafruit___bus_i_o___register_8h.html#aab8187a2a7855dbdafc14106289f7c52a8b87cf6aa44743ad867af0a38ebf7a2d":[12,0,3,0,1,1,3,0],
 "_sensor_hub_l_c_2lib_2_adafruit___bus_i_o_2_adafruit___bus_i_o___register_8h.html#aab8187a2a7855dbdafc14106289f7c52a8b87cf6aa44743ad867af0a38ebf7a2d":[12,0,4,0,1,1,3,0],
 "_sensor_hub_l_c_2lib_2_adafruit___bus_i_o_2_adafruit___bus_i_o___register_8h.html#aab8187a2a7855dbdafc14106289f7c52a8b87cf6aa44743ad867af0a38ebf7a2d":[12,0,2,0,1,1,3,0],
-"_sensor_hub_l_c_2lib_2_adafruit___bus_i_o_2_adafruit___bus_i_o___register_8h.html#aab8187a2a7855dbdafc14106289f7c52af378f422210a85e02ce862100f9be37b":[12,0,4,0,1,1,3,2],
-"_sensor_hub_l_c_2lib_2_adafruit___bus_i_o_2_adafruit___bus_i_o___register_8h.html#aab8187a2a7855dbdafc14106289f7c52af378f422210a85e02ce862100f9be37b":[12,0,3,0,1,1,3,2],
+"_sensor_hub_l_c_2lib_2_adafruit___bus_i_o_2_adafruit___bus_i_o___register_8h.html#aab8187a2a7855dbdafc14106289f7c52a8b87cf6aa44743ad867af0a38ebf7a2d":[12,0,3,0,1,1,3,0],
 "_sensor_hub_l_c_2lib_2_adafruit___bus_i_o_2_adafruit___bus_i_o___register_8h.html#aab8187a2a7855dbdafc14106289f7c52af378f422210a85e02ce862100f9be37b":[12,0,2,0,1,1,3,2],
+"_sensor_hub_l_c_2lib_2_adafruit___bus_i_o_2_adafruit___bus_i_o___register_8h.html#aab8187a2a7855dbdafc14106289f7c52af378f422210a85e02ce862100f9be37b":[12,0,3,0,1,1,3,2],
+"_sensor_hub_l_c_2lib_2_adafruit___bus_i_o_2_adafruit___bus_i_o___register_8h.html#aab8187a2a7855dbdafc14106289f7c52af378f422210a85e02ce862100f9be37b":[12,0,4,0,1,1,3,2],
 "_sensor_hub_l_c_2lib_2_adafruit___bus_i_o_2_adafruit___bus_i_o___register_8h_source.html":[12,0,2,0,1,1],
 "_sensor_hub_l_c_2lib_2_adafruit___bus_i_o_2_adafruit___i2_c_device_8cpp.html":[12,0,2,0,1,2],
 "_sensor_hub_l_c_2lib_2_adafruit___bus_i_o_2_adafruit___i2_c_device_8cpp_source.html":[12,0,2,0,1,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1 =
 "_sensor_hub_l_c_2lib_2_adafruit___p_m_t_k_8h.html#af707de334bf9803a5b4972eb15a4cb95":[12,0,2,0,5,5],
 "_sensor_hub_l_c_2lib_2_adafruit___p_m_t_k_8h.html#af812234d17586abaa58c970c3186e047":[12,0,2,0,5,10],
 "_sensor_hub_l_c_2lib_2_adafruit___p_m_t_k_8h_source.html":[12,0,2,0,5],
-"_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8cpp.html":[12,0,2,0,3,0],
-"_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8cpp_source.html":[12,0,2,0,3,0]
+"_sensor_hub_l_c_2lib_2_adafruit___unified___sensor_2_adafruit___sensor_8cpp.html":[12,0,2,0,3,0]
 };

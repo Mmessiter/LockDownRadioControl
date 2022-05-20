@@ -129,5 +129,6 @@ var _radio_functions_8h =
     [ "TotalledRecentPacketsLost", "_radio_functions_8h.html#a7f485e1361fb90bec75e06944665686d", null ],
     [ "TxOnTime", "_radio_functions_8h.html#a992a1c7536f872bdfd833e282cf3b4e4", null ],
     [ "TxPace", "_radio_functions_8h.html#a97c9afd7483ad56e7a2aa63db252d616", null ],
-    [ "TXTimeStamp", "_radio_functions_8h.html#afd020f35b9f4a1aa2643c4fdcc46f5db", null ]
+    [ "TXTimeStamp", "_radio_functions_8h.html#afd020f35b9f4a1aa2643c4fdcc46f5db", null ],
+    [ "UseMacros", "_radio_functions_8h.html#a42a6363bff83773c1b99caa06aebb1f5", null ]
 ];
