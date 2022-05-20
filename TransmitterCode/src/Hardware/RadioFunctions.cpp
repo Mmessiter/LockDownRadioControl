@@ -118,8 +118,27 @@ uint32_t ThisMoment = millis();
     }
 }
 
+
+// **********************************************************************************************************
+// These are called from Execute Macro()
+
+void StartMacro(uint8_t m){
+    Serial.println("START!");                                           // Start macro    
+    MacrosBuffer[m][MACRORUNNINGNOW] = 1 ;
+}
+
+void RunMacro(uint8_t m){                                              // Move a servo to a place
+    SendBuffer[(MacrosBuffer[m][MACROMOVECHANNEL])-1] = map(MacrosBuffer[m][MACROMOVETOPOSITION],0,180,MINMICROS,MAXMICROS);
+}
+
+void StopMacro(uint8_t m){
+    Serial.println("STOP!");                                           // STOP macro    
+    MacrosBuffer[m][MACRORUNNINGNOW] = 0;
+}
+
+
 /************************************************************************************************************/
-// ***************** Function to run macro if defined **************(****************************************
+// ***************** Function to run macro  (Called from SendData)  *****************************************
 /************************************************************************************************************/
 void ExecuteMacro(){
 
@@ -132,21 +151,25 @@ void ExecuteMacro(){
     //  #define MAXMICROS 2500
     
    uint8_t TriggerChannel = 0;
+   for (u_int8_t i = 0; i < MAXMACROS; ++i){        
+    
+    // START OR STOP
+        if (MacrosBuffer[i][MACROTRIGGERCHANNEL]) {                                             // is trigger channel non-zero? 
+            TriggerChannel = MacrosBuffer[i][MACROTRIGGERCHANNEL];
+            if (SendBuffer[TriggerChannel] >= MAXMICROS-1){                                     // Trigger point is close to highest value
+                if (!MacrosBuffer[i][MACRORUNNINGNOW]) StartMacro(i);
+            } else {
+                if (MacrosBuffer[i][MACRORUNNINGNOW])  StopMacro(i); 
+            }
+         
+    // RUN IT
+         if (MacrosBuffer[i][MACRORUNNINGNOW]) {
+             RunMacro(i);
 
-   for (u_int8_t i = 0; i < MAXMACROS; ++i){
-            
-            
-                if (MacrosBuffer[i][MACROTRIGGERCHANNEL]) {
-                    TriggerChannel = MacrosBuffer[i][MACROTRIGGERCHANNEL];
-                            if (SendBuffer[TriggerChannel]  >= (MAXMICROS - 20)){
-                                Serial.println("ON!");
-                                MacrosBuffer[i][MACRORUNNINGNOW] = 1 ;
-                                
-                            } else {
-                                Serial.println("OFF!");
-                                MacrosBuffer[i][MACRORUNNINGNOW] = 0 ;
-                            }
-                }
+         }
+         
+         
+         }
    }
 }
 /************************************************************************************************************/
