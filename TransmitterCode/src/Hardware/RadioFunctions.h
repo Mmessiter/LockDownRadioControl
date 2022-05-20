@@ -178,6 +178,7 @@ extern uint16_t       ChannelMin[CHANNELSUSED + 1];       //    output of pots a
 extern uint8_t        MacrosBuffer[MAXMACROS][BYTESPERMACRO];    // macros' buffer
 extern uint32_t       MacroStartTime[MAXMACROS];
 extern uint32_t       MacroStopTime[MAXMACROS];
+extern bool           UseMacros;
 
 
 

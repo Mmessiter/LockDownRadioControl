@@ -550,6 +550,7 @@ uint8_t  MacrosBuffer[MAXMACROS][BYTESPERMACRO];        // macros' buffer
 uint32_t MacroStartTime[MAXMACROS];
 uint32_t MacroStopTime[MAXMACROS];
 uint8_t  PreviousMacroNumber = 1;
+bool     UseMacros = false;
 
 // ***************************************** Extra Prototypes **********************************************
 
@@ -608,34 +609,21 @@ void GetSlaveChannelValues()
         }
     }
 }
-/**************************** Clear any Macros ********************************************************************************/
+/**************************** Clear Macros if junk was loaded from SD ********************************************************************************/
 void CheckMacrosBuffer(){
 
-    bool junk = false;
-
-for (uint8_t j = 0; j < BYTESPERMACRO; ++j){
-    for (uint8_t i = 0; i < MAXMACROS; ++i){
-               if ((MacrosBuffer[i][j] > 16)  && (j == MACROTRIGGERCHANNEL)) junk = true;
-    } 
-  }
+bool junk = false;
+for (uint8_t i = 0; i < MAXMACROS; ++i){
+                if (MacrosBuffer[i][MACROTRIGGERCHANNEL] > 16)  junk = true;
+                if (MacrosBuffer[i][MACROTRIGGERCHANNEL] > 0)   UseMacros = true;
+}
  if (junk == false) return;
-
+ UseMacros = false;
  for (uint8_t j = 0; j < BYTESPERMACRO; ++j){
     for (uint8_t i = 0; i < MAXMACROS; ++i){
                 MacrosBuffer[i][j] = 0;
     } 
   }
-}
-/**************************************************** LoadDummyMacro() ********************************************************/
-void LoadDummyMacro(){
-      uint8_t i = 1;
-      MacrosBuffer[i][MACROTRIGGERCHANNEL]      = 12;   // Use channel 12 as trigger
-      MacrosBuffer[i][MACROSTARTTIME]           = 5;    // Start immediately
-      MacrosBuffer[i][MACRODURATION]            = 5;    // Sustain for one second
-      MacrosBuffer[i][MACROMOVECHANNEL]         = 5;    // Move Channel 5
-      MacrosBuffer[i][MACROMOVETOPOSITION]      = 180;  // Put it fully on
-      MacrosBuffer[i][MACRORUNNINGNOW]          = 0;    // Currently not running
-
 }
 /************************************************************************************************************/
 void ResetSubTrims(){
@@ -3030,7 +3018,6 @@ void setup()
     if (PlayFanfare) SendCommand(OpeningFanfare);
     ScreenTimeTimer = millis();
     CheckMacrosBuffer();
-   // LoadDummyMacro();
     RestoreBrightness();
 }
 /*********************************************************************************************************************************/

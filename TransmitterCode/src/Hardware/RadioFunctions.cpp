@@ -174,7 +174,7 @@ void SendData()
         TxPace = millis();
         GetNewChannelValues();                    // Load SendBuffer with new servo positions
         
-        ExecuteMacro();                           // Modify it if macro is running
+        if (UseMacros) ExecuteMacro();            // Modify it if macro is running
         
         if (DoSbusSendOnly)                       // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
         {
