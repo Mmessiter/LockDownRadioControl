@@ -152,7 +152,7 @@ RF24 Radio1(CE_PIN, CSN_PIN);
 #define SUBTRIMVIEW     8
 #define DATAVIEW        9
 #define TRIM_VIEW       10
-
+#define MACROS_VIEW     11
 #define SWITCHES_VIEW   12
 #define ONE_SWITCH_VIEW 13
 #define HELP_VIEW       14
@@ -3253,7 +3253,7 @@ void SaveOneModel(int mnum)
         } 
     }
 
-    // ********************** Add more heer
+    // ********************** Add more 
 
     OneModelMemory = SDCardAddress - StartLocation;
 #ifdef DB_NEXTION
@@ -4540,11 +4540,16 @@ void ZeroDataScreen(){             // ZERO Those parameters that are zeroable
             SavedRX2TotalTime  = RX2TotalTime;
             SavedSbusRepeats   = SbusRepeats;
 }
+/***************************************************** ShowChannelName ****************************************************************************/
 
+void ShowChannelName(){
+    char MoveToChannel[]    =   "Mch";
+    char MacrosView_chM[]   =   "chM";
+    SendText(MacrosView_chM,ChannelNames[GetValue(MoveToChannel)-1]);
+}
 /***************************************************** Populate Macros View ****************************************************************************/
 
-void PopulateMacrosView(){
-
+void PopulateMacrosView(){ // heer 
     char MacroNumber[]      =   "Mno";
     char TriggerChannel[]   =   "Tch";
     char MoveToChannel[]    =   "Mch";
@@ -4552,7 +4557,7 @@ void PopulateMacrosView(){
     char Delay[]            =   "Del";
     char Duration[]         =   "Dur";
     uint8_t n               =   PreviousMacroNumber;
-      
+   
     if (n < 100) {                                                                        // Read previous values before moveing to next  
         MacrosBuffer[n][MACROTRIGGERCHANNEL]    = GetValue(TriggerChannel);
         MacrosBuffer[n][MACROMOVECHANNEL]       = GetValue(MoveToChannel);
@@ -4566,8 +4571,8 @@ void PopulateMacrosView(){
     SendValue(MoveToPosition,MacrosBuffer[n][MACROMOVETOPOSITION]);
     SendValue(Delay,MacrosBuffer[n][MACROSTARTTIME]);
     SendValue(Duration,MacrosBuffer[n][MACRODURATION]);
+    ShowChannelName();
     PreviousMacroNumber = n;
-
 }
 
 /*********************************************************************************************************************************/
@@ -4610,11 +4615,9 @@ void  DoNumberedCommands(uint8_t nc){
             ShowFileNumber();
             CloseModelsFile();
             break;
-
-         case 3:                    
+        case 3:                    
             ModelNameTimeCheck = 0 ;
             break;
-        
         case 4:                              // goto models view   
             SendCommand(pModelsView);
             CurrentView = MODELSVIEW;
@@ -4626,21 +4629,23 @@ void  DoNumberedCommands(uint8_t nc){
         case 5:
             PreviousMacroNumber = 200;        // i.e. no usable number
             SendCommand(pMacrosView);         // Display MacroView
+            CurrentView = MACROS_VIEW;
             Procrastinate(50);
             PopulateMacrosView();
             break;
         case 6:
             PopulateMacrosView();             // Macros view number has moved to new macro
             break;
-
         case 7:
             ExitMacrosView();
             break;
-
+        case 8:
+            ShowChannelName();
+            break;
         default:
            break;
     }
-            ClearText();
+    ClearText();
 }
 /*********************************************************************************************************************************/
 
@@ -5230,7 +5235,7 @@ void ButtonWasPressed()
             ClearText();
             return;
         }
-        if (InStrng(GOTO, TextIn) > 0) {                     // Help screen returns here to relevent config screen
+        if (InStrng(GOTO, TextIn) > 0) {                     // Return from Help screen returns here to relevent config screen
             i = 5;
             while (uint8_t(TextIn[i]) > 0 && i < 30) {
                 WhichPage[i] = TextIn[i];
@@ -5261,6 +5266,10 @@ void ButtonWasPressed()
             }
             if (CurrentView == FILESVIEW) { 
                 ShowDirectory();  
+            }
+            if (CurrentView == MACROS_VIEW){ // heer
+                PreviousMacroNumber = 200;        // i.e. no usable number
+                PopulateMacrosView();
             }
             UpdateModelsNameEveryWhere();
             ClearText();
