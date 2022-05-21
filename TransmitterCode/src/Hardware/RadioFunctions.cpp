@@ -136,6 +136,7 @@ void StopMacro(uint8_t m){                                                      
     MacrosBuffer[m][MACRORUNNINGNOW] = 0;
 }
 /************************************************************************************************************/
+
 void ExecuteMacro(){                                                                            // Main entry point from SendData()  ... START/STOP/RUN
    uint8_t TriggerChannel = 0;
    for (u_int8_t i = 0; i < MAXMACROS; ++i){        
@@ -145,7 +146,7 @@ void ExecuteMacro(){                                                            
             if (SendBuffer[TriggerChannel] >= MAXMICROS-1){                                     // Is the trigger point is close to its highest value?
                 if (!MacrosBuffer[i][MACRORUNNINGNOW]) StartMacro(i);                           // Yes. Start if not already started
             } else {                                            
-                if (MacrosBuffer[i][MACRORUNNINGNOW])  StopMacro(i);                            // No. Stop it it was running 
+                if (MacrosBuffer[i][MACRORUNNINGNOW])  StopMacro(i);                            // No. Stop it if it was running 
             }
  // ****************************  RUN ****************************************
             if (MacrosBuffer[i][MACRORUNNINGNOW]) {                                             // If running, move the servo ... if timer agrees.
@@ -154,6 +155,7 @@ void ExecuteMacro(){                                                            
         }
    }
 }
+
 // *************** END OF MACROS ZONE ************************************************
 
 
