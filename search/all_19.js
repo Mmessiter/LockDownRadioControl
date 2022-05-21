@@ -7,5 +7,6 @@ var searchData=
   ['ypoint_4',['yPoint',['../_transmitter_code_2src_2main_8cpp.html#ac57deb5507c3835634b98d51b5d13c9b',1,'main.cpp']]],
   ['ypoints_5',['yPoints',['../_transmitter_code_2src_2main_8cpp.html#aff20e4985ae632d4c59eeb3d772874c9',1,'main.cpp']]],
   ['ytouchplace_6',['YtouchPlace',['../_transmitter_code_2src_2main_8cpp.html#a6e7d01bfa867cd7da9aba15150bc258b',1,'main.cpp']]],
-  ['yy1_7',['yy1',['../_radio_functions_8cpp.html#a10274b74b5b9f35476ae844506775afe',1,'RadioFunctions.cpp']]]
+  ['yy1_7',['yy1',['../_radio_functions_8cpp.html#a10274b74b5b9f35476ae844506775afe',1,'RadioFunctions.cpp']]],
+  ['yy1extra_8',['YY1EXTRA',['../_radio_functions_8cpp.html#ad7ab066fbe7d750f032f5761dbaa2487',1,'RadioFunctions.cpp']]]
 ];

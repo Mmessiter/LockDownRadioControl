@@ -25,6 +25,7 @@ var _radio_functions_8cpp =
     [ "UNCOMPRESSEDWORDS", "_radio_functions_8cpp.html#a0c40a351a0c0e01fbd5e5b1b0187eb48", null ],
     [ "xx1", "_radio_functions_8cpp.html#af12cb4fe3d6d02738ca7a75e1e1fd722", null ],
     [ "yy1", "_radio_functions_8cpp.html#a10274b74b5b9f35476ae844506775afe", null ],
+    [ "YY1EXTRA", "_radio_functions_8cpp.html#ad7ab066fbe7d750f032f5761dbaa2487", null ],
     [ "BufferNewPipe", "_radio_functions_8cpp.html#aa37950d8ffe471beabe0f25c1e671808", null ],
     [ "Compress", "_radio_functions_8cpp.html#ab46df249e949de237fc3bacdc5225934", null ],
     [ "DeComp", "_radio_functions_8cpp.html#a287a5bee7563781398fb98de9e039371", null ],

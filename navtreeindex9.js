@@ -1,5 +1,6 @@
 var NAVTREEINDEX9 =
 {
+"dir_a82113462c71b35643a3d0b67cbae1c6.html":[12,0,4],
 "dir_b406d8e7f03ad7c96464cb7b7bea32c4.html":[12,0,2,1],
 "dir_bc43e722192e51f8bb0226ac573abc19.html":[12,0,3],
 "dir_c3a04bb3f7b535ba1b19f666bb64b849.html":[12,0,2,0,1],
@@ -14,8 +15,8 @@ var NAVTREEINDEX9 =
 "dir_f3433e26411b8b5b6b990f1ec8ef8a7a.html":[12,0,1,0],
 "dir_f4a416e20b33f36e9e4ccc17423b29f0.html":[12,0,3,0,4,0],
 "files.html":[12,0],
-"functions.html":[11,3,0],
 "functions.html":[11,3,0,0],
+"functions.html":[11,3,0],
 "functions_b.html":[11,3,0,1],
 "functions_c.html":[11,3,0,2],
 "functions_d.html":[11,3,0,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX9 =
 "md__sensor_hub_teensy3_6_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md99":[9,5],
 "pages.html":[],
 "radio_8h.html":[12,0,1,1,0,1],
-"radio_8h.html#a0944456d2dbd7c1deb2abba2532afe24":[12,0,1,1,0,1,50],
-"radio_8h.html#a09cb370d93005b5a43e932a3d6093ea2":[12,0,1,1,0,1,55]
+"radio_8h.html#a0944456d2dbd7c1deb2abba2532afe24":[12,0,1,1,0,1,50]
 };
