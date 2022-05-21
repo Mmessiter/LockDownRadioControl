@@ -3667,6 +3667,11 @@ void SetDefaultValues()
     for (i = 0; i < CHANNELSUSED + 1; ++i) {
             SubTrims[i] = 127;                    // centre (0 - 254)
         }
+    for (j = 0; j < BYTESPERMACRO; ++j){
+        for (i = 0; i < MAXMACROS; ++i){
+                MacrosBuffer[i][j] = 0;
+        } 
+    }
 
 
     SendValue(Progress, 95);
