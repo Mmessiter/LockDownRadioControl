@@ -2775,6 +2775,7 @@ bool ReadOneModel(uint8_t Mnum)
     Serial.println(" bytes reserved per model.)");
 #endif // defined DB_NEXTION
     UpdateButtonLabels();
+    CheckMacrosBuffer();
     return true;
 }
 
@@ -3002,7 +3003,7 @@ void setup()
     SendValue(FrontView_Mins, 0);
     SendValue(FrontView_Secs, 0);
     //  ***************************************************************************************
-     //  SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
+    //  SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
     //  **   BUT then re-comment it!! Otherwise it will reset to same time on every boot up! **
     //  ***************************************************************************************
     RecoveryTimer = millis();
@@ -3017,7 +3018,6 @@ void setup()
     SetAudioVolume(AudioVolume);
     if (PlayFanfare) SendCommand(OpeningFanfare);
     ScreenTimeTimer = millis();
-    CheckMacrosBuffer();
     RestoreBrightness();
 }
 /*********************************************************************************************************************************/
@@ -3667,6 +3667,11 @@ void SetDefaultValues()
     for (i = 0; i < CHANNELSUSED + 1; ++i) {
             SubTrims[i] = 127;                    // centre (0 - 254)
         }
+    for (j = 0; j < BYTESPERMACRO; ++j){
+        for (i = 0; i < MAXMACROS; ++i){
+                MacrosBuffer[i][j] = 0;
+        } 
+    }
 
 
     SendValue(Progress, 95);
@@ -4595,6 +4600,7 @@ void ExitMacrosView(){
     UseMacros = true;
     SaveOneModel(ModelNumber);
     SendCommand (pSetupView);
+    CurrentView =  MAINSETUPVIEW;
 }
 /*********************************************************************************************************************************/
 
@@ -5312,6 +5318,7 @@ void ButtonWasPressed()
                 SendCommand(NotStillConnected);
             }
             else {
+                SaveAllParameters();
                 digitalWrite(POWER_OFF_PIN, HIGH);
             }
             ClearText();
