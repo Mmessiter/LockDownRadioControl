@@ -228,7 +228,6 @@ void SendData()
     }
 }
 
-
 /************************************************************************************************************/
 
 // This function draws or re-draws and clears the box that display wave band scanning information
@@ -244,7 +243,6 @@ void DrawFhssBox()
     int  x2          = x1 + (128 * 5);
     int  y2          = y1 + 255;
     int  y3          = y2+YY1EXTRA;
-
     int  xd1         = 20;
     char STR125GHZ[] = "\"2.525\"";
     char STR96GHZ[]  = "\"2.496\"";
@@ -255,7 +253,6 @@ void DrawFhssBox()
     char CB[150];       // COMMAND BUFFER
     char draw[] = "draw ";
     char xstr[] = "xstr ";
-  
     char NB[9];        // Number Buffers...
     char NB1[9];
     char NB2[9];
@@ -268,7 +265,6 @@ void DrawFhssBox()
     char NA[2]    = ""; // blank one
     char NewWhite[15];
     char NewWhite1[15];
-   
     Str(NewWhite,ForeGroundColour,0);
     Str(NewWhite1,ForeGroundColour,1);
 
