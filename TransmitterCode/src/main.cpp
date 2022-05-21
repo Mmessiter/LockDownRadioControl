@@ -4595,6 +4595,7 @@ void ExitMacrosView(){
     UseMacros = true;
     SaveOneModel(ModelNumber);
     SendCommand (pSetupView);
+    CurrentView =  MAINSETUPVIEW;
 }
 /*********************************************************************************************************************************/
 
