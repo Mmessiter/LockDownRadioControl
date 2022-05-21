@@ -5313,6 +5313,7 @@ void ButtonWasPressed()
                 SendCommand(NotStillConnected);
             }
             else {
+                SaveAllParameters();
                 digitalWrite(POWER_OFF_PIN, HIGH);
             }
             ClearText();
