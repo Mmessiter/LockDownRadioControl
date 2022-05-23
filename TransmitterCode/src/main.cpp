@@ -553,13 +553,17 @@ uint32_t MacroStopTime[MAXMACROS];
 uint8_t  PreviousMacroNumber = 1;
 bool     UseMacros = false;
 uint16_t ReversedChannelBITS = 0; // 16 BIT for 16 Channels
-
+uint16_t SavedLineX          = 12345;
 // ***************************************** Extra Prototypes **********************************************
 
 void SendText(char* tbox, char* NewWord); // needed a prototype or two here!
 void RestoreBrightness();
 void ButtonWasPressed();
 void CalibrateEdgeSwitches();
+void DisplayCurve();
+void DrawLine(int x1, int y1, int x2, int y2, int c);
+void DrawBox(int x1, int y1, int x2, int y2, int c);
+void FillBox(int x1, int y1, int w, int h, int c);
 
 /************************************************************************************************************/
 // This function returns distance (in MILES) between two GPS coordinates (in degrees)
@@ -1455,7 +1459,7 @@ void ShowServoPos()
     char CalibrateView_Ch8[] = "Ch8";
     char ChannelInput[]      = "Input";
     char ChannelOutput[]     = "Output";
-
+    uint16_t StickPosition   = 54321;
     int l             = 0;
     int l1            = 0;
     int LeastDistance = 2; // if the change is very small, don't re-display anything - to reduce flashing.
@@ -1560,15 +1564,28 @@ void ShowServoPos()
             ShownBuffer[15] = SendBuffer[15];
         }
     }
-    if (CurrentView == GRAPHVIEW) { // Display current stick and output values 
+    if (CurrentView == GRAPHVIEW) { // Display current stick and output values // heer
+    
         if (ChanneltoSet <= 8) {
             l  = (InPutStick[ChanneltoSet - 1]);
             l1 = analogRead(AnalogueInput[l]);
             if (l1 <= ChannelCentre[l]) {
                 SendValue(ChannelInput, map(l1, ChannelCentre[l], ChannelMin[l], 0, -100));
+                StickPosition = map(l1, ChannelMin[l], ChannelCentre[l],BoxLeft,BoxLeft+(((BoxRight-30)-BoxLeft)/2));
+                if (abs(StickPosition - SavedLineX) > LeastDistance) {
+                    DisplayCurve();
+                    FillBox(StickPosition,BoxTop+4,2,(BoxBottom-42)-BoxTop, HighlightColour);
+                    SavedLineX = StickPosition;
+                }
             }
             else {
                 SendValue(ChannelInput, map(l1, ChannelCentre[l], ChannelMax[l], 0, 100));
+                StickPosition = map(l1, ChannelCentre[l], ChannelMax[l],BoxLeft+(((BoxRight-30)-BoxLeft)/2),BoxRight-30);
+                if (abs(StickPosition - SavedLineX) > LeastDistance) {
+                    DisplayCurve();   
+                    FillBox(StickPosition,BoxTop+4,2,(BoxBottom-42)-BoxTop, HighlightColour);
+                    SavedLineX = StickPosition;
+                }
             }
             if (Connected){
                 SendValue(ChannelOutput, map(SendBuffer[ChanneltoSet - 1], MINMICROS, MAXMICROS, -100, 100));
@@ -2062,7 +2079,7 @@ float MapExp(float xx, float Xxmin, float Xxmax, float Yymin, float Yymax, float
 
 void DoReverseSense(){
   for (uint8_t i = 0; i < 16; i++) {
-    if (ReversedChannelBITS & 1 << i){                                                          // Is BIT set?? // heer
+    if (ReversedChannelBITS & 1 << i){                                                          // Is BIT set?? 
             uint16_t p = map(SendBuffer[i],MINMICROS,MAXMICROS,MAXMICROS,MINMICROS);           // Yes so reverse the channel
             SendBuffer[i] = p;
             PreMixBuffer[i] = p;
@@ -3751,6 +3768,32 @@ void DrawLine(int x1, int y1, int x2, int y2, int c)
 }
 
 /*********************************************************************************************************************************/
+/**
+ * @param x1
+ * @param y1
+ * @param x2
+ * @param y2
+ * @param color
+ */
+void FillBox(int x1, int y1, int w, int h, int c)
+{
+    char line[] = "fill ";
+    char nb[12];
+    char cb[50];
+    char comma[] = ",";
+    strcpy(cb, line);
+    strcat(cb, Str(nb, x1, 0));
+    strcat(cb, comma);
+    strcat(cb, Str(nb, y1, 0));
+    strcat(cb, comma);
+    strcat(cb, Str(nb, w, 0));
+    strcat(cb, comma);
+    strcat(cb, Str(nb, h, 0));
+    strcat(cb, comma);
+    strcat(cb, Str(nb, c, 0));
+    SendCommand(cb);
+}
+/*********************************************************************************************************************************/
 
 /**
  * @param x1
@@ -3994,7 +4037,7 @@ void DisplayCurve()
     }
 
     if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == 2) { //EXPO  ************************************************************************************************
-#define APPROXIMATION 5                                         // This is for the approximation of the screen curve
+#define APPROXIMATION 10                                         // This is for the approximation of the screen curve
 
         SendCommand(b3off);
         SendCommand(b4off);
@@ -4654,7 +4697,7 @@ void  EndReverseView(){
 
 /*********************************************************************************************************************************/
 
-void  StartReverseView(){ // heer
+void  StartReverseView(){ 
     char pReverseView[] = "page ReverseView";
     char fs[16][5]      = {"fs1","fs2","fs3","fs4","fs5","fs6","fs7","fs8","fs9","fs10","fs11","fs12","fs13","fs14","fs15","fs16"};
     uint8_t i;    
