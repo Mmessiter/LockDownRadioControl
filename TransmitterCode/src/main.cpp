@@ -1565,25 +1565,33 @@ void ShowServoPos()
         }
     }
     if (CurrentView == GRAPHVIEW) { // Display current stick and output values // heer
-    
+#define fixitx 34
+#define BarWidth 3
         if (ChanneltoSet <= 8) {
             l  = (InPutStick[ChanneltoSet - 1]);
             l1 = analogRead(AnalogueInput[l]);
+            if (ReversedChannelBITS & 1 << (ChanneltoSet-1)){  // reversed??
+                    if (l1 <= ChannelCentre[l]){
+                        l1 = map(l1,ChannelMin[l],ChannelCentre[l],ChannelMax[l],ChannelCentre[l]);
+                    }else{
+                        l1 = map(l1,ChannelCentre[l],ChannelMax[l],ChannelCentre[l],ChannelMin[l]);
+                    }
+            }
             if (l1 <= ChannelCentre[l]) {
                 SendValue(ChannelInput, map(l1, ChannelCentre[l], ChannelMin[l], 0, -100));
-                StickPosition = map(l1, ChannelMin[l], ChannelCentre[l],BoxLeft,BoxLeft+(((BoxRight-30)-BoxLeft)/2));
+                StickPosition = map(l1, ChannelMin[l], ChannelCentre[l],BoxLeft-4,BoxLeft+(((BoxRight-fixitx)-BoxLeft)/2));
                 if (abs(StickPosition - SavedLineX) > LeastDistance) {
                     DisplayCurve();
-                    FillBox(StickPosition,BoxTop+4,2,(BoxBottom-42)-BoxTop, HighlightColour);
+                    FillBox(StickPosition-1,BoxTop+4,BarWidth,(BoxBottom-42)-BoxTop, Green);
                     SavedLineX = StickPosition;
                 }
             }
             else {
                 SendValue(ChannelInput, map(l1, ChannelCentre[l], ChannelMax[l], 0, 100));
-                StickPosition = map(l1, ChannelCentre[l], ChannelMax[l],BoxLeft+(((BoxRight-30)-BoxLeft)/2),BoxRight-30);
+                StickPosition = map(l1, ChannelCentre[l], ChannelMax[l],BoxLeft+(((BoxRight-fixitx)-BoxLeft)/2),BoxRight-fixitx);
                 if (abs(StickPosition - SavedLineX) > LeastDistance) {
                     DisplayCurve();   
-                    FillBox(StickPosition,BoxTop+4,2,(BoxBottom-42)-BoxTop, HighlightColour);
+                    FillBox(StickPosition-1,BoxTop+4,BarWidth,(BoxBottom-42)-BoxTop, Green);
                     SavedLineX = StickPosition;
                 }
             }
