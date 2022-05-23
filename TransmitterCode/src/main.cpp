@@ -4554,7 +4554,7 @@ void ShowChannelName(){
 }
 /***************************************************** Populate Macros View ****************************************************************************/
 
-void PopulateMacrosView(){ // heer 
+void PopulateMacrosView(){ 
     char MacroNumber[]      =   "Mno";
     char TriggerChannel[]   =   "Tch";
     char MoveToChannel[]    =   "Mch";
@@ -5273,10 +5273,18 @@ void ButtonWasPressed()
             if (CurrentView == FILESVIEW) { 
                 ShowDirectory();  
             }
-            if (CurrentView == MACROS_VIEW){ // heer
-                PreviousMacroNumber = 200;        // i.e. no usable number
-                PopulateMacrosView();
+            if (CurrentView == MACROS_VIEW){ 
+               // Do nothing!
             }
+             if (CurrentView == CALIBRATEVIEW){
+                Force_ReDisplay();
+                ShowServoPos(); 
+             };
+
+             if (CurrentView == STICKSVIEW){
+                Force_ReDisplay();
+                ShowServoPos(); 
+             };
             UpdateModelsNameEveryWhere();
             ClearText();
             return;
@@ -6042,7 +6050,7 @@ void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(ReScan, TextIn))
+        if (InStrng(ReScan, TextIn)) // heer
         {
             DrawFhssBox();
             DoScanInit();
