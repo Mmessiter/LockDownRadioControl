@@ -1582,7 +1582,7 @@ void ShowServoPos()
                 StickPosition = map(l1, ChannelMin[l], ChannelCentre[l],BoxLeft-4,BoxLeft+(((BoxRight-fixitx)-BoxLeft)/2));
                 if (abs(StickPosition - SavedLineX) > LeastDistance) {
                     DisplayCurve();
-                    FillBox(StickPosition-1,BoxTop+4,BarWidth,(BoxBottom-42)-BoxTop, Green);
+                    FillBox(StickPosition-1,BoxTop+4,BarWidth,(BoxBottom-42)-BoxTop, HighlightColour);
                     SavedLineX = StickPosition;
                 }
             }
@@ -1591,7 +1591,7 @@ void ShowServoPos()
                 StickPosition = map(l1, ChannelCentre[l], ChannelMax[l],BoxLeft+(((BoxRight-fixitx)-BoxLeft)/2),BoxRight-fixitx);
                 if (abs(StickPosition - SavedLineX) > LeastDistance) {
                     DisplayCurve();   
-                    FillBox(StickPosition-1,BoxTop+4,BarWidth,(BoxBottom-42)-BoxTop, Green);
+                    FillBox(StickPosition-1,BoxTop+4,BarWidth,(BoxBottom-42)-BoxTop, HighlightColour);
                     SavedLineX = StickPosition;
                 }
             }
@@ -2083,14 +2083,13 @@ float MapExp(float xx, float Xxmin, float Xxmax, float Yymin, float Yymax, float
 
 
 /*********************************************************************************************************************************/
-// Is this servo reversed?
+// Is this channel reversed?
 
 void DoReverseSense(){
   for (uint8_t i = 0; i < 16; i++) {
-    if (ReversedChannelBITS & 1 << i){                                                          // Is BIT set?? 
-            uint16_t p = map(SendBuffer[i],MINMICROS,MAXMICROS,MAXMICROS,MINMICROS);           // Yes so reverse the channel
-            SendBuffer[i] = p;
-            PreMixBuffer[i] = p;
+    if (ReversedChannelBITS & 1 << i){                                                              // Is BIT set?? 
+            PreMixBuffer[i] = map(SendBuffer[i],MINMICROS,MAXMICROS,MAXMICROS,MINMICROS);           // Yes so reverse the channel
+            SendBuffer[i] = PreMixBuffer[i];
     }
   }
 }
