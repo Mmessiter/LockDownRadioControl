@@ -22,13 +22,14 @@ var searchData=
   ['reserved0_19',['reserved0',['../structsensors__event__t.html#a8be4dc00344f46abf29e06251bf9fad9',1,'sensors_event_t']]],
   ['resolution_20',['resolution',['../structsensor__t.html#a926aba3216afd50e62c0a6cdbcc7433a',1,'sensor_t']]],
   ['response_21',['response',['../structnmea__datavalue__t.html#a0fc893fd25c28ff4ee9f5142f4c309c0',1,'nmea_datavalue_t']]],
-  ['rgba_22',['rgba',['../structsensors__color__t.html#a0afbff980c17fbacdab1666735f3d3e6',1,'sensors_color_t']]],
-  ['roll_23',['roll',['../structsensors__vec__t.html#a6d8c6e288de54942e1d2be4f42f96bb2',1,'sensors_vec_t']]],
-  ['rx1totaltime_24',['RX1TotalTime',['../radio_8h.html#aa1850e21b7988ec8784a0a6a89077df0',1,'RX1TotalTime():&#160;radio.h'],['../_transmitter_code_2src_2main_8cpp.html#a95dd54e021a56919600706636b80fb5a',1,'RX1TotalTime():&#160;main.cpp']]],
-  ['rx2totaltime_25',['RX2TotalTime',['../radio_8h.html#aabc8c01b8e9f9b91a3575bf7052dc4de',1,'RX2TotalTime():&#160;radio.h'],['../_transmitter_code_2src_2main_8cpp.html#a3e02a2c832634c8521a867cac4299c5c',1,'RX2TotalTime():&#160;main.cpp']]],
-  ['rxcellcount_26',['RXCellCount',['../_transmitter_code_2src_2main_8cpp.html#aa09bc4e1398cb869ae79670683470ed5',1,'main.cpp']]],
-  ['rxmaxmodelaltitude_27',['RXMAXModelAltitude',['../_transmitter_code_2src_2main_8cpp.html#aac60f398ee9f5f9f89459014e003f68d',1,'main.cpp']]],
-  ['rxmodelaltitude_28',['RXModelAltitude',['../_transmitter_code_2src_2main_8cpp.html#a60096f1f0ec75fa673207d2d11cfd123',1,'main.cpp']]],
-  ['rxmodeltemperature_29',['RXModelTemperature',['../_transmitter_code_2src_2main_8cpp.html#ac8d7ac69a7e7a6b90792e640742b2097',1,'main.cpp']]],
-  ['rxmodelvolts_30',['RXModelVolts',['../_transmitter_code_2src_2main_8cpp.html#a5f56f32c16498a3547635bda86c49428',1,'main.cpp']]]
+  ['reversedchannelbits_22',['ReversedChannelBITS',['../_transmitter_code_2src_2main_8cpp.html#ab67a250be0b26224543450b96a5f11bf',1,'main.cpp']]],
+  ['rgba_23',['rgba',['../structsensors__color__t.html#a0afbff980c17fbacdab1666735f3d3e6',1,'sensors_color_t']]],
+  ['roll_24',['roll',['../structsensors__vec__t.html#a6d8c6e288de54942e1d2be4f42f96bb2',1,'sensors_vec_t']]],
+  ['rx1totaltime_25',['RX1TotalTime',['../radio_8h.html#aa1850e21b7988ec8784a0a6a89077df0',1,'RX1TotalTime():&#160;radio.h'],['../_transmitter_code_2src_2main_8cpp.html#a95dd54e021a56919600706636b80fb5a',1,'RX1TotalTime():&#160;main.cpp']]],
+  ['rx2totaltime_26',['RX2TotalTime',['../radio_8h.html#aabc8c01b8e9f9b91a3575bf7052dc4de',1,'RX2TotalTime():&#160;radio.h'],['../_transmitter_code_2src_2main_8cpp.html#a3e02a2c832634c8521a867cac4299c5c',1,'RX2TotalTime():&#160;main.cpp']]],
+  ['rxcellcount_27',['RXCellCount',['../_transmitter_code_2src_2main_8cpp.html#aa09bc4e1398cb869ae79670683470ed5',1,'main.cpp']]],
+  ['rxmaxmodelaltitude_28',['RXMAXModelAltitude',['../_transmitter_code_2src_2main_8cpp.html#aac60f398ee9f5f9f89459014e003f68d',1,'main.cpp']]],
+  ['rxmodelaltitude_29',['RXModelAltitude',['../_transmitter_code_2src_2main_8cpp.html#a60096f1f0ec75fa673207d2d11cfd123',1,'main.cpp']]],
+  ['rxmodeltemperature_30',['RXModelTemperature',['../_transmitter_code_2src_2main_8cpp.html#ac8d7ac69a7e7a6b90792e640742b2097',1,'main.cpp']]],
+  ['rxmodelvolts_31',['RXModelVolts',['../_transmitter_code_2src_2main_8cpp.html#a5f56f32c16498a3547635bda86c49428',1,'main.cpp']]]
 ];

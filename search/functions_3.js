@@ -19,11 +19,12 @@ var searchData=
   ['domixes_16',['DoMixes',['../_transmitter_code_2src_2main_8cpp.html#ac182a99befc8d4d83532a6c38571a222',1,'main.cpp']]],
   ['donewchannelname_17',['DoNewChannelName',['../_transmitter_code_2src_2main_8cpp.html#aba44d61ea51411cb5c601beb94b6fef4',1,'main.cpp']]],
   ['donumberedcommands_18',['DoNumberedCommands',['../_transmitter_code_2src_2main_8cpp.html#a463a07d516b046c17a66b486dbcacb68',1,'main.cpp']]],
-  ['doscanend_19',['DoScanEnd',['../_radio_functions_8cpp.html#a31fb6a46af68482e107cddee58dfb677',1,'DoScanEnd():&#160;RadioFunctions.cpp'],['../_radio_functions_8h.html#a31fb6a46af68482e107cddee58dfb677',1,'DoScanEnd():&#160;RadioFunctions.cpp']]],
-  ['doscaninit_20',['DoScanInit',['../_radio_functions_8cpp.html#a77c4a4ffa609df08830ccece07bf283b',1,'DoScanInit():&#160;RadioFunctions.cpp'],['../_radio_functions_8h.html#a77c4a4ffa609df08830ccece07bf283b',1,'DoScanInit():&#160;RadioFunctions.cpp']]],
-  ['dotherequest_21',['DoTheRequest',['../_sensor_hub_l_c_2src_2main_8cpp.html#aa813a4b38095c6683d78bdf2baa33f69',1,'DoTheRequest():&#160;main.cpp'],['../_sensor_hub_t32_2src_2main_8cpp.html#aa813a4b38095c6683d78bdf2baa33f69',1,'DoTheRequest():&#160;main.cpp'],['../_sensor_hub_teensy3__6_2src_2main_8cpp.html#aa813a4b38095c6683d78bdf2baa33f69',1,'DoTheRequest():&#160;main.cpp']]],
-  ['drawbox_22',['DrawBox',['../_transmitter_code_2src_2main_8cpp.html#a705c97485d6142131c03577ec14134e7',1,'main.cpp']]],
-  ['drawdot_23',['DrawDot',['../_transmitter_code_2src_2main_8cpp.html#a711945ac5f6948657463708863748432',1,'main.cpp']]],
-  ['drawfhssbox_24',['DrawFhssBox',['../_radio_functions_8cpp.html#a6bdc6419b47dda71d0d2c8faf652adc2',1,'DrawFhssBox():&#160;RadioFunctions.cpp'],['../_radio_functions_8h.html#a6bdc6419b47dda71d0d2c8faf652adc2',1,'DrawFhssBox():&#160;RadioFunctions.cpp']]],
-  ['drawline_25',['DrawLine',['../_transmitter_code_2src_2main_8cpp.html#acbef1d41e1bd646b60a6e8afd9c66880',1,'main.cpp']]]
+  ['doreversesense_19',['DoReverseSense',['../_transmitter_code_2src_2main_8cpp.html#aa49d0b535165a5470b2328472eae2e18',1,'main.cpp']]],
+  ['doscanend_20',['DoScanEnd',['../_radio_functions_8cpp.html#a31fb6a46af68482e107cddee58dfb677',1,'DoScanEnd():&#160;RadioFunctions.cpp'],['../_radio_functions_8h.html#a31fb6a46af68482e107cddee58dfb677',1,'DoScanEnd():&#160;RadioFunctions.cpp']]],
+  ['doscaninit_21',['DoScanInit',['../_radio_functions_8cpp.html#a77c4a4ffa609df08830ccece07bf283b',1,'DoScanInit():&#160;RadioFunctions.cpp'],['../_radio_functions_8h.html#a77c4a4ffa609df08830ccece07bf283b',1,'DoScanInit():&#160;RadioFunctions.cpp']]],
+  ['dotherequest_22',['DoTheRequest',['../_sensor_hub_l_c_2src_2main_8cpp.html#aa813a4b38095c6683d78bdf2baa33f69',1,'DoTheRequest():&#160;main.cpp'],['../_sensor_hub_t32_2src_2main_8cpp.html#aa813a4b38095c6683d78bdf2baa33f69',1,'DoTheRequest():&#160;main.cpp'],['../_sensor_hub_teensy3__6_2src_2main_8cpp.html#aa813a4b38095c6683d78bdf2baa33f69',1,'DoTheRequest():&#160;main.cpp']]],
+  ['drawbox_23',['DrawBox',['../_transmitter_code_2src_2main_8cpp.html#a705c97485d6142131c03577ec14134e7',1,'main.cpp']]],
+  ['drawdot_24',['DrawDot',['../_transmitter_code_2src_2main_8cpp.html#a711945ac5f6948657463708863748432',1,'main.cpp']]],
+  ['drawfhssbox_25',['DrawFhssBox',['../_radio_functions_8cpp.html#a6bdc6419b47dda71d0d2c8faf652adc2',1,'DrawFhssBox():&#160;RadioFunctions.cpp'],['../_radio_functions_8h.html#a6bdc6419b47dda71d0d2c8faf652adc2',1,'DrawFhssBox():&#160;RadioFunctions.cpp']]],
+  ['drawline_26',['DrawLine',['../_transmitter_code_2src_2main_8cpp.html#acbef1d41e1bd646b60a6e8afd9c66880',1,'main.cpp']]]
 ];
