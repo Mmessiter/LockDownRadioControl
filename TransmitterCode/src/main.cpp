@@ -162,6 +162,7 @@ RF24 Radio1(CE_PIN, CSN_PIN);
 #define COLOURS_VIEW    18
 #define AUDIOVIEW       19
 #define FILESVIEW       20
+#define REVERSEVIEW     21
 
 #define CharsMax        120 
 
@@ -551,6 +552,7 @@ uint32_t MacroStartTime[MAXMACROS];
 uint32_t MacroStopTime[MAXMACROS];
 uint8_t  PreviousMacroNumber = 1;
 bool     UseMacros = false;
+uint16_t ReversedChannelBITS = 0; // 16 BIT for 16 Channels
 
 // ***************************************** Extra Prototypes **********************************************
 
@@ -2054,6 +2056,19 @@ float MapExp(float xx, float Xxmin, float Xxmax, float Yymin, float Yymax, float
     return map(xx, Xxmin, Xxmax, Yymin, Yymax);
 }
 
+
+/*********************************************************************************************************************************/
+// Is this servo reversed?
+
+void DoReverseSense(){
+  for (uint8_t i = 0; i < 16; i++) {
+    if (ReversedChannelBITS & 1 << i){                                                          // Is BIT set?? // heer
+            uint16_t p = map(SendBuffer[i],MINMICROS,MAXMICROS,MAXMICROS,MINMICROS);           // Yes so reverse the channel
+            SendBuffer[i] = p;
+            PreMixBuffer[i] = p;
+    }
+  }
+}
 /*********************************************************************************************************************************/
 
 /** @brief GET NEW SERVO POSITIONS */
@@ -2124,6 +2139,7 @@ void GetNewChannelValues()
         k               = 1500;
         SendBuffer[n]   = PreMixBuffer[n];
     }
+    DoReverseSense();
     if (CurrentMode == NORMAL) DoMixes();                               // not while calibrating
 }
 
@@ -2577,7 +2593,7 @@ void UpdateButtonLabels()
         strcat(BoxOffsetLabel, ChannelNames[15]);
         SendText(SticksViewButton16, BoxOffsetLabel);
     }
-    if (CurrentView == INPUTS_VIEW || CurrentView == FAILSAFE_VIEW) {
+    if (CurrentView == INPUTS_VIEW || CurrentView == FAILSAFE_VIEW || CurrentView == REVERSEVIEW) {
         SendText(fsch1, ChannelNames[0]);
         SendText(fsch2, ChannelNames[1]);
         SendText(fsch3, ChannelNames[2]);
@@ -2748,6 +2764,9 @@ bool ReadOneModel(uint8_t Mnum)
                 ++SDCardAddress;
         } 
     }
+    ReversedChannelBITS = SDReadInt(SDCardAddress);
+    ++SDCardAddress;
+    ++SDCardAddress;
 
     // **************************************
 
@@ -3252,6 +3271,12 @@ void SaveOneModel(int mnum)
                 ++SDCardAddress;
         } 
     }
+    SDUpdateInt (SDCardAddress,ReversedChannelBITS);
+    ++SDCardAddress;
+    ++SDCardAddress;
+     
+      
+
 
     // ********************** Add more 
 
@@ -3679,6 +3704,7 @@ void SetDefaultValues()
     SaveOneModel(ModelNumber);
     UpdateModelsNameEveryWhere();
     SendValue(Progress, 100);
+    ReversedChannelBITS = 0;
     Procrastinate(100);
     SendCommand(ProgressEnd);
 }
@@ -4602,6 +4628,53 @@ void ExitMacrosView(){
     SendCommand (pSetupView);
     CurrentView =  MAINSETUPVIEW;
 }
+
+/*********************************************************************************************************************************/
+
+void  EndReverseView(){
+        char fs[16][5]   = {"fs1","fs2","fs3","fs4","fs5","fs6","fs7","fs8","fs9","fs10","fs11","fs12","fs13","fs14","fs15","fs16"};
+        uint8_t i;    
+        char pSetupView[] = "page SetupView";
+        char ProgressStart[]           = "vis Progress,1";
+        char ProgressEnd[]             = "vis Progress,0";
+        char Progress[]                = "Progress";
+        SendCommand(ProgressStart);
+        ReversedChannelBITS = 0;
+        for (i = 0; i < 16 ; ++i){
+             SendValue(Progress, (i * (100/16)));
+            if (GetValue(fs[i])){
+                ReversedChannelBITS |= 1 << i; // set a BIT 
+            }
+        }
+        CurrentView = MAINSETUPVIEW;
+        SaveOneModel(ModelNumber);
+        SendCommand(ProgressEnd);
+        SendCommand(pSetupView);
+}
+
+/*********************************************************************************************************************************/
+
+void  StartReverseView(){ // heer
+    char pReverseView[] = "page ReverseView";
+    char fs[16][5]      = {"fs1","fs2","fs3","fs4","fs5","fs6","fs7","fs8","fs9","fs10","fs11","fs12","fs13","fs14","fs15","fs16"};
+    uint8_t i;    
+    char Progress[]                = "Progress";
+    char ProgressStart[]           = "vis Progress,1";
+    char ProgressEnd[]             = "vis Progress,0";
+    CurrentView = REVERSEVIEW;
+    SendCommand(pReverseView);
+    UpdateButtonLabels();
+    SendCommand(ProgressStart);
+        for (i = 0; i < 16 ; ++i){
+             SendValue(Progress, (i *(100/16)));
+            if (ReversedChannelBITS & 1 << i){  // is BIT set?? 
+                SendValue(fs[i],1);
+            }else{
+                SendValue(fs[i],0);
+            }
+        }
+    SendCommand(ProgressEnd);
+}
 /*********************************************************************************************************************************/
 
 void  DoNumberedCommands(uint8_t nc){
@@ -4647,6 +4720,12 @@ void  DoNumberedCommands(uint8_t nc){
             break;
         case 8:
             ShowChannelName();
+            break;
+        case 9:
+            StartReverseView();
+            break;
+        case 10:
+            EndReverseView();
             break;
         default:
            break;
@@ -5384,22 +5463,22 @@ void ButtonWasPressed()
         }
         if (InStrng(FailSafe, TextIn) > 0) {
             SendCommand(pFailSafe);
-            SendValue(fs1, FailSafeChannel[0]);
-            SendValue(fs2, FailSafeChannel[1]);
-            SendValue(fs3, FailSafeChannel[2]);
-            SendValue(fs4, FailSafeChannel[3]);
-            SendValue(fs5, FailSafeChannel[4]);
-            SendValue(fs6, FailSafeChannel[5]);
-            SendValue(fs7, FailSafeChannel[6]);
-            SendValue(fs8, FailSafeChannel[7]);
-            SendValue(fs9, FailSafeChannel[8]);
-            SendValue(fs10, FailSafeChannel[9]);
-            SendValue(fs11, FailSafeChannel[10]);
-            SendValue(fs12, FailSafeChannel[11]);
-            SendValue(fs13, FailSafeChannel[12]);
-            SendValue(fs14, FailSafeChannel[13]);
-            SendValue(fs15, FailSafeChannel[14]);
-            SendValue(fs16, FailSafeChannel[15]);
+          //  SendValue(fs1, FailSafeChannel[0]); // this is done by   UpdateButtonLabels(); !
+          //  SendValue(fs2, FailSafeChannel[1]);
+          //  SendValue(fs3, FailSafeChannel[2]);
+          //  SendValue(fs4, FailSafeChannel[3]);
+          //  SendValue(fs5, FailSafeChannel[4]);
+          //  SendValue(fs6, FailSafeChannel[5]);
+          //  SendValue(fs7, FailSafeChannel[6]);
+          //  SendValue(fs8, FailSafeChannel[7]);
+          //  SendValue(fs9, FailSafeChannel[8]);
+          //  SendValue(fs10, FailSafeChannel[9]);
+          //  SendValue(fs11, FailSafeChannel[10]);
+          //  SendValue(fs12, FailSafeChannel[11]);
+          //  SendValue(fs13, FailSafeChannel[12]);
+          //  SendValue(fs14, FailSafeChannel[13]);
+          //  SendValue(fs15, FailSafeChannel[14]);
+          //  SendValue(fs16, FailSafeChannel[15]);
             CurrentView = FAILSAFE_VIEW;
             UpdateButtonLabels();
             ClearText();
