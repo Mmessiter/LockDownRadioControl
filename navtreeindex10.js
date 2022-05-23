@@ -1,5 +1,7 @@
 var NAVTREEINDEX10 =
 {
+"md__sensor_hub_teensy3_6_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md97":[9,3],
+"md__sensor_hub_teensy3_6_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md98":[9,4],
 "md__sensor_hub_teensy3_6_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md99":[9,5],
 "pages.html":[],
 "radio_8h.html":[12,0,1,1,0,1],
@@ -247,7 +249,5 @@ var NAVTREEINDEX10 =
 "structbmp280__calib__data.html#a512563b392052c4d687d92e0fa4c69fc":[11,0,10,9],
 "structbmp280__calib__data.html#a65d0abb061f85a294731e4466f28e5c9":[11,0,10,6],
 "structbmp280__calib__data.html#a73f05510565c594116b2074ab0ff73d7":[11,0,10,3],
-"structbmp280__calib__data.html#a75facb42146d3294c4b3502429bb11ff":[11,0,10,8],
-"structbmp280__calib__data.html#a84831980d460c469926abee7e4230714":[11,0,10,7],
-"structbmp280__calib__data.html#a8e8f4e91586272463abf5e7ca3d2a371":[11,0,10,1]
+"structbmp280__calib__data.html#a75facb42146d3294c4b3502429bb11ff":[11,0,10,8]
 };
