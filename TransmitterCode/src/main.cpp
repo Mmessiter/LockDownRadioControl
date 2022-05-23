@@ -2170,7 +2170,7 @@ void GetNewChannelValues()
 /*********************************************************************************************************************************/
 
 void ReduceLimits(){                              // Get things setup for sticks calibration
- for (uint8_t i = 0; i < PROPOCHANNELS; ++i)
+ for (uint8_t i = 0; i < CHANNELSUSED; ++i)
     {
         ChannelMax[i] = 512;
         ChannelMin[i] = 512;
