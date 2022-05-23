@@ -6050,7 +6050,7 @@ void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(ReScan, TextIn)) // heer
+        if (InStrng(ReScan, TextIn)) 
         {
             DrawFhssBox();
             DoScanInit();
