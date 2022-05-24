@@ -29,6 +29,15 @@
  * - Timer goes on and off with motor to keep track of motor use.
  * - DS1307 Real time clock auto synched to exact GPS time.
  * - Model memory sharing between transmitters wirelessly.
+ * - Sub-trim
+ * - Servo reverse
+ * - Macros
+ * - Hardware digital trims
+ * - Capacitive touch screen
+ * - Hardware bug in nRF24L01+ work-around implemented
+ * - Screen colours definable
+ * - Data screen gives all possible telemetry  
+ *  
  *
  * @section txPinout Teensy 4.1 Pins
  * | Teensy 4.1 Pins | Connections |
@@ -4727,7 +4736,7 @@ void  StartReverseView(){  // channel reverse flags are 16 individual BITs in Re
 }
 /*********************************************************************************************************************************/
 
-void  DoNumberedCommands(uint8_t nc){
+void  DoNumberedCommands(uint8_t nc){ // These gradually are replacing word invoked commands for speed and economy
   
     char pModelsView[]  = "page ModelsView";
     char mn[]           = "ModelNumber";
