@@ -1215,8 +1215,8 @@ void SendText1(char* tbox, char* NewWord)
 /*********************************************************************************************************************************/
 void EndSend()
 {
-    for (int pp = 0; pp < 3; ++pp) NEXTION.write(0xff); // Send end of Input message
-    Procrastinate(65);                                          // ** A DELAY ** (>=50 ms) is needed if an answer might come!
+    for (u_int8_t pp = 0; pp < 3; ++pp) {NEXTION.write(0xff);} // Send end of Input message
+    delay(35);                                            // ** A DELAY ** (>=50 ms) was needed if an answer might come! (!! Shorter with Intelligent dislay)
 }
 /*********************************************************************************************************************************/
 void SendValue(char* nbox, int value)
@@ -1259,9 +1259,9 @@ void GetTextIn()
     }
 }
 /*********************************************************************************************************************************/
-int GetValue(char* nbox)
+uint32_t GetValue(char* nbox)
 {
-    double ValueIn = 0;
+    uint32_t ValueIn = 0;
     char   GET[]   = "get ";
     char   VAL[]   = ".val";
     char   CB[100];
@@ -5377,7 +5377,7 @@ void ButtonWasPressed()
                 ++i;
                 WhichPage[i] = 0;
             } // Get page name to which to return
-            SendCommand(WhichPage);
+            SendCommand(WhichPage);                         // this sends nextion back to last screen
             CurrentView = SavedCurrentView; 
    
             if (CurrentView == GRAPHVIEW) {
@@ -5416,7 +5416,7 @@ void ButtonWasPressed()
              if (CurrentView == STICKSVIEW){
                 Force_ReDisplay();
                 ShowServoPos(); 
-             };
+             }
             UpdateModelsNameEveryWhere();
             ClearText();
             return;
