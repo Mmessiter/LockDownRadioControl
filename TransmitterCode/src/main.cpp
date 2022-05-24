@@ -2732,7 +2732,12 @@ bool ReadOneModel(uint8_t Mnum)
         if ((SubTrims[i] < 10) ||  (SubTrims[i] > 244))  SubTrims[i] = 127; // centre if undefined or zero
         ++SDCardAddress;                
     }
-    SDCardAddress += 11; // 11 Spare Bytes here (PID stuff gone)
+    ReversedChannelBITS = SDReadInt(SDCardAddress);
+    ++SDCardAddress; 
+    ++SDCardAddress; 
+   
+    SDCardAddress += 9; // 9 Spare Bytes here (PID stuff gone) *****************************
+    
     for (i = 0; i < CHANNELSUSED; ++i) {
         InPutStick[i] = SDReadByte(SDCardAddress);
         if (InPutStick[i] > 16) InPutStick[i] = i; // reset if nothing was saved!
@@ -2797,9 +2802,7 @@ bool ReadOneModel(uint8_t Mnum)
                 ++SDCardAddress;
         } 
     }
-    ReversedChannelBITS = SDReadInt(SDCardAddress);
-    ++SDCardAddress;
-    ++SDCardAddress;
+   
 
     // **************************************
 
@@ -3248,7 +3251,13 @@ void SaveOneModel(int mnum)
             SDUpdateByte(SDCardAddress,SubTrims[i]);   
             ++SDCardAddress;                
         }
-    SDCardAddress += 11; // *********************** 11 spare here remaining
+    SDUpdateInt (SDCardAddress,ReversedChannelBITS);
+    ++SDCardAddress; 
+    ++SDCardAddress; 
+
+
+    SDCardAddress += 9; // *********************** 9 spare here remaining  **********************
+
 
     for (i = 0; i < CHANNELSUSED; ++i) {
         SDUpdateByte(SDCardAddress, InPutStick[i]);
@@ -3304,9 +3313,7 @@ void SaveOneModel(int mnum)
                 ++SDCardAddress;
         } 
     }
-    SDUpdateInt (SDCardAddress,ReversedChannelBITS);
-    ++SDCardAddress;
-    ++SDCardAddress;
+   
      
       
 
