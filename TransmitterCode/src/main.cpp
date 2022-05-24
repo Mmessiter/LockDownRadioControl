@@ -4759,7 +4759,7 @@ void  DoNumberedCommands(uint8_t nc){
             PreviousMacroNumber = 200;        // i.e. no usable number
             SendCommand(pMacrosView);         // Display MacroView
             CurrentView = MACROS_VIEW;
-            Procrastinate(50);
+            Procrastinate(200);                // allow enough time for screen to display
             PopulateMacrosView();
             break;
         case 6:
