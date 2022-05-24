@@ -7,7 +7,7 @@
  * - 16 channels
  * - 12 BIT servo resolution (11 BIT via SBUS)
  * - 32 Mixes
- * - 4 Flight modes, or 3 plus autorotation
+ * - 4 Flight modes (Banks), or 3 plus autorotation
  * - User defined Channel names
  * - 2.4 Ghz FHSS ISM band licence free in UK and most other countries.
  * - 2.5 Km range (approx.)
@@ -19,7 +19,7 @@
  * - Lossless data compression.
  * - Trims on screen saved per flight mode per model.
  * - Screen timeout.
- * - FFHS fast recovery on lost packet
+ * - FFHS with very fast recovery on lost packet
  * - Uses 32 GIG SD card for model memories and help files
  * - Binding - uses unique Mac address as pipe address.
  * - Four User definable three position switches
@@ -28,11 +28,11 @@
  * - Model memory files alphabetically sorted
  * - Timer goes on and off with motor to keep track of motor use.
  * - DS1307 Real time clock auto synched to exact GPS time.
- * - Model memory sharing between transmitters wirelessly.
+ * - Model memory sharing between transmitters - wirelessly.
  * - Sub-trim
  * - Servo reverse
- * - Macros
- * - Hardware digital trims
+ * - Macros - for snap rolls, heli rescue, etc.
+ * - Hardware digital trims with accellerating repeat
  * - Capacitive touch screen
  * - Hardware bug in nRF24L01+ work-around implemented
  * - Screen colours definable
