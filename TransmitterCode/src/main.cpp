@@ -4681,7 +4681,7 @@ void ExitMacrosView(){
 
 /*********************************************************************************************************************************/
 
-void  EndReverseView(){
+void  EndReverseView(){ // channel reverse flags are 16 individual BITs in ReversedChannelBITS
         char fs[16][5]   = {"fs1","fs2","fs3","fs4","fs5","fs6","fs7","fs8","fs9","fs10","fs11","fs12","fs13","fs14","fs15","fs16"};
         uint8_t i;    
         char pSetupView[] = "page SetupView";
@@ -4704,7 +4704,7 @@ void  EndReverseView(){
 
 /*********************************************************************************************************************************/
 
-void  StartReverseView(){ 
+void  StartReverseView(){  // channel reverse flags are 16 individual BITs in ReversedChannelBITS
     char pReverseView[] = "page ReverseView";
     char fs[16][5]      = {"fs1","fs2","fs3","fs4","fs5","fs6","fs7","fs8","fs9","fs10","fs11","fs12","fs13","fs14","fs15","fs16"};
     uint8_t i;    
