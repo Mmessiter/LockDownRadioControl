@@ -5408,7 +5408,10 @@ void ButtonWasPressed()
              if (CurrentView == CALIBRATEVIEW){
                 Force_ReDisplay();
                 ShowServoPos(); 
-             };
+             }
+             if (CurrentView == REVERSEVIEW){
+                 StartReverseView();
+             }
 
              if (CurrentView == STICKSVIEW){
                 Force_ReDisplay();
