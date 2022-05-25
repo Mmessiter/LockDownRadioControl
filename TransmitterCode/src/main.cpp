@@ -2094,13 +2094,12 @@ float MapExp(float xx, float Xxmin, float Xxmax, float Yymin, float Yymax, float
 
 
 /*********************************************************************************************************************************/
-// Is this channel reversed?
 
 void DoReverseSense(){
   for (uint8_t i = 0; i < 16; i++) {
-    if (ReversedChannelBITS & 1 << i){                                                              // Is BIT set?? 
-            PreMixBuffer[i] = map(SendBuffer[i],MINMICROS,MAXMICROS,MAXMICROS,MINMICROS);           // Yes so reverse the channel
-            SendBuffer[i] = PreMixBuffer[i];
+    if (ReversedChannelBITS & 1 << i){                                                              // Is this channel reversed?
+            PreMixBuffer[i] = map(SendBuffer[i],MINMICROS,MAXMICROS,MAXMICROS,MINMICROS);           // Yes! So reverse the channel
+            SendBuffer[i]   = PreMixBuffer[i];
     }
   }
 }
@@ -2168,15 +2167,17 @@ void GetNewChannelValues()
                 k -= TrimAmount;
             }
         }
-
         if (!CalibratedYet) k = map(m, 0, 1024, MINMICROS, MAXMICROS); // Crude servos until calibrated
         PreMixBuffer[n] = constrain(k, MINMICROS, MAXMICROS);
         k               = 1500;
         SendBuffer[n]   = PreMixBuffer[n];
     }
-    DoReverseSense();
-    if (CurrentMode == NORMAL) DoMixes();                               // not while calibrating
-}
+    
+    if (CurrentMode == NORMAL) {   // not while calibrating etc.
+        DoReverseSense();
+        DoMixes();   
+        }                         
+}  
 
 /*********************************************************************************************************************************/
 
