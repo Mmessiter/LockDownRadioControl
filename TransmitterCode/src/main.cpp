@@ -2062,7 +2062,7 @@ int m, c, p, mindeg, maxdeg, TheSum, Result;
                         p = map(PreMixBuffer[c], MINMICROS, MAXMICROS, -HALFMICROSRANGE, HALFMICROSRANGE);
                         p = p * Mixes[m][M_Percent] / 50; // *****  50, not 100, because mix can now go right to 200% *****
                         if (Mixes[m][M_Reversed] == 1) p = -p;
-                        TheSum = SendBuffer[(Mixes[m][M_SlaveChannel]) - 1] + p;
+                        TheSum = SendBuffer[(Mixes[m][M_SlaveChannel]) - 1] + p;  // THIS IS THE MIX!
                         mindeg = mp(MinDegrees[FlightMode][(Mixes[m][M_SlaveChannel]) - 1]);
                         maxdeg = mp(MaxDegrees[FlightMode][(Mixes[m][M_SlaveChannel]) - 1]);
                         if (mindeg > maxdeg) {
