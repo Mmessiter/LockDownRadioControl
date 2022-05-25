@@ -629,8 +629,10 @@ void CheckMacrosBuffer(){
 
 bool junk = false;
 for (uint8_t i = 0; i < MAXMACROS; ++i){
-                if (MacrosBuffer[i][MACROTRIGGERCHANNEL] > 16)  junk = true;
-                if (MacrosBuffer[i][MACROTRIGGERCHANNEL] > 0)   UseMacros = true;
+                if (MacrosBuffer[i][MACROTRIGGERCHANNEL] > 16)   junk = true;
+                if (MacrosBuffer[i][MACROMOVECHANNEL] > 16)      junk = true; 
+                if (MacrosBuffer[i][MACROMOVETOPOSITION] > 180)  junk = true; 
+                if (MacrosBuffer[i][MACROTRIGGERCHANNEL] > 0)    UseMacros = true;
 }
  if (junk == false) return;
  UseMacros = false;
