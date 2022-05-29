@@ -1,5 +1,8 @@
 var NAVTREEINDEX11 =
 {
+"structbmp280__calib__data.html#a37e51f1053d031cc747e8700093719e6":[11,0,10,4],
+"structbmp280__calib__data.html#a512563b392052c4d687d92e0fa4c69fc":[11,0,10,9],
+"structbmp280__calib__data.html#a65d0abb061f85a294731e4466f28e5c9":[11,0,10,6],
 "structbmp280__calib__data.html#a73f05510565c594116b2074ab0ff73d7":[11,0,10,3],
 "structbmp280__calib__data.html#a75facb42146d3294c4b3502429bb11ff":[11,0,10,8],
 "structbmp280__calib__data.html#a84831980d460c469926abee7e4230714":[11,0,10,7],

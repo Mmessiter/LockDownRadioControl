@@ -1,5 +1,8 @@
 var NAVTREEINDEX10 =
 {
+"md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md81":[8,5],
+"md__sensor_hub_teensy3_6_lib__adafruit__i_n_a219_code_of_conduct.html":[9],
+"md__sensor_hub_teensy3_6_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md94":[9,0],
 "md__sensor_hub_teensy3_6_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md95":[9,1],
 "md__sensor_hub_teensy3_6_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md96":[9,2],
 "md__sensor_hub_teensy3_6_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md97":[9,3],
@@ -246,8 +249,5 @@ var NAVTREEINDEX10 =
 "struct_tiny_g_p_s_time.html#afcdb632fee9d144b1414c9d7b95719f1":[11,0,29,26],
 "structbmp280__calib__data.html":[11,0,10],
 "structbmp280__calib__data.html#a088f2845708e76334f4a441c01977766":[11,0,10,2],
-"structbmp280__calib__data.html#a110637cd80d4c20cbf018370b1687a19":[11,0,10,10],
-"structbmp280__calib__data.html#a37e51f1053d031cc747e8700093719e6":[11,0,10,4],
-"structbmp280__calib__data.html#a512563b392052c4d687d92e0fa4c69fc":[11,0,10,9],
-"structbmp280__calib__data.html#a65d0abb061f85a294731e4466f28e5c9":[11,0,10,6]
+"structbmp280__calib__data.html#a110637cd80d4c20cbf018370b1687a19":[11,0,10,10]
 };

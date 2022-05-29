@@ -1,5 +1,8 @@
 var NAVTREEINDEX9 =
 {
+"dir_4bc8145933580d362e72aa7e50ccac9a.html":[12,0,3,0,1],
+"dir_501107bd01cc99852ca08396c7b88289.html":[12,0,4,0,1],
+"dir_5baf679cf4943df8904dce5d41d4d3dc.html":[12,0,0],
 "dir_6416b023daa24ba643a6810094d2f7ce.html":[12,0,3,0,3],
 "dir_6764a81ba3086941266bfe494d1bf274.html":[12,0,2,0,4,0],
 "dir_6d2aff6f94c8475e7ae85fc86867d9b6.html":[12,0,4,0,4,0],
@@ -23,8 +26,8 @@ var NAVTREEINDEX9 =
 "dir_f3433e26411b8b5b6b990f1ec8ef8a7a.html":[12,0,1,0],
 "dir_f4a416e20b33f36e9e4ccc17423b29f0.html":[12,0,3,0,4,0],
 "files.html":[12,0],
-"functions.html":[11,3,0,0],
 "functions.html":[11,3,0],
+"functions.html":[11,3,0,0],
 "functions_b.html":[11,3,0,1],
 "functions_c.html":[11,3,0,2],
 "functions_d.html":[11,3,0,3],
@@ -76,14 +79,14 @@ var NAVTREEINDEX9 =
 "functions_y.html":[11,3,0,22],
 "functions_z.html":[11,3,0,23],
 "functions_~.html":[11,3,0,24],
-"globals.html":[12,1,0],
 "globals.html":[12,1,0,0],
+"globals.html":[12,1,0],
 "globals_a.html":[12,1,0,1],
 "globals_b.html":[12,1,0,2],
 "globals_c.html":[12,1,0,3],
 "globals_d.html":[12,1,0,4],
-"globals_defs.html":[12,1,6],
 "globals_defs.html":[12,1,6,0],
+"globals_defs.html":[12,1,6],
 "globals_defs_a.html":[12,1,6,1],
 "globals_defs_b.html":[12,1,6,2],
 "globals_defs_c.html":[12,1,6,3],
@@ -246,8 +249,5 @@ var NAVTREEINDEX9 =
 "md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md77":[8,1],
 "md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md78":[8,2],
 "md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md79":[8,3],
-"md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md80":[8,4],
-"md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md81":[8,5],
-"md__sensor_hub_teensy3_6_lib__adafruit__i_n_a219_code_of_conduct.html":[9],
-"md__sensor_hub_teensy3_6_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md94":[9,0]
+"md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md80":[8,4]
 };

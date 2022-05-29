@@ -68,6 +68,6 @@ var searchData=
   ['lostcontactcutoff_65',['LOSTCONTACTCUTOFF',['../_radio_functions_8h.html#ac5b4f54697bc5a8d58ef0c92c094c6b6',1,'RadioFunctions.h']]],
   ['lostcontactflag_66',['LostContactFlag',['../_radio_functions_8h.html#ad5f463902789a79fc622b3befd9409b9',1,'LostContactFlag():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#ad5f463902789a79fc622b3befd9409b9',1,'LostContactFlag():&#160;main.cpp']]],
   ['lostpackets_67',['LostPackets',['../_transmitter_code_2src_2main_8cpp.html#ace8651c9c20dd6ea531190d34d35e1fc',1,'main.cpp']]],
-  ['lowbattery_68',['LowBattery',['../_transmitter_code_2src_2main_8cpp.html#a841a740574f81e5bb80ea1a16f704be5',1,'main.cpp']]],
-  ['lowbattery_69',['LOWBATTERY',['../_radio_functions_8h.html#adca16f7a43b448d4584dcb62897068a5',1,'RadioFunctions.h']]]
+  ['lowbattery_68',['LOWBATTERY',['../_radio_functions_8h.html#adca16f7a43b448d4584dcb62897068a5',1,'RadioFunctions.h']]],
+  ['lowbattery_69',['LowBattery',['../_transmitter_code_2src_2main_8cpp.html#a841a740574f81e5bb80ea1a16f704be5',1,'main.cpp']]]
 ];
