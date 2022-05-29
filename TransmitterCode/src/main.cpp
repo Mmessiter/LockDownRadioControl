@@ -492,6 +492,7 @@ char     ThisRadio[4]  = "0 ";
 uint8_t NextChannel   = 0;
 bool    DoSbusSendOnly  = false;
 bool    BuddyMaster     = false;
+uint8_t BuddyTriggerChannel = 12;
 bool    SlaveHasControl = false;
 uint16_t Qnh            = 1009;               // pressure at sea level here/
 uint32_t ModelNameTimeCheck = 0;
@@ -601,14 +602,14 @@ void FixDeltaGMTSign(){
     }
 }
 /************************************************************************************************************/
-// This function reads data from BUDDY (Slave) BUT uses it ONLY WHILE the channel 12 switch is in the ON position ( > 1000)
+// This function reads data from BUDDY (Slave) BUT uses it ONLY WHILE the channel BUDDTRIGGERCHANNEL switch is in the ON position ( > 1000)
 
 void GetSlaveChannelValues()
 {
     bool failSafeM; // These flags not used, yet.
     bool lostFrameM;
     SlaveHasControl = false;
-    if (SendBuffer[11] > 1000)
+    if (SendBuffer[BuddyTriggerChannel-1] > 1000)
     { // MASTER'S CHANNEL 12 (500 - 2500) used here as switch.
         if (MySbus.read(&SbusChannels[0], &failSafeM, &lostFrameM))
         {
@@ -2923,6 +2924,8 @@ bool LoadAllParameters()
             if ((j >= SWITCH7) && (j <= SWITCH0))  {SwitchNumber[i] = j;} 
             ++SDCardAddress;
         }
+        BuddyTriggerChannel= SDReadByte(SDCardAddress);
+        ++SDCardAddress;
         MemoryForTransmtter = SDCardAddress;
         ReadOneModel(ModelNumber);
         return true;
@@ -3185,6 +3188,9 @@ void SaveTXStuff()
         SDUpdateByte(SDCardAddress,SwitchNumber[i]);
         ++SDCardAddress;
     }
+    SDUpdateByte(SDCardAddress,BuddyTriggerChannel);
+    ++SDCardAddress;
+
     CloseModelsFile();
 }
 
@@ -4745,6 +4751,41 @@ void  StartReverseView(){  // channel reverse flags are 16 individual BITs in Re
         }
     SendCommand(ProgressEnd);
 }
+
+
+/*********************************************************************************************************************************/
+
+void StartBuddyView(){
+    char BuddyM[]                  = "BuddyM";
+    char BuddyP[]                  = "BuddyP"; 
+    char n0[]                      = "n0";
+    char pBuddyView[]  = "page BuddyView";
+    SendCommand(pBuddyView);
+    delay (200);
+    if (BuddyTriggerChannel > 16) BuddyTriggerChannel = 16;
+    if (BuddyTriggerChannel < 1) BuddyTriggerChannel = 12;
+    SendValue(BuddyM, BuddyMaster);
+    SendValue(BuddyP, DoSbusSendOnly);
+    SendValue(n0,BuddyTriggerChannel);
+}
+
+/*********************************************************************************************************************************/
+
+void  EndBuddyView(){
+    char BuddyM[]                  = "BuddyM";
+    char BuddyP[]                  = "BuddyP";
+    char n0[]                      = "n0";
+
+    char pSetupView[] = "page SetupView";
+    DoSbusSendOnly      = GetValue(BuddyP);  // Pupil, wired
+    BuddyMaster         = GetValue(BuddyM);  // Master, either.
+    BuddyTriggerChannel = GetValue(n0);
+    if (BuddyTriggerChannel > 16) BuddyTriggerChannel = 16;
+    if (BuddyTriggerChannel < 1) BuddyTriggerChannel = 12;
+
+    SaveAllParameters();
+    SendCommand(pSetupView);
+}
 /*********************************************************************************************************************************/
 
 void  DoNumberedCommands(uint8_t nc){ // These gradually are replacing word invoked commands for speed and economy
@@ -4797,6 +4838,13 @@ void  DoNumberedCommands(uint8_t nc){ // These gradually are replacing word invo
         case 10:
             EndReverseView();
             break;
+        case 11:
+            StartBuddyView();
+            break;
+        case 12:
+            EndBuddyView();
+            break;
+
         default:
            break;
     }
@@ -5007,8 +5055,7 @@ void ButtonWasPressed()
     char pSubTrimView[]            = "page SubTrimView";
     char DataView_Clear[]          = "Clear";
     char DataView_AltZero[]        = "AltZero";
-    char BuddyM[]                  = "BuddyM";
-    char BuddyP[]                  = "BuddyP";
+   
     char OptionsEnd[]              = "OptionsEnd";
     char QNH[]                     = "Qnh";
     char Mark[]                    = "Mark";
@@ -5229,9 +5276,6 @@ void ButtonWasPressed()
                 ++i;
                 TxName[j] = 0;
             }
-            SendValue(Progress,25);
-            DoSbusSendOnly      = GetValue(BuddyP);  // Pupil, wired
-            BuddyMaster         = GetValue(BuddyM);  // Master, either.
             SendValue(Progress,35);
             Qnh                 = GetValue(QNH);
             DeltaGMT            = GetValue(dGMT);
@@ -5376,8 +5420,7 @@ void ButtonWasPressed()
             FixDeltaGMTSign();
             SendCommand(pOptionsViewS);
             SendValue(ScreenViewTimeout, ScreenTimeout);
-            SendValue(BuddyM, BuddyMaster);
-            SendValue(BuddyP, DoSbusSendOnly);
+         
             SendValue(Pto, (Inactivity_Timeout / TICKSPERMINUTE));
             SendText(Tx_Name, TxName);
             SendValue(QNH,Qnh);
