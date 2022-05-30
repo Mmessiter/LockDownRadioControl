@@ -2,7 +2,7 @@ var structsensors__vec__t =
 [
     [ "heading", "structsensors__vec__t.html#a4fe8caabff59868ff44f1ed8334cbf47", null ],
     [ "pitch", "structsensors__vec__t.html#aa298c3cbbd0016698c64d9451fbf3aff", null ],
-    [ "reserved", "structsensors__vec__t.html#a8991b7e181ed3cbf3ad0e54da3d8e6c9", null ],
+    [ "reserved", "structsensors__vec__t.html#acb78c50bdd894d4dd4015f144c4a4488", null ],
     [ "roll", "structsensors__vec__t.html#a6d8c6e288de54942e1d2be4f42f96bb2", null ],
     [ "status", "structsensors__vec__t.html#af75d491f35f979932de5609d6ef6c363", null ],
     [ "v", "structsensors__vec__t.html#a5114a743de9aab053acce7722f394bc4", null ],

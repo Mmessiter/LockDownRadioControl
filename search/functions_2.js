@@ -2,13 +2,13 @@ var searchData=
 [
   ['calibrateedgeswitches_0',['CalibrateEdgeSwitches',['../_transmitter_code_2src_2main_8cpp.html#a128fe47088693b102796cd67a175ea08',1,'main.cpp']]],
   ['calibratesticks_1',['CalibrateSticks',['../_transmitter_code_2src_2main_8cpp.html#ae1b8cef371d26fca2b4f5a101be7a8ba',1,'main.cpp']]],
-  ['cardinal_2',['cardinal',['../class_tiny_g_p_s_plus.html#a288b2da8a18e7660377f376372892a58',1,'TinyGPSPlus::cardinal(double course)'],['../class_tiny_g_p_s_plus.html#a288b2da8a18e7660377f376372892a58',1,'TinyGPSPlus::cardinal(double course)'],['../class_tiny_g_p_s_plus.html#a8c9e9444552ff85a505ffc6933dda03c',1,'TinyGPSPlus::cardinal(double course)']]],
-  ['centisecond_3',['centisecond',['../struct_tiny_g_p_s_time.html#a1f74ad4a2a53e0ee19f8e3a6b2bc985f',1,'TinyGPSTime::centisecond()'],['../struct_tiny_g_p_s_time.html#a1f74ad4a2a53e0ee19f8e3a6b2bc985f',1,'TinyGPSTime::centisecond()'],['../struct_tiny_g_p_s_time.html#a1f74ad4a2a53e0ee19f8e3a6b2bc985f',1,'TinyGPSTime::centisecond()']]],
+  ['cardinal_2',['cardinal',['../class_tiny_g_p_s_plus.html#a8c9e9444552ff85a505ffc6933dda03c',1,'TinyGPSPlus']]],
+  ['centisecond_3',['centisecond',['../struct_tiny_g_p_s_time.html#a1f74ad4a2a53e0ee19f8e3a6b2bc985f',1,'TinyGPSTime']]],
   ['centretrims_4',['CentreTrims',['../_transmitter_code_2src_2main_8cpp.html#a608cf928b58a8597d2411a3482365abd',1,'main.cpp']]],
   ['channelcentres_5',['ChannelCentres',['../_transmitter_code_2src_2main_8cpp.html#a0e7ca9043d8fa769e8a9290df885e594',1,'main.cpp']]],
-  ['charsprocessed_6',['charsProcessed',['../class_tiny_g_p_s_plus.html#addfc1fdbfddfeef2774dda1be42cdd55',1,'TinyGPSPlus::charsProcessed() const'],['../class_tiny_g_p_s_plus.html#addfc1fdbfddfeef2774dda1be42cdd55',1,'TinyGPSPlus::charsProcessed() const'],['../class_tiny_g_p_s_plus.html#addfc1fdbfddfeef2774dda1be42cdd55',1,'TinyGPSPlus::charsProcessed() const']]],
+  ['charsprocessed_6',['charsProcessed',['../class_tiny_g_p_s_plus.html#addfc1fdbfddfeef2774dda1be42cdd55',1,'TinyGPSPlus']]],
   ['check_7',['check',['../class_adafruit___g_p_s.html#ae4abe9822d8ca59866bbb44de7910881',1,'Adafruit_GPS']]],
-  ['checkgapslength_8',['CheckGapsLength',['../_radio_functions_8h.html#aa60c9cac090f6965b4223d5caf84e2f1',1,'CheckGapsLength():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#aa60c9cac090f6965b4223d5caf84e2f1',1,'CheckGapsLength():&#160;main.cpp']]],
+  ['checkgapslength_8',['CheckGapsLength',['../_transmitter_code_2src_2main_8cpp.html#aa60c9cac090f6965b4223d5caf84e2f1',1,'CheckGapsLength():&#160;main.cpp'],['../_radio_functions_8h.html#aa60c9cac090f6965b4223d5caf84e2f1',1,'CheckGapsLength():&#160;main.cpp']]],
   ['checkhardwaretrims_9',['CheckHardwareTrims',['../_transmitter_code_2src_2main_8cpp.html#add643409678258cabdb0aa1ae76d802a',1,'main.cpp']]],
   ['checkmacrosbuffer_10',['CheckMacrosBuffer',['../_transmitter_code_2src_2main_8cpp.html#a6bb930920ba3a8d45a737dde782ef65c',1,'main.cpp']]],
   ['checkmodelname_11',['CheckModelName',['../_transmitter_code_2src_2main_8cpp.html#a984cb52354a84c45e9e41f396a1c5e92',1,'main.cpp']]],
@@ -25,5 +25,5 @@ var searchData=
   ['common_5finit_22',['common_init',['../class_adafruit___g_p_s.html#ab8a2fe20ce1874b10a6e9f007c236b30',1,'Adafruit_GPS']]],
   ['compassangle_23',['compassAngle',['../class_adafruit___g_p_s.html#a06b7e12e38f1b00df058a253364215db',1,'Adafruit_GPS']]],
   ['compress_24',['Compress',['../_radio_functions_8cpp.html#ab46df249e949de237fc3bacdc5225934',1,'RadioFunctions.cpp']]],
-  ['courseto_25',['courseTo',['../class_tiny_g_p_s_plus.html#a82b8fff820573de45c9ae98df3abbdfa',1,'TinyGPSPlus::courseTo(double lat1, double long1, double lat2, double long2)'],['../class_tiny_g_p_s_plus.html#a82b8fff820573de45c9ae98df3abbdfa',1,'TinyGPSPlus::courseTo(double lat1, double long1, double lat2, double long2)'],['../class_tiny_g_p_s_plus.html#af338c18ccf58a47659be1ffc8259541d',1,'TinyGPSPlus::courseTo(double lat1, double long1, double lat2, double long2)']]]
+  ['courseto_25',['courseTo',['../class_tiny_g_p_s_plus.html#af338c18ccf58a47659be1ffc8259541d',1,'TinyGPSPlus']]]
 ];

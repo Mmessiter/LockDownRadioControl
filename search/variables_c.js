@@ -1,7 +1,7 @@
 var searchData=
 [
   ['n_0',['n',['../structnmea__history__t.html#a8bf34a6e794f01eec90c4a919f9b244d',1,'nmea_history_t']]],
-  ['name_1',['name',['../structsensor__t.html#a6ee209265e4a44d31369ac6b43b95519',1,'sensor_t']]],
+  ['name_1',['name',['../structsensor__t.html#a4383b68d36f9dc4096d83583c3b009bf',1,'sensor_t']]],
   ['namecount_2',['NameCount',['../_transmitter_code_2src_2main_8cpp.html#a9d45c7ae65785e43b3c1dac353dc77b9',1,'main.cpp']]],
   ['negative_3',['negative',['../struct_raw_degrees.html#a39c31d2d0332155a4d2c975cec0a796f',1,'RawDegrees']]],
   ['newpipe_4',['NewPipe',['../radio_8h.html#a594f07765a7ed90e0830d4e2f69a7112',1,'NewPipe():&#160;radio.h'],['../_radio_functions_8h.html#a594f07765a7ed90e0830d4e2f69a7112',1,'NewPipe():&#160;radio.h'],['../_transmitter_code_2src_2main_8cpp.html#a594f07765a7ed90e0830d4e2f69a7112',1,'NewPipe():&#160;main.cpp']]],
