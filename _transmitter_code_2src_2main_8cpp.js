@@ -10,6 +10,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "BOXOFFSET", "_transmitter_code_2src_2main_8cpp.html#a1ca4c62befbda4dbe363ef453b2ebf09", null ],
     [ "BOXSIZE", "_transmitter_code_2src_2main_8cpp.html#a4f84c7cd953e90b218a9baa12f6e5e35", null ],
     [ "Brown", "_transmitter_code_2src_2main_8cpp.html#a3057a3f4d88842d385cd5ad6c5ddf80f", null ],
+    [ "BUDDYVIEW", "_transmitter_code_2src_2main_8cpp.html#a38c9376ad661411cad3019d4a43ac493", null ],
     [ "BUFFERSIZE", "_transmitter_code_2src_2main_8cpp.html#ac3146f1e9227301bb4aa518f4d336cee", null ],
     [ "CALIBRATELIMITS", "_transmitter_code_2src_2main_8cpp.html#a8d671ce93ba33f2f6b5c314108d3592d", null ],
     [ "CALIBRATEVIEW", "_transmitter_code_2src_2main_8cpp.html#ad2d9a19870ac880f7f6b2485345ccb6d", null ],

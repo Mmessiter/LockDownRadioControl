@@ -11,6 +11,7 @@ var searchData=
   ['boxoffset_8',['BOXOFFSET',['../_transmitter_code_2src_2main_8cpp.html#a1ca4c62befbda4dbe363ef453b2ebf09',1,'main.cpp']]],
   ['boxsize_9',['BOXSIZE',['../_transmitter_code_2src_2main_8cpp.html#a4f84c7cd953e90b218a9baa12f6e5e35',1,'main.cpp']]],
   ['brown_10',['Brown',['../_transmitter_code_2src_2main_8cpp.html#a3057a3f4d88842d385cd5ad6c5ddf80f',1,'main.cpp']]],
-  ['buffersize_11',['BUFFERSIZE',['../_transmitter_code_2src_2main_8cpp.html#ac3146f1e9227301bb4aa518f4d336cee',1,'main.cpp']]],
-  ['bytespermacro_12',['BYTESPERMACRO',['../_radio_functions_8h.html#acb6ba8383362a5f2efee8416bc4300c9',1,'RadioFunctions.h']]]
+  ['buddyview_11',['BUDDYVIEW',['../_transmitter_code_2src_2main_8cpp.html#a38c9376ad661411cad3019d4a43ac493',1,'main.cpp']]],
+  ['buffersize_12',['BUFFERSIZE',['../_transmitter_code_2src_2main_8cpp.html#ac3146f1e9227301bb4aa518f4d336cee',1,'main.cpp']]],
+  ['bytespermacro_13',['BYTESPERMACRO',['../_radio_functions_8h.html#acb6ba8383362a5f2efee8416bc4300c9',1,'RadioFunctions.h']]]
 ];

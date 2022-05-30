@@ -1,5 +1,6 @@
 var NAVTREEINDEX5 =
 {
+"class_adafruit___g_p_s.html#a613f1926fbff9829256d85f7aeec7e1f":[9,0,5,76],
 "class_adafruit___g_p_s.html#a6938dadca5d72ec6e89e86a5b01b9b67":[9,0,5,18],
 "class_adafruit___g_p_s.html#a6ce54126c2fa2d6b59fd012b4173840f":[9,0,5,89],
 "class_adafruit___g_p_s.html#a6d13e7c81f124ca8809c02fe048b1218":[9,0,5,17],
@@ -248,6 +249,5 @@ var NAVTREEINDEX5 =
 "globals_func.html":[10,1,1,0],
 "globals_func.html":[10,1,1],
 "globals_func_b.html":[10,1,1,1],
-"globals_func_c.html":[10,1,1,2],
-"globals_func_d.html":[10,1,1,3]
+"globals_func_c.html":[10,1,1,2]
 };
