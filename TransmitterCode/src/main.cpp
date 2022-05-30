@@ -172,6 +172,8 @@ RF24 Radio1(CE_PIN, CSN_PIN);
 #define AUDIOVIEW       19
 #define FILESVIEW       20
 #define REVERSEVIEW     21
+#define BUDDYVIEW       22
+
 
 #define CharsMax        120 
 
@@ -1645,8 +1647,8 @@ FASTRUN void ShowComms()
     char  FrontView_TXBV[]       = "TXBV";
     char  Not_Connected[]        = "Not connected";
     char  Msg_Connected[]        = "** Connected! **";
-    char  Msg_CnctdBuddyMast[]   = "Connected BUDDY MASTER";
-    char  Msg_CnctdBuddySlave[]  = "Connected BUDDY SLAVE";
+    char  Msg_CnctdBuddyMast[]   = "* BUDDY MASTER! *";
+    char  Msg_CnctdBuddySlave[]  = "* BUDDY SLAVE! *";
     char  MsgBuddying[]          = "Buddy";
     char  DataView_pps[]         = "pps";       // These are all label names in the NEXTION data screen. They are best kept short.
     char  DataView_lps[]         = "lps";
@@ -4701,6 +4703,7 @@ void ExitMacrosView(){
     MacrosBuffer[n][MACRODURATION]          = GetValue(Duration);
     UseMacros = true;
     SaveOneModel(ModelNumber);
+    b5isGrey = false;
     SendCommand (pSetupView);
     CurrentView =  MAINSETUPVIEW;
 }
@@ -4725,6 +4728,7 @@ void  EndReverseView(){ // channel reverse flags are 16 individual BITs in Rever
         CurrentView = MAINSETUPVIEW;
         SaveOneModel(ModelNumber);
         SendCommand(ProgressEnd);
+        b5isGrey = false;
         SendCommand(pSetupView);
 }
 
@@ -4749,6 +4753,7 @@ void  StartReverseView(){  // channel reverse flags are 16 individual BITs in Re
                 SendValue(fs[i],0);
             }
         }
+   
     SendCommand(ProgressEnd);
 }
 
@@ -4761,6 +4766,7 @@ void StartBuddyView(){
     char n0[]                      = "n0";
     char pBuddyView[]  = "page BuddyView";
     SendCommand(pBuddyView);
+    CurrentView = BUDDYVIEW;
     delay (200);
     if (BuddyTriggerChannel > 16) BuddyTriggerChannel = 16;
     if (BuddyTriggerChannel < 1) BuddyTriggerChannel = 12;
@@ -4784,15 +4790,20 @@ void  EndBuddyView(){
     if (BuddyTriggerChannel < 1) BuddyTriggerChannel = 12;
 
     SaveAllParameters();
+    b5isGrey = false;
     SendCommand(pSetupView);
+    CurrentView = MAINSETUPVIEW;
 }
 /*********************************************************************************************************************************/
 
-void  DoNumberedCommands(uint8_t nc){ // These gradually are replacing word invoked commands for speed and economy
+void  DoNumberedCommands(uint8_t nc){ // These gradually are replacing word-invoked commands for speed and economy
   
     char pModelsView[]  = "page ModelsView";
     char mn[]           = "ModelNumber";
     char pMacrosView[]  = "page MacrosView";
+    
+    
+    b5isGrey = false;
 
     switch(nc){
           case 1:                      // Previous file (modelsview)
