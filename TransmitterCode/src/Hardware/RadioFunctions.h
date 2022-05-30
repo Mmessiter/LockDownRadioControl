@@ -3,11 +3,11 @@
 #define RadioFunctions_H
 
 // **************************************************************************
-//                TX VERSION NUMBER   (May 14th 2022 Malcolm Messiter) *
+//                TX VERSION NUMBER   (May 30th 2022 Malcolm Messiter) *
 //***************************************************************************
 #define TXVERSION_MAJOR   1
 #define TXVERSION_MINOR   7
-#define TXVERSION_MINIMUS 4
+#define TXVERSION_MINIMUS 5
 
 
 
