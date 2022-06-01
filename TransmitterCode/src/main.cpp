@@ -3025,7 +3025,7 @@ void setup()
     pinMode(POWER_OFF_PIN, OUTPUT);
     BlueLedOn();
     NEXTION.begin(921600);      // BAUD rate also set in display code THIS IS THE MAX (was 115200)  
-    delay(1000);
+    delay(1500);
     InitMaxMin();               // in case not yet calibrated
     InitCentreDegrees();        // In case not yet calibrated
     ResetSubTrims();
@@ -3037,13 +3037,13 @@ void setup()
     TeensyWatchDog.begin(WatchDogConfig);
     LastDogKick = millis(); // needed? - yes!
 #endif
-    delay (100);
+    delay (500);
     if (!SD.begin(chipSelect)){    // MUST return true or all is lost! (todo: create error page)
        delay (500);
        SD.begin(chipSelect);       // a second attempt for iffy sd cards ?!
     }                                
     CalibratedYet = LoadAllParameters();                  // If they exist, read saved SD card settings.   
-    if (!CalibratedYet)     { Procrastinate(250); CalibratedYet = LoadAllParameters(); }   
+    if (!CalibratedYet)     {Procrastinate(250); CalibratedYet = LoadAllParameters(); }   
         
     SendValue(FrontView_BackGround,BackGroundColour);     // Get colours ready
     SendValue(FrontView_ForeGround,ForeGroundColour);
