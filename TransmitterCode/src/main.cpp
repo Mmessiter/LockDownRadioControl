@@ -4802,6 +4802,10 @@ void  DoNumberedCommands(uint8_t nc){ // These gradually are replacing word-invo
     char mn[]           = "ModelNumber";
     char pMacrosView[]  = "page MacrosView";
     
+#if DD_NEXTION
+    Serial.print (" Command number: ");
+    Serial.println (nc);
+#endif
     
     b5isGrey = false;
 
@@ -5902,11 +5906,10 @@ void ButtonWasPressed()
         if (p > 0) {
             j = 0;
             i = p + 5;
-            while ((TextIn[i]) > 0) {
+            while ((TextIn[i] > 0) && (i < 15)) {
                 if (TextIn[i] >= 97 && TextIn[i] <= 122) {
-                    TextIn[i] &= ~0x20;
-                } // upper case only
-                if (TextIn[i] <= 32 || TextIn[i] > 127) break;
+                    TextIn[i] &= ~0x20; // upper case only
+                } 
                 SingleModelFile[j] = TextIn[i];
                 ++j;
                 ++i;
