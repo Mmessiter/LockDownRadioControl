@@ -4759,8 +4759,8 @@ $(document).ready(function(){initNavTree('_transmitter_code_2src_2main_8cpp_sour
 <div class="line"><a id="l04802" name="l04802"></a><span class="lineno"> 4802</span>    <span class="keywordtype">char</span> mn[]           = <span class="stringliteral">&quot;ModelNumber&quot;</span>;</div>
 <div class="line"><a id="l04803" name="l04803"></a><span class="lineno"> 4803</span>    <span class="keywordtype">char</span> pMacrosView[]  = <span class="stringliteral">&quot;page MacrosView&quot;</span>;</div>
 <div class="line"><a id="l04804" name="l04804"></a><span class="lineno"> 4804</span>    </div>
-<div class="line"><a id="l04805" name="l04805"></a><span class="lineno"> 4805</span><span class="preprocessor">#if DD_NEXTION</span></div>
-<div class="line"><a id="l04806" name="l04806"></a><span class="lineno"> 4806</span>    Serial.print (<span class="stringliteral">&quot; Command number: &quot;</span>);</div>
+<div class="line"><a id="l04805" name="l04805"></a><span class="lineno"> 4805</span><span class="preprocessor">#ifdef DB_NEXTION</span></div>
+<div class="line"><a id="l04806" name="l04806"></a><span class="lineno"> 4806</span>    Serial.print (<span class="stringliteral">&quot;Command number: -&gt; &quot;</span>);</div>
 <div class="line"><a id="l04807" name="l04807"></a><span class="lineno"> 4807</span>    Serial.println (nc);</div>
 <div class="line"><a id="l04808" name="l04808"></a><span class="lineno"> 4808</span><span class="preprocessor">#endif</span></div>
 <div class="line"><a id="l04809" name="l04809"></a><span class="lineno"> 4809</span>    </div>
@@ -5082,7 +5082,7 @@ $(document).ready(function(){initNavTree('_transmitter_code_2src_2main_8cpp_sour
 <div class="line"><a id="l05129" name="l05129"></a><span class="lineno"> 5129</span>    <span class="keywordflow">if</span> (strlen(<a class="code hl_variable" href="_transmitter_code_2src_2main_8cpp.html#acc4e38ab51d5a9e18e8aff0917195cae">TextIn</a>) &gt; 0) {</div>
 <div class="line"><a id="l05130" name="l05130"></a><span class="lineno"> 5130</span>        <a class="code hl_function" href="_transmitter_code_2src_2main_8cpp.html#a793b7bcd77531c95fe72ed4356d421c8">StartInactvityTimeout</a>();</div>
 <div class="line"><a id="l05131" name="l05131"></a><span class="lineno"> 5131</span><span class="preprocessor"> #ifdef DB_NEXTION</span></div>
-<div class="line"><a id="l05132" name="l05132"></a><span class="lineno"> 5132</span>        Serial.print(<span class="stringliteral">&quot;From NEXTION -&gt; &quot;</span>);</div>
+<div class="line"><a id="l05132" name="l05132"></a><span class="lineno"> 5132</span>        Serial.print(<span class="stringliteral">&quot;Command word: -&gt; &quot;</span>);</div>
 <div class="line"><a id="l05133" name="l05133"></a><span class="lineno"> 5133</span>        Serial.println(<a class="code hl_variable" href="_transmitter_code_2src_2main_8cpp.html#acc4e38ab51d5a9e18e8aff0917195cae">TextIn</a>);</div>
 <div class="line"><a id="l05134" name="l05134"></a><span class="lineno"> 5134</span><span class="preprocessor"> #endif</span></div>
 <div class="line"><a id="l05135" name="l05135"></a><span class="lineno"> 5135</span>            </div>
