@@ -4802,8 +4802,8 @@ void  DoNumberedCommands(uint8_t nc){ // These gradually are replacing word-invo
     char mn[]           = "ModelNumber";
     char pMacrosView[]  = "page MacrosView";
     
-#if DD_NEXTION
-    Serial.print (" Command number: ");
+#ifdef DB_NEXTION
+    Serial.print ("Command number: -> ");
     Serial.println (nc);
 #endif
     
@@ -5129,7 +5129,7 @@ void ButtonWasPressed()
     if (strlen(TextIn) > 0) {
         StartInactvityTimeout();
  #ifdef DB_NEXTION
-        Serial.print("From NEXTION -> ");
+        Serial.print("Command word: -> ");
         Serial.println(TextIn);
  #endif
             
