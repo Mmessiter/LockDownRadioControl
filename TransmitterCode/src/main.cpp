@@ -5906,7 +5906,7 @@ void ButtonWasPressed()
         if (p > 0) {
             j = 0;
             i = p + 5;
-            while ((TextIn[i] > 0) && (i < 15)) {
+            while ((TextIn[i] > 0) && (i < 18)) {
                 if (TextIn[i] >= 97 && TextIn[i] <= 122) {
                     TextIn[i] &= ~0x20; // upper case only
                 } 
@@ -5915,6 +5915,7 @@ void ButtonWasPressed()
                 ++i;
                 SingleModelFile[j] = 0;
             }
+            //Serial.println (SingleModelFile);
 
             if ((InStrng(ModExt, SingleModelFile) == 0) && (strlen(SingleModelFile) <= 8)) {
                 strcat(SingleModelFile, ModExt);
