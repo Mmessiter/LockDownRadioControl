@@ -1,5 +1,6 @@
 var NAVTREEINDEX2 =
 {
+"_sensor_hub_t32_2lib_2_adafruit___p_m_t_k_8h.html#a5c77d38e1e8c50af3bd64a43fad53b57":[10,0,2,0,5,17],
 "_sensor_hub_t32_2lib_2_adafruit___p_m_t_k_8h.html#a5fa8379e8ed611060b16d5f02b1c1dd8":[10,0,2,0,5,15],
 "_sensor_hub_t32_2lib_2_adafruit___p_m_t_k_8h.html#a7bbd33aebbc2c55557ea9c1f1c8ef2f4":[10,0,2,0,5,22],
 "_sensor_hub_t32_2lib_2_adafruit___p_m_t_k_8h.html#a7d6e7a31eec3d891ea928825c0248018":[10,0,2,0,5,32],
@@ -248,6 +249,5 @@ var NAVTREEINDEX2 =
 "_transmitter_code_2src_2main_8cpp.html#a483cced19b61975f76957f5696425fe9":[10,0,3,0,1,201],
 "_transmitter_code_2src_2main_8cpp.html#a48589088880569c1ae40f8c226cc52be":[10,0,3,0,1,523],
 "_transmitter_code_2src_2main_8cpp.html#a488388f6430a0fc7bec57074ba750a2d":[10,0,3,0,1,136],
-"_transmitter_code_2src_2main_8cpp.html#a489f04d8af51ba47e5032937dc23a330":[10,0,3,0,1,70],
-"_transmitter_code_2src_2main_8cpp.html#a493eeacfcf61a53db5933a893f7d94a6":[10,0,3,0,1,139]
+"_transmitter_code_2src_2main_8cpp.html#a489f04d8af51ba47e5032937dc23a330":[10,0,3,0,1,70]
 };
