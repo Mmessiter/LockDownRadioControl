@@ -520,8 +520,10 @@ FASTRUN void ReceiveData(){
 // Discover what was connected on I2C
 
 void ScanI2c(){
+     
     for (uint8_t i = 1; i < 127; ++i) {
         Wire.beginTransmission(i);
+       
         if (Wire.endTransmission() == 0) {
             if (i == SENSOR_HUB_I2C_ADDRESS) {
                 SENSOR_HUB_CONNECTED = true;
@@ -534,7 +536,7 @@ void ScanI2c(){
 #ifdef DB_SENSORS
                 Serial.println("INA219 voltage meter detected!");
 #endif
-              }
+            }
         }
     }
 }
