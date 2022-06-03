@@ -31,6 +31,6 @@ var searchData=
   ['switch5_28',['SWITCH5',['../_transmitter_code_2src_2main_8cpp.html#a4a43ca3258e65eeb2f7a0cc990728278',1,'main.cpp']]],
   ['switch6_29',['SWITCH6',['../_transmitter_code_2src_2main_8cpp.html#a76f238185a1051be3f529e233e5367e9',1,'main.cpp']]],
   ['switch7_30',['SWITCH7',['../_transmitter_code_2src_2main_8cpp.html#a34cc45470bb24099949911a2a08040bf',1,'main.cpp']]],
-  ['switches_5fview_31',['Switches_View',['../_radio_functions_8cpp.html#ad16a6b359f59fa52101e30d233fb030f',1,'RadioFunctions.cpp']]],
-  ['switches_5fview_32',['SWITCHES_VIEW',['../_transmitter_code_2src_2main_8cpp.html#ace2d3514934b21f0e469528e292f2584',1,'main.cpp']]]
+  ['switches_5fview_31',['SWITCHES_VIEW',['../_transmitter_code_2src_2main_8cpp.html#ace2d3514934b21f0e469528e292f2584',1,'main.cpp']]],
+  ['switches_5fview_32',['Switches_View',['../_radio_functions_8cpp.html#ad16a6b359f59fa52101e30d233fb030f',1,'RadioFunctions.cpp']]]
 ];
