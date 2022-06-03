@@ -179,6 +179,7 @@ extern uint8_t        MacrosBuffer[MAXMACROS][BYTESPERMACRO];    // macros' buff
 extern uint32_t       MacroStartTime[MAXMACROS];
 extern uint32_t       MacroStopTime[MAXMACROS];
 extern bool           UseMacros;
+extern unsigned int   LostPackets;
 
 
 
@@ -199,6 +200,7 @@ extern void  FailedPacket();
 extern void  StartInactvityTimeout();
 extern void  ShowServoPos();
 extern void  MapToSBUS();
+extern void  ZeroDataScreen();
 
 
 /*********************************************************************************************************************************/

@@ -4642,6 +4642,7 @@ void ZeroDataScreen(){             // ZERO Those parameters that are zeroable
             GapCount           = 0;
             RXMAXModelAltitude = 0;
             GPSMaxAltitude     = 0;
+            ThisGap            = 0;
             GPSMaxDistance     = 0;
             GPSMaxSpeed        = 0;
             SavedRadioSwaps    = RadioSwaps;    // Cannot easily zero these, so do a subtraction
@@ -7107,6 +7108,7 @@ void loop()
         ShowServoPos();              // Show servos positions
         ShowServoTimer = millis();
     }
+
     if ((millis() - TxOnTime) > 2000) { // Transmit nothing for first 2 seconds
 
         switch (CurrentMode) {
