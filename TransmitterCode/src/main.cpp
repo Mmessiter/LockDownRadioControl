@@ -1394,15 +1394,16 @@ void CheckTimer()
         Mins = Secs / 60;
         Secs %= 60;
     }
-    if (CurrentView == FRONTVIEW) {
         if (LastSeconds != Secs) {
             ClockSpoken = false;
-            SendValue(FrontView_Secs, Secs);
-            SendValue(FrontView_Mins, Mins);
-            SendValue(FrontView_Hours, Hours);
-            LastSeconds = Secs;
-            }
+            if (CurrentView == FRONTVIEW) {
+                SendValue(FrontView_Secs, Secs);
+                SendValue(FrontView_Mins, Mins);
+                SendValue(FrontView_Hours, Hours);
+           }
+           LastSeconds = Secs;       
     }
+
     if (!Secs && SpeakingClock && !ClockSpoken){   
         ClockSpoken = true;
         switch (Mins) {
