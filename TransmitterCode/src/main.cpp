@@ -2789,7 +2789,7 @@ bool ReadOneModel(uint8_t Mnum)
     for (j = 0; j < FLIGHTMODESUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             Exponential[j][i] = SDReadByte(SDCardAddress);
-            if (Exponential[j][i] >= 201 || Exponential[j][i] < 20 ) {
+            if (Exponential[j][i] >= 201 || Exponential[j][i] == 0 ) {
                 Exponential[j][i] = DEFAULT_EXPO;
             }
             ++SDCardAddress;
