@@ -566,6 +566,8 @@ uint8_t  PreviousMacroNumber = 1;
 bool     UseMacros = false;
 uint16_t ReversedChannelBITS = 0; // 16 BIT for 16 Channels
 uint16_t SavedLineX          = 12345;
+bool     FirstConnection     = true;
+
 // ***************************************** Extra Prototypes **********************************************
 
 void SendText(char* tbox, char* NewWord); // needed a prototype or two here!
@@ -1128,6 +1130,7 @@ uint8_t GetLEDBrightness()
 void RedLedOn()
 {
     LedWasGreen = false;
+    FirstConnection = true;
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, 0);
     analogWrite(REDLED, GetLEDBrightness()); // Brightness is a function of maybe blinking
@@ -1139,6 +1142,10 @@ void GreenLedOn()
 {
     if (!LedWasGreen || LedIsBlinking) {         // no need to repeat unless it is blinking
         LedWasGreen = true;
+        if (FirstConnection) {
+            ZeroDataScreen(); 
+            FirstConnection = false;   
+        }
         analogWrite(BLUELED, 0);
         analogWrite(REDLED, 0); 
         analogWrite(GREENLED, GetLEDBrightness()); // Brightness is a function of maybe blinking
@@ -4640,6 +4647,7 @@ void ZeroDataScreen(){             // ZERO Those parameters that are zeroable
             GapSum             = 0;
             GapAverage         = 0;
             GapCount           = 0;
+            GapStart           = 0;
             RXMAXModelAltitude = 0;
             GPSMaxAltitude     = 0;
             ThisGap            = 0;
