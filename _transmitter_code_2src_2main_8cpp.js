@@ -332,6 +332,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "FhssView_Rlow", "_transmitter_code_2src_2main_8cpp.html#a07c5647132fc5f6bcdf9333b10dc40a6", null ],
     [ "FileError", "_transmitter_code_2src_2main_8cpp.html#a9b313f53ee84b82b622e9f186d0bbb81", null ],
     [ "FileNumberInView", "_transmitter_code_2src_2main_8cpp.html#a497bcfa9783d5fba829ae70b5cd2f883", null ],
+    [ "FirstConnection", "_transmitter_code_2src_2main_8cpp.html#ac2fc49f3335ebd2b38d0184306dfcf9b", null ],
     [ "FlightMode", "_transmitter_code_2src_2main_8cpp.html#a932ba83a0eaedd0b0237c0005a77e508", null ],
     [ "FMSwitch", "_transmitter_code_2src_2main_8cpp.html#a452f6aed1252d3f1da8a0ceb07552c07", null ],
     [ "ForeGroundColour", "_transmitter_code_2src_2main_8cpp.html#a029840d27a3c9954aa481d494df4ace6", null ],
