@@ -2088,8 +2088,7 @@ int m, c, p, mindeg, maxdeg, TheSum, Result;
  
 float MapExp(float xx, float Xxmin, float Xxmax, float Yymin, float Yymax, float Expo)
 {
-    if (!Expo) Expo = 1;
-    Expo  = map(Expo, -100, 100, -1, 1);
+    Expo  = map(Expo, -100, 100, -0.25, 0.75);
     xx    = pow(xx * xx, Expo);
     Xxmin = pow(Xxmin * Xxmin, Expo);
     Xxmax = pow(Xxmax * Xxmax, Expo);
