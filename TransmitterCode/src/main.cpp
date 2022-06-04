@@ -5047,7 +5047,6 @@ void ButtonWasPressed()
     char ExpR[]                    = "Exp";
     char Smooth[]                  = "Smooth";
     char Lines[]                   = "Lines";
-    char Expon[]                   = "Expo"; // number display
     char GOTO[]                    = "GOTO:";
     char WhichPage[]               = "page                            "; // excessive spaces for page name
     char AddMinute[]               = "IncMinute";
@@ -5357,7 +5356,7 @@ void ButtonWasPressed()
             LastShowTime = 0;     // this is to make redisplay sooner (in ShowComms())
             LastTimeRead = 0;
             Reconnected = false;  // this is to make '** Connected! **' redisplay (in ShowComms())
-            LastSeconds = 0;      // This forces redisplay of timer
+            LastSeconds = 0;      // This forces redisplay of timer...
             CheckTimer();
             ClearText();
             return;
