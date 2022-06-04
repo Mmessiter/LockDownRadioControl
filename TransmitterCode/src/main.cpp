@@ -1578,7 +1578,7 @@ void ShowServoPos()
             ShownBuffer[15] = SendBuffer[15];
         }
     }
-    if (CurrentView == GRAPHVIEW) { // Display current stick and output values // heer
+    if (CurrentView == GRAPHVIEW) { 
 #define fixitx 34
 #define BarWidth 3
         if (ChanneltoSet <= 8) {
@@ -2088,7 +2088,8 @@ int m, c, p, mindeg, maxdeg, TheSum, Result;
  
 float MapExp(float xx, float Xxmin, float Xxmax, float Yymin, float Yymax, float Expo)
 {
-    Expo  = map(Expo, -100, 100, 0, 1);
+    if (!Expo) Expo = 1;
+    Expo  = map(Expo, -100, 100, -1, 1);
     xx    = pow(xx * xx, Expo);
     Xxmin = pow(Xxmin * Xxmin, Expo);
     Xxmax = pow(Xxmax * Xxmax, Expo);
@@ -2788,8 +2789,8 @@ bool ReadOneModel(uint8_t Mnum)
     for (j = 0; j < FLIGHTMODESUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             Exponential[j][i] = SDReadByte(SDCardAddress);
-            if (Exponential[j][i] > 200 || Exponential[j][i] < 0) {
-                Exponential[j][i] = 20;
+            if (Exponential[j][i] >= 201 || Exponential[j][i] < 20 ) {
+                Exponential[j][i] = DEFAULT_EXPO;
             }
             ++SDCardAddress;
         }
@@ -3732,7 +3733,7 @@ void SetDefaultValues()
 
     for (j = 0; j < FLIGHTMODESUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
-            Exponential[j][i] = 0;                // 0% expo = default
+            Exponential[j][i] = DEFAULT_EXPO;     // 0% (50) expo = default
         }
     }
     for (j = 0; j < FLIGHTMODESUSED + 1; ++j) {
@@ -3959,8 +3960,8 @@ void updateInterpolationTypes()
             SendCommand(b12on);
             SendCommand(ExponOn);
             SendCommand(Ex1On);
-            SendValue(Ex1, Exponential[FlightMode][ChanneltoSet - 1]);
-            SendValue(Expon, Exponential[FlightMode][ChanneltoSet - 1]);
+            SendValue (Ex1,     (Exponential[FlightMode][ChanneltoSet - 1]));           // The slider 
+            SendValue (Expon,   (Exponential[FlightMode][ChanneltoSet - 1])-50);     // the number
             break;
         default:
             break;
@@ -5046,7 +5047,6 @@ void ButtonWasPressed()
     char ExpR[]                    = "Exp";
     char Smooth[]                  = "Smooth";
     char Lines[]                   = "Lines";
-    char Expon[]                   = "Expo"; // number display
     char GOTO[]                    = "GOTO:";
     char WhichPage[]               = "page                            "; // excessive spaces for page name
     char AddMinute[]               = "IncMinute";
@@ -5348,7 +5348,7 @@ void ButtonWasPressed()
             ClearText();
             return;
         }
-        if (InStrng(GoFrontView, TextIn) > 0) { // GOTO frontview
+        if (InStrng(GoFrontView, TextIn) > 0) { // GOTO frontview // heer
             CurrentView = FRONTVIEW;
             SendCommand(page_FrontView);
             UpdateModelsNameEveryWhere();
@@ -5356,6 +5356,8 @@ void ButtonWasPressed()
             LastShowTime = 0;     // this is to make redisplay sooner (in ShowComms())
             LastTimeRead = 0;
             Reconnected = false;  // this is to make '** Connected! **' redisplay (in ShowComms())
+            LastSeconds = 0;      // This forces redisplay of timer...
+            CheckTimer();
             ClearText();
             return;
         }
@@ -5511,7 +5513,7 @@ void ButtonWasPressed()
             if (GetValue(Lines)) {
                 InterpolationTypes[FlightMode][ChanneltoSet - 1] = 0;
             }
-            Exponential[FlightMode][ChanneltoSet - 1] = (GetValue(Expon));
+            Exponential[FlightMode][ChanneltoSet - 1] = (GetValue(Ex1)); 
             ClearText();
             DisplayCurve();
             return;
@@ -6453,7 +6455,7 @@ void ButtonWasPressed()
             CentreDegrees[FlightMode][ChanneltoSet - 1]      = 90;
             MidHiDegrees[FlightMode][ChanneltoSet - 1]       = 120;
             MaxDegrees[FlightMode][ChanneltoSet - 1]         = 150;
-            Exponential[FlightMode][ChanneltoSet - 1]        = 0;
+            Exponential[FlightMode][ChanneltoSet - 1]        = DEFAULT_EXPO;
             InterpolationTypes[FlightMode][ChanneltoSet - 1] = 2; // expo = default
             DisplayCurve();
             ClearText();

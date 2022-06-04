@@ -62,9 +62,9 @@
 //                            SERVO RANGE PARAMETERS                        *
 //***************************************************************************
 
-#define MINMICROS 500
-#define MAXMICROS 2500
-
+#define MINMICROS    500
+#define MAXMICROS    2500
+#define DEFAULT_EXPO 50 // = ZERO EXPO (Range is 0 - 200. Below 50 is negative Expo)
 
 // **************************************************************************
 //                            FHSS PARAMETERS                               *
