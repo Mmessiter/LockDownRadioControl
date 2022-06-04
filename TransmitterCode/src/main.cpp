@@ -5520,12 +5520,12 @@ void ButtonWasPressed()
             if (GetValue(Lines)) {
                 InterpolationTypes[FlightMode][ChanneltoSet - 1] = 0;
             }
-            Exponential[FlightMode][ChanneltoSet - 1] = (GetValue(Ex1)); 
-            ClearText();
+            Exponential[FlightMode][ChanneltoSet - 1] = (GetValue(Ex1));
+            if (Exponential[FlightMode][ChanneltoSet - 1] == 0) Exponential[FlightMode][ChanneltoSet - 1] = 36; // Bug in Nextion!!
             DisplayCurve();
+            ClearText();
             return;
         }
-
         if (InStrng(ReceiveModel, TextIn) > 0) {
             i = strlen(ReceiveModel);
             j = 0;
