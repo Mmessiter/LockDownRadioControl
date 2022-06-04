@@ -1118,7 +1118,7 @@ uint8_t GetLEDBrightness()
         BlinkOnPhase = 1;
     }
     if (BlinkOnPhase) {
-        return 100; // 0 - 254
+        return 150; // 0 - 254
     }
     else {
         return 0;
@@ -1133,7 +1133,7 @@ void RedLedOn()
     FirstConnection = true;
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, 0);
-    analogWrite(REDLED, GetLEDBrightness()); // Brightness is a function of maybe blinking
+    analogWrite(REDLED, GetLEDBrightness());     // Brightness is a function of maybe blinking
 }
 
 /*********************************************************************************************************************************/
@@ -1142,7 +1142,7 @@ void GreenLedOn()
 {
     if (!LedWasGreen || LedIsBlinking) {         // no need to repeat unless it is blinking
         LedWasGreen = true;
-        if (FirstConnection) {
+        if (FirstConnection) {                   // Zero data on first connection
             ZeroDataScreen(); 
             FirstConnection = false;   
         }
