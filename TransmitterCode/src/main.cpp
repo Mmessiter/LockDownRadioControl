@@ -1629,95 +1629,19 @@ void ShowServoPos()
 }
 
 /*********************************************************************************************************************************/
-  void CheckScreenTime(){
-  char ScreenOff[] = "dim=10";
-  if ((millis() - ScreenTimeTimer) > ScreenTimeout * 1000) {
-      SendCommand(ScreenOff);
-      ScreenTimeTimer = millis();
-      ScreenIsOff = true;
-  }
- }
-/*********************************************************************************************************************************/
-
-/** @brief SHOW COMMS */
-FASTRUN void ShowComms()
-{
-    if (NEXTION.available()) return; // was a button pressed?
-
-    bool  TXWarningFlag          = false;
-    bool  RXWarningFlag          = false;
-    bool  ShowNow                = false;
-    char  na[]                   = "";
-    char  FrontView_Connected[]  = "Connected";
-    char  FrontView_AckPayload[] = "AckPayload";
-    char  FrontView_RXBV[]       = "RXBV";
-    char  FrontView_TXBV[]       = "TXBV";
-    char  Not_Connected[]        = "Not connected";
-    char  Msg_Connected[]        = "** Connected! **";
-    char  Msg_CnctdBuddyMast[]   = "* BUDDY MASTER! *";
-    char  Msg_CnctdBuddySlave[]  = "* BUDDY SLAVE! *";
-    char  MsgBuddying[]          = "Buddy";
-    char  DataView_pps[]         = "pps";       // These are all label names in the NEXTION data screen. They are best kept short.
-    char  DataView_lps[]         = "lps";
-    char  DataView_Alt[]         = "alt";
-    char  DataView_Temp[]        = "Temp";
-    char  DataView_MaxAlt[]      = "MaxAlt";
+bool CheckTXVolts(){
     char  DataView_txv[]         = "txv";
-    char  DataView_rxv[]         = "rxv";
-    char  DataView_Ls[]          = "Ls";
-    char  DataView_Ts[]          = "Ts";
-    char  DataView_Rx[]          = "rx";
-    char  DataView_Sg[]          = "Sg";
-    char  DataView_Ag[]          = "Ag";
-    char  DataView_Gc[]          = "Gc";
-    char  WarnNow[]              = "vis Warning,1";
-    char  WarnOff[]              = "vis Warning,0";
+    float txv                    = 0;
     char  TXVolts[]              = "t21";
-    float Volts                  = 0;
     char  Vbuf[16];
-    char  pc[]      = "%";
-    char  v[]       = "V, ";
-    float txv       = 0;
-    int   txpc      = 0;
-    char  LiFe2s[]  = " 2s LiFe,  ";
-    char  LiPo2s[]  = " 2s LiPo,  ";
-    char  LiPo3s[]  = " 3s LiPo,  ";
-    char  LiPo4s[]  = " 4s LiPo,  ";
-    char  LiPo5s[]  = " 5s LiPo,  ";
-    char  LiPo6s[]  = " 6s LiPo,  ";
-    char  PerCell[] = "V/C";
-    char  RXBattInfo[65];
-    char  RXBattNA[] = "(No data)";
-    char  RXBattNV[] = "    ";
+    char  pc[]                   = "%";
+    char  v[]                    = "V, ";
     char  TXBattInfo[65];
-    float ReadVolts           = 0;
-    float VoltsPerCell        = 0;
-    char  BindButtonVisible[] = "vis bind,1";
-    char  Fix[]               = "Fix";   // These are all label names in the NEXTION data screen. They are best kept short.
-    char  Lon[]               = "Lon";
-    char  Lat[]               = "Lat";
-    char  Bear[]              = "Bear";
-    char  Dist[]              = "Dist";
-    char  Sped[]              = "Sped";
-    char  yes[]               = "Yes";
-    char  no[]                = "No";
-    char  ALT[]               = "ALT";
-    char  MALT[]              = "MALT";
-    char  MxS[]               = "MxS";
-    char  Mxd[]               = "Mxd";
-    char  BTo[]               = "BTo";
-    char  Sat[]               = "Sat";
-    char  Sbs[]               = "Sbus";
-    char  LowBat[]            = "play 0,19,0";
-
-    if (CurrentView == FRONTVIEW || CurrentView == DATAVIEW) {
-        if (millis() - LastShowTime > ShowCommsDelay) { 
-            ShowNow = true;
-        }
-    }
-    if (ShowNow)
-    {
-        LastShowTime = millis();
+    char  FrontView_TXBV[]       = "TXBV";
+    char  LiFe2s[]               = " 2s LiFe,  ";
+    char  PerCell[]              = "V/C";
+    bool  TXWarningFlag          = false;
+    int   txpc                   = 0;
         if (USE_INA219) {
             txv  = (ina219.getBusVoltage_V()) * 100;
             txpc = map(txv, 512, 670, 0, 100); // LiFePo4 Battery 2.6 ->3.5  volts per cell
@@ -1738,9 +1662,92 @@ FASTRUN void ShowComms()
             strcat(TXBattInfo, Vbuf);
             strcat(TXBattInfo, PerCell);
             if (CurrentView == FRONTVIEW) SendText(FrontView_TXBV, TXBattInfo);
-            if (CurrentView == DATAVIEW) SendText(DataView_txv, TransmitterVersionNumber); // TX Version Number
+            if (CurrentView == DATAVIEW)  SendText(DataView_txv, TransmitterVersionNumber); // TX Version Number
                                                                                            // if (CurrentView == DATAVIEW) SendText(DataView_txv, Vbuf);
         }
+return TXWarningFlag;
+}
+/*********************************************************************************************************************************/
+  void CheckScreenTime(){
+  char ScreenOff[] = "dim=10";
+  if ((millis() - ScreenTimeTimer) > ScreenTimeout * 1000) {
+      SendCommand(ScreenOff);
+      ScreenTimeTimer = millis();
+      ScreenIsOff = true;
+  }
+ }
+/*********************************************************************************************************************************/
+
+/** @brief SHOW COMMS */
+FASTRUN void ShowComms()
+{
+    if (NEXTION.available()) return; // was a button pressed?
+    char  WarnNow[]              = "vis Warning,1";
+    char  WarnOff[]              = "vis Warning,0";
+    bool  TXWarningFlag          = false;
+    bool  RXWarningFlag          = false;
+    bool  ShowNow                = false;
+    char  na[]                   = "";
+    char  FrontView_Connected[]  = "Connected";
+    char  FrontView_AckPayload[] = "AckPayload";
+    float Volts                  = 0;
+    char  pc[]                   = "%";
+    char  Not_Connected[]        = "Not connected";
+    char  Msg_Connected[]        = "** Connected! **";
+    char  Msg_CnctdBuddyMast[]   = "* BUDDY MASTER! *";
+    char  Msg_CnctdBuddySlave[]  = "* BUDDY SLAVE! *";
+    char  MsgBuddying[]          = "Buddy";
+    char  DataView_pps[]         = "pps";       // These are all label names in the NEXTION data screen. They are best kept short.
+    char  DataView_lps[]         = "lps";
+    char  DataView_Alt[]         = "alt";
+    char  DataView_Temp[]        = "Temp";
+    char  DataView_MaxAlt[]      = "MaxAlt";
+    char  FrontView_RXBV[]       = "RXBV";
+    char  DataView_rxv[]         = "rxv";
+    char  DataView_Ls[]          = "Ls";
+    char  DataView_Ts[]          = "Ts";
+    char  DataView_Rx[]          = "rx";
+    char  DataView_Sg[]          = "Sg";
+    char  DataView_Ag[]          = "Ag";
+    char  DataView_Gc[]          = "Gc";
+    char  Vbuf[16];
+    char  LiPo2s[]  = " 2s LiPo,  ";
+    char  LiPo3s[]  = " 3s LiPo,  ";
+    char  LiPo4s[]  = " 4s LiPo,  ";
+    char  LiPo5s[]  = " 5s LiPo,  ";
+    char  LiPo6s[]  = " 6s LiPo,  ";
+    char  PerCell[] = "V/C";
+    char  RXBattInfo[65];
+    char  RXBattNA[] = "(No data)";
+    char  RXBattNV[] = "    ";
+    char  v[]                 = "V, ";
+    float ReadVolts           = 0;
+    float VoltsPerCell        = 0;
+    char  BindButtonVisible[] = "vis bind,1";
+    char  Fix[]               = "Fix";   // These are all label names in the NEXTION data screen. They are best kept short.
+    char  Lon[]               = "Lon";
+    char  Lat[]               = "Lat";
+    char  Bear[]              = "Bear";
+    char  Dist[]              = "Dist";
+    char  Sped[]              = "Sped";
+    char  yes[]               = "Yes";
+    char  no[]                = "No";
+    char  ALT[]               = "ALT";
+    char  MALT[]              = "MALT";
+    char  MxS[]               = "MxS";
+    char  Mxd[]               = "Mxd";
+    char  BTo[]               = "BTo";
+    char  Sat[]               = "Sat";
+    char  Sbs[]               = "Sbus";
+    char  LowBat[]            = "play 0,19,0";
+
+if (millis() - LastShowTime > ShowCommsDelay) { 
+    TXWarningFlag = CheckTXVolts();
+    ShowNow = true;
+    LastShowTime = millis();
+}
+if (ShowNow){
+    if (CurrentView == FRONTVIEW || CurrentView == DATAVIEW) {
         if (!LostContactFlag)
         {
             if ((CurrentView == FRONTVIEW)) {
@@ -1775,7 +1782,6 @@ FASTRUN void ShowComms()
                     }
                 }
             }
-
             if (CurrentView == DATAVIEW) {
                 SendValue(DataView_pps,   PacketsPerSecond);
                 SendValue(DataView_lps,   LostPackets);
@@ -1818,8 +1824,6 @@ FASTRUN void ShowComms()
                 SendText(Mxd,Vbuf);  
                 snprintf(Vbuf, 6,"%d",  (int) SbusRepeats - SavedSbusRepeats);
                 SendText(Sbs,Vbuf);   
-                 
-                
             }
             ReadVolts = RXModelVolts * 10;
             // 6s Max 25.2 -> 20.4
@@ -1868,7 +1872,6 @@ FASTRUN void ShowComms()
                     SendValue(DataView_pps, PacketsPerSecond);
                     SendValue(DataView_lps, LostPackets);
                 }
-
                 if (CurrentView == FRONTVIEW) {
                     SendText(FrontView_Connected, Not_Connected);
                     SendText(FrontView_RXBV, na); // data not available
@@ -1887,23 +1890,22 @@ FASTRUN void ShowComms()
                     }
                 }
             }
-        }
-        CheckScreenTime();
-        if (CurrentView == FRONTVIEW) {
-            if (RXWarningFlag || TXWarningFlag) {
-                SendCommand(WarnNow);
-                LedIsBlinking = true; 
-                    if((millis() - WarningTimer) > 10000) {
-                        WarningTimer = millis();
-                        SendCommand(LowBat);                // issue audible warning every 10 seconds
-                    }
-            } else {
-                SendCommand(WarnOff);
-                LedIsBlinking = false; 
-                LedWasGreen = false;
-            }
-        }
+        } 
     }
+CheckScreenTime();        
+if (RXWarningFlag || TXWarningFlag) {
+        LedIsBlinking = true; 
+        if((millis() - WarningTimer) > 10000) {
+            WarningTimer = millis();
+            SendCommand(LowBat);                // issue audible warning every 10 seconds
+        }
+        if (CurrentView == FRONTVIEW) SendCommand(WarnNow);         
+    }else{
+        if (LedIsBlinking && (CurrentView ==  FRONTVIEW)) SendCommand(WarnOff);
+        LedIsBlinking = false; 
+        LedWasGreen = false;
+    }
+}
 } // end ShowComms()
 
 /************************************************************************************************************/
@@ -7087,16 +7089,13 @@ void  CheckScanButton(){
 // LOOP
 /************************************************************************************************************/
 void loop()
-{
-    
+{  
     KickTheDog();                    // Watchdog
     if (GetButtonPress()) {
         ButtonWasPressed();          // Deal with button
     }
-
     if ((millis()-ModelNameTimeCheck) > 5000) {  
         ModelNameTimeCheck  = millis();
-
         if (CurrentView == MAINSETUPVIEW){ 
             CheckScanButton();           
         }
