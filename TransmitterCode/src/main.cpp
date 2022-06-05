@@ -4144,6 +4144,7 @@ void DisplayCurve()
         DrawDot(xPoints[4], yPoints[4], DotSize, DotColour);
     }
     updateInterpolationTypes();
+ 
 }
 
 /*********************************************************************************************************************************/
@@ -5360,7 +5361,7 @@ void ButtonWasPressed()
             ClearText();
             return;
         }
-        if (InStrng(GoFrontView, TextIn) > 0) { // GOTO frontview // heer
+        if (InStrng(GoFrontView, TextIn) > 0) { // GOTO frontview 
             CurrentView = FRONTVIEW;
             SendCommand(page_FrontView);
             UpdateModelsNameEveryWhere();
@@ -6683,7 +6684,11 @@ void GetFlightMode()
         }
         CheckTimer(); // update timer
         UpdateModelsNameEveryWhere();
-        if (CurrentView == GRAPHVIEW) DisplayCurve();
+        if (CurrentView == GRAPHVIEW) {
+            DisplayCurve();
+            SavedLineX = 0;  // to force redisplay
+            ShowServoPos();  
+         }
     }
     PreviousFlightMode = FlightMode;
 }
