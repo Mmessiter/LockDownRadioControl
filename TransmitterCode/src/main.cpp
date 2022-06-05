@@ -6686,7 +6686,7 @@ void GetFlightMode()
         UpdateModelsNameEveryWhere();
         if (CurrentView == GRAPHVIEW) {
             DisplayCurve();
-            SavedLineX = 0;  // to force redisplay
+            SavedLineX = 0;         // to force redisplay of servo indicator bar
             ShowServoPos();  
          }
     }
