@@ -6942,7 +6942,7 @@ void ParseAckPayload()
         HopToNextChannel();
         AckPayload.Purpose &= 0x7f;                                      // Clear the high BIT, use the remainder ...
     }    
-        switch (AckPayload.Purpose) // Only look at the low 7 BITS
+        switch (AckPayload.Purpose)                                      // Only look at the low 7 BITS
         {
             case 0:
                 GetRXVersionNumber();
