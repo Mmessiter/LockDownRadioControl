@@ -1782,6 +1782,8 @@ if (ShowNow){
                     }
                 }
             }
+           
+           
             if (CurrentView == DATAVIEW) {
                 SendValue(DataView_pps,   PacketsPerSecond);
                 SendValue(DataView_lps,   LostPackets);
@@ -1825,6 +1827,7 @@ if (ShowNow){
                 snprintf(Vbuf, 6,"%d",  (int) SbusRepeats - SavedSbusRepeats);
                 SendText(Sbs,Vbuf);   
             }
+          
             ReadVolts = RXModelVolts * 10;
             // 6s Max 25.2 -> 20.4
             // 5s Max 21.0 -> 17.0
