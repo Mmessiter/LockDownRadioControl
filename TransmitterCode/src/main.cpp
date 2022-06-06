@@ -1236,8 +1236,8 @@ void SendText1(char* tbox, char* NewWord)
 /*********************************************************************************************************************************/
 void EndSend()
 {
-    for (u_int8_t pp = 0; pp < 3; ++pp) {NEXTION.write(0xff);} // Send end of Input message
-    delay(55);                                            // ** A DELAY ** (>=50 ms) was needed if an answer might come! (!! Shorter with Intelligent dislay)
+    for (u_int8_t pp = 0; pp < 3; ++pp) {NEXTION.write(0xff);} // Send end of Input message // 
+    delay(60);                                            // ** A DELAY ** (>=50 ms) was needed if an answer might come! (!! Shorter with Intelligent dislay)
 }
 /*********************************************************************************************************************************/
 void SendValue(char* nbox, int value)
@@ -1280,7 +1280,7 @@ void GetTextIn()
     }
 }
 /*********************************************************************************************************************************/
-uint32_t GetValue(char* nbox)
+uint32_t GetValue(char* nbox) 
 {
     uint32_t ValueIn = 0;
     char   GET[]   = "get ";
@@ -3972,7 +3972,7 @@ void updateInterpolationTypes()
             SendCommand(ExponOn);
             SendCommand(Ex1On);
             SendValue (Ex1,     (Exponential[FlightMode][ChanneltoSet - 1]));           // The slider 
-            SendValue (Expon,   (Exponential[FlightMode][ChanneltoSet - 1])-50);     // the number
+            SendValue (Expon,   (Exponential[FlightMode][ChanneltoSet - 1])-50);        // the number
             break;
         default:
             break;
@@ -4084,7 +4084,7 @@ void DisplayCurve()
     }
 
     if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == 2) { //EXPO  ************************************************************************************************
-#define APPROXIMATION 10                                         // This is for the approximation of the screen curve
+#define APPROXIMATION 7                                         // This is for the approximation of the screen curve
 
         SendCommand(b3off);
         SendCommand(b4off);
@@ -5476,6 +5476,8 @@ void ButtonWasPressed()
    
             if (CurrentView == GRAPHVIEW) {
                 DisplayCurve();
+                SavedLineX = 0;  
+                ShowServoPos(); 
                 SendValue(CopyToAllFlightModes, 0);
             }
             if (CurrentView == SWITCHES_VIEW) {
@@ -5526,10 +5528,13 @@ void ButtonWasPressed()
             if (GetValue(Lines)) {
                 InterpolationTypes[FlightMode][ChanneltoSet - 1] = 0;
             }
-            Exponential[FlightMode][ChanneltoSet - 1] = (GetValue(Ex1));
-            if (Exponential[FlightMode][ChanneltoSet - 1] == 0) Exponential[FlightMode][ChanneltoSet - 1] = 36; // Bug in Nextion!!
-            DisplayCurve();
+            if (GetValue(Ex1)) {
+                Exponential[FlightMode][ChanneltoSet - 1] = GetValue(Ex1);
+                DisplayCurve(); // Bug ? (36 -> Zero!)
+            }
             ClearText();
+            SavedLineX = 0;  
+            ShowServoPos(); 
             return;
         }
         if (InStrng(ReceiveModel, TextIn) > 0) {
@@ -6454,7 +6459,6 @@ void ButtonWasPressed()
 
         if (InStrng(yy2down, TextIn)) // yy1 down?
         {
-            Serial.println (MinDegrees[FlightMode][ChanneltoSet - 1]);
             if (MinDegrees[FlightMode][ChanneltoSet - 1] > 0) {MinDegrees[FlightMode][ChanneltoSet - 1]--;}
             DisplayCurve();
             ClearText();
@@ -6471,6 +6475,8 @@ void ButtonWasPressed()
             Exponential[FlightMode][ChanneltoSet - 1]        = DEFAULT_EXPO;
             InterpolationTypes[FlightMode][ChanneltoSet - 1] = 2; // expo = default
             DisplayCurve();
+            SavedLineX = 0;  
+            ShowServoPos(); 
             ClearText();
             return;
         }
@@ -6488,6 +6494,8 @@ void ButtonWasPressed()
             p                                           = MaxDegrees[FlightMode][ChanneltoSet - 1];
             MaxDegrees[FlightMode][ChanneltoSet - 1]    = 180 - p;
             DisplayCurve();
+            SavedLineX = 0;  
+            ShowServoPos(); 
             ClearText();
             return;
         }
