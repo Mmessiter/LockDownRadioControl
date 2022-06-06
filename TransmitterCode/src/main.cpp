@@ -6233,7 +6233,9 @@ void ButtonWasPressed()
             ClearText();
             SendCommand(page_GraphView); // Set to GraphView
             CurrentView = GRAPHVIEW;
-            DisplayCurve(); // redisplay curve
+            DisplayCurve(); // redisplay curve 
+            SavedLineX = 0;  
+            ShowServoPos(); 
             updateInterpolationTypes();
             UpdateModelsNameEveryWhere();
             SendValue(CopyToAllFlightModes, 0);
