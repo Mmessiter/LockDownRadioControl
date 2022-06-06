@@ -4135,7 +4135,6 @@ void DisplayCurve()
         DrawDot(xPoints[2], yPoints[2], DotSize, DotColour);
         DrawDot(xPoints[4], yPoints[4], DotSize, DotColour);
     }
-
     if (InterpolationTypes[FlightMode][ChanneltoSet - 1] != 2) {
         DrawDot(xPoints[0], yPoints[0], DotSize, DotColour); // This adds 5 dots
         DrawDot(xPoints[1], yPoints[1], DotSize, DotColour);
@@ -4144,7 +4143,6 @@ void DisplayCurve()
         DrawDot(xPoints[4], yPoints[4], DotSize, DotColour);
     }
     updateInterpolationTypes();
- 
 }
 
 /*********************************************************************************************************************************/
@@ -5115,6 +5113,7 @@ void ButtonWasPressed()
     char SetupAud[]                = "SetupAud";
     char n0[]                      = "n0";
     char Ex1[]                     = "Ex1";
+    char Expo[]                    = "Expo";
     char AudioView[]               = "AudioView";
     char cb0[]                     = "cb0";
     char n1[]                      = "n1";
@@ -5528,11 +5527,9 @@ void ButtonWasPressed()
             if (GetValue(Lines)) {
                 InterpolationTypes[FlightMode][ChanneltoSet - 1] = 0;
             }
-            if (GetValue(Ex1)) {
-                Exponential[FlightMode][ChanneltoSet - 1] = GetValue(Ex1);
-                DisplayCurve(); // Bug ? (36 -> Zero!)
-            }
+            Exponential[FlightMode][ChanneltoSet - 1] = GetValue(Expo)+50; // Note: Getting this value from slider was not reliable (could not return 36!)
             ClearText();
+            DisplayCurve(); 
             SavedLineX = 0;  
             ShowServoPos(); 
             return;
