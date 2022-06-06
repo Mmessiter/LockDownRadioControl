@@ -4647,10 +4647,13 @@ void RestoreBrightness(){
 void ZeroDataScreen(){             // ZERO Those parameters that are zeroable
             LostPackets        = 0;
             GapShortest        = 0;
+            TimerMillis        = millis();
             GapLongest         = 0;
             GapSum             = 0;
             GapAverage         = 0;
             GapCount           = 0;
+            Secs               = 0;
+            PausedSecs         = 0;
             GapStart           = 0;
             RXMAXModelAltitude = 0;
             GPSMaxAltitude     = 0;
