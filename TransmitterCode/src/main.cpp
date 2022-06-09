@@ -4421,6 +4421,7 @@ void SendModelFile()
     char          of[]   = " of ";
     char          msg[50];  
     char          bytes[] = " bytes.";
+    uint32_t      SentMoment = 0;
   
     BlueLedOn();
     SendCommand(ProgressStart);
@@ -4467,19 +4468,19 @@ void SendModelFile()
             Fposition += BUFFERSIZE;
             if (Fposition > Fsize) Fposition = Fsize;
         }
-         Radio1.flush_tx();
-         Radio1.flush_rx();
-         Procrastinate(2);
+       while ((millis()-SentMoment) < PACEMAKER * 2) {   
+                Radio1.flush_tx();
+                Radio1.flush_rx();
+       }
         if (Radio1.write(&Fbuffer, BUFFERSIZE + 4)) {
-              Procrastinate(2);
+            SentMoment = millis();
+            Procrastinate(1);     
             if (Radio1.isAckPayloadAvailable()) {
                 Radio1.read(&Fack, sizeof(Fack));
                 Serial.println ("ACK received");
                 Serial.println (Fposition);
-                Procrastinate(1);
             }else{
                 Serial.println ("NO ACK received");
-                Procrastinate(1);
             }
         }
         else {
