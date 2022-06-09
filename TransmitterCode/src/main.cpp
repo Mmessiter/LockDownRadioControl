@@ -4,10 +4,11 @@
  * @page TransmitterCode
  * @section LockDown Radio Control Features list, so far:
  * - Uses Teensy 4.1 MCU (at 600 Mhz) with nRF24L01+ transceiver
+ * - (Ebyte's ML01DP5 recommended for TX, two ML01SP4s for RX.)
  * - 16 channels
  * - 12 BIT servo resolution (11 BIT via SBUS)
  * - 32 Mixes
- * - 4 Flight modes (Banks), or 3 plus autorotation
+ * - 4 Flight modes (AKA Banks), or 3 plus autorotation
  * - User defined Channel names
  * - 2.4 Ghz FHSS ISM band licence free in UK and most other countries.
  * - 2.5 Km range (approx.)
@@ -17,13 +18,14 @@
  * - 2.4 GHz RF scan
  * - Motor Timer
  * - Lossless data compression.
- * - Trims on screen saved per flight mode per model.
- * - Screen timeout.
- * - FFHS with very fast recovery on lost packet
- * - Uses 32 GIG SD card for model memories and help files
- * - Binding - uses unique Mac address as pipe address.
+ * - Trims saved per bank and per model.
+ * - Screen timeout to save battery.
+ * - FHSS with very fast connect and reconnect
+ * - Uses 32 GIG SD card for model memories and help files (TODO: LOG FILES)
+ * - Binding without bind plug - uses unique Mac address as pipe address.
  * - Four User definable three position switches
- * - Input sources definable - any stick or switch can be mapped to any function.
+ * - Channels 5,6,7 & 8 can be switches or knobs.
+ * - Input sources definable - any stick, switch or knob can be mapped to any function.
  * - Model memories export and import to backup files on SD card
  * - Model memory files alphabetically sorted
  * - Timer goes on and off with motor to keep track of motor use.
@@ -33,8 +35,8 @@
  * - Servo reverse
  * - Macros - for snap rolls, heli rescue, etc.
  * - Hardware digital trims with accellerating repeat
- * - Capacitive touch screen
- * - Hardware bug in nRF24L01+ work-around implemented
+ * - Capacitive touch screen GUI
+ * - Hardware bug in nRF24L01+ discovered. A fix (work-around) is implemented
  * - Screen colours definable
  * - Data screen gives all possible telemetry  
  *  
@@ -104,7 +106,7 @@
 
 #define MINMICROS       500
 #define MAXMICROS       2500
-#define HALFMICROSRANGE (MAXMICROS - MINMICROS) / 2 //  = 500
+#define HALFMICROSRANGE (MAXMICROS - MINMICROS) / 2 //  = 1000
 #define MIDMICROS       MINMICROS + HALFMICROSRANGE
 
 #include <Arduino.h>
@@ -180,7 +182,7 @@ RF24 Radio1(CE_PIN, CSN_PIN);
 #define UNCOMPRESSEDWORDS 20                        // DATA TO SEND = 40  bytes
 #define COMPRESSEDWORDS   UNCOMPRESSEDWORDS * 3 / 4 // COMPRESSED DATA SENT = 30  bytes
 
-#define SWITCH0       32   // SWITCHES' PIN NUMBERS ...
+#define SWITCH0       32   // EDGE SWITCHES' PIN NUMBERS ...
 #define SWITCH1       31
 #define SWITCH2       30
 #define SWITCH3       29
@@ -614,7 +616,7 @@ void GetSlaveChannelValues()
     bool lostFrameM;
     SlaveHasControl = false;
     if (SendBuffer[BuddyTriggerChannel-1] > 1000)
-    { // MASTER'S CHANNEL 12 (500 - 2500) used here as switch.
+    { // MASTER'S CHANNEL 'BuddyTriggerChannel' (500 - 2500) used here as switch.
         if (MySbus.read(&SbusChannels[0], &failSafeM, &lostFrameM))
         {
             SBUSTimer = millis();       // RESET timeout when data comes in
@@ -1375,7 +1377,7 @@ bool GetButtonPress()
 
 uint8_t um(uint16_t bv) // convert to lower resolution
 {
-    return (map(bv, MINMICROS, MAXMICROS, 0, 100)); // lower res is enough on display
+    return (map(bv, MINMICROS, MAXMICROS, 0, 100)); // lower res is enough on display and on failsafe
 }
 
 /*********************************************************************************************************************************/
@@ -1904,7 +1906,7 @@ if (RXWarningFlag || TXWarningFlag) {
         }
         if (CurrentView == FRONTVIEW) SendCommand(WarnNow);         
     }else{
-        if (LedIsBlinking && (CurrentView ==  FRONTVIEW)) SendCommand(WarnOff);
+        if (LedIsBlinking && (CurrentView == FRONTVIEW)) SendCommand(WarnOff);
         LedIsBlinking = false; 
         LedWasGreen = false;
     }
@@ -1977,7 +1979,6 @@ void SendCharArray(char* ch0, char* ch1, char* ch2, char* ch3, char* ch4, char* 
 
 void SendMixValues()
 {
-
     char MixesView_Enabled[]       = "MixesView.Enabled";
     char MixesView_FlightMode[]    = "MixesView.FlightMode";
     char MixesView_MasterChannel[] = "MixesView.MasterChannel";
