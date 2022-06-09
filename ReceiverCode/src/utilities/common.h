@@ -22,6 +22,8 @@
 //**************************************************************************************************************************
 
     #define SENSOR_HUB_I2C_ADDRESS      8
+    
+ 
     #define HOPTIME                     91   // ms between channel changes ( >12 packets per hop)
     
     #define LISTEN_PERIOD               15    // 10 How many ms to listen for TX in Reconnect()

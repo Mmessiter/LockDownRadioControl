@@ -341,17 +341,18 @@ void HopToNextChannel()
     Radio1.stopListening();            // Transmit only (no need for any extra delay() as this is here followed by several tasks)
 
 #ifdef DB_FHSS
-    uint8_t ch =  * (FHSSChPointer + NextChannelNumber);
+    float ch =  * (FHSSChPointer + NextChannelNumber);
+    float Freq = 2.4;
     PEndTime  = millis();
     Pduration = (PEndTime - PStartTime) / 1000;
     Serial.print("Hop duration: ");
     Serial.print(Pduration);
     Serial.print(" seconds. Good packets per hop: ");
     Serial.print(PacketNumber); 
-    Serial.print(" Next channel: ");
-    Serial.print(ch);
-    if (ch < 100) Serial.print(" ");
-    if (ch <  10) Serial.print(" ");
+    Serial.print(" Next frequency: ");
+    Freq += ch/1000;
+    Serial.print(Freq);
+    Serial.print(" Ghz.");
     Serial.print(BoundFlag ? " Bound!" : " NOT BOUND.");
     Serial.print(" RX Radio: ");
     Serial.println(ThisRadio);
