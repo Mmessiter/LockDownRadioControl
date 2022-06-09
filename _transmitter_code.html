@@ -100,10 +100,11 @@ $(document).ready(function(){initNavTree('_transmitter_code.html',''); initResiz
 Radio Control Features list, so far:</h1>
 <ul>
 <li>Uses Teensy 4.1 MCU (at 600 Mhz) with nRF24L01+ transceiver</li>
+<li>(Ebyte's ML01DP5 recommended for TX, two ML01SP4s for RX.)</li>
 <li>16 channels</li>
 <li>12 BIT servo resolution (11 BIT via SBUS)</li>
 <li>32 Mixes</li>
-<li>4 Flight modes (Banks), or 3 plus autorotation</li>
+<li>4 Flight modes (AKA Banks), or 3 plus autorotation</li>
 <li>User defined Channel names</li>
 <li>2.4 Ghz FHSS ISM band licence free in UK and most other countries.</li>
 <li>2.5 Km range (approx.)</li>
@@ -113,13 +114,14 @@ Radio Control Features list, so far:</h1>
 <li>2.4 GHz RF scan</li>
 <li>Motor Timer</li>
 <li>Lossless data compression.</li>
-<li>Trims on screen saved per flight mode per model.</li>
-<li>Screen timeout.</li>
-<li>FFHS with very fast recovery on lost packet</li>
-<li>Uses 32 GIG SD card for model memories and help files</li>
-<li>Binding - uses unique Mac address as pipe address.</li>
+<li>Trims saved per bank and per model.</li>
+<li>Screen timeout to save battery.</li>
+<li>FHSS with very fast connect and reconnect</li>
+<li>Uses 32 GIG SD card for model memories and help files (TODO: LOG FILES)</li>
+<li>Binding without bind plug - uses unique Mac address as pipe address.</li>
 <li>Four User definable three position switches</li>
-<li>Input sources definable - any stick or switch can be mapped to any function.</li>
+<li>Channels 5,6,7 &amp; 8 can be switches or knobs.</li>
+<li>Input sources definable - any stick, switch or knob can be mapped to any function.</li>
 <li>Model memories export and import to backup files on SD card</li>
 <li>Model memory files alphabetically sorted</li>
 <li>Timer goes on and off with motor to keep track of motor use.</li>
@@ -129,8 +131,8 @@ Radio Control Features list, so far:</h1>
 <li>Servo reverse</li>
 <li>Macros - for snap rolls, heli rescue, etc.</li>
 <li>Hardware digital trims with accellerating repeat</li>
-<li>Capacitive touch screen</li>
-<li>Hardware bug in nRF24L01+ work-around implemented</li>
+<li>Capacitive touch screen GUI</li>
+<li>Hardware bug in nRF24L01+ discovered. A fix (work-around) is implemented</li>
 <li>Screen colours definable</li>
 <li>Data screen gives all possible telemetry <br  />
 </li>
