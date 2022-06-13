@@ -165,18 +165,17 @@ void ExecuteMacro(){                                                            
 
 void SendData()
 {
-// uint32_t testt = 0;
-    if (NEXTION.available()) return;               // was a button pressed?
+    if (NEXTION.available()) return;              // was a button pressed?
     if (millis() - TxPace <= 2) {
-        ShowComms();                                   // there is time to fit in these calls because there are about 5 ms spare still. ONLY WHEN CONNECTED
-        ReadSwitches();                                // Check switch positions
+        ShowComms();                              // there is time to fit in these calls because there are about 5 ms spare still WHEN CONNECTED
+        ReadSwitches();                           // Check switch positions
         CheckTimer();  
     }
     if (((millis() - TxPace) >= PACEMAKER) || (LostContactFlag)){
         TxPace = millis();
         GetNewChannelValues();                    // Load SendBuffer with new servo positions
         if (UseMacros) ExecuteMacro();            // Modify it if macro is running
-        if (DoSbusSendOnly) {                      // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
+        if (DoSbusSendOnly) {                     // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
             ReadSwitches();
             MapToSBUS();
             return;                               // no more to do here!
@@ -198,14 +197,12 @@ void SendData()
             HopToNextChannel();
         }
         Connected = false;
-       // testt=millis();
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);   // Compress 32 bytes down to 24
         Radio1.flush_rx();                                         // This avoids a lockup that happens when the FIFO gets full.
         Radio1.flush_tx();                                         // This avoids a lockup that happens when the FIFO gets full.
                                                                    //  *************************************** SEND *************************************************************************************
         if  (Radio1.write(&CompressedData, SizeOfCompressedData)){ //  **************************** ! ACTUALLY SEND DATA ! *********************************************
-                                                                   //  ***************************** (Returns TRUE if ACK received) ******************************************************************************
-           // Serial.println(millis()-testt);
+                                                                   //  ***************************** (Returns TRUE if ACK received) ****************************************************************************
             ++RangeTestGoodPackets;
             ++PacketNumber;
             LostContactFlag = false;
