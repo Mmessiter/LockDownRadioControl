@@ -165,6 +165,7 @@ void ExecuteMacro(){                                                            
 
 void SendData()
 {
+// uint32_t testt = 0;
     if (NEXTION.available()) return;               // was a button pressed?
     if (millis() - TxPace <= 2) {
         ShowComms();                                   // there is time to fit in these calls because there are about 5 ms spare still. ONLY WHEN CONNECTED
@@ -197,12 +198,14 @@ void SendData()
             HopToNextChannel();
         }
         Connected = false;
+       // testt=millis();
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);   // Compress 32 bytes down to 24
         Radio1.flush_rx();                                         // This avoids a lockup that happens when the FIFO gets full.
         Radio1.flush_tx();                                         // This avoids a lockup that happens when the FIFO gets full.
                                                                    //  *************************************** SEND *************************************************************************************
         if  (Radio1.write(&CompressedData, SizeOfCompressedData)){ //  **************************** ! ACTUALLY SEND DATA ! *********************************************
                                                                    //  ***************************** (Returns TRUE if ACK received) ******************************************************************************
+           // Serial.println(millis()-testt);
             ++RangeTestGoodPackets;
             ++PacketNumber;
             LostContactFlag = false;
