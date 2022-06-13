@@ -167,27 +167,25 @@ void SendData()
 {
     if (NEXTION.available()) return;               // was a button pressed?
     if (millis() - TxPace <= 2) {
-    ShowComms();                                   // there is time to fit in these calls because there are about 5 ms spare still. ONLY WHEN CONNECTED
-    ReadSwitches();                                // Check switch positions
-    CheckTimer();  
+        ShowComms();                                   // there is time to fit in these calls because there are about 5 ms spare still. ONLY WHEN CONNECTED
+        ReadSwitches();                                // Check switch positions
+        CheckTimer();  
     }
     if (((millis() - TxPace) >= PACEMAKER) || (LostContactFlag)){
         TxPace = millis();
         GetNewChannelValues();                    // Load SendBuffer with new servo positions
         if (UseMacros) ExecuteMacro();            // Modify it if macro is running
-        if (DoSbusSendOnly)                       // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
-        {
+        if (DoSbusSendOnly) {                      // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
             ReadSwitches();
             MapToSBUS();
             return;                               // no more to do here!
         }
-        if (BuddyMaster)  GetSlaveChannelValues(); // If buddy master, check where student's sticks etc. are.
-        if (!BoundFlag && !(CurrentView == CALIBRATEVIEW) && !(CurrentView == STICKSVIEW))
-        {
+        if (BuddyMaster) {GetSlaveChannelValues();} // If buddy master, check where student's sticks etc. are.
+        if (!BoundFlag && !(CurrentView == CALIBRATEVIEW) && !(CurrentView == STICKSVIEW)){
             BufferNewPipe(); // if not yet bound, send our pipe
         }
         LoadPacketData();    // extra parameters appended to the data packet
-        if (LostContactFlag) {
+        if (LostContactFlag){
             if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {
                 TryOtherPipe();
                 PipeTimeout = millis();
@@ -199,37 +197,32 @@ void SendData()
             HopToNextChannel();
         }
         Connected = false;
-        Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24
-        Radio1.flush_rx();                                       // This avoids a lockup that happens when the FIFO gets full.
-        Radio1.flush_tx();                                       // This avoids a lockup that happens when the FIFO gets full.
-                                                                 //  *************************************** SEND *************************************************************************************
-        Radio1.write(&CompressedData, SizeOfCompressedData);     //  **************************** ! ACTUALLY SEND DATA ! *********************************************
-                                                                 //  *************************************** SEND *************************************************************************************
-        if (Radio1.isAckPayloadAvailable())
-        {
-            Radio1.read(&AckPayload, AckPayloadSize);        //  "sizeof" doesn't work with externs,
+        Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);   // Compress 32 bytes down to 24
+        Radio1.flush_rx();                                         // This avoids a lockup that happens when the FIFO gets full.
+        Radio1.flush_tx();                                         // This avoids a lockup that happens when the FIFO gets full.
+                                                                   //  *************************************** SEND *************************************************************************************
+        if  (Radio1.write(&CompressedData, SizeOfCompressedData)){ //  **************************** ! ACTUALLY SEND DATA ! *********************************************
+                                                                   //  ***************************** (Returns TRUE if ACK received) ******************************************************************************
             ++RangeTestGoodPackets;
             ++PacketNumber;
             LostContactFlag = false;
-            ParseAckPayload();
             RecentPacketsLost         = 0;
             TotalledRecentPacketsLost = 0;
             Connected                 = true;
             if (BoundFlag) GreenLedOn();
             CheckGapsLength();
             StartInactvityTimeout();
-        }
-        else
-        {
+            if (Radio1.isAckPayloadAvailable()){                     //  This 'if' is redundant
+                    Radio1.read(&AckPayload, AckPayloadSize);        //  "sizeof" doesn't work with externs,
+                    ParseAckPayload();
+            } 
+        }else{
             FailedPacket();
         }
     }
 }
-
 /************************************************************************************************************/
-
 // This function draws or re-draws and clears the box that display wave band scanning information
-
 #define xx1 90 // Needed below... Edit xx1,yy1 to move box ....
 #define yy1 70 // Needed below... Edit xx1,yy1 to move box ....
 #define YY1EXTRA 15
@@ -349,7 +342,7 @@ void HopToNextChannel()
     Serial.print(PacketNumber); 
     Serial.print(" Next frequency: ");
     Freq += ch/1000;
-    Serial.print(Freq);
+    Serial.print(Freq,3);
     Serial.print(" Ghz.");
     Serial.print(BoundFlag ? " Bound!" : " NOT BOUND.");
     Serial.print(" RX Radio: ");

@@ -7149,7 +7149,7 @@ void loop()
             case CENTRESTICKS:      // 2
                 ChannelCentres();
                 break;
-            case 3:
+            case SCANWAVEBAND:      // 3
                 ScanAllChannels();
                 break;
             default:
