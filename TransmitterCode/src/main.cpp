@@ -1935,9 +1935,7 @@ void  ReEnableScanButton(){
 void FailedPacket()
 {
     int SecondsRemaining;
-    if (GapStart == 0) {
-        GapStart = millis(); // To keep track of gaps' length
-    }
+    if (GapStart == 0) GapStart = millis(); // To keep track of gaps' length
     ++RecentPacketsLost;
     ++TotalledRecentPacketsLost; // this is to keep track of events when receiver is off
     if (RecentPacketsLost > LOSTCONTACTCUTOFF) {
@@ -7043,13 +7041,8 @@ void CheckGapsLength()
         ++GapCount;
         ThisGap = (millis() - GapStart); // AND in fact RX sends no data for 20 ms after reconnection
         if (!GapShortest) GapShortest = ThisGap;
-        if (ThisGap > GapLongest) {
-            GapLongest = ThisGap;
-        }
-
-        if (ThisGap < GapShortest) {
-            GapShortest = ThisGap;
-        }
+        if (ThisGap > GapLongest)  GapLongest = ThisGap;
+        if (ThisGap < GapShortest) GapShortest = ThisGap;
         GapSum += ThisGap;
         GapStart   = 0;
         GapAverage = GapSum / GapCount;
