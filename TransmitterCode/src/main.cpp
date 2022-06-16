@@ -1757,7 +1757,7 @@ FASTRUN void ShowComms()
     char  Msg_CnctdBuddyMast[]   = "* BUDDY MASTER! *";
     char  Msg_CnctdBuddySlave[]  = "* BUDDY SLAVE! *";
     char  MsgBuddying[]          = "Buddy";
-    char  DataView_pps[]         = "pps";       // These are all label names in the NEXTION data screen. They are best kept short.
+    char  DataView_pps[]         = "pps";       // These are label names in the NEXTION data screen. They are best kept short.
     char  DataView_lps[]         = "lps";
     char  DataView_Alt[]         = "alt";
     char  DataView_Temp[]        = "Temp";
@@ -1771,7 +1771,7 @@ FASTRUN void ShowComms()
     char  DataView_Gc[]          = "Gc";
     char  Vbuf[16];
     char  BindButtonVisible[] = "vis bind,1";
-    char  Fix[]               = "Fix";   // These are all label names in the NEXTION data screen. They are best kept short.
+    char  Fix[]               = "Fix";        // These are label names in the NEXTION data screen. They are best kept short.
     char  Lon[]               = "Lon";
     char  Lat[]               = "Lat";
     char  Bear[]              = "Bear";
