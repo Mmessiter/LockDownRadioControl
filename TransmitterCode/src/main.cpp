@@ -1749,8 +1749,6 @@ FASTRUN void ShowComms()
     if (NEXTION.available()) return; // was a button pressed?
     char  WarnNow[]              = "vis Warning,1";
     char  WarnOff[]              = "vis Warning,0";
-    bool  TXWarningFlag          = false;
-    bool  RXWarningFlag          = false;
     bool  ShowNow                = false;
     char  na[]                   = "";
     char  FrontView_Connected[]  = "Connected";
@@ -1793,7 +1791,7 @@ FASTRUN void ShowComms()
     char  LowBat[]            = "play 0,19,0";
 
 if (millis() - LastShowTime > ShowCommsDelay) { 
-    TXWarningFlag = CheckTXVolts();
+    
     ShowNow = true;
     LastShowTime = millis();
 }
@@ -1904,9 +1902,8 @@ if (ShowNow){
             }
         } 
     }
-RXWarningFlag = CheckRXVolts();
-CheckScreenTime();        
-if (RXWarningFlag || TXWarningFlag) {
+CheckScreenTime(); 
+if (CheckRXVolts() || CheckTXVolts()) {
         LedIsBlinking = true; 
         if((millis() - WarningTimer) > 10000) {
             WarningTimer = millis();
