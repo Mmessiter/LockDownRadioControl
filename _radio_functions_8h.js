@@ -7,6 +7,7 @@ var _radio_functions_8h =
     [ "CENTRESTICKS", "_radio_functions_8h.html#a53bc52cfc1253f58c2f3835aa39205a3", null ],
     [ "CHANNELSUSED", "_radio_functions_8h.html#ad143c01c2b36424b292b568f48cbe014", null ],
     [ "CSN_PIN", "_radio_functions_8h.html#a6c4d73944fe1bd2ff7ceee867c315ac1", null ],
+    [ "DB_NEXTION", "_radio_functions_8h.html#a37c149666ecf7d90765ce2a9df4b8fb8", null ],
     [ "DEFAULT_EXPO", "_radio_functions_8h.html#a2a42bee007b474de05c409af41aba395", null ],
     [ "DEFAULTPIPEADDRESS", "_radio_functions_8h.html#a4882e6035f50cbda34385a5388985813", null ],
     [ "DS1307_ADDRESS", "_radio_functions_8h.html#a647261f334080cbf95e4f8dd79f73769", null ],
