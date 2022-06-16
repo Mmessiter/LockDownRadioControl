@@ -133,7 +133,7 @@ var searchData=
   ['showchannelname_130',['ShowChannelName',['../_transmitter_code_2src_2main_8cpp.html#a4d8497742bcb615831e3b52c5d463cde',1,'main.cpp']]],
   ['showcomms_131',['ShowComms',['../_radio_functions_8h.html#aac472b3398ab38e7f54b1a2cae96ba62',1,'ShowComms():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a5d3a46c21927cf7a3031a1e68e0b7b48',1,'ShowComms():&#160;main.cpp']]],
   ['showcommscounter_132',['ShowCommsCounter',['../_transmitter_code_2src_2main_8cpp.html#a87db39f793446f674bfc10c0c664a1bd',1,'main.cpp']]],
-  ['showcommsdelay_133',['ShowCommsDelay',['../_radio_functions_8h.html#a7bb16a19e302005551e627b26f45e637',1,'RadioFunctions.h']]],
+  ['showcommsdelay_133',['SHOWCOMMSDELAY',['../_radio_functions_8h.html#ac3bae9d911f4773794c9977639f6a116',1,'RadioFunctions.h']]],
   ['showdatavalue_134',['showDataValue',['../class_adafruit___g_p_s.html#accf44cdc598df5c687e2f5fb32e9e752',1,'Adafruit_GPS']]],
   ['showdirectory_135',['ShowDirectory',['../_transmitter_code_2src_2main_8cpp.html#ad1800b78308843897cf7bd9f8e0a3a69',1,'main.cpp']]],
   ['showfileerrormsg_136',['ShowFileErrorMsg',['../_transmitter_code_2src_2main_8cpp.html#a1e7673fa1ef97d68711edd0da2abed9b',1,'main.cpp']]],

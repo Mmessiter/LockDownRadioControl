@@ -17,7 +17,7 @@ var searchData=
   ['sensors_5fpressure_5fsealevelhpa_14',['SENSORS_PRESSURE_SEALEVELHPA',['../_adafruit___sensor_8h.html#ad12eded4725631bfb3a662e743fe3bfb',1,'Adafruit_Sensor.h']]],
   ['sensors_5frads_5fto_5fdps_15',['SENSORS_RADS_TO_DPS',['../_adafruit___sensor_8h.html#afc1d6f5819b7a1e3436af6948f5bcc80',1,'Adafruit_Sensor.h']]],
   ['servosused_16',['SERVOSUSED',['../common_8h.html#ab1515f8a159ef919c7afb5a1d71f55a3',1,'common.h']]],
-  ['showcommsdelay_17',['ShowCommsDelay',['../_radio_functions_8h.html#a7bb16a19e302005551e627b26f45e637',1,'RadioFunctions.h']]],
+  ['showcommsdelay_17',['SHOWCOMMSDELAY',['../_radio_functions_8h.html#ac3bae9d911f4773794c9977639f6a116',1,'RadioFunctions.h']]],
   ['skyblue_18',['SkyBlue',['../_transmitter_code_2src_2main_8cpp.html#a8a431faef1cf5f8d166b51cd97ee08bf',1,'main.cpp']]],
   ['spi_5fbitorder_5flsbfirst_19',['SPI_BITORDER_LSBFIRST',['../_adafruit___s_p_i_device_8h.html#a8982e24ac54e333a0ad2813a3667df73',1,'Adafruit_SPIDevice.h']]],
   ['spi_5fbitorder_5fmsbfirst_20',['SPI_BITORDER_MSBFIRST',['../_adafruit___s_p_i_device_8h.html#ad6a384a002c4fc658ba5cde19eade5c2',1,'Adafruit_SPIDevice.h']]],

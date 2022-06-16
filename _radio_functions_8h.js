@@ -42,7 +42,7 @@ var _radio_functions_8h =
     [ "SBUSRATE", "_radio_functions_8h.html#a39848a06498c1e6444c458f25542b252", null ],
     [ "SCANWAVEBAND", "_radio_functions_8h.html#af8400c0c2d5c4779f32223055a12336d", null ],
     [ "SENDNOTHING", "_radio_functions_8h.html#aa8cb091644f8785e060422c38a5ee334", null ],
-    [ "ShowCommsDelay", "_radio_functions_8h.html#a7bb16a19e302005551e627b26f45e637", null ],
+    [ "SHOWCOMMSDELAY", "_radio_functions_8h.html#ac3bae9d911f4773794c9977639f6a116", null ],
     [ "TICKSPERMINUTE", "_radio_functions_8h.html#a97290be0c518c6c918c843e88a7f3640", null ],
     [ "TXVERSION_MAJOR", "_radio_functions_8h.html#aebd7ef5764d81d53646b187e0e337bd3", null ],
     [ "TXVERSION_MINIMUS", "_radio_functions_8h.html#a7b2773d8aa3a50ce71dfeb1568f8da26", null ],
