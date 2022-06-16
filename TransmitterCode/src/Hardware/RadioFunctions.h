@@ -93,7 +93,7 @@
 //                          NEXTION SERIAL CONNECTION                       *
 //***************************************************************************
 #define NEXTION Serial1      // NEXTION is connected to Serial1
-#define ShowCommsDelay 500   // 250   // ms pauses between updated info on NEXTION
+#define SHOWCOMMSDELAY 500   // 250   // ms pauses between updated info on NEXTION
 // ***************************************************************************
 
 // **************************************************************************

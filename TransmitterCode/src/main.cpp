@@ -1665,11 +1665,9 @@ bool CheckTXVolts(){
             strcat(TXBattInfo, PerCell);
             if (CurrentView == FRONTVIEW) SendText(FrontView_TXBV, TXBattInfo);
             if (CurrentView == DATAVIEW)  SendText(DataView_txv, TransmitterVersionNumber); // TX Version Number
-                                                                                           // if (CurrentView == DATAVIEW) SendText(DataView_txv, Vbuf);
         }
 return TXWarningFlag;
 }
-
 /*********************************************************************************************************************************/
 
 bool CheckRXVolts(){
@@ -1790,8 +1788,7 @@ FASTRUN void ShowComms()
     char  Sbs[]               = "Sbus";
     char  LowBat[]            = "play 0,19,0";
 
-if (millis() - LastShowTime > ShowCommsDelay) { 
-    
+if (millis() - LastShowTime > SHOWCOMMSDELAY) { 
     ShowNow = true;
     LastShowTime = millis();
 }
@@ -1902,8 +1899,8 @@ if (ShowNow){
             }
         } 
     }
-CheckScreenTime(); 
-if (CheckRXVolts() || CheckTXVolts()) {
+ CheckScreenTime(); 
+ if (CheckRXVolts() || CheckTXVolts()) {
         LedIsBlinking = true; 
         if((millis() - WarningTimer) > 10000) {
             WarningTimer = millis();
