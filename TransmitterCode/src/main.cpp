@@ -1900,7 +1900,7 @@ if (ShowNow){
         } 
     }
  CheckScreenTime(); 
- if (CheckRXVolts() || CheckTXVolts()) {
+ if (CheckTXVolts() || CheckRXVolts()) {        // Note: If TX Battery is low, CheckRXVolts() is not called.
         LedIsBlinking = true; 
         if((millis() - WarningTimer) > 10000) {
             WarningTimer = millis();
