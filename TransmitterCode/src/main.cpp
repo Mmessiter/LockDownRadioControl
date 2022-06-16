@@ -5082,8 +5082,11 @@ void ButtonWasPressed()
     char pCalibrateView[]          = "page CalibrateView";
     char pFailSafe[]               = "page FailSafeView";
     char pSubTrimView[]            = "page SubTrimView";
+    char pLogView[]                = "page LogView";  // heer
     char DataView_Clear[]          = "Clear";
     char DataView_AltZero[]        = "AltZero";
+    char LogVIEW[]                 = "LogVIEW";
+    char LogEND[]                  = "LogEND";
    
     char OptionsEnd[]              = "OptionsEnd";
     char QNH[]                     = "Qnh";
@@ -5165,6 +5168,20 @@ void ButtonWasPressed()
             ClearText();
             return;
         }
+
+          if (InStrng(LogEND, TextIn)){
+            SendCommand(page_SetupView);// heer
+            ClearText();
+            return;
+          }
+          
+          
+          if (InStrng(LogVIEW, TextIn)){
+            SendCommand(pLogView);// heer
+            ClearText();
+            return;
+          }
+         
           if (InStrng(STgo, TextIn)) {                  // Subtrim view start
             SendCommand(pSubTrimView);
             SubTrimToEdit = 0;
