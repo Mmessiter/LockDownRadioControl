@@ -1669,6 +1669,69 @@ bool CheckTXVolts(){
         }
 return TXWarningFlag;
 }
+
+/*********************************************************************************************************************************/
+
+bool CheckRXVolts(){
+    float Volts                  = 0;
+    float ReadVolts              = 0;
+    bool  RXWarningFlag          = false;
+    char  Vbuf[16];
+    char  RXBattInfo[65];
+    char  LiPo2s[]  = " 2s LiPo,  ";
+    char  LiPo3s[]  = " 3s LiPo,  ";
+    char  LiPo4s[]  = " 4s LiPo,  ";
+    char  LiPo5s[]  = " 5s LiPo,  ";
+    char  LiPo6s[]  = " 6s LiPo,  ";
+    char  FrontView_AckPayload[]    = "AckPayload";
+    float VoltsPerCell              = 0;
+    char  FrontView_RXBV[]          = "RXBV";
+    char  PerCell[]                 = "V/C";
+    char  RXBattNA[]                = "(No data)";
+    char  RXBattNV[]                = "    ";
+    char  v[]                       = "V, ";
+    char  pc[]                      = "%";
+            ReadVolts = RXModelVolts * 10;
+            // 6s Max 25.2 -> 20.4
+            // 5s Max 21.0 -> 17.0
+            // 4s Max 16.8 -> 13.6
+            // 3s Max 12.6 -> 10.2
+            // 2s Max 8.4  -> 6.8
+            if (RXCellCount == 6) Volts = map(ReadVolts, 204, 252, 0, 100);  // works for 6s batteries (*10)
+            if (RXCellCount == 5) Volts = map(ReadVolts, 170, 210, 0, 100);  // works for 5s batteries (*10)
+            if (RXCellCount == 4) Volts = map(ReadVolts, 136, 168, 0, 100);  // works for 4s batteries (*10)
+            if (RXCellCount == 3) Volts = map(ReadVolts, 102, 126, 0, 100);  // works for 3s batteries (*10)
+            if (RXCellCount == 2) Volts = map(ReadVolts,  68,  84, 0, 100);  // works for 2s batteries (*10)
+            if (VoltsDetected) {
+                Volts = constrain(Volts, 0, 100);
+                if (Volts <= LowBattery && Volts > 0) {
+                    RXWarningFlag = true;
+                }
+            }
+            if (VoltsDetected) {
+                dtostrf(Volts, 0, 0, Vbuf);
+                strcat(Vbuf, pc);
+                if (BoundFlag && CurrentView == FRONTVIEW) SendText(FrontView_AckPayload, Vbuf);
+                strcpy(RXBattInfo, ModelVolts);
+                strcat(RXBattInfo, v);
+                if (RXCellCount == 6) strcat(RXBattInfo, LiPo6s);
+                if (RXCellCount == 5) strcat(RXBattInfo, LiPo5s);
+                if (RXCellCount == 4) strcat(RXBattInfo, LiPo4s);
+                if (RXCellCount == 3) strcat(RXBattInfo, LiPo3s);
+                if (RXCellCount == 2) strcat(RXBattInfo, LiPo2s);
+                VoltsPerCell = (ReadVolts / RXCellCount) / 10;
+                dtostrf(VoltsPerCell, 2, 2, Vbuf);
+                strcat(RXBattInfo, Vbuf);
+                strcat(RXBattInfo, PerCell);
+                if (BoundFlag && CurrentView == FRONTVIEW) SendText(FrontView_RXBV, RXBattInfo);
+            }
+            if (!VoltsDetected) {
+                if (BoundFlag && CurrentView == FRONTVIEW) SendText(FrontView_RXBV, RXBattNA);
+                if (BoundFlag && CurrentView == FRONTVIEW) SendText(FrontView_AckPayload, RXBattNV);
+            }
+            return RXWarningFlag;
+}
+
 /*********************************************************************************************************************************/
   void CheckScreenTime(){
   char ScreenOff[] = "dim=10";
@@ -1692,8 +1755,7 @@ FASTRUN void ShowComms()
     char  na[]                   = "";
     char  FrontView_Connected[]  = "Connected";
     char  FrontView_AckPayload[] = "AckPayload";
-    float Volts                  = 0;
-    char  pc[]                   = "%";
+    char  FrontView_RXBV[]       = "RXBV";
     char  Not_Connected[]        = "Not connected";
     char  Msg_Connected[]        = "** Connected! **";
     char  Msg_CnctdBuddyMast[]   = "* BUDDY MASTER! *";
@@ -1704,7 +1766,6 @@ FASTRUN void ShowComms()
     char  DataView_Alt[]         = "alt";
     char  DataView_Temp[]        = "Temp";
     char  DataView_MaxAlt[]      = "MaxAlt";
-    char  FrontView_RXBV[]       = "RXBV";
     char  DataView_rxv[]         = "rxv";
     char  DataView_Ls[]          = "Ls";
     char  DataView_Ts[]          = "Ts";
@@ -1713,18 +1774,6 @@ FASTRUN void ShowComms()
     char  DataView_Ag[]          = "Ag";
     char  DataView_Gc[]          = "Gc";
     char  Vbuf[16];
-    char  LiPo2s[]  = " 2s LiPo,  ";
-    char  LiPo3s[]  = " 3s LiPo,  ";
-    char  LiPo4s[]  = " 4s LiPo,  ";
-    char  LiPo5s[]  = " 5s LiPo,  ";
-    char  LiPo6s[]  = " 6s LiPo,  ";
-    char  PerCell[] = "V/C";
-    char  RXBattInfo[65];
-    char  RXBattNA[] = "(No data)";
-    char  RXBattNV[] = "    ";
-    char  v[]                 = "V, ";
-    float ReadVolts           = 0;
-    float VoltsPerCell        = 0;
     char  BindButtonVisible[] = "vis bind,1";
     char  Fix[]               = "Fix";   // These are all label names in the NEXTION data screen. They are best kept short.
     char  Lon[]               = "Lon";
@@ -1784,8 +1833,6 @@ if (ShowNow){
                     }
                 }
             }
-           
-           
             if (CurrentView == DATAVIEW) {
                 SendValue(DataView_pps,   PacketsPerSecond);
                 SendValue(DataView_lps,   LostPackets);
@@ -1829,46 +1876,6 @@ if (ShowNow){
                 snprintf(Vbuf, 6,"%d",  (int) SbusRepeats - SavedSbusRepeats);
                 SendText(Sbs,Vbuf);   
             }
-          
-            ReadVolts = RXModelVolts * 10;
-            // 6s Max 25.2 -> 20.4
-            // 5s Max 21.0 -> 17.0
-            // 4s Max 16.8 -> 13.6
-            // 3s Max 12.6 -> 10.2
-            // 2s Max 8.4  -> 6.8
-            if (RXCellCount == 6) Volts = map(ReadVolts, 204, 252, 0, 100);  // works for 6s batteries (*10)
-            if (RXCellCount == 5) Volts = map(ReadVolts, 170, 210, 0, 100);  // works for 5s batteries (*10)
-            if (RXCellCount == 4) Volts = map(ReadVolts, 136, 168, 0, 100);  // works for 4s batteries (*10)
-            if (RXCellCount == 3) Volts = map(ReadVolts, 102, 126, 0, 100);  // works for 3s batteries (*10)
-            if (RXCellCount == 2) Volts = map(ReadVolts,  68,  84, 0, 100);  // works for 2s batteries (*10)
-
-            if (VoltsDetected) {
-                Volts = constrain(Volts, 0, 100);
-                if (Volts <= LowBattery && Volts > 0) {
-                    RXWarningFlag = true;
-                }
-            }
-            if (VoltsDetected) {
-                dtostrf(Volts, 0, 0, Vbuf);
-                strcat(Vbuf, pc);
-                if (BoundFlag && CurrentView == FRONTVIEW) SendText(FrontView_AckPayload, Vbuf);
-                strcpy(RXBattInfo, ModelVolts);
-                strcat(RXBattInfo, v);
-                if (RXCellCount == 6) strcat(RXBattInfo, LiPo6s);
-                if (RXCellCount == 5) strcat(RXBattInfo, LiPo5s);
-                if (RXCellCount == 4) strcat(RXBattInfo, LiPo4s);
-                if (RXCellCount == 3) strcat(RXBattInfo, LiPo3s);
-                if (RXCellCount == 2) strcat(RXBattInfo, LiPo2s);
-                VoltsPerCell = (ReadVolts / RXCellCount) / 10;
-                dtostrf(VoltsPerCell, 2, 2, Vbuf);
-                strcat(RXBattInfo, Vbuf);
-                strcat(RXBattInfo, PerCell);
-                if (BoundFlag && CurrentView == FRONTVIEW) SendText(FrontView_RXBV, RXBattInfo);
-            }
-            if (!VoltsDetected) {
-                if (BoundFlag && CurrentView == FRONTVIEW) SendText(FrontView_RXBV, RXBattNA);
-                if (BoundFlag && CurrentView == FRONTVIEW) SendText(FrontView_AckPayload, RXBattNV);
-            }
         }
         else {
             if (BoundFlag) {
@@ -1897,6 +1904,7 @@ if (ShowNow){
             }
         } 
     }
+RXWarningFlag = CheckRXVolts();
 CheckScreenTime();        
 if (RXWarningFlag || TXWarningFlag) {
         LedIsBlinking = true; 
@@ -1914,7 +1922,6 @@ if (RXWarningFlag || TXWarningFlag) {
 } // end ShowComms()
 
 /************************************************************************************************************/
-
 void  ReEnableScanButton(){ 
     char b5NOTGreyed[]= "b5.pco=";
     char nb[15];
@@ -1929,7 +1936,6 @@ void  ReEnableScanButton(){
         }   
     }
 }
-
 /*********************************************************************************************************************************/
 
 void FailedPacket()
