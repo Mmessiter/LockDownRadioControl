@@ -3025,21 +3025,29 @@ void SetTestFrequencies(){
 /************************************************************************************************************/
 void GetTimeForLog(char *  DateAndTime){
     char NB[10];
+    char zero[]     = "0";
     char Dash[]     = "-";
     char Colon[]    = ":";
     char Space[]    = " ";
+  
     if (RTC.read(tm)) { 
+            if (MayBeAddZero(tm.Day)) strcat(DateAndTime,zero);
             strcpy(DateAndTime, Str(NB, tm.Day , 0));
             strcat(DateAndTime, Dash);
+             if (MayBeAddZero(tm.Month)) strcat(DateAndTime,zero);
             strcat(DateAndTime, Str(NB, tm.Month , 0));
             strcat(DateAndTime, Dash);
             strcat(DateAndTime, (Str(NB, tmYearToCalendar(tm.Year), 0)));
             strcat(DateAndTime, Space);
-            strcat(DateAndTime, Str(NB, tm.Hour , 0));
+            if (MayBeAddZero(tm.Hour)) strcat(DateAndTime,zero);
+            strcat(DateAndTime, Str(NB, tm.Hour,0));
             strcat(DateAndTime, Colon);
+            if (MayBeAddZero(tm.Minute)) strcat(DateAndTime,zero);
             strcat(DateAndTime, Str(NB, tm.Minute , 0));
             strcat(DateAndTime, Colon);
+            if (MayBeAddZero(tm.Second)) strcat(DateAndTime,zero);
             strcat(DateAndTime, Str(NB, tm.Second , 0));
+           
     }
 }
 
@@ -3078,44 +3086,45 @@ void CloseLogFile(){
     LogFileOpen = false;
 }
 /************************************************************************************************************/
-void WriteToLogFile(char * SomeData){
-   
-    LogFileNumber.write(SomeData);
+void WriteToLogFile(char * SomeData, uint16_t len){
+    LogFileNumber.write(SomeData, len);
 }
 /************************************************************************************************************/
 void CreateLogFile(){ // heer
 
     char LogFileName[30];
-    char Blank[] = "->";
-    char a[]= " ";
-    char LogHeader[] = "Log file created: ";
-    char crlf[]= {13,10,0};
-   
-    MakeLogFileName(LogFileName);    // Create a "today" filename
-    DeleteLogFile(LogFileName);      // Delete any former instance <<<<
-    OpenLogFileW(LogFileName);       // Open file for writing
-    GetTimeForLog (DateTime);
-    WriteToLogFile(LogHeader);
-    WriteToLogFile(DateTime);
-    WriteToLogFile(crlf);
+    char a[]            = " ";
+    char LogHeader[]    = "Log file created: ";
+    char Underline[]      = " -------------------------------------";
+    char crlf[]         = {13,10,0};
+    char Buf[90];
+    
+    LogFileOpen = false;
+    MakeLogFileName(LogFileName);                   // Create a "today" filename
+    DeleteLogFile(LogFileName);                     // Delete any former instance <<<<
+    OpenLogFileW(LogFileName);                      // Open file for writing
+    GetTimeForLog(Buf);
+    WriteToLogFile(LogHeader, sizeof (LogHeader));
+    WriteToLogFile(Buf,19);
+    WriteToLogFile(crlf,sizeof (crlf));
+    WriteToLogFile(Underline,sizeof (Underline));
+    WriteToLogFile(crlf,sizeof (crlf));
+
 
 
 
     CloseLogFile();
-
-
-    strcpy(DateTime,Blank);
-
+    strcpy(Buf,a);
     OpenLogFileR(LogFileName);
 
    int i = 0;
     while (LogFileNumber.available() && i < MAXFILELEN) {
           a[0] = LogFileNumber.read();
-          strcat(DateTime,a);
+          strcat(Buf,a);
           ++i;
     }  
 
-    Serial.println (DateTime);
+    Serial.println (Buf);
 }
 /*********************************************************************************************************************************/
 // SETUP
