@@ -23,9 +23,11 @@ var searchData=
   ['clearackpayload_20',['ClearAckPayload',['../radio_8h.html#a5a26715a721e1073d6ae00498282c056',1,'radio.h']]],
   ['clearbox_21',['ClearBox',['../_transmitter_code_2src_2main_8cpp.html#a5aeea47b9d855ae9911bae1115d02de7',1,'main.cpp']]],
   ['cleartext_22',['ClearText',['../_transmitter_code_2src_2main_8cpp.html#af0852678d8e89501acee8951f09d3b43',1,'main.cpp']]],
-  ['closemodelsfile_23',['CloseModelsFile',['../_transmitter_code_2src_2main_8cpp.html#a6922974b734cfe3a511e074a2d6ac33c',1,'main.cpp']]],
-  ['common_5finit_24',['common_init',['../class_adafruit___g_p_s.html#ab8a2fe20ce1874b10a6e9f007c236b30',1,'Adafruit_GPS']]],
-  ['compassangle_25',['compassAngle',['../class_adafruit___g_p_s.html#a06b7e12e38f1b00df058a253364215db',1,'Adafruit_GPS']]],
-  ['compress_26',['Compress',['../_radio_functions_8cpp.html#ab46df249e949de237fc3bacdc5225934',1,'RadioFunctions.cpp']]],
-  ['courseto_27',['courseTo',['../class_tiny_g_p_s_plus.html#af338c18ccf58a47659be1ffc8259541d',1,'TinyGPSPlus']]]
+  ['closelogfile_23',['CloseLogFile',['../_transmitter_code_2src_2main_8cpp.html#abc72fe68abd024cb263115e0afd3160a',1,'main.cpp']]],
+  ['closemodelsfile_24',['CloseModelsFile',['../_transmitter_code_2src_2main_8cpp.html#a6922974b734cfe3a511e074a2d6ac33c',1,'main.cpp']]],
+  ['common_5finit_25',['common_init',['../class_adafruit___g_p_s.html#ab8a2fe20ce1874b10a6e9f007c236b30',1,'Adafruit_GPS']]],
+  ['compassangle_26',['compassAngle',['../class_adafruit___g_p_s.html#a06b7e12e38f1b00df058a253364215db',1,'Adafruit_GPS']]],
+  ['compress_27',['Compress',['../_radio_functions_8cpp.html#ab46df249e949de237fc3bacdc5225934',1,'RadioFunctions.cpp']]],
+  ['courseto_28',['courseTo',['../class_tiny_g_p_s_plus.html#af338c18ccf58a47659be1ffc8259541d',1,'TinyGPSPlus']]],
+  ['createlogfile_29',['CreateLogFile',['../_transmitter_code_2src_2main_8cpp.html#a1c7507ba7201b4ca816d214e49e59b96',1,'main.cpp']]]
 ];
