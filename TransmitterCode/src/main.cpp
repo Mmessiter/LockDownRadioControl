@@ -569,6 +569,9 @@ bool     UseMacros = false;
 uint16_t ReversedChannelBITS = 0; // 16 BIT for 16 Channels
 uint16_t SavedLineX          = 12345;
 bool     FirstConnection     = true;
+File     LogFileNumber;
+bool     LogFileOpen         =  false;
+
 
 // ***************************************** Extra Prototypes **********************************************
 
@@ -3018,32 +3021,101 @@ void SetTestFrequencies(){
             UkRules = false;     
 }
 
-/************************************************************************************************************/
-void OpenLogFile(){
 
-    char LogFileName[30];
+/************************************************************************************************************/
+void GetTimeForLog(char *  DateAndTime){
     char NB[10];
     char Dash[]     = "-";
     char Colon[]    = ":";
     char Space[]    = " ";
-    char Ext[]      = ".LOG";
-
     if (RTC.read(tm)) { 
-            strcpy(LogFileName, Str(NB, tm.Day , 0));
-            strcat(LogFileName, Dash);
-            strcat(LogFileName, Str(NB, tm.Month , 0));
-            strcat(LogFileName, Dash);
-            strcat(LogFileName, (Str(NB, tmYearToCalendar(tm.Year), 0)));
-            strcat(LogFileName, Space);
-            strcat(LogFileName, Str(NB, tm.Hour , 0));
-            strcat(LogFileName, Colon);
-            strcat(LogFileName, Str(NB, tm.Minute , 0));
-            strcat(LogFileName, Colon);
-            strcat(LogFileName, Str(NB, tm.Second , 0));
-            strcat(LogFileName, Ext);
+            strcpy(DateAndTime, Str(NB, tm.Day , 0));
+            strcat(DateAndTime, Dash);
+            strcat(DateAndTime, Str(NB, tm.Month , 0));
+            strcat(DateAndTime, Dash);
+            strcat(DateAndTime, (Str(NB, tmYearToCalendar(tm.Year), 0)));
+            strcat(DateAndTime, Space);
+            strcat(DateAndTime, Str(NB, tm.Hour , 0));
+            strcat(DateAndTime, Colon);
+            strcat(DateAndTime, Str(NB, tm.Minute , 0));
+            strcat(DateAndTime, Colon);
+            strcat(DateAndTime, Str(NB, tm.Second , 0));
     }
-    Serial.println (LogFileName);
+}
 
+/************************************************************************************************************/
+void MakeLogFileName(char * LogFileName){
+    char NB[10];
+    char Ext[]      = ".LOG";
+    if (RTC.read(tm)) { 
+        strcpy(LogFileName, Str(NB,tm.Day,0));
+        strcat(LogFileName, Str(NB,tm.Month,0));
+        strcat(LogFileName, Ext);
+    }
+}
+
+/************************************************************************************************************/
+void DeleteLogFile(char * LogFileName){
+    SD.remove(LogFileName);
+}
+/************************************************************************************************************/
+void OpenLogFileW(char * LogFileName){
+    if (!LogFileOpen){
+        LogFileNumber = SD.open(LogFileName, FILE_WRITE);
+        LogFileOpen = true;
+    }
+}
+/************************************************************************************************************/
+void OpenLogFileR(char * LogFileName){
+    if (!LogFileOpen){
+        LogFileNumber = SD.open(LogFileName, FILE_READ);
+        LogFileOpen = true;
+    }
+}
+/************************************************************************************************************/
+void CloseLogFile(){
+    LogFileNumber.close();
+    LogFileOpen = false;
+}
+/************************************************************************************************************/
+void WriteToLogFile(char * SomeData){
+   
+    LogFileNumber.write(SomeData);
+}
+/************************************************************************************************************/
+void CreateLogFile(){ // heer
+
+    char LogFileName[30];
+    char Blank[] = "->";
+    char a[]= " ";
+    char LogHeader[] = "Log file created: ";
+    char crlf[]= {13,10,0};
+   
+    MakeLogFileName(LogFileName);    // Create a "today" filename
+    DeleteLogFile(LogFileName);      // Delete any former instance <<<<
+    OpenLogFileW(LogFileName);       // Open file for writing
+    GetTimeForLog (DateTime);
+    WriteToLogFile(LogHeader);
+    WriteToLogFile(DateTime);
+    WriteToLogFile(crlf);
+
+
+
+    CloseLogFile();
+
+
+    strcpy(DateTime,Blank);
+
+    OpenLogFileR(LogFileName);
+
+   int i = 0;
+    while (LogFileNumber.available() && i < MAXFILELEN) {
+          a[0] = LogFileNumber.read();
+          strcat(DateTime,a);
+          ++i;
+    }  
+
+    Serial.println (DateTime);
 }
 /*********************************************************************************************************************************/
 // SETUP
@@ -3120,7 +3192,7 @@ void setup()
     if (PlayFanfare) SendCommand(OpeningFanfare);
     ScreenTimeTimer = millis();
     RestoreBrightness();
-    OpenLogFile();
+    CreateLogFile();
 }
 /*********************************************************************************************************************************/
 
