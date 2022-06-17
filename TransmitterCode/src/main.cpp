@@ -2307,8 +2307,7 @@ void CloseModelsFile()
 
 /*********************************************************************************************************************************/
 
-void OpenModelsFile()
-{
+void OpenModelsFile(){
     if (SingleModelFlag) {
         ModelsFileNumber = SD.open(SingleModelFile, FILE_WRITE);
     }
@@ -3018,6 +3017,34 @@ void SetTestFrequencies(){
             FHSSChPointer = FHSS_Channels1; 
             UkRules = false;     
 }
+
+/************************************************************************************************************/
+void OpenLogFile(){
+
+    char LogFileName[30];
+    char NB[10];
+    char Dash[]     = "-";
+    char Colon[]    = ":";
+    char Space[]    = " ";
+    char Ext[]      = ".LOG";
+
+    if (RTC.read(tm)) { 
+            strcpy(LogFileName, Str(NB, tm.Day , 0));
+            strcat(LogFileName, Dash);
+            strcat(LogFileName, Str(NB, tm.Month , 0));
+            strcat(LogFileName, Dash);
+            strcat(LogFileName, (Str(NB, tmYearToCalendar(tm.Year), 0)));
+            strcat(LogFileName, Space);
+            strcat(LogFileName, Str(NB, tm.Hour , 0));
+            strcat(LogFileName, Colon);
+            strcat(LogFileName, Str(NB, tm.Minute , 0));
+            strcat(LogFileName, Colon);
+            strcat(LogFileName, Str(NB, tm.Second , 0));
+            strcat(LogFileName, Ext);
+    }
+    Serial.println (LogFileName);
+
+}
 /*********************************************************************************************************************************/
 // SETUP
 /*********************************************************************************************************************************/
@@ -3077,7 +3104,7 @@ void setup()
     SendValue(FrontView_Mins, 0);
     SendValue(FrontView_Secs, 0);
     //  ***************************************************************************************
-    //  SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
+    // SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
     //  **   BUT then re-comment it!! Otherwise it will reset to same time on every boot up! **
     //  ***************************************************************************************
     RecoveryTimer = millis();
@@ -3093,6 +3120,7 @@ void setup()
     if (PlayFanfare) SendCommand(OpeningFanfare);
     ScreenTimeTimer = millis();
     RestoreBrightness();
+    OpenLogFile();
 }
 /*********************************************************************************************************************************/
 
@@ -3428,9 +3456,9 @@ uint16_t i,j;
         return len;
 }
 /*********************************************************************************************************************************/
-void ReadHelpFile(char* fname, char* htext){
+void ReadTextFile(char* fname, char* htext){
     #define MAXWIDTH 68
-    char errormsg[] = "Help file not found.";
+    char errormsg[] = "File not found.";
     File fnumber;
     uint16_t i  = 0;
     byte Column = 0;
@@ -3465,8 +3493,7 @@ void ReadHelpFile(char* fname, char* htext){
     fnumber.close();
 }
 /*********************************************************************************************************************************/
-void SendHelp()
-{
+void SendHelp(){
     char HelpView[] = "HelpText";
     char hcmd[] = "page HelpView";
     char HelpFile[20];
@@ -3480,7 +3507,7 @@ void SendHelp()
         ++j;
         HelpFile[j] = 0;
     }
-    ReadHelpFile(HelpFile, HelpText);  // Then load help text
+    ReadTextFile(HelpFile, HelpText);  // Then load help text
     SendText1(HelpView, HelpText);     // Then send it
 }
 /*********************************************************************************************************************************/
@@ -5152,7 +5179,18 @@ void ButtonWasPressed()
  #endif
             
 
- if (InStrng(SetupViewFM, TextIn) > 0) {                // New model name occurs at offset 12 in TextIn
+    if (InStrng(LogEND, TextIn)){
+            SendCommand(page_SetupView);   // heer
+            ClearText();
+            return;
+    }    
+    if (InStrng(LogVIEW, TextIn)){
+            SendCommand(pLogView);
+            ClearText();
+            return;
+    }
+
+    if (InStrng(SetupViewFM, TextIn) > 0) {                // New model name occurs at offset 12 in TextIn
             i = 0;
             while (TextIn[i + 12] > 0) {
                 ModelName[i]     = TextIn[i + 12];     // copy new name
@@ -5168,20 +5206,6 @@ void ButtonWasPressed()
             ClearText();
             return;
         }
-
-          if (InStrng(LogEND, TextIn)){
-            SendCommand(page_SetupView);// heer
-            ClearText();
-            return;
-          }
-          
-          
-          if (InStrng(LogVIEW, TextIn)){
-            SendCommand(pLogView);// heer
-            ClearText();
-            return;
-          }
-         
           if (InStrng(STgo, TextIn)) {                  // Subtrim view start
             SendCommand(pSubTrimView);
             SubTrimToEdit = 0;
