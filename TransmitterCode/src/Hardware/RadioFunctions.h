@@ -3,11 +3,11 @@
 #define RadioFunctions_H
 
 // **************************************************************************
-//                TX VERSION NUMBER   (May 30th 2022 Malcolm Messiter) *
+//                TX VERSION NUMBER   (June 9th 2022 Malcolm Messiter) *
 //***************************************************************************
 #define TXVERSION_MAJOR   1
 #define TXVERSION_MINOR   7
-#define TXVERSION_MINIMUS 5
+#define TXVERSION_MINIMUS 7
 
 
 
@@ -70,13 +70,13 @@
 //                            FHSS PARAMETERS                               *
 //***************************************************************************
 
-#define PACEMAKER                   7   // MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
+#define PACEMAKER                   8  // (was 7) MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
 #define RETRYCOUNT                  3   // auto retries from nRF24L01
 #define RETRYWAIT                   1   // Wait between retries is RetryWait+1 * 250us. A failed packet therefore takes (RetryWait+1 * 250us) * RetryCount
 #define LOSTCONTACTCUTOFF           6   // How many packets to lose before reconnect triggers  (>6)
 #define RECONNECT_CHANNELS_COUNT    3   // How many channels to try when reconnecting
 #define RECONNECT_CHANNELS_START    12
-#define RED_LED_ON_TIME             500 // How many ms of no connection before RED led comes on
+#define RED_LED_ON_TIME             1000 // How many ms of no connection before RED led comes on
 
 // **************************************************************************
 //                            SEND MODE PARAMETERS                          *
@@ -93,7 +93,7 @@
 //                          NEXTION SERIAL CONNECTION                       *
 //***************************************************************************
 #define NEXTION Serial1      // NEXTION is connected to Serial1
-#define ShowCommsDelay 500   // 250   // ms pauses between updated info on NEXTION
+#define SHOWCOMMSDELAY 500   // 250   // ms pauses between updated info on NEXTION
 // ***************************************************************************
 
 // **************************************************************************
@@ -112,7 +112,7 @@
 //             UNCOMMENT ANY OF THESE for that bit of debug info            *
 //***************************************************************************
 
-// #define DB_NEXTION        // Debug NEXTION and SD card data
+   #define DB_NEXTION        // Debug NEXTION and SD card data
 // #define DB_FHSS           // Debug real time FHSS data
 // #define DB_SENSORS        // Debug Sensors
 // #define DB_BIND           // Debug Binding

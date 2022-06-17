@@ -4,10 +4,11 @@
  * @page TransmitterCode
  * @section LockDown Radio Control Features list, so far:
  * - Uses Teensy 4.1 MCU (at 600 Mhz) with nRF24L01+ transceiver
+ * - (Ebyte's ML01DP5 recommended for TX, two ML01SP4s for RX.)
  * - 16 channels
  * - 12 BIT servo resolution (11 BIT via SBUS)
  * - 32 Mixes
- * - 4 Flight modes (Banks), or 3 plus autorotation
+ * - 4 Flight modes (AKA Banks), or 3 plus autorotation
  * - User defined Channel names
  * - 2.4 Ghz FHSS ISM band licence free in UK and most other countries.
  * - 2.5 Km range (approx.)
@@ -17,13 +18,14 @@
  * - 2.4 GHz RF scan
  * - Motor Timer
  * - Lossless data compression.
- * - Trims on screen saved per flight mode per model.
- * - Screen timeout.
- * - FFHS with very fast recovery on lost packet
- * - Uses 32 GIG SD card for model memories and help files
- * - Binding - uses unique Mac address as pipe address.
+ * - Trims saved per bank and per model.
+ * - Screen timeout to save battery.
+ * - FHSS with very fast connect and reconnect
+ * - Uses 32 GIG SD card for model memories and help files (TODO: LOG FILES)
+ * - Binding without bind plug - uses unique Mac address as pipe address.
  * - Four User definable three position switches
- * - Input sources definable - any stick or switch can be mapped to any function.
+ * - Channels 5,6,7 & 8 can be switches or knobs.
+ * - Input sources definable - any stick, switch or knob can be mapped to any function.
  * - Model memories export and import to backup files on SD card
  * - Model memory files alphabetically sorted
  * - Timer goes on and off with motor to keep track of motor use.
@@ -33,8 +35,8 @@
  * - Servo reverse
  * - Macros - for snap rolls, heli rescue, etc.
  * - Hardware digital trims with accellerating repeat
- * - Capacitive touch screen
- * - Hardware bug in nRF24L01+ work-around implemented
+ * - Capacitive touch screen GUI
+ * - Hardware bug in nRF24L01+ discovered. A fix (work-around) is implemented
  * - Screen colours definable
  * - Data screen gives all possible telemetry  
  *  
@@ -104,7 +106,7 @@
 
 #define MINMICROS       500
 #define MAXMICROS       2500
-#define HALFMICROSRANGE (MAXMICROS - MINMICROS) / 2 //  = 500
+#define HALFMICROSRANGE (MAXMICROS - MINMICROS) / 2 //  = 1000
 #define MIDMICROS       MINMICROS + HALFMICROSRANGE
 
 #include <Arduino.h>
@@ -180,7 +182,7 @@ RF24 Radio1(CE_PIN, CSN_PIN);
 #define UNCOMPRESSEDWORDS 20                        // DATA TO SEND = 40  bytes
 #define COMPRESSEDWORDS   UNCOMPRESSEDWORDS * 3 / 4 // COMPRESSED DATA SENT = 30  bytes
 
-#define SWITCH0       32   // SWITCHES' PIN NUMBERS ...
+#define SWITCH0       32   // EDGE SWITCHES' PIN NUMBERS ...
 #define SWITCH1       31
 #define SWITCH2       30
 #define SWITCH3       29
@@ -566,6 +568,8 @@ uint8_t  PreviousMacroNumber = 1;
 bool     UseMacros = false;
 uint16_t ReversedChannelBITS = 0; // 16 BIT for 16 Channels
 uint16_t SavedLineX          = 12345;
+bool     FirstConnection     = true;
+
 // ***************************************** Extra Prototypes **********************************************
 
 void SendText(char* tbox, char* NewWord); // needed a prototype or two here!
@@ -612,7 +616,7 @@ void GetSlaveChannelValues()
     bool lostFrameM;
     SlaveHasControl = false;
     if (SendBuffer[BuddyTriggerChannel-1] > 1000)
-    { // MASTER'S CHANNEL 12 (500 - 2500) used here as switch.
+    { // MASTER'S CHANNEL 'BuddyTriggerChannel' (500 - 2500) used here as switch.
         if (MySbus.read(&SbusChannels[0], &failSafeM, &lostFrameM))
         {
             SBUSTimer = millis();       // RESET timeout when data comes in
@@ -1116,7 +1120,7 @@ uint8_t GetLEDBrightness()
         BlinkOnPhase = 1;
     }
     if (BlinkOnPhase) {
-        return 100; // 0 - 254
+        return 150; // 0 - 254
     }
     else {
         return 0;
@@ -1128,9 +1132,10 @@ uint8_t GetLEDBrightness()
 void RedLedOn()
 {
     LedWasGreen = false;
+    FirstConnection = true;
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, 0);
-    analogWrite(REDLED, GetLEDBrightness()); // Brightness is a function of maybe blinking
+    analogWrite(REDLED, GetLEDBrightness());     // Brightness is a function of maybe blinking
 }
 
 /*********************************************************************************************************************************/
@@ -1139,6 +1144,10 @@ void GreenLedOn()
 {
     if (!LedWasGreen || LedIsBlinking) {         // no need to repeat unless it is blinking
         LedWasGreen = true;
+        if (FirstConnection) {                   // Zero data on first connection
+            ZeroDataScreen(); 
+            FirstConnection = false;   
+        }
         analogWrite(BLUELED, 0);
         analogWrite(REDLED, 0); 
         analogWrite(GREENLED, GetLEDBrightness()); // Brightness is a function of maybe blinking
@@ -1229,8 +1238,8 @@ void SendText1(char* tbox, char* NewWord)
 /*********************************************************************************************************************************/
 void EndSend()
 {
-    for (u_int8_t pp = 0; pp < 3; ++pp) {NEXTION.write(0xff);} // Send end of Input message
-    delay(55);                                            // ** A DELAY ** (>=50 ms) was needed if an answer might come! (!! Shorter with Intelligent dislay)
+    for (u_int8_t pp = 0; pp < 3; ++pp) {NEXTION.write(0xff);} // Send end of Input message // 
+    delay(60);                                            // ** A DELAY ** (>=50 ms) was needed if an answer might come! (!! Shorter with Intelligent dislay)
 }
 /*********************************************************************************************************************************/
 void SendValue(char* nbox, int value)
@@ -1273,7 +1282,7 @@ void GetTextIn()
     }
 }
 /*********************************************************************************************************************************/
-uint32_t GetValue(char* nbox)
+uint32_t GetValue(char* nbox) 
 {
     uint32_t ValueIn = 0;
     char   GET[]   = "get ";
@@ -1368,7 +1377,7 @@ bool GetButtonPress()
 
 uint8_t um(uint16_t bv) // convert to lower resolution
 {
-    return (map(bv, MINMICROS, MAXMICROS, 0, 100)); // lower res is enough on display
+    return (map(bv, MINMICROS, MAXMICROS, 0, 100)); // lower res is enough on display and on failsafe
 }
 
 /*********************************************************************************************************************************/
@@ -1622,95 +1631,19 @@ void ShowServoPos()
 }
 
 /*********************************************************************************************************************************/
-  void CheckScreenTime(){
-  char ScreenOff[] = "dim=10";
-  if ((millis() - ScreenTimeTimer) > ScreenTimeout * 1000) {
-      SendCommand(ScreenOff);
-      ScreenTimeTimer = millis();
-      ScreenIsOff = true;
-  }
- }
-/*********************************************************************************************************************************/
-
-/** @brief SHOW COMMS */
-FASTRUN void ShowComms()
-{
-    if (NEXTION.available()) return; // was a button pressed?
-
-    bool  TXWarningFlag          = false;
-    bool  RXWarningFlag          = false;
-    bool  ShowNow                = false;
-    char  na[]                   = "";
-    char  FrontView_Connected[]  = "Connected";
-    char  FrontView_AckPayload[] = "AckPayload";
-    char  FrontView_RXBV[]       = "RXBV";
-    char  FrontView_TXBV[]       = "TXBV";
-    char  Not_Connected[]        = "Not connected";
-    char  Msg_Connected[]        = "** Connected! **";
-    char  Msg_CnctdBuddyMast[]   = "* BUDDY MASTER! *";
-    char  Msg_CnctdBuddySlave[]  = "* BUDDY SLAVE! *";
-    char  MsgBuddying[]          = "Buddy";
-    char  DataView_pps[]         = "pps";       // These are all label names in the NEXTION data screen. They are best kept short.
-    char  DataView_lps[]         = "lps";
-    char  DataView_Alt[]         = "alt";
-    char  DataView_Temp[]        = "Temp";
-    char  DataView_MaxAlt[]      = "MaxAlt";
+bool CheckTXVolts(){
     char  DataView_txv[]         = "txv";
-    char  DataView_rxv[]         = "rxv";
-    char  DataView_Ls[]          = "Ls";
-    char  DataView_Ts[]          = "Ts";
-    char  DataView_Rx[]          = "rx";
-    char  DataView_Sg[]          = "Sg";
-    char  DataView_Ag[]          = "Ag";
-    char  DataView_Gc[]          = "Gc";
-    char  WarnNow[]              = "vis Warning,1";
-    char  WarnOff[]              = "vis Warning,0";
+    float txv                    = 0;
     char  TXVolts[]              = "t21";
-    float Volts                  = 0;
     char  Vbuf[16];
-    char  pc[]      = "%";
-    char  v[]       = "V, ";
-    float txv       = 0;
-    int   txpc      = 0;
-    char  LiFe2s[]  = " 2s LiFe,  ";
-    char  LiPo2s[]  = " 2s LiPo,  ";
-    char  LiPo3s[]  = " 3s LiPo,  ";
-    char  LiPo4s[]  = " 4s LiPo,  ";
-    char  LiPo5s[]  = " 5s LiPo,  ";
-    char  LiPo6s[]  = " 6s LiPo,  ";
-    char  PerCell[] = "V/C";
-    char  RXBattInfo[65];
-    char  RXBattNA[] = "(No data)";
-    char  RXBattNV[] = "    ";
+    char  pc[]                   = "%";
+    char  v[]                    = "V, ";
     char  TXBattInfo[65];
-    float ReadVolts           = 0;
-    float VoltsPerCell        = 0;
-    char  BindButtonVisible[] = "vis bind,1";
-    char  Fix[]               = "Fix";   // These are all label names in the NEXTION data screen. They are best kept short.
-    char  Lon[]               = "Lon";
-    char  Lat[]               = "Lat";
-    char  Bear[]              = "Bear";
-    char  Dist[]              = "Dist";
-    char  Sped[]              = "Sped";
-    char  yes[]               = "Yes";
-    char  no[]                = "No";
-    char  ALT[]               = "ALT";
-    char  MALT[]              = "MALT";
-    char  MxS[]               = "MxS";
-    char  Mxd[]               = "Mxd";
-    char  BTo[]               = "BTo";
-    char  Sat[]               = "Sat";
-    char  Sbs[]               = "Sbus";
-    char  LowBat[]            = "play 0,19,0";
-
-    if (CurrentView == FRONTVIEW || CurrentView == DATAVIEW) {
-        if (millis() - LastShowTime > ShowCommsDelay) { 
-            ShowNow = true;
-        }
-    }
-    if (ShowNow)
-    {
-        LastShowTime = millis();
+    char  FrontView_TXBV[]       = "TXBV";
+    char  LiFe2s[]               = " 2s LiFe,  ";
+    char  PerCell[]              = "V/C";
+    bool  TXWarningFlag          = false;
+    int   txpc                   = 0;
         if (USE_INA219) {
             txv  = (ina219.getBusVoltage_V()) * 100;
             txpc = map(txv, 512, 670, 0, 100); // LiFePo4 Battery 2.6 ->3.5  volts per cell
@@ -1731,9 +1664,136 @@ FASTRUN void ShowComms()
             strcat(TXBattInfo, Vbuf);
             strcat(TXBattInfo, PerCell);
             if (CurrentView == FRONTVIEW) SendText(FrontView_TXBV, TXBattInfo);
-            if (CurrentView == DATAVIEW) SendText(DataView_txv, TransmitterVersionNumber); // TX Version Number
-                                                                                           // if (CurrentView == DATAVIEW) SendText(DataView_txv, Vbuf);
+            if (CurrentView == DATAVIEW)  SendText(DataView_txv, TransmitterVersionNumber); // TX Version Number
         }
+return TXWarningFlag;
+}
+/*********************************************************************************************************************************/
+
+bool CheckRXVolts(){
+    float Volts                  = 0;
+    float ReadVolts              = 0;
+    bool  RXWarningFlag          = false;
+    char  Vbuf[16];
+    char  RXBattInfo[65];
+    char  LiPo2s[]  = " 2s LiPo,  ";
+    char  LiPo3s[]  = " 3s LiPo,  ";
+    char  LiPo4s[]  = " 4s LiPo,  ";
+    char  LiPo5s[]  = " 5s LiPo,  ";
+    char  LiPo6s[]  = " 6s LiPo,  ";
+    char  FrontView_AckPayload[]    = "AckPayload";
+    float VoltsPerCell              = 0;
+    char  FrontView_RXBV[]          = "RXBV";
+    char  PerCell[]                 = "V/C";
+    char  RXBattNA[]                = "(No data)";
+    char  RXBattNV[]                = "    ";
+    char  v[]                       = "V, ";
+    char  pc[]                      = "%";
+            ReadVolts = RXModelVolts * 10;
+            // 6s Max 25.2 -> 20.4
+            // 5s Max 21.0 -> 17.0
+            // 4s Max 16.8 -> 13.6
+            // 3s Max 12.6 -> 10.2
+            // 2s Max 8.4  -> 6.8
+            if (RXCellCount == 6) Volts = map(ReadVolts, 204, 252, 0, 100);  // works for 6s batteries (*10)
+            if (RXCellCount == 5) Volts = map(ReadVolts, 170, 210, 0, 100);  // works for 5s batteries (*10)
+            if (RXCellCount == 4) Volts = map(ReadVolts, 136, 168, 0, 100);  // works for 4s batteries (*10)
+            if (RXCellCount == 3) Volts = map(ReadVolts, 102, 126, 0, 100);  // works for 3s batteries (*10)
+            if (RXCellCount == 2) Volts = map(ReadVolts,  68,  84, 0, 100);  // works for 2s batteries (*10)
+            if (VoltsDetected) {
+                Volts = constrain(Volts, 0, 100);
+                if (Volts <= LowBattery && Volts > 0) {
+                    RXWarningFlag = true;
+                }
+            }
+            if (VoltsDetected) {
+                dtostrf(Volts, 0, 0, Vbuf);
+                strcat(Vbuf, pc);
+                if (BoundFlag && CurrentView == FRONTVIEW) SendText(FrontView_AckPayload, Vbuf);
+                strcpy(RXBattInfo, ModelVolts);
+                strcat(RXBattInfo, v);
+                if (RXCellCount == 6) strcat(RXBattInfo, LiPo6s);
+                if (RXCellCount == 5) strcat(RXBattInfo, LiPo5s);
+                if (RXCellCount == 4) strcat(RXBattInfo, LiPo4s);
+                if (RXCellCount == 3) strcat(RXBattInfo, LiPo3s);
+                if (RXCellCount == 2) strcat(RXBattInfo, LiPo2s);
+                VoltsPerCell = (ReadVolts / RXCellCount) / 10;
+                dtostrf(VoltsPerCell, 2, 2, Vbuf);
+                strcat(RXBattInfo, Vbuf);
+                strcat(RXBattInfo, PerCell);
+                if (BoundFlag && CurrentView == FRONTVIEW) SendText(FrontView_RXBV, RXBattInfo);
+            }
+            if (!VoltsDetected) {
+                if (BoundFlag && CurrentView == FRONTVIEW) SendText(FrontView_RXBV, RXBattNA);
+                if (BoundFlag && CurrentView == FRONTVIEW) SendText(FrontView_AckPayload, RXBattNV);
+            }
+            return RXWarningFlag;
+}
+
+/*********************************************************************************************************************************/
+  void CheckScreenTime(){
+  char ScreenOff[] = "dim=10";
+  if ((millis() - ScreenTimeTimer) > ScreenTimeout * 1000) {
+      SendCommand(ScreenOff);
+      ScreenTimeTimer = millis();
+      ScreenIsOff = true;
+  }
+ }
+/*********************************************************************************************************************************/
+
+/** @brief SHOW COMMS */
+FASTRUN void ShowComms()
+{
+    if (NEXTION.available()) return; // was a button pressed?
+    char  WarnNow[]              = "vis Warning,1";
+    char  WarnOff[]              = "vis Warning,0";
+    bool  ShowNow                = false;
+    char  na[]                   = "";
+    char  FrontView_Connected[]  = "Connected";
+    char  FrontView_AckPayload[] = "AckPayload";
+    char  FrontView_RXBV[]       = "RXBV";
+    char  Not_Connected[]        = "Not connected";
+    char  Msg_Connected[]        = "** Connected! **";
+    char  Msg_CnctdBuddyMast[]   = "* BUDDY MASTER! *";
+    char  Msg_CnctdBuddySlave[]  = "* BUDDY SLAVE! *";
+    char  MsgBuddying[]          = "Buddy";
+    char  DataView_pps[]         = "pps";       // These are label names in the NEXTION data screen. They are best kept short.
+    char  DataView_lps[]         = "lps";
+    char  DataView_Alt[]         = "alt";
+    char  DataView_Temp[]        = "Temp";
+    char  DataView_MaxAlt[]      = "MaxAlt";
+    char  DataView_rxv[]         = "rxv";
+    char  DataView_Ls[]          = "Ls";
+    char  DataView_Ts[]          = "Ts";
+    char  DataView_Rx[]          = "rx";
+    char  DataView_Sg[]          = "Sg";
+    char  DataView_Ag[]          = "Ag";
+    char  DataView_Gc[]          = "Gc";
+    char  Vbuf[16];
+    char  BindButtonVisible[] = "vis bind,1";
+    char  Fix[]               = "Fix";        // These are label names in the NEXTION data screen. They are best kept short.
+    char  Lon[]               = "Lon";
+    char  Lat[]               = "Lat";
+    char  Bear[]              = "Bear";
+    char  Dist[]              = "Dist";
+    char  Sped[]              = "Sped";
+    char  yes[]               = "Yes";
+    char  no[]                = "No";
+    char  ALT[]               = "ALT";
+    char  MALT[]              = "MALT";
+    char  MxS[]               = "MxS";
+    char  Mxd[]               = "Mxd";
+    char  BTo[]               = "BTo";
+    char  Sat[]               = "Sat";
+    char  Sbs[]               = "Sbus";
+    char  LowBat[]            = "play 0,19,0";
+
+if (millis() - LastShowTime > SHOWCOMMSDELAY) { 
+    ShowNow = true;
+    LastShowTime = millis();
+}
+if (ShowNow){
+    if (CurrentView == FRONTVIEW || CurrentView == DATAVIEW) {
         if (!LostContactFlag)
         {
             if ((CurrentView == FRONTVIEW)) {
@@ -1768,7 +1828,6 @@ FASTRUN void ShowComms()
                     }
                 }
             }
-
             if (CurrentView == DATAVIEW) {
                 SendValue(DataView_pps,   PacketsPerSecond);
                 SendValue(DataView_lps,   LostPackets);
@@ -1811,47 +1870,6 @@ FASTRUN void ShowComms()
                 SendText(Mxd,Vbuf);  
                 snprintf(Vbuf, 6,"%d",  (int) SbusRepeats - SavedSbusRepeats);
                 SendText(Sbs,Vbuf);   
-                 
-                
-            }
-            ReadVolts = RXModelVolts * 10;
-            // 6s Max 25.2 -> 20.4
-            // 5s Max 21.0 -> 17.0
-            // 4s Max 16.8 -> 13.6
-            // 3s Max 12.6 -> 10.2
-            // 2s Max 8.4  -> 6.8
-            if (RXCellCount == 6) Volts = map(ReadVolts, 204, 252, 0, 100);  // works for 6s batteries (*10)
-            if (RXCellCount == 5) Volts = map(ReadVolts, 170, 210, 0, 100);  // works for 5s batteries (*10)
-            if (RXCellCount == 4) Volts = map(ReadVolts, 136, 168, 0, 100);  // works for 4s batteries (*10)
-            if (RXCellCount == 3) Volts = map(ReadVolts, 102, 126, 0, 100);  // works for 3s batteries (*10)
-            if (RXCellCount == 2) Volts = map(ReadVolts,  68,  84, 0, 100);  // works for 2s batteries (*10)
-
-            if (VoltsDetected) {
-                Volts = constrain(Volts, 0, 100);
-                if (Volts <= LowBattery && Volts > 0) {
-                    RXWarningFlag = true;
-                }
-            }
-            if (VoltsDetected) {
-                dtostrf(Volts, 0, 0, Vbuf);
-                strcat(Vbuf, pc);
-                if (BoundFlag && CurrentView == FRONTVIEW) SendText(FrontView_AckPayload, Vbuf);
-                strcpy(RXBattInfo, ModelVolts);
-                strcat(RXBattInfo, v);
-                if (RXCellCount == 6) strcat(RXBattInfo, LiPo6s);
-                if (RXCellCount == 5) strcat(RXBattInfo, LiPo5s);
-                if (RXCellCount == 4) strcat(RXBattInfo, LiPo4s);
-                if (RXCellCount == 3) strcat(RXBattInfo, LiPo3s);
-                if (RXCellCount == 2) strcat(RXBattInfo, LiPo2s);
-                VoltsPerCell = (ReadVolts / RXCellCount) / 10;
-                dtostrf(VoltsPerCell, 2, 2, Vbuf);
-                strcat(RXBattInfo, Vbuf);
-                strcat(RXBattInfo, PerCell);
-                if (BoundFlag && CurrentView == FRONTVIEW) SendText(FrontView_RXBV, RXBattInfo);
-            }
-            if (!VoltsDetected) {
-                if (BoundFlag && CurrentView == FRONTVIEW) SendText(FrontView_RXBV, RXBattNA);
-                if (BoundFlag && CurrentView == FRONTVIEW) SendText(FrontView_AckPayload, RXBattNV);
             }
         }
         else {
@@ -1861,7 +1879,6 @@ FASTRUN void ShowComms()
                     SendValue(DataView_pps, PacketsPerSecond);
                     SendValue(DataView_lps, LostPackets);
                 }
-
                 if (CurrentView == FRONTVIEW) {
                     SendText(FrontView_Connected, Not_Connected);
                     SendText(FrontView_RXBV, na); // data not available
@@ -1880,27 +1897,25 @@ FASTRUN void ShowComms()
                     }
                 }
             }
-        }
-        CheckScreenTime();
-        if (CurrentView == FRONTVIEW) {
-            if (RXWarningFlag || TXWarningFlag) {
-                SendCommand(WarnNow);
-                LedIsBlinking = true; 
-                    if((millis() - WarningTimer) > 10000) {
-                        WarningTimer = millis();
-                        SendCommand(LowBat);                // issue audible warning every 10 seconds
-                    }
-            } else {
-                SendCommand(WarnOff);
-                LedIsBlinking = false; 
-                LedWasGreen = false;
-            }
-        }
+        } 
     }
+ CheckScreenTime(); 
+ if (CheckTXVolts() || CheckRXVolts()) {        // Note: If TX Battery is low, then CheckRXVolts() is not even called.
+        LedIsBlinking = true; 
+        if((millis() - WarningTimer) > 10000) {
+            WarningTimer = millis();
+            SendCommand(LowBat);                // issue audible warning every 10 seconds
+        }
+        if (CurrentView == FRONTVIEW) SendCommand(WarnNow);         
+    }else{
+        if (LedIsBlinking && (CurrentView == FRONTVIEW)) SendCommand(WarnOff);
+        LedIsBlinking = false; 
+        LedWasGreen = false;
+    }
+}
 } // end ShowComms()
 
 /************************************************************************************************************/
-
 void  ReEnableScanButton(){ 
     char b5NOTGreyed[]= "b5.pco=";
     char nb[15];
@@ -1915,15 +1930,12 @@ void  ReEnableScanButton(){
         }   
     }
 }
-
 /*********************************************************************************************************************************/
 
 void FailedPacket()
 {
     int SecondsRemaining;
-    if (GapStart == 0) {
-        GapStart = millis(); // To keep track of gaps' length
-    }
+    if (GapStart == 0) GapStart = millis(); // To keep track of gaps' length
     ++RecentPacketsLost;
     ++TotalledRecentPacketsLost; // this is to keep track of events when receiver is off
     if (RecentPacketsLost > LOSTCONTACTCUTOFF) {
@@ -1965,7 +1977,6 @@ void SendCharArray(char* ch0, char* ch1, char* ch2, char* ch3, char* ch4, char* 
 
 void SendMixValues()
 {
-
     char MixesView_Enabled[]       = "MixesView.Enabled";
     char MixesView_FlightMode[]    = "MixesView.FlightMode";
     char MixesView_MasterChannel[] = "MixesView.MasterChannel";
@@ -2053,7 +2064,6 @@ int GetNextNumber(int p1, char text1[CharsMax])
 /*********************************************************************************************************************************/
 // MIXES  (Channel mixes)
 /*********************************************************************************************************************************/
-
 void DoMixes()
 {
 int m, c, p, mindeg, maxdeg, TheSum, Result;
@@ -2088,8 +2098,7 @@ int m, c, p, mindeg, maxdeg, TheSum, Result;
  
 float MapExp(float xx, float Xxmin, float Xxmax, float Yymin, float Yymax, float Expo)
 {
-    if (!Expo) Expo = 1;
-    Expo  = map(Expo, -100, 100, -1, 1);
+    Expo  = map(Expo, -100, 100, -0.25, 0.75);
     xx    = pow(xx * xx, Expo);
     Xxmin = pow(Xxmin * Xxmin, Expo);
     Xxmax = pow(Xxmax * Xxmax, Expo);
@@ -2789,7 +2798,7 @@ bool ReadOneModel(uint8_t Mnum)
     for (j = 0; j < FLIGHTMODESUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             Exponential[j][i] = SDReadByte(SDCardAddress);
-            if (Exponential[j][i] >= 201 || Exponential[j][i] < 20 ) {
+            if (Exponential[j][i] >= 201 || Exponential[j][i] == 0 ) {
                 Exponential[j][i] = DEFAULT_EXPO;
             }
             ++SDCardAddress;
@@ -3961,7 +3970,7 @@ void updateInterpolationTypes()
             SendCommand(ExponOn);
             SendCommand(Ex1On);
             SendValue (Ex1,     (Exponential[FlightMode][ChanneltoSet - 1]));           // The slider 
-            SendValue (Expon,   (Exponential[FlightMode][ChanneltoSet - 1])-50);     // the number
+            SendValue (Expon,   (Exponential[FlightMode][ChanneltoSet - 1])-50);        // the number
             break;
         default:
             break;
@@ -4073,7 +4082,7 @@ void DisplayCurve()
     }
 
     if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == 2) { //EXPO  ************************************************************************************************
-#define APPROXIMATION 10                                         // This is for the approximation of the screen curve
+#define APPROXIMATION 7                                         // This is for the approximation of the screen curve
 
         SendCommand(b3off);
         SendCommand(b4off);
@@ -4124,7 +4133,6 @@ void DisplayCurve()
         DrawDot(xPoints[2], yPoints[2], DotSize, DotColour);
         DrawDot(xPoints[4], yPoints[4], DotSize, DotColour);
     }
-
     if (InterpolationTypes[FlightMode][ChanneltoSet - 1] != 2) {
         DrawDot(xPoints[0], yPoints[0], DotSize, DotColour); // This adds 5 dots
         DrawDot(xPoints[1], yPoints[1], DotSize, DotColour);
@@ -4411,6 +4419,7 @@ void SendModelFile()
     char          of[]   = " of ";
     char          msg[50];  
     char          bytes[] = " bytes.";
+    uint32_t      SentMoment = 0;
   
     BlueLedOn();
     SendCommand(ProgressStart);
@@ -4457,19 +4466,19 @@ void SendModelFile()
             Fposition += BUFFERSIZE;
             if (Fposition > Fsize) Fposition = Fsize;
         }
-         Radio1.flush_tx();
-         Radio1.flush_rx();
-         Procrastinate(2);
+       while ((millis()-SentMoment) < PACEMAKER * 2) {   
+                Radio1.flush_tx();
+                Radio1.flush_rx();
+       }
         if (Radio1.write(&Fbuffer, BUFFERSIZE + 4)) {
-              Procrastinate(2);
+            SentMoment = millis();
+            Procrastinate(1);     
             if (Radio1.isAckPayloadAvailable()) {
                 Radio1.read(&Fack, sizeof(Fack));
                 Serial.println ("ACK received");
                 Serial.println (Fposition);
-                Procrastinate(1);
             }else{
                 Serial.println ("NO ACK received");
-                Procrastinate(1);
             }
         }
         else {
@@ -4637,10 +4646,14 @@ void RestoreBrightness(){
 void ZeroDataScreen(){             // ZERO Those parameters that are zeroable
             LostPackets        = 0;
             GapShortest        = 0;
+            TimerMillis        = millis();
             GapLongest         = 0;
             GapSum             = 0;
             GapAverage         = 0;
             GapCount           = 0;
+            Secs               = 0;
+            PausedSecs         = 0;
+            GapStart           = 0;
             RXMAXModelAltitude = 0;
             GPSMaxAltitude     = 0;
             ThisGap            = 0;
@@ -5069,8 +5082,11 @@ void ButtonWasPressed()
     char pCalibrateView[]          = "page CalibrateView";
     char pFailSafe[]               = "page FailSafeView";
     char pSubTrimView[]            = "page SubTrimView";
+    char pLogView[]                = "page LogView";  // heer
     char DataView_Clear[]          = "Clear";
     char DataView_AltZero[]        = "AltZero";
+    char LogVIEW[]                 = "LogVIEW";
+    char LogEND[]                  = "LogEND";
    
     char OptionsEnd[]              = "OptionsEnd";
     char QNH[]                     = "Qnh";
@@ -5102,6 +5118,7 @@ void ButtonWasPressed()
     char SetupAud[]                = "SetupAud";
     char n0[]                      = "n0";
     char Ex1[]                     = "Ex1";
+    char Expo[]                    = "Expo";
     char AudioView[]               = "AudioView";
     char cb0[]                     = "cb0";
     char n1[]                      = "n1";
@@ -5151,6 +5168,20 @@ void ButtonWasPressed()
             ClearText();
             return;
         }
+
+          if (InStrng(LogEND, TextIn)){
+            SendCommand(page_SetupView);// heer
+            ClearText();
+            return;
+          }
+          
+          
+          if (InStrng(LogVIEW, TextIn)){
+            SendCommand(pLogView);// heer
+            ClearText();
+            return;
+          }
+         
           if (InStrng(STgo, TextIn)) {                  // Subtrim view start
             SendCommand(pSubTrimView);
             SubTrimToEdit = 0;
@@ -5348,7 +5379,7 @@ void ButtonWasPressed()
             ClearText();
             return;
         }
-        if (InStrng(GoFrontView, TextIn) > 0) { // GOTO frontview // heer
+        if (InStrng(GoFrontView, TextIn) > 0) { // GOTO frontview 
             CurrentView = FRONTVIEW;
             SendCommand(page_FrontView);
             UpdateModelsNameEveryWhere();
@@ -5463,6 +5494,8 @@ void ButtonWasPressed()
    
             if (CurrentView == GRAPHVIEW) {
                 DisplayCurve();
+                SavedLineX = 0;  
+                ShowServoPos(); 
                 SendValue(CopyToAllFlightModes, 0);
             }
             if (CurrentView == SWITCHES_VIEW) {
@@ -5513,12 +5546,13 @@ void ButtonWasPressed()
             if (GetValue(Lines)) {
                 InterpolationTypes[FlightMode][ChanneltoSet - 1] = 0;
             }
-            Exponential[FlightMode][ChanneltoSet - 1] = (GetValue(Ex1)); 
+            Exponential[FlightMode][ChanneltoSet - 1] = GetValue(Expo)+50; // Note: Getting this value from slider was not reliable (could not return 36!)
             ClearText();
-            DisplayCurve();
+            DisplayCurve(); 
+            SavedLineX = 0;  
+            ShowServoPos(); 
             return;
         }
-
         if (InStrng(ReceiveModel, TextIn) > 0) {
             i = strlen(ReceiveModel);
             j = 0;
@@ -6218,7 +6252,9 @@ void ButtonWasPressed()
             ClearText();
             SendCommand(page_GraphView); // Set to GraphView
             CurrentView = GRAPHVIEW;
-            DisplayCurve(); // redisplay curve
+            DisplayCurve(); // redisplay curve 
+            SavedLineX = 0;  
+            ShowServoPos(); 
             updateInterpolationTypes();
             UpdateModelsNameEveryWhere();
             SendValue(CopyToAllFlightModes, 0);
@@ -6441,7 +6477,6 @@ void ButtonWasPressed()
 
         if (InStrng(yy2down, TextIn)) // yy1 down?
         {
-            Serial.println (MinDegrees[FlightMode][ChanneltoSet - 1]);
             if (MinDegrees[FlightMode][ChanneltoSet - 1] > 0) {MinDegrees[FlightMode][ChanneltoSet - 1]--;}
             DisplayCurve();
             ClearText();
@@ -6458,6 +6493,8 @@ void ButtonWasPressed()
             Exponential[FlightMode][ChanneltoSet - 1]        = DEFAULT_EXPO;
             InterpolationTypes[FlightMode][ChanneltoSet - 1] = 2; // expo = default
             DisplayCurve();
+            SavedLineX = 0;  
+            ShowServoPos(); 
             ClearText();
             return;
         }
@@ -6475,6 +6512,8 @@ void ButtonWasPressed()
             p                                           = MaxDegrees[FlightMode][ChanneltoSet - 1];
             MaxDegrees[FlightMode][ChanneltoSet - 1]    = 180 - p;
             DisplayCurve();
+            SavedLineX = 0;  
+            ShowServoPos(); 
             ClearText();
             return;
         }
@@ -6671,7 +6710,11 @@ void GetFlightMode()
         }
         CheckTimer(); // update timer
         UpdateModelsNameEveryWhere();
-        if (CurrentView == GRAPHVIEW) DisplayCurve();
+        if (CurrentView == GRAPHVIEW) {
+            DisplayCurve();
+            SavedLineX = 0;                                    // just to force redisplay of servo indicator vertical bar
+            ShowServoPos();  
+         }
     }
     PreviousFlightMode = FlightMode;
 }
@@ -6930,7 +6973,7 @@ void ParseAckPayload()
         HopToNextChannel();
         AckPayload.Purpose &= 0x7f;                                      // Clear the high BIT, use the remainder ...
     }    
-        switch (AckPayload.Purpose) // Only look at the low 7 BITS
+        switch (AckPayload.Purpose)                                      // Only look at the low 7 BITS
         {
             case 0:
                 GetRXVersionNumber();
@@ -7015,13 +7058,8 @@ void CheckGapsLength()
         ++GapCount;
         ThisGap = (millis() - GapStart); // AND in fact RX sends no data for 20 ms after reconnection
         if (!GapShortest) GapShortest = ThisGap;
-        if (ThisGap > GapLongest) {
-            GapLongest = ThisGap;
-        }
-
-        if (ThisGap < GapShortest) {
-            GapShortest = ThisGap;
-        }
+        if (ThisGap > GapLongest)  GapLongest = ThisGap;
+        if (ThisGap < GapShortest) GapShortest = ThisGap;
         GapSum += ThisGap;
         GapStart   = 0;
         GapAverage = GapSum / GapCount;
@@ -7080,16 +7118,13 @@ void  CheckScanButton(){
 // LOOP
 /************************************************************************************************************/
 void loop()
-{
-    
+{  
     KickTheDog();                    // Watchdog
     if (GetButtonPress()) {
         ButtonWasPressed();          // Deal with button
     }
-
     if ((millis()-ModelNameTimeCheck) > 5000) {  
         ModelNameTimeCheck  = millis();
-
         if (CurrentView == MAINSETUPVIEW){ 
             CheckScanButton();           
         }
@@ -7124,7 +7159,7 @@ void loop()
             case CENTRESTICKS:      // 2
                 ChannelCentres();
                 break;
-            case 3:
+            case SCANWAVEBAND:      // 3
                 ScanAllChannels();
                 break;
             default:

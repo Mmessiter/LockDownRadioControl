@@ -15,14 +15,16 @@
     
     #define RXVERSION_MAJOR             1
     #define RXVERSION_MINOR             7
-    #define RXVERSION_MINIMUS           5   // June 1st 2022
+    #define RXVERSION_MINIMUS           7   // June 9th 2022
 
 //**************************************************************************************************************************
  //   #define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< **
 //**************************************************************************************************************************
 
     #define SENSOR_HUB_I2C_ADDRESS      8
-    #define HOPTIME                     91   // ms between channel changes ( >12 packets per hop)
+    
+ 
+    #define HOPTIME                     97   // >= ms between channel changes (10 packets per hop)
     
     #define LISTEN_PERIOD               15    // 10 How many ms to listen for TX in Reconnect()
     #define RECEIVE_TIMEOUT             40   // <=16 fails, >=20 OK, 25 - 40 milliseconds seems an optimal value?

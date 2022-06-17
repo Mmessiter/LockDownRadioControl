@@ -151,25 +151,22 @@ void FailSafe(){
 
 #ifdef DB_FHSS
 /************************************************************************************************************/
-/**
+/*
  * Print out some FHSS information about the channel hopping implementation
- * 
  */
-void ShowHopDurationEtc() // heer
+void ShowHopDurationEtc() 
 {
+    PacketNumber+=2; // ?
+    float freq = 2.4 + (float) NextChannel/1000;
     uint8_t OnePacketTime = (millis() - PacketStartTime) / PacketNumber;
     Serial.print("Hop duration: ");
-    Serial.print( int (millis() - PacketStartTime));
+    Serial.print(int (millis() - PacketStartTime));
     Serial.print("ms.  Packets per hop: ");
-    if (PacketNumber<10) Serial.print (" ");
     Serial.print(PacketNumber);
     Serial.print("  Average Time per packet: ");
-    if (OnePacketTime<10) Serial.print (" ");
     Serial.print(OnePacketTime);
-    Serial.print("ms.  Next channel: ");
-    if (NextChannel < 10) Serial.print (" ");
-    if (NextChannel < 100) Serial.print (" "); // :-)
-    Serial.print(NextChannel);
+    Serial.print("ms.  Next frequency: ");
+    Serial.print(freq);
     Serial.print(BoundFlag ? " Bound!" : " NOT Bound");
     Serial.print("  Radio: ");
     Serial.print(ThisRadio);
