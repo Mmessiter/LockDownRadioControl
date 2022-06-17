@@ -3020,8 +3020,6 @@ void SetTestFrequencies(){
             FHSSChPointer = FHSS_Channels1; 
             UkRules = false;     
 }
-
-
 /************************************************************************************************************/
 void GetTimeForLog(char *  DateAndTime){
     char NB[10];
@@ -3047,10 +3045,8 @@ void GetTimeForLog(char *  DateAndTime){
             strcat(DateAndTime, Colon);
             if (MayBeAddZero(tm.Second)) strcat(DateAndTime,zero);
             strcat(DateAndTime, Str(NB, tm.Second , 0));
-           
     }
 }
-
 /************************************************************************************************************/
 void MakeLogFileName(char * LogFileName){
     char NB[10];
@@ -3061,7 +3057,6 @@ void MakeLogFileName(char * LogFileName){
         strcat(LogFileName, Ext);
     }
 }
-
 /************************************************************************************************************/
 void DeleteLogFile(char * LogFileName){
     SD.remove(LogFileName);
@@ -3095,9 +3090,9 @@ void CreateLogFile(){ // heer
     char LogFileName[30];
     char a[]            = " ";
     char LogHeader[]    = "Log file created: ";
-    char Underline[]      = " -------------------------------------";
+    char Underline[]    = " -------------------------------------";
     char crlf[]         = {13,10,0};
-    char Buf[90];
+    char Buf[130];
     
     LogFileOpen = false;
     MakeLogFileName(LogFileName);                   // Create a "today" filename
@@ -3111,7 +3106,7 @@ void CreateLogFile(){ // heer
     WriteToLogFile(crlf,sizeof (crlf));
 
 
-
+// below is test only....
 
     CloseLogFile();
     strcpy(Buf,a);
@@ -3125,6 +3120,8 @@ void CreateLogFile(){ // heer
     }  
 
     Serial.println (Buf);
+
+  // end test  
 }
 /*********************************************************************************************************************************/
 // SETUP
