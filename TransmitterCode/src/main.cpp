@@ -3085,7 +3085,7 @@ void WriteToLogFile(char * SomeData, uint16_t len){
     LogFileNumber.write(SomeData, len);
 }
 /************************************************************************************************************/
-void CreateLogFile(){ // heer
+void StartLogFile(){ // heer
 
     char LogFileName[30];
     char a[]            = " ";
@@ -3096,14 +3096,15 @@ void CreateLogFile(){ // heer
     
     LogFileOpen = false;
     MakeLogFileName(LogFileName);                   // Create a "today" filename
-    DeleteLogFile(LogFileName);                     // Delete any former instance <<<<
+    DeleteLogFile(LogFileName);                     // **** >>>>> Delete any former instance <<<< **** remove!
     OpenLogFileW(LogFileName);                      // Open file for writing
-    GetTimeForLog(Buf);
-    WriteToLogFile(LogHeader, sizeof (LogHeader));
-    WriteToLogFile(Buf,19);
-    WriteToLogFile(crlf,sizeof (crlf));
-    WriteToLogFile(Underline,sizeof (Underline));
-    WriteToLogFile(crlf,sizeof (crlf));
+    GetTimeForLog(Buf);                             // Put time stamp into buffer
+    WriteToLogFile(LogHeader, sizeof (LogHeader));  // Write header
+    WriteToLogFile(Buf,19);                         // Add time stamp
+    WriteToLogFile(crlf,sizeof (crlf));             // End of line
+    WriteToLogFile(Underline,sizeof (Underline));   // Underline it
+    WriteToLogFile(crlf,sizeof (crlf));             // End of line
+                                                    // Log file is now open and ready for new data ...
 
 
 // below is test only....
@@ -3198,7 +3199,7 @@ void setup()
     if (PlayFanfare) SendCommand(OpeningFanfare);
     ScreenTimeTimer = millis();
     RestoreBrightness();
-    CreateLogFile();
+    StartLogFile();
 }
 /*********************************************************************************************************************************/
 
