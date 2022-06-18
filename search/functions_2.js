@@ -30,5 +30,6 @@ var searchData=
   ['compassangle_27',['compassAngle',['../class_adafruit___g_p_s.html#a06b7e12e38f1b00df058a253364215db',1,'Adafruit_GPS']]],
   ['compress_28',['Compress',['../_radio_functions_8cpp.html#ab46df249e949de237fc3bacdc5225934',1,'RadioFunctions.cpp']]],
   ['courseto_29',['courseTo',['../class_tiny_g_p_s_plus.html#af338c18ccf58a47659be1ffc8259541d',1,'TinyGPSPlus']]],
-  ['createtimestamp_30',['CreateTimeStamp',['../_transmitter_code_2src_2main_8cpp.html#a7c6f60956ed82b2b20275f9a55b392a8',1,'main.cpp']]]
+  ['createtimedatestamp_30',['CreateTimeDateStamp',['../_transmitter_code_2src_2main_8cpp.html#a3503bafedbcece3177a9e4361bb1b081',1,'main.cpp']]],
+  ['createtimestamp_31',['CreateTimeStamp',['../_transmitter_code_2src_2main_8cpp.html#a7c6f60956ed82b2b20275f9a55b392a8',1,'main.cpp']]]
 ];

@@ -13,8 +13,8 @@ var searchData=
   ['openlogfilew_10',['OpenLogFileW',['../_transmitter_code_2src_2main_8cpp.html#acfdde90c4cdda343445ae69343aa89da',1,'main.cpp']]],
   ['openmodelsfile_11',['OpenModelsFile',['../_transmitter_code_2src_2main_8cpp.html#ae7618f38a148877bc5681be58cba8354',1,'main.cpp']]],
   ['operator_3c_3c_12',['operator&lt;&lt;',['../class_tiny_g_p_s_plus.html#a05c12d268eddf254a9846bc34935a73c',1,'TinyGPSPlus']]],
-  ['options_5fview_13',['OPTIONS_VIEW',['../_transmitter_code_2src_2main_8cpp.html#ae621a5598c31428a00cb602730a5259d',1,'main.cpp']]],
-  ['options_5fview_14',['Options_View',['../_radio_functions_8cpp.html#a90604ea6b0b372f3c24fa6935127e6fd',1,'RadioFunctions.cpp']]],
+  ['options_5fview_13',['Options_View',['../_radio_functions_8cpp.html#a90604ea6b0b372f3c24fa6935127e6fd',1,'RadioFunctions.cpp']]],
+  ['options_5fview_14',['OPTIONS_VIEW',['../_transmitter_code_2src_2main_8cpp.html#ae621a5598c31428a00cb602730a5259d',1,'main.cpp']]],
   ['orange_15',['Orange',['../_transmitter_code_2src_2main_8cpp.html#a154e686fe7f3f545c01af3592ce0cdff',1,'main.cpp']]],
   ['orientation_16',['orientation',['../structsensors__event__t.html#acbe3c50a256fa9423bc9e3a6e0da7ebf',1,'sensors_event_t']]]
 ];
