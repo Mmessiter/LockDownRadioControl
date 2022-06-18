@@ -208,10 +208,10 @@ RF24 Radio1(CE_PIN, CSN_PIN);
 
 // SDCARD MODEL MEMORY CONSTANTS
 
-#define RENEWDATA  8787 // Change these to rewrite all
-#define TXSIZE     250  // SD space reserved for transmitter
-#define MODELSIZE  1600 // SD space reserved for each model
-#define MAXFILELEN 5021 // MAX SIZE FOR HELP FILE
+#define RENEWDATA  8787         // Change these to rewrite all
+#define TXSIZE     250          // SD space reserved for transmitter
+#define MODELSIZE  1600         // SD space reserved for each model
+#define MAXFILELEN 1024 * 3     // MAX SIZE FOR HELP AND LOG FILES
 #define BOXOFFSET    35
 #define BOXSIZE     395
 
@@ -1236,7 +1236,7 @@ void SendText1(char* tbox, char* NewWord)
 {
     char txt[]   = ".txt=\"";
     char quote[] = "\"";
-    char CB[MAXFILELEN];
+    char CB[MAXFILELEN+10];
     char TooLong[] = "Too long!";
 
     if (strlen(NewWord) > MAXFILELEN) {
@@ -7158,7 +7158,7 @@ void GetRXVersionNumber()
     strcpy(ThisRadio, nbuf);
     if (LastRadio != AckPayload.Byte1) {
         LastRadio = AckPayload.Byte1;
-        LogThisRX();
+       // LogThisRX();
     }
     Str(ReceiverVersionNumber, AckPayload.Byte2, 2);
     Str(nbuf, AckPayload.Byte3, 2);
@@ -7297,7 +7297,7 @@ void CheckGapsLength()
     if (GapStart > 0) { // when reconnected, how long was connection lost?
         ++GapCount;
         ThisGap = (millis() - GapStart); // AND in fact RX sends no data for 20 ms after reconnection
-        if (ThisGap  > 50) LogThisGap();
+        if (ThisGap  > 99) LogThisGap();
         if (!GapShortest) GapShortest = ThisGap;
         if (ThisGap > GapLongest)  GapLongest = ThisGap;
         if (ThisGap < GapShortest) GapShortest = ThisGap;
