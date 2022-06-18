@@ -16,5 +16,6 @@ var searchData=
   ['logfilepreamble_13',['LogFilePreamble',['../_transmitter_code_2src_2main_8cpp.html#a245cf37e2504095132bfcf03f2eeaa93',1,'main.cpp']]],
   ['lognewflightmode_14',['LogNewFlightMode',['../_transmitter_code_2src_2main_8cpp.html#acac3c6cebc71150f10a4ba2f6d047e69',1,'main.cpp']]],
   ['logtext_15',['LogText',['../_transmitter_code_2src_2main_8cpp.html#a3082155bd493af8377f0384347bdc55b',1,'main.cpp']]],
-  ['loop_16',['loop',['../_receiver_code_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../_sensor_hub_t32_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp']]]
+  ['logthisgap_16',['LogThisGap',['../_transmitter_code_2src_2main_8cpp.html#af9d8a17fec28e4ae948cc53c29406f78',1,'main.cpp']]],
+  ['loop_17',['loop',['../_receiver_code_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../_sensor_hub_t32_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp']]]
 ];

@@ -191,6 +191,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "LogFilePreamble", "_transmitter_code_2src_2main_8cpp.html#a245cf37e2504095132bfcf03f2eeaa93", null ],
     [ "LogNewFlightMode", "_transmitter_code_2src_2main_8cpp.html#acac3c6cebc71150f10a4ba2f6d047e69", null ],
     [ "LogText", "_transmitter_code_2src_2main_8cpp.html#a3082155bd493af8377f0384347bdc55b", null ],
+    [ "LogThisGap", "_transmitter_code_2src_2main_8cpp.html#af9d8a17fec28e4ae948cc53c29406f78", null ],
     [ "loop", "_transmitter_code_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f", null ],
     [ "MakeBindButtonInvisible", "_transmitter_code_2src_2main_8cpp.html#a2e38b32674344cfc06b09a71dfcaf3f1", null ],
     [ "MakeLogFileName", "_transmitter_code_2src_2main_8cpp.html#a205517052fef38205271cdef51852022", null ],
