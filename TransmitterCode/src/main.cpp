@@ -5317,6 +5317,7 @@ void ButtonWasPressed()
     char DataView_AltZero[]        = "AltZero";
     char LogVIEW[]                 = "LogVIEW";
     char LogEND[]                  = "LogEND";
+    char RefrLOG[]                 = "RefrLOG";
    
     char OptionsEnd[]              = "OptionsEnd";
     char QNH[]                     = "Qnh";
@@ -5382,6 +5383,12 @@ void ButtonWasPressed()
         Serial.println(TextIn);
  #endif
             
+
+    if (InStrng(RefrLOG, TextIn)){
+        ShowLogFile(); // heer
+        ClearText();
+        return;        
+    }   
 
     if (InStrng(LogEND, TextIn)){
             SendCommand(page_SetupView);   // heer
