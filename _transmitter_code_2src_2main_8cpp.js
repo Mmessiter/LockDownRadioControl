@@ -186,6 +186,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "KickTheDog", "_transmitter_code_2src_2main_8cpp.html#ada95a00a341e4a80176eda743a94ab2e", null ],
     [ "LoadAllParameters", "_transmitter_code_2src_2main_8cpp.html#a909acb7ed667a5cc9c4ec6191fc33e75", null ],
     [ "LoadPacketData", "_transmitter_code_2src_2main_8cpp.html#ac4ffb9b555ce8d38f615610dc89b5499", null ],
+    [ "LogFilePreamble", "_transmitter_code_2src_2main_8cpp.html#a245cf37e2504095132bfcf03f2eeaa93", null ],
     [ "LogNewFlightMode", "_transmitter_code_2src_2main_8cpp.html#acac3c6cebc71150f10a4ba2f6d047e69", null ],
     [ "loop", "_transmitter_code_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f", null ],
     [ "MakeBindButtonInvisible", "_transmitter_code_2src_2main_8cpp.html#a2e38b32674344cfc06b09a71dfcaf3f1", null ],

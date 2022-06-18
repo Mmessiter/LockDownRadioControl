@@ -1,5 +1,6 @@
 var NAVTREEINDEX7 =
 {
+"struct_tiny_g_p_s_decimal.html#ae09cbb1856cd57c7dcee52fb5fb1ba16":[9,0,23,0],
 "struct_tiny_g_p_s_h_d_o_p.html":[9,0,24],
 "struct_tiny_g_p_s_h_d_o_p.html#a27cd35588c96eefb690bba46497d20d7":[9,0,24,0],
 "struct_tiny_g_p_s_integer.html":[9,0,25],
