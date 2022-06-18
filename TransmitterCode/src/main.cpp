@@ -583,6 +583,7 @@ void DisplayCurve();
 void DrawLine(int x1, int y1, int x2, int y2, int c);
 void DrawBox(int x1, int y1, int x2, int y2, int c);
 void FillBox(int x1, int y1, int w, int h, int c);
+void ReadTextFile(char* fname, char* htext);
 
 /************************************************************************************************************/
 // This function returns distance (in MILES) between two GPS coordinates (in degrees)
@@ -3021,18 +3022,18 @@ void SetTestFrequencies(){
             UkRules = false;     
 }
 /************************************************************************************************************/
-void GetTimeForLog(char *  DateAndTime){
+void CreateTimeStamp(char *  DateAndTime){
     char NB[10];
     char zero[]     = "0";
     char Dash[]     = "-";
-    char Colon[]    = ":";
+    char Colon[]    = "."; // a dot!
     char Space[]    = " ";
   
     if (RTC.read(tm)) { 
             if (MayBeAddZero(tm.Day)) strcat(DateAndTime,zero);
             strcpy(DateAndTime, Str(NB, tm.Day , 0));
             strcat(DateAndTime, Dash);
-             if (MayBeAddZero(tm.Month)) strcat(DateAndTime,zero);
+            if (MayBeAddZero(tm.Month)) strcat(DateAndTime,zero);
             strcat(DateAndTime, Str(NB, tm.Month , 0));
             strcat(DateAndTime, Dash);
             strcat(DateAndTime, (Str(NB, tmYearToCalendar(tm.Year), 0)));
@@ -3085,44 +3086,66 @@ void WriteToLogFile(char * SomeData, uint16_t len){
     LogFileNumber.write(SomeData, len);
 }
 /************************************************************************************************************/
-void StartLogFile(){ // heer
+void StartLogFile(){ 
 
-    char LogFileName[30];
-    char a[]            = " ";
+    char LogFileName[20];
     char LogHeader[]    = "Log file created: ";
-    char Underline[]    = " -------------------------------------";
-    char crlf[]         = {13,10,0};
-    char Buf[130];
-    
+    char crlf[]         = {'|',13,10,0};
+    char Buf[30];
+
     LogFileOpen = false;
     MakeLogFileName(LogFileName);                   // Create a "today" filename
-    DeleteLogFile(LogFileName);                     // **** >>>>> Delete any former instance <<<< **** remove!
+    DeleteLogFile(LogFileName);                     // **** >>>>> Delete any former instance <<<< **** remove!???
     OpenLogFileW(LogFileName);                      // Open file for writing
-    GetTimeForLog(Buf);                             // Put time stamp into buffer
+    CreateTimeStamp(Buf);                           // Put time stamp into buffer
     WriteToLogFile(LogHeader, sizeof (LogHeader));  // Write header
     WriteToLogFile(Buf,19);                         // Add time stamp
     WriteToLogFile(crlf,sizeof (crlf));             // End of line
-    WriteToLogFile(Underline,sizeof (Underline));   // Underline it
-    WriteToLogFile(crlf,sizeof (crlf));             // End of line
                                                     // Log file is now open and ready for new data ...
+}
 
 
-// below is test only....
+// ************************************************************************
+void CheckLogFileIsOpen(){
+  
+    char LogFileName[20];
 
+   if (!LogFileOpen){
+        MakeLogFileName(LogFileName);                   // Create a "today" filename
+        OpenLogFileW(LogFileName);                      // Open file for writing
+   }
+}
+
+// ************************************************************************
+
+void LogNewFlightMode(){
+
+    char Ltext[] = "Bank: ";
+    char NB[3];
+    char dbuf[22];
+    char thetext[10];
+    char crlf[]  = {'|',13,10,0};
+    char Divider[] = " -> ";
+    CheckLogFileIsOpen();
+    CreateTimeStamp(dbuf);                           // Put time stamp into buffer
+    WriteToLogFile(dbuf,19);                         // Add time stamp
+    WriteToLogFile(Divider,sizeof (Divider));           
+    Str(NB,FlightMode,0);
+    strcpy(thetext,Ltext);
+    strcat(thetext, NB);
+    strcat(thetext,crlf);
+    WriteToLogFile(thetext,sizeof(thetext));
+}
+
+// ************************************************************************
+void ShowLogFile(){ // heer
+    char TheText[MAXFILELEN + 10];      // MAX = 5K or so
+    char LogFileName[20];
+    char LogText[] = "LogText";     
     CloseLogFile();
-    strcpy(Buf,a);
-    OpenLogFileR(LogFileName);
-
-   int i = 0;
-    while (LogFileNumber.available() && i < MAXFILELEN) {
-          a[0] = LogFileNumber.read();
-          strcat(Buf,a);
-          ++i;
-    }  
-
-    Serial.println (Buf);
-
-  // end test  
+    MakeLogFileName(LogFileName);        // Create "today" filename
+    ReadTextFile(LogFileName, TheText);  // Then load text
+    SendText1(LogText, TheText);         // Then send it
 }
 /*********************************************************************************************************************************/
 // SETUP
@@ -5188,7 +5211,7 @@ void ButtonWasPressed()
     char pCalibrateView[]          = "page CalibrateView";
     char pFailSafe[]               = "page FailSafeView";
     char pSubTrimView[]            = "page SubTrimView";
-    char pLogView[]                = "page LogView";  // heer
+    char pLogView[]                = "page LogView"; 
     char DataView_Clear[]          = "Clear";
     char DataView_AltZero[]        = "AltZero";
     char LogVIEW[]                 = "LogVIEW";
@@ -5265,6 +5288,7 @@ void ButtonWasPressed()
     }    
     if (InStrng(LogVIEW, TextIn)){
             SendCommand(pLogView);
+            ShowLogFile();
             ClearText();
             return;
     }
@@ -6800,6 +6824,7 @@ void GetFlightMode()
     Channel12SwitchValue = CheckSwitch(Channel12Switch);
 
     if (FlightMode != PreviousFlightMode) {
+        LogNewFlightMode();
         if (AnnounceBanks) SoundFlightMode();
         if (CurrentView == FRONTVIEW) {
             ShowFlightMode();
