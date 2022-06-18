@@ -11,5 +11,6 @@ var searchData=
   ['locus_5freadstatus_8',['LOCUS_ReadStatus',['../class_adafruit___g_p_s.html#adb6139e84c64156b5654dfce2a2e6e3f',1,'Adafruit_GPS']]],
   ['locus_5fstartlogger_9',['LOCUS_StartLogger',['../class_adafruit___g_p_s.html#a325d15c43c09fa1bedcdadb39706e72b',1,'Adafruit_GPS']]],
   ['locus_5fstoplogger_10',['LOCUS_StopLogger',['../class_adafruit___g_p_s.html#a48eaf7f5b46e3682b058a7f8f44fa385',1,'Adafruit_GPS']]],
-  ['loop_11',['loop',['../_receiver_code_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../_sensor_hub_t32_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp']]]
+  ['lognewflightmode_11',['LogNewFlightMode',['../_transmitter_code_2src_2main_8cpp.html#acac3c6cebc71150f10a4ba2f6d047e69',1,'main.cpp']]],
+  ['loop_12',['loop',['../_receiver_code_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../_sensor_hub_t32_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp']]]
 ];

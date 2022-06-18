@@ -1,5 +1,8 @@
 var NAVTREEINDEX7 =
 {
+"struct_tiny_g_p_s_h_d_o_p.html":[9,0,24],
+"struct_tiny_g_p_s_h_d_o_p.html#a27cd35588c96eefb690bba46497d20d7":[9,0,24,0],
+"struct_tiny_g_p_s_integer.html":[9,0,25],
 "struct_tiny_g_p_s_integer.html#a017a71970fa652964a9e71b7ec945cec":[9,0,25,0],
 "struct_tiny_g_p_s_integer.html#a35234fdeeffdb934a93740db1aefa6a5":[9,0,25,2],
 "struct_tiny_g_p_s_integer.html#a3a76131645f7604b3f3e759b90f9373f":[9,0,25,3],
