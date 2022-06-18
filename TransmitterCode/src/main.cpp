@@ -3116,20 +3116,32 @@ void CheckLogFileIsOpen(){
    }
 }
 
+
+// ************************************************************************
+void LogFilePreamble(){
+    char dbuf[22];
+    char Divider[] = " -> ";
+    CheckLogFileIsOpen();
+    CreateTimeStamp(dbuf);                           // Put time stamp into buffer
+    WriteToLogFile(dbuf,19);                         // Add time stamp
+    WriteToLogFile(Divider,sizeof (Divider));           
+
+}
 // ************************************************************************
 
 void LogNewFlightMode(){
 
     char Ltext[] = "Bank: ";
     char NB[3];
-    char dbuf[22];
+  //  char dbuf[22];
     char thetext[10];
     char crlf[]  = {'|',13,10,0};
-    char Divider[] = " -> ";
-    CheckLogFileIsOpen();
-    CreateTimeStamp(dbuf);                           // Put time stamp into buffer
-    WriteToLogFile(dbuf,19);                         // Add time stamp
-    WriteToLogFile(Divider,sizeof (Divider));           
+   // char Divider[] = " -> ";
+  //  CheckLogFileIsOpen();
+  //  CreateTimeStamp(dbuf);                           // Put time stamp into buffer
+  //  WriteToLogFile(dbuf,19);                         // Add time stamp
+  //  WriteToLogFile(Divider,sizeof (Divider));  
+    LogFilePreamble();         
     Str(NB,FlightMode,0);
     strcpy(thetext,Ltext);
     strcat(thetext, NB);
