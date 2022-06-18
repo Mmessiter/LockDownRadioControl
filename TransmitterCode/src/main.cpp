@@ -493,6 +493,7 @@ uint32_t BlinkTimer    = 0;
 uint8_t  BlinkOnPhase  = 1;
 bool     LedWasGreen   = false;
 char     ThisRadio[4]  = "0 ";
+uint8_t  LastRadio     = 0;
 uint8_t NextChannel   = 0;
 bool    DoSbusSendOnly  = false;
 bool    BuddyMaster     = false;
@@ -3027,8 +3028,30 @@ void SetTestFrequencies(){
             FHSSChPointer = FHSS_Channels1; 
             UkRules = false;     
 }
+
 /************************************************************************************************************/
 void CreateTimeStamp(char *  DateAndTime){
+    char NB[10];
+    char zero[]     = "0";
+    char Colon[]    = "."; // a dot!
+    char null[] = "";
+  
+    if (RTC.read(tm)) { 
+            strcpy(DateAndTime,null);
+            if (MayBeAddZero(tm.Hour)) strcat(DateAndTime,zero);
+            strcat(DateAndTime, Str(NB, tm.Hour,0));
+            strcat(DateAndTime, Colon);
+            if (MayBeAddZero(tm.Minute)) strcat(DateAndTime,zero);
+            strcat(DateAndTime, Str(NB, tm.Minute , 0));
+            strcat(DateAndTime, Colon);
+            if (MayBeAddZero(tm.Second)) strcat(DateAndTime,zero);
+            strcat(DateAndTime, Str(NB, tm.Second , 0));
+    }
+}
+
+
+/************************************************************************************************************/
+void CreateTimeDateStamp(char *  DateAndTime){
     char NB[10];
     char zero[]     = "0";
     char Dash[]     = "-";
@@ -3044,6 +3067,7 @@ void CreateTimeStamp(char *  DateAndTime){
             strcat(DateAndTime, Dash);
             strcat(DateAndTime, (Str(NB, tmYearToCalendar(tm.Year), 0)));
             strcat(DateAndTime, Space);
+           
             if (MayBeAddZero(tm.Hour)) strcat(DateAndTime,zero);
             strcat(DateAndTime, Str(NB, tm.Hour,0));
             strcat(DateAndTime, Colon);
@@ -3103,7 +3127,7 @@ void StartLogFile(){
     MakeLogFileName(LogFileName);                   // Create a "today" filename
     DeleteLogFile(LogFileName);                     // **** >>>>> Delete any former instance <<<< **** remove!???
     OpenLogFileW(LogFileName);                      // Open file for writing
-    CreateTimeStamp(Buf);                           // Put time stamp into buffer
+    CreateTimeDateStamp(Buf);                       // Put time stamp into buffer
     WriteToLogFile(LogHeader, sizeof (LogHeader));  // Write header
     WriteToLogFile(Buf,19);                         // Add time stamp
     WriteToLogFile(crlf,sizeof (crlf));             // End of line
@@ -3113,9 +3137,8 @@ void StartLogFile(){
 
 // ************************************************************************
 void CheckLogFileIsOpen(){
-  
-    char LogFileName[20];
 
+    char LogFileName[20];
    if (!LogFileOpen){
         MakeLogFileName(LogFileName);                   // Create a "today" filename
         OpenLogFileW(LogFileName);                      // Open file for writing
@@ -3125,11 +3148,11 @@ void CheckLogFileIsOpen(){
 
 // ************************************************************************
 void LogFilePreamble(){
-    char dbuf[22];
-    char Divider[] = " -> ";
+    char dbuf[12];
+    char Divider[] = " - ";
     CheckLogFileIsOpen();
     CreateTimeStamp(dbuf);                           // Put time stamp into buffer
-    WriteToLogFile(dbuf,19);                         // Add time stamp
+    WriteToLogFile(dbuf,9);                          // Add time stamp
     WriteToLogFile(Divider,sizeof (Divider));           
 
 }
@@ -7113,6 +7136,10 @@ void GetRXVersionNumber()
     char nbuf[5];
     Str(nbuf,AckPayload.Byte1, 0);
     strcpy(ThisRadio, nbuf);
+    if (LastRadio != AckPayload.Byte1) {
+        LastRadio = AckPayload.Byte1;
+        LogThisRX();
+    }
     Str(ReceiverVersionNumber, AckPayload.Byte2, 2);
     Str(nbuf, AckPayload.Byte3, 2);
     strcat(ReceiverVersionNumber, nbuf);
@@ -7250,7 +7277,7 @@ void CheckGapsLength()
     if (GapStart > 0) { // when reconnected, how long was connection lost?
         ++GapCount;
         ThisGap = (millis() - GapStart); // AND in fact RX sends no data for 20 ms after reconnection
-        if (ThisGap  > 10) LogThisGap();
+        if (ThisGap  > 50) LogThisGap();
         if (!GapShortest) GapShortest = ThisGap;
         if (ThisGap > GapLongest)  GapLongest = ThisGap;
         if (ThisGap < GapShortest) GapShortest = ThisGap;
