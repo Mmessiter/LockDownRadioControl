@@ -133,11 +133,11 @@ var NAVTREEINDEX =
 "_adafruit___b_m_p280_8cpp.html",
 "_radio_functions_8h.html#a1a11fabb6c953055a80c5df5eebbfb0d",
 "_sensor_hub_t32_2lib_2_adafruit___p_m_t_k_8h.html#a549460207c65eb13674930fdf6fc2bac",
-"_transmitter_code_2src_2main_8cpp.html#a4693f77df28f9d6032c4292b0275f53a",
-"_transmitter_code_2src_2main_8cpp.html#abc801729e599fbe5b84d088ead6fae1a",
-"class_adafruit___g_p_s.html#a27b5195e96aaef00fb5751a34f3fb82b",
-"globals_defs_k.html",
-"struct_tiny_g_p_s_decimal.html#a8c7fd3ccd678b195d8f23bd1cb31d9ba"
+"_transmitter_code_2src_2main_8cpp.html#a463a07d516b046c17a66b486dbcacb68",
+"_transmitter_code_2src_2main_8cpp.html#abc72fe68abd024cb263115e0afd3160a",
+"class_adafruit___g_p_s.html#a272df8380267fd53ff611f552409e86d",
+"globals_defs_i.html",
+"struct_tiny_g_p_s_decimal.html#a6501fd5ef19ae166d43e0e5781609ee2"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

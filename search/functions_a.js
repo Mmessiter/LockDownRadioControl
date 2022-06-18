@@ -12,8 +12,9 @@ var searchData=
   ['locus_5fstartlogger_9',['LOCUS_StartLogger',['../class_adafruit___g_p_s.html#a325d15c43c09fa1bedcdadb39706e72b',1,'Adafruit_GPS']]],
   ['locus_5fstoplogger_10',['LOCUS_StopLogger',['../class_adafruit___g_p_s.html#a48eaf7f5b46e3682b058a7f8f44fa385',1,'Adafruit_GPS']]],
   ['logconnection_11',['LogConnection',['../_transmitter_code_2src_2main_8cpp.html#a896d9c3f90c2a4c083748097a98bc96b',1,'main.cpp']]],
-  ['logfilepreamble_12',['LogFilePreamble',['../_transmitter_code_2src_2main_8cpp.html#a245cf37e2504095132bfcf03f2eeaa93',1,'main.cpp']]],
-  ['lognewflightmode_13',['LogNewFlightMode',['../_transmitter_code_2src_2main_8cpp.html#acac3c6cebc71150f10a4ba2f6d047e69',1,'main.cpp']]],
-  ['logtext_14',['LogText',['../_transmitter_code_2src_2main_8cpp.html#a3082155bd493af8377f0384347bdc55b',1,'main.cpp']]],
-  ['loop_15',['loop',['../_receiver_code_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../_sensor_hub_t32_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp']]]
+  ['logdisconnection_12',['LogDisConnection',['../_transmitter_code_2src_2main_8cpp.html#a01c8a29ed73a0c490282e23e119eca14',1,'main.cpp']]],
+  ['logfilepreamble_13',['LogFilePreamble',['../_transmitter_code_2src_2main_8cpp.html#a245cf37e2504095132bfcf03f2eeaa93',1,'main.cpp']]],
+  ['lognewflightmode_14',['LogNewFlightMode',['../_transmitter_code_2src_2main_8cpp.html#acac3c6cebc71150f10a4ba2f6d047e69',1,'main.cpp']]],
+  ['logtext_15',['LogText',['../_transmitter_code_2src_2main_8cpp.html#a3082155bd493af8377f0384347bdc55b',1,'main.cpp']]],
+  ['loop_16',['loop',['../_receiver_code_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../_sensor_hub_t32_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp']]]
 ];

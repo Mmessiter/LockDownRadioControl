@@ -1,5 +1,6 @@
 var NAVTREEINDEX6 =
 {
+"globals_defs_i.html":[10,1,6,8],
 "globals_defs_k.html":[10,1,6,9],
 "globals_defs_l.html":[10,1,6,10],
 "globals_defs_m.html":[10,1,6,11],
@@ -248,6 +249,5 @@ var NAVTREEINDEX6 =
 "struct_tiny_g_p_s_date.html#af8b9c057a28dcb490081fcfde2a0ee11":[9,0,22,1],
 "struct_tiny_g_p_s_decimal.html":[9,0,23],
 "struct_tiny_g_p_s_decimal.html#a041cada3e406205d0878c9819eddbbbb":[9,0,23,1],
-"struct_tiny_g_p_s_decimal.html#a34e6448314c198fa204dfb22cd24fc7e":[9,0,23,3],
-"struct_tiny_g_p_s_decimal.html#a6501fd5ef19ae166d43e0e5781609ee2":[9,0,23,5]
+"struct_tiny_g_p_s_decimal.html#a34e6448314c198fa204dfb22cd24fc7e":[9,0,23,3]
 };

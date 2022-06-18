@@ -187,6 +187,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "LoadAllParameters", "_transmitter_code_2src_2main_8cpp.html#a909acb7ed667a5cc9c4ec6191fc33e75", null ],
     [ "LoadPacketData", "_transmitter_code_2src_2main_8cpp.html#ac4ffb9b555ce8d38f615610dc89b5499", null ],
     [ "LogConnection", "_transmitter_code_2src_2main_8cpp.html#a896d9c3f90c2a4c083748097a98bc96b", null ],
+    [ "LogDisConnection", "_transmitter_code_2src_2main_8cpp.html#a01c8a29ed73a0c490282e23e119eca14", null ],
     [ "LogFilePreamble", "_transmitter_code_2src_2main_8cpp.html#a245cf37e2504095132bfcf03f2eeaa93", null ],
     [ "LogNewFlightMode", "_transmitter_code_2src_2main_8cpp.html#acac3c6cebc71150f10a4ba2f6d047e69", null ],
     [ "LogText", "_transmitter_code_2src_2main_8cpp.html#a3082155bd493af8377f0384347bdc55b", null ],
