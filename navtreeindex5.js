@@ -1,5 +1,7 @@
 var NAVTREEINDEX5 =
 {
+"class_adafruit___g_p_s.html#a27b5195e96aaef00fb5751a34f3fb82b":[9,0,5,77],
+"class_adafruit___g_p_s.html#a2a1d1e5e89b46270d8d3ff82bb68666a":[9,0,5,71],
 "class_adafruit___g_p_s.html#a2a7f90b64349dca658dbc8e0c79c9938":[9,0,5,1],
 "class_adafruit___g_p_s.html#a2b04c8136e976cd8cd87aaa3526753d6":[9,0,5,54],
 "class_adafruit___g_p_s.html#a2c53f008694ebee3871583cb44842033":[9,0,5,73],
@@ -232,14 +234,14 @@ var NAVTREEINDEX5 =
 "functions_y.html":[9,3,0,22],
 "functions_z.html":[9,3,0,23],
 "functions_~.html":[9,3,0,24],
-"globals.html":[10,1,0,0],
 "globals.html":[10,1,0],
+"globals.html":[10,1,0,0],
 "globals_a.html":[10,1,0,1],
 "globals_b.html":[10,1,0,2],
 "globals_c.html":[10,1,0,3],
 "globals_d.html":[10,1,0,4],
-"globals_defs.html":[10,1,6,0],
 "globals_defs.html":[10,1,6],
+"globals_defs.html":[10,1,6,0],
 "globals_defs_a.html":[10,1,6,1],
 "globals_defs_b.html":[10,1,6,2],
 "globals_defs_c.html":[10,1,6,3],
@@ -247,7 +249,5 @@ var NAVTREEINDEX5 =
 "globals_defs_f.html":[10,1,6,5],
 "globals_defs_g.html":[10,1,6,6],
 "globals_defs_h.html":[10,1,6,7],
-"globals_defs_i.html":[10,1,6,8],
-"globals_defs_k.html":[10,1,6,9],
-"globals_defs_l.html":[10,1,6,10]
+"globals_defs_i.html":[10,1,6,8]
 };
