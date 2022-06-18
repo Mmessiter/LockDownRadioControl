@@ -584,6 +584,7 @@ void DrawLine(int x1, int y1, int x2, int y2, int c);
 void DrawBox(int x1, int y1, int x2, int y2, int c);
 void FillBox(int x1, int y1, int w, int h, int c);
 void ReadTextFile(char* fname, char* htext);
+void LogConnection();
 
 /************************************************************************************************************/
 // This function returns distance (in MILES) between two GPS coordinates (in degrees)
@@ -1151,6 +1152,7 @@ void GreenLedOn()
         if (FirstConnection) {                   // Zero data on first connection
             ZeroDataScreen(); 
             FirstConnection = false;   
+            LogConnection();
         }
         analogWrite(BLUELED, 0);
         analogWrite(REDLED, 0); 
@@ -3127,20 +3129,34 @@ void LogFilePreamble(){
     WriteToLogFile(Divider,sizeof (Divider));           
 
 }
+
+void LogText(char * TheText, uint16_t len){
+    
+    char crlf[]  = {'|',13,10,0};
+    
+    LogFilePreamble();
+    WriteToLogFile(TheText,len);
+    WriteToLogFile(crlf, sizeof(crlf));
+
+}
+
+
+// ************************************************************************
+
+void LogConnection(){
+
+char TheText[] = "Connected!";
+       LogText(TheText, sizeof (TheText));
+
+}
+
 // ************************************************************************
 
 void LogNewFlightMode(){
-
     char Ltext[] = "Bank: ";
     char NB[3];
-  //  char dbuf[22];
     char thetext[10];
     char crlf[]  = {'|',13,10,0};
-   // char Divider[] = " -> ";
-  //  CheckLogFileIsOpen();
-  //  CreateTimeStamp(dbuf);                           // Put time stamp into buffer
-  //  WriteToLogFile(dbuf,19);                         // Add time stamp
-  //  WriteToLogFile(Divider,sizeof (Divider));  
     LogFilePreamble();         
     Str(NB,FlightMode,0);
     strcpy(thetext,Ltext);
