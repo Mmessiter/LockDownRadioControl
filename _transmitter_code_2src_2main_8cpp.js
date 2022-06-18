@@ -36,6 +36,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "HALFMICROSRANGE", "_transmitter_code_2src_2main_8cpp.html#aa0f99ed9c5fd16fa7deba8d4f0336b3a", null ],
     [ "HELP_VIEW", "_transmitter_code_2src_2main_8cpp.html#a7f61099fecfe7dae5a38078cb36a9bd4", null ],
     [ "INPUTS_VIEW", "_transmitter_code_2src_2main_8cpp.html#aa2bec27575ce278d56e8d9f844dfe72e", null ],
+    [ "LOGVIEW", "_transmitter_code_2src_2main_8cpp.html#ab5b352492259f7b453a051455d5dca50", null ],
     [ "M_Enabled", "_transmitter_code_2src_2main_8cpp.html#ad2b2fe49829868cf9b49c2e65dfaa006", null ],
     [ "M_FlightMode", "_transmitter_code_2src_2main_8cpp.html#a0d44a2f20bda277d503359ced2a28145", null ],
     [ "M_MasterChannel", "_transmitter_code_2src_2main_8cpp.html#ad6c3cb6bd50690ce1867594d589cc727", null ],
