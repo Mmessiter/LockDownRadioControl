@@ -175,6 +175,7 @@ RF24 Radio1(CE_PIN, CSN_PIN);
 #define FILESVIEW       20
 #define REVERSEVIEW     21
 #define BUDDYVIEW       22
+#define LOGVIEW         23
 
 
 #define CharsMax        120 
@@ -3239,7 +3240,7 @@ void LogThisGap(){
 
 
 // ************************************************************************
-void ShowLogFile(){ // heer
+void ShowLogFile(){ 
     char TheText[MAXFILELEN + 10];      // MAX = 5K or so
     char LogFileName[20];
     char LogTeXt[] = "LogText";     
@@ -5368,7 +5369,7 @@ void ButtonWasPressed()
     char DelLOG[]                  = "DelLOG";       
     
 
-     ScreenTimeTimer = millis();  // reset screen counter
+     ScreenTimeTimer = millis();  // reset screen timeout counter
      if (ScreenIsOff) {
          RestoreBrightness();
          ScreenIsOff = false;
@@ -5384,25 +5385,29 @@ void ButtonWasPressed()
  #endif
             
 
-    if (InStrng(RefrLOG, TextIn)){
-        ShowLogFile(); // heer
+    if (InStrng(RefrLOG, TextIn)){   // refresh log screen
+        ShowLogFile(); 
         ClearText();
         return;        
     }   
 
-    if (InStrng(LogEND, TextIn)){
-            SendCommand(page_SetupView);   // heer
+    if (InStrng(LogEND, TextIn)){ // close log screen heer
+            CurrentMode  = NORMAL;
+            CurrentView  = DATAVIEW;
+            LastShowTime = 0;
+            SendCommand(pDataView);
             ClearText();
             return;
     }   
-    if (InStrng(DelLOG, TextIn)){
+    if (InStrng(DelLOG, TextIn)){  // delete log and start new one
             DeleteLogFile1();
             ClearText();
             return;
     }   
 
-    if (InStrng(LogVIEW, TextIn)){
+    if (InStrng(LogVIEW, TextIn)){  // Start log screen
             SendCommand(pLogView);
+            CurrentView = LOGVIEW;
             ShowLogFile();
             ClearText();
             return;
@@ -5724,7 +5729,7 @@ void ButtonWasPressed()
             ClearText();
             return;
         }
-        if (InStrng(GOTO, TextIn) > 0) {                     // Return from Help screen returns here to relevent config screen
+        if (InStrng(GOTO, TextIn) > 0) {                     // Return from Help screen returns here to relevent config screen //heer
             i = 5;
             while (uint8_t(TextIn[i]) > 0 && i < 30) {
                 WhichPage[i] = TextIn[i];
@@ -5768,11 +5773,16 @@ void ButtonWasPressed()
              if (CurrentView == REVERSEVIEW){
                  StartReverseView();
              }
-
              if (CurrentView == STICKSVIEW){
                 Force_ReDisplay();
                 ShowServoPos(); 
              }
+             if (CurrentView == LOGVIEW){ 
+                SendCommand(pLogView);
+                CurrentView = LOGVIEW;
+                ShowLogFile();
+             }
+
             UpdateModelsNameEveryWhere();
             ClearText();
             return;
