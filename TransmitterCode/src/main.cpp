@@ -585,6 +585,7 @@ void DrawBox(int x1, int y1, int x2, int y2, int c);
 void FillBox(int x1, int y1, int w, int h, int c);
 void ReadTextFile(char* fname, char* htext);
 void LogConnection();
+void LogDisConnection();
 
 /************************************************************************************************************/
 // This function returns distance (in MILES) between two GPS coordinates (in degrees)
@@ -1136,7 +1137,11 @@ uint8_t GetLEDBrightness()
 
 void RedLedOn()
 {
-    LedWasGreen = false;
+    if (LedWasGreen){
+        LogDisConnection();
+        LedWasGreen = false;
+    }
+    
     FirstConnection = true;
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, 0);
@@ -1916,7 +1921,6 @@ if (ShowNow){
     }else{
         if (LedIsBlinking && (CurrentView == FRONTVIEW)) SendCommand(WarnOff);
         LedIsBlinking = false; 
-        LedWasGreen = false;
     }
 }
 } // end ShowComms()
@@ -3130,24 +3134,29 @@ void LogFilePreamble(){
 
 }
 
+// ************************************************************************
 void LogText(char * TheText, uint16_t len){
-    
     char crlf[]  = {'|',13,10,0};
-    
     LogFilePreamble();
     WriteToLogFile(TheText,len);
     WriteToLogFile(crlf, sizeof(crlf));
-
 }
-
 
 // ************************************************************************
 
 void LogConnection(){
+        char TheText[] = "Connected to ";
+        char buf[40] = " ";
+        strcpy (buf,TheText);
+        strcat (buf,ModelName);
+        LogText(buf, sizeof (buf));
+}
 
-char TheText[] = "Connected!";
-       LogText(TheText, sizeof (TheText));
+// ************************************************************************
 
+void LogDisConnection(){ 
+    char TheText[] = "Disconnected";
+    LogText(TheText, sizeof (TheText));
 }
 
 // ************************************************************************
