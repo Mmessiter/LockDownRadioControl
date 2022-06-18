@@ -28,6 +28,5 @@ var searchData=
   ['common_5finit_25',['common_init',['../class_adafruit___g_p_s.html#ab8a2fe20ce1874b10a6e9f007c236b30',1,'Adafruit_GPS']]],
   ['compassangle_26',['compassAngle',['../class_adafruit___g_p_s.html#a06b7e12e38f1b00df058a253364215db',1,'Adafruit_GPS']]],
   ['compress_27',['Compress',['../_radio_functions_8cpp.html#ab46df249e949de237fc3bacdc5225934',1,'RadioFunctions.cpp']]],
-  ['courseto_28',['courseTo',['../class_tiny_g_p_s_plus.html#af338c18ccf58a47659be1ffc8259541d',1,'TinyGPSPlus']]],
-  ['createlogfile_29',['CreateLogFile',['../_transmitter_code_2src_2main_8cpp.html#a1c7507ba7201b4ca816d214e49e59b96',1,'main.cpp']]]
+  ['courseto_28',['courseTo',['../class_tiny_g_p_s_plus.html#af338c18ccf58a47659be1ffc8259541d',1,'TinyGPSPlus']]]
 ];
