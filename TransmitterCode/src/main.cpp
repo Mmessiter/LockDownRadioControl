@@ -3176,18 +3176,31 @@ void LogNewFlightMode(){
 
 // ************************************************************************
 
+void LogThisRX(){
+char Ltext[] = "RX: ";
+    char crlf[]  = {'|',13,10,0};
+    LogFilePreamble();    
+    WriteToLogFile(Ltext,sizeof(Ltext));
+    WriteToLogFile(ThisRadio,sizeof(ThisRadio));
+    WriteToLogFile(crlf,sizeof(crlf));
+}
+// ************************************************************************
+
 void LogThisGap(){
     char Ltext[] = "Gap: ";
     char NB[3];
     char thetext[10];
     char crlf[]  = {'|',13,10,0};
+    if (ThisGap > 1000) return;
     LogFilePreamble();         
     Str(NB,ThisGap,0);
     strcpy(thetext,Ltext);
     strcat(thetext, NB);
     strcat(thetext,crlf);
     WriteToLogFile(thetext,sizeof(thetext));
+   
 }
+
 
 // ************************************************************************
 void ShowLogFile(){ // heer
@@ -7236,16 +7249,8 @@ void CheckGapsLength()
 {
     if (GapStart > 0) { // when reconnected, how long was connection lost?
         ++GapCount;
-
-
-      
-
         ThisGap = (millis() - GapStart); // AND in fact RX sends no data for 20 ms after reconnection
-
-        if (ThisGap  > 90) LogThisGap();
-
-
-
+        if (ThisGap  > 10) LogThisGap();
         if (!GapShortest) GapShortest = ThisGap;
         if (ThisGap > GapLongest)  GapLongest = ThisGap;
         if (ThisGap < GapShortest) GapShortest = ThisGap;
