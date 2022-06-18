@@ -132,6 +132,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "DecYear", "_transmitter_code_2src_2main_8cpp.html#ad712237b8d367326a7f460181dade102", null ],
     [ "DegsToPercent", "_transmitter_code_2src_2main_8cpp.html#a68b36025c7478c0710565b4fb059d9bc", null ],
     [ "DeleteLogFile", "_transmitter_code_2src_2main_8cpp.html#aead154aa403de2fe97ad750378011b10", null ],
+    [ "DeleteLogFile1", "_transmitter_code_2src_2main_8cpp.html#adb5aacd8adab39f57e32a80cf537a989", null ],
     [ "DisplayCurve", "_transmitter_code_2src_2main_8cpp.html#af941d3a33327b2cee79e058ba9cd65f6", null ],
     [ "DoMixes", "_transmitter_code_2src_2main_8cpp.html#ac182a99befc8d4d83532a6c38571a222", null ],
     [ "DoNewChannelName", "_transmitter_code_2src_2main_8cpp.html#aba44d61ea51411cb5c601beb94b6fef4", null ],
