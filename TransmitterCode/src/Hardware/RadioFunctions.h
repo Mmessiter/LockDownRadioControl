@@ -3,11 +3,11 @@
 #define RadioFunctions_H
 
 // **************************************************************************
-//                TX VERSION NUMBER   (June 9th 2022 Malcolm Messiter) *
+//                TX VERSION NUMBER   (June 18th 2022 Malcolm Messiter) *
 //***************************************************************************
 #define TXVERSION_MAJOR   1
 #define TXVERSION_MINOR   7
-#define TXVERSION_MINIMUS 7
+#define TXVERSION_MINIMUS 8
 
 
 
@@ -112,7 +112,7 @@
 //             UNCOMMENT ANY OF THESE for that bit of debug info            *
 //***************************************************************************
 
- //  #define DB_NEXTION        // Debug NEXTION and SD card data
+// #define DB_NEXTION        // Debug NEXTION and SD card data
 // #define DB_FHSS           // Debug real time FHSS data
 // #define DB_SENSORS        // Debug Sensors
 // #define DB_BIND           // Debug Binding

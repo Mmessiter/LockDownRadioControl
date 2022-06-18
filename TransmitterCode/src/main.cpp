@@ -587,7 +587,9 @@ void FillBox(int x1, int y1, int w, int h, int c);
 void ReadTextFile(char* fname, char* htext);
 void LogConnection();
 void LogDisConnection();
-
+void CloseLogFile();
+void StartLogFile();     
+void ShowLogFile();
 /************************************************************************************************************/
 // This function returns distance (in MILES) between two GPS coordinates (in degrees)
 // it was essentially cribbed from the internet, then tested and adjusted a little. 
@@ -3092,6 +3094,20 @@ void MakeLogFileName(char * LogFileName){
 void DeleteLogFile(char * LogFileName){
     SD.remove(LogFileName);
 }
+
+/************************************************************************************************************/
+void DeleteLogFile1(){
+    char LogFileName[20];
+    char LogTeXt[] = "LogText";     
+    char BlankText[] = " ";     
+    CloseLogFile();
+    MakeLogFileName(LogFileName);  
+    DeleteLogFile(LogFileName);   
+    SendText1(LogTeXt, BlankText);  
+    StartLogFile();     
+    ShowLogFile();
+}
+
 /************************************************************************************************************/
 void OpenLogFileW(char * LogFileName){
     if (!LogFileOpen){
@@ -3119,15 +3135,16 @@ void WriteToLogFile(char * SomeData, uint16_t len){
 void StartLogFile(){ 
 
     char LogFileName[20];
-    char LogHeader[]    = "Log file created: ";
+    char LogHeader[]    = "Log file started: ";
     char crlf[]         = {'|',13,10,0};
     char Buf[30];
 
     LogFileOpen = false;
     MakeLogFileName(LogFileName);                   // Create a "today" filename
-    DeleteLogFile(LogFileName);                     // **** >>>>> Delete any former instance <<<< **** remove!???
+ // DeleteLogFile(LogFileName);                   // **** >>>>> Delete any former instance <<<< **** remove!???
     OpenLogFileW(LogFileName);                      // Open file for writing
     CreateTimeDateStamp(Buf);                       // Put time stamp into buffer
+    WriteToLogFile(crlf,sizeof (crlf));             // End of line
     WriteToLogFile(LogHeader, sizeof (LogHeader));  // Write header
     WriteToLogFile(Buf,19);                         // Add time stamp
     WriteToLogFile(crlf,sizeof (crlf));             // End of line
@@ -3137,15 +3154,12 @@ void StartLogFile(){
 
 // ************************************************************************
 void CheckLogFileIsOpen(){
-
-    char LogFileName[20];
-   if (!LogFileOpen){
+     char LogFileName[20];
+     if (!LogFileOpen){
         MakeLogFileName(LogFileName);                   // Create a "today" filename
         OpenLogFileW(LogFileName);                      // Open file for writing
-   }
+     }
 }
-
-
 // ************************************************************************
 void LogFilePreamble(){
     char dbuf[12];
@@ -3154,7 +3168,6 @@ void LogFilePreamble(){
     CreateTimeStamp(dbuf);                           // Put time stamp into buffer
     WriteToLogFile(dbuf,9);                          // Add time stamp
     WriteToLogFile(Divider,sizeof (Divider));           
-
 }
 
 // ************************************************************************
@@ -3229,11 +3242,11 @@ void LogThisGap(){
 void ShowLogFile(){ // heer
     char TheText[MAXFILELEN + 10];      // MAX = 5K or so
     char LogFileName[20];
-    char LogText[] = "LogText";     
+    char LogTeXt[] = "LogText";     
     CloseLogFile();
     MakeLogFileName(LogFileName);        // Create "today" filename
     ReadTextFile(LogFileName, TheText);  // Then load text
-    SendText1(LogText, TheText);         // Then send it
+    SendText1(LogTeXt, TheText);         // Then send it
 }
 /*********************************************************************************************************************************/
 // SETUP
@@ -5350,7 +5363,8 @@ void ButtonWasPressed()
     char StCH[]                    = "StCH";
     char s0[]                      = "s0";
     char t2[]                      = "t2";
-    char StEDIT[]                  = "StEDIT";             
+    char StEDIT[]                  = "StEDIT";     
+    char DelLOG[]                  = "DelLOG";       
     
 
      ScreenTimeTimer = millis();  // reset screen counter
@@ -5373,7 +5387,13 @@ void ButtonWasPressed()
             SendCommand(page_SetupView);   // heer
             ClearText();
             return;
-    }    
+    }   
+    if (InStrng(DelLOG, TextIn)){
+            DeleteLogFile1();
+            ClearText();
+            return;
+    }   
+
     if (InStrng(LogVIEW, TextIn)){
             SendCommand(pLogView);
             ShowLogFile();
