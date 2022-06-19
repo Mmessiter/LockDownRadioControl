@@ -1161,6 +1161,7 @@ void GreenLedOn()
         if (FirstConnection) {                   // Zero data on first connection
             ZeroDataScreen(); 
             FirstConnection = false;   
+            if (!LogFileOpen) StartLogFile();
             LogConnection();
         }
         analogWrite(BLUELED, 0);
@@ -3070,7 +3071,6 @@ void CreateTimeDateStamp(char *  DateAndTime){
             strcat(DateAndTime, Dash);
             strcat(DateAndTime, (Str(NB, tmYearToCalendar(tm.Year), 0)));
             strcat(DateAndTime, Space);
-           
             if (MayBeAddZero(tm.Hour)) strcat(DateAndTime,zero);
             strcat(DateAndTime, Str(NB, tm.Hour,0));
             strcat(DateAndTime, Colon);
@@ -3095,7 +3095,6 @@ void MakeLogFileName(char * LogFileName){
 void DeleteLogFile(char * LogFileName){
     SD.remove(LogFileName);
 }
-
 /************************************************************************************************************/
 void DeleteLogFile1(){
     char LogFileName[20];
@@ -3105,10 +3104,11 @@ void DeleteLogFile1(){
     MakeLogFileName(LogFileName);  
     DeleteLogFile(LogFileName);   
     SendText1(LogTeXt, BlankText);  
-    StartLogFile();     
-    ShowLogFile();
+    if (Connected) {
+        StartLogFile();     
+        ShowLogFile();
+    }
 }
-
 /************************************************************************************************************/
 void OpenLogFileW(char * LogFileName){
     if (!LogFileOpen){
@@ -3134,15 +3134,13 @@ void WriteToLogFile(char * SomeData, uint16_t len){
 }
 /************************************************************************************************************/
 void StartLogFile(){ 
-
     char LogFileName[20];
     char LogHeader[]    = "Log file started: ";
     char crlf[]         = {'|',13,10,0};
     char Buf[30];
-
     LogFileOpen = false;
     MakeLogFileName(LogFileName);                   // Create a "today" filename
- // DeleteLogFile(LogFileName);                   // **** >>>>> Delete any former instance <<<< **** remove!???
+ // DeleteLogFile(LogFileName);                   // **** >>>>> Delete any former instance <<<< FOR TESTS
     OpenLogFileW(LogFileName);                      // Open file for writing
     CreateTimeDateStamp(Buf);                       // Put time stamp into buffer
     WriteToLogFile(crlf,sizeof (crlf));             // End of line
@@ -3151,7 +3149,6 @@ void StartLogFile(){
     WriteToLogFile(crlf,sizeof (crlf));             // End of line
                                                     // Log file is now open and ready for new data ...
 }
-
 
 // ************************************************************************
 void CheckLogFileIsOpen(){
@@ -3324,7 +3321,7 @@ void setup()
     if (PlayFanfare) SendCommand(OpeningFanfare);
     ScreenTimeTimer = millis();
     RestoreBrightness();
-    StartLogFile();
+  
 }
 /*********************************************************************************************************************************/
 
@@ -6949,7 +6946,7 @@ void GetFlightMode()
     Channel12SwitchValue = CheckSwitch(Channel12Switch);
 
     if (FlightMode != PreviousFlightMode) {
-        LogNewFlightMode();
+        if (Connected) LogNewFlightMode();
         if (AnnounceBanks) SoundFlightMode();
         if (CurrentView == FRONTVIEW) {
             ShowFlightMode();
@@ -7314,7 +7311,7 @@ void CheckGapsLength()
     if (GapStart > 0) { // when reconnected, how long was connection lost?
         ++GapCount;
         ThisGap = (millis() - GapStart); // AND in fact RX sends no data for 20 ms after reconnection
-        if (ThisGap  > 99) LogThisGap();
+        if (ThisGap  >= 75) LogThisGap();
         if (!GapShortest) GapShortest = ThisGap;
         if (ThisGap > GapLongest)  GapLongest = ThisGap;
         if (ThisGap < GapShortest) GapShortest = ThisGap;
