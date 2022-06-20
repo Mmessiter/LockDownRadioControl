@@ -3067,7 +3067,6 @@ void CreateTimeStamp(char *  DateAndTime){
     }
 }
 
-
 /************************************************************************************************************/
 void CreateTimeDateStamp(char *  DateAndTime){
     char NB[10];
@@ -3155,7 +3154,6 @@ void StartLogFile(){
     char Buf[30];
     LogFileOpen = false;
     MakeLogFileName(LogFileName);                   // Create a "today" filename
- // DeleteLogFile(LogFileName);                   // **** >>>>> Delete any former instance <<<< FOR TESTS
     OpenLogFileW(LogFileName);                      // Open file for writing
     CreateTimeDateStamp(Buf);                       // Put time stamp into buffer
     WriteToLogFile(crlf,sizeof (crlf));             // End of line
@@ -3164,7 +3162,6 @@ void StartLogFile(){
     WriteToLogFile(crlf,sizeof (crlf));             // End of line
                                                     // Log file is now open and ready for new data ...
 }
-
 // ************************************************************************
 void CheckLogFileIsOpen(){
      char LogFileName[20];
