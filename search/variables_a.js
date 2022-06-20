@@ -38,13 +38,14 @@ var searchData=
   ['locus_5ftype_35',['LOCUS_type',['../class_adafruit___g_p_s.html#ae3eddbc004d2945018eb1f71abecd0b8',1,'Adafruit_GPS']]],
   ['logfilenumber_36',['LogFileNumber',['../_transmitter_code_2src_2main_8cpp.html#abb4c65c0c164063d297d20ae5e42abb8',1,'main.cpp']]],
   ['logfileopen_37',['LogFileOpen',['../_transmitter_code_2src_2main_8cpp.html#a248f734d3eab8f5a565ede92c6eadb97',1,'main.cpp']]],
-  ['lon_38',['lon',['../class_adafruit___g_p_s.html#a704ab5d76824ade6f954e11029c1c916',1,'Adafruit_GPS']]],
-  ['longitude_39',['longitude',['../class_adafruit___g_p_s.html#a0ed3549d1600cf3bbb7492d376e61ca8',1,'Adafruit_GPS']]],
-  ['longitude_5ffixed_40',['longitude_fixed',['../class_adafruit___g_p_s.html#a8010f253b2708e05547c452cb5368837',1,'Adafruit_GPS']]],
-  ['longitudedegrees_41',['longitudeDegrees',['../class_adafruit___g_p_s.html#a2a1d1e5e89b46270d8d3ff82bb68666a',1,'Adafruit_GPS']]],
-  ['longitudegps_42',['LongitudeGPS',['../_receiver_code_2src_2main_8cpp.html#afabe4c9d9760f8606aa408474e3d626c',1,'LongitudeGPS():&#160;main.cpp'],['../radio_8h.html#afabe4c9d9760f8606aa408474e3d626c',1,'LongitudeGPS():&#160;main.cpp']]],
-  ['looptimer_43',['LoopTimer',['../_sensor_hub_t32_2src_2main_8cpp.html#a46536419f1b2ee88934f4f812fd6140c',1,'main.cpp']]],
-  ['lostcontactflag_44',['LostContactFlag',['../_radio_functions_8h.html#ad5f463902789a79fc622b3befd9409b9',1,'LostContactFlag():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#ad5f463902789a79fc622b3befd9409b9',1,'LostContactFlag():&#160;main.cpp']]],
-  ['lostpackets_45',['LostPackets',['../_radio_functions_8h.html#ace8651c9c20dd6ea531190d34d35e1fc',1,'LostPackets():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#ace8651c9c20dd6ea531190d34d35e1fc',1,'LostPackets():&#160;main.cpp']]],
-  ['lowbattery_46',['LowBattery',['../_transmitter_code_2src_2main_8cpp.html#a841a740574f81e5bb80ea1a16f704be5',1,'main.cpp']]]
+  ['logrxswaps_38',['LogRXSwaps',['../_transmitter_code_2src_2main_8cpp.html#a16515797c15a76da539562acaa1e1275',1,'main.cpp']]],
+  ['lon_39',['lon',['../class_adafruit___g_p_s.html#a704ab5d76824ade6f954e11029c1c916',1,'Adafruit_GPS']]],
+  ['longitude_40',['longitude',['../class_adafruit___g_p_s.html#a0ed3549d1600cf3bbb7492d376e61ca8',1,'Adafruit_GPS']]],
+  ['longitude_5ffixed_41',['longitude_fixed',['../class_adafruit___g_p_s.html#a8010f253b2708e05547c452cb5368837',1,'Adafruit_GPS']]],
+  ['longitudedegrees_42',['longitudeDegrees',['../class_adafruit___g_p_s.html#a2a1d1e5e89b46270d8d3ff82bb68666a',1,'Adafruit_GPS']]],
+  ['longitudegps_43',['LongitudeGPS',['../_receiver_code_2src_2main_8cpp.html#afabe4c9d9760f8606aa408474e3d626c',1,'LongitudeGPS():&#160;main.cpp'],['../radio_8h.html#afabe4c9d9760f8606aa408474e3d626c',1,'LongitudeGPS():&#160;main.cpp']]],
+  ['looptimer_44',['LoopTimer',['../_sensor_hub_t32_2src_2main_8cpp.html#a46536419f1b2ee88934f4f812fd6140c',1,'main.cpp']]],
+  ['lostcontactflag_45',['LostContactFlag',['../_radio_functions_8h.html#ad5f463902789a79fc622b3befd9409b9',1,'LostContactFlag():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#ad5f463902789a79fc622b3befd9409b9',1,'LostContactFlag():&#160;main.cpp']]],
+  ['lostpackets_46',['LostPackets',['../_radio_functions_8h.html#ace8651c9c20dd6ea531190d34d35e1fc',1,'LostPackets():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#ace8651c9c20dd6ea531190d34d35e1fc',1,'LostPackets():&#160;main.cpp']]],
+  ['lowbattery_47',['LowBattery',['../_transmitter_code_2src_2main_8cpp.html#a841a740574f81e5bb80ea1a16f704be5',1,'main.cpp']]]
 ];
