@@ -596,6 +596,7 @@ void LogDisConnection();
 void CloseLogFile();
 void StartLogFile();     
 void ShowLogFile(uint8_t StartLine);
+
 /************************************************************************************************************/
 // This function returns distance (in MILES) between two GPS coordinates (in degrees)
 // it was essentially cribbed from the internet, then tested and adjusted a little. 
@@ -3117,7 +3118,7 @@ void DeleteLogFile1(){
     MakeLogFileName(LogFileName);  
     DeleteLogFile(LogFileName);   
     SendText1(LogTeXt, BlankText);  
-    if (Connected) {
+    if (LedWasGreen) {
         StartLogFile();     
         RecentStartLine = 0;
         ShowLogFile(RecentStartLine);
@@ -3685,7 +3686,7 @@ void ReadTextFile(char* fname, char* htext, uint8_t StartLineNumber, uint8_t Max
     uint16_t i                  = 0;
     uint8_t  Column             = 0;
     File     fnumber;
-    
+
     char crlf[]         = {13,10,0};
     char a[]            = " ";
     char dots[]         = "(There's more below ...) ";
