@@ -3659,38 +3659,68 @@ uint16_t i,j;
 /*********************************************************************************************************************************/
 void ReadTextFile(char* fname, char* htext){
     #define MAXWIDTH 68
-    char errormsg[] = "File not found.";
-    File fnumber;
-    uint16_t i  = 0;
-    byte Column = 0;
+    #define MAXLINES 30  // ... on screen at a time ...
+
+    char errormsg[] = "File not found! -> ";
+    
+    uint16_t LineCounter        = 0;
+    uint16_t StartLineNumber    = 0;
+    uint16_t StopLineNumber     = 0;
+    uint16_t i                  = 0;
+    uint8_t  Column             = 0;
+    File     fnumber;
+
+    StopLineNumber = StartLineNumber + MAXLINES;
+
     char crlf[] = {13,10,0};
     char a[] = " ";
     htext[0] = 0;
     char SearchFile[30];
     char slash[] =  "/";
-    strcpy (SearchFile,slash);
-    strcat (SearchFile,fname);
+    char OpenBracket[] = "( ";
+    char CloseBracket[] = " )";
+    
+        strcpy (SearchFile,slash);
+        strcat (SearchFile,fname);
+        strcpy (htext,OpenBracket);
+        strcat (htext,SearchFile);
+        strcat (htext,CloseBracket);
+        strcat (htext, crlf);
+        strcat (htext, crlf);
+
         fnumber  = SD.open(SearchFile, FILE_READ); 
         if (fnumber) {
-            while (fnumber.available() && i < MAXFILELEN) {
+            while (fnumber.available() && i < (MAXFILELEN-10)) {
                 a[0] = fnumber.read();                             //  Read in one byte at a time.
                  if (a[0] == '|') {                                //  New Line character = '|'   
-                     strcat(htext, crlf);
-                     Column = 0;
-                     a[0] = 34;
-                 }
-                 if (Column >= MAXWIDTH) Column = WordWrap(htext);       
-                 if ((a[0] == 13) || (a[0] == 10)) a[0] = 34;      // Ignore CrLfs
-                 if (a[0] != 34) {
-                     strcat(htext, a);
-                     ++ Column;
-                     ++ i;
-                 }
+                    if ((LineCounter >= StartLineNumber) && (LineCounter <= StopLineNumber)){
+                        strcat(htext, crlf);
+                        ++i;
+                        ++i;
+                    }
+                    Column = 0;
+                    ++LineCounter;         
+                    a[0] = 34; // a '34'  ( " ) is ignored.
+                }
+                if (Column >= MAXWIDTH) {
+                    Column = WordWrap(htext);
+                    ++LineCounter;
+                }       
+                if ((a[0] == 13) || (a[0] == 10)) a[0] = 34;      // Ignore CrLfs
+                if (a[0] != 34) {
+                    if ((LineCounter >= StartLineNumber) && (LineCounter <= StopLineNumber)){
+                        strcat(htext, a);
+                        ++ Column;
+                        ++ i;
+                    }
+                }
             }
         }
-    else {
-        strcpy(htext, errormsg);
-    }
+        else 
+        {
+            strcpy(htext, errormsg);
+            strcat(htext,fname);
+        }
     fnumber.close();
 }
 /*********************************************************************************************************************************/
@@ -5388,7 +5418,7 @@ void ButtonWasPressed()
         return;        
     }   
 
-    if (InStrng(LogEND, TextIn)){ // close log screen heer
+    if (InStrng(LogEND, TextIn)){ // close log screen 
             CurrentMode  = NORMAL;
             CurrentView  = DATAVIEW;
             LastShowTime = 0;
