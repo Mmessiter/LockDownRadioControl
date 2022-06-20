@@ -3674,29 +3674,28 @@ uint16_t i,j;
         return len;
 }
 /*********************************************************************************************************************************/
+// This function now scrolls by loading only part of the text file
+// This allows very long files to be handled ok.
+
 void ReadTextFile(char* fname, char* htext, uint8_t StartLineNumber, uint8_t MaxLines){
     #define MAXWIDTH 68
-   
-
     char errormsg[] = "File not found! -> ";
-    
     uint16_t LineCounter        = 0;
     uint16_t StopLineNumber     = 0;
     uint16_t i                  = 0;
     uint8_t  Column             = 0;
     File     fnumber;
-
-    StopLineNumber = StartLineNumber + MaxLines;
-
-    char crlf[] = {13,10,0};
-    char a[] = " ";
-    char dots[] = "(There's more below ...) ";
-    char dots1[] = "(There's more above ...) ";
-    char SearchFile[30];
-    char slash[] =  "/";
-    char OpenBracket[] = "( ";
+    
+    char crlf[]         = {13,10,0};
+    char a[]            = " ";
+    char dots[]         = "(There's more below ...) ";
+    char dots1[]        = "(There's more above ...) ";
+    char slash[]        =  "/";
+    char OpenBracket[]  = "( ";
     char CloseBracket[] = " )";
-        
+    char SearchFile[30];
+
+        StopLineNumber = StartLineNumber + MaxLines;
         strcpy (SearchFile,slash);
         strcat (SearchFile,fname);
         strcpy (htext,OpenBracket);
@@ -3704,7 +3703,6 @@ void ReadTextFile(char* fname, char* htext, uint8_t StartLineNumber, uint8_t Max
         strcat (htext,CloseBracket);
         strcat (htext, crlf);
         strcat (htext, crlf);
-
         if (StartLineNumber > 1) {
             strcat (htext, crlf);
             strcat (htext,dots1);
@@ -3737,14 +3735,13 @@ void ReadTextFile(char* fname, char* htext, uint8_t StartLineNumber, uint8_t Max
                         ++ Column;
                         ++ i;
                     }
-                   
                 }
                 if (LineCounter > StopLineNumber){
                     strcat (htext, crlf);
-                    strcat(htext,dots);
+                    strcat (htext,dots);
                     ThereIsMoreToSee = true;
                     break;
-                    } // heer
+                } 
             }
         }
         else 
@@ -3756,14 +3753,14 @@ void ReadTextFile(char* fname, char* htext, uint8_t StartLineNumber, uint8_t Max
 }
 
 /*********************************************************************************************************************************/
-void ScrollHelpFile(){                 // redisplays maybe from top of file
+void ScrollHelpFile(){                 // redisplays help file to scroll it ... maybe from top of file
   char HelpText[MAXFILELEN + 10];      // MAX = 3K or so
   char HelpView[] = "HelpText";
     ReadTextFile(RecentTextFile,HelpText,RecentStartLine,MAXLINES);    // Then load help text
     SendText1(HelpView, HelpText);                  // Then send it
 }
 /*********************************************************************************************************************************/
-void SendHelp(){
+void SendHelp(){  // load new help file
     char hcmd[] = "page HelpView";
     char HelpFile[20];
     int i = 9;
