@@ -503,6 +503,8 @@ bool    SlaveHasControl = false;
 uint16_t Qnh            = 1009;               // pressure at sea level here/
 uint32_t ModelNameTimeCheck = 0;
 uint16_t LastModelLoaded    = 0;
+uint8_t  MinimumGap = 75;
+bool     LogRXSwaps =  false;
 
 uint8_t * FHSSChPointer;                                                              // pointer for channels array (first five only used for reconnect)
 
@@ -2952,6 +2954,14 @@ bool LoadAllParameters()
         }
         BuddyTriggerChannel= SDReadByte(SDCardAddress);
         ++SDCardAddress;
+        MinimumGap = SDReadByte(SDCardAddress);
+        ++SDCardAddress;
+        LogRXSwaps = SDReadByte(SDCardAddress);
+        ++SDCardAddress;
+
+
+
+
         MemoryForTransmtter = SDCardAddress;
         ReadOneModel(ModelNumber);
         return true;
@@ -3431,7 +3441,10 @@ void SaveTXStuff()
     }
     SDUpdateByte(SDCardAddress,BuddyTriggerChannel);
     ++SDCardAddress;
-
+    SDUpdateByte(SDCardAddress,MinimumGap);
+    ++SDCardAddress;
+    SDUpdateByte(SDCardAddress,LogRXSwaps);
+    ++SDCardAddress;
     CloseModelsFile();
 }
 
@@ -5422,6 +5435,9 @@ void ButtonWasPressed()
             CurrentMode  = NORMAL;
             CurrentView  = DATAVIEW;
             LastShowTime = 0;
+            MinimumGap = GetValue(n0);
+            LogRXSwaps = GetValue(c0);
+            SaveTXStuff();
             SendCommand(pDataView);
             ClearText();
             return;
@@ -5436,6 +5452,8 @@ void ButtonWasPressed()
             SendCommand(pLogView);
             CurrentView = LOGVIEW;
             ShowLogFile();
+            SendValue(n0,MinimumGap);
+            SendValue(c0,LogRXSwaps);
             ClearText();
             return;
     }
@@ -7202,7 +7220,7 @@ void GetRXVersionNumber()
     strcpy(ThisRadio, nbuf);
     if (LastRadio != AckPayload.Byte1) {
         LastRadio = AckPayload.Byte1;
-        LogThisRX();
+        if (LogRXSwaps) LogThisRX();
     }
     Str(ReceiverVersionNumber, AckPayload.Byte2, 2);
     Str(nbuf, AckPayload.Byte3, 2);
@@ -7341,7 +7359,7 @@ void CheckGapsLength()
     if (GapStart > 0) { // when reconnected, how long was connection lost?
         ++GapCount;
         ThisGap = (millis() - GapStart); // AND in fact RX sends no data for 20 ms after reconnection
-        if (ThisGap  >= 75) LogThisGap();
+        if (ThisGap  >= MinimumGap) LogThisGap();
         if (!GapShortest) GapShortest = ThisGap;
         if (ThisGap > GapLongest)  GapLongest = ThisGap;
         if (ThisGap < GapShortest) GapShortest = ThisGap;
