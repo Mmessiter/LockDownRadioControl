@@ -48,6 +48,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "MACROS_VIEW", "_transmitter_code_2src_2main_8cpp.html#a0a68d90e2d484ab8d703ffc7a5f0ade9", null ],
     [ "MAINSETUPVIEW", "_transmitter_code_2src_2main_8cpp.html#a0de9a27687c5d129d1184703edb30e1f", null ],
     [ "MAXFILELEN", "_transmitter_code_2src_2main_8cpp.html#aa67b661e0a71a9cce5c2903953b8b8bf", null ],
+    [ "MAXLINES", "_transmitter_code_2src_2main_8cpp.html#a8759764610aff6d0cf94742c22856182", null ],
     [ "MAXMICROS", "_transmitter_code_2src_2main_8cpp.html#a843e3db36f734b45096220f7ca4b8d9f", null ],
     [ "MAXWIDTH", "_transmitter_code_2src_2main_8cpp.html#ac101c663138f79260b6d5ea00140fa22", null ],
     [ "MIDMICROS", "_transmitter_code_2src_2main_8cpp.html#aa4dd4979e290d977d813a5a4af263b0d", null ],
