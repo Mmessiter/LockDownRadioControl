@@ -23,6 +23,7 @@ var _radio_functions_8h =
     [ "MACRORUNNINGNOW", "_radio_functions_8h.html#a20b56099fe1fdbd5605a91af95c5a50b", null ],
     [ "MACROSTARTTIME", "_radio_functions_8h.html#a0ed0c416beb6781a8c8a52c37d059957", null ],
     [ "MACROTRIGGERCHANNEL", "_radio_functions_8h.html#af8ab3c768a28f2a28475c81309bcf379", null ],
+    [ "MAXLINES", "_radio_functions_8h.html#a8759764610aff6d0cf94742c22856182", null ],
     [ "MAXMACROS", "_radio_functions_8h.html#af9fb1b689f62242b5e960b18dbe76761", null ],
     [ "MAXMICROS", "_radio_functions_8h.html#a843e3db36f734b45096220f7ca4b8d9f", null ],
     [ "MAXMIXES", "_radio_functions_8h.html#a78eca4e2f9590ad626beb2486d11610d", null ],
