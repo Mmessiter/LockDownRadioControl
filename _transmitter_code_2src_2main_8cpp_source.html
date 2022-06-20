@@ -3674,69 +3674,69 @@ $(document).ready(function(){initNavTree('_transmitter_code_2src_2main_8cpp_sour
 <div class="line"><a id="l03692" name="l03692"></a><span class="lineno"> 3692</span>    <span class="keywordtype">char</span> a[] = <span class="stringliteral">&quot; &quot;</span>;</div>
 <div class="line"><a id="l03693" name="l03693"></a><span class="lineno"> 3693</span>    <span class="keywordtype">char</span> dots[] = <span class="stringliteral">&quot;(There&#39;s more below ...) &quot;</span>;</div>
 <div class="line"><a id="l03694" name="l03694"></a><span class="lineno"> 3694</span>    <span class="keywordtype">char</span> dots1[] = <span class="stringliteral">&quot;(There&#39;s more above ...) &quot;</span>;</div>
-<div class="line"><a id="l03695" name="l03695"></a><span class="lineno"> 3695</span>    htext[0] = 0;</div>
-<div class="line"><a id="l03696" name="l03696"></a><span class="lineno"> 3696</span>    <span class="keywordtype">char</span> SearchFile[30];</div>
-<div class="line"><a id="l03697" name="l03697"></a><span class="lineno"> 3697</span>    <span class="keywordtype">char</span> slash[] =  <span class="stringliteral">&quot;/&quot;</span>;</div>
-<div class="line"><a id="l03698" name="l03698"></a><span class="lineno"> 3698</span>    <span class="keywordtype">char</span> OpenBracket[] = <span class="stringliteral">&quot;( &quot;</span>;</div>
-<div class="line"><a id="l03699" name="l03699"></a><span class="lineno"> 3699</span>    <span class="keywordtype">char</span> CloseBracket[] = <span class="stringliteral">&quot; )&quot;</span>;</div>
-<div class="line"><a id="l03700" name="l03700"></a><span class="lineno"> 3700</span>    </div>
-<div class="line"><a id="l03701" name="l03701"></a><span class="lineno"> 3701</span>        strcpy (SearchFile,slash);</div>
-<div class="line"><a id="l03702" name="l03702"></a><span class="lineno"> 3702</span>        strcat (SearchFile,fname);</div>
-<div class="line"><a id="l03703" name="l03703"></a><span class="lineno"> 3703</span>        strcpy (htext,OpenBracket);</div>
-<div class="line"><a id="l03704" name="l03704"></a><span class="lineno"> 3704</span>        strcat (htext,SearchFile);</div>
-<div class="line"><a id="l03705" name="l03705"></a><span class="lineno"> 3705</span>        strcat (htext,CloseBracket);</div>
+<div class="line"><a id="l03695" name="l03695"></a><span class="lineno"> 3695</span>    <span class="keywordtype">char</span> SearchFile[30];</div>
+<div class="line"><a id="l03696" name="l03696"></a><span class="lineno"> 3696</span>    <span class="keywordtype">char</span> slash[] =  <span class="stringliteral">&quot;/&quot;</span>;</div>
+<div class="line"><a id="l03697" name="l03697"></a><span class="lineno"> 3697</span>    <span class="keywordtype">char</span> OpenBracket[] = <span class="stringliteral">&quot;( &quot;</span>;</div>
+<div class="line"><a id="l03698" name="l03698"></a><span class="lineno"> 3698</span>    <span class="keywordtype">char</span> CloseBracket[] = <span class="stringliteral">&quot; )&quot;</span>;</div>
+<div class="line"><a id="l03699" name="l03699"></a><span class="lineno"> 3699</span>        </div>
+<div class="line"><a id="l03700" name="l03700"></a><span class="lineno"> 3700</span>        strcpy (SearchFile,slash);</div>
+<div class="line"><a id="l03701" name="l03701"></a><span class="lineno"> 3701</span>        strcat (SearchFile,fname);</div>
+<div class="line"><a id="l03702" name="l03702"></a><span class="lineno"> 3702</span>        strcpy (htext,OpenBracket);</div>
+<div class="line"><a id="l03703" name="l03703"></a><span class="lineno"> 3703</span>        strcat (htext,SearchFile);</div>
+<div class="line"><a id="l03704" name="l03704"></a><span class="lineno"> 3704</span>        strcat (htext,CloseBracket);</div>
+<div class="line"><a id="l03705" name="l03705"></a><span class="lineno"> 3705</span>        strcat (htext, crlf);</div>
 <div class="line"><a id="l03706" name="l03706"></a><span class="lineno"> 3706</span>        strcat (htext, crlf);</div>
-<div class="line"><a id="l03707" name="l03707"></a><span class="lineno"> 3707</span>        strcat (htext, crlf);</div>
-<div class="line"><a id="l03708" name="l03708"></a><span class="lineno"> 3708</span> </div>
-<div class="line"><a id="l03709" name="l03709"></a><span class="lineno"> 3709</span>        <span class="keywordflow">if</span> (StartLineNumber &gt; 1) {</div>
-<div class="line"><a id="l03710" name="l03710"></a><span class="lineno"> 3710</span>            strcat (htext, crlf);</div>
-<div class="line"><a id="l03711" name="l03711"></a><span class="lineno"> 3711</span>            strcat (htext,dots1);</div>
-<div class="line"><a id="l03712" name="l03712"></a><span class="lineno"> 3712</span>            strcat (htext, crlf);</div>
-<div class="line"><a id="l03713" name="l03713"></a><span class="lineno"> 3713</span>        }</div>
-<div class="line"><a id="l03714" name="l03714"></a><span class="lineno"> 3714</span>        </div>
-<div class="line"><a id="l03715" name="l03715"></a><span class="lineno"> 3715</span>        <a class="code hl_variable" href="_transmitter_code_2src_2main_8cpp.html#adb831eb55ed2957c4677c87a6f51be59">ThereIsMoreToSee</a> = <span class="keyword">false</span>;</div>
-<div class="line"><a id="l03716" name="l03716"></a><span class="lineno"> 3716</span>        fnumber  = SD.open(SearchFile, FILE_READ); </div>
-<div class="line"><a id="l03717" name="l03717"></a><span class="lineno"> 3717</span>        <span class="keywordflow">if</span> (fnumber) {</div>
-<div class="line"><a id="l03718" name="l03718"></a><span class="lineno"> 3718</span>            <span class="keywordflow">while</span> (fnumber.available() &amp;&amp; i &lt; (<a class="code hl_define" href="_transmitter_code_2src_2main_8cpp.html#aa67b661e0a71a9cce5c2903953b8b8bf">MAXFILELEN</a>-10)) {</div>
-<div class="line"><a id="l03719" name="l03719"></a><span class="lineno"> 3719</span>                a[0] = fnumber.read();                             <span class="comment">//  Read in one byte at a time.</span></div>
-<div class="line"><a id="l03720" name="l03720"></a><span class="lineno"> 3720</span>                 <span class="keywordflow">if</span> (a[0] == <span class="charliteral">&#39;|&#39;</span>) {                                <span class="comment">//  New Line character = &#39;|&#39;   </span></div>
-<div class="line"><a id="l03721" name="l03721"></a><span class="lineno"> 3721</span>                    <span class="keywordflow">if</span> ((LineCounter &gt;= StartLineNumber) &amp;&amp; (LineCounter &lt;= StopLineNumber)){</div>
-<div class="line"><a id="l03722" name="l03722"></a><span class="lineno"> 3722</span>                        strcat(htext, crlf);</div>
+<div class="line"><a id="l03707" name="l03707"></a><span class="lineno"> 3707</span> </div>
+<div class="line"><a id="l03708" name="l03708"></a><span class="lineno"> 3708</span>        <span class="keywordflow">if</span> (StartLineNumber &gt; 1) {</div>
+<div class="line"><a id="l03709" name="l03709"></a><span class="lineno"> 3709</span>            strcat (htext, crlf);</div>
+<div class="line"><a id="l03710" name="l03710"></a><span class="lineno"> 3710</span>            strcat (htext,dots1);</div>
+<div class="line"><a id="l03711" name="l03711"></a><span class="lineno"> 3711</span>            strcat (htext, crlf);</div>
+<div class="line"><a id="l03712" name="l03712"></a><span class="lineno"> 3712</span>        }</div>
+<div class="line"><a id="l03713" name="l03713"></a><span class="lineno"> 3713</span>        </div>
+<div class="line"><a id="l03714" name="l03714"></a><span class="lineno"> 3714</span>        <a class="code hl_variable" href="_transmitter_code_2src_2main_8cpp.html#adb831eb55ed2957c4677c87a6f51be59">ThereIsMoreToSee</a> = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l03715" name="l03715"></a><span class="lineno"> 3715</span>        fnumber  = SD.open(SearchFile, FILE_READ); </div>
+<div class="line"><a id="l03716" name="l03716"></a><span class="lineno"> 3716</span>        <span class="keywordflow">if</span> (fnumber) {</div>
+<div class="line"><a id="l03717" name="l03717"></a><span class="lineno"> 3717</span>            <span class="keywordflow">while</span> (fnumber.available() &amp;&amp; i &lt; (<a class="code hl_define" href="_transmitter_code_2src_2main_8cpp.html#aa67b661e0a71a9cce5c2903953b8b8bf">MAXFILELEN</a>-10)) {</div>
+<div class="line"><a id="l03718" name="l03718"></a><span class="lineno"> 3718</span>                a[0] = fnumber.read();                             <span class="comment">//  Read in one byte at a time.</span></div>
+<div class="line"><a id="l03719" name="l03719"></a><span class="lineno"> 3719</span>                 <span class="keywordflow">if</span> (a[0] == <span class="charliteral">&#39;|&#39;</span>) {                                <span class="comment">//  New Line character = &#39;|&#39;   </span></div>
+<div class="line"><a id="l03720" name="l03720"></a><span class="lineno"> 3720</span>                    <span class="keywordflow">if</span> ((LineCounter &gt;= StartLineNumber) &amp;&amp; (LineCounter &lt;= StopLineNumber)){</div>
+<div class="line"><a id="l03721" name="l03721"></a><span class="lineno"> 3721</span>                        strcat(htext, crlf);</div>
+<div class="line"><a id="l03722" name="l03722"></a><span class="lineno"> 3722</span>                        ++i;</div>
 <div class="line"><a id="l03723" name="l03723"></a><span class="lineno"> 3723</span>                        ++i;</div>
-<div class="line"><a id="l03724" name="l03724"></a><span class="lineno"> 3724</span>                        ++i;</div>
-<div class="line"><a id="l03725" name="l03725"></a><span class="lineno"> 3725</span>                    }</div>
-<div class="line"><a id="l03726" name="l03726"></a><span class="lineno"> 3726</span>                    Column = 0;</div>
-<div class="line"><a id="l03727" name="l03727"></a><span class="lineno"> 3727</span>                    ++LineCounter;         </div>
-<div class="line"><a id="l03728" name="l03728"></a><span class="lineno"> 3728</span>                    a[0] = 34; <span class="comment">// a &#39;34&#39;  ( &quot; ) is ignored.</span></div>
-<div class="line"><a id="l03729" name="l03729"></a><span class="lineno"> 3729</span>                }</div>
-<div class="line"><a id="l03730" name="l03730"></a><span class="lineno"> 3730</span>                <span class="keywordflow">if</span> (Column &gt;= <a class="code hl_define" href="_transmitter_code_2src_2main_8cpp.html#ac101c663138f79260b6d5ea00140fa22">MAXWIDTH</a>) {</div>
-<div class="line"><a id="l03731" name="l03731"></a><span class="lineno"> 3731</span>                    Column = <a class="code hl_function" href="_transmitter_code_2src_2main_8cpp.html#a6d6ab5dcee82c319640e3a0a0537ebf7">WordWrap</a>(htext);</div>
-<div class="line"><a id="l03732" name="l03732"></a><span class="lineno"> 3732</span>                    ++LineCounter;</div>
-<div class="line"><a id="l03733" name="l03733"></a><span class="lineno"> 3733</span>                }       </div>
-<div class="line"><a id="l03734" name="l03734"></a><span class="lineno"> 3734</span>                <span class="keywordflow">if</span> ((a[0] == 13) || (a[0] == 10)) a[0] = 34;      <span class="comment">// Ignore CrLfs</span></div>
-<div class="line"><a id="l03735" name="l03735"></a><span class="lineno"> 3735</span>                <span class="keywordflow">if</span> (a[0] != 34) {</div>
-<div class="line"><a id="l03736" name="l03736"></a><span class="lineno"> 3736</span>                    <span class="keywordflow">if</span> ((LineCounter &gt;= StartLineNumber) &amp;&amp; (LineCounter &lt;= StopLineNumber)){</div>
-<div class="line"><a id="l03737" name="l03737"></a><span class="lineno"> 3737</span>                        strcat(htext, a);</div>
-<div class="line"><a id="l03738" name="l03738"></a><span class="lineno"> 3738</span>                        ++ Column;</div>
-<div class="line"><a id="l03739" name="l03739"></a><span class="lineno"> 3739</span>                        ++ i;</div>
-<div class="line"><a id="l03740" name="l03740"></a><span class="lineno"> 3740</span>                    }</div>
-<div class="line"><a id="l03741" name="l03741"></a><span class="lineno"> 3741</span>                   </div>
-<div class="line"><a id="l03742" name="l03742"></a><span class="lineno"> 3742</span>                }</div>
-<div class="line"><a id="l03743" name="l03743"></a><span class="lineno"> 3743</span>                <span class="keywordflow">if</span> (LineCounter &gt; StopLineNumber){</div>
-<div class="line"><a id="l03744" name="l03744"></a><span class="lineno"> 3744</span>                    strcat (htext, crlf);</div>
-<div class="line"><a id="l03745" name="l03745"></a><span class="lineno"> 3745</span>                    strcat(htext,dots);</div>
-<div class="line"><a id="l03746" name="l03746"></a><span class="lineno"> 3746</span>                    <a class="code hl_variable" href="_transmitter_code_2src_2main_8cpp.html#adb831eb55ed2957c4677c87a6f51be59">ThereIsMoreToSee</a> = <span class="keyword">true</span>;</div>
-<div class="line"><a id="l03747" name="l03747"></a><span class="lineno"> 3747</span>                    <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l03748" name="l03748"></a><span class="lineno"> 3748</span>                    } <span class="comment">// heer</span></div>
-<div class="line"><a id="l03749" name="l03749"></a><span class="lineno"> 3749</span>            }</div>
-<div class="line"><a id="l03750" name="l03750"></a><span class="lineno"> 3750</span>        }</div>
-<div class="line"><a id="l03751" name="l03751"></a><span class="lineno"> 3751</span>        <span class="keywordflow">else</span> </div>
-<div class="line"><a id="l03752" name="l03752"></a><span class="lineno"> 3752</span>        {</div>
-<div class="line"><a id="l03753" name="l03753"></a><span class="lineno"> 3753</span>            strcpy(htext, errormsg);</div>
-<div class="line"><a id="l03754" name="l03754"></a><span class="lineno"> 3754</span>            strcat(htext,fname);</div>
-<div class="line"><a id="l03755" name="l03755"></a><span class="lineno"> 3755</span>        }</div>
-<div class="line"><a id="l03756" name="l03756"></a><span class="lineno"> 3756</span>    fnumber.close();</div>
-<div class="line"><a id="l03757" name="l03757"></a><span class="lineno"> 3757</span>}</div>
+<div class="line"><a id="l03724" name="l03724"></a><span class="lineno"> 3724</span>                    }</div>
+<div class="line"><a id="l03725" name="l03725"></a><span class="lineno"> 3725</span>                    Column = 0;</div>
+<div class="line"><a id="l03726" name="l03726"></a><span class="lineno"> 3726</span>                    ++LineCounter;         </div>
+<div class="line"><a id="l03727" name="l03727"></a><span class="lineno"> 3727</span>                    a[0] = 34; <span class="comment">// a &#39;34&#39;  ( &quot; ) is ignored.</span></div>
+<div class="line"><a id="l03728" name="l03728"></a><span class="lineno"> 3728</span>                }</div>
+<div class="line"><a id="l03729" name="l03729"></a><span class="lineno"> 3729</span>                <span class="keywordflow">if</span> (Column &gt;= <a class="code hl_define" href="_transmitter_code_2src_2main_8cpp.html#ac101c663138f79260b6d5ea00140fa22">MAXWIDTH</a>) {</div>
+<div class="line"><a id="l03730" name="l03730"></a><span class="lineno"> 3730</span>                    Column = <a class="code hl_function" href="_transmitter_code_2src_2main_8cpp.html#a6d6ab5dcee82c319640e3a0a0537ebf7">WordWrap</a>(htext);</div>
+<div class="line"><a id="l03731" name="l03731"></a><span class="lineno"> 3731</span>                    ++LineCounter;</div>
+<div class="line"><a id="l03732" name="l03732"></a><span class="lineno"> 3732</span>                }       </div>
+<div class="line"><a id="l03733" name="l03733"></a><span class="lineno"> 3733</span>                <span class="keywordflow">if</span> ((a[0] == 13) || (a[0] == 10)) a[0] = 34;      <span class="comment">// Ignore CrLfs</span></div>
+<div class="line"><a id="l03734" name="l03734"></a><span class="lineno"> 3734</span>                <span class="keywordflow">if</span> (a[0] != 34) {</div>
+<div class="line"><a id="l03735" name="l03735"></a><span class="lineno"> 3735</span>                    <span class="keywordflow">if</span> ((LineCounter &gt;= StartLineNumber) &amp;&amp; (LineCounter &lt;= StopLineNumber)){</div>
+<div class="line"><a id="l03736" name="l03736"></a><span class="lineno"> 3736</span>                        strcat(htext, a);</div>
+<div class="line"><a id="l03737" name="l03737"></a><span class="lineno"> 3737</span>                        ++ Column;</div>
+<div class="line"><a id="l03738" name="l03738"></a><span class="lineno"> 3738</span>                        ++ i;</div>
+<div class="line"><a id="l03739" name="l03739"></a><span class="lineno"> 3739</span>                    }</div>
+<div class="line"><a id="l03740" name="l03740"></a><span class="lineno"> 3740</span>                   </div>
+<div class="line"><a id="l03741" name="l03741"></a><span class="lineno"> 3741</span>                }</div>
+<div class="line"><a id="l03742" name="l03742"></a><span class="lineno"> 3742</span>                <span class="keywordflow">if</span> (LineCounter &gt; StopLineNumber){</div>
+<div class="line"><a id="l03743" name="l03743"></a><span class="lineno"> 3743</span>                    strcat (htext, crlf);</div>
+<div class="line"><a id="l03744" name="l03744"></a><span class="lineno"> 3744</span>                    strcat(htext,dots);</div>
+<div class="line"><a id="l03745" name="l03745"></a><span class="lineno"> 3745</span>                    <a class="code hl_variable" href="_transmitter_code_2src_2main_8cpp.html#adb831eb55ed2957c4677c87a6f51be59">ThereIsMoreToSee</a> = <span class="keyword">true</span>;</div>
+<div class="line"><a id="l03746" name="l03746"></a><span class="lineno"> 3746</span>                    <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l03747" name="l03747"></a><span class="lineno"> 3747</span>                    } <span class="comment">// heer</span></div>
+<div class="line"><a id="l03748" name="l03748"></a><span class="lineno"> 3748</span>            }</div>
+<div class="line"><a id="l03749" name="l03749"></a><span class="lineno"> 3749</span>        }</div>
+<div class="line"><a id="l03750" name="l03750"></a><span class="lineno"> 3750</span>        <span class="keywordflow">else</span> </div>
+<div class="line"><a id="l03751" name="l03751"></a><span class="lineno"> 3751</span>        {</div>
+<div class="line"><a id="l03752" name="l03752"></a><span class="lineno"> 3752</span>            strcpy(htext, errormsg);</div>
+<div class="line"><a id="l03753" name="l03753"></a><span class="lineno"> 3753</span>            strcat(htext,fname);</div>
+<div class="line"><a id="l03754" name="l03754"></a><span class="lineno"> 3754</span>        }</div>
+<div class="line"><a id="l03755" name="l03755"></a><span class="lineno"> 3755</span>    fnumber.close();</div>
+<div class="line"><a id="l03756" name="l03756"></a><span class="lineno"> 3756</span>}</div>
+<div class="line"><a id="l03757" name="l03757"></a><span class="lineno"> 3757</span> </div>
 <div class="line"><a id="l03758" name="l03758"></a><span class="lineno"> 3758</span><span class="comment">/*********************************************************************************************************************************/</span></div>
 <div class="line"><a id="l03759" name="l03759"></a><span class="lineno"><a class="line" href="_transmitter_code_2src_2main_8cpp.html#ab0a84052e41734eb43651d054ee2b4c5"> 3759</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="_transmitter_code_2src_2main_8cpp.html#ab0a84052e41734eb43651d054ee2b4c5">ScrollHelpFile</a>(){                 <span class="comment">// redisplays maybe from top of file</span></div>
 <div class="line"><a id="l03760" name="l03760"></a><span class="lineno"> 3760</span>  <span class="keywordtype">char</span> HelpText[<a class="code hl_define" href="_transmitter_code_2src_2main_8cpp.html#aa67b661e0a71a9cce5c2903953b8b8bf">MAXFILELEN</a> + 10];      <span class="comment">// MAX = 3K or so</span></div>
