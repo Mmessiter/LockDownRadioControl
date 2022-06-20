@@ -3692,12 +3692,11 @@ void ReadTextFile(char* fname, char* htext, uint8_t StartLineNumber, uint8_t Max
     char a[] = " ";
     char dots[] = "(There's more below ...) ";
     char dots1[] = "(There's more above ...) ";
-    htext[0] = 0;
     char SearchFile[30];
     char slash[] =  "/";
     char OpenBracket[] = "( ";
     char CloseBracket[] = " )";
-    
+        
         strcpy (SearchFile,slash);
         strcat (SearchFile,fname);
         strcpy (htext,OpenBracket);
@@ -3755,6 +3754,7 @@ void ReadTextFile(char* fname, char* htext, uint8_t StartLineNumber, uint8_t Max
         }
     fnumber.close();
 }
+
 /*********************************************************************************************************************************/
 void ScrollHelpFile(){                 // redisplays maybe from top of file
   char HelpText[MAXFILELEN + 10];      // MAX = 3K or so

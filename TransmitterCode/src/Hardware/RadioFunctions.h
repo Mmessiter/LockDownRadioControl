@@ -3,11 +3,11 @@
 #define RadioFunctions_H
 
 // **************************************************************************
-//                TX VERSION NUMBER   (June 18th 2022 Malcolm Messiter) *
+//                TX VERSION NUMBER   (June 20th 2022 Malcolm Messiter) *
 //***************************************************************************
 #define TXVERSION_MAJOR   1
 #define TXVERSION_MINOR   7
-#define TXVERSION_MINIMUS 8
+#define TXVERSION_MINIMUS 9
 
 
 
@@ -25,7 +25,7 @@
 #define INACTIVITYMINIMUM  5  * TICKSPERMINUTE // Inactivity timeout minimum is 5 minutes
 #define INACTIVITYMAXIMUM  30 * TICKSPERMINUTE // Inactivity timeout maximum is 30 minutes
 #define DS1307_ADDRESS     0x68
-#define MAXLINES           10                   // text to load at once for log and help screens
+#define MAXLINES           30                   // text to load at once for log and help screens
 
 
 
