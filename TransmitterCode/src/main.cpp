@@ -175,6 +175,7 @@ RF24 Radio1(CE_PIN, CSN_PIN);
 #define FILESVIEW       20
 #define REVERSEVIEW     21
 #define BUDDYVIEW       22
+#define LOGVIEW         23
 
 
 #define CharsMax        120 
@@ -208,10 +209,10 @@ RF24 Radio1(CE_PIN, CSN_PIN);
 
 // SDCARD MODEL MEMORY CONSTANTS
 
-#define RENEWDATA  8787 // Change these to rewrite all
-#define TXSIZE     250  // SD space reserved for transmitter
-#define MODELSIZE  1600 // SD space reserved for each model
-#define MAXFILELEN 5021 // MAX SIZE FOR HELP FILE
+#define RENEWDATA  8787         // Change these to rewrite all
+#define TXSIZE     250          // SD space reserved for transmitter
+#define MODELSIZE  1600         // SD space reserved for each model
+#define MAXFILELEN 1024 * 3     // MAX SIZE FOR HELP AND LOG FILES
 #define BOXOFFSET    35
 #define BOXSIZE     395
 
@@ -493,6 +494,7 @@ uint32_t BlinkTimer    = 0;
 uint8_t  BlinkOnPhase  = 1;
 bool     LedWasGreen   = false;
 char     ThisRadio[4]  = "0 ";
+uint8_t  LastRadio     = 0;
 uint8_t NextChannel   = 0;
 bool    DoSbusSendOnly  = false;
 bool    BuddyMaster     = false;
@@ -501,6 +503,8 @@ bool    SlaveHasControl = false;
 uint16_t Qnh            = 1009;               // pressure at sea level here/
 uint32_t ModelNameTimeCheck = 0;
 uint16_t LastModelLoaded    = 0;
+uint8_t  MinimumGap = 75;
+bool     LogRXSwaps =  false;
 
 uint8_t * FHSSChPointer;                                                              // pointer for channels array (first five only used for reconnect)
 
@@ -569,6 +573,9 @@ bool     UseMacros = false;
 uint16_t ReversedChannelBITS = 0; // 16 BIT for 16 Channels
 uint16_t SavedLineX          = 12345;
 bool     FirstConnection     = true;
+File     LogFileNumber;
+bool     LogFileOpen         =  false;
+
 
 // ***************************************** Extra Prototypes **********************************************
 
@@ -580,7 +587,12 @@ void DisplayCurve();
 void DrawLine(int x1, int y1, int x2, int y2, int c);
 void DrawBox(int x1, int y1, int x2, int y2, int c);
 void FillBox(int x1, int y1, int w, int h, int c);
-
+void ReadTextFile(char* fname, char* htext);
+void LogConnection();
+void LogDisConnection();
+void CloseLogFile();
+void StartLogFile();     
+void ShowLogFile();
 /************************************************************************************************************/
 // This function returns distance (in MILES) between two GPS coordinates (in degrees)
 // it was essentially cribbed from the internet, then tested and adjusted a little. 
@@ -1131,7 +1143,11 @@ uint8_t GetLEDBrightness()
 
 void RedLedOn()
 {
-    LedWasGreen = false;
+    if (LedWasGreen){
+        LogDisConnection();
+        LedWasGreen = false;
+    }
+    
     FirstConnection = true;
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, 0);
@@ -1147,6 +1163,8 @@ void GreenLedOn()
         if (FirstConnection) {                   // Zero data on first connection
             ZeroDataScreen(); 
             FirstConnection = false;   
+            if (!LogFileOpen) StartLogFile();
+            LogConnection();
         }
         analogWrite(BLUELED, 0);
         analogWrite(REDLED, 0); 
@@ -1222,7 +1240,7 @@ void SendText1(char* tbox, char* NewWord)
 {
     char txt[]   = ".txt=\"";
     char quote[] = "\"";
-    char CB[MAXFILELEN];
+    char CB[MAXFILELEN+10];
     char TooLong[] = "Too long!";
 
     if (strlen(NewWord) > MAXFILELEN) {
@@ -1910,7 +1928,6 @@ if (ShowNow){
     }else{
         if (LedIsBlinking && (CurrentView == FRONTVIEW)) SendCommand(WarnOff);
         LedIsBlinking = false; 
-        LedWasGreen = false;
     }
 }
 } // end ShowComms()
@@ -2307,8 +2324,7 @@ void CloseModelsFile()
 
 /*********************************************************************************************************************************/
 
-void OpenModelsFile()
-{
+void OpenModelsFile(){
     if (SingleModelFlag) {
         ModelsFileNumber = SD.open(SingleModelFile, FILE_WRITE);
     }
@@ -2938,6 +2954,14 @@ bool LoadAllParameters()
         }
         BuddyTriggerChannel= SDReadByte(SDCardAddress);
         ++SDCardAddress;
+        MinimumGap = SDReadByte(SDCardAddress);
+        ++SDCardAddress;
+        LogRXSwaps = SDReadByte(SDCardAddress);
+        ++SDCardAddress;
+
+
+
+
         MemoryForTransmtter = SDCardAddress;
         ReadOneModel(ModelNumber);
         return true;
@@ -3018,6 +3042,220 @@ void SetTestFrequencies(){
             FHSSChPointer = FHSS_Channels1; 
             UkRules = false;     
 }
+
+/************************************************************************************************************/
+void CreateTimeStamp(char *  DateAndTime){
+    char NB[10];
+    char zero[]     = "0";
+    char Colon[]    = "."; // a dot!
+    char null[] = "";
+  
+    if (RTC.read(tm)) { 
+            strcpy(DateAndTime,null);
+            if (MayBeAddZero(tm.Hour)) strcat(DateAndTime,zero);
+            strcat(DateAndTime, Str(NB, tm.Hour,0));
+            strcat(DateAndTime, Colon);
+            if (MayBeAddZero(tm.Minute)) strcat(DateAndTime,zero);
+            strcat(DateAndTime, Str(NB, tm.Minute , 0));
+            strcat(DateAndTime, Colon);
+            if (MayBeAddZero(tm.Second)) strcat(DateAndTime,zero);
+            strcat(DateAndTime, Str(NB, tm.Second , 0));
+    }
+}
+
+
+/************************************************************************************************************/
+void CreateTimeDateStamp(char *  DateAndTime){
+    char NB[10];
+    char zero[]     = "0";
+    char Dash[]     = "-";
+    char Colon[]    = "."; // a dot!
+    char Space[]    = " ";
+  
+    if (RTC.read(tm)) { 
+            if (MayBeAddZero(tm.Day)) strcat(DateAndTime,zero);
+            strcpy(DateAndTime, Str(NB, tm.Day , 0));
+            strcat(DateAndTime, Dash);
+            if (MayBeAddZero(tm.Month)) strcat(DateAndTime,zero);
+            strcat(DateAndTime, Str(NB, tm.Month , 0));
+            strcat(DateAndTime, Dash);
+            strcat(DateAndTime, (Str(NB, tmYearToCalendar(tm.Year), 0)));
+            strcat(DateAndTime, Space);
+            if (MayBeAddZero(tm.Hour)) strcat(DateAndTime,zero);
+            strcat(DateAndTime, Str(NB, tm.Hour,0));
+            strcat(DateAndTime, Colon);
+            if (MayBeAddZero(tm.Minute)) strcat(DateAndTime,zero);
+            strcat(DateAndTime, Str(NB, tm.Minute , 0));
+            strcat(DateAndTime, Colon);
+            if (MayBeAddZero(tm.Second)) strcat(DateAndTime,zero);
+            strcat(DateAndTime, Str(NB, tm.Second , 0));
+    }
+}
+/************************************************************************************************************/
+void MakeLogFileName(char * LogFileName){
+    char NB[10];
+    char Ext[]      = ".LOG";
+    if (RTC.read(tm)) { 
+        strcpy(LogFileName, Str(NB,tm.Day,0));
+        strcat(LogFileName, Str(NB,tm.Month,0));
+        strcat(LogFileName, Ext);
+    }
+}
+/************************************************************************************************************/
+void DeleteLogFile(char * LogFileName){
+    SD.remove(LogFileName);
+}
+/************************************************************************************************************/
+void DeleteLogFile1(){
+    char LogFileName[20];
+    char LogTeXt[] = "LogText";     
+    char BlankText[] = " ";     
+    CloseLogFile();
+    MakeLogFileName(LogFileName);  
+    DeleteLogFile(LogFileName);   
+    SendText1(LogTeXt, BlankText);  
+    if (Connected) {
+        StartLogFile();     
+        ShowLogFile();
+    }
+}
+/************************************************************************************************************/
+void OpenLogFileW(char * LogFileName){
+    if (!LogFileOpen){
+        LogFileNumber = SD.open(LogFileName, FILE_WRITE);
+        LogFileOpen = true;
+    }
+}
+/************************************************************************************************************/
+void OpenLogFileR(char * LogFileName){
+    if (!LogFileOpen){
+        LogFileNumber = SD.open(LogFileName, FILE_READ);
+        LogFileOpen = true;
+    }
+}
+/************************************************************************************************************/
+void CloseLogFile(){
+    LogFileNumber.close();
+    LogFileOpen = false;
+}
+/************************************************************************************************************/
+void WriteToLogFile(char * SomeData, uint16_t len){
+    LogFileNumber.write(SomeData, len);
+}
+/************************************************************************************************************/
+void StartLogFile(){ 
+    char LogFileName[20];
+    char LogHeader[]    = "Log file started: ";
+    char crlf[]         = {'|',13,10,0};
+    char Buf[30];
+    LogFileOpen = false;
+    MakeLogFileName(LogFileName);                   // Create a "today" filename
+ // DeleteLogFile(LogFileName);                   // **** >>>>> Delete any former instance <<<< FOR TESTS
+    OpenLogFileW(LogFileName);                      // Open file for writing
+    CreateTimeDateStamp(Buf);                       // Put time stamp into buffer
+    WriteToLogFile(crlf,sizeof (crlf));             // End of line
+    WriteToLogFile(LogHeader, sizeof (LogHeader));  // Write header
+    WriteToLogFile(Buf,19);                         // Add time stamp
+    WriteToLogFile(crlf,sizeof (crlf));             // End of line
+                                                    // Log file is now open and ready for new data ...
+}
+
+// ************************************************************************
+void CheckLogFileIsOpen(){
+     char LogFileName[20];
+     if (!LogFileOpen){
+        MakeLogFileName(LogFileName);                   // Create a "today" filename
+        OpenLogFileW(LogFileName);                      // Open file for writing
+     }
+}
+// ************************************************************************
+void LogFilePreamble(){
+    char dbuf[12];
+    char Divider[] = " - ";
+    CheckLogFileIsOpen();
+    CreateTimeStamp(dbuf);                           // Put time stamp into buffer
+    WriteToLogFile(dbuf,9);                          // Add time stamp
+    WriteToLogFile(Divider,sizeof (Divider));           
+}
+
+// ************************************************************************
+void LogText(char * TheText, uint16_t len){
+    char crlf[]  = {'|',13,10,0};
+    LogFilePreamble();
+    WriteToLogFile(TheText,len);
+    WriteToLogFile(crlf, sizeof(crlf));
+}
+
+// ************************************************************************
+
+void LogConnection(){
+        char TheText[] = "Connected to ";
+        char buf[40] = " ";
+        strcpy (buf,TheText);
+        strcat (buf,ModelName);
+        LogText(buf, sizeof (buf));
+}
+
+// ************************************************************************
+
+void LogDisConnection(){ 
+    char TheText[] = "Disconnected";
+    LogText(TheText, sizeof (TheText));
+}
+
+// ************************************************************************
+
+void LogNewFlightMode(){
+    char Ltext[] = "Bank: ";
+    char NB[3];
+    char thetext[10];
+    char crlf[]  = {'|',13,10,0};
+    LogFilePreamble();         
+    Str(NB,FlightMode,0);
+    strcpy(thetext,Ltext);
+    strcat(thetext, NB);
+    strcat(thetext,crlf);
+    WriteToLogFile(thetext,sizeof(thetext));
+}
+
+// ************************************************************************
+
+void LogThisRX(){
+char Ltext[] = "RX: ";
+    char crlf[]  = {'|',13,10,0};
+    LogFilePreamble();    
+    WriteToLogFile(Ltext,sizeof(Ltext));
+    WriteToLogFile(ThisRadio,sizeof(ThisRadio));
+    WriteToLogFile(crlf,sizeof(crlf));
+}
+// ************************************************************************
+
+void LogThisGap(){
+    char Ltext[] = "Gap: ";
+    char NB[3];
+    char thetext[10];
+    char crlf[]  = {'|',13,10,0};
+    if (ThisGap > 1000) return;
+    LogFilePreamble();         
+    Str(NB,ThisGap,0);
+    strcpy(thetext,Ltext);
+    strcat(thetext, NB);
+    strcat(thetext,crlf);
+    WriteToLogFile(thetext,sizeof(thetext));
+   
+}
+
+
+// ************************************************************************
+void ShowLogFile(){ 
+    char TheText[MAXFILELEN + 10];      // MAX = 5K or so
+    char LogFileName[20];
+    char LogTeXt[] = "LogText";     
+    CloseLogFile();
+    MakeLogFileName(LogFileName);        // Create "today" filename
+    ReadTextFile(LogFileName, TheText);  // Then load text
+    SendText1(LogTeXt, TheText);         // Then send it
+}
 /*********************************************************************************************************************************/
 // SETUP
 /*********************************************************************************************************************************/
@@ -3077,7 +3315,7 @@ void setup()
     SendValue(FrontView_Mins, 0);
     SendValue(FrontView_Secs, 0);
     //  ***************************************************************************************
-    //  SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
+    // SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
     //  **   BUT then re-comment it!! Otherwise it will reset to same time on every boot up! **
     //  ***************************************************************************************
     RecoveryTimer = millis();
@@ -3093,6 +3331,7 @@ void setup()
     if (PlayFanfare) SendCommand(OpeningFanfare);
     ScreenTimeTimer = millis();
     RestoreBrightness();
+  
 }
 /*********************************************************************************************************************************/
 
@@ -3202,7 +3441,10 @@ void SaveTXStuff()
     }
     SDUpdateByte(SDCardAddress,BuddyTriggerChannel);
     ++SDCardAddress;
-
+    SDUpdateByte(SDCardAddress,MinimumGap);
+    ++SDCardAddress;
+    SDUpdateByte(SDCardAddress,LogRXSwaps);
+    ++SDCardAddress;
     CloseModelsFile();
 }
 
@@ -3428,45 +3670,74 @@ uint16_t i,j;
         return len;
 }
 /*********************************************************************************************************************************/
-void ReadHelpFile(char* fname, char* htext){
+void ReadTextFile(char* fname, char* htext){
     #define MAXWIDTH 68
-    char errormsg[] = "Help file not found.";
-    File fnumber;
-    uint16_t i  = 0;
-    byte Column = 0;
+    #define MAXLINES 30  // ... on screen at a time ...
+
+    char errormsg[] = "File not found! -> ";
+    
+    uint16_t LineCounter        = 0;
+    uint16_t StartLineNumber    = 0;
+    uint16_t StopLineNumber     = 0;
+    uint16_t i                  = 0;
+    uint8_t  Column             = 0;
+    File     fnumber;
+
+    StopLineNumber = StartLineNumber + MAXLINES;
+
     char crlf[] = {13,10,0};
     char a[] = " ";
     htext[0] = 0;
     char SearchFile[30];
     char slash[] =  "/";
-    strcpy (SearchFile,slash);
-    strcat (SearchFile,fname);
+    char OpenBracket[] = "( ";
+    char CloseBracket[] = " )";
+    
+        strcpy (SearchFile,slash);
+        strcat (SearchFile,fname);
+        strcpy (htext,OpenBracket);
+        strcat (htext,SearchFile);
+        strcat (htext,CloseBracket);
+        strcat (htext, crlf);
+        strcat (htext, crlf);
+
         fnumber  = SD.open(SearchFile, FILE_READ); 
         if (fnumber) {
-            while (fnumber.available() && i < MAXFILELEN) {
+            while (fnumber.available() && i < (MAXFILELEN-10)) {
                 a[0] = fnumber.read();                             //  Read in one byte at a time.
                  if (a[0] == '|') {                                //  New Line character = '|'   
-                     strcat(htext, crlf);
-                     Column = 0;
-                     a[0] = 34;
-                 }
-                 if (Column >= MAXWIDTH) Column = WordWrap(htext);       
-                 if ((a[0] == 13) || (a[0] == 10)) a[0] = 34;      // Ignore CrLfs
-                 if (a[0] != 34) {
-                     strcat(htext, a);
-                     ++ Column;
-                     ++ i;
-                 }
+                    if ((LineCounter >= StartLineNumber) && (LineCounter <= StopLineNumber)){
+                        strcat(htext, crlf);
+                        ++i;
+                        ++i;
+                    }
+                    Column = 0;
+                    ++LineCounter;         
+                    a[0] = 34; // a '34'  ( " ) is ignored.
+                }
+                if (Column >= MAXWIDTH) {
+                    Column = WordWrap(htext);
+                    ++LineCounter;
+                }       
+                if ((a[0] == 13) || (a[0] == 10)) a[0] = 34;      // Ignore CrLfs
+                if (a[0] != 34) {
+                    if ((LineCounter >= StartLineNumber) && (LineCounter <= StopLineNumber)){
+                        strcat(htext, a);
+                        ++ Column;
+                        ++ i;
+                    }
+                }
             }
         }
-    else {
-        strcpy(htext, errormsg);
-    }
+        else 
+        {
+            strcpy(htext, errormsg);
+            strcat(htext,fname);
+        }
     fnumber.close();
 }
 /*********************************************************************************************************************************/
-void SendHelp()
-{
+void SendHelp(){
     char HelpView[] = "HelpText";
     char hcmd[] = "page HelpView";
     char HelpFile[20];
@@ -3480,7 +3751,7 @@ void SendHelp()
         ++j;
         HelpFile[j] = 0;
     }
-    ReadHelpFile(HelpFile, HelpText);  // Then load help text
+    ReadTextFile(HelpFile, HelpText);  // Then load help text
     SendText1(HelpView, HelpText);     // Then send it
 }
 /*********************************************************************************************************************************/
@@ -5082,11 +5353,12 @@ void ButtonWasPressed()
     char pCalibrateView[]          = "page CalibrateView";
     char pFailSafe[]               = "page FailSafeView";
     char pSubTrimView[]            = "page SubTrimView";
-    char pLogView[]                = "page LogView";  // heer
+    char pLogView[]                = "page LogView"; 
     char DataView_Clear[]          = "Clear";
     char DataView_AltZero[]        = "AltZero";
     char LogVIEW[]                 = "LogVIEW";
     char LogEND[]                  = "LogEND";
+    char RefrLOG[]                 = "RefrLOG";
    
     char OptionsEnd[]              = "OptionsEnd";
     char QNH[]                     = "Qnh";
@@ -5133,10 +5405,11 @@ void ButtonWasPressed()
     char StCH[]                    = "StCH";
     char s0[]                      = "s0";
     char t2[]                      = "t2";
-    char StEDIT[]                  = "StEDIT";             
+    char StEDIT[]                  = "StEDIT";     
+    char DelLOG[]                  = "DelLOG";       
     
 
-     ScreenTimeTimer = millis();  // reset screen counter
+     ScreenTimeTimer = millis();  // reset screen timeout counter
      if (ScreenIsOff) {
          RestoreBrightness();
          ScreenIsOff = false;
@@ -5152,7 +5425,40 @@ void ButtonWasPressed()
  #endif
             
 
- if (InStrng(SetupViewFM, TextIn) > 0) {                // New model name occurs at offset 12 in TextIn
+    if (InStrng(RefrLOG, TextIn)){   // refresh log screen
+        ShowLogFile(); 
+        ClearText();
+        return;        
+    }   
+
+    if (InStrng(LogEND, TextIn)){ // close log screen 
+            CurrentMode  = NORMAL;
+            CurrentView  = DATAVIEW;
+            LastShowTime = 0;
+            MinimumGap = GetValue(n0);
+            LogRXSwaps = GetValue(c0);
+            SaveTXStuff();
+            SendCommand(pDataView);
+            ClearText();
+            return;
+    }   
+    if (InStrng(DelLOG, TextIn)){  // delete log and start new one
+            DeleteLogFile1();
+            ClearText();
+            return;
+    }   
+
+    if (InStrng(LogVIEW, TextIn)){  // Start log screen
+            SendCommand(pLogView);
+            CurrentView = LOGVIEW;
+            ShowLogFile();
+            SendValue(n0,MinimumGap);
+            SendValue(c0,LogRXSwaps);
+            ClearText();
+            return;
+    }
+
+    if (InStrng(SetupViewFM, TextIn) > 0) {                // New model name occurs at offset 12 in TextIn
             i = 0;
             while (TextIn[i + 12] > 0) {
                 ModelName[i]     = TextIn[i + 12];     // copy new name
@@ -5168,20 +5474,6 @@ void ButtonWasPressed()
             ClearText();
             return;
         }
-
-          if (InStrng(LogEND, TextIn)){
-            SendCommand(page_SetupView);// heer
-            ClearText();
-            return;
-          }
-          
-          
-          if (InStrng(LogVIEW, TextIn)){
-            SendCommand(pLogView);// heer
-            ClearText();
-            return;
-          }
-         
           if (InStrng(STgo, TextIn)) {                  // Subtrim view start
             SendCommand(pSubTrimView);
             SubTrimToEdit = 0;
@@ -5482,7 +5774,7 @@ void ButtonWasPressed()
             ClearText();
             return;
         }
-        if (InStrng(GOTO, TextIn) > 0) {                     // Return from Help screen returns here to relevent config screen
+        if (InStrng(GOTO, TextIn) > 0) {                     // Return from Help screen returns here to relevent config screen //heer
             i = 5;
             while (uint8_t(TextIn[i]) > 0 && i < 30) {
                 WhichPage[i] = TextIn[i];
@@ -5526,11 +5818,16 @@ void ButtonWasPressed()
              if (CurrentView == REVERSEVIEW){
                  StartReverseView();
              }
-
              if (CurrentView == STICKSVIEW){
                 Force_ReDisplay();
                 ShowServoPos(); 
              }
+             if (CurrentView == LOGVIEW){ 
+                SendCommand(pLogView);
+                CurrentView = LOGVIEW;
+                ShowLogFile();
+             }
+
             UpdateModelsNameEveryWhere();
             ClearText();
             return;
@@ -6697,6 +6994,7 @@ void GetFlightMode()
     Channel12SwitchValue = CheckSwitch(Channel12Switch);
 
     if (FlightMode != PreviousFlightMode) {
+        if (Connected) LogNewFlightMode();
         if (AnnounceBanks) SoundFlightMode();
         if (CurrentView == FRONTVIEW) {
             ShowFlightMode();
@@ -6920,6 +7218,10 @@ void GetRXVersionNumber()
     char nbuf[5];
     Str(nbuf,AckPayload.Byte1, 0);
     strcpy(ThisRadio, nbuf);
+    if (LastRadio != AckPayload.Byte1) {
+        LastRadio = AckPayload.Byte1;
+        if (LogRXSwaps) LogThisRX();
+    }
     Str(ReceiverVersionNumber, AckPayload.Byte2, 2);
     Str(nbuf, AckPayload.Byte3, 2);
     strcat(ReceiverVersionNumber, nbuf);
@@ -7057,6 +7359,7 @@ void CheckGapsLength()
     if (GapStart > 0) { // when reconnected, how long was connection lost?
         ++GapCount;
         ThisGap = (millis() - GapStart); // AND in fact RX sends no data for 20 ms after reconnection
+        if (ThisGap  >= MinimumGap) LogThisGap();
         if (!GapShortest) GapShortest = ThisGap;
         if (ThisGap > GapLongest)  GapLongest = ThisGap;
         if (ThisGap < GapShortest) GapShortest = ThisGap;
