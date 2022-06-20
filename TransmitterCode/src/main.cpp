@@ -504,7 +504,10 @@ uint16_t Qnh            = 1009;               // pressure at sea level here/
 uint32_t ModelNameTimeCheck = 0;
 uint16_t LastModelLoaded    = 0;
 uint8_t  MinimumGap = 75;
+uint8_t  RecentStartLine = 0;
+char     RecentTextFile[20];
 bool     LogRXSwaps =  false;
+bool     ThereIsMoreToSee = false;
 
 uint8_t * FHSSChPointer;                                                              // pointer for channels array (first five only used for reconnect)
 
@@ -587,12 +590,12 @@ void DisplayCurve();
 void DrawLine(int x1, int y1, int x2, int y2, int c);
 void DrawBox(int x1, int y1, int x2, int y2, int c);
 void FillBox(int x1, int y1, int w, int h, int c);
-void ReadTextFile(char* fname, char* htext);
+void ReadTextFile(char* fname, char* htext, uint8_t StartLineNumber, uint8_t MaxLines);
 void LogConnection();
 void LogDisConnection();
 void CloseLogFile();
 void StartLogFile();     
-void ShowLogFile();
+void ShowLogFile(uint8_t StartLine);
 /************************************************************************************************************/
 // This function returns distance (in MILES) between two GPS coordinates (in degrees)
 // it was essentially cribbed from the internet, then tested and adjusted a little. 
@@ -3116,7 +3119,8 @@ void DeleteLogFile1(){
     SendText1(LogTeXt, BlankText);  
     if (Connected) {
         StartLogFile();     
-        ShowLogFile();
+        RecentStartLine = 0;
+        ShowLogFile(RecentStartLine);
     }
 }
 /************************************************************************************************************/
@@ -3247,13 +3251,13 @@ void LogThisGap(){
 
 
 // ************************************************************************
-void ShowLogFile(){ 
+void ShowLogFile(uint8_t StartLine){ 
     char TheText[MAXFILELEN + 10];      // MAX = 5K or so
     char LogFileName[20];
     char LogTeXt[] = "LogText";     
     CloseLogFile();
     MakeLogFileName(LogFileName);        // Create "today" filename
-    ReadTextFile(LogFileName, TheText);  // Then load text
+    ReadTextFile(LogFileName,TheText,StartLine,MAXLINES);  // Then load text
     SendText1(LogTeXt, TheText);         // Then send it
 }
 /*********************************************************************************************************************************/
@@ -3670,23 +3674,24 @@ uint16_t i,j;
         return len;
 }
 /*********************************************************************************************************************************/
-void ReadTextFile(char* fname, char* htext){
+void ReadTextFile(char* fname, char* htext, uint8_t StartLineNumber, uint8_t MaxLines){
     #define MAXWIDTH 68
-    #define MAXLINES 30  // ... on screen at a time ...
+   
 
     char errormsg[] = "File not found! -> ";
     
     uint16_t LineCounter        = 0;
-    uint16_t StartLineNumber    = 0;
     uint16_t StopLineNumber     = 0;
     uint16_t i                  = 0;
     uint8_t  Column             = 0;
     File     fnumber;
 
-    StopLineNumber = StartLineNumber + MAXLINES;
+    StopLineNumber = StartLineNumber + MaxLines;
 
     char crlf[] = {13,10,0};
     char a[] = " ";
+    char dots[] = "(There's more below ...) ";
+    char dots1[] = "(There's more above ...) ";
     htext[0] = 0;
     char SearchFile[30];
     char slash[] =  "/";
@@ -3701,6 +3706,13 @@ void ReadTextFile(char* fname, char* htext){
         strcat (htext, crlf);
         strcat (htext, crlf);
 
+        if (StartLineNumber > 1) {
+            strcat (htext, crlf);
+            strcat (htext,dots1);
+            strcat (htext, crlf);
+        }
+        
+        ThereIsMoreToSee = false;
         fnumber  = SD.open(SearchFile, FILE_READ); 
         if (fnumber) {
             while (fnumber.available() && i < (MAXFILELEN-10)) {
@@ -3726,7 +3738,14 @@ void ReadTextFile(char* fname, char* htext){
                         ++ Column;
                         ++ i;
                     }
+                   
                 }
+                if (LineCounter > StopLineNumber){
+                    strcat (htext, crlf);
+                    strcat(htext,dots);
+                    ThereIsMoreToSee = true;
+                    break;
+                    } // heer
             }
         }
         else 
@@ -3737,11 +3756,16 @@ void ReadTextFile(char* fname, char* htext){
     fnumber.close();
 }
 /*********************************************************************************************************************************/
+void ScrollHelpFile(){                 // redisplays maybe from top of file
+  char HelpText[MAXFILELEN + 10];      // MAX = 3K or so
+  char HelpView[] = "HelpText";
+    ReadTextFile(RecentTextFile,HelpText,RecentStartLine,MAXLINES);    // Then load help text
+    SendText1(HelpView, HelpText);                  // Then send it
+}
+/*********************************************************************************************************************************/
 void SendHelp(){
-    char HelpView[] = "HelpText";
     char hcmd[] = "page HelpView";
     char HelpFile[20];
-    char HelpText[MAXFILELEN + 10];      // MAX = 3K or so
     int i = 9;
     int j = 0;
     SendCommand(hcmd);                   // first load the right screen
@@ -3751,8 +3775,9 @@ void SendHelp(){
         ++j;
         HelpFile[j] = 0;
     }
-    ReadTextFile(HelpFile, HelpText);  // Then load help text
-    SendText1(HelpView, HelpText);     // Then send it
+    strcpy(RecentTextFile,HelpFile);
+    RecentStartLine = 0;
+    ScrollHelpFile();
 }
 /*********************************************************************************************************************************/
 /** @brief Discover which channel to setup */
@@ -5359,6 +5384,8 @@ void ButtonWasPressed()
     char LogVIEW[]                 = "LogVIEW";
     char LogEND[]                  = "LogEND";
     char RefrLOG[]                 = "RefrLOG";
+    char DownLOG[]                 = "DownLOG";
+    char UpLOG[]                   = "UpLOG";
    
     char OptionsEnd[]              = "OptionsEnd";
     char QNH[]                     = "Qnh";
@@ -5424,9 +5451,37 @@ void ButtonWasPressed()
         Serial.println(TextIn);
  #endif
             
+ if (InStrng(UpLOG, TextIn)){  
+        if (RecentStartLine > 0 && (CurrentView == LOGVIEW))  {
+            RecentStartLine-=1;
+            ShowLogFile(RecentStartLine); 
+        }
+        if (RecentStartLine > 0 && (CurrentView == HELP_VIEW))  {
+            RecentStartLine-=1;
+            ScrollHelpFile(); 
+        }
+        ClearText();
+        return;        
+    }   
+          
+    if (InStrng(DownLOG, TextIn)){  
+        if (ThereIsMoreToSee && (CurrentView == LOGVIEW)) {
+            RecentStartLine+=1;
+            ShowLogFile(RecentStartLine); 
+        }
+
+        if (ThereIsMoreToSee && (CurrentView == HELP_VIEW)) {
+            RecentStartLine+=1;
+            ScrollHelpFile(); 
+        }
+
+        ClearText();
+        return;        
+    }   
 
     if (InStrng(RefrLOG, TextIn)){   // refresh log screen
-        ShowLogFile(); 
+        RecentStartLine = 0;
+        ShowLogFile(RecentStartLine); 
         ClearText();
         return;        
     }   
@@ -5451,7 +5506,8 @@ void ButtonWasPressed()
     if (InStrng(LogVIEW, TextIn)){  // Start log screen
             SendCommand(pLogView);
             CurrentView = LOGVIEW;
-            ShowLogFile();
+            RecentStartLine = 0;
+            ShowLogFile(RecentStartLine);
             SendValue(n0,MinimumGap);
             SendValue(c0,LogRXSwaps);
             ClearText();
@@ -5774,7 +5830,7 @@ void ButtonWasPressed()
             ClearText();
             return;
         }
-        if (InStrng(GOTO, TextIn) > 0) {                     // Return from Help screen returns here to relevent config screen //heer
+        if (InStrng(GOTO, TextIn) > 0) {                     // Return from Help screen returns here to relevent config screen 
             i = 5;
             while (uint8_t(TextIn[i]) > 0 && i < 30) {
                 WhichPage[i] = TextIn[i];
@@ -5825,7 +5881,8 @@ void ButtonWasPressed()
              if (CurrentView == LOGVIEW){ 
                 SendCommand(pLogView);
                 CurrentView = LOGVIEW;
-                ShowLogFile();
+                RecentStartLine = 0;
+                ShowLogFile(RecentStartLine);
              }
 
             UpdateModelsNameEveryWhere();
