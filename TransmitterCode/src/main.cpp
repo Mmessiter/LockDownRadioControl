@@ -3334,15 +3334,17 @@ void GetStatistics()
 /** @returns position of text1 within text2 or 0 if not found */
 int InStrng(char * text1, char * text2)
 {
-    unsigned int j;
-    unsigned int i;
-    unsigned int flag;
+    uint16_t j;
+    uint16_t i;
+    bool flag;
     for (j = 0; j < strlen(text2); ++j) {
-        flag = 0;
+        flag = false;
         for (i = 0; i < strlen(text1); ++i) {
-            if (text1[i] != text2[i + j]) flag = 1;
+            if (text1[i] != text2[i + j]) {
+                flag = true; break;
+            }
         }
-        if (flag == 0) return j + 1;
+        if (!flag) return j + 1;
     }
     return 0;
 }
