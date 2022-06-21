@@ -270,11 +270,11 @@ void Reconnect(){                                                               
     uint32_t SearchStartTime  = millis();;
     uint8_t  ReconnectChannel = * (FHSSChPointer + ReconnectIndex);              // Get a reconnect channel 
     uint8_t  PreviousRadio    =  ThisRadio;
+#ifdef SECOND_TRANSCEIVER
+    uint8_t  Attempts = 0;
+#endif
     if (ThisRadio == 1) RX1TotalTime += (millis() - ReconnectedMoment);          // keep track of how long on each
     if (ThisRadio == 2) RX2TotalTime += (millis() - ReconnectedMoment);
-//#ifdef SECOND_TRANSCEIVER
-//        TryTheOtherTransceiver(ReconnectChannel);                                // Just lost it on this one - so try the other
-//#endif 
     while (!Connected) {
         if (BoundFlag) KeepSbusHappy();                                           // Some SBUS systems timeout FAST, so resend old data to keep it happy
         CurrentRadio->stopListening();
@@ -284,8 +284,10 @@ void Reconnect(){                                                               
         if (ReconnectIndex >= RECONNECT_CHANNELS_COUNT + RECONNECT_CHANNELS_START) ReconnectIndex = RECONNECT_CHANNELS_START;
         CurrentRadio->setChannel(ReconnectChannel);  
         TryToConnectNow();
+        
 #ifdef SECOND_TRANSCEIVER
-        if (!Connected) TryTheOtherTransceiver(ReconnectChannel);
+        ++ Attempts;
+        if (Attempts >= 3){if (!Connected) TryTheOtherTransceiver(ReconnectChannel); Attempts = 0;}
 #endif 
         if (!Connected) {
             if ((millis() - SearchStartTime) > FAILSAFE_TIMEOUT){
@@ -308,7 +310,6 @@ void Reconnect(){                                                               
    Serial.println (" ...");
    Serial.println ("");
 #endif
-
 
 }
 /************************************************************************************************************/
