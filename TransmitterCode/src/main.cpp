@@ -5882,7 +5882,6 @@ void ButtonWasPressed()
                 RecentStartLine = 0;
                 if (UseLog) ShowLogFile(RecentStartLine);
              }
-
             UpdateModelsNameEveryWhere();
             ClearText();
             return;
