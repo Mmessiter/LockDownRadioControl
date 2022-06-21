@@ -1,5 +1,6 @@
 var NAVTREEINDEX5 =
 {
+"class_adafruit___bus_i_o___register_bits.html#a9311f94f1a1d93bc575b06c34ddecd80":[9,0,4,2],
 "class_adafruit___g_p_s.html":[9,0,5],
 "class_adafruit___g_p_s.html#a06b7e12e38f1b00df058a253364215db":[9,0,5,12],
 "class_adafruit___g_p_s.html#a0780becacadd5c8f1566eb598dac6f02":[9,0,5,25],
@@ -248,6 +249,5 @@ var NAVTREEINDEX5 =
 "functions_w.html":[9,3,0,20],
 "functions_x.html":[9,3,0,21],
 "functions_y.html":[9,3,0,22],
-"functions_z.html":[9,3,0,23],
-"functions_~.html":[9,3,0,24]
+"functions_z.html":[9,3,0,23]
 };

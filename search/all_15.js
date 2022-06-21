@@ -16,6 +16,7 @@ var searchData=
   ['use_5fsw_5fserial_13',['USE_SW_SERIAL',['../_adafruit___g_p_s_8h.html#a7d44b2886944eb862b51948f2acc8d23',1,'Adafruit_GPS.h']]],
   ['use_5fwatchdog_14',['USE_WATCHDOG',['../_radio_functions_8h.html#a71be4a990011c7b00830abf5f3b2190d',1,'RadioFunctions.h']]],
   ['useaudio_15',['USEAUDIO',['../_radio_functions_8h.html#a1a522582f7918d462403b1e4724a2c9d',1,'RadioFunctions.h']]],
-  ['usemacros_16',['UseMacros',['../_radio_functions_8h.html#a42a6363bff83773c1b99caa06aebb1f5',1,'UseMacros():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a42a6363bff83773c1b99caa06aebb1f5',1,'UseMacros():&#160;main.cpp']]],
-  ['usereceiveddata_17',['UseReceivedData',['../_receiver_code_2src_2main_8cpp.html#abb1997c589abc6432f612eaedf985e38',1,'main.cpp']]]
+  ['uselog_16',['UseLog',['../_transmitter_code_2src_2main_8cpp.html#aa42482a0bb01edaf26f217dbc38643d2',1,'main.cpp']]],
+  ['usemacros_17',['UseMacros',['../_radio_functions_8h.html#a42a6363bff83773c1b99caa06aebb1f5',1,'UseMacros():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a42a6363bff83773c1b99caa06aebb1f5',1,'UseMacros():&#160;main.cpp']]],
+  ['usereceiveddata_18',['UseReceivedData',['../_receiver_code_2src_2main_8cpp.html#abb1997c589abc6432f612eaedf985e38',1,'main.cpp']]]
 ];

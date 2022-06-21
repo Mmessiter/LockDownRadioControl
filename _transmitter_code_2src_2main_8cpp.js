@@ -563,6 +563,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "UkRules", "_transmitter_code_2src_2main_8cpp.html#a7847cc790a939f378993691ae7d40a2f", null ],
     [ "UkRulesCounter", "_transmitter_code_2src_2main_8cpp.html#a29883074027da47422a24b04284728db", null ],
     [ "USE_INA219", "_transmitter_code_2src_2main_8cpp.html#a87ae50e2ac4507568cbf98072f174a1b", null ],
+    [ "UseLog", "_transmitter_code_2src_2main_8cpp.html#aa42482a0bb01edaf26f217dbc38643d2", null ],
     [ "UseMacros", "_transmitter_code_2src_2main_8cpp.html#a42a6363bff83773c1b99caa06aebb1f5", null ],
     [ "ValueSent", "_transmitter_code_2src_2main_8cpp.html#ace7e8fecf64d2c788fd0e7d5fe0c47fe", null ],
     [ "VoltsDetected", "_transmitter_code_2src_2main_8cpp.html#a6dfccb2c71ac97313ccc4248d382f6a3", null ],
