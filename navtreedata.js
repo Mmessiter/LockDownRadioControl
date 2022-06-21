@@ -33,56 +33,56 @@ var NAVTREE =
       [ "Things that can help", "index.html#autotoc_md42", null ],
       [ "To Do", "index.html#autotoc_md43", null ]
     ] ],
-    [ "Lockdown Radio", "md__docs__l_d_r_c__user__manual__ver_0_1.html", [
-      [ "Part one: Introduction", "md__docs__l_d_r_c__user__manual__ver_0_1.html#autotoc_md1", null ],
-      [ "Part two: User manual", "md__docs__l_d_r_c__user__manual__ver_0_1.html#autotoc_md2", [
-        [ "Features already supported:", "md__docs__l_d_r_c__user__manual__ver_0_1.html#autotoc_md3", null ]
+    [ "Lockdown Radio", "md_Docs_LDRC_User_Manual_Ver_0_1.html", [
+      [ "Part one: Introduction", "md_Docs_LDRC_User_Manual_Ver_0_1.html#autotoc_md1", null ],
+      [ "Part two: User manual", "md_Docs_LDRC_User_Manual_Ver_0_1.html#autotoc_md2", [
+        [ "Features already supported:", "md_Docs_LDRC_User_Manual_Ver_0_1.html#autotoc_md3", null ]
       ] ],
-      [ "Binding", "md__docs__l_d_r_c__user__manual__ver_0_1.html#autotoc_md4", null ],
-      [ "Failsafe", "md__docs__l_d_r_c__user__manual__ver_0_1.html#autotoc_md5", null ],
-      [ "Switches", "md__docs__l_d_r_c__user__manual__ver_0_1.html#autotoc_md6", null ],
-      [ "Mixes", "md__docs__l_d_r_c__user__manual__ver_0_1.html#autotoc_md7", null ],
-      [ "Features still in development", "md__docs__l_d_r_c__user__manual__ver_0_1.html#autotoc_md8", null ],
-      [ "Scanning", "md__docs__l_d_r_c__user__manual__ver_0_1.html#autotoc_md9", null ],
-      [ "Power and data rate", "md__docs__l_d_r_c__user__manual__ver_0_1.html#autotoc_md10", null ],
-      [ "Trims", "md__docs__l_d_r_c__user__manual__ver_0_1.html#autotoc_md11", null ],
-      [ "Helicopters, multirotors and simulators", "md__docs__l_d_r_c__user__manual__ver_0_1.html#autotoc_md12", null ],
-      [ "Disclaimer", "md__docs__l_d_r_c__user__manual__ver_0_1.html#autotoc_md13", null ],
-      [ "Part 3: Building the radio", "md__docs__l_d_r_c__user__manual__ver_0_1.html#autotoc_md14", [
-        [ "3A : Transmitter", "md__docs__l_d_r_c__user__manual__ver_0_1.html#autotoc_md15", null ]
+      [ "Binding", "md_Docs_LDRC_User_Manual_Ver_0_1.html#autotoc_md4", null ],
+      [ "Failsafe", "md_Docs_LDRC_User_Manual_Ver_0_1.html#autotoc_md5", null ],
+      [ "Switches", "md_Docs_LDRC_User_Manual_Ver_0_1.html#autotoc_md6", null ],
+      [ "Mixes", "md_Docs_LDRC_User_Manual_Ver_0_1.html#autotoc_md7", null ],
+      [ "Features still in development", "md_Docs_LDRC_User_Manual_Ver_0_1.html#autotoc_md8", null ],
+      [ "Scanning", "md_Docs_LDRC_User_Manual_Ver_0_1.html#autotoc_md9", null ],
+      [ "Power and data rate", "md_Docs_LDRC_User_Manual_Ver_0_1.html#autotoc_md10", null ],
+      [ "Trims", "md_Docs_LDRC_User_Manual_Ver_0_1.html#autotoc_md11", null ],
+      [ "Helicopters, multirotors and simulators", "md_Docs_LDRC_User_Manual_Ver_0_1.html#autotoc_md12", null ],
+      [ "Disclaimer", "md_Docs_LDRC_User_Manual_Ver_0_1.html#autotoc_md13", null ],
+      [ "Part 3: Building the radio", "md_Docs_LDRC_User_Manual_Ver_0_1.html#autotoc_md14", [
+        [ "3A : Transmitter", "md_Docs_LDRC_User_Manual_Ver_0_1.html#autotoc_md15", null ]
       ] ],
-      [ "Parts list:", "md__docs__l_d_r_c__user__manual__ver_0_1.html#autotoc_md16", null ]
+      [ "Parts list:", "md_Docs_LDRC_User_Manual_Ver_0_1.html#autotoc_md16", null ]
     ] ],
-    [ "LockDownRadioControl - User Manual", "md__docs__l_d_r_c1_____user__manual.html", [
-      [ "Introduction", "md__docs__l_d_r_c1_____user__manual.html#autotoc_md18", [
-        [ "Features already supported:", "md__docs__l_d_r_c1_____user__manual.html#autotoc_md19", null ]
+    [ "LockDownRadioControl - User Manual", "md_Docs_LDRC1____User_Manual.html", [
+      [ "Introduction", "md_Docs_LDRC1____User_Manual.html#autotoc_md18", [
+        [ "Features already supported:", "md_Docs_LDRC1____User_Manual.html#autotoc_md19", null ]
       ] ],
-      [ "Binding", "md__docs__l_d_r_c1_____user__manual.html#autotoc_md20", null ],
-      [ "Failsafe", "md__docs__l_d_r_c1_____user__manual.html#autotoc_md21", null ],
-      [ "Switches", "md__docs__l_d_r_c1_____user__manual.html#autotoc_md22", null ],
-      [ "Mixes", "md__docs__l_d_r_c1_____user__manual.html#autotoc_md23", null ],
-      [ "Features still in development", "md__docs__l_d_r_c1_____user__manual.html#autotoc_md24", null ],
-      [ "Scanning", "md__docs__l_d_r_c1_____user__manual.html#autotoc_md25", null ],
-      [ "Power and data rate", "md__docs__l_d_r_c1_____user__manual.html#autotoc_md26", null ],
-      [ "Trims", "md__docs__l_d_r_c1_____user__manual.html#autotoc_md27", null ],
-      [ "Helicopters, multirotors and simulators", "md__docs__l_d_r_c1_____user__manual.html#autotoc_md28", null ],
-      [ "Disclaimer", "md__docs__l_d_r_c1_____user__manual.html#autotoc_md29", null ]
+      [ "Binding", "md_Docs_LDRC1____User_Manual.html#autotoc_md20", null ],
+      [ "Failsafe", "md_Docs_LDRC1____User_Manual.html#autotoc_md21", null ],
+      [ "Switches", "md_Docs_LDRC1____User_Manual.html#autotoc_md22", null ],
+      [ "Mixes", "md_Docs_LDRC1____User_Manual.html#autotoc_md23", null ],
+      [ "Features still in development", "md_Docs_LDRC1____User_Manual.html#autotoc_md24", null ],
+      [ "Scanning", "md_Docs_LDRC1____User_Manual.html#autotoc_md25", null ],
+      [ "Power and data rate", "md_Docs_LDRC1____User_Manual.html#autotoc_md26", null ],
+      [ "Trims", "md_Docs_LDRC1____User_Manual.html#autotoc_md27", null ],
+      [ "Helicopters, multirotors and simulators", "md_Docs_LDRC1____User_Manual.html#autotoc_md28", null ],
+      [ "Disclaimer", "md_Docs_LDRC1____User_Manual.html#autotoc_md29", null ]
     ] ],
-    [ "Building the LockDownRadioControl", "md__docs__l_d_r_c2____building__the__radio.html", [
-      [ "1. Transmitter", "md__docs__l_d_r_c2____building__the__radio.html#autotoc_md32", [
-        [ "Parts list:", "md__docs__l_d_r_c2____building__the__radio.html#autotoc_md34", null ],
-        [ "Case", "md__docs__l_d_r_c2____building__the__radio.html#autotoc_md35", null ]
+    [ "Building the LockDownRadioControl", "md_Docs_LDRC2___Building_The_Radio.html", [
+      [ "1. Transmitter", "md_Docs_LDRC2___Building_The_Radio.html#autotoc_md32", [
+        [ "Parts list:", "md_Docs_LDRC2___Building_The_Radio.html#autotoc_md34", null ],
+        [ "Case", "md_Docs_LDRC2___Building_The_Radio.html#autotoc_md35", null ]
       ] ],
-      [ "autotoc_md36", "md__docs__l_d_r_c2____building__the__radio.html#autotoc_md36", null ]
+      [ "autotoc_md36", "md_Docs_LDRC2___Building_The_Radio.html#autotoc_md36", null ]
     ] ],
-    [ "LDRC3 - Software developement", "md__docs__l_d_r_c3____software_developement.html", null ],
-    [ "RecieverCode", "_r_x_c_o_d_e.html", [
-      [ "Features List", "_r_x_c_o_d_e.html#rxFeatures", null ],
-      [ "TEENSY 4.0 PINS", "_r_x_c_o_d_e.html#rxpinout", null ]
+    [ "LDRC3 - Software developement", "md_Docs_LDRC3___Software_developement.html", null ],
+    [ "RecieverCode", "RXCODE.html", [
+      [ "Features List", "RXCODE.html#rxFeatures", null ],
+      [ "TEENSY 4.0 PINS", "RXCODE.html#rxpinout", null ]
     ] ],
-    [ "TransmitterCode", "_transmitter_code.html", [
-      [ "Radio Control Features list, so far:", "_transmitter_code.html#LockDown", null ],
-      [ "Teensy 4.1 Pins", "_transmitter_code.html#txPinout", null ]
+    [ "TransmitterCode", "TransmitterCode.html", [
+      [ "Radio Control Features list, so far:", "TransmitterCode.html#LockDown", null ],
+      [ "Teensy 4.1 Pins", "TransmitterCode.html#txPinout", null ]
     ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
@@ -106,11 +106,11 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"_adafruit___p_m_t_k_8h.html",
-"_receiver_code_2src_2main_8cpp.html#a5424788640aaa8d535d6ea077949ef82",
-"_transmitter_code_2src_2main_8cpp.html#a436844f605001cad62b48d890e11fe2c",
-"_transmitter_code_2src_2main_8cpp.html#ab6e3ad31a969d0f0341e67b7af6f0a01",
-"globals_defs_d.html"
+"RXCODE.html",
+"ReceiverCode_2src_2main_8cpp.html#aeda79da3882f657a3eaefc5800122da5",
+"TransmitterCode_2src_2main_8cpp.html#a5339146bea48f821a6abbf680f5fe09b",
+"TransmitterCode_2src_2main_8cpp.html#ac7a1d7bfd3ca33948785ed02fe21c6c3",
+"globals_g.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
