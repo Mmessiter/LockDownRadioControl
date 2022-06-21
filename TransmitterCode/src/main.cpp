@@ -39,6 +39,7 @@
  * - Hardware bug in nRF24L01+ discovered. A fix (work-around) is implemented
  * - Screen colours definable
  * - Data screen gives all possible telemetry  
+ * - Log files implemented - and help file system with unlimited file length
  *  
  *
  * @section txPinout Teensy 4.1 Pins
@@ -3126,7 +3127,6 @@ void DeleteLogFile1(){
 }
 /************************************************************************************************************/
 void OpenLogFileW(char * LogFileName){
-    
     if (!LogFileOpen){
         LogFileNumber = SD.open(LogFileName, FILE_WRITE);
         LogFileOpen = true;
@@ -3204,7 +3204,6 @@ void LogDisConnection(){
     LogText(TheText, sizeof (TheText));
 }
 // ************************************************************************
-
 void LogNewFlightMode(){
     char Ltext[] = "Bank: ";
     char NB[5];
