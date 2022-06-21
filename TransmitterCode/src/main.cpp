@@ -3134,7 +3134,6 @@ void OpenLogFileW(char * LogFileName){
 }
 /************************************************************************************************************/
 void OpenLogFileR(char * LogFileName){
-   
     if (!LogFileOpen){
         LogFileNumber = SD.open(LogFileName, FILE_READ);
         LogFileOpen = true;
@@ -3147,7 +3146,6 @@ void CloseLogFile(){
 }
 /************************************************************************************************************/
 void WriteToLogFile(char * SomeData, uint16_t len){
-    
     LogFileNumber.write(SomeData, len);
 }
 /************************************************************************************************************/
@@ -3170,7 +3168,6 @@ void StartLogFile(){
 // ************************************************************************
 void CheckLogFileIsOpen(){
      char LogFileName[20];
-    
      if (!LogFileOpen){
         MakeLogFileName(LogFileName);                   // Create a "today" filename
         OpenLogFileW(LogFileName);                      // Open file for writing
@@ -3180,28 +3177,22 @@ void CheckLogFileIsOpen(){
 void LogFilePreamble(){
     char dbuf[12];
     char Divider[] = " - ";
-   
     CheckLogFileIsOpen();
     CreateTimeStamp(dbuf);                           // Put time stamp into buffer
     WriteToLogFile(dbuf,9);                          // Add time stamp
     WriteToLogFile(Divider,sizeof (Divider));           
 }
-
 // ************************************************************************
 void LogText(char * TheText, uint16_t len){
     char crlf[]  = {'|',13,10,0};
-    
     LogFilePreamble();
     WriteToLogFile(TheText,len);
     WriteToLogFile(crlf, sizeof(crlf));
 }
-
 // ************************************************************************
-
 void LogConnection(){
         char TheText[] = "Connected to ";
         char buf[40] = " ";
-        
         strcpy (buf,TheText);
         strcat (buf,ModelName);
         LogText(buf, sizeof (buf));
@@ -3218,7 +3209,6 @@ void LogNewFlightMode(){
     char Ltext[] = "Bank: ";
     char NB[5];
     char thetext[10];
-   
     Str(NB,FlightMode,0);
     strcpy(thetext,Ltext);
     strcat(thetext, NB);
@@ -3229,7 +3219,6 @@ void LogNewFlightMode(){
 void LogThisRX(){
     char Ltext[] = "RX: ";
     char thetext[10];
-    
     strcpy (thetext,Ltext);
     strcat (thetext,ThisRadio);
     LogText(thetext, 5);
@@ -3240,7 +3229,6 @@ void LogThisGap(){
     char Ltext[] = "Gap: ";
     char NB[5];
     char thetext[10];
-    
     if (ThisGap > 1000) return;
     Str(NB,ThisGap,0);
     strcpy(thetext,Ltext);
@@ -5518,7 +5506,7 @@ void ButtonWasPressed()
             CurrentView = LOGVIEW;
             SendValue(n0,MinimumGap);
             SendValue(c0,LogRXSwaps);
-            SendValue(sw0,UseLog);    
+            SendValue(sw0,UseLog);   
             if (UseLog){
                 RecentStartLine = 0;
                 ShowLogFile(RecentStartLine);
