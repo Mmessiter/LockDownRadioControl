@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['bmp280_5fcalib_5fdata_0',['bmp280_calib_data',['../structbmp280__calib__data.html',1,'']]]
+  ['nmea_5fdatavalue_5ft_0',['nmea_datavalue_t',['../structnmea__datavalue__t.html',1,'']]],
+  ['nmea_5fhistory_5ft_1',['nmea_history_t',['../structnmea__history__t.html',1,'']]]
 ];

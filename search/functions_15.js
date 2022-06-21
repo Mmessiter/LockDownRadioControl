@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['year_0',['year',['../struct_tiny_g_p_s_date.html#ae2cc914fec377b429d99f01204f50d60',1,'TinyGPSDate']]]
+  ['_7eadafruit_5fgps_0',['~Adafruit_GPS',['../class_adafruit___g_p_s.html#aa10e13a582969a5d49f1416fe147d1d2',1,'Adafruit_GPS']]]
 ];

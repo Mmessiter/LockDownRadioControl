@@ -88,14 +88,6 @@ var NAVTREE =
       [ "Features List", "_r_x_c_o_d_e.html#rxFeatures", null ],
       [ "TEENSY 4.0 PINS", "_r_x_c_o_d_e.html#rxpinout", null ]
     ] ],
-    [ "Adafruit Community Code of Conduct", "md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html", [
-      [ "Our Pledge", "md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md58", null ],
-      [ "Our Standards", "md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md59", null ],
-      [ "Our Responsibilities", "md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md60", null ],
-      [ "Moderation", "md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md61", null ],
-      [ "Scope", "md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md62", null ],
-      [ "Attribution", "md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md63", null ]
-    ] ],
     [ "TransmitterCode", "_transmitter_code.html", [
       [ "Radio Control Features list, so far:", "_transmitter_code.html#LockDown", null ],
       [ "Teensy 4.1 Pins", "_transmitter_code.html#txPinout", null ]
@@ -105,12 +97,9 @@ var NAVTREE =
       [ "Class Index", "classes.html", null ],
       [ "Class Hierarchy", "hierarchy.html", "hierarchy" ],
       [ "Class Members", "functions.html", [
-        [ "All", "functions.html", "functions_dup" ],
+        [ "All", "functions.html", null ],
         [ "Functions", "functions_func.html", null ],
-        [ "Variables", "functions_vars.html", null ],
-        [ "Enumerations", "functions_enum.html", null ],
-        [ "Enumerator", "functions_eval.html", null ],
-        [ "Related Functions", "functions_rela.html", null ]
+        [ "Variables", "functions_vars.html", null ]
       ] ]
     ] ],
     [ "Files", "files.html", [
@@ -130,14 +119,12 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"_adafruit___b_m_p280_8cpp.html",
-"_radio_functions_8h.html#a1a11fabb6c953055a80c5df5eebbfb0d",
-"_sensor_hub_t32_2lib_2_adafruit___p_m_t_k_8h.html#a4c44c7abcfe149f1d72bdbb207c86eeb",
-"_transmitter_code_2src_2main_8cpp.html#a445cfbf06ed74188fcf3965b4cab9533",
-"_transmitter_code_2src_2main_8cpp.html#ab868feed8f8750461174430290031a83",
-"class_adafruit___bus_i_o___register_bits.html#a9311f94f1a1d93bc575b06c34ddecd80",
-"functions_~.html",
-"struct_tiny_g_p_s_altitude.html#a1eb3e5b425784fc0db3e9ffe0f77f741"
+"_adafruit___g_p_s_8cpp.html",
+"_radio_functions_8h.html#aa98c3d7858384fded2f32ce45a271605",
+"_sensor_hub_t32_2src_2main_8cpp.html#af5f2a2a78189687a7055abd054ac6058",
+"_transmitter_code_2src_2main_8cpp.html#a6e4fac4e296c09388b8b56353402d67a",
+"_transmitter_code_2src_2main_8cpp.html#ae17abd00a1768ace75c1828f3d02a35c",
+"globals_defs_g.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

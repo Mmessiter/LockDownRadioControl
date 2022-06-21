@@ -1,4 +1,9 @@
 var searchData=
 [
-  ['value_0',['value',['../struct_tiny_g_p_s_date.html#a718150ae16f68afa9ae81f9d1b3ce3f4',1,'TinyGPSDate::value()'],['../struct_tiny_g_p_s_time.html#afcdb632fee9d144b1414c9d7b95719f1',1,'TinyGPSTime::value()'],['../struct_tiny_g_p_s_decimal.html#ac3ce80976e5d8456e9f211b910a6cb19',1,'TinyGPSDecimal::value()'],['../struct_tiny_g_p_s_integer.html#a67de7e76d61dbd25eb32f701d8ce867b',1,'TinyGPSInteger::value()'],['../class_tiny_g_p_s_custom.html#a03bb66f8d3e078b21c8a5033a88d8a32',1,'TinyGPSCustom::value()']]]
+  ['waitforsentence_0',['waitForSentence',['../class_adafruit___g_p_s.html#a13d67a0055576c31de0ca3db0641ca1d',1,'Adafruit_GPS']]],
+  ['wakeup_1',['wakeup',['../class_adafruit___g_p_s.html#afc67f26f7b14d5cc851e13eb7f6aeae3',1,'Adafruit_GPS']]],
+  ['watchdogcallback_2',['WatchDogCallBack',['../_transmitter_code_2src_2main_8cpp.html#ae410be09c6f449451d8f2327fd895c7d',1,'main.cpp']]],
+  ['wordwrap_3',['WordWrap',['../_transmitter_code_2src_2main_8cpp.html#a6d6ab5dcee82c319640e3a0a0537ebf7',1,'main.cpp']]],
+  ['write_4',['write',['../class_adafruit___g_p_s.html#a079d9990da5971f336fab880cd141445',1,'Adafruit_GPS']]],
+  ['writetologfile_5',['WriteToLogFile',['../_transmitter_code_2src_2main_8cpp.html#ad533b143a4eb329828117f9884135686',1,'main.cpp']]]
 ];
