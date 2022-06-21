@@ -3197,26 +3197,23 @@ void LogConnection(){
         strcat (buf,ModelName);
         LogText(buf, sizeof (buf));
 }
-
 // ************************************************************************
 
 void LogDisConnection(){ 
     char TheText[] = "Disconnected";
     LogText(TheText, sizeof (TheText));
 }
-
 // ************************************************************************
 
 void LogNewFlightMode(){
     char Ltext[] = "Bank: ";
-    char NB[3];
+    char NB[5];
     char thetext[10];
     Str(NB,FlightMode,0);
     strcpy(thetext,Ltext);
     strcat(thetext, NB);
     LogText(thetext, 7);
 }
-
 // ************************************************************************
 
 void LogThisRX(){
@@ -3230,7 +3227,7 @@ void LogThisRX(){
 
 void LogThisGap(){
     char Ltext[] = "Gap: ";
-    char NB[3];
+    char NB[5];
     char thetext[10];
     if (ThisGap > 1000) return;
     Str(NB,ThisGap,0);
@@ -3238,8 +3235,6 @@ void LogThisGap(){
     strcat(thetext, NB);
     LogText(thetext, 8);
 }
-
-
 // ************************************************************************
 void ShowLogFile(uint8_t StartLine){ 
     char TheText[MAXFILELEN + 10];      // MAX = 5K or so
