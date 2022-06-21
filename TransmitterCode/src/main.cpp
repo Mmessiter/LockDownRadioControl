@@ -508,7 +508,7 @@ uint8_t  RecentStartLine = 0;
 char     RecentTextFile[20];
 bool     LogRXSwaps =  false;
 bool     ThereIsMoreToSee = false;
-
+bool     UseLog = false;
 uint8_t * FHSSChPointer;                                                              // pointer for channels array (first five only used for reconnect)
 
 uint8_t FHSS_Channels1[42] = {93,111,107,103,106,97,108,102,118,104,101,109,98,      // TEST array
@@ -1148,7 +1148,7 @@ uint8_t GetLEDBrightness()
 void RedLedOn()
 {
     if (LedWasGreen){
-        LogDisConnection();
+        if (UseLog) LogDisConnection();
         LedWasGreen = false;
     }
     
@@ -1166,9 +1166,11 @@ void GreenLedOn()
         LedWasGreen = true;
         if (FirstConnection) {                   // Zero data on first connection
             ZeroDataScreen(); 
-            FirstConnection = false;   
-            if (!LogFileOpen) StartLogFile();
-            LogConnection();
+            FirstConnection = false;  
+            if (UseLog){ 
+                if (!LogFileOpen) StartLogFile();
+                LogConnection();
+            }
         }
         analogWrite(BLUELED, 0);
         analogWrite(REDLED, 0); 
@@ -2962,10 +2964,8 @@ bool LoadAllParameters()
         ++SDCardAddress;
         LogRXSwaps = SDReadByte(SDCardAddress);
         ++SDCardAddress;
-
-
-
-
+        UseLog = SDReadByte(SDCardAddress);
+        ++SDCardAddress;
         MemoryForTransmtter = SDCardAddress;
         ReadOneModel(ModelNumber);
         return true;
@@ -3117,6 +3117,7 @@ void DeleteLogFile1(){
     MakeLogFileName(LogFileName);  
     DeleteLogFile(LogFileName);   
     SendText1(LogTeXt, BlankText);  
+    if (!UseLog) return;
     if (LedWasGreen) {
         StartLogFile();     
         RecentStartLine = 0;
@@ -3125,6 +3126,7 @@ void DeleteLogFile1(){
 }
 /************************************************************************************************************/
 void OpenLogFileW(char * LogFileName){
+    
     if (!LogFileOpen){
         LogFileNumber = SD.open(LogFileName, FILE_WRITE);
         LogFileOpen = true;
@@ -3132,6 +3134,7 @@ void OpenLogFileW(char * LogFileName){
 }
 /************************************************************************************************************/
 void OpenLogFileR(char * LogFileName){
+   
     if (!LogFileOpen){
         LogFileNumber = SD.open(LogFileName, FILE_READ);
         LogFileOpen = true;
@@ -3144,6 +3147,7 @@ void CloseLogFile(){
 }
 /************************************************************************************************************/
 void WriteToLogFile(char * SomeData, uint16_t len){
+    
     LogFileNumber.write(SomeData, len);
 }
 /************************************************************************************************************/
@@ -3153,6 +3157,7 @@ void StartLogFile(){
     char crlf[]         = {'|',13,10,0};
     char Buf[30];
     LogFileOpen = false;
+    
     MakeLogFileName(LogFileName);                   // Create a "today" filename
     OpenLogFileW(LogFileName);                      // Open file for writing
     CreateTimeDateStamp(Buf);                       // Put time stamp into buffer
@@ -3165,6 +3170,7 @@ void StartLogFile(){
 // ************************************************************************
 void CheckLogFileIsOpen(){
      char LogFileName[20];
+    
      if (!LogFileOpen){
         MakeLogFileName(LogFileName);                   // Create a "today" filename
         OpenLogFileW(LogFileName);                      // Open file for writing
@@ -3174,6 +3180,7 @@ void CheckLogFileIsOpen(){
 void LogFilePreamble(){
     char dbuf[12];
     char Divider[] = " - ";
+   
     CheckLogFileIsOpen();
     CreateTimeStamp(dbuf);                           // Put time stamp into buffer
     WriteToLogFile(dbuf,9);                          // Add time stamp
@@ -3183,6 +3190,7 @@ void LogFilePreamble(){
 // ************************************************************************
 void LogText(char * TheText, uint16_t len){
     char crlf[]  = {'|',13,10,0};
+    
     LogFilePreamble();
     WriteToLogFile(TheText,len);
     WriteToLogFile(crlf, sizeof(crlf));
@@ -3193,6 +3201,7 @@ void LogText(char * TheText, uint16_t len){
 void LogConnection(){
         char TheText[] = "Connected to ";
         char buf[40] = " ";
+        
         strcpy (buf,TheText);
         strcat (buf,ModelName);
         LogText(buf, sizeof (buf));
@@ -3209,6 +3218,7 @@ void LogNewFlightMode(){
     char Ltext[] = "Bank: ";
     char NB[5];
     char thetext[10];
+   
     Str(NB,FlightMode,0);
     strcpy(thetext,Ltext);
     strcat(thetext, NB);
@@ -3219,6 +3229,7 @@ void LogNewFlightMode(){
 void LogThisRX(){
     char Ltext[] = "RX: ";
     char thetext[10];
+    
     strcpy (thetext,Ltext);
     strcat (thetext,ThisRadio);
     LogText(thetext, 5);
@@ -3229,6 +3240,7 @@ void LogThisGap(){
     char Ltext[] = "Gap: ";
     char NB[5];
     char thetext[10];
+    
     if (ThisGap > 1000) return;
     Str(NB,ThisGap,0);
     strcpy(thetext,Ltext);
@@ -3434,6 +3446,10 @@ void SaveTXStuff()
     ++SDCardAddress;
     SDUpdateByte(SDCardAddress,LogRXSwaps);
     ++SDCardAddress;
+    SDUpdateByte(SDCardAddress,UseLog);
+    ++SDCardAddress;
+
+    
     CloseModelsFile();
 }
 
@@ -5413,6 +5429,7 @@ void ButtonWasPressed()
     char n1[]                      = "n1";
     char h0[]                      = "h0";
     char c0[]                      = "c0";
+    char sw0[]                     = "sw0";
     char c1[]                      = "c1";
     char c2[]                      = "c2";
     char c3[]                      = "c3";
@@ -5470,9 +5487,11 @@ void ButtonWasPressed()
     }   
 
     if (InStrng(RefrLOG, TextIn)){   // refresh log screen
-        RecentStartLine = 0;
-        ShowLogFile(RecentStartLine); 
-        ClearText();
+        if (UseLog){
+            RecentStartLine = 0;
+            ShowLogFile(RecentStartLine); 
+            ClearText();
+        }
         return;        
     }   
 
@@ -5482,6 +5501,7 @@ void ButtonWasPressed()
             LastShowTime = 0;
             MinimumGap = GetValue(n0);
             LogRXSwaps = GetValue(c0);
+            UseLog     = GetValue(sw0);
             SaveTXStuff();
             SendCommand(pDataView);
             ClearText();
@@ -5496,10 +5516,13 @@ void ButtonWasPressed()
     if (InStrng(LogVIEW, TextIn)){  // Start log screen
             SendCommand(pLogView);
             CurrentView = LOGVIEW;
-            RecentStartLine = 0;
-            ShowLogFile(RecentStartLine);
-            SendValue(n0,MinimumGap);
-            SendValue(c0,LogRXSwaps);
+            if (UseLog){
+                RecentStartLine = 0;
+                ShowLogFile(RecentStartLine);
+                SendValue(n0,MinimumGap);
+                SendValue(c0,LogRXSwaps);
+                SendValue(sw0,UseLog);
+            }
             ClearText();
             return;
     }
@@ -7222,7 +7245,7 @@ void GetRXVersionNumber()
     strcpy(ThisRadio, nbuf);
     if (LastRadio != AckPayload.Byte1) {
         LastRadio = AckPayload.Byte1;
-        if (LogRXSwaps) LogThisRX();
+        if (LogRXSwaps && UseLog) LogThisRX();
     }
     Str(ReceiverVersionNumber, AckPayload.Byte2, 2);
     Str(nbuf, AckPayload.Byte3, 2);
@@ -7361,7 +7384,7 @@ void CheckGapsLength()
     if (GapStart > 0) { // when reconnected, how long was connection lost?
         ++GapCount;
         ThisGap = (millis() - GapStart); // AND in fact RX sends no data for 20 ms after reconnection
-        if (ThisGap  >= MinimumGap) LogThisGap();
+        if (ThisGap  >= MinimumGap  && UseLog ) LogThisGap();
         if (!GapShortest) GapShortest = ThisGap;
         if (ThisGap > GapLongest)  GapLongest = ThisGap;
         if (ThisGap < GapShortest) GapShortest = ThisGap;
