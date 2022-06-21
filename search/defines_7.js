@@ -1,10 +1,7 @@
 var searchData=
 [
-  ['i2caddress_0',['I2CADDRESS',['../SensorHubT32_2src_2main_8cpp.html#a6ee9f32cf8cccca5a7e078c303afee94',1,'main.cpp']]],
-  ['idlen_1',['IDLEN',['../ReceiverCode_2src_2main_8cpp.html#a472646a6b1f959aa3b4261a8247c2015',1,'IDLEN():&#160;main.cpp'],['../SensorHubT32_2src_2main_8cpp.html#a472646a6b1f959aa3b4261a8247c2015',1,'IDLEN():&#160;main.cpp']]],
-  ['inactivitymaximum_2',['INACTIVITYMAXIMUM',['../RadioFunctions_8h.html#a6f6e4e8e296f81b3dd22980c49168662',1,'RadioFunctions.h']]],
-  ['inactivityminimum_3',['INACTIVITYMINIMUM',['../RadioFunctions_8h.html#a0da025fab2b31f5ffb073d6e12fe7fde',1,'RadioFunctions.h']]],
-  ['inactivitytimeout_4',['INACTIVITYTIMEOUT',['../RadioFunctions_8h.html#afc6ed518e5867e4d7095ec597eae9443',1,'RadioFunctions.h']]],
-  ['inputs_5fview_5',['Inputs_View',['../RadioFunctions_8cpp.html#a7a40aeaf7436d33790723c244446ca0a',1,'RadioFunctions.cpp']]],
-  ['inputs_5fview_6',['INPUTS_VIEW',['../TransmitterCode_2src_2main_8cpp.html#aa2bec27575ce278d56e8d9f844dfe72e',1,'main.cpp']]]
+  ['halfmicrosrange_0',['HALFMICROSRANGE',['../_transmitter_code_2src_2main_8cpp.html#aa0f99ed9c5fd16fa7deba8d4f0336b3a',1,'main.cpp']]],
+  ['help_5fview_1',['Help_View',['../_radio_functions_8cpp.html#a05037ba2042b6e261c7f9aca80b34b34',1,'RadioFunctions.cpp']]],
+  ['help_5fview_2',['HELP_VIEW',['../_transmitter_code_2src_2main_8cpp.html#a7f61099fecfe7dae5a38078cb36a9bd4',1,'main.cpp']]],
+  ['hoptime_3',['HOPTIME',['../common_8h.html#a57d506b5f34172770c8d645c12cb5ba2',1,'common.h']]]
 ];
