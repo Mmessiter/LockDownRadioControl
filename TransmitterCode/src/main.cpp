@@ -4462,7 +4462,7 @@ void MovePoint()
         }
     }
 
-    if (XtouchPlace > xPoints[1] - BOXOFFSET&& XtouchPlace < xPoints[1] + BOXOFFSET) { // do next point  ?
+    if (XtouchPlace > xPoints[1] - BOXOFFSET && XtouchPlace < xPoints[1] + BOXOFFSET) { // do next point  ?
         if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == 2) return;              //  expo = ignore this area
         rjump = GetDifference(YtouchPlace, yPoints[1]);
         if (YtouchPlace > yPoints[1]) {
