@@ -5157,6 +5157,17 @@ void  DoNumberedCommands(uint8_t nc){ // These gradually are replacing word-invo
     }
     ClearText();
 }
+
+
+/*********************************************************************************************************************************/
+
+void DisplayCurveAndServoPos(){
+            DisplayCurve();
+            SavedLineX = 0;  
+            ShowServoPos(); 
+            ClearText();
+}
+
 /*********************************************************************************************************************************/
 
 /**
@@ -5822,9 +5833,7 @@ void ButtonWasPressed()
             CurrentView = SavedCurrentView; 
    
             if (CurrentView == GRAPHVIEW) {
-                DisplayCurve();
-                SavedLineX = 0;  
-                ShowServoPos(); 
+                DisplayCurveAndServoPos();
                 SendValue(CopyToAllFlightModes, 0);
             }
             if (CurrentView == SWITCHES_VIEW) {
@@ -5883,9 +5892,7 @@ void ButtonWasPressed()
             }
             Exponential[FlightMode][ChanneltoSet - 1] = GetValue(Expo)+50; // Note: Getting this value from slider was not reliable (could not return 36!)
             ClearText();
-            DisplayCurve(); 
-            SavedLineX = 0;  
-            ShowServoPos(); 
+            DisplayCurveAndServoPos();
             return;
         }
         if (InStrng(ReceiveModel, TextIn) > 0) {
@@ -6587,9 +6594,7 @@ void ButtonWasPressed()
             ClearText();
             SendCommand(page_GraphView); // Set to GraphView
             CurrentView = GRAPHVIEW;
-            DisplayCurve(); // redisplay curve 
-            SavedLineX = 0;  
-            ShowServoPos(); 
+            DisplayCurveAndServoPos();
             updateInterpolationTypes();
             UpdateModelsNameEveryWhere();
             SendValue(CopyToAllFlightModes, 0);
@@ -6737,100 +6742,70 @@ void ButtonWasPressed()
         if (InStrng(midyup, TextIn)) // midy up?
         {
             CentreDegrees[FlightMode][ChanneltoSet - 1]++;
-            DisplayCurve();
-            SavedLineX = 0;  
-            ShowServoPos(); 
-            ClearText();
+            DisplayCurveAndServoPos();
             return;
         }
 
         if (InStrng(midydown, TextIn)) // midy down?
         {
             if (CentreDegrees[FlightMode][ChanneltoSet - 1] > 0 ) {CentreDegrees[FlightMode][ChanneltoSet - 1]--;}
-            DisplayCurve();
-            SavedLineX = 0;  
-            ShowServoPos(); 
-            ClearText();
+            DisplayCurveAndServoPos();
             return;
         }
 
         if (InStrng(midhiyup, TextIn)) // midhiy up?
         {
             MidHiDegrees[FlightMode][ChanneltoSet - 1]++;
-            DisplayCurve();
-            SavedLineX = 0;  
-            ShowServoPos(); 
-            ClearText();
+            DisplayCurveAndServoPos();
             return;
         }
 
         if (InStrng(midhiydown, TextIn)) // midhiy down?
         {
             if (MidHiDegrees[FlightMode][ChanneltoSet - 1] > 0) {MidHiDegrees[FlightMode][ChanneltoSet - 1]--;}
-            DisplayCurve();
-            SavedLineX = 0;  
-            ShowServoPos(); 
-            ClearText();
+            DisplayCurveAndServoPos();
             return;
         }
 
         if (InStrng(midlowyup, TextIn)) // midlowy up?
         {
             MidLowDegrees[FlightMode][ChanneltoSet - 1]++;
-            DisplayCurve();
-            SavedLineX = 0;  
-            ShowServoPos(); 
-            ClearText();
+            DisplayCurveAndServoPos();
             return;
         }
 
         if (InStrng(midlowydown, TextIn)) // midlowy down?
         {
             if (MidLowDegrees[FlightMode][ChanneltoSet - 1] > 0 ) {MidLowDegrees[FlightMode][ChanneltoSet - 1]--;}
-            DisplayCurve();
-            SavedLineX = 0;  
-            ShowServoPos(); 
-            ClearText();
+            DisplayCurveAndServoPos();
             return;
         }
 
         if (InStrng(yy1up, TextIn)) // yy1 up?
         {
             MaxDegrees[FlightMode][ChanneltoSet - 1]++;
-            DisplayCurve();
-            SavedLineX = 0;  
-            ShowServoPos(); 
-            ClearText();
+            DisplayCurveAndServoPos();
             return;
         }
 
         if (InStrng(yy1down, TextIn)) // yy1 down?
         {
             if(MaxDegrees[FlightMode][ChanneltoSet - 1] > 0) {MaxDegrees[FlightMode][ChanneltoSet - 1]--;}
-            DisplayCurve();
-            SavedLineX = 0;  
-            ShowServoPos(); 
-            ClearText();
+            DisplayCurveAndServoPos();
             return;
         }
 
         if (InStrng(yy2up, TextIn)) // yy1 up?
         {
             MinDegrees[FlightMode][ChanneltoSet - 1]++;
-            DisplayCurve();
-            SavedLineX = 0;  
-            ShowServoPos(); 
-            ClearText();
+            DisplayCurveAndServoPos();
             return;
         }
 
         if (InStrng(yy2down, TextIn)) // yy1 down?
         {
             if (MinDegrees[FlightMode][ChanneltoSet - 1] > 0) {MinDegrees[FlightMode][ChanneltoSet - 1]--;}
-            DisplayCurve();
-            SavedLineX = 0;  
-            ShowServoPos(); 
-            ClearText();
+            DisplayCurveAndServoPos();
             return;
         }
 
@@ -6843,10 +6818,7 @@ void ButtonWasPressed()
             MaxDegrees[FlightMode][ChanneltoSet - 1]         = 150;
             Exponential[FlightMode][ChanneltoSet - 1]        = DEFAULT_EXPO;
             InterpolationTypes[FlightMode][ChanneltoSet - 1] = 2; // expo = default
-            DisplayCurve();
-            SavedLineX = 0;  
-            ShowServoPos(); 
-            ClearText();
+            DisplayCurveAndServoPos();
             return;
         }
 
@@ -6862,10 +6834,7 @@ void ButtonWasPressed()
             MidHiDegrees[FlightMode][ChanneltoSet - 1]  = 180 - p;
             p                                           = MaxDegrees[FlightMode][ChanneltoSet - 1];
             MaxDegrees[FlightMode][ChanneltoSet - 1]    = 180 - p;
-            DisplayCurve();
-            SavedLineX = 0;  
-            ShowServoPos(); 
-            ClearText();
+            DisplayCurveAndServoPos();
             return;
         }
         p = (InStrng(ClickX, TextIn)); // Clicked to move point?
@@ -6876,10 +6845,7 @@ void ButtonWasPressed()
         p = (InStrng(ClickY, TextIn)); // Clicked to move point?
         if (p > 0) {
             YtouchPlace = GetNextNumber(p + 7, TextIn);
-            MovePoint();
-            ClearText(); // heer
-            SavedLineX = 0;                                    // just to force redisplay of servo indicator vertical bar
-            ShowServoPos();  
+            DisplayCurveAndServoPos();
             return;
         }
         if (CurrentMode == NORMAL) { 
@@ -7065,9 +7031,7 @@ void GetFlightMode()
         CheckTimer(); // update timer
         UpdateModelsNameEveryWhere();
         if (CurrentView == GRAPHVIEW) {
-            DisplayCurve();
-            SavedLineX = 0;                                    // just to force redisplay of servo indicator vertical bar
-            ShowServoPos();  
+            DisplayCurveAndServoPos();
          }
     }
     PreviousFlightMode = FlightMode;
