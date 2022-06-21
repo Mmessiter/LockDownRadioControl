@@ -1,6 +1,5 @@
 var NAVTREEINDEX7 =
 {
-"struct_tiny_g_p_s_course.html#a76dc8ae6c2fe5ead9b44c8d53a3272ca":[9,0,20,0],
 "struct_tiny_g_p_s_date.html":[9,0,22],
 "struct_tiny_g_p_s_date.html#a1b913837130bb49ecd309eaf6bc205b1":[9,0,22,3],
 "struct_tiny_g_p_s_date.html#a3ae7825f840ef4ba0ecddbc22f741817":[9,0,22,4],
