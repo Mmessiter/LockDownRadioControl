@@ -6597,8 +6597,7 @@ void ButtonWasPressed()
             return;
         }
 
-        p = (InStrng(Front_View, TextIn)); //which screen is in view?
-        if (p > 0) {
+        if (InStrng(Front_View, TextIn)) {
             CurrentView = FRONTVIEW;
             ClearText();
             PreviousFlightMode = 250; // sure to be different
@@ -6608,8 +6607,7 @@ void ButtonWasPressed()
             return;
         }
 
-        p = (InStrng(Sticks_View, TextIn));
-        if (p > 0) {
+        if (InStrng(Sticks_View, TextIn)) {
             SendCommand(page_SticksView);
             Force_ReDisplay();
             CurrentView = STICKSVIEW;
@@ -6642,8 +6640,7 @@ void ButtonWasPressed()
             return;
         }
 
-        p = (InStrng(MIXES_VIEW, TextIn)); //
-        if (p > 0) {
+        if (InStrng(MIXES_VIEW, TextIn)) {
             SendCommand(pMixesView); 
             CurrentView = MIXESVIEW;
             UpdateModelsNameEveryWhere();
@@ -6655,8 +6652,7 @@ void ButtonWasPressed()
             return;
         }
 
-        p = (InStrng(Mixes_View, TextIn));    // Get New Mixes!
-        if (p > 0) {
+        if (InStrng(Mixes_View, TextIn)) {
             CurrentView = MIXESVIEW;
             Procrastinate(100);               // allow screen changes to appear
             UpdateModelsNameEveryWhere();
@@ -6742,6 +6738,8 @@ void ButtonWasPressed()
         {
             CentreDegrees[FlightMode][ChanneltoSet - 1]++;
             DisplayCurve();
+            SavedLineX = 0;  
+            ShowServoPos(); 
             ClearText();
             return;
         }
@@ -6750,6 +6748,8 @@ void ButtonWasPressed()
         {
             if (CentreDegrees[FlightMode][ChanneltoSet - 1] > 0 ) {CentreDegrees[FlightMode][ChanneltoSet - 1]--;}
             DisplayCurve();
+            SavedLineX = 0;  
+            ShowServoPos(); 
             ClearText();
             return;
         }
@@ -6758,6 +6758,8 @@ void ButtonWasPressed()
         {
             MidHiDegrees[FlightMode][ChanneltoSet - 1]++;
             DisplayCurve();
+            SavedLineX = 0;  
+            ShowServoPos(); 
             ClearText();
             return;
         }
@@ -6766,6 +6768,8 @@ void ButtonWasPressed()
         {
             if (MidHiDegrees[FlightMode][ChanneltoSet - 1] > 0) {MidHiDegrees[FlightMode][ChanneltoSet - 1]--;}
             DisplayCurve();
+            SavedLineX = 0;  
+            ShowServoPos(); 
             ClearText();
             return;
         }
@@ -6774,6 +6778,8 @@ void ButtonWasPressed()
         {
             MidLowDegrees[FlightMode][ChanneltoSet - 1]++;
             DisplayCurve();
+            SavedLineX = 0;  
+            ShowServoPos(); 
             ClearText();
             return;
         }
@@ -6782,6 +6788,8 @@ void ButtonWasPressed()
         {
             if (MidLowDegrees[FlightMode][ChanneltoSet - 1] > 0 ) {MidLowDegrees[FlightMode][ChanneltoSet - 1]--;}
             DisplayCurve();
+            SavedLineX = 0;  
+            ShowServoPos(); 
             ClearText();
             return;
         }
@@ -6790,6 +6798,8 @@ void ButtonWasPressed()
         {
             MaxDegrees[FlightMode][ChanneltoSet - 1]++;
             DisplayCurve();
+            SavedLineX = 0;  
+            ShowServoPos(); 
             ClearText();
             return;
         }
@@ -6798,6 +6808,8 @@ void ButtonWasPressed()
         {
             if(MaxDegrees[FlightMode][ChanneltoSet - 1] > 0) {MaxDegrees[FlightMode][ChanneltoSet - 1]--;}
             DisplayCurve();
+            SavedLineX = 0;  
+            ShowServoPos(); 
             ClearText();
             return;
         }
@@ -6806,6 +6818,8 @@ void ButtonWasPressed()
         {
             MinDegrees[FlightMode][ChanneltoSet - 1]++;
             DisplayCurve();
+            SavedLineX = 0;  
+            ShowServoPos(); 
             ClearText();
             return;
         }
@@ -6814,6 +6828,8 @@ void ButtonWasPressed()
         {
             if (MinDegrees[FlightMode][ChanneltoSet - 1] > 0) {MinDegrees[FlightMode][ChanneltoSet - 1]--;}
             DisplayCurve();
+            SavedLineX = 0;  
+            ShowServoPos(); 
             ClearText();
             return;
         }
@@ -6861,7 +6877,9 @@ void ButtonWasPressed()
         if (p > 0) {
             YtouchPlace = GetNextNumber(p + 7, TextIn);
             MovePoint();
-            ClearText();
+            ClearText(); // heer
+            SavedLineX = 0;                                    // just to force redisplay of servo indicator vertical bar
+            ShowServoPos();  
             return;
         }
         if (CurrentMode == NORMAL) { 
