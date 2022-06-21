@@ -3211,24 +3211,20 @@ void LogNewFlightMode(){
     char Ltext[] = "Bank: ";
     char NB[3];
     char thetext[10];
-    char crlf[]  = {'|',13,10,0};
-    LogFilePreamble();         
     Str(NB,FlightMode,0);
     strcpy(thetext,Ltext);
     strcat(thetext, NB);
-    strcat(thetext,crlf);
-    WriteToLogFile(thetext,sizeof(thetext));
+    LogText(thetext, 7);
 }
 
 // ************************************************************************
 
 void LogThisRX(){
-char Ltext[] = "RX: ";
-    char crlf[]  = {'|',13,10,0};
-    LogFilePreamble();    
-    WriteToLogFile(Ltext,sizeof(Ltext));
-    WriteToLogFile(ThisRadio,sizeof(ThisRadio));
-    WriteToLogFile(crlf,sizeof(crlf));
+    char Ltext[] = "RX: ";
+    char thetext[10];
+    strcpy (thetext,Ltext);
+    strcat (thetext,ThisRadio);
+    LogText(thetext, 5);
 }
 // ************************************************************************
 
@@ -3236,15 +3232,11 @@ void LogThisGap(){
     char Ltext[] = "Gap: ";
     char NB[3];
     char thetext[10];
-    char crlf[]  = {'|',13,10,0};
     if (ThisGap > 1000) return;
-    LogFilePreamble();         
     Str(NB,ThisGap,0);
     strcpy(thetext,Ltext);
     strcat(thetext, NB);
-    strcat(thetext,crlf);
-    WriteToLogFile(thetext,sizeof(thetext));
-   
+    LogText(thetext, 8);
 }
 
 
