@@ -16,10 +16,10 @@ var searchData=
   ['secondssincedate_13',['secondsSinceDate',['../class_adafruit___g_p_s.html#a4b49f40ba946d1646d7937b25e8dda37',1,'Adafruit_GPS']]],
   ['secondssincefix_14',['secondsSinceFix',['../class_adafruit___g_p_s.html#aed7db1b8b55742a78f291687f1ebc9ca',1,'Adafruit_GPS']]],
   ['secondssincetime_15',['secondsSinceTime',['../class_adafruit___g_p_s.html#af01989c447efddb9fe1baa78e50373c5',1,'Adafruit_GPS']]],
-  ['sendchararray_16',['SendCharArray',['../_radio_functions_8h.html#acd617ff93ca893aa7d65aaf2898dfc3d',1,'SendCharArray(char *ch0, char *ch1, char *ch2, char *ch3, char *ch4, char *ch5, char *ch6, char *ch7, char *ch8, char *ch9, char *ch10, char *ch11, char *ch12):&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#acd617ff93ca893aa7d65aaf2898dfc3d',1,'SendCharArray(char *ch0, char *ch1, char *ch2, char *ch3, char *ch4, char *ch5, char *ch6, char *ch7, char *ch8, char *ch9, char *ch10, char *ch11, char *ch12):&#160;main.cpp']]],
-  ['sendcommand_17',['sendCommand',['../class_adafruit___g_p_s.html#abd7e2f17f11188dfc99fff55e3560dfb',1,'Adafruit_GPS']]],
-  ['sendcommand_18',['SendCommand',['../_radio_functions_8h.html#aecac2f0c289f02ef3c92b85be82eacac',1,'SendCommand(char *tbox):&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#aecac2f0c289f02ef3c92b85be82eacac',1,'SendCommand(char *tbox):&#160;main.cpp']]],
-  ['senddata_19',['SendData',['../_radio_functions_8h.html#a3d7322e78f097d02d476f17a6306997c',1,'SendData():&#160;RadioFunctions.cpp'],['../_radio_functions_8cpp.html#a3d7322e78f097d02d476f17a6306997c',1,'SendData():&#160;RadioFunctions.cpp']]],
+  ['sendchararray_16',['SendCharArray',['../_transmitter_code_2src_2main_8cpp.html#acd617ff93ca893aa7d65aaf2898dfc3d',1,'SendCharArray(char *ch0, char *ch1, char *ch2, char *ch3, char *ch4, char *ch5, char *ch6, char *ch7, char *ch8, char *ch9, char *ch10, char *ch11, char *ch12):&#160;main.cpp'],['../_radio_functions_8h.html#acd617ff93ca893aa7d65aaf2898dfc3d',1,'SendCharArray(char *ch0, char *ch1, char *ch2, char *ch3, char *ch4, char *ch5, char *ch6, char *ch7, char *ch8, char *ch9, char *ch10, char *ch11, char *ch12):&#160;main.cpp']]],
+  ['sendcommand_17',['SendCommand',['../_transmitter_code_2src_2main_8cpp.html#aecac2f0c289f02ef3c92b85be82eacac',1,'SendCommand(char *tbox):&#160;main.cpp'],['../_radio_functions_8h.html#aecac2f0c289f02ef3c92b85be82eacac',1,'SendCommand(char *tbox):&#160;main.cpp']]],
+  ['sendcommand_18',['sendCommand',['../class_adafruit___g_p_s.html#abd7e2f17f11188dfc99fff55e3560dfb',1,'Adafruit_GPS']]],
+  ['senddata_19',['SendData',['../_radio_functions_8cpp.html#a3d7322e78f097d02d476f17a6306997c',1,'SendData():&#160;RadioFunctions.cpp'],['../_radio_functions_8h.html#a3d7322e78f097d02d476f17a6306997c',1,'SendData():&#160;RadioFunctions.cpp']]],
   ['senddatatoreceiver_20',['SendDataToReceiver',['../_sensor_hub_t32_2src_2main_8cpp.html#aac529433269b7b52ef0a627716a70aea',1,'main.cpp']]],
   ['senddatetoackpayload_21',['SendDateToAckPayload',['../radio_8h.html#affa2dcc4341b8daecac77e6e0a354b2d',1,'radio.h']]],
   ['sendhelp_22',['SendHelp',['../_transmitter_code_2src_2main_8cpp.html#a038111bf598c53ad7b9a62ca45259356',1,'main.cpp']]],
@@ -46,7 +46,7 @@ var searchData=
   ['setnewpipe_43',['SetNewPipe',['../radio_8h.html#a6f54969e66375decc44723b141b78766',1,'radio.h']]],
   ['setsampling_44',['setSampling',['../class_adafruit___b_m_p280.html#a1a3d84395d208a5f21cbab211fda176e',1,'Adafruit_BMP280']]],
   ['setspeed_45',['setSpeed',['../class_adafruit___i2_c_device.html#a784c398626837ef911ce7e69b0807be7',1,'Adafruit_I2CDevice']]],
-  ['settestfrequencies_46',['SetTestFrequencies',['../_receiver_code_2src_2main_8cpp.html#a31a35307bbac88ceda244272f25d399a',1,'SetTestFrequencies():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a31a35307bbac88ceda244272f25d399a',1,'SetTestFrequencies():&#160;main.cpp']]],
+  ['settestfrequencies_46',['SetTestFrequencies',['../_transmitter_code_2src_2main_8cpp.html#a31a35307bbac88ceda244272f25d399a',1,'SetTestFrequencies():&#160;main.cpp'],['../_receiver_code_2src_2main_8cpp.html#a31a35307bbac88ceda244272f25d399a',1,'SetTestFrequencies():&#160;main.cpp']]],
   ['setthepipe_47',['SetThePipe',['../_radio_functions_8cpp.html#a70dc6f8d2e5ccef6b8e4a2b9b0afb2ce',1,'SetThePipe(uint64_t WhichPipe):&#160;RadioFunctions.cpp'],['../_radio_functions_8h.html#a70dc6f8d2e5ccef6b8e4a2b9b0afb2ce',1,'SetThePipe(uint64_t WhichPipe):&#160;RadioFunctions.cpp']]],
   ['setthertc_48',['SetTheRTC',['../_transmitter_code_2src_2main_8cpp.html#a12d5a2fc981085112cd6b885f22247e8',1,'main.cpp']]],
   ['setukfrequencies_49',['SetUKFrequencies',['../radio_8h.html#a2eabdb233653fa02f0b899e26b5e8ce7',1,'SetUKFrequencies():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a2eabdb233653fa02f0b899e26b5e8ce7',1,'SetUKFrequencies():&#160;main.cpp'],['../_receiver_code_2src_2main_8cpp.html#a2eabdb233653fa02f0b899e26b5e8ce7',1,'SetUKFrequencies():&#160;main.cpp']]],
@@ -74,5 +74,6 @@ var searchData=
   ['stopmacro_71',['StopMacro',['../_radio_functions_8cpp.html#ae1e0755ae9441b2835ac027a98707caa',1,'RadioFunctions.cpp']]],
   ['str_72',['Str',['../_radio_functions_8h.html#a6bac145d5df31efb9c90e2a60a4cbca5',1,'Str(char *s, int n, int comma):&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a6bac145d5df31efb9c90e2a60a4cbca5',1,'Str(char *s, int n, int comma):&#160;main.cpp']]],
   ['swap_73',['swap',['../_transmitter_code_2src_2main_8cpp.html#a31322f63ce3e02c4ef9a0c1e0c7f1ff5',1,'main.cpp']]],
-  ['synchrtcwithgpstime_74',['SynchRTCwithGPSTime',['../_transmitter_code_2src_2main_8cpp.html#abb1ea95b6b3f033883aa87682d3240ab',1,'main.cpp']]]
+  ['swapchipenablelines_74',['SwapChipEnableLines',['../radio_8h.html#ac980be068a45a1406b0e244304741ac6',1,'radio.h']]],
+  ['synchrtcwithgpstime_75',['SynchRTCwithGPSTime',['../_transmitter_code_2src_2main_8cpp.html#abb1ea95b6b3f033883aa87682d3240ab',1,'main.cpp']]]
 ];
