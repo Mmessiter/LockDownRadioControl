@@ -5516,13 +5516,13 @@ void ButtonWasPressed()
     if (InStrng(LogVIEW, TextIn)){  // Start log screen
             SendCommand(pLogView);
             CurrentView = LOGVIEW;
+            SendValue(n0,MinimumGap);
+            SendValue(c0,LogRXSwaps);
+            SendValue(sw0,UseLog);    
             if (UseLog){
                 RecentStartLine = 0;
                 ShowLogFile(RecentStartLine);
-                SendValue(n0,MinimumGap);
-                SendValue(c0,LogRXSwaps);
-                SendValue(sw0,UseLog);
-            }
+            }        
             ClearText();
             return;
     }
