@@ -76,14 +76,6 @@ var NAVTREE =
       [ "autotoc_md36", "md__docs__l_d_r_c2____building__the__radio.html#autotoc_md36", null ]
     ] ],
     [ "LDRC3 - Software developement", "md__docs__l_d_r_c3____software_developement.html", null ],
-    [ "Adafruit Community Code of Conduct", "md__receiver_code_lib__adafruit__g_p_s__library_code_of_conduct.html", [
-      [ "Our Pledge", "md__receiver_code_lib__adafruit__g_p_s__library_code_of_conduct.html#autotoc_md45", null ],
-      [ "Our Standards", "md__receiver_code_lib__adafruit__g_p_s__library_code_of_conduct.html#autotoc_md46", null ],
-      [ "Our Responsibilities", "md__receiver_code_lib__adafruit__g_p_s__library_code_of_conduct.html#autotoc_md47", null ],
-      [ "Moderation", "md__receiver_code_lib__adafruit__g_p_s__library_code_of_conduct.html#autotoc_md48", null ],
-      [ "Scope", "md__receiver_code_lib__adafruit__g_p_s__library_code_of_conduct.html#autotoc_md49", null ],
-      [ "Attribution", "md__receiver_code_lib__adafruit__g_p_s__library_code_of_conduct.html#autotoc_md50", null ]
-    ] ],
     [ "RecieverCode", "_r_x_c_o_d_e.html", [
       [ "Features List", "_r_x_c_o_d_e.html#rxFeatures", null ],
       [ "TEENSY 4.0 PINS", "_r_x_c_o_d_e.html#rxpinout", null ]
@@ -95,10 +87,8 @@ var NAVTREE =
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],
-      [ "Class Hierarchy", "hierarchy.html", "hierarchy" ],
       [ "Class Members", "functions.html", [
         [ "All", "functions.html", null ],
-        [ "Functions", "functions_func.html", null ],
         [ "Variables", "functions_vars.html", null ]
       ] ]
     ] ],
@@ -108,9 +98,6 @@ var NAVTREE =
         [ "All", "globals.html", "globals_dup" ],
         [ "Functions", "globals_func.html", "globals_func" ],
         [ "Variables", "globals_vars.html", "globals_vars" ],
-        [ "Typedefs", "globals_type.html", null ],
-        [ "Enumerations", "globals_enum.html", null ],
-        [ "Enumerator", "globals_eval.html", null ],
         [ "Macros", "globals_defs.html", "globals_defs" ]
       ] ]
     ] ]
@@ -119,12 +106,11 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"_adafruit___g_p_s_8cpp.html",
-"_radio_functions_8h.html#aa98c3d7858384fded2f32ce45a271605",
-"_sensor_hub_t32_2src_2main_8cpp.html#af5f2a2a78189687a7055abd054ac6058",
-"_transmitter_code_2src_2main_8cpp.html#a6e4fac4e296c09388b8b56353402d67a",
-"_transmitter_code_2src_2main_8cpp.html#ae17abd00a1768ace75c1828f3d02a35c",
-"globals_defs_g.html"
+"_adafruit___p_m_t_k_8h.html",
+"_receiver_code_2src_2main_8cpp.html#a5424788640aaa8d535d6ea077949ef82",
+"_transmitter_code_2src_2main_8cpp.html#a436844f605001cad62b48d890e11fe2c",
+"_transmitter_code_2src_2main_8cpp.html#ab6e3ad31a969d0f0341e67b7af6f0a01",
+"globals_defs_d.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
