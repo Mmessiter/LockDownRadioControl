@@ -5378,7 +5378,6 @@ void ButtonWasPressed()
     char RefrLOG[]                 = "RefrLOG";
     char DownLOG[]                 = "DownLOG";
     char UpLOG[]                   = "UpLOG";
-   
     char OptionsEnd[]              = "OptionsEnd";
     char QNH[]                     = "Qnh";
     char Mark[]                    = "Mark";
@@ -5965,7 +5964,6 @@ void ButtonWasPressed()
             FailSafeChannel[14] = GetValue(fs15);
             FailSafeChannel[15] = GetValue(fs16);
             SaveOneModel(ModelNumber);
-          //  SendCommand(ProgressEnd);
             FailSafeTimer= millis();
             SaveFailSafeNow = true;
             ClearText();
@@ -5973,22 +5971,6 @@ void ButtonWasPressed()
         }
         if (InStrng(FailSafe, TextIn) > 0) {
             SendCommand(pFailSafe);
-          //  SendValue(fs1, FailSafeChannel[0]); // this is done by   UpdateButtonLabels(); !
-          //  SendValue(fs2, FailSafeChannel[1]);
-          //  SendValue(fs3, FailSafeChannel[2]);
-          //  SendValue(fs4, FailSafeChannel[3]);
-          //  SendValue(fs5, FailSafeChannel[4]);
-          //  SendValue(fs6, FailSafeChannel[5]);
-          //  SendValue(fs7, FailSafeChannel[6]);
-          //  SendValue(fs8, FailSafeChannel[7]);
-          //  SendValue(fs9, FailSafeChannel[8]);
-          //  SendValue(fs10, FailSafeChannel[9]);
-          //  SendValue(fs11, FailSafeChannel[10]);
-          //  SendValue(fs12, FailSafeChannel[11]);
-          //  SendValue(fs13, FailSafeChannel[12]);
-          //  SendValue(fs14, FailSafeChannel[13]);
-          //  SendValue(fs15, FailSafeChannel[14]);
-          //  SendValue(fs16, FailSafeChannel[15]);
             CurrentView = FAILSAFE_VIEW;
             UpdateButtonLabels();
             ClearText();
