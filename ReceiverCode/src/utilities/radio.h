@@ -432,10 +432,10 @@ void LoadAckPayload()
  * @param compressed_buf[out] Must have allocated 3/4 the size of uncompressed_buf
  * @param uncompressed_size Size is in units of uint16_t (aka word or unsigned short)
  */
-void Decompress(uint16_t* uncompressed_buf, uint16_t* compressed_buf, int uncompressed_size)
+void Decompress(uint16_t* uncompressed_buf, uint16_t* compressed_buf, uint8_t uncompressed_size)
 {
-    int p = 0;
-    for (int l = 0; l < (uncompressed_size * 3 / 4); l += 3) {
+    uint8_t p = 0;
+    for (uint8_t l = 0; l < (uncompressed_size * 3 / 4); l += 3) {
         uncompressed_buf[p] = compressed_buf[l] >> 4;
         ++p;
         uncompressed_buf[p] = (compressed_buf[l] & 0xf) << 8 | compressed_buf[l + 1] >> 8;
