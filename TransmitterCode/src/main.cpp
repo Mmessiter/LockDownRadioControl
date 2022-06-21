@@ -4503,7 +4503,6 @@ void MovePoint()
             if (MaxDegrees[FlightMode][ChanneltoSet - 1] <= 180 - rjump) MaxDegrees[FlightMode][ChanneltoSet - 1] += rjump;
         }
     }
-    DisplayCurve();
 }
 
 
