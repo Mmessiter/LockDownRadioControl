@@ -6827,6 +6827,7 @@ void ButtonWasPressed()
         p = (InStrng(ClickY, TextIn)); // Clicked to move point?
         if (p > 0) {
             YtouchPlace = GetNextNumber(p + 7, TextIn);
+            MovePoint();
             DisplayCurveAndServoPos();
             return;
         }
