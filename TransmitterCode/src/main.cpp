@@ -365,8 +365,6 @@ uint32_t GapStart                    = 0;
 uint32_t ThisGap                     = 0;
 uint32_t GapAverage                  = 0;
 uint32_t GapCount                    = 0;
-uint32_t GapShortest                 = 0;
-char     CalibrateNow[]              = "touch_j";
 char     ModelVolts[8]               = " ";
 float    GPSLatitude                 = 0;  
 float    GPSLongitude                = 0;
@@ -4924,7 +4922,6 @@ void RestoreBrightness(){
 
 void ZeroDataScreen(){             // ZERO Those parameters that are zeroable
             LostPackets        = 0;
-            GapShortest        = 0;
             TimerMillis        = millis();
             GapLongest         = 0;
             GapSum             = 0;
@@ -7371,9 +7368,7 @@ void CheckGapsLength()
         ++GapCount;
         ThisGap = (millis() - GapStart); // AND in fact RX sends no data for 20 ms after reconnection
         if (ThisGap  >= MinimumGap  && UseLog ) LogThisGap();
-        if (!GapShortest) GapShortest = ThisGap;
         if (ThisGap > GapLongest)  GapLongest = ThisGap;
-        if (ThisGap < GapShortest) GapShortest = ThisGap;
         GapSum += ThisGap;
         GapStart   = 0;
         GapAverage = GapSum / GapCount;
@@ -7382,8 +7377,6 @@ void CheckGapsLength()
         Serial.println(GapCount);
         Serial.print("GapAverage: ");
         Serial.println(GapAverage);
-        Serial.print("GapShortest: ");
-        Serial.println(GapShortest);
         Serial.print("GapLongest: ");
         Serial.println(GapLongest);
         Serial.println(" ");
@@ -7491,7 +7484,6 @@ void loop()
             BindingNow  = 0;
             BoundFlag   = true;
             LostPackets = 0;
-            GapShortest = 0;
             GapLongest  = 0;
             GapSum      = 0;
             GapAverage  = 0;

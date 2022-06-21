@@ -507,9 +507,6 @@ FASTRUN void ReceiveData(){
         if (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT) {                      
         Reconnect();                                                                  // Try to reconnect.
         } 
-       // else {
-       // Serial.println ("Waiting...");    
-       // }
     }
 }
 /************************************************************************************************************/
@@ -638,7 +635,7 @@ void loop()
     if (BoundFlag && Connected) {
         if (millis() - SBUSTimer >= SBUSRATE) {                  // SBUS rate is also good enough for servo rate
             SBUSTimer = millis();                                // timer starts before send starts....
-            if ((millis() - ReconnectedMoment) > RECONNECTGAP) { // Don't send data for 20 ms after reconnect
+            if ((millis() - ReconnectedMoment) > RECONNECTGAP) { // Don't send data for 25 ms after reconnect
                 MoveServos();
             }
         }

@@ -44,20 +44,20 @@ float Pduration  = 0;
 #endif
 
 // **** Decompresses cc*3/4 x 16 BIT values up to cc loading only their low 12 BITS cc must be divisble by 4! ******************
-void DeComp(uint16_t* d, uint16_t* c, int cc)
-{
-    int p = 0, l = 0;
-    for (l = 0; l < (cc * 3 / 4); l += 3) {
-        d[p] = c[l] >> 4;
-        p++;
-        d[p] = (c[l] & 0xf) << 8 | c[l + 1] >> 8;
-        p++;
-        d[p] = (c[l + 1] & 0xff) << 4 | c[l + 2] >> 12;
-        p++;
-        d[p] = c[l + 2] & 0xfff;
-        p++;
-    }
-}
+//void DeComp(uint16_t* d, uint16_t* c, int cc)
+//{
+ //   int p = 0, l = 0;
+ //   for (l = 0; l < (cc * 3 / 4); l += 3) {
+ //       d[p] = c[l] >> 4;
+ //       p++;
+ //       d[p] = (c[l] & 0xf) << 8 | c[l + 1] >> 8;
+ //       p++;
+ //       d[p] = (c[l + 1] & 0xff) << 4 | c[l + 2] >> 12;
+ //       p++;
+ //       d[p] = c[l + 2] & 0xfff;
+ //       p++;
+ //   }
+//}
 
 /**
  * Compresses uint16_t* buffer values (each with 12 bit resolution - the lower 12 bits).
@@ -65,9 +65,9 @@ void DeComp(uint16_t* d, uint16_t* c, int cc)
  * @param uncompressed_buf[in]
  * @param uncompressed_size Size is in units of uint16_t (aka word or unsigned short). This *must* be divisible by 4.
  */
-void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, int uncompressed_size)
+void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uint8_t uncompressed_size)
 {
-    int p = 0;
+    uint8_t p = 0;
     for (int l = 0; l < (uncompressed_size * 3 / 4); l += 3) {
         compressed_buf[l] = uncompressed_buf[p] << 4 | uncompressed_buf[p + 1] >> 8;
         ++p;
