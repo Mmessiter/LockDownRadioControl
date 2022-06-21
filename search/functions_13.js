@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['value_0',['value',['../struct_tiny_g_p_s_date.html#a718150ae16f68afa9ae81f9d1b3ce3f4',1,'TinyGPSDate::value()'],['../struct_tiny_g_p_s_time.html#afcdb632fee9d144b1414c9d7b95719f1',1,'TinyGPSTime::value()'],['../struct_tiny_g_p_s_decimal.html#ac3ce80976e5d8456e9f211b910a6cb19',1,'TinyGPSDecimal::value()'],['../struct_tiny_g_p_s_integer.html#a67de7e76d61dbd25eb32f701d8ce867b',1,'TinyGPSInteger::value()'],['../class_tiny_g_p_s_custom.html#a03bb66f8d3e078b21c8a5033a88d8a32',1,'TinyGPSCustom::value()']]]
+  ['watchdogcallback_0',['WatchDogCallBack',['../TransmitterCode_2src_2main_8cpp.html#ae410be09c6f449451d8f2327fd895c7d',1,'main.cpp']]],
+  ['wordwrap_1',['WordWrap',['../TransmitterCode_2src_2main_8cpp.html#a6d6ab5dcee82c319640e3a0a0537ebf7',1,'main.cpp']]],
+  ['writetologfile_2',['WriteToLogFile',['../TransmitterCode_2src_2main_8cpp.html#ad533b143a4eb329828117f9884135686',1,'main.cpp']]]
 ];
