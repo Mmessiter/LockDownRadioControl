@@ -1,14 +1,11 @@
 var NAVTREEINDEX6 =
 {
-"functions_~.html":[9,3,0,24],
-"globals.html":[10,1,0,0],
-"globals.html":[10,1,0],
 "globals_a.html":[10,1,0,1],
 "globals_b.html":[10,1,0,2],
 "globals_c.html":[10,1,0,3],
 "globals_d.html":[10,1,0,4],
-"globals_defs.html":[10,1,6,0],
 "globals_defs.html":[10,1,6],
+"globals_defs.html":[10,1,6,0],
 "globals_defs_a.html":[10,1,6,1],
 "globals_defs_b.html":[10,1,6,2],
 "globals_defs_c.html":[10,1,6,3],
@@ -249,5 +246,8 @@ var NAVTREEINDEX6 =
 "struct_raw_degrees.html#a13564009c60e20dbf03b158114d1c0e2":[9,0,14,1],
 "struct_raw_degrees.html#a156d5ced092fa1473b9b669a29be3509":[9,0,14,0],
 "struct_raw_degrees.html#a39c31d2d0332155a4d2c975cec0a796f":[9,0,14,3],
-"struct_tiny_g_p_s_altitude.html":[9,0,19]
+"struct_tiny_g_p_s_altitude.html":[9,0,19],
+"struct_tiny_g_p_s_altitude.html#a1eb3e5b425784fc0db3e9ffe0f77f741":[9,0,19,1],
+"struct_tiny_g_p_s_altitude.html#a5a39d145bb1778814007206c765189f7":[9,0,19,2],
+"struct_tiny_g_p_s_altitude.html#a5ae68d990ea08d4e21cfa6aefb46cc03":[9,0,19,3]
 };
