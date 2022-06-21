@@ -5880,7 +5880,7 @@ void ButtonWasPressed()
                 SendCommand(pLogView);
                 CurrentView = LOGVIEW;
                 RecentStartLine = 0;
-                ShowLogFile(RecentStartLine);
+                if (UseLog) ShowLogFile(RecentStartLine);
              }
 
             UpdateModelsNameEveryWhere();
