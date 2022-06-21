@@ -59,7 +59,7 @@ var searchData=
   ['clockspoken_56',['ClockSpoken',['../_transmitter_code_2src_2main_8cpp.html#a235116408ba9ac496c2a243a340888e5',1,'main.cpp']]],
   ['closelogfile_57',['CloseLogFile',['../_transmitter_code_2src_2main_8cpp.html#abc72fe68abd024cb263115e0afd3160a',1,'main.cpp']]],
   ['closemodelsfile_58',['CloseModelsFile',['../_transmitter_code_2src_2main_8cpp.html#a6922974b734cfe3a511e074a2d6ac33c',1,'main.cpp']]],
-  ['code_2dof_2dconduct_2emd_59',['code-of-conduct.md',['../_receiver_code_2lib_2_adafruit___g_p_s___library_2code-of-conduct_8md.html',1,'(Global Namespace)'],['../_sensor_hub_t32_2lib_2_adafruit___i_n_a219_2code-of-conduct_8md.html',1,'(Global Namespace)']]],
+  ['code_2dof_2dconduct_2emd_59',['code-of-conduct.md',['../_sensor_hub_t32_2lib_2_adafruit___i_n_a219_2code-of-conduct_8md.html',1,'(Global Namespace)'],['../_receiver_code_2lib_2_adafruit___g_p_s___library_2code-of-conduct_8md.html',1,'(Global Namespace)']]],
   ['color_60',['color',['../structsensors__event__t.html#a56b4d05fbf47013727ec1a0a94db91e6',1,'sensors_event_t']]],
   ['colours_5fview_61',['COLOURS_VIEW',['../_transmitter_code_2src_2main_8cpp.html#a8bafc146db9adcaf79abde00aaffb6bc',1,'main.cpp']]],
   ['colours_5fview_62',['Colours_View',['../_radio_functions_8cpp.html#aa4b7f6ea183a42ffcb033e811b468efe',1,'RadioFunctions.cpp']]],
