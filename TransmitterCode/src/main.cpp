@@ -4061,8 +4061,11 @@ void SetDefaultValues()
     SDCardAddress += (ModelNumber - 1) * MODELSIZE; //  spare bytes for Model params
     StartLocation = SDCardAddress;
     ModelDefined  = 0;
+    OpenModelsFile();
     SDUpdateByte(SDCardAddress, ModelDefined);
-    ReadOneModel(ModelNumber);
+    CloseModelsFile();
+    ReadOneModel(ModelNumber); // heer
+    UpdateModelsNameEveryWhere();
     Procrastinate(100);
     SendCommand(ProgressEnd);
 }
