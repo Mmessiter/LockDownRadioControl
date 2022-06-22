@@ -4054,6 +4054,11 @@ void SetDefaultValues()
     UpdateModelsNameEveryWhere();
     SendValue(Progress, 100);
     ReversedChannelBITS = 0;
+    SDCardAddress = TXSIZE;                  //  spare bytes for TX stuff
+    SDCardAddress += (ModelNumber - 1) * MODELSIZE; //  spare bytes for Model params
+    StartLocation = SDCardAddress;
+    ModelDefined  = 84;
+    SDUpdateByte(SDCardAddress, ModelDefined);
     Procrastinate(100);
     SendCommand(ProgressEnd);
 }
