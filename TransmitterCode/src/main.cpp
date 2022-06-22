@@ -2706,6 +2706,14 @@ bool ReadOneModel(uint8_t Mnum)
 {
     uint16_t j;
     uint16_t i;
+    char NoModelYet[]  = "Model ";
+    char nb[5];
+
+    Str(nb,ModelNumber,0);
+    strcpy(ModelName,NoModelYet);
+    strcat(ModelName, nb);
+
+
     if (!ModelsFileOpen) OpenModelsFile();
     if (!ModelsFileOpen) return false;
     SDCardAddress = TXSIZE;                    //  spare bytes for TX stuff
