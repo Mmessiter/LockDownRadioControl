@@ -1,6 +1,6 @@
 var radio_8h =
 [
-    [ "Payload", "struct_payload.html", "struct_payload" ],
+    [ "Payload", "structPayload.html", "structPayload" ],
     [ "CheckWhetherItsTimeToHop", "radio_8h.html#ad21c5c00ff554736e4e21cee13773cd5", null ],
     [ "ClearAckPayload", "radio_8h.html#a5a26715a721e1073d6ae00498282c056", null ],
     [ "Decompress", "radio_8h.html#a6feccc8c0583de3235616d42076f1371", null ],
