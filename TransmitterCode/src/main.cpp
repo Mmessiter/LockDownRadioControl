@@ -4054,7 +4054,6 @@ void SetDefaultValues()
     SendValue(Progress, 95);
     Procrastinate(10);
     SaveOneModel(ModelNumber);
-    UpdateModelsNameEveryWhere();
     SendValue(Progress, 100);
     ReversedChannelBITS = 0;
     SDCardAddress = TXSIZE;                         //  spare bytes for TX stuff
@@ -4062,7 +4061,7 @@ void SetDefaultValues()
     StartLocation = SDCardAddress;
     ModelDefined  = 0;
     OpenModelsFile();
-    SDUpdateByte(SDCardAddress, ModelDefined);
+    SDUpdateByte(SDCardAddress, ModelDefined);      // mark this model as undefined
     CloseModelsFile();
     ReadOneModel(ModelNumber); // heer
     UpdateModelsNameEveryWhere();
