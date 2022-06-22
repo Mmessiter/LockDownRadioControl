@@ -3450,10 +3450,10 @@ void SaveTXStuff()
 /*********************************************************************************************************************************/
 
 /** MODEL Specific */
-void SaveOneModel(int mnum)
+void SaveOneModel(uint16_t mnum)
 {
-    unsigned int j;
-    unsigned int i;
+    uint16_t j;
+    uint16_t i;
     bool EndOfName = false;
     if ((mnum < 1) || (mnum > 99))  return;  // There is no model zero!
     if (!ModelsFileOpen) OpenModelsFile();
