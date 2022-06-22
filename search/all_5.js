@@ -8,5 +8,6 @@ var searchData=
   ['executemacro_5',['ExecuteMacro',['../_radio_functions_8cpp.html#a78f22801971c106db61d728dd345e28e',1,'RadioFunctions.cpp']]],
   ['exitmacrosview_6',['ExitMacrosView',['../_transmitter_code_2src_2main_8cpp.html#a488388f6430a0fc7bec57074ba750a2d',1,'main.cpp']]],
   ['exponential_7',['Exponential',['../_transmitter_code_2src_2main_8cpp.html#ad84a9fba12ba7570c42d9c37698b8298',1,'main.cpp']]],
-  ['exportedfilecounter_8',['ExportedFileCounter',['../_transmitter_code_2src_2main_8cpp.html#a1252681409ac5c9ed335a78f80633236',1,'main.cpp']]]
+  ['exponentialcurves_8',['EXPONENTIALCURVES',['../_radio_functions_8h.html#a0681550b8fd26c741ffd8c6447a64f82',1,'RadioFunctions.h']]],
+  ['exportedfilecounter_9',['ExportedFileCounter',['../_transmitter_code_2src_2main_8cpp.html#a1252681409ac5c9ed335a78f80633236',1,'main.cpp']]]
 ];
