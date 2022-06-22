@@ -2721,7 +2721,7 @@ bool ReadOneModel(uint8_t Mnum)
     StartLocation = SDCardAddress;
     ModelDefined  = SDReadByte(SDCardAddress); 
     ++SDCardAddress;
-    if (ModelDefined != 42) return;
+    if (ModelDefined != 42) return false;
     for (j = 0; j < 30; ++j) {
         ModelName[j] = SDReadByte(SDCardAddress);
         ++SDCardAddress;
