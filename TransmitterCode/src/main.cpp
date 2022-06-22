@@ -2704,8 +2704,8 @@ void UpdateButtonLabels()
 
 bool ReadOneModel(uint8_t Mnum)
 {
-    unsigned int j;
-    unsigned int i;
+    uint16_t j;
+    uint16_t i;
     if (!ModelsFileOpen) OpenModelsFile();
     if (!ModelsFileOpen) return false;
     SDCardAddress = TXSIZE;                    //  spare bytes for TX stuff
