@@ -3951,20 +3951,16 @@ void ShowDirectory()
 
 void SetDefaultValues()
 {
-    int  j;
-    int  i;
+    uint16_t  j;
+    uint16_t  i;
     char ProgressStart[]                       = "vis Progress,1";
     char ProgressEnd[]                         = "vis Progress,0";
     char Progress[]                            = "Progress";
-    char defaultName[]                         = "(Deleted)";
-
-
-
+   
     char DefaultChannelNames[CHANNELSUSED][11] = {{"Aileron"}, {"Elevator"}, {"Throttle"}, {"Rudder"}, {"Ch 5"}, {"Ch 6"}, {"Ch 7"}, {"Ch 8"}, {"Ch 9"}, {"Ch 10"}, {"Ch 11"}, {"Ch 12"}, {"Ch 13"}, {"Ch 14"}, {"Ch 15"}, {"Ch 16"}};
     SendCommand(ProgressStart);
     SendValue(Progress, 5);
     Procrastinate(10);
-    strcpy(ModelName, defaultName);
 
     for (i = 0; i < CHANNELSUSED; ++i) {
         for (j = 1; j <= 4; ++j) {
@@ -4063,7 +4059,7 @@ void SetDefaultValues()
     OpenModelsFile();
     SDUpdateByte(SDCardAddress, ModelDefined);      // mark this model as undefined
     CloseModelsFile();
-    ReadOneModel(ModelNumber); // heer
+    ReadOneModel(ModelNumber); 
     UpdateModelsNameEveryWhere();
     Procrastinate(100);
     SendCommand(ProgressEnd);
