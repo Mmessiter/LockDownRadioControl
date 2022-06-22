@@ -3957,6 +3957,9 @@ void SetDefaultValues()
     char ProgressEnd[]                         = "vis Progress,0";
     char Progress[]                            = "Progress";
     char defaultName[]                         = "(Deleted)";
+
+
+
     char DefaultChannelNames[CHANNELSUSED][11] = {{"Aileron"}, {"Elevator"}, {"Throttle"}, {"Rudder"}, {"Ch 5"}, {"Ch 6"}, {"Ch 7"}, {"Ch 8"}, {"Ch 9"}, {"Ch 10"}, {"Ch 11"}, {"Ch 12"}, {"Ch 13"}, {"Ch 14"}, {"Ch 15"}, {"Ch 16"}};
     SendCommand(ProgressStart);
     SendValue(Progress, 5);
@@ -4054,10 +4057,10 @@ void SetDefaultValues()
     UpdateModelsNameEveryWhere();
     SendValue(Progress, 100);
     ReversedChannelBITS = 0;
-    SDCardAddress = TXSIZE;                  //  spare bytes for TX stuff
+    SDCardAddress = TXSIZE;                         //  spare bytes for TX stuff
     SDCardAddress += (ModelNumber - 1) * MODELSIZE; //  spare bytes for Model params
     StartLocation = SDCardAddress;
-    ModelDefined  = 84;
+    ModelDefined  = 0;
     SDUpdateByte(SDCardAddress, ModelDefined);
     Procrastinate(100);
     SendCommand(ProgressEnd);
