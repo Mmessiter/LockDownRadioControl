@@ -2141,6 +2141,8 @@ void DoReverseSense(){
 }
 /*********************************************************************************************************************************/
 
+
+
 /** @brief GET NEW SERVO POSITIONS */
 void GetNewChannelValues()
 {
@@ -2164,14 +2166,14 @@ void GetNewChannelValues()
             k = GetStickInput(l);                               // Four 3 postion switches
         }
         else {                                                  // Map the eight analogue inputs
-            if (InterpolationTypes[FlightMode][n] == 0) {       
+            if (InterpolationTypes[FlightMode][n] == STRAIGHTLINES) {       
                 if (m >= ChannelMidHi[l]) k = map(m, ChannelMidHi[l], ChannelMax[l], mp(MidHiDegrees[FlightMode][n]), mp(MaxDegrees[FlightMode][n]));
                 if (m >= ChannelCentre[l] && m <= (ChannelMidHi[l])) k = map(m, ChannelCentre[l], ChannelMidHi[l], mp(CentreDegrees[FlightMode][n]), mp(MidHiDegrees[FlightMode][n]));
                 if (m >= ChannelMidLow[l] && m <= ChannelCentre[l]) k = map(m, ChannelMidLow[l], ChannelCentre[l], mp(MidLowDegrees[FlightMode][n]), mp(CentreDegrees[FlightMode][n]));
                 if (m <= ChannelMidLow[l]) k = map(m, ChannelMin[l], ChannelMidLow[l], mp(MinDegrees[FlightMode][n]), mp(MidLowDegrees[FlightMode][n]));
             }
 
-            if (InterpolationTypes[FlightMode][n] == 1) {           // CatmullSpline (!)
+            if (InterpolationTypes[FlightMode][n] == SMOOTHEDCURVES) {           // CatmullSpline (!)
                 xPoints[0] = ChannelMin[l];
                 xPoints[1] = ChannelMidLow[l];
                 xPoints[2] = ChannelCentre[l];
@@ -2184,7 +2186,7 @@ void GetNewChannelValues()
                 yPoints[0] = mp(MinDegrees[FlightMode][n]);
                 k          = Interpolation::CatmullSpline(xPoints, yPoints, PointsCount, m);
             }
-            if (InterpolationTypes[FlightMode][n] == 2) {               // EXPONENTIAL (!!)
+            if (InterpolationTypes[FlightMode][n] == EXPONENTIALCURVES) {               // EXPONENTIAL (!!)
                 if (m >= ChannelCentre[l]) {
                     k = MapExp(m - ChannelCentre[l], 0, ChannelMax[l] - ChannelCentre[l], 0, mp(MaxDegrees[FlightMode][n]) - mp(CentreDegrees[FlightMode][n]), Exponential[FlightMode][n]) + mp(CentreDegrees[FlightMode][n]);
                 }
@@ -2838,7 +2840,7 @@ bool ReadOneModel(uint8_t Mnum)
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             InterpolationTypes[j][i] = SDReadByte(SDCardAddress);
             if (InterpolationTypes[j][i] < 0 || InterpolationTypes[j][i] > 2) {
-                InterpolationTypes[j][i] = 2;
+                InterpolationTypes[j][i] = EXPONENTIALCURVES;
             }
             ++SDCardAddress;
         }
@@ -4033,7 +4035,7 @@ void SetDefaultValues()
     }
     for (j = 0; j < FLIGHTMODESUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
-            InterpolationTypes[j][i] = 2;        // Expo is default
+            InterpolationTypes[j][i] = EXPONENTIALCURVES;        // Expo is default
         }
     }
 
@@ -4045,13 +4047,11 @@ void SetDefaultValues()
                 MacrosBuffer[i][j] = 0;
         } 
     }
-
-
     SendValue(Progress, 95);
     Procrastinate(10);
     SaveOneModel(ModelNumber);
     SendValue(Progress, 100);
-    ReversedChannelBITS = 0;
+    ReversedChannelBITS = 0;                        // No channel reversed
     SDCardAddress = TXSIZE;                         //  spare bytes for TX stuff
     SDCardAddress += (ModelNumber - 1) * MODELSIZE; //  spare bytes for Model params
     StartLocation = SDCardAddress;
@@ -4234,7 +4234,7 @@ void updateInterpolationTypes()
     char Ex1Off[]   = "vis Ex1,0";  // slider
 
     switch (InterpolationTypes[FlightMode][ChanneltoSet - 1]) {
-        case 0:
+        case STRAIGHTLINES:
             SendValue(Lines, 1);
             SendValue(Smooth, 0);
             SendValue(ExpR, 0);
@@ -4244,7 +4244,7 @@ void updateInterpolationTypes()
             SendCommand(ExponOff);
             SendCommand(Ex1Off);
             break;
-        case 1:
+        case SMOOTHEDCURVES:
             SendValue(Lines, 0);
             SendValue(Smooth, 1);
             SendValue(ExpR, 0);
@@ -4254,7 +4254,7 @@ void updateInterpolationTypes()
             SendCommand(ExponOff);
             SendCommand(Ex1Off);
             break;
-        case 2:
+        case EXPONENTIALCURVES:
             SendValue(Lines, 0);
             SendValue(Smooth, 0);
             SendValue(ExpR, 1);
@@ -4335,7 +4335,7 @@ void DisplayCurve()
     yDot2 = BoxBottom - BOXOFFSET;
     DrawLine(xDot1, yDot1, xDot2, yDot2, SpecialColour);
 
-    if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == 0) {                // Linear
+    if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == STRAIGHTLINES) {                // Linear
         SendCommand(b3on);
         SendCommand(b4on);
         SendCommand(b7on);
@@ -4348,7 +4348,7 @@ void DisplayCurve()
         DrawLine(xPoints[3], yPoints[3], xPoints[4], yPoints[4], ForeGroundColour);
     }
       //  delay(250);
-    if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == 1) {                // CatmullSpline
+    if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == SMOOTHEDCURVES) {                // CatmullSpline
        
         SendCommand(b3on);
         SendCommand(b4on);
@@ -4375,7 +4375,7 @@ void DisplayCurve()
         }
     }
 
-    if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == 2) { //EXPO  ************************************************************************************************
+    if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == EXPONENTIALCURVES) { //EXPO  ************************************************************************************************
 #define APPROXIMATION 7                                         // This is for the approximation of the screen curve
 
         SendCommand(b3off);
@@ -4427,7 +4427,7 @@ void DisplayCurve()
         DrawDot(xPoints[2], yPoints[2], DotSize, DotColour);
         DrawDot(xPoints[4], yPoints[4], DotSize, DotColour);
     }
-    if (InterpolationTypes[FlightMode][ChanneltoSet - 1] != 2) {
+    if (InterpolationTypes[FlightMode][ChanneltoSet - 1] != EXPONENTIALCURVES) {
         DrawDot(xPoints[0], yPoints[0], DotSize, DotColour); // This adds 5 dots
         DrawDot(xPoints[1], yPoints[1], DotSize, DotColour);
         DrawDot(xPoints[2], yPoints[2], DotSize, DotColour);
@@ -4480,7 +4480,7 @@ void MovePoint()
     }
 
     if (XtouchPlace > xPoints[1] - BOXOFFSET && XtouchPlace < xPoints[1] + BOXOFFSET) { // do next point  ?
-        if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == 2) return;              //  expo = ignore this area
+        if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == EXPONENTIALCURVES) return;              //  expo = ignore this area
         rjump = GetDifference(YtouchPlace, yPoints[1]);
         if (YtouchPlace > yPoints[1]) {
             if (MidLowDegrees[FlightMode][ChanneltoSet - 1] >= rjump) MidLowDegrees[FlightMode][ChanneltoSet - 1] -= rjump;
@@ -4501,7 +4501,7 @@ void MovePoint()
     }
 
     if (XtouchPlace > xPoints[3] - BOXOFFSET && XtouchPlace < xPoints[3] + BOXOFFSET) { // do next point  ?
-        if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == 2) return;              //  expo = ignore this area
+        if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == EXPONENTIALCURVES) return;              //  expo = ignore this area
         rjump = GetDifference(YtouchPlace, yPoints[3]);
         if (YtouchPlace > yPoints[3]) {
             if (MidHiDegrees[FlightMode][ChanneltoSet - 1] >= rjump) MidHiDegrees[FlightMode][ChanneltoSet - 1] -= rjump;
@@ -5902,13 +5902,13 @@ void ButtonWasPressed()
 
         if (InStrng(Exrite, TextIn) > 0) { //  *******************
             if (GetValue(ExpR)) {
-                InterpolationTypes[FlightMode][ChanneltoSet - 1] = 2;
+                InterpolationTypes[FlightMode][ChanneltoSet - 1] = EXPONENTIALCURVES;
             }
             if (GetValue(Smooth)) {
-                InterpolationTypes[FlightMode][ChanneltoSet - 1] = 1;
+                InterpolationTypes[FlightMode][ChanneltoSet - 1] = SMOOTHEDCURVES;
             }
             if (GetValue(Lines)) {
-                InterpolationTypes[FlightMode][ChanneltoSet - 1] = 0;
+                InterpolationTypes[FlightMode][ChanneltoSet - 1] = STRAIGHTLINES;
             }
             Exponential[FlightMode][ChanneltoSet - 1] = GetValue(Expo)+50; // Note: Getting this value from slider was not reliable (could not return 36!)
             ClearText();
@@ -6820,7 +6820,7 @@ void ButtonWasPressed()
             MidHiDegrees[FlightMode][ChanneltoSet - 1]       = 120;
             MaxDegrees[FlightMode][ChanneltoSet - 1]         = 150;
             Exponential[FlightMode][ChanneltoSet - 1]        = DEFAULT_EXPO;
-            InterpolationTypes[FlightMode][ChanneltoSet - 1] = 2; // expo = default
+            InterpolationTypes[FlightMode][ChanneltoSet - 1] = EXPONENTIALCURVES; // expo = default
             DisplayCurveAndServoPos();
             return;
         }

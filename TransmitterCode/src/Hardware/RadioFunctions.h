@@ -27,7 +27,12 @@
 #define DS1307_ADDRESS     0x68
 #define MAXLINES           30                   // text to load at once for log and help screens
 
-
+// **************************************************************************
+//                            Interpolations                                *
+// **************************************************************************
+#define STRAIGHTLINES       0
+#define SMOOTHEDCURVES      1
+#define EXPONENTIALCURVES   2 
 
 // **************************************************************************
 //                              Macros                                      *
