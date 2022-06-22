@@ -2719,8 +2719,9 @@ bool ReadOneModel(uint8_t Mnum)
     SDCardAddress = TXSIZE;                    //  spare bytes for TX stuff
     SDCardAddress += ((Mnum - 1) * MODELSIZE); //  spare bytes for Model params
     StartLocation = SDCardAddress;
-    ModelDefined  = SDReadByte(SDCardAddress); // this variable is redundant now   could be re-used
+    ModelDefined  = SDReadByte(SDCardAddress); 
     ++SDCardAddress;
+    if (ModelDefined != 42) return;
     for (j = 0; j < 30; ++j) {
         ModelName[j] = SDReadByte(SDCardAddress);
         ++SDCardAddress;
