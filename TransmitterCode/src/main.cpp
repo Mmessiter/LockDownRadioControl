@@ -4062,6 +4062,7 @@ void SetDefaultValues()
     StartLocation = SDCardAddress;
     ModelDefined  = 0;
     SDUpdateByte(SDCardAddress, ModelDefined);
+    ReadOneModel(ModelNumber);
     Procrastinate(100);
     SendCommand(ProgressEnd);
 }
