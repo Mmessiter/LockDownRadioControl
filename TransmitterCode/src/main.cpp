@@ -97,12 +97,8 @@
 #include "Hardware/RadioFunctions.h"                           // This file contains many definitions and further includes
 
 RF24 Radio1(CE_PIN, CSN_PIN);
-
-#ifdef USE_WATCHDOG
 WDT_T4<WDT3>  TeensyWatchDog;
 WDT_timings_t WatchDogConfig;
-#endif
-
 SBUS     MySbus(SBUSPORT);
 uint16_t SbusChannels[CHANNELSUSED + 2]; // a few spare
 uint32_t SBUSTimer = 0;
@@ -766,23 +762,23 @@ bool getDate(const char* str)
 
 void KickTheDog()
 {
-#ifdef USE_WATCHDOG
+
     if (millis() - LastDogKick >= KICKRATE) {
         LastDogKick = millis();
         TeensyWatchDog.feed();
     }
-#endif
+
 }
 
 /*********************************************************************************************************************************/
 
 void Reboot()
 {
-#ifdef USE_WATCHDOG
+
     for (int i = 0; i < 30; ++i) {
         TeensyWatchDog.feed();
     } // Dog will explode when overfed
-#endif
+
 }
 
 /*********************************************************************************************************************************/
@@ -1030,21 +1026,22 @@ void BlueLedOn()
 }
 
 /*********************************************************************************************************************************/
-
-uint16_t mp(uint8_t lowres)
+uint8_t IntoLowerRes(uint16_t HiRes)                        // convert to lower resolution for screen display
 {
-    return map(lowres, 0, 180, MINMICROS, MAXMICROS);
-} // This returns the 5 curve-points at the higher resolution
-
+    return (map(HiRes, MINMICROS, MAXMICROS, 0, 100));      
+}
 /*********************************************************************************************************************************/
-
+uint16_t IntoHigherRes(uint8_t LowRes)                      // This returns the main curve-points at the higher resolution for Servo output
+{
+    return map(LowRes, 0, 180, MINMICROS, MAXMICROS);
+} 
+/*********************************************************************************************************************************/
 void ClearText()
 {
     for (int i = 0; i < CHARSMAX; ++i) {
         TextIn[i] = 0;
     }
 }
-
 /*********************************************************************************************************************************/
 //                        NEXTION functions
 /*********************************************************************************************************************************/
@@ -1238,13 +1235,6 @@ bool GetButtonPress()
 //             END OF NEXTION FUNCTIONS
 /*********************************************************************************************************************************/
 
-uint8_t um(uint16_t bv) // convert to lower resolution
-{
-    return (map(bv, MINMICROS, MAXMICROS, 0, 100)); // lower res is enough on display and on failsafe
-}
-
-/*********************************************************************************************************************************/
-
 void CheckTimer()
 {
    
@@ -1352,101 +1342,101 @@ void ShowServoPos()
 
     if (CurrentView == CALIBRATEVIEW) {
         if (abs(SendBuffer[0] - ShownBuffer[0]) > LeastDistance) {
-            SendValue(CalibrateView_Ch1, um(SendBuffer[0]));
+            SendValue(CalibrateView_Ch1, IntoLowerRes(SendBuffer[0]));
             ShownBuffer[0] = SendBuffer[0];
         }
         if (abs(SendBuffer[1] - ShownBuffer[1]) > LeastDistance) {
-            SendValue(CalibrateView_Ch2, um(SendBuffer[1]));
+            SendValue(CalibrateView_Ch2, IntoLowerRes(SendBuffer[1]));
             ShownBuffer[1] = SendBuffer[1];
         }
         if (abs(SendBuffer[2] - ShownBuffer[2]) > LeastDistance) {
-            SendValue(CalibrateView_Ch3, um(SendBuffer[2]));
+            SendValue(CalibrateView_Ch3, IntoLowerRes(SendBuffer[2]));
             ShownBuffer[2] = SendBuffer[2];
         }
         if (abs(SendBuffer[3] - ShownBuffer[3]) > LeastDistance) {
-            SendValue(CalibrateView_Ch4, um(SendBuffer[3]));
+            SendValue(CalibrateView_Ch4, IntoLowerRes(SendBuffer[3]));
             ShownBuffer[3] = SendBuffer[3];
         }
         if (abs(SendBuffer[4] - ShownBuffer[4]) > LeastDistance) {
-            SendValue(CalibrateView_Ch5, um(SendBuffer[4]));
+            SendValue(CalibrateView_Ch5, IntoLowerRes(SendBuffer[4]));
             ShownBuffer[4] = SendBuffer[4];
         }
         if (abs(SendBuffer[5] - ShownBuffer[5]) > LeastDistance) {
-            SendValue(CalibrateView_Ch6, um(SendBuffer[5]));
+            SendValue(CalibrateView_Ch6, IntoLowerRes(SendBuffer[5]));
             ShownBuffer[5] = SendBuffer[5];
         }
         if (abs(SendBuffer[6] - ShownBuffer[6]) > LeastDistance) {
-            SendValue(CalibrateView_Ch7, um(SendBuffer[6]));
+            SendValue(CalibrateView_Ch7, IntoLowerRes(SendBuffer[6]));
             ShownBuffer[6] = SendBuffer[6];
         }
         if (abs(SendBuffer[7] - ShownBuffer[7]) > LeastDistance) {
-            SendValue(CalibrateView_Ch8, um(SendBuffer[7]));
+            SendValue(CalibrateView_Ch8, IntoLowerRes(SendBuffer[7]));
             ShownBuffer[7] = SendBuffer[7];
         }
     }
     if (CurrentView == STICKSVIEW) {
         if (abs(SendBuffer[0] - ShownBuffer[0]) > LeastDistance) {
-            SendValue(SticksView_Ch1, um(SendBuffer[0]));
+            SendValue(SticksView_Ch1, IntoLowerRes(SendBuffer[0]));
             ShownBuffer[0] = SendBuffer[0];
         }
         if (abs(SendBuffer[1] - ShownBuffer[1]) > LeastDistance) {
-            SendValue(SticksView_Ch2, um(SendBuffer[1]));
+            SendValue(SticksView_Ch2, IntoLowerRes(SendBuffer[1]));
             ShownBuffer[1] = SendBuffer[1];
         }
         if (abs(SendBuffer[2] - ShownBuffer[2]) > LeastDistance) {
-            SendValue(SticksView_Ch3, um(SendBuffer[2]));
+            SendValue(SticksView_Ch3, IntoLowerRes(SendBuffer[2]));
             ShownBuffer[2] = SendBuffer[2];
         }
         if (abs(SendBuffer[3] - ShownBuffer[3]) > LeastDistance) {
-            SendValue(SticksView_Ch4, um(SendBuffer[3]));
+            SendValue(SticksView_Ch4, IntoLowerRes(SendBuffer[3]));
             ShownBuffer[3] = SendBuffer[3];
         }
         if (abs(SendBuffer[4] - ShownBuffer[4]) > LeastDistance) {
-            SendValue(SticksView_Ch5, um(SendBuffer[4]));
+            SendValue(SticksView_Ch5, IntoLowerRes(SendBuffer[4]));
             ShownBuffer[4] = SendBuffer[4];
         }
         if (abs(SendBuffer[5] - ShownBuffer[5]) > LeastDistance) {
-            SendValue(SticksView_Ch6, um(SendBuffer[5]));
+            SendValue(SticksView_Ch6, IntoLowerRes(SendBuffer[5]));
             ShownBuffer[5] = SendBuffer[5];
         }
         if (abs(SendBuffer[6] - ShownBuffer[6]) > LeastDistance) {
-            SendValue(SticksView_Ch7, um(SendBuffer[6]));
+            SendValue(SticksView_Ch7, IntoLowerRes(SendBuffer[6]));
             ShownBuffer[6] = SendBuffer[6];
         }
         if (abs(SendBuffer[7] - ShownBuffer[7]) > LeastDistance) {
-            SendValue(SticksView_Ch8, um(SendBuffer[7]));
+            SendValue(SticksView_Ch8, IntoLowerRes(SendBuffer[7]));
             ShownBuffer[7] = SendBuffer[7];
         }
         if (abs(SendBuffer[8] - ShownBuffer[8]) > LeastDistance) {
-            SendValue(SticksView_Ch9, um(SendBuffer[8]));
+            SendValue(SticksView_Ch9, IntoLowerRes(SendBuffer[8]));
             ShownBuffer[8] = SendBuffer[8];
         }
         if (abs(SendBuffer[9] - ShownBuffer[9]) > LeastDistance) {
-            SendValue(SticksView_Ch10, um(SendBuffer[9]));
+            SendValue(SticksView_Ch10, IntoLowerRes(SendBuffer[9]));
             ShownBuffer[9] = SendBuffer[9];
         }
         if (abs(SendBuffer[10] - ShownBuffer[10]) > LeastDistance) {
-            SendValue(SticksView_Ch11, um(SendBuffer[10]));
+            SendValue(SticksView_Ch11, IntoLowerRes(SendBuffer[10]));
             ShownBuffer[10] = SendBuffer[10];
         }
         if (abs(SendBuffer[11] - ShownBuffer[11]) > LeastDistance) {
-            SendValue(SticksView_Ch12, um(SendBuffer[11]));
+            SendValue(SticksView_Ch12, IntoLowerRes(SendBuffer[11]));
             ShownBuffer[11] = SendBuffer[11];
         }
         if (abs(SendBuffer[12] - ShownBuffer[12]) > LeastDistance) {
-            SendValue(SticksView_Ch13, um(SendBuffer[12]));
+            SendValue(SticksView_Ch13, IntoLowerRes(SendBuffer[12]));
             ShownBuffer[12] = SendBuffer[12];
         }
         if (abs(SendBuffer[13] - ShownBuffer[13]) > LeastDistance) {
-            SendValue(SticksView_Ch14, um(SendBuffer[13]));
+            SendValue(SticksView_Ch14, IntoLowerRes(SendBuffer[13]));
             ShownBuffer[13] = SendBuffer[13];
         }
         if (abs(SendBuffer[14] - ShownBuffer[14]) > LeastDistance) {
-            SendValue(SticksView_Ch15, um(SendBuffer[14]));
+            SendValue(SticksView_Ch15, IntoLowerRes(SendBuffer[14]));
             ShownBuffer[14] = SendBuffer[14];
         }
         if (abs(SendBuffer[15] - ShownBuffer[15]) > LeastDistance) {
-            SendValue(SticksView_Ch16, um(SendBuffer[15]));
+            SendValue(SticksView_Ch16, IntoLowerRes(SendBuffer[15]));
             ShownBuffer[15] = SendBuffer[15];
         }
     }
@@ -1899,27 +1889,27 @@ int GetNextNumber(int p1, char text1[CHARSMAX])
    uint16_t k = 0;
    switch (l) {
     case 8:
-        if (Channel9SwitchValue == 0) k = mp(MinDegrees[FlightMode][8]);
-        if (Channel9SwitchValue == 90) k = mp(CentreDegrees[FlightMode][8]);
-        if (Channel9SwitchValue == 180) k = mp(MaxDegrees[FlightMode][8]);
+        if (Channel9SwitchValue == 0) k = IntoHigherRes(MinDegrees[FlightMode][8]);
+        if (Channel9SwitchValue == 90) k = IntoHigherRes(CentreDegrees[FlightMode][8]);
+        if (Channel9SwitchValue == 180) k = IntoHigherRes(MaxDegrees[FlightMode][8]);
         break;
     case 9:
-        if (Channel10SwitchValue == 0) k = mp(MinDegrees[FlightMode][9]);
-        if (Channel10SwitchValue == 90) k = mp(CentreDegrees[FlightMode][9]);
-        if (Channel10SwitchValue == 180) k = mp(MaxDegrees[FlightMode][9]);
+        if (Channel10SwitchValue == 0) k = IntoHigherRes(MinDegrees[FlightMode][9]);
+        if (Channel10SwitchValue == 90) k = IntoHigherRes(CentreDegrees[FlightMode][9]);
+        if (Channel10SwitchValue == 180) k = IntoHigherRes(MaxDegrees[FlightMode][9]);
         break;
     case 10:
-        if (Channel11SwitchValue == 0) k = mp(MinDegrees[FlightMode][10]);
-        if (Channel11SwitchValue == 90) k = mp(CentreDegrees[FlightMode][10]);
-        if (Channel11SwitchValue == 180) k = mp(MaxDegrees[FlightMode][10]);
+        if (Channel11SwitchValue == 0) k = IntoHigherRes(MinDegrees[FlightMode][10]);
+        if (Channel11SwitchValue == 90) k = IntoHigherRes(CentreDegrees[FlightMode][10]);
+        if (Channel11SwitchValue == 180) k = IntoHigherRes(MaxDegrees[FlightMode][10]);
         break;
     case 11:
-        if (Channel12SwitchValue == 0) k = mp(MinDegrees[FlightMode][11]);
-        if (Channel12SwitchValue == 90) k = mp(CentreDegrees[FlightMode][11]);
-        if (Channel12SwitchValue == 180) k = mp(MaxDegrees[FlightMode][11]);
+        if (Channel12SwitchValue == 0) k = IntoHigherRes(MinDegrees[FlightMode][11]);
+        if (Channel12SwitchValue == 90) k = IntoHigherRes(CentreDegrees[FlightMode][11]);
+        if (Channel12SwitchValue == 180) k = IntoHigherRes(MaxDegrees[FlightMode][11]);
         break;
     default:
-           k = mp(CentreDegrees[FlightMode][15]); // channels 13,14,15,16 are simply centred
+           k = IntoHigherRes(CentreDegrees[FlightMode][15]); // channels 13,14,15,16 are simply centred
     }
     return k;
 }
@@ -1938,8 +1928,8 @@ int m, c, p, mindeg, maxdeg, TheSum, Result;
                         p = p * Mixes[m][M_Percent] / 50; // *****  50, not 100, because mix can now go right to 200% *****
                         if (Mixes[m][M_Reversed] == 1) p = -p;
                         TheSum = SendBuffer[(Mixes[m][M_SlaveChannel]) - 1] + p;  // THIS IS THE MIX!
-                        mindeg = mp(MinDegrees[FlightMode][(Mixes[m][M_SlaveChannel]) - 1]);
-                        maxdeg = mp(MaxDegrees[FlightMode][(Mixes[m][M_SlaveChannel]) - 1]);
+                        mindeg = IntoHigherRes(MinDegrees[FlightMode][(Mixes[m][M_SlaveChannel]) - 1]);
+                        maxdeg = IntoHigherRes(MaxDegrees[FlightMode][(Mixes[m][M_SlaveChannel]) - 1]);
                         if (mindeg > maxdeg) {
                             Result = constrain(TheSum, maxdeg, mindeg);
                         }
@@ -2007,10 +1997,10 @@ void GetNewChannelValues()
         }
         else {                                                  // Map the eight analogue inputs
             if (InterpolationTypes[FlightMode][n] == STRAIGHTLINES) {       
-                if (m >= ChannelMidHi[l]) k = map(m, ChannelMidHi[l], ChannelMax[l], mp(MidHiDegrees[FlightMode][n]), mp(MaxDegrees[FlightMode][n]));
-                if (m >= ChannelCentre[l] && m <= (ChannelMidHi[l])) k = map(m, ChannelCentre[l], ChannelMidHi[l], mp(CentreDegrees[FlightMode][n]), mp(MidHiDegrees[FlightMode][n]));
-                if (m >= ChannelMidLow[l] && m <= ChannelCentre[l]) k = map(m, ChannelMidLow[l], ChannelCentre[l], mp(MidLowDegrees[FlightMode][n]), mp(CentreDegrees[FlightMode][n]));
-                if (m <= ChannelMidLow[l]) k = map(m, ChannelMin[l], ChannelMidLow[l], mp(MinDegrees[FlightMode][n]), mp(MidLowDegrees[FlightMode][n]));
+                if (m >= ChannelMidHi[l]) k = map(m, ChannelMidHi[l], ChannelMax[l], IntoHigherRes(MidHiDegrees[FlightMode][n]), IntoHigherRes(MaxDegrees[FlightMode][n]));
+                if (m >= ChannelCentre[l] && m <= (ChannelMidHi[l])) k = map(m, ChannelCentre[l], ChannelMidHi[l], IntoHigherRes(CentreDegrees[FlightMode][n]), IntoHigherRes(MidHiDegrees[FlightMode][n]));
+                if (m >= ChannelMidLow[l] && m <= ChannelCentre[l]) k = map(m, ChannelMidLow[l], ChannelCentre[l], IntoHigherRes(MidLowDegrees[FlightMode][n]), IntoHigherRes(CentreDegrees[FlightMode][n]));
+                if (m <= ChannelMidLow[l]) k = map(m, ChannelMin[l], ChannelMidLow[l], IntoHigherRes(MinDegrees[FlightMode][n]), IntoHigherRes(MidLowDegrees[FlightMode][n]));
             }
 
             if (InterpolationTypes[FlightMode][n] == SMOOTHEDCURVES) {           // CatmullSpline (!)
@@ -2019,19 +2009,19 @@ void GetNewChannelValues()
                 xPoints[2] = ChannelCentre[l];
                 xPoints[3] = ChannelMidHi[l];
                 xPoints[4] = ChannelMax[l];
-                yPoints[4] = mp(MaxDegrees[FlightMode][n]);
-                yPoints[3] = mp(MidHiDegrees[FlightMode][n]);
-                yPoints[2] = mp(CentreDegrees[FlightMode][n]);
-                yPoints[1] = mp(MidLowDegrees[FlightMode][n]);
-                yPoints[0] = mp(MinDegrees[FlightMode][n]);
+                yPoints[4] = IntoHigherRes(MaxDegrees[FlightMode][n]);
+                yPoints[3] = IntoHigherRes(MidHiDegrees[FlightMode][n]);
+                yPoints[2] = IntoHigherRes(CentreDegrees[FlightMode][n]);
+                yPoints[1] = IntoHigherRes(MidLowDegrees[FlightMode][n]);
+                yPoints[0] = IntoHigherRes(MinDegrees[FlightMode][n]);
                 k          = Interpolation::CatmullSpline(xPoints, yPoints, PointsCount, m);
             }
             if (InterpolationTypes[FlightMode][n] == EXPONENTIALCURVES) {               // EXPONENTIAL (!!)
                 if (m >= ChannelCentre[l]) {
-                    k = MapExp(m - ChannelCentre[l], 0, ChannelMax[l] - ChannelCentre[l], 0, mp(MaxDegrees[FlightMode][n]) - mp(CentreDegrees[FlightMode][n]), Exponential[FlightMode][n]) + mp(CentreDegrees[FlightMode][n]);
+                    k = MapExp(m - ChannelCentre[l], 0, ChannelMax[l] - ChannelCentre[l], 0, IntoHigherRes(MaxDegrees[FlightMode][n]) - IntoHigherRes(CentreDegrees[FlightMode][n]), Exponential[FlightMode][n]) + IntoHigherRes(CentreDegrees[FlightMode][n]);
                 }
                 if (m < ChannelCentre[l]) {
-                    k = MapExp(ChannelCentre[l] - m, 0, ChannelCentre[l] - ChannelMin[l], mp(CentreDegrees[FlightMode][n]) - mp(MinDegrees[FlightMode][n]), 0, Exponential[FlightMode][n]) + mp(MinDegrees[FlightMode][n]);
+                    k = MapExp(ChannelCentre[l] - m, 0, ChannelCentre[l] - ChannelMin[l], IntoHigherRes(CentreDegrees[FlightMode][n]) - IntoHigherRes(MinDegrees[FlightMode][n]), 0, Exponential[FlightMode][n]) + IntoHigherRes(MinDegrees[FlightMode][n]);
                 }
             }
         }
@@ -2856,12 +2846,10 @@ void ButtonWhite(char* but)
 
 /*********************************************************************************************************************************/
 
-#ifdef USE_WATCHDOG
 void WatchDogCallBack()
 {
     // Serial.println("RESETTING ...");
 }
-#endif
 
 /*********************************************************************************************************************************/
 
@@ -3115,13 +3103,13 @@ void setup()
     InitCentreDegrees();        // In case not yet calibrated
     ResetSubTrims();
     CentreTrims();
-#ifdef USE_WATCHDOG
+
     WatchDogConfig.window   = WATCHDOGMAXRATE; //  = MINIMUM RATE in milli seconds, (32ms to 522.232s) must be MUCH smaller than timeout
     WatchDogConfig.timeout  = WATCHDOGTIMEOUT; //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s)
     WatchDogConfig.callback = WatchDogCallBack;
     TeensyWatchDog.begin(WatchDogConfig);
     LastDogKick = millis(); // needed? - yes!
-#endif
+
     delay (500);
     if (!SD.begin(chipSelect)){    // MUST return true or all is lost! (todo: create error page)
        delay (500);
