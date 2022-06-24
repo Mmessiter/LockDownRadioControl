@@ -52,7 +52,6 @@ var _radio_functions_8h =
     [ "TXVERSION_MINIMUS", "_radio_functions_8h.html#a7b2773d8aa3a50ce71dfeb1568f8da26", null ],
     [ "TXVERSION_MINOR", "_radio_functions_8h.html#a892ac703d752012a921e12fc7d632bf2", null ],
     [ "USE_WATCHDOG", "_radio_functions_8h.html#a71be4a990011c7b00830abf5f3b2190d", null ],
-    [ "USEAUDIO", "_radio_functions_8h.html#a1a522582f7918d462403b1e4724a2c9d", null ],
     [ "WATCHDOGMAXRATE", "_radio_functions_8h.html#af3358f12fbced88c655895c7e56f1ca6", null ],
     [ "WATCHDOGTIMEOUT", "_radio_functions_8h.html#a263fd3c52a680256641d33815e7ef6a4", null ],
     [ "CheckGapsLength", "_radio_functions_8h.html#aa60c9cac090f6965b4223d5caf84e2f1", null ],
