@@ -68,7 +68,7 @@ var searchData=
   ['logtext_65',['LogText',['../_transmitter_code_2src_2main_8cpp.html#a3082155bd493af8377f0384347bdc55b',1,'main.cpp']]],
   ['logthisgap_66',['LogThisGap',['../_transmitter_code_2src_2main_8cpp.html#af9d8a17fec28e4ae948cc53c29406f78',1,'main.cpp']]],
   ['logthisrx_67',['LogThisRX',['../_transmitter_code_2src_2main_8cpp.html#a436844f605001cad62b48d890e11fe2c',1,'main.cpp']]],
-  ['logview_68',['LOGVIEW',['../_transmitter_code_2src_2main_8cpp.html#ab5b352492259f7b453a051455d5dca50',1,'main.cpp']]],
+  ['logview_68',['LOGVIEW',['../_radio_functions_8h.html#ab5b352492259f7b453a051455d5dca50',1,'RadioFunctions.h']]],
   ['lon_69',['lon',['../class_adafruit___g_p_s.html#a704ab5d76824ade6f954e11029c1c916',1,'Adafruit_GPS']]],
   ['longitude_70',['longitude',['../class_adafruit___g_p_s.html#a0ed3549d1600cf3bbb7492d376e61ca8',1,'Adafruit_GPS']]],
   ['longitude_5ffixed_71',['longitude_fixed',['../class_adafruit___g_p_s.html#a8010f253b2708e05547c452cb5368837',1,'Adafruit_GPS']]],
@@ -79,6 +79,6 @@ var searchData=
   ['lostcontactcutoff_76',['LOSTCONTACTCUTOFF',['../_radio_functions_8h.html#ac5b4f54697bc5a8d58ef0c92c094c6b6',1,'RadioFunctions.h']]],
   ['lostcontactflag_77',['LostContactFlag',['../_radio_functions_8h.html#ad5f463902789a79fc622b3befd9409b9',1,'LostContactFlag():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#ad5f463902789a79fc622b3befd9409b9',1,'LostContactFlag():&#160;main.cpp']]],
   ['lostpackets_78',['LostPackets',['../_radio_functions_8h.html#ace8651c9c20dd6ea531190d34d35e1fc',1,'LostPackets():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#ace8651c9c20dd6ea531190d34d35e1fc',1,'LostPackets():&#160;main.cpp']]],
-  ['lowbattery_79',['LOWBATTERY',['../_radio_functions_8h.html#adca16f7a43b448d4584dcb62897068a5',1,'RadioFunctions.h']]],
-  ['lowbattery_80',['LowBattery',['../_transmitter_code_2src_2main_8cpp.html#a841a740574f81e5bb80ea1a16f704be5',1,'main.cpp']]]
+  ['lowbattery_79',['LowBattery',['../_transmitter_code_2src_2main_8cpp.html#a841a740574f81e5bb80ea1a16f704be5',1,'main.cpp']]],
+  ['lowbattery_80',['LOWBATTERY',['../_radio_functions_8h.html#adca16f7a43b448d4584dcb62897068a5',1,'RadioFunctions.h']]]
 ];

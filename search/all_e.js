@@ -9,7 +9,7 @@ var searchData=
   ['newpipe_6',['NewPipe',['../_transmitter_code_2src_2main_8cpp.html#a594f07765a7ed90e0830d4e2f69a7112',1,'NewPipe():&#160;main.cpp'],['../_radio_functions_8h.html#a594f07765a7ed90e0830d4e2f69a7112',1,'NewPipe():&#160;radio.h'],['../radio_8h.html#a594f07765a7ed90e0830d4e2f69a7112',1,'NewPipe():&#160;radio.h']]],
   ['nextchannel_7',['NextChannel',['../_radio_functions_8h.html#a4c9fbf66b2c98730d43dc9dfe573a998',1,'NextChannel():&#160;radio.h'],['../radio_8h.html#a4c9fbf66b2c98730d43dc9dfe573a998',1,'NextChannel():&#160;radio.h'],['../_transmitter_code_2src_2main_8cpp.html#a4c9fbf66b2c98730d43dc9dfe573a998',1,'NextChannel():&#160;main.cpp']]],
   ['nextchannelnumber_8',['NextChannelNumber',['../radio_8h.html#a372b457a109ccee3253b219df1a47412',1,'NextChannelNumber():&#160;radio.h'],['../_radio_functions_8h.html#a372b457a109ccee3253b219df1a47412',1,'NextChannelNumber():&#160;radio.h'],['../_transmitter_code_2src_2main_8cpp.html#a372b457a109ccee3253b219df1a47412',1,'NextChannelNumber():&#160;main.cpp']]],
-  ['nextion_9',['NEXTION',['../_radio_functions_8h.html#a8faf90f81afc68086a4b47c2e94cd519',1,'NEXTION():&#160;RadioFunctions.h'],['../_transmitter_code_2src_2main_8cpp.html#a8faf90f81afc68086a4b47c2e94cd519',1,'NEXTION():&#160;main.cpp']]],
+  ['nextion_9',['NEXTION',['../_radio_functions_8h.html#a8faf90f81afc68086a4b47c2e94cd519',1,'NEXTION():&#160;RadioFunctions.h'],['../_radio_functions_8h.html#a8faf90f81afc68086a4b47c2e94cd519',1,'NEXTION():&#160;RadioFunctions.h']]],
   ['nextionsleeptime_10',['NEXTIONSleepTime',['../_radio_functions_8h.html#aa98c3d7858384fded2f32ce45a271605',1,'RadioFunctions.h']]],
   ['nmea_5fawa_11',['NMEA_AWA',['../_n_m_e_a__data_8h.html#a8a308981a294c0b3640afd1c360822f7a1363b51b93019f4cd2be31a3181f7a73',1,'NMEA_data.h']]],
   ['nmea_5fawa_5fcos_12',['NMEA_AWA_COS',['../_n_m_e_a__data_8h.html#a8a308981a294c0b3640afd1c360822f7aced0f6b647b9b3d9090e10eab53a573f',1,'NMEA_data.h']]],
@@ -36,8 +36,8 @@ var searchData=
   ['nmea_5fdepth_33',['NMEA_DEPTH',['../_n_m_e_a__data_8h.html#a8a308981a294c0b3640afd1c360822f7a1edf09b5b95475b7e8420c571cfa52fc',1,'NMEA_data.h']]],
   ['nmea_5fdistwp_34',['NMEA_DISTWP',['../_n_m_e_a__data_8h.html#a8a308981a294c0b3640afd1c360822f7a1ef9e86aba876eedca5c4f2f38b72991',1,'NMEA_data.h']]],
   ['nmea_5fextensions_35',['NMEA_EXTENSIONS',['../_adafruit___g_p_s_8h.html#aca54bdead693302e0ed647eaa65c56af',1,'Adafruit_GPS.h']]],
-  ['nmea_5ffloat_5ft_36',['nmea_float_t',['../_n_m_e_a__data_8h.html#aee5c758e7db8567b181c71df68003368',1,'NMEA_data.h']]],
-  ['nmea_5ffloat_5ft_37',['NMEA_FLOAT_T',['../_n_m_e_a__data_8h.html#a0c423588a466231e5a996377c5b652e1',1,'NMEA_data.h']]],
+  ['nmea_5ffloat_5ft_36',['NMEA_FLOAT_T',['../_n_m_e_a__data_8h.html#a0c423588a466231e5a996377c5b652e1',1,'NMEA_data.h']]],
+  ['nmea_5ffloat_5ft_37',['nmea_float_t',['../_n_m_e_a__data_8h.html#aee5c758e7db8567b181c71df68003368',1,'NMEA_data.h']]],
   ['nmea_5fhas_5fchecksum_38',['NMEA_HAS_CHECKSUM',['../_adafruit___g_p_s_8h.html#aea6700399d9215ce5ef0f450d1733dcaa9ec09ffff6d9cb41a22d2780523646ba',1,'Adafruit_GPS.h']]],
   ['nmea_5fhas_5fdollar_39',['NMEA_HAS_DOLLAR',['../_adafruit___g_p_s_8h.html#aea6700399d9215ce5ef0f450d1733dcaa8d5fd241c3361bef95f143797347c887',1,'Adafruit_GPS.h']]],
   ['nmea_5fhas_5fname_40',['NMEA_HAS_NAME',['../_adafruit___g_p_s_8h.html#aea6700399d9215ce5ef0f450d1733dcaa092e0bfd70702561109e85dc8c249810',1,'Adafruit_GPS.h']]],
@@ -106,7 +106,7 @@ var searchData=
   ['nmea_5fvtw_103',['NMEA_VTW',['../_n_m_e_a__data_8h.html#a8a308981a294c0b3640afd1c360822f7a6ff0de04c149a72122eae64296c3c97a',1,'NMEA_data.h']]],
   ['nmea_5fxte_104',['NMEA_XTE',['../_n_m_e_a__data_8h.html#a8a308981a294c0b3640afd1c360822f7af355570bff473cb5cff6dd366e02bef9',1,'NMEA_data.h']]],
   ['nocarrier_105',['NoCarrier',['../_radio_functions_8h.html#a2a951a35df4a07c010710b02a17f92b7',1,'NoCarrier():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a740b6b60d941238e8a8cd6caa083a7ca',1,'NoCarrier():&#160;main.cpp']]],
-  ['normal_106',['NORMAL',['../_radio_functions_8h.html#a1291f416b069313021b519eea62d5bf1',1,'NORMAL():&#160;RadioFunctions.h'],['../_transmitter_code_2src_2main_8cpp.html#a1291f416b069313021b519eea62d5bf1',1,'NORMAL():&#160;main.cpp']]],
+  ['normal_106',['NORMAL',['../_radio_functions_8h.html#a1291f416b069313021b519eea62d5bf1',1,'NORMAL():&#160;RadioFunctions.h'],['../_radio_functions_8h.html#a1291f416b069313021b519eea62d5bf1',1,'NORMAL():&#160;RadioFunctions.h']]],
   ['normalisetheradio_107',['NormaliseTheRadio',['../_transmitter_code_2src_2main_8cpp.html#a0708fa5166a126be25283b6cfaff6227',1,'main.cpp']]],
   ['nosleeping_108',['NoSleeping',['../_radio_functions_8h.html#aa336d2e589396e246b779e7ed2b097c0',1,'NoSleeping():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#aa336d2e589396e246b779e7ed2b097c0',1,'NoSleeping():&#160;main.cpp']]]
 ];

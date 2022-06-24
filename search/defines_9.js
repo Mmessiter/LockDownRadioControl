@@ -19,6 +19,6 @@ var searchData=
   ['inactivitymaximum_16',['INACTIVITYMAXIMUM',['../_radio_functions_8h.html#a6f6e4e8e296f81b3dd22980c49168662',1,'RadioFunctions.h']]],
   ['inactivityminimum_17',['INACTIVITYMINIMUM',['../_radio_functions_8h.html#a0da025fab2b31f5ffb073d6e12fe7fde',1,'RadioFunctions.h']]],
   ['inactivitytimeout_18',['INACTIVITYTIMEOUT',['../_radio_functions_8h.html#afc6ed518e5867e4d7095ec597eae9443',1,'RadioFunctions.h']]],
-  ['inputs_5fview_19',['Inputs_View',['../_radio_functions_8cpp.html#a7a40aeaf7436d33790723c244446ca0a',1,'RadioFunctions.cpp']]],
-  ['inputs_5fview_20',['INPUTS_VIEW',['../_transmitter_code_2src_2main_8cpp.html#aa2bec27575ce278d56e8d9f844dfe72e',1,'main.cpp']]]
+  ['inputs_5fview_19',['INPUTS_VIEW',['../_radio_functions_8h.html#aa2bec27575ce278d56e8d9f844dfe72e',1,'RadioFunctions.h']]],
+  ['inputs_5fview_20',['Inputs_View',['../_radio_functions_8cpp.html#a7a40aeaf7436d33790723c244446ca0a',1,'RadioFunctions.cpp']]]
 ];
