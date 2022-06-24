@@ -4858,9 +4858,7 @@ void  EndReverseView(){ // channel reverse flags are 16 individual BITs in Rever
         ReversedChannelBITS = 0;
         for (i = 0; i < 16 ; ++i){
              SendValue(Progress, (i * (100/16)));
-            if (GetValue(fs[i])){
-                ReversedChannelBITS |= 1 << i; // set a BIT 
-            }
+             if (GetValue(fs[i])) ReversedChannelBITS |= 1 << i; // set a BIT 
         }
         CurrentView = MAINSETUPVIEW;
         SaveOneModel(ModelNumber);
