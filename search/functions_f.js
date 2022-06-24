@@ -19,7 +19,7 @@ var searchData=
   ['readsensorhub_16',['ReadSensorHub',['../radio_8h.html#a8fff0fd6eb9e23721d9e06f3f44bd3c9',1,'radio.h']]],
   ['readswitches_17',['ReadSwitches',['../_radio_functions_8h.html#ab0af36f3442ad4f2d0b716c14c7d6085',1,'ReadSwitches():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#ab0af36f3442ad4f2d0b716c14c7d6085',1,'ReadSwitches():&#160;main.cpp']]],
   ['readtemperature_18',['readTemperature',['../class_adafruit___b_m_p280.html#a8511efd594618dea5f1e52d6bd149795',1,'Adafruit_BMP280']]],
-  ['readtextfile_19',['ReadTextFile',['../_transmitter_code_2src_2main_8cpp.html#abd6446fb403bd9b07d150a5e4fdd86e1',1,'main.cpp']]],
+  ['readtextfile_19',['ReadTextFile',['../_radio_functions_8h.html#abd6446fb403bd9b07d150a5e4fdd86e1',1,'ReadTextFile(char *fname, char *htext, uint8_t StartLineNumber, uint8_t MaxLines):&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#abd6446fb403bd9b07d150a5e4fdd86e1',1,'ReadTextFile(char *fname, char *htext, uint8_t StartLineNumber, uint8_t MaxLines):&#160;main.cpp']]],
   ['readthertc_20',['ReadTheRTC',['../_transmitter_code_2src_2main_8cpp.html#a7a48851f0d38e4a0dd727a30d9515cf1',1,'main.cpp']]],
   ['readthesensorhub_21',['ReadTheSensorHub',['../_receiver_code_2src_2main_8cpp.html#a5d2350b2507883d3644251013370bc5b',1,'main.cpp']]],
   ['readtime_22',['ReadTime',['../_transmitter_code_2src_2main_8cpp.html#a483cced19b61975f76957f5696425fe9',1,'main.cpp']]],
@@ -36,6 +36,6 @@ var searchData=
   ['reset_33',['reset',['../class_adafruit___b_m_p280.html#a6ef79c9cc7ed5d3548ed69785bf627ed',1,'Adafruit_BMP280']]],
   ['resetsenttime_34',['resetSentTime',['../class_adafruit___g_p_s.html#a1194f23fada702be6e58b24a62402d39',1,'Adafruit_GPS']]],
   ['resetsubtrims_35',['ResetSubTrims',['../_transmitter_code_2src_2main_8cpp.html#a0b5bf6a4444e93f7c2f99264c414037d',1,'main.cpp']]],
-  ['restorebrightness_36',['RestoreBrightness',['../_transmitter_code_2src_2main_8cpp.html#a49da3478d89a22069e29c7f00cb46a5f',1,'main.cpp']]],
+  ['restorebrightness_36',['RestoreBrightness',['../_radio_functions_8h.html#a49da3478d89a22069e29c7f00cb46a5f',1,'RestoreBrightness():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a49da3478d89a22069e29c7f00cb46a5f',1,'RestoreBrightness():&#160;main.cpp']]],
   ['runmacro_37',['RunMacro',['../_radio_functions_8cpp.html#a91fb686ba2d3111821721ab33b442918',1,'RadioFunctions.cpp']]]
 ];

@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['calibrateedgeswitches_0',['CalibrateEdgeSwitches',['../_transmitter_code_2src_2main_8cpp.html#a128fe47088693b102796cd67a175ea08',1,'main.cpp']]],
+  ['calibrateedgeswitches_0',['CalibrateEdgeSwitches',['../_radio_functions_8h.html#a128fe47088693b102796cd67a175ea08',1,'CalibrateEdgeSwitches():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a128fe47088693b102796cd67a175ea08',1,'CalibrateEdgeSwitches():&#160;main.cpp']]],
   ['calibratesticks_1',['CalibrateSticks',['../_transmitter_code_2src_2main_8cpp.html#ae1b8cef371d26fca2b4f5a101be7a8ba',1,'main.cpp']]],
   ['cardinal_2',['cardinal',['../class_tiny_g_p_s_plus.html#a8c9e9444552ff85a505ffc6933dda03c',1,'TinyGPSPlus']]],
   ['centisecond_3',['centisecond',['../struct_tiny_g_p_s_time.html#a1f74ad4a2a53e0ee19f8e3a6b2bc985f',1,'TinyGPSTime']]],
@@ -24,7 +24,7 @@ var searchData=
   ['clearackpayload_21',['ClearAckPayload',['../radio_8h.html#a5a26715a721e1073d6ae00498282c056',1,'radio.h']]],
   ['clearbox_22',['ClearBox',['../_transmitter_code_2src_2main_8cpp.html#a5aeea47b9d855ae9911bae1115d02de7',1,'main.cpp']]],
   ['cleartext_23',['ClearText',['../_transmitter_code_2src_2main_8cpp.html#af0852678d8e89501acee8951f09d3b43',1,'main.cpp']]],
-  ['closelogfile_24',['CloseLogFile',['../_transmitter_code_2src_2main_8cpp.html#abc72fe68abd024cb263115e0afd3160a',1,'main.cpp']]],
+  ['closelogfile_24',['CloseLogFile',['../_radio_functions_8h.html#abc72fe68abd024cb263115e0afd3160a',1,'CloseLogFile():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#abc72fe68abd024cb263115e0afd3160a',1,'CloseLogFile():&#160;main.cpp']]],
   ['closemodelsfile_25',['CloseModelsFile',['../_transmitter_code_2src_2main_8cpp.html#a6922974b734cfe3a511e074a2d6ac33c',1,'main.cpp']]],
   ['common_5finit_26',['common_init',['../class_adafruit___g_p_s.html#ab8a2fe20ce1874b10a6e9f007c236b30',1,'Adafruit_GPS']]],
   ['compassangle_27',['compassAngle',['../class_adafruit___g_p_s.html#a06b7e12e38f1b00df058a253364215db',1,'Adafruit_GPS']]],

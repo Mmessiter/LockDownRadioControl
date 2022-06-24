@@ -3,7 +3,7 @@ var searchData=
   ['ukrules_0',['UkRules',['../_transmitter_code_2src_2main_8cpp.html#a7847cc790a939f378993691ae7d40a2f',1,'main.cpp']]],
   ['ukrulescounter_1',['UkRulesCounter',['../_transmitter_code_2src_2main_8cpp.html#a29883074027da47422a24b04284728db',1,'main.cpp']]],
   ['um_2',['um',['../_transmitter_code_2src_2main_8cpp.html#a9f83d3bf4d2c0b217e0e461d0c2f3e71',1,'main.cpp']]],
-  ['uncompressedwords_3',['UNCOMPRESSEDWORDS',['../common_8h.html#a0c40a351a0c0e01fbd5e5b1b0187eb48',1,'UNCOMPRESSEDWORDS():&#160;common.h'],['../_radio_functions_8cpp.html#a0c40a351a0c0e01fbd5e5b1b0187eb48',1,'UNCOMPRESSEDWORDS():&#160;RadioFunctions.cpp'],['../_radio_functions_8h.html#a0c40a351a0c0e01fbd5e5b1b0187eb48',1,'UNCOMPRESSEDWORDS():&#160;RadioFunctions.h']]],
+  ['uncompressedwords_3',['UNCOMPRESSEDWORDS',['../common_8h.html#a0c40a351a0c0e01fbd5e5b1b0187eb48',1,'UNCOMPRESSEDWORDS():&#160;common.h'],['../_radio_functions_8h.html#a0c40a351a0c0e01fbd5e5b1b0187eb48',1,'UNCOMPRESSEDWORDS():&#160;RadioFunctions.h']]],
   ['unit_4',['unit',['../structnmea__datavalue__t.html#a904af9df777122471b3358c1af5e5aac',1,'nmea_datavalue_t']]],
   ['updatebuttonlabels_5',['UpdateButtonLabels',['../_transmitter_code_2src_2main_8cpp.html#abf59862cf6c4e3df5a76f0bfea8919ef',1,'main.cpp']]],
   ['updateinterpolationtypes_6',['updateInterpolationTypes',['../_transmitter_code_2src_2main_8cpp.html#ab07d91dcd72f515d2d80b1d18f95ece5',1,'main.cpp']]],

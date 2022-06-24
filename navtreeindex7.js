@@ -1,16 +1,5 @@
 var NAVTREEINDEX7 =
 {
-"struct_tiny_g_p_s_course.html":[9,0,20],
-"struct_tiny_g_p_s_course.html#a76dc8ae6c2fe5ead9b44c8d53a3272ca":[9,0,20,0],
-"struct_tiny_g_p_s_date.html":[9,0,22],
-"struct_tiny_g_p_s_date.html#a1b913837130bb49ecd309eaf6bc205b1":[9,0,22,3],
-"struct_tiny_g_p_s_date.html#a3ae7825f840ef4ba0ecddbc22f741817":[9,0,22,4],
-"struct_tiny_g_p_s_date.html#a4d5f23eb008cbfd385343687bf902003":[9,0,22,0],
-"struct_tiny_g_p_s_date.html#a6501fd5ef19ae166d43e0e5781609ee2":[9,0,22,8],
-"struct_tiny_g_p_s_date.html#a6f3c5b4e72ef28b010f94ac9016315f3":[9,0,22,5],
-"struct_tiny_g_p_s_date.html#a718150ae16f68afa9ae81f9d1b3ce3f4":[9,0,22,6],
-"struct_tiny_g_p_s_date.html#ae2cc914fec377b429d99f01204f50d60":[9,0,22,7],
-"struct_tiny_g_p_s_date.html#ae8cc5f80c49e328f792d168a44062000":[9,0,22,2],
 "struct_tiny_g_p_s_date.html#af8b9c057a28dcb490081fcfde2a0ee11":[9,0,22,1],
 "struct_tiny_g_p_s_decimal.html":[9,0,23],
 "struct_tiny_g_p_s_decimal.html#a041cada3e406205d0878c9819eddbbbb":[9,0,23,1],

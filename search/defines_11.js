@@ -22,7 +22,7 @@ var searchData=
   ['smoothedcurves_19',['SMOOTHEDCURVES',['../_radio_functions_8h.html#a4bb4c483e9d754ae63391df1d8341deb',1,'RadioFunctions.h']]],
   ['spi_5fbitorder_5flsbfirst_20',['SPI_BITORDER_LSBFIRST',['../_adafruit___s_p_i_device_8h.html#a8982e24ac54e333a0ad2813a3667df73',1,'Adafruit_SPIDevice.h']]],
   ['spi_5fbitorder_5fmsbfirst_21',['SPI_BITORDER_MSBFIRST',['../_adafruit___s_p_i_device_8h.html#ad6a384a002c4fc658ba5cde19eade5c2',1,'Adafruit_SPIDevice.h']]],
-  ['sticksview_22',['STICKSVIEW',['../_radio_functions_8cpp.html#abfc5f0d31f80fc812b9c44a55fe3134e',1,'STICKSVIEW():&#160;RadioFunctions.cpp'],['../_radio_functions_8h.html#abfc5f0d31f80fc812b9c44a55fe3134e',1,'STICKSVIEW():&#160;RadioFunctions.h']]],
+  ['sticksview_22',['STICKSVIEW',['../_radio_functions_8h.html#abfc5f0d31f80fc812b9c44a55fe3134e',1,'RadioFunctions.h']]],
   ['straightlines_23',['STRAIGHTLINES',['../_radio_functions_8h.html#a00adadb4876f6c86728e50a79fbc8fcc',1,'RadioFunctions.h']]],
   ['subtrimview_24',['SUBTRIMVIEW',['../_radio_functions_8h.html#a489f04d8af51ba47e5032937dc23a330',1,'RadioFunctions.h']]],
   ['switch0_25',['SWITCH0',['../_radio_functions_8h.html#a5ad241ff204c1ff242cb95c222a4b8c1',1,'RadioFunctions.h']]],
@@ -33,6 +33,5 @@ var searchData=
   ['switch5_30',['SWITCH5',['../_radio_functions_8h.html#a4a43ca3258e65eeb2f7a0cc990728278',1,'RadioFunctions.h']]],
   ['switch6_31',['SWITCH6',['../_radio_functions_8h.html#a76f238185a1051be3f529e233e5367e9',1,'RadioFunctions.h']]],
   ['switch7_32',['SWITCH7',['../_radio_functions_8h.html#a34cc45470bb24099949911a2a08040bf',1,'RadioFunctions.h']]],
-  ['switches_5fview_33',['SWITCHES_VIEW',['../_radio_functions_8h.html#ace2d3514934b21f0e469528e292f2584',1,'RadioFunctions.h']]],
-  ['switches_5fview_34',['Switches_View',['../_radio_functions_8cpp.html#ad16a6b359f59fa52101e30d233fb030f',1,'RadioFunctions.cpp']]]
+  ['switches_5fview_33',['SWITCHES_VIEW',['../_radio_functions_8h.html#ace2d3514934b21f0e469528e292f2584',1,'RadioFunctions.h']]]
 ];
