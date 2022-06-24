@@ -1451,7 +1451,7 @@ void ShowServoPos()
         }
     }
     if (CurrentView == GRAPHVIEW) { 
-#define fixitx 34
+#define fixitx 35
 #define BarWidth 3
         if (ChanneltoSet <= 8) {
             l  = (InPutStick[ChanneltoSet - 1]);
@@ -1465,7 +1465,7 @@ void ShowServoPos()
             }
             if (l1 <= ChannelCentre[l]) {
                 SendValue(ChannelInput, map(l1, ChannelCentre[l], ChannelMin[l], 0, -100));
-                StickPosition = map(l1, ChannelMin[l], ChannelCentre[l],BoxLeft-4,BoxLeft+(((BoxRight-fixitx)-BoxLeft)/2));
+                StickPosition = map(l1, ChannelMin[l], ChannelCentre[l],BoxLeft-0,BoxLeft+(((BoxRight-fixitx)-BoxLeft)/2));
                 if (abs(StickPosition - SavedLineX) > LeastDistance) {
                     DisplayCurve();
                     FillBox(StickPosition-1,BoxTop+4,BarWidth,(BoxBottom-42)-BoxTop, HighlightColour);
