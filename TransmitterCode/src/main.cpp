@@ -4789,7 +4789,9 @@ void ZeroDataScreen(){             // ZERO Those parameters that are zeroable
 void ShowChannelName(){
     char MoveToChannel[]    =   "Mch";
     char MacrosView_chM[]   =   "chM";
-    SendText(MacrosView_chM,ChannelNames[GetValue(MoveToChannel)-1]);
+    uint8_t ch = GetValue(MoveToChannel);
+    if (ch > 0) -- ch;                 // no zero
+    SendText(MacrosView_chM,ChannelNames[ch]);
 }
 /***************************************************** Populate Macros View ****************************************************************************/
 
