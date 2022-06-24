@@ -18,7 +18,7 @@ var _radio_functions_8h =
     [ "CENTRESTICKS", "_radio_functions_8h.html#a53bc52cfc1253f58c2f3835aa39205a3", null ],
     [ "CENTRESTICKS", "_radio_functions_8h.html#a53bc52cfc1253f58c2f3835aa39205a3", null ],
     [ "CHANNELSUSED", "_radio_functions_8h.html#ad143c01c2b36424b292b568f48cbe014", null ],
-    [ "CharsMax", "_radio_functions_8h.html#ae67832ba1a9ab519ae788d9ea5902f40", null ],
+    [ "CHARSMAX", "_radio_functions_8h.html#a2214b1aa5fbdf61eaa9061c051d3826d", null ],
     [ "COLOURS_VIEW", "_radio_functions_8h.html#a8bafc146db9adcaf79abde00aaffb6bc", null ],
     [ "COMPRESSEDWORDS", "_radio_functions_8h.html#a461caf7198eaa60ce589088ff38b97cb", null ],
     [ "CSN_PIN", "_radio_functions_8h.html#a6c4d73944fe1bd2ff7ceee867c315ac1", null ],

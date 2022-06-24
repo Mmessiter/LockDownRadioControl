@@ -23,7 +23,7 @@ var searchData=
   ['getledbrightness_20',['GetLEDBrightness',['../_transmitter_code_2src_2main_8cpp.html#a549a702bb9b539c6b3a4f20cce65adcc',1,'main.cpp']]],
   ['getnewchannelvalues_21',['GetNewChannelValues',['../_transmitter_code_2src_2main_8cpp.html#a1a11fabb6c953055a80c5df5eebbfb0d',1,'GetNewChannelValues():&#160;main.cpp'],['../_radio_functions_8h.html#a1a11fabb6c953055a80c5df5eebbfb0d',1,'GetNewChannelValues():&#160;main.cpp']]],
   ['getnewpipe_22',['GetNewPipe',['../radio_8h.html#ad8b2470258da4e397b34d67ffce9ebaf',1,'radio.h']]],
-  ['getnextnumber_23',['GetNextNumber',['../_transmitter_code_2src_2main_8cpp.html#a5b456468ac6be5e872b327e0d03a9f7a',1,'main.cpp']]],
+  ['getnextnumber_23',['GetNextNumber',['../_transmitter_code_2src_2main_8cpp.html#a3a1bb848113ddbbc27294921fa92f92a',1,'main.cpp']]],
   ['getoldpipe_24',['GetOldPipe',['../radio_8h.html#a2cce213711b7a34bc80eec167dffcb8f',1,'radio.h']]],
   ['getothervalue_25',['GetOtherValue',['../_transmitter_code_2src_2main_8cpp.html#ac8919b32f9c38cc65c7b93cae664acfb',1,'main.cpp']]],
   ['getpower_5fmw_26',['getPower_mW',['../class_adafruit___i_n_a219.html#a610b73a256146e07c30b00714548f0ac',1,'Adafruit_INA219']]],

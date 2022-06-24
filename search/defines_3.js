@@ -7,7 +7,7 @@ var searchData=
   ['ce_5fpin_4',['CE_PIN',['../_radio_functions_8h.html#abb388c9dfbdca89b280a12c4af1a030f',1,'RadioFunctions.h']]],
   ['centresticks_5',['CENTRESTICKS',['../_radio_functions_8h.html#a53bc52cfc1253f58c2f3835aa39205a3',1,'CENTRESTICKS():&#160;RadioFunctions.h'],['../_radio_functions_8h.html#a53bc52cfc1253f58c2f3835aa39205a3',1,'CENTRESTICKS():&#160;RadioFunctions.h']]],
   ['channelsused_6',['CHANNELSUSED',['../_radio_functions_8h.html#ad143c01c2b36424b292b568f48cbe014',1,'CHANNELSUSED():&#160;RadioFunctions.h'],['../common_8h.html#ad143c01c2b36424b292b568f48cbe014',1,'CHANNELSUSED():&#160;common.h']]],
-  ['charsmax_7',['CharsMax',['../_radio_functions_8h.html#ae67832ba1a9ab519ae788d9ea5902f40',1,'RadioFunctions.h']]],
+  ['charsmax_7',['CHARSMAX',['../_radio_functions_8h.html#a2214b1aa5fbdf61eaa9061c051d3826d',1,'RadioFunctions.h']]],
   ['colours_5fview_8',['COLOURS_VIEW',['../_radio_functions_8h.html#a8bafc146db9adcaf79abde00aaffb6bc',1,'RadioFunctions.h']]],
   ['combine_9',['COMBINE',['../_tiny_g_p_s_09_09_8cpp.html#ae8b0c7d4f4c61109a44d953e5bd22e4f',1,'TinyGPS++.cpp']]],
   ['compressedwords_10',['COMPRESSEDWORDS',['../common_8h.html#a461caf7198eaa60ce589088ff38b97cb',1,'COMPRESSEDWORDS():&#160;common.h'],['../_radio_functions_8h.html#a461caf7198eaa60ce589088ff38b97cb',1,'COMPRESSEDWORDS():&#160;RadioFunctions.h']]],

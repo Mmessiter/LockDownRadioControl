@@ -248,6 +248,6 @@ var NAVTREEINDEX0 =
 "_radio_functions_8h.html#a1ed2189ce3484aec5668702d3ad26f81":[10,0,3,0,0,1,185],
 "_radio_functions_8h.html#a1ef5fc5af54a467bfc4d8fd805081e3c":[10,0,3,0,0,1,27],
 "_radio_functions_8h.html#a20b56099fe1fdbd5605a91af95c5a50b":[10,0,3,0,0,1,57],
-"_radio_functions_8h.html#a2279f0fac9f7362b46f3c53ae91a5ce8":[10,0,3,0,0,1,83],
-"_radio_functions_8h.html#a227f033c353a3fc7b0581cc0593e5f24":[10,0,3,0,0,1,121]
+"_radio_functions_8h.html#a2214b1aa5fbdf61eaa9061c051d3826d":[10,0,3,0,0,1,18],
+"_radio_functions_8h.html#a2279f0fac9f7362b46f3c53ae91a5ce8":[10,0,3,0,0,1,83]
 };
