@@ -1,11 +1,5 @@
 var NAVTREEINDEX6 =
 {
-"globals_defs_e.html":[10,1,6,5],
-"globals_defs_f.html":[10,1,6,6],
-"globals_defs_g.html":[10,1,6,7],
-"globals_defs_h.html":[10,1,6,8],
-"globals_defs_i.html":[10,1,6,9],
-"globals_defs_k.html":[10,1,6,10],
 "globals_defs_l.html":[10,1,6,11],
 "globals_defs_m.html":[10,1,6,12],
 "globals_defs_n.html":[10,1,6,13],
@@ -249,5 +243,11 @@ var NAVTREEINDEX6 =
 "struct_tiny_g_p_s_date.html#a6f3c5b4e72ef28b010f94ac9016315f3":[9,0,22,5],
 "struct_tiny_g_p_s_date.html#a718150ae16f68afa9ae81f9d1b3ce3f4":[9,0,22,6],
 "struct_tiny_g_p_s_date.html#ae2cc914fec377b429d99f01204f50d60":[9,0,22,7],
-"struct_tiny_g_p_s_date.html#ae8cc5f80c49e328f792d168a44062000":[9,0,22,2]
+"struct_tiny_g_p_s_date.html#ae8cc5f80c49e328f792d168a44062000":[9,0,22,2],
+"struct_tiny_g_p_s_date.html#af8b9c057a28dcb490081fcfde2a0ee11":[9,0,22,1],
+"struct_tiny_g_p_s_decimal.html":[9,0,23],
+"struct_tiny_g_p_s_decimal.html#a041cada3e406205d0878c9819eddbbbb":[9,0,23,1],
+"struct_tiny_g_p_s_decimal.html#a34e6448314c198fa204dfb22cd24fc7e":[9,0,23,3],
+"struct_tiny_g_p_s_decimal.html#a6501fd5ef19ae166d43e0e5781609ee2":[9,0,23,5],
+"struct_tiny_g_p_s_decimal.html#a8c7fd3ccd678b195d8f23bd1cb31d9ba":[9,0,23,2]
 };
