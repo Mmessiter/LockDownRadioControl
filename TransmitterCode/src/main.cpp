@@ -457,24 +457,6 @@ bool     FirstConnection     = true;
 File     LogFileNumber;
 bool     LogFileOpen         =  false;
 
-
-// ***************************************** Extra Prototypes **********************************************
-
-void SendText(char* tbox, char* NewWord); // needed a prototype or two here!
-void RestoreBrightness();
-void ButtonWasPressed();
-void CalibrateEdgeSwitches();
-void DisplayCurve();
-void DrawLine(int x1, int y1, int x2, int y2, int c);
-void DrawBox(int x1, int y1, int x2, int y2, int c);
-void FillBox(int x1, int y1, int w, int h, int c);
-void ReadTextFile(char* fname, char* htext, uint8_t StartLineNumber, uint8_t MaxLines);
-void LogConnection();
-void LogDisConnection();
-void CloseLogFile();
-void StartLogFile();     
-void ShowLogFile(uint8_t StartLine);
-
 /************************************************************************************************************/
 // This function returns distance (in MILES) between two GPS coordinates (in degrees)
 // it was essentially cribbed from the internet, then tested and adjusted a little. 

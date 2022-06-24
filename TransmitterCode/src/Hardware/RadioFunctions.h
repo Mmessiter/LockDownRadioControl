@@ -2,7 +2,6 @@
 #ifndef RadioFunctions_H
 #define RadioFunctions_H
 
-
 #include <Arduino.h>
 #include <SD.h>
 #include <SPI.h>
@@ -45,8 +44,6 @@
 #define DS1307_ADDRESS     0x68                // I2C address for RTC
 #define MAXLINES           30                  // text to load at once for log and help screens
 
-
-
 // CurrentMode values (=WHETHER TO SEND DATA)
 
 #define NORMAL          0 // Normal for transmit as usual
@@ -55,14 +52,17 @@
 #define SCANWAVEBAND    3 // Scan waveband
 #define SENDNOTHING     4 // Transmission off
 
-// VALUES FOR MAX SERVO RESOLUTION
+// **************************************************************************
+//                            SERVO RANGE PARAMETERS                        *
+//***************************************************************************
+
+#define DEFAULT_EXPO    50 // = ZERO EXPO (Range is 0 - 200. Below 50 is negative Expo)
 
 #define MINMICROS       500
 #define MAXMICROS       2500
-#define HALFMICROSRANGE (MAXMICROS - MINMICROS) / 2 //  = 1000
+#define HALFMICROSRANGE (MAXMICROS - MINMICROS) / 2 
 #define MIDMICROS       MINMICROS + HALFMICROSRANGE
 
-#define NEXTION         Serial1 // NEXTION is connected to Serial1
 #define Black           0
 #define Blue            31
 #define Brown           48192
@@ -113,6 +113,8 @@
 #define UNCOMPRESSEDWORDS 20                        // DATA TO SEND = 40  bytes
 #define COMPRESSEDWORDS   UNCOMPRESSEDWORDS * 3 / 4 // COMPRESSED DATA SENT = 30  bytes
 
+#define BINDPIPETIMEOUT    1000                      // timeout for switching from Bound to Default pipe
+
 #define SWITCH0       32   // EDGE SWITCHES' PIN NUMBERS ...
 #define SWITCH1       31
 #define SWITCH2       30
@@ -121,14 +123,14 @@
 #define SWITCH5       27
 #define SWITCH6       26
 #define SWITCH7       25
-#define TRIM1A         34   // Digital trims pins
-#define TRIM1B         35
-#define TRIM2A         36
-#define TRIM2B         37
-#define TRIM3A         38
-#define TRIM3B         39
-#define TRIM4A         40
-#define TRIM4B         41
+#define TRIM1A        34   // Digital trims pins
+#define TRIM1B        35
+#define TRIM2A        36
+#define TRIM2B        37
+#define TRIM3A        38
+#define TRIM3B        39
+#define TRIM4A        40
+#define TRIM4B        41
 #define REDLED        2 // COLOURED LEDS' PIN NUMBERS ...
 #define GREENLED      3
 #define BLUELED       4
@@ -177,19 +179,11 @@
 #define RANGEMIN 0    // = Frsky at 0 %
 
 // **************************************************************************
-//                            SERVO RANGE PARAMETERS                        *
-//***************************************************************************
-
-#define MINMICROS    500
-#define MAXMICROS    2500
-#define DEFAULT_EXPO 50 // = ZERO EXPO (Range is 0 - 200. Below 50 is negative Expo)
-
-// **************************************************************************
 //                            FHSS PARAMETERS                               *
 //***************************************************************************
 
-#define PACEMAKER                   8  // (was 7) MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
-#define RETRYCOUNT                  3   // auto retries from nRF24L01
+#define PACEMAKER                   8   // (was 7) MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
+#define RETRYCOUNT                  3   // auto retries inside nRF24L01
 #define RETRYWAIT                   1   // Wait between retries is RetryWait+1 * 250us. A failed packet therefore takes (RetryWait+1 * 250us) * RetryCount
 #define LOSTCONTACTCUTOFF           6   // How many packets to lose before reconnect triggers  (>6)
 #define RECONNECT_CHANNELS_COUNT    3   // How many channels to try when reconnecting
@@ -236,8 +230,6 @@
 // #define DB_SWITCHES       // Debug Switches
 // #define DB_MODEL_EXCHANGE // Debug MODEL EXCHANGE (by RF link)
 // #define DB_GAPS           // Debug Connection Gap assessment
-
-
 
 #ifdef USE_WATCHDOG
     #include <Watchdog_t4.h>
@@ -301,8 +293,7 @@ extern uint32_t       MacroStopTime[MAXMACROS];
 extern bool           UseMacros;
 extern unsigned int   LostPackets;
 
-
-
+// external (global) functions needed here
 extern void  GetSlaveChannelValues();
 extern void  KickTheDog();
 extern void  SendCommand(char* tbox);
@@ -322,7 +313,6 @@ extern void  ShowServoPos();
 extern void  MapToSBUS();
 extern void  ZeroDataScreen();
 
-
 /*********************************************************************************************************************************/
 // function prototypes
 
@@ -336,6 +326,20 @@ void ScanAllChannels();
 void SendData();
 void Procrastinate(uint32_t HowLong);
 void DrawFhssBox(); 
+void SendText(char* tbox, char* NewWord); // needed a prototype or two here!
+void RestoreBrightness();
+void ButtonWasPressed();
+void CalibrateEdgeSwitches();
+void DisplayCurve();
+void DrawLine(int x1, int y1, int x2, int y2, int c);
+void DrawBox(int x1, int y1, int x2, int y2, int c);
+void FillBox(int x1, int y1, int w, int h, int c);
+void ReadTextFile(char* fname, char* htext, uint8_t StartLineNumber, uint8_t MaxLines);
+void LogConnection();
+void LogDisConnection();
+void CloseLogFile();
+void StartLogFile();     
+void ShowLogFile(uint8_t StartLine);
 
 /*********************************************************************************************************************************/
 
