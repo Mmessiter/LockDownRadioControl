@@ -3,13 +3,16 @@
 #define RadioFunctions_H
 
 // **************************************************************************
-//                TX VERSION NUMBER   (June 21st 2022 Malcolm Messiter) *
+//                TX VERSION NUMBER   (June 21st 2022 Malcolm Messiter)     *
 //***************************************************************************
+
 #define TXVERSION_MAJOR   1
 #define TXVERSION_MINOR   8
 #define TXVERSION_MINIMUS 0
 
-
+// **************************************************************************
+//                               General                                    *
+// **************************************************************************
 
 #define CHANNELSUSED       16                  // 16 Channels
 #define MAXMIXES           32                  // 32 mixes
