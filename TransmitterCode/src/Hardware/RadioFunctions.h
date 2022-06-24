@@ -109,7 +109,7 @@
 #define BUDDYVIEW       22
 #define LOGVIEW         23
 
-#define CharsMax        120 
+#define CHARSMAX        120 
 #define UNCOMPRESSEDWORDS 20                        // DATA TO SEND = 40  bytes
 #define COMPRESSEDWORDS   UNCOMPRESSEDWORDS * 3 / 4 // COMPRESSED DATA SENT = 30  bytes
 

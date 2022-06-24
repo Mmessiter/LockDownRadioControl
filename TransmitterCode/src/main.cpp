@@ -118,7 +118,7 @@ uint8_t       CurrentView        = FRONTVIEW;
 uint8_t       SavedCurrentView   = FRONTVIEW;
 uint64_t      DefaultPipe        = DEFAULTPIPEADDRESS; //          Default Radio pipe address
 uint64_t      NewPipe            = 0xBABE1E5420LL;     //             New Radio pipe address for binding comes from MAC address
-char          TextIn[CharsMax+2];  // spare space
+char          TextIn[CHARSMAX+2];  // spare space
 unsigned int  PacketsPerSecond = 0;
 unsigned int  LostPackets      = 0;
 uint8_t       PacketNumber     = 0;
@@ -1061,7 +1061,7 @@ uint16_t mp(uint8_t lowres)
 
 void ClearText()
 {
-    for (int i = 0; i < CharsMax; ++i) {
+    for (int i = 0; i < CHARSMAX; ++i) {
         TextIn[i] = 0;
     }
 }
@@ -1160,7 +1160,7 @@ void GetTextIn()
         while (NEXTION.available()) {
             TextIn[j] = uint8_t(NEXTION.read());
             if (TextIn[j] == '$') TextIn[j] = 0; 
-            if (j < CharsMax) ++j;
+            if (j < CHARSMAX) ++j;
             delayMicroseconds(20);
         }
     }
@@ -1246,7 +1246,7 @@ bool GetButtonPress()
                 if (TextIn[i] == '$') TextIn[i] = 0; 
                 TextIn[i + 1] = 0;
             }
-            if (i < CharsMax-1) ++i; 
+            if (i < CHARSMAX-1) ++i; 
             delayMicroseconds(20);      // 20 seems best so far value here
         }
     }
@@ -1890,12 +1890,12 @@ void SendMixValues()
 
 /*********************************************************************************************************************************/
 
-int GetNextNumber(int p1, char text1[CharsMax])
+int GetNextNumber(int p1, char text1[CHARSMAX])
 {
-    char text2[CharsMax];
+    char text2[CHARSMAX];
     int  j = 0;
     int  i = p1 - 1;
-    while (isDigit(text1[i]) && i < CharsMax) {
+    while (isDigit(text1[i]) && i < CHARSMAX) {
         text2[j] = text1[i];
         ++i;
         ++j;
