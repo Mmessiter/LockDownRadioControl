@@ -15,8 +15,7 @@ var searchData=
   ['moveatrim_12',['MoveaTrim',['../_transmitter_code_2src_2main_8cpp.html#a17123a117a96a9416dec48d9345f8a5b',1,'main.cpp']]],
   ['movepoint_13',['MovePoint',['../_transmitter_code_2src_2main_8cpp.html#aad727ec0b0f9f34487a535eaa4a83172',1,'main.cpp']]],
   ['moveservos_14',['MoveServos',['../_receiver_code_2src_2main_8cpp.html#a6f2443a0666140cf4d8b7352bb3b793c',1,'MoveServos():&#160;main.cpp'],['../radio_8h.html#a6f2443a0666140cf4d8b7352bb3b793c',1,'MoveServos():&#160;main.cpp']]],
-  ['mp_15',['mp',['../_transmitter_code_2src_2main_8cpp.html#a23f912b672279a759ae7c65c51011160',1,'main.cpp']]],
-  ['mph_16',['mph',['../struct_tiny_g_p_s_speed.html#a1809120167961ea9a85e860a964b1c6e',1,'TinyGPSSpeed']]],
-  ['mps_17',['mps',['../struct_tiny_g_p_s_speed.html#aacee536241e810cdf4ba7846d6c202cb',1,'TinyGPSSpeed']]],
-  ['mysbus_18',['MySbus',['../_receiver_code_2src_2main_8cpp.html#a5424788640aaa8d535d6ea077949ef82',1,'MySbus(SBUSPORT):&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a5424788640aaa8d535d6ea077949ef82',1,'MySbus(SBUSPORT):&#160;main.cpp']]]
+  ['mph_15',['mph',['../struct_tiny_g_p_s_speed.html#a1809120167961ea9a85e860a964b1c6e',1,'TinyGPSSpeed']]],
+  ['mps_16',['mps',['../struct_tiny_g_p_s_speed.html#aacee536241e810cdf4ba7846d6c202cb',1,'TinyGPSSpeed']]],
+  ['mysbus_17',['MySbus',['../_receiver_code_2src_2main_8cpp.html#a5424788640aaa8d535d6ea077949ef82',1,'MySbus(SBUSPORT):&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a5424788640aaa8d535d6ea077949ef82',1,'MySbus(SBUSPORT):&#160;main.cpp']]]
 ];
