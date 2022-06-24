@@ -128,7 +128,6 @@ uint32_t      TrimTimer        = 0;
 uint16_t      TrimRepeatSpeed  = 600;   
 uint16_t      DefaultTrimRepeatSpeed  = 600;   
 
-
 // ************************************* AckPayload structure ******************************************************
 /**
      * This first byte "Purpose" defines what all the other bytes mean, AND ...
@@ -171,7 +170,6 @@ uint8_t  MidLowDegrees[5][CHANNELSUSED + 1]; //    MidLow Degrees (45)
 uint8_t  MinDegrees[5][CHANNELSUSED + 1];    //    Min Degrees (0)
 uint8_t  SubTrims[CHANNELSUSED + 1];         //    Subtrims
 uint8_t  SubTrimToEdit = 0;
-
 uint8_t  FlightMode         = 1;
 uint8_t  PreviousFlightMode = 1;
 uint16_t ChannelMax[CHANNELSUSED + 1];       //    output of pots at max
@@ -196,7 +194,7 @@ int           BoxRight;
 int           ClickX;
 int           ClickY;
 bool          CalibratedYet                = false;
-int           AnalogueInput[PROPOCHANNELS] = {A0, A1, A2, A3, A6, A7, A8, A9}; // PROPO Channels for transmission
+uint16_t      AnalogueInput[PROPOCHANNELS] = {A0, A1, A2, A3, A6, A7, A8, A9}; // PROPO Channels for transmission
 uint8_t       CurrentMode                  = NORMAL;
 uint8_t       AllChannels[127]; /// for scanning
 uint8_t       NoCarrier[127];
@@ -208,14 +206,13 @@ uint32_t      Secs        = 0;
 uint32_t      PausedSecs  = 0;
 uint32_t      Mins        = 0;
 uint32_t      Hours       = 0;
-uint8_t       NameCount     = 0;
-char          ModelName[30] = "Undefined";
 uint8_t       ModelNumber   = 1;
 uint8_t       ModelDefined  = 0;
 uint16_t      MemoryForTransmtter  = 0;   // SD space for transmitter parameters
 uint16_t      OneModelMemory       = 0;   // SD space for every model's parameters
 uint16_t      SDCardAddress        = 0;   // Address on SD card (offset from zero)
 
+char     ModelName[30];
 char     FrontView_Hours[]           = "Hours";
 char     FrontView_Mins[]            = "Mins";
 char     FrontView_Secs[]            = "Secs";
@@ -281,9 +278,8 @@ char     MaxAltitude[8]              = " ";
 float    MaxAlt                      = 0;
 char     ReceiverVersionNumber[8]    = " ";
 char     TransmitterVersionNumber[8] = " ";
-char     deletedmodel[]              = "Deleted";
 
-File ModelsFileNumber;
+File     ModelsFileNumber;
 
 Adafruit_INA219 ina219;
 
@@ -348,7 +344,7 @@ uint32_t Inactivity_Timeout = INACTIVITYTIMEOUT ;
 uint32_t Inactivity_Start   = 0;
 
 tmElements_t tm;
-char         TxName[32]   = {"Curtis Youngblood"};
+char         TxName[32]   = {"No name was found!"};
 int          LastTimeRead = 0;
 int          LastShowTime = 0;
 int          LastDogKick  = 0;
@@ -456,23 +452,6 @@ uint16_t SavedLineX          = 12345;
 bool     FirstConnection     = true;
 File     LogFileNumber;
 bool     LogFileOpen         =  false;
-
-/************************************************************************************************************/
-// This function returns distance (in MILES) between two GPS coordinates (in degrees)
-// it was essentially cribbed from the internet, then tested and adjusted a little. 
-
-//FASTRUN double HowFar(double latitude_new, double longitude_new, double latitude_old, double longitude_old) {
-//        double  RadiusOfTheEarth = 6372797.56085;                 // Meters by the way
-//        double  DegreesToRadians = 3.14159265358979323846 / 180;
-//        double  lat_new = latitude_old * DegreesToRadians;
-//        double  lat_old = latitude_new * DegreesToRadians;
-//        double  lat_diff = (latitude_new-latitude_old) *  DegreesToRadians;
-//        double  lng_diff = (longitude_new-longitude_old) *  DegreesToRadians;
-//        double  a = sin(lat_diff/2) * sin(lat_diff/2) + cos(lat_new) * cos(lat_old) *  sin(lng_diff/2) * sin(lng_diff/2);
-//        double  c = 2 * atan2(sqrt(a), sqrt(1-a));
-//        double  distance = (RadiusOfTheEarth * c ) ; //* 3.28084) / 1760;
-//        return  distance; // in MILES now
-//   }
 
 /******************* DeltaGMT is a user defined representation of time zone. It should never exceed 24. Not on this planet. **********/
 void FixDeltaGMTSign(){

@@ -1,4 +1,8 @@
 
+// **************************************************************************
+//     This header file now has all definitions and includes                *
+// **************************************************************************
+
 #ifndef RadioFunctions_H
 #define RadioFunctions_H
 
@@ -15,6 +19,7 @@
 #include <InterpolationLib.h>
 #include <SBUS.h>
 #include <RF24.h>
+#include <Watchdog_t4.h>
 
 // **************************************************************************
 //                TX VERSION NUMBER   (June 24th 2022 Malcolm Messiter)     *
@@ -23,6 +28,18 @@
 #define TXVERSION_MAJOR   1
 #define TXVERSION_MINOR   8
 #define TXVERSION_MINIMUS 0
+
+// **************************************************************************
+//    DEBUG OPTIONS (UNCOMMENT ANY OF THESE for that bit of debug info)     *
+//***************************************************************************
+
+// #define DB_NEXTION        // Debug NEXTION and SD card data
+// #define DB_FHSS           // Debug real time FHSS data
+// #define DB_SENSORS        // Debug Sensors
+// #define DB_BIND           // Debug Binding
+// #define DB_SWITCHES       // Debug Switches
+// #define DB_MODEL_EXCHANGE // Debug MODEL EXCHANGE (by RF link)
+// #define DB_GAPS           // Debug Connection Gap assessment
 
 // **************************************************************************
 //                               General                                    *
@@ -43,25 +60,6 @@
 #define INACTIVITYMAXIMUM  30 * TICKSPERMINUTE // Inactivity timeout maximum is 30 minutes
 #define DS1307_ADDRESS     0x68                // I2C address for RTC
 #define MAXLINES           30                  // text to load at once for log and help screens
-
-// CurrentMode values (=WHETHER TO SEND DATA)
-
-#define NORMAL          0 // Normal for transmit as usual
-#define CALIBRATELIMITS 1 // Calibrate limits
-#define CENTRESTICKS    2 // Calibrate Centres
-#define SCANWAVEBAND    3 // Scan waveband
-#define SENDNOTHING     4 // Transmission off
-
-// **************************************************************************
-//                            SERVO RANGE PARAMETERS                        *
-//***************************************************************************
-
-#define DEFAULT_EXPO    50 // = ZERO EXPO (Range is 0 - 200. Below 50 is negative Expo)
-
-#define MINMICROS       500
-#define MAXMICROS       2500
-#define HALFMICROSRANGE (MAXMICROS - MINMICROS) / 2 
-#define MIDMICROS       MINMICROS + HALFMICROSRANGE
 
 #define Black           0
 #define Blue            31
@@ -109,6 +107,8 @@
 #define BUDDYVIEW       22
 #define LOGVIEW         23
 
+#define DEFAULT_EXPO    50 // = ZERO EXPO (Range is 0 - 200. Below 50 is negative Expo)
+
 #define CHARSMAX        120 
 #define UNCOMPRESSEDWORDS 20                        // DATA TO SEND = 40  bytes
 #define COMPRESSEDWORDS   UNCOMPRESSEDWORDS * 3 / 4 // COMPRESSED DATA SENT = 30  bytes
@@ -136,7 +136,9 @@
 #define BLUELED       4
 #define POWER_OFF_PIN 5 
 
-// SDCARD MODEL MEMORY CONSTANTS
+// **************************************************************************
+//               SDCARD MODEL MEMORY CONSTANTS                              *
+//***************************************************************************
 
 #define RENEWDATA  8787         // Change these to rewrite all
 #define TXSIZE     250          // SD space reserved for transmitter
@@ -144,6 +146,25 @@
 #define MAXFILELEN 1024 * 3     // MAX SIZE FOR HELP AND LOG FILES
 #define BOXOFFSET    35
 #define BOXSIZE     395
+
+// **************************************************************************
+//           CurrentMode values (=WHETHER TO SEND DATA)                     *
+//***************************************************************************
+
+#define NORMAL          0 // Normal for transmit as usual
+#define CALIBRATELIMITS 1 // Calibrate limits
+#define CENTRESTICKS    2 // Calibrate Centres
+#define SCANWAVEBAND    3 // Scan waveband
+#define SENDNOTHING     4 // Transmission off
+
+// **************************************************************************
+//                            SERVO RANGE PARAMETERS                        *
+//***************************************************************************
+
+#define MINMICROS       500
+#define MAXMICROS       2500
+#define HALFMICROSRANGE (MAXMICROS - MINMICROS) / 2 
+#define MIDMICROS       MINMICROS + HALFMICROSRANGE
 
 // **************************************************************************
 //                            Interpolations                                *
@@ -199,41 +220,22 @@
 #define CENTRESTICKS    2 // Calibrate Centres
 #define SCANWAVEBAND    3 // Scan waveband
 #define SENDNOTHING     4 // Transmission off
-                          // ************************************************
 
 // **************************************************************************
 //                          NEXTION SERIAL CONNECTION                       *
 //***************************************************************************
+
 #define NEXTION Serial1      // NEXTION is connected to Serial1
 #define SHOWCOMMSDELAY 500   // 250   // ms pauses between updated info on NEXTION
-// ***************************************************************************
 
 // **************************************************************************
 //                            WATCHDOG PARAMETERS                           *
 //***************************************************************************
 
-#define USE_WATCHDOG
 #define WATCHDOGTIMEOUT 10000 // 10 Seconds before reboot (32ms -> 500 seconds)
 #define KICKRATE        1000  // Kick once a second (must be between WATCHDOGMAXRATE and WATCHDOGTIMEOUT)
 #define WATCHDOGMAXRATE 500   // 500 ms secs between kicks is max rate allowed
 
-// **************************************************************************
-
-// **************************************************************************
-//    DEBUG OPTIONS (UNCOMMENT ANY OF THESE for that bit of debug info)     *
-//***************************************************************************
-
-// #define DB_NEXTION        // Debug NEXTION and SD card data
-// #define DB_FHSS           // Debug real time FHSS data
-// #define DB_SENSORS        // Debug Sensors
-// #define DB_BIND           // Debug Binding
-// #define DB_SWITCHES       // Debug Switches
-// #define DB_MODEL_EXCHANGE // Debug MODEL EXCHANGE (by RF link)
-// #define DB_GAPS           // Debug Connection Gap assessment
-
-#ifdef USE_WATCHDOG
-    #include <Watchdog_t4.h>
-#endif
 /*********************************************************************************************************************************/
 // external (global vars) needed here
 
