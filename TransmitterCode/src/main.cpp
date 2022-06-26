@@ -3167,7 +3167,6 @@ void setup()
     SetUKFrequencies(); 
     SetAudioVolume(AudioVolume);
     if (PlayFanfare) PlaySound(THEFANFARE);
-   // if (PlayFanfare) SendCommand(OpeningFanfare);
     ScreenTimeTimer = millis();
     RestoreBrightness();
   
