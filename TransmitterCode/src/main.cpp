@@ -94,134 +94,11 @@
  */
 // ************************************************** TRANSMITTER CODE **************************************************
 
-
-// CurrentMode values (=WHETHER TO SEND DATA)
-
-#define NORMAL          0 // Normal for transmit as usual
-#define CALIBRATELIMITS 1 // Calibrate limits
-#define CENTRESTICKS    2 // Calibrate Centres
-#define SCANWAVEBAND    3 // Scan waveband
-#define SENDNOTHING     4 // Transmission off
-
-// VALUES FOR MAX SERVO RESOLUTION
-
-#define MINMICROS       500
-#define MAXMICROS       2500
-#define HALFMICROSRANGE (MAXMICROS - MINMICROS) / 2 //  = 1000
-#define MIDMICROS       MINMICROS + HALFMICROSRANGE
-
-#include <Arduino.h>
-#include <SD.h>
-#include <SPI.h>
-#include <RF24.h>
-#include <Wire.h>
-#include <Adafruit_INA219.h>
-#include <TimeLib.h>
-#include <DS1307RTC.h>
-#include <TeensyID.h>
-#include <EEPROM.h>
-#include <InterpolationLib.h>
-#include <SBUS.h>
-#include "Hardware/RadioFunctions.h"
-
-#ifdef USE_WATCHDOG
-    #include <Watchdog_t4.h>
-#endif
-
+#include "Hardware/RadioFunctions.h"                           // This file contains many definitions and further includes
 
 RF24 Radio1(CE_PIN, CSN_PIN);
-
-#define NEXTION         Serial1 // NEXTION is connected to Serial1
-#define Black           0
-#define Blue            31
-#define Brown           48192
-#define Green           2016
-#define Yellow          65504
-#define Red             63488
-#define Gray            33840
-#define SkyBlue         2047
-#define Purple          39070
-#define Orange          64512
-#define White           65535
-#define FLIGHTMODESUSED 4
-#define M_Enabled       0 // Offsets for Mixes array
-#define M_FlightMode    1
-#define M_MasterChannel 2
-#define M_SlaveChannel  3
-#define M_Reversed      4
-#define M_Percent       5
-#define M_R1            6
-#define M_R2            7
-
-#define FRONTVIEW       0
-#define STICKSVIEW      1
-#define GRAPHVIEW       2
-#define MIXESVIEW       3
-#define SCANVIEW        4
-#define MODELSVIEW      5
-#define CALIBRATEVIEW   6
-#define MAINSETUPVIEW   7
-#define SUBTRIMVIEW     8
-#define DATAVIEW        9
-#define TRIM_VIEW       10
-#define MACROS_VIEW     11
-#define SWITCHES_VIEW   12
-#define ONE_SWITCH_VIEW 13
-#define HELP_VIEW       14
-#define OPTIONS_VIEW    15
-#define INPUTS_VIEW     16
-#define FAILSAFE_VIEW   17
-#define COLOURS_VIEW    18
-#define AUDIOVIEW       19
-#define FILESVIEW       20
-#define REVERSEVIEW     21
-#define BUDDYVIEW       22
-#define LOGVIEW         23
-
-
-#define CharsMax        120 
-
-#define UNCOMPRESSEDWORDS 20                        // DATA TO SEND = 40  bytes
-#define COMPRESSEDWORDS   UNCOMPRESSEDWORDS * 3 / 4 // COMPRESSED DATA SENT = 30  bytes
-
-#define SWITCH0       32   // EDGE SWITCHES' PIN NUMBERS ...
-#define SWITCH1       31
-#define SWITCH2       30
-#define SWITCH3       29
-#define SWITCH4       28
-#define SWITCH5       27
-#define SWITCH6       26
-#define SWITCH7       25
-
-#define TRIM1A         34   // Digital trims pins
-#define TRIM1B         35
-#define TRIM2A         36
-#define TRIM2B         37
-#define TRIM3A         38
-#define TRIM3B         39
-#define TRIM4A         40
-#define TRIM4B         41
-
-
-#define REDLED        2 // COLOURED LEDS' PIN NUMBERS ...
-#define GREENLED      3
-#define BLUELED       4
-#define POWER_OFF_PIN 5 
-
-// SDCARD MODEL MEMORY CONSTANTS
-
-#define RENEWDATA  8787         // Change these to rewrite all
-#define TXSIZE     250          // SD space reserved for transmitter
-#define MODELSIZE  1600         // SD space reserved for each model
-#define MAXFILELEN 1024 * 3     // MAX SIZE FOR HELP AND LOG FILES
-#define BOXOFFSET    35
-#define BOXSIZE     395
-
-#ifdef USE_WATCHDOG
 WDT_T4<WDT3>  TeensyWatchDog;
 WDT_timings_t WatchDogConfig;
-#endif
-
 SBUS     MySbus(SBUSPORT);
 uint16_t SbusChannels[CHANNELSUSED + 2]; // a few spare
 uint32_t SBUSTimer = 0;
@@ -237,7 +114,7 @@ uint8_t       CurrentView        = FRONTVIEW;
 uint8_t       SavedCurrentView   = FRONTVIEW;
 uint64_t      DefaultPipe        = DEFAULTPIPEADDRESS; //          Default Radio pipe address
 uint64_t      NewPipe            = 0xBABE1E5420LL;     //             New Radio pipe address for binding comes from MAC address
-char          TextIn[CharsMax+2];  // spare space
+char          TextIn[CHARSMAX+2];  // spare space
 unsigned int  PacketsPerSecond = 0;
 unsigned int  LostPackets      = 0;
 uint8_t       PacketNumber     = 0;
@@ -246,7 +123,6 @@ uint8_t       PreviousTrim     = 255;
 uint32_t      TrimTimer        = 0;  
 uint16_t      TrimRepeatSpeed  = 600;   
 uint16_t      DefaultTrimRepeatSpeed  = 600;   
-
 
 // ************************************* AckPayload structure ******************************************************
 /**
@@ -262,7 +138,6 @@ uint16_t      DefaultTrimRepeatSpeed  = 600;
      *
      *  If Purpose = 2 then ...
      **/
-
 
 struct Payload
 {
@@ -291,7 +166,6 @@ uint8_t  MidLowDegrees[5][CHANNELSUSED + 1]; //    MidLow Degrees (45)
 uint8_t  MinDegrees[5][CHANNELSUSED + 1];    //    Min Degrees (0)
 uint8_t  SubTrims[CHANNELSUSED + 1];         //    Subtrims
 uint8_t  SubTrimToEdit = 0;
-
 uint8_t  FlightMode         = 1;
 uint8_t  PreviousFlightMode = 1;
 uint16_t ChannelMax[CHANNELSUSED + 1];       //    output of pots at max
@@ -309,7 +183,6 @@ double yPoints[5];
 double xPoint = 0;
 double yPoint = 0;
 
-
 int           BoxBottom;
 int           BoxTop;
 int           BoxLeft;
@@ -317,7 +190,7 @@ int           BoxRight;
 int           ClickX;
 int           ClickY;
 bool          CalibratedYet                = false;
-int           AnalogueInput[PROPOCHANNELS] = {A0, A1, A2, A3, A6, A7, A8, A9}; // PROPO Channels for transmission
+uint16_t      AnalogueInput[PROPOCHANNELS] = {A0, A1, A2, A3, A6, A7, A8, A9}; // PROPO Channels for transmission
 uint8_t       CurrentMode                  = NORMAL;
 uint8_t       AllChannels[127]; /// for scanning
 uint8_t       NoCarrier[127];
@@ -329,14 +202,13 @@ uint32_t      Secs        = 0;
 uint32_t      PausedSecs  = 0;
 uint32_t      Mins        = 0;
 uint32_t      Hours       = 0;
-uint8_t       NameCount     = 0;
-char          ModelName[30] = "Undefined";
 uint8_t       ModelNumber   = 1;
 uint8_t       ModelDefined  = 0;
 uint16_t      MemoryForTransmtter  = 0;   // SD space for transmitter parameters
 uint16_t      OneModelMemory       = 0;   // SD space for every model's parameters
 uint16_t      SDCardAddress        = 0;   // Address on SD card (offset from zero)
 
+char     ModelName[30];
 char     FrontView_Hours[]           = "Hours";
 char     FrontView_Mins[]            = "Mins";
 char     FrontView_Secs[]            = "Secs";
@@ -402,9 +274,8 @@ char     MaxAltitude[8]              = " ";
 float    MaxAlt                      = 0;
 char     ReceiverVersionNumber[8]    = " ";
 char     TransmitterVersionNumber[8] = " ";
-char     deletedmodel[]              = "Deleted";
 
-File ModelsFileNumber;
+File     ModelsFileNumber;
 
 Adafruit_INA219 ina219;
 
@@ -469,7 +340,7 @@ uint32_t Inactivity_Timeout = INACTIVITYTIMEOUT ;
 uint32_t Inactivity_Start   = 0;
 
 tmElements_t tm;
-char         TxName[32]   = {"Curtis Youngblood"};
+char         TxName[32]   = {"No name was found!"};
 int          LastTimeRead = 0;
 int          LastShowTime = 0;
 int          LastDogKick  = 0;
@@ -553,6 +424,8 @@ uint16_t SavedRX1TotalTime  = 0;
 uint16_t SavedRX2TotalTime  = 0;
 uint8_t  AudioVolume        = 90;
 char     OpeningFanfare[]   = "play 0,18,0";
+char     ConnectedSound[]   = "play 0,20,0";
+char     DisconnectedSound[]= "play 0,21,0";
 char     click0[]           = "play 0,0,0";  //  = channel, noiseID ,loop
 char     click1[]           = "play 0,1,0";  //  = channel, noiseID ,loop
 uint32_t WarningTimer       = 0;
@@ -565,6 +438,7 @@ bool     TrimClicks         = true;
 bool     SpeakingClock      = true;
 bool     ClockSpoken        = false;
 bool     AnnounceBanks      = true;
+bool     AnnounceConnected  = true;
 bool     CopyTrimsToAll     = true;
 
 uint8_t  MacrosBuffer[MAXMACROS][BYTESPERMACRO];        // macros' buffer
@@ -577,41 +451,6 @@ uint16_t SavedLineX          = 12345;
 bool     FirstConnection     = true;
 File     LogFileNumber;
 bool     LogFileOpen         =  false;
-
-
-// ***************************************** Extra Prototypes **********************************************
-
-void SendText(char* tbox, char* NewWord); // needed a prototype or two here!
-void RestoreBrightness();
-void ButtonWasPressed();
-void CalibrateEdgeSwitches();
-void DisplayCurve();
-void DrawLine(int x1, int y1, int x2, int y2, int c);
-void DrawBox(int x1, int y1, int x2, int y2, int c);
-void FillBox(int x1, int y1, int w, int h, int c);
-void ReadTextFile(char* fname, char* htext, uint8_t StartLineNumber, uint8_t MaxLines);
-void LogConnection();
-void LogDisConnection();
-void CloseLogFile();
-void StartLogFile();     
-void ShowLogFile(uint8_t StartLine);
-
-/************************************************************************************************************/
-// This function returns distance (in MILES) between two GPS coordinates (in degrees)
-// it was essentially cribbed from the internet, then tested and adjusted a little. 
-
-//FASTRUN double HowFar(double latitude_new, double longitude_new, double latitude_old, double longitude_old) {
-//        double  RadiusOfTheEarth = 6372797.56085;                 // Meters by the way
-//        double  DegreesToRadians = 3.14159265358979323846 / 180;
-//        double  lat_new = latitude_old * DegreesToRadians;
-//        double  lat_old = latitude_new * DegreesToRadians;
-//        double  lat_diff = (latitude_new-latitude_old) *  DegreesToRadians;
-//        double  lng_diff = (longitude_new-longitude_old) *  DegreesToRadians;
-//        double  a = sin(lat_diff/2) * sin(lat_diff/2) + cos(lat_new) * cos(lat_old) *  sin(lng_diff/2) * sin(lng_diff/2);
-//        double  c = 2 * atan2(sqrt(a), sqrt(1-a));
-//        double  distance = (RadiusOfTheEarth * c ) ; //* 3.28084) / 1760;
-//        return  distance; // in MILES now
-//   }
 
 /******************* DeltaGMT is a user defined representation of time zone. It should never exceed 24. Not on this planet. **********/
 void FixDeltaGMTSign(){
@@ -926,23 +765,23 @@ bool getDate(const char* str)
 
 void KickTheDog()
 {
-#ifdef USE_WATCHDOG
+
     if (millis() - LastDogKick >= KICKRATE) {
         LastDogKick = millis();
         TeensyWatchDog.feed();
     }
-#endif
+
 }
 
 /*********************************************************************************************************************************/
 
 void Reboot()
 {
-#ifdef USE_WATCHDOG
+
     for (int i = 0; i < 30; ++i) {
         TeensyWatchDog.feed();
     } // Dog will explode when overfed
-#endif
+
 }
 
 /*********************************************************************************************************************************/
@@ -1148,6 +987,7 @@ void RedLedOn()
 {
     if (LedWasGreen){
         if (UseLog) LogDisConnection();
+        if (AnnounceConnected) SendCommand(DisconnectedSound);
         LedWasGreen = false;
     }
     
@@ -1165,7 +1005,8 @@ void GreenLedOn()
         LedWasGreen = true;
         if (FirstConnection) {                   // Zero data on first connection
             ZeroDataScreen(); 
-            FirstConnection = false;  
+            FirstConnection = false; 
+            if (AnnounceConnected) SendCommand(ConnectedSound); 
             if (UseLog){ 
                 if (!LogFileOpen) StartLogFile();
                 LogConnection();
@@ -1190,21 +1031,22 @@ void BlueLedOn()
 }
 
 /*********************************************************************************************************************************/
-
-uint16_t mp(uint8_t lowres)
+uint8_t IntoLowerRes(uint16_t HiRes)                        // convert to lower resolution for screen display
 {
-    return map(lowres, 0, 180, MINMICROS, MAXMICROS);
-} // This returns the 5 curve-points at the higher resolution
-
+    return (map(HiRes, MINMICROS, MAXMICROS, 0, 100));      
+}
 /*********************************************************************************************************************************/
-
+uint16_t IntoHigherRes(uint8_t LowRes)                      // This returns the main curve-points at the higher resolution for Servo output
+{
+    return map(LowRes, 0, 180, MINMICROS, MAXMICROS);
+} 
+/*********************************************************************************************************************************/
 void ClearText()
 {
-    for (int i = 0; i < CharsMax; ++i) {
+    for (int i = 0; i < CHARSMAX; ++i) {
         TextIn[i] = 0;
     }
 }
-
 /*********************************************************************************************************************************/
 //                        NEXTION functions
 /*********************************************************************************************************************************/
@@ -1299,7 +1141,7 @@ void GetTextIn()
         while (NEXTION.available()) {
             TextIn[j] = uint8_t(NEXTION.read());
             if (TextIn[j] == '$') TextIn[j] = 0; 
-            if (j < CharsMax) ++j;
+            if (j < CHARSMAX) ++j;
             delayMicroseconds(20);
         }
     }
@@ -1385,7 +1227,7 @@ bool GetButtonPress()
                 if (TextIn[i] == '$') TextIn[i] = 0; 
                 TextIn[i + 1] = 0;
             }
-            if (i < CharsMax-1) ++i; 
+            if (i < CHARSMAX-1) ++i; 
             delayMicroseconds(20);      // 20 seems best so far value here
         }
     }
@@ -1396,13 +1238,6 @@ bool GetButtonPress()
 
 /*********************************************************************************************************************************/
 //             END OF NEXTION FUNCTIONS
-/*********************************************************************************************************************************/
-
-uint8_t um(uint16_t bv) // convert to lower resolution
-{
-    return (map(bv, MINMICROS, MAXMICROS, 0, 100)); // lower res is enough on display and on failsafe
-}
-
 /*********************************************************************************************************************************/
 
 void CheckTimer()
@@ -1512,106 +1347,106 @@ void ShowServoPos()
 
     if (CurrentView == CALIBRATEVIEW) {
         if (abs(SendBuffer[0] - ShownBuffer[0]) > LeastDistance) {
-            SendValue(CalibrateView_Ch1, um(SendBuffer[0]));
+            SendValue(CalibrateView_Ch1, IntoLowerRes(SendBuffer[0]));
             ShownBuffer[0] = SendBuffer[0];
         }
         if (abs(SendBuffer[1] - ShownBuffer[1]) > LeastDistance) {
-            SendValue(CalibrateView_Ch2, um(SendBuffer[1]));
+            SendValue(CalibrateView_Ch2, IntoLowerRes(SendBuffer[1]));
             ShownBuffer[1] = SendBuffer[1];
         }
         if (abs(SendBuffer[2] - ShownBuffer[2]) > LeastDistance) {
-            SendValue(CalibrateView_Ch3, um(SendBuffer[2]));
+            SendValue(CalibrateView_Ch3, IntoLowerRes(SendBuffer[2]));
             ShownBuffer[2] = SendBuffer[2];
         }
         if (abs(SendBuffer[3] - ShownBuffer[3]) > LeastDistance) {
-            SendValue(CalibrateView_Ch4, um(SendBuffer[3]));
+            SendValue(CalibrateView_Ch4, IntoLowerRes(SendBuffer[3]));
             ShownBuffer[3] = SendBuffer[3];
         }
         if (abs(SendBuffer[4] - ShownBuffer[4]) > LeastDistance) {
-            SendValue(CalibrateView_Ch5, um(SendBuffer[4]));
+            SendValue(CalibrateView_Ch5, IntoLowerRes(SendBuffer[4]));
             ShownBuffer[4] = SendBuffer[4];
         }
         if (abs(SendBuffer[5] - ShownBuffer[5]) > LeastDistance) {
-            SendValue(CalibrateView_Ch6, um(SendBuffer[5]));
+            SendValue(CalibrateView_Ch6, IntoLowerRes(SendBuffer[5]));
             ShownBuffer[5] = SendBuffer[5];
         }
         if (abs(SendBuffer[6] - ShownBuffer[6]) > LeastDistance) {
-            SendValue(CalibrateView_Ch7, um(SendBuffer[6]));
+            SendValue(CalibrateView_Ch7, IntoLowerRes(SendBuffer[6]));
             ShownBuffer[6] = SendBuffer[6];
         }
         if (abs(SendBuffer[7] - ShownBuffer[7]) > LeastDistance) {
-            SendValue(CalibrateView_Ch8, um(SendBuffer[7]));
+            SendValue(CalibrateView_Ch8, IntoLowerRes(SendBuffer[7]));
             ShownBuffer[7] = SendBuffer[7];
         }
     }
     if (CurrentView == STICKSVIEW) {
         if (abs(SendBuffer[0] - ShownBuffer[0]) > LeastDistance) {
-            SendValue(SticksView_Ch1, um(SendBuffer[0]));
+            SendValue(SticksView_Ch1, IntoLowerRes(SendBuffer[0]));
             ShownBuffer[0] = SendBuffer[0];
         }
         if (abs(SendBuffer[1] - ShownBuffer[1]) > LeastDistance) {
-            SendValue(SticksView_Ch2, um(SendBuffer[1]));
+            SendValue(SticksView_Ch2, IntoLowerRes(SendBuffer[1]));
             ShownBuffer[1] = SendBuffer[1];
         }
         if (abs(SendBuffer[2] - ShownBuffer[2]) > LeastDistance) {
-            SendValue(SticksView_Ch3, um(SendBuffer[2]));
+            SendValue(SticksView_Ch3, IntoLowerRes(SendBuffer[2]));
             ShownBuffer[2] = SendBuffer[2];
         }
         if (abs(SendBuffer[3] - ShownBuffer[3]) > LeastDistance) {
-            SendValue(SticksView_Ch4, um(SendBuffer[3]));
+            SendValue(SticksView_Ch4, IntoLowerRes(SendBuffer[3]));
             ShownBuffer[3] = SendBuffer[3];
         }
         if (abs(SendBuffer[4] - ShownBuffer[4]) > LeastDistance) {
-            SendValue(SticksView_Ch5, um(SendBuffer[4]));
+            SendValue(SticksView_Ch5, IntoLowerRes(SendBuffer[4]));
             ShownBuffer[4] = SendBuffer[4];
         }
         if (abs(SendBuffer[5] - ShownBuffer[5]) > LeastDistance) {
-            SendValue(SticksView_Ch6, um(SendBuffer[5]));
+            SendValue(SticksView_Ch6, IntoLowerRes(SendBuffer[5]));
             ShownBuffer[5] = SendBuffer[5];
         }
         if (abs(SendBuffer[6] - ShownBuffer[6]) > LeastDistance) {
-            SendValue(SticksView_Ch7, um(SendBuffer[6]));
+            SendValue(SticksView_Ch7, IntoLowerRes(SendBuffer[6]));
             ShownBuffer[6] = SendBuffer[6];
         }
         if (abs(SendBuffer[7] - ShownBuffer[7]) > LeastDistance) {
-            SendValue(SticksView_Ch8, um(SendBuffer[7]));
+            SendValue(SticksView_Ch8, IntoLowerRes(SendBuffer[7]));
             ShownBuffer[7] = SendBuffer[7];
         }
         if (abs(SendBuffer[8] - ShownBuffer[8]) > LeastDistance) {
-            SendValue(SticksView_Ch9, um(SendBuffer[8]));
+            SendValue(SticksView_Ch9, IntoLowerRes(SendBuffer[8]));
             ShownBuffer[8] = SendBuffer[8];
         }
         if (abs(SendBuffer[9] - ShownBuffer[9]) > LeastDistance) {
-            SendValue(SticksView_Ch10, um(SendBuffer[9]));
+            SendValue(SticksView_Ch10, IntoLowerRes(SendBuffer[9]));
             ShownBuffer[9] = SendBuffer[9];
         }
         if (abs(SendBuffer[10] - ShownBuffer[10]) > LeastDistance) {
-            SendValue(SticksView_Ch11, um(SendBuffer[10]));
+            SendValue(SticksView_Ch11, IntoLowerRes(SendBuffer[10]));
             ShownBuffer[10] = SendBuffer[10];
         }
         if (abs(SendBuffer[11] - ShownBuffer[11]) > LeastDistance) {
-            SendValue(SticksView_Ch12, um(SendBuffer[11]));
+            SendValue(SticksView_Ch12, IntoLowerRes(SendBuffer[11]));
             ShownBuffer[11] = SendBuffer[11];
         }
         if (abs(SendBuffer[12] - ShownBuffer[12]) > LeastDistance) {
-            SendValue(SticksView_Ch13, um(SendBuffer[12]));
+            SendValue(SticksView_Ch13, IntoLowerRes(SendBuffer[12]));
             ShownBuffer[12] = SendBuffer[12];
         }
         if (abs(SendBuffer[13] - ShownBuffer[13]) > LeastDistance) {
-            SendValue(SticksView_Ch14, um(SendBuffer[13]));
+            SendValue(SticksView_Ch14, IntoLowerRes(SendBuffer[13]));
             ShownBuffer[13] = SendBuffer[13];
         }
         if (abs(SendBuffer[14] - ShownBuffer[14]) > LeastDistance) {
-            SendValue(SticksView_Ch15, um(SendBuffer[14]));
+            SendValue(SticksView_Ch15, IntoLowerRes(SendBuffer[14]));
             ShownBuffer[14] = SendBuffer[14];
         }
         if (abs(SendBuffer[15] - ShownBuffer[15]) > LeastDistance) {
-            SendValue(SticksView_Ch16, um(SendBuffer[15]));
+            SendValue(SticksView_Ch16, IntoLowerRes(SendBuffer[15]));
             ShownBuffer[15] = SendBuffer[15];
         }
     }
     if (CurrentView == GRAPHVIEW) { 
-#define fixitx 34
+#define fixitx 35
 #define BarWidth 3
         if (ChanneltoSet <= 8) {
             l  = (InPutStick[ChanneltoSet - 1]);
@@ -1625,7 +1460,7 @@ void ShowServoPos()
             }
             if (l1 <= ChannelCentre[l]) {
                 SendValue(ChannelInput, map(l1, ChannelCentre[l], ChannelMin[l], 0, -100));
-                StickPosition = map(l1, ChannelMin[l], ChannelCentre[l],BoxLeft-4,BoxLeft+(((BoxRight-fixitx)-BoxLeft)/2));
+                StickPosition = map(l1, ChannelMin[l], ChannelCentre[l],BoxLeft-0,BoxLeft+(((BoxRight-fixitx)-BoxLeft)/2));
                 if (abs(StickPosition - SavedLineX) > LeastDistance) {
                     DisplayCurve();
                     FillBox(StickPosition-1,BoxTop+4,BarWidth,(BoxBottom-42)-BoxTop, HighlightColour);
@@ -2029,12 +1864,12 @@ void SendMixValues()
 
 /*********************************************************************************************************************************/
 
-int GetNextNumber(int p1, char text1[CharsMax])
+int GetNextNumber(int p1, char text1[CHARSMAX])
 {
-    char text2[CharsMax];
+    char text2[CHARSMAX];
     int  j = 0;
     int  i = p1 - 1;
-    while (isDigit(text1[i]) && i < CharsMax) {
+    while (isDigit(text1[i]) && i < CHARSMAX) {
         text2[j] = text1[i];
         ++i;
         ++j;
@@ -2059,27 +1894,27 @@ int GetNextNumber(int p1, char text1[CharsMax])
    uint16_t k = 0;
    switch (l) {
     case 8:
-        if (Channel9SwitchValue == 0) k = mp(MinDegrees[FlightMode][8]);
-        if (Channel9SwitchValue == 90) k = mp(CentreDegrees[FlightMode][8]);
-        if (Channel9SwitchValue == 180) k = mp(MaxDegrees[FlightMode][8]);
+        if (Channel9SwitchValue == 0) k = IntoHigherRes(MinDegrees[FlightMode][8]);
+        if (Channel9SwitchValue == 90) k = IntoHigherRes(CentreDegrees[FlightMode][8]);
+        if (Channel9SwitchValue == 180) k = IntoHigherRes(MaxDegrees[FlightMode][8]);
         break;
     case 9:
-        if (Channel10SwitchValue == 0) k = mp(MinDegrees[FlightMode][9]);
-        if (Channel10SwitchValue == 90) k = mp(CentreDegrees[FlightMode][9]);
-        if (Channel10SwitchValue == 180) k = mp(MaxDegrees[FlightMode][9]);
+        if (Channel10SwitchValue == 0) k = IntoHigherRes(MinDegrees[FlightMode][9]);
+        if (Channel10SwitchValue == 90) k = IntoHigherRes(CentreDegrees[FlightMode][9]);
+        if (Channel10SwitchValue == 180) k = IntoHigherRes(MaxDegrees[FlightMode][9]);
         break;
     case 10:
-        if (Channel11SwitchValue == 0) k = mp(MinDegrees[FlightMode][10]);
-        if (Channel11SwitchValue == 90) k = mp(CentreDegrees[FlightMode][10]);
-        if (Channel11SwitchValue == 180) k = mp(MaxDegrees[FlightMode][10]);
+        if (Channel11SwitchValue == 0) k = IntoHigherRes(MinDegrees[FlightMode][10]);
+        if (Channel11SwitchValue == 90) k = IntoHigherRes(CentreDegrees[FlightMode][10]);
+        if (Channel11SwitchValue == 180) k = IntoHigherRes(MaxDegrees[FlightMode][10]);
         break;
     case 11:
-        if (Channel12SwitchValue == 0) k = mp(MinDegrees[FlightMode][11]);
-        if (Channel12SwitchValue == 90) k = mp(CentreDegrees[FlightMode][11]);
-        if (Channel12SwitchValue == 180) k = mp(MaxDegrees[FlightMode][11]);
+        if (Channel12SwitchValue == 0) k = IntoHigherRes(MinDegrees[FlightMode][11]);
+        if (Channel12SwitchValue == 90) k = IntoHigherRes(CentreDegrees[FlightMode][11]);
+        if (Channel12SwitchValue == 180) k = IntoHigherRes(MaxDegrees[FlightMode][11]);
         break;
     default:
-           k = mp(CentreDegrees[FlightMode][15]); // channels 13,14,15,16 are simply centred
+           k = IntoHigherRes(CentreDegrees[FlightMode][15]); // channels 13,14,15,16 are simply centred
     }
     return k;
 }
@@ -2098,8 +1933,8 @@ int m, c, p, mindeg, maxdeg, TheSum, Result;
                         p = p * Mixes[m][M_Percent] / 50; // *****  50, not 100, because mix can now go right to 200% *****
                         if (Mixes[m][M_Reversed] == 1) p = -p;
                         TheSum = SendBuffer[(Mixes[m][M_SlaveChannel]) - 1] + p;  // THIS IS THE MIX!
-                        mindeg = mp(MinDegrees[FlightMode][(Mixes[m][M_SlaveChannel]) - 1]);
-                        maxdeg = mp(MaxDegrees[FlightMode][(Mixes[m][M_SlaveChannel]) - 1]);
+                        mindeg = IntoHigherRes(MinDegrees[FlightMode][(Mixes[m][M_SlaveChannel]) - 1]);
+                        maxdeg = IntoHigherRes(MaxDegrees[FlightMode][(Mixes[m][M_SlaveChannel]) - 1]);
                         if (mindeg > maxdeg) {
                             Result = constrain(TheSum, maxdeg, mindeg);
                         }
@@ -2167,10 +2002,10 @@ void GetNewChannelValues()
         }
         else {                                                  // Map the eight analogue inputs
             if (InterpolationTypes[FlightMode][n] == STRAIGHTLINES) {       
-                if (m >= ChannelMidHi[l]) k = map(m, ChannelMidHi[l], ChannelMax[l], mp(MidHiDegrees[FlightMode][n]), mp(MaxDegrees[FlightMode][n]));
-                if (m >= ChannelCentre[l] && m <= (ChannelMidHi[l])) k = map(m, ChannelCentre[l], ChannelMidHi[l], mp(CentreDegrees[FlightMode][n]), mp(MidHiDegrees[FlightMode][n]));
-                if (m >= ChannelMidLow[l] && m <= ChannelCentre[l]) k = map(m, ChannelMidLow[l], ChannelCentre[l], mp(MidLowDegrees[FlightMode][n]), mp(CentreDegrees[FlightMode][n]));
-                if (m <= ChannelMidLow[l]) k = map(m, ChannelMin[l], ChannelMidLow[l], mp(MinDegrees[FlightMode][n]), mp(MidLowDegrees[FlightMode][n]));
+                if (m >= ChannelMidHi[l]) k = map(m, ChannelMidHi[l], ChannelMax[l], IntoHigherRes(MidHiDegrees[FlightMode][n]), IntoHigherRes(MaxDegrees[FlightMode][n]));
+                if (m >= ChannelCentre[l] && m <= (ChannelMidHi[l])) k = map(m, ChannelCentre[l], ChannelMidHi[l], IntoHigherRes(CentreDegrees[FlightMode][n]), IntoHigherRes(MidHiDegrees[FlightMode][n]));
+                if (m >= ChannelMidLow[l] && m <= ChannelCentre[l]) k = map(m, ChannelMidLow[l], ChannelCentre[l], IntoHigherRes(MidLowDegrees[FlightMode][n]), IntoHigherRes(CentreDegrees[FlightMode][n]));
+                if (m <= ChannelMidLow[l]) k = map(m, ChannelMin[l], ChannelMidLow[l], IntoHigherRes(MinDegrees[FlightMode][n]), IntoHigherRes(MidLowDegrees[FlightMode][n]));
             }
 
             if (InterpolationTypes[FlightMode][n] == SMOOTHEDCURVES) {           // CatmullSpline (!)
@@ -2179,19 +2014,19 @@ void GetNewChannelValues()
                 xPoints[2] = ChannelCentre[l];
                 xPoints[3] = ChannelMidHi[l];
                 xPoints[4] = ChannelMax[l];
-                yPoints[4] = mp(MaxDegrees[FlightMode][n]);
-                yPoints[3] = mp(MidHiDegrees[FlightMode][n]);
-                yPoints[2] = mp(CentreDegrees[FlightMode][n]);
-                yPoints[1] = mp(MidLowDegrees[FlightMode][n]);
-                yPoints[0] = mp(MinDegrees[FlightMode][n]);
+                yPoints[4] = IntoHigherRes(MaxDegrees[FlightMode][n]);
+                yPoints[3] = IntoHigherRes(MidHiDegrees[FlightMode][n]);
+                yPoints[2] = IntoHigherRes(CentreDegrees[FlightMode][n]);
+                yPoints[1] = IntoHigherRes(MidLowDegrees[FlightMode][n]);
+                yPoints[0] = IntoHigherRes(MinDegrees[FlightMode][n]);
                 k          = Interpolation::CatmullSpline(xPoints, yPoints, PointsCount, m);
             }
             if (InterpolationTypes[FlightMode][n] == EXPONENTIALCURVES) {               // EXPONENTIAL (!!)
                 if (m >= ChannelCentre[l]) {
-                    k = MapExp(m - ChannelCentre[l], 0, ChannelMax[l] - ChannelCentre[l], 0, mp(MaxDegrees[FlightMode][n]) - mp(CentreDegrees[FlightMode][n]), Exponential[FlightMode][n]) + mp(CentreDegrees[FlightMode][n]);
+                    k = MapExp(m - ChannelCentre[l], 0, ChannelMax[l] - ChannelCentre[l], 0, IntoHigherRes(MaxDegrees[FlightMode][n]) - IntoHigherRes(CentreDegrees[FlightMode][n]), Exponential[FlightMode][n]) + IntoHigherRes(CentreDegrees[FlightMode][n]);
                 }
                 if (m < ChannelCentre[l]) {
-                    k = MapExp(ChannelCentre[l] - m, 0, ChannelCentre[l] - ChannelMin[l], mp(CentreDegrees[FlightMode][n]) - mp(MinDegrees[FlightMode][n]), 0, Exponential[FlightMode][n]) + mp(MinDegrees[FlightMode][n]);
+                    k = MapExp(ChannelCentre[l] - m, 0, ChannelCentre[l] - ChannelMin[l], IntoHigherRes(CentreDegrees[FlightMode][n]) - IntoHigherRes(MinDegrees[FlightMode][n]), 0, Exponential[FlightMode][n]) + IntoHigherRes(MinDegrees[FlightMode][n]);
                 }
             }
         }
@@ -2976,6 +2811,9 @@ bool LoadAllParameters()
         ++SDCardAddress;
         UseLog = SDReadByte(SDCardAddress);
         ++SDCardAddress;
+        AnnounceConnected = SDReadByte(SDCardAddress);
+         ++SDCardAddress;
+        
         MemoryForTransmtter = SDCardAddress;
         ReadOneModel(ModelNumber);
         return true;
@@ -3016,12 +2854,10 @@ void ButtonWhite(char* but)
 
 /*********************************************************************************************************************************/
 
-#ifdef USE_WATCHDOG
 void WatchDogCallBack()
 {
     // Serial.println("RESETTING ...");
 }
-#endif
 
 /*********************************************************************************************************************************/
 
@@ -3207,10 +3043,12 @@ void LogConnection(){
         LogText(buf, sizeof (buf));
 }
 // ************************************************************************
-
 void LogDisConnection(){ 
-    char TheText[] = "Disconnected";
-    LogText(TheText, sizeof (TheText));
+char TheText[] = "Disconnected from ";
+        char buf[40] = " ";
+        strcpy (buf,TheText);
+        strcat (buf,ModelName);
+        LogText(buf, sizeof (buf));
 }
 // ************************************************************************
 void LogNewFlightMode(){
@@ -3230,6 +3068,12 @@ void LogThisRX(){
     strcpy (thetext,Ltext);
     strcat (thetext,ThisRadio);
     LogText(thetext, 5);
+}
+
+// ************************************************************************
+void LogLowBattery(){ // Not yet implemented
+    char TheText[]= "Low battery";
+    LogText(TheText, strlen(TheText));
 }
 // ************************************************************************
 
@@ -3275,13 +3119,13 @@ void setup()
     InitCentreDegrees();        // In case not yet calibrated
     ResetSubTrims();
     CentreTrims();
-#ifdef USE_WATCHDOG
+
     WatchDogConfig.window   = WATCHDOGMAXRATE; //  = MINIMUM RATE in milli seconds, (32ms to 522.232s) must be MUCH smaller than timeout
     WatchDogConfig.timeout  = WATCHDOGTIMEOUT; //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s)
     WatchDogConfig.callback = WatchDogCallBack;
     TeensyWatchDog.begin(WatchDogConfig);
     LastDogKick = millis(); // needed? - yes!
-#endif
+
     delay (500);
     if (!SD.begin(chipSelect)){    // MUST return true or all is lost! (todo: create error page)
        delay (500);
@@ -3444,8 +3288,8 @@ void SaveTXStuff()
     ++SDCardAddress;
     SDUpdateByte(SDCardAddress,UseLog);
     ++SDCardAddress;
-
-    
+    SDUpdateByte(SDCardAddress,AnnounceConnected); 
+    ++SDCardAddress;
     CloseModelsFile();
 }
 
@@ -4938,7 +4782,6 @@ void RestoreBrightness(){
 
 void ZeroDataScreen(){             // ZERO Those parameters that are zeroable
             LostPackets        = 0;
-            TimerMillis        = millis();
             GapLongest         = 0;
             GapSum             = 0;
             GapAverage         = 0;
@@ -4951,7 +4794,7 @@ void ZeroDataScreen(){             // ZERO Those parameters that are zeroable
             ThisGap            = 0;
             GPSMaxDistance     = 0;
             GPSMaxSpeed        = 0;
-            SavedRadioSwaps    = RadioSwaps;    // Cannot easily zero these, so do a subtraction
+            SavedRadioSwaps    = RadioSwaps;       // Cannot easily zero these, so do a subtraction
             SavedRX1TotalTime  = RX1TotalTime;
             SavedRX2TotalTime  = RX2TotalTime;
             SavedSbusRepeats   = SbusRepeats;
@@ -4961,7 +4804,9 @@ void ZeroDataScreen(){             // ZERO Those parameters that are zeroable
 void ShowChannelName(){
     char MoveToChannel[]    =   "Mch";
     char MacrosView_chM[]   =   "chM";
-    SendText(MacrosView_chM,ChannelNames[GetValue(MoveToChannel)-1]);
+    uint8_t ch = GetValue(MoveToChannel);
+    if (ch > 0) -- ch;                 // no zero
+    SendText(MacrosView_chM,ChannelNames[ch]);
 }
 /***************************************************** Populate Macros View ****************************************************************************/
 
@@ -5017,10 +4862,10 @@ void ExitMacrosView(){
 
 /*********************************************************************************************************************************/
 
-void  EndReverseView(){ // channel reverse flags are 16 individual BITs in ReversedChannelBITS
-        char fs[16][5]   = {"fs1","fs2","fs3","fs4","fs5","fs6","fs7","fs8","fs9","fs10","fs11","fs12","fs13","fs14","fs15","fs16"};
+void  EndReverseView(){ // channel reverse flags are 16 individual BITs in var 'ReversedChannelBITS'
+        char fs[16][5]                 = {"fs1","fs2","fs3","fs4","fs5","fs6","fs7","fs8","fs9","fs10","fs11","fs12","fs13","fs14","fs15","fs16"};
         uint8_t i;    
-        char pSetupView[] = "page SetupView";
+        char pSetupView[]              = "page SetupView";
         char ProgressStart[]           = "vis Progress,1";
         char ProgressEnd[]             = "vis Progress,0";
         char Progress[]                = "Progress";
@@ -5028,9 +4873,7 @@ void  EndReverseView(){ // channel reverse flags are 16 individual BITs in Rever
         ReversedChannelBITS = 0;
         for (i = 0; i < 16 ; ++i){
              SendValue(Progress, (i * (100/16)));
-            if (GetValue(fs[i])){
-                ReversedChannelBITS |= 1 << i; // set a BIT 
-            }
+             if (GetValue(fs[i])) ReversedChannelBITS |= 1 << i; // set a BIT 
         }
         CurrentView = MAINSETUPVIEW;
         SaveOneModel(ModelNumber);
@@ -5434,6 +5277,7 @@ void ButtonWasPressed()
     char c2[]                      = "c2";
     char c3[]                      = "c3";
     char c4[]                      = "c4";
+    char c5[]                      = "c5";
     char StEND[]                   = "StEND";
     char STgo[]                    = "STgo";
     char StCH[]                    = "StCH";
@@ -5601,7 +5445,8 @@ void ButtonWasPressed()
             SendValue(c2,ButtonClicks);
             SendValue(c3,SpeakingClock);   
             SendValue(c4,AnnounceBanks);  
-            SetAudioVolume(AudioVolume);
+            SendValue(c5,AnnounceConnected);
+            SetAudioVolume(AudioVolume); 
             RestoreBrightness();
             ClearText();
             return;
@@ -5617,6 +5462,7 @@ void ButtonWasPressed()
             ButtonClicks  = GetValue(c2);
             SpeakingClock = GetValue(c3);
             AnnounceBanks = GetValue(c4);
+            AnnounceConnected = GetValue(c5);
             RestoreBrightness();
             SetAudioVolume(AudioVolume);
             SendCommand(page_SetupView);
@@ -6297,8 +6143,7 @@ void ButtonWasPressed()
                 ++i;
                 SingleModelFile[j] = 0;
             }
-            //Serial.println (SingleModelFile);
-
+           
             if ((InStrng(ModExt, SingleModelFile) == 0) && (strlen(SingleModelFile) <= 8)) {
                 strcat(SingleModelFile, ModExt);
             }
