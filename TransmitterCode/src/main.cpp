@@ -452,6 +452,24 @@ bool     FirstConnection     = true;
 File     LogFileNumber;
 bool     LogFileOpen         =  false;
 
+
+
+
+// **************************************************************** Play a sound from RAM *********************************************
+void PlaySound(uint8_t TheSound){ // heer
+
+char Sound[20];
+char SoundPrefix[] = "play 0,";
+char SoundPostfix[] = "0";
+char NB[6];
+    Str(NB,TheSound,1);
+    strcpy (Sound,SoundPrefix);
+    strcat (Sound,NB);
+    strcat (Sound,SoundPostfix);
+    SendCommand(Sound);
+}
+
+
 /******************* DeltaGMT is a user defined representation of time zone. It should never exceed 24. Not on this planet. **********/
 void FixDeltaGMTSign(){
     if (DeltaGMT < -24) DeltaGMT = 0;  // Undefined value?f
@@ -3169,7 +3187,8 @@ void setup()
     MySbus.begin();
     SetUKFrequencies(); 
     SetAudioVolume(AudioVolume);
-    if (PlayFanfare) SendCommand(OpeningFanfare);
+    if (PlayFanfare) PlaySound(THEFANFARE);
+   // if (PlayFanfare) SendCommand(OpeningFanfare);
     ScreenTimeTimer = millis();
     RestoreBrightness();
   

@@ -137,6 +137,33 @@
 #define POWER_OFF_PIN 5 
 
 // **************************************************************************
+//               Sounds                             *
+//***************************************************************************
+
+#define SHORTTWO        0 
+#define SHORTONE        1 
+#define ONEMINUTE       2 
+#define TWOMINUTES      3 
+#define THREEMINUTES    4 
+#define FOURMINUTES     5 
+#define FIVEMINUTES     6 
+#define SIXMINUTES      7 
+#define SEVENMINUTES    8 
+#define EIGHTMINUTES    9 
+#define NINEMINUTES     10 
+#define TENMINUTES      11 
+#define BANKONE         12 
+#define BANKTWO         13 
+#define BANKTHREE       14 
+#define BANKFOUR        15 
+#define BEEPMIDDLE      16 
+#define BEEPCOMPLETE    17 
+#define THEFANFARE      18 
+#define BATTERYISLOW    19 
+#define CONNECTEDMSG    20
+#define DISCONNECTEDMSG 21  
+
+// **************************************************************************
 //               SDCARD MODEL MEMORY CONSTANTS                              *
 //***************************************************************************
 
