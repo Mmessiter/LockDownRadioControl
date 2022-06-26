@@ -423,11 +423,6 @@ uint16_t SavedRadioSwaps    = 0;
 uint16_t SavedRX1TotalTime  = 0;
 uint16_t SavedRX2TotalTime  = 0;
 uint8_t  AudioVolume        = 90;
-char     OpeningFanfare[]   = "play 0,18,0";
-char     ConnectedSound[]   = "play 0,20,0";
-char     DisconnectedSound[]= "play 0,21,0";
-char     click0[]           = "play 0,0,0";  //  = channel, noiseID ,loop
-char     click1[]           = "play 0,1,0";  //  = channel, noiseID ,loop
 uint32_t WarningTimer       = 0;
 uint32_t ScreenTimeTimer    = 0;
 bool     ScreenIsOff        = false;
@@ -452,11 +447,8 @@ bool     FirstConnection     = true;
 File     LogFileNumber;
 bool     LogFileOpen         =  false;
 
-
-
-
 // **************************************************************** Play a sound from RAM *********************************************
-void PlaySound(uint8_t TheSound){ // heer
+void PlaySound(uint8_t TheSound){ // Plays a sound identified by a number 0 - 21 ...
 
 char Sound[20];
 char SoundPrefix[] = "play 0,";
@@ -468,8 +460,6 @@ char NB[6];
     strcat (Sound,SoundPostfix);
     SendCommand(Sound);
 }
-
-
 /******************* DeltaGMT is a user defined representation of time zone. It should never exceed 24. Not on this planet. **********/
 void FixDeltaGMTSign(){
     if (DeltaGMT < -24) DeltaGMT = 0;  // Undefined value?f
@@ -1005,7 +995,7 @@ void RedLedOn()
 {
     if (LedWasGreen){
         if (UseLog) LogDisConnection();
-        if (AnnounceConnected) SendCommand(DisconnectedSound);
+        if (AnnounceConnected) PlaySound(DISCONNECTEDMSG);
         LedWasGreen = false;
     }
     
@@ -1024,7 +1014,7 @@ void GreenLedOn()
         if (FirstConnection) {                   // Zero data on first connection
             ZeroDataScreen(); 
             FirstConnection = false; 
-            if (AnnounceConnected) SendCommand(ConnectedSound); 
+            if (AnnounceConnected) PlaySound(CONNECTEDMSG);
             if (UseLog){ 
                 if (!LogFileOpen) StartLogFile();
                 LogConnection();
@@ -1250,7 +1240,7 @@ bool GetButtonPress()
         }
     }
    if(!(strlen(TextIn))) ButtonPressed = false;
-   if (ButtonPressed && ButtonClicks) SendCommand(click1);
+   if (ButtonPressed && ButtonClicks) PlaySound(CLICKONE);
    return ButtonPressed;
 }
 
@@ -1261,17 +1251,6 @@ bool GetButtonPress()
 void CheckTimer()
 {
    
-   char Min1[]  = "play 0,2,0";
-   char Min2[]  = "play 0,3,0";
-   char Min3[]  = "play 0,4,0";
-   char Min4[]  = "play 0,5,0";
-   char Min5[]  = "play 0,6,0";
-   char Min6[]  = "play 0,7,0";
-   char Min7[]  = "play 0,8,0";
-   char Min8[]  = "play 0,9,0";
-   char Min9[]  = "play 0,10,0";
-   char Min10[] = "play 0,11,0";
-
     if (FlightMode < 4 && !LostContactFlag) {
         Secs  = ((millis() - TimerMillis) / 1000) + PausedSecs;
         Hours = Secs / 3600;
@@ -1292,34 +1271,34 @@ void CheckTimer()
         ClockSpoken = true;
         switch (Mins) {
         case 1:
-            SendCommand(Min1);
+            PlaySound(ONEMINUTE);
             break;
         case 2:
-            SendCommand(Min2);
+            PlaySound(TWOMINUTES);
             break;
         case 3:
-            SendCommand(Min3); 
+            PlaySound(THREEMINUTES);
             break;
         case 4:
-            SendCommand(Min4); 
+            PlaySound(FOURMINUTES);
             break;
         case 5:
-            SendCommand(Min5); 
+            PlaySound(FIVEMINUTES); 
             break;
         case 6:
-            SendCommand(Min6); 
+            PlaySound(SIXMINUTES); 
             break;
         case 7:
-            SendCommand(Min7); 
+            PlaySound(SEVENMINUTES); 
             break;
         case 8:
-            SendCommand(Min8); 
+            PlaySound(EIGHTMINUTES); 
             break;
         case 9:
-            SendCommand(Min9); 
+            PlaySound(NINEMINUTES); 
             break;
         case 10:
-            SendCommand(Min10); 
+            PlaySound(TENMINUTES); 
             break;
         default:
             break;   
@@ -1662,7 +1641,7 @@ FASTRUN void ShowComms()
     char  BTo[]               = "BTo";
     char  Sat[]               = "Sat";
     char  Sbs[]               = "Sbus";
-    char  LowBat[]            = "play 0,19,0";
+
 
 if (millis() - LastShowTime > SHOWCOMMSDELAY) { 
     ShowNow = true;
@@ -1780,7 +1759,7 @@ if (ShowNow){
         LedIsBlinking = true; 
         if((millis() - WarningTimer) > 10000) {
             WarningTimer = millis();
-            SendCommand(LowBat);                // issue audible warning every 10 seconds
+            PlaySound(BATTERYISLOW); // issue audible warning every 10 seconds
         }
         if (CurrentView == FRONTVIEW) SendCommand(WarnNow);         
     }else{
@@ -4418,7 +4397,6 @@ void ReceiveModelFile()
 {
     uint64_t      RXPipe;
     uint32_t      RXTimer = 0;
-    char          Complete[]   = "play 0,17,0";      // end noise
     char          ModelsView_filename[] = "filename";
     char          ProgressStart[]       = "vis Progress,1";
     char          ProgressEnd[]         = "vis Progress,0";
@@ -4551,7 +4529,7 @@ void ReceiveModelFile()
     strcat(msg, Str(nb1,Fsize,0));  
     strcat(msg,bytes);     
     ShowFileProgress(msg);
-    SendCommand(Complete);
+    PlaySound(BEEPCOMPLETE);
 }
 
 /*********************************************************************************************************************************/
@@ -4559,7 +4537,7 @@ void ReceiveModelFile()
 /** @brief SEND A MODEL FILE */ 
 void SendModelFile()
 {
-    char          Complete[]      = "play 0,17,0";      // end noise
+   
     char          ProgressStart[] = "vis Progress,1";
     char          ProgressEnd[]   = "vis Progress,0";
     char          Progress[]      = "Progress";
@@ -4661,30 +4639,25 @@ void SendModelFile()
     strcat (msg, Str(nb1,Fsize,0));
     strcat (msg,bytes);
     ShowFileProgress(msg);
-    SendCommand(Complete);
+    PlaySound(BEEPCOMPLETE);
 }
 
 /*********************************************************************************************************************************/
 
 void SoundFlightMode()
 {
-    char b1[] = "play 0,12,0";
-    char b2[] = "play 0,13,0";
-    char b3[] = "play 0,14,0";
-    char b4[] = "play 0,15,0";
-
     switch (FlightMode) {
         case 1:
-            SendCommand(b1);
+            PlaySound(BANKONE);
             break;
         case 2:
-            SendCommand(b2);
+            PlaySound(BANKTWO);
             break;
         case 3:
-            SendCommand(b3);
+             PlaySound(BANKTHREE);
             break;
         case 4:
-            SendCommand(b4);
+            PlaySound(BANKFOUR);
             break;
         default:
             break;
@@ -5287,7 +5260,6 @@ void ButtonWasPressed()
     char Ex1[]                     = "Ex1";
     char Expo[]                    = "Expo";
     char AudioView[]               = "AudioView";
-    char cb0[]                     = "cb0";
     char n1[]                      = "n1";
     char h0[]                      = "h0";
     char c0[]                      = "c0";
@@ -5456,7 +5428,6 @@ void ButtonWasPressed()
             SendCommand(page_AudioView);
             SendValue(n0,AudioVolume);
             SendValue(Ex1,AudioVolume);
-            SendText (cb0,OpeningFanfare);
             SendValue(n1,Brightness);
             SendValue(h0,Brightness);
             SendValue(c0,PlayFanfare);
@@ -6944,14 +6915,14 @@ switch(ch){
 // *************************************************************************************************************
 
 void IncTrim(uint8_t t){
-        char Complete[]   = "play 0,17,0";      // end noise
-        char BeepMiddle[] = "play 0,16,0";      // centre noise
+       
         bool Sounded = false;
         Trims[FlightMode][t] += 1;
         if (Trims[FlightMode][t] >= 120) {
             Trims[FlightMode][t]  = 120;
             if (TrimClicks) {
-                SendCommand(Complete);
+               
+                PlaySound(BEEPCOMPLETE);
                 Sounded = true;
                 TrimRepeatSpeed = DefaultTrimRepeatSpeed; 
              }
@@ -6959,24 +6930,23 @@ void IncTrim(uint8_t t){
         if (Trims[FlightMode][t] == 80)  {
             TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed at centre
              if (TrimClicks) {
-                SendCommand(BeepMiddle);
+                 PlaySound(BEEPMIDDLE);
                 Sounded = true;
             }
         }
         if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimViewPart(t);
-        if ((TrimClicks) && (!Sounded)) SendCommand (click0);
+        if ((TrimClicks) && (!Sounded)) PlaySound(CLICKZERO);
 }
 // *************************************************************************************************************
 
 void DecTrim(uint8_t t){
-        char Complete[]   = "play 0,17,0";      // end noise
-        char BeepMiddle[] = "play 0,16,0";      // centre noise
+        
         bool Sounded = false;
          Trims[FlightMode][t] -= 1;
          if (Trims[FlightMode][t] <= 40) {
              Trims[FlightMode][t] = 40;
              if (TrimClicks) {
-                SendCommand(Complete);
+                PlaySound(BEEPCOMPLETE);
                 Sounded = true;
                  TrimRepeatSpeed = DefaultTrimRepeatSpeed; 
              }
@@ -6984,12 +6954,12 @@ void DecTrim(uint8_t t){
          if (Trims[FlightMode][t] == 80)  {
              TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed at centre
             if (TrimClicks) {
-                SendCommand(BeepMiddle);
+                PlaySound(BEEPMIDDLE);
                 Sounded = true;
             }
          }
         if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimViewPart(t);
-        if ((TrimClicks) && (!Sounded)) SendCommand (click0);
+        if ((TrimClicks) && (!Sounded)) PlaySound(CLICKZERO);
 }
 // *************************************************************************************************************
 

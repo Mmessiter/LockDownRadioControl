@@ -140,8 +140,8 @@
 //               Sounds                             *
 //***************************************************************************
 
-#define SHORTTWO        0 
-#define SHORTONE        1 
+#define CLICKZERO       0 
+#define CLICKONE        1 
 #define ONEMINUTE       2 
 #define TWOMINUTES      3 
 #define THREEMINUTES    4 
