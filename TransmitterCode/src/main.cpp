@@ -424,6 +424,8 @@ uint16_t SavedRX1TotalTime  = 0;
 uint16_t SavedRX2TotalTime  = 0;
 uint8_t  AudioVolume        = 90;
 char     OpeningFanfare[]   = "play 0,18,0";
+char     ConnectedSound[]   = "play 0,20,0";
+char     DisconnectedSound[]= "play 0,21,0";
 char     click0[]           = "play 0,0,0";  //  = channel, noiseID ,loop
 char     click1[]           = "play 0,1,0";  //  = channel, noiseID ,loop
 uint32_t WarningTimer       = 0;
@@ -984,6 +986,7 @@ void RedLedOn()
 {
     if (LedWasGreen){
         if (UseLog) LogDisConnection();
+        SendCommand(DisconnectedSound);
         LedWasGreen = false;
     }
     
@@ -1001,7 +1004,8 @@ void GreenLedOn()
         LedWasGreen = true;
         if (FirstConnection) {                   // Zero data on first connection
             ZeroDataScreen(); 
-            FirstConnection = false;  
+            FirstConnection = false; 
+            SendCommand(ConnectedSound); 
             if (UseLog){ 
                 if (!LogFileOpen) StartLogFile();
                 LogConnection();
@@ -3035,10 +3039,12 @@ void LogConnection(){
         LogText(buf, sizeof (buf));
 }
 // ************************************************************************
-
 void LogDisConnection(){ 
-    char TheText[] = "Disconnected";
-    LogText(TheText, sizeof (TheText));
+char TheText[] = "Disconnected from ";
+        char buf[40] = " ";
+        strcpy (buf,TheText);
+        strcat (buf,ModelName);
+        LogText(buf, sizeof (buf));
 }
 // ************************************************************************
 void LogNewFlightMode(){
@@ -3058,6 +3064,12 @@ void LogThisRX(){
     strcpy (thetext,Ltext);
     strcat (thetext,ThisRadio);
     LogText(thetext, 5);
+}
+
+// ************************************************************************
+void LogLowBattery(){ // Not yet implemented
+    char TheText[]= "Low battery";
+    LogText(TheText, strlen(TheText));
 }
 // ************************************************************************
 
