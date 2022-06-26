@@ -207,6 +207,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "AllChannels", "_transmitter_code_2src_2main_8cpp.html#a1d18aaaa3cc4ba52bd309c88815c60a7", null ],
     [ "AnalogueInput", "_transmitter_code_2src_2main_8cpp.html#aff628072047986ff5293dbb907c3f676", null ],
     [ "AnnounceBanks", "_transmitter_code_2src_2main_8cpp.html#ae9add7064c6a555558088c4f67560535", null ],
+    [ "AnnounceConnected", "_transmitter_code_2src_2main_8cpp.html#a7f979f6e267f37833beb30c91b796cae", null ],
     [ "AudioVolume", "_transmitter_code_2src_2main_8cpp.html#adddcbca54e7b49592c3f6c360bf04494", null ],
     [ "AutoSwitch", "_transmitter_code_2src_2main_8cpp.html#a6d1c8ca21c8826267f5687d3799c6a1f", null ],
     [ "b5isGrey", "_transmitter_code_2src_2main_8cpp.html#a2cacff4290d454b1134b62c183e4e17a", null ],

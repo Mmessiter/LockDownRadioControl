@@ -10,6 +10,7 @@ var searchData=
   ['angle_7',['angle',['../class_adafruit___g_p_s.html#a0f60908101d728cfa3c12f7ae6a31018',1,'Adafruit_GPS']]],
   ['anglegps_8',['AngleGPS',['../_receiver_code_2src_2main_8cpp.html#a9cb6617428d513efc095336972632da6',1,'AngleGPS():&#160;main.cpp'],['../radio_8h.html#a9cb6617428d513efc095336972632da6',1,'AngleGPS():&#160;main.cpp']]],
   ['announcebanks_9',['AnnounceBanks',['../_transmitter_code_2src_2main_8cpp.html#ae9add7064c6a555558088c4f67560535',1,'main.cpp']]],
-  ['audiovolume_10',['AudioVolume',['../_transmitter_code_2src_2main_8cpp.html#adddcbca54e7b49592c3f6c360bf04494',1,'main.cpp']]],
-  ['autoswitch_11',['AutoSwitch',['../_transmitter_code_2src_2main_8cpp.html#a6d1c8ca21c8826267f5687d3799c6a1f',1,'main.cpp']]]
+  ['announceconnected_10',['AnnounceConnected',['../_transmitter_code_2src_2main_8cpp.html#a7f979f6e267f37833beb30c91b796cae',1,'main.cpp']]],
+  ['audiovolume_11',['AudioVolume',['../_transmitter_code_2src_2main_8cpp.html#adddcbca54e7b49592c3f6c360bf04494',1,'main.cpp']]],
+  ['autoswitch_12',['AutoSwitch',['../_transmitter_code_2src_2main_8cpp.html#a6d1c8ca21c8826267f5687d3799c6a1f',1,'main.cpp']]]
 ];

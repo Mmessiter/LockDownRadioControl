@@ -47,11 +47,12 @@ var searchData=
   ['angle_44',['angle',['../class_adafruit___g_p_s.html#a0f60908101d728cfa3c12f7ae6a31018',1,'Adafruit_GPS']]],
   ['anglegps_45',['AngleGPS',['../_receiver_code_2src_2main_8cpp.html#a9cb6617428d513efc095336972632da6',1,'AngleGPS():&#160;main.cpp'],['../radio_8h.html#a9cb6617428d513efc095336972632da6',1,'AngleGPS():&#160;main.cpp']]],
   ['announcebanks_46',['AnnounceBanks',['../_transmitter_code_2src_2main_8cpp.html#ae9add7064c6a555558088c4f67560535',1,'main.cpp']]],
-  ['approximation_47',['APPROXIMATION',['../_transmitter_code_2src_2main_8cpp.html#aee8c3c363eab49d6a90d3f74587694d5',1,'main.cpp']]],
-  ['attachservos_48',['AttachServos',['../_receiver_code_2src_2main_8cpp.html#a0cbfd712ab3bd8f654bc19400fd704bd',1,'main.cpp']]],
-  ['audioview_49',['AUDIOVIEW',['../_radio_functions_8h.html#a445cfbf06ed74188fcf3965b4cab9533',1,'RadioFunctions.h']]],
-  ['audiovolume_50',['AudioVolume',['../_transmitter_code_2src_2main_8cpp.html#adddcbca54e7b49592c3f6c360bf04494',1,'main.cpp']]],
-  ['autoswitch_51',['AutoSwitch',['../_transmitter_code_2src_2main_8cpp.html#a6d1c8ca21c8826267f5687d3799c6a1f',1,'main.cpp']]],
+  ['announceconnected_47',['AnnounceConnected',['../_transmitter_code_2src_2main_8cpp.html#a7f979f6e267f37833beb30c91b796cae',1,'main.cpp']]],
+  ['approximation_48',['APPROXIMATION',['../_transmitter_code_2src_2main_8cpp.html#aee8c3c363eab49d6a90d3f74587694d5',1,'main.cpp']]],
+  ['attachservos_49',['AttachServos',['../_receiver_code_2src_2main_8cpp.html#a0cbfd712ab3bd8f654bc19400fd704bd',1,'main.cpp']]],
+  ['audioview_50',['AUDIOVIEW',['../_radio_functions_8h.html#a445cfbf06ed74188fcf3965b4cab9533',1,'RadioFunctions.h']]],
+  ['audiovolume_51',['AudioVolume',['../_transmitter_code_2src_2main_8cpp.html#adddcbca54e7b49592c3f6c360bf04494',1,'main.cpp']]],
   ['autoswitch_52',['AUTOSWITCH',['../_radio_functions_8h.html#aa4414f3ff790f01b8bb41a0f51d1518f',1,'RadioFunctions.h']]],
-  ['available_53',['available',['../class_adafruit___g_p_s.html#abe6399af00c0047527ea20e3f35a0182',1,'Adafruit_GPS']]]
+  ['autoswitch_53',['AutoSwitch',['../_transmitter_code_2src_2main_8cpp.html#a6d1c8ca21c8826267f5687d3799c6a1f',1,'main.cpp']]],
+  ['available_54',['available',['../class_adafruit___g_p_s.html#abe6399af00c0047527ea20e3f35a0182',1,'Adafruit_GPS']]]
 ];
