@@ -438,6 +438,7 @@ bool     TrimClicks         = true;
 bool     SpeakingClock      = true;
 bool     ClockSpoken        = false;
 bool     AnnounceBanks      = true;
+bool     AnnounceConnected  = true;
 bool     CopyTrimsToAll     = true;
 
 uint8_t  MacrosBuffer[MAXMACROS][BYTESPERMACRO];        // macros' buffer
@@ -986,7 +987,7 @@ void RedLedOn()
 {
     if (LedWasGreen){
         if (UseLog) LogDisConnection();
-        SendCommand(DisconnectedSound);
+        if (AnnounceConnected) SendCommand(DisconnectedSound);
         LedWasGreen = false;
     }
     
@@ -1005,7 +1006,7 @@ void GreenLedOn()
         if (FirstConnection) {                   // Zero data on first connection
             ZeroDataScreen(); 
             FirstConnection = false; 
-            SendCommand(ConnectedSound); 
+            if (AnnounceConnected) SendCommand(ConnectedSound); 
             if (UseLog){ 
                 if (!LogFileOpen) StartLogFile();
                 LogConnection();
@@ -2810,6 +2811,9 @@ bool LoadAllParameters()
         ++SDCardAddress;
         UseLog = SDReadByte(SDCardAddress);
         ++SDCardAddress;
+        AnnounceConnected = SDReadByte(SDCardAddress);
+         ++SDCardAddress;
+        
         MemoryForTransmtter = SDCardAddress;
         ReadOneModel(ModelNumber);
         return true;
@@ -3284,8 +3288,8 @@ void SaveTXStuff()
     ++SDCardAddress;
     SDUpdateByte(SDCardAddress,UseLog);
     ++SDCardAddress;
-
-    
+    SDUpdateByte(SDCardAddress,AnnounceConnected); 
+    ++SDCardAddress;
     CloseModelsFile();
 }
 
@@ -5274,6 +5278,7 @@ void ButtonWasPressed()
     char c2[]                      = "c2";
     char c3[]                      = "c3";
     char c4[]                      = "c4";
+    char c5[]                      = "c5";
     char StEND[]                   = "StEND";
     char STgo[]                    = "STgo";
     char StCH[]                    = "StCH";
@@ -5441,7 +5446,8 @@ void ButtonWasPressed()
             SendValue(c2,ButtonClicks);
             SendValue(c3,SpeakingClock);   
             SendValue(c4,AnnounceBanks);  
-            SetAudioVolume(AudioVolume);
+            SendValue(c5,AnnounceConnected);
+            SetAudioVolume(AudioVolume); // heer
             RestoreBrightness();
             ClearText();
             return;
@@ -5457,6 +5463,7 @@ void ButtonWasPressed()
             ButtonClicks  = GetValue(c2);
             SpeakingClock = GetValue(c3);
             AnnounceBanks = GetValue(c4);
+            AnnounceConnected = GetValue(c5);
             RestoreBrightness();
             SetAudioVolume(AudioVolume);
             SendCommand(page_SetupView);
