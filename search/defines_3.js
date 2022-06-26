@@ -11,7 +11,8 @@ var searchData=
   ['colours_5fview_8',['COLOURS_VIEW',['../_radio_functions_8h.html#a8bafc146db9adcaf79abde00aaffb6bc',1,'RadioFunctions.h']]],
   ['combine_9',['COMBINE',['../_tiny_g_p_s_09_09_8cpp.html#ae8b0c7d4f4c61109a44d953e5bd22e4f',1,'TinyGPS++.cpp']]],
   ['compressedwords_10',['COMPRESSEDWORDS',['../common_8h.html#a461caf7198eaa60ce589088ff38b97cb',1,'COMPRESSEDWORDS():&#160;common.h'],['../_radio_functions_8h.html#a461caf7198eaa60ce589088ff38b97cb',1,'COMPRESSEDWORDS():&#160;RadioFunctions.h']]],
-  ['csn_5foff_11',['CSN_OFF',['../common_8h.html#a834c4941fd9b037a25a8053912995e61',1,'common.h']]],
-  ['csn_5fon_12',['CSN_ON',['../common_8h.html#ab22ef6e01ad09b637ca55f3fcd3cae94',1,'common.h']]],
-  ['csn_5fpin_13',['CSN_PIN',['../_radio_functions_8h.html#a6c4d73944fe1bd2ff7ceee867c315ac1',1,'RadioFunctions.h']]]
+  ['connectedmsg_11',['CONNECTEDMSG',['../_radio_functions_8h.html#a2a2b035486dce4d0e5d5e956da201121',1,'RadioFunctions.h']]],
+  ['csn_5foff_12',['CSN_OFF',['../common_8h.html#a834c4941fd9b037a25a8053912995e61',1,'common.h']]],
+  ['csn_5fon_13',['CSN_ON',['../common_8h.html#ab22ef6e01ad09b637ca55f3fcd3cae94',1,'common.h']]],
+  ['csn_5fpin_14',['CSN_PIN',['../_radio_functions_8h.html#a6c4d73944fe1bd2ff7ceee867c315ac1',1,'RadioFunctions.h']]]
 ];

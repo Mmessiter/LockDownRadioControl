@@ -9,10 +9,12 @@ var searchData=
   ['filepipeaddress_6',['FILEPIPEADDRESS',['../_transmitter_code_2src_2main_8cpp.html#aec45a9afab4b013142d7ff497e5b4f0c',1,'main.cpp']]],
   ['filesview_7',['FILESVIEW',['../_radio_functions_8h.html#aaed5fa6e1bbaac4e862e2acad1cb145d',1,'RadioFunctions.h']]],
   ['filetimeout_8',['FILETIMEOUT',['../_transmitter_code_2src_2main_8cpp.html#ac23f3d9653dfa68ab2f39567096545e6',1,'main.cpp']]],
-  ['fixitx_9',['fixitx',['../_transmitter_code_2src_2main_8cpp.html#ad40f5a53042299d0a733f7238b5df3a2',1,'main.cpp']]],
-  ['flightmodesused_10',['FLIGHTMODESUSED',['../_radio_functions_8h.html#a29485fb8e0e98e37e333f2954f50e541',1,'RadioFunctions.h']]],
-  ['flightmodeswitch_11',['FLIGHTMODESWITCH',['../_radio_functions_8h.html#a360ae40b5dcb40c9beb3fd1af7134f99',1,'RadioFunctions.h']]],
-  ['frequencyscount_12',['FREQUENCYSCOUNT',['../common_8h.html#afe5bce36baf737bd284d43cd0e805fdb',1,'common.h']]],
-  ['frequencyscount1_13',['FREQUENCYSCOUNT1',['../common_8h.html#a71a3cc3c3b499cb9329172835e5a1df8',1,'common.h']]],
-  ['frontview_14',['FRONTVIEW',['../_radio_functions_8h.html#a8204cbed1c612a522a43c80f071eee2a',1,'RadioFunctions.h']]]
+  ['fiveminutes_9',['FIVEMINUTES',['../_radio_functions_8h.html#a84242d01b905e842a18fb3019e839ada',1,'RadioFunctions.h']]],
+  ['fixitx_10',['fixitx',['../_transmitter_code_2src_2main_8cpp.html#ad40f5a53042299d0a733f7238b5df3a2',1,'main.cpp']]],
+  ['flightmodesused_11',['FLIGHTMODESUSED',['../_radio_functions_8h.html#a29485fb8e0e98e37e333f2954f50e541',1,'RadioFunctions.h']]],
+  ['flightmodeswitch_12',['FLIGHTMODESWITCH',['../_radio_functions_8h.html#a360ae40b5dcb40c9beb3fd1af7134f99',1,'RadioFunctions.h']]],
+  ['fourminutes_13',['FOURMINUTES',['../_radio_functions_8h.html#aad932f138e888f84b6cd1c268fdabb84',1,'RadioFunctions.h']]],
+  ['frequencyscount_14',['FREQUENCYSCOUNT',['../common_8h.html#afe5bce36baf737bd284d43cd0e805fdb',1,'common.h']]],
+  ['frequencyscount1_15',['FREQUENCYSCOUNT1',['../common_8h.html#a71a3cc3c3b499cb9329172835e5a1df8',1,'common.h']]],
+  ['frontview_16',['FRONTVIEW',['../_radio_functions_8h.html#a8204cbed1c612a522a43c80f071eee2a',1,'RadioFunctions.h']]]
 ];
