@@ -1,19 +1,11 @@
 var searchData=
 [
-  ['rangemax_0',['RANGEMAX',['../RadioFunctions_8h.html#a152ff5774ac656fc5f23664a214a8b53',1,'RANGEMAX():&#160;RadioFunctions.h'],['../common_8h.html#a152ff5774ac656fc5f23664a214a8b53',1,'RANGEMAX():&#160;common.h']]],
-  ['rangemin_1',['RANGEMIN',['../common_8h.html#a2279f0fac9f7362b46f3c53ae91a5ce8',1,'RANGEMIN():&#160;common.h'],['../RadioFunctions_8h.html#a2279f0fac9f7362b46f3c53ae91a5ce8',1,'RANGEMIN():&#160;RadioFunctions.h']]],
-  ['receive_5ftimeout_2',['RECEIVE_TIMEOUT',['../common_8h.html#a4c69942f01447fa7563c5726c7d8abf2',1,'common.h']]],
-  ['reconnect_5fchannels_5fcount_3',['RECONNECT_CHANNELS_COUNT',['../common_8h.html#a2e43bf9a06b03c08517e35fb1c553350',1,'RECONNECT_CHANNELS_COUNT():&#160;common.h'],['../RadioFunctions_8h.html#a2e43bf9a06b03c08517e35fb1c553350',1,'RECONNECT_CHANNELS_COUNT():&#160;RadioFunctions.h']]],
-  ['reconnect_5fchannels_5fstart_4',['RECONNECT_CHANNELS_START',['../common_8h.html#a1d74cf6f6bbce0a927f69d545139f301',1,'RECONNECT_CHANNELS_START():&#160;common.h'],['../RadioFunctions_8h.html#a1d74cf6f6bbce0a927f69d545139f301',1,'RECONNECT_CHANNELS_START():&#160;RadioFunctions.h']]],
-  ['reconnectgap_5',['RECONNECTGAP',['../common_8h.html#a00a419fbe253e6e9cb4d716d02d0b2b7',1,'common.h']]],
-  ['red_6',['Red',['../TransmitterCode_2src_2main_8cpp.html#ae8e246fd7335d7e27ab04150cbc418ba',1,'main.cpp']]],
-  ['red_5fled_5fon_5ftime_7',['RED_LED_ON_TIME',['../RadioFunctions_8h.html#ab939b00b86d17d03b6fdfe585f06396d',1,'RadioFunctions.h']]],
-  ['redled_8',['REDLED',['../TransmitterCode_2src_2main_8cpp.html#a1a93f984896e07e32aff39c2e0fb4459',1,'main.cpp']]],
-  ['renewdata_9',['RENEWDATA',['../TransmitterCode_2src_2main_8cpp.html#abe07c12a93bec238e54292e20937dc11',1,'main.cpp']]],
-  ['retrycount_10',['RETRYCOUNT',['../RadioFunctions_8h.html#a0cf4668725c06b3a6d64a2895c906379',1,'RadioFunctions.h']]],
-  ['retrywait_11',['RETRYWAIT',['../RadioFunctions_8h.html#aadc879b4b6396135d31e22c22955a753',1,'RadioFunctions.h']]],
-  ['reverseview_12',['REVERSEVIEW',['../TransmitterCode_2src_2main_8cpp.html#a3bedd97d2e81444eda8c2d43050b88c9',1,'main.cpp']]],
-  ['rxversion_5fmajor_13',['RXVERSION_MAJOR',['../common_8h.html#a2b147d5155fcf962e9f1c4885b32c67d',1,'common.h']]],
-  ['rxversion_5fminimus_14',['RXVERSION_MINIMUS',['../common_8h.html#a46d5105ccf92f7e44b10af6fd51772a8',1,'common.h']]],
-  ['rxversion_5fminor_15',['RXVERSION_MINOR',['../common_8h.html#adeb76229aa4087c3bc1e1fd17bd865b2',1,'common.h']]]
+  ['pacemaker_0',['PACEMAKER',['../RadioFunctions_8h.html#a56e90cbec59fa96bebfb3db997e6a3fe',1,'RadioFunctions.h']]],
+  ['pince1_1',['pinCE1',['../common_8h.html#a29eb13cced8716c95cf23e18ac99ffc7',1,'common.h']]],
+  ['pince2_2',['pinCE2',['../common_8h.html#a86715d66aa5d1363f2db07ae6428eb90',1,'common.h']]],
+  ['pincsn1_3',['pinCSN1',['../common_8h.html#a047f5702802c2bbf4918e9318f3e6a56',1,'common.h']]],
+  ['pincsn2_4',['pinCSN2',['../common_8h.html#a76971ffb50fdfd6bc8e2c3c6ac339459',1,'common.h']]],
+  ['power_5foff_5fpin_5',['POWER_OFF_PIN',['../RadioFunctions_8h.html#aac8f9c268e406507be95a1255281323c',1,'RadioFunctions.h']]],
+  ['propochannels_6',['PROPOCHANNELS',['../RadioFunctions_8h.html#a19677884790860fea7a21dae72e1b862',1,'RadioFunctions.h']]],
+  ['purple_7',['Purple',['../RadioFunctions_8h.html#a5168ce33eb581e85fbfa454e89012bfb',1,'RadioFunctions.h']]]
 ];

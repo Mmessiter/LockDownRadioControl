@@ -12,5 +12,7 @@ var searchData=
   ['initmaxmin_9',['InitMaxMin',['../TransmitterCode_2src_2main_8cpp.html#a1704b259882e35bc7581539d95ca3214',1,'main.cpp']]],
   ['initradio_10',['InitRadio',['../RadioFunctions_8cpp.html#a86ce6c54618629a61b8502786d2ce82c',1,'InitRadio(uint64_t Pipe):&#160;RadioFunctions.cpp'],['../RadioFunctions_8h.html#a86ce6c54618629a61b8502786d2ce82c',1,'InitRadio(uint64_t Pipe):&#160;RadioFunctions.cpp']]],
   ['initswitchesandtrims_11',['InitSwitchesAndTrims',['../TransmitterCode_2src_2main_8cpp.html#afcf8508f9739c35e0c793d178cdc3e79',1,'main.cpp']]],
-  ['instrng_12',['InStrng',['../TransmitterCode_2src_2main_8cpp.html#a5f109790a6fe0b972a502f3cac4ed1e7',1,'main.cpp']]]
+  ['instrng_12',['InStrng',['../TransmitterCode_2src_2main_8cpp.html#a5f109790a6fe0b972a502f3cac4ed1e7',1,'main.cpp']]],
+  ['intohigherres_13',['IntoHigherRes',['../TransmitterCode_2src_2main_8cpp.html#a0d8d8a0d67cb9b04481f1692abe75368',1,'main.cpp']]],
+  ['intolowerres_14',['IntoLowerRes',['../TransmitterCode_2src_2main_8cpp.html#a5cdbe11d62e0de7610ba323e60b97d33',1,'main.cpp']]]
 ];

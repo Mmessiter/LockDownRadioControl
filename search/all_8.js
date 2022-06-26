@@ -21,12 +21,13 @@ var searchData=
   ['initcentredegrees_18',['InitCentreDegrees',['../TransmitterCode_2src_2main_8cpp.html#a2342451905454b70cecc7707b58f96bc',1,'main.cpp']]],
   ['initcurrentradio_19',['InitCurrentRadio',['../radio_8h.html#a9c6678b1449ea8eaaab6a3a53cbb3d65',1,'radio.h']]],
   ['initmaxmin_20',['InitMaxMin',['../TransmitterCode_2src_2main_8cpp.html#a1704b259882e35bc7581539d95ca3214',1,'main.cpp']]],
-  ['initradio_21',['InitRadio',['../RadioFunctions_8cpp.html#a86ce6c54618629a61b8502786d2ce82c',1,'InitRadio(uint64_t Pipe):&#160;RadioFunctions.cpp'],['../RadioFunctions_8h.html#a86ce6c54618629a61b8502786d2ce82c',1,'InitRadio(uint64_t Pipe):&#160;RadioFunctions.cpp']]],
+  ['initradio_21',['InitRadio',['../RadioFunctions_8h.html#a86ce6c54618629a61b8502786d2ce82c',1,'InitRadio(uint64_t Pipe):&#160;RadioFunctions.cpp'],['../RadioFunctions_8cpp.html#a86ce6c54618629a61b8502786d2ce82c',1,'InitRadio(uint64_t Pipe):&#160;RadioFunctions.cpp']]],
   ['initswitchesandtrims_22',['InitSwitchesAndTrims',['../TransmitterCode_2src_2main_8cpp.html#afcf8508f9739c35e0c793d178cdc3e79',1,'main.cpp']]],
-  ['inputs_5fview_23',['INPUTS_VIEW',['../TransmitterCode_2src_2main_8cpp.html#aa2bec27575ce278d56e8d9f844dfe72e',1,'main.cpp']]],
-  ['inputs_5fview_24',['Inputs_View',['../RadioFunctions_8cpp.html#a7a40aeaf7436d33790723c244446ca0a',1,'RadioFunctions.cpp']]],
-  ['inputstick_25',['InPutStick',['../TransmitterCode_2src_2main_8cpp.html#ab9d98ee9d26a1af8f20291fd0b717056',1,'main.cpp']]],
-  ['instrng_26',['InStrng',['../TransmitterCode_2src_2main_8cpp.html#a5f109790a6fe0b972a502f3cac4ed1e7',1,'main.cpp']]],
-  ['interations_27',['Interations',['../radio_8h.html#ac8e10a08e9da70138c4a8459c6902d7d',1,'radio.h']]],
-  ['interpolationtypes_28',['InterpolationTypes',['../TransmitterCode_2src_2main_8cpp.html#a5c126186d6f233dca99b92bf971ea87d',1,'main.cpp']]]
+  ['inputs_5fview_23',['INPUTS_VIEW',['../RadioFunctions_8h.html#aa2bec27575ce278d56e8d9f844dfe72e',1,'RadioFunctions.h']]],
+  ['inputstick_24',['InPutStick',['../TransmitterCode_2src_2main_8cpp.html#ab9d98ee9d26a1af8f20291fd0b717056',1,'main.cpp']]],
+  ['instrng_25',['InStrng',['../TransmitterCode_2src_2main_8cpp.html#a5f109790a6fe0b972a502f3cac4ed1e7',1,'main.cpp']]],
+  ['interations_26',['Interations',['../radio_8h.html#ac8e10a08e9da70138c4a8459c6902d7d',1,'radio.h']]],
+  ['interpolationtypes_27',['InterpolationTypes',['../TransmitterCode_2src_2main_8cpp.html#a5c126186d6f233dca99b92bf971ea87d',1,'main.cpp']]],
+  ['intohigherres_28',['IntoHigherRes',['../TransmitterCode_2src_2main_8cpp.html#a0d8d8a0d67cb9b04481f1692abe75368',1,'main.cpp']]],
+  ['intolowerres_29',['IntoLowerRes',['../TransmitterCode_2src_2main_8cpp.html#a5cdbe11d62e0de7610ba323e60b97d33',1,'main.cpp']]]
 ];

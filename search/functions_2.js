@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['calibrateedgeswitches_0',['CalibrateEdgeSwitches',['../TransmitterCode_2src_2main_8cpp.html#a128fe47088693b102796cd67a175ea08',1,'main.cpp']]],
+  ['calibrateedgeswitches_0',['CalibrateEdgeSwitches',['../TransmitterCode_2src_2main_8cpp.html#a128fe47088693b102796cd67a175ea08',1,'CalibrateEdgeSwitches():&#160;main.cpp'],['../RadioFunctions_8h.html#a128fe47088693b102796cd67a175ea08',1,'CalibrateEdgeSwitches():&#160;main.cpp']]],
   ['calibratesticks_1',['CalibrateSticks',['../TransmitterCode_2src_2main_8cpp.html#ae1b8cef371d26fca2b4f5a101be7a8ba',1,'main.cpp']]],
   ['centretrims_2',['CentreTrims',['../TransmitterCode_2src_2main_8cpp.html#a608cf928b58a8597d2411a3482365abd',1,'main.cpp']]],
   ['channelcentres_3',['ChannelCentres',['../TransmitterCode_2src_2main_8cpp.html#a0e7ca9043d8fa769e8a9290df885e594',1,'main.cpp']]],
@@ -20,7 +20,7 @@ var searchData=
   ['clearackpayload_17',['ClearAckPayload',['../radio_8h.html#a5a26715a721e1073d6ae00498282c056',1,'radio.h']]],
   ['clearbox_18',['ClearBox',['../TransmitterCode_2src_2main_8cpp.html#a5aeea47b9d855ae9911bae1115d02de7',1,'main.cpp']]],
   ['cleartext_19',['ClearText',['../TransmitterCode_2src_2main_8cpp.html#af0852678d8e89501acee8951f09d3b43',1,'main.cpp']]],
-  ['closelogfile_20',['CloseLogFile',['../TransmitterCode_2src_2main_8cpp.html#abc72fe68abd024cb263115e0afd3160a',1,'main.cpp']]],
+  ['closelogfile_20',['CloseLogFile',['../RadioFunctions_8h.html#abc72fe68abd024cb263115e0afd3160a',1,'CloseLogFile():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#abc72fe68abd024cb263115e0afd3160a',1,'CloseLogFile():&#160;main.cpp']]],
   ['closemodelsfile_21',['CloseModelsFile',['../TransmitterCode_2src_2main_8cpp.html#a6922974b734cfe3a511e074a2d6ac33c',1,'main.cpp']]],
   ['compress_22',['Compress',['../RadioFunctions_8cpp.html#a8aa13f90aec1aedcfb79d156c38b4647',1,'RadioFunctions.cpp']]],
   ['createtimedatestamp_23',['CreateTimeDateStamp',['../TransmitterCode_2src_2main_8cpp.html#a3503bafedbcece3177a9e4361bb1b081',1,'main.cpp']]],

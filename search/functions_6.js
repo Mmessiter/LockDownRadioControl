@@ -12,7 +12,7 @@ var searchData=
   ['getledbrightness_9',['GetLEDBrightness',['../TransmitterCode_2src_2main_8cpp.html#a549a702bb9b539c6b3a4f20cce65adcc',1,'main.cpp']]],
   ['getnewchannelvalues_10',['GetNewChannelValues',['../RadioFunctions_8h.html#a1a11fabb6c953055a80c5df5eebbfb0d',1,'GetNewChannelValues():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a1a11fabb6c953055a80c5df5eebbfb0d',1,'GetNewChannelValues():&#160;main.cpp']]],
   ['getnewpipe_11',['GetNewPipe',['../radio_8h.html#ad8b2470258da4e397b34d67ffce9ebaf',1,'radio.h']]],
-  ['getnextnumber_12',['GetNextNumber',['../TransmitterCode_2src_2main_8cpp.html#a5b456468ac6be5e872b327e0d03a9f7a',1,'main.cpp']]],
+  ['getnextnumber_12',['GetNextNumber',['../TransmitterCode_2src_2main_8cpp.html#a3a1bb848113ddbbc27294921fa92f92a',1,'main.cpp']]],
   ['getoldpipe_13',['GetOldPipe',['../radio_8h.html#a2cce213711b7a34bc80eec167dffcb8f',1,'radio.h']]],
   ['getothervalue_14',['GetOtherValue',['../TransmitterCode_2src_2main_8cpp.html#ac8919b32f9c38cc65c7b93cae664acfb',1,'main.cpp']]],
   ['getreturncode_15',['GetReturnCode',['../TransmitterCode_2src_2main_8cpp.html#a43937dd3d9c795271fd9c3eb3c6b6410',1,'main.cpp']]],
