@@ -4782,7 +4782,6 @@ void RestoreBrightness(){
 
 void ZeroDataScreen(){             // ZERO Those parameters that are zeroable
             LostPackets        = 0;
-            TimerMillis        = millis();
             GapLongest         = 0;
             GapSum             = 0;
             GapAverage         = 0;
@@ -4795,7 +4794,7 @@ void ZeroDataScreen(){             // ZERO Those parameters that are zeroable
             ThisGap            = 0;
             GPSMaxDistance     = 0;
             GPSMaxSpeed        = 0;
-            SavedRadioSwaps    = RadioSwaps;    // Cannot easily zero these, so do a subtraction
+            SavedRadioSwaps    = RadioSwaps;       // Cannot easily zero these, so do a subtraction
             SavedRX1TotalTime  = RX1TotalTime;
             SavedRX2TotalTime  = RX2TotalTime;
             SavedSbusRepeats   = SbusRepeats;
@@ -5447,7 +5446,7 @@ void ButtonWasPressed()
             SendValue(c3,SpeakingClock);   
             SendValue(c4,AnnounceBanks);  
             SendValue(c5,AnnounceConnected);
-            SetAudioVolume(AudioVolume); // heer
+            SetAudioVolume(AudioVolume); 
             RestoreBrightness();
             ClearText();
             return;
@@ -6144,8 +6143,7 @@ void ButtonWasPressed()
                 ++i;
                 SingleModelFile[j] = 0;
             }
-            //Serial.println (SingleModelFile);
-
+           
             if ((InStrng(ModExt, SingleModelFile) == 0) && (strlen(SingleModelFile) <= 8)) {
                 strcat(SingleModelFile, ModExt);
             }
