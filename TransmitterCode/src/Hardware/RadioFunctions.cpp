@@ -130,20 +130,21 @@ void ExecuteMacro(){                                                            
 
 // *************** END OF MACROS ZONE ************************************************
 
-
 /************************************************************************************************************/
 //****************** Function to send data to receiver ******************************************************
 /************************************************************************************************************/
 
 void SendData()
 {
+    uint32_t ElapsedSinceLastSend = (millis() - TxPace);
     if (NEXTION.available()) return;              // was a button pressed?
-    if (millis() - TxPace <= 2) {
-        ShowComms();                              // there is time to fit in these calls because there are about 5 ms spare still WHEN CONNECTED
+    if (ElapsedSinceLastSend <= 3) {
+        ShowComms();                              // There is PLENTY of time to fit in these calls because there are about 6 ms spare still WHEN CONNECTED
         ReadSwitches();                           // Check switch positions
         CheckTimer();  
     }
-    if (((millis() - TxPace) >= PACEMAKER) || (LostContactFlag)){
+    if ((ElapsedSinceLastSend >= PACEMAKER) || (LostContactFlag)){
+        
         TxPace = millis();
         GetNewChannelValues();                    // Load SendBuffer with new servo positions
         if (UseMacros) ExecuteMacro();            // Modify it if macro is running
@@ -168,7 +169,7 @@ void SendData()
             CheckTimer();  
             HopToNextChannel();
         }
-        Connected = false;
+        Connected = false;                                         // Assume the worst until ACK is received.
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);   // Compress 32 bytes down to 24
         Radio1.flush_rx();                                         // This avoids a lockup that happens when the FIFO gets full.
         Radio1.flush_tx();                                         // This avoids a lockup that happens when the FIFO gets full.
