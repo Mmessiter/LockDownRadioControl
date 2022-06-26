@@ -132,7 +132,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "OpenLogFileW", "_transmitter_code_2src_2main_8cpp.html#acfdde90c4cdda343445ae69343aa89da", null ],
     [ "OpenModelsFile", "_transmitter_code_2src_2main_8cpp.html#ae7618f38a148877bc5681be58cba8354", null ],
     [ "ParseAckPayload", "_transmitter_code_2src_2main_8cpp.html#a230e862a4da0f66746b6b3afba6bd77a", null ],
-    [ "PlaySound", "_transmitter_code_2src_2main_8cpp.html#abe9d1a3da6268076cda5019d1d2003c1", null ],
+    [ "PlaySound", "_transmitter_code_2src_2main_8cpp.html#aa490b4664b0a4498d53b30b82287d5df", null ],
     [ "PopulateMacrosView", "_transmitter_code_2src_2main_8cpp.html#a58fe79634784085398cb1f382f6bf57d", null ],
     [ "Radio1", "_transmitter_code_2src_2main_8cpp.html#a621c346e4b1d9b24b9a5bda63d0f0f52", null ],
     [ "ReadCHSwitch", "_transmitter_code_2src_2main_8cpp.html#aeed3be7dfc45cde2e9e9d3578c104760", null ],
