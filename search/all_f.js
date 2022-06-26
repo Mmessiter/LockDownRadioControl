@@ -8,12 +8,11 @@ var searchData=
   ['oneminute_5',['ONEMINUTE',['../_radio_functions_8h.html#aaf3f23da47dee530842f92fe3d3501e3',1,'RadioFunctions.h']]],
   ['onemodelmemory_6',['OneModelMemory',['../_transmitter_code_2src_2main_8cpp.html#af41e1522d47ccad6267f971f13cb6f79',1,'main.cpp']]],
   ['onlist_7',['onList',['../class_adafruit___g_p_s.html#ac8ccb298fe5b1d096dbdb39be46554e0',1,'Adafruit_GPS']]],
-  ['openingfanfare_8',['OpeningFanfare',['../_transmitter_code_2src_2main_8cpp.html#aca293ca4eefb77dd4642c71cb7a7f6e3',1,'main.cpp']]],
-  ['openlogfiler_9',['OpenLogFileR',['../_transmitter_code_2src_2main_8cpp.html#afe56ea12e9d619703d7856589420763c',1,'main.cpp']]],
-  ['openlogfilew_10',['OpenLogFileW',['../_transmitter_code_2src_2main_8cpp.html#acfdde90c4cdda343445ae69343aa89da',1,'main.cpp']]],
-  ['openmodelsfile_11',['OpenModelsFile',['../_transmitter_code_2src_2main_8cpp.html#ae7618f38a148877bc5681be58cba8354',1,'main.cpp']]],
-  ['operator_3c_3c_12',['operator&lt;&lt;',['../class_tiny_g_p_s_plus.html#a05c12d268eddf254a9846bc34935a73c',1,'TinyGPSPlus']]],
-  ['options_5fview_13',['OPTIONS_VIEW',['../_radio_functions_8h.html#ae621a5598c31428a00cb602730a5259d',1,'RadioFunctions.h']]],
-  ['orange_14',['Orange',['../_radio_functions_8h.html#a154e686fe7f3f545c01af3592ce0cdff',1,'RadioFunctions.h']]],
-  ['orientation_15',['orientation',['../structsensors__event__t.html#acbe3c50a256fa9423bc9e3a6e0da7ebf',1,'sensors_event_t']]]
+  ['openlogfiler_8',['OpenLogFileR',['../_transmitter_code_2src_2main_8cpp.html#afe56ea12e9d619703d7856589420763c',1,'main.cpp']]],
+  ['openlogfilew_9',['OpenLogFileW',['../_transmitter_code_2src_2main_8cpp.html#acfdde90c4cdda343445ae69343aa89da',1,'main.cpp']]],
+  ['openmodelsfile_10',['OpenModelsFile',['../_transmitter_code_2src_2main_8cpp.html#ae7618f38a148877bc5681be58cba8354',1,'main.cpp']]],
+  ['operator_3c_3c_11',['operator&lt;&lt;',['../class_tiny_g_p_s_plus.html#a05c12d268eddf254a9846bc34935a73c',1,'TinyGPSPlus']]],
+  ['options_5fview_12',['OPTIONS_VIEW',['../_radio_functions_8h.html#ae621a5598c31428a00cb602730a5259d',1,'RadioFunctions.h']]],
+  ['orange_13',['Orange',['../_radio_functions_8h.html#a154e686fe7f3f545c01af3592ce0cdff',1,'RadioFunctions.h']]],
+  ['orientation_14',['orientation',['../structsensors__event__t.html#acbe3c50a256fa9423bc9e3a6e0da7ebf',1,'sensors_event_t']]]
 ];

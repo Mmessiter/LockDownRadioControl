@@ -5,6 +5,5 @@ var searchData=
   ['oldpipe_2',['OldPipe',['../radio_8h.html#a8d3c194b5406bff33ef9357f8b1666cc',1,'radio.h']]],
   ['oldqnh_3',['OldQnh',['../_receiver_code_2src_2main_8cpp.html#a9457ea1945cb317c212c8cb98a829f39',1,'main.cpp']]],
   ['onemodelmemory_4',['OneModelMemory',['../_transmitter_code_2src_2main_8cpp.html#af41e1522d47ccad6267f971f13cb6f79',1,'main.cpp']]],
-  ['openingfanfare_5',['OpeningFanfare',['../_transmitter_code_2src_2main_8cpp.html#aca293ca4eefb77dd4642c71cb7a7f6e3',1,'main.cpp']]],
-  ['orientation_6',['orientation',['../structsensors__event__t.html#acbe3c50a256fa9423bc9e3a6e0da7ebf',1,'sensors_event_t']]]
+  ['orientation_5',['orientation',['../structsensors__event__t.html#acbe3c50a256fa9423bc9e3a6e0da7ebf',1,'sensors_event_t']]]
 ];
