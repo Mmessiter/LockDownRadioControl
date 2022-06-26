@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['uncompressedwords_0',['UNCOMPRESSEDWORDS',['../common_8h.html#a0c40a351a0c0e01fbd5e5b1b0187eb48',1,'UNCOMPRESSEDWORDS():&#160;common.h'],['../_radio_functions_8h.html#a0c40a351a0c0e01fbd5e5b1b0187eb48',1,'UNCOMPRESSEDWORDS():&#160;RadioFunctions.h']]],
-  ['use_5fsw_5fserial_1',['USE_SW_SERIAL',['../_adafruit___g_p_s_8h.html#a7d44b2886944eb862b51948f2acc8d23',1,'Adafruit_GPS.h']]]
+  ['xx1_0',['xx1',['../RadioFunctions_8cpp.html#af12cb4fe3d6d02738ca7a75e1e1fd722',1,'RadioFunctions.cpp']]]
 ];

@@ -1,11 +1,11 @@
 var searchData=
 [
-  ['nextion_0',['NEXTION',['../_radio_functions_8h.html#a8faf90f81afc68086a4b47c2e94cd519',1,'RadioFunctions.h']]],
-  ['nineminutes_1',['NINEMINUTES',['../_radio_functions_8h.html#afa357420dae8e3c614be8ef42e626ee3',1,'RadioFunctions.h']]],
-  ['nmea_5fextensions_2',['NMEA_EXTENSIONS',['../_adafruit___g_p_s_8h.html#aca54bdead693302e0ed647eaa65c56af',1,'Adafruit_GPS.h']]],
-  ['nmea_5ffloat_5ft_3',['NMEA_FLOAT_T',['../_n_m_e_a__data_8h.html#a0c423588a466231e5a996377c5b652e1',1,'NMEA_data.h']]],
-  ['nmea_5fmax_5fsentence_5fid_4',['NMEA_MAX_SENTENCE_ID',['../_adafruit___g_p_s_8h.html#aaec49a2365b37bf9aa5c063076818a98',1,'NMEA_MAX_SENTENCE_ID():&#160;Adafruit_GPS.h'],['../_n_m_e_a__data_8h.html#aaec49a2365b37bf9aa5c063076818a98',1,'NMEA_MAX_SENTENCE_ID():&#160;NMEA_data.h']]],
-  ['nmea_5fmax_5fsource_5fid_5',['NMEA_MAX_SOURCE_ID',['../_adafruit___g_p_s_8h.html#ae3b647e67968a2613fcf3fe5c0a9fb40',1,'NMEA_MAX_SOURCE_ID():&#160;Adafruit_GPS.h'],['../_n_m_e_a__data_8h.html#ae3b647e67968a2613fcf3fe5c0a9fb40',1,'NMEA_MAX_SOURCE_ID():&#160;NMEA_data.h']]],
-  ['nmea_5fmax_5fwp_5fid_6',['NMEA_MAX_WP_ID',['../_n_m_e_a__data_8h.html#ada855ff3bc138b7c9df22f6df4ec46a6',1,'NMEA_data.h']]],
-  ['normal_7',['NORMAL',['../_radio_functions_8h.html#a1291f416b069313021b519eea62d5bf1',1,'NORMAL():&#160;RadioFunctions.h'],['../_radio_functions_8h.html#a1291f416b069313021b519eea62d5bf1',1,'NORMAL():&#160;RadioFunctions.h']]]
+  ['pacemaker_0',['PACEMAKER',['../RadioFunctions_8h.html#a56e90cbec59fa96bebfb3db997e6a3fe',1,'RadioFunctions.h']]],
+  ['pince1_1',['pinCE1',['../common_8h.html#a29eb13cced8716c95cf23e18ac99ffc7',1,'common.h']]],
+  ['pince2_2',['pinCE2',['../common_8h.html#a86715d66aa5d1363f2db07ae6428eb90',1,'common.h']]],
+  ['pincsn1_3',['pinCSN1',['../common_8h.html#a047f5702802c2bbf4918e9318f3e6a56',1,'common.h']]],
+  ['pincsn2_4',['pinCSN2',['../common_8h.html#a76971ffb50fdfd6bc8e2c3c6ac339459',1,'common.h']]],
+  ['power_5foff_5fpin_5',['POWER_OFF_PIN',['../TransmitterCode_2src_2main_8cpp.html#aac8f9c268e406507be95a1255281323c',1,'main.cpp']]],
+  ['propochannels_6',['PROPOCHANNELS',['../RadioFunctions_8h.html#a19677884790860fea7a21dae72e1b862',1,'RadioFunctions.h']]],
+  ['purple_7',['Purple',['../TransmitterCode_2src_2main_8cpp.html#a5168ce33eb581e85fbfa454e89012bfb',1,'main.cpp']]]
 ];

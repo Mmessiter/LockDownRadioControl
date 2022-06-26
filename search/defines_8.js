@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['halfmicrosrange_0',['HALFMICROSRANGE',['../_radio_functions_8h.html#aa0f99ed9c5fd16fa7deba8d4f0336b3a',1,'RadioFunctions.h']]],
-  ['help_5fview_1',['HELP_VIEW',['../_radio_functions_8h.html#a7f61099fecfe7dae5a38078cb36a9bd4',1,'RadioFunctions.h']]],
-  ['hoptime_2',['HOPTIME',['../common_8h.html#a57d506b5f34172770c8d645c12cb5ba2',1,'common.h']]]
+  ['kickrate_0',['KICKRATE',['../RadioFunctions_8h.html#a639fb69a9b4f236e3b1a16435b82bb81',1,'RadioFunctions.h']]]
 ];
