@@ -448,7 +448,7 @@ File     LogFileNumber;
 bool     LogFileOpen         =  false;
 
 // **************************************************************** Play a sound from RAM *********************************************
-void PlaySound(uint8_t TheSound){ // Plays a sound identified by a number 0 - 21 ...
+void PlaySound(uint16_t TheSound){    // Plays a sound identified by a number
 
 char Sound[20];
 char SoundPrefix[] = "play 0,";
