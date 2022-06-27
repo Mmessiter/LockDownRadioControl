@@ -136,8 +136,8 @@ var NAVTREEINDEX =
 "_transmitter_code_2src_2main_8cpp.html#a1e7673fa1ef97d68711edd0da2abed9b",
 "_transmitter_code_2src_2main_8cpp.html#aa490b4664b0a4498d53b30b82287d5df",
 "class_adafruit___bus_i_o___register.html#abf1eaeb0ae836be082a73dae14e7e352",
-"functions_u.html",
-"struct_payload.html#ae28220045a0918bdb0fc6484dbff55f9"
+"functions_v.html",
+"struct_raw_degrees.html#a13564009c60e20dbf03b158114d1c0e2"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

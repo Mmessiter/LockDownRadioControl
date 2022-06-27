@@ -77,9 +77,8 @@ var searchData=
   ['println_74',['println',['../class_adafruit___bus_i_o___register.html#aebb1d9dd6520ba1a20b3952c434d7a47',1,'Adafruit_BusIO_Register']]],
   ['printsensordetails_75',['printSensorDetails',['../class_adafruit___sensor.html#af994cc1147831134ad7bf7b2c99d7478',1,'Adafruit_Sensor']]],
   ['procrastinate_76',['Procrastinate',['../_radio_functions_8cpp.html#a760609a682300dfe6bfaac737fd4d5eb',1,'Procrastinate(uint32_t HowLong):&#160;RadioFunctions.cpp'],['../_radio_functions_8h.html#a760609a682300dfe6bfaac737fd4d5eb',1,'Procrastinate(uint32_t HowLong):&#160;RadioFunctions.cpp']]],
-  ['prodradio_77',['ProdRadio',['../radio_8h.html#a62f1498f67d7e438905ae486bc27044f',1,'radio.h']]],
-  ['propochannels_78',['PROPOCHANNELS',['../_radio_functions_8h.html#a19677884790860fea7a21dae72e1b862',1,'RadioFunctions.h']]],
-  ['purple_79',['Purple',['../_radio_functions_8h.html#a5168ce33eb581e85fbfa454e89012bfb',1,'RadioFunctions.h']]],
-  ['purpose_80',['Purpose',['../struct_payload.html#ac18701f2aa35ebd8402f45f840d5c445',1,'Payload']]],
-  ['pwmpins_81',['PWMPins',['../_receiver_code_2src_2main_8cpp.html#a19f864fa6bdea0867325f70e162c92ef',1,'main.cpp']]]
+  ['propochannels_77',['PROPOCHANNELS',['../_radio_functions_8h.html#a19677884790860fea7a21dae72e1b862',1,'RadioFunctions.h']]],
+  ['purple_78',['Purple',['../_radio_functions_8h.html#a5168ce33eb581e85fbfa454e89012bfb',1,'RadioFunctions.h']]],
+  ['purpose_79',['Purpose',['../struct_payload.html#ac18701f2aa35ebd8402f45f840d5c445',1,'Payload']]],
+  ['pwmpins_80',['PWMPins',['../_receiver_code_2src_2main_8cpp.html#a19f864fa6bdea0867325f70e162c92ef',1,'main.cpp']]]
 ];
