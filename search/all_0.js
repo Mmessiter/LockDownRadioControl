@@ -1,18 +1,18 @@
 var searchData=
 [
-  ['ackpayload_0',['AckPayload',['../RadioFunctions_8h.html#aec532bb9df7f865e6612fabf46895e6c',1,'AckPayload():&#160;radio.h'],['../TransmitterCode_2src_2main_8cpp.html#a30a079d60b4731ce1531091ffe56a703',1,'AckPayload():&#160;main.cpp'],['../radio_8h.html#a30a079d60b4731ce1531091ffe56a703',1,'AckPayload():&#160;radio.h']]],
-  ['ackpayloadsize_1',['AckPayloadSize',['../radio_8h.html#a6dc99d00582ef356ea3d57700dca6dab',1,'AckPayloadSize():&#160;radio.h'],['../RadioFunctions_8h.html#a6dc99d00582ef356ea3d57700dca6dab',1,'AckPayloadSize():&#160;radio.h'],['../TransmitterCode_2src_2main_8cpp.html#a6dc99d00582ef356ea3d57700dca6dab',1,'AckPayloadSize():&#160;main.cpp']]],
-  ['adjustdatetime_2',['AdjustDateTime',['../TransmitterCode_2src_2main_8cpp.html#a9de4ea8e761b5f0e537f6f326f9ad429',1,'main.cpp']]],
-  ['allchannels_3',['AllChannels',['../RadioFunctions_8h.html#a340f5f74a3364594ad9b460d4b5b04d5',1,'AllChannels():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a1d18aaaa3cc4ba52bd309c88815c60a7',1,'AllChannels():&#160;main.cpp']]],
-  ['altitudegps_4',['AltitudeGPS',['../ReceiverCode_2src_2main_8cpp.html#a9690c7445dbd0530fa729af6bac11044',1,'AltitudeGPS():&#160;main.cpp'],['../radio_8h.html#a9690c7445dbd0530fa729af6bac11044',1,'AltitudeGPS():&#160;main.cpp']]],
-  ['analogueinput_5',['AnalogueInput',['../TransmitterCode_2src_2main_8cpp.html#aff628072047986ff5293dbb907c3f676',1,'main.cpp']]],
-  ['anglegps_6',['AngleGPS',['../ReceiverCode_2src_2main_8cpp.html#a9cb6617428d513efc095336972632da6',1,'AngleGPS():&#160;main.cpp'],['../radio_8h.html#a9cb6617428d513efc095336972632da6',1,'AngleGPS():&#160;main.cpp']]],
-  ['announcebanks_7',['AnnounceBanks',['../TransmitterCode_2src_2main_8cpp.html#ae9add7064c6a555558088c4f67560535',1,'main.cpp']]],
-  ['announceconnected_8',['AnnounceConnected',['../TransmitterCode_2src_2main_8cpp.html#a7f979f6e267f37833beb30c91b796cae',1,'main.cpp']]],
-  ['approximation_9',['APPROXIMATION',['../TransmitterCode_2src_2main_8cpp.html#aee8c3c363eab49d6a90d3f74587694d5',1,'main.cpp']]],
-  ['attachservos_10',['AttachServos',['../ReceiverCode_2src_2main_8cpp.html#a0cbfd712ab3bd8f654bc19400fd704bd',1,'main.cpp']]],
-  ['audioview_11',['AUDIOVIEW',['../RadioFunctions_8h.html#a445cfbf06ed74188fcf3965b4cab9533',1,'RadioFunctions.h']]],
-  ['audiovolume_12',['AudioVolume',['../TransmitterCode_2src_2main_8cpp.html#adddcbca54e7b49592c3f6c360bf04494',1,'main.cpp']]],
-  ['autoswitch_13',['AutoSwitch',['../TransmitterCode_2src_2main_8cpp.html#a6d1c8ca21c8826267f5687d3799c6a1f',1,'main.cpp']]],
-  ['autoswitch_14',['AUTOSWITCH',['../RadioFunctions_8h.html#aa4414f3ff790f01b8bb41a0f51d1518f',1,'RadioFunctions.h']]]
+  ['_5fadafruit_5fbusio_5fspiregtype_0',['_Adafruit_BusIO_SPIRegType',['../_adafruit___bus_i_o___register_8h.html#aab8187a2a7855dbdafc14106289f7c52',1,'Adafruit_BusIO_Register.h']]],
+  ['_5fadafruit_5fi2c_5fregister_5fh_5f_1',['_ADAFRUIT_I2C_REGISTER_H_',['../_adafruit___i2_c_register_8h.html#a4fef9f30597036cfac3dd9b3a48b6347',1,'Adafruit_I2CRegister.h']]],
+  ['_5fgnggaterm_2',['_GNGGAterm',['../_tiny_g_p_s_09_09_8cpp.html#ae28873e01fa28eec31295762b3f55337',1,'TinyGPS++.cpp']]],
+  ['_5fgnrmcterm_3',['_GNRMCterm',['../_tiny_g_p_s_09_09_8cpp.html#a56d2fdf2ce63d8f36c1a6a82fcdcfe4e',1,'TinyGPS++.cpp']]],
+  ['_5fgpggaterm_4',['_GPGGAterm',['../_tiny_g_p_s_09_09_8cpp.html#a7b0531ec5f337570bebda67aef146173',1,'TinyGPS++.cpp']]],
+  ['_5fgprmcterm_5',['_GPRMCterm',['../_tiny_g_p_s_09_09_8cpp.html#a6233d7d8f4845843775224f7521595bf',1,'TinyGPS++.cpp']]],
+  ['_5fgps_5ffeet_5fper_5fmeter_6',['_GPS_FEET_PER_METER',['../_tiny_g_p_s_09_09_8h.html#af1a3b64121f34d416925518e994b454f',1,'TinyGPS++.h']]],
+  ['_5fgps_5fkm_5fper_5fmeter_7',['_GPS_KM_PER_METER',['../_tiny_g_p_s_09_09_8h.html#a49b3ac6a23c4f78931942c51810e3439',1,'TinyGPS++.h']]],
+  ['_5fgps_5fkmph_5fper_5fknot_8',['_GPS_KMPH_PER_KNOT',['../_tiny_g_p_s_09_09_8h.html#a757cab8e33085416dbafbc05cf71f6a9',1,'TinyGPS++.h']]],
+  ['_5fgps_5fmax_5ffield_5fsize_9',['_GPS_MAX_FIELD_SIZE',['../_tiny_g_p_s_09_09_8h.html#ad31ceaaeae16e1ff8e13640e3b012de3',1,'TinyGPS++.h']]],
+  ['_5fgps_5fmiles_5fper_5fmeter_10',['_GPS_MILES_PER_METER',['../_tiny_g_p_s_09_09_8h.html#a51d2cc47a0dc5655cde4135c24fef480',1,'TinyGPS++.h']]],
+  ['_5fgps_5fmph_5fper_5fknot_11',['_GPS_MPH_PER_KNOT',['../_tiny_g_p_s_09_09_8h.html#a15c78046c05b411cbcb3f93b7a452a97',1,'TinyGPS++.h']]],
+  ['_5fgps_5fmps_5fper_5fknot_12',['_GPS_MPS_PER_KNOT',['../_tiny_g_p_s_09_09_8h.html#a54cbb270522b52fe2c0f14eab76f032b',1,'TinyGPS++.h']]],
+  ['_5fgps_5fversion_13',['_GPS_VERSION',['../_tiny_g_p_s_09_09_8h.html#a210404d704c58b910ecee5bd7e97a7dc',1,'TinyGPS++.h']]],
+  ['_5fnmea_5f_5fdata_5fh_14',['_NMEA__DATA_H',['../_n_m_e_a__data_8h.html#af7216e836776a428f63f632b003e5cb4',1,'NMEA_data.h']]]
 ];
