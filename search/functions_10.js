@@ -74,5 +74,6 @@ var searchData=
   ['stopmacro_71',['StopMacro',['../_radio_functions_8cpp.html#ae1e0755ae9441b2835ac027a98707caa',1,'RadioFunctions.cpp']]],
   ['str_72',['Str',['../_radio_functions_8h.html#a6bac145d5df31efb9c90e2a60a4cbca5',1,'Str(char *s, int n, int comma):&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a6bac145d5df31efb9c90e2a60a4cbca5',1,'Str(char *s, int n, int comma):&#160;main.cpp']]],
   ['swap_73',['swap',['../_transmitter_code_2src_2main_8cpp.html#a31322f63ce3e02c4ef9a0c1e0c7f1ff5',1,'main.cpp']]],
-  ['synchrtcwithgpstime_74',['SynchRTCwithGPSTime',['../_transmitter_code_2src_2main_8cpp.html#abb1ea95b6b3f033883aa87682d3240ab',1,'main.cpp']]]
+  ['swapchipenablelines_74',['SwapChipEnableLines',['../radio_8h.html#ac980be068a45a1406b0e244304741ac6',1,'radio.h']]],
+  ['synchrtcwithgpstime_75',['SynchRTCwithGPSTime',['../_transmitter_code_2src_2main_8cpp.html#abb1ea95b6b3f033883aa87682d3240ab',1,'main.cpp']]]
 ];
