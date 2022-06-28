@@ -1,10 +1,22 @@
 
 // **************************************************************************
-//     This header file now has all definitions and includes                *
+//     This header file has all definitions and includes                    *
 // **************************************************************************
 
 #ifndef RadioFunctions_H
 #define RadioFunctions_H
+
+// **************************************************************************
+//                TX VERSION NUMBER   (June 2022 Malcolm Messiter)          *
+//***************************************************************************
+
+#define TXVERSION_MAJOR   1
+#define TXVERSION_MINOR   8
+#define TXVERSION_MINIMUS 0
+
+// **************************************************************************
+//                               Includes                                   *
+// **************************************************************************
 
 #include <Arduino.h>
 #include <SD.h>
@@ -22,19 +34,11 @@
 #include <Watchdog_t4.h>
 
 // **************************************************************************
-//                TX VERSION NUMBER   (June 24th 2022 Malcolm Messiter)     *
-//***************************************************************************
-
-#define TXVERSION_MAJOR   1
-#define TXVERSION_MINOR   8
-#define TXVERSION_MINIMUS 0
-
-// **************************************************************************
 //    DEBUG OPTIONS (UNCOMMENT ANY OF THESE for that bit of debug info)     *
 //***************************************************************************
 
 // #define DB_NEXTION        // Debug NEXTION and SD card data
- // #define DB_FHSS           // Debug real time FHSS data
+// #define DB_FHSS           // Debug real time FHSS data
 // #define DB_SENSORS        // Debug Sensors
 // #define DB_BIND           // Debug Binding
 // #define DB_SWITCHES       // Debug Switches
@@ -45,21 +49,30 @@
 //                               General                                    *
 // **************************************************************************
 
-#define CHANNELSUSED       16                  // 16 Channels
-#define MAXMIXES           32                  // 32 mixes
-#define TICKSPERMINUTE     60000               // millis() += 60000 per minute
-#define PROPOCHANNELS      8                   // Only 4 have knobs / 2 sticks (= 4 hall sensors)
-#define FLIGHTMODESWITCH   4                   // Default MODE switch
-#define AUTOSWITCH         1                   // Default AUTO switch
-#define DEFAULTPIPEADDRESS 0xBABE1E5420LL      // Pipe address for startup - any value but MUST match RX
-#define LOWBATTERY         42                  // Default percent for warning (User definable)
-#define CE_PIN             9                   // for SPI to nRF24L01
-#define CSN_PIN            10                  // for SPI to nRF24L01
-#define INACTIVITYTIMEOUT  10 * TICKSPERMINUTE // Default time after which to switch off
-#define INACTIVITYMINIMUM  5  * TICKSPERMINUTE // Inactivity timeout minimum is 5 minutes
-#define INACTIVITYMAXIMUM  30 * TICKSPERMINUTE // Inactivity timeout maximum is 30 minutes
-#define DS1307_ADDRESS     0x68                // I2C address for RTC
-#define MAXLINES           30                  // text to load at once for log and help screens
+#define CHANNELSUSED       16                        // 16 Channels
+#define MAXMIXES           32                        // 32 mixes
+#define TICKSPERMINUTE     60000                     // millis() += 60000 per minute
+#define PROPOCHANNELS      8                         // Only 4 have knobs / 2 sticks (= 4 hall sensors)
+#define FLIGHTMODESWITCH   4                         // Default MODE switch
+#define AUTOSWITCH         1                         // Default AUTO switch
+#define FLIGHTMODESUSED    4                         // Flight modes (AKA Banks)
+#define DEFAULTPIPEADDRESS 0xBABE1E5420LL            // Pipe address for startup - any value but MUST match RX
+#define LOWBATTERY         42                        // Default percent for warning (User definable)
+#define CE_PIN             9                         // for SPI to nRF24L01
+#define CSN_PIN            10                        // for SPI to nRF24L01
+#define INACTIVITYTIMEOUT  10 * TICKSPERMINUTE       // Default time after which to switch off
+#define INACTIVITYMINIMUM  5  * TICKSPERMINUTE       // Inactivity timeout minimum is 5 minutes
+#define INACTIVITYMAXIMUM  30 * TICKSPERMINUTE       // Inactivity timeout maximum is 30 minutes
+#define DS1307_ADDRESS     0x68                      // I2C address for RTC
+#define MAXLINES           30                        // text to load at once for log and help screens
+#define DEFAULT_EXPO       50                        // = ZERO EXPO (Range is 0 - 200. Below 50 is negative Expo)
+#define CHARSMAX           120                       // Max length for char arrays
+#define UNCOMPRESSEDWORDS  20                        // DATA TO SEND = 40  bytes
+#define COMPRESSEDWORDS   UNCOMPRESSEDWORDS * 3 / 4  // COMPRESSED DATA SENT = 30  bytes
+#define BINDPIPETIMEOUT    1000                      // timeout for switching from Bound to Default pipe
+// **************************************************************************
+//                               Colours                                    *
+// **************************************************************************
 
 #define Black           0
 #define Blue            31
@@ -72,7 +85,11 @@
 #define Purple          39070
 #define Orange          64512
 #define White           65535
-#define FLIGHTMODESUSED 4
+
+// **************************************************************************
+//                               Mixes                                      *
+// **************************************************************************
+
 #define M_Enabled       0 // Offsets for Mixes array
 #define M_FlightMode    1
 #define M_MasterChannel 2
@@ -81,6 +98,10 @@
 #define M_Percent       5
 #define M_R1            6
 #define M_R2            7
+
+// **************************************************************************
+//                               Screens                                    *
+// **************************************************************************
 
 #define FRONTVIEW       0
 #define STICKSVIEW      1
@@ -107,13 +128,9 @@
 #define BUDDYVIEW       22
 #define LOGVIEW         23
 
-#define DEFAULT_EXPO    50 // = ZERO EXPO (Range is 0 - 200. Below 50 is negative Expo)
-
-#define CHARSMAX        120 
-#define UNCOMPRESSEDWORDS 20                        // DATA TO SEND = 40  bytes
-#define COMPRESSEDWORDS   UNCOMPRESSEDWORDS * 3 / 4 // COMPRESSED DATA SENT = 30  bytes
-
-#define BINDPIPETIMEOUT    1000                      // timeout for switching from Bound to Default pipe
+// **************************************************************************
+//                          Switches' GPIOs                                 *
+// **************************************************************************
 
 #define SWITCH0       32   // EDGE SWITCHES' PIN NUMBERS ...
 #define SWITCH1       31
@@ -123,6 +140,11 @@
 #define SWITCH5       27
 #define SWITCH6       26
 #define SWITCH7       25
+
+// **************************************************************************
+//                           TRIMS' GPIOs                                   *
+// **************************************************************************
+
 #define TRIM1A        34   // Digital trims pins
 #define TRIM1B        35
 #define TRIM2A        36
@@ -131,6 +153,11 @@
 #define TRIM3B        39
 #define TRIM4A        40
 #define TRIM4B        41
+
+// **************************************************************************
+//                LED and Power off GPIOs                                   *
+// **************************************************************************
+
 #define REDLED        2 // COLOURED LEDS' PIN NUMBERS ...
 #define GREENLED      3
 #define BLUELED       4
@@ -230,12 +257,12 @@
 //                            FHSS PARAMETERS                               *
 //***************************************************************************
 
-#define PACEMAKER                   8   // (was 7) MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
+#define PACEMAKER                   8   // MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
 #define RETRYCOUNT                  3   // auto retries inside nRF24L01
 #define RETRYWAIT                   1   // Wait between retries is RetryWait+1 * 250us. A failed packet therefore takes (RetryWait+1 * 250us) * RetryCount
 #define LOSTCONTACTCUTOFF           5   // How many packets to lose before reconnect triggers  (>=5) 5*8 = 40 ms (40 ms = RX timeout)
 #define RECONNECT_CHANNELS_COUNT    3   // How many channels to try when reconnecting
-#define RECONNECT_CHANNELS_START    12
+#define RECONNECT_CHANNELS_START    12  // Offset into channels' array
 #define RED_LED_ON_TIME             1000 // How many ms of no connection before RED led comes on
 
 // **************************************************************************
