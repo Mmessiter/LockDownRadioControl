@@ -34,7 +34,7 @@
 #include <Watchdog_t4.h>
 
 // **************************************************************************
-//    DEBUG OPTIONS (UNCOMMENT ANY OF THESE for that bit of debug info)     *
+//    DEBUG OPTIONS (Uncomment any of these for that bit of debug info)     *
 //***************************************************************************
 
 // #define DB_NEXTION        // Debug NEXTION and SD card data
