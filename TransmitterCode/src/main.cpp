@@ -1792,7 +1792,7 @@ void FailedPacket()
     if (GapStart == 0) GapStart = millis(); // To keep track of gaps' length
     ++RecentPacketsLost;
     ++TotalledRecentPacketsLost; // this is to keep track of events when receiver is off
-    if (RecentPacketsLost > LOSTCONTACTCUTOFF) {
+    if (RecentPacketsLost >= LOSTCONTACTCUTOFF) {
         LostContactFlag   = true;
         Reconnected = false;
         RecentPacketsLost = 0;
