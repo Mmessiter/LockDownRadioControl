@@ -3090,7 +3090,7 @@ void LogThisGap(){
 }
 // ************************************************************************
 
-void LogThisLongGap(){
+void LogThisLongGap(){    // here is logged a Gap that exceeds one second - probably because rx was turned off
     ThisGap = (millis() - GapStart); 
     char Ltext[] = "Long Gap: ";
     char NB[5];
