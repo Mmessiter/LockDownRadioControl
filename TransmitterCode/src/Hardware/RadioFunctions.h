@@ -396,6 +396,7 @@ void LogDisConnection();
 void CloseLogFile();
 void StartLogFile();     
 void ShowLogFile(uint8_t StartLine);
+void LogThisLongGap();
 
 /*********************************************************************************************************************************/
 

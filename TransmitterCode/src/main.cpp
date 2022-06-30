@@ -1793,14 +1793,18 @@ void FailedPacket()
     ++RecentPacketsLost;
     ++TotalledRecentPacketsLost; // this is to keep track of events when receiver is off
     if (RecentPacketsLost >= LOSTCONTACTCUTOFF) {
+      
         LostContactFlag   = true;
         Reconnected = false;
         RecentPacketsLost = 0;
+       
         if ((millis() - GapStart) > RED_LED_ON_TIME) // there's no need to blink red for every single lost packet. Only after 1/2 second of no connection.
         {  
-            RedLedOn();
+            if  (LedWasGreen) LogThisLongGap();
+            RedLedOn(); 
             ReEnableScanButton();
         }
+    
     }
     ++LostPackets;
      SecondsRemaining = (Inactivity_Timeout / 1000) - (millis() - Inactivity_Start) / 1000;
@@ -3085,6 +3089,19 @@ void LogThisGap(){
     LogText(thetext, 8);
 }
 // ************************************************************************
+
+void LogThisLongGap(){
+    ThisGap = (millis() - GapStart); 
+    char Ltext[] = "Long Gap: ";
+    char NB[5];
+    char thetext[20];
+    Str(NB,ThisGap,0);
+    strcpy(thetext,Ltext);
+    strcat(thetext, NB);
+    LogText(thetext, strlen(Ltext)+4);
+}
+// ************************************************************************
+
 void ShowLogFile(uint8_t StartLine){ 
     char TheText[MAXFILELEN + 10];      // MAX = 5K or so
     char LogFileName[20];
