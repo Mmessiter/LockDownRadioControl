@@ -179,7 +179,7 @@ var searchData=
   ['startbackground_176',['StartBackGround',['../_transmitter_code_2src_2main_8cpp.html#a4c274dbafec73d54251779fa8640d290',1,'main.cpp']]],
   ['startbuddyview_177',['StartBuddyView',['../_transmitter_code_2src_2main_8cpp.html#aaf48dfa7ac69b0baa5134fd9547f722c',1,'main.cpp']]],
   ['startinactvitytimeout_178',['StartInactvityTimeout',['../_radio_functions_8h.html#a793b7bcd77531c95fe72ed4356d421c8',1,'StartInactvityTimeout():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a793b7bcd77531c95fe72ed4356d421c8',1,'StartInactvityTimeout():&#160;main.cpp']]],
-  ['startlocation_179',['StartLocation',['../_transmitter_code_2src_2main_8cpp.html#a4037de0ea0fc7cd3c7cd3c40eee10a98',1,'main.cpp']]],
+  ['startlocation_179',['StartLocation',['../_transmitter_code_2src_2main_8cpp.html#a3d13608c0de514d44371734e8063f278',1,'main.cpp']]],
   ['startlogfile_180',['StartLogFile',['../_radio_functions_8h.html#a514afc8dd077db77334696ca719a99b7',1,'StartLogFile():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a514afc8dd077db77334696ca719a99b7',1,'StartLogFile():&#160;main.cpp']]],
   ['startmacro_181',['StartMacro',['../_radio_functions_8cpp.html#aff7f985af10a021196ae5c9bf188c445',1,'RadioFunctions.cpp']]],
   ['startreverseview_182',['StartReverseView',['../_transmitter_code_2src_2main_8cpp.html#a618bc6ca4ab71bb4d5d7e00dc71f9e56',1,'main.cpp']]],
@@ -210,7 +210,7 @@ var searchData=
   ['switch5_207',['SWITCH5',['../_radio_functions_8h.html#a4a43ca3258e65eeb2f7a0cc990728278',1,'RadioFunctions.h']]],
   ['switch6_208',['SWITCH6',['../_radio_functions_8h.html#a76f238185a1051be3f529e233e5367e9',1,'RadioFunctions.h']]],
   ['switch7_209',['SWITCH7',['../_radio_functions_8h.html#a34cc45470bb24099949911a2a08040bf',1,'RadioFunctions.h']]],
-  ['switcheditnumber_210',['SwitchEditNumber',['../_transmitter_code_2src_2main_8cpp.html#a419ee6bf72350585041578e743b6113a',1,'main.cpp']]],
+  ['switcheditnumber_210',['SwitchEditNumber',['../_transmitter_code_2src_2main_8cpp.html#aa55e9d8bf10b47c2b9139b197b7ee842',1,'main.cpp']]],
   ['switches_5fview_211',['SWITCHES_VIEW',['../_radio_functions_8h.html#ace2d3514934b21f0e469528e292f2584',1,'RadioFunctions.h']]],
   ['switchnumber_212',['SwitchNumber',['../_transmitter_code_2src_2main_8cpp.html#a2bd909f3b6a6e46bd5fcecb296800e9e',1,'main.cpp']]],
   ['synchrtcwithgpstime_213',['SynchRTCwithGPSTime',['../_transmitter_code_2src_2main_8cpp.html#abb1ea95b6b3f033883aa87682d3240ab',1,'main.cpp']]]

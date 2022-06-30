@@ -47,7 +47,7 @@ var searchData=
   ['speedgps_44',['SpeedGPS',['../_receiver_code_2src_2main_8cpp.html#af02319a1e0d8c0c651f23e49acc228f8',1,'SpeedGPS():&#160;main.cpp'],['../radio_8h.html#af02319a1e0d8c0c651f23e49acc228f8',1,'SpeedGPS():&#160;main.cpp']]],
   ['spi_45',['SPI',['../_adafruit___b_m_p280_8h.html#a56953eb3affc2a9f56e1680bbc537bf7',1,'Adafruit_BMP280.h']]],
   ['startbackground_46',['StartBackGround',['../_transmitter_code_2src_2main_8cpp.html#a4c274dbafec73d54251779fa8640d290',1,'main.cpp']]],
-  ['startlocation_47',['StartLocation',['../_transmitter_code_2src_2main_8cpp.html#a4037de0ea0fc7cd3c7cd3c40eee10a98',1,'main.cpp']]],
+  ['startlocation_47',['StartLocation',['../_transmitter_code_2src_2main_8cpp.html#a3d13608c0de514d44371734e8063f278',1,'main.cpp']]],
   ['status_48',['status',['../structsensors__vec__t.html#af75d491f35f979932de5609d6ef6c363',1,'sensors_vec_t']]],
   ['sticksmode_49',['SticksMode',['../_transmitter_code_2src_2main_8cpp.html#a5624a3289e95022504382c0d5a194b61',1,'main.cpp']]],
   ['subtrims_50',['SubTrims',['../_transmitter_code_2src_2main_8cpp.html#a8c98d83f822e5c1a5e605844bb8a75cd',1,'main.cpp']]],
@@ -60,6 +60,6 @@ var searchData=
   ['switch2reversed_57',['SWITCH2Reversed',['../_transmitter_code_2src_2main_8cpp.html#ae72c3f4af9982867946efecba70e5269',1,'main.cpp']]],
   ['switch3reversed_58',['SWITCH3Reversed',['../_transmitter_code_2src_2main_8cpp.html#a69b7a73aa29db9ddf810c9a0b56ef8e7',1,'main.cpp']]],
   ['switch4reversed_59',['SWITCH4Reversed',['../_transmitter_code_2src_2main_8cpp.html#a792e2df85286cbba76e2f1f2f5db9768',1,'main.cpp']]],
-  ['switcheditnumber_60',['SwitchEditNumber',['../_transmitter_code_2src_2main_8cpp.html#a419ee6bf72350585041578e743b6113a',1,'main.cpp']]],
+  ['switcheditnumber_60',['SwitchEditNumber',['../_transmitter_code_2src_2main_8cpp.html#aa55e9d8bf10b47c2b9139b197b7ee842',1,'main.cpp']]],
   ['switchnumber_61',['SwitchNumber',['../_transmitter_code_2src_2main_8cpp.html#a2bd909f3b6a6e46bd5fcecb296800e9e',1,'main.cpp']]]
 ];

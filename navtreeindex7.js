@@ -1,8 +1,5 @@
 var NAVTREEINDEX7 =
 {
-"struct_payload.html#ab1cbe4c4b9ee9ce839084b274f3ea494":[9,0,13,0],
-"struct_payload.html#ac18701f2aa35ebd8402f45f840d5c445":[9,0,13,5],
-"struct_payload.html#ae28220045a0918bdb0fc6484dbff55f9":[9,0,13,4],
 "struct_payload.html#ae7106f2efa1bb9f4ebb720c7c9fc54b8":[9,0,13,1],
 "struct_raw_degrees.html":[9,0,14],
 "struct_raw_degrees.html#a11831d9220f303bd716d9412af28e84e":[9,0,14,2],
