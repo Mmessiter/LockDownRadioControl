@@ -115,8 +115,8 @@ uint8_t       SavedCurrentView   = FRONTVIEW;
 uint64_t      DefaultPipe        = DEFAULTPIPEADDRESS; //          Default Radio pipe address
 uint64_t      NewPipe            = 0xBABE1E5420LL;     //             New Radio pipe address for binding comes from MAC address
 char          TextIn[CHARSMAX+2];  // spare space
-unsigned int  PacketsPerSecond = 0;
-unsigned int  LostPackets      = 0;
+uint16_t      PacketsPerSecond = 0;
+uint16_t      LostPackets      = 0;
 uint8_t       PacketNumber     = 0;
 uint8_t       GPSMarkHere      = 0;
 uint8_t       PreviousTrim     = 255;   
