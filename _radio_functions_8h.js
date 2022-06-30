@@ -227,7 +227,7 @@ var _radio_functions_8h =
     [ "HopStart", "_radio_functions_8h.html#a937fc53e966c6b5c66b9d66c01cec13f", null ],
     [ "JustHoppedFlag", "_radio_functions_8h.html#ae768cbeda38b92908ae481b943893e3b", null ],
     [ "LostContactFlag", "_radio_functions_8h.html#ad5f463902789a79fc622b3befd9409b9", null ],
-    [ "LostPackets", "_radio_functions_8h.html#ace8651c9c20dd6ea531190d34d35e1fc", null ],
+    [ "LostPackets", "_radio_functions_8h.html#a2cd5f73af62f9f856c2352e44c73f171", null ],
     [ "MacrosBuffer", "_radio_functions_8h.html#a961efaa3441c7a8fc7ecea83b2cd3260", null ],
     [ "MacroStartTime", "_radio_functions_8h.html#abacba397df8422d772f9f387649a9494", null ],
     [ "MacroStopTime", "_radio_functions_8h.html#a9e444f8769253f982906c933290b1369", null ],
