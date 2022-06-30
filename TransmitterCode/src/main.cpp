@@ -228,9 +228,6 @@ bool     JustHoppedFlag              = true;
 bool     LostContactFlag             = true;
 uint8_t  RecentPacketsLost           = 0;
 uint32_t TotalledRecentPacketsLost   = 0;
-long int RecoveryTimer               = 0;
-bool     ReconnectingFlag            = true;
-int      ReconnectTime               = 0;
 uint32_t GapSum                      = 0;
 uint32_t GapLongest                  = 0;
 uint32_t GapStart                    = 0;
@@ -247,16 +244,12 @@ bool     GpsFix                      = 0;
 uint8_t  GPSSatellites               = 0;
 uint16_t GPSSpeed                    = 0;
 uint16_t GPSMaxSpeed                 = 0;
-
 uint8_t  GPSHours                    = 0;
 uint8_t  GPSMins                     = 0;
 uint8_t  GPSSecs                     = 0;
-
 uint8_t  GPSDay                      = 0;
 uint8_t  GPSMonth                    = 0;
 uint8_t  GPSYear                     = 0;
-
-
 float    GPSAltitude                 = 0;
 float    GPSMaxAltitude              = 0;
 float    GPSGroundAltitude           = 0;
@@ -274,11 +267,9 @@ char     MaxAltitude[8]              = " ";
 float    MaxAlt                      = 0;
 char     ReceiverVersionNumber[8]    = " ";
 char     TransmitterVersionNumber[8] = " ";
-
 File     ModelsFileNumber;
 
 Adafruit_INA219 ina219;
-
 const int chipSelect = BUILTIN_SDCARD;
 char      SingleModelFile[80];
 bool      SingleModelFlag = false;
@@ -293,38 +284,33 @@ bool      Switch[8];
 bool      TrimSwitch[8];
 uint8_t   SwitchNumber[8] = {SWITCH0, SWITCH1, SWITCH2, SWITCH3, SWITCH4, SWITCH5, SWITCH6, SWITCH7};
 uint8_t   TrimNumber[8]   = {TRIM1A, TRIM1B, TRIM2A, TRIM2B, TRIM3A, TRIM3B, TRIM4A, TRIM4B};
-
 uint8_t FMSwitch   = FLIGHTMODESWITCH;
 uint8_t AutoSwitch = AUTOSWITCH;
-
 uint8_t Channel9Switch  = 0;
 uint8_t Channel10Switch = 0;
 uint8_t Channel11Switch = 0;
 uint8_t Channel12Switch = 0;
-
 uint8_t Channel9SwitchValue  = 0;
 uint8_t Channel10SwitchValue = 0;
 uint8_t Channel11SwitchValue = 0;
 uint8_t Channel12SwitchValue = 0;
-
 bool SWITCH1Reversed = false;
 bool SWITCH2Reversed = false;
 bool SWITCH3Reversed = false;
 bool SWITCH4Reversed = false;
-
-int      StartLocation       = 0;
+uint16_t StartLocation       = 0;
 bool     ValueSent           = false;
-int      SwitchEditNumber    = 0; // number of switch being edited
+uint8_t  SwitchEditNumber    = 0; // number of switch being edited
 uint32_t ShowServoTimer      = 0;
 bool     LastFourOnly        = false;
 uint8_t  InPutStick[17]      = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}; //
 uint8_t  ExportedFileCounter = 0;
 char     TheFilesList[100][14];
-int      FileNumberInView     = 0;
+uint16_t FileNumberInView     = 0;
 bool     FileError            = false;
-int      RangeTestStart       = 0;
-int      RangeTestGoodPackets = 0;
-int      RangeTestLostPackets = 0;
+uint32_t RangeTestStart       = 0;
+uint16_t RangeTestGoodPackets = 0;
+uint16_t RangeTestLostPackets = 0;
 float    success              = 0; // percent of packets that  succeed
 uint8_t  SaveFlightMode       = 0;
 bool     FailSafeChannel[CHANNELSUSED];
@@ -341,14 +327,14 @@ uint32_t Inactivity_Start   = 0;
 
 tmElements_t tm;
 char         TxName[32]   = {"No name was found!"};
-int          LastTimeRead = 0;
-int          LastShowTime = 0;
-int          LastDogKick  = 0;
+uint32_t     LastTimeRead = 0;
+uint32_t     LastShowTime = 0;
+uint32_t     LastDogKick  = 0;
 uint8_t      MacAddress[6];
 char         DateTime[] = "DateTime";
 
-int      XtouchPlace = 0; // Clicked X
-int      YtouchPlace = 0; // Clicked Y
+uint16_t     XtouchPlace = 0; // Clicked X
+uint16_t     YtouchPlace = 0; // Clicked Y
 
 bool     BindButton  = false;
 
@@ -3173,7 +3159,6 @@ void setup()
     // SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
     //  **   BUT then re-comment it!! Otherwise it will reset to same time on every boot up! **
     //  ***************************************************************************************
-    RecoveryTimer = millis();
     BoundFlag     = false;
     TxOnTime      = millis();
     UpdateModelsNameEveryWhere();

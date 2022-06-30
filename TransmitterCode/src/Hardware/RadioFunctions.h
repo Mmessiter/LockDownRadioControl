@@ -70,6 +70,19 @@
 #define UNCOMPRESSEDWORDS  20                        // DATA TO SEND = 40  bytes
 #define COMPRESSEDWORDS   UNCOMPRESSEDWORDS * 3 / 4  // COMPRESSED DATA SENT = 30  bytes
 #define BINDPIPETIMEOUT    1000                      // timeout for switching from Bound to Default pipe
+
+// **************************************************************************
+//                            FHSS PARAMETERS                               *
+//***************************************************************************
+
+#define PACEMAKER                   8    // MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
+#define RETRYCOUNT                  3    // auto retries inside nRF24L01
+#define RETRYWAIT                   1    // Wait between retries is RetryWait+1 * 250us. A failed packet therefore takes (RetryWait+1 * 250us) * RetryCount
+#define LOSTCONTACTCUTOFF           5    // How many packets to lose before reconnect triggers  (>=5) 5*8 = 40 ms (40 ms = RX timeout)
+#define RECONNECT_CHANNELS_COUNT    3    // How many channels to try when reconnecting
+#define RECONNECT_CHANNELS_START    12   // Offset into channels' array
+#define RED_LED_ON_TIME             1000 // How many ms of no connection before RED led comes on
+
 // **************************************************************************
 //                               Colours                                    *
 // **************************************************************************
@@ -254,18 +267,6 @@
 #define RANGEMIN 0    // = Frsky at 0 %
 
 // **************************************************************************
-//                            FHSS PARAMETERS                               *
-//***************************************************************************
-
-#define PACEMAKER                   8   // MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
-#define RETRYCOUNT                  3   // auto retries inside nRF24L01
-#define RETRYWAIT                   1   // Wait between retries is RetryWait+1 * 250us. A failed packet therefore takes (RetryWait+1 * 250us) * RetryCount
-#define LOSTCONTACTCUTOFF           5   // How many packets to lose before reconnect triggers  (>=5) 5*8 = 40 ms (40 ms = RX timeout)
-#define RECONNECT_CHANNELS_COUNT    3   // How many channels to try when reconnecting
-#define RECONNECT_CHANNELS_START    12  // Offset into channels' array
-#define RED_LED_ON_TIME             1000 // How many ms of no connection before RED led comes on
-
-// **************************************************************************
 //                            SEND MODE PARAMETERS                          *
 //***************************************************************************
 
@@ -319,11 +320,11 @@ extern bool           Connected;
 extern uint16_t       CompressedData[];
 extern uint8_t        FHSS_Channels[];
 extern struct         Payload AckPayload;
-extern int            RangeTestLostPackets;
+extern uint16_t       RangeTestLostPackets;
 extern uint8_t        RecentPacketsLost;
 extern uint8_t        AckPayloadSize;
 extern uint8_t        SizeOfCompressedData;
-extern int            RangeTestGoodPackets;
+extern uint16_t       RangeTestGoodPackets;
 extern uint8_t        NextChannelNumber;
 extern uint32_t       TotalledRecentPacketsLost;
 extern uint32_t       TxOnTime;
