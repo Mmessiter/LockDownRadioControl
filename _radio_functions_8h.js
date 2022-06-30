@@ -178,6 +178,7 @@ var _radio_functions_8h =
     [ "LoadPacketData", "_radio_functions_8h.html#ac4ffb9b555ce8d38f615610dc89b5499", null ],
     [ "LogConnection", "_radio_functions_8h.html#a896d9c3f90c2a4c083748097a98bc96b", null ],
     [ "LogDisConnection", "_radio_functions_8h.html#a01c8a29ed73a0c490282e23e119eca14", null ],
+    [ "LogThisLongGap", "_radio_functions_8h.html#a4d0ec00f44761a9280cb95ba073d277e", null ],
     [ "MapToSBUS", "_radio_functions_8h.html#a6a495c5560f12cc3fd3df9454927d681", null ],
     [ "ParseAckPayload", "_radio_functions_8h.html#a230e862a4da0f66746b6b3afba6bd77a", null ],
     [ "PreScan", "_radio_functions_8h.html#a5e3e764f8311564f5e20c3a838b25c07", null ],
