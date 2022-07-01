@@ -13,7 +13,7 @@ var searchData=
   ['centisecond_10',['centisecond',['../struct_tiny_g_p_s_time.html#a1f74ad4a2a53e0ee19f8e3a6b2bc985f',1,'TinyGPSTime']]],
   ['centredegrees_11',['CentreDegrees',['../_transmitter_code_2src_2main_8cpp.html#a90b5b04465812372bdda286367ed8ed8',1,'main.cpp']]],
   ['centresticks_12',['CENTRESTICKS',['../_radio_functions_8h.html#a53bc52cfc1253f58c2f3835aa39205a3',1,'RadioFunctions.h']]],
-  ['centretrims_13',['CentreTrims',['../_transmitter_code_2src_2main_8cpp.html#a608cf928b58a8597d2411a3482365abd',1,'main.cpp']]],
+  ['centretrims_13',['CentreTrims',['../_transmitter_code_2src_2main_8cpp.html#a4d21fc3e237eec44b6cc9a5d102249dd',1,'main.cpp']]],
   ['channel10switch_14',['Channel10Switch',['../_transmitter_code_2src_2main_8cpp.html#ada8ced2776300f41d0d8b5eb8ee7b9d8',1,'main.cpp']]],
   ['channel10switchvalue_15',['Channel10SwitchValue',['../_transmitter_code_2src_2main_8cpp.html#a0fc5e00e5ccee11691b2be777897292e',1,'main.cpp']]],
   ['channel11switch_16',['Channel11Switch',['../_transmitter_code_2src_2main_8cpp.html#ae5cc2e1bcd0e25bfab90eff6e9d01e3b',1,'main.cpp']]],

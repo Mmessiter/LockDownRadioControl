@@ -69,7 +69,7 @@ var searchData=
   ['reserved0_66',['reserved0',['../structsensors__event__t.html#a8be4dc00344f46abf29e06251bf9fad9',1,'sensors_event_t']]],
   ['reset_67',['reset',['../class_adafruit___b_m_p280.html#a6ef79c9cc7ed5d3548ed69785bf627ed',1,'Adafruit_BMP280']]],
   ['resetsenttime_68',['resetSentTime',['../class_adafruit___g_p_s.html#a1194f23fada702be6e58b24a62402d39',1,'Adafruit_GPS']]],
-  ['resetsubtrims_69',['ResetSubTrims',['../_transmitter_code_2src_2main_8cpp.html#a0b5bf6a4444e93f7c2f99264c414037d',1,'main.cpp']]],
+  ['resetsubtrims_69',['ResetSubTrims',['../_transmitter_code_2src_2main_8cpp.html#a15a54a63b911d3a5d622cd12bc440ab6',1,'main.cpp']]],
   ['resolution_70',['resolution',['../structsensor__t.html#a926aba3216afd50e62c0a6cdbcc7433a',1,'sensor_t']]],
   ['response_71',['response',['../structnmea__datavalue__t.html#a0fc893fd25c28ff4ee9f5142f4c309c0',1,'nmea_datavalue_t']]],
   ['restorebrightness_72',['RestoreBrightness',['../_radio_functions_8h.html#a49da3478d89a22069e29c7f00cb46a5f',1,'RestoreBrightness():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a49da3478d89a22069e29c7f00cb46a5f',1,'RestoreBrightness():&#160;main.cpp']]],

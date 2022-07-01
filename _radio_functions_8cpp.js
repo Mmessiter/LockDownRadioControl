@@ -10,7 +10,7 @@ var _radio_functions_8cpp =
     [ "DrawFhssBox", "_radio_functions_8cpp.html#a6bdc6419b47dda71d0d2c8faf652adc2", null ],
     [ "ExecuteMacro", "_radio_functions_8cpp.html#a78f22801971c106db61d728dd345e28e", null ],
     [ "HopToNextChannel", "_radio_functions_8cpp.html#a52aa3e80bccf5e75346c93fdae63122d", null ],
-    [ "InitRadio", "_radio_functions_8cpp.html#a86ce6c54618629a61b8502786d2ce82c", null ],
+    [ "InitRadio", "_radio_functions_8cpp.html#a799f38bc33abdb30eec1d7db3cf27d58", null ],
     [ "Procrastinate", "_radio_functions_8cpp.html#a760609a682300dfe6bfaac737fd4d5eb", null ],
     [ "RunMacro", "_radio_functions_8cpp.html#a91fb686ba2d3111821721ab33b442918", null ],
     [ "ScanAllChannels", "_radio_functions_8cpp.html#a3856ba0adae43d089f08c7b7f653b306", null ],

@@ -5,7 +5,7 @@ var searchData=
   ['saveonemodel_2',['SaveOneModel',['../_transmitter_code_2src_2main_8cpp.html#a23e0cf21492258d84314ae4d1c4a9042',1,'main.cpp']]],
   ['savetxstuff_3',['SaveTXStuff',['../_transmitter_code_2src_2main_8cpp.html#a9214716193ab9843267fc070ebfa12ff',1,'main.cpp']]],
   ['scanallchannels_4',['ScanAllChannels',['../_radio_functions_8h.html#a3856ba0adae43d089f08c7b7f653b306',1,'ScanAllChannels():&#160;RadioFunctions.cpp'],['../_radio_functions_8cpp.html#a3856ba0adae43d089f08c7b7f653b306',1,'ScanAllChannels():&#160;RadioFunctions.cpp']]],
-  ['scani2c_5',['ScanI2c',['../_transmitter_code_2src_2main_8cpp.html#a20ffd6680226b1e058002512386e7770',1,'ScanI2c():&#160;main.cpp'],['../_sensor_hub_t32_2src_2main_8cpp.html#a20ffd6680226b1e058002512386e7770',1,'ScanI2c():&#160;main.cpp'],['../_receiver_code_2src_2main_8cpp.html#a20ffd6680226b1e058002512386e7770',1,'ScanI2c():&#160;main.cpp']]],
+  ['scani2c_5',['ScanI2c',['../_transmitter_code_2src_2main_8cpp.html#a887240a00b11c00c971e633ed47319f9',1,'ScanI2c():&#160;main.cpp'],['../_sensor_hub_t32_2src_2main_8cpp.html#a20ffd6680226b1e058002512386e7770',1,'ScanI2c():&#160;main.cpp'],['../_receiver_code_2src_2main_8cpp.html#a20ffd6680226b1e058002512386e7770',1,'ScanI2c():&#160;main.cpp']]],
   ['scrollhelpfile_6',['ScrollHelpFile',['../_transmitter_code_2src_2main_8cpp.html#ab0a84052e41734eb43651d054ee2b4c5',1,'main.cpp']]],
   ['sdreadbyte_7',['SDReadByte',['../_transmitter_code_2src_2main_8cpp.html#af5db4d6f5f17a24fc08503a4e14de200',1,'main.cpp']]],
   ['sdreadint_8',['SDReadInt',['../_transmitter_code_2src_2main_8cpp.html#ab6670478c40dbf268914a0bfc6831085',1,'main.cpp']]],

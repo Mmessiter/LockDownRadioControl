@@ -4,7 +4,7 @@ var searchData=
   ['calibratesticks_1',['CalibrateSticks',['../_transmitter_code_2src_2main_8cpp.html#ae1b8cef371d26fca2b4f5a101be7a8ba',1,'main.cpp']]],
   ['cardinal_2',['cardinal',['../class_tiny_g_p_s_plus.html#a8c9e9444552ff85a505ffc6933dda03c',1,'TinyGPSPlus']]],
   ['centisecond_3',['centisecond',['../struct_tiny_g_p_s_time.html#a1f74ad4a2a53e0ee19f8e3a6b2bc985f',1,'TinyGPSTime']]],
-  ['centretrims_4',['CentreTrims',['../_transmitter_code_2src_2main_8cpp.html#a608cf928b58a8597d2411a3482365abd',1,'main.cpp']]],
+  ['centretrims_4',['CentreTrims',['../_transmitter_code_2src_2main_8cpp.html#a4d21fc3e237eec44b6cc9a5d102249dd',1,'main.cpp']]],
   ['channelcentres_5',['ChannelCentres',['../_transmitter_code_2src_2main_8cpp.html#a0e7ca9043d8fa769e8a9290df885e594',1,'main.cpp']]],
   ['charsprocessed_6',['charsProcessed',['../class_tiny_g_p_s_plus.html#addfc1fdbfddfeef2774dda1be42cdd55',1,'TinyGPSPlus']]],
   ['check_7',['check',['../class_adafruit___g_p_s.html#ae4abe9822d8ca59866bbb44de7910881',1,'Adafruit_GPS']]],
