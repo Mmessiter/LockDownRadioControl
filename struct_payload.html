@@ -119,8 +119,8 @@ Public Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >AckPayload Stucture for data returned to transmitter.</p>
-<p >This first byte "Purpose" defines what all the other bytes mean, AND ... the highest BIT of Purpose means ** HOP TO NEXT CHANNEL A.S.A.P. (IF ON) ** the lower 7 BITs then define the meaning of the remainder of the ackpayload bytes If Purpose = 1 then ...</p>
-<p >AckPayload.Byte2 = ThisRadio; // Radio in current use Byte1 and Byte2 are free AckPayload.Byte3 = RXVERSION_MAJOR; AckPayload.Byte4 = RXVERSION_MINOR; AckPayload.Byte5 = RXVERSION_MINIMUS;</p>
+<p >This first byte "Purpose" defines what all the other bytes mean, AND ... the highest BIT of Purpose means ** HOP TO NEXT CHANNEL A.S.A.P. (IF ON) ** the lower 7 BITs then define the meaning of the remainder of the ackpayload bytes If Purpose == 1 then ...</p>
+<p >AckPayload.Byte2 = ThisRadio; // RX Transceiver in current use AckPayload.Byte3 = RXVERSION_MAJOR; AckPayload.Byte4 = RXVERSION_MINOR; AckPayload.Byte5 = RXVERSION_MINIMUS;</p>
 <p >If Purpose = 2 then ... </p>
 
 <p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00067">67</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
