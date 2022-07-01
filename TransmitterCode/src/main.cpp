@@ -365,7 +365,7 @@ bool     LogRXSwaps =  false;
 bool     ThereIsMoreToSee = false;
 bool     UseLog = false;
 
- uint8_t * FHSSChPointer;                                                                                 // pointer for channels array (three only used for reconnect)
+uint8_t * FHSSChPointer;                                                                            // pointer for channels array (three only used for reconnect)
 
 FLASHMEM uint8_t FHSS_Channels1[42] = {93,111,107,103,106,97,108,102,118,                           // TEST array 
 104,101,109,98,113,124,115,91,96,85,117,89,99,114,87,112,
@@ -384,7 +384,7 @@ uint8_t  GmonthDay;// = tm.Day;    // 1-31
 uint8_t  Gmonth;   // = tm.Month;  // 1-12
 uint8_t  Gyear;    // = tm.Year;   // 0-99
 bool     GPSTimeSynched  =   false;
-int      DeltaGMT           = 0;
+short int      DeltaGMT           = 0;
 uint32_t SwapWaveBandTimer  = 0;
 uint8_t  UkRulesCounter     = 0;
 bool     UkRules            = true;
