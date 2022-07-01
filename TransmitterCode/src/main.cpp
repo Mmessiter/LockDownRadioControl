@@ -129,9 +129,9 @@ uint16_t      DefaultTrimRepeatSpeed  = 600;
      * This first byte "Purpose" defines what all the other bytes mean, AND ...
      * the highest BIT of Purpose means ** HOP TO NEXT CHANNEL A.S.A.P. (IF ON) **
      * the lower 7 BITs then define the meaning of the remainder of the ackpayload bytes
-     * If Purpose = 1 then ...
+     * If Purpose == 1 then ...
      * 
-     * AckPayload.Byte2           =  ThisRadio;            // Radio in current use  Byte1 and Byte2 are free
+     * AckPayload.Byte2           =  ThisRadio;              // RX Transceiver in current use 
      * AckPayload.Byte3           =  RXVERSION_MAJOR;
      * AckPayload.Byte4           =  RXVERSION_MINOR;
      * AckPayload.Byte5           =  RXVERSION_MINIMUS;
@@ -183,12 +183,12 @@ double yPoints[5];
 double xPoint = 0;
 double yPoint = 0;
 
-int           BoxBottom;
-int           BoxTop;
-int           BoxLeft;
-int           BoxRight;
-int           ClickX;
-int           ClickY;
+uint16_t      BoxBottom;
+uint16_t      BoxTop;
+uint16_t      BoxLeft;
+uint16_t      BoxRight;
+uint16_t      ClickX;
+uint16_t      ClickY;
 bool          CalibratedYet                = false;
 uint16_t      AnalogueInput[PROPOCHANNELS] = {A0, A1, A2, A3, A6, A7, A8, A9}; // PROPO Channels for transmission
 uint8_t       CurrentMode                  = NORMAL;
