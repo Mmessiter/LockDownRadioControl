@@ -84,6 +84,16 @@
 #define RED_LED_ON_TIME             1000 // How many ms of no connection before RED led comes on
 
 // **************************************************************************
+//                            SEND MODE PARAMETERS                          *
+//***************************************************************************
+
+#define NORMAL          0 // Normal = transmit as usual
+#define CALIBRATELIMITS 1 // Calibrate limits (SEND NO DATA)
+#define CENTRESTICKS    2 // Calibrate Centres (SEND NO DATA)
+#define SCANWAVEBAND    3 // Scan waveband (SEND NO DATA)
+#define SENDNOTHING     4 // Transmission off (SEND NO DATA)
+
+// **************************************************************************
 //                               Colours                                    *
 // **************************************************************************
 
@@ -255,16 +265,6 @@
 #define SBUSPORT Serial2
 #define RANGEMAX 2047 // = Frsky at 150 %
 #define RANGEMIN 0    // = Frsky at 0 %
-
-// **************************************************************************
-//                            SEND MODE PARAMETERS                          *
-//***************************************************************************
-
-#define NORMAL          0 // Normal for transmit as usual
-#define CALIBRATELIMITS 1 // Calibrate limits
-#define CENTRESTICKS    2 // Calibrate Centres
-#define SCANWAVEBAND    3 // Scan waveband
-#define SENDNOTHING     4 // Transmission off
 
 // **************************************************************************
 //                          NEXTION SERIAL CONNECTION                       *
