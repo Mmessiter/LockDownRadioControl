@@ -440,7 +440,6 @@ var _transmitter_code_2src_2main_8cpp =
     [ "SticksMode", "_transmitter_code_2src_2main_8cpp.html#a5624a3289e95022504382c0d5a194b61", null ],
     [ "SubTrims", "_transmitter_code_2src_2main_8cpp.html#a8c98d83f822e5c1a5e605844bb8a75cd", null ],
     [ "SubTrimToEdit", "_transmitter_code_2src_2main_8cpp.html#a66b4a2fa113bac114f91593f34ad274a", null ],
-    [ "success", "_transmitter_code_2src_2main_8cpp.html#a78e0e3b7ed8385dd9fdbd0d0b6836054", null ],
     [ "SwapWaveBand", "_transmitter_code_2src_2main_8cpp.html#aaa4402c66bda6731ffa04b970e1eaeea", null ],
     [ "SwapWaveBandTimer", "_transmitter_code_2src_2main_8cpp.html#a8dbdaf66b1bf538b3c1aea4b6ce6c8c2", null ],
     [ "Switch", "_transmitter_code_2src_2main_8cpp.html#a93ac0e6bbb965111abd01e393a21fcfe", null ],
