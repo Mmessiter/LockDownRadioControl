@@ -457,7 +457,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "TransmitterVersionNumber", "_transmitter_code_2src_2main_8cpp.html#a60227ba657b591c1f0123978897e60aa", null ],
     [ "TrimClicks", "_transmitter_code_2src_2main_8cpp.html#ae72cd49c59d06c6160b52860f2c73f1a", null ],
     [ "TrimFactor", "_transmitter_code_2src_2main_8cpp.html#a9a5554921fdc9aa1218a50b8754e3934", null ],
-    [ "TrimNumber", "_transmitter_code_2src_2main_8cpp.html#a9124a1dc8d8e671efbeba644cd83ce19", null ],
+    [ "TrimNumber", "_transmitter_code_2src_2main_8cpp.html#a90ae717bdcc02bd1388ff25afb8fdad6", null ],
     [ "TrimRepeatSpeed", "_transmitter_code_2src_2main_8cpp.html#a321797809a871259bfbb5986b5972d6e", null ],
     [ "Trims", "_transmitter_code_2src_2main_8cpp.html#a1702df657672608db5b2abf670f4f948", null ],
     [ "TrimsReversed", "_transmitter_code_2src_2main_8cpp.html#a13a1bdd6df9d527cfa5e3c1447c0d31a", null ],

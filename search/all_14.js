@@ -48,7 +48,7 @@ var searchData=
   ['trim_5fview_45',['TRIM_VIEW',['../_radio_functions_8h.html#ac618bf3825a805ae53150dd664baa778',1,'RadioFunctions.h']]],
   ['trimclicks_46',['TrimClicks',['../_transmitter_code_2src_2main_8cpp.html#ae72cd49c59d06c6160b52860f2c73f1a',1,'main.cpp']]],
   ['trimfactor_47',['TrimFactor',['../_transmitter_code_2src_2main_8cpp.html#a9a5554921fdc9aa1218a50b8754e3934',1,'main.cpp']]],
-  ['trimnumber_48',['TrimNumber',['../_transmitter_code_2src_2main_8cpp.html#a9124a1dc8d8e671efbeba644cd83ce19',1,'main.cpp']]],
+  ['trimnumber_48',['TrimNumber',['../_transmitter_code_2src_2main_8cpp.html#a90ae717bdcc02bd1388ff25afb8fdad6',1,'main.cpp']]],
   ['trimrepeatspeed_49',['TrimRepeatSpeed',['../_transmitter_code_2src_2main_8cpp.html#a321797809a871259bfbb5986b5972d6e',1,'main.cpp']]],
   ['trims_50',['Trims',['../_transmitter_code_2src_2main_8cpp.html#a1702df657672608db5b2abf670f4f948',1,'main.cpp']]],
   ['trimsreversed_51',['TrimsReversed',['../_transmitter_code_2src_2main_8cpp.html#a13a1bdd6df9d527cfa5e3c1447c0d31a',1,'main.cpp']]],
