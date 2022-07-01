@@ -25,7 +25,7 @@ var searchData=
   ['degstopercent_22',['DegsToPercent',['../_transmitter_code_2src_2main_8cpp.html#a68b36025c7478c0710565b4fb059d9bc',1,'main.cpp']]],
   ['deletelogfile_23',['DeleteLogFile',['../_transmitter_code_2src_2main_8cpp.html#aead154aa403de2fe97ad750378011b10',1,'main.cpp']]],
   ['deletelogfile1_24',['DeleteLogFile1',['../_transmitter_code_2src_2main_8cpp.html#adb5aacd8adab39f57e32a80cf537a989',1,'main.cpp']]],
-  ['deltagmt_25',['DeltaGMT',['../_transmitter_code_2src_2main_8cpp.html#afb18d0459efaad441f7c0cf7a7faec84',1,'main.cpp']]],
+  ['deltagmt_25',['DeltaGMT',['../_transmitter_code_2src_2main_8cpp.html#ab509e0e6c824d1a805643fbdae7a9a5e',1,'main.cpp']]],
   ['depthtokeel_26',['depthToKeel',['../class_adafruit___g_p_s.html#a907f295b8c05b8cf112435e0b2e72c0a',1,'Adafruit_GPS']]],
   ['depthtotransducer_27',['depthToTransducer',['../class_adafruit___g_p_s.html#a8b27e72fb6a2a68fba38e8867ee965f9',1,'Adafruit_GPS']]],
   ['destinationlat_28',['DestinationLat',['../_sensor_hub_t32_2src_2main_8cpp.html#a8c2d07492cf82a17c5cd61777bed8b63',1,'main.cpp']]],

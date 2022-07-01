@@ -10,7 +10,7 @@ var searchData=
   ['defaultpipe_7',['DefaultPipe',['../_transmitter_code_2src_2main_8cpp.html#a0b9fd9f8e85725c128617f006132ea57',1,'DefaultPipe():&#160;main.cpp'],['../_radio_functions_8h.html#a0b9fd9f8e85725c128617f006132ea57',1,'DefaultPipe():&#160;main.cpp']]],
   ['defaulttrimrepeatspeed_8',['DefaultTrimRepeatSpeed',['../_transmitter_code_2src_2main_8cpp.html#ae6d47d8ad12367e1eb9c48442cfdcf99',1,'main.cpp']]],
   ['deg_9',['deg',['../struct_raw_degrees.html#a11831d9220f303bd716d9412af28e84e',1,'RawDegrees']]],
-  ['deltagmt_10',['DeltaGMT',['../_transmitter_code_2src_2main_8cpp.html#afb18d0459efaad441f7c0cf7a7faec84',1,'main.cpp']]],
+  ['deltagmt_10',['DeltaGMT',['../_transmitter_code_2src_2main_8cpp.html#ab509e0e6c824d1a805643fbdae7a9a5e',1,'main.cpp']]],
   ['depthtokeel_11',['depthToKeel',['../class_adafruit___g_p_s.html#a907f295b8c05b8cf112435e0b2e72c0a',1,'Adafruit_GPS']]],
   ['depthtotransducer_12',['depthToTransducer',['../class_adafruit___g_p_s.html#a8b27e72fb6a2a68fba38e8867ee965f9',1,'Adafruit_GPS']]],
   ['destinationlat_13',['DestinationLat',['../_sensor_hub_t32_2src_2main_8cpp.html#a8c2d07492cf82a17c5cd61777bed8b63',1,'main.cpp']]],
