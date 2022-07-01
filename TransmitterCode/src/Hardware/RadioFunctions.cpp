@@ -311,7 +311,7 @@ FASTRUN void HopToNextChannel()
 
 /*********************************************************************************************************************************/
 
-void InitRadio(uint64_t Pipe)
+FLASHMEM void InitRadio(uint64_t Pipe)
 {
     Radio1.begin();
     Radio1.setPALevel(RF24_PA_MAX);

@@ -502,7 +502,7 @@ for (uint8_t i = 0; i < MAXMACROS; ++i){
   }
 }
 /************************************************************************************************************/
-void ResetSubTrims(){
+FLASHMEM void ResetSubTrims(){
     for (int i = 0;i<16;++i){
             SubTrims[i]= 127;
     }
@@ -2126,7 +2126,7 @@ void UpdateTrimView()
 }
 /*********************************************************************************************************************************/
 
-void ScanI2c()
+FLASHMEM void ScanI2c()
 {
     int ii;
     USE_INA219 = false;
@@ -2304,7 +2304,7 @@ void UpdateModelsNameEveryWhere()
 
 /*********************************************************************************************************************************/
 
-void InitSwitchesAndTrims()
+FLASHMEM void InitSwitchesAndTrims()
 {
     for (int i = 0; i < 8; ++i) {
         pinMode(SwitchNumber[i], INPUT_PULLUP);
@@ -2315,7 +2315,7 @@ void InitSwitchesAndTrims()
 /*********************************************************************************************************************************/
 
 /** @brief STICKS CALIBRATION */
-void InitMaxMin()
+FLASHMEM void InitMaxMin()
 {
     for (int i = 0; i < CHANNELSUSED; ++i) {
         ChannelMax[i]    = 1024;
@@ -2328,7 +2328,7 @@ void InitMaxMin()
 
 /*********************************************************************************************************************************/
 
-void CentreTrims()
+FLASHMEM void CentreTrims()
 {
     for (int j = 0; j <= FLIGHTMODESUSED; ++j) {
         for (int i = 0; i < CHANNELSUSED; ++i) {
@@ -2339,7 +2339,7 @@ void CentreTrims()
 
 /*********************************************************************************************************************************/
 
-void InitCentreDegrees()
+FLASHMEM void InitCentreDegrees()
 {
   
     for (int j = 1; j <= 4; ++j) {
@@ -2861,7 +2861,7 @@ void SetDS1307ToCompilerTime()
 
 /************************************************************************************************************/
 
-void GetTXVersionNumber()
+FLASHMEM void GetTXVersionNumber()
 {
     char    nbuf[5];
     uint8_t Txv1 = TXVERSION_MAJOR;
