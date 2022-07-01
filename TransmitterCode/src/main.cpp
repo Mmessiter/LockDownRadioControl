@@ -208,20 +208,37 @@ uint16_t      MemoryForTransmtter  = 0;   // SD space for transmitter parameters
 uint16_t      OneModelMemory       = 0;   // SD space for every model's parameters
 uint16_t      SDCardAddress        = 0;   // Address on SD card (offset from zero)
 
+                                                                       // pointer for channels array (three only used for reconnect)
+
+FLASHMEM uint8_t FHSS_Channels1[42] = {93,111,107,103,106,97,108,102,118,                           // TEST array 
+104,101,109,98,113,124,115,91,96,85,117,89,99,114,87,112,
+86,94,92,119,120,100,121,123,95,122,105,84,116,90,110,88};
+
+FLASHMEM uint8_t FHSS_Channels[83] = {51,28,24,61,64,55,66,19,76,21,59,67,15,71,82,32,49,69,13,2,34,47,20,16,72,  // UK array
+35,57,45,29,75,3,41,62,11,9,77,37,8,31,36,18,17,50,78,73,30,79,6,23,40,
+54,12,80,53,22,1,74,39,58,63,70,52,42,25,43,26,14,38,48,68,33,27,60,44,46,
+56,7,81,5,65,4,10};
+
+uint8_t * FHSSChPointer;     
+
+char        page_FrontView[]            = "page FrontView";
+char        page_FhssView[]             = "page FhssView";
+char        FrontView_Hours[]           = "Hours";
+char        FrontView_Mins[]            = "Mins";
+char        FrontView_Secs[]            = "Secs";
+char        StartBackGround[]           = "click Background,0";
+char        ModelsFile[]                = "models.dat";
+uint8_t     SwitchNumber[8]             = {SWITCH0, SWITCH1, SWITCH2, SWITCH3, SWITCH4, SWITCH5, SWITCH6, SWITCH7};
+const uint8_t     TrimNumber[8]               = {TRIM1A, TRIM1B, TRIM2A, TRIM2B, TRIM3A, TRIM3B, TRIM4A, TRIM4B};
+const int   chipSelect                  = BUILTIN_SDCARD;
+char        DateTime[]                  = "DateTime";
+char        ScreenViewTimeout[]         = "Sto";                  // needed for display info
+char        NoSleeping[]                = "thsp=0";
+
+
+
 char     ModelName[30];
-char     FrontView_Hours[]           = "Hours";
-char     FrontView_Mins[]            = "Mins";
-char     FrontView_Secs[]            = "Secs";
-char     page_FrontView[]            = "page FrontView";
-char     page_FhssView[]             = "page FhssView";
-char     FhssView_Rlow[]             = "FHSSLow";
-char     FhssView_Rhigh[]            = "FHSSHigh";
-char     BindScreenBox[]             = "BindStatus";
-char     ScreenViewTimeout[]         = "Sto";                  // needed for display info
-char     NoSleeping[]                = "thsp=0";
 uint16_t ScreenTimeout               = 120;                     // Screen has two minute timeout by default
-char     HtextCMD[]                  = "click HelpText,0";
-char     StartBackGround[]           = "click Background,0";
 int      LastLinePosition            = 0;
 uint8_t  RXCellCount                 = 2;
 bool     JustHoppedFlag              = true;
@@ -270,10 +287,10 @@ char     TransmitterVersionNumber[8] = " ";
 File     ModelsFileNumber;
 
 Adafruit_INA219 ina219;
-const int chipSelect = BUILTIN_SDCARD;
+
 char      SingleModelFile[80];
 bool      SingleModelFlag = false;
-char      ModelsFile[]    = "models.dat";
+
 bool      ModelsFileOpen  = false;
 bool      USE_INA219      = false;
 uint8_t   BindingNow      = 0;
@@ -282,8 +299,8 @@ bool      BoundFlag       = false;
 int       PipeTimeout     = 0;
 bool      Switch[8];
 bool      TrimSwitch[8];
-uint8_t   SwitchNumber[8] = {SWITCH0, SWITCH1, SWITCH2, SWITCH3, SWITCH4, SWITCH5, SWITCH6, SWITCH7};
-uint8_t   TrimNumber[8]   = {TRIM1A, TRIM1B, TRIM2A, TRIM2B, TRIM3A, TRIM3B, TRIM4A, TRIM4B};
+
+
 uint8_t FMSwitch   = FLIGHTMODESWITCH;
 uint8_t AutoSwitch = AUTOSWITCH;
 uint8_t Channel9Switch  = 0;
@@ -330,7 +347,7 @@ uint32_t     LastTimeRead = 0;
 uint32_t     LastShowTime = 0;
 uint32_t     LastDogKick  = 0;
 uint8_t      MacAddress[6];
-char         DateTime[] = "DateTime";
+
 
 uint16_t     XtouchPlace = 0; // Clicked X
 uint16_t     YtouchPlace = 0; // Clicked Y
@@ -365,16 +382,6 @@ bool     LogRXSwaps =  false;
 bool     ThereIsMoreToSee = false;
 bool     UseLog = false;
 
-uint8_t * FHSSChPointer;                                                                            // pointer for channels array (three only used for reconnect)
-
-FLASHMEM uint8_t FHSS_Channels1[42] = {93,111,107,103,106,97,108,102,118,                           // TEST array 
-104,101,109,98,113,124,115,91,96,85,117,89,99,114,87,112,
-86,94,92,119,120,100,121,123,95,122,105,84,116,90,110,88};
-
-FLASHMEM uint8_t FHSS_Channels[83] = {51,28,24,61,64,55,66,19,76,21,59,67,15,71,82,32,49,69,13,2,34,47,20,16,72,  // UK array
-35,57,45,29,75,3,41,62,11,9,77,37,8,31,36,18,17,50,78,73,30,79,6,23,40,
-54,12,80,53,22,1,74,39,58,63,70,52,42,25,43,26,14,38,48,68,33,27,60,44,46,
-56,7,81,5,65,4,10};
 
 uint8_t  Gsecond;  // = tm.Second; // 0-59
 uint8_t  Gminute;  // = tm.Minute; // 0-59
