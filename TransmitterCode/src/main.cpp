@@ -2852,7 +2852,7 @@ void WatchDogCallBack()
 
 /*********************************************************************************************************************************/
 
-void SetDS1307ToCompilerTime()
+FLASHMEM void SetDS1307ToCompilerTime()
 {
     if (getDate(__DATE__) && getTime(__TIME__)) {
         RTC.write(tm);
@@ -2874,18 +2874,18 @@ FLASHMEM void GetTXVersionNumber()
     strcat(TransmitterVersionNumber, nbuf);
 }
 /************************************************************************************************************/
-void SetUKFrequencies(){
+FASTRUN void SetUKFrequencies(){
             FHSSChPointer = FHSS_Channels; 
             UkRules = true;     
 }
 /************************************************************************************************************/
-void SetTestFrequencies(){
+FASTRUN void SetTestFrequencies(){
             FHSSChPointer = FHSS_Channels1; 
             UkRules = false;     
 }
 
 /************************************************************************************************************/
-void CreateTimeStamp(char *  DateAndTime){
+FASTRUN void CreateTimeStamp(char *  DateAndTime){
     char NB[10];
     char zero[]     = "0";
     char Colon[]    = "."; // a dot!
@@ -2905,7 +2905,7 @@ void CreateTimeStamp(char *  DateAndTime){
 }
 
 /************************************************************************************************************/
-void CreateTimeDateStamp(char *  DateAndTime){
+FASTRUN void CreateTimeDateStamp(char *  DateAndTime){
     char NB[10];
     char zero[]     = "0";
     char Dash[]     = "-";
@@ -2932,7 +2932,7 @@ void CreateTimeDateStamp(char *  DateAndTime){
     }
 }
 /************************************************************************************************************/
-void MakeLogFileName(char * LogFileName){
+FASTRUN void MakeLogFileName(char * LogFileName){
     char NB[10];
     char Ext[]      = ".LOG";
     if (RTC.read(tm)) { 
@@ -2942,11 +2942,11 @@ void MakeLogFileName(char * LogFileName){
     }
 }
 /************************************************************************************************************/
-void DeleteLogFile(char * LogFileName){
+FASTRUN void DeleteLogFile(char * LogFileName){
     SD.remove(LogFileName);
 }
 /************************************************************************************************************/
-void DeleteLogFile1(){
+FASTRUN void DeleteLogFile1(){
     char LogFileName[20];
     char LogTeXt[] = "LogText";     
     char BlankText[] = " ";     
@@ -2962,30 +2962,30 @@ void DeleteLogFile1(){
     }
 }
 /************************************************************************************************************/
-void OpenLogFileW(char * LogFileName){
+FASTRUN void OpenLogFileW(char * LogFileName){
     if (!LogFileOpen){
         LogFileNumber = SD.open(LogFileName, FILE_WRITE);
         LogFileOpen = true;
     }
 }
 /************************************************************************************************************/
-void OpenLogFileR(char * LogFileName){
+FASTRUN void OpenLogFileR(char * LogFileName){
     if (!LogFileOpen){
         LogFileNumber = SD.open(LogFileName, FILE_READ);
         LogFileOpen = true;
     }
 }
 /************************************************************************************************************/
-void CloseLogFile(){
+FASTRUN void CloseLogFile(){
     LogFileNumber.close();
     LogFileOpen = false;
 }
 /************************************************************************************************************/
-void WriteToLogFile(char * SomeData, uint16_t len){
+FASTRUN void WriteToLogFile(char * SomeData, uint16_t len){
     LogFileNumber.write(SomeData, len);
 }
 /************************************************************************************************************/
-void StartLogFile(){ 
+FASTRUN void StartLogFile(){ 
     char LogFileName[20];
     char LogHeader[]    = "Log file started: ";
     char crlf[]         = {'|',13,10,0};
@@ -3002,7 +3002,7 @@ void StartLogFile(){
                                                     // Log file is now open and ready for new data ...
 }
 // ************************************************************************
-void CheckLogFileIsOpen(){
+FASTRUN void CheckLogFileIsOpen(){
      char LogFileName[20];
      if (!LogFileOpen){
         MakeLogFileName(LogFileName);                   // Create a "today" filename
@@ -3010,7 +3010,7 @@ void CheckLogFileIsOpen(){
      }
 }
 // ************************************************************************
-void LogFilePreamble(){
+FASTRUN void LogFilePreamble(){
     char dbuf[12];
     char Divider[] = " - ";
     CheckLogFileIsOpen();
@@ -3019,14 +3019,14 @@ void LogFilePreamble(){
     WriteToLogFile(Divider,sizeof (Divider));           
 }
 // ************************************************************************
-void LogText(char * TheText, uint16_t len){
+FASTRUN void LogText(char * TheText, uint16_t len){
     char crlf[]  = {'|',13,10,0};
     LogFilePreamble();
     WriteToLogFile(TheText,len);
     WriteToLogFile(crlf, sizeof(crlf));
 }
 // ************************************************************************
-void LogConnection(){
+FASTRUN void LogConnection(){
         char TheText[] = "Connected to ";
         char buf[40] = " ";
         strcpy (buf,TheText);
@@ -3034,7 +3034,7 @@ void LogConnection(){
         LogText(buf, sizeof (buf));
 }
 // ************************************************************************
-void LogDisConnection(){ 
+FASTRUN void LogDisConnection(){ 
 char TheText[] = "Disconnected from ";
         char buf[40] = " ";
         strcpy (buf,TheText);
@@ -3042,7 +3042,7 @@ char TheText[] = "Disconnected from ";
         LogText(buf, sizeof (buf));
 }
 // ************************************************************************
-void LogNewFlightMode(){
+FASTRUN void LogNewFlightMode(){
     char Ltext[] = "Bank: ";
     char NB[5];
     char thetext[10];
@@ -3053,7 +3053,7 @@ void LogNewFlightMode(){
 }
 // ************************************************************************
 
-void LogThisRX(){
+FASTRUN void LogThisRX(){
     char Ltext[] = "RX: ";
     char thetext[10];
     strcpy (thetext,Ltext);
@@ -3062,13 +3062,13 @@ void LogThisRX(){
 }
 
 // ************************************************************************
-void LogLowBattery(){ // Not yet implemented
+FASTRUN void LogLowBattery(){ // Not yet implemented
     char TheText[]= "Low battery";
     LogText(TheText, strlen(TheText));
 }
 // ************************************************************************
 
-void LogThisGap(){
+FASTRUN void LogThisGap(){
     char Ltext[] = "Gap: ";
     char NB[5];
     char thetext[10];
@@ -3080,7 +3080,7 @@ void LogThisGap(){
 }
 // ************************************************************************
 
-void LogThisLongGap(){    // here is logged a Gap that exceeds one second - probably because rx was turned off
+FASTRUN void LogThisLongGap(){    // here is logged a Gap that exceeds one second - probably because rx was turned off
     ThisGap = (millis() - GapStart); 
     char Ltext[] = "Long Gap: ";
     char NB[5];
