@@ -1,11 +1,11 @@
 var searchData=
 [
-  ['calibratelimits_0',['CALIBRATELIMITS',['../_radio_functions_8h.html#a8d671ce93ba33f2f6b5c314108d3592d',1,'CALIBRATELIMITS():&#160;RadioFunctions.h'],['../_radio_functions_8h.html#a8d671ce93ba33f2f6b5c314108d3592d',1,'CALIBRATELIMITS():&#160;RadioFunctions.h']]],
+  ['calibratelimits_0',['CALIBRATELIMITS',['../_radio_functions_8h.html#a8d671ce93ba33f2f6b5c314108d3592d',1,'RadioFunctions.h']]],
   ['calibrateview_1',['CALIBRATEVIEW',['../_radio_functions_8h.html#ad2d9a19870ac880f7f6b2485345ccb6d',1,'RadioFunctions.h']]],
   ['ce_5foff_2',['CE_OFF',['../common_8h.html#a45f36ff4dbd4f62c8d80b9cd22a05e75',1,'common.h']]],
   ['ce_5fon_3',['CE_ON',['../common_8h.html#af59ccf587172ff1ab593f7a51276a720',1,'common.h']]],
   ['ce_5fpin_4',['CE_PIN',['../_radio_functions_8h.html#abb388c9dfbdca89b280a12c4af1a030f',1,'RadioFunctions.h']]],
-  ['centresticks_5',['CENTRESTICKS',['../_radio_functions_8h.html#a53bc52cfc1253f58c2f3835aa39205a3',1,'CENTRESTICKS():&#160;RadioFunctions.h'],['../_radio_functions_8h.html#a53bc52cfc1253f58c2f3835aa39205a3',1,'CENTRESTICKS():&#160;RadioFunctions.h']]],
+  ['centresticks_5',['CENTRESTICKS',['../_radio_functions_8h.html#a53bc52cfc1253f58c2f3835aa39205a3',1,'RadioFunctions.h']]],
   ['channelsused_6',['CHANNELSUSED',['../common_8h.html#ad143c01c2b36424b292b568f48cbe014',1,'CHANNELSUSED():&#160;common.h'],['../_radio_functions_8h.html#ad143c01c2b36424b292b568f48cbe014',1,'CHANNELSUSED():&#160;RadioFunctions.h']]],
   ['charsmax_7',['CHARSMAX',['../_radio_functions_8h.html#a2214b1aa5fbdf61eaa9061c051d3826d',1,'RadioFunctions.h']]],
   ['clickone_8',['CLICKONE',['../_radio_functions_8h.html#a896a6492ebc1b214b4e7e5ac4c3db2cd',1,'RadioFunctions.h']]],

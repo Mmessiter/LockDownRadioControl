@@ -7,5 +7,5 @@ var searchData=
   ['nmea_5fmax_5fsentence_5fid_4',['NMEA_MAX_SENTENCE_ID',['../_adafruit___g_p_s_8h.html#aaec49a2365b37bf9aa5c063076818a98',1,'NMEA_MAX_SENTENCE_ID():&#160;Adafruit_GPS.h'],['../_n_m_e_a__data_8h.html#aaec49a2365b37bf9aa5c063076818a98',1,'NMEA_MAX_SENTENCE_ID():&#160;NMEA_data.h']]],
   ['nmea_5fmax_5fsource_5fid_5',['NMEA_MAX_SOURCE_ID',['../_adafruit___g_p_s_8h.html#ae3b647e67968a2613fcf3fe5c0a9fb40',1,'NMEA_MAX_SOURCE_ID():&#160;Adafruit_GPS.h'],['../_n_m_e_a__data_8h.html#ae3b647e67968a2613fcf3fe5c0a9fb40',1,'NMEA_MAX_SOURCE_ID():&#160;NMEA_data.h']]],
   ['nmea_5fmax_5fwp_5fid_6',['NMEA_MAX_WP_ID',['../_n_m_e_a__data_8h.html#ada855ff3bc138b7c9df22f6df4ec46a6',1,'NMEA_data.h']]],
-  ['normal_7',['NORMAL',['../_radio_functions_8h.html#a1291f416b069313021b519eea62d5bf1',1,'NORMAL():&#160;RadioFunctions.h'],['../_radio_functions_8h.html#a1291f416b069313021b519eea62d5bf1',1,'NORMAL():&#160;RadioFunctions.h']]]
+  ['normal_7',['NORMAL',['../_radio_functions_8h.html#a1291f416b069313021b519eea62d5bf1',1,'RadioFunctions.h']]]
 ];
