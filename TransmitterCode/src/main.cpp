@@ -311,7 +311,6 @@ bool     FileError            = false;
 uint32_t RangeTestStart       = 0;
 uint16_t RangeTestGoodPackets = 0;
 uint16_t RangeTestLostPackets = 0;
-float    success              = 0; // percent of packets that  succeed
 uint8_t  SaveFlightMode       = 0;
 bool     FailSafeChannel[CHANNELSUSED];
 bool     SaveFailSafeNow                = false;
@@ -351,11 +350,11 @@ uint8_t  BlinkOnPhase  = 1;
 bool     LedWasGreen   = false;
 char     ThisRadio[4]  = "0 ";
 uint8_t  LastRadio     = 0;
-uint8_t NextChannel   = 0;
-bool    DoSbusSendOnly  = false;
-bool    BuddyMaster     = false;
-uint8_t BuddyTriggerChannel = 12;
-bool    SlaveHasControl = false;
+uint8_t  NextChannel   = 0;
+bool     DoSbusSendOnly  = false;
+bool     BuddyMaster     = false;
+uint8_t  BuddyTriggerChannel = 12;
+bool     SlaveHasControl = false;
 uint16_t Qnh            = 1009;               // pressure at sea level here/
 uint32_t ModelNameTimeCheck = 0;
 uint16_t LastModelLoaded    = 0;
@@ -365,9 +364,10 @@ char     RecentTextFile[20];
 bool     LogRXSwaps =  false;
 bool     ThereIsMoreToSee = false;
 bool     UseLog = false;
+
 uint8_t * FHSSChPointer;                                                              // pointer for channels array (first five only used for reconnect)
 
-uint8_t FHSS_Channels1[42] = {93,111,107,103,106,97,108,102,118,104,101,109,98,      // TEST array
+uint8_t FHSS_Channels1[42] = {93,111,107,103,106,97,108,102,118,104,101,109,98,                           // TEST array 
 113,124,115,91,96,85,117,89,99,114,87,112,
 86,94,92,119,120,100,121,123,95,122,105,84,116,90,110,88};
 
