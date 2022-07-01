@@ -215,16 +215,6 @@
 #define BOXSIZE     395
 
 // **************************************************************************
-//           CurrentMode values (=WHETHER TO SEND DATA)                     *
-//***************************************************************************
-
-#define NORMAL          0 // Normal for transmit as usual
-#define CALIBRATELIMITS 1 // Calibrate limits
-#define CENTRESTICKS    2 // Calibrate Centres
-#define SCANWAVEBAND    3 // Scan waveband
-#define SENDNOTHING     4 // Transmission off
-
-// **************************************************************************
 //                            SERVO RANGE PARAMETERS                        *
 //***************************************************************************
 
