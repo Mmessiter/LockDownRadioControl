@@ -10,7 +10,7 @@ var searchData=
   ['check_7',['check',['../class_adafruit___g_p_s.html#ae4abe9822d8ca59866bbb44de7910881',1,'Adafruit_GPS']]],
   ['checkgapslength_8',['CheckGapsLength',['../_radio_functions_8h.html#aa60c9cac090f6965b4223d5caf84e2f1',1,'CheckGapsLength():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a953f1d5046e183549ed95b08f6d675e3',1,'CheckGapsLength():&#160;main.cpp']]],
   ['checkhardwaretrims_9',['CheckHardwareTrims',['../_transmitter_code_2src_2main_8cpp.html#add643409678258cabdb0aa1ae76d802a',1,'main.cpp']]],
-  ['checklogfileisopen_10',['CheckLogFileIsOpen',['../_transmitter_code_2src_2main_8cpp.html#af1f22897d7015a4a32b072f02bf7e013',1,'main.cpp']]],
+  ['checklogfileisopen_10',['CheckLogFileIsOpen',['../_transmitter_code_2src_2main_8cpp.html#ac45f2f949ccfa372a8cbab3ef0b8caa8',1,'main.cpp']]],
   ['checkmacrosbuffer_11',['CheckMacrosBuffer',['../_transmitter_code_2src_2main_8cpp.html#a6bb930920ba3a8d45a737dde782ef65c',1,'main.cpp']]],
   ['checkmodelname_12',['CheckModelName',['../_transmitter_code_2src_2main_8cpp.html#a984cb52354a84c45e9e41f396a1c5e92',1,'main.cpp']]],
   ['checkrange_5f0_5f16_13',['CheckRange_0_16',['../_transmitter_code_2src_2main_8cpp.html#a962a0c149ba58563ca3bad19e999e027',1,'main.cpp']]],
@@ -24,12 +24,12 @@ var searchData=
   ['clearackpayload_21',['ClearAckPayload',['../radio_8h.html#a5a26715a721e1073d6ae00498282c056',1,'radio.h']]],
   ['clearbox_22',['ClearBox',['../_transmitter_code_2src_2main_8cpp.html#a5aeea47b9d855ae9911bae1115d02de7',1,'main.cpp']]],
   ['cleartext_23',['ClearText',['../_transmitter_code_2src_2main_8cpp.html#af0852678d8e89501acee8951f09d3b43',1,'main.cpp']]],
-  ['closelogfile_24',['CloseLogFile',['../_radio_functions_8h.html#abc72fe68abd024cb263115e0afd3160a',1,'CloseLogFile():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#abc72fe68abd024cb263115e0afd3160a',1,'CloseLogFile():&#160;main.cpp']]],
+  ['closelogfile_24',['CloseLogFile',['../_radio_functions_8h.html#abc72fe68abd024cb263115e0afd3160a',1,'CloseLogFile():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a6f003363493fc53b69f9efc1f447a6a1',1,'CloseLogFile():&#160;main.cpp']]],
   ['closemodelsfile_25',['CloseModelsFile',['../_transmitter_code_2src_2main_8cpp.html#a6922974b734cfe3a511e074a2d6ac33c',1,'main.cpp']]],
   ['common_5finit_26',['common_init',['../class_adafruit___g_p_s.html#ab8a2fe20ce1874b10a6e9f007c236b30',1,'Adafruit_GPS']]],
   ['compassangle_27',['compassAngle',['../class_adafruit___g_p_s.html#a06b7e12e38f1b00df058a253364215db',1,'Adafruit_GPS']]],
   ['compress_28',['Compress',['../_radio_functions_8cpp.html#a1ddd5e8d5bd649dd98ce3710fbff651b',1,'RadioFunctions.cpp']]],
   ['courseto_29',['courseTo',['../class_tiny_g_p_s_plus.html#af338c18ccf58a47659be1ffc8259541d',1,'TinyGPSPlus']]],
-  ['createtimedatestamp_30',['CreateTimeDateStamp',['../_transmitter_code_2src_2main_8cpp.html#a3503bafedbcece3177a9e4361bb1b081',1,'main.cpp']]],
-  ['createtimestamp_31',['CreateTimeStamp',['../_transmitter_code_2src_2main_8cpp.html#a7c6f60956ed82b2b20275f9a55b392a8',1,'main.cpp']]]
+  ['createtimedatestamp_30',['CreateTimeDateStamp',['../_transmitter_code_2src_2main_8cpp.html#a1a0a5d73007aba01755e5274d12e6e9b',1,'main.cpp']]],
+  ['createtimestamp_31',['CreateTimeStamp',['../_transmitter_code_2src_2main_8cpp.html#a5d42b1fba153cc76dc96778cfb6f1a40',1,'main.cpp']]]
 ];
