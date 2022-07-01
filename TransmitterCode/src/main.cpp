@@ -511,7 +511,7 @@ FLASHMEM void ResetSubTrims(){
 /** Map servo channels' data from SendBuffer into SbusChannels buffer */
 // This funtion is used by the BUDDY slave to send it's controls out down a wire using SBUS
 
-void MapToSBUS()
+FASTRUN void MapToSBUS()
 {
     if (millis() - SBUSTimer >= SBUSRATE)
     {
@@ -539,7 +539,7 @@ uint8_t bcdToDec(uint8_t val)
 
 /*********************************************************************************************************************************/
 
-void SetTheRTC(){
+FLASHMEM void SetTheRTC(){
     uint8_t  zero        = 0x00;
     Wire.beginTransmission(DS1307_ADDRESS);
     Wire.write(zero);                               // Stop the oscillator
@@ -793,21 +793,7 @@ void SetAudioVolume(uint16_t v){   // sets audio volume v (0-100)
     strcat (cmd,nb);
     SendCommand(cmd);
 }
-/*********************************************************************************************************************************/
 
-//void PlayWaveFile(char* tbox){  // Now removed. All audio is now in RAM. An issue with the FAT on SD card made this unsafe.
-//#ifdef USEAUDIO
-//    char path[]   = "wav0.path=\"sd0/";
-//    char wav[]    = ".wav\"";
-//    char en[]     = "wav0.en=1";
-//    char CB[70];
-//    strcpy(CB, path);
-//    strcat(CB, tbox);
-//    strcat(CB, wav);
-//    SendCommand(CB);    
-//    SendCommand(en);
-//#endif//
-//}
 /*********************************************************************************************************************************/
 
 // This function converts an int to a char[] array, then adds a comma, a dot, or nothing at the end.
@@ -815,7 +801,7 @@ void SetAudioVolume(uint16_t v){   // sets audio volume v (0-100)
 // It dates for a very early time when I didn't know about standard library functions! 
 // But it works just fine, so it says in.
 
-char* Str(char* s, int n, int comma) // comma = 0 for nothing, 1 for a comma, 2 for a dot.
+FASTRUN char* Str(char* s, int n, int comma) // comma = 0 for nothing, 1 for a comma, 2 for a dot.
 {
     int  r, i, m, flag;
     char cma[] = ",";
@@ -1238,7 +1224,7 @@ bool GetButtonPress()
 //             END OF NEXTION FUNCTIONS
 /*********************************************************************************************************************************/
 
-void CheckTimer()
+FASTRUN void CheckTimer()
 {
    
     if (FlightMode < 4 && !LostContactFlag) {
@@ -1299,7 +1285,7 @@ void CheckTimer()
 
 /*********************************************************************************************************************************/
 
-void ShowServoPos()
+FASTRUN void ShowServoPos()
 {
     char SticksView_Ch1[]    = "Ch1";
     char SticksView_Ch2[]    = "Ch2";
@@ -1476,7 +1462,7 @@ void ShowServoPos()
 }
 
 /*********************************************************************************************************************************/
-bool CheckTXVolts(){
+FASTRUN bool CheckTXVolts(){
     char  DataView_txv[]         = "txv";
     float txv                    = 0;
     char  TXVolts[]              = "t21";
@@ -1515,7 +1501,7 @@ return TXWarningFlag;
 }
 /*********************************************************************************************************************************/
 
-bool CheckRXVolts(){
+FASTRUN bool CheckRXVolts(){
     float Volts                  = 0;
     float ReadVolts              = 0;
     bool  RXWarningFlag          = false;
@@ -1776,7 +1762,7 @@ void  ReEnableScanButton(){
 }
 /*********************************************************************************************************************************/
 
-void FailedPacket()
+FASTRUN void FailedPacket()
 {
     int SecondsRemaining;
     if (GapStart == 0) GapStart = millis(); // To keep track of gaps' length
@@ -1880,7 +1866,7 @@ int GetNextNumber(int p1, char text1[CHARSMAX])
     return j;
 }
 /*********************************************************************************************************************************/
- uint16_t GetStickInput(uint8_t l)
+ FASTRUN uint16_t GetStickInput(uint8_t l)
 {
    uint16_t k = 0;
    switch (l) {
@@ -1912,7 +1898,7 @@ int GetNextNumber(int p1, char text1[CHARSMAX])
 /*********************************************************************************************************************************/
 // MIXES  (Channel mixes)
 /*********************************************************************************************************************************/
-void DoMixes()
+FASTRUN void DoMixes()
 {
 int m, c, p, mindeg, maxdeg, TheSum, Result;
     for (m = 1; m <= MAXMIXES; ++m) {
@@ -1944,7 +1930,7 @@ int m, c, p, mindeg, maxdeg, TheSum, Result;
 //                  My new version of the the traditional "map()" function -- but here with exponential added.
 /*********************************************************************************************************************************/
  
-float MapExp(float xx, float Xxmin, float Xxmax, float Yymin, float Yymax, float Expo)
+FASTRUN float MapExp(float xx, float Xxmin, float Xxmax, float Yymin, float Yymax, float Expo)
 {
     Expo  = map(Expo, -100, 100, -0.25, 0.75);
     xx    = pow(xx * xx, Expo);
@@ -1957,7 +1943,7 @@ float MapExp(float xx, float Xxmin, float Xxmax, float Yymin, float Yymax, float
 /*********************************************************************************************************************************/
 
 
-void DoReverseSense(){
+FASTRUN void DoReverseSense(){
   for (uint8_t i = 0; i < 16; i++) {
     if (ReversedChannelBITS & 1 << i){                                                              // Is this channel reversed?
             PreMixBuffer[i] = map(SendBuffer[i],MINMICROS,MAXMICROS,MAXMICROS,MINMICROS);           // Yes so reverse the channel
@@ -1970,7 +1956,7 @@ void DoReverseSense(){
 
 
 /** @brief GET NEW SERVO POSITIONS */
-void GetNewChannelValues()
+FASTRUN void GetNewChannelValues()
 {
     uint16_t k = 0, l = 0, m = 0, n = 0, TrimAmount;
     // key: -
