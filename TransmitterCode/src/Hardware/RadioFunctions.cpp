@@ -19,7 +19,7 @@ float Pduration  = 0;
  * @param uncompressed_buf[in]
  * @param uncompressed_size Size is in units of uint16_t (aka word or unsigned short). This *must* be divisible by 4.
  */
-void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uint8_t uncompressed_size)
+FASTRUN void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uint8_t uncompressed_size)
 {
     uint8_t p = 0;
     for (int l = 0; l < (uncompressed_size * 3 / 4); l += 3) {
@@ -34,7 +34,7 @@ void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uint8_t unco
 }
 /************************************************************************************************************/
 
-void TryOtherPipe()
+FASTRUN void TryOtherPipe()
 {
     if (TotalledRecentPacketsLost > 10 || (!BoundFlag)) { // This avoids needless pipe swapping during poor connection
         if (BoundFlag == true) {
@@ -51,7 +51,7 @@ void TryOtherPipe()
 
 /************************************************************************************************************/
 
-void BufferNewPipe()
+FASTRUN void BufferNewPipe()
 {
     SendBuffer[0] = (uint8_t)((NewPipe >> 56) & 0xFF); // if not yet bound, send pipe
     SendBuffer[1] = (uint8_t)((NewPipe >> 48) & 0xFF);
@@ -118,7 +118,7 @@ void ExecuteMacro(){                                                            
 //****************** Function to send data to receiver ******************************************************
 /************************************************************************************************************/
 
-void SendData()
+FASTRUN void SendData()
 {
     uint32_t ElapsedSinceLastSend = (millis() - TxPace);
     if (NEXTION.available()) return;              // was a button pressed?
@@ -282,7 +282,7 @@ void ScanAllChannels()
 
  // This function hops to the next channel in the FFHS array (about 16 times a second)
 
-void HopToNextChannel()
+FASTRUN void HopToNextChannel()
 {
     
     Radio1.setChannel(NextChannel);    // Hop !

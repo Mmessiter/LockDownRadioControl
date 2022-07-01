@@ -3988,7 +3988,7 @@ void FillBox(int x1, int y1, int w, int h, int c)
  * @param y2
  * @param color
  */
-void DrawBox(int x1, int y1, int x2, int y2, int c)
+FASTRUN void DrawBox(int x1, int y1, int x2, int y2, int c)
 {
     char line[] = "draw ";
     char nb[12];
@@ -4010,7 +4010,7 @@ void DrawBox(int x1, int y1, int x2, int y2, int c)
 /*********************************************************************************************************************************/
 
 /** @brief Uses servo degrees to position dots */
-void GetDotPositions()
+FASTRUN void GetDotPositions()
 {
     int p      = 0;
     BoxLeft    = BOXOFFSET;
@@ -4043,7 +4043,7 @@ int DegsToPercent(int degs)
 
 /*********************************************************************************************************************************/
 
-void DrawDot(int xx, int yy, int rad, int colr)
+FASTRUN void DrawDot(int xx, int yy, int rad, int colr)
 {
     char cirs[] = "cirs ";
     char nb[12];
@@ -4062,7 +4062,7 @@ void DrawDot(int xx, int yy, int rad, int colr)
 
 /*********************************************************************************************************************************/
 
-void updateInterpolationTypes()
+FASTRUN void updateInterpolationTypes()
 {
     char ExpR[]     = "Exp";
     char Smooth[]   = "Smooth";
@@ -4120,7 +4120,7 @@ void updateInterpolationTypes()
 
 /*********************************************************************************************************************************/
 
-void DisplayCurve()
+FASTRUN void DisplayCurve()
 {
     int  p       = 0;
     char Gn1[]   = "n1";
@@ -4943,7 +4943,7 @@ void  EndBuddyView(){
 }
 /*********************************************************************************************************************************/
 
-void  DoNumberedCommands(uint8_t nc){ // These gradually are replacing word-invoked commands for speed and economy
+FASTRUN void  DoNumberedCommands(uint8_t nc){ // These gradually are replacing word-invoked commands for speed and economy
   
     char pModelsView[]  = "page ModelsView";
     char mn[]           = "ModelNumber";
@@ -5016,7 +5016,7 @@ void  DoNumberedCommands(uint8_t nc){ // These gradually are replacing word-invo
 
 /*********************************************************************************************************************************/
 
-void DisplayCurveAndServoPos(){
+FASTRUN void DisplayCurveAndServoPos(){
             DisplayCurve();
             SavedLineX = 0;  
             ShowServoPos(); 
@@ -5029,7 +5029,7 @@ void DisplayCurveAndServoPos(){
  * BUTTON WAS PRESSED (DEAL WITH INPUT FROM NEXTION DISPLAY)
  *
  */
-void ButtonWasPressed()
+FASTRUN void ButtonWasPressed()
 {
   if (TextIn[0] & 128 ){                                // first byte hi bit indicates a numbered command
           DoNumberedCommands(TextIn[0] & 127);          // send number with the high bit off.
@@ -7048,7 +7048,7 @@ void CalibrateEdgeSwitches(){                                        // This fun
 }  
 /************************************************************************************************************/
 
-void ReadSwitches()  // and indeed read digital trims if these are fitted
+FASTRUN void ReadSwitches()  // and indeed read digital trims if these are fitted
 {
     byte flag = 0;
     for (int i = 0; i < 8; ++i) {
@@ -7094,7 +7094,7 @@ void GetRXVersionNumber()
 
 /************************************************************************************************************/
 
-float GetFromAckPayload(){
+FASTRUN float GetFromAckPayload(){
     union  {float Val32;uint8_t Val8[4];} ThisUnion;
     ThisUnion.Val8[0] = AckPayload.Byte1;
     ThisUnion.Val8[1] = AckPayload.Byte2;
@@ -7129,7 +7129,7 @@ void GetTemperature()
     snprintf(ModelTemperature, 5, "%f", RXModelTemperature);
 }
 /************************************************************************************************************/
-void ParseAckPayload()
+FASTRUN void ParseAckPayload()
 {
     if (AckPayload.Purpose & 0x80)                                       // Hi bit is now the **HOP NOW!!** flag
     {
@@ -7217,7 +7217,7 @@ void ParseAckPayload()
     }
 }
 /************************************************************************************************************/
-void CheckGapsLength()
+FASTRUN void CheckGapsLength()
 {
     if (GapStart > 0) { // when reconnected, how long was connection lost?
         ++GapCount;
@@ -7279,7 +7279,7 @@ void  CheckScanButton(){
 /************************************************************************************************************/
 // LOOP
 /************************************************************************************************************/
-void loop()
+FASTRUN void loop()
 {  
     KickTheDog();                    // Watchdog
     if (GetButtonPress()) {
