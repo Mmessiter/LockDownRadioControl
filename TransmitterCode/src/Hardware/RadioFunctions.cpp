@@ -13,22 +13,6 @@ float PEndTime   = 0;
 float Pduration  = 0;
 #endif
 
-// **** Decompresses cc*3/4 x 16 BIT values up to cc loading only their low 12 BITS cc must be divisble by 4! ******************
-//void DeComp(uint16_t* d, uint16_t* c, int cc)
-//{
- //   int p = 0, l = 0;
- //   for (l = 0; l < (cc * 3 / 4); l += 3) {
- //       d[p] = c[l] >> 4;
- //       p++;
- //       d[p] = (c[l] & 0xf) << 8 | c[l + 1] >> 8;
- //       p++;
- //       d[p] = (c[l + 1] & 0xff) << 4 | c[l + 2] >> 12;
- //       p++;
- //       d[p] = c[l + 2] & 0xfff;
- //       p++;
- //   }
-//}
-
 /**
  * Compresses uint16_t* buffer values (each with 12 bit resolution - the lower 12 bits).
  * @param compressed_buf[out] Must have allocated 3/4 the size of uncompressed_buf

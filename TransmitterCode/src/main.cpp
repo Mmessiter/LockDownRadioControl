@@ -229,14 +229,11 @@ char        FrontView_Secs[]            = "Secs";
 char        StartBackGround[]           = "click Background,0";
 char        ModelsFile[]                = "models.dat";
 uint8_t     SwitchNumber[8]             = {SWITCH0, SWITCH1, SWITCH2, SWITCH3, SWITCH4, SWITCH5, SWITCH6, SWITCH7};
-const uint8_t     TrimNumber[8]               = {TRIM1A, TRIM1B, TRIM2A, TRIM2B, TRIM3A, TRIM3B, TRIM4A, TRIM4B};
+uint8_t     TrimNumber[8]               = {TRIM1A, TRIM1B, TRIM2A, TRIM2B, TRIM3A, TRIM3B, TRIM4A, TRIM4B};
 const int   chipSelect                  = BUILTIN_SDCARD;
 char        DateTime[]                  = "DateTime";
 char        ScreenViewTimeout[]         = "Sto";                  // needed for display info
 char        NoSleeping[]                = "thsp=0";
-
-
-
 char     ModelName[30];
 uint16_t ScreenTimeout               = 120;                     // Screen has two minute timeout by default
 int      LastLinePosition            = 0;
