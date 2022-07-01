@@ -54,7 +54,7 @@ var searchData=
   ['trimsreversed_51',['TrimsReversed',['../_transmitter_code_2src_2main_8cpp.html#a13a1bdd6df9d527cfa5e3c1447c0d31a',1,'main.cpp']]],
   ['trimswitch_52',['TrimSwitch',['../_transmitter_code_2src_2main_8cpp.html#ad5adb31bc39b92d27e6ca35ef4dafefe',1,'main.cpp']]],
   ['trimtimer_53',['TrimTimer',['../_transmitter_code_2src_2main_8cpp.html#a48589088880569c1ae40f8c226cc52be',1,'main.cpp']]],
-  ['tryotherpipe_54',['TryOtherPipe',['../_radio_functions_8cpp.html#a7051e235b8f694c6b01bb5edf3925dc7',1,'RadioFunctions.cpp']]],
+  ['tryotherpipe_54',['TryOtherPipe',['../_radio_functions_8cpp.html#ad0e30213b21808d00110752679788a8c',1,'RadioFunctions.cpp']]],
   ['trytheothertransceiver_55',['TryTheOtherTransceiver',['../radio_8h.html#adfacfc7d075937cec51b7bcd08d323ca',1,'radio.h']]],
   ['trytoconnectnow_56',['TryToConnectNow',['../radio_8h.html#a1208ef26dd460e6f5f56582f4fbfcf94',1,'radio.h']]],
   ['twominutes_57',['TWOMINUTES',['../_radio_functions_8h.html#adc071342f0d02db71ceac915c16d7f85',1,'RadioFunctions.h']]],

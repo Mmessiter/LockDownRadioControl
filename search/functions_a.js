@@ -20,5 +20,5 @@ var searchData=
   ['logthisgap_17',['LogThisGap',['../_transmitter_code_2src_2main_8cpp.html#af9d8a17fec28e4ae948cc53c29406f78',1,'main.cpp']]],
   ['logthislonggap_18',['LogThisLongGap',['../_radio_functions_8h.html#a4d0ec00f44761a9280cb95ba073d277e',1,'LogThisLongGap():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a4d0ec00f44761a9280cb95ba073d277e',1,'LogThisLongGap():&#160;main.cpp']]],
   ['logthisrx_19',['LogThisRX',['../_transmitter_code_2src_2main_8cpp.html#a436844f605001cad62b48d890e11fe2c',1,'main.cpp']]],
-  ['loop_20',['loop',['../_receiver_code_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../_sensor_hub_t32_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp']]]
+  ['loop_20',['loop',['../_receiver_code_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../_sensor_hub_t32_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#ad3cb30894c94eb016e98bdcaa899ac86',1,'loop():&#160;main.cpp']]]
 ];

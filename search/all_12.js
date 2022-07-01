@@ -28,7 +28,7 @@ var searchData=
   ['readpressure_25',['readPressure',['../class_adafruit___b_m_p280.html#aa17b6d5005079cee6e85a7a4d99814b6',1,'Adafruit_BMP280']]],
   ['readsavedpipe_26',['ReadSavedPipe',['../radio_8h.html#a56ee137fc60749fa274236bc239c3291',1,'radio.h']]],
   ['readsensorhub_27',['ReadSensorHub',['../radio_8h.html#a8fff0fd6eb9e23721d9e06f3f44bd3c9',1,'radio.h']]],
-  ['readswitches_28',['ReadSwitches',['../_transmitter_code_2src_2main_8cpp.html#ab0af36f3442ad4f2d0b716c14c7d6085',1,'ReadSwitches():&#160;main.cpp'],['../_radio_functions_8h.html#ab0af36f3442ad4f2d0b716c14c7d6085',1,'ReadSwitches():&#160;main.cpp']]],
+  ['readswitches_28',['ReadSwitches',['../_transmitter_code_2src_2main_8cpp.html#aa144942814b12daf2b2a454c08d29cab',1,'ReadSwitches():&#160;main.cpp'],['../_radio_functions_8h.html#ab0af36f3442ad4f2d0b716c14c7d6085',1,'ReadSwitches():&#160;main.cpp']]],
   ['readtemperature_29',['readTemperature',['../class_adafruit___b_m_p280.html#a8511efd594618dea5f1e52d6bd149795',1,'Adafruit_BMP280']]],
   ['readtextfile_30',['ReadTextFile',['../_radio_functions_8h.html#abd6446fb403bd9b07d150a5e4fdd86e1',1,'ReadTextFile(char *fname, char *htext, uint8_t StartLineNumber, uint8_t MaxLines):&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#abd6446fb403bd9b07d150a5e4fdd86e1',1,'ReadTextFile(char *fname, char *htext, uint8_t StartLineNumber, uint8_t MaxLines):&#160;main.cpp']]],
   ['readthertc_31',['ReadTheRTC',['../_transmitter_code_2src_2main_8cpp.html#a7a48851f0d38e4a0dd727a30d9515cf1',1,'main.cpp']]],
