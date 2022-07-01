@@ -4812,7 +4812,7 @@ void PopulateMacrosView(){
     char Duration[]         =   "Dur";
     uint8_t n               =   PreviousMacroNumber;
    
-    if (n < 100) {                                                                        // Read previous values before moveing to next  
+    if (n < 8) {                                                                        // Read previous values before moveing to next  
         MacrosBuffer[n][MACROTRIGGERCHANNEL]    = GetValue(TriggerChannel);
         MacrosBuffer[n][MACROMOVECHANNEL]       = GetValue(MoveToChannel);
         MacrosBuffer[n][MACROMOVETOPOSITION]    = GetValue(MoveToPosition);
