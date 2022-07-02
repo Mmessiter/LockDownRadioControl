@@ -1952,8 +1952,6 @@ FASTRUN void DoReverseSense(){
 }
 /*********************************************************************************************************************************/
 
-
-
 /** @brief GET NEW SERVO POSITIONS */
 FASTRUN void GetNewChannelValues()
 {

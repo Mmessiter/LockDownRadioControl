@@ -127,8 +127,8 @@ FASTRUN void SendData()
         ReadSwitches();                           // Check switch positions
         CheckTimer();  
     }
-    if ((ElapsedSinceLastSend >= PACEMAKER) || (LostContactFlag)){
-        
+ // if ((ElapsedSinceLastSend >= PACEMAKER) || (LostContactFlag)){ 
+    if ((ElapsedSinceLastSend >= PACEMAKER) || (RecentPacketsLost > 0)){ //  Last packet was lost so don't wait before retry 
         TxPace = millis();
         GetNewChannelValues();                    // Load SendBuffer with new servo positions
         if (UseMacros) ExecuteMacro();            // Modify it if macro is running
