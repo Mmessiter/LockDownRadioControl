@@ -1930,7 +1930,7 @@ int m, c, p, mindeg, maxdeg, TheSum, Result;
 //                  My new version of the the traditional "map()" function -- but here with exponential added.
 /*********************************************************************************************************************************/
  
-FASTRUN float MapExp(float xx, float Xxmin, float Xxmax, float Yymin, float Yymax, float Expo)
+FASTRUN float MapWithExponential(float xx, float Xxmin, float Xxmax, float Yymin, float Yymax, float Expo)
 {
     Expo  = map(Expo, -100, 100, -0.25, 0.75);
     xx    = pow(xx * xx, Expo);
@@ -1940,8 +1940,7 @@ FASTRUN float MapExp(float xx, float Xxmin, float Xxmax, float Yymin, float Yyma
 }
 
 
-/*********************************************************************************************************************************/
-
+/******************************************** CHANNEL REVERSE FUNCTION **********************************************************/
 
 FASTRUN void DoReverseSense(){
   for (uint8_t i = 0; i < 16; i++) {
@@ -2000,10 +1999,10 @@ FASTRUN void GetNewChannelValues()
             }
             if (InterpolationTypes[FlightMode][n] == EXPONENTIALCURVES) {               // EXPONENTIAL (!!)
                 if (m >= ChannelCentre[l]) {
-                    k = MapExp(m - ChannelCentre[l], 0, ChannelMax[l] - ChannelCentre[l], 0, IntoHigherRes(MaxDegrees[FlightMode][n]) - IntoHigherRes(CentreDegrees[FlightMode][n]), Exponential[FlightMode][n]) + IntoHigherRes(CentreDegrees[FlightMode][n]);
+                    k = MapWithExponential(m - ChannelCentre[l], 0, ChannelMax[l] - ChannelCentre[l], 0, IntoHigherRes(MaxDegrees[FlightMode][n]) - IntoHigherRes(CentreDegrees[FlightMode][n]), Exponential[FlightMode][n]) + IntoHigherRes(CentreDegrees[FlightMode][n]);
                 }
                 if (m < ChannelCentre[l]) {
-                    k = MapExp(ChannelCentre[l] - m, 0, ChannelCentre[l] - ChannelMin[l], IntoHigherRes(CentreDegrees[FlightMode][n]) - IntoHigherRes(MinDegrees[FlightMode][n]), 0, Exponential[FlightMode][n]) + IntoHigherRes(MinDegrees[FlightMode][n]);
+                    k = MapWithExponential(ChannelCentre[l] - m, 0, ChannelCentre[l] - ChannelMin[l], IntoHigherRes(CentreDegrees[FlightMode][n]) - IntoHigherRes(MinDegrees[FlightMode][n]), 0, Exponential[FlightMode][n]) + IntoHigherRes(MinDegrees[FlightMode][n]);
                 }
             }
         }
@@ -4223,7 +4222,7 @@ FASTRUN void DisplayCurve()
         yDot2            = 0;
         Step             = APPROXIMATION;                        // This is the approximation of the screen curve
         for (xPoint = 0; xPoint <= HalfXRange; xPoint += Step) { // Simulate a curve with many short lines to speed it up
-            yPoint = MapExp(HalfXRange - xPoint, HalfXRange, 0, 0, BottomHalfYRange, Exponential[FlightMode][ChanneltoSet - 1]);
+            yPoint = MapWithExponential(HalfXRange - xPoint, HalfXRange, 0, 0, BottomHalfYRange, Exponential[FlightMode][ChanneltoSet - 1]);
             if (Step > HalfXRange - xPoint) {
                 Step = HalfXRange - xPoint;
             }
@@ -4241,7 +4240,7 @@ FASTRUN void DisplayCurve()
         Step  = APPROXIMATION;
         yDot2 = 0;
         for (xPoint = HalfXRange; xPoint >= 0; xPoint -= Step) { // Simulate a curve with many short lines to speed it up
-            yPoint = MapExp(xPoint, 0, HalfXRange, 0, TopHalfYRange, Exponential[FlightMode][ChanneltoSet - 1]);
+            yPoint = MapWithExponential(xPoint, 0, HalfXRange, 0, TopHalfYRange, Exponential[FlightMode][ChanneltoSet - 1]);
             if (Step > xPoint) {
                 Step = xPoint;
             }
