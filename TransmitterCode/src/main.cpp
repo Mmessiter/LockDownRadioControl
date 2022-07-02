@@ -113,7 +113,7 @@ uint8_t       MixNumber          = 0;
 uint8_t       CurrentView        = FRONTVIEW;
 uint8_t       SavedCurrentView   = FRONTVIEW;
 uint64_t      DefaultPipe        = DEFAULTPIPEADDRESS; //          Default Radio pipe address
-uint64_t      NewPipe            = 0xBABE1E5420LL;     //             New Radio pipe address for binding comes from MAC address
+uint64_t      NewPipe            = 0xBABE1E5420LL;     //          New Radio pipe address for binding comes from MAC address
 char          TextIn[CHARSMAX+2];  // spare space
 uint16_t      PacketsPerSecond = 0;
 uint16_t      LostPackets      = 0;
@@ -208,9 +208,9 @@ uint16_t      MemoryForTransmtter  = 0;   // SD space for transmitter parameters
 uint16_t      OneModelMemory       = 0;   // SD space for every model's parameters
 uint16_t      SDCardAddress        = 0;   // Address on SD card (offset from zero)
 
-                                                                       // pointer for channels array (three only used for reconnect)
+                                                                      
 
-uint8_t FHSS_Channels1[42] = {93,111,107,103,106,97,108,102,118,                           // TEST array 
+uint8_t FHSS_Channels1[42] = {93,111,107,103,106,97,108,102,118,                                        // TEST array 
 104,101,109,98,113,124,115,91,96,85,117,89,99,114,87,112,
 86,94,92,119,120,100,121,123,95,122,105,84,116,90,110,88};
 
@@ -219,7 +219,7 @@ uint8_t FHSS_Channels[83] = {51,28,24,61,64,55,66,19,76,21,59,67,15,71,82,32,49,
 54,12,80,53,22,1,74,39,58,63,70,52,42,25,43,26,14,38,48,68,33,27,60,44,46,
 56,7,81,5,65,4,10};
 
-uint8_t * FHSSChPointer;     
+uint8_t * FHSSChPointer;                                                                                 // pointer for channels array (three only used for reconnect)
 
 char        page_FrontView[]            = "page FrontView";
 char        page_FhssView[]             = "page FhssView";
