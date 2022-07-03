@@ -2960,7 +2960,7 @@ FASTRUN void OpenLogFileR(char * LogFileName){
 }
 /************************************************************************************************************/
 FASTRUN void CloseLogFile(){
-    LogFileNumber.close();
+    if (LogFileOpen) LogFileNumber.close();
     LogFileOpen = false;
 }
 /************************************************************************************************************/
@@ -3007,6 +3007,7 @@ FASTRUN void LogText(char * TheText, uint16_t len){
     LogFilePreamble();
     WriteToLogFile(TheText,len);
     WriteToLogFile(crlf, sizeof(crlf));
+    CloseLogFile();
 }
 // ************************************************************************
 FASTRUN void LogConnection(){
