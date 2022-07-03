@@ -114,6 +114,34 @@ void ExecuteMacro(){                                                            
 
 // *************** END OF MACROS ZONE ************************************************
 
+
+/*********************************************************************************************************************************/
+
+FASTRUN void FailedPacket()
+{
+    int SecondsRemaining;
+    if (GapStart == 0) GapStart = millis(); // To keep track of gaps' length
+    ++RecentPacketsLost;
+    ++TotalledRecentPacketsLost; // this is to keep track of events when receiver is off
+    if (RecentPacketsLost == 1){ HopToNextChannel(); }; // Hop immediately after losing one packet in case that fixes it!
+    if (RecentPacketsLost >= LOSTCONTACTCUTOFF) {
+      
+        LostContactFlag   = true;
+        Reconnected = false;
+        RecentPacketsLost = 0;
+       
+        if ((millis() - GapStart) > RED_LED_ON_TIME) // there's no need to blink red for every single lost packet. Only after 1/2 second of no connection.
+        {  
+            if  (LedWasGreen) LogThisLongGap();
+            RedLedOn(); 
+            ReEnableScanButton();
+        }
+    }
+    ++LostPackets;
+     SecondsRemaining = (Inactivity_Timeout / 1000) - (millis() - Inactivity_Start) / 1000;
+    if (SecondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH);             // INACTIVITY POWER OFF HERE!!
+}
+
 /************************************************************************************************************/
 //****************** Function to send data to receiver ******************************************************
 /************************************************************************************************************/

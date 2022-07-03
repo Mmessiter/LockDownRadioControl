@@ -84,6 +84,7 @@ uint16_t        CompressedData[COMPRESSEDWORDS]; // 30 bytes -> 40 bytes when un
 bool            SensorHubDead = false;
 uint32_t        BootupMoment  = 0;
 bool            QNHSent       = false;
+bool            FirstLostPacket = true;
 
 /************************************************************************************************************/
 
@@ -475,6 +476,15 @@ void SensorHubHasFailed(){       // If the I2C bus gets its knickers in a twist,
      GpsFix          = 0;
      SensorHubDead   = true;    // This flag inhibits further attempts to call the hub, which might save a model.
 }
+
+// ******************************************************************************************************************************************************************
+FASTRUN void TryNextChannel(){
+        ++NextChannelNumber;                      // Move up the channels' array
+        if (NextChannelNumber >= FrequencyCount)  NextChannelNumber = 1; // If needed, wrap the channels' array pointer
+        NextChannel =  * (FHSSChPointer + NextChannelNumber);
+        HopToNextChannel();
+        FirstLostPacket = false;
+}
 // ******************************************************************************************************************************************************************
 FASTRUN void ReceiveData(){ 
     uint32_t TimeTest; 
@@ -494,7 +504,9 @@ FASTRUN void ReceiveData(){
       }
     }
     if (ReadData()) {
+       // if (!FirstLostPacket) Serial.println ("Hooray!!");                           // Proves it worked!! 
         ReadExtraParameters();                                                         // Check the extra parameters
+        FirstLostPacket = true;                                                        // it will be when one is lost!
     } else {        
         if (millis() - SBUSTimer >= SBUSRATE) {                                        // No new packet yet - but maybe it's time to dispatch the last?
             if (BoundFlag && (millis() > 10000)) {
@@ -504,8 +516,12 @@ FASTRUN void ReceiveData(){
                 }
             }                                          
         }                                                                                                                                           
-        if (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT) {                      
-        Reconnect();                                                                  // Try to reconnect.
+    if (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT) {                      
+        if (FirstLostPacket) {
+                 TryNextChannel();
+            } else {
+                 Reconnect();
+            }                                                                           // Try to reconnect.
         } 
     }
 }

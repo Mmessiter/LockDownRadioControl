@@ -339,6 +339,10 @@ extern uint32_t       MacroStartTime[MAXMACROS];
 extern uint32_t       MacroStopTime[MAXMACROS];
 extern bool           UseMacros;
 extern uint16_t       LostPackets;
+extern bool           Reconnected;
+extern bool           LedWasGreen;
+extern uint32_t       Inactivity_Timeout; 
+extern uint32_t       Inactivity_Start;
 
 // external (global) functions needed here
 extern void  GetSlaveChannelValues();
@@ -359,6 +363,8 @@ extern void  StartInactvityTimeout();
 extern void  ShowServoPos();
 extern void  MapToSBUS();
 extern void  ZeroDataScreen();
+extern void  RedLedOn();
+extern void  ReEnableScanButton();
 
 /*********************************************************************************************************************************/
 // function prototypes
