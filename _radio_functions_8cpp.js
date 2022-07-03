@@ -9,6 +9,7 @@ var _radio_functions_8cpp =
     [ "DoScanInit", "_radio_functions_8cpp.html#a77c4a4ffa609df08830ccece07bf283b", null ],
     [ "DrawFhssBox", "_radio_functions_8cpp.html#a6bdc6419b47dda71d0d2c8faf652adc2", null ],
     [ "ExecuteMacro", "_radio_functions_8cpp.html#a78f22801971c106db61d728dd345e28e", null ],
+    [ "FailedPacket", "_radio_functions_8cpp.html#a5fbd3c8613a4163425c94965704ce5f8", null ],
     [ "HopToNextChannel", "_radio_functions_8cpp.html#a52aa3e80bccf5e75346c93fdae63122d", null ],
     [ "InitRadio", "_radio_functions_8cpp.html#a799f38bc33abdb30eec1d7db3cf27d58", null ],
     [ "Procrastinate", "_radio_functions_8cpp.html#a760609a682300dfe6bfaac737fd4d5eb", null ],

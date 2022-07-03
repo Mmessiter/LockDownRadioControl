@@ -1,5 +1,13 @@
 var NAVTREEINDEX6 =
 {
+"functions_w.html":[9,3,0,20],
+"functions_x.html":[9,3,0,21],
+"functions_y.html":[9,3,0,22],
+"functions_z.html":[9,3,0,23],
+"functions_~.html":[9,3,0,24],
+"globals.html":[10,1,0],
+"globals.html":[10,1,0,0],
+"globals_a.html":[10,1,0,1],
 "globals_b.html":[10,1,0,2],
 "globals_c.html":[10,1,0,3],
 "globals_d.html":[10,1,0,4],
@@ -241,13 +249,5 @@ var NAVTREEINDEX6 =
 "struct_payload.html#ac18701f2aa35ebd8402f45f840d5c445":[9,0,13,5],
 "struct_payload.html#ae28220045a0918bdb0fc6484dbff55f9":[9,0,13,4],
 "struct_payload.html#ae7106f2efa1bb9f4ebb720c7c9fc54b8":[9,0,13,1],
-"struct_raw_degrees.html":[9,0,14],
-"struct_raw_degrees.html#a11831d9220f303bd716d9412af28e84e":[9,0,14,2],
-"struct_raw_degrees.html#a13564009c60e20dbf03b158114d1c0e2":[9,0,14,1],
-"struct_raw_degrees.html#a156d5ced092fa1473b9b669a29be3509":[9,0,14,0],
-"struct_raw_degrees.html#a39c31d2d0332155a4d2c975cec0a796f":[9,0,14,3],
-"struct_tiny_g_p_s_altitude.html":[9,0,19],
-"struct_tiny_g_p_s_altitude.html#a1eb3e5b425784fc0db3e9ffe0f77f741":[9,0,19,1],
-"struct_tiny_g_p_s_altitude.html#a5a39d145bb1778814007206c765189f7":[9,0,19,2],
-"struct_tiny_g_p_s_altitude.html#a5ae68d990ea08d4e21cfa6aefb46cc03":[9,0,19,3]
+"struct_raw_degrees.html":[9,0,14]
 };

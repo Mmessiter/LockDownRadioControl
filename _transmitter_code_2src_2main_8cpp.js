@@ -64,7 +64,6 @@ var _transmitter_code_2src_2main_8cpp =
     [ "EndReverseView", "_transmitter_code_2src_2main_8cpp.html#afd3dd964eafc30405e000b03579dd00c", null ],
     [ "EndSend", "_transmitter_code_2src_2main_8cpp.html#ad7b8aa834c87265667a5687b1787a1cc", null ],
     [ "ExitMacrosView", "_transmitter_code_2src_2main_8cpp.html#a488388f6430a0fc7bec57074ba750a2d", null ],
-    [ "FailedPacket", "_transmitter_code_2src_2main_8cpp.html#a5fbd3c8613a4163425c94965704ce5f8", null ],
     [ "FillBox", "_transmitter_code_2src_2main_8cpp.html#a93d9f055a2723479bb28f6c53fdb2643", null ],
     [ "FixDeltaGMTSign", "_transmitter_code_2src_2main_8cpp.html#a493eeacfcf61a53db5933a893f7d94a6", null ],
     [ "Force_ReDisplay", "_transmitter_code_2src_2main_8cpp.html#aa1e81e58421a34fdfd7bfb31925f5a90", null ],
