@@ -123,7 +123,7 @@ FASTRUN void FailedPacket()
     if (GapStart == 0) GapStart = millis(); // To keep track of gaps' length
     ++RecentPacketsLost;
     ++TotalledRecentPacketsLost; // this is to keep track of events when receiver is off
-    if (RecentPacketsLost == 1){ HopToNextChannel(); }; // Hop immediately after losing one packet in case that fixes it!
+    if (RecentPacketsLost == 1){HopToNextChannel();}; // Hop immediately after losing one packet in case that fixes it!
     if (RecentPacketsLost >= LOSTCONTACTCUTOFF) {
       
         LostContactFlag   = true;
