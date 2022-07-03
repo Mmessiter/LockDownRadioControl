@@ -13,8 +13,8 @@
 <g id="node1" class="node">
 <title>Node1</title>
 <g id="a_node1"><a xlink:title=" ">
-<polygon fill="#bfbfbf" stroke="black" points="0,-19.5 0,-38.5 83,-38.5 83,-19.5 0,-19.5"/>
-<text text-anchor="middle" x="41.5" y="-26.5" font-family="Helvetica,sans-Serif" font-size="10.00">LogLowBattery</text>
+<polygon fill="#bfbfbf" stroke="black" points="0,-38.5 0,-57.5 83,-57.5 83,-38.5 0,-38.5"/>
+<text text-anchor="middle" x="41.5" y="-45.5" font-family="Helvetica,sans-Serif" font-size="10.00">LogLowBattery</text>
 </a>
 </g>
 </g>
@@ -22,146 +22,161 @@
 <g id="node2" class="node">
 <title>Node2</title>
 <g id="a_node2"><a xlink:href="_transmitter_code_2src_2main_8cpp.html#add8d8f400f1c1c4a5add52736cdf94ca" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="black" points="119,-19.5 119,-38.5 171,-38.5 171,-19.5 119,-19.5"/>
-<text text-anchor="middle" x="145" y="-26.5" font-family="Helvetica,sans-Serif" font-size="10.00">LogText</text>
+<polygon fill="white" stroke="black" points="119,-38.5 119,-57.5 171,-57.5 171,-38.5 119,-38.5"/>
+<text text-anchor="middle" x="145" y="-45.5" font-family="Helvetica,sans-Serif" font-size="10.00">LogText</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node2 -->
 <g id="edge1" class="edge">
 <title>Node1&#45;&gt;Node2</title>
-<path fill="none" stroke="midnightblue" d="M83.2,-29C91.65,-29 100.49,-29 108.73,-29"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="108.77,-32.5 118.77,-29 108.77,-25.5 108.77,-32.5"/>
+<path fill="none" stroke="midnightblue" d="M83.2,-48C91.65,-48 100.49,-48 108.73,-48"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="108.77,-51.5 118.77,-48 108.77,-44.5 108.77,-51.5"/>
 </g>
 <!-- Node3 -->
 <g id="node3" class="node">
 <title>Node3</title>
-<g id="a_node3"><a xlink:href="_transmitter_code_2src_2main_8cpp.html#a99a51dbad5d686ca711e982f82cbcada" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="black" points="207,-38.5 207,-57.5 297,-57.5 297,-38.5 207,-38.5"/>
-<text text-anchor="middle" x="252" y="-45.5" font-family="Helvetica,sans-Serif" font-size="10.00">LogFilePreamble</text>
+<g id="a_node3"><a xlink:href="_transmitter_code_2src_2main_8cpp.html#a6f003363493fc53b69f9efc1f447a6a1" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="black" points="215,-76.5 215,-95.5 289,-95.5 289,-76.5 215,-76.5"/>
+<text text-anchor="middle" x="252" y="-83.5" font-family="Helvetica,sans-Serif" font-size="10.00">CloseLogFile</text>
 </a>
 </g>
 </g>
 <!-- Node2&#45;&gt;Node3 -->
 <g id="edge2" class="edge">
 <title>Node2&#45;&gt;Node3</title>
-<path fill="none" stroke="midnightblue" d="M171.15,-33.55C178.91,-34.95 187.77,-36.56 196.71,-38.18"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="196.3,-41.66 206.77,-40 197.55,-34.77 196.3,-41.66"/>
+<path fill="none" stroke="midnightblue" d="M171.15,-57.1C184.26,-61.85 200.53,-67.74 214.96,-72.96"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="214,-76.33 224.59,-76.44 216.38,-69.75 214,-76.33"/>
 </g>
-<!-- Node10 -->
-<g id="node10" class="node">
-<title>Node10</title>
-<g id="a_node10"><a xlink:href="_transmitter_code_2src_2main_8cpp.html#a99154e537ca6e0ce5d538fddf0c2aab3" target="_top" xlink:title=" ">
+<!-- Node4 -->
+<g id="node4" class="node">
+<title>Node4</title>
+<g id="a_node4"><a xlink:href="_transmitter_code_2src_2main_8cpp.html#a99a51dbad5d686ca711e982f82cbcada" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="black" points="207,-38.5 207,-57.5 297,-57.5 297,-38.5 207,-38.5"/>
+<text text-anchor="middle" x="252" y="-45.5" font-family="Helvetica,sans-Serif" font-size="10.00">LogFilePreamble</text>
+</a>
+</g>
+</g>
+<!-- Node2&#45;&gt;Node4 -->
+<g id="edge3" class="edge">
+<title>Node2&#45;&gt;Node4</title>
+<path fill="none" stroke="midnightblue" d="M171.15,-48C178.91,-48 187.77,-48 196.71,-48"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="196.77,-51.5 206.77,-48 196.77,-44.5 196.77,-51.5"/>
+</g>
+<!-- Node11 -->
+<g id="node11" class="node">
+<title>Node11</title>
+<g id="a_node11"><a xlink:href="_transmitter_code_2src_2main_8cpp.html#a99154e537ca6e0ce5d538fddf0c2aab3" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="black" points="345.5,-0.5 345.5,-19.5 428.5,-19.5 428.5,-0.5 345.5,-0.5"/>
 <text text-anchor="middle" x="387" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">WriteToLogFile</text>
 </a>
 </g>
 </g>
-<!-- Node2&#45;&gt;Node10 -->
-<g id="edge11" class="edge">
-<title>Node2&#45;&gt;Node10</title>
-<path fill="none" stroke="midnightblue" d="M171.23,-27C209.96,-23.94 284.86,-18.01 335.15,-14.03"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="335.48,-17.51 345.18,-13.23 334.93,-10.53 335.48,-17.51"/>
-</g>
-<!-- Node4 -->
-<g id="node4" class="node">
-<title>Node4</title>
-<g id="a_node4"><a xlink:href="_transmitter_code_2src_2main_8cpp.html#ac45f2f949ccfa372a8cbab3ef0b8caa8" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="black" points="333,-76.5 333,-95.5 441,-95.5 441,-76.5 333,-76.5"/>
-<text text-anchor="middle" x="387" y="-83.5" font-family="Helvetica,sans-Serif" font-size="10.00">CheckLogFileIsOpen</text>
-</a>
-</g>
-</g>
-<!-- Node3&#45;&gt;Node4 -->
-<g id="edge3" class="edge">
-<title>Node3&#45;&gt;Node4</title>
-<path fill="none" stroke="midnightblue" d="M286.56,-57.59C303.57,-62.45 324.43,-68.41 342.64,-73.61"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="341.87,-77.03 352.45,-76.41 343.8,-70.3 341.87,-77.03"/>
-</g>
-<!-- Node8 -->
-<g id="node8" class="node">
-<title>Node8</title>
-<g id="a_node8"><a xlink:href="_transmitter_code_2src_2main_8cpp.html#a5d42b1fba153cc76dc96778cfb6f1a40" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="black" points="339.5,-38.5 339.5,-57.5 434.5,-57.5 434.5,-38.5 339.5,-38.5"/>
-<text text-anchor="middle" x="387" y="-45.5" font-family="Helvetica,sans-Serif" font-size="10.00">CreateTimeStamp</text>
-</a>
-</g>
-</g>
-<!-- Node3&#45;&gt;Node8 -->
-<g id="edge7" class="edge">
-<title>Node3&#45;&gt;Node8</title>
-<path fill="none" stroke="midnightblue" d="M297.29,-48C307.48,-48 318.46,-48 329.1,-48"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="329.17,-51.5 339.17,-48 329.17,-44.5 329.17,-51.5"/>
-</g>
-<!-- Node3&#45;&gt;Node10 -->
-<g id="edge10" class="edge">
-<title>Node3&#45;&gt;Node10</title>
-<path fill="none" stroke="midnightblue" d="M286.56,-38.41C303.57,-33.55 324.43,-27.59 342.64,-22.39"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="343.8,-25.7 352.45,-19.59 341.87,-18.97 343.8,-25.7"/>
+<!-- Node2&#45;&gt;Node11 -->
+<g id="edge12" class="edge">
+<title>Node2&#45;&gt;Node11</title>
+<path fill="none" stroke="midnightblue" d="M171.23,-38.92C182.11,-35.33 195.05,-31.47 207,-29 249.76,-20.16 299.16,-15.31 335.22,-12.73"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="335.75,-16.2 345.48,-12.03 335.27,-9.22 335.75,-16.2"/>
 </g>
 <!-- Node5 -->
 <g id="node5" class="node">
 <title>Node5</title>
-<g id="a_node5"><a xlink:href="_transmitter_code_2src_2main_8cpp.html#a05c7b4e0b98f9b97eebf9617442de6a5" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="black" points="477,-114.5 477,-133.5 576,-133.5 576,-114.5 477,-114.5"/>
-<text text-anchor="middle" x="526.5" y="-121.5" font-family="Helvetica,sans-Serif" font-size="10.00">MakeLogFileName</text>
+<g id="a_node5"><a xlink:href="_transmitter_code_2src_2main_8cpp.html#ac45f2f949ccfa372a8cbab3ef0b8caa8" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="black" points="333,-76.5 333,-95.5 441,-95.5 441,-76.5 333,-76.5"/>
+<text text-anchor="middle" x="387" y="-83.5" font-family="Helvetica,sans-Serif" font-size="10.00">CheckLogFileIsOpen</text>
 </a>
 </g>
 </g>
 <!-- Node4&#45;&gt;Node5 -->
 <g id="edge4" class="edge">
 <title>Node4&#45;&gt;Node5</title>
-<path fill="none" stroke="midnightblue" d="M422.7,-95.59C440.37,-100.47 462.05,-106.46 480.94,-111.68"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="480.24,-115.12 490.81,-114.41 482.11,-108.38 480.24,-115.12"/>
+<path fill="none" stroke="midnightblue" d="M286.56,-57.59C303.57,-62.45 324.43,-68.41 342.64,-73.61"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="341.87,-77.03 352.45,-76.41 343.8,-70.3 341.87,-77.03"/>
 </g>
-<!-- Node7 -->
-<g id="node7" class="node">
-<title>Node7</title>
-<g id="a_node7"><a xlink:href="_transmitter_code_2src_2main_8cpp.html#ad2d22d4683c318454ab9a1dd15e1f647" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="black" points="486,-76.5 486,-95.5 567,-95.5 567,-76.5 486,-76.5"/>
-<text text-anchor="middle" x="526.5" y="-83.5" font-family="Helvetica,sans-Serif" font-size="10.00">OpenLogFileW</text>
+<!-- Node9 -->
+<g id="node9" class="node">
+<title>Node9</title>
+<g id="a_node9"><a xlink:href="_transmitter_code_2src_2main_8cpp.html#a5d42b1fba153cc76dc96778cfb6f1a40" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="black" points="339.5,-38.5 339.5,-57.5 434.5,-57.5 434.5,-38.5 339.5,-38.5"/>
+<text text-anchor="middle" x="387" y="-45.5" font-family="Helvetica,sans-Serif" font-size="10.00">CreateTimeStamp</text>
 </a>
 </g>
 </g>
-<!-- Node4&#45;&gt;Node7 -->
-<g id="edge6" class="edge">
-<title>Node4&#45;&gt;Node7</title>
-<path fill="none" stroke="midnightblue" d="M441.16,-86C452.5,-86 464.44,-86 475.65,-86"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="475.7,-89.5 485.7,-86 475.7,-82.5 475.7,-89.5"/>
+<!-- Node4&#45;&gt;Node9 -->
+<g id="edge8" class="edge">
+<title>Node4&#45;&gt;Node9</title>
+<path fill="none" stroke="midnightblue" d="M297.29,-48C307.48,-48 318.46,-48 329.1,-48"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="329.17,-51.5 339.17,-48 329.17,-44.5 329.17,-51.5"/>
+</g>
+<!-- Node4&#45;&gt;Node11 -->
+<g id="edge11" class="edge">
+<title>Node4&#45;&gt;Node11</title>
+<path fill="none" stroke="midnightblue" d="M286.56,-38.41C303.57,-33.55 324.43,-27.59 342.64,-22.39"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="343.8,-25.7 352.45,-19.59 341.87,-18.97 343.8,-25.7"/>
 </g>
 <!-- Node6 -->
 <g id="node6" class="node">
 <title>Node6</title>
-<g id="a_node6"><a xlink:href="_transmitter_code_2src_2main_8cpp.html#a590a9174319918d7e3d7baca323fcf26" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="black" points="612,-76.5 612,-95.5 641,-95.5 641,-76.5 612,-76.5"/>
-<text text-anchor="middle" x="626.5" y="-83.5" font-family="Helvetica,sans-Serif" font-size="10.00">Str</text>
+<g id="a_node6"><a xlink:href="_transmitter_code_2src_2main_8cpp.html#a05c7b4e0b98f9b97eebf9617442de6a5" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="black" points="477,-114.5 477,-133.5 576,-133.5 576,-114.5 477,-114.5"/>
+<text text-anchor="middle" x="526.5" y="-121.5" font-family="Helvetica,sans-Serif" font-size="10.00">MakeLogFileName</text>
 </a>
 </g>
 </g>
 <!-- Node5&#45;&gt;Node6 -->
 <g id="edge5" class="edge">
 <title>Node5&#45;&gt;Node6</title>
+<path fill="none" stroke="midnightblue" d="M422.7,-95.59C440.37,-100.47 462.05,-106.46 480.94,-111.68"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="480.24,-115.12 490.81,-114.41 482.11,-108.38 480.24,-115.12"/>
+</g>
+<!-- Node8 -->
+<g id="node8" class="node">
+<title>Node8</title>
+<g id="a_node8"><a xlink:href="_transmitter_code_2src_2main_8cpp.html#ad2d22d4683c318454ab9a1dd15e1f647" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="black" points="486,-76.5 486,-95.5 567,-95.5 567,-76.5 486,-76.5"/>
+<text text-anchor="middle" x="526.5" y="-83.5" font-family="Helvetica,sans-Serif" font-size="10.00">OpenLogFileW</text>
+</a>
+</g>
+</g>
+<!-- Node5&#45;&gt;Node8 -->
+<g id="edge7" class="edge">
+<title>Node5&#45;&gt;Node8</title>
+<path fill="none" stroke="midnightblue" d="M441.16,-86C452.5,-86 464.44,-86 475.65,-86"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="475.7,-89.5 485.7,-86 475.7,-82.5 475.7,-89.5"/>
+</g>
+<!-- Node7 -->
+<g id="node7" class="node">
+<title>Node7</title>
+<g id="a_node7"><a xlink:href="_transmitter_code_2src_2main_8cpp.html#a590a9174319918d7e3d7baca323fcf26" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="black" points="612,-76.5 612,-95.5 641,-95.5 641,-76.5 612,-76.5"/>
+<text text-anchor="middle" x="626.5" y="-83.5" font-family="Helvetica,sans-Serif" font-size="10.00">Str</text>
+</a>
+</g>
+</g>
+<!-- Node6&#45;&gt;Node7 -->
+<g id="edge6" class="edge">
+<title>Node6&#45;&gt;Node7</title>
 <path fill="none" stroke="midnightblue" d="M552.23,-114.41C567.62,-108.44 587.28,-100.82 602.36,-94.97"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="603.9,-98.13 611.96,-91.25 601.37,-91.6 603.9,-98.13"/>
 </g>
-<!-- Node8&#45;&gt;Node6 -->
-<g id="edge9" class="edge">
-<title>Node8&#45;&gt;Node6</title>
+<!-- Node9&#45;&gt;Node7 -->
+<g id="edge10" class="edge">
+<title>Node9&#45;&gt;Node7</title>
 <path fill="none" stroke="midnightblue" d="M434.54,-49.27C472.94,-51.14 528.61,-55.72 576,-67 584.91,-69.12 594.38,-72.46 602.62,-75.76"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="601.37,-79.03 611.94,-79.67 604.07,-72.57 601.37,-79.03"/>
 </g>
-<!-- Node9 -->
-<g id="node9" class="node">
-<title>Node9</title>
-<g id="a_node9"><a xlink:href="_transmitter_code_2src_2main_8cpp.html#ae310e7fc6397929ae886869c05cbc334" target="_top" xlink:title=" ">
+<!-- Node10 -->
+<g id="node10" class="node">
+<title>Node10</title>
+<g id="a_node10"><a xlink:href="_transmitter_code_2src_2main_8cpp.html#ae310e7fc6397929ae886869c05cbc334" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="black" points="485,-0.5 485,-19.5 568,-19.5 568,-0.5 485,-0.5"/>
 <text text-anchor="middle" x="526.5" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">MayBeAddZero</text>
 </a>
 </g>
 </g>
-<!-- Node8&#45;&gt;Node9 -->
-<g id="edge8" class="edge">
-<title>Node8&#45;&gt;Node9</title>
+<!-- Node9&#45;&gt;Node10 -->
+<g id="edge9" class="edge">
+<title>Node9&#45;&gt;Node10</title>
 <path fill="none" stroke="midnightblue" d="M422.7,-38.41C440.37,-33.53 462.05,-27.54 480.94,-22.32"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="482.11,-25.62 490.81,-19.59 480.24,-18.88 482.11,-25.62"/>
 </g>
