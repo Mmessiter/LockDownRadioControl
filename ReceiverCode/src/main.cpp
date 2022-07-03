@@ -504,7 +504,7 @@ FASTRUN void ReceiveData(){
       }
     }
     if (ReadData()) {
-       // if (!FirstLostPacket) Serial.println ("Hooray!!");                           // Proves it worked!! 
+       // if (!FirstLostPacket) Serial.println ("Hooray!!");                             // Proves it worked!! 
         ReadExtraParameters();                                                         // Check the extra parameters
         FirstLostPacket = true;                                                        // it will be when one is lost!
     } else {        
@@ -520,6 +520,8 @@ FASTRUN void ReceiveData(){
         if (FirstLostPacket) {
                  TryNextChannel();
             } else {
+            //   if (!FirstLostPacket) Serial.println ("RECONNECTING...");     
+                 FirstLostPacket = true;
                  Reconnect();
             }                                                                           // Try to reconnect.
         } 

@@ -26,8 +26,8 @@
  
     #define HOPTIME                     97   // >= ms between channel changes (10 packets per hop)
     
-    #define LISTEN_PERIOD               15    // 10 How many ms to listen for TX in Reconnect()
-    #define RECEIVE_TIMEOUT             30   // <=16 fails, >=20 OK, 25 - 40 milliseconds seems an optimal value? (Same as TX timeout.)
+    #define LISTEN_PERIOD               10   // 10 How many ms to listen for TX in Reconnect()
+    #define RECEIVE_TIMEOUT             11   // <=9 fails, >=11 OK ... Reduced here
 
     #define FREQUENCYSCOUNT             82   // use 82 different channels
     #define FREQUENCYSCOUNT1            41   // use 41 different test channels
