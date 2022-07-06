@@ -993,7 +993,6 @@ void GreenLedOn()
             FirstConnection = false; 
             if (AnnounceConnected) PlaySound(CONNECTEDMSG);
             if (UseLog){ 
-                if (!LogFileOpen) StartLogFile();
                 LogConnection();
             }
         }
@@ -2765,7 +2764,7 @@ bool LoadAllParameters()
          ++SDCardAddress;
         
         MemoryForTransmtter = SDCardAddress;
-        ReadOneModel(ModelNumber);
+        ReadOneModel(ModelNumber); // this
         return true;
     }
     else {
@@ -2833,18 +2832,15 @@ FLASHMEM void GetTXVersionNumber()
     strcat(TransmitterVersionNumber, nbuf);
 }
 /************************************************************************************************************/
-FASTRUN void SetUKFrequencies(){ // heer
+FASTRUN void SetUKFrequencies(){ 
             FHSSChPointer = FHSS_Channels; 
-            UkRules = true;     
-            
+            UkRules = true;        
 }
 /************************************************************************************************************/
 FASTRUN void SetTestFrequencies(){
             FHSSChPointer = FHSS_Channels1; 
             UkRules = false;     
-            
 }
-
 /************************************************************************************************************/
 FASTRUN void CreateTimeStamp(char *  DateAndTime){
     char NB[10];
@@ -2903,6 +2899,22 @@ FASTRUN void MakeLogFileName(char * LogFileName){
     }
 }
 /************************************************************************************************************/
+FASTRUN void OpenLogFileW(char * LogFileName){
+    if (!LogFileOpen){
+        LogFileNumber = SD.open(LogFileName, FILE_WRITE);
+        LogFileOpen = true;
+    }
+}
+// ************************************************************************
+FASTRUN void CheckLogFileIsOpen(){
+     char LogFileName[20];
+     if (!LogFileOpen){
+        MakeLogFileName(LogFileName);                   // Create a "today" filename
+        OpenLogFileW(LogFileName);                      // Open file for writing
+     }
+}
+
+/************************************************************************************************************/
 FASTRUN void DeleteLogFile(char * LogFileName){
     SD.remove(LogFileName);
 }
@@ -2917,18 +2929,11 @@ FASTRUN void DeleteLogFile1(){
     SendText1(LogTeXt, BlankText);  
     if (!UseLog) return;
     if (LedWasGreen) {
-        StartLogFile();     
         RecentStartLine = 0;
         ShowLogFile(RecentStartLine);
     }
 }
-/************************************************************************************************************/
-FASTRUN void OpenLogFileW(char * LogFileName){
-    if (!LogFileOpen){
-        LogFileNumber = SD.open(LogFileName, FILE_WRITE);
-        LogFileOpen = true;
-    }
-}
+
 /************************************************************************************************************/
 FASTRUN void OpenLogFileR(char * LogFileName){
     if (!LogFileOpen){
@@ -2945,31 +2950,7 @@ FASTRUN void CloseLogFile(){
 FASTRUN void WriteToLogFile(char * SomeData, uint16_t len){
     LogFileNumber.write(SomeData, len);
 }
-/************************************************************************************************************/
-FASTRUN void StartLogFile(){ 
-    char LogFileName[20];
-    char LogHeader[]    = "Log file started: ";
-    char crlf[]         = {'|',13,10,0};
-    char Buf[30];
-    LogFileOpen = false;
-    
-    MakeLogFileName(LogFileName);                   // Create a "today" filename
-    OpenLogFileW(LogFileName);                      // Open file for writing
-    CreateTimeDateStamp(Buf);                       // Put time stamp into buffer
-    WriteToLogFile(crlf,sizeof (crlf));             // End of line
-    WriteToLogFile(LogHeader, sizeof (LogHeader));  // Write header
-    WriteToLogFile(Buf,19);                         // Add time stamp
-    WriteToLogFile(crlf,sizeof (crlf));             // End of line
-                                                    // Log file is now open and ready for new data ...
-}
-// ************************************************************************
-FASTRUN void CheckLogFileIsOpen(){
-     char LogFileName[20];
-     if (!LogFileOpen){
-        MakeLogFileName(LogFileName);                   // Create a "today" filename
-        OpenLogFileW(LogFileName);                      // Open file for writing
-     }
-}
+
 // ************************************************************************
 FASTRUN void LogFilePreamble(){
     char dbuf[12];
@@ -2979,6 +2960,7 @@ FASTRUN void LogFilePreamble(){
     WriteToLogFile(dbuf,9);                          // Add time stamp
     WriteToLogFile(Divider,sizeof (Divider));           
 }
+
 // ************************************************************************
 FASTRUN void LogText(char * TheText, uint16_t len){
     char crlf[]  = {'|',13,10,0};
@@ -2988,12 +2970,23 @@ FASTRUN void LogText(char * TheText, uint16_t len){
     CloseLogFile();
 }
 // ************************************************************************
+FASTRUN void LogMinGap(){
+        char TheText[] = "Minimum logged gap (ms): ";
+        char buf[50] = " ";
+        char NB[8];
+        Str(NB,MinimumGap,0);
+        strcpy (buf,TheText);
+        strcat (buf,NB);
+        LogText(buf, sizeof (buf));
+}
+// ************************************************************************
 FASTRUN void LogConnection(){
         char TheText[] = "Connected to ";
         char buf[40] = " ";
         strcpy (buf,TheText);
         strcat (buf,ModelName);
         LogText(buf, sizeof (buf));
+        LogMinGap();
 }
 // ************************************************************************
 FASTRUN void LogDisConnection(){ 
@@ -3017,8 +3010,8 @@ FASTRUN void LogNewFlightMode(){
 // ************************************************************************
 
 FASTRUN void LogUKRules(){
-    char Rtext[] = "Using UK Frequencies";
-    char Ttext[] = "Using Test Frequencies";
+    char Rtext[] = "Using 2.400 Ghz - 2.483 Ghz";
+    char Ttext[] = "Using 2.484 Ghz - 2.525 Ghz";
     if (UkRules) {
         LogText(Rtext, strlen(Rtext));
     } else{
@@ -3065,6 +3058,30 @@ FASTRUN void LogThisLongGap(){    // here is logged a Gap that exceeds one secon
     strcpy(thetext,Ltext);
     strcat(thetext, NB);
     LogText(thetext, strlen(Ltext)+4);
+}
+
+// ************************************************************************
+
+FASTRUN void LogPowerOn(){    
+    char Ltext[] = "Power ON";
+    LogText(Ltext, strlen(Ltext));
+}
+
+// ************************************************************************
+
+FASTRUN void LogPowerOff(){    
+    char Ltext[] = "Power OFF";
+    LogText(Ltext, strlen(Ltext));
+}
+
+// ************************************************************************
+
+FASTRUN void LogThisModel(){    
+    char Ltext[] = "Model loaded: ";
+    char thetext[55];
+    strcpy(thetext,Ltext);
+    strcat(thetext, ModelName);
+    LogText(thetext, strlen(Ltext)+strlen(ModelName));
 }
 // ************************************************************************
 
@@ -3151,7 +3168,10 @@ FLASHMEM void setup()
     if (PlayFanfare) PlaySound(THEFANFARE);
     ScreenTimeTimer = millis();
     RestoreBrightness();
-  
+     if (UseLog) {
+            LogPowerOn();
+            LogThisModel();
+     }
 }
 /*********************************************************************************************************************************/
 
@@ -3882,7 +3902,7 @@ void SetDefaultValues()
     OpenModelsFile();
     SDUpdateByte(SDCardAddress, ModelDefined);      // mark this model as undefined
     CloseModelsFile();
-    ReadOneModel(ModelNumber); 
+    ReadOneModel(ModelNumber);  // not this
     UpdateModelsNameEveryWhere();
     Procrastinate(100);
     SendCommand(ProgressEnd);
@@ -5752,6 +5772,7 @@ FASTRUN void ButtonWasPressed()
                 SendCommand(NotStillConnected);
             }
             else {
+                if (UseLog) LogPowerOff();
                 SaveAllParameters();
                 digitalWrite(POWER_OFF_PIN, HIGH);
             }
@@ -5760,6 +5781,8 @@ FASTRUN void ButtonWasPressed()
         }
 
         if (InStrng(OffNow, TextIn) > 0) {
+           if (UseLog) LogPowerOff();
+
             digitalWrite(POWER_OFF_PIN, HIGH); // force OFF in Options View
             ClearText();
             return;
@@ -7233,7 +7256,8 @@ char NewName[35];
         if (GetButtonPress()) ButtonWasPressed();     // Deal with button ... don't want to miss one!
         if (LastModelLoaded != ModelNumber) {
             if (ModelNumber >= 1) {                   // Don't use number zero
-                 ReadOneModel(ModelNumber);
+                 ReadOneModel(ModelNumber);   
+                 if (UseLog) LogThisModel();
                  LastModelLoaded = ModelNumber;
                  UpdateModelsNameEveryWhere();  
             }
