@@ -30,8 +30,8 @@
  * | 15    | Don't use. SBUS driver takes it (RX3) |
  * | 16    | SPARE
  * | 17    | SPARE
- * | 18    | I2C SDA (FOR I2C) |
- * | 19    | I2C SCK (FOR I2C) |
+ * | 18    | I2C SDA (FOR I2C) | *** --- >> BLUE WIRE   = 18 !! << --- ***
+ * | 19    | I2C SCK (FOR I2C) | *** --- >> YELLOW WIRE = 19 !! << --- ***
  * | 20    | SPI CSN2 (FOR RADIO2)  |
  * | 21    | SPI CE2 (FOR RADIO2) |
  * | 22    | IRQ1 (FOR RADIO1) |
