@@ -477,6 +477,8 @@ Functions</h2></td></tr>
 <tr class="separator:a7d34cec6e8edc20c8b50424e15dcc7c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0a3d89dfcfab70c6cbc50401fff1afeb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_radio_functions_8h.html#a0a3d89dfcfab70c6cbc50401fff1afeb">ReEnableScanButton</a> ()</td></tr>
 <tr class="separator:a0a3d89dfcfab70c6cbc50401fff1afeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab7bbbad7e5882348ed2963dae9f4a226"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_radio_functions_8h.html#ab7bbbad7e5882348ed2963dae9f4a226">LogUKRules</a> ()</td></tr>
+<tr class="separator:ab7bbbad7e5882348ed2963dae9f4a226"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a86ce6c54618629a61b8502786d2ce82c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_radio_functions_8h.html#a86ce6c54618629a61b8502786d2ce82c">InitRadio</a> (uint64_t Pipe)</td></tr>
 <tr class="separator:a86ce6c54618629a61b8502786d2ce82c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a70dc6f8d2e5ccef6b8e4a2b9b0afb2ce"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_radio_functions_8h.html#a70dc6f8d2e5ccef6b8e4a2b9b0afb2ce">SetThePipe</a> (uint64_t WhichPipe)</td></tr>
@@ -649,6 +651,10 @@ Variables</h2></td></tr>
 <tr class="separator:ae99f193f5a3e06508bbe4b32ee91a963"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a42f848041eda5cd5b98d334ab44a15a1"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_radio_functions_8h.html#a42f848041eda5cd5b98d334ab44a15a1">Inactivity_Start</a></td></tr>
 <tr class="separator:a42f848041eda5cd5b98d334ab44a15a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7847cc790a939f378993691ae7d40a2f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_radio_functions_8h.html#a7847cc790a939f378993691ae7d40a2f">UkRules</a></td></tr>
+<tr class="separator:a7847cc790a939f378993691ae7d40a2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d77a74eeedd4ed97d38aba4996085b9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_radio_functions_8h.html#a1d77a74eeedd4ed97d38aba4996085b9">PreviousUkRules</a></td></tr>
+<tr class="separator:a1d77a74eeedd4ed97d38aba4996085b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="a445cfbf06ed74188fcf3965b4cab9533" name="a445cfbf06ed74188fcf3965b4cab9533"></a>
@@ -3084,7 +3090,7 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 <p >BUTTON WAS PRESSED (DEAL WITH INPUT FROM NEXTION DISPLAY) </p>
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l04991">4991</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l05008">5008</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -3109,7 +3115,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l06998">6998</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l07015">7015</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -3140,7 +3146,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l07179">7179</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l07196">7196</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -3171,7 +3177,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l01227">1227</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l01228">1228</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -3202,11 +3208,11 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l02937">2937</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l02940">2940</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="_radio_functions_8h_abc72fe68abd024cb263115e0afd3160a_icgraph.svg" width="1271" height="570"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="_radio_functions_8h_abc72fe68abd024cb263115e0afd3160a_icgraph.svg" width="1266" height="586"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 
@@ -3227,7 +3233,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l04082">4082</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l04099">4099</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -3258,7 +3264,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_radio_functions_8cpp_source.html#l00383">383</a> of file <a class="el" href="_radio_functions_8cpp_source.html">RadioFunctions.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_radio_functions_8cpp_source.html#l00387">387</a> of file <a class="el" href="_radio_functions_8cpp_source.html">RadioFunctions.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -3283,7 +3289,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_radio_functions_8cpp_source.html#l00369">369</a> of file <a class="el" href="_radio_functions_8cpp_source.html">RadioFunctions.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_radio_functions_8cpp_source.html#l00373">373</a> of file <a class="el" href="_radio_functions_8cpp_source.html">RadioFunctions.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -3353,7 +3359,7 @@ Here is the caller graph for this function:</div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l03950">3950</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l03967">3967</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -3384,7 +3390,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_radio_functions_8cpp_source.html#l00215">215</a> of file <a class="el" href="_radio_functions_8cpp_source.html">RadioFunctions.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_radio_functions_8cpp_source.html#l00219">219</a> of file <a class="el" href="_radio_functions_8cpp_source.html">RadioFunctions.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -3454,7 +3460,7 @@ Here is the caller graph for this function:</div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l03896">3896</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l03913">3913</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -3555,7 +3561,7 @@ Here is the caller graph for this function:</div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l03923">3923</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l03940">3940</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -3588,7 +3594,7 @@ Here is the caller graph for this function:</div>
 
 <p>GET NEW SERVO POSITIONS. </p>
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l01931">1931</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l01932">1932</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -3619,7 +3625,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l00465">465</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l00466">466</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -3650,7 +3656,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l00986">986</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l00987">987</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -3713,7 +3719,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_radio_functions_8cpp_source.html#l00342">342</a> of file <a class="el" href="_radio_functions_8cpp_source.html">RadioFunctions.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_radio_functions_8cpp_source.html#l00346">346</a> of file <a class="el" href="_radio_functions_8cpp_source.html">RadioFunctions.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -3744,7 +3750,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l00764">764</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l00765">765</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -3769,7 +3775,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l06707">6707</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l06724">6724</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -3800,7 +3806,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l02988">2988</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l02991">2991</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -3831,7 +3837,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l02996">2996</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l02999">2999</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -3862,7 +3868,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l03042">3042</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l03059">3059</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -3873,6 +3879,37 @@ Here is the call graph for this function:</div>
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><iframe scrolling="no" frameborder="0" src="_radio_functions_8h_a4d0ec00f44761a9280cb95ba073d277e_icgraph.svg" width="502" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
+</div>
+
+</div>
+</div>
+<a id="ab7bbbad7e5882348ed2963dae9f4a226" name="ab7bbbad7e5882348ed2963dae9f4a226"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab7bbbad7e5882348ed2963dae9f4a226">&#9670;&nbsp;</a></span>LogUKRules()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LogUKRules </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l03019">3019</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" frameborder="0" src="_radio_functions_8h_ab7bbbad7e5882348ed2963dae9f4a226_cgraph.svg" width="851" height="190"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" frameborder="0" src="_radio_functions_8h_ab7bbbad7e5882348ed2963dae9f4a226_icgraph.svg" width="328" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 
@@ -3926,7 +3963,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l07091">7091</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l07108">7108</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -4006,7 +4043,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l07010">7010</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l07027">7027</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -4060,7 +4097,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l03483">3483</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l03500">3500</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -4091,7 +4128,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l00970">970</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l00971">971</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -4122,7 +4159,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l01749">1749</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l01750">1750</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -4153,7 +4190,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l04726">4726</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l04743">4743</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -4184,7 +4221,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_radio_functions_8cpp_source.html#l00262">262</a> of file <a class="el" href="_radio_functions_8cpp_source.html">RadioFunctions.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_radio_functions_8cpp_source.html#l00266">266</a> of file <a class="el" href="_radio_functions_8cpp_source.html">RadioFunctions.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -4293,7 +4330,7 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 <p >Send 13 joined together char arrays to NEXTION </p>
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l01768">1768</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l01769">1769</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -4325,7 +4362,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l01043">1043</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l01044">1044</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -4360,7 +4397,7 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="_radio_functions_8h_a3d7322e78f097d02d476f17a6306997c_cgraph.svg" width="892" height="1659"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="_radio_functions_8h_a3d7322e78f097d02d476f17a6306997c_cgraph.svg" width="892" height="1648"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 <div class="dynheader">
@@ -4398,7 +4435,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l01052">1052</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l01053">1053</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -4430,7 +4467,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_radio_functions_8cpp_source.html#l00360">360</a> of file <a class="el" href="_radio_functions_8cpp_source.html">RadioFunctions.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_radio_functions_8cpp_source.html#l00364">364</a> of file <a class="el" href="_radio_functions_8cpp_source.html">RadioFunctions.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -4463,7 +4500,7 @@ Here is the caller graph for this function:</div>
 
 <p>SHOW COMMS. </p>
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l01576">1576</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l01577">1577</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -4495,7 +4532,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l03054">3054</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l03071">3071</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -4526,7 +4563,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l01288">1288</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l01289">1289</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -4557,7 +4594,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l00929">929</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l00930">930</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -4582,7 +4619,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l02946">2946</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l02949">2949</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -4630,7 +4667,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l00804">804</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l00805">805</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -4655,7 +4692,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l04739">4739</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l04756">4756</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -4758,7 +4795,7 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l00399">399</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l00400">400</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -5187,7 +5224,7 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l00400">400</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l00401">401</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -5259,7 +5296,7 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l00401">401</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l00402">402</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -5451,7 +5488,7 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l00429">429</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l00430">430</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -5475,7 +5512,7 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l00430">430</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l00431">431</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -5499,7 +5536,7 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l00431">431</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l00432">432</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -5695,6 +5732,30 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
+<a id="a1d77a74eeedd4ed97d38aba4996085b9" name="a1d77a74eeedd4ed97d38aba4996085b9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d77a74eeedd4ed97d38aba4996085b9">&#9670;&nbsp;</a></span>PreviousUkRules</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool PreviousUkRules</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l00395">395</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+
+</div>
+</div>
 <a id="aae23a8374f487a46c5fcb1fb02fadc69" name="aae23a8374f487a46c5fcb1fb02fadc69"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aae23a8374f487a46c5fcb1fb02fadc69">&#9670;&nbsp;</a></span>Radio1</h2>
 
@@ -5809,7 +5870,7 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l00403">403</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l00404">404</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -6049,6 +6110,30 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
+<a id="a7847cc790a939f378993691ae7d40a2f" name="a7847cc790a939f378993691ae7d40a2f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7847cc790a939f378993691ae7d40a2f">&#9670;&nbsp;</a></span>UkRules</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool UkRules</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l00394">394</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+
+</div>
+</div>
 <a id="a42a6363bff83773c1b99caa06aebb1f5" name="a42a6363bff83773c1b99caa06aebb1f5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a42a6363bff83773c1b99caa06aebb1f5">&#9670;&nbsp;</a></span>UseMacros</h2>
 
@@ -6069,7 +6154,7 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l00433">433</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html#l00434">434</a> of file <a class="el" href="_transmitter_code_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>

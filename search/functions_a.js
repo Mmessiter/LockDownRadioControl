@@ -11,7 +11,7 @@ var searchData=
   ['locus_5freadstatus_8',['LOCUS_ReadStatus',['../class_adafruit___g_p_s.html#adb6139e84c64156b5654dfce2a2e6e3f',1,'Adafruit_GPS']]],
   ['locus_5fstartlogger_9',['LOCUS_StartLogger',['../class_adafruit___g_p_s.html#a325d15c43c09fa1bedcdadb39706e72b',1,'Adafruit_GPS']]],
   ['locus_5fstoplogger_10',['LOCUS_StopLogger',['../class_adafruit___g_p_s.html#a48eaf7f5b46e3682b058a7f8f44fa385',1,'Adafruit_GPS']]],
-  ['logconnection_11',['LogConnection',['../_transmitter_code_2src_2main_8cpp.html#aaa3e86084c43b049d52d7d62c58a00b9',1,'LogConnection():&#160;main.cpp'],['../_radio_functions_8h.html#a896d9c3f90c2a4c083748097a98bc96b',1,'LogConnection():&#160;main.cpp']]],
+  ['logconnection_11',['LogConnection',['../_radio_functions_8h.html#a896d9c3f90c2a4c083748097a98bc96b',1,'LogConnection():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#aaa3e86084c43b049d52d7d62c58a00b9',1,'LogConnection():&#160;main.cpp']]],
   ['logdisconnection_12',['LogDisConnection',['../_radio_functions_8h.html#a01c8a29ed73a0c490282e23e119eca14',1,'LogDisConnection():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a2d5ec5fd5ed62d5b7b071fabe2225405',1,'LogDisConnection():&#160;main.cpp']]],
   ['logfilepreamble_13',['LogFilePreamble',['../_transmitter_code_2src_2main_8cpp.html#a99a51dbad5d686ca711e982f82cbcada',1,'main.cpp']]],
   ['loglowbattery_14',['LogLowBattery',['../_transmitter_code_2src_2main_8cpp.html#aac4334531357e4221222c7fc8c5cf817',1,'main.cpp']]],
@@ -20,5 +20,6 @@ var searchData=
   ['logthisgap_17',['LogThisGap',['../_transmitter_code_2src_2main_8cpp.html#a1fadc7cdd854f8b3628b622da5417d8b',1,'main.cpp']]],
   ['logthislonggap_18',['LogThisLongGap',['../_radio_functions_8h.html#a4d0ec00f44761a9280cb95ba073d277e',1,'LogThisLongGap():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#afd409fe008843b50c3e2ff697558d4d5',1,'LogThisLongGap():&#160;main.cpp']]],
   ['logthisrx_19',['LogThisRX',['../_transmitter_code_2src_2main_8cpp.html#a900aa27c1353238593c276186d960912',1,'main.cpp']]],
-  ['loop_20',['loop',['../_receiver_code_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../_sensor_hub_t32_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#ad3cb30894c94eb016e98bdcaa899ac86',1,'loop():&#160;main.cpp']]]
+  ['logukrules_20',['LogUKRules',['../_radio_functions_8h.html#ab7bbbad7e5882348ed2963dae9f4a226',1,'LogUKRules():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#afe8648b7a9a00742332cb5967fc1ad14',1,'LogUKRules():&#160;main.cpp']]],
+  ['loop_21',['loop',['../_receiver_code_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../_sensor_hub_t32_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#ad3cb30894c94eb016e98bdcaa899ac86',1,'loop():&#160;main.cpp']]]
 ];

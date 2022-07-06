@@ -25,6 +25,7 @@ var searchData=
   ['previousflightmode_22',['PreviousFlightMode',['../_transmitter_code_2src_2main_8cpp.html#a8f5159f240ef6e3787b668d1dac1a67a',1,'main.cpp']]],
   ['previousmacronumber_23',['PreviousMacroNumber',['../_transmitter_code_2src_2main_8cpp.html#a2ab3e003635d9ed1751b3f4183762748',1,'main.cpp']]],
   ['previoustrim_24',['PreviousTrim',['../_transmitter_code_2src_2main_8cpp.html#a9b9c21290f5fd4339ede092077d4dfad',1,'main.cpp']]],
-  ['purpose_25',['Purpose',['../struct_payload.html#ac18701f2aa35ebd8402f45f840d5c445',1,'Payload']]],
-  ['pwmpins_26',['PWMPins',['../_receiver_code_2src_2main_8cpp.html#a19f864fa6bdea0867325f70e162c92ef',1,'main.cpp']]]
+  ['previousukrules_25',['PreviousUkRules',['../_radio_functions_8h.html#a1d77a74eeedd4ed97d38aba4996085b9',1,'PreviousUkRules():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a1d77a74eeedd4ed97d38aba4996085b9',1,'PreviousUkRules():&#160;main.cpp']]],
+  ['purpose_26',['Purpose',['../struct_payload.html#ac18701f2aa35ebd8402f45f840d5c445',1,'Payload']]],
+  ['pwmpins_27',['PWMPins',['../_receiver_code_2src_2main_8cpp.html#a19f864fa6bdea0867325f70e162c92ef',1,'main.cpp']]]
 ];

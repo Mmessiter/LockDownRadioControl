@@ -131,13 +131,13 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "_adafruit___b_m_p280_8cpp.html",
-"_radio_functions_8h.html#a2214b1aa5fbdf61eaa9061c051d3826d",
-"_receiver_code_2lib_2_adafruit___g_p_s___library_2src_2_adafruit___p_m_t_k_8h.html#ac31cfcc416ba69780e3894a559404914",
-"_transmitter_code_2src_2main_8cpp.html#a19f6fc09d690832e74fd3c679207f07f",
-"_transmitter_code_2src_2main_8cpp.html#aa337d6e5cf496fbca7cdc61818f8239a",
-"class_adafruit___bus_i_o___register.html#aebb1d9dd6520ba1a20b3952c434d7a47",
-"functions_x.html",
-"struct_tiny_g_p_s_altitude.html"
+"_radio_functions_8h.html#a20b56099fe1fdbd5605a91af95c5a50b",
+"_receiver_code_2lib_2_adafruit___g_p_s___library_2src_2_adafruit___p_m_t_k_8h.html#aa6ac1789ed1c9e0abb27499867dbf1d3",
+"_transmitter_code_2src_2main_8cpp.html#a17699f358cf9f7c3155a9c5daf8ff13c",
+"_transmitter_code_2src_2main_8cpp.html#aa16611ba89205c8cb9e75353ce1ad032",
+"class_adafruit___bus_i_o___register.html#aa418dced5301a1d8c1776a1941c8bc64",
+"functions_t.html",
+"struct_raw_degrees.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

@@ -174,6 +174,7 @@ var _radio_functions_8h =
     [ "LogConnection", "_radio_functions_8h.html#a896d9c3f90c2a4c083748097a98bc96b", null ],
     [ "LogDisConnection", "_radio_functions_8h.html#a01c8a29ed73a0c490282e23e119eca14", null ],
     [ "LogThisLongGap", "_radio_functions_8h.html#a4d0ec00f44761a9280cb95ba073d277e", null ],
+    [ "LogUKRules", "_radio_functions_8h.html#ab7bbbad7e5882348ed2963dae9f4a226", null ],
     [ "MapToSBUS", "_radio_functions_8h.html#a6a495c5560f12cc3fd3df9454927d681", null ],
     [ "ParseAckPayload", "_radio_functions_8h.html#a230e862a4da0f66746b6b3afba6bd77a", null ],
     [ "PreScan", "_radio_functions_8h.html#a5e3e764f8311564f5e20c3a838b25c07", null ],
@@ -239,6 +240,7 @@ var _radio_functions_8h =
     [ "NoSleeping", "_radio_functions_8h.html#aa336d2e589396e246b779e7ed2b097c0", null ],
     [ "PacketNumber", "_radio_functions_8h.html#a09cb370d93005b5a43e932a3d6093ea2", null ],
     [ "PipeTimeout", "_radio_functions_8h.html#a54a3133087523f6dc1d418f09f75e06c", null ],
+    [ "PreviousUkRules", "_radio_functions_8h.html#a1d77a74eeedd4ed97d38aba4996085b9", null ],
     [ "Radio1", "_radio_functions_8h.html#aae23a8374f487a46c5fcb1fb02fadc69", null ],
     [ "RangeTestGoodPackets", "_radio_functions_8h.html#a8a5b55d644bb404cd6cdf61c5a85f822", null ],
     [ "RangeTestLostPackets", "_radio_functions_8h.html#acae6ed358533cc9dfac32f4a45f760ee", null ],
@@ -254,5 +256,6 @@ var _radio_functions_8h =
     [ "TxOnTime", "_radio_functions_8h.html#a992a1c7536f872bdfd833e282cf3b4e4", null ],
     [ "TxPace", "_radio_functions_8h.html#a97c9afd7483ad56e7a2aa63db252d616", null ],
     [ "TXTimeStamp", "_radio_functions_8h.html#afd020f35b9f4a1aa2643c4fdcc46f5db", null ],
+    [ "UkRules", "_radio_functions_8h.html#a7847cc790a939f378993691ae7d40a2f", null ],
     [ "UseMacros", "_radio_functions_8h.html#a42a6363bff83773c1b99caa06aebb1f5", null ]
 ];
