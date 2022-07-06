@@ -1088,7 +1088,7 @@ void SendText1(char* tbox, char* NewWord)
 void EndSend()
 {
     for (u_int8_t pp = 0; pp < 3; ++pp) {NEXTION.write(0xff);} // Send end of Input message // 
-    delay(60);                                            // ** A DELAY ** (>=50 ms) was needed if an answer might come! (!! Shorter with Intelligent dislay)
+    delay(55);                                            // ** A DELAY ** (>=50 ms) was needed if an answer might come! (!! Shorter with Intelligent dislay)
 }
 /*********************************************************************************************************************************/
 void SendValue(char* nbox, int value)
@@ -1137,20 +1137,39 @@ uint32_t GetValue(char* nbox)
     char   GET[]   = "get ";
     char   VAL[]   = ".val";
     char   CB[100];
+    
     strcpy(CB, GET);
     strcat(CB, nbox);
     strcat(CB, VAL);
     NEXTION.print(CB);
-    EndSend();
+    EndSend(); 
     GetTextIn();
     if (TextIn[0] == 'q') {
         ValueIn = TextIn[1]; // Collect and build 32 bit value from 4 bytes
         ValueIn += (TextIn[2] << 8);
         ValueIn += (TextIn[3] << 16);  
         ValueIn += (TextIn[4] << 24);
+    } else{
+        ValueIn = 65535;    // = THERE WAS AN ERROR !
     }
     return ValueIn;
 }
+
+/*********************************************************************************************************************************/
+
+uint32_t GetValueSafer(char* nbox) // This function calls the function above until it returns no error
+{
+    int i               = 0;
+    uint32_t   ValueIn  = GetValue(nbox);
+
+    while (ValueIn == 65535 && i < 25){ // if error read again!
+        delay (50);
+        ValueIn = GetValue(nbox);
+        ++i;
+    }
+    return ValueIn;
+}
+
 // ***************************************************************************************************************
 // This function gets Nextion textbox Text into a char array pointed to by * TheText. There better be room!
 // It returns the length of array
@@ -2950,7 +2969,6 @@ FASTRUN void CloseLogFile(){
 FASTRUN void WriteToLogFile(char * SomeData, uint16_t len){
     LogFileNumber.write(SomeData, len);
 }
-
 // ************************************************************************
 FASTRUN void LogFilePreamble(){
     char dbuf[12];
@@ -3168,10 +3186,10 @@ FLASHMEM void setup()
     if (PlayFanfare) PlaySound(THEFANFARE);
     ScreenTimeTimer = millis();
     RestoreBrightness();
-     if (UseLog) {
+    if (UseLog) {
             LogPowerOn();
             LogThisModel();
-     }
+    }
 }
 /*********************************************************************************************************************************/
 
@@ -5522,15 +5540,15 @@ FASTRUN void ButtonWasPressed()
                 TxName[j] = 0;
             }
             SendValue(Progress,35);
-            Qnh                 = GetValue(QNH);
-            DeltaGMT            = GetValue(dGMT);
+            Qnh = (uint16_t)      GetValueSafer(QNH); // error protected version
+            DeltaGMT            = GetValueSafer(dGMT);
             SendValue(Progress,45);
-            TrimFactor          = GetValue(trf);
-            LowBattery          = GetValue(Bwn);
-            ScreenTimeout       = GetValue(ScreenViewTimeout);
-            CopyTrimsToAll      = GetValue(c0);
+            TrimFactor          = GetValueSafer(trf);
+            LowBattery          = GetValueSafer(Bwn);
+            ScreenTimeout       = GetValueSafer(ScreenViewTimeout);
+            CopyTrimsToAll      = GetValueSafer(c0);
             SendValue(Progress,100);
-            Inactivity_Timeout  = GetValue(Pto) * TICKSPERMINUTE;
+            Inactivity_Timeout  = GetValueSafer(Pto) * TICKSPERMINUTE;
             if (Inactivity_Timeout < INACTIVITYMINIMUM) Inactivity_Timeout = INACTIVITYMINIMUM;
             if (Inactivity_Timeout > INACTIVITYMAXIMUM) Inactivity_Timeout = INACTIVITYMAXIMUM;
             FixDeltaGMTSign();

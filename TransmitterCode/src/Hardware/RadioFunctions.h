@@ -367,7 +367,8 @@ extern void  MapToSBUS();
 extern void  ZeroDataScreen();
 extern void  RedLedOn();
 extern void  ReEnableScanButton();
-extern void LogUKRules();
+extern void  LogUKRules();
+extern int   InStrng(char * text1, char * text2);
 
 /*********************************************************************************************************************************/
 // function prototypes
