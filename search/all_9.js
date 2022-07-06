@@ -77,7 +77,7 @@ var searchData=
   ['initswitchesandtrims_74',['InitSwitchesAndTrims',['../_transmitter_code_2src_2main_8cpp.html#aa43884078cb84d9ae16d8cd6791c7042',1,'main.cpp']]],
   ['inputs_5fview_75',['INPUTS_VIEW',['../_radio_functions_8h.html#aa2bec27575ce278d56e8d9f844dfe72e',1,'RadioFunctions.h']]],
   ['inputstick_76',['InPutStick',['../_transmitter_code_2src_2main_8cpp.html#ab9d98ee9d26a1af8f20291fd0b717056',1,'main.cpp']]],
-  ['instrng_77',['InStrng',['../_transmitter_code_2src_2main_8cpp.html#a5f109790a6fe0b972a502f3cac4ed1e7',1,'main.cpp']]],
+  ['instrng_77',['InStrng',['../_transmitter_code_2src_2main_8cpp.html#a5f109790a6fe0b972a502f3cac4ed1e7',1,'InStrng(char *text1, char *text2):&#160;main.cpp'],['../_radio_functions_8h.html#a5f109790a6fe0b972a502f3cac4ed1e7',1,'InStrng(char *text1, char *text2):&#160;main.cpp']]],
   ['interations_78',['Interations',['../radio_8h.html#ac8e10a08e9da70138c4a8459c6902d7d',1,'radio.h']]],
   ['interpolationtypes_79',['InterpolationTypes',['../_transmitter_code_2src_2main_8cpp.html#a5c126186d6f233dca99b92bf971ea87d',1,'main.cpp']]],
   ['intohigherres_80',['IntoHigherRes',['../_transmitter_code_2src_2main_8cpp.html#a0d8d8a0d67cb9b04481f1692abe75368',1,'main.cpp']]],

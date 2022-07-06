@@ -14,7 +14,7 @@ var searchData=
   ['initmaxmin_11',['InitMaxMin',['../_transmitter_code_2src_2main_8cpp.html#a07064494c6f54db67dfab08c1f744a65',1,'main.cpp']]],
   ['initradio_12',['InitRadio',['../_radio_functions_8h.html#a86ce6c54618629a61b8502786d2ce82c',1,'InitRadio(uint64_t Pipe):&#160;RadioFunctions.cpp'],['../_radio_functions_8cpp.html#a799f38bc33abdb30eec1d7db3cf27d58',1,'InitRadio(uint64_t Pipe):&#160;RadioFunctions.cpp']]],
   ['initswitchesandtrims_13',['InitSwitchesAndTrims',['../_transmitter_code_2src_2main_8cpp.html#aa43884078cb84d9ae16d8cd6791c7042',1,'main.cpp']]],
-  ['instrng_14',['InStrng',['../_transmitter_code_2src_2main_8cpp.html#a5f109790a6fe0b972a502f3cac4ed1e7',1,'main.cpp']]],
+  ['instrng_14',['InStrng',['../_transmitter_code_2src_2main_8cpp.html#a5f109790a6fe0b972a502f3cac4ed1e7',1,'InStrng(char *text1, char *text2):&#160;main.cpp'],['../_radio_functions_8h.html#a5f109790a6fe0b972a502f3cac4ed1e7',1,'InStrng(char *text1, char *text2):&#160;main.cpp']]],
   ['intohigherres_15',['IntoHigherRes',['../_transmitter_code_2src_2main_8cpp.html#a0d8d8a0d67cb9b04481f1692abe75368',1,'main.cpp']]],
   ['intolowerres_16',['IntoLowerRes',['../_transmitter_code_2src_2main_8cpp.html#a5cdbe11d62e0de7610ba323e60b97d33',1,'main.cpp']]],
   ['iscompoundangle_17',['isCompoundAngle',['../class_adafruit___g_p_s.html#a6d13e7c81f124ca8809c02fe048b1218',1,'Adafruit_GPS']]],

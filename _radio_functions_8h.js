@@ -169,6 +169,7 @@ var _radio_functions_8h =
     [ "GreenLedOn", "_radio_functions_8h.html#a62e53eb9359c32b666e3386d62c57037", null ],
     [ "HopToNextChannel", "_radio_functions_8h.html#a62ec0168b1eea5f5c14f663d9217574d", null ],
     [ "InitRadio", "_radio_functions_8h.html#a86ce6c54618629a61b8502786d2ce82c", null ],
+    [ "InStrng", "_radio_functions_8h.html#a5f109790a6fe0b972a502f3cac4ed1e7", null ],
     [ "KickTheDog", "_radio_functions_8h.html#ada95a00a341e4a80176eda743a94ab2e", null ],
     [ "LoadPacketData", "_radio_functions_8h.html#ac4ffb9b555ce8d38f615610dc89b5499", null ],
     [ "LogConnection", "_radio_functions_8h.html#a896d9c3f90c2a4c083748097a98bc96b", null ],

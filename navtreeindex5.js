@@ -1,5 +1,7 @@
 var NAVTREEINDEX5 =
 {
+"class_adafruit___bus_i_o___register.html#a2b48e23dacbb7cffc0eb07dcebcfba6f":[9,0,3,6],
+"class_adafruit___bus_i_o___register.html#a300a0297429df441bc88dbb37eac1a06":[9,0,3,2],
 "class_adafruit___bus_i_o___register.html#a5c49c498815a5414d6fb5915760bbeba":[9,0,3,5],
 "class_adafruit___bus_i_o___register.html#a699434b2567ae8fce541b8048d891252":[9,0,3,8],
 "class_adafruit___bus_i_o___register.html#a7de4a4cbb3e8cdfebac31344e8ab6c8c":[9,0,3,0],
@@ -247,7 +249,5 @@ var NAVTREEINDEX5 =
 "functions_i.html":[9,3,0,8],
 "functions_k.html":[9,3,0,9],
 "functions_l.html":[9,3,0,10],
-"functions_m.html":[9,3,0,11],
-"functions_n.html":[9,3,0,12],
-"functions_o.html":[9,3,0,13]
+"functions_m.html":[9,3,0,11]
 };
