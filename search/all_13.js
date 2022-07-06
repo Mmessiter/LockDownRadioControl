@@ -179,7 +179,7 @@ var searchData=
   ['startbuddyview_176',['StartBuddyView',['../_transmitter_code_2src_2main_8cpp.html#aaf48dfa7ac69b0baa5134fd9547f722c',1,'main.cpp']]],
   ['startinactvitytimeout_177',['StartInactvityTimeout',['../_radio_functions_8h.html#a793b7bcd77531c95fe72ed4356d421c8',1,'StartInactvityTimeout():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a793b7bcd77531c95fe72ed4356d421c8',1,'StartInactvityTimeout():&#160;main.cpp']]],
   ['startlocation_178',['StartLocation',['../_transmitter_code_2src_2main_8cpp.html#a3d13608c0de514d44371734e8063f278',1,'main.cpp']]],
-  ['startlogfile_179',['StartLogFile',['../_radio_functions_8h.html#a514afc8dd077db77334696ca719a99b7',1,'StartLogFile():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#aeff6be35c62c792330dc2413990e10de',1,'StartLogFile():&#160;main.cpp']]],
+  ['startlogfile_179',['StartLogFile',['../_radio_functions_8h.html#a514afc8dd077db77334696ca719a99b7',1,'RadioFunctions.h']]],
   ['startmacro_180',['StartMacro',['../_radio_functions_8cpp.html#aff7f985af10a021196ae5c9bf188c445',1,'RadioFunctions.cpp']]],
   ['startreverseview_181',['StartReverseView',['../_transmitter_code_2src_2main_8cpp.html#a618bc6ca4ab71bb4d5d7e00dc71f9e56',1,'main.cpp']]],
   ['status_182',['status',['../structsensors__vec__t.html#af75d491f35f979932de5609d6ef6c363',1,'sensors_vec_t']]],

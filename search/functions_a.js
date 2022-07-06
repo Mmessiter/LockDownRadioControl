@@ -15,11 +15,15 @@ var searchData=
   ['logdisconnection_12',['LogDisConnection',['../_radio_functions_8h.html#a01c8a29ed73a0c490282e23e119eca14',1,'LogDisConnection():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a2d5ec5fd5ed62d5b7b071fabe2225405',1,'LogDisConnection():&#160;main.cpp']]],
   ['logfilepreamble_13',['LogFilePreamble',['../_transmitter_code_2src_2main_8cpp.html#a99a51dbad5d686ca711e982f82cbcada',1,'main.cpp']]],
   ['loglowbattery_14',['LogLowBattery',['../_transmitter_code_2src_2main_8cpp.html#aac4334531357e4221222c7fc8c5cf817',1,'main.cpp']]],
-  ['lognewflightmode_15',['LogNewFlightMode',['../_transmitter_code_2src_2main_8cpp.html#a7e5a974cd293dd1cef082de89041c488',1,'main.cpp']]],
-  ['logtext_16',['LogText',['../_transmitter_code_2src_2main_8cpp.html#add8d8f400f1c1c4a5add52736cdf94ca',1,'main.cpp']]],
-  ['logthisgap_17',['LogThisGap',['../_transmitter_code_2src_2main_8cpp.html#a1fadc7cdd854f8b3628b622da5417d8b',1,'main.cpp']]],
-  ['logthislonggap_18',['LogThisLongGap',['../_radio_functions_8h.html#a4d0ec00f44761a9280cb95ba073d277e',1,'LogThisLongGap():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#afd409fe008843b50c3e2ff697558d4d5',1,'LogThisLongGap():&#160;main.cpp']]],
-  ['logthisrx_19',['LogThisRX',['../_transmitter_code_2src_2main_8cpp.html#a900aa27c1353238593c276186d960912',1,'main.cpp']]],
-  ['logukrules_20',['LogUKRules',['../_radio_functions_8h.html#ab7bbbad7e5882348ed2963dae9f4a226',1,'LogUKRules():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#afe8648b7a9a00742332cb5967fc1ad14',1,'LogUKRules():&#160;main.cpp']]],
-  ['loop_21',['loop',['../_receiver_code_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../_sensor_hub_t32_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#ad3cb30894c94eb016e98bdcaa899ac86',1,'loop():&#160;main.cpp']]]
+  ['logmingap_15',['LogMinGap',['../_transmitter_code_2src_2main_8cpp.html#af7b3b351c80f0b43c13a4ccb440b2f2e',1,'main.cpp']]],
+  ['lognewflightmode_16',['LogNewFlightMode',['../_transmitter_code_2src_2main_8cpp.html#a7e5a974cd293dd1cef082de89041c488',1,'main.cpp']]],
+  ['logpoweroff_17',['LogPowerOff',['../_transmitter_code_2src_2main_8cpp.html#a31e9d94f45a152e1cbc436284799ca37',1,'main.cpp']]],
+  ['logpoweron_18',['LogPowerOn',['../_transmitter_code_2src_2main_8cpp.html#a7d93a2500f52d72210903c46a85ce820',1,'main.cpp']]],
+  ['logtext_19',['LogText',['../_transmitter_code_2src_2main_8cpp.html#add8d8f400f1c1c4a5add52736cdf94ca',1,'main.cpp']]],
+  ['logthisgap_20',['LogThisGap',['../_transmitter_code_2src_2main_8cpp.html#a1fadc7cdd854f8b3628b622da5417d8b',1,'main.cpp']]],
+  ['logthislonggap_21',['LogThisLongGap',['../_radio_functions_8h.html#a4d0ec00f44761a9280cb95ba073d277e',1,'LogThisLongGap():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#afd409fe008843b50c3e2ff697558d4d5',1,'LogThisLongGap():&#160;main.cpp']]],
+  ['logthismodel_22',['LogThisModel',['../_radio_functions_8h.html#af1548fa3d0c6b8a1e3057b962b77c5eb',1,'LogThisModel():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a83944fc0ecaab86d0bbb0802e99e5084',1,'LogThisModel():&#160;main.cpp']]],
+  ['logthisrx_23',['LogThisRX',['../_transmitter_code_2src_2main_8cpp.html#a900aa27c1353238593c276186d960912',1,'main.cpp']]],
+  ['logukrules_24',['LogUKRules',['../_radio_functions_8h.html#ab7bbbad7e5882348ed2963dae9f4a226',1,'LogUKRules():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#afe8648b7a9a00742332cb5967fc1ad14',1,'LogUKRules():&#160;main.cpp']]],
+  ['loop_25',['loop',['../_receiver_code_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../_sensor_hub_t32_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#ad3cb30894c94eb016e98bdcaa899ac86',1,'loop():&#160;main.cpp']]]
 ];
