@@ -20,7 +20,7 @@
  * @section rxpinout TEENSY 4.0 PINS
  * | pin number(s) | purpose |
  * |---------------|---------|
- * | 0...8 | PWM SERVOS Channels 1 - 9 |
+ * | 0...8 | PWM SERVOS Channels 1 - 9 |  (Channels 10 - 16 available via SBUS)
  * | 9     | SPI CE1  (FOR RADIO1) |
  * | 10    | SPI CSN1 (FOR RADIO1)  |
  * | 11    | SPI MOSI (FOR BOTH RADIOS)  |
