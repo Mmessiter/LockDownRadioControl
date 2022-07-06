@@ -392,6 +392,7 @@ short int      DeltaGMT           = 0;
 uint32_t SwapWaveBandTimer  = 0;
 uint8_t  UkRulesCounter     = 0;
 bool     UkRules            = true;
+bool     PreviousUkRules    = false;
 uint8_t  SwapWaveBand       = 0;  
 uint16_t TrimFactor         = 2;   // How much to multiply trim by
 uint8_t  DateFix            = 0;
@@ -2832,14 +2833,16 @@ FLASHMEM void GetTXVersionNumber()
     strcat(TransmitterVersionNumber, nbuf);
 }
 /************************************************************************************************************/
-FASTRUN void SetUKFrequencies(){
+FASTRUN void SetUKFrequencies(){ // heer
             FHSSChPointer = FHSS_Channels; 
             UkRules = true;     
+            
 }
 /************************************************************************************************************/
 FASTRUN void SetTestFrequencies(){
             FHSSChPointer = FHSS_Channels1; 
             UkRules = false;     
+            
 }
 
 /************************************************************************************************************/
@@ -3010,6 +3013,19 @@ FASTRUN void LogNewFlightMode(){
     strcat(thetext, NB);
     LogText(thetext, 7);
 }
+
+// ************************************************************************
+
+FASTRUN void LogUKRules(){
+    char Rtext[] = "Using UK Frequencies";
+    char Ttext[] = "Using Test Frequencies";
+    if (UkRules) {
+        LogText(Rtext, strlen(Rtext));
+    } else{
+        LogText(Ttext, strlen(Ttext));
+    }
+}
+
 // ************************************************************************
 
 FASTRUN void LogThisRX(){
@@ -3018,6 +3034,7 @@ FASTRUN void LogThisRX(){
     strcpy (thetext,Ltext);
     strcat (thetext,ThisRadio);
     LogText(thetext, 5);
+  
 }
 
 // ************************************************************************

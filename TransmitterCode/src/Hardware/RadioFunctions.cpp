@@ -154,6 +154,10 @@ FASTRUN void SendData()
         ShowComms();                              // There is PLENTY of time to fit in these calls because there are about 6 ms spare still WHEN CONNECTED
         ReadSwitches();                           // Check switch positions
         CheckTimer();  
+        if (PreviousUkRules != UkRules){
+             LogUKRules();
+             PreviousUkRules = UkRules;
+        }
     }
  // if ((ElapsedSinceLastSend >= PACEMAKER) || (LostContactFlag)){ 
     if ((ElapsedSinceLastSend >= PACEMAKER) || (RecentPacketsLost > 0)){ //  Last packet was lost so don't wait before retry 

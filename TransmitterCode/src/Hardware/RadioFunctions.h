@@ -343,6 +343,8 @@ extern bool           Reconnected;
 extern bool           LedWasGreen;
 extern uint32_t       Inactivity_Timeout; 
 extern uint32_t       Inactivity_Start;
+extern bool           UkRules;
+extern bool           PreviousUkRules;
 
 // external (global) functions needed here
 extern void  GetSlaveChannelValues();
@@ -365,6 +367,7 @@ extern void  MapToSBUS();
 extern void  ZeroDataScreen();
 extern void  RedLedOn();
 extern void  ReEnableScanButton();
+extern void LogUKRules();
 
 /*********************************************************************************************************************************/
 // function prototypes
@@ -394,6 +397,8 @@ void CloseLogFile();
 void StartLogFile();     
 void ShowLogFile(uint8_t StartLine);
 void LogThisLongGap();
+
+
 
 /*********************************************************************************************************************************/
 
