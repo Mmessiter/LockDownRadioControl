@@ -16,6 +16,7 @@
  * - Channels increased to 16, 9 PWM outputs.  SBUS can handle all.
  * - Exponential implemented (at TX end)
  * - Sensor Hub added with GPS and more sensors
+ * - Supports one or two tranceivers (nRF24L01+)
  *
  * @section rxpinout TEENSY 4.0 PINS
  * | pin number(s) | purpose |
