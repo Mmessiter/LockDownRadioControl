@@ -38,7 +38,7 @@
 //***************************************************************************
 
 // #define DB_NEXTION        // Debug NEXTION and SD card data
-// #define DB_FHSS           // Debug real time FHSS data
+  // #define DB_FHSS           // Debug real time FHSS data
 // #define DB_SENSORS        // Debug Sensors
 // #define DB_BIND           // Debug Binding
 // #define DB_SWITCHES       // Debug Switches
