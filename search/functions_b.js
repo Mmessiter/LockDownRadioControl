@@ -1,21 +1,14 @@
 var searchData=
 [
-  ['makebindbuttoninvisible_0',['MakeBindButtonInvisible',['../_transmitter_code_2src_2main_8cpp.html#a2e38b32674344cfc06b09a71dfcaf3f1',1,'main.cpp']]],
-  ['makelogfilename_1',['MakeLogFileName',['../_transmitter_code_2src_2main_8cpp.html#a05c7b4e0b98f9b97eebf9617442de6a5',1,'main.cpp']]],
-  ['maketwobytes_2',['MakeTwobytes',['../_transmitter_code_2src_2main_8cpp.html#a5aa4888b924a4f1d95e9cedc3004f2b6',1,'main.cpp']]],
-  ['maptosbus_3',['MapToSBUS',['../_transmitter_code_2src_2main_8cpp.html#a0e52df5913308b71685ca48df1503633',1,'MapToSBUS():&#160;main.cpp'],['../_radio_functions_8h.html#a6a495c5560f12cc3fd3df9454927d681',1,'MapToSBUS():&#160;main.cpp'],['../_receiver_code_2src_2main_8cpp.html#a6a495c5560f12cc3fd3df9454927d681',1,'MapToSBUS():&#160;main.cpp']]],
-  ['mapwithexponential_4',['MapWithExponential',['../_transmitter_code_2src_2main_8cpp.html#a927484b01116cd14fd1ade706bc06d51',1,'main.cpp']]],
-  ['markhere_5',['MarkHere',['../_receiver_code_2src_2main_8cpp.html#a5ae8a2aa29e834880ccf370c7547961b',1,'main.cpp']]],
-  ['maxbuffersize_6',['maxBufferSize',['../class_adafruit___i2_c_device.html#a20c6ac28cbaa9e5f63ef6d4687fd4e60',1,'Adafruit_I2CDevice']]],
-  ['maybeaddzero_7',['MayBeAddZero',['../_transmitter_code_2src_2main_8cpp.html#ae310e7fc6397929ae886869c05cbc334',1,'main.cpp']]],
-  ['meters_8',['meters',['../struct_tiny_g_p_s_altitude.html#a5a39d145bb1778814007206c765189f7',1,'TinyGPSAltitude']]],
-  ['miles_9',['miles',['../struct_tiny_g_p_s_altitude.html#a5ae68d990ea08d4e21cfa6aefb46cc03',1,'TinyGPSAltitude']]],
-  ['minute_10',['minute',['../struct_tiny_g_p_s_time.html#aef83c20c14d404219299da2d7e35cdce',1,'TinyGPSTime']]],
-  ['month_11',['month',['../struct_tiny_g_p_s_date.html#a6f3c5b4e72ef28b010f94ac9016315f3',1,'TinyGPSDate']]],
-  ['moveatrim_12',['MoveaTrim',['../_transmitter_code_2src_2main_8cpp.html#a17123a117a96a9416dec48d9345f8a5b',1,'main.cpp']]],
-  ['movepoint_13',['MovePoint',['../_transmitter_code_2src_2main_8cpp.html#aad727ec0b0f9f34487a535eaa4a83172',1,'main.cpp']]],
-  ['moveservos_14',['MoveServos',['../_receiver_code_2src_2main_8cpp.html#a6f2443a0666140cf4d8b7352bb3b793c',1,'MoveServos():&#160;main.cpp'],['../radio_8h.html#a6f2443a0666140cf4d8b7352bb3b793c',1,'MoveServos():&#160;main.cpp']]],
-  ['mph_15',['mph',['../struct_tiny_g_p_s_speed.html#a1809120167961ea9a85e860a964b1c6e',1,'TinyGPSSpeed']]],
-  ['mps_16',['mps',['../struct_tiny_g_p_s_speed.html#aacee536241e810cdf4ba7846d6c202cb',1,'TinyGPSSpeed']]],
-  ['mysbus_17',['MySbus',['../_receiver_code_2src_2main_8cpp.html#a5424788640aaa8d535d6ea077949ef82',1,'MySbus(SBUSPORT):&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a5424788640aaa8d535d6ea077949ef82',1,'MySbus(SBUSPORT):&#160;main.cpp']]]
+  ['makebindbuttoninvisible_0',['MakeBindButtonInvisible',['../TransmitterCode_2src_2main_8cpp.html#a2e38b32674344cfc06b09a71dfcaf3f1',1,'main.cpp']]],
+  ['makelogfilename_1',['MakeLogFileName',['../TransmitterCode_2src_2main_8cpp.html#a05c7b4e0b98f9b97eebf9617442de6a5',1,'main.cpp']]],
+  ['maketwobytes_2',['MakeTwobytes',['../TransmitterCode_2src_2main_8cpp.html#a5aa4888b924a4f1d95e9cedc3004f2b6',1,'main.cpp']]],
+  ['maptosbus_3',['MapToSBUS',['../ReceiverCode_2src_2main_8cpp.html#a6a495c5560f12cc3fd3df9454927d681',1,'MapToSBUS():&#160;main.cpp'],['../RadioFunctions_8h.html#a6a495c5560f12cc3fd3df9454927d681',1,'MapToSBUS():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a0e52df5913308b71685ca48df1503633',1,'MapToSBUS():&#160;main.cpp']]],
+  ['mapwithexponential_4',['MapWithExponential',['../TransmitterCode_2src_2main_8cpp.html#a927484b01116cd14fd1ade706bc06d51',1,'main.cpp']]],
+  ['markhere_5',['MarkHere',['../ReceiverCode_2src_2main_8cpp.html#a5ae8a2aa29e834880ccf370c7547961b',1,'main.cpp']]],
+  ['maybeaddzero_6',['MayBeAddZero',['../TransmitterCode_2src_2main_8cpp.html#ae310e7fc6397929ae886869c05cbc334',1,'main.cpp']]],
+  ['moveatrim_7',['MoveaTrim',['../TransmitterCode_2src_2main_8cpp.html#a17123a117a96a9416dec48d9345f8a5b',1,'main.cpp']]],
+  ['movepoint_8',['MovePoint',['../TransmitterCode_2src_2main_8cpp.html#aad727ec0b0f9f34487a535eaa4a83172',1,'main.cpp']]],
+  ['moveservos_9',['MoveServos',['../ReceiverCode_2src_2main_8cpp.html#a6f2443a0666140cf4d8b7352bb3b793c',1,'MoveServos():&#160;main.cpp'],['../radio_8h.html#a6f2443a0666140cf4d8b7352bb3b793c',1,'MoveServos():&#160;main.cpp']]],
+  ['mysbus_10',['MySbus',['../ReceiverCode_2src_2main_8cpp.html#a5424788640aaa8d535d6ea077949ef82',1,'MySbus(SBUSPORT):&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a5424788640aaa8d535d6ea077949ef82',1,'MySbus(SBUSPORT):&#160;main.cpp']]]
 ];
