@@ -1,0 +1,7 @@
+<map id="Adafruit_BusIO_Register::write" name="Adafruit_BusIO_Register::write">
+<area shape="rect" id="node1" title="Write a buffer of data to the register location." alt="" coords="5,51,172,92"/>
+<area shape="rect" id="node2" href="$class_adafruit___i2_c_device.html#a382834acac211d47b471de3180327c06" title="Write a buffer or two to the I2C device. Cannot be more than maxBufferSize() bytes." alt="" coords="221,12,355,53"/>
+<area shape="rect" id="node4" href="$class_adafruit___s_p_i_device.html#a98bc2e396650883935a5cb432716956a" title="Write a buffer or two to the SPI device." alt="" coords="220,83,356,124"/>
+<area shape="rect" id="node3" href="$class_adafruit___i2_c_device.html#a20c6ac28cbaa9e5f63ef6d4687fd4e60" title="How many bytes we can read in a transaction." alt="" coords="405,5,539,47"/>
+<area shape="rect" id="node5" href="$class_adafruit___s_p_i_device.html#ac60964386f37b2c498fc1b1540f61889" title="Transfer (send/receive) one byte over hard/soft SPI." alt="" coords="404,95,540,136"/>
+</map>

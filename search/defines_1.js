@@ -1,21 +1,6 @@
 var searchData=
 [
-  ['bankfour_0',['BANKFOUR',['../RadioFunctions_8h.html#a70c430cc7f6137ab569257395a50bd73',1,'RadioFunctions.h']]],
-  ['bankone_1',['BANKONE',['../RadioFunctions_8h.html#a71b5a946c9e0c6ae61a9ba32e3f4fb53',1,'RadioFunctions.h']]],
-  ['bankthree_2',['BANKTHREE',['../RadioFunctions_8h.html#a2e95db48bdc3034a76977452d767933c',1,'RadioFunctions.h']]],
-  ['banktwo_3',['BANKTWO',['../RadioFunctions_8h.html#a4fe53fd1760aef0ce87d3a5a452eb652',1,'RadioFunctions.h']]],
-  ['barwidth_4',['BarWidth',['../TransmitterCode_2src_2main_8cpp.html#a37f06b098ecad47ae1f639f6465aa70f',1,'main.cpp']]],
-  ['batteryislow_5',['BATTERYISLOW',['../RadioFunctions_8h.html#a26aac4b23321722632f5c1676e561e4b',1,'RadioFunctions.h']]],
-  ['beepcomplete_6',['BEEPCOMPLETE',['../RadioFunctions_8h.html#a8a6f6e179e833662304277533103f99f',1,'RadioFunctions.h']]],
-  ['beepmiddle_7',['BEEPMIDDLE',['../RadioFunctions_8h.html#ae4346a524bff46ea22911635a0c865ef',1,'RadioFunctions.h']]],
-  ['bindpipetimeout_8',['BINDPIPETIMEOUT',['../RadioFunctions_8h.html#ab78495430313aff0f45726425e8d31d3',1,'RadioFunctions.h']]],
-  ['black_9',['Black',['../RadioFunctions_8h.html#a68eb1f80b4df2818e5a0774106748141',1,'RadioFunctions.h']]],
-  ['blue_10',['Blue',['../RadioFunctions_8h.html#a6208a194d702872fdbe1d3c7d7a7c879',1,'RadioFunctions.h']]],
-  ['blueled_11',['BLUELED',['../RadioFunctions_8h.html#a0cc50e8ab2356e8108bbb4376c02119e',1,'RadioFunctions.h']]],
-  ['boxoffset_12',['BOXOFFSET',['../RadioFunctions_8h.html#a1ca4c62befbda4dbe363ef453b2ebf09',1,'RadioFunctions.h']]],
-  ['boxsize_13',['BOXSIZE',['../RadioFunctions_8h.html#a4f84c7cd953e90b218a9baa12f6e5e35',1,'RadioFunctions.h']]],
-  ['brown_14',['Brown',['../RadioFunctions_8h.html#a3057a3f4d88842d385cd5ad6c5ddf80f',1,'RadioFunctions.h']]],
-  ['buddyview_15',['BUDDYVIEW',['../RadioFunctions_8h.html#a38c9376ad661411cad3019d4a43ac493',1,'RadioFunctions.h']]],
-  ['buffersize_16',['BUFFERSIZE',['../TransmitterCode_2src_2main_8cpp.html#ac3146f1e9227301bb4aa518f4d336cee',1,'main.cpp']]],
-  ['bytespermacro_17',['BYTESPERMACRO',['../RadioFunctions_8h.html#acb6ba8383362a5f2efee8416bc4300c9',1,'RadioFunctions.h']]]
+  ['approximation_0',['APPROXIMATION',['../_transmitter_code_2src_2main_8cpp.html#aee8c3c363eab49d6a90d3f74587694d5',1,'main.cpp']]],
+  ['audioview_1',['AUDIOVIEW',['../_radio_functions_8h.html#a445cfbf06ed74188fcf3965b4cab9533',1,'RadioFunctions.h']]],
+  ['autoswitch_2',['AUTOSWITCH',['../_radio_functions_8h.html#aa4414f3ff790f01b8bb41a0f51d1518f',1,'RadioFunctions.h']]]
 ];
