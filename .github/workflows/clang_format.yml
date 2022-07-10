@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: shenxianpeng/cpp-linter-action@master
+      - uses: cpp-linter/cpp-linter-action@v1
         id: linter
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -24,6 +24,7 @@ jobs:
           files-changed-only: false
           # lines-changed-only: true
           thread-comments: false
+          ignore: "ReceiverCode/lib|TransmitterCode/lib|SensorHubT32/lib"
 
       - name: Code needs attention?
         if: steps.linter.outputs.checks-failed > 0
