@@ -388,7 +388,6 @@ void GetGains(){
 #define I_GAIN_MAX I_GAIN_DEFAULT * 1.5 
 
 // Yaw 
-
 #define P_YGAIN_DEFAULT 0.3                      // default yaw P Gain is 0.3
 #define P_YGAIN_MIN P_YGAIN_DEFAULT / 2   
 #define P_YGAIN_MAX P_YGAIN_DEFAULT * 1.5 
@@ -1014,10 +1013,12 @@ void controlMixer() {
    */
   //Quad mixing
   //m1 = front left, m2 = front right, m3 = back right, m4 = back left
-  m1_command_scaled = thro_des - pitch_PID + roll_PID + yaw_PID;
-  m2_command_scaled = thro_des - pitch_PID - roll_PID - yaw_PID;
-  m3_command_scaled = thro_des + pitch_PID - roll_PID + yaw_PID;
-  m4_command_scaled = thro_des + pitch_PID + roll_PID - yaw_PID;
+  
+  m1_command_scaled = thro_des - pitch_PID + roll_PID - yaw_PID;   // Yaw PID signs all flipped (MCM)
+  m2_command_scaled = thro_des - pitch_PID - roll_PID + yaw_PID;
+  m3_command_scaled = thro_des + pitch_PID - roll_PID - yaw_PID;
+  m4_command_scaled = thro_des + pitch_PID + roll_PID + yaw_PID;
+
   m5_command_scaled = 0;
   m6_command_scaled = 0;
 
