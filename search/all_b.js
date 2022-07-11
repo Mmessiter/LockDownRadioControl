@@ -1,9 +1,24 @@
 var searchData=
 [
-  ['keepsbushappy_0',['KeepSbusHappy',['../radio_8h.html#a6f74cdb7b32a3aa9e9342661bd44ad1a',1,'radio.h']]],
-  ['kickrate_1',['KICKRATE',['../_radio_functions_8h.html#a639fb69a9b4f236e3b1a16435b82bb81',1,'RadioFunctions.h']]],
-  ['kickthedog_2',['KickTheDog',['../_radio_functions_8h.html#ada95a00a341e4a80176eda743a94ab2e',1,'KickTheDog():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#ada95a00a341e4a80176eda743a94ab2e',1,'KickTheDog():&#160;main.cpp']]],
-  ['kilometers_3',['kilometers',['../struct_tiny_g_p_s_altitude.html#a1eb3e5b425784fc0db3e9ffe0f77f741',1,'TinyGPSAltitude']]],
-  ['kmph_4',['kmph',['../struct_tiny_g_p_s_speed.html#a7fee3c8f9f2fcc5f4a517bd6108f79dd',1,'TinyGPSSpeed']]],
-  ['knots_5',['knots',['../struct_tiny_g_p_s_speed.html#aa3a38ce4ece3d8062c794b73f260395e',1,'TinyGPSSpeed']]]
+  ['kd_5fpitch_5fangle_0',['Kd_pitch_angle',['../_quadcopter_2src_2main_8cpp.html#abc0febf8614baceac008c1574695f727',1,'main.cpp']]],
+  ['kd_5fpitch_5frate_1',['Kd_pitch_rate',['../_quadcopter_2src_2main_8cpp.html#add3364642e560613095600203b403afa',1,'main.cpp']]],
+  ['kd_5froll_5fangle_2',['Kd_roll_angle',['../_quadcopter_2src_2main_8cpp.html#a66ab401162f7e33090db7604d7ec76c2',1,'main.cpp']]],
+  ['kd_5froll_5frate_3',['Kd_roll_rate',['../_quadcopter_2src_2main_8cpp.html#af918e54d5489c203d07c52461dbb8029',1,'main.cpp']]],
+  ['kd_5fyaw_4',['Kd_yaw',['../_quadcopter_2src_2main_8cpp.html#a6268c9e7e07a8020e13bdf90dcab056d',1,'main.cpp']]],
+  ['keepsbushappy_5',['KeepSbusHappy',['../radio_8h.html#a6f74cdb7b32a3aa9e9342661bd44ad1a',1,'radio.h']]],
+  ['ki_5fpitch_5fangle_6',['Ki_pitch_angle',['../_quadcopter_2src_2main_8cpp.html#aa667d21607d6c03411926cd66088b0dd',1,'main.cpp']]],
+  ['ki_5fpitch_5frate_7',['Ki_pitch_rate',['../_quadcopter_2src_2main_8cpp.html#aefc06a3e989cc4bd0cc423ba0273de05',1,'main.cpp']]],
+  ['ki_5froll_5fangle_8',['Ki_roll_angle',['../_quadcopter_2src_2main_8cpp.html#a9dbda8cd7ff103eeb0beb98a35848d5f',1,'main.cpp']]],
+  ['ki_5froll_5frate_9',['Ki_roll_rate',['../_quadcopter_2src_2main_8cpp.html#a83ab455150e1e5c38c3d168d8c43f247',1,'main.cpp']]],
+  ['ki_5fyaw_10',['Ki_yaw',['../_quadcopter_2src_2main_8cpp.html#a0b98df1ff2ca4c30c974221fb809bdb6',1,'main.cpp']]],
+  ['kickrate_11',['KICKRATE',['../_radio_functions_8h.html#a639fb69a9b4f236e3b1a16435b82bb81',1,'RadioFunctions.h']]],
+  ['kickthedog_12',['KickTheDog',['../_transmitter_code_2src_2main_8cpp.html#ada95a00a341e4a80176eda743a94ab2e',1,'KickTheDog():&#160;main.cpp'],['../_radio_functions_8h.html#ada95a00a341e4a80176eda743a94ab2e',1,'KickTheDog():&#160;main.cpp']]],
+  ['kilometers_13',['kilometers',['../struct_tiny_g_p_s_altitude.html#a1eb3e5b425784fc0db3e9ffe0f77f741',1,'TinyGPSAltitude']]],
+  ['kmph_14',['kmph',['../struct_tiny_g_p_s_speed.html#a7fee3c8f9f2fcc5f4a517bd6108f79dd',1,'TinyGPSSpeed']]],
+  ['knots_15',['knots',['../struct_tiny_g_p_s_speed.html#aa3a38ce4ece3d8062c794b73f260395e',1,'TinyGPSSpeed']]],
+  ['kp_5fpitch_5fangle_16',['Kp_pitch_angle',['../_quadcopter_2src_2main_8cpp.html#a29f7c5ed6f3cae8017cf017839e21a84',1,'main.cpp']]],
+  ['kp_5fpitch_5frate_17',['Kp_pitch_rate',['../_quadcopter_2src_2main_8cpp.html#a130b55b7e62be76c4e7340a9b0f77e29',1,'main.cpp']]],
+  ['kp_5froll_5fangle_18',['Kp_roll_angle',['../_quadcopter_2src_2main_8cpp.html#a5a46682cae29e1f9b8404a7c75c5ab7c',1,'main.cpp']]],
+  ['kp_5froll_5frate_19',['Kp_roll_rate',['../_quadcopter_2src_2main_8cpp.html#a1ac21f9289d10935d301a4178950aa96',1,'main.cpp']]],
+  ['kp_5fyaw_20',['Kp_yaw',['../_quadcopter_2src_2main_8cpp.html#a91c6ab84cd358c921a15ab86c90af1b7',1,'main.cpp']]]
 ];

@@ -1,4 +1,30 @@
 var searchData=
 [
-  ['year_0',['year',['../struct_tiny_g_p_s_date.html#ae2cc914fec377b429d99f01204f50d60',1,'TinyGPSDate']]]
+  ['waitforsentence_0',['waitForSentence',['../class_adafruit___g_p_s.html#a13d67a0055576c31de0ca3db0641ca1d',1,'Adafruit_GPS']]],
+  ['wakeup_1',['wakeup',['../class_adafruit___g_p_s.html#afc67f26f7b14d5cc851e13eb7f6aeae3',1,'Adafruit_GPS']]],
+  ['watchdogcallback_2',['WatchDogCallBack',['../_transmitter_code_2src_2main_8cpp.html#ae410be09c6f449451d8f2327fd895c7d',1,'main.cpp']]],
+  ['waterboilingpoint_3',['waterBoilingPoint',['../class_adafruit___b_m_p280.html#a7fb001dbd4b56c5fccfcbcec6b88b215',1,'Adafruit_BMP280']]],
+  ['whoami_4',['whoAmI',['../class_m_p_u9250.html#a319d7500e46f6b1212e0f4067f2f5f70',1,'MPU9250']]],
+  ['whoamiak8963_5',['whoAmIAK8963',['../class_m_p_u9250.html#a55bd8631b32052958e8e56ff42a0d18e',1,'MPU9250']]],
+  ['width_6',['width',['../class_adafruit___bus_i_o___register.html#abf1eaeb0ae836be082a73dae14e7e352',1,'Adafruit_BusIO_Register']]],
+  ['wordwrap_7',['WordWrap',['../_transmitter_code_2src_2main_8cpp.html#a6d6ab5dcee82c319640e3a0a0537ebf7',1,'main.cpp']]],
+  ['write_8',['write',['../class_adafruit___i2_c_device.html#a382834acac211d47b471de3180327c06',1,'Adafruit_I2CDevice::write()'],['../class_adafruit___s_p_i_device.html#a98bc2e396650883935a5cb432716956a',1,'Adafruit_SPIDevice::write()'],['../class_adafruit___bus_i_o___register_bits.html#a9311f94f1a1d93bc575b06c34ddecd80',1,'Adafruit_BusIO_RegisterBits::write()'],['../class_adafruit___bus_i_o___register.html#adad13ec14c8548eaeff62609077aa076',1,'Adafruit_BusIO_Register::write(uint32_t value, uint8_t numbytes=0)'],['../class_adafruit___bus_i_o___register.html#aa418dced5301a1d8c1776a1941c8bc64',1,'Adafruit_BusIO_Register::write(uint8_t *buffer, uint8_t len)'],['../class_adafruit___g_p_s.html#a079d9990da5971f336fab880cd141445',1,'Adafruit_GPS::write()'],['../class_s_b_u_s.html#aeb87d0ab21224d4cc84848c93a788848',1,'SBUS::write()']]],
+  ['write_5fthen_5fread_9',['write_then_read',['../class_adafruit___i2_c_device.html#a7161ce0c7136103d0704fb3ce858c6f7',1,'Adafruit_I2CDevice::write_then_read()'],['../class_adafruit___s_p_i_device.html#a8128f7d67b3e0e56717279deb64227e7',1,'Adafruit_SPIDevice::write_then_read()']]],
+  ['writeak8963register_10',['writeAK8963Register',['../class_m_p_u9250.html#aeca0dc4aed0420c54cf13acba0bdf4d5',1,'MPU9250']]],
+  ['writebit_11',['writeBit',['../class_i2_cdev.html#aa68890af87de5471d32e583ebbd91acb',1,'I2Cdev']]],
+  ['writebits_12',['writeBits',['../class_i2_cdev.html#a913371251b6a41520c080115650e1b59',1,'I2Cdev']]],
+  ['writebitsw_13',['writeBitsW',['../class_i2_cdev.html#a8f8652a1328224cce867eed665a45c4d',1,'I2Cdev']]],
+  ['writebitw_14',['writeBitW',['../class_i2_cdev.html#a1b5fbedfadec5d429c81ee84d27e658d',1,'I2Cdev']]],
+  ['writebyte_15',['writeByte',['../class_i2_cdev.html#aeb297637ef985cd562da465ba61b7042',1,'I2Cdev']]],
+  ['writebytes_16',['writeBytes',['../class_i2_cdev.html#aa4e39cac6c0eac5112f9132084bcc93e',1,'I2Cdev']]],
+  ['writecal_17',['writeCal',['../class_s_b_u_s.html#a30a661b3e229e95e17591021e638e89e',1,'SBUS']]],
+  ['writedmpconfigurationset_18',['writeDMPConfigurationSet',['../class_m_p_u6050.html#abe4f64f68164116b2ec94fe1d987929a',1,'MPU6050']]],
+  ['writememoryblock_19',['writeMemoryBlock',['../class_m_p_u6050.html#aae135772b45e1c7968b55f4f01b3757f',1,'MPU6050']]],
+  ['writememorybyte_20',['writeMemoryByte',['../class_m_p_u6050.html#a20de45af9109402f0cfe785f8fdbf439',1,'MPU6050']]],
+  ['writeprogdmpconfigurationset_21',['writeProgDMPConfigurationSet',['../class_m_p_u6050.html#a160a3d018a81eb85a33874a43f44b3ea',1,'MPU6050']]],
+  ['writeprogmemoryblock_22',['writeProgMemoryBlock',['../class_m_p_u6050.html#a201dc0aa819f451584c575c5a7590e10',1,'MPU6050']]],
+  ['writeregister_23',['writeRegister',['../class_m_p_u9250.html#a5712e6a1fa4a34cf44234c1e44f1ca52',1,'MPU9250']]],
+  ['writetologfile_24',['WriteToLogFile',['../_transmitter_code_2src_2main_8cpp.html#a99154e537ca6e0ce5d538fddf0c2aab3',1,'main.cpp']]],
+  ['writeword_25',['writeWord',['../class_i2_cdev.html#acbe68a802d6a177301736e60bedd1def',1,'I2Cdev']]],
+  ['writewords_26',['writeWords',['../class_i2_cdev.html#aae37c0526e4b4730a5b2ffd752fd8b21',1,'I2Cdev']]]
 ];

@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['mode_5fforced_0',['MODE_FORCED',['../class_adafruit___b_m_p280.html#ab28e689ef7620d2b9f0c9e03116dde8fa971378732d2b3c4e63e719d63eb872fe',1,'Adafruit_BMP280']]],
-  ['mode_5fnormal_1',['MODE_NORMAL',['../class_adafruit___b_m_p280.html#ab28e689ef7620d2b9f0c9e03116dde8fa5c1ec96dab43b099b3a85186d6457906',1,'Adafruit_BMP280']]],
-  ['mode_5fsleep_2',['MODE_SLEEP',['../class_adafruit___b_m_p280.html#ab28e689ef7620d2b9f0c9e03116dde8faf95929c428a02091e24aaedc7ad249c8',1,'Adafruit_BMP280']]],
-  ['mode_5fsoft_5freset_5fcode_3',['MODE_SOFT_RESET_CODE',['../class_adafruit___b_m_p280.html#ab28e689ef7620d2b9f0c9e03116dde8fae486cbd9d3d2e3c572975e6b19ae91cf',1,'Adafruit_BMP280']]]
+  ['gyro_5frange_5f1000dps_0',['GYRO_RANGE_1000DPS',['../class_m_p_u9250.html#afef8319c985d9930cd31797263b37585a847614de649f653ee7c715b86a7b6faa',1,'MPU9250']]],
+  ['gyro_5frange_5f2000dps_1',['GYRO_RANGE_2000DPS',['../class_m_p_u9250.html#afef8319c985d9930cd31797263b37585a99db9385af0ae8b6f22eae1976d54a29',1,'MPU9250']]],
+  ['gyro_5frange_5f250dps_2',['GYRO_RANGE_250DPS',['../class_m_p_u9250.html#afef8319c985d9930cd31797263b37585a536b0bd34e64fac46001efdfc776ed2f',1,'MPU9250']]],
+  ['gyro_5frange_5f500dps_3',['GYRO_RANGE_500DPS',['../class_m_p_u9250.html#afef8319c985d9930cd31797263b37585afb26504cc6b16143d9ea4e0aa9f6d973',1,'MPU9250']]]
 ];

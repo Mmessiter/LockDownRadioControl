@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['_7eadafruit_5fbmp280_0',['~Adafruit_BMP280',['../class_adafruit___b_m_p280.html#a4b34c3753548c503b946dba156a2bb3e',1,'Adafruit_BMP280']]],
-  ['_7eadafruit_5fgps_1',['~Adafruit_GPS',['../class_adafruit___g_p_s.html#aa10e13a582969a5d49f1416fe147d1d2',1,'Adafruit_GPS']]],
-  ['_7eadafruit_5fsensor_2',['~Adafruit_Sensor',['../class_adafruit___sensor.html#ac98df73e0cd9367a226b96668417e2e6',1,'Adafruit_Sensor']]]
+  ['zerodatascreen_0',['ZeroDataScreen',['../_radio_functions_8h.html#a6da9a1fd0b003151f79eabc702ba80ff',1,'ZeroDataScreen():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a6da9a1fd0b003151f79eabc702ba80ff',1,'ZeroDataScreen():&#160;main.cpp']]]
 ];

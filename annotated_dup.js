@@ -11,10 +11,16 @@ var annotated_dup =
     [ "Adafruit_Sensor", "class_adafruit___sensor.html", "class_adafruit___sensor" ],
     [ "Adafruit_SPIDevice", "class_adafruit___s_p_i_device.html", "class_adafruit___s_p_i_device" ],
     [ "bmp280_calib_data", "structbmp280__calib__data.html", "structbmp280__calib__data" ],
+    [ "I2Cdev", "class_i2_cdev.html", "class_i2_cdev" ],
+    [ "MPU6050", "class_m_p_u6050.html", "class_m_p_u6050" ],
+    [ "MPU9250", "class_m_p_u9250.html", "class_m_p_u9250" ],
+    [ "MPU9250FIFO", "class_m_p_u9250_f_i_f_o.html", "class_m_p_u9250_f_i_f_o" ],
     [ "nmea_datavalue_t", "structnmea__datavalue__t.html", "structnmea__datavalue__t" ],
     [ "nmea_history_t", "structnmea__history__t.html", "structnmea__history__t" ],
     [ "Payload", "struct_payload.html", "struct_payload" ],
+    [ "Quaternion", "class_quaternion.html", "class_quaternion" ],
     [ "RawDegrees", "struct_raw_degrees.html", "struct_raw_degrees" ],
+    [ "SBUS", "class_s_b_u_s.html", "class_s_b_u_s" ],
     [ "sensor_t", "structsensor__t.html", "structsensor__t" ],
     [ "sensors_color_t", "structsensors__color__t.html", "structsensors__color__t" ],
     [ "sensors_event_t", "structsensors__event__t.html", "structsensors__event__t" ],
@@ -29,5 +35,7 @@ var annotated_dup =
     [ "TinyGPSLocation", "struct_tiny_g_p_s_location.html", "struct_tiny_g_p_s_location" ],
     [ "TinyGPSPlus", "class_tiny_g_p_s_plus.html", "class_tiny_g_p_s_plus" ],
     [ "TinyGPSSpeed", "struct_tiny_g_p_s_speed.html", "struct_tiny_g_p_s_speed" ],
-    [ "TinyGPSTime", "struct_tiny_g_p_s_time.html", "struct_tiny_g_p_s_time" ]
+    [ "TinyGPSTime", "struct_tiny_g_p_s_time.html", "struct_tiny_g_p_s_time" ],
+    [ "VectorFloat", "class_vector_float.html", "class_vector_float" ],
+    [ "VectorInt16", "class_vector_int16.html", "class_vector_int16" ]
 ];

@@ -1,4 +1,11 @@
 var searchData=
 [
-  ['value_0',['value',['../struct_tiny_g_p_s_date.html#a718150ae16f68afa9ae81f9d1b3ce3f4',1,'TinyGPSDate::value()'],['../struct_tiny_g_p_s_time.html#afcdb632fee9d144b1414c9d7b95719f1',1,'TinyGPSTime::value()'],['../struct_tiny_g_p_s_decimal.html#ac3ce80976e5d8456e9f211b910a6cb19',1,'TinyGPSDecimal::value()'],['../struct_tiny_g_p_s_integer.html#a67de7e76d61dbd25eb32f701d8ce867b',1,'TinyGPSInteger::value()'],['../class_tiny_g_p_s_custom.html#a03bb66f8d3e078b21c8a5033a88d8a32',1,'TinyGPSCustom::value()']]]
+  ['updatebuttonlabels_0',['UpdateButtonLabels',['../_transmitter_code_2src_2main_8cpp.html#abf59862cf6c4e3df5a76f0bfea8919ef',1,'main.cpp']]],
+  ['updateinterpolationtypes_1',['updateInterpolationTypes',['../_transmitter_code_2src_2main_8cpp.html#a3d20af2f1fee81198a0cef2d4500083a',1,'main.cpp']]],
+  ['updatemodelsnameeverywhere_2',['UpdateModelsNameEveryWhere',['../_transmitter_code_2src_2main_8cpp.html#a9e1de754e1d2d483fb15957f70cf0488',1,'main.cpp']]],
+  ['updateoneswitchview_3',['updateOneSwitchView',['../_transmitter_code_2src_2main_8cpp.html#a14dcac76ed8a048041fdc6e6f5d5d000',1,'main.cpp']]],
+  ['updateswitchesdisplay_4',['UpdateSwitchesDisplay',['../_transmitter_code_2src_2main_8cpp.html#a789078ba3c1d92997ab8764eb20cce4f',1,'main.cpp']]],
+  ['updatetrimview_5',['UpdateTrimView',['../_transmitter_code_2src_2main_8cpp.html#ac78966debc2cdc13d8ca958ce3b20c78',1,'main.cpp']]],
+  ['updatetrimviewpart_6',['UpdateTrimViewPart',['../_transmitter_code_2src_2main_8cpp.html#a3cd4694d58bd7a9f56e973d20270722f',1,'main.cpp']]],
+  ['usereceiveddata_7',['UseReceivedData',['../_receiver_code_2src_2main_8cpp.html#abb1997c589abc6432f612eaedf985e38',1,'main.cpp']]]
 ];

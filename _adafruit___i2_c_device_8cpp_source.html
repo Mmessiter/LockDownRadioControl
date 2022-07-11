@@ -143,7 +143,7 @@ $(document).ready(function(){initNavTree('_adafruit___i2_c_device_8cpp_source.ht
 <div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    <span class="comment">// we will need to find out if some platforms have larger</span></div>
 <div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>    <span class="comment">// I2C buffer sizes :/</span></div>
 <div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span><span class="preprocessor">#ifdef DEBUG_SERIAL</span></div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>    DEBUG_SERIAL.println(F(<span class="stringliteral">&quot;\tI2CDevice could not write such a large buffer&quot;</span>));</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>    DEBUG_SERIAL.println(<a class="code hl_define" href="_m_p_u6050__6_axis___motion_apps20_8h.html#a203d5b93e4077aa273c7013964a31f9e">F</a>(<span class="stringliteral">&quot;\tI2CDevice could not write such a large buffer&quot;</span>));</div>
 <div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span><span class="preprocessor">#endif</span></div>
 <div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>  }</div>
@@ -154,7 +154,7 @@ $(document).ready(function(){initNavTree('_adafruit___i2_c_device_8cpp_source.ht
 <div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>  <span class="keywordflow">if</span> ((prefix_len != 0) &amp;&amp; (prefix_buffer != NULL)) {</div>
 <div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>    <span class="keywordflow">if</span> (_wire-&gt;write(prefix_buffer, prefix_len) != prefix_len) {</div>
 <div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span><span class="preprocessor">#ifdef DEBUG_SERIAL</span></div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>      DEBUG_SERIAL.println(F(<span class="stringliteral">&quot;\tI2CDevice failed to write&quot;</span>));</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>      DEBUG_SERIAL.println(<a class="code hl_define" href="_m_p_u6050__6_axis___motion_apps20_8h.html#a203d5b93e4077aa273c7013964a31f9e">F</a>(<span class="stringliteral">&quot;\tI2CDevice failed to write&quot;</span>));</div>
 <div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span><span class="preprocessor">#endif</span></div>
 <div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>      <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>    }</div>
@@ -163,27 +163,27 @@ $(document).ready(function(){initNavTree('_adafruit___i2_c_device_8cpp_source.ht
 <div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>  <span class="comment">// Write the data itself</span></div>
 <div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>  <span class="keywordflow">if</span> (_wire-&gt;write(buffer, len) != len) {</div>
 <div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span><span class="preprocessor">#ifdef DEBUG_SERIAL</span></div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>    DEBUG_SERIAL.println(F(<span class="stringliteral">&quot;\tI2CDevice failed to write&quot;</span>));</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>    DEBUG_SERIAL.println(<a class="code hl_define" href="_m_p_u6050__6_axis___motion_apps20_8h.html#a203d5b93e4077aa273c7013964a31f9e">F</a>(<span class="stringliteral">&quot;\tI2CDevice failed to write&quot;</span>));</div>
 <div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span><span class="preprocessor">#endif</span></div>
 <div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>  }</div>
 <div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span> </div>
 <div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span><span class="preprocessor">#ifdef DEBUG_SERIAL</span></div>
 <div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span> </div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>  DEBUG_SERIAL.print(F(<span class="stringliteral">&quot;\tI2CWRITE @ 0x&quot;</span>));</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>  DEBUG_SERIAL.print(<a class="code hl_define" href="_m_p_u6050__6_axis___motion_apps20_8h.html#a203d5b93e4077aa273c7013964a31f9e">F</a>(<span class="stringliteral">&quot;\tI2CWRITE @ 0x&quot;</span>));</div>
 <div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>  DEBUG_SERIAL.print(_addr, HEX);</div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>  DEBUG_SERIAL.print(F(<span class="stringliteral">&quot; :: &quot;</span>));</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>  DEBUG_SERIAL.print(<a class="code hl_define" href="_m_p_u6050__6_axis___motion_apps20_8h.html#a203d5b93e4077aa273c7013964a31f9e">F</a>(<span class="stringliteral">&quot; :: &quot;</span>));</div>
 <div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>  <span class="keywordflow">if</span> ((prefix_len != 0) &amp;&amp; (prefix_buffer != NULL)) {</div>
 <div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>    <span class="keywordflow">for</span> (uint16_t i = 0; i &lt; prefix_len; i++) {</div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>      DEBUG_SERIAL.print(F(<span class="stringliteral">&quot;0x&quot;</span>));</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>      DEBUG_SERIAL.print(<a class="code hl_define" href="_m_p_u6050__6_axis___motion_apps20_8h.html#a203d5b93e4077aa273c7013964a31f9e">F</a>(<span class="stringliteral">&quot;0x&quot;</span>));</div>
 <div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>      DEBUG_SERIAL.print(prefix_buffer[i], HEX);</div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>      DEBUG_SERIAL.print(F(<span class="stringliteral">&quot;, &quot;</span>));</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>      DEBUG_SERIAL.print(<a class="code hl_define" href="_m_p_u6050__6_axis___motion_apps20_8h.html#a203d5b93e4077aa273c7013964a31f9e">F</a>(<span class="stringliteral">&quot;, &quot;</span>));</div>
 <div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>    }</div>
 <div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>  }</div>
 <div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>  <span class="keywordflow">for</span> (uint16_t i = 0; i &lt; len; i++) {</div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>    DEBUG_SERIAL.print(F(<span class="stringliteral">&quot;0x&quot;</span>));</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>    DEBUG_SERIAL.print(<a class="code hl_define" href="_m_p_u6050__6_axis___motion_apps20_8h.html#a203d5b93e4077aa273c7013964a31f9e">F</a>(<span class="stringliteral">&quot;0x&quot;</span>));</div>
 <div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>    DEBUG_SERIAL.print(buffer[i], HEX);</div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>    DEBUG_SERIAL.print(F(<span class="stringliteral">&quot;, &quot;</span>));</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>    DEBUG_SERIAL.print(<a class="code hl_define" href="_m_p_u6050__6_axis___motion_apps20_8h.html#a203d5b93e4077aa273c7013964a31f9e">F</a>(<span class="stringliteral">&quot;, &quot;</span>));</div>
 <div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>    <span class="keywordflow">if</span> (i % 32 == 31) {</div>
 <div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>      DEBUG_SERIAL.println();</div>
 <div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>    }</div>
@@ -214,7 +214,7 @@ $(document).ready(function(){initNavTree('_adafruit___i2_c_device_8cpp_source.ht
 <div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>    <span class="comment">// we will need to find out if some platforms have larger</span></div>
 <div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>    <span class="comment">// I2C buffer sizes :/</span></div>
 <div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span><span class="preprocessor">#ifdef DEBUG_SERIAL</span></div>
-<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>    DEBUG_SERIAL.println(F(<span class="stringliteral">&quot;\tI2CDevice could not read such a large buffer&quot;</span>));</div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>    DEBUG_SERIAL.println(<a class="code hl_define" href="_m_p_u6050__6_axis___motion_apps20_8h.html#a203d5b93e4077aa273c7013964a31f9e">F</a>(<span class="stringliteral">&quot;\tI2CDevice could not read such a large buffer&quot;</span>));</div>
 <div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span><span class="preprocessor">#endif</span></div>
 <div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>  }</div>
@@ -223,7 +223,7 @@ $(document).ready(function(){initNavTree('_adafruit___i2_c_device_8cpp_source.ht
 <div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>  <span class="keywordflow">if</span> (recv != len) {</div>
 <div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>    <span class="comment">// Not enough data available to fulfill our obligation!</span></div>
 <div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span><span class="preprocessor">#ifdef DEBUG_SERIAL</span></div>
-<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>    DEBUG_SERIAL.print(F(<span class="stringliteral">&quot;\tI2CDevice did not receive enough data: &quot;</span>));</div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>    DEBUG_SERIAL.print(<a class="code hl_define" href="_m_p_u6050__6_axis___motion_apps20_8h.html#a203d5b93e4077aa273c7013964a31f9e">F</a>(<span class="stringliteral">&quot;\tI2CDevice did not receive enough data: &quot;</span>));</div>
 <div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>    DEBUG_SERIAL.println(recv);</div>
 <div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span><span class="preprocessor">#endif</span></div>
 <div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
@@ -234,13 +234,13 @@ $(document).ready(function(){initNavTree('_adafruit___i2_c_device_8cpp_source.ht
 <div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>  }</div>
 <div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span> </div>
 <div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span><span class="preprocessor">#ifdef DEBUG_SERIAL</span></div>
-<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>  DEBUG_SERIAL.print(F(<span class="stringliteral">&quot;\tI2CREAD  @ 0x&quot;</span>));</div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>  DEBUG_SERIAL.print(<a class="code hl_define" href="_m_p_u6050__6_axis___motion_apps20_8h.html#a203d5b93e4077aa273c7013964a31f9e">F</a>(<span class="stringliteral">&quot;\tI2CREAD  @ 0x&quot;</span>));</div>
 <div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>  DEBUG_SERIAL.print(_addr, HEX);</div>
-<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>  DEBUG_SERIAL.print(F(<span class="stringliteral">&quot; :: &quot;</span>));</div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>  DEBUG_SERIAL.print(<a class="code hl_define" href="_m_p_u6050__6_axis___motion_apps20_8h.html#a203d5b93e4077aa273c7013964a31f9e">F</a>(<span class="stringliteral">&quot; :: &quot;</span>));</div>
 <div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>  <span class="keywordflow">for</span> (uint16_t i = 0; i &lt; len; i++) {</div>
-<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>    DEBUG_SERIAL.print(F(<span class="stringliteral">&quot;0x&quot;</span>));</div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>    DEBUG_SERIAL.print(<a class="code hl_define" href="_m_p_u6050__6_axis___motion_apps20_8h.html#a203d5b93e4077aa273c7013964a31f9e">F</a>(<span class="stringliteral">&quot;0x&quot;</span>));</div>
 <div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>    DEBUG_SERIAL.print(buffer[i], HEX);</div>
-<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>    DEBUG_SERIAL.print(F(<span class="stringliteral">&quot;, &quot;</span>));</div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>    DEBUG_SERIAL.print(<a class="code hl_define" href="_m_p_u6050__6_axis___motion_apps20_8h.html#a203d5b93e4077aa273c7013964a31f9e">F</a>(<span class="stringliteral">&quot;, &quot;</span>));</div>
 <div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>    <span class="keywordflow">if</span> (len % 32 == 31) {</div>
 <div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>      DEBUG_SERIAL.println();</div>
 <div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>    }</div>
@@ -272,6 +272,7 @@ $(document).ready(function(){initNavTree('_adafruit___i2_c_device_8cpp_source.ht
 <div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span><span class="preprocessor">#endif</span></div>
 <div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>}</div>
 <div class="ttc" id="a_adafruit___i2_c_device_8h_html"><div class="ttname"><a href="_adafruit___i2_c_device_8h.html">Adafruit_I2CDevice.h</a></div></div>
+<div class="ttc" id="a_m_p_u6050__6_axis___motion_apps20_8h_html_a203d5b93e4077aa273c7013964a31f9e"><div class="ttname"><a href="_m_p_u6050__6_axis___motion_apps20_8h.html#a203d5b93e4077aa273c7013964a31f9e">F</a></div><div class="ttdeci">#define F(x)</div><div class="ttdef"><b>Definition:</b> <a href="_m_p_u6050__6_axis___motion_apps20_8h_source.html#l00061">MPU6050_6Axis_MotionApps20.h:61</a></div></div>
 <div class="ttc" id="aclass_adafruit___i2_c_device_html_a20c6ac28cbaa9e5f63ef6d4687fd4e60"><div class="ttname"><a href="class_adafruit___i2_c_device.html#a20c6ac28cbaa9e5f63ef6d4687fd4e60">Adafruit_I2CDevice::maxBufferSize</a></div><div class="ttdeci">size_t maxBufferSize()</div><div class="ttdoc">How many bytes we can read in a transaction.</div><div class="ttdef"><b>Definition:</b> <a href="_adafruit___i2_c_device_8h_source.html#l00024">Adafruit_I2CDevice.h:24</a></div></div>
 <div class="ttc" id="aclass_adafruit___i2_c_device_html_a382834acac211d47b471de3180327c06"><div class="ttname"><a href="class_adafruit___i2_c_device.html#a382834acac211d47b471de3180327c06">Adafruit_I2CDevice::write</a></div><div class="ttdeci">bool write(uint8_t *buffer, size_t len, bool stop=true, uint8_t *prefix_buffer=NULL, size_t prefix_len=0)</div><div class="ttdoc">Write a buffer or two to the I2C device. Cannot be more than maxBufferSize() bytes.</div><div class="ttdef"><b>Definition:</b> <a href="_adafruit___i2_c_device_8cpp_source.html#l00069">Adafruit_I2CDevice.cpp:69</a></div></div>
 <div class="ttc" id="aclass_adafruit___i2_c_device_html_a7161ce0c7136103d0704fb3ce858c6f7"><div class="ttname"><a href="class_adafruit___i2_c_device.html#a7161ce0c7136103d0704fb3ce858c6f7">Adafruit_I2CDevice::write_then_read</a></div><div class="ttdeci">bool write_then_read(uint8_t *write_buffer, size_t write_len, uint8_t *read_buffer, size_t read_len, bool stop=false)</div><div class="ttdoc">Write some data, then read some data from I2C into another buffer. Cannot be more than maxBufferSize(...</div><div class="ttdef"><b>Definition:</b> <a href="_adafruit___i2_c_device_8cpp_source.html#l00203">Adafruit_I2CDevice.cpp:203</a></div></div>

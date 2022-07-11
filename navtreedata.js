@@ -106,8 +106,8 @@ var NAVTREE =
       [ "Class Hierarchy", "hierarchy.html", "hierarchy" ],
       [ "Class Members", "functions.html", [
         [ "All", "functions.html", "functions_dup" ],
-        [ "Functions", "functions_func.html", null ],
-        [ "Variables", "functions_vars.html", null ],
+        [ "Functions", "functions_func.html", "functions_func" ],
+        [ "Variables", "functions_vars.html", "functions_vars" ],
         [ "Enumerations", "functions_enum.html", null ],
         [ "Enumerator", "functions_eval.html", null ],
         [ "Related Functions", "functions_rela.html", null ]
@@ -131,13 +131,19 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "_adafruit___b_m_p280_8cpp.html",
-"_radio_functions_8h.html#a20b56099fe1fdbd5605a91af95c5a50b",
-"_receiver_code_2lib_2_adafruit___g_p_s___library_2src_2_adafruit___p_m_t_k_8h.html#a9772abe32307f50632edef118f08454a",
-"_transmitter_code_2src_2main_8cpp.html#a170bfb3dd1ee3b2f15020fe516f329bd",
-"_transmitter_code_2src_2main_8cpp.html#a9f535eadbf4eb2d6975105c406c1206f",
-"class_adafruit___bus_i_o___register.html#a2b48e23dacbb7cffc0eb07dcebcfba6f",
-"functions_m.html",
-"radio_8h.html#aff48e1463bf663c156032302d0161c98"
+"_m_p_u6050_8h.html#a5b2f24136f2f68b5d42652d16208d9d0",
+"_m_p_u6050__6_axis___motion_apps___v6__12_8h.html#a06bd8b84df78d293374ba9bc8324e5e7",
+"_quadcopter_2src_2main_8cpp.html#a5a46682cae29e1f9b8404a7c75c5ab7c",
+"_radio_functions_8h.html#a4635a8fc77c9f57fca53a5206cd5e571",
+"_receiver_code_2src_2main_8cpp.html#a4c722ec4fa2ff675bd4a2d511e80cd6e",
+"_transmitter_code_2src_2main_8cpp.html#a2c76c41cd62573eb7227882fc9b9e557",
+"_transmitter_code_2src_2main_8cpp.html#ab50929c4d3d76c3a37ab817e0022d57a",
+"class_adafruit___g_p_s.html#a31e4d48939f3b9e5f62933afc117d04d",
+"class_m_p_u6050.html#a7bd548cb60ecceb27c72f026ec0a60f8",
+"class_m_p_u9250.html#a748a1e21b81ce8e6ab0dd3dee387b1f5",
+"common_8h.html",
+"globals_x.html",
+"structsensor__t.html#ae1d59df64438923d3bd95f2416c32203"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

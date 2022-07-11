@@ -9,5 +9,12 @@ var searchData=
   ['graphview_6',['GRAPHVIEW',['../_radio_functions_8h.html#a336e60cae8bfcec917447fe101efa4f4',1,'RadioFunctions.h']]],
   ['gray_7',['Gray',['../_radio_functions_8h.html#aab957a0fe1c92d227cced2922967fb97',1,'RadioFunctions.h']]],
   ['green_8',['Green',['../_radio_functions_8h.html#aa429cd977709122166b6e31fa10903d1',1,'RadioFunctions.h']]],
-  ['greenled_9',['GREENLED',['../_radio_functions_8h.html#aef42a90443e2cce65762788edcbfb8ee',1,'RadioFunctions.h']]]
+  ['greenled_9',['GREENLED',['../_radio_functions_8h.html#aef42a90443e2cce65762788edcbfb8ee',1,'RadioFunctions.h']]],
+  ['gyro_5f250dps_10',['GYRO_250DPS',['../_quadcopter_2src_2main_8cpp.html#a68bc5d52c72e3692e23ef0cd45f36142',1,'main.cpp']]],
+  ['gyro_5ffs_5fsel_5f1000_11',['GYRO_FS_SEL_1000',['../_quadcopter_2src_2main_8cpp.html#a76b14e6113ae1578504f6ab84bcba2e7',1,'main.cpp']]],
+  ['gyro_5ffs_5fsel_5f2000_12',['GYRO_FS_SEL_2000',['../_quadcopter_2src_2main_8cpp.html#a1b8b264b9f127099af53bb68d197a1d5',1,'main.cpp']]],
+  ['gyro_5ffs_5fsel_5f250_13',['GYRO_FS_SEL_250',['../_quadcopter_2src_2main_8cpp.html#a63858ae7113c6b6ab61bc032d4087847',1,'main.cpp']]],
+  ['gyro_5ffs_5fsel_5f500_14',['GYRO_FS_SEL_500',['../_quadcopter_2src_2main_8cpp.html#ada046b15782fee829013693d347dceb9',1,'main.cpp']]],
+  ['gyro_5fscale_15',['GYRO_SCALE',['../_quadcopter_2src_2main_8cpp.html#abdeac7f9288bf09fd6e1739d22ff8bea',1,'main.cpp']]],
+  ['gyro_5fscale_5ffactor_16',['GYRO_SCALE_FACTOR',['../_quadcopter_2src_2main_8cpp.html#a9a726f5df52d7d55a122b9949686036d',1,'main.cpp']]]
 ];

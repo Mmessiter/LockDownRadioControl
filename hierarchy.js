@@ -11,13 +11,20 @@ var hierarchy =
     ] ],
     [ "Adafruit_SPIDevice", "class_adafruit___s_p_i_device.html", null ],
     [ "bmp280_calib_data", "structbmp280__calib__data.html", null ],
+    [ "I2Cdev", "class_i2_cdev.html", null ],
+    [ "MPU6050", "class_m_p_u6050.html", null ],
+    [ "MPU9250", "class_m_p_u9250.html", [
+      [ "MPU9250FIFO", "class_m_p_u9250_f_i_f_o.html", null ]
+    ] ],
     [ "nmea_datavalue_t", "structnmea__datavalue__t.html", null ],
     [ "nmea_history_t", "structnmea__history__t.html", null ],
     [ "Payload", "struct_payload.html", null ],
     [ "Print", null, [
       [ "Adafruit_GPS", "class_adafruit___g_p_s.html", null ]
     ] ],
+    [ "Quaternion", "class_quaternion.html", null ],
     [ "RawDegrees", "struct_raw_degrees.html", null ],
+    [ "SBUS", "class_s_b_u_s.html", null ],
     [ "sensor_t", "structsensor__t.html", null ],
     [ "sensors_color_t", "structsensors__color__t.html", null ],
     [ "sensors_event_t", "structsensors__event__t.html", null ],
@@ -33,5 +40,7 @@ var hierarchy =
     [ "TinyGPSInteger", "struct_tiny_g_p_s_integer.html", null ],
     [ "TinyGPSLocation", "struct_tiny_g_p_s_location.html", null ],
     [ "TinyGPSPlus", "class_tiny_g_p_s_plus.html", null ],
-    [ "TinyGPSTime", "struct_tiny_g_p_s_time.html", null ]
+    [ "TinyGPSTime", "struct_tiny_g_p_s_time.html", null ],
+    [ "VectorFloat", "class_vector_float.html", null ],
+    [ "VectorInt16", "class_vector_int16.html", null ]
 ];

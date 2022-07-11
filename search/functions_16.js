@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['zerodatascreen_0',['ZeroDataScreen',['../_radio_functions_8h.html#a6da9a1fd0b003151f79eabc702ba80ff',1,'ZeroDataScreen():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a6da9a1fd0b003151f79eabc702ba80ff',1,'ZeroDataScreen():&#160;main.cpp']]]
+  ['year_0',['year',['../struct_tiny_g_p_s_date.html#ae2cc914fec377b429d99f01204f50d60',1,'TinyGPSDate']]]
 ];

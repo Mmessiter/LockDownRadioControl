@@ -19,6 +19,7 @@ var searchData=
   ['boxsize_16',['BOXSIZE',['../_radio_functions_8h.html#a4f84c7cd953e90b218a9baa12f6e5e35',1,'RadioFunctions.h']]],
   ['brown_17',['Brown',['../_radio_functions_8h.html#a3057a3f4d88842d385cd5ad6c5ddf80f',1,'RadioFunctions.h']]],
   ['buddyview_18',['BUDDYVIEW',['../_radio_functions_8h.html#a38c9376ad661411cad3019d4a43ac493',1,'RadioFunctions.h']]],
-  ['buffersize_19',['BUFFERSIZE',['../_transmitter_code_2src_2main_8cpp.html#ac3146f1e9227301bb4aa518f4d336cee',1,'main.cpp']]],
-  ['bytespermacro_20',['BYTESPERMACRO',['../_radio_functions_8h.html#acb6ba8383362a5f2efee8416bc4300c9',1,'RadioFunctions.h']]]
+  ['buffer_5flength_19',['BUFFER_LENGTH',['../_i2_cdev_8cpp.html#af7b7dc9a200cb1404c280bd500fd1551',1,'I2Cdev.cpp']]],
+  ['buffersize_20',['BUFFERSIZE',['../_transmitter_code_2src_2main_8cpp.html#ac3146f1e9227301bb4aa518f4d336cee',1,'main.cpp']]],
+  ['bytespermacro_21',['BYTESPERMACRO',['../_radio_functions_8h.html#acb6ba8383362a5f2efee8416bc4300c9',1,'RadioFunctions.h']]]
 ];

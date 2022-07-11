@@ -1,8 +1,9 @@
 var searchData=
 [
-  ['filter_5foff_0',['FILTER_OFF',['../class_adafruit___b_m_p280.html#a7e817dd76c6b5c92b7f4166556bb3d4eaf28f794b1cd76bdfe914cd6d6a02653a',1,'Adafruit_BMP280']]],
-  ['filter_5fx16_1',['FILTER_X16',['../class_adafruit___b_m_p280.html#a7e817dd76c6b5c92b7f4166556bb3d4ea5d40992fab28e7cb8d730714929c2d0d',1,'Adafruit_BMP280']]],
-  ['filter_5fx2_2',['FILTER_X2',['../class_adafruit___b_m_p280.html#a7e817dd76c6b5c92b7f4166556bb3d4ea2456b5cc5e281fe0e1fc0dd846e14f7a',1,'Adafruit_BMP280']]],
-  ['filter_5fx4_3',['FILTER_X4',['../class_adafruit___b_m_p280.html#a7e817dd76c6b5c92b7f4166556bb3d4ead9d96d679abcf1ee10c058364d6d61f8',1,'Adafruit_BMP280']]],
-  ['filter_5fx8_4',['FILTER_X8',['../class_adafruit___b_m_p280.html#a7e817dd76c6b5c92b7f4166556bb3d4ea0e4173a096cf949ecab626aeffdfb0db',1,'Adafruit_BMP280']]]
+  ['dlpf_5fbandwidth_5f10hz_0',['DLPF_BANDWIDTH_10HZ',['../class_m_p_u9250.html#a7eb38e4553c5cb064169037c6172baa8a2263622f2af87642d5b8b0249759f8c0',1,'MPU9250']]],
+  ['dlpf_5fbandwidth_5f184hz_1',['DLPF_BANDWIDTH_184HZ',['../class_m_p_u9250.html#a7eb38e4553c5cb064169037c6172baa8ad3f73fba8a6d3898ca0e08d98bdd6326',1,'MPU9250']]],
+  ['dlpf_5fbandwidth_5f20hz_2',['DLPF_BANDWIDTH_20HZ',['../class_m_p_u9250.html#a7eb38e4553c5cb064169037c6172baa8ae9979ddfd095d6096a4e74bac6a65846',1,'MPU9250']]],
+  ['dlpf_5fbandwidth_5f41hz_3',['DLPF_BANDWIDTH_41HZ',['../class_m_p_u9250.html#a7eb38e4553c5cb064169037c6172baa8a0ab1599a4c44edcb9497423d73ffdde5',1,'MPU9250']]],
+  ['dlpf_5fbandwidth_5f5hz_4',['DLPF_BANDWIDTH_5HZ',['../class_m_p_u9250.html#a7eb38e4553c5cb064169037c6172baa8a0ee16d0e5d88f375cb5c927ac3cb35c6',1,'MPU9250']]],
+  ['dlpf_5fbandwidth_5f92hz_5',['DLPF_BANDWIDTH_92HZ',['../class_m_p_u9250.html#a7eb38e4553c5cb064169037c6172baa8a48dc0ca0868ebe1c55b6abcfa59b4c87',1,'MPU9250']]]
 ];
