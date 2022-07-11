@@ -291,7 +291,6 @@ void setup() {
   servo5.write(0);
   servo6.write(0);
   servo7.write(0);
-  
   delay(10);
 
   //Arm OneShot125 motors
@@ -373,7 +372,6 @@ void loop() {
 
 
 // ***************************** GetGains (MCM) **********************************************************
-//         This function allows ... heer
 //         Pitch and Roll gains are equal as its a quadcopter
 // *******************************************************************************************************
 
@@ -410,8 +408,6 @@ void GetGains(){
 
        temp = map(channel_6_pwm,1000,2000,I_YGAIN_MIN * 10000,I_YGAIN_MAX * 10000);  // use bigger numbers as map() only likes integers
        Ki_yaw = (float) temp/10000;
-       
-      
 }
 // ***********************************************************************************************************
 
@@ -436,51 +432,28 @@ void PrintGains(){    // MCM
  Serial.println(Ki_yaw,3);
  Serial.println(" ");
 }
-
 // ***********************************************************************************************************
 
 void IMUinit() {
-  //DESCRIPTION: Initialize IMU
-  /*
-   * Don't worry about how this works
-   */
-  
+ 
     Wire.begin();
     Wire.setClock(1000000); //Note this is 2.5 times the spec sheet 400 kHz max...
-    
     mpu6050.initialize();
-    
     if (mpu6050.testConnection() == false) {
       Serial.println("MPU6050 initialization unsuccessful");
       Serial.println("Check MPU6050 wiring or try cycling power");
       while(1) {}
     }
-
-    //From the reset state all registers should be 0x00, so we should be at
-    //max sample rate with digital low pass filter(s) off.  All we need to
-    //do is set the desired fullscale ranges
     mpu6050.setFullScaleGyroRange(GYRO_SCALE);
     mpu6050.setFullScaleAccelRange(ACCEL_SCALE);
- 
 }
 
 // ***********************************************************************************************************
 
 void getIMUdata() {
-  //DESCRIPTION: Request full dataset from IMU and LP filter gyro, accelerometer, and magnetometer data
-  /*
-   * Reads accelerometer, gyro, and magnetometer data from IMU as AccX, AccY, AccZ, GyroX, GyroY, GyroZ, MagX, MagY, MagZ. 
-   * These values are scaled according to the IMU datasheet to put them into correct units of g's, deg/sec, and uT. A simple first-order
-   * low-pass filter is used to get rid of high frequency noise in these raw signals. Generally you want to cut
-   * off everything past 80Hz, but if your loop rate is not fast enough, the low pass filter will cause a lag in
-   * the readings. The filter parameters B_gyro and B_accel are set to be good for a 2kHz loop rate. Finally,
-   * the constant errors found in calculate_IMU_error() on startup are subtracted from the accelerometer and gyro readings.
-   */
-  int16_t AcX,AcY,AcZ,GyX,GyY,GyZ; //MgX=0,MgY=0,MgZ=0;
-
   
+  int16_t AcX,AcY,AcZ,GyX,GyY,GyZ; 
    mpu6050.getMotion6(&AcX, &AcY, &AcZ, &GyX, &GyY, &GyZ);
-
 
  //Accelerometer
   AccX = AcX / ACCEL_SCALE_FACTOR; //G's
@@ -519,13 +492,8 @@ void getIMUdata() {
 // ***********************************************************************************************************
 
 void calculate_IMU_error() {
-  //DESCRIPTION: Computes IMU accelerometer and gyro error on startup. Note: vehicle should be powered up on flat surface
-  /*
-   * Don't worry too much about what this is doing. The error values it computes are applied to the raw gyro and 
-   * accelerometer values AccX, AccY, AccZ, GyroX, GyroY, GyroZ in getIMUdata(). This eliminates drift in the
-   * measurement. 
-   */
-  int16_t AcX,AcY,AcZ,GyX,GyY,GyZ; // ,MgX,MgY,MgZ;
+  
+  int16_t AcX,AcY,AcZ,GyX,GyY,GyZ;
   
   //Read IMU values 12000 times
   int c = 0;
@@ -559,13 +527,7 @@ void calculate_IMU_error() {
 // ***********************************************************************************************************
 
 void calibrateAttitude() {
-  //DESCRIPTION: Used to warm up the main loop to allow the madwick filter to converge before commands can be sent to the actuators
-  //Assuming vehicle is powered up on level surface!
-  /*
-   * This function is used on startup to warm up the attitude estimation and is what causes startup to take a few seconds
-   * to boot. 
-   */
-  //Warm up IMU and madgwick filter in simulated main loop
+  
   for (int i = 0; i <= 10000; i++) {
     prev_time = current_time;      
     current_time = micros();      
@@ -579,60 +541,46 @@ void calibrateAttitude() {
 // ***********************************************************************************************************
 
 void Madgwick(float gx, float gy, float gz, float ax, float ay, float az, float mx, float my, float mz, float invSampleFreq) {
-  //DESCRIPTION: Attitude estimation through sensor fusion - 9DOF
-  /*
-   * This function fuses the accelerometer gyro, and magnetometer readings AccX, AccY, AccZ, GyroX, GyroY, GyroZ, MagX, MagY, and MagZ for attitude estimation.
-   * Don't worry about the math. There is a tunable parameter B_madgwick in the user specified variable section which basically
-   * adjusts the weight of gyro data in the state estimate. Higher beta leads to noisier estimate, lower 
-   * beta leads to slower to respond estimate. It is currently tuned for 2kHz loop rate. This function updates the roll_IMU,
-   * pitch_IMU, and yaw_IMU variables which are in degrees. If magnetometer data is not available, this function calls Madgwick6DOF() instead.
-   */
+  
   float recipNorm;
   float s0, s1, s2, s3;
   float qDot1, qDot2, qDot3, qDot4;
   float hx, hy;
   float _2q0mx, _2q0my, _2q0mz, _2q1mx, _2bx, _2bz, _4bx, _4bz, _2q0, _2q1, _2q2, _2q3, _2q0q2, _2q2q3, q0q0, q0q1, q0q2, q0q3, q1q1, q1q2, q1q3, q2q2, q2q3, q3q3;
-  //float mholder; // not used
-
-  //use 6DOF algorithm if MPU6050 is being used
-  
+ 
     Madgwick6DOF(gx, gy, gz, ax, ay, az, invSampleFreq);
     return;
  
-  
-  //Use 6DOF algorithm if magnetometer measurement invalid (avoids NaN in magnetometer normalisation)
-  if((mx == 0.0f) && (my == 0.0f) && (mz == 0.0f)) {
+   if((mx == 0.0f) && (my == 0.0f) && (mz == 0.0f)) {
     Madgwick6DOF(gx, gy, gz, ax, ay, az, invSampleFreq);
     return;
   }
 
-  //Convert gyroscope degrees/sec to radians/sec
   gx *= 0.0174533f;
   gy *= 0.0174533f;
   gz *= 0.0174533f;
 
-  //Rate of change of quaternion from gyroscope
   qDot1 = 0.5f * (-q1 * gx - q2 * gy - q3 * gz);
   qDot2 = 0.5f * (q0 * gx + q2 * gz - q3 * gy);
   qDot3 = 0.5f * (q0 * gy - q1 * gz + q3 * gx);
   qDot4 = 0.5f * (q0 * gz + q1 * gy - q2 * gx);
 
-  //Compute feedback only if accelerometer measurement valid (avoids NaN in accelerometer normalisation)
+
   if(!((ax == 0.0f) && (ay == 0.0f) && (az == 0.0f))) {
 
-    //Normalise accelerometer measurement
+   
     recipNorm = invSqrt(ax * ax + ay * ay + az * az);
     ax *= recipNorm;
     ay *= recipNorm;
     az *= recipNorm;
 
-    //Normalise magnetometer measurement
+   
     recipNorm = invSqrt(mx * mx + my * my + mz * mz);
     mx *= recipNorm;
     my *= recipNorm;
     mz *= recipNorm;
 
-    //Auxiliary variables to avoid repeated arithmetic
+    
     _2q0mx = 2.0f * q0 * mx;
     _2q0my = 2.0f * q0 * my;
     _2q0mz = 2.0f * q0 * mz;
@@ -702,36 +650,32 @@ void Madgwick(float gx, float gy, float gz, float ax, float ay, float az, float 
 // ***********************************************************************************************************
 
 void Madgwick6DOF(float gx, float gy, float gz, float ax, float ay, float az, float invSampleFreq) {
-  //DESCRIPTION: Attitude estimation through sensor fusion - 6DOF
-  /*
-   * See description of Madgwick() for more information. This is a 6DOF implimentation for when magnetometer data is not
-   * available (for example when using the recommended MPU6050 IMU for the default setup).
-   */
+  
   float recipNorm;
   float s0, s1, s2, s3;
   float qDot1, qDot2, qDot3, qDot4;
   float _2q0, _2q1, _2q2, _2q3, _4q0, _4q1, _4q2 ,_8q1, _8q2, q0q0, q1q1, q2q2, q3q3;
 
-  //Convert gyroscope degrees/sec to radians/sec
+  
   gx *= 0.0174533f;
   gy *= 0.0174533f;
   gz *= 0.0174533f;
 
-  //Rate of change of quaternion from gyroscope
+ 
   qDot1 = 0.5f * (-q1 * gx - q2 * gy - q3 * gz);
   qDot2 = 0.5f * (q0 * gx + q2 * gz - q3 * gy);
   qDot3 = 0.5f * (q0 * gy - q1 * gz + q3 * gx);
   qDot4 = 0.5f * (q0 * gz + q1 * gy - q2 * gx);
 
-  //Compute feedback only if accelerometer measurement valid (avoids NaN in accelerometer normalisation)
+  
   if(!((ax == 0.0f) && (ay == 0.0f) && (az == 0.0f))) {
-    //Normalise accelerometer measurement
+   
     recipNorm = invSqrt(ax * ax + ay * ay + az * az);
     ax *= recipNorm;
     ay *= recipNorm;
     az *= recipNorm;
 
-    //Auxiliary variables to avoid repeated arithmetic
+    
     _2q0 = 2.0f * q0;
     _2q1 = 2.0f * q1;
     _2q2 = 2.0f * q2;
@@ -746,38 +690,38 @@ void Madgwick6DOF(float gx, float gy, float gz, float ax, float ay, float az, fl
     q2q2 = q2 * q2;
     q3q3 = q3 * q3;
 
-    //Gradient decent algorithm corrective step
+    
     s0 = _4q0 * q2q2 + _2q2 * ax + _4q0 * q1q1 - _2q1 * ay;
     s1 = _4q1 * q3q3 - _2q3 * ax + 4.0f * q0q0 * q1 - _2q0 * ay - _4q1 + _8q1 * q1q1 + _8q1 * q2q2 + _4q1 * az;
     s2 = 4.0f * q0q0 * q2 + _2q0 * ax + _4q2 * q3q3 - _2q3 * ay - _4q2 + _8q2 * q1q1 + _8q2 * q2q2 + _4q2 * az;
     s3 = 4.0f * q1q1 * q3 - _2q1 * ax + 4.0f * q2q2 * q3 - _2q2 * ay;
-    recipNorm = invSqrt(s0 * s0 + s1 * s1 + s2 * s2 + s3 * s3); //normalise step magnitude
+    recipNorm = invSqrt(s0 * s0 + s1 * s1 + s2 * s2 + s3 * s3); 
     s0 *= recipNorm;
     s1 *= recipNorm;
     s2 *= recipNorm;
     s3 *= recipNorm;
 
-    //Apply feedback step
+   
     qDot1 -= B_madgwick * s0;
     qDot2 -= B_madgwick * s1;
     qDot3 -= B_madgwick * s2;
     qDot4 -= B_madgwick * s3;
   }
 
-  //Integrate rate of change of quaternion to yield quaternion
+  
   q0 += qDot1 * invSampleFreq;
   q1 += qDot2 * invSampleFreq;
   q2 += qDot3 * invSampleFreq;
   q3 += qDot4 * invSampleFreq;
 
-  //Normalise quaternion
+  
   recipNorm = invSqrt(q0 * q0 + q1 * q1 + q2 * q2 + q3 * q3);
   q0 *= recipNorm;
   q1 *= recipNorm;
   q2 *= recipNorm;
   q3 *= recipNorm;
 
-  //compute angles
+  
   roll_IMU = atan2(q0*q1 + q2*q3, 0.5f - q1*q1 - q2*q2)*57.29577951; //degrees
   pitch_IMU = -asin(-2.0f * (q1*q3 - q0*q2))*57.29577951; //degrees
   yaw_IMU = -atan2(q1*q2 + q0*q3, 0.5f - q2*q2 - q3*q3)*57.29577951; //degrees
@@ -786,19 +730,12 @@ void Madgwick6DOF(float gx, float gy, float gz, float ax, float ay, float az, fl
 // ***********************************************************************************************************
 
 void getDesState() {
-  //DESCRIPTION: Normalizes desired control values to appropriate values
-  /*
-   * Updates the desired state variables thro_des, roll_des, pitch_des, and yaw_des. These are computed by using the raw
-   * RC pwm commands and scaling them to be within our limits defined in setup. thro_des stays within 0 to 1 range.
-   * roll_des and pitch_des are scaled to be within max roll/pitch amount in either degrees (angle mode) or degrees/sec
-   * (rate mode). yaw_des is scaled to be within max yaw in degrees/sec. Also creates roll_passthru, pitch_passthru, and
-   * yaw_passthru variables, to be used in commanding motors/servos with direct unstabilized commands in controlMixer().
-   */
+  
   thro_des = (channel_1_pwm - 1000.0)/1000.0; //between 0 and 1
   roll_des = (channel_2_pwm - 1500.0)/500.0; //between -1 and 1
   pitch_des = (channel_3_pwm - 1500.0)/500.0; //between -1 and 1
   yaw_des = (channel_4_pwm - 1500.0)/500.0; //between -1 and 1
-  //Constrain within normalized bounds
+  
   thro_des = constrain(thro_des, 0.0, 1.0); //between 0 and 1
   roll_des = constrain(roll_des, -1.0, 1.0)*maxRoll; //between -maxRoll and +maxRoll
   pitch_des = constrain(pitch_des, -1.0, 1.0)*maxPitch; //between -maxPitch and +maxPitch
@@ -812,17 +749,7 @@ void getDesState() {
 // ***********************************************************************************************************
 
 void controlANGLE() {
-  //DESCRIPTION: Computes control commands based on state error (angle)
-  /*
-   * Basic PID control to stablize on angle setpoint based on desired states roll_des, pitch_des, and yaw_des computed in 
-   * getDesState(). Error is simply the desired state minus the actual state (ex. roll_des - roll_IMU). Two safety features
-   * are implimented here regarding the I terms. The I terms are saturated within specified limits on startup to prevent 
-   * excessive buildup. This can be seen by holding the vehicle at an angle and seeing the motors ramp up on one side until
-   * they've maxed out throttle...saturating I to a specified limit fixes this. The second feature defaults the I terms to 0
-   * if the throttle is at the minimum setting. This means the motors will not start spooling up on the ground, and the I 
-   * terms will always start from 0 on takeoff. This function updates the variables roll_PID, pitch_PID, and yaw_PID which
-   * can be thought of as 1-D stablized signals. They are mixed to the configuration of the vehicle in controlMixer().
-   */
+  
   
   //Roll
   error_roll = roll_des - roll_IMU;
@@ -1002,15 +929,7 @@ void controlRATE() {
 }
 // ***********************************************************************************************************
 void controlMixer() {
-  //DESCRIPTION: Mixes scaled commands from PID controller to actuator outputs based on vehicle configuration
-  /*
-   * Takes roll_PID, pitch_PID, and yaw_PID computed from the PID controller and appropriately mixes them for the desired
-   * vehicle configuration. For example on a quadcopter, the left two motors should have +roll_PID while the right two motors
-   * should have -roll_PID. Front two should have -pitch_PID and the back two should have +pitch_PID etc... every motor has
-   * normalized (0 to 1) thro_des command for throttle control. Can also apply direct unstabilized commands from the transmitter with 
-   * roll_passthru, pitch_passthru, and yaw_passthu. mX_command_scaled and sX_command scaled variables are used in scaleCommands() 
-   * in preparation to be sent to the motor ESCs and servos.
-   */
+  
   //Quad mixing
   //m1 = front left, m2 = front right, m3 = back right, m4 = back left
   
@@ -1022,7 +941,6 @@ void controlMixer() {
   m5_command_scaled = 0;
   m6_command_scaled = 0;
 
-  //0.5 is centered servo, 0 is zero throttle if connecting to ESC for conventional PWM, 1 is max throttle
  
   s1_command_scaled = m1_command_scaled ;   // MCM edited
   s2_command_scaled = m2_command_scaled ;   // MCM edited
@@ -1091,13 +1009,7 @@ void scaleCommands() {
 // ***********************************************************************************************************
 
 void getCommands() {
-  //DESCRIPTION: Get raw PWM values for every channel from the radio
-  /*
-   * Updates radio PWM commands in loop based on current available commands. channel_x_pwm is the raw command used in the rest of 
-   * the loop. If using a PWM or PPM receiver, the radio commands are retrieved from a function in the readPWM file separate from this one which 
-   * is running a bunch of interrupts to continuously update the radio readings. If using an SBUS receiver, the alues are pulled from the SBUS library directly.
-   * The raw radio commands are filtered with a first order low-pass filter to eliminate any really high frequency noise. 
-   */
+  
     if (sbus.read(&sbusChannels[0], &sbusFailSafe, &sbusLostFrame))
     {
       //sBus scaling below is for Taranis-Plus and X4R-SB
@@ -1131,14 +1043,7 @@ void getCommands() {
 }
 
 void failSafe() {
-  //DESCRIPTION: If radio gives garbage values, set all commands to default values
-  /*
-   * Radio connection failsafe used to check if the getCommands() function is returning acceptable pwm values. If any of 
-   * the commands are lower than 800 or higher than 2200, then we can be certain that there is an issue with the radio
-   * connection (most likely hardware related). If any of the channels show this failure, then all of the radio commands 
-   * channel_x_pwm are set to default failsafe values specified in the setup. Comment out this function when troubleshooting 
-   * your radio connection in case any extreme values are triggering this function to overwrite the printed variables.
-   */
+  
   unsigned minVal = 800;
   unsigned maxVal = 2200;
   int check1 = 0;
