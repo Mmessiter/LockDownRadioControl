@@ -319,7 +319,8 @@ void loop() {
 
   //Print data at 100hz (uncomment one at a time for troubleshooting) - SELECT ONE: 
   
-  // printRadioData();     //radio pwm values (expected: 1000 to 2000)
+  //
+   printRadioData();     //radio pwm values (expected: 1000 to 2000)
   // PrintGains();         //P and I gains for ANGLE mode
   // printDesiredState();  //prints desired vehicle state commanded in either degrees or deg/sec (expected: +/- maxAXIS for roll, pitch, yaw; 0 to 1 for throttle)
   // printGyroData();      //prints filtered gyro data direct from IMU (expected: ~ -250 to 250, 0 at rest)
@@ -422,15 +423,17 @@ void SendPWMData(){ // MCM
 }
 // ***********************************************************************************************************
 void PrintGains(){    // MCM
- Serial.print("Roll and Pitch P Gain: " );
- Serial.println(Kp_pitch_angle,3);
- Serial.print("Roll and Pitch I Gain: " );
- Serial.println(Ki_roll_angle,3);
- Serial.print("YAW P Gain: " );
- Serial.println(Kp_yaw,3);
- Serial.print("YAW I Gain: " );
- Serial.println(Ki_yaw,3);
- Serial.println(" ");
+ if (current_time - print_counter > 10000) {
+    print_counter = micros();Serial.print("Roll and Pitch P Gain: " );
+    Serial.println(Kp_pitch_angle,3);
+    Serial.print("Roll and Pitch I Gain: " );
+    Serial.println(Ki_roll_angle,3);
+    Serial.print("YAW P Gain: " );
+    Serial.println(Kp_yaw,3);
+    Serial.print("YAW I Gain: " );
+    Serial.println(Ki_yaw,3);
+    Serial.println(" ");
+ }
 }
 // ***********************************************************************************************************
 
