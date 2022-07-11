@@ -318,10 +318,10 @@ void loop() {
 
   loopBlink(); //indicate we are in main loop with short blink every 1.5 seconds
 
-  //Print data at 100hz (uncomment one at a time for troubleshooting) - SELECT ONE: // heer
+  //Print data at 100hz (uncomment one at a time for troubleshooting) - SELECT ONE: 
   
   // printRadioData();     //radio pwm values (expected: 1000 to 2000)
-  // PrintGains();         //P and I gains for ANGLE mode
+   PrintGains();         //P and I gains for ANGLE mode
   // printDesiredState();  //prints desired vehicle state commanded in either degrees or deg/sec (expected: +/- maxAXIS for roll, pitch, yaw; 0 to 1 for throttle)
   // printGyroData();      //prints filtered gyro data direct from IMU (expected: ~ -250 to 250, 0 at rest)
   // printAccelData();     //prints filtered accelerometer data direct from IMU (expected: ~ -2 to 2; x,y 0 when level, z 1 when level)
@@ -373,29 +373,48 @@ void loop() {
 
 
 // ***************************** GetGains (MCM) **********************************************************
-//         DEFAULT was 0.2.  This function allows any value from 0.1 - 0.4 set from Channel 7.
+//         This function allows ... heer
 //         Pitch and Roll gains are equal as its a quadcopter
 // *******************************************************************************************************
 
 void GetGains(){
-  
-#define P_GAIN_DEFAULT 0.2                      // default P Gain is 0.2
+// Roll and Pitch  
+#define P_GAIN_DEFAULT 0.2                      // default roll and pitch P Gain is 0.2
 #define P_GAIN_MIN P_GAIN_DEFAULT / 2   
 #define P_GAIN_MAX P_GAIN_DEFAULT * 1.5  
 
-#define I_GAIN_DEFAULT 0.3                      // default I Gain is 0.3
+#define I_GAIN_DEFAULT 0.3                      // default roll and pitch I Gain is 0.3
 #define I_GAIN_MIN I_GAIN_DEFAULT / 2   
 #define I_GAIN_MAX I_GAIN_DEFAULT * 1.5 
 
-   uint16_t temp = 0;
-   
-       temp = map(channel_7_pwm,1000,2000,P_GAIN_MIN * 10000,P_GAIN_MAX * 10000);  // use bigger numbers as map() only likes integers
+
+// float Kp_yaw = 0.3;           //Yaw P-gain
+// float Ki_yaw = 0.05;          //Yaw I-gain
+
+#define P_YGAIN_DEFAULT 0.3                      // default yaw P Gain is 0.3
+#define P_YGAIN_MIN P_YGAIN_DEFAULT / 2   
+#define P_YGAIN_MAX P_YGAIN_DEFAULT * 1.5 
+
+#define I_YGAIN_DEFAULT 0.05                      // default yaw I Gain is 0.05
+#define I_YGAIN_MIN I_YGAIN_DEFAULT / 2   
+#define I_YGAIN_MAX I_YGAIN_DEFAULT * 1.5 
+
+
+       uint16_t temp = map(channel_7_pwm,1000,2000,P_GAIN_MIN * 10000,P_GAIN_MAX * 10000);  // use bigger numbers as map() only likes integers
        Kp_pitch_angle = (float) temp/10000;
        Kp_roll_angle  = Kp_pitch_angle;
+       
        temp = map(channel_6_pwm,1000,2000,I_GAIN_MIN * 10000,I_GAIN_MAX * 10000);  
        Ki_pitch_angle = (float) temp/10000;
        Ki_roll_angle  = Ki_pitch_angle;
 
+       temp = map(channel_7_pwm,1000,2000,P_YGAIN_MIN * 10000,P_YGAIN_MAX * 10000);  // use bigger numbers as map() only likes integers
+       Kp_yaw = (float) temp/10000;
+
+       temp = map(channel_6_pwm,1000,2000,I_YGAIN_MIN * 10000,I_YGAIN_MAX * 10000);  // use bigger numbers as map() only likes integers
+       Ki_yaw = (float) temp/10000;
+       
+      
 }
 // ***********************************************************************************************************
 
@@ -410,11 +429,16 @@ void SendPWMData(){
 }
 // ***********************************************************************************************************
 void PrintGains(){
- Serial.print("P Gain: " );
+ Serial.print("Roll and Pitch P Gain: " );
  Serial.println(Kp_pitch_angle,3);
- Serial.print("I Gain: " );
+ Serial.print("Roll and Pitch I Gain: " );
  Serial.println(Ki_roll_angle,3);
+Serial.print("YAW P Gain: " );
+Serial.println(Kp_yaw,3);
+Serial.print("YAW I Gain: " );
+Serial.println(Ki_yaw,3);
  Serial.println(" ");
+
 }
 
 // ***********************************************************************************************************
