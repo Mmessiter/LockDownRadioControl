@@ -321,7 +321,7 @@ void loop() {
   //Print data at 100hz (uncomment one at a time for troubleshooting) - SELECT ONE: 
   
   // printRadioData();     //radio pwm values (expected: 1000 to 2000)
-   PrintGains();         //P and I gains for ANGLE mode
+  // PrintGains();         //P and I gains for ANGLE mode
   // printDesiredState();  //prints desired vehicle state commanded in either degrees or deg/sec (expected: +/- maxAXIS for roll, pitch, yaw; 0 to 1 for throttle)
   // printGyroData();      //prints filtered gyro data direct from IMU (expected: ~ -250 to 250, 0 at rest)
   // printAccelData();     //prints filtered accelerometer data direct from IMU (expected: ~ -2 to 2; x,y 0 when level, z 1 when level)
@@ -387,9 +387,7 @@ void GetGains(){
 #define I_GAIN_MIN I_GAIN_DEFAULT / 2   
 #define I_GAIN_MAX I_GAIN_DEFAULT * 1.5 
 
-
-// float Kp_yaw = 0.3;           //Yaw P-gain
-// float Ki_yaw = 0.05;          //Yaw I-gain
+// Yaw 
 
 #define P_YGAIN_DEFAULT 0.3                      // default yaw P Gain is 0.3
 #define P_YGAIN_MIN P_YGAIN_DEFAULT / 2   
@@ -418,7 +416,7 @@ void GetGains(){
 }
 // ***********************************************************************************************************
 
-void SendPWMData(){
+void SendPWMData(){ // MCM
   servo1.write(s1_command_PWM); 
   servo2.write(s2_command_PWM);
   servo3.write(s3_command_PWM);
@@ -428,17 +426,16 @@ void SendPWMData(){
   servo7.write(s7_command_PWM);
 }
 // ***********************************************************************************************************
-void PrintGains(){
+void PrintGains(){    // MCM
  Serial.print("Roll and Pitch P Gain: " );
  Serial.println(Kp_pitch_angle,3);
  Serial.print("Roll and Pitch I Gain: " );
  Serial.println(Ki_roll_angle,3);
-Serial.print("YAW P Gain: " );
-Serial.println(Kp_yaw,3);
-Serial.print("YAW I Gain: " );
-Serial.println(Ki_yaw,3);
+ Serial.print("YAW P Gain: " );
+ Serial.println(Kp_yaw,3);
+ Serial.print("YAW I Gain: " );
+ Serial.println(Ki_yaw,3);
  Serial.println(" ");
-
 }
 
 // ***********************************************************************************************************
