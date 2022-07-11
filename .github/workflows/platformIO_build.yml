@@ -22,8 +22,9 @@ jobs:
 
         matrix:
           aspect:
-            - Receiver
-            - Transmitter
+            - ReceiverCode
+            - TransmitterCode
+            - SensorHubT32
 
     steps:
       - uses: actions/checkout@v2
@@ -38,14 +39,14 @@ jobs:
 
       - name: build aspect of project
         run: |
-          cd ${{ matrix.aspect }}Code
+          cd ${{ matrix.aspect }}
           pio run
 
       - name: Save artifact
         uses: actions/upload-artifact@v2
         with:
           name: "${{ matrix.aspect }}Binaries"
-          path: ${{ matrix.aspect }}Code/.pio/build/*/firmware.*
+          path: ${{ matrix.aspect }}/.pio/build/*/firmware.*
 
       # - name: Upload Release assets
       #   if: github.event_name == 'release'
