@@ -1,5 +1,11 @@
 var NAVTREEINDEX12 =
 {
+"globals_vars_u.html":[10,1,2,20],
+"globals_vars_v.html":[10,1,2,21],
+"globals_vars_w.html":[10,1,2,22],
+"globals_vars_x.html":[10,1,2,23],
+"globals_vars_y.html":[10,1,2,24],
+"globals_w.html":[10,1,0,23],
 "globals_x.html":[10,1,0,24],
 "globals_y.html":[10,1,0,25],
 "globals_z.html":[10,1,0,26],
@@ -243,11 +249,5 @@ var NAVTREEINDEX12 =
 "structnmea__history__t.html#a59f3003809801affc387b54971f5d32b":[9,0,16,0],
 "structnmea__history__t.html#a8bf34a6e794f01eec90c4a919f9b244d":[9,0,16,3],
 "structsensor__t.html":[9,0,21],
-"structsensor__t.html#a1a17359f1080eb169a452656f7dec1ee":[9,0,21,0],
-"structsensor__t.html#a1cd271377ff25ec9ca54886f876c87ec":[9,0,21,1],
-"structsensor__t.html#a224f6201d59873cc1b6e9dd8a1894736":[9,0,21,5],
-"structsensor__t.html#a274f12a47669fbd2b61935706339e1c2":[9,0,21,7],
-"structsensor__t.html#a4383b68d36f9dc4096d83583c3b009bf":[9,0,21,3],
-"structsensor__t.html#a4556ed82a0389a7f6af25a6fd0ee1431":[9,0,21,2],
-"structsensor__t.html#a926aba3216afd50e62c0a6cdbcc7433a":[9,0,21,4]
+"structsensor__t.html#a1a17359f1080eb169a452656f7dec1ee":[9,0,21,0]
 };
