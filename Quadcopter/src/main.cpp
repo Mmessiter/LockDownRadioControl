@@ -319,8 +319,7 @@ void loop() {
 
   //Print data at 100hz (uncomment one at a time for troubleshooting) - SELECT ONE: 
   
-  //
-   printRadioData();     //radio pwm values (expected: 1000 to 2000)
+  // printRadioData();     //radio pwm values (expected: 1000 to 2000)
   // PrintGains();         //P and I gains for ANGLE mode
   // printDesiredState();  //prints desired vehicle state commanded in either degrees or deg/sec (expected: +/- maxAXIS for roll, pitch, yaw; 0 to 1 for throttle)
   // printGyroData();      //prints filtered gyro data direct from IMU (expected: ~ -250 to 250, 0 at rest)
@@ -373,7 +372,7 @@ void loop() {
 
 
 // ***************************** GetGains (MCM) **********************************************************
-//         Pitch and Roll gains are equal as its a quadcopter
+//         Pitch and Roll gains are equal because it's a quadcopter
 // *******************************************************************************************************
 
 void GetGains(){
@@ -395,15 +394,19 @@ void GetGains(){
 #define I_YGAIN_MIN I_YGAIN_DEFAULT / 2   
 #define I_YGAIN_MAX I_YGAIN_DEFAULT * 1.5 
 
+uint16_t temp = 0;
 
-       uint16_t temp = map(channel_7_pwm,1000,2000,P_GAIN_MIN * 10000,P_GAIN_MAX * 10000);  // use bigger numbers as map() only likes integers
+//   Comment out this part when good settings are found
+// ******************************** ROLL AND PITCH ***********************************************************
+       temp = map(channel_7_pwm,1000,2000,P_GAIN_MIN * 10000,P_GAIN_MAX * 10000);  // use bigger numbers as map() only likes integers
        Kp_pitch_angle = (float) temp/10000;
        Kp_roll_angle  = Kp_pitch_angle;
        
        temp = map(channel_6_pwm,1000,2000,I_GAIN_MIN * 10000,I_GAIN_MAX * 10000);  
        Ki_pitch_angle = (float) temp/10000;
        Ki_roll_angle  = Ki_pitch_angle;
-
+       
+// ************************************** YAW *****************************************************************
        temp = map(channel_7_pwm,1000,2000,P_YGAIN_MIN * 10000,P_YGAIN_MAX * 10000);  // use bigger numbers as map() only likes integers
        Kp_yaw = (float) temp/10000;
 
@@ -412,7 +415,7 @@ void GetGains(){
 }
 // ***********************************************************************************************************
 
-void SendPWMData(){ // MCM
+void SendPWMData(){           // MCM
   servo1.write(s1_command_PWM); 
   servo2.write(s2_command_PWM);
   servo3.write(s3_command_PWM);
