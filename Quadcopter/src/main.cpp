@@ -331,7 +331,7 @@ void loop() {
   // printLoopRate();      //prints the time between loops in microseconds (expected: microseconds between loop iterations)
  
   // Get PID Gains 
-  GetGains();                                       // MCM
+  GetGains();         // MCM
   
   //Get vehicle state
   getIMUdata(); //pulls raw gyro, accelerometer, and magnetometer data from IMU and LP filters to remove noise
@@ -364,12 +364,9 @@ void loop() {
   loopRate(2000); //do not exceed 2000Hz, all filter parameters tuned to 2000Hz by default
 }
 
-
-
 //========================================================================================================================//
 //                                                      FUNCTIONS                                                         //                           
 //========================================================================================================================//
-
 
 // ***************************** GetGains (MCM) **********************************************************
 //         Pitch and Roll gains are equal because it's a quadcopter
@@ -415,7 +412,7 @@ uint16_t temp = 0;
 }
 // ***********************************************************************************************************
 
-void SendPWMData(){           // MCM
+void SendPWMData(){                       // MCM
   servo1.write(s1_command_PWM); 
   servo2.write(s2_command_PWM);
   servo3.write(s3_command_PWM);
@@ -1376,7 +1373,7 @@ void printLoopRate() {
   }
 }
 // ***********************************************************************************************************
-  float invSqrt(float x) { // gives a warning
+  float invSqrt(float x) {    // gives a warning
   unsigned int i = 0x5F1F1412 - (*(unsigned int*)&x >> 1);
   float tmp = *(float*)&i;
   float y = tmp * (1.69000231f - 0.714158168f * x * tmp * tmp);
