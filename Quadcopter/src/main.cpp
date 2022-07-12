@@ -92,13 +92,15 @@ float maxYaw = 160.0;     //Max yaw rate in deg/sec
 // ***************************************************************************************************************************************************
 float Kp_roll_angle = 0.2;    //Roll P-gain - angle mode 
 float Ki_roll_angle = 0.3;    //Roll I-gain - angle mode
-float Kd_roll_angle = 0.05;   //Roll D-gain - angle mode (if using controlANGLE2(), set to 0.0)
+//float Kd_roll_angle = 0.05; //Roll D-gain - angle mode (if using controlANGLE2(), set to 0.0)
+float Kd_roll_angle   = 0.1;   // MCM
 // ***************************************************************************************************************************************************
 float B_loop_roll = 0.9;      //Roll damping term for controlANGLE2(), lower is more damping (must be between 0 to 1)
 // ***************************************************************************************************************************************************
 float Kp_pitch_angle = 0.2;   //Pitch P-gain - angle mode
 float Ki_pitch_angle = 0.3;   //Pitch I-gain - angle mode
-float Kd_pitch_angle = 0.05;  //Pitch D-gain - angle mode (if using controlANGLE2(), set to 0.0)
+//float Kd_pitch_angle = 0.05;  //Pitch D-gain - angle mode (if using controlANGLE2(), set to 0.0)
+float Kd_pitch_angle = 0.1;  // MCM
 // ***************************************************************************************************************************************************
 float B_loop_pitch = 0.9;     //Pitch damping term for controlANGLE2(), lower is more damping (must be between 0 to 1)
 // ***************************************************************************************************************************************************
@@ -375,16 +377,16 @@ void loop() {
 void GetGains(){
 // Roll and Pitch  
 #define P_GAIN_DEFAULT 0.2                      // default roll and pitch P Gain is 0.2 - angle mode
-#define P_GAIN_MIN P_GAIN_DEFAULT / 2   
-#define P_GAIN_MAX P_GAIN_DEFAULT * 1.5  
+#define P_GAIN_MIN P_GAIN_DEFAULT /10 
+#define P_GAIN_MAX P_GAIN_DEFAULT * 3  
 
 #define I_GAIN_DEFAULT 0.3                      // default roll and pitch I Gain is 0.3 - angle mode
-#define I_GAIN_MIN I_GAIN_DEFAULT / 2   
-#define I_GAIN_MAX I_GAIN_DEFAULT * 1.5 
+#define I_GAIN_MIN I_GAIN_DEFAULT /10  
+#define I_GAIN_MAX I_GAIN_DEFAULT * 3 
 
 #define D_GAIN_DEFAULT 0.05                      //default roll and pitch D-gain - angle mode
-#define D_GAIN_MIN D_GAIN_DEFAULT / 2   
-#define D_GAIN_MAX D_GAIN_DEFAULT * 1.5 
+#define D_GAIN_MIN D_GAIN_DEFAULT / 1   
+#define D_GAIN_MAX D_GAIN_DEFAULT * 10 
 
 // Yaw 
 #define P_YGAIN_DEFAULT 0.3                      // default yaw P Gain is 0.3
@@ -397,26 +399,19 @@ void GetGains(){
 
 uint16_t temp = 0;
 
-/*   Comment out this part when good settings are found
+//   Comment out this part when good settings are found
 // ******************************** ROLL AND PITCH ***********************************************************
        temp = map(channel_7_pwm,1000,2000,P_GAIN_MIN * 10000,P_GAIN_MAX * 10000);  // use bigger numbers as map() only likes integers
        Kp_pitch_angle = (float) temp/10000;
        Kp_roll_angle  = Kp_pitch_angle;
        
        temp = map(channel_6_pwm,1000,2000,I_GAIN_MIN * 10000,I_GAIN_MAX * 10000);  
-       Ki_pitch_angle = (float) temp/10000;
-       Ki_roll_angle  = Ki_pitch_angle;
-*/
-       temp = map(channel_6_pwm,1000,2000,D_GAIN_MIN * 10000,D_GAIN_MAX * 10000);  
-       Kd_pitch_angle = (float) temp/10000;
-       Kd_roll_angle  = Kd_pitch_angle;
+         Ki_pitch_angle = (float) temp/10000;
+         Ki_roll_angle  = Ki_pitch_angle;
 
-
-        Kp_pitch_angle = 0;
-        Kp_roll_angle  = 0;
-        Ki_pitch_angle = 0;
-        Ki_roll_angle  = 0;
-
+   //    temp = map(channel_6_pwm,1000,2000,D_GAIN_MIN * 10000,D_GAIN_MAX * 10000);  
+   //    Kd_pitch_angle = (float) temp/10000;
+   //    Kd_roll_angle  = Kd_pitch_angle;
 /*
 // ************************************** YAW *****************************************************************
        temp = map(channel_7_pwm,1000,2000,P_YGAIN_MIN * 10000,P_YGAIN_MAX * 10000);  // use bigger numbers as map() only likes integers
