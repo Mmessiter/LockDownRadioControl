@@ -377,11 +377,11 @@ void loop() {
 void GetGains(){
 // Roll and Pitch  
 #define P_GAIN_DEFAULT 0.2                      // default roll and pitch P Gain is 0.2 - angle mode
-#define P_GAIN_MIN P_GAIN_DEFAULT /10 
+#define P_GAIN_MIN P_GAIN_DEFAULT / 10 
 #define P_GAIN_MAX P_GAIN_DEFAULT * 3  
 
 #define I_GAIN_DEFAULT 0.3                      // default roll and pitch I Gain is 0.3 - angle mode
-#define I_GAIN_MIN I_GAIN_DEFAULT /10  
+#define I_GAIN_MIN I_GAIN_DEFAULT / 10  
 #define I_GAIN_MAX I_GAIN_DEFAULT * 3 
 
 #define D_GAIN_DEFAULT 0.05                      //default roll and pitch D-gain - angle mode
