@@ -157,6 +157,12 @@ Macros</h2></td></tr>
 <tr class="separator:a8e1b797be4b5e8a69f823f7b04c26053"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a56dad6cfacab28218940ea8563e69642"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_quadcopter_2src_2main_8cpp.html#a56dad6cfacab28218940ea8563e69642">I_GAIN_MAX</a>&#160;&#160;&#160;<a class="el" href="_quadcopter_2src_2main_8cpp.html#aa2f838a4f00b7a67490c28f8e7239482">I_GAIN_DEFAULT</a> * 1.5</td></tr>
 <tr class="separator:a56dad6cfacab28218940ea8563e69642"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7276c54fb12dbb3be43b8ec6290f5ff9"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_quadcopter_2src_2main_8cpp.html#a7276c54fb12dbb3be43b8ec6290f5ff9">D_GAIN_DEFAULT</a>&#160;&#160;&#160;0.05</td></tr>
+<tr class="separator:a7276c54fb12dbb3be43b8ec6290f5ff9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a454096b7f5c63181963c76ea873b80"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_quadcopter_2src_2main_8cpp.html#a5a454096b7f5c63181963c76ea873b80">D_GAIN_MIN</a>&#160;&#160;&#160;<a class="el" href="_quadcopter_2src_2main_8cpp.html#a7276c54fb12dbb3be43b8ec6290f5ff9">D_GAIN_DEFAULT</a> / 2</td></tr>
+<tr class="separator:a5a454096b7f5c63181963c76ea873b80"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb584758f4599e56fab237d8af0e252f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_quadcopter_2src_2main_8cpp.html#acb584758f4599e56fab237d8af0e252f">D_GAIN_MAX</a>&#160;&#160;&#160;<a class="el" href="_quadcopter_2src_2main_8cpp.html#a7276c54fb12dbb3be43b8ec6290f5ff9">D_GAIN_DEFAULT</a> * 1.5</td></tr>
+<tr class="separator:acb584758f4599e56fab237d8af0e252f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1133dab9b24a25c94c296de99c5db1a4"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_quadcopter_2src_2main_8cpp.html#a1133dab9b24a25c94c296de99c5db1a4">P_YGAIN_DEFAULT</a>&#160;&#160;&#160;0.3</td></tr>
 <tr class="separator:a1133dab9b24a25c94c296de99c5db1a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aef1650a66fba052880c3eb57ee630a99"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_quadcopter_2src_2main_8cpp.html#aef1650a66fba052880c3eb57ee630a99">P_YGAIN_MIN</a>&#160;&#160;&#160;<a class="el" href="_quadcopter_2src_2main_8cpp.html#a1133dab9b24a25c94c296de99c5db1a4">P_YGAIN_DEFAULT</a> / 2</td></tr>
@@ -707,6 +713,48 @@ Variables</h2></td></tr>
 
 </div>
 </div>
+<a id="a7276c54fb12dbb3be43b8ec6290f5ff9" name="a7276c54fb12dbb3be43b8ec6290f5ff9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7276c54fb12dbb3be43b8ec6290f5ff9">&#9670;&nbsp;</a></span>D_GAIN_DEFAULT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define D_GAIN_DEFAULT&#160;&#160;&#160;0.05</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acb584758f4599e56fab237d8af0e252f" name="acb584758f4599e56fab237d8af0e252f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb584758f4599e56fab237d8af0e252f">&#9670;&nbsp;</a></span>D_GAIN_MAX</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define D_GAIN_MAX&#160;&#160;&#160;<a class="el" href="_quadcopter_2src_2main_8cpp.html#a7276c54fb12dbb3be43b8ec6290f5ff9">D_GAIN_DEFAULT</a> * 1.5</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5a454096b7f5c63181963c76ea873b80" name="a5a454096b7f5c63181963c76ea873b80"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a454096b7f5c63181963c76ea873b80">&#9670;&nbsp;</a></span>D_GAIN_MIN</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define D_GAIN_MIN&#160;&#160;&#160;<a class="el" href="_quadcopter_2src_2main_8cpp.html#a7276c54fb12dbb3be43b8ec6290f5ff9">D_GAIN_DEFAULT</a> / 2</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a68bc5d52c72e3692e23ef0cd45f36142" name="a68bc5d52c72e3692e23ef0cd45f36142"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a68bc5d52c72e3692e23ef0cd45f36142">&#9670;&nbsp;</a></span>GYRO_250DPS</h2>
 
@@ -1003,7 +1051,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l00497">497</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l00523">523</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -1034,7 +1082,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l00532">532</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l00558">558</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -1082,7 +1130,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l01080">1080</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l01106">1106</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -1107,7 +1155,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l00754">754</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l00780">780</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -1132,7 +1180,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l00798">798</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l00824">824</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1151,7 +1199,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l00934">934</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l00960">960</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -1176,7 +1224,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l00886">886</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l00912">912</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1195,7 +1243,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l01048">1048</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l01074">1074</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -1255,7 +1303,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l01142">1142</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l01168">1168</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1274,7 +1322,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l01014">1014</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l01040">1040</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -1305,7 +1353,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l00735">735</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l00761">761</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -1355,7 +1403,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l00456">456</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l00482">482</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -1386,7 +1434,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l00440">440</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l00466">466</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -1418,7 +1466,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l01376">1376</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l01402">1402</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -1444,7 +1492,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l01383">1383</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l01409">1409</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1467,7 +1515,7 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="_quadcopter_2src_2main_8cpp_afe461d27b9c48d5921c00d521181f12f_cgraph.svg" width="598" height="646"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="_quadcopter_2src_2main_8cpp_afe461d27b9c48d5921c00d521181f12f_cgraph.svg" width="598" height="696"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 
@@ -1488,7 +1536,7 @@ Here is the call graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l01201">1201</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l01227">1227</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -1514,7 +1562,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l01190">1190</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l01216">1216</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -1598,7 +1646,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l00546">546</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l00572">572</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -1670,7 +1718,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l00655">655</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l00681">681</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -1701,7 +1749,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l01286">1286</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l01312">1312</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1720,7 +1768,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l01257">1257</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l01283">1283</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1739,7 +1787,13 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l00425">425</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l00444">444</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" frameborder="0" src="_quadcopter_2src_2main_8cpp_a5d92a8b955d4f84b865069cd0ea4dfad_icgraph.svg" width="188" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
+</div>
 
 </div>
 </div>
@@ -1758,7 +1812,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l01272">1272</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l01298">1298</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1777,7 +1831,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l01368">1368</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l01394">1394</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1796,7 +1850,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l01328">1328</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l01354">1354</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1815,7 +1869,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l01314">1314</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l01340">1340</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1834,7 +1888,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l01235">1235</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l01261">1261</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1853,7 +1907,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l01300">1300</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l01326">1326</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1872,7 +1926,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l01348">1348</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l01374">1374</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1891,7 +1945,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l00970">970</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l00996">996</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -1916,7 +1970,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l00415">415</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l00434">434</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -1983,7 +2037,7 @@ Here is the call graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l01223">1223</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l01249">1249</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -2036,7 +2090,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l01167">1167</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_quadcopter_2src_2main_8cpp_source.html#l01193">1193</a> of file <a class="el" href="_quadcopter_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">

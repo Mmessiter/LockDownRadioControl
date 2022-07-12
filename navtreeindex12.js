@@ -1,5 +1,8 @@
 var NAVTREEINDEX12 =
 {
+"globals_vars_r.html":[10,1,2,17],
+"globals_vars_s.html":[10,1,2,18],
+"globals_vars_t.html":[10,1,2,19],
 "globals_vars_u.html":[10,1,2,20],
 "globals_vars_v.html":[10,1,2,21],
 "globals_vars_w.html":[10,1,2,22],
@@ -246,8 +249,5 @@ var NAVTREEINDEX12 =
 "structnmea__history__t.html#a44a9259e5426c52c809e44ae22d67fa6":[9,0,16,2],
 "structnmea__history__t.html#a4c98f18694ee688d7c4ff2d4d6941739":[9,0,16,5],
 "structnmea__history__t.html#a54afeb9a77cf9595d8516aded551bf44":[9,0,16,4],
-"structnmea__history__t.html#a59f3003809801affc387b54971f5d32b":[9,0,16,0],
-"structnmea__history__t.html#a8bf34a6e794f01eec90c4a919f9b244d":[9,0,16,3],
-"structsensor__t.html":[9,0,21],
-"structsensor__t.html#a1a17359f1080eb169a452656f7dec1ee":[9,0,21,0]
+"structnmea__history__t.html#a59f3003809801affc387b54971f5d32b":[9,0,16,0]
 };
