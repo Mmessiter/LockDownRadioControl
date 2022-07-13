@@ -345,6 +345,7 @@ extern uint32_t       Inactivity_Timeout;
 extern uint32_t       Inactivity_Start;
 extern bool           UkRules;
 extern bool           PreviousUkRules;
+extern bool           UseLog;
 
 // external (global) functions needed here
 extern void  GetSlaveChannelValues();
@@ -369,6 +370,7 @@ extern void  RedLedOn();
 extern void  ReEnableScanButton();
 extern void  LogUKRules();
 extern int   InStrng(char * text1, char * text2);
+
 
 /*********************************************************************************************************************************/
 // function prototypes

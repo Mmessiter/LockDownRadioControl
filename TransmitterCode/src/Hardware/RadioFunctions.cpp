@@ -132,7 +132,7 @@ FASTRUN void FailedPacket()
        
         if ((millis() - GapStart) > RED_LED_ON_TIME) // there's no need to blink red for every single lost packet. Only after 1/2 second of no connection.
         {  
-            if  (LedWasGreen) LogThisLongGap();
+            if  (LedWasGreen && UseLog) LogThisLongGap(); // heer
             RedLedOn(); 
             ReEnableScanButton();
         }
