@@ -259,5 +259,6 @@ var _radio_functions_8h =
     [ "TxPace", "_radio_functions_8h.html#a97c9afd7483ad56e7a2aa63db252d616", null ],
     [ "TXTimeStamp", "_radio_functions_8h.html#afd020f35b9f4a1aa2643c4fdcc46f5db", null ],
     [ "UkRules", "_radio_functions_8h.html#a7847cc790a939f378993691ae7d40a2f", null ],
+    [ "UseLog", "_radio_functions_8h.html#aa42482a0bb01edaf26f217dbc38643d2", null ],
     [ "UseMacros", "_radio_functions_8h.html#a42a6363bff83773c1b99caa06aebb1f5", null ]
 ];
