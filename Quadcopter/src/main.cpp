@@ -319,14 +319,9 @@ void loop() {
 
   loopBlink(); //indicate we are in main loop with short blink every 1.5 seconds
 
-  //Print data at 100hz (uncomment one at a time for troubleshooting) - SELECT ONE: 
-  
-  if (channel_5_pwm > 1500) {
-    PrintGains();       
-  }else{
-     Serial.println (channel_5_pwm);
-  }
-  
+//if (channel_5_pwm > 1500) PrintGains(); // when motors stopped we can look ...MCM
+
+  // Print data at 100hz (uncomment one at a time for troubleshooting) - SELECT ONE: 
   // printRadioData();     //radio pwm values (expected: 1000 to 2000)
   // printDesiredState();  //prints desired vehicle state commanded in either degrees or deg/sec (expected: +/- maxAXIS for roll, pitch, yaw; 0 to 1 for throttle)
   // printGyroData();      //prints filtered gyro data direct from IMU (expected: ~ -250 to 250, 0 at rest)
@@ -336,8 +331,8 @@ void loop() {
   // printMotorCommands(); //prints the values being written to the motors (expected: 120 to 250)
   // printServoCommands(); //prints the values being written to the servos (expected: 0 to 180) // <<<<<<<<<<<<< *******************************************************
   // printLoopRate();      //prints the time between loops in microseconds (expected: microseconds between loop iterations)
- 
   // Get PID Gains 
+  
   GetGains();         // MCM
   
   //Get vehicle state
@@ -382,16 +377,17 @@ void loop() {
 void GetGains(){
 // Roll and Pitch  
 #define P_GAIN_DEFAULT 0.2                      // default roll and pitch P Gain is 0.2 - angle mode
-#define P_GAIN_MIN P_GAIN_DEFAULT / 10 
-#define P_GAIN_MAX P_GAIN_DEFAULT * 3  
+#define P_GAIN_MIN P_GAIN_DEFAULT / 2 
+#define P_GAIN_MAX P_GAIN_DEFAULT * 1.5  
 
 #define I_GAIN_DEFAULT 0.3                      // default roll and pitch I Gain is 0.3 - angle mode
-#define I_GAIN_MIN I_GAIN_DEFAULT / 10  
-#define I_GAIN_MAX I_GAIN_DEFAULT * 3 
+#define I_GAIN_MIN I_GAIN_DEFAULT / 2  
+#define I_GAIN_MAX I_GAIN_DEFAULT * 1.5 
 
-#define D_GAIN_DEFAULT 0.05                      //default roll and pitch D-gain - angle mode
-#define D_GAIN_MIN D_GAIN_DEFAULT / 10   
-#define D_GAIN_MAX D_GAIN_DEFAULT * 5 
+// #define D_GAIN_DEFAULT 0.05                   //default roll and pitch D-gain - angle mode
+#define D_GAIN_DEFAULT 0.1                       // new  default roll and pitch D-gain - angle mode
+#define D_GAIN_MIN D_GAIN_DEFAULT / 2   
+#define D_GAIN_MAX D_GAIN_DEFAULT * 1.5 
 
 // Yaw 
 #define P_YGAIN_DEFAULT 0.3                      // default yaw P Gain is 0.3
@@ -419,10 +415,10 @@ uint16_t temp = 0;
       Kd_roll_angle  = Kd_pitch_angle;
 /*
 // ************************************** YAW *****************************************************************
-       temp = map(channel_7_pwm,1000,2000,P_YGAIN_MIN * 10000,P_YGAIN_MAX * 10000);  // use bigger numbers as map() only likes integers
+       temp = map(channel_7_pwm,1000,2000,P_YGAIN_MIN * 10000,P_YGAIN_MAX * 10000);  
        Kp_yaw = (float) temp/10000;
 
-       temp = map(channel_6_pwm,1000,2000,I_YGAIN_MIN * 10000,I_YGAIN_MAX * 10000);  // use bigger numbers as map() only likes integers
+       temp = map(channel_6_pwm,1000,2000,I_YGAIN_MIN * 10000,I_YGAIN_MAX * 10000);  
        Ki_yaw = (float) temp/10000;
 */
 
@@ -446,16 +442,13 @@ void PrintGains(){    // MCM
     
     Serial.print("Roll and Pitch P Gain: " );
     Serial.println(Kp_pitch_angle,3);
-
     Serial.print("Roll and Pitch I Gain: " );
     Serial.println(Ki_roll_angle,3);
-
     Serial.print("Roll and Pitch D Gain: " );
     Serial.println(Kd_roll_angle,3);
-
-    Serial.print("YAW P Gain: " );
+    Serial.print("           YAW P Gain: " );
     Serial.println(Kp_yaw,3);
-    Serial.print("YAW I Gain: " );
+    Serial.print("           YAW I Gain: " );
     Serial.println(Ki_yaw,3);
     Serial.println(" ");
  }
@@ -782,9 +775,15 @@ void controlANGLE() {
   //Roll
   error_roll = roll_des - roll_IMU;
   integral_roll = integral_roll_prev + error_roll*dt;
-  if (channel_1_pwm < 1060) {   //don't let integrator build if throttle is too low
+  
+  // if (channel_1_pwm < 1060) {   
+  //   integral_roll = 0;
+  // }
+
+  if (channel_1_pwm < 1160) {   //don't let integrator build if throttle is too low MCM
     integral_roll = 0;
   }
+
   integral_roll = constrain(integral_roll, -i_limit, i_limit); //saturate integrator to prevent unsafe buildup
   derivative_roll = GyroX;
   roll_PID = 0.01*(Kp_roll_angle*error_roll + Ki_roll_angle*integral_roll - Kd_roll_angle*derivative_roll); //scaled by .01 to bring within -1 to 1 range
@@ -792,9 +791,15 @@ void controlANGLE() {
   //Pitch
   error_pitch = pitch_des - pitch_IMU;
   integral_pitch = integral_pitch_prev + error_pitch*dt;
-  if (channel_1_pwm < 1060) {   //don't let integrator build if throttle is too low
+
+ // if (channel_1_pwm < 1060) {   //was 1060
+ //   integral_pitch = 0;
+ // }
+
+ if (channel_1_pwm < 1160) {   //don't let integrator build if throttle is too low MCM
     integral_pitch = 0;
   }
+
   integral_pitch = constrain(integral_pitch, -i_limit, i_limit); //saturate integrator to prevent unsafe buildup
   derivative_pitch = GyroY;
   pitch_PID = .01*(Kp_pitch_angle*error_pitch + Ki_pitch_angle*integral_pitch - Kd_pitch_angle*derivative_pitch); //scaled by .01 to bring within -1 to 1 range
@@ -802,9 +807,15 @@ void controlANGLE() {
   //Yaw, stablize on rate from GyroZ
   error_yaw = yaw_des - GyroZ;
   integral_yaw = integral_yaw_prev + error_yaw*dt;
-  if (channel_1_pwm < 1060) {   //don't let integrator build if throttle is too low
+ 
+ // if (channel_1_pwm < 1060) {   //was 1060
+ //   integral_yaw = 0;
+ // }
+
+  if (channel_1_pwm < 1160) {   //don't let integrator build if throttle is too low MCM
     integral_yaw = 0;
   }
+
   integral_yaw = constrain(integral_yaw, -i_limit, i_limit); //saturate integrator to prevent unsafe buildup
   derivative_yaw = (error_yaw - error_yaw_prev)/dt; 
   yaw_PID = .01*(Kp_yaw*error_yaw + Ki_yaw*integral_yaw + Kd_yaw*derivative_yaw); //scaled by .01 to bring within -1 to 1 range
@@ -1398,18 +1409,14 @@ void printLoopRate() {
   }
 }
 // ***********************************************************************************************************
-  float invSqrt(float x) {    // gives a warning
+  
+  
+  float invSqrt(float x) {    // gives a warning (Can't yet find an alternative)
   unsigned int i = 0x5F1F1412 - (*(unsigned int*)&x >> 1);
   float tmp = *(float*)&i;
   float y = tmp * (1.69000231f - 0.714158168f * x * tmp * tmp);
   return y;
 }
 
-  float invSqrt1(float x) { // gives no warning but is not yet used
-  unsigned int i = 0x5F1F1412 - ((unsigned int) x >> 1);
-  float tmp = (float) i;
-  float y = tmp * (1.69000231f - 0.714158168f * x * tmp * tmp);
-  return y;
-}
 // **********************************************************************************************************
 // ***********************************************************************************************************
