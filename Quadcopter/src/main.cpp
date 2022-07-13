@@ -145,31 +145,21 @@ PWMServo servo4;
 PWMServo servo5;
 PWMServo servo6;
 PWMServo servo7;
-
-//========================================================================================================================//
-
-//DECLARE GLOBAL VARIABLES
-
-//General stuff
 float dt;
 unsigned long current_time, prev_time;
 unsigned long print_counter, serial_counter;
 unsigned long blink_counter, blink_delay;
 bool blinkAlternate;
 
-//Radio comm:
 unsigned long channel_1_pwm, channel_2_pwm, channel_3_pwm, channel_4_pwm, channel_5_pwm, channel_6_pwm;
 unsigned long channel_7_pwm, channel_8_pwm, channel_9_pwm, channel_10_pwm, channel_11_pwm, channel_12_pwm;  // MCM
 unsigned long channel_1_pwm_prev, channel_2_pwm_prev, channel_3_pwm_prev, channel_4_pwm_prev;
-
 
   SBUS sbus(Serial5);
   uint16_t sbusChannels[16];
   bool sbusFailSafe;
   bool sbusLostFrame;
 
-
-//IMU:
 float AccX, AccY, AccZ;
 float AccX_prev, AccY_prev, AccZ_prev;
 float GyroX, GyroY, GyroZ;
@@ -198,9 +188,7 @@ int m1_command_PWM, m2_command_PWM, m3_command_PWM, m4_command_PWM, m5_command_P
 float s1_command_scaled, s2_command_scaled, s3_command_scaled, s4_command_scaled, s5_command_scaled, s6_command_scaled, s7_command_scaled;
 int s1_command_PWM, s2_command_PWM, s3_command_PWM, s4_command_PWM, s5_command_PWM, s6_command_PWM, s7_command_PWM;
 
-//========================================================================================================================//
 //********************************************************** PROTOTYPES (ADDED MCM)  *************************************//                           
-//========================================================================================================================//
 
 void IMUinit();
 void getIMUdata();
@@ -246,7 +234,6 @@ void setup() {
   Serial.begin(500000); //usb serial
   delay(3000); //3 second delay for plugging in battery before IMU calibration begins, feel free to comment this out to reduce boot time
   
-  //Initialize all pins
   pinMode(13, OUTPUT); //pin 13 LED blinker on board, do not modify 
   pinMode(m1Pin, OUTPUT);
   pinMode(m2Pin, OUTPUT);
@@ -274,17 +261,12 @@ void setup() {
   channel_4_pwm = channel_4_fs;
   channel_5_pwm = channel_5_fs;
   channel_6_pwm = channel_6_fs;
-
   //Initialize IMU communication
   IMUinit();
-
   delay(10);
-
   //Get IMU error to zero accelerometer and gyro readings, assuming vehicle is level
   calculate_IMU_error();
-
   delay(10);
-
   //Arm servo channels
   servo1.write(0); //command servo angle from 0-180 degrees (1000 to 2000 PWM)
   servo2.write(0);
@@ -294,7 +276,6 @@ void setup() {
   servo6.write(0);
   servo7.write(0);
   delay(10);
-
   //Arm OneShot125 motors
   m1_command_PWM = 125; //command OneShot125 ESC from 125 to 250us pulse length
   m2_command_PWM = 125;
@@ -307,7 +288,6 @@ void setup() {
   calibrateAttitude(); //helps to warm up IMU and Madgwick filter before finally entering main loop
   setupBlink(3,160,70); //numBlinks, upTime (ms), downTime (ms)
 }
-
 //========================================================================================================================//
 //                                                       MAIN LOOP                                                        //                           
 //========================================================================================================================//
@@ -319,8 +299,7 @@ void loop() {
 
   loopBlink(); //indicate we are in main loop with short blink every 1.5 seconds
 
-//if (channel_5_pwm > 1500) PrintGains(); // when motors stopped we can look ...MCM
-
+  //if (channel_5_pwm > 1500) PrintGains(); // when motors stopped we can look ...MCM
   // Print data at 100hz (uncomment one at a time for troubleshooting) - SELECT ONE: 
   // printRadioData();     //radio pwm values (expected: 1000 to 2000)
   // printDesiredState();  //prints desired vehicle state commanded in either degrees or deg/sec (expected: +/- maxAXIS for roll, pitch, yaw; 0 to 1 for throttle)
@@ -334,12 +313,8 @@ void loop() {
   // Get PID Gains 
   
   GetGains();         // MCM
-  
-  //Get vehicle state
   getIMUdata(); //pulls raw gyro, accelerometer, and magnetometer data from IMU and LP filters to remove noise
   Madgwick(GyroX, -GyroY, -GyroZ, -AccX, AccY, AccZ, MagY, -MagX, MagZ, dt); //updates roll_IMU, pitch_IMU, and yaw_IMU (degrees)
-
-  //Compute desired state
   getDesState(); //convert raw commands to normalized values based on saturated control limits
   
   //PID Controller - SELECT ONE: // Mode Set Here <<<<
@@ -347,25 +322,17 @@ void loop() {
   //controlANGLE2(); //stabilize on angle setpoint using cascaded method 
   //controlRATE();   //stabilize on rate setpoint
 
-  //Actuator mixing and scaling to PWM values
   controlMixer(); //mixes PID outputs to scaled actuator commands -- custom mixing assignments done here
   scaleCommands(); //scales motor commands to 125 to 250 range (oneshot125 protocol) and servo PWM commands to 0 to 180 (for servo library)
-
-  //Throttle cut check
   throttleCut(); //directly sets motor commands to low based on state of ch5
 
-  //Command actuators
-  // commandMotors(); //sends command pulses to each motor pin using OneShot125 protocol
+  // Command actuators
+  // commandMotors(); //sends command pulses to each motor pin using OneShot125 protocol MCM not used
   SendPWMData();   //sends PWM to senvos or ESCs if needed
-    
-  //Get vehicle commands for next loop iteration
   getCommands(); //pulls current available radio commands
   failSafe(); //prevent failures in event of bad receiver connection, defaults to failsafe values assigned in setup
-
-  //Regulate loop rate
   loopRate(2000); //do not exceed 2000Hz, all filter parameters tuned to 2000Hz by default
 }
-
 //========================================================================================================================//
 //                                                      FUNCTIONS                                                         //                           
 //========================================================================================================================//
@@ -1409,14 +1376,11 @@ void printLoopRate() {
   }
 }
 // ***********************************************************************************************************
-  
-  
-  float invSqrt(float x) {    // gives a warning (Can't yet find an alternative)
+float invSqrt(float x) {    // gives a warning (Can't yet find an alternative)
   unsigned int i = 0x5F1F1412 - (*(unsigned int*)&x >> 1);
   float tmp = *(float*)&i;
   float y = tmp * (1.69000231f - 0.714158168f * x * tmp * tmp);
   return y;
 }
-
 // **********************************************************************************************************
 // ***********************************************************************************************************
