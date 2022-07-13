@@ -321,8 +321,13 @@ void loop() {
 
   //Print data at 100hz (uncomment one at a time for troubleshooting) - SELECT ONE: 
   
+  if (channel_5_pwm > 1500) {
+    PrintGains();       
+  }else{
+     Serial.println (channel_5_pwm);
+  }
+  
   // printRadioData();     //radio pwm values (expected: 1000 to 2000)
-   PrintGains();         //P and I gains for ANGLE mode
   // printDesiredState();  //prints desired vehicle state commanded in either degrees or deg/sec (expected: +/- maxAXIS for roll, pitch, yaw; 0 to 1 for throttle)
   // printGyroData();      //prints filtered gyro data direct from IMU (expected: ~ -250 to 250, 0 at rest)
   // printAccelData();     //prints filtered accelerometer data direct from IMU (expected: ~ -2 to 2; x,y 0 when level, z 1 when level)
@@ -385,8 +390,8 @@ void GetGains(){
 #define I_GAIN_MAX I_GAIN_DEFAULT * 3 
 
 #define D_GAIN_DEFAULT 0.05                      //default roll and pitch D-gain - angle mode
-#define D_GAIN_MIN D_GAIN_DEFAULT / 1   
-#define D_GAIN_MAX D_GAIN_DEFAULT * 10 
+#define D_GAIN_MIN D_GAIN_DEFAULT / 10   
+#define D_GAIN_MAX D_GAIN_DEFAULT * 5 
 
 // Yaw 
 #define P_YGAIN_DEFAULT 0.3                      // default yaw P Gain is 0.3
@@ -401,17 +406,17 @@ uint16_t temp = 0;
 
 //   Comment out this part when good settings are found
 // ******************************** ROLL AND PITCH ***********************************************************
-       temp = map(channel_7_pwm,1000,2000,P_GAIN_MIN * 10000,P_GAIN_MAX * 10000);  // use bigger numbers as map() only likes integers
-       Kp_pitch_angle = (float) temp/10000;
-       Kp_roll_angle  = Kp_pitch_angle;
+      temp = map(channel_6_pwm,1000,2000,P_GAIN_MIN * 10000,P_GAIN_MAX * 10000);  // use bigger numbers as map() only likes integers
+      Kp_pitch_angle = (float) temp/10000;
+      Kp_roll_angle  = Kp_pitch_angle;
        
-       temp = map(channel_6_pwm,1000,2000,I_GAIN_MIN * 10000,I_GAIN_MAX * 10000);  
-         Ki_pitch_angle = (float) temp/10000;
-         Ki_roll_angle  = Ki_pitch_angle;
+      temp = map(channel_7_pwm,1000,2000,I_GAIN_MIN * 10000,I_GAIN_MAX * 10000);  
+      Ki_pitch_angle = (float) temp/10000;
+      Ki_roll_angle  = Ki_pitch_angle;
 
-   //    temp = map(channel_6_pwm,1000,2000,D_GAIN_MIN * 10000,D_GAIN_MAX * 10000);  
-   //    Kd_pitch_angle = (float) temp/10000;
-   //    Kd_roll_angle  = Kd_pitch_angle;
+      temp = map(channel_8_pwm,1000,2000,D_GAIN_MIN * 10000,D_GAIN_MAX * 10000);  
+      Kd_pitch_angle = (float) temp/10000;
+      Kd_roll_angle  = Kd_pitch_angle;
 /*
 // ************************************** YAW *****************************************************************
        temp = map(channel_7_pwm,1000,2000,P_YGAIN_MIN * 10000,P_YGAIN_MAX * 10000);  // use bigger numbers as map() only likes integers
@@ -419,7 +424,6 @@ uint16_t temp = 0;
 
        temp = map(channel_6_pwm,1000,2000,I_YGAIN_MIN * 10000,I_YGAIN_MAX * 10000);  // use bigger numbers as map() only likes integers
        Ki_yaw = (float) temp/10000;
-
 */
 
 }
