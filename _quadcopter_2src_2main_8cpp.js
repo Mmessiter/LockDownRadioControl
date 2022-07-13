@@ -45,7 +45,6 @@ var _quadcopter_2src_2main_8cpp =
     [ "getIMUdata", "_quadcopter_2src_2main_8cpp.html#ab829dfc83a4be765bcbee507516732fe", null ],
     [ "IMUinit", "_quadcopter_2src_2main_8cpp.html#a2b033451ecabbb1e6e0aec20d547bc25", null ],
     [ "invSqrt", "_quadcopter_2src_2main_8cpp.html#a5e5346796220b271615a52428f6ec6ca", null ],
-    [ "invSqrt1", "_quadcopter_2src_2main_8cpp.html#ac641922a988662f3848a0828e0e64d08", null ],
     [ "loop", "_quadcopter_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f", null ],
     [ "loopBlink", "_quadcopter_2src_2main_8cpp.html#a9826c5f7dba6f1d578d9a90d06d4a373", null ],
     [ "loopRate", "_quadcopter_2src_2main_8cpp.html#a368045f053bb43109cbd14504673bff6", null ],
