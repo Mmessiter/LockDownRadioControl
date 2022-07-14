@@ -6366,7 +6366,6 @@ FASTRUN void ButtonWasPressed()
         if (InStrng(TR4, TextIn) > 0) { // TR4 ->1
             if (SticksMode == 1)  {
                if ((TextIn[3] <= 80 + 40) && (TextIn[3] >= 80 - 40)) Trims[FlightMode][1] = TextIn[3];
-                //Trims[FlightMode][1] = TextIn[3];
                 if (CopyTrimsToAll){
                     for (int fm = 1; fm < 5;++fm){
                       Trims[fm][1] = TextIn[3];
@@ -6375,7 +6374,6 @@ FASTRUN void ButtonWasPressed()
                 }
             }
             if (SticksMode == 2)  {
-               // Trims[FlightMode][2] = TextIn[3];
                 if ((TextIn[3] <= 80 + 40) && (TextIn[3] >= 80 - 40)) Trims[FlightMode][2] = TextIn[3];
                 if (CopyTrimsToAll){
                         for (int fm = 0; fm < 5;++fm){
@@ -6390,7 +6388,6 @@ FASTRUN void ButtonWasPressed()
         if (InStrng(TR2, TextIn) > 0) { // TR2 ->2
             if (SticksMode == 1) {
                 if ((TextIn[3] <= 80 + 40) && (TextIn[3] >= 80 - 40)) Trims[FlightMode][2] = TextIn[3];
-                //Trims[FlightMode][2] = TextIn[3];
                 if (CopyTrimsToAll){
                         for (int fm = 1; fm < 5;++fm)
                         Trims[fm][2] = TextIn[3]; 
@@ -6398,7 +6395,6 @@ FASTRUN void ButtonWasPressed()
             }
             if (SticksMode == 2)  { 
                 if ((TextIn[3] <= 80 + 40) && (TextIn[3] >= 80 - 40)) Trims[FlightMode][1] = TextIn[3];
-               // Trims[FlightMode][1] = TextIn[3];
                 if (CopyTrimsToAll){
                     for (int fm = 1; fm < 5;++fm){
                         Trims[fm][1] = TextIn[3]; 
@@ -6410,7 +6406,6 @@ FASTRUN void ButtonWasPressed()
             return;
         }
         if (InStrng(TR3, TextIn) > 0) { // TR3 ->3
-            //Trims[FlightMode][3] = TextIn[3];
             if ((TextIn[3] <= 80 + 40) && (TextIn[3] >= 80 - 40)) Trims[FlightMode][3] = TextIn[3];
             if (CopyTrimsToAll){
             for (int fm = 0; fm < 5;++fm){
