@@ -5216,6 +5216,8 @@ FASTRUN void ButtonWasPressed()
     char PowerOff[]                = "PowerOff";
     char OffNow[]                  = "OffNow"; // force power off
     char StillConnected[]          = "vis StillConnected,1";
+    char StillConnectedBox[]       = "StillConnected";
+    char StillConnectedMsg[]       = "Disconnect RX!";
     char NotStillConnected[]       = "vis StillConnected,0";
     char OptionsViewS[]            = "OptionsViewS";
     char Pto[]                     = "Pto";
@@ -5792,6 +5794,7 @@ FASTRUN void ButtonWasPressed()
         }
         if (InStrng(PowerOff, TextIn) > 0) {
             if (!LostContactFlag && BoundFlag) {
+                SendText(StillConnectedBox,StillConnectedMsg);
                 SendCommand(StillConnected);
                 Procrastinate(750); // 3/4 second
                 SendCommand(NotStillConnected);
