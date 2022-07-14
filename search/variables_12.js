@@ -13,7 +13,7 @@ var searchData=
   ['recentpacketslost_10',['RecentPacketsLost',['../_radio_functions_8h.html#abf6b6613bda2b08b3e07a231a23f38c2',1,'RecentPacketsLost():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#abf6b6613bda2b08b3e07a231a23f38c2',1,'RecentPacketsLost():&#160;main.cpp']]],
   ['recentstartline_11',['RecentStartLine',['../_transmitter_code_2src_2main_8cpp.html#a1c51abf9c65ed93e152859c5c080f578',1,'main.cpp']]],
   ['recenttextfile_12',['RecentTextFile',['../_transmitter_code_2src_2main_8cpp.html#af92d424401a792a9437fa3e6b7548983',1,'main.cpp']]],
-  ['reconnected_13',['Reconnected',['../_radio_functions_8h.html#a0f8aa0f6f0fca3b57e848eec8d23724e',1,'Reconnected():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a0f8aa0f6f0fca3b57e848eec8d23724e',1,'Reconnected():&#160;main.cpp']]],
+  ['reconnected_13',['Reconnected',['../_transmitter_code_2src_2main_8cpp.html#a0f8aa0f6f0fca3b57e848eec8d23724e',1,'Reconnected():&#160;main.cpp'],['../_radio_functions_8h.html#a0f8aa0f6f0fca3b57e848eec8d23724e',1,'Reconnected():&#160;main.cpp']]],
   ['reconnectedmoment_14',['ReconnectedMoment',['../_receiver_code_2src_2main_8cpp.html#ae6657a547a79d8e304b8ddeb3f6a38e0',1,'ReconnectedMoment():&#160;main.cpp'],['../radio_8h.html#ae6657a547a79d8e304b8ddeb3f6a38e0',1,'ReconnectedMoment():&#160;main.cpp']]],
   ['reconnectindex_15',['ReconnectIndex',['../radio_8h.html#a90d98310365e78ee5ec06aaa7a4092f1',1,'radio.h']]],
   ['recoverytimer_16',['RecoveryTimer',['../_radio_functions_8h.html#ac6156efad98d22f44766714a565ccf2f',1,'RadioFunctions.h']]],
@@ -38,5 +38,6 @@ var searchData=
   ['rxmaxmodelaltitude_35',['RXMAXModelAltitude',['../_transmitter_code_2src_2main_8cpp.html#aac60f398ee9f5f9f89459014e003f68d',1,'main.cpp']]],
   ['rxmodelaltitude_36',['RXModelAltitude',['../_transmitter_code_2src_2main_8cpp.html#a60096f1f0ec75fa673207d2d11cfd123',1,'main.cpp']]],
   ['rxmodeltemperature_37',['RXModelTemperature',['../_transmitter_code_2src_2main_8cpp.html#ac8d7ac69a7e7a6b90792e640742b2097',1,'main.cpp']]],
-  ['rxmodelvolts_38',['RXModelVolts',['../_transmitter_code_2src_2main_8cpp.html#a5f56f32c16498a3547635bda86c49428',1,'main.cpp']]]
+  ['rxmodelvolts_38',['RXModelVolts',['../_transmitter_code_2src_2main_8cpp.html#a5f56f32c16498a3547635bda86c49428',1,'main.cpp']]],
+  ['rxvoltsdetected_39',['RXVoltsDetected',['../_transmitter_code_2src_2main_8cpp.html#abad630d30092274e24516848d8096925',1,'main.cpp']]]
 ];

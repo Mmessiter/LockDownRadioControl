@@ -119,5 +119,6 @@ var searchData=
   ['rxmodelvolts_116',['RXModelVolts',['../_transmitter_code_2src_2main_8cpp.html#a5f56f32c16498a3547635bda86c49428',1,'main.cpp']]],
   ['rxversion_5fmajor_117',['RXVERSION_MAJOR',['../common_8h.html#a2b147d5155fcf962e9f1c4885b32c67d',1,'common.h']]],
   ['rxversion_5fminimus_118',['RXVERSION_MINIMUS',['../common_8h.html#a46d5105ccf92f7e44b10af6fd51772a8',1,'common.h']]],
-  ['rxversion_5fminor_119',['RXVERSION_MINOR',['../common_8h.html#adeb76229aa4087c3bc1e1fd17bd865b2',1,'common.h']]]
+  ['rxversion_5fminor_119',['RXVERSION_MINOR',['../common_8h.html#adeb76229aa4087c3bc1e1fd17bd865b2',1,'common.h']]],
+  ['rxvoltsdetected_120',['RXVoltsDetected',['../_transmitter_code_2src_2main_8cpp.html#abad630d30092274e24516848d8096925',1,'main.cpp']]]
 ];
