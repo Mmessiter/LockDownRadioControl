@@ -12,6 +12,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "fixitx", "_transmitter_code_2src_2main_8cpp.html#ad40f5a53042299d0a733f7238b5df3a2", null ],
     [ "MAXWIDTH", "_transmitter_code_2src_2main_8cpp.html#ac101c663138f79260b6d5ea00140fa22", null ],
     [ "AdjustDateTime", "_transmitter_code_2src_2main_8cpp.html#a9de4ea8e761b5f0e537f6f326f9ad429", null ],
+    [ "Ascii", "_transmitter_code_2src_2main_8cpp.html#a3a793f5d71f6db34ad82272d211f8954", null ],
     [ "bcdToDec", "_transmitter_code_2src_2main_8cpp.html#a5e5cbc12559842867d90e19b7ecf4a8c", null ],
     [ "BindNow", "_transmitter_code_2src_2main_8cpp.html#a7b8f152779a09d867292d3a8e7f76d85", null ],
     [ "BlueLedOn", "_transmitter_code_2src_2main_8cpp.html#aa1f9aec467eb00917ad9ffdc0bd5b20d", null ],
