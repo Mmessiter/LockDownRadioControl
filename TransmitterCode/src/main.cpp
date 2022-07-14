@@ -437,7 +437,12 @@ uint16_t SavedLineX          = 12345;
 bool     FirstConnection     = true;
 File     LogFileNumber;
 bool     LogFileOpen         =  false;
+//
+// **************************************************************** 
 
+uint8_t Ascii(char c){
+ return (uint8_t) c;
+}
 // **************************************************************** Play a sound from RAM *********************************************
 void PlaySound(uint16_t TheSound){    // Plays a sound identified by a number
 
@@ -6347,7 +6352,7 @@ FASTRUN void ButtonWasPressed()
         }
 
         if (InStrng(TR1, TextIn) > 0) { //  TR1->0
-            Trims[FlightMode][0] = TextIn[3];
+            if ((TextIn[3] <= 80 + 40) && (TextIn[3] >= 80 - 40)) Trims[FlightMode][0] = TextIn[3]; // Check in case out of range!
             if (CopyTrimsToAll){
             for (int fm = 1; fm < 5;++fm){
                       Trims[fm][0] = TextIn[3]; 
@@ -6357,9 +6362,11 @@ FASTRUN void ButtonWasPressed()
             ClearText(); 
             return;
         }
+
         if (InStrng(TR4, TextIn) > 0) { // TR4 ->1
             if (SticksMode == 1)  {
-                Trims[FlightMode][1] = TextIn[3];
+               if ((TextIn[3] <= 80 + 40) && (TextIn[3] >= 80 - 40)) Trims[FlightMode][1] = TextIn[3];
+                //Trims[FlightMode][1] = TextIn[3];
                 if (CopyTrimsToAll){
                     for (int fm = 1; fm < 5;++fm){
                       Trims[fm][1] = TextIn[3];
@@ -6368,7 +6375,8 @@ FASTRUN void ButtonWasPressed()
                 }
             }
             if (SticksMode == 2)  {
-                Trims[FlightMode][2] = TextIn[3];
+               // Trims[FlightMode][2] = TextIn[3];
+                if ((TextIn[3] <= 80 + 40) && (TextIn[3] >= 80 - 40)) Trims[FlightMode][2] = TextIn[3];
                 if (CopyTrimsToAll){
                         for (int fm = 0; fm < 5;++fm){
                         Trims[fm][2] = TextIn[3]; 
@@ -6381,14 +6389,16 @@ FASTRUN void ButtonWasPressed()
         }
         if (InStrng(TR2, TextIn) > 0) { // TR2 ->2
             if (SticksMode == 1) {
-                Trims[FlightMode][2] = TextIn[3];
+                if ((TextIn[3] <= 80 + 40) && (TextIn[3] >= 80 - 40)) Trims[FlightMode][2] = TextIn[3];
+                //Trims[FlightMode][2] = TextIn[3];
                 if (CopyTrimsToAll){
                         for (int fm = 1; fm < 5;++fm)
                         Trims[fm][2] = TextIn[3]; 
                 }
             }
             if (SticksMode == 2)  { 
-                Trims[FlightMode][1] = TextIn[3];
+                if ((TextIn[3] <= 80 + 40) && (TextIn[3] >= 80 - 40)) Trims[FlightMode][1] = TextIn[3];
+               // Trims[FlightMode][1] = TextIn[3];
                 if (CopyTrimsToAll){
                     for (int fm = 1; fm < 5;++fm){
                         Trims[fm][1] = TextIn[3]; 
@@ -6400,7 +6410,8 @@ FASTRUN void ButtonWasPressed()
             return;
         }
         if (InStrng(TR3, TextIn) > 0) { // TR3 ->3
-            Trims[FlightMode][3] = TextIn[3];
+            //Trims[FlightMode][3] = TextIn[3];
+            if ((TextIn[3] <= 80 + 40) && (TextIn[3] >= 80 - 40)) Trims[FlightMode][3] = TextIn[3];
             if (CopyTrimsToAll){
             for (int fm = 0; fm < 5;++fm){
                     Trims[fm][3] = TextIn[3]; 
