@@ -12,5 +12,6 @@ var searchData=
   ['transfer_9',['transfer',['../class_adafruit___s_p_i_device.html#ac60964386f37b2c498fc1b1540f61889',1,'Adafruit_SPIDevice::transfer(uint8_t send)'],['../class_adafruit___s_p_i_device.html#a155f5efd84dbc240c987f4066265b840',1,'Adafruit_SPIDevice::transfer(uint8_t *buffer, size_t len)']]],
   ['trynextchannel_10',['TryNextChannel',['../_receiver_code_2src_2main_8cpp.html#a1d10d2ca466b8014f874f16aaa39da91',1,'main.cpp']]],
   ['tryotherpipe_11',['TryOtherPipe',['../_radio_functions_8cpp.html#ad0e30213b21808d00110752679788a8c',1,'RadioFunctions.cpp']]],
-  ['trytoconnectnow_12',['TryToConnectNow',['../radio_8h.html#a1208ef26dd460e6f5f56582f4fbfcf94',1,'radio.h']]]
+  ['trytheothertransceiver_12',['TryTheOtherTransceiver',['../radio_8h.html#adfacfc7d075937cec51b7bcd08d323ca',1,'radio.h']]],
+  ['trytoconnectnow_13',['TryToConnectNow',['../radio_8h.html#a1208ef26dd460e6f5f56582f4fbfcf94',1,'radio.h']]]
 ];

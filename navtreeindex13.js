@@ -1,5 +1,9 @@
 var NAVTREEINDEX13 =
 {
+"structnmea__history__t.html#a59f3003809801affc387b54971f5d32b":[9,0,16,0],
+"structnmea__history__t.html#a8bf34a6e794f01eec90c4a919f9b244d":[9,0,16,3],
+"structsensor__t.html":[9,0,21],
+"structsensor__t.html#a1a17359f1080eb169a452656f7dec1ee":[9,0,21,0],
 "structsensor__t.html#a1cd271377ff25ec9ca54886f876c87ec":[9,0,21,1],
 "structsensor__t.html#a224f6201d59873cc1b6e9dd8a1894736":[9,0,21,5],
 "structsensor__t.html#a274f12a47669fbd2b61935706339e1c2":[9,0,21,7],
