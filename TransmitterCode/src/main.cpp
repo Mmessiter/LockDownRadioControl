@@ -405,7 +405,7 @@ bool     Reconnected        = false;
 uint8_t  LowBattery         = LOWBATTERY;
 uint16_t SbusRepeats        = 0;
 uint16_t SavedSbusRepeats   = 0;
-bool     VoltsDetected      = false;
+bool     RXVoltsDetected      = false;
 uint8_t  SticksMode         = 2;
 uint16_t RadioSwaps         = 0 ;
 uint16_t RX1TotalTime       = 0 ;
@@ -438,7 +438,7 @@ bool     FirstConnection     = true;
 File     LogFileNumber;
 bool     LogFileOpen         =  false;
 //
-// **************************************************************** 
+// ********************************************************************************************************************************** 
 
 uint8_t Ascii(char c){
  return (uint8_t) c;
@@ -978,6 +978,7 @@ void RedLedOn()
     if (LedWasGreen){
         if (UseLog) LogDisConnection();
         if (AnnounceConnected) PlaySound(DISCONNECTEDMSG);
+        RXVoltsDetected = false;
         LedWasGreen = false;
     }
     
@@ -1556,13 +1557,13 @@ FASTRUN bool CheckRXVolts(){
             if (RXCellCount == 4) Volts = map(ReadVolts, 136, 168, 0, 100);  // works for 4s batteries (*10)
             if (RXCellCount == 3) Volts = map(ReadVolts, 102, 126, 0, 100);  // works for 3s batteries (*10)
             if (RXCellCount == 2) Volts = map(ReadVolts,  68,  84, 0, 100);  // works for 2s batteries (*10)
-            if (VoltsDetected) {
+            if (RXVoltsDetected) {
                 Volts = constrain(Volts, 0, 100);
                 if (Volts <= LowBattery && Volts > 0) {
                     RXWarningFlag = true;
                 }
             }
-            if (VoltsDetected) {
+            if (RXVoltsDetected) {
                 dtostrf(Volts, 0, 0, Vbuf);
                 strcat(Vbuf, pc);
                 if (BoundFlag && CurrentView == FRONTVIEW) SendText(FrontView_AckPayload, Vbuf);
@@ -1579,7 +1580,7 @@ FASTRUN bool CheckRXVolts(){
                 strcat(RXBattInfo, PerCell);
                 if (BoundFlag && CurrentView == FRONTVIEW) SendText(FrontView_RXBV, RXBattInfo);
             }
-            if (!VoltsDetected) {
+            if (!RXVoltsDetected) {
                 if (BoundFlag && CurrentView == FRONTVIEW) SendText(FrontView_RXBV, RXBattNA);
                 if (BoundFlag && CurrentView == FRONTVIEW) SendText(FrontView_AckPayload, RXBattNV);
             }
@@ -7182,7 +7183,7 @@ FASTRUN void ParseAckPayload()
             case 5:
                  RXModelVolts = GetFromAckPayload();
                 if (RXModelVolts > 0) {
-                    VoltsDetected = true;
+                    RXVoltsDetected = true;
                     snprintf(ModelVolts, 5, "%f", RXModelVolts);
                 }
                 break;
