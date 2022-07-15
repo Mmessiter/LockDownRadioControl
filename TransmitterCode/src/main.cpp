@@ -5759,7 +5759,7 @@ FASTRUN void ButtonWasPressed()
              if (CurrentView == REVERSEVIEW){
                  StartReverseView();
              }
-             if (CurrentView == STICKSVIEW){
+             if ((CurrentView == STICKSVIEW) || (CurrentView == FRONTVIEW)){
                 Force_ReDisplay();
                 ShowServoPos(); 
              }
