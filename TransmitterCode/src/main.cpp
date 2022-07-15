@@ -1312,7 +1312,10 @@ FASTRUN void CheckTimer()
 
 FASTRUN void ShowServoPos()
 {
-    
+    if ((Connected) || (CurrentView == GRAPHVIEW))  { // not certain why - but this is needed! :-)
+        if (millis() - ShowServoTimer <= 60) return;    
+        ShowServoTimer = millis();
+    }
     char SticksView_Ch1[]    = "Ch1";
     char SticksView_Ch2[]    = "Ch2";
     char SticksView_Ch3[]    = "Ch3";
@@ -1345,6 +1348,7 @@ FASTRUN void ShowServoPos()
     int LeastDistance = 2;          // if the change is very small, don't re-display anything - to reduce flashing.
   
 if ((CurrentView == STICKSVIEW) || (CurrentView == FRONTVIEW)){ 
+
         if (abs(SendBuffer[0] - ShownBuffer[0]) > LeastDistance) {
             SendValue(SticksView_Ch1, IntoLowerRes(SendBuffer[0]));
             ShownBuffer[0] = SendBuffer[0];
@@ -2029,6 +2033,7 @@ FASTRUN void GetNewChannelValues()
         DoReverseSense();
         DoMixes(); 
     }                                 // not while calibrating
+
 }
 
 /*********************************************************************************************************************************/
@@ -5617,6 +5622,7 @@ FASTRUN void ButtonWasPressed()
             LastTimeRead = 0;
             Reconnected = false;  // this is to make '** Connected! **' redisplay (in ShowComms())
             LastSeconds = 0;      // This forces redisplay of timer...
+            Force_ReDisplay();
             CheckTimer();
             ClearText();
             return;
@@ -7336,11 +7342,7 @@ FASTRUN void loop()
         GetStatistics();             // Do stats
         RangeTestStart = millis();
     }
-    if (millis() - ShowServoTimer >= 100)  {
-        ShowServoPos();              // Show servos positions
-        ShowServoTimer = millis();
-    }
-
+    ShowServoPos();                 // Show servos positions
     if ((millis() - TxOnTime) > 2000) { // Transmit nothing for first 2 seconds
 
         switch (CurrentMode) {
