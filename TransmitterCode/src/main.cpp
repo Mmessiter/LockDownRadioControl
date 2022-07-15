@@ -1312,6 +1312,7 @@ FASTRUN void CheckTimer()
 
 FASTRUN void ShowServoPos()
 {
+    
     char SticksView_Ch1[]    = "Ch1";
     char SticksView_Ch2[]    = "Ch2";
     char SticksView_Ch3[]    = "Ch3";
@@ -1341,43 +1342,9 @@ FASTRUN void ShowServoPos()
     uint16_t StickPosition   = 54321;
     int l             = 0;
     int l1            = 0;
-    int LeastDistance = 2; // if the change is very small, don't re-display anything - to reduce flashing.
-
-    if (CurrentView == CALIBRATEVIEW) {
-        if (abs(SendBuffer[0] - ShownBuffer[0]) > LeastDistance) {
-            SendValue(CalibrateView_Ch1, IntoLowerRes(SendBuffer[0]));
-            ShownBuffer[0] = SendBuffer[0];
-        }
-        if (abs(SendBuffer[1] - ShownBuffer[1]) > LeastDistance) {
-            SendValue(CalibrateView_Ch2, IntoLowerRes(SendBuffer[1]));
-            ShownBuffer[1] = SendBuffer[1];
-        }
-        if (abs(SendBuffer[2] - ShownBuffer[2]) > LeastDistance) {
-            SendValue(CalibrateView_Ch3, IntoLowerRes(SendBuffer[2]));
-            ShownBuffer[2] = SendBuffer[2];
-        }
-        if (abs(SendBuffer[3] - ShownBuffer[3]) > LeastDistance) {
-            SendValue(CalibrateView_Ch4, IntoLowerRes(SendBuffer[3]));
-            ShownBuffer[3] = SendBuffer[3];
-        }
-        if (abs(SendBuffer[4] - ShownBuffer[4]) > LeastDistance) {
-            SendValue(CalibrateView_Ch5, IntoLowerRes(SendBuffer[4]));
-            ShownBuffer[4] = SendBuffer[4];
-        }
-        if (abs(SendBuffer[5] - ShownBuffer[5]) > LeastDistance) {
-            SendValue(CalibrateView_Ch6, IntoLowerRes(SendBuffer[5]));
-            ShownBuffer[5] = SendBuffer[5];
-        }
-        if (abs(SendBuffer[6] - ShownBuffer[6]) > LeastDistance) {
-            SendValue(CalibrateView_Ch7, IntoLowerRes(SendBuffer[6]));
-            ShownBuffer[6] = SendBuffer[6];
-        }
-        if (abs(SendBuffer[7] - ShownBuffer[7]) > LeastDistance) {
-            SendValue(CalibrateView_Ch8, IntoLowerRes(SendBuffer[7]));
-            ShownBuffer[7] = SendBuffer[7];
-        }
-    }
-    if (CurrentView == STICKSVIEW) {
+    int LeastDistance = 2;          // if the change is very small, don't re-display anything - to reduce flashing.
+  
+if ((CurrentView == STICKSVIEW) || (CurrentView == FRONTVIEW)){ 
         if (abs(SendBuffer[0] - ShownBuffer[0]) > LeastDistance) {
             SendValue(SticksView_Ch1, IntoLowerRes(SendBuffer[0]));
             ShownBuffer[0] = SendBuffer[0];
@@ -1443,6 +1410,42 @@ FASTRUN void ShowServoPos()
             ShownBuffer[15] = SendBuffer[15];
         }
     }
+
+    if  (CurrentView == CALIBRATEVIEW)  {
+        if (abs(SendBuffer[0] - ShownBuffer[0]) > LeastDistance) {
+            SendValue(CalibrateView_Ch1, IntoLowerRes(SendBuffer[0]));
+            ShownBuffer[0] = SendBuffer[0];
+        }
+        if (abs(SendBuffer[1] - ShownBuffer[1]) > LeastDistance) {
+            SendValue(CalibrateView_Ch2, IntoLowerRes(SendBuffer[1]));
+            ShownBuffer[1] = SendBuffer[1];
+        }
+        if (abs(SendBuffer[2] - ShownBuffer[2]) > LeastDistance) {
+            SendValue(CalibrateView_Ch3, IntoLowerRes(SendBuffer[2]));
+            ShownBuffer[2] = SendBuffer[2];
+        }
+        if (abs(SendBuffer[3] - ShownBuffer[3]) > LeastDistance) {
+            SendValue(CalibrateView_Ch4, IntoLowerRes(SendBuffer[3]));
+            ShownBuffer[3] = SendBuffer[3];
+        }
+        if (abs(SendBuffer[4] - ShownBuffer[4]) > LeastDistance) {
+            SendValue(CalibrateView_Ch5, IntoLowerRes(SendBuffer[4]));
+            ShownBuffer[4] = SendBuffer[4];
+        }
+        if (abs(SendBuffer[5] - ShownBuffer[5]) > LeastDistance) {
+            SendValue(CalibrateView_Ch6, IntoLowerRes(SendBuffer[5]));
+            ShownBuffer[5] = SendBuffer[5];
+        }
+        if (abs(SendBuffer[6] - ShownBuffer[6]) > LeastDistance) {
+            SendValue(CalibrateView_Ch7, IntoLowerRes(SendBuffer[6]));
+            ShownBuffer[6] = SendBuffer[6];
+        }
+        if (abs(SendBuffer[7] - ShownBuffer[7]) > LeastDistance) {
+            SendValue(CalibrateView_Ch8, IntoLowerRes(SendBuffer[7]));
+            ShownBuffer[7] = SendBuffer[7];
+        }
+    }
+    
     if (CurrentView == GRAPHVIEW) { 
 #define fixitx 35
 #define BarWidth 3
@@ -1482,6 +1485,7 @@ FASTRUN void ShowServoPos()
         }else{
     SendValue(ChannelInput, 0);
     SendValue(ChannelOutput, 0);
+   
     }
    }
 }
@@ -7332,7 +7336,7 @@ FASTRUN void loop()
         GetStatistics();             // Do stats
         RangeTestStart = millis();
     }
-    if ((millis() - ShowServoTimer >= 100) && (CurrentView != FRONTVIEW)) {
+    if (millis() - ShowServoTimer >= 100)  {
         ShowServoPos();              // Show servos positions
         ShowServoTimer = millis();
     }

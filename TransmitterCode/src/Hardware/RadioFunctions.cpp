@@ -176,7 +176,7 @@ FASTRUN void SendData()
         LoadPacketData();    // extra parameters appended to the data packet
         if (LostContactFlag){
             if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {
-                TryOtherPipe();
+                TryOtherPipe(); // heer
                 PipeTimeout = millis();
             }     
             NextChannel = * (FHSSChPointer + random(RECONNECT_CHANNELS_COUNT) + RECONNECT_CHANNELS_START);    // a **random** reconnect channel (selected from first five)
