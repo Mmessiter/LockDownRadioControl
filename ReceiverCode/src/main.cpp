@@ -16,11 +16,12 @@
  * - Channels increased to 16, 9 PWM outputs.  SBUS can handle all.
  * - Exponential implemented (at TX end)
  * - Sensor Hub added with GPS and more sensors
+ * - Supports one or two tranceivers (nRF24L01+)
  *
  * @section rxpinout TEENSY 4.0 PINS
  * | pin number(s) | purpose |
  * |---------------|---------|
- * | 0...8 | PWM SERVOS Channels 1 - 9 |
+ * | 0...8 | PWM SERVOS Channels 1 - 9 |  (Channels 10 - 16 available via SBUS)
  * | 9     | SPI CE1  (FOR RADIO1) |
  * | 10    | SPI CSN1 (FOR RADIO1)  |
  * | 11    | SPI MOSI (FOR BOTH RADIOS)  |
@@ -30,8 +31,8 @@
  * | 15    | Don't use. SBUS driver takes it (RX3) |
  * | 16    | SPARE
  * | 17    | SPARE
- * | 18    | I2C SDA (FOR I2C) |
- * | 19    | I2C SCK (FOR I2C) |
+ * | 18    | I2C SDA (FOR I2C) | *** --- >> BLUE WIRE   = 18 !! << --- ***
+ * | 19    | I2C SCK (FOR I2C) | *** --- >> YELLOW WIRE = 19 !! << --- ***
  * | 20    | SPI CSN2 (FOR RADIO2)  |
  * | 21    | SPI CE2 (FOR RADIO2) |
  * | 22    | IRQ1 (FOR RADIO1) |
@@ -84,6 +85,7 @@ uint16_t        CompressedData[COMPRESSEDWORDS]; // 30 bytes -> 40 bytes when un
 bool            SensorHubDead = false;
 uint32_t        BootupMoment  = 0;
 bool            QNHSent       = false;
+bool            FirstLostPacket = true;
 
 /************************************************************************************************************/
 
@@ -475,6 +477,15 @@ void SensorHubHasFailed(){       // If the I2C bus gets its knickers in a twist,
      GpsFix          = 0;
      SensorHubDead   = true;    // This flag inhibits further attempts to call the hub, which might save a model.
 }
+
+// ******************************************************************************************************************************************************************
+FASTRUN void TryNextChannel(){
+        ++NextChannelNumber;                      // Move up the channels' array
+        if (NextChannelNumber >= FrequencyCount)  NextChannelNumber = 1; // If needed, wrap the channels' array pointer
+        NextChannel =  * (FHSSChPointer + NextChannelNumber);
+        HopToNextChannel();
+        FirstLostPacket = false;
+}
 // ******************************************************************************************************************************************************************
 FASTRUN void ReceiveData(){ 
     uint32_t TimeTest; 
@@ -494,7 +505,9 @@ FASTRUN void ReceiveData(){
       }
     }
     if (ReadData()) {
+       // if (!FirstLostPacket) Serial.println ("Hooray!!");                             // Proves it worked!! 
         ReadExtraParameters();                                                         // Check the extra parameters
+        FirstLostPacket = true;                                                        // it will be when one is lost!
     } else {        
         if (millis() - SBUSTimer >= SBUSRATE) {                                        // No new packet yet - but maybe it's time to dispatch the last?
             if (BoundFlag && (millis() > 10000)) {
@@ -504,8 +517,14 @@ FASTRUN void ReceiveData(){
                 }
             }                                          
         }                                                                                                                                           
-        if (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT) {                      
-        Reconnect();                                                                  // Try to reconnect.
+    if (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT) {                      
+        if (FirstLostPacket) {
+                 TryNextChannel();
+            } else {
+            //   if (!FirstLostPacket) Serial.println ("RECONNECTING...");     
+                 FirstLostPacket = true;
+                 Reconnect();
+            }                                                                           // Try to reconnect.
         } 
     }
 }

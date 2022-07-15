@@ -36,7 +36,7 @@
  * - Macros - for snap rolls, heli rescue, etc.
  * - Hardware digital trims with accellerating repeat
  * - Capacitive touch screen GUI
- * - Hardware bug in nRF24L01+ discovered. A fix (work-around) is implemented
+ * - Hardware bug in nRF24L01+ fixed. (FIFO buffers crash the chip when they're full for > 4ms. So these are not used.)
  * - Screen colours definable
  * - Data screen gives all possible telemetry  
  * - Log files implemented - and help file system with unlimited file length
@@ -113,10 +113,10 @@ uint8_t       MixNumber          = 0;
 uint8_t       CurrentView        = FRONTVIEW;
 uint8_t       SavedCurrentView   = FRONTVIEW;
 uint64_t      DefaultPipe        = DEFAULTPIPEADDRESS; //          Default Radio pipe address
-uint64_t      NewPipe            = 0xBABE1E5420LL;     //             New Radio pipe address for binding comes from MAC address
+uint64_t      NewPipe            = 0xBABE1E5420LL;     //          New Radio pipe address for binding comes from MAC address
 char          TextIn[CHARSMAX+2];  // spare space
-unsigned int  PacketsPerSecond = 0;
-unsigned int  LostPackets      = 0;
+uint16_t      PacketsPerSecond = 0;
+uint16_t      LostPackets      = 0;
 uint8_t       PacketNumber     = 0;
 uint8_t       GPSMarkHere      = 0;
 uint8_t       PreviousTrim     = 255;   
@@ -129,9 +129,9 @@ uint16_t      DefaultTrimRepeatSpeed  = 600;
      * This first byte "Purpose" defines what all the other bytes mean, AND ...
      * the highest BIT of Purpose means ** HOP TO NEXT CHANNEL A.S.A.P. (IF ON) **
      * the lower 7 BITs then define the meaning of the remainder of the ackpayload bytes
-     * If Purpose = 1 then ...
+     * If Purpose == 1 then ...
      * 
-     * AckPayload.Byte2           =  ThisRadio;            // Radio in current use  Byte1 and Byte2 are free
+     * AckPayload.Byte2           =  ThisRadio;              // RX Transceiver in current use 
      * AckPayload.Byte3           =  RXVERSION_MAJOR;
      * AckPayload.Byte4           =  RXVERSION_MINOR;
      * AckPayload.Byte5           =  RXVERSION_MINIMUS;
@@ -183,12 +183,12 @@ double yPoints[5];
 double xPoint = 0;
 double yPoint = 0;
 
-int           BoxBottom;
-int           BoxTop;
-int           BoxLeft;
-int           BoxRight;
-int           ClickX;
-int           ClickY;
+uint16_t      BoxBottom;
+uint16_t      BoxTop;
+uint16_t      BoxLeft;
+uint16_t      BoxRight;
+uint16_t      ClickX;
+uint16_t      ClickY;
 bool          CalibratedYet                = false;
 uint16_t      AnalogueInput[PROPOCHANNELS] = {A0, A1, A2, A3, A6, A7, A8, A9}; // PROPO Channels for transmission
 uint8_t       CurrentMode                  = NORMAL;
@@ -208,29 +208,40 @@ uint16_t      MemoryForTransmtter  = 0;   // SD space for transmitter parameters
 uint16_t      OneModelMemory       = 0;   // SD space for every model's parameters
 uint16_t      SDCardAddress        = 0;   // Address on SD card (offset from zero)
 
+                                                                      
+
+uint8_t FHSS_Channels1[42] = {93,111,107,103,106,97,108,102,118,                                        // TEST array 
+104,101,109,98,113,124,115,91,96,85,117,89,99,114,87,112,
+86,94,92,119,120,100,121,123,95,122,105,84,116,90,110,88};
+
+uint8_t FHSS_Channels[83] = {51,28,24,61,64,55,66,19,76,21,59,67,15,71,82,32,49,69,13,2,34,47,20,16,72,  // UK array
+35,57,45,29,75,3,41,62,11,9,77,37,8,31,36,18,17,50,78,73,30,79,6,23,40,
+54,12,80,53,22,1,74,39,58,63,70,52,42,25,43,26,14,38,48,68,33,27,60,44,46,
+56,7,81,5,65,4,10}; /// test comment 
+
+uint8_t * FHSSChPointer;                                                                                 // pointer for channels array (three only used for reconnect)
+
+char        page_FrontView[]            = "page FrontView";
+char        page_FhssView[]             = "page FhssView";
+char        FrontView_Hours[]           = "Hours";
+char        FrontView_Mins[]            = "Mins";
+char        FrontView_Secs[]            = "Secs";
+char        StartBackGround[]           = "click Background,0";
+char        ModelsFile[]                = "models.dat";
+uint8_t     SwitchNumber[8]             = {SWITCH0, SWITCH1, SWITCH2, SWITCH3, SWITCH4, SWITCH5, SWITCH6, SWITCH7};
+uint8_t     TrimNumber[8]               = {TRIM1A, TRIM1B, TRIM2A, TRIM2B, TRIM3A, TRIM3B, TRIM4A, TRIM4B};
+const int   chipSelect                  = BUILTIN_SDCARD;
+char        DateTime[]                  = "DateTime";
+char        ScreenViewTimeout[]         = "Sto";                  // needed for display info
+char        NoSleeping[]                = "thsp=0";
 char     ModelName[30];
-char     FrontView_Hours[]           = "Hours";
-char     FrontView_Mins[]            = "Mins";
-char     FrontView_Secs[]            = "Secs";
-char     page_FrontView[]            = "page FrontView";
-char     page_FhssView[]             = "page FhssView";
-char     FhssView_Rlow[]             = "FHSSLow";
-char     FhssView_Rhigh[]            = "FHSSHigh";
-char     BindScreenBox[]             = "BindStatus";
-char     ScreenViewTimeout[]         = "Sto";                  // needed for display info
-char     NoSleeping[]                = "thsp=0";
 uint16_t ScreenTimeout               = 120;                     // Screen has two minute timeout by default
-char     HtextCMD[]                  = "click HelpText,0";
-char     StartBackGround[]           = "click Background,0";
 int      LastLinePosition            = 0;
 uint8_t  RXCellCount                 = 2;
 bool     JustHoppedFlag              = true;
 bool     LostContactFlag             = true;
 uint8_t  RecentPacketsLost           = 0;
 uint32_t TotalledRecentPacketsLost   = 0;
-long int RecoveryTimer               = 0;
-bool     ReconnectingFlag            = true;
-int      ReconnectTime               = 0;
 uint32_t GapSum                      = 0;
 uint32_t GapLongest                  = 0;
 uint32_t GapStart                    = 0;
@@ -247,16 +258,12 @@ bool     GpsFix                      = 0;
 uint8_t  GPSSatellites               = 0;
 uint16_t GPSSpeed                    = 0;
 uint16_t GPSMaxSpeed                 = 0;
-
 uint8_t  GPSHours                    = 0;
 uint8_t  GPSMins                     = 0;
 uint8_t  GPSSecs                     = 0;
-
 uint8_t  GPSDay                      = 0;
 uint8_t  GPSMonth                    = 0;
 uint8_t  GPSYear                     = 0;
-
-
 float    GPSAltitude                 = 0;
 float    GPSMaxAltitude              = 0;
 float    GPSGroundAltitude           = 0;
@@ -274,15 +281,13 @@ char     MaxAltitude[8]              = " ";
 float    MaxAlt                      = 0;
 char     ReceiverVersionNumber[8]    = " ";
 char     TransmitterVersionNumber[8] = " ";
-
 File     ModelsFileNumber;
 
 Adafruit_INA219 ina219;
 
-const int chipSelect = BUILTIN_SDCARD;
 char      SingleModelFile[80];
 bool      SingleModelFlag = false;
-char      ModelsFile[]    = "models.dat";
+
 bool      ModelsFileOpen  = false;
 bool      USE_INA219      = false;
 uint8_t   BindingNow      = 0;
@@ -291,41 +296,35 @@ bool      BoundFlag       = false;
 int       PipeTimeout     = 0;
 bool      Switch[8];
 bool      TrimSwitch[8];
-uint8_t   SwitchNumber[8] = {SWITCH0, SWITCH1, SWITCH2, SWITCH3, SWITCH4, SWITCH5, SWITCH6, SWITCH7};
-uint8_t   TrimNumber[8]   = {TRIM1A, TRIM1B, TRIM2A, TRIM2B, TRIM3A, TRIM3B, TRIM4A, TRIM4B};
+
 
 uint8_t FMSwitch   = FLIGHTMODESWITCH;
 uint8_t AutoSwitch = AUTOSWITCH;
-
 uint8_t Channel9Switch  = 0;
 uint8_t Channel10Switch = 0;
 uint8_t Channel11Switch = 0;
 uint8_t Channel12Switch = 0;
-
 uint8_t Channel9SwitchValue  = 0;
 uint8_t Channel10SwitchValue = 0;
 uint8_t Channel11SwitchValue = 0;
 uint8_t Channel12SwitchValue = 0;
-
 bool SWITCH1Reversed = false;
 bool SWITCH2Reversed = false;
 bool SWITCH3Reversed = false;
 bool SWITCH4Reversed = false;
-
-int      StartLocation       = 0;
+uint16_t StartLocation       = 0;
 bool     ValueSent           = false;
-int      SwitchEditNumber    = 0; // number of switch being edited
+uint8_t  SwitchEditNumber    = 0; // number of switch being edited
 uint32_t ShowServoTimer      = 0;
 bool     LastFourOnly        = false;
 uint8_t  InPutStick[17]      = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}; //
 uint8_t  ExportedFileCounter = 0;
 char     TheFilesList[100][14];
-int      FileNumberInView     = 0;
+uint16_t FileNumberInView     = 0;
 bool     FileError            = false;
-int      RangeTestStart       = 0;
-int      RangeTestGoodPackets = 0;
-int      RangeTestLostPackets = 0;
-float    success              = 0; // percent of packets that  succeed
+uint32_t RangeTestStart       = 0;
+uint16_t RangeTestGoodPackets = 0;
+uint16_t RangeTestLostPackets = 0;
 uint8_t  SaveFlightMode       = 0;
 bool     FailSafeChannel[CHANNELSUSED];
 bool     SaveFailSafeNow                = false;
@@ -341,14 +340,14 @@ uint32_t Inactivity_Start   = 0;
 
 tmElements_t tm;
 char         TxName[32]   = {"No name was found!"};
-int          LastTimeRead = 0;
-int          LastShowTime = 0;
-int          LastDogKick  = 0;
+uint32_t     LastTimeRead = 0;
+uint32_t     LastShowTime = 0;
+uint32_t     LastDogKick  = 0;
 uint8_t      MacAddress[6];
-char         DateTime[] = "DateTime";
 
-int      XtouchPlace = 0; // Clicked X
-int      YtouchPlace = 0; // Clicked Y
+
+uint16_t     XtouchPlace = 0; // Clicked X
+uint16_t     YtouchPlace = 0; // Clicked Y
 
 bool     BindButton  = false;
 
@@ -365,12 +364,12 @@ uint8_t  BlinkOnPhase  = 1;
 bool     LedWasGreen   = false;
 char     ThisRadio[4]  = "0 ";
 uint8_t  LastRadio     = 0;
-uint8_t NextChannel   = 0;
-bool    DoSbusSendOnly  = false;
-bool    BuddyMaster     = false;
-uint8_t BuddyTriggerChannel = 12;
-bool    SlaveHasControl = false;
-uint16_t Qnh            = 1009;               // pressure at sea level here/
+uint8_t  NextChannel   = 0;
+bool     DoSbusSendOnly  = false;
+bool     BuddyMaster     = false;
+uint8_t  BuddyTriggerChannel = 12;
+bool     SlaveHasControl = false;
+uint16_t Qnh            = 1009;               // pressure at sea level here
 uint32_t ModelNameTimeCheck = 0;
 uint16_t LastModelLoaded    = 0;
 uint8_t  MinimumGap = 75;
@@ -379,16 +378,7 @@ char     RecentTextFile[20];
 bool     LogRXSwaps =  false;
 bool     ThereIsMoreToSee = false;
 bool     UseLog = false;
-uint8_t * FHSSChPointer;                                                              // pointer for channels array (first five only used for reconnect)
 
-uint8_t FHSS_Channels1[42] = {93,111,107,103,106,97,108,102,118,104,101,109,98,      // TEST array
-113,124,115,91,96,85,117,89,99,114,87,112,
-86,94,92,119,120,100,121,123,95,122,105,84,116,90,110,88};
-
-uint8_t FHSS_Channels[83] = {51,28,24,61,64,55,66,19,76,21,59,67,15,71,82,32,49,69,13,2,34,47,20,16,72,  // UK array
-35,57,45,29,75,3,41,62,11,9,77,37,8,31,36,18,17,50,78,73,30,79,6,23,40,
-54,12,80,53,22,1,74,39,58,63,70,52,42,25,43,26,14,38,48,68,33,27,60,44,46,
-56,7,81,5,65,4,10};
 
 uint8_t  Gsecond;  // = tm.Second; // 0-59
 uint8_t  Gminute;  // = tm.Minute; // 0-59
@@ -398,10 +388,11 @@ uint8_t  GmonthDay;// = tm.Day;    // 1-31
 uint8_t  Gmonth;   // = tm.Month;  // 1-12
 uint8_t  Gyear;    // = tm.Year;   // 0-99
 bool     GPSTimeSynched  =   false;
-int      DeltaGMT           = 0;
+short int      DeltaGMT           = 0;
 uint32_t SwapWaveBandTimer  = 0;
 uint8_t  UkRulesCounter     = 0;
 bool     UkRules            = true;
+bool     PreviousUkRules    = false;
 uint8_t  SwapWaveBand       = 0;  
 uint16_t TrimFactor         = 2;   // How much to multiply trim by
 uint8_t  DateFix            = 0;
@@ -414,7 +405,7 @@ bool     Reconnected        = false;
 uint8_t  LowBattery         = LOWBATTERY;
 uint16_t SbusRepeats        = 0;
 uint16_t SavedSbusRepeats   = 0;
-bool     VoltsDetected      = false;
+bool     RXVoltsDetected      = false;
 uint8_t  SticksMode         = 2;
 uint16_t RadioSwaps         = 0 ;
 uint16_t RX1TotalTime       = 0 ;
@@ -423,11 +414,6 @@ uint16_t SavedRadioSwaps    = 0;
 uint16_t SavedRX1TotalTime  = 0;
 uint16_t SavedRX2TotalTime  = 0;
 uint8_t  AudioVolume        = 90;
-char     OpeningFanfare[]   = "play 0,18,0";
-char     ConnectedSound[]   = "play 0,20,0";
-char     DisconnectedSound[]= "play 0,21,0";
-char     click0[]           = "play 0,0,0";  //  = channel, noiseID ,loop
-char     click1[]           = "play 0,1,0";  //  = channel, noiseID ,loop
 uint32_t WarningTimer       = 0;
 uint32_t ScreenTimeTimer    = 0;
 bool     ScreenIsOff        = false;
@@ -451,12 +437,14 @@ uint16_t SavedLineX          = 12345;
 bool     FirstConnection     = true;
 File     LogFileNumber;
 bool     LogFileOpen         =  false;
+//
+// ********************************************************************************************************************************** 
 
-
-
-
+uint8_t Ascii(char c){
+ return (uint8_t) c;
+}
 // **************************************************************** Play a sound from RAM *********************************************
-void PlaySound(uint8_t TheSound){ // heer
+void PlaySound(uint16_t TheSound){    // Plays a sound identified by a number
 
 char Sound[20];
 char SoundPrefix[] = "play 0,";
@@ -468,8 +456,6 @@ char NB[6];
     strcat (Sound,SoundPostfix);
     SendCommand(Sound);
 }
-
-
 /******************* DeltaGMT is a user defined representation of time zone. It should never exceed 24. Not on this planet. **********/
 void FixDeltaGMTSign(){
     if (DeltaGMT < -24) DeltaGMT = 0;  // Undefined value?f
@@ -522,7 +508,7 @@ for (uint8_t i = 0; i < MAXMACROS; ++i){
   }
 }
 /************************************************************************************************************/
-void ResetSubTrims(){
+FLASHMEM void ResetSubTrims(){
     for (int i = 0;i<16;++i){
             SubTrims[i]= 127;
     }
@@ -531,7 +517,7 @@ void ResetSubTrims(){
 /** Map servo channels' data from SendBuffer into SbusChannels buffer */
 // This funtion is used by the BUDDY slave to send it's controls out down a wire using SBUS
 
-void MapToSBUS()
+FASTRUN void MapToSBUS()
 {
     if (millis() - SBUSTimer >= SBUSRATE)
     {
@@ -559,7 +545,7 @@ uint8_t bcdToDec(uint8_t val)
 
 /*********************************************************************************************************************************/
 
-void SetTheRTC(){
+FLASHMEM void SetTheRTC(){
     uint8_t  zero        = 0x00;
     Wire.beginTransmission(DS1307_ADDRESS);
     Wire.write(zero);                               // Stop the oscillator
@@ -813,21 +799,7 @@ void SetAudioVolume(uint16_t v){   // sets audio volume v (0-100)
     strcat (cmd,nb);
     SendCommand(cmd);
 }
-/*********************************************************************************************************************************/
 
-//void PlayWaveFile(char* tbox){  // Now removed. All audio is now in RAM. An issue with the FAT on SD card made this unsafe.
-//#ifdef USEAUDIO
-//    char path[]   = "wav0.path=\"sd0/";
-//    char wav[]    = ".wav\"";
-//    char en[]     = "wav0.en=1";
-//    char CB[70];
-//    strcpy(CB, path);
-//    strcat(CB, tbox);
-//    strcat(CB, wav);
-//    SendCommand(CB);    
-//    SendCommand(en);
-//#endif//
-//}
 /*********************************************************************************************************************************/
 
 // This function converts an int to a char[] array, then adds a comma, a dot, or nothing at the end.
@@ -835,7 +807,7 @@ void SetAudioVolume(uint16_t v){   // sets audio volume v (0-100)
 // It dates for a very early time when I didn't know about standard library functions! 
 // But it works just fine, so it says in.
 
-char* Str(char* s, int n, int comma) // comma = 0 for nothing, 1 for a comma, 2 for a dot.
+FASTRUN char* Str(char* s, int n, int comma) // comma = 0 for nothing, 1 for a comma, 2 for a dot.
 {
     int  r, i, m, flag;
     char cma[] = ",";
@@ -1005,7 +977,8 @@ void RedLedOn()
 {
     if (LedWasGreen){
         if (UseLog) LogDisConnection();
-        if (AnnounceConnected) SendCommand(DisconnectedSound);
+        if (AnnounceConnected) PlaySound(DISCONNECTEDMSG);
+        RXVoltsDetected = false;
         LedWasGreen = false;
     }
     
@@ -1024,9 +997,8 @@ void GreenLedOn()
         if (FirstConnection) {                   // Zero data on first connection
             ZeroDataScreen(); 
             FirstConnection = false; 
-            if (AnnounceConnected) SendCommand(ConnectedSound); 
+            if (AnnounceConnected) PlaySound(CONNECTEDMSG);
             if (UseLog){ 
-                if (!LogFileOpen) StartLogFile();
                 LogConnection();
             }
         }
@@ -1122,7 +1094,7 @@ void SendText1(char* tbox, char* NewWord)
 void EndSend()
 {
     for (u_int8_t pp = 0; pp < 3; ++pp) {NEXTION.write(0xff);} // Send end of Input message // 
-    delay(60);                                            // ** A DELAY ** (>=50 ms) was needed if an answer might come! (!! Shorter with Intelligent dislay)
+    delay(55);                                            // ** A DELAY ** (>=50 ms) was needed if an answer might come! (!! Shorter with Intelligent dislay)
 }
 /*********************************************************************************************************************************/
 void SendValue(char* nbox, int value)
@@ -1171,20 +1143,39 @@ uint32_t GetValue(char* nbox)
     char   GET[]   = "get ";
     char   VAL[]   = ".val";
     char   CB[100];
+    
     strcpy(CB, GET);
     strcat(CB, nbox);
     strcat(CB, VAL);
     NEXTION.print(CB);
-    EndSend();
+    EndSend(); 
     GetTextIn();
     if (TextIn[0] == 'q') {
         ValueIn = TextIn[1]; // Collect and build 32 bit value from 4 bytes
         ValueIn += (TextIn[2] << 8);
         ValueIn += (TextIn[3] << 16);  
         ValueIn += (TextIn[4] << 24);
+    } else{
+        ValueIn = 65535;    // = THERE WAS AN ERROR !
     }
     return ValueIn;
 }
+
+/*********************************************************************************************************************************/
+
+uint32_t GetValueSafer(char* nbox) // This function calls the function above until it returns no error
+{
+    int i               = 0;
+    uint32_t   ValueIn  = GetValue(nbox);
+
+    while (ValueIn == 65535 && i < 25){ // if error read again!
+        delay (50);
+        ValueIn = GetValue(nbox);
+        ++i;
+    }
+    return ValueIn;
+}
+
 // ***************************************************************************************************************
 // This function gets Nextion textbox Text into a char array pointed to by * TheText. There better be room!
 // It returns the length of array
@@ -1250,7 +1241,7 @@ bool GetButtonPress()
         }
     }
    if(!(strlen(TextIn))) ButtonPressed = false;
-   if (ButtonPressed && ButtonClicks) SendCommand(click1);
+   if (ButtonPressed && ButtonClicks) PlaySound(CLICKONE);
    return ButtonPressed;
 }
 
@@ -1258,20 +1249,9 @@ bool GetButtonPress()
 //             END OF NEXTION FUNCTIONS
 /*********************************************************************************************************************************/
 
-void CheckTimer()
+FASTRUN void CheckTimer()
 {
    
-   char Min1[]  = "play 0,2,0";
-   char Min2[]  = "play 0,3,0";
-   char Min3[]  = "play 0,4,0";
-   char Min4[]  = "play 0,5,0";
-   char Min5[]  = "play 0,6,0";
-   char Min6[]  = "play 0,7,0";
-   char Min7[]  = "play 0,8,0";
-   char Min8[]  = "play 0,9,0";
-   char Min9[]  = "play 0,10,0";
-   char Min10[] = "play 0,11,0";
-
     if (FlightMode < 4 && !LostContactFlag) {
         Secs  = ((millis() - TimerMillis) / 1000) + PausedSecs;
         Hours = Secs / 3600;
@@ -1292,34 +1272,34 @@ void CheckTimer()
         ClockSpoken = true;
         switch (Mins) {
         case 1:
-            SendCommand(Min1);
+            PlaySound(ONEMINUTE);
             break;
         case 2:
-            SendCommand(Min2);
+            PlaySound(TWOMINUTES);
             break;
         case 3:
-            SendCommand(Min3); 
+            PlaySound(THREEMINUTES);
             break;
         case 4:
-            SendCommand(Min4); 
+            PlaySound(FOURMINUTES);
             break;
         case 5:
-            SendCommand(Min5); 
+            PlaySound(FIVEMINUTES); 
             break;
         case 6:
-            SendCommand(Min6); 
+            PlaySound(SIXMINUTES); 
             break;
         case 7:
-            SendCommand(Min7); 
+            PlaySound(SEVENMINUTES); 
             break;
         case 8:
-            SendCommand(Min8); 
+            PlaySound(EIGHTMINUTES); 
             break;
         case 9:
-            SendCommand(Min9); 
+            PlaySound(NINEMINUTES); 
             break;
         case 10:
-            SendCommand(Min10); 
+            PlaySound(TENMINUTES); 
             break;
         default:
             break;   
@@ -1330,7 +1310,7 @@ void CheckTimer()
 
 /*********************************************************************************************************************************/
 
-void ShowServoPos()
+FASTRUN void ShowServoPos()
 {
     char SticksView_Ch1[]    = "Ch1";
     char SticksView_Ch2[]    = "Ch2";
@@ -1507,7 +1487,7 @@ void ShowServoPos()
 }
 
 /*********************************************************************************************************************************/
-bool CheckTXVolts(){
+FASTRUN bool CheckTXVolts(){
     char  DataView_txv[]         = "txv";
     float txv                    = 0;
     char  TXVolts[]              = "t21";
@@ -1522,7 +1502,8 @@ bool CheckTXVolts(){
     int   txpc                   = 0;
         if (USE_INA219) {
             txv  = (ina219.getBusVoltage_V()) * 100;
-            txpc = map(txv, 512, 670, 0, 100); // LiFePo4 Battery 2.6 ->3.5  volts per cell
+            //txpc = map(txv, 512, 670, 0, 100); // LiFePo4 Battery 2.6 ->3.5  volts per cell
+            txpc = map(txv, 3.1 * 200, 3.35 * 200, 0, 100); // LiFePo4 Battery 3.1 ->3.35  volts per cell
             if (txpc < LowBattery) {
                 TXWarningFlag = true;
              }
@@ -1546,7 +1527,7 @@ return TXWarningFlag;
 }
 /*********************************************************************************************************************************/
 
-bool CheckRXVolts(){
+FASTRUN bool CheckRXVolts(){
     float Volts                  = 0;
     float ReadVolts              = 0;
     bool  RXWarningFlag          = false;
@@ -1576,13 +1557,13 @@ bool CheckRXVolts(){
             if (RXCellCount == 4) Volts = map(ReadVolts, 136, 168, 0, 100);  // works for 4s batteries (*10)
             if (RXCellCount == 3) Volts = map(ReadVolts, 102, 126, 0, 100);  // works for 3s batteries (*10)
             if (RXCellCount == 2) Volts = map(ReadVolts,  68,  84, 0, 100);  // works for 2s batteries (*10)
-            if (VoltsDetected) {
+            if (RXVoltsDetected) {
                 Volts = constrain(Volts, 0, 100);
                 if (Volts <= LowBattery && Volts > 0) {
                     RXWarningFlag = true;
                 }
             }
-            if (VoltsDetected) {
+            if (RXVoltsDetected) {
                 dtostrf(Volts, 0, 0, Vbuf);
                 strcat(Vbuf, pc);
                 if (BoundFlag && CurrentView == FRONTVIEW) SendText(FrontView_AckPayload, Vbuf);
@@ -1599,7 +1580,7 @@ bool CheckRXVolts(){
                 strcat(RXBattInfo, PerCell);
                 if (BoundFlag && CurrentView == FRONTVIEW) SendText(FrontView_RXBV, RXBattInfo);
             }
-            if (!VoltsDetected) {
+            if (!RXVoltsDetected) {
                 if (BoundFlag && CurrentView == FRONTVIEW) SendText(FrontView_RXBV, RXBattNA);
                 if (BoundFlag && CurrentView == FRONTVIEW) SendText(FrontView_AckPayload, RXBattNV);
             }
@@ -1662,7 +1643,7 @@ FASTRUN void ShowComms()
     char  BTo[]               = "BTo";
     char  Sat[]               = "Sat";
     char  Sbs[]               = "Sbus";
-    char  LowBat[]            = "play 0,19,0";
+
 
 if (millis() - LastShowTime > SHOWCOMMSDELAY) { 
     ShowNow = true;
@@ -1780,7 +1761,7 @@ if (ShowNow){
         LedIsBlinking = true; 
         if((millis() - WarningTimer) > 10000) {
             WarningTimer = millis();
-            SendCommand(LowBat);                // issue audible warning every 10 seconds
+            PlaySound(BATTERYISLOW); // issue audible warning every 10 seconds
         }
         if (CurrentView == FRONTVIEW) SendCommand(WarnNow);         
     }else{
@@ -1805,28 +1786,7 @@ void  ReEnableScanButton(){
         }   
     }
 }
-/*********************************************************************************************************************************/
 
-void FailedPacket()
-{
-    int SecondsRemaining;
-    if (GapStart == 0) GapStart = millis(); // To keep track of gaps' length
-    ++RecentPacketsLost;
-    ++TotalledRecentPacketsLost; // this is to keep track of events when receiver is off
-    if (RecentPacketsLost > LOSTCONTACTCUTOFF) {
-        LostContactFlag   = true;
-        Reconnected = false;
-        RecentPacketsLost = 0;
-        if ((millis() - GapStart) > RED_LED_ON_TIME) // there's no need to blink red for every single lost packet. Only after 1/2 second of no connection.
-        {  
-            RedLedOn();
-            ReEnableScanButton();
-        }
-    }
-    ++LostPackets;
-     SecondsRemaining = (Inactivity_Timeout / 1000) - (millis() - Inactivity_Start) / 1000;
-    if (SecondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH);             // INACTIVITY POWER OFF HERE!!
-}
 
 /*********************************************************************************************************************************/
 
@@ -1907,7 +1867,7 @@ int GetNextNumber(int p1, char text1[CHARSMAX])
     return j;
 }
 /*********************************************************************************************************************************/
- uint16_t GetStickInput(uint8_t l)
+ FASTRUN uint16_t GetStickInput(uint8_t l)
 {
    uint16_t k = 0;
    switch (l) {
@@ -1939,7 +1899,7 @@ int GetNextNumber(int p1, char text1[CHARSMAX])
 /*********************************************************************************************************************************/
 // MIXES  (Channel mixes)
 /*********************************************************************************************************************************/
-void DoMixes()
+FASTRUN void DoMixes()
 {
 int m, c, p, mindeg, maxdeg, TheSum, Result;
     for (m = 1; m <= MAXMIXES; ++m) {
@@ -1971,7 +1931,7 @@ int m, c, p, mindeg, maxdeg, TheSum, Result;
 //                  My new version of the the traditional "map()" function -- but here with exponential added.
 /*********************************************************************************************************************************/
  
-float MapExp(float xx, float Xxmin, float Xxmax, float Yymin, float Yymax, float Expo)
+FASTRUN float MapWithExponential(float xx, float Xxmin, float Xxmax, float Yymin, float Yymax, float Expo)
 {
     Expo  = map(Expo, -100, 100, -0.25, 0.75);
     xx    = pow(xx * xx, Expo);
@@ -1981,10 +1941,9 @@ float MapExp(float xx, float Xxmin, float Xxmax, float Yymin, float Yymax, float
 }
 
 
-/*********************************************************************************************************************************/
+/******************************************** CHANNEL REVERSE FUNCTION **********************************************************/
 
-
-void DoReverseSense(){
+FASTRUN void DoReverseSense(){
   for (uint8_t i = 0; i < 16; i++) {
     if (ReversedChannelBITS & 1 << i){                                                              // Is this channel reversed?
             PreMixBuffer[i] = map(SendBuffer[i],MINMICROS,MAXMICROS,MAXMICROS,MINMICROS);           // Yes so reverse the channel
@@ -1994,10 +1953,8 @@ void DoReverseSense(){
 }
 /*********************************************************************************************************************************/
 
-
-
 /** @brief GET NEW SERVO POSITIONS */
-void GetNewChannelValues()
+FASTRUN void GetNewChannelValues()
 {
     uint16_t k = 0, l = 0, m = 0, n = 0, TrimAmount;
     // key: -
@@ -2041,10 +1998,10 @@ void GetNewChannelValues()
             }
             if (InterpolationTypes[FlightMode][n] == EXPONENTIALCURVES) {               // EXPONENTIAL (!!)
                 if (m >= ChannelCentre[l]) {
-                    k = MapExp(m - ChannelCentre[l], 0, ChannelMax[l] - ChannelCentre[l], 0, IntoHigherRes(MaxDegrees[FlightMode][n]) - IntoHigherRes(CentreDegrees[FlightMode][n]), Exponential[FlightMode][n]) + IntoHigherRes(CentreDegrees[FlightMode][n]);
+                    k = MapWithExponential(m - ChannelCentre[l], 0, ChannelMax[l] - ChannelCentre[l], 0, IntoHigherRes(MaxDegrees[FlightMode][n]) - IntoHigherRes(CentreDegrees[FlightMode][n]), Exponential[FlightMode][n]) + IntoHigherRes(CentreDegrees[FlightMode][n]);
                 }
                 if (m < ChannelCentre[l]) {
-                    k = MapExp(ChannelCentre[l] - m, 0, ChannelCentre[l] - ChannelMin[l], IntoHigherRes(CentreDegrees[FlightMode][n]) - IntoHigherRes(MinDegrees[FlightMode][n]), 0, Exponential[FlightMode][n]) + IntoHigherRes(MinDegrees[FlightMode][n]);
+                    k = MapWithExponential(ChannelCentre[l] - m, 0, ChannelCentre[l] - ChannelMin[l], IntoHigherRes(CentreDegrees[FlightMode][n]) - IntoHigherRes(MinDegrees[FlightMode][n]), 0, Exponential[FlightMode][n]) + IntoHigherRes(MinDegrees[FlightMode][n]);
                 }
             }
         }
@@ -2153,7 +2110,7 @@ void UpdateTrimView()
 }
 /*********************************************************************************************************************************/
 
-void ScanI2c()
+FLASHMEM void ScanI2c()
 {
     int ii;
     USE_INA219 = false;
@@ -2331,7 +2288,7 @@ void UpdateModelsNameEveryWhere()
 
 /*********************************************************************************************************************************/
 
-void InitSwitchesAndTrims()
+FLASHMEM void InitSwitchesAndTrims()
 {
     for (int i = 0; i < 8; ++i) {
         pinMode(SwitchNumber[i], INPUT_PULLUP);
@@ -2342,7 +2299,7 @@ void InitSwitchesAndTrims()
 /*********************************************************************************************************************************/
 
 /** @brief STICKS CALIBRATION */
-void InitMaxMin()
+FLASHMEM void InitMaxMin()
 {
     for (int i = 0; i < CHANNELSUSED; ++i) {
         ChannelMax[i]    = 1024;
@@ -2355,7 +2312,7 @@ void InitMaxMin()
 
 /*********************************************************************************************************************************/
 
-void CentreTrims()
+FLASHMEM void CentreTrims()
 {
     for (int j = 0; j <= FLIGHTMODESUSED; ++j) {
         for (int i = 0; i < CHANNELSUSED; ++i) {
@@ -2366,7 +2323,7 @@ void CentreTrims()
 
 /*********************************************************************************************************************************/
 
-void InitCentreDegrees()
+FLASHMEM void InitCentreDegrees()
 {
   
     for (int j = 1; j <= 4; ++j) {
@@ -2833,7 +2790,7 @@ bool LoadAllParameters()
          ++SDCardAddress;
         
         MemoryForTransmtter = SDCardAddress;
-        ReadOneModel(ModelNumber);
+        ReadOneModel(ModelNumber); // this
         return true;
     }
     else {
@@ -2879,7 +2836,7 @@ void WatchDogCallBack()
 
 /*********************************************************************************************************************************/
 
-void SetDS1307ToCompilerTime()
+FLASHMEM void SetDS1307ToCompilerTime()
 {
     if (getDate(__DATE__) && getTime(__TIME__)) {
         RTC.write(tm);
@@ -2888,7 +2845,7 @@ void SetDS1307ToCompilerTime()
 
 /************************************************************************************************************/
 
-void GetTXVersionNumber()
+FLASHMEM void GetTXVersionNumber()
 {
     char    nbuf[5];
     uint8_t Txv1 = TXVERSION_MAJOR;
@@ -2901,18 +2858,17 @@ void GetTXVersionNumber()
     strcat(TransmitterVersionNumber, nbuf);
 }
 /************************************************************************************************************/
-void SetUKFrequencies(){
+FASTRUN void SetUKFrequencies(){ 
             FHSSChPointer = FHSS_Channels; 
-            UkRules = true;     
+            UkRules = true;        
 }
 /************************************************************************************************************/
-void SetTestFrequencies(){
+FASTRUN void SetTestFrequencies(){
             FHSSChPointer = FHSS_Channels1; 
             UkRules = false;     
 }
-
 /************************************************************************************************************/
-void CreateTimeStamp(char *  DateAndTime){
+FASTRUN void CreateTimeStamp(char *  DateAndTime){
     char NB[10];
     char zero[]     = "0";
     char Colon[]    = "."; // a dot!
@@ -2932,7 +2888,7 @@ void CreateTimeStamp(char *  DateAndTime){
 }
 
 /************************************************************************************************************/
-void CreateTimeDateStamp(char *  DateAndTime){
+FASTRUN void CreateTimeDateStamp(char *  DateAndTime){
     char NB[10];
     char zero[]     = "0";
     char Dash[]     = "-";
@@ -2959,7 +2915,7 @@ void CreateTimeDateStamp(char *  DateAndTime){
     }
 }
 /************************************************************************************************************/
-void MakeLogFileName(char * LogFileName){
+FASTRUN void MakeLogFileName(char * LogFileName){
     char NB[10];
     char Ext[]      = ".LOG";
     if (RTC.read(tm)) { 
@@ -2969,11 +2925,27 @@ void MakeLogFileName(char * LogFileName){
     }
 }
 /************************************************************************************************************/
-void DeleteLogFile(char * LogFileName){
+FASTRUN void OpenLogFileW(char * LogFileName){
+    if (!LogFileOpen){
+        LogFileNumber = SD.open(LogFileName, FILE_WRITE);
+        LogFileOpen = true;
+    }
+}
+// ************************************************************************
+FASTRUN void CheckLogFileIsOpen(){
+     char LogFileName[20];
+     if (!LogFileOpen){
+        MakeLogFileName(LogFileName);                   // Create a "today" filename
+        OpenLogFileW(LogFileName);                      // Open file for writing
+     }
+}
+
+/************************************************************************************************************/
+FASTRUN void DeleteLogFile(char * LogFileName){
     SD.remove(LogFileName);
 }
 /************************************************************************************************************/
-void DeleteLogFile1(){
+FASTRUN void DeleteLogFile1(){
     char LogFileName[20];
     char LogTeXt[] = "LogText";     
     char BlankText[] = " ";     
@@ -2983,61 +2955,29 @@ void DeleteLogFile1(){
     SendText1(LogTeXt, BlankText);  
     if (!UseLog) return;
     if (LedWasGreen) {
-        StartLogFile();     
         RecentStartLine = 0;
         ShowLogFile(RecentStartLine);
     }
 }
+
 /************************************************************************************************************/
-void OpenLogFileW(char * LogFileName){
-    if (!LogFileOpen){
-        LogFileNumber = SD.open(LogFileName, FILE_WRITE);
-        LogFileOpen = true;
-    }
-}
-/************************************************************************************************************/
-void OpenLogFileR(char * LogFileName){
+FASTRUN void OpenLogFileR(char * LogFileName){
     if (!LogFileOpen){
         LogFileNumber = SD.open(LogFileName, FILE_READ);
         LogFileOpen = true;
     }
 }
 /************************************************************************************************************/
-void CloseLogFile(){
-    LogFileNumber.close();
+FASTRUN void CloseLogFile(){
+    if (LogFileOpen) LogFileNumber.close();
     LogFileOpen = false;
 }
 /************************************************************************************************************/
-void WriteToLogFile(char * SomeData, uint16_t len){
+FASTRUN void WriteToLogFile(char * SomeData, uint16_t len){
     LogFileNumber.write(SomeData, len);
 }
-/************************************************************************************************************/
-void StartLogFile(){ 
-    char LogFileName[20];
-    char LogHeader[]    = "Log file started: ";
-    char crlf[]         = {'|',13,10,0};
-    char Buf[30];
-    LogFileOpen = false;
-    
-    MakeLogFileName(LogFileName);                   // Create a "today" filename
-    OpenLogFileW(LogFileName);                      // Open file for writing
-    CreateTimeDateStamp(Buf);                       // Put time stamp into buffer
-    WriteToLogFile(crlf,sizeof (crlf));             // End of line
-    WriteToLogFile(LogHeader, sizeof (LogHeader));  // Write header
-    WriteToLogFile(Buf,19);                         // Add time stamp
-    WriteToLogFile(crlf,sizeof (crlf));             // End of line
-                                                    // Log file is now open and ready for new data ...
-}
 // ************************************************************************
-void CheckLogFileIsOpen(){
-     char LogFileName[20];
-     if (!LogFileOpen){
-        MakeLogFileName(LogFileName);                   // Create a "today" filename
-        OpenLogFileW(LogFileName);                      // Open file for writing
-     }
-}
-// ************************************************************************
-void LogFilePreamble(){
+FASTRUN void LogFilePreamble(){
     char dbuf[12];
     char Divider[] = " - ";
     CheckLogFileIsOpen();
@@ -3045,23 +2985,36 @@ void LogFilePreamble(){
     WriteToLogFile(dbuf,9);                          // Add time stamp
     WriteToLogFile(Divider,sizeof (Divider));           
 }
+
 // ************************************************************************
-void LogText(char * TheText, uint16_t len){
+FASTRUN void LogText(char * TheText, uint16_t len){
     char crlf[]  = {'|',13,10,0};
     LogFilePreamble();
     WriteToLogFile(TheText,len);
     WriteToLogFile(crlf, sizeof(crlf));
+    CloseLogFile();
 }
 // ************************************************************************
-void LogConnection(){
+FASTRUN void LogMinGap(){
+        char TheText[] = "Minimum logged gap (ms): ";
+        char buf[50] = " ";
+        char NB[8];
+        Str(NB,MinimumGap,0);
+        strcpy (buf,TheText);
+        strcat (buf,NB);
+        LogText(buf, sizeof (buf));
+}
+// ************************************************************************
+FASTRUN void LogConnection(){
         char TheText[] = "Connected to ";
         char buf[40] = " ";
         strcpy (buf,TheText);
         strcat (buf,ModelName);
         LogText(buf, sizeof (buf));
+        LogMinGap();
 }
 // ************************************************************************
-void LogDisConnection(){ 
+FASTRUN void LogDisConnection(){ 
 char TheText[] = "Disconnected from ";
         char buf[40] = " ";
         strcpy (buf,TheText);
@@ -3069,7 +3022,7 @@ char TheText[] = "Disconnected from ";
         LogText(buf, sizeof (buf));
 }
 // ************************************************************************
-void LogNewFlightMode(){
+FASTRUN void LogNewFlightMode(){
     char Ltext[] = "Bank: ";
     char NB[5];
     char thetext[10];
@@ -3078,24 +3031,38 @@ void LogNewFlightMode(){
     strcat(thetext, NB);
     LogText(thetext, 7);
 }
+
 // ************************************************************************
 
-void LogThisRX(){
+FASTRUN void LogUKRules(){
+    char Rtext[] = "Using 2.400 Ghz - 2.483 Ghz";
+    char Ttext[] = "Using 2.484 Ghz - 2.525 Ghz";
+    if (UkRules) {
+        LogText(Rtext, strlen(Rtext));
+    } else{
+        LogText(Ttext, strlen(Ttext));
+    }
+}
+
+// ************************************************************************
+
+FASTRUN void LogThisRX(){
     char Ltext[] = "RX: ";
     char thetext[10];
     strcpy (thetext,Ltext);
     strcat (thetext,ThisRadio);
     LogText(thetext, 5);
+  
 }
 
 // ************************************************************************
-void LogLowBattery(){ // Not yet implemented
+FASTRUN void LogLowBattery(){ // Not yet implemented
     char TheText[]= "Low battery";
     LogText(TheText, strlen(TheText));
 }
 // ************************************************************************
 
-void LogThisGap(){
+FASTRUN void LogThisGap(){
     char Ltext[] = "Gap: ";
     char NB[5];
     char thetext[10];
@@ -3106,6 +3073,43 @@ void LogThisGap(){
     LogText(thetext, 8);
 }
 // ************************************************************************
+
+FASTRUN void LogThisLongGap(){    // here is logged a Gap that exceeds one second - probably because rx was turned off
+    ThisGap = (millis() - GapStart); 
+    char Ltext[] = "Long Gap: ";
+    char NB[5];
+    char thetext[20];
+    Str(NB,ThisGap,0);
+    strcpy(thetext,Ltext);
+    strcat(thetext, NB);
+    LogText(thetext, strlen(Ltext)+4);
+}
+
+// ************************************************************************
+
+FASTRUN void LogPowerOn(){    
+    char Ltext[] = "Power ON";
+    LogText(Ltext, strlen(Ltext));
+}
+
+// ************************************************************************
+
+FASTRUN void LogPowerOff(){    
+    char Ltext[] = "Power OFF";
+    LogText(Ltext, strlen(Ltext));
+}
+
+// ************************************************************************
+
+FASTRUN void LogThisModel(){    
+    char Ltext[] = "Model loaded: ";
+    char thetext[55];
+    strcpy(thetext,Ltext);
+    strcat(thetext, ModelName);
+    LogText(thetext, strlen(Ltext)+strlen(ModelName));
+}
+// ************************************************************************
+
 void ShowLogFile(uint8_t StartLine){ 
     char TheText[MAXFILELEN + 10];      // MAX = 5K or so
     char LogFileName[20];
@@ -3118,7 +3122,7 @@ void ShowLogFile(uint8_t StartLine){
 /*********************************************************************************************************************************/
 // SETUP
 /*********************************************************************************************************************************/
-void setup()
+FLASHMEM void setup()
 {
     char Initialising[]            = "Initialising ... ";
     char FrontView_Connected[]     = "FrontView.Connected";
@@ -3177,7 +3181,6 @@ void setup()
     // SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
     //  **   BUT then re-comment it!! Otherwise it will reset to same time on every boot up! **
     //  ***************************************************************************************
-    RecoveryTimer = millis();
     BoundFlag     = false;
     TxOnTime      = millis();
     UpdateModelsNameEveryWhere();
@@ -3188,10 +3191,12 @@ void setup()
     SetUKFrequencies(); 
     SetAudioVolume(AudioVolume);
     if (PlayFanfare) PlaySound(THEFANFARE);
-   // if (PlayFanfare) SendCommand(OpeningFanfare);
     ScreenTimeTimer = millis();
     RestoreBrightness();
-  
+    if (UseLog) {
+            LogPowerOn();
+            LogThisModel();
+    }
 }
 /*********************************************************************************************************************************/
 
@@ -3922,7 +3927,7 @@ void SetDefaultValues()
     OpenModelsFile();
     SDUpdateByte(SDCardAddress, ModelDefined);      // mark this model as undefined
     CloseModelsFile();
-    ReadOneModel(ModelNumber); 
+    ReadOneModel(ModelNumber);  // not this
     UpdateModelsNameEveryWhere();
     Procrastinate(100);
     SendCommand(ProgressEnd);
@@ -4004,7 +4009,7 @@ void FillBox(int x1, int y1, int w, int h, int c)
  * @param y2
  * @param color
  */
-void DrawBox(int x1, int y1, int x2, int y2, int c)
+FASTRUN void DrawBox(int x1, int y1, int x2, int y2, int c)
 {
     char line[] = "draw ";
     char nb[12];
@@ -4026,7 +4031,7 @@ void DrawBox(int x1, int y1, int x2, int y2, int c)
 /*********************************************************************************************************************************/
 
 /** @brief Uses servo degrees to position dots */
-void GetDotPositions()
+FASTRUN void GetDotPositions()
 {
     int p      = 0;
     BoxLeft    = BOXOFFSET;
@@ -4059,7 +4064,7 @@ int DegsToPercent(int degs)
 
 /*********************************************************************************************************************************/
 
-void DrawDot(int xx, int yy, int rad, int colr)
+FASTRUN void DrawDot(int xx, int yy, int rad, int colr)
 {
     char cirs[] = "cirs ";
     char nb[12];
@@ -4078,7 +4083,7 @@ void DrawDot(int xx, int yy, int rad, int colr)
 
 /*********************************************************************************************************************************/
 
-void updateInterpolationTypes()
+FASTRUN void updateInterpolationTypes()
 {
     char ExpR[]     = "Exp";
     char Smooth[]   = "Smooth";
@@ -4136,7 +4141,7 @@ void updateInterpolationTypes()
 
 /*********************************************************************************************************************************/
 
-void DisplayCurve()
+FASTRUN void DisplayCurve()
 {
     int  p       = 0;
     char Gn1[]   = "n1";
@@ -4253,7 +4258,7 @@ void DisplayCurve()
         yDot2            = 0;
         Step             = APPROXIMATION;                        // This is the approximation of the screen curve
         for (xPoint = 0; xPoint <= HalfXRange; xPoint += Step) { // Simulate a curve with many short lines to speed it up
-            yPoint = MapExp(HalfXRange - xPoint, HalfXRange, 0, 0, BottomHalfYRange, Exponential[FlightMode][ChanneltoSet - 1]);
+            yPoint = MapWithExponential(HalfXRange - xPoint, HalfXRange, 0, 0, BottomHalfYRange, Exponential[FlightMode][ChanneltoSet - 1]);
             if (Step > HalfXRange - xPoint) {
                 Step = HalfXRange - xPoint;
             }
@@ -4271,7 +4276,7 @@ void DisplayCurve()
         Step  = APPROXIMATION;
         yDot2 = 0;
         for (xPoint = HalfXRange; xPoint >= 0; xPoint -= Step) { // Simulate a curve with many short lines to speed it up
-            yPoint = MapExp(xPoint, 0, HalfXRange, 0, TopHalfYRange, Exponential[FlightMode][ChanneltoSet - 1]);
+            yPoint = MapWithExponential(xPoint, 0, HalfXRange, 0, TopHalfYRange, Exponential[FlightMode][ChanneltoSet - 1]);
             if (Step > xPoint) {
                 Step = xPoint;
             }
@@ -4418,7 +4423,6 @@ void ReceiveModelFile()
 {
     uint64_t      RXPipe;
     uint32_t      RXTimer = 0;
-    char          Complete[]   = "play 0,17,0";      // end noise
     char          ModelsView_filename[] = "filename";
     char          ProgressStart[]       = "vis Progress,1";
     char          ProgressEnd[]         = "vis Progress,0";
@@ -4551,7 +4555,7 @@ void ReceiveModelFile()
     strcat(msg, Str(nb1,Fsize,0));  
     strcat(msg,bytes);     
     ShowFileProgress(msg);
-    SendCommand(Complete);
+    PlaySound(BEEPCOMPLETE);
 }
 
 /*********************************************************************************************************************************/
@@ -4559,7 +4563,7 @@ void ReceiveModelFile()
 /** @brief SEND A MODEL FILE */ 
 void SendModelFile()
 {
-    char          Complete[]      = "play 0,17,0";      // end noise
+   
     char          ProgressStart[] = "vis Progress,1";
     char          ProgressEnd[]   = "vis Progress,0";
     char          Progress[]      = "Progress";
@@ -4661,30 +4665,25 @@ void SendModelFile()
     strcat (msg, Str(nb1,Fsize,0));
     strcat (msg,bytes);
     ShowFileProgress(msg);
-    SendCommand(Complete);
+    PlaySound(BEEPCOMPLETE);
 }
 
 /*********************************************************************************************************************************/
 
 void SoundFlightMode()
 {
-    char b1[] = "play 0,12,0";
-    char b2[] = "play 0,13,0";
-    char b3[] = "play 0,14,0";
-    char b4[] = "play 0,15,0";
-
     switch (FlightMode) {
         case 1:
-            SendCommand(b1);
+            PlaySound(BANKONE);
             break;
         case 2:
-            SendCommand(b2);
+            PlaySound(BANKTWO);
             break;
         case 3:
-            SendCommand(b3);
+             PlaySound(BANKTHREE);
             break;
         case 4:
-            SendCommand(b4);
+            PlaySound(BANKFOUR);
             break;
         default:
             break;
@@ -4838,7 +4837,7 @@ void PopulateMacrosView(){
     char Duration[]         =   "Dur";
     uint8_t n               =   PreviousMacroNumber;
    
-    if (n < 100) {                                                                        // Read previous values before moveing to next  
+    if (n < 8) {                                                                        // Read previous values before moveing to next  
         MacrosBuffer[n][MACROTRIGGERCHANNEL]    = GetValue(TriggerChannel);
         MacrosBuffer[n][MACROMOVECHANNEL]       = GetValue(MoveToChannel);
         MacrosBuffer[n][MACROMOVETOPOSITION]    = GetValue(MoveToPosition);
@@ -4965,7 +4964,7 @@ void  EndBuddyView(){
 }
 /*********************************************************************************************************************************/
 
-void  DoNumberedCommands(uint8_t nc){ // These gradually are replacing word-invoked commands for speed and economy
+FASTRUN void  DoNumberedCommands(uint8_t nc){ // These gradually are replacing word-invoked commands for speed and economy
   
     char pModelsView[]  = "page ModelsView";
     char mn[]           = "ModelNumber";
@@ -5038,7 +5037,7 @@ void  DoNumberedCommands(uint8_t nc){ // These gradually are replacing word-invo
 
 /*********************************************************************************************************************************/
 
-void DisplayCurveAndServoPos(){
+FASTRUN void DisplayCurveAndServoPos(){
             DisplayCurve();
             SavedLineX = 0;  
             ShowServoPos(); 
@@ -5051,7 +5050,7 @@ void DisplayCurveAndServoPos(){
  * BUTTON WAS PRESSED (DEAL WITH INPUT FROM NEXTION DISPLAY)
  *
  */
-void ButtonWasPressed()
+FASTRUN void ButtonWasPressed()
 {
   if (TextIn[0] & 128 ){                                // first byte hi bit indicates a numbered command
           DoNumberedCommands(TextIn[0] & 127);          // send number with the high bit off.
@@ -5217,6 +5216,8 @@ void ButtonWasPressed()
     char PowerOff[]                = "PowerOff";
     char OffNow[]                  = "OffNow"; // force power off
     char StillConnected[]          = "vis StillConnected,1";
+    char StillConnectedBox[]       = "StillConnected";
+    char StillConnectedMsg[]       = "Disconnect RX!";
     char NotStillConnected[]       = "vis StillConnected,0";
     char OptionsViewS[]            = "OptionsViewS";
     char Pto[]                     = "Pto";
@@ -5287,7 +5288,6 @@ void ButtonWasPressed()
     char Ex1[]                     = "Ex1";
     char Expo[]                    = "Expo";
     char AudioView[]               = "AudioView";
-    char cb0[]                     = "cb0";
     char n1[]                      = "n1";
     char h0[]                      = "h0";
     char c0[]                      = "c0";
@@ -5456,7 +5456,6 @@ void ButtonWasPressed()
             SendCommand(page_AudioView);
             SendValue(n0,AudioVolume);
             SendValue(Ex1,AudioVolume);
-            SendText (cb0,OpeningFanfare);
             SendValue(n1,Brightness);
             SendValue(h0,Brightness);
             SendValue(c0,PlayFanfare);
@@ -5550,15 +5549,15 @@ void ButtonWasPressed()
                 TxName[j] = 0;
             }
             SendValue(Progress,35);
-            Qnh                 = GetValue(QNH);
-            DeltaGMT            = GetValue(dGMT);
+            Qnh = (uint16_t)      GetValueSafer(QNH); // error protected version
+            DeltaGMT            = GetValueSafer(dGMT);
             SendValue(Progress,45);
-            TrimFactor          = GetValue(trf);
-            LowBattery          = GetValue(Bwn);
-            ScreenTimeout       = GetValue(ScreenViewTimeout);
-            CopyTrimsToAll      = GetValue(c0);
+            TrimFactor          = GetValueSafer(trf);
+            LowBattery          = GetValueSafer(Bwn);
+            ScreenTimeout       = GetValueSafer(ScreenViewTimeout);
+            CopyTrimsToAll      = GetValueSafer(c0);
             SendValue(Progress,100);
-            Inactivity_Timeout  = GetValue(Pto) * TICKSPERMINUTE;
+            Inactivity_Timeout  = GetValueSafer(Pto) * TICKSPERMINUTE;
             if (Inactivity_Timeout < INACTIVITYMINIMUM) Inactivity_Timeout = INACTIVITYMINIMUM;
             if (Inactivity_Timeout > INACTIVITYMAXIMUM) Inactivity_Timeout = INACTIVITYMAXIMUM;
             FixDeltaGMTSign();
@@ -5795,11 +5794,13 @@ void ButtonWasPressed()
         }
         if (InStrng(PowerOff, TextIn) > 0) {
             if (!LostContactFlag && BoundFlag) {
+                SendText(StillConnectedBox,StillConnectedMsg);
                 SendCommand(StillConnected);
                 Procrastinate(750); // 3/4 second
                 SendCommand(NotStillConnected);
             }
             else {
+                if (UseLog) LogPowerOff();
                 SaveAllParameters();
                 digitalWrite(POWER_OFF_PIN, HIGH);
             }
@@ -5808,6 +5809,8 @@ void ButtonWasPressed()
         }
 
         if (InStrng(OffNow, TextIn) > 0) {
+           if (UseLog) LogPowerOff();
+
             digitalWrite(POWER_OFF_PIN, HIGH); // force OFF in Options View
             ClearText();
             return;
@@ -6353,7 +6356,7 @@ void ButtonWasPressed()
         }
 
         if (InStrng(TR1, TextIn) > 0) { //  TR1->0
-            Trims[FlightMode][0] = TextIn[3];
+            if ((TextIn[3] <= 80 + 40) && (TextIn[3] >= 80 - 40)) Trims[FlightMode][0] = TextIn[3]; // Check in case out of range!
             if (CopyTrimsToAll){
             for (int fm = 1; fm < 5;++fm){
                       Trims[fm][0] = TextIn[3]; 
@@ -6363,9 +6366,10 @@ void ButtonWasPressed()
             ClearText(); 
             return;
         }
+
         if (InStrng(TR4, TextIn) > 0) { // TR4 ->1
             if (SticksMode == 1)  {
-                Trims[FlightMode][1] = TextIn[3];
+               if ((TextIn[3] <= 80 + 40) && (TextIn[3] >= 80 - 40)) Trims[FlightMode][1] = TextIn[3];
                 if (CopyTrimsToAll){
                     for (int fm = 1; fm < 5;++fm){
                       Trims[fm][1] = TextIn[3];
@@ -6374,7 +6378,7 @@ void ButtonWasPressed()
                 }
             }
             if (SticksMode == 2)  {
-                Trims[FlightMode][2] = TextIn[3];
+                if ((TextIn[3] <= 80 + 40) && (TextIn[3] >= 80 - 40)) Trims[FlightMode][2] = TextIn[3];
                 if (CopyTrimsToAll){
                         for (int fm = 0; fm < 5;++fm){
                         Trims[fm][2] = TextIn[3]; 
@@ -6387,14 +6391,14 @@ void ButtonWasPressed()
         }
         if (InStrng(TR2, TextIn) > 0) { // TR2 ->2
             if (SticksMode == 1) {
-                Trims[FlightMode][2] = TextIn[3];
+                if ((TextIn[3] <= 80 + 40) && (TextIn[3] >= 80 - 40)) Trims[FlightMode][2] = TextIn[3];
                 if (CopyTrimsToAll){
                         for (int fm = 1; fm < 5;++fm)
                         Trims[fm][2] = TextIn[3]; 
                 }
             }
             if (SticksMode == 2)  { 
-                Trims[FlightMode][1] = TextIn[3];
+                if ((TextIn[3] <= 80 + 40) && (TextIn[3] >= 80 - 40)) Trims[FlightMode][1] = TextIn[3];
                 if (CopyTrimsToAll){
                     for (int fm = 1; fm < 5;++fm){
                         Trims[fm][1] = TextIn[3]; 
@@ -6406,7 +6410,7 @@ void ButtonWasPressed()
             return;
         }
         if (InStrng(TR3, TextIn) > 0) { // TR3 ->3
-            Trims[FlightMode][3] = TextIn[3];
+            if ((TextIn[3] <= 80 + 40) && (TextIn[3] >= 80 - 40)) Trims[FlightMode][3] = TextIn[3];
             if (CopyTrimsToAll){
             for (int fm = 0; fm < 5;++fm){
                     Trims[fm][3] = TextIn[3]; 
@@ -6944,14 +6948,14 @@ switch(ch){
 // *************************************************************************************************************
 
 void IncTrim(uint8_t t){
-        char Complete[]   = "play 0,17,0";      // end noise
-        char BeepMiddle[] = "play 0,16,0";      // centre noise
+       
         bool Sounded = false;
         Trims[FlightMode][t] += 1;
         if (Trims[FlightMode][t] >= 120) {
             Trims[FlightMode][t]  = 120;
             if (TrimClicks) {
-                SendCommand(Complete);
+               
+                PlaySound(BEEPCOMPLETE);
                 Sounded = true;
                 TrimRepeatSpeed = DefaultTrimRepeatSpeed; 
              }
@@ -6959,24 +6963,23 @@ void IncTrim(uint8_t t){
         if (Trims[FlightMode][t] == 80)  {
             TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed at centre
              if (TrimClicks) {
-                SendCommand(BeepMiddle);
+                 PlaySound(BEEPMIDDLE);
                 Sounded = true;
             }
         }
         if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimViewPart(t);
-        if ((TrimClicks) && (!Sounded)) SendCommand (click0);
+        if ((TrimClicks) && (!Sounded)) PlaySound(CLICKZERO);
 }
 // *************************************************************************************************************
 
 void DecTrim(uint8_t t){
-        char Complete[]   = "play 0,17,0";      // end noise
-        char BeepMiddle[] = "play 0,16,0";      // centre noise
+        
         bool Sounded = false;
          Trims[FlightMode][t] -= 1;
          if (Trims[FlightMode][t] <= 40) {
              Trims[FlightMode][t] = 40;
              if (TrimClicks) {
-                SendCommand(Complete);
+                PlaySound(BEEPCOMPLETE);
                 Sounded = true;
                  TrimRepeatSpeed = DefaultTrimRepeatSpeed; 
              }
@@ -6984,12 +6987,12 @@ void DecTrim(uint8_t t){
          if (Trims[FlightMode][t] == 80)  {
              TrimRepeatSpeed = DefaultTrimRepeatSpeed;         // Restore default trim repeat speed at centre
             if (TrimClicks) {
-                SendCommand(BeepMiddle);
+                PlaySound(BEEPMIDDLE);
                 Sounded = true;
             }
          }
         if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimViewPart(t);
-        if ((TrimClicks) && (!Sounded)) SendCommand (click0);
+        if ((TrimClicks) && (!Sounded)) PlaySound(CLICKZERO);
 }
 // *************************************************************************************************************
 
@@ -7073,7 +7076,7 @@ void CalibrateEdgeSwitches(){                                        // This fun
 }  
 /************************************************************************************************************/
 
-void ReadSwitches()  // and indeed read digital trims if these are fitted
+FASTRUN void ReadSwitches()  // and indeed read digital trims if these are fitted
 {
     byte flag = 0;
     for (int i = 0; i < 8; ++i) {
@@ -7119,7 +7122,7 @@ void GetRXVersionNumber()
 
 /************************************************************************************************************/
 
-float GetFromAckPayload(){
+FASTRUN float GetFromAckPayload(){
     union  {float Val32;uint8_t Val8[4];} ThisUnion;
     ThisUnion.Val8[0] = AckPayload.Byte1;
     ThisUnion.Val8[1] = AckPayload.Byte2;
@@ -7154,7 +7157,7 @@ void GetTemperature()
     snprintf(ModelTemperature, 5, "%f", RXModelTemperature);
 }
 /************************************************************************************************************/
-void ParseAckPayload()
+FASTRUN void ParseAckPayload()
 {
     if (AckPayload.Purpose & 0x80)                                       // Hi bit is now the **HOP NOW!!** flag
     {
@@ -7183,7 +7186,7 @@ void ParseAckPayload()
             case 5:
                  RXModelVolts = GetFromAckPayload();
                 if (RXModelVolts > 0) {
-                    VoltsDetected = true;
+                    RXVoltsDetected = true;
                     snprintf(ModelVolts, 5, "%f", RXModelVolts);
                 }
                 break;
@@ -7242,7 +7245,7 @@ void ParseAckPayload()
     }
 }
 /************************************************************************************************************/
-void CheckGapsLength()
+FASTRUN void CheckGapsLength()
 {
     if (GapStart > 0) { // when reconnected, how long was connection lost?
         ++GapCount;
@@ -7282,7 +7285,8 @@ char NewName[35];
         if (GetButtonPress()) ButtonWasPressed();     // Deal with button ... don't want to miss one!
         if (LastModelLoaded != ModelNumber) {
             if (ModelNumber >= 1) {                   // Don't use number zero
-                 ReadOneModel(ModelNumber);
+                 ReadOneModel(ModelNumber);   
+                 if (UseLog) LogThisModel();
                  LastModelLoaded = ModelNumber;
                  UpdateModelsNameEveryWhere();  
             }
@@ -7304,7 +7308,7 @@ void  CheckScanButton(){
 /************************************************************************************************************/
 // LOOP
 /************************************************************************************************************/
-void loop()
+FASTRUN void loop()
 {  
     KickTheDog();                    // Watchdog
     if (GetButtonPress()) {

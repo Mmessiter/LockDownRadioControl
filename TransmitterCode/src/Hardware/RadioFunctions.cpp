@@ -13,29 +13,13 @@ float PEndTime   = 0;
 float Pduration  = 0;
 #endif
 
-// **** Decompresses cc*3/4 x 16 BIT values up to cc loading only their low 12 BITS cc must be divisble by 4! ******************
-//void DeComp(uint16_t* d, uint16_t* c, int cc)
-//{
- //   int p = 0, l = 0;
- //   for (l = 0; l < (cc * 3 / 4); l += 3) {
- //       d[p] = c[l] >> 4;
- //       p++;
- //       d[p] = (c[l] & 0xf) << 8 | c[l + 1] >> 8;
- //       p++;
- //       d[p] = (c[l + 1] & 0xff) << 4 | c[l + 2] >> 12;
- //       p++;
- //       d[p] = c[l + 2] & 0xfff;
- //       p++;
- //   }
-//}
-
 /**
  * Compresses uint16_t* buffer values (each with 12 bit resolution - the lower 12 bits).
  * @param compressed_buf[out] Must have allocated 3/4 the size of uncompressed_buf
  * @param uncompressed_buf[in]
  * @param uncompressed_size Size is in units of uint16_t (aka word or unsigned short). This *must* be divisible by 4.
  */
-void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uint8_t uncompressed_size)
+FASTRUN void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uint8_t uncompressed_size)
 {
     uint8_t p = 0;
     for (int l = 0; l < (uncompressed_size * 3 / 4); l += 3) {
@@ -50,7 +34,7 @@ void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uint8_t unco
 }
 /************************************************************************************************************/
 
-void TryOtherPipe()
+FASTRUN void TryOtherPipe()
 {
     if (TotalledRecentPacketsLost > 10 || (!BoundFlag)) { // This avoids needless pipe swapping during poor connection
         if (BoundFlag == true) {
@@ -67,7 +51,7 @@ void TryOtherPipe()
 
 /************************************************************************************************************/
 
-void BufferNewPipe()
+FASTRUN void BufferNewPipe()
 {
     SendBuffer[0] = (uint8_t)((NewPipe >> 56) & 0xFF); // if not yet bound, send pipe
     SendBuffer[1] = (uint8_t)((NewPipe >> 48) & 0xFF);
@@ -130,11 +114,39 @@ void ExecuteMacro(){                                                            
 
 // *************** END OF MACROS ZONE ************************************************
 
+
+/*********************************************************************************************************************************/
+
+FASTRUN void FailedPacket()
+{
+    int SecondsRemaining;
+    if (GapStart == 0) GapStart = millis(); // To keep track of gaps' length
+    ++RecentPacketsLost;
+    ++TotalledRecentPacketsLost; // this is to keep track of events when receiver is off
+    if (RecentPacketsLost == 1){HopToNextChannel();}; // Hop immediately after losing one packet in case that fixes it!
+    if (RecentPacketsLost >= LOSTCONTACTCUTOFF) {
+      
+        LostContactFlag   = true;
+        Reconnected = false;
+        RecentPacketsLost = 0;
+       
+        if ((millis() - GapStart) > RED_LED_ON_TIME) // there's no need to blink red for every single lost packet. Only after 1/2 second of no connection.
+        {  
+            if  (LedWasGreen && UseLog) LogThisLongGap(); 
+            RedLedOn(); 
+            ReEnableScanButton();
+        }
+    }
+    ++LostPackets;
+     SecondsRemaining = (Inactivity_Timeout / 1000) - (millis() - Inactivity_Start) / 1000;
+    if (SecondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH);             // INACTIVITY POWER OFF HERE!!
+}
+
 /************************************************************************************************************/
 //****************** Function to send data to receiver ******************************************************
 /************************************************************************************************************/
 
-void SendData()
+FASTRUN void SendData()
 {
     uint32_t ElapsedSinceLastSend = (millis() - TxPace);
     if (NEXTION.available()) return;              // was a button pressed?
@@ -142,9 +154,13 @@ void SendData()
         ShowComms();                              // There is PLENTY of time to fit in these calls because there are about 6 ms spare still WHEN CONNECTED
         ReadSwitches();                           // Check switch positions
         CheckTimer();  
+        if (PreviousUkRules != UkRules){
+             LogUKRules();
+             PreviousUkRules = UkRules;
+        }
     }
-    if ((ElapsedSinceLastSend >= PACEMAKER) || (LostContactFlag)){
-        
+ // if ((ElapsedSinceLastSend >= PACEMAKER) || (LostContactFlag)){ 
+    if ((ElapsedSinceLastSend >= PACEMAKER) || (RecentPacketsLost > 0)){ //  Last packet was lost so don't wait before retry 
         TxPace = millis();
         GetNewChannelValues();                    // Load SendBuffer with new servo positions
         if (UseMacros) ExecuteMacro();            // Modify it if macro is running
@@ -298,7 +314,7 @@ void ScanAllChannels()
 
  // This function hops to the next channel in the FFHS array (about 16 times a second)
 
-void HopToNextChannel()
+FASTRUN void HopToNextChannel()
 {
     
     Radio1.setChannel(NextChannel);    // Hop !
@@ -327,7 +343,7 @@ void HopToNextChannel()
 
 /*********************************************************************************************************************************/
 
-void InitRadio(uint64_t Pipe)
+FLASHMEM void InitRadio(uint64_t Pipe)
 {
     Radio1.begin();
     Radio1.setPALevel(RF24_PA_MAX);
