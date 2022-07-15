@@ -164,6 +164,7 @@ var _radio_functions_8h =
     [ "DrawLine", "_radio_functions_8h.html#acbef1d41e1bd646b60a6e8afd9c66880", null ],
     [ "FailedPacket", "_radio_functions_8h.html#a783a0141bea15d8539730afd4b3b06a3", null ],
     [ "FillBox", "_radio_functions_8h.html#a93d9f055a2723479bb28f6c53fdb2643", null ],
+    [ "Force_ReDisplay", "_radio_functions_8h.html#aa1e81e58421a34fdfd7bfb31925f5a90", null ],
     [ "GetNewChannelValues", "_radio_functions_8h.html#a1a11fabb6c953055a80c5df5eebbfb0d", null ],
     [ "GetSlaveChannelValues", "_radio_functions_8h.html#a4635a8fc77c9f57fca53a5206cd5e571", null ],
     [ "GreenLedOn", "_radio_functions_8h.html#a62e53eb9359c32b666e3386d62c57037", null ],
