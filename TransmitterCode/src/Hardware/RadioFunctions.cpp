@@ -185,9 +185,7 @@ FASTRUN void SendData()
         }else{
             FailedPacket();
         }
-    } else {
-       // Serial.println ((millis() - TxPace)); // show time to spare!
-    }
+    } 
 }
 /************************************************************************************************************/
 // This function draws or re-draws and clears the box that display wave band scanning information
