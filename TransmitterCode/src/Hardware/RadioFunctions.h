@@ -12,7 +12,7 @@
 
 #define TXVERSION_MAJOR   1
 #define TXVERSION_MINOR   8
-#define TXVERSION_MINIMUS 2
+#define TXVERSION_MINIMUS 3
 
 // **************************************************************************
 //                               Includes                                   *
@@ -38,7 +38,7 @@
 //***************************************************************************
 
 // #define DB_NEXTION        // Debug NEXTION and SD card data
-// #define DB_FHSS           // Debug real time FHSS data
+ #define DB_FHSS           // Debug real time FHSS data
 // #define DB_SENSORS        // Debug Sensors
 // #define DB_BIND           // Debug Binding
 // #define DB_SWITCHES       // Debug Switches
@@ -402,7 +402,8 @@ void ShowLogFile(uint8_t StartLine);
 void LogThisLongGap();
 void LogThisModel();
 void Force_ReDisplay();
-
+FASTRUN void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uint8_t uncompressed_size);
+FASTRUN void BufferNewPipe();
 
 
 /*********************************************************************************************************************************/

@@ -123,7 +123,6 @@ FASTRUN void FailedPacket()
     if (GapStart == 0) GapStart = millis(); // To keep track of gaps' length
     ++RecentPacketsLost;
     ++TotalledRecentPacketsLost; // this is to keep track of events when receiver is off
-    if (RecentPacketsLost == 1){HopToNextChannel();}; // Hop immediately after losing one packet in case that fixes it!
     if (RecentPacketsLost >= LOSTCONTACTCUTOFF) {
       
         LostContactFlag   = true;
@@ -148,48 +147,23 @@ FASTRUN void FailedPacket()
 
 FASTRUN void SendData()
 {
-    uint32_t ElapsedSinceLastSend = (millis() - TxPace);
-    if (NEXTION.available()) return;              // was a button pressed?
-    if (ElapsedSinceLastSend <= 3) {
-        ShowComms();                              // There is PLENTY of time to fit in these calls because there are about 6 ms spare still WHEN CONNECTED
-        ReadSwitches();                           // Check switch positions
-        CheckTimer();  
-        GetNewChannelValues();                    // Load SendBuffer with new servo positions
-        ShowServoPos();
-        if (PreviousUkRules != UkRules){
-             LogUKRules();
-             PreviousUkRules = UkRules;
-        }
-    }
-    if ((ElapsedSinceLastSend >= PACEMAKER) || (RecentPacketsLost > 0)){ //  Last packet was lost so don't wait before retry 
+    if (((millis() - TxPace) >= PACEMAKER) || (LostContactFlag)){ //  Last packet was lost so don't wait before retry 
         TxPace = millis();
-        if (UseMacros) ExecuteMacro();            // Modify it if macro is running
-        if (DoSbusSendOnly) {                     // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
-            ReadSwitches();
+        if (UseMacros) ExecuteMacro();                  // Modify it if macro is running
+        if (DoSbusSendOnly) {                           // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
             MapToSBUS();
-            return;                               // no more to do here!
+            return;                                     // no more to do here!
         }
-        if (BuddyMaster) {GetSlaveChannelValues();} // If buddy master, check where student's sticks etc. are.
-        if (!BoundFlag && !(CurrentView == CALIBRATEVIEW) && !(CurrentView == STICKSVIEW)){
-            BufferNewPipe(); // if not yet bound, send our pipe
-        }
-        LoadPacketData();    // extra parameters appended to the data packet
+        LoadPacketData();                               // extra parameters appended to the data packet
         if (LostContactFlag){
             if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {
                 TryOtherPipe(); // heer
                 PipeTimeout = millis();
             }     
             NextChannel = * (FHSSChPointer + random(RECONNECT_CHANNELS_COUNT) + RECONNECT_CHANNELS_START);    // a **random** reconnect channel (selected from first five)
-            ShowComms();                       // NEEDED WHEN NOT CONNECTED ...                       
-            GetNewChannelValues();             
-            ShowServoPos();
-           
-            ReadSwitches();                                
-            CheckTimer();  
             HopToNextChannel();
         }
         Connected = false;                                         // Assume the worst until ACK is received.
-        Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);   // Compress 32 bytes down to 24
         Radio1.flush_rx();                                         // This avoids a lockup that happens when the FIFO gets full.
         Radio1.flush_tx();                                         // This avoids a lockup that happens when the FIFO gets full.
                                                                    //  *************************************** SEND *************************************************************************************
@@ -211,6 +185,8 @@ FASTRUN void SendData()
         }else{
             FailedPacket();
         }
+    } else {
+       // Serial.println ((millis() - TxPace)); // show time to spare!
     }
 }
 /************************************************************************************************************/

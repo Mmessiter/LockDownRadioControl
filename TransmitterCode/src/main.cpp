@@ -7342,7 +7342,21 @@ FASTRUN void loop()
         GetStatistics();             // Do stats
         RangeTestStart = millis();
     }
-    ShowServoPos();                 // Show servos positions
+    if (PreviousUkRules != UkRules){
+        LogUKRules();
+        PreviousUkRules = UkRules;
+    }
+    ShowComms();                              // Screen Data 
+    ReadSwitches();                           // Check switch positions
+    CheckTimer();                             // Screen Timer 
+    GetNewChannelValues();                    // Load SendBuffer with new servo positions
+    ShowServoPos();                           // Servo positions
+    if (!BoundFlag && (CurrentView != CALIBRATEVIEW) && (CurrentView != STICKSVIEW)){
+            BufferNewPipe();                  // if not yet bound, insert our pipe into sendbuffer
+        }
+   if (BuddyMaster) {GetSlaveChannelValues();} // If buddy master, check where student's sticks etc. are.
+    Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);   // Compress 32 bytes down to 24
+   
     if ((millis() - TxOnTime) > 2000) { // Transmit nothing for first 2 seconds
 
         switch (CurrentMode) {

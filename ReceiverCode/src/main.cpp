@@ -505,9 +505,7 @@ FASTRUN void ReceiveData(){
       }
     }
     if (ReadData()) {
-       // if (!FirstLostPacket) Serial.println ("Hooray!!");                             // Proves it worked!! 
         ReadExtraParameters();                                                         // Check the extra parameters
-        FirstLostPacket = true;                                                        // it will be when one is lost!
     } else {        
         if (millis() - SBUSTimer >= SBUSRATE) {                                        // No new packet yet - but maybe it's time to dispatch the last?
             if (BoundFlag && (millis() > 10000)) {
@@ -517,15 +515,9 @@ FASTRUN void ReceiveData(){
                 }
             }                                          
         }                                                                                                                                           
-    if (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT) {                      
-        if (FirstLostPacket) {
-                 TryNextChannel();
-            } else {
-            //   if (!FirstLostPacket) Serial.println ("RECONNECTING...");     
-                 FirstLostPacket = true;
-                 Reconnect();
-            }                                                                           // Try to reconnect.
-        } 
+        if (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT) {                     
+                Reconnect();
+        }                                                                               // Try to reconnect. 
     }
 }
 /************************************************************************************************************/
