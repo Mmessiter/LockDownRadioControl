@@ -2217,10 +2217,10 @@ void UpdateModelsNameEveryWhere()
     char TrimView_FlightMode[]  = "t1";
     char GraphView_fmode[]      = "fmode";
     char SticksView_t1[]        = "t1";
-    char FrontView_fm1[]        = "fm1";
-    char FrontView_fm2[]        = "fm2";
-    char FrontView_fm3[]        = "fm3";
-    char FrontView_fm4[]        = "fm4";
+  //  char FrontView_fm1[]        = "fm1";
+  //  char FrontView_fm2[]        = "fm2";
+  //  char FrontView_fm3[]        = "fm3";
+  //  char FrontView_fm4[]        = "fm4";
     char NoName[17];
     char Ch[] = "Channel ";
     char Nbuf[7];
@@ -2264,7 +2264,7 @@ void UpdateModelsNameEveryWhere()
             SendText(TrimView_FlightMode, fm1);
             UpdateTrimView();
         }
-        if (CurrentView == FRONTVIEW) SendValue(FrontView_fm1, 1);
+      //  if (CurrentView == FRONTVIEW) SendValue(FrontView_fm1, 1);
     }
     if (FlightMode == 2) {
         if (CurrentView == STICKSVIEW) SendText(SticksView_t1, fm2);
@@ -2273,7 +2273,7 @@ void UpdateModelsNameEveryWhere()
             SendText(TrimView_FlightMode, fm2);
             UpdateTrimView();
         }
-        if (CurrentView == FRONTVIEW) SendValue(FrontView_fm2, 1);
+      //  if (CurrentView == FRONTVIEW) SendValue(FrontView_fm2, 1);
     }
     if (FlightMode == 3) {
         if (CurrentView == STICKSVIEW) SendText(SticksView_t1, fm3);
@@ -2282,7 +2282,7 @@ void UpdateModelsNameEveryWhere()
             SendText(TrimView_FlightMode, fm3);
             UpdateTrimView();
         }
-        if (CurrentView == FRONTVIEW) SendValue(FrontView_fm3, 1);
+     //   if (CurrentView == FRONTVIEW) SendValue(FrontView_fm3, 1);
     }
     if (FlightMode == 4) {
         if (CurrentView == STICKSVIEW) SendText(SticksView_t1, fm4);
@@ -2291,7 +2291,7 @@ void UpdateModelsNameEveryWhere()
             SendText(TrimView_FlightMode, fm4);
             UpdateTrimView();
         }
-        if (CurrentView == FRONTVIEW) SendValue(FrontView_fm4, 1);
+       // if (CurrentView == FRONTVIEW) SendValue(FrontView_fm4, 1);
     }
 }
 
