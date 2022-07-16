@@ -7350,19 +7350,16 @@ FASTRUN void loop()
     ReadSwitches();                           // Check switch positions
     CheckTimer();                             // Screen Timer 
     GetNewChannelValues();                    // Load SendBuffer with new servo positions
-    ShowServoPos();                           // Servo positions
-    if (!BoundFlag && (CurrentView != CALIBRATEVIEW) && (CurrentView != STICKSVIEW)){
-            BufferNewPipe();                  // if not yet bound, insert our pipe into sendbuffer
-        }
-   if (BuddyMaster) {GetSlaveChannelValues();} // If buddy master, check where student's sticks etc. are.
-    Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);   // Compress 32 bytes down to 24
+    ShowServoPos();                           // Servo positions use channel values
+    if (!BoundFlag)  BufferNewPipe();         // if not yet bound, insert our pipe into sendbuffer
+    if (BuddyMaster) GetSlaveChannelValues(); // If buddy master, check where student's sticks etc. are.
+    Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);               // Compress 32 bytes down to 24
    
-    if ((millis() - TxOnTime) > 2000) { // Transmit nothing for first 2 seconds
+    if ((millis() - TxOnTime) > 2000) {                                    // Transmit nothing for first 2 seconds
 
         switch (CurrentMode) {
             case NORMAL:            // 0
                 SendData();
-                if (!LedWasGreen) ShowComms();   // Show when not connected
                 break;
             case CALIBRATELIMITS:   // 1
                 CalibrateSticks();
