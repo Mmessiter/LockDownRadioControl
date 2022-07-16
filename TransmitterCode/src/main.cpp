@@ -6897,8 +6897,8 @@ void GetFlightMode()
         if (AnnounceBanks) SoundFlightMode();
         if (CurrentView == FRONTVIEW) ShowFlightMode();
         if (PreviousFlightMode == 4)  TimerMillis = millis();
-        if (FlightMode == 4)  PausedSecs = Secs + (Mins * 60) + (Hours * 3600); // Remember how long so far
-        LastSeconds = 0;               // to force redisplay of timer
+        if (FlightMode == 4) PausedSecs = Secs + (Mins * 60) + (Hours * 3600); // Remember how long so far
+        LastSeconds = 0;                                                       // to force redisplay of timer
         CheckTimer(); 
         UpdateModelsNameEveryWhere();
         if (CurrentView == GRAPHVIEW) DisplayCurveAndServoPos();
