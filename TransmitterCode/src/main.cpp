@@ -6896,18 +6896,12 @@ void GetFlightMode()
         if (Connected) LogNewFlightMode();
         if (AnnounceBanks) SoundFlightMode();
         if (CurrentView == FRONTVIEW) ShowFlightMode();
-        LastSeconds = 0;               // Just to force redisplay of timer
-        if (PreviousFlightMode == 4) { // Start or restart timer when auto goes off
-            TimerMillis = millis();
-        }
-        if (FlightMode == 4) {                                // Pause timer when auto on
-            PausedSecs = Secs + (Mins * 60) + (Hours * 3600); // Remember how long so far
-        }
-        CheckTimer(); // update timer
+        if (PreviousFlightMode == 4)  TimerMillis = millis();
+        if (FlightMode == 4)  PausedSecs = Secs + (Mins * 60) + (Hours * 3600); // Remember how long so far
+        LastSeconds = 0;               // to force redisplay of timer
+        CheckTimer(); 
         UpdateModelsNameEveryWhere();
-        if (CurrentView == GRAPHVIEW) {
-            DisplayCurveAndServoPos();
-         }
+        if (CurrentView == GRAPHVIEW) DisplayCurveAndServoPos();
     }
     PreviousFlightMode = FlightMode;
 }
