@@ -154,16 +154,15 @@ FASTRUN void SendData()
         ShowComms();                              // There is PLENTY of time to fit in these calls because there are about 6 ms spare still WHEN CONNECTED
         ReadSwitches();                           // Check switch positions
         CheckTimer();  
+        GetNewChannelValues();                    // Load SendBuffer with new servo positions
+        ShowServoPos();
         if (PreviousUkRules != UkRules){
              LogUKRules();
              PreviousUkRules = UkRules;
         }
     }
- // if ((ElapsedSinceLastSend >= PACEMAKER) || (LostContactFlag)){ 
     if ((ElapsedSinceLastSend >= PACEMAKER) || (RecentPacketsLost > 0)){ //  Last packet was lost so don't wait before retry 
         TxPace = millis();
-        GetNewChannelValues();                    // Load SendBuffer with new servo positions
-        ShowServoPos();
         if (UseMacros) ExecuteMacro();            // Modify it if macro is running
         if (DoSbusSendOnly) {                     // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
             ReadSwitches();
@@ -181,7 +180,10 @@ FASTRUN void SendData()
                 PipeTimeout = millis();
             }     
             NextChannel = * (FHSSChPointer + random(RECONNECT_CHANNELS_COUNT) + RECONNECT_CHANNELS_START);    // a **random** reconnect channel (selected from first five)
-            ShowComms();                       // NEEDED WHEN NOT CONNECTED                        
+            ShowComms();                       // NEEDED WHEN NOT CONNECTED ...                       
+            GetNewChannelValues();             
+            ShowServoPos();
+           
             ReadSwitches();                                
             CheckTimer();  
             HopToNextChannel();
