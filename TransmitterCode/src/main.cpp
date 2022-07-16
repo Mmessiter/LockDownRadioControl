@@ -3199,7 +3199,10 @@ FLASHMEM void setup()
     MySbus.begin();
     SetUKFrequencies(); 
     SetAudioVolume(AudioVolume);
-    if (PlayFanfare) PlaySound(THEFANFARE);
+    if (PlayFanfare) {
+        PlaySound(THEFANFARE);
+        Procrastinate(4000); // FANFARE TAKES 4 SECONDS :-)
+        }
     ScreenTimeTimer = millis();
     RestoreBrightness();
     if (UseLog) {
@@ -7313,7 +7316,6 @@ void  CheckScanButton(){
              b5isGrey = true;
         }   
 }
-
 
 /************************************************************************************************************/
 // LOOP
