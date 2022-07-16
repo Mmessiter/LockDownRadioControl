@@ -3179,7 +3179,7 @@ FLASHMEM void setup()
     SendValue(FrontView_Mins, 0);
     SendValue(FrontView_Secs, 0);
     //  ***************************************************************************************
-    // SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
+    //  SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
     //  **   BUT then re-comment it!! Otherwise it will reset to same time on every boot up! **
     //  ***************************************************************************************
     BoundFlag     = false;
@@ -3191,7 +3191,7 @@ FLASHMEM void setup()
     MySbus.begin();
     SetUKFrequencies(); 
     SetAudioVolume(AudioVolume);
-    if (PlayFanfare) {
+    if (PlayFanfare){
         PlaySound(THEFANFARE);
         Procrastinate(4000); // FANFARE TAKES 4 SECONDS :-)
         }
