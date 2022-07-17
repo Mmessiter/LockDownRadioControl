@@ -147,7 +147,7 @@ FASTRUN void FailedPacket()
 
 FASTRUN void SendData()
 {
-    if (NEXTION.available()) return;//
+    if (NEXTION.available()) return; // in case key was hit
     if (((millis() - TxPace) >= PACEMAKER) || (LostContactFlag)){ //  Last packet was lost so don't wait before retry 
         TxPace = millis();
         if (UseMacros) ExecuteMacro();                  // Modify it if macro is running
