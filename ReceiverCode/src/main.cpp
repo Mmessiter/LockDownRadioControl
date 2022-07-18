@@ -336,7 +336,7 @@ void ReadExtraParameters()
     return;
 }
 // ***************************************************************************************************************************************************
-// Here the GPS HUB is asked for 7 bytes of data over I2C. 
+// Here the GPS (Sensor) HUB is asked for 7 bytes of data over I2C. 
 // The first IDLEN (=3) bytes are the ID (LAT, LNG, etc...)
 // The next 4 bytes are the value (as a float).
 // The ID changes with each call
@@ -458,7 +458,7 @@ FASTRUN void ReadTheSensorHub(){
 }
 
 // ******************************************************************************************************************************************************************
-void SensorHubHasFailed(){       // If the I2C bus gets its knickers in a twist, it can lock up the reciever, so DON'T call it until landed and reset.
+void SensorHubHasFailed(){       // If the I2C bus gets its knickers in a twist, it can lock up the receiver, so DON'T call it until landed and reset.
 #define Failed  42
      LatitudeGPS     = Failed; 
      LongitudeGPS    = Failed;
