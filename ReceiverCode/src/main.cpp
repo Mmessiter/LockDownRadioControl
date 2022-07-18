@@ -291,7 +291,7 @@ void SetUKFrequencies(){
  * the parameter sent is defined by the packet number ... which goes only upto about 5
  * 
  * Note: If extra parameters are needed, the "HOPTIME" duration can be increased.
- * It's 50ms right now, which gives about 7 packets between hops.
+ * It's 97ms right now, which gives about 11 packets per hops.
  */
 void ReadExtraParameters()
 { uint16_t TwoBytes = 0; 

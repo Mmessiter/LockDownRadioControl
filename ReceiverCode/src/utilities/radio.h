@@ -198,13 +198,11 @@ void TryToConnectNow(){
 
 void ProdRadio(uint8_t Recon_Ch)
 {  // After switching radios, this prod allows EITHER to connect. Don't know why - yet!
-   // Re-setting up the radio may be required on power failure or unsufficient current supply. While this function
-   // addresses a power "drop-out" during Reconnect(), there may be times that require this while connected.
    
-    CurrentRadio->enableAckPayload();       // needed
-    CurrentRadio->enableDynamicPayloads();  // needed
-    CurrentRadio->maskIRQ(1, 1, 1);         // no interrupts - seems NEEDED at the moment - (line *IS* connected)
-    CurrentRadio->setCRCLength(RF24_CRC_8); // could be 16 or disabled
+    CurrentRadio->enableAckPayload();       
+    CurrentRadio->enableDynamicPayloads(); 
+    CurrentRadio->maskIRQ(1, 1, 1);         
+    CurrentRadio->setCRCLength(RF24_CRC_8); 
     CurrentRadio->setPALevel(RF24_PA_MAX);
     CurrentRadio->setDataRate(RF24_250KBPS);
     CurrentRadio->openReadingPipe(1, ThisPipe);
@@ -248,7 +246,7 @@ void TryTheOtherTransceiver(uint8_t Recon_Ch){
 
 /************************************************************************************************************/
 
-// This function is called when the system is busy but not receiving - to preempt very short SBUS timeouts (eg DJI).
+// This function is called when the system is busy but not receiving - to prevent very short SBUS timeouts (eg DJI).
 
 void KeepSbusHappy(){
     if (millis() < 20000) return;               // Let things settle down after connection for 20 seconds or so before using this
