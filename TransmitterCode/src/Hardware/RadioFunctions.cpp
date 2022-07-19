@@ -147,6 +147,37 @@ FASTRUN void FailedPacket()
     if (SecondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH);             // INACTIVITY POWER OFF HERE!!
 }
 
+
+/************************************************************************************************************/
+
+void TryToReconnect(){
+   if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {
+        TryOtherPipe(); 
+        PipeTimeout = millis();
+    }     
+    NextChannel = * (FHSSChPointer + random(RECONNECT_CHANNELS_COUNT) + RECONNECT_CHANNELS_START);    // a **random** reconnect channel (selected from first five)
+    HopToNextChannel();
+}
+/************************************************************************************************************/
+void PacketSucceded(){
+        ++RangeTestGoodPackets;
+        ++PacketNumber;
+        LostContactFlag = false;
+        RecentPacketsLost         = 0;
+        TotalledRecentPacketsLost = 0;
+        Connected                 = true;
+        if (BoundFlag) GreenLedOn();
+        CheckGapsLength();
+        StartInactvityTimeout();
+        Radio1.read(&AckPayload, AckPayloadSize);        //  "sizeof" doesn't work with externs,
+        ParseAckPayload();
+}
+
+/************************************************************************************************************/
+void FlushFifos(){
+        Radio1.flush_rx();                                         // This avoids a lockup that happens when the FIFO gets full.
+        Radio1.flush_tx();                                         // This avoids a lockup that happens when the FIFO gets full.
+}
 /************************************************************************************************************/
 //****************** Function to send data to receiver ******************************************************
 /************************************************************************************************************/
@@ -154,42 +185,15 @@ FASTRUN void FailedPacket()
 FASTRUN void SendData()
 {
     if (NEXTION.available()) return; // in case key was hit
-    if (((millis() - TxPace) >= PACEMAKER) || (LostContactFlag)){ //  Last packet was lost so don't wait before retry 
+    if (((millis() - TxPace) >= PACEMAKER) || (LostContactFlag)){ 
         TxPace = millis();
-        if (DoSbusSendOnly) {                           // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
-            MapToSBUS();
-            return;                                     // no more to do here!
-        }
-        LoadPacketData();                               // extra parameters appended to the data packet
-        if (LostContactFlag){
-            if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {
-                TryOtherPipe(); // heer
-                PipeTimeout = millis();
-            }     
-            NextChannel = * (FHSSChPointer + random(RECONNECT_CHANNELS_COUNT) + RECONNECT_CHANNELS_START);    // a **random** reconnect channel (selected from first five)
-            HopToNextChannel();
-        }
+        if (DoSbusSendOnly) {MapToSBUS();return;}                  // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
+        if (LostContactFlag) TryToReconnect();
+        LoadPacketData();                                          // extra parameters appended to the data packet
         Connected = false;                                         // Assume the worst until ACK is received.
-        Radio1.flush_rx();                                         // This avoids a lockup that happens when the FIFO gets full.
-        Radio1.flush_tx();                                         // This avoids a lockup that happens when the FIFO gets full.
-       
-
-                                                                   //  *************************************** SEND ***************************************************************************************
-        if  (Radio1.write(&CompressedData, SizeOfCompressedData)){ //  **************************** ! ACTUALLY SEND DATA ! *********************************************
-                                                                   //  ***************************** (Returns TRUE if ACK received) ****************************************************************************
-            ++RangeTestGoodPackets;
-            ++PacketNumber;
-            LostContactFlag = false;
-            RecentPacketsLost         = 0;
-            TotalledRecentPacketsLost = 0;
-            Connected                 = true;
-            if (BoundFlag) GreenLedOn();
-            CheckGapsLength();
-            StartInactvityTimeout();
-            if (Radio1.isAckPayloadAvailable()){                     //  This 'if' is redundant
-                    Radio1.read(&AckPayload, AckPayloadSize);        //  "sizeof" doesn't work with externs,
-                    ParseAckPayload();
-            } 
+        FlushFifos();
+        if  (Radio1.write(&CompressedData, SizeOfCompressedData)){ //  ************************** >>>>> SEND DATA TO RX <<<<< ***************************************                                                  
+            PacketSucceded();
         }else{
             FailedPacket();
         }

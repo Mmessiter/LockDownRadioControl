@@ -3188,7 +3188,6 @@ void setup()
     SendValue(FrontView_Mins, 0);
     SendValue(FrontView_Secs, 0);
     Procrastinate(1000);
-   
     //  ***************************************************************************************
     //  SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
     //  **   BUT then re-comment it!! Otherwise it will reset to same time on every boot up! **
