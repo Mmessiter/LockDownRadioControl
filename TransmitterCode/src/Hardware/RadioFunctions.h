@@ -346,6 +346,7 @@ extern uint32_t       Inactivity_Start;
 extern bool           UkRules;
 extern bool           PreviousUkRules;
 extern bool           UseLog;
+extern uint32_t       ShowServoTimer;
 
 // external (global) functions needed here
 extern void  GetSlaveChannelValues();

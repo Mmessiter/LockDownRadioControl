@@ -82,6 +82,7 @@ void StartMacro(uint8_t m){                                                     
     MacrosBuffer[m][MACRORUNNINGNOW] |= 1 ;                                                    // LOW BIT = "running now" flag
     MacroStartTime[m] = millis()          + ((MacrosBuffer[m][MACROSTARTTIME]) * 100);         // Note its Start moment
     MacroStopTime[m]  = MacroStartTime[m] + ((MacrosBuffer[m][MACRODURATION])  * 100);         // Note its Stop moment
+   
 }
 /************************************************************************************************************/
 void RunMacro(uint8_t m){                                                                       // Move a servo to a place                                            
@@ -155,7 +156,7 @@ FASTRUN void SendData()
     if (NEXTION.available()) return; // in case key was hit
     if (((millis() - TxPace) >= PACEMAKER) || (LostContactFlag)){ //  Last packet was lost so don't wait before retry 
         TxPace = millis();
-        if (UseMacros) ExecuteMacro();                  // Modify it if macro is running
+        if (UseMacros)  ExecuteMacro();                 // Modify it if macro is running
         if (DoSbusSendOnly) {                           // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
             MapToSBUS();
             return;                                     // no more to do here!
