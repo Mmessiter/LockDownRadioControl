@@ -255,6 +255,7 @@ var _radio_functions_8h =
     [ "ScanEnd", "_radio_functions_8h.html#a6fde7bc3d03bda84c33abdbe1ed7b5bf", null ],
     [ "ScanStart", "_radio_functions_8h.html#a40219e66b010dcf762b96491c9e668ec", null ],
     [ "SendBuffer", "_radio_functions_8h.html#a55f006b14432e3ce08ccbfc802f35cd8", null ],
+    [ "ShowServoTimer", "_radio_functions_8h.html#ae4989662282fe08eb2deb769a3611fa0", null ],
     [ "SizeOfCompressedData", "_radio_functions_8h.html#ac99b4fb4d71fa95d1ee8ab0a81696a4d", null ],
     [ "ThisRadio", "_radio_functions_8h.html#a2e695c7565eda3b02ff77324e274772b", null ],
     [ "TotalledRecentPacketsLost", "_radio_functions_8h.html#a7f485e1361fb90bec75e06944665686d", null ],
