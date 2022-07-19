@@ -405,7 +405,7 @@ void LogThisModel();
 void Force_ReDisplay();
 FASTRUN void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uint8_t uncompressed_size);
 FASTRUN void BufferNewPipe();
-
+void ExecuteMacro();
 
 /*********************************************************************************************************************************/
 

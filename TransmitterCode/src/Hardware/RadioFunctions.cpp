@@ -72,7 +72,7 @@ uint32_t ThisMoment = millis();
 }
 
 //***********************************************************************************************************
-void Beep(int p){
+void Look(int p){
     Serial.println (p);
 }
 //***********************************************************************************************************
@@ -90,7 +90,7 @@ void RunMacro(uint8_t m){                                                       
     if (RightNow >= MacroStartTime[m])  MacrosBuffer[m][MACRORUNNINGNOW] |= 2 ;                 // Set the ACTIVE Bit if started (BIT 1)
     if (RightNow >=  MacroStopTime[m])  MacrosBuffer[m][MACRORUNNINGNOW] &= 1 ;                 // Clear the ACTIVE Bit if expired (BIT 1)
     if (MacrosBuffer[m][MACRORUNNINGNOW] & 2) {
-      SendBuffer[(MacrosBuffer[m][MACROMOVECHANNEL])-1] = map(MacrosBuffer[m][MACROMOVETOPOSITION],0,180,MINMICROS,MAXMICROS); // Do it if currently active!
+       SendBuffer[(MacrosBuffer[m][MACROMOVECHANNEL])-1] = map(MacrosBuffer[m][MACROMOVETOPOSITION],0,180,MINMICROS,MAXMICROS); // Do it if currently active!
     }
 }
 /************************************************************************************************************/
@@ -121,7 +121,7 @@ void ExecuteMacro(){                                                            
 // *************** END OF MACROS ZONE ************************************************
 
 
-/*********************************************************************************************************************************/
+/***************************************************************************************/
 
 FASTRUN void FailedPacket()
 {
@@ -156,7 +156,6 @@ FASTRUN void SendData()
     if (NEXTION.available()) return; // in case key was hit
     if (((millis() - TxPace) >= PACEMAKER) || (LostContactFlag)){ //  Last packet was lost so don't wait before retry 
         TxPace = millis();
-        if (UseMacros)  ExecuteMacro();                 // Modify it if macro is running
         if (DoSbusSendOnly) {                           // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
             MapToSBUS();
             return;                                     // no more to do here!
@@ -173,7 +172,9 @@ FASTRUN void SendData()
         Connected = false;                                         // Assume the worst until ACK is received.
         Radio1.flush_rx();                                         // This avoids a lockup that happens when the FIFO gets full.
         Radio1.flush_tx();                                         // This avoids a lockup that happens when the FIFO gets full.
-                                                                   //  *************************************** SEND *************************************************************************************
+       
+
+                                                                   //  *************************************** SEND ***************************************************************************************
         if  (Radio1.write(&CompressedData, SizeOfCompressedData)){ //  **************************** ! ACTUALLY SEND DATA ! *********************************************
                                                                    //  ***************************** (Returns TRUE if ACK received) ****************************************************************************
             ++RangeTestGoodPackets;
