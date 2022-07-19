@@ -8,5 +8,6 @@ var searchData=
   ['fillbox_5',['FillBox',['../_radio_functions_8h.html#a93d9f055a2723479bb28f6c53fdb2643',1,'FillBox(int x1, int y1, int w, int h, int c):&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a93d9f055a2723479bb28f6c53fdb2643',1,'FillBox(int x1, int y1, int w, int h, int c):&#160;main.cpp']]],
   ['fixdeltagmtsign_6',['FixDeltaGMTSign',['../_transmitter_code_2src_2main_8cpp.html#a493eeacfcf61a53db5933a893f7d94a6',1,'main.cpp']]],
   ['floatfaderlinear_7',['floatFaderLinear',['../_quadcopter_2src_2main_8cpp.html#a52df4cd3a995a94095b13b2a5ff6413a',1,'main.cpp']]],
-  ['force_5fredisplay_8',['Force_ReDisplay',['../_radio_functions_8h.html#aa1e81e58421a34fdfd7bfb31925f5a90',1,'Force_ReDisplay():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#aa1e81e58421a34fdfd7bfb31925f5a90',1,'Force_ReDisplay():&#160;main.cpp']]]
+  ['flushfifos_8',['FlushFifos',['../_radio_functions_8cpp.html#a07c27b4e208198453c70876517926052',1,'RadioFunctions.cpp']]],
+  ['force_5fredisplay_9',['Force_ReDisplay',['../_radio_functions_8h.html#aa1e81e58421a34fdfd7bfb31925f5a90',1,'Force_ReDisplay():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#aa1e81e58421a34fdfd7bfb31925f5a90',1,'Force_ReDisplay():&#160;main.cpp']]]
 ];

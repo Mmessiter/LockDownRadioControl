@@ -10,9 +10,11 @@ var _radio_functions_8cpp =
     [ "DrawFhssBox", "_radio_functions_8cpp.html#a6bdc6419b47dda71d0d2c8faf652adc2", null ],
     [ "ExecuteMacro", "_radio_functions_8cpp.html#a78f22801971c106db61d728dd345e28e", null ],
     [ "FailedPacket", "_radio_functions_8cpp.html#a5fbd3c8613a4163425c94965704ce5f8", null ],
+    [ "FlushFifos", "_radio_functions_8cpp.html#a07c27b4e208198453c70876517926052", null ],
     [ "HopToNextChannel", "_radio_functions_8cpp.html#a52aa3e80bccf5e75346c93fdae63122d", null ],
     [ "InitRadio", "_radio_functions_8cpp.html#a799f38bc33abdb30eec1d7db3cf27d58", null ],
     [ "Look", "_radio_functions_8cpp.html#a44db40e8ffa545be92871325c4dcdc55", null ],
+    [ "PacketSucceded", "_radio_functions_8cpp.html#aea1060b3adfcea6ce7106cf88e42279b", null ],
     [ "Procrastinate", "_radio_functions_8cpp.html#a760609a682300dfe6bfaac737fd4d5eb", null ],
     [ "RunMacro", "_radio_functions_8cpp.html#a91fb686ba2d3111821721ab33b442918", null ],
     [ "ScanAllChannels", "_radio_functions_8cpp.html#a3856ba0adae43d089f08c7b7f653b306", null ],
@@ -20,5 +22,6 @@ var _radio_functions_8cpp =
     [ "SetThePipe", "_radio_functions_8cpp.html#a70dc6f8d2e5ccef6b8e4a2b9b0afb2ce", null ],
     [ "StartMacro", "_radio_functions_8cpp.html#aff7f985af10a021196ae5c9bf188c445", null ],
     [ "StopMacro", "_radio_functions_8cpp.html#ae1e0755ae9441b2835ac027a98707caa", null ],
-    [ "TryOtherPipe", "_radio_functions_8cpp.html#ad0e30213b21808d00110752679788a8c", null ]
+    [ "TryOtherPipe", "_radio_functions_8cpp.html#ad0e30213b21808d00110752679788a8c", null ],
+    [ "TryToReconnect", "_radio_functions_8cpp.html#ad0236abcfc887ad708d9504c4ab2a7c3", null ]
 ];

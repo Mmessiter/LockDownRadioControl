@@ -1,5 +1,8 @@
 var NAVTREEINDEX12 =
 {
+"globals_func_e.html":[10,1,1,4],
+"globals_func_f.html":[10,1,1,5],
+"globals_func_g.html":[10,1,1,6],
 "globals_func_h.html":[10,1,1,7],
 "globals_func_i.html":[10,1,1,8],
 "globals_func_k.html":[10,1,1,9],
@@ -246,8 +249,5 @@ var NAVTREEINDEX12 =
 "struct_tiny_g_p_s_location.html":[9,0,32],
 "struct_tiny_g_p_s_location.html#a4e20b4067a448ca0003fc65a3d3864d2":[9,0,32,7],
 "struct_tiny_g_p_s_location.html#a544e9009a5580b2fd5466821a5e5b782":[9,0,32,5],
-"struct_tiny_g_p_s_location.html#a6501fd5ef19ae166d43e0e5781609ee2":[9,0,32,8],
-"struct_tiny_g_p_s_location.html#a86c3acea4f317b427eebb667e4d05a49":[9,0,32,4],
-"struct_tiny_g_p_s_location.html#a905822cea7a00e550d29d037acdde549":[9,0,32,2],
-"struct_tiny_g_p_s_location.html#a9bc435af16c3c5224fcd4b5c40d0c70f":[9,0,32,0]
+"struct_tiny_g_p_s_location.html#a6501fd5ef19ae166d43e0e5781609ee2":[9,0,32,8]
 };
