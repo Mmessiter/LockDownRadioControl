@@ -3125,7 +3125,7 @@ void ShowLogFile(uint8_t StartLine){
 /*********************************************************************************************************************************/
 // SETUP
 /*********************************************************************************************************************************/
-FLASHMEM void setup()
+void setup()
 {
     char Initialising[]            = "Initialising ... ";
     char FrontView_Connected[]     = "FrontView.Connected";
@@ -3139,26 +3139,23 @@ FLASHMEM void setup()
     pinMode(POWER_OFF_PIN, OUTPUT);
     BlueLedOn();
     NEXTION.begin(921600);      // BAUD rate also set in display code THIS IS THE MAX (was 115200)  
-    delay(1500);
+    delay(250);
     InitMaxMin();               // in case not yet calibrated
     InitCentreDegrees();        // In case not yet calibrated
     ResetSubTrims();
     CentreTrims();
-
     WatchDogConfig.window   = WATCHDOGMAXRATE; //  = MINIMUM RATE in milli seconds, (32ms to 522.232s) must be MUCH smaller than timeout
     WatchDogConfig.timeout  = WATCHDOGTIMEOUT; //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s)
     WatchDogConfig.callback = WatchDogCallBack;
     TeensyWatchDog.begin(WatchDogConfig);
     LastDogKick = millis(); // needed? - yes!
-
-    delay (500);
+    delay (100);
     if (!SD.begin(chipSelect)){    // MUST return true or all is lost! (todo: create error page)
-       delay (500);
+       delay (250);
        SD.begin(chipSelect);       // a second attempt for iffy sd cards ?!
     }                                
     CalibratedYet = LoadAllParameters();                  // If they exist, read saved SD card settings.   
     if (!CalibratedYet)     {Procrastinate(250); CalibratedYet = LoadAllParameters(); }   
-        
     SendValue(FrontView_BackGround,BackGroundColour);     // Get colours ready
     SendValue(FrontView_ForeGround,ForeGroundColour);
     SendValue(FrontView_Special,SpecialColour);
@@ -3176,27 +3173,30 @@ FLASHMEM void setup()
     if (USE_INA219) ina219.begin();
     InitSwitchesAndTrims();
     InitRadio(DefaultPipe);
+    SetAudioVolume(AudioVolume);
+    if (PlayFanfare){
+        PlaySound(THEFANFARE);
+        }
+    Procrastinate(500); // enough?
     SendText(FrontView_Connected, Initialising);
+    Procrastinate(1000);
+    UpdateModelsNameEveryWhere();
     SendValue(FrontView_Hours, 0);
     SendValue(FrontView_Mins, 0);
     SendValue(FrontView_Secs, 0);
+    Procrastinate(1000);
+    RedLedOn();
     //  ***************************************************************************************
     //  SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
     //  **   BUT then re-comment it!! Otherwise it will reset to same time on every boot up! **
     //  ***************************************************************************************
     BoundFlag     = false;
     TxOnTime      = millis();
-    UpdateModelsNameEveryWhere();
     StartInactvityTimeout();
     SizeOfCompressedData = sizeof(CompressedData);
     GetTXVersionNumber();
     MySbus.begin();
     SetUKFrequencies(); 
-    SetAudioVolume(AudioVolume);
-    if (PlayFanfare){
-        PlaySound(THEFANFARE);
-        Procrastinate(4000); // FANFARE TAKES 4 SECONDS :-)
-        }
     ScreenTimeTimer = millis();
     RestoreBrightness();
     if (UseLog) {
@@ -5128,7 +5128,6 @@ FASTRUN void ButtonWasPressed()
     char MixesView_Percent[]       = "Percent";
     char page_SetupView[]          = "page SetupView";
     char page_AudioView[]          = "page AudioView";
-    char page_FrontView[]          = "page FrontView";
     char page_ColoursView[]        = "page ColoursView";
     char GoSetupView[]             = "GoSetupView";
     char ColoursView[]             = "ColoursView";
