@@ -164,6 +164,7 @@ var _radio_functions_8h =
     [ "DrawBox", "_radio_functions_8h.html#a705c97485d6142131c03577ec14134e7", null ],
     [ "DrawFhssBox", "_radio_functions_8h.html#a6bdc6419b47dda71d0d2c8faf652adc2", null ],
     [ "DrawLine", "_radio_functions_8h.html#acbef1d41e1bd646b60a6e8afd9c66880", null ],
+    [ "ExecuteMacro", "_radio_functions_8h.html#a78f22801971c106db61d728dd345e28e", null ],
     [ "FailedPacket", "_radio_functions_8h.html#a783a0141bea15d8539730afd4b3b06a3", null ],
     [ "FillBox", "_radio_functions_8h.html#a93d9f055a2723479bb28f6c53fdb2643", null ],
     [ "Force_ReDisplay", "_radio_functions_8h.html#aa1e81e58421a34fdfd7bfb31925f5a90", null ],
