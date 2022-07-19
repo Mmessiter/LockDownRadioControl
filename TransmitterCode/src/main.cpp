@@ -1609,6 +1609,9 @@ FASTRUN bool CheckRXVolts(){
 /*********************************************************************************************************************************/
 
 /** @brief SHOW COMMS */
+
+// This displays many telemetry data onto the current screen
+
 FASTRUN void ShowComms()
 {
     if (NEXTION.available()) return; // was a button pressed?
@@ -3185,7 +3188,7 @@ void setup()
     SendValue(FrontView_Mins, 0);
     SendValue(FrontView_Secs, 0);
     Procrastinate(1000);
-    RedLedOn();
+   
     //  ***************************************************************************************
     //  SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
     //  **   BUT then re-comment it!! Otherwise it will reset to same time on every boot up! **
@@ -3203,6 +3206,7 @@ void setup()
             LogPowerOn();
             LogThisModel();
     }
+     RedLedOn();
 }
 /*********************************************************************************************************************************/
 
@@ -7337,7 +7341,7 @@ FASTRUN void loop()
     ReadSwitches();                           // Check switch positions
     CheckTimer();                             // Screen Timer 
     GetNewChannelValues();                    // Load SendBuffer with new servo positions
-    if (UseMacros)   ExecuteMacro();          // Modify it if macro is running
+    if (UseMacros) ExecuteMacro();            // Modify it if macro is running
     ShowServoPos();                           // Servo positions use channel values
     if (!BoundFlag)  BufferNewPipe();         // if not yet bound, insert our pipe into sendbuffer
     if (BuddyMaster) GetSlaveChannelValues(); // If buddy master, check where student's sticks etc. are.
