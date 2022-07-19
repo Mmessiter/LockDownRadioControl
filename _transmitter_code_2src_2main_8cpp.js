@@ -179,7 +179,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "SetTestFrequencies", "_transmitter_code_2src_2main_8cpp.html#a60a8ba3819508aedbe1d59640b0a79b0", null ],
     [ "SetTheRTC", "_transmitter_code_2src_2main_8cpp.html#aab56bfb50b2e8997275de7ea611e5bb4", null ],
     [ "SetUKFrequencies", "_transmitter_code_2src_2main_8cpp.html#a083c423be6ce1635de5961d0fc72ff06", null ],
-    [ "setup", "_transmitter_code_2src_2main_8cpp.html#a17699f358cf9f7c3155a9c5daf8ff13c", null ],
+    [ "setup", "_transmitter_code_2src_2main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d", null ],
     [ "ShowChannelName", "_transmitter_code_2src_2main_8cpp.html#a4d8497742bcb615831e3b52c5d463cde", null ],
     [ "ShowComms", "_transmitter_code_2src_2main_8cpp.html#a5d3a46c21927cf7a3031a1e68e0b7b48", null ],
     [ "ShowDirectory", "_transmitter_code_2src_2main_8cpp.html#ad1800b78308843897cf7bd9f8e0a3a69", null ],

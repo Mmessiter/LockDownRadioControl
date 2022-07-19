@@ -1,5 +1,6 @@
 var NAVTREEINDEX13 =
 {
+"struct_tiny_g_p_s_location.html#ae5da08aba335d0515b7a84ce57b80179":[9,0,32,1],
 "struct_tiny_g_p_s_speed.html":[9,0,34],
 "struct_tiny_g_p_s_speed.html#a1809120167961ea9a85e860a964b1c6e":[9,0,34,2],
 "struct_tiny_g_p_s_speed.html#a7fee3c8f9f2fcc5f4a517bd6108f79dd":[9,0,34,0],

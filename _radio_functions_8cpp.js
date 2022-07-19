@@ -3,6 +3,7 @@ var _radio_functions_8cpp =
     [ "xx1", "_radio_functions_8cpp.html#af12cb4fe3d6d02738ca7a75e1e1fd722", null ],
     [ "yy1", "_radio_functions_8cpp.html#a10274b74b5b9f35476ae844506775afe", null ],
     [ "YY1EXTRA", "_radio_functions_8cpp.html#ad7ab066fbe7d750f032f5761dbaa2487", null ],
+    [ "Beep", "_radio_functions_8cpp.html#ae0d99123717b8c947cf6533d68f8bff0", null ],
     [ "BufferNewPipe", "_radio_functions_8cpp.html#a9a3e35cbf8abeae1ebdb4af8dff3571a", null ],
     [ "Compress", "_radio_functions_8cpp.html#a1ddd5e8d5bd649dd98ce3710fbff651b", null ],
     [ "DoScanEnd", "_radio_functions_8cpp.html#a31fb6a46af68482e107cddee58dfb677", null ],
