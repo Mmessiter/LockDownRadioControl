@@ -7337,8 +7337,8 @@ FASTRUN void loop()
     ReadSwitches();                           // Check switch positions
     CheckTimer();                             // Screen Timer 
     GetNewChannelValues();                    // Load SendBuffer with new servo positions
-    if (UseMacros)   ExecuteMacro();                 // Modify it if macro is running
-    if (Connected)   ShowServoPos();          // Servo positions use channel values
+    if (UseMacros)   ExecuteMacro();          // Modify it if macro is running
+    ShowServoPos();                           // Servo positions use channel values
     if (!BoundFlag)  BufferNewPipe();         // if not yet bound, insert our pipe into sendbuffer
     if (BuddyMaster) GetSlaveChannelValues(); // If buddy master, check where student's sticks etc. are.
     Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);               // Compress 32 bytes down to 24
@@ -7362,7 +7362,6 @@ FASTRUN void loop()
                 break; // CurrentMode >= 4 for no action at all.
         }
     }
-    if (!Connected) ShowServoPos();                                // Servo positions use channel values
     if (BindingNow == 2 && (millis() - BindingTimer) > 100) {
         if (!BoundFlag) {
 #ifdef DB_BIND
