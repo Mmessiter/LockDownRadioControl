@@ -152,14 +152,14 @@ FASTRUN void FailedPacket()
 
 void TryToReconnect(){
    if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {
-        TryOtherPipe(); 
+        TryOtherPipe();                                                                                 // in case the receiver has re-booted
         PipeTimeout = millis();
     }     
-    NextChannel = * (FHSSChPointer + random(RECONNECT_CHANNELS_COUNT) + RECONNECT_CHANNELS_START);    // a **random** reconnect channel (selected from first five)
+    NextChannel = * (FHSSChPointer + random(RECONNECT_CHANNELS_COUNT) + RECONNECT_CHANNELS_START);      // a **random** reconnect channel (selected from first five)
     HopToNextChannel();
 }
 /************************************************************************************************************/
-void PacketSucceded(){
+void SuccessfulPacket(){
         ++RangeTestGoodPackets;
         ++PacketNumber;
         LostContactFlag = false;
@@ -176,15 +176,15 @@ void PacketSucceded(){
 /************************************************************************************************************/
 void FlushFifos(){
         Radio1.flush_rx();                                         // This avoids a lockup that happens when the FIFO gets full.
-        Radio1.flush_tx();                                         // This avoids a lockup that happens when the FIFO gets full.
+        Radio1.flush_tx();                                         
 }
 /************************************************************************************************************/
-//****************** Function to send data to receiver ******************************************************
+//****************** Function to send pre-compressed data to receiver ***************************************
 /************************************************************************************************************/
 
 FASTRUN void SendData()
 {
-    if (NEXTION.available()) return; // in case key was hit
+    if (NEXTION.available()) return;                               // in case key was hit
     if (((millis() - TxPace) >= PACEMAKER) || (LostContactFlag)){ 
         TxPace = millis();
         if (DoSbusSendOnly) {MapToSBUS();return;}                  // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
@@ -193,7 +193,7 @@ FASTRUN void SendData()
         Connected = false;                                         // Assume the worst until ACK is received.
         FlushFifos();
         if  (Radio1.write(&CompressedData, SizeOfCompressedData)){ //  ************************** >>>>> SEND DATA TO RX <<<<< ***************************************                                                  
-            PacketSucceded();
+            SuccessfulPacket();
         }else{
             FailedPacket();
         }
