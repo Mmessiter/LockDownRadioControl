@@ -298,7 +298,7 @@ var searchData=
   ['showfileerrormsg_295',['ShowFileErrorMsg',['../_transmitter_code_2src_2main_8cpp.html#a1e7673fa1ef97d68711edd0da2abed9b',1,'main.cpp']]],
   ['showfilenumber_296',['ShowFileNumber',['../_transmitter_code_2src_2main_8cpp.html#aa337d6e5cf496fbca7cdc61818f8239a',1,'main.cpp']]],
   ['showfileprogress_297',['ShowFileProgress',['../_transmitter_code_2src_2main_8cpp.html#abdbaa9b790382ce7f04feb681df5144a',1,'main.cpp']]],
-  ['showflightmode_298',['ShowFlightMode',['../_transmitter_code_2src_2main_8cpp.html#a61f4d39b42cd6199d0ad2f97bb7f80e2',1,'main.cpp']]],
+  ['showflightmode_298',['ShowFlightMode',['../_radio_functions_8h.html#a61f4d39b42cd6199d0ad2f97bb7f80e2',1,'ShowFlightMode():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a61f4d39b42cd6199d0ad2f97bb7f80e2',1,'ShowFlightMode():&#160;main.cpp']]],
   ['showgps_299',['ShowGPS',['../_sensor_hub_t32_2src_2main_8cpp.html#a6dfb0fe1b733dfc8e9d989a321596850',1,'main.cpp']]],
   ['showhopdurationetc_300',['ShowHopDurationEtc',['../radio_8h.html#a2863e7455e30e6fddc0fcf56f62d6564',1,'radio.h']]],
   ['showlogfile_301',['ShowLogFile',['../_radio_functions_8h.html#af5df157d4ece6b40a9ce7a60faeca569',1,'ShowLogFile(uint8_t StartLine):&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#af5df157d4ece6b40a9ce7a60faeca569',1,'ShowLogFile(uint8_t StartLine):&#160;main.cpp']]],

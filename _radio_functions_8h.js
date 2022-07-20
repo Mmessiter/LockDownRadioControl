@@ -198,6 +198,7 @@ var _radio_functions_8h =
     [ "SendText", "_radio_functions_8h.html#afe513398f72d5e48f691830a1ef6eb42", null ],
     [ "SetThePipe", "_radio_functions_8h.html#a70dc6f8d2e5ccef6b8e4a2b9b0afb2ce", null ],
     [ "ShowComms", "_radio_functions_8h.html#aac472b3398ab38e7f54b1a2cae96ba62", null ],
+    [ "ShowFlightMode", "_radio_functions_8h.html#a61f4d39b42cd6199d0ad2f97bb7f80e2", null ],
     [ "ShowLogFile", "_radio_functions_8h.html#af5df157d4ece6b40a9ce7a60faeca569", null ],
     [ "ShowServoPos", "_radio_functions_8h.html#ad959eec03b0151ade81dc088593d816c", null ],
     [ "StartInactvityTimeout", "_radio_functions_8h.html#a793b7bcd77531c95fe72ed4356d421c8", null ],
