@@ -407,6 +407,7 @@ FASTRUN void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uint
 FASTRUN void BufferNewPipe();
 void ExecuteMacro();
 void Look(int p);
+void ShowFlightMode();
 
 /*********************************************************************************************************************************/
 
