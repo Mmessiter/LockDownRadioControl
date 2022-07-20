@@ -3158,12 +3158,14 @@ void setup()
        SD.begin(chipSelect);       // a second attempt for iffy sd cards ?!
     }                                
     CalibratedYet = LoadAllParameters();                  // If they exist, read saved SD card settings.   
-    if (!CalibratedYet)     {Procrastinate(250); CalibratedYet = LoadAllParameters(); }   
+    if (!CalibratedYet) {Procrastinate(250); CalibratedYet = LoadAllParameters(); }   
+    delay(100);
     SendValue(FrontView_BackGround,BackGroundColour);     // Get colours ready
     SendValue(FrontView_ForeGround,ForeGroundColour);
     SendValue(FrontView_Special,SpecialColour);
     SendValue(FrontView_Highlight,HighlightColour);
     SendCommand(page_FrontView);
+    delay (100);
     teensyMAC(MacAddress);                                // Get MAC address and use it as pipe address
     NewPipe  = (uint64_t)MacAddress[0] << 40;
     NewPipe += (uint64_t)MacAddress[1] << 32;
@@ -3179,15 +3181,16 @@ void setup()
     SetAudioVolume(AudioVolume);
     if (PlayFanfare){
         PlaySound(THEFANFARE);
+         Procrastinate(4000);
         }
-    Procrastinate(500); // enough?
+    Procrastinate(100); // enough?
     SendText(FrontView_Connected, Initialising);
-    Procrastinate(1000);
+    Procrastinate(300);
     UpdateModelsNameEveryWhere();
     SendValue(FrontView_Hours, 0);
     SendValue(FrontView_Mins, 0);
     SendValue(FrontView_Secs, 0);
-    Procrastinate(1000);
+    Procrastinate(300);
     //  ***************************************************************************************
     //  SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
     //  **   BUT then re-comment it!! Otherwise it will reset to same time on every boot up! **
