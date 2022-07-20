@@ -6837,15 +6837,19 @@ void LoadPacketData()
 /************************************************************************************************************/
 
 void ReadFMSwitch(bool sw1, bool sw2, bool rev)
-{
-    if (sw1 == false && sw2 == false) FlightMode = 2;
-    if (rev) {
-        if (sw1) FlightMode = 1;
-        if (sw2) FlightMode = 3;
-    }
-    else {
-        if (sw1) FlightMode = 3;
-        if (sw2) FlightMode = 1;
+{   
+     if ((sw1 == false) && (sw2 == false)) 
+    {
+        FlightMode = 2;
+    }else{
+        if (rev) {
+            if (sw1) FlightMode = 1;
+            if (sw2) FlightMode = 3;
+        }
+        else {
+            if (sw1) FlightMode = 3;
+            if (sw2) FlightMode = 1;
+        }
     }
 }
 
