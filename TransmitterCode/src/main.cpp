@@ -6594,7 +6594,7 @@ FASTRUN void ButtonWasPressed()
         }
 
         if (InStrng(FM2, TextIn))
-            if (p > 0) {
+            {
                 FlightMode         = 2;
                 PreviousFlightMode = 2;
                 UpdateModelsNameEveryWhere();
@@ -6838,7 +6838,7 @@ void LoadPacketData()
 
 void ReadFMSwitch(bool sw1, bool sw2, bool rev)
 {   
-     if ((sw1 == false) && (sw2 == false)) 
+    if ((sw1 == false) && (sw2 == false)) 
     {
         FlightMode = 2;
     }else{
@@ -6850,7 +6850,7 @@ void ReadFMSwitch(bool sw1, bool sw2, bool rev)
             if (sw1) FlightMode = 3;
             if (sw2) FlightMode = 1;
         }
-    }
+    } 
 }
 
 /************************************************************************************************************/
