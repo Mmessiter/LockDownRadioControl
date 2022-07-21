@@ -927,6 +927,7 @@ void ReadTime()
             SendText(DateTime, TimeString);
             SendText(Owner, TxName);
             UpdateModelsNameEveryWhere();
+            if (CurrentView == FRONTVIEW) ShowFlightMode();
         }
     }
 }
@@ -3129,7 +3130,7 @@ void ShowLogFile(uint8_t StartLine){
 /*********************************************************************************************************************************/
 // SETUP
 /*********************************************************************************************************************************/
-void setup()
+FLASHMEM void setup()
 {
     char FrontView_BackGround[]    = "FrontView.BackGround";
     char FrontView_ForeGround[]    = "FrontView.ForeGround";
@@ -3152,7 +3153,7 @@ void setup()
     LastDogKick = millis();        // needed? - yes!
     if (!SD.begin(chipSelect)){    // MUST return true or all is lost! (todo: create error page)
        delay (250);
-       SD.begin(chipSelect);        // a second attempt for iffy sd cards ?!
+       SD.begin(chipSelect);       // a second attempt for iffy sd cards ?!
     }                                
     CalibratedYet = LoadAllParameters();                  // If they exist, read saved SD card settings.   
     if (!CalibratedYet) {Procrastinate(250); CalibratedYet = LoadAllParameters(); }   
@@ -3176,7 +3177,7 @@ void setup()
     SetAudioVolume(AudioVolume);
     if (PlayFanfare){
         PlaySound(THEFANFARE);
-         Procrastinate(3000);
+         Procrastinate(4000);
         }
     SendValue(FrontView_Hours, 0);
     SendValue(FrontView_Mins, 0);
