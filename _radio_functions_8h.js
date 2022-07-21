@@ -204,6 +204,7 @@ var _radio_functions_8h =
     [ "StartInactvityTimeout", "_radio_functions_8h.html#a793b7bcd77531c95fe72ed4356d421c8", null ],
     [ "StartLogFile", "_radio_functions_8h.html#a514afc8dd077db77334696ca719a99b7", null ],
     [ "Str", "_radio_functions_8h.html#a6bac145d5df31efb9c90e2a60a4cbca5", null ],
+    [ "UpdateModelsNameEveryWhere", "_radio_functions_8h.html#a9e1de754e1d2d483fb15957f70cf0488", null ],
     [ "ZeroDataScreen", "_radio_functions_8h.html#a6da9a1fd0b003151f79eabc702ba80ff", null ],
     [ "AckPayload", "_radio_functions_8h.html#aec532bb9df7f865e6612fabf46895e6c", null ],
     [ "AckPayloadSize", "_radio_functions_8h.html#a6dc99d00582ef356ea3d57700dca6dab", null ],
