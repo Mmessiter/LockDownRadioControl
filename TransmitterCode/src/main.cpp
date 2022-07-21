@@ -3176,8 +3176,9 @@ FLASHMEM void setup()
     InitRadio(DefaultPipe);
     SetAudioVolume(AudioVolume);
     if (PlayFanfare){
+        Procrastinate(750);         // (Cannot play until warmed up a bit!)
         PlaySound(THEFANFARE);
-         Procrastinate(4000);
+        Procrastinate(4000);        // Fanafare takes about 4 seconds
         }
     SendValue(FrontView_Hours, 0);
     SendValue(FrontView_Mins, 0);
@@ -3199,8 +3200,6 @@ FLASHMEM void setup()
             LogPowerOn();
             LogThisModel();
     }
-    RedLedOn();
-    ShowFlightMode();
 }
 /*********************************************************************************************************************************/
 
