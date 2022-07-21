@@ -299,7 +299,7 @@ void loop() {
 
   loopBlink(); //indicate we are in main loop with short blink every 1.5 seconds
 
-  //if (channel_5_pwm > 1500) PrintGains(); // when motors stopped we can look ...MCM
+  if (channel_5_pwm > 1500) PrintGains(); // when motors stopped we can look ...MCM
   // Print data at 100hz (uncomment one at a time for troubleshooting) - SELECT ONE: 
   // printRadioData();     //radio pwm values (expected: 1000 to 2000)
   // printDesiredState();  //prints desired vehicle state commanded in either degrees or deg/sec (expected: +/- maxAXIS for roll, pitch, yaw; 0 to 1 for throttle)
