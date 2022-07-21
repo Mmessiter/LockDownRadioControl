@@ -1,5 +1,6 @@
 var NAVTREEINDEX12 =
 {
+"globals_func.html":[10,1,1],
 "globals_func_b.html":[10,1,1,1],
 "globals_func_c.html":[10,1,1,2],
 "globals_func_d.html":[10,1,1,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX12 =
 "struct_tiny_g_p_s_integer.html#a3a76131645f7604b3f3e759b90f9373f":[9,0,31,3],
 "struct_tiny_g_p_s_integer.html#a6501fd5ef19ae166d43e0e5781609ee2":[9,0,31,5],
 "struct_tiny_g_p_s_integer.html#a67de7e76d61dbd25eb32f701d8ce867b":[9,0,31,4],
-"struct_tiny_g_p_s_integer.html#aabd55511befbd769155c69e0c1208691":[9,0,31,1],
-"struct_tiny_g_p_s_location.html":[9,0,32]
+"struct_tiny_g_p_s_integer.html#aabd55511befbd769155c69e0c1208691":[9,0,31,1]
 };

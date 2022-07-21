@@ -1,5 +1,6 @@
 var NAVTREEINDEX8 =
 {
+"class_adafruit___bus_i_o___register_bits.html#a868614bb793ae3c4c00b7954896213d0":[9,0,4,1],
 "class_adafruit___bus_i_o___register_bits.html#a9311f94f1a1d93bc575b06c34ddecd80":[9,0,4,2],
 "class_adafruit___g_p_s.html":[9,0,5],
 "class_adafruit___g_p_s.html#a06b7e12e38f1b00df058a253364215db":[9,0,5,12],
@@ -248,6 +249,5 @@ var NAVTREEINDEX8 =
 "class_m_p_u6050.html#a65cc9d75ff347b146414685fb83fa451":[9,0,12,93],
 "class_m_p_u6050.html#a66da5bc38aa82404117d1ef5306c951a":[9,0,12,181],
 "class_m_p_u6050.html#a67a11be7fc7ab6b1186469b94ea33dda":[9,0,12,192],
-"class_m_p_u6050.html#a6985da2cbc37be3fefbe3c16bf8d34a6":[9,0,12,218],
-"class_m_p_u6050.html#a6aa7aa2e3fac06f8b5ab9ee127255a5e":[9,0,12,90]
+"class_m_p_u6050.html#a6985da2cbc37be3fefbe3c16bf8d34a6":[9,0,12,218]
 };
