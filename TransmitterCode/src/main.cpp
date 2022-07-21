@@ -3151,17 +3151,13 @@ FLASHMEM void setup()
     WatchDogConfig.callback = WatchDogCallBack;
     TeensyWatchDog.begin(WatchDogConfig);
     LastDogKick = millis();        // needed? - yes!
+    delay (WARMUPDELAY);
     if (!SD.begin(chipSelect)){    // MUST return true or all is lost! (todo: create error page)
-       delay (250);
+       delay (WARMUPDELAY);
        SD.begin(chipSelect);       // a second attempt for iffy sd cards ?!
     }                                
     CalibratedYet = LoadAllParameters();                  // If they exist, read saved SD card settings.   
     if (!CalibratedYet) {Procrastinate(250); CalibratedYet = LoadAllParameters(); }   
-    SendValue(FrontView_BackGround,BackGroundColour);     // Get colours ready
-    SendValue(FrontView_ForeGround,ForeGroundColour);
-    SendValue(FrontView_Special,SpecialColour);
-    SendValue(FrontView_Highlight,HighlightColour);
-    SendCommand(page_FrontView);
     teensyMAC(MacAddress);                                // Get MAC address and use it as pipe address
     NewPipe  = (uint64_t)MacAddress[0] << 40;
     NewPipe += (uint64_t)MacAddress[1] << 32;
@@ -3174,9 +3170,14 @@ FLASHMEM void setup()
     if (USE_INA219) ina219.begin();
     InitSwitchesAndTrims();
     InitRadio(DefaultPipe);
+    Procrastinate(WARMUPDELAY);                           // Allow Nextion time to warm up
+    SendValue(FrontView_BackGround,BackGroundColour);     // Get colours ready
+    SendValue(FrontView_ForeGround,ForeGroundColour);
+    SendValue(FrontView_Special,SpecialColour);
+    SendValue(FrontView_Highlight,HighlightColour);
+    SendCommand(page_FrontView);
     SetAudioVolume(AudioVolume);
     if (PlayFanfare){
-        Procrastinate(750);         // (Cannot play until warmed up a bit!)
         PlaySound(THEFANFARE);
         Procrastinate(4000);        // Fanafare takes about 4 seconds
         }
