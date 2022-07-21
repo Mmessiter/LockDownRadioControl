@@ -926,6 +926,7 @@ void ReadTime()
             strcat(TimeString, Str(NB, tm.Second, 0));
             SendText(DateTime, TimeString);
             SendText(Owner, TxName);
+            UpdateModelsNameEveryWhere();
         }
     }
 }
@@ -3130,8 +3131,6 @@ void ShowLogFile(uint8_t StartLine){
 /*********************************************************************************************************************************/
 void setup()
 {
-    char Initialising[]            = "Initialising ... ";
-    char FrontView_Connected[]     = "FrontView.Connected";
     char FrontView_BackGround[]    = "FrontView.BackGround";
     char FrontView_ForeGround[]    = "FrontView.ForeGround";
     char FrontView_Special[]       = "FrontView.Special";
@@ -3142,7 +3141,6 @@ void setup()
     pinMode(POWER_OFF_PIN, OUTPUT);
     BlueLedOn();
     NEXTION.begin(921600);      // BAUD rate also set in display code THIS IS THE MAX (was 115200)  
-    delay(250);
     InitMaxMin();               // in case not yet calibrated
     InitCentreDegrees();        // In case not yet calibrated
     ResetSubTrims();
@@ -3151,21 +3149,18 @@ void setup()
     WatchDogConfig.timeout  = WATCHDOGTIMEOUT; //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s)
     WatchDogConfig.callback = WatchDogCallBack;
     TeensyWatchDog.begin(WatchDogConfig);
-    LastDogKick = millis(); // needed? - yes!
-    delay (100);
+    LastDogKick = millis();        // needed? - yes!
     if (!SD.begin(chipSelect)){    // MUST return true or all is lost! (todo: create error page)
        delay (250);
-       SD.begin(chipSelect);       // a second attempt for iffy sd cards ?!
+       SD.begin(chipSelect);        // a second attempt for iffy sd cards ?!
     }                                
     CalibratedYet = LoadAllParameters();                  // If they exist, read saved SD card settings.   
     if (!CalibratedYet) {Procrastinate(250); CalibratedYet = LoadAllParameters(); }   
-    delay(100);
     SendValue(FrontView_BackGround,BackGroundColour);     // Get colours ready
     SendValue(FrontView_ForeGround,ForeGroundColour);
     SendValue(FrontView_Special,SpecialColour);
     SendValue(FrontView_Highlight,HighlightColour);
     SendCommand(page_FrontView);
-    delay (100);
     teensyMAC(MacAddress);                                // Get MAC address and use it as pipe address
     NewPipe  = (uint64_t)MacAddress[0] << 40;
     NewPipe += (uint64_t)MacAddress[1] << 32;
@@ -3181,18 +3176,13 @@ void setup()
     SetAudioVolume(AudioVolume);
     if (PlayFanfare){
         PlaySound(THEFANFARE);
-         Procrastinate(4000);
+         Procrastinate(3000);
         }
-    Procrastinate(100); // enough?
-    SendText(FrontView_Connected, Initialising);
-    Procrastinate(300);
-    UpdateModelsNameEveryWhere();
     SendValue(FrontView_Hours, 0);
     SendValue(FrontView_Mins, 0);
     SendValue(FrontView_Secs, 0);
-    Procrastinate(300);
     //  ***************************************************************************************
-     // SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
+    //  SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
     //  **   BUT then re-comment it!! Otherwise it will reset to same time on every boot up! **
     //  ***************************************************************************************
     BoundFlag     = false;
@@ -7322,7 +7312,7 @@ FASTRUN void loop()
     if (GetButtonPress()) {
         ButtonWasPressed();          // Deal with button
     }
-    if ((millis()-ModelNameTimeCheck) > 5000) {  
+    if ((millis()-ModelNameTimeCheck) > 1000) {  
         ModelNameTimeCheck  = millis();
         if (CurrentView == MAINSETUPVIEW){ 
             CheckScanButton();           

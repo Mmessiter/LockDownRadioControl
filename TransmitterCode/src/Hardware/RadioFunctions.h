@@ -408,7 +408,7 @@ FASTRUN void BufferNewPipe();
 void ExecuteMacro();
 void Look(int p);
 void ShowFlightMode();
-
+void UpdateModelsNameEveryWhere();
 /*********************************************************************************************************************************/
 
 #endif
