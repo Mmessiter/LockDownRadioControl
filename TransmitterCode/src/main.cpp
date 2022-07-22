@@ -1541,7 +1541,6 @@ FASTRUN bool CheckRXVolts(){
     bool  RXWarningFlag          = false;
     char  Vbuf[16];
     char  RXBattInfo[65];
-  
     char  FrontView_AckPayload[]    = "AckPayload";
     float VoltsPerCell              = 0;
     char  FrontView_RXBV[]          = "RXBV";
@@ -1575,7 +1574,6 @@ FASTRUN bool CheckRXVolts(){
                     SendText(FrontView_RXBV, RXBattNA);
                     SendText(FrontView_AckPayload, RXBattNV);
                 }
-               
             }
             return RXWarningFlag;
 }
@@ -4789,8 +4787,6 @@ void ZeroDataScreen(){             // ZERO Those parameters that are zeroable
             GapSum             = 0;
             GapAverage         = 0;
             GapCount           = 0;
-            Secs               = 0;
-            PausedSecs         = 0;
             GapStart           = 0;
             RXMAXModelAltitude = 0;
             GPSMaxAltitude     = 0;
