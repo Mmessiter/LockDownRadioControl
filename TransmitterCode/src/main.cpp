@@ -1510,7 +1510,6 @@ FASTRUN bool CheckTXVolts(){
     int   txpc                   = 0;
         if (USE_INA219) {
             txv  = (ina219.getBusVoltage_V()) * 100;
-            //txpc = map(txv, 512, 670, 0, 100); // LiFePo4 Battery 2.6 ->3.5  volts per cell
             txpc = map(txv, 3.2 * 200, 3.33 * 200, 0, 100); // LiFePo4 Battery 3.1 ->3.35  volts per cell
             if (txpc < LowBattery) {
                 TXWarningFlag = true;
@@ -1539,14 +1538,11 @@ FASTRUN bool CheckRXVolts(){
     bool  RXWarningFlag          = false;
     char  Vbuf[16];
     char  RXBattInfo[65];
-    char  FrontView_AckPayload[]    = "AckPayload";
     float VoltsPerCell              = 0;
     char  FrontView_RXBV[]          = "RXBV";
     char  PerCell[]                 = " per cell)";
     char  RXBattNA[]                = "(No data)";
-    char  RXBattNV[]                = "    ";
     char  v[]                       = "V  (";
-
             ReadVolts = RXModelVolts * 100;
             Volts = map(ReadVolts,  3.4f * RXCellCount * 100 ,  4.2f * RXCellCount * 100, 0, 100);  
             if (RXVoltsDetected) {
@@ -1568,13 +1564,11 @@ FASTRUN bool CheckRXVolts(){
             if (!RXVoltsDetected) {
                 if (BoundFlag && CurrentView == FRONTVIEW) {
                     SendText(FrontView_RXBV, RXBattNA);
-                    SendText(FrontView_AckPayload, RXBattNV);
                     SendValue(JRX, 0);
                 }
             }
             return RXWarningFlag;
 }
-
 /*********************************************************************************************************************************/
   void CheckScreenTime(){
   char ScreenOff[] = "dim=10";
