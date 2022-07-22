@@ -4845,8 +4845,7 @@ void ExitMacrosView(){
     char MoveToPosition[]   =   "Pos";
     char Delay[]            =   "Del";
     char Duration[]         =   "Dur";
-    uint8_t n;
-    n = GetValue(MacroNumber)-1;
+    uint8_t n = GetValue(MacroNumber)-1;
     MacrosBuffer[n][MACROTRIGGERCHANNEL]    = GetValue(TriggerChannel);
     MacrosBuffer[n][MACROMOVECHANNEL]       = GetValue(MoveToChannel);
     MacrosBuffer[n][MACROMOVETOPOSITION]    = GetValue(MoveToPosition);
