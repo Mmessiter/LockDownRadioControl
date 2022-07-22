@@ -1482,8 +1482,17 @@ $(document).ready(function(){initNavTree('_quadcopter_2src_2main_8cpp_source.htm
 <div class="line"><a id="l01384" name="l01384"></a><span class="lineno"> 1384</span>  <span class="keywordtype">float</span> y = tmp * (1.69000231f - 0.714158168f * x * tmp * tmp);</div>
 <div class="line"><a id="l01385" name="l01385"></a><span class="lineno"> 1385</span>  <span class="keywordflow">return</span> y;</div>
 <div class="line"><a id="l01386" name="l01386"></a><span class="lineno"> 1386</span>}</div>
-<div class="line"><a id="l01387" name="l01387"></a><span class="lineno"> 1387</span><span class="comment">// **********************************************************************************************************</span></div>
-<div class="line"><a id="l01388" name="l01388"></a><span class="lineno"> 1388</span><span class="comment">// ***********************************************************************************************************</span></div>
+<div class="line"><a id="l01387" name="l01387"></a><span class="lineno"> 1387</span><span class="comment">//float invSqrt(float x)</span></div>
+<div class="line"><a id="l01388" name="l01388"></a><span class="lineno"> 1388</span><span class="comment">//{</span></div>
+<div class="line"><a id="l01389" name="l01389"></a><span class="lineno"> 1389</span><span class="comment">//    union { float as_float; int32_t as_int; } un;</span></div>
+<div class="line"><a id="l01390" name="l01390"></a><span class="lineno"> 1390</span><span class="comment">//   float xhalf = 0.5f * x;</span></div>
+<div class="line"><a id="l01391" name="l01391"></a><span class="lineno"> 1391</span><span class="comment">//    un.as_float = x;</span></div>
+<div class="line"><a id="l01392" name="l01392"></a><span class="lineno"> 1392</span><span class="comment">//    un.as_int = 0x5f3759df - (un.as_int &gt;&gt; 1);</span></div>
+<div class="line"><a id="l01393" name="l01393"></a><span class="lineno"> 1393</span><span class="comment">//    un.as_float = un.as_float * (1.5f - xhalf * un.as_float * un.as_float);</span></div>
+<div class="line"><a id="l01394" name="l01394"></a><span class="lineno"> 1394</span><span class="comment">//    return un.as_float;</span></div>
+<div class="line"><a id="l01395" name="l01395"></a><span class="lineno"> 1395</span><span class="comment">//}</span></div>
+<div class="line"><a id="l01396" name="l01396"></a><span class="lineno"> 1396</span><span class="comment">// **********************************************************************************************************</span></div>
+<div class="line"><a id="l01397" name="l01397"></a><span class="lineno"> 1397</span><span class="comment">// ***********************************************************************************************************</span></div>
 <div class="ttc" id="a_adafruit___b_m_p280_8h_html_a35bd3de386d23ba02c35f820303db472"><div class="ttname"><a href="_adafruit___b_m_p280_8h.html#a35bd3de386d23ba02c35f820303db472">Wire</a></div><div class="ttdeci">TwoWire Wire</div></div>
 <div class="ttc" id="a_m_p_u6050_8h_html"><div class="ttname"><a href="_m_p_u6050_8h.html">MPU6050.h</a></div></div>
 <div class="ttc" id="a_m_p_u6050__6_axis___motion_apps20_8h_html_a203d5b93e4077aa273c7013964a31f9e"><div class="ttname"><a href="_m_p_u6050__6_axis___motion_apps20_8h.html#a203d5b93e4077aa273c7013964a31f9e">F</a></div><div class="ttdeci">#define F(x)</div><div class="ttdef"><b>Definition:</b> <a href="_m_p_u6050__6_axis___motion_apps20_8h_source.html#l00061">MPU6050_6Axis_MotionApps20.h:61</a></div></div>
