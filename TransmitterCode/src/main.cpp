@@ -1516,8 +1516,7 @@ FASTRUN bool CheckTXVolts(){
             if (txpc < LowBattery) {
                 TXWarningFlag = true;
              }
-            if (txpc > 100) txpc = 100; // avoid showing > 100% !
-            if (txpc < 0)   txpc = 0;   // avoid showing < 0% !
+            txpc = constrain(txpc, 0, 100);
             dtostrf(txpc, 0, 0, Vbuf);
             strcat(Vbuf, pc);
             if (CurrentView == FRONTVIEW) SendText(TXVolts, Vbuf);
@@ -1551,17 +1550,8 @@ FASTRUN bool CheckRXVolts(){
     char  RXBattNV[]                = "    ";
     char  v[]                       = "V  (";
     char  pc[]                      = "%";
-            ReadVolts = RXModelVolts * 10;
-            // 6s Max 25.2 -> 20.4
-            // 5s Max 21.0 -> 17.0
-            // 4s Max 16.8 -> 13.6
-            // 3s Max 12.6 -> 10.2
-            // 2s Max 8.4  -> 6.8
-            if (RXCellCount == 6) Volts = map(ReadVolts, 204, 252, 0, 100);  // works for 6s batteries (*10)
-            if (RXCellCount == 5) Volts = map(ReadVolts, 170, 210, 0, 100);  // works for 5s batteries (*10)
-            if (RXCellCount == 4) Volts = map(ReadVolts, 136, 168, 0, 100);  // works for 4s batteries (*10)
-            if (RXCellCount == 3) Volts = map(ReadVolts, 102, 126, 0, 100);  // works for 3s batteries (*10)
-            if (RXCellCount == 2) Volts = map(ReadVolts,  68,  84, 0, 100);  // works for 2s batteries (*10)
+            ReadVolts = RXModelVolts * 100;
+            Volts = map(ReadVolts,  3.4f * RXCellCount * 100 ,  4.2f * RXCellCount * 100, 0, 100);  
             if (RXVoltsDetected) {
                 Volts = constrain(Volts, 0, 100);
                 if (Volts <= LowBattery && Volts > 0) {
@@ -1575,7 +1565,7 @@ FASTRUN bool CheckRXVolts(){
                 strcpy(RXBattInfo, ModelVolts);
                 strcat(RXBattInfo, v);
               
-                VoltsPerCell = (ReadVolts / RXCellCount) / 10;
+                VoltsPerCell = (ReadVolts / RXCellCount) / 100;
                 dtostrf(VoltsPerCell, 2, 2, Vbuf);
                 strcat(RXBattInfo, Vbuf);
                 strcat(RXBattInfo, PerCell);
