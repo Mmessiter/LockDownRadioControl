@@ -1499,10 +1499,9 @@ if ((CurrentView == STICKSVIEW) || (CurrentView == FRONTVIEW)){
 /*********************************************************************************************************************************/
 FASTRUN bool CheckTXVolts(){
     char  DataView_txv[]         = "txv";
+    char  JTX[]                   = "JTX";
     float txv                    = 0;
-    char  TXVolts[]              = "t21";
     char  Vbuf[16];
-    char  pc[]                   = "%";
     char  v[]                    = "V  (";
     char  TXBattInfo[65];
     char  FrontView_TXBV[]       = "TXBV";
@@ -1517,9 +1516,7 @@ FASTRUN bool CheckTXVolts(){
                 TXWarningFlag = true;
              }
             txpc = constrain(txpc, 0, 100);
-            dtostrf(txpc, 0, 0, Vbuf);
-            strcat(Vbuf, pc);
-            if (CurrentView == FRONTVIEW) SendText(TXVolts, Vbuf);
+            if (CurrentView == FRONTVIEW) SendValue(JTX,txpc);
             txv /= 100;
             snprintf(Vbuf, 5, "%f", txv); // float to string...
             strcpy(TXBattInfo, Vbuf);
@@ -1538,6 +1535,7 @@ return TXWarningFlag;
 FASTRUN bool CheckRXVolts(){
     float Volts                  = 0;
     float ReadVolts              = 0;
+    char  JRX[]                   = "JRX";
     bool  RXWarningFlag          = false;
     char  Vbuf[16];
     char  RXBattInfo[65];
@@ -1548,7 +1546,7 @@ FASTRUN bool CheckRXVolts(){
     char  RXBattNA[]                = "(No data)";
     char  RXBattNV[]                = "    ";
     char  v[]                       = "V  (";
-    char  pc[]                      = "%";
+
             ReadVolts = RXModelVolts * 100;
             Volts = map(ReadVolts,  3.4f * RXCellCount * 100 ,  4.2f * RXCellCount * 100, 0, 100);  
             if (RXVoltsDetected) {
@@ -1558,9 +1556,7 @@ FASTRUN bool CheckRXVolts(){
                 }
             }
             if (RXVoltsDetected) {
-                dtostrf(Volts, 0, 0, Vbuf);
-                strcat(Vbuf, pc);
-                if (BoundFlag && CurrentView == FRONTVIEW) SendText(FrontView_AckPayload, Vbuf);
+                if (BoundFlag && CurrentView == FRONTVIEW) SendValue(JRX, Volts);
                 strcpy(RXBattInfo, ModelVolts);
                 strcat(RXBattInfo, v);
                 VoltsPerCell = (ReadVolts / RXCellCount) / 100;
@@ -1573,6 +1569,7 @@ FASTRUN bool CheckRXVolts(){
                 if (BoundFlag && CurrentView == FRONTVIEW) {
                     SendText(FrontView_RXBV, RXBattNA);
                     SendText(FrontView_AckPayload, RXBattNV);
+                    SendValue(JRX, 0);
                 }
             }
             return RXWarningFlag;
@@ -4901,10 +4898,8 @@ void  StartReverseView(){  // channel reverse flags are 16 individual BITs in Re
                 SendValue(fs[i],0);
             }
         }
-   
     SendCommand(ProgressEnd);
 }
-
 
 /*********************************************************************************************************************************/
 
