@@ -1564,7 +1564,6 @@ FASTRUN bool CheckRXVolts(){
                 if (BoundFlag && CurrentView == FRONTVIEW) SendText(FrontView_AckPayload, Vbuf);
                 strcpy(RXBattInfo, ModelVolts);
                 strcat(RXBattInfo, v);
-              
                 VoltsPerCell = (ReadVolts / RXCellCount) / 100;
                 dtostrf(VoltsPerCell, 2, 2, Vbuf);
                 strcat(RXBattInfo, Vbuf);
@@ -1572,8 +1571,11 @@ FASTRUN bool CheckRXVolts(){
                 if (BoundFlag && CurrentView == FRONTVIEW) SendText(FrontView_RXBV, RXBattInfo);
             }
             if (!RXVoltsDetected) {
-                if (BoundFlag && CurrentView == FRONTVIEW) SendText(FrontView_RXBV, RXBattNA);
-                if (BoundFlag && CurrentView == FRONTVIEW) SendText(FrontView_AckPayload, RXBattNV);
+                if (BoundFlag && CurrentView == FRONTVIEW) {
+                    SendText(FrontView_RXBV, RXBattNA);
+                    SendText(FrontView_AckPayload, RXBattNV);
+                }
+               
             }
             return RXWarningFlag;
 }
