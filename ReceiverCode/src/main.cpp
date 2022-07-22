@@ -291,7 +291,7 @@ void SetUKFrequencies(){
  * the parameter sent is defined by the packet number ... which goes only upto about 5
  * 
  * Note: If extra parameters are needed, the "HOPTIME" duration can be increased.
- * It's 50ms right now, which gives about 7 packets between hops.
+ * It's 97ms right now, which gives about 11 packets per hops.
  */
 void ReadExtraParameters()
 { uint16_t TwoBytes = 0; 
@@ -336,7 +336,7 @@ void ReadExtraParameters()
     return;
 }
 // ***************************************************************************************************************************************************
-// Here the GPS HUB is asked for 7 bytes of data over I2C. 
+// Here the GPS (Sensor) HUB is asked for 7 bytes of data over I2C. 
 // The first IDLEN (=3) bytes are the ID (LAT, LNG, etc...)
 // The next 4 bytes are the value (as a float).
 // The ID changes with each call
@@ -458,7 +458,7 @@ FASTRUN void ReadTheSensorHub(){
 }
 
 // ******************************************************************************************************************************************************************
-void SensorHubHasFailed(){       // If the I2C bus gets its knickers in a twist, it can lock up the reciever, so DON'T call it until landed and reset.
+void SensorHubHasFailed(){       // If the I2C bus gets its knickers in a twist, it can lock up the receiver, so DON'T call it until landed and reset.
 #define Failed  42
      LatitudeGPS     = Failed; 
      LongitudeGPS    = Failed;
@@ -505,9 +505,7 @@ FASTRUN void ReceiveData(){
       }
     }
     if (ReadData()) {
-       // if (!FirstLostPacket) Serial.println ("Hooray!!");                             // Proves it worked!! 
         ReadExtraParameters();                                                         // Check the extra parameters
-        FirstLostPacket = true;                                                        // it will be when one is lost!
     } else {        
         if (millis() - SBUSTimer >= SBUSRATE) {                                        // No new packet yet - but maybe it's time to dispatch the last?
             if (BoundFlag && (millis() > 10000)) {
@@ -517,15 +515,9 @@ FASTRUN void ReceiveData(){
                 }
             }                                          
         }                                                                                                                                           
-    if (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT) {                      
-        if (FirstLostPacket) {
-                 TryNextChannel();
-            } else {
-            //   if (!FirstLostPacket) Serial.println ("RECONNECTING...");     
-                 FirstLostPacket = true;
-                 Reconnect();
-            }                                                                           // Try to reconnect.
-        } 
+        if (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT) {                     
+                Reconnect();
+        }                                                                               // Try to reconnect. 
     }
 }
 /************************************************************************************************************/

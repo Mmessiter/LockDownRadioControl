@@ -12,7 +12,7 @@
 
 #define TXVERSION_MAJOR   1
 #define TXVERSION_MINOR   8
-#define TXVERSION_MINIMUS 2
+#define TXVERSION_MINIMUS 3
 
 // **************************************************************************
 //                               Includes                                   *
@@ -271,7 +271,8 @@
 //***************************************************************************
 
 #define NEXTION Serial1      // NEXTION is connected to Serial1
-#define SHOWCOMMSDELAY 500   // 250   // ms pauses between updated info on NEXTION
+#define SHOWCOMMSDELAY 500   // ms pauses between updated info on NEXTION
+#define WARMUPDELAY    300   // fails at 200 so must be >200 ...
 
 // **************************************************************************
 //                            WATCHDOG PARAMETERS                           *
@@ -346,6 +347,7 @@ extern uint32_t       Inactivity_Start;
 extern bool           UkRules;
 extern bool           PreviousUkRules;
 extern bool           UseLog;
+extern uint32_t       ShowServoTimer;
 
 // external (global) functions needed here
 extern void  GetSlaveChannelValues();
@@ -401,9 +403,13 @@ void StartLogFile();
 void ShowLogFile(uint8_t StartLine);
 void LogThisLongGap();
 void LogThisModel();
-
-
-
+void Force_ReDisplay();
+FASTRUN void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uint8_t uncompressed_size);
+FASTRUN void BufferNewPipe();
+void ExecuteMacro();
+void Look(int p);
+void ShowFlightMode();
+void UpdateModelsNameEveryWhere();
 /*********************************************************************************************************************************/
 
 #endif

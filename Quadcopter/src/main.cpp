@@ -90,14 +90,16 @@ float maxRoll = 30.0;     //Max roll angle in degrees for angle mode (maximum 60
 float maxPitch = 30.0;    //Max pitch angle in degrees for angle mode (maximum 60 degrees), deg/sec for rate mode
 float maxYaw = 160.0;     //Max yaw rate in deg/sec
 // ***************************************************************************************************************************************************
-float Kp_roll_angle = 0.2;    //Roll P-gain - angle mode 
+//float Kp_roll_angle = 0.2;    //Roll P-gain - angle mode 
+float Kp_roll_angle = 0.3;    // MCM
 float Ki_roll_angle = 0.3;    //Roll I-gain - angle mode
 //float Kd_roll_angle = 0.05; //Roll D-gain - angle mode (if using controlANGLE2(), set to 0.0)
 float Kd_roll_angle   = 0.1;   // MCM
 // ***************************************************************************************************************************************************
 float B_loop_roll = 0.9;      //Roll damping term for controlANGLE2(), lower is more damping (must be between 0 to 1)
 // ***************************************************************************************************************************************************
-float Kp_pitch_angle = 0.2;   //Pitch P-gain - angle mode
+// float Kp_pitch_angle = 0.2;   //Pitch P-gain - angle mode
+float Kp_pitch_angle = 0.3;   //MCM
 float Ki_pitch_angle = 0.3;   //Pitch I-gain - angle mode
 //float Kd_pitch_angle = 0.05;  //Pitch D-gain - angle mode (if using controlANGLE2(), set to 0.0)
 float Kd_pitch_angle = 0.1;  // MCM
@@ -299,7 +301,7 @@ void loop() {
 
   loopBlink(); //indicate we are in main loop with short blink every 1.5 seconds
 
-  //if (channel_5_pwm > 1500) PrintGains(); // when motors stopped we can look ...MCM
+  if (channel_5_pwm > 1500) PrintGains(); // when motors stopped we can look ...MCM
   // Print data at 100hz (uncomment one at a time for troubleshooting) - SELECT ONE: 
   // printRadioData();     //radio pwm values (expected: 1000 to 2000)
   // printDesiredState();  //prints desired vehicle state commanded in either degrees or deg/sec (expected: +/- maxAXIS for roll, pitch, yaw; 0 to 1 for throttle)
@@ -343,7 +345,7 @@ void loop() {
 
 void GetGains(){
 // Roll and Pitch  
-#define P_GAIN_DEFAULT 0.2                      // default roll and pitch P Gain is 0.2 - angle mode
+#define P_GAIN_DEFAULT 0.3                      // default roll and pitch P Gain WAS 0.2 - angle mode
 #define P_GAIN_MIN P_GAIN_DEFAULT / 2 
 #define P_GAIN_MAX P_GAIN_DEFAULT * 1.5  
 

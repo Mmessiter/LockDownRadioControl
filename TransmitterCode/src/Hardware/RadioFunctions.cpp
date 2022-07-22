@@ -70,6 +70,11 @@ uint32_t ThisMoment = millis();
           KickTheDog();                 // keep watchdog happy                                  
     }
 }
+
+//***********************************************************************************************************
+void Look(int p){
+    Serial.println (p);
+}
 //***********************************************************************************************************
 // *************************************** Functions to run macros  *****************************************
 // **********************************************************************************************************
@@ -77,6 +82,7 @@ void StartMacro(uint8_t m){                                                     
     MacrosBuffer[m][MACRORUNNINGNOW] |= 1 ;                                                    // LOW BIT = "running now" flag
     MacroStartTime[m] = millis()          + ((MacrosBuffer[m][MACROSTARTTIME]) * 100);         // Note its Start moment
     MacroStopTime[m]  = MacroStartTime[m] + ((MacrosBuffer[m][MACRODURATION])  * 100);         // Note its Stop moment
+   
 }
 /************************************************************************************************************/
 void RunMacro(uint8_t m){                                                                       // Move a servo to a place                                            
@@ -84,7 +90,7 @@ void RunMacro(uint8_t m){                                                       
     if (RightNow >= MacroStartTime[m])  MacrosBuffer[m][MACRORUNNINGNOW] |= 2 ;                 // Set the ACTIVE Bit if started (BIT 1)
     if (RightNow >=  MacroStopTime[m])  MacrosBuffer[m][MACRORUNNINGNOW] &= 1 ;                 // Clear the ACTIVE Bit if expired (BIT 1)
     if (MacrosBuffer[m][MACRORUNNINGNOW] & 2) {
-      SendBuffer[(MacrosBuffer[m][MACROMOVECHANNEL])-1] = map(MacrosBuffer[m][MACROMOVETOPOSITION],0,180,MINMICROS,MAXMICROS); // Do it if currently active!
+       SendBuffer[(MacrosBuffer[m][MACROMOVECHANNEL])-1] = map(MacrosBuffer[m][MACROMOVETOPOSITION],0,180,MINMICROS,MAXMICROS); // Do it if currently active!
     }
 }
 /************************************************************************************************************/
@@ -109,13 +115,13 @@ void ExecuteMacro(){                                                            
                   RunMacro(i);
             }
         }
-   }
+    }
 }
 
 // *************** END OF MACROS ZONE ************************************************
 
 
-/*********************************************************************************************************************************/
+/***************************************************************************************/
 
 FASTRUN void FailedPacket()
 {
@@ -123,7 +129,6 @@ FASTRUN void FailedPacket()
     if (GapStart == 0) GapStart = millis(); // To keep track of gaps' length
     ++RecentPacketsLost;
     ++TotalledRecentPacketsLost; // this is to keep track of events when receiver is off
-    if (RecentPacketsLost == 1){HopToNextChannel();}; // Hop immediately after losing one packet in case that fixes it!
     if (RecentPacketsLost >= LOSTCONTACTCUTOFF) {
       
         LostContactFlag   = true;
@@ -142,73 +147,57 @@ FASTRUN void FailedPacket()
     if (SecondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH);             // INACTIVITY POWER OFF HERE!!
 }
 
+
 /************************************************************************************************************/
-//****************** Function to send data to receiver ******************************************************
+
+void TryToReconnect(){
+   if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {
+        TryOtherPipe();                                                                                 // in case the receiver has re-booted
+        PipeTimeout = millis();
+    }     
+    NextChannel = * (FHSSChPointer + random(RECONNECT_CHANNELS_COUNT) + RECONNECT_CHANNELS_START);      // a **random** reconnect channel (selected from first five)
+    HopToNextChannel();
+}
+/************************************************************************************************************/
+void SuccessfulPacket(){
+        ++RangeTestGoodPackets;
+        ++PacketNumber;
+        LostContactFlag = false;
+        RecentPacketsLost         = 0;
+        TotalledRecentPacketsLost = 0;
+        Connected                 = true;
+        if (BoundFlag) GreenLedOn();
+        CheckGapsLength();
+        StartInactvityTimeout();
+        Radio1.read(&AckPayload, AckPayloadSize);        //  "sizeof" doesn't work with externs,
+        ParseAckPayload();
+}
+
+/************************************************************************************************************/
+void FlushFifos(){
+        Radio1.flush_rx();                                         // This avoids a lockup that happens when the FIFO gets full.
+        Radio1.flush_tx();                                         
+}
+/************************************************************************************************************/
+//****************** Function to send pre-compressed data to receiver ***************************************
 /************************************************************************************************************/
 
 FASTRUN void SendData()
 {
-    uint32_t ElapsedSinceLastSend = (millis() - TxPace);
-    if (NEXTION.available()) return;              // was a button pressed?
-    if (ElapsedSinceLastSend <= 3) {
-        ShowComms();                              // There is PLENTY of time to fit in these calls because there are about 6 ms spare still WHEN CONNECTED
-        ReadSwitches();                           // Check switch positions
-        CheckTimer();  
-        if (PreviousUkRules != UkRules){
-             LogUKRules();
-             PreviousUkRules = UkRules;
-        }
-    }
- // if ((ElapsedSinceLastSend >= PACEMAKER) || (LostContactFlag)){ 
-    if ((ElapsedSinceLastSend >= PACEMAKER) || (RecentPacketsLost > 0)){ //  Last packet was lost so don't wait before retry 
+    if (NEXTION.available()) return;                               // in case key was hit
+    if (((millis() - TxPace) >= PACEMAKER) || (LostContactFlag)){ 
         TxPace = millis();
-        GetNewChannelValues();                    // Load SendBuffer with new servo positions
-        if (UseMacros) ExecuteMacro();            // Modify it if macro is running
-        if (DoSbusSendOnly) {                     // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
-            ReadSwitches();
-            MapToSBUS();
-            return;                               // no more to do here!
-        }
-        if (BuddyMaster) {GetSlaveChannelValues();} // If buddy master, check where student's sticks etc. are.
-        if (!BoundFlag && !(CurrentView == CALIBRATEVIEW) && !(CurrentView == STICKSVIEW)){
-            BufferNewPipe(); // if not yet bound, send our pipe
-        }
-        LoadPacketData();    // extra parameters appended to the data packet
-        if (LostContactFlag){
-            if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {
-                TryOtherPipe();
-                PipeTimeout = millis();
-            }     
-            NextChannel = * (FHSSChPointer + random(RECONNECT_CHANNELS_COUNT) + RECONNECT_CHANNELS_START);    // a **random** reconnect channel (selected from first five)
-            ShowComms();                       // NEEDED WHEN NOT CONNECTED                        
-            ReadSwitches();                                
-            CheckTimer();  
-            HopToNextChannel();
-        }
+        if (DoSbusSendOnly) {MapToSBUS();return;}                  // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
+        if (LostContactFlag) TryToReconnect();
+        LoadPacketData();                                          // extra parameters appended to the data packet
         Connected = false;                                         // Assume the worst until ACK is received.
-        Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);   // Compress 32 bytes down to 24
-        Radio1.flush_rx();                                         // This avoids a lockup that happens when the FIFO gets full.
-        Radio1.flush_tx();                                         // This avoids a lockup that happens when the FIFO gets full.
-                                                                   //  *************************************** SEND *************************************************************************************
-        if  (Radio1.write(&CompressedData, SizeOfCompressedData)){ //  **************************** ! ACTUALLY SEND DATA ! *********************************************
-                                                                   //  ***************************** (Returns TRUE if ACK received) ****************************************************************************
-            ++RangeTestGoodPackets;
-            ++PacketNumber;
-            LostContactFlag = false;
-            RecentPacketsLost         = 0;
-            TotalledRecentPacketsLost = 0;
-            Connected                 = true;
-            if (BoundFlag) GreenLedOn();
-            CheckGapsLength();
-            StartInactvityTimeout();
-            if (Radio1.isAckPayloadAvailable()){                     //  This 'if' is redundant
-                    Radio1.read(&AckPayload, AckPayloadSize);        //  "sizeof" doesn't work with externs,
-                    ParseAckPayload();
-            } 
+        FlushFifos();
+        if  (Radio1.write(&CompressedData, SizeOfCompressedData)){ //  ************************** >>>>> SEND DATA TO RX <<<<< ***************************************                                                  
+            SuccessfulPacket();
         }else{
             FailedPacket();
         }
-    }
+    } 
 }
 /************************************************************************************************************/
 // This function draws or re-draws and clears the box that display wave band scanning information

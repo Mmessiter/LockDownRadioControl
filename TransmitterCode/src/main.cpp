@@ -926,6 +926,8 @@ void ReadTime()
             strcat(TimeString, Str(NB, tm.Second, 0));
             SendText(DateTime, TimeString);
             SendText(Owner, TxName);
+            UpdateModelsNameEveryWhere();
+            if (CurrentView == FRONTVIEW) ShowFlightMode();
         }
     }
 }
@@ -1312,6 +1314,10 @@ FASTRUN void CheckTimer()
 
 FASTRUN void ShowServoPos()
 {
+    if ((Connected) || (CurrentView == GRAPHVIEW))  { // not certain why - but this is needed! :-)
+        if (millis() - ShowServoTimer <= 60) return;    
+        ShowServoTimer = millis();
+    }
     char SticksView_Ch1[]    = "Ch1";
     char SticksView_Ch2[]    = "Ch2";
     char SticksView_Ch3[]    = "Ch3";
@@ -1341,43 +1347,10 @@ FASTRUN void ShowServoPos()
     uint16_t StickPosition   = 54321;
     int l             = 0;
     int l1            = 0;
-    int LeastDistance = 2; // if the change is very small, don't re-display anything - to reduce flashing.
+    int LeastDistance = 2;          // if the change is very small, don't re-display anything - to reduce flashing.
+  
+if ((CurrentView == STICKSVIEW) || (CurrentView == FRONTVIEW)){ 
 
-    if (CurrentView == CALIBRATEVIEW) {
-        if (abs(SendBuffer[0] - ShownBuffer[0]) > LeastDistance) {
-            SendValue(CalibrateView_Ch1, IntoLowerRes(SendBuffer[0]));
-            ShownBuffer[0] = SendBuffer[0];
-        }
-        if (abs(SendBuffer[1] - ShownBuffer[1]) > LeastDistance) {
-            SendValue(CalibrateView_Ch2, IntoLowerRes(SendBuffer[1]));
-            ShownBuffer[1] = SendBuffer[1];
-        }
-        if (abs(SendBuffer[2] - ShownBuffer[2]) > LeastDistance) {
-            SendValue(CalibrateView_Ch3, IntoLowerRes(SendBuffer[2]));
-            ShownBuffer[2] = SendBuffer[2];
-        }
-        if (abs(SendBuffer[3] - ShownBuffer[3]) > LeastDistance) {
-            SendValue(CalibrateView_Ch4, IntoLowerRes(SendBuffer[3]));
-            ShownBuffer[3] = SendBuffer[3];
-        }
-        if (abs(SendBuffer[4] - ShownBuffer[4]) > LeastDistance) {
-            SendValue(CalibrateView_Ch5, IntoLowerRes(SendBuffer[4]));
-            ShownBuffer[4] = SendBuffer[4];
-        }
-        if (abs(SendBuffer[5] - ShownBuffer[5]) > LeastDistance) {
-            SendValue(CalibrateView_Ch6, IntoLowerRes(SendBuffer[5]));
-            ShownBuffer[5] = SendBuffer[5];
-        }
-        if (abs(SendBuffer[6] - ShownBuffer[6]) > LeastDistance) {
-            SendValue(CalibrateView_Ch7, IntoLowerRes(SendBuffer[6]));
-            ShownBuffer[6] = SendBuffer[6];
-        }
-        if (abs(SendBuffer[7] - ShownBuffer[7]) > LeastDistance) {
-            SendValue(CalibrateView_Ch8, IntoLowerRes(SendBuffer[7]));
-            ShownBuffer[7] = SendBuffer[7];
-        }
-    }
-    if (CurrentView == STICKSVIEW) {
         if (abs(SendBuffer[0] - ShownBuffer[0]) > LeastDistance) {
             SendValue(SticksView_Ch1, IntoLowerRes(SendBuffer[0]));
             ShownBuffer[0] = SendBuffer[0];
@@ -1443,6 +1416,42 @@ FASTRUN void ShowServoPos()
             ShownBuffer[15] = SendBuffer[15];
         }
     }
+
+    if  (CurrentView == CALIBRATEVIEW)  {
+        if (abs(SendBuffer[0] - ShownBuffer[0]) > LeastDistance) {
+            SendValue(CalibrateView_Ch1, IntoLowerRes(SendBuffer[0]));
+            ShownBuffer[0] = SendBuffer[0];
+        }
+        if (abs(SendBuffer[1] - ShownBuffer[1]) > LeastDistance) {
+            SendValue(CalibrateView_Ch2, IntoLowerRes(SendBuffer[1]));
+            ShownBuffer[1] = SendBuffer[1];
+        }
+        if (abs(SendBuffer[2] - ShownBuffer[2]) > LeastDistance) {
+            SendValue(CalibrateView_Ch3, IntoLowerRes(SendBuffer[2]));
+            ShownBuffer[2] = SendBuffer[2];
+        }
+        if (abs(SendBuffer[3] - ShownBuffer[3]) > LeastDistance) {
+            SendValue(CalibrateView_Ch4, IntoLowerRes(SendBuffer[3]));
+            ShownBuffer[3] = SendBuffer[3];
+        }
+        if (abs(SendBuffer[4] - ShownBuffer[4]) > LeastDistance) {
+            SendValue(CalibrateView_Ch5, IntoLowerRes(SendBuffer[4]));
+            ShownBuffer[4] = SendBuffer[4];
+        }
+        if (abs(SendBuffer[5] - ShownBuffer[5]) > LeastDistance) {
+            SendValue(CalibrateView_Ch6, IntoLowerRes(SendBuffer[5]));
+            ShownBuffer[5] = SendBuffer[5];
+        }
+        if (abs(SendBuffer[6] - ShownBuffer[6]) > LeastDistance) {
+            SendValue(CalibrateView_Ch7, IntoLowerRes(SendBuffer[6]));
+            ShownBuffer[6] = SendBuffer[6];
+        }
+        if (abs(SendBuffer[7] - ShownBuffer[7]) > LeastDistance) {
+            SendValue(CalibrateView_Ch8, IntoLowerRes(SendBuffer[7]));
+            ShownBuffer[7] = SendBuffer[7];
+        }
+    }
+    
     if (CurrentView == GRAPHVIEW) { 
 #define fixitx 35
 #define BarWidth 3
@@ -1482,6 +1491,7 @@ FASTRUN void ShowServoPos()
         }else{
     SendValue(ChannelInput, 0);
     SendValue(ChannelOutput, 0);
+   
     }
    }
 }
@@ -1503,11 +1513,13 @@ FASTRUN bool CheckTXVolts(){
         if (USE_INA219) {
             txv  = (ina219.getBusVoltage_V()) * 100;
             //txpc = map(txv, 512, 670, 0, 100); // LiFePo4 Battery 2.6 ->3.5  volts per cell
-            txpc = map(txv, 3.1 * 200, 3.35 * 200, 0, 100); // LiFePo4 Battery 3.1 ->3.35  volts per cell
+            txpc = map(txv, 3.2 * 200, 3.33 * 200, 0, 100); // LiFePo4 Battery 3.1 ->3.35  volts per cell
             if (txpc < LowBattery) {
                 TXWarningFlag = true;
              }
             if (txpc > 100) txpc = 100; // avoid showing > 100% !
+            if (txpc < 0)   txpc = 0;   // avoid showing < 0% !
+
             dtostrf(txpc, 0, 0, Vbuf);
             strcat(Vbuf, pc);
             if (CurrentView == FRONTVIEW) SendText(TXVolts, Vbuf);
@@ -1599,6 +1611,9 @@ FASTRUN bool CheckRXVolts(){
 /*********************************************************************************************************************************/
 
 /** @brief SHOW COMMS */
+
+// This displays many telemetry data onto the current screen
+
 FASTRUN void ShowComms()
 {
     if (NEXTION.available()) return; // was a button pressed?
@@ -2025,6 +2040,7 @@ FASTRUN void GetNewChannelValues()
         DoReverseSense();
         DoMixes(); 
     }                                 // not while calibrating
+
 }
 
 /*********************************************************************************************************************************/
@@ -2208,10 +2224,6 @@ void UpdateModelsNameEveryWhere()
     char TrimView_FlightMode[]  = "t1";
     char GraphView_fmode[]      = "fmode";
     char SticksView_t1[]        = "t1";
-    char FrontView_fm1[]        = "fm1";
-    char FrontView_fm2[]        = "fm2";
-    char FrontView_fm3[]        = "fm3";
-    char FrontView_fm4[]        = "fm4";
     char NoName[17];
     char Ch[] = "Channel ";
     char Nbuf[7];
@@ -2255,7 +2267,6 @@ void UpdateModelsNameEveryWhere()
             SendText(TrimView_FlightMode, fm1);
             UpdateTrimView();
         }
-        if (CurrentView == FRONTVIEW) SendValue(FrontView_fm1, 1);
     }
     if (FlightMode == 2) {
         if (CurrentView == STICKSVIEW) SendText(SticksView_t1, fm2);
@@ -2264,7 +2275,6 @@ void UpdateModelsNameEveryWhere()
             SendText(TrimView_FlightMode, fm2);
             UpdateTrimView();
         }
-        if (CurrentView == FRONTVIEW) SendValue(FrontView_fm2, 1);
     }
     if (FlightMode == 3) {
         if (CurrentView == STICKSVIEW) SendText(SticksView_t1, fm3);
@@ -2273,7 +2283,6 @@ void UpdateModelsNameEveryWhere()
             SendText(TrimView_FlightMode, fm3);
             UpdateTrimView();
         }
-        if (CurrentView == FRONTVIEW) SendValue(FrontView_fm3, 1);
     }
     if (FlightMode == 4) {
         if (CurrentView == STICKSVIEW) SendText(SticksView_t1, fm4);
@@ -2282,7 +2291,6 @@ void UpdateModelsNameEveryWhere()
             SendText(TrimView_FlightMode, fm4);
             UpdateTrimView();
         }
-        if (CurrentView == FRONTVIEW) SendValue(FrontView_fm4, 1);
     }
 }
 
@@ -3124,8 +3132,6 @@ void ShowLogFile(uint8_t StartLine){
 /*********************************************************************************************************************************/
 FLASHMEM void setup()
 {
-    char Initialising[]            = "Initialising ... ";
-    char FrontView_Connected[]     = "FrontView.Connected";
     char FrontView_BackGround[]    = "FrontView.BackGround";
     char FrontView_ForeGround[]    = "FrontView.ForeGround";
     char FrontView_Special[]       = "FrontView.Special";
@@ -3136,31 +3142,22 @@ FLASHMEM void setup()
     pinMode(POWER_OFF_PIN, OUTPUT);
     BlueLedOn();
     NEXTION.begin(921600);      // BAUD rate also set in display code THIS IS THE MAX (was 115200)  
-    delay(1500);
     InitMaxMin();               // in case not yet calibrated
     InitCentreDegrees();        // In case not yet calibrated
     ResetSubTrims();
     CentreTrims();
-
     WatchDogConfig.window   = WATCHDOGMAXRATE; //  = MINIMUM RATE in milli seconds, (32ms to 522.232s) must be MUCH smaller than timeout
     WatchDogConfig.timeout  = WATCHDOGTIMEOUT; //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s)
     WatchDogConfig.callback = WatchDogCallBack;
     TeensyWatchDog.begin(WatchDogConfig);
-    LastDogKick = millis(); // needed? - yes!
-
-    delay (500);
+    LastDogKick = millis();        // needed? - yes!
+    delay (WARMUPDELAY);
     if (!SD.begin(chipSelect)){    // MUST return true or all is lost! (todo: create error page)
-       delay (500);
+       delay (WARMUPDELAY);
        SD.begin(chipSelect);       // a second attempt for iffy sd cards ?!
     }                                
     CalibratedYet = LoadAllParameters();                  // If they exist, read saved SD card settings.   
-    if (!CalibratedYet)     {Procrastinate(250); CalibratedYet = LoadAllParameters(); }   
-        
-    SendValue(FrontView_BackGround,BackGroundColour);     // Get colours ready
-    SendValue(FrontView_ForeGround,ForeGroundColour);
-    SendValue(FrontView_Special,SpecialColour);
-    SendValue(FrontView_Highlight,HighlightColour);
-    SendCommand(page_FrontView);
+    if (!CalibratedYet) {Procrastinate(250); CalibratedYet = LoadAllParameters(); }   
     teensyMAC(MacAddress);                                // Get MAC address and use it as pipe address
     NewPipe  = (uint64_t)MacAddress[0] << 40;
     NewPipe += (uint64_t)MacAddress[1] << 32;
@@ -3173,24 +3170,31 @@ FLASHMEM void setup()
     if (USE_INA219) ina219.begin();
     InitSwitchesAndTrims();
     InitRadio(DefaultPipe);
-    SendText(FrontView_Connected, Initialising);
+    Procrastinate(WARMUPDELAY);                           // Allow Nextion time to warm up
+    SendValue(FrontView_BackGround,BackGroundColour);     // Get colours ready
+    SendValue(FrontView_ForeGround,ForeGroundColour);
+    SendValue(FrontView_Special,SpecialColour);
+    SendValue(FrontView_Highlight,HighlightColour);
+    SendCommand(page_FrontView);
+    SetAudioVolume(AudioVolume);
+    if (PlayFanfare){
+        PlaySound(THEFANFARE);
+        Procrastinate(4000);        // Fanafare takes about 4 seconds
+        }
     SendValue(FrontView_Hours, 0);
     SendValue(FrontView_Mins, 0);
     SendValue(FrontView_Secs, 0);
     //  ***************************************************************************************
-    // SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
+    //  SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
     //  **   BUT then re-comment it!! Otherwise it will reset to same time on every boot up! **
     //  ***************************************************************************************
     BoundFlag     = false;
     TxOnTime      = millis();
-    UpdateModelsNameEveryWhere();
     StartInactvityTimeout();
     SizeOfCompressedData = sizeof(CompressedData);
     GetTXVersionNumber();
     MySbus.begin();
     SetUKFrequencies(); 
-    SetAudioVolume(AudioVolume);
-    if (PlayFanfare) PlaySound(THEFANFARE);
     ScreenTimeTimer = millis();
     RestoreBrightness();
     if (UseLog) {
@@ -4697,7 +4701,7 @@ void SoundFlightMode()
 }
 /*********************************************************************************************************************************/
 
-void ShowFlightMode()
+void ShowFlightMode() // heer 
 {
     char FMPress1[]  = "click fm1,1";
     char FMPress2[]  = "click fm2,1";
@@ -5122,7 +5126,6 @@ FASTRUN void ButtonWasPressed()
     char MixesView_Percent[]       = "Percent";
     char page_SetupView[]          = "page SetupView";
     char page_AudioView[]          = "page AudioView";
-    char page_FrontView[]          = "page FrontView";
     char page_ColoursView[]        = "page ColoursView";
     char GoSetupView[]             = "GoSetupView";
     char ColoursView[]             = "ColoursView";
@@ -5613,6 +5616,7 @@ FASTRUN void ButtonWasPressed()
             LastTimeRead = 0;
             Reconnected = false;  // this is to make '** Connected! **' redisplay (in ShowComms())
             LastSeconds = 0;      // This forces redisplay of timer...
+            Force_ReDisplay();
             CheckTimer();
             ClearText();
             return;
@@ -5749,7 +5753,7 @@ FASTRUN void ButtonWasPressed()
              if (CurrentView == REVERSEVIEW){
                  StartReverseView();
              }
-             if (CurrentView == STICKSVIEW){
+             if ((CurrentView == STICKSVIEW) || (CurrentView == FRONTVIEW)){
                 Force_ReDisplay();
                 ShowServoPos(); 
              }
@@ -6585,7 +6589,7 @@ FASTRUN void ButtonWasPressed()
         }
 
         if (InStrng(FM2, TextIn))
-            if (p > 0) {
+            {
                 FlightMode         = 2;
                 PreviousFlightMode = 2;
                 UpdateModelsNameEveryWhere();
@@ -6828,16 +6832,20 @@ void LoadPacketData()
 /************************************************************************************************************/
 
 void ReadFMSwitch(bool sw1, bool sw2, bool rev)
-{
-    if (sw1 == false && sw2 == false) FlightMode = 2;
-    if (rev) {
-        if (sw1) FlightMode = 1;
-        if (sw2) FlightMode = 3;
-    }
-    else {
-        if (sw1) FlightMode = 3;
-        if (sw2) FlightMode = 1;
-    }
+{   
+    if ((sw1 == false) && (sw2 == false)) 
+    {
+        FlightMode = 2;
+    }else{
+        if (rev) {
+            if (sw1) FlightMode = 1;
+            if (sw2) FlightMode = 3;
+        }
+        else {
+            if (sw1) FlightMode = 3;
+            if (sw2) FlightMode = 1;
+        }
+    } 
 }
 
 /************************************************************************************************************/
@@ -6890,21 +6898,13 @@ void GetFlightMode()
     if (FlightMode != PreviousFlightMode) {
         if (Connected) LogNewFlightMode();
         if (AnnounceBanks) SoundFlightMode();
-        if (CurrentView == FRONTVIEW) {
-            ShowFlightMode();
-        }
-        LastSeconds = 0;               // Just to force redisplay of timer
-        if (PreviousFlightMode == 4) { // Start or restart timer when auto goes off
-            TimerMillis = millis();
-        }
-        if (FlightMode == 4) {                                // Pause timer when auto on
-            PausedSecs = Secs + (Mins * 60) + (Hours * 3600); // Remember how long so far
-        }
-        CheckTimer(); // update timer
+        if (CurrentView == FRONTVIEW) ShowFlightMode();
+        if (PreviousFlightMode == 4)  TimerMillis = millis();
+        if (FlightMode == 4) PausedSecs = Secs + (Mins * 60) + (Hours * 3600); // Remember how long so far
+        LastSeconds = 0;                                                       // to force redisplay of timer
+        CheckTimer(); 
         UpdateModelsNameEveryWhere();
-        if (CurrentView == GRAPHVIEW) {
-            DisplayCurveAndServoPos();
-         }
+        if (CurrentView == GRAPHVIEW) DisplayCurveAndServoPos();
     }
     PreviousFlightMode = FlightMode;
 }
@@ -7304,7 +7304,6 @@ void  CheckScanButton(){
         }   
 }
 
-
 /************************************************************************************************************/
 // LOOP
 /************************************************************************************************************/
@@ -7314,7 +7313,7 @@ FASTRUN void loop()
     if (GetButtonPress()) {
         ButtonWasPressed();          // Deal with button
     }
-    if ((millis()-ModelNameTimeCheck) > 5000) {  
+    if ((millis()-ModelNameTimeCheck) > 1000) {  
         ModelNameTimeCheck  = millis();
         if (CurrentView == MAINSETUPVIEW){ 
             CheckScanButton();           
@@ -7332,17 +7331,25 @@ FASTRUN void loop()
         GetStatistics();             // Do stats
         RangeTestStart = millis();
     }
-    if ((millis() - ShowServoTimer >= 100) && (CurrentView != FRONTVIEW)) {
-        ShowServoPos();              // Show servos positions
-        ShowServoTimer = millis();
+    if (PreviousUkRules != UkRules){
+        LogUKRules();
+        PreviousUkRules = UkRules;
     }
-
-    if ((millis() - TxOnTime) > 2000) { // Transmit nothing for first 2 seconds
+    ShowComms();                              // Screen Data 
+    ReadSwitches();                           // Check switch positions
+    CheckTimer();                             // Screen Timer 
+    GetNewChannelValues();                    // Load SendBuffer with new servo positions
+    if (UseMacros) ExecuteMacro();            // Modify it if macro is running
+    ShowServoPos();                           // Servo positions use channel values
+    if (!BoundFlag)  BufferNewPipe();         // if not yet bound, insert our pipe into sendbuffer
+    if (BuddyMaster) GetSlaveChannelValues(); // If buddy master, check where student's sticks etc. are.
+    Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);               // Compress 32 bytes down to 24
+   
+    if ((millis() - TxOnTime) > 2000) {                                    // Transmit nothing for first 2 seconds
 
         switch (CurrentMode) {
             case NORMAL:            // 0
                 SendData();
-                if (!LedWasGreen) ShowComms();   // Show when not connected
                 break;
             case CALIBRATELIMITS:   // 1
                 CalibrateSticks();
@@ -7357,7 +7364,6 @@ FASTRUN void loop()
                 break; // CurrentMode >= 4 for no action at all.
         }
     }
-
     if (BindingNow == 2 && (millis() - BindingTimer) > 100) {
         if (!BoundFlag) {
 #ifdef DB_BIND
