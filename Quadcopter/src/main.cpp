@@ -1384,5 +1384,14 @@ float invSqrt(float x) {    // gives a warning (Can't yet find an alternative)
   float y = tmp * (1.69000231f - 0.714158168f * x * tmp * tmp);
   return y;
 }
+//float invSqrt(float x)
+//{
+//    union { float as_float; int32_t as_int; } un;
+//   float xhalf = 0.5f * x;
+//    un.as_float = x;
+//    un.as_int = 0x5f3759df - (un.as_int >> 1);
+//    un.as_float = un.as_float * (1.5f - xhalf * un.as_float * un.as_float);
+//    return un.as_float;
+//}
 // **********************************************************************************************************
 // ***********************************************************************************************************

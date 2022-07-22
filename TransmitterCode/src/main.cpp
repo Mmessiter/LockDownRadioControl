@@ -1503,11 +1503,10 @@ FASTRUN bool CheckTXVolts(){
     char  TXVolts[]              = "t21";
     char  Vbuf[16];
     char  pc[]                   = "%";
-    char  v[]                    = "V, ";
+    char  v[]                    = "V  (";
     char  TXBattInfo[65];
     char  FrontView_TXBV[]       = "TXBV";
-    char  LiFe2s[]               = " 2s LiFe,  ";
-    char  PerCell[]              = "V/C";
+    char  PerCell[]              = " per cell)";
     bool  TXWarningFlag          = false;
     int   txpc                   = 0;
         if (USE_INA219) {
@@ -1519,7 +1518,6 @@ FASTRUN bool CheckTXVolts(){
              }
             if (txpc > 100) txpc = 100; // avoid showing > 100% !
             if (txpc < 0)   txpc = 0;   // avoid showing < 0% !
-
             dtostrf(txpc, 0, 0, Vbuf);
             strcat(Vbuf, pc);
             if (CurrentView == FRONTVIEW) SendText(TXVolts, Vbuf);
@@ -1528,7 +1526,6 @@ FASTRUN bool CheckTXVolts(){
             strcpy(TXBattInfo, Vbuf);
             strcat(TXBattInfo, v);
             txv /= 2;
-            strcat(TXBattInfo, LiFe2s);
             dtostrf(txv, 2, 2, Vbuf);
             strcat(TXBattInfo, Vbuf);
             strcat(TXBattInfo, PerCell);
@@ -1545,18 +1542,14 @@ FASTRUN bool CheckRXVolts(){
     bool  RXWarningFlag          = false;
     char  Vbuf[16];
     char  RXBattInfo[65];
-    char  LiPo2s[]  = " 2s LiPo,  ";
-    char  LiPo3s[]  = " 3s LiPo,  ";
-    char  LiPo4s[]  = " 4s LiPo,  ";
-    char  LiPo5s[]  = " 5s LiPo,  ";
-    char  LiPo6s[]  = " 6s LiPo,  ";
+  
     char  FrontView_AckPayload[]    = "AckPayload";
     float VoltsPerCell              = 0;
     char  FrontView_RXBV[]          = "RXBV";
-    char  PerCell[]                 = "V/C";
+    char  PerCell[]                 = " per cell)";
     char  RXBattNA[]                = "(No data)";
     char  RXBattNV[]                = "    ";
-    char  v[]                       = "V, ";
+    char  v[]                       = "V  (";
     char  pc[]                      = "%";
             ReadVolts = RXModelVolts * 10;
             // 6s Max 25.2 -> 20.4
@@ -1581,11 +1574,7 @@ FASTRUN bool CheckRXVolts(){
                 if (BoundFlag && CurrentView == FRONTVIEW) SendText(FrontView_AckPayload, Vbuf);
                 strcpy(RXBattInfo, ModelVolts);
                 strcat(RXBattInfo, v);
-                if (RXCellCount == 6) strcat(RXBattInfo, LiPo6s);
-                if (RXCellCount == 5) strcat(RXBattInfo, LiPo5s);
-                if (RXCellCount == 4) strcat(RXBattInfo, LiPo4s);
-                if (RXCellCount == 3) strcat(RXBattInfo, LiPo3s);
-                if (RXCellCount == 2) strcat(RXBattInfo, LiPo2s);
+              
                 VoltsPerCell = (ReadVolts / RXCellCount) / 10;
                 dtostrf(VoltsPerCell, 2, 2, Vbuf);
                 strcat(RXBattInfo, Vbuf);
