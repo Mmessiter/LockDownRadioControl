@@ -26,6 +26,5 @@ var searchData=
   ['printrollpitchyaw_23',['printRollPitchYaw',['../_quadcopter_2src_2main_8cpp.html#af58905571a8592d536b2f10f243e0ce9',1,'main.cpp']]],
   ['printsensordetails_24',['printSensorDetails',['../class_adafruit___sensor.html#af994cc1147831134ad7bf7b2c99d7478',1,'Adafruit_Sensor']]],
   ['printservocommands_25',['printServoCommands',['../_quadcopter_2src_2main_8cpp.html#ab3633f479d5122bce26384264d64f657',1,'main.cpp']]],
-  ['procrastinate_26',['Procrastinate',['../_radio_functions_8cpp.html#a760609a682300dfe6bfaac737fd4d5eb',1,'Procrastinate(uint32_t HowLong):&#160;RadioFunctions.cpp'],['../_radio_functions_8h.html#a760609a682300dfe6bfaac737fd4d5eb',1,'Procrastinate(uint32_t HowLong):&#160;RadioFunctions.cpp']]],
-  ['prodradio_27',['ProdRadio',['../radio_8h.html#a62f1498f67d7e438905ae486bc27044f',1,'radio.h']]]
+  ['procrastinate_26',['Procrastinate',['../_radio_functions_8cpp.html#a760609a682300dfe6bfaac737fd4d5eb',1,'Procrastinate(uint32_t HowLong):&#160;RadioFunctions.cpp'],['../_radio_functions_8h.html#a760609a682300dfe6bfaac737fd4d5eb',1,'Procrastinate(uint32_t HowLong):&#160;RadioFunctions.cpp']]]
 ];
