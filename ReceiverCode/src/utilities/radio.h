@@ -139,7 +139,7 @@ void GetNewPipe()
  * @note Address data in EEPORM is valid only after a previous power cycle observed
  * a completed binding process (pairing was successful at least once during last flight's session).
  */
-void GetOldPipe()
+FLASHMEM void GetOldPipe()
 {
     ReadSavedPipe();
     OldPipe = (uint64_t)SavedPipeAddress[0] << 56;
@@ -168,7 +168,7 @@ void HopToNextChannel()
 /************************************************************************************************************/
 
 /** Initialize a radio transceiver. */
-void InitCurrentRadio()
+FLASHMEM void InitCurrentRadio()
 {
     CurrentRadio->begin();
     CurrentRadio->enableAckPayload();       // needed
