@@ -4671,7 +4671,7 @@ void SoundFlightMode()
 }
 /*********************************************************************************************************************************/
 
-void ShowFlightMode() // heer 
+void ShowFlightMode() 
 {
     char FMPress1[]  = "click fm1,1";
     char FMPress2[]  = "click fm2,1";
@@ -5721,6 +5721,11 @@ FASTRUN void ButtonWasPressed()
              if ((CurrentView == STICKSVIEW) || (CurrentView == FRONTVIEW)){
                 Force_ReDisplay();
                 ShowServoPos(); 
+                if (CurrentView == FRONTVIEW){
+                    SendValue(FrontView_Secs, Secs);
+                    SendValue(FrontView_Mins, Mins);
+                    SendValue(FrontView_Hours, Hours);  
+                }
              }
              if (CurrentView == LOGVIEW){ 
                 SendCommand(pLogView);
