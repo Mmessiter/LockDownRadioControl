@@ -97,7 +97,7 @@ var searchData=
   ['inhibitnamecheck_94',['InhibitNameCheck',['../_transmitter_code_2src_2main_8cpp.html#aff92977de1d532b82ebb3650a790f099',1,'main.cpp']]],
   ['initbmp280_95',['InitBMP280',['../_sensor_hub_t32_2src_2main_8cpp.html#aa2c448c0ec510ffaaecbc5991e726b53',1,'main.cpp']]],
   ['initcentredegrees_96',['InitCentreDegrees',['../_transmitter_code_2src_2main_8cpp.html#a515ad50eda3c39eddfdca4700eae9b5f',1,'main.cpp']]],
-  ['initcurrentradio_97',['InitCurrentRadio',['../radio_8h.html#a9c6678b1449ea8eaaab6a3a53cbb3d65',1,'radio.h']]],
+  ['initcurrentradio_97',['InitCurrentRadio',['../radio_8h.html#ab652df130d9feb78c0accd5beedf7d80',1,'radio.h']]],
   ['initdatavalue_98',['initDataValue',['../class_adafruit___g_p_s.html#a160e187e03ea22b22379dfd25b86bd2d',1,'Adafruit_GPS']]],
   ['inithistory_99',['initHistory',['../class_adafruit___g_p_s.html#a39a2aecda4b5dcf8cab72ef93bdcc103',1,'Adafruit_GPS']]],
   ['initialize_100',['initialize',['../class_m_p_u6050.html#abd8fc6c18adf158011118fbccc7e7054',1,'MPU6050']]],

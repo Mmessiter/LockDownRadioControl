@@ -146,7 +146,7 @@ var searchData=
   ['getnewpipe_143',['GetNewPipe',['../radio_8h.html#ad8b2470258da4e397b34d67ffce9ebaf',1,'radio.h']]],
   ['getnextnumber_144',['GetNextNumber',['../_transmitter_code_2src_2main_8cpp.html#a3a1bb848113ddbbc27294921fa92f92a',1,'main.cpp']]],
   ['getnormalized_145',['getNormalized',['../class_quaternion.html#a61f5f7cb9b248aa259292c3c1960a1f0',1,'Quaternion::getNormalized()'],['../class_vector_int16.html#a1f2c17ac660f1e90a095f9e7914200c5',1,'VectorInt16::getNormalized()'],['../class_vector_float.html#aacb5e7ca59563c47dd066d8b1264ec4b',1,'VectorFloat::getNormalized()']]],
-  ['getoldpipe_146',['GetOldPipe',['../radio_8h.html#a2cce213711b7a34bc80eec167dffcb8f',1,'radio.h']]],
+  ['getoldpipe_146',['GetOldPipe',['../radio_8h.html#a198affe6f9f64da7272c5fcfe16c1621',1,'radio.h']]],
   ['getothervalue_147',['GetOtherValue',['../_transmitter_code_2src_2main_8cpp.html#ac8919b32f9c38cc65c7b93cae664acfb',1,'main.cpp']]],
   ['getotpbankvalid_148',['getOTPBankValid',['../class_m_p_u6050.html#a6eb099e3dc96eb4d113cf81804256e8c',1,'MPU6050']]],
   ['getpassthroughstatus_149',['getPassthroughStatus',['../class_m_p_u6050.html#af2820067b73f177d985ed81e894281b0',1,'MPU6050']]],
