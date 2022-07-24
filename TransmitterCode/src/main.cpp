@@ -1499,26 +1499,21 @@ if ((CurrentView == STICKSVIEW) || (CurrentView == FRONTVIEW)){
 /*********************************************************************************************************************************/
 FASTRUN bool CheckTXVolts(){
     char  DataView_txv[]         = "txv";
-    char  JTX[]                   = "JTX";
-    float txv                    = 0;
-    char  Vbuf[16];
-    char  TXBattInfo[65];
+    char  JTX[]                  = "JTX";
     char  FrontView_TXBV[]       = "TXBV";
     bool  TXWarningFlag          = false;
-    int   txpc                   = 0;
+    float txpc,txv;            
+    char  Vbuf[16];
+    char  TXBattInfo[65];
         if (USE_INA219) {
             txv  = (ina219.getBusVoltage_V()) * 100;
-            txpc = map(txv, 3.2 * 200, 3.33 * 200, 0, 100); // LiFePo4 Battery 3.1 ->3.35  volts per cell
-            if (txpc < LowBattery) {
-                TXWarningFlag = true;
-             }
+            txpc = map(txv, 3.2f * 200, 3.33f * 200, 0, 100); // LiFePo4 Battery 3.1 ->3.35  volts per cell
+            if (txpc < LowBattery) TXWarningFlag = true;
             txpc = constrain(txpc, 0, 100);
-            if (CurrentView == FRONTVIEW) SendValue(JTX,txpc);
-            txv /= 200;
-            dtostrf(txv, 2, 2, Vbuf);
+            dtostrf(txv/200, 2, 2, Vbuf);
             strcpy(TXBattInfo, Vbuf);
-            if (CurrentView == FRONTVIEW) SendText(FrontView_TXBV, TXBattInfo);
-            if (CurrentView == DATAVIEW)  SendText(DataView_txv, TransmitterVersionNumber); // TX Version Number
+            if (CurrentView == FRONTVIEW) {SendValue(JTX,txpc); SendText(FrontView_TXBV, TXBattInfo);}
+            if (CurrentView == DATAVIEW)  SendText(DataView_txv, TransmitterVersionNumber); 
         }
 return TXWarningFlag;
 }
