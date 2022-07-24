@@ -1530,9 +1530,12 @@ FASTRUN bool CheckRXVolts(){
     char  RXBattInfo[65];
     float VoltsPerCell              = 0;
     char  FrontView_RXBV[]          = "RXBV";
+    char  RXPC[]                    = "RXPC";
     char  PerCell[]                 = " per cell)";
     char  RXBattNA[]                = "(No data from RX)";
     char  v[]                       = "V  (";
+    char pc[]                       = "%";
+    char spaces[]                   = "  "; 
             ReadVolts = RXModelVolts * 100;
             Volts = map(ReadVolts,  3.4f * RXCellCount * 100 ,  4.2f * RXCellCount * 100, 0, 100);  
             if (RXVoltsDetected) {
@@ -1543,6 +1546,9 @@ FASTRUN bool CheckRXVolts(){
             }
             if (RXVoltsDetected) {
                 if (BoundFlag && CurrentView == FRONTVIEW) SendValue(JRX, Volts);
+                Str(Vbuf,Volts,0);
+                strcat(Vbuf,pc);
+                SendText(RXPC,Vbuf);
                 strcpy(RXBattInfo, ModelVolts);
                 strcat(RXBattInfo, v);
                 VoltsPerCell = (ReadVolts / RXCellCount) / 100;
@@ -1555,6 +1561,7 @@ FASTRUN bool CheckRXVolts(){
                 if (BoundFlag && CurrentView == FRONTVIEW) {
                     SendText(FrontView_RXBV, RXBattNA);
                     SendValue(JRX, 0);
+                    SendText(RXPC,spaces);
                 }
             }
             return RXWarningFlag;
