@@ -1540,11 +1540,7 @@ FASTRUN bool CheckRXVolts(){
             Volts = map(ReadVolts,  3.4f * RXCellCount * 100 ,  4.2f * RXCellCount * 100, 0, 100);  
             if (RXVoltsDetected) {
                 Volts = constrain(Volts, 0, 100);
-                if (Volts <= LowBattery && Volts > 0) {
-                    RXWarningFlag = true;
-                }
-            }
-            if (RXVoltsDetected) {
+                if (Volts <= LowBattery && Volts > 0)  RXWarningFlag = true;
                 if (BoundFlag && CurrentView == FRONTVIEW) SendValue(JRX, Volts);
                 Str(Vbuf,Volts,0);
                 strcat(Vbuf,pc);
@@ -1556,8 +1552,7 @@ FASTRUN bool CheckRXVolts(){
                 strcat(RXBattInfo, Vbuf);
                 strcat(RXBattInfo, PerCell);
                 if (BoundFlag && CurrentView == FRONTVIEW) SendText(FrontView_RXBV, RXBattInfo);
-            }
-            if (!RXVoltsDetected) {
+            }else{
                 if (BoundFlag && CurrentView == FRONTVIEW) {
                     SendText(FrontView_RXBV, RXBattNA);
                     SendValue(JRX, 0);
