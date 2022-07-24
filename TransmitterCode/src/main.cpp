@@ -1505,13 +1505,15 @@ FASTRUN bool CheckTXVolts(){
     float txpc,txv;            
     char  Vbuf[16];
     char  TXBattInfo[65];
+    char  pc[] = "%";
         if (USE_INA219) {
             txv  = (ina219.getBusVoltage_V()) * 100;
-            txpc = map(txv, 3.2f * 200, 3.33f * 200, 0, 100); // LiFePo4 Battery 3.1 ->3.35  volts per cell
+            txpc = map(txv, 3.2 * 200, 3.33 * 200, 0, 100); // LiFePo4 Battery 3.1 ->3.35  volts per cell
             if (txpc < LowBattery) TXWarningFlag = true;
             txpc = constrain(txpc, 0, 100);
-            dtostrf(txv/200, 2, 2, Vbuf);
+            Str(Vbuf,txpc,0);
             strcpy(TXBattInfo, Vbuf);
+            strcat(TXBattInfo, pc);
             if (CurrentView == FRONTVIEW) {SendValue(JTX,txpc); SendText(FrontView_TXBV, TXBattInfo);}
             if (CurrentView == DATAVIEW)  SendText(DataView_txv, TransmitterVersionNumber); 
         }
