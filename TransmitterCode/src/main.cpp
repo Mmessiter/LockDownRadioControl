@@ -1502,29 +1502,21 @@ FASTRUN bool CheckTXVolts(){
     char  JTX[]                   = "JTX";
     float txv                    = 0;
     char  Vbuf[16];
-    char  v[]                    = "V  (";
     char  TXBattInfo[65];
     char  FrontView_TXBV[]       = "TXBV";
-    char  PerCell[]              = " per cell)";
     bool  TXWarningFlag          = false;
     int   txpc                   = 0;
         if (USE_INA219) {
             txv  = (ina219.getBusVoltage_V()) * 100;
-            //txpc = map(txv, 512, 670, 0, 100); // LiFePo4 Battery 2.6 ->3.5  volts per cell
             txpc = map(txv, 3.2 * 200, 3.33 * 200, 0, 100); // LiFePo4 Battery 3.1 ->3.35  volts per cell
             if (txpc < LowBattery) {
                 TXWarningFlag = true;
              }
             txpc = constrain(txpc, 0, 100);
             if (CurrentView == FRONTVIEW) SendValue(JTX,txpc);
-            txv /= 100;
-            snprintf(Vbuf, 5, "%f", txv); // float to string...
-            strcpy(TXBattInfo, Vbuf);
-            strcat(TXBattInfo, v);
-            txv /= 2;
+            txv /= 200;
             dtostrf(txv, 2, 2, Vbuf);
-            strcat(TXBattInfo, Vbuf);
-            strcat(TXBattInfo, PerCell);
+            strcpy(TXBattInfo, Vbuf);
             if (CurrentView == FRONTVIEW) SendText(FrontView_TXBV, TXBattInfo);
             if (CurrentView == DATAVIEW)  SendText(DataView_txv, TransmitterVersionNumber); // TX Version Number
         }
@@ -1539,14 +1531,11 @@ FASTRUN bool CheckRXVolts(){
     bool  RXWarningFlag          = false;
     char  Vbuf[16];
     char  RXBattInfo[65];
-    char  FrontView_AckPayload[]    = "AckPayload";
     float VoltsPerCell              = 0;
     char  FrontView_RXBV[]          = "RXBV";
     char  PerCell[]                 = " per cell)";
-    char  RXBattNA[]                = "(No data)";
-    char  RXBattNV[]                = "    ";
+    char  RXBattNA[]                = "(No data from RX)";
     char  v[]                       = "V  (";
-
             ReadVolts = RXModelVolts * 100;
             Volts = map(ReadVolts,  3.4f * RXCellCount * 100 ,  4.2f * RXCellCount * 100, 0, 100);  
             if (RXVoltsDetected) {
@@ -1568,13 +1557,11 @@ FASTRUN bool CheckRXVolts(){
             if (!RXVoltsDetected) {
                 if (BoundFlag && CurrentView == FRONTVIEW) {
                     SendText(FrontView_RXBV, RXBattNA);
-                    SendText(FrontView_AckPayload, RXBattNV);
                     SendValue(JRX, 0);
                 }
             }
             return RXWarningFlag;
 }
-
 /*********************************************************************************************************************************/
   void CheckScreenTime(){
   char ScreenOff[] = "dim=10";
@@ -4677,7 +4664,7 @@ void SoundFlightMode()
 }
 /*********************************************************************************************************************************/
 
-void ShowFlightMode() // heer 
+void ShowFlightMode() 
 {
     char FMPress1[]  = "click fm1,1";
     char FMPress2[]  = "click fm2,1";
@@ -5727,6 +5714,11 @@ FASTRUN void ButtonWasPressed()
              if ((CurrentView == STICKSVIEW) || (CurrentView == FRONTVIEW)){
                 Force_ReDisplay();
                 ShowServoPos(); 
+                if (CurrentView == FRONTVIEW){
+                    SendValue(FrontView_Secs, Secs);
+                    SendValue(FrontView_Mins, Mins);
+                    SendValue(FrontView_Hours, Hours);  
+                }
              }
              if (CurrentView == LOGVIEW){ 
                 SendCommand(pLogView);

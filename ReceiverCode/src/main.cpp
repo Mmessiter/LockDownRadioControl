@@ -524,7 +524,7 @@ FASTRUN void ReceiveData(){
 
 // Discover what was connected on I2C
 
-void ScanI2c(){
+FLASHMEM void ScanI2c(){
      
     for (uint8_t i = 1; i < 127; ++i) {
         Wire.beginTransmission(i);
@@ -599,7 +599,7 @@ void DoBinding()
 /************************************************************************************************************/
 // SETUP
 /************************************************************************************************************/
-void setup()
+FLASHMEM void setup()
 {
     pinMode(LED_PIN, OUTPUT);
     pinMode(pinCSN1, OUTPUT);
