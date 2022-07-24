@@ -1511,8 +1511,7 @@ FASTRUN bool CheckTXVolts(){
             txpc = map(txv, 3.2 * 200, 3.33 * 200, 0, 100); // LiFePo4 Battery 3.1 ->3.35  volts per cell
             if (txpc < LowBattery) TXWarningFlag = true;
             txpc = constrain(txpc, 0, 100);
-            Str(Vbuf,txpc,0);
-            strcpy(TXBattInfo, Vbuf);
+            strcpy(TXBattInfo, Str(Vbuf,txpc,0));
             strcat(TXBattInfo, pc);
             if (CurrentView == FRONTVIEW) {SendValue(JTX,txpc); SendText(FrontView_TXBV, TXBattInfo);}
             if (CurrentView == DATAVIEW)  SendText(DataView_txv, TransmitterVersionNumber); 
@@ -1542,8 +1541,8 @@ FASTRUN bool CheckRXVolts(){
                 Volts = constrain(Volts, 0, 100);
                 if (Volts <= LowBattery && Volts > 0)  RXWarningFlag = true;
                 if (BoundFlag && CurrentView == FRONTVIEW) SendValue(JRX, Volts);
-                Str(Vbuf,Volts,0);
-                strcat(Vbuf,pc);
+               
+                strcat( Str(Vbuf,Volts,0),pc);
                 SendText(RXPC,Vbuf);
                 strcpy(RXBattInfo, ModelVolts);
                 strcat(RXBattInfo, v);
