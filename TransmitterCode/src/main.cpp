@@ -1502,10 +1502,8 @@ FASTRUN bool CheckTXVolts(){
     char  JTX[]                   = "JTX";
     float txv                    = 0;
     char  Vbuf[16];
-    char  v[]                    = "V  (";
     char  TXBattInfo[65];
     char  FrontView_TXBV[]       = "TXBV";
-    char  PerCell[]              = " per cell)";
     bool  TXWarningFlag          = false;
     int   txpc                   = 0;
         if (USE_INA219) {
@@ -1516,14 +1514,9 @@ FASTRUN bool CheckTXVolts(){
              }
             txpc = constrain(txpc, 0, 100);
             if (CurrentView == FRONTVIEW) SendValue(JTX,txpc);
-            txv /= 100;
-            snprintf(Vbuf, 5, "%f", txv); // float to string...
-            strcpy(TXBattInfo, Vbuf);
-            strcat(TXBattInfo, v);
-            txv /= 2;
+            txv /= 200;
             dtostrf(txv, 2, 2, Vbuf);
-            strcat(TXBattInfo, Vbuf);
-            strcat(TXBattInfo, PerCell);
+            strcpy(TXBattInfo, Vbuf);
             if (CurrentView == FRONTVIEW) SendText(FrontView_TXBV, TXBattInfo);
             if (CurrentView == DATAVIEW)  SendText(DataView_txv, TransmitterVersionNumber); // TX Version Number
         }
@@ -1541,7 +1534,7 @@ FASTRUN bool CheckRXVolts(){
     float VoltsPerCell              = 0;
     char  FrontView_RXBV[]          = "RXBV";
     char  PerCell[]                 = " per cell)";
-    char  RXBattNA[]                = "(No data)";
+    char  RXBattNA[]                = "(No data from RX)";
     char  v[]                       = "V  (";
             ReadVolts = RXModelVolts * 100;
             Volts = map(ReadVolts,  3.4f * RXCellCount * 100 ,  4.2f * RXCellCount * 100, 0, 100);  
