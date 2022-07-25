@@ -1937,35 +1937,15 @@ void UpdateTrimView()
 {
     char Mode1[]        = "Mode1";
     char Mode2[]        = "Mode2";
-    char TrimView_ch1[] = "ch1";
-    char TrimView_ch2[] = "ch2";
-    char TrimView_ch3[] = "ch3";
-    char TrimView_ch4[] = "ch4"; 
-    char TrimView_n1[]  = "n1";
-    char TrimView_n2[]  = "n2";
-    char TrimView_n3[]  = "n3";
-    char TrimView_n4[]  = "n4";
-    char TrimView_r1[]  = "r1";
-    char TrimView_r2[]  = "r2";
-    char TrimView_r3[]  = "r3";
-    char TrimView_r4[]  = "r4";
-    
-    SendValue(TrimView_ch1, (Trims[FlightMode][0]));
-    SendValue(TrimView_ch4, (Trims[FlightMode][1]));
-    SendValue(TrimView_ch2, (Trims[FlightMode][2]));
-    SendValue(TrimView_ch3, (Trims[FlightMode][3]));
-
-    if (CurrentView == TRIM_VIEW) 
-    {
-        SendValue(TrimView_n1, (Trims[FlightMode][0] - 80));
-        SendValue(TrimView_n4, (Trims[FlightMode][1] - 80));
-        SendValue(TrimView_n2, (Trims[FlightMode][2] - 80));
-        SendValue(TrimView_n3, (Trims[FlightMode][3] - 80));
-
-        SendValue(TrimView_r1, TrimsReversed[FlightMode][0]);
-        SendValue(TrimView_r4, TrimsReversed[FlightMode][1]);
-        SendValue(TrimView_r2, TrimsReversed[FlightMode][2]);
-        SendValue(TrimView_r3, TrimsReversed[FlightMode][3]);
+    char TrimViewChannels[4][4]  = {"ch1","ch2","ch3","ch4"};
+    char TrimViewNumbers[4][3]   = {"n1","n2","n3","n4"};
+    char TrimViewReversed[4][3]  = {"r1","r2","r3","r4"};
+if (CurrentView == TRIM_VIEW)  {
+    for (int i = 0; i < 4; ++i){
+        SendValue(TrimViewChannels[i], (Trims[FlightMode][i]));
+        SendValue(TrimViewNumbers[i],  (Trims[FlightMode][i]- 80));
+        SendValue(TrimViewReversed[i], (TrimsReversed[FlightMode][i]));
+    }
         if (SticksMode == 2) {
                 SendValue(Mode2,1);
                 SendValue(Mode1,0);}
@@ -2201,12 +2181,10 @@ FLASHMEM void InitCentreDegrees()
 
 void UpdateButtonLabels()
 {
-   
-
     char InputStick_Labels[16][4]   = {"c1","c2","c3","c4","c5","c6","c7","c8","c9","c10","c11","c12","c13","c14","c15","c16"};
     char fsch_labels[16][5]         = {"ch1","ch2","ch3","ch4","ch5","ch6","ch7","ch8","ch9","ch10","ch11","ch12","ch13","ch14","ch15","ch16"};
     char fs[16][5]                  = {"fs1","fs2","fs3","fs4","fs5","fs6","fs7","fs8","fs9","fs10","fs11","fs12","fs13","fs14","fs15","fs16"};
-     
+    
     char arrowrh[] = " >";
     char arrowlh[] = "< ";
     char BoxOffsetLabel[20];
@@ -4985,6 +4963,7 @@ FASTRUN void ButtonWasPressed()
     char CH14NAME[]                = "CH14NAME=";
     char CH15NAME[]                = "CH15NAME=";
     char CH16NAME[]                = "CH16NAME=";
+    
     char MixesView_chM[]           = "chM";
     char MixesView_chS[]           = "chS";
     char ProgressStart[]           = "vis Progress,1";
