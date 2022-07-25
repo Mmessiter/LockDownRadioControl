@@ -1308,147 +1308,36 @@ FASTRUN void CheckTimer()
         }  
     }
 }
-
-
 /*********************************************************************************************************************************/
 
 FASTRUN void ShowServoPos()
 {
-    if ((Connected) || (CurrentView == GRAPHVIEW))  { // not certain why - but this is needed! :-)
+    if ((Connected) || (CurrentView == GRAPHVIEW))  { // (this is needed! :-)
         if (millis() - ShowServoTimer <= 60) return;    
         ShowServoTimer = millis();
     }
-    char SticksView_Ch1[]    = "Ch1";
-    char SticksView_Ch2[]    = "Ch2";
-    char SticksView_Ch3[]    = "Ch3";
-    char SticksView_Ch4[]    = "Ch4";
-    char SticksView_Ch5[]    = "Ch5";
-    char SticksView_Ch6[]    = "Ch6";
-    char SticksView_Ch7[]    = "Ch7";
-    char SticksView_Ch8[]    = "Ch8";
-    char SticksView_Ch9[]    = "Ch9";
-    char SticksView_Ch10[]   = "Ch10";
-    char SticksView_Ch11[]   = "Ch11";
-    char SticksView_Ch12[]   = "Ch12";
-    char SticksView_Ch13[]   = "Ch13";
-    char SticksView_Ch14[]   = "Ch14";
-    char SticksView_Ch15[]   = "Ch15";
-    char SticksView_Ch16[]   = "Ch16";
-    char CalibrateView_Ch1[] = "Ch1";
-    char CalibrateView_Ch2[] = "Ch2";
-    char CalibrateView_Ch3[] = "Ch3";
-    char CalibrateView_Ch4[] = "Ch4";
-    char CalibrateView_Ch5[] = "Ch5";
-    char CalibrateView_Ch6[] = "Ch6";
-    char CalibrateView_Ch7[] = "Ch7";
-    char CalibrateView_Ch8[] = "Ch8";
-    char ChannelInput[]      = "Input";
-    char ChannelOutput[]     = "Output";
-    uint16_t StickPosition   = 54321;
+    char Ch_Lables[16][5]    =  {"Ch1","Ch2","Ch3","Ch4","Ch5","Ch6","Ch7","Ch8","Ch9","Ch10","Ch11","Ch12","Ch13","Ch14","Ch15","Ch16"};
+    char ChannelInput[]      =  "Input";
+    char ChannelOutput[]     =  "Output"; 
+    uint16_t StickPosition   =  54321;
     int l             = 0;
     int l1            = 0;
     int LeastDistance = 2;          // if the change is very small, don't re-display anything - to reduce flashing.
   
-if ((CurrentView == STICKSVIEW) || (CurrentView == FRONTVIEW)){ 
-
-        if (abs(SendBuffer[0] - ShownBuffer[0]) > LeastDistance) {
-            SendValue(SticksView_Ch1, IntoLowerRes(SendBuffer[0]));
-            ShownBuffer[0] = SendBuffer[0];
-        }
-        if (abs(SendBuffer[1] - ShownBuffer[1]) > LeastDistance) {
-            SendValue(SticksView_Ch2, IntoLowerRes(SendBuffer[1]));
-            ShownBuffer[1] = SendBuffer[1];
-        }
-        if (abs(SendBuffer[2] - ShownBuffer[2]) > LeastDistance) {
-            SendValue(SticksView_Ch3, IntoLowerRes(SendBuffer[2]));
-            ShownBuffer[2] = SendBuffer[2];
-        }
-        if (abs(SendBuffer[3] - ShownBuffer[3]) > LeastDistance) {
-            SendValue(SticksView_Ch4, IntoLowerRes(SendBuffer[3]));
-            ShownBuffer[3] = SendBuffer[3];
-        }
-        if (abs(SendBuffer[4] - ShownBuffer[4]) > LeastDistance) {
-            SendValue(SticksView_Ch5, IntoLowerRes(SendBuffer[4]));
-            ShownBuffer[4] = SendBuffer[4];
-        }
-        if (abs(SendBuffer[5] - ShownBuffer[5]) > LeastDistance) {
-            SendValue(SticksView_Ch6, IntoLowerRes(SendBuffer[5]));
-            ShownBuffer[5] = SendBuffer[5];
-        }
-        if (abs(SendBuffer[6] - ShownBuffer[6]) > LeastDistance) {
-            SendValue(SticksView_Ch7, IntoLowerRes(SendBuffer[6]));
-            ShownBuffer[6] = SendBuffer[6];
-        }
-        if (abs(SendBuffer[7] - ShownBuffer[7]) > LeastDistance) {
-            SendValue(SticksView_Ch8, IntoLowerRes(SendBuffer[7]));
-            ShownBuffer[7] = SendBuffer[7];
-        }
-        if (abs(SendBuffer[8] - ShownBuffer[8]) > LeastDistance) {
-            SendValue(SticksView_Ch9, IntoLowerRes(SendBuffer[8]));
-            ShownBuffer[8] = SendBuffer[8];
-        }
-        if (abs(SendBuffer[9] - ShownBuffer[9]) > LeastDistance) {
-            SendValue(SticksView_Ch10, IntoLowerRes(SendBuffer[9]));
-            ShownBuffer[9] = SendBuffer[9];
-        }
-        if (abs(SendBuffer[10] - ShownBuffer[10]) > LeastDistance) {
-            SendValue(SticksView_Ch11, IntoLowerRes(SendBuffer[10]));
-            ShownBuffer[10] = SendBuffer[10];
-        }
-        if (abs(SendBuffer[11] - ShownBuffer[11]) > LeastDistance) {
-            SendValue(SticksView_Ch12, IntoLowerRes(SendBuffer[11]));
-            ShownBuffer[11] = SendBuffer[11];
-        }
-        if (abs(SendBuffer[12] - ShownBuffer[12]) > LeastDistance) {
-            SendValue(SticksView_Ch13, IntoLowerRes(SendBuffer[12]));
-            ShownBuffer[12] = SendBuffer[12];
-        }
-        if (abs(SendBuffer[13] - ShownBuffer[13]) > LeastDistance) {
-            SendValue(SticksView_Ch14, IntoLowerRes(SendBuffer[13]));
-            ShownBuffer[13] = SendBuffer[13];
-        }
-        if (abs(SendBuffer[14] - ShownBuffer[14]) > LeastDistance) {
-            SendValue(SticksView_Ch15, IntoLowerRes(SendBuffer[14]));
-            ShownBuffer[14] = SendBuffer[14];
-        }
-        if (abs(SendBuffer[15] - ShownBuffer[15]) > LeastDistance) {
-            SendValue(SticksView_Ch16, IntoLowerRes(SendBuffer[15]));
-            ShownBuffer[15] = SendBuffer[15];
+    if ((CurrentView == STICKSVIEW) || (CurrentView == FRONTVIEW) || (CurrentView == CALIBRATEVIEW)){ 
+        for (int i = 0; i < 8; ++i){
+            if (SendBuffer[i] != ShownBuffer[i]) {
+                SendValue(Ch_Lables[i], IntoLowerRes(SendBuffer[i]));
+                ShownBuffer[i] = SendBuffer[i];
+            }
         }
     }
-
-    if  (CurrentView == CALIBRATEVIEW)  {
-        if (abs(SendBuffer[0] - ShownBuffer[0]) > LeastDistance) {
-            SendValue(CalibrateView_Ch1, IntoLowerRes(SendBuffer[0]));
-            ShownBuffer[0] = SendBuffer[0];
-        }
-        if (abs(SendBuffer[1] - ShownBuffer[1]) > LeastDistance) {
-            SendValue(CalibrateView_Ch2, IntoLowerRes(SendBuffer[1]));
-            ShownBuffer[1] = SendBuffer[1];
-        }
-        if (abs(SendBuffer[2] - ShownBuffer[2]) > LeastDistance) {
-            SendValue(CalibrateView_Ch3, IntoLowerRes(SendBuffer[2]));
-            ShownBuffer[2] = SendBuffer[2];
-        }
-        if (abs(SendBuffer[3] - ShownBuffer[3]) > LeastDistance) {
-            SendValue(CalibrateView_Ch4, IntoLowerRes(SendBuffer[3]));
-            ShownBuffer[3] = SendBuffer[3];
-        }
-        if (abs(SendBuffer[4] - ShownBuffer[4]) > LeastDistance) {
-            SendValue(CalibrateView_Ch5, IntoLowerRes(SendBuffer[4]));
-            ShownBuffer[4] = SendBuffer[4];
-        }
-        if (abs(SendBuffer[5] - ShownBuffer[5]) > LeastDistance) {
-            SendValue(CalibrateView_Ch6, IntoLowerRes(SendBuffer[5]));
-            ShownBuffer[5] = SendBuffer[5];
-        }
-        if (abs(SendBuffer[6] - ShownBuffer[6]) > LeastDistance) {
-            SendValue(CalibrateView_Ch7, IntoLowerRes(SendBuffer[6]));
-            ShownBuffer[6] = SendBuffer[6];
-        }
-        if (abs(SendBuffer[7] - ShownBuffer[7]) > LeastDistance) {
-            SendValue(CalibrateView_Ch8, IntoLowerRes(SendBuffer[7]));
-            ShownBuffer[7] = SendBuffer[7];
+    if ((CurrentView == STICKSVIEW) || (CurrentView == FRONTVIEW) ){ 
+        for (int i = 8; i < 16; ++i){
+            if (SendBuffer[i] != ShownBuffer[i]){
+                SendValue(Ch_Lables[i], IntoLowerRes(SendBuffer[i]));
+                ShownBuffer[i] = SendBuffer[i];
+            }
         }
     }
     
@@ -1489,11 +1378,10 @@ if ((CurrentView == STICKSVIEW) || (CurrentView == FRONTVIEW)){
                 SendValue(ChannelOutput,0);   // because when not connected nothing is sent
             }
         }else{
-    SendValue(ChannelInput, 0);
-    SendValue(ChannelOutput, 0);
-   
+            SendValue(ChannelInput, 0);
+            SendValue(ChannelOutput, 0);
+        }
     }
-   }
 }
 
 /*********************************************************************************************************************************/
@@ -1523,7 +1411,7 @@ return TXWarningFlag;
 FASTRUN bool CheckRXVolts(){
     float Volts                  = 0;
     float ReadVolts              = 0;
-    char  JRX[]                   = "JRX";
+    char  JRX[]                  = "JRX";
     bool  RXWarningFlag          = false;
     char  Vbuf[16];
     char  RXBattInfo[65];
@@ -1541,8 +1429,7 @@ FASTRUN bool CheckRXVolts(){
                 Volts = constrain(Volts, 0, 100);
                 if (Volts <= LowBattery && Volts > 0)  RXWarningFlag = true;
                 if (BoundFlag && CurrentView == FRONTVIEW) SendValue(JRX, Volts);
-               
-                strcat( Str(Vbuf,Volts,0),pc);
+                strcat(Str(Vbuf,Volts,0),pc);
                 SendText(RXPC,Vbuf);
                 strcpy(RXBattInfo, ModelVolts);
                 strcat(RXBattInfo, v);
