@@ -1320,10 +1320,9 @@ FASTRUN void ShowServoPos()
     char ChannelInput[]      =  "Input";
     char ChannelOutput[]     =  "Output"; 
     uint16_t StickPosition   =  54321;
-    int l             = 0;
-    int l1            = 0;
-    int LeastDistance = 2;          // if the change is very small, don't re-display anything - to reduce flashing.
-  
+    int l                    = 0;
+    int l1                   = 0;
+   
     if ((CurrentView == STICKSVIEW) || (CurrentView == FRONTVIEW) || (CurrentView == CALIBRATEVIEW)){ 
         for (int i = 0; i < 8; ++i){
             if (SendBuffer[i] != ShownBuffer[i]) {
@@ -1340,10 +1339,11 @@ FASTRUN void ShowServoPos()
             }
         }
     }
-    
     if (CurrentView == GRAPHVIEW) { 
-#define fixitx 35
-#define BarWidth 3
+#define fixitx          35
+#define BarWidth        3
+#define LeastDistance   2          // if the change is very small, don't re-display anything - to reduce flashing.
+
         if (ChanneltoSet <= 8) {
             l  = (InPutStick[ChanneltoSet - 1]);
             l1 = analogRead(AnalogueInput[l]);
