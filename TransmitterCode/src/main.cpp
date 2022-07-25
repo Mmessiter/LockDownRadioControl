@@ -4466,9 +4466,7 @@ void SendModelFile()
 
 void SoundFlightMode()
 {
-
- uint8_t Sounds[4] = {BANKONE,BANKTWO,BANKTHREE,BANKFOUR};
- 
+    uint8_t Sounds[4] = {BANKONE,BANKTWO,BANKTHREE,BANKFOUR};
     PlaySound(Sounds[FlightMode-1]);
     ScreenTimeTimer = millis();  // reset screen counter
     if (ScreenIsOff) {
@@ -6452,7 +6450,7 @@ FASTRUN void ButtonWasPressed()
         }
     }
     ClearText(); // Let's have cleared text for next one!
-} // end ButtonWasPressed()
+} // end ButtonWasPressed() (... at last!!!)
 
 /************************************************************************************************************/
 
