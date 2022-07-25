@@ -1322,7 +1322,8 @@ FASTRUN void ShowServoPos()
     uint16_t StickPosition   =  54321;
     int l                    = 0;
     int l1                   = 0;
-   
+    
+    // The first 8 channels are displayed on all three of these screens
     if ((CurrentView == STICKSVIEW) || (CurrentView == FRONTVIEW) || (CurrentView == CALIBRATEVIEW)){ 
         for (int i = 0; i < 8; ++i){
             if (SendBuffer[i] != ShownBuffer[i]) {
@@ -1331,6 +1332,8 @@ FASTRUN void ShowServoPos()
             }
         }
     }
+    
+    // The second 8 channels are displayed on only two screens
     if ((CurrentView == STICKSVIEW) || (CurrentView == FRONTVIEW) ){ 
         for (int i = 8; i < 16; ++i){
             if (SendBuffer[i] != ShownBuffer[i]){
