@@ -2201,42 +2201,16 @@ FLASHMEM void InitCentreDegrees()
 
 void UpdateButtonLabels()
 {
-    char InPutStick_c1[]  = "c1";
-    char InPutStick_c2[]  = "c2";
-    char InPutStick_c3[]  = "c3";
-    char InPutStick_c4[]  = "c4";
-    char InPutStick_c5[]  = "c5";
-    char InPutStick_c6[]  = "c6";
-    char InPutStick_c7[]  = "c7";
-    char InPutStick_c8[]  = "c8";
-    char InPutStick_c9[]  = "c9";
-    char InPutStick_c10[] = "c10";
-    char InPutStick_c11[] = "c11";
-    char InPutStick_c12[] = "c12";
-    char InPutStick_c13[] = "c13";
-    char InPutStick_c14[] = "c14";
-    char InPutStick_c15[] = "c15";
-    char InPutStick_c16[] = "c16";
+   
 
-    char fsch1[]   = "ch1";
-    char fsch2[]   = "ch2";
-    char fsch3[]   = "ch3";
-    char fsch4[]   = "ch4";
-    char fsch5[]   = "ch5";
-    char fsch6[]   = "ch6";
-    char fsch7[]   = "ch7";
-    char fsch8[]   = "ch8";
-    char fsch9[]   = "ch9";
-    char fsch10[]  = "ch10";
-    char fsch11[]  = "ch11";
-    char fsch12[]  = "ch12";
-    char fsch13[]  = "ch13";
-    char fsch14[]  = "ch14";
-    char fsch15[]  = "ch15";
-    char fsch16[]  = "ch16";
+    char InputStick_Labels[16][4]   = {"c1","c2","c3","c4","c5","c6","c7","c8","c9","c10","c11","c12","c13","c14","c15","c16"};
+    char fsch_labels[16][5]         = {"ch1","ch2","ch3","ch4","ch5","ch6","ch7","ch8","ch9","ch10","ch11","ch12","ch13","ch14","ch15","ch16"};
+    
     char arrowrh[] = " >";
     char arrowlh[] = "< ";
     char BoxOffsetLabel[20];
+
+
     char SticksViewButton1[]  = "Sch1";
     char SticksViewButton2[]  = "Sch2";
     char SticksViewButton3[]  = "Sch3";
@@ -2253,6 +2227,8 @@ void UpdateButtonLabels()
     char SticksViewButton14[] = "Sch14";
     char SticksViewButton15[] = "Sch15";
     char SticksViewButton16[] = "Sch16";
+
+
     char one[]                = " (1)";
     char two[]                = "(2) ";
     char three[]              = " (3)";
@@ -2270,15 +2246,19 @@ void UpdateButtonLabels()
     char fifteen[]            = " (15)";
     char sixteen[]            = "(16) ";
     if (CurrentView == STICKSVIEW) {
+       
         strcpy(BoxOffsetLabel, ChannelNames[0]);
         strcat(BoxOffsetLabel, one);
         strcat(BoxOffsetLabel, arrowrh);
+
         SendText(SticksViewButton1, BoxOffsetLabel);
         strcpy(BoxOffsetLabel, arrowlh);
         strcat(BoxOffsetLabel, two);
+
         strcat(BoxOffsetLabel, ChannelNames[1]);
         SendText(SticksViewButton2, BoxOffsetLabel);
         strcpy(BoxOffsetLabel, ChannelNames[2]);
+
         strcat(BoxOffsetLabel, three);
         strcat(BoxOffsetLabel, arrowrh);
         SendText(SticksViewButton3, BoxOffsetLabel);
@@ -2334,40 +2314,15 @@ void UpdateButtonLabels()
         strcat(BoxOffsetLabel, sixteen);
         strcat(BoxOffsetLabel, ChannelNames[15]);
         SendText(SticksViewButton16, BoxOffsetLabel);
+
     }
     if (CurrentView == INPUTS_VIEW || CurrentView == FAILSAFE_VIEW || CurrentView == REVERSEVIEW) {
-        SendText(fsch1, ChannelNames[0]);
-        SendText(fsch2, ChannelNames[1]);
-        SendText(fsch3, ChannelNames[2]);
-        SendText(fsch4, ChannelNames[3]);
-        SendText(fsch5, ChannelNames[4]);
-        SendText(fsch6, ChannelNames[5]);
-        SendText(fsch7, ChannelNames[6]);
-        SendText(fsch8, ChannelNames[7]);
-        SendText(fsch9, ChannelNames[8]);
-        SendText(fsch10, ChannelNames[9]);
-        SendText(fsch11, ChannelNames[10]);
-        SendText(fsch12, ChannelNames[11]);
-        SendText(fsch13, ChannelNames[12]);
-        SendText(fsch14, ChannelNames[13]);
-        SendText(fsch15, ChannelNames[14]);
-        SendText(fsch16, ChannelNames[15]);
-        SendValue(InPutStick_c1, InPutStick[0] + 1);
-        SendValue(InPutStick_c2, InPutStick[1] + 1);
-        SendValue(InPutStick_c3, InPutStick[2] + 1);
-        SendValue(InPutStick_c4, InPutStick[3] + 1);
-        SendValue(InPutStick_c5, InPutStick[4] + 1);
-        SendValue(InPutStick_c6, InPutStick[5] + 1);
-        SendValue(InPutStick_c7, InPutStick[6] + 1);
-        SendValue(InPutStick_c8, InPutStick[7] + 1);
-        SendValue(InPutStick_c9, InPutStick[8] + 1);
-        SendValue(InPutStick_c10, InPutStick[9] + 1);
-        SendValue(InPutStick_c11, InPutStick[10] + 1);
-        SendValue(InPutStick_c12, InPutStick[11] + 1);
-        SendValue(InPutStick_c13, InPutStick[12] + 1);
-        SendValue(InPutStick_c14, InPutStick[13] + 1);
-        SendValue(InPutStick_c15, InPutStick[14] + 1);
-        SendValue(InPutStick_c16, InPutStick[15] + 1);
+     for (int i = 0;i < 16; ++i){
+       SendText(fsch_labels[i], ChannelNames[i]);
+     }
+     for (int i = 0; i < 16; ++i){    
+        SendValue(InputStick_Labels[i], InPutStick[i] + 1);
+     }
     }
 }
 
@@ -4997,6 +4952,9 @@ FASTRUN void ButtonWasPressed()
     char PageSwitchView[]          = "page SwitchesView";
     char InputsView[]              = "InputsView";
     char InputsDone[]              = "InputsDone";
+    
+    char InputStick_Labels[16][4] = {"c1","c2","c3","c4","c5","c6","c7","c8","c9","c10","c11","c12","c13","c14","c15","c16"};
+    
     char InPutStick_c1[]           = "c1";
     char InPutStick_c2[]           = "c2";
     char InPutStick_c3[]           = "c3";
@@ -5013,6 +4971,7 @@ FASTRUN void ButtonWasPressed()
     char InPutStick_c14[]          = "c14";
     char InPutStick_c15[]          = "c15";
     char InPutStick_c16[]          = "c16";
+
     char Export[]                  = "Export";
     char Import[]                  = "Import";
     char ListFiles[]               = "ListFiles";
@@ -5816,37 +5775,12 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(InputsDone, TextIn) > 0) {
             SendCommand(ProgressStart);
-            InPutStick[0] = CheckRange_0_16(GetValue(InPutStick_c1)) - 1;
-            SendValue(Progress, 5);
-            InPutStick[1] = CheckRange_0_16(GetValue(InPutStick_c2)) - 1;
-            SendValue(Progress, 15);
-            InPutStick[2] = CheckRange_0_16(GetValue(InPutStick_c3)) - 1;
-            SendValue(Progress, 25);
-            InPutStick[3] = CheckRange_0_16(GetValue(InPutStick_c4)) - 1;
-            SendValue(Progress, 35);
-            InPutStick[4] = CheckRange_0_16(GetValue(InPutStick_c5)) - 1;
-            SendValue(Progress, 45);
-            InPutStick[5] = CheckRange_0_16(GetValue(InPutStick_c6)) - 1;
-            SendValue(Progress, 55);
-            InPutStick[6] = CheckRange_0_16(GetValue(InPutStick_c7)) - 1;
-            SendValue(Progress, 65);
-            InPutStick[7] = CheckRange_0_16(GetValue(InPutStick_c8)) - 1;
-            SendValue(Progress, 75);
-            InPutStick[8] = CheckRange_0_16(GetValue(InPutStick_c9)) - 1;
-            SendValue(Progress, 80);
-            InPutStick[9] = CheckRange_0_16(GetValue(InPutStick_c10)) - 1;
-            SendValue(Progress, 85);
-            InPutStick[10] = CheckRange_0_16(GetValue(InPutStick_c11)) - 1;
-            SendValue(Progress, 86);
-            InPutStick[11] = CheckRange_0_16(GetValue(InPutStick_c12)) - 1;
-            SendValue(Progress, 87);
-            InPutStick[12] = CheckRange_0_16(GetValue(InPutStick_c13)) - 1;
-            SendValue(Progress, 88);
-            InPutStick[13] = CheckRange_0_16(GetValue(InPutStick_c14)) - 1;
-            SendValue(Progress, 89);
-            InPutStick[14] = CheckRange_0_16(GetValue(InPutStick_c15)) - 1;
-            SendValue(Progress, 95);
-            InPutStick[15] = CheckRange_0_16(GetValue(InPutStick_c16)) - 1;
+           
+            for (int i = 0; i < 16; ++i){
+                InPutStick[i] = CheckRange_0_16(GetValue(InputStick_Labels[i]))-1; // heer
+                SendValue(Progress, i *(100/16));
+            }
+        
             SendValue(Progress, 99);
             SaveOneModel(ModelNumber);
             SendValue(Progress, 100);
