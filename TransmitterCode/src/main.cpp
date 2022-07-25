@@ -4952,26 +4952,7 @@ FASTRUN void ButtonWasPressed()
     char PageSwitchView[]          = "page SwitchesView";
     char InputsView[]              = "InputsView";
     char InputsDone[]              = "InputsDone";
-    
-    char InputStick_Labels[16][4] = {"c1","c2","c3","c4","c5","c6","c7","c8","c9","c10","c11","c12","c13","c14","c15","c16"};
-    
-    char InPutStick_c1[]           = "c1";
-    char InPutStick_c2[]           = "c2";
-    char InPutStick_c3[]           = "c3";
-    char InPutStick_c4[]           = "c4";
-    char InPutStick_c5[]           = "c5";
-    char InPutStick_c6[]           = "c6";
-    char InPutStick_c7[]           = "c7";
-    char InPutStick_c8[]           = "c8";
-    char InPutStick_c9[]           = "c9";
-    char InPutStick_c10[]          = "c10";
-    char InPutStick_c11[]          = "c11";
-    char InPutStick_c12[]          = "c12";
-    char InPutStick_c13[]          = "c13";
-    char InPutStick_c14[]          = "c14";
-    char InPutStick_c15[]          = "c15";
-    char InPutStick_c16[]          = "c16";
-
+    char InputStick_Labels[16][4]  = {"c1","c2","c3","c4","c5","c6","c7","c8","c9","c10","c11","c12","c13","c14","c15","c16"};
     char Export[]                  = "Export";
     char Import[]                  = "Import";
     char ListFiles[]               = "ListFiles";
@@ -4980,22 +4961,8 @@ FASTRUN void ButtonWasPressed()
     char ModExt[]                  = ".MOD";
     char FailSAVE[]                = "FailSAVE";
     char FailSafe[]                = "FailSafe";
-    char fs1[]                     = "fs1";
-    char fs2[]                     = "fs2";
-    char fs3[]                     = "fs3";
-    char fs4[]                     = "fs4";
-    char fs5[]                     = "fs5";
-    char fs6[]                     = "fs6";
-    char fs7[]                     = "fs7";
-    char fs8[]                     = "fs8";
-    char fs9[]                     = "fs9";
-    char fs10[]                    = "fs10";
-    char fs11[]                    = "fs11";
-    char fs12[]                    = "fs12";
-    char fs13[]                    = "fs13";
-    char fs14[]                    = "fs14";
-    char fs15[]                    = "fs15";
-    char fs16[]                    = "fs16";
+    char fs[16][5]                 = {"fs1","fs2","fs3","fs4","fs5","fs6","fs7","fs8","fs9","fs10","fs11","fs12","fs13","fs14","fs15","fs16"};
+  
     char CH1NAME[]                 = "CH1NAME=";
     char CH2NAME[]                 = "CH2NAME=";
     char CH3NAME[]                 = "CH3NAME=";
@@ -5645,27 +5612,11 @@ FASTRUN void ButtonWasPressed()
         }
         if (InStrng(FailSAVE, TextIn) > 0) {
             SendCommand(ProgressStart);
-            FailSafeChannel[0] = GetValue(fs1);
-            SendValue(Progress, 5);
-            FailSafeChannel[1] = GetValue(fs2);
-            FailSafeChannel[2] = GetValue(fs3);
-            SendValue(Progress, 25);
-            FailSafeChannel[3] = GetValue(fs4);
-            FailSafeChannel[4] = GetValue(fs5);
-            FailSafeChannel[5] = GetValue(fs6);
-            SendValue(Progress, 50);
-            FailSafeChannel[6] = GetValue(fs7);
-            FailSafeChannel[7] = GetValue(fs8);
-            FailSafeChannel[8] = GetValue(fs9);
-            FailSafeChannel[9] = GetValue(fs10);
-            SendValue(Progress, 75);
-            FailSafeChannel[10] = GetValue(fs11);
-            FailSafeChannel[11] = GetValue(fs12);
-            FailSafeChannel[12] = GetValue(fs13);
-            SendValue(Progress, 100);
-            FailSafeChannel[13] = GetValue(fs14);
-            FailSafeChannel[14] = GetValue(fs15);
-            FailSafeChannel[15] = GetValue(fs16);
+            for (int i = 0; i < 16 ; ++i){
+                FailSafeChannel[i] = GetValue(fs[i]); // heer
+                SendValue(Progress, i * (100/16));
+                }
+             
             SaveOneModel(ModelNumber);
             FailSafeTimer= millis();
             SaveFailSafeNow = true;
