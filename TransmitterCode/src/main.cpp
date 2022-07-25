@@ -4490,32 +4490,11 @@ void SoundFlightMode()
 
 }
 /*********************************************************************************************************************************/
-
 void ShowFlightMode() 
 {
-    char FMPress1[]  = "click fm1,1";
-    char FMPress2[]  = "click fm2,1";
-    char FMPress3[]  = "click fm3,1";
-    char FMPress4[]  = "click fm4,1";
-
-    switch (FlightMode) {
-        case 1:
-            SendCommand(FMPress1);
-            break;
-        case 2:
-            SendCommand(FMPress2);
-            break;
-        case 3:
-            SendCommand(FMPress3);
-            break;
-        case 4:
-            SendCommand(FMPress4);
-            break;
-        default:
-            break;
-    }
+    char FMPress[4][12] = {"click fm1,1","click fm2,1","click fm3,1","click fm4,1"};
+    SendCommand(FMPress[FlightMode-1]);
 }
-
 /*********************************************************************************************************************************/
 
 void updateOneSwitchView()
