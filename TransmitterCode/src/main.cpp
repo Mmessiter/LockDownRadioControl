@@ -4466,22 +4466,10 @@ void SendModelFile()
 
 void SoundFlightMode()
 {
-    switch (FlightMode) {
-        case 1:
-            PlaySound(BANKONE);
-            break;
-        case 2:
-            PlaySound(BANKTWO);
-            break;
-        case 3:
-             PlaySound(BANKTHREE);
-            break;
-        case 4:
-            PlaySound(BANKFOUR);
-            break;
-        default:
-            break;
-    }
+
+ uint8_t Sounds[4] = {BANKONE,BANKTWO,BANKTHREE,BANKFOUR};
+ 
+    PlaySound(Sounds[FlightMode-1]);
     ScreenTimeTimer = millis();  // reset screen counter
     if (ScreenIsOff) {
        RestoreBrightness();
