@@ -2205,7 +2205,8 @@ void UpdateButtonLabels()
 
     char InputStick_Labels[16][4]   = {"c1","c2","c3","c4","c5","c6","c7","c8","c9","c10","c11","c12","c13","c14","c15","c16"};
     char fsch_labels[16][5]         = {"ch1","ch2","ch3","ch4","ch5","ch6","ch7","ch8","ch9","ch10","ch11","ch12","ch13","ch14","ch15","ch16"};
-    
+    char fs[16][5]                  = {"fs1","fs2","fs3","fs4","fs5","fs6","fs7","fs8","fs9","fs10","fs11","fs12","fs13","fs14","fs15","fs16"};
+     
     char arrowrh[] = " >";
     char arrowlh[] = "< ";
     char BoxOffsetLabel[20];
@@ -2316,13 +2317,18 @@ void UpdateButtonLabels()
         SendText(SticksViewButton16, BoxOffsetLabel);
 
     }
+    if (CurrentView == FAILSAFE_VIEW) {
+         for (int i = 0;i < 16; ++i){
+            SendValue(fs[i], FailSafeChannel[i]); 
+         }
+    }
     if (CurrentView == INPUTS_VIEW || CurrentView == FAILSAFE_VIEW || CurrentView == REVERSEVIEW) {
-     for (int i = 0;i < 16; ++i){
-       SendText(fsch_labels[i], ChannelNames[i]);
-     }
-     for (int i = 0; i < 16; ++i){    
-        SendValue(InputStick_Labels[i], InPutStick[i] + 1);
-     }
+        for (int i = 0;i < 16; ++i){
+            SendText(fsch_labels[i], ChannelNames[i]); 
+        }
+        for (int i = 0; i < 16; ++i){    
+            SendValue(InputStick_Labels[i], InPutStick[i] + 1);
+        }
     }
 }
 
@@ -5265,8 +5271,15 @@ FASTRUN void ButtonWasPressed()
             ClearText();
             return;
         }
-
-        if (InStrng(SetupView, TextIn) > 0) { //  goto main setup screen
+        if (InStrng(SetupView, TextIn) > 0) {           //  goto main setup screen
+            if (CurrentView == FAILSAFE_VIEW)  {        //  read failsafe blobs heer
+                SendCommand(ProgressStart);
+                    for (int i = 0; i < 16 ; ++i){
+                    FailSafeChannel[i] = GetValue(fs[i]);
+                    SendValue(Progress, i * (100/16));
+                    }
+                SendCommand(ProgressEnd);
+            }
             ClearText();
             SaveAllParameters();
             SendCommand(page_SetupView);
@@ -5613,10 +5626,9 @@ FASTRUN void ButtonWasPressed()
         if (InStrng(FailSAVE, TextIn) > 0) {
             SendCommand(ProgressStart);
             for (int i = 0; i < 16 ; ++i){
-                FailSafeChannel[i] = GetValue(fs[i]); // heer
+                FailSafeChannel[i] = GetValue(fs[i]); 
                 SendValue(Progress, i * (100/16));
                 }
-             
             SaveOneModel(ModelNumber);
             FailSafeTimer= millis();
             SaveFailSafeNow = true;
@@ -5726,12 +5738,10 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(InputsDone, TextIn) > 0) {
             SendCommand(ProgressStart);
-           
             for (int i = 0; i < 16; ++i){
-                InPutStick[i] = CheckRange_0_16(GetValue(InputStick_Labels[i]))-1; // heer
+                InPutStick[i] = CheckRange_0_16(GetValue(InputStick_Labels[i]))-1;
                 SendValue(Progress, i *(100/16));
             }
-        
             SendValue(Progress, 99);
             SaveOneModel(ModelNumber);
             SendValue(Progress, 100);
