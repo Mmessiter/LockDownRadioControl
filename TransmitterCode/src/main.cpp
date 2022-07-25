@@ -1308,153 +1308,45 @@ FASTRUN void CheckTimer()
         }  
     }
 }
-
-
 /*********************************************************************************************************************************/
 
 FASTRUN void ShowServoPos()
 {
-    if ((Connected) || (CurrentView == GRAPHVIEW))  { // not certain why - but this is needed! :-)
+    if ((Connected) || (CurrentView == GRAPHVIEW))  { // (this is needed! :-)
         if (millis() - ShowServoTimer <= 60) return;    
         ShowServoTimer = millis();
     }
-    char SticksView_Ch1[]    = "Ch1";
-    char SticksView_Ch2[]    = "Ch2";
-    char SticksView_Ch3[]    = "Ch3";
-    char SticksView_Ch4[]    = "Ch4";
-    char SticksView_Ch5[]    = "Ch5";
-    char SticksView_Ch6[]    = "Ch6";
-    char SticksView_Ch7[]    = "Ch7";
-    char SticksView_Ch8[]    = "Ch8";
-    char SticksView_Ch9[]    = "Ch9";
-    char SticksView_Ch10[]   = "Ch10";
-    char SticksView_Ch11[]   = "Ch11";
-    char SticksView_Ch12[]   = "Ch12";
-    char SticksView_Ch13[]   = "Ch13";
-    char SticksView_Ch14[]   = "Ch14";
-    char SticksView_Ch15[]   = "Ch15";
-    char SticksView_Ch16[]   = "Ch16";
-    char CalibrateView_Ch1[] = "Ch1";
-    char CalibrateView_Ch2[] = "Ch2";
-    char CalibrateView_Ch3[] = "Ch3";
-    char CalibrateView_Ch4[] = "Ch4";
-    char CalibrateView_Ch5[] = "Ch5";
-    char CalibrateView_Ch6[] = "Ch6";
-    char CalibrateView_Ch7[] = "Ch7";
-    char CalibrateView_Ch8[] = "Ch8";
-    char ChannelInput[]      = "Input";
-    char ChannelOutput[]     = "Output";
-    uint16_t StickPosition   = 54321;
-    int l             = 0;
-    int l1            = 0;
-    int LeastDistance = 2;          // if the change is very small, don't re-display anything - to reduce flashing.
-  
-if ((CurrentView == STICKSVIEW) || (CurrentView == FRONTVIEW)){ 
-
-        if (abs(SendBuffer[0] - ShownBuffer[0]) > LeastDistance) {
-            SendValue(SticksView_Ch1, IntoLowerRes(SendBuffer[0]));
-            ShownBuffer[0] = SendBuffer[0];
-        }
-        if (abs(SendBuffer[1] - ShownBuffer[1]) > LeastDistance) {
-            SendValue(SticksView_Ch2, IntoLowerRes(SendBuffer[1]));
-            ShownBuffer[1] = SendBuffer[1];
-        }
-        if (abs(SendBuffer[2] - ShownBuffer[2]) > LeastDistance) {
-            SendValue(SticksView_Ch3, IntoLowerRes(SendBuffer[2]));
-            ShownBuffer[2] = SendBuffer[2];
-        }
-        if (abs(SendBuffer[3] - ShownBuffer[3]) > LeastDistance) {
-            SendValue(SticksView_Ch4, IntoLowerRes(SendBuffer[3]));
-            ShownBuffer[3] = SendBuffer[3];
-        }
-        if (abs(SendBuffer[4] - ShownBuffer[4]) > LeastDistance) {
-            SendValue(SticksView_Ch5, IntoLowerRes(SendBuffer[4]));
-            ShownBuffer[4] = SendBuffer[4];
-        }
-        if (abs(SendBuffer[5] - ShownBuffer[5]) > LeastDistance) {
-            SendValue(SticksView_Ch6, IntoLowerRes(SendBuffer[5]));
-            ShownBuffer[5] = SendBuffer[5];
-        }
-        if (abs(SendBuffer[6] - ShownBuffer[6]) > LeastDistance) {
-            SendValue(SticksView_Ch7, IntoLowerRes(SendBuffer[6]));
-            ShownBuffer[6] = SendBuffer[6];
-        }
-        if (abs(SendBuffer[7] - ShownBuffer[7]) > LeastDistance) {
-            SendValue(SticksView_Ch8, IntoLowerRes(SendBuffer[7]));
-            ShownBuffer[7] = SendBuffer[7];
-        }
-        if (abs(SendBuffer[8] - ShownBuffer[8]) > LeastDistance) {
-            SendValue(SticksView_Ch9, IntoLowerRes(SendBuffer[8]));
-            ShownBuffer[8] = SendBuffer[8];
-        }
-        if (abs(SendBuffer[9] - ShownBuffer[9]) > LeastDistance) {
-            SendValue(SticksView_Ch10, IntoLowerRes(SendBuffer[9]));
-            ShownBuffer[9] = SendBuffer[9];
-        }
-        if (abs(SendBuffer[10] - ShownBuffer[10]) > LeastDistance) {
-            SendValue(SticksView_Ch11, IntoLowerRes(SendBuffer[10]));
-            ShownBuffer[10] = SendBuffer[10];
-        }
-        if (abs(SendBuffer[11] - ShownBuffer[11]) > LeastDistance) {
-            SendValue(SticksView_Ch12, IntoLowerRes(SendBuffer[11]));
-            ShownBuffer[11] = SendBuffer[11];
-        }
-        if (abs(SendBuffer[12] - ShownBuffer[12]) > LeastDistance) {
-            SendValue(SticksView_Ch13, IntoLowerRes(SendBuffer[12]));
-            ShownBuffer[12] = SendBuffer[12];
-        }
-        if (abs(SendBuffer[13] - ShownBuffer[13]) > LeastDistance) {
-            SendValue(SticksView_Ch14, IntoLowerRes(SendBuffer[13]));
-            ShownBuffer[13] = SendBuffer[13];
-        }
-        if (abs(SendBuffer[14] - ShownBuffer[14]) > LeastDistance) {
-            SendValue(SticksView_Ch15, IntoLowerRes(SendBuffer[14]));
-            ShownBuffer[14] = SendBuffer[14];
-        }
-        if (abs(SendBuffer[15] - ShownBuffer[15]) > LeastDistance) {
-            SendValue(SticksView_Ch16, IntoLowerRes(SendBuffer[15]));
-            ShownBuffer[15] = SendBuffer[15];
-        }
-    }
-
-    if  (CurrentView == CALIBRATEVIEW)  {
-        if (abs(SendBuffer[0] - ShownBuffer[0]) > LeastDistance) {
-            SendValue(CalibrateView_Ch1, IntoLowerRes(SendBuffer[0]));
-            ShownBuffer[0] = SendBuffer[0];
-        }
-        if (abs(SendBuffer[1] - ShownBuffer[1]) > LeastDistance) {
-            SendValue(CalibrateView_Ch2, IntoLowerRes(SendBuffer[1]));
-            ShownBuffer[1] = SendBuffer[1];
-        }
-        if (abs(SendBuffer[2] - ShownBuffer[2]) > LeastDistance) {
-            SendValue(CalibrateView_Ch3, IntoLowerRes(SendBuffer[2]));
-            ShownBuffer[2] = SendBuffer[2];
-        }
-        if (abs(SendBuffer[3] - ShownBuffer[3]) > LeastDistance) {
-            SendValue(CalibrateView_Ch4, IntoLowerRes(SendBuffer[3]));
-            ShownBuffer[3] = SendBuffer[3];
-        }
-        if (abs(SendBuffer[4] - ShownBuffer[4]) > LeastDistance) {
-            SendValue(CalibrateView_Ch5, IntoLowerRes(SendBuffer[4]));
-            ShownBuffer[4] = SendBuffer[4];
-        }
-        if (abs(SendBuffer[5] - ShownBuffer[5]) > LeastDistance) {
-            SendValue(CalibrateView_Ch6, IntoLowerRes(SendBuffer[5]));
-            ShownBuffer[5] = SendBuffer[5];
-        }
-        if (abs(SendBuffer[6] - ShownBuffer[6]) > LeastDistance) {
-            SendValue(CalibrateView_Ch7, IntoLowerRes(SendBuffer[6]));
-            ShownBuffer[6] = SendBuffer[6];
-        }
-        if (abs(SendBuffer[7] - ShownBuffer[7]) > LeastDistance) {
-            SendValue(CalibrateView_Ch8, IntoLowerRes(SendBuffer[7]));
-            ShownBuffer[7] = SendBuffer[7];
+    char Ch_Lables[16][5]    =  {"Ch1","Ch2","Ch3","Ch4","Ch5","Ch6","Ch7","Ch8","Ch9","Ch10","Ch11","Ch12","Ch13","Ch14","Ch15","Ch16"};
+    char ChannelInput[]      =  "Input";
+    char ChannelOutput[]     =  "Output"; 
+    uint16_t StickPosition   =  54321;
+    int l                    = 0;
+    int l1                   = 0;
+    
+    // The first 8 channels are displayed on all three of these screens
+    if ((CurrentView == STICKSVIEW) || (CurrentView == FRONTVIEW) || (CurrentView == CALIBRATEVIEW)){ 
+        for (int i = 0; i < 8; ++i){
+            if (SendBuffer[i] != ShownBuffer[i]) {
+                SendValue(Ch_Lables[i], IntoLowerRes(SendBuffer[i]));
+                ShownBuffer[i] = SendBuffer[i];
+            }
         }
     }
     
+    // The second 8 channels are displayed on only two screens
+    if ((CurrentView == STICKSVIEW) || (CurrentView == FRONTVIEW) ){ 
+        for (int i = 8; i < 16; ++i){
+            if (SendBuffer[i] != ShownBuffer[i]){
+                SendValue(Ch_Lables[i], IntoLowerRes(SendBuffer[i]));
+                ShownBuffer[i] = SendBuffer[i];
+            }
+        }
+    }
     if (CurrentView == GRAPHVIEW) { 
-#define fixitx 35
-#define BarWidth 3
+#define fixitx          35
+#define BarWidth        3
+#define LeastDistance   2          // if the change is very small, don't re-display anything - to reduce flashing.
+
         if (ChanneltoSet <= 8) {
             l  = (InPutStick[ChanneltoSet - 1]);
             l1 = analogRead(AnalogueInput[l]);
@@ -1489,11 +1381,10 @@ if ((CurrentView == STICKSVIEW) || (CurrentView == FRONTVIEW)){
                 SendValue(ChannelOutput,0);   // because when not connected nothing is sent
             }
         }else{
-    SendValue(ChannelInput, 0);
-    SendValue(ChannelOutput, 0);
-   
+            SendValue(ChannelInput, 0);
+            SendValue(ChannelOutput, 0);
+        }
     }
-   }
 }
 
 /*********************************************************************************************************************************/
@@ -1505,13 +1396,14 @@ FASTRUN bool CheckTXVolts(){
     float txpc,txv;            
     char  Vbuf[16];
     char  TXBattInfo[65];
+    char  pc[] = "%";
         if (USE_INA219) {
             txv  = (ina219.getBusVoltage_V()) * 100;
-            txpc = map(txv, 3.2f * 200, 3.33f * 200, 0, 100); // LiFePo4 Battery 3.1 ->3.35  volts per cell
+            txpc = map(txv, 3.2 * 200, 3.33 * 200, 0, 100); // LiFePo4 Battery 3.1 ->3.35  volts per cell
             if (txpc < LowBattery) TXWarningFlag = true;
             txpc = constrain(txpc, 0, 100);
-            dtostrf(txv/200, 2, 2, Vbuf);
-            strcpy(TXBattInfo, Vbuf);
+            strcpy(TXBattInfo, Str(Vbuf,txpc,0));
+            strcat(TXBattInfo, pc);
             if (CurrentView == FRONTVIEW) {SendValue(JTX,txpc); SendText(FrontView_TXBV, TXBattInfo);}
             if (CurrentView == DATAVIEW)  SendText(DataView_txv, TransmitterVersionNumber); 
         }
@@ -1522,25 +1414,26 @@ return TXWarningFlag;
 FASTRUN bool CheckRXVolts(){
     float Volts                  = 0;
     float ReadVolts              = 0;
-    char  JRX[]                   = "JRX";
+    char  JRX[]                  = "JRX";
     bool  RXWarningFlag          = false;
     char  Vbuf[16];
     char  RXBattInfo[65];
     float VoltsPerCell              = 0;
     char  FrontView_RXBV[]          = "RXBV";
+    char  RXPC[]                    = "RXPC";
     char  PerCell[]                 = " per cell)";
     char  RXBattNA[]                = "(No data from RX)";
     char  v[]                       = "V  (";
+    char pc[]                       = "%";
+    char spaces[]                   = "  "; 
             ReadVolts = RXModelVolts * 100;
             Volts = map(ReadVolts,  3.4f * RXCellCount * 100 ,  4.2f * RXCellCount * 100, 0, 100);  
             if (RXVoltsDetected) {
                 Volts = constrain(Volts, 0, 100);
-                if (Volts <= LowBattery && Volts > 0) {
-                    RXWarningFlag = true;
-                }
-            }
-            if (RXVoltsDetected) {
+                if (Volts <= LowBattery && Volts > 0)  RXWarningFlag = true;
                 if (BoundFlag && CurrentView == FRONTVIEW) SendValue(JRX, Volts);
+                strcat(Str(Vbuf,Volts,0),pc);
+                SendText(RXPC,Vbuf);
                 strcpy(RXBattInfo, ModelVolts);
                 strcat(RXBattInfo, v);
                 VoltsPerCell = (ReadVolts / RXCellCount) / 100;
@@ -1548,11 +1441,11 @@ FASTRUN bool CheckRXVolts(){
                 strcat(RXBattInfo, Vbuf);
                 strcat(RXBattInfo, PerCell);
                 if (BoundFlag && CurrentView == FRONTVIEW) SendText(FrontView_RXBV, RXBattInfo);
-            }
-            if (!RXVoltsDetected) {
+            }else{
                 if (BoundFlag && CurrentView == FRONTVIEW) {
                     SendText(FrontView_RXBV, RXBattNA);
                     SendValue(JRX, 0);
+                    SendText(RXPC,spaces);
                 }
             }
             return RXWarningFlag;
@@ -2308,42 +2201,17 @@ FLASHMEM void InitCentreDegrees()
 
 void UpdateButtonLabels()
 {
-    char InPutStick_c1[]  = "c1";
-    char InPutStick_c2[]  = "c2";
-    char InPutStick_c3[]  = "c3";
-    char InPutStick_c4[]  = "c4";
-    char InPutStick_c5[]  = "c5";
-    char InPutStick_c6[]  = "c6";
-    char InPutStick_c7[]  = "c7";
-    char InPutStick_c8[]  = "c8";
-    char InPutStick_c9[]  = "c9";
-    char InPutStick_c10[] = "c10";
-    char InPutStick_c11[] = "c11";
-    char InPutStick_c12[] = "c12";
-    char InPutStick_c13[] = "c13";
-    char InPutStick_c14[] = "c14";
-    char InPutStick_c15[] = "c15";
-    char InPutStick_c16[] = "c16";
+   
 
-    char fsch1[]   = "ch1";
-    char fsch2[]   = "ch2";
-    char fsch3[]   = "ch3";
-    char fsch4[]   = "ch4";
-    char fsch5[]   = "ch5";
-    char fsch6[]   = "ch6";
-    char fsch7[]   = "ch7";
-    char fsch8[]   = "ch8";
-    char fsch9[]   = "ch9";
-    char fsch10[]  = "ch10";
-    char fsch11[]  = "ch11";
-    char fsch12[]  = "ch12";
-    char fsch13[]  = "ch13";
-    char fsch14[]  = "ch14";
-    char fsch15[]  = "ch15";
-    char fsch16[]  = "ch16";
+    char InputStick_Labels[16][4]   = {"c1","c2","c3","c4","c5","c6","c7","c8","c9","c10","c11","c12","c13","c14","c15","c16"};
+    char fsch_labels[16][5]         = {"ch1","ch2","ch3","ch4","ch5","ch6","ch7","ch8","ch9","ch10","ch11","ch12","ch13","ch14","ch15","ch16"};
+    char fs[16][5]                  = {"fs1","fs2","fs3","fs4","fs5","fs6","fs7","fs8","fs9","fs10","fs11","fs12","fs13","fs14","fs15","fs16"};
+     
     char arrowrh[] = " >";
     char arrowlh[] = "< ";
     char BoxOffsetLabel[20];
+
+
     char SticksViewButton1[]  = "Sch1";
     char SticksViewButton2[]  = "Sch2";
     char SticksViewButton3[]  = "Sch3";
@@ -2360,6 +2228,8 @@ void UpdateButtonLabels()
     char SticksViewButton14[] = "Sch14";
     char SticksViewButton15[] = "Sch15";
     char SticksViewButton16[] = "Sch16";
+
+
     char one[]                = " (1)";
     char two[]                = "(2) ";
     char three[]              = " (3)";
@@ -2377,15 +2247,19 @@ void UpdateButtonLabels()
     char fifteen[]            = " (15)";
     char sixteen[]            = "(16) ";
     if (CurrentView == STICKSVIEW) {
+       
         strcpy(BoxOffsetLabel, ChannelNames[0]);
         strcat(BoxOffsetLabel, one);
         strcat(BoxOffsetLabel, arrowrh);
+
         SendText(SticksViewButton1, BoxOffsetLabel);
         strcpy(BoxOffsetLabel, arrowlh);
         strcat(BoxOffsetLabel, two);
+
         strcat(BoxOffsetLabel, ChannelNames[1]);
         SendText(SticksViewButton2, BoxOffsetLabel);
         strcpy(BoxOffsetLabel, ChannelNames[2]);
+
         strcat(BoxOffsetLabel, three);
         strcat(BoxOffsetLabel, arrowrh);
         SendText(SticksViewButton3, BoxOffsetLabel);
@@ -2441,40 +2315,20 @@ void UpdateButtonLabels()
         strcat(BoxOffsetLabel, sixteen);
         strcat(BoxOffsetLabel, ChannelNames[15]);
         SendText(SticksViewButton16, BoxOffsetLabel);
+
+    }
+    if (CurrentView == FAILSAFE_VIEW) {
+         for (int i = 0;i < 16; ++i){
+            SendValue(fs[i], FailSafeChannel[i]); 
+         }
     }
     if (CurrentView == INPUTS_VIEW || CurrentView == FAILSAFE_VIEW || CurrentView == REVERSEVIEW) {
-        SendText(fsch1, ChannelNames[0]);
-        SendText(fsch2, ChannelNames[1]);
-        SendText(fsch3, ChannelNames[2]);
-        SendText(fsch4, ChannelNames[3]);
-        SendText(fsch5, ChannelNames[4]);
-        SendText(fsch6, ChannelNames[5]);
-        SendText(fsch7, ChannelNames[6]);
-        SendText(fsch8, ChannelNames[7]);
-        SendText(fsch9, ChannelNames[8]);
-        SendText(fsch10, ChannelNames[9]);
-        SendText(fsch11, ChannelNames[10]);
-        SendText(fsch12, ChannelNames[11]);
-        SendText(fsch13, ChannelNames[12]);
-        SendText(fsch14, ChannelNames[13]);
-        SendText(fsch15, ChannelNames[14]);
-        SendText(fsch16, ChannelNames[15]);
-        SendValue(InPutStick_c1, InPutStick[0] + 1);
-        SendValue(InPutStick_c2, InPutStick[1] + 1);
-        SendValue(InPutStick_c3, InPutStick[2] + 1);
-        SendValue(InPutStick_c4, InPutStick[3] + 1);
-        SendValue(InPutStick_c5, InPutStick[4] + 1);
-        SendValue(InPutStick_c6, InPutStick[5] + 1);
-        SendValue(InPutStick_c7, InPutStick[6] + 1);
-        SendValue(InPutStick_c8, InPutStick[7] + 1);
-        SendValue(InPutStick_c9, InPutStick[8] + 1);
-        SendValue(InPutStick_c10, InPutStick[9] + 1);
-        SendValue(InPutStick_c11, InPutStick[10] + 1);
-        SendValue(InPutStick_c12, InPutStick[11] + 1);
-        SendValue(InPutStick_c13, InPutStick[12] + 1);
-        SendValue(InPutStick_c14, InPutStick[13] + 1);
-        SendValue(InPutStick_c15, InPutStick[14] + 1);
-        SendValue(InPutStick_c16, InPutStick[15] + 1);
+        for (int i = 0;i < 16; ++i){
+            SendText(fsch_labels[i], ChannelNames[i]); 
+        }
+        for (int i = 0; i < 16; ++i){    
+            SendValue(InputStick_Labels[i], InPutStick[i] + 1);
+        }
     }
 }
 
@@ -5104,22 +4958,7 @@ FASTRUN void ButtonWasPressed()
     char PageSwitchView[]          = "page SwitchesView";
     char InputsView[]              = "InputsView";
     char InputsDone[]              = "InputsDone";
-    char InPutStick_c1[]           = "c1";
-    char InPutStick_c2[]           = "c2";
-    char InPutStick_c3[]           = "c3";
-    char InPutStick_c4[]           = "c4";
-    char InPutStick_c5[]           = "c5";
-    char InPutStick_c6[]           = "c6";
-    char InPutStick_c7[]           = "c7";
-    char InPutStick_c8[]           = "c8";
-    char InPutStick_c9[]           = "c9";
-    char InPutStick_c10[]          = "c10";
-    char InPutStick_c11[]          = "c11";
-    char InPutStick_c12[]          = "c12";
-    char InPutStick_c13[]          = "c13";
-    char InPutStick_c14[]          = "c14";
-    char InPutStick_c15[]          = "c15";
-    char InPutStick_c16[]          = "c16";
+    char InputStick_Labels[16][4]  = {"c1","c2","c3","c4","c5","c6","c7","c8","c9","c10","c11","c12","c13","c14","c15","c16"};
     char Export[]                  = "Export";
     char Import[]                  = "Import";
     char ListFiles[]               = "ListFiles";
@@ -5128,22 +4967,8 @@ FASTRUN void ButtonWasPressed()
     char ModExt[]                  = ".MOD";
     char FailSAVE[]                = "FailSAVE";
     char FailSafe[]                = "FailSafe";
-    char fs1[]                     = "fs1";
-    char fs2[]                     = "fs2";
-    char fs3[]                     = "fs3";
-    char fs4[]                     = "fs4";
-    char fs5[]                     = "fs5";
-    char fs6[]                     = "fs6";
-    char fs7[]                     = "fs7";
-    char fs8[]                     = "fs8";
-    char fs9[]                     = "fs9";
-    char fs10[]                    = "fs10";
-    char fs11[]                    = "fs11";
-    char fs12[]                    = "fs12";
-    char fs13[]                    = "fs13";
-    char fs14[]                    = "fs14";
-    char fs15[]                    = "fs15";
-    char fs16[]                    = "fs16";
+    char fs[16][5]                 = {"fs1","fs2","fs3","fs4","fs5","fs6","fs7","fs8","fs9","fs10","fs11","fs12","fs13","fs14","fs15","fs16"};
+  
     char CH1NAME[]                 = "CH1NAME=";
     char CH2NAME[]                 = "CH2NAME=";
     char CH3NAME[]                 = "CH3NAME=";
@@ -5446,8 +5271,15 @@ FASTRUN void ButtonWasPressed()
             ClearText();
             return;
         }
-
-        if (InStrng(SetupView, TextIn) > 0) { //  goto main setup screen
+        if (InStrng(SetupView, TextIn) > 0) {           //  goto main setup screen
+            if (CurrentView == FAILSAFE_VIEW)  {        //  read failsafe blobs heer
+                SendCommand(ProgressStart);
+                    for (int i = 0; i < 16 ; ++i){
+                    FailSafeChannel[i] = GetValue(fs[i]);
+                    SendValue(Progress, i * (100/16));
+                    }
+                SendCommand(ProgressEnd);
+            }
             ClearText();
             SaveAllParameters();
             SendCommand(page_SetupView);
@@ -5793,27 +5625,10 @@ FASTRUN void ButtonWasPressed()
         }
         if (InStrng(FailSAVE, TextIn) > 0) {
             SendCommand(ProgressStart);
-            FailSafeChannel[0] = GetValue(fs1);
-            SendValue(Progress, 5);
-            FailSafeChannel[1] = GetValue(fs2);
-            FailSafeChannel[2] = GetValue(fs3);
-            SendValue(Progress, 25);
-            FailSafeChannel[3] = GetValue(fs4);
-            FailSafeChannel[4] = GetValue(fs5);
-            FailSafeChannel[5] = GetValue(fs6);
-            SendValue(Progress, 50);
-            FailSafeChannel[6] = GetValue(fs7);
-            FailSafeChannel[7] = GetValue(fs8);
-            FailSafeChannel[8] = GetValue(fs9);
-            FailSafeChannel[9] = GetValue(fs10);
-            SendValue(Progress, 75);
-            FailSafeChannel[10] = GetValue(fs11);
-            FailSafeChannel[11] = GetValue(fs12);
-            FailSafeChannel[12] = GetValue(fs13);
-            SendValue(Progress, 100);
-            FailSafeChannel[13] = GetValue(fs14);
-            FailSafeChannel[14] = GetValue(fs15);
-            FailSafeChannel[15] = GetValue(fs16);
+            for (int i = 0; i < 16 ; ++i){
+                FailSafeChannel[i] = GetValue(fs[i]); 
+                SendValue(Progress, i * (100/16));
+                }
             SaveOneModel(ModelNumber);
             FailSafeTimer= millis();
             SaveFailSafeNow = true;
@@ -5923,37 +5738,10 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(InputsDone, TextIn) > 0) {
             SendCommand(ProgressStart);
-            InPutStick[0] = CheckRange_0_16(GetValue(InPutStick_c1)) - 1;
-            SendValue(Progress, 5);
-            InPutStick[1] = CheckRange_0_16(GetValue(InPutStick_c2)) - 1;
-            SendValue(Progress, 15);
-            InPutStick[2] = CheckRange_0_16(GetValue(InPutStick_c3)) - 1;
-            SendValue(Progress, 25);
-            InPutStick[3] = CheckRange_0_16(GetValue(InPutStick_c4)) - 1;
-            SendValue(Progress, 35);
-            InPutStick[4] = CheckRange_0_16(GetValue(InPutStick_c5)) - 1;
-            SendValue(Progress, 45);
-            InPutStick[5] = CheckRange_0_16(GetValue(InPutStick_c6)) - 1;
-            SendValue(Progress, 55);
-            InPutStick[6] = CheckRange_0_16(GetValue(InPutStick_c7)) - 1;
-            SendValue(Progress, 65);
-            InPutStick[7] = CheckRange_0_16(GetValue(InPutStick_c8)) - 1;
-            SendValue(Progress, 75);
-            InPutStick[8] = CheckRange_0_16(GetValue(InPutStick_c9)) - 1;
-            SendValue(Progress, 80);
-            InPutStick[9] = CheckRange_0_16(GetValue(InPutStick_c10)) - 1;
-            SendValue(Progress, 85);
-            InPutStick[10] = CheckRange_0_16(GetValue(InPutStick_c11)) - 1;
-            SendValue(Progress, 86);
-            InPutStick[11] = CheckRange_0_16(GetValue(InPutStick_c12)) - 1;
-            SendValue(Progress, 87);
-            InPutStick[12] = CheckRange_0_16(GetValue(InPutStick_c13)) - 1;
-            SendValue(Progress, 88);
-            InPutStick[13] = CheckRange_0_16(GetValue(InPutStick_c14)) - 1;
-            SendValue(Progress, 89);
-            InPutStick[14] = CheckRange_0_16(GetValue(InPutStick_c15)) - 1;
-            SendValue(Progress, 95);
-            InPutStick[15] = CheckRange_0_16(GetValue(InPutStick_c16)) - 1;
+            for (int i = 0; i < 16; ++i){
+                InPutStick[i] = CheckRange_0_16(GetValue(InputStick_Labels[i]))-1;
+                SendValue(Progress, i *(100/16));
+            }
             SendValue(Progress, 99);
             SaveOneModel(ModelNumber);
             SendValue(Progress, 100);
