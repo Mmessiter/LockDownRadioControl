@@ -10,6 +10,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "FILEPIPEADDRESS", "_transmitter_code_2src_2main_8cpp.html#aec45a9afab4b013142d7ff497e5b4f0c", null ],
     [ "FILETIMEOUT", "_transmitter_code_2src_2main_8cpp.html#ac23f3d9653dfa68ab2f39567096545e6", null ],
     [ "fixitx", "_transmitter_code_2src_2main_8cpp.html#ad40f5a53042299d0a733f7238b5df3a2", null ],
+    [ "LeastDistance", "_transmitter_code_2src_2main_8cpp.html#ae7bf971a98ac285531a8f3ef290b5a61", null ],
     [ "MAXWIDTH", "_transmitter_code_2src_2main_8cpp.html#ac101c663138f79260b6d5ea00140fa22", null ],
     [ "AdjustDateTime", "_transmitter_code_2src_2main_8cpp.html#a9de4ea8e761b5f0e537f6f326f9ad429", null ],
     [ "Ascii", "_transmitter_code_2src_2main_8cpp.html#a3a793f5d71f6db34ad82272d211f8954", null ],

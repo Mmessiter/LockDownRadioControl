@@ -1,5 +1,6 @@
 var NAVTREEINDEX11 =
 {
+"class_tiny_g_p_s_plus.html#af7dc415ad7cf13f01ca2eaead8a4ade2":[9,0,33,3],
 "class_vector_float.html":[9,0,36],
 "class_vector_float.html#a112eaf8758a6f51b96ed1ccb71700495":[9,0,36,5],
 "class_vector_float.html#a2d8e5159f045ca977769d168af75320c":[9,0,36,7],
@@ -134,8 +135,8 @@ var NAVTREEINDEX11 =
 "elapsed_millis_8h.html":[10,0,1,0,0,2,0],
 "elapsed_millis_8h_source.html":[10,0,1,0,0,2,0],
 "files.html":[10,0],
-"functions.html":[9,3,0],
 "functions.html":[9,3,0,0],
+"functions.html":[9,3,0],
 "functions_a.html":[9,3,0,1],
 "functions_b.html":[9,3,0,2],
 "functions_c.html":[9,3,0,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX11 =
 "globals_enum.html":[10,1,4],
 "globals_eval.html":[10,1,5],
 "globals_f.html":[10,1,0,6],
-"globals_func.html":[10,1,1,0],
-"globals_func.html":[10,1,1]
+"globals_func.html":[10,1,1,0]
 };
