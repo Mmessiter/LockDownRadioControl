@@ -1940,12 +1940,15 @@ void UpdateTrimView()
     char TrimViewChannels[4][4]  = {"ch1","ch2","ch3","ch4"};
     char TrimViewNumbers[4][3]   = {"n1","n2","n3","n4"};
     char TrimViewReversed[4][3]  = {"r1","r2","r3","r4"};
-if (CurrentView == TRIM_VIEW)  {
-    for (int i = 0; i < 4; ++i){
-        SendValue(TrimViewChannels[i], (Trims[FlightMode][i]));
-        SendValue(TrimViewNumbers[i],  (Trims[FlightMode][i]- 80));
-        SendValue(TrimViewReversed[i], (TrimsReversed[FlightMode][i]));
+
+    if (CurrentView == FRONTVIEW || (CurrentView == TRIM_VIEW))  {
+        for (int i = 0; i < 4; ++i){
+            SendValue(TrimViewChannels[i], (Trims[FlightMode][i]));
+            SendValue(TrimViewNumbers[i],  (Trims[FlightMode][i]- 80));
+            if (CurrentView == TRIM_VIEW) SendValue(TrimViewReversed[i], (TrimsReversed[FlightMode][i]));        
+        }
     }
+    if (CurrentView == TRIM_VIEW)  {   
         if (SticksMode == 2) {
                 SendValue(Mode2,1);
                 SendValue(Mode1,0);}
@@ -2040,90 +2043,30 @@ uint8_t SDReadByte(int p_address)
 /*********************************************************************************************************************************/
 
 void UpdateModelsNameEveryWhere()
-{ // ... and flight mode ... and trim settings etc...
-    char fm1[]                  = "Bank 1";
-    char fm2[]                  = "Bank 2";
-    char fm3[]                  = "Bank 3";
-    char fm4[]                  = "Bank 4";
-    char FrontView_ModelName[]  = "ModelName";
-    char SticksView_ModelName[] = "ModelName";
-    char MixesView_ModelName[]  = "ModelName";
-    char ModelsView_ModelName[] = "ModelName";
-    char GraphView_ModelName[]  = "ModelName";
+{   char fms[4][7]              = {"Bank 1","Bank 2","Bank 3","Bank 4",};
+    char TheModelName[]         = "ModelName";
     char GraphView_Channel[]    = "Channel";
-    char TrimView_ModelName[]   = "ModelName";
     char TrimView_FlightMode[]  = "t1";
     char GraphView_fmode[]      = "fmode";
     char SticksView_t1[]        = "t1";
     char NoName[17];
     char Ch[] = "Channel ";
     char Nbuf[7];
-
-    switch (CurrentView) {
-        case FRONTVIEW:
-            SendText(FrontView_ModelName, ModelName);
-            UpdateTrimView();
-            break;
-        case STICKSVIEW:
-            SendText(SticksView_ModelName, ModelName);
-            break;
-        case MIXESVIEW:
-            SendText(MixesView_ModelName, ModelName);
-            break;
-        case GRAPHVIEW:
-            SendText(GraphView_ModelName, ModelName);
-            if (strlen(ChannelNames[ChanneltoSet - 1]) < 2) { // if no name, just show the channel number
-                strcpy(NoName, Ch);
-                SendText(GraphView_Channel, strcat(NoName, Str(Nbuf, ChanneltoSet, 0)));
+            SendText(TheModelName, ModelName);
+            if (CurrentView == GRAPHVIEW){
+                if (strlen(ChannelNames[ChanneltoSet - 1]) < 2) { // if no name, just show the channel number
+                    strcpy(NoName, Ch);
+                    SendText(GraphView_Channel, strcat(NoName, Str(Nbuf, ChanneltoSet, 0)));
+                }else {
+                    SendText(GraphView_Channel, ChannelNames[ChanneltoSet - 1]);
+                }
             }
-            else {
-                SendText(GraphView_Channel, ChannelNames[ChanneltoSet - 1]);
-            }
-            break;
-        case MODELSVIEW:
-            SendText(ModelsView_ModelName, ModelName);
-            break;
-        case TRIM_VIEW:
-            SendText(TrimView_ModelName, ModelName);
-            UpdateTrimView();
-            break;
-        default:
-            break;
-    }
-
-    if (FlightMode == 1) {
-        if (CurrentView == STICKSVIEW) SendText(SticksView_t1, fm1);
-        if (CurrentView == GRAPHVIEW) SendText(GraphView_fmode, fm1);
-        if (CurrentView == TRIM_VIEW) {
-            SendText(TrimView_FlightMode, fm1);
-            UpdateTrimView();
-        }
-    }
-    if (FlightMode == 2) {
-        if (CurrentView == STICKSVIEW) SendText(SticksView_t1, fm2);
-        if (CurrentView == GRAPHVIEW) SendText(GraphView_fmode, fm2);
-        if (CurrentView == TRIM_VIEW) {
-            SendText(TrimView_FlightMode, fm2);
-            UpdateTrimView();
-        }
-    }
-    if (FlightMode == 3) {
-        if (CurrentView == STICKSVIEW) SendText(SticksView_t1, fm3);
-        if (CurrentView == GRAPHVIEW) SendText(GraphView_fmode, fm3);
-        if (CurrentView == TRIM_VIEW) {
-            SendText(TrimView_FlightMode, fm3);
-            UpdateTrimView();
-        }
-    }
-    if (FlightMode == 4) {
-        if (CurrentView == STICKSVIEW) SendText(SticksView_t1, fm4);
-        if (CurrentView == GRAPHVIEW) SendText(GraphView_fmode, fm4);
-        if (CurrentView == TRIM_VIEW) {
-            SendText(TrimView_FlightMode, fm4);
-            UpdateTrimView();
-        }
-    }
-}
+            if (CurrentView == STICKSVIEW) SendText(SticksView_t1, fms[FlightMode-1]);
+            if (CurrentView == GRAPHVIEW)  SendText(GraphView_fmode, fms[FlightMode-1]);
+            if (CurrentView == TRIM_VIEW) {SendText(TrimView_FlightMode, fms[FlightMode-1]); UpdateTrimView();}
+            if (CurrentView == FRONTVIEW)  {UpdateTrimView();}
+          
+} 
 
 /*********************************************************************************************************************************/
 
@@ -6604,35 +6547,10 @@ void GetFlightMode()
 
 void UpdateTrimViewPart(uint8_t ch)
 {
-    char TrimView_ch1[] = "ch1";
-    char TrimView_ch2[] = "ch2";
-    char TrimView_ch3[] = "ch3";
-    char TrimView_ch4[] = "ch4"; 
-    char TrimView_n1[]  = "n1";
-    char TrimView_n2[]  = "n2";
-    char TrimView_n3[]  = "n3";
-    char TrimView_n4[]  = "n4";
-
-switch(ch){
-    case 0:
-    SendValue(TrimView_ch1, (Trims[FlightMode][0]));
-    SendValue(TrimView_n1,  (Trims[FlightMode][0] - 80));
-    break;
-    case 1:
-    SendValue(TrimView_ch4, (Trims[FlightMode][1]));
-    SendValue(TrimView_n4,  (Trims[FlightMode][1] - 80));
-    break;
-    case 2:
-    SendValue(TrimView_ch2, (Trims[FlightMode][2]));
-    SendValue(TrimView_n2,  (Trims[FlightMode][2] - 80));
-    break;
-    case 3:
-    SendValue(TrimView_ch3, (Trims[FlightMode][3]));
-    SendValue(TrimView_n3,  (Trims[FlightMode][3] - 80));
-    break;
-    default:
-    break;
-    }
+    char TrimViewCh[4][4] = {"ch1","ch2","ch3","ch4"};
+    char TrimViewN[4][3]  = {"n1","n2","n3","n4"};
+    SendValue(TrimViewCh[ch], (Trims[FlightMode][ch]));
+    SendValue(TrimViewN[ch], (Trims[FlightMode][ch] - 80));
 }
 
 // *************************************************************************************************************
