@@ -2133,7 +2133,7 @@ void UpdateButtonLabels() {
     
     if (CurrentView == STICKSVIEW) {
         for (int i = 0; i < 16; ++i ){
-            if ((float) i/2 != (int) i/2){  // Odd and even labels are formatted differnently here
+            if ((float) i/2 != (int) i/2){                      // Odd and even labels are formatted differnently here
                 strcpy(LabelText, ArrowLh);
                 strcat(LabelText, ChannelNumber[i]);
                 strcat(LabelText, ChannelNames[i]);
@@ -2153,8 +2153,6 @@ void UpdateButtonLabels() {
     if (CurrentView == INPUTS_VIEW || CurrentView == FAILSAFE_VIEW || CurrentView == REVERSEVIEW) {
         for (int i = 0;i < 16; ++i){
             SendText(fsch_labels[i], ChannelNames[i]); 
-        }
-        for (int i = 0; i < 16; ++i){    
             SendValue(InputStick_Labels[i], InPutStick[i] + 1);
         }
     }
