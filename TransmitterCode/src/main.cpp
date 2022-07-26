@@ -2119,124 +2119,31 @@ FLASHMEM void InitCentreDegrees()
     }
 }
 
-
 /*********************************************************************************************************************************/
 
-void UpdateButtonLabels()
-{
+void UpdateButtonLabels() {
     char InputStick_Labels[16][4]   = {"c1","c2","c3","c4","c5","c6","c7","c8","c9","c10","c11","c12","c13","c14","c15","c16"};
     char fsch_labels[16][5]         = {"ch1","ch2","ch3","ch4","ch5","ch6","ch7","ch8","ch9","ch10","ch11","ch12","ch13","ch14","ch15","ch16"};
     char fs[16][5]                  = {"fs1","fs2","fs3","fs4","fs5","fs6","fs7","fs8","fs9","fs10","fs11","fs12","fs13","fs14","fs15","fs16"};
+    char ChannelLabels[16][6]       = {"Sch1","Sch2","Sch3","Sch4","Sch5","Sch6","Sch7","Sch8","Sch9","Sch10","Sch11","Sch12","Sch13","Sch14","Sch15","Sch16"};
+    char ChannelNumber[16][6]       = {" (1)","(2) "," (3)","(4) "," (5)","(6) "," (7)","(8) "," (9)","(10) "," (11)","(12) "," (13)","(14) "," (15)","(16) "};
+    char ArrowRh[]                  = " >";
+    char ArrowLh[]                  = "< ";
+    char LabelText[20];
     
-    char arrowrh[] = " >";
-    char arrowlh[] = "< ";
-    char BoxOffsetLabel[20];
-
-
-    char SticksViewButton1[]  = "Sch1";
-    char SticksViewButton2[]  = "Sch2";
-    char SticksViewButton3[]  = "Sch3";
-    char SticksViewButton4[]  = "Sch4";
-    char SticksViewButton5[]  = "Sch5";
-    char SticksViewButton6[]  = "Sch6";
-    char SticksViewButton7[]  = "Sch7";
-    char SticksViewButton8[]  = "Sch8";
-    char SticksViewButton9[]  = "Sch9";
-    char SticksViewButton10[] = "Sch10";
-    char SticksViewButton11[] = "Sch11";
-    char SticksViewButton12[] = "Sch12";
-    char SticksViewButton13[] = "Sch13";
-    char SticksViewButton14[] = "Sch14";
-    char SticksViewButton15[] = "Sch15";
-    char SticksViewButton16[] = "Sch16";
-
-
-    char one[]                = " (1)";
-    char two[]                = "(2) ";
-    char three[]              = " (3)";
-    char four[]               = "(4) ";
-    char five[]               = " (5)";
-    char six[]                = "(6) ";
-    char seven[]              = " (7)";
-    char eight[]              = "(8) ";
-    char nine[]               = " (9)";
-    char ten[]                = "(10) ";
-    char eleven[]             = " (11)";
-    char twelve[]             = "(12) ";
-    char thirteen[]           = " (13)";
-    char fourteen[]           = "(14) ";
-    char fifteen[]            = " (15)";
-    char sixteen[]            = "(16) ";
     if (CurrentView == STICKSVIEW) {
-       
-        strcpy(BoxOffsetLabel, ChannelNames[0]);
-        strcat(BoxOffsetLabel, one);
-        strcat(BoxOffsetLabel, arrowrh);
-
-        SendText(SticksViewButton1, BoxOffsetLabel);
-        strcpy(BoxOffsetLabel, arrowlh);
-        strcat(BoxOffsetLabel, two);
-
-        strcat(BoxOffsetLabel, ChannelNames[1]);
-        SendText(SticksViewButton2, BoxOffsetLabel);
-        strcpy(BoxOffsetLabel, ChannelNames[2]);
-
-        strcat(BoxOffsetLabel, three);
-        strcat(BoxOffsetLabel, arrowrh);
-        SendText(SticksViewButton3, BoxOffsetLabel);
-        strcpy(BoxOffsetLabel, arrowlh);
-        strcat(BoxOffsetLabel, four);
-        strcat(BoxOffsetLabel, ChannelNames[3]);
-        SendText(SticksViewButton4, BoxOffsetLabel);
-        strcpy(BoxOffsetLabel, ChannelNames[4]);
-        strcat(BoxOffsetLabel, five);
-        strcat(BoxOffsetLabel, arrowrh);
-        SendText(SticksViewButton5, BoxOffsetLabel);
-        strcpy(BoxOffsetLabel, arrowlh);
-        strcat(BoxOffsetLabel, six);
-        strcat(BoxOffsetLabel, ChannelNames[5]);
-        SendText(SticksViewButton6, BoxOffsetLabel);
-        strcpy(BoxOffsetLabel, ChannelNames[6]);
-        strcat(BoxOffsetLabel, seven);
-        strcat(BoxOffsetLabel, arrowrh);
-        SendText(SticksViewButton7, BoxOffsetLabel);
-        strcpy(BoxOffsetLabel, arrowlh);
-        strcat(BoxOffsetLabel, eight);
-        strcat(BoxOffsetLabel, ChannelNames[7]);
-        SendText(SticksViewButton8, BoxOffsetLabel);
-        strcpy(BoxOffsetLabel, ChannelNames[8]);
-        strcat(BoxOffsetLabel, nine);
-        strcat(BoxOffsetLabel, arrowrh);
-        SendText(SticksViewButton9, BoxOffsetLabel);
-        strcpy(BoxOffsetLabel, arrowlh);
-        strcat(BoxOffsetLabel, ten);
-        strcat(BoxOffsetLabel, ChannelNames[9]);
-        SendText(SticksViewButton10, BoxOffsetLabel);
-        strcpy(BoxOffsetLabel, ChannelNames[10]);
-        strcat(BoxOffsetLabel, eleven);
-        strcat(BoxOffsetLabel, arrowrh);
-        SendText(SticksViewButton11, BoxOffsetLabel);
-        strcpy(BoxOffsetLabel, arrowlh);
-        strcat(BoxOffsetLabel, twelve);
-        strcat(BoxOffsetLabel, ChannelNames[11]);
-        SendText(SticksViewButton12, BoxOffsetLabel);
-        strcpy(BoxOffsetLabel, ChannelNames[12]);
-        strcat(BoxOffsetLabel, thirteen);
-        strcat(BoxOffsetLabel, arrowrh);
-        SendText(SticksViewButton13, BoxOffsetLabel);
-        strcpy(BoxOffsetLabel, arrowlh);
-        strcat(BoxOffsetLabel, fourteen);
-        strcat(BoxOffsetLabel, ChannelNames[13]);
-        SendText(SticksViewButton14, BoxOffsetLabel);
-        strcpy(BoxOffsetLabel, ChannelNames[14]);
-        strcat(BoxOffsetLabel, fifteen);
-        strcat(BoxOffsetLabel, arrowrh);
-        SendText(SticksViewButton15, BoxOffsetLabel);
-        strcpy(BoxOffsetLabel, arrowlh);
-        strcat(BoxOffsetLabel, sixteen);
-        strcat(BoxOffsetLabel, ChannelNames[15]);
-        SendText(SticksViewButton16, BoxOffsetLabel);
-
+        for (int i = 0; i < 16; ++i ){
+            if ((float) i/2 != (int) i/2){  // Odd and even labels are formatted differnently here
+                strcpy(LabelText, ArrowLh);
+                strcat(LabelText, ChannelNumber[i]);
+                strcat(LabelText, ChannelNames[i]);
+            } else {       
+                strcpy(LabelText, ChannelNames[i]);
+                strcat(LabelText, ChannelNumber[i]);
+                strcat(LabelText, ArrowRh);
+            }   
+            SendText(ChannelLabels[i], LabelText);
+        }
     }
     if (CurrentView == FAILSAFE_VIEW) {
          for (int i = 0;i < 16; ++i){
