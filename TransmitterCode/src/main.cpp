@@ -4652,8 +4652,17 @@ FASTRUN void DisplayCurveAndServoPos(){
  * BUTTON WAS PRESSED (DEAL WITH INPUT FROM NEXTION DISPLAY)
  *
  */
-FASTRUN void ButtonWasPressed()
+FASTRUN void ButtonWasPressed() // heer
 {
+/*
+union {uint8_t First4Bytes[4];uint32_t FirstDWord;} NextionCommand;
+
+     NextionCommand.First4Bytes[0] = TextIn[0];
+     NextionCommand.First4Bytes[1] = TextIn[1];
+     NextionCommand.First4Bytes[2] = TextIn[2];
+     NextionCommand.First4Bytes[3] = TextIn[3];
+     Serial.println (NextionCommand.FirstDWord);
+*/
   if (TextIn[0] & 128 ){                                // first byte hi bit indicates a numbered command
           DoNumberedCommands(TextIn[0] & 127);          // send number with the high bit off.
           return;                                       // skip the rest!
@@ -4893,8 +4902,12 @@ FASTRUN void ButtonWasPressed()
         Serial.print("Command word: -> ");
         Serial.println(TextIn);
  #endif
-            
+            // ************************* test input from Nextion *****************
+
+ 
+ 
  if (InStrng(UpLOG, TextIn)){  
+    
         if (RecentStartLine > 0 && (CurrentView == LOGVIEW))  {
             RecentStartLine-=1;
             ShowLogFile(RecentStartLine); 
@@ -4906,6 +4919,8 @@ FASTRUN void ButtonWasPressed()
         ClearText();
         return;        
     }   
+
+
           
     if (InStrng(DownLOG, TextIn)){  
         if (ThereIsMoreToSee && (CurrentView == LOGVIEW)) {
@@ -5064,7 +5079,7 @@ FASTRUN void ButtonWasPressed()
             return;
         }
         if (InStrng(SetupView, TextIn) > 0) {           //  goto main setup screen
-            if (CurrentView == FAILSAFE_VIEW)  {        //  read failsafe blobs heer
+            if (CurrentView == FAILSAFE_VIEW)  {        //  read failsafe blobs
                 SendCommand(ProgressStart);
                     for (int i = 0; i < 16 ; ++i){
                     FailSafeChannel[i] = GetValue(fs[i]);
