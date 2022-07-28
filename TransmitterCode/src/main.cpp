@@ -217,7 +217,7 @@ uint8_t FHSS_Channels1[42] = {93,111,107,103,106,97,108,102,118,                
 uint8_t FHSS_Channels[83] = {51,28,24,61,64,55,66,19,76,21,59,67,15,71,82,32,49,69,13,2,34,47,20,16,72,  // UK array
 35,57,45,29,75,3,41,62,11,9,77,37,8,31,36,18,17,50,78,73,30,79,6,23,40,
 54,12,80,53,22,1,74,39,58,63,70,52,42,25,43,26,14,38,48,68,33,27,60,44,46,
-56,7,81,5,65,4,10}; /// test comment 
+56,7,81,5,65,4,10}; 
 
 uint8_t * FHSSChPointer;                                                                                 // pointer for channels array (three only used for reconnect)
 
@@ -983,8 +983,7 @@ void RedLedOn()
         RXVoltsDetected = false;
         LedWasGreen = false;
     }
-    
-    FirstConnection = true;
+   // FirstConnection = true;
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, 0);
     analogWrite(REDLED, GetLEDBrightness());     // Brightness is a function of maybe blinking
@@ -996,7 +995,7 @@ void GreenLedOn()
 {
     if (!LedWasGreen || LedIsBlinking) {         // no need to repeat unless it is blinking
         LedWasGreen = true;
-        if (FirstConnection) {                   // Zero data on first connection
+        if (FirstConnection) {                   // Zero data on first connection after reboot
             ZeroDataScreen(); 
             FirstConnection = false; 
             if (AnnounceConnected) PlaySound(CONNECTEDMSG);
