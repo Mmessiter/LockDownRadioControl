@@ -4591,8 +4591,8 @@ void IncFileInView(){    // 2
 }
 void DoModelNameTimeCheck(){
             ModelNameTimeCheck = 0 ;
-
 }
+
 void GotoModelsView(){
             char pModelsView[]  = "page ModelsView";
             char mn[]           = "ModelNumber";
@@ -4638,9 +4638,7 @@ void (*NumberedFunctions[LASTFUNCTION])() {
 FASTRUN void ButtonWasPressed() {
 
 if (strlen(TextIn) > 0) { //heer
-
      StartInactvityTimeout();
-
      union {uint8_t First4Bytes[4];uint32_t FirstDWord;} NextionCommand;
      NextionCommand.First4Bytes[0] = TextIn[0];
      NextionCommand.First4Bytes[1] = TextIn[1];
@@ -4653,19 +4651,15 @@ if (strlen(TextIn) > 0) { //heer
             Serial.print("Command WORD: -> ");
             Serial.println(TextIn);
      } else {
-        Serial.print("Command NUMBER: -> ");
-        Look (NumberedCommand);
+            Serial.print("Command NUMBER: -> ");
+            Look (NumberedCommand);
      }
     #endif
-
-
     
   if (TextIn[0] >= 128 ){                    // (First byte != printable char) indicates a numbered command...
-    
      if (NumberedCommand < LASTFUNCTION) {   // ...so this system currently only permits 127 numbered functions to be supported. 
                                              // But that's OK! Because only about 110 still need converting, after which 
                                              // the restriction can be removed and the max will then be a full 32 bit value.
-
 // **********************************************************************************************************************************
         NumberedFunctions[NumberedCommand]();            // Call the needed function --  with a function pointer! :-)               *
 // **********************************************************************************************************************************
