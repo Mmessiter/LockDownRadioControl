@@ -4575,10 +4575,10 @@ FASTRUN void DisplayCurveAndServoPos(){
 }
 
 /******************************** FUNCTIONS FOR ARRAY OF POINTERS *************************************************************************************************/
-
 void Blank(){
         return;
         }
+
 void DecFileInView(){    // 1
             --FileNumberInView;
             ShowFileNumber();
@@ -4644,10 +4644,15 @@ union {uint8_t First4Bytes[4];uint32_t FirstDWord;} NextionCommand;
      NextionCommand.First4Bytes[2] = TextIn[2];
      NextionCommand.First4Bytes[3] = TextIn[3];
     
-  if (TextIn[0] >= 128 ){                                                       // first byte not a char indicates USE a numbered command
+// This system currently only permits 127 numbered functions to be supported. 
+// But that's OK! Because only about 110 still need converting, after which the restriction can be removed and the max will then be a full 32 bit value.
+
+  if (TextIn[0] >= 128 ){          // first byte not a char indicates USE a numbered command
      uint32_t NumberedCommand = NextionCommand.FirstDWord - 128;
      if (NumberedCommand < LASTFUNCTION) {
-        NumberedFunctions[NumberedCommand]();                                   // Call the needed function --  with a function pointer! :-) 
+// **********************************************************************************************************************************
+        NumberedFunctions[NumberedCommand]();            // Call the needed function --  with a function pointer! :-)               *
+// **********************************************************************************************************************************
         b5isGrey = false;
         ClearText();
         return;      
@@ -4754,7 +4759,6 @@ union {uint8_t First4Bytes[4];uint32_t FirstDWord;} NextionCommand;
     char FailSAVE[]                = "FailSAVE";
     char FailSafe[]                = "FailSafe";
     char fs[16][5]                 = {"fs1","fs2","fs3","fs4","fs5","fs6","fs7","fs8","fs9","fs10","fs11","fs12","fs13","fs14","fs15","fs16"};
-  
     char CH1NAME[]                 = "CH1NAME=";
     char CH2NAME[]                 = "CH2NAME=";
     char CH3NAME[]                 = "CH3NAME=";
@@ -4898,6 +4902,7 @@ union {uint8_t First4Bytes[4];uint32_t FirstDWord;} NextionCommand;
             RecentStartLine-=1;
             ShowLogFile(RecentStartLine); 
         }
+
         if (RecentStartLine > 0 && (CurrentView == HELP_VIEW))  {
             RecentStartLine-=1;
             ScrollHelpFile(); 
