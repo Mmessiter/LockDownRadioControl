@@ -2859,9 +2859,9 @@ int InStrng(char * text1, char * text2)
                 flag = true; break;
             }
         }
-        if (!flag) return j + 1;
+        if (!flag) return j + 1;   // Found match
     }
-    return 0;
+    return 0;                      // Found no match
 }
 
 /*********************************************************************************************************************************/
@@ -4894,9 +4894,8 @@ if (strlen(TextIn) > 0) { //heer
          return;
      }
 
-            // ************************* test input from Nextion *****************
+ // ************************* test input words from Nextion *****************
 
- 
  
  if (InStrng(UpLOG, TextIn)){  
     
