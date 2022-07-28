@@ -2851,9 +2851,8 @@ void GetStatistics()
 /** @returns position of text1 within text2 or 0 if not found */
 int InStrng(char * text1, char * text2)
 {
-    bool flag;
     for (uint16_t j = 0; j < strlen(text2); ++j) {
-        flag = false;
+        bool flag = false;
         for (uint16_t i = 0; i < strlen(text1); ++i) {
             if (text1[i] != text2[i + j]) {
                 flag = true; break;
@@ -2866,7 +2865,7 @@ int InStrng(char * text1, char * text2)
 
 /*********************************************************************************************************************************/
 
-void SaveTXStuff()
+void SaveTransmitterParameters()
 {
     int  rd  = 0;
     bool EON = false;
@@ -3400,10 +3399,8 @@ void ShowFileErrorMsg()
 
 void SaveAllParameters()
 {
-
-
     if (!ModelsFileOpen) OpenModelsFile();
-    SaveTXStuff();
+    SaveTransmitterParameters();
     MemoryForTransmtter = SDCardAddress - 2;
     SaveOneModel(ModelNumber);
 #ifdef DB_SD
@@ -4652,7 +4649,7 @@ void RefreshLog(){   // refresh log screen
             MinimumGap = GetValue(n0);
             LogRXSwaps = GetValue(c0);
             UseLog     = GetValue(sw0);
-            SaveTXStuff();
+            SaveTransmitterParameters();
             SendCommand(pDataView);
     } 
 /******************************************************************************************************************************/
@@ -4744,7 +4741,7 @@ void (*NumberedFunctions[LASTFUNCTION])() {
  *                          BUTTON WAS PRESSED (DEAL WITH INPUT FROM NEXTION DISPLAY)                                            *
  *********************************************************************************************************************************/
 FASTRUN void ButtonWasPressed() {
-
+ //heer
 if (strlen(TextIn) > 0) { 
      StartInactvityTimeout();
      union {uint8_t First4Bytes[4];uint32_t FirstDWord;} NextionCommand;
@@ -5055,7 +5052,7 @@ if (strlen(TextIn) > 0) {
             SetAudioVolume(AudioVolume);
             SendCommand(page_SetupView);
             ModelNameTimeCheck = 0;
-            SaveTXStuff();
+            SaveTransmitterParameters();
             b5isGrey = false;
             ClearText();
             return;
@@ -5818,7 +5815,7 @@ if (strlen(TextIn) > 0) {
             SendValue(FrontView_ForeGround,ForeGroundColour);
             SendValue(FrontView_Special,SpecialColour);
             SendValue(FrontView_Highlight,HighlightColour);
-            SaveTXStuff();
+            SaveTransmitterParameters();
             CurrentView = MAINSETUPVIEW;
             b5isGrey = false;
             SendCommand(page_SetupView);
@@ -6288,7 +6285,7 @@ if (strlen(TextIn) > 0) {
         if (CurrentMode == CENTRESTICKS) {
             if (strcmp(TextIn, "Calibrate1") == 0) {
                 CurrentMode = NORMAL;
-                SaveTXStuff();                     // Save calibrations
+                SaveTransmitterParameters();                     // Save calibrations
                 LoadAllParameters();               // Restore all current model settings
                 SendCommand(page_SetupView);
                 ModelNameTimeCheck = 0;
@@ -6298,7 +6295,7 @@ if (strlen(TextIn) > 0) {
         }
     } 
     ClearText(); // Let's have cleared text for next one!
-} // end ButtonWasPressed() (... at last!!!)
+} // end ButtonWasPressed() (... at last!!!) // heer
 
 /************************************************************************************************************/
 
