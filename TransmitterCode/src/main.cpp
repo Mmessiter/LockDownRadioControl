@@ -4633,7 +4633,7 @@ void DownLog(){
         }
     }   
 /******************************************************************************************************************************/
-void RefrLOG(){   // refresh log screen
+void RefreshLog(){   // refresh log screen
         if (UseLog){
             RecentStartLine = 0;
             ShowLogFile(RecentStartLine); 
@@ -4731,7 +4731,7 @@ void (*NumberedFunctions[LASTFUNCTION])() {
                 EndBuddyView,               // 12
                 UpLog,                      // 13
                 DownLog,                    // 14
-                RefrLOG,                    // 15
+                RefreshLog,                    // 15
                 LogEND,                     // 16
                 DelLOG,                     // 17
                 LogVIEW,                    // 18
