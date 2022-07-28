@@ -13,7 +13,7 @@ var _radio_functions_8cpp =
     [ "FlushFifos", "_radio_functions_8cpp.html#a07c27b4e208198453c70876517926052", null ],
     [ "HopToNextChannel", "_radio_functions_8cpp.html#a52aa3e80bccf5e75346c93fdae63122d", null ],
     [ "InitRadio", "_radio_functions_8cpp.html#a799f38bc33abdb30eec1d7db3cf27d58", null ],
-    [ "Look", "_radio_functions_8cpp.html#a44db40e8ffa545be92871325c4dcdc55", null ],
+    [ "Look", "_radio_functions_8cpp.html#a96cb0a88b752f6abf12d13450d101bdc", null ],
     [ "Procrastinate", "_radio_functions_8cpp.html#a760609a682300dfe6bfaac737fd4d5eb", null ],
     [ "RunMacro", "_radio_functions_8cpp.html#a91fb686ba2d3111821721ab33b442918", null ],
     [ "ScanAllChannels", "_radio_functions_8cpp.html#a3856ba0adae43d089f08c7b7f653b306", null ],

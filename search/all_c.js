@@ -83,7 +83,7 @@ var searchData=
   ['longitude_5ffixed_80',['longitude_fixed',['../class_adafruit___g_p_s.html#a8010f253b2708e05547c452cb5368837',1,'Adafruit_GPS']]],
   ['longitudedegrees_81',['longitudeDegrees',['../class_adafruit___g_p_s.html#a2a1d1e5e89b46270d8d3ff82bb68666a',1,'Adafruit_GPS']]],
   ['longitudegps_82',['LongitudeGPS',['../_receiver_code_2src_2main_8cpp.html#afabe4c9d9760f8606aa408474e3d626c',1,'LongitudeGPS():&#160;main.cpp'],['../radio_8h.html#afabe4c9d9760f8606aa408474e3d626c',1,'LongitudeGPS():&#160;main.cpp']]],
-  ['look_83',['Look',['../_radio_functions_8cpp.html#a44db40e8ffa545be92871325c4dcdc55',1,'Look(int p):&#160;RadioFunctions.cpp'],['../_radio_functions_8h.html#a44db40e8ffa545be92871325c4dcdc55',1,'Look(int p):&#160;RadioFunctions.cpp']]],
+  ['look_83',['Look',['../_radio_functions_8cpp.html#a96cb0a88b752f6abf12d13450d101bdc',1,'Look(uint32_t p):&#160;RadioFunctions.cpp'],['../_radio_functions_8h.html#a96cb0a88b752f6abf12d13450d101bdc',1,'Look(uint32_t p):&#160;RadioFunctions.cpp']]],
   ['loop_84',['loop',['../_receiver_code_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../_quadcopter_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../_sensor_hub_t32_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#ad3cb30894c94eb016e98bdcaa899ac86',1,'loop():&#160;main.cpp']]],
   ['loopblink_85',['loopBlink',['../_quadcopter_2src_2main_8cpp.html#a9826c5f7dba6f1d578d9a90d06d4a373',1,'main.cpp']]],
   ['looprate_86',['loopRate',['../_quadcopter_2src_2main_8cpp.html#a368045f053bb43109cbd14504673bff6',1,'main.cpp']]],
