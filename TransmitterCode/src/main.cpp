@@ -4610,8 +4610,112 @@ void GotoMacrosView(){
             Procrastinate(200);               // allow enough time for screen to display
             PopulateMacrosView();
 }
+/******************************************************************************************************************************/
+ void UpLog(){  
+        if (RecentStartLine > 0 && (CurrentView == LOGVIEW))  {
+            RecentStartLine-=1;
+            ShowLogFile(RecentStartLine); 
+        }
+        if (RecentStartLine > 0 && (CurrentView == HELP_VIEW))  {
+            RecentStartLine-=1;
+            ScrollHelpFile(); 
+        }    
+    }   
+/******************************************************************************************************************************/  
+void DownLog(){  
+        if (ThereIsMoreToSee && (CurrentView == LOGVIEW)) {
+            RecentStartLine+=1;
+            ShowLogFile(RecentStartLine); 
+        }
+        if (ThereIsMoreToSee && (CurrentView == HELP_VIEW)) {
+            RecentStartLine+=1;
+            ScrollHelpFile(); 
+        }
+    }   
+/******************************************************************************************************************************/
+void RefrLOG(){   // refresh log screen
+        if (UseLog){
+            RecentStartLine = 0;
+            ShowLogFile(RecentStartLine); 
+            ClearText();
+        }       
+    }   
+ /******************************************************************************************************************************/
+ void LogEND(){ // close log screen 
+            char n0[]                      = "n0"; 
+            char c0[]                      = "c0";
+            char sw0[]                     = "sw0";
+            char pDataView[]               = "page DataView";
+            CurrentMode  = NORMAL;
+            CurrentView  = DATAVIEW;
+            LastShowTime = 0;
+            MinimumGap = GetValue(n0);
+            LogRXSwaps = GetValue(c0);
+            UseLog     = GetValue(sw0);
+            SaveTXStuff();
+            SendCommand(pDataView);
+    } 
+/******************************************************************************************************************************/
+void DelLOG(){  // delete log and start new one
+            DeleteLogFile1();
+            ClearText();
+    }   
+/******************************************************************************************************************************/
+void LogVIEW(){  // Start log screen
+            char n0[]                      = "n0";
+            char c0[]                      = "c0";
+            char sw0[]                     = "sw0";
+            char pLogView[]                = "page LogView"; 
+            SendCommand(pLogView);
+            CurrentView = LOGVIEW;
+            SendValue(n0,MinimumGap);
+            SendValue(c0,LogRXSwaps);
+            SendValue(sw0,UseLog);   
+            if (UseLog){
+                RecentStartLine = 0;
+                ShowLogFile(RecentStartLine);
+            }        
+    }
+/******************************************************************************************************************************/
+void SetupViewFM() {                // (Exit from models screen) New model name occurs at offset 4 in TextIn
+            char page_SetupView[]          = "page SetupView";
+            int i = 0;
+            while (TextIn[i + 4] > 0) {
+                ModelName[i]     = TextIn[i + 4];     // copy new name
+                ModelName[i + 1] = 0;
+                ++i;
+            } 
+            SaveAllParameters();
+            SendCommand(page_SetupView);
+            CurrentMode = NORMAL; // Send data again
+            CurrentView = MAINSETUPVIEW;
+            ModelNameTimeCheck = 0;
+            b5isGrey = false;
+        }
+/******************************************************************************************************************************/
+void StartSubTrimView() {                // Subtrim view start heer
+            char pSubTrimView[]             = "page SubTrimView";
+            char t2[]                       = "t2";
+            char n0[]                       = "n0";
+            char h0[]                       = "h0";
+            SendCommand(pSubTrimView);
+            SubTrimToEdit = 0;
+            CurrentView =  SUBTRIMVIEW;
+            SendText(t2,ChannelNames[SubTrimToEdit]);   
+            SendValue(n0,SubTrims[SubTrimToEdit]-127);
+            SendValue(h0,SubTrims[SubTrimToEdit]);
+}
+/******************************************************************************************************************************/
+  void EndSubTrimView() {                       // Subtrim view exit
+           char page_SetupView[]          = "page SetupView";
+            SaveOneModel(ModelNumber);
+            CurrentView = MAINSETUPVIEW;
+            b5isGrey = false;
+            SendCommand(page_SetupView);
+            ModelNameTimeCheck = 0;
+        }
 // ******************************** Global Array of numbered function pointers - OK up to 128 functions ... **********************************
-#define LASTFUNCTION 13                     // one more than final one
+#define LASTFUNCTION 22                     // one more than final one
 
 void (*NumberedFunctions[LASTFUNCTION])() {
                 Blank,                      // 0 (not used, yet.)
@@ -4626,7 +4730,16 @@ void (*NumberedFunctions[LASTFUNCTION])() {
                 StartReverseView,           // 9
                 EndReverseView,             // 10
                 StartBuddyView,             // 11
-                EndBuddyView                // 12
+                EndBuddyView,               // 12
+                UpLog,                      // 13
+                DownLog,                    // 14
+                RefrLOG,                    // 15
+                LogEND,                     // 16
+                DelLOG,                     // 17
+                LogVIEW,                    // 18
+                SetupViewFM,                // 19
+                StartSubTrimView,           // 20
+                EndSubTrimView              // 21
                 };
 
 /*********************************************************************************************************************************
@@ -4634,7 +4747,7 @@ void (*NumberedFunctions[LASTFUNCTION])() {
  *********************************************************************************************************************************/
 FASTRUN void ButtonWasPressed() {
 
-if (strlen(TextIn) > 0) { //heer
+if (strlen(TextIn) > 0) { 
      StartInactvityTimeout();
      union {uint8_t First4Bytes[4];uint32_t FirstDWord;} NextionCommand;
      NextionCommand.First4Bytes[0] = TextIn[0];
@@ -4697,7 +4810,6 @@ if (strlen(TextIn) > 0) { //heer
     char SetupView[]               = "MainSetup";
     char Scan_End[]                = "ScanEnd";
     char DataEnd[]                 = "DataEnd";
-    char SetupViewFM[]             = "SetupViewFM:";
     char Data_View[]               = "DataView";
     char CalibrateView[]           = "CalibrateView";
     char Trim[]                    = "Trim";
@@ -4782,7 +4894,6 @@ if (strlen(TextIn) > 0) { //heer
     char CH14NAME[]                = "CH14NAME=";
     char CH15NAME[]                = "CH15NAME=";
     char CH16NAME[]                = "CH16NAME=";
-    
     char MixesView_chM[]           = "chM";
     char MixesView_chS[]           = "chS";
     char ProgressStart[]           = "vis Progress,1";
@@ -4827,15 +4938,8 @@ if (strlen(TextIn) > 0) { //heer
     char pTypeView[]               = "page TypeView";
     char pCalibrateView[]          = "page CalibrateView";
     char pFailSafe[]               = "page FailSafeView";
-    char pSubTrimView[]            = "page SubTrimView";
-    char pLogView[]                = "page LogView"; 
     char DataView_Clear[]          = "Clear";
     char DataView_AltZero[]        = "AltZero";
-    char LogVIEW[]                 = "LogVIEW";
-    char LogEND[]                  = "LogEND";
-    char RefrLOG[]                 = "RefrLOG";
-    char DownLOG[]                 = "DownLOG";
-    char UpLOG[]                   = "UpLOG";
     char OptionsEnd[]              = "OptionsEnd";
     char QNH[]                     = "Qnh";
     char Mark[]                    = "Mark";
@@ -4871,19 +4975,17 @@ if (strlen(TextIn) > 0) { //heer
     char n1[]                      = "n1";
     char h0[]                      = "h0";
     char c0[]                      = "c0";
-    char sw0[]                     = "sw0";
     char c1[]                      = "c1";
     char c2[]                      = "c2";
     char c3[]                      = "c3";
     char c4[]                      = "c4";
     char c5[]                      = "c5";
-    char StEND[]                   = "StEND";
-    char STgo[]                    = "STgo";
     char StCH[]                    = "StCH";
     char s0[]                      = "s0";
     char t2[]                      = "t2";
-    char StEDIT[]                  = "StEDIT";     
-    char DelLOG[]                  = "DelLOG";       
+    char StEDIT[]                  = "StEDIT";  
+    char pLogView[]                = "page LogView";    
+     
     
 
      ScreenTimeTimer = millis();  // reset screen timeout counter
@@ -4896,116 +4998,6 @@ if (strlen(TextIn) > 0) { //heer
 
  // ************************* test input words from Nextion *****************
 
- 
- if (InStrng(UpLOG, TextIn)){  
-    
-        if (RecentStartLine > 0 && (CurrentView == LOGVIEW))  {
-            RecentStartLine-=1;
-            ShowLogFile(RecentStartLine); 
-        }
-
-        if (RecentStartLine > 0 && (CurrentView == HELP_VIEW))  {
-            RecentStartLine-=1;
-            ScrollHelpFile(); 
-        }
-        ClearText();
-        return;        
-    }   
-
-
-          
-    if (InStrng(DownLOG, TextIn)){  
-        if (ThereIsMoreToSee && (CurrentView == LOGVIEW)) {
-            RecentStartLine+=1;
-            ShowLogFile(RecentStartLine); 
-        }
-
-        if (ThereIsMoreToSee && (CurrentView == HELP_VIEW)) {
-            RecentStartLine+=1;
-            ScrollHelpFile(); 
-        }
-
-        ClearText();
-        return;        
-    }   
-
-    if (InStrng(RefrLOG, TextIn)){   // refresh log screen
-        if (UseLog){
-            RecentStartLine = 0;
-            ShowLogFile(RecentStartLine); 
-            ClearText();
-        }
-        return;        
-    }   
-
-    if (InStrng(LogEND, TextIn)){ // close log screen 
-            CurrentMode  = NORMAL;
-            CurrentView  = DATAVIEW;
-            LastShowTime = 0;
-            MinimumGap = GetValue(n0);
-            LogRXSwaps = GetValue(c0);
-            UseLog     = GetValue(sw0);
-            SaveTXStuff();
-            SendCommand(pDataView);
-            ClearText();
-            return;
-    }   
-    if (InStrng(DelLOG, TextIn)){  // delete log and start new one
-            DeleteLogFile1();
-            ClearText();
-            return;
-    }   
-
-    if (InStrng(LogVIEW, TextIn)){  // Start log screen
-            SendCommand(pLogView);
-            CurrentView = LOGVIEW;
-            SendValue(n0,MinimumGap);
-            SendValue(c0,LogRXSwaps);
-            SendValue(sw0,UseLog);   
-            if (UseLog){
-                RecentStartLine = 0;
-                ShowLogFile(RecentStartLine);
-            }        
-            ClearText();
-            return;
-    }
-
-    if (InStrng(SetupViewFM, TextIn) > 0) {                // New model name occurs at offset 12 in TextIn
-            i = 0;
-            while (TextIn[i + 12] > 0) {
-                ModelName[i]     = TextIn[i + 12];     // copy new name
-                ModelName[i + 1] = 0;
-                ++i;
-            } 
-            SaveAllParameters();
-            SendCommand(page_SetupView);
-            CurrentMode = NORMAL; // Send data again
-            CurrentView = MAINSETUPVIEW;
-            ModelNameTimeCheck = 0;
-            b5isGrey = false;
-            ClearText();
-            return;
-        }
-          if (InStrng(STgo, TextIn)) {                  // Subtrim view start
-            SendCommand(pSubTrimView);
-            SubTrimToEdit = 0;
-            CurrentView =  SUBTRIMVIEW;
-            SendText(t2,ChannelNames[SubTrimToEdit]);  // 
-            SendValue(n0,SubTrims[SubTrimToEdit]-127);
-            SendValue(h0,SubTrims[SubTrimToEdit]);
-            ClearText();
-            return;
-        }
-
-        if (InStrng(StEND, TextIn)) {                  // Subtrim view exit
-            SaveOneModel(ModelNumber);
-            CurrentView = MAINSETUPVIEW;
-            b5isGrey = false;
-            SendCommand(page_SetupView);
-            ModelNameTimeCheck = 0;
-            ClearText();
-            return;
-        }
         if (InStrng(StCH, TextIn)) {                   // select sub trim channel
             SubTrimToEdit = GetValue(s0);
             SendText(t2,ChannelNames[SubTrimToEdit]); 
@@ -5347,6 +5339,7 @@ if (strlen(TextIn) > 0) { //heer
                 }
              }
              if (CurrentView == LOGVIEW){ 
+
                 SendCommand(pLogView);
                 CurrentView = LOGVIEW;
                 RecentStartLine = 0;
@@ -6305,7 +6298,7 @@ if (strlen(TextIn) > 0) { //heer
                 return;
             }
         }
-    } //heer
+    } 
     ClearText(); // Let's have cleared text for next one!
 } // end ButtonWasPressed() (... at last!!!)
 
