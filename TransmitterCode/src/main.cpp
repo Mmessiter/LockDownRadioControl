@@ -4690,7 +4690,6 @@ void SetupViewFM() {                // (Exit from models screen) New model name 
             CurrentMode = NORMAL; // Send data again
             CurrentView = MAINSETUPVIEW;
             ModelNameTimeCheck = 0;
-            b5isGrey = false;
         }
 /******************************************************************************************************************************/
 void StartSubTrimView() {                // Subtrim view start heer
@@ -4710,7 +4709,6 @@ void StartSubTrimView() {                // Subtrim view start heer
            char page_SetupView[]          = "page SetupView";
             SaveOneModel(ModelNumber);
             CurrentView = MAINSETUPVIEW;
-            b5isGrey = false;
             SendCommand(page_SetupView);
             ModelNameTimeCheck = 0;
         }
