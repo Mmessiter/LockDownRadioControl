@@ -35,7 +35,7 @@ var searchData=
   ['saveflightmode_32',['SaveFlightMode',['../_transmitter_code_2src_2main_8cpp.html#a6e7a073d216762b73caa5e1c1a384f1a',1,'main.cpp']]],
   ['savenewbind_33',['SaveNewBind',['../radio_8h.html#a34f8e085f5589c915f292bbf5b0aa513',1,'radio.h']]],
   ['saveonemodel_34',['SaveOneModel',['../_transmitter_code_2src_2main_8cpp.html#a23e0cf21492258d84314ae4d1c4a9042',1,'main.cpp']]],
-  ['savetxstuff_35',['SaveTXStuff',['../_transmitter_code_2src_2main_8cpp.html#a9214716193ab9843267fc070ebfa12ff',1,'main.cpp']]],
+  ['savetransmitterparameters_35',['SaveTransmitterParameters',['../_transmitter_code_2src_2main_8cpp.html#aaf3d3b6d086a958ac8ebf1bb771adcee',1,'main.cpp']]],
   ['sbus_36',['SBUS',['../class_s_b_u_s.html',1,'']]],
   ['sbus_37',['sbus',['../_quadcopter_2src_2main_8cpp.html#ab1ddf25403a51681bc1e0130d18a91b8',1,'main.cpp']]],
   ['sbus_38',['SBUS',['../class_s_b_u_s.html#aee0b4b879b6415eac8d79879c24bf88d',1,'SBUS']]],

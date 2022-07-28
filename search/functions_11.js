@@ -3,7 +3,7 @@ var searchData=
   ['saveallparameters_0',['SaveAllParameters',['../_transmitter_code_2src_2main_8cpp.html#a92c5dada5e5ef70261391557464f2d19',1,'main.cpp']]],
   ['savefailsafedata_1',['SaveFailSafeData',['../_receiver_code_2src_2main_8cpp.html#a96891035aa9f064462b6a614c5878f51',1,'main.cpp']]],
   ['saveonemodel_2',['SaveOneModel',['../_transmitter_code_2src_2main_8cpp.html#a23e0cf21492258d84314ae4d1c4a9042',1,'main.cpp']]],
-  ['savetxstuff_3',['SaveTXStuff',['../_transmitter_code_2src_2main_8cpp.html#a9214716193ab9843267fc070ebfa12ff',1,'main.cpp']]],
+  ['savetransmitterparameters_3',['SaveTransmitterParameters',['../_transmitter_code_2src_2main_8cpp.html#aaf3d3b6d086a958ac8ebf1bb771adcee',1,'main.cpp']]],
   ['sbus_4',['SBUS',['../class_s_b_u_s.html#aee0b4b879b6415eac8d79879c24bf88d',1,'SBUS']]],
   ['scalecommands_5',['scaleCommands',['../_quadcopter_2src_2main_8cpp.html#a8d52798485917f4265993ca62bd6ced4',1,'main.cpp']]],
   ['scanallchannels_6',['ScanAllChannels',['../_radio_functions_8h.html#a3856ba0adae43d089f08c7b7f653b306',1,'ScanAllChannels():&#160;RadioFunctions.cpp'],['../_radio_functions_8cpp.html#a3856ba0adae43d089f08c7b7f653b306',1,'ScanAllChannels():&#160;RadioFunctions.cpp']]],

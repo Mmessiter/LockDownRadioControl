@@ -170,7 +170,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "RestoreBrightness", "_transmitter_code_2src_2main_8cpp.html#a49da3478d89a22069e29c7f00cb46a5f", null ],
     [ "SaveAllParameters", "_transmitter_code_2src_2main_8cpp.html#a92c5dada5e5ef70261391557464f2d19", null ],
     [ "SaveOneModel", "_transmitter_code_2src_2main_8cpp.html#a23e0cf21492258d84314ae4d1c4a9042", null ],
-    [ "SaveTXStuff", "_transmitter_code_2src_2main_8cpp.html#a9214716193ab9843267fc070ebfa12ff", null ],
+    [ "SaveTransmitterParameters", "_transmitter_code_2src_2main_8cpp.html#aaf3d3b6d086a958ac8ebf1bb771adcee", null ],
     [ "ScanI2c", "_transmitter_code_2src_2main_8cpp.html#a887240a00b11c00c971e633ed47319f9", null ],
     [ "ScrollHelpFile", "_transmitter_code_2src_2main_8cpp.html#ab0a84052e41734eb43651d054ee2b4c5", null ],
     [ "SDReadByte", "_transmitter_code_2src_2main_8cpp.html#af5db4d6f5f17a24fc08503a4e14de200", null ],
