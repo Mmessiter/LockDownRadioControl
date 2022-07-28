@@ -1,5 +1,14 @@
 var NAVTREEINDEX8 =
 {
+"class_adafruit___b_m_p280___temp.html#a403166e48337783265ce40fef8de51df":[9,0,2,1],
+"class_adafruit___b_m_p280___temp.html#a4ea067e213cc789e945bc9ab22c028a5":[9,0,2,2],
+"class_adafruit___bus_i_o___register.html":[9,0,3],
+"class_adafruit___bus_i_o___register.html#a2b48e23dacbb7cffc0eb07dcebcfba6f":[9,0,3,6],
+"class_adafruit___bus_i_o___register.html#a300a0297429df441bc88dbb37eac1a06":[9,0,3,2],
+"class_adafruit___bus_i_o___register.html#a5c49c498815a5414d6fb5915760bbeba":[9,0,3,5],
+"class_adafruit___bus_i_o___register.html#a699434b2567ae8fce541b8048d891252":[9,0,3,8],
+"class_adafruit___bus_i_o___register.html#a7de4a4cbb3e8cdfebac31344e8ab6c8c":[9,0,3,0],
+"class_adafruit___bus_i_o___register.html#a89e57552743a5f15c99cb7aa27b3ca13":[9,0,3,1],
 "class_adafruit___bus_i_o___register.html#aa418dced5301a1d8c1776a1941c8bc64":[9,0,3,11],
 "class_adafruit___bus_i_o___register.html#abc1e92469336a95e6ddf34bd7fd18a67":[9,0,3,3],
 "class_adafruit___bus_i_o___register.html#abf1eaeb0ae836be082a73dae14e7e352":[9,0,3,9],
@@ -240,14 +249,5 @@ var NAVTREEINDEX8 =
 "class_m_p_u6050.html#a55f99c88cc84901f245924ed5e3fe47e":[9,0,12,60],
 "class_m_p_u6050.html#a562f930682e7c24628783561acbf51c1":[9,0,12,2],
 "class_m_p_u6050.html#a571bb0b54080a1def63fb4166b7f7f59":[9,0,12,251],
-"class_m_p_u6050.html#a574d3093dc131e4251a9b37adf208ca7":[9,0,12,75],
-"class_m_p_u6050.html#a57710638eeb6176cf14a8c444bda5300":[9,0,12,13],
-"class_m_p_u6050.html#a58da1dfb39eb34e3a09a9b0bf4d87f29":[9,0,12,59],
-"class_m_p_u6050.html#a5a671929be9a7d6ff5e433aa0eaa0c90":[9,0,12,256],
-"class_m_p_u6050.html#a5d432fa2fb8b2227f50aa5c7b5befb66":[9,0,12,215],
-"class_m_p_u6050.html#a5e36e3acace6e545718d7997169cff9b":[9,0,12,204],
-"class_m_p_u6050.html#a5f14bde83fe00b27dec6776fc44e89c2":[9,0,12,109],
-"class_m_p_u6050.html#a60fc85d4f27f99d07ffb9543d5e5f347":[9,0,12,43],
-"class_m_p_u6050.html#a6214fa36c8881f3b02a3e7033678bfb3":[9,0,12,252],
-"class_m_p_u6050.html#a62495e89f4787e6b18f0f795cef2b7cd":[9,0,12,246]
+"class_m_p_u6050.html#a574d3093dc131e4251a9b37adf208ca7":[9,0,12,75]
 };

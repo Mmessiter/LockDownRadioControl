@@ -8,6 +8,7 @@ var searchData=
   ['endbuddyview_5',['EndBuddyView',['../_transmitter_code_2src_2main_8cpp.html#a16c65917a148c7f6c17babf11e977b69',1,'main.cpp']]],
   ['endreverseview_6',['EndReverseView',['../_transmitter_code_2src_2main_8cpp.html#afd3dd964eafc30405e000b03579dd00c',1,'main.cpp']]],
   ['endsend_7',['EndSend',['../_transmitter_code_2src_2main_8cpp.html#ad7b8aa834c87265667a5687b1787a1cc',1,'main.cpp']]],
-  ['executemacro_8',['ExecuteMacro',['../_radio_functions_8cpp.html#a78f22801971c106db61d728dd345e28e',1,'ExecuteMacro():&#160;RadioFunctions.cpp'],['../_radio_functions_8h.html#a78f22801971c106db61d728dd345e28e',1,'ExecuteMacro():&#160;RadioFunctions.cpp']]],
-  ['exitmacrosview_9',['ExitMacrosView',['../_transmitter_code_2src_2main_8cpp.html#a488388f6430a0fc7bec57074ba750a2d',1,'main.cpp']]]
+  ['endsubtrimview_8',['EndSubTrimView',['../_transmitter_code_2src_2main_8cpp.html#a40003084a0136ca08cf8ded75ff4aa4d',1,'main.cpp']]],
+  ['executemacro_9',['ExecuteMacro',['../_radio_functions_8cpp.html#a78f22801971c106db61d728dd345e28e',1,'ExecuteMacro():&#160;RadioFunctions.cpp'],['../_radio_functions_8h.html#a78f22801971c106db61d728dd345e28e',1,'ExecuteMacro():&#160;RadioFunctions.cpp']]],
+  ['exitmacrosview_10',['ExitMacrosView',['../_transmitter_code_2src_2main_8cpp.html#a488388f6430a0fc7bec57074ba750a2d',1,'main.cpp']]]
 ];

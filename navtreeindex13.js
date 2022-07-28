@@ -1,5 +1,14 @@
 var NAVTREEINDEX13 =
 {
+"struct_tiny_g_p_s_decimal.html#a6501fd5ef19ae166d43e0e5781609ee2":[9,0,29,5],
+"struct_tiny_g_p_s_decimal.html#a8c7fd3ccd678b195d8f23bd1cb31d9ba":[9,0,29,2],
+"struct_tiny_g_p_s_decimal.html#ac3ce80976e5d8456e9f211b910a6cb19":[9,0,29,4],
+"struct_tiny_g_p_s_decimal.html#ae09cbb1856cd57c7dcee52fb5fb1ba16":[9,0,29,0],
+"struct_tiny_g_p_s_h_d_o_p.html":[9,0,30],
+"struct_tiny_g_p_s_h_d_o_p.html#a27cd35588c96eefb690bba46497d20d7":[9,0,30,0],
+"struct_tiny_g_p_s_integer.html":[9,0,31],
+"struct_tiny_g_p_s_integer.html#a017a71970fa652964a9e71b7ec945cec":[9,0,31,0],
+"struct_tiny_g_p_s_integer.html#a35234fdeeffdb934a93740db1aefa6a5":[9,0,31,2],
 "struct_tiny_g_p_s_integer.html#a3a76131645f7604b3f3e759b90f9373f":[9,0,31,3],
 "struct_tiny_g_p_s_integer.html#a6501fd5ef19ae166d43e0e5781609ee2":[9,0,31,5],
 "struct_tiny_g_p_s_integer.html#a67de7e76d61dbd25eb32f701d8ce867b":[9,0,31,4],
