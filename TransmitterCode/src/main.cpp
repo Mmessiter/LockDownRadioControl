@@ -4739,7 +4739,7 @@ void (*NumberedFunctions[LASTFUNCTION])() {
                 LogVIEW,                    // 18
                 SetupViewFM,                // 19
                 StartSubTrimView,           // 20
-                EndSubTrimView              // 21
+                EndSubTrimView              // 21 ... to be continued ...
                 };
 
 /*********************************************************************************************************************************
