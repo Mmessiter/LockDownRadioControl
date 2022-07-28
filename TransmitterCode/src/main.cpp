@@ -217,7 +217,7 @@ uint8_t FHSS_Channels1[42] = {93,111,107,103,106,97,108,102,118,                
 uint8_t FHSS_Channels[83] = {51,28,24,61,64,55,66,19,76,21,59,67,15,71,82,32,49,69,13,2,34,47,20,16,72,  // UK array
 35,57,45,29,75,3,41,62,11,9,77,37,8,31,36,18,17,50,78,73,30,79,6,23,40,
 54,12,80,53,22,1,74,39,58,63,70,52,42,25,43,26,14,38,48,68,33,27,60,44,46,
-56,7,81,5,65,4,10}; /// test comment 
+56,7,81,5,65,4,10}; 
 
 uint8_t * FHSSChPointer;                                                                                 // pointer for channels array (three only used for reconnect)
 
@@ -983,8 +983,7 @@ void RedLedOn()
         RXVoltsDetected = false;
         LedWasGreen = false;
     }
-    
-    FirstConnection = true;
+   // FirstConnection = true;
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, 0);
     analogWrite(REDLED, GetLEDBrightness());     // Brightness is a function of maybe blinking
@@ -996,7 +995,7 @@ void GreenLedOn()
 {
     if (!LedWasGreen || LedIsBlinking) {         // no need to repeat unless it is blinking
         LedWasGreen = true;
-        if (FirstConnection) {                   // Zero data on first connection
+        if (FirstConnection) {                   // Zero data on first connection after reboot
             ZeroDataScreen(); 
             FirstConnection = false; 
             if (AnnounceConnected) PlaySound(CONNECTEDMSG);
@@ -1937,35 +1936,18 @@ void UpdateTrimView()
 {
     char Mode1[]        = "Mode1";
     char Mode2[]        = "Mode2";
-    char TrimView_ch1[] = "ch1";
-    char TrimView_ch2[] = "ch2";
-    char TrimView_ch3[] = "ch3";
-    char TrimView_ch4[] = "ch4"; 
-    char TrimView_n1[]  = "n1";
-    char TrimView_n2[]  = "n2";
-    char TrimView_n3[]  = "n3";
-    char TrimView_n4[]  = "n4";
-    char TrimView_r1[]  = "r1";
-    char TrimView_r2[]  = "r2";
-    char TrimView_r3[]  = "r3";
-    char TrimView_r4[]  = "r4";
-    
-    SendValue(TrimView_ch1, (Trims[FlightMode][0]));
-    SendValue(TrimView_ch4, (Trims[FlightMode][1]));
-    SendValue(TrimView_ch2, (Trims[FlightMode][2]));
-    SendValue(TrimView_ch3, (Trims[FlightMode][3]));
+    char TrimViewChannels[4][4]  = {"ch1","ch2","ch3","ch4"};
+    char TrimViewNumbers[4][3]   = {"n1","n2","n3","n4"};
+    char TrimViewReversed[4][3]  = {"r1","r2","r3","r4"};
 
-    if (CurrentView == TRIM_VIEW) 
-    {
-        SendValue(TrimView_n1, (Trims[FlightMode][0] - 80));
-        SendValue(TrimView_n4, (Trims[FlightMode][1] - 80));
-        SendValue(TrimView_n2, (Trims[FlightMode][2] - 80));
-        SendValue(TrimView_n3, (Trims[FlightMode][3] - 80));
-
-        SendValue(TrimView_r1, TrimsReversed[FlightMode][0]);
-        SendValue(TrimView_r4, TrimsReversed[FlightMode][1]);
-        SendValue(TrimView_r2, TrimsReversed[FlightMode][2]);
-        SendValue(TrimView_r3, TrimsReversed[FlightMode][3]);
+    if (CurrentView == FRONTVIEW || (CurrentView == TRIM_VIEW))  {
+        for (int i = 0; i < 4; ++i){
+            SendValue(TrimViewChannels[i], (Trims[FlightMode][i]));
+            SendValue(TrimViewNumbers[i],  (Trims[FlightMode][i]- 80));
+            if (CurrentView == TRIM_VIEW) SendValue(TrimViewReversed[i], (TrimsReversed[FlightMode][i]));        
+        }
+    }
+    if (CurrentView == TRIM_VIEW)  {   
         if (SticksMode == 2) {
                 SendValue(Mode2,1);
                 SendValue(Mode1,0);}
@@ -2060,90 +2042,30 @@ uint8_t SDReadByte(int p_address)
 /*********************************************************************************************************************************/
 
 void UpdateModelsNameEveryWhere()
-{ // ... and flight mode ... and trim settings etc...
-    char fm1[]                  = "Bank 1";
-    char fm2[]                  = "Bank 2";
-    char fm3[]                  = "Bank 3";
-    char fm4[]                  = "Bank 4";
-    char FrontView_ModelName[]  = "ModelName";
-    char SticksView_ModelName[] = "ModelName";
-    char MixesView_ModelName[]  = "ModelName";
-    char ModelsView_ModelName[] = "ModelName";
-    char GraphView_ModelName[]  = "ModelName";
+{   char fms[4][7]              = {"Bank 1","Bank 2","Bank 3","Bank 4",};
+    char TheModelName[]         = "ModelName";
     char GraphView_Channel[]    = "Channel";
-    char TrimView_ModelName[]   = "ModelName";
     char TrimView_FlightMode[]  = "t1";
     char GraphView_fmode[]      = "fmode";
     char SticksView_t1[]        = "t1";
     char NoName[17];
     char Ch[] = "Channel ";
     char Nbuf[7];
-
-    switch (CurrentView) {
-        case FRONTVIEW:
-            SendText(FrontView_ModelName, ModelName);
-            UpdateTrimView();
-            break;
-        case STICKSVIEW:
-            SendText(SticksView_ModelName, ModelName);
-            break;
-        case MIXESVIEW:
-            SendText(MixesView_ModelName, ModelName);
-            break;
-        case GRAPHVIEW:
-            SendText(GraphView_ModelName, ModelName);
-            if (strlen(ChannelNames[ChanneltoSet - 1]) < 2) { // if no name, just show the channel number
-                strcpy(NoName, Ch);
-                SendText(GraphView_Channel, strcat(NoName, Str(Nbuf, ChanneltoSet, 0)));
+            SendText(TheModelName, ModelName);
+            if (CurrentView == GRAPHVIEW){
+                if (strlen(ChannelNames[ChanneltoSet - 1]) < 2) { // if no name, just show the channel number
+                    strcpy(NoName, Ch);
+                    SendText(GraphView_Channel, strcat(NoName, Str(Nbuf, ChanneltoSet, 0)));
+                }else {
+                    SendText(GraphView_Channel, ChannelNames[ChanneltoSet - 1]);
+                }
             }
-            else {
-                SendText(GraphView_Channel, ChannelNames[ChanneltoSet - 1]);
-            }
-            break;
-        case MODELSVIEW:
-            SendText(ModelsView_ModelName, ModelName);
-            break;
-        case TRIM_VIEW:
-            SendText(TrimView_ModelName, ModelName);
-            UpdateTrimView();
-            break;
-        default:
-            break;
-    }
-
-    if (FlightMode == 1) {
-        if (CurrentView == STICKSVIEW) SendText(SticksView_t1, fm1);
-        if (CurrentView == GRAPHVIEW) SendText(GraphView_fmode, fm1);
-        if (CurrentView == TRIM_VIEW) {
-            SendText(TrimView_FlightMode, fm1);
-            UpdateTrimView();
-        }
-    }
-    if (FlightMode == 2) {
-        if (CurrentView == STICKSVIEW) SendText(SticksView_t1, fm2);
-        if (CurrentView == GRAPHVIEW) SendText(GraphView_fmode, fm2);
-        if (CurrentView == TRIM_VIEW) {
-            SendText(TrimView_FlightMode, fm2);
-            UpdateTrimView();
-        }
-    }
-    if (FlightMode == 3) {
-        if (CurrentView == STICKSVIEW) SendText(SticksView_t1, fm3);
-        if (CurrentView == GRAPHVIEW) SendText(GraphView_fmode, fm3);
-        if (CurrentView == TRIM_VIEW) {
-            SendText(TrimView_FlightMode, fm3);
-            UpdateTrimView();
-        }
-    }
-    if (FlightMode == 4) {
-        if (CurrentView == STICKSVIEW) SendText(SticksView_t1, fm4);
-        if (CurrentView == GRAPHVIEW) SendText(GraphView_fmode, fm4);
-        if (CurrentView == TRIM_VIEW) {
-            SendText(TrimView_FlightMode, fm4);
-            UpdateTrimView();
-        }
-    }
-}
+            if (CurrentView == STICKSVIEW) SendText(SticksView_t1, fms[FlightMode-1]);
+            if (CurrentView == GRAPHVIEW)  SendText(GraphView_fmode, fms[FlightMode-1]);
+            if (CurrentView == TRIM_VIEW) {SendText(TrimView_FlightMode, fms[FlightMode-1]); UpdateTrimView();}
+            if (CurrentView == FRONTVIEW)  {UpdateTrimView();}
+          
+} 
 
 /*********************************************************************************************************************************/
 
@@ -2196,126 +2118,31 @@ FLASHMEM void InitCentreDegrees()
     }
 }
 
-
 /*********************************************************************************************************************************/
 
-void UpdateButtonLabels()
-{
-   
-
+void UpdateButtonLabels() {
     char InputStick_Labels[16][4]   = {"c1","c2","c3","c4","c5","c6","c7","c8","c9","c10","c11","c12","c13","c14","c15","c16"};
     char fsch_labels[16][5]         = {"ch1","ch2","ch3","ch4","ch5","ch6","ch7","ch8","ch9","ch10","ch11","ch12","ch13","ch14","ch15","ch16"};
     char fs[16][5]                  = {"fs1","fs2","fs3","fs4","fs5","fs6","fs7","fs8","fs9","fs10","fs11","fs12","fs13","fs14","fs15","fs16"};
-     
-    char arrowrh[] = " >";
-    char arrowlh[] = "< ";
-    char BoxOffsetLabel[20];
-
-
-    char SticksViewButton1[]  = "Sch1";
-    char SticksViewButton2[]  = "Sch2";
-    char SticksViewButton3[]  = "Sch3";
-    char SticksViewButton4[]  = "Sch4";
-    char SticksViewButton5[]  = "Sch5";
-    char SticksViewButton6[]  = "Sch6";
-    char SticksViewButton7[]  = "Sch7";
-    char SticksViewButton8[]  = "Sch8";
-    char SticksViewButton9[]  = "Sch9";
-    char SticksViewButton10[] = "Sch10";
-    char SticksViewButton11[] = "Sch11";
-    char SticksViewButton12[] = "Sch12";
-    char SticksViewButton13[] = "Sch13";
-    char SticksViewButton14[] = "Sch14";
-    char SticksViewButton15[] = "Sch15";
-    char SticksViewButton16[] = "Sch16";
-
-
-    char one[]                = " (1)";
-    char two[]                = "(2) ";
-    char three[]              = " (3)";
-    char four[]               = "(4) ";
-    char five[]               = " (5)";
-    char six[]                = "(6) ";
-    char seven[]              = " (7)";
-    char eight[]              = "(8) ";
-    char nine[]               = " (9)";
-    char ten[]                = "(10) ";
-    char eleven[]             = " (11)";
-    char twelve[]             = "(12) ";
-    char thirteen[]           = " (13)";
-    char fourteen[]           = "(14) ";
-    char fifteen[]            = " (15)";
-    char sixteen[]            = "(16) ";
+    char ChannelLabels[16][6]       = {"Sch1","Sch2","Sch3","Sch4","Sch5","Sch6","Sch7","Sch8","Sch9","Sch10","Sch11","Sch12","Sch13","Sch14","Sch15","Sch16"};
+    char ChannelNumber[16][6]       = {" (1)","(2) "," (3)","(4) "," (5)","(6) "," (7)","(8) "," (9)","(10) "," (11)","(12) "," (13)","(14) "," (15)","(16) "};
+    char ArrowRh[]                  = " >";
+    char ArrowLh[]                  = "< ";
+    char LabelText[20];
+    
     if (CurrentView == STICKSVIEW) {
-       
-        strcpy(BoxOffsetLabel, ChannelNames[0]);
-        strcat(BoxOffsetLabel, one);
-        strcat(BoxOffsetLabel, arrowrh);
-
-        SendText(SticksViewButton1, BoxOffsetLabel);
-        strcpy(BoxOffsetLabel, arrowlh);
-        strcat(BoxOffsetLabel, two);
-
-        strcat(BoxOffsetLabel, ChannelNames[1]);
-        SendText(SticksViewButton2, BoxOffsetLabel);
-        strcpy(BoxOffsetLabel, ChannelNames[2]);
-
-        strcat(BoxOffsetLabel, three);
-        strcat(BoxOffsetLabel, arrowrh);
-        SendText(SticksViewButton3, BoxOffsetLabel);
-        strcpy(BoxOffsetLabel, arrowlh);
-        strcat(BoxOffsetLabel, four);
-        strcat(BoxOffsetLabel, ChannelNames[3]);
-        SendText(SticksViewButton4, BoxOffsetLabel);
-        strcpy(BoxOffsetLabel, ChannelNames[4]);
-        strcat(BoxOffsetLabel, five);
-        strcat(BoxOffsetLabel, arrowrh);
-        SendText(SticksViewButton5, BoxOffsetLabel);
-        strcpy(BoxOffsetLabel, arrowlh);
-        strcat(BoxOffsetLabel, six);
-        strcat(BoxOffsetLabel, ChannelNames[5]);
-        SendText(SticksViewButton6, BoxOffsetLabel);
-        strcpy(BoxOffsetLabel, ChannelNames[6]);
-        strcat(BoxOffsetLabel, seven);
-        strcat(BoxOffsetLabel, arrowrh);
-        SendText(SticksViewButton7, BoxOffsetLabel);
-        strcpy(BoxOffsetLabel, arrowlh);
-        strcat(BoxOffsetLabel, eight);
-        strcat(BoxOffsetLabel, ChannelNames[7]);
-        SendText(SticksViewButton8, BoxOffsetLabel);
-        strcpy(BoxOffsetLabel, ChannelNames[8]);
-        strcat(BoxOffsetLabel, nine);
-        strcat(BoxOffsetLabel, arrowrh);
-        SendText(SticksViewButton9, BoxOffsetLabel);
-        strcpy(BoxOffsetLabel, arrowlh);
-        strcat(BoxOffsetLabel, ten);
-        strcat(BoxOffsetLabel, ChannelNames[9]);
-        SendText(SticksViewButton10, BoxOffsetLabel);
-        strcpy(BoxOffsetLabel, ChannelNames[10]);
-        strcat(BoxOffsetLabel, eleven);
-        strcat(BoxOffsetLabel, arrowrh);
-        SendText(SticksViewButton11, BoxOffsetLabel);
-        strcpy(BoxOffsetLabel, arrowlh);
-        strcat(BoxOffsetLabel, twelve);
-        strcat(BoxOffsetLabel, ChannelNames[11]);
-        SendText(SticksViewButton12, BoxOffsetLabel);
-        strcpy(BoxOffsetLabel, ChannelNames[12]);
-        strcat(BoxOffsetLabel, thirteen);
-        strcat(BoxOffsetLabel, arrowrh);
-        SendText(SticksViewButton13, BoxOffsetLabel);
-        strcpy(BoxOffsetLabel, arrowlh);
-        strcat(BoxOffsetLabel, fourteen);
-        strcat(BoxOffsetLabel, ChannelNames[13]);
-        SendText(SticksViewButton14, BoxOffsetLabel);
-        strcpy(BoxOffsetLabel, ChannelNames[14]);
-        strcat(BoxOffsetLabel, fifteen);
-        strcat(BoxOffsetLabel, arrowrh);
-        SendText(SticksViewButton15, BoxOffsetLabel);
-        strcpy(BoxOffsetLabel, arrowlh);
-        strcat(BoxOffsetLabel, sixteen);
-        strcat(BoxOffsetLabel, ChannelNames[15]);
-        SendText(SticksViewButton16, BoxOffsetLabel);
-
+        for (int i = 0; i < 16; ++i ){
+            if ((float) i/2 != (int) i/2){                      // Odd and even labels are formatted differnently here
+                strcpy(LabelText, ArrowLh);
+                strcat(LabelText, ChannelNumber[i]);
+                strcat(LabelText, ChannelNames[i]);
+            } else {       
+                strcpy(LabelText, ChannelNames[i]);
+                strcat(LabelText, ChannelNumber[i]);
+                strcat(LabelText, ArrowRh);
+            }   
+            SendText(ChannelLabels[i], LabelText);
+        }
     }
     if (CurrentView == FAILSAFE_VIEW) {
          for (int i = 0;i < 16; ++i){
@@ -2325,8 +2152,6 @@ void UpdateButtonLabels()
     if (CurrentView == INPUTS_VIEW || CurrentView == FAILSAFE_VIEW || CurrentView == REVERSEVIEW) {
         for (int i = 0;i < 16; ++i){
             SendText(fsch_labels[i], ChannelNames[i]); 
-        }
-        for (int i = 0; i < 16; ++i){    
             SendValue(InputStick_Labels[i], InPutStick[i] + 1);
         }
     }
@@ -2487,7 +2312,7 @@ bool ReadOneModel(uint8_t Mnum)
 
     OneModelMemory = SDCardAddress - StartLocation;
 
-#ifdef DB_NEXTION
+#ifdef DB_SD
     Serial.print(MemoryForTransmtter);
     Serial.println(" bytes were  used for TX data.");
     Serial.print(TXSIZE);
@@ -2507,7 +2332,7 @@ bool ReadOneModel(uint8_t Mnum)
     Serial.println(" spare bytes per model.");
     Serial.print(MODELSIZE);
     Serial.println(" bytes reserved per model.)");
-#endif // defined DB_NEXTION
+#endif // defined DB_SD
     UpdateButtonLabels();
     CheckMacrosBuffer();
     return true;
@@ -3034,9 +2859,9 @@ int InStrng(char * text1, char * text2)
                 flag = true; break;
             }
         }
-        if (!flag) return j + 1;
+        if (!flag) return j + 1;   // Found match
     }
-    return 0;
+    return 0;                      // Found no match
 }
 
 /*********************************************************************************************************************************/
@@ -3270,7 +3095,7 @@ void SaveOneModel(uint16_t mnum)
     // ********************** Add more 
 
     OneModelMemory = SDCardAddress - StartLocation;
-#ifdef DB_NEXTION
+#ifdef DB_SD
     Serial.print("Saved model: ");
     Serial.println(ModelName);
     Serial.println(" ");
@@ -3281,7 +3106,7 @@ void SaveOneModel(uint16_t mnum)
     Serial.print(MODELSIZE);
     Serial.println(" bytes reserved per model.)");
     Serial.println(" ");
-#endif // defined DB_NEXTION
+#endif // defined DB_SD
     CloseModelsFile();
 }
 
@@ -3581,7 +3406,7 @@ void SaveAllParameters()
     SaveTXStuff();
     MemoryForTransmtter = SDCardAddress - 2;
     SaveOneModel(ModelNumber);
-#ifdef DB_NEXTION
+#ifdef DB_SD
     Serial.println(" ");
     Serial.print(MemoryForTransmtter);
     Serial.println(" bytes written to SD CARD FOR TX.");
@@ -3594,7 +3419,7 @@ void SaveAllParameters()
     Serial.print(" (");
     Serial.print(ModelName);
     Serial.println(")");
-#endif // defined DB_NEXTION
+#endif // defined DB_SD
 }
 
 /*********************************************************************************************************************************/
@@ -4488,22 +4313,8 @@ void SendModelFile()
 
 void SoundFlightMode()
 {
-    switch (FlightMode) {
-        case 1:
-            PlaySound(BANKONE);
-            break;
-        case 2:
-            PlaySound(BANKTWO);
-            break;
-        case 3:
-             PlaySound(BANKTHREE);
-            break;
-        case 4:
-            PlaySound(BANKFOUR);
-            break;
-        default:
-            break;
-    }
+    uint8_t Sounds[4] = {BANKONE,BANKTWO,BANKTHREE,BANKFOUR};
+    PlaySound(Sounds[FlightMode-1]);
     ScreenTimeTimer = millis();  // reset screen counter
     if (ScreenIsOff) {
        RestoreBrightness();
@@ -4512,32 +4323,11 @@ void SoundFlightMode()
 
 }
 /*********************************************************************************************************************************/
-
 void ShowFlightMode() 
 {
-    char FMPress1[]  = "click fm1,1";
-    char FMPress2[]  = "click fm2,1";
-    char FMPress3[]  = "click fm3,1";
-    char FMPress4[]  = "click fm4,1";
-
-    switch (FlightMode) {
-        case 1:
-            SendCommand(FMPress1);
-            break;
-        case 2:
-            SendCommand(FMPress2);
-            break;
-        case 3:
-            SendCommand(FMPress3);
-            break;
-        case 4:
-            SendCommand(FMPress4);
-            break;
-        default:
-            break;
-    }
+    char FMPress[4][12] = {"click fm1,1","click fm2,1","click fm3,1","click fm4,1"};
+    SendCommand(FMPress[FlightMode-1]);
 }
-
 /*********************************************************************************************************************************/
 
 void updateOneSwitchView()
@@ -4774,99 +4564,218 @@ void  EndBuddyView(){
     CurrentView = MAINSETUPVIEW;
 }
 /*********************************************************************************************************************************/
-
-FASTRUN void  DoNumberedCommands(uint8_t nc){ // These gradually are replacing word-invoked commands for speed and economy
-  
-    char pModelsView[]  = "page ModelsView";
-    char mn[]           = "ModelNumber";
-    char pMacrosView[]  = "page MacrosView";
-    
-#ifdef DB_NEXTION
-    Serial.print ("Command number: -> ");
-    Serial.println (nc);
-#endif
-    
-    b5isGrey = false;
-
-    switch(nc){
-          case 1:                      // Previous file (modelsview)
-            FileNumberInView--;
-            ShowFileNumber();
-            CloseModelsFile();
-            break;
-        case 2:                        // Next file (modelsview)
-            FileNumberInView++;
-            ShowFileNumber();
-            CloseModelsFile();
-            break;
-        case 3:                    
-            ModelNameTimeCheck = 0 ;
-            break;
-        case 4:                              // goto models view   
-            SendCommand(pModelsView);
-            CurrentView = MODELSVIEW;
-            UpdateModelsNameEveryWhere();
-            BuildDirectory();                 // of SD card
-            ShowFileNumber();
-            SendValue(mn,ModelNumber);
-            break;
-        case 5:
-            PreviousMacroNumber = 200;        // i.e. no usable number
-            SendCommand(pMacrosView);         // Display MacroView
-            CurrentView = MACROS_VIEW;
-            Procrastinate(200);               // allow enough time for screen to display
-            PopulateMacrosView();
-            break;
-        case 6:
-            PopulateMacrosView();             // Macros view number has moved to new macro
-            break;
-        case 7:
-            ExitMacrosView();
-            break;
-        case 8:
-            ShowChannelName();
-            break;
-        case 9:
-            StartReverseView();
-            break;
-        case 10:
-            EndReverseView();
-            break;
-        case 11:
-            StartBuddyView();
-            break;
-        case 12:
-            EndBuddyView();
-            break;
-
-        default:
-           break;
-    }
-    ClearText();
-}
-
-
-/*********************************************************************************************************************************/
-
 FASTRUN void DisplayCurveAndServoPos(){
             DisplayCurve();
             SavedLineX = 0;  
             ShowServoPos(); 
             ClearText();
 }
+/******************************** FUNCTIONS FOR ARRAY OF POINTERS *************************************************************/
+void Blank(){
+        return;
+        }
+/******************************************************************************************************************************/
+void DecFileInView(){    // 1
+            --FileNumberInView;
+            ShowFileNumber();
+            CloseModelsFile();
+}
+/******************************************************************************************************************************/
+void IncFileInView(){    // 2
+            ++FileNumberInView;
+            ShowFileNumber();
+            CloseModelsFile();
+}
+/******************************************************************************************************************************/
+void DoModelNameTimeCheck(){
+            ModelNameTimeCheck = 0 ;
+}
+/******************************************************************************************************************************/
+void GotoModelsView(){
+            char pModelsView[]  = "page ModelsView";
+            char mn[]           = "ModelNumber";
+            SendCommand(pModelsView);
+            CurrentView = MODELSVIEW;
+            UpdateModelsNameEveryWhere();
+            BuildDirectory();                 // of SD card
+            ShowFileNumber();
+            SendValue(mn,ModelNumber);
+}
+/******************************************************************************************************************************/
+void GotoMacrosView(){
+            char pMacrosView[]  = "page MacrosView";
+            PreviousMacroNumber = 200;        // i.e. no usable number
+            SendCommand(pMacrosView);         // Display MacroView
+            CurrentView = MACROS_VIEW;
+            Procrastinate(200);               // allow enough time for screen to display
+            PopulateMacrosView();
+}
+/******************************************************************************************************************************/
+ void UpLog(){  
+        if (RecentStartLine > 0 && (CurrentView == LOGVIEW))  {
+            RecentStartLine-=1;
+            ShowLogFile(RecentStartLine); 
+        }
+        if (RecentStartLine > 0 && (CurrentView == HELP_VIEW))  {
+            RecentStartLine-=1;
+            ScrollHelpFile(); 
+        }    
+    }   
+/******************************************************************************************************************************/  
+void DownLog(){  
+        if (ThereIsMoreToSee && (CurrentView == LOGVIEW)) {
+            RecentStartLine+=1;
+            ShowLogFile(RecentStartLine); 
+        }
+        if (ThereIsMoreToSee && (CurrentView == HELP_VIEW)) {
+            RecentStartLine+=1;
+            ScrollHelpFile(); 
+        }
+    }   
+/******************************************************************************************************************************/
+void RefrLOG(){   // refresh log screen
+        if (UseLog){
+            RecentStartLine = 0;
+            ShowLogFile(RecentStartLine); 
+            ClearText();
+        }       
+    }   
+ /******************************************************************************************************************************/
+ void LogEND(){ // close log screen 
+            char n0[]                      = "n0"; 
+            char c0[]                      = "c0";
+            char sw0[]                     = "sw0";
+            char pDataView[]               = "page DataView";
+            CurrentMode  = NORMAL;
+            CurrentView  = DATAVIEW;
+            LastShowTime = 0;
+            MinimumGap = GetValue(n0);
+            LogRXSwaps = GetValue(c0);
+            UseLog     = GetValue(sw0);
+            SaveTXStuff();
+            SendCommand(pDataView);
+    } 
+/******************************************************************************************************************************/
+void DelLOG(){  // delete log and start new one
+            DeleteLogFile1();
+            ClearText();
+    }   
+/******************************************************************************************************************************/
+void LogVIEW(){  // Start log screen
+            char n0[]                      = "n0";
+            char c0[]                      = "c0";
+            char sw0[]                     = "sw0";
+            char pLogView[]                = "page LogView"; 
+            SendCommand(pLogView);
+            CurrentView = LOGVIEW;
+            SendValue(n0,MinimumGap);
+            SendValue(c0,LogRXSwaps);
+            SendValue(sw0,UseLog);   
+            if (UseLog){
+                RecentStartLine = 0;
+                ShowLogFile(RecentStartLine);
+            }        
+    }
+/******************************************************************************************************************************/
+void SetupViewFM() {                // (Exit from models screen) New model name occurs at offset 4 in TextIn
+            char page_SetupView[]          = "page SetupView";
+            int i = 0;
+            while (TextIn[i + 4] > 0) {
+                ModelName[i]     = TextIn[i + 4];     // copy new name
+                ModelName[i + 1] = 0;
+                ++i;
+            } 
+            SaveAllParameters();
+            SendCommand(page_SetupView);
+            CurrentMode = NORMAL; // Send data again
+            CurrentView = MAINSETUPVIEW;
+            ModelNameTimeCheck = 0;
+        }
+/******************************************************************************************************************************/
+void StartSubTrimView() {                // Subtrim view start heer
+            char pSubTrimView[]             = "page SubTrimView";
+            char t2[]                       = "t2";
+            char n0[]                       = "n0";
+            char h0[]                       = "h0";
+            SendCommand(pSubTrimView);
+            SubTrimToEdit = 0;
+            CurrentView =  SUBTRIMVIEW;
+            SendText(t2,ChannelNames[SubTrimToEdit]);   
+            SendValue(n0,SubTrims[SubTrimToEdit]-127);
+            SendValue(h0,SubTrims[SubTrimToEdit]);
+}
+/******************************************************************************************************************************/
+  void EndSubTrimView() {                       // Subtrim view exit
+           char page_SetupView[]          = "page SetupView";
+            SaveOneModel(ModelNumber);
+            CurrentView = MAINSETUPVIEW;
+            SendCommand(page_SetupView);
+            ModelNameTimeCheck = 0;
+        }
+// ******************************** Global Array of numbered function pointers - OK up to 128 functions ... **********************************
+#define LASTFUNCTION 22                     // one more than final one
 
-/*********************************************************************************************************************************/
+void (*NumberedFunctions[LASTFUNCTION])() {
+                Blank,                      // 0 (not used, yet.)
+                DecFileInView,              // 1
+                IncFileInView,              // 2 
+                DoModelNameTimeCheck,       // 3
+                GotoModelsView,             // 4
+                GotoMacrosView,             // 5
+                PopulateMacrosView,         // 6
+                ExitMacrosView,             // 7
+                ShowChannelName,            // 8 
+                StartReverseView,           // 9
+                EndReverseView,             // 10
+                StartBuddyView,             // 11
+                EndBuddyView,               // 12
+                UpLog,                      // 13
+                DownLog,                    // 14
+                RefrLOG,                    // 15
+                LogEND,                     // 16
+                DelLOG,                     // 17
+                LogVIEW,                    // 18
+                SetupViewFM,                // 19
+                StartSubTrimView,           // 20
+                EndSubTrimView              // 21 ... to be continued ...
+                };
 
-/**
- * BUTTON WAS PRESSED (DEAL WITH INPUT FROM NEXTION DISPLAY)
- *
- */
-FASTRUN void ButtonWasPressed()
-{
-  if (TextIn[0] & 128 ){                                // first byte hi bit indicates a numbered command
-          DoNumberedCommands(TextIn[0] & 127);          // send number with the high bit off.
-          return;                                       // skip the rest!
-  }         
+/*********************************************************************************************************************************
+ *                          BUTTON WAS PRESSED (DEAL WITH INPUT FROM NEXTION DISPLAY)                                            *
+ *********************************************************************************************************************************/
+FASTRUN void ButtonWasPressed() {
+
+if (strlen(TextIn) > 0) { 
+     StartInactvityTimeout();
+     union {uint8_t First4Bytes[4];uint32_t FirstDWord;} NextionCommand;
+     NextionCommand.First4Bytes[0] = TextIn[0];
+     NextionCommand.First4Bytes[1] = TextIn[1];
+     NextionCommand.First4Bytes[2] = TextIn[2];
+     NextionCommand.First4Bytes[3] = TextIn[3];
+    uint32_t NumberedCommand = NextionCommand.FirstDWord - 128;
+
+    #ifdef DB_NEXTION
+    if (TextIn[0] < 128 ){
+            Serial.print("Command WORD: -> ");
+            Serial.println(TextIn);
+     } else {
+            Serial.print("Command NUMBER: -> ");
+            Look (NumberedCommand);
+     }
+    #endif
+    
+  if (TextIn[0] >= 128 ){                    // (First byte != printable char) indicates a numbered command...
+     if (NumberedCommand < LASTFUNCTION) {   // ...so this system currently only permits 127 numbered functions to be supported. 
+                                             // But that's OK! Because only about 110 still need converting, after which 
+                                             // the restriction can be removed and the max will then be a full 32 bit value.
+// **********************************************************************************************************************************
+        NumberedFunctions[NumberedCommand]();            // Call the needed function --  with a function pointer! :-)               *
+// **********************************************************************************************************************************
+        b5isGrey = false;
+        ClearText();
+        return;      
+     }
+  }                                           
 
     int i = 0;
     char OneSwitchView_r1[]        = "r1";     // Flight modes
@@ -4899,7 +4808,6 @@ FASTRUN void ButtonWasPressed()
     char SetupView[]               = "MainSetup";
     char Scan_End[]                = "ScanEnd";
     char DataEnd[]                 = "DataEnd";
-    char SetupViewFM[]             = "SetupViewFM:";
     char Data_View[]               = "DataView";
     char CalibrateView[]           = "CalibrateView";
     char Trim[]                    = "Trim";
@@ -4968,7 +4876,6 @@ FASTRUN void ButtonWasPressed()
     char FailSAVE[]                = "FailSAVE";
     char FailSafe[]                = "FailSafe";
     char fs[16][5]                 = {"fs1","fs2","fs3","fs4","fs5","fs6","fs7","fs8","fs9","fs10","fs11","fs12","fs13","fs14","fs15","fs16"};
-  
     char CH1NAME[]                 = "CH1NAME=";
     char CH2NAME[]                 = "CH2NAME=";
     char CH3NAME[]                 = "CH3NAME=";
@@ -4998,7 +4905,8 @@ FASTRUN void ButtonWasPressed()
     char OffNow[]                  = "OffNow"; // force power off
     char StillConnected[]          = "vis StillConnected,1";
     char StillConnectedBox[]       = "StillConnected";
-    char StillConnectedMsg[]       = "Disconnect RX!";
+    char StillConnectedMsg[]       = "RX STILL ON!";
+    char TurnOffRX[]               = "TURN OFF RX!";
     char NotStillConnected[]       = "vis StillConnected,0";
     char OptionsViewS[]            = "OptionsViewS";
     char Pto[]                     = "Pto";
@@ -5028,15 +4936,8 @@ FASTRUN void ButtonWasPressed()
     char pTypeView[]               = "page TypeView";
     char pCalibrateView[]          = "page CalibrateView";
     char pFailSafe[]               = "page FailSafeView";
-    char pSubTrimView[]            = "page SubTrimView";
-    char pLogView[]                = "page LogView"; 
     char DataView_Clear[]          = "Clear";
     char DataView_AltZero[]        = "AltZero";
-    char LogVIEW[]                 = "LogVIEW";
-    char LogEND[]                  = "LogEND";
-    char RefrLOG[]                 = "RefrLOG";
-    char DownLOG[]                 = "DownLOG";
-    char UpLOG[]                   = "UpLOG";
     char OptionsEnd[]              = "OptionsEnd";
     char QNH[]                     = "Qnh";
     char Mark[]                    = "Mark";
@@ -5072,19 +4973,17 @@ FASTRUN void ButtonWasPressed()
     char n1[]                      = "n1";
     char h0[]                      = "h0";
     char c0[]                      = "c0";
-    char sw0[]                     = "sw0";
     char c1[]                      = "c1";
     char c2[]                      = "c2";
     char c3[]                      = "c3";
     char c4[]                      = "c4";
     char c5[]                      = "c5";
-    char StEND[]                   = "StEND";
-    char STgo[]                    = "STgo";
     char StCH[]                    = "StCH";
     char s0[]                      = "s0";
     char t2[]                      = "t2";
-    char StEDIT[]                  = "StEDIT";     
-    char DelLOG[]                  = "DelLOG";       
+    char StEDIT[]                  = "StEDIT";  
+    char pLogView[]                = "page LogView";    
+     
     
 
      ScreenTimeTimer = millis();  // reset screen timeout counter
@@ -5095,118 +4994,8 @@ FASTRUN void ButtonWasPressed()
          return;
      }
 
-    if (strlen(TextIn) > 0) {
-        StartInactvityTimeout();
- #ifdef DB_NEXTION
-        Serial.print("Command word: -> ");
-        Serial.println(TextIn);
- #endif
-            
- if (InStrng(UpLOG, TextIn)){  
-        if (RecentStartLine > 0 && (CurrentView == LOGVIEW))  {
-            RecentStartLine-=1;
-            ShowLogFile(RecentStartLine); 
-        }
-        if (RecentStartLine > 0 && (CurrentView == HELP_VIEW))  {
-            RecentStartLine-=1;
-            ScrollHelpFile(); 
-        }
-        ClearText();
-        return;        
-    }   
-          
-    if (InStrng(DownLOG, TextIn)){  
-        if (ThereIsMoreToSee && (CurrentView == LOGVIEW)) {
-            RecentStartLine+=1;
-            ShowLogFile(RecentStartLine); 
-        }
+ // ************************* test input words from Nextion *****************
 
-        if (ThereIsMoreToSee && (CurrentView == HELP_VIEW)) {
-            RecentStartLine+=1;
-            ScrollHelpFile(); 
-        }
-
-        ClearText();
-        return;        
-    }   
-
-    if (InStrng(RefrLOG, TextIn)){   // refresh log screen
-        if (UseLog){
-            RecentStartLine = 0;
-            ShowLogFile(RecentStartLine); 
-            ClearText();
-        }
-        return;        
-    }   
-
-    if (InStrng(LogEND, TextIn)){ // close log screen 
-            CurrentMode  = NORMAL;
-            CurrentView  = DATAVIEW;
-            LastShowTime = 0;
-            MinimumGap = GetValue(n0);
-            LogRXSwaps = GetValue(c0);
-            UseLog     = GetValue(sw0);
-            SaveTXStuff();
-            SendCommand(pDataView);
-            ClearText();
-            return;
-    }   
-    if (InStrng(DelLOG, TextIn)){  // delete log and start new one
-            DeleteLogFile1();
-            ClearText();
-            return;
-    }   
-
-    if (InStrng(LogVIEW, TextIn)){  // Start log screen
-            SendCommand(pLogView);
-            CurrentView = LOGVIEW;
-            SendValue(n0,MinimumGap);
-            SendValue(c0,LogRXSwaps);
-            SendValue(sw0,UseLog);   
-            if (UseLog){
-                RecentStartLine = 0;
-                ShowLogFile(RecentStartLine);
-            }        
-            ClearText();
-            return;
-    }
-
-    if (InStrng(SetupViewFM, TextIn) > 0) {                // New model name occurs at offset 12 in TextIn
-            i = 0;
-            while (TextIn[i + 12] > 0) {
-                ModelName[i]     = TextIn[i + 12];     // copy new name
-                ModelName[i + 1] = 0;
-                ++i;
-            } 
-            SaveAllParameters();
-            SendCommand(page_SetupView);
-            CurrentMode = NORMAL; // Send data again
-            CurrentView = MAINSETUPVIEW;
-            ModelNameTimeCheck = 0;
-            b5isGrey = false;
-            ClearText();
-            return;
-        }
-          if (InStrng(STgo, TextIn)) {                  // Subtrim view start
-            SendCommand(pSubTrimView);
-            SubTrimToEdit = 0;
-            CurrentView =  SUBTRIMVIEW;
-            SendText(t2,ChannelNames[SubTrimToEdit]);  // 
-            SendValue(n0,SubTrims[SubTrimToEdit]-127);
-            SendValue(h0,SubTrims[SubTrimToEdit]);
-            ClearText();
-            return;
-        }
-
-        if (InStrng(StEND, TextIn)) {                  // Subtrim view exit
-            SaveOneModel(ModelNumber);
-            CurrentView = MAINSETUPVIEW;
-            b5isGrey = false;
-            SendCommand(page_SetupView);
-            ModelNameTimeCheck = 0;
-            ClearText();
-            return;
-        }
         if (InStrng(StCH, TextIn)) {                   // select sub trim channel
             SubTrimToEdit = GetValue(s0);
             SendText(t2,ChannelNames[SubTrimToEdit]); 
@@ -5272,7 +5061,7 @@ FASTRUN void ButtonWasPressed()
             return;
         }
         if (InStrng(SetupView, TextIn) > 0) {           //  goto main setup screen
-            if (CurrentView == FAILSAFE_VIEW)  {        //  read failsafe blobs heer
+            if (CurrentView == FAILSAFE_VIEW)  {        //  read failsafe blobs
                 SendCommand(ProgressStart);
                     for (int i = 0; i < 16 ; ++i){
                     FailSafeChannel[i] = GetValue(fs[i]);
@@ -5548,6 +5337,7 @@ FASTRUN void ButtonWasPressed()
                 }
              }
              if (CurrentView == LOGVIEW){ 
+
                 SendCommand(pLogView);
                 CurrentView = LOGVIEW;
                 RecentStartLine = 0;
@@ -5590,7 +5380,9 @@ FASTRUN void ButtonWasPressed()
             if (!LostContactFlag && BoundFlag) {
                 SendText(StillConnectedBox,StillConnectedMsg);
                 SendCommand(StillConnected);
-                Procrastinate(750); // 3/4 second
+                Procrastinate(1500); 
+                SendText(StillConnectedBox,TurnOffRX);
+                Procrastinate(1500); 
                 SendCommand(NotStillConnected);
             }
             else {
@@ -6504,9 +6296,9 @@ FASTRUN void ButtonWasPressed()
                 return;
             }
         }
-    }
+    } 
     ClearText(); // Let's have cleared text for next one!
-} // end ButtonWasPressed()
+} // end ButtonWasPressed() (... at last!!!)
 
 /************************************************************************************************************/
 
@@ -6660,35 +6452,10 @@ void GetFlightMode()
 
 void UpdateTrimViewPart(uint8_t ch)
 {
-    char TrimView_ch1[] = "ch1";
-    char TrimView_ch2[] = "ch2";
-    char TrimView_ch3[] = "ch3";
-    char TrimView_ch4[] = "ch4"; 
-    char TrimView_n1[]  = "n1";
-    char TrimView_n2[]  = "n2";
-    char TrimView_n3[]  = "n3";
-    char TrimView_n4[]  = "n4";
-
-switch(ch){
-    case 0:
-    SendValue(TrimView_ch1, (Trims[FlightMode][0]));
-    SendValue(TrimView_n1,  (Trims[FlightMode][0] - 80));
-    break;
-    case 1:
-    SendValue(TrimView_ch4, (Trims[FlightMode][1]));
-    SendValue(TrimView_n4,  (Trims[FlightMode][1] - 80));
-    break;
-    case 2:
-    SendValue(TrimView_ch2, (Trims[FlightMode][2]));
-    SendValue(TrimView_n2,  (Trims[FlightMode][2] - 80));
-    break;
-    case 3:
-    SendValue(TrimView_ch3, (Trims[FlightMode][3]));
-    SendValue(TrimView_n3,  (Trims[FlightMode][3] - 80));
-    break;
-    default:
-    break;
-    }
+    char TrimViewCh[4][4] = {"ch1","ch2","ch3","ch4"};
+    char TrimViewN[4][3]  = {"n1","n2","n3","n4"};
+    SendValue(TrimViewCh[ch], (Trims[FlightMode][ch]));
+    SendValue(TrimViewN[ch], (Trims[FlightMode][ch] - 80));
 }
 
 // *************************************************************************************************************

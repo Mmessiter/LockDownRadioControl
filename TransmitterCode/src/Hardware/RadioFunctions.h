@@ -37,7 +37,8 @@
 //    DEBUG OPTIONS (Uncomment any of these for that bit of debug info)     *
 //***************************************************************************
 
-// #define DB_NEXTION        // Debug NEXTION and SD card data
+// #define DB_NEXTION        // Debug NEXTION 
+// #define DB_SD             // Debug SD card data
 // #define DB_FHSS           // Debug real time FHSS data
 // #define DB_SENSORS        // Debug Sensors
 // #define DB_BIND           // Debug Binding
@@ -270,9 +271,9 @@
 //                          NEXTION SERIAL CONNECTION                       *
 //***************************************************************************
 
-#define NEXTION Serial1      // NEXTION is connected to Serial1
-#define SHOWCOMMSDELAY 500   // ms pauses between updated info on NEXTION
-#define WARMUPDELAY    300   // fails at 200 so must be >200 ...
+#define NEXTION Serial1       // NEXTION is connected to Serial1
+#define SHOWCOMMSDELAY 2000   // ms pauses between updated info on NEXTION
+#define WARMUPDELAY    200    // fails at 200 so must be >200 ...
 
 // **************************************************************************
 //                            WATCHDOG PARAMETERS                           *
@@ -407,7 +408,7 @@ void Force_ReDisplay();
 FASTRUN void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uint8_t uncompressed_size);
 FASTRUN void BufferNewPipe();
 void ExecuteMacro();
-void Look(int p);
+void Look(uint32_t p);
 void ShowFlightMode();
 void UpdateModelsNameEveryWhere();
 /*********************************************************************************************************************************/
