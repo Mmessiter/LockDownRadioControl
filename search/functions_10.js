@@ -47,7 +47,7 @@ var searchData=
   ['redledon_44',['RedLedOn',['../_radio_functions_8h.html#a7d34cec6e8edc20c8b50424e15dcc7c7',1,'RedLedOn():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a7d34cec6e8edc20c8b50424e15dcc7c7',1,'RedLedOn():&#160;main.cpp']]],
   ['reducelimits_45',['ReduceLimits',['../_transmitter_code_2src_2main_8cpp.html#ad875fe28566f35ffc5f90e73d0089fc6',1,'main.cpp']]],
   ['reenablescanbutton_46',['ReEnableScanButton',['../_radio_functions_8h.html#a0a3d89dfcfab70c6cbc50401fff1afeb',1,'ReEnableScanButton():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a0a3d89dfcfab70c6cbc50401fff1afeb',1,'ReEnableScanButton():&#160;main.cpp']]],
-  ['refrlog_47',['RefrLOG',['../_transmitter_code_2src_2main_8cpp.html#ac20b90c9e5b51acee8c53e0563b98c6a',1,'main.cpp']]],
+  ['refreshlog_47',['RefreshLog',['../_transmitter_code_2src_2main_8cpp.html#a816b0ec602ed068bb08647d951681993',1,'main.cpp']]],
   ['removehistory_48',['removeHistory',['../class_adafruit___g_p_s.html#aea92bf75e742154517db75d1d30087d9',1,'Adafruit_GPS']]],
   ['reset_49',['reset',['../class_adafruit___b_m_p280.html#a6ef79c9cc7ed5d3548ed69785bf627ed',1,'Adafruit_BMP280::reset()'],['../class_m_p_u6050.html#a7100b6d276c3c8664cf00d768b7b0dee',1,'MPU6050::reset()']]],
   ['resetaccelerometerpath_50',['resetAccelerometerPath',['../class_m_p_u6050.html#a99ee74708c12f32e48ef5ec69ac9f4a9',1,'MPU6050']]],

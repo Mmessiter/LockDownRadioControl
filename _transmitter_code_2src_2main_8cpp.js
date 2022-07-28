@@ -165,7 +165,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "RedLedOn", "_transmitter_code_2src_2main_8cpp.html#a7d34cec6e8edc20c8b50424e15dcc7c7", null ],
     [ "ReduceLimits", "_transmitter_code_2src_2main_8cpp.html#ad875fe28566f35ffc5f90e73d0089fc6", null ],
     [ "ReEnableScanButton", "_transmitter_code_2src_2main_8cpp.html#a0a3d89dfcfab70c6cbc50401fff1afeb", null ],
-    [ "RefrLOG", "_transmitter_code_2src_2main_8cpp.html#ac20b90c9e5b51acee8c53e0563b98c6a", null ],
+    [ "RefreshLog", "_transmitter_code_2src_2main_8cpp.html#a816b0ec602ed068bb08647d951681993", null ],
     [ "ResetSubTrims", "_transmitter_code_2src_2main_8cpp.html#a15a54a63b911d3a5d622cd12bc440ab6", null ],
     [ "RestoreBrightness", "_transmitter_code_2src_2main_8cpp.html#a49da3478d89a22069e29c7f00cb46a5f", null ],
     [ "SaveAllParameters", "_transmitter_code_2src_2main_8cpp.html#a92c5dada5e5ef70261391557464f2d19", null ],

@@ -77,7 +77,7 @@ var searchData=
   ['redledon_74',['RedLedOn',['../_radio_functions_8h.html#a7d34cec6e8edc20c8b50424e15dcc7c7',1,'RedLedOn():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a7d34cec6e8edc20c8b50424e15dcc7c7',1,'RedLedOn():&#160;main.cpp']]],
   ['reducelimits_75',['ReduceLimits',['../_transmitter_code_2src_2main_8cpp.html#ad875fe28566f35ffc5f90e73d0089fc6',1,'main.cpp']]],
   ['reenablescanbutton_76',['ReEnableScanButton',['../_radio_functions_8h.html#a0a3d89dfcfab70c6cbc50401fff1afeb',1,'ReEnableScanButton():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a0a3d89dfcfab70c6cbc50401fff1afeb',1,'ReEnableScanButton():&#160;main.cpp']]],
-  ['refrlog_77',['RefrLOG',['../_transmitter_code_2src_2main_8cpp.html#ac20b90c9e5b51acee8c53e0563b98c6a',1,'main.cpp']]],
+  ['refreshlog_77',['RefreshLog',['../_transmitter_code_2src_2main_8cpp.html#a816b0ec602ed068bb08647d951681993',1,'main.cpp']]],
   ['reinit_78',['ReInit',['../_receiver_code_2src_2main_8cpp.html#aace5dda203af973b33a46413f02d9f9a',1,'main.cpp']]],
   ['relative_5fhumidity_79',['relative_humidity',['../structsensors__event__t.html#a577b73698368fb061382ce9f31052417',1,'sensors_event_t']]],
   ['removehistory_80',['removeHistory',['../class_adafruit___g_p_s.html#aea92bf75e742154517db75d1d30087d9',1,'Adafruit_GPS']]],
