@@ -4796,7 +4796,8 @@ if (strlen(TextIn) > 0) { //heer
     char OffNow[]                  = "OffNow"; // force power off
     char StillConnected[]          = "vis StillConnected,1";
     char StillConnectedBox[]       = "StillConnected";
-    char StillConnectedMsg[]       = "Disconnect RX!";
+    char StillConnectedMsg[]       = "RX STILL ON!";
+    char TurnOffRX[]               = "TURN OFF RX!";
     char NotStillConnected[]       = "vis StillConnected,0";
     char OptionsViewS[]            = "OptionsViewS";
     char Pto[]                     = "Pto";
@@ -5389,7 +5390,9 @@ if (strlen(TextIn) > 0) { //heer
             if (!LostContactFlag && BoundFlag) {
                 SendText(StillConnectedBox,StillConnectedMsg);
                 SendCommand(StillConnected);
-                Procrastinate(750); // 3/4 second
+                Procrastinate(1500); 
+                SendText(StillConnectedBox,TurnOffRX);
+                Procrastinate(1500); 
                 SendCommand(NotStillConnected);
             }
             else {
