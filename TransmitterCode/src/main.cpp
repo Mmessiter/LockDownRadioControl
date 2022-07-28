@@ -4564,78 +4564,6 @@ void  EndBuddyView(){
     SendCommand(pSetupView);
     CurrentView = MAINSETUPVIEW;
 }
-/*********************************************************************************************************************************/
-
-FASTRUN void  DoNumberedCommands(uint8_t nc){ // These gradually are replacing word-invoked commands for speed and economy
-  
-    char pModelsView[]  = "page ModelsView";
-    char mn[]           = "ModelNumber";
-    char pMacrosView[]  = "page MacrosView";
-    
-#ifdef DB_NEXTION
-    Serial.print ("Command number: -> ");
-    Serial.println (nc);
-#endif
-    
-    b5isGrey = false;
-
-    switch(nc){
-          case 1:                      // Previous file (modelsview)
-            FileNumberInView--;
-            ShowFileNumber();
-            CloseModelsFile();
-            break;
-        case 2:                        // Next file (modelsview)
-            FileNumberInView++;
-            ShowFileNumber();
-            CloseModelsFile();
-            break;
-        case 3:                    
-            ModelNameTimeCheck = 0 ;
-            break;
-        case 4:                              // goto models view   
-            SendCommand(pModelsView);
-            CurrentView = MODELSVIEW;
-            UpdateModelsNameEveryWhere();
-            BuildDirectory();                 // of SD card
-            ShowFileNumber();
-            SendValue(mn,ModelNumber);
-            break;
-        case 5:
-            PreviousMacroNumber = 200;        // i.e. no usable number
-            SendCommand(pMacrosView);         // Display MacroView
-            CurrentView = MACROS_VIEW;
-            Procrastinate(200);               // allow enough time for screen to display
-            PopulateMacrosView();
-            break;
-        case 6:
-            PopulateMacrosView();             // Macros view number has moved to new macro
-            break;
-        case 7:
-            ExitMacrosView();
-            break;
-        case 8:
-            ShowChannelName();
-            break;
-        case 9:
-            StartReverseView();
-            break;
-        case 10:
-            EndReverseView();
-            break;
-        case 11:
-            StartBuddyView();
-            break;
-        case 12:
-            EndBuddyView();
-            break;
-
-        default:
-           break;
-    }
-    ClearText();
-}
-
 
 /*********************************************************************************************************************************/
 
@@ -4646,27 +4574,85 @@ FASTRUN void DisplayCurveAndServoPos(){
             ClearText();
 }
 
-/*********************************************************************************************************************************/
+/******************************** FUNCTIONS FOR ARRAY OF POINTERS *************************************************************************************************/
 
-/**
+void Blank(){
+        return;
+        }
+void DecFileInView(){    // 1
+            --FileNumberInView;
+            ShowFileNumber();
+            CloseModelsFile();
+}
+void IncFileInView(){    // 2
+            ++FileNumberInView;
+            ShowFileNumber();
+            CloseModelsFile();
+}
+void DoModelNameTimeCheck(){
+            ModelNameTimeCheck = 0 ;
+
+}
+void GotoModelsView(){
+            char pModelsView[]  = "page ModelsView";
+            char mn[]           = "ModelNumber";
+            SendCommand(pModelsView);
+            CurrentView = MODELSVIEW;
+            UpdateModelsNameEveryWhere();
+            BuildDirectory();                 // of SD card
+            ShowFileNumber();
+            SendValue(mn,ModelNumber);
+
+}
+void GotoMacrosView(){
+            char pMacrosView[]  = "page MacrosView";
+            PreviousMacroNumber = 200;        // i.e. no usable number
+            SendCommand(pMacrosView);         // Display MacroView
+            CurrentView = MACROS_VIEW;
+            Procrastinate(200);               // allow enough time for screen to display
+            PopulateMacrosView();
+}
+
+// ******************************** Global Array of numbered function pointers - OK up to 128 functions ... **********************************
+#define LASTFUNCTION 13                     // one more than final one
+
+void (*NumberedFunctions[LASTFUNCTION])() {
+                Blank,                      // 0 (not used, yet.)
+                DecFileInView,              // 1
+                IncFileInView,              // 2 
+                DoModelNameTimeCheck,       // 3
+                GotoModelsView,             // 4
+                GotoMacrosView,             // 5
+                PopulateMacrosView,         // 6
+                ExitMacrosView,             // 7
+                ShowChannelName,            // 8 
+                StartReverseView,           // 9
+                EndReverseView,             // 10
+                StartBuddyView,             // 11
+                EndBuddyView                // 12
+                };
+
+/*********************************************************************************************************************************
  * BUTTON WAS PRESSED (DEAL WITH INPUT FROM NEXTION DISPLAY)
- *
  */
 FASTRUN void ButtonWasPressed() // heer
 {
-/*
 union {uint8_t First4Bytes[4];uint32_t FirstDWord;} NextionCommand;
 
      NextionCommand.First4Bytes[0] = TextIn[0];
      NextionCommand.First4Bytes[1] = TextIn[1];
      NextionCommand.First4Bytes[2] = TextIn[2];
      NextionCommand.First4Bytes[3] = TextIn[3];
-     Serial.println (NextionCommand.FirstDWord);
-*/
-  if (TextIn[0] & 128 ){                                // first byte hi bit indicates a numbered command
-          DoNumberedCommands(TextIn[0] & 127);          // send number with the high bit off.
-          return;                                       // skip the rest!
-  }         
+    
+  if (TextIn[0] >= 128 ){                                                       // first byte not a char indicates USE a numbered command
+     uint32_t NumberedCommand = NextionCommand.FirstDWord - 128;
+     if (NumberedCommand < LASTFUNCTION) {
+        NumberedFunctions[NumberedCommand]();                                   // Call the needed function --  with a function pointer! :-) 
+        b5isGrey = false;
+        ClearText();
+        return;      
+     }
+  }                                           
 
     int i = 0;
     char OneSwitchView_r1[]        = "r1";     // Flight modes
