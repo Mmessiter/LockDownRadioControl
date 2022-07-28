@@ -4564,35 +4564,34 @@ void  EndBuddyView(){
     SendCommand(pSetupView);
     CurrentView = MAINSETUPVIEW;
 }
-
 /*********************************************************************************************************************************/
-
 FASTRUN void DisplayCurveAndServoPos(){
             DisplayCurve();
             SavedLineX = 0;  
             ShowServoPos(); 
             ClearText();
 }
-
-/******************************** FUNCTIONS FOR ARRAY OF POINTERS *************************************************************************************************/
+/******************************** FUNCTIONS FOR ARRAY OF POINTERS *************************************************************/
 void Blank(){
         return;
         }
-
+/******************************************************************************************************************************/
 void DecFileInView(){    // 1
             --FileNumberInView;
             ShowFileNumber();
             CloseModelsFile();
 }
+/******************************************************************************************************************************/
 void IncFileInView(){    // 2
             ++FileNumberInView;
             ShowFileNumber();
             CloseModelsFile();
 }
+/******************************************************************************************************************************/
 void DoModelNameTimeCheck(){
             ModelNameTimeCheck = 0 ;
 }
-
+/******************************************************************************************************************************/
 void GotoModelsView(){
             char pModelsView[]  = "page ModelsView";
             char mn[]           = "ModelNumber";
@@ -4602,8 +4601,8 @@ void GotoModelsView(){
             BuildDirectory();                 // of SD card
             ShowFileNumber();
             SendValue(mn,ModelNumber);
-
 }
+/******************************************************************************************************************************/
 void GotoMacrosView(){
             char pMacrosView[]  = "page MacrosView";
             PreviousMacroNumber = 200;        // i.e. no usable number
@@ -4612,7 +4611,6 @@ void GotoMacrosView(){
             Procrastinate(200);               // allow enough time for screen to display
             PopulateMacrosView();
 }
-
 // ******************************** Global Array of numbered function pointers - OK up to 128 functions ... **********************************
 #define LASTFUNCTION 13                     // one more than final one
 
