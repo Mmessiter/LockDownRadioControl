@@ -2313,7 +2313,7 @@ bool ReadOneModel(uint8_t Mnum)
 
     OneModelMemory = SDCardAddress - StartLocation;
 
-#ifdef DB_NEXTION
+#ifdef DB_SD
     Serial.print(MemoryForTransmtter);
     Serial.println(" bytes were  used for TX data.");
     Serial.print(TXSIZE);
@@ -2333,7 +2333,7 @@ bool ReadOneModel(uint8_t Mnum)
     Serial.println(" spare bytes per model.");
     Serial.print(MODELSIZE);
     Serial.println(" bytes reserved per model.)");
-#endif // defined DB_NEXTION
+#endif // defined DB_SD
     UpdateButtonLabels();
     CheckMacrosBuffer();
     return true;
@@ -3096,7 +3096,7 @@ void SaveOneModel(uint16_t mnum)
     // ********************** Add more 
 
     OneModelMemory = SDCardAddress - StartLocation;
-#ifdef DB_NEXTION
+#ifdef DB_SD
     Serial.print("Saved model: ");
     Serial.println(ModelName);
     Serial.println(" ");
@@ -3107,7 +3107,7 @@ void SaveOneModel(uint16_t mnum)
     Serial.print(MODELSIZE);
     Serial.println(" bytes reserved per model.)");
     Serial.println(" ");
-#endif // defined DB_NEXTION
+#endif // defined DB_SD
     CloseModelsFile();
 }
 
@@ -3407,7 +3407,7 @@ void SaveAllParameters()
     SaveTXStuff();
     MemoryForTransmtter = SDCardAddress - 2;
     SaveOneModel(ModelNumber);
-#ifdef DB_NEXTION
+#ifdef DB_SD
     Serial.println(" ");
     Serial.print(MemoryForTransmtter);
     Serial.println(" bytes written to SD CARD FOR TX.");
@@ -3420,7 +3420,7 @@ void SaveAllParameters()
     Serial.print(" (");
     Serial.print(ModelName);
     Serial.println(")");
-#endif // defined DB_NEXTION
+#endif // defined DB_SD
 }
 
 /*********************************************************************************************************************************/
@@ -4633,23 +4633,39 @@ void (*NumberedFunctions[LASTFUNCTION])() {
                 };
 
 /*********************************************************************************************************************************
- * BUTTON WAS PRESSED (DEAL WITH INPUT FROM NEXTION DISPLAY)
- */
-FASTRUN void ButtonWasPressed() // heer
-{
-union {uint8_t First4Bytes[4];uint32_t FirstDWord;} NextionCommand;
+ *                          BUTTON WAS PRESSED (DEAL WITH INPUT FROM NEXTION DISPLAY)                                            *
+ *********************************************************************************************************************************/
+FASTRUN void ButtonWasPressed() {
 
+if (strlen(TextIn) > 0) { //heer
+
+     StartInactvityTimeout();
+
+     union {uint8_t First4Bytes[4];uint32_t FirstDWord;} NextionCommand;
      NextionCommand.First4Bytes[0] = TextIn[0];
      NextionCommand.First4Bytes[1] = TextIn[1];
      NextionCommand.First4Bytes[2] = TextIn[2];
      NextionCommand.First4Bytes[3] = TextIn[3];
-    
-// This system currently only permits 127 numbered functions to be supported. 
-// But that's OK! Because only about 110 still need converting, after which the restriction can be removed and the max will then be a full 32 bit value.
+    uint32_t NumberedCommand = NextionCommand.FirstDWord - 128;
 
-  if (TextIn[0] >= 128 ){          // first byte not a char indicates USE a numbered command
-     uint32_t NumberedCommand = NextionCommand.FirstDWord - 128;
-     if (NumberedCommand < LASTFUNCTION) {
+    #ifdef DB_NEXTION
+    if (TextIn[0] < 128 ){
+            Serial.print("Command WORD: -> ");
+            Serial.println(TextIn);
+     } else {
+        Serial.print("Command NUMBER: -> ");
+        Look (NumberedCommand);
+     }
+    #endif
+
+
+    
+  if (TextIn[0] >= 128 ){                    // (First byte != printable char) indicates a numbered command...
+    
+     if (NumberedCommand < LASTFUNCTION) {   // ...so this system currently only permits 127 numbered functions to be supported. 
+                                             // But that's OK! Because only about 110 still need converting, after which 
+                                             // the restriction can be removed and the max will then be a full 32 bit value.
+
 // **********************************************************************************************************************************
         NumberedFunctions[NumberedCommand]();            // Call the needed function --  with a function pointer! :-)               *
 // **********************************************************************************************************************************
@@ -4886,12 +4902,6 @@ union {uint8_t First4Bytes[4];uint32_t FirstDWord;} NextionCommand;
          return;
      }
 
-    if (strlen(TextIn) > 0) {
-        StartInactvityTimeout();
- #ifdef DB_NEXTION
-        Serial.print("Command word: -> ");
-        Serial.println(TextIn);
- #endif
             // ************************* test input from Nextion *****************
 
  
@@ -6302,7 +6312,7 @@ union {uint8_t First4Bytes[4];uint32_t FirstDWord;} NextionCommand;
                 return;
             }
         }
-    }
+    } //heer
     ClearText(); // Let's have cleared text for next one!
 } // end ButtonWasPressed() (... at last!!!)
 
