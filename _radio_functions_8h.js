@@ -160,6 +160,7 @@ var _radio_functions_8h =
     [ "CheckTimer", "_radio_functions_8h.html#addfc131a271de92cb52d869fde35729e", null ],
     [ "CloseLogFile", "_radio_functions_8h.html#abc72fe68abd024cb263115e0afd3160a", null ],
     [ "Compress", "_radio_functions_8h.html#a1ddd5e8d5bd649dd98ce3710fbff651b", null ],
+    [ "DefineTrimsStart", "_radio_functions_8h.html#aa36a3594acf30c4314af50c16b9f3c58", null ],
     [ "DisplayCurve", "_radio_functions_8h.html#af941d3a33327b2cee79e058ba9cd65f6", null ],
     [ "DoScanEnd", "_radio_functions_8h.html#a31fb6a46af68482e107cddee58dfb677", null ],
     [ "DoScanInit", "_radio_functions_8h.html#a77c4a4ffa609df08830ccece07bf283b", null ],
