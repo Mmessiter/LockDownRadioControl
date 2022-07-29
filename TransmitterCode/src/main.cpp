@@ -231,6 +231,7 @@ char        ModelsFile[]                = "models.dat";
 uint8_t     SwitchNumber[8]             = {SWITCH0, SWITCH1, SWITCH2, SWITCH3, SWITCH4, SWITCH5, SWITCH6, SWITCH7};  // These can get swapped over later
 uint8_t     TrimNumberUsed[8]           = {TRIM1A, TRIM1B,  TRIM2A, TRIM2B,  TRIM3A, TRIM3B,   TRIM4A, TRIM4B};      // These are defaults only now
 uint8_t     TrimNumber[8];
+uint8_t     DefiningTrims               = 0;
 const int   chipSelect                  = BUILTIN_SDCARD;
 char        DateTime[]                  = "DateTime";
 char        ScreenViewTimeout[]         = "Sto";                  // needed for display info
@@ -297,7 +298,6 @@ bool      BoundFlag       = false;
 int       PipeTimeout     = 0;
 bool      Switch[8];
 bool      TrimSwitch[8];
-
 
 uint8_t FMSwitch   = FLIGHTMODESWITCH;
 uint8_t AutoSwitch = AUTOSWITCH;
@@ -1312,10 +1312,9 @@ FASTRUN void CheckTimer()
 
 FASTRUN void ShowServoPos()
 {
-    if ((Connected) || (CurrentView == GRAPHVIEW))  { // (this is needed! :-)
-        if (millis() - ShowServoTimer <= 60) return;    
-        ShowServoTimer = millis();
-    }
+    if (millis() - ShowServoTimer <= 100) return;    
+    ShowServoTimer = millis();
+
     char Ch_Lables[16][5]    =  {"Ch1","Ch2","Ch3","Ch4","Ch5","Ch6","Ch7","Ch8","Ch9","Ch10","Ch11","Ch12","Ch13","Ch14","Ch15","Ch16"};
     char ChannelInput[]      =  "Input";
     char ChannelOutput[]     =  "Output"; 
@@ -4711,7 +4710,7 @@ void StartSubTrimView() {                // Subtrim view start
             SendValue(h0,SubTrims[SubTrimToEdit]);
 }
 /******************************************************************************************************************************/
-  void EndSubTrimView() {                       // Subtrim view exit
+  void EndSubTrimView() {                   // Subtrim view exit
            char page_SetupView[]            = "page SetupView";
             SaveOneModel(ModelNumber);
             CurrentView = MAINSETUPVIEW;
@@ -4725,13 +4724,34 @@ void StartTrimDefView(){
             SendCommand(pTrimDefView);
 }
 /******************************************************************************************************************************/
-void DefineTrims(){
+void  DefineTrimsEnd(){
+            char page_SetupView[]            = "page SetupView";
+            CurrentView = MAINSETUPVIEW;
+            SendCommand(page_SetupView);
+            DefiningTrims = 0 ;
+    }
+/******************************************************************************************************************************/
+void DefineTrimsStart(){ // heer
+    char t11[]                              = "t11";
+    char b0[]                               = "b0";
+    char Lefta[]                            = "Press the right aileron trim...";
+    char LeftaButton[]                      = "(Right aileron?)";
+    
+    ++DefiningTrims; 
+    if (DefiningTrims >4) {
+        DefiningTrims = 0 ;
+        DefineTrimsEnd();
+        return;
+    }
 
-
-
+    SendText(t11,Lefta);
+    SendText(b0,LeftaButton);
+   
 }
+
+
 // ******************************** Global Array of numbered function pointers - OK up to 128 functions ... **********************************
-#define LASTFUNCTION 24                     // one more than final one
+#define LASTFUNCTION 25                     // one more than final one
 
 void (*NumberedFunctions[LASTFUNCTION])() {
                 Blank,                      // 0 (not used, yet.)
@@ -4757,14 +4777,14 @@ void (*NumberedFunctions[LASTFUNCTION])() {
                 StartSubTrimView,           // 20
                 EndSubTrimView,             // 21 
                 StartTrimDefView,           // 22 
-                DefineTrims                 // 23 
+                DefineTrimsStart,           // 23 
+                DefineTrimsEnd              // 24 
                 };
 
 /*********************************************************************************************************************************
  *                          BUTTON WAS PRESSED (DEAL WITH INPUT FROM NEXTION DISPLAY)                                            *
  *********************************************************************************************************************************/
 FASTRUN void ButtonWasPressed() {
- //heer
 if (strlen(TextIn) > 0) { 
      StartInactvityTimeout();
      union {uint8_t First4Bytes[4];uint32_t FirstDWord;} NextionCommand;
@@ -6577,6 +6597,37 @@ void  MoveaTrim(uint8_t i){
         }
 } 
 
+
+void SetATrimDefinition(int i){
+        
+
+      // uint8_t     TrimNumberUsed[8]           = {TRIM1A,TRIM1B,  TRIM2A,TRIM2B,  TRIM3A,TRIM3B,   TRIM4A,TRIM4B};  
+    
+   
+    if (DefiningTrims == 1) {               // Aileron
+                                   // heer  
+         Look(i) ;
+         
+         if (i == 0){
+            TrimNumber[0]   = TRIM1A;
+            TrimNumber[1]   = TRIM1B;
+         }
+         if (i == 1){
+            TrimNumber[1]   = TRIM1A;
+            TrimNumber[0]   = TRIM1B;
+         }
+
+
+
+
+
+         delay (500);
+    }
+       
+
+}
+
+
 /************************************************************************************************************/
 void CheckHardwareTrims(){  
     int i;
@@ -6584,7 +6635,10 @@ void CheckHardwareTrims(){
     TrimTimer = millis();
     for (i = 0; i < 8; ++i) {
         if (TrimSwitch[i]) {
-          //  Look(i); // heer
+            if (DefiningTrims){
+                    SetATrimDefinition(i);
+                    return;
+             } 
             MoveaTrim(i);
             TrimRepeatSpeed -= (TrimRepeatSpeed/6);           //  accelerate repeat...
             if (TrimRepeatSpeed < 40) TrimRepeatSpeed = 40;   //  ... up to a point... 

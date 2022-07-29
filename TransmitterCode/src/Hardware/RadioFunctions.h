@@ -412,6 +412,7 @@ void ExecuteMacro();
 void Look(uint32_t p);
 void ShowFlightMode();
 void UpdateModelsNameEveryWhere();
+void DefineTrimsStart();
 /*********************************************************************************************************************************/
 
 #endif
