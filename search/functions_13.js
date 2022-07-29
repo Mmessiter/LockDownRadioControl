@@ -6,7 +6,6 @@ var searchData=
   ['updateoneswitchview_3',['updateOneSwitchView',['../_transmitter_code_2src_2main_8cpp.html#a14dcac76ed8a048041fdc6e6f5d5d000',1,'main.cpp']]],
   ['updateswitchesdisplay_4',['UpdateSwitchesDisplay',['../_transmitter_code_2src_2main_8cpp.html#a789078ba3c1d92997ab8764eb20cce4f',1,'main.cpp']]],
   ['updatetrimview_5',['UpdateTrimView',['../_transmitter_code_2src_2main_8cpp.html#ac78966debc2cdc13d8ca958ce3b20c78',1,'main.cpp']]],
-  ['updatetrimviewpart_6',['UpdateTrimViewPart',['../_transmitter_code_2src_2main_8cpp.html#a3cd4694d58bd7a9f56e973d20270722f',1,'main.cpp']]],
-  ['uplog_7',['UpLog',['../_transmitter_code_2src_2main_8cpp.html#a2206c19b4fc075f4c9f1bb957ca89e1d',1,'main.cpp']]],
-  ['usereceiveddata_8',['UseReceivedData',['../_receiver_code_2src_2main_8cpp.html#abb1997c589abc6432f612eaedf985e38',1,'main.cpp']]]
+  ['uplog_6',['UpLog',['../_transmitter_code_2src_2main_8cpp.html#a2206c19b4fc075f4c9f1bb957ca89e1d',1,'main.cpp']]],
+  ['usereceiveddata_7',['UseReceivedData',['../_receiver_code_2src_2main_8cpp.html#abb1997c589abc6432f612eaedf985e38',1,'main.cpp']]]
 ];

@@ -222,7 +222,6 @@ var _transmitter_code_2src_2main_8cpp =
     [ "updateOneSwitchView", "_transmitter_code_2src_2main_8cpp.html#a14dcac76ed8a048041fdc6e6f5d5d000", null ],
     [ "UpdateSwitchesDisplay", "_transmitter_code_2src_2main_8cpp.html#a789078ba3c1d92997ab8764eb20cce4f", null ],
     [ "UpdateTrimView", "_transmitter_code_2src_2main_8cpp.html#ac78966debc2cdc13d8ca958ce3b20c78", null ],
-    [ "UpdateTrimViewPart", "_transmitter_code_2src_2main_8cpp.html#a3cd4694d58bd7a9f56e973d20270722f", null ],
     [ "UpLog", "_transmitter_code_2src_2main_8cpp.html#a2206c19b4fc075f4c9f1bb957ca89e1d", null ],
     [ "WatchDogCallBack", "_transmitter_code_2src_2main_8cpp.html#ae410be09c6f449451d8f2327fd895c7d", null ],
     [ "WordWrap", "_transmitter_code_2src_2main_8cpp.html#a6d6ab5dcee82c319640e3a0a0537ebf7", null ],
