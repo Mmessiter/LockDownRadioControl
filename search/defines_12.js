@@ -13,9 +13,10 @@ var searchData=
   ['trim4a_10',['TRIM4A',['../_radio_functions_8h.html#ac7a1d7bfd3ca33948785ed02fe21c6c3',1,'RadioFunctions.h']]],
   ['trim4b_11',['TRIM4B',['../_radio_functions_8h.html#abbdd53a2e2032d39c94e2058992f227a',1,'RadioFunctions.h']]],
   ['trim_5fview_12',['TRIM_VIEW',['../_radio_functions_8h.html#ac618bf3825a805ae53150dd664baa778',1,'RadioFunctions.h']]],
-  ['twominutes_13',['TWOMINUTES',['../_radio_functions_8h.html#adc071342f0d02db71ceac915c16d7f85',1,'RadioFunctions.h']]],
-  ['txsize_14',['TXSIZE',['../_radio_functions_8h.html#a4b19180ba242a70607d90a3d37985df2',1,'RadioFunctions.h']]],
-  ['txversion_5fmajor_15',['TXVERSION_MAJOR',['../_radio_functions_8h.html#aebd7ef5764d81d53646b187e0e337bd3',1,'RadioFunctions.h']]],
-  ['txversion_5fminimus_16',['TXVERSION_MINIMUS',['../_radio_functions_8h.html#a7b2773d8aa3a50ce71dfeb1568f8da26',1,'RadioFunctions.h']]],
-  ['txversion_5fminor_17',['TXVERSION_MINOR',['../_radio_functions_8h.html#a892ac703d752012a921e12fc7d632bf2',1,'RadioFunctions.h']]]
+  ['trimdefview_13',['TRIMDEFVIEW',['../_radio_functions_8h.html#a9d1ed55f9bcd66d3b1137bca25978f0f',1,'RadioFunctions.h']]],
+  ['twominutes_14',['TWOMINUTES',['../_radio_functions_8h.html#adc071342f0d02db71ceac915c16d7f85',1,'RadioFunctions.h']]],
+  ['txsize_15',['TXSIZE',['../_radio_functions_8h.html#a4b19180ba242a70607d90a3d37985df2',1,'RadioFunctions.h']]],
+  ['txversion_5fmajor_16',['TXVERSION_MAJOR',['../_radio_functions_8h.html#aebd7ef5764d81d53646b187e0e337bd3',1,'RadioFunctions.h']]],
+  ['txversion_5fminimus_17',['TXVERSION_MINIMUS',['../_radio_functions_8h.html#a7b2773d8aa3a50ce71dfeb1568f8da26',1,'RadioFunctions.h']]],
+  ['txversion_5fminor_18',['TXVERSION_MINOR',['../_radio_functions_8h.html#a892ac703d752012a921e12fc7d632bf2',1,'RadioFunctions.h']]]
 ];

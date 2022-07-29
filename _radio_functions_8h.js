@@ -141,6 +141,7 @@ var _radio_functions_8h =
     [ "TRIM4A", "_radio_functions_8h.html#ac7a1d7bfd3ca33948785ed02fe21c6c3", null ],
     [ "TRIM4B", "_radio_functions_8h.html#abbdd53a2e2032d39c94e2058992f227a", null ],
     [ "TRIM_VIEW", "_radio_functions_8h.html#ac618bf3825a805ae53150dd664baa778", null ],
+    [ "TRIMDEFVIEW", "_radio_functions_8h.html#a9d1ed55f9bcd66d3b1137bca25978f0f", null ],
     [ "TWOMINUTES", "_radio_functions_8h.html#adc071342f0d02db71ceac915c16d7f85", null ],
     [ "TXSIZE", "_radio_functions_8h.html#a4b19180ba242a70607d90a3d37985df2", null ],
     [ "TXVERSION_MAJOR", "_radio_functions_8h.html#aebd7ef5764d81d53646b187e0e337bd3", null ],
