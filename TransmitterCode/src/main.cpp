@@ -1936,15 +1936,28 @@ void UpdateTrimView()
 {
     char Mode1[]        = "Mode1";
     char Mode2[]        = "Mode2";
-    char TrimViewChannels[4][4]  = {"ch1","ch2","ch3","ch4"};
-    char TrimViewNumbers[4][3]   = {"n1","n2","n3","n4"};
-    char TrimViewReversed[4][3]  = {"r1","r2","r3","r4"};
+    uint8_t p;
+  
+  
+    char TrimViewChannels[4][4]  = {"ch1","ch4","ch2","ch3"};
+    char TrimViewNumbers[4][3]   = {"n1","n4","n2","n3"};
+    char TrimViewReversed[4][3]  = {"r1","r4","r2","r3"};
+
 
     if (CurrentView == FRONTVIEW || (CurrentView == TRIM_VIEW))  {
         for (int i = 0; i < 4; ++i){
-            SendValue(TrimViewChannels[i], (Trims[FlightMode][i]));
-            SendValue(TrimViewNumbers[i],  (Trims[FlightMode][i]- 80));
-            if (CurrentView == TRIM_VIEW) SendValue(TrimViewReversed[i], (TrimsReversed[FlightMode][i]));        
+           p = i;
+          // if (i == 2){  
+            if (SticksMode == 2){
+                if (i == 1) p = 2;
+                if (i == 2) p = 1; 
+            }
+            SendValue(TrimViewChannels[p], (Trims[FlightMode][p]));
+            SendValue(TrimViewNumbers[p],  (Trims[FlightMode][p]- 80));
+            if (CurrentView == TRIM_VIEW) SendValue(TrimViewReversed[i], (TrimsReversed[FlightMode][p])); 
+          // }
+       
+
         }
     }
     if (CurrentView == TRIM_VIEW)  {   
@@ -6520,7 +6533,7 @@ void IncTrim(uint8_t t){
                 Sounded = true;
             }
         }
-        if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimViewPart(t);
+        if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimView(); // heer (part)UpdateTrimViewPart(t); 
         if ((TrimClicks) && (!Sounded)) PlaySound(CLICKZERO);
 }
 // *************************************************************************************************************
@@ -6544,7 +6557,7 @@ void DecTrim(uint8_t t){
                 Sounded = true;
             }
          }
-        if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimViewPart(t);
+        if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimView(); // heer part
         if ((TrimClicks) && (!Sounded)) PlaySound(CLICKZERO);
 }
 
@@ -6603,28 +6616,25 @@ void SetATrimDefinition(int i){
 
       // uint8_t     TrimNumberUsed[8]           = {TRIM1A,TRIM1B,  TRIM2A,TRIM2B,  TRIM3A,TRIM3B,   TRIM4A,TRIM4B};  
     
-   
-    if (DefiningTrims == 1) {               // Aileron
-                                   // heer  
-         Look(i) ;
-         
-         if (i == 0){
-            TrimNumber[0]   = TRIM1A;
-            TrimNumber[1]   = TRIM1B;
-         }
-         if (i == 1){
-            TrimNumber[1]   = TRIM1A;
-            TrimNumber[0]   = TRIM1B;
-         }
-
-
-
-
-
-         delay (500);
+   Look(i) ;
+    if (DefiningTrims == 1) {               // Aileron // heer                         
+         if (i == 0){ TrimNumber[0]   = TRIM1A;TrimNumber[1]   = TRIM1B;}
+         if (i == 1){ TrimNumber[1]   = TRIM1A;TrimNumber[0]   = TRIM1B;}
     }
-       
-
+    if (DefiningTrims == 3) {               // Elevator                          
+         if (i == 2){ TrimNumber[2]   = TRIM2A;TrimNumber[3]   = TRIM2B;}
+         if (i == 3){ TrimNumber[3]   = TRIM2A;TrimNumber[2]   = TRIM2B;}
+    }
+     if (DefiningTrims == 5) {               // Throttle                          
+         if (i == 4){ TrimNumber[4]   = TRIM3A;TrimNumber[5]   = TRIM3B;}
+         if (i == 5){ TrimNumber[5]   = TRIM3A;TrimNumber[4]   = TRIM3B;}
+    }
+     if (DefiningTrims == 7) {               // Rudder                          
+         if (i == 6){ TrimNumber[6]   = TRIM4A;TrimNumber[7]   = TRIM4B;}
+         if (i == 7){ TrimNumber[7]   = TRIM4A;TrimNumber[6]   = TRIM4B;}
+    }
+           delay (500);
+        
 }
 
 
