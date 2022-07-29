@@ -1937,38 +1937,26 @@ void UpdateTrimView()
     char Mode1[]        = "Mode1";
     char Mode2[]        = "Mode2";
     uint8_t p;
-  
-  
     char TrimViewChannels[4][4]  = {"ch1","ch4","ch2","ch3"};
     char TrimViewNumbers[4][3]   = {"n1","n4","n2","n3"};
     char TrimViewReversed[4][3]  = {"r1","r4","r2","r3"};
-
-
     if (CurrentView == FRONTVIEW || (CurrentView == TRIM_VIEW))  {
-        for (int i = 0; i < 4; ++i){
-           p = i;
-          // if (i == 2){  
-            if (SticksMode == 2){
-                if (i == 1) p = 2;
-                if (i == 2) p = 1; 
-            }
+        for (int i = 0; i < 4; ++i){ p = i;
+            if (SticksMode == 2){if (i == 1) p = 2;if (i == 2) p = 1;}
             SendValue(TrimViewChannels[p], (Trims[FlightMode][p]));
             SendValue(TrimViewNumbers[p],  (Trims[FlightMode][p]- 80));
-            if (CurrentView == TRIM_VIEW) SendValue(TrimViewReversed[i], (TrimsReversed[FlightMode][p])); 
-          // }
-       
-
+            SendValue(TrimViewReversed[i], (TrimsReversed[FlightMode][p])); 
         }
     }
-    if (CurrentView == TRIM_VIEW)  {   
-        if (SticksMode == 2) {
-                SendValue(Mode2,1);
-                SendValue(Mode1,0);}
-            else {
-                SendValue(Mode1,1);
-                SendValue(Mode2,0);
-                }
+     if (CurrentView == TRIM_VIEW) {
+    if (SticksMode == 2) {
+        SendValue(Mode2,1);
+        SendValue(Mode1,0);}
+    else {
+        SendValue(Mode1,1);
+        SendValue(Mode2,0);
         }
+    }
 }
 /*********************************************************************************************************************************/
 
@@ -6498,17 +6486,6 @@ void GetFlightMode()
         if (CurrentView == GRAPHVIEW) DisplayCurveAndServoPos();
     }
     PreviousFlightMode = FlightMode;
-}
-
-/*********************************************************************************************************************************/
- // This updates only the trim that was editied - for extra speed.
-
-void UpdateTrimViewPart(uint8_t ch)
-{
-    char TrimViewCh[4][4] = {"ch1","ch2","ch3","ch4"};
-    char TrimViewN[4][3]  = {"n1","n2","n3","n4"};
-    SendValue(TrimViewCh[ch], (Trims[FlightMode][ch]));
-    SendValue(TrimViewN[ch], (Trims[FlightMode][ch] - 80));
 }
 
 // *************************************************************************************************************
