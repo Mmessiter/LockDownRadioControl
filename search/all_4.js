@@ -31,7 +31,7 @@ var searchData=
   ['defaulttrimrepeatspeed_28',['DefaultTrimRepeatSpeed',['../_transmitter_code_2src_2main_8cpp.html#ae6d47d8ad12367e1eb9c48442cfdcf99',1,'main.cpp']]],
   ['definetrimsend_29',['DefineTrimsEnd',['../_transmitter_code_2src_2main_8cpp.html#a175b6111f05e020becf6f4fc8c3e474d',1,'main.cpp']]],
   ['definetrimsstart_30',['DefineTrimsStart',['../_radio_functions_8h.html#aa36a3594acf30c4314af50c16b9f3c58',1,'DefineTrimsStart():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#aa36a3594acf30c4314af50c16b9f3c58',1,'DefineTrimsStart():&#160;main.cpp']]],
-  ['definingtrims_31',['DefiningTrims',['../_transmitter_code_2src_2main_8cpp.html#a76a879f2ad5977a132618ec49c1475a2',1,'main.cpp']]],
+  ['definingtrims_31',['DefiningTrims',['../_transmitter_code_2src_2main_8cpp.html#a53d8c3d55ec5cdfd424929c62efe1677',1,'main.cpp']]],
   ['deg_32',['deg',['../struct_raw_degrees.html#a11831d9220f303bd716d9412af28e84e',1,'RawDegrees::deg()'],['../struct_tiny_g_p_s_course.html#a76dc8ae6c2fe5ead9b44c8d53a3272ca',1,'TinyGPSCourse::deg()']]],
   ['degstopercent_33',['DegsToPercent',['../_transmitter_code_2src_2main_8cpp.html#a68b36025c7478c0710565b4fb059d9bc',1,'main.cpp']]],
   ['deletelogfile_34',['DeleteLogFile',['../_transmitter_code_2src_2main_8cpp.html#a6425b8279e521002220e7d104e97b265',1,'main.cpp']]],
