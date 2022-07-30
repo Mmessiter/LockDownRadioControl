@@ -151,6 +151,7 @@
 #define REVERSEVIEW     21
 #define BUDDYVIEW       22
 #define LOGVIEW         23
+#define TRIMDEFVIEW     24
 
 // **************************************************************************
 //                          Switches' GPIOs                                 *
@@ -273,7 +274,7 @@
 
 #define NEXTION Serial1       // NEXTION is connected to Serial1
 #define SHOWCOMMSDELAY 2000   // ms pauses between updated info on NEXTION
-#define WARMUPDELAY    200    // fails at 200 so must be >200 ...
+#define WARMUPDELAY    250    // fails at 200 so must be >200 ...
 
 // **************************************************************************
 //                            WATCHDOG PARAMETERS                           *
@@ -411,6 +412,9 @@ void ExecuteMacro();
 void Look(uint32_t p);
 void ShowFlightMode();
 void UpdateModelsNameEveryWhere();
+void DefineTrimsStart();
+void ResetAllTrims();
+void CheckTrimValues();
 /*********************************************************************************************************************************/
 
 #endif

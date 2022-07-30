@@ -228,8 +228,10 @@ char        FrontView_Mins[]            = "Mins";
 char        FrontView_Secs[]            = "Secs";
 char        StartBackGround[]           = "click Background,0";
 char        ModelsFile[]                = "models.dat";
-uint8_t     SwitchNumber[8]             = {SWITCH0, SWITCH1, SWITCH2, SWITCH3, SWITCH4, SWITCH5, SWITCH6, SWITCH7};
-uint8_t     TrimNumber[8]               = {TRIM1A, TRIM1B, TRIM2A, TRIM2B, TRIM3A, TRIM3B, TRIM4A, TRIM4B};
+uint8_t     SwitchNumber[8]             = {SWITCH0, SWITCH1, SWITCH2, SWITCH3, SWITCH4, SWITCH5, SWITCH6, SWITCH7};  // These can get swapped over later
+uint8_t     TrimNumber[8]               = {TRIM1A, TRIM1B,  TRIM2A, TRIM2B,  TRIM3A, TRIM3B,   TRIM4A, TRIM4B};      // These too can get swapped over later
+bool        DefiningTrims               = false;
+bool        TrimDefined[4]              = {true,true,true,true};
 const int   chipSelect                  = BUILTIN_SDCARD;
 char        DateTime[]                  = "DateTime";
 char        ScreenViewTimeout[]         = "Sto";                  // needed for display info
@@ -296,7 +298,6 @@ bool      BoundFlag       = false;
 int       PipeTimeout     = 0;
 bool      Switch[8];
 bool      TrimSwitch[8];
-
 
 uint8_t FMSwitch   = FLIGHTMODESWITCH;
 uint8_t AutoSwitch = AUTOSWITCH;
@@ -1311,10 +1312,9 @@ FASTRUN void CheckTimer()
 
 FASTRUN void ShowServoPos()
 {
-    if ((Connected) || (CurrentView == GRAPHVIEW))  { // (this is needed! :-)
-        if (millis() - ShowServoTimer <= 60) return;    
-        ShowServoTimer = millis();
-    }
+    if (millis() - ShowServoTimer <= 100) return;    
+    ShowServoTimer = millis();
+
     char Ch_Lables[16][5]    =  {"Ch1","Ch2","Ch3","Ch4","Ch5","Ch6","Ch7","Ch8","Ch9","Ch10","Ch11","Ch12","Ch13","Ch14","Ch15","Ch16"};
     char ChannelInput[]      =  "Input";
     char ChannelOutput[]     =  "Output"; 
@@ -1936,26 +1936,27 @@ void UpdateTrimView()
 {
     char Mode1[]        = "Mode1";
     char Mode2[]        = "Mode2";
-    char TrimViewChannels[4][4]  = {"ch1","ch2","ch3","ch4"};
-    char TrimViewNumbers[4][3]   = {"n1","n2","n3","n4"};
-    char TrimViewReversed[4][3]  = {"r1","r2","r3","r4"};
-
+    uint8_t p;
+    char TrimViewChannels[4][4]  = {"ch1","ch4","ch2","ch3"};
+    char TrimViewNumbers[4][3]   = {"n1","n4","n2","n3"};
+    char TrimViewReversed[4][3]  = {"r1","r4","r2","r3"};
     if (CurrentView == FRONTVIEW || (CurrentView == TRIM_VIEW))  {
-        for (int i = 0; i < 4; ++i){
-            SendValue(TrimViewChannels[i], (Trims[FlightMode][i]));
-            SendValue(TrimViewNumbers[i],  (Trims[FlightMode][i]- 80));
-            if (CurrentView == TRIM_VIEW) SendValue(TrimViewReversed[i], (TrimsReversed[FlightMode][i]));        
+        for (int i = 0; i < 4; ++i){ p = i;
+            if (SticksMode == 2){if (i == 1) p = 2;if (i == 2) p = 1;}
+            SendValue(TrimViewChannels[p], (Trims[FlightMode][p]));
+            SendValue(TrimViewNumbers[p],  (Trims[FlightMode][p]- 80));
+            SendValue(TrimViewReversed[i], (TrimsReversed[FlightMode][p])); 
         }
     }
-    if (CurrentView == TRIM_VIEW)  {   
-        if (SticksMode == 2) {
-                SendValue(Mode2,1);
-                SendValue(Mode1,0);}
-            else {
-                SendValue(Mode1,1);
-                SendValue(Mode2,0);
-                }
+    if (CurrentView == TRIM_VIEW) {
+    if (SticksMode == 2) {
+        SendValue(Mode2,1);
+        SendValue(Mode1,0);}
+    else {
+        SendValue(Mode1,1);
+        SendValue(Mode2,0);
         }
+    }
 }
 /*********************************************************************************************************************************/
 
@@ -2062,7 +2063,7 @@ void UpdateModelsNameEveryWhere()
             }
             if (CurrentView == STICKSVIEW) SendText(SticksView_t1, fms[FlightMode-1]);
             if (CurrentView == GRAPHVIEW)  SendText(GraphView_fmode, fms[FlightMode-1]);
-            if (CurrentView == TRIM_VIEW) {SendText(TrimView_FlightMode, fms[FlightMode-1]); UpdateTrimView();}
+            if (CurrentView == TRIM_VIEW)  {SendText(TrimView_FlightMode, fms[FlightMode-1]); UpdateTrimView();}
             if (CurrentView == FRONTVIEW)  {UpdateTrimView();}
           
 } 
@@ -2433,7 +2434,11 @@ bool LoadAllParameters()
         ++SDCardAddress;
         AnnounceConnected = SDReadByte(SDCardAddress);
          ++SDCardAddress;
-        
+        for (j = 0; j < 8; ++j) { 
+             TrimNumber[j]= SDReadByte(SDCardAddress);
+            ++SDCardAddress;
+        }
+        CheckTrimValues();
         MemoryForTransmtter = SDCardAddress;
         ReadOneModel(ModelNumber); // this
         return true;
@@ -2442,14 +2447,19 @@ bool LoadAllParameters()
         return false;
     }
 }
-
 /*********************************************************************************************************************************/
-
+void  CheckTrimValues(){
+    bool KO =  false;
+    for (int j = 0; j < 8; ++j) { 
+           if ((TrimNumber[j] > TRIM4B) || (TrimNumber[j] < TRIM1A)) KO = true; 
+    }  
+    if (KO) ResetAllTrims();
+}
+/*********************************************************************************************************************************/
 void Force_ReDisplay()
 {
     for (int i = 0; i < CHANNELSUSED; ++i) ShownBuffer[i] = 242; // to force a re-show of servo positions
 }
-
 /*********************************************************************************************************************************/
 
 void ButtonRed(char* but)
@@ -2838,6 +2848,7 @@ FLASHMEM void setup()
             LogPowerOn();
             LogThisModel();
     }
+    UpdateModelsNameEveryWhere();
 }
 /*********************************************************************************************************************************/
 
@@ -2851,9 +2862,8 @@ void GetStatistics()
 /** @returns position of text1 within text2 or 0 if not found */
 int InStrng(char * text1, char * text2)
 {
-    bool flag;
     for (uint16_t j = 0; j < strlen(text2); ++j) {
-        flag = false;
+        bool flag = false;
         for (uint16_t i = 0; i < strlen(text1); ++i) {
             if (text1[i] != text2[i + j]) {
                 flag = true; break;
@@ -2866,7 +2876,7 @@ int InStrng(char * text1, char * text2)
 
 /*********************************************************************************************************************************/
 
-void SaveTXStuff()
+void SaveTransmitterParameters()
 {
     int  rd  = 0;
     bool EON = false;
@@ -2955,6 +2965,10 @@ void SaveTXStuff()
     ++SDCardAddress;
     SDUpdateByte(SDCardAddress,AnnounceConnected); 
     ++SDCardAddress;
+    for (j = 0; j < 8; ++j) { 
+        SDUpdateByte(SDCardAddress, TrimNumber[j]);
+        ++SDCardAddress;
+    }
     CloseModelsFile();
 }
 
@@ -3400,10 +3414,8 @@ void ShowFileErrorMsg()
 
 void SaveAllParameters()
 {
-
-
     if (!ModelsFileOpen) OpenModelsFile();
-    SaveTXStuff();
+    SaveTransmitterParameters();
     MemoryForTransmtter = SDCardAddress - 2;
     SaveOneModel(ModelNumber);
 #ifdef DB_SD
@@ -4633,7 +4645,7 @@ void DownLog(){
         }
     }   
 /******************************************************************************************************************************/
-void RefrLOG(){   // refresh log screen
+void RefreshLog(){   // refresh log screen
         if (UseLog){
             RecentStartLine = 0;
             ShowLogFile(RecentStartLine); 
@@ -4652,7 +4664,7 @@ void RefrLOG(){   // refresh log screen
             MinimumGap = GetValue(n0);
             LogRXSwaps = GetValue(c0);
             UseLog     = GetValue(sw0);
-            SaveTXStuff();
+            SaveTransmitterParameters();
             SendCommand(pDataView);
     } 
 /******************************************************************************************************************************/
@@ -4692,7 +4704,7 @@ void SetupViewFM() {                // (Exit from models screen) New model name 
             ModelNameTimeCheck = 0;
         }
 /******************************************************************************************************************************/
-void StartSubTrimView() {                // Subtrim view start heer
+void StartSubTrimView() {                // Subtrim view start
             char pSubTrimView[]             = "page SubTrimView";
             char t2[]                       = "t2";
             char n0[]                       = "n0";
@@ -4705,18 +4717,45 @@ void StartSubTrimView() {                // Subtrim view start heer
             SendValue(h0,SubTrims[SubTrimToEdit]);
 }
 /******************************************************************************************************************************/
-  void EndSubTrimView() {                       // Subtrim view exit
-           char page_SetupView[]          = "page SetupView";
+  void EndSubTrimView() {                   // Subtrim view exit
+           char page_SetupView[]            = "page SetupView";
             SaveOneModel(ModelNumber);
             CurrentView = MAINSETUPVIEW;
             SendCommand(page_SetupView);
             ModelNameTimeCheck = 0;
         }
+/******************************************************************************************************************************/
+void StartTrimDefView(){
+    char pTrimDefView[]             = "page TrimDefView";
+    CurrentView = TRIMDEFVIEW;      
+    SendCommand(pTrimDefView);
+    ResetAllTrims();
+    for (int i = 0; i < 4; ++i) TrimDefined[i] = false; 
+    DefiningTrims = true; 
+}
+/******************************************************************************************************************************/
+void  DefineTrimsEnd(){             // exit from trim defining screen
+    char page_SetupView[]            = "page SetupView";
+    CurrentView = MAINSETUPVIEW;
+    SendCommand(page_SetupView);
+    DefiningTrims = false ;
+    SaveTransmitterParameters();
+}
+/******************************************************************************************************************************/
+void ResetAllTrims(){
+uint8_t  T[8] = {TRIM1A, TRIM1B,  TRIM2A, TRIM2B,  TRIM3A, TRIM3B,  TRIM4A, TRIM4B};   
+    for (int i = 0; i < 8; ++i) {TrimNumber[i] = T[i];}
+}
+/******************************************************************************************************************************/
+void DefineTrimsStart(){ // redundant
+  
+}
+
 // ******************************** Global Array of numbered function pointers - OK up to 128 functions ... **********************************
-#define LASTFUNCTION 22                     // one more than final one
+#define LASTFUNCTION 25                     // one more than final one
 
 void (*NumberedFunctions[LASTFUNCTION])() {
-                Blank,                      // 0 (not used, yet.)
+                Blank,                      // 0 (spare)
                 DecFileInView,              // 1
                 IncFileInView,              // 2 
                 DoModelNameTimeCheck,       // 3
@@ -4731,20 +4770,22 @@ void (*NumberedFunctions[LASTFUNCTION])() {
                 EndBuddyView,               // 12
                 UpLog,                      // 13
                 DownLog,                    // 14
-                RefrLOG,                    // 15
+                RefreshLog,                 // 15
                 LogEND,                     // 16
                 DelLOG,                     // 17
                 LogVIEW,                    // 18
                 SetupViewFM,                // 19
                 StartSubTrimView,           // 20
-                EndSubTrimView              // 21 ... to be continued ...
+                EndSubTrimView,             // 21 
+                StartTrimDefView,           // 22 
+                DefineTrimsStart,           // 23 // spare 
+                DefineTrimsEnd              // 24 
                 };
 
 /*********************************************************************************************************************************
  *                          BUTTON WAS PRESSED (DEAL WITH INPUT FROM NEXTION DISPLAY)                                            *
  *********************************************************************************************************************************/
 FASTRUN void ButtonWasPressed() {
-
 if (strlen(TextIn) > 0) { 
      StartInactvityTimeout();
      union {uint8_t First4Bytes[4];uint32_t FirstDWord;} NextionCommand;
@@ -5055,7 +5096,7 @@ if (strlen(TextIn) > 0) {
             SetAudioVolume(AudioVolume);
             SendCommand(page_SetupView);
             ModelNameTimeCheck = 0;
-            SaveTXStuff();
+            SaveTransmitterParameters();
             b5isGrey = false;
             ClearText();
             return;
@@ -5818,7 +5859,7 @@ if (strlen(TextIn) > 0) {
             SendValue(FrontView_ForeGround,ForeGroundColour);
             SendValue(FrontView_Special,SpecialColour);
             SendValue(FrontView_Highlight,HighlightColour);
-            SaveTXStuff();
+            SaveTransmitterParameters();
             CurrentView = MAINSETUPVIEW;
             b5isGrey = false;
             SendCommand(page_SetupView);
@@ -6288,7 +6329,7 @@ if (strlen(TextIn) > 0) {
         if (CurrentMode == CENTRESTICKS) {
             if (strcmp(TextIn, "Calibrate1") == 0) {
                 CurrentMode = NORMAL;
-                SaveTXStuff();                     // Save calibrations
+                SaveTransmitterParameters();                     // Save calibrations
                 LoadAllParameters();               // Restore all current model settings
                 SendCommand(page_SetupView);
                 ModelNameTimeCheck = 0;
@@ -6298,7 +6339,7 @@ if (strlen(TextIn) > 0) {
         }
     } 
     ClearText(); // Let's have cleared text for next one!
-} // end ButtonWasPressed() (... at last!!!)
+} // end ButtonWasPressed() (... at last!!!) 
 
 /************************************************************************************************************/
 
@@ -6447,17 +6488,6 @@ void GetFlightMode()
     PreviousFlightMode = FlightMode;
 }
 
-/*********************************************************************************************************************************/
- // This updates only the trim that was editied - for extra speed.
-
-void UpdateTrimViewPart(uint8_t ch)
-{
-    char TrimViewCh[4][4] = {"ch1","ch2","ch3","ch4"};
-    char TrimViewN[4][3]  = {"n1","n2","n3","n4"};
-    SendValue(TrimViewCh[ch], (Trims[FlightMode][ch]));
-    SendValue(TrimViewN[ch], (Trims[FlightMode][ch] - 80));
-}
-
 // *************************************************************************************************************
 
 void IncTrim(uint8_t t){
@@ -6480,7 +6510,7 @@ void IncTrim(uint8_t t){
                 Sounded = true;
             }
         }
-        if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimViewPart(t);
+        if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimView(); 
         if ((TrimClicks) && (!Sounded)) PlaySound(CLICKZERO);
 }
 // *************************************************************************************************************
@@ -6504,9 +6534,10 @@ void DecTrim(uint8_t t){
                 Sounded = true;
             }
          }
-        if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimViewPart(t);
+        if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimView(); 
         if ((TrimClicks) && (!Sounded)) PlaySound(CLICKZERO);
 }
+
 // *************************************************************************************************************
 
 void  MoveaTrim(uint8_t i){
@@ -6556,6 +6587,48 @@ void  MoveaTrim(uint8_t i){
         }
 } 
 
+
+/************************************************************************************************************/
+void SetATrimDefinition(int i){
+
+
+
+    char AilDone[] = "Aileron trim is defined!";
+    char EleDone[] = "Elevator trim is defined!";
+    char ThrDone[] = "Throttle trim is defined!";
+    char RudDone[] = "Rudder trim is defined!";
+    char ail[] = "ail";
+    char ele[] = "ele";
+    char thr[] = "thr";
+    char rud[] = "rud";
+
+               // Aileron   
+         if (!TrimDefined[0]){                           
+            if ((i == 0) || (i == 1)) SendText(ail,AilDone);
+            if (i == 0){ TrimNumber[0]   = TRIM1A;TrimNumber[1]   = TRIM1B;TrimDefined[0] = true;}
+            if (i == 1){ TrimNumber[1]   = TRIM1A;TrimNumber[0]   = TRIM1B;TrimDefined[0] = true;}
+         }
+              // Elevator  
+        if (!TrimDefined[1]){              
+            if ((i == 2) || (i == 3)) SendText(ele,EleDone);        
+            if (i == 3){ TrimNumber[2]   = TRIM2A;TrimNumber[3]   = TRIM2B;TrimDefined[1] = true;}
+            if (i == 2){ TrimNumber[3]   = TRIM2A;TrimNumber[2]   = TRIM2B;TrimDefined[1] = true;}
+        }
+               // Throttle       
+        if (!TrimDefined[2]){           
+            if ((i == 4) || (i == 5)) SendText(thr,ThrDone);                      
+            if (i == 4){ TrimNumber[4]   = TRIM3A;TrimNumber[5]   = TRIM3B;TrimDefined[2] = true;}
+            if (i == 5){ TrimNumber[5]   = TRIM3A;TrimNumber[4]   = TRIM3B;TrimDefined[2] = true;}
+        }
+               // Rudder   
+        if (!TrimDefined[3]){    
+            if ((i == 6) || (i == 7)) SendText(rud,RudDone);                   
+            if (i == 6){ TrimNumber[6]   = TRIM4A;TrimNumber[7]   = TRIM4B;TrimDefined[3] = true;}
+            if (i == 7){ TrimNumber[7]   = TRIM4A;TrimNumber[6]   = TRIM4B;TrimDefined[3] = true;}
+        }
+       // Procrastinate(500);    
+}
+
 /************************************************************************************************************/
 void CheckHardwareTrims(){  
     int i;
@@ -6563,9 +6636,13 @@ void CheckHardwareTrims(){
     TrimTimer = millis();
     for (i = 0; i < 8; ++i) {
         if (TrimSwitch[i]) {
+            if (DefiningTrims){
+                    SetATrimDefinition(i);
+                    return;
+             } 
             MoveaTrim(i);
-            TrimRepeatSpeed -= (TrimRepeatSpeed/6);           // accelerate repeat...
-            if (TrimRepeatSpeed < 40) TrimRepeatSpeed = 40;   // ... up to a point... 
+            TrimRepeatSpeed -= (TrimRepeatSpeed/6);           //  accelerate repeat...
+            if (TrimRepeatSpeed < 40) TrimRepeatSpeed = 40;   //  ... up to a point... 
         }
     }
 }
