@@ -38,6 +38,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "CheckScreenTime", "_transmitter_code_2src_2main_8cpp.html#adce05a2e4f5763c3b90c7126234d2cc8", null ],
     [ "CheckSwitch", "_transmitter_code_2src_2main_8cpp.html#afcd616e96ae28694a7fa2197ad74c6fe", null ],
     [ "CheckTimer", "_transmitter_code_2src_2main_8cpp.html#a671f8420f68cbdd4f18e4726f93e14da", null ],
+    [ "CheckTrimValues", "_transmitter_code_2src_2main_8cpp.html#a1930cb00e0e68d2c871cec56cc458064", null ],
     [ "CheckTXVolts", "_transmitter_code_2src_2main_8cpp.html#a28ff2460f96b023cdb62a5c2b8f593f5", null ],
     [ "ClearBox", "_transmitter_code_2src_2main_8cpp.html#a5aeea47b9d855ae9911bae1115d02de7", null ],
     [ "ClearText", "_transmitter_code_2src_2main_8cpp.html#af0852678d8e89501acee8951f09d3b43", null ],

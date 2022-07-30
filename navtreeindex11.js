@@ -1,5 +1,7 @@
 var NAVTREEINDEX11 =
 {
+"class_s_b_u_s.html#aecb494398de660b416a5619316a4b7af":[9,0,20,9],
+"class_s_b_u_s.html#aee0b4b879b6415eac8d79879c24bf88d":[9,0,20,0],
 "class_tiny_g_p_s_custom.html":[9,0,27],
 "class_tiny_g_p_s_custom.html#a03bb66f8d3e078b21c8a5033a88d8a32":[9,0,27,6],
 "class_tiny_g_p_s_custom.html#a29b2a658bf95d8e6265e983b1c0251b5":[9,0,27,1],
@@ -240,14 +242,12 @@ var NAVTREEINDEX11 =
 "functions_y.html":[9,3,0,24],
 "functions_z.html":[9,3,0,25],
 "functions_~.html":[9,3,0,26],
-"globals.html":[10,1,0],
 "globals.html":[10,1,0,0],
+"globals.html":[10,1,0],
 "globals_a.html":[10,1,0,1],
 "globals_b.html":[10,1,0,2],
 "globals_c.html":[10,1,0,3],
 "globals_d.html":[10,1,0,4],
-"globals_defs.html":[10,1,6],
 "globals_defs.html":[10,1,6,0],
-"globals_defs_a.html":[10,1,6,1],
-"globals_defs_b.html":[10,1,6,2]
+"globals_defs.html":[10,1,6]
 };
