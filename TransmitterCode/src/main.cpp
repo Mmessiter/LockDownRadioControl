@@ -229,9 +229,9 @@ char        FrontView_Secs[]            = "Secs";
 char        StartBackGround[]           = "click Background,0";
 char        ModelsFile[]                = "models.dat";
 uint8_t     SwitchNumber[8]             = {SWITCH0, SWITCH1, SWITCH2, SWITCH3, SWITCH4, SWITCH5, SWITCH6, SWITCH7};  // These can get swapped over later
-uint8_t     TrimNumberUsed[8]           = {TRIM1A, TRIM1B,  TRIM2A, TRIM2B,  TRIM3A, TRIM3B,   TRIM4A, TRIM4B};      // These are defaults only now
-uint8_t     TrimNumber[8];
-uint8_t     DefiningTrims               = 0;
+uint8_t     TrimNumber[8]               = {TRIM1A, TRIM1B,  TRIM2A, TRIM2B,  TRIM3A, TRIM3B,   TRIM4A, TRIM4B};      // These too can get swapped over later
+bool        DefiningTrims               = false;
+bool        TrimDefined[4]              = {true,true,true,true};
 const int   chipSelect                  = BUILTIN_SDCARD;
 char        DateTime[]                  = "DateTime";
 char        ScreenViewTimeout[]         = "Sto";                  // needed for display info
@@ -2073,7 +2073,6 @@ void UpdateModelsNameEveryWhere()
 FLASHMEM void InitSwitchesAndTrims()
 {
     for (int i = 0; i < 8; ++i) {
-        TrimNumber[i]   =   TrimNumberUsed[i]; // Because might have been modeified
         pinMode(SwitchNumber[i], INPUT_PULLUP);
         pinMode(TrimNumber[i], INPUT_PULLUP);
     }
@@ -2436,7 +2435,7 @@ bool LoadAllParameters()
         AnnounceConnected = SDReadByte(SDCardAddress);
          ++SDCardAddress;
         for (j = 0; j < 8; ++j) { 
-            TrimNumberUsed[j]= SDReadByte(SDCardAddress);
+            TrimNumber[j]= SDReadByte(SDCardAddress);
             ++SDCardAddress;
         }
         MemoryForTransmtter = SDCardAddress;
@@ -2960,7 +2959,7 @@ void SaveTransmitterParameters()
     SDUpdateByte(SDCardAddress,AnnounceConnected); 
     ++SDCardAddress;
     for (j = 0; j < 8; ++j) { 
-        SDUpdateByte(SDCardAddress, TrimNumberUsed[j]);
+        SDUpdateByte(SDCardAddress, TrimNumber[j]);
         ++SDCardAddress;
     }
     CloseModelsFile();
@@ -4729,27 +4728,32 @@ void  DefineTrimsEnd(){
             char page_SetupView[]            = "page SetupView";
             CurrentView = MAINSETUPVIEW;
             SendCommand(page_SetupView);
-            DefiningTrims = 0 ;
+            DefiningTrims = false ;
+            SaveTransmitterParameters();
     }
+
+/******************************************************************************************************************************/
+
+void ResetAllTrims(){
+
+uint8_t     T[8]  = {TRIM1A, TRIM1B,  TRIM2A, TRIM2B,  TRIM3A, TRIM3B,  TRIM4A, TRIM4B};   
+    for ( int i = 0; i < 8; ++i){
+     TrimNumber[i] = T[i];
+    }
+}
+
 /******************************************************************************************************************************/
 void DefineTrimsStart(){ // heer
     char t11[]                              = "t11";
     char b0[]                               = "b0";
     char Lefta[]                            = "Press the right aileron trim...";
     char LeftaButton[]                      = "(Right aileron?)";
-    
-    ++DefiningTrims; 
-    if (DefiningTrims >4) {
-        DefiningTrims = 0 ;
-        DefineTrimsEnd();
-        return;
-    }
-
+    ResetAllTrims();
+    for (int i = 0; i < 4; ++i) TrimDefined[i] = false; 
+    DefiningTrims = true; 
     SendText(t11,Lefta);
     SendText(b0,LeftaButton);
-   
 }
-
 
 // ******************************** Global Array of numbered function pointers - OK up to 128 functions ... **********************************
 #define LASTFUNCTION 25                     // one more than final one
@@ -6590,28 +6594,27 @@ void  MoveaTrim(uint8_t i){
 
 /************************************************************************************************************/
 void SetATrimDefinition(int i){
-        
-      // uint8_t     TrimNumberUsed[8]           = {TRIM1A,TRIM1B,  TRIM2A,TRIM2B,  TRIM3A,TRIM3B,   TRIM4A,TRIM4B};  
-    
-   Look(i) ;
-    if (DefiningTrims == 1) {               // Aileron // heer                         
-         if (i == 0){ TrimNumber[0]   = TRIM1A;TrimNumber[1]   = TRIM1B;}
-         if (i == 1){ TrimNumber[1]   = TRIM1A;TrimNumber[0]   = TRIM1B;}
-    }
-    if (DefiningTrims == 3) {               // Elevator                          
-         if (i == 2){ TrimNumber[2]   = TRIM2A;TrimNumber[3]   = TRIM2B;}
-         if (i == 3){ TrimNumber[3]   = TRIM2A;TrimNumber[2]   = TRIM2B;}
-    }
-     if (DefiningTrims == 5) {               // Throttle                          
-         if (i == 4){ TrimNumber[4]   = TRIM3A;TrimNumber[5]   = TRIM3B;}
-         if (i == 5){ TrimNumber[5]   = TRIM3A;TrimNumber[4]   = TRIM3B;}
-    }
-     if (DefiningTrims == 7) {               // Rudder                          
-         if (i == 6){ TrimNumber[6]   = TRIM4A;TrimNumber[7]   = TRIM4B;}
-         if (i == 7){ TrimNumber[7]   = TRIM4A;TrimNumber[6]   = TRIM4B;}
-    }
-    Procrastinate(500);
-        
+               // Aileron   
+         if (!TrimDefined[0]){                           
+            if (i == 0){ TrimNumber[0]   = TRIM1A;TrimNumber[1]   = TRIM1B;TrimDefined[0] = true;}
+            if (i == 1){ TrimNumber[1]   = TRIM1A;TrimNumber[0]   = TRIM1B;TrimDefined[0] = true;}
+         }
+              // Elevator  
+        if (!TrimDefined[1]){                      
+            if (i == 3){ TrimNumber[2]   = TRIM2A;TrimNumber[3]   = TRIM2B;TrimDefined[1] = true;}
+            if (i == 2){ TrimNumber[3]   = TRIM2A;TrimNumber[2]   = TRIM2B;TrimDefined[1] = true;}
+        }
+               // Throttle       
+        if (!TrimDefined[2]){                                
+            if (i == 4){ TrimNumber[4]   = TRIM3A;TrimNumber[5]   = TRIM3B;TrimDefined[2] = true;}
+            if (i == 5){ TrimNumber[5]   = TRIM3A;TrimNumber[4]   = TRIM3B;TrimDefined[2] = true;}
+        }
+               // Rudder   
+        if (!TrimDefined[3]){                      
+            if (i == 6){ TrimNumber[6]   = TRIM4A;TrimNumber[7]   = TRIM4B;TrimDefined[3] = true;}
+            if (i == 7){ TrimNumber[7]   = TRIM4A;TrimNumber[6]   = TRIM4B;TrimDefined[3] = true;}
+        }
+       // Procrastinate(500);    
 }
 
 /************************************************************************************************************/
