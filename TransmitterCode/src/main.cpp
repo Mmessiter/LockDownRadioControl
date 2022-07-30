@@ -4719,47 +4719,36 @@ void StartSubTrimView() {                // Subtrim view start
         }
 /******************************************************************************************************************************/
 void StartTrimDefView(){
-            char pTrimDefView[]             = "page TrimDefView";
-            CurrentView = TRIMDEFVIEW;
-            SendCommand(pTrimDefView);
-}
-/******************************************************************************************************************************/
-void  DefineTrimsEnd(){
-            char page_SetupView[]            = "page SetupView";
-            CurrentView = MAINSETUPVIEW;
-            SendCommand(page_SetupView);
-            DefiningTrims = false ;
-            SaveTransmitterParameters();
-    }
-
-/******************************************************************************************************************************/
-
-void ResetAllTrims(){
-
-uint8_t     T[8]  = {TRIM1A, TRIM1B,  TRIM2A, TRIM2B,  TRIM3A, TRIM3B,  TRIM4A, TRIM4B};   
-    for ( int i = 0; i < 8; ++i){
-     TrimNumber[i] = T[i];
-    }
-}
-
-/******************************************************************************************************************************/
-void DefineTrimsStart(){ // heer
-    char t11[]                              = "t11";
-    char b0[]                               = "b0";
-    char Lefta[]                            = "Press the right aileron trim...";
-    char LeftaButton[]                      = "(Right aileron?)";
+    char pTrimDefView[]             = "page TrimDefView";
+    CurrentView = TRIMDEFVIEW;      
+    SendCommand(pTrimDefView);
     ResetAllTrims();
     for (int i = 0; i < 4; ++i) TrimDefined[i] = false; 
     DefiningTrims = true; 
-    SendText(t11,Lefta);
-    SendText(b0,LeftaButton);
+}
+/******************************************************************************************************************************/
+void  DefineTrimsEnd(){
+    char page_SetupView[]            = "page SetupView";
+    CurrentView = MAINSETUPVIEW;
+    SendCommand(page_SetupView);
+    DefiningTrims = false ;
+    SaveTransmitterParameters();
+}
+/******************************************************************************************************************************/
+void ResetAllTrims(){
+uint8_t  T[8] = {TRIM1A, TRIM1B,  TRIM2A, TRIM2B,  TRIM3A, TRIM3B,  TRIM4A, TRIM4B};   
+    for (int i = 0; i < 8; ++i) {TrimNumber[i] = T[i];}
+}
+/******************************************************************************************************************************/
+void DefineTrimsStart(){ // redundant
+  
 }
 
 // ******************************** Global Array of numbered function pointers - OK up to 128 functions ... **********************************
 #define LASTFUNCTION 25                     // one more than final one
 
 void (*NumberedFunctions[LASTFUNCTION])() {
-                Blank,                      // 0 (not used, yet.)
+                Blank,                      // 0 (spare)
                 DecFileInView,              // 1
                 IncFileInView,              // 2 
                 DoModelNameTimeCheck,       // 3
@@ -4782,7 +4771,7 @@ void (*NumberedFunctions[LASTFUNCTION])() {
                 StartSubTrimView,           // 20
                 EndSubTrimView,             // 21 
                 StartTrimDefView,           // 22 
-                DefineTrimsStart,           // 23 
+                DefineTrimsStart,           // 23 // spare 
                 DefineTrimsEnd              // 24 
                 };
 
