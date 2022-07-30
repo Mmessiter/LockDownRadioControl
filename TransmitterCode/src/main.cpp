@@ -983,8 +983,8 @@ void RedLedOn()
         if (AnnounceConnected) PlaySound(DISCONNECTEDMSG);
         RXVoltsDetected = false;
         LedWasGreen = false;
+        if (!LedIsBlinking) {LastShowTime = 0;ShowComms();}
     }
-   // FirstConnection = true;
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, 0);
     analogWrite(REDLED, GetLEDBrightness());     // Brightness is a function of maybe blinking
@@ -996,6 +996,7 @@ void GreenLedOn()
 {
     if (!LedWasGreen || LedIsBlinking) {         // no need to repeat unless it is blinking
         LedWasGreen = true;
+        if (!LedIsBlinking) {LastShowTime = 0;ShowComms();}
         if (FirstConnection) {                   // Zero data on first connection after reboot
             ZeroDataScreen(); 
             FirstConnection = false; 
