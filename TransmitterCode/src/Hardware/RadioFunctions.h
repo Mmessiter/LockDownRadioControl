@@ -414,6 +414,7 @@ void ShowFlightMode();
 void UpdateModelsNameEveryWhere();
 void DefineTrimsStart();
 void ResetAllTrims();
+void CheckTrimValues();
 /*********************************************************************************************************************************/
 
 #endif

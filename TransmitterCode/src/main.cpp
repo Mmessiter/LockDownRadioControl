@@ -2435,9 +2435,10 @@ bool LoadAllParameters()
         AnnounceConnected = SDReadByte(SDCardAddress);
          ++SDCardAddress;
         for (j = 0; j < 8; ++j) { 
-            TrimNumber[j]= SDReadByte(SDCardAddress);
+             TrimNumber[j]= SDReadByte(SDCardAddress);
             ++SDCardAddress;
         }
+        CheckTrimValues();
         MemoryForTransmtter = SDCardAddress;
         ReadOneModel(ModelNumber); // this
         return true;
@@ -2446,14 +2447,19 @@ bool LoadAllParameters()
         return false;
     }
 }
-
 /*********************************************************************************************************************************/
-
+void  CheckTrimValues(){
+    bool KO =  false;
+    for (int j = 0; j < 8; ++j) { 
+           if ((TrimNumber[j] > TRIM4B) || (TrimNumber[j] < TRIM1A)) KO = true; 
+    }  
+    if (KO) ResetAllTrims();
+}
+/*********************************************************************************************************************************/
 void Force_ReDisplay()
 {
     for (int i = 0; i < CHANNELSUSED; ++i) ShownBuffer[i] = 242; // to force a re-show of servo positions
 }
-
 /*********************************************************************************************************************************/
 
 void ButtonRed(char* but)
@@ -2842,6 +2848,7 @@ FLASHMEM void setup()
             LogPowerOn();
             LogThisModel();
     }
+    UpdateModelsNameEveryWhere();
 }
 /*********************************************************************************************************************************/
 
@@ -6583,23 +6590,39 @@ void  MoveaTrim(uint8_t i){
 
 /************************************************************************************************************/
 void SetATrimDefinition(int i){
+
+
+
+    char AilDone[] = "Aileron trim is defined!";
+    char EleDone[] = "Elevator trim is defined!";
+    char ThrDone[] = "Throttle trim is defined!";
+    char RudDone[] = "Rudder trim is defined!";
+    char ail[] = "ail";
+    char ele[] = "ele";
+    char thr[] = "thr";
+    char rud[] = "rud";
+
                // Aileron   
          if (!TrimDefined[0]){                           
+            if ((i == 0) || (i == 1)) SendText(ail,AilDone);
             if (i == 0){ TrimNumber[0]   = TRIM1A;TrimNumber[1]   = TRIM1B;TrimDefined[0] = true;}
             if (i == 1){ TrimNumber[1]   = TRIM1A;TrimNumber[0]   = TRIM1B;TrimDefined[0] = true;}
          }
               // Elevator  
-        if (!TrimDefined[1]){                      
+        if (!TrimDefined[1]){              
+            if ((i == 2) || (i == 3)) SendText(ele,EleDone);        
             if (i == 3){ TrimNumber[2]   = TRIM2A;TrimNumber[3]   = TRIM2B;TrimDefined[1] = true;}
             if (i == 2){ TrimNumber[3]   = TRIM2A;TrimNumber[2]   = TRIM2B;TrimDefined[1] = true;}
         }
                // Throttle       
-        if (!TrimDefined[2]){                                
+        if (!TrimDefined[2]){           
+            if ((i == 4) || (i == 5)) SendText(thr,ThrDone);                      
             if (i == 4){ TrimNumber[4]   = TRIM3A;TrimNumber[5]   = TRIM3B;TrimDefined[2] = true;}
             if (i == 5){ TrimNumber[5]   = TRIM3A;TrimNumber[4]   = TRIM3B;TrimDefined[2] = true;}
         }
                // Rudder   
-        if (!TrimDefined[3]){                      
+        if (!TrimDefined[3]){    
+            if ((i == 6) || (i == 7)) SendText(rud,RudDone);                   
             if (i == 6){ TrimNumber[6]   = TRIM4A;TrimNumber[7]   = TRIM4B;TrimDefined[3] = true;}
             if (i == 7){ TrimNumber[7]   = TRIM4A;TrimNumber[6]   = TRIM4B;TrimDefined[3] = true;}
         }
