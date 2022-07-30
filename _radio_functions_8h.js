@@ -193,6 +193,7 @@ var _radio_functions_8h =
     [ "ReadTextFile", "_radio_functions_8h.html#abd6446fb403bd9b07d150a5e4fdd86e1", null ],
     [ "RedLedOn", "_radio_functions_8h.html#a7d34cec6e8edc20c8b50424e15dcc7c7", null ],
     [ "ReEnableScanButton", "_radio_functions_8h.html#a0a3d89dfcfab70c6cbc50401fff1afeb", null ],
+    [ "ResetAllTrims", "_radio_functions_8h.html#a883e18dbafdf41d3451879db47ab113f", null ],
     [ "RestoreBrightness", "_radio_functions_8h.html#a49da3478d89a22069e29c7f00cb46a5f", null ],
     [ "ScanAllChannels", "_radio_functions_8h.html#a3856ba0adae43d089f08c7b7f653b306", null ],
     [ "SendCharArray", "_radio_functions_8h.html#acd617ff93ca893aa7d65aaf2898dfc3d", null ],
