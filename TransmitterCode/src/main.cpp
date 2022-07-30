@@ -4727,7 +4727,7 @@ void StartTrimDefView(){
     DefiningTrims = true; 
 }
 /******************************************************************************************************************************/
-void  DefineTrimsEnd(){
+void  DefineTrimsEnd(){             // exit from trim defining screen
     char page_SetupView[]            = "page SetupView";
     CurrentView = MAINSETUPVIEW;
     SendCommand(page_SetupView);
