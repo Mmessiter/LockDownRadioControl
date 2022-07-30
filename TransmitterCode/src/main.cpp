@@ -4731,6 +4731,8 @@ void StartTrimDefView(){
     CurrentView = TRIMDEFVIEW;      
     SendCommand(pTrimDefView);
     ResetAllTrims();
+    BlueLedOn();
+    CurrentMode = SENDNOTHING;
     for (int i = 0; i < 4; ++i) TrimDefined[i] = false; 
     DefiningTrims = true; 
 }
@@ -4740,6 +4742,7 @@ void  DefineTrimsEnd(){             // exit from trim defining screen
     CurrentView = MAINSETUPVIEW;
     SendCommand(page_SetupView);
     DefiningTrims = false ;
+    CurrentMode = NORMAL;
     SaveTransmitterParameters();
 }
 /******************************************************************************************************************************/
