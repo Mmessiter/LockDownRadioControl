@@ -4737,13 +4737,15 @@ void StartTrimDefView(){
     DefiningTrims = true; 
 }
 /******************************************************************************************************************************/
-void  DefineTrimsEnd(){             // exit from trim defining screen
-    char page_SetupView[]            = "page SetupView";
-    CurrentView = MAINSETUPVIEW;
-    SendCommand(page_SetupView);
-    DefiningTrims = false ;
-    CurrentMode = NORMAL;
-    SaveTransmitterParameters();
+void  DefineTrimsEnd(){             // exit from trim defining screen // heer 
+        char pCalibrateView[]          = "page CalibrateView";
+        CurrentView = MAINSETUPVIEW;
+        SendCommand(pCalibrateView);
+        Force_ReDisplay();
+        CurrentView = CALIBRATEVIEW;
+        DefiningTrims = false ;
+        CurrentMode = NORMAL;
+        SaveTransmitterParameters();
 }
 /******************************************************************************************************************************/
 void ResetAllTrims(){
@@ -4896,6 +4898,8 @@ if (strlen(TextIn) > 0) {
     char CMsg2[]                   = "Next ...";
     char Cmsg3[]                   = "Centre all channels,\r\nPush edge switches fully back,\r\nthen press Finish.";
     char Cmsg4[]                   = "Finish";
+    char Cmsg5[]                   = "Repeat?";
+    char Cmsg6[]                   = "Calbrate again?"; // heer
     char TypeView[]                = "TypeView";
     char CopyToAllFlightModes[]    = "callfm";
     char RXBAT[]                   = "RXBAT";
@@ -6330,12 +6334,14 @@ if (strlen(TextIn) > 0) {
                 return;
             }
         }
-        if (CurrentMode == CENTRESTICKS) {
+        if (CurrentMode == CENTRESTICKS) { 
             if (strcmp(TextIn, "Calibrate1") == 0) {
                 CurrentMode = NORMAL;
-                SaveTransmitterParameters();                     // Save calibrations
+                RedLedOn();
+                SaveTransmitterParameters();        // Save calibrations
                 LoadAllParameters();               // Restore all current model settings
-                SendCommand(page_SetupView);
+                SendText(SvB0, Cmsg5);
+                SendText(SvT11, Cmsg6);
                 ModelNameTimeCheck = 0;
                 ClearText();
                 return;
