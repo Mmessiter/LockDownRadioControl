@@ -6600,27 +6600,27 @@ void SetATrimDefinition(int i){
     char rud[] = "rud";
                // Aileron   
          if (!TrimDefined[0]){                           
-            if ((i == 0) || (i == 1)) {PlaySound(BEEPCOMPLETE);SendText(ail,AilDone);}
-            if (i == 0){ TrimNumber[0]   = TRIM1A;TrimNumber[1]   = TRIM1B;TrimDefined[0] = true;}
-            if (i == 1){ TrimNumber[1]   = TRIM1A;TrimNumber[0]   = TRIM1B;TrimDefined[0] = true;}
+            if ((i == 0) || (i == 1)) {PlaySound(BEEPCOMPLETE); SendText(ail,AilDone);TrimDefined[0] = true;}
+            if (i == 0){ TrimNumber[0] = TRIM1A;TrimNumber[1] = TRIM1B;}
+            if (i == 1){ TrimNumber[1] = TRIM1A;TrimNumber[0] = TRIM1B;}
          }
               // Elevator  
         if (!TrimDefined[1]){              
-            if ((i == 2) || (i == 3)) {PlaySound(BEEPCOMPLETE);SendText(ele,EleDone);}      
-            if (i == 3){ TrimNumber[2]   = TRIM2A;TrimNumber[3]   = TRIM2B;TrimDefined[1] = true;}
-            if (i == 2){ TrimNumber[3]   = TRIM2A;TrimNumber[2]   = TRIM2B;TrimDefined[1] = true;}
+            if ((i == 2) || (i == 3)) {PlaySound(BEEPCOMPLETE); SendText(ele,EleDone);TrimDefined[1] = true;}      
+            if (i == 3){ TrimNumber[2] = TRIM2A;TrimNumber[3] = TRIM2B;}
+            if (i == 2){ TrimNumber[3] = TRIM2A;TrimNumber[2] = TRIM2B;}
         }
                // Throttle       
         if (!TrimDefined[2]){           
-            if ((i == 4) || (i == 5)) {PlaySound(BEEPCOMPLETE);SendText(thr,ThrDone);}                      
-            if (i == 4){ TrimNumber[4]   = TRIM3A;TrimNumber[5]   = TRIM3B;TrimDefined[2] = true;}
-            if (i == 5){ TrimNumber[5]   = TRIM3A;TrimNumber[4]   = TRIM3B;TrimDefined[2] = true;}
+            if ((i == 4) || (i == 5)) {PlaySound(BEEPCOMPLETE); SendText(thr,ThrDone);TrimDefined[2] = true;}                      
+            if (i == 4){ TrimNumber[4] = TRIM3A;TrimNumber[5] = TRIM3B;}
+            if (i == 5){ TrimNumber[5] = TRIM3A;TrimNumber[4] = TRIM3B;}
         }
                // Rudder   
         if (!TrimDefined[3]){    
-            if ((i == 6) || (i == 7)){PlaySound(BEEPCOMPLETE); SendText(rud,RudDone);}                   
-            if (i == 6){ TrimNumber[6]   = TRIM4A;TrimNumber[7]   = TRIM4B;TrimDefined[3] = true;}
-            if (i == 7){ TrimNumber[7]   = TRIM4A;TrimNumber[6]   = TRIM4B;TrimDefined[3] = true;}
+            if ((i == 6) || (i == 7)) {PlaySound(BEEPCOMPLETE); SendText(rud,RudDone);TrimDefined[3] = true;}                   
+            if (i == 6){ TrimNumber[6] = TRIM4A;TrimNumber[7] = TRIM4B;}
+            if (i == 7){ TrimNumber[7] = TRIM4A;TrimNumber[6] = TRIM4B;}
         }  
 } 
 
@@ -6635,7 +6635,7 @@ void CheckHardwareTrims(){
             if (DefiningTrims){
                     SetATrimDefinition(i);
                     return;
-             } 
+            } 
             MoveaTrim(i);
             TrimRepeatSpeed -= (TrimRepeatSpeed/6);           //  accelerate repeat...
             if (TrimRepeatSpeed < 40) TrimRepeatSpeed = 40;   //  ... up to a point... 
