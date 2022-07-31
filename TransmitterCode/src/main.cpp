@@ -4737,7 +4737,7 @@ void StartTrimDefView(){
     DefiningTrims = true; 
 }
 /******************************************************************************************************************************/
-void  DefineTrimsEnd(){             // exit from trim defining screen // heer 
+void  DefineTrimsEnd(){             // exit from trim defining screen  
         char pCalibrateView[]          = "page CalibrateView";
         CurrentView = MAINSETUPVIEW;
         SendCommand(pCalibrateView);
@@ -4899,7 +4899,7 @@ if (strlen(TextIn) > 0) {
     char Cmsg3[]                   = "Centre all channels,\r\nPush edge switches fully back,\r\nthen press Finish.";
     char Cmsg4[]                   = "Finish";
     char Cmsg5[]                   = "Repeat?";
-    char Cmsg6[]                   = "Calbrate again?"; // heer
+    char Cmsg6[]                   = "Calbrate again?"; 
     char TypeView[]                = "TypeView";
     char CopyToAllFlightModes[]    = "callfm";
     char RXBAT[]                   = "RXBAT";
