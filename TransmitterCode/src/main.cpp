@@ -2166,6 +2166,20 @@ void UpdateButtonLabels() {
 
 /*********************************************************************************************************************************/
 
+void CheckSavedTrimValues(){
+    bool OK = true;
+    for (int i = 0; i < 4; ++i) {
+        if ((InputTrim[i] > 3) || (InputTrim[i] < 0)) OK = false;
+     }
+    if (!OK) {
+        for (int i = 0; i < 4; ++i){
+            InputTrim[i] = i;
+        }   
+    }
+ }
+
+/*********************************************************************************************************************************/
+
 bool ReadOneModel(uint8_t Mnum)
 {
     uint16_t j;
@@ -2246,8 +2260,12 @@ bool ReadOneModel(uint8_t Mnum)
     ReversedChannelBITS = SDReadInt(SDCardAddress);
     ++SDCardAddress; 
     ++SDCardAddress; 
-   
-    SDCardAddress += 9; // 9 Spare Bytes here (PID stuff gone) *****************************// heer
+    for (i = 0; i < 4; ++i) {
+        InputTrim[i] = SDReadByte(SDCardAddress);
+        ++SDCardAddress;
+     }
+    CheckSavedTrimValues();
+    SDCardAddress += 5; // 5 Spare Bytes here (PID stuff gone) *****************************// heer
     
     for (i = 0; i < CHANNELSUSED; ++i) {
         InPutStick[i] = SDReadByte(SDCardAddress);
@@ -3048,12 +3066,12 @@ void SaveOneModel(uint16_t mnum)
     SDUpdateInt (SDCardAddress,ReversedChannelBITS);
     ++SDCardAddress; 
     ++SDCardAddress; 
-
-
-    SDCardAddress += 9; // *********************** 9 spare here remaining  **********************/ heer
+    for (i = 0; i < 4; ++i) {
+        SDUpdateByte(SDCardAddress,InputTrim[i]);   
+        ++SDCardAddress;
+     }
+    SDCardAddress += 5; // *********************** 5 spare here remaining  **********************/ heer
     
-
-
     for (i = 0; i < CHANNELSUSED; ++i) {
         SDUpdateByte(SDCardAddress, InPutStick[i]);
         ++SDCardAddress;
