@@ -4789,9 +4789,9 @@ void (*NumberedFunctions[LASTFUNCTION])() {
                 StartSubTrimView,           // 20
                 EndSubTrimView,             // 21 
                 StartTrimDefView,           // 22 
-                DefineTrimsStart,           // 23 // spare 
+                DefineTrimsStart,           // 23 // [spare] 
                 DefineTrimsEnd              // 24 
-                };
+                };                          // list will become much longer ...
 
 /*********************************************************************************************************************************
  *                          BUTTON WAS PRESSED (DEAL WITH INPUT FROM NEXTION DISPLAY)                                            *
@@ -4821,7 +4821,7 @@ if (strlen(TextIn) > 0) {
                                              // But that's OK! Because only about 110 still need converting, after which 
                                              // the restriction can be removed and the max will then be a full 32 bit value.
 // **********************************************************************************************************************************
-        NumberedFunctions[NumberedCommand]();            // Call the needed function --  with a function pointer! :-)               *
+        NumberedFunctions[NumberedCommand]();            // Call the needed function -- with a function pointer                     *
 // **********************************************************************************************************************************
         b5isGrey = false;
         ClearText();
@@ -5477,7 +5477,6 @@ if (strlen(TextIn) > 0) {
                 }
             SendValue(Progress, 100);
             SaveOneModel(ModelNumber); 
-          
             FailSafeTimer= millis();
             SaveFailSafeNow = true;
             ClearText();
