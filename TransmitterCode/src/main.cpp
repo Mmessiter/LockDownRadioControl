@@ -2247,7 +2247,7 @@ bool ReadOneModel(uint8_t Mnum)
     ++SDCardAddress; 
     ++SDCardAddress; 
    
-    SDCardAddress += 9; // 9 Spare Bytes here (PID stuff gone) *****************************
+    SDCardAddress += 9; // 9 Spare Bytes here (PID stuff gone) *****************************// heer
     
     for (i = 0; i < CHANNELSUSED; ++i) {
         InPutStick[i] = SDReadByte(SDCardAddress);
@@ -3050,7 +3050,8 @@ void SaveOneModel(uint16_t mnum)
     ++SDCardAddress; 
 
 
-    SDCardAddress += 9; // *********************** 9 spare here remaining  **********************
+    SDCardAddress += 9; // *********************** 9 spare here remaining  **********************/ heer
+    
 
 
     for (i = 0; i < CHANNELSUSED; ++i) {
