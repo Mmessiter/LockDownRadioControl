@@ -319,7 +319,7 @@ uint8_t  SwitchEditNumber    = 0; // number of switch being edited
 uint32_t ShowServoTimer      = 0;
 bool     LastFourOnly        = false;
 uint8_t  InPutStick[17]      = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}; //
-uint8_t  InputTrim[4]        = {4,3,2,1}; // User defined trim inputs
+uint8_t  InputTrim[4]        = {0,1,2,3}; // User defined trim inputs
 
 uint8_t  ExportedFileCounter = 0;
 char     TheFilesList[100][14];
@@ -1810,58 +1810,56 @@ FASTRUN float MapWithExponential(float xx, float Xxmin, float Xxmax, float Yymin
 /******************************************** CHANNEL REVERSE FUNCTION **********************************************************/
 
 FASTRUN void DoReverseSense(){
-  for (uint8_t i = 0; i < 16; i++) {
-    if (ReversedChannelBITS & 1 << i){                                                              // Is this channel reversed?
+    for (uint8_t i = 0; i < 16; i++) {
+        if (ReversedChannelBITS & 1 << i){                                                              // Is this channel reversed?
             PreMixBuffer[i] = map(SendBuffer[i],MINMICROS,MAXMICROS,MAXMICROS,MINMICROS);           // Yes so reverse the channel
             SendBuffer[i] = PreMixBuffer[i];
+        }
     }
-  }
 }
 /*********************************************************************************************************************************/
 uint16_t CatmullSplineInterpolation(uint16_t m,uint16_t l, uint16_t n){
-                uint16_t k = 0 ;
-                xPoints[0] = ChannelMin[l];
-                xPoints[1] = ChannelMidLow[l];
-                xPoints[2] = ChannelCentre[l];
-                xPoints[3] = ChannelMidHi[l];
-                xPoints[4] = ChannelMax[l];
-                yPoints[4] = IntoHigherRes(MaxDegrees[FlightMode][n]);
-                yPoints[3] = IntoHigherRes(MidHiDegrees[FlightMode][n]);
-                yPoints[2] = IntoHigherRes(CentreDegrees[FlightMode][n]);
-                yPoints[1] = IntoHigherRes(MidLowDegrees[FlightMode][n]);
-                yPoints[0] = IntoHigherRes(MinDegrees[FlightMode][n]);
-                k          = Interpolation::CatmullSpline(xPoints, yPoints, PointsCount, m);
-                return k;
+    xPoints[0] = ChannelMin[l];
+    xPoints[1] = ChannelMidLow[l];
+    xPoints[2] = ChannelCentre[l];
+    xPoints[3] = ChannelMidHi[l];
+    xPoints[4] = ChannelMax[l];
+    yPoints[4] = IntoHigherRes(MaxDegrees[FlightMode][n]);
+    yPoints[3] = IntoHigherRes(MidHiDegrees[FlightMode][n]);
+    yPoints[2] = IntoHigherRes(CentreDegrees[FlightMode][n]);
+    yPoints[1] = IntoHigherRes(MidLowDegrees[FlightMode][n]);
+    yPoints[0] = IntoHigherRes(MinDegrees[FlightMode][n]);
+    return  Interpolation::CatmullSpline(xPoints, yPoints, PointsCount, m);
 }
 /*********************************************************************************************************************************/
 uint16_t StraightLineInterpolation(uint16_t m,uint16_t l, uint16_t n){
-        uint16_t k = 0 ;
-                if (m >= ChannelMidHi[l]) k = map(m, ChannelMidHi[l], ChannelMax[l], IntoHigherRes(MidHiDegrees[FlightMode][n]), IntoHigherRes(MaxDegrees[FlightMode][n]));
-                if (m >= ChannelCentre[l] && m <= (ChannelMidHi[l])) k = map(m, ChannelCentre[l], ChannelMidHi[l], IntoHigherRes(CentreDegrees[FlightMode][n]), IntoHigherRes(MidHiDegrees[FlightMode][n]));
-                if (m >= ChannelMidLow[l] && m <= ChannelCentre[l]) k = map(m, ChannelMidLow[l], ChannelCentre[l], IntoHigherRes(MidLowDegrees[FlightMode][n]), IntoHigherRes(CentreDegrees[FlightMode][n]));
-                if (m <= ChannelMidLow[l]) k = map(m, ChannelMin[l], ChannelMidLow[l], IntoHigherRes(MinDegrees[FlightMode][n]), IntoHigherRes(MidLowDegrees[FlightMode][n]));
-        return k;
+    uint16_t k = 0 ;
+    if (m >= ChannelMidHi[l]) k = map(m, ChannelMidHi[l], ChannelMax[l], IntoHigherRes(MidHiDegrees[FlightMode][n]), IntoHigherRes(MaxDegrees[FlightMode][n]));
+    if (m >= ChannelCentre[l] && m <= (ChannelMidHi[l])) k = map(m, ChannelCentre[l], ChannelMidHi[l], IntoHigherRes(CentreDegrees[FlightMode][n]), IntoHigherRes(MidHiDegrees[FlightMode][n]));
+    if (m >= ChannelMidLow[l] && m <= ChannelCentre[l]) k = map(m, ChannelMidLow[l], ChannelCentre[l], IntoHigherRes(MidLowDegrees[FlightMode][n]), IntoHigherRes(CentreDegrees[FlightMode][n]));
+    if (m <= ChannelMidLow[l]) k = map(m, ChannelMin[l], ChannelMidLow[l], IntoHigherRes(MinDegrees[FlightMode][n]), IntoHigherRes(MidLowDegrees[FlightMode][n]));
+    return k;
 }
 /*********************************************************************************************************************************/
 uint16_t ExponentialInterpolation(uint16_t m,uint16_t l, uint16_t n){
-                uint16_t k = 0 ;
-                if (m >= ChannelCentre[l]) {
-                    k = MapWithExponential(m - ChannelCentre[l], 0, ChannelMax[l] - ChannelCentre[l], 0, IntoHigherRes(MaxDegrees[FlightMode][n]) - // 
-                    IntoHigherRes(CentreDegrees[FlightMode][n]), Exponential[FlightMode][n]) + IntoHigherRes(CentreDegrees[FlightMode][n]);
-                }
-                if (m < ChannelCentre[l]) {
-                    k = MapWithExponential(ChannelCentre[l] - m, 0, ChannelCentre[l] - ChannelMin[l], IntoHigherRes(CentreDegrees[FlightMode][n]) -  // 
-                    IntoHigherRes(MinDegrees[FlightMode][n]), 0, Exponential[FlightMode][n]) + IntoHigherRes(MinDegrees[FlightMode][n]);
-                }
-                return k;
+    uint16_t k = 0 ;
+    if (m >= ChannelCentre[l]) {
+        k = MapWithExponential(m - ChannelCentre[l], 0, ChannelMax[l] - ChannelCentre[l], 0, IntoHigherRes(MaxDegrees[FlightMode][n]) - // 
+        IntoHigherRes(CentreDegrees[FlightMode][n]), Exponential[FlightMode][n]) + IntoHigherRes(CentreDegrees[FlightMode][n]);
+    }
+    if (m < ChannelCentre[l]) {
+        k = MapWithExponential(ChannelCentre[l] - m, 0, ChannelCentre[l] - ChannelMin[l], IntoHigherRes(CentreDegrees[FlightMode][n]) -  // 
+        IntoHigherRes(MinDegrees[FlightMode][n]), 0, Exponential[FlightMode][n]) + IntoHigherRes(MinDegrees[FlightMode][n]);
+    }
+    return k;
 }
 
 /*********************************************************************************************************************************/
 
 uint16_t (*Interpolate[3])(uint16_t m,uint16_t l, uint16_t n) {
-                StraightLineInterpolation,      // 0               
-                CatmullSplineInterpolation,     // 1 
-                ExponentialInterpolation,       // 2
+        StraightLineInterpolation,      // 0               
+        CatmullSplineInterpolation,     // 1 
+        ExponentialInterpolation,       // 2
 };
 
 /*********************************************************************************************************************************/
@@ -1871,7 +1869,7 @@ FASTRUN void GetNewChannelValues()
 {
     uint16_t k = 0, l = 0, m = 0, n = 0, t = 0, TrimAmount = 0 ;
     // key: -
-    // m = input value
+    // m = input value from sticks etc
     // l = input channel
     // t = trim input 
     // n = output channel
@@ -1890,16 +1888,11 @@ FASTRUN void GetNewChannelValues()
         k += (SubTrims[n]-127) * (TrimFactor/2);                            // ADD SUBTRIM (...to output channel, not mapped input channel) (Range 0 - 127 - 254)
         if (l < 4) {
             TrimAmount = (Trims[FlightMode][t] - 80) * TrimFactor;          // TRIMS on lower four channels (80 is mid point !! (range 40 - 80 - 120)) 
-            if (!TrimsReversed[FlightMode][t]) {
-                k += TrimAmount; 
-            }
-            else {
-                k -= TrimAmount;
-            }
+            if (TrimsReversed[FlightMode][t]) TrimAmount = -TrimAmount;
+            k += TrimAmount;
         }
-        if (!CalibratedYet) k = map(m, 0, 1024, MINMICROS, MAXMICROS); // Crude servos until calibrated
+        if (!CalibratedYet) k = map(m, 0, 1024, MINMICROS, MAXMICROS);      // Crude servos until calibrated
         PreMixBuffer[n] = constrain(k, MINMICROS, MAXMICROS);
-        k               = 1500;
         SendBuffer[n]   = PreMixBuffer[n];
     }
     if (CurrentMode == NORMAL) {
