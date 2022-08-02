@@ -35,6 +35,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "CheckModelName", "_transmitter_code_2src_2main_8cpp.html#a984cb52354a84c45e9e41f396a1c5e92", null ],
     [ "CheckRange_0_16", "_transmitter_code_2src_2main_8cpp.html#a962a0c149ba58563ca3bad19e999e027", null ],
     [ "CheckRXVolts", "_transmitter_code_2src_2main_8cpp.html#a3014b0aec0f1343c2fd7b480bd5e0425", null ],
+    [ "CheckSavedTrimValues", "_transmitter_code_2src_2main_8cpp.html#a688c8f45b7061a1574dcb7eb28eec56b", null ],
     [ "CheckScanButton", "_transmitter_code_2src_2main_8cpp.html#a2dca4e1c03e2abb86aa3c1843c55a1c2", null ],
     [ "CheckScreenTime", "_transmitter_code_2src_2main_8cpp.html#adce05a2e4f5763c3b90c7126234d2cc8", null ],
     [ "CheckSwitch", "_transmitter_code_2src_2main_8cpp.html#afcd616e96ae28694a7fa2197ad74c6fe", null ],
