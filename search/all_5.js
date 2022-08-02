@@ -21,6 +21,7 @@ var searchData=
   ['exitmacrosview_18',['ExitMacrosView',['../_transmitter_code_2src_2main_8cpp.html#a488388f6430a0fc7bec57074ba750a2d',1,'main.cpp']]],
   ['exponential_19',['Exponential',['../_transmitter_code_2src_2main_8cpp.html#ad84a9fba12ba7570c42d9c37698b8298',1,'main.cpp']]],
   ['exponentialcurves_20',['EXPONENTIALCURVES',['../_radio_functions_8h.html#a0681550b8fd26c741ffd8c6447a64f82',1,'RadioFunctions.h']]],
-  ['exportedfilecounter_21',['ExportedFileCounter',['../_transmitter_code_2src_2main_8cpp.html#a1252681409ac5c9ed335a78f80633236',1,'main.cpp']]],
-  ['ext_5fsens_5fdata_5f00_22',['EXT_SENS_DATA_00',['../class_m_p_u9250.html#af3ff49b6a515f043ed76fc3f0088ccfe',1,'MPU9250']]]
+  ['exponentialinterpolation_21',['ExponentialInterpolation',['../_transmitter_code_2src_2main_8cpp.html#a2088bc57321fd542f58a3d8993444764',1,'main.cpp']]],
+  ['exportedfilecounter_22',['ExportedFileCounter',['../_transmitter_code_2src_2main_8cpp.html#a1252681409ac5c9ed335a78f80633236',1,'main.cpp']]],
+  ['ext_5fsens_5fdata_5f00_23',['EXT_SENS_DATA_00',['../class_m_p_u9250.html#af3ff49b6a515f043ed76fc3f0088ccfe',1,'MPU9250']]]
 ];

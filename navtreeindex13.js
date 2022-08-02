@@ -1,5 +1,10 @@
 var NAVTREEINDEX13 =
 {
+"struct_tiny_g_p_s_altitude.html#ac782babc0c485d47e6f57384e88b8cc8":[9,0,25,0],
+"struct_tiny_g_p_s_course.html":[9,0,26],
+"struct_tiny_g_p_s_course.html#a76dc8ae6c2fe5ead9b44c8d53a3272ca":[9,0,26,0],
+"struct_tiny_g_p_s_date.html":[9,0,28],
+"struct_tiny_g_p_s_date.html#a1b913837130bb49ecd309eaf6bc205b1":[9,0,28,3],
 "struct_tiny_g_p_s_date.html#a3ae7825f840ef4ba0ecddbc22f741817":[9,0,28,4],
 "struct_tiny_g_p_s_date.html#a4d5f23eb008cbfd385343687bf902003":[9,0,28,0],
 "struct_tiny_g_p_s_date.html#a6501fd5ef19ae166d43e0e5781609ee2":[9,0,28,8],
