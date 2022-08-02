@@ -319,7 +319,7 @@ uint8_t  SwitchEditNumber    = 0; // number of switch being edited
 uint32_t ShowServoTimer      = 0;
 bool     LastFourOnly        = false;
 uint8_t  InPutStick[17]      = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}; //
-uint8_t  InputTrim[4]        = {0,1,2,3}; // User defined trim inputs
+uint8_t  InputTrim[4]        = {4,3,2,1}; // User defined trim inputs
 
 uint8_t  ExportedFileCounter = 0;
 char     TheFilesList[100][14];
@@ -1881,13 +1881,13 @@ FASTRUN void GetNewChannelValues()
     for (n = 0; n < CHANNELSUSED; ++n) {
         if (n < 4) t = InputTrim[n];                                        // user defined trim input 
         l = InPutStick[n];                                                  // input sticks knobs & switches are now mapped by user
-        if (l > 7) {
+        if (l > 7) {                                                        // Must be a switch
             k = GetStickInput(l);                                           // Four 3 postion switches
-        } else {
-            m = analogRead(AnalogueInput[l]);                               // Get values from sticks' pots then inerpolate them.      
-            k = Interpolate[InterpolationTypes[FlightMode][n]](m,l,n);      // Use function pointer array for chosen interpolation.
+        } else {                                                            // i.e. l <= 7 so it's a Stick/knob/switch 
+            m = analogRead(AnalogueInput[l]);                               // Get values from sticks' pots then interpolate them.      
+            k = Interpolate[InterpolationTypes[FlightMode][n]](m,l,n);      // Use function pointer array to invoke chosen interpolation.
         }
-        k += (SubTrims[n]-127) * (TrimFactor/2);                            // ADD SUBTRIM (just to output channel, ignoring any mapped input channel) (Range 0 - 127 - 254)
+        k += (SubTrims[n]-127) * (TrimFactor/2);                            // ADD SUBTRIM (...to output channel, not mapped input channel) (Range 0 - 127 - 254)
         if (l < 4) {
             TrimAmount = (Trims[FlightMode][t] - 80) * TrimFactor;          // TRIMS on lower four channels (80 is mid point !! (range 40 - 80 - 120)) 
             if (!TrimsReversed[FlightMode][t]) {
