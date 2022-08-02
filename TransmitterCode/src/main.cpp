@@ -1655,7 +1655,6 @@ void  ReEnableScanButton(){
     }
 }
 
-
 /*********************************************************************************************************************************/
 
 /** Send 13 joined together char arrays to NEXTION */
@@ -1811,7 +1810,7 @@ FASTRUN float MapWithExponential(float xx, float Xxmin, float Xxmax, float Yymin
 
 FASTRUN void DoReverseSense(){
     for (uint8_t i = 0; i < 16; i++) {
-        if (ReversedChannelBITS & 1 << i){                                                              // Is this channel reversed?
+        if (ReversedChannelBITS & 1 << i){                                                          // Is this channel reversed?
             PreMixBuffer[i] = map(SendBuffer[i],MINMICROS,MAXMICROS,MAXMICROS,MINMICROS);           // Yes so reverse the channel
             SendBuffer[i] = PreMixBuffer[i];
         }
