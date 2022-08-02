@@ -319,6 +319,8 @@ uint8_t  SwitchEditNumber    = 0; // number of switch being edited
 uint32_t ShowServoTimer      = 0;
 bool     LastFourOnly        = false;
 uint8_t  InPutStick[17]      = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}; //
+uint8_t  InputTrim[4]        = {0,1,2,3}; // User defined trim inputs
+
 uint8_t  ExportedFileCounter = 0;
 char     TheFilesList[100][14];
 uint16_t FileNumberInView     = 0;
@@ -1805,8 +1807,6 @@ FASTRUN float MapWithExponential(float xx, float Xxmin, float Xxmax, float Yymin
     Xxmax = pow(Xxmax * Xxmax, Expo);
     return map(xx, Xxmin, Xxmax, Yymin, Yymax);
 }
-
-
 /******************************************** CHANNEL REVERSE FUNCTION **********************************************************/
 
 FASTRUN void DoReverseSense(){
@@ -1818,38 +1818,8 @@ FASTRUN void DoReverseSense(){
   }
 }
 /*********************************************************************************************************************************/
-
-/** @brief GET NEW SERVO POSITIONS */
-FASTRUN void GetNewChannelValues()
-{
-    uint16_t k = 0, l = 0, m = 0, n = 0, TrimAmount;
-    // key: -
-    // m = input value
-    // l = input channel
-    // n = output channel
-    // k = interim output result
-    // TrimAmount = TrimAmount :-)
-
-    for (n = 0; n < CHANNELSUSED; ++n) {
-        l = InPutStick[n];                                      // input sticks knobs & switches are now mapped by user
-        if (l <= 7)
-        {
-            m = analogRead(AnalogueInput[l]);                   // Get values from sticks' pots
-        }
-
-        if (l > 7)
-        {                                                       // Switch ?
-            k = GetStickInput(l);                               // Four 3 postion switches
-        }
-        else {                                                  // Map the eight analogue inputs
-            if (InterpolationTypes[FlightMode][n] == STRAIGHTLINES) {       
-                if (m >= ChannelMidHi[l]) k = map(m, ChannelMidHi[l], ChannelMax[l], IntoHigherRes(MidHiDegrees[FlightMode][n]), IntoHigherRes(MaxDegrees[FlightMode][n]));
-                if (m >= ChannelCentre[l] && m <= (ChannelMidHi[l])) k = map(m, ChannelCentre[l], ChannelMidHi[l], IntoHigherRes(CentreDegrees[FlightMode][n]), IntoHigherRes(MidHiDegrees[FlightMode][n]));
-                if (m >= ChannelMidLow[l] && m <= ChannelCentre[l]) k = map(m, ChannelMidLow[l], ChannelCentre[l], IntoHigherRes(MidLowDegrees[FlightMode][n]), IntoHigherRes(CentreDegrees[FlightMode][n]));
-                if (m <= ChannelMidLow[l]) k = map(m, ChannelMin[l], ChannelMidLow[l], IntoHigherRes(MinDegrees[FlightMode][n]), IntoHigherRes(MidLowDegrees[FlightMode][n]));
-            }
-
-            if (InterpolationTypes[FlightMode][n] == SMOOTHEDCURVES) {           // CatmullSpline (!)
+uint16_t CatmullSplineInterpolation(uint16_t m,uint16_t l, uint16_t n){
+                uint16_t k = 0 ;
                 xPoints[0] = ChannelMin[l];
                 xPoints[1] = ChannelMidLow[l];
                 xPoints[2] = ChannelCentre[l];
@@ -1861,27 +1831,72 @@ FASTRUN void GetNewChannelValues()
                 yPoints[1] = IntoHigherRes(MidLowDegrees[FlightMode][n]);
                 yPoints[0] = IntoHigherRes(MinDegrees[FlightMode][n]);
                 k          = Interpolation::CatmullSpline(xPoints, yPoints, PointsCount, m);
-            }
-            if (InterpolationTypes[FlightMode][n] == EXPONENTIALCURVES) {               // EXPONENTIAL (!!)
+                return k;
+}
+/*********************************************************************************************************************************/
+uint16_t StraightLineInterpolation(uint16_t m,uint16_t l, uint16_t n){
+        uint16_t k = 0 ;
+                if (m >= ChannelMidHi[l]) k = map(m, ChannelMidHi[l], ChannelMax[l], IntoHigherRes(MidHiDegrees[FlightMode][n]), IntoHigherRes(MaxDegrees[FlightMode][n]));
+                if (m >= ChannelCentre[l] && m <= (ChannelMidHi[l])) k = map(m, ChannelCentre[l], ChannelMidHi[l], IntoHigherRes(CentreDegrees[FlightMode][n]), IntoHigherRes(MidHiDegrees[FlightMode][n]));
+                if (m >= ChannelMidLow[l] && m <= ChannelCentre[l]) k = map(m, ChannelMidLow[l], ChannelCentre[l], IntoHigherRes(MidLowDegrees[FlightMode][n]), IntoHigherRes(CentreDegrees[FlightMode][n]));
+                if (m <= ChannelMidLow[l]) k = map(m, ChannelMin[l], ChannelMidLow[l], IntoHigherRes(MinDegrees[FlightMode][n]), IntoHigherRes(MidLowDegrees[FlightMode][n]));
+        return k;
+}
+/*********************************************************************************************************************************/
+uint16_t ExponentialInterpolation(uint16_t m,uint16_t l, uint16_t n){
+                uint16_t k = 0 ;
                 if (m >= ChannelCentre[l]) {
-                    k = MapWithExponential(m - ChannelCentre[l], 0, ChannelMax[l] - ChannelCentre[l], 0, IntoHigherRes(MaxDegrees[FlightMode][n]) - IntoHigherRes(CentreDegrees[FlightMode][n]), Exponential[FlightMode][n]) + IntoHigherRes(CentreDegrees[FlightMode][n]);
+                    k = MapWithExponential(m - ChannelCentre[l], 0, ChannelMax[l] - ChannelCentre[l], 0, IntoHigherRes(MaxDegrees[FlightMode][n]) - // 
+                    IntoHigherRes(CentreDegrees[FlightMode][n]), Exponential[FlightMode][n]) + IntoHigherRes(CentreDegrees[FlightMode][n]);
                 }
                 if (m < ChannelCentre[l]) {
-                    k = MapWithExponential(ChannelCentre[l] - m, 0, ChannelCentre[l] - ChannelMin[l], IntoHigherRes(CentreDegrees[FlightMode][n]) - IntoHigherRes(MinDegrees[FlightMode][n]), 0, Exponential[FlightMode][n]) + IntoHigherRes(MinDegrees[FlightMode][n]);
+                    k = MapWithExponential(ChannelCentre[l] - m, 0, ChannelCentre[l] - ChannelMin[l], IntoHigherRes(CentreDegrees[FlightMode][n]) -  // 
+                    IntoHigherRes(MinDegrees[FlightMode][n]), 0, Exponential[FlightMode][n]) + IntoHigherRes(MinDegrees[FlightMode][n]);
                 }
-            }
+                return k;
+}
+
+/*********************************************************************************************************************************/
+
+uint16_t (*Interpolate[3])(uint16_t m,uint16_t l, uint16_t n) {
+                StraightLineInterpolation,      // 0               
+                CatmullSplineInterpolation,     // 1 
+                ExponentialInterpolation,       // 2
+};
+
+/*********************************************************************************************************************************/
+
+/** @brief GET NEW SERVO POSITIONS */
+FASTRUN void GetNewChannelValues()
+{
+    uint16_t k = 0, l = 0, m = 0, n = 0, t = 0, TrimAmount = 0 ;
+    // key: -
+    // m = input value
+    // l = input channel
+    // t = trim input 
+    // n = output channel
+    // k = interim output result
+    // TrimAmount = TrimAmount :-)
+
+    for (n = 0; n < CHANNELSUSED; ++n) {
+        if (n < 4) t = InputTrim[n];                                        // user defined trim input 
+        l = InPutStick[n];                                                  // input sticks knobs & switches are now mapped by user
+        if (l > 7) {
+            k = GetStickInput(l);                                           // Four 3 postion switches
+        } else {
+            m = analogRead(AnalogueInput[l]);                               // Get values from sticks' pots then inerpolate them.      
+            k = Interpolate[InterpolationTypes[FlightMode][n]](m,l,n);      // Use function pointer array for chosen interpolation.
         }
-        k += (SubTrims[n]-127) * (TrimFactor/2);                        //  ADD SUBTRIM (just to output channel, ignoring any mapped input channel) (Range 0 - 127 - 254)
+        k += (SubTrims[n]-127) * (TrimFactor/2);                            // ADD SUBTRIM (just to output channel, ignoring any mapped input channel) (Range 0 - 127 - 254)
         if (l < 4) {
-            TrimAmount = (Trims[FlightMode][l] - 80) * TrimFactor;      // TRIMS on lower four channels (80 is mid point !! (range 40 - 80 - 120)) 
-            if (!TrimsReversed[FlightMode][l]) {
+            TrimAmount = (Trims[FlightMode][t] - 80) * TrimFactor;          // TRIMS on lower four channels (80 is mid point !! (range 40 - 80 - 120)) 
+            if (!TrimsReversed[FlightMode][t]) {
                 k += TrimAmount; 
             }
             else {
                 k -= TrimAmount;
             }
         }
-
         if (!CalibratedYet) k = map(m, 0, 1024, MINMICROS, MAXMICROS); // Crude servos until calibrated
         PreMixBuffer[n] = constrain(k, MINMICROS, MAXMICROS);
         k               = 1500;
@@ -1890,10 +1905,8 @@ FASTRUN void GetNewChannelValues()
     if (CurrentMode == NORMAL) {
         DoReverseSense();
         DoMixes(); 
-    }                                 // not while calibrating
-
+    }                                
 }
-
 /*********************************************************************************************************************************/
 
 void ReduceLimits(){                              // Get things setup for sticks calibration
