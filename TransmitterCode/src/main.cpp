@@ -2838,7 +2838,7 @@ FLASHMEM void setup()
     SendValue(FrontView_Mins, 0);
     SendValue(FrontView_Secs, 0);
     //  ***************************************************************************************
-    //  SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
+     // SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
     //  **   BUT then re-comment it!! Otherwise it will reset to same time on every boot up! **
     //  ***************************************************************************************
     BoundFlag     = false;
@@ -5475,7 +5475,9 @@ if (strlen(TextIn) > 0) {
                 FailSafeChannel[i] = GetValue(fs[i]); 
                 SendValue(Progress, i * (100/16));
                 }
-            SaveOneModel(ModelNumber);
+            SendValue(Progress, 100);
+            SaveOneModel(ModelNumber); 
+          
             FailSafeTimer= millis();
             SaveFailSafeNow = true;
             ClearText();
