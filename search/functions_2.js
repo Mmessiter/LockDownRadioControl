@@ -22,7 +22,7 @@ var searchData=
   ['checklogfileisopen_19',['CheckLogFileIsOpen',['../_transmitter_code_2src_2main_8cpp.html#ac45f2f949ccfa372a8cbab3ef0b8caa8',1,'main.cpp']]],
   ['checkmacrosbuffer_20',['CheckMacrosBuffer',['../_transmitter_code_2src_2main_8cpp.html#a6bb930920ba3a8d45a737dde782ef65c',1,'main.cpp']]],
   ['checkmodelname_21',['CheckModelName',['../_transmitter_code_2src_2main_8cpp.html#a984cb52354a84c45e9e41f396a1c5e92',1,'main.cpp']]],
-  ['checkrange_5f0_5f16_22',['CheckRange_0_16',['../_transmitter_code_2src_2main_8cpp.html#a962a0c149ba58563ca3bad19e999e027',1,'main.cpp']]],
+  ['checkrange_22',['CheckRange',['../_transmitter_code_2src_2main_8cpp.html#a01c7a0b0de94ec72fe070ea9f90dc2ec',1,'main.cpp']]],
   ['checkrxvolts_23',['CheckRXVolts',['../_transmitter_code_2src_2main_8cpp.html#a3014b0aec0f1343c2fd7b480bd5e0425',1,'main.cpp']]],
   ['checksavedtrimvalues_24',['CheckSavedTrimValues',['../_transmitter_code_2src_2main_8cpp.html#a688c8f45b7061a1574dcb7eb28eec56b',1,'main.cpp']]],
   ['checkscanbutton_25',['CheckScanButton',['../_transmitter_code_2src_2main_8cpp.html#a2dca4e1c03e2abb86aa3c1843c55a1c2',1,'main.cpp']]],

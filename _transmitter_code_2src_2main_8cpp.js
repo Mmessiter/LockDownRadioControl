@@ -33,7 +33,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "CheckLogFileIsOpen", "_transmitter_code_2src_2main_8cpp.html#ac45f2f949ccfa372a8cbab3ef0b8caa8", null ],
     [ "CheckMacrosBuffer", "_transmitter_code_2src_2main_8cpp.html#a6bb930920ba3a8d45a737dde782ef65c", null ],
     [ "CheckModelName", "_transmitter_code_2src_2main_8cpp.html#a984cb52354a84c45e9e41f396a1c5e92", null ],
-    [ "CheckRange_0_16", "_transmitter_code_2src_2main_8cpp.html#a962a0c149ba58563ca3bad19e999e027", null ],
+    [ "CheckRange", "_transmitter_code_2src_2main_8cpp.html#a01c7a0b0de94ec72fe070ea9f90dc2ec", null ],
     [ "CheckRXVolts", "_transmitter_code_2src_2main_8cpp.html#a3014b0aec0f1343c2fd7b480bd5e0425", null ],
     [ "CheckSavedTrimValues", "_transmitter_code_2src_2main_8cpp.html#a688c8f45b7061a1574dcb7eb28eec56b", null ],
     [ "CheckScanButton", "_transmitter_code_2src_2main_8cpp.html#a2dca4e1c03e2abb86aa3c1843c55a1c2", null ],
