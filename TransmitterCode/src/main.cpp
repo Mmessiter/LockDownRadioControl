@@ -999,10 +999,10 @@ void GreenLedOn()
     if (!LedWasGreen || LedIsBlinking) {         // no need to repeat unless it is blinking
         LedWasGreen = true;
         if (!LedIsBlinking) {LastShowTime = 0;ShowComms();}
+        if (AnnounceConnected) PlaySound(CONNECTEDMSG);
         if (FirstConnection) {                   // Zero data on first connection after reboot
             ZeroDataScreen(); 
             FirstConnection = false; 
-            if (AnnounceConnected) PlaySound(CONNECTEDMSG);
             if (UseLog){ 
                 LogConnection();
             }
@@ -5452,9 +5452,9 @@ if (strlen(TextIn) > 0) {
             if (!LostContactFlag && BoundFlag) {
                 SendText(StillConnectedBox,StillConnectedMsg);
                 SendCommand(StillConnected);
-                Procrastinate(1500); 
+                Procrastinate(500); 
                 SendText(StillConnectedBox,TurnOffRX);
-                Procrastinate(1500); 
+                Procrastinate(500); 
                 SendCommand(NotStillConnected);
             }
             else {
