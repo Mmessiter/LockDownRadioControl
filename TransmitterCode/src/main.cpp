@@ -2135,6 +2135,7 @@ void UpdateButtonLabels() {
     char ChannelNumber[16][6]       = {" (1)","(2) "," (3)","(4) "," (5)","(6) "," (7)","(8) "," (9)","(10) "," (11)","(12) "," (13)","(14) "," (15)","(16) "};
     char ArrowRh[]                  = " >";
     char ArrowLh[]                  = "< ";
+    char TrimLabels[4][4]           = {"n0","n1","n2","n3"};
     char LabelText[20];
     
     if (CurrentView == STICKSVIEW) {
@@ -2160,12 +2161,11 @@ void UpdateButtonLabels() {
         for (int i = 0;i < 16; ++i){
             SendText(fsch_labels[i], ChannelNames[i]); 
             SendValue(InputStick_Labels[i], InPutStick[i] + 1);
+            if (i < 4) SendValue(TrimLabels[i], InputTrim[i] + 1);  //
         }
     }
 }
-
 /*********************************************************************************************************************************/
-
 void CheckSavedTrimValues(){
     bool OK = true;
     for (int i = 0; i < 4; ++i) {
@@ -2177,7 +2177,6 @@ void CheckSavedTrimValues(){
         }   
     }
  }
-
 /*********************************************************************************************************************************/
 
 bool ReadOneModel(uint8_t Mnum)
@@ -2265,7 +2264,7 @@ bool ReadOneModel(uint8_t Mnum)
         ++SDCardAddress;
      }
     CheckSavedTrimValues();
-    SDCardAddress += 5; // 5 Spare Bytes here (PID stuff gone) *****************************// heer
+    SDCardAddress += 5; // 5 Spare Bytes here (PID stuff gone) *****************************
     
     for (i = 0; i < CHANNELSUSED; ++i) {
         InPutStick[i] = SDReadByte(SDCardAddress);
@@ -3070,7 +3069,7 @@ void SaveOneModel(uint16_t mnum)
         SDUpdateByte(SDCardAddress,InputTrim[i]);   
         ++SDCardAddress;
      }
-    SDCardAddress += 5; // *********************** 5 spare here remaining  **********************/ heer
+    SDCardAddress += 5; // *********************** 5 spare here remaining  **********************
     
     for (i = 0; i < CHANNELSUSED; ++i) {
         SDUpdateByte(SDCardAddress, InPutStick[i]);
@@ -3381,10 +3380,9 @@ void UpdateSwitchesDisplay()
 }
 
 /*********************************************************************************************************************************/
-uint8_t CheckRange_0_16(uint8_t v)
-{
-    if (v > 16) v = 16;
-    if (v < 0) v = 0;
+int CheckRange(int v,int min, int max){
+    if (v > max) v = max;
+    if (v < min) v = min;   
     return v;
 }
 /*********************************************************************************************************************************/
@@ -4940,6 +4938,7 @@ if (strlen(TextIn) > 0) {
     char InputsView[]              = "InputsView";
     char InputsDone[]              = "InputsDone";
     char InputStick_Labels[16][4]  = {"c1","c2","c3","c4","c5","c6","c7","c8","c9","c10","c11","c12","c13","c14","c15","c16"};
+    char InputTrim_labels[4][4]    =  {"n0","n1","n2","n3"};
     char Export[]                  = "Export";
     char Import[]                  = "Import";
     char ListFiles[]               = "ListFiles";
@@ -5605,7 +5604,8 @@ if (strlen(TextIn) > 0) {
         if (InStrng(InputsDone, TextIn) > 0) {
             SendCommand(ProgressStart);
             for (int i = 0; i < 16; ++i){
-                InPutStick[i] = CheckRange_0_16(GetValue(InputStick_Labels[i]))-1;
+                InPutStick[i] =  CheckRange((GetValue(InputStick_Labels[i])-1),0,15);
+                if (i < 4) InputTrim[i] = CheckRange((GetValue(InputTrim_labels[i])-1),0,3);
                 SendValue(Progress, i *(100/16));
             }
             SendValue(Progress, 99);
