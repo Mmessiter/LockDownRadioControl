@@ -142,8 +142,8 @@ var NAVTREEINDEX =
 "class_m_p_u6050.html#a4d02c38682aa566b6204df3f81fbcb68",
 "class_m_p_u9250.html#a40709f51f790ff69f5b06f35b0a91b72",
 "class_s_b_u_s.html#a44376d88b040d2cdf85f1a6d93633935",
-"globals_a.html",
-"struct_tiny_g_p_s_altitude.html#a5ae68d990ea08d4e21cfa6aefb46cc03"
+"globals.html",
+"struct_raw_degrees.html#a39c31d2d0332155a4d2c975cec0a796f"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
