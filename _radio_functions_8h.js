@@ -173,6 +173,7 @@ var _radio_functions_8h =
     [ "Force_ReDisplay", "_radio_functions_8h.html#aa1e81e58421a34fdfd7bfb31925f5a90", null ],
     [ "GetNewChannelValues", "_radio_functions_8h.html#a1a11fabb6c953055a80c5df5eebbfb0d", null ],
     [ "GetSlaveChannelValues", "_radio_functions_8h.html#a4635a8fc77c9f57fca53a5206cd5e571", null ],
+    [ "GetStickInput", "_radio_functions_8h.html#af065c70531320b19dbb5f54a714e186a", null ],
     [ "GreenLedOn", "_radio_functions_8h.html#a62e53eb9359c32b666e3386d62c57037", null ],
     [ "HopToNextChannel", "_radio_functions_8h.html#a62ec0168b1eea5f5c14f663d9217574d", null ],
     [ "InitRadio", "_radio_functions_8h.html#a86ce6c54618629a61b8502786d2ce82c", null ],
