@@ -36,7 +36,9 @@ FASTRUN void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uint
 
 FASTRUN void TryOtherPipe()
 {
-    if (TotalledRecentPacketsLost > 10 || (!BoundFlag)) { // This avoids needless pipe swapping during poor connection
+   
+    if ((TotalledRecentPacketsLost > 100 || (!BoundFlag))) { // This avoids needless pipe swapping during poor connection
+       Look(TotalledRecentPacketsLost);
         if (BoundFlag == true) {
             BoundFlag = false;
             SetThePipe(DefaultPipe);
@@ -149,14 +151,13 @@ FASTRUN void FailedPacket()
     if (SecondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH);             // INACTIVITY POWER OFF HERE!!
 }
 
-
 /************************************************************************************************************/
 
 void TryToReconnect(){
-   if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) { 
+  // if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {                                                    // BINDPIPETIMEOUT must not be too long
         TryOtherPipe();                                                                                 // in case the receiver has re-booted
-        PipeTimeout = millis();
-    }     
+      //  PipeTimeout = millis();
+  //  }     
     NextChannel = * (FHSSChPointer + random(RECONNECT_CHANNELS_COUNT) + RECONNECT_CHANNELS_START);      // a **random** reconnect channel (selected from first five)
     HopToNextChannel();
 }
@@ -183,6 +184,7 @@ void FlushFifos(){
 /************************************************************************************************************/
 //****************** Function to send pre-compressed data to receiver ***************************************
 /************************************************************************************************************/
+
 
 FASTRUN void SendData()
 {

@@ -70,7 +70,7 @@
 #define CHARSMAX           120                       // Max length for char arrays
 #define UNCOMPRESSEDWORDS  20                        // DATA TO SEND = 40  bytes
 #define COMPRESSEDWORDS   UNCOMPRESSEDWORDS * 3 / 4  // COMPRESSED DATA SENT = 30  bytes
-#define BINDPIPETIMEOUT    25                        // ms timeout for switching from Bound to Default pipe
+#define BINDPIPETIMEOUT    0                         // ms timeout for switching from Bound to Default pipe (works at zero!)
 
 // **************************************************************************
 //                            FHSS PARAMETERS                               *
