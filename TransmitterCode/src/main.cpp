@@ -1354,7 +1354,7 @@ FASTRUN void ShowServoPos()
         if (ChanneltoSet <= 8) {   
             l1 = analogRead(AnalogueInput[l]);
         }else{
-             l1 =  GetStickInput(l);
+            l1 =  GetStickInput(l);
         }
             if (ReversedChannelBITS & 1 << (ChanneltoSet-1)){  // reversed??
                     if (l1 <= ChannelCentre[l]){
@@ -1934,14 +1934,14 @@ void CalibrateSticks()   // This discovers end of travel place for sticks etc.
 void ChannelCentres()
 { 
     for (int i = 0; i < PROPOCHANNELS; ++i) {
-        ChannelCentre[i] = analogRead(AnalogueInput[i]);
-        ChannelMidHi[i]  = ChannelCentre[i] + ((ChannelMax[i] - ChannelCentre[i]) / 2);
-        ChannelMidLow[i] = ChannelMin[i] + ((ChannelCentre[i] - ChannelMin[i]) / 2);
+        ChannelCentre[i]    = analogRead(AnalogueInput[i]);
+        ChannelMidHi[i]     = ChannelCentre[i] + ((ChannelMax[i] - ChannelCentre[i]) / 2);
+        ChannelMidLow[i]    = ChannelMin[i] + ((ChannelCentre[i] - ChannelMin[i]) / 2);
     }
     for (int i = PROPOCHANNELS; i < CHANNELSUSED; ++i) { 
-             ChannelMin[i]      = 500;
-             ChannelCentre[i]   = 1500;
-             ChannelMax[i]      = 2500;
+        ChannelMin[i]      = 500;
+        ChannelCentre[i]   = 1500;
+        ChannelMax[i]      = 2500;
     }
     GetNewChannelValues();
     CalibrateEdgeSwitches();        // These are now calibrated too in case some are reversed.
