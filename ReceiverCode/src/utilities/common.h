@@ -56,7 +56,6 @@
     #define CE_ON   HIGH
     #define CE_OFF  LOW
 
-
     // #define DB_FHSS        
     // #define DB_SENSORS
     // #define DB_BIND
