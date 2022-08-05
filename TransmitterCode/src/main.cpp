@@ -4193,7 +4193,13 @@ void ReceiveModelFile()
     ModelsFileNumber = SD.open(SingleModelFile, FILE_WRITE);                    //  Open file to receive
     RXTimer          = millis();                                                //  zero timeout
     while ((Fposition < Fsize) && (millis() - RXTimer) / 1000 <= FILETIMEOUT) { //  (Fposition<Fsize) ********************
-        KickTheDog();                                                           //  Watchdog
+        KickTheDog();                                                 //  Watchdog
+        if (GetButtonPress()){    // user can abandon the transfer by hitting a button 
+              NormaliseTheRadio();
+              RedLedOn();
+              ButtonWasPressed();
+              return;
+        }
         if (Radio1.available()) {
             Radio1.flush_tx();
             Radio1.writeAckPayload(1, &Fack, sizeof(Fack));
