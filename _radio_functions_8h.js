@@ -253,7 +253,7 @@ var _radio_functions_8h =
     [ "NoCarrier", "_radio_functions_8h.html#a2a951a35df4a07c010710b02a17f92b7", null ],
     [ "NoSleeping", "_radio_functions_8h.html#aa336d2e589396e246b779e7ed2b097c0", null ],
     [ "PacketNumber", "_radio_functions_8h.html#a09cb370d93005b5a43e932a3d6093ea2", null ],
-    [ "PipeTimeout", "_radio_functions_8h.html#a54a3133087523f6dc1d418f09f75e06c", null ],
+    [ "PipeTimeout", "_radio_functions_8h.html#a656582814675067f4ca9775bbdc71e18", null ],
     [ "PreviousUkRules", "_radio_functions_8h.html#a1d77a74eeedd4ed97d38aba4996085b9", null ],
     [ "Radio1", "_radio_functions_8h.html#aae23a8374f487a46c5fcb1fb02fadc69", null ],
     [ "RangeTestGoodPackets", "_radio_functions_8h.html#a8a5b55d644bb404cd6cdf61c5a85f822", null ],
