@@ -74,7 +74,7 @@ var searchData=
   ['ina219_5fconfig_5fsadcres_5f12bit_5f8s_5f4260us_71',['INA219_CONFIG_SADCRES_12BIT_8S_4260US',['../_adafruit___i_n_a219_8h.html#adc29c2ff13d900c2f185ee95427fb06cacbf87c0a00a39d443bdbd85fc926c702',1,'Adafruit_INA219.h']]],
   ['ina219_5fconfig_5fsadcres_5f9bit_5f1s_5f84us_72',['INA219_CONFIG_SADCRES_9BIT_1S_84US',['../_adafruit___i_n_a219_8h.html#adc29c2ff13d900c2f185ee95427fb06caddc0717802747ff5a1ff418fb8bfcad5',1,'Adafruit_INA219.h']]],
   ['ina219_5fconfig_5fsadcres_5fmask_73',['INA219_CONFIG_SADCRES_MASK',['../_adafruit___i_n_a219_8h.html#ad66384c679c835a2ab915fc50db2ed78',1,'Adafruit_INA219.h']]],
-  ['ina219_5fconnected_74',['INA219_CONNECTED',['../common_01_07_malcolm_xE2_x80_x99s_01_mac_book_01_air's_01conflicted_01copy_012022-07-14_08_8h.html#a8d0889feaf5beb5db1e50a266ea7b0a5',1,'INA219_CONNECTED():&#160;common (Malcolm’s MacBook Air&apos;s conflicted copy 2022-07-14).h'],['../common_8h.html#a8d0889feaf5beb5db1e50a266ea7b0a5',1,'INA219_CONNECTED():&#160;common.h']]],
+  ['ina219_5fconnected_74',['INA219_CONNECTED',['../common_8h.html#a8d0889feaf5beb5db1e50a266ea7b0a5',1,'common.h']]],
   ['ina219_5fread_75',['INA219_READ',['../_adafruit___i_n_a219_8h.html#acf1557fd16ff50351f795b87a9d4cddf',1,'Adafruit_INA219.h']]],
   ['ina219_5freg_5fbusvoltage_76',['INA219_REG_BUSVOLTAGE',['../_adafruit___i_n_a219_8h.html#a06987d28f8a8885f7d1f6a10d0ec6b3b',1,'Adafruit_INA219.h']]],
   ['ina219_5freg_5fcalibration_77',['INA219_REG_CALIBRATION',['../_adafruit___i_n_a219_8h.html#a7ec015caf45bb013e8858a6e53e47e3c',1,'Adafruit_INA219.h']]],
