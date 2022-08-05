@@ -1778,7 +1778,7 @@ int m, c, p, mindeg, maxdeg, TheSum, Result;
                         p = p * Mixes[m][M_Percent] / 50; // *****  50, not 100, because mix can now go right to 200% *****
                         if (Mixes[m][M_Reversed] == 1) p = -p;
                         TheSum = SendBuffer[(Mixes[m][M_SlaveChannel]) - 1] + p;  // THIS IS THE MIX!
-                        mindeg = IntoHigherRes(MinDegrees[FlightMode][(Mixes[m][M_SlaveChannel]) - 1]);
+                        mindeg = IntoHigherRes(MinDegrees[FlightMode][(Mixes[m][M_SlaveChannel]) - 1]); // todo: add option to change or remove constraints
                         maxdeg = IntoHigherRes(MaxDegrees[FlightMode][(Mixes[m][M_SlaveChannel]) - 1]);
                         if (mindeg > maxdeg) {
                             Result = constrain(TheSum, maxdeg, mindeg);
