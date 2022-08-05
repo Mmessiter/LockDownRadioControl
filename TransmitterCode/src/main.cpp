@@ -1348,10 +1348,14 @@ FASTRUN void ShowServoPos()
 #define fixitx          35
 #define BarWidth        3
 #define LeastDistance   2          // if the change is very small, don't re-display anything - to reduce flashing.
-
-        if (ChanneltoSet <= 8) {
-            l  = (InPutStick[ChanneltoSet - 1]);
+        
+        
+        l  = (InPutStick[ChanneltoSet - 1]);
+        if (ChanneltoSet <= 8) {   
             l1 = analogRead(AnalogueInput[l]);
+        }else{
+             l1 =  GetStickInput(l);
+        }
             if (ReversedChannelBITS & 1 << (ChanneltoSet-1)){  // reversed??
                     if (l1 <= ChannelCentre[l]){
                         l1 = map(l1,ChannelMin[l],ChannelCentre[l],ChannelMax[l],ChannelCentre[l]);
@@ -1368,7 +1372,7 @@ FASTRUN void ShowServoPos()
                     SavedLineX = StickPosition;
                 }
             }
-            else {
+            else { 
                 SendValue(ChannelInput, map(l1, ChannelCentre[l], ChannelMax[l], 0, 100));
                 StickPosition = map(l1, ChannelCentre[l], ChannelMax[l],BoxLeft+(((BoxRight-fixitx)-BoxLeft)/2),BoxRight-fixitx);
                 if (abs(StickPosition - SavedLineX) > LeastDistance) {
@@ -1377,7 +1381,7 @@ FASTRUN void ShowServoPos()
                     SavedLineX = StickPosition;
                 }
             }
-            if (Connected){
+        if (Connected){
                 SendValue(ChannelOutput, map(SendBuffer[ChanneltoSet - 1], MINMICROS, MAXMICROS, -100, 100));
             }else{
                 SendValue(ChannelOutput,0);   // because when not connected nothing is sent
@@ -1387,7 +1391,7 @@ FASTRUN void ShowServoPos()
             SendValue(ChannelOutput, 0);
         }
     }
-}
+
 
 /*********************************************************************************************************************************/
 FASTRUN bool CheckTXVolts(){
@@ -1933,6 +1937,11 @@ void ChannelCentres()
         ChannelCentre[i] = analogRead(AnalogueInput[i]);
         ChannelMidHi[i]  = ChannelCentre[i] + ((ChannelMax[i] - ChannelCentre[i]) / 2);
         ChannelMidLow[i] = ChannelMin[i] + ((ChannelCentre[i] - ChannelMin[i]) / 2);
+    }
+    for (int i = PROPOCHANNELS; i < CHANNELSUSED; ++i) { 
+             ChannelMin[i]      = 500;
+             ChannelCentre[i]   = 1500;
+             ChannelMax[i]      = 2500;
     }
     GetNewChannelValues();
     CalibrateEdgeSwitches();        // These are now calibrated too in case some are reversed.
