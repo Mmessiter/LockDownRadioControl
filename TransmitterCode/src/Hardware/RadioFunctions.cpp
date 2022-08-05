@@ -36,11 +36,9 @@ FASTRUN void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uint
 
 FASTRUN void TryOtherPipe(){   
     if (BoundFlag == true) {
-            BoundFlag = false;
-            SetThePipe(DefaultPipe);
-    }
-    else
-    {
+        BoundFlag = false;
+        SetThePipe(DefaultPipe);
+    } else {
         BoundFlag = true;
         SetThePipe(NewPipe);
     }
