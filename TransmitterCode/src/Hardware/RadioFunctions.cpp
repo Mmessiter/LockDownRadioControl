@@ -34,11 +34,9 @@ FASTRUN void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uint
 }
 /************************************************************************************************************/
 
-FASTRUN void TryOtherPipe()
-{
-   
+FASTRUN void TryOtherPipe(){   
+    
     if ((TotalledRecentPacketsLost > 100 || (!BoundFlag))) { // This avoids needless pipe swapping during poor connection
-       Look(TotalledRecentPacketsLost);
         if (BoundFlag == true) {
             BoundFlag = false;
             SetThePipe(DefaultPipe);
