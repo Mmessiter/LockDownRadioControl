@@ -295,7 +295,7 @@ bool      USE_INA219      = false;
 uint8_t   BindingNow      = 0;
 int       BindingTimer    = 0;
 bool      BoundFlag       = false;
-int       PipeTimeout     = 0;
+uint32_t  PipeTimeout     = 0;
 bool      Switch[8];
 bool      TrimSwitch[8];
 

@@ -7,12 +7,12 @@
 #define RadioFunctions_H
 
 // **************************************************************************
-//                TX VERSION NUMBER   (July 2022 Malcolm Messiter)          *
+//                TX VERSION NUMBER   (August 2022 Malcolm Messiter)        *
 //***************************************************************************
 
 #define TXVERSION_MAJOR   1
 #define TXVERSION_MINOR   8
-#define TXVERSION_MINIMUS 3
+#define TXVERSION_MINIMUS 4
 
 // **************************************************************************
 //                               Includes                                   *
@@ -70,7 +70,7 @@
 #define CHARSMAX           120                       // Max length for char arrays
 #define UNCOMPRESSEDWORDS  20                        // DATA TO SEND = 40  bytes
 #define COMPRESSEDWORDS   UNCOMPRESSEDWORDS * 3 / 4  // COMPRESSED DATA SENT = 30  bytes
-#define BINDPIPETIMEOUT    1000                      // timeout for switching from Bound to Default pipe
+#define BINDPIPETIMEOUT    25                        // ms timeout for switching from Bound to Default pipe
 
 // **************************************************************************
 //                            FHSS PARAMETERS                               *
@@ -288,7 +288,7 @@
 // external (global vars) needed here
 
 extern RF24           Radio1;
-extern int            PipeTimeout;
+extern uint32_t       PipeTimeout;
 extern uint8_t        CurrentMode;
 extern uint8_t        NoCarrier[];
 extern uint8_t        AllChannels[];

@@ -153,7 +153,7 @@ FASTRUN void FailedPacket()
 /************************************************************************************************************/
 
 void TryToReconnect(){
-   if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {
+   if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) { 
         TryOtherPipe();                                                                                 // in case the receiver has re-booted
         PipeTimeout = millis();
     }     
