@@ -9,7 +9,6 @@ var _radio_functions_8h =
     [ "BATTERYISLOW", "_radio_functions_8h.html#a26aac4b23321722632f5c1676e561e4b", null ],
     [ "BEEPCOMPLETE", "_radio_functions_8h.html#a8a6f6e179e833662304277533103f99f", null ],
     [ "BEEPMIDDLE", "_radio_functions_8h.html#ae4346a524bff46ea22911635a0c865ef", null ],
-    [ "BINDPIPETIMEOUT", "_radio_functions_8h.html#ab78495430313aff0f45726425e8d31d3", null ],
     [ "Black", "_radio_functions_8h.html#a68eb1f80b4df2818e5a0774106748141", null ],
     [ "Blue", "_radio_functions_8h.html#a6208a194d702872fdbe1d3c7d7a7c879", null ],
     [ "BLUELED", "_radio_functions_8h.html#a0cc50e8ab2356e8108bbb4376c02119e", null ],
