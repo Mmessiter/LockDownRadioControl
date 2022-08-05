@@ -35,17 +35,14 @@ FASTRUN void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uint
 /************************************************************************************************************/
 
 FASTRUN void TryOtherPipe(){   
-    
-    if ((TotalledRecentPacketsLost > 100 || (!BoundFlag))) { // This avoids needless pipe swapping during poor connection
-        if (BoundFlag == true) {
+    if (BoundFlag == true) {
             BoundFlag = false;
             SetThePipe(DefaultPipe);
-        }
-        else
-        {
-            BoundFlag = true;
-            SetThePipe(NewPipe);
-        }
+    }
+    else
+    {
+        BoundFlag = true;
+        SetThePipe(NewPipe);
     }
 }
 
@@ -152,11 +149,8 @@ FASTRUN void FailedPacket()
 /************************************************************************************************************/
 
 void TryToReconnect(){
-  // if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {                                                    // BINDPIPETIMEOUT must not be too long
-        TryOtherPipe();                                                                                 // in case the receiver has re-booted
-      //  PipeTimeout = millis();
-  //  }     
-    NextChannel = * (FHSSChPointer + random(RECONNECT_CHANNELS_COUNT) + RECONNECT_CHANNELS_START);      // a **random** reconnect channel (selected from first five)
+    if ((TotalledRecentPacketsLost > 100 || (!BoundFlag))) TryOtherPipe();                              // In case the receiver has re-booted                                                                        
+    NextChannel = * (FHSSChPointer + random(RECONNECT_CHANNELS_COUNT) + RECONNECT_CHANNELS_START);      // random reconnect channel (selected from first three)
     HopToNextChannel();
 }
 /************************************************************************************************************/
