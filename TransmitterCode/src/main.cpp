@@ -356,7 +356,7 @@ bool     BindButton  = false;
 
 uint8_t  PreviousChannelNumber = 0;
 uint8_t  NextChannelNumber     = 0;
-bool     InhibitNameCheck      = false;
+//bool     InhibitNameCheck      = false;
 
 // changing these four valiables controls LED blink and speed
 
@@ -4642,7 +4642,7 @@ void IncFileInView(){    // 2
 }
 /******************************************************************************************************************************/
 void DoModelNameTimeCheck(){
-            ModelNameTimeCheck = 0 ;
+            ModelNameTimeCheck = millis() ;
 }
 /******************************************************************************************************************************/
 void GotoModelsView(){
@@ -6912,7 +6912,6 @@ void CheckModelName(){                               // In ModelsView, this func
 char ModelsView_ModelNumber[]   = "ModelNumber";    
 char ModelsView_ModelName[]     = "ModelName";
 char NewName[35];
-    if (!InhibitNameCheck){                          // If name is being edited, do not check it.
         ModelNumber = GetValue(ModelsView_ModelNumber); 
         GetText(ModelsView_ModelName,NewName);
         if (GetButtonPress()) ButtonWasPressed();     // Deal with button ... don't want to miss one!
@@ -6921,7 +6920,6 @@ char NewName[35];
                     strcpy(ModelName,NewName);        // Edited name!
                     SaveOneModel(ModelNumber);        // Save it!
                 }
-        }
         if (GetButtonPress()) ButtonWasPressed();     // Deal with button ... don't want to miss one!
         if (LastModelLoaded != ModelNumber) {
             if (ModelNumber >= 1) {                   // Don't use number zero
@@ -6947,21 +6945,14 @@ void  CheckScanButton(){
 /************************************************************************************************************/
 // LOOP
 /************************************************************************************************************/
-FASTRUN void loop()
-{  
-    KickTheDog();                    // Watchdog
-    if (GetButtonPress()) {
-        ButtonWasPressed();          // Deal with button
-    }
-    if ((millis()-ModelNameTimeCheck) > 1000) {  
+FASTRUN void loop(){  
+    KickTheDog();                                               // Watchdog
+    if (GetButtonPress())  ButtonWasPressed();                  // Deal with button
+    if ((millis()-ModelNameTimeCheck) > 1000) {                 
         ModelNameTimeCheck  = millis();
-        if (CurrentView == MAINSETUPVIEW){ 
-            CheckScanButton();           
-        }
-        if (CurrentView == MODELSVIEW){ 
-            CheckModelName();                                  // In MODELSVIEW, this function checks correct name is displayed.
-            if (GetButtonPress()) ButtonWasPressed();          // Deal with button ... don't want to miss one!
-        }
+        if (CurrentView == MAINSETUPVIEW) CheckScanButton();           
+        if (CurrentView == MODELSVIEW)    CheckModelName();    // In MODELSVIEW, this function checks correct name is displayed.
+        if (GetButtonPress()) ButtonWasPressed();              // Deal with button ... don't want to miss one!
     }
     if (millis() - LastTimeRead >= 1000) {
         ReadTime();                  // Do the clock
