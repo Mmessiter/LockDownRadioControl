@@ -998,8 +998,11 @@ void GreenLedOn()
 {
     if (!LedWasGreen || LedIsBlinking) {         // no need to repeat unless it is blinking
         LedWasGreen = true;
-        if (!LedIsBlinking) {LastShowTime = 0;ShowComms();}
-        if (AnnounceConnected) PlaySound(CONNECTEDMSG);
+        if (!LedIsBlinking){
+            LastShowTime = 0;
+            ShowComms();
+            if (AnnounceConnected) PlaySound(CONNECTEDMSG);
+        }
         if (FirstConnection) {                   // Zero data on first connection after reboot
             ZeroDataScreen(); 
             FirstConnection = false; 
