@@ -2475,6 +2475,7 @@ bool LoadAllParameters()
         }
         CheckTrimValues();
         MemoryForTransmtter = SDCardAddress;
+        if ((ModelNumber < 1) || (ModelNumber > 99)) ModelNumber = 1;
         ReadOneModel(ModelNumber); // this
         return true;
     }
