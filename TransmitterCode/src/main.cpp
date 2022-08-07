@@ -4833,7 +4833,7 @@ void (*NumberedFunctions[LASTFUNCTION])() {
                 StartTrimDefView,           // 22 
                 DefineTrimsStart,           // 23 // [spare] 
                 DefineTrimsEnd,             // 24 
-                EditingModelName            // 25
+                EditingModelName            // 25 // not needed now 
                 };                         // list will become much longer ...
 
 /*********************************************************************************************************************************
