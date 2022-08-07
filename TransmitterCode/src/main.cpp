@@ -440,6 +440,7 @@ uint16_t SavedLineX          = 12345;
 bool     FirstConnection     = true;
 File     LogFileNumber;
 bool     LogFileOpen         =  false;
+bool     SkipNameCheck       = false; 
 //
 // ********************************************************************************************************************************** 
 
@@ -4642,7 +4643,8 @@ void IncFileInView(){    // 2
 }
 /******************************************************************************************************************************/
 void DoModelNameTimeCheck(){
-            ModelNameTimeCheck = millis() ;
+            ModelNameTimeCheck = 0; 
+            SkipNameCheck = false;
 }
 /******************************************************************************************************************************/
 void GotoModelsView(){
@@ -4654,6 +4656,7 @@ void GotoModelsView(){
             BuildDirectory();                 // of SD card
             ShowFileNumber();
             SendValue(mn,ModelNumber);
+            SkipNameCheck = false;
 }
 /******************************************************************************************************************************/
 void GotoMacrosView(){
@@ -4794,12 +4797,17 @@ uint8_t  T[8] = {TRIM1A, TRIM1B,  TRIM2A, TRIM2B,  TRIM3A, TRIM3B,  TRIM4A, TRIM
     for (int i = 0; i < 8; ++i) {TrimNumber[i] = T[i];}
 }
 /******************************************************************************************************************************/
-void DefineTrimsStart(){ // redundant
-  
+void DefineTrimsStart(){ // redundant 
+}
+/******************************************************************************************************************************/
+ 
+void EditingModelName(){ 
+        SkipNameCheck = true;
+        // heer 
 }
 
 // ******************************** Global Array of numbered function pointers - OK up to 128 functions ... **********************************
-#define LASTFUNCTION 25                     // one more than final one
+#define LASTFUNCTION 26                     // one more than final one
 
 void (*NumberedFunctions[LASTFUNCTION])() {
                 Blank,                      // 0 (spare)
@@ -4826,8 +4834,9 @@ void (*NumberedFunctions[LASTFUNCTION])() {
                 EndSubTrimView,             // 21 
                 StartTrimDefView,           // 22 
                 DefineTrimsStart,           // 23 // [spare] 
-                DefineTrimsEnd              // 24 
-                };                          // list will become much longer ...
+                DefineTrimsEnd,             // 24 
+                EditingModelName            // 25
+                };                         // list will become much longer ...
 
 /*********************************************************************************************************************************
  *                          BUTTON WAS PRESSED (DEAL WITH INPUT FROM NEXTION DISPLAY)                                            *
@@ -6909,7 +6918,7 @@ FASTRUN void CheckGapsLength()
 
 /************************************************************************************************************/
 void CheckModelName(){                               // In ModelsView, this function checks correct name is displayed.
-char ModelsView_ModelNumber[]   = "ModelNumber";    
+char ModelsView_ModelNumber[]   = "ModelNumber";    // heer 
 char ModelsView_ModelName[]     = "ModelName";
 char NewName[35];
         ModelNumber = GetValue(ModelsView_ModelNumber); 
@@ -6919,14 +6928,17 @@ char NewName[35];
                 if (strcmp(ModelName,NewName) != 0) { // Change?
                     strcpy(ModelName,NewName);        // Edited name!
                     SaveOneModel(ModelNumber);        // Save it!
+                    return;
                 }
-        if (GetButtonPress()) ButtonWasPressed();     // Deal with button ... don't want to miss one!
+        if (GetButtonPress()) ButtonWasPressed();      // Deal with button ... don't want to miss one!
         if (LastModelLoaded != ModelNumber) {
-            if (ModelNumber >= 1) {                   // Don't use number zero
-                 ReadOneModel(ModelNumber);   
-                 if (UseLog) LogThisModel();
-                 LastModelLoaded = ModelNumber;
-                 UpdateModelsNameEveryWhere();  
+            if (!SkipNameCheck){
+                if (ModelNumber >= 1) {                // Don't use number zero
+                     ReadOneModel(ModelNumber);   
+                    if (UseLog) LogThisModel();
+                    LastModelLoaded = ModelNumber;
+                    UpdateModelsNameEveryWhere();  
+                } 
             }
         }
     ClearText(); 
@@ -6948,7 +6960,7 @@ void  CheckScanButton(){
 FASTRUN void loop(){  
     KickTheDog();                                               // Watchdog
     if (GetButtonPress())  ButtonWasPressed();                  // Deal with button
-    if ((millis()-ModelNameTimeCheck) > 1000) {                 
+    if ((millis()-ModelNameTimeCheck) > 800) {                 
         ModelNameTimeCheck  = millis();
         if (CurrentView == MAINSETUPVIEW) CheckScanButton();           
         if (CurrentView == MODELSVIEW)    CheckModelName();    // In MODELSVIEW, this function checks correct name is displayed.
