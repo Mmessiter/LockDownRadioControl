@@ -440,7 +440,7 @@ uint16_t SavedLineX          = 12345;
 bool     FirstConnection     = true;
 File     LogFileNumber;
 bool     LogFileOpen         =  false;
-bool     SkipNameCheck       = false; 
+
 //
 // ********************************************************************************************************************************** 
 
@@ -2198,12 +2198,10 @@ bool ReadOneModel(uint8_t Mnum)
     uint16_t i;
     char NoModelYet[]  = "Model ";
     char nb[5];
-
+    if ((ModelNumber > 99) || (ModelNumber < 0)) ModelNumber = 1;
     Str(nb,ModelNumber,0);
     strcpy(ModelName,NoModelYet);
     strcat(ModelName, nb);
-
-
     if (!ModelsFileOpen) OpenModelsFile();
     if (!ModelsFileOpen) return false;
     SDCardAddress = TXSIZE;                    //  spare bytes for TX stuff
@@ -2477,7 +2475,7 @@ bool LoadAllParameters()
         CheckTrimValues();
         MemoryForTransmtter = SDCardAddress;
         if ((ModelNumber < 1) || (ModelNumber > 99)) ModelNumber = 1;
-        ReadOneModel(ModelNumber); // this
+        ReadOneModel(ModelNumber); 
         return true;
     }
     else {
@@ -3617,7 +3615,7 @@ void SetDefaultValues()
     OpenModelsFile();
     SDUpdateByte(SDCardAddress, ModelDefined);      // mark this model as undefined
     CloseModelsFile();
-    ReadOneModel(ModelNumber);  // not this
+    ReadOneModel(ModelNumber);  
     UpdateModelsNameEveryWhere();
     Procrastinate(100);
     SendCommand(ProgressEnd);
@@ -4644,7 +4642,7 @@ void IncFileInView(){    // 2
 /******************************************************************************************************************************/
 void DoModelNameTimeCheck(){
             ModelNameTimeCheck = 0; 
-            SkipNameCheck = false;
+          
 }
 /******************************************************************************************************************************/
 void GotoModelsView(){
@@ -4656,7 +4654,7 @@ void GotoModelsView(){
             BuildDirectory();                 // of SD card
             ShowFileNumber();
             SendValue(mn,ModelNumber);
-            SkipNameCheck = false;
+           
 }
 /******************************************************************************************************************************/
 void GotoMacrosView(){
@@ -4802,8 +4800,8 @@ void DefineTrimsStart(){ // redundant
 /******************************************************************************************************************************/
  
 void EditingModelName(){ 
-        SkipNameCheck = true;
-        // heer 
+      // not used
+       
 }
 
 // ******************************** Global Array of numbered function pointers - OK up to 128 functions ... **********************************
@@ -6918,7 +6916,7 @@ FASTRUN void CheckGapsLength()
 
 /************************************************************************************************************/
 void CheckModelName(){                               // In ModelsView, this function checks correct name is displayed.
-char ModelsView_ModelNumber[]   = "ModelNumber";    // heer 
+char ModelsView_ModelNumber[]   = "ModelNumber";     // heer 
 char ModelsView_ModelName[]     = "ModelName";
 char NewName[35];
         ModelNumber = GetValue(ModelsView_ModelNumber); 
@@ -6928,18 +6926,18 @@ char NewName[35];
                     strcpy(ModelName,NewName);        // Edited name!
                     SaveOneModel(ModelNumber);        // Save it!
                     CloseModelsFile();
-                    ReadOneModel(ModelNumber);
+                    SendCommand(page_FrontView);
+                    CurrentView = FRONTVIEW; 
                     UpdateModelsNameEveryWhere();
                 }
         if (GetButtonPress()) ButtonWasPressed();      // Deal with button ... don't want to miss one!
         if (LastModelLoaded != ModelNumber) {
-            if (!SkipNameCheck){
                 if (ModelNumber >= 1) {                // Don't use number zero
+                    if ((ModelNumber > 99)||(ModelNumber < 1)) ModelNumber = 1;   
                      ReadOneModel(ModelNumber);   
                     if (UseLog) LogThisModel();
                     LastModelLoaded = ModelNumber;
                     UpdateModelsNameEveryWhere();  
-                } 
             }
         }
     ClearText(); 
@@ -6961,7 +6959,7 @@ void  CheckScanButton(){
 FASTRUN void loop(){  
     KickTheDog();                                               // Watchdog
     if (GetButtonPress())  ButtonWasPressed();                  // Deal with button
-    if ((millis()-ModelNameTimeCheck) > 1000) {                 
+    if ((millis()-ModelNameTimeCheck) > 500) {                 
         ModelNameTimeCheck  = millis();
         if (CurrentView == MAINSETUPVIEW) CheckScanButton();           
         if (CurrentView == MODELSVIEW)    CheckModelName();    // In MODELSVIEW, this function checks correct name is displayed.
