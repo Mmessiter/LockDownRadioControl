@@ -6926,9 +6926,7 @@ char NewName[35];
                     strcpy(ModelName,NewName);        // Edited name!
                     SaveOneModel(ModelNumber);        // Save it!
                     CloseModelsFile();
-                    SendCommand(page_FrontView);
-                    CurrentView = FRONTVIEW; 
-                    UpdateModelsNameEveryWhere();
+                    return;
                 }
         if (GetButtonPress()) ButtonWasPressed();      // Deal with button ... don't want to miss one!
         if (LastModelLoaded != ModelNumber) {
@@ -6959,7 +6957,7 @@ void  CheckScanButton(){
 FASTRUN void loop(){  
     KickTheDog();                                               // Watchdog
     if (GetButtonPress())  ButtonWasPressed();                  // Deal with button
-    if ((millis()-ModelNameTimeCheck) > 500) {                 
+    if ((millis()-ModelNameTimeCheck) > 900) {                 
         ModelNameTimeCheck  = millis();
         if (CurrentView == MAINSETUPVIEW) CheckScanButton();           
         if (CurrentView == MODELSVIEW)    CheckModelName();    // In MODELSVIEW, this function checks correct name is displayed.
