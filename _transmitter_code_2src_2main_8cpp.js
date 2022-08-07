@@ -464,7 +464,6 @@ var _transmitter_code_2src_2main_8cpp =
     [ "SingleModelFile", "_transmitter_code_2src_2main_8cpp.html#ae72cb82df39671a3226320fc9c32c125", null ],
     [ "SingleModelFlag", "_transmitter_code_2src_2main_8cpp.html#ae2cdde9c7cfcbfc86f8e37f2b63c2fbe", null ],
     [ "SizeOfCompressedData", "_transmitter_code_2src_2main_8cpp.html#ac99b4fb4d71fa95d1ee8ab0a81696a4d", null ],
-    [ "SkipNameCheck", "_transmitter_code_2src_2main_8cpp.html#a47f909a4a5bc3a86c5d9b47618a8c655", null ],
     [ "SlaveHasControl", "_transmitter_code_2src_2main_8cpp.html#afd042feb8b8e181cbff0d5f27fde063e", null ],
     [ "SpeakingClock", "_transmitter_code_2src_2main_8cpp.html#ad6ee693920610731a7b3b3627219fbfc", null ],
     [ "SpecialColour", "_transmitter_code_2src_2main_8cpp.html#ad573af1737d71953a0301a82b1bee22d", null ],
