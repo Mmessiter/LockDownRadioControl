@@ -6922,13 +6922,14 @@ char ModelsView_ModelNumber[]   = "ModelNumber";    // heer
 char ModelsView_ModelName[]     = "ModelName";
 char NewName[35];
         ModelNumber = GetValue(ModelsView_ModelNumber); 
-        GetText(ModelsView_ModelName,NewName);
         if (GetButtonPress()) ButtonWasPressed();     // Deal with button ... don't want to miss one!
-        if (strlen(NewName) > 3)  {                   // Short texts come in from kbd screen
-                if (strcmp(ModelName,NewName) != 0) { // Change?
+        if ((GetText(ModelsView_ModelName,NewName)) > 3)  {                   // Short texts come in from kbd screen
+                if (strcmp(ModelName,NewName) != 0) { // Changed name?
                     strcpy(ModelName,NewName);        // Edited name!
                     SaveOneModel(ModelNumber);        // Save it!
-                    return;
+                    CloseModelsFile();
+                    ReadOneModel(ModelNumber);
+                    UpdateModelsNameEveryWhere();
                 }
         if (GetButtonPress()) ButtonWasPressed();      // Deal with button ... don't want to miss one!
         if (LastModelLoaded != ModelNumber) {
@@ -6960,7 +6961,7 @@ void  CheckScanButton(){
 FASTRUN void loop(){  
     KickTheDog();                                               // Watchdog
     if (GetButtonPress())  ButtonWasPressed();                  // Deal with button
-    if ((millis()-ModelNameTimeCheck) > 800) {                 
+    if ((millis()-ModelNameTimeCheck) > 1000) {                 
         ModelNameTimeCheck  = millis();
         if (CurrentView == MAINSETUPVIEW) CheckScanButton();           
         if (CurrentView == MODELSVIEW)    CheckModelName();    // In MODELSVIEW, this function checks correct name is displayed.
