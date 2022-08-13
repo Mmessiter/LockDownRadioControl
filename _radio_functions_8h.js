@@ -89,6 +89,7 @@ var _radio_functions_8h =
     [ "ONE_SWITCH_VIEW", "_radio_functions_8h.html#a933cba614da0ca34d9e36b24d462ee07", null ],
     [ "ONEMINUTE", "_radio_functions_8h.html#aaf3f23da47dee530842f92fe3d3501e3", null ],
     [ "OPTIONS_VIEW", "_radio_functions_8h.html#ae621a5598c31428a00cb602730a5259d", null ],
+    [ "OPTIONVIEW2", "_radio_functions_8h.html#a9ae3e0717733059e0261c02343d5c917", null ],
     [ "Orange", "_radio_functions_8h.html#a154e686fe7f3f545c01af3592ce0cdff", null ],
     [ "PACEMAKER", "_radio_functions_8h.html#a56e90cbec59fa96bebfb3db997e6a3fe", null ],
     [ "POWER_OFF_PIN", "_radio_functions_8h.html#aac8f9c268e406507be95a1255281323c", null ],

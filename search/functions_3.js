@@ -11,7 +11,7 @@ var searchData=
   ['dectrim_8',['DecTrim',['../_transmitter_code_2src_2main_8cpp.html#ae4be4bb0e33569d140264079d28227fd',1,'main.cpp']]],
   ['decyear_9',['DecYear',['../_transmitter_code_2src_2main_8cpp.html#ad712237b8d367326a7f460181dade102',1,'main.cpp']]],
   ['definetrimsend_10',['DefineTrimsEnd',['../_transmitter_code_2src_2main_8cpp.html#a175b6111f05e020becf6f4fc8c3e474d',1,'main.cpp']]],
-  ['definetrimsstart_11',['DefineTrimsStart',['../_radio_functions_8h.html#aa36a3594acf30c4314af50c16b9f3c58',1,'DefineTrimsStart():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#aa36a3594acf30c4314af50c16b9f3c58',1,'DefineTrimsStart():&#160;main.cpp']]],
+  ['definetrimsstart_11',['DefineTrimsStart',['../_radio_functions_8h.html#aa36a3594acf30c4314af50c16b9f3c58',1,'RadioFunctions.h']]],
   ['deg_12',['deg',['../struct_tiny_g_p_s_course.html#a76dc8ae6c2fe5ead9b44c8d53a3272ca',1,'TinyGPSCourse']]],
   ['degstopercent_13',['DegsToPercent',['../_transmitter_code_2src_2main_8cpp.html#a68b36025c7478c0710565b4fb059d9bc',1,'main.cpp']]],
   ['deletelogfile_14',['DeleteLogFile',['../_transmitter_code_2src_2main_8cpp.html#a6425b8279e521002220e7d104e97b265',1,'main.cpp']]],
