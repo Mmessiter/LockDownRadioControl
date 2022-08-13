@@ -151,6 +151,7 @@
 #define BUDDYVIEW       22
 #define LOGVIEW         23
 #define TRIMDEFVIEW     24
+#define OPTIONVIEW2     25 
 
 // **************************************************************************
 //                          Switches' GPIOs                                 *

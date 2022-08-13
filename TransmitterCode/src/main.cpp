@@ -886,10 +886,10 @@ void ReadTime()
     char Owner[] = "Owner";
     uint8_t DisplayedHour;
     FixDeltaGMTSign();  
-    if (CurrentView == FRONTVIEW || CurrentView == OPTIONS_VIEW) {
+    if (CurrentView == FRONTVIEW || CurrentView == OPTIONVIEW2) {
         if (RTC.read(tm)) { 
             strcpy(TimeString, Str(NB, tm.Day + DateFix, 0));
-            if (CurrentView == OPTIONS_VIEW)
+            if (CurrentView == OPTIONVIEW2)
             {
                 if ((tm.Day) < 10) {
                     strcat(TimeString, Space); // to align better the rest of the data
@@ -897,7 +897,7 @@ void ReadTime()
                 }
             }
             strcat(TimeString, Space);
-            if (CurrentView == OPTIONS_VIEW)
+            if (CurrentView == OPTIONVIEW2)
             {
                 strcat(TimeString, ShortMonth[tm.Month - 1]);
             }
@@ -4795,13 +4795,23 @@ uint8_t  T[8] = {TRIM1A, TRIM1B,  TRIM2A, TRIM2B,  TRIM3A, TRIM3B,  TRIM4A, TRIM
     for (int i = 0; i < 8; ++i) {TrimNumber[i] = T[i];}
 }
 /******************************************************************************************************************************/
-void DefineTrimsStart(){ // redundant 
+void Options2End(){  // back to setup?
+            char dGMT[]                      = "dGMT";
+            char page_SetupView[]            = "page SetupView";
+            DeltaGMT            = GetValueSafer(dGMT);
+            SaveTransmitterParameters();
+            CurrentView = MAINSETUPVIEW;
+            SendCommand(page_SetupView);
 }
 /******************************************************************************************************************************/
  
-void EditingModelName(){ 
-      // not used
-       
+void OptionView2Start(){ 
+    char dGMT[]                      = "dGMT";
+    char OptionV2Start[] = "page OptionView2"; 
+    CurrentView = OPTIONVIEW2;
+    SendCommand(OptionV2Start);
+    Procrastinate(300);
+    SendValue(dGMT,DeltaGMT);
 }
 
 // ******************************** Global Array of numbered function pointers - OK up to 128 functions ... **********************************
@@ -4831,10 +4841,10 @@ void (*NumberedFunctions[LASTFUNCTION])() {
                 StartSubTrimView,           // 20
                 EndSubTrimView,             // 21 
                 StartTrimDefView,           // 22 
-                DefineTrimsStart,           // 23 // [spare] 
+                Options2End,                // 23 
                 DefineTrimsEnd,             // 24 
-                EditingModelName            // 25 // not needed now 
-                };                         // list will become much longer ...
+                OptionView2Start            // 25  
+                };                          // list will become much longer ...
 
 /*********************************************************************************************************************************
  *                          BUTTON WAS PRESSED (DEAL WITH INPUT FROM NEXTION DISPLAY)                                            *
@@ -5039,7 +5049,7 @@ if (strlen(TextIn) > 0) {
     char OptionsEnd[]              = "OptionsEnd";
     char QNH[]                     = "Qnh";
     char Mark[]                    = "Mark";
-    char dGMT[]                    = "dGMT";
+    
     char UKRULES[]                 = "UKRULES";
     char Htext0[]                  = "HELP";
     char Htext1[]                  = "Help";
@@ -5081,7 +5091,7 @@ if (strlen(TextIn) > 0) {
     char t2[]                      = "t2";
     char StEDIT[]                  = "StEDIT";  
     char pLogView[]                = "page LogView";    
-     
+     char dGMT[]                    = "dGMT";
     
 
      ScreenTimeTimer = millis();  // reset screen timeout counter
@@ -5225,7 +5235,7 @@ if (strlen(TextIn) > 0) {
             }
             SendValue(Progress,35);
             Qnh = (uint16_t)      GetValueSafer(QNH); // error protected version
-            DeltaGMT            = GetValueSafer(dGMT);
+           
             SendValue(Progress,45);
             TrimFactor          = GetValueSafer(trf);
             LowBattery          = GetValueSafer(Bwn);
@@ -5368,13 +5378,12 @@ if (strlen(TextIn) > 0) {
 
         if (InStrng(OptionsViewS, TextIn) > 0) { 
             FixDeltaGMTSign();
+            if (CurrentView == OPTIONVIEW2) DeltaGMT = GetValueSafer(dGMT);
             SendCommand(pOptionsViewS);
             SendValue(ScreenViewTimeout, ScreenTimeout);
-         
             SendValue(Pto, (Inactivity_Timeout / TICKSPERMINUTE));
             SendText(Tx_Name, TxName);
             SendValue(QNH,Qnh);
-            SendValue(dGMT,DeltaGMT);
             SendValue(trf,TrimFactor); 
             SendValue(Bwn,LowBattery);
             SendValue(c0,CopyTrimsToAll);
