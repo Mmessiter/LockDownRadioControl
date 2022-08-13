@@ -7,12 +7,12 @@
 #define RadioFunctions_H
 
 // **************************************************************************
-//                TX VERSION NUMBER   (July 2022 Malcolm Messiter)          *
+//                TX VERSION NUMBER   (August 2022 Malcolm Messiter)        *
 //***************************************************************************
 
 #define TXVERSION_MAJOR   1
 #define TXVERSION_MINOR   8
-#define TXVERSION_MINIMUS 3
+#define TXVERSION_MINIMUS 4
 
 // **************************************************************************
 //                               Includes                                   *
@@ -70,7 +70,6 @@
 #define CHARSMAX           120                       // Max length for char arrays
 #define UNCOMPRESSEDWORDS  20                        // DATA TO SEND = 40  bytes
 #define COMPRESSEDWORDS   UNCOMPRESSEDWORDS * 3 / 4  // COMPRESSED DATA SENT = 30  bytes
-#define BINDPIPETIMEOUT    1000                      // timeout for switching from Bound to Default pipe
 
 // **************************************************************************
 //                            FHSS PARAMETERS                               *
@@ -152,6 +151,7 @@
 #define BUDDYVIEW       22
 #define LOGVIEW         23
 #define TRIMDEFVIEW     24
+#define OPTIONVIEW2     25 
 
 // **************************************************************************
 //                          Switches' GPIOs                                 *
@@ -288,7 +288,7 @@
 // external (global vars) needed here
 
 extern RF24           Radio1;
-extern int            PipeTimeout;
+extern uint32_t       PipeTimeout;
 extern uint8_t        CurrentMode;
 extern uint8_t        NoCarrier[];
 extern uint8_t        AllChannels[];
@@ -350,6 +350,7 @@ extern bool           UkRules;
 extern bool           PreviousUkRules;
 extern bool           UseLog;
 extern uint32_t       ShowServoTimer;
+extern uint16_t       GetStickInput(uint8_t l);
 
 // external (global) functions needed here
 extern void  GetSlaveChannelValues();

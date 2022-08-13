@@ -285,7 +285,7 @@ void Reconnect(){                                                               
         
 #ifdef SECOND_TRANSCEIVER
         ++ Attempts;
-        if (Attempts >= 3){if (!Connected) TryTheOtherTransceiver(ReconnectChannel); Attempts = 0;}
+        if (Attempts >= 2){if (!Connected) TryTheOtherTransceiver(ReconnectChannel); Attempts = 0;}
 #endif 
         if (!Connected) {
             if ((millis() - SearchStartTime) > FAILSAFE_TIMEOUT){

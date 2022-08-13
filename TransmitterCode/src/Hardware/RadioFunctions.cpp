@@ -34,18 +34,13 @@ FASTRUN void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uint
 }
 /************************************************************************************************************/
 
-FASTRUN void TryOtherPipe()
-{
-    if (TotalledRecentPacketsLost > 10 || (!BoundFlag)) { // This avoids needless pipe swapping during poor connection
-        if (BoundFlag == true) {
-            BoundFlag = false;
-            SetThePipe(DefaultPipe);
-        }
-        else
-        {
-            BoundFlag = true;
-            SetThePipe(NewPipe);
-        }
+FASTRUN void TryOtherPipe(){   
+    if (BoundFlag == true) {
+        BoundFlag = false;
+        SetThePipe(DefaultPipe);
+    } else {
+        BoundFlag = true;
+        SetThePipe(NewPipe);
     }
 }
 
@@ -149,15 +144,11 @@ FASTRUN void FailedPacket()
     if (SecondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH);             // INACTIVITY POWER OFF HERE!!
 }
 
-
 /************************************************************************************************************/
 
 void TryToReconnect(){
-   if ((millis() - PipeTimeout) > BINDPIPETIMEOUT) {
-        TryOtherPipe();                                                                                 // in case the receiver has re-booted
-        PipeTimeout = millis();
-    }     
-    NextChannel = * (FHSSChPointer + random(RECONNECT_CHANNELS_COUNT) + RECONNECT_CHANNELS_START);      // a **random** reconnect channel (selected from first five)
+    if ((TotalledRecentPacketsLost > 100 || (!BoundFlag))) TryOtherPipe();                              // In case the receiver has re-booted                                                                        
+    NextChannel = * (FHSSChPointer + random(RECONNECT_CHANNELS_COUNT) + RECONNECT_CHANNELS_START);      // random reconnect channel (selected from first three)
     HopToNextChannel();
 }
 /************************************************************************************************************/
@@ -183,6 +174,7 @@ void FlushFifos(){
 /************************************************************************************************************/
 //****************** Function to send pre-compressed data to receiver ***************************************
 /************************************************************************************************************/
+
 
 FASTRUN void SendData()
 {
