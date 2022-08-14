@@ -1,6 +1,5 @@
 var NAVTREEINDEX11 =
 {
-"class_s_b_u_s.html#a23dee3cadb6755157b32b8b16b10ccfe":[9,0,20,4],
 "class_s_b_u_s.html#a30a661b3e229e95e17591021e638e89e":[9,0,20,12],
 "class_s_b_u_s.html#a385df1b8fcb453e5a63eae01fb394c61":[9,0,20,7],
 "class_s_b_u_s.html#a44376d88b040d2cdf85f1a6d93633935":[9,0,20,6],
@@ -139,8 +138,8 @@ var NAVTREEINDEX11 =
 "functions_enum.html":[9,3,3],
 "functions_eval.html":[9,3,4],
 "functions_f.html":[9,3,0,6],
-"functions_func.html":[9,3,1,0],
 "functions_func.html":[9,3,1],
+"functions_func.html":[9,3,1,0],
 "functions_func_b.html":[9,3,1,1],
 "functions_func_c.html":[9,3,1,2],
 "functions_func_d.html":[9,3,1,3],
@@ -215,8 +214,8 @@ var NAVTREEINDEX11 =
 "globals_b.html":[10,1,0,2],
 "globals_c.html":[10,1,0,3],
 "globals_d.html":[10,1,0,4],
-"globals_defs.html":[10,1,6],
 "globals_defs.html":[10,1,6,0],
+"globals_defs.html":[10,1,6],
 "globals_defs_a.html":[10,1,6,1],
 "globals_defs_b.html":[10,1,6,2],
 "globals_defs_c.html":[10,1,6,3],
@@ -249,5 +248,6 @@ var NAVTREEINDEX11 =
 "globals_func_c.html":[10,1,1,2],
 "globals_func_d.html":[10,1,1,3],
 "globals_func_e.html":[10,1,1,4],
-"globals_func_f.html":[10,1,1,5]
+"globals_func_f.html":[10,1,1,5],
+"globals_func_g.html":[10,1,1,6]
 };

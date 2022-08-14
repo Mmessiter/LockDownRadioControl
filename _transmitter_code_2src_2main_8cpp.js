@@ -510,7 +510,6 @@ var _transmitter_code_2src_2main_8cpp =
     [ "UseLog", "_transmitter_code_2src_2main_8cpp.html#aa42482a0bb01edaf26f217dbc38643d2", null ],
     [ "UseMacros", "_transmitter_code_2src_2main_8cpp.html#a42a6363bff83773c1b99caa06aebb1f5", null ],
     [ "ValueSent", "_transmitter_code_2src_2main_8cpp.html#ace7e8fecf64d2c788fd0e7d5fe0c47fe", null ],
-    [ "VPCTimer", "_transmitter_code_2src_2main_8cpp.html#a32f8b541bdda212ce694251116522883", null ],
     [ "WarningTimer", "_transmitter_code_2src_2main_8cpp.html#a762d0bd8b884aee82ec41f594c470b87", null ],
     [ "WatchDogConfig", "_transmitter_code_2src_2main_8cpp.html#abf278d2a0f4b093a96fd83a6f635d8c8", null ],
     [ "xPoint", "_transmitter_code_2src_2main_8cpp.html#a36b7f1f7174274a965e69e8853a3c90c", null ],
