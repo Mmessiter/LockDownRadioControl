@@ -441,11 +441,8 @@ bool     FirstConnection     = true;
 File     LogFileNumber;
 bool     LogFileOpen         =  false;
 bool     ShowVPC             =  false;  
-uint32_t VPCTimer            = 0;
 
-      
 
-//
 // ********************************************************************************************************************************** 
 
 uint8_t Ascii(char c){
@@ -1412,7 +1409,7 @@ FASTRUN bool CheckTXVolts(){
     char  TXBattInfo[65];
     char  pc[] = "%";
     char  nbuf[10];
-   // char  PerCell[]= "x2";
+ 
     
         if (USE_INA219) {
             txv  = (ina219.getBusVoltage_V()) * 100;
@@ -1423,15 +1420,11 @@ FASTRUN bool CheckTXVolts(){
             strcpy(TXBattInfo, Str(Vbuf,txpc,0));
             strcat(TXBattInfo, pc);
             if (CurrentView == FRONTVIEW){
-                if (millis() - VPCTimer > 2000){ 
-                    ShowVPC ^= 1;
-                    VPCTimer = millis();
-                }
+                ShowVPC ^= 1;
                 SendValue(JTX,txpc); 
                 if (ShowVPC){
                         SendText(FrontView_TXBV, TXBattInfo);
                 }else{
-                        //strcat(nbuf,PerCell);
                         SendText(FrontView_TXBV, nbuf);
                 }
             }

@@ -273,7 +273,7 @@
 //***************************************************************************
 
 #define NEXTION Serial1       // NEXTION is connected to Serial1
-#define SHOWCOMMSDELAY 2000   // ms pauses between updated info on NEXTION
+#define SHOWCOMMSDELAY 3000   // ms pauses between updated info on NEXTION
 #define WARMUPDELAY    250    // fails at 200 so must be >200 ...
 
 // **************************************************************************
