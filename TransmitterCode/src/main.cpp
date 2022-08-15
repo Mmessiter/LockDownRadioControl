@@ -1415,10 +1415,7 @@ FASTRUN bool CheckTXVolts(){
  
     
         if (USE_INA219) {
-            txv  = ((ina219.getBusVoltage_V()) * 100);
-             
-            txv += (TxVoltageCorrection * 2);
-
+            txv  = ((ina219.getBusVoltage_V()) * 100) + (TxVoltageCorrection * 2); // corrected for duff ina219
             dtostrf(txv / 200, 2, 2, nbuf);  // Volts per cell 
             txpc = map(txv, 3.2 * 200, 3.33 * 200, 0, 100); // LiFePo4 Battery 3.1 ->3.35  volts per cell
             if (txpc < LowBattery) TXWarningFlag = true;
@@ -2497,8 +2494,6 @@ bool LoadAllParameters()
         TxVoltageCorrection = SDReadInt(SDCardAddress);
         ++SDCardAddress;
         ++SDCardAddress;
-
-
         CheckTrimValues();
         MemoryForTransmtter = SDCardAddress;
         if ((ModelNumber < 1) || (ModelNumber > 99)) ModelNumber = 1;
@@ -3031,11 +3026,9 @@ void SaveTransmitterParameters()
         SDUpdateByte(SDCardAddress, TrimNumber[j]);
         ++SDCardAddress;
     }
-
     SDUpdateInt(SDCardAddress,TxVoltageCorrection);
     ++SDCardAddress;
     ++SDCardAddress;
-
     CloseModelsFile();
 }
 
@@ -4843,10 +4836,12 @@ void OptionView2Start(){
     char TxVCorrextion[] = "t2";
     if(CurrentView == OPTIONVIEW3){
         TxVoltageCorrection = GetValueSafer(TxVCorrextion);
+        SaveTransmitterParameters();
     }
     CurrentView = OPTIONVIEW2;
+    LastTimeRead = 0;
     SendCommand(OptionV2Start);
-    Procrastinate(300);
+    Procrastinate(100);
     SendValue(dGMT,DeltaGMT);
 }
 
@@ -4857,7 +4852,7 @@ void OptionView3Start(){  // heer
     char OptionV3Start[] = "page OptionView3"; 
     CurrentView = OPTIONVIEW3;
     SendCommand(OptionV3Start);
-    Procrastinate(300);
+    Procrastinate(100);
     SendValue(TxVCorrextion,TxVoltageCorrection);
 }
 
