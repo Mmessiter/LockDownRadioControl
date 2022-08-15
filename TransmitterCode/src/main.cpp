@@ -985,6 +985,8 @@ uint8_t GetLEDBrightness()
 void RedLedOn()
 {
     if (LedWasGreen){
+        PacketsPerSecond = 0; 
+        RangeTestGoodPackets = 0;
         if (UseLog) LogDisConnection();
         if (AnnounceConnected) PlaySound(DISCONNECTEDMSG);
         RXVoltsDetected = false;
@@ -4846,7 +4848,7 @@ void OptionView2Start(){
 
 /******************************************************************************************************************************/
 
-void OptionView3Start(){  // heer
+void OptionView3Start(){  
     char TxVCorrextion[] = "t2";
     char OptionV3Start[] = "page OptionView3"; 
     CurrentView = OPTIONVIEW3;
