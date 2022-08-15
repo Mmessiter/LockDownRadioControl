@@ -2908,6 +2908,8 @@ FLASHMEM void setup()
             LogThisModel();
     }
     UpdateModelsNameEveryWhere();
+    LastShowTime = millis();
+    
 }
 /*********************************************************************************************************************************/
 
