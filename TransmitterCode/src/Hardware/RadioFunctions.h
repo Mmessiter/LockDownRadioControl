@@ -37,8 +37,8 @@
 //    DEBUG OPTIONS (Uncomment any of these for that bit of debug info)     *
 //***************************************************************************
 
-// #define DB_NEXTION        // Debug NEXTION 
-// #define DB_SD             // Debug SD card data
+ //#define DB_NEXTION        // Debug NEXTION 
+   #define DB_SD             // Debug SD card data
 // #define DB_FHSS           // Debug real time FHSS data
 // #define DB_SENSORS        // Debug Sensors
 // #define DB_BIND           // Debug Binding
@@ -152,6 +152,7 @@
 #define LOGVIEW         23
 #define TRIMDEFVIEW     24
 #define OPTIONVIEW2     25 
+#define OPTIONVIEW3     26 
 
 // **************************************************************************
 //                          Switches' GPIOs                                 *
