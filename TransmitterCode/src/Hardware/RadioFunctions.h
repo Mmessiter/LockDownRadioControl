@@ -37,8 +37,8 @@
 //    DEBUG OPTIONS (Uncomment any of these for that bit of debug info)     *
 //***************************************************************************
 
-// #define DB_NEXTION        // Debug NEXTION 
-// #define DB_SD             // Debug SD card data
+ //#define DB_NEXTION        // Debug NEXTION 
+   #define DB_SD             // Debug SD card data
 // #define DB_FHSS           // Debug real time FHSS data
 // #define DB_SENSORS        // Debug Sensors
 // #define DB_BIND           // Debug Binding
@@ -152,6 +152,7 @@
 #define LOGVIEW         23
 #define TRIMDEFVIEW     24
 #define OPTIONVIEW2     25 
+#define OPTIONVIEW3     26 
 
 // **************************************************************************
 //                          Switches' GPIOs                                 *
@@ -273,7 +274,7 @@
 //***************************************************************************
 
 #define NEXTION Serial1       // NEXTION is connected to Serial1
-#define SHOWCOMMSDELAY 2000   // ms pauses between updated info on NEXTION
+#define SHOWCOMMSDELAY 3000   // ms pauses between updated info on NEXTION
 #define WARMUPDELAY    250    // fails at 200 so must be >200 ...
 
 // **************************************************************************
@@ -350,6 +351,7 @@ extern bool           UkRules;
 extern bool           PreviousUkRules;
 extern bool           UseLog;
 extern uint32_t       ShowServoTimer;
+extern uint16_t       PacketsPerSecond;
 extern uint16_t       GetStickInput(uint8_t l);
 
 // external (global) functions needed here

@@ -440,8 +440,11 @@ uint16_t SavedLineX          = 12345;
 bool     FirstConnection     = true;
 File     LogFileNumber;
 bool     LogFileOpen         =  false;
+bool     ShowVPC             =  false;  
+short int      TxVoltageCorrection = 0;
 
-//
+
+
 // ********************************************************************************************************************************** 
 
 uint8_t Ascii(char c){
@@ -982,6 +985,8 @@ uint8_t GetLEDBrightness()
 void RedLedOn()
 {
     if (LedWasGreen){
+        PacketsPerSecond = 0; 
+        RangeTestGoodPackets = 0;
         if (UseLog) LogDisConnection();
         if (AnnounceConnected) PlaySound(DISCONNECTEDMSG);
         RXVoltsDetected = false;
@@ -1404,17 +1409,31 @@ FASTRUN bool CheckTXVolts(){
     char  FrontView_TXBV[]       = "TXBV";
     bool  TXWarningFlag          = false;
     float txpc,txv;            
-    char  Vbuf[16];
+    char  Vbuf[10];
     char  TXBattInfo[65];
     char  pc[] = "%";
+    char  nbuf[10];
+    char  v[] = "V";
+ 
+    
         if (USE_INA219) {
-            txv  = (ina219.getBusVoltage_V()) * 100;
+            txv  = ((ina219.getBusVoltage_V()) * 100) + (TxVoltageCorrection * 2); // corrected for duff ina219
+            dtostrf(txv / 200, 2, 2, nbuf);  // Volts per cell 
             txpc = map(txv, 3.2 * 200, 3.33 * 200, 0, 100); // LiFePo4 Battery 3.1 ->3.35  volts per cell
             if (txpc < LowBattery) TXWarningFlag = true;
             txpc = constrain(txpc, 0, 100);
             strcpy(TXBattInfo, Str(Vbuf,txpc,0));
             strcat(TXBattInfo, pc);
-            if (CurrentView == FRONTVIEW) {SendValue(JTX,txpc); SendText(FrontView_TXBV, TXBattInfo);}
+            if (CurrentView == FRONTVIEW){
+                ShowVPC ^= 1;
+                SendValue(JTX,txpc); 
+                if (ShowVPC){
+                        SendText(FrontView_TXBV, TXBattInfo);
+                }else{
+                        strcat(nbuf,v); //
+                        SendText(FrontView_TXBV, nbuf);
+                }
+            }
             if (CurrentView == DATAVIEW)  SendText(DataView_txv, TransmitterVersionNumber); 
         }
 return TXWarningFlag;
@@ -1441,16 +1460,18 @@ FASTRUN bool CheckRXVolts(){
             if (RXVoltsDetected) {
                 Volts = constrain(Volts, 0, 100);
                 if (Volts <= LowBattery && Volts > 0)  RXWarningFlag = true;
-                if (BoundFlag && CurrentView == FRONTVIEW) SendValue(JRX, Volts);
-                strcat(Str(Vbuf,Volts,0),pc);
-                SendText(RXPC,Vbuf);
-                strcpy(RXBattInfo, ModelVolts);
-                strcat(RXBattInfo, v);
-                VoltsPerCell = (ReadVolts / RXCellCount) / 100;
-                dtostrf(VoltsPerCell, 2, 2, Vbuf);
-                strcat(RXBattInfo, Vbuf);
-                strcat(RXBattInfo, PerCell);
-                if (BoundFlag && CurrentView == FRONTVIEW) SendText(FrontView_RXBV, RXBattInfo);
+                if (BoundFlag && CurrentView == FRONTVIEW) {
+                        SendValue(JRX, Volts);
+                        strcat(Str(Vbuf,Volts,0),pc);
+                        SendText(RXPC,Vbuf);
+                        strcpy(RXBattInfo, ModelVolts);
+                        strcat(RXBattInfo, v);
+                        VoltsPerCell = (ReadVolts / RXCellCount) / 100;
+                        dtostrf(VoltsPerCell, 2, 2, Vbuf);
+                        strcat(RXBattInfo, Vbuf);
+                        strcat(RXBattInfo, PerCell);
+                        SendText(FrontView_RXBV, RXBattInfo);
+                }
             }else{
                 if (BoundFlag && CurrentView == FRONTVIEW) {
                     SendText(FrontView_RXBV, RXBattNA);
@@ -1608,7 +1629,6 @@ if (ShowNow){
         else {
             if (BoundFlag) {
                 if (CurrentView == DATAVIEW) {
-                    PacketsPerSecond = 0;
                     SendValue(DataView_pps, PacketsPerSecond);
                     SendValue(DataView_lps, LostPackets);
                 }
@@ -2472,6 +2492,9 @@ bool LoadAllParameters()
              TrimNumber[j]= SDReadByte(SDCardAddress);
             ++SDCardAddress;
         }
+        TxVoltageCorrection = SDReadInt(SDCardAddress);
+        ++SDCardAddress;
+        ++SDCardAddress;
         CheckTrimValues();
         MemoryForTransmtter = SDCardAddress;
         if ((ModelNumber < 1) || (ModelNumber > 99)) ModelNumber = 1;
@@ -2889,8 +2912,8 @@ FLASHMEM void setup()
 
 void GetStatistics()
 {
-    PacketsPerSecond     = RangeTestGoodPackets;
-    RangeTestGoodPackets = 0;
+       if (RangeTestGoodPackets) PacketsPerSecond = RangeTestGoodPackets;
+       RangeTestGoodPackets = 0;
 }
 
 /*********************************************************************************************************************************/
@@ -3004,6 +3027,9 @@ void SaveTransmitterParameters()
         SDUpdateByte(SDCardAddress, TrimNumber[j]);
         ++SDCardAddress;
     }
+    SDUpdateInt(SDCardAddress,TxVoltageCorrection);
+    ++SDCardAddress;
+    ++SDCardAddress;
     CloseModelsFile();
 }
 
@@ -4808,14 +4834,42 @@ void Options2End(){  // back to setup?
 void OptionView2Start(){ 
     char dGMT[]                      = "dGMT";
     char OptionV2Start[] = "page OptionView2"; 
+    char TxVCorrextion[] = "t2";
+    if(CurrentView == OPTIONVIEW3){
+        TxVoltageCorrection = GetValueSafer(TxVCorrextion);
+        SaveTransmitterParameters();
+    }
     CurrentView = OPTIONVIEW2;
+    LastTimeRead = 0;
     SendCommand(OptionV2Start);
-    Procrastinate(300);
+    Procrastinate(100);
     SendValue(dGMT,DeltaGMT);
 }
 
+/******************************************************************************************************************************/
+
+void OptionView3Start(){  
+    char TxVCorrextion[] = "t2";
+    char OptionV3Start[] = "page OptionView3"; 
+    CurrentView = OPTIONVIEW3;
+    SendCommand(OptionV3Start);
+    Procrastinate(100);
+    SendValue(TxVCorrextion,TxVoltageCorrection);
+}
+
+/******************************************************************************************************************************/
+
+void OptionView3End(){ 
+            char TxVCorrextion[]        = "t2";
+            char page_SetupView[]       = "page SetupView";
+            TxVoltageCorrection         = GetValueSafer(TxVCorrextion);
+            SaveTransmitterParameters();
+            CurrentView = MAINSETUPVIEW;
+            SendCommand(page_SetupView);
+}
+
 // ******************************** Global Array of numbered function pointers - OK up to 128 functions ... **********************************
-#define LASTFUNCTION 26                     // one more than final one
+#define LASTFUNCTION 28                     // one more than final one
 
 void (*NumberedFunctions[LASTFUNCTION])() {
                 Blank,                      // 0 (spare)
@@ -4843,7 +4897,9 @@ void (*NumberedFunctions[LASTFUNCTION])() {
                 StartTrimDefView,           // 22 
                 Options2End,                // 23 
                 DefineTrimsEnd,             // 24 
-                OptionView2Start            // 25  
+                OptionView2Start,           // 25  
+                OptionView3Start,           // 26  
+                OptionView3End              // 27 
                 };                          // list will become much longer ...
 
 /*********************************************************************************************************************************
@@ -5250,6 +5306,8 @@ if (strlen(TextIn) > 0) {
             {
                 Connected       = false;
                 LostContactFlag = true;
+                PacketsPerSecond = 0;
+                RangeTestGoodPackets = 0;
                 BlueLedOn();
             }
             SaveAllParameters();
@@ -6925,7 +6983,7 @@ FASTRUN void CheckGapsLength()
 
 /************************************************************************************************************/
 void CheckModelName(){                               // In ModelsView, this function checks correct name is displayed.
-char ModelsView_ModelNumber[]   = "ModelNumber";     // heer 
+char ModelsView_ModelNumber[]   = "ModelNumber";     // 
 char ModelsView_ModelName[]     = "ModelName";
 char NewName[35];
         ModelNumber = GetValue(ModelsView_ModelNumber); 
