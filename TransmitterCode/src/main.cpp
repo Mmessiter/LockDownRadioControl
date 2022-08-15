@@ -1548,7 +1548,7 @@ if (millis() - LastShowTime > SHOWCOMMSDELAY) {
     LastShowTime = millis();
 }
 if (ShowNow){
-    if (CurrentView == FRONTVIEW )  SendValue(Quality,((float) PacketsPerSecond / (float) 125) * (float) 100); // show quality of connection
+    if (CurrentView == FRONTVIEW )  SendValue(Quality,(100 * PacketsPerSecond) / 125); // show quality of connection
     if (CurrentView == FRONTVIEW || CurrentView == DATAVIEW) {
         if(LedWasGreen){
             if ((CurrentView == FRONTVIEW)) {
