@@ -345,6 +345,7 @@ tmElements_t tm;
 char         TxName[32]   = {"No name was found!"};
 uint32_t     LastTimeRead = 0;
 uint32_t     LastShowTime = 0;
+uint32_t     LastQualityTime = 0;
 uint32_t     LastDogKick  = 0;
 uint8_t      MacAddress[6];
 
@@ -984,13 +985,13 @@ uint8_t GetLEDBrightness()
 
 void RedLedOn()
 {
-    if (LedWasGreen){
+    if (LedWasGreen){ 
+        RXVoltsDetected = false;
+        LedWasGreen = false;
         PacketsPerSecond = 0; 
         RangeTestGoodPackets = 0;
         if (UseLog) LogDisConnection();
         if (AnnounceConnected) PlaySound(DISCONNECTEDMSG);
-        RXVoltsDetected = false;
-        LedWasGreen = false;
         if (!LedIsBlinking) {LastShowTime = 0;ShowComms();}
     }
     analogWrite(GREENLED, 0);
@@ -1540,16 +1541,16 @@ FASTRUN void ShowComms()
     char  BTo[]               = "BTo";
     char  Sat[]               = "Sat";
     char  Sbs[]               = "Sbus";
-
+    char  Quality[]           = "Quality";
 
 if (millis() - LastShowTime > SHOWCOMMSDELAY) { 
     ShowNow = true;
     LastShowTime = millis();
 }
 if (ShowNow){
+    if (CurrentView == FRONTVIEW )  SendValue(Quality,((float) PacketsPerSecond / (float) 125) * (float) 100); // show quality of connection
     if (CurrentView == FRONTVIEW || CurrentView == DATAVIEW) {
-        if (!LostContactFlag)
-        {
+        if(LedWasGreen){
             if ((CurrentView == FRONTVIEW)) {
                 if (!BoundFlag) {
                     SendCommand(BindButtonVisible); 
@@ -1562,7 +1563,7 @@ if (ShowNow){
                         {
                             if (!Reconnected){
                                 MakeBindButtonInvisible();
-                                SendText(FrontView_Connected, Msg_Connected);
+                                SendText(FrontView_Connected, Msg_Connected);                         
                                 Reconnected = true;
                             }
                         }
