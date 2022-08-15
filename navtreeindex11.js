@@ -1,5 +1,6 @@
 var NAVTREEINDEX11 =
 {
+"class_quaternion.html#aa44a65ab99e36f6ab8771030eed8a7ad":[9,0,18,7],
 "class_quaternion.html#abcc01358aada56ea5f0db4da18aaf77d":[9,0,18,0],
 "class_quaternion.html#ad8158a59767dc3d42ebf0324b82ba95a":[9,0,18,1],
 "class_s_b_u_s.html":[9,0,20],
@@ -134,8 +135,8 @@ var NAVTREEINDEX11 =
 "elapsed_millis_8h.html":[10,0,1,0,0,2,0],
 "elapsed_millis_8h_source.html":[10,0,1,0,0,2,0],
 "files.html":[10,0],
-"functions.html":[9,3,0,0],
 "functions.html":[9,3,0],
+"functions.html":[9,3,0,0],
 "functions_a.html":[9,3,0,1],
 "functions_b.html":[9,3,0,2],
 "functions_c.html":[9,3,0,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX11 =
 "globals_enum.html":[10,1,4],
 "globals_eval.html":[10,1,5],
 "globals_f.html":[10,1,0,6],
-"globals_func.html":[10,1,1,0],
-"globals_func.html":[10,1,1]
+"globals_func.html":[10,1,1,0]
 };

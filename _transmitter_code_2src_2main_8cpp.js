@@ -362,6 +362,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "LastLinePosition", "_transmitter_code_2src_2main_8cpp.html#af4c308fd737536a055254fb9858ced91", null ],
     [ "LastMixNumber", "_transmitter_code_2src_2main_8cpp.html#a4e93c6d21a52ae42832359ee0e4c8b2d", null ],
     [ "LastModelLoaded", "_transmitter_code_2src_2main_8cpp.html#a23f3d76e747ca641d7cb1549fb775e40", null ],
+    [ "LastQualityTime", "_transmitter_code_2src_2main_8cpp.html#ada9e33daa89d56cfa79eaa9d26399b0c", null ],
     [ "LastRadio", "_transmitter_code_2src_2main_8cpp.html#a72790e4cca2413ccec56e2bbeeb0cf4a", null ],
     [ "LastSeconds", "_transmitter_code_2src_2main_8cpp.html#a461bdfbe0df771f541b8872ac04bb717", null ],
     [ "LastShowTime", "_transmitter_code_2src_2main_8cpp.html#ae818c99aa6e4a19030a586da53a9dcc4", null ],

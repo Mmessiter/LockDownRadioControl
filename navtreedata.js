@@ -138,12 +138,12 @@ var NAVTREEINDEX =
 "_receiver_code_2lib_2_adafruit___g_p_s___library_2src_2_adafruit___p_m_t_k_8h.html#aef371298391fd30cc08c4980f8502ce9",
 "_transmitter_code_2src_2main_8cpp.html#a17699f358cf9f7c3155a9c5daf8ff13c",
 "_transmitter_code_2src_2main_8cpp.html#a984cb52354a84c45e9e41f396a1c5e92",
-"class_adafruit___b_m_p280.html#a7504522739c2e77f106ad0a193e3fe93",
-"class_m_p_u6050.html#a455f63be2ea810cac26d583da6915050",
-"class_m_p_u9250.html#a36fab1c8d06aa5dcd0e6a4014d7ca5e7",
-"class_quaternion.html#abcc01358aada56ea5f0db4da18aaf77d",
-"globals_func_b.html",
-"struct_tiny_g_p_s_location.html#a86c3acea4f317b427eebb667e4d05a49"
+"class_adafruit___b_m_p280.html#a70f70d9f9c6c4c70eca412cd9909ac7eaa3797dd5a223b8d835686c571fd58b19",
+"class_m_p_u6050.html#a45013abb39103e858d432cc720bc351a",
+"class_m_p_u9250.html#a35c23245b36a7088cf7e4e28f25f6819",
+"class_quaternion.html#aa44a65ab99e36f6ab8771030eed8a7ad",
+"globals_func.html",
+"struct_tiny_g_p_s_location.html#a6501fd5ef19ae166d43e0e5781609ee2"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
