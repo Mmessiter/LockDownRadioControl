@@ -1627,7 +1627,6 @@ if (ShowNow){
         else {
             if (BoundFlag) {
                 if (CurrentView == DATAVIEW) {
-                    PacketsPerSecond = 0;
                     SendValue(DataView_pps, PacketsPerSecond);
                     SendValue(DataView_lps, LostPackets);
                 }
@@ -2911,8 +2910,8 @@ FLASHMEM void setup()
 
 void GetStatistics()
 {
-    PacketsPerSecond     = RangeTestGoodPackets;
-    RangeTestGoodPackets = 0;
+       if (RangeTestGoodPackets) PacketsPerSecond = RangeTestGoodPackets;
+       RangeTestGoodPackets = 0;
 }
 
 /*********************************************************************************************************************************/
@@ -5305,6 +5304,8 @@ if (strlen(TextIn) > 0) {
             {
                 Connected       = false;
                 LostContactFlag = true;
+                PacketsPerSecond = 0;
+                RangeTestGoodPackets = 0;
                 BlueLedOn();
             }
             SaveAllParameters();

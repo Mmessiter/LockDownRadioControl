@@ -351,6 +351,7 @@ extern bool           UkRules;
 extern bool           PreviousUkRules;
 extern bool           UseLog;
 extern uint32_t       ShowServoTimer;
+extern uint16_t       PacketsPerSecond;
 extern uint16_t       GetStickInput(uint8_t l);
 
 // external (global) functions needed here
