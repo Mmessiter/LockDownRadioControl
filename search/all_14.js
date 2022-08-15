@@ -78,7 +78,8 @@ var searchData=
   ['txversion_5fmajor_75',['TXVERSION_MAJOR',['../_radio_functions_8h.html#aebd7ef5764d81d53646b187e0e337bd3',1,'RadioFunctions.h']]],
   ['txversion_5fminimus_76',['TXVERSION_MINIMUS',['../_radio_functions_8h.html#a7b2773d8aa3a50ce71dfeb1568f8da26',1,'RadioFunctions.h']]],
   ['txversion_5fminor_77',['TXVERSION_MINOR',['../_radio_functions_8h.html#a892ac703d752012a921e12fc7d632bf2',1,'RadioFunctions.h']]],
-  ['ty_78',['tY',['../class_m_p_u9250.html#ae100c82474b1e78337ecfdc8d18518d5',1,'MPU9250']]],
-  ['type_79',['type',['../structsensors__event__t.html#a58401dd7f3400d9eb96c71b8fba9f8e8',1,'sensors_event_t::type()'],['../structnmea__datavalue__t.html#a519cb117696d382f6366260f683008fd',1,'nmea_datavalue_t::type()'],['../structsensor__t.html#ae1d59df64438923d3bd95f2416c32203',1,'sensor_t::type()']]],
-  ['tz_80',['tZ',['../class_m_p_u9250.html#a595f111a497c7727ac70a544b98162e1',1,'MPU9250']]]
+  ['txvoltagecorrection_78',['TxVoltageCorrection',['../_transmitter_code_2src_2main_8cpp.html#a985d38323fbadec8df22d3e17ca18eb2',1,'main.cpp']]],
+  ['ty_79',['tY',['../class_m_p_u9250.html#ae100c82474b1e78337ecfdc8d18518d5',1,'MPU9250']]],
+  ['type_80',['type',['../structsensors__event__t.html#a58401dd7f3400d9eb96c71b8fba9f8e8',1,'sensors_event_t::type()'],['../structnmea__datavalue__t.html#a519cb117696d382f6366260f683008fd',1,'nmea_datavalue_t::type()'],['../structsensor__t.html#ae1d59df64438923d3bd95f2416c32203',1,'sensor_t::type()']]],
+  ['tz_81',['tZ',['../class_m_p_u9250.html#a595f111a497c7727ac70a544b98162e1',1,'MPU9250']]]
 ];

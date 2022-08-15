@@ -18,7 +18,7 @@ var searchData=
   ['timestamp_15',['timestamp',['../structsensors__event__t.html#acd3be1560458b3e3bf52f93f744e8238',1,'sensors_event_t']]],
   ['tm_16',['tm',['../_transmitter_code_2src_2main_8cpp.html#a52357cbf68af66972047f7aed7a45218',1,'main.cpp']]],
   ['toid_17',['toID',['../class_adafruit___g_p_s.html#aef3bc1b4cfce3547b90042c6e7f472c9',1,'Adafruit_GPS']]],
-  ['totalledrecentpacketslost_18',['TotalledRecentPacketsLost',['../_radio_functions_8h.html#a7f485e1361fb90bec75e06944665686d',1,'TotalledRecentPacketsLost():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a7f485e1361fb90bec75e06944665686d',1,'TotalledRecentPacketsLost():&#160;main.cpp']]],
+  ['totalledrecentpacketslost_18',['TotalledRecentPacketsLost',['../_transmitter_code_2src_2main_8cpp.html#a7f485e1361fb90bec75e06944665686d',1,'TotalledRecentPacketsLost():&#160;main.cpp'],['../_radio_functions_8h.html#a7f485e1361fb90bec75e06944665686d',1,'TotalledRecentPacketsLost():&#160;main.cpp']]],
   ['transmitterversionnumber_19',['TransmitterVersionNumber',['../_transmitter_code_2src_2main_8cpp.html#a60227ba657b591c1f0123978897e60aa',1,'main.cpp']]],
   ['trimclicks_20',['TrimClicks',['../_transmitter_code_2src_2main_8cpp.html#ae72cd49c59d06c6160b52860f2c73f1a',1,'main.cpp']]],
   ['trimdefined_21',['TrimDefined',['../_transmitter_code_2src_2main_8cpp.html#a637b67a91d76737f0574a633348cc114',1,'main.cpp']]],
@@ -38,7 +38,8 @@ var searchData=
   ['txtn_35',['txtN',['../class_adafruit___g_p_s.html#aad5682d8705240af58b22ca430adc8ae',1,'Adafruit_GPS']]],
   ['txttot_36',['txtTot',['../class_adafruit___g_p_s.html#a6dc609e12336547d76ae984f0df4257b',1,'Adafruit_GPS']]],
   ['txttxt_37',['txtTXT',['../class_adafruit___g_p_s.html#ad293e1b1f3d1c2c35f24d56f41983876',1,'Adafruit_GPS']]],
-  ['ty_38',['tY',['../class_m_p_u9250.html#ae100c82474b1e78337ecfdc8d18518d5',1,'MPU9250']]],
-  ['type_39',['type',['../structsensor__t.html#ae1d59df64438923d3bd95f2416c32203',1,'sensor_t::type()'],['../structsensors__event__t.html#a58401dd7f3400d9eb96c71b8fba9f8e8',1,'sensors_event_t::type()'],['../structnmea__datavalue__t.html#a519cb117696d382f6366260f683008fd',1,'nmea_datavalue_t::type()']]],
-  ['tz_40',['tZ',['../class_m_p_u9250.html#a595f111a497c7727ac70a544b98162e1',1,'MPU9250']]]
+  ['txvoltagecorrection_38',['TxVoltageCorrection',['../_transmitter_code_2src_2main_8cpp.html#a985d38323fbadec8df22d3e17ca18eb2',1,'main.cpp']]],
+  ['ty_39',['tY',['../class_m_p_u9250.html#ae100c82474b1e78337ecfdc8d18518d5',1,'MPU9250']]],
+  ['type_40',['type',['../structsensor__t.html#ae1d59df64438923d3bd95f2416c32203',1,'sensor_t::type()'],['../structsensors__event__t.html#a58401dd7f3400d9eb96c71b8fba9f8e8',1,'sensors_event_t::type()'],['../structnmea__datavalue__t.html#a519cb117696d382f6366260f683008fd',1,'nmea_datavalue_t::type()']]],
+  ['tz_41',['tZ',['../class_m_p_u9250.html#a595f111a497c7727ac70a544b98162e1',1,'MPU9250']]]
 ];

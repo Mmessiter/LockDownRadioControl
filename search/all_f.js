@@ -16,6 +16,9 @@ var searchData=
   ['options_5fview_13',['OPTIONS_VIEW',['../_radio_functions_8h.html#ae621a5598c31428a00cb602730a5259d',1,'RadioFunctions.h']]],
   ['optionview2_14',['OPTIONVIEW2',['../_radio_functions_8h.html#a9ae3e0717733059e0261c02343d5c917',1,'RadioFunctions.h']]],
   ['optionview2start_15',['OptionView2Start',['../_transmitter_code_2src_2main_8cpp.html#aa1ada50da7cf7f716d14bc9c1a7fdfe9',1,'main.cpp']]],
-  ['orange_16',['Orange',['../_radio_functions_8h.html#a154e686fe7f3f545c01af3592ce0cdff',1,'RadioFunctions.h']]],
-  ['orientation_17',['orientation',['../structsensors__event__t.html#acbe3c50a256fa9423bc9e3a6e0da7ebf',1,'sensors_event_t']]]
+  ['optionview3_16',['OPTIONVIEW3',['../_radio_functions_8h.html#a8d39c6400d468e4435fe0cd79ce663d2',1,'RadioFunctions.h']]],
+  ['optionview3end_17',['OptionView3End',['../_transmitter_code_2src_2main_8cpp.html#ab71829b0aee177464a613b151545c08a',1,'main.cpp']]],
+  ['optionview3start_18',['OptionView3Start',['../_transmitter_code_2src_2main_8cpp.html#af991f96a1dc93f4cb1a464bc7c4e4ade',1,'main.cpp']]],
+  ['orange_19',['Orange',['../_radio_functions_8h.html#a154e686fe7f3f545c01af3592ce0cdff',1,'RadioFunctions.h']]],
+  ['orientation_20',['orientation',['../structsensors__event__t.html#acbe3c50a256fa9423bc9e3a6e0da7ebf',1,'sensors_event_t']]]
 ];
