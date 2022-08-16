@@ -1495,7 +1495,6 @@ FASTRUN bool CheckRXVolts(){
 
 /*********************************************************************************************************************************/
  void ShowConnectionQuality(){
-
         char  Quality[]                 = "Quality";
         char  Visible[]                 = "vis Quality,1";
         char  FrontView_Connected[]     = "Connected";
@@ -1508,7 +1507,7 @@ FASTRUN bool CheckRXVolts(){
         char  Msg_ConnectedPoor[]       = "Marginal";
         char  Msg_ConnectedBad[]        = "Weak";
         char  Msg_ConnectedVBad[]       = "Very weak";
-
+        
         if (PacketsPerShowComms){                                           // repeat call sees it at zero     
             uint16_t ConnectionQuality = (100 * PacketsPerShowComms) /  (125 * SHOWCOMMSSESCONDS);
             SendValue(Quality,ConnectionQuality);                           // show quality of connection
