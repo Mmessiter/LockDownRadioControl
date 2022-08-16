@@ -1501,11 +1501,11 @@ FASTRUN bool CheckRXVolts(){
         char  Msg_Connected[]           = "Connection: ";
         char  Msg_ConnectedPerfect[]    = "Perfect";
         char  Msg_ConnectedExcellent[]  = "Excellent";
+        char  Msg_ConnectedVGood[]      = "Very Good";
         char  Msg_ConnectedGood[]       = "Good";
-        char  Msg_ConnectedOK[]         = "Fair";
-        char  Msg_ConnectedPoor[]       = "Marginal";
-        char  Msg_ConnectedBad[]        = "Weak";
-        char  Msg_ConnectedVBad[]       = "Very weak";
+        char  Msg_ConnectedMarginal[]   = "Marginal";
+        char  Msg_ConnectedWeak[]       = "Weak";
+        char  Msg_ConnectedVWeak[]      = "Very weak";
         
         if (PacketsPerShowComms){                                           // repeat call sees it at zero     
             uint16_t ConnectionQuality = (100 * PacketsPerShowComms) /  (125 * SHOWCOMMSSESCONDS);
@@ -1514,11 +1514,11 @@ FASTRUN bool CheckRXVolts(){
             strcpy(Msgbuf,Msg_Connected);
             if ( ConnectionQuality >= 100)                              strcat(Msgbuf,Msg_ConnectedPerfect);
             if ((ConnectionQuality >= 95) && (ConnectionQuality < 100)) strcat(Msgbuf,Msg_ConnectedExcellent);
-            if ((ConnectionQuality >= 90) && (ConnectionQuality <  95)) strcat(Msgbuf,Msg_ConnectedGood);
-            if ((ConnectionQuality >= 75) && (ConnectionQuality <  90)) strcat(Msgbuf,Msg_ConnectedOK);
-            if ((ConnectionQuality >= 50) && (ConnectionQuality <  75)) strcat(Msgbuf,Msg_ConnectedPoor);
-            if ((ConnectionQuality >= 25) && (ConnectionQuality <  50)) strcat(Msgbuf,Msg_ConnectedBad);
-            if ((ConnectionQuality >=  1) && (ConnectionQuality <  25)) strcat(Msgbuf,Msg_ConnectedVBad);
+            if ((ConnectionQuality >= 90) && (ConnectionQuality <  95)) strcat(Msgbuf,Msg_ConnectedVGood);
+            if ((ConnectionQuality >= 75) && (ConnectionQuality <  90)) strcat(Msgbuf,Msg_ConnectedGood);
+            if ((ConnectionQuality >= 50) && (ConnectionQuality <  75)) strcat(Msgbuf,Msg_ConnectedMarginal);
+            if ((ConnectionQuality >= 25) && (ConnectionQuality <  50)) strcat(Msgbuf,Msg_ConnectedWeak);
+            if ((ConnectionQuality >=  1) && (ConnectionQuality <  25)) strcat(Msgbuf,Msg_ConnectedVWeak);
             SendText(FrontView_Connected, Msgbuf); 
             SendCommand (Visible);
             PacketsPerShowComms = 0;
