@@ -116,6 +116,7 @@ uint64_t      DefaultPipe        = DEFAULTPIPEADDRESS; //          Default Radio
 uint64_t      NewPipe            = 0xBABE1E5420LL;     //          New Radio pipe address for binding comes from MAC address
 char          TextIn[CHARSMAX+2];  // spare space
 uint16_t      PacketsPerSecond = 0;
+uint16_t      PacketsPer3Seconds = 0;
 uint16_t      LostPackets      = 0;
 uint8_t       PacketNumber     = 0;
 uint8_t       GPSMarkHere      = 0;
@@ -1491,6 +1492,36 @@ FASTRUN bool CheckRXVolts(){
       ScreenIsOff = true;
   }
  }
+
+
+/*********************************************************************************************************************************/
+ void ShowConnectionQuality(){
+
+
+        char  Quality[]                 = "Quality";
+        char  FrontView_Connected[]     = "Connected";
+        char  Msgbuf[]                  = "                     ";     
+        char  Msg_Connected[]           = "Connection: ";
+        char  Msg_ConnectedExcellent[] = "Excellent";
+        char  Msg_ConnectedGood[]       = "Good";
+        char  Msg_ConnectedOK[]         = "OK";
+        char  Msg_ConnectedPoor[]       = "Poor";
+        char  Msg_ConnectedBad[]        = "Don't fly!";
+        uint16_t ConnectionQuality = 0;
+        
+        if (PacketsPer3Seconds){    // repeat call sees it at zero     
+            ConnectionQuality = (100 * PacketsPer3Seconds) /  (125 * 3);
+            SendValue(Quality,ConnectionQuality); // show quality of connection
+            strcpy(Msgbuf,Msg_Connected);
+            if  (ConnectionQuality >= 95 ) strcat(Msgbuf,Msg_ConnectedExcellent);
+            if ((ConnectionQuality >= 90 ) && (ConnectionQuality < 95 )) strcat(Msgbuf,Msg_ConnectedGood);
+            if ((ConnectionQuality < 90 ) && (ConnectionQuality >= 75 ))  strcat(Msgbuf,Msg_ConnectedOK);
+            if ((ConnectionQuality < 75 ) && (ConnectionQuality >= 50 ))  strcat(Msgbuf,Msg_ConnectedPoor);
+            if ((ConnectionQuality < 50 ))  strcat(Msgbuf,Msg_ConnectedBad);
+        SendText(FrontView_Connected, Msgbuf); 
+        PacketsPer3Seconds = 0;
+     }
+ }
 /*********************************************************************************************************************************/
 
 /** @brief SHOW COMMS */
@@ -1504,11 +1535,10 @@ FASTRUN void ShowComms()
     char  WarnOff[]              = "vis Warning,0";
     bool  ShowNow                = false;
     char  na[]                   = "";
-    char  FrontView_Connected[]  = "Connected";
     char  FrontView_AckPayload[] = "AckPayload";
     char  FrontView_RXBV[]       = "RXBV";
-    char  Not_Connected[]        = "Not connected";
-    char  Msg_Connected[]        = "** Connected! **";
+    char  FrontView_Connected[]  = "Connected";
+    char  Not_Connected[]        = "Not connected"; 
     char  Msg_CnctdBuddyMast[]   = "* BUDDY MASTER! *";
     char  Msg_CnctdBuddySlave[]  = "* BUDDY SLAVE! *";
     char  MsgBuddying[]          = "Buddy";
@@ -1541,14 +1571,19 @@ FASTRUN void ShowComms()
     char  BTo[]               = "BTo";
     char  Sat[]               = "Sat";
     char  Sbs[]               = "Sbus";
-    char  Quality[]           = "Quality";
+   
 
 if (millis() - LastShowTime > SHOWCOMMSDELAY) { 
     ShowNow = true;
     LastShowTime = millis();
 }
 if (ShowNow){
-    if (CurrentView == FRONTVIEW )  SendValue(Quality,(100 * PacketsPerSecond) / 125); // show quality of connection
+    if (CurrentView == FRONTVIEW )  {
+        ShowConnectionQuality();
+        
+    }
+  
+
     if (CurrentView == FRONTVIEW || CurrentView == DATAVIEW) {
         if(LedWasGreen){
             if ((CurrentView == FRONTVIEW)) {
@@ -1563,7 +1598,7 @@ if (ShowNow){
                         {
                             if (!Reconnected){
                                 MakeBindButtonInvisible();
-                                SendText(FrontView_Connected, Msg_Connected);                         
+                                ShowConnectionQuality();                        
                                 Reconnected = true;
                             }
                         }
@@ -1666,6 +1701,7 @@ if (ShowNow){
         LedIsBlinking = false; 
     }
 }
+
 } // end ShowComms()
 
 /************************************************************************************************************/
