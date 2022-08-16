@@ -116,6 +116,7 @@ uint64_t      DefaultPipe        = DEFAULTPIPEADDRESS; //          Default Radio
 uint64_t      NewPipe            = 0xBABE1E5420LL;     //          New Radio pipe address for binding comes from MAC address
 char          TextIn[CHARSMAX+2];  // spare space
 uint16_t      PacketsPerSecond = 0;
+uint16_t      PacketsPerShowComms = 0;
 uint16_t      LostPackets      = 0;
 uint8_t       PacketNumber     = 0;
 uint8_t       GPSMarkHere      = 0;
@@ -345,6 +346,7 @@ tmElements_t tm;
 char         TxName[32]   = {"No name was found!"};
 uint32_t     LastTimeRead = 0;
 uint32_t     LastShowTime = 0;
+uint32_t     LastQualityTime = 0;
 uint32_t     LastDogKick  = 0;
 uint8_t      MacAddress[6];
 
@@ -984,14 +986,15 @@ uint8_t GetLEDBrightness()
 
 void RedLedOn()
 {
-    if (LedWasGreen){
-        PacketsPerSecond = 0; 
-        RangeTestGoodPackets = 0;
-        if (UseLog) LogDisConnection();
-        if (AnnounceConnected) PlaySound(DISCONNECTEDMSG);
+    if (LedWasGreen){ 
         RXVoltsDetected = false;
         LedWasGreen = false;
-        if (!LedIsBlinking) {LastShowTime = 0;ShowComms();}
+        PacketsPerSecond = 0; 
+        RangeTestGoodPackets = 0;
+        PacketsPerShowComms =1;
+        if (UseLog) LogDisConnection();
+        if (AnnounceConnected) PlaySound(DISCONNECTEDMSG);
+        if (!LedIsBlinking) {ShowComms();}
     }
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, 0);
@@ -1005,7 +1008,7 @@ void GreenLedOn()
     if (!LedWasGreen || LedIsBlinking) {         // no need to repeat unless it is blinking
         LedWasGreen = true;
         if (!LedIsBlinking){
-            LastShowTime = 0;
+           // LastShowTime = 0;
             ShowComms();
             if (AnnounceConnected) PlaySound(CONNECTEDMSG);
         }
@@ -1490,6 +1493,38 @@ FASTRUN bool CheckRXVolts(){
       ScreenIsOff = true;
   }
  }
+
+
+/*********************************************************************************************************************************/
+ void ShowConnectionQuality(){
+
+        char  Quality[]                 = "Quality";
+        char  FrontView_Connected[]     = "Connected";
+        char  Msgbuf[]                  = "                       ";     
+        char  Msg_Connected[]           = "Connection: ";
+        char  Msg_ConnectedPerfect[]    = "Perfect";
+        char  Msg_ConnectedExcellent[]  = "Excellent";
+        char  Msg_ConnectedGood[]       = "Good";
+        char  Msg_ConnectedOK[]         = "Fair";
+        char  Msg_ConnectedPoor[]       = "Poor";
+        char  Msg_ConnectedBad[]        = "Insufficient";
+        uint16_t ConnectionQuality = 0;
+        
+        if (PacketsPerShowComms){    // repeat call sees it at zero     
+            ConnectionQuality = (100 * PacketsPerShowComms) /  (125 * SHOWCOMMSSESCONDS);
+            SendValue(Quality,ConnectionQuality); // show quality of connection
+            if ((millis() - TxOnTime) < SHOWCOMMSSESCONDS * 2000) return; //
+            strcpy(Msgbuf,Msg_Connected);
+            if  (ConnectionQuality == 100)  strcat(Msgbuf,Msg_ConnectedPerfect);
+            if ((ConnectionQuality >= 95 ) && (ConnectionQuality < 100 )) strcat(Msgbuf,Msg_ConnectedExcellent);
+            if ((ConnectionQuality >= 90 ) && (ConnectionQuality < 95 )) strcat(Msgbuf,Msg_ConnectedGood);
+            if ((ConnectionQuality < 90 ) && (ConnectionQuality >= 75 ))  strcat(Msgbuf,Msg_ConnectedOK);
+            if ((ConnectionQuality < 75 ) && (ConnectionQuality >= 50 ))  strcat(Msgbuf,Msg_ConnectedPoor);
+            if ((ConnectionQuality < 50 ))  strcat(Msgbuf,Msg_ConnectedBad);
+        SendText(FrontView_Connected, Msgbuf); 
+        PacketsPerShowComms = 0;
+     }
+ }
 /*********************************************************************************************************************************/
 
 /** @brief SHOW COMMS */
@@ -1499,15 +1534,15 @@ FASTRUN bool CheckRXVolts(){
 FASTRUN void ShowComms()
 {
     if (NEXTION.available()) return; // was a button pressed?
+  
     char  WarnNow[]              = "vis Warning,1";
     char  WarnOff[]              = "vis Warning,0";
     bool  ShowNow                = false;
     char  na[]                   = "";
-    char  FrontView_Connected[]  = "Connected";
     char  FrontView_AckPayload[] = "AckPayload";
     char  FrontView_RXBV[]       = "RXBV";
-    char  Not_Connected[]        = "Not connected";
-    char  Msg_Connected[]        = "** Connected! **";
+    char  FrontView_Connected[]  = "Connected";
+    char  Not_Connected[]        = "Not connected"; 
     char  Msg_CnctdBuddyMast[]   = "* BUDDY MASTER! *";
     char  Msg_CnctdBuddySlave[]  = "* BUDDY SLAVE! *";
     char  MsgBuddying[]          = "Buddy";
@@ -1540,16 +1575,21 @@ FASTRUN void ShowComms()
     char  BTo[]               = "BTo";
     char  Sat[]               = "Sat";
     char  Sbs[]               = "Sbus";
-
+   
 
 if (millis() - LastShowTime > SHOWCOMMSDELAY) { 
     ShowNow = true;
     LastShowTime = millis();
 }
 if (ShowNow){
+    if (CurrentView == FRONTVIEW )  {
+        ShowConnectionQuality();
+        
+    }
+  
+
     if (CurrentView == FRONTVIEW || CurrentView == DATAVIEW) {
-        if (!LostContactFlag)
-        {
+        if(LedWasGreen){
             if ((CurrentView == FRONTVIEW)) {
                 if (!BoundFlag) {
                     SendCommand(BindButtonVisible); 
@@ -1562,7 +1602,7 @@ if (ShowNow){
                         {
                             if (!Reconnected){
                                 MakeBindButtonInvisible();
-                                SendText(FrontView_Connected, Msg_Connected);
+                                ShowConnectionQuality();                        
                                 Reconnected = true;
                             }
                         }
@@ -1665,6 +1705,7 @@ if (ShowNow){
         LedIsBlinking = false; 
     }
 }
+
 } // end ShowComms()
 
 /************************************************************************************************************/
@@ -2907,6 +2948,8 @@ FLASHMEM void setup()
             LogThisModel();
     }
     UpdateModelsNameEveryWhere();
+    LastShowTime = millis();
+    
 }
 /*********************************************************************************************************************************/
 
@@ -5352,7 +5395,8 @@ if (strlen(TextIn) > 0) {
             SendCommand(page_FrontView);
             UpdateModelsNameEveryWhere();
             ShowFlightMode();
-            LastShowTime = 0;     // this is to make redisplay sooner (in ShowComms())
+            LastShowTime = 0;        // this is to make redisplay sooner (in ShowComms())
+            PacketsPerShowComms = 0; // this is to stop "poor" connection number appearing owing to display after less time 
             LastTimeRead = 0;
             Reconnected = false;  // this is to make '** Connected! **' redisplay (in ShowComms())
             LastSeconds = 0;      // This forces redisplay of timer...
