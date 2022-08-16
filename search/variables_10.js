@@ -1,8 +1,8 @@
 var searchData=
 [
   ['packetnumber_0',['PacketNumber',['../radio_8h.html#a09cb370d93005b5a43e932a3d6093ea2',1,'PacketNumber():&#160;radio.h'],['../_radio_functions_8h.html#a09cb370d93005b5a43e932a3d6093ea2',1,'PacketNumber():&#160;radio.h'],['../_transmitter_code_2src_2main_8cpp.html#a09cb370d93005b5a43e932a3d6093ea2',1,'PacketNumber():&#160;main.cpp']]],
-  ['packetsper3seconds_1',['PacketsPer3Seconds',['../_transmitter_code_2src_2main_8cpp.html#afc75a7c42d34229391eb77c29c497295',1,'PacketsPer3Seconds():&#160;main.cpp'],['../_radio_functions_8h.html#afc75a7c42d34229391eb77c29c497295',1,'PacketsPer3Seconds():&#160;main.cpp']]],
-  ['packetspersecond_2',['PacketsPerSecond',['../_transmitter_code_2src_2main_8cpp.html#aa7dff891c96c5574f3a8dfb38a1aad0d',1,'PacketsPerSecond():&#160;main.cpp'],['../_radio_functions_8h.html#aa7dff891c96c5574f3a8dfb38a1aad0d',1,'PacketsPerSecond():&#160;main.cpp']]],
+  ['packetspersecond_1',['PacketsPerSecond',['../_transmitter_code_2src_2main_8cpp.html#aa7dff891c96c5574f3a8dfb38a1aad0d',1,'PacketsPerSecond():&#160;main.cpp'],['../_radio_functions_8h.html#aa7dff891c96c5574f3a8dfb38a1aad0d',1,'PacketsPerSecond():&#160;main.cpp']]],
+  ['packetspershowcomms_2',['PacketsPerShowComms',['../_transmitter_code_2src_2main_8cpp.html#a8965b70f29b054fa9b5035727a7f4361',1,'PacketsPerShowComms():&#160;main.cpp'],['../_radio_functions_8h.html#a8965b70f29b054fa9b5035727a7f4361',1,'PacketsPerShowComms():&#160;main.cpp']]],
   ['packetstarttime_3',['PacketStartTime',['../_receiver_code_2src_2main_8cpp.html#ac479139b01668992bdccae3c508df1df',1,'main.cpp']]],
   ['page_5ffhssview_4',['page_FhssView',['../_transmitter_code_2src_2main_8cpp.html#abb0c124b134df44ba1d408d719ab6b75',1,'main.cpp']]],
   ['page_5ffrontview_5',['page_FrontView',['../_transmitter_code_2src_2main_8cpp.html#a0a6be8adfb11b7e5dafd3f47867c0801',1,'main.cpp']]],
