@@ -1584,42 +1584,33 @@ if (millis() - LastShowTime > SHOWCOMMSDELAY) {
     LastShowTime = millis();
 }
 if (ShowNow){   
-
         if (CurrentView == FRONTVIEW || CurrentView == DATAVIEW) {
         if ((CurrentView == FRONTVIEW)) {
                 ShowConnectionQuality(); 
-                if ((!BoundFlag ) && (!LostContactFlag)) {
+                if ((!BoundFlag) && (!LostContactFlag)) { // i.e. connected but not yet bound
                     SendCommand(BindButtonVisible); 
                     BindButton = true;
                 }
         }
         if(LedWasGreen){
             if ((CurrentView == FRONTVIEW)) {
-               // if (!BoundFlag) {}
-               // else {
-                    if (BoundFlag)
-                    {
-                        if (!BuddyMaster)
-                        {
+                    if (BoundFlag){
+                        if (!BuddyMaster){
                             if (!Reconnected){
                                 MakeBindButtonInvisible();
                                 ShowConnectionQuality();                        
                                 Reconnected = true;
                             }
                         }else{
-                            if (!SlaveHasControl)
-                            {
+                            if (!SlaveHasControl) { 
                                 SendText(FrontView_Connected, Msg_CnctdBuddyMast);
-                            }
-                            else
-                            {
+                            }else{
                                 SendText(FrontView_Connected, Msg_CnctdBuddySlave);
                             }
                         }
                         GreenLedOn();
                         StartInactvityTimeout();
                     }
-                //}
             }
             if (CurrentView == DATAVIEW) {
                 SendValue(DataView_pps,   PacketsPerSecond);
