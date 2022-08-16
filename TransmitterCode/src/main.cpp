@@ -991,7 +991,7 @@ void RedLedOn()
         LedWasGreen = false;
         PacketsPerSecond = 0; 
         RangeTestGoodPackets = 0;
-        PacketsPerShowComms =1;
+        PacketsPerShowComms = 1; //heer 
         if (UseLog) LogDisConnection();
         if (AnnounceConnected) PlaySound(DISCONNECTEDMSG);
         if (!LedIsBlinking) {ShowComms();}
@@ -1008,7 +1008,6 @@ void GreenLedOn()
     if (!LedWasGreen || LedIsBlinking) {         // no need to repeat unless it is blinking
         LedWasGreen = true;
         if (!LedIsBlinking){
-           // LastShowTime = 0;
             ShowComms();
             if (AnnounceConnected) PlaySound(CONNECTEDMSG);
         }
@@ -1494,11 +1493,11 @@ FASTRUN bool CheckRXVolts(){
   }
  }
 
-
 /*********************************************************************************************************************************/
  void ShowConnectionQuality(){
 
         char  Quality[]                 = "Quality";
+        char  Visible[]                 = "vis Quality,1";
         char  FrontView_Connected[]     = "Connected";
         char  Msgbuf[]                  = "                       ";     
         char  Msg_Connected[]           = "Connection: ";
@@ -1515,6 +1514,7 @@ FASTRUN bool CheckRXVolts(){
             SendValue(Quality,ConnectionQuality); // show quality of connection
             if ((millis() - TxOnTime) < SHOWCOMMSSESCONDS * 2000) return; //
             strcpy(Msgbuf,Msg_Connected);
+            SendCommand (Visible);
             if  (ConnectionQuality == 100)  strcat(Msgbuf,Msg_ConnectedPerfect);
             if ((ConnectionQuality >= 95 ) && (ConnectionQuality < 100 )) strcat(Msgbuf,Msg_ConnectedExcellent);
             if ((ConnectionQuality >= 90 ) && (ConnectionQuality < 95 )) strcat(Msgbuf,Msg_ConnectedGood);
@@ -1537,6 +1537,7 @@ FASTRUN void ShowComms()
   
     char  WarnNow[]              = "vis Warning,1";
     char  WarnOff[]              = "vis Warning,0";
+    char  InVisible[]                 = "vis Quality,0";
     bool  ShowNow                = false;
     char  na[]                   = "";
     char  FrontView_AckPayload[] = "AckPayload";
@@ -1576,18 +1577,12 @@ FASTRUN void ShowComms()
     char  Sat[]               = "Sat";
     char  Sbs[]               = "Sbus";
    
-
 if (millis() - LastShowTime > SHOWCOMMSDELAY) { 
     ShowNow = true;
     LastShowTime = millis();
 }
 if (ShowNow){
-    if (CurrentView == FRONTVIEW )  {
-        ShowConnectionQuality();
-        
-    }
-  
-
+    if (CurrentView == FRONTVIEW )  ShowConnectionQuality(); 
     if (CurrentView == FRONTVIEW || CurrentView == DATAVIEW) {
         if(LedWasGreen){
             if ((CurrentView == FRONTVIEW)) {
@@ -1605,9 +1600,7 @@ if (ShowNow){
                                 ShowConnectionQuality();                        
                                 Reconnected = true;
                             }
-                        }
-                        else
-                        {
+                        }else{
                             if (!SlaveHasControl)
                             {
                                 SendText(FrontView_Connected, Msg_CnctdBuddyMast);
@@ -1673,25 +1666,23 @@ if (ShowNow){
                     SendValue(DataView_lps, LostPackets);
                 }
                 if (CurrentView == FRONTVIEW) {
-                    SendText(FrontView_Connected, Not_Connected);
                     SendText(FrontView_RXBV, na); // data not available
                     SendText(FrontView_AckPayload, na);
+                    SendCommand(InVisible);
+                }
+            } else {// i.e. contact is lost
+            if (CurrentView == FRONTVIEW) {
+                if (DoSbusSendOnly) {
+                    SendText(FrontView_Connected, MsgBuddying);
+                }
+                else {
+                    SendText(FrontView_Connected, Not_Connected);
+                    SendCommand(InVisible);
                 }
             }
-            else // i.e. contact is lost
-            {
-                if (CurrentView == FRONTVIEW)
-                {
-                    if (DoSbusSendOnly) {
-                        SendText(FrontView_Connected, MsgBuddying);
-                    }
-                    else {
-                        SendText(FrontView_Connected, Not_Connected);
-                    }
-                }
-            }
-        } 
-    }
+        }
+    } 
+}
  CheckScreenTime(); 
  if (CheckTXVolts() || CheckRXVolts()) {        // Note: If TX Battery is low, then CheckRXVolts() is not even called.
         LedIsBlinking = true; 
