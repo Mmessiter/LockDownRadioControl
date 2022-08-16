@@ -256,6 +256,7 @@ var _radio_functions_8h =
     [ "NoCarrier", "_radio_functions_8h.html#a2a951a35df4a07c010710b02a17f92b7", null ],
     [ "NoSleeping", "_radio_functions_8h.html#aa336d2e589396e246b779e7ed2b097c0", null ],
     [ "PacketNumber", "_radio_functions_8h.html#a09cb370d93005b5a43e932a3d6093ea2", null ],
+    [ "PacketsPer3Seconds", "_radio_functions_8h.html#afc75a7c42d34229391eb77c29c497295", null ],
     [ "PacketsPerSecond", "_radio_functions_8h.html#aa7dff891c96c5574f3a8dfb38a1aad0d", null ],
     [ "PipeTimeout", "_radio_functions_8h.html#a656582814675067f4ca9775bbdc71e18", null ],
     [ "PreviousUkRules", "_radio_functions_8h.html#a1d77a74eeedd4ed97d38aba4996085b9", null ],
