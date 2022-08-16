@@ -991,6 +991,7 @@ void RedLedOn()
         LedWasGreen = false;
         PacketsPerSecond = 0; 
         RangeTestGoodPackets = 0;
+        PacketsPerShowComms =1;
         if (UseLog) LogDisConnection();
         if (AnnounceConnected) PlaySound(DISCONNECTEDMSG);
         if (!LedIsBlinking) {ShowComms();}
