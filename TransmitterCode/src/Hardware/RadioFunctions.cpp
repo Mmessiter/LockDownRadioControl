@@ -156,7 +156,7 @@ void TryToReconnect(){
 void SuccessfulPacket(){
         ++RangeTestGoodPackets;
         ++PacketNumber;
-        ++PacketsPer3Seconds;
+        ++PacketsPerShowComms;
         LostContactFlag = false;
         RecentPacketsLost         = 0;
         TotalledRecentPacketsLost = 0;

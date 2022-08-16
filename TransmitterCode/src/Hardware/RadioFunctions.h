@@ -274,8 +274,9 @@
 //***************************************************************************
 
 #define NEXTION Serial1       // NEXTION is connected to Serial1
-#define SHOWCOMMSDELAY 3000   // ms pauses between updated info on NEXTION
-#define WARMUPDELAY    250    // fails at 200 so must be >200 ...
+#define SHOWCOMMSSESCONDS 2 
+#define SHOWCOMMSDELAY SHOWCOMMSSESCONDS * 1000   // ms pauses between updated info on NEXTION
+#define WARMUPDELAY    300     // fails at 200 so must be >200 ...
 
 // **************************************************************************
 //                            WATCHDOG PARAMETERS                           *
@@ -352,7 +353,7 @@ extern bool           PreviousUkRules;
 extern bool           UseLog;
 extern uint32_t       ShowServoTimer;
 extern uint16_t       PacketsPerSecond;
-extern uint16_t       PacketsPer3Seconds;
+extern uint16_t       PacketsPerShowComms;
 extern uint16_t       GetStickInput(uint8_t l);
 
 // external (global) functions needed here
