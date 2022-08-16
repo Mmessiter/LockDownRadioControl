@@ -335,7 +335,6 @@ bool     SaveFailSafeNow                = false;
 uint32_t FailSafeTimer;
 char     ChannelNames[CHANNELSUSED][11] = {{"Aileron"}, {"Elevator"}, {"Throttle"}, {"Rudder"}, {"Gear"}, {"AUX1"}, {"AUX2"}, {"AUX3"}, {"AUX4"}, {"AUX5"}, {"AUX6"}, {"AUX7"}, {"AUX8"}, {"AUX9"}, {"AUX10"}, {"AUX11"}};
 
-uint32_t TxOnTime      = 0;
 uint32_t TxPace        = 0;
 uint16_t CompressedData[COMPRESSEDWORDS]; // = 20
 uint8_t  SizeOfCompressedData;
@@ -1511,7 +1510,7 @@ FASTRUN bool CheckRXVolts(){
         if (PacketsPerShowComms){                                           // repeat call sees it at zero     
             uint16_t ConnectionQuality = (100 * PacketsPerShowComms) /  (125 * SHOWCOMMSSESCONDS);
             SendValue(Quality,ConnectionQuality);                           // show quality of connection
-            if ((millis() - TxOnTime) < SHOWCOMMSSESCONDS * 2000) return;   // for cleaner startup
+            if ((millis()) < SHOWCOMMSSESCONDS * 2000) return;   // for cleaner startup
             strcpy(Msgbuf,Msg_Connected);
             if ( ConnectionQuality >= 100)                              strcat(Msgbuf,Msg_ConnectedPerfect);
             if ((ConnectionQuality >= 95) && (ConnectionQuality < 100)) strcat(Msgbuf,Msg_ConnectedExcellent);
@@ -2926,7 +2925,6 @@ FLASHMEM void setup()
     //  **   BUT then re-comment it!! Otherwise it will reset to same time on every boot up! **
     //  ***************************************************************************************
     BoundFlag     = false;
-    TxOnTime      = millis();
     StartInactvityTimeout();
     SizeOfCompressedData = sizeof(CompressedData);
     GetTXVersionNumber();
@@ -2939,8 +2937,8 @@ FLASHMEM void setup()
             LogThisModel();
     }
     UpdateModelsNameEveryWhere();
+    Procrastinate(2000);
     LastShowTime = millis();
-    
 }
 /*********************************************************************************************************************************/
 
@@ -7086,9 +7084,7 @@ FASTRUN void loop(){
     if (!BoundFlag)  BufferNewPipe();         // if not yet bound, insert our pipe into sendbuffer
     if (BuddyMaster) GetSlaveChannelValues(); // If buddy master, check where student's sticks etc. are.
     Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);               // Compress 32 bytes down to 24
-   
-    if ((millis() - TxOnTime) > 2000) {                                    // Transmit nothing for first 2 seconds
-
+    if ((millis()) > 2500) {                                    // Transmit nothing for first 2.5 seconds
         switch (CurrentMode) {
             case NORMAL:            // 0
                 SendData();
