@@ -988,9 +988,10 @@ void RedLedOn()
     if (LedWasGreen){ 
         RXVoltsDetected = false;
         LedWasGreen = false;
-        PacketsPerSecond = 0; 
-        RangeTestGoodPackets = 0;
-        PacketsPerShowComms = 1; //heer 
+       // PacketsPerSecond = 0; 
+       // RXVoltsDetected = false;
+       // RangeTestGoodPackets = 0;
+       // PacketsPerShowComms = 1; 
         if (UseLog) LogDisConnection();
         if (AnnounceConnected) PlaySound(DISCONNECTEDMSG);
         if (!LedIsBlinking) {ShowComms();}
@@ -998,6 +999,7 @@ void RedLedOn()
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, 0);
     analogWrite(REDLED, GetLEDBrightness());     // Brightness is a function of maybe blinking
+
 }
 
 /*********************************************************************************************************************************/
@@ -1506,6 +1508,8 @@ FASTRUN bool CheckRXVolts(){
         char  Msg_ConnectedMarginal[]   = "Marginal";
         char  Msg_ConnectedWeak[]       = "Weak";
         char  Msg_ConnectedVWeak[]      = "Very weak";
+
+        if (!BoundFlag) return;
         
         if (PacketsPerShowComms){                                           // repeat call sees it at zero     
             uint16_t ConnectionQuality = (100 * PacketsPerShowComms) /  (125 * SHOWCOMMSSESCONDS);
@@ -4712,7 +4716,6 @@ void GotoModelsView(){
             BuildDirectory();                 // of SD card
             ShowFileNumber();
             SendValue(mn,ModelNumber);
-           
 }
 /******************************************************************************************************************************/
 void GotoMacrosView(){
@@ -6932,6 +6935,7 @@ FASTRUN void ParseAckPayload()
                 break;
             case 5:
                  RXModelVolts = GetFromAckPayload();
+                 RXVoltsDetected = false;
                 if (RXModelVolts > 0) {
                     RXVoltsDetected = true;
                     snprintf(ModelVolts, 5, "%f", RXModelVolts);
