@@ -988,10 +988,10 @@ void RedLedOn()
     if (LedWasGreen){ 
         RXVoltsDetected = false;
         LedWasGreen = false;
-       // PacketsPerSecond = 0; 
-       // RXVoltsDetected = false;
-       // RangeTestGoodPackets = 0;
-       // PacketsPerShowComms = 1; 
+        PacketsPerSecond = 0; 
+        RXVoltsDetected = false;
+        RangeTestGoodPackets = 0;
+        PacketsPerShowComms = 1; //heer 
         if (UseLog) LogDisConnection();
         if (AnnounceConnected) PlaySound(DISCONNECTEDMSG);
         if (!LedIsBlinking) {ShowComms();}
@@ -999,7 +999,6 @@ void RedLedOn()
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, 0);
     analogWrite(REDLED, GetLEDBrightness());     // Brightness is a function of maybe blinking
-
 }
 
 /*********************************************************************************************************************************/
@@ -1584,16 +1583,20 @@ if (millis() - LastShowTime > SHOWCOMMSDELAY) {
     ShowNow = true;
     LastShowTime = millis();
 }
-if (ShowNow){
-    if (CurrentView == FRONTVIEW )  ShowConnectionQuality(); 
-    if (CurrentView == FRONTVIEW || CurrentView == DATAVIEW) {
-        if(LedWasGreen){
-            if ((CurrentView == FRONTVIEW)) {
-                if (!BoundFlag) {
+if (ShowNow){   
+
+        if (CurrentView == FRONTVIEW || CurrentView == DATAVIEW) {
+        if ((CurrentView == FRONTVIEW)) {
+                ShowConnectionQuality(); 
+                if ((!BoundFlag ) && (!LostContactFlag)) {
                     SendCommand(BindButtonVisible); 
                     BindButton = true;
                 }
-                else {
+        }
+        if(LedWasGreen){
+            if ((CurrentView == FRONTVIEW)) {
+               // if (!BoundFlag) {}
+               // else {
                     if (BoundFlag)
                     {
                         if (!BuddyMaster)
@@ -1616,7 +1619,7 @@ if (ShowNow){
                         GreenLedOn();
                         StartInactvityTimeout();
                     }
-                }
+                //}
             }
             if (CurrentView == DATAVIEW) {
                 SendValue(DataView_pps,   PacketsPerSecond);
