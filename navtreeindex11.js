@@ -1,6 +1,5 @@
 var NAVTREEINDEX11 =
 {
-"class_quaternion.html#a61f5f7cb9b248aa259292c3c1960a1f0":[9,0,18,4],
 "class_quaternion.html#a625cb732d8ff3083e7852b86b736ab29":[9,0,18,10],
 "class_quaternion.html#a6d0f82bd29fcbe29f784e848ec2eb8f1":[9,0,18,3],
 "class_quaternion.html#a8b80f191a3155cc0158d2b4f4d50b2cb":[9,0,18,8],
@@ -149,8 +148,8 @@ var NAVTREEINDEX11 =
 "functions_enum.html":[9,3,3],
 "functions_eval.html":[9,3,4],
 "functions_f.html":[9,3,0,6],
-"functions_func.html":[9,3,1,0],
 "functions_func.html":[9,3,1],
+"functions_func.html":[9,3,1,0],
 "functions_func_b.html":[9,3,1,1],
 "functions_func_c.html":[9,3,1,2],
 "functions_func_d.html":[9,3,1,3],
@@ -189,8 +188,8 @@ var NAVTREEINDEX11 =
 "functions_t.html":[9,3,0,19],
 "functions_u.html":[9,3,0,20],
 "functions_v.html":[9,3,0,21],
-"functions_vars.html":[9,3,2],
 "functions_vars.html":[9,3,2,0],
+"functions_vars.html":[9,3,2],
 "functions_vars_a.html":[9,3,2,1],
 "functions_vars_b.html":[9,3,2,2],
 "functions_vars_c.html":[9,3,2,3],
@@ -225,8 +224,8 @@ var NAVTREEINDEX11 =
 "globals_b.html":[10,1,0,2],
 "globals_c.html":[10,1,0,3],
 "globals_d.html":[10,1,0,4],
-"globals_defs.html":[10,1,6],
 "globals_defs.html":[10,1,6,0],
+"globals_defs.html":[10,1,6],
 "globals_defs_a.html":[10,1,6,1],
 "globals_defs_b.html":[10,1,6,2],
 "globals_defs_c.html":[10,1,6,3],
@@ -249,5 +248,6 @@ var NAVTREEINDEX11 =
 "globals_defs_w.html":[10,1,6,20],
 "globals_defs_x.html":[10,1,6,21],
 "globals_defs_y.html":[10,1,6,22],
-"globals_e.html":[10,1,0,5]
+"globals_e.html":[10,1,0,5],
+"globals_enum.html":[10,1,4]
 };

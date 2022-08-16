@@ -31,7 +31,7 @@ var searchData=
   ['trimtimer_28',['TrimTimer',['../_transmitter_code_2src_2main_8cpp.html#a48589088880569c1ae40f8c226cc52be',1,'main.cpp']]],
   ['tx_29',['tX',['../class_m_p_u9250.html#af7d992743ffa2e15d5674b45a100791e',1,'MPU9250']]],
   ['txname_30',['TxName',['../_transmitter_code_2src_2main_8cpp.html#a967f3c9b0fd867928c55d75d65cfcd8c',1,'main.cpp']]],
-  ['txontime_31',['TxOnTime',['../_radio_functions_8h.html#a992a1c7536f872bdfd833e282cf3b4e4',1,'TxOnTime():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a992a1c7536f872bdfd833e282cf3b4e4',1,'TxOnTime():&#160;main.cpp']]],
+  ['txontime_31',['TxOnTime',['../_radio_functions_8h.html#a992a1c7536f872bdfd833e282cf3b4e4',1,'RadioFunctions.h']]],
   ['txpace_32',['TxPace',['../_radio_functions_8h.html#a97c9afd7483ad56e7a2aa63db252d616',1,'TxPace():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a97c9afd7483ad56e7a2aa63db252d616',1,'TxPace():&#160;main.cpp']]],
   ['txtid_33',['txtID',['../class_adafruit___g_p_s.html#ad32955a01923ef7bc47535f32657e66c',1,'Adafruit_GPS']]],
   ['txtimestamp_34',['TXTimeStamp',['../_radio_functions_8h.html#afd020f35b9f4a1aa2643c4fdcc46f5db',1,'RadioFunctions.h']]],

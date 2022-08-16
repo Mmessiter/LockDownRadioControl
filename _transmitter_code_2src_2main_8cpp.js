@@ -507,7 +507,6 @@ var _transmitter_code_2src_2main_8cpp =
     [ "TrimSwitch", "_transmitter_code_2src_2main_8cpp.html#ad5adb31bc39b92d27e6ca35ef4dafefe", null ],
     [ "TrimTimer", "_transmitter_code_2src_2main_8cpp.html#a48589088880569c1ae40f8c226cc52be", null ],
     [ "TxName", "_transmitter_code_2src_2main_8cpp.html#a967f3c9b0fd867928c55d75d65cfcd8c", null ],
-    [ "TxOnTime", "_transmitter_code_2src_2main_8cpp.html#a992a1c7536f872bdfd833e282cf3b4e4", null ],
     [ "TxPace", "_transmitter_code_2src_2main_8cpp.html#a97c9afd7483ad56e7a2aa63db252d616", null ],
     [ "TxVoltageCorrection", "_transmitter_code_2src_2main_8cpp.html#a985d38323fbadec8df22d3e17ca18eb2", null ],
     [ "UkRules", "_transmitter_code_2src_2main_8cpp.html#a7847cc790a939f378993691ae7d40a2f", null ],

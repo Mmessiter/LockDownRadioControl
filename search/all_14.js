@@ -67,7 +67,7 @@ var searchData=
   ['twominutes_64',['TWOMINUTES',['../_radio_functions_8h.html#adc071342f0d02db71ceac915c16d7f85',1,'RadioFunctions.h']]],
   ['tx_65',['tX',['../class_m_p_u9250.html#af7d992743ffa2e15d5674b45a100791e',1,'MPU9250']]],
   ['txname_66',['TxName',['../_transmitter_code_2src_2main_8cpp.html#a967f3c9b0fd867928c55d75d65cfcd8c',1,'main.cpp']]],
-  ['txontime_67',['TxOnTime',['../_radio_functions_8h.html#a992a1c7536f872bdfd833e282cf3b4e4',1,'TxOnTime():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a992a1c7536f872bdfd833e282cf3b4e4',1,'TxOnTime():&#160;main.cpp']]],
+  ['txontime_67',['TxOnTime',['../_radio_functions_8h.html#a992a1c7536f872bdfd833e282cf3b4e4',1,'RadioFunctions.h']]],
   ['txpace_68',['TxPace',['../_radio_functions_8h.html#a97c9afd7483ad56e7a2aa63db252d616',1,'TxPace():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a97c9afd7483ad56e7a2aa63db252d616',1,'TxPace():&#160;main.cpp']]],
   ['txsize_69',['TXSIZE',['../_radio_functions_8h.html#a4b19180ba242a70607d90a3d37985df2',1,'RadioFunctions.h']]],
   ['txtid_70',['txtID',['../class_adafruit___g_p_s.html#ad32955a01923ef7bc47535f32657e66c',1,'Adafruit_GPS']]],
