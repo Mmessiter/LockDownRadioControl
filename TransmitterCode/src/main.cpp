@@ -1514,7 +1514,7 @@ FASTRUN bool CheckRXVolts(){
             SendValue(Quality,ConnectionQuality);                           // show quality of connection
             if ((millis() - TxOnTime) < SHOWCOMMSSESCONDS * 2000) return;   // for cleaner startup
             strcpy(Msgbuf,Msg_Connected);
-            if ( ConnectionQuality >= 100)  strcat(Msgbuf,Msg_ConnectedPerfect);
+            if ( ConnectionQuality >= 100)                              strcat(Msgbuf,Msg_ConnectedPerfect);
             if ((ConnectionQuality >= 95) && (ConnectionQuality < 100)) strcat(Msgbuf,Msg_ConnectedExcellent);
             if ((ConnectionQuality >= 90) && (ConnectionQuality <  95)) strcat(Msgbuf,Msg_ConnectedGood);
             if ((ConnectionQuality >= 75) && (ConnectionQuality <  90)) strcat(Msgbuf,Msg_ConnectedOK);
