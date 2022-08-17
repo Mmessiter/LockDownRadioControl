@@ -43,6 +43,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "CheckTrimValues", "_transmitter_code_2src_2main_8cpp.html#a1930cb00e0e68d2c871cec56cc458064", null ],
     [ "CheckTXVolts", "_transmitter_code_2src_2main_8cpp.html#a28ff2460f96b023cdb62a5c2b8f593f5", null ],
     [ "ClearBox", "_transmitter_code_2src_2main_8cpp.html#a5aeea47b9d855ae9911bae1115d02de7", null ],
+    [ "ClearSuccessRate", "_transmitter_code_2src_2main_8cpp.html#a82b1900a80d1622896601c57d6edaeda", null ],
     [ "ClearText", "_transmitter_code_2src_2main_8cpp.html#af0852678d8e89501acee8951f09d3b43", null ],
     [ "CloseLogFile", "_transmitter_code_2src_2main_8cpp.html#a6f003363493fc53b69f9efc1f447a6a1", null ],
     [ "CloseModelsFile", "_transmitter_code_2src_2main_8cpp.html#a6922974b734cfe3a511e074a2d6ac33c", null ],
