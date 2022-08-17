@@ -194,7 +194,7 @@ var searchData=
   ['getstatistics_191',['GetStatistics',['../_transmitter_code_2src_2main_8cpp.html#a1d43600764a34cbda9c2fa211a12ed2e',1,'main.cpp']]],
   ['getstatus_192',['getStatus',['../class_adafruit___b_m_p280.html#a1b7ddc6a57525e0c8a0e4b6487a3598d',1,'Adafruit_BMP280']]],
   ['getstickinput_193',['GetStickInput',['../_radio_functions_8h.html#af065c70531320b19dbb5f54a714e186a',1,'GetStickInput(uint8_t l):&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a248db02e07497e7a4149db17b4e5c2f3',1,'GetStickInput(uint8_t l):&#160;main.cpp']]],
-  ['getsuccessrate_194',['GetSuccessRate',['../_transmitter_code_2src_2main_8cpp.html#ae8fa66e0b5ff801e45ce58ae161b06fe',1,'main.cpp']]],
+  ['getsuccessrate_194',['GetSuccessRate',['../_transmitter_code_2src_2main_8cpp.html#a9f5745d51ac7a3efbee333bcacd06c50',1,'main.cpp']]],
   ['gettemperature_195',['getTemperature',['../class_m_p_u6050.html#aedfa4f1e6507f48c0a09545345a87875',1,'MPU6050']]],
   ['gettemperature_196',['GetTemperature',['../_transmitter_code_2src_2main_8cpp.html#a19f6fc09d690832e74fd3c679207f07f',1,'main.cpp']]],
   ['gettemperature_5fc_197',['getTemperature_C',['../class_m_p_u9250.html#a3b6cad3768c6153c56fcac4edd3fe792',1,'MPU9250']]],
