@@ -34,7 +34,7 @@ var searchData=
   ['checkwhetheritstimetohop_31',['CheckWhetherItsTimeToHop',['../radio_8h.html#ad21c5c00ff554736e4e21cee13773cd5',1,'radio.h']]],
   ['clearackpayload_32',['ClearAckPayload',['../radio_8h.html#a5a26715a721e1073d6ae00498282c056',1,'radio.h']]],
   ['clearbox_33',['ClearBox',['../_transmitter_code_2src_2main_8cpp.html#a5aeea47b9d855ae9911bae1115d02de7',1,'main.cpp']]],
-  ['clearsuccessrate_34',['ClearSuccessRate',['../_transmitter_code_2src_2main_8cpp.html#a82b1900a80d1622896601c57d6edaeda',1,'main.cpp']]],
+  ['clearsuccessrate_34',['ClearSuccessRate',['../_transmitter_code_2src_2main_8cpp.html#a82b1900a80d1622896601c57d6edaeda',1,'ClearSuccessRate():&#160;main.cpp'],['../_radio_functions_8h.html#a82b1900a80d1622896601c57d6edaeda',1,'ClearSuccessRate():&#160;main.cpp']]],
   ['cleartext_35',['ClearText',['../_transmitter_code_2src_2main_8cpp.html#af0852678d8e89501acee8951f09d3b43',1,'main.cpp']]],
   ['closelogfile_36',['CloseLogFile',['../_radio_functions_8h.html#abc72fe68abd024cb263115e0afd3160a',1,'CloseLogFile():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a6f003363493fc53b69f9efc1f447a6a1',1,'CloseLogFile():&#160;main.cpp']]],
   ['closemodelsfile_37',['CloseModelsFile',['../_transmitter_code_2src_2main_8cpp.html#a6922974b734cfe3a511e074a2d6ac33c',1,'main.cpp']]],

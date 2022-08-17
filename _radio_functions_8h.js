@@ -161,6 +161,7 @@ var _radio_functions_8h =
     [ "CheckGapsLength", "_radio_functions_8h.html#aa60c9cac090f6965b4223d5caf84e2f1", null ],
     [ "CheckTimer", "_radio_functions_8h.html#addfc131a271de92cb52d869fde35729e", null ],
     [ "CheckTrimValues", "_radio_functions_8h.html#a1930cb00e0e68d2c871cec56cc458064", null ],
+    [ "ClearSuccessRate", "_radio_functions_8h.html#a82b1900a80d1622896601c57d6edaeda", null ],
     [ "CloseLogFile", "_radio_functions_8h.html#abc72fe68abd024cb263115e0afd3160a", null ],
     [ "Compress", "_radio_functions_8h.html#a1ddd5e8d5bd649dd98ce3710fbff651b", null ],
     [ "DefineTrimsStart", "_radio_functions_8h.html#aa36a3594acf30c4314af50c16b9f3c58", null ],

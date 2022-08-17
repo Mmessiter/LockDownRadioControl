@@ -83,7 +83,7 @@ var searchData=
   ['chipselect_80',['chipSelect',['../_transmitter_code_2src_2main_8cpp.html#a266db0f4dbdfbc06ea34c96f66bebed3',1,'main.cpp']]],
   ['clearackpayload_81',['ClearAckPayload',['../radio_8h.html#a5a26715a721e1073d6ae00498282c056',1,'radio.h']]],
   ['clearbox_82',['ClearBox',['../_transmitter_code_2src_2main_8cpp.html#a5aeea47b9d855ae9911bae1115d02de7',1,'main.cpp']]],
-  ['clearsuccessrate_83',['ClearSuccessRate',['../_transmitter_code_2src_2main_8cpp.html#a82b1900a80d1622896601c57d6edaeda',1,'main.cpp']]],
+  ['clearsuccessrate_83',['ClearSuccessRate',['../_radio_functions_8h.html#a82b1900a80d1622896601c57d6edaeda',1,'ClearSuccessRate():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a82b1900a80d1622896601c57d6edaeda',1,'ClearSuccessRate():&#160;main.cpp']]],
   ['cleartext_84',['ClearText',['../_transmitter_code_2src_2main_8cpp.html#af0852678d8e89501acee8951f09d3b43',1,'main.cpp']]],
   ['clickone_85',['CLICKONE',['../_radio_functions_8h.html#a896a6492ebc1b214b4e7e5ac4c3db2cd',1,'RadioFunctions.h']]],
   ['clickx_86',['ClickX',['../_transmitter_code_2src_2main_8cpp.html#a5977abea05dff7ba2cdb9dd379595f76',1,'main.cpp']]],
