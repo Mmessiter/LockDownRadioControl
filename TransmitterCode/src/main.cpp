@@ -7120,13 +7120,8 @@ FASTRUN void loop(){
             SetThePipe(NewPipe);
             BindingNow  = 0;
             BoundFlag   = true;
-            LostPackets = 0;
-            GapLongest  = 0;
-            GapSum      = 0;
-            GapAverage  = 0;
-            GapCount    = 0;
+            ZeroDataScreen(); 
             GreenLedOn();
-          
         }
     }
 } // end loop()
