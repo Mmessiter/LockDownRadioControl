@@ -117,6 +117,8 @@ uint64_t      NewPipe            = 0xBABE1E5420LL;     //          New Radio pip
 char          TextIn[CHARSMAX+2];  // spare space
 uint16_t      PacketsPerSecond = 0;
 uint16_t      PacketsPerShowComms = 0;
+//uint8_t       PacketsHistoryBuffer[125 * SHOWCOMMSSESCONDS];  // heer
+//uint8_t       PacketsHistoryIndex = 0;
 uint16_t      LostPackets      = 0;
 uint8_t       PacketNumber     = 0;
 uint8_t       GPSMarkHere      = 0;
@@ -991,7 +993,7 @@ void RedLedOn()
         PacketsPerSecond = 0; 
         RXVoltsDetected = false;
         RangeTestGoodPackets = 0;
-        PacketsPerShowComms = 1; //heer 
+        PacketsPerShowComms = 1;
         if (UseLog) LogDisConnection();
         if (AnnounceConnected) PlaySound(DISCONNECTEDMSG);
         if (!LedIsBlinking) {ShowComms();}
@@ -2919,7 +2921,7 @@ FLASHMEM void setup()
     SendValue(FrontView_Mins, 0);
     SendValue(FrontView_Secs, 0);
     //  ***************************************************************************************
-     // SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
+    // SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
     //  **   BUT then re-comment it!! Otherwise it will reset to same time on every boot up! **
     //  ***************************************************************************************
     BoundFlag     = false;
@@ -4861,7 +4863,6 @@ void Options2End(){  // back to setup?
 /******************************************************************************************************************************/
  
 void OptionView2Start(){ 
-    return;                                         // fix later!! TODO
     char dGMT[]                      = "dGMT";
     char OptionV2Start[] = "page OptionView2"; 
     char TxVCorrextion[] = "t2";
