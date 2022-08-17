@@ -4861,6 +4861,7 @@ void Options2End(){  // back to setup?
 /******************************************************************************************************************************/
  
 void OptionView2Start(){ 
+    return;                                         // fix later!! TODO
     char dGMT[]                      = "dGMT";
     char OptionV2Start[] = "page OptionView2"; 
     char TxVCorrextion[] = "t2";
