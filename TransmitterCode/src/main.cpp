@@ -1454,7 +1454,7 @@ FASTRUN bool CheckRXVolts(){
     char  FrontView_RXBV[]          = "RXBV";
     char  RXPC[]                    = "RXPC";
     char  PerCell[]                 = " per cell)";
-    char  RXBattNA[]                = "(No data from RX)";
+    char  RXBattNA[]                = "";//"(No data from RX)";
     char  v[]                       = "V  (";
     char pc[]                       = "%";
     char spaces[]                   = "  "; 
