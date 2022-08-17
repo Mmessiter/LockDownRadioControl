@@ -358,7 +358,6 @@ bool     BindButton  = false;
 
 uint8_t  PreviousChannelNumber = 0;
 uint8_t  NextChannelNumber     = 0;
-//bool     InhibitNameCheck      = false;
 
 // changing these four valiables controls LED blink and speed
 
@@ -988,8 +987,9 @@ void RedLedOn()
 {
     if (LedWasGreen){ 
         RXVoltsDetected = false;
-        LedWasGreen = false;
+        LedWasGreen = false;  
         PacketsPerSecond = 0; 
+        LastShowTime = 0;
         RXVoltsDetected = false;
         RangeTestGoodPackets = 0;
         if (UseLog) LogDisConnection();
@@ -1005,6 +1005,7 @@ void RedLedOn()
 
 void GreenLedOn()
 {
+    if (!LedWasGreen) ClearSuccessRate();
     if (!LedWasGreen || LedIsBlinking) {         // no need to repeat unless it is blinking
         LedWasGreen = true;
         if (!LedIsBlinking){
@@ -2948,8 +2949,6 @@ FLASHMEM void setup()
             LogThisModel();
     }
     UpdateModelsNameEveryWhere();
-    ClearSuccessRate();
-    
 }
 /*********************************************************************************************************************************/
 
@@ -4066,11 +4065,11 @@ FASTRUN void DisplayCurve()
 
 void BindNow()
 {
-
 #ifdef DB_BIND
     Serial.println("Binding");
 #endif
     BindingNow    = 1;
+   
 }
 
 /*********************************************************************************************************************************/

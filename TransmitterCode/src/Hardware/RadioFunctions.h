@@ -421,6 +421,7 @@ void UpdateModelsNameEveryWhere();
 void DefineTrimsStart();
 void ResetAllTrims();
 void CheckTrimValues();
+void ClearSuccessRate();
 /*********************************************************************************************************************************/
 
 #endif

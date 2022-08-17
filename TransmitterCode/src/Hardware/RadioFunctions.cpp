@@ -137,7 +137,6 @@ FASTRUN void FailedPacket()
         LostContactFlag   = true;
         Reconnected = false;
         RecentPacketsLost = 0;
-       
         if ((millis() - GapStart) > RED_LED_ON_TIME) // there's no need to blink red for every single lost packet. Only after 1/2 second of no connection.
         {  
             if  (LedWasGreen && UseLog) LogThisLongGap(); 
