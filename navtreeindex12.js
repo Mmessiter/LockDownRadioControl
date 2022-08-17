@@ -1,5 +1,9 @@
 var NAVTREEINDEX12 =
 {
+"globals_defs_y.html":[10,1,6,22],
+"globals_e.html":[10,1,0,5],
+"globals_enum.html":[10,1,4],
+"globals_eval.html":[10,1,5],
 "globals_f.html":[10,1,0,6],
 "globals_func.html":[10,1,1,0],
 "globals_func.html":[10,1,1],
@@ -245,9 +249,5 @@ var NAVTREEINDEX12 =
 "struct_tiny_g_p_s_integer.html":[9,0,31],
 "struct_tiny_g_p_s_integer.html#a017a71970fa652964a9e71b7ec945cec":[9,0,31,0],
 "struct_tiny_g_p_s_integer.html#a35234fdeeffdb934a93740db1aefa6a5":[9,0,31,2],
-"struct_tiny_g_p_s_integer.html#a3a76131645f7604b3f3e759b90f9373f":[9,0,31,3],
-"struct_tiny_g_p_s_integer.html#a6501fd5ef19ae166d43e0e5781609ee2":[9,0,31,5],
-"struct_tiny_g_p_s_integer.html#a67de7e76d61dbd25eb32f701d8ce867b":[9,0,31,4],
-"struct_tiny_g_p_s_integer.html#aabd55511befbd769155c69e0c1208691":[9,0,31,1],
-"struct_tiny_g_p_s_location.html":[9,0,32]
+"struct_tiny_g_p_s_integer.html#a3a76131645f7604b3f3e759b90f9373f":[9,0,31,3]
 };

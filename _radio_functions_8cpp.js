@@ -15,6 +15,7 @@ var _radio_functions_8cpp =
     [ "InitRadio", "_radio_functions_8cpp.html#a799f38bc33abdb30eec1d7db3cf27d58", null ],
     [ "Look", "_radio_functions_8cpp.html#a96cb0a88b752f6abf12d13450d101bdc", null ],
     [ "Procrastinate", "_radio_functions_8cpp.html#a760609a682300dfe6bfaac737fd4d5eb", null ],
+    [ "RecordsPacketSuccess", "_radio_functions_8cpp.html#afc091b5942e21a03f6dc8635d5e519ba", null ],
     [ "RunMacro", "_radio_functions_8cpp.html#a91fb686ba2d3111821721ab33b442918", null ],
     [ "ScanAllChannels", "_radio_functions_8cpp.html#a3856ba0adae43d089f08c7b7f653b306", null ],
     [ "SendData", "_radio_functions_8cpp.html#a049bfb836e7aa4a3a48a1a4bd225fafc", null ],
