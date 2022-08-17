@@ -118,6 +118,12 @@ void ExecuteMacro(){                                                            
 // *************** END OF MACROS ZONE ************************************************
 
 
+/************************************************************************************************************/
+void RecordsPacketSuccess(uint8_t s){ // or failure according to s 
+        PacketsHistoryBuffer[PacketsHistoryIndex] = s;
+        ++PacketsHistoryIndex;
+        if (PacketsHistoryIndex >= (125 * SHOWCOMMSSESCONDS))PacketsHistoryIndex = 0; //
+}
 /***************************************************************************************/
 
 FASTRUN void FailedPacket()
@@ -125,9 +131,9 @@ FASTRUN void FailedPacket()
     int SecondsRemaining;
     if (GapStart == 0) GapStart = millis(); // To keep track of gaps' length
     ++RecentPacketsLost;
+    RecordsPacketSuccess(0);
     ++TotalledRecentPacketsLost; // this is to keep track of events when receiver is off
     if (RecentPacketsLost >= LOSTCONTACTCUTOFF) {
-      
         LostContactFlag   = true;
         Reconnected = false;
         RecentPacketsLost = 0;
@@ -152,11 +158,12 @@ void TryToReconnect(){
     NextChannel = * (FHSSChPointer + random(RECONNECT_CHANNELS_COUNT) + RECONNECT_CHANNELS_START);      // random reconnect channel (selected from first three)
     HopToNextChannel();
 }
+
 /************************************************************************************************************/
 void SuccessfulPacket(){
         ++RangeTestGoodPackets;
         ++PacketNumber;
-        ++PacketsPerShowComms;
+        RecordsPacketSuccess(1);
         LostContactFlag = false;
         RecentPacketsLost         = 0;
         TotalledRecentPacketsLost = 0;

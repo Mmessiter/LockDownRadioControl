@@ -116,9 +116,8 @@ uint64_t      DefaultPipe        = DEFAULTPIPEADDRESS; //          Default Radio
 uint64_t      NewPipe            = 0xBABE1E5420LL;     //          New Radio pipe address for binding comes from MAC address
 char          TextIn[CHARSMAX+2];  // spare space
 uint16_t      PacketsPerSecond = 0;
-uint16_t      PacketsPerShowComms = 0;
-//uint8_t       PacketsHistoryBuffer[125 * SHOWCOMMSSESCONDS];  // heer
-//uint8_t       PacketsHistoryIndex = 0;
+uint8_t       PacketsHistoryBuffer[125 * SHOWCOMMSSESCONDS];  // Here we record some history
+uint8_t       PacketsHistoryIndex = 0;
 uint16_t      LostPackets      = 0;
 uint8_t       PacketNumber     = 0;
 uint8_t       GPSMarkHere      = 0;
@@ -993,7 +992,6 @@ void RedLedOn()
         PacketsPerSecond = 0; 
         RXVoltsDetected = false;
         RangeTestGoodPackets = 0;
-        PacketsPerShowComms = 1;
         if (UseLog) LogDisConnection();
         if (AnnounceConnected) PlaySound(DISCONNECTEDMSG);
         if (!LedIsBlinking) {ShowComms();}
@@ -1496,6 +1494,14 @@ FASTRUN bool CheckRXVolts(){
  }
 
 /*********************************************************************************************************************************/
+uint8_t GetSuccessRate(){
+uint16_t Total = 0;
+    for (int i = 0; i < (125 * SHOWCOMMSSESCONDS); ++i) { // 125 packets per second are either good or bad 
+        Total += PacketsHistoryBuffer[i];
+    }
+    return (Total * 100) / (125 * SHOWCOMMSSESCONDS);  //return a percentage of total good packets
+}
+/*********************************************************************************************************************************/
  void ShowConnectionQuality(){
         char  Quality[]                 = "Quality";
         char  Visible[]                 = "vis Quality,1";
@@ -1510,12 +1516,8 @@ FASTRUN bool CheckRXVolts(){
         char  Msg_ConnectedWeak[]       = "Weak";
         char  Msg_ConnectedVWeak[]      = "Very weak";
 
-        if (!BoundFlag) return;
-        
-        if (PacketsPerShowComms){                                           // repeat call sees it at zero     
-            uint16_t ConnectionQuality = (100 * PacketsPerShowComms) /  (125 * SHOWCOMMSSESCONDS);
+            uint8_t ConnectionQuality = GetSuccessRate();
             SendValue(Quality,ConnectionQuality);                           // show quality of connection
-            if ((millis()) < SHOWCOMMSSESCONDS * 2000) return;   // for cleaner startup
             strcpy(Msgbuf,Msg_Connected);
             if ( ConnectionQuality >= 100)                              strcat(Msgbuf,Msg_ConnectedPerfect);
             if ((ConnectionQuality >= 95) && (ConnectionQuality < 100)) strcat(Msgbuf,Msg_ConnectedExcellent);
@@ -1526,8 +1528,6 @@ FASTRUN bool CheckRXVolts(){
             if ((ConnectionQuality >=  1) && (ConnectionQuality <  25)) strcat(Msgbuf,Msg_ConnectedVWeak);
             SendText(FrontView_Connected, Msgbuf); 
             SendCommand (Visible);
-            PacketsPerShowComms = 0;
-        }
     }
 /*********************************************************************************************************************************/
 
@@ -5383,8 +5383,7 @@ if (strlen(TextIn) > 0) {
             SendCommand(page_FrontView);
             UpdateModelsNameEveryWhere();
             ShowFlightMode();
-            LastShowTime = 0;        // this is to make redisplay sooner (in ShowComms())
-            PacketsPerShowComms = 0; // this is to stop "poor" connection number appearing owing to display after less time 
+            LastShowTime = 0;     // this is to make redisplay sooner (in ShowComms())
             LastTimeRead = 0;
             Reconnected = false;  // this is to make '** Connected! **' redisplay (in ShowComms())
             LastSeconds = 0;      // This forces redisplay of timer...

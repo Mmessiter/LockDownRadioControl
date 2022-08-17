@@ -353,8 +353,9 @@ extern bool           PreviousUkRules;
 extern bool           UseLog;
 extern uint32_t       ShowServoTimer;
 extern uint16_t       PacketsPerSecond;
-extern uint16_t       PacketsPerShowComms;
 extern uint16_t       GetStickInput(uint8_t l);
+extern uint8_t        PacketsHistoryBuffer[125 * SHOWCOMMSSESCONDS];  
+extern uint8_t        PacketsHistoryIndex;
 
 // external (global) functions needed here
 extern void  GetSlaveChannelValues();
