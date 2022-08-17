@@ -274,7 +274,7 @@
 //***************************************************************************
 
 #define NEXTION Serial1       // NEXTION is connected to Serial1
-#define SHOWCOMMSSESCONDS 2 
+#define SHOWCOMMSSESCONDS 2
 #define SHOWCOMMSDELAY SHOWCOMMSSESCONDS * 1000   // ms pauses between updated info on NEXTION
 #define WARMUPDELAY    300     // fails at 200 so must be >200 ...
 
@@ -355,7 +355,7 @@ extern uint32_t       ShowServoTimer;
 extern uint16_t       PacketsPerSecond;
 extern uint16_t       GetStickInput(uint8_t l);
 extern uint8_t        PacketsHistoryBuffer[125 * SHOWCOMMSSESCONDS];  
-extern uint8_t        PacketsHistoryIndex;
+extern uint16_t       PacketsHistoryIndex;
 
 // external (global) functions needed here
 extern void  GetSlaveChannelValues();

@@ -117,7 +117,7 @@ uint64_t      NewPipe            = 0xBABE1E5420LL;     //          New Radio pip
 char          TextIn[CHARSMAX+2];  // spare space
 uint16_t      PacketsPerSecond = 0;
 uint8_t       PacketsHistoryBuffer[125 * SHOWCOMMSSESCONDS];  // Here we record some history
-uint8_t       PacketsHistoryIndex = 0;
+uint16_t      PacketsHistoryIndex = 0;
 uint16_t      LostPackets      = 0;
 uint8_t       PacketNumber     = 0;
 uint8_t       GPSMarkHere      = 0;
@@ -1494,12 +1494,14 @@ FASTRUN bool CheckRXVolts(){
  }
 
 /*********************************************************************************************************************************/
-uint8_t GetSuccessRate(){
-uint16_t Total = 0;
+int GetSuccessRate(){
+int Total = 0;
+int SuccessRate;
     for (int i = 0; i < (125 * SHOWCOMMSSESCONDS); ++i) { // 125 packets per second are either good or bad 
         Total += PacketsHistoryBuffer[i];
     }
-    return (Total * 100) / (125 * SHOWCOMMSSESCONDS);  //return a percentage of total good packets
+    SuccessRate = (Total * 100) / (125 * SHOWCOMMSSESCONDS);  //return a percentage of total good packets
+    return SuccessRate;
 }
 /*********************************************************************************************************************************/
  void ShowConnectionQuality(){
@@ -1515,9 +1517,9 @@ uint16_t Total = 0;
         char  Msg_ConnectedMarginal[]   = "Marginal";
         char  Msg_ConnectedWeak[]       = "Weak";
         char  Msg_ConnectedVWeak[]      = "Very weak";
-        uint8_t ConnectionQuality       = GetSuccessRate();
+        int   ConnectionQuality       = GetSuccessRate();
         
-            SendValue(Quality,ConnectionQuality);                           // show quality of connection
+            SendValue(Quality,ConnectionQuality);                           // show quality of connection in progress bar
             strcpy(Msgbuf,Msg_Connected);
             if ( ConnectionQuality >= 100)                              strcat(Msgbuf,Msg_ConnectedPerfect);
             if ((ConnectionQuality >= 95) && (ConnectionQuality < 100)) strcat(Msgbuf,Msg_ConnectedExcellent);
