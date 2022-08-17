@@ -1494,6 +1494,12 @@ FASTRUN bool CheckRXVolts(){
  }
 
 /*********************************************************************************************************************************/
+void ClearSuccessRate(){
+    for (int i = 0; i < (125 * SHOWCOMMSSESCONDS); ++i) { // 125 packets per second start off good§
+        PacketsHistoryBuffer[i] = 1 ;
+    }
+}
+/*********************************************************************************************************************************/
 int GetSuccessRate(){
 int Total = 0;
 int SuccessRate;
@@ -1504,6 +1510,9 @@ int SuccessRate;
     return SuccessRate;
 }
 /*********************************************************************************************************************************/
+// this function looks at the most recent (SHOWCOMMSSESCONDS) two seconds of packets which succeeded and expresses these 
+// as a percentage of total attempted packets. 
+
  void ShowConnectionQuality(){
         char  Quality[]                 = "Quality";
         char  Visible[]                 = "vis Quality,1";
@@ -1517,9 +1526,10 @@ int SuccessRate;
         char  Msg_ConnectedMarginal[]   = "Marginal";
         char  Msg_ConnectedWeak[]       = "Weak";
         char  Msg_ConnectedVWeak[]      = "Very weak";
-        int   ConnectionQuality       = GetSuccessRate();
-        
-            SendValue(Quality,ConnectionQuality);                           // show quality of connection in progress bar
+        int   ConnectionQuality         = GetSuccessRate();
+            
+            if (!ConnectionQuality) return;
+            SendValue(Quality,ConnectionQuality);           // show quality of connection in progress bar
             strcpy(Msgbuf,Msg_Connected);
             if ( ConnectionQuality >= 100)                              strcat(Msgbuf,Msg_ConnectedPerfect);
             if ((ConnectionQuality >= 95) && (ConnectionQuality < 100)) strcat(Msgbuf,Msg_ConnectedExcellent);
@@ -1543,13 +1553,12 @@ FASTRUN void ShowComms()
   
     char  WarnNow[]              = "vis Warning,1";
     char  WarnOff[]              = "vis Warning,0";
-    char  InVisible[]                 = "vis Quality,0";
+    char  InVisible[]            = "vis Quality,0";
     bool  ShowNow                = false;
     char  na[]                   = "";
     char  FrontView_AckPayload[] = "AckPayload";
     char  FrontView_RXBV[]       = "RXBV";
     char  FrontView_Connected[]  = "Connected";
-    char  Not_Connected[]        = "Not connected"; 
     char  Msg_CnctdBuddyMast[]   = "* BUDDY MASTER! *";
     char  Msg_CnctdBuddySlave[]  = "* BUDDY SLAVE! *";
     char  MsgBuddying[]          = "Buddy";
@@ -1677,7 +1686,7 @@ if (ShowNow){
                     SendText(FrontView_Connected, MsgBuddying);
                 }
                 else {
-                    SendText(FrontView_Connected, Not_Connected);
+                    SendText(FrontView_Connected, na);
                     SendCommand(InVisible);
                 }
             }
@@ -2939,8 +2948,8 @@ FLASHMEM void setup()
             LogThisModel();
     }
     UpdateModelsNameEveryWhere();
-    Procrastinate(2000);
-    LastShowTime = millis();
+    ClearSuccessRate();
+    
 }
 /*********************************************************************************************************************************/
 
