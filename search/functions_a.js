@@ -27,7 +27,7 @@ var searchData=
   ['logthisrx_24',['LogThisRX',['../_transmitter_code_2src_2main_8cpp.html#a900aa27c1353238593c276186d960912',1,'main.cpp']]],
   ['logukrules_25',['LogUKRules',['../_transmitter_code_2src_2main_8cpp.html#afe8648b7a9a00742332cb5967fc1ad14',1,'LogUKRules():&#160;main.cpp'],['../_radio_functions_8h.html#ab7bbbad7e5882348ed2963dae9f4a226',1,'LogUKRules():&#160;main.cpp']]],
   ['logview_26',['LogVIEW',['../_transmitter_code_2src_2main_8cpp.html#a6e27b8b3c5b752c6a208a768de54c277',1,'main.cpp']]],
-  ['look_27',['Look',['../_radio_functions_8cpp.html#a96cb0a88b752f6abf12d13450d101bdc',1,'Look(uint32_t p):&#160;RadioFunctions.cpp'],['../_radio_functions_8h.html#a96cb0a88b752f6abf12d13450d101bdc',1,'Look(uint32_t p):&#160;RadioFunctions.cpp']]],
+  ['look_27',['Look',['../_radio_functions_8cpp.html#a44db40e8ffa545be92871325c4dcdc55',1,'Look(int p):&#160;RadioFunctions.cpp'],['../_radio_functions_8h.html#a44db40e8ffa545be92871325c4dcdc55',1,'Look(int p):&#160;RadioFunctions.cpp']]],
   ['loop_28',['loop',['../_quadcopter_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../_receiver_code_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../_sensor_hub_t32_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#ad3cb30894c94eb016e98bdcaa899ac86',1,'loop():&#160;main.cpp']]],
   ['loopblink_29',['loopBlink',['../_quadcopter_2src_2main_8cpp.html#a9826c5f7dba6f1d578d9a90d06d4a373',1,'main.cpp']]],
   ['looprate_30',['loopRate',['../_quadcopter_2src_2main_8cpp.html#a368045f053bb43109cbd14504673bff6',1,'main.cpp']]]
