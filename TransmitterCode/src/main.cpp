@@ -1548,7 +1548,7 @@ void ShowConnectionQuality()
     char Msg_ConnectedVWeak[]     = "Very weak";
     int  ConnectionQuality        = GetSuccessRate();
 
-    if (!ConnectionQuality) return;
+    if (!LedWasGreen) return;
     SendValue(Quality, ConnectionQuality); // show quality of connection in progress bar
     strcpy(Msgbuf, Msg_Connected);
     if (ConnectionQuality >= 100) strcat(Msgbuf, Msg_ConnectedPerfect);

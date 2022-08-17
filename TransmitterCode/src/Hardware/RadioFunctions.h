@@ -273,10 +273,10 @@
 //                          NEXTION SERIAL CONNECTION                       *
 //***************************************************************************
 
-#define NEXTION Serial1       // NEXTION is connected to Serial1
-#define SHOWCOMMSSESCONDS 2
-#define SHOWCOMMSDELAY SHOWCOMMSSESCONDS * 1000   // ms pauses between updated info on NEXTION
-#define WARMUPDELAY    300     // fails at 200 so must be >200 ...
+#define NEXTION Serial1        // NEXTION is connected to Serial1
+#define SHOWCOMMSSESCONDS 6
+#define SHOWCOMMSDELAY  2000    // ms pauses between updated info on NEXTION
+#define WARMUPDELAY     300     // fails at 200 so must be >200 ...
 
 // **************************************************************************
 //                            WATCHDOG PARAMETERS                           *
