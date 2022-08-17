@@ -1505,8 +1505,8 @@ $(document).ready(function(){initNavTree('_transmitter_code_2src_2main_8cpp_sour
 <div class="line"><a id="l01515" name="l01515"></a><span class="lineno"> 1515</span>        <span class="keywordtype">char</span>  Msg_ConnectedMarginal[]   = <span class="stringliteral">&quot;Marginal&quot;</span>;</div>
 <div class="line"><a id="l01516" name="l01516"></a><span class="lineno"> 1516</span>        <span class="keywordtype">char</span>  Msg_ConnectedWeak[]       = <span class="stringliteral">&quot;Weak&quot;</span>;</div>
 <div class="line"><a id="l01517" name="l01517"></a><span class="lineno"> 1517</span>        <span class="keywordtype">char</span>  Msg_ConnectedVWeak[]      = <span class="stringliteral">&quot;Very weak&quot;</span>;</div>
-<div class="line"><a id="l01518" name="l01518"></a><span class="lineno"> 1518</span> </div>
-<div class="line"><a id="l01519" name="l01519"></a><span class="lineno"> 1519</span>            uint8_t ConnectionQuality = <a class="code hl_function" href="_transmitter_code_2src_2main_8cpp.html#ae8fa66e0b5ff801e45ce58ae161b06fe">GetSuccessRate</a>();</div>
+<div class="line"><a id="l01518" name="l01518"></a><span class="lineno"> 1518</span>        uint8_t ConnectionQuality       = <a class="code hl_function" href="_transmitter_code_2src_2main_8cpp.html#ae8fa66e0b5ff801e45ce58ae161b06fe">GetSuccessRate</a>();</div>
+<div class="line"><a id="l01519" name="l01519"></a><span class="lineno"> 1519</span>        </div>
 <div class="line"><a id="l01520" name="l01520"></a><span class="lineno"> 1520</span>            <a class="code hl_function" href="_transmitter_code_2src_2main_8cpp.html#a1e20efc1e419b252b50d36f9924503fc">SendValue</a>(Quality,ConnectionQuality);                           <span class="comment">// show quality of connection</span></div>
 <div class="line"><a id="l01521" name="l01521"></a><span class="lineno"> 1521</span>            strcpy(Msgbuf,Msg_Connected);</div>
 <div class="line"><a id="l01522" name="l01522"></a><span class="lineno"> 1522</span>            <span class="keywordflow">if</span> ( ConnectionQuality &gt;= 100)                              strcat(Msgbuf,Msg_ConnectedPerfect);</div>
