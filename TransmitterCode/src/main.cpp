@@ -1515,8 +1515,8 @@ uint16_t Total = 0;
         char  Msg_ConnectedMarginal[]   = "Marginal";
         char  Msg_ConnectedWeak[]       = "Weak";
         char  Msg_ConnectedVWeak[]      = "Very weak";
-
-            uint8_t ConnectionQuality = GetSuccessRate();
+        uint8_t ConnectionQuality       = GetSuccessRate();
+        
             SendValue(Quality,ConnectionQuality);                           // show quality of connection
             strcpy(Msgbuf,Msg_Connected);
             if ( ConnectionQuality >= 100)                              strcat(Msgbuf,Msg_ConnectedPerfect);
