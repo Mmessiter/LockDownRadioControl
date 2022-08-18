@@ -3753,7 +3753,7 @@ void SetDefaultValues()
         }
     }
     for (i = 0; i < CHANNELSUSED + 1; ++i) {
-        SubTrims[i] = 127; // centre (0 - 254)
+            SubTrims[i] = 127; // centre (0 - 254)
     }
     for (j = 0; j < BYTESPERMACRO; ++j) {
         for (i = 0; i < MAXMACROS; ++i) {
@@ -3763,17 +3763,18 @@ void SetDefaultValues()
     for (int i = 0; i < 4; ++i) {
             InputTrim[i] = i;
     }
+    ReversedChannelBITS = 0;  //  No channel reversed
     SendValue(Progress, 95);
     Procrastinate(10);
-    SaveAllParameters();
-    SendValue(Progress, 100);
-    ReversedChannelBITS = 0;                        // No channel reversed
+    SaveOneModel(ModelNumber);
+    CloseModelsFile();
+    SendValue(Progress, 100);          
     SDCardAddress       = TXSIZE;                   //  spare bytes for TX stuff
     SDCardAddress += (ModelNumber - 1) * MODELSIZE; //  spare bytes for Model params
     StartLocation = SDCardAddress;
     ModelDefined  = 0;
     OpenModelsFile();
-    SDUpdateByte(SDCardAddress, ModelDefined); // mark this model as undefined
+    SDUpdateByte(SDCardAddress, ModelDefined);      // mark this model as undefined
     CloseModelsFile();
     ReadOneModel(ModelNumber);
     UpdateModelsNameEveryWhere();
