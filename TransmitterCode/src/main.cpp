@@ -118,7 +118,7 @@ char     TextIn[CHARSMAX + 2];                  // spare space
 uint16_t PacketsPerSecond = 0;
 uint8_t  PacketsHistoryBuffer[125 * SHOWCOMMSSESCONDS]; // Here we record some history
 uint16_t PacketsHistoryIndex    = 0;
-uint16_t LostPackets            = 0;
+uint32_t TotalLostPackets       = 0;
 uint8_t  PacketNumber           = 0;
 uint8_t  GPSMarkHere            = 0;
 uint8_t  PreviousTrim           = 255;
@@ -244,7 +244,7 @@ int       LastLinePosition            = 0;
 uint8_t   RXCellCount                 = 2;
 bool      JustHoppedFlag              = true;
 bool      LostContactFlag             = true;
-uint32_t  TotalledRecentPacketsLost   = 0;
+uint32_t  RecentPacketsLost           = 0;
 uint32_t  GapSum                      = 0;
 uint32_t  GapLongest                  = 0;
 uint32_t  GapStart                    = 0;
@@ -328,7 +328,6 @@ uint16_t FileNumberInView     = 0;
 bool     FileError            = false;
 uint32_t RangeTestStart       = 0;
 uint16_t RangeTestGoodPackets = 0;
-uint16_t RangeTestLostPackets = 0;
 uint8_t  SaveFlightMode       = 0;
 bool     FailSafeChannel[CHANNELSUSED];
 bool     SaveFailSafeNow = false;
@@ -1651,7 +1650,7 @@ FASTRUN void ShowComms()
                 }
                 if (CurrentView == DATAVIEW) {
                     SendValue(DataView_pps, PacketsPerSecond);
-                    SendValue(DataView_lps, LostPackets);
+                    SendValue(DataView_lps, TotalLostPackets);
                     SendText(DataView_Alt, ModelAltitude);
                     SendText(DataView_MaxAlt, MaxAltitude);
                     SendText(DataView_Temp, ModelTemperature);
@@ -1698,7 +1697,7 @@ FASTRUN void ShowComms()
                 if (BoundFlag) {
                     if (CurrentView == DATAVIEW) {
                         SendValue(DataView_pps, PacketsPerSecond);
-                        SendValue(DataView_lps, LostPackets);
+                        SendValue(DataView_lps, TotalLostPackets);
                     }
                     if (CurrentView == FRONTVIEW) {
                         SendText(FrontView_RXBV, na); // data not available
@@ -4622,7 +4621,7 @@ void RestoreBrightness()
 
 void ZeroDataScreen()
 { // ZERO Those parameters that are zeroable
-    LostPackets        = 0;
+    TotalLostPackets   = 0;
     GapLongest         = 0;
     GapSum             = 0;
     GapAverage         = 0;

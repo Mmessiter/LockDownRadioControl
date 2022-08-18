@@ -128,22 +128,19 @@ void RecordsPacketSuccess(uint8_t s){ // or failure according to s
 
 FASTRUN void FailedPacket()
 {
-  
-    RecordsPacketSuccess(0);                      // Record a failure
-    ++TotalledRecentPacketsLost;                  // this is to keep track of events when receiver is off
-    if (TotalledRecentPacketsLost >= LOSTCONTACTCUTOFF) { // Don't panic until at least two packets are lost. 
-        if (!GapStart) GapStart = millis();       // To keep track of this gap's length
+    RecordsPacketSuccess(0);                         // Record a failure
+    ++RecentPacketsLost;                             // this is to keep track of events when receiver is off  
+    ++TotalLostPackets;                              // This is total - never zeroed 
+    if (RecentPacketsLost >= LOSTCONTACTCUTOFF) {    // Don't panic until at two packets are lost. 
+        if (!GapStart) GapStart = millis();          // To keep track of this gap's length
         LostContactFlag   = true;
         Reconnected = false;
-      
-        if ((millis() - GapStart) > RED_LED_ON_TIME) // there's no need to blink red for every single lost packet. Only after 1/2 second of no connection.
-        {  
+        if ((millis() - GapStart) > RED_LED_ON_TIME){ // there's no need to blink red for every single lost packet. Only after 1/2 second of no connection.
             if  (LedWasGreen && UseLog) LogThisLongGap(); 
             RedLedOn(); 
             ReEnableScanButton();
         }
     }
-    ++LostPackets;
     int SecondsRemaining = (Inactivity_Timeout / 1000) - (millis() - Inactivity_Start) / 1000;
     if (SecondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH);             // INACTIVITY POWER OFF HERE!!
 }
@@ -152,7 +149,7 @@ FASTRUN void FailedPacket()
 
 void TryToReconnect(){
    
-    if ((TotalledRecentPacketsLost > 100 || (!BoundFlag))) TryOtherPipe();                              // In case the receiver has re-booted                                                                        
+    if ((RecentPacketsLost > 200 || (!BoundFlag))) TryOtherPipe();                                      // In case the receiver has re-booted                                                                        
     NextChannel = * (FHSSChPointer + random(RECONNECT_CHANNELS_COUNT) + RECONNECT_CHANNELS_START);      // random reconnect channel (selected from first three)
     HopToNextChannel();
 }
@@ -163,7 +160,7 @@ void SuccessfulPacket(){
         ++PacketNumber;
         RecordsPacketSuccess(1);
         LostContactFlag = false;
-        TotalledRecentPacketsLost = 0;
+        RecentPacketsLost = 0;
         Connected                 = true;
         if (BoundFlag) GreenLedOn();
         CheckGapsLength();
