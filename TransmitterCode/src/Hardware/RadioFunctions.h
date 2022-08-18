@@ -316,7 +316,6 @@ extern uint16_t       CompressedData[];
 extern uint8_t        FHSS_Channels[];
 extern struct         Payload AckPayload;
 extern uint16_t       RangeTestLostPackets;
-extern uint8_t        RecentPacketsLost;
 extern uint8_t        AckPayloadSize;
 extern uint8_t        SizeOfCompressedData;
 extern uint16_t       RangeTestGoodPackets;

@@ -244,7 +244,6 @@ int       LastLinePosition            = 0;
 uint8_t   RXCellCount                 = 2;
 bool      JustHoppedFlag              = true;
 bool      LostContactFlag             = true;
-uint8_t   RecentPacketsLost           = 0;
 uint32_t  TotalledRecentPacketsLost   = 0;
 uint32_t  GapSum                      = 0;
 uint32_t  GapLongest                  = 0;

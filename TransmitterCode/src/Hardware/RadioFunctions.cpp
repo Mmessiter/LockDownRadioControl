@@ -128,15 +128,14 @@ void RecordsPacketSuccess(uint8_t s){ // or failure according to s
 
 FASTRUN void FailedPacket()
 {
-    int SecondsRemaining;
-    if (GapStart == 0) GapStart = millis(); // To keep track of gaps' length
-    ++RecentPacketsLost;
-    RecordsPacketSuccess(0);
-    ++TotalledRecentPacketsLost; // this is to keep track of events when receiver is off
-    if (RecentPacketsLost >= LOSTCONTACTCUTOFF) {
+  
+    RecordsPacketSuccess(0);                      // Record a failure
+    ++TotalledRecentPacketsLost;                  // this is to keep track of events when receiver is off
+    if (TotalledRecentPacketsLost >= LOSTCONTACTCUTOFF) { // Don't panic until at least two packets are lost. 
+        if (!GapStart) GapStart = millis();       // To keep track of this gap's length
         LostContactFlag   = true;
         Reconnected = false;
-        RecentPacketsLost = 0;
+      
         if ((millis() - GapStart) > RED_LED_ON_TIME) // there's no need to blink red for every single lost packet. Only after 1/2 second of no connection.
         {  
             if  (LedWasGreen && UseLog) LogThisLongGap(); 
@@ -145,7 +144,7 @@ FASTRUN void FailedPacket()
         }
     }
     ++LostPackets;
-     SecondsRemaining = (Inactivity_Timeout / 1000) - (millis() - Inactivity_Start) / 1000;
+    int SecondsRemaining = (Inactivity_Timeout / 1000) - (millis() - Inactivity_Start) / 1000;
     if (SecondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH);             // INACTIVITY POWER OFF HERE!!
 }
 
@@ -164,7 +163,6 @@ void SuccessfulPacket(){
         ++PacketNumber;
         RecordsPacketSuccess(1);
         LostContactFlag = false;
-        RecentPacketsLost         = 0;
         TotalledRecentPacketsLost = 0;
         Connected                 = true;
         if (BoundFlag) GreenLedOn();
