@@ -3742,7 +3742,6 @@ void SetDefaultValues()
             ChannelNames[i][j] = DefaultChannelNames[i][j];
         }
     }
-
     for (j = 0; j < FLIGHTMODESUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             Exponential[j][i] = DEFAULT_EXPO; // 0% (50) expo = default
@@ -3753,7 +3752,6 @@ void SetDefaultValues()
             InterpolationTypes[j][i] = EXPONENTIALCURVES; // Expo is default
         }
     }
-
     for (i = 0; i < CHANNELSUSED + 1; ++i) {
         SubTrims[i] = 127; // centre (0 - 254)
     }
@@ -3762,9 +3760,12 @@ void SetDefaultValues()
             MacrosBuffer[i][j] = 0;
         }
     }
+    for (int i = 0; i < 4; ++i) {
+            InputTrim[i] = i;
+    }
     SendValue(Progress, 95);
     Procrastinate(10);
-    SaveOneModel(ModelNumber);
+    SaveAllParameters();
     SendValue(Progress, 100);
     ReversedChannelBITS = 0;                        // No channel reversed
     SDCardAddress       = TXSIZE;                   //  spare bytes for TX stuff

@@ -274,7 +274,7 @@
 //***************************************************************************
 
 #define NEXTION Serial1             // NEXTION is connected to Serial1
-#define SHOWCOMMSSESCONDS 6         // Assess average connection quality over most recent 6 seconds continiously
+#define SHOWCOMMSSESCONDS 6         // Assess average connection quality over most recent 6 seconds continously
 #define SHOWCOMMSDELAY    3000      // ms pauses between updated info on NEXTION
 #define WARMUPDELAY       300       // fails at 200 so must be >200 ...
 
