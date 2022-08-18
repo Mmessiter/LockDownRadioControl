@@ -30,9 +30,10 @@ var searchData=
   ['found_5fina219_27',['FOUND_INA219',['../_sensor_hub_t32_2src_2main_8cpp.html#af1b5290b72a9f9bc5d1d70c7c14df9b0',1,'main.cpp']]],
   ['frequencycount_28',['FrequencyCount',['../common_8h.html#a2cecb6d8a82a88635e2c10438fedf092',1,'common.h']]],
   ['fromid_29',['fromID',['../class_adafruit___g_p_s.html#aa261e33c920ac4279babc6aba0da931f',1,'Adafruit_GPS']]],
-  ['frontview_5fhours_30',['FrontView_Hours',['../_transmitter_code_2src_2main_8cpp.html#aedaf1495391d83b1ff10ad2192fffc93',1,'main.cpp']]],
-  ['frontview_5fmins_31',['FrontView_Mins',['../_transmitter_code_2src_2main_8cpp.html#a60f4339de362e3a16c844e1325523c90',1,'main.cpp']]],
-  ['frontview_5fsecs_32',['FrontView_Secs',['../_transmitter_code_2src_2main_8cpp.html#a9a8581d01528b71e16b6b9e0a18f9193',1,'main.cpp']]],
-  ['fs_5fbyte1_33',['FS_byte1',['../_receiver_code_2src_2main_8cpp.html#a3be9019b72265fa9443e1f1132fd9bc7',1,'main.cpp']]],
-  ['fs_5fbyte2_34',['FS_byte2',['../_receiver_code_2src_2main_8cpp.html#a9949c81d8f6abc28616445945c5d24ba',1,'main.cpp']]]
+  ['frontview_5fconnected_30',['FrontView_Connected',['../_transmitter_code_2src_2main_8cpp.html#ab61956b4b300b36a8a9234e2a9b53087',1,'main.cpp']]],
+  ['frontview_5fhours_31',['FrontView_Hours',['../_transmitter_code_2src_2main_8cpp.html#aedaf1495391d83b1ff10ad2192fffc93',1,'main.cpp']]],
+  ['frontview_5fmins_32',['FrontView_Mins',['../_transmitter_code_2src_2main_8cpp.html#a60f4339de362e3a16c844e1325523c90',1,'main.cpp']]],
+  ['frontview_5fsecs_33',['FrontView_Secs',['../_transmitter_code_2src_2main_8cpp.html#a9a8581d01528b71e16b6b9e0a18f9193',1,'main.cpp']]],
+  ['fs_5fbyte1_34',['FS_byte1',['../_receiver_code_2src_2main_8cpp.html#a3be9019b72265fa9443e1f1132fd9bc7',1,'main.cpp']]],
+  ['fs_5fbyte2_35',['FS_byte2',['../_receiver_code_2src_2main_8cpp.html#a9949c81d8f6abc28616445945c5d24ba',1,'main.cpp']]]
 ];
