@@ -125,6 +125,8 @@ uint8_t  PreviousTrim           = 255;
 uint32_t TrimTimer              = 0;
 uint16_t TrimRepeatSpeed        = 600;
 uint16_t DefaultTrimRepeatSpeed = 600;
+char FrontView_Connected[]      = "Connected";
+char na[]                       = "";
 
 // ************************************* AckPayload structure ******************************************************
 /**
@@ -1536,7 +1538,7 @@ void ShowConnectionQuality()
 {
     char Quality[]                = "Quality";
     char Visible[]                = "vis Quality,1";
-    char FrontView_Connected[]    = "Connected";
+    
     char Msgbuf[]                 = "                       ";
     char Msg_Connected[]          = "Connection: ";
     char Msg_ConnectedPerfect[]   = "Perfect";
@@ -1575,10 +1577,10 @@ FASTRUN void ShowComms()
     char WarnOff[]              = "vis Warning,0";
     char InVisible[]            = "vis Quality,0";
     bool ShowNow                = false;
-    char na[]                   = "";
+    
     char FrontView_AckPayload[] = "AckPayload";
     char FrontView_RXBV[]       = "RXBV";
-    char FrontView_Connected[]  = "Connected";
+
     char Msg_CnctdBuddyMast[]   = "* BUDDY MASTER! *";
     char Msg_CnctdBuddySlave[]  = "* BUDDY SLAVE! *";
     char MsgBuddying[]          = "Buddy";
@@ -1617,6 +1619,7 @@ FASTRUN void ShowComms()
         LastShowTime = millis();
     }
     if (ShowNow) {
+       
         if (CurrentView == FRONTVIEW || CurrentView == DATAVIEW) {
             if ((CurrentView == FRONTVIEW)) {
                 ShowConnectionQuality();
@@ -5523,18 +5526,19 @@ FASTRUN void ButtonWasPressed()
             ClearText();
             return;
         }
-        if (InStrng(GoFrontView, TextIn) > 0) { // GOTO frontview
-            CurrentView = FRONTVIEW;
+        if (InStrng(GoFrontView, TextIn) > 0) { // GOTO frontview // heer
             SendCommand(page_FrontView);
             UpdateModelsNameEveryWhere();
             ShowFlightMode();
-            LastShowTime = 0; // this is to make redisplay sooner (in ShowComms())
             LastTimeRead = 0;
             Reconnected  = false; // this is to make '** Connected! **' redisplay (in ShowComms())
             LastSeconds  = 0;     // This forces redisplay of timer...
             Force_ReDisplay();
             CheckTimer();
             ClearText();
+            CurrentView = FRONTVIEW;
+            LastShowTime = 0; // this is to make redisplay sooner (in ShowComms())
+            SendText(FrontView_Connected, na);
             return;
         }
 
