@@ -18,7 +18,7 @@ var searchData=
   ['timestamp_15',['timestamp',['../structsensors__event__t.html#acd3be1560458b3e3bf52f93f744e8238',1,'sensors_event_t']]],
   ['tm_16',['tm',['../_transmitter_code_2src_2main_8cpp.html#a52357cbf68af66972047f7aed7a45218',1,'main.cpp']]],
   ['toid_17',['toID',['../class_adafruit___g_p_s.html#aef3bc1b4cfce3547b90042c6e7f472c9',1,'Adafruit_GPS']]],
-  ['totalledrecentpacketslost_18',['TotalledRecentPacketsLost',['../_transmitter_code_2src_2main_8cpp.html#a7f485e1361fb90bec75e06944665686d',1,'TotalledRecentPacketsLost():&#160;main.cpp'],['../_radio_functions_8h.html#a7f485e1361fb90bec75e06944665686d',1,'TotalledRecentPacketsLost():&#160;main.cpp']]],
+  ['totallostpackets_18',['TotalLostPackets',['../_transmitter_code_2src_2main_8cpp.html#add763855be5b4be56770f98ca20d0ad4',1,'TotalLostPackets():&#160;main.cpp'],['../_radio_functions_8h.html#add763855be5b4be56770f98ca20d0ad4',1,'TotalLostPackets():&#160;main.cpp']]],
   ['transmitterversionnumber_19',['TransmitterVersionNumber',['../_transmitter_code_2src_2main_8cpp.html#a60227ba657b591c1f0123978897e60aa',1,'main.cpp']]],
   ['trimclicks_20',['TrimClicks',['../_transmitter_code_2src_2main_8cpp.html#ae72cd49c59d06c6160b52860f2c73f1a',1,'main.cpp']]],
   ['trimdefined_21',['TrimDefined',['../_transmitter_code_2src_2main_8cpp.html#a637b67a91d76737f0574a633348cc114',1,'main.cpp']]],

@@ -37,7 +37,7 @@ var searchData=
   ['tinygpstime_34',['TinyGPSTime',['../struct_tiny_g_p_s_time.html',1,'TinyGPSTime'],['../struct_tiny_g_p_s_time.html#abd6dd7a576fd42cd6980c92eec77ab1d',1,'TinyGPSTime::TinyGPSTime()']]],
   ['tm_35',['tm',['../_transmitter_code_2src_2main_8cpp.html#a52357cbf68af66972047f7aed7a45218',1,'main.cpp']]],
   ['toid_36',['toID',['../class_adafruit___g_p_s.html#aef3bc1b4cfce3547b90042c6e7f472c9',1,'Adafruit_GPS']]],
-  ['totalledrecentpacketslost_37',['TotalledRecentPacketsLost',['../_radio_functions_8h.html#a7f485e1361fb90bec75e06944665686d',1,'TotalledRecentPacketsLost():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a7f485e1361fb90bec75e06944665686d',1,'TotalledRecentPacketsLost():&#160;main.cpp']]],
+  ['totallostpackets_37',['TotalLostPackets',['../_radio_functions_8h.html#add763855be5b4be56770f98ca20d0ad4',1,'TotalLostPackets():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#add763855be5b4be56770f98ca20d0ad4',1,'TotalLostPackets():&#160;main.cpp']]],
   ['transfer_38',['transfer',['../class_adafruit___s_p_i_device.html#a155f5efd84dbc240c987f4066265b840',1,'Adafruit_SPIDevice::transfer(uint8_t *buffer, size_t len)'],['../class_adafruit___s_p_i_device.html#ac60964386f37b2c498fc1b1540f61889',1,'Adafruit_SPIDevice::transfer(uint8_t send)']]],
   ['transmittercode_39',['TransmitterCode',['../_transmitter_code.html',1,'']]],
   ['transmitterversionnumber_40',['TransmitterVersionNumber',['../_transmitter_code_2src_2main_8cpp.html#a60227ba657b591c1f0123978897e60aa',1,'main.cpp']]],

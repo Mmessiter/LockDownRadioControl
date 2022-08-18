@@ -47,7 +47,6 @@ var searchData=
   ['longitudegps_44',['LongitudeGPS',['../_receiver_code_2src_2main_8cpp.html#afabe4c9d9760f8606aa408474e3d626c',1,'LongitudeGPS():&#160;main.cpp'],['../radio_8h.html#afabe4c9d9760f8606aa408474e3d626c',1,'LongitudeGPS():&#160;main.cpp']]],
   ['looptimer_45',['LoopTimer',['../_sensor_hub_t32_2src_2main_8cpp.html#a46536419f1b2ee88934f4f812fd6140c',1,'main.cpp']]],
   ['lostcontactflag_46',['LostContactFlag',['../_radio_functions_8h.html#ad5f463902789a79fc622b3befd9409b9',1,'LostContactFlag():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#ad5f463902789a79fc622b3befd9409b9',1,'LostContactFlag():&#160;main.cpp']]],
-  ['lostpackets_47',['LostPackets',['../_radio_functions_8h.html#a2cd5f73af62f9f856c2352e44c73f171',1,'LostPackets():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a2cd5f73af62f9f856c2352e44c73f171',1,'LostPackets():&#160;main.cpp']]],
-  ['lowbattery_48',['LowBattery',['../_transmitter_code_2src_2main_8cpp.html#a841a740574f81e5bb80ea1a16f704be5',1,'main.cpp']]],
-  ['lp_5faccel_5fodr_49',['LP_ACCEL_ODR',['../class_m_p_u9250.html#a20a0eee49ffef67d73ba8275486ba47e',1,'MPU9250']]]
+  ['lowbattery_47',['LowBattery',['../_transmitter_code_2src_2main_8cpp.html#a841a740574f81e5bb80ea1a16f704be5',1,'main.cpp']]],
+  ['lp_5faccel_5fodr_48',['LP_ACCEL_ODR',['../class_m_p_u9250.html#a20a0eee49ffef67d73ba8275486ba47e',1,'MPU9250']]]
 ];
