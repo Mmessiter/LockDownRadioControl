@@ -48,5 +48,6 @@ var searchData=
   ['looptimer_45',['LoopTimer',['../_sensor_hub_t32_2src_2main_8cpp.html#a46536419f1b2ee88934f4f812fd6140c',1,'main.cpp']]],
   ['lostcontactflag_46',['LostContactFlag',['../_radio_functions_8h.html#ad5f463902789a79fc622b3befd9409b9',1,'LostContactFlag():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#ad5f463902789a79fc622b3befd9409b9',1,'LostContactFlag():&#160;main.cpp']]],
   ['lowbattery_47',['LowBattery',['../_transmitter_code_2src_2main_8cpp.html#a841a740574f81e5bb80ea1a16f704be5',1,'main.cpp']]],
-  ['lp_5faccel_5fodr_48',['LP_ACCEL_ODR',['../class_m_p_u9250.html#a20a0eee49ffef67d73ba8275486ba47e',1,'MPU9250']]]
+  ['lowpowermode_48',['LowPowerMode',['../_radio_functions_8h.html#aff0b3d2ab8500d95569cb52a1fa2dad1',1,'LowPowerMode():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#aff0b3d2ab8500d95569cb52a1fa2dad1',1,'LowPowerMode():&#160;main.cpp']]],
+  ['lp_5faccel_5fodr_49',['LP_ACCEL_ODR',['../class_m_p_u9250.html#a20a0eee49ffef67d73ba8275486ba47e',1,'MPU9250']]]
 ];

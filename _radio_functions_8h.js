@@ -246,6 +246,7 @@ var _radio_functions_8h =
     [ "JustHoppedFlag", "_radio_functions_8h.html#ae768cbeda38b92908ae481b943893e3b", null ],
     [ "LedWasGreen", "_radio_functions_8h.html#abe57ee67b36530a7bde7680e5b6e40f8", null ],
     [ "LostContactFlag", "_radio_functions_8h.html#ad5f463902789a79fc622b3befd9409b9", null ],
+    [ "LowPowerMode", "_radio_functions_8h.html#aff0b3d2ab8500d95569cb52a1fa2dad1", null ],
     [ "MacrosBuffer", "_radio_functions_8h.html#a961efaa3441c7a8fc7ecea83b2cd3260", null ],
     [ "MacroStartTime", "_radio_functions_8h.html#abacba397df8422d772f9f387649a9494", null ],
     [ "MacroStopTime", "_radio_functions_8h.html#a9e444f8769253f982906c933290b1369", null ],
