@@ -15,7 +15,7 @@
     
     #define RXVERSION_MAJOR             1
     #define RXVERSION_MINOR             8
-    #define RXVERSION_MINIMUS           4   // August 2022
+    #define RXVERSION_MINIMUS           5   // August 2022
 
 //**************************************************************************************************************************
 // #define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< **
@@ -25,13 +25,12 @@
     #define HOPTIME                     97   // >= ms between channel changes (10 packets per hop)
 
 // ********************************* reconnect params ***************************************
-    #define LISTEN_PERIOD               50   // was 10.    How many ms to listen for TX in Reconnect()
-    #define RECEIVE_TIMEOUT             25   // was 14.    <=9 fails, >=11 OK ... 
+    #define LISTEN_PERIOD               50   //  How many ms to listen for TX in Reconnect()
+    #define RECEIVE_TIMEOUT             25   //  <=9 fails, >=11 OK ... 
  // *****************************************************************************************
 
-    #define FREQUENCYSCOUNT             82   // use 82 different channels
-    #define FREQUENCYSCOUNT1            41   // use 41 different test channels
-   
+    #define FREQUENCYSCOUNT             82   // uses 82 different channels
+    #define FREQUENCYSCOUNT1            41   // uses 41 different test channels
     #define CHANNELSUSED                16   
     #define SERVOSUSED                  9    // But all 16 are available via SBUS
     #define SBUSRATE                    10   // SBUS frame every 10 milliseconds
