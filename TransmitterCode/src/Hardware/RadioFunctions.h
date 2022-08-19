@@ -12,7 +12,7 @@
 
 #define TXVERSION_MAJOR   1
 #define TXVERSION_MINOR   8
-#define TXVERSION_MINIMUS 4
+#define TXVERSION_MINIMUS 5
 
 // **************************************************************************
 //                               Includes                                   *
@@ -37,8 +37,8 @@
 //    DEBUG OPTIONS (Uncomment any of these for that bit of debug info)     *
 //***************************************************************************
 
- //#define DB_NEXTION        // Debug NEXTION 
-   #define DB_SD             // Debug SD card data
+// #define DB_NEXTION        // Debug NEXTION 
+// #define DB_SD             // Debug SD card data
 // #define DB_FHSS           // Debug real time FHSS data
 // #define DB_SENSORS        // Debug Sensors
 // #define DB_BIND           // Debug Binding
@@ -273,10 +273,10 @@
 //                          NEXTION SERIAL CONNECTION                       *
 //***************************************************************************
 
-#define NEXTION Serial1       // NEXTION is connected to Serial1
-#define SHOWCOMMSSESCONDS 2 
-#define SHOWCOMMSDELAY SHOWCOMMSSESCONDS * 1000   // ms pauses between updated info on NEXTION
-#define WARMUPDELAY    300     // fails at 200 so must be >200 ...
+#define NEXTION Serial1             // NEXTION is connected to Serial1
+#define SHOWCOMMSSESCONDS 6         // Assess average connection quality over most recent 6 seconds continously
+#define SHOWCOMMSDELAY    3000      // ms pauses between updated info on NEXTION
+#define WARMUPDELAY       300       // fails at 200 so must be >200 ...
 
 // **************************************************************************
 //                            WATCHDOG PARAMETERS                           *
@@ -315,13 +315,11 @@ extern bool           Connected;
 extern uint16_t       CompressedData[];
 extern uint8_t        FHSS_Channels[];
 extern struct         Payload AckPayload;
-extern uint16_t       RangeTestLostPackets;
-extern uint8_t        RecentPacketsLost;
 extern uint8_t        AckPayloadSize;
 extern uint8_t        SizeOfCompressedData;
 extern uint16_t       RangeTestGoodPackets;
 extern uint8_t        NextChannelNumber;
-extern uint32_t       TotalledRecentPacketsLost;
+extern uint32_t       RecentPacketsLost;
 extern uint32_t       TxOnTime;
 extern uint32_t       TXTimeStamp;
 extern uint32_t       HopStart;
@@ -343,7 +341,7 @@ extern uint8_t        MacrosBuffer[MAXMACROS][BYTESPERMACRO];    // macros' buff
 extern uint32_t       MacroStartTime[MAXMACROS];
 extern uint32_t       MacroStopTime[MAXMACROS];
 extern bool           UseMacros;
-extern uint16_t       LostPackets;
+extern uint32_t       TotalLostPackets;
 extern bool           Reconnected;
 extern bool           LedWasGreen;
 extern uint32_t       Inactivity_Timeout; 
@@ -353,8 +351,9 @@ extern bool           PreviousUkRules;
 extern bool           UseLog;
 extern uint32_t       ShowServoTimer;
 extern uint16_t       PacketsPerSecond;
-extern uint16_t       PacketsPerShowComms;
 extern uint16_t       GetStickInput(uint8_t l);
+extern uint8_t        PacketsHistoryBuffer[125 * SHOWCOMMSSESCONDS];  
+extern uint16_t       PacketsHistoryIndex;
 
 // external (global) functions needed here
 extern void  GetSlaveChannelValues();
@@ -414,12 +413,13 @@ void Force_ReDisplay();
 FASTRUN void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uint8_t uncompressed_size);
 FASTRUN void BufferNewPipe();
 void ExecuteMacro();
-void Look(uint32_t p);
+void Look(int p);
 void ShowFlightMode();
 void UpdateModelsNameEveryWhere();
 void DefineTrimsStart();
 void ResetAllTrims();
 void CheckTrimValues();
+void ClearSuccessRate();
 /*********************************************************************************************************************************/
 
 #endif
