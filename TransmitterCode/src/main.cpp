@@ -993,6 +993,7 @@ void RedLedOn()
         LastShowTime         = 0;
         RXVoltsDetected      = false;
         RangeTestGoodPackets = 0;
+        if (CurrentView == FRONTVIEW) SendText(FrontView_Connected, na);
         if (UseLog) LogDisConnection();
         if (AnnounceConnected) PlaySound(DISCONNECTEDMSG);
         if (!LedIsBlinking) {
@@ -5524,7 +5525,7 @@ FASTRUN void ButtonWasPressed()
             ClearText();
             return;
         }
-        if (InStrng(GoFrontView, TextIn) > 0) { // GOTO frontview // heer
+        if (InStrng(GoFrontView, TextIn) > 0) { // GOTO frontview 
             SendCommand(page_FrontView);
             UpdateModelsNameEveryWhere();
             ShowFlightMode();

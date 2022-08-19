@@ -161,7 +161,7 @@ void SuccessfulPacket(){
         RecordsPacketSuccess(1);
         LostContactFlag = false;
         RecentPacketsLost = 0;
-        Connected                 = true;
+        Connected         = true;
         if (BoundFlag) GreenLedOn();
         CheckGapsLength();
         StartInactvityTimeout();
