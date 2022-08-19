@@ -354,6 +354,7 @@ extern uint16_t       PacketsPerSecond;
 extern uint16_t       GetStickInput(uint8_t l);
 extern uint8_t        PacketsHistoryBuffer[125 * SHOWCOMMSSESCONDS];  
 extern uint16_t       PacketsHistoryIndex;
+extern bool           LowPowerMode;
 
 // external (global) functions needed here
 extern void  GetSlaveChannelValues();
