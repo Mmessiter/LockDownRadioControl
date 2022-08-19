@@ -439,6 +439,7 @@ File      LogFileNumber;
 bool      LogFileOpen         = false;
 bool      ShowVPC             = false;
 short int TxVoltageCorrection = 0;
+bool      LowPowerMode        = false;
 
 // **********************************************************************************************************************************
 
@@ -2597,6 +2598,8 @@ bool LoadAllParameters()
         TxVoltageCorrection = SDReadInt(SDCardAddress);
         ++SDCardAddress;
         ++SDCardAddress;
+        LowPowerMode = SDReadInt(SDCardAddress);
+        ++SDCardAddress;
         CheckTrimValues();
         MemoryForTransmtter = SDCardAddress;
         if ((ModelNumber < 1) || (ModelNumber > 99)) ModelNumber = 1;
@@ -3162,6 +3165,8 @@ void SaveTransmitterParameters()
     }
     SDUpdateInt(SDCardAddress, TxVoltageCorrection);
     ++SDCardAddress;
+    ++SDCardAddress;
+     SDUpdateInt(SDCardAddress, LowPowerMode);
     ++SDCardAddress;
     CloseModelsFile();
 }
@@ -4914,6 +4919,15 @@ void LogVIEW()
         ShowLogFile(RecentStartLine);
     }
 }
+
+/******************************************************************************************************************************/
+void SetPowerMode(){
+ if (LowPowerMode){ 
+        Radio1.setPALevel(RF24_PA_MIN);
+    }else{
+        Radio1.setPALevel(RF24_PA_MAX);
+    }
+}
 /******************************************************************************************************************************/
 void SetupViewFM()
 { // (Exit from models screen) New model name occurs at offset 4 in TextIn
@@ -4999,12 +5013,15 @@ void Options2End()
 
 void OptionView2Start()
 {
-    char dGMT[]          = "dGMT";
+    char dGMT[]          = "dGMT";  // Time zone
+    char lpm[]           = "c0";   // Low power mode
     char OptionV2Start[] = "page OptionView2";
     char TxVCorrextion[] = "t2";
     if (CurrentView == OPTIONVIEW3) {
         TxVoltageCorrection = GetValueSafer(TxVCorrextion);
+        LowPowerMode        = GetValueSafer(lpm);
         SaveTransmitterParameters();
+        SetPowerMode();
     }
     CurrentView  = OPTIONVIEW2;
     LastTimeRead = 0;
@@ -5018,11 +5035,13 @@ void OptionView2Start()
 void OptionView3Start()
 {
     char TxVCorrextion[] = "t2";
+    char lpm[]           = "c0"; // Low power mode
     char OptionV3Start[] = "page OptionView3";
     CurrentView          = OPTIONVIEW3;
     SendCommand(OptionV3Start);
     Procrastinate(100);
     SendValue(TxVCorrextion, TxVoltageCorrection);
+    SendValue(lpm, LowPowerMode);
 }
 
 /******************************************************************************************************************************/
@@ -5031,7 +5050,10 @@ void OptionView3End()
 {
     char TxVCorrextion[]  = "t2";
     char page_SetupView[] = "page SetupView";
+    char lpm[]           = "c0"; // Low power mode
     TxVoltageCorrection   = GetValueSafer(TxVCorrextion);
+    LowPowerMode          = GetValueSafer(lpm);
+    SetPowerMode();
     SaveTransmitterParameters();
     CurrentView = MAINSETUPVIEW;
     SendCommand(page_SetupView);
