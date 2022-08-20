@@ -372,6 +372,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "LastSeconds", "_transmitter_code_2src_2main_8cpp.html#a461bdfbe0df771f541b8872ac04bb717", null ],
     [ "LastShowTime", "_transmitter_code_2src_2main_8cpp.html#ae818c99aa6e4a19030a586da53a9dcc4", null ],
     [ "LastTimeRead", "_transmitter_code_2src_2main_8cpp.html#ad70c8744223914d4350b199002cec7b7", null ],
+    [ "LEDBrightness", "_transmitter_code_2src_2main_8cpp.html#a77915a48e3521d96d558aee6ea3549c8", null ],
     [ "LedIsBlinking", "_transmitter_code_2src_2main_8cpp.html#a733907c842f15a6a6c1c0ce292f55ba2", null ],
     [ "LedWasGreen", "_transmitter_code_2src_2main_8cpp.html#abe57ee67b36530a7bde7680e5b6e40f8", null ],
     [ "LogFileNumber", "_transmitter_code_2src_2main_8cpp.html#abb4c65c0c164063d297d20ae5e42abb8", null ],

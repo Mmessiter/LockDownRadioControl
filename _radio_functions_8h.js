@@ -159,6 +159,7 @@ var _radio_functions_8h =
     [ "ButtonWasPressed", "_radio_functions_8h.html#a8e7ccbf842764fd85cc578be263f7202", null ],
     [ "CalibrateEdgeSwitches", "_radio_functions_8h.html#a128fe47088693b102796cd67a175ea08", null ],
     [ "CheckGapsLength", "_radio_functions_8h.html#aa60c9cac090f6965b4223d5caf84e2f1", null ],
+    [ "CheckRange", "_radio_functions_8h.html#a01c7a0b0de94ec72fe070ea9f90dc2ec", null ],
     [ "CheckTimer", "_radio_functions_8h.html#addfc131a271de92cb52d869fde35729e", null ],
     [ "CheckTrimValues", "_radio_functions_8h.html#a1930cb00e0e68d2c871cec56cc458064", null ],
     [ "ClearSuccessRate", "_radio_functions_8h.html#a82b1900a80d1622896601c57d6edaeda", null ],
