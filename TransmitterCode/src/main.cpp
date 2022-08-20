@@ -1282,6 +1282,7 @@ bool GetButtonPress()
 
 FASTRUN void CheckTimer()
 {
+    uint8_t Recording[10] = {ONEMINUTE, TWOMINUTES, THREEMINUTES,FOURMINUTES, FIVEMINUTES, SIXMINUTES, SEVENMINUTES,EIGHTMINUTES, NINEMINUTES, TENMINUTES};
 
     if (FlightMode < 4 && !LostContactFlag) {
         Secs  = ((millis() - TimerMillis) / 1000) + PausedSecs;
@@ -1301,42 +1302,12 @@ FASTRUN void CheckTimer()
     }
     if (!Secs && SpeakingClock && !ClockSpoken) {
         ClockSpoken = true;
-        switch (Mins) {
-            case 1:
-                PlaySound(ONEMINUTE);
-                break;
-            case 2:
-                PlaySound(TWOMINUTES);
-                break;
-            case 3:
-                PlaySound(THREEMINUTES);
-                break;
-            case 4:
-                PlaySound(FOURMINUTES);
-                break;
-            case 5:
-                PlaySound(FIVEMINUTES);
-                break;
-            case 6:
-                PlaySound(SIXMINUTES);
-                break;
-            case 7:
-                PlaySound(SEVENMINUTES);
-                break;
-            case 8:
-                PlaySound(EIGHTMINUTES);
-                break;
-            case 9:
-                PlaySound(NINEMINUTES);
-                break;
-            case 10:
-                PlaySound(TENMINUTES);
-                break;
-            default:
-                break;
+        if ((Mins <= 10) && (Mins > 0)){
+            PlaySound(Recording[Mins-1]);
         }
     }
 }
+
 /*********************************************************************************************************************************/
 
 FASTRUN void ShowServoPos()
