@@ -4654,10 +4654,11 @@ void ZeroDataScreen()
     ThisGap            = 0;
     GPSMaxDistance     = 0;
     GPSMaxSpeed        = 0;
-    SavedRadioSwaps    = RadioSwaps; // Cannot easily zero these, so do a subtraction
+    SavedRadioSwaps    = RadioSwaps;    // Cannot easily zero these, so do a subtraction
     SavedRX1TotalTime  = RX1TotalTime;
     SavedRX2TotalTime  = RX2TotalTime;
     SavedSbusRepeats   = SbusRepeats;
+    LastShowTime       = 0;             // for instant redisplay
 }
 /***************************************************** ShowChannelName ****************************************************************************/
 
