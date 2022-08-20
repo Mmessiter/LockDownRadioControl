@@ -37,7 +37,7 @@
 //    DEBUG OPTIONS (Uncomment any of these for that bit of debug info)     *
 //***************************************************************************
 
-// #define DB_NEXTION        // Debug NEXTION 
+// #define DB_NEXTION        // Debug NEXTION
 // #define DB_SD             // Debug SD card data
 // #define DB_FHSS           // Debug real time FHSS data
 // #define DB_SENSORS        // Debug Sensors
@@ -62,26 +62,26 @@
 #define CE_PIN             9                         // for SPI to nRF24L01
 #define CSN_PIN            10                        // for SPI to nRF24L01
 #define INACTIVITYTIMEOUT  10 * TICKSPERMINUTE       // Default time after which to switch off
-#define INACTIVITYMINIMUM  5  * TICKSPERMINUTE       // Inactivity timeout minimum is 5 minutes
+#define INACTIVITYMINIMUM  5 * TICKSPERMINUTE        // Inactivity timeout minimum is 5 minutes
 #define INACTIVITYMAXIMUM  30 * TICKSPERMINUTE       // Inactivity timeout maximum is 30 minutes
 #define DS1307_ADDRESS     0x68                      // I2C address for RTC
 #define MAXLINES           30                        // text to load at once for log and help screens
 #define DEFAULT_EXPO       50                        // = ZERO EXPO (Range is 0 - 200. Below 50 is negative Expo)
 #define CHARSMAX           120                       // Max length for char arrays
 #define UNCOMPRESSEDWORDS  20                        // DATA TO SEND = 40  bytes
-#define COMPRESSEDWORDS   UNCOMPRESSEDWORDS * 3 / 4  // COMPRESSED DATA SENT = 30  bytes
+#define COMPRESSEDWORDS    UNCOMPRESSEDWORDS * 3 / 4 // COMPRESSED DATA SENT = 30  bytes
 
 // **************************************************************************
 //                            FHSS PARAMETERS                               *
 //***************************************************************************
 
-#define PACEMAKER                   8    // MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
-#define RETRYCOUNT                  3    // auto retries inside nRF24L01
-#define RETRYWAIT                   1    // Wait between retries is RetryWait+1 * 250us. A failed packet therefore takes (RetryWait+1 * 250us) * RetryCount
-#define LOSTCONTACTCUTOFF           2    // How many packets to lose before reconnect triggers  
-#define RECONNECT_CHANNELS_COUNT    3    // How many channels to try when reconnecting
-#define RECONNECT_CHANNELS_START    12   // Offset into channels' array
-#define RED_LED_ON_TIME             1000 // How many ms of no connection before RED led comes on
+#define PACEMAKER                8    // MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
+#define RETRYCOUNT               3    // auto retries inside nRF24L01
+#define RETRYWAIT                1    // Wait between retries is RetryWait+1 * 250us. A failed packet therefore takes (RetryWait+1 * 250us) * RetryCount
+#define LOSTCONTACTCUTOFF        2    // How many packets to lose before reconnect triggers
+#define RECONNECT_CHANNELS_COUNT 3    // How many channels to try when reconnecting
+#define RECONNECT_CHANNELS_START 12   // Offset into channels' array
+#define RED_LED_ON_TIME          1000 // How many ms of no connection before RED led comes on
 
 // **************************************************************************
 //                            SEND MODE PARAMETERS                          *
@@ -97,17 +97,17 @@
 //                               Colours                                    *
 // **************************************************************************
 
-#define Black           0
-#define Blue            31
-#define Brown           48192
-#define Green           2016
-#define Yellow          65504
-#define Red             63488
-#define Gray            33840
-#define SkyBlue         2047
-#define Purple          39070
-#define Orange          64512
-#define White           65535
+#define Black   0
+#define Blue    31
+#define Brown   48192
+#define Green   2016
+#define Yellow  65504
+#define Red     63488
+#define Gray    33840
+#define SkyBlue 2047
+#define Purple  39070
+#define Orange  64512
+#define White   65535
 
 // **************************************************************************
 //                               Mixes                                      *
@@ -151,34 +151,34 @@
 #define BUDDYVIEW       22
 #define LOGVIEW         23
 #define TRIMDEFVIEW     24
-#define OPTIONVIEW2     25 
-#define OPTIONVIEW3     26 
+#define OPTIONVIEW2     25
+#define OPTIONVIEW3     26
 
 // **************************************************************************
 //                          Switches' GPIOs                                 *
 // **************************************************************************
 
-#define SWITCH0       32   // EDGE SWITCHES' PIN NUMBERS ...
-#define SWITCH1       31
-#define SWITCH2       30
-#define SWITCH3       29
-#define SWITCH4       28
-#define SWITCH5       27
-#define SWITCH6       26
-#define SWITCH7       25
+#define SWITCH0 32 // EDGE SWITCHES' PIN NUMBERS ...
+#define SWITCH1 31
+#define SWITCH2 30
+#define SWITCH3 29
+#define SWITCH4 28
+#define SWITCH5 27
+#define SWITCH6 26
+#define SWITCH7 25
 
 // **************************************************************************
 //                           TRIMS' GPIOs                                   *
 // **************************************************************************
 
-#define TRIM1A        34   // Digital trims pins
-#define TRIM1B        35
-#define TRIM2A        36
-#define TRIM2B        37
-#define TRIM3A        38
-#define TRIM3B        39
-#define TRIM4A        40
-#define TRIM4B        41
+#define TRIM1A 34 // Digital trims pins
+#define TRIM1B 35
+#define TRIM2A 36
+#define TRIM2B 37
+#define TRIM3A 38
+#define TRIM3B 39
+#define TRIM4A 40
+#define TRIM4B 41
 
 // **************************************************************************
 //                LED and Power off GPIOs                                   *
@@ -187,45 +187,45 @@
 #define REDLED        2 // COLOURED LEDS' PIN NUMBERS ...
 #define GREENLED      3
 #define BLUELED       4
-#define POWER_OFF_PIN 5 
+#define POWER_OFF_PIN 5
 
 // **************************************************************************
 //               Sounds                             *
 //***************************************************************************
 
-#define CLICKZERO       0 
-#define CLICKONE        1 
-#define ONEMINUTE       2 
-#define TWOMINUTES      3 
-#define THREEMINUTES    4 
-#define FOURMINUTES     5 
-#define FIVEMINUTES     6 
-#define SIXMINUTES      7 
-#define SEVENMINUTES    8 
-#define EIGHTMINUTES    9 
-#define NINEMINUTES     10 
-#define TENMINUTES      11 
-#define BANKONE         12 
-#define BANKTWO         13 
-#define BANKTHREE       14 
-#define BANKFOUR        15 
-#define BEEPMIDDLE      16 
-#define BEEPCOMPLETE    17 
-#define THEFANFARE      18 
-#define BATTERYISLOW    19 
+#define CLICKZERO       0
+#define CLICKONE        1
+#define ONEMINUTE       2
+#define TWOMINUTES      3
+#define THREEMINUTES    4
+#define FOURMINUTES     5
+#define FIVEMINUTES     6
+#define SIXMINUTES      7
+#define SEVENMINUTES    8
+#define EIGHTMINUTES    9
+#define NINEMINUTES     10
+#define TENMINUTES      11
+#define BANKONE         12
+#define BANKTWO         13
+#define BANKTHREE       14
+#define BANKFOUR        15
+#define BEEPMIDDLE      16
+#define BEEPCOMPLETE    17
+#define THEFANFARE      18
+#define BATTERYISLOW    19
 #define CONNECTEDMSG    20
-#define DISCONNECTEDMSG 21  
+#define DISCONNECTEDMSG 21
 
 // **************************************************************************
 //               SDCARD MODEL MEMORY CONSTANTS                              *
 //***************************************************************************
 
-#define RENEWDATA  8787         // Change these to rewrite all
-#define TXSIZE     250          // SD space reserved for transmitter
-#define MODELSIZE  1600         // SD space reserved for each model
-#define MAXFILELEN 1024 * 3     // MAX SIZE FOR HELP AND LOG FILES
-#define BOXOFFSET    35
-#define BOXSIZE     395
+#define RENEWDATA  8787     // Change these to rewrite all
+#define TXSIZE     250      // SD space reserved for transmitter
+#define MODELSIZE  1600     // SD space reserved for each model
+#define MAXFILELEN 1024 * 3 // MAX SIZE FOR HELP AND LOG FILES
+#define BOXOFFSET  35
+#define BOXSIZE    395
 
 // **************************************************************************
 //                            SERVO RANGE PARAMETERS                        *
@@ -233,32 +233,32 @@
 
 #define MINMICROS       500
 #define MAXMICROS       2500
-#define HALFMICROSRANGE (MAXMICROS - MINMICROS) / 2 
+#define HALFMICROSRANGE (MAXMICROS - MINMICROS) / 2
 #define MIDMICROS       MINMICROS + HALFMICROSRANGE
 
 // **************************************************************************
 //                            Interpolations                                *
 // **************************************************************************
 
-#define STRAIGHTLINES       0
-#define SMOOTHEDCURVES      1
-#define EXPONENTIALCURVES   2 
+#define STRAIGHTLINES     0
+#define SMOOTHEDCURVES    1
+#define EXPONENTIALCURVES 2
 
 // **************************************************************************
 //                              Macros                                      *
 // **************************************************************************
 
-#define MAXMACROS               8                       // 8 macros enough for now?
-#define BYTESPERMACRO           6                       // 6 bytes each         
+#define MAXMACROS     8 // 8 macros enough for now?
+#define BYTESPERMACRO 6 // 6 bytes each
 
 // ********************* Offsets within macros' buffer ***********************
 
-#define MACROTRIGGERCHANNEL     0                       // 1 - 16. 0 means dissabled.
-#define MACROSTARTTIME          1                       // In ** >> 10ths << ** of a second since trigger. ( = millis() * 100 ) up to 25.4 seconds
-#define MACRODURATION           2                       // In ** >> 10ths << ** of a second since start    ( = millis() * 100 ) up to 25.4 seconds
-#define MACROMOVECHANNEL        3                       // Which channel to move.
-#define MACROMOVETOPOSITION     4                       // Where to put said channel for said duration. (0 -180)
-#define MACRORUNNINGNOW         5                       // Running flag (BIT 0 running/not running,  BIT 1 = Timer active / inactive)
+#define MACROTRIGGERCHANNEL 0 // 1 - 16. 0 means dissabled.
+#define MACROSTARTTIME      1 // In ** >> 10ths << ** of a second since trigger. ( = millis() * 100 ) up to 25.4 seconds
+#define MACRODURATION       2 // In ** >> 10ths << ** of a second since start    ( = millis() * 100 ) up to 25.4 seconds
+#define MACROMOVECHANNEL    3 // Which channel to move.
+#define MACROMOVETOPOSITION 4 // Where to put said channel for said duration. (0 -180)
+#define MACRORUNNINGNOW     5 // Running flag (BIT 0 running/not running,  BIT 1 = Timer active / inactive)
 
 // **************************************************************************
 //                            SBUS PARAMETERS   (FOR BUDDY BOXING)          *
@@ -273,10 +273,10 @@
 //                          NEXTION SERIAL CONNECTION                       *
 //***************************************************************************
 
-#define NEXTION Serial1             // NEXTION is connected to Serial1
-#define SHOWCOMMSSESCONDS 6         // Assess average connection quality over most recent 6 seconds continously
-#define SHOWCOMMSDELAY    3000      // ms pauses between updated info on NEXTION
-#define WARMUPDELAY       300       // fails at 200 so must be >200 ...
+#define NEXTION           Serial1 // NEXTION is connected to Serial1
+#define SHOWCOMMSSESCONDS 6       // Assess average connection quality over most recent 6 seconds continously
+#define SHOWCOMMSDELAY    3000    // ms pauses between updated info on NEXTION
+#define WARMUPDELAY       300     // fails at 200 so must be >200 ...
 
 // **************************************************************************
 //                            WATCHDOG PARAMETERS                           *
@@ -314,7 +314,7 @@ extern long int       RecoveryTimer;
 extern bool           Connected;
 extern uint16_t       CompressedData[];
 extern uint8_t        FHSS_Channels[];
-extern struct         Payload AckPayload;
+extern struct Payload AckPayload;
 extern uint8_t        AckPayloadSize;
 extern uint8_t        SizeOfCompressedData;
 extern uint16_t       RangeTestGoodPackets;
@@ -326,25 +326,25 @@ extern uint32_t       HopStart;
 extern char           ThisRadio[4];
 extern uint32_t       GapSum;
 extern uint32_t       GapStart;
-extern uint8_t *      FHSSChPointer;
+extern uint8_t*       FHSSChPointer;
 extern bool           DoSbusSendOnly;
 extern bool           BuddyMaster;
 extern uint16_t       BackGroundColour;
 extern uint16_t       HighlightColour;
 extern uint16_t       ForeGroundColour;
-extern uint16_t       ChannelMax[CHANNELSUSED + 1];       //    output of pots at max
-extern uint16_t       ChannelMidHi[CHANNELSUSED + 1];     //    output of pots at MidHi
-extern uint16_t       ChannelCentre[CHANNELSUSED + 1];    //    output of pots at Centre
-extern uint16_t       ChannelMidLow[CHANNELSUSED + 1];    //    output of pots at MidLow
-extern uint16_t       ChannelMin[CHANNELSUSED + 1];       //    output of pots at min
-extern uint8_t        MacrosBuffer[MAXMACROS][BYTESPERMACRO];    // macros' buffer
+extern uint16_t       ChannelMax[CHANNELSUSED + 1];           //    output of pots at max
+extern uint16_t       ChannelMidHi[CHANNELSUSED + 1];         //    output of pots at MidHi
+extern uint16_t       ChannelCentre[CHANNELSUSED + 1];        //    output of pots at Centre
+extern uint16_t       ChannelMidLow[CHANNELSUSED + 1];        //    output of pots at MidLow
+extern uint16_t       ChannelMin[CHANNELSUSED + 1];           //    output of pots at min
+extern uint8_t        MacrosBuffer[MAXMACROS][BYTESPERMACRO]; // macros' buffer
 extern uint32_t       MacroStartTime[MAXMACROS];
 extern uint32_t       MacroStopTime[MAXMACROS];
 extern bool           UseMacros;
 extern uint32_t       TotalLostPackets;
 extern bool           Reconnected;
 extern bool           LedWasGreen;
-extern uint32_t       Inactivity_Timeout; 
+extern uint32_t       Inactivity_Timeout;
 extern uint32_t       Inactivity_Start;
 extern bool           UkRules;
 extern bool           PreviousUkRules;
@@ -352,7 +352,7 @@ extern bool           UseLog;
 extern uint32_t       ShowServoTimer;
 extern uint16_t       PacketsPerSecond;
 extern uint16_t       GetStickInput(uint8_t l);
-extern uint8_t        PacketsHistoryBuffer[125 * SHOWCOMMSSESCONDS];  
+extern uint8_t        PacketsHistoryBuffer[125 * SHOWCOMMSSESCONDS];
 extern uint16_t       PacketsHistoryIndex;
 extern bool           LowPowerMode;
 
@@ -378,49 +378,49 @@ extern void  ZeroDataScreen();
 extern void  RedLedOn();
 extern void  ReEnableScanButton();
 extern void  LogUKRules();
-extern int   InStrng(char * text1, char * text2);
-
+extern int   InStrng(char* text1, char* text2);
 
 /*********************************************************************************************************************************/
 // function prototypes
 
-void InitRadio(uint64_t Pipe);
-void SetThePipe(uint64_t WhichPipe);
-void DoScanInit();
-void DoScanEnd();
-void PreScan();
-void HopToNextChannel();
-void ScanAllChannels();
-void SendData();
-void Procrastinate(uint32_t HowLong);
-void DrawFhssBox(); 
-void SendText(char* tbox, char* NewWord); // needed a prototype or two here!
-void RestoreBrightness();
-void ButtonWasPressed();
-void CalibrateEdgeSwitches();
-void DisplayCurve();
-void DrawLine(int x1, int y1, int x2, int y2, int c);
-void DrawBox(int x1, int y1, int x2, int y2, int c);
-void FillBox(int x1, int y1, int w, int h, int c);
-void ReadTextFile(char* fname, char* htext, uint8_t StartLineNumber, uint8_t MaxLines);
-void LogConnection();
-void LogDisConnection();
-void CloseLogFile();
-void StartLogFile();     
-void ShowLogFile(uint8_t StartLine);
-void LogThisLongGap();
-void LogThisModel();
-void Force_ReDisplay();
+void         InitRadio(uint64_t Pipe);
+void         SetThePipe(uint64_t WhichPipe);
+void         DoScanInit();
+void         DoScanEnd();
+void         PreScan();
+void         HopToNextChannel();
+void         ScanAllChannels();
+void         SendData();
+void         Procrastinate(uint32_t HowLong);
+void         DrawFhssBox();
+void         SendText(char* tbox, char* NewWord); // needed a prototype or two here!
+void         RestoreBrightness();
+void         ButtonWasPressed();
+void         CalibrateEdgeSwitches();
+void         DisplayCurve();
+void         DrawLine(int x1, int y1, int x2, int y2, int c);
+void         DrawBox(int x1, int y1, int x2, int y2, int c);
+void         FillBox(int x1, int y1, int w, int h, int c);
+void         ReadTextFile(char* fname, char* htext, uint8_t StartLineNumber, uint8_t MaxLines);
+void         LogConnection();
+void         LogDisConnection();
+void         CloseLogFile();
+void         StartLogFile();
+void         ShowLogFile(uint8_t StartLine);
+void         LogThisLongGap();
+void         LogThisModel();
+void         Force_ReDisplay();
 FASTRUN void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uint8_t uncompressed_size);
 FASTRUN void BufferNewPipe();
-void ExecuteMacro();
-void Look(int p);
-void ShowFlightMode();
-void UpdateModelsNameEveryWhere();
-void DefineTrimsStart();
-void ResetAllTrims();
-void CheckTrimValues();
-void ClearSuccessRate();
+void         ExecuteMacro();
+void         Look(int p);
+void         ShowFlightMode();
+void         UpdateModelsNameEveryWhere();
+void         DefineTrimsStart();
+void         ResetAllTrims();
+void         CheckTrimValues();
+void         ClearSuccessRate();
+int          CheckRange(int v, int min, int max);
 /*********************************************************************************************************************************/
 
 #endif

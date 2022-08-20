@@ -441,6 +441,7 @@ bool      ShowVPC             = false;
 short int TxVoltageCorrection = 0;
 short int RxVoltageCorrection = 0;
 bool      LowPowerMode        = false;
+uint8_t   LEDBrightness       = 100;
 
 // **********************************************************************************************************************************
 
@@ -968,7 +969,7 @@ void MakeBindButtonInvisible()
 uint8_t GetLEDBrightness()
 {
     if (LedIsBlinking) {
-        if ((millis() - BlinkTimer) > (500 / BlinkHertz)) {
+        if ((millis() - BlinkTimer) > (750 / BlinkHertz)) {
             BlinkOnPhase ^= 1;
             BlinkTimer = millis();
         }
@@ -977,7 +978,7 @@ uint8_t GetLEDBrightness()
         BlinkOnPhase = 1;
     }
     if (BlinkOnPhase) {
-        return 150; // 0 - 254
+        return LEDBrightness; // 0 - 254 (= brightness)
     }
     else {
         return 0;
@@ -2603,7 +2604,10 @@ bool LoadAllParameters()
         TxVoltageCorrection = SDReadInt(SDCardAddress);
         ++SDCardAddress;
         ++SDCardAddress;
-        LowPowerMode = SDReadInt(SDCardAddress);
+         LowPowerMode = SDReadByte(SDCardAddress);
+        ++SDCardAddress;
+        LEDBrightness = SDReadInt(SDCardAddress);
+        LEDBrightness = CheckRange(LEDBrightness, 0, 254);
         ++SDCardAddress;
         CheckTrimValues();
         MemoryForTransmtter = SDCardAddress;
@@ -3172,7 +3176,9 @@ void SaveTransmitterParameters()
     SDUpdateInt(SDCardAddress, TxVoltageCorrection);
     ++SDCardAddress;
     ++SDCardAddress;
-     SDUpdateInt(SDCardAddress, LowPowerMode);
+     SDUpdateByte(SDCardAddress, LowPowerMode);
+    ++SDCardAddress;
+    SDUpdateInt(SDCardAddress, LEDBrightness);
     ++SDCardAddress;
     CloseModelsFile();
 }
@@ -5024,15 +5030,19 @@ void Options2End()
 void OptionView2Start()
 {
     char dGMT[]          = "dGMT";  // Time zone
-    char lpm[]           = "c0";   // Low power mode
+    char n1[]            = "n1";
+    char lpm[]           = "c0"; // Low power mode
     char OptionV2Start[] = "page OptionView2";
     char TxVCorrextion[] = "t2";
-    char n0[]            = "n0";
+    char RxVCorrextion[] = "n0";    // RX Voltage correction
 
     if (CurrentView == OPTIONVIEW3) {
-        RxVoltageCorrection = GetValueSafer(n0);
+        RxVoltageCorrection = GetValueSafer(RxVCorrextion);
         TxVoltageCorrection = GetValueSafer(TxVCorrextion);
         LowPowerMode        = GetValueSafer(lpm);
+        LEDBrightness       = GetValueSafer(n1);
+        LEDBrightness       = CheckRange(LEDBrightness, 0, 254); // heer
+        LedWasGreen         = false;
         SaveAllParameters();
         SetPowerMode();
     }
@@ -5048,15 +5058,17 @@ void OptionView2Start()
 void OptionView3Start()
 {
     char TxVCorrextion[] = "t2";
-    char n0[]            = "n0";
-    char lpm[]           = "c0"; // Low power mode
+     char n1[]            = "n1";
+    char RxVCorrextion[] = "n0";  // RX Voltage correction
+    char lpm[]           = "c0";  // Low power mode
     char OptionV3Start[] = "page OptionView3";
     CurrentView          = OPTIONVIEW3;
     SendCommand(OptionV3Start);
     Procrastinate(100);
     SendValue(TxVCorrextion, TxVoltageCorrection);
-    SendValue(n0,RxVoltageCorrection);
+    SendValue(RxVCorrextion,RxVoltageCorrection);
     SendValue(lpm, LowPowerMode);
+    SendValue(n1, LEDBrightness);
 }
 
 /******************************************************************************************************************************/
@@ -5064,12 +5076,16 @@ void OptionView3Start()
 void OptionView3End()
 {
     char TxVCorrextion[]  = "t2";
-    char n0[]             = "n0";
+    char RxVCorrextion[]  = "n0";
+     char n1[]            = "n1";
     char page_SetupView[] = "page SetupView";
     char lpm[]            = "c0"; // Low power mode
     TxVoltageCorrection   = GetValueSafer(TxVCorrextion);
-    RxVoltageCorrection   = GetValueSafer(n0);
+    RxVoltageCorrection   = GetValueSafer(RxVCorrextion);
     LowPowerMode          = GetValueSafer(lpm);
+    LEDBrightness         = GetValueSafer(n1);
+    LEDBrightness          = CheckRange(LEDBrightness, 0, 254);
+    LedWasGreen            = false;
     SetPowerMode();
     SaveAllParameters();
     CurrentView = MAINSETUPVIEW;
@@ -7309,6 +7325,7 @@ void CheckScanButton()
 FASTRUN void loop()
 {
     KickTheDog();                             // Watchdog
+    if (LowPowerMode) LedIsBlinking = true;
     if (GetButtonPress()) ButtonWasPressed(); // Deal with button
     if ((millis() - ModelNameTimeCheck) > 900) {
         ModelNameTimeCheck = millis();
