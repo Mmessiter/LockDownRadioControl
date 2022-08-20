@@ -38,5 +38,6 @@ var searchData=
   ['rxmodelaltitude_35',['RXModelAltitude',['../_transmitter_code_2src_2main_8cpp.html#a60096f1f0ec75fa673207d2d11cfd123',1,'main.cpp']]],
   ['rxmodeltemperature_36',['RXModelTemperature',['../_transmitter_code_2src_2main_8cpp.html#ac8d7ac69a7e7a6b90792e640742b2097',1,'main.cpp']]],
   ['rxmodelvolts_37',['RXModelVolts',['../_transmitter_code_2src_2main_8cpp.html#a5f56f32c16498a3547635bda86c49428',1,'main.cpp']]],
-  ['rxvoltsdetected_38',['RXVoltsDetected',['../_transmitter_code_2src_2main_8cpp.html#abad630d30092274e24516848d8096925',1,'main.cpp']]]
+  ['rxvoltagecorrection_38',['RxVoltageCorrection',['../_transmitter_code_2src_2main_8cpp.html#ad17e5f7f0f1b17d90abfb4da29f1ab41',1,'main.cpp']]],
+  ['rxvoltsdetected_39',['RXVoltsDetected',['../_transmitter_code_2src_2main_8cpp.html#abad630d30092274e24516848d8096925',1,'main.cpp']]]
 ];
