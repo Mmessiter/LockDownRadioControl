@@ -439,6 +439,7 @@ File      LogFileNumber;
 bool      LogFileOpen         = false;
 bool      ShowVPC             = false;
 short int TxVoltageCorrection = 0;
+short int RxVoltageCorrection = 0;
 bool      LowPowerMode        = false;
 
 // **********************************************************************************************************************************
@@ -1474,7 +1475,7 @@ FASTRUN bool CheckRXVolts()
     char  v[]              = "V  (";
     char  pc[]             = "%";
     char  spaces[]         = "  ";
-    ReadVolts              = RXModelVolts * 100;
+    ReadVolts              = (RXModelVolts * 100) + (RxVoltageCorrection * RXCellCount);
     Volts                  = map(ReadVolts, 3.4f * RXCellCount * 100, 4.2f * RXCellCount * 100, 0, 100);
     if (RXVoltsDetected) {
         Volts = constrain(Volts, 0, 100);
@@ -2396,8 +2397,12 @@ bool ReadOneModel(uint8_t Mnum)
         InputTrim[i] = SDReadByte(SDCardAddress);
         ++SDCardAddress;
     }
+    RxVoltageCorrection  = SDReadInt(SDCardAddress);
+    ++SDCardAddress;
+    ++SDCardAddress;
+
     CheckSavedTrimValues();
-    SDCardAddress += 5; // 5 Spare Bytes here (PID stuff gone) *****************************
+    SDCardAddress += 3; // 3 Spare Bytes here (PID stuff gone) *****************************
 
     for (i = 0; i < CHANNELSUSED; ++i) {
         InPutStick[i] = SDReadByte(SDCardAddress);
@@ -3041,6 +3046,7 @@ FLASHMEM void setup()
         LogPowerOn();
         LogThisModel();
     }
+    SendText(FrontView_Connected, na);
     UpdateModelsNameEveryWhere();
 }
 /*********************************************************************************************************************************/
@@ -3245,7 +3251,11 @@ void SaveOneModel(uint16_t mnum)
         SDUpdateByte(SDCardAddress, InputTrim[i]);
         ++SDCardAddress;
     }
-    SDCardAddress += 5; // *********************** 5 spare here remaining  **********************
+    SDUpdateInt(SDCardAddress, RxVoltageCorrection);
+    ++SDCardAddress;
+    ++SDCardAddress;
+
+    SDCardAddress += 3; // *********************** 3 spare here remaining  **********************
 
     for (i = 0; i < CHANNELSUSED; ++i) {
         SDUpdateByte(SDCardAddress, InPutStick[i]);
@@ -5017,10 +5027,13 @@ void OptionView2Start()
     char lpm[]           = "c0";   // Low power mode
     char OptionV2Start[] = "page OptionView2";
     char TxVCorrextion[] = "t2";
+    char n0[]            = "n0";
+
     if (CurrentView == OPTIONVIEW3) {
+        RxVoltageCorrection = GetValueSafer(n0);
         TxVoltageCorrection = GetValueSafer(TxVCorrextion);
         LowPowerMode        = GetValueSafer(lpm);
-        SaveTransmitterParameters();
+        SaveAllParameters();
         SetPowerMode();
     }
     CurrentView  = OPTIONVIEW2;
@@ -5035,12 +5048,14 @@ void OptionView2Start()
 void OptionView3Start()
 {
     char TxVCorrextion[] = "t2";
+    char n0[]            = "n0";
     char lpm[]           = "c0"; // Low power mode
     char OptionV3Start[] = "page OptionView3";
     CurrentView          = OPTIONVIEW3;
     SendCommand(OptionV3Start);
     Procrastinate(100);
     SendValue(TxVCorrextion, TxVoltageCorrection);
+    SendValue(n0,RxVoltageCorrection);
     SendValue(lpm, LowPowerMode);
 }
 
@@ -5049,12 +5064,14 @@ void OptionView3Start()
 void OptionView3End()
 {
     char TxVCorrextion[]  = "t2";
+    char n0[]             = "n0";
     char page_SetupView[] = "page SetupView";
-    char lpm[]           = "c0"; // Low power mode
+    char lpm[]            = "c0"; // Low power mode
     TxVoltageCorrection   = GetValueSafer(TxVCorrextion);
+    RxVoltageCorrection   = GetValueSafer(n0);
     LowPowerMode          = GetValueSafer(lpm);
     SetPowerMode();
-    SaveTransmitterParameters();
+    SaveAllParameters();
     CurrentView = MAINSETUPVIEW;
     SendCommand(page_SetupView);
 }
