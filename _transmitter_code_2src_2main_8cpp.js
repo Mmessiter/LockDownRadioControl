@@ -425,6 +425,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "PipeTimeout", "_transmitter_code_2src_2main_8cpp.html#a656582814675067f4ca9775bbdc71e18", null ],
     [ "PlayFanfare", "_transmitter_code_2src_2main_8cpp.html#af20a742cb89289b31695edccb45ccb3f", null ],
     [ "PointsCount", "_transmitter_code_2src_2main_8cpp.html#abc8fa11262dc227a1bd6eba957fcf95c", null ],
+    [ "PowerOffTimer", "_transmitter_code_2src_2main_8cpp.html#a4920261904b22c215b85f66a7b5670e5", null ],
     [ "PreMixBuffer", "_transmitter_code_2src_2main_8cpp.html#ac24c1436596363f5c1d3c50f2c3d5266", null ],
     [ "PreviousChannelNumber", "_transmitter_code_2src_2main_8cpp.html#abbd06b60b1ad6be88a3363b5129d10d4", null ],
     [ "PreviousFlightMode", "_transmitter_code_2src_2main_8cpp.html#a8f5159f240ef6e3787b668d1dac1a67a", null ],
