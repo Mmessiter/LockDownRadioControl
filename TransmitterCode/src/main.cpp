@@ -442,6 +442,7 @@ short int TxVoltageCorrection = 0;
 short int RxVoltageCorrection = 0;
 bool      LowPowerMode        = false;
 uint8_t   LEDBrightness       = 100;
+uint32_t  PowerOffTimer       = 0;
 
 // **********************************************************************************************************************************
 
@@ -5267,6 +5268,7 @@ FASTRUN void ButtonWasPressed()
         char ReceiveModel[]            = "ReceiveModel";
         char SendModel[]               = "SendModel";
         char PowerOff[]                = "PowerOff";
+        char PowerDown[]               = "PowerDown";
         char OffNow[]                  = "OffNow"; // force power off
         char StillConnected[]          = "vis StillConnected,1";
         char StillConnectedBox[]       = "StillConnected";
@@ -5746,8 +5748,18 @@ FASTRUN void ButtonWasPressed()
             ClearText();
             return;
         }
+        if (InStrng(PowerDown, TextIn) > 0) {
+                PowerOffTimer = millis();            // Start a timer for power off
+                ClearText();
+                return;
+        }
+
         if (InStrng(PowerOff, TextIn) > 0) {
             if (!LostContactFlag && BoundFlag) {
+                if ((millis()-PowerOffTimer) > 1500) { // if off button was held for longer, turn off now.
+                    if (UseLog) LogPowerOff();
+                    digitalWrite(POWER_OFF_PIN, HIGH);
+                }
                 SendText(StillConnectedBox, StillConnectedMsg);
                 SendCommand(StillConnected);
                 Procrastinate(500);
