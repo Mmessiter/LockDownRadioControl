@@ -1283,7 +1283,6 @@ bool GetButtonPress()
 FASTRUN void CheckTimer()
 {
     uint8_t Recording[10] = {ONEMINUTE, TWOMINUTES, THREEMINUTES,FOURMINUTES, FIVEMINUTES, SIXMINUTES, SEVENMINUTES,EIGHTMINUTES, NINEMINUTES, TENMINUTES};
-
     if (FlightMode < 4 && !LostContactFlag) {
         Secs  = ((millis() - TimerMillis) / 1000) + PausedSecs;
         Hours = Secs / 3600;
@@ -4911,9 +4910,9 @@ void LogVIEW()
 /******************************************************************************************************************************/
 void SetPowerMode(){
  if (LowPowerMode){ 
-        Radio1.setPALevel(RF24_PA_MIN);
+        Radio1.setPALevel(RF24_PA_MIN,true);
     }else{
-        Radio1.setPALevel(RF24_PA_MAX);
+        Radio1.setPALevel(RF24_PA_MAX,true);
     }
 }
 /******************************************************************************************************************************/

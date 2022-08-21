@@ -333,9 +333,9 @@ FLASHMEM void InitRadio(uint64_t Pipe)
 {
     Radio1.begin(); // heer
     if (LowPowerMode){ 
-        Radio1.setPALevel(RF24_PA_MIN);
+        Radio1.setPALevel(RF24_PA_MIN,true);
     }else{
-        Radio1.setPALevel(RF24_PA_MAX);
+        Radio1.setPALevel(RF24_PA_MAX,true);
     }
     Radio1.setDataRate(RF24_250KBPS);
     Radio1.enableAckPayload();
