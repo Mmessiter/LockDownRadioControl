@@ -439,7 +439,10 @@ File      LogFileNumber;
 bool      LogFileOpen         = false;
 bool      ShowVPC             = false;
 short int TxVoltageCorrection = 0;
+short int RxVoltageCorrection = 0;
 bool      LowPowerMode        = false;
+uint8_t   LEDBrightness       = 100;
+uint32_t  PowerOffTimer       = 0;
 
 // **********************************************************************************************************************************
 
@@ -967,7 +970,7 @@ void MakeBindButtonInvisible()
 uint8_t GetLEDBrightness()
 {
     if (LedIsBlinking) {
-        if ((millis() - BlinkTimer) > (500 / BlinkHertz)) {
+        if ((millis() - BlinkTimer) > (750 / BlinkHertz)) {
             BlinkOnPhase ^= 1;
             BlinkTimer = millis();
         }
@@ -976,7 +979,7 @@ uint8_t GetLEDBrightness()
         BlinkOnPhase = 1;
     }
     if (BlinkOnPhase) {
-        return 150; // 0 - 254
+        return LEDBrightness; // 0 - 254 (= brightness)
     }
     else {
         return 0;
@@ -1015,7 +1018,6 @@ void GreenLedOn()
         LastShowTime = 0;
     }                                    // on first
     if (!LedWasGreen || LedIsBlinking) { // no need to repeat unless it is blinking
-        LedWasGreen = true;
         if (!LedIsBlinking) {
             ShowComms();
             if (AnnounceConnected) PlaySound(CONNECTEDMSG);
@@ -1030,6 +1032,7 @@ void GreenLedOn()
         analogWrite(BLUELED, 0);
         analogWrite(REDLED, 0);
         analogWrite(GREENLED, GetLEDBrightness()); // Brightness is a function of maybe blinking
+        if (GetLEDBrightness()) LedWasGreen = true;
         MakeBindButtonInvisible();
         Reconnected = false;
     }
@@ -1280,7 +1283,7 @@ bool GetButtonPress()
 
 FASTRUN void CheckTimer()
 {
-
+    uint8_t Recording[10] = {ONEMINUTE, TWOMINUTES, THREEMINUTES,FOURMINUTES, FIVEMINUTES, SIXMINUTES, SEVENMINUTES,EIGHTMINUTES, NINEMINUTES, TENMINUTES};
     if (FlightMode < 4 && !LostContactFlag) {
         Secs  = ((millis() - TimerMillis) / 1000) + PausedSecs;
         Hours = Secs / 3600;
@@ -1299,42 +1302,12 @@ FASTRUN void CheckTimer()
     }
     if (!Secs && SpeakingClock && !ClockSpoken) {
         ClockSpoken = true;
-        switch (Mins) {
-            case 1:
-                PlaySound(ONEMINUTE);
-                break;
-            case 2:
-                PlaySound(TWOMINUTES);
-                break;
-            case 3:
-                PlaySound(THREEMINUTES);
-                break;
-            case 4:
-                PlaySound(FOURMINUTES);
-                break;
-            case 5:
-                PlaySound(FIVEMINUTES);
-                break;
-            case 6:
-                PlaySound(SIXMINUTES);
-                break;
-            case 7:
-                PlaySound(SEVENMINUTES);
-                break;
-            case 8:
-                PlaySound(EIGHTMINUTES);
-                break;
-            case 9:
-                PlaySound(NINEMINUTES);
-                break;
-            case 10:
-                PlaySound(TENMINUTES);
-                break;
-            default:
-                break;
+        if ((Mins <= 10) && (Mins > 0)){
+            PlaySound(Recording[Mins-1]);
         }
     }
 }
+
 /*********************************************************************************************************************************/
 
 FASTRUN void ShowServoPos()
@@ -1474,7 +1447,7 @@ FASTRUN bool CheckRXVolts()
     char  v[]              = "V  (";
     char  pc[]             = "%";
     char  spaces[]         = "  ";
-    ReadVolts              = RXModelVolts * 100;
+    ReadVolts              = (RXModelVolts * 100) + (RxVoltageCorrection * RXCellCount);
     Volts                  = map(ReadVolts, 3.4f * RXCellCount * 100, 4.2f * RXCellCount * 100, 0, 100);
     if (RXVoltsDetected) {
         Volts = constrain(Volts, 0, 100);
@@ -2396,8 +2369,12 @@ bool ReadOneModel(uint8_t Mnum)
         InputTrim[i] = SDReadByte(SDCardAddress);
         ++SDCardAddress;
     }
+    RxVoltageCorrection  = SDReadInt(SDCardAddress);
+    ++SDCardAddress;
+    ++SDCardAddress;
+
     CheckSavedTrimValues();
-    SDCardAddress += 5; // 5 Spare Bytes here (PID stuff gone) *****************************
+    SDCardAddress += 3; // 3 Spare Bytes here (PID stuff gone) *****************************
 
     for (i = 0; i < CHANNELSUSED; ++i) {
         InPutStick[i] = SDReadByte(SDCardAddress);
@@ -2598,7 +2575,10 @@ bool LoadAllParameters()
         TxVoltageCorrection = SDReadInt(SDCardAddress);
         ++SDCardAddress;
         ++SDCardAddress;
-        LowPowerMode = SDReadInt(SDCardAddress);
+         LowPowerMode = SDReadByte(SDCardAddress);
+        ++SDCardAddress;
+        LEDBrightness = SDReadInt(SDCardAddress);
+        LEDBrightness = CheckRange(LEDBrightness, 0, 254);
         ++SDCardAddress;
         CheckTrimValues();
         MemoryForTransmtter = SDCardAddress;
@@ -3041,6 +3021,7 @@ FLASHMEM void setup()
         LogPowerOn();
         LogThisModel();
     }
+    SendText(FrontView_Connected, na);
     UpdateModelsNameEveryWhere();
 }
 /*********************************************************************************************************************************/
@@ -3166,7 +3147,9 @@ void SaveTransmitterParameters()
     SDUpdateInt(SDCardAddress, TxVoltageCorrection);
     ++SDCardAddress;
     ++SDCardAddress;
-     SDUpdateInt(SDCardAddress, LowPowerMode);
+     SDUpdateByte(SDCardAddress, LowPowerMode);
+    ++SDCardAddress;
+    SDUpdateInt(SDCardAddress, LEDBrightness);
     ++SDCardAddress;
     CloseModelsFile();
 }
@@ -3245,7 +3228,11 @@ void SaveOneModel(uint16_t mnum)
         SDUpdateByte(SDCardAddress, InputTrim[i]);
         ++SDCardAddress;
     }
-    SDCardAddress += 5; // *********************** 5 spare here remaining  **********************
+    SDUpdateInt(SDCardAddress, RxVoltageCorrection);
+    ++SDCardAddress;
+    ++SDCardAddress;
+
+    SDCardAddress += 3; // *********************** 3 spare here remaining  **********************
 
     for (i = 0; i < CHANNELSUSED; ++i) {
         SDUpdateByte(SDCardAddress, InPutStick[i]);
@@ -4459,7 +4446,7 @@ void SendModelFile()
     Serial.println(" bytes.");
 #endif
     Radio1.setChannel(FILECHANNEL);
-    Radio1.setPALevel(FILEPALEVEL);
+    Radio1.setPALevel(FILEPALEVEL,true);
     Radio1.setRetries(15, 15);
     Radio1.openWritingPipe(TXPipe);
     Radio1.stopListening();
@@ -4638,10 +4625,11 @@ void ZeroDataScreen()
     ThisGap            = 0;
     GPSMaxDistance     = 0;
     GPSMaxSpeed        = 0;
-    SavedRadioSwaps    = RadioSwaps; // Cannot easily zero these, so do a subtraction
+    SavedRadioSwaps    = RadioSwaps;    // Cannot easily zero these, so do a subtraction
     SavedRX1TotalTime  = RX1TotalTime;
     SavedRX2TotalTime  = RX2TotalTime;
     SavedSbusRepeats   = SbusRepeats;
+    LastShowTime       = 0;             // for instant redisplay
 }
 /***************************************************** ShowChannelName ****************************************************************************/
 
@@ -4923,9 +4911,9 @@ void LogVIEW()
 /******************************************************************************************************************************/
 void SetPowerMode(){
  if (LowPowerMode){ 
-        Radio1.setPALevel(RF24_PA_MIN);
+        Radio1.setPALevel(RF24_PA_MIN,false);
     }else{
-        Radio1.setPALevel(RF24_PA_MAX);
+        Radio1.setPALevel(RF24_PA_MAX,true);
     }
 }
 /******************************************************************************************************************************/
@@ -5014,13 +5002,20 @@ void Options2End()
 void OptionView2Start()
 {
     char dGMT[]          = "dGMT";  // Time zone
-    char lpm[]           = "c0";   // Low power mode
+    char n1[]            = "n1";
+    char lpm[]           = "c0"; // Low power mode
     char OptionV2Start[] = "page OptionView2";
     char TxVCorrextion[] = "t2";
+    char RxVCorrextion[] = "n0";    // RX Voltage correction
+
     if (CurrentView == OPTIONVIEW3) {
+        RxVoltageCorrection = GetValueSafer(RxVCorrextion);
         TxVoltageCorrection = GetValueSafer(TxVCorrextion);
         LowPowerMode        = GetValueSafer(lpm);
-        SaveTransmitterParameters();
+        LEDBrightness       = GetValueSafer(n1);
+        LEDBrightness       = CheckRange(LEDBrightness, 0, 254); // heer
+        LedWasGreen         = false;
+        SaveAllParameters();
         SetPowerMode();
     }
     CurrentView  = OPTIONVIEW2;
@@ -5035,13 +5030,17 @@ void OptionView2Start()
 void OptionView3Start()
 {
     char TxVCorrextion[] = "t2";
-    char lpm[]           = "c0"; // Low power mode
+     char n1[]            = "n1";
+    char RxVCorrextion[] = "n0";  // RX Voltage correction
+    char lpm[]           = "c0";  // Low power mode
     char OptionV3Start[] = "page OptionView3";
     CurrentView          = OPTIONVIEW3;
     SendCommand(OptionV3Start);
     Procrastinate(100);
     SendValue(TxVCorrextion, TxVoltageCorrection);
+    SendValue(RxVCorrextion,RxVoltageCorrection);
     SendValue(lpm, LowPowerMode);
+    SendValue(n1, LEDBrightness);
 }
 
 /******************************************************************************************************************************/
@@ -5049,12 +5048,18 @@ void OptionView3Start()
 void OptionView3End()
 {
     char TxVCorrextion[]  = "t2";
+    char RxVCorrextion[]  = "n0";
+     char n1[]            = "n1";
     char page_SetupView[] = "page SetupView";
-    char lpm[]           = "c0"; // Low power mode
+    char lpm[]            = "c0"; // Low power mode
     TxVoltageCorrection   = GetValueSafer(TxVCorrextion);
+    RxVoltageCorrection   = GetValueSafer(RxVCorrextion);
     LowPowerMode          = GetValueSafer(lpm);
+    LEDBrightness         = GetValueSafer(n1);
+    LEDBrightness          = CheckRange(LEDBrightness, 0, 254);
+    LedWasGreen            = false;
     SetPowerMode();
-    SaveTransmitterParameters();
+    SaveAllParameters();
     CurrentView = MAINSETUPVIEW;
     SendCommand(page_SetupView);
 }
@@ -5263,6 +5268,7 @@ FASTRUN void ButtonWasPressed()
         char ReceiveModel[]            = "ReceiveModel";
         char SendModel[]               = "SendModel";
         char PowerOff[]                = "PowerOff";
+        char PowerDown[]               = "PowerDown";
         char OffNow[]                  = "OffNow"; // force power off
         char StillConnected[]          = "vis StillConnected,1";
         char StillConnectedBox[]       = "StillConnected";
@@ -5737,13 +5743,23 @@ FASTRUN void ButtonWasPressed()
                 ++j;
                 ++i;
                 SingleModelFile[j] = 0;
-            } // got local name but won't use it.....
+            }                                       // got local name but won't use it.....
             ReceiveModelFile();
             ClearText();
             return;
         }
+        if (InStrng(PowerDown, TextIn) > 0) {
+                PowerOffTimer = millis();            // Start a timer for power off
+                ClearText();
+                return;
+        }
+
         if (InStrng(PowerOff, TextIn) > 0) {
             if (!LostContactFlag && BoundFlag) {
+                if ((millis()-PowerOffTimer) > 1500) { // if off button was held for longer, turn off now.
+                    if (UseLog) LogPowerOff();
+                    digitalWrite(POWER_OFF_PIN, HIGH);
+                }
                 SendText(StillConnectedBox, StillConnectedMsg);
                 SendCommand(StillConnected);
                 Procrastinate(500);
@@ -7292,6 +7308,7 @@ void CheckScanButton()
 FASTRUN void loop()
 {
     KickTheDog();                             // Watchdog
+    if (LowPowerMode) LedIsBlinking = true;
     if (GetButtonPress()) ButtonWasPressed(); // Deal with button
     if ((millis() - ModelNameTimeCheck) > 900) {
         ModelNameTimeCheck = millis();
