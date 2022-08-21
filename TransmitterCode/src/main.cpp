@@ -5272,8 +5272,8 @@ FASTRUN void ButtonWasPressed()
         char OffNow[]                  = "OffNow"; // force power off
         char StillConnected[]          = "vis StillConnected,1";
         char StillConnectedBox[]       = "StillConnected";
-        char StillConnectedMsg[]       = "RX STILL ON!";
-        char TurnOffRX[]               = "TURN OFF RX!";
+        char StillConnectedMsg[]       = "RX IS ON!";
+        char TurnOffRX[]               = "HOLD FOR OFF";
         char NotStillConnected[]       = "vis StillConnected,0";
         char OptionsViewS[]            = "OptionsViewS";
         char Pto[]                     = "Pto";
