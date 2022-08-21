@@ -333,7 +333,7 @@ FLASHMEM void InitRadio(uint64_t Pipe)
 {
     Radio1.begin(); // heer
     if (LowPowerMode){ 
-        Radio1.setPALevel(RF24_PA_MIN,true);
+        Radio1.setPALevel(RF24_PA_MIN,false);
     }else{
         Radio1.setPALevel(RF24_PA_MAX,true);
     }

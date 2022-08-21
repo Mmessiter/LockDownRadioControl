@@ -1017,7 +1017,6 @@ void GreenLedOn()
         LastShowTime = 0;
     }                                    // on first
     if (!LedWasGreen || LedIsBlinking) { // no need to repeat unless it is blinking
-        LedWasGreen = true;
         if (!LedIsBlinking) {
             ShowComms();
             if (AnnounceConnected) PlaySound(CONNECTEDMSG);
@@ -1032,6 +1031,7 @@ void GreenLedOn()
         analogWrite(BLUELED, 0);
         analogWrite(REDLED, 0);
         analogWrite(GREENLED, GetLEDBrightness()); // Brightness is a function of maybe blinking
+        if (GetLEDBrightness()) LedWasGreen = true;
         MakeBindButtonInvisible();
         Reconnected = false;
     }
@@ -4445,7 +4445,7 @@ void SendModelFile()
     Serial.println(" bytes.");
 #endif
     Radio1.setChannel(FILECHANNEL);
-    Radio1.setPALevel(FILEPALEVEL);
+    Radio1.setPALevel(FILEPALEVEL,true);
     Radio1.setRetries(15, 15);
     Radio1.openWritingPipe(TXPipe);
     Radio1.stopListening();
@@ -4910,7 +4910,7 @@ void LogVIEW()
 /******************************************************************************************************************************/
 void SetPowerMode(){
  if (LowPowerMode){ 
-        Radio1.setPALevel(RF24_PA_MIN,true);
+        Radio1.setPALevel(RF24_PA_MIN,false);
     }else{
         Radio1.setPALevel(RF24_PA_MAX,true);
     }
