@@ -5743,7 +5743,7 @@ FASTRUN void ButtonWasPressed()
                 ++j;
                 ++i;
                 SingleModelFile[j] = 0;
-            } // got local name but won't use it.....
+            }                                       // got local name but won't use it.....
             ReceiveModelFile();
             ClearText();
             return;
