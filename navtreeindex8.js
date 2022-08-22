@@ -1,5 +1,14 @@
 var NAVTREEINDEX8 =
 {
+"class_adafruit___b_m_p280.html#a145ce46b3996ff93ec743ff4f96594b3":[9,0,0,3],
+"class_adafruit___b_m_p280.html#a145ce46b3996ff93ec743ff4f96594b3a02142a0892267fd0765b4740dc96e894":[9,0,0,3,1],
+"class_adafruit___b_m_p280.html#a145ce46b3996ff93ec743ff4f96594b3a5078ac311fcf6bfd36c1659d8b1f2a85":[9,0,0,3,5],
+"class_adafruit___b_m_p280.html#a145ce46b3996ff93ec743ff4f96594b3a56ededdd7733bb2fcf324d0c9c9a3f71":[9,0,0,3,7],
+"class_adafruit___b_m_p280.html#a145ce46b3996ff93ec743ff4f96594b3a81b40e111bbcfe28c975474562774fb5":[9,0,0,3,2],
+"class_adafruit___b_m_p280.html#a145ce46b3996ff93ec743ff4f96594b3a8b70b8988398b29582a5f98fde0c2c33":[9,0,0,3,6],
+"class_adafruit___b_m_p280.html#a145ce46b3996ff93ec743ff4f96594b3a98aa3dc46a1beffeba06e8cf95bc0bf9":[9,0,0,3,4],
+"class_adafruit___b_m_p280.html#a145ce46b3996ff93ec743ff4f96594b3aaf77ff20e2b2eb57a99a8fcbeeca1780":[9,0,0,3,0],
+"class_adafruit___b_m_p280.html#a145ce46b3996ff93ec743ff4f96594b3ac5632fe3529d0d476c2f5a1274a80932":[9,0,0,3,3],
 "class_adafruit___b_m_p280.html#a191f291cb5eb59777b6040571d42ca5f":[9,0,0,11],
 "class_adafruit___b_m_p280.html#a1a3d84395d208a5f21cbab211fda176e":[9,0,0,17],
 "class_adafruit___b_m_p280.html#a1b7ddc6a57525e0c8a0e4b6487a3598d":[9,0,0,10],
@@ -240,14 +249,5 @@ var NAVTREEINDEX8 =
 "class_m_p_u6050.html#a31d6c2b03fc2d6ce82d67d142f316851":[9,0,12,65],
 "class_m_p_u6050.html#a31f588beab6760258212c65725eba336":[9,0,12,124],
 "class_m_p_u6050.html#a32602ab86f70b70d3313628fc6c010ae":[9,0,12,233],
-"class_m_p_u6050.html#a32ce8023bb80afc5d55811de70c7214f":[9,0,12,113],
-"class_m_p_u6050.html#a33c766cd415fc5780417b1ed76717875":[9,0,12,151],
-"class_m_p_u6050.html#a340eade71cf6286f6904c2021330944e":[9,0,12,245],
-"class_m_p_u6050.html#a3413efbf2f4e8a27aa8768d9bc34d663":[9,0,12,230],
-"class_m_p_u6050.html#a347a51fd25de20b9ead4659015ef793b":[9,0,12,259],
-"class_m_p_u6050.html#a34a1def575f6abcd464afe954de8a461":[9,0,12,229],
-"class_m_p_u6050.html#a35ae3c8894b3258e642043886801e031":[9,0,12,18],
-"class_m_p_u6050.html#a3601b732eb15644212b8f29cf396e142":[9,0,12,150],
-"class_m_p_u6050.html#a384765351b5c4bd2b6efec9ed71ad1b7":[9,0,12,143],
-"class_m_p_u6050.html#a38a10ac4f30b96718ec021dc0db8587b":[9,0,12,216]
+"class_m_p_u6050.html#a32ce8023bb80afc5d55811de70c7214f":[9,0,12,113]
 };

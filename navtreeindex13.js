@@ -1,5 +1,14 @@
 var NAVTREEINDEX13 =
 {
+"struct_tiny_g_p_s_date.html#ae2cc914fec377b429d99f01204f50d60":[9,0,28,7],
+"struct_tiny_g_p_s_date.html#ae8cc5f80c49e328f792d168a44062000":[9,0,28,2],
+"struct_tiny_g_p_s_date.html#af8b9c057a28dcb490081fcfde2a0ee11":[9,0,28,1],
+"struct_tiny_g_p_s_decimal.html":[9,0,29],
+"struct_tiny_g_p_s_decimal.html#a041cada3e406205d0878c9819eddbbbb":[9,0,29,1],
+"struct_tiny_g_p_s_decimal.html#a34e6448314c198fa204dfb22cd24fc7e":[9,0,29,3],
+"struct_tiny_g_p_s_decimal.html#a6501fd5ef19ae166d43e0e5781609ee2":[9,0,29,5],
+"struct_tiny_g_p_s_decimal.html#a8c7fd3ccd678b195d8f23bd1cb31d9ba":[9,0,29,2],
+"struct_tiny_g_p_s_decimal.html#ac3ce80976e5d8456e9f211b910a6cb19":[9,0,29,4],
 "struct_tiny_g_p_s_decimal.html#ae09cbb1856cd57c7dcee52fb5fb1ba16":[9,0,29,0],
 "struct_tiny_g_p_s_h_d_o_p.html":[9,0,30],
 "struct_tiny_g_p_s_h_d_o_p.html#a27cd35588c96eefb690bba46497d20d7":[9,0,30,0],

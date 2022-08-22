@@ -111,5 +111,6 @@ var searchData=
   ['normalisetheradio_108',['NormaliseTheRadio',['../_transmitter_code_2src_2main_8cpp.html#a0708fa5166a126be25283b6cfaff6227',1,'main.cpp']]],
   ['normalize_109',['normalize',['../class_vector_int16.html#aefdadb30fbc20b564bbbf0b1a885e349',1,'VectorInt16::normalize()'],['../class_quaternion.html#a48e6bafb249c895ed25f29dc9170e11e',1,'Quaternion::normalize()'],['../class_vector_float.html#a112eaf8758a6f51b96ed1ccb71700495',1,'VectorFloat::normalize()']]],
   ['nosleeping_110',['NoSleeping',['../_radio_functions_8h.html#aa336d2e589396e246b779e7ed2b097c0',1,'NoSleeping():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#aa336d2e589396e246b779e7ed2b097c0',1,'NoSleeping():&#160;main.cpp']]],
-  ['numberedfunctions_111',['NumberedFunctions',['../_transmitter_code_2src_2main_8cpp.html#abb4fb8e30aec6f80bfcb85d5f4c7931f',1,'main.cpp']]]
+  ['notstillconnected_111',['NotStillConnected',['../_transmitter_code_2src_2main_8cpp.html#a75cead2f224731cba6299be91a344a05',1,'main.cpp']]],
+  ['numberedfunctions_112',['NumberedFunctions',['../_transmitter_code_2src_2main_8cpp.html#abb4fb8e30aec6f80bfcb85d5f4c7931f',1,'main.cpp']]]
 ];
