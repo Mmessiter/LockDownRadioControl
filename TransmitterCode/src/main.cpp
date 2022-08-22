@@ -443,6 +443,14 @@ short int RxVoltageCorrection = 0;
 bool      LowPowerMode        = false;
 uint8_t   LEDBrightness       = 100;
 uint32_t  PowerOffTimer       = 0;
+char      StillConnected[]          = "vis StillConnected,1";
+char      StillConnectedBox[]       = "StillConnected";
+char      TurnOffRX[]               = "TURN OFF RX";
+char      NotStillConnected[]       = "vis StillConnected,0";
+bool      PowerWarningVisible       = false;
+uint8_t   TurnOffSecondToGo         = 5;
+uint8_t   TurnOffSecondsWarning      = 5;
+uint32_t  PreviousPowerOffTimer     = 0;
 
 // **********************************************************************************************************************************
 
@@ -5270,11 +5278,6 @@ FASTRUN void ButtonWasPressed()
         char PowerOff[]                = "PowerOff";
         char PowerDown[]               = "PowerDown";
         char OffNow[]                  = "OffNow"; // force power off
-        char StillConnected[]          = "vis StillConnected,1";
-        char StillConnectedBox[]       = "StillConnected";
-        char StillConnectedMsg[]       = "RX IS ON!";
-        char TurnOffRX[]               = "HOLD FOR OFF";
-        char NotStillConnected[]       = "vis StillConnected,0";
         char OptionsViewS[]            = "OptionsViewS";
         char Pto[]                     = "Pto";
         char Tx_Name[]                 = "TxName";
@@ -5749,36 +5752,27 @@ FASTRUN void ButtonWasPressed()
             return;
         }
         if (InStrng(PowerDown, TextIn) > 0) {
-                PowerOffTimer = millis();            // Start a timer for power off
-                ClearText();
+            if (Connected){
+                    PowerOffTimer = millis();    // Start a timer for power off button down
+                    TurnOffSecondToGo = TurnOffSecondsWarning;
+                    ClearText();
+                }else{
+                    if (UseLog) LogPowerOff();
+                    delay(250);
+                    digitalWrite(POWER_OFF_PIN, HIGH);
+                }
                 return;
         }
 
-        if (InStrng(PowerOff, TextIn) > 0) {
-            if (!LostContactFlag && BoundFlag) {
-                if ((millis()-PowerOffTimer) > 1500) { // if off button was held for longer, turn off now.
-                    if (UseLog) LogPowerOff();
-                    digitalWrite(POWER_OFF_PIN, HIGH);
-                }
-                SendText(StillConnectedBox, StillConnectedMsg);
-                SendCommand(StillConnected);
-                Procrastinate(500);
-                SendText(StillConnectedBox, TurnOffRX);
-                Procrastinate(500);
-                SendCommand(NotStillConnected);
-            }
-            else {
-                if (UseLog) LogPowerOff();
-                SaveAllParameters();
-                digitalWrite(POWER_OFF_PIN, HIGH);
-            }
-            ClearText();
+        if (InStrng(PowerOff, TextIn) > 0) { // power off button up no longer turns off!
+                PowerOffTimer = 0;
+                ClearText();
             return;
         }
 
-        if (InStrng(OffNow, TextIn) > 0) {
+        if (InStrng(OffNow, TextIn) > 0) { // redundant
             if (UseLog) LogPowerOff();
-
+            delay(250);
             digitalWrite(POWER_OFF_PIN, HIGH); // force OFF in Options View
             ClearText();
             return;
@@ -7301,13 +7295,47 @@ void CheckScanButton()
         b5isGrey = true;
     }
 }
+/************************************************************************************************************/
+void CheckPowerOffButton(){
+    
+    char PowerMsg[15] ;
+    char PowerPre[] = "TURN OFF?! ";
+    char nb[4];
 
+    if (PowerOffTimer){  // count down started?
+        if (!PowerWarningVisible) {
+            SendCommand(StillConnected);
+            PowerWarningVisible = true;
+        }
+     } else {
+         if (PowerWarningVisible) {
+            SendCommand(NotStillConnected);
+            PowerWarningVisible = false;
+        }
+     }
+    if (PowerWarningVisible) {
+    if ((millis() - PreviousPowerOffTimer) >= 1000){
+            strcpy(PowerMsg, PowerPre);
+            Str(nb,TurnOffSecondToGo,0);
+            strcat(PowerMsg, nb);
+            SendText(StillConnectedBox, PowerMsg);
+            if (!TurnOffSecondToGo) {               // Time's up!
+                if (UseLog) LogPowerOff();          // log the event
+                delay(250);                         // wait a mo for user to see 0 and log to write to file
+                digitalWrite(POWER_OFF_PIN, HIGH);  // power off
+            }
+            --TurnOffSecondToGo;
+            PreviousPowerOffTimer = millis();
+        }
+    }
+}
 /************************************************************************************************************/
 // LOOP
 /************************************************************************************************************/
 FASTRUN void loop()
 {
     KickTheDog();                             // Watchdog
+    CheckPowerOffButton();
     if (LowPowerMode) LedIsBlinking = true;
     if (GetButtonPress()) ButtonWasPressed(); // Deal with button
     if ((millis() - ModelNameTimeCheck) > 900) {
