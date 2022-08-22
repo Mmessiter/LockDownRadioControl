@@ -5752,7 +5752,7 @@ FASTRUN void ButtonWasPressed()
             return;
         }
         if (InStrng(PowerDown, TextIn) > 0) {
-            if (Connected){
+            if (LedWasGreen){
                     PowerOffTimer = millis();    // Start a timer for power off button down
                     TurnOffSecondToGo = TurnOffSecondsWarning;
                     ClearText();
