@@ -2115,7 +2115,7 @@ void OpenModelsFile()
 
 /*********************************************************************************************************************************/
 
-void SDUpdateInt(int p_address, int p_value)
+void SDUpdate16BITS(int p_address, int p_value)
 {
     ModelsFileNumber.seek(p_address);
     ModelsFileNumber.write(uint8_t(p_value));
@@ -2124,7 +2124,7 @@ void SDUpdateInt(int p_address, int p_value)
 
 /*********************************************************************************************************************************/
 
-void SDUpdateByte(int p_address, uint8_t p_value)
+void SDUpdate8BITS(int p_address, uint8_t p_value)
 {
     ModelsFileNumber.seek(p_address);
     ModelsFileNumber.write(uint8_t(p_value));
@@ -2132,7 +2132,7 @@ void SDUpdateByte(int p_address, uint8_t p_value)
 
 /*********************************************************************************************************************************/
 
-int SDReadInt(int p_address)
+int SDRead16BITS(int p_address)
 {
     ModelsFileNumber.seek(p_address);
     int r = ModelsFileNumber.read();
@@ -2141,7 +2141,7 @@ int SDReadInt(int p_address)
 }
 /*********************************************************************************************************************************/
 
-uint8_t SDReadByte(int p_address)
+uint8_t SDRead8BITS(int p_address)
 {
     ModelsFileNumber.seek(p_address);
     uint8_t r = ModelsFileNumber.read();
@@ -2310,74 +2310,74 @@ bool ReadOneModel(uint8_t Mnum)
     SDCardAddress = TXSIZE;                    //  spare bytes for TX stuff
     SDCardAddress += ((Mnum - 1) * MODELSIZE); //  spare bytes for Model params
     StartLocation = SDCardAddress;
-    ModelDefined  = SDReadByte(SDCardAddress);
+    ModelDefined  = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
     if (ModelDefined != 42) return false;
     for (j = 0; j < 30; ++j) {
-        ModelName[j] = SDReadByte(SDCardAddress);
+        ModelName[j] = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
     }
 
     for (i = 0; i < CHANNELSUSED; ++i) {
         for (j = 1; j <= 4; ++j) {
-            MaxDegrees[j][i] = SDReadByte(SDCardAddress);
+            MaxDegrees[j][i] = SDRead8BITS(SDCardAddress);
             ++SDCardAddress;
-            MidHiDegrees[j][i] = SDReadByte(SDCardAddress);
+            MidHiDegrees[j][i] = SDRead8BITS(SDCardAddress);
             ++SDCardAddress;
-            CentreDegrees[j][i] = SDReadByte(SDCardAddress);
+            CentreDegrees[j][i] = SDRead8BITS(SDCardAddress);
             ++SDCardAddress;
-            MidLowDegrees[j][i] = SDReadByte(SDCardAddress);
+            MidLowDegrees[j][i] = SDRead8BITS(SDCardAddress);
             ++SDCardAddress;
-            MinDegrees[j][i] = SDReadByte(SDCardAddress);
+            MinDegrees[j][i] = SDRead8BITS(SDCardAddress);
             ++SDCardAddress;
         }
     }
     for (j = 0; j < MAXMIXES; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
-            Mixes[j][i] = SDReadByte(SDCardAddress); // Read mixes
+            Mixes[j][i] = SDRead8BITS(SDCardAddress); // Read mixes
             ++SDCardAddress;
         }
     }
 
     for (j = 0; j < FLIGHTMODESUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
-            Trims[j][i] = SDReadByte(SDCardAddress);
+            Trims[j][i] = SDRead8BITS(SDCardAddress);
             ++SDCardAddress;
         }
     }
     for (j = 0; j < FLIGHTMODESUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
-            TrimsReversed[j][i] = SDReadByte(SDCardAddress);
+            TrimsReversed[j][i] = SDRead8BITS(SDCardAddress);
             ++SDCardAddress;
         }
     }
-    RXCellCount = SDReadByte(SDCardAddress);
+    RXCellCount = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-    TrimFactor = SDReadInt(SDCardAddress);
+    TrimFactor = SDRead16BITS(SDCardAddress);
     if (TrimFactor < 1) TrimFactor = 1;
     if (TrimFactor > 10) TrimFactor = 10;
     ++SDCardAddress;
     ++SDCardAddress;
-    LowBattery = SDReadByte(SDCardAddress);
+    LowBattery = SDRead8BITS(SDCardAddress);
     if (LowBattery > 100) LowBattery = LOWBATTERY;
     if (LowBattery < 10) LowBattery = LOWBATTERY;
     ++SDCardAddress;
-    CopyTrimsToAll = SDReadByte(SDCardAddress);
+    CopyTrimsToAll = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
 
     for (i = 0; i < CHANNELSUSED; ++i) {
-        SubTrims[i] = SDReadByte(SDCardAddress);
+        SubTrims[i] = SDRead8BITS(SDCardAddress);
         if ((SubTrims[i] < 10) || (SubTrims[i] > 244)) SubTrims[i] = 127; // centre if undefined or zero
         ++SDCardAddress;
     }
-    ReversedChannelBITS = SDReadInt(SDCardAddress);
+    ReversedChannelBITS = SDRead16BITS(SDCardAddress);
     ++SDCardAddress;
     ++SDCardAddress;
     for (i = 0; i < 4; ++i) {
-        InputTrim[i] = SDReadByte(SDCardAddress);
+        InputTrim[i] = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
     }
-    RxVoltageCorrection  = SDReadInt(SDCardAddress);
+    RxVoltageCorrection  = SDRead16BITS(SDCardAddress);
     ++SDCardAddress;
     ++SDCardAddress;
 
@@ -2385,48 +2385,48 @@ bool ReadOneModel(uint8_t Mnum)
     SDCardAddress += 3; // 3 Spare Bytes here (PID stuff gone) *****************************
 
     for (i = 0; i < CHANNELSUSED; ++i) {
-        InPutStick[i] = SDReadByte(SDCardAddress);
+        InPutStick[i] = SDRead8BITS(SDCardAddress);
         if (InPutStick[i] > 16) InPutStick[i] = i; // reset if nothing was saved!
         ++SDCardAddress;
     }
 
     // **************************
 
-    FMSwitch = SDReadByte(SDCardAddress);
+    FMSwitch = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-    AutoSwitch = SDReadByte(SDCardAddress);
+    AutoSwitch = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-    Channel9Switch = SDReadByte(SDCardAddress);
+    Channel9Switch = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-    Channel10Switch = SDReadByte(SDCardAddress);
+    Channel10Switch = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-    Channel11Switch = SDReadByte(SDCardAddress);
+    Channel11Switch = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-    Channel12Switch = SDReadByte(SDCardAddress);
+    Channel12Switch = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-    SWITCH1Reversed = bool(SDReadByte(SDCardAddress));
+    SWITCH1Reversed = bool(SDRead8BITS(SDCardAddress));
     ++SDCardAddress;
-    SWITCH2Reversed = bool(SDReadByte(SDCardAddress));
+    SWITCH2Reversed = bool(SDRead8BITS(SDCardAddress));
     ++SDCardAddress;
-    SWITCH3Reversed = bool(SDReadByte(SDCardAddress));
+    SWITCH3Reversed = bool(SDRead8BITS(SDCardAddress));
     ++SDCardAddress;
-    SWITCH4Reversed = bool(SDReadByte(SDCardAddress));
+    SWITCH4Reversed = bool(SDRead8BITS(SDCardAddress));
     ++SDCardAddress;
     for (i = 0; i < CHANNELSUSED; ++i) {
-        FailSafeChannel[i] = bool(SDReadByte(SDCardAddress));
+        FailSafeChannel[i] = bool(SDRead8BITS(SDCardAddress));
         if (int(FailSafeChannel[i]) > 1) FailSafeChannel[i] = 0;
         ++SDCardAddress;
     }
     for (i = 0; i < CHANNELSUSED; ++i) {
         for (j = 0; j < 10; ++j) {
-            ChannelNames[i][j] = SDReadByte(SDCardAddress);
+            ChannelNames[i][j] = SDRead8BITS(SDCardAddress);
             ++SDCardAddress;
         }
     }
 
     for (j = 0; j < FLIGHTMODESUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
-            Exponential[j][i] = SDReadByte(SDCardAddress);
+            Exponential[j][i] = SDRead8BITS(SDCardAddress);
             if (Exponential[j][i] >= 201 || Exponential[j][i] == 0) {
                 Exponential[j][i] = DEFAULT_EXPO;
             }
@@ -2435,7 +2435,7 @@ bool ReadOneModel(uint8_t Mnum)
     }
     for (j = 0; j < FLIGHTMODESUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
-            InterpolationTypes[j][i] = SDReadByte(SDCardAddress);
+            InterpolationTypes[j][i] = SDRead8BITS(SDCardAddress);
             if (InterpolationTypes[j][i] < 0 || InterpolationTypes[j][i] > 2) {
                 InterpolationTypes[j][i] = EXPONENTIALCURVES;
             }
@@ -2444,7 +2444,7 @@ bool ReadOneModel(uint8_t Mnum)
     }
     for (j = 0; j < BYTESPERMACRO; ++j) {
         for (i = 0; i < MAXMACROS; ++i) {
-            MacrosBuffer[i][j] = SDReadByte(SDCardAddress);
+            MacrosBuffer[i][j] = SDRead8BITS(SDCardAddress);
             ++SDCardAddress;
         }
     }
@@ -2488,106 +2488,106 @@ bool LoadAllParameters()
     int i = 0;
     if (!ModelsFileOpen) OpenModelsFile();
     SDCardAddress = 0;
-    p             = SDReadInt(SDCardAddress);
+    p             = SDRead16BITS(SDCardAddress);
     if (p == RENEWDATA) {
         SDCardAddress += 2;
         for (i = 0; i < CHANNELSUSED; ++i) {
-            ChannelMin[i] = SDReadInt(SDCardAddress);
+            ChannelMin[i] = SDRead16BITS(SDCardAddress);
             SDCardAddress += 2;
-            ChannelMidLow[i] = SDReadInt(SDCardAddress);
+            ChannelMidLow[i] = SDRead16BITS(SDCardAddress);
             SDCardAddress += 2;
-            ChannelCentre[i] = SDReadInt(SDCardAddress);
+            ChannelCentre[i] = SDRead16BITS(SDCardAddress);
             SDCardAddress += 2;
-            ChannelMidHi[i] = SDReadInt(SDCardAddress);
+            ChannelMidHi[i] = SDRead16BITS(SDCardAddress);
             SDCardAddress += 2;
-            ChannelMax[i] = SDReadInt(SDCardAddress);
+            ChannelMax[i] = SDRead16BITS(SDCardAddress);
             SDCardAddress += 2;
         }
-        DoSbusSendOnly = SDReadByte(SDCardAddress);
+        DoSbusSendOnly = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
-        BuddyMaster = SDReadByte(SDCardAddress);
+        BuddyMaster = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
-        ModelNumber = SDReadByte(SDCardAddress);
+        ModelNumber = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
-        ScreenTimeout = SDReadInt(SDCardAddress);
+        ScreenTimeout = SDRead16BITS(SDCardAddress);
         ++SDCardAddress;
         ++SDCardAddress;
-        Inactivity_Timeout = SDReadByte(SDCardAddress) * TICKSPERMINUTE;
+        Inactivity_Timeout = SDRead8BITS(SDCardAddress) * TICKSPERMINUTE;
         if (Inactivity_Timeout < INACTIVITYMINIMUM) Inactivity_Timeout = INACTIVITYMINIMUM;
         if (Inactivity_Timeout > INACTIVITYMAXIMUM) Inactivity_Timeout = INACTIVITYMAXIMUM;
         ++SDCardAddress;
         for (j = 0; j < 30; ++j) {
-            TxName[j] = SDReadByte(SDCardAddress);
+            TxName[j] = SDRead8BITS(SDCardAddress);
             ++SDCardAddress;
         }
-        Qnh = SDReadInt(SDCardAddress);
+        Qnh = SDRead16BITS(SDCardAddress);
         ++SDCardAddress;
         ++SDCardAddress;
-        DeltaGMT = SDReadInt(SDCardAddress);
+        DeltaGMT = SDRead16BITS(SDCardAddress);
         ++SDCardAddress;
         ++SDCardAddress;
-        BackGroundColour = SDReadInt(SDCardAddress);
+        BackGroundColour = SDRead16BITS(SDCardAddress);
         if (BackGroundColour == 0) BackGroundColour = 214;
         ++SDCardAddress;
         ++SDCardAddress;
-        ForeGroundColour = SDReadInt(SDCardAddress);
+        ForeGroundColour = SDRead16BITS(SDCardAddress);
         if (ForeGroundColour == 0) ForeGroundColour = 65535;
         ++SDCardAddress;
         ++SDCardAddress;
-        SpecialColour = SDReadInt(SDCardAddress);
+        SpecialColour = SDRead16BITS(SDCardAddress);
         if (SpecialColour == 0) SpecialColour = Red;
         ++SDCardAddress;
         ++SDCardAddress;
-        HighlightColour = SDReadInt(SDCardAddress);
+        HighlightColour = SDRead16BITS(SDCardAddress);
         if (HighlightColour == 0) HighlightColour = Yellow;
         ++SDCardAddress;
         ++SDCardAddress;
-        SticksMode = SDReadByte(SDCardAddress);
+        SticksMode = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
-        AudioVolume = SDReadByte(SDCardAddress);
+        AudioVolume = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
-        Brightness = SDReadByte(SDCardAddress);
+        Brightness = SDRead8BITS(SDCardAddress);
         if (Brightness < 10) Brightness = 10;
         ++SDCardAddress;
-        PlayFanfare = SDReadByte(SDCardAddress);
+        PlayFanfare = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
-        TrimClicks = SDReadByte(SDCardAddress);
+        TrimClicks = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
-        ButtonClicks = SDReadByte(SDCardAddress);
+        ButtonClicks = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
-        SpeakingClock = SDReadByte(SDCardAddress);
+        SpeakingClock = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
-        AnnounceBanks = SDReadByte(SDCardAddress);
+        AnnounceBanks = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
         for (i = 0; i < 8; ++i) {
-            j = SDReadByte(SDCardAddress);
+            j = SDRead8BITS(SDCardAddress);
             if ((j >= SWITCH7) && (j <= SWITCH0)) {
                 SwitchNumber[i] = j;
             }
             ++SDCardAddress;
         }
-        BuddyTriggerChannel = SDReadByte(SDCardAddress);
+        BuddyTriggerChannel = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
-        MinimumGap = SDReadByte(SDCardAddress);
+        MinimumGap = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
-        LogRXSwaps = SDReadByte(SDCardAddress);
+        LogRXSwaps = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
-        UseLog = SDReadByte(SDCardAddress);
+        UseLog = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
-        AnnounceConnected = SDReadByte(SDCardAddress);
+        AnnounceConnected = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
         for (j = 0; j < 8; ++j) {
-            TrimNumber[j] = SDReadByte(SDCardAddress);
+            TrimNumber[j] = SDRead8BITS(SDCardAddress);
             ++SDCardAddress;
         }
-        TxVoltageCorrection = SDReadInt(SDCardAddress);
+        TxVoltageCorrection = SDRead16BITS(SDCardAddress);
         ++SDCardAddress;
         ++SDCardAddress;
       
-      //   LowPowerMode = SDReadByte(SDCardAddress); // spare
+      //   LowPowerMode = SDRead8BITS(SDCardAddress); // spare
         ++SDCardAddress;
        
-        LEDBrightness = SDReadInt(SDCardAddress);
+        LEDBrightness = SDRead16BITS(SDCardAddress);
         LEDBrightness = CheckRange(LEDBrightness, 0, 254);
         ++SDCardAddress;
         CheckTrimValues();
@@ -3071,95 +3071,95 @@ void SaveTransmitterParameters()
     rd            = RENEWDATA;
     SDCardAddress = 0;
     CalibratedYet = true;
-    SDUpdateInt(SDCardAddress, rd); // xxxx in first two bytes = calibration done! *** CHANGE THIS NUMBER IF FORMAT IS NEW!! ****
+    SDUpdate16BITS(SDCardAddress, rd); // xxxx in first two bytes = calibration done! *** CHANGE THIS NUMBER IF FORMAT IS NEW!! ****
     SDCardAddress += 2;
     for (i = 0; i < CHANNELSUSED; ++i) {
-        SDUpdateInt(SDCardAddress, ChannelMin[i]); // Stick min output of pot
+        SDUpdate16BITS(SDCardAddress, ChannelMin[i]); // Stick min output of pot
         SDCardAddress += 2;
-        SDUpdateInt(SDCardAddress, ChannelMidLow[i]); //
+        SDUpdate16BITS(SDCardAddress, ChannelMidLow[i]); //
         SDCardAddress += 2;
-        SDUpdateInt(SDCardAddress, ChannelCentre[i]); // Stick Centre output of pot
+        SDUpdate16BITS(SDCardAddress, ChannelCentre[i]); // Stick Centre output of pot
         SDCardAddress += 2;
-        SDUpdateInt(SDCardAddress, ChannelMidHi[i]); //
+        SDUpdate16BITS(SDCardAddress, ChannelMidHi[i]); //
         SDCardAddress += 2;
-        SDUpdateInt(SDCardAddress, ChannelMax[i]); // Stick max output of pot
+        SDUpdate16BITS(SDCardAddress, ChannelMax[i]); // Stick max output of pot
         SDCardAddress += 2;
     }
-    SDUpdateByte(SDCardAddress, DoSbusSendOnly);
+    SDUpdate8BITS(SDCardAddress, DoSbusSendOnly);
     ++SDCardAddress;
-    SDUpdateByte(SDCardAddress, BuddyMaster);
+    SDUpdate8BITS(SDCardAddress, BuddyMaster);
     ++SDCardAddress;
-    SDUpdateByte(SDCardAddress, ModelNumber);
+    SDUpdate8BITS(SDCardAddress, ModelNumber);
     ++SDCardAddress;
-    SDUpdateInt(SDCardAddress, ScreenTimeout);
+    SDUpdate16BITS(SDCardAddress, ScreenTimeout);
     ++SDCardAddress;
     ++SDCardAddress;
-    SDUpdateByte(SDCardAddress, (Inactivity_Timeout / TICKSPERMINUTE));
+    SDUpdate8BITS(SDCardAddress, (Inactivity_Timeout / TICKSPERMINUTE));
     ++SDCardAddress;
     for (j = 0; j < 30; ++j) {
         if (EON) TxName[j] = 0;
-        SDUpdateByte(SDCardAddress, TxName[j]);
+        SDUpdate8BITS(SDCardAddress, TxName[j]);
         if (TxName[j] == 0) EON = true;
         ++SDCardAddress;
     }
-    SDUpdateInt(SDCardAddress, Qnh);
+    SDUpdate16BITS(SDCardAddress, Qnh);
     ++SDCardAddress;
     ++SDCardAddress;
-    SDUpdateInt(SDCardAddress, DeltaGMT);
+    SDUpdate16BITS(SDCardAddress, DeltaGMT);
     ++SDCardAddress;
     ++SDCardAddress;
-    SDUpdateInt(SDCardAddress, BackGroundColour);
+    SDUpdate16BITS(SDCardAddress, BackGroundColour);
     ++SDCardAddress;
     ++SDCardAddress;
-    SDUpdateInt(SDCardAddress, ForeGroundColour);
+    SDUpdate16BITS(SDCardAddress, ForeGroundColour);
     ++SDCardAddress;
     ++SDCardAddress;
-    SDUpdateInt(SDCardAddress, SpecialColour);
+    SDUpdate16BITS(SDCardAddress, SpecialColour);
     ++SDCardAddress;
     ++SDCardAddress;
-    SDUpdateInt(SDCardAddress, HighlightColour);
+    SDUpdate16BITS(SDCardAddress, HighlightColour);
     ++SDCardAddress;
     ++SDCardAddress;
-    SDUpdateByte(SDCardAddress, SticksMode);
+    SDUpdate8BITS(SDCardAddress, SticksMode);
     ++SDCardAddress;
-    SDUpdateByte(SDCardAddress, AudioVolume);
+    SDUpdate8BITS(SDCardAddress, AudioVolume);
     ++SDCardAddress;
-    SDUpdateByte(SDCardAddress, Brightness);
+    SDUpdate8BITS(SDCardAddress, Brightness);
     ++SDCardAddress;
-    SDUpdateByte(SDCardAddress, PlayFanfare);
+    SDUpdate8BITS(SDCardAddress, PlayFanfare);
     ++SDCardAddress;
-    SDUpdateByte(SDCardAddress, TrimClicks);
+    SDUpdate8BITS(SDCardAddress, TrimClicks);
     ++SDCardAddress;
-    SDUpdateByte(SDCardAddress, ButtonClicks);
+    SDUpdate8BITS(SDCardAddress, ButtonClicks);
     ++SDCardAddress;
-    SDUpdateByte(SDCardAddress, SpeakingClock);
+    SDUpdate8BITS(SDCardAddress, SpeakingClock);
     ++SDCardAddress;
-    SDUpdateByte(SDCardAddress, AnnounceBanks);
+    SDUpdate8BITS(SDCardAddress, AnnounceBanks);
     ++SDCardAddress;
     for (i = 0; i < 8; ++i) {
-        SDUpdateByte(SDCardAddress, SwitchNumber[i]);
+        SDUpdate8BITS(SDCardAddress, SwitchNumber[i]);
         ++SDCardAddress;
     }
-    SDUpdateByte(SDCardAddress, BuddyTriggerChannel);
+    SDUpdate8BITS(SDCardAddress, BuddyTriggerChannel);
     ++SDCardAddress;
-    SDUpdateByte(SDCardAddress, MinimumGap);
+    SDUpdate8BITS(SDCardAddress, MinimumGap);
     ++SDCardAddress;
-    SDUpdateByte(SDCardAddress, LogRXSwaps);
+    SDUpdate8BITS(SDCardAddress, LogRXSwaps);
     ++SDCardAddress;
-    SDUpdateByte(SDCardAddress, UseLog);
+    SDUpdate8BITS(SDCardAddress, UseLog);
     ++SDCardAddress;
-    SDUpdateByte(SDCardAddress, AnnounceConnected);
+    SDUpdate8BITS(SDCardAddress, AnnounceConnected);
     ++SDCardAddress;
     for (j = 0; j < 8; ++j) {
-        SDUpdateByte(SDCardAddress, TrimNumber[j]);
+        SDUpdate8BITS(SDCardAddress, TrimNumber[j]);
         ++SDCardAddress;
     }
-    SDUpdateInt(SDCardAddress, TxVoltageCorrection);
+    SDUpdate16BITS(SDCardAddress, TxVoltageCorrection);
     ++SDCardAddress;
     ++SDCardAddress;
-   //  SDUpdateByte(SDCardAddress, LowPowerMode); // spare
+   //  SDUpdate8BITS(SDCardAddress, LowPowerMode); // spare
     ++SDCardAddress;
-    SDUpdateInt(SDCardAddress, LEDBrightness);
+    SDUpdate16BITS(SDCardAddress, LEDBrightness);
     ++SDCardAddress;
     CloseModelsFile();
 }
@@ -3178,123 +3178,123 @@ void SaveOneModel(uint16_t mnum)
     SDCardAddress += (mnum - 1) * MODELSIZE; //  spare bytes for Model params
     StartLocation = SDCardAddress;
     ModelDefined  = 42;
-    SDUpdateByte(SDCardAddress, ModelDefined);
+    SDUpdate8BITS(SDCardAddress, ModelDefined);
     ++SDCardAddress;
     for (j = 0; j < 30; ++j) {
         if (EndOfName) ModelName[j] = 0;
-        SDUpdateByte(SDCardAddress, ModelName[j]);
+        SDUpdate8BITS(SDCardAddress, ModelName[j]);
         if (ModelName[j] == 0) EndOfName = true;
         ++SDCardAddress;
     }
     for (i = 0; i < CHANNELSUSED; ++i) {
         for (j = 1; j <= 4; ++j) {
-            SDUpdateByte(SDCardAddress, MaxDegrees[j][i]); // Max requested in degrees (180)
+            SDUpdate8BITS(SDCardAddress, MaxDegrees[j][i]); // Max requested in degrees (180)
             ++SDCardAddress;
-            SDUpdateByte(SDCardAddress, MidHiDegrees[j][i]); // MidHi requested in degrees (135)
+            SDUpdate8BITS(SDCardAddress, MidHiDegrees[j][i]); // MidHi requested in degrees (135)
             ++SDCardAddress;
-            SDUpdateByte(SDCardAddress, CentreDegrees[j][i]); // Centre requested in degrees (90)
+            SDUpdate8BITS(SDCardAddress, CentreDegrees[j][i]); // Centre requested in degrees (90)
             ++SDCardAddress;
-            SDUpdateByte(SDCardAddress, MidLowDegrees[j][i]); // MidLo requested in degrees (45)
+            SDUpdate8BITS(SDCardAddress, MidLowDegrees[j][i]); // MidLo requested in degrees (45)
             ++SDCardAddress;
-            SDUpdateByte(SDCardAddress, MinDegrees[j][i]); // Min requested in degrees (0)
+            SDUpdate8BITS(SDCardAddress, MinDegrees[j][i]); // Min requested in degrees (0)
             ++SDCardAddress;
         }
     }
     for (j = 0; j < MAXMIXES; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
-            SDUpdateByte(SDCardAddress, Mixes[j][i]); // Save mixes
+            SDUpdate8BITS(SDCardAddress, Mixes[j][i]); // Save mixes
             ++SDCardAddress;
         }
     }
     for (j = 0; j < FLIGHTMODESUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
-            SDUpdateByte(SDCardAddress, Trims[j][i]);
+            SDUpdate8BITS(SDCardAddress, Trims[j][i]);
             ++SDCardAddress;
         }
     }
     for (j = 0; j < FLIGHTMODESUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
-            SDUpdateByte(SDCardAddress, TrimsReversed[j][i]);
+            SDUpdate8BITS(SDCardAddress, TrimsReversed[j][i]);
             ++SDCardAddress;
         }
     }
-    SDUpdateByte(SDCardAddress, RXCellCount);
+    SDUpdate8BITS(SDCardAddress, RXCellCount);
     ++SDCardAddress;
-    SDUpdateInt(SDCardAddress, TrimFactor);
+    SDUpdate16BITS(SDCardAddress, TrimFactor);
     ++SDCardAddress;
     ++SDCardAddress;
-    SDUpdateByte(SDCardAddress, LowBattery);
+    SDUpdate8BITS(SDCardAddress, LowBattery);
     ++SDCardAddress;
-    SDUpdateByte(SDCardAddress, CopyTrimsToAll);
+    SDUpdate8BITS(SDCardAddress, CopyTrimsToAll);
     ++SDCardAddress;
     for (i = 0; i < CHANNELSUSED; ++i) {
-        SDUpdateByte(SDCardAddress, SubTrims[i]);
+        SDUpdate8BITS(SDCardAddress, SubTrims[i]);
         ++SDCardAddress;
     }
-    SDUpdateInt(SDCardAddress, ReversedChannelBITS);
+    SDUpdate16BITS(SDCardAddress, ReversedChannelBITS);
     ++SDCardAddress;
     ++SDCardAddress;
     for (i = 0; i < 4; ++i) {
-        SDUpdateByte(SDCardAddress, InputTrim[i]);
+        SDUpdate8BITS(SDCardAddress, InputTrim[i]);
         ++SDCardAddress;
     }
-    SDUpdateInt(SDCardAddress, RxVoltageCorrection);
+    SDUpdate16BITS(SDCardAddress, RxVoltageCorrection);
     ++SDCardAddress;
     ++SDCardAddress;
 
     SDCardAddress += 3; // *********************** 3 spare here remaining  **********************
 
     for (i = 0; i < CHANNELSUSED; ++i) {
-        SDUpdateByte(SDCardAddress, InPutStick[i]);
+        SDUpdate8BITS(SDCardAddress, InPutStick[i]);
         ++SDCardAddress;
     }
-    SDUpdateByte(SDCardAddress, FMSwitch);
+    SDUpdate8BITS(SDCardAddress, FMSwitch);
     ++SDCardAddress;
-    SDUpdateByte(SDCardAddress, AutoSwitch);
+    SDUpdate8BITS(SDCardAddress, AutoSwitch);
     ++SDCardAddress;
-    SDUpdateByte(SDCardAddress, Channel9Switch);
+    SDUpdate8BITS(SDCardAddress, Channel9Switch);
     ++SDCardAddress;
-    SDUpdateByte(SDCardAddress, Channel10Switch);
+    SDUpdate8BITS(SDCardAddress, Channel10Switch);
     ++SDCardAddress;
-    SDUpdateByte(SDCardAddress, Channel11Switch);
+    SDUpdate8BITS(SDCardAddress, Channel11Switch);
     ++SDCardAddress;
-    SDUpdateByte(SDCardAddress, Channel12Switch);
+    SDUpdate8BITS(SDCardAddress, Channel12Switch);
     ++SDCardAddress;
-    SDUpdateByte(SDCardAddress, SWITCH1Reversed);
+    SDUpdate8BITS(SDCardAddress, SWITCH1Reversed);
     ++SDCardAddress;
-    SDUpdateByte(SDCardAddress, SWITCH2Reversed);
+    SDUpdate8BITS(SDCardAddress, SWITCH2Reversed);
     ++SDCardAddress;
-    SDUpdateByte(SDCardAddress, SWITCH3Reversed);
+    SDUpdate8BITS(SDCardAddress, SWITCH3Reversed);
     ++SDCardAddress;
-    SDUpdateByte(SDCardAddress, SWITCH4Reversed);
+    SDUpdate8BITS(SDCardAddress, SWITCH4Reversed);
     ++SDCardAddress;
     for (i = 0; i < CHANNELSUSED; ++i) {
-        SDUpdateByte(SDCardAddress, FailSafeChannel[i]);
+        SDUpdate8BITS(SDCardAddress, FailSafeChannel[i]);
         ++SDCardAddress;
     }
     for (i = 0; i < CHANNELSUSED; ++i) {
         for (j = 0; j < 10; ++j) {
-            SDUpdateByte(SDCardAddress, ChannelNames[i][j]);
+            SDUpdate8BITS(SDCardAddress, ChannelNames[i][j]);
             ++SDCardAddress;
         }
     }
     for (j = 0; j < FLIGHTMODESUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
-            SDUpdateByte(SDCardAddress, Exponential[j][i]);
+            SDUpdate8BITS(SDCardAddress, Exponential[j][i]);
             ++SDCardAddress;
         }
     }
 
     for (j = 0; j < FLIGHTMODESUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
-            SDUpdateByte(SDCardAddress, InterpolationTypes[j][i]);
+            SDUpdate8BITS(SDCardAddress, InterpolationTypes[j][i]);
             ++SDCardAddress;
         }
     }
 
     for (j = 0; j < BYTESPERMACRO; ++j) {
         for (i = 0; i < MAXMACROS; ++i) {
-            SDUpdateByte(SDCardAddress, MacrosBuffer[i][j]);
+            SDUpdate8BITS(SDCardAddress, MacrosBuffer[i][j]);
             ++SDCardAddress;
         }
     }
@@ -3780,7 +3780,7 @@ void SetDefaultValues()
     StartLocation = SDCardAddress;
     ModelDefined  = 0;
     OpenModelsFile();
-    SDUpdateByte(SDCardAddress, ModelDefined);      // mark this model as undefined
+    SDUpdate8BITS(SDCardAddress, ModelDefined);      // mark this model as undefined
     CloseModelsFile();
     ReadOneModel(ModelNumber);
     UpdateModelsNameEveryWhere();
@@ -6100,7 +6100,6 @@ FASTRUN void ButtonWasPressed()
                 for (uint8_t WriteTwice = 1; WriteTwice <= 3; ++WriteTwice) { // if a new file, write many times seems to be needed!!
                     SingleModelFlag = true;
                     SaveOneModel(1); // heer
-                    CloseModelsFile();
                     SendValue(Progress, WriteTwice * 15);
                 }
                 SingleModelFlag = false;
