@@ -2583,8 +2583,10 @@ bool LoadAllParameters()
         TxVoltageCorrection = SDReadInt(SDCardAddress);
         ++SDCardAddress;
         ++SDCardAddress;
-         LowPowerMode = SDReadByte(SDCardAddress);
+      
+      //   LowPowerMode = SDReadByte(SDCardAddress); // spare
         ++SDCardAddress;
+       
         LEDBrightness = SDReadInt(SDCardAddress);
         LEDBrightness = CheckRange(LEDBrightness, 0, 254);
         ++SDCardAddress;
@@ -3155,7 +3157,7 @@ void SaveTransmitterParameters()
     SDUpdateInt(SDCardAddress, TxVoltageCorrection);
     ++SDCardAddress;
     ++SDCardAddress;
-     SDUpdateByte(SDCardAddress, LowPowerMode);
+   //  SDUpdateByte(SDCardAddress, LowPowerMode); // spare
     ++SDCardAddress;
     SDUpdateInt(SDCardAddress, LEDBrightness);
     ++SDCardAddress;
@@ -3768,6 +3770,8 @@ void SetDefaultValues()
     ReversedChannelBITS = 0;  //  No channel reversed
     SendValue(Progress, 95);
     Procrastinate(10);
+    LEDBrightness = 75;
+    RxVoltageCorrection = 0;
     SaveOneModel(ModelNumber);
     CloseModelsFile();
     SendValue(Progress, 100);          
@@ -5021,7 +5025,7 @@ void OptionView2Start()
         TxVoltageCorrection = GetValueSafer(TxVCorrextion);
         LowPowerMode        = GetValueSafer(lpm);
         LEDBrightness       = GetValueSafer(n1);
-        LEDBrightness       = CheckRange(LEDBrightness, 0, 254); // heer
+        LEDBrightness       = CheckRange(LEDBrightness, 0, 254); 
         LedWasGreen         = false;
         SaveAllParameters();
         SetPowerMode();
@@ -5038,13 +5042,13 @@ void OptionView2Start()
 void OptionView3Start()
 {
     char TxVCorrextion[] = "t2";
-     char n1[]            = "n1";
+     char n1[]           = "n1";
     char RxVCorrextion[] = "n0";  // RX Voltage correction
     char lpm[]           = "c0";  // Low power mode
     char OptionV3Start[] = "page OptionView3";
     CurrentView          = OPTIONVIEW3;
     SendCommand(OptionV3Start);
-    Procrastinate(100);
+    Procrastinate(250);
     SendValue(TxVCorrextion, TxVoltageCorrection);
     SendValue(RxVCorrextion,RxVoltageCorrection);
     SendValue(lpm, LowPowerMode);
@@ -5057,17 +5061,18 @@ void OptionView3End()
 {
     char TxVCorrextion[]  = "t2";
     char RxVCorrextion[]  = "n0";
-     char n1[]            = "n1";
+    char n1[]             = "n1";
     char page_SetupView[] = "page SetupView";
     char lpm[]            = "c0"; // Low power mode
     TxVoltageCorrection   = GetValueSafer(TxVCorrextion);
     RxVoltageCorrection   = GetValueSafer(RxVCorrextion);
     LowPowerMode          = GetValueSafer(lpm);
     LEDBrightness         = GetValueSafer(n1);
-    LEDBrightness          = CheckRange(LEDBrightness, 0, 254);
-    LedWasGreen            = false;
+    LEDBrightness         = CheckRange(LEDBrightness, 0, 254);
+    LedWasGreen           = false;
     SetPowerMode();
     SaveAllParameters();
+    CloseModelsFile();
     CurrentView = MAINSETUPVIEW;
     SendCommand(page_SetupView);
 }
@@ -6092,26 +6097,17 @@ FASTRUN void ButtonWasPressed()
             {
                 SendText(ModelsView_filename, SingleModelFile);
                 SendCommand(ProgressStart);
-                Procrastinate(20);
-                SendValue(Progress, 10);
-                Procrastinate(20);
-                CloseModelsFile();
-                for (uint8_t WriteTwice = 1; WriteTwice <= 2; ++WriteTwice) { // if a new file, write twice seems to be needed!!
+                for (uint8_t WriteTwice = 1; WriteTwice <= 3; ++WriteTwice) { // if a new file, write many times seems to be needed!!
                     SingleModelFlag = true;
-                    OpenModelsFile();
-                    SendValue(Progress, 25);
-                    Procrastinate(10);
-                    SaveOneModel(1);
-                    SendValue(Progress, 50);
-                    Procrastinate(10);
+                    SaveOneModel(1); // heer
                     CloseModelsFile();
+                    SendValue(Progress, WriteTwice * 15);
                 }
                 SingleModelFlag = false;
-                SendValue(Progress, 75);
-                Procrastinate(10);
+                SendValue(Progress, 80);
                 BuildDirectory();
                 SendValue(Progress, 100);
-                Procrastinate(10);
+                Procrastinate(300);
                 SendCommand(ProgressEnd);
             }
             else {
@@ -7263,9 +7259,9 @@ void CheckModelName()
     char ModelsView_ModelNumber[] = "ModelNumber"; //
     char ModelsView_ModelName[]   = "ModelName";
     char NewName[35];
-    ModelNumber = GetValue(ModelsView_ModelNumber);
+    ModelNumber = GetValueSafer(ModelsView_ModelNumber);
     if (GetButtonPress()) ButtonWasPressed();           // Deal with button ... don't want to miss one!
-    if ((GetText(ModelsView_ModelName, NewName)) > 3) { // Short texts come in from kbd screen
+    if ((GetText(ModelsView_ModelName, NewName)) > 2) { // Short texts come in from kbd screen
         if (strcmp(ModelName, NewName) != 0) {          // Changed name?
             strcpy(ModelName, NewName);                 // Edited name!
             SaveOneModel(ModelNumber);                  // Save it!
