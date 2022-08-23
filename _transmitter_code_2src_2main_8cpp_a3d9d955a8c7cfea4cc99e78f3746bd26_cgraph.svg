@@ -66,32 +66,32 @@
 <!-- Node5 -->
 <g id="node5" class="node">
 <title>Node5</title>
-<g id="a_node5"><a xlink:href="_transmitter_code_2src_2main_8cpp.html#af5db4d6f5f17a24fc08503a4e14de200" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="black" points="144,-165.16 144,-184.16 216,-184.16 216,-165.16 144,-165.16"/>
-<text text-anchor="middle" x="180" y="-172.16" font-family="Helvetica,sans-Serif" font-size="10.00">SDReadByte</text>
+<g id="a_node5"><a xlink:href="_transmitter_code_2src_2main_8cpp.html#a390e5cfbafdda998c93b9a352560d57d" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="black" points="137,-165.16 137,-184.16 223,-184.16 223,-165.16 137,-165.16"/>
+<text text-anchor="middle" x="180" y="-172.16" font-family="Helvetica,sans-Serif" font-size="10.00">SDRead16BITS</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node5 -->
 <g id="edge4" class="edge">
 <title>Node1&#45;&gt;Node5</title>
-<path fill="none" stroke="midnightblue" d="M83.08,-174.66C98.94,-174.66 117.2,-174.66 133.5,-174.66"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="133.89,-178.16 143.89,-174.66 133.89,-171.16 133.89,-178.16"/>
+<path fill="none" stroke="midnightblue" d="M83.08,-174.66C96.74,-174.66 112.18,-174.66 126.62,-174.66"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="126.91,-178.16 136.91,-174.66 126.91,-171.16 126.91,-178.16"/>
 </g>
 <!-- Node6 -->
 <g id="node6" class="node">
 <title>Node6</title>
-<g id="a_node6"><a xlink:href="_transmitter_code_2src_2main_8cpp.html#ab6670478c40dbf268914a0bfc6831085" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="black" points="148,-127.16 148,-146.16 212,-146.16 212,-127.16 148,-127.16"/>
-<text text-anchor="middle" x="180" y="-134.16" font-family="Helvetica,sans-Serif" font-size="10.00">SDReadInt</text>
+<g id="a_node6"><a xlink:href="_transmitter_code_2src_2main_8cpp.html#a9cf4a8c584c2b92d52de18627ca4434b" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="black" points="140,-127.16 140,-146.16 220,-146.16 220,-127.16 140,-127.16"/>
+<text text-anchor="middle" x="180" y="-134.16" font-family="Helvetica,sans-Serif" font-size="10.00">SDRead8BITS</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node6 -->
 <g id="edge5" class="edge">
 <title>Node1&#45;&gt;Node6</title>
-<path fill="none" stroke="midnightblue" d="M76.94,-165.07C95.51,-159.9 118.53,-153.49 138.01,-148.07"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="139.14,-151.39 147.83,-145.34 137.26,-144.65 139.14,-151.39"/>
+<path fill="none" stroke="midnightblue" d="M76.94,-165.07C94.48,-160.19 116.01,-154.2 134.76,-148.98"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="135.87,-152.3 144.57,-146.25 133.99,-145.56 135.87,-152.3"/>
 </g>
 <!-- Node7 -->
 <g id="node7" class="node">

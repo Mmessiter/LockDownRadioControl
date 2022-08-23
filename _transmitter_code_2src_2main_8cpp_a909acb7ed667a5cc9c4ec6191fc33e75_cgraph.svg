@@ -81,32 +81,32 @@
 <!-- Node9 -->
 <g id="node9" class="node">
 <title>Node9</title>
-<g id="a_node9"><a xlink:href="_transmitter_code_2src_2main_8cpp.html#af5db4d6f5f17a24fc08503a4e14de200" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="black" points="291,-38.5 291,-57.5 363,-57.5 363,-38.5 291,-38.5"/>
-<text text-anchor="middle" x="327" y="-45.5" font-family="Helvetica,sans-Serif" font-size="10.00">SDReadByte</text>
+<g id="a_node9"><a xlink:href="_transmitter_code_2src_2main_8cpp.html#a390e5cfbafdda998c93b9a352560d57d" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="black" points="284,-38.5 284,-57.5 370,-57.5 370,-38.5 284,-38.5"/>
+<text text-anchor="middle" x="327" y="-45.5" font-family="Helvetica,sans-Serif" font-size="10.00">SDRead16BITS</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node9 -->
 <g id="edge21" class="edge">
 <title>Node1&#45;&gt;Node9</title>
-<path fill="none" stroke="midnightblue" d="M70.62,-133.36C87.66,-125.2 113.12,-113.51 136,-105 184.74,-86.88 242.09,-70.3 280.93,-59.75"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="282.14,-63.05 290.88,-57.07 280.32,-56.3 282.14,-63.05"/>
+<path fill="none" stroke="midnightblue" d="M70.62,-133.36C87.66,-125.2 113.12,-113.51 136,-105 184,-87.15 240.35,-70.81 279.15,-60.24"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="280.37,-63.54 289.11,-57.55 278.55,-56.78 280.37,-63.54"/>
 </g>
 <!-- Node10 -->
 <g id="node10" class="node">
 <title>Node10</title>
-<g id="a_node10"><a xlink:href="_transmitter_code_2src_2main_8cpp.html#ab6670478c40dbf268914a0bfc6831085" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="black" points="295,-0.5 295,-19.5 359,-19.5 359,-0.5 295,-0.5"/>
-<text text-anchor="middle" x="327" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">SDReadInt</text>
+<g id="a_node10"><a xlink:href="_transmitter_code_2src_2main_8cpp.html#a9cf4a8c584c2b92d52de18627ca4434b" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="black" points="287,-0.5 287,-19.5 367,-19.5 367,-0.5 287,-0.5"/>
+<text text-anchor="middle" x="327" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">SDRead8BITS</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node10 -->
 <g id="edge22" class="edge">
 <title>Node1&#45;&gt;Node10</title>
-<path fill="none" stroke="midnightblue" d="M59.97,-133.05C74.5,-117.5 104.72,-87.4 136,-70 183.83,-43.39 245.12,-26.75 284.96,-17.93"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="285.81,-21.32 294.85,-15.8 284.34,-14.48 285.81,-21.32"/>
+<path fill="none" stroke="midnightblue" d="M59.97,-133.05C74.5,-117.5 104.72,-87.4 136,-70 180.63,-45.17 236.98,-29.02 276.69,-19.8"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="277.68,-23.17 286.66,-17.55 276.13,-16.34 277.68,-23.17"/>
 </g>
 <!-- Node4 -->
 <g id="node4" class="node">
@@ -162,14 +162,14 @@
 <!-- Node6&#45;&gt;Node9 -->
 <g id="edge9" class="edge">
 <title>Node6&#45;&gt;Node9</title>
-<path fill="none" stroke="midnightblue" d="M197.42,-114.34C218.76,-99.04 258.77,-70.56 266,-67 270.72,-64.68 275.79,-62.56 280.9,-60.65"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="282.43,-63.82 290.72,-57.23 280.13,-57.21 282.43,-63.82"/>
+<path fill="none" stroke="midnightblue" d="M197.42,-114.34C218.76,-99.04 258.77,-70.56 266,-67 270.54,-64.77 275.4,-62.72 280.32,-60.86"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="281.51,-64.16 289.78,-57.54 279.18,-57.55 281.51,-64.16"/>
 </g>
 <!-- Node6&#45;&gt;Node10 -->
 <g id="edge10" class="edge">
 <title>Node6&#45;&gt;Node10</title>
-<path fill="none" stroke="midnightblue" d="M189.71,-114.37C201.52,-95.26 230.53,-52.38 266,-29 271.82,-25.16 278.47,-22.06 285.17,-19.56"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="286.55,-22.79 294.94,-16.31 284.35,-16.14 286.55,-22.79"/>
+<path fill="none" stroke="midnightblue" d="M189.71,-114.37C201.52,-95.26 230.53,-52.38 266,-29 269.54,-26.67 273.39,-24.6 277.37,-22.78"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="278.85,-25.96 286.8,-18.96 276.22,-19.47 278.85,-25.96"/>
 </g>
 <!-- Node11 -->
 <g id="node11" class="node">

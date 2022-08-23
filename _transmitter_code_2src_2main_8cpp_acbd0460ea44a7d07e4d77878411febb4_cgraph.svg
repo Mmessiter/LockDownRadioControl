@@ -123,20 +123,20 @@
 <path fill="none" stroke="midnightblue" d="M51.23,-361.71C61.37,-383.96 89.15,-439.15 128,-471 138.14,-479.31 150.68,-485.84 162.71,-490.81"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="161.61,-494.14 172.2,-494.47 164.13,-487.61 161.61,-494.14"/>
 </g>
-<!-- Node18 -->
-<g id="node18" class="node">
-<title>Node18</title>
-<g id="a_node18"><a xlink:href="_transmitter_code_2src_2main_8cpp.html#aead4267a5769c2ae9feb2917c3d77db0" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="black" points="342.5,-494.5 342.5,-513.5 423.5,-513.5 423.5,-494.5 342.5,-494.5"/>
-<text text-anchor="middle" x="383" y="-501.5" font-family="Helvetica,sans-Serif" font-size="10.00">SDUpdateByte</text>
+<!-- Node19 -->
+<g id="node19" class="node">
+<title>Node19</title>
+<g id="a_node19"><a xlink:href="_transmitter_code_2src_2main_8cpp.html#a512ed84f4270bd62e922cd7dd82fd427" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="black" points="338.5,-494.5 338.5,-513.5 427.5,-513.5 427.5,-494.5 338.5,-494.5"/>
+<text text-anchor="middle" x="383" y="-501.5" font-family="Helvetica,sans-Serif" font-size="10.00">SDUpdate8BITS</text>
 </a>
 </g>
 </g>
-<!-- Node1&#45;&gt;Node18 -->
+<!-- Node1&#45;&gt;Node19 -->
 <g id="edge26" class="edge">
-<title>Node1&#45;&gt;Node18</title>
-<path fill="none" stroke="midnightblue" d="M55.55,-361.51C69.4,-376.39 98.21,-405.21 128,-422 193.98,-459.2 279.26,-482.33 332.29,-494.18"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="331.62,-497.62 342.13,-496.34 333.11,-490.78 331.62,-497.62"/>
+<title>Node1&#45;&gt;Node19</title>
+<path fill="none" stroke="midnightblue" d="M55.55,-361.51C69.4,-376.39 98.21,-405.21 128,-422 192.47,-458.34 275.35,-481.25 328.59,-493.35"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="327.98,-496.8 338.5,-495.55 329.5,-489.97 327.98,-496.8"/>
 </g>
 <!-- Node20 -->
 <g id="node20" class="node">
@@ -207,32 +207,32 @@
 <!-- Node9 -->
 <g id="node9" class="node">
 <title>Node9</title>
-<g id="a_node9"><a xlink:href="_transmitter_code_2src_2main_8cpp.html#af5db4d6f5f17a24fc08503a4e14de200" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="black" points="347,-342.5 347,-361.5 419,-361.5 419,-342.5 347,-342.5"/>
-<text text-anchor="middle" x="383" y="-349.5" font-family="Helvetica,sans-Serif" font-size="10.00">SDReadByte</text>
+<g id="a_node9"><a xlink:href="_transmitter_code_2src_2main_8cpp.html#a390e5cfbafdda998c93b9a352560d57d" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="black" points="340,-342.5 340,-361.5 426,-361.5 426,-342.5 340,-342.5"/>
+<text text-anchor="middle" x="383" y="-349.5" font-family="Helvetica,sans-Serif" font-size="10.00">SDRead16BITS</text>
 </a>
 </g>
 </g>
 <!-- Node6&#45;&gt;Node9 -->
 <g id="edge9" class="edge">
 <title>Node6&#45;&gt;Node9</title>
-<path fill="none" stroke="midnightblue" d="M248.8,-352C275.16,-352 309.5,-352 336.71,-352"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="336.76,-355.5 346.76,-352 336.76,-348.5 336.76,-355.5"/>
+<path fill="none" stroke="midnightblue" d="M248.8,-352C273,-352 303.94,-352 329.9,-352"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="329.95,-355.5 339.95,-352 329.95,-348.5 329.95,-355.5"/>
 </g>
 <!-- Node10 -->
 <g id="node10" class="node">
 <title>Node10</title>
-<g id="a_node10"><a xlink:href="_transmitter_code_2src_2main_8cpp.html#ab6670478c40dbf268914a0bfc6831085" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="black" points="351,-304.5 351,-323.5 415,-323.5 415,-304.5 351,-304.5"/>
-<text text-anchor="middle" x="383" y="-311.5" font-family="Helvetica,sans-Serif" font-size="10.00">SDReadInt</text>
+<g id="a_node10"><a xlink:href="_transmitter_code_2src_2main_8cpp.html#a9cf4a8c584c2b92d52de18627ca4434b" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="black" points="343,-304.5 343,-323.5 423,-323.5 423,-304.5 343,-304.5"/>
+<text text-anchor="middle" x="383" y="-311.5" font-family="Helvetica,sans-Serif" font-size="10.00">SDRead8BITS</text>
 </a>
 </g>
 </g>
 <!-- Node6&#45;&gt;Node10 -->
 <g id="edge10" class="edge">
 <title>Node6&#45;&gt;Node10</title>
-<path fill="none" stroke="midnightblue" d="M248.8,-343.09C276.62,-337.01 313.32,-329 341.15,-322.92"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="341.95,-326.33 350.97,-320.78 340.46,-319.49 341.95,-326.33"/>
+<path fill="none" stroke="midnightblue" d="M248.8,-343.09C274,-337.59 306.5,-330.49 333.08,-324.68"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="333.93,-328.08 342.96,-322.53 332.44,-321.24 333.93,-328.08"/>
 </g>
 <!-- Node11 -->
 <g id="node11" class="node">
@@ -342,26 +342,26 @@
 <path fill="none" stroke="midnightblue" d="M248.8,-495.09C272.83,-489.84 303.48,-483.15 329.33,-477.5"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="330.32,-480.87 339.34,-475.32 328.82,-474.03 330.32,-480.87"/>
 </g>
+<!-- Node18 -->
+<g id="node18" class="node">
+<title>Node18</title>
+<g id="a_node18"><a xlink:href="_transmitter_code_2src_2main_8cpp.html#ab050a5ccab59581ec4f14a916be9d97b" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="black" points="335.5,-532.5 335.5,-551.5 430.5,-551.5 430.5,-532.5 335.5,-532.5"/>
+<text text-anchor="middle" x="383" y="-539.5" font-family="Helvetica,sans-Serif" font-size="10.00">SDUpdate16BITS</text>
+</a>
+</g>
+</g>
 <!-- Node17&#45;&gt;Node18 -->
 <g id="edge24" class="edge">
 <title>Node17&#45;&gt;Node18</title>
-<path fill="none" stroke="midnightblue" d="M248.8,-504C273.71,-504 305.76,-504 332.17,-504"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="332.36,-507.5 342.36,-504 332.36,-500.5 332.36,-507.5"/>
-</g>
-<!-- Node19 -->
-<g id="node19" class="node">
-<title>Node19</title>
-<g id="a_node19"><a xlink:href="_transmitter_code_2src_2main_8cpp.html#a653ff5fd975f7ed9e38a790af206aa97" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="black" points="346.5,-532.5 346.5,-551.5 419.5,-551.5 419.5,-532.5 346.5,-532.5"/>
-<text text-anchor="middle" x="383" y="-539.5" font-family="Helvetica,sans-Serif" font-size="10.00">SDUpdateInt</text>
-</a>
-</g>
+<path fill="none" stroke="midnightblue" d="M248.8,-512.91C272.56,-518.1 302.81,-524.7 328.47,-530.31"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="327.9,-533.77 338.42,-532.48 329.4,-526.93 327.9,-533.77"/>
 </g>
 <!-- Node17&#45;&gt;Node19 -->
 <g id="edge25" class="edge">
 <title>Node17&#45;&gt;Node19</title>
-<path fill="none" stroke="midnightblue" d="M248.8,-512.91C275.07,-518.65 309.27,-526.12 336.43,-532.05"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="335.95,-535.53 346.47,-534.24 337.45,-528.69 335.95,-535.53"/>
+<path fill="none" stroke="midnightblue" d="M248.8,-504C272.46,-504 302.54,-504 328.13,-504"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="328.42,-507.5 338.42,-504 328.42,-500.5 328.42,-507.5"/>
 </g>
 <!-- Node20&#45;&gt;Node11 -->
 <g id="edge31" class="edge">
