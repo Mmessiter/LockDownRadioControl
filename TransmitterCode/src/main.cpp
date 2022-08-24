@@ -2586,6 +2586,7 @@ bool LoadAllParameters()
         ++SDCardAddress;
         ++SDCardAddress;
         PowerOffWarningSeconds = SDRead8BITS(SDCardAddress);
+        PowerOffWarningSeconds = CheckRange(PowerOffWarningSeconds, 2, 30);
         ++SDCardAddress;
         LEDBrightness = SDRead16BITS(SDCardAddress);
         LEDBrightness = CheckRange(LEDBrightness, 5, 254);
@@ -5025,7 +5026,8 @@ void OptionView2Start()
         RxVoltageCorrection = GetValueSafer(RxVCorrextion);
         TxVoltageCorrection = GetValueSafer(TxVCorrextion);
         PowerOffWarningSeconds = GetValueSafer(n2);
-        LowPowerMode        = GetValueSafer(lpm);
+        PowerOffWarningSeconds = CheckRange(PowerOffWarningSeconds, 2, 30);
+        LowPowerMode           = GetValueSafer(lpm);
         LEDBrightness       = GetValueSafer(n1);
         LEDBrightness       = CheckRange(LEDBrightness, 0, 254); 
         LedWasGreen         = false;
@@ -5073,7 +5075,8 @@ void OptionView3End()
     char lpm[]            = "c0"; // Low power mode
     TxVoltageCorrection   = GetValueSafer(TxVCorrextion);
     RxVoltageCorrection   = GetValueSafer(RxVCorrextion);
-     PowerOffWarningSeconds = GetValueSafer(n2);
+    PowerOffWarningSeconds = GetValueSafer(n2);
+    PowerOffWarningSeconds = CheckRange(PowerOffWarningSeconds, 2, 30);
     LowPowerMode          = GetValueSafer(lpm);
     LEDBrightness         = GetValueSafer(n1);
     LEDBrightness         = CheckRange(LEDBrightness, 0, 254);
