@@ -2378,6 +2378,7 @@ bool ReadOneModel(uint8_t Mnum)
         ++SDCardAddress;
     }
     RxVoltageCorrection  = SDRead16BITS(SDCardAddress);
+    if ((RxVoltageCorrection > 20) || (RxVoltageCorrection < 0)) RxVoltageCorrection = 0;
     ++SDCardAddress;
     ++SDCardAddress;
 
@@ -2581,14 +2582,13 @@ bool LoadAllParameters()
             ++SDCardAddress;
         }
         TxVoltageCorrection = SDRead16BITS(SDCardAddress);
+        if ((TxVoltageCorrection > 20) || (TxVoltageCorrection < 0)) TxVoltageCorrection = 0;
         ++SDCardAddress;
         ++SDCardAddress;
-      
       //   LowPowerMode = SDRead8BITS(SDCardAddress); // spare
         ++SDCardAddress;
-       
         LEDBrightness = SDRead16BITS(SDCardAddress);
-        LEDBrightness = CheckRange(LEDBrightness, 0, 254);
+        LEDBrightness = CheckRange(LEDBrightness, 5, 254);
         ++SDCardAddress;
         CheckTrimValues();
         MemoryForTransmtter = SDCardAddress;
@@ -7306,10 +7306,12 @@ void CheckPowerOffButton(){
          if (PowerWarningVisible) {
             SendCommand(NotStillConnected);
             PowerWarningVisible = false;
-        }
+         }
+     return;
      }
-    if (PowerWarningVisible) {
-    if ((millis() - PreviousPowerOffTimer) >= 1000){
+     
+     if (PowerWarningVisible) {
+     if ((millis() - PreviousPowerOffTimer) >= 1000){
             strcpy(PowerMsg, PowerPre);
             Str(nb,TurnOffSecondToGo,0);
             strcat(PowerMsg, nb);
