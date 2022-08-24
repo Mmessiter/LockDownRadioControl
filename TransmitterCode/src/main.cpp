@@ -440,7 +440,7 @@ bool      LogFileOpen         = false;
 bool      ShowVPC             = false;
 short int TxVoltageCorrection = 0;
 short int RxVoltageCorrection = 0;
-bool      LowPowerMode        = false;
+bool      LowPowerMode               = false;
 uint8_t   LEDBrightness       = 100;
 uint32_t  PowerOffTimer       = 0;
 char      StillConnected[]          = "vis StillConnected,1";
@@ -449,7 +449,7 @@ char      TurnOffRX[]               = "TURN OFF RX";
 char      NotStillConnected[]       = "vis StillConnected,0";
 bool      PowerWarningVisible       = false;
 uint8_t   TurnOffSecondToGo         = 5;
-uint8_t   TurnOffSecondsWarning      = 5;
+uint8_t   PowerOffWarningSeconds    = 5;
 uint32_t  PreviousPowerOffTimer     = 0;
 
 // **********************************************************************************************************************************
@@ -2585,7 +2585,7 @@ bool LoadAllParameters()
         if ((TxVoltageCorrection > 20) || (TxVoltageCorrection < 0)) TxVoltageCorrection = 0;
         ++SDCardAddress;
         ++SDCardAddress;
-      //   LowPowerMode = SDRead8BITS(SDCardAddress); // spare
+        PowerOffWarningSeconds = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
         LEDBrightness = SDRead16BITS(SDCardAddress);
         LEDBrightness = CheckRange(LEDBrightness, 5, 254);
@@ -3157,7 +3157,7 @@ void SaveTransmitterParameters()
     SDUpdate16BITS(SDCardAddress, TxVoltageCorrection);
     ++SDCardAddress;
     ++SDCardAddress;
-   //  SDUpdate8BITS(SDCardAddress, LowPowerMode); // spare
+     SDUpdate8BITS(SDCardAddress, PowerOffWarningSeconds);
     ++SDCardAddress;
     SDUpdate16BITS(SDCardAddress, LEDBrightness);
     ++SDCardAddress;
@@ -5015,6 +5015,7 @@ void OptionView2Start()
 {
     char dGMT[]          = "dGMT";  // Time zone
     char n1[]            = "n1";
+    char n2[]            = "n2";
     char lpm[]           = "c0"; // Low power mode
     char OptionV2Start[] = "page OptionView2";
     char TxVCorrextion[] = "t2";
@@ -5023,6 +5024,7 @@ void OptionView2Start()
     if (CurrentView == OPTIONVIEW3) {
         RxVoltageCorrection = GetValueSafer(RxVCorrextion);
         TxVoltageCorrection = GetValueSafer(TxVCorrextion);
+        PowerOffWarningSeconds = GetValueSafer(n2);
         LowPowerMode        = GetValueSafer(lpm);
         LEDBrightness       = GetValueSafer(n1);
         LEDBrightness       = CheckRange(LEDBrightness, 0, 254); 
@@ -5030,6 +5032,7 @@ void OptionView2Start()
         SaveAllParameters();
         SetPowerMode();
     }
+  
     CurrentView  = OPTIONVIEW2;
     LastTimeRead = 0;
     SendCommand(OptionV2Start);
@@ -5041,18 +5044,21 @@ void OptionView2Start()
 
 void OptionView3Start()
 {
-    char TxVCorrextion[] = "t2";
-     char n1[]           = "n1";
-    char RxVCorrextion[] = "n0";  // RX Voltage correction
-    char lpm[]           = "c0";  // Low power mode
-    char OptionV3Start[] = "page OptionView3";
-    CurrentView          = OPTIONVIEW3;
-    SendCommand(OptionV3Start);
-    Procrastinate(250);
-    SendValue(TxVCorrextion, TxVoltageCorrection);
-    SendValue(RxVCorrextion,RxVoltageCorrection);
-    SendValue(lpm, LowPowerMode);
-    SendValue(n1, LEDBrightness);
+     char TxVCorrextion[] = "t2";
+     char n1[]            = "n1";
+     char n2[]            = "n2";
+     char RxVCorrextion[] = "n0";                  // RX Voltage correction
+     char lpm[]           = "c0"; // Low power mode
+     char OptionV3Start[] = "page OptionView3";
+     CurrentView          = OPTIONVIEW3;
+     SendCommand(OptionV3Start);
+     Procrastinate(250);
+     SendValue(TxVCorrextion, TxVoltageCorrection);
+     SendValue(RxVCorrextion, RxVoltageCorrection);
+     SendValue(n2, PowerOffWarningSeconds);
+     SendValue(lpm, LowPowerMode);
+     SendValue(n1, LEDBrightness);
+     
 }
 
 /******************************************************************************************************************************/
@@ -5061,11 +5067,13 @@ void OptionView3End()
 {
     char TxVCorrextion[]  = "t2";
     char RxVCorrextion[]  = "n0";
+    char n2[]             = "n2";
     char n1[]             = "n1";
     char page_SetupView[] = "page SetupView";
     char lpm[]            = "c0"; // Low power mode
     TxVoltageCorrection   = GetValueSafer(TxVCorrextion);
     RxVoltageCorrection   = GetValueSafer(RxVCorrextion);
+     PowerOffWarningSeconds = GetValueSafer(n2);
     LowPowerMode          = GetValueSafer(lpm);
     LEDBrightness         = GetValueSafer(n1);
     LEDBrightness         = CheckRange(LEDBrightness, 0, 254);
@@ -5759,7 +5767,7 @@ FASTRUN void ButtonWasPressed()
         if (InStrng(PowerDown, TextIn) > 0) {
             if (LedWasGreen){
                     PowerOffTimer = millis();    // Start a timer for power off button down
-                    TurnOffSecondToGo = TurnOffSecondsWarning;
+                    TurnOffSecondToGo = PowerOffWarningSeconds;
                     ClearText();
                 }else{
                     if (UseLog) LogPowerOff();
@@ -7322,6 +7330,7 @@ void CheckPowerOffButton(){
                 digitalWrite(POWER_OFF_PIN, HIGH);  // power off
             }
             --TurnOffSecondToGo;
+            PlaySound(CLICKZERO);
             PreviousPowerOffTimer = millis();
         }
     }
