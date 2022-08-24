@@ -6097,7 +6097,7 @@ FASTRUN void ButtonWasPressed()
             {
                 SendText(ModelsView_filename, SingleModelFile);
                 SendCommand(ProgressStart);
-                for (uint8_t WriteTwice = 1; WriteTwice <= 3; ++WriteTwice) { // Write many times is needed. Once didn't work.
+                for (uint8_t WriteTwice = 1; WriteTwice <= 3; ++WriteTwice) { // Write many times is needed. Once does't work ... no idea why!
                     SingleModelFlag = true;
                     SaveOneModel(1); // heer
                     SendValue(Progress, WriteTwice * 15);
