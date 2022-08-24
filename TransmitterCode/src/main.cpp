@@ -441,7 +441,7 @@ bool      ShowVPC             = false;
 short int TxVoltageCorrection = 0;
 short int RxVoltageCorrection = 0;
 bool      LowPowerMode               = false;
-uint8_t   LEDBrightness       = 100;
+uint8_t   LEDBrightness       = 75;
 uint32_t  PowerOffTimer       = 0;
 char      StillConnected[]          = "vis StillConnected,1";
 char      StillConnectedBox[]       = "StillConnected";
@@ -2589,7 +2589,7 @@ bool LoadAllParameters()
         PowerOffWarningSeconds = CheckRange(PowerOffWarningSeconds, 2, 30);
         ++SDCardAddress;
         LEDBrightness = SDRead16BITS(SDCardAddress);
-        LEDBrightness = CheckRange(LEDBrightness, 5, 254);
+        LEDBrightness = CheckRange(LEDBrightness, 1, 254);
         ++SDCardAddress;
         CheckTrimValues();
         MemoryForTransmtter = SDCardAddress;
@@ -5029,7 +5029,7 @@ void OptionView2Start()
         PowerOffWarningSeconds = CheckRange(PowerOffWarningSeconds, 2, 30);
         LowPowerMode           = GetValueSafer(lpm);
         LEDBrightness       = GetValueSafer(n1);
-        LEDBrightness       = CheckRange(LEDBrightness, 0, 254); 
+        LEDBrightness       = CheckRange(LEDBrightness, 1, 254); 
         LedWasGreen         = false;
         SaveAllParameters();
         SetPowerMode();
@@ -5079,7 +5079,7 @@ void OptionView3End()
     PowerOffWarningSeconds = CheckRange(PowerOffWarningSeconds, 2, 30);
     LowPowerMode          = GetValueSafer(lpm);
     LEDBrightness         = GetValueSafer(n1);
-    LEDBrightness         = CheckRange(LEDBrightness, 0, 254);
+    LEDBrightness         = CheckRange(LEDBrightness, 1, 254);
     LedWasGreen           = false;
     SetPowerMode();
     SaveAllParameters();
