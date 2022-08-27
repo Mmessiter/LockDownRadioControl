@@ -1533,9 +1533,9 @@ void ShowConnectionQuality()
     int  ConnectionQuality        = GetSuccessRate();
 
     if (!LedWasGreen) return;
-    SendValue(Quality, ConnectionQuality); // show quality of connection in progress bar
+    SendValue(Quality, ConnectionQuality);                                      // show quality of connection in progress bar
     strcpy(Msgbuf, Msg_Connected);
-    if (ConnectionQuality >= 100) strcat(Msgbuf, Msg_ConnectedPerfect);
+    if (ConnectionQuality >= 100) strcat(Msgbuf, Msg_ConnectedPerfect);         // show quality as a comment
     if ((ConnectionQuality >= 95) && (ConnectionQuality < 100)) strcat(Msgbuf, Msg_ConnectedExcellent);
     if ((ConnectionQuality >= 90) && (ConnectionQuality < 95)) strcat(Msgbuf, Msg_ConnectedVGood);
     if ((ConnectionQuality >= 75) && (ConnectionQuality < 90)) strcat(Msgbuf, Msg_ConnectedGood);
