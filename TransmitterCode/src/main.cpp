@@ -5031,16 +5031,16 @@ void OptionView2Start()
     char RxVCorrextion[] = "n0";    // RX Voltage correction
 
     if (CurrentView == OPTIONVIEW3) {
-        RxVoltageCorrection = GetValueSafer(RxVCorrextion);
-        TxVoltageCorrection = GetValueSafer(TxVCorrextion);
-        PowerOffWarningSeconds = GetValueSafer(n2);
-        PowerOffWarningSeconds = CheckRange(PowerOffWarningSeconds, 2, 30);
-        LowPowerMode        = GetValueSafer(lpm);
-        LEDBrightness       = GetValueSafer(n1);
+        RxVoltageCorrection     = GetValueSafer(RxVCorrextion);
+        TxVoltageCorrection     = GetValueSafer(TxVCorrextion);
+        PowerOffWarningSeconds  = GetValueSafer(n2);
+        PowerOffWarningSeconds  = CheckRange(PowerOffWarningSeconds, 2, 30);
+        LowPowerMode            = GetValueSafer(lpm);
+        LEDBrightness           = GetValueSafer(n1);
         ConnectionAssessSeconds = GetValueSafer(n3);
         ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);
-        LEDBrightness       = CheckRange(LEDBrightness, 1, 254); 
-        LedWasGreen         = false;
+        LEDBrightness           = CheckRange(LEDBrightness, 1, 254); 
+       // LedWasGreen             = false;
         SaveAllParameters();
         SetPowerMode();
     }
@@ -5095,7 +5095,7 @@ void OptionView3End()
     ConnectionAssessSeconds = GetValueSafer(n3);
     ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);
     LEDBrightness           = CheckRange(LEDBrightness, 1, 254);
-    LedWasGreen             = false;
+   // LedWasGreen             = false;
     SetPowerMode();
     SaveAllParameters();
     CloseModelsFile();
