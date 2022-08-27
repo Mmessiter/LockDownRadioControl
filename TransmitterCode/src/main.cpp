@@ -1520,7 +1520,6 @@ void ShowConnectionQuality()
 {
     char Quality[]                = "Quality";
     char Visible[]                = "vis Quality,1";
-    
     char Msgbuf[]                 = "                       ";
     char Msg_Connected[]          = "Connection: ";
     char Msg_ConnectedPerfect[]   = "Perfect";
