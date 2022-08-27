@@ -1,6 +1,5 @@
 var NAVTREEINDEX8 =
 {
-"_transmitter_code_2src_2main_8cpp_source.html":[10,0,4,0,1],
 "annotated.html":[9,0],
 "class_adafruit___b_m_p280.html":[9,0,0],
 "class_adafruit___b_m_p280.html#a145ce46b3996ff93ec743ff4f96594b3":[9,0,0,3],
@@ -249,5 +248,6 @@ var NAVTREEINDEX8 =
 "class_m_p_u6050.html#a2bbde7653d2d2d37e16e515599f3b08b":[9,0,12,165],
 "class_m_p_u6050.html#a2d2d1d3b03198a09c83a48ec3bc20bd8":[9,0,12,202],
 "class_m_p_u6050.html#a2fa64c7030242aac18bd6727e8ca4a54":[9,0,12,197],
-"class_m_p_u6050.html#a31d6c2b03fc2d6ce82d67d142f316851":[9,0,12,65]
+"class_m_p_u6050.html#a31d6c2b03fc2d6ce82d67d142f316851":[9,0,12,65],
+"class_m_p_u6050.html#a31f588beab6760258212c65725eba336":[9,0,12,124]
 };
