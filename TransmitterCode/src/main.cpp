@@ -1497,7 +1497,7 @@ void CheckScreenTime()
 /*********************************************************************************************************************************/
 void ClearSuccessRate()
 {
-    for (int i = 0; i < (125 * ConnectionAssessSeconds); ++i) { // 125 packets per second start off good§
+    for (int i = 0; i < (125 * (uint16_t) ConnectionAssessSeconds); ++i) { // 125 packets per second start off good§
         PacketsHistoryBuffer[i] = 1;
     }
 }
@@ -1506,14 +1506,14 @@ int GetSuccessRate()
 {
     int Total = 0;
     int SuccessRate;
-    for (int i = 0; i < (125 * ConnectionAssessSeconds); ++i) { // 125 packets per second are either good or bad
+    for (int i = 0; i < (125 * (uint16_t) ConnectionAssessSeconds); ++i) { // 125 packets per second are either good or bad
         Total += PacketsHistoryBuffer[i];
     }
-    SuccessRate = (Total * 100) / (125 * ConnectionAssessSeconds); // return a percentage of total good packets
+    SuccessRate = (Total * 100) / (125 * (uint16_t) ConnectionAssessSeconds); // return a percentage of total good packets
     return SuccessRate;
 }
 /*********************************************************************************************************************************/
-// this function looks at the most recent (MAXSHOWCOMMSSESCONDS) two seconds of packets which succeeded and expresses these
+// this function looks at the most recent ((uint16_t) ConnectionAssessSeconds) few seconds of packets which succeeded and expresses these
 // as a percentage of total attempted packets.
 
 void ShowConnectionQuality()
