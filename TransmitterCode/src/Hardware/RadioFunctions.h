@@ -38,7 +38,7 @@
 //***************************************************************************
 
 // #define DB_NEXTION        // Debug NEXTION
-// #define DB_SD             // Debug SD card data
+ #define DB_SD             // Debug SD card data
 // #define DB_FHSS           // Debug real time FHSS data
 // #define DB_SENSORS        // Debug Sensors
 // #define DB_BIND           // Debug Binding
@@ -274,7 +274,7 @@
 //***************************************************************************
 
 #define NEXTION           Serial1 // NEXTION is connected to Serial1
-#define SHOWCOMMSSESCONDS 6       // Assess average connection quality over most recent 6 seconds continously
+#define MAXSHOWCOMMSSESCONDS 6       // Assess average connection quality over most recent 6 seconds continously
 #define SHOWCOMMSDELAY    3000    // ms pauses between updated info on NEXTION
 #define WARMUPDELAY       300     // fails at 200 so must be >200 ...
 
@@ -352,8 +352,9 @@ extern bool           UseLog;
 extern uint32_t       ShowServoTimer;
 extern uint16_t       PacketsPerSecond;
 extern uint16_t       GetStickInput(uint8_t l);
-extern uint8_t        PacketsHistoryBuffer[125 * SHOWCOMMSSESCONDS];
+extern uint8_t        PacketsHistoryBuffer[125 * MAXSHOWCOMMSSESCONDS];
 extern uint16_t       PacketsHistoryIndex;
+extern uint8_t        ConnectionAssessSeconds;
 extern bool           LowPowerMode;
 
 // external (global) functions needed here

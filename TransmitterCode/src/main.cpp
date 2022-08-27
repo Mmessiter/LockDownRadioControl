@@ -116,7 +116,7 @@ uint64_t DefaultPipe      = DEFAULTPIPEADDRESS; //          Default Radio pipe a
 uint64_t NewPipe          = 0xBABE1E5420LL;     //          New Radio pipe address for binding comes from MAC address
 char     TextIn[CHARSMAX + 2];                  // spare space
 uint16_t PacketsPerSecond = 0;
-uint8_t  PacketsHistoryBuffer[125 * SHOWCOMMSSESCONDS]; // Here we record some history
+uint8_t  PacketsHistoryBuffer[125 * MAXSHOWCOMMSSESCONDS]; // Here we record some history
 uint16_t PacketsHistoryIndex    = 0;
 uint32_t TotalLostPackets       = 0;
 uint8_t  PacketNumber           = 0;
@@ -450,7 +450,8 @@ char      NotStillConnected[]       = "vis StillConnected,0";
 bool      PowerWarningVisible       = false;
 uint8_t   TurnOffSecondToGo         = 5;
 uint8_t   PowerOffWarningSeconds    = 5;
-uint32_t  PreviousPowerOffTimer     = 0;
+uint8_t   ConnectionAssessSeconds    = 5;
+uint32_t  PreviousPowerOffTimer      = 0;
 
 // **********************************************************************************************************************************
 
@@ -1496,7 +1497,7 @@ void CheckScreenTime()
 /*********************************************************************************************************************************/
 void ClearSuccessRate()
 {
-    for (int i = 0; i < (125 * SHOWCOMMSSESCONDS); ++i) { // 125 packets per second start off good§
+    for (int i = 0; i < (125 * ConnectionAssessSeconds); ++i) { // 125 packets per second start off good§
         PacketsHistoryBuffer[i] = 1;
     }
 }
@@ -1505,14 +1506,14 @@ int GetSuccessRate()
 {
     int Total = 0;
     int SuccessRate;
-    for (int i = 0; i < (125 * SHOWCOMMSSESCONDS); ++i) { // 125 packets per second are either good or bad
+    for (int i = 0; i < (125 * ConnectionAssessSeconds); ++i) { // 125 packets per second are either good or bad
         Total += PacketsHistoryBuffer[i];
     }
-    SuccessRate = (Total * 100) / (125 * SHOWCOMMSSESCONDS); // return a percentage of total good packets
+    SuccessRate = (Total * 100) / (125 * ConnectionAssessSeconds); // return a percentage of total good packets
     return SuccessRate;
 }
 /*********************************************************************************************************************************/
-// this function looks at the most recent (SHOWCOMMSSESCONDS) two seconds of packets which succeeded and expresses these
+// this function looks at the most recent (MAXSHOWCOMMSSESCONDS) two seconds of packets which succeeded and expresses these
 // as a percentage of total attempted packets.
 
 void ShowConnectionQuality()
@@ -2591,6 +2592,10 @@ bool LoadAllParameters()
         LEDBrightness = SDRead16BITS(SDCardAddress);
         LEDBrightness = CheckRange(LEDBrightness, 1, 254);
         ++SDCardAddress;
+        ConnectionAssessSeconds = SDRead8BITS(SDCardAddress);
+        ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);
+        ++SDCardAddress;
+
         CheckTrimValues();
         MemoryForTransmtter = SDCardAddress;
         if ((ModelNumber < 1) || (ModelNumber > 99)) ModelNumber = 1;
@@ -3161,6 +3166,8 @@ void SaveTransmitterParameters()
      SDUpdate8BITS(SDCardAddress, PowerOffWarningSeconds);
     ++SDCardAddress;
     SDUpdate16BITS(SDCardAddress, LEDBrightness);
+    ++SDCardAddress;
+    SDUpdate16BITS(SDCardAddress, ConnectionAssessSeconds);
     ++SDCardAddress;
     CloseModelsFile();
 }
@@ -5017,6 +5024,7 @@ void OptionView2Start()
     char dGMT[]          = "dGMT";  // Time zone
     char n1[]            = "n1";
     char n2[]            = "n2";
+    char n3[]            = "n3";
     char lpm[]           = "c0"; // Low power mode
     char OptionV2Start[] = "page OptionView2";
     char TxVCorrextion[] = "t2";
@@ -5027,8 +5035,10 @@ void OptionView2Start()
         TxVoltageCorrection = GetValueSafer(TxVCorrextion);
         PowerOffWarningSeconds = GetValueSafer(n2);
         PowerOffWarningSeconds = CheckRange(PowerOffWarningSeconds, 2, 30);
-        LowPowerMode           = GetValueSafer(lpm);
+        LowPowerMode        = GetValueSafer(lpm);
         LEDBrightness       = GetValueSafer(n1);
+        ConnectionAssessSeconds = GetValueSafer(n3);
+        ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);
         LEDBrightness       = CheckRange(LEDBrightness, 1, 254); 
         LedWasGreen         = false;
         SaveAllParameters();
@@ -5049,6 +5059,7 @@ void OptionView3Start()
      char TxVCorrextion[] = "t2";
      char n1[]            = "n1";
      char n2[]            = "n2";
+     char n3[]            = "n3";
      char RxVCorrextion[] = "n0";                  // RX Voltage correction
      char lpm[]           = "c0"; // Low power mode
      char OptionV3Start[] = "page OptionView3";
@@ -5058,6 +5069,7 @@ void OptionView3Start()
      SendValue(TxVCorrextion, TxVoltageCorrection);
      SendValue(RxVCorrextion, RxVoltageCorrection);
      SendValue(n2, PowerOffWarningSeconds);
+     SendValue(n3, ConnectionAssessSeconds);
      SendValue(lpm, LowPowerMode);
      SendValue(n1, LEDBrightness);
      
@@ -5067,20 +5079,23 @@ void OptionView3Start()
 
 void OptionView3End()
 {
-    char TxVCorrextion[]  = "t2";
-    char RxVCorrextion[]  = "n0";
-    char n2[]             = "n2";
-    char n1[]             = "n1";
-    char page_SetupView[] = "page SetupView";
-    char lpm[]            = "c0"; // Low power mode
-    TxVoltageCorrection   = GetValueSafer(TxVCorrextion);
-    RxVoltageCorrection   = GetValueSafer(RxVCorrextion);
-    PowerOffWarningSeconds = GetValueSafer(n2);
-    PowerOffWarningSeconds = CheckRange(PowerOffWarningSeconds, 2, 30);
-    LowPowerMode          = GetValueSafer(lpm);
-    LEDBrightness         = GetValueSafer(n1);
-    LEDBrightness         = CheckRange(LEDBrightness, 1, 254);
-    LedWasGreen           = false;
+    char TxVCorrextion[]    = "t2";
+    char RxVCorrextion[]    = "n0";
+    char n2[]               = "n2";
+    char n3[]               = "n3";
+    char n1[]               = "n1";
+    char page_SetupView[]   = "page SetupView";
+    char lpm[]              = "c0"; // Low power mode
+    TxVoltageCorrection     = GetValueSafer(TxVCorrextion);
+    RxVoltageCorrection     = GetValueSafer(RxVCorrextion);
+    PowerOffWarningSeconds  = GetValueSafer(n2);
+    PowerOffWarningSeconds  = CheckRange(PowerOffWarningSeconds, 2, 30);
+    LowPowerMode            = GetValueSafer(lpm);
+    LEDBrightness           = GetValueSafer(n1);
+    ConnectionAssessSeconds = GetValueSafer(n3);
+    ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);
+    LEDBrightness           = CheckRange(LEDBrightness, 1, 254);
+    LedWasGreen             = false;
     SetPowerMode();
     SaveAllParameters();
     CloseModelsFile();
