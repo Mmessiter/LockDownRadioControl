@@ -5040,11 +5040,11 @@ void OptionView2Start()
         PowerOffWarningSeconds  = GetValueSafer(n2);
         PowerOffWarningSeconds  = CheckRange(PowerOffWarningSeconds, 2, 30);
         LowPowerMode            = GetValueSafer(lpm);
+        if (LEDBrightness != GetValueSafer(n1)) LedWasGreen = false;
         LEDBrightness           = GetValueSafer(n1);
         ConnectionAssessSeconds = GetValueSafer(n3);
         ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);
         LEDBrightness           = CheckRange(LEDBrightness, 1, 254); 
-       // LedWasGreen             = false;
         SaveAllParameters();
         SetPowerMode();
     }
@@ -5090,16 +5090,18 @@ void OptionView3End()
     char n1[]               = "n1";
     char page_SetupView[]   = "page SetupView";
     char lpm[]              = "c0"; // Low power mode
+   
+
     TxVoltageCorrection     = GetValueSafer(TxVCorrextion);
     RxVoltageCorrection     = GetValueSafer(RxVCorrextion);
     PowerOffWarningSeconds  = GetValueSafer(n2);
     PowerOffWarningSeconds  = CheckRange(PowerOffWarningSeconds, 2, 30);
     LowPowerMode            = GetValueSafer(lpm);
+    if (LEDBrightness != GetValueSafer(n1)) LedWasGreen = false;
     LEDBrightness           = GetValueSafer(n1);
     ConnectionAssessSeconds = GetValueSafer(n3);
     ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);
     LEDBrightness           = CheckRange(LEDBrightness, 1, 254);
-   // LedWasGreen             = false;
     SetPowerMode();
     SaveAllParameters();
     CloseModelsFile();
