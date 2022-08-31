@@ -492,8 +492,7 @@ void GetSlaveChannelValues()
     bool failSafeM; // These flags not used, yet.
     bool lostFrameM;
     SlaveHasControl = false;
-    if (SendBuffer[BuddyTriggerChannel - 1] > 1000)
-    { // MASTER'S CHANNEL 'BuddyTriggerChannel' (500 - 2500) used here as switch.
+    if (SendBuffer[BuddyTriggerChannel - 1] > 1000){ // MASTER'S CHANNEL 'BuddyTriggerChannel' (500 - 2500) used here as switch.
         if (MySbus.read(&SbusChannels[0], &failSafeM, &lostFrameM))
         {
             SBUSTimer = millis();       // RESET timeout when data comes in
@@ -7348,10 +7347,13 @@ void CheckPowerOffButton(){
             Str(nb,TurnOffSecondToGo,0);
             strcat(PowerMsg, nb);
             SendText(StillConnectedBox, PowerMsg);
-            if (!TurnOffSecondToGo) {               // Time's up!
-                if (UseLog) LogPowerOff();          // log the event
-                delay(250);                         // wait a mo for user to see 0 and log to write to file
-                digitalWrite(POWER_OFF_PIN, HIGH);  // power off
+            if (TurnOffSecondToGo<=0) {              // Time's up!
+                if (UseLog) LogPowerOff();           // log the event
+                if (PlayFanfare) {
+                    PlaySound(WHAHWHAHMSG);             
+                    delay(2300);  
+                 }                                   // wait a mo for user to see 0 and log to write to file
+                digitalWrite(POWER_OFF_PIN, HIGH);   // power off
             }
             --TurnOffSecondToGo;
             PlaySound(CLICKZERO);
@@ -7413,7 +7415,7 @@ FASTRUN void loop()
                 break; // CurrentMode >= 4 for no action at all.
         }
     }
-    if (BindingNow == 2 && (millis() - BindingTimer) > 100) {
+    if (BindingNow == 2 && (millis() - BindingTimer) > 100) { // 100?
         if (!BoundFlag) {
 #ifdef DB_BIND
             Serial.println("Binding now");

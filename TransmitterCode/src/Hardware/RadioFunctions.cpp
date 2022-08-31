@@ -158,8 +158,7 @@ void TryToReconnect(){
 
 /************************************************************************************************************/
 void SuccessfulPacket(){
-        Radio1.read(&AckPayload, AckPayloadSize);
-        ParseAckPayload(); //  "sizeof" doesn't work with externs,
+       
         ++RangeTestGoodPackets;
         ++PacketNumber;
         RecordsPacketSuccess(1);
@@ -168,6 +167,8 @@ void SuccessfulPacket(){
         Connected         = true;
         if (BoundFlag) GreenLedOn();
         CheckGapsLength();
+        Radio1.read(&AckPayload, AckPayloadSize); //  "sizeof" doesn't work with externs,
+        ParseAckPayload(); 
         StartInactvityTimeout();
 }
 
