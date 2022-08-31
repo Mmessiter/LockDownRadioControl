@@ -198,7 +198,7 @@ bool ReadData()
         Connected = true;
         CurrentRadio->flush_tx();                                      // This avoids a lockup that happens when the FIFO gets full
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // Send telemetry
-        delayMicroseconds(1500);                                       // N.B. SOME DUFF NRF24L01 TRANSCEIVERS NEED THIS PAUSE. But not all..***************************
+        delayMicroseconds(1500);                                       // N.B. SOME DUFF NRF24L01 TRANSCEIVERS NEED THIS PAUSE. But not all.
         CurrentRadio->read(&CompressedData, sizeof(CompressedData));   // Get Data
         CurrentRadio->flush_rx();                                      // Flush FIFO to avoid a lock up                                 
     }
