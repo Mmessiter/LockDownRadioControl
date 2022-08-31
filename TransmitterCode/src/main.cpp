@@ -497,7 +497,7 @@ void GetSlaveChannelValues()
         {
             SBUSTimer = millis();       // RESET timeout when data comes in
         }                               // Even if there's no new data, re-use old data
-        if (millis() - SBUSTimer < 500) // Ignore data more than 500ms old
+        if (millis() - SBUSTimer < 500) // Ignore data more than 500ms old // heer
         {
             SlaveHasControl = true;
             for (int j = 0; j < CHANNELSUSED; ++j) // While slave has control, his stick data replaces all ours
