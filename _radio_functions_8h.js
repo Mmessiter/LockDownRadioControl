@@ -247,6 +247,7 @@ var _radio_functions_8h =
     [ "Inactivity_Timeout", "_radio_functions_8h.html#ae99f193f5a3e06508bbe4b32ee91a963", null ],
     [ "JustHoppedFlag", "_radio_functions_8h.html#ae768cbeda38b92908ae481b943893e3b", null ],
     [ "LedWasGreen", "_radio_functions_8h.html#abe57ee67b36530a7bde7680e5b6e40f8", null ],
+    [ "LedWasRed", "_radio_functions_8h.html#ade7869bef39ac7f65c47c558c7efd4fc", null ],
     [ "LostContactFlag", "_radio_functions_8h.html#ad5f463902789a79fc622b3befd9409b9", null ],
     [ "LowPowerMode", "_radio_functions_8h.html#aff0b3d2ab8500d95569cb52a1fa2dad1", null ],
     [ "MacrosBuffer", "_radio_functions_8h.html#a961efaa3441c7a8fc7ecea83b2cd3260", null ],

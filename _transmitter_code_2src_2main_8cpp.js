@@ -377,6 +377,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "LEDBrightness", "_transmitter_code_2src_2main_8cpp.html#a77915a48e3521d96d558aee6ea3549c8", null ],
     [ "LedIsBlinking", "_transmitter_code_2src_2main_8cpp.html#a733907c842f15a6a6c1c0ce292f55ba2", null ],
     [ "LedWasGreen", "_transmitter_code_2src_2main_8cpp.html#abe57ee67b36530a7bde7680e5b6e40f8", null ],
+    [ "LedWasRed", "_transmitter_code_2src_2main_8cpp.html#ade7869bef39ac7f65c47c558c7efd4fc", null ],
     [ "LogFileNumber", "_transmitter_code_2src_2main_8cpp.html#abb4c65c0c164063d297d20ae5e42abb8", null ],
     [ "LogFileOpen", "_transmitter_code_2src_2main_8cpp.html#a248f734d3eab8f5a565ede92c6eadb97", null ],
     [ "LogRXSwaps", "_transmitter_code_2src_2main_8cpp.html#a16515797c15a76da539562acaa1e1275", null ],
