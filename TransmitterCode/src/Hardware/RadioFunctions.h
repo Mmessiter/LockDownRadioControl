@@ -344,6 +344,7 @@ extern bool           UseMacros;
 extern uint32_t       TotalLostPackets;
 extern bool           Reconnected;
 extern bool           LedWasGreen;
+extern bool           LedWasRed;
 extern uint32_t       Inactivity_Timeout;
 extern uint32_t       Inactivity_Start;
 extern bool           UkRules;

@@ -363,6 +363,7 @@ float    BlinkHertz          = 2;
 uint32_t BlinkTimer          = 0;
 uint8_t  BlinkOnPhase        = 1;
 bool     LedWasGreen         = false;
+bool     LedWasRed           = false;
 char     ThisRadio[4]        = "0 ";
 uint8_t  LastRadio           = 0;
 uint8_t  NextChannel         = 0;
@@ -1013,6 +1014,7 @@ void RedLedOn()
             ShowComms();
         }
     }
+    LedWasRed = true;
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, 0);
     analogWrite(REDLED, GetLEDBrightness()); // Brightness is a function of maybe blinking
@@ -1038,6 +1040,8 @@ void GreenLedOn()
                 LogConnection();
             }
         }
+        LedWasRed = false;
+        LedWasGreen = true;
         analogWrite(BLUELED, 0);
         analogWrite(REDLED, 0);
         analogWrite(GREENLED, GetLEDBrightness()); // Brightness is a function of maybe blinking
@@ -1052,6 +1056,7 @@ void GreenLedOn()
 void BlueLedOn()
 {
     LedWasGreen = false;
+    LedWasRed   = false;
     analogWrite(REDLED, 0);
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, GetLEDBrightness()); // Brightness is a function of maybe blinking
@@ -6124,7 +6129,7 @@ FASTRUN void ButtonWasPressed()
                 SendCommand(ProgressStart);
                 for (uint8_t WriteTwice = 1; WriteTwice <= 3; ++WriteTwice) { // Write many times is needed. Once does't work ... no idea why!
                     SingleModelFlag = true;
-                    SaveOneModel(1); // heer
+                    SaveOneModel(1);
                     SendValue(Progress, WriteTwice * 15);
                 }
                 SingleModelFlag = false;
