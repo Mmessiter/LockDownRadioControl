@@ -5040,7 +5040,7 @@ void OptionView2Start()
         PowerOffWarningSeconds  = GetValueSafer(n2);
         PowerOffWarningSeconds  = CheckRange(PowerOffWarningSeconds, 2, 30);
         LowPowerMode            = GetValueSafer(lpm);
-        if (LEDBrightness != GetValueSafer(n1)) LedWasGreen = false;
+        if (LEDBrightness != GetValueSafer(n1)) LedWasGreen = false;// Forces a redisplay if brightness has changed
         LEDBrightness           = GetValueSafer(n1);
         ConnectionAssessSeconds = GetValueSafer(n3);
         ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);
@@ -5064,8 +5064,8 @@ void OptionView3Start()
      char n1[]            = "n1";
      char n2[]            = "n2";
      char n3[]            = "n3";
-     char RxVCorrextion[] = "n0";                  // RX Voltage correction
-     char lpm[]           = "c0"; // Low power mode
+     char RxVCorrextion[] = "n0";                   // RX Voltage correction
+     char lpm[]           = "c0";                   // Low power mode
      char OptionV3Start[] = "page OptionView3";
      CurrentView          = OPTIONVIEW3;
      SendCommand(OptionV3Start);
@@ -5097,7 +5097,7 @@ void OptionView3End()
     PowerOffWarningSeconds  = GetValueSafer(n2);
     PowerOffWarningSeconds  = CheckRange(PowerOffWarningSeconds, 2, 30);
     LowPowerMode            = GetValueSafer(lpm);
-    if (LEDBrightness != GetValueSafer(n1)) LedWasGreen = false;
+    if (LEDBrightness != GetValueSafer(n1)) LedWasGreen = false; // Forces a redisplay if brightness has changed
     LEDBrightness           = GetValueSafer(n1);
     ConnectionAssessSeconds = GetValueSafer(n3);
     ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);
