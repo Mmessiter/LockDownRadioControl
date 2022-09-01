@@ -136,8 +136,10 @@ FASTRUN void FailedPacket()
         LostContactFlag   = true;
         Reconnected = false;
         if ((millis() - GapStart) > RED_LED_ON_TIME){ // there's no need to blink red for every single lost packet. Only after 1/2 second of no connection.
-            if  (LedWasGreen && UseLog) LogThisLongGap(); 
-            RedLedOn(); 
+            if  (LedWasGreen && UseLog) {
+                LogThisLongGap();
+            }
+            if (!LedWasRed) RedLedOn(); // heer
             ReEnableScanButton();
         }
     }
@@ -156,6 +158,7 @@ void TryToReconnect(){
 
 /************************************************************************************************************/
 void SuccessfulPacket(){
+       
         ++RangeTestGoodPackets;
         ++PacketNumber;
         RecordsPacketSuccess(1);
@@ -164,9 +167,9 @@ void SuccessfulPacket(){
         Connected         = true;
         if (BoundFlag) GreenLedOn();
         CheckGapsLength();
+        Radio1.read(&AckPayload, AckPayloadSize); //  "sizeof" doesn't work with externs,
+        ParseAckPayload(); 
         StartInactvityTimeout();
-        Radio1.read(&AckPayload, AckPayloadSize);        //  "sizeof" doesn't work with externs,
-        ParseAckPayload();
 }
 
 /************************************************************************************************************/

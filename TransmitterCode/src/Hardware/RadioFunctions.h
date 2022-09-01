@@ -7,12 +7,12 @@
 #define RadioFunctions_H
 
 // **************************************************************************
-//                TX VERSION NUMBER   (August 2022 Malcolm Messiter)        *
+//                TX VERSION NUMBER   (September 2022 Malcolm Messiter)        *
 //***************************************************************************
 
 #define TXVERSION_MAJOR   1
 #define TXVERSION_MINOR   8
-#define TXVERSION_MINIMUS 5
+#define TXVERSION_MINIMUS 6
 
 // **************************************************************************
 //                               Includes                                   *
@@ -41,7 +41,7 @@
 // #define DB_SD             // Debug SD card data
 // #define DB_FHSS           // Debug real time FHSS data
 // #define DB_SENSORS        // Debug Sensors
-// #define DB_BIND           // Debug Binding
+   #define DB_BIND           // Debug Binding
 // #define DB_SWITCHES       // Debug Switches
 // #define DB_MODEL_EXCHANGE // Debug MODEL EXCHANGE (by RF link)
 // #define DB_GAPS           // Debug Connection Gap assessment
@@ -153,6 +153,7 @@
 #define TRIMDEFVIEW     24
 #define OPTIONVIEW2     25
 #define OPTIONVIEW3     26
+#define BUDDYCHVIEW     27
 
 // **************************************************************************
 //                          Switches' GPIOs                                 *
@@ -215,6 +216,11 @@
 #define BATTERYISLOW    19
 #define CONNECTEDMSG    20
 #define DISCONNECTEDMSG 21
+#define BUDDYMSG        22
+#define MASTERMSG       23
+#define WEAKMSG         23
+#define WHAHWHAHMSG     25
+
 
 // **************************************************************************
 //               SDCARD MODEL MEMORY CONSTANTS                              *
@@ -344,6 +350,7 @@ extern bool           UseMacros;
 extern uint32_t       TotalLostPackets;
 extern bool           Reconnected;
 extern bool           LedWasGreen;
+extern bool           LedWasRed;
 extern uint32_t       Inactivity_Timeout;
 extern uint32_t       Inactivity_Start;
 extern bool           UkRules;

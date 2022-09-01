@@ -154,8 +154,7 @@ FLASHMEM void GetOldPipe()
 
 /************************************************************************************************************/
 
-void HopToNextChannel()
-{
+void HopToNextChannel(){
     CurrentRadio->stopListening();
     delay(1);
     CurrentRadio->setChannel(NextChannel);
@@ -178,9 +177,10 @@ FLASHMEM void InitCurrentRadio()
     CurrentRadio->setPALevel(RF24_PA_MAX);
     CurrentRadio->setDataRate(RF24_250KBPS);
     CurrentRadio->openReadingPipe(1, ThisPipe);
+    CurrentRadio->setRetries(3, 3);         // automatic retries
+    CurrentRadio->setAutoAck(true);
     SaveNewBind = true;
     HopStart    = millis();
-    return;
 }
 
 /************************************ Try to connect  ... *********************************************/

@@ -188,6 +188,7 @@ void UseReceivedData(){
             HopStart = millis();            // ... and start the timer.
         }
 }
+
 /************************************************************************************************************/
 bool ReadData()
 {
@@ -195,10 +196,11 @@ bool ReadData()
     while (CurrentRadio->available()) {                                // Get all, but use only the latest
         LoadAckPayload();
         Connected = true;
-        CurrentRadio->flush_tx();                                      // This maybe avoids a lockup that happens when the FIFO gets full.**************
+        CurrentRadio->flush_tx();                                      // This avoids a lockup that happens when the FIFO gets full
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // Send telemetry
-        CurrentRadio->read(&CompressedData, sizeof(CompressedData));   // Get Data  
-        CurrentRadio->flush_rx();                                      // Flush FIFO to avoid a lock up
+        delayMicroseconds(1500);                                       // N.B. SOME DUFF NRF24L01 TRANSCEIVERS NEED THIS PAUSE. But not all.
+        CurrentRadio->read(&CompressedData, sizeof(CompressedData));   // Get Data
+        CurrentRadio->flush_rx();                                      // Flush FIFO to avoid a lock up                                 
     }
     if (Connected) UseReceivedData();  
     return Connected;
@@ -302,6 +304,7 @@ void ReadExtraParameters()
     switch (PacketNumber) {     
         case 0:
                 BindNow = ReceivedData[CHANNELSUSED + 2];
+                //Serial.println(BindNow);
                 FailSafeSave = bool(ReceivedData[CHANNELSUSED + 1]);
                 if (FailSafeSave) {
                     TwoBytes = uint16_t(FS_byte2) + uint16_t(FS_byte1 << 8);
@@ -653,6 +656,6 @@ void loop()
         if (FailSafeSave) SaveFailSafeData();
     }
     else {
-        DoBinding();
+       if (!BoundFlag) DoBinding();
     }
 }

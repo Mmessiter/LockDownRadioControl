@@ -180,8 +180,8 @@ uint16_t ChannelMin[CHANNELSUSED + 1];    //    output of pots at min
 uint16_t ChanneltoSet     = 0;
 bool     Connected        = false;
 uint8_t  ShowCommsCounter = 0;
-
-double PointsCount = 5; // This for displaying curves only
+uint16_t BuddyControlled  = 0; // Flags
+double   PointsCount      = 5; // This for displaying curves only
 double xPoints[5];
 double yPoints[5];
 double xPoint = 0;
@@ -363,6 +363,7 @@ float    BlinkHertz          = 2;
 uint32_t BlinkTimer          = 0;
 uint8_t  BlinkOnPhase        = 1;
 bool     LedWasGreen         = false;
+bool     LedWasRed           = false;
 char     ThisRadio[4]        = "0 ";
 uint8_t  LastRadio           = 0;
 uint8_t  NextChannel         = 0;
@@ -483,28 +484,38 @@ void FixDeltaGMTSign()
         DeltaGMT = -DeltaGMT;         // it's definately meant to be negative!
     }
 }
+
+
 /************************************************************************************************************/
 // This function reads data from BUDDY (Slave) BUT uses it ONLY WHILE the channel BUDDTRIGGERCHANNEL switch is in the ON position ( > 1000)
 
-void GetSlaveChannelValues()
+void GetSlaveChannelValues() 
 {
-    bool failSafeM; // These flags not used, yet.
+    bool failSafeM;                                                     // These flags not used, yet...
     bool lostFrameM;
-    SlaveHasControl = false;
-    if (SendBuffer[BuddyTriggerChannel - 1] > 1000)
-    { // MASTER'S CHANNEL 'BuddyTriggerChannel' (500 - 2500) used here as switch.
-        if (MySbus.read(&SbusChannels[0], &failSafeM, &lostFrameM))
-        {
-            SBUSTimer = millis();       // RESET timeout when data comes in
-        }                               // Even if there's no new data, re-use old data
-        if (millis() - SBUSTimer < 500) // Ignore data more than 500ms old
-        {
-            SlaveHasControl = true;
-            for (int j = 0; j < CHANNELSUSED; ++j) // While slave has control, his stick data replaces all ours
-            {
-                SendBuffer[j] = map(SbusChannels[j], RANGEMIN, RANGEMAX, MINMICROS, MAXMICROS); // Put re-mapped data where we use it.
+    if (SendBuffer[BuddyTriggerChannel - 1] > 1000) {                   // MASTER'S CHANNEL 'BuddyTriggerChannel' (500 - 2500) used here as switch.
+        if (MySbus.read(&SbusChannels[0], &failSafeM, &lostFrameM)) {   // Buddy is On
+            SBUSTimer = millis();                                       // RESET timeout when data comes in
+        }                                                               // Even if there's no new data, re-use old data
+        if (millis() - SBUSTimer < 500){                                // Ignore data more than 500ms old 
+            for (int j = 0; j < CHANNELSUSED; ++j){                     // While slave has control, his stick data replaces all ours        
+                if (BuddyControlled & 1 << j){                          // Test if this channel is buddy controlled. If not leave it unchanged
+                    SendBuffer[j] = map(SbusChannels[j], RANGEMIN, RANGEMAX, MINMICROS, MAXMICROS); // Put re-mapped data where we can use it.
+                }
             }
+            if (!SlaveHasControl && AnnounceConnected) {
+                PlaySound(BUDDYMSG);
+                LastShowTime = 0;
+            }
+            SlaveHasControl = true;
         }
+    }
+    else { // Buddy is Off
+        if (SlaveHasControl && AnnounceConnected) {
+            PlaySound(MASTERMSG);
+            LastShowTime = 0;
+        }
+        SlaveHasControl = false;
     }
 }
 /**************************** Clear Macros if junk was loaded from SD ********************************************************************************/
@@ -542,6 +553,7 @@ FASTRUN void MapToSBUS()
     if (millis() - SBUSTimer >= SBUSRATE)
     {
         SBUSTimer = millis();
+       
         for (int j = 0; j < CHANNELSUSED; ++j)
         {
             SbusChannels[j] = static_cast<uint16_t>(map(SendBuffer[j], MINMICROS, MAXMICROS, RANGEMIN, RANGEMAX));
@@ -1013,6 +1025,7 @@ void RedLedOn()
             ShowComms();
         }
     }
+    LedWasRed = true;
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, 0);
     analogWrite(REDLED, GetLEDBrightness()); // Brightness is a function of maybe blinking
@@ -1038,6 +1051,8 @@ void GreenLedOn()
                 LogConnection();
             }
         }
+        LedWasRed = false;
+        LedWasGreen = true;
         analogWrite(BLUELED, 0);
         analogWrite(REDLED, 0);
         analogWrite(GREENLED, GetLEDBrightness()); // Brightness is a function of maybe blinking
@@ -1052,6 +1067,7 @@ void GreenLedOn()
 void BlueLedOn()
 {
     LedWasGreen = false;
+    LedWasRed   = false;
     analogWrite(REDLED, 0);
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, GetLEDBrightness()); // Brightness is a function of maybe blinking
@@ -2272,7 +2288,7 @@ void UpdateButtonLabels()
             SendValue(fs[i], FailSafeChannel[i]);
         }
     }
-    if (CurrentView == INPUTS_VIEW || CurrentView == FAILSAFE_VIEW || CurrentView == REVERSEVIEW) {
+    if (CurrentView == INPUTS_VIEW || CurrentView == FAILSAFE_VIEW || CurrentView == REVERSEVIEW || CurrentView == BUDDYCHVIEW) {
         for (int i = 0; i < 16; ++i) {
             SendText(fsch_labels[i], ChannelNames[i]);
             SendValue(InputStick_Labels[i], InPutStick[i] + 1);
@@ -2381,9 +2397,12 @@ bool ReadOneModel(uint8_t Mnum)
     if ((RxVoltageCorrection > 20) || (RxVoltageCorrection < 0)) RxVoltageCorrection = 0;
     ++SDCardAddress;
     ++SDCardAddress;
-
     CheckSavedTrimValues();
-    SDCardAddress += 3; // 3 Spare Bytes here (PID stuff gone) *****************************
+    BuddyControlled = SDRead16BITS(SDCardAddress);
+    ++SDCardAddress;
+    ++SDCardAddress;
+
+    SDCardAddress += 1; // 1 Spare Bytes here (PID stuff gone) *****************************
 
     for (i = 0; i < CHANNELSUSED; ++i) {
         InPutStick[i] = SDRead8BITS(SDCardAddress);
@@ -2960,6 +2979,7 @@ void ShowLogFile(uint8_t StartLine)
     ReadTextFile(LogFileName, TheText, StartLine, MAXLINES); // Then load text
     SendText1(LogTeXt, TheText);                             // Then send it
 }
+
 /*********************************************************************************************************************************/
 // SETUP
 /*********************************************************************************************************************************/
@@ -3249,7 +3269,12 @@ void SaveOneModel(uint16_t mnum)
     ++SDCardAddress;
     ++SDCardAddress;
 
-    SDCardAddress += 3; // *********************** 3 spare here remaining  **********************
+    SDUpdate16BITS(SDCardAddress, BuddyControlled);
+    ++SDCardAddress;
+    ++SDCardAddress;
+
+
+    SDCardAddress += 1; // *********************** 1 spare here remaining  **********************
 
     for (i = 0; i < CHANNELSUSED; ++i) {
         SDUpdate8BITS(SDCardAddress, InPutStick[i]);
@@ -5035,11 +5060,11 @@ void OptionView2Start()
         PowerOffWarningSeconds  = GetValueSafer(n2);
         PowerOffWarningSeconds  = CheckRange(PowerOffWarningSeconds, 2, 30);
         LowPowerMode            = GetValueSafer(lpm);
+        if (LEDBrightness != GetValueSafer(n1)) LedWasGreen = false;// Forces a redisplay if brightness has changed
         LEDBrightness           = GetValueSafer(n1);
         ConnectionAssessSeconds = GetValueSafer(n3);
         ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);
         LEDBrightness           = CheckRange(LEDBrightness, 1, 254); 
-       // LedWasGreen             = false;
         SaveAllParameters();
         SetPowerMode();
     }
@@ -5059,8 +5084,8 @@ void OptionView3Start()
      char n1[]            = "n1";
      char n2[]            = "n2";
      char n3[]            = "n3";
-     char RxVCorrextion[] = "n0";                  // RX Voltage correction
-     char lpm[]           = "c0"; // Low power mode
+     char RxVCorrextion[] = "n0";                   // RX Voltage correction
+     char lpm[]           = "c0";                   // Low power mode
      char OptionV3Start[] = "page OptionView3";
      CurrentView          = OPTIONVIEW3;
      SendCommand(OptionV3Start);
@@ -5085,16 +5110,17 @@ void OptionView3End()
     char n1[]               = "n1";
     char page_SetupView[]   = "page SetupView";
     char lpm[]              = "c0"; // Low power mode
+   
     TxVoltageCorrection     = GetValueSafer(TxVCorrextion);
     RxVoltageCorrection     = GetValueSafer(RxVCorrextion);
     PowerOffWarningSeconds  = GetValueSafer(n2);
     PowerOffWarningSeconds  = CheckRange(PowerOffWarningSeconds, 2, 30);
     LowPowerMode            = GetValueSafer(lpm);
+    if (LEDBrightness != GetValueSafer(n1)) LedWasGreen = false; // Forces a redisplay if brightness has changed
     LEDBrightness           = GetValueSafer(n1);
     ConnectionAssessSeconds = GetValueSafer(n3);
     ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);
     LEDBrightness           = CheckRange(LEDBrightness, 1, 254);
-   // LedWasGreen             = false;
     SetPowerMode();
     SaveAllParameters();
     CloseModelsFile();
@@ -5102,8 +5128,45 @@ void OptionView3End()
     SendCommand(page_SetupView);
 }
 
+/******************************************************************************************************************************/
+
+void BuddyChViewStart(){ // heer
+        char page_BuddyChView[] = "page BuddyChView";
+        char fs[16][5]                = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
+        SendCommand(page_BuddyChView);
+        CurrentView = BUDDYCHVIEW;
+        UpdateButtonLabels();
+        for (int i = 0; i < 16; ++i) {
+            if (BuddyControlled & 1 << i){
+                SendValue(fs[i], 1);
+            }else{
+                SendValue(fs[i], 0);
+            }
+        }
+}
+
+/******************************************************************************************************************************/
+
+void BuddyChViewEnd(){
+        char ProgressStart[]  = "vis Progress,1";
+        char ProgressEnd[]    = "vis Progress,0";
+        char Progress[]       = "Progress";
+        char page_BuddyView[] = "page BuddyView";
+        char fs[16][5]                = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
+        SendCommand(ProgressStart);
+        BuddyControlled = 0;
+        for (int i = 0; i < 16; ++i) {
+            BuddyControlled |= GetValue(fs[i]) << i;     
+            SendValue(Progress, i * (100 / 16));
+        }
+        SaveOneModel(ModelNumber);
+        SendCommand(ProgressEnd);
+        SendCommand(page_BuddyView);
+        CurrentView = BUDDYVIEW;
+}
+
 // ******************************** Global Array of numbered function pointers - OK up to 128 functions ... **********************************
-#define LASTFUNCTION 28 // one more than final one
+#define LASTFUNCTION 30 // one more than final one
 
 void (*NumberedFunctions[LASTFUNCTION])() {
     Blank,                // 0 (spare)
@@ -5133,7 +5196,10 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     DefineTrimsEnd,       // 24
     OptionView2Start,     // 25
     OptionView3Start,     // 26
-    OptionView3End        // 27
+    OptionView3End,       // 27
+    BuddyChViewStart,     // 28
+    BuddyChViewEnd        // 29  
+
 };                        // list will become much longer ...
 
 /*********************************************************************************************************************************
@@ -6124,7 +6190,7 @@ FASTRUN void ButtonWasPressed()
                 SendCommand(ProgressStart);
                 for (uint8_t WriteTwice = 1; WriteTwice <= 3; ++WriteTwice) { // Write many times is needed. Once does't work ... no idea why!
                     SingleModelFlag = true;
-                    SaveOneModel(1); // heer
+                    SaveOneModel(1);
                     SendValue(Progress, WriteTwice * 15);
                 }
                 SingleModelFlag = false;
@@ -7341,10 +7407,13 @@ void CheckPowerOffButton(){
             Str(nb,TurnOffSecondToGo,0);
             strcat(PowerMsg, nb);
             SendText(StillConnectedBox, PowerMsg);
-            if (!TurnOffSecondToGo) {               // Time's up!
-                if (UseLog) LogPowerOff();          // log the event
-                delay(250);                         // wait a mo for user to see 0 and log to write to file
-                digitalWrite(POWER_OFF_PIN, HIGH);  // power off
+            if (TurnOffSecondToGo<=0) {              // Time's up!
+                if (UseLog) LogPowerOff();           // log the event
+                if (PlayFanfare) {
+                    PlaySound(WHAHWHAHMSG);             
+                    delay(2300);  
+                 }                                   // wait a mo for user to see 0 and log to write to file
+                digitalWrite(POWER_OFF_PIN, HIGH);   // power off
             }
             --TurnOffSecondToGo;
             PlaySound(CLICKZERO);
@@ -7384,10 +7453,12 @@ FASTRUN void loop()
     CheckTimer();                                            // Screen Timer
     GetNewChannelValues();                                   // Load SendBuffer with new servo positions
     if (UseMacros) ExecuteMacro();                           // Modify it if macro is running
-    ShowServoPos();                                          // Servo positions use channel values
-    if (!BoundFlag) BufferNewPipe();                         // if not yet bound, insert our pipe into sendbuffer
-    if (BuddyMaster) GetSlaveChannelValues();                // If buddy master, check where student's sticks etc. are.
-    Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24
+    if (!DoSbusSendOnly) {                                   // Skip these next lines when buddying as a slave
+        if (!BoundFlag) BufferNewPipe();                     // if not yet bound, insert our pipe into sendbuffer
+        if (BuddyMaster) GetSlaveChannelValues();            // If buddy master, get buddy data and maybe use it.
+        Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24
+    }
+    ShowServoPos();
     if ((millis()) > 2500) {                                 // Transmit nothing for first 2.5 seconds
         switch (CurrentMode) {
             case NORMAL: // 0
@@ -7406,7 +7477,7 @@ FASTRUN void loop()
                 break; // CurrentMode >= 4 for no action at all.
         }
     }
-    if (BindingNow == 2 && (millis() - BindingTimer) > 100) {
+    if (BindingNow == 2 && (millis() - BindingTimer) > 100) { // 100?
         if (!BoundFlag) {
 #ifdef DB_BIND
             Serial.println("Binding now");
