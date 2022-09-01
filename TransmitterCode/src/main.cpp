@@ -180,8 +180,8 @@ uint16_t ChannelMin[CHANNELSUSED + 1];    //    output of pots at min
 uint16_t ChanneltoSet     = 0;
 bool     Connected        = false;
 uint8_t  ShowCommsCounter = 0;
-
-double PointsCount = 5; // This for displaying curves only
+uint16_t BuddyControlled  = 0;
+double   PointsCount      = 5; // This for displaying curves only
 double xPoints[5];
 double yPoints[5];
 double xPoint = 0;
@@ -489,7 +489,7 @@ void FixDeltaGMTSign()
 /************************************************************************************************************/
 // This function reads data from BUDDY (Slave) BUT uses it ONLY WHILE the channel BUDDTRIGGERCHANNEL switch is in the ON position ( > 1000)
 
-void GetSlaveChannelValues()
+void GetSlaveChannelValues() // heer
 {
     bool failSafeM;                                                     // These flags not used, yet...
     bool lostFrameM;
@@ -499,8 +499,10 @@ void GetSlaveChannelValues()
             SBUSTimer = millis();                                       // RESET timeout when data comes in
         }                                                               // Even if there's no new data, re-use old data
         if (millis() - SBUSTimer < 500){                                // Ignore data more than 500ms old // heer
-            for (int j = 0; j < CHANNELSUSED; ++j){                     // While slave has control, his stick data replaces all ours
-                SendBuffer[j] = map(SbusChannels[j], RANGEMIN, RANGEMAX, MINMICROS, MAXMICROS); // Put re-mapped data where we can use it.
+            for (int j = 0; j < CHANNELSUSED; ++j){                     // While slave has control, his stick data replaces all ours        
+                if (BuddyControlled & 1 << j){
+                    SendBuffer[j] = map(SbusChannels[j], RANGEMIN, RANGEMAX, MINMICROS, MAXMICROS); // Put re-mapped data where we can use it.
+                }
             }
             if (!SlaveHasControl && AnnounceConnected) {
                 PlaySound(BUDDYMSG);
@@ -2974,6 +2976,14 @@ void ShowLogFile(uint8_t StartLine)
     ReadTextFile(LogFileName, TheText, StartLine, MAXLINES); // Then load text
     SendText1(LogTeXt, TheText);                             // Then send it
 }
+
+/*********************************************************************************************************************************/
+void InitBuddyControlledFlags(){ // heer
+     BuddyControlled = 0;
+     for (int i = 0; i < CHANNELSUSED; ++i) { 
+          BuddyControlled |= 1 << i;             // set each bit for buddy control
+     }
+}
 /*********************************************************************************************************************************/
 // SETUP
 /*********************************************************************************************************************************/
@@ -3052,6 +3062,7 @@ FLASHMEM void setup()
     }
     SendText(FrontView_Connected, na);
     UpdateModelsNameEveryWhere();
+    InitBuddyControlledFlags();
 }
 /*********************************************************************************************************************************/
 
