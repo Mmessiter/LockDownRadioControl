@@ -12,5 +12,24 @@ Screen timeout will save battery while you fly by turning off the screen. To swi
 
 Inactivity Timeout will switch off the transmitter after it's been forgotten and left on. It will never switch off while connected, nor if you move a stick or press a button.||
 
-Low battery warning will warn you when either the transmitter or receiver battery gets low. To be safe, set it quite high.
+Low battery warning will warn you when either the transmitter or receiver battery gets low. To be safe, set it quite high.||
 
+Options page 2 allows the clock to be set||
+
+On Options page 3:||
+
+LED brightness can be 0 to 254 where zero is off and 254 is very bright.||
+
+If the voltage reported for either battery is different from that indicated by a very accurate voltmeter, the correction needed can be entered here in 100th of a volt.
+
+The power-off button on the front screen works immediately when there is no connection. |When a model is connected it must be held down for a few seconds (defined here) to switch off.
+
+Low power mode is for range tests. (But this is not (yet) supported on Ebyte transceiver chips.)|
+To reduce range for these chips simply remove the transmitter aerial.
+
+On the front screen the connection quality indicated works by counting successful and unsuccessful packets over several seconds.| 
+The number of seconds can be between one and six and is defined here.
+
+
+
+  
