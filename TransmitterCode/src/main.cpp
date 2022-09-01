@@ -493,13 +493,13 @@ void GetSlaveChannelValues()
     bool lostFrameM;
     SlaveHasControl = false;
     if (SendBuffer[BuddyTriggerChannel - 1] > 1000){ // MASTER'S CHANNEL 'BuddyTriggerChannel' (500 - 2500) used here as switch.
-        if (MySbus.read(&SbusChannels[0], &failSafeM, &lostFrameM))
-        {
+        if (MySbus.read(&SbusChannels[0], &failSafeM, &lostFrameM)) {
             SBUSTimer = millis();       // RESET timeout when data comes in
         }                               // Even if there's no new data, re-use old data
         if (millis() - SBUSTimer < 500) // Ignore data more than 500ms old // heer
         {
             SlaveHasControl = true;
+            
             for (int j = 0; j < CHANNELSUSED; ++j) // While slave has control, his stick data replaces all ours
             {
                 SendBuffer[j] = map(SbusChannels[j], RANGEMIN, RANGEMAX, MINMICROS, MAXMICROS); // Put re-mapped data where we use it.
@@ -542,6 +542,7 @@ FASTRUN void MapToSBUS()
     if (millis() - SBUSTimer >= SBUSRATE)
     {
         SBUSTimer = millis();
+       
         for (int j = 0; j < CHANNELSUSED; ++j)
         {
             SbusChannels[j] = static_cast<uint16_t>(map(SendBuffer[j], MINMICROS, MAXMICROS, RANGEMIN, RANGEMAX));
@@ -7393,10 +7394,12 @@ FASTRUN void loop()
     CheckTimer();                                            // Screen Timer
     GetNewChannelValues();                                   // Load SendBuffer with new servo positions
     if (UseMacros) ExecuteMacro();                           // Modify it if macro is running
-    ShowServoPos();                                          // Servo positions use channel values
-    if (!BoundFlag) BufferNewPipe();                         // if not yet bound, insert our pipe into sendbuffer
-    if (BuddyMaster) GetSlaveChannelValues();                // If buddy master, check where student's sticks etc. are.
-    Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24
+    if (!DoSbusSendOnly) {                                        // Servo positions use channel values
+        if (!BoundFlag) BufferNewPipe();                         // if not yet bound, insert our pipe into sendbuffer
+        if (BuddyMaster) GetSlaveChannelValues();                // If buddy master, check where student's sticks etc. are.
+        Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24
+    }
+    ShowServoPos();
     if ((millis()) > 2500) {                                 // Transmit nothing for first 2.5 seconds
         switch (CurrentMode) {
             case NORMAL: // 0
