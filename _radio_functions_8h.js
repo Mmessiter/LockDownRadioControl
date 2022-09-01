@@ -15,6 +15,7 @@ var _radio_functions_8h =
     [ "BOXOFFSET", "_radio_functions_8h.html#a1ca4c62befbda4dbe363ef453b2ebf09", null ],
     [ "BOXSIZE", "_radio_functions_8h.html#a4f84c7cd953e90b218a9baa12f6e5e35", null ],
     [ "Brown", "_radio_functions_8h.html#a3057a3f4d88842d385cd5ad6c5ddf80f", null ],
+    [ "BUDDYCHVIEW", "_radio_functions_8h.html#a292f677c644b13c00f8026f08ee648c9", null ],
     [ "BUDDYMSG", "_radio_functions_8h.html#a4369b0021c14140eca0aab3f7d3c83d1", null ],
     [ "BUDDYVIEW", "_radio_functions_8h.html#a38c9376ad661411cad3019d4a43ac493", null ],
     [ "BYTESPERMACRO", "_radio_functions_8h.html#acb6ba8383362a5f2efee8416bc4300c9", null ],

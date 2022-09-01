@@ -7,10 +7,12 @@ var searchData=
   ['blank_4',['Blank',['../_transmitter_code_2src_2main_8cpp.html#a0bd2123bbb9dfc3a3af87642de04b591',1,'main.cpp']]],
   ['blueledon_5',['BlueLedOn',['../_transmitter_code_2src_2main_8cpp.html#aa1f9aec467eb00917ad9ffdc0bd5b20d',1,'main.cpp']]],
   ['boatangle_6',['boatAngle',['../class_adafruit___g_p_s.html#a911b6b32cac6cf3b24f865c820b5072e',1,'Adafruit_GPS']]],
-  ['buffernewpipe_7',['BufferNewPipe',['../_radio_functions_8cpp.html#a9a3e35cbf8abeae1ebdb4af8dff3571a',1,'BufferNewPipe():&#160;RadioFunctions.cpp'],['../_radio_functions_8h.html#a9a3e35cbf8abeae1ebdb4af8dff3571a',1,'BufferNewPipe():&#160;RadioFunctions.cpp']]],
-  ['build_8',['build',['../class_adafruit___g_p_s.html#aa98fd519cac1b6f0dd93b7b74e619616',1,'Adafruit_GPS']]],
-  ['builddirectory_9',['BuildDirectory',['../_transmitter_code_2src_2main_8cpp.html#affc6c0de18db71aa5ad8b4d241339731',1,'main.cpp']]],
-  ['buttonred_10',['ButtonRed',['../_transmitter_code_2src_2main_8cpp.html#a5bf7a964da96991a9ca3a1eb3d2d9d09',1,'main.cpp']]],
-  ['buttonwaspressed_11',['ButtonWasPressed',['../_radio_functions_8h.html#a8e7ccbf842764fd85cc578be263f7202',1,'ButtonWasPressed():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a804fdbdd5eab4c596bbe8a23eecbe4d5',1,'ButtonWasPressed():&#160;main.cpp']]],
-  ['buttonwhite_12',['ButtonWhite',['../_transmitter_code_2src_2main_8cpp.html#a1864beba7616666b0f27dac30975673e',1,'main.cpp']]]
+  ['buddychviewend_7',['BuddyChViewEnd',['../_transmitter_code_2src_2main_8cpp.html#ad332e97e29352b9b7bf0ada90b4dcf06',1,'main.cpp']]],
+  ['buddychviewstart_8',['BuddyChViewStart',['../_transmitter_code_2src_2main_8cpp.html#ab1bdf189a2e5d2c6252095abeb660e79',1,'main.cpp']]],
+  ['buffernewpipe_9',['BufferNewPipe',['../_radio_functions_8cpp.html#a9a3e35cbf8abeae1ebdb4af8dff3571a',1,'BufferNewPipe():&#160;RadioFunctions.cpp'],['../_radio_functions_8h.html#a9a3e35cbf8abeae1ebdb4af8dff3571a',1,'BufferNewPipe():&#160;RadioFunctions.cpp']]],
+  ['build_10',['build',['../class_adafruit___g_p_s.html#aa98fd519cac1b6f0dd93b7b74e619616',1,'Adafruit_GPS']]],
+  ['builddirectory_11',['BuildDirectory',['../_transmitter_code_2src_2main_8cpp.html#affc6c0de18db71aa5ad8b4d241339731',1,'main.cpp']]],
+  ['buttonred_12',['ButtonRed',['../_transmitter_code_2src_2main_8cpp.html#a5bf7a964da96991a9ca3a1eb3d2d9d09',1,'main.cpp']]],
+  ['buttonwaspressed_13',['ButtonWasPressed',['../_radio_functions_8h.html#a8e7ccbf842764fd85cc578be263f7202',1,'ButtonWasPressed():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a804fdbdd5eab4c596bbe8a23eecbe4d5',1,'ButtonWasPressed():&#160;main.cpp']]],
+  ['buttonwhite_14',['ButtonWhite',['../_transmitter_code_2src_2main_8cpp.html#a1864beba7616666b0f27dac30975673e',1,'main.cpp']]]
 ];
