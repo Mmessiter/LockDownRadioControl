@@ -7399,9 +7399,9 @@ FASTRUN void loop()
     CheckTimer();                                            // Screen Timer
     GetNewChannelValues();                                   // Load SendBuffer with new servo positions
     if (UseMacros) ExecuteMacro();                           // Modify it if macro is running
-    if (!DoSbusSendOnly) {                                        // Servo positions use channel values
-        if (!BoundFlag) BufferNewPipe();                         // if not yet bound, insert our pipe into sendbuffer
-        if (BuddyMaster) GetSlaveChannelValues();                // If buddy master, check where student's sticks etc. are.
+    if (!DoSbusSendOnly) {                                   // Skip these next lines when buddying as a slave
+        if (!BoundFlag) BufferNewPipe();                     // if not yet bound, insert our pipe into sendbuffer
+        if (BuddyMaster) GetSlaveChannelValues();            // If buddy master, get buddy data and maybe use it.
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24
     }
     ShowServoPos();
