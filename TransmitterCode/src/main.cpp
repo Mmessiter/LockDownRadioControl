@@ -491,24 +491,28 @@ void FixDeltaGMTSign()
 
 void GetSlaveChannelValues()
 {
-    bool failSafeM; // These flags not used, yet.
+    bool failSafeM;                                                     // These flags not used, yet...
     bool lostFrameM;
    
-    if (SendBuffer[BuddyTriggerChannel - 1] > 1000){ // MASTER'S CHANNEL 'BuddyTriggerChannel' (500 - 2500) used here as switch.
-        if (MySbus.read(&SbusChannels[0], &failSafeM, &lostFrameM)) {
-            SBUSTimer = millis();       // RESET timeout when data comes in
-        }                               // Even if there's no new data, re-use old data
-        if (millis() - SBUSTimer < 500) // Ignore data more than 500ms old // heer
-        {
-            for (int j = 0; j < CHANNELSUSED; ++j) // While slave has control, his stick data replaces all ours
-            {
-                SendBuffer[j] = map(SbusChannels[j], RANGEMIN, RANGEMAX, MINMICROS, MAXMICROS); // Put re-mapped data where we use it.
+    if (SendBuffer[BuddyTriggerChannel - 1] > 1000){                    // MASTER'S CHANNEL 'BuddyTriggerChannel' (500 - 2500) used here as switch.
+        if (MySbus.read(&SbusChannels[0], &failSafeM, &lostFrameM)) {   // Buddy is On
+            SBUSTimer = millis();                                       // RESET timeout when data comes in
+        }                                                               // Even if there's no new data, re-use old data
+        if (millis() - SBUSTimer < 500){                                // Ignore data more than 500ms old // heer
+            for (int j = 0; j < CHANNELSUSED; ++j){                     // While slave has control, his stick data replaces all ours
+                SendBuffer[j] = map(SbusChannels[j], RANGEMIN, RANGEMAX, MINMICROS, MAXMICROS); // Put re-mapped data where we can use it.
             }
-             if (!SlaveHasControl && AnnounceConnected) PlaySound(BUDDYMSG);
+            if (!SlaveHasControl && AnnounceConnected) {
+                PlaySound(BUDDYMSG);
+                LastShowTime = 0;
+            }
             SlaveHasControl = true;
         }
-    }else{    // Buddy is Off
-        if (SlaveHasControl && AnnounceConnected) PlaySound(MASTERMSG);
+    }else{                                                              // Buddy is Off
+        if (SlaveHasControl && AnnounceConnected) {
+            PlaySound(MASTERMSG);
+            LastShowTime = 0;
+        }
         SlaveHasControl = false;
     }
 }
