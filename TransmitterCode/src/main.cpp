@@ -484,6 +484,8 @@ void FixDeltaGMTSign()
         DeltaGMT = -DeltaGMT;         // it's definately meant to be negative!
     }
 }
+
+
 /************************************************************************************************************/
 // This function reads data from BUDDY (Slave) BUT uses it ONLY WHILE the channel BUDDTRIGGERCHANNEL switch is in the ON position ( > 1000)
 
@@ -491,20 +493,23 @@ void GetSlaveChannelValues()
 {
     bool failSafeM; // These flags not used, yet.
     bool lostFrameM;
-    SlaveHasControl = false;
+   
     if (SendBuffer[BuddyTriggerChannel - 1] > 1000){ // MASTER'S CHANNEL 'BuddyTriggerChannel' (500 - 2500) used here as switch.
         if (MySbus.read(&SbusChannels[0], &failSafeM, &lostFrameM)) {
             SBUSTimer = millis();       // RESET timeout when data comes in
         }                               // Even if there's no new data, re-use old data
         if (millis() - SBUSTimer < 500) // Ignore data more than 500ms old // heer
         {
-            SlaveHasControl = true;
-            
             for (int j = 0; j < CHANNELSUSED; ++j) // While slave has control, his stick data replaces all ours
             {
                 SendBuffer[j] = map(SbusChannels[j], RANGEMIN, RANGEMAX, MINMICROS, MAXMICROS); // Put re-mapped data where we use it.
             }
+             if (!SlaveHasControl) PlaySound(BUDDYMSG);
+            SlaveHasControl = true;
         }
+    }else{    // Buddy is Off
+        if (SlaveHasControl) PlaySound(MASTERMSG);
+        SlaveHasControl = false;
     }
 }
 /**************************** Clear Macros if junk was loaded from SD ********************************************************************************/
