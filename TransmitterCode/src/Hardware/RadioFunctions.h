@@ -153,6 +153,7 @@
 #define TRIMDEFVIEW     24
 #define OPTIONVIEW2     25
 #define OPTIONVIEW3     26
+#define BUDDYCHVIEW     27
 
 // **************************************************************************
 //                          Switches' GPIOs                                 *

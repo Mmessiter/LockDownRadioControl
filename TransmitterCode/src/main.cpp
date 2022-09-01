@@ -180,7 +180,7 @@ uint16_t ChannelMin[CHANNELSUSED + 1];    //    output of pots at min
 uint16_t ChanneltoSet     = 0;
 bool     Connected        = false;
 uint8_t  ShowCommsCounter = 0;
-uint16_t BuddyControlled  = 0;
+uint16_t BuddyControlled  = 0; // Flags
 double   PointsCount      = 5; // This for displaying curves only
 double xPoints[5];
 double yPoints[5];
@@ -489,18 +489,17 @@ void FixDeltaGMTSign()
 /************************************************************************************************************/
 // This function reads data from BUDDY (Slave) BUT uses it ONLY WHILE the channel BUDDTRIGGERCHANNEL switch is in the ON position ( > 1000)
 
-void GetSlaveChannelValues() // heer
+void GetSlaveChannelValues() 
 {
     bool failSafeM;                                                     // These flags not used, yet...
     bool lostFrameM;
-   
-    if (SendBuffer[BuddyTriggerChannel - 1] > 1000){                    // MASTER'S CHANNEL 'BuddyTriggerChannel' (500 - 2500) used here as switch.
+    if (SendBuffer[BuddyTriggerChannel - 1] > 1000) {                   // MASTER'S CHANNEL 'BuddyTriggerChannel' (500 - 2500) used here as switch.
         if (MySbus.read(&SbusChannels[0], &failSafeM, &lostFrameM)) {   // Buddy is On
             SBUSTimer = millis();                                       // RESET timeout when data comes in
         }                                                               // Even if there's no new data, re-use old data
-        if (millis() - SBUSTimer < 500){                                // Ignore data more than 500ms old // heer
+        if (millis() - SBUSTimer < 500){                                // Ignore data more than 500ms old 
             for (int j = 0; j < CHANNELSUSED; ++j){                     // While slave has control, his stick data replaces all ours        
-                if (BuddyControlled & 1 << j){
+                if (BuddyControlled & 1 << j){                          // Test if this channel is buddy controlled. If not leave it unchanged
                     SendBuffer[j] = map(SbusChannels[j], RANGEMIN, RANGEMAX, MINMICROS, MAXMICROS); // Put re-mapped data where we can use it.
                 }
             }
@@ -510,7 +509,8 @@ void GetSlaveChannelValues() // heer
             }
             SlaveHasControl = true;
         }
-    }else{                                                              // Buddy is Off
+    }
+    else { // Buddy is Off
         if (SlaveHasControl && AnnounceConnected) {
             PlaySound(MASTERMSG);
             LastShowTime = 0;
@@ -2288,7 +2288,7 @@ void UpdateButtonLabels()
             SendValue(fs[i], FailSafeChannel[i]);
         }
     }
-    if (CurrentView == INPUTS_VIEW || CurrentView == FAILSAFE_VIEW || CurrentView == REVERSEVIEW) {
+    if (CurrentView == INPUTS_VIEW || CurrentView == FAILSAFE_VIEW || CurrentView == REVERSEVIEW || CurrentView == BUDDYCHVIEW) {
         for (int i = 0; i < 16; ++i) {
             SendText(fsch_labels[i], ChannelNames[i]);
             SendValue(InputStick_Labels[i], InPutStick[i] + 1);
@@ -2397,9 +2397,12 @@ bool ReadOneModel(uint8_t Mnum)
     if ((RxVoltageCorrection > 20) || (RxVoltageCorrection < 0)) RxVoltageCorrection = 0;
     ++SDCardAddress;
     ++SDCardAddress;
-
     CheckSavedTrimValues();
-    SDCardAddress += 3; // 3 Spare Bytes here (PID stuff gone) *****************************
+    BuddyControlled = SDRead16BITS(SDCardAddress);
+    ++SDCardAddress;
+    ++SDCardAddress;
+
+    SDCardAddress += 1; // 1 Spare Bytes here (PID stuff gone) *****************************
 
     for (i = 0; i < CHANNELSUSED; ++i) {
         InPutStick[i] = SDRead8BITS(SDCardAddress);
@@ -2978,13 +2981,6 @@ void ShowLogFile(uint8_t StartLine)
 }
 
 /*********************************************************************************************************************************/
-void InitBuddyControlledFlags(){ // heer
-     BuddyControlled = 0;
-     for (int i = 0; i < CHANNELSUSED; ++i) { 
-          BuddyControlled |= 1 << i;             // set each bit for buddy control
-     }
-}
-/*********************************************************************************************************************************/
 // SETUP
 /*********************************************************************************************************************************/
 FLASHMEM void setup()
@@ -3062,7 +3058,6 @@ FLASHMEM void setup()
     }
     SendText(FrontView_Connected, na);
     UpdateModelsNameEveryWhere();
-    InitBuddyControlledFlags();
 }
 /*********************************************************************************************************************************/
 
@@ -3274,7 +3269,12 @@ void SaveOneModel(uint16_t mnum)
     ++SDCardAddress;
     ++SDCardAddress;
 
-    SDCardAddress += 3; // *********************** 3 spare here remaining  **********************
+    SDUpdate16BITS(SDCardAddress, BuddyControlled);
+    ++SDCardAddress;
+    ++SDCardAddress;
+
+
+    SDCardAddress += 1; // *********************** 1 spare here remaining  **********************
 
     for (i = 0; i < CHANNELSUSED; ++i) {
         SDUpdate8BITS(SDCardAddress, InPutStick[i]);
@@ -5111,7 +5111,6 @@ void OptionView3End()
     char page_SetupView[]   = "page SetupView";
     char lpm[]              = "c0"; // Low power mode
    
-
     TxVoltageCorrection     = GetValueSafer(TxVCorrextion);
     RxVoltageCorrection     = GetValueSafer(RxVCorrextion);
     PowerOffWarningSeconds  = GetValueSafer(n2);
@@ -5129,8 +5128,45 @@ void OptionView3End()
     SendCommand(page_SetupView);
 }
 
+/******************************************************************************************************************************/
+
+void BuddyChViewStart(){ // heer
+        char page_BuddyChView[] = "page BuddyChView";
+        char fs[16][5]                = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
+        SendCommand(page_BuddyChView);
+        CurrentView = BUDDYCHVIEW;
+        UpdateButtonLabels();
+        for (int i = 0; i < 16; ++i) {
+            if (BuddyControlled & 1 << i){
+                SendValue(fs[i], 1);
+            }else{
+                SendValue(fs[i], 0);
+            }
+        }
+}
+
+/******************************************************************************************************************************/
+
+void BuddyChViewEnd(){
+        char ProgressStart[]  = "vis Progress,1";
+        char ProgressEnd[]    = "vis Progress,0";
+        char Progress[]       = "Progress";
+        char page_BuddyView[] = "page BuddyView";
+        char fs[16][5]                = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
+        SendCommand(ProgressStart);
+        BuddyControlled = 0;
+        for (int i = 0; i < 16; ++i) {
+            BuddyControlled |= GetValue(fs[i]) << i;     
+            SendValue(Progress, i * (100 / 16));
+        }
+        SaveOneModel(ModelNumber);
+        SendCommand(ProgressEnd);
+        SendCommand(page_BuddyView);
+        CurrentView = BUDDYVIEW;
+}
+
 // ******************************** Global Array of numbered function pointers - OK up to 128 functions ... **********************************
-#define LASTFUNCTION 28 // one more than final one
+#define LASTFUNCTION 30 // one more than final one
 
 void (*NumberedFunctions[LASTFUNCTION])() {
     Blank,                // 0 (spare)
@@ -5160,7 +5196,10 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     DefineTrimsEnd,       // 24
     OptionView2Start,     // 25
     OptionView3Start,     // 26
-    OptionView3End        // 27
+    OptionView3End,       // 27
+    BuddyChViewStart,     // 28
+    BuddyChViewEnd        // 29  
+
 };                        // list will become much longer ...
 
 /*********************************************************************************************************************************
