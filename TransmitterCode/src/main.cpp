@@ -504,11 +504,11 @@ void GetSlaveChannelValues()
             {
                 SendBuffer[j] = map(SbusChannels[j], RANGEMIN, RANGEMAX, MINMICROS, MAXMICROS); // Put re-mapped data where we use it.
             }
-             if (!SlaveHasControl) PlaySound(BUDDYMSG);
+             if (!SlaveHasControl && AnnounceConnected) PlaySound(BUDDYMSG);
             SlaveHasControl = true;
         }
     }else{    // Buddy is Off
-        if (SlaveHasControl) PlaySound(MASTERMSG);
+        if (SlaveHasControl && AnnounceConnected) PlaySound(MASTERMSG);
         SlaveHasControl = false;
     }
 }
