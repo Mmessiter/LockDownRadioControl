@@ -364,6 +364,7 @@ extern uint16_t       PacketsHistoryIndex;
 extern uint8_t        ConnectionAssessSeconds;
 extern bool           LowPowerMode;
 
+
 // external (global) functions needed here
 extern void  GetSlaveChannelValues();
 extern void  KickTheDog();
@@ -387,6 +388,7 @@ extern void  RedLedOn();
 extern void  ReEnableScanButton();
 extern void  LogUKRules();
 extern int   InStrng(char* text1, char* text2);
+
 
 /*********************************************************************************************************************************/
 // function prototypes
@@ -429,6 +431,8 @@ void         ResetAllTrims();
 void         CheckTrimValues();
 void         ClearSuccessRate();
 int          CheckRange(int v, int min, int max);
+void         EnquireViaSbus();
+
 /*********************************************************************************************************************************/
 
 #endif

@@ -139,7 +139,7 @@ FASTRUN void FailedPacket()
             if  (LedWasGreen && UseLog) {
                 LogThisLongGap();
             }
-            if (!LedWasRed) RedLedOn(); // heer
+            if (!LedWasRed) RedLedOn(); 
             ReEnableScanButton();
         }
     }
@@ -177,6 +177,8 @@ void FlushFifos(){
         Radio1.flush_rx();                                         // This avoids a lockup that happens when the FIFO gets full.
         Radio1.flush_tx();                                         
 }
+
+
 /************************************************************************************************************/
 //****************** Function to send pre-compressed data to receiver ***************************************
 /************************************************************************************************************/
@@ -187,7 +189,11 @@ FASTRUN void SendData()
     if (NEXTION.available()) return;                               // in case key was hit
     if (((millis() - TxPace) >= PACEMAKER) || (LostContactFlag)){ 
         TxPace = millis();
-        if (DoSbusSendOnly) {MapToSBUS();return;}                  // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
+        if (DoSbusSendOnly){
+            MapToSBUS();
+            EnquireViaSbus(); // find out who's in control
+            return;
+            }                  // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
         if (LostContactFlag) TryToReconnect();
         LoadPacketData();                                          // extra parameters appended to the data packet
         Connected = false;                                         // Assume the worst until ACK is received.

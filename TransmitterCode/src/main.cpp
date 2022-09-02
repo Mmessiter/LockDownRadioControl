@@ -40,6 +40,7 @@
  * - Screen colours definable
  * - Data screen gives all possible telemetry
  * - Log files implemented - and help file system with unlimited file length
+ * - Buddy box training per channel implemented.
  *
  *
  * @section txPinout Teensy 4.1 Pins
@@ -453,6 +454,7 @@ uint8_t   TurnOffSecondToGo         = 5;
 uint8_t   PowerOffWarningSeconds    = 5;
 uint8_t   ConnectionAssessSeconds    = 5;
 uint32_t  PreviousPowerOffTimer      = 0;
+bool      BuddyHasControl            = false;
 
 // **********************************************************************************************************************************
 
@@ -485,7 +487,36 @@ void FixDeltaGMTSign()
     }
 }
 
-
+/************************************************************************************************************/
+void InformBuddy (bool BHasControl){ // Tell Buddy who is in control! // heer
+    if(BHasControl){
+        for (int i = 0; i < 16;++i){
+            SbusChannels[i] = 'y';
+        }
+    }else{
+        for (int i = 0; i < 16;++i){
+            SbusChannels[i] = 'n';
+        }
+    }
+    MySbus.write(SbusChannels);
+}
+/************************************************************************************************************/
+void EnquireViaSbus(){  // find out who's in control // heer
+   bool failSafeM;      // These flags not used, yet...
+   bool lostFrameM;
+   if (MySbus.read(&SbusChannels[0], &failSafeM, &lostFrameM)){
+       if (SbusChannels[0] == 'y') {
+           PlaySound(BUDDYMSG);
+           BuddyHasControl = true;
+           LastShowTime    = 0;
+       }
+       if (SbusChannels[0] == 'n') {
+           PlaySound(MASTERMSG);
+           BuddyHasControl = false;
+           LastShowTime    = 0;
+       }
+   }
+}
 /************************************************************************************************************/
 // This function reads data from BUDDY (Slave) BUT uses it ONLY WHILE the channel BUDDTRIGGERCHANNEL switch is in the ON position ( > 1000)
 
@@ -499,12 +530,13 @@ void GetSlaveChannelValues()
         }                                                               // Even if there's no new data, re-use old data
         if (millis() - SBUSTimer < 500){                                // Ignore data more than 500ms old 
             for (int j = 0; j < CHANNELSUSED; ++j){                     // While slave has control, his stick data replaces all ours        
-                if (BuddyControlled & 1 << j){                          // Test if this channel is buddy controlled. If not leave it unchanged
+                if (BuddyControlled & 1 << j){                          // Test if this channel is buddy controlled. If not leave it unchanged.
                     SendBuffer[j] = map(SbusChannels[j], RANGEMIN, RANGEMAX, MINMICROS, MAXMICROS); // Put re-mapped data where we can use it.
                 }
             }
             if (!SlaveHasControl && AnnounceConnected) {
                 PlaySound(BUDDYMSG);
+                 InformBuddy(1);
                 LastShowTime = 0;
             }
             SlaveHasControl = true;
@@ -513,6 +545,7 @@ void GetSlaveChannelValues()
     else { // Buddy is Off
         if (SlaveHasControl && AnnounceConnected) {
             PlaySound(MASTERMSG);
+            InformBuddy(0);
             LastShowTime = 0;
         }
         SlaveHasControl = false;
@@ -1574,13 +1607,12 @@ FASTRUN void ShowComms()
     char WarnOff[]              = "vis Warning,0";
     char InVisible[]            = "vis Quality,0";
     bool ShowNow                = false;
-    
     char FrontView_AckPayload[] = "AckPayload";
     char FrontView_RXBV[]       = "RXBV";
-
-    char Msg_CnctdBuddyMast[]   = "* BUDDY MASTER! *";
-    char Msg_CnctdBuddySlave[]  = "* BUDDY SLAVE! *";
-    char MsgBuddying[]          = "Buddy";
+    char Msg_CnctdBuddyMast[]   = " MASTER!";
+    char Msg_CnctdBuddySlave[]  = "(buddy)  ";
+    char MsgBuddyingn[]         = "(master) ";
+    char MsgBuddyingy[]         = " BUDDY!  ";
     char DataView_pps[]         = "pps"; // These are label names in the NEXTION data screen. They are best kept short.
     char DataView_lps[]         = "lps";
     char DataView_Alt[]         = "alt";
@@ -1707,7 +1739,11 @@ FASTRUN void ShowComms()
                 else { // i.e. contact is lost
                     if (CurrentView == FRONTVIEW) {
                         if (DoSbusSendOnly) {
-                            SendText(FrontView_Connected, MsgBuddying);
+                            if (BuddyHasControl){
+                                SendText(FrontView_Connected, MsgBuddyingy);
+                            }else{
+                                SendText(FrontView_Connected, MsgBuddyingn);
+                            }
                         }
                         else {
                             SendText(FrontView_Connected, na);
@@ -5130,7 +5166,7 @@ void OptionView3End()
 
 /******************************************************************************************************************************/
 
-void BuddyChViewStart(){ // heer
+void BuddyChViewStart(){ 
         char page_BuddyChView[] = "page BuddyChView";
         char fs[16][5]                = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
         SendCommand(page_BuddyChView);
