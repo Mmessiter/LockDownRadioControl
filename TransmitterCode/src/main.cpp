@@ -1722,21 +1722,19 @@ FASTRUN void ShowComms()
                     SendText(Mxd, Vbuf);
                     snprintf(Vbuf, 6, "%d", (int)SbusRepeats - SavedSbusRepeats);
                     SendText(Sbs, Vbuf);
+                    SendValue(DataView_pps, PacketsPerSecond);
+                    SendValue(DataView_lps, TotalLostPackets);
                 }
             }
             else {
                 if (BoundFlag) {
-                    if (CurrentView == DATAVIEW) {
-                        SendValue(DataView_pps, PacketsPerSecond);
-                        SendValue(DataView_lps, TotalLostPackets);
-                    }
                     if (CurrentView == FRONTVIEW) {
                         SendText(FrontView_RXBV, na); // data not available
                         SendText(FrontView_AckPayload, na);
                         SendCommand(InVisible);
                     }
                 }
-                else { // i.e. contact is lost
+                else { 
                     if (CurrentView == FRONTVIEW) {
                         if (DoSbusSendOnly) {
                             if (BuddyHasControl){
@@ -4856,6 +4854,11 @@ void EndBuddyView()
     if (BuddyTriggerChannel > 16) BuddyTriggerChannel = 16;
     if (BuddyTriggerChannel < 1) BuddyTriggerChannel = 12;
 
+    if (DoSbusSendOnly) {
+        BoundFlag       = false;
+        LostContactFlag = true;
+        BlueLedOn();
+    }
     SaveAllParameters();
     b5isGrey = false;
     SendCommand(pSetupView);
