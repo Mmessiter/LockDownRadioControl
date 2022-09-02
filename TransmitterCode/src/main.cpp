@@ -4846,14 +4846,13 @@ void EndBuddyView()
     char BuddyM[] = "BuddyM";
     char BuddyP[] = "BuddyP";
     char n0[]     = "n0";
-
     char pSetupView[]   = "page SetupView";
+    
     DoSbusSendOnly      = GetValue(BuddyP); // Pupil, wired
     BuddyMaster         = GetValue(BuddyM); // Master, either.
     BuddyTriggerChannel = GetValue(n0);
     if (BuddyTriggerChannel > 16) BuddyTriggerChannel = 16;
     if (BuddyTriggerChannel < 1) BuddyTriggerChannel = 12;
-
     if (DoSbusSendOnly) {
         BoundFlag       = false;
         LostContactFlag = true;
