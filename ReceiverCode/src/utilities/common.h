@@ -12,6 +12,8 @@
     #include <Servo.h> 
     #include <SBUS.h>
     #include "utilities/radio.h"
+    #include <TeensyID.h>
+
     
     #define RXVERSION_MAJOR             1
     #define RXVERSION_MINOR             8

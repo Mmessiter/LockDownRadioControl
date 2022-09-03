@@ -86,6 +86,7 @@ bool            SensorHubDead = false;
 uint32_t        BootupMoment  = 0;
 bool            QNHSent       = false;
 bool            FirstLostPacket = true;
+uint8_t         MacAddress[6];
 
 /************************************************************************************************************/
 
@@ -236,6 +237,9 @@ void BindModel()
     AttachServos(); // AND START SBUS!!!
 #ifdef DB_BIND
     Serial.println("BINDING NOW");
+    for (int i = 0; i < 6; ++i) {
+        Serial.println(MacAddress[i]); // 
+    }
 #endif
 }
 // ***************************************************************************************************************************************************
@@ -304,7 +308,6 @@ void ReadExtraParameters()
     switch (PacketNumber) {     
         case 0:
                 BindNow = ReceivedData[CHANNELSUSED + 2];
-                //Serial.println(BindNow);
                 FailSafeSave = bool(ReceivedData[CHANNELSUSED + 1]);
                 if (FailSafeSave) {
                     TwoBytes = uint16_t(FS_byte2) + uint16_t(FS_byte1 << 8);
@@ -586,7 +589,7 @@ void DoBinding()
         if (BindOKTimer == 0) {
             BindOKTimer = millis();
         }
-        else if ((millis() - BindOKTimer) > 400) { // allow .4 of a second for the TX to bind
+        else if ((millis() - BindOKTimer) > 500) { // allow .5 of a second for the TX to bind
             BindNow = 1;
         }
     }
@@ -598,6 +601,8 @@ void DoBinding()
         BindModel();
     }
 }
+
+
 
 /************************************************************************************************************/
 // SETUP
@@ -611,6 +616,10 @@ FLASHMEM void setup()
     pinMode(pinCE2,  OUTPUT);
     digitalWrite(LED_PIN, HIGH);
     delay(2500);                           // Needed so that the Sensor hub can boot first and be detected
+    
+    teensyMAC(MacAddress); 
+   // Serial.println ((int)MacAddress);
+
     CurrentRadio = &Radio1;
     digitalWrite(pinCSN2,CSN_OFF);
     digitalWrite(pinCE2, CE_OFF);

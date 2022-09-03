@@ -53,7 +53,8 @@ extern float    AngleGPS;
 extern float    AltitudeGPS;
 extern float    DistanceGPS;
 extern float    CourseToGPS;
-  
+extern uint8_t  BindNow;
+extern uint8_t  MacAddress[6];
 extern void     FailSafe();                               // defined in main.cpp
 extern void     ClearAckPayload();
 extern void     ShowHopDurationEtc();
@@ -355,9 +356,14 @@ void SendDateToAckPayload(){
 /************************************************************************************************************/
 void LoadAckPayload()
 {
-     uint8_t MaxAckP     = 4;                                      // 4 if only RX  
-      AckPayload.Purpose &= 0x7F;                                   // NOTE: The HIGH BIT of "purpose" bit is the HOPNOW flag. It gets set only when it's time to hop.
-    ++AckPayload.Purpose;   
+     uint8_t MaxAckP     = 4;                                      // 4 if only RX 
+    if (!BoundFlag) {
+       // Serial.println(MacAddress[0]); // todo: ... 6 bytes to be sent here for reverse bind 
+        return;
+    }
+    AckPayload.Purpose &= 0x7F;                                   // NOTE: The HIGH BIT of "purpose" bit is the HOPNOW flag. It gets set only when it's time to hop.
+    ++AckPayload.Purpose;
+    
     if (INA219_CONNECTED) MaxAckP = 5;
     if (SENSOR_HUB_CONNECTED) MaxAckP = 18;                       // its 14 + GPS
     if (AckPayload.Purpose > MaxAckP) AckPayload.Purpose = 0;     // wrap after max
