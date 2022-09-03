@@ -17,7 +17,7 @@ var searchData=
   ['bindbutton_14',['BindButton',['../_transmitter_code_2src_2main_8cpp.html#a11a586885b48e92a4cd03ff1840ac374',1,'main.cpp']]],
   ['bindingnow_15',['BindingNow',['../_transmitter_code_2src_2main_8cpp.html#a1873a8dc0cbecc66366b95540f9c3249',1,'main.cpp']]],
   ['bindingtimer_16',['BindingTimer',['../_transmitter_code_2src_2main_8cpp.html#a2ffac1bf85fe937c44ef26ac326575e7',1,'main.cpp']]],
-  ['bindnow_17',['BindNow',['../_receiver_code_2src_2main_8cpp.html#ac629a0e239d1c27f33584d6ac3e841f8',1,'main.cpp']]],
+  ['bindnow_17',['BindNow',['../_receiver_code_2src_2main_8cpp.html#ac629a0e239d1c27f33584d6ac3e841f8',1,'BindNow():&#160;main.cpp'],['../radio_8h.html#ac629a0e239d1c27f33584d6ac3e841f8',1,'BindNow():&#160;main.cpp']]],
   ['bindoktimer_18',['BindOKTimer',['../_receiver_code_2src_2main_8cpp.html#a547d518da80d9f29dde20e14880e250c',1,'main.cpp']]],
   ['blink_5fcounter_19',['blink_counter',['../_quadcopter_2src_2main_8cpp.html#abd8ade0bc330fe3504214184429e1d02',1,'main.cpp']]],
   ['blink_5fdelay_20',['blink_delay',['../_quadcopter_2src_2main_8cpp.html#ae62fadf9630759ca0effd0eb556d079f',1,'main.cpp']]],

@@ -28,7 +28,7 @@ var searchData=
   ['bindingnow_25',['BindingNow',['../_transmitter_code_2src_2main_8cpp.html#a1873a8dc0cbecc66366b95540f9c3249',1,'main.cpp']]],
   ['bindingtimer_26',['BindingTimer',['../_transmitter_code_2src_2main_8cpp.html#a2ffac1bf85fe937c44ef26ac326575e7',1,'main.cpp']]],
   ['bindmodel_27',['BindModel',['../_receiver_code_2src_2main_8cpp.html#aa0c6905579a33aef28d737d43676cbbd',1,'main.cpp']]],
-  ['bindnow_28',['BindNow',['../_receiver_code_2src_2main_8cpp.html#ac629a0e239d1c27f33584d6ac3e841f8',1,'BindNow():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a7b8f152779a09d867292d3a8e7f76d85',1,'BindNow():&#160;main.cpp']]],
+  ['bindnow_28',['BindNow',['../_receiver_code_2src_2main_8cpp.html#ac629a0e239d1c27f33584d6ac3e841f8',1,'BindNow():&#160;main.cpp'],['../radio_8h.html#ac629a0e239d1c27f33584d6ac3e841f8',1,'BindNow():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a7b8f152779a09d867292d3a8e7f76d85',1,'BindNow():&#160;main.cpp']]],
   ['bindoktimer_29',['BindOKTimer',['../_receiver_code_2src_2main_8cpp.html#a547d518da80d9f29dde20e14880e250c',1,'main.cpp']]],
   ['black_30',['Black',['../_radio_functions_8h.html#a68eb1f80b4df2818e5a0774106748141',1,'RadioFunctions.h']]],
   ['blank_31',['Blank',['../_transmitter_code_2src_2main_8cpp.html#a0bd2123bbb9dfc3a3af87642de04b591',1,'main.cpp']]],
