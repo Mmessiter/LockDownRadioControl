@@ -17,7 +17,6 @@ uint8_t         NextChannel;
 uint8_t         ReconnectIndex = RECONNECT_CHANNELS_START;
 uint8_t         PacketNumber; 
 uint16_t        ReceivedData[UNCOMPRESSEDWORDS];           //  20 x 16 BIT words
-uint16_t        PreviousData[UNCOMPRESSEDWORDS];           /** Previously received data (used for servos. Hence not sent if unchanged) */
 uint16_t        Interations = 0;
 uint32_t        HopStart;
 uint64_t        ThisPipe = 0xBABE1E5420LL; // default startup
@@ -28,8 +27,6 @@ uint16_t        SbusRepeats = 0;
 uint32_t        RX1TotalTime = 0;
 uint32_t        RX2TotalTime = 0;
 uint32_t        RadioSwaps = 0;
-
-
 
 extern bool     BoundFlag;
 extern bool     GpsFix;
@@ -353,14 +350,55 @@ void SendDateToAckPayload(){
     AckPayload.Byte2    = MonthGPS;
     AckPayload.Byte3    = YearGPS;
 }
+
+
+/************************************************************************************************************/
+// The unique Mac address of this Teensy 4.0 is sent to transmitter while binding to identify this model.
+// This is to avoid the wrong model memory being used.
+
+void  SendMacAddress()
+{
+  union  {
+      uint64_t Val64 = 0;   // the MacAddess is 6 bytes long, so this breaks it into two 32 bit values to send it all in two ack payloads.
+      uint32_t Val32[2];
+      uint8_t  Val8[8];     // the highest two bytes will always be zero. We didn't need all 8.
+  } ThisUnion;
+  uint8_t MaxAckP = 1;      // only packets 0 and 1 are needed here.
+  
+
+      AckPayload.Purpose &= 0x7F;
+      ++AckPayload.Purpose;
+      if (AckPayload.Purpose > MaxAckP) AckPayload.Purpose = 0;     // wrap after max
+
+      for (int i = 0; i < 6;++i){
+            ThisUnion.Val8[i] = MacAddress[i];
+    }
+        
+       // Serial.println(AckPayload.Purpose); 
+       // Serial.println(ThisUnion.Val32[0]); 
+       // Serial.println(ThisUnion.Val32[1]); 
+
+        switch (AckPayload.Purpose) {
+            case 0:
+                SendToAckPayload(ThisUnion.Val32[0]);
+                break;
+            case 1:
+                SendToAckPayload(ThisUnion.Val32[1]);
+                break;
+            default:
+                break;
+        }
+}
 /************************************************************************************************************/
 void LoadAckPayload()
 {
-     uint8_t MaxAckP     = 4;                                      // 4 if only RX 
     if (!BoundFlag) {
-       // Serial.println(MacAddress[0]); // todo: ... 6 bytes to be sent here for reverse bind 
+        SendMacAddress();
         return;
     }
+    
+    uint8_t MaxAckP     = 4;                                      // 4 if only RX 
+    
     AckPayload.Purpose &= 0x7F;                                   // NOTE: The HIGH BIT of "purpose" bit is the HOPNOW flag. It gets set only when it's time to hop.
     ++AckPayload.Purpose;
     
