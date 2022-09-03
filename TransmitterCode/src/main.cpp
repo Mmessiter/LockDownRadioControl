@@ -452,9 +452,9 @@ char      NotStillConnected[]       = "vis StillConnected,0";
 bool      PowerWarningVisible       = false;
 uint8_t   TurnOffSecondToGo         = 5;
 uint8_t   PowerOffWarningSeconds    = 5;
-uint8_t   ConnectionAssessSeconds    = 5;
-uint32_t  PreviousPowerOffTimer      = 0;
-bool      BuddyHasControl            = false;
+uint8_t   ConnectionAssessSeconds   = 5;
+uint32_t  PreviousPowerOffTimer     = 0;
+bool      BuddyHasControl           = false;
 
 // **********************************************************************************************************************************
 
@@ -488,7 +488,7 @@ void FixDeltaGMTSign()
 }
 
 /************************************************************************************************************/
-void InformBuddy (bool BHasControl){ // Tell Buddy who is in control! // heer
+void InformBuddy (bool BHasControl){ // Tell Buddy who is in control! 
     if(BHasControl){
         for (int i = 0; i < 16;++i){
             SbusChannels[i] = 'y';
@@ -501,7 +501,7 @@ void InformBuddy (bool BHasControl){ // Tell Buddy who is in control! // heer
     MySbus.write(SbusChannels);
 }
 /************************************************************************************************************/
-void EnquireViaSbus(){  // find out who's in control // heer
+void EnquireViaSbus(){  // find out who's in control 
    bool failSafeM;      // These flags not used, yet...
    bool lostFrameM;
    if (MySbus.read(&SbusChannels[0], &failSafeM, &lostFrameM)){
@@ -3092,6 +3092,7 @@ FLASHMEM void setup()
     }
     SendText(FrontView_Connected, na);
     UpdateModelsNameEveryWhere();
+   
 }
 /*********************************************************************************************************************************/
 
@@ -7227,8 +7228,7 @@ void GetRXVersionNumber()
 }
 
 /************************************************************************************************************/
-
-FASTRUN float GetFromAckPayload()
+FASTRUN float GetFromAckPayload()   // This uses a float
 {
     union
     {
@@ -7241,6 +7241,21 @@ FASTRUN float GetFromAckPayload()
     ThisUnion.Val8[3] = AckPayload.Byte4;
     return ThisUnion.Val32;
 }
+/************************************************************************************************************/
+FASTRUN uint32_t GetIntFromAckPayload()   // This one uses a uint32_t int
+{
+    union
+    {
+        uint32_t Val32 = 0;
+        uint8_t Val8[4];
+    } ThisUnion;
+    ThisUnion.Val8[0] = AckPayload.Byte1;
+    ThisUnion.Val8[1] = AckPayload.Byte2;
+    ThisUnion.Val8[2] = AckPayload.Byte3;
+    ThisUnion.Val8[3] = AckPayload.Byte4;
+    return ThisUnion.Val32;
+}
+
 /************************************************************************************************************/
 void GetTimeFromAckPayload()
 {
@@ -7269,7 +7284,33 @@ void GetTemperature()
     RXModelTemperature = GetFromAckPayload();
     snprintf(ModelTemperature, 5, "%f", RXModelTemperature);
 }
+
+
 /************************************************************************************************************/
+void  GetModelsMacAddress(){ // heer
+  
+  union  {
+      uint64_t Val64=0;       // the MacAddess is 6 bytes long, so this breaks it into two 32 bit values to send it all in two ack payloads.
+      uint32_t Val32[2];
+      uint8_t  Val8[8];        // the highest two bytes will always be zero. We didn't need all 8.
+     } ModelsMacUnion;
+    
+    switch (AckPayload.Purpose) 
+    {
+        case 0:
+             ModelsMacUnion.Val32[0] = GetIntFromAckPayload();
+             break;
+        case 1:
+             ModelsMacUnion.Val32[1] = GetIntFromAckPayload();
+             break;
+        default:
+             break;
+    }
+   //  Serial.println (ModelsMacUnion.Val32[0]);
+   //  Serial.println (ModelsMacUnion.Val32[1]);
+     
+}
+/************************************************************************************************/
 FASTRUN void ParseAckPayload()
 {
     if (AckPayload.Purpose & 0x80) // Hi bit is now the **HOP NOW!!** flag
@@ -7279,6 +7320,12 @@ FASTRUN void ParseAckPayload()
         HopToNextChannel();
         AckPayload.Purpose &= 0x7f; // Clear the high BIT, use the remainder ...
     }
+
+    if (!BoundFlag){
+        GetModelsMacAddress();
+        return;
+    }
+
     switch (AckPayload.Purpose) // Only look at the low 7 BITS
     {
         case 0:

@@ -51,7 +51,7 @@ extern float    AltitudeGPS;
 extern float    DistanceGPS;
 extern float    CourseToGPS;
 extern uint8_t  BindNow;
-extern uint8_t  MacAddress[6];
+extern uint8_t  MacAddress[8];
 extern void     FailSafe();                               // defined in main.cpp
 extern void     ClearAckPayload();
 extern void     ShowHopDurationEtc();
@@ -336,6 +336,18 @@ void SendToAckPayload(float U){                        // This one function now 
     AckPayload.Byte3    = ThisUnion.Val8[2];
     AckPayload.Byte4    = ThisUnion.Val8[3];
 }
+
+/************************************************************************************************************/
+void SendIntToAckPayload(uint32_t U){                        // This one function now works with most int parameters
+    union  {uint32_t Val32; uint8_t Val8[4];} ThisUnion;
+    CheckWhetherItsTimeToHop();
+    ThisUnion.Val32     = U;
+    AckPayload.Byte1    = ThisUnion.Val8[0];           // These values are herewith delivered to Transmitter in Ack Payload
+    AckPayload.Byte2    = ThisUnion.Val8[1];
+    AckPayload.Byte3    = ThisUnion.Val8[2];
+    AckPayload.Byte4    = ThisUnion.Val8[3];
+}
+
 /************************************************************************************************************/
 void SendTimeToAckPayload(){    
     CheckWhetherItsTimeToHop();                  
@@ -359,7 +371,7 @@ void SendDateToAckPayload(){
 void  SendMacAddress()
 {
   union  {
-      uint64_t Val64 = 0;   // the MacAddess is 6 bytes long, so this breaks it into two 32 bit values to send it all in two ack payloads.
+      uint64_t Val64;       // the MacAddess is 6 bytes long, so this breaks it into two 32 bit values to send it all in two ack payloads.
       uint32_t Val32[2];
       uint8_t  Val8[8];     // the highest two bytes will always be zero. We didn't need all 8.
   } ThisUnion;
@@ -370,20 +382,19 @@ void  SendMacAddress()
       ++AckPayload.Purpose;
       if (AckPayload.Purpose > MaxAckP) AckPayload.Purpose = 0;     // wrap after max
 
-      for (int i = 0; i < 6;++i){
+      for (int i = 0; i < 8; ++i){
             ThisUnion.Val8[i] = MacAddress[i];
     }
-        
-       // Serial.println(AckPayload.Purpose); 
-       // Serial.println(ThisUnion.Val32[0]); 
-       // Serial.println(ThisUnion.Val32[1]); 
+
+     //  Serial.println(ThisUnion.Val32[0]); 
+     //  Serial.println(ThisUnion.Val32[1]); 
 
         switch (AckPayload.Purpose) {
             case 0:
-                SendToAckPayload(ThisUnion.Val32[0]);
+                SendIntToAckPayload(ThisUnion.Val32[0]);
                 break;
             case 1:
-                SendToAckPayload(ThisUnion.Val32[1]);
+                SendIntToAckPayload(ThisUnion.Val32[1]);
                 break;
             default:
                 break;

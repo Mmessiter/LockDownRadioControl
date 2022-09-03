@@ -86,7 +86,7 @@ bool            SensorHubDead = false;
 uint32_t        BootupMoment  = 0;
 bool            QNHSent       = false;
 bool            FirstLostPacket = true;
-uint8_t         MacAddress[6];
+uint8_t         MacAddress[8] = {0,0,0,0,0,0,0,0};
 
 /************************************************************************************************************/
 
@@ -230,8 +230,6 @@ void BindModel()
     AttachServos(); // AND START SBUS!!!
 #ifdef DB_BIND
     Serial.println("BINDING NOW");
-    for (int i = 0; i < 6; ++i) {
-        Serial.println(MacAddress[i]); // 
     }
 #endif
 }
@@ -609,10 +607,7 @@ FLASHMEM void setup()
     pinMode(pinCE2,  OUTPUT);
     digitalWrite(LED_PIN, HIGH);
     delay(2500);                           // Needed so that the Sensor hub can boot first and be detected
-    
     teensyMAC(MacAddress); 
-   // Serial.println ((int)MacAddress);
-
     CurrentRadio = &Radio1;
     digitalWrite(pinCSN2,CSN_OFF);
     digitalWrite(pinCE2, CE_OFF);

@@ -158,18 +158,18 @@ void TryToReconnect(){
 
 /************************************************************************************************************/
 void SuccessfulPacket(){
-       
-        ++RangeTestGoodPackets;
-        ++PacketNumber;
-        RecordsPacketSuccess(1);
-        LostContactFlag = false;
-        RecentPacketsLost = 0;
-        Connected         = true;
-        if (BoundFlag) GreenLedOn();
-        CheckGapsLength();
-        Radio1.read(&AckPayload, AckPayloadSize); //  "sizeof" doesn't work with externs,
-        ParseAckPayload(); 
-        StartInactvityTimeout();
+
+    ++RangeTestGoodPackets;
+    ++PacketNumber;
+    RecordsPacketSuccess(1);
+    LostContactFlag   = false;
+    RecentPacketsLost = 0;
+    Connected         = true;
+    if (BoundFlag) GreenLedOn();
+    CheckGapsLength();
+    Radio1.read(&AckPayload, AckPayloadSize); //  "sizeof" doesn't work with externs,
+    ParseAckPayload();
+    StartInactvityTimeout();
 }
 
 /************************************************************************************************************/
@@ -178,14 +178,12 @@ void FlushFifos(){
         Radio1.flush_tx();                                         
 }
 
-
 /************************************************************************************************************/
 //****************** Function to send pre-compressed data to receiver ***************************************
 /************************************************************************************************************/
 
-
 FASTRUN void SendData()
-{
+{ 
     if (NEXTION.available()) return;                               // in case key was hit
     if (((millis() - TxPace) >= PACEMAKER) || (LostContactFlag)){ 
         TxPace = millis();
@@ -340,7 +338,7 @@ FASTRUN void HopToNextChannel()
 
 FLASHMEM void InitRadio(uint64_t Pipe)
 {
-    Radio1.begin(); // heer
+    Radio1.begin();
     if (LowPowerMode){ 
         Radio1.setPALevel(RF24_PA_MIN,false);
     }else{
