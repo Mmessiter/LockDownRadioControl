@@ -1,8 +1,8 @@
 var searchData=
 [
   ['halfmicrosrange_0',['HALFMICROSRANGE',['../_radio_functions_8h.html#aa0f99ed9c5fd16fa7deba8d4f0336b3a',1,'RadioFunctions.h']]],
-  ['hdop_1',['HDOP',['../class_adafruit___g_p_s.html#a547a9c4cc50447f86fe5f9861c952563',1,'Adafruit_GPS']]],
-  ['hdop_2',['hdop',['../class_tiny_g_p_s_plus.html#a0bb6a7eb2d0261095911d71c8c067546',1,'TinyGPSPlus::hdop()'],['../struct_tiny_g_p_s_h_d_o_p.html#a27cd35588c96eefb690bba46497d20d7',1,'TinyGPSHDOP::hdop()']]],
+  ['hdop_1',['hdop',['../class_tiny_g_p_s_plus.html#a0bb6a7eb2d0261095911d71c8c067546',1,'TinyGPSPlus::hdop()'],['../struct_tiny_g_p_s_h_d_o_p.html#a27cd35588c96eefb690bba46497d20d7',1,'TinyGPSHDOP::hdop()']]],
+  ['hdop_2',['HDOP',['../class_adafruit___g_p_s.html#a547a9c4cc50447f86fe5f9861c952563',1,'Adafruit_GPS']]],
   ['heading_3',['heading',['../structsensors__vec__t.html#a4fe8caabff59868ff44f1ed8334cbf47',1,'sensors_vec_t']]],
   ['help_5fview_4',['HELP_VIEW',['../_radio_functions_8h.html#a7f61099fecfe7dae5a38078cb36a9bd4',1,'RadioFunctions.h']]],
   ['helper_5f3dmath_2eh_5',['helper_3dmath.h',['../helper__3dmath_8h.html',1,'']]],
