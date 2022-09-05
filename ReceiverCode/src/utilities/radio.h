@@ -388,7 +388,7 @@ void  SendMacAddress()
 
        Serial.println(ThisUnion.Val32[0]); 
        Serial.println(ThisUnion.Val32[1]); 
-        Serial.println(millis()); 
+       
 
         switch (AckPayload.Purpose) {
             case 0:

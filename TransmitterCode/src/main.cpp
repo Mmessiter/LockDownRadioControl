@@ -3021,6 +3021,13 @@ void ShowLogFile(uint8_t StartLine)
 }
 
 /*********************************************************************************************************************************/
+
+void teensyMAC(uint8_t *mac) { // GET UNIQUE TEENSY 4.1 ID
+    for(uint8_t by=0; by<2; by++) mac[by]=(HW_OCOTP_MAC1 >> ((1-by)*8)) & 0xFF;
+    for(uint8_t by=0; by<4; by++) mac[by+2]=(HW_OCOTP_MAC0 >> ((3-by)*8)) & 0xFF;
+}
+
+/*********************************************************************************************************************************/
 // SETUP
 /*********************************************************************************************************************************/
 FLASHMEM void setup()
@@ -7300,13 +7307,13 @@ void  GetModelsMacAddress(){ // heer
     {
         case 0:
              ModelsMacUnion.Val32[0] = GetIntFromAckPayload();
-           //  Serial.print("ModelsMacUnion.Val32[0] = ");
-           //  Serial.println(ModelsMacUnion.Val32[0]); // heer
+             Serial.print("ModelsMacUnion.Val32[0] = ");
+             Serial.println(ModelsMacUnion.Val32[0]); // heer
             break;
         case 1:
              ModelsMacUnion.Val32[1] = GetIntFromAckPayload();
-           //  Serial.print("ModelsMacUnion.Val32[1] = ");
-           //  Serial.println(ModelsMacUnion.Val32[1]);    
+             Serial.print("ModelsMacUnion.Val32[1] = ");
+             Serial.println(ModelsMacUnion.Val32[1]);    
              break;
         default:
              break;
