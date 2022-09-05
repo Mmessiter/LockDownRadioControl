@@ -19,7 +19,7 @@ uint8_t         PacketNumber;
 uint16_t        ReceivedData[UNCOMPRESSEDWORDS];           //  20 x 16 BIT words
 uint16_t        Interations = 0;
 uint32_t        HopStart;
-uint64_t        ThisPipe = 0xBABE1E5420LL; // default startup
+uint64_t        ThisPipe = DEFAULTPIPE; // default startup
 uint64_t        NewPipe  = 0;
 uint64_t        OldPipe  = 0;
 bool            FailSafeSent         = true;
@@ -263,7 +263,7 @@ void KeepSbusHappy(){
 /************************************************************************************************************/
 
 void Reconnect(){                                                                // This is called when contact is lost, to reconnect ASAP
-    uint32_t SearchStartTime  = millis();;
+    uint32_t SearchStartTime  = millis();
     uint8_t  ReconnectChannel = * (FHSSChPointer + ReconnectIndex);              // Get a reconnect channel 
     uint8_t  PreviousRadio    =  ThisRadio;
 #ifdef SECOND_TRANSCEIVER
@@ -386,8 +386,9 @@ void  SendMacAddress()
             ThisUnion.Val8[i] = MacAddress[i];
     }
 
-     //  Serial.println(ThisUnion.Val32[0]); 
-     //  Serial.println(ThisUnion.Val32[1]); 
+       Serial.println(ThisUnion.Val32[0]); 
+       Serial.println(ThisUnion.Val32[1]); 
+        Serial.println(millis()); 
 
         switch (AckPayload.Purpose) {
             case 0:
@@ -404,7 +405,7 @@ void  SendMacAddress()
 void LoadAckPayload()
 {
     if (!BoundFlag) {
-        SendMacAddress();
+        SendMacAddress(); // heer
         return;
     }
     

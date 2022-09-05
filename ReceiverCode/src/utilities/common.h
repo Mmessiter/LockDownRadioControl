@@ -30,7 +30,7 @@
     #define LISTEN_PERIOD               50   //  How many ms to listen for TX in Reconnect()
     #define RECEIVE_TIMEOUT             25   //  <=9 fails, >=11 OK ... 
  // *****************************************************************************************
-
+    #define DEFAULTPIPE                 0xBABE1E5420LL
     #define FREQUENCYSCOUNT             82   // uses 82 different channels
     #define FREQUENCYSCOUNT1            41   // uses 41 different test channels
     #define CHANNELSUSED                16   

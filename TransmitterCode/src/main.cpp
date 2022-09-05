@@ -455,6 +455,12 @@ uint8_t   PowerOffWarningSeconds    = 5;
 uint8_t   ConnectionAssessSeconds   = 5;
 uint32_t  PreviousPowerOffTimer     = 0;
 bool      BuddyHasControl           = false;
+union
+     {
+      uint32_t Val32[2] = {0,0};
+      uint8_t  Val8[8];        // the highest two bytes will always be zero. We didn't need all 8.
+     } ModelsMacUnion;
+    
 
 // **********************************************************************************************************************************
 
@@ -7285,30 +7291,26 @@ void GetTemperature()
     snprintf(ModelTemperature, 5, "%f", RXModelTemperature);
 }
 
-
+    
 /************************************************************************************************************/
 void  GetModelsMacAddress(){ // heer
   
-  union  {
-      uint64_t Val64=0;       // the MacAddess is 6 bytes long, so this breaks it into two 32 bit values to send it all in two ack payloads.
-      uint32_t Val32[2];
-      uint8_t  Val8[8];        // the highest two bytes will always be zero. We didn't need all 8.
-     } ModelsMacUnion;
     
     switch (AckPayload.Purpose) 
     {
         case 0:
              ModelsMacUnion.Val32[0] = GetIntFromAckPayload();
-             break;
+           //  Serial.print("ModelsMacUnion.Val32[0] = ");
+           //  Serial.println(ModelsMacUnion.Val32[0]); // heer
+            break;
         case 1:
              ModelsMacUnion.Val32[1] = GetIntFromAckPayload();
+           //  Serial.print("ModelsMacUnion.Val32[1] = ");
+           //  Serial.println(ModelsMacUnion.Val32[1]);    
              break;
         default:
              break;
-    }
-   //  Serial.println (ModelsMacUnion.Val32[0]);
-   //  Serial.println (ModelsMacUnion.Val32[1]);
-     
+    } 
 }
 /************************************************************************************************/
 FASTRUN void ParseAckPayload()

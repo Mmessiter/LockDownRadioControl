@@ -139,6 +139,9 @@ void FailSafe(){
         MapToSBUS();
         MoveServos();
         Connected = false; // I lied earlier - we're not really connected.
+        BoundFlag = false; // heer
+        ThisPipe  = DEFAULTPIPE; // default startup
+        SetNewPipe();
     }
     FailSafeSent = true;                                        // Once is enough
     SbusRepeats = 0;                                            // Reset this count for next connection
@@ -188,8 +191,8 @@ bool ReadData()
 {
     Connected = false;
     while (CurrentRadio->available()) {                                // Get all, but use only the latest
-        LoadAckPayload();
         Connected = true;
+        LoadAckPayload();
         CurrentRadio->flush_tx();                                      // This avoids a lockup that happens when the FIFO gets full
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // Send telemetry
         delayMicroseconds(1500);                                       // N.B. SOME DUFF NRF24L01 TRANSCEIVERS NEED THIS PAUSE. But not all.
@@ -580,7 +583,7 @@ void DoBinding()
         if (BindOKTimer == 0) {
             BindOKTimer = millis();
         }
-        else if ((millis() - BindOKTimer) > 500) { // allow .5 of a second for the TX to bind
+        else if ((millis() - BindOKTimer) > 600) { // allow .6 of a second for the TX to bind 
             BindNow = 1;
         }
     }
