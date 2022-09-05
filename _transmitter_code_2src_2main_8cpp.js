@@ -236,6 +236,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "StraightLineInterpolation", "_transmitter_code_2src_2main_8cpp.html#a212778326d4228952040c5fda68dd2b9", null ],
     [ "swap", "_transmitter_code_2src_2main_8cpp.html#a31322f63ce3e02c4ef9a0c1e0c7f1ff5", null ],
     [ "SynchRTCwithGPSTime", "_transmitter_code_2src_2main_8cpp.html#abb1ea95b6b3f033883aa87682d3240ab", null ],
+    [ "teensyMAC", "_transmitter_code_2src_2main_8cpp.html#a06122bf4eee8af08c02c45022253a4f4", null ],
     [ "UpdateButtonLabels", "_transmitter_code_2src_2main_8cpp.html#abf59862cf6c4e3df5a76f0bfea8919ef", null ],
     [ "updateInterpolationTypes", "_transmitter_code_2src_2main_8cpp.html#a3d20af2f1fee81198a0cef2d4500083a", null ],
     [ "UpdateModelsNameEveryWhere", "_transmitter_code_2src_2main_8cpp.html#a9e1de754e1d2d483fb15957f70cf0488", null ],
