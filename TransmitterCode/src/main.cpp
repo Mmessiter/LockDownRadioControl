@@ -1,7 +1,7 @@
 /** @file TransmitterCode/src/main.cpp
  * // Malcolm Messiter 2022
  *
- * @page TransmitterCode
+ * @page TransmitterCode.
  * @section LockDown Radio Control Features list, so far:
  * - Uses Teensy 4.1 MCU (at 600 Mhz) with nRF24L01+ transceiver
  * - (Ebyte's ML01DP5 recommended for TX, two ML01SP4s for RX.)
@@ -40,7 +40,6 @@
  * - Screen colours definable
  * - Data screen gives all possible telemetry
  * - Log files implemented - and help file system with unlimited file length
- * - Buddy box training per channel implemented.
  *
  *
  * @section txPinout Teensy 4.1 Pins
@@ -126,8 +125,8 @@ uint8_t  PreviousTrim           = 255;
 uint32_t TrimTimer              = 0;
 uint16_t TrimRepeatSpeed        = 600;
 uint16_t DefaultTrimRepeatSpeed = 600;
-char FrontView_Connected[]      = "Connected";
-char na[]                       = "";
+char     FrontView_Connected[]  = "Connected";
+char     na[]                   = "";
 
 // ************************************* AckPayload structure ******************************************************
 /**
@@ -183,10 +182,10 @@ bool     Connected        = false;
 uint8_t  ShowCommsCounter = 0;
 uint16_t BuddyControlled  = 0; // Flags
 double   PointsCount      = 5; // This for displaying curves only
-double xPoints[5];
-double yPoints[5];
-double xPoint = 0;
-double yPoint = 0;
+double   xPoints[5];
+double   yPoints[5];
+double   xPoint = 0;
+double   yPoint = 0;
 
 uint16_t BoxBottom;
 uint16_t BoxTop;
@@ -438,29 +437,22 @@ uint16_t  ReversedChannelBITS = 0; // 16 BIT for 16 Channels
 uint16_t  SavedLineX          = 12345;
 bool      FirstConnection     = true;
 File      LogFileNumber;
-bool      LogFileOpen         = false;
-bool      ShowVPC             = false;
-short int TxVoltageCorrection = 0;
-short int RxVoltageCorrection = 0;
-bool      LowPowerMode               = false;
-uint8_t   LEDBrightness       = 75;
-uint32_t  PowerOffTimer       = 0;
-char      StillConnected[]          = "vis StillConnected,1";
-char      StillConnectedBox[]       = "StillConnected";
-char      TurnOffRX[]               = "TURN OFF RX";
-char      NotStillConnected[]       = "vis StillConnected,0";
-bool      PowerWarningVisible       = false;
-uint8_t   TurnOffSecondToGo         = 5;
-uint8_t   PowerOffWarningSeconds    = 5;
-uint8_t   ConnectionAssessSeconds   = 5;
-uint32_t  PreviousPowerOffTimer     = 0;
-bool      BuddyHasControl           = false;
-union
-     {
-      uint32_t Val32[2] = {0,0};
-      uint8_t  Val8[8];        // the highest two bytes will always be zero. We didn't need all 8.
-     } ModelsMacUnion;
-    
+bool      LogFileOpen             = false;
+bool      ShowVPC                 = false;
+short int TxVoltageCorrection     = 0;
+short int RxVoltageCorrection     = 0;
+bool      LowPowerMode            = false;
+uint8_t   LEDBrightness           = 75;
+uint32_t  PowerOffTimer           = 0;
+char      StillConnected[]        = "vis StillConnected,1";
+char      StillConnectedBox[]     = "StillConnected";
+char      TurnOffRX[]             = "TURN OFF RX";
+char      NotStillConnected[]     = "vis StillConnected,0";
+bool      PowerWarningVisible     = false;
+uint8_t   TurnOffSecondToGo       = 5;
+uint8_t   PowerOffWarningSeconds  = 5;
+uint8_t   ConnectionAssessSeconds = 5;
+uint32_t  PreviousPowerOffTimer   = 0;
 
 // **********************************************************************************************************************************
 
@@ -494,55 +486,24 @@ void FixDeltaGMTSign()
 }
 
 /************************************************************************************************************/
-void InformBuddy (bool BHasControl){ // Tell Buddy who is in control! 
-    if(BHasControl){
-        for (int i = 0; i < 16;++i){
-            SbusChannels[i] = 'y';
-        }
-    }else{
-        for (int i = 0; i < 16;++i){
-            SbusChannels[i] = 'n';
-        }
-    }
-    MySbus.write(SbusChannels);
-}
-/************************************************************************************************************/
-void EnquireViaSbus(){  // find out who's in control 
-   bool failSafeM;      // These flags not used, yet...
-   bool lostFrameM;
-   if (MySbus.read(&SbusChannels[0], &failSafeM, &lostFrameM)){
-       if (SbusChannels[0] == 'y') {
-           PlaySound(BUDDYMSG);
-           BuddyHasControl = true;
-           LastShowTime    = 0;
-       }
-       if (SbusChannels[0] == 'n') {
-           PlaySound(MASTERMSG);
-           BuddyHasControl = false;
-           LastShowTime    = 0;
-       }
-   }
-}
-/************************************************************************************************************/
 // This function reads data from BUDDY (Slave) BUT uses it ONLY WHILE the channel BUDDTRIGGERCHANNEL switch is in the ON position ( > 1000)
 
-void GetSlaveChannelValues() 
+void GetSlaveChannelValues()
 {
-    bool failSafeM;                                                     // These flags not used, yet...
+    bool failSafeM; // These flags not used, yet...
     bool lostFrameM;
-    if (SendBuffer[BuddyTriggerChannel - 1] > 1000) {                   // MASTER'S CHANNEL 'BuddyTriggerChannel' (500 - 2500) used here as switch.
-        if (MySbus.read(&SbusChannels[0], &failSafeM, &lostFrameM)) {   // Buddy is On
-            SBUSTimer = millis();                                       // RESET timeout when data comes in
-        }                                                               // Even if there's no new data, re-use old data
-        if (millis() - SBUSTimer < 500){                                // Ignore data more than 500ms old 
-            for (int j = 0; j < CHANNELSUSED; ++j){                     // While slave has control, his stick data replaces all ours        
-                if (BuddyControlled & 1 << j){                          // Test if this channel is buddy controlled. If not leave it unchanged.
+    if (SendBuffer[BuddyTriggerChannel - 1] > 1000) {                                               // MASTER'S CHANNEL 'BuddyTriggerChannel' (500 - 2500) used here as switch.
+        if (MySbus.read(&SbusChannels[0], &failSafeM, &lostFrameM)) {                               // Buddy is On
+            SBUSTimer = millis();                                                                   // RESET timeout when data comes in
+        }                                                                                           // Even if there's no new data, re-use old data
+        if (millis() - SBUSTimer < 500) {                                                           // Ignore data more than 500ms old
+            for (int j = 0; j < CHANNELSUSED; ++j) {                                                // While slave has control, his stick data replaces all ours
+                if (BuddyControlled & 1 << j) {                                                     // Test if this channel is buddy controlled. If not leave it unchanged
                     SendBuffer[j] = map(SbusChannels[j], RANGEMIN, RANGEMAX, MINMICROS, MAXMICROS); // Put re-mapped data where we can use it.
                 }
             }
             if (!SlaveHasControl && AnnounceConnected) {
                 PlaySound(BUDDYMSG);
-                 InformBuddy(1);
                 LastShowTime = 0;
             }
             SlaveHasControl = true;
@@ -551,7 +512,6 @@ void GetSlaveChannelValues()
     else { // Buddy is Off
         if (SlaveHasControl && AnnounceConnected) {
             PlaySound(MASTERMSG);
-            InformBuddy(0);
             LastShowTime = 0;
         }
         SlaveHasControl = false;
@@ -592,7 +552,7 @@ FASTRUN void MapToSBUS()
     if (millis() - SBUSTimer >= SBUSRATE)
     {
         SBUSTimer = millis();
-       
+
         for (int j = 0; j < CHANNELSUSED; ++j)
         {
             SbusChannels[j] = static_cast<uint16_t>(map(SendBuffer[j], MINMICROS, MAXMICROS, RANGEMIN, RANGEMAX));
@@ -1090,7 +1050,7 @@ void GreenLedOn()
                 LogConnection();
             }
         }
-        LedWasRed = false;
+        LedWasRed   = false;
         LedWasGreen = true;
         analogWrite(BLUELED, 0);
         analogWrite(REDLED, 0);
@@ -1347,7 +1307,7 @@ bool GetButtonPress()
 
 FASTRUN void CheckTimer()
 {
-    uint8_t Recording[10] = {ONEMINUTE, TWOMINUTES, THREEMINUTES,FOURMINUTES, FIVEMINUTES, SIXMINUTES, SEVENMINUTES,EIGHTMINUTES, NINEMINUTES, TENMINUTES};
+    uint8_t Recording[10] = {ONEMINUTE, TWOMINUTES, THREEMINUTES, FOURMINUTES, FIVEMINUTES, SIXMINUTES, SEVENMINUTES, EIGHTMINUTES, NINEMINUTES, TENMINUTES};
     if (FlightMode < 4 && !LostContactFlag) {
         Secs  = ((millis() - TimerMillis) / 1000) + PausedSecs;
         Hours = Secs / 3600;
@@ -1366,8 +1326,8 @@ FASTRUN void CheckTimer()
     }
     if (!Secs && SpeakingClock && !ClockSpoken) {
         ClockSpoken = true;
-        if ((Mins <= 10) && (Mins > 0)){
-            PlaySound(Recording[Mins-1]);
+        if ((Mins <= 10) && (Mins > 0)) {
+            PlaySound(Recording[Mins - 1]);
         }
     }
 }
@@ -1552,7 +1512,7 @@ void CheckScreenTime()
 /*********************************************************************************************************************************/
 void ClearSuccessRate()
 {
-    for (int i = 0; i < (125 * (uint16_t) ConnectionAssessSeconds); ++i) { // 125 packets per second start off good§
+    for (int i = 0; i < (125 * (uint16_t)ConnectionAssessSeconds); ++i) { // 125 packets per second start off good§
         PacketsHistoryBuffer[i] = 1;
     }
 }
@@ -1561,10 +1521,10 @@ int GetSuccessRate()
 {
     int Total = 0;
     int SuccessRate;
-    for (int i = 0; i < (125 * (uint16_t) ConnectionAssessSeconds); ++i) { // 125 packets per second are either good or bad
+    for (int i = 0; i < (125 * (uint16_t)ConnectionAssessSeconds); ++i) { // 125 packets per second are either good or bad
         Total += PacketsHistoryBuffer[i];
     }
-    SuccessRate = (Total * 100) / (125 * (uint16_t) ConnectionAssessSeconds); // return a percentage of total good packets
+    SuccessRate = (Total * 100) / (125 * (uint16_t)ConnectionAssessSeconds); // return a percentage of total good packets
     return SuccessRate;
 }
 /*********************************************************************************************************************************/
@@ -1587,9 +1547,9 @@ void ShowConnectionQuality()
     int  ConnectionQuality        = GetSuccessRate();
 
     if (!LedWasGreen) return;
-    SendValue(Quality, ConnectionQuality);                                      // show quality of connection in progress bar
+    SendValue(Quality, ConnectionQuality); // show quality of connection in progress bar
     strcpy(Msgbuf, Msg_Connected);
-    if (ConnectionQuality >= 100) strcat(Msgbuf, Msg_ConnectedPerfect);         // show quality as a comment
+    if (ConnectionQuality >= 100) strcat(Msgbuf, Msg_ConnectedPerfect); // show quality as a comment
     if ((ConnectionQuality >= 95) && (ConnectionQuality < 100)) strcat(Msgbuf, Msg_ConnectedExcellent);
     if ((ConnectionQuality >= 90) && (ConnectionQuality < 95)) strcat(Msgbuf, Msg_ConnectedVGood);
     if ((ConnectionQuality >= 75) && (ConnectionQuality < 90)) strcat(Msgbuf, Msg_ConnectedGood);
@@ -1609,28 +1569,29 @@ FASTRUN void ShowComms()
 {
     if (NEXTION.available()) return; // was a button pressed?
 
-    char WarnNow[]              = "vis Warning,1";
-    char WarnOff[]              = "vis Warning,0";
-    char InVisible[]            = "vis Quality,0";
-    bool ShowNow                = false;
+    char WarnNow[]   = "vis Warning,1";
+    char WarnOff[]   = "vis Warning,0";
+    char InVisible[] = "vis Quality,0";
+    bool ShowNow     = false;
+
     char FrontView_AckPayload[] = "AckPayload";
     char FrontView_RXBV[]       = "RXBV";
-    char Msg_CnctdBuddyMast[]   = " MASTER!";
-    char Msg_CnctdBuddySlave[]  = "(buddy)  ";
-    char MsgBuddyingn[]         = "(master) ";
-    char MsgBuddyingy[]         = " BUDDY!  ";
-    char DataView_pps[]         = "pps"; // These are label names in the NEXTION data screen. They are best kept short.
-    char DataView_lps[]         = "lps";
-    char DataView_Alt[]         = "alt";
-    char DataView_Temp[]        = "Temp";
-    char DataView_MaxAlt[]      = "MaxAlt";
-    char DataView_rxv[]         = "rxv";
-    char DataView_Ls[]          = "Ls";
-    char DataView_Ts[]          = "Ts";
-    char DataView_Rx[]          = "rx";
-    char DataView_Sg[]          = "Sg";
-    char DataView_Ag[]          = "Ag";
-    char DataView_Gc[]          = "Gc";
+
+    char Msg_CnctdBuddyMast[]  = "* BUDDY MASTER! *";
+    char Msg_CnctdBuddySlave[] = "* BUDDY SLAVE! *";
+    char MsgBuddying[]         = "Buddy";
+    char DataView_pps[]        = "pps"; // These are label names in the NEXTION data screen. They are best kept short.
+    char DataView_lps[]        = "lps";
+    char DataView_Alt[]        = "alt";
+    char DataView_Temp[]       = "Temp";
+    char DataView_MaxAlt[]     = "MaxAlt";
+    char DataView_rxv[]        = "rxv";
+    char DataView_Ls[]         = "Ls";
+    char DataView_Ts[]         = "Ts";
+    char DataView_Rx[]         = "rx";
+    char DataView_Sg[]         = "Sg";
+    char DataView_Ag[]         = "Ag";
+    char DataView_Gc[]         = "Gc";
     char Vbuf[16];
     char BindButtonVisible[] = "vis bind,1";
     char Fix[]               = "Fix"; // These are label names in the NEXTION data screen. They are best kept short.
@@ -1654,7 +1615,7 @@ FASTRUN void ShowComms()
         LastShowTime = millis();
     }
     if (ShowNow) {
-       
+
         if (CurrentView == FRONTVIEW || CurrentView == DATAVIEW) {
             if ((CurrentView == FRONTVIEW)) {
                 ShowConnectionQuality();
@@ -1728,26 +1689,24 @@ FASTRUN void ShowComms()
                     SendText(Mxd, Vbuf);
                     snprintf(Vbuf, 6, "%d", (int)SbusRepeats - SavedSbusRepeats);
                     SendText(Sbs, Vbuf);
-                    SendValue(DataView_pps, PacketsPerSecond);
-                    SendValue(DataView_lps, TotalLostPackets);
                 }
             }
             else {
                 if (BoundFlag) {
+                    if (CurrentView == DATAVIEW) {
+                        SendValue(DataView_pps, PacketsPerSecond);
+                        SendValue(DataView_lps, TotalLostPackets);
+                    }
                     if (CurrentView == FRONTVIEW) {
                         SendText(FrontView_RXBV, na); // data not available
                         SendText(FrontView_AckPayload, na);
                         SendCommand(InVisible);
                     }
                 }
-                else { 
+                else { // i.e. contact is lost
                     if (CurrentView == FRONTVIEW) {
                         if (DoSbusSendOnly) {
-                            if (BuddyHasControl){
-                                SendText(FrontView_Connected, MsgBuddyingy);
-                            }else{
-                                SendText(FrontView_Connected, MsgBuddyingn);
-                            }
+                            SendText(FrontView_Connected, MsgBuddying);
                         }
                         else {
                             SendText(FrontView_Connected, na);
@@ -2433,7 +2392,7 @@ bool ReadOneModel(uint8_t Mnum)
         InputTrim[i] = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
     }
-    RxVoltageCorrection  = SDRead16BITS(SDCardAddress);
+    RxVoltageCorrection = SDRead16BITS(SDCardAddress);
     if ((RxVoltageCorrection > 20) || (RxVoltageCorrection < 0)) RxVoltageCorrection = 0;
     ++SDCardAddress;
     ++SDCardAddress;
@@ -3021,13 +2980,6 @@ void ShowLogFile(uint8_t StartLine)
 }
 
 /*********************************************************************************************************************************/
-
-void teensyMAC(uint8_t *mac) { // GET UNIQUE TEENSY 4.1 ID
-    for(uint8_t by=0; by<2; by++) mac[by]=(HW_OCOTP_MAC1 >> ((1-by)*8)) & 0xFF;
-    for(uint8_t by=0; by<4; by++) mac[by+2]=(HW_OCOTP_MAC0 >> ((3-by)*8)) & 0xFF;
-}
-
-/*********************************************************************************************************************************/
 // SETUP
 /*********************************************************************************************************************************/
 FLASHMEM void setup()
@@ -3105,7 +3057,6 @@ FLASHMEM void setup()
     }
     SendText(FrontView_Connected, na);
     UpdateModelsNameEveryWhere();
-   
 }
 /*********************************************************************************************************************************/
 
@@ -3230,7 +3181,7 @@ void SaveTransmitterParameters()
     SDUpdate16BITS(SDCardAddress, TxVoltageCorrection);
     ++SDCardAddress;
     ++SDCardAddress;
-     SDUpdate8BITS(SDCardAddress, PowerOffWarningSeconds);
+    SDUpdate8BITS(SDCardAddress, PowerOffWarningSeconds);
     ++SDCardAddress;
     SDUpdate16BITS(SDCardAddress, LEDBrightness);
     ++SDCardAddress;
@@ -3320,7 +3271,6 @@ void SaveOneModel(uint16_t mnum)
     SDUpdate16BITS(SDCardAddress, BuddyControlled);
     ++SDCardAddress;
     ++SDCardAddress;
-
 
     SDCardAddress += 1; // *********************** 1 spare here remaining  **********************
 
@@ -3837,7 +3787,7 @@ void SetDefaultValues()
         }
     }
     for (i = 0; i < CHANNELSUSED + 1; ++i) {
-            SubTrims[i] = 127; // centre (0 - 254)
+        SubTrims[i] = 127; // centre (0 - 254)
     }
     for (j = 0; j < BYTESPERMACRO; ++j) {
         for (i = 0; i < MAXMACROS; ++i) {
@@ -3845,22 +3795,22 @@ void SetDefaultValues()
         }
     }
     for (int i = 0; i < 4; ++i) {
-            InputTrim[i] = i;
+        InputTrim[i] = i;
     }
-    ReversedChannelBITS = 0;  //  No channel reversed
+    ReversedChannelBITS = 0; //  No channel reversed
     SendValue(Progress, 95);
     Procrastinate(10);
-    LEDBrightness = 75;
+    LEDBrightness       = 75;
     RxVoltageCorrection = 0;
     SaveOneModel(ModelNumber);
     CloseModelsFile();
-    SendValue(Progress, 100);          
-    SDCardAddress       = TXSIZE;                   //  spare bytes for TX stuff
+    SendValue(Progress, 100);
+    SDCardAddress = TXSIZE;                         //  spare bytes for TX stuff
     SDCardAddress += (ModelNumber - 1) * MODELSIZE; //  spare bytes for Model params
     StartLocation = SDCardAddress;
     ModelDefined  = 0;
     OpenModelsFile();
-    SDUpdate8BITS(SDCardAddress, ModelDefined);      // mark this model as undefined
+    SDUpdate8BITS(SDCardAddress, ModelDefined); // mark this model as undefined
     CloseModelsFile();
     ReadOneModel(ModelNumber);
     UpdateModelsNameEveryWhere();
@@ -4538,7 +4488,7 @@ void SendModelFile()
     Serial.println(" bytes.");
 #endif
     Radio1.setChannel(FILECHANNEL);
-    Radio1.setPALevel(FILEPALEVEL,true);
+    Radio1.setPALevel(FILEPALEVEL, true);
     Radio1.setRetries(15, 15);
     Radio1.openWritingPipe(TXPipe);
     Radio1.stopListening();
@@ -4717,11 +4667,11 @@ void ZeroDataScreen()
     ThisGap            = 0;
     GPSMaxDistance     = 0;
     GPSMaxSpeed        = 0;
-    SavedRadioSwaps    = RadioSwaps;    // Cannot easily zero these, so do a subtraction
+    SavedRadioSwaps    = RadioSwaps; // Cannot easily zero these, so do a subtraction
     SavedRX1TotalTime  = RX1TotalTime;
     SavedRX2TotalTime  = RX2TotalTime;
     SavedSbusRepeats   = SbusRepeats;
-    LastShowTime       = 0;             // for instant redisplay
+    LastShowTime       = 0; // for instant redisplay
 }
 /***************************************************** ShowChannelName ****************************************************************************/
 
@@ -4860,18 +4810,14 @@ void EndBuddyView()
     char BuddyM[] = "BuddyM";
     char BuddyP[] = "BuddyP";
     char n0[]     = "n0";
+
     char pSetupView[]   = "page SetupView";
-    
     DoSbusSendOnly      = GetValue(BuddyP); // Pupil, wired
     BuddyMaster         = GetValue(BuddyM); // Master, either.
     BuddyTriggerChannel = GetValue(n0);
     if (BuddyTriggerChannel > 16) BuddyTriggerChannel = 16;
     if (BuddyTriggerChannel < 1) BuddyTriggerChannel = 12;
-    if (DoSbusSendOnly) {
-        BoundFlag       = false;
-        LostContactFlag = true;
-        BlueLedOn();
-    }
+
     SaveAllParameters();
     b5isGrey = false;
     SendCommand(pSetupView);
@@ -5005,11 +4951,13 @@ void LogVIEW()
 }
 
 /******************************************************************************************************************************/
-void SetPowerMode(){
- if (LowPowerMode){ 
-        Radio1.setPALevel(RF24_PA_MIN,false);
-    }else{
-        Radio1.setPALevel(RF24_PA_MAX,true);
+void SetPowerMode()
+{
+    if (LowPowerMode) {
+        Radio1.setPALevel(RF24_PA_MIN, false);
+    }
+    else {
+        Radio1.setPALevel(RF24_PA_MAX, true);
     }
 }
 /******************************************************************************************************************************/
@@ -5097,30 +5045,30 @@ void Options2End()
 
 void OptionView2Start()
 {
-    char dGMT[]          = "dGMT";  // Time zone
+    char dGMT[]          = "dGMT"; // Time zone
     char n1[]            = "n1";
     char n2[]            = "n2";
     char n3[]            = "n3";
     char lpm[]           = "c0"; // Low power mode
     char OptionV2Start[] = "page OptionView2";
     char TxVCorrextion[] = "t2";
-    char RxVCorrextion[] = "n0";    // RX Voltage correction
+    char RxVCorrextion[] = "n0"; // RX Voltage correction
 
     if (CurrentView == OPTIONVIEW3) {
-        RxVoltageCorrection     = GetValueSafer(RxVCorrextion);
-        TxVoltageCorrection     = GetValueSafer(TxVCorrextion);
-        PowerOffWarningSeconds  = GetValueSafer(n2);
-        PowerOffWarningSeconds  = CheckRange(PowerOffWarningSeconds, 2, 30);
-        LowPowerMode            = GetValueSafer(lpm);
-        if (LEDBrightness != GetValueSafer(n1)) LedWasGreen = false;// Forces a redisplay if brightness has changed
+        RxVoltageCorrection    = GetValueSafer(RxVCorrextion);
+        TxVoltageCorrection    = GetValueSafer(TxVCorrextion);
+        PowerOffWarningSeconds = GetValueSafer(n2);
+        PowerOffWarningSeconds = CheckRange(PowerOffWarningSeconds, 2, 30);
+        LowPowerMode           = GetValueSafer(lpm);
+        if (LEDBrightness != GetValueSafer(n1)) LedWasGreen = false; // Forces a redisplay if brightness has changed
         LEDBrightness           = GetValueSafer(n1);
         ConnectionAssessSeconds = GetValueSafer(n3);
         ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);
-        LEDBrightness           = CheckRange(LEDBrightness, 1, 254); 
+        LEDBrightness           = CheckRange(LEDBrightness, 1, 254);
         SaveAllParameters();
         SetPowerMode();
     }
-  
+
     CurrentView  = OPTIONVIEW2;
     LastTimeRead = 0;
     SendCommand(OptionV2Start);
@@ -5132,42 +5080,41 @@ void OptionView2Start()
 
 void OptionView3Start()
 {
-     char TxVCorrextion[] = "t2";
-     char n1[]            = "n1";
-     char n2[]            = "n2";
-     char n3[]            = "n3";
-     char RxVCorrextion[] = "n0";                   // RX Voltage correction
-     char lpm[]           = "c0";                   // Low power mode
-     char OptionV3Start[] = "page OptionView3";
-     CurrentView          = OPTIONVIEW3;
-     SendCommand(OptionV3Start);
-     Procrastinate(250);
-     SendValue(TxVCorrextion, TxVoltageCorrection);
-     SendValue(RxVCorrextion, RxVoltageCorrection);
-     SendValue(n2, PowerOffWarningSeconds);
-     SendValue(n3, ConnectionAssessSeconds);
-     SendValue(lpm, LowPowerMode);
-     SendValue(n1, LEDBrightness);
-     
+    char TxVCorrextion[] = "t2";
+    char n1[]            = "n1";
+    char n2[]            = "n2";
+    char n3[]            = "n3";
+    char RxVCorrextion[] = "n0"; // RX Voltage correction
+    char lpm[]           = "c0"; // Low power mode
+    char OptionV3Start[] = "page OptionView3";
+    CurrentView          = OPTIONVIEW3;
+    SendCommand(OptionV3Start);
+    Procrastinate(250);
+    SendValue(TxVCorrextion, TxVoltageCorrection);
+    SendValue(RxVCorrextion, RxVoltageCorrection);
+    SendValue(n2, PowerOffWarningSeconds);
+    SendValue(n3, ConnectionAssessSeconds);
+    SendValue(lpm, LowPowerMode);
+    SendValue(n1, LEDBrightness);
 }
 
 /******************************************************************************************************************************/
 
 void OptionView3End()
 {
-    char TxVCorrextion[]    = "t2";
-    char RxVCorrextion[]    = "n0";
-    char n2[]               = "n2";
-    char n3[]               = "n3";
-    char n1[]               = "n1";
-    char page_SetupView[]   = "page SetupView";
-    char lpm[]              = "c0"; // Low power mode
-   
-    TxVoltageCorrection     = GetValueSafer(TxVCorrextion);
-    RxVoltageCorrection     = GetValueSafer(RxVCorrextion);
-    PowerOffWarningSeconds  = GetValueSafer(n2);
-    PowerOffWarningSeconds  = CheckRange(PowerOffWarningSeconds, 2, 30);
-    LowPowerMode            = GetValueSafer(lpm);
+    char TxVCorrextion[]  = "t2";
+    char RxVCorrextion[]  = "n0";
+    char n2[]             = "n2";
+    char n3[]             = "n3";
+    char n1[]             = "n1";
+    char page_SetupView[] = "page SetupView";
+    char lpm[]            = "c0"; // Low power mode
+
+    TxVoltageCorrection    = GetValueSafer(TxVCorrextion);
+    RxVoltageCorrection    = GetValueSafer(RxVCorrextion);
+    PowerOffWarningSeconds = GetValueSafer(n2);
+    PowerOffWarningSeconds = CheckRange(PowerOffWarningSeconds, 2, 30);
+    LowPowerMode           = GetValueSafer(lpm);
     if (LEDBrightness != GetValueSafer(n1)) LedWasGreen = false; // Forces a redisplay if brightness has changed
     LEDBrightness           = GetValueSafer(n1);
     ConnectionAssessSeconds = GetValueSafer(n3);
@@ -5182,39 +5129,42 @@ void OptionView3End()
 
 /******************************************************************************************************************************/
 
-void BuddyChViewStart(){ 
-        char page_BuddyChView[] = "page BuddyChView";
-        char fs[16][5]                = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
-        SendCommand(page_BuddyChView);
-        CurrentView = BUDDYCHVIEW;
-        UpdateButtonLabels();
-        for (int i = 0; i < 16; ++i) {
-            if (BuddyControlled & 1 << i){
-                SendValue(fs[i], 1);
-            }else{
-                SendValue(fs[i], 0);
-            }
+void BuddyChViewStart()
+{ // heer
+    char page_BuddyChView[] = "page BuddyChView";
+    char fs[16][5]          = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
+    SendCommand(page_BuddyChView);
+    CurrentView = BUDDYCHVIEW;
+    UpdateButtonLabels();
+    for (int i = 0; i < 16; ++i) {
+        if (BuddyControlled & 1 << i) {
+            SendValue(fs[i], 1);
         }
+        else {
+            SendValue(fs[i], 0);
+        }
+    }
 }
 
 /******************************************************************************************************************************/
 
-void BuddyChViewEnd(){
-        char ProgressStart[]  = "vis Progress,1";
-        char ProgressEnd[]    = "vis Progress,0";
-        char Progress[]       = "Progress";
-        char page_BuddyView[] = "page BuddyView";
-        char fs[16][5]                = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
-        SendCommand(ProgressStart);
-        BuddyControlled = 0;
-        for (int i = 0; i < 16; ++i) {
-            BuddyControlled |= GetValue(fs[i]) << i;     
-            SendValue(Progress, i * (100 / 16));
-        }
-        SaveOneModel(ModelNumber);
-        SendCommand(ProgressEnd);
-        SendCommand(page_BuddyView);
-        CurrentView = BUDDYVIEW;
+void BuddyChViewEnd()
+{
+    char ProgressStart[]  = "vis Progress,1";
+    char ProgressEnd[]    = "vis Progress,0";
+    char Progress[]       = "Progress";
+    char page_BuddyView[] = "page BuddyView";
+    char fs[16][5]        = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
+    SendCommand(ProgressStart);
+    BuddyControlled = 0;
+    for (int i = 0; i < 16; ++i) {
+        BuddyControlled |= GetValue(fs[i]) << i;
+        SendValue(Progress, i * (100 / 16));
+    }
+    SaveOneModel(ModelNumber);
+    SendCommand(ProgressEnd);
+    SendCommand(page_BuddyView);
+    CurrentView = BUDDYVIEW;
 }
 
 // ******************************** Global Array of numbered function pointers - OK up to 128 functions ... **********************************
@@ -5250,9 +5200,9 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     OptionView3Start,     // 26
     OptionView3End,       // 27
     BuddyChViewStart,     // 28
-    BuddyChViewEnd        // 29  
+    BuddyChViewEnd        // 29
 
-};                        // list will become much longer ...
+}; // list will become much longer ...
 
 /*********************************************************************************************************************************
  *                          BUTTON WAS PRESSED (DEAL WITH INPUT FROM NEXTION DISPLAY)                                            *
@@ -5704,7 +5654,7 @@ FASTRUN void ButtonWasPressed()
             ClearText();
             return;
         }
-        if (InStrng(GoFrontView, TextIn) > 0) { // GOTO frontview 
+        if (InStrng(GoFrontView, TextIn) > 0) { // GOTO frontview
             SendCommand(page_FrontView);
             UpdateModelsNameEveryWhere();
             ShowFlightMode();
@@ -5714,7 +5664,7 @@ FASTRUN void ButtonWasPressed()
             Force_ReDisplay();
             CheckTimer();
             ClearText();
-            CurrentView = FRONTVIEW;
+            CurrentView  = FRONTVIEW;
             LastShowTime = 0; // this is to make redisplay sooner (in ShowComms())
             SendText(FrontView_Connected, na);
             return;
@@ -5894,27 +5844,28 @@ FASTRUN void ButtonWasPressed()
                 ++j;
                 ++i;
                 SingleModelFile[j] = 0;
-            }                                       // got local name but won't use it.....
+            } // got local name but won't use it.....
             ReceiveModelFile();
             ClearText();
             return;
         }
         if (InStrng(PowerDown, TextIn) > 0) {
-            if (LedWasGreen){
-                    PowerOffTimer = millis();    // Start a timer for power off button down
-                    TurnOffSecondToGo = PowerOffWarningSeconds;
-                    ClearText();
-                }else{
-                    if (UseLog) LogPowerOff();
-                    delay(250);
-                    digitalWrite(POWER_OFF_PIN, HIGH);
-                }
-                return;
+            if (LedWasGreen) {
+                PowerOffTimer     = millis(); // Start a timer for power off button down
+                TurnOffSecondToGo = PowerOffWarningSeconds;
+                ClearText();
+            }
+            else {
+                if (UseLog) LogPowerOff();
+                delay(250);
+                digitalWrite(POWER_OFF_PIN, HIGH);
+            }
+            return;
         }
 
         if (InStrng(PowerOff, TextIn) > 0) { // power off button up no longer turns off!
-                PowerOffTimer = 0;
-                ClearText();
+            PowerOffTimer = 0;
+            ClearText();
             return;
         }
 
@@ -7241,7 +7192,8 @@ void GetRXVersionNumber()
 }
 
 /************************************************************************************************************/
-FASTRUN float GetFromAckPayload()   // This uses a float
+
+FASTRUN float GetFromAckPayload()
 {
     union
     {
@@ -7254,21 +7206,6 @@ FASTRUN float GetFromAckPayload()   // This uses a float
     ThisUnion.Val8[3] = AckPayload.Byte4;
     return ThisUnion.Val32;
 }
-/************************************************************************************************************/
-FASTRUN uint32_t GetIntFromAckPayload()   // This one uses a uint32_t int
-{
-    union
-    {
-        uint32_t Val32 = 0;
-        uint8_t Val8[4];
-    } ThisUnion;
-    ThisUnion.Val8[0] = AckPayload.Byte1;
-    ThisUnion.Val8[1] = AckPayload.Byte2;
-    ThisUnion.Val8[2] = AckPayload.Byte3;
-    ThisUnion.Val8[3] = AckPayload.Byte4;
-    return ThisUnion.Val32;
-}
-
 /************************************************************************************************************/
 void GetTimeFromAckPayload()
 {
@@ -7297,29 +7234,7 @@ void GetTemperature()
     RXModelTemperature = GetFromAckPayload();
     snprintf(ModelTemperature, 5, "%f", RXModelTemperature);
 }
-
-    
 /************************************************************************************************************/
-void  GetModelsMacAddress(){ // heer
-  
-    
-    switch (AckPayload.Purpose) 
-    {
-        case 0:
-             ModelsMacUnion.Val32[0] = GetIntFromAckPayload();
-             Serial.print("ModelsMacUnion.Val32[0] = ");
-             Serial.println(ModelsMacUnion.Val32[0]); // heer
-            break;
-        case 1:
-             ModelsMacUnion.Val32[1] = GetIntFromAckPayload();
-             Serial.print("ModelsMacUnion.Val32[1] = ");
-             Serial.println(ModelsMacUnion.Val32[1]);    
-             break;
-        default:
-             break;
-    } 
-}
-/************************************************************************************************/
 FASTRUN void ParseAckPayload()
 {
     if (AckPayload.Purpose & 0x80) // Hi bit is now the **HOP NOW!!** flag
@@ -7329,12 +7244,6 @@ FASTRUN void ParseAckPayload()
         HopToNextChannel();
         AckPayload.Purpose &= 0x7f; // Clear the high BIT, use the remainder ...
     }
-
-    if (!BoundFlag){
-        GetModelsMacAddress();
-        return;
-    }
-
     switch (AckPayload.Purpose) // Only look at the low 7 BITS
     {
         case 0:
@@ -7476,38 +7385,40 @@ void CheckScanButton()
     }
 }
 /************************************************************************************************************/
-void CheckPowerOffButton(){
-    
-    char PowerMsg[15] ;
+void CheckPowerOffButton()
+{
+
+    char PowerMsg[15];
     char PowerPre[] = "TURN OFF?! ";
     char nb[4];
 
-    if (PowerOffTimer){  // count down started?
+    if (PowerOffTimer) { // count down started?
         if (!PowerWarningVisible) {
             SendCommand(StillConnected);
             PowerWarningVisible = true;
         }
-     } else {
-         if (PowerWarningVisible) {
+    }
+    else {
+        if (PowerWarningVisible) {
             SendCommand(NotStillConnected);
             PowerWarningVisible = false;
-         }
-     return;
-     }
-     
-     if (PowerWarningVisible) {
-     if ((millis() - PreviousPowerOffTimer) >= 1000){
+        }
+        return;
+    }
+
+    if (PowerWarningVisible) {
+        if ((millis() - PreviousPowerOffTimer) >= 1000) {
             strcpy(PowerMsg, PowerPre);
-            Str(nb,TurnOffSecondToGo,0);
+            Str(nb, TurnOffSecondToGo, 0);
             strcat(PowerMsg, nb);
             SendText(StillConnectedBox, PowerMsg);
-            if (TurnOffSecondToGo<=0) {              // Time's up!
-                if (UseLog) LogPowerOff();           // log the event
+            if (TurnOffSecondToGo <= 0) {  // Time's up!
+                if (UseLog) LogPowerOff(); // log the event
                 if (PlayFanfare) {
-                    PlaySound(WHAHWHAHMSG);             
-                    delay(2300);  
-                 }                                   // wait a mo for user to see 0 and log to write to file
-                digitalWrite(POWER_OFF_PIN, HIGH);   // power off
+                    PlaySound(WHAHWHAHMSG);
+                    delay(2300);
+                }                                  // wait a mo for user to see 0 and log to write to file
+                digitalWrite(POWER_OFF_PIN, HIGH); // power off
             }
             --TurnOffSecondToGo;
             PlaySound(CLICKZERO);
@@ -7520,7 +7431,7 @@ void CheckPowerOffButton(){
 /************************************************************************************************************/
 FASTRUN void loop()
 {
-    KickTheDog();                             // Watchdog
+    KickTheDog(); // Watchdog
     CheckPowerOffButton();
     if (LowPowerMode) LedIsBlinking = true;
     if (GetButtonPress()) ButtonWasPressed(); // Deal with button
@@ -7542,18 +7453,18 @@ FASTRUN void loop()
         LogUKRules();
         PreviousUkRules = UkRules;
     }
-    ShowComms();                                             // Screen Data
-    ReadSwitches();                                          // Check switch positions
-    CheckTimer();                                            // Screen Timer
-    GetNewChannelValues();                                   // Load SendBuffer with new servo positions
-    if (UseMacros) ExecuteMacro();                           // Modify it if macro is running
-    if (!DoSbusSendOnly) {                                   // Skip these next lines when buddying as a slave
-        if (!BoundFlag) BufferNewPipe();                     // if not yet bound, insert our pipe into sendbuffer
-        if (BuddyMaster) GetSlaveChannelValues();            // If buddy master, get buddy data and maybe use it.
+    ShowComms();                                                 // Screen Data
+    ReadSwitches();                                              // Check switch positions
+    CheckTimer();                                                // Screen Timer
+    GetNewChannelValues();                                       // Load SendBuffer with new servo positions
+    if (UseMacros) ExecuteMacro();                               // Modify it if macro is running
+    if (!DoSbusSendOnly) {                                       // Skip these next lines when buddying as a slave
+        if (!BoundFlag) BufferNewPipe();                         // if not yet bound, insert our pipe into sendbuffer
+        if (BuddyMaster) GetSlaveChannelValues();                // If buddy master, get buddy data and maybe use it.
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24
     }
     ShowServoPos();
-    if ((millis()) > 2500) {                                 // Transmit nothing for first 2.5 seconds
+    if ((millis()) > 2500) { // Transmit nothing for first 2.5 seconds
         switch (CurrentMode) {
             case NORMAL: // 0
                 SendData();
