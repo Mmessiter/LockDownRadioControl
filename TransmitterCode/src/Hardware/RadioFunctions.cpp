@@ -34,11 +34,13 @@ FASTRUN void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uint
 }
 /************************************************************************************************************/
 
-FASTRUN void TryOtherPipe(){   
+FASTRUN void TryOtherPipe()
+{
     if (BoundFlag == true) {
         BoundFlag = false;
         SetThePipe(DefaultPipe);
-    } else {
+    }
+    else {
         BoundFlag = true;
         SetThePipe(NewPipe);
     }
@@ -48,6 +50,7 @@ FASTRUN void TryOtherPipe(){
 
 FASTRUN void BufferNewPipe()
 {
+
     SendBuffer[0] = (uint8_t)((NewPipe >> 56) & 0xFF); // if not yet bound, send pipe
     SendBuffer[1] = (uint8_t)((NewPipe >> 48) & 0xFF);
     SendBuffer[2] = (uint8_t)((NewPipe >> 40) & 0xFF);
@@ -59,57 +62,62 @@ FASTRUN void BufferNewPipe()
 }
 /************************************************************************************************************/
 // This function replaces delay() without freezing needed tasks
-void Procrastinate(uint32_t HowLong){
-uint32_t ThisMoment = millis();
-    while ((millis()-ThisMoment) < HowLong){
-          KickTheDog();                 // keep watchdog happy                                  
+void Procrastinate(uint32_t HowLong)
+{
+    uint32_t ThisMoment = millis();
+    while ((millis() - ThisMoment) < HowLong) {
+        KickTheDog(); // keep watchdog happy
     }
 }
 
 //***********************************************************************************************************
-void Look(int p){
-    Serial.println (p);
+void Look(int p)
+{
+    Serial.println(p);
 }
-
 
 //***********************************************************************************************************
 // *************************************** Functions to run macros  *****************************************
 // **********************************************************************************************************
-void StartMacro(uint8_t m){                                                                    // Start a macro    
-    MacrosBuffer[m][MACRORUNNINGNOW] |= 1 ;                                                    // LOW BIT = "running now" flag
-    MacroStartTime[m] = millis()          + ((MacrosBuffer[m][MACROSTARTTIME]) * 100);         // Note its Start moment
-    MacroStopTime[m]  = MacroStartTime[m] + ((MacrosBuffer[m][MACRODURATION])  * 100);         // Note its Stop moment
-   
+void StartMacro(uint8_t m)
+{                                                                                     // Start a macro
+    MacrosBuffer[m][MACRORUNNINGNOW] |= 1;                                            // LOW BIT = "running now" flag
+    MacroStartTime[m] = millis() + ((MacrosBuffer[m][MACROSTARTTIME]) * 100);         // Note its Start moment
+    MacroStopTime[m]  = MacroStartTime[m] + ((MacrosBuffer[m][MACRODURATION]) * 100); // Note its Stop moment
 }
 /************************************************************************************************************/
-void RunMacro(uint8_t m){                                                                       // Move a servo to a place                                            
+void RunMacro(uint8_t m)
+{ // Move a servo to a place
     uint32_t RightNow = millis();
-    if (RightNow >= MacroStartTime[m])  MacrosBuffer[m][MACRORUNNINGNOW] |= 2 ;                 // Set the ACTIVE Bit if started (BIT 1)
-    if (RightNow >=  MacroStopTime[m])  MacrosBuffer[m][MACRORUNNINGNOW] &= 1 ;                 // Clear the ACTIVE Bit if expired (BIT 1)
+    if (RightNow >= MacroStartTime[m]) MacrosBuffer[m][MACRORUNNINGNOW] |= 2; // Set the ACTIVE Bit if started (BIT 1)
+    if (RightNow >= MacroStopTime[m]) MacrosBuffer[m][MACRORUNNINGNOW] &= 1;  // Clear the ACTIVE Bit if expired (BIT 1)
     if (MacrosBuffer[m][MACRORUNNINGNOW] & 2) {
-       SendBuffer[(MacrosBuffer[m][MACROMOVECHANNEL])-1] = map(MacrosBuffer[m][MACROMOVETOPOSITION],0,180,MINMICROS,MAXMICROS); // Do it if currently active!
+        SendBuffer[(MacrosBuffer[m][MACROMOVECHANNEL]) - 1] = map(MacrosBuffer[m][MACROMOVETOPOSITION], 0, 180, MINMICROS, MAXMICROS); // Do it if currently active!
     }
 }
 /************************************************************************************************************/
-void StopMacro(uint8_t m){                                                                      // Stop a macro    
+void StopMacro(uint8_t m)
+{ // Stop a macro
     MacrosBuffer[m][MACRORUNNINGNOW] = 0;
 }
 /************************************************************************************************************/
 
-void ExecuteMacro(){                                                                            // Main entry point from SendData()  ... START/STOP/RUN
-   uint8_t TriggerChannel = 0;
-   for (u_int8_t i = 0; i < MAXMACROS; ++i){        
-// ***************************** START OR STOP ******************************
-        TriggerChannel = (MacrosBuffer[i][MACROTRIGGERCHANNEL])-1;                              // Down by one as channels are really 0 - 15
-        if (TriggerChannel) {                                                                   // Is trigger channel non-zero? 
-            if (SendBuffer[TriggerChannel] >= MAXMICROS-1){                                     // Is the trigger point is close to its highest value?
-                if (!MacrosBuffer[i][MACRORUNNINGNOW]) StartMacro(i);                           // Yes. Start if not already started
-            } else {                                            
-                if (MacrosBuffer[i][MACRORUNNINGNOW])  StopMacro(i);                            // No. Stop it if it was running 
+void ExecuteMacro()
+{ // Main entry point from SendData()  ... START/STOP/RUN
+    uint8_t TriggerChannel = 0;
+    for (u_int8_t i = 0; i < MAXMACROS; ++i) {
+        // ***************************** START OR STOP ******************************
+        TriggerChannel = (MacrosBuffer[i][MACROTRIGGERCHANNEL]) - 1;  // Down by one as channels are really 0 - 15
+        if (TriggerChannel) {                                         // Is trigger channel non-zero?
+            if (SendBuffer[TriggerChannel] >= MAXMICROS - 1) {        // Is the trigger point is close to its highest value?
+                if (!MacrosBuffer[i][MACRORUNNINGNOW]) StartMacro(i); // Yes. Start if not already started
             }
- // ****************************  RUN ****************************************
-            if (MacrosBuffer[i][MACRORUNNINGNOW]) {                                             // If running, move the servo ... if timer agrees.
-                  RunMacro(i);
+            else {
+                if (MacrosBuffer[i][MACRORUNNINGNOW]) StopMacro(i); // No. Stop it if it was running
+            }
+            // ****************************  RUN ****************************************
+            if (MacrosBuffer[i][MACRORUNNINGNOW]) { // If running, move the servo ... if timer agrees.
+                RunMacro(i);
             }
         }
     }
@@ -117,47 +125,49 @@ void ExecuteMacro(){                                                            
 
 // *************** END OF MACROS ZONE ************************************************
 
-
 /************************************************************************************************************/
-void RecordsPacketSuccess(uint8_t s){ // or failure according to s 
-        PacketsHistoryBuffer[PacketsHistoryIndex] = s;
-        ++PacketsHistoryIndex;
-        if (PacketsHistoryIndex >= (125 * ConnectionAssessSeconds)) PacketsHistoryIndex = 0; //
+void RecordsPacketSuccess(uint8_t s)
+{ // or failure according to s
+    PacketsHistoryBuffer[PacketsHistoryIndex] = s;
+    ++PacketsHistoryIndex;
+    if (PacketsHistoryIndex >= (125 * ConnectionAssessSeconds)) PacketsHistoryIndex = 0; //
 }
 /***************************************************************************************/
 
 FASTRUN void FailedPacket()
 {
-    RecordsPacketSuccess(0);                         // Record a failure
-    ++RecentPacketsLost;                             // this is to keep track of events when receiver is off  
-    ++TotalLostPackets;                              // This is total - never zeroed 
-    if (RecentPacketsLost >= LOSTCONTACTCUTOFF) {    // Don't panic until at two packets are lost. 
-        if (!GapStart) GapStart = millis();          // To keep track of this gap's length
-        LostContactFlag   = true;
-        Reconnected = false;
-        if ((millis() - GapStart) > RED_LED_ON_TIME){ // there's no need to blink red for every single lost packet. Only after 1/2 second of no connection.
-            if  (LedWasGreen && UseLog) {
+    RecordsPacketSuccess(0);                      // Record a failure
+    ++RecentPacketsLost;                          // this is to keep track of events when receiver is off
+    ++TotalLostPackets;                           // This is total - never zeroed
+    if (RecentPacketsLost >= LOSTCONTACTCUTOFF) { // Don't panic until at two packets are lost.
+        if (!GapStart) GapStart = millis();       // To keep track of this gap's length
+        LostContactFlag = true;
+        Reconnected     = false;
+        if ((millis() - GapStart) > RED_LED_ON_TIME) { // there's no need to blink red for every single lost packet. Only after 1/2 second of no connection.
+            if (LedWasGreen && UseLog) {
                 LogThisLongGap();
             }
-            if (!LedWasRed) RedLedOn(); 
+            if (!LedWasRed) RedLedOn(); // heer
             ReEnableScanButton();
         }
     }
     int SecondsRemaining = (Inactivity_Timeout / 1000) - (millis() - Inactivity_Start) / 1000;
-    if (SecondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH);             // INACTIVITY POWER OFF HERE!!
+    if (SecondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH); // INACTIVITY POWER OFF HERE!!
 }
 
 /************************************************************************************************************/
 
-void TryToReconnect(){
-   
-    if ((RecentPacketsLost > 200 || (!BoundFlag))) TryOtherPipe();                                      // In case the receiver has re-booted                                                                        
-    NextChannel = * (FHSSChPointer + random(RECONNECT_CHANNELS_COUNT) + RECONNECT_CHANNELS_START);      // random reconnect channel (selected from first three)
+void TryToReconnect()
+{
+
+    if ((RecentPacketsLost > 200 || (!BoundFlag))) TryOtherPipe();                                // In case the receiver has re-booted
+    NextChannel = *(FHSSChPointer + random(RECONNECT_CHANNELS_COUNT) + RECONNECT_CHANNELS_START); // random reconnect channel (selected from first three)
     HopToNextChannel();
 }
 
 /************************************************************************************************************/
-void SuccessfulPacket(){
+void SuccessfulPacket()
+{
 
     ++RangeTestGoodPackets;
     ++PacketNumber;
@@ -173,49 +183,49 @@ void SuccessfulPacket(){
 }
 
 /************************************************************************************************************/
-void FlushFifos(){
-        Radio1.flush_rx();                                         // This avoids a lockup that happens when the FIFO gets full.
-        Radio1.flush_tx();                                         
+void FlushFifos()
+{
+    Radio1.flush_rx(); // This avoids a lockup that happens when the FIFO gets full.
+    Radio1.flush_tx();
 }
-
 /************************************************************************************************************/
 //****************** Function to send pre-compressed data to receiver ***************************************
 /************************************************************************************************************/
 
 FASTRUN void SendData()
-{ 
-    if (NEXTION.available()) return;                               // in case key was hit
-    if (((millis() - TxPace) >= PACEMAKER) || (LostContactFlag)){ 
+{
+    if (NEXTION.available()) return; // in case key was hit
+    if (((millis() - TxPace) >= PACEMAKER) || (LostContactFlag)) {
         TxPace = millis();
-        if (DoSbusSendOnly){
+        if (DoSbusSendOnly) {
             MapToSBUS();
-            EnquireViaSbus(); // find out who's in control
             return;
-            }                  // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
+        } // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
         if (LostContactFlag) TryToReconnect();
-        LoadPacketData();                                          // extra parameters appended to the data packet
-        Connected = false;                                         // Assume the worst until ACK is received.
+        LoadPacketData();  // extra parameters appended to the data packet
+        Connected = false; // Assume the worst until ACK is received.
         FlushFifos();
-        if  (Radio1.write(&CompressedData, SizeOfCompressedData)){ //  ************************** >>>>> SEND DATA TO RX <<<<< ***************************************                                                  
+        if (Radio1.write(&CompressedData, SizeOfCompressedData)) { //  ************************** >>>>> SEND DATA TO RX <<<<< ***************************************
             SuccessfulPacket();
-        }else{
+        }
+        else {
             FailedPacket();
         }
-    } 
+    }
 }
 /************************************************************************************************************/
 // This function draws or re-draws and clears the box that display wave band scanning information
-#define xx1 90 // Needed below... Edit xx1,yy1 to move box ....
-#define yy1 70 // Needed below... Edit xx1,yy1 to move box ....
+#define xx1      90 // Needed below... Edit xx1,yy1 to move box ....
+#define yy1      70 // Needed below... Edit xx1,yy1 to move box ....
 #define YY1EXTRA 15
 
-void DrawFhssBox() 
+void DrawFhssBox()
 {
     int  x1          = xx1;
     int  y1          = yy1;
     int  x2          = x1 + (128 * 5);
     int  y2          = y1 + 255;
-    int  y3          = y2+YY1EXTRA;
+    int  y3          = y2 + YY1EXTRA;
     int  xd1         = 20;
     char STR125GHZ[] = "\"2.525\"";
     char STR96GHZ[]  = "\"2.496\"";
@@ -223,10 +233,10 @@ void DrawFhssBox()
     char STR32GHZ[]  = "\"2.432\"";
     char STR1GHZ[]   = "\"2.400\"";
     char GHZ[]       = "\"GHz\"";
-    char CB[150];       // COMMAND BUFFER
+    char CB[150]; // COMMAND BUFFER
     char draw[] = "draw ";
     char xstr[] = "xstr ";
-    char NB[9];        // Number Buffers...
+    char NB[9]; // Number Buffers...
     char NB1[9];
     char NB2[9];
     char NB3[9];
@@ -235,12 +245,12 @@ void DrawFhssBox()
     char NB6[9];
     char NB7[9];
     char NB8[9];
-    char NA[2]    = ""; // blank one
+    char NA[2] = ""; // blank one
     char NewWhite[15];
     char NewWhite1[15];
     char fyll[] = "fill ";
-    Str(NewWhite,ForeGroundColour,0);
-    Str(NewWhite1,ForeGroundColour,1);
+    Str(NewWhite, ForeGroundColour, 0);
+    Str(NewWhite1, ForeGroundColour, 1);
 
     SendCharArray(CB, draw, Str(NB1, x1, 1), Str(NB2, y1, 1), Str(NB3, x2, 1), Str(NB4, y2, 1), NewWhite, NA, NA, NA, NA, NA, NA);
     SendCharArray(CB, xstr, Str(NB, 0, 1), Str(NB1, y3, 1), Str(NB2, 70, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), GHZ);
@@ -269,11 +279,11 @@ void ScanAllChannels()
     char NB3[12];
     char NB4[12];
     char CB[100]; // COMMAND BUFFER
-    char fyll[]   = "fill ";
+    char fyll[] = "fill ";
     char NewYellow[15];
-    char NA[1]    = ""; // blank one
+    char NA[1] = ""; // blank one
 
-    Str(NewYellow,HighlightColour,0);
+    Str(NewYellow, HighlightColour, 0);
     for (Sc = ScanStart; Sc <= ScanEnd; ++Sc) {
         if (NEXTION.available()) return; // in case someone wants to stop!
         Radio1.setChannel(Sc);
@@ -305,44 +315,45 @@ void ScanAllChannels()
 
 /************************************************************************************************************/
 
- // This function hops to the next channel in the FFHS array (about 16 times a second)
+// This function hops to the next channel in the FFHS array (about 16 times a second)
 
 FASTRUN void HopToNextChannel()
 {
-    
-    Radio1.setChannel(NextChannel);    // Hop !
-    Radio1.stopListening();            // Transmit only (no need for any extra delay() as this is here followed by several tasks)
+
+    Radio1.setChannel(NextChannel); // Hop !
+    Radio1.stopListening();         // Transmit only (no need for any extra delay() as this is here followed by several tasks)
 
 #ifdef DB_FHSS
-    float ch =  * (FHSSChPointer + NextChannelNumber);
+    float ch   = *(FHSSChPointer + NextChannelNumber);
     float Freq = 2.4;
-    PEndTime  = millis();
-    Pduration = (PEndTime - PStartTime) / 1000;
+    PEndTime   = millis();
+    Pduration  = (PEndTime - PStartTime) / 1000;
     Serial.print("Hop duration: ");
     Serial.print(Pduration);
     Serial.print(" seconds. Good packets per hop: ");
-    Serial.print(PacketNumber); 
+    Serial.print(PacketNumber);
     Serial.print(" Next frequency: ");
-    Freq += ch/1000;
-    Serial.print(Freq,3);
+    Freq += ch / 1000;
+    Serial.print(Freq, 3);
     Serial.print(" Ghz.");
     Serial.print(BoundFlag ? " Bound!" : " NOT BOUND.");
     Serial.print(" RX Radio: ");
     Serial.println(ThisRadio);
     PStartTime = millis();
 #endif
-    PacketNumber  = 0;
+    PacketNumber = 0;
 }
 
 /*********************************************************************************************************************************/
 
 FLASHMEM void InitRadio(uint64_t Pipe)
 {
-    Radio1.begin();
-    if (LowPowerMode){ 
-        Radio1.setPALevel(RF24_PA_MIN,false);
-    }else{
-        Radio1.setPALevel(RF24_PA_MAX,true);
+    Radio1.begin(); // heer
+    if (LowPowerMode) {
+        Radio1.setPALevel(RF24_PA_MIN, false);
+    }
+    else {
+        Radio1.setPALevel(RF24_PA_MAX, true);
     }
     Radio1.setDataRate(RF24_250KBPS);
     Radio1.enableAckPayload();

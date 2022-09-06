@@ -26,6 +26,7 @@
 #include <Adafruit_INA219.h>
 #include <TimeLib.h>
 #include <DS1307RTC.h>
+#include <TeensyID.h>
 #include <EEPROM.h>
 #include <InterpolationLib.h>
 #include <SBUS.h>
@@ -39,7 +40,8 @@
 // #define DB_NEXTION        // Debug NEXTION
 // #define DB_SD             // Debug SD card data
 // #define DB_FHSS           // Debug real time FHSS data
-// #define DB_SENSORS        // Debug Sensors // #define DB_BIND           // Debug Binding
+// #define DB_SENSORS        // Debug Sensors
+#define DB_BIND // Debug Binding
 // #define DB_SWITCHES       // Debug Switches
 // #define DB_MODEL_EXCHANGE // Debug MODEL EXCHANGE (by RF link)
 // #define DB_GAPS           // Debug Connection Gap assessment
@@ -219,7 +221,6 @@
 #define WEAKMSG         23
 #define WHAHWHAHMSG     25
 
-
 // **************************************************************************
 //               SDCARD MODEL MEMORY CONSTANTS                              *
 //***************************************************************************
@@ -277,10 +278,10 @@
 //                          NEXTION SERIAL CONNECTION                       *
 //***************************************************************************
 
-#define NEXTION           Serial1 // NEXTION is connected to Serial1
+#define NEXTION              Serial1 // NEXTION is connected to Serial1
 #define MAXSHOWCOMMSSESCONDS 6       // Assess average connection quality over most recent 6 seconds continously
-#define SHOWCOMMSDELAY    3000    // ms pauses between updated info on NEXTION
-#define WARMUPDELAY       300     // fails at 200 so must be >200 ...
+#define SHOWCOMMSDELAY       3000    // ms pauses between updated info on NEXTION
+#define WARMUPDELAY          300     // fails at 200 so must be >200 ...
 
 // **************************************************************************
 //                            WATCHDOG PARAMETERS                           *
@@ -362,7 +363,6 @@ extern uint16_t       PacketsHistoryIndex;
 extern uint8_t        ConnectionAssessSeconds;
 extern bool           LowPowerMode;
 
-
 // external (global) functions needed here
 extern void  GetSlaveChannelValues();
 extern void  KickTheDog();
@@ -386,7 +386,6 @@ extern void  RedLedOn();
 extern void  ReEnableScanButton();
 extern void  LogUKRules();
 extern int   InStrng(char* text1, char* text2);
-
 
 /*********************************************************************************************************************************/
 // function prototypes
@@ -429,8 +428,6 @@ void         ResetAllTrims();
 void         CheckTrimValues();
 void         ClearSuccessRate();
 int          CheckRange(int v, int min, int max);
-void         EnquireViaSbus();
-
 /*********************************************************************************************************************************/
 
 #endif
