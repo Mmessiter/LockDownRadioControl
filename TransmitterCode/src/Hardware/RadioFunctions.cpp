@@ -348,7 +348,7 @@ FASTRUN void HopToNextChannel()
 
 FLASHMEM void InitRadio(uint64_t Pipe)
 {
-    Radio1.begin(); // heer
+    Radio1.begin(); 
     if (LowPowerMode) {
         Radio1.setPALevel(RF24_PA_MIN, false);
     }
