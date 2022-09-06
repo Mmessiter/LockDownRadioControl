@@ -96,7 +96,7 @@ var NAVTREE =
       [ "Scope", "md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md62", null ],
       [ "Attribution", "md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md63", null ]
     ] ],
-    [ "TransmitterCode", "_transmitter_code.html", [
+    [ ".", "_transmitter_code.html", [
       [ "Radio Control Features list, so far:", "_transmitter_code.html#LockDown", null ],
       [ "Teensy 4.1 Pins", "_transmitter_code.html#txPinout", null ]
     ] ],
@@ -136,14 +136,14 @@ var NAVTREEINDEX =
 "_quadcopter_2src_2main_8cpp.html#a585dc9036243cba230705899afcf4348",
 "_radio_functions_8h.html#a311ab302366bcdb533945702481ef679",
 "_receiver_code_2lib_2_adafruit___g_p_s___library_2src_2_adafruit___p_m_t_k_8h.html#a95ee80f53d11d05c6a593330679c89b2",
-"_transmitter_code_2src_2main_8cpp.html#a113f8bee0942b732f19881466ef0f42d",
-"_transmitter_code_2src_2main_8cpp.html#a86b9aef762f5ecd22b5902d1ded5dec2",
-"_transmitter_code_2src_2main_8cpp.html#af83cef6905713757f73ce14cefc41433",
-"class_m_p_u6050.html#a1ac1a70c4d207c93359b43e743d34839",
-"class_m_p_u9250.html#a06a7c665a4f85acbc48d6339b7267e84",
-"class_m_p_u9250.html#aff5c0acd0797c79230d78c5e6c8a6321",
-"functions_vars_t.html",
-"radio_8h.html#affa2dcc4341b8daecac77e6e0a354b2d"
+"_transmitter_code_2src_2main_8cpp.html#a11a586885b48e92a4cd03ff1840ac374",
+"_transmitter_code_2src_2main_8cpp.html#a882e41768b06234c5a87749be672ea06",
+"_transmitter_code_2src_2main_8cpp.html#afd042feb8b8e181cbff0d5f27fde063e",
+"class_m_p_u6050.html#a269710b7bca814bbf67e7bb38c381650",
+"class_m_p_u9250.html#a163a99348a724a4dd8c9b2299ecf50f1",
+"class_m_p_u9250_f_i_f_o.html#a3ace78d10c1619e8778956936b3facde",
+"functions_y.html",
+"struct_raw_degrees.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

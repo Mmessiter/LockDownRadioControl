@@ -1,14 +1,20 @@
 var searchData=
 [
-  ['v_0',['v',['../structsensors__vec__t.html#a5114a743de9aab053acce7722f394bc4',1,'sensors_vec_t']]],
-  ['val_1',['val',['../class_adafruit___g_p_s.html#a6ce54126c2fa2d6b59fd012b4173840f',1,'Adafruit_GPS']]],
-  ['val32_2',['Val32',['../_transmitter_code_2src_2main_8cpp.html#adc7498bedbda955851733c9f3ef82752',1,'main.cpp']]],
-  ['val8_3',['Val8',['../_transmitter_code_2src_2main_8cpp.html#ac2c06ba791dc0d03fd2a7a34228a8cac',1,'main.cpp']]],
-  ['value_4',['value',['../struct_tiny_g_p_s_date.html#a718150ae16f68afa9ae81f9d1b3ce3f4',1,'TinyGPSDate::value()'],['../struct_tiny_g_p_s_time.html#afcdb632fee9d144b1414c9d7b95719f1',1,'TinyGPSTime::value()'],['../struct_tiny_g_p_s_decimal.html#ac3ce80976e5d8456e9f211b910a6cb19',1,'TinyGPSDecimal::value()'],['../struct_tiny_g_p_s_integer.html#a67de7e76d61dbd25eb32f701d8ce867b',1,'TinyGPSInteger::value()'],['../class_tiny_g_p_s_custom.html#a03bb66f8d3e078b21c8a5033a88d8a32',1,'TinyGPSCustom::value()']]],
-  ['valuesent_5',['ValueSent',['../_transmitter_code_2src_2main_8cpp.html#ace7e8fecf64d2c788fd0e7d5fe0c47fe',1,'main.cpp']]],
-  ['vdop_6',['VDOP',['../class_adafruit___g_p_s.html#af13a4d008ab2f74ff30bfc098315edea',1,'Adafruit_GPS']]],
-  ['vectorfloat_7',['VectorFloat',['../class_vector_float.html#a8b54ec5c117ca7101cff478b3cfaa0cc',1,'VectorFloat::VectorFloat()'],['../class_vector_float.html#a3b12ed03e28bded4316275882433e5aa',1,'VectorFloat::VectorFloat(float nx, float ny, float nz)'],['../class_vector_float.html',1,'VectorFloat']]],
-  ['vectorint16_8',['VectorInt16',['../class_vector_int16.html#a314bffb747999af26026f734c43d61a2',1,'VectorInt16::VectorInt16()'],['../class_vector_int16.html#acce45f37b3f90df1d5aff6edbf12f02b',1,'VectorInt16::VectorInt16(int16_t nx, int16_t ny, int16_t nz)'],['../class_vector_int16.html',1,'VectorInt16']]],
-  ['version_9',['version',['../structsensors__event__t.html#a2134d60fdb21e3495c595a2df2f5cece',1,'sensors_event_t::version()'],['../structsensor__t.html#a274f12a47669fbd2b61935706339e1c2',1,'sensor_t::version()']]],
-  ['voltage_10',['voltage',['../structsensors__event__t.html#ab01b52f6b83f390a6370d319ded97b28',1,'sensors_event_t']]]
+  ['ukrules_0',['UkRules',['../_radio_functions_8h.html#a7847cc790a939f378993691ae7d40a2f',1,'UkRules():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a7847cc790a939f378993691ae7d40a2f',1,'UkRules():&#160;main.cpp']]],
+  ['ukrulescounter_1',['UkRulesCounter',['../_transmitter_code_2src_2main_8cpp.html#a29883074027da47422a24b04284728db',1,'main.cpp']]],
+  ['uncompressedwords_2',['UNCOMPRESSEDWORDS',['../common_8h.html#a0c40a351a0c0e01fbd5e5b1b0187eb48',1,'UNCOMPRESSEDWORDS():&#160;common.h'],['../_radio_functions_8h.html#a0c40a351a0c0e01fbd5e5b1b0187eb48',1,'UNCOMPRESSEDWORDS():&#160;RadioFunctions.h']]],
+  ['unit_3',['unit',['../structnmea__datavalue__t.html#a904af9df777122471b3358c1af5e5aac',1,'nmea_datavalue_t']]],
+  ['updatebuttonlabels_4',['UpdateButtonLabels',['../_transmitter_code_2src_2main_8cpp.html#abf59862cf6c4e3df5a76f0bfea8919ef',1,'main.cpp']]],
+  ['updateinterpolationtypes_5',['updateInterpolationTypes',['../_transmitter_code_2src_2main_8cpp.html#a3d20af2f1fee81198a0cef2d4500083a',1,'main.cpp']]],
+  ['updatemodelsnameeverywhere_6',['UpdateModelsNameEveryWhere',['../_transmitter_code_2src_2main_8cpp.html#a9e1de754e1d2d483fb15957f70cf0488',1,'UpdateModelsNameEveryWhere():&#160;main.cpp'],['../_radio_functions_8h.html#a9e1de754e1d2d483fb15957f70cf0488',1,'UpdateModelsNameEveryWhere():&#160;main.cpp']]],
+  ['updateoneswitchview_7',['updateOneSwitchView',['../_transmitter_code_2src_2main_8cpp.html#a14dcac76ed8a048041fdc6e6f5d5d000',1,'main.cpp']]],
+  ['updateswitchesdisplay_8',['UpdateSwitchesDisplay',['../_transmitter_code_2src_2main_8cpp.html#a789078ba3c1d92997ab8764eb20cce4f',1,'main.cpp']]],
+  ['updatetrimview_9',['UpdateTrimView',['../_transmitter_code_2src_2main_8cpp.html#ac78966debc2cdc13d8ca958ce3b20c78',1,'main.cpp']]],
+  ['uplog_10',['UpLog',['../_transmitter_code_2src_2main_8cpp.html#a2206c19b4fc075f4c9f1bb957ca89e1d',1,'main.cpp']]],
+  ['use_5fina219_11',['USE_INA219',['../_transmitter_code_2src_2main_8cpp.html#a87ae50e2ac4507568cbf98072f174a1b',1,'main.cpp']]],
+  ['use_5fsw_5fserial_12',['USE_SW_SERIAL',['../_adafruit___g_p_s_8h.html#a7d44b2886944eb862b51948f2acc8d23',1,'Adafruit_GPS.h']]],
+  ['uselog_13',['UseLog',['../_radio_functions_8h.html#aa42482a0bb01edaf26f217dbc38643d2',1,'UseLog():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#aa42482a0bb01edaf26f217dbc38643d2',1,'UseLog():&#160;main.cpp']]],
+  ['usemacros_14',['UseMacros',['../_radio_functions_8h.html#a42a6363bff83773c1b99caa06aebb1f5',1,'UseMacros():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a42a6363bff83773c1b99caa06aebb1f5',1,'UseMacros():&#160;main.cpp']]],
+  ['user_5fctrl_15',['USER_CTRL',['../class_m_p_u9250.html#ac7a02a1a77fe8bf5a477cc37820d2f27',1,'MPU9250']]],
+  ['usereceiveddata_16',['UseReceivedData',['../_receiver_code_2src_2main_8cpp.html#abb1997c589abc6432f612eaedf985e38',1,'main.cpp']]]
 ];

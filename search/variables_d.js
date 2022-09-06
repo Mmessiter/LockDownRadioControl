@@ -57,12 +57,11 @@ var searchData=
   ['modelsfile_54',['ModelsFile',['../_transmitter_code_2src_2main_8cpp.html#ad770dd5d9906766e96979c3954c6b67b',1,'main.cpp']]],
   ['modelsfilenumber_55',['ModelsFileNumber',['../_transmitter_code_2src_2main_8cpp.html#a3c59f91f84e4b03ab8c76c68429e7ce4',1,'main.cpp']]],
   ['modelsfileopen_56',['ModelsFileOpen',['../_transmitter_code_2src_2main_8cpp.html#a2feea4e42b19e3b7f6656c60f05fd191',1,'main.cpp']]],
-  ['modelsmacunion_57',['ModelsMacUnion',['../_transmitter_code_2src_2main_8cpp.html#acecca3068e50df19ce1e99f44081e5bc',1,'main.cpp']]],
-  ['modeltemperature_58',['ModelTemperature',['../_transmitter_code_2src_2main_8cpp.html#af1be8dbab56f6eb8133a695b09b5f479',1,'main.cpp']]],
-  ['modelvolts_59',['ModelVolts',['../_transmitter_code_2src_2main_8cpp.html#a20eb734081d289d52b21bec4b966be23',1,'main.cpp']]],
-  ['month_60',['month',['../class_adafruit___g_p_s.html#a613f1926fbff9829256d85f7aeec7e1f',1,'Adafruit_GPS']]],
-  ['monthgps_61',['MonthGPS',['../_receiver_code_2src_2main_8cpp.html#a0944456d2dbd7c1deb2abba2532afe24',1,'MonthGPS():&#160;main.cpp'],['../radio_8h.html#a0944456d2dbd7c1deb2abba2532afe24',1,'MonthGPS():&#160;main.cpp']]],
-  ['mot_5fdetect_5fctrl_62',['MOT_DETECT_CTRL',['../class_m_p_u9250.html#aec0050de3ee1ffb4cc976e8bed8fdf62',1,'MPU9250']]],
-  ['mpu6050_63',['mpu6050',['../_quadcopter_2src_2main_8cpp.html#a7e41a2178d7943922a90e58da80ffa9d',1,'main.cpp']]],
-  ['mysbus_64',['MySbus',['../_receiver_code_2src_2main_8cpp.html#a4c80b3036b9eb8438e1564693e122f68',1,'MySbus():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a4c80b3036b9eb8438e1564693e122f68',1,'MySbus():&#160;main.cpp']]]
+  ['modeltemperature_57',['ModelTemperature',['../_transmitter_code_2src_2main_8cpp.html#af1be8dbab56f6eb8133a695b09b5f479',1,'main.cpp']]],
+  ['modelvolts_58',['ModelVolts',['../_transmitter_code_2src_2main_8cpp.html#a20eb734081d289d52b21bec4b966be23',1,'main.cpp']]],
+  ['month_59',['month',['../class_adafruit___g_p_s.html#a613f1926fbff9829256d85f7aeec7e1f',1,'Adafruit_GPS']]],
+  ['monthgps_60',['MonthGPS',['../_receiver_code_2src_2main_8cpp.html#a0944456d2dbd7c1deb2abba2532afe24',1,'MonthGPS():&#160;main.cpp'],['../radio_8h.html#a0944456d2dbd7c1deb2abba2532afe24',1,'MonthGPS():&#160;main.cpp']]],
+  ['mot_5fdetect_5fctrl_61',['MOT_DETECT_CTRL',['../class_m_p_u9250.html#aec0050de3ee1ffb4cc976e8bed8fdf62',1,'MPU9250']]],
+  ['mpu6050_62',['mpu6050',['../_quadcopter_2src_2main_8cpp.html#a7e41a2178d7943922a90e58da80ffa9d',1,'main.cpp']]],
+  ['mysbus_63',['MySbus',['../_receiver_code_2src_2main_8cpp.html#a4c80b3036b9eb8438e1564693e122f68',1,'MySbus():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a4c80b3036b9eb8438e1564693e122f68',1,'MySbus():&#160;main.cpp']]]
 ];
