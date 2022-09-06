@@ -9,8 +9,7 @@ var searchData=
   ['endreverseview_6',['EndReverseView',['../_transmitter_code_2src_2main_8cpp.html#afd3dd964eafc30405e000b03579dd00c',1,'main.cpp']]],
   ['endsend_7',['EndSend',['../_transmitter_code_2src_2main_8cpp.html#ad7b8aa834c87265667a5687b1787a1cc',1,'main.cpp']]],
   ['endsubtrimview_8',['EndSubTrimView',['../_transmitter_code_2src_2main_8cpp.html#a40003084a0136ca08cf8ded75ff4aa4d',1,'main.cpp']]],
-  ['enquireviasbus_9',['EnquireViaSbus',['../_radio_functions_8h.html#a57b442083b948aa6e531361249120354',1,'RadioFunctions.h']]],
-  ['executemacro_10',['ExecuteMacro',['../_radio_functions_8cpp.html#a78f22801971c106db61d728dd345e28e',1,'ExecuteMacro():&#160;RadioFunctions.cpp'],['../_radio_functions_8h.html#a78f22801971c106db61d728dd345e28e',1,'ExecuteMacro():&#160;RadioFunctions.cpp']]],
-  ['exitmacrosview_11',['ExitMacrosView',['../_transmitter_code_2src_2main_8cpp.html#a488388f6430a0fc7bec57074ba750a2d',1,'main.cpp']]],
-  ['exponentialinterpolation_12',['ExponentialInterpolation',['../_transmitter_code_2src_2main_8cpp.html#a2088bc57321fd542f58a3d8993444764',1,'main.cpp']]]
+  ['executemacro_9',['ExecuteMacro',['../_radio_functions_8cpp.html#a78f22801971c106db61d728dd345e28e',1,'ExecuteMacro():&#160;RadioFunctions.cpp'],['../_radio_functions_8h.html#a78f22801971c106db61d728dd345e28e',1,'ExecuteMacro():&#160;RadioFunctions.cpp']]],
+  ['exitmacrosview_10',['ExitMacrosView',['../_transmitter_code_2src_2main_8cpp.html#a488388f6430a0fc7bec57074ba750a2d',1,'main.cpp']]],
+  ['exponentialinterpolation_11',['ExponentialInterpolation',['../_transmitter_code_2src_2main_8cpp.html#a2088bc57321fd542f58a3d8993444764',1,'main.cpp']]]
 ];
