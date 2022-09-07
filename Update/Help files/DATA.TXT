@@ -1,0 +1,23 @@
+This screen shows some information about the quality of the current connection and other data including GPS if connected.||
+
+Units are milliseconds, feet, and centigrade.||
+
+Pressing 'Clear' will zero many parameters.||
+Pressing 'Zero Alt' toggles between altitude relative to sea level, and altitude
+relative to where the model was when 'Zero Alt' was pressed.|
+Pressing 'Mark here' marks the current location, if GPS was aquired.| 
+Thereafter 'Meters to mark' etc. will inform you how far away the model is from the mark.
+
+If you are using a two-transceiver receiver, then this screen shows which is in current use, and how long each was in use so far.
+
+When using SBUS, the receiver maintains the SBUS framerate (about 100 fps) even when it is reconnecting (if this reconnection take longer than about 10 ms). This it does by simply repeating the most recent SBUS packet. These SBUS repeats are counted and shown on this screen. 
+
+'gap' on this screen means the number of milliseconds between losing connection and re-establishing a connection. (Note: 100 ms is only one tenth of a second.) ||
+
+When using FHSS (as this radiosystem does) it is likely, especially in the presence of WiFi etc., that the occasional lost packet will occur due to momentary collisions of frequencies. Recovery of connection after this usually takes less than a tenth of a second so it usually goes unnoticed to the pilot - except when interference is especially heavy. In these cases it's best to find quieter conditions away from other transmissions on the 2.4Ghz wave band.||
+
+This radio system hops around 83 different frequencies between 2.401 GHz and 2.483 Ghz. The frequency sequence is pseudo-random and hard coded. There are approximately 16 hops per second. The maximum transmission power is 100 Mw.||
+
+Hence this system is safe and completely legal for licence-free use in the United Kingdom and many other places.||
+
+The claimed maximum range is about 2.5 kilometers under ideal conditions. In the real world it's probably a bit less.
