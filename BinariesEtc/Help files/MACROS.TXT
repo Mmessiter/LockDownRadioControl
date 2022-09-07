@@ -1,0 +1,29 @@
+Macros are simple to understand and to use. They are useful or even essential for a helicopter 'rescue' switch or a fixed-wing snap-roll function, etc.||
+
+Each macro moves one channel (1 - 16) to any position (0 - 180).||
+
+Each macro can be 'triggered' by any channel (1 - 16). It is triggered by moving the trigger channel to its maximum position from a lower position.||
+
+Setting the trigger channel to '0' (zero) disables the macro.||
+
+Each macro uses a 'Delay' and a 'Duration'. These are measured in units of one tenth of a second and each has a value up to 255. ||
+
+'Delay' (0 - 255) begins when the macro is triggered. When it ends, the channel is moved and 'Duration' begins.||
+
+'Duration' (1 - 255) begins when 'Delay' ends. The channel is moved. When 'Duration' ends, the channel is released and the macro ends. || 
+
+A macro can be run multiple times, by repeatedly moving the trigger channel to its maximum from a lower position.||
+
+If the trigger channel moves below its maximum while the macro is still running, the macro is stopped and the channel released.||
+
+The longest possible 'Delay' or 'Duration' is 25.5 seconds (255/10 seconds).||
+
+For an immediate macro start, set 'Delay' to zero '0'.||
+
+Multiple macros can be triggered simultaneously by the same trigger channel (usually a switch) if two or more channels are needed. They run concurrently.||
+
+So if, for example, two sequential servo movements are needed, set the 'Delay' of the second equal to the 'Duration'+'Delay' of the first. Then they'll be executed in the right order.
+
+
+
+
