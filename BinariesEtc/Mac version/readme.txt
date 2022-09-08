@@ -10,4 +10,5 @@ How to use the transmitter or receiver firmware updater:
 
 Note: If the receiver has two transceivers, use RX2.hex otherwise use RX1.hex.
 
-To update the help files, copy the new help files onto the SD card overwriting older versions.
+To update the Nextion screen, download their free editor (Windows only), load the .HMI file into it, and then upload it to the screen using an FTDI adapter over USB.
+
