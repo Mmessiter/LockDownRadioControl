@@ -3829,6 +3829,7 @@ void ClearBox()
     Str(nb, BackGroundColour, 0);
     strcat(cmd, nb);
     SendCommand(cmd);
+    delay(2); // heer
 }
 
 /*********************************************************************************************************************************/
@@ -4129,8 +4130,8 @@ FASTRUN void DisplayCurve()
     }
 
     if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == EXPONENTIALCURVES) { // EXPO  ************************************************************************************************
-#define APPROXIMATION 9                                                          // This is for the approximation of the screen curve
-
+#define APPROXIMATION 7       // heer      // This is for the approximation of the screen curve
+#define PAUSETIME 250 
         SendCommand(b3off);
         SendCommand(b4off);
         SendCommand(b7off);
@@ -4158,9 +4159,10 @@ FASTRUN void DisplayCurve()
             DrawLine(xDot1, yDot1, xDot2, yDot2, ForeGroundColour); // Draw short line from this point to previous point
             xDot2 = xDot1;
             yDot2 = yDot1;
+            delayMicroseconds(PAUSETIME);
         }
         Step  = APPROXIMATION;
-        yDot2 = 0;
+        yDot2 = 0; 
         for (xPoint = HalfXRange; xPoint >= 0; xPoint -= Step) { // Simulate a curve with many short lines to speed it up
             yPoint = MapWithExponential(xPoint, 0, HalfXRange, 0, TopHalfYRange, Exponential[FlightMode][ChanneltoSet - 1]);
             if (Step > xPoint) {
@@ -4176,6 +4178,7 @@ FASTRUN void DisplayCurve()
             DrawLine(xDot1, yDot1, xDot2, yDot2, ForeGroundColour); // Draw short line from this point to previous point
             xDot2 = xDot1;
             yDot2 = yDot1;
+            delayMicroseconds(PAUSETIME);
         }
 
 
