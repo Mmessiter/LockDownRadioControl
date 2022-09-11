@@ -42,7 +42,7 @@
  */
 #include "utilities/radio.h"
 Adafruit_INA219 ina219;
-bool            SENSOR_HUB_CONNECTED = false; //  GPS (Adafruit Ultimate GPS) ?
+bool            SensorHubConnected = false; //  GPS (Adafruit Ultimate GPS) ?
 Servo           MCMServo[SERVOSUSED];
 uint8_t         PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8}; // 9 PWMs, remaining 7 via sbus
 SBUS            MySbus(SBUSPORT);
@@ -519,7 +519,7 @@ FASTRUN void ReceiveData()
                 SensorHubAccessed = millis();                                     //  Note the moment of last attempted read.
                 if (!SensorHubDead) {                                             //  Better check it hasn't died.
                     TimeTest = millis();                                          //  Time the I2C calls. If too long, don't repeat it ... save the model.
-                    if (SENSOR_HUB_CONNECTED) ReadTheSensorHub();                 //  Sensor now has its own MCU. Calls return in far less that 6 ms unless it lost I2C synch
+                    if (SensorHubConnected) ReadTheSensorHub();                 //  Sensor now has its own MCU. Calls return in far less that 6 ms unless it lost I2C synch
                     if (INA219_CONNECTED) INA219Volts = ina219.getBusVoltage_V(); //  Get RX LIPO volts if connected separately (as will be needed on 'planes with no GPS fitted.)
                     if ((millis() - BootupMoment) > 5000) {
                         if ((millis() - TimeTest) > 6) SensorHubHasFailed(); //  If sensor hub and/or INA219 fails, don't bother calling either again (It normally returns within 2 ms.
@@ -557,7 +557,7 @@ FLASHMEM void ScanI2c()
 
         if (Wire.endTransmission() == 0) {
             if (i == SENSOR_HUB_I2C_ADDRESS) {
-                SENSOR_HUB_CONNECTED = true;
+                SensorHubConnected = true;
 #ifdef DB_SENSORS
                 Serial.println("Sensor Hub with Adafruit Ultimate GPS etc. detected!");
 #endif

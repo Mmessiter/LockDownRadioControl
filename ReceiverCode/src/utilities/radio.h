@@ -31,7 +31,7 @@ uint32_t RadioSwaps   = 0;
 
 extern bool     BoundFlag;
 extern bool     GpsFix;
-extern bool     SENSOR_HUB_CONNECTED;
+extern bool     SensorHubConnected;
 extern uint8_t  HoursGPS;
 extern uint8_t  MinsGPS;
 extern uint8_t  SecsGPS;
@@ -374,7 +374,7 @@ void LoadAckPayload()
     AckPayload.Purpose &= 0x7F; // NOTE: The HIGH BIT of "purpose" bit is the HOPNOW flag. It gets set only when it's time to hop.
     ++AckPayload.Purpose;
     if (INA219_CONNECTED) MaxAckP = 5;
-    if (SENSOR_HUB_CONNECTED) MaxAckP = 18;                   // its 14 + GPS
+    if (SensorHubConnected) MaxAckP = 18;                   // its 14 + GPS
     if (AckPayload.Purpose > MaxAckP) AckPayload.Purpose = 0; // wrap after max
     switch (AckPayload.Purpose) {
         case 0:
