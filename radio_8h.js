@@ -66,7 +66,7 @@ var radio_8h =
     [ "SbusRepeats", "radio_8h.html#a62cc4d43d463897ef0d417150d6e7f3f", null ],
     [ "SBUSTimer", "radio_8h.html#a2e121251691466f81a2f540f00e7141e", null ],
     [ "SecsGPS", "radio_8h.html#a79832b04c40823abb496f503a264e7d5", null ],
-    [ "SENSOR_HUB_CONNECTED", "radio_8h.html#a20d437b81f88442e5cb998557d1f9cea", null ],
+    [ "SensorHubConnected", "radio_8h.html#af5ed7b5350f1500e976e56af6f24efb0", null ],
     [ "SpeedGPS", "radio_8h.html#af02319a1e0d8c0c651f23e49acc228f8", null ],
     [ "ThisPipe", "radio_8h.html#a88d2add9e7ca58e7218870f887b25859", null ],
     [ "ThisRadio", "radio_8h.html#a25cc3bb5cb94f4bbef0f2c5b79140c20", null ],
