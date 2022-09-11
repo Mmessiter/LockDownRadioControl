@@ -461,7 +461,7 @@ FASTRUN void ReadTheSensorHub()
         return;
     }
     if (strcmp(VLT, RdataID) == 0) {
-        if (!INA219_CONNECTED) INA219Volts = RdataIn; // if there's a locally connected sensor, use it.
+        if (!INA219Connected) INA219Volts = RdataIn; // if there's a locally connected sensor, use it.
         return;
     }
     if (strcmp(DAY, RdataID) == 0) {
@@ -520,7 +520,7 @@ FASTRUN void ReceiveData()
                 if (!SensorHubDead) {                                             //  Better check it hasn't died.
                     TimeTest = millis();                                          //  Time the I2C calls. If too long, don't repeat it ... save the model.
                     if (SensorHubConnected) ReadTheSensorHub();                 //  Sensor now has its own MCU. Calls return in far less that 6 ms unless it lost I2C synch
-                    if (INA219_CONNECTED) INA219Volts = ina219.getBusVoltage_V(); //  Get RX LIPO volts if connected separately (as will be needed on 'planes with no GPS fitted.)
+                    if (INA219Connected) INA219Volts = ina219.getBusVoltage_V(); //  Get RX LIPO volts if connected separately (as will be needed on 'planes with no GPS fitted.)
                     if ((millis() - BootupMoment) > 5000) {
                         if ((millis() - TimeTest) > 6) SensorHubHasFailed(); //  If sensor hub and/or INA219 fails, don't bother calling either again (It normally returns within 2 ms.
                     }
@@ -551,7 +551,6 @@ FASTRUN void ReceiveData()
 
 FLASHMEM void ScanI2c()
 {
-
     for (uint8_t i = 1; i < 127; ++i) {
         Wire.beginTransmission(i);
 
@@ -563,7 +562,7 @@ FLASHMEM void ScanI2c()
 #endif
             }
             if (i == 0x40) {
-                INA219_CONNECTED = true;
+                INA219Connected = true;
 #ifdef DB_SENSORS
                 Serial.println("INA219 voltage meter detected!");
 #endif
@@ -645,7 +644,7 @@ FLASHMEM void setup()
     Wire.begin();
     delay(20);
     ScanI2c(); // Detect what's connected
-    if (INA219_CONNECTED) ina219.begin();
+    if (INA219Connected) ina219.begin();
 #ifdef SECOND_TRANSCEIVER
     CurrentRadio = &Radio2;
     digitalWrite(pinCSN1, CSN_OFF);

@@ -373,7 +373,7 @@ void LoadAckPayload()
     uint8_t MaxAckP = 4;        // 4 if only RX
     AckPayload.Purpose &= 0x7F; // NOTE: The HIGH BIT of "purpose" bit is the HOPNOW flag. It gets set only when it's time to hop.
     ++AckPayload.Purpose;
-    if (INA219_CONNECTED) MaxAckP = 5;
+    if (INA219Connected) MaxAckP = 5;
     if (SensorHubConnected) MaxAckP = 18;                   // its 14 + GPS
     if (AckPayload.Purpose > MaxAckP) AckPayload.Purpose = 0; // wrap after max
     switch (AckPayload.Purpose) {

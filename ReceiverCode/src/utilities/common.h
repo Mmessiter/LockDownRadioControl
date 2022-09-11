@@ -63,7 +63,7 @@
 
 uint32_t LastPacketArrivalTime = 0;
 bool     FailSafeSave          = false;
-bool     INA219_CONNECTED      = false; //  Volts from INA219 ?
+bool     INA219Connected      = false; //  Volts from INA219 ?
 
 uint8_t* FHSSChPointer; // Pointer for FHSS channels' array
 uint8_t  FrequencyCount    = FREQUENCYSCOUNT;
