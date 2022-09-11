@@ -4100,7 +4100,7 @@ FASTRUN void DisplayCurve()
         DrawLine(xPoints[2], yPoints[2], xPoints[3], yPoints[3], ForeGroundColour);
         DrawLine(xPoints[3], yPoints[3], xPoints[4], yPoints[4], ForeGroundColour);
     }
-    //  delay(250);
+  
     if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == SMOOTHEDCURVES) { // CatmullSpline
 
         SendCommand(b3on);
@@ -4129,7 +4129,7 @@ FASTRUN void DisplayCurve()
     }
 
     if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == EXPONENTIALCURVES) { // EXPO  ************************************************************************************************
-#define APPROXIMATION 7                                                          // This is for the approximation of the screen curve
+#define APPROXIMATION 9                                                          // This is for the approximation of the screen curve
 
         SendCommand(b3off);
         SendCommand(b4off);
@@ -4142,6 +4142,7 @@ FASTRUN void DisplayCurve()
         BottomHalfYRange = yPoints[2] - yPoints[0];
         yDot2            = 0;
         Step             = APPROXIMATION;                        // This is the approximation of the screen curve
+        
         for (xPoint = 0; xPoint <= HalfXRange; xPoint += Step) { // Simulate a curve with many short lines to speed it up
             yPoint = MapWithExponential(HalfXRange - xPoint, HalfXRange, 0, 0, BottomHalfYRange, Exponential[FlightMode][ChanneltoSet - 1]);
             if (Step > HalfXRange - xPoint) {
@@ -4176,6 +4177,8 @@ FASTRUN void DisplayCurve()
             xDot2 = xDot1;
             yDot2 = yDot1;
         }
+
+
         DrawDot(xPoints[0], yPoints[0], DotSize, DotColour); // This adds 3 dots
         DrawDot(xPoints[2], yPoints[2], DotSize, DotColour);
         DrawDot(xPoints[4], yPoints[4], DotSize, DotColour);
