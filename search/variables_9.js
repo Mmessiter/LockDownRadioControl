@@ -11,7 +11,7 @@ var searchData=
   ['i2c_5fslv0_5freg_8',['I2C_SLV0_REG',['../class_m_p_u9250.html#a8b22e82027b25cdce70e4df0f412e856',1,'MPU9250']]],
   ['i_5flimit_9',['i_limit',['../_quadcopter_2src_2main_8cpp.html#a1dd74ecfd9bb023afa0798103dd539ad',1,'main.cpp']]],
   ['ina219_10',['ina219',['../_transmitter_code_2src_2main_8cpp.html#a69393b86406e49dbacfbabd283877495',1,'ina219():&#160;main.cpp'],['../_sensor_hub_t32_2src_2main_8cpp.html#a69393b86406e49dbacfbabd283877495',1,'ina219():&#160;main.cpp'],['../_receiver_code_2src_2main_8cpp.html#a69393b86406e49dbacfbabd283877495',1,'ina219():&#160;main.cpp']]],
-  ['ina219_5fconnected_11',['INA219_CONNECTED',['../common_8h.html#a8d0889feaf5beb5db1e50a266ea7b0a5',1,'common.h']]],
+  ['ina219connected_11',['INA219Connected',['../common_8h.html#a8251d20351fc918ea452ad591c75116e',1,'common.h']]],
   ['ina219volts_12',['INA219Volts',['../_receiver_code_2src_2main_8cpp.html#ad84d94b7259bcf40213f0af9be706ee7',1,'INA219Volts():&#160;main.cpp'],['../radio_8h.html#ad84d94b7259bcf40213f0af9be706ee7',1,'INA219Volts():&#160;main.cpp'],['../_sensor_hub_t32_2src_2main_8cpp.html#ad84d94b7259bcf40213f0af9be706ee7',1,'INA219Volts():&#160;main.cpp']]],
   ['inactivity_5fstart_13',['Inactivity_Start',['../_transmitter_code_2src_2main_8cpp.html#a42f848041eda5cd5b98d334ab44a15a1',1,'Inactivity_Start():&#160;main.cpp'],['../_radio_functions_8h.html#a42f848041eda5cd5b98d334ab44a15a1',1,'Inactivity_Start():&#160;main.cpp']]],
   ['inactivity_5ftimeout_14',['Inactivity_Timeout',['../_radio_functions_8h.html#ae99f193f5a3e06508bbe4b32ee91a963',1,'Inactivity_Timeout():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#ae99f193f5a3e06508bbe4b32ee91a963',1,'Inactivity_Timeout():&#160;main.cpp']]],
