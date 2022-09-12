@@ -14,3 +14,8 @@ Note: If the receiver has two transceivers, use RX2.hex otherwise use RX1.hex.
 
 To update the Nextion screen, download their free editor (Windows only), load the .HMI file into it, and then upload it to the screen using an FTDI adapter over USB.
 
+
+New in version: 1.8.7:
+----------------------
+
+The "Reverse" button displayed with the curve (under "Setup/Channels") now reverses the channel in ALL Banks (AKA Flight modes). Previously, it reversed it only in the selected Bank. But this could cause dangerous confusion we found, so I have modified it. It's very unlikely that anyone would ever want a channel reversed in only one Bank. This does remain possible nonetheless, by simply moving points instead of hitting the Reverse button.
