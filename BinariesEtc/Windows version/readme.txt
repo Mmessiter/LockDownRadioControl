@@ -1,3 +1,5 @@
+Version 1.8.7 (TX) 1.8.6 (RX)
+
 How to use the transmitter or receiver firmware updater:
 
 

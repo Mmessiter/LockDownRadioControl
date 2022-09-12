@@ -1099,7 +1099,7 @@ void GetReturnCode()
     }
 }
 /*********************************************************************************************************************************/
-void SendCommand(char* tbox) // heer
+void SendCommand(char* tbox) 
 {
     NEXTION.print(tbox);
     for (int i = 0; i < 3; ++i) {
@@ -1394,9 +1394,8 @@ FASTRUN void ShowServoPos()
             StickPosition = map(l1, ChannelCentre[l], ChannelMax[l], BoxLeft + (((BoxRight - fixitx) - BoxLeft) / 2), BoxRight - fixitx);
         }
         if (abs(StickPosition - SavedLineX) > LeastDistance) {
-            DisplayCurve(); // heer
-           // FillBox(StickPosition - 1, BoxTop + 4, BarWidth, (BoxBottom - 42) - BoxTop, HighlightColour);
-            DrawLine(StickPosition - 1, BoxTop + 3, StickPosition - 1, (BoxBottom - 3) - BoxTop, HighlightColour);
+            DisplayCurve(); // needed to clear last line
+            DrawLine(StickPosition - 1, BoxTop + 3, StickPosition - 1, (BoxBottom - 3) - BoxTop, HighlightColour); // draws line for stick position
             SavedLineX = StickPosition;
         }
         if (Connected) {
@@ -4126,7 +4125,7 @@ FASTRUN void DisplayCurve()
     }
 
     if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == EXPONENTIALCURVES) { // EXPO  ************************************************************************************************
-#define APPROXIMATION 7       // heer   // This is the approximation of the screen curve
+#define APPROXIMATION 7       // This is the approximation of the screen curve
 
         SendCommand(b3off);
         SendCommand(b4off);
@@ -4826,8 +4825,7 @@ void EndBuddyView()
     CurrentView = MAINSETUPVIEW;
 }
 /*********************************************************************************************************************************/
-FASTRUN void DisplayCurveAndServoPos() // heer 
-{
+FASTRUN void DisplayCurveAndServoPos(){
     SavedLineX = 0;
     ShowServoPos(); // this calls display curve!!!
     ClearText();
