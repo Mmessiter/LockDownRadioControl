@@ -2,7 +2,6 @@ var _transmitter_code_2src_2main_8cpp =
 [
     [ "Payload", "struct_payload.html", "struct_payload" ],
     [ "APPROXIMATION", "_transmitter_code_2src_2main_8cpp.html#aee8c3c363eab49d6a90d3f74587694d5", null ],
-    [ "BarWidth", "_transmitter_code_2src_2main_8cpp.html#a37f06b098ecad47ae1f639f6465aa70f", null ],
     [ "BUFFERSIZE", "_transmitter_code_2src_2main_8cpp.html#ac3146f1e9227301bb4aa518f4d336cee", null ],
     [ "FILECHANNEL", "_transmitter_code_2src_2main_8cpp.html#a25a02fd19ba6092af59f73a9de071bd2", null ],
     [ "FILEDATARATE", "_transmitter_code_2src_2main_8cpp.html#a632cdd81885fffa95960e573cc6b42b3", null ],
