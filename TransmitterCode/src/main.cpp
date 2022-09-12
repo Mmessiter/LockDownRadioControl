@@ -1104,7 +1104,7 @@ void SendCommand(char* tbox) // heer
     NEXTION.print(tbox);
     for (int i = 0; i < 3; ++i) {
         NEXTION.write(0xff);
-        delayMicroseconds(65);
+        delayMicroseconds(70);
     }
     GetReturnCode();
 }
@@ -1399,11 +1399,14 @@ FASTRUN void ShowServoPos()
             SendValue(ChannelInput, map(l1, ChannelCentre[l], ChannelMax[l], 0, 100));
             StickPosition = map(l1, ChannelCentre[l], ChannelMax[l], BoxLeft + (((BoxRight - fixitx) - BoxLeft) / 2), BoxRight - fixitx);
             if (abs(StickPosition - SavedLineX) > LeastDistance) {
-                DisplayCurve();
+                DisplayCurve(); 
                 FillBox(StickPosition - 1, BoxTop + 4, BarWidth, (BoxBottom - 42) - BoxTop, HighlightColour);
                 SavedLineX = StickPosition;
             }
         }
+
+
+
         if (Connected) {
             SendValue(ChannelOutput, map(SendBuffer[ChanneltoSet - 1], MINMICROS, MAXMICROS, -100, 100));
         }
@@ -4131,7 +4134,7 @@ FASTRUN void DisplayCurve()
     }
 
     if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == EXPONENTIALCURVES) { // EXPO  ************************************************************************************************
-#define APPROXIMATION 4       // heer      // This is for the approximation of the screen curve
+#define APPROXIMATION 5       // heer      // This is for the approximation of the screen curve
 
         SendCommand(b3off);
         SendCommand(b4off);
@@ -4833,7 +4836,6 @@ void EndBuddyView()
 /*********************************************************************************************************************************/
 FASTRUN void DisplayCurveAndServoPos() // heer 
 {
-   // DisplayCurve();
     SavedLineX = 0;
     ShowServoPos(); // this calls display curve!!!
     ClearText();
