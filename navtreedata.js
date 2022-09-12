@@ -138,12 +138,12 @@ var NAVTREEINDEX =
 "_receiver_code_2lib_2_adafruit___g_p_s___library_2src_2_adafruit___p_m_t_k_8h.html#a9772abe32307f50632edef118f08454a",
 "_transmitter_code_2src_2main_8cpp.html#a13a1bdd6df9d527cfa5e3c1447c0d31a",
 "_transmitter_code_2src_2main_8cpp.html#a8a5b55d644bb404cd6cdf61c5a85f822",
-"_transmitter_code_2src_2main_8cpp.html#afd409fe008843b50c3e2ff697558d4d5",
-"class_m_p_u6050.html#a282ae29e029d88604a59c92bdf9ce252",
-"class_m_p_u9250.html#a17c1301768497ed0718f01289f22d57a",
-"class_m_p_u9250_f_i_f_o.html#a4b15facd0ce38964d241db56b1c57f75",
+"_transmitter_code_2src_2main_8cpp.html#afd8df260b5cc99e246c0e3c23cff81d1",
+"class_m_p_u6050.html#a29594027f88c291708a38fba67c4ecd5",
+"class_m_p_u9250.html#a18001505ab8b0633ad7a42519e532a36",
+"class_m_p_u9250_f_i_f_o.html#a538dddb6f169edabae06a6b7d55a556e",
 "globals.html",
-"struct_tiny_g_p_s_altitude.html#a1eb3e5b425784fc0db3e9ffe0f77f741"
+"struct_tiny_g_p_s_altitude.html#a5a39d145bb1778814007206c765189f7"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

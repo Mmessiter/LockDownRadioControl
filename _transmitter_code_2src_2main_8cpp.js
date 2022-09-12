@@ -13,7 +13,6 @@ var _transmitter_code_2src_2main_8cpp =
     [ "LASTFUNCTION", "_transmitter_code_2src_2main_8cpp.html#a7b562fa140e3020f492686ce35e4ac52", null ],
     [ "LeastDistance", "_transmitter_code_2src_2main_8cpp.html#ae7bf971a98ac285531a8f3ef290b5a61", null ],
     [ "MAXWIDTH", "_transmitter_code_2src_2main_8cpp.html#ac101c663138f79260b6d5ea00140fa22", null ],
-    [ "PAUSETIME", "_transmitter_code_2src_2main_8cpp.html#acf9420a676ab668b850aaef80578d8fb", null ],
     [ "AdjustDateTime", "_transmitter_code_2src_2main_8cpp.html#a9de4ea8e761b5f0e537f6f326f9ad429", null ],
     [ "Ascii", "_transmitter_code_2src_2main_8cpp.html#a3a793f5d71f6db34ad82272d211f8954", null ],
     [ "bcdToDec", "_transmitter_code_2src_2main_8cpp.html#a5e5cbc12559842867d90e19b7ecf4a8c", null ],
