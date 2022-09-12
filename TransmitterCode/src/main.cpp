@@ -1368,7 +1368,6 @@ FASTRUN void ShowServoPos()
     }
     if (CurrentView == GRAPHVIEW) {
 #define fixitx        35
-#define BarWidth      1
 #define LeastDistance 1 // if the change is very small, don't re-display anything - to reduce flashing. :=)!!
 
         l = (InPutStick[ChanneltoSet - 1]);
@@ -1395,8 +1394,9 @@ FASTRUN void ShowServoPos()
             StickPosition = map(l1, ChannelCentre[l], ChannelMax[l], BoxLeft + (((BoxRight - fixitx) - BoxLeft) / 2), BoxRight - fixitx);
         }
         if (abs(StickPosition - SavedLineX) > LeastDistance) {
-            DisplayCurve(); 
-            FillBox(StickPosition - 1, BoxTop + 4, BarWidth, (BoxBottom - 42) - BoxTop, HighlightColour);
+            DisplayCurve(); // heer
+           // FillBox(StickPosition - 1, BoxTop + 4, BarWidth, (BoxBottom - 42) - BoxTop, HighlightColour);
+            DrawLine(StickPosition - 1, BoxTop + 3, StickPosition - 1, (BoxBottom - 3) - BoxTop, HighlightColour);
             SavedLineX = StickPosition;
         }
         if (Connected) {
