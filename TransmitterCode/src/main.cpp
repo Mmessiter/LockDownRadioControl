@@ -1368,8 +1368,8 @@ FASTRUN void ShowServoPos()
     }
     if (CurrentView == GRAPHVIEW) {
 #define fixitx        35
-#define BarWidth      3
-#define LeastDistance 2 // if the change is very small, don't re-display anything - to reduce flashing.
+#define BarWidth      1
+#define LeastDistance 1 // if the change is very small, don't re-display anything - to reduce flashing. :=)!!
 
         l = (InPutStick[ChanneltoSet - 1]);
         if (ChanneltoSet <= 8) {
@@ -1389,24 +1389,16 @@ FASTRUN void ShowServoPos()
         if (l1 <= ChannelCentre[l]) {
             SendValue(ChannelInput, map(l1, ChannelCentre[l], ChannelMin[l], 0, -100));
             StickPosition = map(l1, ChannelMin[l], ChannelCentre[l], BoxLeft - 0, BoxLeft + (((BoxRight - fixitx) - BoxLeft) / 2));
-            if (abs(StickPosition - SavedLineX) > LeastDistance) {
-                DisplayCurve();
-                FillBox(StickPosition - 1, BoxTop + 4, BarWidth, (BoxBottom - 42) - BoxTop, HighlightColour);
-                SavedLineX = StickPosition;
-            }
         }
         else {
             SendValue(ChannelInput, map(l1, ChannelCentre[l], ChannelMax[l], 0, 100));
             StickPosition = map(l1, ChannelCentre[l], ChannelMax[l], BoxLeft + (((BoxRight - fixitx) - BoxLeft) / 2), BoxRight - fixitx);
-            if (abs(StickPosition - SavedLineX) > LeastDistance) {
-                DisplayCurve(); 
-                FillBox(StickPosition - 1, BoxTop + 4, BarWidth, (BoxBottom - 42) - BoxTop, HighlightColour);
-                SavedLineX = StickPosition;
-            }
         }
-
-
-
+        if (abs(StickPosition - SavedLineX) > LeastDistance) {
+            DisplayCurve(); 
+            FillBox(StickPosition - 1, BoxTop + 4, BarWidth, (BoxBottom - 42) - BoxTop, HighlightColour);
+            SavedLineX = StickPosition;
+        }
         if (Connected) {
             SendValue(ChannelOutput, map(SendBuffer[ChanneltoSet - 1], MINMICROS, MAXMICROS, -100, 100));
         }
@@ -4134,7 +4126,7 @@ FASTRUN void DisplayCurve()
     }
 
     if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == EXPONENTIALCURVES) { // EXPO  ************************************************************************************************
-#define APPROXIMATION 7       // heer      // This is for the approximation of the screen curve
+#define APPROXIMATION 7       // heer   // This is the approximation of the screen curve
 
         SendCommand(b3off);
         SendCommand(b4off);
