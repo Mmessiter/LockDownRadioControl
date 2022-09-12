@@ -4134,7 +4134,7 @@ FASTRUN void DisplayCurve()
     }
 
     if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == EXPONENTIALCURVES) { // EXPO  ************************************************************************************************
-#define APPROXIMATION 5       // heer      // This is for the approximation of the screen curve
+#define APPROXIMATION 7       // heer      // This is for the approximation of the screen curve
 
         SendCommand(b3off);
         SendCommand(b4off);
