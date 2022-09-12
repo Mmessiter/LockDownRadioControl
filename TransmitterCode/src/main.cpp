@@ -1099,11 +1099,12 @@ void GetReturnCode()
     }
 }
 /*********************************************************************************************************************************/
-void SendCommand(char* tbox)
+void SendCommand(char* tbox) // heer
 {
     NEXTION.print(tbox);
     for (int i = 0; i < 3; ++i) {
         NEXTION.write(0xff);
+        delayMicroseconds(65);
     }
     GetReturnCode();
 }
@@ -3829,7 +3830,7 @@ void ClearBox()
     Str(nb, BackGroundColour, 0);
     strcat(cmd, nb);
     SendCommand(cmd);
-    delay(2); // heer
+ 
 }
 
 /*********************************************************************************************************************************/
@@ -4130,8 +4131,8 @@ FASTRUN void DisplayCurve()
     }
 
     if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == EXPONENTIALCURVES) { // EXPO  ************************************************************************************************
-#define APPROXIMATION 7       // heer      // This is for the approximation of the screen curve
-#define PAUSETIME 250 
+#define APPROXIMATION 4       // heer      // This is for the approximation of the screen curve
+
         SendCommand(b3off);
         SendCommand(b4off);
         SendCommand(b7off);
@@ -4159,7 +4160,7 @@ FASTRUN void DisplayCurve()
             DrawLine(xDot1, yDot1, xDot2, yDot2, ForeGroundColour); // Draw short line from this point to previous point
             xDot2 = xDot1;
             yDot2 = yDot1;
-            delayMicroseconds(PAUSETIME);
+         
         }
         Step  = APPROXIMATION;
         yDot2 = 0; 
@@ -4178,7 +4179,7 @@ FASTRUN void DisplayCurve()
             DrawLine(xDot1, yDot1, xDot2, yDot2, ForeGroundColour); // Draw short line from this point to previous point
             xDot2 = xDot1;
             yDot2 = yDot1;
-            delayMicroseconds(PAUSETIME);
+            
         }
 
 
@@ -4830,11 +4831,11 @@ void EndBuddyView()
     CurrentView = MAINSETUPVIEW;
 }
 /*********************************************************************************************************************************/
-FASTRUN void DisplayCurveAndServoPos()
+FASTRUN void DisplayCurveAndServoPos() // heer 
 {
-    DisplayCurve();
+   // DisplayCurve();
     SavedLineX = 0;
-    ShowServoPos();
+    ShowServoPos(); // this calls display curve!!!
     ClearText();
 }
 /******************************** FUNCTIONS FOR ARRAY OF POINTERS *************************************************************/
@@ -6731,6 +6732,7 @@ FASTRUN void ButtonWasPressed()
                 p                                           = MaxDegrees[i][ChanneltoSet - 1];
                 MaxDegrees[i][ChanneltoSet - 1]    = 180 - p;
                 DisplayCurveAndServoPos();
+                ClearText();
             }
             return;
         }
