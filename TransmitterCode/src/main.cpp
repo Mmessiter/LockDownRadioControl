@@ -4733,6 +4733,8 @@ void ExitMacrosView()
     b5isGrey = false;
     SendCommand(pSetupView);
     CurrentView = MAINSETUPVIEW;
+    UpdateModelsNameEveryWhere();
+    
 }
 
 /*********************************************************************************************************************************/
@@ -4756,6 +4758,7 @@ void EndReverseView()
     SendCommand(ProgressEnd);
     b5isGrey = false;
     SendCommand(pSetupView);
+    UpdateModelsNameEveryWhere();
 }
 
 /*********************************************************************************************************************************/
@@ -4782,6 +4785,7 @@ void StartReverseView()
         }
     }
     SendCommand(ProgressEnd);
+    UpdateModelsNameEveryWhere();
 }
 
 /*********************************************************************************************************************************/
@@ -4821,6 +4825,7 @@ void EndBuddyView()
     b5isGrey = false;
     SendCommand(pSetupView);
     CurrentView = MAINSETUPVIEW;
+    UpdateModelsNameEveryWhere();
 }
 /*********************************************************************************************************************************/
 FASTRUN void DisplayCurveAndServoPos(){
@@ -4872,6 +4877,7 @@ void GotoMacrosView()
     SendCommand(pMacrosView);  // Display MacroView
     CurrentView = MACROS_VIEW;
     Procrastinate(200); // allow enough time for screen to display
+    UpdateModelsNameEveryWhere();
     PopulateMacrosView();
 }
 /******************************************************************************************************************************/
@@ -4971,6 +4977,7 @@ void SetupViewFM()
     SendCommand(page_SetupView);
     CurrentMode        = NORMAL; // Send data again
     CurrentView        = MAINSETUPVIEW;
+    UpdateModelsNameEveryWhere();
     ModelNameTimeCheck = 0;
 }
 /******************************************************************************************************************************/
@@ -4986,6 +4993,7 @@ void StartSubTrimView()
     SendText(t2, ChannelNames[SubTrimToEdit]);
     SendValue(n0, SubTrims[SubTrimToEdit] - 127);
     SendValue(h0, SubTrims[SubTrimToEdit]);
+    UpdateModelsNameEveryWhere();
 }
 /******************************************************************************************************************************/
 void EndSubTrimView()
@@ -4995,6 +5003,7 @@ void EndSubTrimView()
     CurrentView = MAINSETUPVIEW;
     SendCommand(page_SetupView);
     ModelNameTimeCheck = 0;
+    UpdateModelsNameEveryWhere();
 }
 /******************************************************************************************************************************/
 void StartTrimDefView()
@@ -5019,6 +5028,7 @@ void DefineTrimsEnd()
     DefiningTrims = false;
     CurrentMode   = NORMAL;
     SaveTransmitterParameters();
+    UpdateModelsNameEveryWhere();
 }
 /******************************************************************************************************************************/
 void ResetAllTrims()
@@ -5037,6 +5047,7 @@ void Options2End()
     SaveTransmitterParameters();
     CurrentView = MAINSETUPVIEW;
     SendCommand(page_SetupView);
+    UpdateModelsNameEveryWhere();
 }
 /******************************************************************************************************************************/
 
@@ -5122,6 +5133,7 @@ void OptionView3End()
     CloseModelsFile();
     CurrentView = MAINSETUPVIEW;
     SendCommand(page_SetupView);
+    UpdateModelsNameEveryWhere();
 }
 
 /******************************************************************************************************************************/
@@ -5519,6 +5531,7 @@ FASTRUN void ButtonWasPressed()
             SendCommand(page_SetupView);
             ModelNameTimeCheck = 0;
             SaveTransmitterParameters();
+            UpdateModelsNameEveryWhere();
             b5isGrey = false;
             ClearText();
             return;
@@ -5540,6 +5553,7 @@ FASTRUN void ButtonWasPressed()
             CurrentView        = MAINSETUPVIEW;
             b5isGrey           = false;
             ClearText();
+            UpdateModelsNameEveryWhere();
             return;
         }
         if (InStrng(Md1, TextIn) > 0) { // Mode 1 for trims
@@ -5618,6 +5632,7 @@ FASTRUN void ButtonWasPressed()
             b5isGrey           = false;
             SendCommand(ProgressEnd);
             LedWasGreen = false;
+            UpdateModelsNameEveryWhere();
             ClearText();
             return;
         }
@@ -5626,6 +5641,7 @@ FASTRUN void ButtonWasPressed()
             CurrentView = MAINSETUPVIEW;
             b5isGrey    = false;
             CurrentMode = NORMAL;
+            UpdateModelsNameEveryWhere();
             ClearText();
             return;
         }
@@ -5674,6 +5690,7 @@ FASTRUN void ButtonWasPressed()
             SendCommand(page_SetupView);
             ModelNameTimeCheck = 0;
             DoScanEnd();
+            UpdateModelsNameEveryWhere();
             ClearText();
             return;
         }
@@ -5905,6 +5922,7 @@ FASTRUN void ButtonWasPressed()
             SendCommand(pFailSafe);
             CurrentView = FAILSAFE_VIEW;
             UpdateButtonLabels();
+            UpdateModelsNameEveryWhere();
             ClearText();
             return;
         }
@@ -5914,6 +5932,7 @@ FASTRUN void ButtonWasPressed()
             CurrentView      = ONE_SWITCH_VIEW;
             SendCommand(PageOneSwitchView); // edit one switch - could be 1-4
             updateOneSwitchView();
+            UpdateModelsNameEveryWhere();
             ClearText();
             return;
         }
@@ -5998,6 +6017,7 @@ FASTRUN void ButtonWasPressed()
             SendCommand(pInputsView);
             CurrentView = INPUTS_VIEW;
             UpdateButtonLabels();
+            UpdateModelsNameEveryWhere();
             ClearText();
             return;
         }
@@ -6156,6 +6176,7 @@ FASTRUN void ButtonWasPressed()
             SendCommand(pSwitchesView);
             UpdateSwitchesDisplay(); // display saved values
             CurrentView = SWITCHES_VIEW;
+            UpdateModelsNameEveryWhere();
             ClearText();
             return;
         }
@@ -6261,6 +6282,7 @@ FASTRUN void ButtonWasPressed()
             b5isGrey    = false;
             SendCommand(page_SetupView);
             ModelNameTimeCheck = 0;
+            UpdateModelsNameEveryWhere();
             ClearText();
             return;
         }
@@ -6287,6 +6309,7 @@ FASTRUN void ButtonWasPressed()
             b5isGrey    = false;
             SendCommand(page_SetupView);
             ModelNameTimeCheck = 0;
+            UpdateModelsNameEveryWhere();
             ClearText();
             return;
         }
@@ -6304,6 +6327,7 @@ FASTRUN void ButtonWasPressed()
             if (RXCellCount == 5) SendValue(r5s, 1);
             if (RXCellCount == 6) SendValue(r6s, 1);
             ClearText();
+            UpdateModelsNameEveryWhere();
             return;
         }
 
@@ -6436,6 +6460,7 @@ FASTRUN void ButtonWasPressed()
             ModelNameTimeCheck = 0;
             CurrentMode        = NORMAL;
             CurrentView        = MAINSETUPVIEW;
+            UpdateModelsNameEveryWhere();
             b5isGrey           = false;
             ClearText();
             return;
