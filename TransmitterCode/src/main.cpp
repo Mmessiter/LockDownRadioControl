@@ -4825,7 +4825,7 @@ void EndBuddyView()
 /*********************************************************************************************************************************/
 FASTRUN void DisplayCurveAndServoPos(){
     SavedLineX = 0;
-    ShowServoPos(); // this calls display curve!!!
+    ShowServoPos(); // this calls displaycurve!!!
     ClearText();
 }
 /******************************** FUNCTIONS FOR ARRAY OF POINTERS *************************************************************/
