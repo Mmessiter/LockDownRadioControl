@@ -405,7 +405,7 @@ void SendPWMData(){                       // MCM
   servo7.write(s7_command_PWM);
 }
 // ***********************************************************************************************************
-void PrintGains(){    // MCM
+void PrintGains(){                        // MCM
  if (current_time - print_counter > 10000) {
     print_counter = micros();
     

@@ -4,43 +4,41 @@
 #define _SRC_UTILITIES_RADIO_H
 #include "common.h"
 
-RF24            Radio1(pinCE1, pinCSN1);
-RF24            Radio2(pinCE2, pinCSN2);
-RF24*           CurrentRadio = &Radio1;
-bool            Connected    = false;
-bool            SaveNewBind  = true;
-bool            HopNow       = false;
-uint8_t         ThisRadio    = 1;
-uint8_t         SavedPipeAddress[8];
-uint8_t         NextChannelNumber = 0;
-uint8_t         NextChannel;
-uint8_t         ReconnectIndex = RECONNECT_CHANNELS_START;
-uint8_t         PacketNumber; 
-uint16_t        ReceivedData[UNCOMPRESSEDWORDS];           //  20 x 16 BIT words
-uint16_t        PreviousData[UNCOMPRESSEDWORDS];           /** Previously received data (used for servos. Hence not sent if unchanged) */
-uint16_t        Interations = 0;
-uint32_t        HopStart;
-uint64_t        ThisPipe = 0xBABE1E5420LL; // default startup
-uint64_t        NewPipe  = 0;
-uint64_t        OldPipe  = 0;
-bool            FailSafeSent         = true;
-uint16_t        SbusRepeats = 0;
-uint32_t        RX1TotalTime = 0;
-uint32_t        RX2TotalTime = 0;
-uint32_t        RadioSwaps = 0;
-
-
+RF24     Radio1(pinCE1, pinCSN1);
+RF24     Radio2(pinCE2, pinCSN2);
+RF24*    CurrentRadio = &Radio1; //
+bool     Connected    = false;
+bool     SaveNewBind  = true;
+bool     HopNow       = false;
+uint8_t  ThisRadio    = 1;
+uint8_t  SavedPipeAddress[8];
+uint8_t  NextChannelNumber = 0;
+uint8_t  NextChannel;
+uint8_t  ReconnectIndex = RECONNECT_CHANNELS_START;
+uint8_t  PacketNumber;
+uint16_t ReceivedData[UNCOMPRESSEDWORDS]; //  20 x 16 BIT words
+uint16_t PreviousData[UNCOMPRESSEDWORDS]; /** Previously received data (used for servos. Hence not sent if unchanged) */
+uint16_t Interations = 0;
+uint32_t HopStart;
+uint64_t ThisPipe     = 0xBABE1E5420LL; // default startup
+uint64_t NewPipe      = 0;
+uint64_t OldPipe      = 0;
+bool     FailSafeSent = true;
+uint16_t SbusRepeats  = 0;
+uint32_t RX1TotalTime = 0;
+uint32_t RX2TotalTime = 0;
+uint32_t RadioSwaps   = 0;
 
 extern bool     BoundFlag;
 extern bool     GpsFix;
-extern bool     SENSOR_HUB_CONNECTED;  
+extern bool     SensorHubConnected;
 extern uint8_t  HoursGPS;
 extern uint8_t  MinsGPS;
 extern uint8_t  SecsGPS;
 extern uint8_t  YearGPS;
 extern uint8_t  MonthGPS;
 extern uint8_t  DayGPS;
-extern uint8_t  SatellitesGPS; 
+extern uint8_t  SatellitesGPS;
 extern uint16_t BaroAltitude;
 extern uint32_t ReconnectedMoment;
 extern uint32_t SBUSTimer;
@@ -53,16 +51,14 @@ extern float    AngleGPS;
 extern float    AltitudeGPS;
 extern float    DistanceGPS;
 extern float    CourseToGPS;
-  
-extern void     FailSafe();                               // defined in main.cpp
-extern void     ClearAckPayload();
-extern void     ShowHopDurationEtc();
-extern void     ReadSensorHub();
-extern void     SetUKFrequencies();
-extern void     MoveServos();
 
+extern void FailSafe(); // defined in main.cpp
+extern void ClearAckPayload();
+extern void ShowHopDurationEtc();
+extern void ReadSensorHub();
+extern void SetUKFrequencies();
+extern void MoveServos();
 
- 
 /** AckPayload Stucture for data returned to transmitter. */
 struct Payload
 {
@@ -71,7 +67,7 @@ struct Payload
      * the highest BIT of Purpose means ** HOP TO NEXT CHANNEL A.S.A.P. (IF ON) **
      * the lower 7 BITs then define the meaning of the remainder of the ackpayload bytes
      * If Purpose = 1 then ...
-     * 
+     *
      * AckPayload.Byte2           =  ThisRadio;            // Radio in current use  Byte1 and Byte2 are free
      * AckPayload.Byte3           =  RXVERSION_MAJOR;
      * AckPayload.Byte4           =  RXVERSION_MINOR;
@@ -81,15 +77,14 @@ struct Payload
      **/
 
     uint8_t Purpose = 0; // 0  Purpose
-    uint8_t Byte1   = 0; // 1  
-    uint8_t Byte2   = 0; // 2 
-    uint8_t Byte3   = 0; // 3 
-    uint8_t Byte4   = 0; // 4  
-    uint8_t Byte5   = 0; // 5 
+    uint8_t Byte1   = 0; // 1
+    uint8_t Byte2   = 0; // 2
+    uint8_t Byte3   = 0; // 3
+    uint8_t Byte4   = 0; // 4
+    uint8_t Byte5   = 0; // 5
 };
-Payload AckPayload;                         
-uint8_t AckPayloadSize = sizeof(AckPayload);        // Size for later externs if needed etc. (=6)
-
+Payload AckPayload;
+uint8_t AckPayloadSize = sizeof(AckPayload); // Size for later externs if needed etc. (=6)
 
 /************************************************************************************************************/
 
@@ -154,7 +149,8 @@ FLASHMEM void GetOldPipe()
 
 /************************************************************************************************************/
 
-void HopToNextChannel(){
+void HopToNextChannel()
+{
     CurrentRadio->stopListening();
     delay(1);
     CurrentRadio->setChannel(NextChannel);
@@ -177,7 +173,7 @@ FLASHMEM void InitCurrentRadio()
     CurrentRadio->setPALevel(RF24_PA_MAX);
     CurrentRadio->setDataRate(RF24_250KBPS);
     CurrentRadio->openReadingPipe(1, ThisPipe);
-    CurrentRadio->setRetries(3, 3);         // automatic retries
+    CurrentRadio->setRetries(3, 3); // automatic retries
     CurrentRadio->setAutoAck(true);
     SaveNewBind = true;
     HopStart    = millis();
@@ -185,10 +181,12 @@ FLASHMEM void InitCurrentRadio()
 
 /************************************ Try to connect  ... *********************************************/
 
-void TryToConnectNow(){
+void TryToConnectNow()
+{
     CurrentRadio->startListening();
     uint32_t ATimer = millis();
-    while ((!CurrentRadio->available()) && (millis() - ATimer) < LISTEN_PERIOD) { }    // Wait here until connected, on short timeout (10 ms)
+    while ((!CurrentRadio->available()) && (millis() - ATimer) < LISTEN_PERIOD) {
+    } // Wait here until connected, on short timeout (10 ms)
     Connected = CurrentRadio->available();
 }
 
@@ -197,50 +195,54 @@ void TryToConnectNow(){
 #ifdef SECOND_TRANSCEIVER
 
 void ProdRadio(uint8_t Recon_Ch)
-{  // After switching radios, this prod allows EITHER to connect. Don't know why - yet!
-   
-    CurrentRadio->enableAckPayload();       
-    CurrentRadio->enableDynamicPayloads(); 
-    CurrentRadio->maskIRQ(1, 1, 1);         
-    CurrentRadio->setCRCLength(RF24_CRC_8); 
+{ // After switching radios, this prod allows EITHER to connect. Don't know why - yet!
+
+    CurrentRadio->enableAckPayload();
+    CurrentRadio->enableDynamicPayloads();
+    CurrentRadio->maskIRQ(1, 1, 1);
+    CurrentRadio->setCRCLength(RF24_CRC_8);
     CurrentRadio->setPALevel(RF24_PA_MAX);
     CurrentRadio->setDataRate(RF24_250KBPS);
     CurrentRadio->openReadingPipe(1, ThisPipe);
     CurrentRadio->setChannel(Recon_Ch);
-    delay(3);                               
+    delay(3);
     TryToConnectNow();
 }
 
 /************************************************************************************************************/
- 
-void SwapChipEnableLines(){
-    if (ThisRadio == 1){
+
+void SwapChipEnableLines()
+{
+    if (ThisRadio == 1) {
         digitalWrite(pinCE2, CE_OFF);
-        digitalWrite(pinCSN2,CSN_OFF);      
-        digitalWrite(pinCE1, CE_ON);        
-        digitalWrite(pinCSN1,CSN_ON);
-    } else {
-        digitalWrite(pinCSN1,CSN_OFF);     
-        digitalWrite(pinCE1, CE_OFF); 
-        digitalWrite(pinCSN2,CSN_ON);
-        digitalWrite(pinCE2, CE_ON);  
+        digitalWrite(pinCSN2, CSN_OFF);
+        digitalWrite(pinCE1, CE_ON);
+        digitalWrite(pinCSN1, CSN_ON);
     }
-    delay(1);                            // Allow swap over a little time to be noticed ...
+    else {
+        digitalWrite(pinCSN1, CSN_OFF);
+        digitalWrite(pinCE1, CE_OFF);
+        digitalWrite(pinCSN2, CSN_ON);
+        digitalWrite(pinCE2, CE_ON);
+    }
+    delay(1); // Allow swap over a little time to be noticed ...
 }
 
 /************************************************************************************************************/
- 
-void TryTheOtherTransceiver(uint8_t Recon_Ch){
-            CurrentRadio->stopListening();
-            if (ThisRadio == 2) {
-                CurrentRadio = &Radio1;
-                ThisRadio    = 1;
-            } else {
-                CurrentRadio = &Radio2;
-                ThisRadio    = 2;
-            }
-            SwapChipEnableLines();
-            ProdRadio(Recon_Ch);          
+
+void TryTheOtherTransceiver(uint8_t Recon_Ch)
+{
+    CurrentRadio->stopListening();
+    if (ThisRadio == 2) {
+        CurrentRadio = &Radio1;
+        ThisRadio    = 1;
+    }
+    else {
+        CurrentRadio = &Radio2;
+        ThisRadio    = 2;
+    }
+    SwapChipEnableLines();
+    ProdRadio(Recon_Ch);
 }
 #endif // defined (SECOND_TRANSCEIVER)
 
@@ -248,175 +250,188 @@ void TryTheOtherTransceiver(uint8_t Recon_Ch){
 
 // This function is called when the system is busy but not receiving - to prevent very short SBUS timeouts (eg DJI).
 
-void KeepSbusHappy(){
-    if (millis() < 20000) return;               // Let things settle down after connection for 20 seconds or so before using this
-    if (millis() - SBUSTimer >= SBUSRATE) {     // Does SBUS expect a packet? 
-        SBUSTimer = millis();                   // Yes...             
-        if (!FailSafeSent)                      // But don't send after failsafe
+void KeepSbusHappy()
+{
+    if (millis() < 20000) return;           // Let things settle down after connection for 20 seconds or so before using this
+    if (millis() - SBUSTimer >= SBUSRATE) { // Does SBUS expect a packet?
+        SBUSTimer = millis();               // Yes...
+        if (!FailSafeSent)                  // But don't send after failsafe
         {
-            ++ SbusRepeats;                     // Count these repeats out of pure curiosity
-            Connected  = true;                  // To force re-sending this older data 
-            MoveServos();                       // This call also sends an SBUS packet
-            Connected = false;                  // Not in fact connnected of course
+            ++SbusRepeats;     // Count these repeats out of pure curiosity
+            Connected = true;  // To force re-sending this older data
+            MoveServos();      // This call also sends an SBUS packet
+            Connected = false; // Not in fact connnected of course
         }
     }
 }
 
 /************************************************************************************************************/
 
-void Reconnect(){                                                                // This is called when contact is lost, to reconnect ASAP
-    uint32_t SearchStartTime  = millis();;
-    uint8_t  ReconnectChannel = * (FHSSChPointer + ReconnectIndex);              // Get a reconnect channel 
-    uint8_t  PreviousRadio    =  ThisRadio;
+void Reconnect()
+{ // This is called when contact is lost, to reconnect ASAP
+    uint32_t SearchStartTime = millis();
+    ;
+    uint8_t ReconnectChannel = *(FHSSChPointer + ReconnectIndex); // Get a reconnect channel
+    uint8_t PreviousRadio    = ThisRadio;
 #ifdef SECOND_TRANSCEIVER
-    uint8_t  Attempts = 0;
+    uint8_t Attempts = 0;
 #endif
-    if (ThisRadio == 1) RX1TotalTime += (millis() - ReconnectedMoment);          // keep track of how long on each
+    if (ThisRadio == 1) RX1TotalTime += (millis() - ReconnectedMoment); // keep track of how long on each
     if (ThisRadio == 2) RX2TotalTime += (millis() - ReconnectedMoment);
     while (!Connected) {
-        if (BoundFlag) KeepSbusHappy();                                           // Some SBUS systems timeout FAST, so resend old data to keep it happy
+        if (BoundFlag) KeepSbusHappy(); // Some SBUS systems timeout FAST, so resend old data to keep it happy
         CurrentRadio->stopListening();
-        delayMicroseconds(500);                                                   // NEEDED!
-        ReconnectChannel = * (FHSSChPointer + ReconnectIndex);                    // Get a reconnect channel 
-        ++ ReconnectIndex;
+        delayMicroseconds(500);                               // NEEDED!
+        ReconnectChannel = *(FHSSChPointer + ReconnectIndex); // Get a reconnect channel
+        ++ReconnectIndex;
         if (ReconnectIndex >= RECONNECT_CHANNELS_COUNT + RECONNECT_CHANNELS_START) ReconnectIndex = RECONNECT_CHANNELS_START;
-        CurrentRadio->setChannel(ReconnectChannel);  
+        CurrentRadio->setChannel(ReconnectChannel);
         TryToConnectNow();
-        
+
 #ifdef SECOND_TRANSCEIVER
-        ++ Attempts;
-        if (Attempts >= 2){if (!Connected) TryTheOtherTransceiver(ReconnectChannel); Attempts = 0;}
-#endif 
+        ++Attempts;
+        if (Attempts >= 2) {
+            if (!Connected) TryTheOtherTransceiver(ReconnectChannel);
+            Attempts = 0;
+        }
+#endif
         if (!Connected) {
-            if ((millis() - SearchStartTime) > FAILSAFE_TIMEOUT){
+            if ((millis() - SearchStartTime) > FAILSAFE_TIMEOUT) {
                 if (!FailSafeSent) FailSafe();
             }
         }
     }
     FailSafeSent = false;
-    if (PreviousRadio != ThisRadio) ++ RadioSwaps;                                                           // Count the radio swaps
-    ReconnectedMoment    = millis();  // Save this moment, then don't move a servo for 20 ms ...
+    if (PreviousRadio != ThisRadio) ++RadioSwaps; // Count the radio swaps
+    ReconnectedMoment = millis();                 // Save this moment, then don't move a servo for 20 ms ...
 #ifdef DB_RXTIMERS
-   Serial.print ("Transceiver1 use so far: ");
-   Serial.print (RX1TotalTime/1000);
-   Serial.println (" seconds");
-   Serial.print ("Transceiver2 use so far: ");
-   Serial.print (RX2TotalTime/1000);
-   Serial.println (" seconds");
-   Serial.print ("Now connected on transceiver number: ");
-   Serial.print (ThisRadio);
-   Serial.println (" ...");
-   Serial.println ("");
+    Serial.print("Transceiver1 use so far: ");
+    Serial.print(RX1TotalTime / 1000);
+    Serial.println(" seconds");
+    Serial.print("Transceiver2 use so far: ");
+    Serial.print(RX2TotalTime / 1000);
+    Serial.println(" seconds");
+    Serial.print("Now connected on transceiver number: ");
+    Serial.print(ThisRadio);
+    Serial.println(" ...");
+    Serial.println("");
 #endif
-
 }
 /************************************************************************************************************/
-// This function checks the time since last hop. 
+// This function checks the time since last hop.
 // If it's time to HOP, it sets the high bit in AckPayload.Purpose and both ends then HOP to new channel before next packet.
 // The other 7 BITS of AckPayload.Purpose dictate the Payload's function (therefore 127 possibities.)
 // This happens for *every* AckPayload, which return telemetry data as well as this hoptime information.
 // Hence a single BIT now directs the transmitter to hop.
 
-void CheckWhetherItsTimeToHop(){
-    AckPayload.Purpose  &= 0x7f;                   // Clear the HOP flag
-    if ((millis() - HopStart) >= HOPTIME){         // Time to hop?? 
-         AckPayload.Purpose |= 0x80;               // Yes. So set the HOP flag leaving lower 7 bits unchanged
-         ++NextChannelNumber;                      // Move up the channels' array
-         if (NextChannelNumber >= FrequencyCount)  NextChannelNumber = 1; // If needed, wrap the channels' array pointer
-         AckPayload.Byte5 = NextChannelNumber;     // Tell the transmitter which element of the array to use next.
-         NextChannel =  * (FHSSChPointer + NextChannelNumber);   // Get the actual channel number from the array.
-         HopNow = true;                            // Set local flag and hop when ready BUT NOT BEFORE.
+void CheckWhetherItsTimeToHop()
+{
+    AckPayload.Purpose &= 0x7f;                                         // Clear the HOP flag
+    if ((millis() - HopStart) >= HOPTIME) {                             // Time to hop??
+        AckPayload.Purpose |= 0x80;                                     // Yes. So set the HOP flag leaving lower 7 bits unchanged
+        ++NextChannelNumber;                                            // Move up the channels' array
+        if (NextChannelNumber >= FrequencyCount) NextChannelNumber = 1; // If needed, wrap the channels' array pointer
+        AckPayload.Byte5 = NextChannelNumber;                           // Tell the transmitter which element of the array to use next.
+        NextChannel      = *(FHSSChPointer + NextChannelNumber);        // Get the actual channel number from the array.
+        HopNow           = true;                                        // Set local flag and hop when ready BUT NOT BEFORE.
     }
 }
 /************************************************************************************************************/
-void SendToAckPayload(float U){                        // This one function now works with most float parameters
-    union  {float Val32; uint8_t Val8[4];} ThisUnion;
+void SendToAckPayload(float U)
+{ // This one function now works with most float parameters
+    union
+    {
+        float   Val32;
+        uint8_t Val8[4];
+    } ThisUnion;
     CheckWhetherItsTimeToHop();
-    ThisUnion.Val32     = U;
-    AckPayload.Byte1    = ThisUnion.Val8[0];           // These values are herewith delivered to Transmitter in Ack Payload
-    AckPayload.Byte2    = ThisUnion.Val8[1];
-    AckPayload.Byte3    = ThisUnion.Val8[2];
-    AckPayload.Byte4    = ThisUnion.Val8[3];
+    ThisUnion.Val32  = U;
+    AckPayload.Byte1 = ThisUnion.Val8[0]; // These values are herewith delivered to Transmitter in Ack Payload
+    AckPayload.Byte2 = ThisUnion.Val8[1];
+    AckPayload.Byte3 = ThisUnion.Val8[2];
+    AckPayload.Byte4 = ThisUnion.Val8[3];
 }
 /************************************************************************************************************/
-void SendTimeToAckPayload(){    
-    CheckWhetherItsTimeToHop();                  
-    AckPayload.Byte1    = SecsGPS;    
-    AckPayload.Byte2    = MinsGPS;
-    AckPayload.Byte3    = HoursGPS;
+void SendTimeToAckPayload()
+{
+    CheckWhetherItsTimeToHop();
+    AckPayload.Byte1 = SecsGPS;
+    AckPayload.Byte2 = MinsGPS;
+    AckPayload.Byte3 = HoursGPS;
 }
 /************************************************************************************************************/
-void SendDateToAckPayload(){   
-    CheckWhetherItsTimeToHop();                         
-    AckPayload.Byte1    = DayGPS;  
-    AckPayload.Byte2    = MonthGPS;
-    AckPayload.Byte3    = YearGPS;
+void SendDateToAckPayload()
+{
+    CheckWhetherItsTimeToHop();
+    AckPayload.Byte1 = DayGPS;
+    AckPayload.Byte2 = MonthGPS;
+    AckPayload.Byte3 = YearGPS;
 }
 /************************************************************************************************************/
 void LoadAckPayload()
 {
-     uint8_t MaxAckP     = 4;                                      // 4 if only RX  
-      AckPayload.Purpose &= 0x7F;                                   // NOTE: The HIGH BIT of "purpose" bit is the HOPNOW flag. It gets set only when it's time to hop.
-    ++AckPayload.Purpose;   
-    if (INA219_CONNECTED) MaxAckP = 5;
-    if (SENSOR_HUB_CONNECTED) MaxAckP = 18;                       // its 14 + GPS
-    if (AckPayload.Purpose > MaxAckP) AckPayload.Purpose = 0;     // wrap after max
+    uint8_t MaxAckP = 4;        // 4 if only RX
+    AckPayload.Purpose &= 0x7F; // NOTE: The HIGH BIT of "purpose" bit is the HOPNOW flag. It gets set only when it's time to hop.
+    ++AckPayload.Purpose;
+    if (INA219Connected) MaxAckP = 5;
+    if (SensorHubConnected) MaxAckP = 18;                   // its 14 + GPS
+    if (AckPayload.Purpose > MaxAckP) AckPayload.Purpose = 0; // wrap after max
     switch (AckPayload.Purpose) {
-        case 0: 
+        case 0:
             SendVersionNumberToAckPayload();
-            break;  
+            break;
         case 1:
-            SendToAckPayload (SbusRepeats);
+            SendToAckPayload(SbusRepeats);
             break;
         case 2:
-            SendToAckPayload (RadioSwaps);
+            SendToAckPayload(RadioSwaps);
             break;
         case 3:
-            SendToAckPayload (RX1TotalTime/1000);
+            SendToAckPayload(RX1TotalTime / 1000);
             break;
-         case 4:
-            SendToAckPayload (RX2TotalTime/1000);
+        case 4:
+            SendToAckPayload(RX2TotalTime / 1000);
             break;
-        case 5: 
-            SendToAckPayload (INA219Volts);
+        case 5:
+            SendToAckPayload(INA219Volts);
             break;
         case 6:
-            SendToAckPayload (BaroAltitude);
+            SendToAckPayload(BaroAltitude);
             break;
-        case 7: 
-            SendToAckPayload (BaroTemperature);
+        case 7:
+            SendToAckPayload(BaroTemperature);
             break;
-        case 8: 
-            SendToAckPayload (LatitudeGPS);       
+        case 8:
+            SendToAckPayload(LatitudeGPS);
             break;
-        case 9: 
-             SendToAckPayload (LongitudeGPS);
+        case 9:
+            SendToAckPayload(LongitudeGPS);
             break;
-        case 10: 
-             SendToAckPayload (AngleGPS); 
+        case 10:
+            SendToAckPayload(AngleGPS);
             break;
-        case 11: 
-             SendToAckPayload (SpeedGPS);  
+        case 11:
+            SendToAckPayload(SpeedGPS);
             break;
-        case 12: 
-            SendToAckPayload (GpsFix);    
+        case 12:
+            SendToAckPayload(GpsFix);
             break;
-        case 13: 
-            SendToAckPayload (AltitudeGPS);      
+        case 13:
+            SendToAckPayload(AltitudeGPS);
             break;
-        case 14: 
-            SendToAckPayload (DistanceGPS);    
+        case 14:
+            SendToAckPayload(DistanceGPS);
             break;
-        case 15: 
-            SendToAckPayload (CourseToGPS);       
+        case 15:
+            SendToAckPayload(CourseToGPS);
             break;
-        case 16: 
-            SendToAckPayload (SatellitesGPS);     
+        case 16:
+            SendToAckPayload(SatellitesGPS);
             break;
-        case 17: 
+        case 17:
             SendDateToAckPayload();
             break;
-        case 18: 
+        case 18:
             SendTimeToAckPayload();
             break;
         default:
