@@ -1507,18 +1507,18 @@ void CheckScreenTime()
 /*********************************************************************************************************************************/
 void ClearSuccessRate()
 {
-    for (int i = 0; i < (125 * (uint16_t)ConnectionAssessSeconds); ++i) { // 125 packets per second start off good§
+    for (int i = 0; i < (125 * (uint16_t)ConnectionAssessSeconds); ++i) { // 125 packets per second start off good
         PacketsHistoryBuffer[i] = 1;
     }
 }
 /*********************************************************************************************************************************/
 int GetSuccessRate()
-{
-    int Total = 0;
-    int SuccessRate;
-    for (int i = 0; i < (125 * (uint16_t)ConnectionAssessSeconds); ++i) { // 125 packets per second are either good or bad
+{   uint16_t Total = 0;
+    uint16_t SuccessRate;
+    for (uint16_t i = 0; i < (125 * (uint16_t)ConnectionAssessSeconds); ++i) { // 125 packets per second are either good or bad
         Total += PacketsHistoryBuffer[i];
     }
+    Total += (125 - Total) / 2;                                              // about half made it but were simply unacknowledged
     SuccessRate = (Total * 100) / (125 * (uint16_t)ConnectionAssessSeconds); // return a percentage of total good packets
     return SuccessRate;
 }
@@ -1568,10 +1568,8 @@ FASTRUN void ShowComms()
     char WarnOff[]   = "vis Warning,0";
     char InVisible[] = "vis Quality,0";
     bool ShowNow     = false;
-
     char FrontView_AckPayload[] = "AckPayload";
     char FrontView_RXBV[]       = "RXBV";
-
     char Msg_CnctdBuddyMast[]  = "* BUDDY MASTER! *";
     char Msg_CnctdBuddySlave[] = "* BUDDY SLAVE! *";
     char MsgBuddying[]         = "Buddy";
@@ -1643,7 +1641,7 @@ FASTRUN void ShowComms()
                 }
                 if (CurrentView == DATAVIEW) {
                     SendValue(DataView_pps, PacketsPerSecond);
-                    SendValue(DataView_lps, TotalLostPackets);
+                    SendValue(DataView_lps, TotalLostPackets/2); // about half proboaly made it but went un acknoledged
                     SendText(DataView_Alt, ModelAltitude);
                     SendText(DataView_MaxAlt, MaxAltitude);
                     SendText(DataView_Temp, ModelTemperature);
@@ -5619,6 +5617,7 @@ FASTRUN void ButtonWasPressed()
             CurrentView        = MAINSETUPVIEW;
             b5isGrey           = false;
             SendCommand(ProgressEnd);
+            LedWasGreen = false;
             ClearText();
             return;
         }
