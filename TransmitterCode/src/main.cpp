@@ -1765,7 +1765,7 @@ void SendCharArray(char* ch0, char* ch1, char* ch2, char* ch3, char* ch4, char* 
 
 /*********************************************************************************************************************************/
 
-void SendMixValues()
+void SendMixValues() // sends mix values to Nextion screen
 {
     char MixesView_Enabled[]       = "MixesView.Enabled";
     char MixesView_FlightMode[]    = "MixesView.FlightMode";
