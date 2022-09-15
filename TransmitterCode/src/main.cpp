@@ -1193,7 +1193,7 @@ void GetTextIn()
     }
 }
 /*********************************************************************************************************************************/
-uint32_t GetValue(char* nbox)
+uint32_t getvalue(char* nbox)
 {
     uint32_t ValueIn = 0;
     char     GET[]   = "get ";
@@ -1220,14 +1220,14 @@ uint32_t GetValue(char* nbox)
 
 /*********************************************************************************************************************************/
 
-uint32_t GetValueSafer(char* nbox) // This function calls the function above until it returns no error
+uint32_t GetValue(char* nbox) // This function calls the function above until it returns no error
 {
     int      i       = 0;
-    uint32_t ValueIn = GetValue(nbox);
+    uint32_t ValueIn = getvalue(nbox);
 
     while (ValueIn == 65535 && i < 25) { // if error read again!
         delay(50);
-        ValueIn = GetValue(nbox);
+        ValueIn = getvalue(nbox);
         ++i;
     }
     return ValueIn;
@@ -4678,7 +4678,7 @@ void ShowChannelName()
 {
     char    MoveToChannel[]  = "Mch";
     char    MacrosView_chM[] = "chM";
-    uint8_t ch               = GetValueSafer(MoveToChannel);
+    uint8_t ch               = GetValue(MoveToChannel);
     if (ch > 0) --ch; // no zero
     SendText(MacrosView_chM, ChannelNames[ch]);
 }
@@ -4695,13 +4695,13 @@ void PopulateMacrosView()
     uint8_t n                = PreviousMacroNumber;
 
     if (n < 8) { // Read previous values before moveing to next
-        MacrosBuffer[n][MACROTRIGGERCHANNEL] = GetValueSafer(TriggerChannel);
-        MacrosBuffer[n][MACROMOVECHANNEL]    = GetValueSafer(MoveToChannel);
-        MacrosBuffer[n][MACROMOVETOPOSITION] = GetValueSafer(MoveToPosition);
-        MacrosBuffer[n][MACROSTARTTIME]      = GetValueSafer(Delay);
-        MacrosBuffer[n][MACRODURATION]       = GetValueSafer(Duration);
+        MacrosBuffer[n][MACROTRIGGERCHANNEL] = GetValue(TriggerChannel);
+        MacrosBuffer[n][MACROMOVECHANNEL]    = GetValue(MoveToChannel);
+        MacrosBuffer[n][MACROMOVETOPOSITION] = GetValue(MoveToPosition);
+        MacrosBuffer[n][MACROSTARTTIME]      = GetValue(Delay);
+        MacrosBuffer[n][MACRODURATION]       = GetValue(Duration);
     }
-    n = GetValueSafer(MacroNumber) - 1;
+    n = GetValue(MacroNumber) - 1;
     SendValue(TriggerChannel, MacrosBuffer[n][MACROTRIGGERCHANNEL]);
     SendValue(MoveToChannel, MacrosBuffer[n][MACROMOVECHANNEL]);
     SendValue(MoveToPosition, MacrosBuffer[n][MACROMOVETOPOSITION]);
@@ -4722,12 +4722,12 @@ void ExitMacrosView()
     char    MoveToPosition[]             = "Pos";
     char    Delay[]                      = "Del";
     char    Duration[]                   = "Dur";
-    uint8_t n                            = GetValueSafer(MacroNumber) - 1;
-    MacrosBuffer[n][MACROTRIGGERCHANNEL] = GetValueSafer(TriggerChannel);
-    MacrosBuffer[n][MACROMOVECHANNEL]    = GetValueSafer(MoveToChannel);
-    MacrosBuffer[n][MACROMOVETOPOSITION] = GetValueSafer(MoveToPosition);
-    MacrosBuffer[n][MACROSTARTTIME]      = GetValueSafer(Delay);
-    MacrosBuffer[n][MACRODURATION]       = GetValueSafer(Duration);
+    uint8_t n                            = GetValue(MacroNumber) - 1;
+    MacrosBuffer[n][MACROTRIGGERCHANNEL] = GetValue(TriggerChannel);
+    MacrosBuffer[n][MACROMOVECHANNEL]    = GetValue(MoveToChannel);
+    MacrosBuffer[n][MACROMOVETOPOSITION] = GetValue(MoveToPosition);
+    MacrosBuffer[n][MACROSTARTTIME]      = GetValue(Delay);
+    MacrosBuffer[n][MACRODURATION]       = GetValue(Duration);
     UseMacros                            = true;
     SaveOneModel(ModelNumber);
     b5isGrey = false;
@@ -4751,7 +4751,7 @@ void EndReverseView()
     ReversedChannelBITS = 0;
     for (i = 0; i < 16; ++i) {
         SendValue(Progress, (i * (100 / 16)));
-        if (GetValueSafer(fs[i])) ReversedChannelBITS |= 1 << i; // set a BIT // heer
+        if (GetValue(fs[i])) ReversedChannelBITS |= 1 << i; // set a BIT // heer
     }
     CurrentView = MAINSETUPVIEW;
     SaveOneModel(ModelNumber);
@@ -4815,9 +4815,9 @@ void EndBuddyView()
     char n0[]     = "n0";
 
     char pSetupView[]   = "page SetupView";
-    DoSbusSendOnly      = GetValueSafer(BuddyP); // Pupil, wired
-    BuddyMaster         = GetValueSafer(BuddyM); // Master, either.
-    BuddyTriggerChannel = GetValueSafer(n0);
+    DoSbusSendOnly      = GetValue(BuddyP); // Pupil, wired
+    BuddyMaster         = GetValue(BuddyM); // Master, either.
+    BuddyTriggerChannel = GetValue(n0);
     if (BuddyTriggerChannel > 16) BuddyTriggerChannel = 16;
     if (BuddyTriggerChannel < 1) BuddyTriggerChannel = 12;
 
@@ -4923,9 +4923,9 @@ void LogEND()
     CurrentMode      = NORMAL;
     CurrentView      = DATAVIEW;
     LastShowTime     = 0;
-    MinimumGap       = GetValueSafer(n0);
-    LogRXSwaps       = GetValueSafer(c0);
-    UseLog           = GetValueSafer(sw0);
+    MinimumGap       = GetValue(n0);
+    LogRXSwaps       = GetValue(c0);
+    UseLog           = GetValue(sw0);
     SaveTransmitterParameters();
     SendCommand(pDataView);
 }
@@ -5043,7 +5043,7 @@ void Options2End()
 { // back to setup?
     char dGMT[]           = "dGMT";
     char page_SetupView[] = "page SetupView";
-    DeltaGMT              = GetValueSafer(dGMT);
+    DeltaGMT              = GetValue(dGMT);
     SaveTransmitterParameters();
     CurrentView = MAINSETUPVIEW;
     SendCommand(page_SetupView);
@@ -5063,14 +5063,14 @@ void OptionView2Start()
     char RxVCorrextion[] = "n0"; // RX Voltage correction
 
     if (CurrentView == OPTIONVIEW3) {
-        RxVoltageCorrection    = GetValueSafer(RxVCorrextion);
-        TxVoltageCorrection    = GetValueSafer(TxVCorrextion);
-        PowerOffWarningSeconds = GetValueSafer(n2);
-        PowerOffWarningSeconds = CheckRange(PowerOffWarningSeconds, 2, 30);
-        LowPowerMode           = GetValueSafer(lpm);
-        if (LEDBrightness != GetValueSafer(n1)) LedWasGreen = false; // Forces a redisplay if brightness has changed
-        LEDBrightness           = GetValueSafer(n1);
-        ConnectionAssessSeconds = GetValueSafer(n3);
+        RxVoltageCorrection     = GetValue(RxVCorrextion);
+        TxVoltageCorrection     = GetValue(TxVCorrextion);
+        PowerOffWarningSeconds  = GetValue(n2);
+        PowerOffWarningSeconds  = CheckRange(PowerOffWarningSeconds, 2, 30);
+        LowPowerMode            = GetValue(lpm);
+        if (LEDBrightness      != GetValue(n1)) LedWasGreen = false; // Forces a redisplay if brightness has changed
+        LEDBrightness           = GetValue(n1);
+        ConnectionAssessSeconds = GetValue(n3);
         ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);
         LEDBrightness           = CheckRange(LEDBrightness, 1, 254);
         SaveAllParameters();
@@ -5118,14 +5118,14 @@ void OptionView3End()
     char page_SetupView[] = "page SetupView";
     char lpm[]            = "c0"; // Low power mode
 
-    TxVoltageCorrection    = GetValueSafer(TxVCorrextion);
-    RxVoltageCorrection    = GetValueSafer(RxVCorrextion);
-    PowerOffWarningSeconds = GetValueSafer(n2);
-    PowerOffWarningSeconds = CheckRange(PowerOffWarningSeconds, 2, 30);
-    LowPowerMode           = GetValueSafer(lpm);
-    if (LEDBrightness != GetValueSafer(n1)) LedWasGreen = false; // Forces a redisplay if brightness has changed
-    LEDBrightness           = GetValueSafer(n1);
-    ConnectionAssessSeconds = GetValueSafer(n3);
+    TxVoltageCorrection     = GetValue(TxVCorrextion);
+    RxVoltageCorrection     = GetValue(RxVCorrextion);
+    PowerOffWarningSeconds  = GetValue(n2);
+    PowerOffWarningSeconds  = CheckRange(PowerOffWarningSeconds, 2, 30);
+    LowPowerMode            = GetValue(lpm);
+    if (LEDBrightness      != GetValue(n1)) LedWasGreen = false; // Forces a redisplay if brightness has changed
+    LEDBrightness           = GetValue(n1);
+    ConnectionAssessSeconds = GetValue(n3);
     ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);
     LEDBrightness           = CheckRange(LEDBrightness, 1, 254);
     SetPowerMode();
@@ -5167,7 +5167,7 @@ void BuddyChViewEnd()
     SendCommand(ProgressStart);
     BuddyControlled = 0;
     for (int i = 0; i < 16; ++i) {
-        BuddyControlled |= GetValueSafer(fs[i]) << i;
+        BuddyControlled |= GetValue(fs[i]) << i;
         SendValue(Progress, i * (100 / 16));
     }
     SaveOneModel(ModelNumber);
@@ -5473,7 +5473,7 @@ FASTRUN void ButtonWasPressed()
         // ************************* test input words from Nextion *****************
 
         if (InStrng(StCH, TextIn)) { // select sub trim channel
-            SubTrimToEdit = GetValueSafer(s0);
+            SubTrimToEdit = GetValue(s0);
             SendText(t2, ChannelNames[SubTrimToEdit]);
             SendValue(n0, SubTrims[SubTrimToEdit] - 127);
             SendValue(h0, SubTrims[SubTrimToEdit]);
@@ -5482,13 +5482,13 @@ FASTRUN void ButtonWasPressed()
         }
 
         if (InStrng(StEDIT, TextIn)) {                    // edit sub trim value
-            SubTrims[SubTrimToEdit] = GetValueSafer(n0) + 127; // 127 is mid point in 8 bit value 0 - 254
+            SubTrims[SubTrimToEdit] = GetValue(n0) + 127; // 127 is mid point in 8 bit value 0 - 254
             ClearText();
             return;
         }
 
         if (InStrng(Delete, TextIn) > 0) {
-            ModelNumber = GetValueSafer(ModelsView_ModelNumber);
+            ModelNumber = GetValue(ModelsView_ModelNumber);
             SetDefaultValues();
             SaveOneModel(ModelNumber);
             ClearText();
@@ -5517,15 +5517,15 @@ FASTRUN void ButtonWasPressed()
         if (InStrng(SetupAud, TextIn) > 0) { // Exit from screen with audio options
             CurrentMode = NORMAL;
             CurrentView = MAINSETUPVIEW;
-            AudioVolume = GetValueSafer(n0);
+            AudioVolume = GetValue(n0);
             if (AudioVolume < 5) AudioVolume = 5;
-            Brightness        = GetValueSafer(n1);
-            PlayFanfare       = GetValueSafer(c0);
-            TrimClicks        = GetValueSafer(c1);
-            ButtonClicks      = GetValueSafer(c2);
-            SpeakingClock     = GetValueSafer(c3);
-            AnnounceBanks     = GetValueSafer(c4);
-            AnnounceConnected = GetValueSafer(c5);
+            Brightness        = GetValue(n1);
+            PlayFanfare       = GetValue(c0);
+            TrimClicks        = GetValue(c1);
+            ButtonClicks      = GetValue(c2);
+            SpeakingClock     = GetValue(c3);
+            AnnounceBanks     = GetValue(c4);
+            AnnounceConnected = GetValue(c5);
             RestoreBrightness();
             SetAudioVolume(AudioVolume);
             SendCommand(page_SetupView);
@@ -5540,7 +5540,7 @@ FASTRUN void ButtonWasPressed()
             if (CurrentView == FAILSAFE_VIEW) { //  read failsafe blobs
                 SendCommand(ProgressStart);
                 for (int i = 0; i < 16; ++i) {
-                    FailSafeChannel[i] = GetValueSafer(fs[i]);
+                    FailSafeChannel[i] = GetValue(fs[i]);
                     SendValue(Progress, i * (100 / 16));
                 }
                 SendCommand(ProgressEnd);
@@ -5604,15 +5604,15 @@ FASTRUN void ButtonWasPressed()
                 TxName[j] = 0;
             }
             SendValue(Progress, 35);
-            Qnh = (uint16_t)GetValueSafer(QNH); // error protected version
+            Qnh = (uint16_t)GetValue(QNH); // error protected version
 
             SendValue(Progress, 45);
-            TrimFactor     = GetValueSafer(trf);
-            LowBattery     = GetValueSafer(Bwn);
-            ScreenTimeout  = GetValueSafer(ScreenViewTimeout);
-            CopyTrimsToAll = GetValueSafer(c0);
+            TrimFactor     = GetValue(trf);
+            LowBattery     = GetValue(Bwn);
+            ScreenTimeout  = GetValue(ScreenViewTimeout);
+            CopyTrimsToAll = GetValue(c0);
             SendValue(Progress, 100);
-            Inactivity_Timeout = GetValueSafer(Pto) * TICKSPERMINUTE;
+            Inactivity_Timeout = GetValue(Pto) * TICKSPERMINUTE;
             if (Inactivity_Timeout < INACTIVITYMINIMUM) Inactivity_Timeout = INACTIVITYMINIMUM;
             if (Inactivity_Timeout > INACTIVITYMAXIMUM) Inactivity_Timeout = INACTIVITYMAXIMUM;
             FixDeltaGMTSign();
@@ -5759,7 +5759,7 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(OptionsViewS, TextIn) > 0) {
             FixDeltaGMTSign();
-            if (CurrentView == OPTIONVIEW2) DeltaGMT = GetValueSafer(dGMT);
+            if (CurrentView == OPTIONVIEW2) DeltaGMT = GetValue(dGMT);
             SendCommand(pOptionsViewS);
             SendValue(ScreenViewTimeout, ScreenTimeout);
             SendValue(Pto, (Inactivity_Timeout / TICKSPERMINUTE));
@@ -5837,16 +5837,16 @@ FASTRUN void ButtonWasPressed()
         }
 
         if (InStrng(Exrite, TextIn) > 0) { //  *******************
-            if (GetValueSafer(ExpR)) {
+            if (GetValue(ExpR)) {
                 InterpolationTypes[FlightMode][ChanneltoSet - 1] = EXPONENTIALCURVES;
             }
-            if (GetValueSafer(Smooth)) {
+            if (GetValue(Smooth)) {
                 InterpolationTypes[FlightMode][ChanneltoSet - 1] = SMOOTHEDCURVES;
             }
-            if (GetValueSafer(Lines)) {
+            if (GetValue(Lines)) {
                 InterpolationTypes[FlightMode][ChanneltoSet - 1] = STRAIGHTLINES;
             }
-            Exponential[FlightMode][ChanneltoSet - 1] = GetValueSafer(Expo) + 50; // Note: Getting this value from slider was not reliable (could not return 36!)
+            Exponential[FlightMode][ChanneltoSet - 1] = GetValue(Expo) + 50; // Note: Getting this value from slider was not reliable (could not return 36!)
             ClearText();
             DisplayCurveAndServoPos();
             return;
@@ -5908,7 +5908,7 @@ FASTRUN void ButtonWasPressed()
         if (InStrng(FailSAVE, TextIn) > 0) {
             SendCommand(ProgressStart);
             for (int i = 0; i < 16; ++i) {
-                FailSafeChannel[i] = GetValueSafer(fs[i]);
+                FailSafeChannel[i] = GetValue(fs[i]);
                 SendValue(Progress, i * (100 / 16));
             }
             SendValue(Progress, 100);
@@ -5938,37 +5938,37 @@ FASTRUN void ButtonWasPressed()
         }
 
         if (InStrng(SwitchesView1, TextIn) > 0) { //  read switch values from screen (could be 1-4)
-            if (GetValueSafer(OneSwitchView_r1)) {
+            if (GetValue(OneSwitchView_r1)) {
                 FMSwitch = SwitchEditNumber;
             }
             else {
                 if (FMSwitch == SwitchEditNumber) FMSwitch = 0;
             }
-            if (GetValueSafer(OneSwitchView_r2)) {
+            if (GetValue(OneSwitchView_r2)) {
                 AutoSwitch = SwitchEditNumber;
             }
             else {
                 if (AutoSwitch == SwitchEditNumber) AutoSwitch = 0;
             }
-            if (GetValueSafer(OneSwitchView_r3)) {
+            if (GetValue(OneSwitchView_r3)) {
                 Channel9Switch = SwitchEditNumber;
             }
             else {
                 if (Channel9Switch == SwitchEditNumber) Channel9Switch = 0;
             }
-            if (GetValueSafer(OneSwitchView_r4)) {
+            if (GetValue(OneSwitchView_r4)) {
                 Channel10Switch = SwitchEditNumber;
             }
             else {
                 if (Channel10Switch == SwitchEditNumber) Channel10Switch = 0;
             }
-            if (GetValueSafer(OneSwitchView_r5)) {
+            if (GetValue(OneSwitchView_r5)) {
                 Channel11Switch = SwitchEditNumber;
             }
             else {
                 if (Channel11Switch == SwitchEditNumber) Channel11Switch = 0;
             }
-            if (GetValueSafer(OneSwitchView_r6)) {
+            if (GetValue(OneSwitchView_r6)) {
                 Channel12Switch = SwitchEditNumber;
             }
             else {
@@ -5976,7 +5976,7 @@ FASTRUN void ButtonWasPressed()
             }
 
             if (SwitchEditNumber == 1) {
-                if (GetValueSafer(OneSwitchViewc_revd)) {
+                if (GetValue(OneSwitchViewc_revd)) {
                     SWITCH1Reversed = true;
                 }
                 else {
@@ -5984,7 +5984,7 @@ FASTRUN void ButtonWasPressed()
                 }
             }
             if (SwitchEditNumber == 2) {
-                if (GetValueSafer(OneSwitchViewc_revd)) {
+                if (GetValue(OneSwitchViewc_revd)) {
                     SWITCH2Reversed = true;
                 }
                 else {
@@ -5992,7 +5992,7 @@ FASTRUN void ButtonWasPressed()
                 }
             }
             if (SwitchEditNumber == 3) {
-                if (GetValueSafer(OneSwitchViewc_revd)) {
+                if (GetValue(OneSwitchViewc_revd)) {
                     SWITCH3Reversed = true;
                 }
                 else {
@@ -6000,7 +6000,7 @@ FASTRUN void ButtonWasPressed()
                 }
             }
             if (SwitchEditNumber == 4) {
-                if (GetValueSafer(OneSwitchViewc_revd)) {
+                if (GetValue(OneSwitchViewc_revd)) {
                     SWITCH4Reversed = true;
                 }
                 else {
@@ -6025,8 +6025,8 @@ FASTRUN void ButtonWasPressed()
         if (InStrng(InputsDone, TextIn) > 0) {
             SendCommand(ProgressStart);
             for (int i = 0; i < 16; ++i) {
-                InPutStick[i] = CheckRange((GetValueSafer(InputStick_Labels[i]) - 1), 0, 15);
-                if (i < 4) InputTrim[i] = CheckRange((GetValueSafer(InputTrim_labels[i]) - 1), 0, 3);
+                InPutStick[i] = CheckRange((GetValue(InputStick_Labels[i]) - 1), 0, 15);
+                if (i < 4) InputTrim[i] = CheckRange((GetValue(InputTrim_labels[i]) - 1), 0, 3);
                 SendValue(Progress, i * (100 / 16));
             }
             SendValue(Progress, 99);
@@ -6332,11 +6332,11 @@ FASTRUN void ButtonWasPressed()
         }
 
         if (InStrng(RXBAT, TextIn) > 0) { // UPdate RX batt cell count
-            if (GetValueSafer(r2s) == 1) RXCellCount = 2;
-            if (GetValueSafer(r3s) == 1) RXCellCount = 3;
-            if (GetValueSafer(r4s) == 1) RXCellCount = 4;
-            if (GetValueSafer(r5s) == 1) RXCellCount = 5;
-            if (GetValueSafer(r6s) == 1) RXCellCount = 6;
+            if (GetValue(r2s) == 1) RXCellCount = 2;
+            if (GetValue(r3s) == 1) RXCellCount = 3;
+            if (GetValue(r4s) == 1) RXCellCount = 4;
+            if (GetValue(r5s) == 1) RXCellCount = 5;
+            if (GetValue(r6s) == 1) RXCellCount = 6;
             SaveOneModel(ModelNumber);
             ClearText();
             return;
@@ -6356,10 +6356,10 @@ FASTRUN void ButtonWasPressed()
             return;
         }
         if (InStrng(RTRIM, TextIn) > 0) {
-            TrimsReversed[FlightMode][0] = GetValueSafer(TrimView_r1);
-            TrimsReversed[FlightMode][1] = GetValueSafer(TrimView_r4);
-            TrimsReversed[FlightMode][2] = GetValueSafer(TrimView_r2);
-            TrimsReversed[FlightMode][3] = GetValueSafer(TrimView_r3);
+            TrimsReversed[FlightMode][0] = GetValue(TrimView_r1);
+            TrimsReversed[FlightMode][1] = GetValue(TrimView_r4);
+            TrimsReversed[FlightMode][2] = GetValue(TrimView_r2);
+            TrimsReversed[FlightMode][3] = GetValue(TrimView_r3);
             if (CopyTrimsToAll) {
                 for (j = 0; j < 4; ++j) {
                     for (i = 1; i < 5; ++i) {
@@ -6453,8 +6453,8 @@ FASTRUN void ButtonWasPressed()
         }
 
         if (InStrng(Trim, TextIn) > 0) { // This is the return from Trim view
-            if (GetValueSafer(Mode1) == 1) SticksMode = 1;
-            if (GetValueSafer(Mode2) == 1) SticksMode = 2;
+            if (GetValue(Mode1) == 1) SticksMode = 1;
+            if (GetValue(Mode2) == 1) SticksMode = 2;
             SaveAllParameters(); // save trims to SDcard
             SendCommand(page_SetupView);
             ModelNameTimeCheck = 0;
@@ -6467,7 +6467,7 @@ FASTRUN void ButtonWasPressed()
         }
 
         if (InStrng(Write, TextIn) > 0) { //  write new data to SD
-            p = GetValueSafer(CopyToAllFlightModes);
+            p = GetValue(CopyToAllFlightModes);
             if (p == 1) {
                 for (p = 1; p <= 4; ++p) {
                     if (p != FlightMode) {
@@ -6563,18 +6563,18 @@ FASTRUN void ButtonWasPressed()
             CurrentView = MIXESVIEW;
             Procrastinate(100); // allow screen changes to appear
             UpdateModelsNameEveryWhere();
-            MixNumber = GetValueSafer(MixesView_MixNumber);
+            MixNumber = GetValue(MixesView_MixNumber);
             if (LastMixNumber != MixNumber) { // Did it change?
                 LastMixNumber = MixNumber;
                 SendMixValues();
             }
             else {
-                Mixes[MixNumber][M_Enabled]       = GetValueSafer(MixesView_Enabled);
-                Mixes[MixNumber][M_FlightMode]    = GetValueSafer(MixesView_FlightMode);
-                Mixes[MixNumber][M_MasterChannel] = GetValueSafer(MixesView_MasterChannel);
-                Mixes[MixNumber][M_SlaveChannel]  = GetValueSafer(MixesView_SlaveChannel);
-                Mixes[MixNumber][M_Reversed]      = GetValueSafer(MixesView_Reversed);
-                Mixes[MixNumber][M_Percent]       = GetValueSafer(MixesView_Percent);
+                Mixes[MixNumber][M_Enabled]       = GetValue(MixesView_Enabled);
+                Mixes[MixNumber][M_FlightMode]    = GetValue(MixesView_FlightMode);
+                Mixes[MixNumber][M_MasterChannel] = GetValue(MixesView_MasterChannel);
+                Mixes[MixNumber][M_SlaveChannel]  = GetValue(MixesView_SlaveChannel);
+                Mixes[MixNumber][M_Reversed]      = GetValue(MixesView_Reversed);
+                Mixes[MixNumber][M_Percent]       = GetValue(MixesView_Percent);
                 SendText(MixesView_chM, ChannelNames[Mixes[MixNumber][M_MasterChannel] - 1]);
                 SendText(MixesView_chS, ChannelNames[Mixes[MixNumber][M_SlaveChannel] - 1]);
             }
@@ -7378,7 +7378,7 @@ void CheckModelName()
     char ModelsView_ModelNumber[] = "ModelNumber"; //
     char ModelsView_ModelName[]   = "ModelName";
     char NewName[35];
-    ModelNumber = GetValueSafer(ModelsView_ModelNumber);
+    ModelNumber = GetValue(ModelsView_ModelNumber);
     if (GetButtonPress()) ButtonWasPressed();           // Deal with button ... don't want to miss one!
     if ((GetText(ModelsView_ModelName, NewName)) > 2) { // Short texts come in from kbd screen
         if (strcmp(ModelName, NewName) != 0) {          // Changed name?
