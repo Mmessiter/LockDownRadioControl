@@ -5872,7 +5872,9 @@ FASTRUN void ButtonWasPressed()
             }
             else {
                 if (UseLog) LogPowerOff();
-                delay(250);
+                delay(100);
+                SaveAllParameters();
+                delay(250); 
                 digitalWrite(POWER_OFF_PIN, HIGH);
             }
             return;
@@ -5886,7 +5888,9 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(OffNow, TextIn) > 0) { // redundant
             if (UseLog) LogPowerOff();
-            delay(250);
+            delay(100);
+            SaveAllParameters();
+            delay(250); 
             digitalWrite(POWER_OFF_PIN, HIGH); // force OFF in Options View
             ClearText();
             return;
@@ -7443,7 +7447,9 @@ void CheckPowerOffButton()
                 if (PlayFanfare) {
                     PlaySound(WHAHWHAHMSG);
                     delay(2300);
-                }                                  // wait a mo for user to see 0 and log to write to file
+                } 
+                SaveAllParameters();
+                delay(250);                        // wait a mo for user to see 0 and log to write to file
                 digitalWrite(POWER_OFF_PIN, HIGH); // power off
             }
             --TurnOffSecondToGo;
