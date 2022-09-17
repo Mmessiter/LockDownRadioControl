@@ -4515,10 +4515,10 @@ void SendModelFile()
             Fposition += BUFFERSIZE;
             if (Fposition > Fsize) Fposition = Fsize;
         }
-        while ((millis() - SentMoment) < PACEMAKER * 2) {
+        while ((millis() - SentMoment) < PACEMAKER * 2 ) {
             Radio1.flush_tx();
             Radio1.flush_rx();
-        }
+       }
         if (Radio1.write(&Fbuffer, BUFFERSIZE + 4)) {
             SentMoment = millis();
             Procrastinate(1);
