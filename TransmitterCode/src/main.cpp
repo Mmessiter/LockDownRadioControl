@@ -1193,7 +1193,7 @@ void GetTextIn()
     }
 }
 /*********************************************************************************************************************************/
-uint32_t GetValue(char* nbox)
+uint32_t getvalue(char* nbox)
 {
     uint32_t ValueIn = 0;
     char     GET[]   = "get ";
@@ -1220,14 +1220,14 @@ uint32_t GetValue(char* nbox)
 
 /*********************************************************************************************************************************/
 
-uint32_t GetValueSafer(char* nbox) // This function calls the function above until it returns no error
+uint32_t GetValue(char* nbox) // This function calls the function above until it returns no error
 {
     int      i       = 0;
-    uint32_t ValueIn = GetValue(nbox);
+    uint32_t ValueIn = getvalue(nbox);
 
     while (ValueIn == 65535 && i < 25) { // if error read again!
         delay(50);
-        ValueIn = GetValue(nbox);
+        ValueIn = getvalue(nbox);
         ++i;
     }
     return ValueIn;
@@ -1765,7 +1765,7 @@ void SendCharArray(char* ch0, char* ch1, char* ch2, char* ch3, char* ch4, char* 
 
 /*********************************************************************************************************************************/
 
-void SendMixValues()
+void SendMixValues() // sends mix values to Nextion screen
 {
     char MixesView_Enabled[]       = "MixesView.Enabled";
     char MixesView_FlightMode[]    = "MixesView.FlightMode";
@@ -4515,10 +4515,10 @@ void SendModelFile()
             Fposition += BUFFERSIZE;
             if (Fposition > Fsize) Fposition = Fsize;
         }
-        while ((millis() - SentMoment) < PACEMAKER * 2) {
+        while ((millis() - SentMoment) < PACEMAKER * 2 ) {
             Radio1.flush_tx();
             Radio1.flush_rx();
-        }
+       }
         if (Radio1.write(&Fbuffer, BUFFERSIZE + 4)) {
             SentMoment = millis();
             Procrastinate(1);
@@ -4733,6 +4733,8 @@ void ExitMacrosView()
     b5isGrey = false;
     SendCommand(pSetupView);
     CurrentView = MAINSETUPVIEW;
+    UpdateModelsNameEveryWhere();
+    
 }
 
 /*********************************************************************************************************************************/
@@ -4749,13 +4751,14 @@ void EndReverseView()
     ReversedChannelBITS = 0;
     for (i = 0; i < 16; ++i) {
         SendValue(Progress, (i * (100 / 16)));
-        if (GetValue(fs[i])) ReversedChannelBITS |= 1 << i; // set a BIT
+        if (GetValue(fs[i])) ReversedChannelBITS |= 1 << i; // set a BIT // heer
     }
     CurrentView = MAINSETUPVIEW;
     SaveOneModel(ModelNumber);
     SendCommand(ProgressEnd);
     b5isGrey = false;
     SendCommand(pSetupView);
+    UpdateModelsNameEveryWhere();
 }
 
 /*********************************************************************************************************************************/
@@ -4782,6 +4785,7 @@ void StartReverseView()
         }
     }
     SendCommand(ProgressEnd);
+    UpdateModelsNameEveryWhere();
 }
 
 /*********************************************************************************************************************************/
@@ -4821,6 +4825,7 @@ void EndBuddyView()
     b5isGrey = false;
     SendCommand(pSetupView);
     CurrentView = MAINSETUPVIEW;
+    UpdateModelsNameEveryWhere();
 }
 /*********************************************************************************************************************************/
 FASTRUN void DisplayCurveAndServoPos(){
@@ -4872,6 +4877,7 @@ void GotoMacrosView()
     SendCommand(pMacrosView);  // Display MacroView
     CurrentView = MACROS_VIEW;
     Procrastinate(200); // allow enough time for screen to display
+    UpdateModelsNameEveryWhere();
     PopulateMacrosView();
 }
 /******************************************************************************************************************************/
@@ -4971,6 +4977,7 @@ void SetupViewFM()
     SendCommand(page_SetupView);
     CurrentMode        = NORMAL; // Send data again
     CurrentView        = MAINSETUPVIEW;
+    UpdateModelsNameEveryWhere();
     ModelNameTimeCheck = 0;
 }
 /******************************************************************************************************************************/
@@ -4986,6 +4993,7 @@ void StartSubTrimView()
     SendText(t2, ChannelNames[SubTrimToEdit]);
     SendValue(n0, SubTrims[SubTrimToEdit] - 127);
     SendValue(h0, SubTrims[SubTrimToEdit]);
+    UpdateModelsNameEveryWhere();
 }
 /******************************************************************************************************************************/
 void EndSubTrimView()
@@ -4995,6 +5003,7 @@ void EndSubTrimView()
     CurrentView = MAINSETUPVIEW;
     SendCommand(page_SetupView);
     ModelNameTimeCheck = 0;
+    UpdateModelsNameEveryWhere();
 }
 /******************************************************************************************************************************/
 void StartTrimDefView()
@@ -5019,6 +5028,7 @@ void DefineTrimsEnd()
     DefiningTrims = false;
     CurrentMode   = NORMAL;
     SaveTransmitterParameters();
+    UpdateModelsNameEveryWhere();
 }
 /******************************************************************************************************************************/
 void ResetAllTrims()
@@ -5033,10 +5043,11 @@ void Options2End()
 { // back to setup?
     char dGMT[]           = "dGMT";
     char page_SetupView[] = "page SetupView";
-    DeltaGMT              = GetValueSafer(dGMT);
+    DeltaGMT              = GetValue(dGMT);
     SaveTransmitterParameters();
     CurrentView = MAINSETUPVIEW;
     SendCommand(page_SetupView);
+    UpdateModelsNameEveryWhere();
 }
 /******************************************************************************************************************************/
 
@@ -5052,14 +5063,14 @@ void OptionView2Start()
     char RxVCorrextion[] = "n0"; // RX Voltage correction
 
     if (CurrentView == OPTIONVIEW3) {
-        RxVoltageCorrection    = GetValueSafer(RxVCorrextion);
-        TxVoltageCorrection    = GetValueSafer(TxVCorrextion);
-        PowerOffWarningSeconds = GetValueSafer(n2);
-        PowerOffWarningSeconds = CheckRange(PowerOffWarningSeconds, 2, 30);
-        LowPowerMode           = GetValueSafer(lpm);
-        if (LEDBrightness != GetValueSafer(n1)) LedWasGreen = false; // Forces a redisplay if brightness has changed
-        LEDBrightness           = GetValueSafer(n1);
-        ConnectionAssessSeconds = GetValueSafer(n3);
+        RxVoltageCorrection     = GetValue(RxVCorrextion);
+        TxVoltageCorrection     = GetValue(TxVCorrextion);
+        PowerOffWarningSeconds  = GetValue(n2);
+        PowerOffWarningSeconds  = CheckRange(PowerOffWarningSeconds, 2, 30);
+        LowPowerMode            = GetValue(lpm);
+        if (LEDBrightness      != GetValue(n1)) LedWasGreen = false; // Forces a redisplay if brightness has changed
+        LEDBrightness           = GetValue(n1);
+        ConnectionAssessSeconds = GetValue(n3);
         ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);
         LEDBrightness           = CheckRange(LEDBrightness, 1, 254);
         SaveAllParameters();
@@ -5107,14 +5118,14 @@ void OptionView3End()
     char page_SetupView[] = "page SetupView";
     char lpm[]            = "c0"; // Low power mode
 
-    TxVoltageCorrection    = GetValueSafer(TxVCorrextion);
-    RxVoltageCorrection    = GetValueSafer(RxVCorrextion);
-    PowerOffWarningSeconds = GetValueSafer(n2);
-    PowerOffWarningSeconds = CheckRange(PowerOffWarningSeconds, 2, 30);
-    LowPowerMode           = GetValueSafer(lpm);
-    if (LEDBrightness != GetValueSafer(n1)) LedWasGreen = false; // Forces a redisplay if brightness has changed
-    LEDBrightness           = GetValueSafer(n1);
-    ConnectionAssessSeconds = GetValueSafer(n3);
+    TxVoltageCorrection     = GetValue(TxVCorrextion);
+    RxVoltageCorrection     = GetValue(RxVCorrextion);
+    PowerOffWarningSeconds  = GetValue(n2);
+    PowerOffWarningSeconds  = CheckRange(PowerOffWarningSeconds, 2, 30);
+    LowPowerMode            = GetValue(lpm);
+    if (LEDBrightness      != GetValue(n1)) LedWasGreen = false; // Forces a redisplay if brightness has changed
+    LEDBrightness           = GetValue(n1);
+    ConnectionAssessSeconds = GetValue(n3);
     ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);
     LEDBrightness           = CheckRange(LEDBrightness, 1, 254);
     SetPowerMode();
@@ -5122,6 +5133,7 @@ void OptionView3End()
     CloseModelsFile();
     CurrentView = MAINSETUPVIEW;
     SendCommand(page_SetupView);
+    UpdateModelsNameEveryWhere();
 }
 
 /******************************************************************************************************************************/
@@ -5519,6 +5531,7 @@ FASTRUN void ButtonWasPressed()
             SendCommand(page_SetupView);
             ModelNameTimeCheck = 0;
             SaveTransmitterParameters();
+            UpdateModelsNameEveryWhere();
             b5isGrey = false;
             ClearText();
             return;
@@ -5540,6 +5553,7 @@ FASTRUN void ButtonWasPressed()
             CurrentView        = MAINSETUPVIEW;
             b5isGrey           = false;
             ClearText();
+            UpdateModelsNameEveryWhere();
             return;
         }
         if (InStrng(Md1, TextIn) > 0) { // Mode 1 for trims
@@ -5590,15 +5604,15 @@ FASTRUN void ButtonWasPressed()
                 TxName[j] = 0;
             }
             SendValue(Progress, 35);
-            Qnh = (uint16_t)GetValueSafer(QNH); // error protected version
+            Qnh = (uint16_t)GetValue(QNH); // error protected version
 
             SendValue(Progress, 45);
-            TrimFactor     = GetValueSafer(trf);
-            LowBattery     = GetValueSafer(Bwn);
-            ScreenTimeout  = GetValueSafer(ScreenViewTimeout);
-            CopyTrimsToAll = GetValueSafer(c0);
+            TrimFactor     = GetValue(trf);
+            LowBattery     = GetValue(Bwn);
+            ScreenTimeout  = GetValue(ScreenViewTimeout);
+            CopyTrimsToAll = GetValue(c0);
             SendValue(Progress, 100);
-            Inactivity_Timeout = GetValueSafer(Pto) * TICKSPERMINUTE;
+            Inactivity_Timeout = GetValue(Pto) * TICKSPERMINUTE;
             if (Inactivity_Timeout < INACTIVITYMINIMUM) Inactivity_Timeout = INACTIVITYMINIMUM;
             if (Inactivity_Timeout > INACTIVITYMAXIMUM) Inactivity_Timeout = INACTIVITYMAXIMUM;
             FixDeltaGMTSign();
@@ -5618,6 +5632,7 @@ FASTRUN void ButtonWasPressed()
             b5isGrey           = false;
             SendCommand(ProgressEnd);
             LedWasGreen = false;
+            UpdateModelsNameEveryWhere();
             ClearText();
             return;
         }
@@ -5626,6 +5641,7 @@ FASTRUN void ButtonWasPressed()
             CurrentView = MAINSETUPVIEW;
             b5isGrey    = false;
             CurrentMode = NORMAL;
+            UpdateModelsNameEveryWhere();
             ClearText();
             return;
         }
@@ -5674,6 +5690,7 @@ FASTRUN void ButtonWasPressed()
             SendCommand(page_SetupView);
             ModelNameTimeCheck = 0;
             DoScanEnd();
+            UpdateModelsNameEveryWhere();
             ClearText();
             return;
         }
@@ -5742,7 +5759,7 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(OptionsViewS, TextIn) > 0) {
             FixDeltaGMTSign();
-            if (CurrentView == OPTIONVIEW2) DeltaGMT = GetValueSafer(dGMT);
+            if (CurrentView == OPTIONVIEW2) DeltaGMT = GetValue(dGMT);
             SendCommand(pOptionsViewS);
             SendValue(ScreenViewTimeout, ScreenTimeout);
             SendValue(Pto, (Inactivity_Timeout / TICKSPERMINUTE));
@@ -5855,7 +5872,9 @@ FASTRUN void ButtonWasPressed()
             }
             else {
                 if (UseLog) LogPowerOff();
-                delay(250);
+                delay(100);
+                SaveAllParameters();
+                delay(250); 
                 digitalWrite(POWER_OFF_PIN, HIGH);
             }
             return;
@@ -5869,7 +5888,9 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(OffNow, TextIn) > 0) { // redundant
             if (UseLog) LogPowerOff();
-            delay(250);
+            delay(100);
+            SaveAllParameters();
+            delay(250); 
             digitalWrite(POWER_OFF_PIN, HIGH); // force OFF in Options View
             ClearText();
             return;
@@ -5905,6 +5926,7 @@ FASTRUN void ButtonWasPressed()
             SendCommand(pFailSafe);
             CurrentView = FAILSAFE_VIEW;
             UpdateButtonLabels();
+            UpdateModelsNameEveryWhere();
             ClearText();
             return;
         }
@@ -5914,6 +5936,7 @@ FASTRUN void ButtonWasPressed()
             CurrentView      = ONE_SWITCH_VIEW;
             SendCommand(PageOneSwitchView); // edit one switch - could be 1-4
             updateOneSwitchView();
+            UpdateModelsNameEveryWhere();
             ClearText();
             return;
         }
@@ -5998,6 +6021,7 @@ FASTRUN void ButtonWasPressed()
             SendCommand(pInputsView);
             CurrentView = INPUTS_VIEW;
             UpdateButtonLabels();
+            UpdateModelsNameEveryWhere();
             ClearText();
             return;
         }
@@ -6156,6 +6180,7 @@ FASTRUN void ButtonWasPressed()
             SendCommand(pSwitchesView);
             UpdateSwitchesDisplay(); // display saved values
             CurrentView = SWITCHES_VIEW;
+            UpdateModelsNameEveryWhere();
             ClearText();
             return;
         }
@@ -6261,6 +6286,7 @@ FASTRUN void ButtonWasPressed()
             b5isGrey    = false;
             SendCommand(page_SetupView);
             ModelNameTimeCheck = 0;
+            UpdateModelsNameEveryWhere();
             ClearText();
             return;
         }
@@ -6287,6 +6313,7 @@ FASTRUN void ButtonWasPressed()
             b5isGrey    = false;
             SendCommand(page_SetupView);
             ModelNameTimeCheck = 0;
+            UpdateModelsNameEveryWhere();
             ClearText();
             return;
         }
@@ -6304,6 +6331,7 @@ FASTRUN void ButtonWasPressed()
             if (RXCellCount == 5) SendValue(r5s, 1);
             if (RXCellCount == 6) SendValue(r6s, 1);
             ClearText();
+            UpdateModelsNameEveryWhere();
             return;
         }
 
@@ -6436,6 +6464,7 @@ FASTRUN void ButtonWasPressed()
             ModelNameTimeCheck = 0;
             CurrentMode        = NORMAL;
             CurrentView        = MAINSETUPVIEW;
+            UpdateModelsNameEveryWhere();
             b5isGrey           = false;
             ClearText();
             return;
@@ -7353,7 +7382,7 @@ void CheckModelName()
     char ModelsView_ModelNumber[] = "ModelNumber"; //
     char ModelsView_ModelName[]   = "ModelName";
     char NewName[35];
-    ModelNumber = GetValueSafer(ModelsView_ModelNumber);
+    ModelNumber = GetValue(ModelsView_ModelNumber);
     if (GetButtonPress()) ButtonWasPressed();           // Deal with button ... don't want to miss one!
     if ((GetText(ModelsView_ModelName, NewName)) > 2) { // Short texts come in from kbd screen
         if (strcmp(ModelName, NewName) != 0) {          // Changed name?
@@ -7418,7 +7447,9 @@ void CheckPowerOffButton()
                 if (PlayFanfare) {
                     PlaySound(WHAHWHAHMSG);
                     delay(2300);
-                }                                  // wait a mo for user to see 0 and log to write to file
+                } 
+                SaveAllParameters();
+                delay(250);                        // wait a mo for user to see 0 and log to write to file
                 digitalWrite(POWER_OFF_PIN, HIGH); // power off
             }
             --TurnOffSecondToGo;
