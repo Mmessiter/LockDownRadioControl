@@ -49,7 +49,6 @@ SBUS            MySbus(SBUSPORT);
 float           PacketStartTime;
 uint8_t         BindNow        = 0;     /** indicates that the receiver should start the binding/pairing process */
 bool            BoundFlag      = false; /** indicates if receiver paired with transmitter */
-int             BindOKTimer    = 0;
 bool            ServosAttached = false;
 uint16_t        SbusChannels[CHANNELSUSED + 1]; // Just one spare
 uint32_t        SBUSTimer = 0;
@@ -86,12 +85,14 @@ bool            SensorHubDead   = false;
 uint32_t        BootupMoment    = 0;
 bool            QNHSent         = false;
 bool            FirstLostPacket = true;
-
+uint8_t         MacAddress[8] = {0,0,0,0,0,0,0,0};
+uint8_t         MacSentCounter = 0;
+bool            ModelMatched    = false;
 /************************************************************************************************************/
 
 void LoadFailSafeData()
 {
-    uint8_t  FS_Offset = 10;
+   uint8_t FS_Offset = FS_EEPROM_OFFSET;
     uint16_t s[CHANNELSUSED];
 
     for (uint8_t i = 0; i < CHANNELSUSED; ++i) {
@@ -139,17 +140,25 @@ void MoveServos()
 
 /** Execute FailSafe data from EEPROM. */
 void FailSafe()
-{
-    if (BoundFlag) {
+{   
+    if (BoundFlag)
+    {
         LoadFailSafeData();
         Connected = true; // to force sending this data!
         MapToSBUS();
         MoveServos();
         Connected = false; // I lied earlier - we're not really connected.
     }
-    FailSafeSent = true; // Once is enough
-    SbusRepeats  = 0;    // Reset this count for next connection
-    SetUKFrequencies();  // In case this had been changed
+    SetUKFrequencies();     // default startup conditions
+    ModelMatched = false;
+    SaveNewBind  = true;    // default startup conditions
+    Connected    = false;   // default startup conditions
+    FailSafeSent = true;    // Once is enough
+    SbusRepeats  = 0;       // Reset this count for next connection
+    BindNow      = 0;       // default startup conditions
+    BoundFlag    = false;   // default startup conditions
+    ThisPipe     = DEFAULTPIPE; // default startup conditions
+    SetNewPipe();
 }
 
 #ifdef DB_FHSS
@@ -221,24 +230,25 @@ void AttachServos()
     MySbus.begin(); // AND START SBUS!!!
 }
 /************************************************************************************************************/
-void BindModel()
-{
+// This function binds the model using the TX supplied Pipe instead of the default one.
+// If not already saved, this saves it to the eeprom too for next time.
+
+void BindModel(){  
     ThisPipe = NewPipe;
-    if (SaveNewBind) {
-        for (uint8_t i = 0; i < 8; ++i) {
-            EEPROM.update(i, ReceivedData[i]);
-        }
-    }
+    OldPipe  = NewPipe;
     CurrentRadio->stopListening();
     delayMicroseconds(250);
-    SetNewPipe();
+    SetNewPipe();                  // change to bound pipe
+    if (SaveNewBind) {        
+        for (uint8_t i = 0; i < 8; ++i) {
+            EEPROM.update(i+BIND_EEPROM_OFFSET, ReceivedData[i]);
+            delay(1);
+        }
+    }
     BoundFlag   = true;
     BindNow     = 0;
     SaveNewBind = false;
     AttachServos(); // AND START SBUS!!!
-#ifdef DB_BIND
-    Serial.println("BINDING NOW");
-#endif
 }
 // ***************************************************************************************************************************************************
 void SendToSensorHub(char m[])
@@ -316,7 +326,6 @@ void ReadExtraParameters()
     switch (PacketNumber) {
         case 0:
             BindNow = ReceivedData[CHANNELSUSED + 2];
-            // Serial.println(BindNow);
             FailSafeSave = bool(ReceivedData[CHANNELSUSED + 1]);
             if (FailSafeSave) {
                 TwoBytes = uint16_t(FS_byte2) + uint16_t(FS_byte1 << 8);
@@ -340,6 +349,7 @@ void ReadExtraParameters()
             }
             break;
         case 4:
+            ModelMatched = ReceivedData[CHANNELSUSED + 1];
             SwapWaveBand = ReceivedData[CHANNELSUSED + 2];
             if (SwapWaveBand > 0) {
                 if (SwapWaveBand == 1) SetUKFrequencies();
@@ -573,54 +583,52 @@ FLASHMEM void ScanI2c()
 /************************************************************************************************************/
 void SaveFailSafeData()
 {
-    // FailSafe data occupies EEPROM from offset 10 to 26
-
-    uint8_t FS_Offset = 10;
+    // FailSafe data occupies EEPROM from offset FS_EEPROM_OFFSET 
+    uint8_t FS_Offset = FS_EEPROM_OFFSET;
     for (uint8_t i = 0; i < CHANNELSUSED; ++i) {
         EEPROM.update(i + FS_Offset, (map(ReceivedData[i], MINMICROS, MAXMICROS, 0, 180))); // save servo positions lower res: 8 bits
+        delay(1);
     }
     FS_Offset += CHANNELSUSED;
     for (uint8_t i = 0; i < CHANNELSUSED; ++i) {
         EEPROM.update(i + FS_Offset, FailSafeChannel[i]); // save flags
+        delay(1);
     }
 #ifdef DB_FAILSAFE
     Serial.println("Fail safe settings are saved!");
 #endif
     FailSafeSave = false;
 }
+
+
 /************************************************************************************************************/
-void DoBinding()
-{
-    GetNewPipe();
+void ShowPipes(){               // only for debugging
 #ifdef DB_BIND
     Serial.print("NewPipe: ");
     Serial.println((int)NewPipe, HEX);
-
     Serial.print("OldPipe: ");
     Serial.println((int)OldPipe, HEX);
 #endif
+}
+
+/************************************************************************************************************/
+void DoBinding(){
+    GetNewPipe();
+    ShowPipes();                // only for debugging
     if (OldPipe == NewPipe) {
         SaveNewBind = false;
-
-#ifdef DB_BIND
-        Serial.println(millis() - BindOKTimer);
-#endif
-        if (BindOKTimer == 0) {
-            BindOKTimer = millis();
-        }
-        else if ((millis() - BindOKTimer) > 400) { // allow .4 of a second for the TX to bind
-            BindNow = 1;
-        }
+        BindNow = 1;
     }
     if (BindNow == 1 && !BoundFlag) {
-#ifdef DB_BIND
-        Serial.print("Binding to: ");
-        Serial.println((int)NewPipe, HEX);
-#endif
         BindModel();
     }
 }
+/************************************************************************************************************/
 
+void teensyMAC(uint8_t *mac) {      // GET UNIQUE TEENSY 4.0 ID
+    for(uint8_t by=0; by<2; by++) mac[by]=(HW_OCOTP_MAC1 >> ((1-by)*8)) & 0xFF;
+    for(uint8_t by=0; by<4; by++) mac[by+2]=(HW_OCOTP_MAC0 >> ((3-by)*8)) & 0xFF;
+}
 /************************************************************************************************************/
 // SETUP
 /************************************************************************************************************/
@@ -633,6 +641,7 @@ FLASHMEM void setup()
     pinMode(pinCE2, OUTPUT);
     digitalWrite(LED_PIN, HIGH);
     delay(2500); // Needed so that the Sensor hub can boot first and be detected
+    teensyMAC(MacAddress); 
     CurrentRadio = &Radio1;
     digitalWrite(pinCSN2, CSN_OFF);
     digitalWrite(pinCE2, CE_OFF);
@@ -668,11 +677,11 @@ FLASHMEM void setup()
 void loop()
 {
     ReceiveData();
-    if (BoundFlag && Connected) {
-        if (millis() - SBUSTimer >= SBUSRATE) {                  // SBUS rate is also good enough for servo rate
-            SBUSTimer = millis();                                // timer starts before send starts....
-            if ((millis() - ReconnectedMoment) > RECONNECTGAP) { // Don't send data for 25 ms after reconnect
-                MoveServos();
+    if (BoundFlag && Connected && ModelMatched) {                   // Only move servos if everything is good
+        if (millis() - SBUSTimer >= SBUSRATE) {                     // SBUS rate is also good enough for servo rate
+            SBUSTimer = millis();                                   // timer starts before send starts....
+            if ((millis() - ReconnectedMoment) > RECONNECTGAP) {    // Don't send data for 25 ms after reconnect
+                MoveServos();                        
             }
         }
         if (FailSafeSave) SaveFailSafeData();

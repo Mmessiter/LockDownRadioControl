@@ -222,7 +222,7 @@ uint8_t FHSS_Channels[83] = {51, 28, 24, 61, 64, 55, 66, 19, 76, 21, 59, 67, 15,
                              56, 7, 81, 5, 65, 4, 10};
 
 uint8_t* FHSSChPointer; // pointer for channels array (three only used for reconnect)
-
+char      BindButtonVisible[] = "vis bind,1";
 char      page_FrontView[]    = "page FrontView";
 char      page_FhssView[]     = "page FhssView";
 char      FrontView_Hours[]   = "Hours";
@@ -441,7 +441,6 @@ bool      LogFileOpen             = false;
 bool      ShowVPC                 = false;
 short int TxVoltageCorrection     = 0;
 short int RxVoltageCorrection     = 0;
-bool      LowPowerMode            = false;
 uint8_t   LEDBrightness           = 75;
 uint32_t  PowerOffTimer           = 0;
 char      StillConnected[]        = "vis StillConnected,1";
@@ -453,6 +452,23 @@ uint8_t   TurnOffSecondToGo       = 5;
 uint8_t   PowerOffWarningSeconds  = 5;
 uint8_t   ConnectionAssessSeconds = 5;
 uint32_t  PreviousPowerOffTimer   = 0;
+bool      ModelIdentified         = false;
+bool      ModelMatched            = false;
+bool      AutoModelSelect         = true;
+union
+{
+    uint32_t Val32[2] = {0, 0};
+    uint8_t  Val8[8]; // Model's Mac address just obtained from model
+     } ModelsMacUnion;
+
+union
+     {
+      uint32_t Val32[2] = {0,0};
+      uint8_t  Val8[8];        // Model's Mac address that had been saved on disk
+     } ModelsMacUnionSaved;
+
+
+
 
 // **********************************************************************************************************************************
 
@@ -976,6 +992,7 @@ void StartInactvityTimeout()
 
 void MakeBindButtonInvisible()
 {
+    if (!ModelMatched) return;
     if (CurrentView == FRONTVIEW) {
         char bbiv[] = "vis bind,0";
         if (BindButton) {
@@ -1011,12 +1028,16 @@ uint8_t GetLEDBrightness()
 void RedLedOn()
 {
     if (LedWasGreen) {
-        RXVoltsDetected      = false;
-        LedWasGreen          = false;
-        PacketsPerSecond     = 0;
-        LastShowTime         = 0;
-        RXVoltsDetected      = false;
-        RangeTestGoodPackets = 0;
+        RXVoltsDetected                             = false;
+        LedWasGreen                                 = false;
+        RXVoltsDetected                             = false;
+        ModelIdentified                             = false;
+        PacketsPerSecond                            = 0;
+        LastShowTime                                = 0; 
+        ModelsMacUnion.Val32[0]                     = 0;
+        ModelsMacUnion.Val32[1]                     = 0;
+        RangeTestGoodPackets                        = 0;
+        ModelMatched                                = false;
         if (CurrentView == FRONTVIEW) SendText(FrontView_Connected, na);
         if (UseLog) LogDisConnection();
         if (AnnounceConnected) PlaySound(DISCONNECTEDMSG);
@@ -1034,10 +1055,11 @@ void RedLedOn()
 
 void GreenLedOn()
 {
+    if (!ModelMatched) return; // no green led for wrong model
     if (!LedWasGreen) {
         ClearSuccessRate();
         LastShowTime = 0;
-    }                                    // on first
+    }                                   
     if (!LedWasGreen || LedIsBlinking) { // no need to repeat unless it is blinking
         if (!LedIsBlinking) {
             ShowComms();
@@ -1586,7 +1608,6 @@ FASTRUN void ShowComms()
     char DataView_Ag[]         = "Ag";
     char DataView_Gc[]         = "Gc";
     char Vbuf[16];
-    char BindButtonVisible[] = "vis bind,1";
     char Fix[]               = "Fix"; // These are label names in the NEXTION data screen. They are best kept short.
     char Lon[]               = "Lon";
     char Lat[]               = "Lat";
@@ -1612,7 +1633,7 @@ FASTRUN void ShowComms()
         if (CurrentView == FRONTVIEW || CurrentView == DATAVIEW) {
             if ((CurrentView == FRONTVIEW)) {
                 ShowConnectionQuality();
-                if ((!BoundFlag) && (!LostContactFlag)) { // i.e. connected but not yet bound
+                if ((!BoundFlag) && (!LostContactFlag)) {     // i.e. connected but not yet bound
                     SendCommand(BindButtonVisible);
                     BindButton = true;
                 }
@@ -1727,15 +1748,19 @@ FASTRUN void ShowComms()
 } // end ShowComms()
 
 /************************************************************************************************************/
-void ReEnableScanButton()
+void ReEnableScanButton()   // Scan button AND models button
 {
-    char b5NOTGreyed[] = "b5.pco=";
+    char b5NOTGreyed[]  = "b5.pco=";
+    char b12NOTGreyed[] = "b12.pco=";
     char nb[15];
     char cmd[30];
     if (CurrentView == MAINSETUPVIEW) {
         if (b5isGrey) {
             Str(nb, ForeGroundColour, 0);
             strcpy(cmd, b5NOTGreyed);
+            strcat(cmd, nb);
+            SendCommand(cmd);
+            strcpy(cmd, b12NOTGreyed);
             strcat(cmd, nb);
             SendCommand(cmd);
             b5isGrey = false;
@@ -2460,7 +2485,16 @@ bool ReadOneModel(uint8_t Mnum)
             ++SDCardAddress;
         }
     }
-
+    for (i = 0; i < 8; ++i) {
+        ModelsMacUnionSaved.Val8[i] = SDRead8BITS(SDCardAddress);
+        ++SDCardAddress;
+    }
+   if (ModelIdentified){ 
+        if ((ModelsMacUnion.Val32[0] == ModelsMacUnionSaved.Val32[0]) && (ModelsMacUnion.Val32[1] == ModelsMacUnionSaved.Val32[1])) {
+            ModelMatched = true;
+        }
+   }
+  
     // **************************************
 
     OneModelMemory = SDCardAddress - StartLocation;
@@ -2605,7 +2639,8 @@ bool LoadAllParameters()
         ConnectionAssessSeconds = SDRead8BITS(SDCardAddress);
         ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);
         ++SDCardAddress;
-
+        AutoModelSelect = SDRead8BITS(SDCardAddress);
+        ++SDCardAddress;
         CheckTrimValues();
         MemoryForTransmtter = SDCardAddress;
         if ((ModelNumber < 1) || (ModelNumber > 99)) ModelNumber = 1;
@@ -3180,6 +3215,8 @@ void SaveTransmitterParameters()
     ++SDCardAddress;
     SDUpdate16BITS(SDCardAddress, ConnectionAssessSeconds);
     ++SDCardAddress;
+    SDUpdate16BITS(SDCardAddress, AutoModelSelect);
+    ++SDCardAddress;
     CloseModelsFile();
 }
 
@@ -3321,10 +3358,14 @@ void SaveOneModel(uint16_t mnum)
             ++SDCardAddress;
         }
     }
+   for (i = 0; i < 8; ++i) {
+        SDUpdate8BITS(SDCardAddress,ModelsMacUnionSaved.Val8[i]);
+        ++SDCardAddress;
+   }
 
-    // ********************** Add more
+       // ********************** Add more
 
-    OneModelMemory = SDCardAddress - StartLocation;
+       OneModelMemory = SDCardAddress - StartLocation;
 #ifdef DB_SD
     Serial.print("Saved model: ");
     Serial.println(ModelName);
@@ -3795,6 +3836,8 @@ void SetDefaultValues()
     Procrastinate(10);
     LEDBrightness       = 75;
     RxVoltageCorrection = 0;
+    ModelsMacUnionSaved.Val32[0] = 0;
+    ModelsMacUnionSaved.Val32[1] = 0;
     SaveOneModel(ModelNumber);
     CloseModelsFile();
     SendValue(Progress, 100);
@@ -4191,12 +4234,18 @@ FASTRUN void DisplayCurve()
 
 /*********************************************************************************************************************************/
 
-void BindNow()
+void BindNow() // Bind button was pressed heer
 {
 #ifdef DB_BIND
-    Serial.println("Binding");
+    Serial.println("Saving model's ID");
 #endif
     BindingNow = 1;
+    ModelMatched                 = true;
+    ModelsMacUnionSaved.Val32[0] = ModelsMacUnion.Val32[0];
+    ModelsMacUnionSaved.Val32[1] = ModelsMacUnion.Val32[1];
+    SaveOneModel(ModelNumber);
+    MakeBindButtonInvisible();
+    UpdateModelsNameEveryWhere();
 }
 
 /*********************************************************************************************************************************/
@@ -4751,7 +4800,7 @@ void EndReverseView()
     ReversedChannelBITS = 0;
     for (i = 0; i < 16; ++i) {
         SendValue(Progress, (i * (100 / 16)));
-        if (GetValue(fs[i])) ReversedChannelBITS |= 1 << i; // set a BIT // heer
+        if (GetValue(fs[i])) ReversedChannelBITS |= 1 << i; // set a BIT 
     }
     CurrentView = MAINSETUPVIEW;
     SaveOneModel(ModelNumber);
@@ -4862,6 +4911,7 @@ void GotoModelsView()
 {
     char pModelsView[] = "page ModelsView";
     char mn[]          = "ModelNumber";
+    if (ModelMatched) return;       // must not change when model connected
     SendCommand(pModelsView);
     CurrentView = MODELSVIEW;
     UpdateModelsNameEveryWhere();
@@ -4876,7 +4926,7 @@ void GotoMacrosView()
     PreviousMacroNumber = 200; // i.e. no usable number
     SendCommand(pMacrosView);  // Display MacroView
     CurrentView = MACROS_VIEW;
-    Procrastinate(200); // allow enough time for screen to display
+    Procrastinate(200);        // allow enough time for screen to display
     UpdateModelsNameEveryWhere();
     PopulateMacrosView();
 }
@@ -4953,16 +5003,6 @@ void LogVIEW()
     }
 }
 
-/******************************************************************************************************************************/
-void SetPowerMode()
-{
-    if (LowPowerMode) {
-        Radio1.setPALevel(RF24_PA_MIN, false);
-    }
-    else {
-        Radio1.setPALevel(RF24_PA_MAX, true);
-    }
-}
 /******************************************************************************************************************************/
 void SetupViewFM()
 { // (Exit from models screen) New model name occurs at offset 4 in TextIn
@@ -5067,14 +5107,13 @@ void OptionView2Start()
         TxVoltageCorrection     = GetValue(TxVCorrextion);
         PowerOffWarningSeconds  = GetValue(n2);
         PowerOffWarningSeconds  = CheckRange(PowerOffWarningSeconds, 2, 30);
-        LowPowerMode            = GetValue(lpm);
+        AutoModelSelect         = GetValue(lpm);
         if (LEDBrightness      != GetValue(n1)) LedWasGreen = false; // Forces a redisplay if brightness has changed
         LEDBrightness           = GetValue(n1);
         ConnectionAssessSeconds = GetValue(n3);
         ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);
         LEDBrightness           = CheckRange(LEDBrightness, 1, 254);
         SaveAllParameters();
-        SetPowerMode();
     }
 
     CurrentView  = OPTIONVIEW2;
@@ -5100,10 +5139,10 @@ void OptionView3Start()
     Procrastinate(250);
     SendValue(TxVCorrextion, TxVoltageCorrection);
     SendValue(RxVCorrextion, RxVoltageCorrection);
-    SendValue(n2, PowerOffWarningSeconds);
-    SendValue(n3, ConnectionAssessSeconds);
-    SendValue(lpm, LowPowerMode);
-    SendValue(n1, LEDBrightness);
+    SendValue(n2,  PowerOffWarningSeconds);
+    SendValue(n3,  ConnectionAssessSeconds);
+    SendValue(lpm, AutoModelSelect);
+    SendValue(n1,  LEDBrightness);
 }
 
 /******************************************************************************************************************************/
@@ -5122,13 +5161,12 @@ void OptionView3End()
     RxVoltageCorrection     = GetValue(RxVCorrextion);
     PowerOffWarningSeconds  = GetValue(n2);
     PowerOffWarningSeconds  = CheckRange(PowerOffWarningSeconds, 2, 30);
-    LowPowerMode            = GetValue(lpm);
+    AutoModelSelect         = GetValue(lpm);
     if (LEDBrightness      != GetValue(n1)) LedWasGreen = false; // Forces a redisplay if brightness has changed
     LEDBrightness           = GetValue(n1);
     ConnectionAssessSeconds = GetValue(n3);
     ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);
     LEDBrightness           = CheckRange(LEDBrightness, 1, 254);
-    SetPowerMode();
     SaveAllParameters();
     CloseModelsFile();
     CurrentView = MAINSETUPVIEW;
@@ -5234,7 +5272,7 @@ FASTRUN void ButtonWasPressed()
 #ifdef DB_NEXTION
         if (TextIn[0] < 128) {
             Serial.print("Command WORD: -> ");
-            Serial.print(TextIn);
+            Serial.println(TextIn);
         }
         else {
             Serial.print("Command NUMBER: -> ");
@@ -6842,6 +6880,7 @@ void LoadPacketData()
                 BindingTimer = millis(); // start a timer
                 BindingNow   = 2;
             }
+           
             if (((millis() - FailSafeTimer) > 1500) && SaveFailSafeNow) {
                 SendBuffer[CHANNELSUSED + 1] = SaveFailSafeNow; // FailSafeSaveMoment
                 SaveFailSafeNow              = false;           // once should do it.
@@ -6864,12 +6903,13 @@ void LoadPacketData()
             }
             break;
         case 4:
-            SendBuffer[CHANNELSUSED + 1] = 0;
-            SendBuffer[CHANNELSUSED + 2] = SwapWaveBand; // This feature allows the quiet switching between 2.400-2.4830 and 2.4840-2.525 (press HELP three times)
+            SendBuffer[CHANNELSUSED + 1] = ModelMatched; // let receiver know whether correct model is loaded.
+            SendBuffer[CHANNELSUSED + 2] = SwapWaveBand; 
             if (SwapWaveBand == 2) SetTestFrequencies();
             if (SwapWaveBand == 1) SetUKFrequencies();
             SwapWaveBand = 0;
             break;
+
         default:
             break;
     }
@@ -7265,6 +7305,96 @@ void GetTemperature()
     snprintf(ModelTemperature, 5, "%f", RXModelTemperature);
 }
 /************************************************************************************************************/
+FASTRUN uint32_t GetIntFromAckPayload()   // This one uses a uint32_t int
+{
+    union
+    {
+          uint32_t Val32 = 0;
+          uint8_t Val8[4];
+    } ThisUnion;
+    ThisUnion.Val8[0] = AckPayload.Byte1;
+    ThisUnion.Val8[1] = AckPayload.Byte2;
+    ThisUnion.Val8[2] = AckPayload.Byte3;
+    ThisUnion.Val8[3] = AckPayload.Byte4;
+    return ThisUnion.Val32;
+}
+
+
+
+/************************************************************************************************************/
+void CompareModelsIDs(){ // heer the saved MacAddress is compared with the one just received from the model ... etc ...
+    
+    uint8_t SavedModelNumber = ModelNumber;
+    ModelMatched             = false;
+  
+   if (CurrentView != FRONTVIEW){                                       // Frontview is needed because of Bind button
+       SendCommand(page_FrontView);
+       CurrentView = FRONTVIEW;
+       UpdateModelsNameEveryWhere();
+   }
+
+    if (ModelIdentified) {                                               // We have both bits of Model ID?
+        if ((ModelsMacUnion.Val32[0] == ModelsMacUnionSaved.Val32[0]) && (ModelsMacUnion.Val32[1] == ModelsMacUnionSaved.Val32[1])) {
+            ModelMatched = true;                                         // It's a match so start flying!
+#ifdef DB_BIND
+            Serial.println("Remote ID matches locally stored ID");
+#endif
+        } else {
+            if (AutoModelSelect){                                        // It's not a match so maybe search for it.
+                ModelNumber = 100;
+                while ((ModelMatched == false) && (ModelNumber > 1)) {   // Try to match the ID with a save one
+                    --ModelNumber;
+                    ReadOneModel(ModelNumber);
+                }
+                if (ModelMatched){                                       // Found it!
+#ifdef DB_BIND
+                    Serial.print("Match found at model number: ");    
+                    Serial.print(ModelNumber);
+                    Serial.print(" (");
+                    Serial.print(ModelName);
+                    Serial.println(")");
+#endif
+                    SaveAllParameters();                                 //  save it
+                    UpdateModelsNameEveryWhere();                        //  Use it.
+                }else{                                                    
+#ifdef DB_BIND
+                    Serial.println("Match not found.");                    
+#endif      
+                    ModelNumber = SavedModelNumber;                      // Not found anywhere. So offer to bind the restored selected one
+                    ReadOneModel(ModelNumber);
+                    SendCommand(BindButtonVisible);
+                    BindButton = true;
+                    ModelMatched = false;
+                } return;
+            } else {
+                SendCommand(BindButtonVisible);
+                BindButton = true;
+                ModelMatched = false;
+            }
+        }
+    }
+}
+/************************************************************************************************************/
+void  GetModelsMacAddress(){  
+    switch (AckPayload.Purpose)
+    {
+        case 0:
+             ModelsMacUnion.Val32[0] = GetIntFromAckPayload();
+             break;
+        case 1:
+             ModelsMacUnion.Val32[1] = GetIntFromAckPayload();  
+             break;
+        default:
+             break;
+    } 
+    if (ModelMatched == false) {
+        if ((ModelsMacUnion.Val32[0] > 0) && (ModelsMacUnion.Val32[1] > 0)){   // got both bits yet? heer
+               ModelIdentified = true;
+        }
+        CompareModelsIDs();
+    }
+}
+/************************************************************************************************************/
 FASTRUN void ParseAckPayload()
 {
     if (AckPayload.Purpose & 0x80) // Hi bit is now the **HOP NOW!!** flag
@@ -7274,6 +7404,12 @@ FASTRUN void ParseAckPayload()
         HopToNextChannel();
         AckPayload.Purpose &= 0x7f; // Clear the high BIT, use the remainder ...
     }
+
+    if (!BoundFlag){
+        GetModelsMacAddress();
+        return;
+    }
+
     switch (AckPayload.Purpose) // Only look at the low 7 BITS
     {
         case 0:
@@ -7406,11 +7542,14 @@ void CheckModelName()
 }
 /************************************************************************************************************/
 
-void CheckScanButton()
+void CheckScanButton() // Scan button AND models button
 {
-    char b5Greyed[] = "b5.pco=33840";
+    char b5Greyed[]  = "b5.pco=33840";
+    char b12Greyed[] = "b12.pco=33840";
     if (!LostContactFlag & !b5isGrey) {
         SendCommand(b5Greyed);
+        delay(10);
+        SendCommand(b12Greyed);
         b5isGrey = true;
     }
 }
@@ -7465,7 +7604,6 @@ FASTRUN void loop()
 {
     KickTheDog(); // Watchdog
     CheckPowerOffButton();
-    if (LowPowerMode) LedIsBlinking = true;
     if (GetButtonPress()) ButtonWasPressed(); // Deal with button
     if ((millis() - ModelNameTimeCheck) > 900) {
         ModelNameTimeCheck = millis();
@@ -7496,7 +7634,7 @@ FASTRUN void loop()
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24
     }
     ShowServoPos();
-    if ((millis()) > 2500) { // Transmit nothing for first 2.5 seconds
+    if ((millis()) > 1500) { // Transmit nothing for first 1.5 seconds
         switch (CurrentMode) {
             case NORMAL: // 0
                 SendData();
@@ -7512,19 +7650,6 @@ FASTRUN void loop()
                 break;
             default:
                 break; // CurrentMode >= 4 for no action at all.
-        }
-    }
-    if (BindingNow == 2 && (millis() - BindingTimer) > 100) { // 100?
-        if (!BoundFlag) {
-#ifdef DB_BIND
-            Serial.println("Binding now");
-#endif
-            MakeBindButtonInvisible();
-            SetThePipe(NewPipe);
-            BindingNow = 0;
-            BoundFlag  = true;
-            ZeroDataScreen();
-            GreenLedOn();
         }
     }
 } // end loop()

@@ -349,12 +349,7 @@ FASTRUN void HopToNextChannel()
 FLASHMEM void InitRadio(uint64_t Pipe)
 {
     Radio1.begin(); 
-    if (LowPowerMode) {
-        Radio1.setPALevel(RF24_PA_MIN, false);
-    }
-    else {
-        Radio1.setPALevel(RF24_PA_MAX, true);
-    }
+    Radio1.setPALevel(RF24_PA_MAX, true);
     Radio1.setDataRate(RF24_250KBPS);
     Radio1.enableAckPayload();
     Radio1.openWritingPipe(Pipe);             // Current Pipe address used for Binding

@@ -14,8 +14,8 @@
 #include "utilities/radio.h"
 
 #define RXVERSION_MAJOR   1
-#define RXVERSION_MINOR   8
-#define RXVERSION_MINIMUS 6 // September 2022
+#define RXVERSION_MINOR   9
+#define RXVERSION_MINIMUS 0 // September 2022
 
 //**************************************************************************************************************************
 // #define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< **..
@@ -29,6 +29,7 @@
 #define RECEIVE_TIMEOUT 25 //  <=9 fails, >=11 OK ...
                            // *****************************************************************************************
 
+#define DEFAULTPIPE              0xBABE1E5420LL
 #define FREQUENCYSCOUNT          82 // uses 82 different channels
 #define FREQUENCYSCOUNT1         41 // uses 41 different test channels
 #define CHANNELSUSED             16
@@ -54,6 +55,8 @@
 #define CSN_OFF                  HIGH
 #define CE_ON                    HIGH
 #define CE_OFF                   LOW
+#define BIND_EEPROM_OFFSET       0                           // use 8 bytes from here
+#define FS_EEPROM_OFFSET         BIND_EEPROM_OFFSET+8        // use 16 bytes from here
 
 // #define DB_FHSS
 // #define DB_SENSORS

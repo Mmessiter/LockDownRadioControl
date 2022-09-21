@@ -51,6 +51,9 @@ extern float    AngleGPS;
 extern float    AltitudeGPS;
 extern float    DistanceGPS;
 extern float    CourseToGPS;
+extern uint8_t  MacAddress[8];
+extern uint8_t  MacSentCounter;
+extern void     BindModel();
 
 extern void FailSafe(); // defined in main.cpp
 extern void ClearAckPayload();
@@ -98,7 +101,7 @@ void SetNewPipe()
 void ReadSavedPipe()
 {
     for (uint8_t i = 0; i < 8; ++i) {
-        SavedPipeAddress[i] = EEPROM.read(i); // uses first 8 bytes only.
+        SavedPipeAddress[i] = EEPROM.read(i+BIND_EEPROM_OFFSET); // uses first 8 bytes only.
     }
 }
 
@@ -114,10 +117,9 @@ void SendVersionNumberToAckPayload() // AND which radio transceiver is currently
 
 /************************************************************************************************************/
 
-/** Store bounded pipe address from the received pairing payload. */
 void GetNewPipe()
 {
-    NewPipe = (uint64_t)ReceivedData[0] << 56;
+    NewPipe =  (uint64_t)ReceivedData[0] << 56;
     NewPipe += (uint64_t)ReceivedData[1] << 48;
     NewPipe += (uint64_t)ReceivedData[2] << 40;
     NewPipe += (uint64_t)ReceivedData[3] << 32;
@@ -367,9 +369,63 @@ void SendDateToAckPayload()
     AckPayload.Byte2 = MonthGPS;
     AckPayload.Byte3 = YearGPS;
 }
+
+/************************************************************************************************************/
+void SendIntToAckPayload(uint32_t U){                        // This one function now works with most int parameters
+    union  {uint32_t Val32; uint8_t Val8[4];} ThisUnion;
+    CheckWhetherItsTimeToHop();
+    ThisUnion.Val32     = U;
+    AckPayload.Byte1    = ThisUnion.Val8[0];           // These values are herewith delivered to Transmitter in Ack Payload
+    AckPayload.Byte2    = ThisUnion.Val8[1];
+    AckPayload.Byte3    = ThisUnion.Val8[2];
+    AckPayload.Byte4    = ThisUnion.Val8[3];
+}
+
+/************************************************************************************************************/
+// The unique Mac address of this Teensy 4.0 is sent to transmitter while binding to identify this model.
+// This is to avoid the wrong model memory being used. heer
+
+void  SendMacAddress()
+{
+  union  {
+      uint64_t Val64;       // the MacAddess is 6 bytes long, so this breaks it into two 32 bit values to send it all in two ack payloads.
+      uint32_t Val32[2];
+      uint8_t  Val8[8];     // the highest two bytes will always be zero. We didn't need all 8.
+  } ThisUnion;
+  uint8_t MaxAckP = 1;      // only packets 0 and 1 are needed here.
+
+  AckPayload.Purpose &= 0x7F;
+  ++AckPayload.Purpose;
+  if (AckPayload.Purpose > MaxAckP) AckPayload.Purpose = 0; // wrap after max
+
+  for (int i = 0; i < 8; ++i) 
+       ThisUnion.Val8[i] = MacAddress[i];
+       
+       switch (AckPayload.Purpose) {
+           case 0:
+               SendIntToAckPayload(ThisUnion.Val32[0]);
+                //Serial.println(ThisUnion.Val32[0]);
+               ++MacSentCounter;
+               break;
+           case 1:
+               SendIntToAckPayload(ThisUnion.Val32[1]);
+                //Serial.println(ThisUnion.Val32[1]);
+               ++MacSentCounter;
+               break;
+           default:
+               break;
+        }
+}
+
 /************************************************************************************************************/
 void LoadAckPayload()
 {
+    
+     if (!BoundFlag) {
+        SendMacAddress(); // heer
+        return;
+    }
+    
     uint8_t MaxAckP = 4;        // 4 if only RX
     AckPayload.Purpose &= 0x7F; // NOTE: The HIGH BIT of "purpose" bit is the HOPNOW flag. It gets set only when it's time to hop.
     ++AckPayload.Purpose;
