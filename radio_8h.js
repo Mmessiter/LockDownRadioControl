@@ -50,7 +50,6 @@ var radio_8h =
     [ "LatitudeGPS", "radio_8h.html#a79c2bfabc0682301ec238954845e1e81", null ],
     [ "LongitudeGPS", "radio_8h.html#afabe4c9d9760f8606aa408474e3d626c", null ],
     [ "MacAddress", "radio_8h.html#ad343661d8a4343426f171e531b9d8aa9", null ],
-    [ "MacSentCounter", "radio_8h.html#aeb927eef45ec5b9eb8c6e596b7604ebc", null ],
     [ "MinsGPS", "radio_8h.html#ad3b8d1f00f2046a53bd3c5c997af2abb", null ],
     [ "MonthGPS", "radio_8h.html#a0944456d2dbd7c1deb2abba2532afe24", null ],
     [ "NewPipe", "radio_8h.html#a594f07765a7ed90e0830d4e2f69a7112", null ],

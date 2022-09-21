@@ -52,7 +52,6 @@ var _receiver_code_2src_2main_8cpp =
     [ "LatitudeGPS", "_receiver_code_2src_2main_8cpp.html#a79c2bfabc0682301ec238954845e1e81", null ],
     [ "LongitudeGPS", "_receiver_code_2src_2main_8cpp.html#afabe4c9d9760f8606aa408474e3d626c", null ],
     [ "MacAddress", "_receiver_code_2src_2main_8cpp.html#ad343661d8a4343426f171e531b9d8aa9", null ],
-    [ "MacSentCounter", "_receiver_code_2src_2main_8cpp.html#aeb927eef45ec5b9eb8c6e596b7604ebc", null ],
     [ "MCMServo", "_receiver_code_2src_2main_8cpp.html#aea43f0afa386a593269762fb00bc6c77", null ],
     [ "MinsGPS", "_receiver_code_2src_2main_8cpp.html#ad3b8d1f00f2046a53bd3c5c997af2abb", null ],
     [ "ModelMatched", "_receiver_code_2src_2main_8cpp.html#abafce2220b6ad57b4be99289a7953a0c", null ],
