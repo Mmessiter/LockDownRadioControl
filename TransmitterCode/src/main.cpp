@@ -7318,21 +7318,17 @@ FASTRUN uint32_t GetIntFromAckPayload()   // This one uses a uint32_t int
     ThisUnion.Val8[3] = AckPayload.Byte4;
     return ThisUnion.Val32;
 }
-
-
-
 /************************************************************************************************************/
+
 void CompareModelsIDs(){ // heer the saved MacAddress is compared with the one just received from the model ... etc ...
     
     uint8_t SavedModelNumber = ModelNumber;
     ModelMatched             = false;
-  
-   if (CurrentView != FRONTVIEW){                                       // Frontview is needed because of Bind button
+    if (CurrentView != FRONTVIEW){                                       // Frontview is needed because of Bind button
        SendCommand(page_FrontView);
        CurrentView = FRONTVIEW;
        UpdateModelsNameEveryWhere();
-   }
-
+    }
     if (ModelIdentified) {                                               // We have both bits of Model ID?
         if ((ModelsMacUnion.Val32[0] == ModelsMacUnionSaved.Val32[0]) && (ModelsMacUnion.Val32[1] == ModelsMacUnionSaved.Val32[1])) {
             ModelMatched = true;                                         // It's a match so start flying!
@@ -7344,7 +7340,7 @@ void CompareModelsIDs(){ // heer the saved MacAddress is compared with the one j
                 ModelNumber = 0;
                 while ((ModelMatched == false) && (ModelNumber < 99)) {   // Try to match the ID with a save one
                     ++ModelNumber;
-                    ReadOneModel(ModelNumber);
+                    ReadOneModel(ModelNumber);                            // Match is checked at read time
                 }
                 if (ModelMatched){                                       // Found it!
 #ifdef DB_BIND
