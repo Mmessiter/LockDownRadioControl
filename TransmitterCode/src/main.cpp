@@ -7341,10 +7341,12 @@ void CompareModelsIDs(){ // heer the saved MacAddress is compared with the one j
 #endif
         } else {
             if (AutoModelSelect){                                        // It's not a match so maybe search for it.
-                ModelNumber = 100;
-                while ((ModelMatched == false) && (ModelNumber > 1)) {   // Try to match the ID with a save one
-                    --ModelNumber;
+                ModelNumber = 0;
+                while ((ModelMatched == false) && (ModelNumber < 99)) {   // Try to match the ID with a save one
+                    ++ModelNumber;
                     ReadOneModel(ModelNumber);
+                   // UpdateModelsNameEveryWhere();
+                   // Procrastinate(200);
                 }
                 if (ModelMatched){                                       // Found it!
 #ifdef DB_BIND
