@@ -268,7 +268,6 @@ var _radio_functions_8h =
     [ "PacketsHistoryBuffer", "_radio_functions_8h.html#a5dd81bcedc2ca746fd59e46fb57891ea", null ],
     [ "PacketsHistoryIndex", "_radio_functions_8h.html#ada48f675f3257d6c92af2ffa2eda0352", null ],
     [ "PacketsPerSecond", "_radio_functions_8h.html#aa7dff891c96c5574f3a8dfb38a1aad0d", null ],
-    [ "PipeTimeout", "_radio_functions_8h.html#a656582814675067f4ca9775bbdc71e18", null ],
     [ "PreviousUkRules", "_radio_functions_8h.html#a1d77a74eeedd4ed97d38aba4996085b9", null ],
     [ "Radio1", "_radio_functions_8h.html#aae23a8374f487a46c5fcb1fb02fadc69", null ],
     [ "RangeTestGoodPackets", "_radio_functions_8h.html#a8a5b55d644bb404cd6cdf61c5a85f822", null ],
