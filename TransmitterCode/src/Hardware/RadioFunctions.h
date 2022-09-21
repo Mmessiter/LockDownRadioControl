@@ -295,7 +295,6 @@
 // external (global vars) needed here
 
 extern RF24           Radio1;
-extern uint32_t       PipeTimeout;
 extern uint8_t        CurrentMode;
 extern uint8_t        NoCarrier[];
 extern uint8_t        AllChannels[];
