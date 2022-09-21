@@ -86,7 +86,6 @@ uint32_t        BootupMoment    = 0;
 bool            QNHSent         = false;
 bool            FirstLostPacket = true;
 uint8_t         MacAddress[8] = {0,0,0,0,0,0,0,0};
-uint8_t         MacSentCounter = 0;
 bool            ModelMatched    = false;
 /************************************************************************************************************/
 
@@ -619,9 +618,7 @@ void DoBinding(){
         SaveNewBind = false;
         BindNow = 1;
     }
-    if (BindNow == 1 && !BoundFlag) {
-        BindModel();
-    }
+    if (BindNow == 1 && !BoundFlag)  BindModel();
 }
 /************************************************************************************************************/
 
