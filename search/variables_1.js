@@ -47,5 +47,6 @@ var searchData=
   ['announcebanks_44',['AnnounceBanks',['../_transmitter_code_2src_2main_8cpp.html#ae9add7064c6a555558088c4f67560535',1,'main.cpp']]],
   ['announceconnected_45',['AnnounceConnected',['../_transmitter_code_2src_2main_8cpp.html#a7f979f6e267f37833beb30c91b796cae',1,'main.cpp']]],
   ['audiovolume_46',['AudioVolume',['../_transmitter_code_2src_2main_8cpp.html#adddcbca54e7b49592c3f6c360bf04494',1,'main.cpp']]],
-  ['autoswitch_47',['AutoSwitch',['../_transmitter_code_2src_2main_8cpp.html#a6d1c8ca21c8826267f5687d3799c6a1f',1,'main.cpp']]]
+  ['automodelselect_47',['AutoModelSelect',['../_transmitter_code_2src_2main_8cpp.html#a77387f8b9f18e9b75448e01d821ae17e',1,'main.cpp']]],
+  ['autoswitch_48',['AutoSwitch',['../_transmitter_code_2src_2main_8cpp.html#a6d1c8ca21c8826267f5687d3799c6a1f',1,'main.cpp']]]
 ];

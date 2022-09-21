@@ -1,6 +1,7 @@
 var radio_8h =
 [
     [ "Payload", "struct_payload.html", "struct_payload" ],
+    [ "BindModel", "radio_8h.html#aa0c6905579a33aef28d737d43676cbbd", null ],
     [ "CheckWhetherItsTimeToHop", "radio_8h.html#ad21c5c00ff554736e4e21cee13773cd5", null ],
     [ "ClearAckPayload", "radio_8h.html#a5a26715a721e1073d6ae00498282c056", null ],
     [ "Decompress", "radio_8h.html#a6feccc8c0583de3235616d42076f1371", null ],
@@ -18,6 +19,8 @@ var radio_8h =
     [ "ReadSensorHub", "radio_8h.html#a8fff0fd6eb9e23721d9e06f3f44bd3c9", null ],
     [ "Reconnect", "radio_8h.html#a692b8b0727e0db358f99c7bf4e8235c0", null ],
     [ "SendDateToAckPayload", "radio_8h.html#affa2dcc4341b8daecac77e6e0a354b2d", null ],
+    [ "SendIntToAckPayload", "radio_8h.html#a5b9bcce29081b0c53837ecb90e0a6b33", null ],
+    [ "SendMacAddress", "radio_8h.html#ab6bb1ded4e272b24f150c28295f4d291", null ],
     [ "SendTimeToAckPayload", "radio_8h.html#a8162c1748e39496c4adf88c55d1c49b8", null ],
     [ "SendToAckPayload", "radio_8h.html#a632401c7e72610ff0a0678358b6877ad", null ],
     [ "SendVersionNumberToAckPayload", "radio_8h.html#af56956a6b17dbdfc9fceedeb5a13cb71", null ],
@@ -46,6 +49,8 @@ var radio_8h =
     [ "Interations", "radio_8h.html#ac8e10a08e9da70138c4a8459c6902d7d", null ],
     [ "LatitudeGPS", "radio_8h.html#a79c2bfabc0682301ec238954845e1e81", null ],
     [ "LongitudeGPS", "radio_8h.html#afabe4c9d9760f8606aa408474e3d626c", null ],
+    [ "MacAddress", "radio_8h.html#ad343661d8a4343426f171e531b9d8aa9", null ],
+    [ "MacSentCounter", "radio_8h.html#aeb927eef45ec5b9eb8c6e596b7604ebc", null ],
     [ "MinsGPS", "radio_8h.html#ad3b8d1f00f2046a53bd3c5c997af2abb", null ],
     [ "MonthGPS", "radio_8h.html#a0944456d2dbd7c1deb2abba2532afe24", null ],
     [ "NewPipe", "radio_8h.html#a594f07765a7ed90e0830d4e2f69a7112", null ],
