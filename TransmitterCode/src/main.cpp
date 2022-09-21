@@ -7345,8 +7345,6 @@ void CompareModelsIDs(){ // heer the saved MacAddress is compared with the one j
                 while ((ModelMatched == false) && (ModelNumber < 99)) {   // Try to match the ID with a save one
                     ++ModelNumber;
                     ReadOneModel(ModelNumber);
-                   // UpdateModelsNameEveryWhere();
-                   // Procrastinate(200);
                 }
                 if (ModelMatched){                                       // Found it!
 #ifdef DB_BIND
