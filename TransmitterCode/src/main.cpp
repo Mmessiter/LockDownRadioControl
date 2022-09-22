@@ -2202,7 +2202,17 @@ void UpdateModelsNameEveryWhere()
     char NoName[17];
     char Ch[] = "Channel ";
     char Nbuf[7];
-    SendText(TheModelName, ModelName);
+    char mn[30];             // holds model name plus its number
+    char lb[] = " (";
+    char rb[] = ")";
+    
+    strcpy(mn, ModelName);
+    if (CurrentView != MODELSVIEW){ 
+        strcat(mn, lb);
+        strcat(mn, Str(Nbuf, ModelNumber, 0));  // Add model number for extra clarity
+        strcat(mn, rb);
+    }
+    SendText(TheModelName, mn);
     if (CurrentView == GRAPHVIEW) {
         if (strlen(ChannelNames[ChanneltoSet - 1]) < 2) { // if no name, just show the channel number
             strcpy(NoName, Ch);
@@ -6081,11 +6091,8 @@ FASTRUN void ButtonWasPressed()
             SendCommand(ProgressEnd);
             UpdateButtonLabels();
             SendCommand(page_SetupView);
-            Procrastinate(10);
-            SendCommand(b5Greyed);
-            Procrastinate(10);
-            SendCommand(b12Greyed);
-            b5isGrey = true;
+            CurrentView = MAINSETUPVIEW;
+            b5isGrey = false;
             ModelNameTimeCheck = 0;
             ClearText();
             return;
@@ -7548,7 +7555,7 @@ void CheckModelName()
 
 void CheckScanButton() // Scan button AND models button
 {
-    if (!LostContactFlag & !b5isGrey) {
+    if (BoundFlag & !b5isGrey) {
         SendCommand(b5Greyed);
         delay(10);
         SendCommand(b12Greyed);
@@ -7607,7 +7614,7 @@ FASTRUN void loop()
     KickTheDog(); // Watchdog
     CheckPowerOffButton();
     if (GetButtonPress()) ButtonWasPressed(); // Deal with button
-    if ((millis() - ModelNameTimeCheck) > 900) {
+    if ((millis() - ModelNameTimeCheck) > 700) {
         ModelNameTimeCheck = millis();
         if (CurrentView == MAINSETUPVIEW) CheckScanButton();
         if (CurrentView == MODELSVIEW) CheckModelName(); // In MODELSVIEW, this function checks correct name is displayed.
