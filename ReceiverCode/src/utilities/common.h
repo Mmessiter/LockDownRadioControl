@@ -26,7 +26,7 @@
 
 // ********************************* reconnect params ***************************************
 #define LISTEN_PERIOD   50 //  How many ms to listen for TX in Reconnect()
-#define RECEIVE_TIMEOUT 25 //  <=9 fails, >=11 OK ...
+#define RECEIVE_TIMEOUT 25 //  <=9 fails, >=11 OK ... (25 = about 2.5 packets lost)
                            // *****************************************************************************************
 
 #define DEFAULTPIPE              0xBABE1E5420LL

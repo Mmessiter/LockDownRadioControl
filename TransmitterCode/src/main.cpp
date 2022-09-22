@@ -112,9 +112,9 @@ uint8_t  LastMixNumber    = 1;
 uint8_t  MixNumber        = 0;
 uint8_t  CurrentView      = FRONTVIEW;
 uint8_t  SavedCurrentView = FRONTVIEW;
-uint64_t DefaultPipe      = DEFAULTPIPEADDRESS; //          Default Radio pipe address
-uint64_t NewPipe          = 0xBABE1E5420LL;     //          New Radio pipe address for binding comes from MAC address
-char     TextIn[CHARSMAX + 2];                  // spare space
+uint64_t DefaultPipe      = DEFAULTPIPEADDRESS;  //          Default Radio pipe address
+uint64_t NewPipe          = DEFAULTPIPEADDRESS;  //          New Radio pipe address for binding will come from MAC address
+char     TextIn[CHARSMAX + 2];                   // spare space
 uint16_t PacketsPerSecond = 0;
 uint8_t  PacketsHistoryBuffer[125 * MAXSHOWCOMMSSESCONDS]; // Here we record some history
 uint16_t PacketsHistoryIndex    = 0;
