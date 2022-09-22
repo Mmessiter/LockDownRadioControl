@@ -1,4 +1,4 @@
-Version 1.8.7 (TX) 1.8.6 (RX)
+Version 1.9.0 
 
 How to use the transmitter or receiver firmware updater:
 
@@ -13,6 +13,14 @@ How to use the transmitter or receiver firmware updater:
 Note: If the receiver has two transceivers, use RX2.hex otherwise use RX1.hex.
 
 To update the Nextion screen, download their free editor (Windows only), load the .HMI file into it, and then upload it to the screen using an FTDI adapter over USB.
+
+
+
+New in version: 1.9.0:
+----------------------
+
+This version adds a feature very like ModelMatch, only better. When binding a model to the transmitter, its Teensy's unique MAC address is saved with the model memory at the transmitter. On subsequent connections, and if this feature is turned on (in Setup -> System -> page 3) then the transmitter will automatically switch to that model even if another was loaded at the time. 	
+
 
 
 New in version: 1.8.7:
