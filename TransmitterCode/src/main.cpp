@@ -9,6 +9,9 @@
  * - 12 BIT servo resolution (11 BIT via SBUS)
  * - 32 Mixes
  * - 4 Flight modes (AKA Banks), or 3 plus autorotation
+ * - "ModelMatch" plus automatic model memory selection. (Avoid flying with wrong memory loaded.)
+ * - Buddyboxing with selectable channels.
+ * - Voice messages and other audio prompts.
  * - User defined Channel names
  * - 2.4 Ghz FHSS ISM band licence free in UK and most other countries.
  * - 2.5 Km range (approx.)
@@ -466,7 +469,8 @@ union
       uint8_t  Val8[8];        // Model's Mac address that had been saved on disk
      } ModelsMacUnionSaved;
 
-
+char b5Greyed[]  = "b5.pco=33840";
+char b12Greyed[] = "b12.pco=33840";
 
 
 // **********************************************************************************************************************************
@@ -4233,7 +4237,7 @@ FASTRUN void DisplayCurve()
 
 /*********************************************************************************************************************************/
 
-void BindNow() // Bind button was pressed heer
+void BindNow() // Bind button was pressed 
 {
 #ifdef DB_BIND
     Serial.println("Saving model's ID");
@@ -6077,6 +6081,11 @@ FASTRUN void ButtonWasPressed()
             SendCommand(ProgressEnd);
             UpdateButtonLabels();
             SendCommand(page_SetupView);
+            Procrastinate(10);
+            SendCommand(b5Greyed);
+            Procrastinate(10);
+            SendCommand(b12Greyed);
+            b5isGrey = true;
             ModelNameTimeCheck = 0;
             ClearText();
             return;
@@ -6497,12 +6506,12 @@ FASTRUN void ButtonWasPressed()
             if (GetValue(Mode1) == 1) SticksMode = 1;
             if (GetValue(Mode2) == 1) SticksMode = 2;
             SaveAllParameters(); // save trims to SDcard
+            b5isGrey           = false;
             SendCommand(page_SetupView);
             ModelNameTimeCheck = 0;
             CurrentMode        = NORMAL;
             CurrentView        = MAINSETUPVIEW;
             UpdateModelsNameEveryWhere();
-            b5isGrey           = false;
             ClearText();
             return;
         }
@@ -7319,7 +7328,7 @@ FASTRUN uint32_t GetIntFromAckPayload()   // This one uses a uint32_t int
 }
 /************************************************************************************************************/
 
-void CompareModelsIDs(){ // heer the saved MacAddress is compared with the one just received from the model ... etc ...
+void CompareModelsIDs(){ // The saved MacAddress is compared with the one just received from the model ... etc ...
     
     uint8_t SavedModelNumber = ModelNumber;
     ModelMatched             = false;
@@ -7383,7 +7392,7 @@ void  GetModelsMacAddress(){
              break;
     } 
     if (ModelMatched == false) {
-        if ((ModelsMacUnion.Val32[0] > 0) && (ModelsMacUnion.Val32[1] > 0)){   // got both bits yet? heer
+        if ((ModelsMacUnion.Val32[0] > 0) && (ModelsMacUnion.Val32[1] > 0)){   // got both bits yet? 
                ModelIdentified = true;
         }
         CompareModelsIDs();
@@ -7539,8 +7548,6 @@ void CheckModelName()
 
 void CheckScanButton() // Scan button AND models button
 {
-    char b5Greyed[]  = "b5.pco=33840";
-    char b12Greyed[] = "b12.pco=33840";
     if (!LostContactFlag & !b5isGrey) {
         SendCommand(b5Greyed);
         delay(10);
