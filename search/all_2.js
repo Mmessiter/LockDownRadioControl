@@ -101,7 +101,7 @@ var searchData=
   ['audioview_98',['AUDIOVIEW',['../_radio_functions_8h.html#a445cfbf06ed74188fcf3965b4cab9533',1,'RadioFunctions.h']]],
   ['audiovolume_99',['AudioVolume',['../_transmitter_code_2src_2main_8cpp.html#adddcbca54e7b49592c3f6c360bf04494',1,'main.cpp']]],
   ['automodelselect_100',['AutoModelSelect',['../_transmitter_code_2src_2main_8cpp.html#a77387f8b9f18e9b75448e01d821ae17e',1,'main.cpp']]],
-  ['autoswitch_101',['AUTOSWITCH',['../_radio_functions_8h.html#aa4414f3ff790f01b8bb41a0f51d1518f',1,'RadioFunctions.h']]],
-  ['autoswitch_102',['AutoSwitch',['../_transmitter_code_2src_2main_8cpp.html#a6d1c8ca21c8826267f5687d3799c6a1f',1,'main.cpp']]],
+  ['autoswitch_101',['AutoSwitch',['../_transmitter_code_2src_2main_8cpp.html#a6d1c8ca21c8826267f5687d3799c6a1f',1,'main.cpp']]],
+  ['autoswitch_102',['AUTOSWITCH',['../_radio_functions_8h.html#aa4414f3ff790f01b8bb41a0f51d1518f',1,'RadioFunctions.h']]],
   ['available_103',['available',['../class_adafruit___g_p_s.html#abe6399af00c0047527ea20e3f35a0182',1,'Adafruit_GPS']]]
 ];

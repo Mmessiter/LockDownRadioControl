@@ -253,6 +253,8 @@ var _transmitter_code_2src_2main_8cpp =
     [ "AudioVolume", "_transmitter_code_2src_2main_8cpp.html#adddcbca54e7b49592c3f6c360bf04494", null ],
     [ "AutoModelSelect", "_transmitter_code_2src_2main_8cpp.html#a77387f8b9f18e9b75448e01d821ae17e", null ],
     [ "AutoSwitch", "_transmitter_code_2src_2main_8cpp.html#a6d1c8ca21c8826267f5687d3799c6a1f", null ],
+    [ "b12Greyed", "_transmitter_code_2src_2main_8cpp.html#a09683651d97b8d7f0b78e01f1ca5c18f", null ],
+    [ "b5Greyed", "_transmitter_code_2src_2main_8cpp.html#a48ed16418893473ea7e8da4fe6c08b15", null ],
     [ "b5isGrey", "_transmitter_code_2src_2main_8cpp.html#a2cacff4290d454b1134b62c183e4e17a", null ],
     [ "BackGroundColour", "_transmitter_code_2src_2main_8cpp.html#a59c3d8b001e63150ebf11e3d9d6dca5b", null ],
     [ "BindButton", "_transmitter_code_2src_2main_8cpp.html#a11a586885b48e92a4cd03ff1840ac374", null ],
