@@ -7359,10 +7359,10 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                     ReadOneModel(ModelNumber);                            // Match is checked at read time
                 }
                 if (ModelMatched){                                        // Found it!
+                    UpdateModelsNameEveryWhere();                        //  Use it.
                     if (AnnounceConnected) PlaySound(MMFOUND);
                     Procrastinate(1500);
                     SaveAllParameters();                                 //  Save it
-                    UpdateModelsNameEveryWhere();                        //  Use it.
                 }else{                                                    
                     if (AnnounceConnected) PlaySound(MMNOTFOUND);
                     Procrastinate(1700);
