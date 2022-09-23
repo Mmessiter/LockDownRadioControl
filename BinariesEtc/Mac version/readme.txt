@@ -1,4 +1,4 @@
-Version 1.9.0 
+Version 1.9.1 (RX: 1.9.0) 
 
 How to use the transmitter or receiver firmware updater:
 
@@ -14,6 +14,12 @@ Note: If the receiver has two transceivers, use RX2.hex otherwise use RX1.hex.
 
 To update the Nextion screen, download their free editor (Windows only), load the .HMI file into it, and then upload it to the screen using an FTDI adapter over USB.
 
+
+
+New in version: 1.9.1:
+----------------------
+New audio prompts for ModelMatch and binding. Model number now added to name display.
+Some small performance enhancements and one display bug fix.
 
 
 New in version: 1.9.0:
