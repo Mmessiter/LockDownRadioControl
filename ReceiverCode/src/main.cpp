@@ -247,6 +247,7 @@ void BindModel(){
     BindNow     = 0;
     SaveNewBind = false;
     AttachServos(); // AND START SBUS!!!
+    ReconnectedMoment = millis();                 // Save this moment, then don't move a servo for 20 ms ...
 }
 // ***************************************************************************************************************************************************
 void SendToSensorHub(char m[])
@@ -617,7 +618,7 @@ void DoBinding(){
         SaveNewBind = false;
         BindNow = 1;
     }
-    if (BindNow == 1 && !BoundFlag && ModelMatched) BindModel();// heer
+    if (BindNow == 1 && !BoundFlag && ModelMatched) BindModel();
 }
 /************************************************************************************************************/
 
