@@ -63,7 +63,6 @@ var _receiver_code_2src_2main_8cpp =
     [ "Qnh", "_receiver_code_2src_2main_8cpp.html#ae3495ca407a0a3ea570ce0af7a3447a3", null ],
     [ "QNHSent", "_receiver_code_2src_2main_8cpp.html#a85141adc0aa19e8a8d1d9b3e5796500f", null ],
     [ "ReconnectedMoment", "_receiver_code_2src_2main_8cpp.html#ae6657a547a79d8e304b8ddeb3f6a38e0", null ],
-    [ "ReInit", "_receiver_code_2src_2main_8cpp.html#aace5dda203af973b33a46413f02d9f9a", null ],
     [ "SatellitesGPS", "_receiver_code_2src_2main_8cpp.html#a7dc81a3982ee72ef15b460b4bbf32818", null ],
     [ "SbusChannels", "_receiver_code_2src_2main_8cpp.html#a8331e76046c0a5dfd554712b1e54507c", null ],
     [ "SBUSTimer", "_receiver_code_2src_2main_8cpp.html#a2e121251691466f81a2f540f00e7141e", null ],
