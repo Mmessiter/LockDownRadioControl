@@ -7351,33 +7351,19 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
             ModelMatched = true;                                         // It's a match so start flying!
             if (AnnounceConnected) PlaySound(MMMATCHED);
             Procrastinate(1500);
-#ifdef DB_BIND
-            Serial.println("Remote ID matches locally stored ID");
-#endif
         } else {
-            if (AutoModelSelect){                                        // It's not a match so maybe search for it.
+            if (AutoModelSelect){                                         // It's not a match so maybe search for it.
                 ModelNumber = 0;
                 while ((ModelMatched == false) && (ModelNumber < 99)) {   // Try to match the ID with a save one
                     ++ModelNumber;
                     ReadOneModel(ModelNumber);                            // Match is checked at read time
                 }
-                if (ModelMatched){                                       // Found it!
-#ifdef DB_BIND
-                    Serial.print("Match found at model number: ");    
-                    Serial.print(ModelNumber);
-                    Serial.print(" (");
-                    Serial.print(ModelName);
-                    Serial.println(")");
-#endif
+                if (ModelMatched){                                        // Found it!
                     if (AnnounceConnected) PlaySound(MMFOUND);
                     Procrastinate(1500);
-                    SaveAllParameters();                                 //  save it
+                    SaveAllParameters();                                 //  Save it
                     UpdateModelsNameEveryWhere();                        //  Use it.
                 }else{                                                    
-#ifdef DB_BIND
-                    Serial.println("Match not found.");                    
-#endif      
-                    
                     if (AnnounceConnected) PlaySound(MMNOTFOUND);
                     Procrastinate(1700);
                     ModelNumber = SavedModelNumber;                      // Not found anywhere. So offer to bind the restored selected one
