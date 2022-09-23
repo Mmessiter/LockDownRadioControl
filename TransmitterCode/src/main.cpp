@@ -1634,13 +1634,7 @@ FASTRUN void ShowComms()
     if (ShowNow) {
 
         if (CurrentView == FRONTVIEW || CurrentView == DATAVIEW) {
-            if ((CurrentView == FRONTVIEW)) {
-                ShowConnectionQuality();
-                if ((!BoundFlag) && (!LostContactFlag)) {     // i.e. connected but not yet bound
-                    SendCommand(BindButtonVisible);
-                    BindButton = true;
-                }
-            }
+            if ((CurrentView == FRONTVIEW))  ShowConnectionQuality();
             if (LedWasGreen) {
                 if ((CurrentView == FRONTVIEW)) {
                     if (BoundFlag) {
@@ -2502,11 +2496,7 @@ bool ReadOneModel(uint8_t Mnum)
         ModelsMacUnionSaved.Val8[i] = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
     }
-   if (ModelIdentified){ 
-        if ((ModelsMacUnion.Val32[0] == ModelsMacUnionSaved.Val32[0]) && (ModelsMacUnion.Val32[1] == ModelsMacUnionSaved.Val32[1])) {
-            ModelMatched = true;
-        }
-   }
+   
   
     // **************************************
 
@@ -3098,6 +3088,7 @@ FLASHMEM void setup()
     }
     SendText(FrontView_Connected, na);
     UpdateModelsNameEveryWhere();
+    WarningTimer = millis();
 }
 /*********************************************************************************************************************************/
 
@@ -6892,12 +6883,11 @@ void LoadPacketData()
     SendBuffer[CHANNELSUSED + 2] = 0;
     switch (PacketNumber) {
         case 0:
-            SendBuffer[CHANNELSUSED + 2] = BindingNow;
+             SendBuffer[CHANNELSUSED + 2] = BindingNow;
             if (BindingNow == 1) {
                 BindingTimer = millis(); // start a timer
                 BindingNow   = 2;
             }
-           
             if (((millis() - FailSafeTimer) > 1500) && SaveFailSafeNow) {
                 SendBuffer[CHANNELSUSED + 1] = SaveFailSafeNow; // FailSafeSaveMoment
                 SaveFailSafeNow              = false;           // once should do it.
@@ -6926,7 +6916,6 @@ void LoadPacketData()
             if (SwapWaveBand == 1) SetUKFrequencies();
             SwapWaveBand = 0;
             break;
-
         default:
             break;
     }
@@ -7347,18 +7336,21 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
        UpdateModelsNameEveryWhere();
     }
     if (ModelIdentified) {                                                //  We have both bits of Model ID?
-        if ((ModelsMacUnion.Val32[0] == ModelsMacUnionSaved.Val32[0]) && (ModelsMacUnion.Val32[1] == ModelsMacUnionSaved.Val32[1])) {
-            ModelMatched = true;                                          //  It's a match so start flying!
+        if ((ModelsMacUnion.Val32[0] == ModelsMacUnionSaved.Val32[0]) && (ModelsMacUnion.Val32[1] == ModelsMacUnionSaved.Val32[1])) {       
             if (AnnounceConnected) {
                 PlaySound(MMMATCHED);
-                Procrastinate(1500);
+                Procrastinate(1000);
                 }
+                ModelMatched = true;                                      //  It's a match so start flying!
         } else {
             if (AutoModelSelect){                                         //  It's not a match so maybe search for it.
                 ModelNumber = 0;
                 while ((ModelMatched == false) && (ModelNumber < 99)) {   //  Try to match the ID with a save one
                     ++ModelNumber;
-                    ReadOneModel(ModelNumber);                            //  Match is checked at read time
+                    ReadOneModel(ModelNumber);                           
+                    if ((ModelsMacUnion.Val32[0] == ModelsMacUnionSaved.Val32[0]) && (ModelsMacUnion.Val32[1] == ModelsMacUnionSaved.Val32[1])) {
+                        ModelMatched = true;
+                    }
                 }
                 if (ModelMatched){                                        //  Found it!
                     UpdateModelsNameEveryWhere();                         //  Use it.
@@ -7369,13 +7361,18 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                     SaveAllParameters();                                  //  Save it
                 }else{                                                    
                     if (AnnounceConnected) {
-                        PlaySound(MMNOTFOUND);
-                        Procrastinate(1700);
+                        if ((millis() - WarningTimer) > 10000) {
+                            PlaySound(MMNOTFOUND); // heer 
+                            Procrastinate(1500);
                         }
+                    }
                     ModelNumber = SavedModelNumber;                       //  Not found anywhere. So offer to bind the restored selected one
                     ReadOneModel(ModelNumber);
                     SendCommand(BindButtonVisible);
-                    if (AnnounceConnected)PlaySound(BINDNEEDED);
+                    if ((millis() - WarningTimer) > 10000) {
+                            WarningTimer = millis();
+                            if (AnnounceConnected)PlaySound(BINDNEEDED);
+                    }
                     BindButton = true;
                     ModelMatched = false;
                 } return;

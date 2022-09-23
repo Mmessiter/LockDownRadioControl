@@ -54,7 +54,6 @@ uint16_t        SbusChannels[CHANNELSUSED + 1]; // Just one spare
 uint32_t        SBUSTimer = 0;
 bool            FailSafeChannel[17];
 bool            FailSafeDataLoaded = false;
-bool            ReInit             = false;
 uint8_t         FS_byte1           = 0; // All 16 failsafe channel flags are in these two bytes
 uint8_t         FS_byte2           = 0;
 uint32_t        ReconnectedMoment;
@@ -613,12 +612,12 @@ void ShowPipes(){               // only for debugging
 /************************************************************************************************************/
 void DoBinding(){
     GetNewPipe();
-    ShowPipes();                // only for debugging
+    ShowPipes();            
     if (OldPipe == NewPipe) {
         SaveNewBind = false;
         BindNow = 1;
     }
-    if (BindNow == 1 && !BoundFlag)  BindModel();
+    if (BindNow == 1 && !BoundFlag && ModelMatched) BindModel();// heer
 }
 /************************************************************************************************************/
 
