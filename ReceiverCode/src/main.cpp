@@ -142,10 +142,10 @@ void FailSafe()
     if (BoundFlag)
     {
         LoadFailSafeData();
-        Connected = true; // to force sending this data!
+        Connected = true;   // to force sending this data!
         MapToSBUS();
         MoveServos();
-        Connected = false; // I lied earlier - we're not really connected.
+        Connected = false;  // I lied earlier - we're not really connected.
     }
     SetUKFrequencies();     // default startup conditions
     ModelMatched = false;
