@@ -7346,30 +7346,36 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
        CurrentView = FRONTVIEW;
        UpdateModelsNameEveryWhere();
     }
-    if (ModelIdentified) {                                               // We have both bits of Model ID?
+    if (ModelIdentified) {                                                //  We have both bits of Model ID?
         if ((ModelsMacUnion.Val32[0] == ModelsMacUnionSaved.Val32[0]) && (ModelsMacUnion.Val32[1] == ModelsMacUnionSaved.Val32[1])) {
-            ModelMatched = true;                                         // It's a match so start flying!
-            if (AnnounceConnected) PlaySound(MMMATCHED);
-            Procrastinate(1500);
-        } else {
-            if (AutoModelSelect){                                         // It's not a match so maybe search for it.
-                ModelNumber = 0;
-                while ((ModelMatched == false) && (ModelNumber < 99)) {   // Try to match the ID with a save one
-                    ++ModelNumber;
-                    ReadOneModel(ModelNumber);                            // Match is checked at read time
+            ModelMatched = true;                                          //  It's a match so start flying!
+            if (AnnounceConnected) {
+                PlaySound(MMMATCHED);
+                Procrastinate(1500);
                 }
-                if (ModelMatched){                                        // Found it!
-                    UpdateModelsNameEveryWhere();                        //  Use it.
-                    if (AnnounceConnected) PlaySound(MMFOUND);
-                    Procrastinate(1500);
-                    SaveAllParameters();                                 //  Save it
+        } else {
+            if (AutoModelSelect){                                         //  It's not a match so maybe search for it.
+                ModelNumber = 0;
+                while ((ModelMatched == false) && (ModelNumber < 99)) {   //  Try to match the ID with a save one
+                    ++ModelNumber;
+                    ReadOneModel(ModelNumber);                            //  Match is checked at read time
+                }
+                if (ModelMatched){                                        //  Found it!
+                    UpdateModelsNameEveryWhere();                         //  Use it.
+                    if (AnnounceConnected) {
+                        PlaySound(MMFOUND);
+                        Procrastinate(1500);
+                        }
+                    SaveAllParameters();                                  //  Save it
                 }else{                                                    
-                    if (AnnounceConnected) PlaySound(MMNOTFOUND);
-                    Procrastinate(1700);
-                    ModelNumber = SavedModelNumber;                      // Not found anywhere. So offer to bind the restored selected one
+                    if (AnnounceConnected) {
+                        PlaySound(MMNOTFOUND);
+                        Procrastinate(1700);
+                        }
+                    ModelNumber = SavedModelNumber;                       //  Not found anywhere. So offer to bind the restored selected one
                     ReadOneModel(ModelNumber);
                     SendCommand(BindButtonVisible);
-                    if (AnnounceConnected) PlaySound(BINDNEEDED);
+                    if (AnnounceConnected)PlaySound(BINDNEEDED);
                     BindButton = true;
                     ModelMatched = false;
                 } return;
@@ -7598,7 +7604,7 @@ void CheckPowerOffButton()
                 digitalWrite(POWER_OFF_PIN, HIGH); // power off
             }
             --TurnOffSecondToGo;
-            PlaySound(CLICKZERO);
+             if (TrimClicks)  PlaySound(CLICKZERO);
             PreviousPowerOffTimer = millis();
         }
     }
