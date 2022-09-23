@@ -4258,6 +4258,8 @@ void BindNow() // Bind button was pressed
     ModelsMacUnionSaved.Val32[1] = ModelsMacUnion.Val32[1];
     SaveOneModel(ModelNumber);
     MakeBindButtonInvisible();
+    if (AnnounceConnected) PlaySound(BINDSUCCEEDED);
+    Procrastinate(1700);
     UpdateModelsNameEveryWhere();
 }
 
@@ -7347,6 +7349,8 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
     if (ModelIdentified) {                                               // We have both bits of Model ID?
         if ((ModelsMacUnion.Val32[0] == ModelsMacUnionSaved.Val32[0]) && (ModelsMacUnion.Val32[1] == ModelsMacUnionSaved.Val32[1])) {
             ModelMatched = true;                                         // It's a match so start flying!
+            if (AnnounceConnected) PlaySound(MMMATCHED);
+            Procrastinate(1500);
 #ifdef DB_BIND
             Serial.println("Remote ID matches locally stored ID");
 #endif
@@ -7365,20 +7369,27 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                     Serial.print(ModelName);
                     Serial.println(")");
 #endif
+                    if (AnnounceConnected) PlaySound(MMFOUND);
+                    Procrastinate(1500);
                     SaveAllParameters();                                 //  save it
                     UpdateModelsNameEveryWhere();                        //  Use it.
                 }else{                                                    
 #ifdef DB_BIND
                     Serial.println("Match not found.");                    
 #endif      
+                    
+                    if (AnnounceConnected) PlaySound(MMNOTFOUND);
+                    Procrastinate(1700);
                     ModelNumber = SavedModelNumber;                      // Not found anywhere. So offer to bind the restored selected one
                     ReadOneModel(ModelNumber);
                     SendCommand(BindButtonVisible);
+                    if (AnnounceConnected) PlaySound(BINDNEEDED);
                     BindButton = true;
                     ModelMatched = false;
                 } return;
             } else {
                 SendCommand(BindButtonVisible);
+                if (AnnounceConnected) PlaySound(BINDNEEDED);
                 BindButton = true;
                 ModelMatched = false;
             }

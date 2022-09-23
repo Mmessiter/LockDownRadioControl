@@ -220,6 +220,12 @@
 #define MASTERMSG       23
 #define WEAKMSG         23
 #define WHAHWHAHMSG     25
+#define BINDSUCCEEDED   26
+#define BINDNEEDED      27
+#define MMFOUND         28
+#define MMMATCHED       29
+#define MMNOTFOUND      30
+
 
 // **************************************************************************
 //               SDCARD MODEL MEMORY CONSTANTS                              *
