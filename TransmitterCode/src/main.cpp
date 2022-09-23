@@ -7330,7 +7330,7 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
     
     uint8_t SavedModelNumber = ModelNumber;
     ModelMatched             = false;
-    if (CurrentView != FRONTVIEW){                                       // Frontview is needed because of Bind button
+    if (CurrentView != FRONTVIEW){                                        // Frontview is needed because of Bind button
        SendCommand(page_FrontView);
        CurrentView = FRONTVIEW;
        UpdateModelsNameEveryWhere();
@@ -7370,15 +7370,18 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                     ReadOneModel(ModelNumber);
                     SendCommand(BindButtonVisible);
                     if ((millis() - WarningTimer) > 10000) {
-                            WarningTimer = millis();
-                            if (AnnounceConnected)PlaySound(BINDNEEDED);
+                        WarningTimer = millis();
+                        if (AnnounceConnected) PlaySound(BINDNEEDED);
                     }
                     BindButton = true;
                     ModelMatched = false;
                 } return;
             } else {
                 SendCommand(BindButtonVisible);
-                if (AnnounceConnected) PlaySound(BINDNEEDED);
+                if ((millis() - WarningTimer) > 10000) {
+                    WarningTimer = millis();
+                    if (AnnounceConnected) PlaySound(BINDNEEDED);
+                }
                 BindButton = true;
                 ModelMatched = false;
             }
