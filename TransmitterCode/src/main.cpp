@@ -7559,17 +7559,16 @@ void CheckModelName()
 
 void CheckScanButton() // Scan button AND models button
 {
-
-if (CurrentView == MAINSETUPVIEW) {
-    if (ModelMatched) {
+    if (CurrentView == MAINSETUPVIEW) {
+        if (ModelMatched) {
           if(!b5isGrey) { 
-            SendCommand(b5Greyed);
-            delay(10);
-            SendCommand(b12Greyed);
-            b5isGrey = true;
+                SendCommand(b5Greyed);
+                delay(10);
+                SendCommand(b12Greyed);
+                b5isGrey = true;
+            }
         }
     }
-}
 }
 /************************************************************************************************************/
 void CheckPowerOffButton()
