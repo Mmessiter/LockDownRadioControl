@@ -5109,7 +5109,7 @@ void OptionView2Start()
     char TxVCorrextion[] = "t2";
     char RxVCorrextion[] = "n0"; // RX Voltage correction
 
-    if (CurrentView == OPTIONVIEW3) {
+    if (CurrentView == OPTIONVIEW3) { // heer TODO: what if Options 1    ????
         RxVoltageCorrection     = GetValue(RxVCorrextion);
         TxVoltageCorrection     = GetValue(TxVCorrextion);
         PowerOffWarningSeconds  = GetValue(n2);
@@ -5656,6 +5656,7 @@ FASTRUN void ButtonWasPressed()
             if (Inactivity_Timeout < INACTIVITYMINIMUM) Inactivity_Timeout = INACTIVITYMINIMUM;
             if (Inactivity_Timeout > INACTIVITYMAXIMUM) Inactivity_Timeout = INACTIVITYMAXIMUM;
             FixDeltaGMTSign();
+           
             if (DoSbusSendOnly)
             {
                 Connected            = false;
