@@ -5637,21 +5637,26 @@ FASTRUN void ButtonWasPressed()
         }
         if (InStrng(OptionsEnd, TextIn) > 0) { // Exit from Options screen
             SendCommand(ProgressStart);
+            SendValue(Progress, 10);
             GetText(TxNme, TxName); 
+            SendValue(Progress, 20);
             GetText(RxName, ModelName); 
-            SendValue(Progress, 35);
+            SendValue(Progress, 30);
             Qnh = (uint16_t)GetValue(QNH);
-            SendValue(Progress, 45);
+            SendValue(Progress, 40);
             TrimFactor     = GetValue(trf);
+            SendValue(Progress, 50);
             LowBattery     = GetValue(Bwn);
+            SendValue(Progress, 60);
             ScreenTimeout  = GetValue(ScreenViewTimeout);
+            SendValue(Progress, 70);
             CopyTrimsToAll = GetValue(c0);
-            SendValue(Progress, 100);
+            SendValue(Progress, 80);
             Inactivity_Timeout = GetValue(Pto) * TICKSPERMINUTE;
             if (Inactivity_Timeout < INACTIVITYMINIMUM) Inactivity_Timeout = INACTIVITYMINIMUM;
             if (Inactivity_Timeout > INACTIVITYMAXIMUM) Inactivity_Timeout = INACTIVITYMAXIMUM;
+            SendValue(Progress, 90);
             FixDeltaGMTSign();
-           
             if (DoSbusSendOnly)
             {
                 Connected            = false;
@@ -5661,6 +5666,8 @@ FASTRUN void ButtonWasPressed()
                 BlueLedOn();
             }
             SaveAllParameters();
+            SendValue(Progress, 95);
+            SendValue(Progress, 100);
             SendCommand(page_SetupView);
             ModelNameTimeCheck = 0;
             CurrentMode        = NORMAL;
