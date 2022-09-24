@@ -5013,20 +5013,15 @@ void LogVIEW()
 /******************************************************************************************************************************/
 void SetupViewFM() // heer saved
 { // (Exit from models screen) New model name occurs at offset 4 in TextIn
+
     char page_SetupView[] = "page SetupView";
-    int  i                = 0;
-    while (TextIn[i + 4] > 0) {
-        ModelName[i]     = TextIn[i + 4]; // copy new name
-        ModelName[i + 1] = 0;
-        ++i;
-    }
     SaveAllParameters();
     SendCommand(page_SetupView);
     CurrentMode        = NORMAL; // Send data again
     CurrentView        = MAINSETUPVIEW;
     UpdateModelsNameEveryWhere();
-    ModelNameTimeCheck = 0;
 }
+    
 /******************************************************************************************************************************/
 void StartSubTrimView()
 { // Subtrim view start
@@ -5109,7 +5104,7 @@ void OptionView2Start()
     char TxVCorrextion[] = "t2";
     char RxVCorrextion[] = "n0"; // RX Voltage correction
 
-    if (CurrentView == OPTIONVIEW3) {
+    if (CurrentView == OPTIONVIEW3) { // heer TODO: And what if was Options 1??
         RxVoltageCorrection     = GetValue(RxVCorrextion);
         TxVoltageCorrection     = GetValue(TxVCorrextion);
         PowerOffWarningSeconds  = GetValue(n2);
@@ -5642,19 +5637,25 @@ FASTRUN void ButtonWasPressed()
         }
         if (InStrng(OptionsEnd, TextIn) > 0) { // Exit from Options screen
             SendCommand(ProgressStart);
+            SendValue(Progress, 10);
             GetText(TxNme, TxName); 
+            SendValue(Progress, 20);
             GetText(RxName, ModelName); 
-            SendValue(Progress, 35);
+            SendValue(Progress, 30);
             Qnh = (uint16_t)GetValue(QNH);
-            SendValue(Progress, 45);
+            SendValue(Progress, 40);
             TrimFactor     = GetValue(trf);
+            SendValue(Progress, 50);
             LowBattery     = GetValue(Bwn);
+            SendValue(Progress, 60);
             ScreenTimeout  = GetValue(ScreenViewTimeout);
+            SendValue(Progress, 70);
             CopyTrimsToAll = GetValue(c0);
-            SendValue(Progress, 100);
+            SendValue(Progress, 80);
             Inactivity_Timeout = GetValue(Pto) * TICKSPERMINUTE;
             if (Inactivity_Timeout < INACTIVITYMINIMUM) Inactivity_Timeout = INACTIVITYMINIMUM;
             if (Inactivity_Timeout > INACTIVITYMAXIMUM) Inactivity_Timeout = INACTIVITYMAXIMUM;
+            SendValue(Progress, 90);
             FixDeltaGMTSign();
             if (DoSbusSendOnly)
             {
@@ -5665,6 +5666,8 @@ FASTRUN void ButtonWasPressed()
                 BlueLedOn();
             }
             SaveAllParameters();
+            SendValue(Progress, 95);
+            SendValue(Progress, 100);
             SendCommand(page_SetupView);
             ModelNameTimeCheck = 0;
             CurrentMode        = NORMAL;
@@ -5805,7 +5808,7 @@ FASTRUN void ButtonWasPressed()
             SendValue(Pto, (Inactivity_Timeout / TICKSPERMINUTE));
             SendText(Tx_Name, TxName);
             SendValue(QNH, Qnh);
-            SendText(RxName, ModelName); // heer
+            SendText(RxName, ModelName); 
             SendValue(trf, TrimFactor);
             SendValue(Bwn, LowBattery);
             SendValue(c0, CopyTrimsToAll);
