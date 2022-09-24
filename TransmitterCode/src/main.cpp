@@ -5013,20 +5013,15 @@ void LogVIEW()
 /******************************************************************************************************************************/
 void SetupViewFM() // heer saved
 { // (Exit from models screen) New model name occurs at offset 4 in TextIn
+
     char page_SetupView[] = "page SetupView";
-    int  i                = 0;
-    while (TextIn[i + 4] > 0) {
-        ModelName[i]     = TextIn[i + 4]; // copy new name
-        ModelName[i + 1] = 0;
-        ++i;
-    }
     SaveAllParameters();
     SendCommand(page_SetupView);
     CurrentMode        = NORMAL; // Send data again
     CurrentView        = MAINSETUPVIEW;
     UpdateModelsNameEveryWhere();
-    ModelNameTimeCheck = 0;
 }
+    
 /******************************************************************************************************************************/
 void StartSubTrimView()
 { // Subtrim view start
@@ -5109,7 +5104,7 @@ void OptionView2Start()
     char TxVCorrextion[] = "t2";
     char RxVCorrextion[] = "n0"; // RX Voltage correction
 
-    if (CurrentView == OPTIONVIEW3) { // heer TODO: what if Options 1    ????
+    if (CurrentView == OPTIONVIEW3) { // heer TODO: And what if was Options 1??
         RxVoltageCorrection     = GetValue(RxVCorrextion);
         TxVoltageCorrection     = GetValue(TxVCorrextion);
         PowerOffWarningSeconds  = GetValue(n2);
@@ -5806,7 +5801,7 @@ FASTRUN void ButtonWasPressed()
             SendValue(Pto, (Inactivity_Timeout / TICKSPERMINUTE));
             SendText(Tx_Name, TxName);
             SendValue(QNH, Qnh);
-            SendText(RxName, ModelName); // heer
+            SendText(RxName, ModelName); 
             SendValue(trf, TrimFactor);
             SendValue(Bwn, LowBattery);
             SendValue(c0, CopyTrimsToAll);
