@@ -5011,7 +5011,7 @@ void LogVIEW()
 }
 
 /******************************************************************************************************************************/
-void SetupViewFM()
+void SetupViewFM() // heer saved
 { // (Exit from models screen) New model name occurs at offset 4 in TextIn
     char page_SetupView[] = "page SetupView";
     int  i                = 0;
@@ -5506,6 +5506,8 @@ FASTRUN void ButtonWasPressed()
         char StEDIT[]               = "StEDIT";
         char pLogView[]             = "page LogView";
         char dGMT[]                 = "dGMT";
+        char RxName[]               = "RxName";
+        char TxNme[]                = "TxName";
 
         ScreenTimeTimer = millis(); // reset screen timeout counter
         if (ScreenIsOff) {
@@ -5640,17 +5642,10 @@ FASTRUN void ButtonWasPressed()
         }
         if (InStrng(OptionsEnd, TextIn) > 0) { // Exit from Options screen
             SendCommand(ProgressStart);
-            i = strlen(OptionsEnd);
-            j = 0;
-            while (uint8_t(TextIn[i]) > 0 && i < 100) {
-                TxName[j] = TextIn[i];
-                ++j;
-                ++i;
-                TxName[j] = 0;
-            }
+            GetText(TxNme, TxName); 
+            GetText(RxName, ModelName); 
             SendValue(Progress, 35);
-            Qnh = (uint16_t)GetValue(QNH); // error protected version
-
+            Qnh = (uint16_t)GetValue(QNH);
             SendValue(Progress, 45);
             TrimFactor     = GetValue(trf);
             LowBattery     = GetValue(Bwn);
@@ -5810,6 +5805,7 @@ FASTRUN void ButtonWasPressed()
             SendValue(Pto, (Inactivity_Timeout / TICKSPERMINUTE));
             SendText(Tx_Name, TxName);
             SendValue(QNH, Qnh);
+            SendText(RxName, ModelName); // heer
             SendValue(trf, TrimFactor);
             SendValue(Bwn, LowBattery);
             SendValue(c0, CopyTrimsToAll);
@@ -7531,18 +7527,7 @@ FASTRUN void CheckGapsLength()
 void CheckModelName()
 {                                                  // In ModelsView, this function checks correct name is displayed.
     char ModelsView_ModelNumber[] = "ModelNumber"; //
-    char ModelsView_ModelName[]   = "ModelName";
-    char NewName[35];
     ModelNumber = GetValue(ModelsView_ModelNumber);
-    if (GetButtonPress()) ButtonWasPressed();           // Deal with button ... don't want to miss one!
-    if ((GetText(ModelsView_ModelName, NewName)) > 2) { // Short texts come in from kbd screen
-        if (strcmp(ModelName, NewName) != 0) {          // Changed name?
-            strcpy(ModelName, NewName);                 // Edited name!
-            SaveOneModel(ModelNumber);                  // Save it!
-            CloseModelsFile();
-            return;
-        }
-        if (GetButtonPress()) ButtonWasPressed(); // Deal with button ... don't want to miss one!
         if (LastModelLoaded != ModelNumber) {
             if (ModelNumber >= 1) { // Don't use number zero
                 if ((ModelNumber > 99) || (ModelNumber < 1)) ModelNumber = 1;
@@ -7551,10 +7536,10 @@ void CheckModelName()
                 LastModelLoaded = ModelNumber;
                 UpdateModelsNameEveryWhere();
             }
-        }
-        ClearText();
     }
+    ClearText();
 }
+
 /************************************************************************************************************/
 
 void CheckScanButton() // Scan button AND models button
