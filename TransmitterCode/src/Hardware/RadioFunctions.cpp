@@ -147,7 +147,7 @@ FASTRUN void FailedPacket()
             if (LedWasGreen && UseLog) {
                 LogThisLongGap();
             }
-            if (!LedWasRed) RedLedOn(); // heer
+            if (!LedWasRed) RedLedOn(); 
             ReEnableScanButton();
         }
     }

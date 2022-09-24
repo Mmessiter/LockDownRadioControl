@@ -1041,6 +1041,7 @@ void RedLedOn()
         ModelsMacUnion.Val32[1]                     = 0;
         RangeTestGoodPackets                        = 0;
         ModelMatched                                = false;
+        BoundFlag                                   = false;
         if (CurrentView == FRONTVIEW) SendText(FrontView_Connected, na);
         if (UseLog) LogDisConnection();
         if (AnnounceConnected) PlaySound(DISCONNECTEDMSG);
@@ -7362,7 +7363,7 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                 }else{                                                    
                     if (AnnounceConnected) {
                         if ((millis() - WarningTimer) > 10000) {
-                            PlaySound(MMNOTFOUND); // heer 
+                            PlaySound(MMNOTFOUND); 
                             Procrastinate(1500);
                         }
                     }
@@ -7558,12 +7559,17 @@ void CheckModelName()
 
 void CheckScanButton() // Scan button AND models button
 {
-    if (BoundFlag & !b5isGrey) {
-        SendCommand(b5Greyed);
-        delay(10);
-        SendCommand(b12Greyed);
-        b5isGrey = true;
+
+if (CurrentView == MAINSETUPVIEW) {
+    if (ModelMatched) {
+          if(!b5isGrey) { 
+            SendCommand(b5Greyed);
+            delay(10);
+            SendCommand(b12Greyed);
+            b5isGrey = true;
+        }
     }
+}
 }
 /************************************************************************************************************/
 void CheckPowerOffButton()
