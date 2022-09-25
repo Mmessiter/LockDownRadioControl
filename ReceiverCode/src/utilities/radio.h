@@ -187,7 +187,7 @@ void TryToConnectNow()
     CurrentRadio->startListening();
     uint32_t ATimer = millis();
     while ((!CurrentRadio->available()) && (millis() - ATimer) < LISTEN_PERIOD) {
-    } // Wait here until connected, on short timeout (10 ms)
+    }
     Connected = CurrentRadio->available();
 }
 
@@ -382,7 +382,7 @@ void SendIntToAckPayload(uint32_t U){                        // This one functio
 
 /************************************************************************************************************/
 // The unique Mac address of this Teensy 4.0 is sent to transmitter while binding to identify this model.
-// This is to avoid the wrong model memory being used. heer
+// This is to avoid the wrong model memory being used. 
 
 void  SendMacAddress()
 {
@@ -397,7 +397,7 @@ void  SendMacAddress()
   if (AckPayload.Purpose > MaxAckP) AckPayload.Purpose = 0; // wrap after max
 
   for (int i = 0; i < 8; ++i)  ThisUnion.Val8[i] = MacAddress[i];
-       
+
        switch (AckPayload.Purpose) {
            case 0:
                SendIntToAckPayload(ThisUnion.Val32[0]);

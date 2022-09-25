@@ -1036,7 +1036,7 @@ void RedLedOn()
         RXVoltsDetected                             = false;
         ModelIdentified                             = false;
         PacketsPerSecond                            = 0;
-        LastShowTime                                = 0; 
+        LastShowTime                                = 0;
         ModelsMacUnion.Val32[0]                     = 0;
         ModelsMacUnion.Val32[1]                     = 0;
         RangeTestGoodPackets                        = 0;
@@ -7402,12 +7402,14 @@ void  GetModelsMacAddress(){
              break;
         default:
              break;
-    } 
+    }
+   
     if (ModelMatched == false) {
         if ((ModelsMacUnion.Val32[0] > 0) && (ModelsMacUnion.Val32[1] > 0)){   // got both bits yet? 
                ModelIdentified = true;
         }
         CompareModelsIDs();
+
         if (BindButton) SendCommand(BindButtonVisible); // heer
     }
 }
