@@ -248,6 +248,7 @@ void BindModel(){
     SaveNewBind = false;
     AttachServos(); // AND START SBUS!!!
     ReconnectedMoment = millis();                 // Save this moment, then don't move a servo for 20 ms ...
+   
 }
 // ***************************************************************************************************************************************************
 void SendToSensorHub(char m[])
@@ -325,6 +326,9 @@ void ReadExtraParameters()
     switch (PacketNumber) {
         case 0:
             BindNow = ReceivedData[CHANNELSUSED + 2];
+            
+            Serial.println(BindNow);
+            
             FailSafeSave = bool(ReceivedData[CHANNELSUSED + 1]);
             if (FailSafeSave) {
                 TwoBytes = uint16_t(FS_byte2) + uint16_t(FS_byte1 << 8);
@@ -613,12 +617,16 @@ void ShowPipes(){               // only for debugging
 /************************************************************************************************************/
 void DoBinding(){
     GetNewPipe();
-    ShowPipes();            
+    ShowPipes();
     if (OldPipe == NewPipe) {
         SaveNewBind = false;
         BindNow = 1;
     }
-    if (BindNow == 1 && !BoundFlag && ModelMatched) BindModel();
+
+    if (BindNow > 0 && !BoundFlag && ModelMatched) { // heer
+   // if (ModelMatched && !BoundFlag) {
+        BindModel();
+    }
 }
 /************************************************************************************************************/
 

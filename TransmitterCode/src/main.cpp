@@ -7342,6 +7342,7 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                 Procrastinate(1000);
                 }
                 ModelMatched = true;                                      //  It's a match so start flying!
+                BindButton = true; // heer
         } else {
             if (AutoModelSelect){                                         //  It's not a match so maybe search for it.
                 ModelNumber = 0;
@@ -7350,6 +7351,7 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                     ReadOneModel(ModelNumber);                           
                     if ((ModelsMacUnion.Val32[0] == ModelsMacUnionSaved.Val32[0]) && (ModelsMacUnion.Val32[1] == ModelsMacUnionSaved.Val32[1])) {
                         ModelMatched = true;
+                        BindButton = true; // heer
                     }
                 }
                 if (ModelMatched){                                        //  Found it!
@@ -7406,6 +7408,7 @@ void  GetModelsMacAddress(){
                ModelIdentified = true;
         }
         CompareModelsIDs();
+        if (BindButton) SendCommand(BindButtonVisible); // heer
     }
 }
 /************************************************************************************************************/
