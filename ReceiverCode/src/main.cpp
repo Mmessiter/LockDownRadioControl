@@ -616,10 +616,10 @@ void DoBinding(){
     GetNewPipe();
     ShowPipes();
     if (OldPipe == NewPipe) {
-        SaveNewBind = false;
-        BindNow = 1;
+        SaveNewBind = false;  // No need to save it as we had it.
+        BindNow = 1;          // This critical value is sent from TX when user hits bind button, on set locally if we we knew him already
     }
-    if (BindNow > 0 && !BoundFlag && ModelMatched)  BindModel();
+    if (BindNow > 0 && !BoundFlag && ModelMatched) BindModel(); // only when all conditions are right shall we bind.
 }
 /************************************************************************************************************/
 
