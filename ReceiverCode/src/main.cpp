@@ -622,11 +622,7 @@ void DoBinding(){
         SaveNewBind = false;
         BindNow = 1;
     }
-
-    if (BindNow > 0 && !BoundFlag && ModelMatched) { // heer
-   // if (ModelMatched && !BoundFlag) {
-        BindModel();
-    }
+    if (BindNow > 0 && !BoundFlag && ModelMatched)  BindModel();
 }
 /************************************************************************************************************/
 
@@ -686,7 +682,7 @@ void loop()
         if (millis() - SBUSTimer >= SBUSRATE) {                     // SBUS rate is also good enough for servo rate
             SBUSTimer = millis();                                   // timer starts before send starts....
             if ((millis() - ReconnectedMoment) > RECONNECTGAP) {    // Don't send data for 25 ms after reconnect
-                MoveServos();                        
+                MoveServos();                                       // Actually do something useful at last
             }
         }
         if (FailSafeSave) SaveFailSafeData();
