@@ -264,7 +264,7 @@ $(document).ready(function(){initNavTree('radio_8h_source.html',''); initResizab
 <div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>    <a class="code hl_variable" href="radio_8h.html#a7bca81159d93f215060f40f45f19b0de">CurrentRadio</a>-&gt;startListening();</div>
 <div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>    uint32_t ATimer = millis();</div>
 <div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>    <span class="keywordflow">while</span> ((!<a class="code hl_variable" href="radio_8h.html#a7bca81159d93f215060f40f45f19b0de">CurrentRadio</a>-&gt;available()) &amp;&amp; (millis() - ATimer) &lt; <a class="code hl_define" href="common_01_07_malcolm_xE2_x80_x99s_01_mac_book_01_air's_01conflicted_01copy_012022-09-24_08_8h.html#a66ccb27c237c105f63ffa01c67d6eed9">LISTEN_PERIOD</a>) {</div>
-<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>    } <span class="comment">// Wait here until connected, on short timeout (10 ms)</span></div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>    }</div>
 <div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>    <a class="code hl_variable" href="radio_8h.html#a5318db734c71b1b08208ef690f1f0146">Connected</a> = <a class="code hl_variable" href="radio_8h.html#a7bca81159d93f215060f40f45f19b0de">CurrentRadio</a>-&gt;available();</div>
 <div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>}</div>
 <div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span> </div>
@@ -459,7 +459,7 @@ $(document).ready(function(){initNavTree('radio_8h_source.html',''); initResizab
 <div class="line"><a id="l00382" name="l00382"></a><span class="lineno">  382</span> </div>
 <div class="line"><a id="l00383" name="l00383"></a><span class="lineno">  383</span><span class="comment">/************************************************************************************************************/</span></div>
 <div class="line"><a id="l00384" name="l00384"></a><span class="lineno">  384</span><span class="comment">// The unique Mac address of this Teensy 4.0 is sent to transmitter while binding to identify this model.</span></div>
-<div class="line"><a id="l00385" name="l00385"></a><span class="lineno">  385</span><span class="comment">// This is to avoid the wrong model memory being used. heer</span></div>
+<div class="line"><a id="l00385" name="l00385"></a><span class="lineno">  385</span><span class="comment">// This is to avoid the wrong model memory being used. </span></div>
 <div class="line"><a id="l00386" name="l00386"></a><span class="lineno">  386</span> </div>
 <div class="line"><a id="l00387" name="l00387"></a><span class="lineno"><a class="line" href="radio_8h.html#ab6bb1ded4e272b24f150c28295f4d291">  387</a></span><span class="keywordtype">void</span>  <a class="code hl_function" href="radio_8h.html#ab6bb1ded4e272b24f150c28295f4d291">SendMacAddress</a>()</div>
 <div class="line"><a id="l00388" name="l00388"></a><span class="lineno">  388</span>{</div>
@@ -474,7 +474,7 @@ $(document).ready(function(){initNavTree('radio_8h_source.html',''); initResizab
 <div class="line"><a id="l00397" name="l00397"></a><span class="lineno">  397</span>  <span class="keywordflow">if</span> (<a class="code hl_variable" href="radio_8h.html#a30a079d60b4731ce1531091ffe56a703">AckPayload</a>.<a class="code hl_variable" href="struct_payload.html#ac18701f2aa35ebd8402f45f840d5c445">Purpose</a> &gt; MaxAckP) <a class="code hl_variable" href="radio_8h.html#a30a079d60b4731ce1531091ffe56a703">AckPayload</a>.<a class="code hl_variable" href="struct_payload.html#ac18701f2aa35ebd8402f45f840d5c445">Purpose</a> = 0; <span class="comment">// wrap after max</span></div>
 <div class="line"><a id="l00398" name="l00398"></a><span class="lineno">  398</span> </div>
 <div class="line"><a id="l00399" name="l00399"></a><span class="lineno">  399</span>  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; 8; ++i)  ThisUnion.Val8[i] = <a class="code hl_variable" href="radio_8h.html#ad343661d8a4343426f171e531b9d8aa9">MacAddress</a>[i];</div>
-<div class="line"><a id="l00400" name="l00400"></a><span class="lineno">  400</span>       </div>
+<div class="line"><a id="l00400" name="l00400"></a><span class="lineno">  400</span> </div>
 <div class="line"><a id="l00401" name="l00401"></a><span class="lineno">  401</span>       switch (<a class="code hl_variable" href="radio_8h.html#a30a079d60b4731ce1531091ffe56a703">AckPayload</a>.<a class="code hl_variable" href="struct_payload.html#ac18701f2aa35ebd8402f45f840d5c445">Purpose</a>) {</div>
 <div class="line"><a id="l00402" name="l00402"></a><span class="lineno">  402</span>           <span class="keywordflow">case</span> 0:</div>
 <div class="line"><a id="l00403" name="l00403"></a><span class="lineno">  403</span>               <a class="code hl_function" href="radio_8h.html#a5b9bcce29081b0c53837ecb90e0a6b33">SendIntToAckPayload</a>(ThisUnion.Val32[0]);</div>
