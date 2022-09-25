@@ -7409,7 +7409,6 @@ void  GetModelsMacAddress(){
                ModelIdentified = true;
         }
         CompareModelsIDs();
-
         if (BindButton) SendCommand(BindButtonVisible); // heer
     }
 }
