@@ -326,9 +326,6 @@ void ReadExtraParameters()
     switch (PacketNumber) {
         case 0:
             BindNow = ReceivedData[CHANNELSUSED + 2];
-            
-            Serial.println(BindNow);
-            
             FailSafeSave = bool(ReceivedData[CHANNELSUSED + 1]);
             if (FailSafeSave) {
                 TwoBytes = uint16_t(FS_byte2) + uint16_t(FS_byte1 << 8);
