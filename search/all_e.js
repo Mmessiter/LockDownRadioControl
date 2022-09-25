@@ -45,7 +45,7 @@ var searchData=
   ['magx_42',['MagX',['../_quadcopter_2src_2main_8cpp.html#a2147cfcf58b4ad01e6914a0e07678b93',1,'main.cpp']]],
   ['magy_43',['MagY',['../_quadcopter_2src_2main_8cpp.html#ac6ac8f7dadfc13730ef787e4a1067aef',1,'main.cpp']]],
   ['magz_44',['MagZ',['../_quadcopter_2src_2main_8cpp.html#a3be02ea38098132450acb2f9209b458e',1,'main.cpp']]],
-  ['main_2ecpp_45',['main.cpp',['../_quadcopter_2src_2main_8cpp.html',1,'(Global Namespace)'],['../_receiver_code_2src_2main_8cpp.html',1,'(Global Namespace)'],['../_sensor_hub_t32_2src_2main_8cpp.html',1,'(Global Namespace)'],['../_transmitter_code_2src_2main_8cpp.html',1,'(Global Namespace)']]],
+  ['main_2ecpp_45',['main.cpp',['../_sensor_hub_t32_2src_2main_8cpp.html',1,'(Global Namespace)'],['../_transmitter_code_2src_2main_8cpp.html',1,'(Global Namespace)'],['../_receiver_code_2src_2main_8cpp.html',1,'(Global Namespace)'],['../_quadcopter_2src_2main_8cpp.html',1,'(Global Namespace)']]],
   ['mainsetupview_46',['MAINSETUPVIEW',['../_radio_functions_8h.html#a0de9a27687c5d129d1184703edb30e1f',1,'RadioFunctions.h']]],
   ['makebindbuttoninvisible_47',['MakeBindButtonInvisible',['../_transmitter_code_2src_2main_8cpp.html#a2e38b32674344cfc06b09a71dfcaf3f1',1,'main.cpp']]],
   ['makelogfilename_48',['MakeLogFileName',['../_transmitter_code_2src_2main_8cpp.html#a05c7b4e0b98f9b97eebf9617442de6a5',1,'main.cpp']]],
