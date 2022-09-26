@@ -297,7 +297,7 @@ bool SingleModelFlag = false;
 bool     ModelsFileOpen = false;
 bool     USE_INA219     = false;
 uint8_t  BindingNow     = 0;
-int      BindingTimer   = 0;
+uint32_t BindingTimer   = 0;
 bool     BoundFlag      = false;
 bool     Switch[8];
 bool     TrimSwitch[8];
@@ -471,7 +471,6 @@ union
 
 char b5Greyed[]  = "b5.pco=33840";
 char b12Greyed[] = "b12.pco=33840";
-
 
 // **********************************************************************************************************************************
 
@@ -1040,6 +1039,7 @@ void RedLedOn()
         ModelsMacUnion.Val32[0]                     = 0;
         ModelsMacUnion.Val32[1]                     = 0;
         RangeTestGoodPackets                        = 0;
+        BindingTimer                                = 0;
         ModelMatched                                = false;
         BoundFlag                                   = false;
         if (CurrentView == FRONTVIEW) SendText(FrontView_Connected, na);
@@ -5011,7 +5011,7 @@ void LogVIEW()
 }
 
 /******************************************************************************************************************************/
-void SetupViewFM() // heer saved
+void SetupViewFM() 
 { // (Exit from models screen) New model name occurs at offset 4 in TextIn
 
     char page_SetupView[] = "page SetupView";
@@ -6885,7 +6885,6 @@ void LoadPacketData()
         case 0:
              SendBuffer[CHANNELSUSED + 2] = BindingNow;
             if (BindingNow == 1) {
-                BindingTimer = millis(); // start a timer
                 BindingNow   = 2;
             }
             if (((millis() - FailSafeTimer) > 1500) && SaveFailSafeNow) {
@@ -7342,7 +7341,7 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                 Procrastinate(1000);
                 }
                 ModelMatched = true;                                      //  It's a match so start flying!
-                BindButton = true; // heer
+                BindButton = true; 
         } else {
             if (AutoModelSelect){                                         //  It's not a match so maybe search for it.
                 ModelNumber = 0;
@@ -7351,7 +7350,7 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                     ReadOneModel(ModelNumber);                           
                     if ((ModelsMacUnion.Val32[0] == ModelsMacUnionSaved.Val32[0]) && (ModelsMacUnion.Val32[1] == ModelsMacUnionSaved.Val32[1])) {
                         ModelMatched = true;
-                        BindButton = true; // heer
+                        BindButton = true; 
                     }
                 }
                 if (ModelMatched){                                        //  Found it!
@@ -7409,7 +7408,10 @@ void  GetModelsMacAddress(){
                ModelIdentified = true;
         }
         CompareModelsIDs();
-        if (BindButton) SendCommand(BindButtonVisible); // heer
+    }
+    if (!BindingTimer) BindingTimer = millis();
+    if (BindButton) {
+        if ((millis() - BindingTimer) > 2500) SendCommand(BindButtonVisible); // heer
     }
 }
 /************************************************************************************************************/
