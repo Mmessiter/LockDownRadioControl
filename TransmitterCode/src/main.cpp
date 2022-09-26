@@ -1034,14 +1034,14 @@ void RedLedOn()
         LedWasGreen                                 = false;
         RXVoltsDetected                             = false;
         ModelIdentified                             = false;
+        ModelMatched                                = false;
+        BoundFlag                                   = false;
         PacketsPerSecond                            = 0;
         LastShowTime                                = 0;
         ModelsMacUnion.Val32[0]                     = 0;
         ModelsMacUnion.Val32[1]                     = 0;
         RangeTestGoodPackets                        = 0;
         BindingTimer                                = 0;
-        ModelMatched                                = false;
-        BoundFlag                                   = false;
         if (CurrentView == FRONTVIEW) SendText(FrontView_Connected, na);
         if (UseLog) LogDisConnection();
         if (AnnounceConnected) PlaySound(DISCONNECTEDMSG);
