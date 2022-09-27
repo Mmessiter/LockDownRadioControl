@@ -1891,6 +1891,12 @@ FASTRUN void DoMixes()
                         TheSum = SendBuffer[(Mixes[m][M_SlaveChannel]) - 1] + p;                        // THIS IS THE MIX!
                         mindeg = IntoHigherRes(MinDegrees[FlightMode][(Mixes[m][M_SlaveChannel]) - 1]); // todo: add option to change or remove constraints
                         maxdeg = IntoHigherRes(MaxDegrees[FlightMode][(Mixes[m][M_SlaveChannel]) - 1]);
+                        if (mindeg > maxdeg) {
+                            Result = constrain(TheSum, maxdeg, mindeg);
+                        }
+                        else {
+                            Result = constrain(TheSum, mindeg, maxdeg);
+                        }
                         SendBuffer[(Mixes[m][M_SlaveChannel]) - 1] = Result;
                     }
                 }
@@ -2000,12 +2006,12 @@ FASTRUN void GetNewChannelValues()
         }
         k += (SubTrims[n] - 127) * (TrimFactor / 2); // ADD SUBTRIM (...to output channel, not mapped input channel) (Range 0 - 127 - 254)
         if (l < 4) {
-            uint16_t tt = t; 
+            uint16_t tt = t; // heer
             if (SticksMode == 2) {
                 if (t == 1) tt = 2;
                 if (t == 2) tt = 1;
             }
-            TrimAmount = (Trims[FlightMode][tt] - 80) * TrimFactor; // TRIMS on lower four channels (80 is mid point !! (range 40 - 80 - 120)) 
+            TrimAmount = (Trims[FlightMode][tt] - 80) * TrimFactor; // TRIMS on lower four channels (80 is mid point !! (range 40 - 80 - 120)) // heer
             if (TrimsReversed[FlightMode][tt]) TrimAmount = -TrimAmount;
             k += TrimAmount;
         
@@ -2083,7 +2089,7 @@ void UpdateTrimView()
             }
             SendValue(TrimViewChannels[p], (Trims[FlightMode][p]));
             SendValue(TrimViewNumbers[p], (Trims[FlightMode][p] - 80));
-            SendValue(TrimViewReversed[p], (TrimsReversed[FlightMode][p]));
+            SendValue(TrimViewReversed[p], (TrimsReversed[FlightMode][p])); // heer fixed one!
         }
     }
     if (CurrentView == TRIM_VIEW) {
