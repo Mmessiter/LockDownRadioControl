@@ -5240,25 +5240,21 @@ void ElevatorUpTrim(){
     if (SticksMode == 2)  tt = 5;
      MoveaTrim(tt);
 }
-
 void ElevatorDownTrim(){
      uint8_t tt = 3;
      if (SticksMode == 2)  tt = 4;
      MoveaTrim(tt);
 }
-
 void ThrottleUpTrim(){
     uint8_t tt = 4;
     if (SticksMode == 2) tt = 3;
     MoveaTrim(tt);
 }
-
 void ThrottleDownTrim(){
     uint8_t tt = 5;
      if (SticksMode == 2) tt = 2;
      MoveaTrim(tt);
 }
-
 // ******************************** Global Array of numbered function pointers - OK up to 128 functions ... **********************************
 #define LASTFUNCTION 38 // one more than final one
 
@@ -5508,7 +5504,6 @@ FASTRUN void ButtonWasPressed()
         char OptionsEnd[]              = "OptionsEnd";
         char QNH[]                     = "Qnh";
         char Mark[]                    = "Mark";
-
         char UKRULES[]              = "UKRULES";
         char Htext0[]               = "HELP";
         char Htext1[]               = "Help";
