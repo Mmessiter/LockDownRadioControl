@@ -1989,7 +1989,7 @@ FASTRUN void GetNewChannelValues()
     // key: -
     // m = input value from sticks etc
     // l = input channel
-    // t = trim input
+    // t = trim input channel
     // n = output channel
     // k = interim output result
     // TrimAmount = TrimAmount :-)
@@ -2006,10 +2006,18 @@ FASTRUN void GetNewChannelValues()
         }
         k += (SubTrims[n] - 127) * (TrimFactor / 2); // ADD SUBTRIM (...to output channel, not mapped input channel) (Range 0 - 127 - 254)
         if (l < 4) {
-            TrimAmount = (Trims[FlightMode][t] - 80) * TrimFactor; // TRIMS on lower four channels (80 is mid point !! (range 40 - 80 - 120))
-            if (TrimsReversed[FlightMode][t]) TrimAmount = -TrimAmount;
+            uint16_t tt = t; // heer
+            if (SticksMode == 2) {
+                if (t == 1) tt = 2;
+                if (t == 2) tt = 1;
+            }
+            TrimAmount = (Trims[FlightMode][tt] - 80) * TrimFactor; // TRIMS on lower four channels (80 is mid point !! (range 40 - 80 - 120)) // heer
+            if (TrimsReversed[FlightMode][tt]) TrimAmount = -TrimAmount;
             k += TrimAmount;
+        
         }
+
+
         if (!CalibratedYet) k = map(m, 0, 1024, MINMICROS, MAXMICROS); // Crude servos until calibrated
         PreMixBuffer[n] = constrain(k, MINMICROS, MAXMICROS);
         SendBuffer[n]   = PreMixBuffer[n];
@@ -2081,15 +2089,14 @@ void UpdateTrimView()
             }
             SendValue(TrimViewChannels[p], (Trims[FlightMode][p]));
             SendValue(TrimViewNumbers[p], (Trims[FlightMode][p] - 80));
-            SendValue(TrimViewReversed[i], (TrimsReversed[FlightMode][p]));
+            SendValue(TrimViewReversed[p], (TrimsReversed[FlightMode][p])); // heer fixed one!
         }
     }
     if (CurrentView == TRIM_VIEW) {
         if (SticksMode == 2) {
             SendValue(Mode2, 1);
             SendValue(Mode1, 0);
-        }
-        else {
+        } else {
             SendValue(Mode1, 1);
             SendValue(Mode2, 0);
         }
@@ -5215,9 +5222,45 @@ void BuddyChViewEnd()
     SendCommand(page_BuddyView);
     CurrentView = BUDDYVIEW;
 }
+// ******************************************************************************
+void RudderLeftTrim(){
+     MoveaTrim(7);
+}
+void RudderRightTrim(){
+     MoveaTrim(6);
+}
+void AileronRightTrim(){
+     MoveaTrim(0);
+}
+void AileronLeftTrim(){
+     MoveaTrim(1);
+}
+void ElevatorUpTrim(){
+    uint8_t tt = 2;
+    if (SticksMode == 2)  tt = 5;
+     MoveaTrim(tt);
+}
+
+void ElevatorDownTrim(){
+     uint8_t tt = 3;
+     if (SticksMode == 2)  tt = 4;
+     MoveaTrim(tt);
+}
+
+void ThrottleUpTrim(){
+    uint8_t tt = 4;
+    if (SticksMode == 2) tt = 3;
+    MoveaTrim(tt);
+}
+
+void ThrottleDownTrim(){
+    uint8_t tt = 5;
+     if (SticksMode == 2) tt = 2;
+     MoveaTrim(tt);
+}
 
 // ******************************** Global Array of numbered function pointers - OK up to 128 functions ... **********************************
-#define LASTFUNCTION 30 // one more than final one
+#define LASTFUNCTION 38 // one more than final one
 
 void (*NumberedFunctions[LASTFUNCTION])() {
     Blank,                // 0 (spare)
@@ -5249,7 +5292,17 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     OptionView3Start,     // 26
     OptionView3End,       // 27
     BuddyChViewStart,     // 28
-    BuddyChViewEnd        // 29
+    BuddyChViewEnd,       // 29
+    RudderLeftTrim,       // 30
+    RudderRightTrim,      // 31  
+    AileronRightTrim,     // 32
+    AileronLeftTrim,      // 33
+    ElevatorUpTrim,       // 34  
+    ElevatorDownTrim,     // 35
+    ThrottleDownTrim,     // 36  
+    ThrottleUpTrim        // 37  
+
+
 
 }; // list will become much longer ...
 
@@ -5330,10 +5383,7 @@ FASTRUN void ButtonWasPressed()
         char CalibrateView[]           = "CalibrateView";
         char Trim[]                    = "Trim";
         char TrimView[]                = "TrimView";
-        char TR1[]                     = "TR1";
-        char TR2[]                     = "TR2";
-        char TR3[]                     = "TR3";
-        char TR4[]                     = "TR4";
+       
         char TRIMS50[]                 = "TRIMS50";
         char RTRIM[]                   = "RTRIM";
         char MIXES_VIEW[]              = "MIXESVIEW"; // first call
@@ -6436,72 +6486,6 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(TR1, TextIn) > 0) {                                                             //  TR1->0
-            if ((TextIn[3] <= 80 + 40) && (TextIn[3] >= 80 - 40)) Trims[FlightMode][0] = TextIn[3]; // Check in case out of range!
-            if (CopyTrimsToAll) {
-                for (int fm = 1; fm < 5; ++fm) {
-                    Trims[fm][0]         = TextIn[3];
-                    TrimsReversed[fm][i] = TrimsReversed[FlightMode][i];
-                }
-            }
-            ClearText();
-            return;
-        }
-
-        if (InStrng(TR4, TextIn) > 0) { // TR4 ->1
-            if (SticksMode == 1) {
-                if ((TextIn[3] <= 80 + 40) && (TextIn[3] >= 80 - 40)) Trims[FlightMode][1] = TextIn[3];
-                if (CopyTrimsToAll) {
-                    for (int fm = 1; fm < 5; ++fm) {
-                        Trims[fm][1]         = TextIn[3];
-                        TrimsReversed[fm][i] = TrimsReversed[FlightMode][i];
-                    }
-                }
-            }
-            if (SticksMode == 2) {
-                if ((TextIn[3] <= 80 + 40) && (TextIn[3] >= 80 - 40)) Trims[FlightMode][2] = TextIn[3];
-                if (CopyTrimsToAll) {
-                    for (int fm = 0; fm < 5; ++fm) {
-                        Trims[fm][2]         = TextIn[3];
-                        TrimsReversed[fm][i] = TrimsReversed[FlightMode][i];
-                    }
-                }
-            }
-            ClearText();
-            return;
-        }
-        if (InStrng(TR2, TextIn) > 0) { // TR2 ->2
-            if (SticksMode == 1) {
-                if ((TextIn[3] <= 80 + 40) && (TextIn[3] >= 80 - 40)) Trims[FlightMode][2] = TextIn[3];
-                if (CopyTrimsToAll) {
-                    for (int fm = 1; fm < 5; ++fm)
-                        Trims[fm][2] = TextIn[3];
-                }
-            }
-            if (SticksMode == 2) {
-                if ((TextIn[3] <= 80 + 40) && (TextIn[3] >= 80 - 40)) Trims[FlightMode][1] = TextIn[3];
-                if (CopyTrimsToAll) {
-                    for (int fm = 1; fm < 5; ++fm) {
-                        Trims[fm][1]         = TextIn[3];
-                        TrimsReversed[fm][i] = TrimsReversed[FlightMode][i];
-                    }
-                }
-            }
-            ClearText();
-            return;
-        }
-        if (InStrng(TR3, TextIn) > 0) { // TR3 ->3
-            if ((TextIn[3] <= 80 + 40) && (TextIn[3] >= 80 - 40)) Trims[FlightMode][3] = TextIn[3];
-            if (CopyTrimsToAll) {
-                for (int fm = 0; fm < 5; ++fm) {
-                    Trims[fm][3]         = TextIn[3];
-                    TrimsReversed[fm][i] = TrimsReversed[FlightMode][i];
-                }
-            }
-            ClearText();
-            return;
-        }
-
         if (InStrng(Trim, TextIn) > 0) { // This is the return from Trim view
             if (GetValue(Mode1) == 1) SticksMode = 1;
             if (GetValue(Mode2) == 1) SticksMode = 2;
@@ -7411,7 +7395,7 @@ void  GetModelsMacAddress(){
     }
     if (!BindingTimer) BindingTimer = millis();
     if (BindButton) {
-        if ((millis() - BindingTimer) > 2500) SendCommand(BindButtonVisible); // heer
+        if ((millis() - BindingTimer) > 2500) SendCommand(BindButtonVisible); 
     }
 }
 /************************************************************************************************************/
