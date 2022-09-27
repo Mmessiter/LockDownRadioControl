@@ -202,6 +202,7 @@ var _radio_functions_8h =
     [ "LogUKRules", "_radio_functions_8h.html#ab7bbbad7e5882348ed2963dae9f4a226", null ],
     [ "Look", "_radio_functions_8h.html#a44db40e8ffa545be92871325c4dcdc55", null ],
     [ "MapToSBUS", "_radio_functions_8h.html#a6a495c5560f12cc3fd3df9454927d681", null ],
+    [ "MoveaTrim", "_radio_functions_8h.html#a17123a117a96a9416dec48d9345f8a5b", null ],
     [ "ParseAckPayload", "_radio_functions_8h.html#a230e862a4da0f66746b6b3afba6bd77a", null ],
     [ "PreScan", "_radio_functions_8h.html#a5e3e764f8311564f5e20c3a838b25c07", null ],
     [ "Procrastinate", "_radio_functions_8h.html#a760609a682300dfe6bfaac737fd4d5eb", null ],

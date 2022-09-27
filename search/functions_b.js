@@ -14,7 +14,7 @@ var searchData=
   ['miles_11',['miles',['../struct_tiny_g_p_s_altitude.html#a5ae68d990ea08d4e21cfa6aefb46cc03',1,'TinyGPSAltitude']]],
   ['minute_12',['minute',['../struct_tiny_g_p_s_time.html#aef83c20c14d404219299da2d7e35cdce',1,'TinyGPSTime']]],
   ['month_13',['month',['../struct_tiny_g_p_s_date.html#a6f3c5b4e72ef28b010f94ac9016315f3',1,'TinyGPSDate']]],
-  ['moveatrim_14',['MoveaTrim',['../_transmitter_code_2src_2main_8cpp.html#a17123a117a96a9416dec48d9345f8a5b',1,'main.cpp']]],
+  ['moveatrim_14',['MoveaTrim',['../_radio_functions_8h.html#a17123a117a96a9416dec48d9345f8a5b',1,'MoveaTrim(uint8_t i):&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a17123a117a96a9416dec48d9345f8a5b',1,'MoveaTrim(uint8_t i):&#160;main.cpp']]],
   ['movepoint_15',['MovePoint',['../_transmitter_code_2src_2main_8cpp.html#aad727ec0b0f9f34487a535eaa4a83172',1,'main.cpp']]],
   ['moveservos_16',['MoveServos',['../_receiver_code_2src_2main_8cpp.html#a6f2443a0666140cf4d8b7352bb3b793c',1,'MoveServos():&#160;main.cpp'],['../radio_8h.html#a6f2443a0666140cf4d8b7352bb3b793c',1,'MoveServos():&#160;main.cpp']]],
   ['mph_17',['mph',['../struct_tiny_g_p_s_speed.html#a1809120167961ea9a85e860a964b1c6e',1,'TinyGPSSpeed']]],

@@ -1,11 +1,11 @@
 var searchData=
 [
-  ['radio1_0',['Radio1',['../radio_8h.html#a6e2d4126d864c50e7c23c988c2bfdd1a',1,'Radio1(pinCE1, pinCSN1):&#160;radio.h'],['../_transmitter_code_2src_2main_8cpp.html#a621c346e4b1d9b24b9a5bda63d0f0f52',1,'Radio1(CE_PIN, CSN_PIN):&#160;main.cpp']]],
+  ['radio1_0',['Radio1',['../_transmitter_code_2src_2main_8cpp.html#a621c346e4b1d9b24b9a5bda63d0f0f52',1,'Radio1(CE_PIN, CSN_PIN):&#160;main.cpp'],['../radio_8h.html#a6e2d4126d864c50e7c23c988c2bfdd1a',1,'Radio1(pinCE1, pinCSN1):&#160;radio.h']]],
   ['radio2_1',['Radio2',['../radio_8h.html#a8b76f3c338025926421c7b308405bbfd',1,'radio.h']]],
   ['rawdegrees_2',['RawDegrees',['../struct_raw_degrees.html#a156d5ced092fa1473b9b669a29be3509',1,'RawDegrees']]],
   ['rawlat_3',['rawLat',['../struct_tiny_g_p_s_location.html#abe5f28b0d636a1031af3cd98af863af6',1,'TinyGPSLocation']]],
   ['rawlng_4',['rawLng',['../struct_tiny_g_p_s_location.html#a4e20b4067a448ca0003fc65a3d3864d2',1,'TinyGPSLocation']]],
-  ['read_5',['read',['../class_adafruit___bus_i_o___register.html#adca04654563a7c68a580533197366f61',1,'Adafruit_BusIO_Register::read(uint8_t *value)'],['../class_adafruit___bus_i_o___register.html#a5c49c498815a5414d6fb5915760bbeba',1,'Adafruit_BusIO_Register::read(uint16_t *value)'],['../class_adafruit___bus_i_o___register.html#a699434b2567ae8fce541b8048d891252',1,'Adafruit_BusIO_Register::read(void)'],['../class_adafruit___bus_i_o___register_bits.html#a868614bb793ae3c4c00b7954896213d0',1,'Adafruit_BusIO_RegisterBits::read()'],['../class_adafruit___i2_c_device.html#afeeccb3147b2f0340c65d2c0c1ce3ea6',1,'Adafruit_I2CDevice::read()'],['../class_adafruit___s_p_i_device.html#a5c4fce15c92a0210c0872a827f239ab1',1,'Adafruit_SPIDevice::read()'],['../class_adafruit___g_p_s.html#a776378bc3e4e8a098dce88d6a4ffb0b8',1,'Adafruit_GPS::read()'],['../class_s_b_u_s.html#a44376d88b040d2cdf85f1a6d93633935',1,'SBUS::read()'],['../class_adafruit___bus_i_o___register.html#a2b48e23dacbb7cffc0eb07dcebcfba6f',1,'Adafruit_BusIO_Register::read()']]],
+  ['read_5',['read',['../class_adafruit___bus_i_o___register.html#adca04654563a7c68a580533197366f61',1,'Adafruit_BusIO_Register::read(uint8_t *value)'],['../class_adafruit___bus_i_o___register.html#a2b48e23dacbb7cffc0eb07dcebcfba6f',1,'Adafruit_BusIO_Register::read(uint8_t *buffer, uint8_t len)'],['../class_s_b_u_s.html#a44376d88b040d2cdf85f1a6d93633935',1,'SBUS::read()'],['../class_adafruit___g_p_s.html#a776378bc3e4e8a098dce88d6a4ffb0b8',1,'Adafruit_GPS::read()'],['../class_adafruit___s_p_i_device.html#a5c4fce15c92a0210c0872a827f239ab1',1,'Adafruit_SPIDevice::read()'],['../class_adafruit___i2_c_device.html#afeeccb3147b2f0340c65d2c0c1ce3ea6',1,'Adafruit_I2CDevice::read()'],['../class_adafruit___bus_i_o___register_bits.html#a868614bb793ae3c4c00b7954896213d0',1,'Adafruit_BusIO_RegisterBits::read()'],['../class_adafruit___bus_i_o___register.html#a699434b2567ae8fce541b8048d891252',1,'Adafruit_BusIO_Register::read(void)'],['../class_adafruit___bus_i_o___register.html#a5c49c498815a5414d6fb5915760bbeba',1,'Adafruit_BusIO_Register::read(uint16_t *value)']]],
   ['readak8963registers_6',['readAK8963Registers',['../class_m_p_u9250.html#a8882aa5158664912c4d4354739d2bc23',1,'MPU9250']]],
   ['readaltitude_7',['readAltitude',['../class_adafruit___b_m_p280.html#a55c1a78abf03a021abb297b3f35127ff',1,'Adafruit_BMP280']]],
   ['readbit_8',['readBit',['../class_i2_cdev.html#abe6d8ea07027d362419de86188981559',1,'I2Cdev']]],
@@ -30,7 +30,7 @@ var searchData=
   ['readsavedpipe_27',['ReadSavedPipe',['../radio_8h.html#a56ee137fc60749fa274236bc239c3291',1,'radio.h']]],
   ['readsensor_28',['readSensor',['../class_m_p_u9250.html#aff5c0acd0797c79230d78c5e6c8a6321',1,'MPU9250']]],
   ['readsensorhub_29',['ReadSensorHub',['../radio_8h.html#a8fff0fd6eb9e23721d9e06f3f44bd3c9',1,'radio.h']]],
-  ['readswitches_30',['ReadSwitches',['../_transmitter_code_2src_2main_8cpp.html#aa144942814b12daf2b2a454c08d29cab',1,'ReadSwitches():&#160;main.cpp'],['../_radio_functions_8h.html#ab0af36f3442ad4f2d0b716c14c7d6085',1,'ReadSwitches():&#160;main.cpp']]],
+  ['readswitches_30',['ReadSwitches',['../_radio_functions_8h.html#ab0af36f3442ad4f2d0b716c14c7d6085',1,'ReadSwitches():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#aa144942814b12daf2b2a454c08d29cab',1,'ReadSwitches():&#160;main.cpp']]],
   ['readtemperature_31',['readTemperature',['../class_adafruit___b_m_p280.html#a8511efd594618dea5f1e52d6bd149795',1,'Adafruit_BMP280']]],
   ['readtextfile_32',['ReadTextFile',['../_radio_functions_8h.html#abd6446fb403bd9b07d150a5e4fdd86e1',1,'ReadTextFile(char *fname, char *htext, uint8_t StartLineNumber, uint8_t MaxLines):&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#abd6446fb403bd9b07d150a5e4fdd86e1',1,'ReadTextFile(char *fname, char *htext, uint8_t StartLineNumber, uint8_t MaxLines):&#160;main.cpp']]],
   ['readthertc_33',['ReadTheRTC',['../_transmitter_code_2src_2main_8cpp.html#a7a48851f0d38e4a0dd727a30d9515cf1',1,'main.cpp']]],
@@ -61,7 +61,9 @@ var searchData=
   ['resetsenttime_58',['resetSentTime',['../class_adafruit___g_p_s.html#a1194f23fada702be6e58b24a62402d39',1,'Adafruit_GPS']]],
   ['resetsubtrims_59',['ResetSubTrims',['../_transmitter_code_2src_2main_8cpp.html#a15a54a63b911d3a5d622cd12bc440ab6',1,'main.cpp']]],
   ['resettemperaturepath_60',['resetTemperaturePath',['../class_m_p_u6050.html#a559c2d091d36a4e0489bc639916ddbb6',1,'MPU6050']]],
-  ['restorebrightness_61',['RestoreBrightness',['../_radio_functions_8h.html#a49da3478d89a22069e29c7f00cb46a5f',1,'RestoreBrightness():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a49da3478d89a22069e29c7f00cb46a5f',1,'RestoreBrightness():&#160;main.cpp']]],
-  ['rotate_62',['rotate',['../class_vector_float.html#afef0e6d631fb1eb67b6913e90730aa9e',1,'VectorFloat::rotate()'],['../class_vector_int16.html#ac7bf149db0a2b66d7683b87ebeb2dfc5',1,'VectorInt16::rotate()']]],
-  ['runmacro_63',['RunMacro',['../_radio_functions_8cpp.html#a91fb686ba2d3111821721ab33b442918',1,'RadioFunctions.cpp']]]
+  ['restorebrightness_61',['RestoreBrightness',['../_transmitter_code_2src_2main_8cpp.html#a49da3478d89a22069e29c7f00cb46a5f',1,'RestoreBrightness():&#160;main.cpp'],['../_radio_functions_8h.html#a49da3478d89a22069e29c7f00cb46a5f',1,'RestoreBrightness():&#160;main.cpp']]],
+  ['rotate_62',['rotate',['../class_vector_int16.html#ac7bf149db0a2b66d7683b87ebeb2dfc5',1,'VectorInt16::rotate()'],['../class_vector_float.html#afef0e6d631fb1eb67b6913e90730aa9e',1,'VectorFloat::rotate()']]],
+  ['rudderlefttrim_63',['RudderLeftTrim',['../_transmitter_code_2src_2main_8cpp.html#ae96314eac241d2716e7ebda1fc658ec4',1,'main.cpp']]],
+  ['rudderrighttrim_64',['RudderRightTrim',['../_transmitter_code_2src_2main_8cpp.html#a77a49849e3aa20dc1aadce0fe00de798',1,'main.cpp']]],
+  ['runmacro_65',['RunMacro',['../_radio_functions_8cpp.html#a91fb686ba2d3111821721ab33b442918',1,'RadioFunctions.cpp']]]
 ];
