@@ -1892,10 +1892,10 @@ FASTRUN void DoMixes()
                         mindeg = IntoHigherRes(MinDegrees[FlightMode][(Mixes[m][M_SlaveChannel]) - 1]); // todo: add option to change or remove constraints
                         maxdeg = IntoHigherRes(MaxDegrees[FlightMode][(Mixes[m][M_SlaveChannel]) - 1]);
                         if (mindeg > maxdeg) {
-                            Result = constrain(TheSum, maxdeg, mindeg);
+                             Result = constrain(TheSum, maxdeg, mindeg);
                         }
                         else {
-                            Result = constrain(TheSum, mindeg, maxdeg);
+                             Result = constrain(TheSum, mindeg, maxdeg);
                         }
                         SendBuffer[(Mixes[m][M_SlaveChannel]) - 1] = Result;
                     }
