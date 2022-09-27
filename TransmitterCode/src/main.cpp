@@ -1036,18 +1036,18 @@ void RedLedOn()
         ModelIdentified                             = false;
         ModelMatched                                = false;
         BoundFlag                                   = false;
+        BindButton                                  = false;
+        BindingNow                                  = 0;
+        BindingTimer                                = 0;
         PacketsPerSecond                            = 0;
         LastShowTime                                = 0;
         ModelsMacUnion.Val32[0]                     = 0;
         ModelsMacUnion.Val32[1]                     = 0;
         RangeTestGoodPackets                        = 0;
-        BindingTimer                                = 0;
         if (CurrentView == FRONTVIEW) SendText(FrontView_Connected, na);
         if (UseLog) LogDisConnection();
         if (AnnounceConnected) PlaySound(DISCONNECTEDMSG);
-        if (!LedIsBlinking) {
-            ShowComms();
-        }
+        if (!LedIsBlinking) ShowComms();
     }
     LedWasRed = true;
     analogWrite(GREENLED, 0);
