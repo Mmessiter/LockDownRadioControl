@@ -1544,7 +1544,7 @@ int GetSuccessRate()
     for (uint16_t i = 0; i < (125 * (uint16_t)ConnectionAssessSeconds); ++i) { // 125 packets per second are either good or bad
         Total += PacketsHistoryBuffer[i];
     }
-    Total += (125 - Total) / 2;                                              // about half made it but were simply unacknowledged
+    Total += ((125 * (uint16_t)ConnectionAssessSeconds) - Total) / 2;         // about half made it but were simply unacknowledged
     SuccessRate = (Total * 100) / (125 * (uint16_t)ConnectionAssessSeconds); // return a percentage of total good packets
     return SuccessRate;
 }
