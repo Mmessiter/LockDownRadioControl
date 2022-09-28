@@ -7624,7 +7624,7 @@ FASTRUN void loop()
         if (BuddyMaster) GetSlaveChannelValues();                // If buddy master, get buddy data and maybe use it.
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24
     }
-    ShowServoPos();
+    ShowServoPos();                                              // Display servo positions
     if ((millis()) > 1500) { // Transmit nothing for first 1.5 seconds
         switch (CurrentMode) {
             case NORMAL: // 0
