@@ -1541,11 +1541,13 @@ void ClearSuccessRate()
 int GetSuccessRate()
 {   uint16_t Total = 0;
     uint16_t SuccessRate;
-    for (uint16_t i = 0; i < (125 * (uint16_t)ConnectionAssessSeconds); ++i) { // 125 packets per second are either good or bad
+    uint16_t Perfection = (125 * (uint16_t)ConnectionAssessSeconds);
+
+    for (uint16_t i = 0; i < Perfection; ++i) { // 125 packets per second are either good or bad
         Total += PacketsHistoryBuffer[i];
     }
-    Total += ((125 * (uint16_t)ConnectionAssessSeconds) - Total) / 2;         // about half made it but were simply unacknowledged
-    SuccessRate = (Total * 100) / (125 * (uint16_t)ConnectionAssessSeconds); // return a percentage of total good packets
+    Total += (Perfection - Total) / 2;         // about half made it but were simply unacknowledged
+    SuccessRate = (Total * 100) / Perfection; // return a percentage of total good packets
     return SuccessRate;
 }
 /*********************************************************************************************************************************/
