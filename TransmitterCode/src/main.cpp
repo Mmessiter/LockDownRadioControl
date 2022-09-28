@@ -1547,7 +1547,7 @@ int GetSuccessRate()
         Total += PacketsHistoryBuffer[i];
     }
     Total += (Perfection - Total) / 2;         // about half made it but were simply unacknowledged
-    SuccessRate = (Total * 100) / Perfection; // return a percentage of total good packets
+    SuccessRate = (Total * 100) / Perfection;  // return a percentage of total good packets
     return SuccessRate;
 }
 /*********************************************************************************************************************************/
