@@ -3612,8 +3612,8 @@ void UpdateSwitchesDisplay()
     char SwitchesView_sw3[] = "sw3";
     char SwitchesView_sw4[] = "sw4";
     char NotUsed[]          = "Not used";
-    char Banks123[]   = "Banks 1 - 2 - 3";
-    char Auto[]             = "Auto (Bank 4)";
+    char Banks123[]         = "Banks 1 - 2 - 3";
+    char Auto[]             = "Bank 4, auto & motor";
     char Channel_9[]        = "Channel 9";
     char Channel_10[]       = "Channel 10";
     char Channel_11[]       = "Channel 11";
@@ -5145,7 +5145,7 @@ void OptionView2Start()
     char n1[]            = "n1";
     char n2[]            = "n2";
     char n3[]            = "n3";
-    char lpm[]           = "c0"; // Low power mode
+    char lpm[]           = "c0";    // Auto model match
     char OptionV2Start[] = "page OptionView2";
     char TxVCorrextion[] = "t2";
     char RxVCorrextion[] = "n0"; // RX Voltage correction
@@ -5193,8 +5193,6 @@ void OptionView3Start()
     SendValue(n1,  LEDBrightness);
 }
 
-
-
 /******************************************************************************************************************************/
 
 void OptionView4Start() // heer
@@ -5210,16 +5208,12 @@ void OptionView4Start() // heer
     SendValue(Mchannel, MotorChannel + 1);
     SendValue(UseKill, UseMotorKill);
     CurrentView = OPTIONVIEW4;
-
 }
-
 /******************************************************************************************************************************/
 
 void OptionView4End()
 {
- 
     char page_SetupView[] = "page SetupView";
-
     char UseKill[]        = "c0";
     char Mchannel[]       = "n1";
     char Mvalue[]         = "n0";
@@ -5228,10 +5222,9 @@ void OptionView4End()
     UseMotorKill        = GetValue(UseKill);
     MotorChannel        = GetValue(Mchannel) - 1;
 
-
-    SaveTransmitterParameters();
-    CurrentView = MAINSETUPVIEW;
     SendCommand(page_SetupView);
+    CurrentView = MAINSETUPVIEW;
+    SaveTransmitterParameters();
     UpdateModelsNameEveryWhere();
 }
 
