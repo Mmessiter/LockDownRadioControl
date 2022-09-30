@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['m_5fenabled_0',['M_Enabled',['../_radio_functions_8h.html#ad2b2fe49829868cf9b49c2e65dfaa006',1,'RadioFunctions.h']]],
-  ['m_5fflightmode_1',['M_FlightMode',['../_radio_functions_8h.html#a0d44a2f20bda277d503359ced2a28145',1,'RadioFunctions.h']]],
+  ['m_5fbank_0',['M_Bank',['../_radio_functions_8h.html#afbfbe35486d9ee68d5286e84b4134d04',1,'RadioFunctions.h']]],
+  ['m_5fenabled_1',['M_Enabled',['../_radio_functions_8h.html#ad2b2fe49829868cf9b49c2e65dfaa006',1,'RadioFunctions.h']]],
   ['m_5fmasterchannel_2',['M_MasterChannel',['../_radio_functions_8h.html#ad6c3cb6bd50690ce1867594d589cc727',1,'RadioFunctions.h']]],
   ['m_5fpercent_3',['M_Percent',['../_radio_functions_8h.html#a1d2c1a7c2e532457f8a16284d4560094',1,'RadioFunctions.h']]],
   ['m_5fr1_4',['M_R1',['../_radio_functions_8h.html#a25c000282c221bb28fa3fac74ccb1eae',1,'RadioFunctions.h']]],

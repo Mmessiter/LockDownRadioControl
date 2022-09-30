@@ -17,7 +17,7 @@ var searchData=
   ['logfilepreamble_14',['LogFilePreamble',['../_transmitter_code_2src_2main_8cpp.html#a99a51dbad5d686ca711e982f82cbcada',1,'main.cpp']]],
   ['loglowbattery_15',['LogLowBattery',['../_transmitter_code_2src_2main_8cpp.html#aac4334531357e4221222c7fc8c5cf817',1,'main.cpp']]],
   ['logmingap_16',['LogMinGap',['../_transmitter_code_2src_2main_8cpp.html#af7b3b351c80f0b43c13a4ccb440b2f2e',1,'main.cpp']]],
-  ['lognewflightmode_17',['LogNewFlightMode',['../_transmitter_code_2src_2main_8cpp.html#a7e5a974cd293dd1cef082de89041c488',1,'main.cpp']]],
+  ['lognewbank_17',['LogNewBank',['../_transmitter_code_2src_2main_8cpp.html#a32be1544c90acbd0fb13568c35213510',1,'main.cpp']]],
   ['logpoweroff_18',['LogPowerOff',['../_transmitter_code_2src_2main_8cpp.html#a31e9d94f45a152e1cbc436284799ca37',1,'main.cpp']]],
   ['logpoweron_19',['LogPowerOn',['../_transmitter_code_2src_2main_8cpp.html#a7d93a2500f52d72210903c46a85ce820',1,'main.cpp']]],
   ['logtext_20',['LogText',['../_transmitter_code_2src_2main_8cpp.html#add8d8f400f1c1c4a5add52736cdf94ca',1,'main.cpp']]],
