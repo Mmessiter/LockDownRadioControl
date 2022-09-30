@@ -436,6 +436,7 @@ void         CheckTrimValues();
 void         ClearSuccessRate();
 int          CheckRange(int v, int min, int max);
 void         MoveaTrim(uint8_t i);
+void         SetUKFrequencies();
 
 /*********************************************************************************************************************************/
 
