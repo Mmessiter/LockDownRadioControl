@@ -1,9 +1,10 @@
 var NAVTREEINDEX12 =
 {
+"elapsed_millis_8h.html":[10,0,1,0,0,2,0],
 "elapsed_millis_8h_source.html":[10,0,1,0,0,2,0],
 "files.html":[10,0],
-"functions.html":[9,3,0],
 "functions.html":[9,3,0,0],
+"functions.html":[9,3,0],
 "functions_a.html":[9,3,0,1],
 "functions_b.html":[9,3,0,2],
 "functions_c.html":[9,3,0,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX12 =
 "md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md63":[7,5],
 "pages.html":[],
 "radio_8h.html":[10,0,2,1,0,2],
-"radio_8h.html#a0944456d2dbd7c1deb2abba2532afe24":[10,0,2,1,0,2,51],
-"radio_8h.html#a09cb370d93005b5a43e932a3d6093ea2":[10,0,2,1,0,2,56]
+"radio_8h.html#a0944456d2dbd7c1deb2abba2532afe24":[10,0,2,1,0,2,51]
 };

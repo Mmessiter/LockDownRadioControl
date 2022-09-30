@@ -221,6 +221,7 @@ var _radio_functions_8h =
     [ "SendData", "_radio_functions_8h.html#a3d7322e78f097d02d476f17a6306997c", null ],
     [ "SendText", "_radio_functions_8h.html#afe513398f72d5e48f691830a1ef6eb42", null ],
     [ "SetThePipe", "_radio_functions_8h.html#a70dc6f8d2e5ccef6b8e4a2b9b0afb2ce", null ],
+    [ "SetUKFrequencies", "_radio_functions_8h.html#a2eabdb233653fa02f0b899e26b5e8ce7", null ],
     [ "ShowBank", "_radio_functions_8h.html#a86ff8d6a0763abc33c7e814f5c1d4b5c", null ],
     [ "ShowComms", "_radio_functions_8h.html#aac472b3398ab38e7f54b1a2cae96ba62", null ],
     [ "ShowLogFile", "_radio_functions_8h.html#af5df157d4ece6b40a9ce7a60faeca569", null ],
