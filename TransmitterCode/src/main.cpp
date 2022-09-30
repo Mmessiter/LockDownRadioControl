@@ -106,10 +106,10 @@ SBUS          MySbus(SBUSPORT);
 uint16_t      SbusChannels[CHANNELSUSED + 2]; // a few spare
 uint32_t      SBUSTimer = 0;
 uint8_t       Mixes[MAXMIXES + 1][CHANNELSUSED + 1];                // Channel mixes' 2D array store
-int           Trims[FLIGHTMODESUSED + 1][CHANNELSUSED + 1];         // Trims to store
-uint8_t       TrimsReversed[FLIGHTMODESUSED + 1][CHANNELSUSED + 1]; // Trim directions to store
-uint8_t       Exponential[FLIGHTMODESUSED + 1][CHANNELSUSED + 1];   // Exponential
-uint8_t       InterpolationTypes[FLIGHTMODESUSED + 1][CHANNELSUSED + 1];
+int           Trims[BankSUSED + 1][CHANNELSUSED + 1];         // Trims to store
+uint8_t       TrimsReversed[BankSUSED + 1][CHANNELSUSED + 1]; // Trim directions to store
+uint8_t       Exponential[BankSUSED + 1][CHANNELSUSED + 1];   // Exponential
+uint8_t       InterpolationTypes[BankSUSED + 1][CHANNELSUSED + 1];
 
 uint8_t  LastMixNumber    = 1;
 uint8_t  MixNumber        = 0;
@@ -173,8 +173,8 @@ uint8_t  MidLowDegrees[5][CHANNELSUSED + 1]; //    MidLow Degrees (45)
 uint8_t  MinDegrees[5][CHANNELSUSED + 1];    //    Min Degrees (0)
 uint8_t  SubTrims[CHANNELSUSED + 1];         //    Subtrims
 uint8_t  SubTrimToEdit      = 0;
-uint8_t  FlightMode         = 1;
-uint8_t  PreviousFlightMode = 1;
+uint8_t  Bank         = 1;
+uint8_t  PreviousBank = 1;
 uint16_t ChannelMax[CHANNELSUSED + 1];    //    output of pots at max
 uint16_t ChannelMidHi[CHANNELSUSED + 1];  //    output of pots at MidHi
 uint16_t ChannelCentre[CHANNELSUSED + 1]; //    output of pots at Centre
@@ -302,7 +302,7 @@ bool     BoundFlag      = false;
 bool     Switch[8];
 bool     TrimSwitch[8];
 
-uint8_t  FMSwitch             = FLIGHTMODESWITCH;
+uint8_t  FMSwitch             = BankSWITCH;
 uint8_t  AutoSwitch           = AUTOSWITCH;
 uint8_t  Channel9Switch       = 0;
 uint8_t  Channel10Switch      = 0;
@@ -330,7 +330,7 @@ uint16_t FileNumberInView     = 0;
 bool     FileError            = false;
 uint32_t RangeTestStart       = 0;
 uint16_t RangeTestGoodPackets = 0;
-uint8_t  SaveFlightMode       = 0;
+uint8_t  SaveBank       = 0;
 bool     FailSafeChannel[CHANNELSUSED];
 bool     SaveFailSafeNow = false;
 uint32_t FailSafeTimer;
@@ -469,8 +469,15 @@ union
       uint8_t  Val8[8];        // Model's Mac address that had been saved on disk
      } ModelsMacUnionSaved;
 
-char b5Greyed[]  = "b5.pco=33840";
-char b12Greyed[] = "b12.pco=33840";
+char b5Greyed[]     = "b5.pco=33840";
+char b12Greyed[]    = "b12.pco=33840";
+bool MotorEnabled       = false;
+bool MotorWasEnabled    = false;
+
+uint8_t  MotorChannel           = 2; // Throttle from zero
+uint8_t  MotorChannelZero       = 0; 
+bool     UseMotorKill           = true;
+
 
 // **********************************************************************************************************************************
 
@@ -978,7 +985,7 @@ void ReadTime()
             SendText(DateTime, TimeString);
             SendText(Owner, TxName);
             UpdateModelsNameEveryWhere();
-            if (CurrentView == FRONTVIEW) ShowFlightMode();
+            if (CurrentView == FRONTVIEW) ShowBank();
         }
     }
 }
@@ -1044,6 +1051,7 @@ void RedLedOn()
         ModelsMacUnion.Val32[0]                     = 0;
         ModelsMacUnion.Val32[1]                     = 0;
         RangeTestGoodPackets                        = 0;
+        SetUKFrequencies();
         if (CurrentView == FRONTVIEW) SendText(FrontView_Connected, na);
         if (UseLog) LogDisConnection();
         if (AnnounceConnected) PlaySound(DISCONNECTEDMSG);
@@ -1335,7 +1343,7 @@ bool GetButtonPress()
 FASTRUN void CheckTimer()
 {
     uint8_t Recording[10] = {ONEMINUTE, TWOMINUTES, THREEMINUTES, FOURMINUTES, FIVEMINUTES, SIXMINUTES, SEVENMINUTES, EIGHTMINUTES, NINEMINUTES, TENMINUTES};
-    if (FlightMode < 4 && !LostContactFlag) {
+    if (MotorEnabled && !LostContactFlag) {
         Secs  = ((millis() - TimerMillis) / 1000) + PausedSecs;
         Hours = Secs / 3600;
         Secs %= 3600;
@@ -1541,11 +1549,13 @@ void ClearSuccessRate()
 int GetSuccessRate()
 {   uint16_t Total = 0;
     uint16_t SuccessRate;
-    for (uint16_t i = 0; i < (125 * (uint16_t)ConnectionAssessSeconds); ++i) { // 125 packets per second are either good or bad
+    uint16_t Perfection = (125 * (uint16_t)ConnectionAssessSeconds);
+
+    for (uint16_t i = 0; i < Perfection; ++i) { // 125 packets per second are either good or bad
         Total += PacketsHistoryBuffer[i];
     }
-    Total += (125 - Total) / 2;                                              // about half made it but were simply unacknowledged
-    SuccessRate = (Total * 100) / (125 * (uint16_t)ConnectionAssessSeconds); // return a percentage of total good packets
+    Total += (Perfection - Total) / 2;         // about half made it but were simply unacknowledged
+    SuccessRate = (Total * 100) / Perfection;  // return a percentage of total good packets
     return SuccessRate;
 }
 /*********************************************************************************************************************************/
@@ -1791,7 +1801,7 @@ void SendCharArray(char* ch0, char* ch1, char* ch2, char* ch3, char* ch4, char* 
 void SendMixValues() // sends mix values to Nextion screen
 {
     char MixesView_Enabled[]       = "MixesView.Enabled";
-    char MixesView_FlightMode[]    = "MixesView.FlightMode";
+    char MixesView_Bank[]    = "MixesView.Bank";
     char MixesView_MasterChannel[] = "MixesView.MasterChannel";
     char MixesView_SlaveChannel[]  = "MixesView.SlaveChannel";
     char MixesView_Reversed[]      = "MixesView.Reversed";
@@ -1803,7 +1813,7 @@ void SendMixValues() // sends mix values to Nextion screen
     SendText(MixesView_chM, ChannelNames[Mixes[MixNumber][M_MasterChannel] - 1]);
     SendText(MixesView_chS, ChannelNames[Mixes[MixNumber][M_SlaveChannel] - 1]);
     SendValue(MixesView_Enabled, Mixes[MixNumber][M_Enabled]);
-    SendValue(MixesView_FlightMode, Mixes[MixNumber][M_FlightMode]);
+    SendValue(MixesView_Bank, Mixes[MixNumber][M_Bank]);
     if (Mixes[MixNumber][M_MasterChannel] == 0) Mixes[MixNumber][M_MasterChannel] = 1;
     SendValue(MixesView_MasterChannel, Mixes[MixNumber][M_MasterChannel]);
     if (Mixes[MixNumber][M_SlaveChannel] == 0) Mixes[MixNumber][M_SlaveChannel] = 1;
@@ -1850,27 +1860,27 @@ FASTRUN uint16_t GetStickInput(uint8_t l)
     uint16_t k = 0;
     switch (l) {
         case 8:
-            if (Channel9SwitchValue == 0) k = IntoHigherRes(MinDegrees[FlightMode][8]);
-            if (Channel9SwitchValue == 90) k = IntoHigherRes(CentreDegrees[FlightMode][8]);
-            if (Channel9SwitchValue == 180) k = IntoHigherRes(MaxDegrees[FlightMode][8]);
+            if (Channel9SwitchValue == 0) k = IntoHigherRes(MinDegrees[Bank][8]);
+            if (Channel9SwitchValue == 90) k = IntoHigherRes(CentreDegrees[Bank][8]);
+            if (Channel9SwitchValue == 180) k = IntoHigherRes(MaxDegrees[Bank][8]);
             break;
         case 9:
-            if (Channel10SwitchValue == 0) k = IntoHigherRes(MinDegrees[FlightMode][9]);
-            if (Channel10SwitchValue == 90) k = IntoHigherRes(CentreDegrees[FlightMode][9]);
-            if (Channel10SwitchValue == 180) k = IntoHigherRes(MaxDegrees[FlightMode][9]);
+            if (Channel10SwitchValue == 0) k = IntoHigherRes(MinDegrees[Bank][9]);
+            if (Channel10SwitchValue == 90) k = IntoHigherRes(CentreDegrees[Bank][9]);
+            if (Channel10SwitchValue == 180) k = IntoHigherRes(MaxDegrees[Bank][9]);
             break;
         case 10:
-            if (Channel11SwitchValue == 0) k = IntoHigherRes(MinDegrees[FlightMode][10]);
-            if (Channel11SwitchValue == 90) k = IntoHigherRes(CentreDegrees[FlightMode][10]);
-            if (Channel11SwitchValue == 180) k = IntoHigherRes(MaxDegrees[FlightMode][10]);
+            if (Channel11SwitchValue == 0) k = IntoHigherRes(MinDegrees[Bank][10]);
+            if (Channel11SwitchValue == 90) k = IntoHigherRes(CentreDegrees[Bank][10]);
+            if (Channel11SwitchValue == 180) k = IntoHigherRes(MaxDegrees[Bank][10]);
             break;
         case 11:
-            if (Channel12SwitchValue == 0) k = IntoHigherRes(MinDegrees[FlightMode][11]);
-            if (Channel12SwitchValue == 90) k = IntoHigherRes(CentreDegrees[FlightMode][11]);
-            if (Channel12SwitchValue == 180) k = IntoHigherRes(MaxDegrees[FlightMode][11]);
+            if (Channel12SwitchValue == 0) k = IntoHigherRes(MinDegrees[Bank][11]);
+            if (Channel12SwitchValue == 90) k = IntoHigherRes(CentreDegrees[Bank][11]);
+            if (Channel12SwitchValue == 180) k = IntoHigherRes(MaxDegrees[Bank][11]);
             break;
         default:
-            k = IntoHigherRes(CentreDegrees[FlightMode][15]); // channels 13,14,15,16 are simply centred
+            k = IntoHigherRes(CentreDegrees[Bank][15]); // channels 13,14,15,16 are simply centred
     }
     return k;
 }
@@ -1881,7 +1891,7 @@ FASTRUN void DoMixes()
 {
     int m, c, p, mindeg, maxdeg, TheSum, Result;
     for (m = 1; m <= MAXMIXES; ++m) {
-        if (Mixes[m][M_FlightMode] == FlightMode || Mixes[m][M_FlightMode] == 0) {
+        if (Mixes[m][M_Bank] == Bank || Mixes[m][M_Bank] == 0) {
             if (Mixes[m][M_Enabled] == 1) {
                 for (c = 0; c < CHANNELSUSED; ++c) {
                     if ((Mixes[m][M_MasterChannel] - 1) == c) {
@@ -1889,13 +1899,13 @@ FASTRUN void DoMixes()
                         p = p * Mixes[m][M_Percent] / 50; // *****  50, not 100, because mix can now go right to 200% *****
                         if (Mixes[m][M_Reversed] == 1) p = -p;
                         TheSum = SendBuffer[(Mixes[m][M_SlaveChannel]) - 1] + p;                        // THIS IS THE MIX!
-                        mindeg = IntoHigherRes(MinDegrees[FlightMode][(Mixes[m][M_SlaveChannel]) - 1]); // todo: add option to change or remove constraints
-                        maxdeg = IntoHigherRes(MaxDegrees[FlightMode][(Mixes[m][M_SlaveChannel]) - 1]);
+                        mindeg = IntoHigherRes(MinDegrees[Bank][(Mixes[m][M_SlaveChannel]) - 1]); // todo: add option to change or remove constraints
+                        maxdeg = IntoHigherRes(MaxDegrees[Bank][(Mixes[m][M_SlaveChannel]) - 1]);
                         if (mindeg > maxdeg) {
-                            Result = constrain(TheSum, maxdeg, mindeg);
+                             Result = constrain(TheSum, maxdeg, mindeg);
                         }
                         else {
-                            Result = constrain(TheSum, mindeg, maxdeg);
+                             Result = constrain(TheSum, mindeg, maxdeg);
                         }
                         SendBuffer[(Mixes[m][M_SlaveChannel]) - 1] = Result;
                     }
@@ -1936,21 +1946,21 @@ uint16_t CatmullSplineInterpolation(uint16_t m, uint16_t l, uint16_t n)
     xPoints[2] = ChannelCentre[l];
     xPoints[3] = ChannelMidHi[l];
     xPoints[4] = ChannelMax[l];
-    yPoints[4] = IntoHigherRes(MaxDegrees[FlightMode][n]);
-    yPoints[3] = IntoHigherRes(MidHiDegrees[FlightMode][n]);
-    yPoints[2] = IntoHigherRes(CentreDegrees[FlightMode][n]);
-    yPoints[1] = IntoHigherRes(MidLowDegrees[FlightMode][n]);
-    yPoints[0] = IntoHigherRes(MinDegrees[FlightMode][n]);
+    yPoints[4] = IntoHigherRes(MaxDegrees[Bank][n]);
+    yPoints[3] = IntoHigherRes(MidHiDegrees[Bank][n]);
+    yPoints[2] = IntoHigherRes(CentreDegrees[Bank][n]);
+    yPoints[1] = IntoHigherRes(MidLowDegrees[Bank][n]);
+    yPoints[0] = IntoHigherRes(MinDegrees[Bank][n]);
     return Interpolation::CatmullSpline(xPoints, yPoints, PointsCount, m);
 }
 /*********************************************************************************************************************************/
 uint16_t StraightLineInterpolation(uint16_t m, uint16_t l, uint16_t n)
 {
     uint16_t k = 0;
-    if (m >= ChannelMidHi[l]) k = map(m, ChannelMidHi[l], ChannelMax[l], IntoHigherRes(MidHiDegrees[FlightMode][n]), IntoHigherRes(MaxDegrees[FlightMode][n]));
-    if (m >= ChannelCentre[l] && m <= (ChannelMidHi[l])) k = map(m, ChannelCentre[l], ChannelMidHi[l], IntoHigherRes(CentreDegrees[FlightMode][n]), IntoHigherRes(MidHiDegrees[FlightMode][n]));
-    if (m >= ChannelMidLow[l] && m <= ChannelCentre[l]) k = map(m, ChannelMidLow[l], ChannelCentre[l], IntoHigherRes(MidLowDegrees[FlightMode][n]), IntoHigherRes(CentreDegrees[FlightMode][n]));
-    if (m <= ChannelMidLow[l]) k = map(m, ChannelMin[l], ChannelMidLow[l], IntoHigherRes(MinDegrees[FlightMode][n]), IntoHigherRes(MidLowDegrees[FlightMode][n]));
+    if (m >= ChannelMidHi[l]) k = map(m, ChannelMidHi[l], ChannelMax[l], IntoHigherRes(MidHiDegrees[Bank][n]), IntoHigherRes(MaxDegrees[Bank][n]));
+    if (m >= ChannelCentre[l] && m <= (ChannelMidHi[l])) k = map(m, ChannelCentre[l], ChannelMidHi[l], IntoHigherRes(CentreDegrees[Bank][n]), IntoHigherRes(MidHiDegrees[Bank][n]));
+    if (m >= ChannelMidLow[l] && m <= ChannelCentre[l]) k = map(m, ChannelMidLow[l], ChannelCentre[l], IntoHigherRes(MidLowDegrees[Bank][n]), IntoHigherRes(CentreDegrees[Bank][n]));
+    if (m <= ChannelMidLow[l]) k = map(m, ChannelMin[l], ChannelMidLow[l], IntoHigherRes(MinDegrees[Bank][n]), IntoHigherRes(MidLowDegrees[Bank][n]));
     return k;
 }
 /*********************************************************************************************************************************/
@@ -1958,16 +1968,16 @@ uint16_t ExponentialInterpolation(uint16_t m, uint16_t l, uint16_t n)
 {
     uint16_t k = 0;
     if (m >= ChannelCentre[l]) {
-        k = MapWithExponential(m - ChannelCentre[l], 0, ChannelMax[l] - ChannelCentre[l], 0, IntoHigherRes(MaxDegrees[FlightMode][n]) - //
-                                   IntoHigherRes(CentreDegrees[FlightMode][n]),
-                               Exponential[FlightMode][n])
-            + IntoHigherRes(CentreDegrees[FlightMode][n]);
+        k = MapWithExponential(m - ChannelCentre[l], 0, ChannelMax[l] - ChannelCentre[l], 0, IntoHigherRes(MaxDegrees[Bank][n]) - //
+                                   IntoHigherRes(CentreDegrees[Bank][n]),
+                               Exponential[Bank][n])
+            + IntoHigherRes(CentreDegrees[Bank][n]);
     }
     if (m < ChannelCentre[l]) {
-        k = MapWithExponential(ChannelCentre[l] - m, 0, ChannelCentre[l] - ChannelMin[l], IntoHigherRes(CentreDegrees[FlightMode][n]) - //
-                                   IntoHigherRes(MinDegrees[FlightMode][n]),
-                               0, Exponential[FlightMode][n])
-            + IntoHigherRes(MinDegrees[FlightMode][n]);
+        k = MapWithExponential(ChannelCentre[l] - m, 0, ChannelCentre[l] - ChannelMin[l], IntoHigherRes(CentreDegrees[Bank][n]) - //
+                                   IntoHigherRes(MinDegrees[Bank][n]),
+                               0, Exponential[Bank][n])
+            + IntoHigherRes(MinDegrees[Bank][n]);
     }
     return k;
 }
@@ -2002,17 +2012,17 @@ FASTRUN void GetNewChannelValues()
         }
         else {                                                           // i.e. l <= 7 so it's a Stick/knob/switch
             m = analogRead(AnalogueInput[l]);                            // Get values from sticks' pots then interpolate them.
-            k = Interpolate[InterpolationTypes[FlightMode][n]](m, l, n); // Use function pointer array to invoke chosen interpolation.
+            k = Interpolate[InterpolationTypes[Bank][n]](m, l, n); // Use function pointer array to invoke chosen interpolation.
         }
         k += (SubTrims[n] - 127) * (TrimFactor / 2); // ADD SUBTRIM (...to output channel, not mapped input channel) (Range 0 - 127 - 254)
         if (l < 4) {
-            uint16_t tt = t; // heer
+            uint16_t tt = t; 
             if (SticksMode == 2) {
                 if (t == 1) tt = 2;
                 if (t == 2) tt = 1;
             }
-            TrimAmount = (Trims[FlightMode][tt] - 80) * TrimFactor; // TRIMS on lower four channels (80 is mid point !! (range 40 - 80 - 120)) // heer
-            if (TrimsReversed[FlightMode][tt]) TrimAmount = -TrimAmount;
+            TrimAmount = (Trims[Bank][tt] - 80) * TrimFactor; // TRIMS on lower four channels (80 is mid point !! (range 40 - 80 - 120)) 
+            if (TrimsReversed[Bank][tt]) TrimAmount = -TrimAmount;
             k += TrimAmount;
         
         }
@@ -2037,9 +2047,9 @@ void ReduceLimits()
         ChannelMin[i] = 512;
     }
     for (uint8_t i = 0; i < CHANNELSUSED; ++i) {
-        MaxDegrees[FlightMode][i]    = 180;
-        CentreDegrees[FlightMode][i] = 90;
-        MinDegrees[FlightMode][i]    = 0;
+        MaxDegrees[Bank][i]    = 180;
+        CentreDegrees[Bank][i] = 90;
+        MinDegrees[Bank][i]    = 0;
     }
 }
 /*********************************************************************************************************************************/
@@ -2087,9 +2097,9 @@ void UpdateTrimView()
                 if (i == 1) p = 2;
                 if (i == 2) p = 1;
             }
-            SendValue(TrimViewChannels[p], (Trims[FlightMode][p]));
-            SendValue(TrimViewNumbers[p], (Trims[FlightMode][p] - 80));
-            SendValue(TrimViewReversed[p], (TrimsReversed[FlightMode][p])); // heer fixed one!
+            SendValue(TrimViewChannels[p], (Trims[Bank][p]));
+            SendValue(TrimViewNumbers[p], (Trims[Bank][p] - 80));
+            SendValue(TrimViewReversed[p], (TrimsReversed[Bank][p]));
         }
     }
     if (CurrentView == TRIM_VIEW) {
@@ -2198,7 +2208,7 @@ void UpdateModelsNameEveryWhere()
     };
     char TheModelName[]        = "ModelName";
     char GraphView_Channel[]   = "Channel";
-    char TrimView_FlightMode[] = "t1";
+    char TrimView_Bank[] = "t1";
     char GraphView_fmode[]     = "fmode";
     char SticksView_t1[]       = "t1";
     char NoName[17];
@@ -2224,10 +2234,10 @@ void UpdateModelsNameEveryWhere()
             SendText(GraphView_Channel, ChannelNames[ChanneltoSet - 1]);
         }
     }
-    if (CurrentView == STICKSVIEW) SendText(SticksView_t1, fms[FlightMode - 1]);
-    if (CurrentView == GRAPHVIEW) SendText(GraphView_fmode, fms[FlightMode - 1]);
+    if (CurrentView == STICKSVIEW) SendText(SticksView_t1, fms[Bank - 1]);
+    if (CurrentView == GRAPHVIEW) SendText(GraphView_fmode, fms[Bank - 1]);
     if (CurrentView == TRIM_VIEW) {
-        SendText(TrimView_FlightMode, fms[FlightMode - 1]);
+        SendText(TrimView_Bank, fms[Bank - 1]);
         UpdateTrimView();
     }
     if (CurrentView == FRONTVIEW) {
@@ -2263,7 +2273,7 @@ FLASHMEM void InitMaxMin()
 
 FLASHMEM void CentreTrims()
 {
-    for (int j = 0; j <= FLIGHTMODESUSED; ++j) {
+    for (int j = 0; j <= BankSUSED; ++j) {
         for (int i = 0; i < CHANNELSUSED; ++i) {
             Trims[j][i] = 80;
         }
@@ -2387,13 +2397,13 @@ bool ReadOneModel(uint8_t Mnum)
         }
     }
 
-    for (j = 0; j < FLIGHTMODESUSED + 1; ++j) {
+    for (j = 0; j < BankSUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             Trims[j][i] = SDRead8BITS(SDCardAddress);
             ++SDCardAddress;
         }
     }
-    for (j = 0; j < FLIGHTMODESUSED + 1; ++j) {
+    for (j = 0; j < BankSUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             TrimsReversed[j][i] = SDRead8BITS(SDCardAddress);
             ++SDCardAddress;
@@ -2476,7 +2486,7 @@ bool ReadOneModel(uint8_t Mnum)
         }
     }
 
-    for (j = 0; j < FLIGHTMODESUSED + 1; ++j) {
+    for (j = 0; j < BankSUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             Exponential[j][i] = SDRead8BITS(SDCardAddress);
             if (Exponential[j][i] >= 201 || Exponential[j][i] == 0) {
@@ -2485,7 +2495,7 @@ bool ReadOneModel(uint8_t Mnum)
             ++SDCardAddress;
         }
     }
-    for (j = 0; j < FLIGHTMODESUSED + 1; ++j) {
+    for (j = 0; j < BankSUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             InterpolationTypes[j][i] = SDRead8BITS(SDCardAddress);
             if (InterpolationTypes[j][i] < 0 || InterpolationTypes[j][i] > 2) {
@@ -2504,8 +2514,13 @@ bool ReadOneModel(uint8_t Mnum)
         ModelsMacUnionSaved.Val8[i] = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
     }
-   
-  
+    UseMotorKill = SDRead8BITS(SDCardAddress);
+    ++SDCardAddress;
+     MotorChannelZero = SDRead8BITS(SDCardAddress);
+    ++SDCardAddress;
+     MotorChannel = SDRead8BITS(SDCardAddress);
+    ++SDCardAddress;
+
     // **************************************
 
     OneModelMemory = SDCardAddress - StartLocation;
@@ -2910,12 +2925,12 @@ FASTRUN void LogDisConnection()
     LogText(buf, sizeof(buf));
 }
 // ************************************************************************
-FASTRUN void LogNewFlightMode()
+FASTRUN void LogNewBank()
 {
     char Ltext[] = "Bank: ";
     char NB[5];
     char thetext[10];
-    Str(NB, FlightMode, 0);
+    Str(NB, Bank, 0);
     strcpy(thetext, Ltext);
     strcat(thetext, NB);
     LogText(thetext, 7);
@@ -3274,13 +3289,13 @@ void SaveOneModel(uint16_t mnum)
             ++SDCardAddress;
         }
     }
-    for (j = 0; j < FLIGHTMODESUSED + 1; ++j) {
+    for (j = 0; j < BankSUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             SDUpdate8BITS(SDCardAddress, Trims[j][i]);
             ++SDCardAddress;
         }
     }
-    for (j = 0; j < FLIGHTMODESUSED + 1; ++j) {
+    for (j = 0; j < BankSUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             SDUpdate8BITS(SDCardAddress, TrimsReversed[j][i]);
             ++SDCardAddress;
@@ -3350,14 +3365,14 @@ void SaveOneModel(uint16_t mnum)
             ++SDCardAddress;
         }
     }
-    for (j = 0; j < FLIGHTMODESUSED + 1; ++j) {
+    for (j = 0; j < BankSUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             SDUpdate8BITS(SDCardAddress, Exponential[j][i]);
             ++SDCardAddress;
         }
     }
 
-    for (j = 0; j < FLIGHTMODESUSED + 1; ++j) {
+    for (j = 0; j < BankSUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             SDUpdate8BITS(SDCardAddress, InterpolationTypes[j][i]);
             ++SDCardAddress;
@@ -3374,6 +3389,14 @@ void SaveOneModel(uint16_t mnum)
         SDUpdate8BITS(SDCardAddress,ModelsMacUnionSaved.Val8[i]);
         ++SDCardAddress;
    }
+
+    SDUpdate8BITS(SDCardAddress,UseMotorKill);
+    ++SDCardAddress;
+    SDUpdate8BITS(SDCardAddress,MotorChannelZero);
+    ++SDCardAddress;
+    SDUpdate8BITS(SDCardAddress,MotorChannel);
+    ++SDCardAddress;
+
 
        // ********************** Add more
 
@@ -3589,7 +3612,7 @@ void UpdateSwitchesDisplay()
     char SwitchesView_sw3[] = "sw3";
     char SwitchesView_sw4[] = "sw4";
     char NotUsed[]          = "Not used";
-    char FlightModes123[]   = "Banks 1 - 2 - 3";
+    char Banks123[]   = "Banks 1 - 2 - 3";
     char Auto[]             = "Auto (Bank 4)";
     char Channel_9[]        = "Channel 9";
     char Channel_10[]       = "Channel 10";
@@ -3598,7 +3621,7 @@ void UpdateSwitchesDisplay()
 
     SendText(SwitchesView_sw1, NotUsed);
     if (AutoSwitch == 1) SendText(SwitchesView_sw1, Auto);
-    if (FMSwitch == 1) SendText(SwitchesView_sw1, FlightModes123);
+    if (FMSwitch == 1) SendText(SwitchesView_sw1, Banks123);
     if (Channel9Switch == 1) SendText(SwitchesView_sw1, Channel_9);
     if (Channel10Switch == 1) SendText(SwitchesView_sw1, Channel_10);
     if (Channel11Switch == 1) SendText(SwitchesView_sw1, Channel_11);
@@ -3606,7 +3629,7 @@ void UpdateSwitchesDisplay()
 
     SendText(SwitchesView_sw2, NotUsed);
     if (AutoSwitch == 2) SendText(SwitchesView_sw2, Auto);
-    if (FMSwitch == 2) SendText(SwitchesView_sw2, FlightModes123);
+    if (FMSwitch == 2) SendText(SwitchesView_sw2, Banks123);
     if (Channel9Switch == 2) SendText(SwitchesView_sw2, Channel_9);
     if (Channel10Switch == 2) SendText(SwitchesView_sw2, Channel_10);
     if (Channel11Switch == 2) SendText(SwitchesView_sw2, Channel_11);
@@ -3614,7 +3637,7 @@ void UpdateSwitchesDisplay()
 
     SendText(SwitchesView_sw3, NotUsed);
     if (AutoSwitch == 3) SendText(SwitchesView_sw3, Auto);
-    if (FMSwitch == 3) SendText(SwitchesView_sw3, FlightModes123);
+    if (FMSwitch == 3) SendText(SwitchesView_sw3, Banks123);
     if (Channel9Switch == 3) SendText(SwitchesView_sw3, Channel_9);
     if (Channel10Switch == 3) SendText(SwitchesView_sw3, Channel_10);
     if (Channel11Switch == 3) SendText(SwitchesView_sw3, Channel_11);
@@ -3622,7 +3645,7 @@ void UpdateSwitchesDisplay()
 
     SendText(SwitchesView_sw4, NotUsed);
     if (AutoSwitch == 4) SendText(SwitchesView_sw4, Auto);
-    if (FMSwitch == 4) SendText(SwitchesView_sw4, FlightModes123);
+    if (FMSwitch == 4) SendText(SwitchesView_sw4, Banks123);
     if (Channel9Switch == 4) SendText(SwitchesView_sw4, Channel_9);
     if (Channel10Switch == 4) SendText(SwitchesView_sw4, Channel_10);
     if (Channel11Switch == 4) SendText(SwitchesView_sw4, Channel_11);
@@ -3787,7 +3810,7 @@ void SetDefaultValues()
     SendValue(Progress, 25);
     Procrastinate(10);
 
-    for (j = 0; j < FLIGHTMODESUSED + 1; ++j) { // must have fudged this somewhere.... 5?!
+    for (j = 0; j < BankSUSED + 1; ++j) { // must have fudged this somewhere.... 5?!
         for (i = 0; i < CHANNELSUSED; ++i) {
             Trims[j][i]         = 80; // MIDPOINT is 80 !
             TrimsReversed[j][i] = 0;
@@ -3822,12 +3845,12 @@ void SetDefaultValues()
             ChannelNames[i][j] = DefaultChannelNames[i][j];
         }
     }
-    for (j = 0; j < FLIGHTMODESUSED + 1; ++j) {
+    for (j = 0; j < BankSUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             Exponential[j][i] = DEFAULT_EXPO; // 0% (50) expo = default
         }
     }
-    for (j = 0; j < FLIGHTMODESUSED + 1; ++j) {
+    for (j = 0; j < BankSUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             InterpolationTypes[j][i] = EXPONENTIALCURVES; // Expo is default
         }
@@ -3843,6 +3866,10 @@ void SetDefaultValues()
     for (int i = 0; i < 4; ++i) {
         InputTrim[i] = i;
     }
+    UseMotorKill = false;
+    MotorChannelZero = 0;
+    MotorChannel = 2;
+    
     ReversedChannelBITS = 0; //  No channel reversed
     SendValue(Progress, 95);
     Procrastinate(10);
@@ -3974,18 +4001,18 @@ FASTRUN void GetDotPositions()
     BoxBottom  = BoxRight;
     xPoints[0] = BoxLeft;
     xPoints[4] = BoxRight - BOXOFFSET;
-    p          = map(MinDegrees[FlightMode][ChanneltoSet - 1], 0, 180, BOXSIZE, BOXOFFSET);
+    p          = map(MinDegrees[Bank][ChanneltoSet - 1], 0, 180, BOXSIZE, BOXOFFSET);
     yPoints[0] = constrain(p, 39, 391);
-    p          = map(MidLowDegrees[FlightMode][ChanneltoSet - 1], 0, 180, BOXSIZE, BOXOFFSET);
+    p          = map(MidLowDegrees[Bank][ChanneltoSet - 1], 0, 180, BOXSIZE, BOXOFFSET);
     yPoints[1] = constrain(p, 39, 391);
     xPoints[1] = BOXOFFSET + 90;
     xPoints[2] = BOXOFFSET + 180;
-    p          = map(CentreDegrees[FlightMode][ChanneltoSet - 1], 0, 180, BOXSIZE, BOXOFFSET);
+    p          = map(CentreDegrees[Bank][ChanneltoSet - 1], 0, 180, BOXSIZE, BOXOFFSET);
     yPoints[2] = constrain(p, 39, 391);
     xPoints[3] = BOXOFFSET + 270;
-    p          = map(MidHiDegrees[FlightMode][ChanneltoSet - 1], 0, 180, BOXSIZE, BOXOFFSET);
+    p          = map(MidHiDegrees[Bank][ChanneltoSet - 1], 0, 180, BOXSIZE, BOXOFFSET);
     yPoints[3] = constrain(p, 39, 391);
-    p          = map(MaxDegrees[FlightMode][ChanneltoSet - 1], 0, 180, BOXSIZE, BOXOFFSET);
+    p          = map(MaxDegrees[Bank][ChanneltoSet - 1], 0, 180, BOXSIZE, BOXOFFSET);
     yPoints[4] = constrain(p, 39, 391);
 }
 
@@ -4035,7 +4062,7 @@ FASTRUN void updateInterpolationTypes()
     char ExponOff[] = "vis Expo,0"; // number display
     char Ex1Off[]   = "vis Ex1,0";  // slider
 
-    switch (InterpolationTypes[FlightMode][ChanneltoSet - 1]) {
+    switch (InterpolationTypes[Bank][ChanneltoSet - 1]) {
         case STRAIGHTLINES:
             SendValue(Lines, 1);
             SendValue(Smooth, 0);
@@ -4065,8 +4092,8 @@ FASTRUN void updateInterpolationTypes()
             SendCommand(b12on);
             SendCommand(ExponOn);
             SendCommand(Ex1On);
-            SendValue(Ex1, (Exponential[FlightMode][ChanneltoSet - 1]));        // The slider
-            SendValue(Expon, (Exponential[FlightMode][ChanneltoSet - 1]) - 50); // the number
+            SendValue(Ex1, (Exponential[Bank][ChanneltoSet - 1]));        // The slider
+            SendValue(Expon, (Exponential[Bank][ChanneltoSet - 1]) - 50); // the number
             break;
         default:
             break;
@@ -4107,22 +4134,22 @@ FASTRUN void DisplayCurve()
     int   DotSize   = 2;
     int   DotColour = HighlightColour;
     ClearBox();
-    p                                           = constrain(MinDegrees[FlightMode][ChanneltoSet - 1], 0, 180);
-    MinDegrees[FlightMode][ChanneltoSet - 1]    = p;
-    p                                           = constrain(MidLowDegrees[FlightMode][ChanneltoSet - 1], 0, 180);
-    MidLowDegrees[FlightMode][ChanneltoSet - 1] = p;
-    p                                           = constrain(CentreDegrees[FlightMode][ChanneltoSet - 1], 0, 180);
-    CentreDegrees[FlightMode][ChanneltoSet - 1] = p;
-    p                                           = constrain(MidHiDegrees[FlightMode][ChanneltoSet - 1], 0, 180);
-    MidHiDegrees[FlightMode][ChanneltoSet - 1]  = p;
-    p                                           = constrain(MaxDegrees[FlightMode][ChanneltoSet - 1], 0, 180);
-    MaxDegrees[FlightMode][ChanneltoSet - 1]    = p;
+    p                                           = constrain(MinDegrees[Bank][ChanneltoSet - 1], 0, 180);
+    MinDegrees[Bank][ChanneltoSet - 1]    = p;
+    p                                           = constrain(MidLowDegrees[Bank][ChanneltoSet - 1], 0, 180);
+    MidLowDegrees[Bank][ChanneltoSet - 1] = p;
+    p                                           = constrain(CentreDegrees[Bank][ChanneltoSet - 1], 0, 180);
+    CentreDegrees[Bank][ChanneltoSet - 1] = p;
+    p                                           = constrain(MidHiDegrees[Bank][ChanneltoSet - 1], 0, 180);
+    MidHiDegrees[Bank][ChanneltoSet - 1]  = p;
+    p                                           = constrain(MaxDegrees[Bank][ChanneltoSet - 1], 0, 180);
+    MaxDegrees[Bank][ChanneltoSet - 1]    = p;
     GetDotPositions();
-    SendValue(Gn1, DegsToPercent(MinDegrees[FlightMode][ChanneltoSet - 1])); // put numbers at top row
-    SendValue(Gn2, DegsToPercent(MidLowDegrees[FlightMode][ChanneltoSet - 1]));
-    SendValue(Gn3, DegsToPercent(CentreDegrees[FlightMode][ChanneltoSet - 1]));
-    SendValue(Gn4, DegsToPercent(MidHiDegrees[FlightMode][ChanneltoSet - 1]));
-    SendValue(Gn5, DegsToPercent(MaxDegrees[FlightMode][ChanneltoSet - 1]));
+    SendValue(Gn1, DegsToPercent(MinDegrees[Bank][ChanneltoSet - 1])); // put numbers at top row
+    SendValue(Gn2, DegsToPercent(MidLowDegrees[Bank][ChanneltoSet - 1]));
+    SendValue(Gn3, DegsToPercent(CentreDegrees[Bank][ChanneltoSet - 1]));
+    SendValue(Gn4, DegsToPercent(MidHiDegrees[Bank][ChanneltoSet - 1]));
+    SendValue(Gn5, DegsToPercent(MaxDegrees[Bank][ChanneltoSet - 1]));
     DrawBox(BoxLeft, BoxTop, BoxRight - BoxLeft, BoxBottom - BoxTop, HighlightColour);
 
     xDot1 = xPoints[0];
@@ -4137,7 +4164,7 @@ FASTRUN void DisplayCurve()
     yDot2 = BoxBottom - BOXOFFSET;
     DrawLine(xDot1, yDot1, xDot2, yDot2, SpecialColour);
 
-    if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == STRAIGHTLINES) { // Linear
+    if (InterpolationTypes[Bank][ChanneltoSet - 1] == STRAIGHTLINES) { // Linear
         SendCommand(b3on);
         SendCommand(b4on);
         SendCommand(b7on);
@@ -4150,7 +4177,7 @@ FASTRUN void DisplayCurve()
         DrawLine(xPoints[3], yPoints[3], xPoints[4], yPoints[4], ForeGroundColour);
     }
   
-    if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == SMOOTHEDCURVES) { // CatmullSpline
+    if (InterpolationTypes[Bank][ChanneltoSet - 1] == SMOOTHEDCURVES) { // CatmullSpline
 
         SendCommand(b3on);
         SendCommand(b4on);
@@ -4177,7 +4204,7 @@ FASTRUN void DisplayCurve()
         }
     }
 
-    if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == EXPONENTIALCURVES) { // EXPO  ************************************************************************************************
+    if (InterpolationTypes[Bank][ChanneltoSet - 1] == EXPONENTIALCURVES) { // EXPO  ************************************************************************************************
 #define APPROXIMATION 7       // This is the approximation of the screen curve
 
         SendCommand(b3off);
@@ -4193,7 +4220,7 @@ FASTRUN void DisplayCurve()
         Step             = APPROXIMATION;                        // This is the approximation of the screen curve
         
         for (xPoint = 0; xPoint <= HalfXRange; xPoint += Step) { // Simulate a curve with many short lines to speed it up
-            yPoint = MapWithExponential(HalfXRange - xPoint, HalfXRange, 0, 0, BottomHalfYRange, Exponential[FlightMode][ChanneltoSet - 1]);
+            yPoint = MapWithExponential(HalfXRange - xPoint, HalfXRange, 0, 0, BottomHalfYRange, Exponential[Bank][ChanneltoSet - 1]);
             if (Step > HalfXRange - xPoint) {
                 Step = HalfXRange - xPoint;
             }
@@ -4212,7 +4239,7 @@ FASTRUN void DisplayCurve()
         Step  = APPROXIMATION;
         yDot2 = 0; 
         for (xPoint = HalfXRange; xPoint >= 0; xPoint -= Step) { // Simulate a curve with many short lines to speed it up
-            yPoint = MapWithExponential(xPoint, 0, HalfXRange, 0, TopHalfYRange, Exponential[FlightMode][ChanneltoSet - 1]);
+            yPoint = MapWithExponential(xPoint, 0, HalfXRange, 0, TopHalfYRange, Exponential[Bank][ChanneltoSet - 1]);
             if (Step > xPoint) {
                 Step = xPoint;
             }
@@ -4234,7 +4261,7 @@ FASTRUN void DisplayCurve()
         DrawDot(xPoints[2], yPoints[2], DotSize, DotColour);
         DrawDot(xPoints[4], yPoints[4], DotSize, DotColour);
     }
-    if (InterpolationTypes[FlightMode][ChanneltoSet - 1] != EXPONENTIALCURVES) {
+    if (InterpolationTypes[Bank][ChanneltoSet - 1] != EXPONENTIALCURVES) {
         DrawDot(xPoints[0], yPoints[0], DotSize, DotColour); // This adds 5 dots
         DrawDot(xPoints[1], yPoints[1], DotSize, DotColour);
         DrawDot(xPoints[2], yPoints[2], DotSize, DotColour);
@@ -4286,52 +4313,52 @@ void MovePoint()
     if (XtouchPlace < BOXOFFSET + xPoints[0]) { // do leftmost point  ?
         rjump = GetDifference(YtouchPlace, yPoints[0]);
         if (YtouchPlace > yPoints[0]) {
-            if (MinDegrees[FlightMode][ChanneltoSet - 1] >= rjump) MinDegrees[FlightMode][ChanneltoSet - 1] -= rjump;
+            if (MinDegrees[Bank][ChanneltoSet - 1] >= rjump) MinDegrees[Bank][ChanneltoSet - 1] -= rjump;
         }
         else {
-            if (MinDegrees[FlightMode][ChanneltoSet - 1] <= (180 - rjump)) MinDegrees[FlightMode][ChanneltoSet - 1] += rjump;
+            if (MinDegrees[Bank][ChanneltoSet - 1] <= (180 - rjump)) MinDegrees[Bank][ChanneltoSet - 1] += rjump;
         }
     }
 
     if (XtouchPlace > xPoints[1] - BOXOFFSET && XtouchPlace < xPoints[1] + BOXOFFSET) {    // do next point  ?
-        if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == EXPONENTIALCURVES) return; //  expo = ignore this area
+        if (InterpolationTypes[Bank][ChanneltoSet - 1] == EXPONENTIALCURVES) return; //  expo = ignore this area
         rjump = GetDifference(YtouchPlace, yPoints[1]);
         if (YtouchPlace > yPoints[1]) {
-            if (MidLowDegrees[FlightMode][ChanneltoSet - 1] >= rjump) MidLowDegrees[FlightMode][ChanneltoSet - 1] -= rjump;
+            if (MidLowDegrees[Bank][ChanneltoSet - 1] >= rjump) MidLowDegrees[Bank][ChanneltoSet - 1] -= rjump;
         }
         else {
-            if (MidLowDegrees[FlightMode][ChanneltoSet - 1] <= 180 - rjump) MidLowDegrees[FlightMode][ChanneltoSet - 1] += rjump;
+            if (MidLowDegrees[Bank][ChanneltoSet - 1] <= 180 - rjump) MidLowDegrees[Bank][ChanneltoSet - 1] += rjump;
         }
     }
 
     if (XtouchPlace > xPoints[2] - BOXOFFSET && XtouchPlace < xPoints[2] + BOXOFFSET) { // do next point  ?
         rjump = GetDifference(YtouchPlace, yPoints[2]);
         if (YtouchPlace > yPoints[2]) {
-            if (CentreDegrees[FlightMode][ChanneltoSet - 1] >= rjump) CentreDegrees[FlightMode][ChanneltoSet - 1] -= rjump;
+            if (CentreDegrees[Bank][ChanneltoSet - 1] >= rjump) CentreDegrees[Bank][ChanneltoSet - 1] -= rjump;
         }
         else {
-            if (CentreDegrees[FlightMode][ChanneltoSet - 1] <= 180 - rjump) CentreDegrees[FlightMode][ChanneltoSet - 1] += rjump;
+            if (CentreDegrees[Bank][ChanneltoSet - 1] <= 180 - rjump) CentreDegrees[Bank][ChanneltoSet - 1] += rjump;
         }
     }
 
     if (XtouchPlace > xPoints[3] - BOXOFFSET && XtouchPlace < xPoints[3] + BOXOFFSET) {    // do next point  ?
-        if (InterpolationTypes[FlightMode][ChanneltoSet - 1] == EXPONENTIALCURVES) return; //  expo = ignore this area
+        if (InterpolationTypes[Bank][ChanneltoSet - 1] == EXPONENTIALCURVES) return; //  expo = ignore this area
         rjump = GetDifference(YtouchPlace, yPoints[3]);
         if (YtouchPlace > yPoints[3]) {
-            if (MidHiDegrees[FlightMode][ChanneltoSet - 1] >= rjump) MidHiDegrees[FlightMode][ChanneltoSet - 1] -= rjump;
+            if (MidHiDegrees[Bank][ChanneltoSet - 1] >= rjump) MidHiDegrees[Bank][ChanneltoSet - 1] -= rjump;
         }
         else {
-            if (MidHiDegrees[FlightMode][ChanneltoSet - 1] <= 180 - rjump) MidHiDegrees[FlightMode][ChanneltoSet - 1] += rjump;
+            if (MidHiDegrees[Bank][ChanneltoSet - 1] <= 180 - rjump) MidHiDegrees[Bank][ChanneltoSet - 1] += rjump;
         }
     }
     if (XtouchPlace > xPoints[3] + BOXOFFSET) // do hi point  ?
     {
         rjump = GetDifference(YtouchPlace, yPoints[4]);
         if (YtouchPlace > yPoints[4]) {
-            if (MaxDegrees[FlightMode][ChanneltoSet - 1] > rjump) MaxDegrees[FlightMode][ChanneltoSet - 1] -= rjump;
+            if (MaxDegrees[Bank][ChanneltoSet - 1] > rjump) MaxDegrees[Bank][ChanneltoSet - 1] -= rjump;
         }
         else {
-            if (MaxDegrees[FlightMode][ChanneltoSet - 1] <= 180 - rjump) MaxDegrees[FlightMode][ChanneltoSet - 1] += rjump;
+            if (MaxDegrees[Bank][ChanneltoSet - 1] <= 180 - rjump) MaxDegrees[Bank][ChanneltoSet - 1] += rjump;
         }
     }
 }
@@ -4623,10 +4650,10 @@ void SendModelFile()
 
 /*********************************************************************************************************************************/
 
-void SoundFlightMode()
+void SoundBank()
 {
     uint8_t Sounds[4] = {BANKONE, BANKTWO, BANKTHREE, BANKFOUR};
-    PlaySound(Sounds[FlightMode - 1]);
+    PlaySound(Sounds[Bank - 1]);
     ScreenTimeTimer = millis(); // reset screen counter
     if (ScreenIsOff) {
         RestoreBrightness();
@@ -4634,10 +4661,22 @@ void SoundFlightMode()
     }
 }
 /*********************************************************************************************************************************/
-void ShowFlightMode()
-{
+void ShowBank(){
     char FMPress[4][12] = {"click fm1,1", "click fm2,1", "click fm3,1", "click fm4,1"};
-    SendCommand(FMPress[FlightMode - 1]);
+    SendCommand(FMPress[Bank - 1]);
+}
+
+/*********************************************************************************************************************************/
+void ShowMotor(bool on)
+{       
+        char bt0[]      = "bt0";
+        char bt01[]     = "click bt0,1";
+        char OnMsg[]    = "Motor ON";
+        char OffMsg[]   = "Motor OFF";
+
+        if (on)   SendText(bt0, OnMsg);
+        if (!on)  SendText(bt0, OffMsg);
+        SendCommand(bt01);
 }
 /*********************************************************************************************************************************/
 
@@ -5154,6 +5193,48 @@ void OptionView3Start()
     SendValue(n1,  LEDBrightness);
 }
 
+
+
+/******************************************************************************************************************************/
+
+void OptionView4Start() // heer
+{
+    char OptionV4Start[]  = "page OptionView4";
+    char UseKill[]        = "c0";
+    char Mchannel[]       = "n1";
+    char Mvalue[]         = "n0";
+
+    SendCommand(OptionV4Start);
+    Procrastinate(100);
+    SendValue(Mvalue, MotorChannelZero);
+    SendValue(Mchannel, MotorChannel + 1);
+    SendValue(UseKill, UseMotorKill);
+    CurrentView = OPTIONVIEW4;
+
+}
+
+/******************************************************************************************************************************/
+
+void OptionView4End()
+{
+ 
+    char page_SetupView[] = "page SetupView";
+
+    char UseKill[]        = "c0";
+    char Mchannel[]       = "n1";
+    char Mvalue[]         = "n0";
+
+    MotorChannelZero    = GetValue(Mvalue);
+    UseMotorKill        = GetValue(UseKill);
+    MotorChannel        = GetValue(Mchannel) - 1;
+
+
+    SaveTransmitterParameters();
+    CurrentView = MAINSETUPVIEW;
+    SendCommand(page_SetupView);
+    UpdateModelsNameEveryWhere();
+}
+
 /******************************************************************************************************************************/
 
 void OptionView3End()
@@ -5164,7 +5245,7 @@ void OptionView3End()
     char n3[]             = "n3";
     char n1[]             = "n1";
     char page_SetupView[] = "page SetupView";
-    char lpm[]            = "c0"; // Low power mode
+    char lpm[]            = "c0"; // Auto model selection
 
     TxVoltageCorrection     = GetValue(TxVCorrextion);
     RxVoltageCorrection     = GetValue(RxVCorrextion);
@@ -5222,41 +5303,40 @@ void BuddyChViewEnd()
     SendCommand(page_BuddyView);
     CurrentView = BUDDYVIEW;
 }
-// ******************************************************************************
-void RudderLeftTrim(){
-     MoveaTrim(7);
-}
-void RudderRightTrim(){
-     MoveaTrim(6);
-}
-void AileronRightTrim(){
-     MoveaTrim(0);
-}
-void AileronLeftTrim(){
-     MoveaTrim(1);
-}
+/******************************************************************************************************************************/
+void RudderLeftTrim(){MoveaTrim(7);}
+/******************************************************************************************************************************/
+void RudderRightTrim(){MoveaTrim(6);}
+/******************************************************************************************************************************/
+void AileronRightTrim(){MoveaTrim(0);}
+/******************************************************************************************************************************/
+void AileronLeftTrim(){MoveaTrim(1);}
+/******************************************************************************************************************************/
 void ElevatorUpTrim(){
     uint8_t tt = 2;
     if (SticksMode == 2)  tt = 5;
      MoveaTrim(tt);
 }
+/******************************************************************************************************************************/
 void ElevatorDownTrim(){
      uint8_t tt = 3;
      if (SticksMode == 2)  tt = 4;
      MoveaTrim(tt);
 }
+/******************************************************************************************************************************/
 void ThrottleUpTrim(){
     uint8_t tt = 4;
     if (SticksMode == 2) tt = 3;
     MoveaTrim(tt);
 }
+/******************************************************************************************************************************/
 void ThrottleDownTrim(){
     uint8_t tt = 5;
      if (SticksMode == 2) tt = 2;
      MoveaTrim(tt);
 }
 // ******************************** Global Array of numbered function pointers - OK up to 128 functions ... **********************************
-#define LASTFUNCTION 38 // one more than final one
+#define LASTFUNCTION 40 // one more than final one
 
 void (*NumberedFunctions[LASTFUNCTION])() {
     Blank,                // 0 (spare)
@@ -5296,7 +5376,12 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     ElevatorUpTrim,       // 34  
     ElevatorDownTrim,     // 35
     ThrottleDownTrim,     // 36  
-    ThrottleUpTrim        // 37  
+    ThrottleUpTrim,       // 37  
+    OptionView4Start,     // 38  
+    OptionView4End        // 39  
+    
+    
+
 
 
 
@@ -5398,7 +5483,7 @@ FASTRUN void ButtonWasPressed()
         char page_SticksView[]         = "page SticksView";
         char page_GraphView[]          = "page GraphView";
         char MixesView_Enabled[]       = "Enabled";
-        char MixesView_FlightMode[]    = "FlightMode";
+        char MixesView_Bank[]    = "Bank";
         char MixesView_MasterChannel[] = "MasterChannel";
         char MixesView_SlaveChannel[]  = "SlaveChannel";
         char MixesView_Reversed[]      = "Reversed";
@@ -5418,7 +5503,7 @@ FASTRUN void ButtonWasPressed()
         char Cmsg5[]                   = "Repeat?";
         char Cmsg6[]                   = "Calbrate again?";
         char TypeView[]                = "TypeView";
-        char CopyToAllFlightModes[]    = "callfm";
+        char CopyToAllBanks[]    = "callfm";
         char RXBAT[]                   = "RXBAT";
         char r2s[]                     = "r2s";
         char r3s[]                     = "r3s";
@@ -5759,7 +5844,7 @@ FASTRUN void ButtonWasPressed()
         if (InStrng(GoFrontView, TextIn) > 0) { // GOTO frontview
             SendCommand(page_FrontView);
             UpdateModelsNameEveryWhere();
-            ShowFlightMode();
+            ShowBank();
             LastTimeRead = 0;
             Reconnected  = false; // this is to make '** Connected! **' redisplay (in ShowComms())
             LastSeconds  = 0;     // This forces redisplay of timer...
@@ -5874,7 +5959,7 @@ FASTRUN void ButtonWasPressed()
 
             if (CurrentView == GRAPHVIEW) {
                 DisplayCurveAndServoPos();
-                SendValue(CopyToAllFlightModes, 0);
+                SendValue(CopyToAllBanks, 0);
             }
             if (CurrentView == SWITCHES_VIEW) {
                 UpdateSwitchesDisplay();
@@ -5927,15 +6012,15 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(Exrite, TextIn) > 0) { //  *******************
             if (GetValue(ExpR)) {
-                InterpolationTypes[FlightMode][ChanneltoSet - 1] = EXPONENTIALCURVES;
+                InterpolationTypes[Bank][ChanneltoSet - 1] = EXPONENTIALCURVES;
             }
             if (GetValue(Smooth)) {
-                InterpolationTypes[FlightMode][ChanneltoSet - 1] = SMOOTHEDCURVES;
+                InterpolationTypes[Bank][ChanneltoSet - 1] = SMOOTHEDCURVES;
             }
             if (GetValue(Lines)) {
-                InterpolationTypes[FlightMode][ChanneltoSet - 1] = STRAIGHTLINES;
+                InterpolationTypes[Bank][ChanneltoSet - 1] = STRAIGHTLINES;
             }
-            Exponential[FlightMode][ChanneltoSet - 1] = GetValue(Expo) + 50; // Note: Getting this value from slider was not reliable (could not return 36!)
+            Exponential[Bank][ChanneltoSet - 1] = GetValue(Expo) + 50; // Note: Getting this value from slider was not reliable (could not return 36!)
             ClearText();
             DisplayCurveAndServoPos();
             return;
@@ -6451,14 +6536,14 @@ FASTRUN void ButtonWasPressed()
             return;
         }
         if (InStrng(RTRIM, TextIn) > 0) {
-            TrimsReversed[FlightMode][0] = GetValue(TrimView_r1);
-            TrimsReversed[FlightMode][1] = GetValue(TrimView_r4);
-            TrimsReversed[FlightMode][2] = GetValue(TrimView_r2);
-            TrimsReversed[FlightMode][3] = GetValue(TrimView_r3);
+            TrimsReversed[Bank][0] = GetValue(TrimView_r1);
+            TrimsReversed[Bank][1] = GetValue(TrimView_r4);
+            TrimsReversed[Bank][2] = GetValue(TrimView_r2);
+            TrimsReversed[Bank][3] = GetValue(TrimView_r3);
             if (CopyTrimsToAll) {
                 for (j = 0; j < 4; ++j) {
                     for (i = 1; i < 5; ++i) {
-                        TrimsReversed[i][j] = TrimsReversed[FlightMode][j];
+                        TrimsReversed[i][j] = TrimsReversed[Bank][j];
                     }
                 }
             }
@@ -6467,12 +6552,12 @@ FASTRUN void ButtonWasPressed()
         }
         if (InStrng(TRIMS50, TextIn) > 0) {
             for (i = 0; i < 4; ++i) {
-                Trims[FlightMode][i] = 80; // Mid value is 80
+                Trims[Bank][i] = 80; // Mid value is 80
                 if (CopyTrimsToAll) {
                     for (i = 0; i < 4; ++i) {
                         for (int fm = 1; fm < 5; ++fm) {
                             Trims[fm][i]         = 80;
-                            TrimsReversed[fm][i] = TrimsReversed[FlightMode][i];
+                            TrimsReversed[fm][i] = TrimsReversed[Bank][i];
                         }
                     }
                 }
@@ -6496,17 +6581,17 @@ FASTRUN void ButtonWasPressed()
         }
 
         if (InStrng(Write, TextIn) > 0) { //  write new data to SD
-            p = GetValue(CopyToAllFlightModes);
+            p = GetValue(CopyToAllBanks);
             if (p == 1) {
                 for (p = 1; p <= 4; ++p) {
-                    if (p != FlightMode) {
-                        MinDegrees[p][ChanneltoSet - 1]         = MinDegrees[FlightMode][ChanneltoSet - 1];
-                        MidLowDegrees[p][ChanneltoSet - 1]      = MidLowDegrees[FlightMode][ChanneltoSet - 1];
-                        CentreDegrees[p][ChanneltoSet - 1]      = CentreDegrees[FlightMode][ChanneltoSet - 1];
-                        MidHiDegrees[p][ChanneltoSet - 1]       = MidHiDegrees[FlightMode][ChanneltoSet - 1];
-                        MaxDegrees[p][ChanneltoSet - 1]         = MaxDegrees[FlightMode][ChanneltoSet - 1];
-                        InterpolationTypes[p][ChanneltoSet - 1] = InterpolationTypes[FlightMode][ChanneltoSet - 1];
-                        Exponential[p][ChanneltoSet - 1]        = Exponential[FlightMode][ChanneltoSet - 1];
+                    if (p != Bank) {
+                        MinDegrees[p][ChanneltoSet - 1]         = MinDegrees[Bank][ChanneltoSet - 1];
+                        MidLowDegrees[p][ChanneltoSet - 1]      = MidLowDegrees[Bank][ChanneltoSet - 1];
+                        CentreDegrees[p][ChanneltoSet - 1]      = CentreDegrees[Bank][ChanneltoSet - 1];
+                        MidHiDegrees[p][ChanneltoSet - 1]       = MidHiDegrees[Bank][ChanneltoSet - 1];
+                        MaxDegrees[p][ChanneltoSet - 1]         = MaxDegrees[Bank][ChanneltoSet - 1];
+                        InterpolationTypes[p][ChanneltoSet - 1] = InterpolationTypes[Bank][ChanneltoSet - 1];
+                        Exponential[p][ChanneltoSet - 1]        = Exponential[Bank][ChanneltoSet - 1];
                     }
                 }
             }
@@ -6528,7 +6613,7 @@ FASTRUN void ButtonWasPressed()
             DisplayCurveAndServoPos();
             updateInterpolationTypes();
             UpdateModelsNameEveryWhere();
-            SendValue(CopyToAllFlightModes, 0);
+            SendValue(CopyToAllBanks, 0);
             ClearText();
             return;
         }
@@ -6536,7 +6621,7 @@ FASTRUN void ButtonWasPressed()
         if (InStrng(Front_View, TextIn)) {
             CurrentView = FRONTVIEW;
             ClearText();
-            PreviousFlightMode = 250; // sure to be different
+            PreviousBank = 250; // sure to be different
             CurrentMode        = NORMAL;
             UpdateModelsNameEveryWhere();
             ClearText();
@@ -6599,7 +6684,7 @@ FASTRUN void ButtonWasPressed()
             }
             else {
                 Mixes[MixNumber][M_Enabled]       = GetValue(MixesView_Enabled);
-                Mixes[MixNumber][M_FlightMode]    = GetValue(MixesView_FlightMode);
+                Mixes[MixNumber][M_Bank]    = GetValue(MixesView_Bank);
                 Mixes[MixNumber][M_MasterChannel] = GetValue(MixesView_MasterChannel);
                 Mixes[MixNumber][M_SlaveChannel]  = GetValue(MixesView_SlaveChannel);
                 Mixes[MixNumber][M_Reversed]      = GetValue(MixesView_Reversed);
@@ -6637,8 +6722,8 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(FM1, TextIn))
         {
-            FlightMode         = 1;
-            PreviousFlightMode = 1;
+            Bank         = 1;
+            PreviousBank = 1;
             UpdateModelsNameEveryWhere();
             ClearText();
             return;
@@ -6646,8 +6731,8 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(FM2, TextIn))
         {
-            FlightMode         = 2;
-            PreviousFlightMode = 2;
+            Bank         = 2;
+            PreviousBank = 2;
             UpdateModelsNameEveryWhere();
             ClearText();
             return;
@@ -6655,8 +6740,8 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(FM3, TextIn))
         {
-            FlightMode         = 3;
-            PreviousFlightMode = 3;
+            Bank         = 3;
+            PreviousBank = 3;
             UpdateModelsNameEveryWhere();
             ClearText();
             return;
@@ -6664,23 +6749,23 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(FM4, TextIn))
         {
-            FlightMode         = 4;
-            PreviousFlightMode = 4;
+            Bank         = 4;
+            PreviousBank = 4;
             UpdateModelsNameEveryWhere();
             ClearText();
             return;
         }
         if (InStrng(midyup, TextIn)) // midy up?
         {
-            CentreDegrees[FlightMode][ChanneltoSet - 1]++;
+            CentreDegrees[Bank][ChanneltoSet - 1]++;
             DisplayCurveAndServoPos();
             return;
         }
 
         if (InStrng(midydown, TextIn)) // midy down?
         {
-            if (CentreDegrees[FlightMode][ChanneltoSet - 1] > 0) {
-                CentreDegrees[FlightMode][ChanneltoSet - 1]--;
+            if (CentreDegrees[Bank][ChanneltoSet - 1] > 0) {
+                CentreDegrees[Bank][ChanneltoSet - 1]--;
             }
             DisplayCurveAndServoPos();
             return;
@@ -6688,15 +6773,15 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(midhiyup, TextIn)) // midhiy up?
         {
-            MidHiDegrees[FlightMode][ChanneltoSet - 1]++;
+            MidHiDegrees[Bank][ChanneltoSet - 1]++;
             DisplayCurveAndServoPos();
             return;
         }
 
         if (InStrng(midhiydown, TextIn)) // midhiy down?
         {
-            if (MidHiDegrees[FlightMode][ChanneltoSet - 1] > 0) {
-                MidHiDegrees[FlightMode][ChanneltoSet - 1]--;
+            if (MidHiDegrees[Bank][ChanneltoSet - 1] > 0) {
+                MidHiDegrees[Bank][ChanneltoSet - 1]--;
             }
             DisplayCurveAndServoPos();
             return;
@@ -6704,15 +6789,15 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(midlowyup, TextIn)) // midlowy up?
         {
-            MidLowDegrees[FlightMode][ChanneltoSet - 1]++;
+            MidLowDegrees[Bank][ChanneltoSet - 1]++;
             DisplayCurveAndServoPos();
             return;
         }
 
         if (InStrng(midlowydown, TextIn)) // midlowy down?
         {
-            if (MidLowDegrees[FlightMode][ChanneltoSet - 1] > 0) {
-                MidLowDegrees[FlightMode][ChanneltoSet - 1]--;
+            if (MidLowDegrees[Bank][ChanneltoSet - 1] > 0) {
+                MidLowDegrees[Bank][ChanneltoSet - 1]--;
             }
             DisplayCurveAndServoPos();
             return;
@@ -6720,15 +6805,15 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(yy1up, TextIn)) // yy1 up?
         {
-            MaxDegrees[FlightMode][ChanneltoSet - 1]++;
+            MaxDegrees[Bank][ChanneltoSet - 1]++;
             DisplayCurveAndServoPos();
             return;
         }
 
         if (InStrng(yy1down, TextIn)) // yy1 down?
         {
-            if (MaxDegrees[FlightMode][ChanneltoSet - 1] > 0) {
-                MaxDegrees[FlightMode][ChanneltoSet - 1]--;
+            if (MaxDegrees[Bank][ChanneltoSet - 1] > 0) {
+                MaxDegrees[Bank][ChanneltoSet - 1]--;
             }
             DisplayCurveAndServoPos();
             return;
@@ -6736,15 +6821,15 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(yy2up, TextIn)) // yy1 up?
         {
-            MinDegrees[FlightMode][ChanneltoSet - 1]++;
+            MinDegrees[Bank][ChanneltoSet - 1]++;
             DisplayCurveAndServoPos();
             return;
         }
 
         if (InStrng(yy2down, TextIn)) // yy1 down?
         {
-            if (MinDegrees[FlightMode][ChanneltoSet - 1] > 0) {
-                MinDegrees[FlightMode][ChanneltoSet - 1]--;
+            if (MinDegrees[Bank][ChanneltoSet - 1] > 0) {
+                MinDegrees[Bank][ChanneltoSet - 1]--;
             }
             DisplayCurveAndServoPos();
             return;
@@ -6752,13 +6837,13 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(Reset, TextIn)) // RESET?
         {
-            MinDegrees[FlightMode][ChanneltoSet - 1]         = 30;
-            MidLowDegrees[FlightMode][ChanneltoSet - 1]      = 60;
-            CentreDegrees[FlightMode][ChanneltoSet - 1]      = 90;
-            MidHiDegrees[FlightMode][ChanneltoSet - 1]       = 120;
-            MaxDegrees[FlightMode][ChanneltoSet - 1]         = 150;
-            Exponential[FlightMode][ChanneltoSet - 1]        = DEFAULT_EXPO;
-            InterpolationTypes[FlightMode][ChanneltoSet - 1] = EXPONENTIALCURVES; // expo = default
+            MinDegrees[Bank][ChanneltoSet - 1]         = 30;
+            MidLowDegrees[Bank][ChanneltoSet - 1]      = 60;
+            CentreDegrees[Bank][ChanneltoSet - 1]      = 90;
+            MidHiDegrees[Bank][ChanneltoSet - 1]       = 120;
+            MaxDegrees[Bank][ChanneltoSet - 1]         = 150;
+            Exponential[Bank][ChanneltoSet - 1]        = DEFAULT_EXPO;
+            InterpolationTypes[Bank][ChanneltoSet - 1] = EXPONENTIALCURVES; // expo = default
             DisplayCurveAndServoPos();
             return;
         }
@@ -6905,16 +6990,16 @@ void ReadFMSwitch(bool sw1, bool sw2, bool rev)
 {
     if ((sw1 == false) && (sw2 == false))
     {
-        FlightMode = 2;
+        Bank = 2;
     }
     else {
         if (rev) {
-            if (sw1) FlightMode = 1;
-            if (sw2) FlightMode = 3;
+            if (sw1) Bank = 1;
+            if (sw2) Bank = 3;
         }
         else {
-            if (sw1) FlightMode = 3;
-            if (sw2) FlightMode = 1;
+            if (sw1) Bank = 3;
+            if (sw2) Bank = 1;
         }
     }
 }
@@ -6938,7 +7023,7 @@ uint8_t ReadCHSwitch(bool sw1, bool sw2, bool rev)
 
 /************************************************************************************************************/
 
-uint8_t CheckSwitch(uint8_t swt)
+uint8_t CheckSwitch(uint8_t swt) 
 {
     uint8_t rtv = 90;
     if (swt == 1) rtv = ReadCHSwitch(Switch[7], Switch[6], SWITCH1Reversed);
@@ -6949,35 +7034,56 @@ uint8_t CheckSwitch(uint8_t swt)
 }
 /************************************************************************************************************/
 
-void GetFlightMode()
-{ //  and AUTO and other switchy things ...
+void GetBank()
+{ //  and AUTO and motor switch and other switchy things ...
 
-    if (FMSwitch == 4) ReadFMSwitch(Switch[2], Switch[3], SWITCH4Reversed);
+    MotorEnabled = !UseMotorKill;                            //  If not using motor switch then motor is always enabled.
+
+    if (AutoSwitch == 1 && Switch[7] == SWITCH1Reversed) MotorEnabled = true;
+    if (AutoSwitch == 2 && Switch[5] == SWITCH2Reversed) MotorEnabled = true;
+    if (AutoSwitch == 3 && Switch[0] == SWITCH3Reversed) MotorEnabled = true;
+    if (AutoSwitch == 4 && Switch[2] == SWITCH4Reversed) MotorEnabled = true; // heer !!!
+
+    if (FMSwitch == 4) ReadFMSwitch(Switch[2], Switch[3], SWITCH4Reversed); 
     if (FMSwitch == 3) ReadFMSwitch(Switch[0], Switch[1], SWITCH3Reversed);
     if (FMSwitch == 2) ReadFMSwitch(Switch[4], Switch[5], SWITCH2Reversed);
     if (FMSwitch == 1) ReadFMSwitch(Switch[6], Switch[7], SWITCH1Reversed);
-    if (AutoSwitch == 1 && Switch[6] == SWITCH1Reversed) FlightMode = 4; // Flight mode 4 (Auto) overrides modes 1,2,3.
-    if (AutoSwitch == 2 && Switch[4] == SWITCH2Reversed) FlightMode = 4;
-    if (AutoSwitch == 3 && Switch[1] == SWITCH3Reversed) FlightMode = 4;
-    if (AutoSwitch == 4 && Switch[3] == SWITCH4Reversed) FlightMode = 4;
-
+    
+    if (MotorEnabled){
+        if (AutoSwitch == 1 && Switch[6] == SWITCH1Reversed) Bank = 4; // Flight mode 4 (Auto) overrides modes 1,2,3.
+        if (AutoSwitch == 2 && Switch[4] == SWITCH2Reversed) Bank = 4;
+        if (AutoSwitch == 3 && Switch[1] == SWITCH3Reversed) Bank = 4;
+        if (AutoSwitch == 4 && Switch[3] == SWITCH4Reversed) Bank = 4;
+    }
+    if (Bank == 4 && !MotorWasEnabled) MotorEnabled = false;    // Moving to Bank4 from off doesn't start motor ...  yet
+    if (MotorEnabled != MotorWasEnabled){                       // Motor switch moved?
+        if (MotorEnabled) {
+            ShowMotor(1);
+            PlaySound(MOTORON);                                 // Tell the pilot motor is on!
+            TimerMillis = millis();
+        } else {
+            PlaySound(MOTOROFF);
+            ShowMotor(0);                                       // Tell the pilot motor is off
+            PausedSecs = Secs + (Mins * 60) + (Hours * 3600);   // Remember how long so far
+        }
+        LastSeconds = 0;  
+        CheckTimer();
+    }
     Channel9SwitchValue  = CheckSwitch(Channel9Switch);
     Channel10SwitchValue = CheckSwitch(Channel10Switch);
     Channel11SwitchValue = CheckSwitch(Channel11Switch);
     Channel12SwitchValue = CheckSwitch(Channel12Switch);
-
-    if (FlightMode != PreviousFlightMode) {
-        if (Connected) LogNewFlightMode();
-        if (AnnounceBanks) SoundFlightMode();
-        if (CurrentView == FRONTVIEW) ShowFlightMode();
-        if (PreviousFlightMode == 4) TimerMillis = millis();
-        if (FlightMode == 4) PausedSecs = Secs + (Mins * 60) + (Hours * 3600); // Remember how long so far
-        LastSeconds = 0;                                                       // to force redisplay of timer
-        CheckTimer();
+    if (Bank != PreviousBank) {
+        if (Connected) LogNewBank();
+        if (MotorEnabled == MotorWasEnabled){                   // When turning off motor, don't sound bank too.
+                if (AnnounceBanks) SoundBank();
+        }
+        if (CurrentView == FRONTVIEW) ShowBank();
         UpdateModelsNameEveryWhere();
         if (CurrentView == GRAPHVIEW) DisplayCurveAndServoPos();
     }
-    PreviousFlightMode = FlightMode;
+    MotorWasEnabled = MotorEnabled;                             // Remember motor state  
+    PreviousBank = Bank;                                        // Remember BANK
 }
 
 // *************************************************************************************************************
@@ -6986,9 +7092,9 @@ void IncTrim(uint8_t t)
 {
 
     bool Sounded = false;
-    Trims[FlightMode][t] += 1;
-    if (Trims[FlightMode][t] >= 120) {
-        Trims[FlightMode][t] = 120;
+    Trims[Bank][t] += 1;
+    if (Trims[Bank][t] >= 120) {
+        Trims[Bank][t] = 120;
         if (TrimClicks) {
 
             PlaySound(BEEPCOMPLETE);
@@ -6996,7 +7102,7 @@ void IncTrim(uint8_t t)
             TrimRepeatSpeed = DefaultTrimRepeatSpeed;
         }
     }
-    if (Trims[FlightMode][t] == 80) {
+    if (Trims[Bank][t] == 80) {
         TrimRepeatSpeed = DefaultTrimRepeatSpeed; // Restore default trim repeat speed at centre
         if (TrimClicks) {
             PlaySound(BEEPMIDDLE);
@@ -7012,16 +7118,16 @@ void DecTrim(uint8_t t)
 {
 
     bool Sounded = false;
-    Trims[FlightMode][t] -= 1;
-    if (Trims[FlightMode][t] <= 40) {
-        Trims[FlightMode][t] = 40;
+    Trims[Bank][t] -= 1;
+    if (Trims[Bank][t] <= 40) {
+        Trims[Bank][t] = 40;
         if (TrimClicks) {
             PlaySound(BEEPCOMPLETE);
             Sounded         = true;
             TrimRepeatSpeed = DefaultTrimRepeatSpeed;
         }
     }
-    if (Trims[FlightMode][t] == 80) {
+    if (Trims[Bank][t] == 80) {
         TrimRepeatSpeed = DefaultTrimRepeatSpeed; // Restore default trim repeat speed at centre
         if (TrimClicks) {
             PlaySound(BEEPMIDDLE);
@@ -7076,8 +7182,8 @@ void MoveaTrim(uint8_t i)
     if (CopyTrimsToAll) {
         for (i = 0; i < 4; ++i)
             for (int fm = 1; fm < 5; ++fm) {
-                Trims[fm][i]         = Trims[FlightMode][i];
-                TrimsReversed[fm][i] = TrimsReversed[FlightMode][i];
+                Trims[fm][i]         = Trims[Bank][i];
+                TrimsReversed[fm][i] = TrimsReversed[Bank][i];
             }
     }
 }
@@ -7224,8 +7330,7 @@ FASTRUN void ReadSwitches() // and indeed read digital trims if these are fitted
         PreviousTrim    = 254;                    // Previous trim must now match none
         TrimRepeatSpeed = DefaultTrimRepeatSpeed; // Restore default trim repeat speed
     }
-    GetFlightMode();
-    CheckHardwareTrims();
+  
 }
 /************************************************************************************************************/
 
@@ -7587,6 +7692,9 @@ void CheckPowerOffButton()
         }
     }
 }
+
+
+
 /************************************************************************************************************/
 // LOOP
 /************************************************************************************************************/
@@ -7615,15 +7723,22 @@ FASTRUN void loop()
     }
     ShowComms();                                                 // Screen Data
     ReadSwitches();                                              // Check switch positions
+    GetBank();
+    CheckHardwareTrims();
     CheckTimer();                                                // Screen Timer
     GetNewChannelValues();                                       // Load SendBuffer with new servo positions
+    
+    if (!MotorEnabled){
+        SendBuffer[MotorChannel] =  IntoHigherRes(MotorChannelZero);
+    }
+
     if (UseMacros) ExecuteMacro();                               // Modify it if macro is running
     if (!DoSbusSendOnly) {                                       // Skip these next lines when buddying as a slave
         if (!BoundFlag) BufferNewPipe();                         // if not yet bound, insert our pipe into sendbuffer
         if (BuddyMaster) GetSlaveChannelValues();                // If buddy master, get buddy data and maybe use it.
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24
     }
-    ShowServoPos();
+    ShowServoPos();                                              // Display servo positions
     if ((millis()) > 1500) { // Transmit nothing for first 1.5 seconds
         switch (CurrentMode) {
             case NORMAL: // 0

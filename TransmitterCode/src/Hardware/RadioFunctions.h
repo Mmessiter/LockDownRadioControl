@@ -54,9 +54,9 @@
 #define MAXMIXES           32                        // 32 mixes
 #define TICKSPERMINUTE     60000                     // millis() += 60000 per minute
 #define PROPOCHANNELS      8                         // Only 4 have knobs / 2 sticks (= 4 hall sensors)
-#define FLIGHTMODESWITCH   4                         // Default MODE switch
+#define BankSWITCH         4                         // Default MODE switch
 #define AUTOSWITCH         1                         // Default AUTO switch
-#define FLIGHTMODESUSED    4                         // Flight modes (AKA Banks)
+#define BankSUSED          4                         // Flight modes (AKA Banks)
 #define DEFAULTPIPEADDRESS 0xBABE1E5420LL            // Pipe address for startup - any value but MUST match RX
 #define LOWBATTERY         42                        // Default percent for warning (User definable)
 #define CE_PIN             9                         // for SPI to nRF24L01
@@ -114,7 +114,7 @@
 // **************************************************************************
 
 #define M_Enabled       0 // Offsets for Mixes array
-#define M_FlightMode    1
+#define M_Bank    1
 #define M_MasterChannel 2
 #define M_SlaveChannel  3
 #define M_Reversed      4
@@ -154,6 +154,7 @@
 #define OPTIONVIEW2     25
 #define OPTIONVIEW3     26
 #define BUDDYCHVIEW     27
+#define OPTIONVIEW4     28
 
 // **************************************************************************
 //                          Switches' GPIOs                                 *
@@ -225,7 +226,8 @@
 #define MMFOUND         28
 #define MMMATCHED       29
 #define MMNOTFOUND      30
-
+#define MOTORON         31
+#define MOTOROFF        32
 
 // **************************************************************************
 //               SDCARD MODEL MEMORY CONSTANTS                              *
@@ -426,7 +428,7 @@ FASTRUN void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uint
 FASTRUN void BufferNewPipe();
 void         ExecuteMacro();
 void         Look(int p);
-void         ShowFlightMode();
+void         ShowBank();
 void         UpdateModelsNameEveryWhere();
 void         DefineTrimsStart();
 void         ResetAllTrims();
@@ -434,6 +436,7 @@ void         CheckTrimValues();
 void         ClearSuccessRate();
 int          CheckRange(int v, int min, int max);
 void         MoveaTrim(uint8_t i);
+void         SetUKFrequencies();
 
 /*********************************************************************************************************************************/
 
