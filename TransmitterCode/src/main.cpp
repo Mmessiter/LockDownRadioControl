@@ -7024,18 +7024,18 @@ uint8_t CheckSwitch(uint8_t swt)
 void GetFlightMode()
 { //  and AUTO and other switchy things ...
 
-    MotorEnabled = !UseMotorKill;  //  Using kill switch at all is optional
+    MotorEnabled = !UseMotorKill;                            //  If not using motor switch then motor is always enabled.
 
     if (AutoSwitch == 1 && Switch[7] == SWITCH1Reversed) MotorEnabled = true;
     if (AutoSwitch == 2 && Switch[5] == SWITCH2Reversed) MotorEnabled = true;
     if (AutoSwitch == 3 && Switch[0] == SWITCH3Reversed) MotorEnabled = true;
     if (AutoSwitch == 4 && Switch[2] == SWITCH4Reversed) MotorEnabled = true; // heer !!!
 
-    if (MotorEnabled != MotorWasEnabled){
-        if (MotorEnabled) PlaySound(MOTORON);                 // tell the pilot about the motor!
-        else              PlaySound(MOTOROFF); 
-        Procrastinate(1000);
-        MotorWasEnabled = MotorEnabled;
+    if (MotorEnabled != MotorWasEnabled){                     // Motor switch moved?
+        if (MotorEnabled) PlaySound(MOTORON);                 // Tell the pilot motor is on!
+        else              PlaySound(MOTOROFF);                // Tell the pilot motor is off!
+        Procrastinate(1000);                                  // Allow time to speak  
+        MotorWasEnabled = MotorEnabled;                       // remember state  
     }
 
     if (FMSwitch == 4) ReadFMSwitch(Switch[2], Switch[3], SWITCH4Reversed); 
