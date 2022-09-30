@@ -69,6 +69,7 @@ var searchData=
   ['motorchannel_66',['MotorChannel',['../_transmitter_code_2src_2main_8cpp.html#a4099c0e4eb568a492011dc5f5aba39bb',1,'main.cpp']]],
   ['motorchannelzero_67',['MotorChannelZero',['../_transmitter_code_2src_2main_8cpp.html#a0a3b657eeecd6fcc580de851347009bb',1,'main.cpp']]],
   ['motorenabled_68',['MotorEnabled',['../_transmitter_code_2src_2main_8cpp.html#a82646b4c8a5eb0c1926d643b804e42ca',1,'main.cpp']]],
-  ['mpu6050_69',['mpu6050',['../_quadcopter_2src_2main_8cpp.html#a7e41a2178d7943922a90e58da80ffa9d',1,'main.cpp']]],
-  ['mysbus_70',['MySbus',['../_receiver_code_2src_2main_8cpp.html#a4c80b3036b9eb8438e1564693e122f68',1,'MySbus():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a4c80b3036b9eb8438e1564693e122f68',1,'MySbus():&#160;main.cpp']]]
+  ['motorwasenabled_69',['MotorWasEnabled',['../_transmitter_code_2src_2main_8cpp.html#a6d81569424db81b979ace459d8482d95',1,'main.cpp']]],
+  ['mpu6050_70',['mpu6050',['../_quadcopter_2src_2main_8cpp.html#a7e41a2178d7943922a90e58da80ffa9d',1,'main.cpp']]],
+  ['mysbus_71',['MySbus',['../_receiver_code_2src_2main_8cpp.html#a4c80b3036b9eb8438e1564693e122f68',1,'MySbus():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a4c80b3036b9eb8438e1564693e122f68',1,'MySbus():&#160;main.cpp']]]
 ];

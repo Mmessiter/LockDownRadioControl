@@ -6,5 +6,6 @@ var searchData=
   ['use_5fina219_3',['USE_INA219',['../_transmitter_code_2src_2main_8cpp.html#a87ae50e2ac4507568cbf98072f174a1b',1,'main.cpp']]],
   ['uselog_4',['UseLog',['../_radio_functions_8h.html#aa42482a0bb01edaf26f217dbc38643d2',1,'UseLog():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#aa42482a0bb01edaf26f217dbc38643d2',1,'UseLog():&#160;main.cpp']]],
   ['usemacros_5',['UseMacros',['../_radio_functions_8h.html#a42a6363bff83773c1b99caa06aebb1f5',1,'UseMacros():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a42a6363bff83773c1b99caa06aebb1f5',1,'UseMacros():&#160;main.cpp']]],
-  ['user_5fctrl_6',['USER_CTRL',['../class_m_p_u9250.html#ac7a02a1a77fe8bf5a477cc37820d2f27',1,'MPU9250']]]
+  ['usemotorkill_6',['UseMotorKill',['../_transmitter_code_2src_2main_8cpp.html#ad76445c097f9d33a6935be5c2489bd34',1,'main.cpp']]],
+  ['user_5fctrl_7',['USER_CTRL',['../class_m_p_u9250.html#ac7a02a1a77fe8bf5a477cc37820d2f27',1,'MPU9250']]]
 ];
