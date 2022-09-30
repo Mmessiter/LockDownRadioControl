@@ -471,10 +471,12 @@ union
 
 char b5Greyed[]     = "b5.pco=33840";
 char b12Greyed[]    = "b12.pco=33840";
-bool MotorEnabled   = false;
+bool MotorEnabled       = false;
+bool MotorWasEnabled    = false;
 
-uint8_t  MotorChannel        = 2; // Throttle from zero
-uint8_t  MotorChannelZero     = 0; 
+uint8_t  MotorChannel           = 2; // Throttle from zero
+uint8_t  MotorChannelZero       = 0; 
+bool     UseMotorKill           = true;
 
 
 // **********************************************************************************************************************************
@@ -2018,7 +2020,7 @@ FASTRUN void GetNewChannelValues()
                 if (t == 1) tt = 2;
                 if (t == 2) tt = 1;
             }
-            TrimAmount = (Trims[FlightMode][tt] - 80) * TrimFactor; // TRIMS on lower four channels (80 is mid point !! (range 40 - 80 - 120)) // heer
+            TrimAmount = (Trims[FlightMode][tt] - 80) * TrimFactor; // TRIMS on lower four channels (80 is mid point !! (range 40 - 80 - 120)) 
             if (TrimsReversed[FlightMode][tt]) TrimAmount = -TrimAmount;
             k += TrimAmount;
         
@@ -2511,8 +2513,13 @@ bool ReadOneModel(uint8_t Mnum)
         ModelsMacUnionSaved.Val8[i] = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
     }
-   
-  
+    UseMotorKill = SDRead8BITS(SDCardAddress);
+    ++SDCardAddress;
+     MotorChannelZero = SDRead8BITS(SDCardAddress);
+    ++SDCardAddress;
+     MotorChannel = SDRead8BITS(SDCardAddress);
+    ++SDCardAddress;
+
     // **************************************
 
     OneModelMemory = SDCardAddress - StartLocation;
@@ -3382,6 +3389,14 @@ void SaveOneModel(uint16_t mnum)
         ++SDCardAddress;
    }
 
+    SDUpdate8BITS(SDCardAddress,UseMotorKill);
+    ++SDCardAddress;
+    SDUpdate8BITS(SDCardAddress,MotorChannelZero);
+    ++SDCardAddress;
+    SDUpdate8BITS(SDCardAddress,MotorChannel);
+    ++SDCardAddress;
+
+
        // ********************** Add more
 
        OneModelMemory = SDCardAddress - StartLocation;
@@ -3850,6 +3865,10 @@ void SetDefaultValues()
     for (int i = 0; i < 4; ++i) {
         InputTrim[i] = i;
     }
+    UseMotorKill = false;
+    MotorChannelZero = 0;
+    MotorChannel = 2;
+    
     ReversedChannelBITS = 0; //  No channel reversed
     SendValue(Progress, 95);
     Procrastinate(10);
@@ -5161,6 +5180,48 @@ void OptionView3Start()
     SendValue(n1,  LEDBrightness);
 }
 
+
+
+/******************************************************************************************************************************/
+
+void OptionView4Start() // heer
+{
+    char OptionV4Start[]  = "page OptionView4";
+    char UseKill[]        = "c0";
+    char Mchannel[]       = "n1";
+    char Mvalue[]         = "n0";
+
+    SendCommand(OptionV4Start);
+    Procrastinate(100);
+    SendValue(Mvalue, MotorChannelZero);
+    SendValue(Mchannel, MotorChannel + 1);
+    SendValue(UseKill, UseMotorKill);
+    CurrentView = OPTIONVIEW4;
+
+}
+
+/******************************************************************************************************************************/
+
+void OptionView4End()
+{
+ 
+    char page_SetupView[] = "page SetupView";
+
+    char UseKill[]        = "c0";
+    char Mchannel[]       = "n1";
+    char Mvalue[]         = "n0";
+
+    MotorChannelZero    = GetValue(Mvalue);
+    UseMotorKill        = GetValue(UseKill);
+    MotorChannel        = GetValue(Mchannel) - 1;
+
+
+    SaveTransmitterParameters();
+    CurrentView = MAINSETUPVIEW;
+    SendCommand(page_SetupView);
+    UpdateModelsNameEveryWhere();
+}
+
 /******************************************************************************************************************************/
 
 void OptionView3End()
@@ -5171,7 +5232,7 @@ void OptionView3End()
     char n3[]             = "n3";
     char n1[]             = "n1";
     char page_SetupView[] = "page SetupView";
-    char lpm[]            = "c0"; // Low power mode
+    char lpm[]            = "c0"; // Auto model selection
 
     TxVoltageCorrection     = GetValue(TxVCorrextion);
     RxVoltageCorrection     = GetValue(RxVCorrextion);
@@ -5262,7 +5323,7 @@ void ThrottleDownTrim(){
      MoveaTrim(tt);
 }
 // ******************************** Global Array of numbered function pointers - OK up to 128 functions ... **********************************
-#define LASTFUNCTION 38 // one more than final one
+#define LASTFUNCTION 40 // one more than final one
 
 void (*NumberedFunctions[LASTFUNCTION])() {
     Blank,                // 0 (spare)
@@ -5302,7 +5363,12 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     ElevatorUpTrim,       // 34  
     ElevatorDownTrim,     // 35
     ThrottleDownTrim,     // 36  
-    ThrottleUpTrim        // 37  
+    ThrottleUpTrim,       // 37  
+    OptionView4Start,     // 38  
+    OptionView4End        // 39  
+    
+    
+
 
 
 
@@ -6958,11 +7024,22 @@ uint8_t CheckSwitch(uint8_t swt)
 void GetFlightMode()
 { //  and AUTO and other switchy things ...
 
-    MotorEnabled = false;
+    MotorEnabled = !UseMotorKill;  //  Using kill switch at all is optional
+    
     if (AutoSwitch == 1 && Switch[7] == SWITCH1Reversed) MotorEnabled = true;
     if (AutoSwitch == 2 && Switch[5] == SWITCH2Reversed) MotorEnabled = true;
     if (AutoSwitch == 3 && Switch[0] == SWITCH3Reversed) MotorEnabled = true;
     if (AutoSwitch == 4 && Switch[2] == SWITCH4Reversed) MotorEnabled = true; // heer !!!
+
+    if (MotorEnabled != MotorWasEnabled){
+        if (MotorEnabled) {
+            PlaySound(MOTORON);                 // tell the pilot about the motor!
+        } else {
+            PlaySound(MOTOROFF);
+        }
+        Procrastinate(1000);
+        MotorWasEnabled = MotorEnabled;
+    }
 
     if (FMSwitch == 4) ReadFMSwitch(Switch[2], Switch[3], SWITCH4Reversed); 
     if (FMSwitch == 3) ReadFMSwitch(Switch[0], Switch[1], SWITCH3Reversed);

@@ -154,6 +154,7 @@
 #define OPTIONVIEW2     25
 #define OPTIONVIEW3     26
 #define BUDDYCHVIEW     27
+#define OPTIONVIEW4     28
 
 // **************************************************************************
 //                          Switches' GPIOs                                 *
@@ -225,7 +226,8 @@
 #define MMFOUND         28
 #define MMMATCHED       29
 #define MMNOTFOUND      30
-
+#define MOTORON         31
+#define MOTOROFF        32
 
 // **************************************************************************
 //               SDCARD MODEL MEMORY CONSTANTS                              *
