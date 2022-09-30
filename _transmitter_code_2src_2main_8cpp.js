@@ -229,6 +229,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "ShowFileNumber", "_transmitter_code_2src_2main_8cpp.html#aa337d6e5cf496fbca7cdc61818f8239a", null ],
     [ "ShowFileProgress", "_transmitter_code_2src_2main_8cpp.html#abdbaa9b790382ce7f04feb681df5144a", null ],
     [ "ShowLogFile", "_transmitter_code_2src_2main_8cpp.html#af5df157d4ece6b40a9ce7a60faeca569", null ],
+    [ "ShowMotor", "_transmitter_code_2src_2main_8cpp.html#a1bb4b21ba32a4693094048639c3c3334", null ],
     [ "ShowServoPos", "_transmitter_code_2src_2main_8cpp.html#ad770ee51a34d8c5026e65136884c16bf", null ],
     [ "SortDirectory", "_transmitter_code_2src_2main_8cpp.html#a113f8bee0942b732f19881466ef0f42d", null ],
     [ "SoundBank", "_transmitter_code_2src_2main_8cpp.html#a030ff9af8fc6b06c659a3c56ab7d2ff2", null ],
