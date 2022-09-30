@@ -4660,10 +4660,22 @@ void SoundBank()
     }
 }
 /*********************************************************************************************************************************/
-void ShowBank()
-{
+void ShowBank(){
     char FMPress[4][12] = {"click fm1,1", "click fm2,1", "click fm3,1", "click fm4,1"};
     SendCommand(FMPress[Bank - 1]);
+}
+
+/*********************************************************************************************************************************/
+void ShowMotor(bool on)
+{       
+        char bt0[]      = "bt0";
+        char bt01[]     = "click bt0,1";
+        char OnMsg[]    = "Motor ON";
+        char OffMsg[]   = "Motor OFF";
+
+        if (on)   SendText(bt0, OnMsg);
+        if (!on)  SendText(bt0, OffMsg);
+        SendCommand(bt01);
 }
 /*********************************************************************************************************************************/
 
@@ -7046,10 +7058,12 @@ void GetBank()
     if (Bank == 4 && !MotorWasEnabled) MotorEnabled = false;    // Moving to Bank4 from off doesn't start motor ...  yet
     if (MotorEnabled != MotorWasEnabled){                       // Motor switch moved?
         if (MotorEnabled) {
-            PlaySound(MOTORON);                                 // Tell the pilot motor is on!
+            ShowMotor(1);
+            PlaySound(MOTORON); // Tell the pilot motor is on!
             TimerMillis = millis();
         } else {
-            PlaySound(MOTOROFF);                                // Tell the pilot motor is off
+            PlaySound(MOTOROFF);
+            ShowMotor(0);                                        // Tell the pilot motor is off
             PausedSecs = Secs + (Mins * 60) + (Hours * 3600);   // Remember how long so far
         }
         LastSeconds = 0;  
