@@ -4144,14 +4144,15 @@ FASTRUN void DisplayCurve()
     MidHiDegrees[Bank][ChanneltoSet - 1]  = p;
     p                                           = constrain(MaxDegrees[Bank][ChanneltoSet - 1], 0, 180);
     MaxDegrees[Bank][ChanneltoSet - 1]    = p;
+   
     GetDotPositions();
     SendValue(Gn1, DegsToPercent(MinDegrees[Bank][ChanneltoSet - 1])); // put numbers at top row
     SendValue(Gn2, DegsToPercent(MidLowDegrees[Bank][ChanneltoSet - 1]));
     SendValue(Gn3, DegsToPercent(CentreDegrees[Bank][ChanneltoSet - 1]));
     SendValue(Gn4, DegsToPercent(MidHiDegrees[Bank][ChanneltoSet - 1]));
     SendValue(Gn5, DegsToPercent(MaxDegrees[Bank][ChanneltoSet - 1]));
+    Procrastinate(1); // heer
     DrawBox(BoxLeft, BoxTop, BoxRight - BoxLeft, BoxBottom - BoxTop, HighlightColour);
-
     xDot1 = xPoints[0];
     yDot1 = ((BoxBottom - BoxTop) / 2) + 20; // ?
     xDot2 = BoxRight - BOXOFFSET;
@@ -4206,7 +4207,6 @@ FASTRUN void DisplayCurve()
 
     if (InterpolationTypes[Bank][ChanneltoSet - 1] == EXPONENTIALCURVES) { // EXPO  ************************************************************************************************
 #define APPROXIMATION 7       // This is the approximation of the screen curve
-
         SendCommand(b3off);
         SendCommand(b4off);
         SendCommand(b7off);
@@ -5269,8 +5269,7 @@ void BuddyChViewStart()
     for (int i = 0; i < 16; ++i) {
         if (BuddyControlled & 1 << i) {
             SendValue(fs[i], 1);
-        }
-        else {
+        } else {
             SendValue(fs[i], 0);
         }
     }
