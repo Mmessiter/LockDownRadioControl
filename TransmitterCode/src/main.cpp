@@ -7025,18 +7025,15 @@ void GetFlightMode()
 { //  and AUTO and other switchy things ...
 
     MotorEnabled = !UseMotorKill;  //  Using kill switch at all is optional
-    
+
     if (AutoSwitch == 1 && Switch[7] == SWITCH1Reversed) MotorEnabled = true;
     if (AutoSwitch == 2 && Switch[5] == SWITCH2Reversed) MotorEnabled = true;
     if (AutoSwitch == 3 && Switch[0] == SWITCH3Reversed) MotorEnabled = true;
     if (AutoSwitch == 4 && Switch[2] == SWITCH4Reversed) MotorEnabled = true; // heer !!!
 
     if (MotorEnabled != MotorWasEnabled){
-        if (MotorEnabled) {
-            PlaySound(MOTORON);                 // tell the pilot about the motor!
-        } else {
-            PlaySound(MOTOROFF);
-        }
+        if (MotorEnabled) PlaySound(MOTORON);                 // tell the pilot about the motor!
+        else              PlaySound(MOTOROFF); 
         Procrastinate(1000);
         MotorWasEnabled = MotorEnabled;
     }
