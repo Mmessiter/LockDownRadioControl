@@ -469,8 +469,13 @@ union
       uint8_t  Val8[8];        // Model's Mac address that had been saved on disk
      } ModelsMacUnionSaved;
 
-char b5Greyed[]  = "b5.pco=33840";
-char b12Greyed[] = "b12.pco=33840";
+char b5Greyed[]     = "b5.pco=33840";
+char b12Greyed[]    = "b12.pco=33840";
+bool MotorEnabled   = false;
+
+uint8_t  MotorChannel        = 2; // Throttle from zero
+uint8_t  MotorChannelZero     = 0; 
+
 
 // **********************************************************************************************************************************
 
@@ -2008,7 +2013,7 @@ FASTRUN void GetNewChannelValues()
         }
         k += (SubTrims[n] - 127) * (TrimFactor / 2); // ADD SUBTRIM (...to output channel, not mapped input channel) (Range 0 - 127 - 254)
         if (l < 4) {
-            uint16_t tt = t; // heer
+            uint16_t tt = t; 
             if (SticksMode == 2) {
                 if (t == 1) tt = 2;
                 if (t == 2) tt = 1;
@@ -2091,7 +2096,7 @@ void UpdateTrimView()
             }
             SendValue(TrimViewChannels[p], (Trims[FlightMode][p]));
             SendValue(TrimViewNumbers[p], (Trims[FlightMode][p] - 80));
-            SendValue(TrimViewReversed[p], (TrimsReversed[FlightMode][p])); // heer fixed one!
+            SendValue(TrimViewReversed[p], (TrimsReversed[FlightMode][p]));
         }
     }
     if (CurrentView == TRIM_VIEW) {
@@ -6939,7 +6944,7 @@ uint8_t ReadCHSwitch(bool sw1, bool sw2, bool rev)
 
 /************************************************************************************************************/
 
-uint8_t CheckSwitch(uint8_t swt)
+uint8_t CheckSwitch(uint8_t swt) 
 {
     uint8_t rtv = 90;
     if (swt == 1) rtv = ReadCHSwitch(Switch[7], Switch[6], SWITCH1Reversed);
@@ -6953,15 +6958,24 @@ uint8_t CheckSwitch(uint8_t swt)
 void GetFlightMode()
 { //  and AUTO and other switchy things ...
 
-    if (FMSwitch == 4) ReadFMSwitch(Switch[2], Switch[3], SWITCH4Reversed);
+    MotorEnabled = false;
+    if (AutoSwitch == 1 && Switch[7] == SWITCH1Reversed) MotorEnabled = true;
+    if (AutoSwitch == 2 && Switch[5] == SWITCH2Reversed) MotorEnabled = true;
+    if (AutoSwitch == 3 && Switch[0] == SWITCH3Reversed) MotorEnabled = true;
+    if (AutoSwitch == 4 && Switch[2] == SWITCH4Reversed) MotorEnabled = true; // heer !!!
+
+    if (FMSwitch == 4) ReadFMSwitch(Switch[2], Switch[3], SWITCH4Reversed); 
     if (FMSwitch == 3) ReadFMSwitch(Switch[0], Switch[1], SWITCH3Reversed);
     if (FMSwitch == 2) ReadFMSwitch(Switch[4], Switch[5], SWITCH2Reversed);
     if (FMSwitch == 1) ReadFMSwitch(Switch[6], Switch[7], SWITCH1Reversed);
-    if (AutoSwitch == 1 && Switch[6] == SWITCH1Reversed) FlightMode = 4; // Flight mode 4 (Auto) overrides modes 1,2,3.
-    if (AutoSwitch == 2 && Switch[4] == SWITCH2Reversed) FlightMode = 4;
-    if (AutoSwitch == 3 && Switch[1] == SWITCH3Reversed) FlightMode = 4;
-    if (AutoSwitch == 4 && Switch[3] == SWITCH4Reversed) FlightMode = 4;
-
+    
+    if (MotorEnabled){
+        if (AutoSwitch == 1 && Switch[6] == SWITCH1Reversed) FlightMode = 4; // Flight mode 4 (Auto) overrides modes 1,2,3.
+        if (AutoSwitch == 2 && Switch[4] == SWITCH2Reversed) FlightMode = 4;
+        if (AutoSwitch == 3 && Switch[1] == SWITCH3Reversed) FlightMode = 4;
+        if (AutoSwitch == 4 && Switch[3] == SWITCH4Reversed) FlightMode = 4;
+    }
+    
     Channel9SwitchValue  = CheckSwitch(Channel9Switch);
     Channel10SwitchValue = CheckSwitch(Channel10Switch);
     Channel11SwitchValue = CheckSwitch(Channel11Switch);
@@ -7618,6 +7632,11 @@ FASTRUN void loop()
     ReadSwitches();                                              // Check switch positions
     CheckTimer();                                                // Screen Timer
     GetNewChannelValues();                                       // Load SendBuffer with new servo positions
+    
+    if (!MotorEnabled){
+        SendBuffer[MotorChannel] =  IntoHigherRes(MotorChannelZero);
+    }
+
     if (UseMacros) ExecuteMacro();                               // Modify it if macro is running
     if (!DoSbusSendOnly) {                                       // Skip these next lines when buddying as a slave
         if (!BoundFlag) BufferNewPipe();                         // if not yet bound, insert our pipe into sendbuffer
