@@ -1,4 +1,4 @@
-Version 1.9.2 (RX: 1.9.2) 
+Version 1.9.3 (RX: 1.9.2) 
 
 How to use the transmitter or receiver firmware updater:
 
@@ -14,6 +14,14 @@ Note: If the receiver has two transceivers, use RX2.hex otherwise use RX1.hex.
 
 To update the Nextion screen, download their free editor (Windows only), load the .HMI file into it, and then upload it to the screen using an FTDI adapter over USB.
 
+
+
+
+
+
+New in version: 1.9.3:
+----------------------
+The Bank 4 (Auto) switch now allows Kill Motor in its third position. While motor is off, it's now possible to edit the curves for all modes even while connected without starting the motor. Also there was a bug affecting trims when in stick mode 2. This is here fixed.
 
 
 New in version: 1.9.2:
