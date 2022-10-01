@@ -478,6 +478,7 @@ uint8_t MotorChannel           = 2; // Throttle from zero
 uint8_t MotorChannelZero       = 0; 
 bool    UseMotorKill           = true;
 bool    SafetyON = false;
+bool    SafetyWASON = false;
  
 // **********************************************************************************************************************************
 
@@ -2694,23 +2695,31 @@ void Force_ReDisplay()
 }
 /*********************************************************************************************************************************/
 
-void ButtonRed(char* but)
+void ButtonRed(char* but) // heer
 {
     char lbut[60];
     char red[] = ".pco=RED";
+    char red2[] = ".pco2=RED";
     strcpy(lbut, but);
     strcat(lbut, red);
+    SendCommand(lbut);
+    strcpy(lbut, but);
+    strcat(lbut, red2);
     SendCommand(lbut);
 }
 
 /*********************************************************************************************************************************/
 
-void ButtonWhite(char* but)
+void ButtonGreen(char* but)
 {
     char lbut[60];
-    char wight[] = ".pco=WHITE";
+    char green[] = ".pco=GREEN";
+    char green2[] = ".pco2=GREEN";
     strcpy(lbut, but);
-    strcat(lbut, wight);
+    strcat(lbut, green);
+    SendCommand(lbut);
+    strcpy(lbut, but);
+    strcat(lbut, green2);
     SendCommand(lbut);
 }
 
@@ -4679,13 +4688,10 @@ void ShowBank(){
 void ShowMotor(int on)
 {       
         char bt0[]      = "bt0";
-        char bt01[]     = "click bt0,1";
         char OnMsg[]    = "Motor ON";
         char OffMsg[]   = "Motor OFF";
-
         if (on == 1)   SendText(bt0, OnMsg);
         if (on == 0)   SendText(bt0, OffMsg);
-        SendCommand(bt01);
 }
 /*********************************************************************************************************************************/
 
@@ -7057,11 +7063,13 @@ uint8_t CheckSwitch(uint8_t swt)
     if (swt == 4) rtv = ReadCHSwitch(Switch[2], Switch[3], SWITCH4Reversed);
     return rtv;
 }
+
 /************************************************************************************************************/
 
 void GetBank()
 { //  and AUTO and motor switch and other switchy things ...
-
+    char bt0[]      = "bt0";
+    
     SafetyON     = false;
     MotorEnabled = !UseMotorKill; //  If not using motor switch then motor is always enabled.
 
@@ -7084,7 +7092,12 @@ void GetBank()
     if (AutoSwitch == 2 && Switch[4] == SWITCH2Reversed) Bank = 4;
     if (AutoSwitch == 3 && Switch[1] == SWITCH3Reversed) Bank = 4;
     if (AutoSwitch == 4 && Switch[3] == SWITCH4Reversed) Bank = 4;
- 
+
+    if (SafetyWASON != SafetyON){
+        if (SafetyON) ButtonRed(bt0); else ButtonGreen(bt0);
+        SafetyWASON = SafetyON;
+    }
+
     if (Bank == 4 && !MotorWasEnabled) MotorEnabled = false;        // Moving to Bank4 from off doesn't start motor ...  yet
    
     if (SafetyON) MotorEnabled = false;
