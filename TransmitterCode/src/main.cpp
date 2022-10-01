@@ -478,7 +478,6 @@ uint8_t MotorChannel           = 2; // Throttle from zero
 uint8_t MotorChannelZero       = 0; 
 bool    UseMotorKill           = true;
 bool    SafetyON = false;
-bool    SafetyWASON = false; // Heer!! TODO
  
 // **********************************************************************************************************************************
 
@@ -4682,12 +4681,10 @@ void ShowMotor(int on)
         char bt0[]      = "bt0";
         char bt01[]     = "click bt0,1";
         char OnMsg[]    = "Motor ON";
-        char OnMsg1[]   = "(Motor ON)";
         char OffMsg[]   = "Motor OFF";
 
         if (on == 1)   SendText(bt0, OnMsg);
         if (on == 0)   SendText(bt0, OffMsg);
-        if (on == 2)  SendText(bt0, OnMsg1);
         SendCommand(bt01);
 }
 /*********************************************************************************************************************************/
@@ -7090,13 +7087,13 @@ void GetBank()
         if (AutoSwitch == 4 && Switch[3] == SWITCH4Reversed) Bank = 4;
     }
     if (Bank == 4 && !MotorWasEnabled) MotorEnabled = false;    // Moving to Bank4 from off doesn't start motor ...  yet
-    if (MotorEnabled != MotorWasEnabled){                       // Motor switch moved?
+    if (SafetyON) MotorEnabled = false;
+    if ((MotorEnabled != MotorWasEnabled))  {                       // Motor switch moved?
         if (MotorEnabled) {       
-            if (SafetyON)  ShowMotor(2);
-            if (!SafetyON) ShowMotor(1);
-            PlaySound(MOTORON);                                 // Tell the pilot motor is on!
+            ShowMotor(1);
+            PlaySound(MOTORON);     // Tell the pilot motor is on!
             TimerMillis = millis();
-        } else {
+        } else {            
             PlaySound(MOTOROFF);
             ShowMotor(0);                                       // Tell the pilot motor is off
             PausedSecs = Secs + (Mins * 60) + (Hours * 3600);   // Remember how long so far
@@ -7117,9 +7114,8 @@ void GetBank()
         UpdateModelsNameEveryWhere();
         if (CurrentView == GRAPHVIEW) DisplayCurveAndServoPos();
     }
-    MotorWasEnabled = MotorEnabled;                             // Remember motor state  
-    PreviousBank = Bank;                                        // Remember BANK
-    if (SafetyON) MotorEnabled = false;
+    MotorWasEnabled = MotorEnabled;                               // Remember motor state
+    PreviousBank = Bank;                                          // Remember BANK
 }
 
 // *************************************************************************************************************
