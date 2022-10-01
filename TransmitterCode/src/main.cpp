@@ -7080,23 +7080,23 @@ void GetBank()
     if (FMSwitch == 2) ReadFMSwitch(Switch[4], Switch[5], SWITCH2Reversed);
     if (FMSwitch == 1) ReadFMSwitch(Switch[6], Switch[7], SWITCH1Reversed);
     
-    if (MotorEnabled){
-        if (AutoSwitch == 1 && Switch[6] == SWITCH1Reversed) Bank = 4; // Flight mode 4 (Auto) overrides modes 1,2,3.
-        if (AutoSwitch == 2 && Switch[4] == SWITCH2Reversed) Bank = 4;
-        if (AutoSwitch == 3 && Switch[1] == SWITCH3Reversed) Bank = 4;
-        if (AutoSwitch == 4 && Switch[3] == SWITCH4Reversed) Bank = 4;
-    }
-    if (Bank == 4 && !MotorWasEnabled) MotorEnabled = false;    // Moving to Bank4 from off doesn't start motor ...  yet
+    if (AutoSwitch == 1 && Switch[6] == SWITCH1Reversed) Bank = 4; // Flight mode 4 (Auto) overrides modes 1,2,3.
+    if (AutoSwitch == 2 && Switch[4] == SWITCH2Reversed) Bank = 4;
+    if (AutoSwitch == 3 && Switch[1] == SWITCH3Reversed) Bank = 4;
+    if (AutoSwitch == 4 && Switch[3] == SWITCH4Reversed) Bank = 4;
+ 
+    if (Bank == 4 && !MotorWasEnabled) MotorEnabled = false;        // Moving to Bank4 from off doesn't start motor ...  yet
+   
     if (SafetyON) MotorEnabled = false;
-    if ((MotorEnabled != MotorWasEnabled))  {                       // Motor switch moved?
+    if ((MotorEnabled != MotorWasEnabled))  {                       // MotorEnabled changed ?
         if (MotorEnabled) {       
             ShowMotor(1);
-            PlaySound(MOTORON);     // Tell the pilot motor is on!
+            PlaySound(MOTORON);                                     // Tell the pilot motor is on!
             TimerMillis = millis();
         } else {            
             PlaySound(MOTOROFF);
-            ShowMotor(0);                                       // Tell the pilot motor is off
-            PausedSecs = Secs + (Mins * 60) + (Hours * 3600);   // Remember how long so far
+            ShowMotor(0);                                           // Tell the pilot motor is off
+            PausedSecs = Secs + (Mins * 60) + (Hours * 3600);       // Remember how long so far
         }
         LastSeconds = 0;  
         CheckTimer();
