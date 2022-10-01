@@ -23,6 +23,8 @@ New in version: 1.9.3:
 ----------------------
 The Bank 4 (Auto) switch now allows Kill Motor in its third position. While motor is off, it's now possible to edit the curves for all modes even while connected without starting the motor. Also there was a bug affecting trims when in stick mode 2. This is here fixed.
 
+A "Safety" switch possibility is also added. When safety is on, the motor cannot be started.
+
 
 New in version: 1.9.2:
 ----------------------
