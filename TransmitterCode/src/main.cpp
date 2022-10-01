@@ -6125,7 +6125,7 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(SwitchesView1, TextIn) > 0) { //  read switch values from screen (could be 1-4) // heer (Define a switch)
+        if (InStrng(SwitchesView1, TextIn) > 0) { //  read switch values from screen (could be 1-4) 
             
             if (GetValue(OneSwitchView_r1)) {
                 FMSwitch = SwitchEditNumber;
