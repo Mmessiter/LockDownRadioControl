@@ -485,7 +485,6 @@ var _transmitter_code_2src_2main_8cpp =
     [ "RXVoltsDetected", "_transmitter_code_2src_2main_8cpp.html#abad630d30092274e24516848d8096925", null ],
     [ "SafetyON", "_transmitter_code_2src_2main_8cpp.html#a4ac99fd4ac80526c01d97806c13621d6", null ],
     [ "SafetySwitch", "_transmitter_code_2src_2main_8cpp.html#a1df5d01cd1ef206b8f485173c1fa3549", null ],
-    [ "SafetyWASON", "_transmitter_code_2src_2main_8cpp.html#afc0cacc8b682cc867342d80c1c93686b", null ],
     [ "SaveBank", "_transmitter_code_2src_2main_8cpp.html#a0a8bee2144501f0dea55dc8a8243ad55", null ],
     [ "SavedCurrentView", "_transmitter_code_2src_2main_8cpp.html#a9f535eadbf4eb2d6975105c406c1206f", null ],
     [ "SavedLineX", "_transmitter_code_2src_2main_8cpp.html#ab6e3ad31a969d0f0341e67b7af6f0a01", null ],
