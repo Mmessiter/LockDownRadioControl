@@ -12,7 +12,7 @@ var searchData=
   ['buffernewpipe_9',['BufferNewPipe',['../_radio_functions_8cpp.html#a9a3e35cbf8abeae1ebdb4af8dff3571a',1,'BufferNewPipe():&#160;RadioFunctions.cpp'],['../_radio_functions_8h.html#a9a3e35cbf8abeae1ebdb4af8dff3571a',1,'BufferNewPipe():&#160;RadioFunctions.cpp']]],
   ['build_10',['build',['../class_adafruit___g_p_s.html#aa98fd519cac1b6f0dd93b7b74e619616',1,'Adafruit_GPS']]],
   ['builddirectory_11',['BuildDirectory',['../_transmitter_code_2src_2main_8cpp.html#affc6c0de18db71aa5ad8b4d241339731',1,'main.cpp']]],
-  ['buttonred_12',['ButtonRed',['../_transmitter_code_2src_2main_8cpp.html#a5bf7a964da96991a9ca3a1eb3d2d9d09',1,'main.cpp']]],
-  ['buttonwaspressed_13',['ButtonWasPressed',['../_radio_functions_8h.html#a8e7ccbf842764fd85cc578be263f7202',1,'ButtonWasPressed():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a804fdbdd5eab4c596bbe8a23eecbe4d5',1,'ButtonWasPressed():&#160;main.cpp']]],
-  ['buttonwhite_14',['ButtonWhite',['../_transmitter_code_2src_2main_8cpp.html#a1864beba7616666b0f27dac30975673e',1,'main.cpp']]]
+  ['buttongreen_12',['ButtonGreen',['../_transmitter_code_2src_2main_8cpp.html#a7a41e827a33713cb5e1bbaeb0812b2c3',1,'main.cpp']]],
+  ['buttonred_13',['ButtonRed',['../_transmitter_code_2src_2main_8cpp.html#a5bf7a964da96991a9ca3a1eb3d2d9d09',1,'main.cpp']]],
+  ['buttonwaspressed_14',['ButtonWasPressed',['../_radio_functions_8h.html#a8e7ccbf842764fd85cc578be263f7202',1,'ButtonWasPressed():&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a804fdbdd5eab4c596bbe8a23eecbe4d5',1,'ButtonWasPressed():&#160;main.cpp']]]
 ];
