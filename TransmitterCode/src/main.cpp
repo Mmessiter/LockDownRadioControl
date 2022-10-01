@@ -4206,7 +4206,7 @@ FASTRUN void DisplayCurve()
     }
 
     if (InterpolationTypes[Bank][ChanneltoSet - 1] == EXPONENTIALCURVES) { // EXPO  ************************************************************************************************
-#define APPROXIMATION 7       // This is the approximation of the screen curve
+#define APPROXIMATION 5       // This is the approximation of the screen curve
         SendCommand(b3off);
         SendCommand(b4off);
         SendCommand(b7off);
@@ -6602,6 +6602,7 @@ FASTRUN void ButtonWasPressed()
             ClearText();
             SendCommand(page_GraphView); // Set to GraphView
             CurrentView = GRAPHVIEW;
+            Procrastinate(50);
             DisplayCurveAndServoPos();
             updateInterpolationTypes();
             UpdateModelsNameEveryWhere();
