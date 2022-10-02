@@ -2698,8 +2698,8 @@ void Force_ReDisplay()
 void ButtonRed(char* but) // heer
 {
     char lbut[60];
-    char red[] = ".pco=RED";
-    char red2[] = ".pco2=RED";
+    char red[] = ".bco=RED";
+    char red2[] = ".pco=WHITE";
     strcpy(lbut, but);
     strcat(lbut, red);
     SendCommand(lbut);
@@ -2713,8 +2713,8 @@ void ButtonRed(char* but) // heer
 void ButtonGreen(char* but)
 {
     char lbut[60];
-    char green[] = ".pco=GREEN";
-    char green2[] = ".pco2=GREEN";
+    char green[] = ".bco=GREEN";
+    char green2[] = ".pco=BLACK";
     strcpy(lbut, but);
     strcat(lbut, green);
     SendCommand(lbut);
