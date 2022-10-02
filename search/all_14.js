@@ -16,7 +16,7 @@ var searchData=
   ['s7_5fcommand_5fscaled_13',['s7_command_scaled',['../_quadcopter_2src_2main_8cpp.html#a7a6cda066f857a8292f2e0408b74c49b',1,'main.cpp']]],
   ['safetyon_14',['SafetyON',['../_transmitter_code_2src_2main_8cpp.html#a4ac99fd4ac80526c01d97806c13621d6',1,'main.cpp']]],
   ['safetyswitch_15',['SafetySwitch',['../_transmitter_code_2src_2main_8cpp.html#a1df5d01cd1ef206b8f485173c1fa3549',1,'main.cpp']]],
-  ['safetywason_16',['SafetyWASON',['../_transmitter_code_2src_2main_8cpp.html#afc0cacc8b682cc867342d80c1c93686b',1,'main.cpp']]],
+  ['safetywason_16',['SafetyWasOn',['../_transmitter_code_2src_2main_8cpp.html#a6fc6c046045a888ac1b688035a465571',1,'main.cpp']]],
   ['sampling_5fnone_17',['SAMPLING_NONE',['../class_adafruit___b_m_p280.html#a70f70d9f9c6c4c70eca412cd9909ac7ea61c2eef4038fdc5ddcf63bbb1b6956cd',1,'Adafruit_BMP280']]],
   ['sampling_5fx1_18',['SAMPLING_X1',['../class_adafruit___b_m_p280.html#a70f70d9f9c6c4c70eca412cd9909ac7ea64ca1027177a49c2f905f8ff9f06e790',1,'Adafruit_BMP280']]],
   ['sampling_5fx16_19',['SAMPLING_X16',['../class_adafruit___b_m_p280.html#a70f70d9f9c6c4c70eca412cd9909ac7eaa3797dd5a223b8d835686c571fd58b19',1,'Adafruit_BMP280']]],

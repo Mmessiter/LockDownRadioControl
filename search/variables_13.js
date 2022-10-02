@@ -16,7 +16,7 @@ var searchData=
   ['s7_5fcommand_5fscaled_13',['s7_command_scaled',['../_quadcopter_2src_2main_8cpp.html#a7a6cda066f857a8292f2e0408b74c49b',1,'main.cpp']]],
   ['safetyon_14',['SafetyON',['../_transmitter_code_2src_2main_8cpp.html#a4ac99fd4ac80526c01d97806c13621d6',1,'main.cpp']]],
   ['safetyswitch_15',['SafetySwitch',['../_transmitter_code_2src_2main_8cpp.html#a1df5d01cd1ef206b8f485173c1fa3549',1,'main.cpp']]],
-  ['safetywason_16',['SafetyWASON',['../_transmitter_code_2src_2main_8cpp.html#afc0cacc8b682cc867342d80c1c93686b',1,'main.cpp']]],
+  ['safetywason_16',['SafetyWasOn',['../_transmitter_code_2src_2main_8cpp.html#a6fc6c046045a888ac1b688035a465571',1,'main.cpp']]],
   ['satellites_17',['satellites',['../class_tiny_g_p_s_plus.html#a5fb47066d1d03f4bb5853529053aab48',1,'TinyGPSPlus::satellites()'],['../class_adafruit___g_p_s.html#a31e4d48939f3b9e5f62933afc117d04d',1,'Adafruit_GPS::satellites()']]],
   ['satellitesgps_18',['SatellitesGPS',['../radio_8h.html#a7dc81a3982ee72ef15b460b4bbf32818',1,'SatellitesGPS():&#160;main.cpp'],['../_receiver_code_2src_2main_8cpp.html#a7dc81a3982ee72ef15b460b4bbf32818',1,'SatellitesGPS():&#160;main.cpp']]],
   ['savebank_19',['SaveBank',['../_transmitter_code_2src_2main_8cpp.html#a0a8bee2144501f0dea55dc8a8243ad55',1,'main.cpp']]],
