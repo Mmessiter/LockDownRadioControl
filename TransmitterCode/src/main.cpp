@@ -6639,13 +6639,13 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(Setup, TextIn) > 0) { // Which channel to setup ... Goes to GraphView
+        if (InStrng(Setup, TextIn) > 0) {   // Which channel to setup ... Goes to GraphView
             ChanneltoSet = GetChannel();
-            SendCommand(page_GraphView); // Set to GraphView
+            SendCommand(page_GraphView);    // Set to GraphView
             CurrentView = GRAPHVIEW;
-           // DisplayCurveAndServoPos();
+           // DisplayCurveAndServoPos();    // This call proved less depedable
             Procrastinate(100);
-            DisplayCurve();
+            DisplayCurve();                 // This call proved more depedable
             updateInterpolationTypes();
             UpdateModelsNameEveryWhere();
             SendValue(CopyToAllBanks, 0);
