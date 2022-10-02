@@ -2689,34 +2689,42 @@ void Force_ReDisplay()
 {
     for (int i = 0; i < CHANNELSUSED; ++i) ShownBuffer[i] = 242; // to force a re-show of servo positions
 }
-/*********************************************************************************************************************************/
 
-void ButtonRed(char* but) 
+/*********************************************************************************************************************************/
+void SendColour(char* but, char* attr, int Colour)
 {
-    char lbut[60];
-    char red[] = ".bco=RED";
-    char red2[] = ".pco=WHITE";
-    strcpy(lbut, but);
-    strcat(lbut, red);
-    SendCommand(lbut);
-    strcpy(lbut, but);
-    strcat(lbut, red2);
-    SendCommand(lbut);
+  char lbut[60];
+  char nb[10] = " ";
+  strcpy(lbut, but);
+  strcat(lbut, attr);
+  strcat(lbut,Str(nb,Colour,0));
+  SendCommand(lbut);
+}
+/*********************************************************************************************************************************/
+void ShowSafetyIsOn(char* but) 
+{
+    char bco[]  = ".bco=";     
+    char bco2[] = ".bco2=";
+    char pco[]  = ".pco=";
+    char pco2[] = ".pco2=";
+    SendColour(but, bco,SpecialColour);
+    SendColour(but, bco2,SpecialColour);
+    SendColour(but, pco,HighlightColour);
+    SendColour(but, pco2,HighlightColour);
 }
 
 /*********************************************************************************************************************************/
 
-void ButtonGreen(char* but)
+void ShowSafetyIsOff(char* but)
 {
-    char lbut[60];
-    char green[] = ".bco=GREEN";
-    char green2[] = ".pco=BLACK";
-    strcpy(lbut, but);
-    strcat(lbut, green);
-    SendCommand(lbut);
-    strcpy(lbut, but);
-    strcat(lbut, green2);
-    SendCommand(lbut);
+    char bco[]  = ".bco=";
+    char bco2[] = ".bco2=";
+    char pco[]  = ".pco=";
+    char pco2[] = ".pco2=";
+    SendColour(but, bco,BackGroundColour);
+    SendColour(but, bco2,BackGroundColour);
+    SendColour(but, pco,HighlightColour);
+    SendColour(but, pco2,HighlightColour);
 }
 
 /*********************************************************************************************************************************/
@@ -7092,7 +7100,7 @@ void GetBank()
     if (AutoSwitch == 4 && Switch[3] == SWITCH4Reversed) Bank = 4;
 
     if (SafetyWasOn != SafetyON){
-        if (SafetyON) ButtonRed(bt0); else ButtonGreen(bt0);
+        if (SafetyON) ShowSafetyIsOn(bt0); else ShowSafetyIsOff(bt0);
         SafetyWasOn = SafetyON;
     }
 
@@ -7738,8 +7746,6 @@ void CheckPowerOffButton()
         }
     }
 }
-
-
 
 /************************************************************************************************************/
 // LOOP
