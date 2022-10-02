@@ -6643,9 +6643,9 @@ FASTRUN void ButtonWasPressed()
             ChanneltoSet = GetChannel();
             SendCommand(page_GraphView);    // Set to GraphView
             CurrentView = GRAPHVIEW;
-           // DisplayCurveAndServoPos();    // This call proved less depedable
+           // DisplayCurveAndServoPos();    // This call proved less dependable :<(
             Procrastinate(100);
-            DisplayCurve();                 // This call proved more depedable
+            DisplayCurve();                 // This call proved more dependable :<)
             updateInterpolationTypes();
             UpdateModelsNameEveryWhere();
             SendValue(CopyToAllBanks, 0);
