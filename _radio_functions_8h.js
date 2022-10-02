@@ -273,7 +273,6 @@ var _radio_functions_8h =
     [ "NextChannelNumber", "_radio_functions_8h.html#a372b457a109ccee3253b219df1a47412", null ],
     [ "NEXTIONSleepTime", "_radio_functions_8h.html#aa98c3d7858384fded2f32ce45a271605", null ],
     [ "NoCarrier", "_radio_functions_8h.html#a2a951a35df4a07c010710b02a17f92b7", null ],
-    [ "NoSleeping", "_radio_functions_8h.html#aa336d2e589396e246b779e7ed2b097c0", null ],
     [ "PacketNumber", "_radio_functions_8h.html#a09cb370d93005b5a43e932a3d6093ea2", null ],
     [ "PacketsHistoryBuffer", "_radio_functions_8h.html#a5dd81bcedc2ca746fd59e46fb57891ea", null ],
     [ "PacketsHistoryIndex", "_radio_functions_8h.html#ada48f675f3257d6c92af2ffa2eda0352", null ],
