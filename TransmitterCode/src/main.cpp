@@ -1371,6 +1371,7 @@ FASTRUN void ShowServoPos()
     if (millis() - ShowServoTimer <= 100) return;
     ShowServoTimer = millis();
 
+  
     char     Ch_Lables[16][5] = {"Ch1", "Ch2", "Ch3", "Ch4", "Ch5", "Ch6", "Ch7", "Ch8", "Ch9", "Ch10", "Ch11", "Ch12", "Ch13", "Ch14", "Ch15", "Ch16"};
     char     ChannelInput[]   = "Input";
     char     ChannelOutput[]  = "Output";
@@ -1400,7 +1401,7 @@ FASTRUN void ShowServoPos()
     if (CurrentView == GRAPHVIEW) {
 #define fixitx        35
 #define LeastDistance 1 // if the change is very small, don't re-display anything - to reduce flashing. :=)!!
-
+  
         l = (InPutStick[ChanneltoSet - 1]);
         if (ChanneltoSet <= 8) {
             l1 = analogRead(AnalogueInput[l]);
@@ -1416,6 +1417,7 @@ FASTRUN void ShowServoPos()
                 l1 = map(l1, ChannelCentre[l], ChannelMax[l], ChannelCentre[l], ChannelMin[l]);
             }
         }
+       
         if (l1 <= ChannelCentre[l]) {
             SendValue(ChannelInput, map(l1, ChannelCentre[l], ChannelMin[l], 0, -100));
             StickPosition = map(l1, ChannelMin[l], ChannelCentre[l], BoxLeft - 0, BoxLeft + (((BoxRight - fixitx) - BoxLeft) / 2));
@@ -1429,6 +1431,7 @@ FASTRUN void ShowServoPos()
             DrawLine(StickPosition - 1, BoxTop + 3, StickPosition - 1, (BoxBottom - 3) - BoxTop, HighlightColour); // draws line for stick position
             SavedLineX = StickPosition;
         }
+    
         if (Connected) {
             SendValue(ChannelOutput, map(SendBuffer[ChanneltoSet - 1], MINMICROS, MAXMICROS, -100, 100));
         }
@@ -4953,8 +4956,8 @@ void EndBuddyView()
 }
 /*********************************************************************************************************************************/
 FASTRUN void DisplayCurveAndServoPos(){
-    SavedLineX = 0;
-    ShowServoPos(); // this calls displaycurve!!!
+    SavedLineX = 52735;             // just to be massvely different
+    ShowServoPos();                 // this calls displaycurve!!!
     ClearText();
 }
 /******************************** FUNCTIONS FOR ARRAY OF POINTERS *************************************************************/
@@ -5856,7 +5859,7 @@ FASTRUN void ButtonWasPressed()
             ClearText();
             return;
         }
-        if (InStrng(GoFrontView, TextIn) > 0) { // GOTO frontview // heer
+        if (InStrng(GoFrontView, TextIn) > 0) { // GOTO frontview 
             SendCommand(page_FrontView);
             UpdateModelsNameEveryWhere();
             SafetyWasOn ^= 1;                   // this forces a re-display of motor state
@@ -6643,9 +6646,8 @@ FASTRUN void ButtonWasPressed()
             ChanneltoSet = GetChannel();
             SendCommand(page_GraphView);    // Set to GraphView
             CurrentView = GRAPHVIEW;
-           // DisplayCurveAndServoPos();    // This call proved less dependable :<(
-            Procrastinate(100);
-            DisplayCurve();                 // This call proved more dependable :<)
+            Procrastinate(50);
+            DisplayCurveAndServoPos(); 
             updateInterpolationTypes();
             UpdateModelsNameEveryWhere();
             SendValue(CopyToAllBanks, 0);
