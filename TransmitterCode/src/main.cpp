@@ -1400,16 +1400,16 @@ FASTRUN void ShowServoPos()
     }
     if (CurrentView == GRAPHVIEW) {
 #define fixitx        35
-#define LeastDistance 2 // if the change is very small, don't re-display anything - to reduce flashing. :=)!!
+#define LeastDistance 1 // if the change is very small, don't re-display anything - to reduce flashing. :=)!!
   
         l = (InPutStick[ChanneltoSet - 1]);
         if (ChanneltoSet <= 8) {
             l1 = analogRead(AnalogueInput[l]);
         }
         else {
-            l1 = GetStickInput(l);
+            l1 = GetStickInput(l); // heer?
         }
-        if (ReversedChannelBITS & 1 << (ChanneltoSet - 1)) { // reversed??
+        if (ReversedChannelBITS & 1 << (ChanneltoSet - 1)) { // reversed?
             if (l1 <= ChannelCentre[l]) {
                 l1 = map(l1, ChannelMin[l], ChannelCentre[l], ChannelMax[l], ChannelCentre[l]);
             }
@@ -1427,12 +1427,12 @@ FASTRUN void ShowServoPos()
             StickPosition = map(l1, ChannelCentre[l], ChannelMax[l], BoxLeft + (((BoxRight - fixitx) - BoxLeft) / 2), BoxRight - fixitx);
         }
         if (abs(StickPosition - SavedLineX) > LeastDistance) {
-            DisplayCurve(); // needed to clear last line
+            DisplayCurve();                                 // needed to clear last line
             DrawLine(StickPosition - 1, BoxTop + 3, StickPosition - 1, (BoxBottom - 3) - BoxTop, HighlightColour); // draws line for stick position
             SavedLineX = StickPosition;
         }
     
-        if (Connected) {
+        if (Connected) { // heer
             SendValue(ChannelOutput, map(SendBuffer[ChanneltoSet - 1], MINMICROS, MAXMICROS, -100, 100));
         }
         else {
@@ -7080,7 +7080,7 @@ void GetBank()
     if (AutoSwitch == 1 && Switch[7] == SWITCH1Reversed) MotorEnabled = true;
     if (AutoSwitch == 2 && Switch[5] == SWITCH2Reversed) MotorEnabled = true;
     if (AutoSwitch == 3 && Switch[0] == SWITCH3Reversed) MotorEnabled = true;
-    if (AutoSwitch == 4 && Switch[2] == SWITCH4Reversed) MotorEnabled = true; // heer !!!
+    if (AutoSwitch == 4 && Switch[2] == SWITCH4Reversed) MotorEnabled = true; 
 
     if (SafetySwitch == 1 && Switch[7] == SWITCH1Reversed) SafetyON = true;
     if (SafetySwitch == 2 && Switch[5] == SWITCH2Reversed) SafetyON = true;
@@ -7111,7 +7111,7 @@ void GetBank()
     if ((MotorEnabled != MotorWasEnabled) && (UseMotorKill))  {                         // MotorEnabled changed ?
         if (MotorEnabled) {       
             ShowMotor(1);
-            if (AnnounceBanks) PlaySound(MOTORON);                                      // Tell the pilot motor is on! // heer
+            if (AnnounceBanks) PlaySound(MOTORON);                                      // Tell the pilot motor is on! 
             TimerMillis = millis();
         } else {            
             if (AnnounceBanks) PlaySound(MOTOROFF);
