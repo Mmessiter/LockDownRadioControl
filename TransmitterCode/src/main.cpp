@@ -1432,7 +1432,7 @@ FASTRUN void ShowServoPos()
             SavedLineX = StickPosition;
         }
     
-        if (Connected) { // heer
+        if (Connected) { // heer?
             SendValue(ChannelOutput, map(SendBuffer[ChanneltoSet - 1], MINMICROS, MAXMICROS, -100, 100));
         }
         else {
