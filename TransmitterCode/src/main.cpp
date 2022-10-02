@@ -7768,11 +7768,7 @@ FASTRUN void loop()
     CheckHardwareTrims();
     CheckTimer();                                                // Screen Timer
     GetNewChannelValues();                                       // Load SendBuffer with new servo positions
-    
-    if (!MotorEnabled){
-        SendBuffer[MotorChannel] =  IntoHigherRes(MotorChannelZero);
-    }
-
+    if (!MotorEnabled) SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero);
     if (UseMacros) ExecuteMacro();                               // Modify it if macro is running
     if (!DoSbusSendOnly) {                                       // Skip these next lines when buddying as a slave
         if (!BoundFlag) BufferNewPipe();                         // if not yet bound, insert our pipe into sendbuffer
@@ -7780,22 +7776,20 @@ FASTRUN void loop()
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24
     }
     ShowServoPos();                                              // Display servo positions
-    if ((millis()) > 1500) { // Transmit nothing for first 1.5 seconds
-        switch (CurrentMode) {
-            case NORMAL: // 0
-                SendData();
-                break;
-            case CALIBRATELIMITS: // 1
-                CalibrateSticks();
-                break;
-            case CENTRESTICKS: // 2
-                ChannelCentres();
-                break;
-            case SCANWAVEBAND: // 3
-                ScanAllChannels();
-                break;
-            default:
-                break; // CurrentMode >= 4 for no action at all.
+    switch (CurrentMode) {
+        case NORMAL:            // 0
+            SendData();
+            break;
+        case CALIBRATELIMITS:   // 1
+            CalibrateSticks();
+            break;
+        case CENTRESTICKS:      // 2
+            ChannelCentres();
+            break;
+        case SCANWAVEBAND:      // 3
+            ScanAllChannels();
+            break;
+        default:
+            break; // CurrentMode >= 4 for no action at all.
         }
-    }
 } // end loop()
