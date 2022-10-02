@@ -2691,42 +2691,38 @@ void Force_ReDisplay()
 }
 
 /*********************************************************************************************************************************/
-void SendColour(char* but, char* attr, int Colour)
+void SendColour(char* but, int Colour)
 {
   char lbut[60];
   char nb[10] = " ";
   strcpy(lbut, but);
-  strcat(lbut, attr);
   strcat(lbut,Str(nb,Colour,0));
   SendCommand(lbut);
 }
 /*********************************************************************************************************************************/
-void ShowSafetyIsOn(char* but) 
+void ShowSafetyIsOn() 
 {
-    char bco[]  = ".bco=";     
-    char bco2[] = ".bco2=";
-    char pco[]  = ".pco=";
-    char pco2[] = ".pco2=";
-    SendColour(but, bco,SpecialColour);
-    SendColour(but, bco2,SpecialColour);
-    SendColour(but, pco,HighlightColour);
-    SendColour(but, pco2,HighlightColour);
+    char bco[]  = "bt0.bco=";     
+    char bco2[] = "bt0.bco2=";
+    char pco[]  = "bt0.pco=";
+    char pco2[] = "bt0.pco2=";
+    SendColour(bco,SpecialColour);
+    SendColour(bco2,SpecialColour);
+    SendColour(pco,HighlightColour);
+    SendColour(pco2,HighlightColour);
 }
-
 /*********************************************************************************************************************************/
-
-void ShowSafetyIsOff(char* but)
+void ShowSafetyIsOff()
 {
-    char bco[]  = ".bco=";
-    char bco2[] = ".bco2=";
-    char pco[]  = ".pco=";
-    char pco2[] = ".pco2=";
-    SendColour(but, bco,BackGroundColour);
-    SendColour(but, bco2,BackGroundColour);
-    SendColour(but, pco,HighlightColour);
-    SendColour(but, pco2,HighlightColour);
+    char bco[]  = "bt0.bco=";
+    char bco2[] = "bt0.bco2=";
+    char pco[]  = "bt0.pco=";
+    char pco2[] = "bt0.pco2=";
+    SendColour(bco,BackGroundColour);
+    SendColour(bco2,BackGroundColour);
+    SendColour(pco,HighlightColour);
+    SendColour(pco2,HighlightColour);
 }
-
 /*********************************************************************************************************************************/
 
 void WatchDogCallBack()
@@ -4173,7 +4169,9 @@ FASTRUN void DisplayCurve()
     SendValue(Gn3, DegsToPercent(CentreDegrees[Bank][ChanneltoSet - 1]));
     SendValue(Gn4, DegsToPercent(MidHiDegrees[Bank][ChanneltoSet - 1]));
     SendValue(Gn5, DegsToPercent(MaxDegrees[Bank][ChanneltoSet - 1]));
-    Procrastinate(1); 
+    
+    Procrastinate(2);
+
     DrawBox(BoxLeft, BoxTop, BoxRight - BoxLeft, BoxBottom - BoxTop, HighlightColour);
     xDot1 = xPoints[0];
     yDot1 = ((BoxBottom - BoxTop) / 2) + 20; // ?
@@ -6643,11 +6641,11 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(Setup, TextIn) > 0) { // Which channel to setup ... Goes to GraphView
             ChanneltoSet = GetChannel();
-            ClearText();
             SendCommand(page_GraphView); // Set to GraphView
             CurrentView = GRAPHVIEW;
-            Procrastinate(50);
-            DisplayCurveAndServoPos();
+           // DisplayCurveAndServoPos();
+            Procrastinate(100);
+            DisplayCurve();
             updateInterpolationTypes();
             UpdateModelsNameEveryWhere();
             SendValue(CopyToAllBanks, 0);
@@ -7074,7 +7072,7 @@ uint8_t CheckSwitch(uint8_t swt)
 
 void GetBank()
 { //  and AUTO and motor switch and other switchy things ...
-    char bt0[]      = "bt0";
+  
     
     SafetyON     = false;
     MotorEnabled = !UseMotorKill; //  If not using motor switch then motor is always enabled.
@@ -7100,7 +7098,7 @@ void GetBank()
     if (AutoSwitch == 4 && Switch[3] == SWITCH4Reversed) Bank = 4;
 
     if (SafetyWasOn != SafetyON){
-        if (SafetyON) ShowSafetyIsOn(bt0); else ShowSafetyIsOff(bt0);
+        if (SafetyON) ShowSafetyIsOn(); else ShowSafetyIsOff();
         SafetyWasOn = SafetyON;
     }
 
