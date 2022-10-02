@@ -56,7 +56,7 @@
 #define PROPOCHANNELS      8                         // Only 4 have knobs / 2 sticks (= 4 hall sensors)
 #define BankSWITCH         4                         // Default MODE switch
 #define AUTOSWITCH         1                         // Default AUTO switch
-#define BankSUSED          4                         // Flight modes (AKA Banks)
+#define BANKSUSED          4                         // Flight modes (AKA Banks)
 #define DEFAULTPIPEADDRESS 0xBABE1E5420LL            // Pipe address for startup - any value but MUST match RX
 #define LOWBATTERY         42                        // Default percent for warning (User definable)
 #define CE_PIN             9                         // for SPI to nRF24L01

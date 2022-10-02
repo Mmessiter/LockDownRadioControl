@@ -107,10 +107,10 @@ SBUS          MySbus(SBUSPORT);
 uint16_t      SbusChannels[CHANNELSUSED + 2]; // a few spare
 uint32_t      SBUSTimer = 0;
 uint8_t       Mixes[MAXMIXES + 1][CHANNELSUSED + 1];                // Channel mixes' 2D array store
-int           Trims[BankSUSED + 1][CHANNELSUSED + 1];         // Trims to store
-uint8_t       TrimsReversed[BankSUSED + 1][CHANNELSUSED + 1]; // Trim directions to store
-uint8_t       Exponential[BankSUSED + 1][CHANNELSUSED + 1];   // Exponential
-uint8_t       InterpolationTypes[BankSUSED + 1][CHANNELSUSED + 1];
+int           Trims[BANKSUSED + 1][CHANNELSUSED + 1];         // Trims to store
+uint8_t       TrimsReversed[BANKSUSED + 1][CHANNELSUSED + 1]; // Trim directions to store
+uint8_t       Exponential[BANKSUSED + 1][CHANNELSUSED + 1];   // Exponential
+uint8_t       InterpolationTypes[BANKSUSED + 1][CHANNELSUSED + 1];
 
 uint8_t  LastMixNumber    = 1;
 uint8_t  MixNumber        = 0;
@@ -474,7 +474,7 @@ uint8_t MotorChannel            = 2; // Throttle from zero
 uint8_t MotorChannelZero        = 0; 
 bool    UseMotorKill            = true;
 bool    SafetyON                = false;
-bool    SafetyWASON             = false;
+bool    SafetyWasOn             = false;
  
 // **********************************************************************************************************************************
 
@@ -2270,7 +2270,7 @@ FLASHMEM void InitMaxMin()
 
 FLASHMEM void CentreTrims()
 {
-    for (int j = 0; j <= BankSUSED; ++j) {
+    for (int j = 0; j <= BANKSUSED; ++j) {
         for (int i = 0; i < CHANNELSUSED; ++i) {
             Trims[j][i] = 80;
         }
@@ -2394,13 +2394,13 @@ bool ReadOneModel(uint8_t Mnum)
         }
     }
 
-    for (j = 0; j < BankSUSED + 1; ++j) {
+    for (j = 0; j < BANKSUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             Trims[j][i] = SDRead8BITS(SDCardAddress);
             ++SDCardAddress;
         }
     }
-    for (j = 0; j < BankSUSED + 1; ++j) {
+    for (j = 0; j < BANKSUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             TrimsReversed[j][i] = SDRead8BITS(SDCardAddress);
             ++SDCardAddress;
@@ -2483,7 +2483,7 @@ bool ReadOneModel(uint8_t Mnum)
         }
     }
 
-    for (j = 0; j < BankSUSED + 1; ++j) {
+    for (j = 0; j < BANKSUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             Exponential[j][i] = SDRead8BITS(SDCardAddress);
             if (Exponential[j][i] >= 201 || Exponential[j][i] == 0) {
@@ -2492,7 +2492,7 @@ bool ReadOneModel(uint8_t Mnum)
             ++SDCardAddress;
         }
     }
-    for (j = 0; j < BankSUSED + 1; ++j) {
+    for (j = 0; j < BANKSUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             InterpolationTypes[j][i] = SDRead8BITS(SDCardAddress);
             if (InterpolationTypes[j][i] < 0 || InterpolationTypes[j][i] > 2) {
@@ -3295,13 +3295,13 @@ void SaveOneModel(uint16_t mnum)
             ++SDCardAddress;
         }
     }
-    for (j = 0; j < BankSUSED + 1; ++j) {
+    for (j = 0; j < BANKSUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             SDUpdate8BITS(SDCardAddress, Trims[j][i]);
             ++SDCardAddress;
         }
     }
-    for (j = 0; j < BankSUSED + 1; ++j) {
+    for (j = 0; j < BANKSUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             SDUpdate8BITS(SDCardAddress, TrimsReversed[j][i]);
             ++SDCardAddress;
@@ -3371,14 +3371,14 @@ void SaveOneModel(uint16_t mnum)
             ++SDCardAddress;
         }
     }
-    for (j = 0; j < BankSUSED + 1; ++j) {
+    for (j = 0; j < BANKSUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             SDUpdate8BITS(SDCardAddress, Exponential[j][i]);
             ++SDCardAddress;
         }
     }
 
-    for (j = 0; j < BankSUSED + 1; ++j) {
+    for (j = 0; j < BANKSUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             SDUpdate8BITS(SDCardAddress, InterpolationTypes[j][i]);
             ++SDCardAddress;
@@ -3824,7 +3824,7 @@ void SetDefaultValues()
     SendValue(Progress, 25);
     Procrastinate(10);
 
-    for (j = 0; j < BankSUSED + 1; ++j) { // must have fudged this somewhere.... 5?!
+    for (j = 0; j < BANKSUSED + 1; ++j) { // must have fudged this somewhere.... 5?!
         for (i = 0; i < CHANNELSUSED; ++i) {
             Trims[j][i]         = 80; // MIDPOINT is 80 !
             TrimsReversed[j][i] = 0;
@@ -3859,12 +3859,12 @@ void SetDefaultValues()
             ChannelNames[i][j] = DefaultChannelNames[i][j];
         }
     }
-    for (j = 0; j < BankSUSED + 1; ++j) {
+    for (j = 0; j < BANKSUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             Exponential[j][i] = DEFAULT_EXPO; // 0% (50) expo = default
         }
     }
-    for (j = 0; j < BankSUSED + 1; ++j) {
+    for (j = 0; j < BANKSUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             InterpolationTypes[j][i] = EXPONENTIALCURVES; // Expo is default
         }
@@ -5853,8 +5853,8 @@ FASTRUN void ButtonWasPressed()
         if (InStrng(GoFrontView, TextIn) > 0) { // GOTO frontview // heer
             SendCommand(page_FrontView);
             UpdateModelsNameEveryWhere();
-            SafetyWASON ^= 1;
-            MotorWasEnabled ^= 1;
+            SafetyWasOn ^= 1;                   // this forces a re-display of motor state
+            MotorWasEnabled ^= 1;               // this forces a re-display of motor state
             ShowBank();
             LastTimeRead = 0;
             Reconnected  = false; // this is to make '** Connected! **' redisplay (in ShowComms())
@@ -7091,9 +7091,9 @@ void GetBank()
     if (AutoSwitch == 3 && Switch[1] == SWITCH3Reversed) Bank = 4;
     if (AutoSwitch == 4 && Switch[3] == SWITCH4Reversed) Bank = 4;
 
-    if (SafetyWASON != SafetyON){
+    if (SafetyWasOn != SafetyON){
         if (SafetyON) ButtonRed(bt0); else ButtonGreen(bt0);
-        SafetyWASON = SafetyON;
+        SafetyWasOn = SafetyON;
     }
 
     if (Bank == 4 && !MotorWasEnabled) MotorEnabled = false;                            // Moving to Bank4 from motor off doesn't start motor ...  yet
