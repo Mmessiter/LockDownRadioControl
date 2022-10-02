@@ -1400,7 +1400,7 @@ FASTRUN void ShowServoPos()
     }
     if (CurrentView == GRAPHVIEW) {
 #define fixitx        35
-#define LeastDistance 1 // if the change is very small, don't re-display anything - to reduce flashing. :=)!!
+#define LeastDistance 2 // if the change is very small, don't re-display anything - to reduce flashing. :=)!!
   
         l = (InPutStick[ChanneltoSet - 1]);
         if (ChanneltoSet <= 8) {
@@ -4173,8 +4173,6 @@ FASTRUN void DisplayCurve()
     SendValue(Gn4, DegsToPercent(MidHiDegrees[Bank][ChanneltoSet - 1]));
     SendValue(Gn5, DegsToPercent(MaxDegrees[Bank][ChanneltoSet - 1]));
     
-    Procrastinate(2);
-
     DrawBox(BoxLeft, BoxTop, BoxRight - BoxLeft, BoxBottom - BoxTop, HighlightColour);
     xDot1 = xPoints[0];
     yDot1 = ((BoxBottom - BoxTop) / 2) + 20; // ?
@@ -4229,7 +4227,7 @@ FASTRUN void DisplayCurve()
     }
 
     if (InterpolationTypes[Bank][ChanneltoSet - 1] == EXPONENTIALCURVES) { // EXPO  ************************************************************************************************
-#define APPROXIMATION 5       // This is the approximation of the screen curve
+#define APPROXIMATION 7       // This is the approximation of the screen curve
         SendCommand(b3off);
         SendCommand(b4off);
         SendCommand(b7off);
