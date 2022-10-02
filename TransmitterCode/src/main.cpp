@@ -43,6 +43,7 @@
  * - Screen colours definable
  * - Data screen gives all possible telemetry
  * - Log files implemented - and help file system with unlimited file length
+ * - Safety switch implemtented (Stops accidental motor starting)
  *
  *
  * @section txPinout Teensy 4.1 Pins
@@ -182,7 +183,6 @@ uint16_t ChannelMidLow[CHANNELSUSED + 1]; //    output of pots at MidLow
 uint16_t ChannelMin[CHANNELSUSED + 1];    //    output of pots at min
 uint16_t ChanneltoSet     = 0;
 bool     Connected        = false;
-uint8_t  ShowCommsCounter = 0;
 uint16_t BuddyControlled  = 0; // Flags
 double   PointsCount      = 5; // This for displaying curves only
 double   xPoints[5];
@@ -240,7 +240,6 @@ bool      TrimDefined[4]      = {true, true, true, true};
 const int chipSelect          = BUILTIN_SDCARD;
 char      DateTime[]          = "DateTime";
 char      ScreenViewTimeout[] = "Sto"; // needed for display info
-char      NoSleeping[]        = "thsp=0";
 char      ModelName[30];
 uint16_t  ScreenTimeout               = 120; // Screen has two minute timeout by default
 int       LastLinePosition            = 0;
@@ -324,14 +323,13 @@ uint32_t ShowServoTimer       = 0;
 bool     LastFourOnly         = false;
 uint8_t  InPutStick[17]       = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}; //
 uint8_t  InputTrim[4]         = {0, 1, 2, 3};                                           // User defined trim inputs
-
-uint8_t  ExportedFileCounter = 0;
+uint8_t  ExportedFileCounter  = 0;
 char     TheFilesList[100][14];
 uint16_t FileNumberInView     = 0;
 bool     FileError            = false;
 uint32_t RangeTestStart       = 0;
 uint16_t RangeTestGoodPackets = 0;
-uint8_t  SaveBank       = 0;
+uint8_t  SaveBank             = 0;
 bool     FailSafeChannel[CHANNELSUSED];
 bool     SaveFailSafeNow = false;
 uint32_t FailSafeTimer;
@@ -458,27 +456,25 @@ uint32_t  PreviousPowerOffTimer   = 0;
 bool      ModelIdentified         = false;
 bool      ModelMatched            = false;
 bool      AutoModelSelect         = true;
-union
-{
-    uint32_t Val32[2] = {0, 0};
-    uint8_t  Val8[8]; // Model's Mac address just obtained from model
-     } ModelsMacUnion;
+union {
+        uint32_t Val32[2] = {0, 0};
+        uint8_t  Val8[8]; // Model's Mac address just obtained from model
+     }  ModelsMacUnion;
 
-union
-     {
-      uint32_t Val32[2] = {0,0};
-      uint8_t  Val8[8];        // Model's Mac address that had been saved on disk
-     } ModelsMacUnionSaved;
+union {
+        uint32_t Val32[2] = {0,0};
+        uint8_t  Val8[8];        // Model's Mac address that had been saved on disk
+     }  ModelsMacUnionSaved;
 
-char b5Greyed[]     = "b5.pco=33840";
-char b12Greyed[]    = "b12.pco=33840";
-bool MotorEnabled       = false;
-bool MotorWasEnabled    = false;
-uint8_t MotorChannel           = 2; // Throttle from zero
-uint8_t MotorChannelZero       = 0; 
-bool    UseMotorKill           = true;
-bool    SafetyON = false;
-bool    SafetyWASON = false;
+char b5Greyed[]                 = "b5.pco=33840";
+char b12Greyed[]                = "b12.pco=33840";
+bool MotorEnabled               = false;
+bool MotorWasEnabled            = false;
+uint8_t MotorChannel            = 2; // Throttle from zero
+uint8_t MotorChannelZero        = 0; 
+bool    UseMotorKill            = true;
+bool    SafetyON                = false;
+bool    SafetyWASON             = false;
  
 // **********************************************************************************************************************************
 

@@ -306,7 +306,6 @@ extern RF24           Radio1;
 extern uint8_t        CurrentMode;
 extern uint8_t        NoCarrier[];
 extern uint8_t        AllChannels[];
-extern char           NoSleeping[];
 extern char           NEXTIONSleepTime[];
 extern uint8_t        ScanStart;
 extern uint8_t        ScanEnd;
