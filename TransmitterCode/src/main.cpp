@@ -7769,7 +7769,7 @@ FASTRUN void loop()
     if (!MotorEnabled) SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero);
     if (UseMacros) ExecuteMacro();                               // Modify it if macro is running
     if (!DoSbusSendOnly) {                                       // Skip these next lines when buddying as a slave
-        if (!BoundFlag && Connected) BufferNewPipe();            // if not yet bound, insert our pipe into sendbuffer ONLY WHEN CONNECTED!! *** heer
+        if (!BoundFlag && Connected) BufferNewPipe();            // if not yet bound, insert our pipe into SendBuffer BUT ONLY WHEN CONNECTED!! *** bug fixed heer
         if (BuddyMaster) GetSlaveChannelValues();                // If buddy master, get buddy data and maybe use it.
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24
     }
