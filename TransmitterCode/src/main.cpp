@@ -1370,7 +1370,7 @@ FASTRUN void ShowServoPos()
 {
     if (millis() - ShowServoTimer <= 100) return;
     ShowServoTimer = millis();
-
+   
   
     char     Ch_Lables[16][5] = {"Ch1", "Ch2", "Ch3", "Ch4", "Ch5", "Ch6", "Ch7", "Ch8", "Ch9", "Ch10", "Ch11", "Ch12", "Ch13", "Ch14", "Ch15", "Ch16"};
     char     ChannelInput[]   = "Input";
@@ -1407,7 +1407,7 @@ FASTRUN void ShowServoPos()
             l1 = analogRead(AnalogueInput[l]);
         }
         else {
-            l1 = GetStickInput(l); // heer?
+            l1 = GetStickInput(l); 
         }
         if (ReversedChannelBITS & 1 << (ChanneltoSet - 1)) { // reversed?
             if (l1 <= ChannelCentre[l]) {
@@ -1417,7 +1417,6 @@ FASTRUN void ShowServoPos()
                 l1 = map(l1, ChannelCentre[l], ChannelMax[l], ChannelCentre[l], ChannelMin[l]);
             }
         }
-       
         if (l1 <= ChannelCentre[l]) {
             SendValue(ChannelInput, map(l1, ChannelCentre[l], ChannelMin[l], 0, -100));
             StickPosition = map(l1, ChannelMin[l], ChannelCentre[l], BoxLeft - 0, BoxLeft + (((BoxRight - fixitx) - BoxLeft) / 2));
@@ -1426,25 +1425,15 @@ FASTRUN void ShowServoPos()
             SendValue(ChannelInput, map(l1, ChannelCentre[l], ChannelMax[l], 0, 100));
             StickPosition = map(l1, ChannelCentre[l], ChannelMax[l], BoxLeft + (((BoxRight - fixitx) - BoxLeft) / 2), BoxRight - fixitx);
         }
+
         if (abs(StickPosition - SavedLineX) > LeastDistance) {
-            DisplayCurve();                                 // needed to clear last line
+            DisplayCurve();                                                                                        // needed to clear last line
             DrawLine(StickPosition - 1, BoxTop + 3, StickPosition - 1, (BoxBottom - 3) - BoxTop, HighlightColour); // draws line for stick position
+            SendValue(ChannelOutput, map(SendBuffer[ChanneltoSet-1], MINMICROS, MAXMICROS, -100, 100));            // heer
             SavedLineX = StickPosition;
         }
-    
-        if (Connected) { // heer?
-            SendValue(ChannelOutput, map(SendBuffer[ChanneltoSet - 1], MINMICROS, MAXMICROS, -100, 100));
-        }
-        else {
-            SendValue(ChannelOutput, 0); // because when not connected nothing is sent
-        }
-    }
-    else {
-        SendValue(ChannelInput, 0);
-        SendValue(ChannelOutput, 0);
     }
 }
-
 /*********************************************************************************************************************************/
 FASTRUN bool CheckTXVolts()
 {
@@ -1857,6 +1846,7 @@ int GetNextNumber(int p1, char text1[CHARSMAX])
 /*********************************************************************************************************************************/
 FASTRUN uint16_t GetStickInput(uint8_t l)
 {
+
     uint16_t k = 0;
     switch (l) {
         case 8:
@@ -2014,6 +2004,7 @@ FASTRUN void GetNewChannelValues()
             m = analogRead(AnalogueInput[l]);                            // Get values from sticks' pots then interpolate them.
             k = Interpolate[InterpolationTypes[Bank][n]](m, l, n); // Use function pointer array to invoke chosen interpolation.
         }
+
         k += (SubTrims[n] - 127) * (TrimFactor / 2); // ADD SUBTRIM (...to output channel, not mapped input channel) (Range 0 - 127 - 254)
         if (l < 4) {
             uint16_t tt = t; 
@@ -2024,10 +2015,7 @@ FASTRUN void GetNewChannelValues()
             TrimAmount = (Trims[Bank][tt] - 80) * TrimFactor; // TRIMS on lower four channels (80 is mid point !! (range 40 - 80 - 120)) 
             if (TrimsReversed[Bank][tt]) TrimAmount = -TrimAmount;
             k += TrimAmount;
-        
         }
-
-
         if (!CalibratedYet) k = map(m, 0, 1024, MINMICROS, MAXMICROS); // Crude servos until calibrated
         PreMixBuffer[n] = constrain(k, MINMICROS, MAXMICROS);
         SendBuffer[n]   = PreMixBuffer[n];
@@ -2036,6 +2024,7 @@ FASTRUN void GetNewChannelValues()
         DoReverseSense();
         DoMixes();
     }
+       
 }
 /*********************************************************************************************************************************/
 
@@ -7780,7 +7769,7 @@ FASTRUN void loop()
     if (!MotorEnabled) SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero);
     if (UseMacros) ExecuteMacro();                               // Modify it if macro is running
     if (!DoSbusSendOnly) {                                       // Skip these next lines when buddying as a slave
-        if (!BoundFlag) BufferNewPipe();                         // if not yet bound, insert our pipe into sendbuffer
+        if (!BoundFlag && Connected) BufferNewPipe();            // if not yet bound, insert our pipe into sendbuffer ONLY WHEN CONNECTED!! *** heer
         if (BuddyMaster) GetSlaveChannelValues();                // If buddy master, get buddy data and maybe use it.
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24
     }
