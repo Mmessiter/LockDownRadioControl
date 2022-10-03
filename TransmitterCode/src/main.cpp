@@ -1404,6 +1404,7 @@ FASTRUN void ShowServoPos()
   
         l = (InPutStick[ChanneltoSet - 1]);
         if (ChanneltoSet <= 8) l1 = analogRead(AnalogueInput[l]); else l1 = GetStickInputInputOnly(l); // heer
+
         if (ReversedChannelBITS & 1 << (ChanneltoSet - 1)) { // reversed?
             if (l1 <= ChannelCentre[l]) {
                 l1 = map(l1, ChannelMin[l], ChannelCentre[l], ChannelMax[l], ChannelCentre[l]);
