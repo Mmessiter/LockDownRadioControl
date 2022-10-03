@@ -1865,7 +1865,8 @@ FASTRUN uint16_t GetStickInput(uint8_t l)  // This returns the proper output - n
             if (Channel12SwitchValue == 180) k = IntoHigherRes(MaxDegrees[Bank][11]);
             break;
         default:
-            k = IntoHigherRes(CentreDegrees[Bank][15]); // channels 13,14,15,16 are simply centred
+            k = IntoHigherRes(90); // channels 13,14,15,16 are simply centred
+            break;
     }
     return k;
 }
@@ -1896,7 +1897,8 @@ FASTRUN uint16_t GetStickInputInputOnly(uint8_t l) // This returns the input onl
             if (Channel12SwitchValue == 180) k = ChannelMax[l];
             break;
         default:
-            k = 90; 
+            k = 1500; // Centre because no input possible
+        break;
     }
     return k;
 }
