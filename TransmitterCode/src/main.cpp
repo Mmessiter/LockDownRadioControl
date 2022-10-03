@@ -1403,12 +1403,7 @@ FASTRUN void ShowServoPos()
 #define LeastDistance 1 // if the change is very small, don't re-display anything - to reduce flashing. :=)!!
   
         l = (InPutStick[ChanneltoSet - 1]);
-        if (ChanneltoSet <= 8) {
-            l1 = analogRead(AnalogueInput[l]);
-        }
-        else {
-            l1 = GetStickInput(l); 
-        }
+        if (ChanneltoSet <= 8) l1 = analogRead(AnalogueInput[l]); else l1 = GetStickInputInputOnly(l); // heer
         if (ReversedChannelBITS & 1 << (ChanneltoSet - 1)) { // reversed?
             if (l1 <= ChannelCentre[l]) {
                 l1 = map(l1, ChannelMin[l], ChannelCentre[l], ChannelMax[l], ChannelCentre[l]);
@@ -1417,11 +1412,11 @@ FASTRUN void ShowServoPos()
                 l1 = map(l1, ChannelCentre[l], ChannelMax[l], ChannelCentre[l], ChannelMin[l]);
             }
         }
+
         if (l1 <= ChannelCentre[l]) {
             SendValue(ChannelInput, map(l1, ChannelCentre[l], ChannelMin[l], 0, -100));
             StickPosition = map(l1, ChannelMin[l], ChannelCentre[l], BoxLeft - 0, BoxLeft + (((BoxRight - fixitx) - BoxLeft) / 2));
-        }
-        else {
+        } else {
             SendValue(ChannelInput, map(l1, ChannelCentre[l], ChannelMax[l], 0, 100));
             StickPosition = map(l1, ChannelCentre[l], ChannelMax[l], BoxLeft + (((BoxRight - fixitx) - BoxLeft) / 2), BoxRight - fixitx);
         }
@@ -1429,7 +1424,7 @@ FASTRUN void ShowServoPos()
         if (abs(StickPosition - SavedLineX) > LeastDistance) {
             DisplayCurve();                                                                                        // needed to clear last line
             DrawLine(StickPosition - 1, BoxTop + 3, StickPosition - 1, (BoxBottom - 3) - BoxTop, HighlightColour); // draws line for stick position
-            SendValue(ChannelOutput, map(SendBuffer[ChanneltoSet-1], MINMICROS, MAXMICROS, -100, 100));            // heer
+            SendValue(ChannelOutput, map(SendBuffer[ChanneltoSet-1], MINMICROS, MAXMICROS, -100, 100));         
             SavedLineX = StickPosition;
         }
     }
@@ -1844,29 +1839,28 @@ int GetNextNumber(int p1, char text1[CHARSMAX])
     return j;
 }
 /*********************************************************************************************************************************/
-FASTRUN uint16_t GetStickInput(uint8_t l)
+FASTRUN uint16_t GetStickInput(uint8_t l)  // This returns the proper output - not just input
 {
-
     uint16_t k = 0;
     switch (l) {
         case 8:
-            if (Channel9SwitchValue == 0) k = IntoHigherRes(MinDegrees[Bank][8]);
-            if (Channel9SwitchValue == 90) k = IntoHigherRes(CentreDegrees[Bank][8]);
+            if (Channel9SwitchValue == 0)   k = IntoHigherRes(MinDegrees[Bank][8]);
+            if (Channel9SwitchValue == 90)  k = IntoHigherRes(CentreDegrees[Bank][8]);
             if (Channel9SwitchValue == 180) k = IntoHigherRes(MaxDegrees[Bank][8]);
             break;
         case 9:
-            if (Channel10SwitchValue == 0) k = IntoHigherRes(MinDegrees[Bank][9]);
-            if (Channel10SwitchValue == 90) k = IntoHigherRes(CentreDegrees[Bank][9]);
+            if (Channel10SwitchValue == 0)   k = IntoHigherRes(MinDegrees[Bank][9]);
+            if (Channel10SwitchValue == 90)  k = IntoHigherRes(CentreDegrees[Bank][9]);
             if (Channel10SwitchValue == 180) k = IntoHigherRes(MaxDegrees[Bank][9]);
             break;
         case 10:
-            if (Channel11SwitchValue == 0) k = IntoHigherRes(MinDegrees[Bank][10]);
-            if (Channel11SwitchValue == 90) k = IntoHigherRes(CentreDegrees[Bank][10]);
+            if (Channel11SwitchValue == 0)   k = IntoHigherRes(MinDegrees[Bank][10]);
+            if (Channel11SwitchValue == 90)  k = IntoHigherRes(CentreDegrees[Bank][10]);
             if (Channel11SwitchValue == 180) k = IntoHigherRes(MaxDegrees[Bank][10]);
             break;
         case 11:
-            if (Channel12SwitchValue == 0) k = IntoHigherRes(MinDegrees[Bank][11]);
-            if (Channel12SwitchValue == 90) k = IntoHigherRes(CentreDegrees[Bank][11]);
+            if (Channel12SwitchValue == 0)   k = IntoHigherRes(MinDegrees[Bank][11]);
+            if (Channel12SwitchValue == 90)  k = IntoHigherRes(CentreDegrees[Bank][11]);
             if (Channel12SwitchValue == 180) k = IntoHigherRes(MaxDegrees[Bank][11]);
             break;
         default:
@@ -1874,6 +1868,38 @@ FASTRUN uint16_t GetStickInput(uint8_t l)
     }
     return k;
 }
+
+/*********************************************************************************************************************************/
+FASTRUN uint16_t GetStickInputInputOnly(uint8_t l) // This returns the input only
+{
+    uint16_t k = 0;
+    switch (l) {
+        case 8:
+            if (Channel9SwitchValue == 0)   k = ChannelMin[l];
+            if (Channel9SwitchValue == 90)  k = ChannelCentre[l];
+            if (Channel9SwitchValue == 180) k = ChannelMax[l];
+            break;
+        case 9:
+            if (Channel10SwitchValue == 0)   k = ChannelMin[l];
+            if (Channel10SwitchValue == 90)  k = ChannelCentre[l];
+            if (Channel10SwitchValue == 180) k = ChannelMax[l];
+            break;
+        case 10:
+            if (Channel11SwitchValue == 0)   k = ChannelMin[l];
+            if (Channel11SwitchValue == 90)  k = ChannelCentre[l];
+            if (Channel11SwitchValue == 180) k = ChannelMax[l];
+            break;
+        case 11:
+            if (Channel12SwitchValue == 0)   k = ChannelMin[l];
+            if (Channel12SwitchValue == 90)  k = ChannelCentre[l];
+            if (Channel12SwitchValue == 180) k = ChannelMax[l];
+            break;
+        default:
+            k = 90; 
+    }
+    return k;
+}
+
 /*********************************************************************************************************************************/
 // MIXES  (Channel mixes)
 /*********************************************************************************************************************************/
@@ -2051,6 +2077,7 @@ void CalibrateSticks() // This discovers end of travel place for sticks etc.
         if (ChannelMax[i] < p) ChannelMax[i] = p;
         if (ChannelMin[i] > p) ChannelMin[i] = p;
     }
+    
     GetNewChannelValues();
 }
 /*********************************************************************************************************************************/
@@ -7769,7 +7796,7 @@ FASTRUN void loop()
     if (!MotorEnabled) SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero);
     if (UseMacros) ExecuteMacro();                               // Modify it if macro is running
     if (!DoSbusSendOnly) {                                       // Skip these next lines when buddying as a slave
-        if (!BoundFlag && Connected) BufferNewPipe();            // if not yet bound, insert our pipe into SendBuffer BUT ONLY WHEN CONNECTED *** bug fixed heer !!
+        if (!BoundFlag && Connected) BufferNewPipe();            // if not yet bound, insert our pipe into SendBuffer BUT ONLY WHEN CONNECTED 
         if (BuddyMaster) GetSlaveChannelValues();                // If buddy master, get buddy data and maybe use it.
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24
     }
