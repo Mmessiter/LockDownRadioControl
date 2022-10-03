@@ -1,5 +1,7 @@
 var NAVTREEINDEX12 =
 {
+"dir_edb8ec2f9dae68eea4f449c51708f6ca.html":[10,0,3,0,2],
+"dir_f3433e26411b8b5b6b990f1ec8ef8a7a.html":[10,0,2,0],
 "dir_f4a416e20b33f36e9e4ccc17423b29f0.html":[10,0,3,0,4,0],
 "elapsed_millis_8h.html":[10,0,1,0,0,2,0],
 "elapsed_millis_8h_source.html":[10,0,1,0,0,2,0],
@@ -247,7 +249,5 @@ var NAVTREEINDEX12 =
 "md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md60":[7,2],
 "md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md61":[7,3],
 "md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md62":[7,4],
-"md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md63":[7,5],
-"pages.html":[],
-"radio_8h.html":[10,0,2,1,0,2]
+"md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md63":[7,5]
 };

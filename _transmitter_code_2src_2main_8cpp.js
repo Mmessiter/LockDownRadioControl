@@ -106,6 +106,7 @@ var _transmitter_code_2src_2main_8cpp =
     [ "GetSlaveChannelValues", "_transmitter_code_2src_2main_8cpp.html#a4635a8fc77c9f57fca53a5206cd5e571", null ],
     [ "GetStatistics", "_transmitter_code_2src_2main_8cpp.html#a1d43600764a34cbda9c2fa211a12ed2e", null ],
     [ "GetStickInput", "_transmitter_code_2src_2main_8cpp.html#a248db02e07497e7a4149db17b4e5c2f3", null ],
+    [ "GetStickInputInputOnly", "_transmitter_code_2src_2main_8cpp.html#af1030157034999448f5ca611d6209385", null ],
     [ "GetSuccessRate", "_transmitter_code_2src_2main_8cpp.html#a9f5745d51ac7a3efbee333bcacd06c50", null ],
     [ "GetTemperature", "_transmitter_code_2src_2main_8cpp.html#a19f6fc09d690832e74fd3c679207f07f", null ],
     [ "GetText", "_transmitter_code_2src_2main_8cpp.html#a8e271ca29dc3c90bcf0e465b41bd71ff", null ],
