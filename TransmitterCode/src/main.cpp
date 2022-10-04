@@ -7803,7 +7803,7 @@ FASTRUN void loop()
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24
     }
     ShowServoPos();                                              // Display servo positions resulting from all functions above
-    if (!MotorEnabled) SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // if safety is on throttle will be zero but not displayed as such
+    if (!MotorEnabled) SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero, but not displayed as such
     switch (CurrentMode) {
         case NORMAL:            // 0
             SendData();
