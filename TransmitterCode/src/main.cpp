@@ -7145,7 +7145,7 @@ void GetBank()
     Channel11SwitchValue = CheckSwitch(Channel11Switch);
     Channel12SwitchValue = CheckSwitch(Channel12Switch);
     if (Bank != PreviousBank) {
-        if (Connected) LogNewBank();
+        //if (Connected) LogNewBank();                          // heer!!!
         if (MotorEnabled == MotorWasEnabled){                   // When turning off motor, don't sound bank too.
                 if (AnnounceBanks) SoundBank();
         }
