@@ -1074,12 +1074,12 @@ void GreenLedOn()
             ShowComms();
             if (AnnounceConnected) PlaySound(CONNECTEDMSG);
         }
+        if (UseLog) {
+                LogConnection();
+        }
         if (FirstConnection) { // Zero data on first connection after reboot
             ZeroDataScreen();
-            FirstConnection = false;
-            if (UseLog) {
-                LogConnection();
-            }
+            FirstConnection = false;   
         }
         LedWasRed   = false;
         LedWasGreen = true;
@@ -7145,9 +7145,9 @@ void GetBank()
     Channel11SwitchValue = CheckSwitch(Channel11Switch);
     Channel12SwitchValue = CheckSwitch(Channel12Switch);
     if (Bank != PreviousBank) {
-        //if (Connected) LogNewBank();                          // heer!!!
-        if (MotorEnabled == MotorWasEnabled){                   // When turning off motor, don't sound bank too.
-                if (AnnounceBanks) SoundBank();
+        if (UseLog) LogNewBank();                          // heer!!!
+        if (MotorEnabled == MotorWasEnabled) { // When turning off motor, don't sound bank too.
+            if (AnnounceBanks) SoundBank();
         }
         if (CurrentView == FRONTVIEW) ShowBank();
         UpdateModelsNameEveryWhere();
