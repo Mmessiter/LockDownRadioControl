@@ -492,7 +492,7 @@ void PlaySound(uint16_t TheSound)
     char SoundPostfix[] = "0";
     char NB[6];
     
-    if (DontAnnoyMe){
+    if (DontAnnoyMe){ // this flag is to cancel a repeating announcement
        DontAnnoyMe = false;
        return;
        }
@@ -5917,7 +5917,7 @@ FASTRUN void ButtonWasPressed()
             UpdateModelsNameEveryWhere();
             SafetyWasOn ^= 1;                   // this forces a re-display of motor state // heer
             MotorWasEnabled ^= 1;               // this forces a re-display of motor state
-            DontAnnoyMe = true;
+            DontAnnoyMe = true;                 // this cancels an audio prompt
             ShowBank();
             LastTimeRead = 0;
             Reconnected  = false; // this is to make '** Connected! **' redisplay (in ShowComms())
