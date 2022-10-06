@@ -5057,11 +5057,13 @@ void GotoMacrosView()
 void UpLog()
 {
     if (RecentStartLine > 0 && (CurrentView == LOGVIEW)) {
-        RecentStartLine -= 1;
+        RecentStartLine -= 3;
+        if (RecentStartLine < 1) RecentStartLine = 1;
         ShowLogFile(RecentStartLine);
     }
     if (RecentStartLine > 0 && (CurrentView == HELP_VIEW)) {
-        RecentStartLine -= 1;
+        RecentStartLine -= 3;
+        if (RecentStartLine < 1) RecentStartLine = 1;
         ScrollHelpFile();
     }
 }
@@ -5069,11 +5071,11 @@ void UpLog()
 void DownLog()
 {
     if (ThereIsMoreToSee && (CurrentView == LOGVIEW)) {
-        RecentStartLine += 1;
+        RecentStartLine += 3;
         ShowLogFile(RecentStartLine);
     }
     if (ThereIsMoreToSee && (CurrentView == HELP_VIEW)) {
-        RecentStartLine += 1;
+        RecentStartLine += 3;
         ScrollHelpFile();
     }
 }
