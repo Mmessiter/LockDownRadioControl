@@ -7797,18 +7797,16 @@ void CheckPowerOffButton()
 }
 
 /************************************************************************************************************/
-// LOOP
-/************************************************************************************************************/
-FASTRUN void loop()
-{
+FASTRUN void DoSomeHouseKeeping(){
+
     KickTheDog(); // Watchdog
     CheckPowerOffButton();
-    if (GetButtonPress()) ButtonWasPressed(); // Deal with button
+    if (GetButtonPress()) ButtonWasPressed();               // Deal with button
     if ((millis() - ModelNameTimeCheck) > 700) {
         ModelNameTimeCheck = millis();
         if (CurrentView == MAINSETUPVIEW) CheckScanButton();
-        if (CurrentView == MODELSVIEW) CheckModelName(); // In MODELSVIEW, this function checks correct name is displayed.
-        if (GetButtonPress()) ButtonWasPressed();        // Deal with button ... don't want to miss one!
+        if (CurrentView == MODELSVIEW) CheckModelName();    // In MODELSVIEW, this function checks correct name is displayed.
+        if (GetButtonPress()) ButtonWasPressed();           // Deal with button ... don't want to miss one!
     }
     if (millis() - LastTimeRead >= 1000) {
         ReadTime(); // Do the clock
@@ -7822,20 +7820,41 @@ FASTRUN void loop()
         LogUKRules();
         PreviousUkRules = UkRules;
     }
+    if (GetButtonPress()) ButtonWasPressed();
+}
+
+
+/************************************************************************************************************/
+void FASTRUN ManageTransmitter(){
+
+    if (GetButtonPress()) ButtonWasPressed();
     ShowComms();                                                 // Screen Data
     ReadSwitches();                                              // Check switch positions
     GetBank();
     CheckHardwareTrims();
+    if (GetButtonPress()) ButtonWasPressed();
     CheckTimer();                                                // Screen Timer
     GetNewChannelValues();                                       // Load SendBuffer with new servo positions
     if (UseMacros) ExecuteMacro();                               // Modify it if macro is running
     if (!DoSbusSendOnly) {                                       // Skip these next lines when buddying as a slave
         if (!BoundFlag && Connected) BufferNewPipe();            // if not yet bound, insert our pipe into SendBuffer BUT ONLY WHEN CONNECTED 
         if (BuddyMaster) GetSlaveChannelValues();                // If buddy master, get buddy data and maybe use it.
+        if (!MotorEnabled) SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24
     }
-    ShowServoPos();                                              // Display servo positions resulting from all functions above
-    if (!MotorEnabled) SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero, but NOT displayed as such
+    if (GetButtonPress()) ButtonWasPressed();
+}
+/************************************************************************************************************/
+// LOOP
+/************************************************************************************************************/
+FASTRUN void loop()
+{
+    DoSomeHouseKeeping();
+    
+    ManageTransmitter();
+    
+    ShowServoPos();                                             
+    
     switch (CurrentMode) {
         case NORMAL:            // 0
             SendData();
@@ -7848,6 +7867,8 @@ FASTRUN void loop()
             break;
         case SCANWAVEBAND:      // 3
             ScanAllChannels();
+            break;
+        case SENDNOTHING:       // 4
             break;
         default:
             break; // CurrentMode >= 4 for no action at all.
