@@ -1324,7 +1324,6 @@ bool GetButtonPress()
         ButtonPressed = true;
         while (NEXTION.available()) {
             a = NEXTION.read();
-            //  if (a > 127) Serial.println (a);   // to detect errors
             if (a > 31 && a < 254) {
                 TextIn[i] = a;
                 if (TextIn[i] == '$') TextIn[i] = 0;
@@ -5405,7 +5404,7 @@ void ThrottleDownTrim(){
      if (SticksMode == 2) tt = 2;
      MoveaTrim(tt);
 }
-// ******************************** Global Array of numbered function pointers - OK up to 128 functions ... **********************************
+// ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
 #define LASTFUNCTION 40 // one more than final one
 
 void (*NumberedFunctions[LASTFUNCTION])() {
