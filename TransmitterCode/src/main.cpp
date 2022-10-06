@@ -470,7 +470,8 @@ char b5Greyed[]                 = "b5.pco=33840";
 char b12Greyed[]                = "b12.pco=33840";
 bool MotorEnabled               = false;
 bool MotorWasEnabled            = false;
-uint8_t MotorChannel            = 2; // Throttle from zero
+bool    DontAnnoyMe                = false;
+uint8_t MotorChannel               = 2; // Throttle from zero
 uint8_t MotorChannelZero        = 0; 
 bool    UseMotorKill            = true;
 bool    SafetyON                = false;
@@ -490,6 +491,11 @@ void PlaySound(uint16_t TheSound)
     char SoundPrefix[]  = "play 0,";
     char SoundPostfix[] = "0";
     char NB[6];
+    
+    if (DontAnnoyMe){
+       DontAnnoyMe = false;
+       return;
+       }
     Str(NB, TheSound, 1);
     strcpy(Sound, SoundPrefix);
     strcat(Sound, NB);
@@ -1403,7 +1409,7 @@ FASTRUN void ShowServoPos()
 #define LeastDistance 1 // if the change is very small, don't re-display anything - to reduce flashing. :=)!!
   
         l = (InPutStick[ChanneltoSet - 1]);
-        if (ChanneltoSet <= 8) l1 = analogRead(AnalogueInput[l]); else l1 = GetStickInputInputOnly(l); // heer
+        if (ChanneltoSet <= 8) l1 = analogRead(AnalogueInput[l]); else l1 = GetStickInputInputOnly(l); 
 
         if (ReversedChannelBITS & 1 << (ChanneltoSet - 1)) { // reversed?
             if (l1 <= ChannelCentre[l]) {
@@ -5909,8 +5915,9 @@ FASTRUN void ButtonWasPressed()
         if (InStrng(GoFrontView, TextIn) > 0) { // GOTO frontview 
             SendCommand(page_FrontView);
             UpdateModelsNameEveryWhere();
-            SafetyWasOn ^= 1;                   // this forces a re-display of motor state
+            SafetyWasOn ^= 1;                   // this forces a re-display of motor state // heer
             MotorWasEnabled ^= 1;               // this forces a re-display of motor state
+            DontAnnoyMe = true;
             ShowBank();
             LastTimeRead = 0;
             Reconnected  = false; // this is to make '** Connected! **' redisplay (in ShowComms())
