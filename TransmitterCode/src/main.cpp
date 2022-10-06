@@ -2724,26 +2724,32 @@ void SendColour(char* but, int Colour)
 /*********************************************************************************************************************************/
 void ShowSafetyIsOn() 
 {
-    char bco[]  = "bt0.bco=";     
-    char bco2[] = "bt0.bco2=";
-    char pco[]  = "bt0.pco=";
-    char pco2[] = "bt0.pco2=";
-    SendColour(bco,SpecialColour);
-    SendColour(bco2,SpecialColour);
-    SendColour(pco,HighlightColour);
-    SendColour(pco2,HighlightColour);
+    if (CurrentView == FRONTVIEW){
+        char bco[]  = "bt0.bco=";     
+        char bco2[] = "bt0.bco2=";
+        char pco[]  = "bt0.pco=";
+        char pco2[] = "bt0.pco2=";
+        SendColour(bco,SpecialColour);
+        SendColour(bco2,SpecialColour);
+        SendColour(pco,HighlightColour);
+        SendColour(pco2,HighlightColour);
+    }
+    if (UseLog) LogSafety(1);
 }
 /*********************************************************************************************************************************/
 void ShowSafetyIsOff()
 {
-    char bco[]  = "bt0.bco=";
-    char bco2[] = "bt0.bco2=";
-    char pco[]  = "bt0.pco=";
-    char pco2[] = "bt0.pco2=";
-    SendColour(bco,BackGroundColour);
-    SendColour(bco2,BackGroundColour);
-    SendColour(pco,HighlightColour);
-    SendColour(pco2,HighlightColour);
+    if (CurrentView == FRONTVIEW){
+        char bco[]  = "bt0.bco=";
+        char bco2[] = "bt0.bco2=";
+        char pco[]  = "bt0.pco=";
+        char pco2[] = "bt0.pco2=";
+        SendColour(bco,BackGroundColour);
+        SendColour(bco2,BackGroundColour);
+        SendColour(pco,HighlightColour);
+        SendColour(pco2,HighlightColour);
+    }
+    if (UseLog) LogSafety(0);
 }
 /*********************************************************************************************************************************/
 
@@ -2968,6 +2974,28 @@ FASTRUN void LogNewBank()
     LogText(thetext, 7);
 }
 
+
+// ************************************************************************
+ FASTRUN void LogMotor(bool On){
+    char Ltext1[] = "Motor On";
+    char Ltext0[] = "Motor Off";
+    char thetext[10];
+        if (On) strcpy(thetext, Ltext1); 
+        else
+        strcpy(thetext, Ltext0);
+        LogText(thetext, 9);
+ } 
+
+// ************************************************************************
+ FASTRUN void LogSafety(bool On){
+    char Ltext1[] = "Safety On";
+    char Ltext0[] = "Safety Off";
+    char thetext[10];
+        if (On) strcpy(thetext, Ltext1); 
+        else
+        strcpy(thetext, Ltext0);
+        LogText(thetext, 10);
+ } 
 // ************************************************************************
 
 FASTRUN void LogUKRules()
@@ -7131,9 +7159,11 @@ void GetBank()
         if (MotorEnabled) {       
             ShowMotor(1);
             if (AnnounceBanks) PlaySound(MOTORON);                                      // Tell the pilot motor is on! 
+              if (UseLog) LogMotor(1);   
             TimerMillis = millis();
         } else {            
             if (AnnounceBanks) PlaySound(MOTOROFF);
+              if (UseLog) LogMotor(0); 
             ShowMotor(0);                                                               // Tell the pilot motor is off
             PausedSecs = Secs + (Mins * 60) + (Hours * 3600);                           // Remember how long so far
         }

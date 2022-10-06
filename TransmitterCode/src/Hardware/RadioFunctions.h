@@ -437,6 +437,7 @@ int          CheckRange(int v, int min, int max);
 void         MoveaTrim(uint8_t i);
 void         SetUKFrequencies();
 FASTRUN uint16_t GetStickInputInputOnly(uint8_t l);
+FASTRUN void     LogSafety(bool On);
 
 /*********************************************************************************************************************************/
 
