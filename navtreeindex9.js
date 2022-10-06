@@ -1,5 +1,6 @@
 var NAVTREEINDEX9 =
 {
+"class_adafruit___sensor.html#a1d06c6f2b9d014894f47102fc1effddf":[9,0,8,0],
 "class_adafruit___sensor.html#ac98df73e0cd9367a226b96668417e2e6":[9,0,8,1],
 "class_adafruit___sensor.html#ace6c1f26eeb956f95801b9fc1841f3a0":[9,0,8,2],
 "class_adafruit___sensor.html#af994cc1147831134ad7bf7b2c99d7478":[9,0,8,5],
@@ -248,6 +249,5 @@ var NAVTREEINDEX9 =
 "class_m_p_u6050.html#ae528a25b4997ad0e3091a012e4e4419e":[9,0,12,242],
 "class_m_p_u6050.html#ae54dc358da048e61a1ac68012300fdaa":[9,0,12,223],
 "class_m_p_u6050.html#ae7e9ead9645bcef326eb579c6ab5d5ff":[9,0,12,111],
-"class_m_p_u6050.html#ae84fd795630f9ab5e8d6b19a616a11ce":[9,0,12,108],
-"class_m_p_u6050.html#ae9882b425cbdced4de325b608d896e10":[9,0,12,103]
+"class_m_p_u6050.html#ae84fd795630f9ab5e8d6b19a616a11ce":[9,0,12,108]
 };
