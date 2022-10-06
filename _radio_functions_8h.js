@@ -201,6 +201,7 @@ var _radio_functions_8h =
     [ "LoadPacketData", "_radio_functions_8h.html#ac4ffb9b555ce8d38f615610dc89b5499", null ],
     [ "LogConnection", "_radio_functions_8h.html#a896d9c3f90c2a4c083748097a98bc96b", null ],
     [ "LogDisConnection", "_radio_functions_8h.html#a01c8a29ed73a0c490282e23e119eca14", null ],
+    [ "LogSafety", "_radio_functions_8h.html#a0ed2fd04eebb4fd11b61b6fddd5d2590", null ],
     [ "LogThisLongGap", "_radio_functions_8h.html#a4d0ec00f44761a9280cb95ba073d277e", null ],
     [ "LogThisModel", "_radio_functions_8h.html#af1548fa3d0c6b8a1e3057b962b77c5eb", null ],
     [ "LogUKRules", "_radio_functions_8h.html#ab7bbbad7e5882348ed2963dae9f4a226", null ],

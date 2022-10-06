@@ -1,5 +1,8 @@
 var NAVTREEINDEX12 =
 {
+"dir_d97f32bc8f4241c30356624fcd958639.html":[10,0,1,0],
+"dir_df4e18087407ac7111fd007e44af4a2e.html":[10,0,2,0,0],
+"dir_e885f0bd5710008de054d06acc49d4bb.html":[10,0,3,0],
 "dir_edb8ec2f9dae68eea4f449c51708f6ca.html":[10,0,3,0,2],
 "dir_f3433e26411b8b5b6b990f1ec8ef8a7a.html":[10,0,2,0],
 "dir_f4a416e20b33f36e9e4ccc17423b29f0.html":[10,0,3,0,4,0],
@@ -246,8 +249,5 @@ var NAVTREEINDEX12 =
 "md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html":[7],
 "md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md58":[7,0],
 "md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md59":[7,1],
-"md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md60":[7,2],
-"md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md61":[7,3],
-"md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md62":[7,4],
-"md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md63":[7,5]
+"md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md60":[7,2]
 };
