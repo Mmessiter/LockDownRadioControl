@@ -1,5 +1,7 @@
 var NAVTREEINDEX13 =
 {
+"md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md59":[7,1],
+"md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md60":[7,2],
 "md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md61":[7,3],
 "md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md62":[7,4],
 "md__sensor_hub_t32_lib__adafruit__i_n_a219_code_of_conduct.html#autotoc_md63":[7,5],

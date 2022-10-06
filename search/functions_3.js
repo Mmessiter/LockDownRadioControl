@@ -29,10 +29,11 @@ var searchData=
   ['doreversesense_26',['DoReverseSense',['../_transmitter_code_2src_2main_8cpp.html#acbd7adcd2b0e2095a89b4a98042b526e',1,'main.cpp']]],
   ['doscanend_27',['DoScanEnd',['../_radio_functions_8cpp.html#a31fb6a46af68482e107cddee58dfb677',1,'DoScanEnd():&#160;RadioFunctions.cpp'],['../_radio_functions_8h.html#a31fb6a46af68482e107cddee58dfb677',1,'DoScanEnd():&#160;RadioFunctions.cpp']]],
   ['doscaninit_28',['DoScanInit',['../_radio_functions_8h.html#a77c4a4ffa609df08830ccece07bf283b',1,'DoScanInit():&#160;RadioFunctions.cpp'],['../_radio_functions_8cpp.html#a77c4a4ffa609df08830ccece07bf283b',1,'DoScanInit():&#160;RadioFunctions.cpp']]],
-  ['dotherequest_29',['DoTheRequest',['../_sensor_hub_t32_2src_2main_8cpp.html#aa813a4b38095c6683d78bdf2baa33f69',1,'main.cpp']]],
-  ['downlog_30',['DownLog',['../_transmitter_code_2src_2main_8cpp.html#a01be76cc3bf8a963f987ae47916dc8d3',1,'main.cpp']]],
-  ['drawbox_31',['DrawBox',['../_radio_functions_8h.html#a705c97485d6142131c03577ec14134e7',1,'DrawBox(int x1, int y1, int x2, int y2, int c):&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a060d8c4636339f7e6760cf835307530e',1,'DrawBox(int x1, int y1, int x2, int y2, int c):&#160;main.cpp']]],
-  ['drawdot_32',['DrawDot',['../_transmitter_code_2src_2main_8cpp.html#ad0feb21fbea69455d1d206f142b563ac',1,'main.cpp']]],
-  ['drawfhssbox_33',['DrawFhssBox',['../_radio_functions_8cpp.html#a6bdc6419b47dda71d0d2c8faf652adc2',1,'DrawFhssBox():&#160;RadioFunctions.cpp'],['../_radio_functions_8h.html#a6bdc6419b47dda71d0d2c8faf652adc2',1,'DrawFhssBox():&#160;RadioFunctions.cpp']]],
-  ['drawline_34',['DrawLine',['../_radio_functions_8h.html#acbef1d41e1bd646b60a6e8afd9c66880',1,'DrawLine(int x1, int y1, int x2, int y2, int c):&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#acbef1d41e1bd646b60a6e8afd9c66880',1,'DrawLine(int x1, int y1, int x2, int y2, int c):&#160;main.cpp']]]
+  ['dosomehousekeeping_29',['DoSomeHouseKeeping',['../_transmitter_code_2src_2main_8cpp.html#aa221b44ecae36dd0367f03ed4aeb9e92',1,'main.cpp']]],
+  ['dotherequest_30',['DoTheRequest',['../_sensor_hub_t32_2src_2main_8cpp.html#aa813a4b38095c6683d78bdf2baa33f69',1,'main.cpp']]],
+  ['downlog_31',['DownLog',['../_transmitter_code_2src_2main_8cpp.html#a01be76cc3bf8a963f987ae47916dc8d3',1,'main.cpp']]],
+  ['drawbox_32',['DrawBox',['../_radio_functions_8h.html#a705c97485d6142131c03577ec14134e7',1,'DrawBox(int x1, int y1, int x2, int y2, int c):&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a060d8c4636339f7e6760cf835307530e',1,'DrawBox(int x1, int y1, int x2, int y2, int c):&#160;main.cpp']]],
+  ['drawdot_33',['DrawDot',['../_transmitter_code_2src_2main_8cpp.html#ad0feb21fbea69455d1d206f142b563ac',1,'main.cpp']]],
+  ['drawfhssbox_34',['DrawFhssBox',['../_radio_functions_8cpp.html#a6bdc6419b47dda71d0d2c8faf652adc2',1,'DrawFhssBox():&#160;RadioFunctions.cpp'],['../_radio_functions_8h.html#a6bdc6419b47dda71d0d2c8faf652adc2',1,'DrawFhssBox():&#160;RadioFunctions.cpp']]],
+  ['drawline_35',['DrawLine',['../_radio_functions_8h.html#acbef1d41e1bd646b60a6e8afd9c66880',1,'DrawLine(int x1, int y1, int x2, int y2, int c):&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#acbef1d41e1bd646b60a6e8afd9c66880',1,'DrawLine(int x1, int y1, int x2, int y2, int c):&#160;main.cpp']]]
 ];
