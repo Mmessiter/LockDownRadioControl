@@ -37,7 +37,7 @@
 //    DEBUG OPTIONS (Uncomment any of these for that bit of debug info)     *
 //***************************************************************************
 
- #define DB_NEXTION        // Debug NEXTION
+ // #define DB_NEXTION        // Debug NEXTION
 // #define DB_SD             // Debug SD card data
 // #define DB_FHSS           // Debug real time FHSS data
 // #define DB_SENSORS        // Debug Sensors
@@ -290,6 +290,8 @@
 #define MAXSHOWCOMMSSESCONDS 6       // Assess average connection quality over most recent 6 seconds continously
 #define SHOWCOMMSDELAY       1000    // ms pauses between updated info on NEXTION
 #define WARMUPDELAY          300     // fails at 200 so must be >200 ...
+#define SCREENCHANGEWAIT     250     
+
 
 // **************************************************************************
 //                            WATCHDOG PARAMETERS                           *
