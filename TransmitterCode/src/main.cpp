@@ -43,6 +43,7 @@
  * - Screen colours definable
  * - Data screen gives all possible telemetry
  * - Log files implemented - and help file system with unlimited file length
+ * - Safety switch implemtented (Stops accidental motor starting)
  *
  *
  * @section txPinout Teensy 4.1 Pins
@@ -106,10 +107,10 @@ SBUS          MySbus(SBUSPORT);
 uint16_t      SbusChannels[CHANNELSUSED + 2]; // a few spare
 uint32_t      SBUSTimer = 0;
 uint8_t       Mixes[MAXMIXES + 1][CHANNELSUSED + 1];                // Channel mixes' 2D array store
-int           Trims[BankSUSED + 1][CHANNELSUSED + 1];         // Trims to store
-uint8_t       TrimsReversed[BankSUSED + 1][CHANNELSUSED + 1]; // Trim directions to store
-uint8_t       Exponential[BankSUSED + 1][CHANNELSUSED + 1];   // Exponential
-uint8_t       InterpolationTypes[BankSUSED + 1][CHANNELSUSED + 1];
+int           Trims[BANKSUSED + 1][CHANNELSUSED + 1];         // Trims to store
+uint8_t       TrimsReversed[BANKSUSED + 1][CHANNELSUSED + 1]; // Trim directions to store
+uint8_t       Exponential[BANKSUSED + 1][CHANNELSUSED + 1];   // Exponential
+uint8_t       InterpolationTypes[BANKSUSED + 1][CHANNELSUSED + 1];
 
 uint8_t  LastMixNumber    = 1;
 uint8_t  MixNumber        = 0;
@@ -182,7 +183,6 @@ uint16_t ChannelMidLow[CHANNELSUSED + 1]; //    output of pots at MidLow
 uint16_t ChannelMin[CHANNELSUSED + 1];    //    output of pots at min
 uint16_t ChanneltoSet     = 0;
 bool     Connected        = false;
-uint8_t  ShowCommsCounter = 0;
 uint16_t BuddyControlled  = 0; // Flags
 double   PointsCount      = 5; // This for displaying curves only
 double   xPoints[5];
@@ -240,7 +240,6 @@ bool      TrimDefined[4]      = {true, true, true, true};
 const int chipSelect          = BUILTIN_SDCARD;
 char      DateTime[]          = "DateTime";
 char      ScreenViewTimeout[] = "Sto"; // needed for display info
-char      NoSleeping[]        = "thsp=0";
 char      ModelName[30];
 uint16_t  ScreenTimeout               = 120; // Screen has two minute timeout by default
 int       LastLinePosition            = 0;
@@ -324,14 +323,13 @@ uint32_t ShowServoTimer       = 0;
 bool     LastFourOnly         = false;
 uint8_t  InPutStick[17]       = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}; //
 uint8_t  InputTrim[4]         = {0, 1, 2, 3};                                           // User defined trim inputs
-
-uint8_t  ExportedFileCounter = 0;
+uint8_t  ExportedFileCounter  = 0;
 char     TheFilesList[100][14];
 uint16_t FileNumberInView     = 0;
 bool     FileError            = false;
 uint32_t RangeTestStart       = 0;
 uint16_t RangeTestGoodPackets = 0;
-uint8_t  SaveBank       = 0;
+uint8_t  SaveBank             = 0;
 bool     FailSafeChannel[CHANNELSUSED];
 bool     SaveFailSafeNow = false;
 uint32_t FailSafeTimer;
@@ -458,26 +456,26 @@ uint32_t  PreviousPowerOffTimer   = 0;
 bool      ModelIdentified         = false;
 bool      ModelMatched            = false;
 bool      AutoModelSelect         = true;
-union
-{
-    uint32_t Val32[2] = {0, 0};
-    uint8_t  Val8[8]; // Model's Mac address just obtained from model
-     } ModelsMacUnion;
+union {
+        uint32_t Val32[2] = {0, 0};
+        uint8_t  Val8[8]; // Model's Mac address just obtained from model
+     }  ModelsMacUnion;
 
-union
-     {
-      uint32_t Val32[2] = {0,0};
-      uint8_t  Val8[8];        // Model's Mac address that had been saved on disk
-     } ModelsMacUnionSaved;
+union {
+        uint32_t Val32[2] = {0,0};
+        uint8_t  Val8[8];        // Model's Mac address that had been saved on disk
+     }  ModelsMacUnionSaved;
 
-char b5Greyed[]     = "b5.pco=33840";
-char b12Greyed[]    = "b12.pco=33840";
-bool MotorEnabled       = false;
-bool MotorWasEnabled    = false;
-uint8_t MotorChannel           = 2; // Throttle from zero
-uint8_t MotorChannelZero       = 0; 
-bool    UseMotorKill           = true;
-bool    SafetyON = false;
+char b5Greyed[]                 = "b5.pco=33840";
+char b12Greyed[]                = "b12.pco=33840";
+bool MotorEnabled               = false;
+bool MotorWasEnabled            = false;
+bool    DontAnnoyMe                = false;
+uint8_t MotorChannel               = 2; // Throttle from zero
+uint8_t MotorChannelZero        = 0; 
+bool    UseMotorKill            = true;
+bool    SafetyON                = false;
+bool    SafetyWasOn             = false;
  
 // **********************************************************************************************************************************
 
@@ -493,6 +491,11 @@ void PlaySound(uint16_t TheSound)
     char SoundPrefix[]  = "play 0,";
     char SoundPostfix[] = "0";
     char NB[6];
+    
+    if (DontAnnoyMe){ // this flag is to cancel a repeating announcement
+       DontAnnoyMe = false;
+       return;
+       }
     Str(NB, TheSound, 1);
     strcpy(Sound, SoundPrefix);
     strcat(Sound, NB);
@@ -1077,12 +1080,12 @@ void GreenLedOn()
             ShowComms();
             if (AnnounceConnected) PlaySound(CONNECTEDMSG);
         }
+        if (UseLog) {
+                LogConnection();
+        }
         if (FirstConnection) { // Zero data on first connection after reboot
             ZeroDataScreen();
-            FirstConnection = false;
-            if (UseLog) {
-                LogConnection();
-            }
+            FirstConnection = false;   
         }
         LedWasRed   = false;
         LedWasGreen = true;
@@ -1128,9 +1131,9 @@ void ClearText()
 /*********************************************************************************************************************************/
 void GetReturnCode()
 { // currently absorbed but ignored.
-    while (NEXTION.available()) {
-        NEXTION.read();
-    }
+  //  while (NEXTION.available()) {
+  //      NEXTION.read();
+  //  }
 }
 /*********************************************************************************************************************************/
 void SendCommand(char* tbox) 
@@ -1321,7 +1324,6 @@ bool GetButtonPress()
         ButtonPressed = true;
         while (NEXTION.available()) {
             a = NEXTION.read();
-            //  if (a > 127) Serial.println (a);   // to detect errors
             if (a > 31 && a < 254) {
                 TextIn[i] = a;
                 if (TextIn[i] == '$') TextIn[i] = 0;
@@ -1373,7 +1375,8 @@ FASTRUN void ShowServoPos()
 {
     if (millis() - ShowServoTimer <= 100) return;
     ShowServoTimer = millis();
-
+   
+  
     char     Ch_Lables[16][5] = {"Ch1", "Ch2", "Ch3", "Ch4", "Ch5", "Ch6", "Ch7", "Ch8", "Ch9", "Ch10", "Ch11", "Ch12", "Ch13", "Ch14", "Ch15", "Ch16"};
     char     ChannelInput[]   = "Input";
     char     ChannelOutput[]  = "Output";
@@ -1403,15 +1406,11 @@ FASTRUN void ShowServoPos()
     if (CurrentView == GRAPHVIEW) {
 #define fixitx        35
 #define LeastDistance 1 // if the change is very small, don't re-display anything - to reduce flashing. :=)!!
-
+  
         l = (InPutStick[ChanneltoSet - 1]);
-        if (ChanneltoSet <= 8) {
-            l1 = analogRead(AnalogueInput[l]);
-        }
-        else {
-            l1 = GetStickInput(l);
-        }
-        if (ReversedChannelBITS & 1 << (ChanneltoSet - 1)) { // reversed??
+        if (ChanneltoSet <= 8) l1 = analogRead(AnalogueInput[l]); else l1 = GetStickInputInputOnly(l); 
+
+        if (ReversedChannelBITS & 1 << (ChanneltoSet - 1)) { // reversed?
             if (l1 <= ChannelCentre[l]) {
                 l1 = map(l1, ChannelMin[l], ChannelCentre[l], ChannelMax[l], ChannelCentre[l]);
             }
@@ -1419,32 +1418,23 @@ FASTRUN void ShowServoPos()
                 l1 = map(l1, ChannelCentre[l], ChannelMax[l], ChannelCentre[l], ChannelMin[l]);
             }
         }
+
         if (l1 <= ChannelCentre[l]) {
             SendValue(ChannelInput, map(l1, ChannelCentre[l], ChannelMin[l], 0, -100));
             StickPosition = map(l1, ChannelMin[l], ChannelCentre[l], BoxLeft - 0, BoxLeft + (((BoxRight - fixitx) - BoxLeft) / 2));
-        }
-        else {
+        } else {
             SendValue(ChannelInput, map(l1, ChannelCentre[l], ChannelMax[l], 0, 100));
             StickPosition = map(l1, ChannelCentre[l], ChannelMax[l], BoxLeft + (((BoxRight - fixitx) - BoxLeft) / 2), BoxRight - fixitx);
         }
+
         if (abs(StickPosition - SavedLineX) > LeastDistance) {
-            DisplayCurve(); // needed to clear last line
+            DisplayCurve();                                                                                        // needed to clear last line
             DrawLine(StickPosition - 1, BoxTop + 3, StickPosition - 1, (BoxBottom - 3) - BoxTop, HighlightColour); // draws line for stick position
+            SendValue(ChannelOutput, map(SendBuffer[ChanneltoSet-1], MINMICROS, MAXMICROS, -100, 100));         
             SavedLineX = StickPosition;
         }
-        if (Connected) {
-            SendValue(ChannelOutput, map(SendBuffer[ChanneltoSet - 1], MINMICROS, MAXMICROS, -100, 100));
-        }
-        else {
-            SendValue(ChannelOutput, 0); // because when not connected nothing is sent
-        }
-    }
-    else {
-        SendValue(ChannelInput, 0);
-        SendValue(ChannelOutput, 0);
     }
 }
-
 /*********************************************************************************************************************************/
 FASTRUN bool CheckTXVolts()
 {
@@ -1855,35 +1845,69 @@ int GetNextNumber(int p1, char text1[CHARSMAX])
     return j;
 }
 /*********************************************************************************************************************************/
-FASTRUN uint16_t GetStickInput(uint8_t l)
+FASTRUN uint16_t GetStickInput(uint8_t l)  // This returns the proper output - not just input
 {
     uint16_t k = 0;
     switch (l) {
         case 8:
-            if (Channel9SwitchValue == 0) k = IntoHigherRes(MinDegrees[Bank][8]);
-            if (Channel9SwitchValue == 90) k = IntoHigherRes(CentreDegrees[Bank][8]);
+            if (Channel9SwitchValue == 0)   k = IntoHigherRes(MinDegrees[Bank][8]);
+            if (Channel9SwitchValue == 90)  k = IntoHigherRes(CentreDegrees[Bank][8]);
             if (Channel9SwitchValue == 180) k = IntoHigherRes(MaxDegrees[Bank][8]);
             break;
         case 9:
-            if (Channel10SwitchValue == 0) k = IntoHigherRes(MinDegrees[Bank][9]);
-            if (Channel10SwitchValue == 90) k = IntoHigherRes(CentreDegrees[Bank][9]);
+            if (Channel10SwitchValue == 0)   k = IntoHigherRes(MinDegrees[Bank][9]);
+            if (Channel10SwitchValue == 90)  k = IntoHigherRes(CentreDegrees[Bank][9]);
             if (Channel10SwitchValue == 180) k = IntoHigherRes(MaxDegrees[Bank][9]);
             break;
         case 10:
-            if (Channel11SwitchValue == 0) k = IntoHigherRes(MinDegrees[Bank][10]);
-            if (Channel11SwitchValue == 90) k = IntoHigherRes(CentreDegrees[Bank][10]);
+            if (Channel11SwitchValue == 0)   k = IntoHigherRes(MinDegrees[Bank][10]);
+            if (Channel11SwitchValue == 90)  k = IntoHigherRes(CentreDegrees[Bank][10]);
             if (Channel11SwitchValue == 180) k = IntoHigherRes(MaxDegrees[Bank][10]);
             break;
         case 11:
-            if (Channel12SwitchValue == 0) k = IntoHigherRes(MinDegrees[Bank][11]);
-            if (Channel12SwitchValue == 90) k = IntoHigherRes(CentreDegrees[Bank][11]);
+            if (Channel12SwitchValue == 0)   k = IntoHigherRes(MinDegrees[Bank][11]);
+            if (Channel12SwitchValue == 90)  k = IntoHigherRes(CentreDegrees[Bank][11]);
             if (Channel12SwitchValue == 180) k = IntoHigherRes(MaxDegrees[Bank][11]);
             break;
         default:
-            k = IntoHigherRes(CentreDegrees[Bank][15]); // channels 13,14,15,16 are simply centred
+            k = IntoHigherRes(90); // channels 13,14,15,16 are simply centred
+            break;
     }
     return k;
 }
+
+/*********************************************************************************************************************************/
+FASTRUN uint16_t GetStickInputInputOnly(uint8_t l) // This returns the input only
+{
+    uint16_t k = 0;
+    switch (l) {
+        case 8:
+            if (Channel9SwitchValue == 0)   k = ChannelMin[l];
+            if (Channel9SwitchValue == 90)  k = ChannelCentre[l];
+            if (Channel9SwitchValue == 180) k = ChannelMax[l];
+            break;
+        case 9:
+            if (Channel10SwitchValue == 0)   k = ChannelMin[l];
+            if (Channel10SwitchValue == 90)  k = ChannelCentre[l];
+            if (Channel10SwitchValue == 180) k = ChannelMax[l];
+            break;
+        case 10:
+            if (Channel11SwitchValue == 0)   k = ChannelMin[l];
+            if (Channel11SwitchValue == 90)  k = ChannelCentre[l];
+            if (Channel11SwitchValue == 180) k = ChannelMax[l];
+            break;
+        case 11:
+            if (Channel12SwitchValue == 0)   k = ChannelMin[l];
+            if (Channel12SwitchValue == 90)  k = ChannelCentre[l];
+            if (Channel12SwitchValue == 180) k = ChannelMax[l];
+            break;
+        default:
+            k = 1500; // Centre because no input possible
+        break;
+    }
+    return k;
+}
+
 /*********************************************************************************************************************************/
 // MIXES  (Channel mixes)
 /*********************************************************************************************************************************/
@@ -2014,6 +2038,7 @@ FASTRUN void GetNewChannelValues()
             m = analogRead(AnalogueInput[l]);                            // Get values from sticks' pots then interpolate them.
             k = Interpolate[InterpolationTypes[Bank][n]](m, l, n); // Use function pointer array to invoke chosen interpolation.
         }
+
         k += (SubTrims[n] - 127) * (TrimFactor / 2); // ADD SUBTRIM (...to output channel, not mapped input channel) (Range 0 - 127 - 254)
         if (l < 4) {
             uint16_t tt = t; 
@@ -2024,10 +2049,7 @@ FASTRUN void GetNewChannelValues()
             TrimAmount = (Trims[Bank][tt] - 80) * TrimFactor; // TRIMS on lower four channels (80 is mid point !! (range 40 - 80 - 120)) 
             if (TrimsReversed[Bank][tt]) TrimAmount = -TrimAmount;
             k += TrimAmount;
-        
         }
-
-
         if (!CalibratedYet) k = map(m, 0, 1024, MINMICROS, MAXMICROS); // Crude servos until calibrated
         PreMixBuffer[n] = constrain(k, MINMICROS, MAXMICROS);
         SendBuffer[n]   = PreMixBuffer[n];
@@ -2036,6 +2058,7 @@ FASTRUN void GetNewChannelValues()
         DoReverseSense();
         DoMixes();
     }
+       
 }
 /*********************************************************************************************************************************/
 
@@ -2062,6 +2085,7 @@ void CalibrateSticks() // This discovers end of travel place for sticks etc.
         if (ChannelMax[i] < p) ChannelMax[i] = p;
         if (ChannelMin[i] > p) ChannelMin[i] = p;
     }
+    
     GetNewChannelValues();
 }
 /*********************************************************************************************************************************/
@@ -2206,6 +2230,7 @@ void UpdateModelsNameEveryWhere()
         "Bank 3",
         "Bank 4",
     };
+
     char TheModelName[]        = "ModelName";
     char GraphView_Channel[]   = "Channel";
     char TrimView_Bank[] = "t1";
@@ -2214,17 +2239,23 @@ void UpdateModelsNameEveryWhere()
     char NoName[17];
     char Ch[] = "Channel ";
     char Nbuf[7];
-    char mn[30];             // holds model name plus its number
+    char mn1[30];             // holds model name plus its number
     char lb[] = " (";
     char rb[] = ")";
-    
-    strcpy(mn, ModelName);
+
+
+    strcpy(mn1, ModelName);
+
+    //Serial.print(ModelName);
+
     if (CurrentView != MODELSVIEW){ 
-        strcat(mn, lb);
-        strcat(mn, Str(Nbuf, ModelNumber, 0));  // Add model number for extra clarity
-        strcat(mn, rb);
+        strcat(mn1, lb);
+        strcat(mn1, Str(Nbuf, ModelNumber, 0));  // Add model number for extra clarity
+        strcat(mn1, rb);
     }
-    SendText(TheModelName, mn);
+
+    SendText(TheModelName, mn1);
+    
     if (CurrentView == GRAPHVIEW) {
         if (strlen(ChannelNames[ChanneltoSet - 1]) < 2) { // if no name, just show the channel number
             strcpy(NoName, Ch);
@@ -2273,7 +2304,7 @@ FLASHMEM void InitMaxMin()
 
 FLASHMEM void CentreTrims()
 {
-    for (int j = 0; j <= BankSUSED; ++j) {
+    for (int j = 0; j <= BANKSUSED; ++j) {
         for (int i = 0; i < CHANNELSUSED; ++i) {
             Trims[j][i] = 80;
         }
@@ -2397,13 +2428,13 @@ bool ReadOneModel(uint8_t Mnum)
         }
     }
 
-    for (j = 0; j < BankSUSED + 1; ++j) {
+    for (j = 0; j < BANKSUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             Trims[j][i] = SDRead8BITS(SDCardAddress);
             ++SDCardAddress;
         }
     }
-    for (j = 0; j < BankSUSED + 1; ++j) {
+    for (j = 0; j < BANKSUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             TrimsReversed[j][i] = SDRead8BITS(SDCardAddress);
             ++SDCardAddress;
@@ -2436,7 +2467,7 @@ bool ReadOneModel(uint8_t Mnum)
         ++SDCardAddress;
     }
     RxVoltageCorrection = SDRead16BITS(SDCardAddress);
-   // if ((RxVoltageCorrection > 20) || (RxVoltageCorrection < 0)) RxVoltageCorrection = 0;
+    if ((RxVoltageCorrection > 20) || (RxVoltageCorrection < 0)) RxVoltageCorrection = 0;
     ++SDCardAddress;
     ++SDCardAddress;
     CheckSavedTrimValues();
@@ -2486,7 +2517,7 @@ bool ReadOneModel(uint8_t Mnum)
         }
     }
 
-    for (j = 0; j < BankSUSED + 1; ++j) {
+    for (j = 0; j < BANKSUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             Exponential[j][i] = SDRead8BITS(SDCardAddress);
             if (Exponential[j][i] >= 201 || Exponential[j][i] == 0) {
@@ -2495,7 +2526,7 @@ bool ReadOneModel(uint8_t Mnum)
             ++SDCardAddress;
         }
     }
-    for (j = 0; j < BankSUSED + 1; ++j) {
+    for (j = 0; j < BANKSUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             InterpolationTypes[j][i] = SDRead8BITS(SDCardAddress);
             if (InterpolationTypes[j][i] < 0 || InterpolationTypes[j][i] > 2) {
@@ -2692,28 +2723,46 @@ void Force_ReDisplay()
 {
     for (int i = 0; i < CHANNELSUSED; ++i) ShownBuffer[i] = 242; // to force a re-show of servo positions
 }
-/*********************************************************************************************************************************/
-
-void ButtonRed(char* but)
-{
-    char lbut[60];
-    char red[] = ".pco=RED";
-    strcpy(lbut, but);
-    strcat(lbut, red);
-    SendCommand(lbut);
-}
 
 /*********************************************************************************************************************************/
-
-void ButtonWhite(char* but)
+void SendColour(char* but, int Colour)
 {
-    char lbut[60];
-    char wight[] = ".pco=WHITE";
-    strcpy(lbut, but);
-    strcat(lbut, wight);
-    SendCommand(lbut);
+  char lbut[60];
+  char nb[10] = " ";
+  strcpy(lbut, but);
+  strcat(lbut,Str(nb,Colour,0));
+  SendCommand(lbut);
 }
-
+/*********************************************************************************************************************************/
+void ShowSafetyIsOn() 
+{
+    if (CurrentView == FRONTVIEW){
+        char bco[]  = "bt0.bco=";     
+        char bco2[] = "bt0.bco2=";
+        char pco[]  = "bt0.pco=";
+        char pco2[] = "bt0.pco2=";
+        SendColour(bco,SpecialColour);
+        SendColour(bco2,SpecialColour);
+        SendColour(pco,HighlightColour);
+        SendColour(pco2,HighlightColour);
+    }
+    if (UseLog) LogSafety(1);
+}
+/*********************************************************************************************************************************/
+void ShowSafetyIsOff()
+{
+    if (CurrentView == FRONTVIEW){
+        char bco[]  = "bt0.bco=";
+        char bco2[] = "bt0.bco2=";
+        char pco[]  = "bt0.pco=";
+        char pco2[] = "bt0.pco2=";
+        SendColour(bco,BackGroundColour);
+        SendColour(bco2,BackGroundColour);
+        SendColour(pco,HighlightColour);
+        SendColour(pco2,HighlightColour);
+    }
+    if (UseLog) LogSafety(0);
+}
 /*********************************************************************************************************************************/
 
 void WatchDogCallBack()
@@ -2937,6 +2986,28 @@ FASTRUN void LogNewBank()
     LogText(thetext, 7);
 }
 
+
+// ************************************************************************
+ FASTRUN void LogMotor(bool On){
+    char Ltext1[] = "Motor On";
+    char Ltext0[] = "Motor Off";
+    char thetext[10];
+        if (On) strcpy(thetext, Ltext1); 
+        else
+        strcpy(thetext, Ltext0);
+        LogText(thetext, 9);
+ } 
+
+// ************************************************************************
+ FASTRUN void LogSafety(bool On){
+    char Ltext1[] = "Safety On";
+    char Ltext0[] = "Safety Off";
+    char thetext[10];
+        if (On) strcpy(thetext, Ltext1); 
+        else
+        strcpy(thetext, Ltext0);
+        LogText(thetext, 10);
+ } 
 // ************************************************************************
 
 FASTRUN void LogUKRules()
@@ -3290,13 +3361,13 @@ void SaveOneModel(uint16_t mnum)
             ++SDCardAddress;
         }
     }
-    for (j = 0; j < BankSUSED + 1; ++j) {
+    for (j = 0; j < BANKSUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             SDUpdate8BITS(SDCardAddress, Trims[j][i]);
             ++SDCardAddress;
         }
     }
-    for (j = 0; j < BankSUSED + 1; ++j) {
+    for (j = 0; j < BANKSUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             SDUpdate8BITS(SDCardAddress, TrimsReversed[j][i]);
             ++SDCardAddress;
@@ -3366,14 +3437,14 @@ void SaveOneModel(uint16_t mnum)
             ++SDCardAddress;
         }
     }
-    for (j = 0; j < BankSUSED + 1; ++j) {
+    for (j = 0; j < BANKSUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             SDUpdate8BITS(SDCardAddress, Exponential[j][i]);
             ++SDCardAddress;
         }
     }
 
-    for (j = 0; j < BankSUSED + 1; ++j) {
+    for (j = 0; j < BANKSUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             SDUpdate8BITS(SDCardAddress, InterpolationTypes[j][i]);
             ++SDCardAddress;
@@ -3819,7 +3890,7 @@ void SetDefaultValues()
     SendValue(Progress, 25);
     Procrastinate(10);
 
-    for (j = 0; j < BankSUSED + 1; ++j) { // must have fudged this somewhere.... 5?!
+    for (j = 0; j < BANKSUSED + 1; ++j) { // must have fudged this somewhere.... 5?!
         for (i = 0; i < CHANNELSUSED; ++i) {
             Trims[j][i]         = 80; // MIDPOINT is 80 !
             TrimsReversed[j][i] = 0;
@@ -3854,12 +3925,12 @@ void SetDefaultValues()
             ChannelNames[i][j] = DefaultChannelNames[i][j];
         }
     }
-    for (j = 0; j < BankSUSED + 1; ++j) {
+    for (j = 0; j < BANKSUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             Exponential[j][i] = DEFAULT_EXPO; // 0% (50) expo = default
         }
     }
-    for (j = 0; j < BankSUSED + 1; ++j) {
+    for (j = 0; j < BANKSUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
             InterpolationTypes[j][i] = EXPONENTIALCURVES; // Expo is default
         }
@@ -4160,7 +4231,7 @@ FASTRUN void DisplayCurve()
     SendValue(Gn3, DegsToPercent(CentreDegrees[Bank][ChanneltoSet - 1]));
     SendValue(Gn4, DegsToPercent(MidHiDegrees[Bank][ChanneltoSet - 1]));
     SendValue(Gn5, DegsToPercent(MaxDegrees[Bank][ChanneltoSet - 1]));
-    Procrastinate(1); 
+    
     DrawBox(BoxLeft, BoxTop, BoxRight - BoxLeft, BoxBottom - BoxTop, HighlightColour);
     xDot1 = xPoints[0];
     yDot1 = ((BoxBottom - BoxTop) / 2) + 20; // ?
@@ -4215,7 +4286,7 @@ FASTRUN void DisplayCurve()
     }
 
     if (InterpolationTypes[Bank][ChanneltoSet - 1] == EXPONENTIALCURVES) { // EXPO  ************************************************************************************************
-#define APPROXIMATION 5       // This is the approximation of the screen curve
+#define APPROXIMATION 7       // This is the approximation of the screen curve
         SendCommand(b3off);
         SendCommand(b4off);
         SendCommand(b7off);
@@ -4679,13 +4750,10 @@ void ShowBank(){
 void ShowMotor(int on)
 {       
         char bt0[]      = "bt0";
-        char bt01[]     = "click bt0,1";
         char OnMsg[]    = "Motor ON";
         char OffMsg[]   = "Motor OFF";
-
         if (on == 1)   SendText(bt0, OnMsg);
         if (on == 0)   SendText(bt0, OffMsg);
-        SendCommand(bt01);
 }
 /*********************************************************************************************************************************/
 
@@ -4945,8 +5013,8 @@ void EndBuddyView()
 }
 /*********************************************************************************************************************************/
 FASTRUN void DisplayCurveAndServoPos(){
-    SavedLineX = 0;
-    ShowServoPos(); // this calls displaycurve!!!
+    SavedLineX = 52735;             // just to be massvely different
+    ShowServoPos();                 // this calls displaycurve!!!
     ClearText();
 }
 /******************************** FUNCTIONS FOR ARRAY OF POINTERS *************************************************************/
@@ -5001,11 +5069,13 @@ void GotoMacrosView()
 void UpLog()
 {
     if (RecentStartLine > 0 && (CurrentView == LOGVIEW)) {
-        RecentStartLine -= 1;
+        RecentStartLine -= 3;
+        if (RecentStartLine < 1) RecentStartLine = 1;
         ShowLogFile(RecentStartLine);
     }
     if (RecentStartLine > 0 && (CurrentView == HELP_VIEW)) {
-        RecentStartLine -= 1;
+        RecentStartLine -= 3;
+        if (RecentStartLine < 1) RecentStartLine = 1;
         ScrollHelpFile();
     }
 }
@@ -5013,11 +5083,11 @@ void UpLog()
 void DownLog()
 {
     if (ThereIsMoreToSee && (CurrentView == LOGVIEW)) {
-        RecentStartLine += 1;
+        RecentStartLine += 3;
         ShowLogFile(RecentStartLine);
     }
     if (ThereIsMoreToSee && (CurrentView == HELP_VIEW)) {
-        RecentStartLine += 1;
+        RecentStartLine += 3;
         ScrollHelpFile();
     }
 }
@@ -5341,7 +5411,7 @@ void ThrottleDownTrim(){
      if (SticksMode == 2) tt = 2;
      MoveaTrim(tt);
 }
-// ******************************** Global Array of numbered function pointers - OK up to 128 functions ... **********************************
+// ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
 #define LASTFUNCTION 40 // one more than final one
 
 void (*NumberedFunctions[LASTFUNCTION])() {
@@ -5848,9 +5918,12 @@ FASTRUN void ButtonWasPressed()
             ClearText();
             return;
         }
-        if (InStrng(GoFrontView, TextIn) > 0) { // GOTO frontview
+        if (InStrng(GoFrontView, TextIn) > 0) { // GOTO frontview 
             SendCommand(page_FrontView);
             UpdateModelsNameEveryWhere();
+            SafetyWasOn ^= 1;                   // this forces a re-display of motor state // heer
+            MotorWasEnabled ^= 1;               // this forces a re-display of motor state
+            DontAnnoyMe = true;                 // this cancels an audio prompt
             ShowBank();
             LastTimeRead = 0;
             Reconnected  = false; // this is to make '** Connected! **' redisplay (in ShowComms())
@@ -6482,10 +6555,9 @@ FASTRUN void ButtonWasPressed()
         }
 
         if (InStrng(GoSetupView, TextIn) > 0) {
+            SendCommand(page_SetupView);
             CurrentView = MAINSETUPVIEW;
             b5isGrey    = false;
-            SendCommand(page_SetupView);
-            ModelNameTimeCheck = 0;
             UpdateModelsNameEveryWhere();
             ClearText();
             return;
@@ -6629,13 +6701,12 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(Setup, TextIn) > 0) { // Which channel to setup ... Goes to GraphView
+        if (InStrng(Setup, TextIn) > 0) {   // Which channel to setup ... Goes to GraphView
             ChanneltoSet = GetChannel();
-            ClearText();
-            SendCommand(page_GraphView); // Set to GraphView
+            SendCommand(page_GraphView);    // Set to GraphView
             CurrentView = GRAPHVIEW;
             Procrastinate(50);
-            DisplayCurveAndServoPos();
+            DisplayCurveAndServoPos(); 
             updateInterpolationTypes();
             UpdateModelsNameEveryWhere();
             SendValue(CopyToAllBanks, 0);
@@ -7057,18 +7128,20 @@ uint8_t CheckSwitch(uint8_t swt)
     if (swt == 4) rtv = ReadCHSwitch(Switch[2], Switch[3], SWITCH4Reversed);
     return rtv;
 }
+
 /************************************************************************************************************/
 
 void GetBank()
 { //  and AUTO and motor switch and other switchy things ...
-
+  
+    
     SafetyON     = false;
     MotorEnabled = !UseMotorKill; //  If not using motor switch then motor is always enabled.
 
     if (AutoSwitch == 1 && Switch[7] == SWITCH1Reversed) MotorEnabled = true;
     if (AutoSwitch == 2 && Switch[5] == SWITCH2Reversed) MotorEnabled = true;
     if (AutoSwitch == 3 && Switch[0] == SWITCH3Reversed) MotorEnabled = true;
-    if (AutoSwitch == 4 && Switch[2] == SWITCH4Reversed) MotorEnabled = true; // heer !!!
+    if (AutoSwitch == 4 && Switch[2] == SWITCH4Reversed) MotorEnabled = true; 
 
     if (SafetySwitch == 1 && Switch[7] == SWITCH1Reversed) SafetyON = true;
     if (SafetySwitch == 2 && Switch[5] == SWITCH2Reversed) SafetyON = true;
@@ -7080,23 +7153,33 @@ void GetBank()
     if (FMSwitch == 2) ReadFMSwitch(Switch[4], Switch[5], SWITCH2Reversed);
     if (FMSwitch == 1) ReadFMSwitch(Switch[6], Switch[7], SWITCH1Reversed);
     
-    if (AutoSwitch == 1 && Switch[6] == SWITCH1Reversed) Bank = 4; // Flight mode 4 (Auto) overrides modes 1,2,3.
+    if (AutoSwitch == 1 && Switch[6] == SWITCH1Reversed) Bank = 4;                      // Flight mode 4 (Auto) overrides modes 1,2,3.
     if (AutoSwitch == 2 && Switch[4] == SWITCH2Reversed) Bank = 4;
     if (AutoSwitch == 3 && Switch[1] == SWITCH3Reversed) Bank = 4;
     if (AutoSwitch == 4 && Switch[3] == SWITCH4Reversed) Bank = 4;
- 
-    if (Bank == 4 && !MotorWasEnabled) MotorEnabled = false;        // Moving to Bank4 from off doesn't start motor ...  yet
+
+    if (SafetyWasOn != SafetyON){
+        if (SafetyON) ShowSafetyIsOn(); else ShowSafetyIsOff();
+        SafetyWasOn = SafetyON;
+    }
+
+    if (Bank == 4 && !MotorWasEnabled) MotorEnabled = false;                            // Moving to Bank4 from motor off doesn't start motor ...  yet
    
     if (SafetyON) MotorEnabled = false;
-    if ((MotorEnabled != MotorWasEnabled))  {                       // MotorEnabled changed ?
+
+    if(!UseMotorKill)  ShowMotor(1);
+
+    if ((MotorEnabled != MotorWasEnabled) && (UseMotorKill))  {                         // MotorEnabled changed ?
         if (MotorEnabled) {       
             ShowMotor(1);
-            PlaySound(MOTORON);                                     // Tell the pilot motor is on!
+            if (AnnounceBanks) PlaySound(MOTORON);                                      // Tell the pilot motor is on! 
+              if (UseLog) LogMotor(1);   
             TimerMillis = millis();
         } else {            
-            PlaySound(MOTOROFF);
-            ShowMotor(0);                                           // Tell the pilot motor is off
-            PausedSecs = Secs + (Mins * 60) + (Hours * 3600);       // Remember how long so far
+            if (AnnounceBanks) PlaySound(MOTOROFF);
+              if (UseLog) LogMotor(0); 
+            ShowMotor(0);                                                               // Tell the pilot motor is off
+            PausedSecs = Secs + (Mins * 60) + (Hours * 3600);                           // Remember how long so far
         }
         LastSeconds = 0;  
         CheckTimer();
@@ -7106,9 +7189,9 @@ void GetBank()
     Channel11SwitchValue = CheckSwitch(Channel11Switch);
     Channel12SwitchValue = CheckSwitch(Channel12Switch);
     if (Bank != PreviousBank) {
-        if (Connected) LogNewBank();
-        if (MotorEnabled == MotorWasEnabled){                   // When turning off motor, don't sound bank too.
-                if (AnnounceBanks) SoundBank();
+        if (UseLog) LogNewBank();                          // heer!!!
+        if (MotorEnabled == MotorWasEnabled) { // When turning off motor, don't sound bank too.
+            if (AnnounceBanks) SoundBank();
         }
         if (CurrentView == FRONTVIEW) ShowBank();
         UpdateModelsNameEveryWhere();
@@ -7725,21 +7808,17 @@ void CheckPowerOffButton()
     }
 }
 
-
-
 /************************************************************************************************************/
-// LOOP
-/************************************************************************************************************/
-FASTRUN void loop()
-{
+FASTRUN void DoSomeHouseKeeping(){
+
     KickTheDog(); // Watchdog
     CheckPowerOffButton();
-    if (GetButtonPress()) ButtonWasPressed(); // Deal with button
+    if (GetButtonPress()) ButtonWasPressed();               // Deal with button
     if ((millis() - ModelNameTimeCheck) > 700) {
         ModelNameTimeCheck = millis();
         if (CurrentView == MAINSETUPVIEW) CheckScanButton();
-        if (CurrentView == MODELSVIEW) CheckModelName(); // In MODELSVIEW, this function checks correct name is displayed.
-        if (GetButtonPress()) ButtonWasPressed();        // Deal with button ... don't want to miss one!
+        if (CurrentView == MODELSVIEW) CheckModelName();    // In MODELSVIEW, this function checks correct name is displayed.
+        if (GetButtonPress()) ButtonWasPressed();
     }
     if (millis() - LastTimeRead >= 1000) {
         ReadTime(); // Do the clock
@@ -7753,40 +7832,59 @@ FASTRUN void loop()
         LogUKRules();
         PreviousUkRules = UkRules;
     }
+   
+}
+
+
+/************************************************************************************************************/
+void FASTRUN ManageTransmitter(){
+
+  
     ShowComms();                                                 // Screen Data
     ReadSwitches();                                              // Check switch positions
     GetBank();
     CheckHardwareTrims();
+    if (GetButtonPress()) ButtonWasPressed();
     CheckTimer();                                                // Screen Timer
     GetNewChannelValues();                                       // Load SendBuffer with new servo positions
-    
-    if (!MotorEnabled){
-        SendBuffer[MotorChannel] =  IntoHigherRes(MotorChannelZero);
-    }
-
     if (UseMacros) ExecuteMacro();                               // Modify it if macro is running
     if (!DoSbusSendOnly) {                                       // Skip these next lines when buddying as a slave
-        if (!BoundFlag) BufferNewPipe();                         // if not yet bound, insert our pipe into sendbuffer
+        if (!BoundFlag && Connected) BufferNewPipe();            // if not yet bound, insert our pipe into SendBuffer BUT ONLY WHEN CONNECTED 
         if (BuddyMaster) GetSlaveChannelValues();                // If buddy master, get buddy data and maybe use it.
+        if (!MotorEnabled) SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24
     }
-    ShowServoPos();                                              // Display servo positions
-    if ((millis()) > 1500) { // Transmit nothing for first 1.5 seconds
-        switch (CurrentMode) {
-            case NORMAL: // 0
-                SendData();
-                break;
-            case CALIBRATELIMITS: // 1
-                CalibrateSticks();
-                break;
-            case CENTRESTICKS: // 2
-                ChannelCentres();
-                break;
-            case SCANWAVEBAND: // 3
-                ScanAllChannels();
-                break;
-            default:
-                break; // CurrentMode >= 4 for no action at all.
+  
+}
+/************************************************************************************************************/
+// LOOP
+/************************************************************************************************************/
+FASTRUN void loop()
+{
+    if (GetButtonPress()) ButtonWasPressed();
+    
+    DoSomeHouseKeeping();
+    
+    ManageTransmitter();
+    
+    ShowServoPos();                                             
+    
+    switch (CurrentMode) {
+        case NORMAL:            // 0
+            SendData();
+            break;
+        case CALIBRATELIMITS:   // 1
+            CalibrateSticks();
+            break;
+        case CENTRESTICKS:      // 2
+            ChannelCentres();
+            break;
+        case SCANWAVEBAND:      // 3
+            ScanAllChannels();
+            break;
+        case SENDNOTHING:       // 4
+            break;
+        default:
+            break; // CurrentMode >= 4 for no action at all.
         }
-    }
 } // end loop()
