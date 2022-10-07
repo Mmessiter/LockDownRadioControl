@@ -344,8 +344,8 @@ uint32_t Inactivity_Start   = 0;
 tmElements_t tm;
 char         TxName[32]      = {"No name was found!"};
 uint32_t     LastTimeRead    = 0;
+uint32_t     LastBankRead    = 0;
 uint32_t     LastShowTime    = 0;
-uint32_t     LastQualityTime = 0;
 uint32_t     LastDogKick     = 0;
 uint8_t      MacAddress[6];
 
@@ -3468,6 +3468,7 @@ void SaveOneModel(uint16_t mnum)
     SDUpdate8BITS(SDCardAddress,MotorChannelZero);
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress,MotorChannel);
+    if (MotorChannel <= 0 || MotorChannel > 16) MotorChannel = 16;
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress,SafetySwitch);
     ++SDCardAddress;
@@ -7148,8 +7149,7 @@ uint8_t CheckSwitch(uint8_t swt)
 
 void GetBank()
 { //  and AUTO and motor switch and other switchy things ...
-  
-    
+
     SafetyON     = false;
     MotorEnabled = !UseMotorKill; //  If not using motor switch then motor is always enabled.
 
@@ -7772,7 +7772,7 @@ void CheckScanButton() // Scan button AND models button
         if (ModelMatched) {
           if(!b5isGrey) { 
                 SendCommand(b5Greyed);
-                delay(10);
+                delay(1);
                 SendCommand(b12Greyed);
                 b5isGrey = true;
             }
@@ -7827,8 +7827,6 @@ void CheckPowerOffButton()
 /************************************************************************************************************/
 FASTRUN void DoSomeHouseKeeping(){
 
-    KickTheDog(); // Watchdog
-    CheckPowerOffButton();
     if (GetButtonPress()) ButtonWasPressed();               // Deal with button
     if ((millis() - ModelNameTimeCheck) > 700) {
         ModelNameTimeCheck = millis();
@@ -7837,31 +7835,30 @@ FASTRUN void DoSomeHouseKeeping(){
         if (GetButtonPress()) ButtonWasPressed();
     }
     if (millis() - LastTimeRead >= 1000) {
-        ReadTime(); // Do the clock
+        ReadTime();        // Do the clock
+        GetStatistics();   // Do stats
         LastTimeRead = millis();
-    }
-    if (millis() - RangeTestStart >= 1000) {
-        GetStatistics(); // Do stats
-        RangeTestStart = millis();
     }
     if (PreviousUkRules != UkRules) {
         LogUKRules();
         PreviousUkRules = UkRules;
     }
-   
 }
-
 
 /************************************************************************************************************/
 void FASTRUN ManageTransmitter(){
-
-  
-    ShowComms();                                                 // Screen Data
-    ReadSwitches();                                              // Check switch positions
-    GetBank();
-    CheckHardwareTrims();
-    if (GetButtonPress()) ButtonWasPressed();
-    CheckTimer();                                                // Screen Timer
+if (GetButtonPress()) ButtonWasPressed();
+  if (millis()-LastBankRead >50){                               // 20 times a second is plenty
+        GetBank();                                              // Must not call too often        
+        ShowComms();                                            // Screen Data                                  
+        CheckTimer();                                           // Screen Timer
+        KickTheDog();                                           // Watchdog
+        CheckPowerOffButton();
+        ReadSwitches();                                         // Check switch positions
+        CheckHardwareTrims();
+        if (GetButtonPress()) ButtonWasPressed();
+        LastBankRead = millis();
+  }                                             
     GetNewChannelValues();                                       // Load SendBuffer with new servo positions
     if (UseMacros) ExecuteMacro();                               // Modify it if macro is running
     if (!DoSbusSendOnly) {                                       // Skip these next lines when buddying as a slave
@@ -7870,14 +7867,12 @@ void FASTRUN ManageTransmitter(){
         if (!MotorEnabled) SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24
     }
-  
 }
 /************************************************************************************************************/
 // LOOP
 /************************************************************************************************************/
 FASTRUN void loop()
 {
-    if (GetButtonPress()) ButtonWasPressed();
     
     DoSomeHouseKeeping();
     
