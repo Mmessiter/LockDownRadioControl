@@ -2,7 +2,7 @@ var searchData=
 [
   ['bankfour_0',['BANKFOUR',['../_radio_functions_8h.html#a70c430cc7f6137ab569257395a50bd73',1,'RadioFunctions.h']]],
   ['bankone_1',['BANKONE',['../_radio_functions_8h.html#a71b5a946c9e0c6ae61a9ba32e3f4fb53',1,'RadioFunctions.h']]],
-  ['banksused_2',['BankSUSED',['../_radio_functions_8h.html#adc6298411fbd13cfdc1272bcd125a8d7',1,'RadioFunctions.h']]],
+  ['banksused_2',['BANKSUSED',['../_radio_functions_8h.html#a16ec6f28a04c27b65af626adf8a994f6',1,'RadioFunctions.h']]],
   ['bankswitch_3',['BankSWITCH',['../_radio_functions_8h.html#ac89745fc04e8c0b89405873dccb9450d',1,'RadioFunctions.h']]],
   ['bankthree_4',['BANKTHREE',['../_radio_functions_8h.html#a2e95db48bdc3034a76977452d767933c',1,'RadioFunctions.h']]],
   ['banktwo_5',['BANKTWO',['../_radio_functions_8h.html#a4fe53fd1760aef0ce87d3a5a452eb652',1,'RadioFunctions.h']]],

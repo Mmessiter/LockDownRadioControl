@@ -1,5 +1,13 @@
 var NAVTREEINDEX12 =
 {
+"functions_func_y.html":[9,3,1,21],
+"functions_func_~.html":[9,3,1,22],
+"functions_g.html":[9,3,0,7],
+"functions_h.html":[9,3,0,8],
+"functions_i.html":[9,3,0,9],
+"functions_k.html":[9,3,0,10],
+"functions_l.html":[9,3,0,11],
+"functions_m.html":[9,3,0,12],
 "functions_n.html":[9,3,0,13],
 "functions_o.html":[9,3,0,14],
 "functions_p.html":[9,3,0,15],
@@ -241,13 +249,5 @@ var NAVTREEINDEX12 =
 "radio_8h.html#a6f54969e66375decc44723b141b78766":[10,0,2,1,0,1,24],
 "radio_8h.html#a6f74cdb7b32a3aa9e9342661bd44ad1a":[10,0,2,1,0,1,10],
 "radio_8h.html#a6f76c248ca5e727e482873f5328587e1":[10,0,2,1,0,1,39],
-"radio_8h.html#a6feccc8c0583de3235616d42076f1371":[10,0,2,1,0,1,4],
-"radio_8h.html#a79832b04c40823abb496f503a264e7d5":[10,0,2,1,0,1,69],
-"radio_8h.html#a79c2bfabc0682301ec238954845e1e81":[10,0,2,1,0,1,47],
-"radio_8h.html#a7bca81159d93f215060f40f45f19b0de":[10,0,2,1,0,1,37],
-"radio_8h.html#a7dc81a3982ee72ef15b460b4bbf32818":[10,0,2,1,0,1,64],
-"radio_8h.html#a8162c1748e39496c4adf88c55d1c49b8":[10,0,2,1,0,1,21],
-"radio_8h.html#a86c2722f6c671747562cc504a440e243":[10,0,2,1,0,1,41],
-"radio_8h.html#a88d2add9e7ca58e7218870f887b25859":[10,0,2,1,0,1,72],
-"radio_8h.html#a8b76f3c338025926421c7b308405bbfd":[10,0,2,1,0,1,14]
+"radio_8h.html#a6feccc8c0583de3235616d42076f1371":[10,0,2,1,0,1,4]
 };
