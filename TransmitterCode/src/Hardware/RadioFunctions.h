@@ -290,7 +290,7 @@
 #define MAXSHOWCOMMSSESCONDS 6       // Assess average connection quality over most recent 6 seconds continously
 #define SHOWCOMMSDELAY       1000    // ms pauses between updated info on NEXTION
 #define WARMUPDELAY          300     // fails at 200 so must be >200 ...
-#define SCREENCHANGEWAIT     250     
+#define SCREENCHANGEWAIT     100     
 
 
 // **************************************************************************
