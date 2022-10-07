@@ -6,7 +6,7 @@ var searchData=
   ['error_5froll_5fprev_3',['error_roll_prev',['../_quadcopter_2src_2main_8cpp.html#ad4d74e2fa2fccc0bfccc9052c9714af1',1,'main.cpp']]],
   ['error_5fyaw_4',['error_yaw',['../_quadcopter_2src_2main_8cpp.html#a239046dd7e85cc3e82531319556f9f5d',1,'main.cpp']]],
   ['error_5fyaw_5fprev_5',['error_yaw_prev',['../_quadcopter_2src_2main_8cpp.html#ae366cc2072db3fde7b163c534ea9b745',1,'main.cpp']]],
-  ['exponential_6',['Exponential',['../_transmitter_code_2src_2main_8cpp.html#a98ff7a43b72a0fdbf4cca16a9910d229',1,'main.cpp']]],
+  ['exponential_6',['Exponential',['../_transmitter_code_2src_2main_8cpp.html#a84fa5b279d091bf8427f9c5ffef75203',1,'main.cpp']]],
   ['exportedfilecounter_7',['ExportedFileCounter',['../_transmitter_code_2src_2main_8cpp.html#a1252681409ac5c9ed335a78f80633236',1,'main.cpp']]],
   ['ext_5fsens_5fdata_5f00_8',['EXT_SENS_DATA_00',['../class_m_p_u9250.html#af3ff49b6a515f043ed76fc3f0088ccfe',1,'MPU9250']]]
 ];
