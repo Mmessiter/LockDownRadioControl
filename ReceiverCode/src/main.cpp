@@ -613,22 +613,15 @@ void ShowPipes(){               // only for debugging
 
 bool Compare64BitValues(uint64_t c1, uint64_t c2){
 
-union{
-    uint64_t v1_64;
-    uint8_t v1_8[8];
-} union1;
+union {uint64_t v1_64; uint8_t v1_8[8];} union1;
+union {uint64_t v1_64; uint8_t v1_8[8];} union2;
 
-union{
-    uint64_t v1_64;
-    uint8_t v1_8[8];
-} union2;
-union1.v1_64 = c1;
-union2.v1_64 = c2;
-
-for (int i = 0; i < 6; ++i){  // only test the first 6 bytes!
-            if (union1.v1_8[i] != union2.v1_8[i]) return false;
-}
-return true;
+    union1.v1_64 = c1;
+    union2.v1_64 = c2;
+    
+    for (int i = 0; i < 6; ++i) if (union1.v1_8[i] != union2.v1_8[i]) return false;
+    
+    return true;
 }
 
 /************************************************************************************************************/
