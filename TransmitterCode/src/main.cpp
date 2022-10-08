@@ -3470,7 +3470,7 @@ void SaveOneModel(uint16_t mnum)
     SDUpdate8BITS(SDCardAddress,MotorChannelZero);
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress,MotorChannel);
-    if (MotorChannel <= 0 || MotorChannel > 16) MotorChannel = 16;
+    if (MotorChannel > 15) MotorChannel = 15;
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress,SafetySwitch);
     ++SDCardAddress;

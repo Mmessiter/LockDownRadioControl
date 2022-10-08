@@ -611,15 +611,15 @@ void ShowPipes(){               // only for debugging
 
 /************************************************************************************************************/
 
-bool Compare64BitValues(uint64_t c1, uint64_t c2){
+bool Compare48BitValues(uint64_t c1, uint64_t c2){
 
-union {uint64_t v1_64; uint8_t v1_8[8];} union1;
-union {uint64_t v1_64; uint8_t v1_8[8];} union2;
+union {uint64_t v64; uint8_t v8[8];} union1;
+union {uint64_t v64; uint8_t v8[8];} union2;
 
-    union1.v1_64 = c1;
-    union2.v1_64 = c2;
+    union1.v64 = c1;
+    union2.v64 = c2;
     
-    for (int i = 0; i < 6; ++i) if (union1.v1_8[i] != union2.v1_8[i]) return false;
+    for (int i = 0; i < 6; ++i) if (union1.v8[i] != union2.v8[i]) return false;
     
     return true;
 }
@@ -628,7 +628,7 @@ union {uint64_t v1_64; uint8_t v1_8[8];} union2;
 void DoBinding(){
     GetNewPipe();
    // ShowPipes();    
-    if (Compare64BitValues(OldPipe,NewPipe)){       // This needed because the more obvious " != " proves unreliable!!!!
+    if (Compare48BitValues(OldPipe,NewPipe)){       // Compares two 48 BIT numbers
         SaveNewBind = false;                        // No need to save it as we had it.
         BindNow = 1;                                // This critical value is sent from TX when user hits bind button, on set locally if we we knew him already
     }
