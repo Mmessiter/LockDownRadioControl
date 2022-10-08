@@ -237,7 +237,9 @@ void BindModel(){
     CurrentRadio->stopListening();
     delayMicroseconds(250);
     SetNewPipe();                  // change to bound pipe
-    if (SaveNewBind) for (uint8_t i = 0; i < 8; ++i) EEPROM.update(i+BIND_EEPROM_OFFSET, ReceivedData[i]);
+    if (SaveNewBind) for (uint8_t i = 0; i < 8; ++i) { 
+        EEPROM.update(i+BIND_EEPROM_OFFSET, ReceivedData[i]);
+    }
     BoundFlag   = true;
     BindNow     = 0;
     SaveNewBind = false;
