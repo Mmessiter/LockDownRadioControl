@@ -5,7 +5,7 @@ var _receiver_code_2src_2main_8cpp =
     [ "IDLEN", "_receiver_code_2src_2main_8cpp.html#a472646a6b1f959aa3b4261a8247c2015", null ],
     [ "AttachServos", "_receiver_code_2src_2main_8cpp.html#a0cbfd712ab3bd8f654bc19400fd704bd", null ],
     [ "BindModel", "_receiver_code_2src_2main_8cpp.html#aa0c6905579a33aef28d737d43676cbbd", null ],
-    [ "Compare64BitValues", "_receiver_code_2src_2main_8cpp.html#a0f77b8134b0b8169a7d8c2364345918a", null ],
+    [ "Compare48BitValues", "_receiver_code_2src_2main_8cpp.html#ae4b6d38acdc3de6654beb1cb5ac1b053", null ],
     [ "DoBinding", "_receiver_code_2src_2main_8cpp.html#af4a2e182cd3b86ca9765a08100cfb14a", null ],
     [ "FailSafe", "_receiver_code_2src_2main_8cpp.html#a42318598726782ebb2e1857f167c8cda", null ],
     [ "LoadFailSafeData", "_receiver_code_2src_2main_8cpp.html#a7b232e8049c83655363495df07fc96d9", null ],
