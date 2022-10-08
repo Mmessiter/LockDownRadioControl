@@ -15,7 +15,7 @@
 
 #define RXVERSION_MAJOR   1
 #define RXVERSION_MINOR   9
-#define RXVERSION_MINIMUS 3 // October 2022
+#define RXVERSION_MINIMUS 4 // October 2022
 
 //**************************************************************************************************************************
 #define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< **..
@@ -55,7 +55,7 @@
 #define CSN_OFF                  HIGH
 #define CE_ON                    HIGH
 #define CE_OFF                   LOW
-#define BIND_EEPROM_OFFSET       20                           // use 8 bytes from here
+#define BIND_EEPROM_OFFSET        0                          // use 8 bytes from here
 #define FS_EEPROM_OFFSET         BIND_EEPROM_OFFSET+8        // use 16 bytes from here
 
 // #define DB_FHSS

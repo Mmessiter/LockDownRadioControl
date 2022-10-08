@@ -86,6 +86,7 @@ bool            QNHSent         = false;
 bool            FirstLostPacket = true;
 uint8_t         MacAddress[8] = {0,0,0,0,0,0,0,0};
 bool            ModelMatched    = false;
+uint8_t         TheReceivedPipe[8];
 /************************************************************************************************************/
 
 void LoadFailSafeData()
@@ -238,8 +239,8 @@ void BindModel(){
     delayMicroseconds(250);
     SetNewPipe();                  // change to bound pipe
     if (SaveNewBind) for (uint8_t i = 0; i < 8; ++i) { 
-        EEPROM.update(i+BIND_EEPROM_OFFSET, ReceivedData[i]);
-    }
+        EEPROM.update(i+BIND_EEPROM_OFFSET, TheReceivedPipe[i]); 
+        }
     BoundFlag   = true;
     BindNow     = 0;
     SaveNewBind = false;
@@ -612,9 +613,9 @@ void ShowPipes(){               // only for debugging
 void DoBinding(){
     GetNewPipe();
     ShowPipes();
-    if (OldPipe == NewPipe) {
-        SaveNewBind = false;      // No need to save it as we had it.
-        BindNow = 1;              // This critical value is sent from TX when user hits bind button, on set locally if we we knew him already
+    if ((int)OldPipe == (int)NewPipe) {
+        SaveNewBind = false;       // No need to save it as we had it.
+        BindNow = 1;               // This critical value is sent from TX when user hits bind button, on set locally if we we knew him already
     }
     if (BindNow > 0 && !BoundFlag && ModelMatched) BindModel(); // only when all conditions are right shall we bind.
 }

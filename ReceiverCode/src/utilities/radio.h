@@ -52,6 +52,7 @@ extern float    AltitudeGPS;
 extern float    DistanceGPS;
 extern float    CourseToGPS;
 extern uint8_t  MacAddress[8];
+extern uint8_t  TheReceivedPipe[8];
 
 extern void     BindModel();
 extern void FailSafe(); // defined in main.cpp
@@ -116,9 +117,8 @@ void SendVersionNumberToAckPayload() // AND which radio transceiver is currently
 
 /************************************************************************************************************/
 
-void GetNewPipe()
-{
-    NewPipe =  (uint64_t)ReceivedData[0] << 56;
+void GetNewPipe() // receive
+{   NewPipe =  (uint64_t)ReceivedData[0] << 56;
     NewPipe += (uint64_t)ReceivedData[1] << 48;
     NewPipe += (uint64_t)ReceivedData[2] << 40;
     NewPipe += (uint64_t)ReceivedData[3] << 32;
@@ -126,6 +126,10 @@ void GetNewPipe()
     NewPipe += (uint64_t)ReceivedData[5] << 16;
     NewPipe += (uint64_t)ReceivedData[6] << 8;
     NewPipe += (uint64_t)ReceivedData[7];
+
+    for (int i = 0; i < 8; ++i){
+          TheReceivedPipe[i] = ReceivedData[i];
+    }
 }
 
 /************************************************************************************************************/
