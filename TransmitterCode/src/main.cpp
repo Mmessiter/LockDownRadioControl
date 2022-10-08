@@ -1138,11 +1138,13 @@ void GetReturnCode()
 /*********************************************************************************************************************************/
 void SendCommand(char* tbox) 
 {
+    char page[] = "page ";
     NEXTION.print(tbox);
     for (int i = 0; i < 3; ++i) {
         NEXTION.write(0xff);
         delayMicroseconds(70);
     }
+    if (InStrng(page, tbox)) Procrastinate(SCREENCHANGEWAIT); // heer
     GetReturnCode();
 }
 /*********************************************************************************************************************************/
@@ -3157,7 +3159,6 @@ FLASHMEM void setup()
     SendValue(FrontView_Special, SpecialColour);
     SendValue(FrontView_Highlight, HighlightColour);
     SendCommand(page_FrontView);
-    delay(SCREENCHANGEWAIT);
     SetAudioVolume(AudioVolume);
     if (PlayFanfare) {
         PlaySound(THEFANFARE);
@@ -3185,6 +3186,7 @@ FLASHMEM void setup()
     SendText(FrontView_Connected, na);
     UpdateModelsNameEveryWhere();
     WarningTimer = millis();
+    if(!UseMotorKill)  ShowMotor(1);
 }
 /*********************************************************************************************************************************/
 
@@ -4756,6 +4758,7 @@ void ShowMotor(int on)
         char OffMsg[]   = "Motor OFF";
         if (on == 1)   SendText(bt0, OnMsg);
         if (on == 0)   SendText(bt0, OffMsg);
+       
 }
 /*********************************************************************************************************************************/
 
@@ -5149,7 +5152,6 @@ void SetupViewFM()
     char page_SetupView[] = "page SetupView";
     SaveAllParameters();
     SendCommand(page_SetupView);
-    delay(SCREENCHANGEWAIT);
     CurrentMode        = NORMAL; // Send data again
     CurrentView        = MAINSETUPVIEW;
     UpdateModelsNameEveryWhere();
@@ -5177,7 +5179,6 @@ void EndSubTrimView()
     SaveOneModel(ModelNumber);
     CurrentView = MAINSETUPVIEW;
     SendCommand(page_SetupView);
-    delay(SCREENCHANGEWAIT);
     ModelNameTimeCheck = 0;
     UpdateModelsNameEveryWhere();
 }
@@ -5223,7 +5224,6 @@ void Options2End()
     SaveTransmitterParameters();
     CurrentView = MAINSETUPVIEW;
     SendCommand(page_SetupView);
-    delay(SCREENCHANGEWAIT);
     UpdateModelsNameEveryWhere();
 }
 /******************************************************************************************************************************/
@@ -5313,7 +5313,6 @@ void OptionView4End()
 
     SendCommand(page_SetupView);
     CurrentView = MAINSETUPVIEW;
-    delay(SCREENCHANGEWAIT);
     SaveTransmitterParameters();
     UpdateModelsNameEveryWhere();
 }
@@ -5344,7 +5343,6 @@ void OptionView3End()
     CloseModelsFile();
     CurrentView = MAINSETUPVIEW;
     SendCommand(page_SetupView);
-    delay(SCREENCHANGEWAIT);
     UpdateModelsNameEveryWhere();
 }
 
@@ -5785,7 +5783,6 @@ FASTRUN void ButtonWasPressed()
             RestoreBrightness();
             SetAudioVolume(AudioVolume);
             SendCommand(page_SetupView);
-            delay(SCREENCHANGEWAIT);
             ModelNameTimeCheck = 0;
             SaveTransmitterParameters();
             UpdateModelsNameEveryWhere();
@@ -5805,7 +5802,6 @@ FASTRUN void ButtonWasPressed()
             ClearText();
             SaveAllParameters();
             SendCommand(page_SetupView);
-            delay(SCREENCHANGEWAIT);
             ModelNameTimeCheck = 0;
             CurrentMode        = NORMAL;
             CurrentView        = MAINSETUPVIEW;
@@ -5885,7 +5881,6 @@ FASTRUN void ButtonWasPressed()
             SendValue(Progress, 95);
             SendValue(Progress, 100);
             SendCommand(page_SetupView);
-            delay(SCREENCHANGEWAIT);
             ModelNameTimeCheck = 0;
             CurrentMode        = NORMAL;
             CurrentView        = MAINSETUPVIEW;
@@ -5930,7 +5925,6 @@ FASTRUN void ButtonWasPressed()
         }
         if (InStrng(GoFrontView, TextIn) > 0) { // GOTO frontview 
             SendCommand(page_FrontView);
-            delay(SCREENCHANGEWAIT);
             UpdateModelsNameEveryWhere();
             SafetyWasOn ^= 1;                   // this forces a re-display of motor state // heer
             MotorWasEnabled ^= 1;               // this forces a re-display of motor state
@@ -5952,7 +5946,6 @@ FASTRUN void ButtonWasPressed()
             CurrentView = MAINSETUPVIEW;
             b5isGrey    = false;
             SendCommand(page_SetupView);
-            delay(SCREENCHANGEWAIT);
             ModelNameTimeCheck = 0;
             DoScanEnd();
             UpdateModelsNameEveryWhere();
@@ -6138,7 +6131,7 @@ FASTRUN void ButtonWasPressed()
             }
             else {
                 if (UseLog) LogPowerOff();
-                delay(SCREENCHANGEWAIT);
+                delay(50);
                 SaveAllParameters();
                 delay(250); 
                 digitalWrite(POWER_OFF_PIN, HIGH);
@@ -6154,7 +6147,7 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(OffNow, TextIn) > 0) { // redundant
             if (UseLog) LogPowerOff();
-            delay(SCREENCHANGEWAIT);
+            delay(50);
             SaveAllParameters();
             delay(250); 
             digitalWrite(POWER_OFF_PIN, HIGH); // force OFF in Options View
@@ -6323,7 +6316,6 @@ FASTRUN void ButtonWasPressed()
             SendCommand(ProgressEnd);
             UpdateButtonLabels();
             SendCommand(page_SetupView);
-            delay(SCREENCHANGEWAIT);
             CurrentView = MAINSETUPVIEW;
             b5isGrey = false;
             ModelNameTimeCheck = 0;
@@ -6569,7 +6561,6 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(GoSetupView, TextIn) > 0) {
             SendCommand(page_SetupView);
-            delay(SCREENCHANGEWAIT);
             CurrentView = MAINSETUPVIEW;
             b5isGrey    = false;
             UpdateModelsNameEveryWhere();
@@ -6598,7 +6589,6 @@ FASTRUN void ButtonWasPressed()
             CurrentView = MAINSETUPVIEW;
             b5isGrey    = false;
             SendCommand(page_SetupView);
-            delay(SCREENCHANGEWAIT);
             ModelNameTimeCheck = 0;
             UpdateModelsNameEveryWhere();
             ClearText();
@@ -6683,7 +6673,6 @@ FASTRUN void ButtonWasPressed()
             SaveAllParameters(); // save trims to SDcard
             b5isGrey           = false;
             SendCommand(page_SetupView);
-            delay(SCREENCHANGEWAIT);
             ModelNameTimeCheck = 0;
             CurrentMode        = NORMAL;
             CurrentView        = MAINSETUPVIEW;
@@ -7182,7 +7171,7 @@ void GetBank()
    
     if (SafetyON) MotorEnabled = false;
 
-    if(!UseMotorKill)  ShowMotor(1);
+   
 
     if ((MotorEnabled != MotorWasEnabled) && (UseMotorKill))  {                         // MotorEnabled changed ?
         if (MotorEnabled) {       
@@ -7545,7 +7534,6 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
     ModelMatched             = false;
     if (CurrentView != FRONTVIEW){                                        // Frontview is needed because of Bind button
        SendCommand(page_FrontView);
-       delay(SCREENCHANGEWAIT);
        CurrentView = FRONTVIEW;
        UpdateModelsNameEveryWhere();
     }
