@@ -73,5 +73,6 @@ var _receiver_code_2src_2main_8cpp =
     [ "SensorTime", "_receiver_code_2src_2main_8cpp.html#a1e9e8116136abd96cf87d7f0fd20a3d8", null ],
     [ "ServosAttached", "_receiver_code_2src_2main_8cpp.html#a95b22fb572f7a91a89a431c7f1236575", null ],
     [ "SpeedGPS", "_receiver_code_2src_2main_8cpp.html#af02319a1e0d8c0c651f23e49acc228f8", null ],
+    [ "TheReceivedPipe", "_receiver_code_2src_2main_8cpp.html#ae5a33f9a5f131b46460efad8f0e8e8b5", null ],
     [ "YearGPS", "_receiver_code_2src_2main_8cpp.html#a4a1012a9dfe5632ac326ce712f311472", null ]
 ];

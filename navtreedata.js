@@ -136,14 +136,14 @@ var NAVTREEINDEX =
 "_quadcopter_2src_2main_8cpp.html#a585dc9036243cba230705899afcf4348",
 "_radio_functions_8h.html#a2e95db48bdc3034a76977452d767933c",
 "_receiver_code_2lib_2_adafruit___g_p_s___library_2src_2_adafruit___p_m_t_k_8h.html#a4c352344763c1ae0f1293dc15c51a824",
-"_transmitter_code_2src_2main_8cpp.html#a0a6be8adfb11b7e5dafd3f47867c0801",
-"_transmitter_code_2src_2main_8cpp.html#a7b8f152779a09d867292d3a8e7f76d85",
-"_transmitter_code_2src_2main_8cpp.html#ae768cbeda38b92908ae481b943893e3b",
-"class_adafruit___sensor.html#a0636562b9bc853b796ecc87b5d4b1bec",
-"class_m_p_u6050.html#ae7e9ead9645bcef326eb579c6ab5d5ff",
-"class_m_p_u9250.html#ad05e77f913449f7581db196ba9539091",
-"functions_func_v.html",
-"radio_8h.html#a6f74cdb7b32a3aa9e9342661bd44ad1a"
+"_transmitter_code_2src_2main_8cpp.html#a0a3d89dfcfab70c6cbc50401fff1afeb",
+"_transmitter_code_2src_2main_8cpp.html#a7b76a0c3310e4ddc51665aee884428c7",
+"_transmitter_code_2src_2main_8cpp.html#ae7618f38a148877bc5681be58cba8354",
+"class_adafruit___sensor.html",
+"class_m_p_u6050.html#ae54dc358da048e61a1ac68012300fdaa",
+"class_m_p_u9250.html#acfc8adb5dcfe24eb35f2a82377c0d8a0",
+"functions_func_t.html",
+"radio_8h.html#a6f54969e66375decc44723b141b78766"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
