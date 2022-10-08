@@ -310,7 +310,7 @@ var searchData=
   ['showgps_307',['ShowGPS',['../_sensor_hub_t32_2src_2main_8cpp.html#a6dfb0fe1b733dfc8e9d989a321596850',1,'main.cpp']]],
   ['showhopdurationetc_308',['ShowHopDurationEtc',['../radio_8h.html#a2863e7455e30e6fddc0fcf56f62d6564',1,'radio.h']]],
   ['showlogfile_309',['ShowLogFile',['../_radio_functions_8h.html#af5df157d4ece6b40a9ce7a60faeca569',1,'ShowLogFile(uint8_t StartLine):&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#af5df157d4ece6b40a9ce7a60faeca569',1,'ShowLogFile(uint8_t StartLine):&#160;main.cpp']]],
-  ['showmotor_310',['ShowMotor',['../_transmitter_code_2src_2main_8cpp.html#a6b3c522a9d43d58a184d9866ca9d21f3',1,'main.cpp']]],
+  ['showmotor_310',['ShowMotor',['../_radio_functions_8h.html#a6b3c522a9d43d58a184d9866ca9d21f3',1,'ShowMotor(int on):&#160;main.cpp'],['../_transmitter_code_2src_2main_8cpp.html#a6b3c522a9d43d58a184d9866ca9d21f3',1,'ShowMotor(int on):&#160;main.cpp']]],
   ['shownbuffer_311',['ShownBuffer',['../_transmitter_code_2src_2main_8cpp.html#a02085855e5fb100e283af07dcefcd145',1,'main.cpp']]],
   ['showpipes_312',['ShowPipes',['../_receiver_code_2src_2main_8cpp.html#a75cc49e9cc24c5f7159fb18c577c5603',1,'main.cpp']]],
   ['showsafetyisoff_313',['ShowSafetyIsOff',['../_transmitter_code_2src_2main_8cpp.html#ac015e93acba51fe284176b84c05e3450',1,'main.cpp']]],

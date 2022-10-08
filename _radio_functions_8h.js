@@ -228,6 +228,7 @@ var _radio_functions_8h =
     [ "ShowBank", "_radio_functions_8h.html#a86ff8d6a0763abc33c7e814f5c1d4b5c", null ],
     [ "ShowComms", "_radio_functions_8h.html#aac472b3398ab38e7f54b1a2cae96ba62", null ],
     [ "ShowLogFile", "_radio_functions_8h.html#af5df157d4ece6b40a9ce7a60faeca569", null ],
+    [ "ShowMotor", "_radio_functions_8h.html#a6b3c522a9d43d58a184d9866ca9d21f3", null ],
     [ "ShowServoPos", "_radio_functions_8h.html#ad959eec03b0151ade81dc088593d816c", null ],
     [ "StartInactvityTimeout", "_radio_functions_8h.html#a793b7bcd77531c95fe72ed4356d421c8", null ],
     [ "StartLogFile", "_radio_functions_8h.html#a514afc8dd077db77334696ca719a99b7", null ],
