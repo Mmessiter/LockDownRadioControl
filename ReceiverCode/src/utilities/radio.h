@@ -6,7 +6,7 @@
 
 RF24     Radio1(pinCE1, pinCSN1);
 RF24     Radio2(pinCE2, pinCSN2);
-RF24*    CurrentRadio = &Radio1; //
+RF24*    CurrentRadio = &Radio1; 
 bool     Connected    = false;
 bool     SaveNewBind  = true;
 bool     HopNow       = false;

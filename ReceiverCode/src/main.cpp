@@ -237,12 +237,7 @@ void BindModel(){
     CurrentRadio->stopListening();
     delayMicroseconds(250);
     SetNewPipe();                  // change to bound pipe
-    if (SaveNewBind) {        
-        for (uint8_t i = 0; i < 8; ++i) {
-            EEPROM.update(i+BIND_EEPROM_OFFSET, ReceivedData[i]);
-            delay(1);
-        }
-    }
+    if (SaveNewBind) for (uint8_t i = 0; i < 8; ++i) EEPROM.update(i+BIND_EEPROM_OFFSET, ReceivedData[i]);
     BoundFlag   = true;
     BindNow     = 0;
     SaveNewBind = false;
@@ -617,7 +612,7 @@ void DoBinding(){
     ShowPipes();
     if (OldPipe == NewPipe) {
         SaveNewBind = false;      // No need to save it as we had it.
-        BindNow = 1;          // This critical value is sent from TX when user hits bind button, on set locally if we we knew him already
+        BindNow = 1;              // This critical value is sent from TX when user hits bind button, on set locally if we we knew him already
     }
     if (BindNow > 0 && !BoundFlag && ModelMatched) BindModel(); // only when all conditions are right shall we bind.
 }

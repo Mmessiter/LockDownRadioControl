@@ -7,12 +7,12 @@
 #define RadioFunctions_H
 
 // **************************************************************************
-//                TX VERSION NUMBER   (September 2022 Malcolm Messiter)        *
+//                TX VERSION NUMBER   (October 2022 Malcolm Messiter)        *
 //***************************************************************************
 
 #define TXVERSION_MAJOR   1
 #define TXVERSION_MINOR   9
-#define TXVERSION_MINIMUS 2
+#define TXVERSION_MINIMUS 3
 
 // **************************************************************************
 //                               Includes                                   *
@@ -37,7 +37,7 @@
 //    DEBUG OPTIONS (Uncomment any of these for that bit of debug info)     *
 //***************************************************************************
 
-// #define DB_NEXTION        // Debug NEXTION
+ // #define DB_NEXTION        // Debug NEXTION
 // #define DB_SD             // Debug SD card data
 // #define DB_FHSS           // Debug real time FHSS data
 // #define DB_SENSORS        // Debug Sensors
@@ -56,7 +56,7 @@
 #define PROPOCHANNELS      8                         // Only 4 have knobs / 2 sticks (= 4 hall sensors)
 #define BankSWITCH         4                         // Default MODE switch
 #define AUTOSWITCH         1                         // Default AUTO switch
-#define BankSUSED          4                         // Flight modes (AKA Banks)
+#define BANKSUSED          4                         // Flight modes (AKA Banks)
 #define DEFAULTPIPEADDRESS 0xBABE1E5420LL            // Pipe address for startup - any value but MUST match RX
 #define LOWBATTERY         42                        // Default percent for warning (User definable)
 #define CE_PIN             9                         // for SPI to nRF24L01
@@ -290,6 +290,8 @@
 #define MAXSHOWCOMMSSESCONDS 6       // Assess average connection quality over most recent 6 seconds continously
 #define SHOWCOMMSDELAY       1000    // ms pauses between updated info on NEXTION
 #define WARMUPDELAY          300     // fails at 200 so must be >200 ...
+#define SCREENCHANGEWAIT     100     // allow time for screen to appear
+
 
 // **************************************************************************
 //                            WATCHDOG PARAMETERS                           *
@@ -306,7 +308,6 @@ extern RF24           Radio1;
 extern uint8_t        CurrentMode;
 extern uint8_t        NoCarrier[];
 extern uint8_t        AllChannels[];
-extern char           NoSleeping[];
 extern char           NEXTIONSleepTime[];
 extern uint8_t        ScanStart;
 extern uint8_t        ScanEnd;
@@ -437,6 +438,9 @@ void         ClearSuccessRate();
 int          CheckRange(int v, int min, int max);
 void         MoveaTrim(uint8_t i);
 void         SetUKFrequencies();
+FASTRUN uint16_t GetStickInputInputOnly(uint8_t l);
+FASTRUN void     LogSafety(bool On);
+void             ShowMotor(int on);
 
 /*********************************************************************************************************************************/
 
