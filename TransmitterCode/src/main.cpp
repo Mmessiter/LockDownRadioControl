@@ -7139,6 +7139,8 @@ uint8_t CheckSwitch(uint8_t swt)
 void GetBank()
 { //  and AUTO and motor switch and other switchy things ...
 
+    if (CurrentMode != NORMAL) return; // not needed if calibrating
+
     SafetyON     = false;
     MotorEnabled = !UseMotorKill; //  If not using motor switch then motor is always enabled.
 
