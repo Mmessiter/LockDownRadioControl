@@ -1494,6 +1494,7 @@ FASTRUN bool CheckRXVolts()
     char  spaces[]         = "  ";
     ReadVolts              = (RXModelVolts * 100) + (RxVoltageCorrection * RXCellCount);
     Volts                  = map(ReadVolts, 3.4f * RXCellCount * 100, 4.2f * RXCellCount * 100, 0, 100);
+ 
     if (RXVoltsDetected) {
         Volts = constrain(Volts, 0, 100);
         if (Volts <= LowBattery && Volts > 0) RXWarningFlag = true;
@@ -5592,6 +5593,7 @@ FASTRUN void ButtonWasPressed()
         char r4s[]                     = "r4s";
         char r5s[]                     = "r5s";
         char r6s[]                     = "r6s";
+        char r12s[]                    = "r12s";
         char SwitchesView[]            = "SwitchesView";
         char SwitchesView1[]           = "SwitchesView1";
         char OneSwitchView[]           = "OneSwitchView";
@@ -6602,22 +6604,25 @@ FASTRUN void ButtonWasPressed()
             SendValue(r4s, 0);
             SendValue(r5s, 0);
             SendValue(r6s, 0);
-            if (RXCellCount == 2) SendValue(r2s, 1); // Then update RX batt cell count
-            if (RXCellCount == 3) SendValue(r3s, 1);
-            if (RXCellCount == 4) SendValue(r4s, 1);
-            if (RXCellCount == 5) SendValue(r5s, 1);
-            if (RXCellCount == 6) SendValue(r6s, 1);
+            SendValue(r12s, 0);
+            if (RXCellCount == 2)  SendValue(r2s, 1); // Then update RX batt cell count
+            if (RXCellCount == 3)  SendValue(r3s, 1);
+            if (RXCellCount == 4)  SendValue(r4s, 1);
+            if (RXCellCount == 5)  SendValue(r5s, 1);
+            if (RXCellCount == 6)  SendValue(r6s, 1);
+            if (RXCellCount == 12) SendValue(r12s, 1);
             ClearText();
             UpdateModelsNameEveryWhere();
             return;
         }
 
         if (InStrng(RXBAT, TextIn) > 0) { // UPdate RX batt cell count
-            if (GetValue(r2s) == 1) RXCellCount = 2;
-            if (GetValue(r3s) == 1) RXCellCount = 3;
-            if (GetValue(r4s) == 1) RXCellCount = 4;
-            if (GetValue(r5s) == 1) RXCellCount = 5;
-            if (GetValue(r6s) == 1) RXCellCount = 6;
+            if (GetValue(r2s) == 1)  RXCellCount = 2;
+            if (GetValue(r3s) == 1)  RXCellCount = 3;
+            if (GetValue(r4s) == 1)  RXCellCount = 4;
+            if (GetValue(r5s) == 1)  RXCellCount = 5;
+            if (GetValue(r6s) == 1)  RXCellCount = 6;
+            if (GetValue(r12s) == 1) RXCellCount = 12;
             SaveOneModel(ModelNumber);
             ClearText();
             return;
@@ -7137,7 +7142,7 @@ uint8_t CheckSwitch(uint8_t swt)
 /************************************************************************************************************/
 
 void GetBank()
-{ //  and AUTO and motor switch and other switchy things ...
+{ //  and  motor switch and safety switch ...
 
     if (CurrentMode != NORMAL) return; // not needed if calibrating
 
@@ -7657,6 +7662,7 @@ FASTRUN void ParseAckPayload()
             RXVoltsDetected = false;
             if (RXModelVolts > 0) {
                 RXVoltsDetected = true;
+                if (RXCellCount == 12) RXModelVolts *= 2; // voltage divider needed !
                 snprintf(ModelVolts, 5, "%f", RXModelVolts);
             }
             break;
@@ -7838,7 +7844,7 @@ FASTRUN void DoSomeHouseKeeping(){
 /************************************************************************************************************/
 void FASTRUN ManageTransmitter(){
 if (GetButtonPress()) ButtonWasPressed();
-  if (millis()-LastBankRead >50){                               // 20 times a second is plenty
+  if (millis() - LastBankRead > 50){                               // 20 times a second is plenty
         GetBank();                                              // Must not call too often        
         ShowComms();                                            // Screen Data                                  
         CheckTimer();                                           // Screen Timer
