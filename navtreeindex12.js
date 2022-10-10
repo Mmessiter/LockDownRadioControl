@@ -1,6 +1,5 @@
 var NAVTREEINDEX12 =
 {
-"dir_9b890c731556063cc45d8ce4c8752f9c.html":[10,0,1,0,0],
 "dir_9bc2b467c10f4c24b8168531d6cac9f2.html":[10,0,4,0],
 "dir_ae13e0bd3287b887e62013125dea1a2e.html":[10,0,1,0,0,2],
 "dir_bc43e722192e51f8bb0226ac573abc19.html":[10,0,3],
@@ -26,8 +25,8 @@ var NAVTREEINDEX12 =
 "functions_enum.html":[9,3,3],
 "functions_eval.html":[9,3,4],
 "functions_f.html":[9,3,0,6],
-"functions_func.html":[9,3,1],
 "functions_func.html":[9,3,1,0],
+"functions_func.html":[9,3,1],
 "functions_func_b.html":[9,3,1,1],
 "functions_func_c.html":[9,3,1,2],
 "functions_func_d.html":[9,3,1,3],
@@ -66,8 +65,8 @@ var NAVTREEINDEX12 =
 "functions_t.html":[9,3,0,19],
 "functions_u.html":[9,3,0,20],
 "functions_v.html":[9,3,0,21],
-"functions_vars.html":[9,3,2,0],
 "functions_vars.html":[9,3,2],
+"functions_vars.html":[9,3,2,0],
 "functions_vars_a.html":[9,3,2,1],
 "functions_vars_b.html":[9,3,2,2],
 "functions_vars_c.html":[9,3,2,3],
@@ -169,8 +168,8 @@ var NAVTREEINDEX12 =
 "globals_type.html":[10,1,3],
 "globals_u.html":[10,1,0,21],
 "globals_v.html":[10,1,0,22],
-"globals_vars.html":[10,1,2,0],
 "globals_vars.html":[10,1,2],
+"globals_vars.html":[10,1,2,0],
 "globals_vars_b.html":[10,1,2,1],
 "globals_vars_c.html":[10,1,2,2],
 "globals_vars_d.html":[10,1,2,3],
@@ -249,5 +248,6 @@ var NAVTREEINDEX12 =
 "md__receiver_code_lib__adafruit__g_p_s__library_code_of_conduct.html":[5],
 "md__receiver_code_lib__adafruit__g_p_s__library_code_of_conduct.html#autotoc_md45":[5,0],
 "md__receiver_code_lib__adafruit__g_p_s__library_code_of_conduct.html#autotoc_md46":[5,1],
-"md__receiver_code_lib__adafruit__g_p_s__library_code_of_conduct.html#autotoc_md47":[5,2]
+"md__receiver_code_lib__adafruit__g_p_s__library_code_of_conduct.html#autotoc_md47":[5,2],
+"md__receiver_code_lib__adafruit__g_p_s__library_code_of_conduct.html#autotoc_md48":[5,3]
 };

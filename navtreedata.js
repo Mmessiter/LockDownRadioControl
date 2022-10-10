@@ -142,8 +142,8 @@ var NAVTREEINDEX =
 "class_adafruit___s_p_i_device.html#aeec71a4a8ea62b118967fda14aa8184c",
 "class_m_p_u6050.html#ae528a25b4997ad0e3091a012e4e4419e",
 "class_m_p_u9250.html#acaf2ae31cfdeb6d47b922996feb55b69",
-"dir_9b890c731556063cc45d8ce4c8752f9c.html",
-"md__receiver_code_lib__adafruit__g_p_s__library_code_of_conduct.html#autotoc_md48"
+"dir_9bc2b467c10f4c24b8168531d6cac9f2.html",
+"md__receiver_code_lib__adafruit__g_p_s__library_code_of_conduct.html#autotoc_md49"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
