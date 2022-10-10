@@ -7621,7 +7621,7 @@ void  GetModelsMacAddress(){
     }
     if (!BindingTimer) BindingTimer = millis();
     if (BindButton) {
-        if ((millis() - BindingTimer) > 2500) SendCommand(BindButtonVisible); 
+        if ((millis() - BindingTimer) > 3500) SendCommand(BindButtonVisible); 
     }
 }
 /************************************************************************************************************/
@@ -7824,7 +7824,7 @@ void CheckPowerOffButton()
 FASTRUN void DoSomeHouseKeeping(){
 
     if (GetButtonPress()) ButtonWasPressed();               // Deal with button
-    if ((millis() - ModelNameTimeCheck) > 700) {
+    if ((millis() - ModelNameTimeCheck) > 100) {
         ModelNameTimeCheck = millis();
         if (CurrentView == MAINSETUPVIEW) CheckScanButton();
         if (CurrentView == MODELSVIEW) CheckModelName();    // In MODELSVIEW, this function checks correct name is displayed.
@@ -7844,7 +7844,7 @@ FASTRUN void DoSomeHouseKeeping(){
 /************************************************************************************************************/
 void FASTRUN ManageTransmitter(){
 if (GetButtonPress()) ButtonWasPressed();
-  if (millis() - LastBankRead > 50){                               // 20 times a second is plenty
+  if (millis() - LastBankRead > 50){                            // 20 times a second is plenty
         GetBank();                                              // Must not call too often        
         ShowComms();                                            // Screen Data                                  
         CheckTimer();                                           // Screen Timer
