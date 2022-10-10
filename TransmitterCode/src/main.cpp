@@ -7747,15 +7747,14 @@ FASTRUN void CheckGapsLength()
 void CheckModelName()
 {                                                  // In ModelsView, this function checks correct name is displayed.
     char ModelsView_ModelNumber[] = "ModelNumber"; //
+    
     ModelNumber = GetValue(ModelsView_ModelNumber);
-        if (LastModelLoaded != ModelNumber) {
-            if (ModelNumber >= 1) { // Don't use number zero
-                if ((ModelNumber > 99) || (ModelNumber < 1)) ModelNumber = 1;
-                ReadOneModel(ModelNumber);
-                if (UseLog) LogThisModel();
-                LastModelLoaded = ModelNumber;
-                UpdateModelsNameEveryWhere();
-            }
+    if (LastModelLoaded != ModelNumber) {       
+        if ((ModelNumber > 99) || (ModelNumber < 1)) ModelNumber = 1;
+        ReadOneModel(ModelNumber);
+        if (UseLog) LogThisModel();
+        LastModelLoaded = ModelNumber;
+        UpdateModelsNameEveryWhere();
     }
     ClearText();
 }
@@ -7768,7 +7767,6 @@ void CheckScanButton() // Scan button AND models button
         if (ModelMatched) {
           if(!b5isGrey) { 
                 SendCommand(b5Greyed);
-                delay(1);
                 SendCommand(b12Greyed);
                 b5isGrey = true;
             }
@@ -7824,7 +7822,7 @@ void CheckPowerOffButton()
 FASTRUN void DoSomeHouseKeeping(){
 
     if (GetButtonPress()) ButtonWasPressed();               // Deal with button
-    if ((millis() - ModelNameTimeCheck) > 100) {
+    if ((millis() - ModelNameTimeCheck) > 750) {
         ModelNameTimeCheck = millis();
         if (CurrentView == MAINSETUPVIEW) CheckScanButton();
         if (CurrentView == MODELSVIEW) CheckModelName();    // In MODELSVIEW, this function checks correct name is displayed.
@@ -7869,13 +7867,9 @@ if (GetButtonPress()) ButtonWasPressed();
 /************************************************************************************************************/
 FASTRUN void loop()
 {
-    
     DoSomeHouseKeeping();
-    
     ManageTransmitter();
-    
-    ShowServoPos();                                             
-    
+    ShowServoPos();
     switch (CurrentMode) {
         case NORMAL:            // 0
             SendData();
