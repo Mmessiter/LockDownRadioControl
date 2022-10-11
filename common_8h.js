@@ -1,17 +1,14 @@
 var common_8h =
 [
-    [ "BIND_EEPROM_OFFSET", "common_8h.html#a9711a7159ecb22d58fd6331700663ee7", null ],
     [ "CE_OFF", "common_8h.html#a45f36ff4dbd4f62c8d80b9cd22a05e75", null ],
     [ "CE_ON", "common_8h.html#af59ccf587172ff1ab593f7a51276a720", null ],
     [ "CHANNELSUSED", "common_8h.html#ad143c01c2b36424b292b568f48cbe014", null ],
     [ "COMPRESSEDWORDS", "common_8h.html#a461caf7198eaa60ce589088ff38b97cb", null ],
     [ "CSN_OFF", "common_8h.html#a834c4941fd9b037a25a8053912995e61", null ],
     [ "CSN_ON", "common_8h.html#ab22ef6e01ad09b637ca55f3fcd3cae94", null ],
-    [ "DEFAULTPIPE", "common_8h.html#ae2e69f002146deef06b390e17a26dc0e", null ],
     [ "FAILSAFE_TIMEOUT", "common_8h.html#a0634ad724c86cd2b4ac7cfebbb622a9c", null ],
     [ "FREQUENCYSCOUNT", "common_8h.html#afe5bce36baf737bd284d43cd0e805fdb", null ],
     [ "FREQUENCYSCOUNT1", "common_8h.html#a71a3cc3c3b499cb9329172835e5a1df8", null ],
-    [ "FS_EEPROM_OFFSET", "common_8h.html#ad529f0c2447693d8418608e122012388", null ],
     [ "HOPTIME", "common_8h.html#a57d506b5f34172770c8d645c12cb5ba2", null ],
     [ "LED_PIN", "common_8h.html#ab4553be4db9860d940f81d7447173b2f", null ],
     [ "LISTEN_PERIOD", "common_8h.html#a66ccb27c237c105f63ffa01c67d6eed9", null ],
@@ -32,6 +29,7 @@ var common_8h =
     [ "RXVERSION_MINOR", "common_8h.html#adeb76229aa4087c3bc1e1fd17bd865b2", null ],
     [ "SBUSPORT", "common_8h.html#aa82f9d8a298740acdbaa5c78a9e9f50c", null ],
     [ "SBUSRATE", "common_8h.html#a39848a06498c1e6444c458f25542b252", null ],
+    [ "SECOND_TRANSCEIVER", "common_8h.html#a2894a289b91f0bc795407decb6e4c39d", null ],
     [ "SENSOR_HUB_I2C_ADDRESS", "common_8h.html#a07a2f33887ffa40ffbc3b895fcfc1999", null ],
     [ "SERVOSUSED", "common_8h.html#ab1515f8a159ef919c7afb5a1d71f55a3", null ],
     [ "UNCOMPRESSEDWORDS", "common_8h.html#a0c40a351a0c0e01fbd5e5b1b0187eb48", null ],
@@ -40,6 +38,6 @@ var common_8h =
     [ "FHSS_Channels1", "common_8h.html#aeea38114c49f6b6dbe375b7a64acdccb", null ],
     [ "FHSSChPointer", "common_8h.html#a76b48a1dfbe2bd97ee5e0479ff16e8ef", null ],
     [ "FrequencyCount", "common_8h.html#a2cecb6d8a82a88635e2c10438fedf092", null ],
-    [ "INA219Connected", "common_8h.html#a8251d20351fc918ea452ad591c75116e", null ],
+    [ "INA219_CONNECTED", "common_8h.html#a8d0889feaf5beb5db1e50a266ea7b0a5", null ],
     [ "LastPacketArrivalTime", "common_8h.html#a9ac62185b964d18f5843146fce5b0063", null ]
 ];

@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['uncompressedwords_0',['UNCOMPRESSEDWORDS',['../common_01_07_malcolm_xE2_x80_x99s_01_mac_book_01_air's_01conflicted_01copy_012022-10-09_08_8h.html#a0c40a351a0c0e01fbd5e5b1b0187eb48',1,'UNCOMPRESSEDWORDS():&#160;common (Malcolm’s MacBook Air&apos;s conflicted copy 2022-10-09).h'],['../common_8h.html#a0c40a351a0c0e01fbd5e5b1b0187eb48',1,'UNCOMPRESSEDWORDS():&#160;common.h'],['../_radio_functions_8h.html#a0c40a351a0c0e01fbd5e5b1b0187eb48',1,'UNCOMPRESSEDWORDS():&#160;RadioFunctions.h']]],
-  ['use_5fsw_5fserial_1',['USE_SW_SERIAL',['../_adafruit___g_p_s_8h.html#a7d44b2886944eb862b51948f2acc8d23',1,'Adafruit_GPS.h']]]
+  ['watchdogmaxrate_0',['WATCHDOGMAXRATE',['../RadioFunctions_8h.html#af3358f12fbced88c655895c7e56f1ca6',1,'RadioFunctions.h']]],
+  ['watchdogtimeout_1',['WATCHDOGTIMEOUT',['../RadioFunctions_8h.html#a263fd3c52a680256641d33815e7ef6a4',1,'RadioFunctions.h']]],
+  ['white_2',['White',['../RadioFunctions_8h.html#a298a3b7c7f2ea427a7cd21cdc9a4f054',1,'RadioFunctions.h']]]
 ];
