@@ -10,14 +10,19 @@ var RadioFunctions_8cpp =
     [ "DrawFhssBox", "RadioFunctions_8cpp.html#a6bdc6419b47dda71d0d2c8faf652adc2", null ],
     [ "ExecuteMacro", "RadioFunctions_8cpp.html#a78f22801971c106db61d728dd345e28e", null ],
     [ "FailedPacket", "RadioFunctions_8cpp.html#a5fbd3c8613a4163425c94965704ce5f8", null ],
+    [ "FlushFifos", "RadioFunctions_8cpp.html#a07c27b4e208198453c70876517926052", null ],
     [ "HopToNextChannel", "RadioFunctions_8cpp.html#a52aa3e80bccf5e75346c93fdae63122d", null ],
     [ "InitRadio", "RadioFunctions_8cpp.html#a799f38bc33abdb30eec1d7db3cf27d58", null ],
+    [ "Look", "RadioFunctions_8cpp.html#a44db40e8ffa545be92871325c4dcdc55", null ],
     [ "Procrastinate", "RadioFunctions_8cpp.html#a760609a682300dfe6bfaac737fd4d5eb", null ],
+    [ "RecordsPacketSuccess", "RadioFunctions_8cpp.html#afc091b5942e21a03f6dc8635d5e519ba", null ],
     [ "RunMacro", "RadioFunctions_8cpp.html#a91fb686ba2d3111821721ab33b442918", null ],
     [ "ScanAllChannels", "RadioFunctions_8cpp.html#a3856ba0adae43d089f08c7b7f653b306", null ],
     [ "SendData", "RadioFunctions_8cpp.html#a049bfb836e7aa4a3a48a1a4bd225fafc", null ],
     [ "SetThePipe", "RadioFunctions_8cpp.html#a70dc6f8d2e5ccef6b8e4a2b9b0afb2ce", null ],
     [ "StartMacro", "RadioFunctions_8cpp.html#aff7f985af10a021196ae5c9bf188c445", null ],
     [ "StopMacro", "RadioFunctions_8cpp.html#ae1e0755ae9441b2835ac027a98707caa", null ],
-    [ "TryOtherPipe", "RadioFunctions_8cpp.html#ad0e30213b21808d00110752679788a8c", null ]
+    [ "SuccessfulPacket", "RadioFunctions_8cpp.html#a1c11bb6771548de7d96723045b922620", null ],
+    [ "TryOtherPipe", "RadioFunctions_8cpp.html#ad0e30213b21808d00110752679788a8c", null ],
+    [ "TryToReconnect", "RadioFunctions_8cpp.html#ad0236abcfc887ad708d9504c4ab2a7c3", null ]
 ];

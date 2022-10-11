@@ -1,4 +1,23 @@
 var searchData=
 [
-  ['kickrate_0',['KICKRATE',['../RadioFunctions_8h.html#a639fb69a9b4f236e3b1a16435b82bb81',1,'RadioFunctions.h']]]
+  ['i2caddress_0',['I2CADDRESS',['../SensorHubT32_2src_2main_8cpp.html#a6ee9f32cf8cccca5a7e078c303afee94',1,'main.cpp']]],
+  ['i2cdev_5farduino_5fwire_1',['I2CDEV_ARDUINO_WIRE',['../I2Cdev_8h.html#a552406c30ac10b8bf904f5015fb987e0',1,'I2Cdev.h']]],
+  ['i2cdev_5fbuiltin_5ffastwire_2',['I2CDEV_BUILTIN_FASTWIRE',['../I2Cdev_8h.html#a1ada544cea9b1c4ecabbdea6e05e7e1b',1,'I2Cdev.h']]],
+  ['i2cdev_5fbuiltin_5fnbwire_3',['I2CDEV_BUILTIN_NBWIRE',['../I2Cdev_8h.html#a220afc88608d77eb7dea2199ad30ded6',1,'I2Cdev.h']]],
+  ['i2cdev_5fbuiltin_5fsbwire_4',['I2CDEV_BUILTIN_SBWIRE',['../I2Cdev_8h.html#aae3a57b00784cdd2abf5648068c03766',1,'I2Cdev.h']]],
+  ['i2cdev_5fdefault_5fread_5ftimeout_5',['I2CDEV_DEFAULT_READ_TIMEOUT',['../I2Cdev_8h.html#ad9726bb02451bb8f59d3d2729e4cd20e',1,'I2Cdev.h']]],
+  ['i2cdev_5fi2cmaster_5flibrary_6',['I2CDEV_I2CMASTER_LIBRARY',['../I2Cdev_8h.html#a1c9827e5efd944bf3ceb18fa4876cddb',1,'I2Cdev.h']]],
+  ['i2cdev_5fimplementation_7',['I2CDEV_IMPLEMENTATION',['../I2Cdev_8h.html#ad7025a5d30aa933619b8560344dbdee6',1,'I2Cdev.h']]],
+  ['i2cdev_5fimplementation_5fwarnings_8',['I2CDEV_IMPLEMENTATION_WARNINGS',['../I2Cdev_8h.html#a3cc0749de8c1d44b3b7e1997a8f1c0fa',1,'I2Cdev.h']]],
+  ['i_5fgain_5fdefault_9',['I_GAIN_DEFAULT',['../Quadcopter_2src_2main_8cpp.html#aa2f838a4f00b7a67490c28f8e7239482',1,'main.cpp']]],
+  ['i_5fgain_5fmax_10',['I_GAIN_MAX',['../Quadcopter_2src_2main_8cpp.html#a56dad6cfacab28218940ea8563e69642',1,'main.cpp']]],
+  ['i_5fgain_5fmin_11',['I_GAIN_MIN',['../Quadcopter_2src_2main_8cpp.html#a8e1b797be4b5e8a69f823f7b04c26053',1,'main.cpp']]],
+  ['i_5fygain_5fdefault_12',['I_YGAIN_DEFAULT',['../Quadcopter_2src_2main_8cpp.html#abd4e7dcf75a0b2783389b8b3f8d03911',1,'main.cpp']]],
+  ['i_5fygain_5fmax_13',['I_YGAIN_MAX',['../Quadcopter_2src_2main_8cpp.html#af649117bb1a37ca00035c5791142631b',1,'main.cpp']]],
+  ['i_5fygain_5fmin_14',['I_YGAIN_MIN',['../Quadcopter_2src_2main_8cpp.html#a1c62fb46ed07188f22be7f261e256da0',1,'main.cpp']]],
+  ['idlen_15',['IDLEN',['../ReceiverCode_2src_2main_8cpp.html#a472646a6b1f959aa3b4261a8247c2015',1,'IDLEN():&#160;main.cpp'],['../SensorHubT32_2src_2main_8cpp.html#a472646a6b1f959aa3b4261a8247c2015',1,'IDLEN():&#160;main.cpp']]],
+  ['inactivitymaximum_16',['INACTIVITYMAXIMUM',['../RadioFunctions_8h.html#a6f6e4e8e296f81b3dd22980c49168662',1,'RadioFunctions.h']]],
+  ['inactivityminimum_17',['INACTIVITYMINIMUM',['../RadioFunctions_8h.html#a0da025fab2b31f5ffb073d6e12fe7fde',1,'RadioFunctions.h']]],
+  ['inactivitytimeout_18',['INACTIVITYTIMEOUT',['../RadioFunctions_8h.html#afc6ed518e5867e4d7095ec597eae9443',1,'RadioFunctions.h']]],
+  ['inputs_5fview_19',['INPUTS_VIEW',['../RadioFunctions_8h.html#aa2bec27575ce278d56e8d9f844dfe72e',1,'RadioFunctions.h']]]
 ];

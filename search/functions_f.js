@@ -1,31 +1,4 @@
 var searchData=
 [
-  ['radio1_0',['Radio1',['../TransmitterCode_2src_2main_8cpp.html#a621c346e4b1d9b24b9a5bda63d0f0f52',1,'Radio1(CE_PIN, CSN_PIN):&#160;main.cpp'],['../radio_8h.html#a6e2d4126d864c50e7c23c988c2bfdd1a',1,'Radio1(pinCE1, pinCSN1):&#160;radio.h']]],
-  ['radio2_1',['Radio2',['../radio_8h.html#a8b76f3c338025926421c7b308405bbfd',1,'radio.h']]],
-  ['readchswitch_2',['ReadCHSwitch',['../TransmitterCode_2src_2main_8cpp.html#aeed3be7dfc45cde2e9e9d3578c104760',1,'main.cpp']]],
-  ['readdata_3',['ReadData',['../ReceiverCode_2src_2main_8cpp.html#a07ca94db0e305e9c01ec51e417576308',1,'main.cpp']]],
-  ['readextraparameters_4',['ReadExtraParameters',['../ReceiverCode_2src_2main_8cpp.html#a6c490ef42e364f8bb1430c436e86c9c0',1,'main.cpp']]],
-  ['readfmswitch_5',['ReadFMSwitch',['../TransmitterCode_2src_2main_8cpp.html#ae0f54c30ea92041b69cdccb888cb86b8',1,'main.cpp']]],
-  ['readgps_6',['ReadGps',['../SensorHubT32_2src_2main_8cpp.html#adf4ab5f33d1ca1e1dd96454622f105d7',1,'main.cpp']]],
-  ['readonemodel_7',['ReadOneModel',['../TransmitterCode_2src_2main_8cpp.html#a3d9d955a8c7cfea4cc99e78f3746bd26',1,'main.cpp']]],
-  ['readothersensors_8',['ReadOtherSensors',['../SensorHubT32_2src_2main_8cpp.html#a8ace27b0e3d8efecd55ad071506aa86d',1,'main.cpp']]],
-  ['readsavedpipe_9',['ReadSavedPipe',['../radio_8h.html#a56ee137fc60749fa274236bc239c3291',1,'radio.h']]],
-  ['readsensorhub_10',['ReadSensorHub',['../radio_8h.html#a8fff0fd6eb9e23721d9e06f3f44bd3c9',1,'radio.h']]],
-  ['readswitches_11',['ReadSwitches',['../RadioFunctions_8h.html#ab0af36f3442ad4f2d0b716c14c7d6085',1,'ReadSwitches():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#aa144942814b12daf2b2a454c08d29cab',1,'ReadSwitches():&#160;main.cpp']]],
-  ['readtextfile_12',['ReadTextFile',['../RadioFunctions_8h.html#abd6446fb403bd9b07d150a5e4fdd86e1',1,'ReadTextFile(char *fname, char *htext, uint8_t StartLineNumber, uint8_t MaxLines):&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#abd6446fb403bd9b07d150a5e4fdd86e1',1,'ReadTextFile(char *fname, char *htext, uint8_t StartLineNumber, uint8_t MaxLines):&#160;main.cpp']]],
-  ['readthertc_13',['ReadTheRTC',['../TransmitterCode_2src_2main_8cpp.html#a7a48851f0d38e4a0dd727a30d9515cf1',1,'main.cpp']]],
-  ['readthesensorhub_14',['ReadTheSensorHub',['../ReceiverCode_2src_2main_8cpp.html#a5d2350b2507883d3644251013370bc5b',1,'main.cpp']]],
-  ['readtime_15',['ReadTime',['../TransmitterCode_2src_2main_8cpp.html#a483cced19b61975f76957f5696425fe9',1,'main.cpp']]],
-  ['reboot_16',['Reboot',['../TransmitterCode_2src_2main_8cpp.html#a374524dc113357d2ed6b8622f6ea85a8',1,'main.cpp']]],
-  ['rebuildflags_17',['RebuildFlags',['../ReceiverCode_2src_2main_8cpp.html#ad86a39e4cba19592c760833870f6f69c',1,'main.cpp']]],
-  ['receivedata_18',['ReceiveData',['../ReceiverCode_2src_2main_8cpp.html#a06807a4f185694d37f774702ba74db0a',1,'main.cpp']]],
-  ['receiveeventinterrupt_19',['ReceiveEventInterrupt',['../SensorHubT32_2src_2main_8cpp.html#a2be9d0838709dc3a88a9a54108bd2b4a',1,'main.cpp']]],
-  ['receivemodelfile_20',['ReceiveModelFile',['../TransmitterCode_2src_2main_8cpp.html#ab7c9edf843c732d7fe296564f39bc0dc',1,'main.cpp']]],
-  ['reconnect_21',['Reconnect',['../radio_8h.html#a692b8b0727e0db358f99c7bf4e8235c0',1,'radio.h']]],
-  ['redledon_22',['RedLedOn',['../RadioFunctions_8h.html#a7d34cec6e8edc20c8b50424e15dcc7c7',1,'RedLedOn():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a7d34cec6e8edc20c8b50424e15dcc7c7',1,'RedLedOn():&#160;main.cpp']]],
-  ['reducelimits_23',['ReduceLimits',['../TransmitterCode_2src_2main_8cpp.html#ad875fe28566f35ffc5f90e73d0089fc6',1,'main.cpp']]],
-  ['reenablescanbutton_24',['ReEnableScanButton',['../RadioFunctions_8h.html#a0a3d89dfcfab70c6cbc50401fff1afeb',1,'ReEnableScanButton():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a0a3d89dfcfab70c6cbc50401fff1afeb',1,'ReEnableScanButton():&#160;main.cpp']]],
-  ['resetsubtrims_25',['ResetSubTrims',['../TransmitterCode_2src_2main_8cpp.html#a15a54a63b911d3a5d622cd12bc440ab6',1,'main.cpp']]],
-  ['restorebrightness_26',['RestoreBrightness',['../RadioFunctions_8h.html#a49da3478d89a22069e29c7f00cb46a5f',1,'RestoreBrightness():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a49da3478d89a22069e29c7f00cb46a5f',1,'RestoreBrightness():&#160;main.cpp']]],
-  ['runmacro_27',['RunMacro',['../RadioFunctions_8cpp.html#a91fb686ba2d3111821721ab33b442918',1,'RadioFunctions.cpp']]]
+  ['quaternion_0',['Quaternion',['../classQuaternion.html#abcc01358aada56ea5f0db4da18aaf77d',1,'Quaternion::Quaternion()'],['../classQuaternion.html#ad8158a59767dc3d42ebf0324b82ba95a',1,'Quaternion::Quaternion(float nw, float nx, float ny, float nz)']]]
 ];

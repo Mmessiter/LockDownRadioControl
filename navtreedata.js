@@ -80,16 +80,20 @@ var NAVTREE =
       [ "Features List", "RXCODE.html#rxFeatures", null ],
       [ "TEENSY 4.0 PINS", "RXCODE.html#rxpinout", null ]
     ] ],
-    [ "TransmitterCode", "TransmitterCode.html", [
+    [ ".", "TransmitterCode.html", [
       [ "Radio Control Features list, so far:", "TransmitterCode.html#LockDown", null ],
       [ "Teensy 4.1 Pins", "TransmitterCode.html#txPinout", null ]
     ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],
+      [ "Class Hierarchy", "hierarchy.html", "hierarchy" ],
       [ "Class Members", "functions.html", [
-        [ "All", "functions.html", null ],
-        [ "Variables", "functions_vars.html", null ]
+        [ "All", "functions.html", "functions_dup" ],
+        [ "Functions", "functions_func.html", "functions_func" ],
+        [ "Variables", "functions_vars.html", "functions_vars" ],
+        [ "Enumerations", "functions_enum.html", null ],
+        [ "Enumerator", "functions_eval.html", null ]
       ] ]
     ] ],
     [ "Files", "files.html", [
@@ -98,6 +102,7 @@ var NAVTREE =
         [ "All", "globals.html", "globals_dup" ],
         [ "Functions", "globals_func.html", "globals_func" ],
         [ "Variables", "globals_vars.html", "globals_vars" ],
+        [ "Typedefs", "globals_type.html", null ],
         [ "Macros", "globals_defs.html", "globals_defs" ]
       ] ]
     ] ]
@@ -106,11 +111,18 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"RXCODE.html",
-"RadioFunctions_8h.html#ad5f463902789a79fc622b3befd9409b9",
-"TransmitterCode_2src_2main_8cpp.html#a2cd5f73af62f9f856c2352e44c73f171",
-"TransmitterCode_2src_2main_8cpp.html#ab5736b017daadeb2c1d7dc73489d31a6",
-"globals_func_f.html"
+"I2Cdev_8cpp.html",
+"MPU6050_8h.html#aa4a24f325b4449adf83ce8458bb31a08",
+"Quadcopter_2src_2main_8cpp.html#a16a244087b5c92e39d803738faa6ff67",
+"RadioFunctions_8h.html#a01c7a0b0de94ec72fe070ea9f90dc2ec",
+"RadioFunctions_8h.html#ad2b2fe49829868cf9b49c2e65dfaa006",
+"TransmitterCode_2src_2main_8cpp.html#a1d18aaaa3cc4ba52bd309c88815c60a7",
+"TransmitterCode_2src_2main_8cpp.html#a8e271ca29dc3c90bcf0e465b41bd71ff",
+"TransmitterCode_2src_2main_8cpp.html#af8795de08ab0ad1ab1a8679eae6c617a",
+"classMPU6050.html#ada7c8a873fe157703dcdc08e25b48e32",
+"classMPU9250.html#ab9ce9097ac03b8ad6ef30b78362453ba",
+"functions_eval.html",
+"radio_8h.html#a8b76f3c338025926421c7b308405bbfd"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

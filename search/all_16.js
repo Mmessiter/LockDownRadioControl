@@ -1,11 +1,19 @@
 var searchData=
 [
-  ['warningtimer_0',['WarningTimer',['../TransmitterCode_2src_2main_8cpp.html#a762d0bd8b884aee82ec41f594c470b87',1,'main.cpp']]],
-  ['watchdogcallback_1',['WatchDogCallBack',['../TransmitterCode_2src_2main_8cpp.html#ae410be09c6f449451d8f2327fd895c7d',1,'main.cpp']]],
-  ['watchdogconfig_2',['WatchDogConfig',['../TransmitterCode_2src_2main_8cpp.html#abf278d2a0f4b093a96fd83a6f635d8c8',1,'main.cpp']]],
-  ['watchdogmaxrate_3',['WATCHDOGMAXRATE',['../RadioFunctions_8h.html#af3358f12fbced88c655895c7e56f1ca6',1,'RadioFunctions.h']]],
-  ['watchdogtimeout_4',['WATCHDOGTIMEOUT',['../RadioFunctions_8h.html#a263fd3c52a680256641d33815e7ef6a4',1,'RadioFunctions.h']]],
-  ['white_5',['White',['../RadioFunctions_8h.html#a298a3b7c7f2ea427a7cd21cdc9a4f054',1,'RadioFunctions.h']]],
-  ['wordwrap_6',['WordWrap',['../TransmitterCode_2src_2main_8cpp.html#a6d6ab5dcee82c319640e3a0a0537ebf7',1,'main.cpp']]],
-  ['writetologfile_7',['WriteToLogFile',['../TransmitterCode_2src_2main_8cpp.html#a99154e537ca6e0ce5d538fddf0c2aab3',1,'main.cpp']]]
+  ['ukrules_0',['UkRules',['../RadioFunctions_8h.html#a7847cc790a939f378993691ae7d40a2f',1,'UkRules():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a7847cc790a939f378993691ae7d40a2f',1,'UkRules():&#160;main.cpp']]],
+  ['ukrulescounter_1',['UkRulesCounter',['../TransmitterCode_2src_2main_8cpp.html#a29883074027da47422a24b04284728db',1,'main.cpp']]],
+  ['uncompressedwords_2',['UNCOMPRESSEDWORDS',['../common_01_07Malcolm_xE2_x80_x99s_01MacBook_01Air's_01conflicted_01copy_012022-10-09_08_8h.html#a0c40a351a0c0e01fbd5e5b1b0187eb48',1,'UNCOMPRESSEDWORDS():&#160;common (Malcolm’s MacBook Air&apos;s conflicted copy 2022-10-09).h'],['../common_8h.html#a0c40a351a0c0e01fbd5e5b1b0187eb48',1,'UNCOMPRESSEDWORDS():&#160;common.h'],['../RadioFunctions_8h.html#a0c40a351a0c0e01fbd5e5b1b0187eb48',1,'UNCOMPRESSEDWORDS():&#160;RadioFunctions.h']]],
+  ['updatebuttonlabels_3',['UpdateButtonLabels',['../TransmitterCode_2src_2main_8cpp.html#abf59862cf6c4e3df5a76f0bfea8919ef',1,'main.cpp']]],
+  ['updateinterpolationtypes_4',['updateInterpolationTypes',['../TransmitterCode_2src_2main_8cpp.html#a3d20af2f1fee81198a0cef2d4500083a',1,'main.cpp']]],
+  ['updatemodelsnameeverywhere_5',['UpdateModelsNameEveryWhere',['../RadioFunctions_8h.html#a9e1de754e1d2d483fb15957f70cf0488',1,'UpdateModelsNameEveryWhere():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a9e1de754e1d2d483fb15957f70cf0488',1,'UpdateModelsNameEveryWhere():&#160;main.cpp']]],
+  ['updateoneswitchview_6',['updateOneSwitchView',['../TransmitterCode_2src_2main_8cpp.html#a14dcac76ed8a048041fdc6e6f5d5d000',1,'main.cpp']]],
+  ['updateswitchesdisplay_7',['UpdateSwitchesDisplay',['../TransmitterCode_2src_2main_8cpp.html#a789078ba3c1d92997ab8764eb20cce4f',1,'main.cpp']]],
+  ['updatetrimview_8',['UpdateTrimView',['../TransmitterCode_2src_2main_8cpp.html#ac78966debc2cdc13d8ca958ce3b20c78',1,'main.cpp']]],
+  ['uplog_9',['UpLog',['../TransmitterCode_2src_2main_8cpp.html#a2206c19b4fc075f4c9f1bb957ca89e1d',1,'main.cpp']]],
+  ['use_5fina219_10',['USE_INA219',['../TransmitterCode_2src_2main_8cpp.html#a87ae50e2ac4507568cbf98072f174a1b',1,'main.cpp']]],
+  ['uselog_11',['UseLog',['../RadioFunctions_8h.html#aa42482a0bb01edaf26f217dbc38643d2',1,'UseLog():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#aa42482a0bb01edaf26f217dbc38643d2',1,'UseLog():&#160;main.cpp']]],
+  ['usemacros_12',['UseMacros',['../RadioFunctions_8h.html#a42a6363bff83773c1b99caa06aebb1f5',1,'UseMacros():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a42a6363bff83773c1b99caa06aebb1f5',1,'UseMacros():&#160;main.cpp']]],
+  ['usemotorkill_13',['UseMotorKill',['../TransmitterCode_2src_2main_8cpp.html#ad76445c097f9d33a6935be5c2489bd34',1,'main.cpp']]],
+  ['user_5fctrl_14',['USER_CTRL',['../classMPU9250.html#ac7a02a1a77fe8bf5a477cc37820d2f27',1,'MPU9250']]],
+  ['usereceiveddata_15',['UseReceivedData',['../ReceiverCode_2src_2main_8cpp.html#abb1997c589abc6432f612eaedf985e38',1,'main.cpp']]]
 ];

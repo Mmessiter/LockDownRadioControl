@@ -1,11 +1,12 @@
 var searchData=
 [
-  ['updatebuttonlabels_0',['UpdateButtonLabels',['../TransmitterCode_2src_2main_8cpp.html#abf59862cf6c4e3df5a76f0bfea8919ef',1,'main.cpp']]],
-  ['updateinterpolationtypes_1',['updateInterpolationTypes',['../TransmitterCode_2src_2main_8cpp.html#a3d20af2f1fee81198a0cef2d4500083a',1,'main.cpp']]],
-  ['updatemodelsnameeverywhere_2',['UpdateModelsNameEveryWhere',['../TransmitterCode_2src_2main_8cpp.html#a9e1de754e1d2d483fb15957f70cf0488',1,'main.cpp']]],
-  ['updateoneswitchview_3',['updateOneSwitchView',['../TransmitterCode_2src_2main_8cpp.html#a14dcac76ed8a048041fdc6e6f5d5d000',1,'main.cpp']]],
-  ['updateswitchesdisplay_4',['UpdateSwitchesDisplay',['../TransmitterCode_2src_2main_8cpp.html#a789078ba3c1d92997ab8764eb20cce4f',1,'main.cpp']]],
-  ['updatetrimview_5',['UpdateTrimView',['../TransmitterCode_2src_2main_8cpp.html#ac78966debc2cdc13d8ca958ce3b20c78',1,'main.cpp']]],
-  ['updatetrimviewpart_6',['UpdateTrimViewPart',['../TransmitterCode_2src_2main_8cpp.html#a3cd4694d58bd7a9f56e973d20270722f',1,'main.cpp']]],
-  ['usereceiveddata_7',['UseReceivedData',['../ReceiverCode_2src_2main_8cpp.html#abb1997c589abc6432f612eaedf985e38',1,'main.cpp']]]
+  ['teensymac_0',['teensyMAC',['../ReceiverCode_2src_2main_8cpp.html#a06122bf4eee8af08c02c45022253a4f4',1,'main.cpp']]],
+  ['testconnection_1',['testConnection',['../classMPU6050.html#a95ffab7b44fce3834236e0813687d11a',1,'MPU6050']]],
+  ['throttlecut_2',['throttleCut',['../Quadcopter_2src_2main_8cpp.html#adbf254c377f0aa7a03dc3c41d502068d',1,'main.cpp']]],
+  ['throttledowntrim_3',['ThrottleDownTrim',['../TransmitterCode_2src_2main_8cpp.html#a4f13231fd2e430935dbee50a83078018',1,'main.cpp']]],
+  ['throttleuptrim_4',['ThrottleUpTrim',['../TransmitterCode_2src_2main_8cpp.html#abe827a1e4c23eb79d1771da1e9393178',1,'main.cpp']]],
+  ['trynextchannel_5',['TryNextChannel',['../ReceiverCode_2src_2main_8cpp.html#a1d10d2ca466b8014f874f16aaa39da91',1,'main.cpp']]],
+  ['tryotherpipe_6',['TryOtherPipe',['../RadioFunctions_8cpp.html#ad0e30213b21808d00110752679788a8c',1,'RadioFunctions.cpp']]],
+  ['trytoconnectnow_7',['TryToConnectNow',['../radio_8h.html#a1208ef26dd460e6f5f56582f4fbfcf94',1,'radio.h']]],
+  ['trytoreconnect_8',['TryToReconnect',['../RadioFunctions_8cpp.html#ad0236abcfc887ad708d9504c4ab2a7c3',1,'RadioFunctions.cpp']]]
 ];

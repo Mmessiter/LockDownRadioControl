@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['transmittercode_0',['TransmitterCode',['../TransmitterCode.html',1,'']]]
+  ['recievercode_0',['RecieverCode',['../RXCODE.html',1,'']]]
 ];

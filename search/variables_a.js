@@ -1,25 +1,4 @@
 var searchData=
 [
-  ['lastbuffer_0',['LastBuffer',['../TransmitterCode_2src_2main_8cpp.html#ae002bd879607e8a3f7722ad78a9aae73',1,'main.cpp']]],
-  ['lastdogkick_1',['LastDogKick',['../TransmitterCode_2src_2main_8cpp.html#a5cbc9265d072e0d0eefb7337baa6c4e2',1,'main.cpp']]],
-  ['lastfouronly_2',['LastFourOnly',['../TransmitterCode_2src_2main_8cpp.html#a97701cb4182125a490f24c210f4d3e24',1,'main.cpp']]],
-  ['lastlineposition_3',['LastLinePosition',['../TransmitterCode_2src_2main_8cpp.html#af4c308fd737536a055254fb9858ced91',1,'main.cpp']]],
-  ['lastmixnumber_4',['LastMixNumber',['../TransmitterCode_2src_2main_8cpp.html#a4e93c6d21a52ae42832359ee0e4c8b2d',1,'main.cpp']]],
-  ['lastmodelloaded_5',['LastModelLoaded',['../TransmitterCode_2src_2main_8cpp.html#a23f3d76e747ca641d7cb1549fb775e40',1,'main.cpp']]],
-  ['lastpacketarrivaltime_6',['LastPacketArrivalTime',['../common_8h.html#a9ac62185b964d18f5843146fce5b0063',1,'common.h']]],
-  ['lastradio_7',['LastRadio',['../TransmitterCode_2src_2main_8cpp.html#a72790e4cca2413ccec56e2bbeeb0cf4a',1,'main.cpp']]],
-  ['lastseconds_8',['LastSeconds',['../TransmitterCode_2src_2main_8cpp.html#a461bdfbe0df771f541b8872ac04bb717',1,'main.cpp']]],
-  ['lastshowtime_9',['LastShowTime',['../TransmitterCode_2src_2main_8cpp.html#ae818c99aa6e4a19030a586da53a9dcc4',1,'main.cpp']]],
-  ['lasttimeread_10',['LastTimeRead',['../TransmitterCode_2src_2main_8cpp.html#ad70c8744223914d4350b199002cec7b7',1,'main.cpp']]],
-  ['latitudegps_11',['LatitudeGPS',['../ReceiverCode_2src_2main_8cpp.html#a79c2bfabc0682301ec238954845e1e81',1,'LatitudeGPS():&#160;main.cpp'],['../radio_8h.html#a79c2bfabc0682301ec238954845e1e81',1,'LatitudeGPS():&#160;main.cpp']]],
-  ['ledisblinking_12',['LedIsBlinking',['../TransmitterCode_2src_2main_8cpp.html#a733907c842f15a6a6c1c0ce292f55ba2',1,'main.cpp']]],
-  ['ledwasgreen_13',['LedWasGreen',['../RadioFunctions_8h.html#abe57ee67b36530a7bde7680e5b6e40f8',1,'LedWasGreen():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#abe57ee67b36530a7bde7680e5b6e40f8',1,'LedWasGreen():&#160;main.cpp']]],
-  ['logfilenumber_14',['LogFileNumber',['../TransmitterCode_2src_2main_8cpp.html#abb4c65c0c164063d297d20ae5e42abb8',1,'main.cpp']]],
-  ['logfileopen_15',['LogFileOpen',['../TransmitterCode_2src_2main_8cpp.html#a248f734d3eab8f5a565ede92c6eadb97',1,'main.cpp']]],
-  ['logrxswaps_16',['LogRXSwaps',['../TransmitterCode_2src_2main_8cpp.html#a16515797c15a76da539562acaa1e1275',1,'main.cpp']]],
-  ['longitudegps_17',['LongitudeGPS',['../ReceiverCode_2src_2main_8cpp.html#afabe4c9d9760f8606aa408474e3d626c',1,'LongitudeGPS():&#160;main.cpp'],['../radio_8h.html#afabe4c9d9760f8606aa408474e3d626c',1,'LongitudeGPS():&#160;main.cpp']]],
-  ['looptimer_18',['LoopTimer',['../SensorHubT32_2src_2main_8cpp.html#a46536419f1b2ee88934f4f812fd6140c',1,'main.cpp']]],
-  ['lostcontactflag_19',['LostContactFlag',['../RadioFunctions_8h.html#ad5f463902789a79fc622b3befd9409b9',1,'LostContactFlag():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#ad5f463902789a79fc622b3befd9409b9',1,'LostContactFlag():&#160;main.cpp']]],
-  ['lostpackets_20',['LostPackets',['../RadioFunctions_8h.html#a2cd5f73af62f9f856c2352e44c73f171',1,'LostPackets():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a2cd5f73af62f9f856c2352e44c73f171',1,'LostPackets():&#160;main.cpp']]],
-  ['lowbattery_21',['LowBattery',['../TransmitterCode_2src_2main_8cpp.html#a841a740574f81e5bb80ea1a16f704be5',1,'main.cpp']]]
+  ['justhoppedflag_0',['JustHoppedFlag',['../RadioFunctions_8h.html#ae768cbeda38b92908ae481b943893e3b',1,'JustHoppedFlag():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#ae768cbeda38b92908ae481b943893e3b',1,'JustHoppedFlag():&#160;main.cpp']]]
 ];
