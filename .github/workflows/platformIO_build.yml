@@ -27,10 +27,10 @@ jobs:
             - SensorHubT32
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
 
       - name: Install PlatformIO
         run: |
@@ -43,7 +43,7 @@ jobs:
           pio run
 
       - name: Save artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: "${{ matrix.aspect }}Binaries"
           path: ${{ matrix.aspect }}/.pio/build/*/firmware.*
