@@ -234,6 +234,7 @@ char      FrontView_Secs[]    = "Secs";
 char      StartBackGround[]   = "click Background,0";
 char      ModelsFile[]        = "models.dat";
 uint8_t   SwitchNumber[8]     = {SWITCH0, SWITCH1, SWITCH2, SWITCH3, SWITCH4, SWITCH5, SWITCH6, SWITCH7}; // These can get swapped over later
+uint8_t   DefaultSwitchNumber[8]     = {SWITCH0, SWITCH1, SWITCH2, SWITCH3, SWITCH4, SWITCH5, SWITCH6, SWITCH7}; 
 uint8_t   TrimNumber[8]       = {TRIM1A, TRIM1B, TRIM2A, TRIM2B, TRIM3A, TRIM3B, TRIM4A, TRIM4B};         // These too can get swapped over later
 bool      DefiningTrims       = false;
 bool      TrimDefined[4]      = {true, true, true, true};
@@ -1143,7 +1144,7 @@ void SendCommand(char* tbox)
         NEXTION.write(0xff);
         delayMicroseconds(70);
     }
-    if (InStrng(page, tbox)) Procrastinate(SCREENCHANGEWAIT); // heer
+    if (InStrng(page, tbox)) Procrastinate(SCREENCHANGEWAIT); 
     GetReturnCode();
 }
 /*********************************************************************************************************************************/
@@ -2075,6 +2076,14 @@ void ReduceLimits()
         MaxDegrees[Bank][i]    = 180;
         CentreDegrees[Bank][i] = 90;
         MinDegrees[Bank][i]    = 0;
+    }
+}
+
+/*********************************************************************************************************************************/
+void ResetSwitchNumbers()
+{
+    for (int i = 0; i < 8; ++i) {
+        SwitchNumber[i] = DefaultSwitchNumber[i];
     }
 }
 /*********************************************************************************************************************************/
@@ -5927,7 +5936,7 @@ FASTRUN void ButtonWasPressed()
         if (InStrng(GoFrontView, TextIn) > 0) { // GOTO frontview 
             SendCommand(page_FrontView);
             UpdateModelsNameEveryWhere();
-            SafetyWasOn ^= 1;                   // this forces a re-display of motor state // heer
+            SafetyWasOn ^= 1;                   // this forces a re-display of motor state 
             MotorWasEnabled ^= 1;               // this forces a re-display of motor state
             DontAnnoyMe = true;                 // this cancels an audio prompt
             ShowBank();
@@ -6988,6 +6997,8 @@ FASTRUN void ButtonWasPressed()
                 ReduceLimits(); // Get setup for sticks calibration
                 CurrentMode = CALIBRATELIMITS;
                 CurrentView = CALIBRATEVIEW;
+                ResetSwitchNumbers(); // heer
+                SaveAllParameters();
                 SendText1(SvT11, CMsg1);
                 SendText(SvB0, CMsg2);
                 ClearText();
@@ -7199,7 +7210,7 @@ void GetBank()
     Channel11SwitchValue = CheckSwitch(Channel11Switch);
     Channel12SwitchValue = CheckSwitch(Channel12Switch);
     if (Bank != PreviousBank) {
-        if (UseLog) LogNewBank();                          // heer!!!
+        if (UseLog) LogNewBank();                        
         if (MotorEnabled == MotorWasEnabled) { // When turning off motor, don't sound bank too.
             if (AnnounceBanks) SoundBank();
         }
@@ -7437,6 +7448,9 @@ FASTRUN void ReadSwitches() // and indeed read digital trims if these are fitted
     byte flag = 0;
     for (int i = 0; i < 8; ++i) {
         Switch[i]     = !digitalRead(SwitchNumber[i]); // These are reversed because they are active low
+
+       // if (Switch[i]) Serial.println(i);// heer
+
         TrimSwitch[i] = !digitalRead(TrimNumber[i]);   // These are reversed because they are active low
         if (TrimSwitch[i]) ++flag;                     // a finger is on a trim lever...
         if ((TrimSwitch[i]) && (PreviousTrim != i)) {  // is it a new one?
