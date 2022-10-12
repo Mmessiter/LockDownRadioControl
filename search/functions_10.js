@@ -52,10 +52,11 @@ var searchData=
   ['reseti2cmaster_49',['resetI2CMaster',['../classMPU6050.html#a96332c394f1b7efd44c83a4ff690e732',1,'MPU6050']]],
   ['resetsensors_50',['resetSensors',['../classMPU6050.html#a9a271104d3302abc4af005c69a930094',1,'MPU6050']]],
   ['resetsubtrims_51',['ResetSubTrims',['../TransmitterCode_2src_2main_8cpp.html#a15a54a63b911d3a5d622cd12bc440ab6',1,'main.cpp']]],
-  ['resettemperaturepath_52',['resetTemperaturePath',['../classMPU6050.html#a559c2d091d36a4e0489bc639916ddbb6',1,'MPU6050']]],
-  ['restorebrightness_53',['RestoreBrightness',['../RadioFunctions_8h.html#a49da3478d89a22069e29c7f00cb46a5f',1,'RestoreBrightness():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a49da3478d89a22069e29c7f00cb46a5f',1,'RestoreBrightness():&#160;main.cpp']]],
-  ['rotate_54',['rotate',['../classVectorFloat.html#afef0e6d631fb1eb67b6913e90730aa9e',1,'VectorFloat::rotate()'],['../classVectorInt16.html#ac7bf149db0a2b66d7683b87ebeb2dfc5',1,'VectorInt16::rotate()']]],
-  ['rudderlefttrim_55',['RudderLeftTrim',['../TransmitterCode_2src_2main_8cpp.html#ae96314eac241d2716e7ebda1fc658ec4',1,'main.cpp']]],
-  ['rudderrighttrim_56',['RudderRightTrim',['../TransmitterCode_2src_2main_8cpp.html#a77a49849e3aa20dc1aadce0fe00de798',1,'main.cpp']]],
-  ['runmacro_57',['RunMacro',['../RadioFunctions_8cpp.html#a91fb686ba2d3111821721ab33b442918',1,'RadioFunctions.cpp']]]
+  ['resetswitchnumbers_52',['ResetSwitchNumbers',['../TransmitterCode_2src_2main_8cpp.html#ac1eb66fa4c391f27c315e687f5335015',1,'main.cpp']]],
+  ['resettemperaturepath_53',['resetTemperaturePath',['../classMPU6050.html#a559c2d091d36a4e0489bc639916ddbb6',1,'MPU6050']]],
+  ['restorebrightness_54',['RestoreBrightness',['../RadioFunctions_8h.html#a49da3478d89a22069e29c7f00cb46a5f',1,'RestoreBrightness():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a49da3478d89a22069e29c7f00cb46a5f',1,'RestoreBrightness():&#160;main.cpp']]],
+  ['rotate_55',['rotate',['../classVectorFloat.html#afef0e6d631fb1eb67b6913e90730aa9e',1,'VectorFloat::rotate()'],['../classVectorInt16.html#ac7bf149db0a2b66d7683b87ebeb2dfc5',1,'VectorInt16::rotate()']]],
+  ['rudderlefttrim_56',['RudderLeftTrim',['../TransmitterCode_2src_2main_8cpp.html#ae96314eac241d2716e7ebda1fc658ec4',1,'main.cpp']]],
+  ['rudderrighttrim_57',['RudderRightTrim',['../TransmitterCode_2src_2main_8cpp.html#a77a49849e3aa20dc1aadce0fe00de798',1,'main.cpp']]],
+  ['runmacro_58',['RunMacro',['../RadioFunctions_8cpp.html#a91fb686ba2d3111821721ab33b442918',1,'RadioFunctions.cpp']]]
 ];
