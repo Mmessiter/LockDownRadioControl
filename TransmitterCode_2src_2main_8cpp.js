@@ -71,7 +71,6 @@ var TransmitterCode_2src_2main_8cpp =
     [ "DoModelNameTimeCheck", "TransmitterCode_2src_2main_8cpp.html#af42d531d7b38cc13e96d5e7812de9ac2", null ],
     [ "DoNewChannelName", "TransmitterCode_2src_2main_8cpp.html#aba44d61ea51411cb5c601beb94b6fef4", null ],
     [ "DoReverseSense", "TransmitterCode_2src_2main_8cpp.html#acbd7adcd2b0e2095a89b4a98042b526e", null ],
-    [ "DoSomeHouseKeeping", "TransmitterCode_2src_2main_8cpp.html#aa221b44ecae36dd0367f03ed4aeb9e92", null ],
     [ "DownLog", "TransmitterCode_2src_2main_8cpp.html#a01be76cc3bf8a963f987ae47916dc8d3", null ],
     [ "DrawBox", "TransmitterCode_2src_2main_8cpp.html#a060d8c4636339f7e6760cf835307530e", null ],
     [ "DrawDot", "TransmitterCode_2src_2main_8cpp.html#ad0feb21fbea69455d1d206f142b563ac", null ],
