@@ -7819,9 +7819,17 @@ void CheckPowerOffButton()
 }
 
 /************************************************************************************************************/
-FASTRUN void DoSomeHouseKeeping(){
+void FASTRUN ManageTransmitter(){
 
-    if (GetButtonPress()) ButtonWasPressed();               // Deal with button
+  if (millis() - LastBankRead > 100){                           // 10 times a second is plenty
+        GetBank();                                              // Must not call too often        
+        ShowComms();                                            // Screen Data                                  
+        CheckTimer();                                           // Screen Timer
+        KickTheDog();                                           // Watchdog
+        CheckPowerOffButton();
+        ReadSwitches();                                         // Check switch positions
+        CheckHardwareTrims();
+        if (GetButtonPress()) ButtonWasPressed();
     if ((millis() - ModelNameTimeCheck) > 750) {
         ModelNameTimeCheck = millis();
         if (CurrentView == MAINSETUPVIEW) CheckScanButton();
@@ -7837,23 +7845,17 @@ FASTRUN void DoSomeHouseKeeping(){
         LogUKRules();
         PreviousUkRules = UkRules;
     }
-}
-
-/************************************************************************************************************/
-void FASTRUN ManageTransmitter(){
-if (GetButtonPress()) ButtonWasPressed();
-  if (millis() - LastBankRead > 50){                            // 20 times a second is plenty
-        GetBank();                                              // Must not call too often        
-        ShowComms();                                            // Screen Data                                  
-        CheckTimer();                                           // Screen Timer
-        KickTheDog();                                           // Watchdog
-        CheckPowerOffButton();
-        ReadSwitches();                                         // Check switch positions
-        CheckHardwareTrims();
-        if (GetButtonPress()) ButtonWasPressed();
-        LastBankRead = millis();
+    LastBankRead = millis();
   }                                             
-    GetNewChannelValues();                                       // Load SendBuffer with new servo positions
+}
+/************************************************************************************************************/
+// LOOP
+/************************************************************************************************************/
+FASTRUN void loop()
+{
+    if (GetButtonPress()) ButtonWasPressed();                    // Very frequently
+    ManageTransmitter();                                         // Only ten times a second << ****
+    GetNewChannelValues();                                       // Load SendBuffer with new servo positions  Very frequently
     if (UseMacros) ExecuteMacro();                               // Modify it if macro is running
     if (!DoSbusSendOnly) {                                       // Skip these next lines when buddying as a slave
         if (!BoundFlag && Connected) BufferNewPipe();            // if not yet bound, insert our pipe into SendBuffer BUT ONLY WHEN CONNECTED 
@@ -7861,15 +7863,7 @@ if (GetButtonPress()) ButtonWasPressed();
         if (!MotorEnabled) SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24
     }
-}
-/************************************************************************************************************/
-// LOOP
-/************************************************************************************************************/
-FASTRUN void loop()
-{
-    DoSomeHouseKeeping();
-    ManageTransmitter();
-    ShowServoPos();
+    ShowServoPos();                                             
     switch (CurrentMode) {
         case NORMAL:            // 0
             SendData();
