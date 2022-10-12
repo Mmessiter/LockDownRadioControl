@@ -120,7 +120,7 @@ uint64_t DefaultPipe      = DEFAULTPIPEADDRESS;  //          Default Radio pipe 
 uint64_t NewPipe          = DEFAULTPIPEADDRESS;  //          New Radio pipe address for binding will come from MAC address
 char     TextIn[CHARSMAX + 2];                   // spare space
 uint16_t PacketsPerSecond = 0;
-uint8_t  PacketsHistoryBuffer[125 * MAXSHOWCOMMSSESCONDS]; // Here we record some history
+uint8_t  PacketsHistoryBuffer[PERFECTPACKETSPERSECOND * MAXSHOWCOMMSSESCONDS]; // Here we record some history
 uint16_t PacketsHistoryIndex    = 0;
 uint32_t TotalLostPackets       = 0;
 uint8_t  PacketNumber           = 0;
@@ -373,7 +373,6 @@ bool     BuddyMaster         = false;
 uint8_t  BuddyTriggerChannel = 12;
 bool     SlaveHasControl     = false;
 uint16_t Qnh                 = 1009; // pressure at sea level here
-uint32_t ModelNameTimeCheck  = 0;
 uint16_t LastModelLoaded     = 0;
 uint8_t  MinimumGap          = 75;
 uint8_t  RecentStartLine     = 0;
@@ -1534,7 +1533,7 @@ void CheckScreenTime()
 /*********************************************************************************************************************************/
 void ClearSuccessRate()
 {
-    for (int i = 0; i < (125 * (uint16_t)ConnectionAssessSeconds); ++i) { // 125 packets per second start off good
+    for (int i = 0; i < (PERFECTPACKETSPERSECOND * (uint16_t)ConnectionAssessSeconds); ++i) { // 126 packets per second start off good
         PacketsHistoryBuffer[i] = 1;
     }
 }
@@ -1542,9 +1541,9 @@ void ClearSuccessRate()
 int GetSuccessRate()
 {   uint16_t Total = 0;
     uint16_t SuccessRate;
-    uint16_t Perfection = (125 * (uint16_t)ConnectionAssessSeconds);
+    uint16_t Perfection = (PERFECTPACKETSPERSECOND * (uint16_t)ConnectionAssessSeconds);
 
-    for (uint16_t i = 0; i < Perfection; ++i) { // 125 packets per second are either good or bad
+    for (uint16_t i = 0; i < Perfection; ++i) { // PERFECTPACKETSPERSECOND (126) packets per second are either good or bad
         Total += PacketsHistoryBuffer[i];
     }
     Total += (Perfection - Total) / 2;         // about half made it but were simply unacknowledged
@@ -5043,9 +5042,9 @@ void IncFileInView()
     CloseModelsFile();
 }
 /******************************************************************************************************************************/
-void DoModelNameTimeCheck()
+void DoLastTimeRead()
 {
-    ModelNameTimeCheck = 0;
+    LastTimeRead = 0;
 }
 /******************************************************************************************************************************/
 void GotoModelsView()
@@ -5180,7 +5179,7 @@ void EndSubTrimView()
     SaveOneModel(ModelNumber);
     CurrentView = MAINSETUPVIEW;
     SendCommand(page_SetupView);
-    ModelNameTimeCheck = 0;
+    LastTimeRead = 0;
     UpdateModelsNameEveryWhere();
 }
 /******************************************************************************************************************************/
@@ -5424,7 +5423,7 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     Blank,                // 0 (spare)
     DecFileInView,        // 1
     IncFileInView,        // 2
-    DoModelNameTimeCheck, // 3
+    DoLastTimeRead, // 3
     GotoModelsView,       // 4
     GotoMacrosView,       // 5
     PopulateMacrosView,   // 6
@@ -5785,7 +5784,7 @@ FASTRUN void ButtonWasPressed()
             RestoreBrightness();
             SetAudioVolume(AudioVolume);
             SendCommand(page_SetupView);
-            ModelNameTimeCheck = 0;
+            LastTimeRead = 0;
             SaveTransmitterParameters();
             UpdateModelsNameEveryWhere();
             b5isGrey = false;
@@ -5804,7 +5803,7 @@ FASTRUN void ButtonWasPressed()
             ClearText();
             SaveAllParameters();
             SendCommand(page_SetupView);
-            ModelNameTimeCheck = 0;
+            LastTimeRead = 0;
             CurrentMode        = NORMAL;
             CurrentView        = MAINSETUPVIEW;
             b5isGrey           = false;
@@ -5883,7 +5882,7 @@ FASTRUN void ButtonWasPressed()
             SendValue(Progress, 95);
             SendValue(Progress, 100);
             SendCommand(page_SetupView);
-            ModelNameTimeCheck = 0;
+            LastTimeRead = 0;
             CurrentMode        = NORMAL;
             CurrentView        = MAINSETUPVIEW;
             b5isGrey           = false;
@@ -5948,7 +5947,7 @@ FASTRUN void ButtonWasPressed()
             CurrentView = MAINSETUPVIEW;
             b5isGrey    = false;
             SendCommand(page_SetupView);
-            ModelNameTimeCheck = 0;
+            LastTimeRead = 0;
             DoScanEnd();
             UpdateModelsNameEveryWhere();
             ClearText();
@@ -6320,7 +6319,7 @@ FASTRUN void ButtonWasPressed()
             SendCommand(page_SetupView);
             CurrentView = MAINSETUPVIEW;
             b5isGrey = false;
-            ModelNameTimeCheck = 0;
+            LastTimeRead = 0;
             ClearText();
             return;
         }
@@ -6591,7 +6590,7 @@ FASTRUN void ButtonWasPressed()
             CurrentView = MAINSETUPVIEW;
             b5isGrey    = false;
             SendCommand(page_SetupView);
-            ModelNameTimeCheck = 0;
+            LastTimeRead = 0;
             UpdateModelsNameEveryWhere();
             ClearText();
             return;
@@ -6678,7 +6677,7 @@ FASTRUN void ButtonWasPressed()
             SaveAllParameters(); // save trims to SDcard
             b5isGrey           = false;
             SendCommand(page_SetupView);
-            ModelNameTimeCheck = 0;
+            LastTimeRead = 0;
             CurrentMode        = NORMAL;
             CurrentView        = MAINSETUPVIEW;
             UpdateModelsNameEveryWhere();
@@ -7015,7 +7014,7 @@ FASTRUN void ButtonWasPressed()
                 LoadAllParameters();         // Restore all current model settings
                 SendText(SvB0, Cmsg5);
                 SendText(SvT11, Cmsg6);
-                ModelNameTimeCheck = 0;
+                LastTimeRead = 0;
                 ClearText();
                 return;
             }
@@ -7821,7 +7820,16 @@ void CheckPowerOffButton()
 /************************************************************************************************************/
 void FASTRUN ManageTransmitter(){
 
-  if (millis() - LastBankRead > 100){                           // 10 times a second is plenty
+    if (millis() - LastBankRead > 100) {                        // 10 times a second is plenty
+        if (millis() - LastTimeRead >= 1000) {                  // Once a second for these...
+            ReadTime();        // Do the clock
+            GetStatistics();   // Do stats
+            LastTimeRead = millis();
+            if (CurrentView == MAINSETUPVIEW) {CheckScanButton();}
+            if (CurrentView == MODELSVIEW)    {CheckModelName();}    // In MODELSVIEW, this function checks correct name is displayed.
+            if (PreviousUkRules != UkRules)   {LogUKRules(); PreviousUkRules = UkRules; }
+            return;                                             // Do no more housekeeping this time around
+        }
         GetBank();                                              // Must not call too often        
         ShowComms();                                            // Screen Data                                  
         CheckTimer();                                           // Screen Timer
@@ -7829,24 +7837,8 @@ void FASTRUN ManageTransmitter(){
         CheckPowerOffButton();
         ReadSwitches();                                         // Check switch positions
         CheckHardwareTrims();
-        if (GetButtonPress()) ButtonWasPressed();
-    if ((millis() - ModelNameTimeCheck) > 750) {
-        ModelNameTimeCheck = millis();
-        if (CurrentView == MAINSETUPVIEW) CheckScanButton();
-        if (CurrentView == MODELSVIEW) CheckModelName();    // In MODELSVIEW, this function checks correct name is displayed.
-        if (GetButtonPress()) ButtonWasPressed();
+        LastBankRead = millis();
     }
-    if (millis() - LastTimeRead >= 1000) {
-        ReadTime();        // Do the clock
-        GetStatistics();   // Do stats
-        LastTimeRead = millis();
-    }
-    if (PreviousUkRules != UkRules) {
-        LogUKRules();
-        PreviousUkRules = UkRules;
-    }
-    LastBankRead = millis();
-  }                                             
 }
 /************************************************************************************************************/
 // LOOP
@@ -7854,7 +7846,7 @@ void FASTRUN ManageTransmitter(){
 FASTRUN void loop()
 {
     if (GetButtonPress()) ButtonWasPressed();                    // Very frequently
-    ManageTransmitter();                                         // Only ten times a second << ****
+    ManageTransmitter();                                         // ****>>> Only ten times a second <<<****
     GetNewChannelValues();                                       // Load SendBuffer with new servo positions  Very frequently
     if (UseMacros) ExecuteMacro();                               // Modify it if macro is running
     if (!DoSbusSendOnly) {                                       // Skip these next lines when buddying as a slave

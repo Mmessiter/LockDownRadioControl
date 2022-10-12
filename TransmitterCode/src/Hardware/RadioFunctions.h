@@ -37,7 +37,7 @@
 //    DEBUG OPTIONS (Uncomment any of these for that bit of debug info)     *
 //***************************************************************************
 
- // #define DB_NEXTION        // Debug NEXTION
+// #define DB_NEXTION        // Debug NEXTION
 // #define DB_SD             // Debug SD card data
 // #define DB_FHSS           // Debug real time FHSS data
 // #define DB_SENSORS        // Debug Sensors
@@ -70,7 +70,7 @@
 #define CHARSMAX           120                       // Max length for char arrays
 #define UNCOMPRESSEDWORDS  20                        // DATA TO SEND = 40  bytes
 #define COMPRESSEDWORDS    UNCOMPRESSEDWORDS * 3 / 4 // COMPRESSED DATA SENT = 30  bytes
-
+#define PERFECTPACKETSPERSECOND 126                  // Flat out perfect packets per second
 // **************************************************************************
 //                            FHSS PARAMETERS                               *
 //***************************************************************************
@@ -366,7 +366,7 @@ extern bool           UseLog;
 extern uint32_t       ShowServoTimer;
 extern uint16_t       PacketsPerSecond;
 extern uint16_t       GetStickInput(uint8_t l);
-extern uint8_t        PacketsHistoryBuffer[125 * MAXSHOWCOMMSSESCONDS];
+extern uint8_t        PacketsHistoryBuffer[PERFECTPACKETSPERSECOND * MAXSHOWCOMMSSESCONDS];
 extern uint16_t       PacketsHistoryIndex;
 extern uint8_t        ConnectionAssessSeconds;
 extern bool           LowPowerMode;

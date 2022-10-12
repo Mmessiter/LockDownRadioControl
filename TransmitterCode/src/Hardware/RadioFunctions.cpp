@@ -130,7 +130,7 @@ void RecordsPacketSuccess(uint8_t s)
 { // or failure according to s
     PacketsHistoryBuffer[PacketsHistoryIndex] = s;
     ++PacketsHistoryIndex;
-    if (PacketsHistoryIndex >= (125 * ConnectionAssessSeconds)) PacketsHistoryIndex = 0; //
+    if (PacketsHistoryIndex >= (PERFECTPACKETSPERSECOND * ConnectionAssessSeconds)) PacketsHistoryIndex = 0; //
 }
 /***************************************************************************************/
 
