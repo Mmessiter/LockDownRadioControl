@@ -132,6 +132,7 @@ var RadioFunctions_8h =
     [ "SkyBlue", "RadioFunctions_8h.html#a8a431faef1cf5f8d166b51cd97ee08bf", null ],
     [ "SMOOTHEDCURVES", "RadioFunctions_8h.html#a4bb4c483e9d754ae63391df1d8341deb", null ],
     [ "STICKSVIEW", "RadioFunctions_8h.html#abfc5f0d31f80fc812b9c44a55fe3134e", null ],
+    [ "STORAGECHARGE", "RadioFunctions_8h.html#a0d7f6ce749c2aceb4ecef39efa939fa6", null ],
     [ "STRAIGHTLINES", "RadioFunctions_8h.html#a00adadb4876f6c86728e50a79fbc8fcc", null ],
     [ "SUBTRIMVIEW", "RadioFunctions_8h.html#a489f04d8af51ba47e5032937dc23a330", null ],
     [ "SWITCH0", "RadioFunctions_8h.html#a5ad241ff204c1ff242cb95c222a4b8c1", null ],
