@@ -477,6 +477,8 @@ bool    UseMotorKill            = true;
 bool    SafetyON                = false;
 bool    SafetyWasOn             = false;
 u_int8_t WarningSound               = BATTERYISLOW;
+float    StopFlyingVoltsPerCell = 0;
+uint16_t SFV                    = 0; // =StopFlyingVoltsPerCell * 100
 
 // **********************************************************************************************************************************
 // **********************************************************************************************************************************
@@ -1512,7 +1514,7 @@ FASTRUN bool CheckRXVolts()
             strcpy(RXBattInfo, ModelVolts);
             strcat(RXBattInfo, v);
             VoltsPerCell = (ReadVolts / RXCellCount) / 100;
-            if (VoltsPerCell <= 3.80f && Volts > 0) {
+            if (VoltsPerCell <= StopFlyingVoltsPerCell && Volts > 0) {
                         RXWarningFlag = true; // down to storage volts?
                         WarningSound = STORAGECHARGE;
             }
@@ -2573,8 +2575,14 @@ bool ReadOneModel(uint8_t Mnum)
     ++SDCardAddress;
      MotorChannel = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-    SafetySwitch =SDRead8BITS(SDCardAddress);
+    SafetySwitch = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
+    SFV = SDRead16BITS(SDCardAddress);
+    ++SDCardAddress;
+    ++SDCardAddress;
+    StopFlyingVoltsPerCell = float (SFV) / 100;
+    if (StopFlyingVoltsPerCell < 3 || StopFlyingVoltsPerCell > 4) StopFlyingVoltsPerCell = 3.80;
+
     // **************************************
 
     OneModelMemory = SDCardAddress - StartLocation;
@@ -3494,6 +3502,11 @@ void SaveOneModel(uint16_t mnum)
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress,SafetySwitch);
     ++SDCardAddress;
+    SDUpdate16BITS(SDCardAddress,SFV);
+    ++SDCardAddress;
+    ++SDCardAddress;
+
+    
 
     // ********************** Add more
 
@@ -5253,24 +5266,29 @@ void OptionView2Start()
     char dGMT[]          = "dGMT"; // Time zone
     char n1[]            = "n1";
     char n2[]            = "n2";
+    char t10[]           = "t10";
     char n3[]            = "n3";
     char lpm[]           = "c0";    // Auto model match
     char OptionV2Start[] = "page OptionView2";
     char TxVCorrextion[] = "t2";
     char RxVCorrextion[] = "n0"; // RX Voltage correction
+    char  fbuf[10];
 
     if (CurrentView == OPTIONVIEW3) { //  TODO: And what if was Options 1??
-        RxVoltageCorrection     = GetValue(RxVCorrextion);
-        TxVoltageCorrection     = GetValue(TxVCorrextion);
-        PowerOffWarningSeconds  = GetValue(n2);
-        PowerOffWarningSeconds  = CheckRange(PowerOffWarningSeconds, 2, 30);
-        AutoModelSelect         = GetValue(lpm);
-        if (LEDBrightness      != GetValue(n1)) LedWasGreen = false; // Forces a redisplay if brightness has changed
-        LEDBrightness           = GetValue(n1);
-        ConnectionAssessSeconds = GetValue(n3);
-        ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);
-        LEDBrightness           = CheckRange(LEDBrightness, 1, 254);
-        SaveAllParameters();
+      GetText(t10, fbuf);
+      StopFlyingVoltsPerCell = atof(fbuf); 
+      SFV                    = StopFlyingVoltsPerCell * 100;// this makes it a 16 bit value I can save easily
+      RxVoltageCorrection    = GetValue(RxVCorrextion);
+      TxVoltageCorrection    = GetValue(TxVCorrextion);
+      PowerOffWarningSeconds = GetValue(n2);
+      PowerOffWarningSeconds = CheckRange(PowerOffWarningSeconds, 2, 30);
+      AutoModelSelect        = GetValue(lpm);
+      if (LEDBrightness != GetValue(n1)) LedWasGreen = false; // Forces a redisplay if brightness has changed
+      LEDBrightness           = GetValue(n1);
+      ConnectionAssessSeconds = GetValue(n3);
+      ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);
+      LEDBrightness           = CheckRange(LEDBrightness, 1, 254);
+      SaveAllParameters();
     }
 
     CurrentView  = OPTIONVIEW2;
@@ -5287,13 +5305,17 @@ void OptionView3Start()
     char TxVCorrextion[] = "t2";
     char n1[]            = "n1";
     char n2[]            = "n2";
+    char t10[]           = "t10";
     char n3[]            = "n3";
     char RxVCorrextion[] = "n0"; // RX Voltage correction
     char lpm[]           = "c0"; // Low power mode
+    char Vbuf[10];
     char OptionV3Start[] = "page OptionView3";
-    CurrentView          = OPTIONVIEW3;
+    CurrentView          = OPTIONVIEW3; 
     SendCommand(OptionV3Start);
     Procrastinate(250);
+    snprintf(Vbuf, 5, "%f", StopFlyingVoltsPerCell);
+    SendText(t10, Vbuf);
     SendValue(TxVCorrextion, TxVoltageCorrection);
     SendValue(RxVCorrextion, RxVoltageCorrection);
     SendValue(n2,  PowerOffWarningSeconds);
@@ -5346,9 +5368,15 @@ void OptionView3End()
     char n2[]             = "n2";
     char n3[]             = "n3";
     char n1[]             = "n1";
+    char t10[]            = "t10";
     char page_SetupView[] = "page SetupView";
     char lpm[]            = "c0"; // Auto model selection
+    char  fbuf[10];
 
+
+    GetText(t10, fbuf);
+    StopFlyingVoltsPerCell  = atof(fbuf);
+    SFV                     = StopFlyingVoltsPerCell * 100;  // this makes it a 16 bit value I can save easily
     TxVoltageCorrection     = GetValue(TxVCorrextion);
     RxVoltageCorrection     = GetValue(RxVCorrextion);
     PowerOffWarningSeconds  = GetValue(n2);
@@ -7005,7 +7033,7 @@ FASTRUN void ButtonWasPressed()
         }
         if (CurrentMode == NORMAL) {
             if (strcmp(TextIn, "Calibrate1") == 0) {
-                ResetSwitchNumbers(); // heer
+                ResetSwitchNumbers(); 
                 SaveTransmitterParameters();
                 ReduceLimits(); // Get setup for sticks calibration
                 CurrentMode = CALIBRATELIMITS;

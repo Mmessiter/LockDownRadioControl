@@ -114,7 +114,7 @@
 // **************************************************************************
 
 #define M_Enabled       0 // Offsets for Mixes array
-#define M_Bank    1
+#define M_Bank          1
 #define M_MasterChannel 2
 #define M_SlaveChannel  3
 #define M_Reversed      4
