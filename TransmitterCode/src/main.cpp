@@ -234,7 +234,7 @@ char      FrontView_Secs[]    = "Secs";
 char      StartBackGround[]   = "click Background,0";
 char      ModelsFile[]        = "models.dat";
 uint8_t   SwitchNumber[8]     = {SWITCH0, SWITCH1, SWITCH2, SWITCH3, SWITCH4, SWITCH5, SWITCH6, SWITCH7}; // These can get swapped over later
-uint8_t   DefaultSwitchNumber[8]     = {SWITCH0, SWITCH1, SWITCH2, SWITCH3, SWITCH4, SWITCH5, SWITCH6, SWITCH7}; 
+uint8_t   DeftSwitchNo[8]     = {SWITCH0, SWITCH1, SWITCH2, SWITCH3, SWITCH4, SWITCH5, SWITCH6, SWITCH7}; // Default value
 uint8_t   TrimNumber[8]       = {TRIM1A, TRIM1B, TRIM2A, TRIM2B, TRIM3A, TRIM3B, TRIM4A, TRIM4B};         // These too can get swapped over later
 bool      DefiningTrims       = false;
 bool      TrimDefined[4]      = {true, true, true, true};
@@ -476,7 +476,10 @@ uint8_t MotorChannelZero        = 0;
 bool    UseMotorKill            = true;
 bool    SafetyON                = false;
 bool    SafetyWasOn             = false;
- 
+u_int8_t WarningSound               = BATTERYISLOW;
+
+// **********************************************************************************************************************************
+// **********************************************************************************************************************************
 // **********************************************************************************************************************************
 
 uint8_t Ascii(char c)
@@ -1497,6 +1500,7 @@ FASTRUN bool CheckRXVolts()
  
     if (RXVoltsDetected) {
         Volts = constrain(Volts, 0, 100);
+        WarningSound = BATTERYISLOW;
         if (Volts <= LowBattery && Volts > 0) RXWarningFlag = true;
         if (BoundFlag && CurrentView == FRONTVIEW) {
             SendValue(JRX, Volts);
@@ -1505,6 +1509,10 @@ FASTRUN bool CheckRXVolts()
             strcpy(RXBattInfo, ModelVolts);
             strcat(RXBattInfo, v);
             VoltsPerCell = (ReadVolts / RXCellCount) / 100;
+            if (VoltsPerCell <= 3.80f && Volts > 0) {
+                        RXWarningFlag = true; // down to storage volts?
+                        WarningSound = STORAGECHARGE;
+            }
             dtostrf(VoltsPerCell, 2, 2, Vbuf);
             strcat(RXBattInfo, Vbuf);
             strcat(RXBattInfo, PerCell);
@@ -1736,7 +1744,7 @@ FASTRUN void ShowComms()
             LedIsBlinking = true;
             if ((millis() - WarningTimer) > 10000) {
                 WarningTimer = millis();
-                PlaySound(BATTERYISLOW); // issue audible warning every 10 seconds
+                PlaySound(WarningSound); // issue audible warning every 10 seconds
             }
             if (CurrentView == FRONTVIEW) SendCommand(WarnNow);
         }
@@ -2083,7 +2091,7 @@ void ReduceLimits()
 void ResetSwitchNumbers()
 {
     for (int i = 0; i < 8; ++i) {
-        SwitchNumber[i] = DefaultSwitchNumber[i];
+        SwitchNumber[i] = DeftSwitchNo[i];
     }
 }
 /*********************************************************************************************************************************/
@@ -6994,11 +7002,11 @@ FASTRUN void ButtonWasPressed()
         }
         if (CurrentMode == NORMAL) {
             if (strcmp(TextIn, "Calibrate1") == 0) {
+                ResetSwitchNumbers(); // heer
+                SaveTransmitterParameters();
                 ReduceLimits(); // Get setup for sticks calibration
                 CurrentMode = CALIBRATELIMITS;
                 CurrentView = CALIBRATEVIEW;
-                ResetSwitchNumbers(); // heer
-                SaveAllParameters();
                 SendText1(SvT11, CMsg1);
                 SendText(SvB0, CMsg2);
                 ClearText();
@@ -7448,9 +7456,6 @@ FASTRUN void ReadSwitches() // and indeed read digital trims if these are fitted
     byte flag = 0;
     for (int i = 0; i < 8; ++i) {
         Switch[i]     = !digitalRead(SwitchNumber[i]); // These are reversed because they are active low
-
-       // if (Switch[i]) Serial.println(i);// heer
-
         TrimSwitch[i] = !digitalRead(TrimNumber[i]);   // These are reversed because they are active low
         if (TrimSwitch[i]) ++flag;                     // a finger is on a trim lever...
         if ((TrimSwitch[i]) && (PreviousTrim != i)) {  // is it a new one?

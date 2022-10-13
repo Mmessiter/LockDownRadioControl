@@ -228,6 +228,7 @@
 #define MMNOTFOUND      30
 #define MOTORON         31
 #define MOTOROFF        32
+#define STORAGECHARGE   33
 
 // **************************************************************************
 //               SDCARD MODEL MEMORY CONSTANTS                              *
