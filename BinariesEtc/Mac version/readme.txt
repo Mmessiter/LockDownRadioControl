@@ -1,4 +1,4 @@
-Version 1.9.3 (RX: 1.9.2) 
+Version 1.9.4 
 
 How to use the transmitter or receiver firmware updater:
 
@@ -17,6 +17,12 @@ To update the Nextion screen, download their free editor (Windows only), load th
 
 
 
+
+New in version: 1.9.4:
+----------------------
+
+Bug fixes! It now just works much better and more reliably especially in the Binding area.
+Its now possible to define the voltage per cell that the receiver lipo reaches when it's time to stop flying.
 
 
 New in version: 1.9.3:
