@@ -1514,7 +1514,7 @@ FASTRUN bool CheckRXVolts()
             strcpy(RXBattInfo, ModelVolts);
             strcat(RXBattInfo, v);
             VoltsPerCell = (ReadVolts / RXCellCount) / 100;
-            if (VoltsPerCell <= StopFlyingVoltsPerCell && Volts > 0) {
+            if (VoltsPerCell < StopFlyingVoltsPerCell && Volts > 0) {
                         RXWarningFlag = true; // down to storage volts?
                         WarningSound = STORAGECHARGE;
             }
@@ -2581,7 +2581,7 @@ bool ReadOneModel(uint8_t Mnum)
     ++SDCardAddress;
     ++SDCardAddress;
     StopFlyingVoltsPerCell = float (SFV) / 100;
-    if (StopFlyingVoltsPerCell < 3 || StopFlyingVoltsPerCell > 4) StopFlyingVoltsPerCell = 3.80;
+    if (StopFlyingVoltsPerCell < 3 || StopFlyingVoltsPerCell > 4) StopFlyingVoltsPerCell = 3.50; // a useful default stop time?!
 
     // **************************************
 
