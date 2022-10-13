@@ -1453,12 +1453,15 @@ FASTRUN bool CheckTXVolts()
     char  pc[] = "%";
     char  nbuf[10];
     char  v[] = "V";
-
+    
     if (USE_INA219) {
         txv = ((ina219.getBusVoltage_V()) * 100) + (TxVoltageCorrection * 2); // corrected for duff ina219
         dtostrf(txv / 200, 2, 2, nbuf);                                       // Volts per cell
         txpc = map(txv, 3.2 * 200, 3.33 * 200, 0, 100);                       // LiFePo4 Battery 3.1 ->3.35  volts per cell
-        if (txpc < LowBattery) TXWarningFlag = true;
+        if (txpc < LowBattery) {
+            TXWarningFlag = true;
+            WarningSound = BATTERYISLOW;
+        }
         txpc = constrain(txpc, 0, 100);
         strcpy(TXBattInfo, Str(Vbuf, txpc, 0));
         strcat(TXBattInfo, pc);
