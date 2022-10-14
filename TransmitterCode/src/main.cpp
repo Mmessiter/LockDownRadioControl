@@ -477,7 +477,8 @@ bool    UseMotorKill            = true;
 bool    SafetyON                = false;
 bool    SafetyWasOn             = false;
 u_int8_t WarningSound               = BATTERYISLOW;
-float    StopFlyingVoltsPerCell = 0;
+uint32_t LowVoltstimer              = 0;
+float    StopFlyingVoltsPerCell     = 0;
 uint16_t SFV                    = 0; // =StopFlyingVoltsPerCell * 100
 
 // **********************************************************************************************************************************
@@ -1506,7 +1507,6 @@ FASTRUN bool CheckRXVolts()
     if (RXVoltsDetected) {
         Volts = constrain(Volts, 0, 100);
         WarningSound = BATTERYISLOW;
-        if (Volts <= LowBattery && Volts > 0) RXWarningFlag = true;
         if (BoundFlag && CurrentView == FRONTVIEW) {
             SendValue(JRX, Volts);
             strcat(Str(Vbuf, Volts, 0), pc);
@@ -1515,8 +1515,13 @@ FASTRUN bool CheckRXVolts()
             strcat(RXBattInfo, v);
             VoltsPerCell = (ReadVolts / RXCellCount) / 100;
             if (VoltsPerCell < StopFlyingVoltsPerCell && Volts > 0) {
-                        RXWarningFlag = true; // down to storage volts?
-                        WarningSound = STORAGECHARGE;
+                if (!LowVoltstimer) LowVoltstimer = millis();        // Start a timer if not running already 
+                if (millis() - LowVoltstimer > LOW_VOLTAGE_TIME){    // Is RX Lipo down to storage volts for over 3 seconds? // heer 
+                    RXWarningFlag = true; 
+                    WarningSound  = STORAGECHARGE;
+                }
+            } else {
+                LowVoltstimer = 0;                                   // Reset timer as voltage recovered
             }
             dtostrf(VoltsPerCell, 2, 2, Vbuf);
             strcat(RXBattInfo, Vbuf);
@@ -1745,17 +1750,15 @@ FASTRUN void ShowComms()
             }
         }
         CheckScreenTime();
-        if (CheckTXVolts() || CheckRXVolts()) { // Note: If TX Battery is low, then CheckRXVolts() is not even called.
-            LedIsBlinking = true;
+        if (CheckTXVolts() || CheckRXVolts()) {         // Note: If TX Battery is low, then CheckRXVolts() is not even called.
             if ((millis() - WarningTimer) > 10000) {
                 WarningTimer = millis();
-                PlaySound(WarningSound); // issue audible warning every 10 seconds
+                PlaySound(WarningSound);                // Issue audible warning every 10 seconds
             }
             if (CurrentView == FRONTVIEW) SendCommand(WarnNow);
         }
         else {
             if (LedIsBlinking && (CurrentView == FRONTVIEW)) SendCommand(WarnOff);
-            LedIsBlinking = false;
         }
     }
 
