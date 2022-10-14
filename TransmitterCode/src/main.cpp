@@ -1507,13 +1507,19 @@ FASTRUN bool CheckRXVolts()
     if (RXVoltsDetected) {
         Volts = constrain(Volts, 0, 100);
         WarningSound = BATTERYISLOW;
-        if (BoundFlag && CurrentView == FRONTVIEW) {
-            SendValue(JRX, Volts);
-            strcat(Str(Vbuf, Volts, 0), pc);
-            SendText(RXPC, Vbuf);
-            strcpy(RXBattInfo, ModelVolts);
-            strcat(RXBattInfo, v);
-            VoltsPerCell = (ReadVolts / RXCellCount) / 100;
+        if (BoundFlag) {
+           VoltsPerCell = (ReadVolts / RXCellCount) / 100;
+           if (CurrentView == FRONTVIEW){
+                SendValue(JRX, Volts);  
+                strcat(Str(Vbuf, Volts, 0), pc);
+                SendText(RXPC, Vbuf); 
+                strcpy(RXBattInfo, ModelVolts);
+                strcat(RXBattInfo, v);
+                dtostrf(VoltsPerCell, 2, 2, Vbuf);
+                strcat(RXBattInfo, Vbuf);
+                strcat(RXBattInfo, PerCell);
+                SendText(FrontView_RXBV, RXBattInfo);  
+            }
             if (VoltsPerCell < StopFlyingVoltsPerCell && Volts > 0) {
                 if (!LowVoltstimer) LowVoltstimer = millis();        // Start a timer if not running already 
                 if (millis() - LowVoltstimer > LOW_VOLTAGE_TIME){    // Is RX Lipo down to storage volts for over 3 seconds? // heer 
@@ -1521,12 +1527,9 @@ FASTRUN bool CheckRXVolts()
                     WarningSound  = STORAGECHARGE;
                 }
             } else {
-                LowVoltstimer = 0;                                   // Reset timer as voltage recovered
+                LowVoltstimer = 0;   
+                RXWarningFlag = false;                                 // Reset timer as voltage recovered
             }
-            dtostrf(VoltsPerCell, 2, 2, Vbuf);
-            strcat(RXBattInfo, Vbuf);
-            strcat(RXBattInfo, PerCell);
-            SendText(FrontView_RXBV, RXBattInfo);
         }
     }
     else {
