@@ -1487,8 +1487,8 @@ FASTRUN bool CheckTXVolts()
 
 FASTRUN bool CheckRXVolts()
 {
-    float Volts         = 0;
-    float ReadVolts     = 0;
+    float ReadVolts             = 0;
+    uint8_t  GreenPercentBar    = 0;
     char  JRX[]         = "JRX";
     bool  RXWarningFlag = false;
     char  Vbuf[16];
@@ -1501,17 +1501,18 @@ FASTRUN bool CheckRXVolts()
     char  v[]              = "V  (";
     char  pc[]             = "%";
     char  spaces[]         = "  ";
-    ReadVolts              = (RXModelVolts * 100) + (RxVoltageCorrection * RXCellCount);
-    Volts                  = map(ReadVolts, 3.4f * RXCellCount * 100, 4.2f * RXCellCount * 100, 0, 100);
- 
+    
+    
+    ReadVolts                = (RXModelVolts * 100) + (RxVoltageCorrection * RXCellCount);
+    GreenPercentBar          = map(ReadVolts, 3.4f * RXCellCount * 100, 4.2f * RXCellCount * 100, 0, 100);
     if (RXVoltsDetected) {
-        Volts = constrain(Volts, 0, 100);
+        GreenPercentBar = constrain(GreenPercentBar, 0, 100);
         WarningSound = BATTERYISLOW;
         if (BoundFlag) {
            VoltsPerCell = (ReadVolts / RXCellCount) / 100;
            if (CurrentView == FRONTVIEW){
-                SendValue(JRX, Volts);  
-                strcat(Str(Vbuf, Volts, 0), pc);
+                SendValue(JRX, GreenPercentBar);  
+                strcat(Str(Vbuf, GreenPercentBar, 0), pc);
                 SendText(RXPC, Vbuf); 
                 strcpy(RXBattInfo, ModelVolts);
                 strcat(RXBattInfo, v);
@@ -1520,7 +1521,7 @@ FASTRUN bool CheckRXVolts()
                 strcat(RXBattInfo, PerCell);
                 SendText(FrontView_RXBV, RXBattInfo);  
             }
-            if (VoltsPerCell < StopFlyingVoltsPerCell && Volts > 0) {
+            if (VoltsPerCell < StopFlyingVoltsPerCell && GreenPercentBar > 0) {
                 if (!LowVoltstimer) LowVoltstimer = millis();        // Start a timer if not running already 
                 if (millis() - LowVoltstimer > LOW_VOLTAGE_TIME){    // Is RX Lipo down to storage volts for over 3 seconds? // heer 
                     RXWarningFlag = true; 
