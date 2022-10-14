@@ -60,6 +60,7 @@ var RadioFunctions_8h =
     [ "KICKRATE", "RadioFunctions_8h.html#a639fb69a9b4f236e3b1a16435b82bb81", null ],
     [ "LOGVIEW", "RadioFunctions_8h.html#ab5b352492259f7b453a051455d5dca50", null ],
     [ "LOSTCONTACTCUTOFF", "RadioFunctions_8h.html#ac5b4f54697bc5a8d58ef0c92c094c6b6", null ],
+    [ "LOW_VOLTAGE_TIME", "RadioFunctions_8h.html#a26bf5116f8cb804123206e63f1432746", null ],
     [ "LOWBATTERY", "RadioFunctions_8h.html#adca16f7a43b448d4584dcb62897068a5", null ],
     [ "M_Bank", "RadioFunctions_8h.html#afbfbe35486d9ee68d5286e84b4134d04", null ],
     [ "M_Enabled", "RadioFunctions_8h.html#ad2b2fe49829868cf9b49c2e65dfaa006", null ],
