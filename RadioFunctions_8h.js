@@ -275,6 +275,7 @@ var RadioFunctions_8h =
     [ "MacrosBuffer", "RadioFunctions_8h.html#a961efaa3441c7a8fc7ecea83b2cd3260", null ],
     [ "MacroStartTime", "RadioFunctions_8h.html#abacba397df8422d772f9f387649a9494", null ],
     [ "MacroStopTime", "RadioFunctions_8h.html#a9e444f8769253f982906c933290b1369", null ],
+    [ "NewCompressNeeded", "RadioFunctions_8h.html#a37ebe494d562386d4f9f00b629d4cf1a", null ],
     [ "NewPipe", "RadioFunctions_8h.html#a594f07765a7ed90e0830d4e2f69a7112", null ],
     [ "NextChannel", "RadioFunctions_8h.html#a4c9fbf66b2c98730d43dc9dfe573a998", null ],
     [ "NextChannelNumber", "RadioFunctions_8h.html#a372b457a109ccee3253b219df1a47412", null ],
