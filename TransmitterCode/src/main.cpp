@@ -7884,7 +7884,7 @@ void CheckPowerOffButton()
 /************************************************************************************************************/
 void FASTRUN ManageTransmitter(){
 
-    if (millis() - LastBankRead > 150) {                        // 6.666666 times a second is plenty
+    if (millis() - LastBankRead > 150) {                        // 6.66666 times a second is plenty
         if (millis() - LastTimeRead >= 1000) {                  // Once a second for these...
             ReadTime();        // Do the clock
             GetStatistics();   // Do stats
@@ -7894,12 +7894,12 @@ void FASTRUN ManageTransmitter(){
             if (PreviousUkRules != UkRules)   {LogUKRules(); PreviousUkRules = UkRules; }
             return;                                             // Do no more housekeeping this time around
         }
+        ReadSwitches();                                         // Check switch positions
         GetBank();                                              // Must not call too often        
         ShowComms();                                            // Screen Data                                  
         CheckTimer();                                           // Screen Timer
         KickTheDog();                                           // Watchdog
         CheckPowerOffButton();
-        ReadSwitches();                                         // Check switch positions
         CheckHardwareTrims();
         LastBankRead = millis();
     }
