@@ -466,16 +466,16 @@ union {
         uint8_t  Val8[8];        // Model's Mac address that had been saved on disk
      }  ModelsMacUnionSaved;
 
-char b5Greyed[]                 = "b5.pco=33840";
-char b12Greyed[]                = "b12.pco=33840";
-bool MotorEnabled               = false;
-bool MotorWasEnabled            = false;
-bool    DontAnnoyMe                = false;
-uint8_t MotorChannel               = 2; // Throttle from zero
-uint8_t MotorChannelZero        = 0; 
-bool    UseMotorKill            = true;
-bool    SafetyON                = false;
-bool    SafetyWasOn             = false;
+char b5Greyed[]                     = "b5.pco=33840";
+char b12Greyed[]                    = "b12.pco=33840";
+bool MotorEnabled                   = false;
+bool MotorWasEnabled                = false;
+bool    DontAnnoyMe                 = false;
+uint8_t MotorChannel                = 2; // Throttle from zero
+uint8_t MotorChannelZero            = 0; 
+bool    UseMotorKill                = true;
+bool    SafetyON                    = false;
+bool    SafetyWasOn                 = false;
 u_int8_t WarningSound               = BATTERYISLOW;
 uint32_t LowVoltstimer              = 0;
 float    StopFlyingVoltsPerCell     = 0;
@@ -2038,8 +2038,7 @@ uint16_t (*Interpolate[3])(uint16_t m, uint16_t l, uint16_t n) {
 /** @brief GET NEW SERVO POSITIONS */
 FASTRUN void GetNewChannelValues()
 {
-
-    if (millis() - GetChannelValuesTimer < 10) return; //  100 calls per second enough?
+    if (millis() - GetChannelValuesTimer < 8) return; //  125 calls per second enough?
     GetChannelValuesTimer = millis();
     NewCompressNeeded     = true;
 
@@ -2081,8 +2080,7 @@ FASTRUN void GetNewChannelValues()
     if (CurrentMode == NORMAL) {
         DoReverseSense();
         DoMixes();
-    }
-       
+    }    
 }
 /*********************************************************************************************************************************/
 
