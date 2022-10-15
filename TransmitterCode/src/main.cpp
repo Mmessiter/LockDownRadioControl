@@ -479,7 +479,9 @@ bool    SafetyWasOn             = false;
 u_int8_t WarningSound               = BATTERYISLOW;
 uint32_t LowVoltstimer              = 0;
 float    StopFlyingVoltsPerCell     = 0;
-uint16_t SFV                    = 0; // =StopFlyingVoltsPerCell * 100
+uint16_t SFV                        = 0; // =StopFlyingVoltsPerCell * 100
+uint32_t GetChannelValuesTimer      = 0;
+bool     NewCompressNeeded          = true;
 
 // **********************************************************************************************************************************
 // **********************************************************************************************************************************
@@ -1382,7 +1384,7 @@ FASTRUN void CheckTimer()
 FASTRUN void ShowServoPos()
 {
     if (millis() - ShowServoTimer <= 100) return;
-    ShowServoTimer = millis();
+   
    
   
     char     Ch_Lables[16][5] = {"Ch1", "Ch2", "Ch3", "Ch4", "Ch5", "Ch6", "Ch7", "Ch8", "Ch9", "Ch10", "Ch11", "Ch12", "Ch13", "Ch14", "Ch15", "Ch16"};
@@ -1442,6 +1444,7 @@ FASTRUN void ShowServoPos()
             SavedLineX = StickPosition;
         }
     }
+    ShowServoTimer = millis();
 }
 /*********************************************************************************************************************************/
 FASTRUN bool CheckTXVolts()
@@ -1501,7 +1504,6 @@ FASTRUN bool CheckRXVolts()
     char  v[]              = "V  (";
     char  pc[]             = "%";
     char  spaces[]         = "  ";
-    
     
     ReadVolts                = (RXModelVolts * 100) + (RxVoltageCorrection * RXCellCount);
     GreenPercentBar          = map(ReadVolts, 3.4f * RXCellCount * 100, 4.2f * RXCellCount * 100, 0, 100);
@@ -2042,6 +2044,11 @@ uint16_t (*Interpolate[3])(uint16_t m, uint16_t l, uint16_t n) {
 /** @brief GET NEW SERVO POSITIONS */
 FASTRUN void GetNewChannelValues()
 {
+
+    if (millis() - GetChannelValuesTimer < 10) return; //  100 calls per second enough?
+    GetChannelValuesTimer = millis();
+    NewCompressNeeded     = true;
+
     uint16_t k = 0, l = 0, m = 0, n = 0, t = 0, TrimAmount = 0;
     // key: -
     // m = input value from sticks etc
@@ -7877,7 +7884,7 @@ void CheckPowerOffButton()
 /************************************************************************************************************/
 void FASTRUN ManageTransmitter(){
 
-    if (millis() - LastBankRead > 100) {                        // 10 times a second is plenty
+    if (millis() - LastBankRead > 150) {                        // 6.666666 times a second is plenty
         if (millis() - LastTimeRead >= 1000) {                  // Once a second for these...
             ReadTime();        // Do the clock
             GetStatistics();   // Do stats
@@ -7897,6 +7904,7 @@ void FASTRUN ManageTransmitter(){
         LastBankRead = millis();
     }
 }
+
 /************************************************************************************************************/
 // LOOP
 /************************************************************************************************************/

@@ -70,7 +70,7 @@
 #define CHARSMAX           120                       // Max length for char arrays
 #define UNCOMPRESSEDWORDS  20                        // DATA TO SEND = 40  bytes
 #define COMPRESSEDWORDS    UNCOMPRESSEDWORDS * 3 / 4 // COMPRESSED DATA SENT = 30  bytes
-#define PERFECTPACKETSPERSECOND 126                  // Flat out perfect packets per second
+#define PERFECTPACKETSPERSECOND 133                  // Flat out perfect packets per second
 // **************************************************************************
 //                            FHSS PARAMETERS                               *
 //***************************************************************************
@@ -371,7 +371,7 @@ extern uint8_t        PacketsHistoryBuffer[PERFECTPACKETSPERSECOND * MAXSHOWCOMM
 extern uint16_t       PacketsHistoryIndex;
 extern uint8_t        ConnectionAssessSeconds;
 extern bool           LowPowerMode;
-
+extern bool           NewCompressNeeded;
 // external (global) functions needed here
 extern void  GetSlaveChannelValues();
 extern void  KickTheDog();
