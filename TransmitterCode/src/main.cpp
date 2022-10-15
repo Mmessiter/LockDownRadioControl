@@ -1615,12 +1615,11 @@ void ShowConnectionQuality()
 
 FASTRUN void ShowComms()
 {
-    if (NEXTION.available()) return; // was a button pressed?
-
+if (millis() - LastShowTime > SHOWCOMMSDELAY) {
+    LastShowTime     = millis();
     char WarnNow[]   = "vis Warning,1";
     char WarnOff[]   = "vis Warning,0";
     char InVisible[] = "vis Quality,0";
-    bool ShowNow     = false;
     char FrontView_AckPayload[] = "AckPayload";
     char FrontView_RXBV[]       = "RXBV";
     char Msg_CnctdBuddyMast[]  = "* BUDDY MASTER! *";
@@ -1655,12 +1654,7 @@ FASTRUN void ShowComms()
     char Sat[]               = "Sat";
     char Sbs[]               = "Sbus";
 
-    if (millis() - LastShowTime > SHOWCOMMSDELAY) {
-        ShowNow      = true;
-        LastShowTime = millis();
-    }
-    if (ShowNow) {
-
+        
         if (CurrentView == FRONTVIEW || CurrentView == DATAVIEW) {
             if ((CurrentView == FRONTVIEW))  ShowConnectionQuality();
             if (LedWasGreen) {
@@ -1767,7 +1761,7 @@ FASTRUN void ShowComms()
             if (LedIsBlinking && (CurrentView == FRONTVIEW)) SendCommand(WarnOff);
         }
     }
-
+   
 } // end ShowComms()
 
 /************************************************************************************************************/
@@ -1789,8 +1783,8 @@ void ReEnableScanButton()   // Scan button AND models button
             b5isGrey = false;
         }
     }
+   
 }
-
 /*********************************************************************************************************************************/
 
 /** Send 13 joined together char arrays to NEXTION */
