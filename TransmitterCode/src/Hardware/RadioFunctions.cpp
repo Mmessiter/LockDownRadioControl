@@ -7,12 +7,6 @@
 
 /************************************************************************************************************/
 
-#ifdef DB_FHSS
-float PStartTime = 0;
-float PEndTime   = 0;
-float Pduration  = 0;
-#endif
-
 /**
  * Compresses uint16_t* buffer values (each with 12 bit resolution - the lower 12 bits).
  * @param compressed_buf[out] Must have allocated 3/4 the size of uncompressed_buf
@@ -316,33 +310,39 @@ void ScanAllChannels()
     }
 }
 
+#ifdef DB_FHSS
+float PStartTime = 0;
+float PEndTime   = 0;
+float Pduration  = 0;
+#endif
+
 /************************************************************************************************************/
 
 // This function hops to the next channel in the FFHS array (about 16 times a second)
 
 FASTRUN void HopToNextChannel()
 {
-
     Radio1.setChannel(NextChannel); // Hop !
     Radio1.stopListening();         // Transmit only (no need for any extra delay() as this is here followed by several tasks)
-
-#ifdef DB_FHSS
-    float ch   = *(FHSSChPointer + NextChannelNumber);
-    float Freq = 2.4;
-    PEndTime   = millis();
-    Pduration  = (PEndTime - PStartTime) / 1000;
-    Serial.print("Hop duration: ");
-    Serial.print(Pduration);
-    Serial.print(" seconds. Good packets per hop: ");
-    Serial.print(PacketNumber);
-    Serial.print(" Next frequency: ");
-    Freq += ch / 1000;
-    Serial.print(Freq, 3);
-    Serial.print(" Ghz.");
-    Serial.print(BoundFlag ? " Bound!" : " NOT BOUND.");
-    Serial.print(" RX Radio: ");
-    Serial.println(ThisRadio);
-    PStartTime = millis();
+   
+#ifdef DB_FHSS 
+    if (BoundFlag && Connected && ModelMatched){
+        float ch   = *(FHSSChPointer + NextChannelNumber);
+        float Freq = 2.4;
+        PEndTime   = millis();
+        Pduration  = (PEndTime - PStartTime) / 1000;
+        Serial.print("Hop duration: ");
+        Serial.print(Pduration);
+        Serial.print(" seconds. Good packets per hop: ");
+        Serial.print(PacketNumber);
+        Serial.print(" Next frequency: ");
+        Freq += ch / 1000;
+        Serial.print(Freq, 3);
+        Serial.print(" Ghz.");
+        Serial.print(" RX transceiver number: ");
+        Serial.println(ThisRadio);
+        PStartTime = millis();
+    }
 #endif
     PacketNumber = 0;
 }

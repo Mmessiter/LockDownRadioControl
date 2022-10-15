@@ -372,6 +372,7 @@ extern uint16_t       PacketsHistoryIndex;
 extern uint8_t        ConnectionAssessSeconds;
 extern bool           LowPowerMode;
 extern bool           NewCompressNeeded;
+extern bool           ModelMatched;
 // external (global) functions needed here
 extern void  GetSlaveChannelValues();
 extern void  KickTheDog();
