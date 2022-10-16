@@ -1235,7 +1235,7 @@ void GetTextIn()
             TextIn[j] = uint8_t(NEXTION.read());
             if (TextIn[j] == '$') TextIn[j] = 0;
             if (j < CHARSMAX) ++j;
-            delayMicroseconds(20);
+            delayMicroseconds(20); 
         }
     }
 }
@@ -1323,12 +1323,13 @@ int GetOtherValue(char* nbox) // don't add .val as other thingy is already there
     }
     return ValueIn;
 }
+
+
 /*********************************************************************************************************************************/
 bool GetButtonPress()
 {
     uint8_t a = 0;
     int     i = 0;
-    delayMicroseconds(20); // 20 seems best so far value here
     bool ButtonPressed = false;
     if (NEXTION.available()) {
         ButtonPressed = true;
@@ -1340,7 +1341,7 @@ bool GetButtonPress()
                 TextIn[i + 1] = 0;
             }
             if (i < CHARSMAX - 1) ++i;
-            delayMicroseconds(20); // 20 seems best so far value here
+            delay(1);    // needed!! 
         }
     }
     if (!(strlen(TextIn))) ButtonPressed = false;
@@ -5700,7 +5701,7 @@ FASTRUN void ButtonWasPressed()
         char Smooth[]                  = "Smooth";
         char Lines[]                   = "Lines";
         char GOTO[]                    = "GOTO:";
-        char WhichPage[]               = "page                            "; // excessive spaces for page name
+        char WhichPage[]               = "page                                 "; // excessive spaces for page name
         char AddMinute[]               = "IncMinute";
         char Dec_Minute[]              = "DecMinute";
         char Dec_Hour[]                = "DecHour";
@@ -6088,7 +6089,7 @@ FASTRUN void ButtonWasPressed()
         }
         if (InStrng(GOTO, TextIn) > 0) { // Return from Help screen returns here to relevent config screen
             i = 5;
-            while (uint8_t(TextIn[i]) > 0 && i < 30) {
+            while (uint8_t(TextIn[i]) && i < 30) {
                 WhichPage[i] = TextIn[i];
                 ++i;
                 WhichPage[i] = 0;
