@@ -36,7 +36,6 @@ var RadioFunctions_8h =
     [ "CONNECTEDMSG", "RadioFunctions_8h.html#a2a2b035486dce4d0e5d5e956da201121", null ],
     [ "CSN_PIN", "RadioFunctions_8h.html#a6c4d73944fe1bd2ff7ceee867c315ac1", null ],
     [ "DATAVIEW", "RadioFunctions_8h.html#a5d4f7906962f2c612f1eeabd809f2f52", null ],
-    [ "DB_NEXTION", "RadioFunctions_8h.html#a37c149666ecf7d90765ce2a9df4b8fb8", null ],
     [ "DEFAULT_EXPO", "RadioFunctions_8h.html#a2a42bee007b474de05c409af41aba395", null ],
     [ "DEFAULTPIPEADDRESS", "RadioFunctions_8h.html#a4882e6035f50cbda34385a5388985813", null ],
     [ "DISCONNECTEDMSG", "RadioFunctions_8h.html#ad369aa903154f60e4c7877091791e1c4", null ],
