@@ -239,6 +239,7 @@ var NAVTREEINDEX2 =
 "RadioFunctions_8cpp.html#a799f38bc33abdb30eec1d7db3cf27d58":[8,0,4,0,0,0,12],
 "RadioFunctions_8cpp.html#a91fb686ba2d3111821721ab33b442918":[8,0,4,0,0,0,16],
 "RadioFunctions_8cpp.html#a9a3e35cbf8abeae1ebdb4af8dff3571a":[8,0,4,0,0,0,3],
+"RadioFunctions_8cpp.html#aa4e775cc458a824cb4bef031518b19a2":[8,0,4,0,0,0,25],
 "RadioFunctions_8cpp.html#ad0236abcfc887ad708d9504c4ab2a7c3":[8,0,4,0,0,0,24],
 "RadioFunctions_8cpp.html#ad0e30213b21808d00110752679788a8c":[8,0,4,0,0,0,23],
 "RadioFunctions_8cpp.html#ad7ab066fbe7d750f032f5761dbaa2487":[8,0,4,0,0,0,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX2 =
 "RadioFunctions_8cpp.html#aff7f985af10a021196ae5c9bf188c445":[8,0,4,0,0,0,20],
 "RadioFunctions_8cpp_source.html":[8,0,4,0,0,0],
 "RadioFunctions_8h.html":[8,0,4,0,0,1],
-"RadioFunctions_8h.html#a0008024e40c8e90017f18745d34b6224":[8,0,4,0,0,1,263],
-"RadioFunctions_8h.html#a00adadb4876f6c86728e50a79fbc8fcc":[8,0,4,0,0,1,134]
+"RadioFunctions_8h.html#a0008024e40c8e90017f18745d34b6224":[8,0,4,0,0,1,263]
 };
