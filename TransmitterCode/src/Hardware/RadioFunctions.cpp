@@ -57,14 +57,31 @@ FASTRUN void BufferNewPipe()
     SendBuffer[6] = (uint8_t)((NewPipe >> 8) & 0xFF);
     SendBuffer[7] = (uint8_t)((NewPipe)&0xFF);
 }
+
+bool RecursedAlready = false;
+
 /************************************************************************************************************/
-// This function replaces delay() without freezing needed tasks
+// This function replaces delay() without freezing critical tasks
 void Procrastinate(uint32_t HowLong)
 {
     uint32_t ThisMoment = millis();
+
+    if (RecursedAlready) 
+    {
+        while ((millis() - ThisMoment) < HowLong) {
+            KickTheDog(); 
+        }
+        return;   // do not allow indirect recursion any further
+    }
+    
+    RecursedAlready = true;
     while ((millis() - ThisMoment) < HowLong) {
         KickTheDog(); // keep watchdog happy
-        }
+        if (Connected && BoundFlag) {
+            SendData(); // keep receiver happy too
+        }  
+    }
+    RecursedAlready = false;
 }
 
 //***********************************************************************************************************

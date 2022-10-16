@@ -1197,7 +1197,7 @@ void EndSend()
     for (u_int8_t pp = 0; pp < 3; ++pp) {
         NEXTION.write(0xff);
     }          // Send end of Input message //
-    delay(55); // ** A DELAY ** (>=50 ms) was needed if an answer might come! (!! Shorter with Intelligent dislay)
+    Procrastinate(55); // ** A DELAY ** (>=50 ms) was needed if an answer might come! (!! Shorter with Intelligent dislay)
 }
 /*********************************************************************************************************************************/
 void SendValue(char* nbox, int value)
@@ -1273,7 +1273,7 @@ uint32_t GetValue(char* nbox) // This function calls the function above until it
     uint32_t ValueIn = getvalue(nbox);
 
     while (ValueIn == 65535 && i < 25) { // if error read again!
-        delay(50);
+        Procrastinate(50);
         ValueIn = getvalue(nbox);
         ++i;
     }
@@ -3165,9 +3165,9 @@ FLASHMEM void setup()
     WatchDogConfig.callback = WatchDogCallBack;
     TeensyWatchDog.begin(WatchDogConfig);
     LastDogKick = millis(); // needed? - yes!
-    delay(WARMUPDELAY);
+    Procrastinate(WARMUPDELAY);
     if (!SD.begin(chipSelect)) { // MUST return true or all is lost! (todo: create error page)
-        delay(WARMUPDELAY);
+        Procrastinate(WARMUPDELAY);
         SD.begin(chipSelect); // a second attempt for iffy sd cards ?!
     }
     CalibratedYet = LoadAllParameters(); // If they exist, read saved SD card settings.
@@ -5026,7 +5026,6 @@ void StartBuddyView()
     char pBuddyView[] = "page BuddyView";
     SendCommand(pBuddyView);
     CurrentView = BUDDYVIEW;
-    delay(200);
     if (BuddyTriggerChannel > 16) BuddyTriggerChannel = 16;
     if (BuddyTriggerChannel < 1) BuddyTriggerChannel = 12;
     SendValue(BuddyM, BuddyMaster);
@@ -6186,7 +6185,6 @@ FASTRUN void ButtonWasPressed()
             }
             else {
                 if (UseLog) LogPowerOff();
-                delay(50);
                 SaveAllParameters();
                 delay(250); 
                 digitalWrite(POWER_OFF_PIN, HIGH);
@@ -6202,7 +6200,6 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(OffNow, TextIn) > 0) { // redundant
             if (UseLog) LogPowerOff();
-            delay(50);
             SaveAllParameters();
             delay(250); 
             digitalWrite(POWER_OFF_PIN, HIGH); // force OFF in Options View
