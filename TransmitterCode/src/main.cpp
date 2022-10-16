@@ -1138,10 +1138,12 @@ void ClearText()
 //                        NEXTION functions
 /*********************************************************************************************************************************/
 void GetReturnCode()
-{ // currently absorbed but ignored.
-  //  while (NEXTION.available()) {
-  //      NEXTION.read();
-  //  }
+{  // Currently this is absorbed but ignored. This seems to be essential.
+    delayMicroseconds(70);
+    while (NEXTION.available()) {
+        NEXTION.read();
+        delayMicroseconds(70);
+    }
 }
 /*********************************************************************************************************************************/
 void SendCommand(char* tbox) 
@@ -1152,8 +1154,9 @@ void SendCommand(char* tbox)
         NEXTION.write(0xff);
         delayMicroseconds(70);
     }
-    if (InStrng(page, tbox)) Procrastinate(SCREENCHANGEWAIT); 
-    GetReturnCode();
+     GetReturnCode();
+    if (InStrng(page, tbox)) Procrastinate(SCREENCHANGEWAIT); // Allow time for new page to appear
+   
 }
 /*********************************************************************************************************************************/
 void SendText(char* tbox, char* NewWord)
