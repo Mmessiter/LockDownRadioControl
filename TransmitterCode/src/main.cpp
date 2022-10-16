@@ -3540,16 +3540,16 @@ void SortDirectory()
     int  f      = 0;
     bool flag   = true;
     int  Scount = 0;
-    char BoxOffset[18];
+    char TempArray[18];
     while (flag && Scount < 10000) {
         flag = false;
-        for (f = 0; f < ExportedFileCounter - 1; f++) {
+        for (f = 0; f < ExportedFileCounter - 1; ++f) {
             if (strcmp(TheFilesList[f], TheFilesList[f + 1]) > 0) {
-                strcpy(BoxOffset, TheFilesList[f]);
+                strcpy(TempArray, TheFilesList[f]);
                 strcpy(TheFilesList[f], TheFilesList[f + 1]);
-                strcpy(TheFilesList[f + 1], BoxOffset);
+                strcpy(TheFilesList[f + 1], TempArray);
                 flag = true;
-                Scount++;
+                ++Scount;
             }
         }
     }
