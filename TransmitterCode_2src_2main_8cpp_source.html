@@ -3517,16 +3517,16 @@ $(document).ready(function(){initNavTree('TransmitterCode_2src_2main_8cpp_source
 <div class="line"><a id="l03540" name="l03540"></a><span class="lineno"> 3540</span>    <span class="keywordtype">int</span>  f      = 0;</div>
 <div class="line"><a id="l03541" name="l03541"></a><span class="lineno"> 3541</span>    <span class="keywordtype">bool</span> flag   = <span class="keyword">true</span>;</div>
 <div class="line"><a id="l03542" name="l03542"></a><span class="lineno"> 3542</span>    <span class="keywordtype">int</span>  Scount = 0;</div>
-<div class="line"><a id="l03543" name="l03543"></a><span class="lineno"> 3543</span>    <span class="keywordtype">char</span> BoxOffset[18];</div>
+<div class="line"><a id="l03543" name="l03543"></a><span class="lineno"> 3543</span>    <span class="keywordtype">char</span> TempArray[18];</div>
 <div class="line"><a id="l03544" name="l03544"></a><span class="lineno"> 3544</span>    <span class="keywordflow">while</span> (flag &amp;&amp; Scount &lt; 10000) {</div>
 <div class="line"><a id="l03545" name="l03545"></a><span class="lineno"> 3545</span>        flag = <span class="keyword">false</span>;</div>
-<div class="line"><a id="l03546" name="l03546"></a><span class="lineno"> 3546</span>        <span class="keywordflow">for</span> (f = 0; f &lt; <a class="code hl_variable" href="TransmitterCode_2src_2main_8cpp.html#a1252681409ac5c9ed335a78f80633236">ExportedFileCounter</a> - 1; f++) {</div>
+<div class="line"><a id="l03546" name="l03546"></a><span class="lineno"> 3546</span>        <span class="keywordflow">for</span> (f = 0; f &lt; <a class="code hl_variable" href="TransmitterCode_2src_2main_8cpp.html#a1252681409ac5c9ed335a78f80633236">ExportedFileCounter</a> - 1; ++f) {</div>
 <div class="line"><a id="l03547" name="l03547"></a><span class="lineno"> 3547</span>            <span class="keywordflow">if</span> (strcmp(<a class="code hl_variable" href="TransmitterCode_2src_2main_8cpp.html#ad4b74e56767ae0e8bb511461086146cd">TheFilesList</a>[f], <a class="code hl_variable" href="TransmitterCode_2src_2main_8cpp.html#ad4b74e56767ae0e8bb511461086146cd">TheFilesList</a>[f + 1]) &gt; 0) {</div>
-<div class="line"><a id="l03548" name="l03548"></a><span class="lineno"> 3548</span>                strcpy(BoxOffset, <a class="code hl_variable" href="TransmitterCode_2src_2main_8cpp.html#ad4b74e56767ae0e8bb511461086146cd">TheFilesList</a>[f]);</div>
+<div class="line"><a id="l03548" name="l03548"></a><span class="lineno"> 3548</span>                strcpy(TempArray, <a class="code hl_variable" href="TransmitterCode_2src_2main_8cpp.html#ad4b74e56767ae0e8bb511461086146cd">TheFilesList</a>[f]);</div>
 <div class="line"><a id="l03549" name="l03549"></a><span class="lineno"> 3549</span>                strcpy(<a class="code hl_variable" href="TransmitterCode_2src_2main_8cpp.html#ad4b74e56767ae0e8bb511461086146cd">TheFilesList</a>[f], <a class="code hl_variable" href="TransmitterCode_2src_2main_8cpp.html#ad4b74e56767ae0e8bb511461086146cd">TheFilesList</a>[f + 1]);</div>
-<div class="line"><a id="l03550" name="l03550"></a><span class="lineno"> 3550</span>                strcpy(<a class="code hl_variable" href="TransmitterCode_2src_2main_8cpp.html#ad4b74e56767ae0e8bb511461086146cd">TheFilesList</a>[f + 1], BoxOffset);</div>
+<div class="line"><a id="l03550" name="l03550"></a><span class="lineno"> 3550</span>                strcpy(<a class="code hl_variable" href="TransmitterCode_2src_2main_8cpp.html#ad4b74e56767ae0e8bb511461086146cd">TheFilesList</a>[f + 1], TempArray);</div>
 <div class="line"><a id="l03551" name="l03551"></a><span class="lineno"> 3551</span>                flag = <span class="keyword">true</span>;</div>
-<div class="line"><a id="l03552" name="l03552"></a><span class="lineno"> 3552</span>                Scount++;</div>
+<div class="line"><a id="l03552" name="l03552"></a><span class="lineno"> 3552</span>                ++Scount;</div>
 <div class="line"><a id="l03553" name="l03553"></a><span class="lineno"> 3553</span>            }</div>
 <div class="line"><a id="l03554" name="l03554"></a><span class="lineno"> 3554</span>        }</div>
 <div class="line"><a id="l03555" name="l03555"></a><span class="lineno"> 3555</span>    }</div>
