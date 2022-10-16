@@ -1332,10 +1332,10 @@ bool GetButtonPress()
     int     i = 0;
     bool ButtonPressed = false;
     if (NEXTION.available()) {
-        ButtonPressed = true;
         while (NEXTION.available()) {
-            a = NEXTION.read();
+            a = NEXTION.read();    
             if (a > 31 && a < 254) {
+                ButtonPressed = true;
                 TextIn[i] = a;
                 if (TextIn[i] == '$') TextIn[i] = 0;
                 TextIn[i + 1] = 0;
@@ -1344,7 +1344,6 @@ bool GetButtonPress()
             delay(1);    // needed!! 
         }
     }
-    if (!(strlen(TextIn))) ButtonPressed = false;
     if (ButtonPressed && ButtonClicks) PlaySound(CLICKONE);
     return ButtonPressed;
 }
@@ -1526,7 +1525,7 @@ FASTRUN bool CheckRXVolts()
             }
             if (VoltsPerCell < StopFlyingVoltsPerCell && GreenPercentBar > 0) {
                 if (!LowVoltstimer) LowVoltstimer = millis();        // Start a timer if not running already 
-                if (millis() - LowVoltstimer > LOW_VOLTAGE_TIME){    // Is RX Lipo down to storage volts for over 3 seconds? // heer 
+                if (millis() - LowVoltstimer > LOW_VOLTAGE_TIME){    // Is RX Lipo down to storage volts for over 3 seconds? 
                     RXWarningFlag = true; 
                     WarningSound  = STORAGECHARGE;
                 }
@@ -3566,11 +3565,12 @@ void BuildDirectory()
     ExportedFileCounter = 0;
     while (true) {
         File entry = dir.openNextFile();
-        if (!entry || ExportedFileCounter > 18) break;
+        if (!entry || ExportedFileCounter > 90) break; // heer
         strcpy(Entry1, entry.name());
         if (InStrng(MOD, Entry1) > 0) {
             strcpy(fn, entry.name());
-            for (i = 0; i < 12; ++i) {
+            for (i = 0; i < 12; ++i)
+            {
                 TheFilesList[ExportedFileCounter][i] = fn[i];
             }
             ExportedFileCounter++;
