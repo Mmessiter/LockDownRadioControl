@@ -234,12 +234,13 @@
 //               SDCARD MODEL MEMORY CONSTANTS                              *
 //***************************************************************************
 
-#define RENEWDATA  8787     // Change these to rewrite all
-#define TXSIZE     250      // SD space reserved for transmitter
-#define MODELSIZE  1600     // SD space reserved for each model
-#define MAXFILELEN 1024 * 3 // MAX SIZE FOR HELP AND LOG FILES
-#define BOXOFFSET  35
-#define BOXSIZE    395
+#define RENEWDATA         8787     // Change these to rewrite all
+#define TXSIZE            250      // SD space reserved for transmitter
+#define MODELSIZE         1600     // SD space reserved for each model
+#define MAXFILELEN        1024 * 3 // MAX SIZE FOR HELP AND LOG FILES
+#define BOXOFFSET         35
+#define BOXSIZE           395
+#define MAXBACKUPFILES    95
 
 // **************************************************************************
 //                            SERVO RANGE PARAMETERS                        *

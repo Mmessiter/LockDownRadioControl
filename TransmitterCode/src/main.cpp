@@ -3565,7 +3565,7 @@ void BuildDirectory()
     ExportedFileCounter = 0;
     while (true) {
         File entry = dir.openNextFile();
-        if (!entry || ExportedFileCounter > 90) break; // heer
+        if (!entry || ExportedFileCounter > MAXBACKUPFILES) break;
         strcpy(Entry1, entry.name());
         if (InStrng(MOD, Entry1) > 0) {
             strcpy(fn, entry.name());
