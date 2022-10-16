@@ -79,6 +79,7 @@ var RadioFunctions_8h =
     [ "MACROTRIGGERCHANNEL", "RadioFunctions_8h.html#af8ab3c768a28f2a28475c81309bcf379", null ],
     [ "MAINSETUPVIEW", "RadioFunctions_8h.html#a0de9a27687c5d129d1184703edb30e1f", null ],
     [ "MASTERMSG", "RadioFunctions_8h.html#a103774f792b7e90787d2d31fb1ae4ddb", null ],
+    [ "MAXBACKUPFILES", "RadioFunctions_8h.html#acc2eaf0a27e9b2c40a5045c22edfd955", null ],
     [ "MAXFILELEN", "RadioFunctions_8h.html#aa67b661e0a71a9cce5c2903953b8b8bf", null ],
     [ "MAXLINES", "RadioFunctions_8h.html#a8759764610aff6d0cf94742c22856182", null ],
     [ "MAXMACROS", "RadioFunctions_8h.html#af9fb1b689f62242b5e960b18dbe76761", null ],
