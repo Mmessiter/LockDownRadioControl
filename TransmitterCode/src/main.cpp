@@ -5637,7 +5637,7 @@ FASTRUN void ButtonWasPressed()
         char CMsg1[]                   = "Move all controls to their full\r\nextent several times,\r\nthen press Next.";
         char SvB0[]                    = "b0";
         char CMsg2[]                   = "Next ...";
-        char Cmsg3[]                   = "Centre all channels,\r\nPush edge switches fully back,\r\nthen press Finish.";
+        char Cmsg3[]                   = "Centre all channels.\r\nPut edge switches fully back,\r\nor fully forward, then press Finish.";
         char Cmsg4[]                   = "Finish";
         char Cmsg5[]                   = "Repeat?";
         char Cmsg6[]                   = "Calbrate again?";
@@ -7057,7 +7057,7 @@ FASTRUN void ButtonWasPressed()
             if (strcmp(TextIn, "Calibrate1") == 0) {
                 CurrentMode = CENTRESTICKS;
                 CurrentView = CALIBRATEVIEW;
-                SendText(SvT11, Cmsg3);
+                SendText1(SvT11, Cmsg3);
                 SendText(SvB0, Cmsg4);
                 ClearText();
                 return;
@@ -7230,7 +7230,7 @@ void GetBank()
         SafetyWasOn = SafetyON;
     }
 
-    if (Bank == 4 && !MotorWasEnabled) MotorEnabled = false;                            // Moving to Bank4 from motor off doesn't start motor ...  yet
+   // if (Bank == 4 && !MotorWasEnabled) MotorEnabled = false;                            // Moving to Bank4 from motor off doesn't start motor ...  yet
    
     if (SafetyON) MotorEnabled = false;
 
