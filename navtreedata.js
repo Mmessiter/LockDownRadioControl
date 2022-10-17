@@ -121,8 +121,8 @@ var NAVTREEINDEX =
 "TransmitterCode_2src_2main_8cpp.html#af1030157034999448f5ca611d6209385",
 "classMPU6050.html#ac7f5c0511fe9d0f3525a3757498daed7",
 "classMPU9250.html#ab0db27e3482e0d7a6b5c523780dfd35d",
-"dir_cf2617b2f451d485c6872b95fd1adbbe.html",
-"radio_8h.html#a6e2d4126d864c50e7c23c988c2bfdd1a"
+"dir_bf1608deb0e45beedd33fe8d0de585f4.html",
+"radio_8h.html#a692b8b0727e0db358f99c7bf4e8235c0"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
