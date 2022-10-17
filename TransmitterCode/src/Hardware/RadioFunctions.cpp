@@ -206,7 +206,6 @@ void FlushFifos()
 
 FASTRUN void SendData()
 {
-    if (NEXTION.available()) return; // in case key was hit
     if (((millis() - TxPace) >= PACEMAKER) || (LostContactFlag)) {
         TxPace = millis();
         if (DoSbusSendOnly) {
