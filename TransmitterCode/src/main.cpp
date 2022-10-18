@@ -479,7 +479,6 @@ u_int8_t WarningSound               = BATTERYISLOW;
 uint32_t LowVoltstimer              = 0;
 float    StopFlyingVoltsPerCell     = 0;
 uint16_t SFV                        = 0; // =StopFlyingVoltsPerCell * 100
-uint32_t GetChannelValuesTimer      = 0;
 bool     NewCompressNeeded          = true;
 
 // **********************************************************************************************************************************
@@ -2037,9 +2036,8 @@ uint16_t (*Interpolate[3])(uint16_t m, uint16_t l, uint16_t n) {
 /** @brief GET NEW SERVO POSITIONS */
 FASTRUN void GetNewChannelValues()
 {
-    if (millis() - GetChannelValuesTimer < 8) return; //  125 calls per second enough?
-    GetChannelValuesTimer = millis();
-    NewCompressNeeded     = true;
+    if (NewCompressNeeded) return; // Have we compressed the last one yet?
+    NewCompressNeeded     = true;  // Yes! So ot must be time for another...
 
     uint16_t k = 0, l = 0, m = 0, n = 0, t = 0, TrimAmount = 0;
     // key: -
