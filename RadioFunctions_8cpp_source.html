@@ -102,25 +102,25 @@ $(document).ready(function(){initNavTree('RadioFunctions_8cpp_source.html',''); 
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment">/************************************************************************************************************/</span></div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment">// Malcolm Messiter 2022</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &quot;<a class="code" href="RadioFunctions_8h.html">RadioFunctions.h</a>&quot;</span></div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="comment">/************************************************************************************************************/</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno"><a class="line" href="RadioFunctions_8cpp.html#a1ddd5e8d5bd649dd98ce3710fbff651b">   16</a></span>FASTRUN <span class="keywordtype">void</span> <a class="code hl_function" href="RadioFunctions_8cpp.html#a1ddd5e8d5bd649dd98ce3710fbff651b">Compress</a>(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uint8_t uncompressed_size)</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>{</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="keywordflow">if</span> (<a class="code hl_variable" href="RadioFunctions_8h.html#a37ebe494d562386d4f9f00b629d4cf1a">NewCompressNeeded</a>){    <span class="comment">// no need to recompress old data</span></div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>     <a class="code hl_variable" href="RadioFunctions_8h.html#a37ebe494d562386d4f9f00b629d4cf1a">NewCompressNeeded</a> = <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>     uint8_t p         = 0;</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>     <span class="keywordflow">for</span> (<span class="keywordtype">int</span> l = 0; l &lt; (uncompressed_size * 3 / 4); l += 3) {</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>         compressed_buf[l] = uncompressed_buf[p] &lt;&lt; 4 | uncompressed_buf[p + 1] &gt;&gt; 8;</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>         ++p;</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>         compressed_buf[l + 1] = uncompressed_buf[p] &lt;&lt; 8 | uncompressed_buf[p + 1] &gt;&gt; 4;</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>         ++p;</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>         compressed_buf[l + 2] = uncompressed_buf[p] &lt;&lt; 12 | uncompressed_buf[p + 1];</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>         ++p;</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>         ++p;</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    }</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> }</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>}</div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="comment">/************************************************************************************************************/</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno"><a class="line" href="RadioFunctions_8cpp.html#a1ddd5e8d5bd649dd98ce3710fbff651b">   15</a></span>FASTRUN <span class="keywordtype">void</span> <a class="code hl_function" href="RadioFunctions_8cpp.html#a1ddd5e8d5bd649dd98ce3710fbff651b">Compress</a>(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uint8_t uncompressed_size)</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>{</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="RadioFunctions_8h.html#a37ebe494d562386d4f9f00b629d4cf1a">NewCompressNeeded</a>){    <span class="comment">// no need to recompress old data</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>        <a class="code hl_variable" href="RadioFunctions_8h.html#a37ebe494d562386d4f9f00b629d4cf1a">NewCompressNeeded</a> = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>        uint8_t p         = 0;</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> l = 0; l &lt; (uncompressed_size * 3 / 4); l += 3) {</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>            compressed_buf[l] = uncompressed_buf[p] &lt;&lt; 4 | uncompressed_buf[p + 1] &gt;&gt; 8;</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>            ++p;</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>            compressed_buf[l + 1] = uncompressed_buf[p] &lt;&lt; 8 | uncompressed_buf[p + 1] &gt;&gt; 4;</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>            ++p;</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>            compressed_buf[l + 2] = uncompressed_buf[p] &lt;&lt; 12 | uncompressed_buf[p + 1];</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>            ++p;</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>            ++p;</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>        }</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    } </div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>}</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
 <div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="comment">/************************************************************************************************************/</span></div>
 <div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
 <div class="line"><a id="l00034" name="l00034"></a><span class="lineno"><a class="line" href="RadioFunctions_8cpp.html#ad0e30213b21808d00110752679788a8c">   34</a></span>FASTRUN <span class="keywordtype">void</span> <a class="code hl_function" href="RadioFunctions_8cpp.html#ad0e30213b21808d00110752679788a8c">TryOtherPipe</a>()</div>
@@ -505,7 +505,7 @@ $(document).ready(function(){initNavTree('RadioFunctions_8cpp_source.html',''); 
 <div class="ttc" id="aRadioFunctions_8cpp_html_a07c27b4e208198453c70876517926052"><div class="ttname"><a href="RadioFunctions_8cpp.html#a07c27b4e208198453c70876517926052">FlushFifos</a></div><div class="ttdeci">void FlushFifos()</div><div class="ttdef"><b>Definition:</b> <a href="RadioFunctions_8cpp_source.html#l00198">RadioFunctions.cpp:198</a></div></div>
 <div class="ttc" id="aRadioFunctions_8cpp_html_a10274b74b5b9f35476ae844506775afe"><div class="ttname"><a href="RadioFunctions_8cpp.html#a10274b74b5b9f35476ae844506775afe">yy1</a></div><div class="ttdeci">#define yy1</div><div class="ttdef"><b>Definition:</b> <a href="RadioFunctions_8cpp_source.html#l00230">RadioFunctions.cpp:230</a></div></div>
 <div class="ttc" id="aRadioFunctions_8cpp_html_a1c11bb6771548de7d96723045b922620"><div class="ttname"><a href="RadioFunctions_8cpp.html#a1c11bb6771548de7d96723045b922620">SuccessfulPacket</a></div><div class="ttdeci">void SuccessfulPacket()</div><div class="ttdef"><b>Definition:</b> <a href="RadioFunctions_8cpp_source.html#l00181">RadioFunctions.cpp:181</a></div></div>
-<div class="ttc" id="aRadioFunctions_8cpp_html_a1ddd5e8d5bd649dd98ce3710fbff651b"><div class="ttname"><a href="RadioFunctions_8cpp.html#a1ddd5e8d5bd649dd98ce3710fbff651b">Compress</a></div><div class="ttdeci">FASTRUN void Compress(uint16_t *compressed_buf, uint16_t *uncompressed_buf, uint8_t uncompressed_size)</div><div class="ttdef"><b>Definition:</b> <a href="RadioFunctions_8cpp_source.html#l00016">RadioFunctions.cpp:16</a></div></div>
+<div class="ttc" id="aRadioFunctions_8cpp_html_a1ddd5e8d5bd649dd98ce3710fbff651b"><div class="ttname"><a href="RadioFunctions_8cpp.html#a1ddd5e8d5bd649dd98ce3710fbff651b">Compress</a></div><div class="ttdeci">FASTRUN void Compress(uint16_t *compressed_buf, uint16_t *uncompressed_buf, uint8_t uncompressed_size)</div><div class="ttdef"><b>Definition:</b> <a href="RadioFunctions_8cpp_source.html#l00015">RadioFunctions.cpp:15</a></div></div>
 <div class="ttc" id="aRadioFunctions_8cpp_html_a31fb6a46af68482e107cddee58dfb677"><div class="ttname"><a href="RadioFunctions_8cpp.html#a31fb6a46af68482e107cddee58dfb677">DoScanEnd</a></div><div class="ttdeci">void DoScanEnd()</div><div class="ttdef"><b>Definition:</b> <a href="RadioFunctions_8cpp_source.html#l00405">RadioFunctions.cpp:405</a></div></div>
 <div class="ttc" id="aRadioFunctions_8cpp_html_a3856ba0adae43d089f08c7b7f653b306"><div class="ttname"><a href="RadioFunctions_8cpp.html#a3856ba0adae43d089f08c7b7f653b306">ScanAllChannels</a></div><div class="ttdeci">void ScanAllChannels()</div><div class="ttdef"><b>Definition:</b> <a href="RadioFunctions_8cpp_source.html#l00280">RadioFunctions.cpp:280</a></div></div>
 <div class="ttc" id="aRadioFunctions_8cpp_html_a44db40e8ffa545be92871325c4dcdc55"><div class="ttname"><a href="RadioFunctions_8cpp.html#a44db40e8ffa545be92871325c4dcdc55">Look</a></div><div class="ttdeci">void Look(int p)</div><div class="ttdef"><b>Definition:</b> <a href="RadioFunctions_8cpp_source.html#l00086">RadioFunctions.cpp:86</a></div></div>
