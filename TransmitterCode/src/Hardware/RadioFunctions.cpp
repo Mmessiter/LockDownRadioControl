@@ -171,7 +171,6 @@ FASTRUN void FailedPacket()
 
 void TryToReconnect()
 {
-
     if ((RecentPacketsLost > 200 || (!BoundFlag))) TryOtherPipe();                                // In case the receiver has re-booted
     NextChannel = *(FHSSChPointer + random(RECONNECT_CHANNELS_COUNT) + RECONNECT_CHANNELS_START); // random reconnect channel (selected from first three)
     HopToNextChannel();
@@ -180,7 +179,6 @@ void TryToReconnect()
 /************************************************************************************************************/
 void SuccessfulPacket()
 {
-
     ++RangeTestGoodPackets;
     ++PacketNumber;
     RecordsPacketSuccess(1);

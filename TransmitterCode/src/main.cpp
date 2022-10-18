@@ -1040,7 +1040,7 @@ uint8_t GetLEDBrightness()
 
 /*********************************************************************************************************************************/
 
-void RedLedOn()
+void RedLedOn() // heer
 {
     if (LedWasGreen) {
         RXVoltsDetected                             = false;
@@ -1057,6 +1057,7 @@ void RedLedOn()
         ModelsMacUnion.Val32[0]                     = 0;
         ModelsMacUnion.Val32[1]                     = 0;
         RangeTestGoodPackets                        = 0;
+        RecentPacketsLost                           = 0;
         SetUKFrequencies();
         if (CurrentView == FRONTVIEW) SendText(FrontView_Connected, na);
         if (UseLog) LogDisConnection();
@@ -1679,7 +1680,7 @@ if (millis() - LastShowTime > SHOWCOMMSDELAY) {
                 }
                 if (CurrentView == DATAVIEW) {
                     SendValue(DataView_pps, PacketsPerSecond);
-                    SendValue(DataView_lps, TotalLostPackets/2); // about half proboaly made it but went un acknoledged
+                    SendValue(DataView_lps, TotalLostPackets/2); // about half probably made it but went un acknoledged
                     SendText(DataView_Alt, ModelAltitude);
                     SendText(DataView_MaxAlt, MaxAltitude);
                     SendText(DataView_Temp, ModelTemperature);
@@ -1725,8 +1726,7 @@ if (millis() - LastShowTime > SHOWCOMMSDELAY) {
             else {
                 if (BoundFlag) {
                     if (CurrentView == DATAVIEW) {
-                        SendValue(DataView_pps, PacketsPerSecond);
-                        SendValue(DataView_lps, TotalLostPackets);
+                        SendValue(DataView_lps, TotalLostPackets/2);
                     }
                     if (CurrentView == FRONTVIEW) {
                         SendText(FrontView_RXBV, na); // data not available
@@ -7216,8 +7216,6 @@ void GetBank()
    // if (Bank == 4 && !MotorWasEnabled) MotorEnabled = false;                         // Moving to Bank4 from motor off doesn't start motor ...  yet
    
     if (SafetyON) MotorEnabled = false;
-
-   
 
     if ((MotorEnabled != MotorWasEnabled) && (UseMotorKill))  {                         // MotorEnabled changed ?
         if (MotorEnabled) {       
