@@ -348,7 +348,6 @@ var TransmitterCode_2src_2main_8cpp =
     [ "GapLongest", "TransmitterCode_2src_2main_8cpp.html#a0bca236cb88a38219ece770757adcbb2", null ],
     [ "GapStart", "TransmitterCode_2src_2main_8cpp.html#aefd589330e26c925a4c6f97b6a8cf98e", null ],
     [ "GapSum", "TransmitterCode_2src_2main_8cpp.html#a9942132c4d194a03fc9791cfdf876ac3", null ],
-    [ "GetChannelValuesTimer", "TransmitterCode_2src_2main_8cpp.html#a860f6c5885a54d71809c6f6952909455", null ],
     [ "Ghour", "TransmitterCode_2src_2main_8cpp.html#a99c73637eae30e0c7dfba8f6ecf5a028", null ],
     [ "Gminute", "TransmitterCode_2src_2main_8cpp.html#abcf678572ea348a08c5776bc4bb40b5b", null ],
     [ "Gmonth", "TransmitterCode_2src_2main_8cpp.html#af0f8a1a8331df7d30e5e236990105437", null ],
