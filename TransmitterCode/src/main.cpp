@@ -2112,7 +2112,7 @@ void CalibrateSticks() // This discovers end of travel place for sticks etc.
         if (ChannelMax[i] < p) ChannelMax[i] = p;
         if (ChannelMin[i] > p) ChannelMin[i] = p;
     }
-    
+    NewCompressNeeded = false; // fake it as we are not sending data
     GetNewChannelValues();
 }
 /*********************************************************************************************************************************/
@@ -2129,6 +2129,7 @@ void ChannelCentres()
         ChannelCentre[i] = 1500;
         ChannelMax[i]    = 2500;
     }
+    NewCompressNeeded = false; // fake it as we are not sending data
     GetNewChannelValues();
     CalibrateEdgeSwitches(); // These are now calibrated too in case some are reversed.
 }
@@ -7887,7 +7888,9 @@ FASTRUN void loop()
     ManageTransmitter();                                         // ****>>> Only 6 times a second <<<****
     GetNewChannelValues();                                       // Load SendBuffer with new servo positions  Very frequently
     if (UseMacros) ExecuteMacro();                               // Modify it if macro is running
-    if (!DoSbusSendOnly) {                                       // Skip these next lines when buddying as a slave
+    if (DoSbusSendOnly) {
+        NewCompressNeeded = false;                               // fake it as Buddy is not sending data
+    } else {                                                     // Skip these next lines when buddying as a slave
         if (!BoundFlag && Connected) BufferNewPipe();            // if not yet bound, insert our pipe into SendBuffer BUT ONLY WHEN CONNECTED 
         if (BuddyMaster) GetSlaveChannelValues();                // If buddy master, get buddy data and maybe use it.
         if (!MotorEnabled) SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero
