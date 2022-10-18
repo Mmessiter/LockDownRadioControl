@@ -394,7 +394,6 @@ short int DeltaGMT          = 0;
 uint32_t  SwapWaveBandTimer = 0;
 uint8_t   UkRulesCounter    = 0;
 bool      UkRules           = true;
-bool      PreviousUkRules   = false;
 uint8_t   SwapWaveBand      = 0;
 uint16_t  TrimFactor        = 2; // How much to multiply trim by
 uint8_t   DateFix           = 0;
@@ -938,7 +937,6 @@ bool MayBeAddZero(uint8_t nn)
 
 void ReadTime()
 {
-
     static char month[12][15]     = {"January", "February", "March", "April", "May", "June", "July", "August", "Sept", "October", "November", "December"};
     static char ShortMonth[12][7] = {"Jan. ", "Feb. ", "Mar. ", "Apr. ", "May  ", "June ", "July ", "Aug. ", "Sept ", "Oct. ", "Nov. ", "Dec. "};
 
@@ -948,11 +946,12 @@ void ReadTime()
     char    colon[]  = ":";
     char    colon1[] = ".";
     char    zero[]   = "0";
-    char    Owner[]  = "Owner";
+   
     uint8_t DisplayedHour;
     FixDeltaGMTSign();
     if (CurrentView == FRONTVIEW || CurrentView == OPTIONVIEW2) {
         if (RTC.read(tm)) {
+         
             strcpy(TimeString, Str(NB, tm.Day + DateFix, 0));
             if (CurrentView == OPTIONVIEW2)
             {
@@ -994,9 +993,6 @@ void ReadTime()
             if (MayBeAddZero(tm.Second)) strcat(TimeString, zero);
             strcat(TimeString, Str(NB, tm.Second, 0));
             SendText(DateTime, TimeString);
-            SendText(Owner, TxName);
-            UpdateModelsNameEveryWhere();
-            if (CurrentView == FRONTVIEW) ShowBank();
         }
     }
 }
@@ -2159,6 +2155,7 @@ void UpdateTrimView()
             SendValue(TrimViewReversed[p], (TrimsReversed[Bank][p]));
         }
     }
+  
     if (CurrentView == TRIM_VIEW) {
         if (SticksMode == 2) {
             SendValue(Mode2, 1);
@@ -2275,11 +2272,12 @@ void UpdateModelsNameEveryWhere()
     char mn1[30];             // holds model name plus its number
     char lb[] = " (";
     char rb[] = ")";
+    char Owner[]                = "Owner";
 
 
     strcpy(mn1, ModelName);
-
-    //Serial.print(ModelName);
+    
+    if (CurrentView == FRONTVIEW) SendText(Owner, TxName);
 
     if (CurrentView != MODELSVIEW){ 
         strcat(mn1, lb);
@@ -2304,9 +2302,7 @@ void UpdateModelsNameEveryWhere()
         SendText(TrimView_Bank, fms[Bank - 1]);
         UpdateTrimView();
     }
-    if (CurrentView == FRONTVIEW) {
-        UpdateTrimView();
-    }
+   
 }
 
 /*********************************************************************************************************************************/
@@ -3047,20 +3043,6 @@ FASTRUN void LogNewBank()
         strcpy(thetext, Ltext0);
         LogText(thetext, 10);
  } 
-// ************************************************************************
-
-FASTRUN void LogUKRules()
-{
-    char Rtext[] = "Using 2.400 Ghz - 2.483 Ghz";
-    char Ttext[] = "Using 2.484 Ghz - 2.525 Ghz";
-    if (UkRules) {
-        LogText(Rtext, strlen(Rtext));
-    }
-    else {
-        LogText(Ttext, strlen(Ttext));
-    }
-}
-
 // ************************************************************************
 
 FASTRUN void LogThisRX()
@@ -5622,7 +5604,7 @@ FASTRUN void ButtonWasPressed()
         char page_SticksView[]         = "page SticksView";
         char page_GraphView[]          = "page GraphView";
         char MixesView_Enabled[]       = "Enabled";
-        char MixesView_Bank[]    = "Bank";
+        char MixesView_Bank[]          = "Bank";
         char MixesView_MasterChannel[] = "MasterChannel";
         char MixesView_SlaveChannel[]  = "SlaveChannel";
         char MixesView_Reversed[]      = "Reversed";
@@ -5773,6 +5755,8 @@ FASTRUN void ButtonWasPressed()
         char dGMT[]                 = "dGMT";
         char RxName[]               = "RxName";
         char TxNme[]                = "TxName";
+      
+
 
         ScreenTimeTimer = millis(); // reset screen timeout counter
         if (ScreenIsOff) {
@@ -5983,6 +5967,7 @@ FASTRUN void ButtonWasPressed()
         }
         if (InStrng(GoFrontView, TextIn) > 0) { // GOTO frontview 
             SendCommand(page_FrontView);
+            CurrentView  = FRONTVIEW;
             UpdateModelsNameEveryWhere();
             SafetyWasOn ^= 1;                   // this forces a re-display of motor state 
             MotorWasEnabled ^= 1;               // this forces a re-display of motor state
@@ -5994,7 +5979,6 @@ FASTRUN void ButtonWasPressed()
             Force_ReDisplay();
             CheckTimer();
             ClearText();
-            CurrentView  = FRONTVIEW;
             LastShowTime = 0; // this is to make redisplay sooner (in ShowComms())
             SendText(FrontView_Connected, na);
             return;
@@ -7230,7 +7214,7 @@ void GetBank()
         SafetyWasOn = SafetyON;
     }
 
-   // if (Bank == 4 && !MotorWasEnabled) MotorEnabled = false;                            // Moving to Bank4 from motor off doesn't start motor ...  yet
+   // if (Bank == 4 && !MotorWasEnabled) MotorEnabled = false;                         // Moving to Bank4 from motor off doesn't start motor ...  yet
    
     if (SafetyON) MotorEnabled = false;
 
@@ -7876,15 +7860,13 @@ void CheckPowerOffButton()
 
 /************************************************************************************************************/
 void FASTRUN ManageTransmitter(){
-
     if (millis() - LastBankRead > 150) {                        // 6.66666 times a second is plenty
         if (millis() - LastTimeRead >= 1000) {                  // Once a second for these...
             ReadTime();        // Do the clock
             GetStatistics();   // Do stats
-            LastTimeRead = millis();
             if (CurrentView == MAINSETUPVIEW) {CheckScanButton();}
             if (CurrentView == MODELSVIEW)    {CheckModelName();}    // In MODELSVIEW, this function checks correct name is displayed.
-            if (PreviousUkRules != UkRules)   {LogUKRules(); PreviousUkRules = UkRules; }
+            LastTimeRead = millis();
             return;                                             // Do no more housekeeping this time around
         }
         ReadSwitches();                                         // Check switch positions
@@ -7904,7 +7886,7 @@ void FASTRUN ManageTransmitter(){
 FASTRUN void loop()
 {
     if (GetButtonPress()) ButtonWasPressed();                    // Very frequently
-    ManageTransmitter();                                         // ****>>> Only ten times a second <<<****
+    ManageTransmitter();                                         // ****>>> Only 6 times a second <<<****
     GetNewChannelValues();                                       // Load SendBuffer with new servo positions  Very frequently
     if (UseMacros) ExecuteMacro();                               // Modify it if macro is running
     if (!DoSbusSendOnly) {                                       // Skip these next lines when buddying as a slave
