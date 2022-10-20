@@ -7861,7 +7861,7 @@ void FASTRUN ManageTransmitter(){
     uint32_t RightNow = millis();
     if (((RightNow - TxPace) >= PACEMAKER - 3)) return;         // *** If it's almost time to send data then do not start some other task which might take longer! ***
     if (RightNow - LastBankRead > 100) {                        // 10 times a second is plenty
-        if (millis() - LastTimeRead >= 1000) {                  // Once a second for these...
+        if (RightNow - LastTimeRead >= 1000) {                  // Once a second for these...
             ReadTime();        // Do the clock
             GetStatistics();   // Do stats
             if (CurrentView == MAINSETUPVIEW) {CheckScanButton();}
