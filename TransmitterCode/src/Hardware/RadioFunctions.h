@@ -70,7 +70,7 @@
 #define CHARSMAX           120                       // Max length for char arrays
 #define UNCOMPRESSEDWORDS  20                        // DATA TO SEND = 40  bytes
 #define COMPRESSEDWORDS    UNCOMPRESSEDWORDS * 3 / 4 // COMPRESSED DATA SENT = 30  bytes
-#define PERFECTPACKETSPERSECOND 125                  // Flat out perfect packets per second
+#define PERFECTPACKETSPERSECOND 130                  // Flat out perfect packets per second
 // **************************************************************************
 //                            FHSS PARAMETERS                               *
 //***************************************************************************
