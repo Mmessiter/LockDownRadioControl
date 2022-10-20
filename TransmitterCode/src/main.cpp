@@ -7860,7 +7860,7 @@ void CheckPowerOffButton()
 
 /************************************************************************************************************/
 void FASTRUN ManageTransmitter(){
-    if (millis() - LastBankRead > 150) {                        // 6.66666 times a second is plenty
+    if (millis() - LastBankRead > 100) {                        // 6.66666 times a second is plenty
         if (millis() - LastTimeRead >= 1000) {                  // Once a second for these...
             ReadTime();        // Do the clock
             GetStatistics();   // Do stats
