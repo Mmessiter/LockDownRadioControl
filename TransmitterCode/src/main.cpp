@@ -7859,21 +7859,21 @@ void CheckPowerOffButton()
 void FASTRUN ManageTransmitter(){
 
     uint32_t RightNow = millis();
-    if (((RightNow - TxPace) >= PACEMAKER - 3) && Connected) return;         // *** If it's almost time to send data then do not start some other task which might take longer! ***
-    if (RightNow - LastBankRead > 100) {                        // 10 times a second is plenty
-        if (RightNow - LastTimeRead >= 1000) {                  // Once a second for these...
-            ReadTime();        // Do the clock
-            GetStatistics();   // Do stats
+    if (((RightNow - TxPace) >= PACEMAKER - 4) && Connected) return; // *** If it's almost time to send data then do not start some other task which might take longer! ***
+    if (RightNow - LastBankRead > 100) {                             // 10 times a second is plenty
+        if (RightNow - LastTimeRead >= 1000) {                       // Once a second for these...
+            ReadTime();                                              // Do the clock
+            GetStatistics();                                         // Do stats
             if (CurrentView == MAINSETUPVIEW) {CheckScanButton();}
             if (CurrentView == MODELSVIEW)    {CheckModelName();}    // In MODELSVIEW, this function checks correct name is displayed.
             LastTimeRead = millis();
-            return;                                             // Do no more housekeeping this time around
+            return;                                                  // Do no more housekeeping this time around
         }
-        ReadSwitches();                                         // Check switch positions
-        GetBank();                                              // Must not call too often        
-        ShowComms();                                            // Screen Data                                  
-        CheckTimer();                                           // Screen Timer
-        KickTheDog();                                           // Watchdog
+        ReadSwitches();                                              // Check switch positions
+        GetBank();                                                   // Must not call too often        
+        ShowComms();                                                 // Screen Data                                  
+        CheckTimer();                                                // Screen Timer
+        KickTheDog();                                                // Watchdog
         CheckPowerOffButton();
         CheckHardwareTrims();
         LastBankRead = millis();
