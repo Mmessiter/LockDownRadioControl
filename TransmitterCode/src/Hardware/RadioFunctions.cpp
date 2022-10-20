@@ -4,7 +4,6 @@
 /************************************************************************************************************/
 // Malcolm Messiter 2022
 #include "RadioFunctions.h"
-
 /************************************************************************************************************/
 
 /**
@@ -15,20 +14,21 @@
  */
 FASTRUN void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uint8_t uncompressed_size)
 {
-if (NewCompressNeeded){    // no need to recompress old data
-     NewCompressNeeded = false;
-     uint8_t p         = 0;
-     for (int l = 0; l < (uncompressed_size * 3 / 4); l += 3) {
-         compressed_buf[l] = uncompressed_buf[p] << 4 | uncompressed_buf[p + 1] >> 8;
-         ++p;
-         compressed_buf[l + 1] = uncompressed_buf[p] << 8 | uncompressed_buf[p + 1] >> 4;
-         ++p;
-         compressed_buf[l + 2] = uncompressed_buf[p] << 12 | uncompressed_buf[p + 1];
-         ++p;
-         ++p;
-    }
- }
+    if (NewCompressNeeded){    // no need to recompress old data
+        NewCompressNeeded = false;
+        uint8_t p         = 0;
+        for (int l = 0; l < (uncompressed_size * 3 / 4); l += 3) {
+            compressed_buf[l] = uncompressed_buf[p] << 4 | uncompressed_buf[p + 1] >> 8;
+            ++p;
+            compressed_buf[l + 1] = uncompressed_buf[p] << 8 | uncompressed_buf[p + 1] >> 4;
+            ++p;
+            compressed_buf[l + 2] = uncompressed_buf[p] << 12 | uncompressed_buf[p + 1];
+            ++p;
+            ++p;
+        }
+    } 
 }
+
 /************************************************************************************************************/
 
 FASTRUN void TryOtherPipe()
@@ -171,7 +171,6 @@ FASTRUN void FailedPacket()
 
 void TryToReconnect()
 {
-
     if ((RecentPacketsLost > 200 || (!BoundFlag))) TryOtherPipe();                                // In case the receiver has re-booted
     NextChannel = *(FHSSChPointer + random(RECONNECT_CHANNELS_COUNT) + RECONNECT_CHANNELS_START); // random reconnect channel (selected from first three)
     HopToNextChannel();
@@ -180,7 +179,6 @@ void TryToReconnect()
 /************************************************************************************************************/
 void SuccessfulPacket()
 {
-
     ++RangeTestGoodPackets;
     ++PacketNumber;
     RecordsPacketSuccess(1);

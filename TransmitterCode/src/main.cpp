@@ -479,7 +479,6 @@ u_int8_t WarningSound               = BATTERYISLOW;
 uint32_t LowVoltstimer              = 0;
 float    StopFlyingVoltsPerCell     = 0;
 uint16_t SFV                        = 0; // =StopFlyingVoltsPerCell * 100
-uint32_t GetChannelValuesTimer      = 0;
 bool     NewCompressNeeded          = true;
 
 // **********************************************************************************************************************************
@@ -1041,7 +1040,7 @@ uint8_t GetLEDBrightness()
 
 /*********************************************************************************************************************************/
 
-void RedLedOn()
+void RedLedOn() // heer
 {
     if (LedWasGreen) {
         RXVoltsDetected                             = false;
@@ -1058,6 +1057,7 @@ void RedLedOn()
         ModelsMacUnion.Val32[0]                     = 0;
         ModelsMacUnion.Val32[1]                     = 0;
         RangeTestGoodPackets                        = 0;
+        RecentPacketsLost                           = 0;
         SetUKFrequencies();
         if (CurrentView == FRONTVIEW) SendText(FrontView_Connected, na);
         if (UseLog) LogDisConnection();
@@ -1680,7 +1680,7 @@ if (millis() - LastShowTime > SHOWCOMMSDELAY) {
                 }
                 if (CurrentView == DATAVIEW) {
                     SendValue(DataView_pps, PacketsPerSecond);
-                    SendValue(DataView_lps, TotalLostPackets/2); // about half proboaly made it but went un acknoledged
+                    SendValue(DataView_lps, TotalLostPackets/2); // about half probably made it but went un acknoledged
                     SendText(DataView_Alt, ModelAltitude);
                     SendText(DataView_MaxAlt, MaxAltitude);
                     SendText(DataView_Temp, ModelTemperature);
@@ -1726,8 +1726,7 @@ if (millis() - LastShowTime > SHOWCOMMSDELAY) {
             else {
                 if (BoundFlag) {
                     if (CurrentView == DATAVIEW) {
-                        SendValue(DataView_pps, PacketsPerSecond);
-                        SendValue(DataView_lps, TotalLostPackets);
+                        SendValue(DataView_lps, TotalLostPackets/2);
                     }
                     if (CurrentView == FRONTVIEW) {
                         SendText(FrontView_RXBV, na); // data not available
@@ -2037,9 +2036,8 @@ uint16_t (*Interpolate[3])(uint16_t m, uint16_t l, uint16_t n) {
 /** @brief GET NEW SERVO POSITIONS */
 FASTRUN void GetNewChannelValues()
 {
-    if (millis() - GetChannelValuesTimer < 8) return; //  125 calls per second enough?
-    GetChannelValuesTimer = millis();
-    NewCompressNeeded     = true;
+    if (NewCompressNeeded) return; // Have we compressed the last one yet?
+    NewCompressNeeded     = true;  // Yes! So ot must be time for another...
 
     uint16_t k = 0, l = 0, m = 0, n = 0, t = 0, TrimAmount = 0;
     // key: -
@@ -2114,7 +2112,7 @@ void CalibrateSticks() // This discovers end of travel place for sticks etc.
         if (ChannelMax[i] < p) ChannelMax[i] = p;
         if (ChannelMin[i] > p) ChannelMin[i] = p;
     }
-    
+    NewCompressNeeded = false; // fake it as we are not sending data
     GetNewChannelValues();
 }
 /*********************************************************************************************************************************/
@@ -2131,6 +2129,7 @@ void ChannelCentres()
         ChannelCentre[i] = 1500;
         ChannelMax[i]    = 2500;
     }
+    NewCompressNeeded = false; // fake it as we are not sending data
     GetNewChannelValues();
     CalibrateEdgeSwitches(); // These are now calibrated too in case some are reversed.
 }
@@ -7218,8 +7217,6 @@ void GetBank()
    
     if (SafetyON) MotorEnabled = false;
 
-   
-
     if ((MotorEnabled != MotorWasEnabled) && (UseMotorKill))  {                         // MotorEnabled changed ?
         if (MotorEnabled) {       
             ShowMotor(1);
@@ -7889,7 +7886,9 @@ FASTRUN void loop()
     ManageTransmitter();                                         // ****>>> Only 6 times a second <<<****
     GetNewChannelValues();                                       // Load SendBuffer with new servo positions  Very frequently
     if (UseMacros) ExecuteMacro();                               // Modify it if macro is running
-    if (!DoSbusSendOnly) {                                       // Skip these next lines when buddying as a slave
+    if (DoSbusSendOnly) {
+        NewCompressNeeded = false;                               // fake it as Buddy is not sending data
+    } else {                                                     // Skip these next lines when buddying as a slave
         if (!BoundFlag && Connected) BufferNewPipe();            // if not yet bound, insert our pipe into SendBuffer BUT ONLY WHEN CONNECTED 
         if (BuddyMaster) GetSlaveChannelValues();                // If buddy master, get buddy data and maybe use it.
         if (!MotorEnabled) SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero
