@@ -9,11 +9,10 @@ var searchData=
   ['red_6',['Red',['../RadioFunctions_8h.html#ae8e246fd7335d7e27ab04150cbc418ba',1,'RadioFunctions.h']]],
   ['red_5fled_5fon_5ftime_7',['RED_LED_ON_TIME',['../RadioFunctions_8h.html#ab939b00b86d17d03b6fdfe585f06396d',1,'RadioFunctions.h']]],
   ['redled_8',['REDLED',['../RadioFunctions_8h.html#a1a93f984896e07e32aff39c2e0fb4459',1,'RadioFunctions.h']]],
-  ['renewdata_9',['RENEWDATA',['../RadioFunctions_8h.html#abe07c12a93bec238e54292e20937dc11',1,'RadioFunctions.h']]],
-  ['retrycount_10',['RETRYCOUNT',['../RadioFunctions_8h.html#a0cf4668725c06b3a6d64a2895c906379',1,'RadioFunctions.h']]],
-  ['retrywait_11',['RETRYWAIT',['../RadioFunctions_8h.html#aadc879b4b6396135d31e22c22955a753',1,'RadioFunctions.h']]],
-  ['reverseview_12',['REVERSEVIEW',['../RadioFunctions_8h.html#a3bedd97d2e81444eda8c2d43050b88c9',1,'RadioFunctions.h']]],
-  ['rxversion_5fmajor_13',['RXVERSION_MAJOR',['../common_01_07Malcolm_xE2_x80_x99s_01MacBook_01Air's_01conflicted_01copy_012022-10-09_08_8h.html#a2b147d5155fcf962e9f1c4885b32c67d',1,'RXVERSION_MAJOR():&#160;common (Malcolm’s MacBook Air&apos;s conflicted copy 2022-10-09).h'],['../common_8h.html#a2b147d5155fcf962e9f1c4885b32c67d',1,'RXVERSION_MAJOR():&#160;common.h']]],
-  ['rxversion_5fminimus_14',['RXVERSION_MINIMUS',['../common_01_07Malcolm_xE2_x80_x99s_01MacBook_01Air's_01conflicted_01copy_012022-10-09_08_8h.html#a46d5105ccf92f7e44b10af6fd51772a8',1,'RXVERSION_MINIMUS():&#160;common (Malcolm’s MacBook Air&apos;s conflicted copy 2022-10-09).h'],['../common_8h.html#a46d5105ccf92f7e44b10af6fd51772a8',1,'RXVERSION_MINIMUS():&#160;common.h']]],
-  ['rxversion_5fminor_15',['RXVERSION_MINOR',['../common_01_07Malcolm_xE2_x80_x99s_01MacBook_01Air's_01conflicted_01copy_012022-10-09_08_8h.html#adeb76229aa4087c3bc1e1fd17bd865b2',1,'RXVERSION_MINOR():&#160;common (Malcolm’s MacBook Air&apos;s conflicted copy 2022-10-09).h'],['../common_8h.html#adeb76229aa4087c3bc1e1fd17bd865b2',1,'RXVERSION_MINOR():&#160;common.h']]]
+  ['retrycount_9',['RETRYCOUNT',['../RadioFunctions_8h.html#a0cf4668725c06b3a6d64a2895c906379',1,'RadioFunctions.h']]],
+  ['retrywait_10',['RETRYWAIT',['../RadioFunctions_8h.html#aadc879b4b6396135d31e22c22955a753',1,'RadioFunctions.h']]],
+  ['reverseview_11',['REVERSEVIEW',['../RadioFunctions_8h.html#a3bedd97d2e81444eda8c2d43050b88c9',1,'RadioFunctions.h']]],
+  ['rxversion_5fmajor_12',['RXVERSION_MAJOR',['../common_01_07Malcolm_xE2_x80_x99s_01MacBook_01Air's_01conflicted_01copy_012022-10-09_08_8h.html#a2b147d5155fcf962e9f1c4885b32c67d',1,'RXVERSION_MAJOR():&#160;common (Malcolm’s MacBook Air&apos;s conflicted copy 2022-10-09).h'],['../common_8h.html#a2b147d5155fcf962e9f1c4885b32c67d',1,'RXVERSION_MAJOR():&#160;common.h']]],
+  ['rxversion_5fminimus_13',['RXVERSION_MINIMUS',['../common_01_07Malcolm_xE2_x80_x99s_01MacBook_01Air's_01conflicted_01copy_012022-10-09_08_8h.html#a46d5105ccf92f7e44b10af6fd51772a8',1,'RXVERSION_MINIMUS():&#160;common (Malcolm’s MacBook Air&apos;s conflicted copy 2022-10-09).h'],['../common_8h.html#a46d5105ccf92f7e44b10af6fd51772a8',1,'RXVERSION_MINIMUS():&#160;common.h']]],
+  ['rxversion_5fminor_14',['RXVERSION_MINOR',['../common_01_07Malcolm_xE2_x80_x99s_01MacBook_01Air's_01conflicted_01copy_012022-10-09_08_8h.html#adeb76229aa4087c3bc1e1fd17bd865b2',1,'RXVERSION_MINOR():&#160;common (Malcolm’s MacBook Air&apos;s conflicted copy 2022-10-09).h'],['../common_8h.html#adeb76229aa4087c3bc1e1fd17bd865b2',1,'RXVERSION_MINOR():&#160;common.h']]]
 ];

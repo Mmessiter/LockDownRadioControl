@@ -16,7 +16,8 @@ var searchData=
   ['destinationlng_13',['DestinationLng',['../SensorHubT32_2src_2main_8cpp.html#a68d045f3a8018e98f4701013f7ac0a64',1,'main.cpp']]],
   ['dis_5fgyro_14',['DIS_GYRO',['../classMPU9250.html#abb9b02dd2f4b7d031c22bfb1422d5367',1,'MPU9250']]],
   ['distancegps_15',['DistanceGPS',['../ReceiverCode_2src_2main_8cpp.html#a6f76c248ca5e727e482873f5328587e1',1,'DistanceGPS():&#160;main.cpp'],['../radio_8h.html#a6f76c248ca5e727e482873f5328587e1',1,'DistanceGPS():&#160;main.cpp']]],
-  ['dontannoyme_16',['DontAnnoyMe',['../TransmitterCode_2src_2main_8cpp.html#a65bd2c9dad16a525962f3897b5202da1',1,'main.cpp']]],
-  ['dosbussendonly_17',['DoSbusSendOnly',['../RadioFunctions_8h.html#a2f95a8628ae27f3acb9b1598b8321781',1,'DoSbusSendOnly():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a2f95a8628ae27f3acb9b1598b8321781',1,'DoSbusSendOnly():&#160;main.cpp']]],
-  ['dt_18',['dt',['../Quadcopter_2src_2main_8cpp.html#a778e38aa889751afffa2dea6b803e67a',1,'main.cpp']]]
+  ['doingchecksm_16',['DoingCheckSm',['../TransmitterCode_2src_2main_8cpp.html#ad29c29032645ef06ffdf1cd62974c96f',1,'main.cpp']]],
+  ['dontannoyme_17',['DontAnnoyMe',['../TransmitterCode_2src_2main_8cpp.html#a65bd2c9dad16a525962f3897b5202da1',1,'main.cpp']]],
+  ['dosbussendonly_18',['DoSbusSendOnly',['../RadioFunctions_8h.html#a2f95a8628ae27f3acb9b1598b8321781',1,'DoSbusSendOnly():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a2f95a8628ae27f3acb9b1598b8321781',1,'DoSbusSendOnly():&#160;main.cpp']]],
+  ['dt_19',['dt',['../Quadcopter_2src_2main_8cpp.html#a778e38aa889751afffa2dea6b803e67a',1,'main.cpp']]]
 ];
