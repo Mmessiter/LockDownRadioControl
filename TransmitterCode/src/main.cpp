@@ -2217,7 +2217,7 @@ void OpenModelsFile()
 
 void BuildCheckSum(int p_address, int p_value) 
 {
-    if (!DoingCheckSm) FileCheckSum += (p_value *  (p_address+1));  // don't include checksm in its own calculation
+    if (!DoingCheckSm) FileCheckSum += (p_value *  (p_address+1));  // don't include checksum in its own calculation
 }
 
 /*********************************************************************************************************************************/
