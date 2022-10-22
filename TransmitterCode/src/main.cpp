@@ -2012,15 +2012,12 @@ uint16_t ExponentialInterpolation(uint16_t m, uint16_t l, uint16_t n)
     uint16_t k = 0;
     if (m >= ChannelCentre[l]) {
         k = MapWithExponential(m - ChannelCentre[l], 0, ChannelMax[l] - ChannelCentre[l], 0, IntoHigherRes(MaxDegrees[Bank][n]) - //
-                                   IntoHigherRes(CentreDegrees[Bank][n]),
-                               Exponential[Bank][n])
-            + IntoHigherRes(CentreDegrees[Bank][n]);
-    }
-    if (m < ChannelCentre[l]) {
+                                   IntoHigherRes(CentreDegrees[Bank][n]), Exponential[Bank][n]) //
+                                   + IntoHigherRes(CentreDegrees[Bank][n]); //
+    } else {
         k = MapWithExponential(ChannelCentre[l] - m, 0, ChannelCentre[l] - ChannelMin[l], IntoHigherRes(CentreDegrees[Bank][n]) - //
-                                   IntoHigherRes(MinDegrees[Bank][n]),
-                               0, Exponential[Bank][n])
-            + IntoHigherRes(MinDegrees[Bank][n]);
+                                   IntoHigherRes(MinDegrees[Bank][n]), 0, Exponential[Bank][n]) //
+                                   + IntoHigherRes(MinDegrees[Bank][n]);
     }
     return k;
 }
