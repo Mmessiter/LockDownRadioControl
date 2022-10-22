@@ -225,22 +225,21 @@ uint8_t FHSS_Channels[83] = {51, 28, 24, 61, 64, 55, 66, 19, 76, 21, 59, 67, 15,
                              56, 7, 81, 5, 65, 4, 10};
 
 uint8_t* FHSSChPointer; // pointer for channels array (three only used for reconnect)
-char      BindButtonVisible[] = "vis bind,1";
-char      page_FrontView[]    = "page FrontView";
-char      page_FhssView[]     = "page FhssView";
-char      FrontView_Hours[]   = "Hours";
-char      FrontView_Mins[]    = "Mins";
-char      FrontView_Secs[]    = "Secs";
-char      StartBackGround[]   = "click Background,0";
-char      ModelsFile[]        = "models.dat";
-uint8_t   SwitchNumber[8]     = {SWITCH0, SWITCH1, SWITCH2, SWITCH3, SWITCH4, SWITCH5, SWITCH6, SWITCH7}; // These can get swapped over later
-uint8_t   DeftSwitchNo[8]     = {SWITCH0, SWITCH1, SWITCH2, SWITCH3, SWITCH4, SWITCH5, SWITCH6, SWITCH7}; // Default value
-uint8_t   TrimNumber[8]       = {TRIM1A, TRIM1B, TRIM2A, TRIM2B, TRIM3A, TRIM3B, TRIM4A, TRIM4B};         // These too can get swapped over later
-bool      DefiningTrims       = false;
-bool      TrimDefined[4]      = {true, true, true, true};
-const int chipSelect          = BUILTIN_SDCARD;
-char      DateTime[]          = "DateTime";
-char      ScreenViewTimeout[] = "Sto"; // needed for display info
+char      BindButtonVisible[]         = "vis bind,1";
+char      page_FrontView[]            = "page FrontView";
+char      page_FhssView[]             = "page FhssView";
+char      FrontView_Hours[]           = "Hours";
+char      FrontView_Mins[]            = "Mins";
+char      FrontView_Secs[]            = "Secs";
+char      StartBackGround[]           = "click Background,0";
+char      ModelsFile[]                = "models.dat";
+uint8_t   SwitchNumber[8]             = {SWITCH0, SWITCH1, SWITCH2, SWITCH3, SWITCH4, SWITCH5, SWITCH6, SWITCH7}; // These can get swapped over later
+uint8_t   DefaultSwitchNumber[8]      = {SWITCH0, SWITCH1, SWITCH2, SWITCH3, SWITCH4, SWITCH5, SWITCH6, SWITCH7}; // Default values
+uint8_t   TrimNumber[8]               = {TRIM1A, TRIM1B, TRIM2A, TRIM2B, TRIM3A, TRIM3B, TRIM4A, TRIM4B};         // These too can get swapped over later
+bool      DefiningTrims               = false;
+bool      TrimDefined[4]              = {true, true, true, true};
+char      DateTime[]                  = "DateTime";
+char      ScreenViewTimeout[]         = "Sto"; // needed for display info
 char      ModelName[30];
 uint16_t  ScreenTimeout               = 120; // Screen has two minute timeout by default
 int       LastLinePosition            = 0;
@@ -2098,7 +2097,7 @@ void ReduceLimits()
 void ResetSwitchNumbers()
 {
     for (int i = 0; i < 8; ++i) {
-        SwitchNumber[i] = DeftSwitchNo[i];
+        SwitchNumber[i] = DefaultSwitchNumber[i];
     }
 }
 /*********************************************************************************************************************************/
@@ -2628,10 +2627,10 @@ bool ReadOneModel(uint8_t Mnum)
     StopFlyingVoltsPerCell = float (SFV) / 100;
     if (StopFlyingVoltsPerCell < 3 || StopFlyingVoltsPerCell > 4) StopFlyingVoltsPerCell = 3.50; // a useful default stop time?!
 
+
     // **************************************
 
-    ReadCheckSum32(); // Heer 
-   
+    ReadCheckSum32(); 
     OneModelMemory = SDCardAddress - StartLocation;
 
 #ifdef DB_SD
@@ -2659,7 +2658,7 @@ bool ReadOneModel(uint8_t Mnum)
 #ifdef DB_CHECKSUM
     Serial.print("Read Model: ");
     Serial.print(ModelName);
-    Serial.print(" Calculated model checksum: "); // heer
+    Serial.print(" Calculated model checksum: ");
     Serial.println(FileCheckSum);
     Serial.println(" ");
 #endif
@@ -2785,7 +2784,7 @@ bool LoadAllParameters()
         ++SDCardAddress;
         AutoModelSelect = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
-        ReadCheckSum32(); // heer
+        ReadCheckSum32(); 
         CheckTrimValues();
         MemoryForTransmtter = SDCardAddress;
         if ((ModelNumber < 1) || (ModelNumber > 99)) ModelNumber = 1;
@@ -3200,9 +3199,9 @@ FLASHMEM void setup()
     TeensyWatchDog.begin(WatchDogConfig);
     LastDogKick = millis(); // needed? - yes!
     Procrastinate(WARMUPDELAY);
-    if (!SD.begin(chipSelect)) { // MUST return true or all is lost! (todo: create error page)
+    if (!SD.begin(BUILTIN_SDCARD)) { // MUST return true or all is lost! (todo: create error page)
         Procrastinate(WARMUPDELAY);
-        SD.begin(chipSelect); // a second attempt for iffy sd cards ?!
+        SD.begin(BUILTIN_SDCARD); // a second attempt for iffy sd cards ?!
     }
     CalibratedYet = LoadAllParameters(); // If they exist, read saved SD card settings.
     if (!CalibratedYet) {
@@ -3435,7 +3434,7 @@ void SaveTransmitterParameters()
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, AutoModelSelect);
     ++SDCardAddress;
-    SaveCheckSum32();  // Save the Transmitter parametres checksm // heer
+    SaveCheckSum32();  // Save the Transmitter parametres checksm
     CloseModelsFile();
 }
 
@@ -6668,8 +6667,6 @@ FASTRUN void ButtonWasPressed()
         }
         p = InStrng(Import, TextIn); 
         if (p > 0) {
-
-            Serial.println("TEST");
             SendCommand(ProgressStart);
             Procrastinate(10);
             SendValue(Progress, 5);
