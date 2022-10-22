@@ -39,6 +39,7 @@
 
 // #define DB_NEXTION        // Debug NEXTION
 // #define DB_SD             // Debug SD card data
+// #define DB_CHECKSUM       // Debug 32BIT file checksum info
 // #define DB_FHSS           // Debug real time FHSS data
 // #define DB_SENSORS        // Debug Sensors
 // #define DB_BIND           // Debug Binding
@@ -234,9 +235,12 @@
 //               SDCARD MODEL MEMORY CONSTANTS                              *
 //***************************************************************************
 
-#define RENEWDATA         8787     // Change these to rewrite all
-#define TXSIZE            250      // SD space reserved for transmitter
-#define MODELSIZE         1600     // SD space reserved for each model
+#define TXSIZE            512      // SD space reserved for transmitter (WAS  250)
+#define MODELSIZE         2048     // SD space reserved for each model (WAS 1600)
+
+//#define MODELOFFSET     250      // OLD VERSION
+#define MODELOFFSET         0      // NEW VERSION
+
 #define MAXFILELEN        1024 * 3 // MAX SIZE FOR HELP AND LOG FILES
 #define BOXOFFSET         35
 #define BOXSIZE           395
@@ -397,6 +401,7 @@ extern void  RedLedOn();
 extern void  ReEnableScanButton();
 extern void  LogUKRules();
 extern int   InStrng(char* text1, char* text2);
+extern uint32_t     ReadCheckSum32();
 
 /*********************************************************************************************************************************/
 // function prototypes

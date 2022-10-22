@@ -480,6 +480,8 @@ uint32_t LowVoltstimer              = 0;
 float    StopFlyingVoltsPerCell     = 0;
 uint16_t SFV                        = 0; // =StopFlyingVoltsPerCell * 100
 bool     NewCompressNeeded          = true;
+uint32_t FileCheckSum                   = 0;
+bool     DoingCheckSm                   = false;
 
 // **********************************************************************************************************************************
 // **********************************************************************************************************************************
@@ -1040,7 +1042,7 @@ uint8_t GetLEDBrightness()
 
 /*********************************************************************************************************************************/
 
-void RedLedOn() // heer
+void RedLedOn() 
 {
     if (LedWasGreen) {
         RXVoltsDetected                             = false;
@@ -2216,17 +2218,49 @@ void OpenModelsFile()
 
 /*********************************************************************************************************************************/
 
-void SDUpdate16BITS(int p_address, int p_value)
+void BuildCheckSum(int p_address, int p_value) 
 {
-    ModelsFileNumber.seek(p_address);
-    ModelsFileNumber.write(uint8_t(p_value));
-    ModelsFileNumber.write(uint8_t(p_value >> 8));
+    if (!DoingCheckSm) FileCheckSum += (p_value *  (p_address+1));  // don't include checksm in its own calculation
 }
 
 /*********************************************************************************************************************************/
 
+
+void SDUpdate32BITS(int p_address, uint32_t p_value)
+{
+    BuildCheckSum(p_address, p_value);
+    ModelsFileNumber.seek(p_address);
+    ModelsFileNumber.write(uint8_t(p_value));
+    ModelsFileNumber.write(uint8_t(p_value >> 8));
+    ModelsFileNumber.write(uint8_t(p_value >> 16));
+    ModelsFileNumber.write(uint8_t(p_value >> 24));
+}
+
+/*********************************************************************************************************************************/
+
+uint32_t SDRead32BITS(int p_address)
+{
+    ModelsFileNumber.seek(p_address);
+    uint32_t r = ModelsFileNumber.read();
+    r += ModelsFileNumber.read() << 8;
+    r += ModelsFileNumber.read() << 16;
+    r += ModelsFileNumber.read() << 24;
+    return r;
+}
+/*********************************************************************************************************************************/
+
+void SDUpdate16BITS(int p_address, int p_value)
+{
+    BuildCheckSum(p_address, p_value);
+    ModelsFileNumber.seek(p_address);
+    ModelsFileNumber.write(uint8_t(p_value));
+    ModelsFileNumber.write(uint8_t(p_value >> 8));
+}
+/*********************************************************************************************************************************/
+
 void SDUpdate8BITS(int p_address, uint8_t p_value)
 {
+    BuildCheckSum(p_address, p_value);
     ModelsFileNumber.seek(p_address);
     ModelsFileNumber.write(uint8_t(p_value));
 }
@@ -2235,17 +2269,23 @@ void SDUpdate8BITS(int p_address, uint8_t p_value)
 
 int SDRead16BITS(int p_address)
 {
+   
     ModelsFileNumber.seek(p_address);
     int r = ModelsFileNumber.read();
     r += ModelsFileNumber.read() << 8;
+    BuildCheckSum(p_address, r);
     return r;
 }
+
+
+
 /*********************************************************************************************************************************/
 
 uint8_t SDRead8BITS(int p_address)
 {
     ModelsFileNumber.seek(p_address);
     uint8_t r = ModelsFileNumber.read();
+    BuildCheckSum(p_address, r);
     return r;
 }
 
@@ -2418,14 +2458,17 @@ bool ReadOneModel(uint8_t Mnum)
     uint16_t i;
     char     NoModelYet[] = "Model ";
     char     nb[5];
+
+    FileCheckSum = 0;
     if ((ModelNumber > 99) || (ModelNumber < 0)) ModelNumber = 1;
     Str(nb, ModelNumber, 0);
     strcpy(ModelName, NoModelYet);
     strcat(ModelName, nb);
     if (!ModelsFileOpen) OpenModelsFile();
     if (!ModelsFileOpen) return false;
-    SDCardAddress = TXSIZE;                    //  spare bytes for TX stuff
-    SDCardAddress += ((Mnum - 1) * MODELSIZE); //  spare bytes for Model params
+    SDCardAddress = TXSIZE;                    
+    if (SingleModelFlag) SDCardAddress = MODELOFFSET;   // Changed from 250 to 0    
+    SDCardAddress += ((Mnum - 1) * MODELSIZE); 
     StartLocation = SDCardAddress;
     ModelDefined  = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
@@ -2510,6 +2553,7 @@ bool ReadOneModel(uint8_t Mnum)
         if (InPutStick[i] > 16) InPutStick[i] = i; // reset if nothing was saved!
         ++SDCardAddress;
     }
+  
 
     // **************************
 
@@ -2589,6 +2633,8 @@ bool ReadOneModel(uint8_t Mnum)
 
     // **************************************
 
+    ReadCheckSum32(); // Heer 
+   
     OneModelMemory = SDCardAddress - StartLocation;
 
 #ifdef DB_SD
@@ -2599,7 +2645,6 @@ bool ReadOneModel(uint8_t Mnum)
     Serial.print("So ");
     Serial.print(TXSIZE - MemoryForTransmtter);
     Serial.println(" spare bytes still remain for TX params.");
-    Serial.println(" ");
     Serial.print("Loaded model number: ");
     Serial.println(ModelNumber);
     Serial.print("Model name: ");
@@ -2611,7 +2656,17 @@ bool ReadOneModel(uint8_t Mnum)
     Serial.println(" spare bytes per model.");
     Serial.print(MODELSIZE);
     Serial.println(" bytes reserved per model.)");
+    Serial.println(" ");
 #endif // defined DB_SD
+
+#ifdef DB_CHECKSUM
+    Serial.print("Read Model: ");
+    Serial.print(ModelName);
+    Serial.print(" Calculated model checksum: "); // heer
+    Serial.println(FileCheckSum);
+    Serial.println(" ");
+#endif
+
     UpdateButtonLabels();
     CheckMacrosBuffer();
     return true;
@@ -2621,13 +2676,12 @@ bool ReadOneModel(uint8_t Mnum)
 
 bool LoadAllParameters()
 {
-    int p;
     int j = 0;
     int i = 0;
+    FileCheckSum = 0;
     if (!ModelsFileOpen) OpenModelsFile();
     SDCardAddress = 0;
-    p             = SDRead16BITS(SDCardAddress);
-    if (p == RENEWDATA) {
+       // two spare bytes!
         SDCardAddress += 2;
         for (i = 0; i < CHANNELSUSED; ++i) {
             ChannelMin[i] = SDRead16BITS(SDCardAddress);
@@ -2728,20 +2782,19 @@ bool LoadAllParameters()
         LEDBrightness = SDRead16BITS(SDCardAddress);
         LEDBrightness = CheckRange(LEDBrightness, 1, 254);
         ++SDCardAddress;
+        ++SDCardAddress;
         ConnectionAssessSeconds = SDRead8BITS(SDCardAddress);
         ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);
         ++SDCardAddress;
         AutoModelSelect = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
+        ReadCheckSum32(); // heer
         CheckTrimValues();
         MemoryForTransmtter = SDCardAddress;
         if ((ModelNumber < 1) || (ModelNumber > 99)) ModelNumber = 1;
         ReadOneModel(ModelNumber);
         return true;
-    }
-    else {
-        return false;
-    }
+  
 }
 /*********************************************************************************************************************************/
 void CheckTrimValues()
@@ -3231,19 +3284,66 @@ int InStrng(char* text1, char* text2)
     return 0; // Found no match
 }
 
+
+/*********************************************************************************************************************************/
+void SaveCheckSum32(){  // uses 5 bytes. Last one is indicator of use.
+
+   
+    DoingCheckSm = true;
+    SDUpdate32BITS(SDCardAddress, FileCheckSum);
+    SDCardAddress += 4;
+    SDUpdate8BITS(SDCardAddress, 0xFF); // indicator
+    SDCardAddress++;
+    DoingCheckSm = false;
+
+#ifdef DB_CHECKSUM
+    Serial.print("Writing: ");
+    Serial.println(FileCheckSum);
+#endif
+}
+
+/*********************************************************************************************************************************/
+uint32_t ReadCheckSum32(){  // uses 5 bytes. Last one is indicator of use.
+
+    bool UseCheckSm = false;
+    DoingCheckSm    = true;
+    uint32_t ch;
+    ch = SDRead32BITS(SDCardAddress);
+    SDCardAddress += 4;
+    if (SDRead8BITS(SDCardAddress) == 0xFF) UseCheckSm = true; // indicator
+    ++SDCardAddress;
+    DoingCheckSm = false;
+    if (UseCheckSm) {
+#ifdef DB_CHECKSUM
+            Serial.print("Read from file: ");
+            Serial.println(ch);
+            if (ch == FileCheckSum) {
+                Serial.println("FILE CHECKSUM IS GOOD :-) ! ");
+            }else{
+                 Serial.print("FILE CHECKSUM WAS ");
+                 Serial.println(FileCheckSum);
+            }
+#endif
+            return ch;
+      }else{
+          return 0;
+      }
+}
+
 /*********************************************************************************************************************************/
 
 void SaveTransmitterParameters()
 {
-    int  rd  = 0;
+   
     bool EON = false;
     int  j   = 0;
     int  i   = 0;
     if (!ModelsFileOpen) OpenModelsFile();
-    rd            = RENEWDATA;
+  
     SDCardAddress = 0;
+    FileCheckSum = 0;
     CalibratedYet = true;
-    SDUpdate16BITS(SDCardAddress, rd); // xxxx in first two bytes = calibration done! *** CHANGE THIS NUMBER IF FORMAT IS NEW!! ****
+   // two spare bytes now
     SDCardAddress += 2;
     for (i = 0; i < CHANNELSUSED; ++i) {
         SDUpdate16BITS(SDCardAddress, ChannelMin[i]); // Stick min output of pot
@@ -3333,10 +3433,12 @@ void SaveTransmitterParameters()
     ++SDCardAddress;
     SDUpdate16BITS(SDCardAddress, LEDBrightness);
     ++SDCardAddress;
-    SDUpdate16BITS(SDCardAddress, ConnectionAssessSeconds);
     ++SDCardAddress;
-    SDUpdate16BITS(SDCardAddress, AutoModelSelect);
+    SDUpdate8BITS(SDCardAddress, ConnectionAssessSeconds);
     ++SDCardAddress;
+    SDUpdate8BITS(SDCardAddress, AutoModelSelect);
+    ++SDCardAddress;
+    SaveCheckSum32();  // Save the Transmitter parametres checksm // heer
     CloseModelsFile();
 }
 
@@ -3348,9 +3450,11 @@ void SaveOneModel(uint16_t mnum)
     uint16_t j;
     uint16_t i;
     bool     EndOfName = false;
+    FileCheckSum = 0;
     if ((mnum < 1) || (mnum > 99)) return; // There is no model zero!
     if (!ModelsFileOpen) OpenModelsFile();
     SDCardAddress = TXSIZE;                  //  spare bytes for TX stuff
+    if (SingleModelFlag) SDCardAddress = MODELOFFSET;    // 250 or zero
     SDCardAddress += (mnum - 1) * MODELSIZE; //  spare bytes for Model params
     StartLocation = SDCardAddress;
     ModelDefined  = 42;
@@ -3495,7 +3599,7 @@ void SaveOneModel(uint16_t mnum)
     SDUpdate16BITS(SDCardAddress,SFV);
     ++SDCardAddress;
     ++SDCardAddress;
-
+     SaveCheckSum32();  // Save the Model parametres checksm
     
 
     // ********************** Add more
@@ -3511,8 +3615,23 @@ void SaveOneModel(uint16_t mnum)
     Serial.println(" spare bytes per model.");
     Serial.print(MODELSIZE);
     Serial.println(" bytes reserved per model.)");
+    Serial.print("Write Model ");
+    Serial.print(ModelNumber);
+    Serial.print(" Checksum: ");
+    Serial.println(FileCheckSum);
     Serial.println(" ");
 #endif // defined DB_SD
+
+
+#ifdef DB_CHECKSUM
+    Serial.print("Write Model: ");
+    Serial.print(ModelName);
+    Serial.print(" Checksum: ");
+    Serial.println(FileCheckSum);
+    Serial.println(" ");
+#endif
+
+
     CloseModelsFile();
 }
 
@@ -6550,8 +6669,10 @@ FASTRUN void ButtonWasPressed()
             ClearText();
             return;
         }
-        p = InStrng(Import, TextIn);
+        p = InStrng(Import, TextIn); 
         if (p > 0) {
+
+            Serial.println("TEST");
             SendCommand(ProgressStart);
             Procrastinate(10);
             SendValue(Progress, 5);
