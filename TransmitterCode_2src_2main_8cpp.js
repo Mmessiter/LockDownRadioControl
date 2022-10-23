@@ -296,7 +296,6 @@ var TransmitterCode_2src_2main_8cpp =
     [ "BuddyMaster", "TransmitterCode_2src_2main_8cpp.html#a26a52012e307147a99289fff5c492358", null ],
     [ "BuddyTriggerChannel", "TransmitterCode_2src_2main_8cpp.html#ae91fe0caf128c1a35e74a9c009b2d347", null ],
     [ "ButtonClicks", "TransmitterCode_2src_2main_8cpp.html#a0955aa08f4b43e6f78ff256fc6ccf421", null ],
-    [ "CalibratedYet", "TransmitterCode_2src_2main_8cpp.html#a34512aff25c972f2f4ed2dd5ca95a5fe", null ],
     [ "CentreDegrees", "TransmitterCode_2src_2main_8cpp.html#a90b5b04465812372bdda286367ed8ed8", null ],
     [ "Channel10Switch", "TransmitterCode_2src_2main_8cpp.html#ada8ced2776300f41d0d8b5eb8ee7b9d8", null ],
     [ "Channel10SwitchValue", "TransmitterCode_2src_2main_8cpp.html#a0fc5e00e5ccee11691b2be777897292e", null ],
