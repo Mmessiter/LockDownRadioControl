@@ -239,6 +239,7 @@ var RadioFunctions_8h =
     [ "StartInactvityTimeout", "RadioFunctions_8h.html#a793b7bcd77531c95fe72ed4356d421c8", null ],
     [ "StartLogFile", "RadioFunctions_8h.html#a514afc8dd077db77334696ca719a99b7", null ],
     [ "Str", "RadioFunctions_8h.html#a6bac145d5df31efb9c90e2a60a4cbca5", null ],
+    [ "TryToReconnect", "RadioFunctions_8h.html#ad0236abcfc887ad708d9504c4ab2a7c3", null ],
     [ "UpdateModelsNameEveryWhere", "RadioFunctions_8h.html#a9e1de754e1d2d483fb15957f70cf0488", null ],
     [ "ZeroDataScreen", "RadioFunctions_8h.html#a6da9a1fd0b003151f79eabc702ba80ff", null ],
     [ "AckPayload", "RadioFunctions_8h.html#aec532bb9df7f865e6612fabf46895e6c", null ],
