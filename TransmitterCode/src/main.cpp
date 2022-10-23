@@ -196,7 +196,6 @@ uint16_t BoxLeft;
 uint16_t BoxRight;
 uint16_t ClickX;
 uint16_t ClickY;
-bool     CalibratedYet                = false;
 uint16_t AnalogueInput[PROPOCHANNELS] = {A0, A1, A2, A3, A6, A7, A8, A9}; // PROPO Channels for transmission
 uint8_t  CurrentMode                  = NORMAL;
 uint8_t  AllChannels[127]; /// for scanning
@@ -2057,7 +2056,6 @@ FASTRUN void GetNewChannelValues()
             if (TrimsReversed[Bank][tt]) TrimAmount = -TrimAmount;
             k += TrimAmount;
         }
-        if (!CalibratedYet) k = map(m, 0, 1024, MINMICROS, MAXMICROS); // Crude servos until calibrated
         PreMixBuffer[n] = constrain(k, MINMICROS, MAXMICROS);
         SendBuffer[n]   = PreMixBuffer[n];
     }
@@ -2665,20 +2663,21 @@ bool LoadAllParameters()
     int i = 0;
     FileCheckSum = 0;
     if (!ModelsFileOpen) OpenModelsFile();
+    if (!ModelsFileOpen) return false;
     SDCardAddress = 0;
-       // two spare bytes!
+    if ((SDRead16BITS(SDCardAddress)) != 12345) return false; // not a good file?!
+    SDCardAddress += 2;
+    for (i = 0; i < CHANNELSUSED; ++i) {
+        ChannelMin[i] = SDRead16BITS(SDCardAddress);
         SDCardAddress += 2;
-        for (i = 0; i < CHANNELSUSED; ++i) {
-            ChannelMin[i] = SDRead16BITS(SDCardAddress);
-            SDCardAddress += 2;
-            ChannelMidLow[i] = SDRead16BITS(SDCardAddress);
-            SDCardAddress += 2;
-            ChannelCentre[i] = SDRead16BITS(SDCardAddress);
-            SDCardAddress += 2;
-            ChannelMidHi[i] = SDRead16BITS(SDCardAddress);
-            SDCardAddress += 2;
-            ChannelMax[i] = SDRead16BITS(SDCardAddress);
-            SDCardAddress += 2;
+        ChannelMidLow[i] = SDRead16BITS(SDCardAddress);
+        SDCardAddress += 2;
+        ChannelCentre[i] = SDRead16BITS(SDCardAddress);
+        SDCardAddress += 2;
+        ChannelMidHi[i] = SDRead16BITS(SDCardAddress);
+        SDCardAddress += 2;
+        ChannelMax[i] = SDRead16BITS(SDCardAddress);
+        SDCardAddress += 2;
         }
         DoSbusSendOnly = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
@@ -2779,7 +2778,6 @@ bool LoadAllParameters()
         if ((ModelNumber < 1) || (ModelNumber > 99)) ModelNumber = 1;
         ReadOneModel(ModelNumber);
         return true;
-  
 }
 /*********************************************************************************************************************************/
 void CheckTrimValues()
@@ -3187,17 +3185,17 @@ FLASHMEM void setup()
     WatchDogConfig.callback = WatchDogCallBack;
     TeensyWatchDog.begin(WatchDogConfig);
     LastDogKick = millis(); // needed? - yes!
+   
     Procrastinate(WARMUPDELAY);
-    if (!SD.begin(BUILTIN_SDCARD)) { // MUST return true or all is lost! (todo: create error page)
+    if (!SD.begin(BUILTIN_SDCARD)) { // MUST return true or all is lost! 
         Procrastinate(WARMUPDELAY);
-        SD.begin(BUILTIN_SDCARD); // a second attempt for iffy sd cards ?!
+        SD.begin(BUILTIN_SDCARD);  // a second attempt for iffy sd cards ?!
     }
-    CalibratedYet = LoadAllParameters(); // If they exist, read saved SD card settings.
-    if (!CalibratedYet) {
-        Procrastinate(250);
-        CalibratedYet = LoadAllParameters();
+    if (!LoadAllParameters()){               // if files not there, create it. 
+         PlaySound(WHAHWHAHMSG);
     }
-    teensyMAC(MacAddress); // Get MAC address and use it as pipe address
+
+    teensyMAC(MacAddress);  // Get MAC address and use it as pipe address
     NewPipe = (uint64_t)MacAddress[0] << 40;
     NewPipe += (uint64_t)MacAddress[1] << 32;
     NewPipe += (uint64_t)MacAddress[2] << 24;
@@ -3327,8 +3325,9 @@ void SaveTransmitterParameters()
   
     SDCardAddress = 0;
     FileCheckSum = 0;
-    CalibratedYet = true;
-   // two spare bytes now
+    
+    SDUpdate16BITS(SDCardAddress, 12345); // marker that file exists!
+
     SDCardAddress += 2;
     for (i = 0; i < CHANNELSUSED; ++i) {
         SDUpdate16BITS(SDCardAddress, ChannelMin[i]); // Stick min output of pot
@@ -5596,6 +5595,7 @@ const char         Tn[32]      = "Unknown";
     LEDBrightness           = 75;
     ConnectionAssessSeconds = 1;
     AutoModelSelect         = true;
+    SaveTransmitterParameters();
     SaveTransmitterParameters();
 }
 
