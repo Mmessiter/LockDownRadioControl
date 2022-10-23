@@ -330,7 +330,6 @@ var TransmitterCode_2src_2main_8cpp =
     [ "DefiningTrims", "TransmitterCode_2src_2main_8cpp.html#a53d8c3d55ec5cdfd424929c62efe1677", null ],
     [ "DeltaGMT", "TransmitterCode_2src_2main_8cpp.html#ab509e0e6c824d1a805643fbdae7a9a5e", null ],
     [ "DoingCheckSm", "TransmitterCode_2src_2main_8cpp.html#ad29c29032645ef06ffdf1cd62974c96f", null ],
-    [ "DontAnnoyMe", "TransmitterCode_2src_2main_8cpp.html#a65bd2c9dad16a525962f3897b5202da1", null ],
     [ "DoSbusSendOnly", "TransmitterCode_2src_2main_8cpp.html#a2f95a8628ae27f3acb9b1598b8321781", null ],
     [ "Exponential", "TransmitterCode_2src_2main_8cpp.html#a98ff7a43b72a0fdbf4cca16a9910d229", null ],
     [ "ExportedFileCounter", "TransmitterCode_2src_2main_8cpp.html#a1252681409ac5c9ed335a78f80633236", null ],
