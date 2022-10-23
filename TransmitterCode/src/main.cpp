@@ -342,7 +342,7 @@ uint32_t Inactivity_Timeout = INACTIVITYTIMEOUT;
 uint32_t Inactivity_Start   = 0;
 
 tmElements_t tm;
-char         TxName[32]      = {"No name was found!"};
+char         TxName[32]      = "Unknown";
 uint32_t     LastTimeRead    = 0;
 uint32_t     LastBankRead    = 0;
 uint32_t     LastShowTime    = 0;
@@ -398,7 +398,7 @@ uint16_t  TrimFactor        = 2; // How much to multiply trim by
 uint8_t   DateFix           = 0;
 bool      b5isGrey          = false;
 uint16_t  BackGroundColour  = 214;
-uint16_t  ForeGroundColour  = 65535;
+uint16_t  ForeGroundColour  = White;
 uint16_t  HighlightColour   = Yellow;
 uint16_t  SpecialColour     = Red;
 bool      Reconnected       = false;
@@ -413,7 +413,7 @@ uint16_t  RX2TotalTime      = 0;
 uint16_t  SavedRadioSwaps   = 0;
 uint16_t  SavedRX1TotalTime = 0;
 uint16_t  SavedRX2TotalTime = 0;
-uint8_t   AudioVolume       = 90;
+uint8_t   AudioVolume       = 50;
 uint32_t  WarningTimer      = 0;
 uint32_t  ScreenTimeTimer   = 0;
 bool      ScreenIsOff       = false;
@@ -447,9 +447,9 @@ char      StillConnectedBox[]     = "StillConnected";
 char      TurnOffRX[]             = "TURN OFF RX";
 char      NotStillConnected[]     = "vis StillConnected,0";
 bool      PowerWarningVisible     = false;
-uint8_t   TurnOffSecondToGo       = 5;
-uint8_t   PowerOffWarningSeconds  = 5;
-uint8_t   ConnectionAssessSeconds = 5;
+uint8_t   TurnOffSecondToGo       = 3;
+uint8_t   PowerOffWarningSeconds  = 3;
+uint8_t   ConnectionAssessSeconds = 1;
 uint32_t  PreviousPowerOffTimer   = 0;
 bool      ModelIdentified         = false;
 bool      ModelMatched            = false;
@@ -838,21 +838,10 @@ bool getDate(const char* str)
 
 void KickTheDog()
 {
-
     if (millis() - LastDogKick >= KICKRATE) {
+        TeensyWatchDog.feed();
         LastDogKick = millis();
-        TeensyWatchDog.feed();
     }
-}
-
-/*********************************************************************************************************************************/
-
-void Reboot()
-{
-
-    for (int i = 0; i < 30; ++i) {
-        TeensyWatchDog.feed();
-    } // Dog will explode when overfed
 }
 
 /*********************************************************************************************************************************/
@@ -3388,7 +3377,7 @@ void SaveTransmitterParameters()
     SDUpdate16BITS(SDCardAddress, HighlightColour);
     ++SDCardAddress;
     ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, SticksMode);
+    SDUpdate8BITS(SDCardAddress, SticksMode); 
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, AudioVolume);
     ++SDCardAddress;
@@ -3432,7 +3421,7 @@ void SaveTransmitterParameters()
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, ConnectionAssessSeconds);
     ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, AutoModelSelect);
+    SDUpdate8BITS(SDCardAddress, AutoModelSelect);  // heeer
     ++SDCardAddress;
     SaveCheckSum32();  // Save the Transmitter parametres checksm
     CloseModelsFile();
@@ -5569,14 +5558,55 @@ void ThrottleDownTrim(){
      if (SticksMode == 2) tt = 2;
      MoveaTrim(tt);
 }
+/*********************************************************************************************************************************/
+void ResetTransmitterSettings(){    // This function resets all transmitter parameters to the default state. 
+                                    // But not the clock. Calibration shoulw  be done next. 
+
+const char         Tn[32]      = "Unknown";
+    
+    DoSbusSendOnly = false;
+    BuddyMaster    = false;
+    ModelNumber    = 1;
+    ScreenTimeout  = 120;
+    Inactivity_Timeout = INACTIVITYTIMEOUT;
+    strcpy(TxName, Tn);
+    Qnh               = 1009;
+    DeltaGMT          = 0;
+    BackGroundColour  = 214;
+    ForeGroundColour  = White;
+    SpecialColour     = Red;
+    HighlightColour   = Yellow;
+    SticksMode        = 2;
+    AudioVolume       = 50;
+    Brightness        = 100;
+    PlayFanfare       = true;
+    TrimClicks        = true;
+    ButtonClicks      = true;
+    SpeakingClock     = true;
+    AnnounceBanks     = true;
+    ResetSwitchNumbers();
+    BuddyTriggerChannel = 12;
+    MinimumGap          = 75;
+    LogRXSwaps          = true;
+    UseLog              = false;
+    AnnounceConnected   = true;
+    ResetAllTrims();
+    TxVoltageCorrection     = 0;
+    PowerOffWarningSeconds  = 3;
+    LEDBrightness           = 75;
+    ConnectionAssessSeconds = 1;
+    AutoModelSelect         = true;
+    SaveTransmitterParameters();
+}
+
 // ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
-#define LASTFUNCTION 40 // one more than final one
+#define LASTFUNCTION 41 // one more than final one
 
 void (*NumberedFunctions[LASTFUNCTION])() {
     Blank,                // 0 (spare)
     DecFileInView,        // 1
     IncFileInView,        // 2
-    DoLastTimeRead, // 3
+    DoLastTimeRead,       // 3
     GotoModelsView,       // 4
     GotoMacrosView,       // 5
     PopulateMacrosView,   // 6
@@ -5612,13 +5642,9 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     ThrottleDownTrim,     // 36  
     ThrottleUpTrim,       // 37  
     OptionView4Start,     // 38  
-    OptionView4End        // 39  
+    OptionView4End,       // 39  
+    ResetTransmitterSettings // 40
     
-    
-
-
-
-
 }; // list will become much longer ...
 
 /*********************************************************************************************************************************
@@ -5699,7 +5725,6 @@ FASTRUN void ButtonWasPressed()
         char CalibrateView[]           = "CalibrateView";
         char Trim[]                    = "Trim";
         char TrimView[]                = "TrimView";
-       
         char TRIMS50[]                 = "TRIMS50";
         char RTRIM[]                   = "RTRIM";
         char MIXES_VIEW[]              = "MIXESVIEW"; // first call
@@ -7974,6 +7999,9 @@ void CheckPowerOffButton()
 void FASTRUN ManageTransmitter(){
 
     uint32_t RightNow = millis();
+
+    KickTheDog();                                                    // Watchdog ... ALWAYS!
+    if (GetButtonPress()) ButtonWasPressed();                        // ALWAYS
     if (((RightNow - TxPace) >= PACEMAKER - 4) && BoundFlag) return; // *** If it's almost time to send data then do not start some other task which might take longer! ***
     if (RightNow - LastBankRead > 100) {                             // 10 times a second is plenty
         if (RightNow - LastTimeRead >= 1000) {                       // Once a second for these...
@@ -7988,7 +8016,6 @@ void FASTRUN ManageTransmitter(){
         GetBank();                                                   // Must not call too often        
         ShowComms();                                                 // Screen Data                                  
         CheckTimer();                                                // Screen Timer
-        KickTheDog();                                                // Watchdog
         CheckPowerOffButton();
         CheckHardwareTrims();
         LastBankRead = millis();
@@ -8000,8 +8027,7 @@ void FASTRUN ManageTransmitter(){
 /************************************************************************************************************/
 FASTRUN void loop()
 {
-    if (GetButtonPress()) ButtonWasPressed();                    // Very frequently
-    ManageTransmitter();                                         // ****>>> Only 6 times a second <<<****
+    ManageTransmitter();                                       
     GetNewChannelValues();                                       // Load SendBuffer with new servo positions  Very frequently
     if (UseMacros) ExecuteMacro();                               // Modify it if macro is running
     if (DoSbusSendOnly) {
