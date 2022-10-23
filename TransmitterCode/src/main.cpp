@@ -3189,10 +3189,11 @@ FLASHMEM void setup()
     Procrastinate(WARMUPDELAY);
     if (!SD.begin(BUILTIN_SDCARD)) { // MUST return true or all is lost! 
         Procrastinate(WARMUPDELAY);
-        SD.begin(BUILTIN_SDCARD);  // a second attempt for iffy sd cards ?!
+        SD.begin(BUILTIN_SDCARD);    // a second attempt for iffy sd cards ?!
     }
-    if (!LoadAllParameters()){               // if files not there, create it. 
+    if (!LoadAllParameters()){       // if files not there, complain
          PlaySound(WHAHWHAHMSG);
+         Procrastinate(3000);
     }
 
     teensyMAC(MacAddress);  // Get MAC address and use it as pipe address
@@ -3297,6 +3298,10 @@ uint32_t ReadCheckSum32(){  // uses 5 bytes. Last one is indicator of use.
     ++SDCardAddress;
     DoingCheckSm = false;
     if (UseCheckSm) {
+        if (ch != FileCheckSum) {
+            PlaySound(WHAHWHAHMSG);
+            Procrastinate(3000);
+        }
 #ifdef DB_CHECKSUM
             Serial.print("Read from file: ");
             Serial.println(ch);
