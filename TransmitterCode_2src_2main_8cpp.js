@@ -30,6 +30,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "CatmullSplineInterpolation", "TransmitterCode_2src_2main_8cpp.html#ab22855ea2564895ca3cc455c071dadbb", null ],
     [ "CentreTrims", "TransmitterCode_2src_2main_8cpp.html#a4d21fc3e237eec44b6cc9a5d102249dd", null ],
     [ "ChannelCentres", "TransmitterCode_2src_2main_8cpp.html#a0e7ca9043d8fa769e8a9290df885e594", null ],
+    [ "CheckFileExists", "TransmitterCode_2src_2main_8cpp.html#a6913f10b439e4856898d699adb4ca373", null ],
     [ "CheckGapsLength", "TransmitterCode_2src_2main_8cpp.html#a953f1d5046e183549ed95b08f6d675e3", null ],
     [ "CheckHardwareTrims", "TransmitterCode_2src_2main_8cpp.html#add643409678258cabdb0aa1ae76d802a", null ],
     [ "CheckLogFileIsOpen", "TransmitterCode_2src_2main_8cpp.html#ac45f2f949ccfa372a8cbab3ef0b8caa8", null ],
