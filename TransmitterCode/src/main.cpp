@@ -2183,6 +2183,18 @@ void CloseModelsFile()
 
 /*********************************************************************************************************************************/
 
+bool CheckFileExists(char * fl){ // heer
+
+    bool exists = false;
+    File t;
+    t = SD.open(fl, FILE_READ);
+    if (t) exists = true;
+    t.close();
+    return exists;
+}
+
+/*********************************************************************************************************************************/
+
 void OpenModelsFile()
 {
     if (SingleModelFlag) {
@@ -3191,9 +3203,15 @@ FLASHMEM void setup()
         Procrastinate(WARMUPDELAY);
         SD.begin(BUILTIN_SDCARD);    // a second attempt for iffy sd cards ?!
     }
-    if (!LoadAllParameters()){       // if files not there, complain
-         PlaySound(WHAHWHAHMSG);
-         Procrastinate(3000);
+
+    if (CheckFileExists(ModelsFile)){
+            if (!LoadAllParameters()){       // if files not there, complain
+                PlaySound(WHAHWHAHMSG);          // bad file
+                Procrastinate(3000);
+            }
+    } else {
+            PlaySound(WHAHWHAHMSG);          // no file ... or no SD
+            Procrastinate(3000);
     }
 
     teensyMAC(MacAddress);  // Get MAC address and use it as pipe address
@@ -3425,7 +3443,7 @@ void SaveTransmitterParameters()
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, ConnectionAssessSeconds);
     ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, AutoModelSelect);  // heeer
+    SDUpdate8BITS(SDCardAddress, AutoModelSelect);  
     ++SDCardAddress;
     SaveCheckSum32();  // Save the Transmitter parametres checksm
     CloseModelsFile();
