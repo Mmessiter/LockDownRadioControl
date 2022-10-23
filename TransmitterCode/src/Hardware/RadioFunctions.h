@@ -403,6 +403,7 @@ extern void  LogUKRules();
 extern int   InStrng(char* text1, char* text2);
 extern uint32_t     ReadCheckSum32();
 extern void         ResetTransmitterSettings();
+extern void         TryToReconnect();
 
 /*********************************************************************************************************************************/
 // function prototypes

@@ -148,6 +148,7 @@ void RecordsPacketSuccess(uint8_t s)
 
 FASTRUN void FailedPacket()
 {
+    if (LostContactFlag) TryToReconnect();
     RecordsPacketSuccess(0);                      // Record a failure
     ++RecentPacketsLost;                          // this is to keep track of events when receiver is off
     ++TotalLostPackets;                           // This is total - never zeroed
@@ -171,7 +172,10 @@ FASTRUN void FailedPacket()
 
 void TryToReconnect()
 {
-    if ((RecentPacketsLost > 200 || (!BoundFlag))) TryOtherPipe();                                // In case the receiver has re-booted
+     if (RecentPacketsLost > 50){
+        TryOtherPipe();
+        RecentPacketsLost = 0;
+    }                                                                                             
     NextChannel = *(FHSSChPointer + random(RECONNECT_CHANNELS_COUNT) + RECONNECT_CHANNELS_START); // random reconnect channel (selected from first three)
     HopToNextChannel();
 }
@@ -204,13 +208,13 @@ void FlushFifos()
 
 FASTRUN void SendData()
 {
-    if (((millis() - TxPace) >= PACEMAKER) || (LostContactFlag)) {
+    if ((millis() - TxPace) >= PACEMAKER)  {
         TxPace = millis();
         if (DoSbusSendOnly) {
             MapToSBUS();
             return;
         } // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
-        if (LostContactFlag) TryToReconnect();
+        
         LoadPacketData();  // extra parameters appended to the data packet
         Connected = false; // Assume the worst until ACK is received.
         FlushFifos();
@@ -370,7 +374,7 @@ FLASHMEM void InitRadio(uint64_t Pipe)
     Radio1.openWritingPipe(Pipe);             // Current Pipe address used for Binding
     Radio1.setRetries(RETRYCOUNT, RETRYWAIT); // automatic retries and pauses *** WAS 15,15 *** !!
     Radio1.stopListening();
-    Procrastinate(1);
+    delay(2);
     Radio1.enableDynamicPayloads();
     Radio1.setAddressWidth(5);       // was 4, is now 5
     Radio1.setCRCLength(RF24_CRC_8); // could be 16
@@ -382,7 +386,7 @@ void SetThePipe(uint64_t WhichPipe)
 {
     Radio1.openWritingPipe(WhichPipe);
     Radio1.stopListening();
-    Procrastinate(1); // alllow things to happen
+    delay(2); // allow things to happen
 }
 
 /*********************************************************************************************************************************/
