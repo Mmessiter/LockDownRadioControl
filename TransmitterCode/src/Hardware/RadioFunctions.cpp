@@ -152,7 +152,7 @@ FASTRUN void FailedPacket()
     RecordsPacketSuccess(0);                      // Record a failure
     ++RecentPacketsLost;                          // this is to keep track of events when receiver is off
     ++TotalLostPackets;                           // This is total - never zeroed
-    if (RecentPacketsLost >= LOSTCONTACTCUTOFF) { // Don't panic until at two packets are lost.
+    if (RecentPacketsLost >= LOSTCONTACTCUTOFF) { // Don't panic until at least two packets are lost.
         if (!GapStart) GapStart = millis();       // To keep track of this gap's length
         LostContactFlag = true;
         Reconnected     = false;
@@ -200,7 +200,9 @@ void SuccessfulPacket()
 void FlushFifos()
 {
     Radio1.flush_rx(); // This avoids a lockup that happens when the FIFO gets full.
+    delayMicroseconds(500);
     Radio1.flush_tx();
+    delayMicroseconds(500);
 }
 /************************************************************************************************************/
 //****************** Function to send pre-compressed data to receiver ***************************************
@@ -214,7 +216,6 @@ FASTRUN void SendData()
             MapToSBUS();
             return;
         } // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
-        
         LoadPacketData();  // extra parameters appended to the data packet
         Connected = false; // Assume the worst until ACK is received.
         FlushFifos();
@@ -339,8 +340,10 @@ float Pduration  = 0;
 FASTRUN void HopToNextChannel()
 {
     Radio1.setChannel(NextChannel); // Hop !
-    Radio1.stopListening();         // Transmit only (no need for any extra delay() as this is here followed by several tasks)
-   
+    delayMicroseconds(500);
+    Radio1.stopListening(); // Transmit only
+    delayMicroseconds(500);
+
 #ifdef DB_FHSS 
     if (BoundFlag && Connected && ModelMatched){
         float ch   = *(FHSSChPointer + NextChannelNumber);

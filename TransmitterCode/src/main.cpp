@@ -467,7 +467,6 @@ char b5Greyed[]                     = "b5.pco=33840";
 char b12Greyed[]                    = "b12.pco=33840";
 bool MotorEnabled                   = false;
 bool MotorWasEnabled                = false;
-bool    DontAnnoyMe                 = false;
 uint8_t MotorChannel                = 2; // Throttle from zero
 uint8_t MotorChannelZero            = 0; 
 bool    UseMotorKill                = true;
@@ -497,11 +496,6 @@ void PlaySound(uint16_t TheSound)
     char SoundPrefix[]  = "play 0,";
     char SoundPostfix[] = "0";
     char NB[6];
-    
-    if (DontAnnoyMe){ // this flag is to cancel a repeating announcement
-       DontAnnoyMe = false;
-       return;
-       }
     Str(NB, TheSound, 1);
     strcpy(Sound, SoundPrefix);
     strcat(Sound, NB);
@@ -6131,9 +6125,7 @@ FASTRUN void ButtonWasPressed()
             SendCommand(page_FrontView);
             CurrentView  = FRONTVIEW;
             UpdateModelsNameEveryWhere();
-            SafetyWasOn ^= 1;                   // this forces a re-display of motor state 
-            MotorWasEnabled ^= 1;               // this forces a re-display of motor state
-            DontAnnoyMe = true;                 // this cancels an audio prompt
+            SafetyWasOn ^= 1;                   // this forces a re-display of safety state 
             ShowBank();
             LastTimeRead = 0;
             Reconnected  = false; // this is to make '** Connected! **' redisplay (in ShowComms())
