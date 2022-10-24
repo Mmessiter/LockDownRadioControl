@@ -17,7 +17,6 @@ var TransmitterCode_2src_2main_8cpp =
     [ "AileronRightTrim", "TransmitterCode_2src_2main_8cpp.html#ae734c00c145b79aa75e175155f8dd4a7", null ],
     [ "Ascii", "TransmitterCode_2src_2main_8cpp.html#a3a793f5d71f6db34ad82272d211f8954", null ],
     [ "bcdToDec", "TransmitterCode_2src_2main_8cpp.html#a5e5cbc12559842867d90e19b7ecf4a8c", null ],
-    [ "Bindit", "TransmitterCode_2src_2main_8cpp.html#a0c5e33fb9e1f54b522448f779ed9f508", null ],
     [ "BindNow", "TransmitterCode_2src_2main_8cpp.html#a7b8f152779a09d867292d3a8e7f76d85", null ],
     [ "Blank", "TransmitterCode_2src_2main_8cpp.html#a0bd2123bbb9dfc3a3af87642de04b591", null ],
     [ "BlueLedOn", "TransmitterCode_2src_2main_8cpp.html#aa1f9aec467eb00917ad9ffdc0bd5b20d", null ],
