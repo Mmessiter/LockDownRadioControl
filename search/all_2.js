@@ -37,7 +37,7 @@ var searchData=
   ['accz_34',['AccZ',['../Quadcopter_2src_2main_8cpp.html#af9a08745989f56ac72e8757359a30d5e',1,'main.cpp']]],
   ['accz_5fprev_35',['AccZ_prev',['../Quadcopter_2src_2main_8cpp.html#a4f12d0d2fdb0d0fa64c642c085341efa',1,'main.cpp']]],
   ['ackpayload_36',['AckPayload',['../TransmitterCode_2src_2main_8cpp.html#a30a079d60b4731ce1531091ffe56a703',1,'AckPayload():&#160;main.cpp'],['../RadioFunctions_8h.html#aec532bb9df7f865e6612fabf46895e6c',1,'AckPayload():&#160;radio.h'],['../radio_8h.html#a30a079d60b4731ce1531091ffe56a703',1,'AckPayload():&#160;radio.h']]],
-  ['ackpayloadsize_37',['AckPayloadSize',['../RadioFunctions_8h.html#a6dc99d00582ef356ea3d57700dca6dab',1,'AckPayloadSize():&#160;radio.h'],['../radio_8h.html#a6dc99d00582ef356ea3d57700dca6dab',1,'AckPayloadSize():&#160;radio.h'],['../TransmitterCode_2src_2main_8cpp.html#a6dc99d00582ef356ea3d57700dca6dab',1,'AckPayloadSize():&#160;main.cpp']]],
+  ['ackpayloadsize_37',['AckPayloadSize',['../RadioFunctions_8h.html#a81b9fbb62d8099a8e75c5d4720f41895',1,'AckPayloadSize():&#160;radio.h'],['../radio_8h.html#a6dc99d00582ef356ea3d57700dca6dab',1,'AckPayloadSize():&#160;radio.h'],['../TransmitterCode_2src_2main_8cpp.html#a81b9fbb62d8099a8e75c5d4720f41895',1,'AckPayloadSize():&#160;main.cpp']]],
   ['adjustdatetime_38',['AdjustDateTime',['../TransmitterCode_2src_2main_8cpp.html#a9de4ea8e761b5f0e537f6f326f9ad429',1,'main.cpp']]],
   ['aileronlefttrim_39',['AileronLeftTrim',['../TransmitterCode_2src_2main_8cpp.html#a71f72bed656884a7e88b70f73f8d81a4',1,'main.cpp']]],
   ['aileronrighttrim_40',['AileronRightTrim',['../TransmitterCode_2src_2main_8cpp.html#ae734c00c145b79aa75e175155f8dd4a7',1,'main.cpp']]],
@@ -64,6 +64,6 @@ var searchData=
   ['audioview_61',['AUDIOVIEW',['../RadioFunctions_8h.html#a445cfbf06ed74188fcf3965b4cab9533',1,'RadioFunctions.h']]],
   ['audiovolume_62',['AudioVolume',['../TransmitterCode_2src_2main_8cpp.html#adddcbca54e7b49592c3f6c360bf04494',1,'main.cpp']]],
   ['automodelselect_63',['AutoModelSelect',['../TransmitterCode_2src_2main_8cpp.html#a77387f8b9f18e9b75448e01d821ae17e',1,'main.cpp']]],
-  ['autoswitch_64',['AutoSwitch',['../TransmitterCode_2src_2main_8cpp.html#a6d1c8ca21c8826267f5687d3799c6a1f',1,'main.cpp']]],
-  ['autoswitch_65',['AUTOSWITCH',['../RadioFunctions_8h.html#aa4414f3ff790f01b8bb41a0f51d1518f',1,'RadioFunctions.h']]]
+  ['autoswitch_64',['AUTOSWITCH',['../RadioFunctions_8h.html#aa4414f3ff790f01b8bb41a0f51d1518f',1,'RadioFunctions.h']]],
+  ['autoswitch_65',['AutoSwitch',['../TransmitterCode_2src_2main_8cpp.html#a6d1c8ca21c8826267f5687d3799c6a1f',1,'main.cpp']]]
 ];

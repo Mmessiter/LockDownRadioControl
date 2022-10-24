@@ -17,11 +17,12 @@ var searchData=
   ['error_5froll_5fprev_14',['error_roll_prev',['../Quadcopter_2src_2main_8cpp.html#ad4d74e2fa2fccc0bfccc9052c9714af1',1,'main.cpp']]],
   ['error_5fyaw_15',['error_yaw',['../Quadcopter_2src_2main_8cpp.html#a239046dd7e85cc3e82531319556f9f5d',1,'main.cpp']]],
   ['error_5fyaw_5fprev_16',['error_yaw_prev',['../Quadcopter_2src_2main_8cpp.html#ae366cc2072db3fde7b163c534ea9b745',1,'main.cpp']]],
-  ['executemacro_17',['ExecuteMacro',['../RadioFunctions_8cpp.html#a78f22801971c106db61d728dd345e28e',1,'ExecuteMacro():&#160;RadioFunctions.cpp'],['../RadioFunctions_8h.html#a78f22801971c106db61d728dd345e28e',1,'ExecuteMacro():&#160;RadioFunctions.cpp']]],
-  ['exitmacrosview_18',['ExitMacrosView',['../TransmitterCode_2src_2main_8cpp.html#a488388f6430a0fc7bec57074ba750a2d',1,'main.cpp']]],
-  ['exponential_19',['Exponential',['../TransmitterCode_2src_2main_8cpp.html#a98ff7a43b72a0fdbf4cca16a9910d229',1,'main.cpp']]],
-  ['exponentialcurves_20',['EXPONENTIALCURVES',['../RadioFunctions_8h.html#a0681550b8fd26c741ffd8c6447a64f82',1,'RadioFunctions.h']]],
-  ['exponentialinterpolation_21',['ExponentialInterpolation',['../TransmitterCode_2src_2main_8cpp.html#a2088bc57321fd542f58a3d8993444764',1,'main.cpp']]],
-  ['exportedfilecounter_22',['ExportedFileCounter',['../TransmitterCode_2src_2main_8cpp.html#a1252681409ac5c9ed335a78f80633236',1,'main.cpp']]],
-  ['ext_5fsens_5fdata_5f00_23',['EXT_SENS_DATA_00',['../classMPU9250.html#af3ff49b6a515f043ed76fc3f0088ccfe',1,'MPU9250']]]
+  ['errorstate_17',['ErrorState',['../TransmitterCode_2src_2main_8cpp.html#a6a368860ecd3ed4841f7564ec5bef635',1,'main.cpp']]],
+  ['executemacro_18',['ExecuteMacro',['../RadioFunctions_8cpp.html#a78f22801971c106db61d728dd345e28e',1,'ExecuteMacro():&#160;RadioFunctions.cpp'],['../RadioFunctions_8h.html#a78f22801971c106db61d728dd345e28e',1,'ExecuteMacro():&#160;RadioFunctions.cpp']]],
+  ['exitmacrosview_19',['ExitMacrosView',['../TransmitterCode_2src_2main_8cpp.html#a488388f6430a0fc7bec57074ba750a2d',1,'main.cpp']]],
+  ['exponential_20',['Exponential',['../TransmitterCode_2src_2main_8cpp.html#a98ff7a43b72a0fdbf4cca16a9910d229',1,'main.cpp']]],
+  ['exponentialcurves_21',['EXPONENTIALCURVES',['../RadioFunctions_8h.html#a0681550b8fd26c741ffd8c6447a64f82',1,'RadioFunctions.h']]],
+  ['exponentialinterpolation_22',['ExponentialInterpolation',['../TransmitterCode_2src_2main_8cpp.html#a2088bc57321fd542f58a3d8993444764',1,'main.cpp']]],
+  ['exportedfilecounter_23',['ExportedFileCounter',['../TransmitterCode_2src_2main_8cpp.html#a1252681409ac5c9ed335a78f80633236',1,'main.cpp']]],
+  ['ext_5fsens_5fdata_5f00_24',['EXT_SENS_DATA_00',['../classMPU9250.html#af3ff49b6a515f043ed76fc3f0088ccfe',1,'MPU9250']]]
 ];

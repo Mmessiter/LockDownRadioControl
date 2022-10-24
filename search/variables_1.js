@@ -25,7 +25,7 @@ var searchData=
   ['accz_22',['AccZ',['../Quadcopter_2src_2main_8cpp.html#af9a08745989f56ac72e8757359a30d5e',1,'main.cpp']]],
   ['accz_5fprev_23',['AccZ_prev',['../Quadcopter_2src_2main_8cpp.html#a4f12d0d2fdb0d0fa64c642c085341efa',1,'main.cpp']]],
   ['ackpayload_24',['AckPayload',['../radio_8h.html#a30a079d60b4731ce1531091ffe56a703',1,'AckPayload():&#160;radio.h'],['../RadioFunctions_8h.html#aec532bb9df7f865e6612fabf46895e6c',1,'AckPayload():&#160;radio.h'],['../TransmitterCode_2src_2main_8cpp.html#a30a079d60b4731ce1531091ffe56a703',1,'AckPayload():&#160;main.cpp']]],
-  ['ackpayloadsize_25',['AckPayloadSize',['../radio_8h.html#a6dc99d00582ef356ea3d57700dca6dab',1,'AckPayloadSize():&#160;radio.h'],['../RadioFunctions_8h.html#a6dc99d00582ef356ea3d57700dca6dab',1,'AckPayloadSize():&#160;radio.h'],['../TransmitterCode_2src_2main_8cpp.html#a6dc99d00582ef356ea3d57700dca6dab',1,'AckPayloadSize():&#160;main.cpp']]],
+  ['ackpayloadsize_25',['AckPayloadSize',['../radio_8h.html#a6dc99d00582ef356ea3d57700dca6dab',1,'AckPayloadSize():&#160;radio.h'],['../RadioFunctions_8h.html#a81b9fbb62d8099a8e75c5d4720f41895',1,'AckPayloadSize():&#160;radio.h'],['../TransmitterCode_2src_2main_8cpp.html#a81b9fbb62d8099a8e75c5d4720f41895',1,'AckPayloadSize():&#160;main.cpp']]],
   ['ak8963_5fasa_26',['AK8963_ASA',['../classMPU9250.html#aafe4f26060946ba06c550cbe1510cf9c',1,'MPU9250']]],
   ['ak8963_5fcnt_5fmeas1_27',['AK8963_CNT_MEAS1',['../classMPU9250.html#ab3cde169087d4e06e153f58b448136d5',1,'MPU9250']]],
   ['ak8963_5fcnt_5fmeas2_28',['AK8963_CNT_MEAS2',['../classMPU9250.html#aa74c8ffb8a828b7bd3c1ce4580a16b55',1,'MPU9250']]],
