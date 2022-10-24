@@ -93,7 +93,6 @@
  * | 39         |TRIM (CH3b)|
  * | 40         |TRIM (CH4a)|
  * | 41         |TRIM (CH4b)|
- * | 53 NOT USED
  * @see TransmitterCode/src/main.cpp
  */
 // ************************************************** TRANSMITTER CODE **************************************************
@@ -159,7 +158,7 @@ struct Payload
 };
 Payload AckPayload;
 
-uint8_t AckPayloadSize = sizeof(AckPayload); // i.e. 6
+const uint8_t AckPayloadSize = sizeof(AckPayload); // i.e. 6
 
 // *****************************************************************************************************************
 
@@ -347,6 +346,8 @@ uint32_t     LastBankRead    = 0;
 uint32_t     LastShowTime    = 0;
 uint32_t     LastDogKick     = 0;
 uint8_t      MacAddress[6];
+uint8_t      ErrorState      = 0;
+
 
 uint16_t XtouchPlace = 0; // Clicked X
 uint16_t YtouchPlace = 0; // Clicked Y
@@ -479,6 +480,10 @@ uint16_t SFV                        = 0; // =StopFlyingVoltsPerCell * 100
 bool     NewCompressNeeded          = true;
 uint32_t FileCheckSum                   = 0;
 bool     DoingCheckSm                   = false;
+char     Owner[]                        = "Owner";
+char     WarnNow[]                      = "vis Warning,1";
+char     WarnOff[]                      = "vis Warning,0";
+char     Warning[]                      = "Warning";
 
 // **********************************************************************************************************************************
 // **********************************************************************************************************************************
@@ -1599,8 +1604,7 @@ FASTRUN void ShowComms()
 {
 if (millis() - LastShowTime > SHOWCOMMSDELAY) {
     LastShowTime     = millis();
-    char WarnNow[]   = "vis Warning,1";
-    char WarnOff[]   = "vis Warning,0";
+    
     char InVisible[] = "vis Quality,0";
     char FrontView_AckPayload[] = "AckPayload";
     char FrontView_RXBV[]       = "RXBV";
@@ -2300,7 +2304,7 @@ void UpdateModelsNameEveryWhere()
     char mn1[30];             // holds model name plus its number
     char lb[] = " (";
     char rb[] = ")";
-    char Owner[]                = "Owner";
+   
 
 
     strcpy(mn1, ModelName);
@@ -3176,6 +3180,9 @@ FLASHMEM void setup()
     char FrontView_ForeGround[] = "FrontView.ForeGround";
     char FrontView_Special[]    = "FrontView.Special";
     char FrontView_Highlight[]  = "FrontView.Highlight";
+    char err_chksm[]            = "Checksum error!";
+    char err_404[]              = "File not found!";
+
     pinMode(REDLED, OUTPUT);
     pinMode(GREENLED, OUTPUT);
     pinMode(BLUELED, OUTPUT);
@@ -3197,15 +3204,14 @@ FLASHMEM void setup()
         Procrastinate(WARMUPDELAY);
         SD.begin(BUILTIN_SDCARD);    // a second attempt for iffy sd cards ?!
     }
+    ErrorState = NOERROR;
 
-    if (CheckFileExists(ModelsFile)){
-            if (!LoadAllParameters()){       // if files not there, complain
-                PlaySound(WHAHWHAHMSG);          // bad file
-                Procrastinate(3000);
-            }
+    if (CheckFileExists(ModelsFile)) {
+        if (!LoadAllParameters()) { // if file not good ..
+            ErrorState = CHECKSUMERROR;
+        }
     } else {
-            PlaySound(WHAHWHAHMSG);          // no file ... or no SD
-            Procrastinate(3000);
+            ErrorState = MODELSFILENOTFOUND; // if no file ... or no SD
     }
 
     teensyMAC(MacAddress);  // Get MAC address and use it as pipe address
@@ -3235,7 +3241,7 @@ FLASHMEM void setup()
     SendValue(FrontView_Mins, 0);
     SendValue(FrontView_Secs, 0);
     //  ***************************************************************************************
-     //SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
+    //  SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
     //  **   BUT then re-comment it!! Otherwise it will reset to same time on every boot up! **
     //  ***************************************************************************************
     BoundFlag = false;
@@ -3254,6 +3260,15 @@ FLASHMEM void setup()
     UpdateModelsNameEveryWhere();
     WarningTimer = millis();
     if(!UseMotorKill)  ShowMotor(1);
+
+    if (ErrorState) SendCommand(WarnNow);
+    if (ErrorState == CHECKSUMERROR) {
+        SendText(Warning, err_chksm);
+    }
+    if (ErrorState == MODELSFILENOTFOUND){
+          SendText(Warning, err_404);
+    
+    }
 }
 /*********************************************************************************************************************************/
 
@@ -3311,8 +3326,7 @@ uint32_t ReadCheckSum32(){  // uses 5 bytes. Last one is indicator of use.
     DoingCheckSm = false;
     if (UseCheckSm) {
         if (ch != FileCheckSum) {
-            PlaySound(WHAHWHAHMSG);
-            Procrastinate(3000);
+            ErrorState = CHECKSUMERROR;
         }
 #ifdef DB_CHECKSUM
             Serial.print("Read from file: ");

@@ -256,6 +256,14 @@
 #define MIDMICROS       MINMICROS + HALFMICROSRANGE
 
 // **************************************************************************
+//                            Error Codes                                *
+// **************************************************************************
+
+#define NOERROR             0
+#define MODELSFILENOTFOUND  1
+#define CHECKSUMERROR       2
+
+// **************************************************************************
 //                            Interpolations                                *
 // **************************************************************************
 
@@ -334,7 +342,7 @@ extern bool           Connected;
 extern uint16_t       CompressedData[];
 extern uint8_t        FHSS_Channels[];
 extern struct Payload AckPayload;
-extern uint8_t        AckPayloadSize;
+const extern uint8_t  AckPayloadSize;
 extern uint8_t        SizeOfCompressedData;
 extern uint16_t       RangeTestGoodPackets;
 extern uint8_t        NextChannelNumber;
