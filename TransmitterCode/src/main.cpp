@@ -1318,9 +1318,6 @@ bool GetButtonPress()
     uint8_t a = 0;
     int     i = 0;
     bool ButtonPressed = false;
-    uint32_t kbd_wait  = millis();
-
-    while (!NEXTION.available() && (millis()-kbd_wait) < 2){ } 
     while (NEXTION.available()) {
         a = NEXTION.read();
         if (a > 31 && a < 254) {
@@ -1330,7 +1327,7 @@ bool GetButtonPress()
             TextIn[i + 1] = 0;
         }
         if (i < CHARSMAX - 1) ++i;
-        delayMicroseconds(5000); // needed!! 
+        delay(1); // needed!! 
         }
     if (ButtonPressed && ButtonClicks) PlaySound(CLICKONE);
     return ButtonPressed;
@@ -4531,7 +4528,6 @@ void BindNow() // Bind button was pressed
     if (AnnounceConnected) PlaySound(BINDSUCCEEDED);
     Procrastinate(1700);
     UpdateModelsNameEveryWhere();
-  
 }
 
 /*********************************************************************************************************************************/
@@ -5633,12 +5629,6 @@ const char         Tn[32]      = "Unknown";
     SaveTransmitterParameters();
     SaveTransmitterParameters();
 }
-/*********************************************************************************************************************************/
-void Bindit(){ // heer
-        BindNow();
-        ClearText();
-        return;
-}
 
 // ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
 #define LASTFUNCTION 42 // one more than final one
@@ -5685,7 +5675,7 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     OptionView4Start,     // 38  
     OptionView4End,       // 39  
     ResetTransmitterSettings, // 40
-    Bindit                // 41
+    BindNow                // 41
 
 }; // list will become much longer ...
 
