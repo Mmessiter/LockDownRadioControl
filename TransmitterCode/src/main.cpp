@@ -1318,19 +1318,20 @@ bool GetButtonPress()
     uint8_t a = 0;
     int     i = 0;
     bool ButtonPressed = false;
-    if (NEXTION.available()) {
-        while (NEXTION.available()) {
-            a = NEXTION.read();    
-            if (a > 31 && a < 254) {
-                ButtonPressed = true;
-                TextIn[i] = a;
-                if (TextIn[i] == '$') TextIn[i] = 0;
-                TextIn[i + 1] = 0;
-            }
-            if (i < CHARSMAX - 1) ++i;
-            delay(1);    // needed!! 
+    uint32_t kbd_wait  = millis();
+
+    while (!NEXTION.available() && (millis()-kbd_wait) < 2){ } 
+    while (NEXTION.available()) {
+        a = NEXTION.read();
+        if (a > 31 && a < 254) {
+            ButtonPressed = true;
+            TextIn[i]     = a;
+            if (TextIn[i] == '$') TextIn[i] = 0;
+            TextIn[i + 1] = 0;
         }
-    }
+        if (i < CHARSMAX - 1) ++i;
+        delayMicroseconds(5000); // needed!! 
+        }
     if (ButtonPressed && ButtonClicks) PlaySound(CLICKONE);
     return ButtonPressed;
 }
@@ -1529,6 +1530,7 @@ FASTRUN bool CheckRXVolts()
             SendText(RXPC, spaces);
         }
     }
+    RXVoltsDetected = false; // in case it was a glitch
     return RXWarningFlag;
 }
 /*********************************************************************************************************************************/
@@ -2181,7 +2183,7 @@ void CloseModelsFile()
 
 /*********************************************************************************************************************************/
 
-bool CheckFileExists(char * fl){ // heer
+bool CheckFileExists(char * fl){
 
     bool exists = false;
     File t;
@@ -4529,6 +4531,7 @@ void BindNow() // Bind button was pressed
     if (AnnounceConnected) PlaySound(BINDSUCCEEDED);
     Procrastinate(1700);
     UpdateModelsNameEveryWhere();
+  
 }
 
 /*********************************************************************************************************************************/
@@ -5348,8 +5351,9 @@ void StartTrimDefView()
     ResetAllTrims();
     BlueLedOn();
     CurrentMode = SENDNOTHING;
-    for (int i = 0; i < 4; ++i) TrimDefined[i] = false;
+    for (int i = 0; i < 4; ++i) TrimDefined[i] = false; 
     DefiningTrims = true;
+   
 }
 /******************************************************************************************************************************/
 void DefineTrimsEnd()
@@ -5629,9 +5633,15 @@ const char         Tn[32]      = "Unknown";
     SaveTransmitterParameters();
     SaveTransmitterParameters();
 }
+/*********************************************************************************************************************************/
+void Bindit(){ // heer
+        BindNow();
+        ClearText();
+        return;
+}
 
 // ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
-#define LASTFUNCTION 41 // one more than final one
+#define LASTFUNCTION 42 // one more than final one
 
 void (*NumberedFunctions[LASTFUNCTION])() {
     Blank,                // 0 (spare)
@@ -5674,8 +5684,9 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     ThrottleUpTrim,       // 37  
     OptionView4Start,     // 38  
     OptionView4End,       // 39  
-    ResetTransmitterSettings // 40
-    
+    ResetTransmitterSettings, // 40
+    Bindit                // 41
+
 }; // list will become much longer ...
 
 /*********************************************************************************************************************************
@@ -5760,7 +5771,6 @@ FASTRUN void ButtonWasPressed()
         char RTRIM[]                   = "RTRIM";
         char MIXES_VIEW[]              = "MIXESVIEW"; // first call
         char Fhss_View[]               = "FhssView";
-        char bind[]                    = "Bind";
         char FM1[]                     = "FM 1";
         char FM2[]                     = "FM 2";
         char FM3[]                     = "FM 3";
@@ -7025,13 +7035,6 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(bind, TextIn))
-        {
-            BindNow();
-            ClearText();
-            return;
-        }
-
         if (InStrng(FM1, TextIn))
         {
             Bank         = 1;
@@ -7827,7 +7830,10 @@ void  GetModelsMacAddress(){
     }
     if (!BindingTimer) BindingTimer = millis();
     if (BindButton) {
-        if ((millis() - BindingTimer) > 3500) SendCommand(BindButtonVisible); 
+        if ((millis() - BindingTimer) > 1500) {
+            SendCommand(BindButtonVisible); 
+            BindButton = true;
+        }
     }
 }
 /************************************************************************************************************/
@@ -7845,7 +7851,7 @@ FASTRUN void ParseAckPayload()
         GetModelsMacAddress();
         return;
     }
-
+    
     switch (AckPayload.Purpose) // Only look at the low 7 BITS
     {
         case 0:
@@ -8028,10 +8034,15 @@ void CheckPowerOffButton()
 void FASTRUN ManageTransmitter(){
 
     uint32_t RightNow = millis();
+    uint32_t TXPacketElapsed = RightNow - TxPace;
 
     KickTheDog();                                                    // Watchdog ... ALWAYS!
-    if (GetButtonPress()) ButtonWasPressed();                        // ALWAYS
-    if (((RightNow - TxPace) >= PACEMAKER - 4) && BoundFlag) return; // *** If it's almost time to send data then do not start some other task which might take longer! ***
+    if (GetButtonPress()) {
+        ButtonWasPressed();                       
+    }
+
+    if ((TXPacketElapsed >= PACEMAKER - 4) && TXPacketElapsed < 100) return; // *** If it's almost time to send data then do not start some other task which might take longer! ***
+   
     if (RightNow - LastBankRead > 100) {                             // 10 times a second is plenty
         if (RightNow - LastTimeRead >= 1000) {                       // Once a second for these...
             ReadTime();                                              // Do the clock
