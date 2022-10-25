@@ -80,7 +80,7 @@ void Procrastinate(uint32_t HowLong)
 }
 
 //***********************************************************************************************************
-void Look(int p)
+void Look(int p)  // This is just to save typing Serial.println :)
 {
     Serial.println(p);
 }
@@ -145,9 +145,8 @@ void RecordsPacketSuccess(uint8_t s)
 
 FASTRUN void FailedPacket()
 {
+    FlushFifos();
     if (LostContactFlag) TryToReconnect();
-    FlushFifos(); 
-    while (Radio1.available()) FlushFifos(); 
     RecordsPacketSuccess(0);                      // Record a failure
     ++RecentPacketsLost;                          // this is to keep track of events when receiver is off
     ++TotalLostPackets;                           // This is total - never zeroed
@@ -200,9 +199,9 @@ void SuccessfulPacket()
 /************************************************************************************************************/
 void FlushFifos()
 {
-    Radio1.flush_rx(); // This avoids a lockup that happens when the FIFO gets full.
+    Radio1.flush_tx(); // This avoids a lockup that happens when the FIFO gets full.
     delayMicroseconds(250);
-    Radio1.flush_tx();
+    Radio1.flush_rx();
     delayMicroseconds(250);
 }
 /************************************************************************************************************/
