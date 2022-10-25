@@ -925,6 +925,7 @@ bool MayBeAddZero(uint8_t nn)
 
 void ReadTime()
 {
+    
     static char month[12][15]     = {"January", "February", "March", "April", "May", "June", "July", "August", "Sept", "October", "November", "December"};
     static char ShortMonth[12][7] = {"Jan. ", "Feb. ", "Mar. ", "Apr. ", "May  ", "June ", "July ", "Aug. ", "Sept ", "Oct. ", "Nov. ", "Dec. "};
 
@@ -981,6 +982,8 @@ void ReadTime()
             if (MayBeAddZero(tm.Second)) strcat(TimeString, zero);
             strcat(TimeString, Str(NB, tm.Second, 0));
             SendText(DateTime, TimeString);
+        } else { 
+           //  SetDS1307ToCompilerTime();
         }
     }
 }
@@ -3295,11 +3298,9 @@ int InStrng(char* text1, char* text2)
     return 0; // Found no match
 }
 
-
 /*********************************************************************************************************************************/
 void SaveCheckSum32(){  // uses 5 bytes. Last one is indicator of use.
 
-   
     DoingCheckSm = true;
     SDUpdate32BITS(SDCardAddress, FileCheckSum);
     SDCardAddress += 4;

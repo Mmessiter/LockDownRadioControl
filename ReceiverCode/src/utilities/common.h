@@ -17,12 +17,18 @@
 #define RXVERSION_MINOR   9
 #define RXVERSION_MINIMUS 7 // October 2022
 
+
+ //#define DB_FHSS
+// #define DB_SENSORS
+// #define DB_BIND
+// #define DB_FAILSAFE
+// #define DB_RXTIMERS
 //**************************************************************************************************************************
 // #define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< **..
 //**************************************************************************************************************************
 
 #define SENSOR_HUB_I2C_ADDRESS 8
-#define HOPTIME               200 // (was 97) >= ms between channel changes (10 packets per hop)
+#define HOPTIME               250 // (was 97) >= ms between channel changes (now 35 packets per hop)
 
 // ********************************* reconnect params ***************************************
 #define LISTEN_PERIOD   50 //  How many ms to listen for TX in Reconnect()
@@ -57,12 +63,6 @@
 #define CE_OFF                   LOW
 #define BIND_EEPROM_OFFSET        0                          // use 8 bytes from here
 #define FS_EEPROM_OFFSET         BIND_EEPROM_OFFSET+8        // use 16 bytes from here
-
- #define DB_FHSS
-// #define DB_SENSORS
-// #define DB_BIND
-// #define DB_FAILSAFE
-// #define DB_RXTIMERS
 
 uint32_t LastPacketArrivalTime = 0;
 bool     FailSafeSave          = false;
