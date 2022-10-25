@@ -7,6 +7,7 @@ var common_8h =
     [ "COMPRESSEDWORDS", "common_8h.html#a461caf7198eaa60ce589088ff38b97cb", null ],
     [ "CSN_OFF", "common_8h.html#a834c4941fd9b037a25a8053912995e61", null ],
     [ "CSN_ON", "common_8h.html#ab22ef6e01ad09b637ca55f3fcd3cae94", null ],
+    [ "DB_FHSS", "common_8h.html#ad10a77a7bf017d578647d0388c264c4d", null ],
     [ "DEFAULTPIPE", "common_8h.html#ae2e69f002146deef06b390e17a26dc0e", null ],
     [ "FAILSAFE_TIMEOUT", "common_8h.html#a0634ad724c86cd2b4ac7cfebbb622a9c", null ],
     [ "FREQUENCYSCOUNT", "common_8h.html#afe5bce36baf737bd284d43cd0e805fdb", null ],
