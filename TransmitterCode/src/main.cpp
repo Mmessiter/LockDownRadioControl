@@ -982,8 +982,7 @@ void ReadTime()
             if (MayBeAddZero(tm.Second)) strcat(TimeString, zero);
             strcat(TimeString, Str(NB, tm.Second, 0));
             SendText(DateTime, TimeString);
-        } else { 
-           //  SetDS1307ToCompilerTime();
+         
         }
     }
 }
