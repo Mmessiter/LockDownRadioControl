@@ -150,7 +150,7 @@ FASTRUN void FailedPacket()
     RecordsPacketSuccess(0);                      // Record a failure
     ++RecentPacketsLost;                          // this is to keep track of events when receiver is off
     ++TotalLostPackets;                           // This is total - never zeroed
-    if (RecentPacketsLost >= LOSTCONTACTCUTOFF) { // Don't panic until at least two packets are lost.
+    if (RecentPacketsLost >= LOSTCONTACTCUTOFF) { // Don't panic until at least LOSTCONTACTCUTOFF packets are lost.
         if (!GapStart) GapStart = millis();       // To keep track of this gap's length
         LostContactFlag = true;
         Reconnected     = false;
