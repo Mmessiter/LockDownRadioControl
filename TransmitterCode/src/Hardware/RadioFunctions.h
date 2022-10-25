@@ -256,6 +256,16 @@
 #define MIDMICROS       MINMICROS + HALFMICROSRANGE
 
 // **************************************************************************
+//                           nRF24L01 lines on off                          *
+// **************************************************************************
+
+#define CSN_ON                   LOW
+#define CSN_OFF                  HIGH
+#define CE_ON                    HIGH
+#define CE_OFF                   LOW
+
+
+// **************************************************************************
 //                            Error Codes                                *
 // **************************************************************************
 
@@ -412,6 +422,8 @@ extern int   InStrng(char* text1, char* text2);
 extern uint32_t     ReadCheckSum32();
 extern void         ResetTransmitterSettings();
 extern void         TryToReconnect();
+extern void         FlushFifos();
+extern bool         RecursedAlready;
 
 /*********************************************************************************************************************************/
 // function prototypes

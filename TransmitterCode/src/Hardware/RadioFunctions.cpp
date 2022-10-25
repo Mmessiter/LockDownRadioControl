@@ -6,8 +6,7 @@
 #include "RadioFunctions.h"
 /************************************************************************************************************/
 
-/**
- * Compresses uint16_t* buffer values (each with 12 bit resolution - the lower 12 bits).
+ /* Compresses uint16_t* buffer values (each with 12 bit resolution - the lower 12 bits).
  * @param compressed_buf[out] Must have allocated 3/4 the size of uncompressed_buf
  * @param uncompressed_buf[in]
  * @param uncompressed_size Size is in units of uint16_t (aka word or unsigned short). This *must* be divisible by 4.
@@ -57,8 +56,6 @@ FASTRUN void BufferNewPipe()
     SendBuffer[6] = (uint8_t)((NewPipe >> 8) & 0xFF);
     SendBuffer[7] = (uint8_t)((NewPipe)&0xFF);
 }
-
-bool RecursedAlready = false;
 
 /************************************************************************************************************/
 // This function replaces delay() without freezing critical tasks
@@ -149,6 +146,8 @@ void RecordsPacketSuccess(uint8_t s)
 FASTRUN void FailedPacket()
 {
     if (LostContactFlag) TryToReconnect();
+    FlushFifos(); 
+    while (Radio1.available()) FlushFifos(); 
     RecordsPacketSuccess(0);                      // Record a failure
     ++RecentPacketsLost;                          // this is to keep track of events when receiver is off
     ++TotalLostPackets;                           // This is total - never zeroed
@@ -160,8 +159,10 @@ FASTRUN void FailedPacket()
             if (LedWasGreen && UseLog) {
                 LogThisLongGap();
             }
-            if (!LedWasRed) RedLedOn(); 
-            ReEnableScanButton();
+            if (!LedWasRed){
+                RedLedOn(); 
+                ReEnableScanButton();
+            }
         }
     }
     int SecondsRemaining = (Inactivity_Timeout / 1000) - (millis() - Inactivity_Start) / 1000;
@@ -189,7 +190,7 @@ void SuccessfulPacket()
     LostContactFlag   = false;
     RecentPacketsLost = 0;
     Connected         = true;
-    if (BoundFlag) GreenLedOn();
+    if (BoundFlag && !LedWasGreen) GreenLedOn();
     CheckGapsLength();
     Radio1.read(&AckPayload, AckPayloadSize); //  "sizeof" doesn't work with externs,
     ParseAckPayload();
@@ -200,9 +201,9 @@ void SuccessfulPacket()
 void FlushFifos()
 {
     Radio1.flush_rx(); // This avoids a lockup that happens when the FIFO gets full.
-    delayMicroseconds(500);
+    delayMicroseconds(250);
     Radio1.flush_tx();
-    delayMicroseconds(500);
+    delayMicroseconds(250);
 }
 /************************************************************************************************************/
 //****************** Function to send pre-compressed data to receiver ***************************************
@@ -221,8 +222,7 @@ FASTRUN void SendData()
         FlushFifos();
         if (Radio1.write(&CompressedData, SizeOfCompressedData)) { //  ************************** >>>>> SEND DATA TO RX <<<<< ***************************************
             SuccessfulPacket();
-        }
-        else {
+        } else {
             FailedPacket();
         }
     }
@@ -388,6 +388,7 @@ FLASHMEM void InitRadio(uint64_t Pipe)
 void SetThePipe(uint64_t WhichPipe)
 {
     Radio1.openWritingPipe(WhichPipe);
+    delay(2);
     Radio1.stopListening();
     delay(2); // allow things to happen
 }
