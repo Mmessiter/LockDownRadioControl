@@ -9,7 +9,7 @@ var searchData=
   ['batteryislow_6',['BATTERYISLOW',['../RadioFunctions_8h.html#a26aac4b23321722632f5c1676e561e4b',1,'RadioFunctions.h']]],
   ['beepcomplete_7',['BEEPCOMPLETE',['../RadioFunctions_8h.html#a8a6f6e179e833662304277533103f99f',1,'RadioFunctions.h']]],
   ['beepmiddle_8',['BEEPMIDDLE',['../RadioFunctions_8h.html#ae4346a524bff46ea22911635a0c865ef',1,'RadioFunctions.h']]],
-  ['bind_5feeprom_5foffset_9',['BIND_EEPROM_OFFSET',['../common_01_07Malcolm_xE2_x80_x99s_01MacBook_01Air's_01conflicted_01copy_012022-10-09_08_8h.html#a9711a7159ecb22d58fd6331700663ee7',1,'BIND_EEPROM_OFFSET():&#160;common (Malcolm’s MacBook Air&apos;s conflicted copy 2022-10-09).h'],['../common_8h.html#a9711a7159ecb22d58fd6331700663ee7',1,'BIND_EEPROM_OFFSET():&#160;common.h']]],
+  ['bind_5feeprom_5foffset_9',['BIND_EEPROM_OFFSET',['../common_8h.html#a9711a7159ecb22d58fd6331700663ee7',1,'common.h']]],
   ['bindneeded_10',['BINDNEEDED',['../RadioFunctions_8h.html#afc19e20d792629177ad1adde09b5982c',1,'RadioFunctions.h']]],
   ['bindsucceeded_11',['BINDSUCCEEDED',['../RadioFunctions_8h.html#a5c1d7fe0f5bc9c8674023766ad474e86',1,'RadioFunctions.h']]],
   ['black_12',['Black',['../RadioFunctions_8h.html#a68eb1f80b4df2818e5a0774106748141',1,'RadioFunctions.h']]],

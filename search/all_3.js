@@ -26,7 +26,7 @@ var searchData=
   ['beepcomplete_23',['BEEPCOMPLETE',['../RadioFunctions_8h.html#a8a6f6e179e833662304277533103f99f',1,'RadioFunctions.h']]],
   ['beepmiddle_24',['BEEPMIDDLE',['../RadioFunctions_8h.html#ae4346a524bff46ea22911635a0c865ef',1,'RadioFunctions.h']]],
   ['begin_25',['begin',['../classSBUS.html#a5c2fccbffff0bd17ed522529fd6b2d8f',1,'SBUS::begin()'],['../classMPU9250.html#ab0e26058e7148ebf5af4569138337a02',1,'MPU9250::begin()']]],
-  ['bind_5feeprom_5foffset_26',['BIND_EEPROM_OFFSET',['../common_01_07Malcolm_xE2_x80_x99s_01MacBook_01Air's_01conflicted_01copy_012022-10-09_08_8h.html#a9711a7159ecb22d58fd6331700663ee7',1,'BIND_EEPROM_OFFSET():&#160;common (Malcolm’s MacBook Air&apos;s conflicted copy 2022-10-09).h'],['../common_8h.html#a9711a7159ecb22d58fd6331700663ee7',1,'BIND_EEPROM_OFFSET():&#160;common.h']]],
+  ['bind_5feeprom_5foffset_26',['BIND_EEPROM_OFFSET',['../common_8h.html#a9711a7159ecb22d58fd6331700663ee7',1,'common.h']]],
   ['bindbutton_27',['BindButton',['../TransmitterCode_2src_2main_8cpp.html#a11a586885b48e92a4cd03ff1840ac374',1,'main.cpp']]],
   ['bindbuttonvisible_28',['BindButtonVisible',['../TransmitterCode_2src_2main_8cpp.html#a54179a9bdd2f60e628828060581339ec',1,'main.cpp']]],
   ['bindingnow_29',['BindingNow',['../TransmitterCode_2src_2main_8cpp.html#a1873a8dc0cbecc66366b95540f9c3249',1,'main.cpp']]],

@@ -26,6 +26,7 @@ var ReceiverCode_2src_2main_8cpp =
     [ "SetTestFrequencies", "ReceiverCode_2src_2main_8cpp.html#a31a35307bbac88ceda244272f25d399a", null ],
     [ "SetUKFrequencies", "ReceiverCode_2src_2main_8cpp.html#a2eabdb233653fa02f0b899e26b5e8ce7", null ],
     [ "setup", "ReceiverCode_2src_2main_8cpp.html#a17699f358cf9f7c3155a9c5daf8ff13c", null ],
+    [ "ShowHopDurationEtc", "ReceiverCode_2src_2main_8cpp.html#a2863e7455e30e6fddc0fcf56f62d6564", null ],
     [ "ShowPipes", "ReceiverCode_2src_2main_8cpp.html#a75cc49e9cc24c5f7159fb18c577c5603", null ],
     [ "teensyMAC", "ReceiverCode_2src_2main_8cpp.html#a06122bf4eee8af08c02c45022253a4f4", null ],
     [ "TryNextChannel", "ReceiverCode_2src_2main_8cpp.html#a1d10d2ca466b8014f874f16aaa39da91", null ],
