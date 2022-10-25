@@ -18,7 +18,7 @@
 #define RXVERSION_MINIMUS 7 // October 2022
 
 
- //#define DB_FHSS
+ #define DB_FHSS
 // #define DB_SENSORS
 // #define DB_BIND
 // #define DB_FAILSAFE
@@ -28,7 +28,7 @@
 //**************************************************************************************************************************
 
 #define SENSOR_HUB_I2C_ADDRESS 8
-#define HOPTIME               250 // (was 97) >= ms between channel changes (now 35 packets per hop)
+#define HOPTIME               97 // (was 97) >= ms between channel changes (now 35 packets per hop)
 
 // ********************************* reconnect params ***************************************
 #define LISTEN_PERIOD   50 //  How many ms to listen for TX in Reconnect()
