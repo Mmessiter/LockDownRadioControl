@@ -145,7 +145,6 @@ void RecordsPacketSuccess(uint8_t s)
 
 FASTRUN void FailedPacket()
 {
-    FlushFifos();
     if (LostContactFlag) TryToReconnect();
     RecordsPacketSuccess(0);                      // Record a failure
     ++RecentPacketsLost;                          // this is to keep track of events when receiver is off
@@ -210,7 +209,7 @@ void FlushFifos()
 
 FASTRUN void SendData()
 {
-    if ((millis() - TxPace) >= PACEMAKER)  {
+    if ((millis() - TxPace) >= PACEMAKER) {
         TxPace = millis();
         if (DoSbusSendOnly) {
             MapToSBUS();
@@ -221,7 +220,9 @@ FASTRUN void SendData()
         FlushFifos();
         if (Radio1.write(&CompressedData, SizeOfCompressedData)) { //  ************************** >>>>> SEND DATA TO RX <<<<< ***************************************
             SuccessfulPacket();
+            FlushFifos();
         } else {
+            FlushFifos();
             FailedPacket();
         }
     }

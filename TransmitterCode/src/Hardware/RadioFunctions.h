@@ -12,7 +12,7 @@
 
 #define TXVERSION_MAJOR   1
 #define TXVERSION_MINOR   9
-#define TXVERSION_MINIMUS 6
+#define TXVERSION_MINIMUS 7
 
 // **************************************************************************
 //                               Includes                                   *
@@ -71,13 +71,13 @@
 #define CHARSMAX           120                       // Max length for char arrays
 #define UNCOMPRESSEDWORDS  20                        // DATA TO SEND = 40  bytes
 #define COMPRESSEDWORDS    UNCOMPRESSEDWORDS * 3 / 4 // COMPRESSED DATA SENT = 30  bytes
-#define PERFECTPACKETSPERSECOND 130                  // Flat out perfect packets per second
+#define PERFECTPACKETSPERSECOND 150                  // Flat out perfect packets per second
 
 // **************************************************************************
 //                            FHSS PARAMETERS                               *
 //***************************************************************************
 
-#define PACEMAKER                8    // MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
+#define PACEMAKER                7    // MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
 #define RETRYCOUNT               3    // auto retries inside nRF24L01
 #define RETRYWAIT                1    // Wait between retries is RetryWait+1 * 250us. A failed packet therefore takes (RetryWait+1 * 250us) * RetryCount
 #define LOSTCONTACTCUTOFF        6    // How many packets to lose before reconnect triggers
