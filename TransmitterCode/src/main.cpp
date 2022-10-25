@@ -8031,8 +8031,8 @@ void FASTRUN ManageTransmitter(){
     if (GetButtonPress()) {
         ButtonWasPressed();                       
     }
-
-    if ((TXPacketElapsed >= PACEMAKER - 4) && TXPacketElapsed < 100) return; // *** If it's almost time to send data then do not start some other task which might take longer! ***
+   
+    if ((TXPacketElapsed >= PACEMAKER - 3) && Connected) return; // *** If it's almost time to send data then do not start some other task which might take longer! ***
    
     if (RightNow - LastBankRead > 100) {                             // 10 times a second is plenty
         if (RightNow - LastTimeRead >= 1000) {                       // Once a second for these...
