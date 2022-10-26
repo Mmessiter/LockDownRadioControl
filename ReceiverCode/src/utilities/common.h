@@ -18,13 +18,13 @@
 #define RXVERSION_MINIMUS 7 // October 2022
 
 
- #define DB_FHSS
+// #define DB_FHSS
 // #define DB_SENSORS
 // #define DB_BIND
 // #define DB_FAILSAFE
 // #define DB_RXTIMERS
 //**************************************************************************************************************************
-// #define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< **..
+ #define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< **..
 //**************************************************************************************************************************
 
 #define SENSOR_HUB_I2C_ADDRESS 8
@@ -66,7 +66,7 @@
 
 uint32_t LastPacketArrivalTime = 0;
 bool     FailSafeSave          = false;
-bool     INA219Connected      = false; //  Volts from INA219 ?
+bool     INA219Connected       = false; //  Volts from INA219 ?
 
 uint8_t* FHSSChPointer; // Pointer for FHSS channels' array
 uint8_t  FrequencyCount    = FREQUENCYSCOUNT;

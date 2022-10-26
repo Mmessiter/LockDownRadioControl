@@ -1048,10 +1048,14 @@ void RedLedOn()
         LastShowTime                                = 0;
         ModelsMacUnion.Val32[0]                     = 0;
         ModelsMacUnion.Val32[1]                     = 0;
+        
         RangeTestGoodPackets                        = 0;
         RecentPacketsLost                           = 0;
         SetUKFrequencies();
-        if (CurrentView == FRONTVIEW) SendText(FrontView_Connected, na);
+        if (CurrentView == FRONTVIEW) {
+            SendText(FrontView_Connected, na);
+            SendCommand(WarnOff);
+        }
         if (UseLog) LogDisConnection();
         if (AnnounceConnected) PlaySound(DISCONNECTEDMSG);
         if (!LedIsBlinking) ShowComms();
@@ -3250,7 +3254,7 @@ FLASHMEM void setup()
     SendValue(FrontView_Mins, 0);
     SendValue(FrontView_Secs, 0);
     //  ***************************************************************************************
-    //  SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
+     // SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
     //  **   BUT then re-comment it!! Otherwise it will reset to same time on every boot up! **
     //  ***************************************************************************************
     BoundFlag = false;
@@ -6845,8 +6849,8 @@ FASTRUN void ButtonWasPressed()
             if (GetValue(r5s) == 1)  RXCellCount = 5;
             if (GetValue(r6s) == 1)  RXCellCount = 6;
             if (GetValue(r12s) == 1) RXCellCount = 12;
-            if (GetValue(r0) == 1)   TXLiPo = false;   // TX LIFE // heer
-            if (GetValue(r1) == 1)   TXLiPo = true;      // TX LIPO
+            if (GetValue(r0) == 1)   TXLiPo = false;   // TX LIFE 
+            if (GetValue(r1) == 1)   TXLiPo = true;    // TX LIPO
             SaveAllParameters();
             ClearText();
             return;

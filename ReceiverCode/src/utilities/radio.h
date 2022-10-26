@@ -286,7 +286,7 @@ void Reconnect()
     while (!Connected) {
         if (BoundFlag) KeepSbusHappy(); // Some SBUS systems timeout FAST, so resend old data to keep it happy
         CurrentRadio->stopListening();
-        delayMicroseconds(500);                               // NEEDED!
+        delayMicroseconds(1000);                             // NEEDED!
         ReconnectChannel = *(FHSSChPointer + ReconnectIndex); // Get a reconnect channel
         ++ReconnectIndex;
         if (ReconnectIndex >= RECONNECT_CHANNELS_COUNT + RECONNECT_CHANNELS_START) ReconnectIndex = RECONNECT_CHANNELS_START;
