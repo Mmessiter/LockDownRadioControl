@@ -1450,18 +1450,13 @@ FASTRUN bool CheckTXVolts()
     char  v[] = "V";
     
     if (USE_INA219) {
-        txv = ((ina219.getBusVoltage_V()) * 100) + (TxVoltageCorrection * 2); // corrected for duff ina219
-        dtostrf(txv / 200, 2, 2, nbuf);                                       // Volts per cell
-        
-        if (TXLiPo)
-            {
-                txpc = map(txv, 3.2 * 200, 4.18 * 200, 0, 100);                       // LIPO Battery 3.6 -> 4.18  volts per cell
+        txv = ((ina219.getBusVoltage_V()) * 100) + (TxVoltageCorrection * 2);          // Correction for inaccurate ina219
+        dtostrf(txv / 200, 2, 2, nbuf);                                                // Volts per cell
+        if (TXLiPo) {                                                                  // Does TX have a LiPo or a LiFePo4?
+                txpc = map(txv, 3.01 * 200, 4.195 * 200, 0, 100);                      // LIPO Battery 3.00 -> 4.20  volts per cell
+            } else {                                                                   // No, it's a LiFePo4
+                txpc = map(txv, 3.2 * 200, 3.33 * 200, 0, 100);                        // LiFePo4 Battery 3.1 ->3.35  volts per cell
             }
-            else
-            {
-                txpc = map(txv, 3.2 * 200, 3.33 * 200, 0, 100);                       // LiFePo4 Battery 3.1 ->3.35  volts per cell
-            }
-        
         if (txpc < LowBattery) {
             TXWarningFlag = true;
             WarningSound = BATTERYISLOW;
