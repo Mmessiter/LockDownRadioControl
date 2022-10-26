@@ -568,6 +568,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "TrimTimer", "TransmitterCode_2src_2main_8cpp.html#a48589088880569c1ae40f8c226cc52be", null ],
     [ "TurnOffRX", "TransmitterCode_2src_2main_8cpp.html#a553fac5bc8b66591d5c1d735e624a614", null ],
     [ "TurnOffSecondToGo", "TransmitterCode_2src_2main_8cpp.html#a8469143c4224c918fc85eab562041d88", null ],
+    [ "TXLiPo", "TransmitterCode_2src_2main_8cpp.html#ae15fd0f1128566cd1120f3dd2e287dc1", null ],
     [ "TxName", "TransmitterCode_2src_2main_8cpp.html#a967f3c9b0fd867928c55d75d65cfcd8c", null ],
     [ "TxPace", "TransmitterCode_2src_2main_8cpp.html#a97c9afd7483ad56e7a2aa63db252d616", null ],
     [ "TxVoltageCorrection", "TransmitterCode_2src_2main_8cpp.html#a985d38323fbadec8df22d3e17ca18eb2", null ],
