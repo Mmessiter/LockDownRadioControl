@@ -4,34 +4,30 @@
 /************************************************************************************************************/
 // Malcolm Messiter 2022
 #include "RadioFunctions.h"
-
 /************************************************************************************************************/
 
-#ifdef DB_FHSS
-float PStartTime = 0;
-float PEndTime   = 0;
-float Pduration  = 0;
-#endif
-
-/**
- * Compresses uint16_t* buffer values (each with 12 bit resolution - the lower 12 bits).
+ /* Compresses uint16_t* buffer values (each with 12 bit resolution - the lower 12 bits).
  * @param compressed_buf[out] Must have allocated 3/4 the size of uncompressed_buf
  * @param uncompressed_buf[in]
  * @param uncompressed_size Size is in units of uint16_t (aka word or unsigned short). This *must* be divisible by 4.
  */
 FASTRUN void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uint8_t uncompressed_size)
 {
-    uint8_t p = 0;
-    for (int l = 0; l < (uncompressed_size * 3 / 4); l += 3) {
-        compressed_buf[l] = uncompressed_buf[p] << 4 | uncompressed_buf[p + 1] >> 8;
-        ++p;
-        compressed_buf[l + 1] = uncompressed_buf[p] << 8 | uncompressed_buf[p + 1] >> 4;
-        ++p;
-        compressed_buf[l + 2] = uncompressed_buf[p] << 12 | uncompressed_buf[p + 1];
-        ++p;
-        ++p;
-    }
+    if (NewCompressNeeded){    // no need to recompress old data
+        NewCompressNeeded = false;
+        uint8_t p         = 0;
+        for (int l = 0; l < (uncompressed_size * 3 / 4); l += 3) {
+            compressed_buf[l] = uncompressed_buf[p] << 4 | uncompressed_buf[p + 1] >> 8;
+            ++p;
+            compressed_buf[l + 1] = uncompressed_buf[p] << 8 | uncompressed_buf[p + 1] >> 4;
+            ++p;
+            compressed_buf[l + 2] = uncompressed_buf[p] << 12 | uncompressed_buf[p + 1];
+            ++p;
+            ++p;
+        }
+    } 
 }
+
 /************************************************************************************************************/
 
 FASTRUN void TryOtherPipe()
@@ -60,18 +56,31 @@ FASTRUN void BufferNewPipe()
     SendBuffer[6] = (uint8_t)((NewPipe >> 8) & 0xFF);
     SendBuffer[7] = (uint8_t)((NewPipe)&0xFF);
 }
+
 /************************************************************************************************************/
-// This function replaces delay() without freezing needed tasks
+// This function replaces delay() without freezing critical tasks
 void Procrastinate(uint32_t HowLong)
 {
     uint32_t ThisMoment = millis();
-    while ((millis() - ThisMoment) < HowLong) {
-        KickTheDog(); // keep watchdog happy
+
+    if (RecursedAlready) 
+    {
+        while ((millis() - ThisMoment) < HowLong) {
+            KickTheDog(); 
         }
+        return;   // do not allow indirect recursion any further
+    }
+    
+    RecursedAlready = true;
+    while ((millis() - ThisMoment) < HowLong) {
+        KickTheDog();                                                  // keep watchdog happy
+        if (Connected && BoundFlag && ModelMatched) SendData();        // keep receiver happy too ... but guard against recursion 
+    }
+    RecursedAlready = false;
 }
 
 //***********************************************************************************************************
-void Look(int p)
+void Look(int p)  // This is just to save typing Serial.println :)
 {
     Serial.println(p);
 }
@@ -136,10 +145,11 @@ void RecordsPacketSuccess(uint8_t s)
 
 FASTRUN void FailedPacket()
 {
+    if (LostContactFlag) TryToReconnect();
     RecordsPacketSuccess(0);                      // Record a failure
     ++RecentPacketsLost;                          // this is to keep track of events when receiver is off
     ++TotalLostPackets;                           // This is total - never zeroed
-    if (RecentPacketsLost >= LOSTCONTACTCUTOFF) { // Don't panic until at two packets are lost.
+    if (RecentPacketsLost >= LOSTCONTACTCUTOFF) { // Don't panic until at least LOSTCONTACTCUTOFF packets are lost.
         if (!GapStart) GapStart = millis();       // To keep track of this gap's length
         LostContactFlag = true;
         Reconnected     = false;
@@ -147,8 +157,10 @@ FASTRUN void FailedPacket()
             if (LedWasGreen && UseLog) {
                 LogThisLongGap();
             }
-            if (!LedWasRed) RedLedOn(); 
-            ReEnableScanButton();
+            if (!LedWasRed){
+                RedLedOn(); 
+                ReEnableScanButton();
+            }
         }
     }
     int SecondsRemaining = (Inactivity_Timeout / 1000) - (millis() - Inactivity_Start) / 1000;
@@ -159,8 +171,10 @@ FASTRUN void FailedPacket()
 
 void TryToReconnect()
 {
-
-    if ((RecentPacketsLost > 200 || (!BoundFlag))) TryOtherPipe();                                // In case the receiver has re-booted
+     if (RecentPacketsLost > 50){
+        TryOtherPipe();
+        RecentPacketsLost = 0;
+    }                                                                                             
     NextChannel = *(FHSSChPointer + random(RECONNECT_CHANNELS_COUNT) + RECONNECT_CHANNELS_START); // random reconnect channel (selected from first three)
     HopToNextChannel();
 }
@@ -168,14 +182,13 @@ void TryToReconnect()
 /************************************************************************************************************/
 void SuccessfulPacket()
 {
-
     ++RangeTestGoodPackets;
     ++PacketNumber;
     RecordsPacketSuccess(1);
     LostContactFlag   = false;
     RecentPacketsLost = 0;
     Connected         = true;
-    if (BoundFlag) GreenLedOn();
+    if (BoundFlag && !LedWasGreen) GreenLedOn();
     CheckGapsLength();
     Radio1.read(&AckPayload, AckPayloadSize); //  "sizeof" doesn't work with externs,
     ParseAckPayload();
@@ -185,8 +198,10 @@ void SuccessfulPacket()
 /************************************************************************************************************/
 void FlushFifos()
 {
-    Radio1.flush_rx(); // This avoids a lockup that happens when the FIFO gets full.
-    Radio1.flush_tx();
+    Radio1.flush_tx(); // This avoids a lockup that happens when the FIFO gets full.
+    delayMicroseconds(250);
+    Radio1.flush_rx();
+    delayMicroseconds(250);
 }
 /************************************************************************************************************/
 //****************** Function to send pre-compressed data to receiver ***************************************
@@ -194,21 +209,20 @@ void FlushFifos()
 
 FASTRUN void SendData()
 {
-    if (NEXTION.available()) return; // in case key was hit
-    if (((millis() - TxPace) >= PACEMAKER) || (LostContactFlag)) {
+    if ((millis() - TxPace) >= PACEMAKER) {
         TxPace = millis();
         if (DoSbusSendOnly) {
             MapToSBUS();
             return;
         } // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
-        if (LostContactFlag) TryToReconnect();
         LoadPacketData();  // extra parameters appended to the data packet
         Connected = false; // Assume the worst until ACK is received.
         FlushFifos();
         if (Radio1.write(&CompressedData, SizeOfCompressedData)) { //  ************************** >>>>> SEND DATA TO RX <<<<< ***************************************
             SuccessfulPacket();
-        }
-        else {
+            FlushFifos();
+        } else {
+            FlushFifos();
             FailedPacket();
         }
     }
@@ -313,33 +327,41 @@ void ScanAllChannels()
     }
 }
 
+#ifdef DB_FHSS
+float PStartTime = 0;
+float PEndTime   = 0;
+float Pduration  = 0;
+#endif
+
 /************************************************************************************************************/
 
 // This function hops to the next channel in the FFHS array (about 16 times a second)
 
 FASTRUN void HopToNextChannel()
 {
-
     Radio1.setChannel(NextChannel); // Hop !
-    Radio1.stopListening();         // Transmit only (no need for any extra delay() as this is here followed by several tasks)
+    delayMicroseconds(500);
+    Radio1.stopListening(); // Transmit only
+    delayMicroseconds(500);
 
-#ifdef DB_FHSS
-    float ch   = *(FHSSChPointer + NextChannelNumber);
-    float Freq = 2.4;
-    PEndTime   = millis();
-    Pduration  = (PEndTime - PStartTime) / 1000;
-    Serial.print("Hop duration: ");
-    Serial.print(Pduration);
-    Serial.print(" seconds. Good packets per hop: ");
-    Serial.print(PacketNumber);
-    Serial.print(" Next frequency: ");
-    Freq += ch / 1000;
-    Serial.print(Freq, 3);
-    Serial.print(" Ghz.");
-    Serial.print(BoundFlag ? " Bound!" : " NOT BOUND.");
-    Serial.print(" RX Radio: ");
-    Serial.println(ThisRadio);
-    PStartTime = millis();
+#ifdef DB_FHSS 
+    if (BoundFlag && Connected && ModelMatched){
+        float ch   = *(FHSSChPointer + NextChannelNumber);
+        float Freq = 2.4;
+        PEndTime   = millis();
+        Pduration  = (PEndTime - PStartTime) / 1000;
+        Serial.print("Hop duration: ");
+        Serial.print(Pduration);
+        Serial.print(" seconds. Good packets per hop: ");
+        Serial.print(PacketNumber);
+        Serial.print(" Next frequency: ");
+        Freq += ch / 1000;
+        Serial.print(Freq, 3);
+        Serial.print(" Ghz.");
+        Serial.print(" RX transceiver number: ");
+        Serial.println(ThisRadio);
+        PStartTime = millis();
+    }
 #endif
     PacketNumber = 0;
 }
@@ -355,7 +377,7 @@ FLASHMEM void InitRadio(uint64_t Pipe)
     Radio1.openWritingPipe(Pipe);             // Current Pipe address used for Binding
     Radio1.setRetries(RETRYCOUNT, RETRYWAIT); // automatic retries and pauses *** WAS 15,15 *** !!
     Radio1.stopListening();
-    Procrastinate(1);
+    delay(2);
     Radio1.enableDynamicPayloads();
     Radio1.setAddressWidth(5);       // was 4, is now 5
     Radio1.setCRCLength(RF24_CRC_8); // could be 16
@@ -366,8 +388,9 @@ FLASHMEM void InitRadio(uint64_t Pipe)
 void SetThePipe(uint64_t WhichPipe)
 {
     Radio1.openWritingPipe(WhichPipe);
+    delay(2);
     Radio1.stopListening();
-    Procrastinate(1); // alllow things to happen
+    delay(2); // allow things to happen
 }
 
 /*********************************************************************************************************************************/

@@ -12,7 +12,7 @@
 
 #define TXVERSION_MAJOR   1
 #define TXVERSION_MINOR   9
-#define TXVERSION_MINIMUS 4
+#define TXVERSION_MINIMUS 7
 
 // **************************************************************************
 //                               Includes                                   *
@@ -37,8 +37,9 @@
 //    DEBUG OPTIONS (Uncomment any of these for that bit of debug info)     *
 //***************************************************************************
 
-// #define DB_NEXTION        // Debug NEXTION
+ //#define DB_NEXTION        // Debug NEXTION
 // #define DB_SD             // Debug SD card data
+// #define DB_CHECKSUM       // Debug 32BIT file checksum info
 // #define DB_FHSS           // Debug real time FHSS data
 // #define DB_SENSORS        // Debug Sensors
 // #define DB_BIND           // Debug Binding
@@ -70,18 +71,20 @@
 #define CHARSMAX           120                       // Max length for char arrays
 #define UNCOMPRESSEDWORDS  20                        // DATA TO SEND = 40  bytes
 #define COMPRESSEDWORDS    UNCOMPRESSEDWORDS * 3 / 4 // COMPRESSED DATA SENT = 30  bytes
-#define PERFECTPACKETSPERSECOND 126                  // Flat out perfect packets per second
+#define PERFECTPACKETSPERSECOND 150                  // Flat out perfect packets per second
+
 // **************************************************************************
 //                            FHSS PARAMETERS                               *
 //***************************************************************************
 
-#define PACEMAKER                8    // MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
+#define PACEMAKER                7    // MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
 #define RETRYCOUNT               3    // auto retries inside nRF24L01
 #define RETRYWAIT                1    // Wait between retries is RetryWait+1 * 250us. A failed packet therefore takes (RetryWait+1 * 250us) * RetryCount
-#define LOSTCONTACTCUTOFF        2    // How many packets to lose before reconnect triggers
+#define LOSTCONTACTCUTOFF        6    // How many packets to lose before reconnect triggers
 #define RECONNECT_CHANNELS_COUNT 3    // How many channels to try when reconnecting
 #define RECONNECT_CHANNELS_START 12   // Offset into channels' array
-#define RED_LED_ON_TIME          1000 // How many ms of no connection before RED led comes on
+#define RED_LED_ON_TIME          2000 // How many ms of no connection before RED led comes on
+#define LOW_VOLTAGE_TIME         3000 // How many ms to endure low voltage before announcing it. (3 seconds)
 
 // **************************************************************************
 //                            SEND MODE PARAMETERS                          *
@@ -234,12 +237,16 @@
 //               SDCARD MODEL MEMORY CONSTANTS                              *
 //***************************************************************************
 
-#define RENEWDATA  8787     // Change these to rewrite all
-#define TXSIZE     250      // SD space reserved for transmitter
-#define MODELSIZE  1600     // SD space reserved for each model
-#define MAXFILELEN 1024 * 3 // MAX SIZE FOR HELP AND LOG FILES
-#define BOXOFFSET  35
-#define BOXSIZE    395
+#define TXSIZE            512      // SD space reserved for transmitter (WAS  250)
+#define MODELSIZE         2048     // SD space reserved for each model (WAS 1600)
+
+//#define MODELOFFSET     250      // OLD VERSION
+#define MODELOFFSET         0      // NEW VERSION
+
+#define MAXFILELEN        1024 * 3 // MAX SIZE FOR HELP AND LOG FILES
+#define BOXOFFSET         35
+#define BOXSIZE           395
+#define MAXBACKUPFILES    95
 
 // **************************************************************************
 //                            SERVO RANGE PARAMETERS                        *
@@ -249,6 +256,24 @@
 #define MAXMICROS       2500
 #define HALFMICROSRANGE (MAXMICROS - MINMICROS) / 2
 #define MIDMICROS       MINMICROS + HALFMICROSRANGE
+
+// **************************************************************************
+//                           nRF24L01 lines on off                          *
+// **************************************************************************
+
+#define CSN_ON                   LOW
+#define CSN_OFF                  HIGH
+#define CE_ON                    HIGH
+#define CE_OFF                   LOW
+
+
+// **************************************************************************
+//                            Error Codes                                *
+// **************************************************************************
+
+#define NOERROR             0
+#define MODELSFILENOTFOUND  1
+#define CHECKSUMERROR       2
 
 // **************************************************************************
 //                            Interpolations                                *
@@ -329,7 +354,7 @@ extern bool           Connected;
 extern uint16_t       CompressedData[];
 extern uint8_t        FHSS_Channels[];
 extern struct Payload AckPayload;
-extern uint8_t        AckPayloadSize;
+const extern uint8_t  AckPayloadSize;
 extern uint8_t        SizeOfCompressedData;
 extern uint16_t       RangeTestGoodPackets;
 extern uint8_t        NextChannelNumber;
@@ -371,7 +396,8 @@ extern uint8_t        PacketsHistoryBuffer[PERFECTPACKETSPERSECOND * MAXSHOWCOMM
 extern uint16_t       PacketsHistoryIndex;
 extern uint8_t        ConnectionAssessSeconds;
 extern bool           LowPowerMode;
-
+extern bool           NewCompressNeeded;
+extern bool           ModelMatched;
 // external (global) functions needed here
 extern void  GetSlaveChannelValues();
 extern void  KickTheDog();
@@ -395,6 +421,12 @@ extern void  RedLedOn();
 extern void  ReEnableScanButton();
 extern void  LogUKRules();
 extern int   InStrng(char* text1, char* text2);
+extern uint32_t     ReadCheckSum32();
+extern void         ResetTransmitterSettings();
+extern void         TryToReconnect();
+extern void         FlushFifos();
+extern bool         RecursedAlready;
+
 
 /*********************************************************************************************************************************/
 // function prototypes

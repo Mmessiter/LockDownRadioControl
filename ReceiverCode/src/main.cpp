@@ -177,7 +177,7 @@ void ShowHopDurationEtc()
     Serial.print("  Average Time per packet: ");
     Serial.print(OnePacketTime);
     Serial.print("ms.  Next frequency: ");
-    Serial.print(freq);
+    Serial.print(freq,3);
     Serial.print(BoundFlag ? " Bound!" : " NOT Bound");
     Serial.print("  Radio: ");
     Serial.print(ThisRadio);
