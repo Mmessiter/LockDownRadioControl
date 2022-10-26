@@ -175,7 +175,7 @@ var searchData=
   ['showfilenumber_172',['ShowFileNumber',['../TransmitterCode_2src_2main_8cpp.html#aa337d6e5cf496fbca7cdc61818f8239a',1,'main.cpp']]],
   ['showfileprogress_173',['ShowFileProgress',['../TransmitterCode_2src_2main_8cpp.html#abdbaa9b790382ce7f04feb681df5144a',1,'main.cpp']]],
   ['showgps_174',['ShowGPS',['../SensorHubT32_2src_2main_8cpp.html#a6dfb0fe1b733dfc8e9d989a321596850',1,'main.cpp']]],
-  ['showhopdurationetc_175',['ShowHopDurationEtc',['../ReceiverCode_2src_2main_8cpp.html#a2863e7455e30e6fddc0fcf56f62d6564',1,'ShowHopDurationEtc():&#160;main.cpp'],['../radio_8h.html#a2863e7455e30e6fddc0fcf56f62d6564',1,'ShowHopDurationEtc():&#160;main.cpp']]],
+  ['showhopdurationetc_175',['ShowHopDurationEtc',['../radio_8h.html#a2863e7455e30e6fddc0fcf56f62d6564',1,'radio.h']]],
   ['showlogfile_176',['ShowLogFile',['../RadioFunctions_8h.html#af5df157d4ece6b40a9ce7a60faeca569',1,'ShowLogFile(uint8_t StartLine):&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#af5df157d4ece6b40a9ce7a60faeca569',1,'ShowLogFile(uint8_t StartLine):&#160;main.cpp']]],
   ['showmotor_177',['ShowMotor',['../RadioFunctions_8h.html#a6b3c522a9d43d58a184d9866ca9d21f3',1,'ShowMotor(int on):&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a6b3c522a9d43d58a184d9866ca9d21f3',1,'ShowMotor(int on):&#160;main.cpp']]],
   ['showpipes_178',['ShowPipes',['../ReceiverCode_2src_2main_8cpp.html#a75cc49e9cc24c5f7159fb18c577c5603',1,'main.cpp']]],
@@ -196,7 +196,8 @@ var searchData=
   ['straightlineinterpolation_193',['StraightLineInterpolation',['../TransmitterCode_2src_2main_8cpp.html#a212778326d4228952040c5fda68dd2b9',1,'main.cpp']]],
   ['successfulpacket_194',['SuccessfulPacket',['../RadioFunctions_8cpp.html#a1c11bb6771548de7d96723045b922620',1,'RadioFunctions.cpp']]],
   ['swap_195',['swap',['../TransmitterCode_2src_2main_8cpp.html#a31322f63ce3e02c4ef9a0c1e0c7f1ff5',1,'main.cpp']]],
-  ['switchrollyaw_196',['switchRollYaw',['../Quadcopter_2src_2main_8cpp.html#a575c5d2a29402a56610d376470b73848',1,'main.cpp']]],
-  ['switchspienabled_197',['switchSPIEnabled',['../classMPU6050.html#a269710b7bca814bbf67e7bb38c381650',1,'MPU6050']]],
-  ['synchrtcwithgpstime_198',['SynchRTCwithGPSTime',['../TransmitterCode_2src_2main_8cpp.html#abb1ea95b6b3f033883aa87682d3240ab',1,'main.cpp']]]
+  ['swapchipenablelines_196',['SwapChipEnableLines',['../radio_8h.html#ac980be068a45a1406b0e244304741ac6',1,'radio.h']]],
+  ['switchrollyaw_197',['switchRollYaw',['../Quadcopter_2src_2main_8cpp.html#a575c5d2a29402a56610d376470b73848',1,'main.cpp']]],
+  ['switchspienabled_198',['switchSPIEnabled',['../classMPU6050.html#a269710b7bca814bbf67e7bb38c381650',1,'MPU6050']]],
+  ['synchrtcwithgpstime_199',['SynchRTCwithGPSTime',['../TransmitterCode_2src_2main_8cpp.html#abb1ea95b6b3f033883aa87682d3240ab',1,'main.cpp']]]
 ];
