@@ -485,6 +485,7 @@ char     WarnNow[]                      = "vis Warning,1";
 char     WarnOff[]                      = "vis Warning,0";
 char     Warning[]                      = "Warning";
 bool     RecursedAlready = false;
+bool     TXLiPo                         = false;
 
 // **********************************************************************************************************************************
 // **********************************************************************************************************************************
@@ -1451,7 +1452,16 @@ FASTRUN bool CheckTXVolts()
     if (USE_INA219) {
         txv = ((ina219.getBusVoltage_V()) * 100) + (TxVoltageCorrection * 2); // corrected for duff ina219
         dtostrf(txv / 200, 2, 2, nbuf);                                       // Volts per cell
-        txpc = map(txv, 3.2 * 200, 3.33 * 200, 0, 100);                       // LiFePo4 Battery 3.1 ->3.35  volts per cell
+        
+        if (TXLiPo)
+            {
+                txpc = map(txv, 3.2 * 200, 4.18 * 200, 0, 100);                       // LIPO Battery 3.6 -> 4.18  volts per cell
+            }
+            else
+            {
+                txpc = map(txv, 3.2 * 200, 3.33 * 200, 0, 100);                       // LiFePo4 Battery 3.1 ->3.35  volts per cell
+            }
+        
         if (txpc < LowBattery) {
             TXWarningFlag = true;
             WarningSound = BATTERYISLOW;
@@ -2784,6 +2794,8 @@ bool LoadAllParameters()
         ++SDCardAddress;
         AutoModelSelect = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
+        TXLiPo = SDRead8BITS(SDCardAddress);
+        ++SDCardAddress;
         ReadCheckSum32(); 
         CheckTrimValues();
         MemoryForTransmtter = SDCardAddress;
@@ -3452,6 +3464,8 @@ void SaveTransmitterParameters()
     SDUpdate8BITS(SDCardAddress, ConnectionAssessSeconds);
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, AutoModelSelect);  
+    ++SDCardAddress;
+    SDUpdate8BITS(SDCardAddress, TXLiPo);
     ++SDCardAddress;
     SaveCheckSum32();  // Save the Transmitter parametres checksm
     CloseModelsFile();
@@ -5795,7 +5809,7 @@ FASTRUN void ButtonWasPressed()
         char Cmsg5[]                   = "Repeat?";
         char Cmsg6[]                   = "Calbrate again?";
         char TypeView[]                = "TypeView";
-        char CopyToAllBanks[]    = "callfm";
+        char CopyToAllBanks[]          = "callfm";
         char RXBAT[]                   = "RXBAT";
         char r2s[]                     = "r2s";
         char r3s[]                     = "r3s";
@@ -5803,6 +5817,8 @@ FASTRUN void ButtonWasPressed()
         char r5s[]                     = "r5s";
         char r6s[]                     = "r6s";
         char r12s[]                    = "r12s";
+        char r0[]                      = "r0";
+        char r1[]                      = "r1";
         char SwitchesView[]            = "SwitchesView";
         char SwitchesView1[]           = "SwitchesView1";
         char OneSwitchView[]           = "OneSwitchView";
@@ -6812,12 +6828,17 @@ FASTRUN void ButtonWasPressed()
             SendValue(r5s, 0);
             SendValue(r6s, 0);
             SendValue(r12s, 0);
+            SendValue(r0, 0);
+            SendValue(r1, 0);
             if (RXCellCount == 2)  SendValue(r2s, 1); // Then update RX batt cell count
             if (RXCellCount == 3)  SendValue(r3s, 1);
             if (RXCellCount == 4)  SendValue(r4s, 1);
             if (RXCellCount == 5)  SendValue(r5s, 1);
             if (RXCellCount == 6)  SendValue(r6s, 1);
             if (RXCellCount == 12) SendValue(r12s, 1);
+            if (TXLiPo)    SendValue(r1, 1); else
+                SendValue(r0, 1);
+
             ClearText();
             UpdateModelsNameEveryWhere();
             return;
@@ -6830,7 +6851,9 @@ FASTRUN void ButtonWasPressed()
             if (GetValue(r5s) == 1)  RXCellCount = 5;
             if (GetValue(r6s) == 1)  RXCellCount = 6;
             if (GetValue(r12s) == 1) RXCellCount = 12;
-            SaveOneModel(ModelNumber);
+            if (GetValue(r0) == 1)   TXLiPo = false;   // TX LIFE // heer
+            if (GetValue(r1) == 1)   TXLiPo = true;      // TX LIPO
+            SaveAllParameters();
             ClearText();
             return;
         }
