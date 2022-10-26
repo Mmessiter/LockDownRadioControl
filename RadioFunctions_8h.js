@@ -224,7 +224,7 @@ var RadioFunctions_8h =
     [ "ParseAckPayload", "RadioFunctions_8h.html#a230e862a4da0f66746b6b3afba6bd77a", null ],
     [ "PreScan", "RadioFunctions_8h.html#a5e3e764f8311564f5e20c3a838b25c07", null ],
     [ "Procrastinate", "RadioFunctions_8h.html#a760609a682300dfe6bfaac737fd4d5eb", null ],
-    [ "ReadCheckSum32", "RadioFunctions_8h.html#a38283e748c193612fce7f5b025ef2377", null ],
+    [ "ReadCheckSum32", "RadioFunctions_8h.html#a3c809856d2abf6b6f804e2fbe68d06f5", null ],
     [ "ReadSwitches", "RadioFunctions_8h.html#ab0af36f3442ad4f2d0b716c14c7d6085", null ],
     [ "ReadTextFile", "RadioFunctions_8h.html#abd6446fb403bd9b07d150a5e4fdd86e1", null ],
     [ "RedLedOn", "RadioFunctions_8h.html#a7d34cec6e8edc20c8b50424e15dcc7c7", null ],

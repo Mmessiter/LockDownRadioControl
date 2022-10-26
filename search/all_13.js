@@ -19,7 +19,7 @@ var searchData=
   ['readbyte_16',['readByte',['../classI2Cdev.html#ad3fb41ce124a29f93749d99611c75c33',1,'I2Cdev']]],
   ['readbytes_17',['readBytes',['../classI2Cdev.html#aca9c503da5cffd6ac6f8eff9b195c5f4',1,'I2Cdev']]],
   ['readcal_18',['readCal',['../classSBUS.html#a385df1b8fcb453e5a63eae01fb394c61',1,'SBUS']]],
-  ['readchecksum32_19',['ReadCheckSum32',['../RadioFunctions_8h.html#a38283e748c193612fce7f5b025ef2377',1,'ReadCheckSum32():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a38283e748c193612fce7f5b025ef2377',1,'ReadCheckSum32():&#160;main.cpp']]],
+  ['readchecksum32_19',['ReadCheckSum32',['../RadioFunctions_8h.html#a3c809856d2abf6b6f804e2fbe68d06f5',1,'ReadCheckSum32():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a3c809856d2abf6b6f804e2fbe68d06f5',1,'ReadCheckSum32():&#160;main.cpp']]],
   ['readchswitch_20',['ReadCHSwitch',['../TransmitterCode_2src_2main_8cpp.html#aeed3be7dfc45cde2e9e9d3578c104760',1,'main.cpp']]],
   ['readdata_21',['ReadData',['../ReceiverCode_2src_2main_8cpp.html#a07ca94db0e305e9c01ec51e417576308',1,'main.cpp']]],
   ['readextraparameters_22',['ReadExtraParameters',['../ReceiverCode_2src_2main_8cpp.html#a6c490ef42e364f8bb1430c436e86c9c0',1,'main.cpp']]],
