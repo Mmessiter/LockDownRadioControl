@@ -167,7 +167,7 @@ void FailSafe()
  */
 void ShowHopDurationEtc()
 {
-    PacketNumber += 2; // ?
+    PacketNumber += 2; //
     float   freq          = 2.4 + (float)NextChannel / 1000;
     uint8_t OnePacketTime = (millis() - PacketStartTime) / PacketNumber;
     Serial.print("Hop duration: ");
