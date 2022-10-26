@@ -3321,14 +3321,16 @@ void SaveCheckSum32(){  // uses 5 bytes. Last one is indicator of use.
 }
 
 /*********************************************************************************************************************************/
-uint32_t ReadCheckSum32(){  // uses 5 bytes. Last one is indicator of use.
+void ReadCheckSum32()
+{ // uses 5 bytes. Last one is indicator of use.
+  // This function sets ErrorState to a non zero value if there'a a file error
 
     bool UseCheckSm = false;
     DoingCheckSm    = true;
     uint32_t ch;
     ch = SDRead32BITS(SDCardAddress);
     SDCardAddress += 4;
-    if (SDRead8BITS(SDCardAddress) == 0xFF) UseCheckSm = true; // indicator
+    if (SDRead8BITS(SDCardAddress) == 0xFF) UseCheckSm = true; // if this byte isn't 0xFF then checksum was never written here.
     ++SDCardAddress;
     DoingCheckSm = false;
     if (UseCheckSm) {
@@ -3345,9 +3347,6 @@ uint32_t ReadCheckSum32(){  // uses 5 bytes. Last one is indicator of use.
                  Serial.println(FileCheckSum);
             }
 #endif
-            return ch;
-      }else{
-          return 0;
       }
 }
 
