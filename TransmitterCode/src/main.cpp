@@ -1442,35 +1442,35 @@ FASTRUN void ShowServoPos()
 /*********************************************************************************************************************************/
 FASTRUN bool CheckTXVolts()
 {
-    char  DataView_txv[]   = "txv";
-    char  JTX[]            = "JTX";
-    char  FrontView_TXBV[] = "TXBV";
+    char  DataView_txv[]   = "txv";  // Labels on Nextion
+    char  JTX[]            = "JTX";  // Labels on Nextion
+    char  FrontView_TXBV[] = "TXBV"; // Labels on Nextion
     bool  TXWarningFlag    = false;
-    float txpc, txv;
-    char  Vbuf[10];
+    float TransmitterBatteryPercentLeft, TransmitterBatteryVolts;
+    char  Vbuf[10];                  // Little buffer for numbers
     char  TXBattInfo[65];
     char  pc[] = "%";
-    char  nbuf[10];
+    char  nbuf[10];                   // Little buffer for numbers
     char  v[] = "V";
     
     if (USE_INA219) {
-        txv = ((ina219.getBusVoltage_V()) * 100) + (TxVoltageCorrection * 2);          // Correction for inaccurate ina219
-        dtostrf(txv / 200, 2, 2, nbuf);                                                // Volts per cell
-        if (TXLiPo) {                                                                  // Does TX have a LiPo or a LiFePo4?
-                txpc = map(txv, 3.01 * 200, 4.195 * 200, 0, 100);                      // LIPO Battery 3.00 -> 4.20  volts per cell
-            } else {                                                                   // No, it's a LiFePo4
-                txpc = map(txv, 3.2 * 200, 3.33 * 200, 0, 100);                        // LiFePo4 Battery 3.1 ->3.35  volts per cell
+        TransmitterBatteryVolts = ((ina219.getBusVoltage_V()) * 100) + (TxVoltageCorrection * 2);               // Correction for inaccurate ina219
+        dtostrf(TransmitterBatteryVolts / 200, 2, 2, nbuf);                                                     // Volts per cell
+        if (TXLiPo) {                                                                                           // Does TX have a LiPo or a LiFePo4?
+                TransmitterBatteryPercentLeft = map(TransmitterBatteryVolts, 3.01 * 200, 4.195 * 200, 0, 100);  // LIPO Battery 3.00 -> 4.20  volts per cell
+            } else {                                                                                            // No, it's a LiFePo4
+                TransmitterBatteryPercentLeft = map(TransmitterBatteryVolts, 3.2 * 200, 3.33 * 200, 0, 100);    // LiFePo4 Battery 3.1 ->3.35  volts per cell
             }
-        if (txpc < LowBattery) {
+        if (TransmitterBatteryPercentLeft < LowBattery) {
             TXWarningFlag = true;
             WarningSound = BATTERYISLOW;
         }
-        txpc = constrain(txpc, 0, 100);
-        strcpy(TXBattInfo, Str(Vbuf, txpc, 0));
+        TransmitterBatteryPercentLeft = constrain(TransmitterBatteryPercentLeft, 0, 100);
+        strcpy(TXBattInfo, Str(Vbuf, TransmitterBatteryPercentLeft, 0));
         strcat(TXBattInfo, pc);
         if (CurrentView == FRONTVIEW) {
-            ShowVPC ^= 1;
-            SendValue(JTX, txpc);
+            ShowVPC ^= 1;       //  Toggle voltspercell and percentage value
+            SendValue(JTX, TransmitterBatteryPercentLeft);
             if (ShowVPC) {
                 SendText(FrontView_TXBV, TXBattInfo);
             }
