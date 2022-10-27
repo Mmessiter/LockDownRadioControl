@@ -426,7 +426,7 @@ extern void         ResetTransmitterSettings();
 extern void         TryToReconnect();
 extern void         FlushFifos();
 extern bool         RecursedAlready;
-
+extern FLASHMEM void SetDS1307ToCompilerTime();
 
 /*********************************************************************************************************************************/
 // function prototypes
