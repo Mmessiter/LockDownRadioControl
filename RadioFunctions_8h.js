@@ -237,6 +237,7 @@ var RadioFunctions_8h =
     [ "SendCommand", "RadioFunctions_8h.html#aecac2f0c289f02ef3c92b85be82eacac", null ],
     [ "SendData", "RadioFunctions_8h.html#a3d7322e78f097d02d476f17a6306997c", null ],
     [ "SendText", "RadioFunctions_8h.html#afe513398f72d5e48f691830a1ef6eb42", null ],
+    [ "SetDS1307ToCompilerTime", "RadioFunctions_8h.html#ac4d5d9012481283090fff8d410116eb2", null ],
     [ "SetThePipe", "RadioFunctions_8h.html#a70dc6f8d2e5ccef6b8e4a2b9b0afb2ce", null ],
     [ "SetUKFrequencies", "RadioFunctions_8h.html#a2eabdb233653fa02f0b899e26b5e8ce7", null ],
     [ "ShowBank", "RadioFunctions_8h.html#a86ff8d6a0763abc33c7e814f5c1d4b5c", null ],
