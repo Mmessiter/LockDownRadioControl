@@ -940,9 +940,7 @@ void ReadTime()
     uint8_t DisplayedHour;
     FixDeltaGMTSign();
     if (CurrentView == FRONTVIEW || CurrentView == OPTIONVIEW2) {
-         
         if (RTC.read(tm)) {
-          
             strcpy(TimeString, Str(NB, tm.Day + DateFix, 0));
             if (CurrentView == OPTIONVIEW2)
             {
@@ -985,7 +983,7 @@ void ReadTime()
             strcat(TimeString, Str(NB, tm.Second, 0));
             SendText(DateTime, TimeString);
         } else {
-            if (millis() < 5000) SetDS1307ToCompilerTime();  // kick the clock if it won't wake up!
+            if (millis() < 5000) SetDS1307ToCompilerTime();  // kick the clock if it won't wake up, and TX just turned on.
         }
     }
 }
