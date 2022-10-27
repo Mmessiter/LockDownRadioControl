@@ -342,7 +342,7 @@ uint32_t Inactivity_Start   = 0;
 tmElements_t tm;
 char         TxName[32]      = "Unknown";
 uint32_t     LastTimeRead    = 0;
-uint32_t     LastBankRead    = 0;
+uint32_t     TransmitterLastManaged    = 0;
 uint32_t     LastShowTime    = 0;
 uint32_t     LastDogKick     = 0;
 uint8_t      MacAddress[6];
@@ -8053,9 +8053,9 @@ void FASTRUN ManageTransmitter(){
         ButtonWasPressed();                       
     }
    
-    if ((TXPacketElapsed >= PACEMAKER - 3) && Connected) return; // *** If it's almost time to send data then do not start some other task which might take longer! ***
+    if ((TXPacketElapsed >= PACEMAKER - 3) && Connected) return;     // If it's almost time to send data, then do not start some other task which might take longer.
    
-    if (RightNow - LastBankRead > 100) {                             // 10 times a second is plenty
+    if (RightNow - TransmitterLastManaged > 100) {                   // 10 times a second is plenty
         if (RightNow - LastTimeRead >= 1000) {                       // Once a second for these...
             ReadTime();                                              // Do the clock
             GetStatistics();                                         // Do stats
@@ -8070,7 +8070,7 @@ void FASTRUN ManageTransmitter(){
         CheckTimer();                                                // Screen Timer
         CheckPowerOffButton();
         CheckHardwareTrims();
-        LastBankRead = millis();
+        TransmitterLastManaged = millis();
     }
 }
 
