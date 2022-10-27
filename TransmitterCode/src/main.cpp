@@ -468,7 +468,7 @@ char b5Greyed[]                     = "b5.pco=33840";
 char b12Greyed[]                    = "b12.pco=33840";
 bool MotorEnabled                   = false;
 bool MotorWasEnabled                = false;
-uint8_t MotorChannel                = 2; // Throttle from zero
+uint8_t MotorChannel                = 15;
 uint8_t MotorChannelZero            = 0; 
 bool    UseMotorKill                = true;
 bool    SafetyON                    = false;
@@ -5603,7 +5603,7 @@ void ThrottleDownTrim(){
 }
 /*********************************************************************************************************************************/
 void ResetTransmitterSettings(){    // This function resets all transmitter parameters to the default state. 
-                                    // But not the clock. Calibration shoulw  be done next. 
+                                    // But not the clock. Calibration shoulw  be done next. // heer
 
 const char         Tn[32]      = "Unknown";
     
@@ -5639,6 +5639,10 @@ const char         Tn[32]      = "Unknown";
     LEDBrightness           = 75;
     ConnectionAssessSeconds = 1;
     AutoModelSelect         = true;
+    MotorChannel            = 15;
+    MotorChannelZero        = 0;
+    SetDS1307ToCompilerTime();
+    delay (250);
     SaveTransmitterParameters();
     SaveTransmitterParameters();
 }
