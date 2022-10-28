@@ -71,15 +71,15 @@
 #define CHARSMAX           120                       // Max length for char arrays
 #define UNCOMPRESSEDWORDS  20                        // DATA TO SEND = 40  bytes
 #define COMPRESSEDWORDS    UNCOMPRESSEDWORDS * 3 / 4 // COMPRESSED DATA SENT = 30  bytes
-#define PERFECTPACKETSPERSECOND 150                  // Flat out perfect packets per second
+#define PERFECTPACKETSPERSECOND 100                  // Flat out perfect packets per second
 
 // **************************************************************************
 //                            FHSS PARAMETERS                               *
 //***************************************************************************
 
-#define PACEMAKER                7    // MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
+#define PACEMAKER                10   // MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
 #define RETRYCOUNT               3    // auto retries inside nRF24L01
-#define RETRYWAIT                1    // Wait between retries is RetryWait+1 * 250us. A failed packet therefore takes (RetryWait+1 * 250us) * RetryCount
+#define RETRYWAIT                3    // Wait between retries is RetryWait+1 * 250us. A failed packet therefore takes (RetryWait+1 * 250us) * RetryCount
 #define LOSTCONTACTCUTOFF        6    // How many packets to lose before reconnect triggers
 #define RECONNECT_CHANNELS_COUNT 3    // How many channels to try when reconnecting
 #define RECONNECT_CHANNELS_START 12   // Offset into channels' array
