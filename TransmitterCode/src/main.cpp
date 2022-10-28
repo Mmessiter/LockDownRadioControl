@@ -57,7 +57,7 @@
  * | 3  LED     | GREEN |
  * | 4  LED     | BLUE |
  * | 5  POLOLU  | 2808 ALL POWER OFF SIGNAL (When high) |
- * | 6  (!! SPARE !!)
+ * | 6  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< (!! SPARE !!)
  * | 7  (RX2)   | SBUS IN    ------> BUDDY BOX SYSTEM |
  * | 8  (TX2)   | SBUS OUT   ------> BUDDY BOX SYSTEM |
  * | 9  (CE)    | nRF24l01 (CE) |
@@ -75,7 +75,6 @@
  * | 21 (A7)    | POT KNOB CH6 |
  * | 22 (A8)    | POT KNOB CH7 |
  * | 23 (A9)    | POT KNOB CH8 |
- * | 24 (!! SPARE !!)
  * | 25         | Switch 1 |
  * | 26         | Switch 1 |
  * | 27         | Switch 2 |
@@ -84,7 +83,7 @@
  * | 30         | Switch 3 |
  * | 31         | Switch 4 |
  * | 32         | Switch 4 |
- * | 33 (!! SPARE !!)
+ * | 33 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< (!! SPARE !!)
  * | 34         |TRIM (CH1a)|
  * | 35         |TRIM (CH1b)|
  * | 36         |TRIM (CH2a)|
