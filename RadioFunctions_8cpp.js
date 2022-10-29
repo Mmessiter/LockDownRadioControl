@@ -24,5 +24,8 @@ var RadioFunctions_8cpp =
     [ "StopMacro", "RadioFunctions_8cpp.html#ae1e0755ae9441b2835ac027a98707caa", null ],
     [ "SuccessfulPacket", "RadioFunctions_8cpp.html#a1c11bb6771548de7d96723045b922620", null ],
     [ "TryOtherPipe", "RadioFunctions_8cpp.html#ad0e30213b21808d00110752679788a8c", null ],
-    [ "TryToReconnect", "RadioFunctions_8cpp.html#ad0236abcfc887ad708d9504c4ab2a7c3", null ]
+    [ "TryToReconnect", "RadioFunctions_8cpp.html#ad0236abcfc887ad708d9504c4ab2a7c3", null ],
+    [ "Pduration", "RadioFunctions_8cpp.html#ae73038812d127134daa62bd8bc2c3837", null ],
+    [ "PEndTime", "RadioFunctions_8cpp.html#a7e1ad468c45da1e139521369743a945c", null ],
+    [ "PStartTime", "RadioFunctions_8cpp.html#aeb7f71a83cf50adff09cfc54384bcf9f", null ]
 ];
