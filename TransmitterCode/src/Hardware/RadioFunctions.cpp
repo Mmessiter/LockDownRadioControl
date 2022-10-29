@@ -209,8 +209,8 @@ void FlushFifos()
 
 FASTRUN void SendData()
 {
-    if ((millis() - TxPace) >= PACEMAKER) {
-        TxPace = millis();
+    if ((millis() - LastPacketSentTime) >= PACEMAKER) {
+        LastPacketSentTime = millis();
         if (DoSbusSendOnly) {
             MapToSBUS();
             return;

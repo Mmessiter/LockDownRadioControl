@@ -40,7 +40,7 @@
  //#define DB_NEXTION        // Debug NEXTION
 // #define DB_SD             // Debug SD card data
 // #define DB_CHECKSUM       // Debug 32BIT file checksum info
-// #define DB_FHSS           // Debug real time FHSS data
+ #define DB_FHSS           // Debug real time FHSS data
 // #define DB_SENSORS        // Debug Sensors
 // #define DB_BIND           // Debug Binding
 // #define DB_SWITCHES       // Debug Switches
@@ -71,19 +71,20 @@
 #define CHARSMAX           120                       // Max length for char arrays
 #define UNCOMPRESSEDWORDS  20                        // DATA TO SEND = 40  bytes
 #define COMPRESSEDWORDS    UNCOMPRESSEDWORDS * 3 / 4 // COMPRESSED DATA SENT = 30  bytes
-#define PERFECTPACKETSPERSECOND 100                  // Flat out perfect packets per second
+#define PERFECTPACKETSPERSECOND 150                  // Flat out perfect packets per second
+#define TIMEFORTXMANAGMENT  6                        // How many ms must be spare between data packets before undertaking other tasks 
 
 // **************************************************************************
 //                            FHSS PARAMETERS                               *
 //***************************************************************************
 
-#define PACEMAKER                10   // MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
+#define PACEMAKER                10    // MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
 #define RETRYCOUNT               3    // auto retries inside nRF24L01
 #define RETRYWAIT                3    // Wait between retries is RetryWait+1 * 250us. A failed packet therefore takes (RetryWait+1 * 250us) * RetryCount
 #define LOSTCONTACTCUTOFF        6    // How many packets to lose before reconnect triggers
 #define RECONNECT_CHANNELS_COUNT 3    // How many channels to try when reconnecting
 #define RECONNECT_CHANNELS_START 12   // Offset into channels' array
-#define RED_LED_ON_TIME          3000 // How many ms of no connection before RED led comes on
+#define RED_LED_ON_TIME          4000 // How many ms of no connection before RED led comes on
 #define LOW_VOLTAGE_TIME         3000 // How many ms to endure low voltage before announcing it. (3 seconds)
 
 // **************************************************************************
@@ -342,7 +343,7 @@ extern uint8_t        BadChannels[];
 extern uint8_t        NextChannel;
 extern uint8_t        PacketNumber;
 extern bool           JustHoppedFlag;
-extern uint32_t       TxPace;
+extern uint32_t       LastPacketSentTime;
 extern bool           BoundFlag;
 extern uint8_t        CurrentView;
 extern uint16_t       SendBuffer[];

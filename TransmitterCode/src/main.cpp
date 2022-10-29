@@ -346,7 +346,7 @@ bool     SaveFailSafeNow = false;
 uint32_t FailSafeTimer;
 char     ChannelNames[CHANNELSUSED][11] = {{"Aileron"}, {"Elevator"}, {"Throttle"}, {"Rudder"}, {"Gear"}, {"AUX1"}, {"AUX2"}, {"AUX3"}, {"AUX4"}, {"AUX5"}, {"AUX6"}, {"AUX7"}, {"AUX8"}, {"AUX9"}, {"AUX10"}, {"AUX11"}};
 
-uint32_t TxPace = 0;
+uint32_t LastPacketSentTime = 0;
 uint16_t CompressedData[COMPRESSEDWORDS]; // = 20
 uint8_t  SizeOfCompressedData;
 uint32_t Inactivity_Timeout = INACTIVITYTIMEOUT;
@@ -995,8 +995,6 @@ void ReadTime()
             if (MayBeAddZero(tm.Second)) strcat(TimeString, zero);
             strcat(TimeString, Str(NB, tm.Second, 0));
             SendText(DateTime, TimeString);
-        } else {
-            if (millis() < 5000) SetDS1307ToCompilerTime();  // kick the clock if it won't wake up, and TX just turned on.
         }
     }
 }
@@ -3267,7 +3265,7 @@ FLASHMEM void setup()
     SendValue(FrontView_Mins, 0);
     SendValue(FrontView_Secs, 0);
     //  ***************************************************************************************
-     // SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
+    //  SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
     //  **   BUT then re-comment it!! Otherwise it will reset to same time on every boot up! **
     //  ***************************************************************************************
     BoundFlag = false;
@@ -5616,7 +5614,7 @@ void ThrottleDownTrim(){
 }
 /*********************************************************************************************************************************/
 void ResetTransmitterSettings(){    // This function resets all transmitter parameters to the default state. 
-                                    // But not the clock. Calibration shoulw  be done next. // heer
+                                    // But not the clock. Calibration shoulw  be done next. 
 
 const char         Tn[32]      = "Unknown";
     
@@ -8063,15 +8061,16 @@ void CheckPowerOffButton()
 void FASTRUN ManageTransmitter(){
 
     uint32_t RightNow = millis();
-    uint32_t TXPacketElapsed = RightNow - TxPace;
+    uint32_t TXPacketElapsed = RightNow - LastPacketSentTime;
 
     KickTheDog();                                                    // Watchdog ... ALWAYS!
     if (GetButtonPress()) {
         ButtonWasPressed();                       
     }
    
-    if ((TXPacketElapsed >= PACEMAKER - 3) && Connected) return;     // If it's almost time to send data, then do not start some other task which might take longer.
-   
+    if ((PACEMAKER - TXPacketElapsed  <= TIMEFORTXMANAGMENT) && Connected) return;     // If it's almost time to send data, then do not start some other task which might take longer.
+
+
     if (RightNow - TransmitterLastManaged > 100) {                   // 10 times a second is plenty
         if (RightNow - LastTimeRead >= 1000) {                       // Once a second for these...
             ReadTime();                                              // Do the clock
