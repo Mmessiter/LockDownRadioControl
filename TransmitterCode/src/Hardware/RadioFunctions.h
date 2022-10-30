@@ -37,10 +37,10 @@
 //    DEBUG OPTIONS (Uncomment any of these for that bit of debug info)     *
 //***************************************************************************
 
- //#define DB_NEXTION        // Debug NEXTION
+// #define DB_NEXTION        // Debug NEXTION
 // #define DB_SD             // Debug SD card data
 // #define DB_CHECKSUM       // Debug 32BIT file checksum info
- #define DB_FHSS           // Debug real time FHSS data
+// #define DB_FHSS           // Debug real time FHSS data
 // #define DB_SENSORS        // Debug Sensors
 // #define DB_BIND           // Debug Binding
 // #define DB_SWITCHES       // Debug Switches
@@ -63,7 +63,7 @@
 #define CE_PIN             9                         // for SPI to nRF24L01
 #define CSN_PIN            10                        // for SPI to nRF24L01
 #define INACTIVITYTIMEOUT  10 * TICKSPERMINUTE       // Default time after which to switch off
-#define INACTIVITYMINIMUM  5 * TICKSPERMINUTE        // Inactivity timeout minimum is 5 minutes
+#define INACTIVITYMINIMUM  05 * TICKSPERMINUTE       // Inactivity timeout minimum is 5 minutes
 #define INACTIVITYMAXIMUM  30 * TICKSPERMINUTE       // Inactivity timeout maximum is 30 minutes
 #define DS1307_ADDRESS     0x68                      // I2C address for RTC
 #define MAXLINES           30                        // text to load at once for log and help screens
