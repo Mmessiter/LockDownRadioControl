@@ -8063,28 +8063,26 @@ void FASTRUN ManageTransmitter(){
     uint32_t RightNow = millis();
     uint32_t TXPacketElapsed = RightNow - LastPacketSentTime;
 
-    KickTheDog();                                                    // Watchdog ... ALWAYS!
-    if (GetButtonPress()) {
-        ButtonWasPressed();                       
-    }
-   
-    if ((PACEMAKER - TXPacketElapsed  <= TIMEFORTXMANAGMENT) && Connected) return;     // If it's almost time to send data, then do not start some other task which might take longer.
+    KickTheDog();                                                   // Watchdog ... ALWAYS!
+                                                  
+    if (GetButtonPress()) ButtonWasPressed();                       // Pretty obvious really ...    
 
+    if ((PACEMAKER - TXPacketElapsed  <= TIMEFORTXMANAGMENT) && Connected && BoundFlag && ModelMatched) return;     // If it's almost time to send data, then do not start some other task which might take longer.
 
     if (RightNow - TransmitterLastManaged > 100) {                   // 10 times a second is plenty
         if (RightNow - LastTimeRead >= 1000) {                       // Once a second for these...
             ReadTime();                                              // Do the clock
             GetStatistics();                                         // Do stats
-            if (CurrentView == MAINSETUPVIEW) {CheckScanButton();}
-            if (CurrentView == MODELSVIEW)    {CheckModelName();}    // In MODELSVIEW, this function checks correct name is displayed.
+            if (CurrentView == MAINSETUPVIEW) CheckScanButton();
+            if (CurrentView == MODELSVIEW)    CheckModelName();      // In MODELSVIEW, this function checks correct name is displayed.
             LastTimeRead = millis();
-            return;                                                  // Do no more housekeeping this time around
+            return;                                                  // That's enough housekeeping this time around
         }
         ReadSwitches();                                              // Check switch positions
         GetBank();                                                   // Must not call too often        
         ShowComms();                                                 // Screen Data                                  
         CheckTimer();                                                // Screen Timer
-        CheckPowerOffButton();
+        CheckPowerOffButton();                                       // Pretty obvious really ...
         CheckHardwareTrims();
         TransmitterLastManaged = millis();
     }
@@ -8095,11 +8093,10 @@ void FASTRUN ManageTransmitter(){
 /************************************************************************************************************/
 FASTRUN void loop()
 {
-    ManageTransmitter();                                       
+    ManageTransmitter();                                         // Do the needed chores ... if there's time
     GetNewChannelValues();                                       // Load SendBuffer with new servo positions  Very frequently
     if (UseMacros) ExecuteMacro();                               // Modify it if macro is running
-    if (DoSbusSendOnly) {
-        NewCompressNeeded = false;                               // fake it as Buddy is not sending data
+    if (DoSbusSendOnly) { NewCompressNeeded = false;             // fake it as Buddy is not sending data
     } else {                                                     // Skip these next lines when buddying as a slave
         if (!BoundFlag && Connected) BufferNewPipe();            // if not yet bound, insert our pipe into SendBuffer BUT ONLY WHEN CONNECTED 
         if (BuddyMaster) GetSlaveChannelValues();                // If buddy master, get buddy data and maybe use it.
@@ -8123,6 +8120,6 @@ FASTRUN void loop()
         case SENDNOTHING:       // 4
             break;
         default:
-            break; // CurrentMode >= 4 for no action at all.
+            break;              // CurrentMode >= 4 for no action at all.
         }
 } // end loop()
