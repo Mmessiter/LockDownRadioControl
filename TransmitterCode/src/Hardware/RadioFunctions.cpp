@@ -211,14 +211,11 @@ FASTRUN void SendData()
 {
     if ((millis() - LastPacketSentTime) >= PACEMAKER) {
         LastPacketSentTime = millis();
-        if (DoSbusSendOnly) {
-            MapToSBUS();
-            return;
-        } // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
-        LoadPacketData();  // extra parameters appended to the data packet
-        Connected = false; // Assume the worst until ACK is received.
+        if (DoSbusSendOnly) { MapToSBUS();return;}                  // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
+        LoadPacketData();                                           // extra parameters appended to the data packet
+        Connected = false;                                          // Assume the worst until ACK is received.
         FlushFifos();
-        if (Radio1.write(&CompressedData, SizeOfCompressedData)) { //  ************************** >>>>> SEND DATA TO RX <<<<< ***************************************
+        if (Radio1.write(&CompressedData, SizeOfCompressedData)) {  //  ************************** >>>>> SEND DATA TO RX <<<<< ***************************************
             SuccessfulPacket();
             FlushFifos();
         } else {
