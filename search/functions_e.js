@@ -16,5 +16,6 @@ var searchData=
   ['printradiodata_13',['printRadioData',['../Quadcopter_2src_2main_8cpp.html#ad670b3b6cad373b20b41ea485669c51d',1,'main.cpp']]],
   ['printrollpitchyaw_14',['printRollPitchYaw',['../Quadcopter_2src_2main_8cpp.html#af58905571a8592d536b2f10f243e0ce9',1,'main.cpp']]],
   ['printservocommands_15',['printServoCommands',['../Quadcopter_2src_2main_8cpp.html#ab3633f479d5122bce26384264d64f657',1,'main.cpp']]],
-  ['procrastinate_16',['Procrastinate',['../RadioFunctions_8cpp.html#a760609a682300dfe6bfaac737fd4d5eb',1,'Procrastinate(uint32_t HowLong):&#160;RadioFunctions.cpp'],['../RadioFunctions_8h.html#a760609a682300dfe6bfaac737fd4d5eb',1,'Procrastinate(uint32_t HowLong):&#160;RadioFunctions.cpp']]]
+  ['procrastinate_16',['Procrastinate',['../RadioFunctions_8cpp.html#a760609a682300dfe6bfaac737fd4d5eb',1,'Procrastinate(uint32_t HowLong):&#160;RadioFunctions.cpp'],['../RadioFunctions_8h.html#a760609a682300dfe6bfaac737fd4d5eb',1,'Procrastinate(uint32_t HowLong):&#160;RadioFunctions.cpp']]],
+  ['prodradio_17',['ProdRadio',['../radio_8h.html#a62f1498f67d7e438905ae486bc27044f',1,'radio.h']]]
 ];
