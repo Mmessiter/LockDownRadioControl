@@ -25,11 +25,11 @@
 // #define DB_RXTIMERS
 
 //**************************************************************************************************************************
- //#define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< **..
+ #define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< **..
 //**************************************************************************************************************************
 
 #define SENSOR_HUB_I2C_ADDRESS 8
-#define HOPTIME               96 // ms between channel changes (97)heer
+#define HOPTIME               96  // ms between channel changes 
 
 // ********************************* reconnect params ***************************************
 #define LISTEN_PERIOD   50 //  How many ms to listen for TX in Reconnect()
