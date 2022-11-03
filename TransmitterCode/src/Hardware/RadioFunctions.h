@@ -24,7 +24,7 @@
 #include <RF24.h>
 #include <Wire.h>
 #include <Adafruit_INA219.h>
-#include <TimeLib.h>
+//#include <TimeLib.h>
 #include <DS1307RTC.h>
 #include <TeensyID.h>
 #include <EEPROM.h>
@@ -428,6 +428,7 @@ extern void         TryToReconnect();
 extern void         FlushFifos();
 extern bool         RecursedAlready;
 extern FLASHMEM void SetDS1307ToCompilerTime();
+extern int           GetOtherValue(char* nbox);
 
 /*********************************************************************************************************************************/
 // function prototypes

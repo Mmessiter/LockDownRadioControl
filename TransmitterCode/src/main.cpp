@@ -935,6 +935,27 @@ bool MayBeAddZero(uint8_t nn)
     return false;
 }
 
+
+/*********************************************************************************************************************************/
+
+void ReadNextionTime(){ // maybe later!
+    
+
+
+   // char Nyear[]       = "rtc0";
+   // char Nmonth[]      = "rtc1";
+   // char Nday[]        = "rtc2";
+   // char Nhour[]       = "rtc3";
+   // char Nminute[]     = "rtc4";
+   // char Second[]      = "rtc5";
+   // char NDayOfWeek[]  = "rtc6";
+   //char SetDay[]      = "rtc2=5";f
+
+   // SendCommand(SetDay);
+
+   // Look(GetOtherValue(Nyear));
+}
+
 /*********************************************************************************************************************************/
 
 void ReadTime()
@@ -3265,7 +3286,7 @@ FLASHMEM void setup()
     SendValue(FrontView_Mins, 0);
     SendValue(FrontView_Secs, 0);
     //  ***************************************************************************************
-     // SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
+    // SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
     //  **   BUT then re-comment it!! Otherwise it will reset to same time on every boot up! **
     //  ***************************************************************************************
     BoundFlag = false;
@@ -8072,7 +8093,8 @@ void FASTRUN ManageTransmitter(){
     if (RightNow - TransmitterLastManaged > 100) {                   // 10 times a second is plenty
         if (RightNow - LastTimeRead >= 1000) {                       // Once a second for these...
             ReadTime();                                              // Do the clock
-            GetStatistics();                                         // Do stats
+            //ReadNextionTime();
+            GetStatistics(); // Do stats
             if (CurrentView == MAINSETUPVIEW) CheckScanButton();
             if (CurrentView == MODELSVIEW)    CheckModelName();      // In MODELSVIEW, this function checks correct name is displayed.
             LastTimeRead = millis();
