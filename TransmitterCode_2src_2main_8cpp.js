@@ -181,6 +181,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "ReadCheckSum32", "TransmitterCode_2src_2main_8cpp.html#a3c809856d2abf6b6f804e2fbe68d06f5", null ],
     [ "ReadCHSwitch", "TransmitterCode_2src_2main_8cpp.html#aeed3be7dfc45cde2e9e9d3578c104760", null ],
     [ "ReadFMSwitch", "TransmitterCode_2src_2main_8cpp.html#ae0f54c30ea92041b69cdccb888cb86b8", null ],
+    [ "ReadNextionTime", "TransmitterCode_2src_2main_8cpp.html#a21c81dbce19243ec47664b511471f390", null ],
     [ "ReadOneModel", "TransmitterCode_2src_2main_8cpp.html#a3d9d955a8c7cfea4cc99e78f3746bd26", null ],
     [ "ReadSwitches", "TransmitterCode_2src_2main_8cpp.html#aa144942814b12daf2b2a454c08d29cab", null ],
     [ "ReadTextFile", "TransmitterCode_2src_2main_8cpp.html#abd6446fb403bd9b07d150a5e4fdd86e1", null ],

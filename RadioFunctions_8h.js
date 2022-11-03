@@ -204,6 +204,7 @@ var RadioFunctions_8h =
     [ "FlushFifos", "RadioFunctions_8h.html#a07c27b4e208198453c70876517926052", null ],
     [ "Force_ReDisplay", "RadioFunctions_8h.html#aa1e81e58421a34fdfd7bfb31925f5a90", null ],
     [ "GetNewChannelValues", "RadioFunctions_8h.html#a1a11fabb6c953055a80c5df5eebbfb0d", null ],
+    [ "GetOtherValue", "RadioFunctions_8h.html#ac8919b32f9c38cc65c7b93cae664acfb", null ],
     [ "GetSlaveChannelValues", "RadioFunctions_8h.html#a4635a8fc77c9f57fca53a5206cd5e571", null ],
     [ "GetStickInput", "RadioFunctions_8h.html#af065c70531320b19dbb5f54a714e186a", null ],
     [ "GetStickInputInputOnly", "RadioFunctions_8h.html#af1030157034999448f5ca611d6209385", null ],
