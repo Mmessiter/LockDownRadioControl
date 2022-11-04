@@ -1438,10 +1438,11 @@ FASTRUN void ShowServoPos()
             }
         }
     }
-    if (CurrentView == GRAPHVIEW) {
+    if ((CurrentView == GRAPHVIEW)){ 
 #define fixitx        35
-#define LeastDistance 1 // if the change is very small, don't re-display anything - to reduce flashing. :=)!!
-  
+
+        uint16_t LeastDistance = 3; // if the change is very small, don't re-display anything - to reduce flashing. :=)!!
+          
         l = (InPutStick[ChanneltoSet - 1]);
         if (ChanneltoSet <= 8) l1 = analogRead(AnalogueInput[l]); else l1 = GetStickInputInputOnly(l); 
 
@@ -1462,15 +1463,21 @@ FASTRUN void ShowServoPos()
             StickPosition = map(l1, ChannelCentre[l], ChannelMax[l], BoxLeft + (((BoxRight - fixitx) - BoxLeft) / 2), BoxRight - fixitx);
         }
 
-        if (abs(StickPosition - SavedLineX) > LeastDistance) {
-            DisplayCurve();                                                                                        // needed to clear last line
-            DrawLine(StickPosition - 1, BoxTop + 3, StickPosition - 1, (BoxBottom - 3) - BoxTop, HighlightColour); // draws line for stick position
-            SendValue(ChannelOutput, map(SendBuffer[ChanneltoSet-1], MINMICROS, MAXMICROS, -100, 100));         
+        if ((abs(StickPosition - SavedLineX) > LeastDistance) ){
+            if  (LedWasRed) // Not while connected as too slow
+            {
+                DisplayCurve();                                                                                        // needed to clear last line
+                DrawLine(StickPosition - 1, BoxTop + 3, StickPosition - 1, (BoxBottom - 3) - BoxTop, HighlightColour); // draws line for stick position
+            }
+            SendValue(ChannelOutput, map(SendBuffer[ChanneltoSet-1], MINMICROS, MAXMICROS, -100, 100));
             SavedLineX = StickPosition;
         }
+        
     }
     ShowServoTimer = millis();
 }
+
+
 /*********************************************************************************************************************************/
 FASTRUN bool CheckTXVolts()
 {
@@ -6977,10 +6984,9 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(Setup, TextIn) > 0) {   // Which channel to setup ... Goes to GraphView
             ChanneltoSet = GetChannel();
-            SendCommand(page_GraphView);    // Set to GraphView
             CurrentView = GRAPHVIEW;
-            Procrastinate(50);
-            DisplayCurveAndServoPos(); 
+            SendCommand(page_GraphView);    // Set to GraphView
+            DisplayCurve();
             updateInterpolationTypes();
             UpdateModelsNameEveryWhere();
             SendValue(CopyToAllBanks, 0);
