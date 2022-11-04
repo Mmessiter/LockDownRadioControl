@@ -10,7 +10,6 @@ var TransmitterCode_2src_2main_8cpp =
     [ "FILETIMEOUT", "TransmitterCode_2src_2main_8cpp.html#ac23f3d9653dfa68ab2f39567096545e6", null ],
     [ "fixitx", "TransmitterCode_2src_2main_8cpp.html#ad40f5a53042299d0a733f7238b5df3a2", null ],
     [ "LASTFUNCTION", "TransmitterCode_2src_2main_8cpp.html#a7b562fa140e3020f492686ce35e4ac52", null ],
-    [ "LeastDistance", "TransmitterCode_2src_2main_8cpp.html#ae7bf971a98ac285531a8f3ef290b5a61", null ],
     [ "MAXWIDTH", "TransmitterCode_2src_2main_8cpp.html#ac101c663138f79260b6d5ea00140fa22", null ],
     [ "AdjustDateTime", "TransmitterCode_2src_2main_8cpp.html#a9de4ea8e761b5f0e537f6f326f9ad429", null ],
     [ "AileronLeftTrim", "TransmitterCode_2src_2main_8cpp.html#a71f72bed656884a7e88b70f73f8d81a4", null ],
