@@ -1464,11 +1464,11 @@ FASTRUN void ShowServoPos()
         }
 
         if ((abs(StickPosition - SavedLineX) > LeastDistance) ){
-            if  (LedWasRed) // Not while connected as too slow
-            {
+          //  if  (LedWasRed) // Not while connected as too slow
+          //  {
                 DisplayCurve();                                                                                        // needed to clear last line
                 DrawLine(StickPosition - 1, BoxTop + 3, StickPosition - 1, (BoxBottom - 3) - BoxTop, HighlightColour); // draws line for stick position
-            }
+          //  }
             SendValue(ChannelOutput, map(SendBuffer[ChanneltoSet-1], MINMICROS, MAXMICROS, -100, 100));
             SavedLineX = StickPosition;
         }
