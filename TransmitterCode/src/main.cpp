@@ -5908,16 +5908,6 @@ FASTRUN void ButtonWasPressed()
         char ClickY[]                  = "ClickY";
         char Reset[]                   = "Reset";
         char Reverse[]                 = "Reverse";
-        char yy1up[]                   = "yy1up";
-        char yy1down[]                 = "yy1down";
-        char yy2up[]                   = "yy2up";
-        char yy2down[]                 = "yy2down";
-        char midlowyup[]               = "midlowyup";
-        char midlowydown[]             = "midlowydown";
-        char midyup[]                  = "midyup";
-        char midydown[]                = "midydown";
-        char midhiyup[]                = "midhiyup";
-        char midhiydown[]              = "midhiydown";
         char Front_View[]              = "FrontView";
         char Sticks_View[]             = "SticksView";
         char Graph_View[]              = "GraphView";
@@ -7245,85 +7235,7 @@ char PowerDown[]               = "PowerDown";
             ClearText();
             return;
         }
-        if (InStrng(midyup, TextIn)) // midy up?
-        {
-            CentreDegrees[Bank][ChanneltoSet - 1]++;
-            DisplayCurveAndServoPos();
-            return;
-        }
-
-        if (InStrng(midydown, TextIn)) // midy down?
-        {
-            if (CentreDegrees[Bank][ChanneltoSet - 1] > 0) {
-                CentreDegrees[Bank][ChanneltoSet - 1]--;
-            }
-            DisplayCurveAndServoPos();
-            return;
-        }
-
-        if (InStrng(midhiyup, TextIn)) // midhiy up?
-        {
-            MidHiDegrees[Bank][ChanneltoSet - 1]++;
-            DisplayCurveAndServoPos();
-            return;
-        }
-
-        if (InStrng(midhiydown, TextIn)) // midhiy down?
-        {
-            if (MidHiDegrees[Bank][ChanneltoSet - 1] > 0) {
-                MidHiDegrees[Bank][ChanneltoSet - 1]--;
-            }
-            DisplayCurveAndServoPos();
-            return;
-        }
-
-        if (InStrng(midlowyup, TextIn)) // midlowy up?
-        {
-            MidLowDegrees[Bank][ChanneltoSet - 1]++;
-            DisplayCurveAndServoPos();
-            return;
-        }
-
-        if (InStrng(midlowydown, TextIn)) // midlowy down?
-        {
-            if (MidLowDegrees[Bank][ChanneltoSet - 1] > 0) {
-                MidLowDegrees[Bank][ChanneltoSet - 1]--;
-            }
-            DisplayCurveAndServoPos();
-            return;
-        }
-
-        if (InStrng(yy1up, TextIn)) // yy1 up?
-        {
-            MaxDegrees[Bank][ChanneltoSet - 1]++;
-            DisplayCurveAndServoPos();
-            return;
-        }
-
-        if (InStrng(yy1down, TextIn)) // yy1 down?
-        {
-            if (MaxDegrees[Bank][ChanneltoSet - 1] > 0) {
-                MaxDegrees[Bank][ChanneltoSet - 1]--;
-            }
-            DisplayCurveAndServoPos();
-            return;
-        }
-
-        if (InStrng(yy2up, TextIn)) // yy1 up?
-        {
-            MinDegrees[Bank][ChanneltoSet - 1]++;
-            DisplayCurveAndServoPos();
-            return;
-        }
-
-        if (InStrng(yy2down, TextIn)) // yy1 down?
-        {
-            if (MinDegrees[Bank][ChanneltoSet - 1] > 0) {
-                MinDegrees[Bank][ChanneltoSet - 1]--;
-            }
-            DisplayCurveAndServoPos();
-            return;
-        }
+       
 
         if (InStrng(Reset, TextIn)) // RESET?
         {
