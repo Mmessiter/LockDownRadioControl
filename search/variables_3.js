@@ -50,6 +50,7 @@ var searchData=
   ['coursetogps_47',['CourseToGPS',['../ReceiverCode_2src_2main_8cpp.html#a1a4e211f9858a5d6d61d11e5679a71f3',1,'CourseToGPS():&#160;main.cpp'],['../radio_8h.html#a1a4e211f9858a5d6d61d11e5679a71f3',1,'CourseToGPS():&#160;main.cpp']]],
   ['current_5ftime_48',['current_time',['../Quadcopter_2src_2main_8cpp.html#a42cc85bc12e25d1c6206a5044d8174e4',1,'main.cpp']]],
   ['currentmode_49',['CurrentMode',['../RadioFunctions_8h.html#aacabee92eb3ddd2e3cf31695c00a912e',1,'CurrentMode():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#aacabee92eb3ddd2e3cf31695c00a912e',1,'CurrentMode():&#160;main.cpp']]],
-  ['currentradio_50',['CurrentRadio',['../radio_8h.html#a7bca81159d93f215060f40f45f19b0de',1,'radio.h']]],
-  ['currentview_51',['CurrentView',['../RadioFunctions_8h.html#a2c76c41cd62573eb7227882fc9b9e557',1,'CurrentView():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a2c76c41cd62573eb7227882fc9b9e557',1,'CurrentView():&#160;main.cpp']]]
+  ['currentpoint_50',['CurrentPoint',['../TransmitterCode_2src_2main_8cpp.html#af10ffe07503b33fd55065fd9021e17e7',1,'main.cpp']]],
+  ['currentradio_51',['CurrentRadio',['../radio_8h.html#a7bca81159d93f215060f40f45f19b0de',1,'radio.h']]],
+  ['currentview_52',['CurrentView',['../RadioFunctions_8h.html#a2c76c41cd62573eb7227882fc9b9e557',1,'CurrentView():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a2c76c41cd62573eb7227882fc9b9e557',1,'CurrentView():&#160;main.cpp']]]
 ];
