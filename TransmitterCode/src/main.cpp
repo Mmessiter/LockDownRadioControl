@@ -57,7 +57,7 @@
  * | 3  LED     | GREEN |
  * | 4  LED     | BLUE |
  * | 5  POLOLU  | 2808 ALL POWER OFF SIGNAL (When high) |
- * | 6  Sense power button press while on
+ * | 6  Pololu  | Sensor for power button press while on
  * | 7  (RX2)   | SBUS IN    ------> BUDDY BOX SYSTEM |
  * | 8  (TX2)   | SBUS OUT   ------> BUDDY BOX SYSTEM |
  * | 9  (CE)    | nRF24l01 (CE) |
