@@ -14,6 +14,7 @@ var searchData=
   ['uselog_11',['UseLog',['../RadioFunctions_8h.html#aa42482a0bb01edaf26f217dbc38643d2',1,'UseLog():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#aa42482a0bb01edaf26f217dbc38643d2',1,'UseLog():&#160;main.cpp']]],
   ['usemacros_12',['UseMacros',['../RadioFunctions_8h.html#a42a6363bff83773c1b99caa06aebb1f5',1,'UseMacros():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a42a6363bff83773c1b99caa06aebb1f5',1,'UseMacros():&#160;main.cpp']]],
   ['usemotorkill_13',['UseMotorKill',['../TransmitterCode_2src_2main_8cpp.html#ad76445c097f9d33a6935be5c2489bd34',1,'main.cpp']]],
-  ['user_5fctrl_14',['USER_CTRL',['../classMPU9250.html#ac7a02a1a77fe8bf5a477cc37820d2f27',1,'MPU9250']]],
-  ['usereceiveddata_15',['UseReceivedData',['../ReceiverCode_2src_2main_8cpp.html#abb1997c589abc6432f612eaedf985e38',1,'main.cpp']]]
+  ['usepoweroffbutton_14',['USEPOWEROFFBUTTON',['../RadioFunctions_8h.html#a066039ca31154d1b66995276a436a716',1,'RadioFunctions.h']]],
+  ['user_5fctrl_15',['USER_CTRL',['../classMPU9250.html#ac7a02a1a77fe8bf5a477cc37820d2f27',1,'MPU9250']]],
+  ['usereceiveddata_16',['UseReceivedData',['../ReceiverCode_2src_2main_8cpp.html#abb1997c589abc6432f612eaedf985e38',1,'main.cpp']]]
 ];

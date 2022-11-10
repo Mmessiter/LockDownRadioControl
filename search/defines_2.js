@@ -23,5 +23,6 @@ var searchData=
   ['buddyview_20',['BUDDYVIEW',['../RadioFunctions_8h.html#a38c9376ad661411cad3019d4a43ac493',1,'RadioFunctions.h']]],
   ['buffer_5flength_21',['BUFFER_LENGTH',['../I2Cdev_8cpp.html#af7b7dc9a200cb1404c280bd500fd1551',1,'I2Cdev.cpp']]],
   ['buffersize_22',['BUFFERSIZE',['../TransmitterCode_2src_2main_8cpp.html#ac3146f1e9227301bb4aa518f4d336cee',1,'main.cpp']]],
-  ['bytespermacro_23',['BYTESPERMACRO',['../RadioFunctions_8h.html#acb6ba8383362a5f2efee8416bc4300c9',1,'RadioFunctions.h']]]
+  ['button_5fsense_5fpin_23',['BUTTON_SENSE_PIN',['../RadioFunctions_8h.html#a6ee4615320320baaf7e0d8e87642141e',1,'RadioFunctions.h']]],
+  ['bytespermacro_24',['BYTESPERMACRO',['../RadioFunctions_8h.html#acb6ba8383362a5f2efee8416bc4300c9',1,'RadioFunctions.h']]]
 ];
