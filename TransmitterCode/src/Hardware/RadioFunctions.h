@@ -37,7 +37,7 @@
 //    DEBUG OPTIONS (Uncomment any of these for that bit of debug info)     *
 //***************************************************************************
 
-// #define DB_NEXTION        // Debug NEXTION
+ //#define DB_NEXTION        // Debug NEXTION
 // #define DB_SD             // Debug SD card data
 // #define DB_CHECKSUM       // Debug 32BIT file checksum info
 // #define DB_FHSS           // Debug real time FHSS data
@@ -52,7 +52,7 @@
 // **************************************************************************
 
 
- #define USEPOWEROFFBUTTON
+#define USEPOWEROFFBUTTON                            // Only used when the extra diodes are installed near the power switch 
 
 #define CHANNELSUSED       16                        // 16 Channels
 #define MAXMIXES           32                        // 32 mixes
@@ -249,8 +249,7 @@
 #define MODELOFFSET         0      // NEW VERSION
 
 #define MAXFILELEN        1024 * 3 // MAX SIZE FOR HELP AND LOG FILES
-#define BOXOFFSET         35
-#define BOXSIZE           395
+
 #define MAXBACKUPFILES    95
 
 // **************************************************************************
@@ -433,6 +432,7 @@ extern void         FlushFifos();
 extern bool         RecursedAlready;
 extern FLASHMEM void SetDS1307ToCompilerTime();
 extern int           GetOtherValue(char* nbox);
+extern void          CheckInvisiblePoint();
 
 /*********************************************************************************************************************************/
 // function prototypes

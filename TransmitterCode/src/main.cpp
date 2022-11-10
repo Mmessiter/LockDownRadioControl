@@ -56,10 +56,10 @@
  * | 2  LED     | RED |
  * | 3  LED     | GREEN |
  * | 4  LED     | BLUE |
- * | 5  POLOLU  | 2808 ALL POWER OFF SIGNAL (When high) |
- * | 6  Pololu  | Sensor for power button press while on
- * | 7  (RX2)   | SBUS IN    ------> BUDDY BOX SYSTEM |
- * | 8  (TX2)   | SBUS OUT   ------> BUDDY BOX SYSTEM |
+ * | 5  POLOLU  | 2808 ALL POWER OFF SIGNAL (When high)  |
+ * | 6  Pololu  | Sensor for power button press while on |
+ * | 7  (RX2)   | SBUS IN    ---------> BUDDY BOX SYSTEM |
+ * | 8  (TX2)   | SBUS OUT   ---------> BUDDY BOX SYSTEM |
  * | 9  (CE)    | nRF24l01 (CE) |
  * | 10 (CS)    | nRF24l01 (CSN) |
  * | 11 (MOSI)  | nRF24l01 (MOSI) |
@@ -499,6 +499,7 @@ char     WarnOff[]                      = "vis Warning,0";
 char     Warning[]                      = "Warning";
 bool     RecursedAlready = false;
 bool     TXLiPo                         = false;
+uint8_t  CurrentPoint                   = 1;
 
 // **********************************************************************************************************************************
 // **********************************************************************************************************************************
@@ -4193,7 +4194,8 @@ void ClearBox()
 {
     char nb[10];
     char cmd[50];
-    char fillcmd[] = "fill 30,30,380,365,";
+    //char fillcmd[] = "fill 30,30,380,365,";
+    char fillcmd[] = "fill 20,20,388,375,";
     strcpy(cmd, fillcmd);
     Str(nb, BackGroundColour, 0);
     strcat(cmd, nb);
@@ -4285,36 +4287,42 @@ FASTRUN void DrawBox(int x1, int y1, int x2, int y2, int c)
 
 /*********************************************************************************************************************************/
 
-/** @brief Uses servo degrees to position dots */
-FASTRUN void GetDotPositions()
+int DegsToPercent(int degs)
 {
-    int p      = 0;
-    BoxLeft    = BOXOFFSET;
-    BoxTop     = BOXOFFSET;
-    BoxRight   = BOXOFFSET + BOXSIZE;
-    BoxBottom  = BoxRight;
-    xPoints[0] = BoxLeft;
-    xPoints[4] = BoxRight - BOXOFFSET;
-    p          = map(MinDegrees[Bank][ChanneltoSet - 1], 0, 180, BOXSIZE, BOXOFFSET);
-    yPoints[0] = constrain(p, 39, 391);
-    p          = map(MidLowDegrees[Bank][ChanneltoSet - 1], 0, 180, BOXSIZE, BOXOFFSET);
-    yPoints[1] = constrain(p, 39, 391);
-    xPoints[1] = BOXOFFSET + 90;
-    xPoints[2] = BOXOFFSET + 180;
-    p          = map(CentreDegrees[Bank][ChanneltoSet - 1], 0, 180, BOXSIZE, BOXOFFSET);
-    yPoints[2] = constrain(p, 39, 391);
-    xPoints[3] = BOXOFFSET + 270;
-    p          = map(MidHiDegrees[Bank][ChanneltoSet - 1], 0, 180, BOXSIZE, BOXOFFSET);
-    yPoints[3] = constrain(p, 39, 391);
-    p          = map(MaxDegrees[Bank][ChanneltoSet - 1], 0, 180, BOXSIZE, BOXOFFSET);
-    yPoints[4] = constrain(p, 39, 391);
+    return map(degs, 0, 180, -100, 100);
 }
 
 /*********************************************************************************************************************************/
 
-int DegsToPercent(int degs)
+#define BOXLEFT         35
+#define BOXTOP          35 // NOT YET FULLY INTEGRATED
+#define BOXSIZE         395
+
+/*********************************************************************************************************************************/
+
+/** @brief Uses servo degrees to position dots */
+FASTRUN void GetDotPositions()
 {
-    return map(degs, 0, 180, -100, 100);
+    int p      = 0;
+    BoxLeft    = BOXLEFT;
+    BoxTop     = BOXTOP;
+    BoxRight   = BOXLEFT + BOXSIZE;
+    BoxBottom  = BOXTOP  + BOXSIZE;
+    xPoints[0] = BoxLeft;
+    xPoints[4] = BoxRight - BOXLEFT;
+    p          = map(MinDegrees[Bank][ChanneltoSet - 1], 0, 180, BOXSIZE, BOXLEFT);
+    yPoints[0] = constrain(p, 39, 391);
+    p          = map(MidLowDegrees[Bank][ChanneltoSet - 1], 0, 180, BOXSIZE, BOXLEFT);
+    yPoints[1] = constrain(p, 39, 391);
+    xPoints[1] = BOXLEFT + 90;
+    xPoints[2] = BOXLEFT + 180;
+    p          = map(CentreDegrees[Bank][ChanneltoSet - 1], 0, 180, BOXSIZE, BOXLEFT);
+    yPoints[2] = constrain(p, 39, 391);
+    xPoints[3] = BOXLEFT + 270;
+    p          = map(MidHiDegrees[Bank][ChanneltoSet - 1], 0, 180, BOXSIZE, BOXLEFT);
+    yPoints[3] = constrain(p, 39, 391);
+    p          = map(MaxDegrees[Bank][ChanneltoSet - 1], 0, 180, BOXSIZE, BOXLEFT);
+    yPoints[4] = constrain(p, 39, 391);
 }
 
 /*********************************************************************************************************************************/
@@ -4425,7 +4433,7 @@ FASTRUN void DisplayCurve()
     int   yDot1;
     int   xDot2     = 0;
     int   yDot2     = 0;
-    int   DotSize   = 2;
+    int   DotSize   = 4;
     int   DotColour = HighlightColour;
     ClearBox();
     p                                           = constrain(MinDegrees[Bank][ChanneltoSet - 1], 0, 180);
@@ -4449,14 +4457,14 @@ FASTRUN void DisplayCurve()
     DrawBox(BoxLeft, BoxTop, BoxRight - BoxLeft, BoxBottom - BoxTop, HighlightColour);
     xDot1 = xPoints[0];
     yDot1 = ((BoxBottom - BoxTop) / 2) + 20; // ?
-    xDot2 = BoxRight - BOXOFFSET;
+    xDot2 = BoxRight - BOXLEFT;
     yDot2 = yDot1;
     DrawLine(xDot1, yDot1, xDot2, yDot1, SpecialColour);
 
     xDot1 = xPoints[2];
     yDot1 = BoxTop;
     xDot2 = xDot1;
-    yDot2 = BoxBottom - BOXOFFSET;
+    yDot2 = BoxBottom - BOXTOP; //(BOXLEFT)
     DrawLine(xDot1, yDot1, xDot2, yDot2, SpecialColour);
 
     if (InterpolationTypes[Bank][ChanneltoSet - 1] == STRAIGHTLINES) { // Linear
@@ -4562,6 +4570,8 @@ FASTRUN void DisplayCurve()
         DrawDot(xPoints[3], yPoints[3], DotSize, DotColour);
         DrawDot(xPoints[4], yPoints[4], DotSize, DotColour);
     }
+    
+    DrawDot(xPoints[CurrentPoint-1], yPoints[CurrentPoint-1], DotSize+5, HighlightColour); // Show selected point
     updateInterpolationTypes();
 }
 
@@ -4593,18 +4603,83 @@ int GetDifference(int YtouchPlace, int oldy)
     return dd;
 }
 /*********************************************************************************************************************************/
+void MoveCurrentPointUp()  
+{
+
+    switch (CurrentPoint){ //heer
+        case 1:
+            ++ MinDegrees[Bank][ChanneltoSet - 1];
+            break;
+        
+        case 2:
+            ++ MidLowDegrees[Bank][ChanneltoSet - 1];
+            break;
+
+        case 3:
+            ++ CentreDegrees[Bank][ChanneltoSet - 1];
+            break;
+        case 4:
+           ++ MidHiDegrees[Bank][ChanneltoSet - 1];
+           break;
+        
+        case 5:
+           ++ MaxDegrees[Bank][ChanneltoSet - 1];
+           break;
+
+        default:
+            break;
+          
+    }
+    DisplayCurve();
+}
+
+/*********************************************************************************************************************************/
+void MoveCurrentPointDown()  
+{
+
+    switch (CurrentPoint){ 
+        case 1:
+            -- MinDegrees[Bank][ChanneltoSet - 1];
+            break;
+        
+        case 2:
+            -- MidLowDegrees[Bank][ChanneltoSet - 1];
+            break;
+
+        case 3:
+            -- CentreDegrees[Bank][ChanneltoSet - 1];
+            break;
+
+        case 4:
+           -- MidHiDegrees[Bank][ChanneltoSet - 1];
+           break;
+        
+        case 5:
+           -- MaxDegrees[Bank][ChanneltoSet - 1];
+           break;
+
+        default:
+            break;
+          
+    }
+    DisplayCurve();
+}
+
+/*********************************************************************************************************************************/
 
 /** @brief moves point very close to where user hit screen */
-void MovePoint()
+void MovePoint() // HEER
 {
     int rjump = 0;
-    GetDotPositions();                               // current
-    if (XtouchPlace > BoxRight - BOXOFFSET) return;  // out of range
-    if (XtouchPlace < BOXOFFSET) return;             // out of range
-    if (YtouchPlace < BoxTop) return;                // out of range
-    if (YtouchPlace > BoxBottom - BOXOFFSET) return; // out of range
+    GetDotPositions();                             // current
+    if (XtouchPlace > BoxRight - BOXLEFT) return;  // out of range
+    if (XtouchPlace < BOXLEFT) return;             // out of range
+    if (YtouchPlace < BoxTop) return;              // out of range
+    if (YtouchPlace > BoxBottom - BOXLEFT) return; // out of range
 
-    if (XtouchPlace < BOXOFFSET + xPoints[0]) { // do leftmost point  ?
+    if (XtouchPlace < BOXLEFT + xPoints[0]) { // do leftmost point  ?
+        CurrentPoint = 1;
+
         rjump = GetDifference(YtouchPlace, yPoints[0]);
         if (YtouchPlace > yPoints[0]) {
             if (MinDegrees[Bank][ChanneltoSet - 1] >= rjump) MinDegrees[Bank][ChanneltoSet - 1] -= rjump;
@@ -4614,7 +4689,9 @@ void MovePoint()
         }
     }
 
-    if (XtouchPlace > xPoints[1] - BOXOFFSET && XtouchPlace < xPoints[1] + BOXOFFSET) {    // do next point  ?
+    if (XtouchPlace > xPoints[1] - BOXLEFT && XtouchPlace < xPoints[1] + BOXLEFT) {    // do next point  ?
+        CurrentPoint = 2;
+        CheckInvisiblePoint();
         if (InterpolationTypes[Bank][ChanneltoSet - 1] == EXPONENTIALCURVES) return; //  expo = ignore this area
         rjump = GetDifference(YtouchPlace, yPoints[1]);
         if (YtouchPlace > yPoints[1]) {
@@ -4625,8 +4702,9 @@ void MovePoint()
         }
     }
 
-    if (XtouchPlace > xPoints[2] - BOXOFFSET && XtouchPlace < xPoints[2] + BOXOFFSET) { // do next point  ?
-        rjump = GetDifference(YtouchPlace, yPoints[2]);
+    if (XtouchPlace > xPoints[2] - BOXLEFT && XtouchPlace < xPoints[2] + BOXLEFT) { // do next point  ?
+        CurrentPoint = 3;
+        rjump        = GetDifference(YtouchPlace, yPoints[2]);
         if (YtouchPlace > yPoints[2]) {
             if (CentreDegrees[Bank][ChanneltoSet - 1] >= rjump) CentreDegrees[Bank][ChanneltoSet - 1] -= rjump;
         }
@@ -4635,7 +4713,9 @@ void MovePoint()
         }
     }
 
-    if (XtouchPlace > xPoints[3] - BOXOFFSET && XtouchPlace < xPoints[3] + BOXOFFSET) {    // do next point  ?
+    if (XtouchPlace > xPoints[3] - BOXLEFT && XtouchPlace < xPoints[3] + BOXLEFT) {    // do next point  ?
+        CurrentPoint = 4;
+        CheckInvisiblePoint();
         if (InterpolationTypes[Bank][ChanneltoSet - 1] == EXPONENTIALCURVES) return; //  expo = ignore this area
         rjump = GetDifference(YtouchPlace, yPoints[3]);
         if (YtouchPlace > yPoints[3]) {
@@ -4645,8 +4725,9 @@ void MovePoint()
             if (MidHiDegrees[Bank][ChanneltoSet - 1] <= 180 - rjump) MidHiDegrees[Bank][ChanneltoSet - 1] += rjump;
         }
     }
-    if (XtouchPlace > xPoints[3] + BOXOFFSET) // do hi point  ?
+    if (XtouchPlace > xPoints[3] + BOXLEFT) // do hi point  ?
     {
+        CurrentPoint = 5;
         rjump = GetDifference(YtouchPlace, yPoints[4]);
         if (YtouchPlace > yPoints[4]) {
             if (MaxDegrees[Bank][ChanneltoSet - 1] > rjump) MaxDegrees[Bank][ChanneltoSet - 1] -= rjump;
@@ -4655,6 +4736,7 @@ void MovePoint()
             if (MaxDegrees[Bank][ChanneltoSet - 1] <= 180 - rjump) MaxDegrees[Bank][ChanneltoSet - 1] += rjump;
         }
     }
+    
 }
 
 /*********************************************************************************************************************************/
@@ -5641,7 +5723,7 @@ void ThrottleDownTrim(){
      if (SticksMode == 2) tt = 2;
      MoveaTrim(tt);
 }
-/*********************************************************************************************************************************/
+/******************************************************************************************************************************/
 void ResetTransmitterSettings(){    // This function resets all transmitter parameters to the default state. 
                                     // But not the clock. Calibration shoulw  be done next. 
 
@@ -5687,8 +5769,37 @@ const char         Tn[32]      = "Unknown";
     SaveTransmitterParameters();
 }
 
+/*********************************************************************************************************************************/
+
+void PointUp(){ 
+    MoveCurrentPointUp();
+}
+/******************************************************************************************************************************/
+
+void PointDown(){
+    MoveCurrentPointDown();
+}
+
+
+/******************************************************************************************************************************/
+
+void CheckInvisiblePoint(){
+    if (InterpolationTypes[Bank][ChanneltoSet - 1] == EXPONENTIALCURVES) {
+        if ((CurrentPoint == 2) || (CurrentPoint == 4)) ++CurrentPoint;
+    }
+}
+
+/******************************************************************************************************************************/
+
+void PointSelect(){ // heer
+    ++CurrentPoint;
+    if (CurrentPoint > 5) CurrentPoint = 1;
+    CheckInvisiblePoint();
+    DisplayCurve();
+}
+
 // ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
-#define LASTFUNCTION 42 // one more than final one
+#define LASTFUNCTION 45 // one more than final one
 
 void (*NumberedFunctions[LASTFUNCTION])() {
     Blank,                // 0 (spare)
@@ -5731,8 +5842,12 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     ThrottleUpTrim,       // 37  
     OptionView4Start,     // 38  
     OptionView4End,       // 39  
-    ResetTransmitterSettings, // 40
-    BindNow                // 41
+    ResetTransmitterSettings,   // 40
+    BindNow,                    // 41
+    PointUp,                    // 42
+    PointDown,                  // 43
+    PointSelect                 // 44
+
 
 }; // list will become much longer ...
 
@@ -5905,7 +6020,6 @@ FASTRUN void ButtonWasPressed()
         char ReceiveModel[]            = "ReceiveModel";
         char SendModel[]               = "SendModel";
         char PowerOff[]                = "PowerOff";
-        char PowerDown[]               = "PowerDown";
         char OffNow[]                  = "OffNow"; // force power off
         char OptionsViewS[]            = "OptionsViewS";
         char Pto[]                     = "Pto";
@@ -6394,6 +6508,7 @@ FASTRUN void ButtonWasPressed()
         }
 
 #ifndef USEPOWEROFFBUTTON
+char PowerDown[]               = "PowerDown";
 
         if (InStrng(PowerDown, TextIn) > 0) {
             if (LedWasGreen) {
@@ -8064,7 +8179,7 @@ void CheckPowerOffButton()
     char nb[4];
 
 #ifdef USEPOWEROFFBUTTON
-    if (!digitalRead(BUTTON_SENSE_PIN)){ // HEER
+    if (!digitalRead(BUTTON_SENSE_PIN)){ 
         if (LedWasRed) 
         {
             simulateCloseDown();              // if not connected power off immediately
