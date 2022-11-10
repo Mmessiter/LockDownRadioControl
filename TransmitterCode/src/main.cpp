@@ -57,7 +57,7 @@
  * | 3  LED     | GREEN |
  * | 4  LED     | BLUE |
  * | 5  POLOLU  | 2808 ALL POWER OFF SIGNAL (When high) |
- * | 6  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< (!! SPARE !!)
+ * | 6  Sense power button press while on
  * | 7  (RX2)   | SBUS IN    ------> BUDDY BOX SYSTEM |
  * | 8  (TX2)   | SBUS OUT   ------> BUDDY BOX SYSTEM |
  * | 9  (CE)    | nRF24l01 (CE) |
@@ -2395,6 +2395,7 @@ FLASHMEM void InitSwitchesAndTrims()
         pinMode(SwitchNumber[i], INPUT_PULLUP);
         pinMode(TrimNumber[i], INPUT_PULLUP);
     }
+    pinMode(BUTTON_SENSE_PIN,INPUT_PULLUP); // New function to sense power button press
 }
 
 /*********************************************************************************************************************************/
@@ -6391,6 +6392,9 @@ FASTRUN void ButtonWasPressed()
             ClearText();
             return;
         }
+
+#ifndef USEPOWEROFFBUTTON
+
         if (InStrng(PowerDown, TextIn) > 0) {
             if (LedWasGreen) {
                 PowerOffTimer     = millis(); // Start a timer for power off button down
@@ -6405,6 +6409,8 @@ FASTRUN void ButtonWasPressed()
             }
             return;
         }
+        
+#endif
 
         if (InStrng(PowerOff, TextIn) > 0) { // power off button up no longer turns off!
             PowerOffTimer = 0;
@@ -8040,12 +8046,39 @@ void CheckScanButton() // Scan button AND models button
     }
 }
 /************************************************************************************************************/
+void simulateCloseDown(){ // Because real closedown occurs only after button is released
+    
+    char ScreenOff[] = "dim=0";
+    analogWrite(GREENLED, 0);
+    analogWrite(BLUELED, 0);
+    analogWrite(REDLED, 0);
+    SendCommand(ScreenOff);
+    digitalWrite(POWER_OFF_PIN, HIGH); 
+}
+/************************************************************************************************************/
 void CheckPowerOffButton()
 {
 
     char PowerMsg[15];
     char PowerPre[] = "TURN OFF?! ";
     char nb[4];
+
+#ifdef USEPOWEROFFBUTTON
+    if (!digitalRead(BUTTON_SENSE_PIN)){ // HEER
+        if (LedWasRed) 
+        {
+            simulateCloseDown();              // if not connected power off immediately
+        } else
+        {
+            if (!PowerOffTimer) {
+                PowerOffTimer     = millis(); // Start a timer for power off button down
+                TurnOffSecondToGo = PowerOffWarningSeconds;
+                }
+        }
+    } else {
+            PowerOffTimer = 0;
+    }
+#endif
 
     if (PowerOffTimer) { // count down started?
         if (!PowerWarningVisible) {
@@ -8075,7 +8108,7 @@ void CheckPowerOffButton()
                 } 
                 SaveAllParameters();
                 delay(250);                        // wait a mo for user to see 0 and log to write to file
-                digitalWrite(POWER_OFF_PIN, HIGH); // power off
+                simulateCloseDown();
             }
             --TurnOffSecondToGo;
              if (TrimClicks)  PlaySound(CLICKZERO);

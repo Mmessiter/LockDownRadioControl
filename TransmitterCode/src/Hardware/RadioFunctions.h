@@ -51,6 +51,9 @@
 //                               General                                    *
 // **************************************************************************
 
+
+ #define USEPOWEROFFBUTTON
+
 #define CHANNELSUSED       16                        // 16 Channels
 #define MAXMIXES           32                        // 32 mixes
 #define TICKSPERMINUTE     60000                     // millis() += 60000 per minute
@@ -190,10 +193,11 @@
 //                LED and Power off GPIOs                                   *
 // **************************************************************************
 
-#define REDLED        2 // COLOURED LEDS' PIN NUMBERS ...
-#define GREENLED      3
-#define BLUELED       4
-#define POWER_OFF_PIN 5
+#define REDLED              2 // COLOURED LEDS' PIN NUMBERS ...
+#define GREENLED            3
+#define BLUELED             4
+#define POWER_OFF_PIN       5
+#define BUTTON_SENSE_PIN    6
 
 // **************************************************************************
 //               Sounds                             *
