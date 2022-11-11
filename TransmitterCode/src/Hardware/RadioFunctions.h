@@ -24,7 +24,7 @@
 #include <RF24.h>
 #include <Wire.h>
 #include <Adafruit_INA219.h>
-#include <TimeLib.h>
+//#include <TimeLib.h>
 #include <DS1307RTC.h>
 #include <TeensyID.h>
 #include <EEPROM.h>
@@ -50,6 +50,9 @@
 // **************************************************************************
 //                               General                                    *
 // **************************************************************************
+
+
+#define USEPOWEROFFBUTTON                            // Only used when the extra diodes are installed near the power switch 
 
 #define CHANNELSUSED       16                        // 16 Channels
 #define MAXMIXES           32                        // 32 mixes
@@ -190,10 +193,11 @@
 //                LED and Power off GPIOs                                   *
 // **************************************************************************
 
-#define REDLED        2 // COLOURED LEDS' PIN NUMBERS ...
-#define GREENLED      3
-#define BLUELED       4
-#define POWER_OFF_PIN 5
+#define REDLED              2 // COLOURED LEDS' PIN NUMBERS ...
+#define GREENLED            3
+#define BLUELED             4
+#define POWER_OFF_PIN       5
+#define BUTTON_SENSE_PIN    6
 
 // **************************************************************************
 //               Sounds                             *
@@ -245,8 +249,7 @@
 #define MODELOFFSET         0      // NEW VERSION
 
 #define MAXFILELEN        1024 * 3 // MAX SIZE FOR HELP AND LOG FILES
-#define BOXOFFSET         35
-#define BOXSIZE           395
+
 #define MAXBACKUPFILES    95
 
 // **************************************************************************
@@ -428,6 +431,8 @@ extern void         TryToReconnect();
 extern void         FlushFifos();
 extern bool         RecursedAlready;
 extern FLASHMEM void SetDS1307ToCompilerTime();
+extern int           GetOtherValue(char* nbox);
+extern void          CheckInvisiblePoint();
 
 /*********************************************************************************************************************************/
 // function prototypes

@@ -309,7 +309,7 @@ void SetUKFrequencies()
 /************************************************************************************************************/
 /**
  * extra parameters can be sent using the last four bytes in every data packet.
- * the parameter sent is defined by the packet number ... which goes only upto about 5
+ * the parameter sent is defined by the packet number ... which goes only up to about 5
  *
  * Note: If extra parameters are needed, the "HOPTIME" duration can be increased.
  * It's 97ms right now, which gives about 11 packets per hops.

@@ -275,7 +275,6 @@ void KeepSbusHappy()
 void Reconnect()
 { // This is called when contact is lost, to reconnect ASAP
     uint32_t SearchStartTime = millis();
-    ;
     uint8_t ReconnectChannel = *(FHSSChPointer + ReconnectIndex); // Get a reconnect channel
     uint8_t PreviousRadio    = ThisRadio;
 #ifdef SECOND_TRANSCEIVER
@@ -327,7 +326,7 @@ void Reconnect()
 // If it's time to HOP, it sets the high bit in AckPayload.Purpose and both ends then HOP to new channel before next packet.
 // The other 7 BITS of AckPayload.Purpose dictate the Payload's function (therefore 127 possibities.)
 // This happens for *every* AckPayload, which return telemetry data as well as this hoptime information.
-// Hence a single BIT now directs the transmitter to hop.
+// Hence a single BIT directs the transmitter to hop.
 
 void CheckWhetherItsTimeToHop()
 {

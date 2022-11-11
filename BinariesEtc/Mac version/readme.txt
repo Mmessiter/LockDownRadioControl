@@ -1,4 +1,4 @@
-Version 1.9.4 
+Version 1.9.8 
 
 How to use the transmitter or receiver firmware updater:
 
@@ -16,6 +16,10 @@ To update the Nextion screen, download their free editor (Windows only), load th
 
 
 
+
+New in version: 1.9.8:
+----------------------
+Many performance and reliability improvements. Support for LIPO or LIFEO4 in transmitter.
 
 
 New in version: 1.9.4:
