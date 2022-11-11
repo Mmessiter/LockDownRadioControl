@@ -4434,7 +4434,7 @@ FASTRUN void DisplayCurve()
     int   xDot2     = 0;
     int   yDot2     = 0;
     int   DotSize   = 4;
-    int   DotColour = HighlightColour;
+    int   DotColour = ForeGroundColour;
     ClearBox();
     p                                           = constrain(MinDegrees[Bank][ChanneltoSet - 1], 0, 180);
     MinDegrees[Bank][ChanneltoSet - 1]    = p;
@@ -4520,7 +4520,9 @@ FASTRUN void DisplayCurve()
         BottomHalfYRange = yPoints[2] - yPoints[0];
         yDot2            = 0;
         Step             = APPROXIMATION;                        // This is the approximation of the screen curve
-        
+
+        CheckInvisiblePoint();
+
         for (xPoint = 0; xPoint <= HalfXRange; xPoint += Step) { // Simulate a curve with many short lines to speed it up
             yPoint = MapWithExponential(HalfXRange - xPoint, HalfXRange, 0, 0, BottomHalfYRange, Exponential[Bank][ChanneltoSet - 1]);
             if (Step > HalfXRange - xPoint) {
