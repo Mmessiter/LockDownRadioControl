@@ -6301,9 +6301,7 @@ FASTRUN void ButtonWasPressed()
             return;
         }
         if (InStrng(GoFrontView, TextIn) > 0) { // GOTO frontview 
-            SendCommand(page_FrontView);
-            CurrentView  = FRONTVIEW;
-            UpdateModelsNameEveryWhere();
+            GotoFrontView(); // heer
             SafetyWasOn ^= 1;                   // this forces a re-display of safety state 
             ShowBank();
             LastTimeRead = 0;
@@ -7831,18 +7829,26 @@ FASTRUN uint32_t GetIntFromAckPayload()   // This one uses a uint32_t int
     ThisUnion.Val8[3] = AckPayload.Byte4;
     return ThisUnion.Val32;
 }
+
+/************************************************************************************************************/
+
+void GotoFrontView(){
+  
+    if (CurrentView != FRONTVIEW){                                        // Frontview is needed
+       SendCommand(page_FrontView);
+       CurrentView = FRONTVIEW;
+       UpdateModelsNameEveryWhere();
+    }
+}
+
 /************************************************************************************************************/
 
 void CompareModelsIDs(){ // The saved MacAddress is compared with the one just received from the model ... etc ...
     
     uint8_t SavedModelNumber = ModelNumber;
     ModelMatched             = false;
+    GotoFrontView();
     RestoreBrightness();
-    if (CurrentView != FRONTVIEW){                                        // Frontview is needed because of Bind button heer
-       SendCommand(page_FrontView);
-       CurrentView = FRONTVIEW;
-       UpdateModelsNameEveryWhere();
-    }
     if (ModelIdentified) {                                                //  We have both bits of Model ID?
         if ((ModelsMacUnion.Val32[0] == ModelsMacUnionSaved.Val32[0]) && (ModelsMacUnion.Val32[1] == ModelsMacUnionSaved.Val32[1])) {       
             if (AnnounceConnected) {
@@ -8095,6 +8101,7 @@ void CheckPowerOffButton()
 
 #ifdef USEPOWEROFFBUTTON
     if (!digitalRead(BUTTON_SENSE_PIN)){ 
+        GotoFrontView();
         if (LedWasRed) 
         {
             simulateCloseDown();              // if not connected power off immediately

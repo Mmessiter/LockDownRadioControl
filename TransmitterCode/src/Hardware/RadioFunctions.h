@@ -426,13 +426,14 @@ extern void  ReEnableScanButton();
 extern void  LogUKRules();
 extern int   InStrng(char* text1, char* text2);
 extern void  ReadCheckSum32();
-extern void         ResetTransmitterSettings();
-extern void         TryToReconnect();
-extern void         FlushFifos();
-extern bool         RecursedAlready;
+extern void          ResetTransmitterSettings();
+extern void          TryToReconnect();
+extern void          FlushFifos();
+extern bool          RecursedAlready;
 extern FLASHMEM void SetDS1307ToCompilerTime();
 extern int           GetOtherValue(char* nbox);
 extern void          CheckInvisiblePoint();
+extern void          GotoFrontView();
 
 /*********************************************************************************************************************************/
 // function prototypes
