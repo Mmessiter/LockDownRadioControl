@@ -4608,7 +4608,7 @@ int GetDifference(int YtouchPlace, int oldy)
 void MoveCurrentPointUp()  
 {
 
-    switch (CurrentPoint){ //heer
+    switch (CurrentPoint){ 
         case 1:
             ++ MinDegrees[Bank][ChanneltoSet - 1];
             break;
@@ -4670,7 +4670,7 @@ void MoveCurrentPointDown()
 /*********************************************************************************************************************************/
 
 /** @brief moves point very close to where user hit screen */
-void MovePoint() // HEER
+void MovePoint() 
 {
     int rjump = 0;
     GetDotPositions();                             // current
@@ -5793,7 +5793,7 @@ void CheckInvisiblePoint(){
 
 /******************************************************************************************************************************/
 
-void PointSelect(){ // heer
+void PointSelect(){ 
     ++CurrentPoint;
     if (CurrentPoint > 5) CurrentPoint = 1;
     CheckInvisiblePoint();
@@ -7837,7 +7837,8 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
     
     uint8_t SavedModelNumber = ModelNumber;
     ModelMatched             = false;
-    if (CurrentView != FRONTVIEW){                                        // Frontview is needed because of Bind button
+    RestoreBrightness();
+    if (CurrentView != FRONTVIEW){                                        // Frontview is needed because of Bind button heer
        SendCommand(page_FrontView);
        CurrentView = FRONTVIEW;
        UpdateModelsNameEveryWhere();
