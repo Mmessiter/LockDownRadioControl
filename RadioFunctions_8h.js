@@ -209,6 +209,7 @@ var RadioFunctions_8h =
     [ "GetSlaveChannelValues", "RadioFunctions_8h.html#a4635a8fc77c9f57fca53a5206cd5e571", null ],
     [ "GetStickInput", "RadioFunctions_8h.html#af065c70531320b19dbb5f54a714e186a", null ],
     [ "GetStickInputInputOnly", "RadioFunctions_8h.html#af1030157034999448f5ca611d6209385", null ],
+    [ "GotoFrontView", "RadioFunctions_8h.html#a2d16d1f4802d4029bc8933a18d213beb", null ],
     [ "GreenLedOn", "RadioFunctions_8h.html#a62e53eb9359c32b666e3386d62c57037", null ],
     [ "HopToNextChannel", "RadioFunctions_8h.html#a62ec0168b1eea5f5c14f663d9217574d", null ],
     [ "InitRadio", "RadioFunctions_8h.html#a86ce6c54618629a61b8502786d2ce82c", null ],
