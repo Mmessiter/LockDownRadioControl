@@ -5885,12 +5885,19 @@ void ReadDualRatesValues(){
 
     UseDualRates = GetValue(c1);   // load new values
     Drate2 = GetValue(rate2);
+    if (Drate2 > 100) Drate2 = 100;
     Drate3 = GetValue(rate3);
+    if (Drate3 > 100) Drate3 = 100;
     Drate4 = GetValue(rate4);
+    if (Drate4 > 100) Drate4 = 100;
     Dbank1 = GetValue(bank1);
+    if (Dbank1 > 4) Dbank1 = 0;
     Dbank2 = GetValue(bank2);
+    if (Dbank2 > 4) Dbank2 = 0;
     Dbank3 = GetValue(bank3);
+    if (Dbank3 > 4) Dbank3 = 0;
     Dbank4 = GetValue(bank4);
+    if (Dbank4 > 4) Dbank4 = 0;
 }
 /******************************************************************************************************************************/
 
@@ -5955,17 +5962,17 @@ void DualRatesApply(){   // This function applies dual rates as setup
         char GotoSticksView[] = "page SticksView";
         ReadDualRatesValues();
     if (UseDualRates) {
-        if (Drate2 && Dbank2){
+        if (Drate2 && Dbank2){              // disable by making either value 0
             DoEntireChannel(aileron,  Drate2, Dbank2);
             DoEntireChannel(elevator, Drate2, Dbank2);
             DoEntireChannel(rudder,   Drate2, Dbank2);
         }
-        if (Drate3 && Dbank3){
+        if (Drate3 && Dbank3){              // disable by making either value 0
             DoEntireChannel(aileron,  Drate3, Dbank3);
             DoEntireChannel(elevator, Drate3, Dbank3);
             DoEntireChannel(rudder,   Drate3, Dbank3);
         }
-        if (Drate4 && Dbank4){
+        if (Drate4 && Dbank4){              // disable by making either value 0
             DoEntireChannel(aileron,  Drate4, Dbank4);
             DoEntireChannel(elevator, Drate4, Dbank4);
             DoEntireChannel(rudder,   Drate4, Dbank4);
