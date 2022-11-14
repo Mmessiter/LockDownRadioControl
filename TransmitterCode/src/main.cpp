@@ -5936,7 +5936,7 @@ float CalculateDualRate(int Curve, int Channel,float rate){
 
 /******************************************************************************************************************************/
 
-void DoEntireChannel(uint8_t Channel,uint8_t Rate,uint8_t bank)  { // this does all five points // heer
+void DoEntireChannel(uint8_t Channel,uint8_t Rate,uint8_t bank)  { // this does all five points 
 
     uint8_t MaxD = 5;
     uint8_t MidHiD = 4;
@@ -5949,7 +5949,8 @@ void DoEntireChannel(uint8_t Channel,uint8_t Rate,uint8_t bank)  { // this does 
     CentreDegrees[bank][Channel]        = CalculateDualRate(CentreD, Channel, Rate);
     MidLowDegrees[bank][Channel]        = CalculateDualRate(MidLoD, Channel, Rate);
     MinDegrees[bank][Channel]           = CalculateDualRate(MinD, Channel, Rate);
-    InterpolationTypes[bank][Channel]   = InterpolationTypes[Dbank1][Channel];
+    InterpolationTypes[bank][Channel]   = InterpolationTypes[Dbank1][Channel]; // heer
+    Exponential[bank][Channel]          = Exponential[Dbank1][Channel];
 }
 
 /******************************************************************************************************************************/
