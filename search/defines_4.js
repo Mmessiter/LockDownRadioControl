@@ -13,5 +13,6 @@ var searchData=
   ['defaultpipe_10',['DEFAULTPIPE',['../common_8h.html#ae2e69f002146deef06b390e17a26dc0e',1,'common.h']]],
   ['defaultpipeaddress_11',['DEFAULTPIPEADDRESS',['../RadioFunctions_8h.html#a4882e6035f50cbda34385a5388985813',1,'RadioFunctions.h']]],
   ['disconnectedmsg_12',['DISCONNECTEDMSG',['../RadioFunctions_8h.html#ad369aa903154f60e4c7877091791e1c4',1,'RadioFunctions.h']]],
-  ['ds1307_5faddress_13',['DS1307_ADDRESS',['../RadioFunctions_8h.html#a647261f334080cbf95e4f8dd79f73769',1,'RadioFunctions.h']]]
+  ['ds1307_5faddress_13',['DS1307_ADDRESS',['../RadioFunctions_8h.html#a647261f334080cbf95e4f8dd79f73769',1,'RadioFunctions.h']]],
+  ['dualratesview_14',['DUALRATESVIEW',['../RadioFunctions_8h.html#a9003bf850d4b53a17692c707fbf4e4d4',1,'RadioFunctions.h']]]
 ];
