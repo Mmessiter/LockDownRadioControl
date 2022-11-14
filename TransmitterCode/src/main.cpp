@@ -501,6 +501,16 @@ bool     RecursedAlready = false;
 bool     TXLiPo                         = false;
 uint8_t  CurrentPoint                   = 1;
 
+bool     UseDualRates                    = false;
+uint8_t  Drate2                          = 80; // 1 is always 100%
+uint8_t  Drate3                          = 70;
+uint8_t  Drate4                          = 60;
+uint8_t  Dbank1                          = 1;
+uint8_t  Dbank2                          = 2;
+uint8_t  Dbank3                          = 3;
+uint8_t  Dbank4                          = 4;
+
+
 // **********************************************************************************************************************************
 // **********************************************************************************************************************************
 // **********************************************************************************************************************************
@@ -2676,6 +2686,22 @@ bool ReadOneModel(uint8_t Mnum)
     StopFlyingVoltsPerCell = float (SFV) / 100;
     if (StopFlyingVoltsPerCell < 3 || StopFlyingVoltsPerCell > 4) StopFlyingVoltsPerCell = 3.50; // a useful default stop time?!
 
+     Drate2 = SDRead8BITS(SDCardAddress);
+     ++SDCardAddress;
+     Drate3 = SDRead8BITS(SDCardAddress);
+     ++SDCardAddress;
+     Drate4 = SDRead8BITS(SDCardAddress);
+     ++SDCardAddress;
+     Dbank1 = SDRead8BITS(SDCardAddress);
+     ++SDCardAddress;
+     Dbank2 = SDRead8BITS(SDCardAddress);
+     ++SDCardAddress;
+     Dbank3 = SDRead8BITS(SDCardAddress);
+     ++SDCardAddress;
+     Dbank4 = SDRead8BITS(SDCardAddress);
+    ++SDCardAddress;
+    UseDualRates = SDRead8BITS(SDCardAddress);
+    ++SDCardAddress;
 
     // **************************************
 
@@ -3667,9 +3693,26 @@ void SaveOneModel(uint16_t mnum)
     SDUpdate16BITS(SDCardAddress,SFV);
     ++SDCardAddress;
     ++SDCardAddress;
-     SaveCheckSum32();  // Save the Model parametres checksm
-    
 
+    SDUpdate8BITS(SDCardAddress, Drate2);
+    ++SDCardAddress;
+    SDUpdate8BITS(SDCardAddress, Drate3);
+    ++SDCardAddress;
+    SDUpdate8BITS(SDCardAddress, Drate4);
+    ++SDCardAddress;
+    SDUpdate8BITS(SDCardAddress, Dbank1);
+    ++SDCardAddress;
+    SDUpdate8BITS(SDCardAddress, Dbank2);
+    ++SDCardAddress;
+    SDUpdate8BITS(SDCardAddress, Dbank3);
+    ++SDCardAddress;
+    SDUpdate8BITS(SDCardAddress, Dbank4);
+    ++SDCardAddress;
+    SDUpdate8BITS(SDCardAddress, UseDualRates);
+    ++SDCardAddress;
+
+    SaveCheckSum32(); // Save the Model parametres checksm
+    
     // ********************** Add more
 
        OneModelMemory = SDCardAddress - StartLocation;
@@ -5311,6 +5354,9 @@ void EndBuddyView()
 }
 /*********************************************************************************************************************************/
 FASTRUN void DisplayCurveAndServoPos(){
+
+    ClearBox();                    
+    Procrastinate(5);
     SavedLineX = 52735;             // just to be massvely different
     ShowServoPos();                 // this calls displaycurve!!!
     ClearText();
@@ -5800,8 +5846,140 @@ void PointSelect(){
     DisplayCurve();
 }
 
+/******************************************************************************************************************************/
+
+void DualRatesStart(){
+    char rate2[]          = "rate2";
+    char rate3[]          = "rate3";
+    char rate4[]          = "rate4";
+    char bank1[]          = "bank1";
+    char bank2[]          = "bank2";
+    char bank3[]          = "bank3";
+    char bank4[]          = "bank4";
+    char c1[]             = "c1";
+    char GotoDualRates[] = "page DualRatesView";
+    SendCommand(GotoDualRates);
+    CurrentView = DUALRATESVIEW;
+    SendValue(c1,UseDualRates);   // display current values
+    SendValue(rate2,Drate2);
+    SendValue(rate3,Drate3);
+    SendValue(rate4,Drate4); 
+    SendValue(bank1,Dbank1);
+    SendValue(bank2,Dbank2);
+    SendValue(bank3,Dbank3);
+    SendValue(bank4, Dbank4);
+}
+
+/******************************************************************************************************************************/
+
+void ReadDualRatesValues(){
+  
+    char rate2[]          = "rate2";
+    char rate3[]          = "rate3";
+    char rate4[]          = "rate4";
+    char bank1[]          = "bank1";
+    char bank2[]          = "bank2";
+    char bank3[]          = "bank3";
+    char bank4[]          = "bank4";
+    char c1[]             = "c1";
+
+    UseDualRates = GetValue(c1);   // load new values
+    Drate2 = GetValue(rate2);
+    Drate3 = GetValue(rate3);
+    Drate4 = GetValue(rate4);
+    Dbank1 = GetValue(bank1);
+    Dbank2 = GetValue(bank2);
+    Dbank3 = GetValue(bank3);
+    Dbank4 = GetValue(bank4);
+}
+/******************************************************************************************************************************/
+
+void DualRatesEnd(){ 
+    
+    char GotoSticksView[] = "page SticksView";
+    
+    ReadDualRatesValues();
+    SaveOneModel(ModelNumber);
+    SendCommand(GotoSticksView);
+    Force_ReDisplay();
+    ShowServoPos();
+    CurrentView = STICKSVIEW;
+
+}
+
+/******************************************************************************************************************************/
+
+float CalculateDualRate(int Curve, int Channel,float rate){
+
+    switch (Curve){ // Curve is 1 - 5, low to hi.
+    case 1:  
+      return (((MinDegrees[Dbank1][Channel]) - 90) * (rate / 100)) + 90;
+    case 2:  
+      return (((MidLowDegrees[Dbank1][Channel]) - 90) * (rate / 100)) + 90;
+    case 3:  
+       return (((CentreDegrees[Dbank1][Channel]) - 90) * (rate / 100)) + 90;
+    case 4:  
+     return (((MidHiDegrees[Dbank1][Channel]) - 90) * (rate / 100)) + 90;
+    case 5:    
+        return (((MaxDegrees[Dbank1][Channel]) - 90) * (rate / 100)) + 90;
+    default:
+        return 0;
+    }
+}
+
+/******************************************************************************************************************************/
+
+void DoEntireChannel(uint8_t Channel,uint8_t Rate,uint8_t bank)  { // this does all five points // heer
+
+    uint8_t MaxD = 5;
+    uint8_t MidHiD = 4;
+    uint8_t CentreD = 3;
+    uint8_t MidLoD = 2;
+    uint8_t MinD = 1;
+
+    MaxDegrees[bank][Channel]           = CalculateDualRate(MaxD, Channel, Rate);
+    MidHiDegrees[bank][Channel]         = CalculateDualRate(MidHiD, Channel, Rate);
+    CentreDegrees[bank][Channel]        = CalculateDualRate(CentreD, Channel, Rate);
+    MidLowDegrees[bank][Channel]        = CalculateDualRate(MidLoD, Channel, Rate);
+    MinDegrees[bank][Channel]           = CalculateDualRate(MinD, Channel, Rate);
+    InterpolationTypes[bank][Channel]   = InterpolationTypes[Dbank1][Channel];
+}
+
+/******************************************************************************************************************************/
+
+void DualRatesApply(){   // This function applies dual rates as setup
+
+        uint8_t aileron     = 0;
+        uint8_t elevator    = 1;
+        uint8_t rudder      = 3;
+        char GotoSticksView[] = "page SticksView";
+        ReadDualRatesValues();
+    if (UseDualRates) {
+        if (Drate2 && Dbank2){
+            DoEntireChannel(aileron,  Drate2, Dbank2);
+            DoEntireChannel(elevator, Drate2, Dbank2);
+            DoEntireChannel(rudder,   Drate2, Dbank2);
+        }
+        if (Drate3 && Dbank3){
+            DoEntireChannel(aileron,  Drate3, Dbank3);
+            DoEntireChannel(elevator, Drate3, Dbank3);
+            DoEntireChannel(rudder,   Drate3, Dbank3);
+        }
+        if (Drate4 && Dbank4){
+            DoEntireChannel(aileron,  Drate4, Dbank4);
+            DoEntireChannel(elevator, Drate4, Dbank4);
+            DoEntireChannel(rudder,   Drate4, Dbank4);
+        }
+        SaveOneModel(ModelNumber);
+        SendCommand(GotoSticksView);
+        Force_ReDisplay();
+        ShowServoPos();
+        CurrentView = STICKSVIEW;
+    }
+}
+
 // ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
-#define LASTFUNCTION 45 // one more than final one
+#define LASTFUNCTION 48 // one more than final one
 
 void (*NumberedFunctions[LASTFUNCTION])() {
     Blank,                // 0 (spare)
@@ -5848,7 +6026,10 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     BindNow,                    // 41
     PointUp,                    // 42
     PointDown,                  // 43
-    PointSelect                 // 44
+    PointSelect,                // 44
+    DualRatesStart,             // 45
+    DualRatesEnd,               // 46
+    DualRatesApply              // 47    
 
 
 }; // list will become much longer ...
@@ -6301,7 +6482,7 @@ FASTRUN void ButtonWasPressed()
             return;
         }
         if (InStrng(GoFrontView, TextIn) > 0) { // GOTO frontview 
-            GotoFrontView(); // heer
+            GotoFrontView(); 
             SafetyWasOn ^= 1;                   // this forces a re-display of safety state 
             ShowBank();
             LastTimeRead = 0;
@@ -7237,13 +7418,14 @@ char PowerDown[]               = "PowerDown";
         }
        
 
-        if (InStrng(Reset, TextIn)) // RESET?
+        if (InStrng(Reset, TextIn)) // Now zeros EXPO only
         {
-            MinDegrees[Bank][ChanneltoSet - 1]         = 30;
-            MidLowDegrees[Bank][ChanneltoSet - 1]      = 60;
-            CentreDegrees[Bank][ChanneltoSet - 1]      = 90;
-            MidHiDegrees[Bank][ChanneltoSet - 1]       = 120;
-            MaxDegrees[Bank][ChanneltoSet - 1]         = 150;
+           // MinDegrees[Bank][ChanneltoSet - 1]         = 30;
+           // MidLowDegrees[Bank][ChanneltoSet - 1]      = 60;
+           // CentreDegrees[Bank][ChanneltoSet - 1]      = 90;
+           // MidHiDegrees[Bank][ChanneltoSet - 1]       = 120;
+           // MaxDegrees[Bank][ChanneltoSet - 1]         = 150;
+            
             Exponential[Bank][ChanneltoSet - 1]        = DEFAULT_EXPO;
             InterpolationTypes[Bank][ChanneltoSet - 1] = EXPONENTIALCURVES; // expo = default
             DisplayCurveAndServoPos();
@@ -7262,10 +7444,10 @@ char PowerDown[]               = "PowerDown";
                 p                                           = MidHiDegrees[i][ChanneltoSet - 1];
                 MidHiDegrees[i][ChanneltoSet - 1]  = 180 - p;
                 p                                           = MaxDegrees[i][ChanneltoSet - 1];
-                MaxDegrees[i][ChanneltoSet - 1]    = 180 - p;
-                DisplayCurveAndServoPos();
-                ClearText();
+                MaxDegrees[i][ChanneltoSet - 1]    = 180 - p;    
             }
+            DisplayCurveAndServoPos();
+            ClearText();
             return;
         }
         p = (InStrng(ClickX, TextIn)); // Clicked to move point?
@@ -8108,6 +8290,7 @@ void CheckPowerOffButton()
         } else
         {
             if (!PowerOffTimer) {
+                RestoreBrightness();
                 PowerOffTimer     = millis(); // Start a timer for power off button down
                 TurnOffSecondToGo = PowerOffWarningSeconds;
                 }

@@ -162,6 +162,7 @@
 #define OPTIONVIEW3     26
 #define BUDDYCHVIEW     27
 #define OPTIONVIEW4     28
+#define DUALRATESVIEW   29
 
 // **************************************************************************
 //                          Switches' GPIOs                                 *
