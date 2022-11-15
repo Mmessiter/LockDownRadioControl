@@ -15,7 +15,7 @@
 
 #define RXVERSION_MAJOR   1
 #define RXVERSION_MINOR   9
-#define RXVERSION_MINIMUS 8 // October 2022
+#define RXVERSION_MINIMUS 9 // November 2022
 
 
 // #define DB_FHSS

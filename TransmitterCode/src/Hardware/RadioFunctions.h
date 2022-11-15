@@ -12,7 +12,7 @@
 
 #define TXVERSION_MAJOR   1
 #define TXVERSION_MINOR   9
-#define TXVERSION_MINIMUS 8
+#define TXVERSION_MINIMUS 9
 
 // **************************************************************************
 //                               Includes                                   *
@@ -54,28 +54,30 @@
 
 #define USEPOWEROFFBUTTON                            // Only used when the extra diodes are installed near the power switch 
 
-#define CHANNELSUSED       16                        // 16 Channels
-#define MAXMIXES           32                        // 32 mixes
-#define TICKSPERMINUTE     60000                     // millis() += 60000 per minute
-#define PROPOCHANNELS      8                         // Only 4 have knobs / 2 sticks (= 4 hall sensors)
-#define BankSWITCH         4                         // Default MODE switch
-#define AUTOSWITCH         1                         // Default AUTO switch
-#define BANKSUSED          4                         // Flight modes (AKA Banks)
-#define DEFAULTPIPEADDRESS 0xBABE1E5420LL            // Pipe address for startup - any value but MUST match RX
-#define LOWBATTERY         42                        // Default percent for warning (User definable)
-#define CE_PIN             9                         // for SPI to nRF24L01
-#define CSN_PIN            10                        // for SPI to nRF24L01
-#define INACTIVITYTIMEOUT  10 * TICKSPERMINUTE       // Default time after which to switch off
-#define INACTIVITYMINIMUM  05 * TICKSPERMINUTE       // Inactivity timeout minimum is 5 minutes
-#define INACTIVITYMAXIMUM  30 * TICKSPERMINUTE       // Inactivity timeout maximum is 30 minutes
-#define DS1307_ADDRESS     0x68                      // I2C address for RTC
-#define MAXLINES           30                        // text to load at once for log and help screens
-#define DEFAULT_EXPO       50                        // = ZERO EXPO (Range is 0 - 200. Below 50 is negative Expo)
-#define CHARSMAX           120                       // Max length for char arrays
-#define UNCOMPRESSEDWORDS  20                        // DATA TO SEND = 40  bytes
-#define COMPRESSEDWORDS    UNCOMPRESSEDWORDS * 3 / 4 // COMPRESSED DATA SENT = 30  bytes
-#define PERFECTPACKETSPERSECOND 150                  // Flat out perfect packets per second
-#define TIMEFORTXMANAGMENT  3                        // How many ms must remain spare between data packets before daring to undertake more trivial tasks 
+#define CHANNELSUSED            16                        // 16 Channels
+#define MAXMIXES                32                        // 32 mixes
+#define TICKSPERMINUTE          60000                     // millis() += 60000 per minute
+#define PROPOCHANNELS           8                         // Only 4 have knobs / 2 sticks (= 4 hall sensors)
+#define BankSWITCH              4                         // Default MODE switch
+#define AUTOSWITCH              1                         // Default AUTO switch
+#define BANKSUSED               4                         // Flight modes (AKA Banks)
+#define DEFAULTPIPEADDRESS      0xBABE1E5420LL            // Pipe address for startup - any value but MUST match RX
+#define LOWBATTERY              42                        // Default percent for warning (User definable)
+#define CE_PIN                  9                         // for SPI to nRF24L01
+#define CSN_PIN                 10                        // for SPI to nRF24L01
+#define INACTIVITYTIMEOUT       10 * TICKSPERMINUTE       // Default time after which to switch off
+#define INACTIVITYMINIMUM       05 * TICKSPERMINUTE       // Inactivity timeout minimum is 5 minutes
+#define INACTIVITYMAXIMUM       30 * TICKSPERMINUTE       // Inactivity timeout maximum is 30 minutes
+#define DS1307_ADDRESS          0x68                      // I2C address for RTC
+#define MAXLINES                30                        // text to load at once for log and help screens
+#define DEFAULT_EXPO            50                        // = ZERO EXPO (Range is 0 - 200. Below 50 is negative Expo)
+#define CHARSMAX                120                       // Max length for char arrays
+#define UNCOMPRESSEDWORDS       20                        // DATA TO SEND = 40  bytes
+#define COMPRESSEDWORDS    UNCOMPRESSEDWORDS * 3 / 4      // COMPRESSED DATA SENT = 30  bytes
+#define PERFECTPACKETSPERSECOND 150                       // Flat out perfect packets per second
+#define TIMEFORTXMANAGMENT      3                         // How many ms must remain spare between data packets before daring to undertake more trivial tasks 
+#define DEFAULTLEDBRIGHTNESS    20                        // LED brightness
+#define DEFAULTPOWEROFFWARNING  3                         //Default time to warn before cutting power      
 
 // **************************************************************************
 //                            FHSS PARAMETERS                               *
@@ -436,6 +438,7 @@ extern int           GetOtherValue(char* nbox);
 extern void          CheckInvisiblePoint();
 extern void          GotoFrontView();
 extern void          CheckDualRatesValues();
+extern void          UpdateLED();
 
 /*********************************************************************************************************************************/
 // function prototypes

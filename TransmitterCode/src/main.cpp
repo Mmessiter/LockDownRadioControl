@@ -453,15 +453,15 @@ bool      LogFileOpen             = false;
 bool      ShowVPC                 = false;
 short int TxVoltageCorrection     = 0;
 short int RxVoltageCorrection     = 0;
-uint8_t   LEDBrightness           = 75;
+uint8_t   LEDBrightness           = DEFAULTLEDBRIGHTNESS;
 uint32_t  PowerOffTimer           = 0;
 char      StillConnected[]        = "vis StillConnected,1";
 char      StillConnectedBox[]     = "StillConnected";
 char      TurnOffRX[]             = "TURN OFF RX";
 char      NotStillConnected[]     = "vis StillConnected,0";
 bool      PowerWarningVisible     = false;
-uint8_t   TurnOffSecondToGo       = 3;
-uint8_t   PowerOffWarningSeconds  = 3;
+uint8_t   TurnOffSecondToGo       = 2;
+uint8_t   PowerOffWarningSeconds  = 2;
 uint8_t   ConnectionAssessSeconds = 1;
 uint32_t  PreviousPowerOffTimer   = 0;
 bool      ModelIdentified         = false;
@@ -2850,7 +2850,7 @@ bool LoadAllParameters()
         ++SDCardAddress;
         ++SDCardAddress;
         PowerOffWarningSeconds = SDRead8BITS(SDCardAddress);
-        PowerOffWarningSeconds = CheckRange(PowerOffWarningSeconds, 2, 30);
+        PowerOffWarningSeconds = CheckRange(PowerOffWarningSeconds, 1, 30);
         ++SDCardAddress;
         LEDBrightness = SDRead16BITS(SDCardAddress);
         LEDBrightness = CheckRange(LEDBrightness, 1, 254);
@@ -4212,7 +4212,7 @@ void SetDefaultValues()
     ReversedChannelBITS = 0; //  No channel reversed
     SendValue(Progress, 95);
     Procrastinate(10);
-    LEDBrightness       = 20;
+    LEDBrightness       = DEFAULTLEDBRIGHTNESS;
     RxVoltageCorrection = 0;
     ModelsMacUnionSaved.Val32[0] = 0;
     ModelsMacUnionSaved.Val32[1] = 0;
@@ -4224,7 +4224,7 @@ void SetDefaultValues()
     Dbank2                         = 2;
     Dbank3                         = 3;
     Dbank4                         = 4;
-// more here
+
 
 
     SaveOneModel(ModelNumber);
@@ -4248,23 +4248,24 @@ void SetDefaultValues()
 void CheckDualRatesValues(){
 
     bool KO = false;
-    if (UseDualRates > 1) KO = true;
-    if (Drate2 > 100) KO = true; 
-    if (Drate3 > 100) KO = true;
-    if (Drate4 > 100) KO = true;
-    if (Dbank1 > 4) KO = true;
-    if (Dbank2 > 4) KO = true;
-    if (Dbank3 > 4) KO = true;
-    if (Dbank4 > 4) KO = true;
+    if (UseDualRates > 1) KO    = true;
+    if (Drate2 > 100) KO        = true; 
+    if (Drate3 > 100) KO        = true;
+    if (Drate4 > 100) KO        = true;
+    if (Dbank1 > 4) KO          = true;
+    if (Dbank2 > 4) KO          = true;
+    if (Dbank3 > 4) KO          = true;
+    if (Dbank4 > 4) KO          = true;
+    
     if (KO){
-        UseDualRates                   = false;
-        Drate2                         = 80; // 1 is always 100%
-        Drate3                         = 70;
-        Drate4                         = 60;
-        Dbank1                         = 1;
-        Dbank2                         = 2;
-        Dbank3                         = 3;
-        Dbank4                         = 4;
+        UseDualRates            = false;
+        Drate2                  = 80; // 1 is always 100%
+        Drate3                  = 70;
+        Drate4                  = 60;
+        Dbank1                  = 1;
+        Dbank2                  = 2;
+        Dbank3                  = 3;
+        Dbank4                  = 4;
     }
 }
 
@@ -5626,13 +5627,11 @@ void OptionView2Start()
       RxVoltageCorrection    = GetValue(RxVCorrextion);
       TxVoltageCorrection    = GetValue(TxVCorrextion);
       PowerOffWarningSeconds = GetValue(n2);
-      PowerOffWarningSeconds = CheckRange(PowerOffWarningSeconds, 2, 30);
+      PowerOffWarningSeconds = CheckRange(PowerOffWarningSeconds, 1, 10);
       AutoModelSelect        = GetValue(lpm);
-      if (LEDBrightness != GetValue(n1)) LedWasGreen = false; // Forces a redisplay if brightness has changed
-      LEDBrightness           = GetValue(n1);
+      if (LEDBrightness != GetValue(n1)) UpdateLED();
       ConnectionAssessSeconds = GetValue(n3);
       ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);
-      LEDBrightness           = CheckRange(LEDBrightness, 1, 254);
       SaveAllParameters();
     }
 
@@ -5706,6 +5705,15 @@ void OptionView4End()
 
 /******************************************************************************************************************************/
 
+void UpdateLED(){ // LED Brightness has changed so this ensures it is redisplayed
+    char n1[]             = "n1";
+    LEDBrightness           = GetValue(n1);
+    LEDBrightness           = CheckRange(LEDBrightness, 1, 254);
+    LedWasGreen = false; // Forces a redisplay if brightness has changed
+}
+
+/******************************************************************************************************************************/
+
 void OptionView3End()
 {
     char TxVCorrextion[]  = "t2";
@@ -5717,21 +5725,17 @@ void OptionView3End()
     char page_SetupView[] = "page SetupView";
     char lpm[]            = "c0"; // Auto model selection
     char  fbuf[10];
-
-
     GetText(t10, fbuf);
     StopFlyingVoltsPerCell  = atof(fbuf);
     SFV                     = StopFlyingVoltsPerCell * 100;  // this makes it a 16 bit value I can save easily
     TxVoltageCorrection     = GetValue(TxVCorrextion);
     RxVoltageCorrection     = GetValue(RxVCorrextion);
     PowerOffWarningSeconds  = GetValue(n2);
-    PowerOffWarningSeconds  = CheckRange(PowerOffWarningSeconds, 2, 30);
+    PowerOffWarningSeconds  = CheckRange(PowerOffWarningSeconds, 1, 10);
     AutoModelSelect         = GetValue(lpm);
-    if (LEDBrightness      != GetValue(n1)) LedWasGreen = false; // Forces a redisplay if brightness has changed
-    LEDBrightness           = GetValue(n1);
+    if (LEDBrightness != GetValue(n1)) UpdateLED(); 
     ConnectionAssessSeconds = GetValue(n3);
     ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);
-    LEDBrightness           = CheckRange(LEDBrightness, 1, 254);
     SaveAllParameters();
     CloseModelsFile();
     CurrentView = MAINSETUPVIEW;
@@ -5843,8 +5847,8 @@ const char         Tn[32]      = "Unknown";
     AnnounceConnected   = true;
     ResetAllTrims();
     TxVoltageCorrection     = 0;
-    PowerOffWarningSeconds  = 3;
-    LEDBrightness           = 75;
+    PowerOffWarningSeconds  = DEFAULTPOWEROFFWARNING;
+    LEDBrightness           = DEFAULTLEDBRIGHTNESS;
     ConnectionAssessSeconds = 1;
     AutoModelSelect         = true;
     MotorChannel            = 15;
