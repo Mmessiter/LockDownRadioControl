@@ -5,7 +5,7 @@ var RadioFunctions_8h =
     [ "BANKFOUR", "RadioFunctions_8h.html#a70c430cc7f6137ab569257395a50bd73", null ],
     [ "BANKONE", "RadioFunctions_8h.html#a71b5a946c9e0c6ae61a9ba32e3f4fb53", null ],
     [ "BANKSUSED", "RadioFunctions_8h.html#a16ec6f28a04c27b65af626adf8a994f6", null ],
-    [ "BankSWITCH", "RadioFunctions_8h.html#ac89745fc04e8c0b89405873dccb9450d", null ],
+    [ "BANKSWITCH", "RadioFunctions_8h.html#a582e13b912bcd3ca62f855f79eea6a64", null ],
     [ "BANKTHREE", "RadioFunctions_8h.html#a2e95db48bdc3034a76977452d767933c", null ],
     [ "BANKTWO", "RadioFunctions_8h.html#a4fe53fd1760aef0ce87d3a5a452eb652", null ],
     [ "BATTERYISLOW", "RadioFunctions_8h.html#a26aac4b23321722632f5c1676e561e4b", null ],

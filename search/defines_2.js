@@ -3,7 +3,7 @@ var searchData=
   ['bankfour_0',['BANKFOUR',['../RadioFunctions_8h.html#a70c430cc7f6137ab569257395a50bd73',1,'RadioFunctions.h']]],
   ['bankone_1',['BANKONE',['../RadioFunctions_8h.html#a71b5a946c9e0c6ae61a9ba32e3f4fb53',1,'RadioFunctions.h']]],
   ['banksused_2',['BANKSUSED',['../RadioFunctions_8h.html#a16ec6f28a04c27b65af626adf8a994f6',1,'RadioFunctions.h']]],
-  ['bankswitch_3',['BankSWITCH',['../RadioFunctions_8h.html#ac89745fc04e8c0b89405873dccb9450d',1,'RadioFunctions.h']]],
+  ['bankswitch_3',['BANKSWITCH',['../RadioFunctions_8h.html#a582e13b912bcd3ca62f855f79eea6a64',1,'RadioFunctions.h']]],
   ['bankthree_4',['BANKTHREE',['../RadioFunctions_8h.html#a2e95db48bdc3034a76977452d767933c',1,'RadioFunctions.h']]],
   ['banktwo_5',['BANKTWO',['../RadioFunctions_8h.html#a4fe53fd1760aef0ce87d3a5a452eb652',1,'RadioFunctions.h']]],
   ['batteryislow_6',['BATTERYISLOW',['../RadioFunctions_8h.html#a26aac4b23321722632f5c1676e561e4b',1,'RadioFunctions.h']]],

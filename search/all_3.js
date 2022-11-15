@@ -16,7 +16,7 @@ var searchData=
   ['bankfour_13',['BANKFOUR',['../RadioFunctions_8h.html#a70c430cc7f6137ab569257395a50bd73',1,'RadioFunctions.h']]],
   ['bankone_14',['BANKONE',['../RadioFunctions_8h.html#a71b5a946c9e0c6ae61a9ba32e3f4fb53',1,'RadioFunctions.h']]],
   ['banksused_15',['BANKSUSED',['../RadioFunctions_8h.html#a16ec6f28a04c27b65af626adf8a994f6',1,'RadioFunctions.h']]],
-  ['bankswitch_16',['BankSWITCH',['../RadioFunctions_8h.html#ac89745fc04e8c0b89405873dccb9450d',1,'RadioFunctions.h']]],
+  ['bankswitch_16',['BANKSWITCH',['../RadioFunctions_8h.html#a582e13b912bcd3ca62f855f79eea6a64',1,'RadioFunctions.h']]],
   ['bankthree_17',['BANKTHREE',['../RadioFunctions_8h.html#a2e95db48bdc3034a76977452d767933c',1,'RadioFunctions.h']]],
   ['banktwo_18',['BANKTWO',['../RadioFunctions_8h.html#a4fe53fd1760aef0ce87d3a5a452eb652',1,'RadioFunctions.h']]],
   ['baroaltitude_19',['BaroAltitude',['../ReceiverCode_2src_2main_8cpp.html#acec349590f33af1fb88040ed4d12e53f',1,'BaroAltitude():&#160;main.cpp'],['../radio_8h.html#acec349590f33af1fb88040ed4d12e53f',1,'BaroAltitude():&#160;main.cpp'],['../SensorHubT32_2src_2main_8cpp.html#af2ae1ded0446ef84d7f1606cb647ac25',1,'BaroAltitude():&#160;main.cpp']]],
