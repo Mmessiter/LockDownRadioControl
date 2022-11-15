@@ -61,6 +61,7 @@ extern void ShowHopDurationEtc();
 extern void ReadSensorHub();
 extern void SetUKFrequencies();
 extern void MoveServos();
+extern FASTRUN void ReceiveData();
 
 /** AckPayload Stucture for data returned to transmitter. */
 struct Payload
@@ -307,7 +308,7 @@ void Reconnect()
     }
     FailSafeSent = false;
     if (PreviousRadio != ThisRadio) ++RadioSwaps; // Count the radio swaps
-    ReconnectedMoment = millis();                 // Save this moment, then don't move a servo for 20 ms ...
+    ReconnectedMoment = millis();                 // Save this moment
 #ifdef DB_RXTIMERS
     Serial.print("Transceiver1 use so far: ");
     Serial.print(RX1TotalTime / 1000);

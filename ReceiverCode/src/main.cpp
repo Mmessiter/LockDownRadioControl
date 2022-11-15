@@ -87,6 +87,8 @@ bool            FirstLostPacket = true;
 uint8_t         MacAddress[8] = {0,0,0,0,0,0,0,0};
 bool            ModelMatched    = false;
 uint8_t         TheReceivedPipe[8];
+bool            FirstConnection = true;
+bool            ReadyToUseData = false;
 /************************************************************************************************************/
 
 void LoadFailSafeData()
@@ -125,7 +127,7 @@ void MapToSBUS()
 
 void MoveServos()
 {
-    if (!Connected) return;     // Avoid sending rubbish
+    if (!ReadyToUseData) return; 
     MySbus.write(SbusChannels); // Send SBUS data
     for (int j = 0; j < SERVOSUSED; ++j) {
         if (PreviousData[j] != ReceivedData[j]) { // if same as last time, don't send again.
@@ -157,6 +159,7 @@ void FailSafe()
     BindNow      = 0;       // default startup conditions
     BoundFlag    = false;   // default startup conditions
     ThisPipe     = DEFAULTPIPE; // default startup conditions
+    ReadyToUseData = false;
     SetNewPipe();
 }
 
@@ -210,9 +213,8 @@ bool ReadData()
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // Send telemetry
         delayMicroseconds(1500);                                       // N.B. SOME DUFF NRF24L01 TRANSCEIVERS NEED THIS PAUSE. But not all.
         CurrentRadio->read(&CompressedData, sizeof(CompressedData));   // Get Data
-        CurrentRadio->flush_rx();                                      // Flush FIFO to avoid a lock up
     }
-    if (Connected) UseReceivedData();
+    if (Connected) UseReceivedData();  
     return Connected;
 }
 
@@ -235,18 +237,25 @@ void AttachServos()
 void BindModel(){  
     ThisPipe = NewPipe;
     OldPipe  = NewPipe;
+   
     CurrentRadio->stopListening();
     delayMicroseconds(250);
     SetNewPipe();                  // change to bound pipe
-    if (SaveNewBind) for (uint8_t i = 0; i < 8; ++i) { 
+    if (SaveNewBind){
+       for (uint8_t i = 0; i < 8; ++i) { 
         EEPROM.update(i+BIND_EEPROM_OFFSET, TheReceivedPipe[i]); 
         }
+    }
     BoundFlag   = true;
     BindNow     = 0;
     SaveNewBind = false;
-    AttachServos(); // AND START SBUS!!!
-    ReconnectedMoment = millis();                 // Save this moment, then don't move a servo for 20 ms ...
-   
+    if (FirstConnection) {
+        AttachServos();  // AND START SBUS!!!  
+        FirstConnection   = false;
+    }
+    uint32_t t = millis();
+    while (millis() - t < 1000)  ReceiveData(); // this avoid inial glitch on reconnect
+    ReadyToUseData = true;
 }
 // ***************************************************************************************************************************************************
 void SendToSensorHub(char m[])
@@ -679,7 +688,6 @@ FLASHMEM void setup()
     BootupMoment = millis();
     SetUKFrequencies();
     digitalWrite(LED_PIN, LOW);
-    ReconnectedMoment = millis();
 }
 /************************************************************************************************************/
 // LOOP
@@ -691,9 +699,7 @@ void loop()
     if (BoundFlag && Connected && ModelMatched) {                   // Only move servos if everything is good
         if (millis() - SBUSTimer >= SBUSRATE) {                     // SBUS rate is also good enough for servo rate
             SBUSTimer = millis();                                   // timer starts before send starts....
-            if ((millis() - ReconnectedMoment) > RECONNECTGAP) {    // Don't send data for 25 ms after reconnect
-                MoveServos();                                       // Actually do something useful at last
-            }
+            MoveServos();                                           // Actually do something useful at last
         }
         if (FailSafeSave) SaveFailSafeData();
     }
