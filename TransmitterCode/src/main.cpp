@@ -5530,9 +5530,9 @@ void SetupViewFM()
 
     char page_SetupView[] = "page SetupView";
     SaveAllParameters();
+    CurrentView = MAINSETUPVIEW;
     SendCommand(page_SetupView);
     CurrentMode        = NORMAL; // Send data again
-    CurrentView        = MAINSETUPVIEW;
     UpdateModelsNameEveryWhere();
 }
     
@@ -5697,9 +5697,8 @@ void OptionView4End()
     MotorChannelZero    = GetValue(Mvalue);
     UseMotorKill        = GetValue(UseKill);
     MotorChannel        = GetValue(Mchannel) - 1;
-
-    SendCommand(page_SetupView);
     CurrentView = MAINSETUPVIEW;
+    SendCommand(page_SetupView);
     SaveTransmitterParameters();
     UpdateModelsNameEveryWhere();
 }
@@ -6090,10 +6089,19 @@ void (*NumberedFunctions[LASTFUNCTION])() {
 /*********************************************************************************************************************************
  *                          BUTTON WAS PRESSED (DEAL WITH INPUT FROM NEXTION DISPLAY)                                            *
  *********************************************************************************************************************************/
-FASTRUN void ButtonWasPressed()
+FASTRUN void ButtonWasPressed() // heer
 {
     if (strlen(TextIn) > 0) {
         StartInactvityTimeout();
+
+        ScreenTimeTimer = millis(); // reset screen timeout counter
+        if (ScreenIsOff) {
+            RestoreBrightness();
+            ScreenIsOff = false;
+            ClearText();
+            return;
+        }
+
         union
         {
             uint8_t  First4Bytes[4];
@@ -6326,13 +6334,6 @@ FASTRUN void ButtonWasPressed()
       
 
 
-        ScreenTimeTimer = millis(); // reset screen timeout counter
-        if (ScreenIsOff) {
-            RestoreBrightness();
-            ScreenIsOff = false;
-            ClearText();
-            return;
-        }
 
         // ************************* test input words from Nextion *****************
 
@@ -6380,7 +6381,6 @@ FASTRUN void ButtonWasPressed()
         }
         if (InStrng(SetupAud, TextIn) > 0) { // Exit from screen with audio options
             CurrentMode = NORMAL;
-            CurrentView = MAINSETUPVIEW;
             AudioVolume = GetValue(n0);
             if (AudioVolume < 5) AudioVolume = 5;
             Brightness        = GetValue(n1);
@@ -6392,6 +6392,7 @@ FASTRUN void ButtonWasPressed()
             AnnounceConnected = GetValue(c5);
             RestoreBrightness();
             SetAudioVolume(AudioVolume);
+            CurrentView = MAINSETUPVIEW;
             SendCommand(page_SetupView);
             LastTimeRead = 0;
             SaveTransmitterParameters();
@@ -6411,6 +6412,7 @@ FASTRUN void ButtonWasPressed()
             }
             ClearText();
             SaveAllParameters();
+            CurrentView = MAINSETUPVIEW;
             SendCommand(page_SetupView);
             LastTimeRead = 0;
             CurrentMode        = NORMAL;
@@ -6490,10 +6492,10 @@ FASTRUN void ButtonWasPressed()
             SaveAllParameters();
             SendValue(Progress, 95);
             SendValue(Progress, 100);
+            CurrentView = MAINSETUPVIEW;
             SendCommand(page_SetupView);
             LastTimeRead = 0;
             CurrentMode        = NORMAL;
-            CurrentView        = MAINSETUPVIEW;
             b5isGrey           = false;
             SendCommand(ProgressEnd);
             LedWasGreen = false;
@@ -6912,8 +6914,8 @@ char PowerDown[]               = "PowerDown";
             CurrentMode = NORMAL;
             SendCommand(ProgressEnd);
             UpdateButtonLabels();
-            SendCommand(page_SetupView);
             CurrentView = MAINSETUPVIEW;
+            SendCommand(page_SetupView);
             b5isGrey = false;
             LastTimeRead = 0;
             ClearText();
@@ -7157,8 +7159,8 @@ char PowerDown[]               = "PowerDown";
         }
 
         if (InStrng(GoSetupView, TextIn) > 0) {
-            SendCommand(page_SetupView);
             CurrentView = MAINSETUPVIEW;
+            SendCommand(page_SetupView);
             b5isGrey    = false;
             UpdateModelsNameEveryWhere();
             ClearText();
@@ -7279,10 +7281,10 @@ char PowerDown[]               = "PowerDown";
             if (GetValue(Mode2) == 1) SticksMode = 2;
             SaveAllParameters(); // save trims to SDcard
             b5isGrey           = false;
+            CurrentView = MAINSETUPVIEW;
             SendCommand(page_SetupView);
             LastTimeRead = 0;
             CurrentMode        = NORMAL;
-            CurrentView        = MAINSETUPVIEW;
             UpdateModelsNameEveryWhere();
             ClearText();
             return;
@@ -8054,21 +8056,21 @@ FASTRUN uint32_t GetIntFromAckPayload()   // This one uses a uint32_t int
 /************************************************************************************************************/
 
 void GotoFrontView(){
-  
-    if (CurrentView != FRONTVIEW){                                        // Frontview is needed
-        SendCommand(page_FrontView);
-        CurrentView = FRONTVIEW;
-        UpdateModelsNameEveryWhere();
-        SafetyWasOn ^= 1;                   // this forces a re-display of safety state 
-        ShowBank();
-        LastTimeRead = 0;
-        Reconnected  = false;               // this is to make '** Connected! **' redisplay (in ShowComms())
-        LastSeconds  = 0;                   // This forces redisplay of timer...
-        Force_ReDisplay();
-        CheckTimer();
-        ClearText();
-        LastShowTime = 0;                   // this is to make redisplay sooner (in ShowComms())
-        SendText(FrontView_Connected, na);
+    if (CurrentView != FRONTVIEW)
+    { 
+          SendCommand(page_FrontView);
+          CurrentView = FRONTVIEW;
+          UpdateModelsNameEveryWhere();
+          SafetyWasOn ^= 1; // this forces a re-display of safety state
+          ShowBank();
+          LastTimeRead = 0;
+          Reconnected  = false; // this is to make '** Connected! **' redisplay (in ShowComms())
+          LastSeconds  = 0;     // This forces redisplay of timer...
+          Force_ReDisplay();
+          CheckTimer();
+          ClearText();
+          LastShowTime = 0; // this is to make redisplay sooner (in ShowComms())
+          SendText(FrontView_Connected, na);
     }
 }
 
