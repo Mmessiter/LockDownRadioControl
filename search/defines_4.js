@@ -6,13 +6,15 @@ var searchData=
   ['dataview_3',['DATAVIEW',['../RadioFunctions_8h.html#a5d4f7906962f2c612f1eeabd809f2f52',1,'RadioFunctions.h']]],
   ['debug_5fprint_4',['DEBUG_PRINT',['../MPU6050__6Axis__MotionApps20_8h.html#af6551f0b4c3964c3128f808e7bf987c7',1,'DEBUG_PRINT():&#160;MPU6050_6Axis_MotionApps20.h'],['../MPU6050__6Axis__MotionApps__V6__12_8h.html#af6551f0b4c3964c3128f808e7bf987c7',1,'DEBUG_PRINT():&#160;MPU6050_6Axis_MotionApps_V6_12.h'],['../MPU6050__9Axis__MotionApps41_8h.html#af6551f0b4c3964c3128f808e7bf987c7',1,'DEBUG_PRINT():&#160;MPU6050_9Axis_MotionApps41.h']]],
   ['debug_5fprintf_5',['DEBUG_PRINTF',['../MPU6050__6Axis__MotionApps20_8h.html#a40c71ee610c953dd0e914ece23dde8a5',1,'DEBUG_PRINTF():&#160;MPU6050_6Axis_MotionApps20.h'],['../MPU6050__6Axis__MotionApps__V6__12_8h.html#a40c71ee610c953dd0e914ece23dde8a5',1,'DEBUG_PRINTF():&#160;MPU6050_6Axis_MotionApps_V6_12.h'],['../MPU6050__9Axis__MotionApps41_8h.html#a40c71ee610c953dd0e914ece23dde8a5',1,'DEBUG_PRINTF():&#160;MPU6050_9Axis_MotionApps41.h']]],
-  ['debug_5fprintln_6',['DEBUG_PRINTLN',['../MPU6050__6Axis__MotionApps__V6__12_8h.html#a8e30ff0704664fcb13dabf0c4dc5c8f5',1,'DEBUG_PRINTLN():&#160;MPU6050_6Axis_MotionApps_V6_12.h'],['../MPU6050__9Axis__MotionApps41_8h.html#a8e30ff0704664fcb13dabf0c4dc5c8f5',1,'DEBUG_PRINTLN():&#160;MPU6050_9Axis_MotionApps41.h'],['../MPU6050__6Axis__MotionApps20_8h.html#a8e30ff0704664fcb13dabf0c4dc5c8f5',1,'DEBUG_PRINTLN():&#160;MPU6050_6Axis_MotionApps20.h']]],
+  ['debug_5fprintln_6',['DEBUG_PRINTLN',['../MPU6050__9Axis__MotionApps41_8h.html#a8e30ff0704664fcb13dabf0c4dc5c8f5',1,'DEBUG_PRINTLN():&#160;MPU6050_9Axis_MotionApps41.h'],['../MPU6050__6Axis__MotionApps__V6__12_8h.html#a8e30ff0704664fcb13dabf0c4dc5c8f5',1,'DEBUG_PRINTLN():&#160;MPU6050_6Axis_MotionApps_V6_12.h'],['../MPU6050__6Axis__MotionApps20_8h.html#a8e30ff0704664fcb13dabf0c4dc5c8f5',1,'DEBUG_PRINTLN():&#160;MPU6050_6Axis_MotionApps20.h']]],
   ['debug_5fprintlnf_7',['DEBUG_PRINTLNF',['../MPU6050__6Axis__MotionApps20_8h.html#ad1937eefa9a7b6d3c9034dd9e62ab114',1,'DEBUG_PRINTLNF():&#160;MPU6050_6Axis_MotionApps20.h'],['../MPU6050__6Axis__MotionApps__V6__12_8h.html#ad1937eefa9a7b6d3c9034dd9e62ab114',1,'DEBUG_PRINTLNF():&#160;MPU6050_6Axis_MotionApps_V6_12.h'],['../MPU6050__9Axis__MotionApps41_8h.html#ad1937eefa9a7b6d3c9034dd9e62ab114',1,'DEBUG_PRINTLNF():&#160;MPU6050_9Axis_MotionApps41.h']]],
   ['debugtimer_8',['DEBUGTIMER',['../SensorHubT32_2src_2main_8cpp.html#a6d8ac148d16fbe92176033a667d3ef8a',1,'main.cpp']]],
   ['default_5fexpo_9',['DEFAULT_EXPO',['../RadioFunctions_8h.html#a2a42bee007b474de05c409af41aba395',1,'RadioFunctions.h']]],
-  ['defaultpipe_10',['DEFAULTPIPE',['../common_8h.html#ae2e69f002146deef06b390e17a26dc0e',1,'common.h']]],
-  ['defaultpipeaddress_11',['DEFAULTPIPEADDRESS',['../RadioFunctions_8h.html#a4882e6035f50cbda34385a5388985813',1,'RadioFunctions.h']]],
-  ['disconnectedmsg_12',['DISCONNECTEDMSG',['../RadioFunctions_8h.html#ad369aa903154f60e4c7877091791e1c4',1,'RadioFunctions.h']]],
-  ['ds1307_5faddress_13',['DS1307_ADDRESS',['../RadioFunctions_8h.html#a647261f334080cbf95e4f8dd79f73769',1,'RadioFunctions.h']]],
-  ['dualratesview_14',['DUALRATESVIEW',['../RadioFunctions_8h.html#a9003bf850d4b53a17692c707fbf4e4d4',1,'RadioFunctions.h']]]
+  ['defaultledbrightness_10',['DEFAULTLEDBRIGHTNESS',['../RadioFunctions_8h.html#a2a95d6724b678596120391f5ea8f1ebe',1,'RadioFunctions.h']]],
+  ['defaultpipe_11',['DEFAULTPIPE',['../common_8h.html#ae2e69f002146deef06b390e17a26dc0e',1,'common.h']]],
+  ['defaultpipeaddress_12',['DEFAULTPIPEADDRESS',['../RadioFunctions_8h.html#a4882e6035f50cbda34385a5388985813',1,'RadioFunctions.h']]],
+  ['defaultpoweroffwarning_13',['DEFAULTPOWEROFFWARNING',['../RadioFunctions_8h.html#aaf61bb959d38561c65510a50ecb4f4d3',1,'RadioFunctions.h']]],
+  ['disconnectedmsg_14',['DISCONNECTEDMSG',['../RadioFunctions_8h.html#ad369aa903154f60e4c7877091791e1c4',1,'RadioFunctions.h']]],
+  ['ds1307_5faddress_15',['DS1307_ADDRESS',['../RadioFunctions_8h.html#a647261f334080cbf95e4f8dd79f73769',1,'RadioFunctions.h']]],
+  ['dualratesview_16',['DUALRATESVIEW',['../RadioFunctions_8h.html#a9003bf850d4b53a17692c707fbf4e4d4',1,'RadioFunctions.h']]]
 ];

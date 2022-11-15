@@ -275,6 +275,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "ThrottleUpTrim", "TransmitterCode_2src_2main_8cpp.html#abe827a1e4c23eb79d1771da1e9393178", null ],
     [ "UpdateButtonLabels", "TransmitterCode_2src_2main_8cpp.html#abf59862cf6c4e3df5a76f0bfea8919ef", null ],
     [ "updateInterpolationTypes", "TransmitterCode_2src_2main_8cpp.html#a3d20af2f1fee81198a0cef2d4500083a", null ],
+    [ "UpdateLED", "TransmitterCode_2src_2main_8cpp.html#a8c8edf1ff8b98d9cd27b45c4e20f22d9", null ],
     [ "UpdateModelsNameEveryWhere", "TransmitterCode_2src_2main_8cpp.html#a9e1de754e1d2d483fb15957f70cf0488", null ],
     [ "updateOneSwitchView", "TransmitterCode_2src_2main_8cpp.html#a14dcac76ed8a048041fdc6e6f5d5d000", null ],
     [ "UpdateSwitchesDisplay", "TransmitterCode_2src_2main_8cpp.html#a789078ba3c1d92997ab8764eb20cce4f", null ],
