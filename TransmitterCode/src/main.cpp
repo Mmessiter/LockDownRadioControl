@@ -2702,6 +2702,7 @@ bool ReadOneModel(uint8_t Mnum)
     ++SDCardAddress;
     UseDualRates = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
+    CheckDualRatesValues();
 
     // **************************************
 
@@ -4211,10 +4212,21 @@ void SetDefaultValues()
     ReversedChannelBITS = 0; //  No channel reversed
     SendValue(Progress, 95);
     Procrastinate(10);
-    LEDBrightness       = 75;
+    LEDBrightness       = 20;
     RxVoltageCorrection = 0;
     ModelsMacUnionSaved.Val32[0] = 0;
     ModelsMacUnionSaved.Val32[1] = 0;
+    UseDualRates                   = false;
+    Drate2                         = 80; // 1 is always 100%
+    Drate3                         = 70;
+    Drate4                         = 60;
+    Dbank1                         = 1;
+    Dbank2                         = 2;
+    Dbank3                         = 3;
+    Dbank4                         = 4;
+// more here
+
+
     SaveOneModel(ModelNumber);
     CloseModelsFile();
     SendValue(Progress, 100);
@@ -4232,6 +4244,32 @@ void SetDefaultValues()
 }
 
 /*********************************************************************************************************************************/
+
+void CheckDualRatesValues(){
+
+    bool KO = false;
+    if (UseDualRates > 1) KO = true;
+    if (Drate2 > 100) KO = true; 
+    if (Drate3 > 100) KO = true;
+    if (Drate4 > 100) KO = true;
+    if (Dbank1 > 4) KO = true;
+    if (Dbank2 > 4) KO = true;
+    if (Dbank3 > 4) KO = true;
+    if (Dbank4 > 4) KO = true;
+    if (KO){
+        UseDualRates                   = false;
+        Drate2                         = 80; // 1 is always 100%
+        Drate3                         = 70;
+        Drate4                         = 60;
+        Dbank1                         = 1;
+        Dbank2                         = 2;
+        Dbank3                         = 3;
+        Dbank4                         = 4;
+    }
+}
+
+/*********************************************************************************************************************************/
+
 
 void ClearBox()
 {
@@ -5949,7 +5987,7 @@ void DoEntireChannel(uint8_t Channel,uint8_t Rate,uint8_t bank)  { // this does 
     CentreDegrees[bank][Channel]        = CalculateDualRate(CentreD, Channel, Rate);
     MidLowDegrees[bank][Channel]        = CalculateDualRate(MidLoD, Channel, Rate);
     MinDegrees[bank][Channel]           = CalculateDualRate(MinD, Channel, Rate);
-    InterpolationTypes[bank][Channel]   = InterpolationTypes[Dbank1][Channel]; // heer
+    InterpolationTypes[bank][Channel]   = InterpolationTypes[Dbank1][Channel];
     Exponential[bank][Channel]          = Exponential[Dbank1][Channel];
 }
 
@@ -5986,8 +6024,9 @@ void DualRatesApply(){   // This function applies dual rates as setup
     }
 }
 
+
 // ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
-#define LASTFUNCTION 48 // one more than final one
+#define LASTFUNCTION 49 // one more than final one
 
 void (*NumberedFunctions[LASTFUNCTION])() {
     Blank,                // 0 (spare)
@@ -6037,7 +6076,8 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     PointSelect,                // 44
     DualRatesStart,             // 45
     DualRatesEnd,               // 46
-    DualRatesApply              // 47    
+    DualRatesApply,             // 47  
+    GotoFrontView               // 48
 
 
 }; // list will become much longer ...
@@ -6137,7 +6177,6 @@ FASTRUN void ButtonWasPressed()
         char page_ColoursView[]        = "page ColoursView";
         char GoSetupView[]             = "GoSetupView";
         char ColoursView[]             = "ColoursView";
-        char GoFrontView[]             = "GoFrontView";
         char SvT11[]                   = "t11";
         char CMsg1[]                   = "Move all controls to their full\r\nextent several times,\r\nthen press Next.";
         char SvB0[]                    = "b0";
@@ -6489,20 +6528,7 @@ FASTRUN void ButtonWasPressed()
             ClearText();
             return;
         }
-        if (InStrng(GoFrontView, TextIn) > 0) { // GOTO frontview 
-            GotoFrontView(); 
-            SafetyWasOn ^= 1;                   // this forces a re-display of safety state 
-            ShowBank();
-            LastTimeRead = 0;
-            Reconnected  = false; // this is to make '** Connected! **' redisplay (in ShowComms())
-            LastSeconds  = 0;     // This forces redisplay of timer...
-            Force_ReDisplay();
-            CheckTimer();
-            ClearText();
-            LastShowTime = 0; // this is to make redisplay sooner (in ShowComms())
-            SendText(FrontView_Connected, na);
-            return;
-        }
+       
 
         if (InStrng(Scan_End, TextIn) > 0) { //  goto setup screen from Scan screen
             CurrentView = MAINSETUPVIEW;
@@ -8025,9 +8051,19 @@ FASTRUN uint32_t GetIntFromAckPayload()   // This one uses a uint32_t int
 void GotoFrontView(){
   
     if (CurrentView != FRONTVIEW){                                        // Frontview is needed
-       SendCommand(page_FrontView);
-       CurrentView = FRONTVIEW;
-       UpdateModelsNameEveryWhere();
+        SendCommand(page_FrontView);
+        CurrentView = FRONTVIEW;
+        UpdateModelsNameEveryWhere();
+        SafetyWasOn ^= 1;                   // this forces a re-display of safety state 
+        ShowBank();
+        LastTimeRead = 0;
+        Reconnected  = false;               // this is to make '** Connected! **' redisplay (in ShowComms())
+        LastSeconds  = 0;                   // This forces redisplay of timer...
+        Force_ReDisplay();
+        CheckTimer();
+        ClearText();
+        LastShowTime = 0;                   // this is to make redisplay sooner (in ShowComms())
+        SendText(FrontView_Connected, na);
     }
 }
 

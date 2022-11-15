@@ -435,6 +435,7 @@ extern FLASHMEM void SetDS1307ToCompilerTime();
 extern int           GetOtherValue(char* nbox);
 extern void          CheckInvisiblePoint();
 extern void          GotoFrontView();
+extern void          CheckDualRatesValues();
 
 /*********************************************************************************************************************************/
 // function prototypes
