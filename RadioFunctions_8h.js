@@ -185,6 +185,7 @@ var RadioFunctions_8h =
     [ "BufferNewPipe", "RadioFunctions_8h.html#a9a3e35cbf8abeae1ebdb4af8dff3571a", null ],
     [ "ButtonWasPressed", "RadioFunctions_8h.html#a8e7ccbf842764fd85cc578be263f7202", null ],
     [ "CalibrateEdgeSwitches", "RadioFunctions_8h.html#a128fe47088693b102796cd67a175ea08", null ],
+    [ "CheckDualRatesValues", "RadioFunctions_8h.html#a5467d21eeae42d1bfdb79914ef52d0ed", null ],
     [ "CheckGapsLength", "RadioFunctions_8h.html#aa60c9cac090f6965b4223d5caf84e2f1", null ],
     [ "CheckInvisiblePoint", "RadioFunctions_8h.html#a1870ad872e2424cbf8222747d3a43617", null ],
     [ "CheckRange", "RadioFunctions_8h.html#a01c7a0b0de94ec72fe070ea9f90dc2ec", null ],
