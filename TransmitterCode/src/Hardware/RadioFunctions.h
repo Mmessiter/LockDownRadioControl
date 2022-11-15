@@ -58,7 +58,7 @@
 #define MAXMIXES                32                        // 32 mixes
 #define TICKSPERMINUTE          60000                     // millis() += 60000 per minute
 #define PROPOCHANNELS           8                         // Only 4 have knobs / 2 sticks (= 4 hall sensors)
-#define BankSWITCH              4                         // Default MODE switch
+#define BANKSWITCH              4                         // Default MODE switch
 #define AUTOSWITCH              1                         // Default AUTO switch
 #define BANKSUSED               4                         // Flight modes (AKA Banks)
 #define DEFAULTPIPEADDRESS      0xBABE1E5420LL            // Pipe address for startup - any value but MUST match RX

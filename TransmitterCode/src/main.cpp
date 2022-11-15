@@ -209,7 +209,7 @@ uint16_t BoxLeft;
 uint16_t BoxRight;
 uint16_t ClickX;
 uint16_t ClickY;
-uint16_t AnalogueInput[PROPOCHANNELS] = {A0, A1, A2, A3, A6, A7, A8, A9}; // PROPO Channels for transmission
+uint16_t AnalogueInput[PROPOCHANNELS] = {A0, A1, A2, A3, A6, A7, A8, A9}; // 8 PROPO Channels for transmission
 uint8_t  CurrentMode                  = NORMAL;
 uint8_t  AllChannels[127]; /// for scanning
 uint8_t  NoCarrier[127];
@@ -313,7 +313,7 @@ bool     BoundFlag      = false;
 bool     Switch[8];
 bool     TrimSwitch[8];
 
-uint8_t  FMSwitch             = BankSWITCH;
+uint8_t  FMSwitch             = BANKSWITCH;
 uint8_t  AutoSwitch           = AUTOSWITCH;
 uint8_t  SafetySwitch         = 0;
 uint8_t  Channel9Switch       = 0;
