@@ -18,6 +18,7 @@ var radio_8h =
     [ "Radio2", "radio_8h.html#a8b76f3c338025926421c7b308405bbfd", null ],
     [ "ReadSavedPipe", "radio_8h.html#a56ee137fc60749fa274236bc239c3291", null ],
     [ "ReadSensorHub", "radio_8h.html#a8fff0fd6eb9e23721d9e06f3f44bd3c9", null ],
+    [ "ReceiveData", "radio_8h.html#a06807a4f185694d37f774702ba74db0a", null ],
     [ "Reconnect", "radio_8h.html#a692b8b0727e0db358f99c7bf4e8235c0", null ],
     [ "SendDateToAckPayload", "radio_8h.html#affa2dcc4341b8daecac77e6e0a354b2d", null ],
     [ "SendIntToAckPayload", "radio_8h.html#a5b9bcce29081b0c53837ecb90e0a6b33", null ],
