@@ -6718,27 +6718,6 @@ FASTRUN void ButtonWasPressed() // heer
             ClearText();
             return;
         }
-
-#ifndef USEPOWEROFFBUTTON
-char PowerDown[]               = "PowerDown";
-
-        if (InStrng(PowerDown, TextIn) > 0) {
-            if (LedWasGreen) {
-                PowerOffTimer     = millis(); // Start a timer for power off button down
-                TurnOffSecondToGo = PowerOffWarningSeconds;
-                ClearText();
-            }
-            else {
-                if (UseLog) LogPowerOff();
-                SaveAllParameters();
-                delay(250); 
-                digitalWrite(POWER_OFF_PIN, HIGH);
-            }
-            return;
-        }
-        
-#endif
-
         if (InStrng(PowerOff, TextIn) > 0) { // power off button up no longer turns off!
             PowerOffTimer = 0;
             ClearText();
@@ -8332,7 +8311,6 @@ void CheckPowerOffButton()
     char PowerPre[] = "TURN OFF?! ";
     char nb[4];
 
-#ifdef USEPOWEROFFBUTTON
     if (!digitalRead(BUTTON_SENSE_PIN)){ 
         GotoFrontView();
         if (LedWasRed) 
@@ -8349,7 +8327,6 @@ void CheckPowerOffButton()
     } else {
             PowerOffTimer = 0;
     }
-#endif
 
     if (PowerOffTimer) { // count down started?
         if (!PowerWarningVisible) {

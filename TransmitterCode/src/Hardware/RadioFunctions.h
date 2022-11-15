@@ -77,7 +77,7 @@
 #define PERFECTPACKETSPERSECOND 150                       // Flat out perfect packets per second
 #define TIMEFORTXMANAGMENT      3                         // How many ms must remain spare between data packets before daring to undertake more trivial tasks 
 #define DEFAULTLEDBRIGHTNESS    20                        // LED brightness
-#define DEFAULTPOWEROFFWARNING  3                         //Default time to warn before cutting power      
+#define DEFAULTPOWEROFFWARNING  3                         // Default time to warn before cutting power      
 
 // **************************************************************************
 //                            FHSS PARAMETERS                               *
