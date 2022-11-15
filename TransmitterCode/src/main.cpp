@@ -24,7 +24,7 @@
  * - Trims saved per bank and per model.
  * - Screen timeout to save battery.
  * - FHSS with very fast connect and reconnect
- * - Uses 32 GIG SD card for model memories and help files (TODO: LOG FILES)
+ * - Uses 32 GIG SD card for model memories and help files
  * - Binding without bind plug - uses unique Mac address as pipe address.
  * - Four User definable three position switches
  * - Channels 5,6,7 & 8 can be switches or knobs.
@@ -44,6 +44,7 @@
  * - Data screen gives all possible telemetry
  * - Log files implemented - and help file system with unlimited file length
  * - Safety switch implemtented (Stops accidental motor starting)
+ * - Dual Rates (actually - quadruple rates) implemented
  *
  *
  * @section txPinout Teensy 4.1 Pins

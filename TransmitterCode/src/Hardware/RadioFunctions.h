@@ -7,7 +7,7 @@
 #define RadioFunctions_H
 
 // **************************************************************************
-//                TX VERSION NUMBER   (October 2022 Malcolm Messiter)        *
+//                TX VERSION NUMBER   (November 2022 Malcolm Messiter)        *
 //***************************************************************************
 
 #define TXVERSION_MAJOR   1
@@ -89,7 +89,7 @@
 #define LOSTCONTACTCUTOFF        3    // How many packets to lose before reconnect triggers
 #define RECONNECT_CHANNELS_COUNT 3    // How many channels to try when reconnecting
 #define RECONNECT_CHANNELS_START 12   // Offset into channels' array
-#define RED_LED_ON_TIME          4000 // How many ms of no connection before RED led comes on
+#define RED_LED_ON_TIME          2000 // How many ms of no connection before RED led comes on
 #define LOW_VOLTAGE_TIME         3000 // How many ms to endure low voltage before announcing it. (3 seconds)
 
 // **************************************************************************
