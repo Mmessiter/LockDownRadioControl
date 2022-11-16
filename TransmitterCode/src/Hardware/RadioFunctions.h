@@ -52,8 +52,6 @@
 // **************************************************************************
 
 
-#define USEPOWEROFFBUTTON                            // Only used when the extra diodes are installed near the power switch 
-
 #define CHANNELSUSED            16                        // 16 Channels
 #define MAXMIXES                32                        // 32 mixes
 #define TICKSPERMINUTE          60000                     // millis() += 60000 per minute
@@ -78,7 +76,7 @@
 #define TIMEFORTXMANAGMENT      3                         // How many ms must remain spare between data packets before daring to undertake more trivial tasks 
 #define DEFAULTLEDBRIGHTNESS    20                        // LED brightness
 #define DEFAULTPOWEROFFWARNING  3                         // Default time to warn before cutting power      
-
+#define MAXDUALRATE             200
 // **************************************************************************
 //                            FHSS PARAMETERS                               *
 //***************************************************************************

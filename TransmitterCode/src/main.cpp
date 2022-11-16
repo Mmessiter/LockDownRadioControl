@@ -4263,9 +4263,9 @@ void CheckDualRatesValues(){
 
     bool KO = false;
 
-    if (Drate2 > 100) KO = true;
-    if (Drate3 > 100) KO = true;
-    if (Drate4 > 100) KO = true;
+    if (Drate2 > MAXDUALRATE) KO = true;
+    if (Drate3 > MAXDUALRATE) KO = true;
+    if (Drate4 > MAXDUALRATE) KO = true;
     if (Dbank1 >   4) KO = true;
     if (Dbank2 >   4) KO = true;
     if (Dbank3 >   4) KO = true;
@@ -6014,11 +6014,11 @@ void ReadDualRatesValues(){
     SendValue(Progress, 10);
     Procrastinate(10);
     Drate2 = GetValue(rate2);
-    if (Drate2 > 100) Drate2 = 100;
+    if (Drate2 > MAXDUALRATE) Drate2 = MAXDUALRATE; // heer
     Drate3 = GetValue(rate3);
-    if (Drate3 > 100) Drate3 = 100;
+    if (Drate3 > MAXDUALRATE) Drate3 = MAXDUALRATE;
     Drate4 = GetValue(rate4);
-    if (Drate4 > 100) Drate4 = 100;
+    if (Drate4 > MAXDUALRATE) Drate4 = MAXDUALRATE;
     SendValue(Progress, 20);
      Procrastinate(10);
     Dbank1 = GetValue(bank1);
