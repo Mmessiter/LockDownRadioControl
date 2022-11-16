@@ -5895,7 +5895,6 @@ void PointDown(){
     MoveCurrentPointDown();
 }
 
-
 /******************************************************************************************************************************/
 
 void CheckInvisiblePoint(){
@@ -5913,20 +5912,13 @@ void PointSelect(){
     DisplayCurve();
 }
 
-
 /******************************************************************************************************************************/
 
 void ShowDRChannelName(char* nm, uint8_t n){
-    char nu[] = "(Not Used)";
+    char nu[] = "Not used";
 
-    if (n > 0)
-        {
-            SendText(nm, ChannelNames[n-1]); 
-        }
-        else 
-        {
-            SendText(nm, nu); 
-        }
+    if (n) { SendText(nm, ChannelNames[n-1]); 
+    } else { SendText(nm, nu); }    // not user if zero
 }
 
 /******************************************************************************************************************************/
@@ -6018,47 +6010,51 @@ void ReadDualRatesValues(){
     char ChNumber6[]      = "n4";
     char ChNumber7[]      = "n5";
     char ChNumber8[]      = "n7";
-
     SendCommand(ProgressStart);
     SendValue(Progress, 10);
-
+    Procrastinate(10);
     Drate2 = GetValue(rate2);
     if (Drate2 > 100) Drate2 = 100;
     Drate3 = GetValue(rate3);
     if (Drate3 > 100) Drate3 = 100;
     Drate4 = GetValue(rate4);
     if (Drate4 > 100) Drate4 = 100;
-     SendValue(Progress, 20);
+    SendValue(Progress, 20);
+     Procrastinate(10);
     Dbank1 = GetValue(bank1);
     if (Dbank1 > 4) Dbank1 = 0;
     Dbank2 = GetValue(bank2);
     if (Dbank2 > 4) Dbank2 = 0;
-     SendValue(Progress, 30);
+    SendValue(Progress, 30);
+     Procrastinate(10);
     Dbank3 = GetValue(bank3);
     if (Dbank3 > 4) Dbank3 = 0;
-     SendValue(Progress, 40);
+    SendValue(Progress, 40);
+     Procrastinate(10);
     Dbank4 = GetValue(bank4);
     if (Dbank4 > 4) Dbank4 = 0;
     SendValue(Progress, 50);
+    Procrastinate(10);
     DRch[0] = CheckRange(GetValue(ChNumber1),0,16);
     DRch[1] = CheckRange(GetValue(ChNumber2),0,16);   
     DRch[2] = CheckRange(GetValue(ChNumber3),0,16);
     SendValue(Progress, 60);
+    Procrastinate(10);
     DRch[3] = CheckRange(GetValue(ChNumber4),0,16);
     DRch[4] = CheckRange(GetValue(ChNumber5),0,16);
     DRch[5] = CheckRange(GetValue(ChNumber6),0,16);
-    SendValue(Progress, 70);
+    SendValue(Progress, 75);
+    Procrastinate(10);
     DRch[6] = CheckRange(GetValue(ChNumber7),0,16);
     DRch[7] = CheckRange(GetValue(ChNumber8),0,16);
     SendValue(Progress, 100);
-    delay (100);
+    Procrastinate(10);
     SendCommand(ProgressEnd);
 }
 /******************************************************************************************************************************/
 
 void DualRatesEnd(){ 
     char GotoSticksView[] = "page SticksView";
-    
     ReadDualRatesValues();
     SaveOneModel(ModelNumber);
     SendCommand(GotoSticksView);
