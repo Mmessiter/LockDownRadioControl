@@ -25,5 +25,6 @@ var searchData=
   ['drate2_22',['Drate2',['../TransmitterCode_2src_2main_8cpp.html#a83c12aaa15d3f764a2f1f84f0f55187d',1,'main.cpp']]],
   ['drate3_23',['Drate3',['../TransmitterCode_2src_2main_8cpp.html#a7fe9d67b9708d831195c2acd3677118d',1,'main.cpp']]],
   ['drate4_24',['Drate4',['../TransmitterCode_2src_2main_8cpp.html#a571cf4330943f1c6cbc33f4e1e5e418a',1,'main.cpp']]],
-  ['dt_25',['dt',['../Quadcopter_2src_2main_8cpp.html#a778e38aa889751afffa2dea6b803e67a',1,'main.cpp']]]
+  ['drch_25',['DRch',['../TransmitterCode_2src_2main_8cpp.html#ac7840e4902dbb27a25af0586fb68469a',1,'main.cpp']]],
+  ['dt_26',['dt',['../Quadcopter_2src_2main_8cpp.html#a778e38aa889751afffa2dea6b803e67a',1,'main.cpp']]]
 ];
