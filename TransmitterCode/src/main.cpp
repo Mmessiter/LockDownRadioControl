@@ -6069,15 +6069,15 @@ float CalculateDualRate(int Curve, int Channel,float rate){
 
     switch (Curve){ // Curve is 1 - 5, low to hi.
     case 1:  
-      return (((MinDegrees[Dbank1][Channel]) - 90) * (rate / 100)) + 90;
+        return (((MinDegrees[Dbank1][Channel])    - 90) * (rate / 100)) + 90;
     case 2:  
-      return (((MidLowDegrees[Dbank1][Channel]) - 90) * (rate / 100)) + 90;
+        return (((MidLowDegrees[Dbank1][Channel]) - 90) * (rate / 100)) + 90;
     case 3:  
-       return (((CentreDegrees[Dbank1][Channel]) - 90) * (rate / 100)) + 90;
+        return (((CentreDegrees[Dbank1][Channel]) - 90) * (rate / 100)) + 90;
     case 4:  
-     return (((MidHiDegrees[Dbank1][Channel]) - 90) * (rate / 100)) + 90;
+        return (((MidHiDegrees[Dbank1][Channel])  - 90) * (rate / 100)) + 90;
     case 5:    
-        return (((MaxDegrees[Dbank1][Channel]) - 90) * (rate / 100)) + 90;
+        return (((MaxDegrees[Dbank1][Channel])    - 90) * (rate / 100)) + 90;
     default:
         return 0;
     }
@@ -6111,21 +6111,21 @@ void DualRatesApply(){                              // This function applies dua
         if (Drate2 && Dbank2){                      // disable bank by making either value 0
         for (int i = 0; i < 8;++i) {
                 if (DRch[i]) {                      // disable channel by making it 0
-                DoEntireChannel(DRch[i]-1, Drate2, Dbank2);
+                    DoEntireChannel(DRch[i]-1, Drate2, Dbank2);
                 };
             }
         }
         if (Drate3 && Dbank3){                      // disable bank by making either value 0
             for (int i = 0; i < 8;++i) {
                 if (DRch[i]) {                      // disable channel by making it 0
-                DoEntireChannel(DRch[i]-1, Drate3, Dbank3);
+                    DoEntireChannel(DRch[i]-1, Drate3, Dbank3);
                 };
             }
         }
         if (Drate4 && Dbank4){                      // disable bank by making either value 0
             for (int i = 0; i < 8;++i) {
                 if (DRch[i]) {                      // disable channel by making it 0
-                DoEntireChannel(DRch[i]-1, Drate4, Dbank4);
+                    DoEntireChannel(DRch[i]-1, Drate4, Dbank4);
                 };
             }
         }
