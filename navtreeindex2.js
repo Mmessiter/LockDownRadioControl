@@ -248,6 +248,6 @@ var NAVTREEINDEX2 =
 "RadioFunctions_8cpp.html#aff7f985af10a021196ae5c9bf188c445":[8,0,4,0,0,0,20],
 "RadioFunctions_8cpp_source.html":[8,0,4,0,0,0],
 "RadioFunctions_8h.html":[8,0,4,0,0,1],
-"RadioFunctions_8h.html#a0008024e40c8e90017f18745d34b6224":[8,0,4,0,0,1,285],
-"RadioFunctions_8h.html#a00adadb4876f6c86728e50a79fbc8fcc":[8,0,4,0,0,1,145]
+"RadioFunctions_8h.html#a0008024e40c8e90017f18745d34b6224":[8,0,4,0,0,1,286],
+"RadioFunctions_8h.html#a00adadb4876f6c86728e50a79fbc8fcc":[8,0,4,0,0,1,146]
 };
