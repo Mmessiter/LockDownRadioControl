@@ -209,7 +209,7 @@ uint16_t BoxLeft;
 uint16_t BoxRight;
 uint16_t ClickX;
 uint16_t ClickY;
-uint16_t AnalogueInput[PROPOCHANNELS] = {A0, A1, A2, A3, A6, A7, A8, A9}; // PROPO Channels for transmission
+uint16_t AnalogueInput[PROPOCHANNELS] = {A0, A1, A2, A3, A6, A7, A8, A9}; // 8 PROPO Channels for transmission
 uint8_t  CurrentMode                  = NORMAL;
 uint8_t  AllChannels[127]; /// for scanning
 uint8_t  NoCarrier[127];
@@ -313,7 +313,7 @@ bool     BoundFlag      = false;
 bool     Switch[8];
 bool     TrimSwitch[8];
 
-uint8_t  FMSwitch             = BankSWITCH;
+uint8_t  FMSwitch             = BANKSWITCH;
 uint8_t  AutoSwitch           = AUTOSWITCH;
 uint8_t  SafetySwitch         = 0;
 uint8_t  Channel9Switch       = 0;
@@ -503,14 +503,14 @@ bool     TXLiPo                         = false;
 uint8_t  CurrentPoint                   = 1;
 
 bool     UseDualRates                    = false;
-uint8_t  Drate2                          = 80; // 1 is always 100%
-uint8_t  Drate3                          = 70;
-uint8_t  Drate4                          = 60;
-uint8_t  Dbank1                          = 1;
+uint8_t  Drate2                          = 75; // 1 is always 100%
+uint8_t  Drate3                          = 50;
+uint8_t  Drate4                          = 0;
+uint8_t  Dbank1                          = 3;
 uint8_t  Dbank2                          = 2;
-uint8_t  Dbank3                          = 3;
-uint8_t  Dbank4                          = 4;
-
+uint8_t  Dbank3                          = 1;
+uint8_t  Dbank4                          = 0;
+uint8_t  DRch[8]                         =  {1, 2, 4, 0, 0, 0, 0, 0};
 
 // **********************************************************************************************************************************
 // **********************************************************************************************************************************
@@ -2703,6 +2703,11 @@ bool ReadOneModel(uint8_t Mnum)
     ++SDCardAddress;
     UseDualRates = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
+for (int i = 0; i < 8;++i){
+        DRch[i]= SDRead8BITS(SDCardAddress);
+        ++SDCardAddress;
+    }
+
     CheckDualRatesValues();
 
     // **************************************
@@ -3712,7 +3717,10 @@ void SaveOneModel(uint16_t mnum)
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, UseDualRates);
     ++SDCardAddress;
-
+    for (int i = 0; i < 8;++i){
+            SDUpdate8BITS(SDCardAddress, DRch[i]);
+            ++SDCardAddress;
+    }
     SaveCheckSum32(); // Save the Model parametres checksm
     
     // ********************** Add more
@@ -4218,16 +4226,21 @@ void SetDefaultValues()
     ModelsMacUnionSaved.Val32[0] = 0;
     ModelsMacUnionSaved.Val32[1] = 0;
     UseDualRates                   = false;
-    Drate2                         = 80; // 1 is always 100%
-    Drate3                         = 70;
-    Drate4                         = 60;
-    Dbank1                         = 1;
+    Drate2                         = 75; // 1 is always 100% 
+    Drate3                         = 50;
+    Drate4                         = 0;
+    Dbank1                         = 3;
     Dbank2                         = 2;
-    Dbank3                         = 3;
-    Dbank4                         = 4;
-
-
-
+    Dbank3                         = 1;
+    Dbank4                         = 0;
+    DRch[0] = 1;
+    DRch[1] = 2;
+    DRch[2] = 4;
+    DRch[3] = 0;
+    DRch[4] = 0;
+    DRch[5] = 0;
+    DRch[6] = 0;
+    DRch[7] = 0;
     SaveOneModel(ModelNumber);
     CloseModelsFile();
     SendValue(Progress, 100);
@@ -4249,25 +4262,37 @@ void SetDefaultValues()
 void CheckDualRatesValues(){
 
     bool KO = false;
-    if (UseDualRates > 1) KO    = true;
-    if (Drate2 > 100) KO        = true; 
-    if (Drate3 > 100) KO        = true;
-    if (Drate4 > 100) KO        = true;
-    if (Dbank1 > 4) KO          = true;
-    if (Dbank2 > 4) KO          = true;
-    if (Dbank3 > 4) KO          = true;
-    if (Dbank4 > 4) KO          = true;
-    
-    if (KO){
-        UseDualRates            = false;
-        Drate2                  = 80; // 1 is always 100%
-        Drate3                  = 70;
-        Drate4                  = 60;
-        Dbank1                  = 1;
-        Dbank2                  = 2;
-        Dbank3                  = 3;
-        Dbank4                  = 4;
+
+    if (Drate2 > MAXDUALRATE) KO = true;
+    if (Drate3 > MAXDUALRATE) KO = true;
+    if (Drate4 > MAXDUALRATE) KO = true;
+    if (Dbank1 >   4) KO = true;
+    if (Dbank2 >   4) KO = true;
+    if (Dbank3 >   4) KO = true;
+    if (Dbank4 >   4) KO = true;
+
+    for (int i = 0; i < 8;++i){
+        if (DRch[i] > 16) KO = true;
+        Look(DRch[i]);
     }
+        if (KO) {
+            UseDualRates = false;
+            Drate2       = 75; // 1 is always 100%
+            Drate3       = 50;
+            Drate4       = 0;
+            Dbank1       = 1;
+            Dbank2       = 2;
+            Dbank3       = 3;
+            Dbank4       = 4;
+            DRch[0]      = 1;
+            DRch[1]      = 2;
+            DRch[2]      = 4;
+            DRch[3]      = 0;
+            DRch[4]      = 0;
+            DRch[5]      = 0;
+            DRch[6]      = 0;
+            DRch[7]      = 0;
+        }
 }
 
 /*********************************************************************************************************************************/
@@ -5453,25 +5478,26 @@ void GotoMacrosView()
 void UpLog()
 {
     if (RecentStartLine > 0 && (CurrentView == LOGVIEW)) {
-        RecentStartLine -= 3;
-        if (RecentStartLine < 1) RecentStartLine = 1;
+        RecentStartLine -= 1;
+        if (RecentStartLine < 0) RecentStartLine = 0;
         ShowLogFile(RecentStartLine);
     }
     if (RecentStartLine > 0 && (CurrentView == HELP_VIEW)) {
-        RecentStartLine -= 3;
-        if (RecentStartLine < 1) RecentStartLine = 1;
+        RecentStartLine -= 1;
+        if (RecentStartLine < 1) RecentStartLine = 0;
         ScrollHelpFile();
     }
 }
 /******************************************************************************************************************************/
 void DownLog()
 {
+  
     if (ThereIsMoreToSee && (CurrentView == LOGVIEW)) {
-        RecentStartLine += 3;
+        RecentStartLine += 1;
         ShowLogFile(RecentStartLine);
     }
     if (ThereIsMoreToSee && (CurrentView == HELP_VIEW)) {
-        RecentStartLine += 3;
+        RecentStartLine += 1;
         ScrollHelpFile();
     }
 }
@@ -5530,9 +5556,9 @@ void SetupViewFM()
 
     char page_SetupView[] = "page SetupView";
     SaveAllParameters();
+    CurrentView = MAINSETUPVIEW;
     SendCommand(page_SetupView);
     CurrentMode        = NORMAL; // Send data again
-    CurrentView        = MAINSETUPVIEW;
     UpdateModelsNameEveryWhere();
 }
     
@@ -5697,9 +5723,8 @@ void OptionView4End()
     MotorChannelZero    = GetValue(Mvalue);
     UseMotorKill        = GetValue(UseKill);
     MotorChannel        = GetValue(Mchannel) - 1;
-
-    SendCommand(page_SetupView);
     CurrentView = MAINSETUPVIEW;
+    SendCommand(page_SetupView);
     SaveTransmitterParameters();
     UpdateModelsNameEveryWhere();
 }
@@ -5871,7 +5896,6 @@ void PointDown(){
     MoveCurrentPointDown();
 }
 
-
 /******************************************************************************************************************************/
 
 void CheckInvisiblePoint(){
@@ -5891,7 +5915,16 @@ void PointSelect(){
 
 /******************************************************************************************************************************/
 
-void DualRatesStart(){
+void ShowDRChannelName(char* nm, uint8_t n){
+    char nu[] = "Not used";
+
+    if (n) { SendText(nm, ChannelNames[n-1]); 
+    } else { SendText(nm, nu); }    // not user if zero
+}
+
+/******************************************************************************************************************************/
+
+void DisplayDualRateValues(){
     char rate2[]          = "rate2";
     char rate3[]          = "rate3";
     char rate4[]          = "rate4";
@@ -5899,24 +5932,70 @@ void DualRatesStart(){
     char bank2[]          = "bank2";
     char bank3[]          = "bank3";
     char bank4[]          = "bank4";
-    char c1[]             = "c1";
-    char GotoDualRates[] = "page DualRatesView";
-    SendCommand(GotoDualRates);
-    CurrentView = DUALRATESVIEW;
-    SendValue(c1,UseDualRates);   // display current values
+    char ChName1[]        = "t12";
+    char ChName2[]        = "t8";
+    char ChName3[]        = "t11";
+    char ChName4[]        = "t13";
+    char ChName5[]        = "t16";
+    char ChName6[]        = "t14";
+    char ChName7[]        = "t15";
+    char ChName8[]        = "t17";
+    char ChNumber1[]      = "n2";
+    char ChNumber2[]      = "n0";
+    char ChNumber3[]      = "n1";
+    char ChNumber4[]      = "n3";
+    char ChNumber5[]      = "n6";
+    char ChNumber6[]      = "n4";
+    char ChNumber7[]      = "n5";
+    char ChNumber8[]      = "n7";
+
     SendValue(rate2,Drate2);
     SendValue(rate3,Drate3);
     SendValue(rate4,Drate4); 
     SendValue(bank1,Dbank1);
     SendValue(bank2,Dbank2);
     SendValue(bank3,Dbank3);
-    SendValue(bank4, Dbank4);
+    SendValue(bank4, Dbank4); 
+    
+    SendValue(ChNumber1, DRch[0]);
+    SendValue(ChNumber2, DRch[1]);
+    SendValue(ChNumber3, DRch[2]);
+    SendValue(ChNumber4, DRch[3]);
+    SendValue(ChNumber5, DRch[4]);
+    SendValue(ChNumber6, DRch[5]);
+    SendValue(ChNumber7, DRch[6]);
+    SendValue(ChNumber8, DRch[7]);
+
+    ShowDRChannelName(ChName1, DRch[0]);
+    ShowDRChannelName(ChName2, DRch[1]);
+    ShowDRChannelName(ChName3, DRch[2]);
+    ShowDRChannelName(ChName4, DRch[3]);
+    ShowDRChannelName(ChName5, DRch[4]);
+    ShowDRChannelName(ChName6, DRch[5]);
+    ShowDRChannelName(ChName7, DRch[6]);
+    ShowDRChannelName(ChName8, DRch[7]);
+
 }
 
 /******************************************************************************************************************************/
 
-void ReadDualRatesValues(){
-  
+void DualRatesStart(){
+    
+    char GotoDualRates[] = "page DualRatesView";
+    
+    SendCommand(GotoDualRates);
+    CurrentView = DUALRATESVIEW;
+    DisplayDualRateValues();
+    UpdateModelsNameEveryWhere();
+}
+
+/******************************************************************************************************************************/
+
+void ReadDualRatesValues(){ 
+
+    char ProgressStart[]  = "vis Progress,1";
+    char ProgressEnd[]    = "vis Progress,0";
+    char Progress[]       = "Progress";
     char rate2[]          = "rate2";
     char rate3[]          = "rate3";
     char rate4[]          = "rate4";
@@ -5924,37 +6003,65 @@ void ReadDualRatesValues(){
     char bank2[]          = "bank2";
     char bank3[]          = "bank3";
     char bank4[]          = "bank4";
-    char c1[]             = "c1";
-
-    UseDualRates = GetValue(c1);   // load new values
+    char ChNumber1[]      = "n2";
+    char ChNumber2[]      = "n0";
+    char ChNumber3[]      = "n1";
+    char ChNumber4[]      = "n3";
+    char ChNumber5[]      = "n6";
+    char ChNumber6[]      = "n4";
+    char ChNumber7[]      = "n5";
+    char ChNumber8[]      = "n7";
+    SendCommand(ProgressStart);
+    SendValue(Progress, 10);
+    Procrastinate(10);
     Drate2 = GetValue(rate2);
-    if (Drate2 > 100) Drate2 = 100;
+    if (Drate2 > MAXDUALRATE) Drate2 = MAXDUALRATE; // heer
     Drate3 = GetValue(rate3);
-    if (Drate3 > 100) Drate3 = 100;
+    if (Drate3 > MAXDUALRATE) Drate3 = MAXDUALRATE;
     Drate4 = GetValue(rate4);
-    if (Drate4 > 100) Drate4 = 100;
+    if (Drate4 > MAXDUALRATE) Drate4 = MAXDUALRATE;
+    SendValue(Progress, 20);
+     Procrastinate(10);
     Dbank1 = GetValue(bank1);
     if (Dbank1 > 4) Dbank1 = 0;
     Dbank2 = GetValue(bank2);
     if (Dbank2 > 4) Dbank2 = 0;
+    SendValue(Progress, 30);
+     Procrastinate(10);
     Dbank3 = GetValue(bank3);
     if (Dbank3 > 4) Dbank3 = 0;
+    SendValue(Progress, 40);
+     Procrastinate(10);
     Dbank4 = GetValue(bank4);
     if (Dbank4 > 4) Dbank4 = 0;
+    SendValue(Progress, 50);
+    Procrastinate(10);
+    DRch[0] = CheckRange(GetValue(ChNumber1),0,16);
+    DRch[1] = CheckRange(GetValue(ChNumber2),0,16);   
+    DRch[2] = CheckRange(GetValue(ChNumber3),0,16);
+    SendValue(Progress, 60);
+    Procrastinate(10);
+    DRch[3] = CheckRange(GetValue(ChNumber4),0,16);
+    DRch[4] = CheckRange(GetValue(ChNumber5),0,16);
+    DRch[5] = CheckRange(GetValue(ChNumber6),0,16);
+    SendValue(Progress, 75);
+    Procrastinate(10);
+    DRch[6] = CheckRange(GetValue(ChNumber7),0,16);
+    DRch[7] = CheckRange(GetValue(ChNumber8),0,16);
+    SendValue(Progress, 100);
+    Procrastinate(10);
+    SendCommand(ProgressEnd);
 }
 /******************************************************************************************************************************/
 
 void DualRatesEnd(){ 
-    
     char GotoSticksView[] = "page SticksView";
-    
     ReadDualRatesValues();
     SaveOneModel(ModelNumber);
     SendCommand(GotoSticksView);
     Force_ReDisplay();
     ShowServoPos();
     CurrentView = STICKSVIEW;
-
 }
 
 /******************************************************************************************************************************/
@@ -5963,15 +6070,15 @@ float CalculateDualRate(int Curve, int Channel,float rate){
 
     switch (Curve){ // Curve is 1 - 5, low to hi.
     case 1:  
-      return (((MinDegrees[Dbank1][Channel]) - 90) * (rate / 100)) + 90;
+        return (((MinDegrees[Dbank1][Channel])    - 90) * (rate / 100)) + 90;
     case 2:  
-      return (((MidLowDegrees[Dbank1][Channel]) - 90) * (rate / 100)) + 90;
+        return (((MidLowDegrees[Dbank1][Channel]) - 90) * (rate / 100)) + 90;
     case 3:  
-       return (((CentreDegrees[Dbank1][Channel]) - 90) * (rate / 100)) + 90;
+        return (((CentreDegrees[Dbank1][Channel]) - 90) * (rate / 100)) + 90;
     case 4:  
-     return (((MidHiDegrees[Dbank1][Channel]) - 90) * (rate / 100)) + 90;
+        return (((MidHiDegrees[Dbank1][Channel])  - 90) * (rate / 100)) + 90;
     case 5:    
-        return (((MaxDegrees[Dbank1][Channel]) - 90) * (rate / 100)) + 90;
+        return (((MaxDegrees[Dbank1][Channel])    - 90) * (rate / 100)) + 90;
     default:
         return 0;
     }
@@ -5986,7 +6093,6 @@ void DoEntireChannel(uint8_t Channel,uint8_t Rate,uint8_t bank)  { // this does 
     uint8_t CentreD = 3;
     uint8_t MidLoD = 2;
     uint8_t MinD = 1;
-
     MaxDegrees[bank][Channel]           = CalculateDualRate(MaxD, Channel, Rate);
     MidHiDegrees[bank][Channel]         = CalculateDualRate(MidHiD, Channel, Rate);
     CentreDegrees[bank][Channel]        = CalculateDualRate(CentreD, Channel, Rate);
@@ -5998,38 +6104,34 @@ void DoEntireChannel(uint8_t Channel,uint8_t Rate,uint8_t bank)  { // this does 
 
 /******************************************************************************************************************************/
 
-void DualRatesApply(){   // This function applies dual rates as setup
+void DualRatesApply(){                              // This function applies dual rates as setup
 
-        uint8_t aileron     = 0;
-        uint8_t elevator    = 1;
-        uint8_t rudder      = 3;
-        char GotoSticksView[] = "page SticksView";
         ReadDualRatesValues();
-    if (UseDualRates) {
-        if (Drate2 && Dbank2){              // disable by making either value 0
-            DoEntireChannel(aileron,  Drate2, Dbank2);
-            DoEntireChannel(elevator, Drate2, Dbank2);
-            DoEntireChannel(rudder,   Drate2, Dbank2);
+        DisplayDualRateValues();
+
+        if (Drate2 && Dbank2){                      // disable bank by making either value 0
+        for (int i = 0; i < 8;++i) {
+                if (DRch[i]) {                      // disable channel by making it 0
+                    DoEntireChannel(DRch[i]-1, Drate2, Dbank2);
+                };
+            }
         }
-        if (Drate3 && Dbank3){              // disable by making either value 0
-            DoEntireChannel(aileron,  Drate3, Dbank3);
-            DoEntireChannel(elevator, Drate3, Dbank3);
-            DoEntireChannel(rudder,   Drate3, Dbank3);
+        if (Drate3 && Dbank3){                      // disable bank by making either value 0
+            for (int i = 0; i < 8;++i) {
+                if (DRch[i]) {                      // disable channel by making it 0
+                    DoEntireChannel(DRch[i]-1, Drate3, Dbank3);
+                };
+            }
         }
-        if (Drate4 && Dbank4){              // disable by making either value 0
-            DoEntireChannel(aileron,  Drate4, Dbank4);
-            DoEntireChannel(elevator, Drate4, Dbank4);
-            DoEntireChannel(rudder,   Drate4, Dbank4);
+        if (Drate4 && Dbank4){                      // disable bank by making either value 0
+            for (int i = 0; i < 8;++i) {
+                if (DRch[i]) {                      // disable channel by making it 0
+                    DoEntireChannel(DRch[i]-1, Drate4, Dbank4);
+                };
+            }
         }
         SaveOneModel(ModelNumber);
-        SendCommand(GotoSticksView);
-        Force_ReDisplay();
-        ShowServoPos();
-        CurrentView = STICKSVIEW;
-    }
 }
-
-
 // ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
 #define LASTFUNCTION 49 // one more than final one
 
@@ -6090,10 +6192,19 @@ void (*NumberedFunctions[LASTFUNCTION])() {
 /*********************************************************************************************************************************
  *                          BUTTON WAS PRESSED (DEAL WITH INPUT FROM NEXTION DISPLAY)                                            *
  *********************************************************************************************************************************/
-FASTRUN void ButtonWasPressed()
+FASTRUN void ButtonWasPressed() 
 {
     if (strlen(TextIn) > 0) {
         StartInactvityTimeout();
+
+        ScreenTimeTimer = millis(); // reset screen timeout counter
+        if (ScreenIsOff) {
+            RestoreBrightness();
+            ScreenIsOff = false;
+            ClearText();
+            return;
+        }
+
         union
         {
             uint8_t  First4Bytes[4];
@@ -6326,13 +6437,6 @@ FASTRUN void ButtonWasPressed()
       
 
 
-        ScreenTimeTimer = millis(); // reset screen timeout counter
-        if (ScreenIsOff) {
-            RestoreBrightness();
-            ScreenIsOff = false;
-            ClearText();
-            return;
-        }
 
         // ************************* test input words from Nextion *****************
 
@@ -6380,7 +6484,6 @@ FASTRUN void ButtonWasPressed()
         }
         if (InStrng(SetupAud, TextIn) > 0) { // Exit from screen with audio options
             CurrentMode = NORMAL;
-            CurrentView = MAINSETUPVIEW;
             AudioVolume = GetValue(n0);
             if (AudioVolume < 5) AudioVolume = 5;
             Brightness        = GetValue(n1);
@@ -6392,6 +6495,7 @@ FASTRUN void ButtonWasPressed()
             AnnounceConnected = GetValue(c5);
             RestoreBrightness();
             SetAudioVolume(AudioVolume);
+            CurrentView = MAINSETUPVIEW;
             SendCommand(page_SetupView);
             LastTimeRead = 0;
             SaveTransmitterParameters();
@@ -6411,6 +6515,7 @@ FASTRUN void ButtonWasPressed()
             }
             ClearText();
             SaveAllParameters();
+            CurrentView = MAINSETUPVIEW;
             SendCommand(page_SetupView);
             LastTimeRead = 0;
             CurrentMode        = NORMAL;
@@ -6490,10 +6595,10 @@ FASTRUN void ButtonWasPressed()
             SaveAllParameters();
             SendValue(Progress, 95);
             SendValue(Progress, 100);
+            CurrentView = MAINSETUPVIEW;
             SendCommand(page_SetupView);
             LastTimeRead = 0;
             CurrentMode        = NORMAL;
-            CurrentView        = MAINSETUPVIEW;
             b5isGrey           = false;
             SendCommand(ProgressEnd);
             LedWasGreen = false;
@@ -6716,27 +6821,6 @@ FASTRUN void ButtonWasPressed()
             ClearText();
             return;
         }
-
-#ifndef USEPOWEROFFBUTTON
-char PowerDown[]               = "PowerDown";
-
-        if (InStrng(PowerDown, TextIn) > 0) {
-            if (LedWasGreen) {
-                PowerOffTimer     = millis(); // Start a timer for power off button down
-                TurnOffSecondToGo = PowerOffWarningSeconds;
-                ClearText();
-            }
-            else {
-                if (UseLog) LogPowerOff();
-                SaveAllParameters();
-                delay(250); 
-                digitalWrite(POWER_OFF_PIN, HIGH);
-            }
-            return;
-        }
-        
-#endif
-
         if (InStrng(PowerOff, TextIn) > 0) { // power off button up no longer turns off!
             PowerOffTimer = 0;
             ClearText();
@@ -6912,8 +6996,8 @@ char PowerDown[]               = "PowerDown";
             CurrentMode = NORMAL;
             SendCommand(ProgressEnd);
             UpdateButtonLabels();
-            SendCommand(page_SetupView);
             CurrentView = MAINSETUPVIEW;
+            SendCommand(page_SetupView);
             b5isGrey = false;
             LastTimeRead = 0;
             ClearText();
@@ -7157,8 +7241,8 @@ char PowerDown[]               = "PowerDown";
         }
 
         if (InStrng(GoSetupView, TextIn) > 0) {
-            SendCommand(page_SetupView);
             CurrentView = MAINSETUPVIEW;
+            SendCommand(page_SetupView);
             b5isGrey    = false;
             UpdateModelsNameEveryWhere();
             ClearText();
@@ -7279,10 +7363,10 @@ char PowerDown[]               = "PowerDown";
             if (GetValue(Mode2) == 1) SticksMode = 2;
             SaveAllParameters(); // save trims to SDcard
             b5isGrey           = false;
+            CurrentView = MAINSETUPVIEW;
             SendCommand(page_SetupView);
             LastTimeRead = 0;
             CurrentMode        = NORMAL;
-            CurrentView        = MAINSETUPVIEW;
             UpdateModelsNameEveryWhere();
             ClearText();
             return;
@@ -8054,21 +8138,21 @@ FASTRUN uint32_t GetIntFromAckPayload()   // This one uses a uint32_t int
 /************************************************************************************************************/
 
 void GotoFrontView(){
-  
-    if (CurrentView != FRONTVIEW){                                        // Frontview is needed
-        SendCommand(page_FrontView);
-        CurrentView = FRONTVIEW;
-        UpdateModelsNameEveryWhere();
-        SafetyWasOn ^= 1;                   // this forces a re-display of safety state 
-        ShowBank();
-        LastTimeRead = 0;
-        Reconnected  = false;               // this is to make '** Connected! **' redisplay (in ShowComms())
-        LastSeconds  = 0;                   // This forces redisplay of timer...
-        Force_ReDisplay();
-        CheckTimer();
-        ClearText();
-        LastShowTime = 0;                   // this is to make redisplay sooner (in ShowComms())
-        SendText(FrontView_Connected, na);
+    if (CurrentView != FRONTVIEW)
+    { 
+          SendCommand(page_FrontView);
+          CurrentView = FRONTVIEW;
+          UpdateModelsNameEveryWhere();
+          SafetyWasOn ^= 1; // this forces a re-display of safety state
+          ShowBank();
+          LastTimeRead = 0;
+          Reconnected  = false; // this is to make '** Connected! **' redisplay (in ShowComms())
+          LastSeconds  = 0;     // This forces redisplay of timer...
+          Force_ReDisplay();
+          CheckTimer();
+          ClearText();
+          LastShowTime = 0; // this is to make redisplay sooner (in ShowComms())
+          SendText(FrontView_Connected, na);
     }
 }
 
@@ -8330,7 +8414,6 @@ void CheckPowerOffButton()
     char PowerPre[] = "TURN OFF?! ";
     char nb[4];
 
-#ifdef USEPOWEROFFBUTTON
     if (!digitalRead(BUTTON_SENSE_PIN)){ 
         GotoFrontView();
         if (LedWasRed) 
@@ -8347,7 +8430,6 @@ void CheckPowerOffButton()
     } else {
             PowerOffTimer = 0;
     }
-#endif
 
     if (PowerOffTimer) { // count down started?
         if (!PowerWarningVisible) {

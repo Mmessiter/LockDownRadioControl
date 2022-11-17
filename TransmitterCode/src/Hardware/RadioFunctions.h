@@ -37,7 +37,7 @@
 //    DEBUG OPTIONS (Uncomment any of these for that bit of debug info)     *
 //***************************************************************************
 
-// #define DB_NEXTION        // Debug NEXTION
+ #define DB_NEXTION        // Debug NEXTION
 // #define DB_SD             // Debug SD card data
 // #define DB_CHECKSUM       // Debug 32BIT file checksum info
 // #define DB_FHSS           // Debug real time FHSS data
@@ -52,13 +52,11 @@
 // **************************************************************************
 
 
-#define USEPOWEROFFBUTTON                            // Only used when the extra diodes are installed near the power switch 
-
 #define CHANNELSUSED            16                        // 16 Channels
 #define MAXMIXES                32                        // 32 mixes
 #define TICKSPERMINUTE          60000                     // millis() += 60000 per minute
 #define PROPOCHANNELS           8                         // Only 4 have knobs / 2 sticks (= 4 hall sensors)
-#define BankSWITCH              4                         // Default MODE switch
+#define BANKSWITCH              4                         // Default MODE switch
 #define AUTOSWITCH              1                         // Default AUTO switch
 #define BANKSUSED               4                         // Flight modes (AKA Banks)
 #define DEFAULTPIPEADDRESS      0xBABE1E5420LL            // Pipe address for startup - any value but MUST match RX
@@ -77,8 +75,8 @@
 #define PERFECTPACKETSPERSECOND 150                       // Flat out perfect packets per second
 #define TIMEFORTXMANAGMENT      3                         // How many ms must remain spare between data packets before daring to undertake more trivial tasks 
 #define DEFAULTLEDBRIGHTNESS    20                        // LED brightness
-#define DEFAULTPOWEROFFWARNING  3                         //Default time to warn before cutting power      
-
+#define DEFAULTPOWEROFFWARNING  3                         // Default time to warn before cutting power      
+#define MAXDUALRATE             200
 // **************************************************************************
 //                            FHSS PARAMETERS                               *
 //***************************************************************************

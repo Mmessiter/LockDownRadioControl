@@ -1,22 +1,28 @@
-This screen should usually be visible while flying a model because it shows the bank, time, trims, motor timer and battery voltages. ||
+Welcome to 'Lockdown Radio' !|
 
-The motor timer runs automatically when the model is NOT in bank 4 in order to time the motor use. So it's recommended to set up the model such that the motor is always off in Bank 4.||
+If you still have questions after looking at the help screens, please email Malcolm Messiter at mmessiter@gmail.com |
 
-The timer pauses while in Bank 4 and is reset when the transmitter is turned on.||
+It's recommended that this screen be visible while flying a model because it shows the bank, time, trims, motor timer and battery voltages. ||
 
-LED blue = radio is not trying to connect.|
-LED red = radio is trying to connect.|
-LED green = connection exists.||
+The motor timer runs automatically when the motor is running. ||
 
-When the LED is green, the 'Off' button is disabled to prevent accidental disconnection. ||
-If you want to switch off while still connected, you can from the Options screen.||
+The timer pauses when the motor is not running and is reset to 0 when the transmitter is turned on.||
 
-The connection quality indicator (near the bottom of the screen) shows the proportion of successful data packets as a percentage of total data packets averaged over a six second||
-period. 
+LED blue  = The radio is not trying to connect.|
+LED red   = The radio is trying to connect.|
+LED green = The radio is connected.||
 
-If the connection quality changes very quickly, the indicator will move over the next few seconds to reflect the change. Packets which did arrive at the receiver but whose 'acknowledgment' was lost are counted as failed.||    
+The power button will turn the radio on and off. If the radio is connected, a (definable) long press is needed (for safety) to turn it off.
 
-The 'Off' button works immediately when not connected, but will need to be held down for a few seconds (definable) when connected for reasons of safety.||
+The connection quality indicator near the bottom of the screen shows the proportion of successful data packets as a percentage of total data packets averaged over a definable period (of 1 - 6 seconds).||
 
+The battery indicator top right shows the transmitter battery state. |
+This battery can be LiPo, Li-Ion or LiFePo4 but always 2 cells.|
+The display changes between percentage and the voltage PER CELL. This is because most people know immediately the 'per cell' voltage at which further discharge is a not a very good idea. 
+|For LiPo and Li-Ion, it's about 3.3V. For LiFePo4 it's about 2.5V. |This battery type should be defined in 'Setup' in order to see a useful percent display.  
+
+The battery indicator bottom right shows the receiver battery state, including per cell voltage. |
+
+Under System page 3 you can set the per-cell receiver voltage below which the transmitter will announce "STOP FLYING!". About 3.5 volts is suggested.
 
 Press 'Setup ...' to change all settings. 
