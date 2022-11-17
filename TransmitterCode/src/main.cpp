@@ -5478,25 +5478,26 @@ void GotoMacrosView()
 void UpLog()
 {
     if (RecentStartLine > 0 && (CurrentView == LOGVIEW)) {
-        RecentStartLine -= 3;
-        if (RecentStartLine < 1) RecentStartLine = 1;
+        RecentStartLine -= 1;
+        if (RecentStartLine < 0) RecentStartLine = 0;
         ShowLogFile(RecentStartLine);
     }
     if (RecentStartLine > 0 && (CurrentView == HELP_VIEW)) {
-        RecentStartLine -= 3;
-        if (RecentStartLine < 1) RecentStartLine = 1;
+        RecentStartLine -= 1;
+        if (RecentStartLine < 1) RecentStartLine = 0;
         ScrollHelpFile();
     }
 }
 /******************************************************************************************************************************/
 void DownLog()
 {
+  
     if (ThereIsMoreToSee && (CurrentView == LOGVIEW)) {
-        RecentStartLine += 3;
+        RecentStartLine += 1;
         ShowLogFile(RecentStartLine);
     }
     if (ThereIsMoreToSee && (CurrentView == HELP_VIEW)) {
-        RecentStartLine += 3;
+        RecentStartLine += 1;
         ScrollHelpFile();
     }
 }
