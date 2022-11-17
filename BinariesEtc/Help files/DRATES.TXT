@@ -1,0 +1,26 @@
+This feature provides a simple yet powerful way to setup 'Dual Rates'.||
+
+It can be thought of as a quick, easy and error-free way to setup all banks meaningfully.
+
+Up to four rates can be used, because for simplicity, the banks (AKA flight modes) are used for the different rates. This makes the concept easier to understand and to setup.||	
+
+These rates can be applied to up to 8 channels - though usually only aileron, elevator and rudder are used.|
+
+One bank must be the 'Main' bank. It can be any bank.|
+
+Other banks can then be set as a percentage of the main bank.||
+
+To leave a bank unaltered, set it or its rate to 0.|
+
+To leave a channel unaltered, set its channel number to 0.|
+
+The interpolation type and exponential amount will be copied from the main bank to all affected channels. You can still edit any bank afterwards.||
+
+If you edit the 'main' bank, you might want return to the dual rates screen to re-apply your new settings. This will overwrite any changes that might have been made to affected banks. It never alters the 'main' bank.
+
+Pressing 'OK' on this screen will save the settings and exit. But it will not apply them. |You must press 'Apply' to apply the settings.
+
+
+
+
+
