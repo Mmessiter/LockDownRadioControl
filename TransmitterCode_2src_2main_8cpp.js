@@ -125,7 +125,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "GetTextIn", "TransmitterCode_2src_2main_8cpp.html#a6fe457db5d6bc71ccb447dee824abf6a", null ],
     [ "getTime", "TransmitterCode_2src_2main_8cpp.html#ae96ca3df2e8b9eef75d400de6ef06db3", null ],
     [ "GetTimeFromAckPayload", "TransmitterCode_2src_2main_8cpp.html#a86523345ecdd52f3d93dccd6fcf4370a", null ],
-    [ "GetTrimAmount", "TransmitterCode_2src_2main_8cpp.html#a8f18ed586e10928a2ce2962271301f02", null ],
+    [ "GetTrimAmount", "TransmitterCode_2src_2main_8cpp.html#a873407e4b7e6eb8e5438ff1de19a4e92", null ],
     [ "GetTXVersionNumber", "TransmitterCode_2src_2main_8cpp.html#aee99c2684d91ac475ed24480da4dcc30", null ],
     [ "getvalue", "TransmitterCode_2src_2main_8cpp.html#aff6fa8906188d3249b01bf59de47df2f", null ],
     [ "GetValue", "TransmitterCode_2src_2main_8cpp.html#a6e4fac4e296c09388b8b56353402d67a", null ],
