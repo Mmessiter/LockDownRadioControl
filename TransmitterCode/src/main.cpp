@@ -2080,8 +2080,7 @@ uint16_t (*Interpolate[3])(uint16_t m, uint16_t l, uint16_t n) {
 /*********************************************************************************************************************************/
 
 uint16_t GetTrimAmount(uint8_t t){ // This is now added to INPUT instead of output  
-    uint16_t TrimAmount;
-    uint16_t tt = t;
+    uint16_t TrimAmount, tt = t;
         if (SticksMode == 2) {
             if (t == 1) tt = 2;
             if (t == 2) tt = 1; 
@@ -2102,10 +2101,8 @@ FASTRUN void GetNewChannelValues()
     // key: -
     // m = input value from sticks etc
     // l = input channel
-    // t = trim input channel
     // n = output channel
     // k = interim output result
-    // TrimAmount = TrimAmount :-)
 
     for (n = 0; n < CHANNELSUSED; ++n) {                                // Do every channel
         l = InPutStick[n];                                              // Input sticks knobs & switches are mapped by user
