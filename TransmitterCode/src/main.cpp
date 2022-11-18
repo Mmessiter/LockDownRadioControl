@@ -2079,13 +2079,29 @@ uint16_t (*Interpolate[3])(uint16_t m, uint16_t l, uint16_t n) {
 
 /*********************************************************************************************************************************/
 
+uint16_t GetTrimAmount(uint8_t t,uint8_t l){ // This is now added to INPUT instead of output  
+    uint16_t TrimAmount;
+    uint16_t tt = t;
+    if (l < 4){
+        if (SticksMode == 2) {
+            if (t == 1) tt = 2;
+            if (t == 2) tt = 1; 
+            }
+            TrimAmount = (Trims[Bank][tt] - 80) * TrimFactor; // TRIMS on lower four input channels (80 is mid point !! (range 40 - 80 - 120)) 
+            if (TrimsReversed[Bank][tt]) TrimAmount = -TrimAmount;
+            return TrimAmount;
+        }
+        return 0;
+}
+/*********************************************************************************************************************************/
+
 /** @brief GET NEW SERVO POSITIONS */
 FASTRUN void GetNewChannelValues()
 {
     if (NewCompressNeeded) return; // Have we compressed the last one yet?
-    NewCompressNeeded     = true;  // Yes! So ot must be time for another...
+     NewCompressNeeded     = true;  // Yes! So ot must be time for another...
 
-    uint16_t k = 0, l = 0, m = 0, n = 0, t = 0, TrimAmount = 0;
+    uint16_t k = 0, l = 0, m = 0, n = 0, t = 0;
     // key: -
     // m = input value from sticks etc
     // l = input channel
@@ -2095,27 +2111,16 @@ FASTRUN void GetNewChannelValues()
     // TrimAmount = TrimAmount :-)
 
     for (n = 0; n < CHANNELSUSED; ++n) {
-        if (n < 4) t = InputTrim[n]; // user defined trim input
         l = InPutStick[n];           // input sticks knobs & switches are now mapped by user
+        if (l < 4) t = InputTrim[l]; // user defined trim input
         if (l > 7) {                 // Must be a switch
             k = GetStickInput(l);    // Four 3 postion switches
         }
-        else {                                                           // i.e. l <= 7 so it's a Stick/knob/switch
-            m = analogRead(AnalogueInput[l]);                            // Get values from sticks' pots then interpolate them.
-            k = Interpolate[InterpolationTypes[Bank][n]](m, l, n); // Use function pointer array to invoke chosen interpolation.
+        else {                                                          // i.e. l <= 7 so it's a Stick/knob/switch
+            m = analogRead(AnalogueInput[l]) + GetTrimAmount(t,l);      // Get values from sticks' pots then ADD TRIM then interpolate them.
+            k = Interpolate[InterpolationTypes[Bank][n]](m, l, n);      // Use function pointer array to invoke selected interpolation.
         }
-
-        k += (SubTrims[n] - 127) * (TrimFactor / 2); // ADD SUBTRIM (...to output channel, not mapped input channel) (Range 0 - 127 - 254)
-        if (l < 4) {
-            uint16_t tt = t; 
-            if (SticksMode == 2) {
-                if (t == 1) tt = 2;
-                if (t == 2) tt = 1;
-            }
-            TrimAmount = (Trims[Bank][tt] - 80) * TrimFactor; // TRIMS on lower four channels (80 is mid point !! (range 40 - 80 - 120)) 
-            if (TrimsReversed[Bank][tt]) TrimAmount = -TrimAmount;
-            k += TrimAmount;
-        }
+        k += (SubTrims[n] - 127) * (TrimFactor / 2);                    // ADD SUBTRIM to output channel, not mapped input channel (Range 0 - 127 - 254)
         PreMixBuffer[n] = constrain(k, MINMICROS, MAXMICROS);
         SendBuffer[n]   = PreMixBuffer[n];
     }
