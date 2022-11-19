@@ -203,7 +203,7 @@ var searchData=
   ['gettextin_200',['GetTextIn',['../TransmitterCode_2src_2main_8cpp.html#a6fe457db5d6bc71ccb447dee824abf6a',1,'main.cpp']]],
   ['gettime_201',['getTime',['../TransmitterCode_2src_2main_8cpp.html#ae96ca3df2e8b9eef75d400de6ef06db3',1,'main.cpp']]],
   ['gettimefromackpayload_202',['GetTimeFromAckPayload',['../TransmitterCode_2src_2main_8cpp.html#a86523345ecdd52f3d93dccd6fcf4370a',1,'main.cpp']]],
-  ['gettrimamount_203',['GetTrimAmount',['../TransmitterCode_2src_2main_8cpp.html#a873407e4b7e6eb8e5438ff1de19a4e92',1,'main.cpp']]],
+  ['gettrimamount_203',['GetTrimAmount',['../TransmitterCode_2src_2main_8cpp.html#a07fabdf50e27daf4c4bd38d316a40e68',1,'main.cpp']]],
   ['gettxversionnumber_204',['GetTXVersionNumber',['../TransmitterCode_2src_2main_8cpp.html#aee99c2684d91ac475ed24480da4dcc30',1,'main.cpp']]],
   ['getvalue_205',['getvalue',['../TransmitterCode_2src_2main_8cpp.html#aff6fa8906188d3249b01bf59de47df2f',1,'main.cpp']]],
   ['getvalue_206',['GetValue',['../TransmitterCode_2src_2main_8cpp.html#a6e4fac4e296c09388b8b56353402d67a',1,'main.cpp']]],
