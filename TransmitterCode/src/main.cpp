@@ -510,10 +510,10 @@ uint8_t  Dbank1                          = 3;
 uint8_t  Dbank2                          = 2;
 uint8_t  Dbank3                          = 1;
 uint8_t  Dbank4                          = 0;
-uint8_t  DRch[8]                         =  {1, 2, 4, 0, 0, 0, 0, 0};
+uint8_t  DualRateChannels[8]             =  {1, 2, 4, 0, 0, 0, 0, 0};
 
 // **********************************************************************************************************************************
-// **********************************************************************************************************************************
+// *********************************************** END OF GLOBAL DATA ***************************************************************
 // **********************************************************************************************************************************
 
 uint8_t Ascii(char c)
@@ -2697,7 +2697,7 @@ bool ReadOneModel(uint8_t Mnum)
     UseDualRates = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
 for (int i = 0; i < 8;++i){
-        DRch[i]= SDRead8BITS(SDCardAddress);
+        DualRateChannels[i]= SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
     }
 
@@ -3711,7 +3711,7 @@ void SaveOneModel(uint16_t mnum)
     SDUpdate8BITS(SDCardAddress, UseDualRates);
     ++SDCardAddress;
     for (int i = 0; i < 8;++i){
-            SDUpdate8BITS(SDCardAddress, DRch[i]);
+            SDUpdate8BITS(SDCardAddress, DualRateChannels[i]);
             ++SDCardAddress;
     }
     SaveCheckSum32(); // Save the Model parametres checksm
@@ -4226,14 +4226,14 @@ void SetDefaultValues()
     Dbank2                         = 2;
     Dbank3                         = 1;
     Dbank4                         = 0;
-    DRch[0] = 1;
-    DRch[1] = 2;
-    DRch[2] = 4;
-    DRch[3] = 0;
-    DRch[4] = 0;
-    DRch[5] = 0;
-    DRch[6] = 0;
-    DRch[7] = 0;
+    DualRateChannels[0] = 1;
+    DualRateChannels[1] = 2;
+    DualRateChannels[2] = 4;
+    DualRateChannels[3] = 0;
+    DualRateChannels[4] = 0;
+    DualRateChannels[5] = 0;
+    DualRateChannels[6] = 0;
+    DualRateChannels[7] = 0;
     SaveOneModel(ModelNumber);
     CloseModelsFile();
     SendValue(Progress, 100);
@@ -4265,8 +4265,8 @@ void CheckDualRatesValues(){
     if (Dbank4 >   4) KO = true;
 
     for (int i = 0; i < 8;++i){
-        if (DRch[i] > 16) KO = true;
-        Look(DRch[i]);
+        if (DualRateChannels[i] > 16) KO = true;
+        Look(DualRateChannels[i]);
     }
         if (KO) {
             UseDualRates = false;
@@ -4277,14 +4277,14 @@ void CheckDualRatesValues(){
             Dbank2       = 2;
             Dbank3       = 3;
             Dbank4       = 4;
-            DRch[0]      = 1;
-            DRch[1]      = 2;
-            DRch[2]      = 4;
-            DRch[3]      = 0;
-            DRch[4]      = 0;
-            DRch[5]      = 0;
-            DRch[6]      = 0;
-            DRch[7]      = 0;
+            DualRateChannels[0]      = 1;
+            DualRateChannels[1]      = 2;
+            DualRateChannels[2]      = 4;
+            DualRateChannels[3]      = 0;
+            DualRateChannels[4]      = 0;
+            DualRateChannels[5]      = 0;
+            DualRateChannels[6]      = 0;
+            DualRateChannels[7]      = 0;
         }
 }
 
@@ -5908,11 +5908,11 @@ void PointSelect(){
 
 /******************************************************************************************************************************/
 
-void ShowDRChannelName(char* nm, uint8_t n){
+void ShowDualRateChannelsName(char* nm, uint8_t n){
     char nu[] = "Not used";
 
-    if (n) { SendText(nm, ChannelNames[n-1]); 
-    } else { SendText(nm, nu); }    // not user if zero
+    if (n) {SendText(nm, ChannelNames[n-1]); 
+    } else {SendText(nm, nu); }    // not user if zero
 }
 
 /******************************************************************************************************************************/
@@ -5950,23 +5950,23 @@ void DisplayDualRateValues(){
     SendValue(bank3,Dbank3);
     SendValue(bank4, Dbank4); 
     
-    SendValue(ChNumber1, DRch[0]);
-    SendValue(ChNumber2, DRch[1]);
-    SendValue(ChNumber3, DRch[2]);
-    SendValue(ChNumber4, DRch[3]);
-    SendValue(ChNumber5, DRch[4]);
-    SendValue(ChNumber6, DRch[5]);
-    SendValue(ChNumber7, DRch[6]);
-    SendValue(ChNumber8, DRch[7]);
+    SendValue(ChNumber1, DualRateChannels[0]);
+    SendValue(ChNumber2, DualRateChannels[1]);
+    SendValue(ChNumber3, DualRateChannels[2]);
+    SendValue(ChNumber4, DualRateChannels[3]);
+    SendValue(ChNumber5, DualRateChannels[4]);
+    SendValue(ChNumber6, DualRateChannels[5]);
+    SendValue(ChNumber7, DualRateChannels[6]);
+    SendValue(ChNumber8, DualRateChannels[7]);
 
-    ShowDRChannelName(ChName1, DRch[0]);
-    ShowDRChannelName(ChName2, DRch[1]);
-    ShowDRChannelName(ChName3, DRch[2]);
-    ShowDRChannelName(ChName4, DRch[3]);
-    ShowDRChannelName(ChName5, DRch[4]);
-    ShowDRChannelName(ChName6, DRch[5]);
-    ShowDRChannelName(ChName7, DRch[6]);
-    ShowDRChannelName(ChName8, DRch[7]);
+    ShowDualRateChannelsName(ChName1, DualRateChannels[0]);
+    ShowDualRateChannelsName(ChName2, DualRateChannels[1]);
+    ShowDualRateChannelsName(ChName3, DualRateChannels[2]);
+    ShowDualRateChannelsName(ChName4, DualRateChannels[3]);
+    ShowDualRateChannelsName(ChName5, DualRateChannels[4]);
+    ShowDualRateChannelsName(ChName6, DualRateChannels[5]);
+    ShowDualRateChannelsName(ChName7, DualRateChannels[6]);
+    ShowDualRateChannelsName(ChName8, DualRateChannels[7]);
 
 }
 
@@ -6029,18 +6029,18 @@ void ReadDualRatesValues(){
     if (Dbank4 > 4) Dbank4 = 0;
     SendValue(Progress, 50);
     Procrastinate(10);
-    DRch[0] = CheckRange(GetValue(ChNumber1),0,16);
-    DRch[1] = CheckRange(GetValue(ChNumber2),0,16);   
-    DRch[2] = CheckRange(GetValue(ChNumber3),0,16);
+    DualRateChannels[0] = CheckRange(GetValue(ChNumber1),0,16);
+    DualRateChannels[1] = CheckRange(GetValue(ChNumber2),0,16);   
+    DualRateChannels[2] = CheckRange(GetValue(ChNumber3),0,16);
     SendValue(Progress, 60);
     Procrastinate(10);
-    DRch[3] = CheckRange(GetValue(ChNumber4),0,16);
-    DRch[4] = CheckRange(GetValue(ChNumber5),0,16);
-    DRch[5] = CheckRange(GetValue(ChNumber6),0,16);
+    DualRateChannels[3] = CheckRange(GetValue(ChNumber4),0,16);
+    DualRateChannels[4] = CheckRange(GetValue(ChNumber5),0,16);
+    DualRateChannels[5] = CheckRange(GetValue(ChNumber6),0,16);
     SendValue(Progress, 75);
     Procrastinate(10);
-    DRch[6] = CheckRange(GetValue(ChNumber7),0,16);
-    DRch[7] = CheckRange(GetValue(ChNumber8),0,16);
+    DualRateChannels[6] = CheckRange(GetValue(ChNumber7),0,16);
+    DualRateChannels[7] = CheckRange(GetValue(ChNumber8),0,16);
     SendValue(Progress, 100);
     Procrastinate(10);
     SendCommand(ProgressEnd);
@@ -6104,22 +6104,22 @@ void DualRatesApply(){                              // This function applies dua
 
         if (Drate2 && Dbank2){                      // disable bank by making either value 0
         for (int i = 0; i < 8;++i) {
-                if (DRch[i]) {                      // disable channel by making it 0
-                    DoEntireChannel(DRch[i]-1, Drate2, Dbank2);
+                if (DualRateChannels[i]) {                      // disable channel by making it 0
+                    DoEntireChannel(DualRateChannels[i]-1, Drate2, Dbank2);
                 };
             }
         }
         if (Drate3 && Dbank3){                      // disable bank by making either value 0
             for (int i = 0; i < 8;++i) {
-                if (DRch[i]) {                      // disable channel by making it 0
-                    DoEntireChannel(DRch[i]-1, Drate3, Dbank3);
+                if (DualRateChannels[i]) {                      // disable channel by making it 0
+                    DoEntireChannel(DualRateChannels[i]-1, Drate3, Dbank3);
                 };
             }
         }
         if (Drate4 && Dbank4){                      // disable bank by making either value 0
             for (int i = 0; i < 8;++i) {
-                if (DRch[i]) {                      // disable channel by making it 0
-                    DoEntireChannel(DRch[i]-1, Drate4, Dbank4);
+                if (DualRateChannels[i]) {                      // disable channel by making it 0
+                    DoEntireChannel(DualRateChannels[i]-1, Drate4, Dbank4);
                 };
             }
         }
