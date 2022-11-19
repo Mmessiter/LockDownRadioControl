@@ -250,7 +250,7 @@ var searchData=
   ['showcommsdelay_247',['SHOWCOMMSDELAY',['../RadioFunctions_8h.html#ac3bae9d911f4773794c9977639f6a116',1,'RadioFunctions.h']]],
   ['showconnectionquality_248',['ShowConnectionQuality',['../TransmitterCode_2src_2main_8cpp.html#a77e9a1ed6c347897af1e92db48c68b77',1,'main.cpp']]],
   ['showdirectory_249',['ShowDirectory',['../TransmitterCode_2src_2main_8cpp.html#ad1800b78308843897cf7bd9f8e0a3a69',1,'main.cpp']]],
-  ['showdrchannelname_250',['ShowDRChannelName',['../TransmitterCode_2src_2main_8cpp.html#a5d9d7bb821d879531a562dae3d1698a4',1,'main.cpp']]],
+  ['showdualratechannelsname_250',['ShowDualRateChannelsName',['../TransmitterCode_2src_2main_8cpp.html#a8234968ed0c44d259a165e08d5b06424',1,'main.cpp']]],
   ['showfileerrormsg_251',['ShowFileErrorMsg',['../TransmitterCode_2src_2main_8cpp.html#a1e7673fa1ef97d68711edd0da2abed9b',1,'main.cpp']]],
   ['showfilenumber_252',['ShowFileNumber',['../TransmitterCode_2src_2main_8cpp.html#aa337d6e5cf496fbca7cdc61818f8239a',1,'main.cpp']]],
   ['showfileprogress_253',['ShowFileProgress',['../TransmitterCode_2src_2main_8cpp.html#abdbaa9b790382ce7f04feb681df5144a',1,'main.cpp']]],

@@ -623,8 +623,8 @@ Functions</h2></td></tr>
 <tr class="separator:a1870ad872e2424cbf8222747d3a43617"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac7ef59496adda1ac4c905b854056a8f7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TransmitterCode_2src_2main_8cpp.html#ac7ef59496adda1ac4c905b854056a8f7">PointSelect</a> ()</td></tr>
 <tr class="separator:ac7ef59496adda1ac4c905b854056a8f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5d9d7bb821d879531a562dae3d1698a4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TransmitterCode_2src_2main_8cpp.html#a5d9d7bb821d879531a562dae3d1698a4">ShowDRChannelName</a> (char *nm, uint8_t n)</td></tr>
-<tr class="separator:a5d9d7bb821d879531a562dae3d1698a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8234968ed0c44d259a165e08d5b06424"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TransmitterCode_2src_2main_8cpp.html#a8234968ed0c44d259a165e08d5b06424">ShowDualRateChannelsName</a> (char *nm, uint8_t n)</td></tr>
+<tr class="separator:a8234968ed0c44d259a165e08d5b06424"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a922416bc71ebe2b10fcd879f271e7c1c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TransmitterCode_2src_2main_8cpp.html#a922416bc71ebe2b10fcd879f271e7c1c">DisplayDualRateValues</a> ()</td></tr>
 <tr class="separator:a922416bc71ebe2b10fcd879f271e7c1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e3590b95598a6cced18d591c2e1879f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TransmitterCode_2src_2main_8cpp.html#a6e3590b95598a6cced18d591c2e1879f">DualRatesStart</a> ()</td></tr>
@@ -1383,8 +1383,8 @@ Variables</h2></td></tr>
 <tr class="separator:aeb3b9b25be10c2983421b53240ee2f1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab49d8b5b21a9f0a8367c8a6065344cbf"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TransmitterCode_2src_2main_8cpp.html#ab49d8b5b21a9f0a8367c8a6065344cbf">Dbank4</a> = 0</td></tr>
 <tr class="separator:ab49d8b5b21a9f0a8367c8a6065344cbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7840e4902dbb27a25af0586fb68469a"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TransmitterCode_2src_2main_8cpp.html#ac7840e4902dbb27a25af0586fb68469a">DRch</a> [8] = {1, 2, 4, 0, 0, 0, 0, 0}</td></tr>
-<tr class="separator:ac7840e4902dbb27a25af0586fb68469a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade150617ac0f31361fa0ac903acf3160"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TransmitterCode_2src_2main_8cpp.html#ade150617ac0f31361fa0ac903acf3160">DualRateChannels</a> [8] = {1, 2, 4, 0, 0, 0, 0, 0}</td></tr>
+<tr class="separator:ade150617ac0f31361fa0ac903acf3160"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5a7bf035a7612a8608883d21ca1f80a9"><td class="memItemLeft" align="right" valign="top">uint16_t(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TransmitterCode_2src_2main_8cpp.html#a5a7bf035a7612a8608883d21ca1f80a9">Interpolate</a> [3])(uint16_t m, uint16_t l, uint16_t n)</td></tr>
 <tr class="separator:a5a7bf035a7612a8608883d21ca1f80a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb4fb8e30aec6f80bfcb85d5f4c7931f"><td class="memItemLeft" align="right" valign="top">void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="TransmitterCode_2src_2main_8cpp.html#abb4fb8e30aec6f80bfcb85d5f4c7931f">NumberedFunctions</a> [<a class="el" href="TransmitterCode_2src_2main_8cpp.html#a7b562fa140e3020f492686ce35e4ac52">LASTFUNCTION</a>])()</td></tr>
@@ -3388,7 +3388,7 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="TransmitterCode_2src_2main_8cpp_a922416bc71ebe2b10fcd879f271e7c1c_cgraph.svg" width="1955" height="1192"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="TransmitterCode_2src_2main_8cpp_a922416bc71ebe2b10fcd879f271e7c1c_cgraph.svg" width="1998" height="1192"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 <div class="dynheader">
@@ -3803,7 +3803,7 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="TransmitterCode_2src_2main_8cpp_a2c3f148b371cfd5d38633cf717c20e8d_cgraph.svg" width="2239" height="1178"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="TransmitterCode_2src_2main_8cpp_a2c3f148b371cfd5d38633cf717c20e8d_cgraph.svg" width="2282" height="1178"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 
@@ -3853,7 +3853,7 @@ Here is the call graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="TransmitterCode_2src_2main_8cpp_a6e3590b95598a6cced18d591c2e1879f_cgraph.svg" width="2372" height="1211"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="TransmitterCode_2src_2main_8cpp_a6e3590b95598a6cced18d591c2e1879f_cgraph.svg" width="2415" height="1211"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 
@@ -8434,7 +8434,7 @@ Here is the call graph for this function:</div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="TransmitterCode_2src_2main_8cpp_afe513398f72d5e48f691830a1ef6eb42_icgraph.svg" width="1320" height="1967"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="TransmitterCode_2src_2main_8cpp_afe513398f72d5e48f691830a1ef6eb42_icgraph.svg" width="1358" height="1974"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 
@@ -8926,14 +8926,14 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="a5d9d7bb821d879531a562dae3d1698a4" name="a5d9d7bb821d879531a562dae3d1698a4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5d9d7bb821d879531a562dae3d1698a4">&#9670;&nbsp;</a></span>ShowDRChannelName()</h2>
+<a id="a8234968ed0c44d259a165e08d5b06424" name="a8234968ed0c44d259a165e08d5b06424"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8234968ed0c44d259a165e08d5b06424">&#9670;&nbsp;</a></span>ShowDualRateChannelsName()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void ShowDRChannelName </td>
+          <td class="memname">void ShowDualRateChannelsName </td>
           <td>(</td>
           <td class="paramtype">char *&#160;</td>
           <td class="paramname"><em>nm</em>, </td>
@@ -8956,13 +8956,13 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="TransmitterCode_2src_2main_8cpp_a5d9d7bb821d879531a562dae3d1698a4_cgraph.svg" width="2080" height="1254"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="TransmitterCode_2src_2main_8cpp_a8234968ed0c44d259a165e08d5b06424_cgraph.svg" width="2123" height="1254"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="TransmitterCode_2src_2main_8cpp_a5d9d7bb821d879531a562dae3d1698a4_icgraph.svg" width="534" height="88"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="TransmitterCode_2src_2main_8cpp_a8234968ed0c44d259a165e08d5b06424_icgraph.svg" width="576" height="88"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 
@@ -11165,14 +11165,14 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="ac7840e4902dbb27a25af0586fb68469a" name="ac7840e4902dbb27a25af0586fb68469a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac7840e4902dbb27a25af0586fb68469a">&#9670;&nbsp;</a></span>DRch</h2>
+<a id="ade150617ac0f31361fa0ac903acf3160" name="ade150617ac0f31361fa0ac903acf3160"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ade150617ac0f31361fa0ac903acf3160">&#9670;&nbsp;</a></span>DualRateChannels</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint8_t DRch[8] = {1, 2, 4, 0, 0, 0, 0, 0}</td>
+          <td class="memname">uint8_t DualRateChannels[8] = {1, 2, 4, 0, 0, 0, 0, 0}</td>
         </tr>
       </table>
 </div><div class="memdoc">
