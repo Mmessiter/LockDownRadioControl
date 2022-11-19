@@ -8132,7 +8132,8 @@ FASTRUN uint32_t GetIntFromAckPayload()   // This one uses a uint32_t int
 
 void GotoFrontView(){
     if (CurrentView != FRONTVIEW)
-    { 
+    {
+          if (CurrentView == SCANVIEW) DoScanEnd();  // heer
           SendCommand(page_FrontView);
           CurrentView = FRONTVIEW;
           UpdateModelsNameEveryWhere();
