@@ -8133,19 +8133,19 @@ FASTRUN uint32_t GetIntFromAckPayload()   // This one uses a uint32_t int
 void GotoFrontView(){
     if (CurrentView != FRONTVIEW)
     {
-          if (CurrentView == SCANVIEW) DoScanEnd();  // heer
+          if (CurrentView == SCANVIEW) DoScanEnd();  
           SendCommand(page_FrontView);
           CurrentView = FRONTVIEW;
           UpdateModelsNameEveryWhere();
-          SafetyWasOn ^= 1; // this forces a re-display of safety state
+          SafetyWasOn ^= 1;                     // this forces a re-display of safety state
           ShowBank();
           LastTimeRead = 0;
-          Reconnected  = false; // this is to make '** Connected! **' redisplay (in ShowComms())
-          LastSeconds  = 0;     // This forces redisplay of timer...
+          Reconnected  = false;                 // this is to make '** Connected! **' redisplay (in ShowComms())
+          LastSeconds  = 0;                     // This forces redisplay of timer...
           Force_ReDisplay();
           CheckTimer();
           ClearText();
-          LastShowTime = 0; // this is to make redisplay sooner (in ShowComms())
+          LastShowTime = 0;                     // this is to make redisplay sooner (in ShowComms())
           SendText(FrontView_Connected, na);
     }
 }
