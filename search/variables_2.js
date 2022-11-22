@@ -38,11 +38,10 @@ var searchData=
   ['buddymaster_35',['BuddyMaster',['../RadioFunctions_8h.html#a26a52012e307147a99289fff5c492358',1,'BuddyMaster():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a26a52012e307147a99289fff5c492358',1,'BuddyMaster():&#160;main.cpp']]],
   ['buddyon_36',['BuddyON',['../TransmitterCode_2src_2main_8cpp.html#a2134130b3bde6e04237bca0aab2c22ef',1,'main.cpp']]],
   ['buddyswitch_37',['BuddySwitch',['../TransmitterCode_2src_2main_8cpp.html#aad45cb80b969ee0f10952b145e4c15a5',1,'main.cpp']]],
-  ['buddytriggerchannel_38',['BuddyTriggerChannel',['../TransmitterCode_2src_2main_8cpp.html#ae91fe0caf128c1a35e74a9c009b2d347',1,'main.cpp']]],
-  ['buttonclicks_39',['ButtonClicks',['../TransmitterCode_2src_2main_8cpp.html#a0955aa08f4b43e6f78ff256fc6ccf421',1,'main.cpp']]],
-  ['byte1_40',['Byte1',['../structPayload.html#ab1cbe4c4b9ee9ce839084b274f3ea494',1,'Payload']]],
-  ['byte2_41',['Byte2',['../structPayload.html#ae7106f2efa1bb9f4ebb720c7c9fc54b8',1,'Payload']]],
-  ['byte3_42',['Byte3',['../structPayload.html#a31d05bdbdf85fe184cc7f806d3391fa9',1,'Payload']]],
-  ['byte4_43',['Byte4',['../structPayload.html#a654bdf192bbe0cc64dc8280527c2da20',1,'Payload']]],
-  ['byte5_44',['Byte5',['../structPayload.html#ae28220045a0918bdb0fc6484dbff55f9',1,'Payload']]]
+  ['buttonclicks_38',['ButtonClicks',['../TransmitterCode_2src_2main_8cpp.html#a0955aa08f4b43e6f78ff256fc6ccf421',1,'main.cpp']]],
+  ['byte1_39',['Byte1',['../structPayload.html#ab1cbe4c4b9ee9ce839084b274f3ea494',1,'Payload']]],
+  ['byte2_40',['Byte2',['../structPayload.html#ae7106f2efa1bb9f4ebb720c7c9fc54b8',1,'Payload']]],
+  ['byte3_41',['Byte3',['../structPayload.html#a31d05bdbdf85fe184cc7f806d3391fa9',1,'Payload']]],
+  ['byte4_42',['Byte4',['../structPayload.html#a654bdf192bbe0cc64dc8280527c2da20',1,'Payload']]],
+  ['byte5_43',['Byte5',['../structPayload.html#ae28220045a0918bdb0fc6484dbff55f9',1,'Payload']]]
 ];
