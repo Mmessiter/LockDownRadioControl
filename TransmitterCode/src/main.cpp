@@ -511,6 +511,7 @@ uint8_t  Dbank2                          = 2;
 uint8_t  Dbank3                          = 1;
 uint8_t  Dbank4                          = 0;
 uint8_t  DualRateChannels[8]             =  {1, 2, 4, 0, 0, 0, 0, 0};
+uint16_t CurveDots[5];
 
 // **********************************************************************************************************************************
 // *********************************************** END OF GLOBAL DATA ***************************************************************
@@ -2036,21 +2037,21 @@ uint16_t CatmullSplineInterpolation(uint16_t m, uint16_t l, uint16_t n)
     xPoints[2] = ChannelCentre[l];
     xPoints[3] = ChannelMidHi[l];
     xPoints[4] = ChannelMax[l];
-    yPoints[4] = IntoHigherRes(MaxDegrees[Bank][n]);
-    yPoints[3] = IntoHigherRes(MidHiDegrees[Bank][n]);
-    yPoints[2] = IntoHigherRes(CentreDegrees[Bank][n]);
-    yPoints[1] = IntoHigherRes(MidLowDegrees[Bank][n]);
-    yPoints[0] = IntoHigherRes(MinDegrees[Bank][n]);
+    yPoints[4] = IntoHigherRes(CurveDots[4]);
+    yPoints[3] = IntoHigherRes(CurveDots[3]);
+    yPoints[2] = IntoHigherRes(CurveDots[2]);
+    yPoints[1] = IntoHigherRes(CurveDots[1]);
+    yPoints[0] = IntoHigherRes(CurveDots[0]);
     return Interpolation::CatmullSpline(xPoints, yPoints, PointsCount, m);
 }
 /*********************************************************************************************************************************/
 uint16_t StraightLineInterpolation(uint16_t m, uint16_t l, uint16_t n)
 {
     uint16_t k = 0;
-    if (m >= ChannelMidHi[l]) k = map(m, ChannelMidHi[l], ChannelMax[l], IntoHigherRes(MidHiDegrees[Bank][n]), IntoHigherRes(MaxDegrees[Bank][n]));
-    if (m >= ChannelCentre[l] && m <= (ChannelMidHi[l])) k = map(m, ChannelCentre[l], ChannelMidHi[l], IntoHigherRes(CentreDegrees[Bank][n]), IntoHigherRes(MidHiDegrees[Bank][n]));
-    if (m >= ChannelMidLow[l] && m <= ChannelCentre[l]) k = map(m, ChannelMidLow[l], ChannelCentre[l], IntoHigherRes(MidLowDegrees[Bank][n]), IntoHigherRes(CentreDegrees[Bank][n]));
-    if (m <= ChannelMidLow[l]) k = map(m, ChannelMin[l], ChannelMidLow[l], IntoHigherRes(MinDegrees[Bank][n]), IntoHigherRes(MidLowDegrees[Bank][n]));
+    if (m >= ChannelMidHi[l]) k = map(m, ChannelMidHi[l], ChannelMax[l], IntoHigherRes(CurveDots[3]), IntoHigherRes(CurveDots[4]));
+    if (m >= ChannelCentre[l] && m <= (ChannelMidHi[l])) k = map(m, ChannelCentre[l], ChannelMidHi[l], IntoHigherRes(CurveDots[2]), IntoHigherRes(CurveDots[3]));
+    if (m >= ChannelMidLow[l] && m <= ChannelCentre[l]) k = map(m, ChannelMidLow[l], ChannelCentre[l], IntoHigherRes(CurveDots[1]), IntoHigherRes(CurveDots[2]));
+    if (m <= ChannelMidLow[l]) k = map(m, ChannelMin[l], ChannelMidLow[l], IntoHigherRes(CurveDots[0]), IntoHigherRes(CurveDots[1]));
     return k;
 }
 /*********************************************************************************************************************************/
@@ -2058,15 +2059,45 @@ uint16_t ExponentialInterpolation(uint16_t m, uint16_t l, uint16_t n)
 {
     uint16_t k = 0;
     if (m >= ChannelCentre[l]) {
-        k = MapWithExponential(m - ChannelCentre[l], 0, ChannelMax[l] - ChannelCentre[l], 0, IntoHigherRes(MaxDegrees[Bank][n]) - //
-                                   IntoHigherRes(CentreDegrees[Bank][n]), Exponential[Bank][n]) //
-                                   + IntoHigherRes(CentreDegrees[Bank][n]); //
+        k = MapWithExponential(m - ChannelCentre[l], 0, ChannelMax[l] - ChannelCentre[l], 0, IntoHigherRes(CurveDots[4]) - //
+                                   IntoHigherRes(CurveDots[2]), Exponential[Bank][n]) //
+                                   + IntoHigherRes(CurveDots[2]); //
     } else {
-        k = MapWithExponential(ChannelCentre[l] - m, 0, ChannelCentre[l] - ChannelMin[l], IntoHigherRes(CentreDegrees[Bank][n]) - //
-                                   IntoHigherRes(MinDegrees[Bank][n]), 0, Exponential[Bank][n]) //
-                                   + IntoHigherRes(MinDegrees[Bank][n]);
+        k = MapWithExponential(ChannelCentre[l] - m, 0, ChannelCentre[l] - ChannelMin[l], IntoHigherRes(CurveDots[2]) - //
+                                   IntoHigherRes(CurveDots[0]), 0, Exponential[Bank][n]) //
+                                   + IntoHigherRes(CurveDots[0]);
     }
     return k;
+}
+
+/*********************************************************************************************************************************/
+
+float CalculateDualRateNew(int Curve, int Channel,float rate){
+
+    switch (Curve){ // Curve is 1 - 5, low to hi.
+    case 1:  
+        return (((MinDegrees[Bank][Channel])    - 90) * (rate / 100)) + 90;
+    case 2:  
+        return (((MidLowDegrees[Bank][Channel]) - 90) * (rate / 100)) + 90;
+    case 3:  
+        return (((CentreDegrees[Bank][Channel]) - 90) * (rate / 100)) + 90;
+    case 4:  
+        return (((MidHiDegrees[Bank][Channel])  - 90) * (rate / 100)) + 90;
+    case 5:    
+        return (((MaxDegrees[Bank][Channel])    - 90) * (rate / 100)) + 90;
+    default:
+        return 0;
+    }
+}
+
+/*********************************************************************************************************************************/
+
+void  GetCurveDots(uint16_t OutputChannel,uint16_t TheRate){  
+    
+        // This for traditional Dual Rates function
+        // Effectively, it copies the dot locations on the curve, and might reduce their extent if rate is below 100
+
+    for (int i = 0; i < 5; ++i) CurveDots[i] = CalculateDualRateNew(i+1, OutputChannel, TheRate); 
 }
 
 /*********************************************************************************************************************************/
@@ -2097,12 +2128,14 @@ FASTRUN void GetNewChannelValues()
 {
     if (NewCompressNeeded) return;                                                                                       // Have we compressed the last one yet?
      NewCompressNeeded     = true;                                                                                       // Yes indeed. It's therefore time for new data.
-     uint16_t OutputValue, InputChannel, InputValue, OutputChannel, TrimAmount;                                          // Local variables now with more meaningful names        
+     uint16_t OutputValue, InputChannel, InputValue, OutputChannel, TrimAmount;                                          // Local variables now with more meaningful names
+    
      for (OutputChannel = 0; OutputChannel < CHANNELSUSED; ++OutputChannel) {                                            // Do every channel
-        InputChannel = InPutStick[OutputChannel];                                                                        // Input sticks knobs & switches are mapped by user
-        TrimAmount = 0;                                                                                                  // Trim is zero if not input 1-4
-        if (InputChannel < 4) TrimAmount = GetTrimAmount(InputTrim[InputChannel]);                                       // User defined trim input
-        if (InputChannel > 7) {                                                                                          // Must be a switch if over 7
+            InputChannel = InPutStick[OutputChannel];                                                                    // Input sticks knobs & switches are mapped by user
+            GetCurveDots(OutputChannel,100);                                                                                 // This can now do dual rates traditionally                                                                                                      
+            TrimAmount   = 0;                                                                                            // Trim is zero if not input 1-4
+            if (InputChannel < 4) TrimAmount = GetTrimAmount(InputTrim[InputChannel]);                                   // User defined trim input
+            if (InputChannel > 7) {                                                                                      // Must be a switch if over 7
             OutputValue = GetStickInput(InputChannel);                                                                   // Four 3 postion switches
         } else {                                                                                                         // i.e. l <= 7 so it's a Stick/knob/switch
             InputValue = analogRead(AnalogueInput[InputChannel]) + TrimAmount;                                           // Get values from sticks' pots then ADD TRIM then interpolate them.
@@ -2111,7 +2144,7 @@ FASTRUN void GetNewChannelValues()
         OutputValue += (SubTrims[OutputChannel] - 127) * (TrimFactor / 2);                                               // ADD SUBTRIM to output channel, not mapped input channel (Range 0 - 127 - 254)
         PreMixBuffer[OutputChannel] = constrain(OutputValue, MINMICROS, MAXMICROS);
         SendBuffer[OutputChannel]   = PreMixBuffer[OutputChannel];
-    }
+     }
     if (CurrentMode == NORMAL) {
         DoReverseSense();
         DoMixes();
@@ -6008,7 +6041,7 @@ void ReadDualRatesValues(){
     SendValue(Progress, 10);
     Procrastinate(10);
     Drate2 = GetValue(rate2);
-    if (Drate2 > MAXDUALRATE) Drate2 = MAXDUALRATE; // heer
+    if (Drate2 > MAXDUALRATE) Drate2 = MAXDUALRATE; 
     Drate3 = GetValue(rate3);
     if (Drate3 > MAXDUALRATE) Drate3 = MAXDUALRATE;
     Drate4 = GetValue(rate4);
