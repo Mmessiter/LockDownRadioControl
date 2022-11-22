@@ -195,7 +195,7 @@ var searchData=
   ['starttrimdefview_192',['StartTrimDefView',['../TransmitterCode_2src_2main_8cpp.html#a6fed69b1bb6d33fc82707a4e70bf3ef4',1,'main.cpp']]],
   ['stopmacro_193',['StopMacro',['../RadioFunctions_8cpp.html#ae1e0755ae9441b2835ac027a98707caa',1,'RadioFunctions.cpp']]],
   ['str_194',['Str',['../RadioFunctions_8h.html#a6bac145d5df31efb9c90e2a60a4cbca5',1,'Str(char *s, int n, int comma):&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a590a9174319918d7e3d7baca323fcf26',1,'Str(char *s, int n, int comma):&#160;main.cpp']]],
-  ['straightlineinterpolation_195',['StraightLineInterpolation',['../TransmitterCode_2src_2main_8cpp.html#a212778326d4228952040c5fda68dd2b9',1,'main.cpp']]],
+  ['straightlineinterpolation_195',['StraightLineInterpolation',['../TransmitterCode_2src_2main_8cpp.html#a88983dee7d62d5f01e7152c6c62b3a98',1,'main.cpp']]],
   ['successfulpacket_196',['SuccessfulPacket',['../RadioFunctions_8cpp.html#a1c11bb6771548de7d96723045b922620',1,'RadioFunctions.cpp']]],
   ['swap_197',['swap',['../TransmitterCode_2src_2main_8cpp.html#a31322f63ce3e02c4ef9a0c1e0c7f1ff5',1,'main.cpp']]],
   ['switchrollyaw_198',['switchRollYaw',['../Quadcopter_2src_2main_8cpp.html#a575c5d2a29402a56610d376470b73848',1,'main.cpp']]],

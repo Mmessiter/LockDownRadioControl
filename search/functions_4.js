@@ -11,5 +11,5 @@ var searchData=
   ['endsubtrimview_8',['EndSubTrimView',['../TransmitterCode_2src_2main_8cpp.html#a40003084a0136ca08cf8ded75ff4aa4d',1,'main.cpp']]],
   ['executemacro_9',['ExecuteMacro',['../RadioFunctions_8cpp.html#a78f22801971c106db61d728dd345e28e',1,'ExecuteMacro():&#160;RadioFunctions.cpp'],['../RadioFunctions_8h.html#a78f22801971c106db61d728dd345e28e',1,'ExecuteMacro():&#160;RadioFunctions.cpp']]],
   ['exitmacrosview_10',['ExitMacrosView',['../TransmitterCode_2src_2main_8cpp.html#a488388f6430a0fc7bec57074ba750a2d',1,'main.cpp']]],
-  ['exponentialinterpolation_11',['ExponentialInterpolation',['../TransmitterCode_2src_2main_8cpp.html#a2088bc57321fd542f58a3d8993444764',1,'main.cpp']]]
+  ['exponentialinterpolation_11',['ExponentialInterpolation',['../TransmitterCode_2src_2main_8cpp.html#ab309da1bf9c1b4a4b7763d8968d7f83e',1,'main.cpp']]]
 ];
