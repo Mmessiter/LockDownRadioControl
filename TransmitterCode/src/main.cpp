@@ -2081,7 +2081,7 @@ uint16_t ExponentialInterpolation(uint16_t InputValue, uint16_t InputChannel, ui
 
 /*********************************************************************************************************************************/
 
-float CalculateDualRateNew(int Curve, int Channel,float rate){
+float CalculateDualRateNew(short int Curve, short int Channel,float rate){
 
     switch (Curve){ // Curve is 1 - 5, low to hi.
     case 1:  
@@ -2141,7 +2141,7 @@ FASTRUN void GetNewChannelValues()
     
      for (OutputChannel = 0; OutputChannel < CHANNELSUSED; ++OutputChannel) {                                            // Do every channel
             InputChannel = InPutStick[OutputChannel];                                                                    // Input sticks knobs & switches are mapped by user
-            GetCurveDots(OutputChannel, NewDualRateValue);                                                                // This can now do dual rates traditionally                                                                                                      
+            GetCurveDots(OutputChannel, NewDualRateValue);                                                               // This can now do dual rates traditionally                                                                                                      
             TrimAmount   = 0;                                                                                            // Trim is zero if not input 1-4
             if (InputChannel < 4) TrimAmount = GetTrimAmount(InputTrim[InputChannel]);                                   // User defined trim input
             if (InputChannel > 7) {                                                                                      // Must be a switch if over 7
