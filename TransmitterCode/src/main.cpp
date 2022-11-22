@@ -390,7 +390,6 @@ uint8_t  LastRadio           = 0;
 uint8_t  NextChannel         = 0;
 bool     DoSbusSendOnly      = false;
 bool     BuddyMaster         = false;
-uint8_t  BuddyTriggerChannel = 12;
 bool     SlaveHasControl     = false;
 uint16_t Qnh                 = 1009; // pressure at sea level here
 uint16_t LastModelLoaded     = 0;
@@ -557,7 +556,6 @@ void GetSlaveChannelValues()
 {
     bool failSafeM; // These flags not used, yet...
     bool lostFrameM;
-   // if (SendBuffer[BuddyTriggerChannel - 1] > 1000) {                                               // MASTER'S CHANNEL 'BuddyTriggerChannel' (500 - 2500) used here as switch.
     if (BuddyON){
         if (MySbus.read(&SbusChannels[0], &failSafeM, &lostFrameM)) {                               // Buddy is On
             SBUSTimer = millis();                                                                   // RESET timeout when data comes in
@@ -2886,7 +2884,7 @@ bool LoadAllParameters()
             }
             ++SDCardAddress;
         }
-        BuddyTriggerChannel = SDRead8BITS(SDCardAddress);
+       //  spare
         ++SDCardAddress;
         MinimumGap = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
@@ -3560,7 +3558,7 @@ void SaveTransmitterParameters()
         SDUpdate8BITS(SDCardAddress, SwitchNumber[i]);
         ++SDCardAddress;
     }
-    SDUpdate8BITS(SDCardAddress, BuddyTriggerChannel);
+   // spare
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, MinimumGap);
     ++SDCardAddress;
@@ -5450,15 +5448,11 @@ void StartBuddyView()
 {
     char BuddyM[]     = "BuddyM";
     char BuddyP[]     = "BuddyP";
-    char n0[]         = "n0";
     char pBuddyView[] = "page BuddyView";
     SendCommand(pBuddyView);
     CurrentView = BUDDYVIEW;
-    if (BuddyTriggerChannel > 16) BuddyTriggerChannel = 16;
-    if (BuddyTriggerChannel < 1) BuddyTriggerChannel = 12;
     SendValue(BuddyM, BuddyMaster);
     SendValue(BuddyP, DoSbusSendOnly);
-    SendValue(n0, BuddyTriggerChannel);
 }
 
 /*********************************************************************************************************************************/
@@ -5467,15 +5461,11 @@ void EndBuddyView()
 {
     char BuddyM[] = "BuddyM";
     char BuddyP[] = "BuddyP";
-    char n0[]     = "n0";
+
 
     char pSetupView[]   = "page SetupView";
     DoSbusSendOnly      = GetValue(BuddyP); // Pupil, wired
     BuddyMaster         = GetValue(BuddyM); // Master, either.
-    BuddyTriggerChannel = GetValue(n0);
-    if (BuddyTriggerChannel > 16) BuddyTriggerChannel = 16;
-    if (BuddyTriggerChannel < 1) BuddyTriggerChannel = 12;
-
     SaveAllParameters();
     b5isGrey = false;
     SendCommand(pSetupView);
@@ -5931,7 +5921,6 @@ const char         Tn[32]      = "Unknown";
     SpeakingClock     = true;
     AnnounceBanks     = true;
     ResetSwitchNumbers();
-    BuddyTriggerChannel = 12;
     MinimumGap          = 75;
     LogRXSwaps          = true;
     UseLog              = false;
@@ -6102,69 +6091,15 @@ void DualRatesEnd(){
     CurrentView = STICKSVIEW;
 }
 
-/******************************************************************************************************************************
 
-float CalculateDualRate(int Curve, int Channel,float rate){
+/******************************************************************************************************************************/
 
-    switch (Curve){ // Curve is 1 - 5, low to hi.
-    case 1:  
-        return (((MinDegrees[Dbank1][Channel])    - 90) * (rate / 100)) + 90;
-    case 2:  
-        return (((MidLowDegrees[Dbank1][Channel]) - 90) * (rate / 100)) + 90;
-    case 3:  
-        return (((CentreDegrees[Dbank1][Channel]) - 90) * (rate / 100)) + 90;
-    case 4:  
-        return (((MidHiDegrees[Dbank1][Channel])  - 90) * (rate / 100)) + 90;
-    case 5:    
-        return (((MaxDegrees[Dbank1][Channel])    - 90) * (rate / 100)) + 90;
-    default:
-        return 0;
-    }
-}
-
-******************************************************************************************************************************
-
-void DoEntireChannel(uint8_t Channel,uint8_t Rate,uint8_t bank)  { // this does all five points 
-
-    uint8_t MaxD = 5;
-    uint8_t MidHiD = 4;
-    uint8_t CentreD = 3;
-    uint8_t MidLoD = 2;
-    uint8_t MinD = 1;
-    MaxDegrees[bank][Channel]           = CalculateDualRate(MaxD, Channel, Rate);
-    MidHiDegrees[bank][Channel]         = CalculateDualRate(MidHiD, Channel, Rate);
-    CentreDegrees[bank][Channel]        = CalculateDualRate(CentreD, Channel, Rate);
-    MidLowDegrees[bank][Channel]        = CalculateDualRate(MidLoD, Channel, Rate);
-    MinDegrees[bank][Channel]           = CalculateDualRate(MinD, Channel, Rate);
-    InterpolationTypes[bank][Channel]   = InterpolationTypes[Dbank1][Channel];
-    Exponential[bank][Channel]          = Exponential[Dbank1][Channel];
-}
-
-******************************************************************************************************************************
-
-void DualRatesApply(){                              // This function applies dual rates as setup
+void DualRatesRefresh(){                              
 
         ReadDualRatesValues();
         DisplayDualRateValues();
-
-        if (Drate2 && Dbank2){                      // disable bank by making either value 0
-        for (int i = 0; i < 8;++i) {
-                if (DualRateChannels[i]) {                      // disable channel by making it 0
-                    DoEntireChannel(DualRateChannels[i]-1, Drate2, Dbank2);
-                };
-            }
-        }
-        if (Drate3 && Dbank3){                      // disable bank by making either value 0
-            for (int i = 0; i < 8;++i) {
-                if (DualRateChannels[i]) {                      // disable channel by making it 0
-                    DoEntireChannel(DualRateChannels[i]-1, Drate3, Dbank3);
-                };
-            }
-        }
-        
-        SaveOneModel(ModelNumber);
 }
-*/
+
 
 // ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
 #define LASTFUNCTION 49 // one more than final one
@@ -6217,9 +6152,8 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     PointSelect,                // 44
     DualRatesStart,             // 45
     DualRatesEnd,               // 46
-    Blank,                      // 47  // Spare
+    DualRatesRefresh,           // 47  
     GotoFrontView               // 48
-
 
 }; // list will become much longer ...
 
@@ -7856,6 +7790,7 @@ void GetBank()
     if  (PreviousDualRateInUse != NewDualRateValue){
         PreviousDualRateInUse = NewDualRateValue;
         LastShowTime          = 0;
+        LastTimeRead          = 0;
     }
 
     if (FMSwitch == 4)        ReadFMSwitch(Switch[2], Switch[3], SWITCH4Reversed); 
@@ -8578,7 +8513,6 @@ void FASTRUN ManageTransmitter(){
     if (RightNow - TransmitterLastManaged > 100) {                   // 10 times a second is plenty
         if (RightNow - LastTimeRead >= 1000) {                       // Once a second for these...
             ReadTime();                                              // Do the clock
-            //ReadNextionTime();
             GetStatistics(); // Do stats
             if (CurrentView == MAINSETUPVIEW) CheckScanButton();
             if (CurrentView == MODELSVIEW)    CheckModelName();      // In MODELSVIEW, this function checks correct name is displayed.
