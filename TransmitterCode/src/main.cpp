@@ -2048,10 +2048,18 @@ uint16_t CatmullSplineInterpolation(uint16_t InputValue, uint16_t InputChannel, 
 uint16_t StraightLineInterpolation(uint16_t InputValue, uint16_t InputChannel, uint16_t OutputChannel)
 {
     uint16_t k = 0;
-    if (InputValue >= ChannelMidHi[InputChannel]) k = map(InputValue, ChannelMidHi[InputChannel], ChannelMax[InputChannel], IntoHigherRes(CurveDots[3]), IntoHigherRes(CurveDots[4]));
-    if (InputValue >= ChannelCentre[InputChannel] && InputValue <= (ChannelMidHi[InputChannel])) k = map(InputValue, ChannelCentre[InputChannel], ChannelMidHi[InputChannel], IntoHigherRes(CurveDots[2]), IntoHigherRes(CurveDots[3]));
-    if (InputValue >= ChannelMidLow[InputChannel] && InputValue <= ChannelCentre[InputChannel]) k = map(InputValue, ChannelMidLow[InputChannel], ChannelCentre[InputChannel], IntoHigherRes(CurveDots[1]), IntoHigherRes(CurveDots[2]));
-    if (InputValue <= ChannelMidLow[InputChannel]) k = map(InputValue, ChannelMin[InputChannel], ChannelMidLow[InputChannel], IntoHigherRes(CurveDots[0]), IntoHigherRes(CurveDots[1]));
+    if (InputValue >= ChannelMidHi[InputChannel]) 
+        {k = map(InputValue, ChannelMidHi[InputChannel], ChannelMax[InputChannel], IntoHigherRes(CurveDots[3]), IntoHigherRes(CurveDots[4]));}
+    
+    if (InputValue >= ChannelCentre[InputChannel] && InputValue <= (ChannelMidHi[InputChannel])) 
+        {k = map(InputValue, ChannelCentre[InputChannel], ChannelMidHi[InputChannel], IntoHigherRes(CurveDots[2]), IntoHigherRes(CurveDots[3]));}
+    
+    if (InputValue >= ChannelMidLow[InputChannel] && InputValue <= ChannelCentre[InputChannel]) 
+        {k = map(InputValue, ChannelMidLow[InputChannel], ChannelCentre[InputChannel], IntoHigherRes(CurveDots[1]), IntoHigherRes(CurveDots[2]));}
+    
+    if (InputValue <= ChannelMidLow[InputChannel]) 
+        {k = map(InputValue, ChannelMin[InputChannel], ChannelMidLow[InputChannel], IntoHigherRes(CurveDots[0]), IntoHigherRes(CurveDots[1]));}
+    
     return k;
 }
 /*********************************************************************************************************************************/
