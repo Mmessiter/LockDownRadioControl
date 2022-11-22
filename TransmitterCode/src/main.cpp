@@ -2030,41 +2030,41 @@ FASTRUN void DoReverseSense()
     }
 }
 /*********************************************************************************************************************************/
-uint16_t CatmullSplineInterpolation(uint16_t m, uint16_t l, uint16_t n)
+uint16_t CatmullSplineInterpolation(uint16_t InputValue, uint16_t InputChannel, uint16_t OutputChannel)
 {
-    xPoints[0] = ChannelMin[l];
-    xPoints[1] = ChannelMidLow[l];
-    xPoints[2] = ChannelCentre[l];
-    xPoints[3] = ChannelMidHi[l];
-    xPoints[4] = ChannelMax[l];
+    xPoints[0] = ChannelMin[InputChannel];
+    xPoints[1] = ChannelMidLow[InputChannel];
+    xPoints[2] = ChannelCentre[InputChannel];
+    xPoints[3] = ChannelMidHi[InputChannel];
+    xPoints[4] = ChannelMax[InputChannel];
     yPoints[4] = IntoHigherRes(CurveDots[4]);
     yPoints[3] = IntoHigherRes(CurveDots[3]);
     yPoints[2] = IntoHigherRes(CurveDots[2]);
     yPoints[1] = IntoHigherRes(CurveDots[1]);
     yPoints[0] = IntoHigherRes(CurveDots[0]);
-    return Interpolation::CatmullSpline(xPoints, yPoints, PointsCount, m);
+    return Interpolation::CatmullSpline(xPoints, yPoints, PointsCount, InputValue);
 }
 /*********************************************************************************************************************************/
-uint16_t StraightLineInterpolation(uint16_t m, uint16_t l, uint16_t n)
+uint16_t StraightLineInterpolation(uint16_t InputValue, uint16_t InputChannel, uint16_t OutputChannel)
 {
     uint16_t k = 0;
-    if (m >= ChannelMidHi[l]) k = map(m, ChannelMidHi[l], ChannelMax[l], IntoHigherRes(CurveDots[3]), IntoHigherRes(CurveDots[4]));
-    if (m >= ChannelCentre[l] && m <= (ChannelMidHi[l])) k = map(m, ChannelCentre[l], ChannelMidHi[l], IntoHigherRes(CurveDots[2]), IntoHigherRes(CurveDots[3]));
-    if (m >= ChannelMidLow[l] && m <= ChannelCentre[l]) k = map(m, ChannelMidLow[l], ChannelCentre[l], IntoHigherRes(CurveDots[1]), IntoHigherRes(CurveDots[2]));
-    if (m <= ChannelMidLow[l]) k = map(m, ChannelMin[l], ChannelMidLow[l], IntoHigherRes(CurveDots[0]), IntoHigherRes(CurveDots[1]));
+    if (InputValue >= ChannelMidHi[InputChannel]) k = map(InputValue, ChannelMidHi[InputChannel], ChannelMax[InputChannel], IntoHigherRes(CurveDots[3]), IntoHigherRes(CurveDots[4]));
+    if (InputValue >= ChannelCentre[InputChannel] && InputValue <= (ChannelMidHi[InputChannel])) k = map(InputValue, ChannelCentre[InputChannel], ChannelMidHi[InputChannel], IntoHigherRes(CurveDots[2]), IntoHigherRes(CurveDots[3]));
+    if (InputValue >= ChannelMidLow[InputChannel] && InputValue <= ChannelCentre[InputChannel]) k = map(InputValue, ChannelMidLow[InputChannel], ChannelCentre[InputChannel], IntoHigherRes(CurveDots[1]), IntoHigherRes(CurveDots[2]));
+    if (InputValue <= ChannelMidLow[InputChannel]) k = map(InputValue, ChannelMin[InputChannel], ChannelMidLow[InputChannel], IntoHigherRes(CurveDots[0]), IntoHigherRes(CurveDots[1]));
     return k;
 }
 /*********************************************************************************************************************************/
-uint16_t ExponentialInterpolation(uint16_t m, uint16_t l, uint16_t n)
+uint16_t ExponentialInterpolation(uint16_t InputValue, uint16_t InputChannel, uint16_t OutputChannel)
 {
     uint16_t k = 0;
-    if (m >= ChannelCentre[l]) {
-        k = MapWithExponential(m - ChannelCentre[l], 0, ChannelMax[l] - ChannelCentre[l], 0, IntoHigherRes(CurveDots[4]) - //
-                                   IntoHigherRes(CurveDots[2]), Exponential[Bank][n]) //
+    if (InputValue >= ChannelCentre[InputChannel]) {
+        k = MapWithExponential(InputValue - ChannelCentre[InputChannel], 0, ChannelMax[InputChannel] - ChannelCentre[InputChannel], 0, IntoHigherRes(CurveDots[4]) - //
+                                   IntoHigherRes(CurveDots[2]), Exponential[Bank][OutputChannel]) //
                                    + IntoHigherRes(CurveDots[2]); //
     } else {
-        k = MapWithExponential(ChannelCentre[l] - m, 0, ChannelCentre[l] - ChannelMin[l], IntoHigherRes(CurveDots[2]) - //
-                                   IntoHigherRes(CurveDots[0]), 0, Exponential[Bank][n]) //
+        k = MapWithExponential(ChannelCentre[InputChannel] - InputValue, 0, ChannelCentre[InputChannel] - ChannelMin[InputChannel], IntoHigherRes(CurveDots[2]) - //
+                                   IntoHigherRes(CurveDots[0]), 0, Exponential[Bank][OutputChannel]) //
                                    + IntoHigherRes(CurveDots[0]);
     }
     return k;
@@ -2103,7 +2103,7 @@ void  GetCurveDots(uint16_t OutputChannel,uint16_t TheRate){
 /*********************************************************************************************************************************/
 // ************* Small function pointer array for interpolation types ************************************************************
 
-uint16_t (*Interpolate[3])(uint16_t m, uint16_t l, uint16_t n) {
+uint16_t (*Interpolate[3])(uint16_t InputValue, uint16_t InputChannel, uint16_t OutputChannel) {
     StraightLineInterpolation,  // 0
     CatmullSplineInterpolation, // 1
     ExponentialInterpolation    // 2
