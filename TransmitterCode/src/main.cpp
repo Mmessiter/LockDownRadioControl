@@ -512,6 +512,7 @@ uint8_t  Dbank3                          = 1;
 uint8_t  Dbank4                          = 0;
 uint8_t  DualRateChannels[8]             =  {1, 2, 4, 0, 0, 0, 0, 0};
 uint16_t CurveDots[5];
+uint8_t  NewDualRateValue                = 100;
 
 // **********************************************************************************************************************************
 // *********************************************** END OF GLOBAL DATA ***************************************************************
@@ -2140,7 +2141,7 @@ FASTRUN void GetNewChannelValues()
     
      for (OutputChannel = 0; OutputChannel < CHANNELSUSED; ++OutputChannel) {                                            // Do every channel
             InputChannel = InPutStick[OutputChannel];                                                                    // Input sticks knobs & switches are mapped by user
-            GetCurveDots(OutputChannel,100);                                                                                 // This can now do dual rates traditionally                                                                                                      
+            GetCurveDots(OutputChannel, NewDualRateValue);                                                                // This can now do dual rates traditionally                                                                                                      
             TrimAmount   = 0;                                                                                            // Trim is zero if not input 1-4
             if (InputChannel < 4) TrimAmount = GetTrimAmount(InputTrim[InputChannel]);                                   // User defined trim input
             if (InputChannel > 7) {                                                                                      // Must be a switch if over 7
