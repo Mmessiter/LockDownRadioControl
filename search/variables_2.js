@@ -36,11 +36,12 @@ var searchData=
   ['brightness_33',['Brightness',['../TransmitterCode_2src_2main_8cpp.html#adb3b4a5ffa0c290576c837177b5385a0',1,'main.cpp']]],
   ['buddycontrolled_34',['BuddyControlled',['../TransmitterCode_2src_2main_8cpp.html#a5c21772263bd77182ecf11e45dc773a5',1,'main.cpp']]],
   ['buddymaster_35',['BuddyMaster',['../RadioFunctions_8h.html#a26a52012e307147a99289fff5c492358',1,'BuddyMaster():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a26a52012e307147a99289fff5c492358',1,'BuddyMaster():&#160;main.cpp']]],
-  ['buddytriggerchannel_36',['BuddyTriggerChannel',['../TransmitterCode_2src_2main_8cpp.html#ae91fe0caf128c1a35e74a9c009b2d347',1,'main.cpp']]],
-  ['buttonclicks_37',['ButtonClicks',['../TransmitterCode_2src_2main_8cpp.html#a0955aa08f4b43e6f78ff256fc6ccf421',1,'main.cpp']]],
-  ['byte1_38',['Byte1',['../structPayload.html#ab1cbe4c4b9ee9ce839084b274f3ea494',1,'Payload']]],
-  ['byte2_39',['Byte2',['../structPayload.html#ae7106f2efa1bb9f4ebb720c7c9fc54b8',1,'Payload']]],
-  ['byte3_40',['Byte3',['../structPayload.html#a31d05bdbdf85fe184cc7f806d3391fa9',1,'Payload']]],
-  ['byte4_41',['Byte4',['../structPayload.html#a654bdf192bbe0cc64dc8280527c2da20',1,'Payload']]],
-  ['byte5_42',['Byte5',['../structPayload.html#ae28220045a0918bdb0fc6484dbff55f9',1,'Payload']]]
+  ['buddyswitch_36',['BuddySwitch',['../TransmitterCode_2src_2main_8cpp.html#aad45cb80b969ee0f10952b145e4c15a5',1,'main.cpp']]],
+  ['buddytriggerchannel_37',['BuddyTriggerChannel',['../TransmitterCode_2src_2main_8cpp.html#ae91fe0caf128c1a35e74a9c009b2d347',1,'main.cpp']]],
+  ['buttonclicks_38',['ButtonClicks',['../TransmitterCode_2src_2main_8cpp.html#a0955aa08f4b43e6f78ff256fc6ccf421',1,'main.cpp']]],
+  ['byte1_39',['Byte1',['../structPayload.html#ab1cbe4c4b9ee9ce839084b274f3ea494',1,'Payload']]],
+  ['byte2_40',['Byte2',['../structPayload.html#ae7106f2efa1bb9f4ebb720c7c9fc54b8',1,'Payload']]],
+  ['byte3_41',['Byte3',['../structPayload.html#a31d05bdbdf85fe184cc7f806d3391fa9',1,'Payload']]],
+  ['byte4_42',['Byte4',['../structPayload.html#a654bdf192bbe0cc64dc8280527c2da20',1,'Payload']]],
+  ['byte5_43',['Byte5',['../structPayload.html#ae28220045a0918bdb0fc6484dbff55f9',1,'Payload']]]
 ];
