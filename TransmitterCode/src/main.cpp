@@ -2103,7 +2103,7 @@ float CalculateDualRateNew(short int Curve, short int Channel,float rate){
 
 void  GetCurveDots(uint16_t OutputChannel,uint16_t TheRate){  
     
-        // This for traditional Dual Rates function
+        // This for the traditional (new) Dual Rates function
         // Effectively, it copies the dot locations on the curve, and might reduce their extent if rate is below 100
 
     for (int i = 0; i < 5; ++i) CurveDots[i] = CalculateDualRateNew(i+1, OutputChannel, TheRate); 
