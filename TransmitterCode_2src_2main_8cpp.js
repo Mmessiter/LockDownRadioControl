@@ -28,7 +28,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "BuildDirectory", "TransmitterCode_2src_2main_8cpp.html#affc6c0de18db71aa5ad8b4d241339731", null ],
     [ "ButtonWasPressed", "TransmitterCode_2src_2main_8cpp.html#a804fdbdd5eab4c596bbe8a23eecbe4d5", null ],
     [ "CalculateDualRate", "TransmitterCode_2src_2main_8cpp.html#a78a3a271118671aa5689036890a0976d", null ],
-    [ "CalculateDualRateNew", "TransmitterCode_2src_2main_8cpp.html#a8bb2d8de7f326c3d252736f647802708", null ],
+    [ "CalculateDualRateNew", "TransmitterCode_2src_2main_8cpp.html#a8ae9f67cb7f3bd9d35070454d81aa149", null ],
     [ "CalibrateEdgeSwitches", "TransmitterCode_2src_2main_8cpp.html#a128fe47088693b102796cd67a175ea08", null ],
     [ "CalibrateSticks", "TransmitterCode_2src_2main_8cpp.html#ae1b8cef371d26fca2b4f5a101be7a8ba", null ],
     [ "CatmullSplineInterpolation", "TransmitterCode_2src_2main_8cpp.html#a11049cdf3f4d84a837d204e7dc687fe3", null ],

@@ -2,7 +2,7 @@ var searchData=
 [
   ['calculate_5fimu_5ferror_0',['calculate_IMU_error',['../Quadcopter_2src_2main_8cpp.html#a9ed284dd7228e75641e725d2c1d30907',1,'main.cpp']]],
   ['calculatedualrate_1',['CalculateDualRate',['../TransmitterCode_2src_2main_8cpp.html#a78a3a271118671aa5689036890a0976d',1,'main.cpp']]],
-  ['calculatedualratenew_2',['CalculateDualRateNew',['../TransmitterCode_2src_2main_8cpp.html#a8bb2d8de7f326c3d252736f647802708',1,'main.cpp']]],
+  ['calculatedualratenew_2',['CalculateDualRateNew',['../TransmitterCode_2src_2main_8cpp.html#a8ae9f67cb7f3bd9d35070454d81aa149',1,'main.cpp']]],
   ['calibrateaccel_3',['calibrateAccel',['../classMPU9250.html#ad5f4d08b299f35374d1bca9d7122fcdc',1,'MPU9250']]],
   ['calibrateaccel_4',['CalibrateAccel',['../classMPU6050.html#a921f5d34643655bf3a584dd52615a526',1,'MPU6050']]],
   ['calibrateattitude_5',['calibrateAttitude',['../Quadcopter_2src_2main_8cpp.html#aaa6190068cf2270175bece527fd6216a',1,'main.cpp']]],
