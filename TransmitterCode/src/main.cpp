@@ -189,6 +189,8 @@ uint8_t  SubTrims[CHANNELSUSED + 1];         //    Subtrims
 uint8_t  SubTrimToEdit      = 0;
 uint8_t  Bank         = 1;
 uint8_t  PreviousBank = 1;
+uint8_t  DualRateInUse              = 1;
+uint8_t  PreviousDualRateInUse      = 1;
 uint16_t ChannelMax[CHANNELSUSED + 1];    //    output of pots at max
 uint16_t ChannelMidHi[CHANNELSUSED + 1];  //    output of pots at MidHi
 uint16_t ChannelCentre[CHANNELSUSED + 1]; //    output of pots at Centre
@@ -316,6 +318,10 @@ bool     TrimSwitch[8];
 uint8_t  FMSwitch             = BANKSWITCH;
 uint8_t  AutoSwitch           = AUTOSWITCH;
 uint8_t  SafetySwitch         = 0;
+
+uint8_t  BuddySwitch         = 0;
+uint8_t  DualRatesSwitch     = 0;
+
 uint8_t  Channel9Switch       = 0;
 uint8_t  Channel10Switch      = 0;
 uint8_t  Channel11Switch      = 0;
@@ -503,13 +509,9 @@ bool     TXLiPo                         = false;
 uint8_t  CurrentPoint                   = 1;
 
 bool     UseDualRates                    = false;
-uint8_t  Drate2                          = 75; // 1 is always 100%
+uint8_t  Drate1                          = 100; 
+uint8_t  Drate2                          = 75; 
 uint8_t  Drate3                          = 50;
-uint8_t  Drate4                          = 0;
-uint8_t  Dbank1                          = 3;
-uint8_t  Dbank2                          = 2;
-uint8_t  Dbank3                          = 1;
-uint8_t  Dbank4                          = 0;
 uint8_t  DualRateChannels[8]             =  {1, 2, 4, 0, 0, 0, 0, 0};
 uint16_t CurveDots[5];
 uint8_t  NewDualRateValue                = 100;
@@ -1703,12 +1705,18 @@ if (millis() - LastShowTime > SHOWCOMMSDELAY) {
     char BTo[]               = "BTo";
     char Sat[]               = "Sat";
     char Sbs[]               = "Sbus";
+    char rate[]              = "rate";
+    char rate1[]             = "Rate 1";
+    char rate2[]             = "Rate 2";
+    char rate3[]             = "Rate 3";
 
-        
-        if (CurrentView == FRONTVIEW || CurrentView == DATAVIEW) {
+    if (CurrentView == FRONTVIEW || CurrentView == DATAVIEW) {
             if ((CurrentView == FRONTVIEW))  ShowConnectionQuality();
             if (LedWasGreen) {
                 if ((CurrentView == FRONTVIEW)) {
+                    if (DualRateInUse == 1) SendText(rate, rate1);
+                    if (DualRateInUse == 2) SendText(rate, rate2);
+                    if (DualRateInUse == 3) SendText(rate, rate3);
                     if (BoundFlag) {
                         if (!BuddyMaster) {
                             if (!Reconnected) {
@@ -2102,11 +2110,22 @@ float CalculateDualRateNew(short int Curve, short int Channel,float rate){
 /*********************************************************************************************************************************/
 
 void  GetCurveDots(uint16_t OutputChannel,uint16_t TheRate){  
-    
         // This for the traditional (new) Dual Rates function
-        // Effectively, it copies the dot locations on the curve, and might reduce their extent if rate is below 100
+        // Effectively, it copies the dot locations on the curve, and might reduce their extent if rate is below 100 and channel specified
 
-    for (int i = 0; i < 5; ++i) CurveDots[i] = CalculateDualRateNew(i+1, OutputChannel, TheRate); 
+    if (OutputChannel < 8) {
+        for (int j = 0; j < 8; ++j) {
+            if (OutputChannel == DualRateChannels[j]-1) {
+                for (int i = 0; i < 5; ++i) {
+                    CurveDots[i] = CalculateDualRateNew(i + 1, OutputChannel, TheRate);
+                }
+            return;   
+            }   
+        }    
+    }
+    for (int i = 0; i < 5; ++i) {
+        CurveDots[i] = CalculateDualRateNew(i + 1, OutputChannel, 100); // if channel not affected, send full amount.
+    }
 }
 
 /*********************************************************************************************************************************/
@@ -2721,27 +2740,20 @@ bool ReadOneModel(uint8_t Mnum)
     ++SDCardAddress;
     StopFlyingVoltsPerCell = float (SFV) / 100;
     if (StopFlyingVoltsPerCell < 3 || StopFlyingVoltsPerCell > 4) StopFlyingVoltsPerCell = 3.50; // a useful default stop time?!
-
      Drate2 = SDRead8BITS(SDCardAddress);
      ++SDCardAddress;
      Drate3 = SDRead8BITS(SDCardAddress);
      ++SDCardAddress;
-     Drate4 = SDRead8BITS(SDCardAddress);
+     Drate1 = SDRead8BITS(SDCardAddress); 
      ++SDCardAddress;
-     Dbank1 = SDRead8BITS(SDCardAddress);
-     ++SDCardAddress;
-     Dbank2 = SDRead8BITS(SDCardAddress);
-     ++SDCardAddress;
-     Dbank3 = SDRead8BITS(SDCardAddress);
-     ++SDCardAddress;
-     Dbank4 = SDRead8BITS(SDCardAddress);
-    ++SDCardAddress;
-    UseDualRates = SDRead8BITS(SDCardAddress);
-    ++SDCardAddress;
 for (int i = 0; i < 8;++i){
         DualRateChannels[i]= SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
     }
+    BuddySwitch = SDRead8BITS(SDCardAddress);
+    ++SDCardAddress;
+    DualRatesSwitch = SDRead8BITS(SDCardAddress);
+    ++SDCardAddress;
 
     CheckDualRatesValues();
 
@@ -3735,27 +3747,25 @@ void SaveOneModel(uint16_t mnum)
     SDUpdate16BITS(SDCardAddress,SFV);
     ++SDCardAddress;
     ++SDCardAddress;
-
     SDUpdate8BITS(SDCardAddress, Drate2);
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, Drate3);
     ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, Drate4);
+    SDUpdate8BITS(SDCardAddress, Drate1); 
     ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, Dbank1);
-    ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, Dbank2);
-    ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, Dbank3);
-    ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, Dbank4);
-    ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, UseDualRates);
-    ++SDCardAddress;
+   
     for (int i = 0; i < 8;++i){
             SDUpdate8BITS(SDCardAddress, DualRateChannels[i]);
             ++SDCardAddress;
     }
+    SDUpdate8BITS(SDCardAddress, BuddySwitch); 
+    ++SDCardAddress;
+    SDUpdate8BITS(SDCardAddress, DualRatesSwitch); 
+    ++SDCardAddress;
+
+
+
+
     SaveCheckSum32(); // Save the Model parametres checksm
     
     // ********************** Add more
@@ -3988,51 +3998,60 @@ void UpdateSwitchesDisplay()
     char SwitchesView_sw3[] = "sw3";
     char SwitchesView_sw4[] = "sw4";
     char NotUsed[]          = "Not used";
-    char Banks123[]         = "Banks 1 - 2 - 3";
-    char Auto[]             = "Bank 4, auto & motor";
-    char Channel_9[]        = "Channel 9";
+    char Banks123[]         = "Banks 1-2-3";
+    char Auto[]             = "Bank 4 (etc)";
+    char Channel_9[]        = "Channel 9" ;
     char Channel_10[]       = "Channel 10";
     char Channel_11[]       = "Channel 11";
     char Channel_12[]       = "Channel 12";
-    char Safety_Switch[]    = "Safety   ";
+    char Safety_Switch[]    = "Safety    ";
+    char Buddy_Switch[]     = "Buddy     ";
+    char DualRates_Switch[] = "Dual rates";
 
     SendText(SwitchesView_sw1, NotUsed);
-    if (AutoSwitch == 1) SendText(SwitchesView_sw1, Auto);
-    if (FMSwitch == 1) SendText(SwitchesView_sw1, Banks123);
-    if (Channel9Switch == 1) SendText(SwitchesView_sw1, Channel_9);
-    if (Channel10Switch == 1) SendText(SwitchesView_sw1, Channel_10);
-    if (Channel11Switch == 1) SendText(SwitchesView_sw1, Channel_11);
-    if (Channel12Switch == 1) SendText(SwitchesView_sw1, Channel_12);
-    if (SafetySwitch == 1) SendText(SwitchesView_sw1, Safety_Switch);
-
-
-
+    if (AutoSwitch == 1)        SendText(SwitchesView_sw1, Auto);
+    if (FMSwitch == 1)          SendText(SwitchesView_sw1, Banks123);
+    if (Channel9Switch == 1)    SendText(SwitchesView_sw1, Channel_9);
+    if (Channel10Switch == 1)   SendText(SwitchesView_sw1, Channel_10);
+    if (Channel11Switch == 1)   SendText(SwitchesView_sw1, Channel_11);
+    if (Channel12Switch == 1)   SendText(SwitchesView_sw1, Channel_12);
+    if (SafetySwitch == 1)      SendText(SwitchesView_sw1, Safety_Switch);
+    if (DualRatesSwitch == 1)   SendText(SwitchesView_sw1, DualRates_Switch);
+    if (BuddySwitch == 1)       SendText(SwitchesView_sw1, Buddy_Switch);
+   
     SendText(SwitchesView_sw2, NotUsed);
-    if (AutoSwitch == 2) SendText(SwitchesView_sw2, Auto);
-    if (FMSwitch == 2) SendText(SwitchesView_sw2, Banks123);
-    if (Channel9Switch == 2) SendText(SwitchesView_sw2, Channel_9);
-    if (Channel10Switch == 2) SendText(SwitchesView_sw2, Channel_10);
-    if (Channel11Switch == 2) SendText(SwitchesView_sw2, Channel_11);
-    if (Channel12Switch == 2) SendText(SwitchesView_sw2, Channel_12);
-     if (SafetySwitch == 2) SendText(SwitchesView_sw2, Safety_Switch);
-
+    if (AutoSwitch == 2)        SendText(SwitchesView_sw2, Auto);
+    if (FMSwitch == 2)          SendText(SwitchesView_sw2, Banks123);
+    if (Channel9Switch == 2)    SendText(SwitchesView_sw2, Channel_9);
+    if (Channel10Switch == 2)   SendText(SwitchesView_sw2, Channel_10);
+    if (Channel11Switch == 2)   SendText(SwitchesView_sw2, Channel_11);
+    if (Channel12Switch == 2)   SendText(SwitchesView_sw2, Channel_12);
+    if (SafetySwitch == 2)      SendText(SwitchesView_sw2, Safety_Switch);
+    if (DualRatesSwitch == 2)   SendText(SwitchesView_sw2, DualRates_Switch);
+    if (BuddySwitch == 2)       SendText(SwitchesView_sw2, Buddy_Switch);
+   
     SendText(SwitchesView_sw3, NotUsed);
-    if (AutoSwitch == 3) SendText(SwitchesView_sw3, Auto);
-    if (FMSwitch == 3) SendText(SwitchesView_sw3, Banks123);
-    if (Channel9Switch == 3) SendText(SwitchesView_sw3, Channel_9);
-    if (Channel10Switch == 3) SendText(SwitchesView_sw3, Channel_10);
-    if (Channel11Switch == 3) SendText(SwitchesView_sw3, Channel_11);
-    if (Channel12Switch == 3) SendText(SwitchesView_sw3, Channel_12);
-     if (SafetySwitch == 3) SendText(SwitchesView_sw3, Safety_Switch);
-
+    if (AutoSwitch == 3)        SendText(SwitchesView_sw3, Auto);
+    if (FMSwitch == 3)          SendText(SwitchesView_sw3, Banks123);
+    if (Channel9Switch == 3)    SendText(SwitchesView_sw3, Channel_9);
+    if (Channel10Switch == 3)   SendText(SwitchesView_sw3, Channel_10);
+    if (Channel11Switch == 3)   SendText(SwitchesView_sw3, Channel_11);
+    if (Channel12Switch == 3)   SendText(SwitchesView_sw3, Channel_12);
+    if (SafetySwitch == 3)      SendText(SwitchesView_sw3, Safety_Switch);
+    if (DualRatesSwitch == 3)   SendText(SwitchesView_sw3, DualRates_Switch);
+    if (BuddySwitch == 3)       SendText(SwitchesView_sw3, Buddy_Switch);
+   
     SendText(SwitchesView_sw4, NotUsed);
-    if (AutoSwitch == 4) SendText(SwitchesView_sw4, Auto);
-    if (FMSwitch == 4) SendText(SwitchesView_sw4, Banks123);
-    if (Channel9Switch == 4) SendText(SwitchesView_sw4, Channel_9);
-    if (Channel10Switch == 4) SendText(SwitchesView_sw4, Channel_10);
-    if (Channel11Switch == 4) SendText(SwitchesView_sw4, Channel_11);
-    if (Channel12Switch == 4) SendText(SwitchesView_sw4, Channel_12);
-    if (SafetySwitch == 4) SendText(SwitchesView_sw4, Safety_Switch);
+    if (AutoSwitch == 4)        SendText(SwitchesView_sw4, Auto);
+    if (FMSwitch == 4)          SendText(SwitchesView_sw4, Banks123);
+    if (Channel9Switch == 4)    SendText(SwitchesView_sw4, Channel_9);
+    if (Channel10Switch == 4)   SendText(SwitchesView_sw4, Channel_10);
+    if (Channel11Switch == 4)   SendText(SwitchesView_sw4, Channel_11);
+    if (Channel12Switch == 4)   SendText(SwitchesView_sw4, Channel_12);
+    if (SafetySwitch == 4)      SendText(SwitchesView_sw4, Safety_Switch);
+    if (DualRatesSwitch == 4)   SendText(SwitchesView_sw4, DualRates_Switch);
+    if (BuddySwitch == 4)       SendText(SwitchesView_sw4, Buddy_Switch);
+   
 }
 
 /*********************************************************************************************************************************/
@@ -4261,13 +4280,10 @@ void SetDefaultValues()
     ModelsMacUnionSaved.Val32[0] = 0;
     ModelsMacUnionSaved.Val32[1] = 0;
     UseDualRates                   = false;
-    Drate2                         = 75; // 1 is always 100% 
+    Drate1                         = 100;
+    Drate2                         = 75;
     Drate3                         = 50;
-    Drate4                         = 0;
-    Dbank1                         = 3;
-    Dbank2                         = 2;
-    Dbank3                         = 1;
-    Dbank4                         = 0;
+    
     DualRateChannels[0] = 1;
     DualRateChannels[1] = 2;
     DualRateChannels[2] = 4;
@@ -4297,28 +4313,20 @@ void SetDefaultValues()
 void CheckDualRatesValues(){
 
     bool KO = false;
-
+    if (Drate1 > MAXDUALRATE) KO = true;
     if (Drate2 > MAXDUALRATE) KO = true;
     if (Drate3 > MAXDUALRATE) KO = true;
-    if (Drate4 > MAXDUALRATE) KO = true;
-    if (Dbank1 >   4) KO = true;
-    if (Dbank2 >   4) KO = true;
-    if (Dbank3 >   4) KO = true;
-    if (Dbank4 >   4) KO = true;
+    
 
     for (int i = 0; i < 8;++i){
         if (DualRateChannels[i] > 16) KO = true;
-        Look(DualRateChannels[i]);
     }
         if (KO) {
-            UseDualRates = false;
+          //  UseDualRates = false;
+            Drate1       = 100;
             Drate2       = 75; // 1 is always 100%
             Drate3       = 50;
-            Drate4       = 0;
-            Dbank1       = 1;
-            Dbank2       = 2;
-            Dbank3       = 3;
-            Dbank4       = 4;
+           
             DualRateChannels[0]      = 1;
             DualRateChannels[1]      = 2;
             DualRateChannels[2]      = 4;
@@ -5208,7 +5216,13 @@ void updateOneSwitchView()
     char OneSwitchView_r4[]    = "r4";     // Ch10
     char OneSwitchView_r5[]    = "r5";     // Ch11
     char OneSwitchView_r6[]    = "r6";     // Ch12
-     char OneSwitchView_r7[]    = "r7";     // Safety
+    char OneSwitchView_r7[]    = "r7";    // Safety
+    char OneSwitchView_r8[]    = "r8";    // Dual Rates
+    char OneSwitchView_r9[]    = "r9";    // Buddy
+    
+    
+    
+    
     char OneSwitchViewc_revd[] = "c_revd"; // Reversed
     char SwNum[]               = "Sw";
 
@@ -5221,6 +5235,12 @@ void updateOneSwitchView()
         if (Channel11Switch == 1) SendValue(OneSwitchView_r5, 1);
         if (Channel12Switch == 1) SendValue(OneSwitchView_r6, 1);
         if (SafetySwitch == 1) SendValue(OneSwitchView_r7, 1);
+        if (DualRatesSwitch == 1) SendValue(OneSwitchView_r8, 1);
+        if (BuddySwitch == 1) SendValue(OneSwitchView_r9, 1);
+        
+        
+        
+        
         if (!ValueSent) SendValue(OneSwitchView_r0, 1); // nothing yet, so not used
         if (SWITCH1Reversed) SendValue(OneSwitchViewc_revd, 1);
     }
@@ -5233,6 +5253,8 @@ void updateOneSwitchView()
         if (Channel11Switch == 2) SendValue(OneSwitchView_r5, 1);
         if (Channel12Switch == 2) SendValue(OneSwitchView_r6, 1);
         if (SafetySwitch == 2) SendValue(OneSwitchView_r7, 1);
+        if (DualRatesSwitch == 2) SendValue(OneSwitchView_r8, 1);
+        if (BuddySwitch == 2) SendValue(OneSwitchView_r9, 1);
         if (!ValueSent) SendValue(OneSwitchView_r0, 1); // nothing yet, so not used
         if (SWITCH2Reversed) SendValue(OneSwitchViewc_revd, 1);
     }
@@ -5244,7 +5266,11 @@ void updateOneSwitchView()
         if (Channel10Switch == 3) SendValue(OneSwitchView_r4, 1);
         if (Channel11Switch == 3) SendValue(OneSwitchView_r5, 1);
         if (Channel12Switch == 3) SendValue(OneSwitchView_r6, 1);
-         if (SafetySwitch == 3) SendValue(OneSwitchView_r7, 1);
+        if (SafetySwitch == 3) SendValue(OneSwitchView_r7, 1);
+        if (DualRatesSwitch == 3) SendValue(OneSwitchView_r8, 1);
+        if (BuddySwitch == 3) SendValue(OneSwitchView_r9, 1);
+        
+
         if (!ValueSent) SendValue(OneSwitchView_r0, 1); // nothing yet, so not used
         if (SWITCH3Reversed) SendValue(OneSwitchViewc_revd, 1);
     }
@@ -5257,6 +5283,8 @@ void updateOneSwitchView()
         if (Channel11Switch == 4) SendValue(OneSwitchView_r5, 1);
         if (Channel12Switch == 4) SendValue(OneSwitchView_r6, 1);
         if (SafetySwitch == 4) SendValue(OneSwitchView_r7, 1);
+        if (DualRatesSwitch == 4) SendValue(OneSwitchView_r8, 1);
+        if (BuddySwitch == 4) SendValue(OneSwitchView_r9, 1);
         if (!ValueSent) SendValue(OneSwitchView_r0, 1); // nothing yet, so not used
         if (SWITCH4Reversed) SendValue(OneSwitchViewc_revd, 1);
     }
@@ -5960,13 +5988,9 @@ void ShowDualRateChannelsName(char* nm, uint8_t n){
 /******************************************************************************************************************************/
 
 void DisplayDualRateValues(){
+    char rate1[]          = "rate1";
     char rate2[]          = "rate2";
     char rate3[]          = "rate3";
-    char rate4[]          = "rate4";
-    char bank1[]          = "bank1";
-    char bank2[]          = "bank2";
-    char bank3[]          = "bank3";
-    char bank4[]          = "bank4";
     char ChName1[]        = "t12";
     char ChName2[]        = "t8";
     char ChName3[]        = "t11";
@@ -5984,13 +6008,9 @@ void DisplayDualRateValues(){
     char ChNumber7[]      = "n5";
     char ChNumber8[]      = "n7";
 
+    SendValue(rate1,Drate1);
     SendValue(rate2,Drate2);
     SendValue(rate3,Drate3);
-    SendValue(rate4,Drate4); 
-    SendValue(bank1,Dbank1);
-    SendValue(bank2,Dbank2);
-    SendValue(bank3,Dbank3);
-    SendValue(bank4, Dbank4); 
     
     SendValue(ChNumber1, DualRateChannels[0]);
     SendValue(ChNumber2, DualRateChannels[1]);
@@ -6027,17 +6047,12 @@ void DualRatesStart(){
 /******************************************************************************************************************************/
 
 void ReadDualRatesValues(){ 
-
     char ProgressStart[]  = "vis Progress,1";
     char ProgressEnd[]    = "vis Progress,0";
     char Progress[]       = "Progress";
     char rate2[]          = "rate2";
     char rate3[]          = "rate3";
-    char rate4[]          = "rate4";
-    char bank1[]          = "bank1";
-    char bank2[]          = "bank2";
-    char bank3[]          = "bank3";
-    char bank4[]          = "bank4";
+    char rate1[]          = "rate1";
     char ChNumber1[]      = "n2";
     char ChNumber2[]      = "n0";
     char ChNumber3[]      = "n1";
@@ -6049,40 +6064,26 @@ void ReadDualRatesValues(){
     SendCommand(ProgressStart);
     SendValue(Progress, 10);
     Procrastinate(10);
+    Drate1 = GetValue(rate1);
+    if (Drate1 > MAXDUALRATE) Drate1 = MAXDUALRATE; 
     Drate2 = GetValue(rate2);
     if (Drate2 > MAXDUALRATE) Drate2 = MAXDUALRATE; 
     Drate3 = GetValue(rate3);
     if (Drate3 > MAXDUALRATE) Drate3 = MAXDUALRATE;
-    Drate4 = GetValue(rate4);
-    if (Drate4 > MAXDUALRATE) Drate4 = MAXDUALRATE;
-    SendValue(Progress, 20);
-     Procrastinate(10);
-    Dbank1 = GetValue(bank1);
-    if (Dbank1 > 4) Dbank1 = 0;
-    Dbank2 = GetValue(bank2);
-    if (Dbank2 > 4) Dbank2 = 0;
-    SendValue(Progress, 30);
-     Procrastinate(10);
-    Dbank3 = GetValue(bank3);
-    if (Dbank3 > 4) Dbank3 = 0;
-    SendValue(Progress, 40);
-     Procrastinate(10);
-    Dbank4 = GetValue(bank4);
-    if (Dbank4 > 4) Dbank4 = 0;
     SendValue(Progress, 50);
     Procrastinate(10);
-    DualRateChannels[0] = CheckRange(GetValue(ChNumber1),0,16);
-    DualRateChannels[1] = CheckRange(GetValue(ChNumber2),0,16);   
-    DualRateChannels[2] = CheckRange(GetValue(ChNumber3),0,16);
+    DualRateChannels[0] = CheckRange(GetValue(ChNumber1),0,8);
+    DualRateChannels[1] = CheckRange(GetValue(ChNumber2),0,8);   
+    DualRateChannels[2] = CheckRange(GetValue(ChNumber3),0,8);
     SendValue(Progress, 60);
     Procrastinate(10);
-    DualRateChannels[3] = CheckRange(GetValue(ChNumber4),0,16);
-    DualRateChannels[4] = CheckRange(GetValue(ChNumber5),0,16);
-    DualRateChannels[5] = CheckRange(GetValue(ChNumber6),0,16);
+    DualRateChannels[3] = CheckRange(GetValue(ChNumber4),0,8);
+    DualRateChannels[4] = CheckRange(GetValue(ChNumber5),0,8);
+    DualRateChannels[5] = CheckRange(GetValue(ChNumber6),0,8);
     SendValue(Progress, 75);
     Procrastinate(10);
-    DualRateChannels[6] = CheckRange(GetValue(ChNumber7),0,16);
-    DualRateChannels[7] = CheckRange(GetValue(ChNumber8),0,16);
+    DualRateChannels[6] = CheckRange(GetValue(ChNumber7),0,8);
+    DualRateChannels[7] = CheckRange(GetValue(ChNumber8),0,8);
     SendValue(Progress, 100);
     Procrastinate(10);
     SendCommand(ProgressEnd);
@@ -6099,7 +6100,7 @@ void DualRatesEnd(){
     CurrentView = STICKSVIEW;
 }
 
-/******************************************************************************************************************************/
+/******************************************************************************************************************************
 
 float CalculateDualRate(int Curve, int Channel,float rate){
 
@@ -6119,7 +6120,7 @@ float CalculateDualRate(int Curve, int Channel,float rate){
     }
 }
 
-/******************************************************************************************************************************/
+******************************************************************************************************************************
 
 void DoEntireChannel(uint8_t Channel,uint8_t Rate,uint8_t bank)  { // this does all five points 
 
@@ -6137,7 +6138,7 @@ void DoEntireChannel(uint8_t Channel,uint8_t Rate,uint8_t bank)  { // this does 
     Exponential[bank][Channel]          = Exponential[Dbank1][Channel];
 }
 
-/******************************************************************************************************************************/
+******************************************************************************************************************************
 
 void DualRatesApply(){                              // This function applies dual rates as setup
 
@@ -6158,15 +6159,11 @@ void DualRatesApply(){                              // This function applies dua
                 };
             }
         }
-        if (Drate4 && Dbank4){                      // disable bank by making either value 0
-            for (int i = 0; i < 8;++i) {
-                if (DualRateChannels[i]) {                      // disable channel by making it 0
-                    DoEntireChannel(DualRateChannels[i]-1, Drate4, Dbank4);
-                };
-            }
-        }
+        
         SaveOneModel(ModelNumber);
 }
+*/
+
 // ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
 #define LASTFUNCTION 49 // one more than final one
 
@@ -6218,7 +6215,7 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     PointSelect,                // 44
     DualRatesStart,             // 45
     DualRatesEnd,               // 46
-    DualRatesApply,             // 47  
+    Blank,                      // 47  // Spare
     GotoFrontView               // 48
 
 
@@ -6283,6 +6280,10 @@ FASTRUN void ButtonWasPressed()
         char OneSwitchView_r5[]        = "r5";     // Ch11
         char OneSwitchView_r6[]        = "r6";     // Ch12
         char OneSwitchView_r7[]        = "r7";     // Safety
+        char OneSwitchView_r8[]        = "r8";     // Dual Rates
+        char OneSwitchView_r9[]        = "r9";     // Buddy
+
+
         char OneSwitchViewc_revd[]     = "c_revd"; // Reversed
         char Write[]                   = "Write";
         char Setup[]                   = "Setup";
@@ -6969,6 +6970,20 @@ FASTRUN void ButtonWasPressed()
                 if (SafetySwitch == SwitchEditNumber) SafetySwitch = 0;
             }
 
+            if (GetValue(OneSwitchView_r8)) {
+                DualRatesSwitch = SwitchEditNumber;
+            }
+            else {
+                if (DualRatesSwitch == SwitchEditNumber) DualRatesSwitch = 0;
+            }
+
+            if (GetValue(OneSwitchView_r9)) {
+                BuddySwitch = SwitchEditNumber;
+            }
+            else {
+                if (BuddySwitch == SwitchEditNumber) BuddySwitch = 0;
+            }
+            
 
             if (SwitchEditNumber == 1) {
                 if (GetValue(OneSwitchViewc_revd)) {
@@ -7730,7 +7745,27 @@ void LoadPacketData()
 
 /************************************************************************************************************/
 
-void ReadFMSwitch(bool sw1, bool sw2, bool rev)
+void ReadDRSwitch(bool sw1, bool sw2, bool rev) // Dual Rate Switch
+{
+    if ((sw1 == false) && (sw2 == false))
+    {
+        DualRateInUse = 2;
+    }
+    else {
+        if (rev) {
+            if (sw1) DualRateInUse = 1;
+            if (sw2) DualRateInUse = 3;
+        }
+        else {
+            if (sw1) DualRateInUse = 3;
+            if (sw2) DualRateInUse = 1;
+        }
+    }
+}
+
+/************************************************************************************************************/
+
+void ReadFMSwitch(bool sw1, bool sw2, bool rev) // Bank Switch
 {
     if ((sw1 == false) && (sw2 == false))
     {
@@ -7787,20 +7822,34 @@ void GetBank()
     SafetyON     = false;
     MotorEnabled = !UseMotorKill; //  If not using motor switch then motor is always enabled.
 
-    if (AutoSwitch == 1 && Switch[7] == SWITCH1Reversed) MotorEnabled = true;
-    if (AutoSwitch == 2 && Switch[5] == SWITCH2Reversed) MotorEnabled = true;
-    if (AutoSwitch == 3 && Switch[0] == SWITCH3Reversed) MotorEnabled = true;
-    if (AutoSwitch == 4 && Switch[2] == SWITCH4Reversed) MotorEnabled = true; 
+    if (AutoSwitch == 1 && Switch[7]   == SWITCH1Reversed) MotorEnabled = true;
+    if (AutoSwitch == 2 && Switch[5]   == SWITCH2Reversed) MotorEnabled = true;
+    if (AutoSwitch == 3 && Switch[0]   == SWITCH3Reversed) MotorEnabled = true;
+    if (AutoSwitch == 4 && Switch[2]   == SWITCH4Reversed) MotorEnabled = true; 
 
     if (SafetySwitch == 1 && Switch[7] == SWITCH1Reversed) SafetyON = true;
     if (SafetySwitch == 2 && Switch[5] == SWITCH2Reversed) SafetyON = true;
     if (SafetySwitch == 3 && Switch[0] == SWITCH3Reversed) SafetyON = true;
     if (SafetySwitch == 4 && Switch[2] == SWITCH4Reversed) SafetyON = true; 
 
-    if (FMSwitch == 4) ReadFMSwitch(Switch[2], Switch[3], SWITCH4Reversed); 
-    if (FMSwitch == 3) ReadFMSwitch(Switch[0], Switch[1], SWITCH3Reversed);
-    if (FMSwitch == 2) ReadFMSwitch(Switch[4], Switch[5], SWITCH2Reversed);
-    if (FMSwitch == 1) ReadFMSwitch(Switch[6], Switch[7], SWITCH1Reversed);
+    if (DualRatesSwitch == 4) ReadDRSwitch(Switch[2], Switch[3], SWITCH4Reversed); 
+    if (DualRatesSwitch == 3) ReadDRSwitch(Switch[0], Switch[1], SWITCH3Reversed);
+    if (DualRatesSwitch == 2) ReadDRSwitch(Switch[4], Switch[5], SWITCH2Reversed); 
+    if (DualRatesSwitch == 1) ReadDRSwitch(Switch[6], Switch[7], SWITCH1Reversed);
+
+    if (DualRateInUse == 1) NewDualRateValue = Drate1;
+    if (DualRateInUse == 2) NewDualRateValue = Drate2;
+    if (DualRateInUse == 3) NewDualRateValue = Drate3;
+
+    if  (PreviousDualRateInUse != NewDualRateValue){
+        PreviousDualRateInUse = NewDualRateValue;
+        LastShowTime          = 0;
+    }
+
+    if (FMSwitch == 4)        ReadFMSwitch(Switch[2], Switch[3], SWITCH4Reversed); 
+    if (FMSwitch == 3)        ReadFMSwitch(Switch[0], Switch[1], SWITCH3Reversed);
+    if (FMSwitch == 2)        ReadFMSwitch(Switch[4], Switch[5], SWITCH2Reversed);
+    if (FMSwitch == 1)        ReadFMSwitch(Switch[6], Switch[7], SWITCH1Reversed);
     
     if (AutoSwitch == 1 && Switch[6] == SWITCH1Reversed) Bank = 4;                      // Flight mode 4 (Auto) overrides modes 1,2,3.
     if (AutoSwitch == 2 && Switch[4] == SWITCH2Reversed) Bank = 4;
@@ -7810,9 +7859,7 @@ void GetBank()
     if (SafetyWasOn != SafetyON){
         if (SafetyON) ShowSafetyIsOn(); else ShowSafetyIsOff();
         SafetyWasOn = SafetyON;
-    }
-
-   // if (Bank == 4 && !MotorWasEnabled) MotorEnabled = false;                         // Moving to Bank4 from motor off doesn't start motor ...  yet
+    }                       // Moving to Bank4 from motor off doesn't start motor ...  yet
    
     if (SafetyON) MotorEnabled = false;
 
