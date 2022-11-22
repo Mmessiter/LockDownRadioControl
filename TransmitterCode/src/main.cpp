@@ -2110,10 +2110,9 @@ float CalculateDualRateNew(short int Curve, short int Channel,float rate){
 /*********************************************************************************************************************************/
 
 void  GetCurveDots(uint16_t OutputChannel,uint16_t TheRate){  
-        // This for the Dual Rates function
-        // Effectively, it copies the dot locations on the curve, and might reduce their extent if rate is below 100 and channel specified
-
-    if (OutputChannel < 8) {
+                                                        // This for the Dual Rates function
+                                                        // Effectively, it copies the dot locations on the curve, and might reduce their extent if rate is below 100 and channel specified
+    if (OutputChannel < 8) {                            // 0-7 ... DUAL RATES ONLY SUPPORTED ON FIRST 8 CHANNELS
         for (int j = 0; j < 8; ++j) {
             if (OutputChannel == DualRateChannels[j]-1) {
                 for (int i = 0; i < 5; ++i) CurveDots[i] = CalculateDualRateNew(i + 1, OutputChannel, TheRate);
@@ -2121,7 +2120,7 @@ void  GetCurveDots(uint16_t OutputChannel,uint16_t TheRate){
             }   
         }    
     }
-    for (int i = 0; i < 5; ++i) CurveDots[i] = CalculateDualRateNew(i + 1, OutputChannel, 100); // if channel not affected, send full amount.
+    for (int i = 0; i < 5; ++i) CurveDots[i] = CalculateDualRateNew(i + 1, OutputChannel, 100); // if channel not affected, USE 100%
 }
 
 /*********************************************************************************************************************************/
@@ -7771,13 +7770,10 @@ void GetBank()
     if (BuddySwitch == 3 && Switch[0] == SWITCH3Reversed) BuddyON = true;
     if (BuddySwitch == 4 && Switch[2] == SWITCH4Reversed) BuddyON = true;
 
-    
-
     if (DualRatesSwitch == 4) ReadDRSwitch(Switch[2], Switch[3], SWITCH4Reversed); 
     if (DualRatesSwitch == 3) ReadDRSwitch(Switch[0], Switch[1], SWITCH3Reversed);
     if (DualRatesSwitch == 2) ReadDRSwitch(Switch[4], Switch[5], SWITCH2Reversed); 
     if (DualRatesSwitch == 1) ReadDRSwitch(Switch[6], Switch[7], SWITCH1Reversed);
-
 
     if (DualRateInUse == 1) NewDualRateValue = Drate1;
     if (DualRateInUse == 2) NewDualRateValue = Drate2;
@@ -7787,6 +7783,7 @@ void GetBank()
         PreviousDualRateInUse = NewDualRateValue;
         LastShowTime          = 0;
         LastTimeRead          = 0;
+        RestoreBrightness();
     }
 
     if (FMSwitch == 4)        ReadFMSwitch(Switch[2], Switch[3], SWITCH4Reversed); 
@@ -7826,7 +7823,10 @@ void GetBank()
     Channel11SwitchValue = CheckSwitch(Channel11Switch);
     Channel12SwitchValue = CheckSwitch(Channel12Switch);
     if (Bank != PreviousBank) {
-        if (UseLog) LogNewBank();                        
+        RestoreBrightness();
+        LastShowTime          = 0;
+        LastTimeRead          = 0;
+        if (UseLog) LogNewBank();
         if (MotorEnabled == MotorWasEnabled) { // When turning off motor, don't sound bank too.
             if (AnnounceBanks) SoundBank();
         }
@@ -7842,7 +7842,6 @@ void GetBank()
 
 void IncTrim(uint8_t t)
 {
-
     bool Sounded = false;
     Trims[Bank][t] += 1;
     if (Trims[Bank][t] >= 120) {
