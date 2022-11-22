@@ -492,7 +492,8 @@ uint8_t MotorChannel                = 15;
 uint8_t MotorChannelZero            = 0; 
 bool    UseMotorKill                = true;
 bool    SafetyON                    = false;
-bool    SafetyWasOn                 = false;
+bool     BuddyON                        = false;
+bool     SafetyWasOn                    = false;
 u_int8_t WarningSound               = BATTERYISLOW;
 uint32_t LowVoltstimer              = 0;
 float    StopFlyingVoltsPerCell     = 0;
@@ -556,7 +557,8 @@ void GetSlaveChannelValues()
 {
     bool failSafeM; // These flags not used, yet...
     bool lostFrameM;
-    if (SendBuffer[BuddyTriggerChannel - 1] > 1000) {                                               // MASTER'S CHANNEL 'BuddyTriggerChannel' (500 - 2500) used here as switch.
+   // if (SendBuffer[BuddyTriggerChannel - 1] > 1000) {                                               // MASTER'S CHANNEL 'BuddyTriggerChannel' (500 - 2500) used here as switch.
+    if (BuddyON){
         if (MySbus.read(&SbusChannels[0], &failSafeM, &lostFrameM)) {                               // Buddy is On
             SBUSTimer = millis();                                                                   // RESET timeout when data comes in
         }                                                                                           // Even if there's no new data, re-use old data
@@ -7820,6 +7822,8 @@ void GetBank()
     if (CurrentMode != NORMAL) return; // not needed if calibrating
 
     SafetyON     = false;
+    BuddyON      = false;
+    
     MotorEnabled = !UseMotorKill; //  If not using motor switch then motor is always enabled.
 
     if (AutoSwitch == 1 && Switch[7]   == SWITCH1Reversed) MotorEnabled = true;
@@ -7832,10 +7836,18 @@ void GetBank()
     if (SafetySwitch == 3 && Switch[0] == SWITCH3Reversed) SafetyON = true;
     if (SafetySwitch == 4 && Switch[2] == SWITCH4Reversed) SafetyON = true; 
 
+    if (BuddySwitch == 1 && Switch[7] == SWITCH1Reversed) BuddyON = true;
+    if (BuddySwitch == 2 && Switch[5] == SWITCH2Reversed) BuddyON = true;
+    if (BuddySwitch == 3 && Switch[0] == SWITCH3Reversed) BuddyON = true;
+    if (BuddySwitch == 4 && Switch[2] == SWITCH4Reversed) BuddyON = true;
+
+    
+
     if (DualRatesSwitch == 4) ReadDRSwitch(Switch[2], Switch[3], SWITCH4Reversed); 
     if (DualRatesSwitch == 3) ReadDRSwitch(Switch[0], Switch[1], SWITCH3Reversed);
     if (DualRatesSwitch == 2) ReadDRSwitch(Switch[4], Switch[5], SWITCH2Reversed); 
     if (DualRatesSwitch == 1) ReadDRSwitch(Switch[6], Switch[7], SWITCH1Reversed);
+
 
     if (DualRateInUse == 1) NewDualRateValue = Drate1;
     if (DualRateInUse == 2) NewDualRateValue = Drate2;
@@ -7859,7 +7871,7 @@ void GetBank()
     if (SafetyWasOn != SafetyON){
         if (SafetyON) ShowSafetyIsOn(); else ShowSafetyIsOff();
         SafetyWasOn = SafetyON;
-    }                       // Moving to Bank4 from motor off doesn't start motor ...  yet
+    }                       
    
     if (SafetyON) MotorEnabled = false;
 
