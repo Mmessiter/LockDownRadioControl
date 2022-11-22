@@ -317,6 +317,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "Brightness", "TransmitterCode_2src_2main_8cpp.html#adb3b4a5ffa0c290576c837177b5385a0", null ],
     [ "BuddyControlled", "TransmitterCode_2src_2main_8cpp.html#a5c21772263bd77182ecf11e45dc773a5", null ],
     [ "BuddyMaster", "TransmitterCode_2src_2main_8cpp.html#a26a52012e307147a99289fff5c492358", null ],
+    [ "BuddyON", "TransmitterCode_2src_2main_8cpp.html#a2134130b3bde6e04237bca0aab2c22ef", null ],
     [ "BuddySwitch", "TransmitterCode_2src_2main_8cpp.html#aad45cb80b969ee0f10952b145e4c15a5", null ],
     [ "BuddyTriggerChannel", "TransmitterCode_2src_2main_8cpp.html#ae91fe0caf128c1a35e74a9c009b2d347", null ],
     [ "ButtonClicks", "TransmitterCode_2src_2main_8cpp.html#a0955aa08f4b43e6f78ff256fc6ccf421", null ],
