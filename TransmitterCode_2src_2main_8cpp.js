@@ -485,6 +485,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "MySbus", "TransmitterCode_2src_2main_8cpp.html#a4c80b3036b9eb8438e1564693e122f68", null ],
     [ "na", "TransmitterCode_2src_2main_8cpp.html#a7137c2210b87f07e6bd33a64c4f6759b", null ],
     [ "NewCompressNeeded", "TransmitterCode_2src_2main_8cpp.html#a37ebe494d562386d4f9f00b629d4cf1a", null ],
+    [ "NewDualRateValue", "TransmitterCode_2src_2main_8cpp.html#a29a732a40d2faf02f81398027b4791b9", null ],
     [ "NewPipe", "TransmitterCode_2src_2main_8cpp.html#a594f07765a7ed90e0830d4e2f69a7112", null ],
     [ "NextChannel", "TransmitterCode_2src_2main_8cpp.html#a4c9fbf66b2c98730d43dc9dfe573a998", null ],
     [ "NextChannelNumber", "TransmitterCode_2src_2main_8cpp.html#a372b457a109ccee3253b219df1a47412", null ],
