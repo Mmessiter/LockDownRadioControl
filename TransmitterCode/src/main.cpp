@@ -1669,12 +1669,12 @@ void ShowConnectionQuality()
 
 FASTRUN void ShowComms()
 {
-if (millis() - LastShowTime > SHOWCOMMSDELAY) {
-    LastShowTime     = millis();
+    if (millis() - LastShowTime < SHOWCOMMSDELAY) return;
     
-    char InVisible[] = "vis Quality,0";
-    char FrontView_AckPayload[] = "AckPayload";
-    char FrontView_RXBV[]       = "RXBV";
+    LastShowTime               = millis();
+    char InVisible[]           = "vis Quality,0";
+    char FrontView_AckPayload[]= "AckPayload";
+    char FrontView_RXBV[]      = "RXBV";
     char Msg_CnctdBuddyMast[]  = "* BUDDY MASTER! *";
     char Msg_CnctdBuddySlave[] = "* BUDDY SLAVE! *";
     char MsgBuddying[]         = "Buddy";
@@ -1712,98 +1712,83 @@ if (millis() - LastShowTime > SHOWCOMMSDELAY) {
     char rate3[]             = "Rate 3";
     char rate4[]             = "      ";
 
-    if (CurrentView == FRONTVIEW || CurrentView == DATAVIEW) {
-            if ((CurrentView == FRONTVIEW))  ShowConnectionQuality();
-                if ((CurrentView == FRONTVIEW)) {
-                    if (DualRateInUse == 1) SendText(rate, rate1);
-                    if (DualRateInUse == 2) SendText(rate, rate2);
-                    if (DualRateInUse == 3) SendText(rate, rate3);
-                    if (DualRateInUse == 4) SendText(rate, rate4); // rates not in use = 4 
-                    if (BuddyPupilOnSbus) SendText(FrontView_Connected, MsgBuddying);
-                    if (LedWasGreen ) {
-                    if (BoundFlag) {
-                        if (!BuddyMaster) {
-                            if (!Reconnected) {
-                                MakeBindButtonInvisible();
-                                ShowConnectionQuality();
-                                Reconnected = true;
-                            }
+        if (CurrentView == FRONTVIEW) {
+            ShowConnectionQuality();
+            if (DualRateInUse == 1) SendText(rate, rate1);
+            if (DualRateInUse == 2) SendText(rate, rate2);
+            if (DualRateInUse == 3) SendText(rate, rate3);
+            if (DualRateInUse == 4) SendText(rate, rate4); // rates not in use = 4
+            if (BuddyPupilOnSbus) SendText(FrontView_Connected, MsgBuddying);
+            if (LedWasGreen) {
+                if (BoundFlag) {
+                    if (!BuddyMaster) {
+                        if (!Reconnected) {
+                            MakeBindButtonInvisible();
+                            ShowConnectionQuality();
+                            Reconnected = true;
                         }
-                        else {
-                            if (!SlaveHasControl) {
-                                SendText(FrontView_Connected, Msg_CnctdBuddyMast);
-                            }
-                            else {
-                                SendText(FrontView_Connected, Msg_CnctdBuddySlave);
-                            }
-                        }
-                        GreenLedOn();
-                        StartInactvityTimeout();
-                    }
-                }
-                if (CurrentView == DATAVIEW) {
-                    SendValue(DataView_pps, PacketsPerSecond);
-                    SendValue(DataView_lps, TotalLostPackets/2); // about half probably made it but went un acknoledged
-                    SendText(DataView_Alt, ModelAltitude);
-                    SendText(DataView_MaxAlt, MaxAltitude);
-                    SendText(DataView_Temp, ModelTemperature);
-                    SendText(DataView_Rx, ThisRadio);
-                    SendText(DataView_rxv, ReceiverVersionNumber);
-                    SendValue(DataView_Ls, GapLongest);
-                    SendValue(DataView_Ts, RadioSwaps - SavedRadioSwaps);
-                    SendValue(DataView_Sg, RX1TotalTime - SavedRX1TotalTime);
-                    SendValue(DataView_Ag, GapAverage);
-                    SendValue(DataView_Gc, RX2TotalTime - SavedRX2TotalTime);
-                    if (GpsFix) { // if no fix, then leave display as before
-                        SendText(Fix, yes);
                     }
                     else {
-                        SendText(Fix, no);
+                        if (!SlaveHasControl) {
+                            SendText(FrontView_Connected, Msg_CnctdBuddyMast);
+                        }
+                        else {
+                            SendText(FrontView_Connected, Msg_CnctdBuddySlave);
+                        }
                     }
-                    snprintf(Vbuf, 3, "%d", GPSSatellites);
-                    SendText(Sat, Vbuf);
-                    snprintf(Vbuf, 10, "%f", GPSLongitude);
-                    SendText(Lon, Vbuf);
-                    snprintf(Vbuf, 10, "%f", GPSLatitude);
-                    SendText(Lat, Vbuf);
-                    snprintf(Vbuf, 7, "%d", int(GPSAngle));
-                    SendText(Bear, Vbuf);
-                    snprintf(Vbuf, 6, "%d", (int)GPSDistanceTo);
-                    SendText(Dist, Vbuf);
-                    snprintf(Vbuf, 4, "%d", (int)GPSSpeed);
-                    SendText(Sped, Vbuf);
-                    snprintf(Vbuf, 4, "%d", (int)GPSMaxSpeed);
-                    SendText(MxS, Vbuf);
-                    snprintf(Vbuf, 4, "%d", (int)GPSAltitude);
-                    SendText(ALT, Vbuf);
-                    snprintf(Vbuf, 4, "%d", (int)GPSMaxAltitude);
-                    SendText(MALT, Vbuf);
-                    snprintf(Vbuf, 4, "%d", (int)GPSCourseTo);
-                    SendText(BTo, Vbuf);
-                    snprintf(Vbuf, 6, "%d", (int)GPSMaxDistance);
-                    SendText(Mxd, Vbuf);
-                    snprintf(Vbuf, 6, "%d", (int)SbusRepeats - SavedSbusRepeats);
-                    SendText(Sbs, Vbuf);
+                    GreenLedOn();
+                    StartInactvityTimeout();
+                } else {
+                    SendText(FrontView_RXBV, na); // data not available
+                    SendText(FrontView_AckPayload, na);
+                    SendCommand(InVisible);
                 }
+            }
+        }
+        if (CurrentView == DATAVIEW) {
+            SendValue(DataView_pps, PacketsPerSecond);
+            SendValue(DataView_lps, TotalLostPackets / 2); // about half probably made it but went un acknoledged
+            SendText(DataView_Alt, ModelAltitude);
+            SendText(DataView_MaxAlt, MaxAltitude);
+            SendText(DataView_Temp, ModelTemperature);
+            SendText(DataView_Rx, ThisRadio);
+            SendText(DataView_rxv, ReceiverVersionNumber);
+            SendValue(DataView_Ls, GapLongest);
+            SendValue(DataView_Ts, RadioSwaps - SavedRadioSwaps);
+            SendValue(DataView_Sg, RX1TotalTime - SavedRX1TotalTime);
+            SendValue(DataView_Ag, GapAverage);
+            SendValue(DataView_Gc, RX2TotalTime - SavedRX2TotalTime);
+            if (GpsFix) { // if no fix, then leave display as before
+                SendText(Fix, yes);
             }
             else {
-                if (BoundFlag) {
-                    if (CurrentView == DATAVIEW) {
-                        SendValue(DataView_lps, TotalLostPackets/2);
-                    }
-                    if (CurrentView == FRONTVIEW) {
-                        SendText(FrontView_RXBV, na); // data not available
-                        SendText(FrontView_AckPayload, na);
-                        SendCommand(InVisible);
-                    }
-                }
-                else { // i.e. contact is lost
-                    if (CurrentView == FRONTVIEW) {
-                        SendText(FrontView_Connected, na);
-                        SendCommand(InVisible);
-                    }
-                }
+                SendText(Fix, no);
             }
+            snprintf(Vbuf, 3, "%d", GPSSatellites);
+            SendText(Sat, Vbuf);
+            snprintf(Vbuf, 10, "%f", GPSLongitude);
+            SendText(Lon, Vbuf);
+            snprintf(Vbuf, 10, "%f", GPSLatitude);
+            SendText(Lat, Vbuf);
+            snprintf(Vbuf, 7, "%d", int(GPSAngle));
+            SendText(Bear, Vbuf);
+            snprintf(Vbuf, 6, "%d", (int)GPSDistanceTo);
+            SendText(Dist, Vbuf);
+            snprintf(Vbuf, 4, "%d", (int)GPSSpeed);
+            SendText(Sped, Vbuf);
+            snprintf(Vbuf, 4, "%d", (int)GPSMaxSpeed);
+            SendText(MxS, Vbuf);
+            snprintf(Vbuf, 4, "%d", (int)GPSAltitude);
+            SendText(ALT, Vbuf);
+            snprintf(Vbuf, 4, "%d", (int)GPSMaxAltitude);
+            SendText(MALT, Vbuf);
+            snprintf(Vbuf, 4, "%d", (int)GPSCourseTo);
+            SendText(BTo, Vbuf);
+            snprintf(Vbuf, 6, "%d", (int)GPSMaxDistance);
+            SendText(Mxd, Vbuf);
+            snprintf(Vbuf, 6, "%d", (int)SbusRepeats - SavedSbusRepeats);
+            SendText(Sbs, Vbuf);
+            if (BoundFlag) SendValue(DataView_lps, TotalLostPackets / 2);
         }
         CheckScreenTime();
         if (CheckTXVolts() || CheckRXVolts()) {         // Note: If TX Battery is low, then CheckRXVolts() is not even called.
@@ -1812,12 +1797,9 @@ if (millis() - LastShowTime > SHOWCOMMSDELAY) {
                 PlaySound(WarningSound);                // Issue audible warning every 10 seconds
             }
             if (CurrentView == FRONTVIEW) SendCommand(WarnNow);
-        }
-        else {
+        } else {
             if (LedIsBlinking && (CurrentView == FRONTVIEW)) SendCommand(WarnOff);
-        }
-    }
-   
+        }   
 } // end ShowComms()
 
 /************************************************************************************************************/
