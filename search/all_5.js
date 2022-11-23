@@ -11,8 +11,8 @@ var searchData=
   ['debug_5fprintf_8',['DEBUG_PRINTF',['../MPU6050__6Axis__MotionApps20_8h.html#a40c71ee610c953dd0e914ece23dde8a5',1,'DEBUG_PRINTF():&#160;MPU6050_6Axis_MotionApps20.h'],['../MPU6050__6Axis__MotionApps__V6__12_8h.html#a40c71ee610c953dd0e914ece23dde8a5',1,'DEBUG_PRINTF():&#160;MPU6050_6Axis_MotionApps_V6_12.h'],['../MPU6050__9Axis__MotionApps41_8h.html#a40c71ee610c953dd0e914ece23dde8a5',1,'DEBUG_PRINTF():&#160;MPU6050_9Axis_MotionApps41.h']]],
   ['debug_5fprintln_9',['DEBUG_PRINTLN',['../MPU6050__6Axis__MotionApps20_8h.html#a8e30ff0704664fcb13dabf0c4dc5c8f5',1,'DEBUG_PRINTLN():&#160;MPU6050_6Axis_MotionApps20.h'],['../MPU6050__6Axis__MotionApps__V6__12_8h.html#a8e30ff0704664fcb13dabf0c4dc5c8f5',1,'DEBUG_PRINTLN():&#160;MPU6050_6Axis_MotionApps_V6_12.h'],['../MPU6050__9Axis__MotionApps41_8h.html#a8e30ff0704664fcb13dabf0c4dc5c8f5',1,'DEBUG_PRINTLN():&#160;MPU6050_9Axis_MotionApps41.h']]],
   ['debug_5fprintlnf_10',['DEBUG_PRINTLNF',['../MPU6050__6Axis__MotionApps20_8h.html#ad1937eefa9a7b6d3c9034dd9e62ab114',1,'DEBUG_PRINTLNF():&#160;MPU6050_6Axis_MotionApps20.h'],['../MPU6050__6Axis__MotionApps__V6__12_8h.html#ad1937eefa9a7b6d3c9034dd9e62ab114',1,'DEBUG_PRINTLNF():&#160;MPU6050_6Axis_MotionApps_V6_12.h'],['../MPU6050__9Axis__MotionApps41_8h.html#ad1937eefa9a7b6d3c9034dd9e62ab114',1,'DEBUG_PRINTLNF():&#160;MPU6050_9Axis_MotionApps41.h']]],
-  ['debugtimer_11',['DebugTimer',['../SensorHubT32_2src_2main_8cpp.html#a7867e45e2d19ce05cda4ef2692ee0dbe',1,'main.cpp']]],
-  ['debugtimer_12',['DEBUGTIMER',['../SensorHubT32_2src_2main_8cpp.html#a6d8ac148d16fbe92176033a667d3ef8a',1,'main.cpp']]],
+  ['debugtimer_11',['DEBUGTIMER',['../SensorHubT32_2src_2main_8cpp.html#a6d8ac148d16fbe92176033a667d3ef8a',1,'main.cpp']]],
+  ['debugtimer_12',['DebugTimer',['../SensorHubT32_2src_2main_8cpp.html#a7867e45e2d19ce05cda4ef2692ee0dbe',1,'main.cpp']]],
   ['decdate_13',['DecDate',['../TransmitterCode_2src_2main_8cpp.html#ac00389a3b76e3ced4517c6ad4147e86a',1,'main.cpp']]],
   ['decfileinview_14',['DecFileInView',['../TransmitterCode_2src_2main_8cpp.html#ae08bf94bb0a896d42684e76b643b3273',1,'main.cpp']]],
   ['dechour_15',['DecHour',['../TransmitterCode_2src_2main_8cpp.html#a053bee2e90b7d0bacffe990847973d4a',1,'main.cpp']]],
@@ -64,7 +64,7 @@ var searchData=
   ['donewchannelname_61',['DoNewChannelName',['../TransmitterCode_2src_2main_8cpp.html#aba44d61ea51411cb5c601beb94b6fef4',1,'main.cpp']]],
   ['doreversesense_62',['DoReverseSense',['../TransmitterCode_2src_2main_8cpp.html#acbd7adcd2b0e2095a89b4a98042b526e',1,'main.cpp']]],
   ['dosbussendonly_63',['DoSbusSendOnly',['../RadioFunctions_8h.html#a2f95a8628ae27f3acb9b1598b8321781',1,'DoSbusSendOnly():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a2f95a8628ae27f3acb9b1598b8321781',1,'DoSbusSendOnly():&#160;main.cpp']]],
-  ['doscanend_64',['DoScanEnd',['../RadioFunctions_8h.html#a31fb6a46af68482e107cddee58dfb677',1,'DoScanEnd():&#160;RadioFunctions.cpp'],['../RadioFunctions_8cpp.html#a31fb6a46af68482e107cddee58dfb677',1,'DoScanEnd():&#160;RadioFunctions.cpp']]],
+  ['doscanend_64',['DoScanEnd',['../RadioFunctions_8cpp.html#a31fb6a46af68482e107cddee58dfb677',1,'DoScanEnd():&#160;RadioFunctions.cpp'],['../RadioFunctions_8h.html#a31fb6a46af68482e107cddee58dfb677',1,'DoScanEnd():&#160;RadioFunctions.cpp']]],
   ['doscaninit_65',['DoScanInit',['../RadioFunctions_8cpp.html#a77c4a4ffa609df08830ccece07bf283b',1,'DoScanInit():&#160;RadioFunctions.cpp'],['../RadioFunctions_8h.html#a77c4a4ffa609df08830ccece07bf283b',1,'DoScanInit():&#160;RadioFunctions.cpp']]],
   ['dotherequest_66',['DoTheRequest',['../SensorHubT32_2src_2main_8cpp.html#aa813a4b38095c6683d78bdf2baa33f69',1,'main.cpp']]],
   ['downlog_67',['DownLog',['../TransmitterCode_2src_2main_8cpp.html#a01be76cc3bf8a963f987ae47916dc8d3',1,'main.cpp']]],
@@ -73,7 +73,7 @@ var searchData=
   ['drate3_70',['Drate3',['../TransmitterCode_2src_2main_8cpp.html#a7fe9d67b9708d831195c2acd3677118d',1,'main.cpp']]],
   ['drawbox_71',['DrawBox',['../RadioFunctions_8h.html#a705c97485d6142131c03577ec14134e7',1,'DrawBox(int x1, int y1, int x2, int y2, int c):&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a060d8c4636339f7e6760cf835307530e',1,'DrawBox(int x1, int y1, int x2, int y2, int c):&#160;main.cpp']]],
   ['drawdot_72',['DrawDot',['../TransmitterCode_2src_2main_8cpp.html#ad0feb21fbea69455d1d206f142b563ac',1,'main.cpp']]],
-  ['drawfhssbox_73',['DrawFhssBox',['../RadioFunctions_8h.html#a6bdc6419b47dda71d0d2c8faf652adc2',1,'DrawFhssBox():&#160;RadioFunctions.cpp'],['../RadioFunctions_8cpp.html#a6bdc6419b47dda71d0d2c8faf652adc2',1,'DrawFhssBox():&#160;RadioFunctions.cpp']]],
+  ['drawfhssbox_73',['DrawFhssBox',['../RadioFunctions_8cpp.html#a6bdc6419b47dda71d0d2c8faf652adc2',1,'DrawFhssBox():&#160;RadioFunctions.cpp'],['../RadioFunctions_8h.html#a6bdc6419b47dda71d0d2c8faf652adc2',1,'DrawFhssBox():&#160;RadioFunctions.cpp']]],
   ['drawline_74',['DrawLine',['../RadioFunctions_8h.html#acbef1d41e1bd646b60a6e8afd9c66880',1,'DrawLine(int x1, int y1, int x2, int y2, int c):&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#acbef1d41e1bd646b60a6e8afd9c66880',1,'DrawLine(int x1, int y1, int x2, int y2, int c):&#160;main.cpp']]],
   ['ds1307_5faddress_75',['DS1307_ADDRESS',['../RadioFunctions_8h.html#a647261f334080cbf95e4f8dd79f73769',1,'RadioFunctions.h']]],
   ['dt_76',['dt',['../Quadcopter_2src_2main_8cpp.html#a778e38aa889751afffa2dea6b803e67a',1,'main.cpp']]],
@@ -83,5 +83,6 @@ var searchData=
   ['dualratesrefresh_80',['DualRatesRefresh',['../TransmitterCode_2src_2main_8cpp.html#af110521855e780717b5248c3aacc799e',1,'main.cpp']]],
   ['dualratesstart_81',['DualRatesStart',['../TransmitterCode_2src_2main_8cpp.html#a6e3590b95598a6cced18d591c2e1879f',1,'main.cpp']]],
   ['dualratesswitch_82',['DualRatesSwitch',['../TransmitterCode_2src_2main_8cpp.html#a4df69e16a4039792dea25b6def556141',1,'main.cpp']]],
-  ['dualratesview_83',['DUALRATESVIEW',['../RadioFunctions_8h.html#a9003bf850d4b53a17692c707fbf4e4d4',1,'RadioFunctions.h']]]
+  ['dualratesview_83',['DUALRATESVIEW',['../RadioFunctions_8h.html#a9003bf850d4b53a17692c707fbf4e4d4',1,'RadioFunctions.h']]],
+  ['dualratevalue_84',['DualRateValue',['../TransmitterCode_2src_2main_8cpp.html#ade79cdae89d2e1ff6ca095d901e7371a',1,'main.cpp']]]
 ];
