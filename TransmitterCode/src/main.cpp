@@ -550,12 +550,13 @@ void FixDeltaGMTSign()
 }
 
 /************************************************************************************************************/
-// This function reads data from BUDDY (Slave) BUT uses it ONLY WHILE the channel BUDDTRIGGERCHANNEL switch is in the ON position ( > 1000)
+// This function reads data from BUDDY (Slave) BUT uses it ONLY WHILE buddy switch is on
 
 void GetSlaveChannelValues()
 {
     bool failSafeM; // These flags not used, yet...
     bool lostFrameM;
+      
     if (BuddyON){
         if (MySbus.read(&SbusChannels[0], &failSafeM, &lostFrameM)) {                               // Buddy is On
             SBUSTimer = millis();                                                                   // RESET timeout when data comes in
@@ -3359,7 +3360,7 @@ FLASHMEM void setup()
     ScanI2c();
     if (USE_INA219) ina219.begin();
     InitSwitchesAndTrims();
-    InitRadio(DefaultPipe);
+    if(!DoSbusSendOnly) InitRadio(DefaultPipe);
     Procrastinate(WARMUPDELAY);                        // Allow Nextion time to warm up
     SendValue(FrontView_BackGround, BackGroundColour); // Get colours ready
     SendValue(FrontView_ForeGround, ForeGroundColour);
@@ -7786,8 +7787,6 @@ void GetBank()
     if (DualRateInUse == 3) DualRateValue = Drate3;
     if (DualRateInUse == 4) DualRateValue = 100;                // Switch not in use, so use 100%
 
-    Look(DualRateInUse);
-
     if  (PreviousDualRateInUse !=  DualRateInUse){
         PreviousDualRateInUse   =  DualRateInUse;
         LastShowTime          = 0;
@@ -8302,6 +8301,8 @@ void  GetModelsMacAddress(){
 /************************************************************************************************************/
 FASTRUN void ParseAckPayload()
 {
+    if (DoSbusSendOnly) return; // buddy pupil need none of this
+
     if (AckPayload.Purpose & 0x80) // Hi bit is now the **HOP NOW!!** flag
     {
         NextChannelNumber = AckPayload.Byte5;                     // This is just the array pointer or offset
@@ -8468,7 +8469,7 @@ void CheckPowerOffButton()
 
     if (!digitalRead(BUTTON_SENSE_PIN)){ 
         GotoFrontView();
-        if (LedWasRed) 
+        if (LedWasRed || DoSbusSendOnly) 
         {
             simulateCloseDown();              // if not connected power off immediately
         } else

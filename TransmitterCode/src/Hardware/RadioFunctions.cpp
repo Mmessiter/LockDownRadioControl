@@ -171,10 +171,11 @@ FASTRUN void FailedPacket()
 
 void TryToReconnect()
 {
-     if (RecentPacketsLost > 50){
+    if (DoSbusSendOnly) return;
+    if (RecentPacketsLost > 50) {
         TryOtherPipe();
         RecentPacketsLost = 0;
-    }                                                                                             
+    }
     NextChannel = *(FHSSChPointer + random(RECONNECT_CHANNELS_COUNT) + RECONNECT_CHANNELS_START); // random reconnect channel (selected from first three)
     HopToNextChannel();
 }
