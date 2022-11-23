@@ -37,7 +37,7 @@
 //    DEBUG OPTIONS (Uncomment any of these for that bit of debug info)     *
 //***************************************************************************
 
- #define DB_NEXTION        // Debug NEXTION
+// #define DB_NEXTION        // Debug NEXTION
 // #define DB_SD             // Debug SD card data
 // #define DB_CHECKSUM       // Debug 32BIT file checksum info
 // #define DB_FHSS           // Debug real time FHSS data
@@ -238,6 +238,10 @@
 #define MOTORON         31
 #define MOTOROFF        32
 #define STORAGECHARGE   33
+#define RATE1           34
+#define RATE2           35
+#define RATE3           36
+
 
 // **************************************************************************
 //               SDCARD MODEL MEMORY CONSTANTS                              *
@@ -371,7 +375,7 @@ extern char           ThisRadio[4];
 extern uint32_t       GapSum;
 extern uint32_t       GapStart;
 extern uint8_t*       FHSSChPointer;
-extern bool           DoSbusSendOnly;
+extern bool           BuddyPupilOnSbus;
 extern bool           BuddyMaster;
 extern uint16_t       BackGroundColour;
 extern uint16_t       HighlightColour;
