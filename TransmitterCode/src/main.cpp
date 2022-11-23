@@ -1714,10 +1714,23 @@ FASTRUN void ShowComms()
 
         if (CurrentView == FRONTVIEW) {
             ShowConnectionQuality();
-            if (DualRateInUse == 1) SendText(rate, rate1);
-            if (DualRateInUse == 2) SendText(rate, rate2);
-            if (DualRateInUse == 3) SendText(rate, rate3);
-            if (DualRateInUse == 4) SendText(rate, rate4); // rates not in use = 4
+            switch (DualRateInUse)
+            {
+            case 1:
+                 SendText(rate, rate1);
+                 break;
+            case 2:
+                SendText(rate, rate2);
+                break;
+            case 3:
+                SendText(rate, rate3);
+                break;
+            case 4:
+                SendText(rate, rate4);  // rates not in use = 4
+                break;
+            default:
+                break;
+            }
             if (BuddyPupilOnSbus) SendText(FrontView_Connected, MsgBuddying);
             if (LedWasGreen) {
                 if (BoundFlag) {
