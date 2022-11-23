@@ -17,13 +17,12 @@ var searchData=
   ['dis_5fgyro_14',['DIS_GYRO',['../classMPU9250.html#abb9b02dd2f4b7d031c22bfb1422d5367',1,'MPU9250']]],
   ['distancegps_15',['DistanceGPS',['../ReceiverCode_2src_2main_8cpp.html#a6f76c248ca5e727e482873f5328587e1',1,'DistanceGPS():&#160;main.cpp'],['../radio_8h.html#a6f76c248ca5e727e482873f5328587e1',1,'DistanceGPS():&#160;main.cpp']]],
   ['doingchecksm_16',['DoingCheckSm',['../TransmitterCode_2src_2main_8cpp.html#ad29c29032645ef06ffdf1cd62974c96f',1,'main.cpp']]],
-  ['dosbussendonly_17',['DoSbusSendOnly',['../RadioFunctions_8h.html#a2f95a8628ae27f3acb9b1598b8321781',1,'DoSbusSendOnly():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a2f95a8628ae27f3acb9b1598b8321781',1,'DoSbusSendOnly():&#160;main.cpp']]],
-  ['drate1_18',['Drate1',['../TransmitterCode_2src_2main_8cpp.html#a53914b50c8322a320269b7635587fc05',1,'main.cpp']]],
-  ['drate2_19',['Drate2',['../TransmitterCode_2src_2main_8cpp.html#a83c12aaa15d3f764a2f1f84f0f55187d',1,'main.cpp']]],
-  ['drate3_20',['Drate3',['../TransmitterCode_2src_2main_8cpp.html#a7fe9d67b9708d831195c2acd3677118d',1,'main.cpp']]],
-  ['dt_21',['dt',['../Quadcopter_2src_2main_8cpp.html#a778e38aa889751afffa2dea6b803e67a',1,'main.cpp']]],
-  ['dualratechannels_22',['DualRateChannels',['../TransmitterCode_2src_2main_8cpp.html#ade150617ac0f31361fa0ac903acf3160',1,'main.cpp']]],
-  ['dualrateinuse_23',['DualRateInUse',['../TransmitterCode_2src_2main_8cpp.html#a3effe8f46dcf634627a86397621f0cbc',1,'main.cpp']]],
-  ['dualratesswitch_24',['DualRatesSwitch',['../TransmitterCode_2src_2main_8cpp.html#a4df69e16a4039792dea25b6def556141',1,'main.cpp']]],
-  ['dualratevalue_25',['DualRateValue',['../TransmitterCode_2src_2main_8cpp.html#ade79cdae89d2e1ff6ca095d901e7371a',1,'main.cpp']]]
+  ['drate1_17',['Drate1',['../TransmitterCode_2src_2main_8cpp.html#a53914b50c8322a320269b7635587fc05',1,'main.cpp']]],
+  ['drate2_18',['Drate2',['../TransmitterCode_2src_2main_8cpp.html#a83c12aaa15d3f764a2f1f84f0f55187d',1,'main.cpp']]],
+  ['drate3_19',['Drate3',['../TransmitterCode_2src_2main_8cpp.html#a7fe9d67b9708d831195c2acd3677118d',1,'main.cpp']]],
+  ['dt_20',['dt',['../Quadcopter_2src_2main_8cpp.html#a778e38aa889751afffa2dea6b803e67a',1,'main.cpp']]],
+  ['dualratechannels_21',['DualRateChannels',['../TransmitterCode_2src_2main_8cpp.html#ade150617ac0f31361fa0ac903acf3160',1,'main.cpp']]],
+  ['dualrateinuse_22',['DualRateInUse',['../TransmitterCode_2src_2main_8cpp.html#a3effe8f46dcf634627a86397621f0cbc',1,'main.cpp']]],
+  ['dualratesswitch_23',['DualRatesSwitch',['../TransmitterCode_2src_2main_8cpp.html#a4df69e16a4039792dea25b6def556141',1,'main.cpp']]],
+  ['dualratevalue_24',['DualRateValue',['../TransmitterCode_2src_2main_8cpp.html#ade79cdae89d2e1ff6ca095d901e7371a',1,'main.cpp']]]
 ];
