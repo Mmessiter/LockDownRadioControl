@@ -375,7 +375,7 @@ extern char           ThisRadio[4];
 extern uint32_t       GapSum;
 extern uint32_t       GapStart;
 extern uint8_t*       FHSSChPointer;
-extern bool           DoSbusSendOnly;
+extern bool           BuddyPupilOnSbus;
 extern bool           BuddyMaster;
 extern uint16_t       BackGroundColour;
 extern uint16_t       HighlightColour;

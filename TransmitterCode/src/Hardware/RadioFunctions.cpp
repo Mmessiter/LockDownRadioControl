@@ -171,7 +171,7 @@ FASTRUN void FailedPacket()
 
 void TryToReconnect()
 {
-    if (DoSbusSendOnly) return;
+    if (BuddyPupilOnSbus) return;
     if (RecentPacketsLost > 50) {
         TryOtherPipe();
         RecentPacketsLost = 0;
@@ -212,7 +212,7 @@ FASTRUN void SendData()
 {
     if ((millis() - LastPacketSentTime) >= PACEMAKER) {
         LastPacketSentTime = millis();
-        if (DoSbusSendOnly) { MapToSBUS();return;}                  // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
+        if (BuddyPupilOnSbus) { MapToSBUS();return;}                  // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
         LoadPacketData();                                           // extra parameters appended to the data packet
         Connected = false;                                          // Assume the worst until ACK is received.
         FlushFifos();

@@ -388,7 +388,7 @@ bool     LedWasRed           = false;
 char     ThisRadio[4]        = "0 ";
 uint8_t  LastRadio           = 0;
 uint8_t  NextChannel         = 0;
-bool     DoSbusSendOnly      = false;
+bool     BuddyPupilOnSbus    = false;
 bool     BuddyMaster         = false;
 bool     SlaveHasControl     = false;
 uint16_t Qnh                 = 1009; // pressure at sea level here
@@ -1714,12 +1714,13 @@ if (millis() - LastShowTime > SHOWCOMMSDELAY) {
 
     if (CurrentView == FRONTVIEW || CurrentView == DATAVIEW) {
             if ((CurrentView == FRONTVIEW))  ShowConnectionQuality();
-            if (LedWasGreen) {
                 if ((CurrentView == FRONTVIEW)) {
                     if (DualRateInUse == 1) SendText(rate, rate1);
                     if (DualRateInUse == 2) SendText(rate, rate2);
                     if (DualRateInUse == 3) SendText(rate, rate3);
                     if (DualRateInUse == 4) SendText(rate, rate4); // rates not in use = 4 
+                    if (BuddyPupilOnSbus) SendText(FrontView_Connected, MsgBuddying);
+                    if (LedWasGreen ) {
                     if (BoundFlag) {
                         if (!BuddyMaster) {
                             if (!Reconnected) {
@@ -1798,13 +1799,8 @@ if (millis() - LastShowTime > SHOWCOMMSDELAY) {
                 }
                 else { // i.e. contact is lost
                     if (CurrentView == FRONTVIEW) {
-                        if (DoSbusSendOnly) {
-                            SendText(FrontView_Connected, MsgBuddying);
-                        }
-                        else {
-                            SendText(FrontView_Connected, na);
-                            SendCommand(InVisible);
-                        }
+                        SendText(FrontView_Connected, na);
+                        SendCommand(InVisible);
                     }
                 }
             }
@@ -2822,7 +2818,7 @@ bool LoadAllParameters()
         ChannelMax[i] = SDRead16BITS(SDCardAddress);
         SDCardAddress += 2;
         }
-        DoSbusSendOnly = SDRead8BITS(SDCardAddress);
+        BuddyPupilOnSbus = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
         BuddyMaster = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
@@ -3360,7 +3356,7 @@ FLASHMEM void setup()
     ScanI2c();
     if (USE_INA219) ina219.begin();
     InitSwitchesAndTrims();
-    if(!DoSbusSendOnly) InitRadio(DefaultPipe);
+    if(!BuddyPupilOnSbus) InitRadio(DefaultPipe);
     Procrastinate(WARMUPDELAY);                        // Allow Nextion time to warm up
     SendValue(FrontView_BackGround, BackGroundColour); // Get colours ready
     SendValue(FrontView_ForeGround, ForeGroundColour);
@@ -3503,7 +3499,7 @@ void SaveTransmitterParameters()
         SDUpdate16BITS(SDCardAddress, ChannelMax[i]); // Stick max output of pot
         SDCardAddress += 2;
     }
-    SDUpdate8BITS(SDCardAddress, DoSbusSendOnly);
+    SDUpdate8BITS(SDCardAddress, BuddyPupilOnSbus);
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, BuddyMaster);
     ++SDCardAddress;
@@ -5452,7 +5448,7 @@ void StartBuddyView()
     SendCommand(pBuddyView);
     CurrentView = BUDDYVIEW;
     SendValue(BuddyM, BuddyMaster);
-    SendValue(BuddyP, DoSbusSendOnly);
+    SendValue(BuddyP, BuddyPupilOnSbus);
 }
 
 /*********************************************************************************************************************************/
@@ -5464,7 +5460,7 @@ void EndBuddyView()
 
 
     char pSetupView[]   = "page SetupView";
-    DoSbusSendOnly      = GetValue(BuddyP); // Pupil, wired
+    BuddyPupilOnSbus      = GetValue(BuddyP); // Pupil, wired
     BuddyMaster         = GetValue(BuddyM); // Master, either.
     SaveAllParameters();
     b5isGrey = false;
@@ -5900,7 +5896,7 @@ void ResetTransmitterSettings(){    // This function resets all transmitter para
 
 const char         Tn[32]      = "Unknown";
     
-    DoSbusSendOnly = false;
+    BuddyPupilOnSbus = false;
     BuddyMaster    = false;
     ModelNumber    = 1;
     ScreenTimeout  = 120;
@@ -6556,7 +6552,7 @@ FASTRUN void ButtonWasPressed()
             if (Inactivity_Timeout > INACTIVITYMAXIMUM) Inactivity_Timeout = INACTIVITYMAXIMUM;
             SendValue(Progress, 90);
             FixDeltaGMTSign();
-            if (DoSbusSendOnly)
+            if (BuddyPupilOnSbus)
             {
                 Connected            = false;
                 LostContactFlag      = true;
@@ -8301,7 +8297,7 @@ void  GetModelsMacAddress(){
 /************************************************************************************************************/
 FASTRUN void ParseAckPayload()
 {
-    if (DoSbusSendOnly) return; // buddy pupil need none of this
+    if (BuddyPupilOnSbus) return; // buddy pupil need none of this
 
     if (AckPayload.Purpose & 0x80) // Hi bit is now the **HOP NOW!!** flag
     {
@@ -8469,7 +8465,7 @@ void CheckPowerOffButton()
 
     if (!digitalRead(BUTTON_SENSE_PIN)){ 
         GotoFrontView();
-        if (LedWasRed || DoSbusSendOnly) 
+        if (LedWasRed || BuddyPupilOnSbus) 
         {
             simulateCloseDown();              // if not connected power off immediately
         } else
@@ -8560,7 +8556,7 @@ FASTRUN void loop()
     ManageTransmitter();                                         // Do the needed chores ... if there's time
     GetNewChannelValues();                                       // Load SendBuffer with new servo positions  Very frequently
     if (UseMacros) ExecuteMacro();                               // Modify it if macro is running
-    if (DoSbusSendOnly) { NewCompressNeeded = false;             // fake it as Buddy is not sending data
+    if (BuddyPupilOnSbus) { NewCompressNeeded = false;             // fake it as Buddy is not sending data
     } else {                                                     // Skip these next lines when buddying as a slave
         if (!BoundFlag && Connected) BufferNewPipe();            // if not yet bound, insert our pipe into SendBuffer BUT ONLY WHEN CONNECTED 
         if (BuddyMaster) GetSlaveChannelValues();                // If buddy master, get buddy data and maybe use it.
