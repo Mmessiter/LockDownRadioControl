@@ -187,8 +187,8 @@ uint8_t  MidLowDegrees[5][CHANNELSUSED + 1]; //    MidLow Degrees (45)
 uint8_t  MinDegrees[5][CHANNELSUSED + 1];    //    Min Degrees (0)
 uint8_t  SubTrims[CHANNELSUSED + 1];         //    Subtrims
 uint8_t  SubTrimToEdit      = 0;
-uint8_t  Bank         = 1;
-uint8_t  PreviousBank = 1;
+uint8_t  Bank                       = 1;
+uint8_t  PreviousBank               = 1;
 uint8_t  DualRateInUse              = 1;
 uint8_t  PreviousDualRateInUse      = 1;
 uint16_t ChannelMax[CHANNELSUSED + 1];    //    output of pots at max
@@ -514,7 +514,7 @@ uint8_t  Drate2                          = 75;
 uint8_t  Drate3                          = 50;
 uint8_t  DualRateChannels[8]             =  {1, 2, 4, 0, 0, 0, 0, 0};
 uint16_t CurveDots[5];
-uint8_t  NewDualRateValue                = 100;
+uint8_t  DualRateValue                = 100;
 
 // **********************************************************************************************************************************
 // *********************************************** END OF GLOBAL DATA ***************************************************************
@@ -1709,6 +1709,7 @@ if (millis() - LastShowTime > SHOWCOMMSDELAY) {
     char rate1[]             = "Rate 1";
     char rate2[]             = "Rate 2";
     char rate3[]             = "Rate 3";
+    char rate4[]             = "      ";
 
     if (CurrentView == FRONTVIEW || CurrentView == DATAVIEW) {
             if ((CurrentView == FRONTVIEW))  ShowConnectionQuality();
@@ -1717,6 +1718,7 @@ if (millis() - LastShowTime > SHOWCOMMSDELAY) {
                     if (DualRateInUse == 1) SendText(rate, rate1);
                     if (DualRateInUse == 2) SendText(rate, rate2);
                     if (DualRateInUse == 3) SendText(rate, rate3);
+                    if (DualRateInUse == 4) SendText(rate, rate4); // rates not in use = 4 
                     if (BoundFlag) {
                         if (!BuddyMaster) {
                             if (!Reconnected) {
@@ -2155,7 +2157,7 @@ FASTRUN void GetNewChannelValues()
     
      for (OutputChannel = 0; OutputChannel < CHANNELSUSED; ++OutputChannel) {                                            // Do every channel
             InputChannel = InPutStick[OutputChannel];                                                                    // Input sticks knobs & switches are mapped by user
-            GetCurveDots(OutputChannel, NewDualRateValue);                                                               // This can now do dual rates traditionally                                                                                                      
+            GetCurveDots(OutputChannel, DualRateValue);                                                               // This can now do dual rates traditionally                                                                                                      
             TrimAmount   = 0;                                                                                            // Trim is zero if not input 1-4
             if (InputChannel < 4) TrimAmount = GetTrimAmount(InputTrim[InputChannel]);                                   // User defined trim input
             if (InputChannel > 7) {                                                                                      // Must be a switch if over 7
@@ -2735,13 +2737,16 @@ bool ReadOneModel(uint8_t Mnum)
     ++SDCardAddress;
     StopFlyingVoltsPerCell = float (SFV) / 100;
     if (StopFlyingVoltsPerCell < 3 || StopFlyingVoltsPerCell > 4) StopFlyingVoltsPerCell = 3.50; // a useful default stop time?!
-     Drate2 = SDRead8BITS(SDCardAddress);
-     ++SDCardAddress;
-     Drate3 = SDRead8BITS(SDCardAddress);
-     ++SDCardAddress;
-     Drate1 = SDRead8BITS(SDCardAddress); 
-     ++SDCardAddress;
-for (int i = 0; i < 8;++i){
+    Drate2 = SDRead8BITS(SDCardAddress);
+    if ((Drate2 < 10) || (Drate2 > 200)) Drate2 = 100;
+    ++SDCardAddress;
+    Drate3 = SDRead8BITS(SDCardAddress);
+    if ((Drate3 < 10) || (Drate3 > 200)) Drate3 = 100;
+    ++SDCardAddress;
+    Drate1 = SDRead8BITS(SDCardAddress); 
+    if ((Drate1 < 10) || (Drate1 > 200)) Drate1 = 100;
+    ++SDCardAddress;
+    for (int i = 0; i < 8;++i){
         DualRateChannels[i]= SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
     }
@@ -3309,8 +3314,8 @@ FLASHMEM void setup()
     char FrontView_ForeGround[] = "FrontView.ForeGround";
     char FrontView_Special[]    = "FrontView.Special";
     char FrontView_Highlight[]  = "FrontView.Highlight";
-    char err_chksm[]            = "Checksum error!";
-    char err_404[]              = "File not found!";
+    char err_chksm[]            = "File checksum?";
+    char err_404[]              = "File not found";
 
     pinMode(REDLED, OUTPUT);
     pinMode(GREENLED, OUTPUT);
@@ -3389,7 +3394,6 @@ FLASHMEM void setup()
     UpdateModelsNameEveryWhere();
     WarningTimer = millis();
     if(!UseMotorKill)  ShowMotor(1);
-
     if (ErrorState) SendCommand(WarnNow);
     if (ErrorState == CHECKSUMERROR) {
         SendText(Warning, err_chksm);
@@ -4001,7 +4005,7 @@ void UpdateSwitchesDisplay()
     char Channel_12[]       = "Channel 12";
     char Safety_Switch[]    = "Safety    ";
     char Buddy_Switch[]     = "Buddy     ";
-    char DualRates_Switch[] = "Dual rates";
+    char DualRates_Switch[] = "Rates     ";
 
     SendText(SwitchesView_sw1, NotUsed);
     if (AutoSwitch == 1)        SendText(SwitchesView_sw1, Auto);
@@ -7746,13 +7750,15 @@ uint8_t CheckSwitch(uint8_t swt)
 /************************************************************************************************************/
 
 void GetBank()
-{ //  and  motor switch and safety switch ...
+{ //  and  motor switch and safety switch ETC ...
 
     if (CurrentMode != NORMAL) return; // not needed if calibrating
 
     SafetyON     = false;
     BuddyON      = false;
-    
+
+    DualRateInUse = 4;
+
     MotorEnabled = !UseMotorKill; //  If not using motor switch then motor is always enabled.
 
     if (AutoSwitch == 1 && Switch[7]   == SWITCH1Reversed) MotorEnabled = true;
@@ -7775,15 +7781,35 @@ void GetBank()
     if (DualRatesSwitch == 2) ReadDRSwitch(Switch[4], Switch[5], SWITCH2Reversed); 
     if (DualRatesSwitch == 1) ReadDRSwitch(Switch[6], Switch[7], SWITCH1Reversed);
 
-    if (DualRateInUse == 1) NewDualRateValue = Drate1;
-    if (DualRateInUse == 2) NewDualRateValue = Drate2;
-    if (DualRateInUse == 3) NewDualRateValue = Drate3;
+    if (DualRateInUse == 1) DualRateValue = Drate1;
+    if (DualRateInUse == 2) DualRateValue = Drate2;
+    if (DualRateInUse == 3) DualRateValue = Drate3;
+    if (DualRateInUse == 4) DualRateValue = 100;                // Switch not in use, so use 100%
 
-    if  (PreviousDualRateInUse != NewDualRateValue){
-        PreviousDualRateInUse = NewDualRateValue;
+    Look(DualRateInUse);
+
+    if  (PreviousDualRateInUse !=  DualRateInUse){
+        PreviousDualRateInUse   =  DualRateInUse;
         LastShowTime          = 0;
         LastTimeRead          = 0;
         RestoreBrightness();
+        if (AnnounceBanks){
+            switch (DualRateInUse)
+            {
+            case 1:
+                    PlaySound(RATE1);
+                    break;
+            case 2:
+                    PlaySound(RATE2);
+                    break;
+            case 3:
+                    PlaySound(RATE3);
+                    break;
+            default:
+                    break;
+            }
+        }
+       // if (UseLog) LogNewRATE(); // HEER
     }
 
     if (FMSwitch == 4)        ReadFMSwitch(Switch[2], Switch[3], SWITCH4Reversed); 
@@ -8031,8 +8057,9 @@ void CheckHardwareTrims()
                 return;
             }
             MoveaTrim(i);
-            TrimRepeatSpeed -= (TrimRepeatSpeed / 6);       //  accelerate repeat...
-            if (TrimRepeatSpeed < 40) TrimRepeatSpeed = 40; //  ... up to a point...
+            TransmitterLastManaged = 0;                     //  to speed up repeat
+            TrimRepeatSpeed -= (TrimRepeatSpeed / 4);       //  accelerate repeat...
+            if (TrimRepeatSpeed < 10) TrimRepeatSpeed = 30; //  ... up to a point...
         }
     }
 }
@@ -8515,11 +8542,11 @@ void FASTRUN ManageTransmitter(){
             return;                                                  // That's enough housekeeping this time around
         }
         ReadSwitches();                                              // Check switch positions
+        CheckHardwareTrims();
         GetBank();                                                   // Must not call too often        
         ShowComms();                                                 // Screen Data                                  
         CheckTimer();                                                // Screen Timer
         CheckPowerOffButton();                                       // Pretty obvious really ...
-        CheckHardwareTrims();
         TransmitterLastManaged = millis();
     }
 }

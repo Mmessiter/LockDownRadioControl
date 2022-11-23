@@ -238,6 +238,10 @@
 #define MOTORON         31
 #define MOTOROFF        32
 #define STORAGECHARGE   33
+#define RATE1           34
+#define RATE2           35
+#define RATE3           36
+
 
 // **************************************************************************
 //               SDCARD MODEL MEMORY CONSTANTS                              *
