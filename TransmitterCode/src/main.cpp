@@ -2124,7 +2124,7 @@ float UseFullRate(short int Curve, uint8_t OutputChannel){
 
 void  GetCurveDots(uint16_t OutputChannel, uint16_t TheRate)
 {                                               // This for the Dual Rates function
-                                                // Effectively, it just copies the dot locations on the curve, but might reduce their extent if rate is below 100 and channel specified
+                                                // Effectively, it just copies the Y dot's magnitude on the curve, but might reduce the extent if rate is below 100 and channel specified
     for (int j = 0; j < 8; ++j) {               // Look at first 8 channels only
         if (DualRateChannels[j]) {              // non zero?
             if (OutputChannel+1 == DualRateChannels[j]) {
