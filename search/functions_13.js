@@ -8,5 +8,6 @@ var searchData=
   ['updateswitchesdisplay_5',['UpdateSwitchesDisplay',['../TransmitterCode_2src_2main_8cpp.html#a789078ba3c1d92997ab8764eb20cce4f',1,'main.cpp']]],
   ['updatetrimview_6',['UpdateTrimView',['../TransmitterCode_2src_2main_8cpp.html#ac78966debc2cdc13d8ca958ce3b20c78',1,'main.cpp']]],
   ['uplog_7',['UpLog',['../TransmitterCode_2src_2main_8cpp.html#a2206c19b4fc075f4c9f1bb957ca89e1d',1,'main.cpp']]],
-  ['usereceiveddata_8',['UseReceivedData',['../ReceiverCode_2src_2main_8cpp.html#abb1997c589abc6432f612eaedf985e38',1,'main.cpp']]]
+  ['usefullrate_8',['UseFullRate',['../TransmitterCode_2src_2main_8cpp.html#aabac6907f74a52fe50a11458a0c715fd',1,'main.cpp']]],
+  ['usereceiveddata_9',['UseReceivedData',['../ReceiverCode_2src_2main_8cpp.html#abb1997c589abc6432f612eaedf985e38',1,'main.cpp']]]
 ];
