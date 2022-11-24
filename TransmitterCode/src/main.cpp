@@ -2122,18 +2122,20 @@ float UseFullRate(short int Curve, uint8_t Channel){
 
 /*********************************************************************************************************************************/
 
-void  GetCurveDots(uint16_t InputChannel,uint16_t TheRate){  
-                                                        // This for the Dual Rates function
-                                                        // Effectively, it copies the dot locations on the curve, and might reduce their extent if rate is below 100 and channel specified
-    if (InputChannel < 8) {                             // 0-7 ... DUAL RATES ONLY SUPPORTED ON FIRST 8 CHANNELS
-        for (int j = 0; j < 8; ++j) {
-            if (InputChannel == DualRateChannels[j]-1) {
-                for (int i = 0; i < 5; ++i) CurveDots[i] = CalculateRate(i + 1, InputChannel, TheRate);
+void  GetCurveDots(uint16_t InputChannel,uint16_t TheRate)
+{                                               // This for the Dual Rates function
+                                                // Effectively, it just copies the dot locations on the curve, but might reduce their extent if rate is below 100 and channel specified
+    for (int j = 0; j < 8; ++j) {               // Look at first 8 channels only
+        if (DualRateChannels[j]) {              // non zero?
+            if (InputChannel+1 == DualRateChannels[j]) {
+                for (int i = 0; i < 5; ++i) {
+                    CurveDots[i] = CalculateRate(i + 1, InputChannel, TheRate);
+                    }
                 return;   
             }   
         }    
     }
-    for (int i = 0; i < 5; ++i) CurveDots[i] = UseFullRate(i + 1, InputChannel); // if channel not affected, USE 100%
+    for (int i = 0; i < 5; ++i) CurveDots[i] = UseFullRate(i + 1, InputChannel);  // ... channel not used so 100%
 }
 
 /*********************************************************************************************************************************/
@@ -5231,10 +5233,6 @@ void updateOneSwitchView()
     char OneSwitchView_r7[]    = "r7";    // Safety
     char OneSwitchView_r8[]    = "r8";    // Dual Rates
     char OneSwitchView_r9[]    = "r9";    // Buddy
-    
-    
-    
-    
     char OneSwitchViewc_revd[] = "c_revd"; // Reversed
     char SwNum[]               = "Sw";
 
@@ -5249,8 +5247,6 @@ void updateOneSwitchView()
         if (SafetySwitch == 1) SendValue(OneSwitchView_r7, 1);
         if (DualRatesSwitch == 1) SendValue(OneSwitchView_r8, 1);
         if (BuddySwitch == 1) SendValue(OneSwitchView_r9, 1);
-        
-        
         
         
         if (!ValueSent) SendValue(OneSwitchView_r0, 1); // nothing yet, so not used
@@ -5282,7 +5278,6 @@ void updateOneSwitchView()
         if (DualRatesSwitch == 3) SendValue(OneSwitchView_r8, 1);
         if (BuddySwitch == 3) SendValue(OneSwitchView_r9, 1);
         
-
         if (!ValueSent) SendValue(OneSwitchView_r0, 1); // nothing yet, so not used
         if (SWITCH3Reversed) SendValue(OneSwitchViewc_revd, 1);
     }
@@ -5338,7 +5333,136 @@ void ZeroDataScreen()
     SavedSbusRepeats   = SbusRepeats;
     LastShowTime       = 0; // for instant redisplay
 }
+/***************************************************** ReadNewSwitchFunction ****************************************************************************/
+
+void ReadNewSwitchFunction(){ // heer
+        char OneSwitchView_r1[]        = "r1";     // Flight modes
+        char OneSwitchView_r2[]        = "r2";     // Auto
+        char OneSwitchView_r3[]        = "r3";     // Ch9
+        char OneSwitchView_r4[]        = "r4";     // Ch10
+        char OneSwitchView_r5[]        = "r5";     // Ch11
+        char OneSwitchView_r6[]        = "r6";     // Ch12
+        char OneSwitchView_r7[]        = "r7";     // Safety
+        char OneSwitchView_r8[]        = "r8";     // Dual Rates
+        char OneSwitchView_r9[]        = "r9";     // Buddy
+        char PageSwitchView[]          = "page SwitchesView";
+        char OneSwitchViewc_revd[]     = "c_revd"; // Reversed
+        char    ProgressStart[] = "vis Progress,1";
+        char    ProgressEnd[]   = "vis Progress,0";
+        char    Progress[]      = "Progress";
+
+            SendCommand(ProgressStart);
+            SendValue(Progress, 10);
+
+            if (GetValue(OneSwitchView_r1)) {
+                FMSwitch = SwitchEditNumber;
+            }
+            else {
+                if (FMSwitch == SwitchEditNumber) FMSwitch = 0;
+            }
+
+            SendValue(Progress, 15);
+            if (GetValue(OneSwitchView_r2)) {
+                AutoSwitch = SwitchEditNumber;
+            }
+            else {
+                if (AutoSwitch == SwitchEditNumber) AutoSwitch = 0;
+            }
+            SendValue(Progress, 25);
+            if (GetValue(OneSwitchView_r3)) {
+                Channel9Switch = SwitchEditNumber;
+            }
+            else {
+                if (Channel9Switch == SwitchEditNumber) Channel9Switch = 0;
+            }
+            SendValue(Progress, 30);
+            if (GetValue(OneSwitchView_r4)) {
+                Channel10Switch = SwitchEditNumber;
+            }
+            else {
+                if (Channel10Switch == SwitchEditNumber) Channel10Switch = 0;
+            }
+            SendValue(Progress, 40);
+            if (GetValue(OneSwitchView_r5)) {
+                Channel11Switch = SwitchEditNumber;
+            }
+            else {
+                if (Channel11Switch == SwitchEditNumber) Channel11Switch = 0;
+            }
+             SendValue(Progress, 50);
+            if (GetValue(OneSwitchView_r6)) {
+                Channel12Switch = SwitchEditNumber;
+            }
+            else {
+                if (Channel12Switch == SwitchEditNumber) Channel12Switch = 0;
+            }
+            SendValue(Progress, 60);
+             if (GetValue(OneSwitchView_r7)) {
+                SafetySwitch = SwitchEditNumber;
+            }
+            else {
+                if (SafetySwitch == SwitchEditNumber) SafetySwitch = 0;
+            }
+             SendValue(Progress, 70);
+            if (GetValue(OneSwitchView_r8)) {
+                DualRatesSwitch = SwitchEditNumber;
+            }
+            else {
+                if (DualRatesSwitch == SwitchEditNumber) DualRatesSwitch = 0;
+            }
+             SendValue(Progress, 80);
+            if (GetValue(OneSwitchView_r9)) {
+                BuddySwitch = SwitchEditNumber;
+            }
+            else {
+                if (BuddySwitch == SwitchEditNumber) BuddySwitch = 0;
+            }
+            
+             SendValue(Progress, 90);
+            if (SwitchEditNumber == 1) {
+                if (GetValue(OneSwitchViewc_revd)) {
+                    SWITCH1Reversed = true;
+                }
+                else {
+                    SWITCH1Reversed = false;
+                }
+            }
+            if (SwitchEditNumber == 2) {
+                if (GetValue(OneSwitchViewc_revd)) {
+                    SWITCH2Reversed = true;
+                }
+                else {
+                    SWITCH2Reversed = false;
+                }
+                 SendValue(Progress, 95);
+            }
+            if (SwitchEditNumber == 3) {
+                if (GetValue(OneSwitchViewc_revd)) {
+                    SWITCH3Reversed = true;
+                }
+                else {
+                    SWITCH3Reversed = false;
+                }
+            }
+            if (SwitchEditNumber == 4) {
+                if (GetValue(OneSwitchViewc_revd)) {
+                    SWITCH4Reversed = true;
+                }
+                else {
+                    SWITCH4Reversed = false;
+                }
+            }
+            SendValue(Progress, 100);
+            SaveOneModel(ModelNumber);
+            SendCommand(PageSwitchView); // change to all switches screen
+            UpdateSwitchesDisplay();     // update its info
+            ClearText();
+            SendCommand(ProgressEnd);
+            return;
+
+}
 /***************************************************** ShowChannelName ****************************************************************************/
+
 
 void ShowChannelName()
 {
@@ -6221,18 +6345,7 @@ FASTRUN void ButtonWasPressed()
         }
 
         int  i                         = 0;
-        char OneSwitchView_r1[]        = "r1";     // Flight modes
-        char OneSwitchView_r2[]        = "r2";     // Auto
-        char OneSwitchView_r3[]        = "r3";     // Ch9
-        char OneSwitchView_r4[]        = "r4";     // Ch10
-        char OneSwitchView_r5[]        = "r5";     // Ch11
-        char OneSwitchView_r6[]        = "r6";     // Ch12
-        char OneSwitchView_r7[]        = "r7";     // Safety
-        char OneSwitchView_r8[]        = "r8";     // Dual Rates
-        char OneSwitchView_r9[]        = "r9";     // Buddy
-
-
-        char OneSwitchViewc_revd[]     = "c_revd"; // Reversed
+        
         char Write[]                   = "Write";
         char Setup[]                   = "Setup";
         char ClickX[]                  = "ClickX";
@@ -6300,7 +6413,6 @@ FASTRUN void ButtonWasPressed()
         char SwitchesView1[]           = "SwitchesView1";
         char OneSwitchView[]           = "OneSwitchView";
         char PageOneSwitchView[]       = "page OneSwitchView";
-        char PageSwitchView[]          = "page SwitchesView";
         char InputsView[]              = "InputsView";
         char InputsDone[]              = "InputsDone";
         char InputStick_Labels[16][4]  = {"c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "c9", "c10", "c11", "c12", "c13", "c14", "c15", "c16"};
@@ -6866,112 +6978,10 @@ FASTRUN void ButtonWasPressed()
         }
 
         if (InStrng(SwitchesView1, TextIn) > 0) { //  read switch values from screen (could be 1-4) 
-            
-            if (GetValue(OneSwitchView_r1)) {
-                FMSwitch = SwitchEditNumber;
-            }
-            else {
-                if (FMSwitch == SwitchEditNumber) FMSwitch = 0;
-            }
-
-
-            if (GetValue(OneSwitchView_r2)) {
-                AutoSwitch = SwitchEditNumber;
-            }
-            else {
-                if (AutoSwitch == SwitchEditNumber) AutoSwitch = 0;
-            }
-
-            if (GetValue(OneSwitchView_r3)) {
-                Channel9Switch = SwitchEditNumber;
-            }
-            else {
-                if (Channel9Switch == SwitchEditNumber) Channel9Switch = 0;
-            }
-
-            if (GetValue(OneSwitchView_r4)) {
-                Channel10Switch = SwitchEditNumber;
-            }
-            else {
-                if (Channel10Switch == SwitchEditNumber) Channel10Switch = 0;
-            }
-
-            if (GetValue(OneSwitchView_r5)) {
-                Channel11Switch = SwitchEditNumber;
-            }
-            else {
-                if (Channel11Switch == SwitchEditNumber) Channel11Switch = 0;
-            }
-
-            if (GetValue(OneSwitchView_r6)) {
-                Channel12Switch = SwitchEditNumber;
-            }
-            else {
-                if (Channel12Switch == SwitchEditNumber) Channel12Switch = 0;
-            }
-
-
-             if (GetValue(OneSwitchView_r7)) {
-                SafetySwitch = SwitchEditNumber;
-            }
-            else {
-                if (SafetySwitch == SwitchEditNumber) SafetySwitch = 0;
-            }
-
-            if (GetValue(OneSwitchView_r8)) {
-                DualRatesSwitch = SwitchEditNumber;
-            }
-            else {
-                if (DualRatesSwitch == SwitchEditNumber) DualRatesSwitch = 0;
-            }
-
-            if (GetValue(OneSwitchView_r9)) {
-                BuddySwitch = SwitchEditNumber;
-            }
-            else {
-                if (BuddySwitch == SwitchEditNumber) BuddySwitch = 0;
-            }
-            
-
-            if (SwitchEditNumber == 1) {
-                if (GetValue(OneSwitchViewc_revd)) {
-                    SWITCH1Reversed = true;
-                }
-                else {
-                    SWITCH1Reversed = false;
-                }
-            }
-            if (SwitchEditNumber == 2) {
-                if (GetValue(OneSwitchViewc_revd)) {
-                    SWITCH2Reversed = true;
-                }
-                else {
-                    SWITCH2Reversed = false;
-                }
-            }
-            if (SwitchEditNumber == 3) {
-                if (GetValue(OneSwitchViewc_revd)) {
-                    SWITCH3Reversed = true;
-                }
-                else {
-                    SWITCH3Reversed = false;
-                }
-            }
-            if (SwitchEditNumber == 4) {
-                if (GetValue(OneSwitchViewc_revd)) {
-                    SWITCH4Reversed = true;
-                }
-                else {
-                    SWITCH4Reversed = false;
-                }
-            }
-
-            SaveOneModel(ModelNumber);
-            SendCommand(PageSwitchView); // change to all switches screen
-            UpdateSwitchesDisplay();     // update its info
-            ClearText();
-            return;
+            ReadNewSwitchFunction();
         }
+
+
         if (InStrng(InputsView, TextIn) > 0) {
             SendCommand(pInputsView);
             CurrentView = INPUTS_VIEW;
@@ -7820,7 +7830,7 @@ void GetBank()
                     break;
             }
         }
-       // if (UseLog) LogNewRATE(); // HEER
+       // if (UseLog) LogNewRATE(); 
     }
 
     if (FMSwitch == 4)        ReadFMSwitch(Switch[2], Switch[3], SWITCH4Reversed); 
