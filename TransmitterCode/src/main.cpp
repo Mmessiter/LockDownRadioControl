@@ -955,10 +955,8 @@ bool MayBeAddZero(uint8_t nn)
 
 /*********************************************************************************************************************************/
 
-void ReadNextionTime(){ // maybe later!
+//void ReadNextionTime(){ // maybe later!
     
-
-
    // char Nyear[]       = "rtc0";
    // char Nmonth[]      = "rtc1";
    // char Nday[]        = "rtc2";
@@ -971,7 +969,7 @@ void ReadNextionTime(){ // maybe later!
    // SendCommand(SetDay);
 
    // Look(GetOtherValue(Nyear));
-}
+//}
 
 /*********************************************************************************************************************************/
 
@@ -1669,12 +1667,12 @@ void ShowConnectionQuality()
 
 FASTRUN void ShowComms()
 {
-if (millis() - LastShowTime > SHOWCOMMSDELAY) {
-    LastShowTime     = millis();
+    if (millis() - LastShowTime < SHOWCOMMSDELAY) return;
     
-    char InVisible[] = "vis Quality,0";
-    char FrontView_AckPayload[] = "AckPayload";
-    char FrontView_RXBV[]       = "RXBV";
+    LastShowTime               = millis();
+    char InVisible[]           = "vis Quality,0";
+    char FrontView_AckPayload[]= "AckPayload";
+    char FrontView_RXBV[]      = "RXBV";
     char Msg_CnctdBuddyMast[]  = "* BUDDY MASTER! *";
     char Msg_CnctdBuddySlave[] = "* BUDDY SLAVE! *";
     char MsgBuddying[]         = "Buddy";
@@ -1712,98 +1710,96 @@ if (millis() - LastShowTime > SHOWCOMMSDELAY) {
     char rate3[]             = "Rate 3";
     char rate4[]             = "      ";
 
-    if (CurrentView == FRONTVIEW || CurrentView == DATAVIEW) {
-            if ((CurrentView == FRONTVIEW))  ShowConnectionQuality();
-                if ((CurrentView == FRONTVIEW)) {
-                    if (DualRateInUse == 1) SendText(rate, rate1);
-                    if (DualRateInUse == 2) SendText(rate, rate2);
-                    if (DualRateInUse == 3) SendText(rate, rate3);
-                    if (DualRateInUse == 4) SendText(rate, rate4); // rates not in use = 4 
-                    if (BuddyPupilOnSbus) SendText(FrontView_Connected, MsgBuddying);
-                    if (LedWasGreen ) {
-                    if (BoundFlag) {
-                        if (!BuddyMaster) {
-                            if (!Reconnected) {
-                                MakeBindButtonInvisible();
-                                ShowConnectionQuality();
-                                Reconnected = true;
-                            }
+        if (CurrentView == FRONTVIEW) {
+            ShowConnectionQuality();
+            switch (DualRateInUse)
+            {
+            case 1:
+                 SendText(rate, rate1);
+                 break;
+            case 2:
+                SendText(rate, rate2);
+                break;
+            case 3:
+                SendText(rate, rate3);
+                break;
+            case 4:
+                SendText(rate, rate4);  // rates not in use = 4
+                break;
+            default:
+                break;
+            }
+            if (BuddyPupilOnSbus) SendText(FrontView_Connected, MsgBuddying);
+            if (LedWasGreen) {
+                if (BoundFlag) {
+                    if (!BuddyMaster) {
+                        if (!Reconnected) {
+                            MakeBindButtonInvisible();
+                            ShowConnectionQuality();
+                            Reconnected = true;
                         }
-                        else {
-                            if (!SlaveHasControl) {
-                                SendText(FrontView_Connected, Msg_CnctdBuddyMast);
-                            }
-                            else {
-                                SendText(FrontView_Connected, Msg_CnctdBuddySlave);
-                            }
-                        }
-                        GreenLedOn();
-                        StartInactvityTimeout();
-                    }
-                }
-                if (CurrentView == DATAVIEW) {
-                    SendValue(DataView_pps, PacketsPerSecond);
-                    SendValue(DataView_lps, TotalLostPackets/2); // about half probably made it but went un acknoledged
-                    SendText(DataView_Alt, ModelAltitude);
-                    SendText(DataView_MaxAlt, MaxAltitude);
-                    SendText(DataView_Temp, ModelTemperature);
-                    SendText(DataView_Rx, ThisRadio);
-                    SendText(DataView_rxv, ReceiverVersionNumber);
-                    SendValue(DataView_Ls, GapLongest);
-                    SendValue(DataView_Ts, RadioSwaps - SavedRadioSwaps);
-                    SendValue(DataView_Sg, RX1TotalTime - SavedRX1TotalTime);
-                    SendValue(DataView_Ag, GapAverage);
-                    SendValue(DataView_Gc, RX2TotalTime - SavedRX2TotalTime);
-                    if (GpsFix) { // if no fix, then leave display as before
-                        SendText(Fix, yes);
                     }
                     else {
-                        SendText(Fix, no);
+                        if (!SlaveHasControl) {
+                            SendText(FrontView_Connected, Msg_CnctdBuddyMast);
+                        }
+                        else {
+                            SendText(FrontView_Connected, Msg_CnctdBuddySlave);
+                        }
                     }
-                    snprintf(Vbuf, 3, "%d", GPSSatellites);
-                    SendText(Sat, Vbuf);
-                    snprintf(Vbuf, 10, "%f", GPSLongitude);
-                    SendText(Lon, Vbuf);
-                    snprintf(Vbuf, 10, "%f", GPSLatitude);
-                    SendText(Lat, Vbuf);
-                    snprintf(Vbuf, 7, "%d", int(GPSAngle));
-                    SendText(Bear, Vbuf);
-                    snprintf(Vbuf, 6, "%d", (int)GPSDistanceTo);
-                    SendText(Dist, Vbuf);
-                    snprintf(Vbuf, 4, "%d", (int)GPSSpeed);
-                    SendText(Sped, Vbuf);
-                    snprintf(Vbuf, 4, "%d", (int)GPSMaxSpeed);
-                    SendText(MxS, Vbuf);
-                    snprintf(Vbuf, 4, "%d", (int)GPSAltitude);
-                    SendText(ALT, Vbuf);
-                    snprintf(Vbuf, 4, "%d", (int)GPSMaxAltitude);
-                    SendText(MALT, Vbuf);
-                    snprintf(Vbuf, 4, "%d", (int)GPSCourseTo);
-                    SendText(BTo, Vbuf);
-                    snprintf(Vbuf, 6, "%d", (int)GPSMaxDistance);
-                    SendText(Mxd, Vbuf);
-                    snprintf(Vbuf, 6, "%d", (int)SbusRepeats - SavedSbusRepeats);
-                    SendText(Sbs, Vbuf);
+                    GreenLedOn();
+                    StartInactvityTimeout();
+                } else {
+                    SendText(FrontView_RXBV, na); // data not available
+                    SendText(FrontView_AckPayload, na);
+                    SendCommand(InVisible);
                 }
+            }
+        }
+        if (CurrentView == DATAVIEW) {
+            SendValue(DataView_pps, PacketsPerSecond);
+            SendValue(DataView_lps, TotalLostPackets / 2); // about half probably made it but went un acknoledged
+            SendText(DataView_Alt, ModelAltitude);
+            SendText(DataView_MaxAlt, MaxAltitude);
+            SendText(DataView_Temp, ModelTemperature);
+            SendText(DataView_Rx, ThisRadio);
+            SendText(DataView_rxv, ReceiverVersionNumber);
+            SendValue(DataView_Ls, GapLongest);
+            SendValue(DataView_Ts, RadioSwaps - SavedRadioSwaps);
+            SendValue(DataView_Sg, RX1TotalTime - SavedRX1TotalTime);
+            SendValue(DataView_Ag, GapAverage);
+            SendValue(DataView_Gc, RX2TotalTime - SavedRX2TotalTime);
+            if (GpsFix) { // if no fix, then leave display as before
+                SendText(Fix, yes);
             }
             else {
-                if (BoundFlag) {
-                    if (CurrentView == DATAVIEW) {
-                        SendValue(DataView_lps, TotalLostPackets/2);
-                    }
-                    if (CurrentView == FRONTVIEW) {
-                        SendText(FrontView_RXBV, na); // data not available
-                        SendText(FrontView_AckPayload, na);
-                        SendCommand(InVisible);
-                    }
-                }
-                else { // i.e. contact is lost
-                    if (CurrentView == FRONTVIEW) {
-                        SendText(FrontView_Connected, na);
-                        SendCommand(InVisible);
-                    }
-                }
+                SendText(Fix, no);
             }
+            snprintf(Vbuf, 3, "%d", GPSSatellites);
+            SendText(Sat, Vbuf);
+            snprintf(Vbuf, 10, "%f", GPSLongitude);
+            SendText(Lon, Vbuf);
+            snprintf(Vbuf, 10, "%f", GPSLatitude);
+            SendText(Lat, Vbuf);
+            snprintf(Vbuf, 7, "%d", int(GPSAngle));
+            SendText(Bear, Vbuf);
+            snprintf(Vbuf, 6, "%d", (int)GPSDistanceTo);
+            SendText(Dist, Vbuf);
+            snprintf(Vbuf, 4, "%d", (int)GPSSpeed);
+            SendText(Sped, Vbuf);
+            snprintf(Vbuf, 4, "%d", (int)GPSMaxSpeed);
+            SendText(MxS, Vbuf);
+            snprintf(Vbuf, 4, "%d", (int)GPSAltitude);
+            SendText(ALT, Vbuf);
+            snprintf(Vbuf, 4, "%d", (int)GPSMaxAltitude);
+            SendText(MALT, Vbuf);
+            snprintf(Vbuf, 4, "%d", (int)GPSCourseTo);
+            SendText(BTo, Vbuf);
+            snprintf(Vbuf, 6, "%d", (int)GPSMaxDistance);
+            SendText(Mxd, Vbuf);
+            snprintf(Vbuf, 6, "%d", (int)SbusRepeats - SavedSbusRepeats);
+            SendText(Sbs, Vbuf);
+            if (BoundFlag) SendValue(DataView_lps, TotalLostPackets / 2);
         }
         CheckScreenTime();
         if (CheckTXVolts() || CheckRXVolts()) {         // Note: If TX Battery is low, then CheckRXVolts() is not even called.
@@ -1812,12 +1808,9 @@ if (millis() - LastShowTime > SHOWCOMMSDELAY) {
                 PlaySound(WarningSound);                // Issue audible warning every 10 seconds
             }
             if (CurrentView == FRONTVIEW) SendCommand(WarnNow);
-        }
-        else {
+        } else {
             if (LedIsBlinking && (CurrentView == FRONTVIEW)) SendCommand(WarnOff);
-        }
-    }
-   
+        }   
 } // end ShowComms()
 
 /************************************************************************************************************/
@@ -2088,19 +2081,40 @@ uint16_t ExponentialInterpolation(uint16_t InputValue, uint16_t InputChannel, ui
 
 /*********************************************************************************************************************************/
 
-float CalculateDualRateNew(short int Curve, short int Channel,float rate){
+float CalculateRate(short int Curve, short int OutputChannel,float rate){
 
     switch (Curve){ // Curve is 1 - 5, low to hi.
     case 1:  
-        return (((MinDegrees[Bank][Channel])    - 90) * (rate / 100)) + 90;
+        return (((MinDegrees[Bank][OutputChannel])    - 90) * (rate / 100)) + 90;
     case 2:  
-        return (((MidLowDegrees[Bank][Channel]) - 90) * (rate / 100)) + 90;
+        return (((MidLowDegrees[Bank][OutputChannel]) - 90) * (rate / 100)) + 90;
     case 3:  
-        return (((CentreDegrees[Bank][Channel]) - 90) * (rate / 100)) + 90;
+        return (((CentreDegrees[Bank][OutputChannel]) - 90) * (rate / 100)) + 90;
     case 4:  
-        return (((MidHiDegrees[Bank][Channel])  - 90) * (rate / 100)) + 90;
+        return (((MidHiDegrees[Bank][OutputChannel])  - 90) * (rate / 100)) + 90;
     case 5:    
-        return (((MaxDegrees[Bank][Channel])    - 90) * (rate / 100)) + 90;
+        return (((MaxDegrees[Bank][OutputChannel])    - 90) * (rate / 100)) + 90;
+    default:
+        return 0;
+    }
+}
+
+
+/*********************************************************************************************************************************/
+
+float UseFullRate(short int Curve, uint8_t OutputChannel){
+
+    switch (Curve){ // Curve is 1 - 5, low to hi.
+    case 1:  
+        return MinDegrees[Bank][OutputChannel]; 
+    case 2:  
+        return MidLowDegrees[Bank][OutputChannel];
+    case 3:  
+        return CentreDegrees[Bank][OutputChannel];
+    case 4:  
+        return MidHiDegrees[Bank][OutputChannel];
+    case 5:    
+        return MaxDegrees[Bank][OutputChannel] ;
     default:
         return 0;
     }
@@ -2108,18 +2122,20 @@ float CalculateDualRateNew(short int Curve, short int Channel,float rate){
 
 /*********************************************************************************************************************************/
 
-void  GetCurveDots(uint16_t OutputChannel,uint16_t TheRate){  
-                                                        // This for the Dual Rates function
-                                                        // Effectively, it copies the dot locations on the curve, and might reduce their extent if rate is below 100 and channel specified
-    if (OutputChannel < 8) {                            // 0-7 ... DUAL RATES ONLY SUPPORTED ON FIRST 8 CHANNELS
-        for (int j = 0; j < 8; ++j) {
-            if (OutputChannel == DualRateChannels[j]-1) {
-                for (int i = 0; i < 5; ++i) CurveDots[i] = CalculateDualRateNew(i + 1, OutputChannel, TheRate);
+void  GetCurveDots(uint16_t OutputChannel, uint16_t TheRate)
+{                                               // This for the Dual Rates function
+                                                // Effectively, it just copies the dot locations on the curve, but might reduce their extent if rate is below 100 and channel specified
+    for (int j = 0; j < 8; ++j) {               // Look at first 8 channels only
+        if (DualRateChannels[j]) {              // non zero?
+            if (OutputChannel+1 == DualRateChannels[j]) {
+                for (int i = 0; i < 5; ++i) {
+                    CurveDots[i] = CalculateRate(i + 1, OutputChannel, TheRate);
+                    }
                 return;   
             }   
         }    
     }
-    for (int i = 0; i < 5; ++i) CurveDots[i] = CalculateDualRateNew(i + 1, OutputChannel, 100); // if channel not affected, USE 100%
+    for (int i = 0; i < 5; ++i) CurveDots[i] = UseFullRate(i + 1, OutputChannel);  // ... channel not used so 100%
 }
 
 /*********************************************************************************************************************************/
@@ -2153,13 +2169,14 @@ FASTRUN void GetNewChannelValues()
      uint16_t OutputValue, InputChannel, InputValue, OutputChannel, TrimAmount;                                          // Local variables now with more meaningful names
     
      for (OutputChannel = 0; OutputChannel < CHANNELSUSED; ++OutputChannel) {                                            // Do every channel
-            InputChannel = InPutStick[OutputChannel];                                                                    // Input sticks knobs & switches are mapped by user
-            GetCurveDots(OutputChannel, DualRateValue);                                                               // This can now do dual rates traditionally                                                                                                      
-            TrimAmount   = 0;                                                                                            // Trim is zero if not input 1-4
-            if (InputChannel < 4) TrimAmount = GetTrimAmount(InputTrim[InputChannel]);                                   // User defined trim input
-            if (InputChannel > 7) {                                                                                      // Must be a switch if over 7
+        InputChannel = InPutStick[OutputChannel];                                                                        // Input sticks knobs & switches are mapped by user                                                                                                 
+        
+        if (InputChannel > 7) {                                                                                          // Must be a switch if over 7
             OutputValue = GetStickInput(InputChannel);                                                                   // Four 3 postion switches
         } else {                                                                                                         // i.e. l <= 7 so it's a Stick/knob/switch
+            TrimAmount   = 0;                                                                                            // Trim is zero if not input 1-4
+            if (InputChannel < 4) TrimAmount = GetTrimAmount(InputTrim[InputChannel]);                                   // User defined trim input
+            GetCurveDots(OutputChannel, DualRateValue);                                                                  // This can now do dual rates traditionally 
             InputValue = analogRead(AnalogueInput[InputChannel]) + TrimAmount;                                           // Get values from sticks' pots then ADD TRIM then interpolate them.
             OutputValue = Interpolate[InterpolationTypes[Bank][OutputChannel]](InputValue, InputChannel, OutputChannel); // Use function pointer array to invoke selected interpolation.
         }
@@ -2170,7 +2187,7 @@ FASTRUN void GetNewChannelValues()
     if (CurrentMode == NORMAL) {
         DoReverseSense();
         DoMixes();
-    }    
+    }
 }
 /*********************************************************************************************************************************/
 
@@ -3372,7 +3389,7 @@ FLASHMEM void setup()
     SendValue(FrontView_Mins, 0);
     SendValue(FrontView_Secs, 0);
     //  ***************************************************************************************
-    // SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
+     //SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
     //  **   BUT then re-comment it!! Otherwise it will reset to same time on every boot up! **
     //  ***************************************************************************************
     BoundFlag = false;
@@ -5215,10 +5232,6 @@ void updateOneSwitchView()
     char OneSwitchView_r7[]    = "r7";    // Safety
     char OneSwitchView_r8[]    = "r8";    // Dual Rates
     char OneSwitchView_r9[]    = "r9";    // Buddy
-    
-    
-    
-    
     char OneSwitchViewc_revd[] = "c_revd"; // Reversed
     char SwNum[]               = "Sw";
 
@@ -5233,8 +5246,6 @@ void updateOneSwitchView()
         if (SafetySwitch == 1) SendValue(OneSwitchView_r7, 1);
         if (DualRatesSwitch == 1) SendValue(OneSwitchView_r8, 1);
         if (BuddySwitch == 1) SendValue(OneSwitchView_r9, 1);
-        
-        
         
         
         if (!ValueSent) SendValue(OneSwitchView_r0, 1); // nothing yet, so not used
@@ -5266,7 +5277,6 @@ void updateOneSwitchView()
         if (DualRatesSwitch == 3) SendValue(OneSwitchView_r8, 1);
         if (BuddySwitch == 3) SendValue(OneSwitchView_r9, 1);
         
-
         if (!ValueSent) SendValue(OneSwitchView_r0, 1); // nothing yet, so not used
         if (SWITCH3Reversed) SendValue(OneSwitchViewc_revd, 1);
     }
@@ -5322,7 +5332,136 @@ void ZeroDataScreen()
     SavedSbusRepeats   = SbusRepeats;
     LastShowTime       = 0; // for instant redisplay
 }
+/***************************************************** ReadNewSwitchFunction ****************************************************************************/
+
+void ReadNewSwitchFunction(){ // heer
+        char OneSwitchView_r1[]        = "r1";     // Flight modes
+        char OneSwitchView_r2[]        = "r2";     // Auto
+        char OneSwitchView_r3[]        = "r3";     // Ch9
+        char OneSwitchView_r4[]        = "r4";     // Ch10
+        char OneSwitchView_r5[]        = "r5";     // Ch11
+        char OneSwitchView_r6[]        = "r6";     // Ch12
+        char OneSwitchView_r7[]        = "r7";     // Safety
+        char OneSwitchView_r8[]        = "r8";     // Dual Rates
+        char OneSwitchView_r9[]        = "r9";     // Buddy
+        char PageSwitchView[]          = "page SwitchesView";
+        char OneSwitchViewc_revd[]     = "c_revd"; // Reversed
+        char    ProgressStart[] = "vis Progress,1";
+        char    ProgressEnd[]   = "vis Progress,0";
+        char    Progress[]      = "Progress";
+
+            SendCommand(ProgressStart);
+            SendValue(Progress, 10);
+
+            if (GetValue(OneSwitchView_r1)) {
+                FMSwitch = SwitchEditNumber;
+            }
+            else {
+                if (FMSwitch == SwitchEditNumber) FMSwitch = 0;
+            }
+
+            SendValue(Progress, 15);
+            if (GetValue(OneSwitchView_r2)) {
+                AutoSwitch = SwitchEditNumber;
+            }
+            else {
+                if (AutoSwitch == SwitchEditNumber) AutoSwitch = 0;
+            }
+            SendValue(Progress, 25);
+            if (GetValue(OneSwitchView_r3)) {
+                Channel9Switch = SwitchEditNumber;
+            }
+            else {
+                if (Channel9Switch == SwitchEditNumber) Channel9Switch = 0;
+            }
+            SendValue(Progress, 30);
+            if (GetValue(OneSwitchView_r4)) {
+                Channel10Switch = SwitchEditNumber;
+            }
+            else {
+                if (Channel10Switch == SwitchEditNumber) Channel10Switch = 0;
+            }
+            SendValue(Progress, 40);
+            if (GetValue(OneSwitchView_r5)) {
+                Channel11Switch = SwitchEditNumber;
+            }
+            else {
+                if (Channel11Switch == SwitchEditNumber) Channel11Switch = 0;
+            }
+             SendValue(Progress, 50);
+            if (GetValue(OneSwitchView_r6)) {
+                Channel12Switch = SwitchEditNumber;
+            }
+            else {
+                if (Channel12Switch == SwitchEditNumber) Channel12Switch = 0;
+            }
+            SendValue(Progress, 60);
+             if (GetValue(OneSwitchView_r7)) {
+                SafetySwitch = SwitchEditNumber;
+            }
+            else {
+                if (SafetySwitch == SwitchEditNumber) SafetySwitch = 0;
+            }
+             SendValue(Progress, 70);
+            if (GetValue(OneSwitchView_r8)) {
+                DualRatesSwitch = SwitchEditNumber;
+            }
+            else {
+                if (DualRatesSwitch == SwitchEditNumber) DualRatesSwitch = 0;
+            }
+             SendValue(Progress, 80);
+            if (GetValue(OneSwitchView_r9)) {
+                BuddySwitch = SwitchEditNumber;
+            }
+            else {
+                if (BuddySwitch == SwitchEditNumber) BuddySwitch = 0;
+            }
+            
+             SendValue(Progress, 90);
+            if (SwitchEditNumber == 1) {
+                if (GetValue(OneSwitchViewc_revd)) {
+                    SWITCH1Reversed = true;
+                }
+                else {
+                    SWITCH1Reversed = false;
+                }
+            }
+            if (SwitchEditNumber == 2) {
+                if (GetValue(OneSwitchViewc_revd)) {
+                    SWITCH2Reversed = true;
+                }
+                else {
+                    SWITCH2Reversed = false;
+                }
+                 SendValue(Progress, 95);
+            }
+            if (SwitchEditNumber == 3) {
+                if (GetValue(OneSwitchViewc_revd)) {
+                    SWITCH3Reversed = true;
+                }
+                else {
+                    SWITCH3Reversed = false;
+                }
+            }
+            if (SwitchEditNumber == 4) {
+                if (GetValue(OneSwitchViewc_revd)) {
+                    SWITCH4Reversed = true;
+                }
+                else {
+                    SWITCH4Reversed = false;
+                }
+            }
+            SendValue(Progress, 100);
+            SaveOneModel(ModelNumber);
+            SendCommand(PageSwitchView); // change to all switches screen
+            UpdateSwitchesDisplay();     // update its info
+            ClearText();
+            SendCommand(ProgressEnd);
+            return;
+
+}
 /***************************************************** ShowChannelName ****************************************************************************/
+
 
 void ShowChannelName()
 {
@@ -6205,18 +6344,7 @@ FASTRUN void ButtonWasPressed()
         }
 
         int  i                         = 0;
-        char OneSwitchView_r1[]        = "r1";     // Flight modes
-        char OneSwitchView_r2[]        = "r2";     // Auto
-        char OneSwitchView_r3[]        = "r3";     // Ch9
-        char OneSwitchView_r4[]        = "r4";     // Ch10
-        char OneSwitchView_r5[]        = "r5";     // Ch11
-        char OneSwitchView_r6[]        = "r6";     // Ch12
-        char OneSwitchView_r7[]        = "r7";     // Safety
-        char OneSwitchView_r8[]        = "r8";     // Dual Rates
-        char OneSwitchView_r9[]        = "r9";     // Buddy
-
-
-        char OneSwitchViewc_revd[]     = "c_revd"; // Reversed
+        
         char Write[]                   = "Write";
         char Setup[]                   = "Setup";
         char ClickX[]                  = "ClickX";
@@ -6284,7 +6412,6 @@ FASTRUN void ButtonWasPressed()
         char SwitchesView1[]           = "SwitchesView1";
         char OneSwitchView[]           = "OneSwitchView";
         char PageOneSwitchView[]       = "page OneSwitchView";
-        char PageSwitchView[]          = "page SwitchesView";
         char InputsView[]              = "InputsView";
         char InputsDone[]              = "InputsDone";
         char InputStick_Labels[16][4]  = {"c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "c9", "c10", "c11", "c12", "c13", "c14", "c15", "c16"};
@@ -6850,112 +6977,10 @@ FASTRUN void ButtonWasPressed()
         }
 
         if (InStrng(SwitchesView1, TextIn) > 0) { //  read switch values from screen (could be 1-4) 
-            
-            if (GetValue(OneSwitchView_r1)) {
-                FMSwitch = SwitchEditNumber;
-            }
-            else {
-                if (FMSwitch == SwitchEditNumber) FMSwitch = 0;
-            }
-
-
-            if (GetValue(OneSwitchView_r2)) {
-                AutoSwitch = SwitchEditNumber;
-            }
-            else {
-                if (AutoSwitch == SwitchEditNumber) AutoSwitch = 0;
-            }
-
-            if (GetValue(OneSwitchView_r3)) {
-                Channel9Switch = SwitchEditNumber;
-            }
-            else {
-                if (Channel9Switch == SwitchEditNumber) Channel9Switch = 0;
-            }
-
-            if (GetValue(OneSwitchView_r4)) {
-                Channel10Switch = SwitchEditNumber;
-            }
-            else {
-                if (Channel10Switch == SwitchEditNumber) Channel10Switch = 0;
-            }
-
-            if (GetValue(OneSwitchView_r5)) {
-                Channel11Switch = SwitchEditNumber;
-            }
-            else {
-                if (Channel11Switch == SwitchEditNumber) Channel11Switch = 0;
-            }
-
-            if (GetValue(OneSwitchView_r6)) {
-                Channel12Switch = SwitchEditNumber;
-            }
-            else {
-                if (Channel12Switch == SwitchEditNumber) Channel12Switch = 0;
-            }
-
-
-             if (GetValue(OneSwitchView_r7)) {
-                SafetySwitch = SwitchEditNumber;
-            }
-            else {
-                if (SafetySwitch == SwitchEditNumber) SafetySwitch = 0;
-            }
-
-            if (GetValue(OneSwitchView_r8)) {
-                DualRatesSwitch = SwitchEditNumber;
-            }
-            else {
-                if (DualRatesSwitch == SwitchEditNumber) DualRatesSwitch = 0;
-            }
-
-            if (GetValue(OneSwitchView_r9)) {
-                BuddySwitch = SwitchEditNumber;
-            }
-            else {
-                if (BuddySwitch == SwitchEditNumber) BuddySwitch = 0;
-            }
-            
-
-            if (SwitchEditNumber == 1) {
-                if (GetValue(OneSwitchViewc_revd)) {
-                    SWITCH1Reversed = true;
-                }
-                else {
-                    SWITCH1Reversed = false;
-                }
-            }
-            if (SwitchEditNumber == 2) {
-                if (GetValue(OneSwitchViewc_revd)) {
-                    SWITCH2Reversed = true;
-                }
-                else {
-                    SWITCH2Reversed = false;
-                }
-            }
-            if (SwitchEditNumber == 3) {
-                if (GetValue(OneSwitchViewc_revd)) {
-                    SWITCH3Reversed = true;
-                }
-                else {
-                    SWITCH3Reversed = false;
-                }
-            }
-            if (SwitchEditNumber == 4) {
-                if (GetValue(OneSwitchViewc_revd)) {
-                    SWITCH4Reversed = true;
-                }
-                else {
-                    SWITCH4Reversed = false;
-                }
-            }
-
-            SaveOneModel(ModelNumber);
-            SendCommand(PageSwitchView); // change to all switches screen
-            UpdateSwitchesDisplay();     // update its info
-            ClearText();
-            return;
+            ReadNewSwitchFunction();
         }
+
+
         if (InStrng(InputsView, TextIn) > 0) {
             SendCommand(pInputsView);
             CurrentView = INPUTS_VIEW;
@@ -7804,7 +7829,7 @@ void GetBank()
                     break;
             }
         }
-       // if (UseLog) LogNewRATE(); // HEER
+       // if (UseLog) LogNewRATE(); 
     }
 
     if (FMSwitch == 4)        ReadFMSwitch(Switch[2], Switch[3], SWITCH4Reversed); 
