@@ -2106,15 +2106,15 @@ uint16_t GetTrimAmount(uint8_t InputTrim){ // This is now added to INPUT instead
 float CalculateRate(short int Curve, short int OutputChannel,float rate){
 
     switch (Curve){ // Curve is 1 - 5, low to hi.
-    case 1:  
+    case 0:  
         return (((MinDegrees[Bank][OutputChannel])    - 90) * (rate / 100)) + 90;
-    case 2:  
+    case 1:  
         return (((MidLowDegrees[Bank][OutputChannel]) - 90) * (rate / 100)) + 90;
-    case 3:  
+    case 2:  
         return (((CentreDegrees[Bank][OutputChannel]) - 90) * (rate / 100)) + 90;
-    case 4:  
+    case 3:  
         return (((MidHiDegrees[Bank][OutputChannel])  - 90) * (rate / 100)) + 90;
-    case 5:    
+    case 4:    
         return (((MaxDegrees[Bank][OutputChannel])    - 90) * (rate / 100)) + 90;
     default:
         return 0;
@@ -2127,15 +2127,15 @@ float CalculateRate(short int Curve, short int OutputChannel,float rate){
 float UseFullRate(short int Curve, uint8_t OutputChannel){
 
     switch (Curve){ // Curve is 1 - 5, low to hi.
-    case 1:  
+    case 0:  
         return MinDegrees[Bank][OutputChannel]; 
-    case 2:  
+    case 1:  
         return MidLowDegrees[Bank][OutputChannel];
-    case 3:  
+    case 2:  
         return CentreDegrees[Bank][OutputChannel];
-    case 4:  
+    case 3:  
         return MidHiDegrees[Bank][OutputChannel];
-    case 5:    
+    case 4:    
         return MaxDegrees[Bank][OutputChannel] ;
     default:
         return 0;
@@ -2150,12 +2150,12 @@ void  GetCurveDots(uint16_t OutputChannel, uint16_t TheRate)
     for (int j = 0; j < 8; ++j) {               // 8 possible rates in any position of output
         if (DualRateChannels[j]) {              // non zero?
             if (OutputChannel+1 == DualRateChannels[j]) {
-                for (int i = 0; i < 5; ++i) CurveDots[i] = CalculateRate(i + 1, OutputChannel, TheRate);
+                for (int i = 0; i < 5; ++i) CurveDots[i] = CalculateRate(i, OutputChannel, TheRate);
                 return;   
             }   
         }    
     }
-    for (int i = 0; i < 5; ++i) CurveDots[i] = UseFullRate(i + 1, OutputChannel);  // ... channel not used so 100%
+    for (int i = 0; i < 5; ++i) CurveDots[i] = UseFullRate(i, OutputChannel);  // ... channel not used so 100%
 }
 /*********************************************************************************************************************************/
 
@@ -8487,7 +8487,7 @@ void CheckPowerOffButton()
 
     if (!digitalRead(BUTTON_SENSE_PIN)){ 
         GotoFrontView();
-        if (LedWasRed || BuddyPupilOnSbus) 
+        if (!LedWasGreen) 
         {
             simulateCloseDown();              // if not connected power off immediately
         } else
