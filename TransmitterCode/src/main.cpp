@@ -2080,6 +2080,28 @@ uint16_t ExponentialInterpolation(uint16_t InputValue, uint16_t InputChannel, ui
 }
 
 /*********************************************************************************************************************************/
+// ************* Small function pointer array for interpolation types ************************************************************
+
+uint16_t (*Interpolate[3])(uint16_t InputValue, uint16_t InputChannel, uint16_t OutputChannel) {
+    StraightLineInterpolation,  // 0
+    CatmullSplineInterpolation, // 1
+    ExponentialInterpolation    // 2
+};
+
+/*********************************************************************************************************************************/
+
+uint16_t GetTrimAmount(uint8_t InputTrim){ // This is now added to INPUT instead of output  
+    uint16_t TrimAmount, tt = InputTrim;
+        if (SticksMode == 2) {
+            if (InputTrim == 1) tt = 2;
+            if (InputTrim == 2) tt = 1; 
+        }
+        TrimAmount = (Trims[Bank][tt] - 80) * TrimFactor; // TRIMS on lower four input channels (80 is mid point !! (range 40 - 80 - 120)) 
+        if (TrimsReversed[Bank][tt]) TrimAmount = -TrimAmount;
+        return TrimAmount;
+}
+
+/*********************************************************************************************************************************/
 
 float CalculateRate(short int Curve, short int OutputChannel,float rate){
 
@@ -2125,39 +2147,15 @@ float UseFullRate(short int Curve, uint8_t OutputChannel){
 void  GetCurveDots(uint16_t OutputChannel, uint16_t TheRate)
 {                                               // This for the Dual Rates function
                                                 // Effectively, it just copies the Y dot's magnitude on the curve, but might reduce the extent if rate is below 100 and channel specified
-    for (int j = 0; j < 8; ++j) {               // Look at first 8 channels only
+    for (int j = 0; j < 8; ++j) {               // 8 possible rates in any position of output
         if (DualRateChannels[j]) {              // non zero?
             if (OutputChannel+1 == DualRateChannels[j]) {
-                for (int i = 0; i < 5; ++i) {
-                    CurveDots[i] = CalculateRate(i + 1, OutputChannel, TheRate);
-                    }
+                for (int i = 0; i < 5; ++i) CurveDots[i] = CalculateRate(i + 1, OutputChannel, TheRate);
                 return;   
             }   
         }    
     }
     for (int i = 0; i < 5; ++i) CurveDots[i] = UseFullRate(i + 1, OutputChannel);  // ... channel not used so 100%
-}
-
-/*********************************************************************************************************************************/
-// ************* Small function pointer array for interpolation types ************************************************************
-
-uint16_t (*Interpolate[3])(uint16_t InputValue, uint16_t InputChannel, uint16_t OutputChannel) {
-    StraightLineInterpolation,  // 0
-    CatmullSplineInterpolation, // 1
-    ExponentialInterpolation    // 2
-};
-
-/*********************************************************************************************************************************/
-
-uint16_t GetTrimAmount(uint8_t InputTrim){ // This is now added to INPUT instead of output  
-    uint16_t TrimAmount, tt = InputTrim;
-        if (SticksMode == 2) {
-            if (InputTrim == 1) tt = 2;
-            if (InputTrim == 2) tt = 1; 
-        }
-        TrimAmount = (Trims[Bank][tt] - 80) * TrimFactor; // TRIMS on lower four input channels (80 is mid point !! (range 40 - 80 - 120)) 
-        if (TrimsReversed[Bank][tt]) TrimAmount = -TrimAmount;
-        return TrimAmount;
 }
 /*********************************************************************************************************************************/
 
@@ -2170,13 +2168,12 @@ FASTRUN void GetNewChannelValues()
     
      for (OutputChannel = 0; OutputChannel < CHANNELSUSED; ++OutputChannel) {                                            // Do every channel
         InputChannel = InPutStick[OutputChannel];                                                                        // Input sticks knobs & switches are mapped by user                                                                                                 
-        
+        GetCurveDots(OutputChannel, DualRateValue);  
         if (InputChannel > 7) {                                                                                          // Must be a switch if over 7
             OutputValue = GetStickInput(InputChannel);                                                                   // Four 3 postion switches
         } else {                                                                                                         // i.e. l <= 7 so it's a Stick/knob/switch
             TrimAmount   = 0;                                                                                            // Trim is zero if not input 1-4
             if (InputChannel < 4) TrimAmount = GetTrimAmount(InputTrim[InputChannel]);                                   // User defined trim input
-            GetCurveDots(OutputChannel, DualRateValue);                                                                  // This can now do dual rates traditionally 
             InputValue = analogRead(AnalogueInput[InputChannel]) + TrimAmount;                                           // Get values from sticks' pots then ADD TRIM then interpolate them.
             OutputValue = Interpolate[InterpolationTypes[Bank][OutputChannel]](InputValue, InputChannel, OutputChannel); // Use function pointer array to invoke selected interpolation.
         }
