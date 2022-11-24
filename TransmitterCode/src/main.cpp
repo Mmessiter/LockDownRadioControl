@@ -2081,19 +2081,19 @@ uint16_t ExponentialInterpolation(uint16_t InputValue, uint16_t InputChannel, ui
 
 /*********************************************************************************************************************************/
 
-float CalculateRate(short int Curve, short int Channel,float rate){
+float CalculateRate(short int Curve, short int OutputChannel,float rate){
 
     switch (Curve){ // Curve is 1 - 5, low to hi.
     case 1:  
-        return (((MinDegrees[Bank][Channel])    - 90) * (rate / 100)) + 90;
+        return (((MinDegrees[Bank][OutputChannel])    - 90) * (rate / 100)) + 90;
     case 2:  
-        return (((MidLowDegrees[Bank][Channel]) - 90) * (rate / 100)) + 90;
+        return (((MidLowDegrees[Bank][OutputChannel]) - 90) * (rate / 100)) + 90;
     case 3:  
-        return (((CentreDegrees[Bank][Channel]) - 90) * (rate / 100)) + 90;
+        return (((CentreDegrees[Bank][OutputChannel]) - 90) * (rate / 100)) + 90;
     case 4:  
-        return (((MidHiDegrees[Bank][Channel])  - 90) * (rate / 100)) + 90;
+        return (((MidHiDegrees[Bank][OutputChannel])  - 90) * (rate / 100)) + 90;
     case 5:    
-        return (((MaxDegrees[Bank][Channel])    - 90) * (rate / 100)) + 90;
+        return (((MaxDegrees[Bank][OutputChannel])    - 90) * (rate / 100)) + 90;
     default:
         return 0;
     }
@@ -2102,19 +2102,19 @@ float CalculateRate(short int Curve, short int Channel,float rate){
 
 /*********************************************************************************************************************************/
 
-float UseFullRate(short int Curve, uint8_t Channel){
+float UseFullRate(short int Curve, uint8_t OutputChannel){
 
     switch (Curve){ // Curve is 1 - 5, low to hi.
     case 1:  
-        return MinDegrees[Bank][Channel]; 
+        return MinDegrees[Bank][OutputChannel]; 
     case 2:  
-        return MidLowDegrees[Bank][Channel];
+        return MidLowDegrees[Bank][OutputChannel];
     case 3:  
-        return CentreDegrees[Bank][Channel];
+        return CentreDegrees[Bank][OutputChannel];
     case 4:  
-        return MidHiDegrees[Bank][Channel];
+        return MidHiDegrees[Bank][OutputChannel];
     case 5:    
-        return MaxDegrees[Bank][Channel] ;
+        return MaxDegrees[Bank][OutputChannel] ;
     default:
         return 0;
     }
@@ -2122,20 +2122,20 @@ float UseFullRate(short int Curve, uint8_t Channel){
 
 /*********************************************************************************************************************************/
 
-void  GetCurveDots(uint16_t InputChannel,uint16_t TheRate)
+void  GetCurveDots(uint16_t OutputChannel, uint16_t TheRate)
 {                                               // This for the Dual Rates function
                                                 // Effectively, it just copies the dot locations on the curve, but might reduce their extent if rate is below 100 and channel specified
     for (int j = 0; j < 8; ++j) {               // Look at first 8 channels only
         if (DualRateChannels[j]) {              // non zero?
-            if (InputChannel+1 == DualRateChannels[j]) {
+            if (OutputChannel+1 == DualRateChannels[j]) {
                 for (int i = 0; i < 5; ++i) {
-                    CurveDots[i] = CalculateRate(i + 1, InputChannel, TheRate);
+                    CurveDots[i] = CalculateRate(i + 1, OutputChannel, TheRate);
                     }
                 return;   
             }   
         }    
     }
-    for (int i = 0; i < 5; ++i) CurveDots[i] = UseFullRate(i + 1, InputChannel);  // ... channel not used so 100%
+    for (int i = 0; i < 5; ++i) CurveDots[i] = UseFullRate(i + 1, OutputChannel);  // ... channel not used so 100%
 }
 
 /*********************************************************************************************************************************/
@@ -2176,11 +2176,10 @@ FASTRUN void GetNewChannelValues()
         } else {                                                                                                         // i.e. l <= 7 so it's a Stick/knob/switch
             TrimAmount   = 0;                                                                                            // Trim is zero if not input 1-4
             if (InputChannel < 4) TrimAmount = GetTrimAmount(InputTrim[InputChannel]);                                   // User defined trim input
-            GetCurveDots(InputChannel, DualRateValue);                                                                  // This can now do dual rates traditionally 
+            GetCurveDots(OutputChannel, DualRateValue);                                                                  // This can now do dual rates traditionally 
             InputValue = analogRead(AnalogueInput[InputChannel]) + TrimAmount;                                           // Get values from sticks' pots then ADD TRIM then interpolate them.
             OutputValue = Interpolate[InterpolationTypes[Bank][OutputChannel]](InputValue, InputChannel, OutputChannel); // Use function pointer array to invoke selected interpolation.
         }
-
         OutputValue += (SubTrims[OutputChannel] - 127) * (TrimFactor / 2);                                               // ADD SUBTRIM to output channel, not mapped input channel (Range 0 - 127 - 254)
         PreMixBuffer[OutputChannel] = constrain(OutputValue, MINMICROS, MAXMICROS);
         SendBuffer[OutputChannel]   = PreMixBuffer[OutputChannel];
@@ -2188,7 +2187,7 @@ FASTRUN void GetNewChannelValues()
     if (CurrentMode == NORMAL) {
         DoReverseSense();
         DoMixes();
-    }    
+    }
 }
 /*********************************************************************************************************************************/
 
@@ -3390,7 +3389,7 @@ FLASHMEM void setup()
     SendValue(FrontView_Mins, 0);
     SendValue(FrontView_Secs, 0);
     //  ***************************************************************************************
-    // SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
+     //SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
     //  **   BUT then re-comment it!! Otherwise it will reset to same time on every boot up! **
     //  ***************************************************************************************
     BoundFlag = false;
