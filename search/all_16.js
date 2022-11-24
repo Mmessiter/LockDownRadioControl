@@ -13,7 +13,7 @@ var searchData=
   ['uplog_10',['UpLog',['../TransmitterCode_2src_2main_8cpp.html#a2206c19b4fc075f4c9f1bb957ca89e1d',1,'main.cpp']]],
   ['use_5fina219_11',['USE_INA219',['../TransmitterCode_2src_2main_8cpp.html#a87ae50e2ac4507568cbf98072f174a1b',1,'main.cpp']]],
   ['usedualrates_12',['UseDualRates',['../TransmitterCode_2src_2main_8cpp.html#a5f6ebf5df29e0ee922a462cbdd419ed8',1,'main.cpp']]],
-  ['usefullrate_13',['UseFullRate',['../TransmitterCode_2src_2main_8cpp.html#aabac6907f74a52fe50a11458a0c715fd',1,'main.cpp']]],
+  ['usefullrate_13',['UseFullRate',['../TransmitterCode_2src_2main_8cpp.html#a8f53f86499d740b350f7b6d791c90497',1,'main.cpp']]],
   ['uselog_14',['UseLog',['../RadioFunctions_8h.html#aa42482a0bb01edaf26f217dbc38643d2',1,'UseLog():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#aa42482a0bb01edaf26f217dbc38643d2',1,'UseLog():&#160;main.cpp']]],
   ['usemacros_15',['UseMacros',['../RadioFunctions_8h.html#a42a6363bff83773c1b99caa06aebb1f5',1,'UseMacros():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a42a6363bff83773c1b99caa06aebb1f5',1,'UseMacros():&#160;main.cpp']]],
   ['usemotorkill_16',['UseMotorKill',['../TransmitterCode_2src_2main_8cpp.html#ad76445c097f9d33a6935be5c2489bd34',1,'main.cpp']]],
