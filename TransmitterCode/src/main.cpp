@@ -2145,15 +2145,17 @@ float UseFullRate(short int Curve, uint8_t OutputChannel){
 /*********************************************************************************************************************************/
 
 void  GetCurveDots(uint16_t OutputChannel, uint16_t TheRate)
-{                                               // This for the Dual Rates function
-                                                // Effectively, it just copies the Y dot's magnitude on the curve, but might reduce the extent if rate is below 100 and channel specified
-    for (int j = 0; j < 8; ++j) {               // 8 possible rates in any position of output
-        if (DualRateChannels[j]) {              // non zero?
-            if (OutputChannel+1 == DualRateChannels[j]) {
-                for (int i = 0; i < 5; ++i) CurveDots[i] = CalculateRate(i, OutputChannel, TheRate);
-                return;   
-            }   
-        }    
+{                                                   // This for the Dual Rates function
+                                                    // Effectively, it just copies the Y dot's magnitude on the curve, but might reduce the extent if rate is below 100 and channel specified
+    if (TheRate !=100){                             // Not 100% ?
+        for (int j = 0; j < 8; ++j) {               // 8 possible rates in any position of output
+            if (DualRateChannels[j]) {              // non zero?
+                if (OutputChannel+1 == DualRateChannels[j]) {
+                    for (int i = 0; i < 5; ++i) CurveDots[i] = CalculateRate(i, OutputChannel, TheRate);
+                    return;   
+                }   
+            }    
+        }
     }
     for (int i = 0; i < 5; ++i) CurveDots[i] = UseFullRate(i, OutputChannel);  // ... channel not used so 100%
 }
