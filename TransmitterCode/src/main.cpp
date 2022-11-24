@@ -2081,7 +2081,7 @@ uint16_t ExponentialInterpolation(uint16_t InputValue, uint16_t InputChannel, ui
 
 /*********************************************************************************************************************************/
 
-float CalculateDualRateNew(short int Curve, short int Channel,float rate){
+float CalculateRate(short int Curve, short int Channel,float rate){
 
     switch (Curve){ // Curve is 1 - 5, low to hi.
     case 1:  
@@ -2099,20 +2099,41 @@ float CalculateDualRateNew(short int Curve, short int Channel,float rate){
     }
 }
 
+
 /*********************************************************************************************************************************/
 
-void  GetCurveDots(uint16_t OutputChannel,uint16_t TheRate){  
+float UseFullRate(short int Curve, uint8_t Channel){
+
+    switch (Curve){ // Curve is 1 - 5, low to hi.
+    case 1:  
+        return MinDegrees[Bank][Channel]; 
+    case 2:  
+        return MidLowDegrees[Bank][Channel];
+    case 3:  
+        return CentreDegrees[Bank][Channel];
+    case 4:  
+        return MidHiDegrees[Bank][Channel];
+    case 5:    
+        return MaxDegrees[Bank][Channel] ;
+    default:
+        return 0;
+    }
+}
+
+/*********************************************************************************************************************************/
+
+void  GetCurveDots(uint16_t InputChannel,uint16_t TheRate){  
                                                         // This for the Dual Rates function
                                                         // Effectively, it copies the dot locations on the curve, and might reduce their extent if rate is below 100 and channel specified
-    if (OutputChannel < 8) {                            // 0-7 ... DUAL RATES ONLY SUPPORTED ON FIRST 8 CHANNELS
+    if (InputChannel < 8) {                             // 0-7 ... DUAL RATES ONLY SUPPORTED ON FIRST 8 CHANNELS
         for (int j = 0; j < 8; ++j) {
-            if (OutputChannel == DualRateChannels[j]-1) {
-                for (int i = 0; i < 5; ++i) CurveDots[i] = CalculateDualRateNew(i + 1, OutputChannel, TheRate);
+            if (InputChannel == DualRateChannels[j]-1) {
+                for (int i = 0; i < 5; ++i) CurveDots[i] = CalculateRate(i + 1, InputChannel, TheRate);
                 return;   
             }   
         }    
     }
-    for (int i = 0; i < 5; ++i) CurveDots[i] = CalculateDualRateNew(i + 1, OutputChannel, 100); // if channel not affected, USE 100%
+    for (int i = 0; i < 5; ++i) CurveDots[i] = UseFullRate(i + 1, InputChannel); // if channel not affected, USE 100%
 }
 
 /*********************************************************************************************************************************/
@@ -2153,7 +2174,7 @@ FASTRUN void GetNewChannelValues()
         } else {                                                                                                         // i.e. l <= 7 so it's a Stick/knob/switch
             TrimAmount   = 0;                                                                                            // Trim is zero if not input 1-4
             if (InputChannel < 4) TrimAmount = GetTrimAmount(InputTrim[InputChannel]);                                   // User defined trim input
-            GetCurveDots(OutputChannel, DualRateValue);                                                                  // This can now do dual rates traditionally 
+            GetCurveDots(InputChannel, DualRateValue);                                                                  // This can now do dual rates traditionally 
             InputValue = analogRead(AnalogueInput[InputChannel]) + TrimAmount;                                           // Get values from sticks' pots then ADD TRIM then interpolate them.
             OutputValue = Interpolate[InterpolationTypes[Bank][OutputChannel]](InputValue, InputChannel, OutputChannel); // Use function pointer array to invoke selected interpolation.
         }
