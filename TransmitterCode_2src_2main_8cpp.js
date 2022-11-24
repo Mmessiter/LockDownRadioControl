@@ -200,6 +200,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "ReadDRSwitch", "TransmitterCode_2src_2main_8cpp.html#a0d5901e43a27733953343dd462178ada", null ],
     [ "ReadDualRatesValues", "TransmitterCode_2src_2main_8cpp.html#ac68cd3f907309c849f5cff2de41801d5", null ],
     [ "ReadFMSwitch", "TransmitterCode_2src_2main_8cpp.html#ae0f54c30ea92041b69cdccb888cb86b8", null ],
+    [ "ReadNewSwitchFunction", "TransmitterCode_2src_2main_8cpp.html#a2521ceba7d91302765db4720e3367127", null ],
     [ "ReadOneModel", "TransmitterCode_2src_2main_8cpp.html#a3d9d955a8c7cfea4cc99e78f3746bd26", null ],
     [ "ReadSwitches", "TransmitterCode_2src_2main_8cpp.html#aa144942814b12daf2b2a454c08d29cab", null ],
     [ "ReadTextFile", "TransmitterCode_2src_2main_8cpp.html#abd6446fb403bd9b07d150a5e4fdd86e1", null ],
