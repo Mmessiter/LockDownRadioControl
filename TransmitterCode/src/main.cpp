@@ -3412,7 +3412,6 @@ FLASHMEM void setup()
     SendText(FrontView_Connected, na);
     UpdateModelsNameEveryWhere();
     WarningTimer = millis();
-
     CheckMotorOff();
     if (MotorEnabled){
             ErrorState = MOTORISON;
@@ -3430,6 +3429,8 @@ FLASHMEM void setup()
         }
         if (ErrorState == MOTORISON){
           SendText(Warning, err_MotorOn);
+          PlaySound(PLSTURNOFF);
+          delay(3000);
         }
     }
 }
@@ -7884,6 +7885,14 @@ void GetBank()
 
     if ((MotorEnabled != MotorWasEnabled) && (UseMotorKill))  {                         // MotorEnabled changed ?
         if (MotorEnabled) {       
+            if (LedWasRed)
+                {
+                    MotorEnabled = false;
+                    PlaySound(PLSTURNOFF);
+                    delay(4000);
+                    return;
+                }
+           
             ShowMotor(1);
             if (AnnounceBanks) PlaySound(MOTORON);                                      // Tell the pilot motor is on! 
               if (UseLog) LogMotor(1);   
