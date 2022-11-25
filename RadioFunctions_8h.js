@@ -120,6 +120,7 @@ var RadioFunctions_8h =
     [ "Orange", "RadioFunctions_8h.html#a154e686fe7f3f545c01af3592ce0cdff", null ],
     [ "PACEMAKER", "RadioFunctions_8h.html#a56e90cbec59fa96bebfb3db997e6a3fe", null ],
     [ "PERFECTPACKETSPERSECOND", "RadioFunctions_8h.html#ad19ebeeabe5c8ede82c5be3f8d3f7776", null ],
+    [ "PLSTURNOFF", "RadioFunctions_8h.html#a3d9e7817e8c3f47044067ead9b8ce38b", null ],
     [ "POWER_OFF_PIN", "RadioFunctions_8h.html#aac8f9c268e406507be95a1255281323c", null ],
     [ "PROPOCHANNELS", "RadioFunctions_8h.html#a19677884790860fea7a21dae72e1b862", null ],
     [ "Purple", "RadioFunctions_8h.html#a5168ce33eb581e85fbfa454e89012bfb", null ],
