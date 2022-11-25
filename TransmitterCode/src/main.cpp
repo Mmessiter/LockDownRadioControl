@@ -3767,7 +3767,8 @@ void SaveOneModel(uint16_t mnum)
 
     SDUpdate8BITS(SDCardAddress,UseMotorKill);
     ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress,MotorChannelZero);
+    Look(UseMotorKill); // heer
+    SDUpdate8BITS(SDCardAddress, MotorChannelZero);
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress,MotorChannel);
     if (MotorChannel > 15) MotorChannel = 15;
@@ -5926,13 +5927,13 @@ void OptionView4End()
     char UseKill[]        = "c0";
     char Mchannel[]       = "n1";
     char Mvalue[]         = "n0";
-
+    Look(42);
     MotorChannelZero    = GetValue(Mvalue);
     UseMotorKill        = GetValue(UseKill);
     MotorChannel        = GetValue(Mchannel) - 1;
     CurrentView = MAINSETUPVIEW;
     SendCommand(page_SetupView);
-    SaveTransmitterParameters();
+    SaveAllParameters();
     UpdateModelsNameEveryWhere();
 }
 
