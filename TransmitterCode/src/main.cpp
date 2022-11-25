@@ -3428,9 +3428,9 @@ FLASHMEM void setup()
             SendText(Warning, err_404);
         }
         if (ErrorState == MOTORISON){
-          SendText(Warning, err_MotorOn);
-          PlaySound(PLSTURNOFF);
-          delay(3000);
+            SendText(Warning, err_MotorOn);
+            PlaySound(PLSTURNOFF);
+            delay(3000);
         }
     }
 }
@@ -8163,16 +8163,16 @@ FASTRUN void ReadSwitches() // and indeed read digital trims if these are fitted
             PreviousTrim = i;                          // remember which trim it was
         }
     }
-    if (flag > 1) {                               // one at a time please!!
-        TrimRepeatSpeed = DefaultTrimRepeatSpeed; // Restore default trim repeat speed
+    if (flag > 1) {                                     // one at a time please!!
+        TrimRepeatSpeed = DefaultTrimRepeatSpeed;       // Restore default trim repeat speed
         for (int i = 0; i < 8; ++i) {
             (TrimSwitch[i]) = 0;
             flag            = 0;
         }
     }
     if (!flag) {
-        PreviousTrim    = 254;                    // Previous trim must now match none
-        TrimRepeatSpeed = DefaultTrimRepeatSpeed; // Restore default trim repeat speed
+        PreviousTrim    = 254;                          // Previous trim must now match none
+        TrimRepeatSpeed = DefaultTrimRepeatSpeed;       // Restore default trim repeat speed
     }
   
 }
@@ -8517,7 +8517,7 @@ void CheckScanButton() // Scan button AND models button
     }
 }
 /************************************************************************************************************/
-void simulateCloseDown(){ // Because real closedown occurs only after button is released
+void SimulateCloseDown(){ // Because real closedown occurs only after button is released
     
     char ScreenOff[] = "dim=0";
     analogWrite(GREENLED, 0);
@@ -8538,7 +8538,7 @@ void CheckPowerOffButton()
         GotoFrontView();
         if (!LedWasGreen) 
         {
-            simulateCloseDown();              // if not connected power off immediately
+            SimulateCloseDown();              // if not connected power off immediately
         } else
         {
             if (!PowerOffTimer) {
@@ -8579,7 +8579,7 @@ void CheckPowerOffButton()
                 } 
                 SaveAllParameters();
                 delay(250);                        // wait a mo for user to see 0 and log to write to file
-                simulateCloseDown();
+                SimulateCloseDown();
             }
             --TurnOffSecondToGo;
              if (TrimClicks)  PlaySound(CLICKZERO);
@@ -8603,7 +8603,7 @@ void FASTRUN ManageTransmitter(){
     if (RightNow - TransmitterLastManaged > 100) {                   // 10 times a second is plenty
         if (RightNow - LastTimeRead >= 1000) {                       // Once a second for these...
             ReadTime();                                              // Do the clock
-            GetStatistics(); // Do stats
+            GetStatistics();                                         // Do stats
             if (CurrentView == MAINSETUPVIEW) CheckScanButton();
             if (CurrentView == MODELSVIEW)    CheckModelName();      // In MODELSVIEW, this function checks correct name is displayed.
             LastTimeRead = millis();
@@ -8627,7 +8627,8 @@ FASTRUN void loop()
     ManageTransmitter();                                         // Do the needed chores ... if there's time
     GetNewChannelValues();                                       // Load SendBuffer with new servo positions  Very frequently
     if (UseMacros) ExecuteMacro();                               // Modify it if macro is running
-    if (BuddyPupilOnSbus) { NewCompressNeeded = false;             // fake it as Buddy is not sending data
+    if (BuddyPupilOnSbus) { 
+        NewCompressNeeded = false;                               // fake it as Buddy is not sending data
     } else {                                                     // Skip these next lines when buddying as a slave
         if (!BoundFlag && Connected) BufferNewPipe();            // if not yet bound, insert our pipe into SendBuffer BUT ONLY WHEN CONNECTED 
         if (BuddyMaster) GetSlaveChannelValues();                // If buddy master, get buddy data and maybe use it.
