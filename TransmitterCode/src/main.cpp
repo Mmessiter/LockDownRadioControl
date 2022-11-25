@@ -7820,17 +7820,17 @@ void GetBank()
 
     if (AutoSwitch == 1 && Switch[7]   == SWITCH1Reversed) MotorEnabled = true;
     if (AutoSwitch == 2 && Switch[5]   == SWITCH2Reversed) MotorEnabled = true;
-    if (AutoSwitch == 3 && Switch[0]   == SWITCH3Reversed) MotorEnabled = true;
+    if (AutoSwitch == 3 && Switch[1]   == SWITCH3Reversed) MotorEnabled = true;
     if (AutoSwitch == 4 && Switch[2]   == SWITCH4Reversed) MotorEnabled = true; 
 
     if (SafetySwitch == 1 && Switch[7] == SWITCH1Reversed) SafetyON = true;
     if (SafetySwitch == 2 && Switch[5] == SWITCH2Reversed) SafetyON = true;
-    if (SafetySwitch == 3 && Switch[0] == SWITCH3Reversed) SafetyON = true;
+    if (SafetySwitch == 3 && Switch[1] == SWITCH3Reversed) SafetyON = true;
     if (SafetySwitch == 4 && Switch[2] == SWITCH4Reversed) SafetyON = true; 
 
     if (BuddySwitch == 1 && Switch[7] == SWITCH1Reversed) BuddyON = true;
     if (BuddySwitch == 2 && Switch[5] == SWITCH2Reversed) BuddyON = true;
-    if (BuddySwitch == 3 && Switch[0] == SWITCH3Reversed) BuddyON = true;
+    if (BuddySwitch == 3 && Switch[1] == SWITCH3Reversed) BuddyON = true;
     if (BuddySwitch == 4 && Switch[2] == SWITCH4Reversed) BuddyON = true;
 
     if (DualRatesSwitch == 4) ReadDRSwitch(Switch[2], Switch[3], SWITCH4Reversed); 
