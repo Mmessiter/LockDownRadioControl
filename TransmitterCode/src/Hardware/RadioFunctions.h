@@ -283,6 +283,7 @@
 #define NOERROR             0
 #define MODELSFILENOTFOUND  1
 #define CHECKSUMERROR       2
+#define MOTORISON           3
 
 // **************************************************************************
 //                            Interpolations                                *
@@ -407,6 +408,7 @@ extern uint8_t        ConnectionAssessSeconds;
 extern bool           LowPowerMode;
 extern bool           NewCompressNeeded;
 extern bool           ModelMatched;
+extern bool           SendNoData;
 // external (global) functions needed here
 extern void  GetSlaveChannelValues();
 extern void  KickTheDog();
@@ -441,6 +443,7 @@ extern void          CheckInvisiblePoint();
 extern void          GotoFrontView();
 extern void          CheckDualRatesValues();
 extern void          UpdateLED();
+extern void          CheckMotorOff();
 
 /*********************************************************************************************************************************/
 // function prototypes

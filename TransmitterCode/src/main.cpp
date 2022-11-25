@@ -486,7 +486,8 @@ union {
 char b5Greyed[]                     = "b5.pco=33840";
 char b12Greyed[]                    = "b12.pco=33840";
 bool MotorEnabled                   = false;
-bool MotorWasEnabled                = false;
+bool     SendNoData                 = false;
+bool     MotorWasEnabled            = false;
 uint8_t MotorChannel                = 15;
 uint8_t MotorChannelZero            = 0; 
 bool    UseMotorKill                = true;
@@ -3329,6 +3330,7 @@ FLASHMEM void setup()
     char FrontView_Highlight[]  = "FrontView.Highlight";
     char err_chksm[]            = "File checksum?";
     char err_404[]              = "File not found";
+    char err_MotorOn[]          = " MOTOR IS ON! ";
 
     pinMode(REDLED, OUTPUT);
     pinMode(GREENLED, OUTPUT);
@@ -3361,6 +3363,8 @@ FLASHMEM void setup()
             ErrorState = MODELSFILENOTFOUND; // if no file ... or no SD
     }
 
+
+
     teensyMAC(MacAddress);  // Get MAC address and use it as pipe address
     NewPipe = (uint64_t)MacAddress[0] << 40;
     NewPipe += (uint64_t)MacAddress[1] << 32;
@@ -3378,6 +3382,8 @@ FLASHMEM void setup()
     SendValue(FrontView_ForeGround, ForeGroundColour);
     SendValue(FrontView_Special, SpecialColour);
     SendValue(FrontView_Highlight, HighlightColour);
+    
+
     SendCommand(page_FrontView);
     SetAudioVolume(AudioVolume);
     if (PlayFanfare) {
@@ -3406,14 +3412,25 @@ FLASHMEM void setup()
     SendText(FrontView_Connected, na);
     UpdateModelsNameEveryWhere();
     WarningTimer = millis();
-    if(!UseMotorKill)  ShowMotor(1);
-    if (ErrorState) SendCommand(WarnNow);
-    if (ErrorState == CHECKSUMERROR) {
-        SendText(Warning, err_chksm);
+
+    CheckMotorOff();
+    if (MotorEnabled){
+            ErrorState = MOTORISON;
+            SendNoData = true;
     }
-    if (ErrorState == MODELSFILENOTFOUND){
-          SendText(Warning, err_404);
-    
+    if(!UseMotorKill)  ShowMotor(1);
+   
+    if (ErrorState) {
+        SendCommand(WarnNow);
+        if (ErrorState == CHECKSUMERROR) {
+            SendText(Warning, err_chksm);
+        }
+        if (ErrorState == MODELSFILENOTFOUND){
+            SendText(Warning, err_404);
+        }
+        if (ErrorState == MOTORISON){
+          SendText(Warning, err_MotorOn);
+        }
     }
 }
 /*********************************************************************************************************************************/
@@ -7770,6 +7787,23 @@ uint8_t CheckSwitch(uint8_t swt)
 
 /************************************************************************************************************/
 
+void CheckMotorOff(){ // For Safety
+
+    ReadSwitches();
+    MotorEnabled = !UseMotorKill; //  If not using motor switch then motor is always enabled.
+    if (AutoSwitch  == 1 && Switch[7]   == SWITCH1Reversed) MotorEnabled = true;
+    if (AutoSwitch  == 2 && Switch[5]   == SWITCH2Reversed) MotorEnabled = true;
+    if (AutoSwitch  == 3 && Switch[0]   == SWITCH3Reversed) MotorEnabled = true;
+    if (AutoSwitch  == 4 && Switch[2]   == SWITCH4Reversed) MotorEnabled = true; 
+    if (SafetySwitch == 1 && Switch[7] == SWITCH1Reversed) SafetyON = true;
+    if (SafetySwitch == 2 && Switch[5] == SWITCH2Reversed) SafetyON = true;
+    if (SafetySwitch == 3 && Switch[0] == SWITCH3Reversed) SafetyON = true;
+    if (SafetySwitch == 4 && Switch[2] == SWITCH4Reversed) SafetyON = true; 
+    if (SafetyON) MotorEnabled = false;
+}
+
+/************************************************************************************************************/
+
 void GetBank()
 { //  and  motor switch and safety switch ETC ...
 
@@ -7858,6 +7892,10 @@ void GetBank()
             if (AnnounceBanks) PlaySound(MOTOROFF);
               if (UseLog) LogMotor(0); 
             ShowMotor(0);                                                               // Tell the pilot motor is off
+           if (SendNoData){
+                SendCommand(WarnOff);
+                SendNoData = false;                                                     // user turned off motor
+            }
             PausedSecs = Secs + (Mins * 60) + (Hours * 3600);                           // Remember how long so far
         }
         LastSeconds = 0;  
