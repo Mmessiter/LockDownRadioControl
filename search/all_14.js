@@ -266,7 +266,7 @@ var searchData=
   ['showservopos_263',['ShowServoPos',['../RadioFunctions_8h.html#ad959eec03b0151ade81dc088593d816c',1,'ShowServoPos():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#ad770ee51a34d8c5026e65136884c16bf',1,'ShowServoPos():&#160;main.cpp']]],
   ['showservotimer_264',['ShowServoTimer',['../RadioFunctions_8h.html#ae4989662282fe08eb2deb769a3611fa0',1,'ShowServoTimer():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#ae4989662282fe08eb2deb769a3611fa0',1,'ShowServoTimer():&#160;main.cpp']]],
   ['showvpc_265',['ShowVPC',['../TransmitterCode_2src_2main_8cpp.html#aa6e0bf2f41a5920241f2618bb0e0bce0',1,'main.cpp']]],
-  ['simulateclosedown_266',['simulateCloseDown',['../TransmitterCode_2src_2main_8cpp.html#ade85aaa1b120c71bbdb4d91b0f5630c3',1,'main.cpp']]],
+  ['simulateclosedown_266',['SimulateCloseDown',['../TransmitterCode_2src_2main_8cpp.html#a761b6bcf24c9ccf34e61a5757ebfc4a7',1,'main.cpp']]],
   ['singlemodelfile_267',['SingleModelFile',['../TransmitterCode_2src_2main_8cpp.html#ae72cb82df39671a3226320fc9c32c125',1,'main.cpp']]],
   ['singlemodelflag_268',['SingleModelFlag',['../TransmitterCode_2src_2main_8cpp.html#ae2cdde9c7cfcbfc86f8e37f2b63c2fbe',1,'main.cpp']]],
   ['sixminutes_269',['SIXMINUTES',['../RadioFunctions_8h.html#a2b38f1266cfe8d0aef5b7eb3a8262b35',1,'RadioFunctions.h']]],
