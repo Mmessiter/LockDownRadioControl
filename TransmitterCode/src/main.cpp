@@ -2146,8 +2146,8 @@ float UseFullRate(short int Curve, uint8_t OutputChannel){
 
 void  GetCurveDots(uint16_t OutputChannel, uint16_t TheRate)
 {                                                   // This for the Dual Rates function
-                                                    // Effectively, it just copies the Y dot's magnitude on the curve, but might reduce the extent if rate is below 100 and channel specified
-    if (TheRate !=100){                             // Not 100% ?
+                                                    // Effectively, it just copies the Y dot's magnitude on the curve, but might reduce the extent if rate is not 100 and channel specified
+    if (TheRate != 100){                            // Not 100% ?
         for (int j = 0; j < 8; ++j) {               // 8 possible rates in any position of output
             if (DualRateChannels[j]) {              // non zero?
                 if (OutputChannel+1 == DualRateChannels[j]) {
@@ -3388,7 +3388,7 @@ FLASHMEM void setup()
     SendValue(FrontView_Mins, 0);
     SendValue(FrontView_Secs, 0);
     //  ***************************************************************************************
-     //SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
+     // SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
     //  **   BUT then re-comment it!! Otherwise it will reset to same time on every boot up! **
     //  ***************************************************************************************
     BoundFlag = false;
