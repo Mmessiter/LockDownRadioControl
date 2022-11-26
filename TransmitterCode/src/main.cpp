@@ -3429,8 +3429,8 @@ FLASHMEM void setup()
         }
         if (ErrorState == MOTORISON){
             SendText(Warning, err_MotorOn);
-            PlaySound(PLSTURNOFF);
-            delay(3000);
+            PlaySound(MOTORON);
+            delay(1000);
         }
     }
 }
@@ -5617,7 +5617,7 @@ void EndBuddyView()
 
 
     char pSetupView[]   = "page SetupView";
-    BuddyPupilOnSbus      = GetValue(BuddyP); // Pupil, wired
+    BuddyPupilOnSbus    = GetValue(BuddyP); // Pupil, wired
     BuddyMaster         = GetValue(BuddyM); // Master, either.
     SaveAllParameters();
     b5isGrey = false;
