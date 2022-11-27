@@ -3429,8 +3429,8 @@ FLASHMEM void setup()
         }
         if (ErrorState == MOTORISON){
             SendText(Warning, err_MotorOn);
-            PlaySound(MOTORON);
-            delay(1000);
+           // PlaySound(MOTORON);
+           // delay(850);
         }
     }
 }
