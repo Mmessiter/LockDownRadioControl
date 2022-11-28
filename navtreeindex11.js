@@ -1,5 +1,7 @@
 var NAVTREEINDEX11 =
 {
+"md_Docs_LDRC_User_Manual_Ver_0_1.html#autotoc_md7":[1,5],
+"md_Docs_LDRC_User_Manual_Ver_0_1.html#autotoc_md8":[1,6],
 "md_Docs_LDRC_User_Manual_Ver_0_1.html#autotoc_md9":[1,7],
 "pages.html":[],
 "radio_8h.html":[8,0,2,0,0,1],

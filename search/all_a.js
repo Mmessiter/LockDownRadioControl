@@ -79,7 +79,8 @@ var searchData=
   ['interations_76',['Interations',['../radio_8h.html#ac8e10a08e9da70138c4a8459c6902d7d',1,'radio.h']]],
   ['interpolate_77',['Interpolate',['../TransmitterCode_2src_2main_8cpp.html#ac8ce9c3b3ac8639fb34ffe64bef87c34',1,'main.cpp']]],
   ['interpolationtypes_78',['InterpolationTypes',['../TransmitterCode_2src_2main_8cpp.html#a5424ceb23e086124c417474911365a58',1,'main.cpp']]],
-  ['intohigherres_79',['IntoHigherRes',['../TransmitterCode_2src_2main_8cpp.html#a0d8d8a0d67cb9b04481f1692abe75368',1,'main.cpp']]],
-  ['intolowerres_80',['IntoLowerRes',['../TransmitterCode_2src_2main_8cpp.html#a5cdbe11d62e0de7610ba323e60b97d33',1,'main.cpp']]],
-  ['invsqrt_81',['invSqrt',['../Quadcopter_2src_2main_8cpp.html#a5e5346796220b271615a52428f6ec6ca',1,'main.cpp']]]
+  ['intodegrees_79',['IntoDegrees',['../TransmitterCode_2src_2main_8cpp.html#a442340cad0d09e58be5ec6afdd5b27d1',1,'main.cpp']]],
+  ['intohigherres_80',['IntoHigherRes',['../TransmitterCode_2src_2main_8cpp.html#a0d8d8a0d67cb9b04481f1692abe75368',1,'main.cpp']]],
+  ['intolowerres_81',['IntoLowerRes',['../TransmitterCode_2src_2main_8cpp.html#a5cdbe11d62e0de7610ba323e60b97d33',1,'main.cpp']]],
+  ['invsqrt_82',['invSqrt',['../Quadcopter_2src_2main_8cpp.html#a5e5346796220b271615a52428f6ec6ca',1,'main.cpp']]]
 ];

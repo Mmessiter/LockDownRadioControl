@@ -17,7 +17,8 @@ var searchData=
   ['initradio_14',['InitRadio',['../RadioFunctions_8cpp.html#a799f38bc33abdb30eec1d7db3cf27d58',1,'InitRadio(uint64_t Pipe):&#160;RadioFunctions.cpp'],['../RadioFunctions_8h.html#a86ce6c54618629a61b8502786d2ce82c',1,'InitRadio(uint64_t Pipe):&#160;RadioFunctions.cpp']]],
   ['initswitchesandtrims_15',['InitSwitchesAndTrims',['../TransmitterCode_2src_2main_8cpp.html#aa43884078cb84d9ae16d8cd6791c7042',1,'main.cpp']]],
   ['instrng_16',['InStrng',['../RadioFunctions_8h.html#a5f109790a6fe0b972a502f3cac4ed1e7',1,'InStrng(char *text1, char *text2):&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a5f109790a6fe0b972a502f3cac4ed1e7',1,'InStrng(char *text1, char *text2):&#160;main.cpp']]],
-  ['intohigherres_17',['IntoHigherRes',['../TransmitterCode_2src_2main_8cpp.html#a0d8d8a0d67cb9b04481f1692abe75368',1,'main.cpp']]],
-  ['intolowerres_18',['IntoLowerRes',['../TransmitterCode_2src_2main_8cpp.html#a5cdbe11d62e0de7610ba323e60b97d33',1,'main.cpp']]],
-  ['invsqrt_19',['invSqrt',['../Quadcopter_2src_2main_8cpp.html#a5e5346796220b271615a52428f6ec6ca',1,'main.cpp']]]
+  ['intodegrees_17',['IntoDegrees',['../TransmitterCode_2src_2main_8cpp.html#a442340cad0d09e58be5ec6afdd5b27d1',1,'main.cpp']]],
+  ['intohigherres_18',['IntoHigherRes',['../TransmitterCode_2src_2main_8cpp.html#a0d8d8a0d67cb9b04481f1692abe75368',1,'main.cpp']]],
+  ['intolowerres_19',['IntoLowerRes',['../TransmitterCode_2src_2main_8cpp.html#a5cdbe11d62e0de7610ba323e60b97d33',1,'main.cpp']]],
+  ['invsqrt_20',['invSqrt',['../Quadcopter_2src_2main_8cpp.html#a5e5346796220b271615a52428f6ec6ca',1,'main.cpp']]]
 ];
