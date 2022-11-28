@@ -10,9 +10,9 @@
 //                TX VERSION NUMBER   (November 2022 Malcolm Messiter)        *
 //***************************************************************************
 
-#define TXVERSION_MAJOR   1
-#define TXVERSION_MINOR   9
-#define TXVERSION_MINIMUS 9
+#define TXVERSION_MAJOR   2
+#define TXVERSION_MINOR   0
+#define TXVERSION_MINIMUS 0
 
 // **************************************************************************
 //                               Includes                                   *

@@ -1156,7 +1156,11 @@ void BlueLedOn()
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, GetLEDBrightness()); // Brightness is a function of maybe blinking
 }
-
+/*********************************************************************************************************************************/
+uint8_t IntoDegrees(uint16_t HiRes) // convert to lower resolution for screen display
+{
+    return (map(HiRes, MINMICROS, MAXMICROS, 0, 180));
+}
 /*********************************************************************************************************************************/
 uint8_t IntoLowerRes(uint16_t HiRes) // convert to lower resolution for screen display
 {
@@ -2160,6 +2164,19 @@ void  GetCurveDots(uint16_t OutputChannel, uint16_t TheRate)
     }
     for (int i = 0; i < 5; ++i) CurveDots[i] = UseFullRate(i, OutputChannel);  // ... channel not used so 100%
 }
+
+/*********************************************************************************************************************************/
+// This will prevent tipovers at spoolup by not allowing a tiny deflection of first four channels
+void DoDeadZone()
+{
+    uint8_t ch = 0; // heer
+    uint8_t DeadZone = 10;
+    for (ch = 0; ch < 4; ++ch){
+        if (abs(SendBuffer[ch] - IntoHigherRes(CentreDegrees[Bank][ch])) < DeadZone) {
+            SendBuffer[ch] = IntoHigherRes(CentreDegrees[Bank][ch]);
+        }
+    }
+}
 /*********************************************************************************************************************************/
 
 /** @brief GET NEW SERVO POSITIONS */
@@ -2187,6 +2204,7 @@ FASTRUN void GetNewChannelValues()
     if (CurrentMode == NORMAL) {
         DoReverseSense();
         DoMixes();
+        DoDeadZone();
     }
 }
 /*********************************************************************************************************************************/
@@ -3767,7 +3785,7 @@ void SaveOneModel(uint16_t mnum)
 
     SDUpdate8BITS(SDCardAddress,UseMotorKill);
     ++SDCardAddress;
-    Look(UseMotorKill); // heer
+    Look(UseMotorKill); 
     SDUpdate8BITS(SDCardAddress, MotorChannelZero);
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress,MotorChannel);
@@ -5352,7 +5370,7 @@ void ZeroDataScreen()
 }
 /***************************************************** ReadNewSwitchFunction ****************************************************************************/
 
-void ReadNewSwitchFunction(){ // heer
+void ReadNewSwitchFunction(){ 
         char OneSwitchView_r1[]        = "r1";     // Flight modes
         char OneSwitchView_r2[]        = "r2";     // Auto
         char OneSwitchView_r3[]        = "r3";     // Ch9
