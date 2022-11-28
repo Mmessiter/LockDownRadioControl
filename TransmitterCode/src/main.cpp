@@ -2171,7 +2171,7 @@ void DoDeadZone()
 {
     uint8_t ch = 0; // heer
     uint8_t DeadZone = 10;
-    for (ch = 0; ch < 4; ++ch){
+    for (ch = 0; ch < 2; ++ch){ // aileron and elevator only
         if (abs(SendBuffer[ch] - IntoHigherRes(CentreDegrees[Bank][ch])) < DeadZone) {
             SendBuffer[ch] = IntoHigherRes(CentreDegrees[Bank][ch]);
         }
