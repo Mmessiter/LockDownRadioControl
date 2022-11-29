@@ -419,7 +419,7 @@ void LoadAckPayload()
 {
     
      if (!BoundFlag) {
-        SendMacAddress(); // heer
+        SendMacAddress(); 
         return;
     }
     

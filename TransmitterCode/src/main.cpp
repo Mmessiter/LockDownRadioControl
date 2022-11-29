@@ -2166,7 +2166,7 @@ void  GetCurveDots(uint16_t OutputChannel, uint16_t TheRate)
 }
 
 /*********************************************************************************************************************************/
-// This might prevent tipovers at spoolup by not allowing a tiny deflection of first 2 channels
+// This is not called
 void DoDeadZone()
 {
     uint8_t ch = 0; // heer
@@ -2204,7 +2204,7 @@ FASTRUN void GetNewChannelValues()
     if (CurrentMode == NORMAL) {
         DoReverseSense();
         DoMixes();
-        DoDeadZone();
+        //DoDeadZone();
     }
 }
 /*********************************************************************************************************************************/

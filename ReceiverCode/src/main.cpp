@@ -254,7 +254,7 @@ void BindModel(){
         FirstConnection   = false;
     }
     uint32_t t = millis();
-    while (millis() - t < 2000)  ReceiveData(); // this avoid initial glitch on reconnect  // heer
+    while (millis() - t < 1000)  ReceiveData(); // this avoid initial glitch on reconnect  // heer
     ReadyToUseData = true;
 }
 // ***************************************************************************************************************************************************
