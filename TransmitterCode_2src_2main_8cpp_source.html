@@ -2136,7 +2136,7 @@ $(document).ready(function(){initNavTree('TransmitterCode_2src_2main_8cpp_source
 <div class="line"><a id="l02166" name="l02166"></a><span class="lineno"> 2166</span>}</div>
 <div class="line"><a id="l02167" name="l02167"></a><span class="lineno"> 2167</span> </div>
 <div class="line"><a id="l02168" name="l02168"></a><span class="lineno"> 2168</span><span class="comment">/*********************************************************************************************************************************/</span></div>
-<div class="line"><a id="l02169" name="l02169"></a><span class="lineno"> 2169</span><span class="comment">// This might prevent tipovers at spoolup by not allowing a tiny deflection of first 2 channels</span></div>
+<div class="line"><a id="l02169" name="l02169"></a><span class="lineno"> 2169</span><span class="comment">// This is not called</span></div>
 <div class="line"><a id="l02170" name="l02170"></a><span class="lineno"><a class="line" href="TransmitterCode_2src_2main_8cpp.html#ac3104bae62185a423852ff4f34165b2e"> 2170</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="TransmitterCode_2src_2main_8cpp.html#ac3104bae62185a423852ff4f34165b2e">DoDeadZone</a>()</div>
 <div class="line"><a id="l02171" name="l02171"></a><span class="lineno"> 2171</span>{</div>
 <div class="line"><a id="l02172" name="l02172"></a><span class="lineno"> 2172</span>    uint8_t ch = 0; <span class="comment">// heer</span></div>
@@ -2173,7 +2173,7 @@ $(document).ready(function(){initNavTree('TransmitterCode_2src_2main_8cpp_source
 <div class="line"><a id="l02204" name="l02204"></a><span class="lineno"> 2204</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="TransmitterCode_2src_2main_8cpp.html#aacabee92eb3ddd2e3cf31695c00a912e">CurrentMode</a> == <a class="code hl_define" href="RadioFunctions_8h.html#a1291f416b069313021b519eea62d5bf1">NORMAL</a>) {</div>
 <div class="line"><a id="l02205" name="l02205"></a><span class="lineno"> 2205</span>        <a class="code hl_function" href="TransmitterCode_2src_2main_8cpp.html#acbd7adcd2b0e2095a89b4a98042b526e">DoReverseSense</a>();</div>
 <div class="line"><a id="l02206" name="l02206"></a><span class="lineno"> 2206</span>        <a class="code hl_function" href="TransmitterCode_2src_2main_8cpp.html#ac77bd940a0faad7b997c9ddf40a7acc6">DoMixes</a>();</div>
-<div class="line"><a id="l02207" name="l02207"></a><span class="lineno"> 2207</span>        <a class="code hl_function" href="TransmitterCode_2src_2main_8cpp.html#ac3104bae62185a423852ff4f34165b2e">DoDeadZone</a>();</div>
+<div class="line"><a id="l02207" name="l02207"></a><span class="lineno"> 2207</span>        <span class="comment">//DoDeadZone();</span></div>
 <div class="line"><a id="l02208" name="l02208"></a><span class="lineno"> 2208</span>    }</div>
 <div class="line"><a id="l02209" name="l02209"></a><span class="lineno"> 2209</span>}</div>
 <div class="line"><a id="l02210" name="l02210"></a><span class="lineno"> 2210</span><span class="comment">/*********************************************************************************************************************************/</span></div>
