@@ -8,7 +8,7 @@ var searchData=
   ['updateled_5',['UpdateLED',['../RadioFunctions_8h.html#a8c8edf1ff8b98d9cd27b45c4e20f22d9',1,'UpdateLED():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a8c8edf1ff8b98d9cd27b45c4e20f22d9',1,'UpdateLED():&#160;main.cpp']]],
   ['updatemodelsnameeverywhere_6',['UpdateModelsNameEveryWhere',['../RadioFunctions_8h.html#a9e1de754e1d2d483fb15957f70cf0488',1,'UpdateModelsNameEveryWhere():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a9e1de754e1d2d483fb15957f70cf0488',1,'UpdateModelsNameEveryWhere():&#160;main.cpp']]],
   ['updateoneswitchview_7',['updateOneSwitchView',['../TransmitterCode_2src_2main_8cpp.html#a14dcac76ed8a048041fdc6e6f5d5d000',1,'main.cpp']]],
-  ['updateswitchesdisplay_8',['UpdateSwitchesDisplay',['../TransmitterCode_2src_2main_8cpp.html#a789078ba3c1d92997ab8764eb20cce4f',1,'main.cpp']]],
+  ['updateswitchesview_8',['UpdateSwitchesView',['../TransmitterCode_2src_2main_8cpp.html#ad2376976bcbc43d81e55e5b58ce2818d',1,'main.cpp']]],
   ['updatetrimview_9',['UpdateTrimView',['../TransmitterCode_2src_2main_8cpp.html#ac78966debc2cdc13d8ca958ce3b20c78',1,'main.cpp']]],
   ['uplog_10',['UpLog',['../TransmitterCode_2src_2main_8cpp.html#a2206c19b4fc075f4c9f1bb957ca89e1d',1,'main.cpp']]],
   ['use_5fina219_11',['USE_INA219',['../TransmitterCode_2src_2main_8cpp.html#a87ae50e2ac4507568cbf98072f174a1b',1,'main.cpp']]],

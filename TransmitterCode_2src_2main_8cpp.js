@@ -285,7 +285,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "UpdateLED", "TransmitterCode_2src_2main_8cpp.html#a8c8edf1ff8b98d9cd27b45c4e20f22d9", null ],
     [ "UpdateModelsNameEveryWhere", "TransmitterCode_2src_2main_8cpp.html#a9e1de754e1d2d483fb15957f70cf0488", null ],
     [ "updateOneSwitchView", "TransmitterCode_2src_2main_8cpp.html#a14dcac76ed8a048041fdc6e6f5d5d000", null ],
-    [ "UpdateSwitchesDisplay", "TransmitterCode_2src_2main_8cpp.html#a789078ba3c1d92997ab8764eb20cce4f", null ],
+    [ "UpdateSwitchesView", "TransmitterCode_2src_2main_8cpp.html#ad2376976bcbc43d81e55e5b58ce2818d", null ],
     [ "UpdateTrimView", "TransmitterCode_2src_2main_8cpp.html#ac78966debc2cdc13d8ca958ce3b20c78", null ],
     [ "UpLog", "TransmitterCode_2src_2main_8cpp.html#a2206c19b4fc075f4c9f1bb957ca89e1d", null ],
     [ "UseFullRate", "TransmitterCode_2src_2main_8cpp.html#a8f53f86499d740b350f7b6d791c90497", null ],
