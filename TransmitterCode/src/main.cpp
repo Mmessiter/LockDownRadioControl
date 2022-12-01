@@ -486,7 +486,8 @@ union {
 char b5Greyed[]                     = "b5.pco=33840";
 char b12Greyed[]                    = "b12.pco=33840";
 bool MotorEnabled                   = false;
-bool MotorWasEnabled                = false;
+bool     SendNoData                 = false;
+bool     MotorWasEnabled            = false;
 uint8_t MotorChannel                = 15;
 uint8_t MotorChannelZero            = 0; 
 bool    UseMotorKill                = true;
@@ -1155,7 +1156,11 @@ void BlueLedOn()
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, GetLEDBrightness()); // Brightness is a function of maybe blinking
 }
-
+/*********************************************************************************************************************************/
+uint8_t IntoDegrees(uint16_t HiRes) // convert to lower resolution for screen display
+{
+    return (map(HiRes, MINMICROS, MAXMICROS, 0, 180));
+}
 /*********************************************************************************************************************************/
 uint8_t IntoLowerRes(uint16_t HiRes) // convert to lower resolution for screen display
 {
@@ -1756,19 +1761,19 @@ FASTRUN void ShowComms()
                 }
             }
         }
-        if (CurrentView == DATAVIEW) {
+        if (CurrentView == DATAVIEW && Connected) {
             SendValue(DataView_pps, PacketsPerSecond);
             SendValue(DataView_lps, TotalLostPackets / 2); // about half probably made it but went un acknoledged
-            SendText(DataView_Alt, ModelAltitude);
-            SendText(DataView_MaxAlt, MaxAltitude);
+            SendText(DataView_Alt,  ModelAltitude);
+          SendText(DataView_MaxAlt, MaxAltitude);
             SendText(DataView_Temp, ModelTemperature);
-            SendText(DataView_Rx, ThisRadio);
-            SendText(DataView_rxv, ReceiverVersionNumber);
-            SendValue(DataView_Ls, GapLongest);
-            SendValue(DataView_Ts, RadioSwaps - SavedRadioSwaps);
-            SendValue(DataView_Sg, RX1TotalTime - SavedRX1TotalTime);
-            SendValue(DataView_Ag, GapAverage);
-            SendValue(DataView_Gc, RX2TotalTime - SavedRX2TotalTime);
+            SendText(DataView_Rx,   ThisRadio);
+            SendText(DataView_rxv,  ReceiverVersionNumber);
+            SendValue(DataView_Ls,  GapLongest);
+            SendValue(DataView_Ts,  RadioSwaps - SavedRadioSwaps);
+            SendValue(DataView_Sg,  RX1TotalTime - SavedRX1TotalTime);
+            SendValue(DataView_Ag,  GapAverage);
+            SendValue(DataView_Gc,  RX2TotalTime - SavedRX2TotalTime);
             if (GpsFix) { // if no fix, then leave display as before
                 SendText(Fix, yes);
             }
@@ -2080,65 +2085,6 @@ uint16_t ExponentialInterpolation(uint16_t InputValue, uint16_t InputChannel, ui
 }
 
 /*********************************************************************************************************************************/
-
-float CalculateRate(short int Curve, short int OutputChannel,float rate){
-
-    switch (Curve){ // Curve is 1 - 5, low to hi.
-    case 1:  
-        return (((MinDegrees[Bank][OutputChannel])    - 90) * (rate / 100)) + 90;
-    case 2:  
-        return (((MidLowDegrees[Bank][OutputChannel]) - 90) * (rate / 100)) + 90;
-    case 3:  
-        return (((CentreDegrees[Bank][OutputChannel]) - 90) * (rate / 100)) + 90;
-    case 4:  
-        return (((MidHiDegrees[Bank][OutputChannel])  - 90) * (rate / 100)) + 90;
-    case 5:    
-        return (((MaxDegrees[Bank][OutputChannel])    - 90) * (rate / 100)) + 90;
-    default:
-        return 0;
-    }
-}
-
-
-/*********************************************************************************************************************************/
-
-float UseFullRate(short int Curve, uint8_t OutputChannel){
-
-    switch (Curve){ // Curve is 1 - 5, low to hi.
-    case 1:  
-        return MinDegrees[Bank][OutputChannel]; 
-    case 2:  
-        return MidLowDegrees[Bank][OutputChannel];
-    case 3:  
-        return CentreDegrees[Bank][OutputChannel];
-    case 4:  
-        return MidHiDegrees[Bank][OutputChannel];
-    case 5:    
-        return MaxDegrees[Bank][OutputChannel] ;
-    default:
-        return 0;
-    }
-}
-
-/*********************************************************************************************************************************/
-
-void  GetCurveDots(uint16_t OutputChannel, uint16_t TheRate)
-{                                               // This for the Dual Rates function
-                                                // Effectively, it just copies the dot locations on the curve, but might reduce their extent if rate is below 100 and channel specified
-    for (int j = 0; j < 8; ++j) {               // Look at first 8 channels only
-        if (DualRateChannels[j]) {              // non zero?
-            if (OutputChannel+1 == DualRateChannels[j]) {
-                for (int i = 0; i < 5; ++i) {
-                    CurveDots[i] = CalculateRate(i + 1, OutputChannel, TheRate);
-                    }
-                return;   
-            }   
-        }    
-    }
-    for (int i = 0; i < 5; ++i) CurveDots[i] = UseFullRate(i + 1, OutputChannel);  // ... channel not used so 100%
-}
-
-/*********************************************************************************************************************************/
 // ************* Small function pointer array for interpolation types ************************************************************
 
 uint16_t (*Interpolate[3])(uint16_t InputValue, uint16_t InputChannel, uint16_t OutputChannel) {
@@ -2159,6 +2105,78 @@ uint16_t GetTrimAmount(uint8_t InputTrim){ // This is now added to INPUT instead
         if (TrimsReversed[Bank][tt]) TrimAmount = -TrimAmount;
         return TrimAmount;
 }
+
+/*********************************************************************************************************************************/
+
+float CalculateRate(short int Curve, short int OutputChannel,float rate){
+
+    switch (Curve){ // Curve is 1 - 5, low to hi.
+    case 0:  
+        return (((MinDegrees[Bank][OutputChannel])    - 90) * (rate / 100)) + 90;
+    case 1:  
+        return (((MidLowDegrees[Bank][OutputChannel]) - 90) * (rate / 100)) + 90;
+    case 2:  
+        return (((CentreDegrees[Bank][OutputChannel]) - 90) * (rate / 100)) + 90;
+    case 3:  
+        return (((MidHiDegrees[Bank][OutputChannel])  - 90) * (rate / 100)) + 90;
+    case 4:    
+        return (((MaxDegrees[Bank][OutputChannel])    - 90) * (rate / 100)) + 90;
+    default:
+        return 0;
+    }
+}
+
+
+/*********************************************************************************************************************************/
+
+float UseFullRate(short int Curve, uint8_t OutputChannel){
+
+    switch (Curve){ // Curve is 1 - 5, low to hi.
+    case 0:  
+        return MinDegrees[Bank][OutputChannel]; 
+    case 1:  
+        return MidLowDegrees[Bank][OutputChannel];
+    case 2:  
+        return CentreDegrees[Bank][OutputChannel];
+    case 3:  
+        return MidHiDegrees[Bank][OutputChannel];
+    case 4:    
+        return MaxDegrees[Bank][OutputChannel] ;
+    default:
+        return 0;
+    }
+}
+
+/*********************************************************************************************************************************/
+
+void  GetCurveDots(uint16_t OutputChannel, uint16_t TheRate)
+{                                                   // This for the Dual Rates function
+                                                    // Effectively, it just copies the Y dot's magnitude on the curve, but might reduce the extent if rate is not 100 and channel specified
+    if (TheRate != 100){                            // Not 100% ?
+        for (int j = 0; j < 8; ++j) {               // 8 possible rates in any position of output
+            if (DualRateChannels[j]) {              // non zero?
+                if (OutputChannel+1 == DualRateChannels[j]) {
+                    for (int i = 0; i < 5; ++i) CurveDots[i] = CalculateRate(i, OutputChannel, TheRate);
+                    return;   
+                }   
+            }    
+        }
+    }
+    for (int i = 0; i < 5; ++i) CurveDots[i] = UseFullRate(i, OutputChannel);  // ... channel not used so 100%
+}
+
+/*********************************************************************************************************************************/
+// This is not called
+void DoDeadZone()
+{
+    uint8_t ch = 0; 
+    uint8_t DeadZone = 10;
+    for (ch = 0; ch < 2; ++ch){ // aileron and elevator only
+        if (abs(SendBuffer[ch] - IntoHigherRes(CentreDegrees[Bank][ch])) < DeadZone) {
+            SendBuffer[ch] = IntoHigherRes(CentreDegrees[Bank][ch]);
+        }
+    }
+}
 /*********************************************************************************************************************************/
 
 /** @brief GET NEW SERVO POSITIONS */
@@ -2170,13 +2188,12 @@ FASTRUN void GetNewChannelValues()
     
      for (OutputChannel = 0; OutputChannel < CHANNELSUSED; ++OutputChannel) {                                            // Do every channel
         InputChannel = InPutStick[OutputChannel];                                                                        // Input sticks knobs & switches are mapped by user                                                                                                 
-        
+        GetCurveDots(OutputChannel, DualRateValue);  
         if (InputChannel > 7) {                                                                                          // Must be a switch if over 7
             OutputValue = GetStickInput(InputChannel);                                                                   // Four 3 postion switches
         } else {                                                                                                         // i.e. l <= 7 so it's a Stick/knob/switch
             TrimAmount   = 0;                                                                                            // Trim is zero if not input 1-4
             if (InputChannel < 4) TrimAmount = GetTrimAmount(InputTrim[InputChannel]);                                   // User defined trim input
-            GetCurveDots(OutputChannel, DualRateValue);                                                                  // This can now do dual rates traditionally 
             InputValue = analogRead(AnalogueInput[InputChannel]) + TrimAmount;                                           // Get values from sticks' pots then ADD TRIM then interpolate them.
             OutputValue = Interpolate[InterpolationTypes[Bank][OutputChannel]](InputValue, InputChannel, OutputChannel); // Use function pointer array to invoke selected interpolation.
         }
@@ -2187,6 +2204,7 @@ FASTRUN void GetNewChannelValues()
     if (CurrentMode == NORMAL) {
         DoReverseSense();
         DoMixes();
+        //DoDeadZone();
     }
 }
 /*********************************************************************************************************************************/
@@ -3330,6 +3348,7 @@ FLASHMEM void setup()
     char FrontView_Highlight[]  = "FrontView.Highlight";
     char err_chksm[]            = "File checksum?";
     char err_404[]              = "File not found";
+    char err_MotorOn[]          = " MOTOR IS ON! ";
 
     pinMode(REDLED, OUTPUT);
     pinMode(GREENLED, OUTPUT);
@@ -3362,6 +3381,8 @@ FLASHMEM void setup()
             ErrorState = MODELSFILENOTFOUND; // if no file ... or no SD
     }
 
+
+
     teensyMAC(MacAddress);  // Get MAC address and use it as pipe address
     NewPipe = (uint64_t)MacAddress[0] << 40;
     NewPipe += (uint64_t)MacAddress[1] << 32;
@@ -3379,6 +3400,8 @@ FLASHMEM void setup()
     SendValue(FrontView_ForeGround, ForeGroundColour);
     SendValue(FrontView_Special, SpecialColour);
     SendValue(FrontView_Highlight, HighlightColour);
+    
+
     SendCommand(page_FrontView);
     SetAudioVolume(AudioVolume);
     if (PlayFanfare) {
@@ -3389,7 +3412,7 @@ FLASHMEM void setup()
     SendValue(FrontView_Mins, 0);
     SendValue(FrontView_Secs, 0);
     //  ***************************************************************************************
-     //SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
+     // SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
     //  **   BUT then re-comment it!! Otherwise it will reset to same time on every boot up! **
     //  ***************************************************************************************
     BoundFlag = false;
@@ -3407,14 +3430,26 @@ FLASHMEM void setup()
     SendText(FrontView_Connected, na);
     UpdateModelsNameEveryWhere();
     WarningTimer = millis();
-    if(!UseMotorKill)  ShowMotor(1);
-    if (ErrorState) SendCommand(WarnNow);
-    if (ErrorState == CHECKSUMERROR) {
-        SendText(Warning, err_chksm);
+    CheckMotorOff();
+    if (MotorEnabled){
+            ErrorState = MOTORISON;
+            SendNoData = true;
     }
-    if (ErrorState == MODELSFILENOTFOUND){
-          SendText(Warning, err_404);
-    
+    if(!UseMotorKill)  ShowMotor(1);
+   
+    if (ErrorState) {
+        SendCommand(WarnNow);
+        if (ErrorState == CHECKSUMERROR) {
+            SendText(Warning, err_chksm);
+        }
+        if (ErrorState == MODELSFILENOTFOUND){
+            SendText(Warning, err_404);
+        }
+        if (ErrorState == MOTORISON){
+            SendText(Warning, err_MotorOn);
+           // PlaySound(MOTORON);
+           // delay(850);
+        }
     }
 }
 /*********************************************************************************************************************************/
@@ -3750,7 +3785,8 @@ void SaveOneModel(uint16_t mnum)
 
     SDUpdate8BITS(SDCardAddress,UseMotorKill);
     ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress,MotorChannelZero);
+    Look(UseMotorKill); 
+    SDUpdate8BITS(SDCardAddress, MotorChannelZero);
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress,MotorChannel);
     if (MotorChannel > 15) MotorChannel = 15;
@@ -4004,7 +4040,7 @@ int GetChannel()
 }
 /*********************************************************************************************************************************/
 
-void UpdateSwitchesDisplay()
+void UpdateSwitchesView() // heer (Should be optimised but it works!)
 {
     char SwitchesView_sw1[] = "sw1";
     char SwitchesView_sw2[] = "sw2";
@@ -4013,10 +4049,6 @@ void UpdateSwitchesDisplay()
     char NotUsed[]          = "Not used";
     char Banks123[]         = "Banks 1-2-3";
     char Auto[]             = "Bank 4 (etc)";
-    char Channel_9[]        = "Channel 9" ;
-    char Channel_10[]       = "Channel 10";
-    char Channel_11[]       = "Channel 11";
-    char Channel_12[]       = "Channel 12";
     char Safety_Switch[]    = "Safety    ";
     char Buddy_Switch[]     = "Buddy     ";
     char DualRates_Switch[] = "Rates     ";
@@ -4024,21 +4056,21 @@ void UpdateSwitchesDisplay()
     SendText(SwitchesView_sw1, NotUsed);
     if (AutoSwitch == 1)        SendText(SwitchesView_sw1, Auto);
     if (FMSwitch == 1)          SendText(SwitchesView_sw1, Banks123);
-    if (Channel9Switch == 1)    SendText(SwitchesView_sw1, Channel_9);
-    if (Channel10Switch == 1)   SendText(SwitchesView_sw1, Channel_10);
-    if (Channel11Switch == 1)   SendText(SwitchesView_sw1, Channel_11);
-    if (Channel12Switch == 1)   SendText(SwitchesView_sw1, Channel_12);
+    if (Channel9Switch == 1)    SendText(SwitchesView_sw1, ChannelNames[8]);
+    if (Channel10Switch == 1)   SendText(SwitchesView_sw1, ChannelNames[9]);
+    if (Channel11Switch == 1)   SendText(SwitchesView_sw1, ChannelNames[10]);
+    if (Channel12Switch == 1)   SendText(SwitchesView_sw1, ChannelNames[11]);
     if (SafetySwitch == 1)      SendText(SwitchesView_sw1, Safety_Switch);
     if (DualRatesSwitch == 1)   SendText(SwitchesView_sw1, DualRates_Switch);
     if (BuddySwitch == 1)       SendText(SwitchesView_sw1, Buddy_Switch);
-   
+    
     SendText(SwitchesView_sw2, NotUsed);
     if (AutoSwitch == 2)        SendText(SwitchesView_sw2, Auto);
     if (FMSwitch == 2)          SendText(SwitchesView_sw2, Banks123);
-    if (Channel9Switch == 2)    SendText(SwitchesView_sw2, Channel_9);
-    if (Channel10Switch == 2)   SendText(SwitchesView_sw2, Channel_10);
-    if (Channel11Switch == 2)   SendText(SwitchesView_sw2, Channel_11);
-    if (Channel12Switch == 2)   SendText(SwitchesView_sw2, Channel_12);
+    if (Channel9Switch == 2)    SendText(SwitchesView_sw2, ChannelNames[8]);
+    if (Channel10Switch == 2)   SendText(SwitchesView_sw2, ChannelNames[9]);
+    if (Channel11Switch == 2)   SendText(SwitchesView_sw2, ChannelNames[10]);
+    if (Channel12Switch == 2)   SendText(SwitchesView_sw2, ChannelNames[11]);
     if (SafetySwitch == 2)      SendText(SwitchesView_sw2, Safety_Switch);
     if (DualRatesSwitch == 2)   SendText(SwitchesView_sw2, DualRates_Switch);
     if (BuddySwitch == 2)       SendText(SwitchesView_sw2, Buddy_Switch);
@@ -4046,10 +4078,10 @@ void UpdateSwitchesDisplay()
     SendText(SwitchesView_sw3, NotUsed);
     if (AutoSwitch == 3)        SendText(SwitchesView_sw3, Auto);
     if (FMSwitch == 3)          SendText(SwitchesView_sw3, Banks123);
-    if (Channel9Switch == 3)    SendText(SwitchesView_sw3, Channel_9);
-    if (Channel10Switch == 3)   SendText(SwitchesView_sw3, Channel_10);
-    if (Channel11Switch == 3)   SendText(SwitchesView_sw3, Channel_11);
-    if (Channel12Switch == 3)   SendText(SwitchesView_sw3, Channel_12);
+    if (Channel9Switch == 3)    SendText(SwitchesView_sw3, ChannelNames[8]);
+    if (Channel10Switch == 3)   SendText(SwitchesView_sw3, ChannelNames[9]);
+    if (Channel11Switch == 3)   SendText(SwitchesView_sw3, ChannelNames[10]);
+    if (Channel12Switch == 3)   SendText(SwitchesView_sw3, ChannelNames[11]);
     if (SafetySwitch == 3)      SendText(SwitchesView_sw3, Safety_Switch);
     if (DualRatesSwitch == 3)   SendText(SwitchesView_sw3, DualRates_Switch);
     if (BuddySwitch == 3)       SendText(SwitchesView_sw3, Buddy_Switch);
@@ -4057,10 +4089,10 @@ void UpdateSwitchesDisplay()
     SendText(SwitchesView_sw4, NotUsed);
     if (AutoSwitch == 4)        SendText(SwitchesView_sw4, Auto);
     if (FMSwitch == 4)          SendText(SwitchesView_sw4, Banks123);
-    if (Channel9Switch == 4)    SendText(SwitchesView_sw4, Channel_9);
-    if (Channel10Switch == 4)   SendText(SwitchesView_sw4, Channel_10);
-    if (Channel11Switch == 4)   SendText(SwitchesView_sw4, Channel_11);
-    if (Channel12Switch == 4)   SendText(SwitchesView_sw4, Channel_12);
+    if (Channel9Switch == 4)    SendText(SwitchesView_sw4, ChannelNames[8]);
+    if (Channel10Switch == 4)   SendText(SwitchesView_sw4, ChannelNames[9]);
+    if (Channel11Switch == 4)   SendText(SwitchesView_sw4, ChannelNames[10]);
+    if (Channel12Switch == 4)   SendText(SwitchesView_sw4, ChannelNames[11]);
     if (SafetySwitch == 4)      SendText(SwitchesView_sw4, Safety_Switch);
     if (DualRatesSwitch == 4)   SendText(SwitchesView_sw4, DualRates_Switch);
     if (BuddySwitch == 4)       SendText(SwitchesView_sw4, Buddy_Switch);
@@ -5220,9 +5252,9 @@ void ShowMotor(int on)
 }
 /*********************************************************************************************************************************/
 
-void updateOneSwitchView()
+void updateOneSwitchView()  // heer 
 {
-    char OneSwitchView_r0[]    = "r0";     // Not used
+    char OneSwitchView_r0[]    = "r0";    
     char OneSwitchView_r1[]    = "r1";     // Flight modes
     char OneSwitchView_r2[]    = "r2";     // Auto
     char OneSwitchView_r3[]    = "r3";     // Ch9
@@ -5232,8 +5264,36 @@ void updateOneSwitchView()
     char OneSwitchView_r7[]    = "r7";    // Safety
     char OneSwitchView_r8[]    = "r8";    // Dual Rates
     char OneSwitchView_r9[]    = "r9";    // Buddy
+
+
     char OneSwitchViewc_revd[] = "c_revd"; // Reversed
     char SwNum[]               = "Sw";
+
+    char ch9[]  = "t3";
+    char ch10[] = "t4";
+    char ch11[] = "t5";
+    char ch12[] = "t6";
+    char ch9a[]  = " (Ch 9)";
+    char ch10a[] = " (Ch 10)";
+    char ch11a[] = " (Ch 11)";
+    char ch12a[] = " (Ch 12)";
+    
+    char temp[30];// show the channel names too instead of only numbers
+    strcpy(temp, ChannelNames[8]);
+    strcat(temp, ch9a);
+    SendText(ch9, temp); 
+
+    strcpy(temp, ChannelNames[9]);
+    strcat(temp, ch10a);
+    SendText(ch10, temp);
+
+    strcpy(temp, ChannelNames[10]);
+    strcat(temp, ch11a);
+    SendText(ch11, temp);
+
+    strcpy(temp, ChannelNames[11]);
+    strcat(temp, ch12a);
+    SendText(ch12,temp);
 
     if (SwitchEditNumber == 1) {
         ValueSent = false; // If no setting, = Not Used
@@ -5334,7 +5394,7 @@ void ZeroDataScreen()
 }
 /***************************************************** ReadNewSwitchFunction ****************************************************************************/
 
-void ReadNewSwitchFunction(){ // heer
+void ReadNewSwitchFunction(){ 
         char OneSwitchView_r1[]        = "r1";     // Flight modes
         char OneSwitchView_r2[]        = "r2";     // Auto
         char OneSwitchView_r3[]        = "r3";     // Ch9
@@ -5344,6 +5404,8 @@ void ReadNewSwitchFunction(){ // heer
         char OneSwitchView_r7[]        = "r7";     // Safety
         char OneSwitchView_r8[]        = "r8";     // Dual Rates
         char OneSwitchView_r9[]        = "r9";     // Buddy
+
+
         char PageSwitchView[]          = "page SwitchesView";
         char OneSwitchViewc_revd[]     = "c_revd"; // Reversed
         char    ProgressStart[] = "vis Progress,1";
@@ -5454,7 +5516,7 @@ void ReadNewSwitchFunction(){ // heer
             SendValue(Progress, 100);
             SaveOneModel(ModelNumber);
             SendCommand(PageSwitchView); // change to all switches screen
-            UpdateSwitchesDisplay();     // update its info
+            UpdateSwitchesView();     // update its info
             ClearText();
             SendCommand(ProgressEnd);
             return;
@@ -5599,7 +5661,7 @@ void EndBuddyView()
 
 
     char pSetupView[]   = "page SetupView";
-    BuddyPupilOnSbus      = GetValue(BuddyP); // Pupil, wired
+    BuddyPupilOnSbus    = GetValue(BuddyP); // Pupil, wired
     BuddyMaster         = GetValue(BuddyM); // Master, either.
     SaveAllParameters();
     b5isGrey = false;
@@ -5909,13 +5971,13 @@ void OptionView4End()
     char UseKill[]        = "c0";
     char Mchannel[]       = "n1";
     char Mvalue[]         = "n0";
-
+    Look(42);
     MotorChannelZero    = GetValue(Mvalue);
     UseMotorKill        = GetValue(UseKill);
     MotorChannel        = GetValue(Mchannel) - 1;
     CurrentView = MAINSETUPVIEW;
     SendCommand(page_SetupView);
-    SaveTransmitterParameters();
+    SaveAllParameters();
     UpdateModelsNameEveryWhere();
 }
 
@@ -6840,7 +6902,7 @@ FASTRUN void ButtonWasPressed()
                 SendValue(CopyToAllBanks, 0);
             }
             if (CurrentView == SWITCHES_VIEW) {
-                UpdateSwitchesDisplay();
+                UpdateSwitchesView();
             }
             if (CurrentView == ONE_SWITCH_VIEW) {
                 updateOneSwitchView();
@@ -7144,7 +7206,7 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(SwitchesView, TextIn)) {
             SendCommand(pSwitchesView);
-            UpdateSwitchesDisplay(); // display saved values
+            UpdateSwitchesView(); // display saved values
             CurrentView = SWITCHES_VIEW;
             UpdateModelsNameEveryWhere();
             ClearText();
@@ -7771,6 +7833,24 @@ uint8_t CheckSwitch(uint8_t swt)
 
 /************************************************************************************************************/
 
+void CheckMotorOff(){ // For Safety
+
+    if (!UseMotorKill) return;
+    ReadSwitches();
+    MotorEnabled = true;
+    if (AutoSwitch == 1 && Switch[7]    == SWITCH1Reversed) MotorEnabled = true;
+    if (AutoSwitch  == 2 && Switch[5]   == SWITCH2Reversed) MotorEnabled = true;
+    if (AutoSwitch  == 3 && Switch[0]   == SWITCH3Reversed) MotorEnabled = true;
+    if (AutoSwitch  == 4 && Switch[2]   == SWITCH4Reversed) MotorEnabled = true; 
+    if (SafetySwitch == 1 && Switch[7]  == SWITCH1Reversed) SafetyON = true;
+    if (SafetySwitch == 2 && Switch[5]  == SWITCH2Reversed) SafetyON = true;
+    if (SafetySwitch == 3 && Switch[0]  == SWITCH3Reversed) SafetyON = true;
+    if (SafetySwitch == 4 && Switch[2]  == SWITCH4Reversed) SafetyON = true; 
+    if (SafetyON) MotorEnabled = false;
+}
+
+/************************************************************************************************************/
+
 void GetBank()
 { //  and  motor switch and safety switch ETC ...
 
@@ -7785,17 +7865,17 @@ void GetBank()
 
     if (AutoSwitch == 1 && Switch[7]   == SWITCH1Reversed) MotorEnabled = true;
     if (AutoSwitch == 2 && Switch[5]   == SWITCH2Reversed) MotorEnabled = true;
-    if (AutoSwitch == 3 && Switch[0]   == SWITCH3Reversed) MotorEnabled = true;
+    if (AutoSwitch == 3 && Switch[1]   == SWITCH3Reversed) MotorEnabled = true;
     if (AutoSwitch == 4 && Switch[2]   == SWITCH4Reversed) MotorEnabled = true; 
 
     if (SafetySwitch == 1 && Switch[7] == SWITCH1Reversed) SafetyON = true;
     if (SafetySwitch == 2 && Switch[5] == SWITCH2Reversed) SafetyON = true;
-    if (SafetySwitch == 3 && Switch[0] == SWITCH3Reversed) SafetyON = true;
+    if (SafetySwitch == 3 && Switch[1] == SWITCH3Reversed) SafetyON = true;
     if (SafetySwitch == 4 && Switch[2] == SWITCH4Reversed) SafetyON = true; 
 
     if (BuddySwitch == 1 && Switch[7] == SWITCH1Reversed) BuddyON = true;
     if (BuddySwitch == 2 && Switch[5] == SWITCH2Reversed) BuddyON = true;
-    if (BuddySwitch == 3 && Switch[0] == SWITCH3Reversed) BuddyON = true;
+    if (BuddySwitch == 3 && Switch[1] == SWITCH3Reversed) BuddyON = true;
     if (BuddySwitch == 4 && Switch[2] == SWITCH4Reversed) BuddyON = true;
 
     if (DualRatesSwitch == 4) ReadDRSwitch(Switch[2], Switch[3], SWITCH4Reversed); 
@@ -7851,6 +7931,14 @@ void GetBank()
 
     if ((MotorEnabled != MotorWasEnabled) && (UseMotorKill))  {                         // MotorEnabled changed ?
         if (MotorEnabled) {       
+            if (LedWasRed)
+                {
+                    MotorEnabled = false;
+                    PlaySound(PLSTURNOFF);
+                    delay(4000);
+                    return;
+                }
+           
             ShowMotor(1);
             if (AnnounceBanks) PlaySound(MOTORON);                                      // Tell the pilot motor is on! 
               if (UseLog) LogMotor(1);   
@@ -7859,6 +7947,10 @@ void GetBank()
             if (AnnounceBanks) PlaySound(MOTOROFF);
               if (UseLog) LogMotor(0); 
             ShowMotor(0);                                                               // Tell the pilot motor is off
+           if (SendNoData){
+                SendCommand(WarnOff);
+                SendNoData = false;                                                     // user turned off motor
+            }
             PausedSecs = Secs + (Mins * 60) + (Hours * 3600);                           // Remember how long so far
         }
         LastSeconds = 0;  
@@ -8117,16 +8209,16 @@ FASTRUN void ReadSwitches() // and indeed read digital trims if these are fitted
             PreviousTrim = i;                          // remember which trim it was
         }
     }
-    if (flag > 1) {                               // one at a time please!!
-        TrimRepeatSpeed = DefaultTrimRepeatSpeed; // Restore default trim repeat speed
+    if (flag > 1) {                                     // one at a time please!!
+        TrimRepeatSpeed = DefaultTrimRepeatSpeed;       // Restore default trim repeat speed
         for (int i = 0; i < 8; ++i) {
             (TrimSwitch[i]) = 0;
             flag            = 0;
         }
     }
     if (!flag) {
-        PreviousTrim    = 254;                    // Previous trim must now match none
-        TrimRepeatSpeed = DefaultTrimRepeatSpeed; // Restore default trim repeat speed
+        PreviousTrim    = 254;                          // Previous trim must now match none
+        TrimRepeatSpeed = DefaultTrimRepeatSpeed;       // Restore default trim repeat speed
     }
   
 }
@@ -8471,7 +8563,7 @@ void CheckScanButton() // Scan button AND models button
     }
 }
 /************************************************************************************************************/
-void simulateCloseDown(){ // Because real closedown occurs only after button is released
+void SimulateCloseDown(){ // Because real closedown occurs only after button is released
     
     char ScreenOff[] = "dim=0";
     analogWrite(GREENLED, 0);
@@ -8490,9 +8582,9 @@ void CheckPowerOffButton()
 
     if (!digitalRead(BUTTON_SENSE_PIN)){ 
         GotoFrontView();
-        if (LedWasRed || BuddyPupilOnSbus) 
+        if (!LedWasGreen) 
         {
-            simulateCloseDown();              // if not connected power off immediately
+            SimulateCloseDown();              // if not connected power off immediately
         } else
         {
             if (!PowerOffTimer) {
@@ -8533,7 +8625,7 @@ void CheckPowerOffButton()
                 } 
                 SaveAllParameters();
                 delay(250);                        // wait a mo for user to see 0 and log to write to file
-                simulateCloseDown();
+                SimulateCloseDown();
             }
             --TurnOffSecondToGo;
              if (TrimClicks)  PlaySound(CLICKZERO);
@@ -8557,7 +8649,7 @@ void FASTRUN ManageTransmitter(){
     if (RightNow - TransmitterLastManaged > 100) {                   // 10 times a second is plenty
         if (RightNow - LastTimeRead >= 1000) {                       // Once a second for these...
             ReadTime();                                              // Do the clock
-            GetStatistics(); // Do stats
+            GetStatistics();                                         // Do stats
             if (CurrentView == MAINSETUPVIEW) CheckScanButton();
             if (CurrentView == MODELSVIEW)    CheckModelName();      // In MODELSVIEW, this function checks correct name is displayed.
             LastTimeRead = millis();
@@ -8581,7 +8673,8 @@ FASTRUN void loop()
     ManageTransmitter();                                         // Do the needed chores ... if there's time
     GetNewChannelValues();                                       // Load SendBuffer with new servo positions  Very frequently
     if (UseMacros) ExecuteMacro();                               // Modify it if macro is running
-    if (BuddyPupilOnSbus) { NewCompressNeeded = false;             // fake it as Buddy is not sending data
+    if (BuddyPupilOnSbus) { 
+        NewCompressNeeded = false;                               // fake it as Buddy is not sending data
     } else {                                                     // Skip these next lines when buddying as a slave
         if (!BoundFlag && Connected) BufferNewPipe();            // if not yet bound, insert our pipe into SendBuffer BUT ONLY WHEN CONNECTED 
         if (BuddyMaster) GetSlaveChannelValues();                // If buddy master, get buddy data and maybe use it.

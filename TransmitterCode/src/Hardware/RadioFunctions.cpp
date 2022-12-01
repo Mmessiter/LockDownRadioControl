@@ -210,6 +210,7 @@ void FlushFifos()
 
 FASTRUN void SendData()
 {
+    if (SendNoData) return;
     if ((millis() - LastPacketSentTime) >= PACEMAKER) {
         LastPacketSentTime = millis();
         if (BuddyPupilOnSbus) {MapToSBUS();return;}                 // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.

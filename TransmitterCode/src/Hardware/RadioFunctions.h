@@ -10,9 +10,9 @@
 //                TX VERSION NUMBER   (November 2022 Malcolm Messiter)        *
 //***************************************************************************
 
-#define TXVERSION_MAJOR   1
-#define TXVERSION_MINOR   9
-#define TXVERSION_MINIMUS 9
+#define TXVERSION_MAJOR   2
+#define TXVERSION_MINOR   0
+#define TXVERSION_MINIMUS 0
 
 // **************************************************************************
 //                               Includes                                   *
@@ -241,6 +241,7 @@
 #define RATE1           34
 #define RATE2           35
 #define RATE3           36
+#define PLSTURNOFF      37
 
 
 // **************************************************************************
@@ -275,7 +276,6 @@
 #define CE_ON                    HIGH
 #define CE_OFF                   LOW
 
-
 // **************************************************************************
 //                            Error Codes                                *
 // **************************************************************************
@@ -283,6 +283,7 @@
 #define NOERROR             0
 #define MODELSFILENOTFOUND  1
 #define CHECKSUMERROR       2
+#define MOTORISON           3
 
 // **************************************************************************
 //                            Interpolations                                *
@@ -407,6 +408,7 @@ extern uint8_t        ConnectionAssessSeconds;
 extern bool           LowPowerMode;
 extern bool           NewCompressNeeded;
 extern bool           ModelMatched;
+extern bool           SendNoData;
 // external (global) functions needed here
 extern void  GetSlaveChannelValues();
 extern void  KickTheDog();
@@ -441,6 +443,7 @@ extern void          CheckInvisiblePoint();
 extern void          GotoFrontView();
 extern void          CheckDualRatesValues();
 extern void          UpdateLED();
+extern void          CheckMotorOff();
 
 /*********************************************************************************************************************************/
 // function prototypes

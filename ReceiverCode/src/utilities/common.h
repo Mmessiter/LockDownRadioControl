@@ -13,9 +13,9 @@
 #include <SBUS.h>
 #include "utilities/radio.h"
 
-#define RXVERSION_MAJOR   1
-#define RXVERSION_MINOR   9
-#define RXVERSION_MINIMUS 9 // November 2022
+#define RXVERSION_MAJOR   2
+#define RXVERSION_MINOR   0
+#define RXVERSION_MINIMUS 0 // November 2022
 
 
 // #define DB_FHSS
@@ -25,7 +25,7 @@
 // #define DB_RXTIMERS
 
 //**************************************************************************************************************************
-// #define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< ***
+ #define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< ***
 //**************************************************************************************************************************
 
 #define SENSOR_HUB_I2C_ADDRESS 8
