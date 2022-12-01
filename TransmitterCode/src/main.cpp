@@ -1761,7 +1761,7 @@ FASTRUN void ShowComms()
                 }
             }
         }
-        if (CurrentView == DATAVIEW) {
+        if (CurrentView == DATAVIEW && Connected) {
             SendValue(DataView_pps, PacketsPerSecond);
             SendValue(DataView_lps, TotalLostPackets / 2); // about half probably made it but went un acknoledged
             SendText(DataView_Alt, ModelAltitude);
