@@ -1764,16 +1764,16 @@ FASTRUN void ShowComms()
         if (CurrentView == DATAVIEW && Connected) {
             SendValue(DataView_pps, PacketsPerSecond);
             SendValue(DataView_lps, TotalLostPackets / 2); // about half probably made it but went un acknoledged
-            SendText(DataView_Alt, ModelAltitude);
-            SendText(DataView_MaxAlt, MaxAltitude);
+            SendText(DataView_Alt,  ModelAltitude);
+          SendText(DataView_MaxAlt, MaxAltitude);
             SendText(DataView_Temp, ModelTemperature);
-            SendText(DataView_Rx, ThisRadio);
-            SendText(DataView_rxv, ReceiverVersionNumber);
-            SendValue(DataView_Ls, GapLongest);
-            SendValue(DataView_Ts, RadioSwaps - SavedRadioSwaps);
-            SendValue(DataView_Sg, RX1TotalTime - SavedRX1TotalTime);
-            SendValue(DataView_Ag, GapAverage);
-            SendValue(DataView_Gc, RX2TotalTime - SavedRX2TotalTime);
+            SendText(DataView_Rx,   ThisRadio);
+            SendText(DataView_rxv,  ReceiverVersionNumber);
+            SendValue(DataView_Ls,  GapLongest);
+            SendValue(DataView_Ts,  RadioSwaps - SavedRadioSwaps);
+            SendValue(DataView_Sg,  RX1TotalTime - SavedRX1TotalTime);
+            SendValue(DataView_Ag,  GapAverage);
+            SendValue(DataView_Gc,  RX2TotalTime - SavedRX2TotalTime);
             if (GpsFix) { // if no fix, then leave display as before
                 SendText(Fix, yes);
             }
