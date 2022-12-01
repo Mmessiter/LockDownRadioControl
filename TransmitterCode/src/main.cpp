@@ -4040,7 +4040,7 @@ int GetChannel()
 }
 /*********************************************************************************************************************************/
 
-void UpdateSwitchesDisplay() // heer
+void UpdateSwitchesView() // heer (Should be optimised but it works!)
 {
     char SwitchesView_sw1[] = "sw1";
     char SwitchesView_sw2[] = "sw2";
@@ -5252,11 +5252,9 @@ void ShowMotor(int on)
 }
 /*********************************************************************************************************************************/
 
-void updateOneSwitchView()
+void updateOneSwitchView()  // heer 
 {
-
-
-    char OneSwitchView_r0[]    = "r0";     // Not used  // heer
+    char OneSwitchView_r0[]    = "r0";    
     char OneSwitchView_r1[]    = "r1";     // Flight modes
     char OneSwitchView_r2[]    = "r2";     // Auto
     char OneSwitchView_r3[]    = "r3";     // Ch9
@@ -5518,7 +5516,7 @@ void ReadNewSwitchFunction(){
             SendValue(Progress, 100);
             SaveOneModel(ModelNumber);
             SendCommand(PageSwitchView); // change to all switches screen
-            UpdateSwitchesDisplay();     // update its info
+            UpdateSwitchesView();     // update its info
             ClearText();
             SendCommand(ProgressEnd);
             return;
@@ -6904,7 +6902,7 @@ FASTRUN void ButtonWasPressed()
                 SendValue(CopyToAllBanks, 0);
             }
             if (CurrentView == SWITCHES_VIEW) {
-                UpdateSwitchesDisplay();
+                UpdateSwitchesView();
             }
             if (CurrentView == ONE_SWITCH_VIEW) {
                 updateOneSwitchView();
@@ -7208,7 +7206,7 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(SwitchesView, TextIn)) {
             SendCommand(pSwitchesView);
-            UpdateSwitchesDisplay(); // display saved values
+            UpdateSwitchesView(); // display saved values
             CurrentView = SWITCHES_VIEW;
             UpdateModelsNameEveryWhere();
             ClearText();
