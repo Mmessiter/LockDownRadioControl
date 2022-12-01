@@ -3447,8 +3447,6 @@ FLASHMEM void setup()
         }
         if (ErrorState == MOTORISON){
             SendText(Warning, err_MotorOn);
-           // PlaySound(MOTORON);
-           // delay(850);
         }
     }
 }
@@ -4040,7 +4038,7 @@ int GetChannel()
 }
 /*********************************************************************************************************************************/
 
-void UpdateSwitchesView() // heer (Should be optimised but it works!)
+void UpdateSwitchesView() //  (Should be optimised but it works!)
 {
     char SwitchesView_sw1[] = "sw1";
     char SwitchesView_sw2[] = "sw2";
@@ -4052,14 +4050,32 @@ void UpdateSwitchesView() // heer (Should be optimised but it works!)
     char Safety_Switch[]    = "Safety    ";
     char Buddy_Switch[]     = "Buddy     ";
     char DualRates_Switch[] = "Rates     ";
+    char c9[30];
+    char c10[30];
+    char c11[30];
+    char c12[30];
+    char cc9[] = " (Ch 9)";
+    char cc10[]= " (Ch 10)";
+    char cc11[]= " (Ch 11)";
+    char cc12[]= " (Ch 12)";
+    
+    strcpy(c9, ChannelNames[8]);
+    strcpy(c10, ChannelNames[9]);
+    strcpy(c11, ChannelNames[10]);
+    strcpy(c12, ChannelNames[11]);
+    strcat(c9, cc9);
+    strcat(c10, cc10);
+    strcat(c11, cc11);
+    strcat(c12, cc12);
+    
 
     SendText(SwitchesView_sw1, NotUsed);
     if (AutoSwitch == 1)        SendText(SwitchesView_sw1, Auto);
     if (FMSwitch == 1)          SendText(SwitchesView_sw1, Banks123);
-    if (Channel9Switch == 1)    SendText(SwitchesView_sw1, ChannelNames[8]);
-    if (Channel10Switch == 1)   SendText(SwitchesView_sw1, ChannelNames[9]);
-    if (Channel11Switch == 1)   SendText(SwitchesView_sw1, ChannelNames[10]);
-    if (Channel12Switch == 1)   SendText(SwitchesView_sw1, ChannelNames[11]);
+    if (Channel9Switch == 1)    SendText(SwitchesView_sw1, c9);
+    if (Channel10Switch == 1)   SendText(SwitchesView_sw1, c10);
+    if (Channel11Switch == 1)   SendText(SwitchesView_sw1, c11);
+    if (Channel12Switch == 1)   SendText(SwitchesView_sw1, c12);
     if (SafetySwitch == 1)      SendText(SwitchesView_sw1, Safety_Switch);
     if (DualRatesSwitch == 1)   SendText(SwitchesView_sw1, DualRates_Switch);
     if (BuddySwitch == 1)       SendText(SwitchesView_sw1, Buddy_Switch);
@@ -4067,10 +4083,10 @@ void UpdateSwitchesView() // heer (Should be optimised but it works!)
     SendText(SwitchesView_sw2, NotUsed);
     if (AutoSwitch == 2)        SendText(SwitchesView_sw2, Auto);
     if (FMSwitch == 2)          SendText(SwitchesView_sw2, Banks123);
-    if (Channel9Switch == 2)    SendText(SwitchesView_sw2, ChannelNames[8]);
-    if (Channel10Switch == 2)   SendText(SwitchesView_sw2, ChannelNames[9]);
-    if (Channel11Switch == 2)   SendText(SwitchesView_sw2, ChannelNames[10]);
-    if (Channel12Switch == 2)   SendText(SwitchesView_sw2, ChannelNames[11]);
+    if (Channel9Switch == 2)    SendText(SwitchesView_sw2, c9);
+    if (Channel10Switch == 2)   SendText(SwitchesView_sw2, c10);
+    if (Channel11Switch == 2)   SendText(SwitchesView_sw2, c11);
+    if (Channel12Switch == 2)   SendText(SwitchesView_sw2, c12);
     if (SafetySwitch == 2)      SendText(SwitchesView_sw2, Safety_Switch);
     if (DualRatesSwitch == 2)   SendText(SwitchesView_sw2, DualRates_Switch);
     if (BuddySwitch == 2)       SendText(SwitchesView_sw2, Buddy_Switch);
@@ -4078,10 +4094,10 @@ void UpdateSwitchesView() // heer (Should be optimised but it works!)
     SendText(SwitchesView_sw3, NotUsed);
     if (AutoSwitch == 3)        SendText(SwitchesView_sw3, Auto);
     if (FMSwitch == 3)          SendText(SwitchesView_sw3, Banks123);
-    if (Channel9Switch == 3)    SendText(SwitchesView_sw3, ChannelNames[8]);
-    if (Channel10Switch == 3)   SendText(SwitchesView_sw3, ChannelNames[9]);
-    if (Channel11Switch == 3)   SendText(SwitchesView_sw3, ChannelNames[10]);
-    if (Channel12Switch == 3)   SendText(SwitchesView_sw3, ChannelNames[11]);
+    if (Channel9Switch == 3)    SendText(SwitchesView_sw3, c9);
+    if (Channel10Switch == 3)   SendText(SwitchesView_sw3, c10);
+    if (Channel11Switch == 3)   SendText(SwitchesView_sw3, c11);
+    if (Channel12Switch == 3)   SendText(SwitchesView_sw3, c12);
     if (SafetySwitch == 3)      SendText(SwitchesView_sw3, Safety_Switch);
     if (DualRatesSwitch == 3)   SendText(SwitchesView_sw3, DualRates_Switch);
     if (BuddySwitch == 3)       SendText(SwitchesView_sw3, Buddy_Switch);
@@ -4089,10 +4105,10 @@ void UpdateSwitchesView() // heer (Should be optimised but it works!)
     SendText(SwitchesView_sw4, NotUsed);
     if (AutoSwitch == 4)        SendText(SwitchesView_sw4, Auto);
     if (FMSwitch == 4)          SendText(SwitchesView_sw4, Banks123);
-    if (Channel9Switch == 4)    SendText(SwitchesView_sw4, ChannelNames[8]);
-    if (Channel10Switch == 4)   SendText(SwitchesView_sw4, ChannelNames[9]);
-    if (Channel11Switch == 4)   SendText(SwitchesView_sw4, ChannelNames[10]);
-    if (Channel12Switch == 4)   SendText(SwitchesView_sw4, ChannelNames[11]);
+    if (Channel9Switch == 4)    SendText(SwitchesView_sw4, c9);
+    if (Channel10Switch == 4)   SendText(SwitchesView_sw4, c10);
+    if (Channel11Switch == 4)   SendText(SwitchesView_sw4, c11);
+    if (Channel12Switch == 4)   SendText(SwitchesView_sw4, c12);
     if (SafetySwitch == 4)      SendText(SwitchesView_sw4, Safety_Switch);
     if (DualRatesSwitch == 4)   SendText(SwitchesView_sw4, DualRates_Switch);
     if (BuddySwitch == 4)       SendText(SwitchesView_sw4, Buddy_Switch);
@@ -5252,7 +5268,7 @@ void ShowMotor(int on)
 }
 /*********************************************************************************************************************************/
 
-void updateOneSwitchView()  // heer 
+void updateOneSwitchView()  //  
 {
     char OneSwitchView_r0[]    = "r0";    
     char OneSwitchView_r1[]    = "r1";     // Flight modes
@@ -7847,6 +7863,7 @@ void CheckMotorOff(){ // For Safety
     if (SafetySwitch == 3 && Switch[0]  == SWITCH3Reversed) SafetyON = true;
     if (SafetySwitch == 4 && Switch[2]  == SWITCH4Reversed) SafetyON = true; 
     if (SafetyON) MotorEnabled = false;
+    MotorWasEnabled = MotorEnabled;
 }
 
 /************************************************************************************************************/
@@ -7930,22 +7947,25 @@ void GetBank()
     if (SafetyON) MotorEnabled = false;
 
     if ((MotorEnabled != MotorWasEnabled) && (UseMotorKill))  {                         // MotorEnabled changed ?
-        if (MotorEnabled) {       
+        if (MotorEnabled) {
             if (LedWasRed)
                 {
-                    MotorEnabled = false;
-                    PlaySound(PLSTURNOFF);
-                    delay(4000);
+                  MotorEnabled = false;
+                   if ((millis() - WarningTimer) > 4000) { 
+                        PlaySound(PLSTURNOFF);
+                        WarningTimer = millis();
+                   }
                     return;
                 }
-           
             ShowMotor(1);
             if (AnnounceBanks) PlaySound(MOTORON);                                      // Tell the pilot motor is on! 
               if (UseLog) LogMotor(1);   
               TimerMillis = millis();
-        } else {            
-            if (AnnounceBanks) PlaySound(MOTOROFF);
-              if (UseLog) LogMotor(0); 
+        }
+        else {
+              if (AnnounceBanks) PlaySound(MOTOROFF);
+              if (UseLog) LogMotor(0);
+               SendCommand(WarnOff);
             ShowMotor(0);                                                               // Tell the pilot motor is off
            if (SendNoData){
                 SendCommand(WarnOff);
