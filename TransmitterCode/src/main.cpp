@@ -2169,7 +2169,7 @@ void  GetCurveDots(uint16_t OutputChannel, uint16_t TheRate)
 // This is not called
 void DoDeadZone()
 {
-    uint8_t ch = 0; // heer
+    uint8_t ch = 0; 
     uint8_t DeadZone = 10;
     for (ch = 0; ch < 2; ++ch){ // aileron and elevator only
         if (abs(SendBuffer[ch] - IntoHigherRes(CentreDegrees[Bank][ch])) < DeadZone) {
@@ -4040,7 +4040,7 @@ int GetChannel()
 }
 /*********************************************************************************************************************************/
 
-void UpdateSwitchesDisplay()
+void UpdateSwitchesDisplay() // heer
 {
     char SwitchesView_sw1[] = "sw1";
     char SwitchesView_sw2[] = "sw2";
@@ -4049,10 +4049,6 @@ void UpdateSwitchesDisplay()
     char NotUsed[]          = "Not used";
     char Banks123[]         = "Banks 1-2-3";
     char Auto[]             = "Bank 4 (etc)";
-    char Channel_9[]        = "Channel 9" ;
-    char Channel_10[]       = "Channel 10";
-    char Channel_11[]       = "Channel 11";
-    char Channel_12[]       = "Channel 12";
     char Safety_Switch[]    = "Safety    ";
     char Buddy_Switch[]     = "Buddy     ";
     char DualRates_Switch[] = "Rates     ";
@@ -4060,21 +4056,21 @@ void UpdateSwitchesDisplay()
     SendText(SwitchesView_sw1, NotUsed);
     if (AutoSwitch == 1)        SendText(SwitchesView_sw1, Auto);
     if (FMSwitch == 1)          SendText(SwitchesView_sw1, Banks123);
-    if (Channel9Switch == 1)    SendText(SwitchesView_sw1, Channel_9);
-    if (Channel10Switch == 1)   SendText(SwitchesView_sw1, Channel_10);
-    if (Channel11Switch == 1)   SendText(SwitchesView_sw1, Channel_11);
-    if (Channel12Switch == 1)   SendText(SwitchesView_sw1, Channel_12);
+    if (Channel9Switch == 1)    SendText(SwitchesView_sw1, ChannelNames[8]);
+    if (Channel10Switch == 1)   SendText(SwitchesView_sw1, ChannelNames[9]);
+    if (Channel11Switch == 1)   SendText(SwitchesView_sw1, ChannelNames[10]);
+    if (Channel12Switch == 1)   SendText(SwitchesView_sw1, ChannelNames[11]);
     if (SafetySwitch == 1)      SendText(SwitchesView_sw1, Safety_Switch);
     if (DualRatesSwitch == 1)   SendText(SwitchesView_sw1, DualRates_Switch);
     if (BuddySwitch == 1)       SendText(SwitchesView_sw1, Buddy_Switch);
-   
+    
     SendText(SwitchesView_sw2, NotUsed);
     if (AutoSwitch == 2)        SendText(SwitchesView_sw2, Auto);
     if (FMSwitch == 2)          SendText(SwitchesView_sw2, Banks123);
-    if (Channel9Switch == 2)    SendText(SwitchesView_sw2, Channel_9);
-    if (Channel10Switch == 2)   SendText(SwitchesView_sw2, Channel_10);
-    if (Channel11Switch == 2)   SendText(SwitchesView_sw2, Channel_11);
-    if (Channel12Switch == 2)   SendText(SwitchesView_sw2, Channel_12);
+    if (Channel9Switch == 2)    SendText(SwitchesView_sw2, ChannelNames[8]);
+    if (Channel10Switch == 2)   SendText(SwitchesView_sw2, ChannelNames[9]);
+    if (Channel11Switch == 2)   SendText(SwitchesView_sw2, ChannelNames[10]);
+    if (Channel12Switch == 2)   SendText(SwitchesView_sw2, ChannelNames[11]);
     if (SafetySwitch == 2)      SendText(SwitchesView_sw2, Safety_Switch);
     if (DualRatesSwitch == 2)   SendText(SwitchesView_sw2, DualRates_Switch);
     if (BuddySwitch == 2)       SendText(SwitchesView_sw2, Buddy_Switch);
@@ -4082,10 +4078,10 @@ void UpdateSwitchesDisplay()
     SendText(SwitchesView_sw3, NotUsed);
     if (AutoSwitch == 3)        SendText(SwitchesView_sw3, Auto);
     if (FMSwitch == 3)          SendText(SwitchesView_sw3, Banks123);
-    if (Channel9Switch == 3)    SendText(SwitchesView_sw3, Channel_9);
-    if (Channel10Switch == 3)   SendText(SwitchesView_sw3, Channel_10);
-    if (Channel11Switch == 3)   SendText(SwitchesView_sw3, Channel_11);
-    if (Channel12Switch == 3)   SendText(SwitchesView_sw3, Channel_12);
+    if (Channel9Switch == 3)    SendText(SwitchesView_sw3, ChannelNames[8]);
+    if (Channel10Switch == 3)   SendText(SwitchesView_sw3, ChannelNames[9]);
+    if (Channel11Switch == 3)   SendText(SwitchesView_sw3, ChannelNames[10]);
+    if (Channel12Switch == 3)   SendText(SwitchesView_sw3, ChannelNames[11]);
     if (SafetySwitch == 3)      SendText(SwitchesView_sw3, Safety_Switch);
     if (DualRatesSwitch == 3)   SendText(SwitchesView_sw3, DualRates_Switch);
     if (BuddySwitch == 3)       SendText(SwitchesView_sw3, Buddy_Switch);
@@ -4093,10 +4089,10 @@ void UpdateSwitchesDisplay()
     SendText(SwitchesView_sw4, NotUsed);
     if (AutoSwitch == 4)        SendText(SwitchesView_sw4, Auto);
     if (FMSwitch == 4)          SendText(SwitchesView_sw4, Banks123);
-    if (Channel9Switch == 4)    SendText(SwitchesView_sw4, Channel_9);
-    if (Channel10Switch == 4)   SendText(SwitchesView_sw4, Channel_10);
-    if (Channel11Switch == 4)   SendText(SwitchesView_sw4, Channel_11);
-    if (Channel12Switch == 4)   SendText(SwitchesView_sw4, Channel_12);
+    if (Channel9Switch == 4)    SendText(SwitchesView_sw4, ChannelNames[8]);
+    if (Channel10Switch == 4)   SendText(SwitchesView_sw4, ChannelNames[9]);
+    if (Channel11Switch == 4)   SendText(SwitchesView_sw4, ChannelNames[10]);
+    if (Channel12Switch == 4)   SendText(SwitchesView_sw4, ChannelNames[11]);
     if (SafetySwitch == 4)      SendText(SwitchesView_sw4, Safety_Switch);
     if (DualRatesSwitch == 4)   SendText(SwitchesView_sw4, DualRates_Switch);
     if (BuddySwitch == 4)       SendText(SwitchesView_sw4, Buddy_Switch);
@@ -5258,7 +5254,9 @@ void ShowMotor(int on)
 
 void updateOneSwitchView()
 {
-    char OneSwitchView_r0[]    = "r0";     // Not used
+
+
+    char OneSwitchView_r0[]    = "r0";     // Not used  // heer
     char OneSwitchView_r1[]    = "r1";     // Flight modes
     char OneSwitchView_r2[]    = "r2";     // Auto
     char OneSwitchView_r3[]    = "r3";     // Ch9
@@ -5268,8 +5266,36 @@ void updateOneSwitchView()
     char OneSwitchView_r7[]    = "r7";    // Safety
     char OneSwitchView_r8[]    = "r8";    // Dual Rates
     char OneSwitchView_r9[]    = "r9";    // Buddy
+
+
     char OneSwitchViewc_revd[] = "c_revd"; // Reversed
     char SwNum[]               = "Sw";
+
+    char ch9[]  = "t3";
+    char ch10[] = "t4";
+    char ch11[] = "t5";
+    char ch12[] = "t6";
+    char ch9a[]  = " (Ch 9)";
+    char ch10a[] = " (Ch 10)";
+    char ch11a[] = " (Ch 11)";
+    char ch12a[] = " (Ch 12)";
+    
+    char temp[30];// show the channel names too instead of only numbers
+    strcpy(temp, ChannelNames[8]);
+    strcat(temp, ch9a);
+    SendText(ch9, temp); 
+
+    strcpy(temp, ChannelNames[9]);
+    strcat(temp, ch10a);
+    SendText(ch10, temp);
+
+    strcpy(temp, ChannelNames[10]);
+    strcat(temp, ch11a);
+    SendText(ch11, temp);
+
+    strcpy(temp, ChannelNames[11]);
+    strcat(temp, ch12a);
+    SendText(ch12,temp);
 
     if (SwitchEditNumber == 1) {
         ValueSent = false; // If no setting, = Not Used
@@ -5380,6 +5406,8 @@ void ReadNewSwitchFunction(){
         char OneSwitchView_r7[]        = "r7";     // Safety
         char OneSwitchView_r8[]        = "r8";     // Dual Rates
         char OneSwitchView_r9[]        = "r9";     // Buddy
+
+
         char PageSwitchView[]          = "page SwitchesView";
         char OneSwitchViewc_revd[]     = "c_revd"; // Reversed
         char    ProgressStart[] = "vis Progress,1";
@@ -7809,16 +7837,17 @@ uint8_t CheckSwitch(uint8_t swt)
 
 void CheckMotorOff(){ // For Safety
 
+    if (!UseMotorKill) return;
     ReadSwitches();
-    MotorEnabled = !UseMotorKill; //  If not using motor switch then motor is always enabled.
-    if (AutoSwitch  == 1 && Switch[7]   == SWITCH1Reversed) MotorEnabled = true;
+    MotorEnabled = true;
+    if (AutoSwitch == 1 && Switch[7]    == SWITCH1Reversed) MotorEnabled = true;
     if (AutoSwitch  == 2 && Switch[5]   == SWITCH2Reversed) MotorEnabled = true;
     if (AutoSwitch  == 3 && Switch[0]   == SWITCH3Reversed) MotorEnabled = true;
     if (AutoSwitch  == 4 && Switch[2]   == SWITCH4Reversed) MotorEnabled = true; 
-    if (SafetySwitch == 1 && Switch[7] == SWITCH1Reversed) SafetyON = true;
-    if (SafetySwitch == 2 && Switch[5] == SWITCH2Reversed) SafetyON = true;
-    if (SafetySwitch == 3 && Switch[0] == SWITCH3Reversed) SafetyON = true;
-    if (SafetySwitch == 4 && Switch[2] == SWITCH4Reversed) SafetyON = true; 
+    if (SafetySwitch == 1 && Switch[7]  == SWITCH1Reversed) SafetyON = true;
+    if (SafetySwitch == 2 && Switch[5]  == SWITCH2Reversed) SafetyON = true;
+    if (SafetySwitch == 3 && Switch[0]  == SWITCH3Reversed) SafetyON = true;
+    if (SafetySwitch == 4 && Switch[2]  == SWITCH4Reversed) SafetyON = true; 
     if (SafetyON) MotorEnabled = false;
 }
 
