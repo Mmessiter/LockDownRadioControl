@@ -23,7 +23,7 @@ var searchData=
   ['checkmacrosbuffer_20',['CheckMacrosBuffer',['../TransmitterCode_2src_2main_8cpp.html#a6bb930920ba3a8d45a737dde782ef65c',1,'main.cpp']]],
   ['checkmodelname_21',['CheckModelName',['../TransmitterCode_2src_2main_8cpp.html#a984cb52354a84c45e9e41f396a1c5e92',1,'main.cpp']]],
   ['checkmotoroff_22',['CheckMotorOff',['../RadioFunctions_8h.html#a2f7d73b3096c884b2ace4b3399268325',1,'CheckMotorOff():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a2f7d73b3096c884b2ace4b3399268325',1,'CheckMotorOff():&#160;main.cpp']]],
-  ['checkpoweroffbutton_23',['CheckPowerOffButton',['../TransmitterCode_2src_2main_8cpp.html#a6ae37c6938b8c10b83d1bc74e8643bd9',1,'main.cpp']]],
+  ['checkpoweroffbutton_23',['CheckPowerOffButton',['../RadioFunctions_8h.html#a6ae37c6938b8c10b83d1bc74e8643bd9',1,'CheckPowerOffButton():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a6ae37c6938b8c10b83d1bc74e8643bd9',1,'CheckPowerOffButton():&#160;main.cpp']]],
   ['checkrange_24',['CheckRange',['../TransmitterCode_2src_2main_8cpp.html#a01c7a0b0de94ec72fe070ea9f90dc2ec',1,'CheckRange(int v, int min, int max):&#160;main.cpp'],['../RadioFunctions_8h.html#a01c7a0b0de94ec72fe070ea9f90dc2ec',1,'CheckRange(int v, int min, int max):&#160;main.cpp']]],
   ['checkrxvolts_25',['CheckRXVolts',['../TransmitterCode_2src_2main_8cpp.html#a3014b0aec0f1343c2fd7b480bd5e0425',1,'main.cpp']]],
   ['checksavedtrimvalues_26',['CheckSavedTrimValues',['../TransmitterCode_2src_2main_8cpp.html#a688c8f45b7061a1574dcb7eb28eec56b',1,'main.cpp']]],
