@@ -3366,9 +3366,9 @@ FLASHMEM void setup()
     TeensyWatchDog.begin(WatchDogConfig);
     LastDogKick = millis(); // needed? - yes!
    
-    Procrastinate(WARMUPDELAY);
+    delay(WARMUPDELAY);
     if (!SD.begin(BUILTIN_SDCARD)) { // MUST return true or all is lost! 
-        Procrastinate(WARMUPDELAY);
+        delay(WARMUPDELAY);
         SD.begin(BUILTIN_SDCARD);    // a second attempt for iffy sd cards ?!
     }
     ErrorState = NOERROR;
@@ -3395,7 +3395,7 @@ FLASHMEM void setup()
     if (USE_INA219) ina219.begin();
     InitSwitchesAndTrims();
     if(!BuddyPupilOnSbus) InitRadio(DefaultPipe);
-    Procrastinate(WARMUPDELAY);                        // Allow Nextion time to warm up
+    delay(WARMUPDELAY);                        // Allow Nextion time to warm up
     SendValue(FrontView_BackGround, BackGroundColour); // Get colours ready
     SendValue(FrontView_ForeGround, ForeGroundColour);
     SendValue(FrontView_Special, SpecialColour);
@@ -3406,7 +3406,7 @@ FLASHMEM void setup()
     SetAudioVolume(AudioVolume);
     if (PlayFanfare) {
         PlaySound(THEFANFARE);
-        Procrastinate(4000); // Fanafare takes about 4 seconds
+        delay(4000); // Fanafare takes about 4 seconds
     }
     SendValue(FrontView_Hours, 0);
     SendValue(FrontView_Mins, 0);
