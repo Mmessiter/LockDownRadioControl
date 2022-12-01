@@ -7955,7 +7955,7 @@ void GetBank()
                         PlaySound(PLSTURNOFF);
                         WarningTimer = millis();
                    }
-                    return;
+                return;
                 }
             ShowMotor(1);
             if (AnnounceBanks) PlaySound(MOTORON);                                      // Tell the pilot motor is on! 
