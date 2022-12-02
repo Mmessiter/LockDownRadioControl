@@ -1511,7 +1511,8 @@ FASTRUN bool CheckTXVolts()
     char  pc[] = "%";
     char  nbuf[10];                   // Little buffer for numbers
     char  v[] = "V";
-    
+    char  t17[] = "t17";
+
     if (USE_INA219) {
         TransmitterBatteryVolts = ((ina219.getBusVoltage_V()) * 100) + (TxVoltageCorrection * 2);               // Correction for inaccurate ina219
         dtostrf(TransmitterBatteryVolts / 200, 2, 2, nbuf);                                                     // Volts per cell
@@ -1538,7 +1539,10 @@ FASTRUN bool CheckTXVolts()
                 SendText(FrontView_TXBV, nbuf);
             }
         }
-        if (CurrentView == DATAVIEW) SendText(DataView_txv, TransmitterVersionNumber);
+        if (CurrentView == DATAVIEW) {
+            SendText(DataView_txv, TransmitterVersionNumber);
+            SendText(t17, nbuf);
+        }
     }
     return TXWarningFlag;
 }
@@ -1560,7 +1564,8 @@ FASTRUN bool CheckRXVolts()
     char  v[]              = "V  (";
     char  pc[]             = "%";
     char  spaces[]         = "  ";
-    
+    char     t6[]             = "t6";
+
     ReadVolts                = (RXModelVolts * 100) + (RxVoltageCorrection * RXCellCount);
     GreenPercentBar          = map(ReadVolts, 3.4f * RXCellCount * 100, 4.2f * RXCellCount * 100, 0, 100);
     if (RXVoltsDetected) {
@@ -1579,6 +1584,11 @@ FASTRUN bool CheckRXVolts()
                 strcat(RXBattInfo, PerCell);
                 SendText(FrontView_RXBV, RXBattInfo);  
             }
+            if (CurrentView == DATAVIEW){
+                 dtostrf(VoltsPerCell, 2, 2, Vbuf);
+                 SendText(t6, Vbuf);
+            }
+
             if (VoltsPerCell < StopFlyingVoltsPerCell && GreenPercentBar > 0) {
                 if (!LowVoltstimer) LowVoltstimer = millis();        // Start a timer if not running already 
                 if (millis() - LowVoltstimer > LOW_VOLTAGE_TIME){    // Is RX Lipo down to storage volts for over 3 seconds? 
@@ -1765,7 +1775,7 @@ FASTRUN void ShowComms()
             SendValue(DataView_pps, PacketsPerSecond);
             SendValue(DataView_lps, TotalLostPackets / 2); // about half probably made it but went un acknoledged
             SendText(DataView_Alt,  ModelAltitude);
-          SendText(DataView_MaxAlt, MaxAltitude);
+            SendText(DataView_MaxAlt, MaxAltitude);
             SendText(DataView_Temp, ModelTemperature);
             SendText(DataView_Rx,   ThisRadio);
             SendText(DataView_rxv,  ReceiverVersionNumber);
@@ -1774,6 +1784,11 @@ FASTRUN void ShowComms()
             SendValue(DataView_Sg,  RX1TotalTime - SavedRX1TotalTime);
             SendValue(DataView_Ag,  GapAverage);
             SendValue(DataView_Gc,  RX2TotalTime - SavedRX2TotalTime);
+            snprintf(Vbuf, 6, "%d", (int)SbusRepeats - SavedSbusRepeats);
+            SendText(Sbs, Vbuf);
+            SendValue(DataView_lps, TotalLostPackets / 2);
+        }
+        if (CurrentView == GPSVIEW ) {
             if (GpsFix) { // if no fix, then leave display as before
                 SendText(Fix, yes);
             }
@@ -1802,9 +1817,6 @@ FASTRUN void ShowComms()
             SendText(BTo, Vbuf);
             snprintf(Vbuf, 6, "%d", (int)GPSMaxDistance);
             SendText(Mxd, Vbuf);
-            snprintf(Vbuf, 6, "%d", (int)SbusRepeats - SavedSbusRepeats);
-            SendText(Sbs, Vbuf);
-            if (BoundFlag) SendValue(DataView_lps, TotalLostPackets / 2);
         }
         CheckScreenTime();
         if (CheckTXVolts() || CheckRXVolts()) {         // Note: If TX Battery is low, then CheckRXVolts() is not even called.
@@ -6313,9 +6325,18 @@ void DualRatesRefresh(){
         DisplayDualRateValues();
 }
 
+/******************************************************************************************************************************/
+
+void GotoGPSView(){                              
+
+   char GotoGPSView[] = "page GPSView";
+   SendCommand(GotoGPSView);
+   CurrentView = GPSVIEW;
+
+}
 
 // ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
-#define LASTFUNCTION 49 // one more than final one
+#define LASTFUNCTION 50 // one more than final one
 
 void (*NumberedFunctions[LASTFUNCTION])() {
     Blank,                // 0 (spare)
@@ -6366,7 +6387,9 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     DualRatesStart,             // 45
     DualRatesEnd,               // 46
     DualRatesRefresh,           // 47  
-    GotoFrontView               // 48
+    GotoFrontView,              // 48
+    GotoGPSView                 // 49
+
 
 }; // list will become much longer ...
 
@@ -6780,7 +6803,8 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(DataEnd, TextIn) > 0) { //  Exit from Data screen
+        if (InStrng(DataEnd, TextIn) > 0) { //  Exit from Data screen // heer
+            SendCommand(page_SetupView);
             CurrentView = MAINSETUPVIEW;
             b5isGrey    = false;
             CurrentMode = NORMAL;

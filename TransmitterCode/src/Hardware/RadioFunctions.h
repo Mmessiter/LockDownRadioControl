@@ -163,6 +163,7 @@
 #define BUDDYCHVIEW     27
 #define OPTIONVIEW4     28
 #define DUALRATESVIEW   29
+#define GPSVIEW         30
 
 // **************************************************************************
 //                          Switches' GPIOs                                 *
