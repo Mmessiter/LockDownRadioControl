@@ -54,6 +54,7 @@ var RadioFunctions_8h =
     [ "FIVEMINUTES", "RadioFunctions_8h.html#a84242d01b905e842a18fb3019e839ada", null ],
     [ "FOURMINUTES", "RadioFunctions_8h.html#aad932f138e888f84b6cd1c268fdabb84", null ],
     [ "FRONTVIEW", "RadioFunctions_8h.html#a8204cbed1c612a522a43c80f071eee2a", null ],
+    [ "GPSVIEW", "RadioFunctions_8h.html#a634deb320121023b685707098898a400", null ],
     [ "GRAPHVIEW", "RadioFunctions_8h.html#a336e60cae8bfcec917447fe101efa4f4", null ],
     [ "Gray", "RadioFunctions_8h.html#aab957a0fe1c92d227cced2922967fb97", null ],
     [ "Green", "RadioFunctions_8h.html#aa429cd977709122166b6e31fa10903d1", null ],

@@ -132,6 +132,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "getvalue", "TransmitterCode_2src_2main_8cpp.html#aff6fa8906188d3249b01bf59de47df2f", null ],
     [ "GetValue", "TransmitterCode_2src_2main_8cpp.html#a6e4fac4e296c09388b8b56353402d67a", null ],
     [ "GotoFrontView", "TransmitterCode_2src_2main_8cpp.html#a2d16d1f4802d4029bc8933a18d213beb", null ],
+    [ "GotoGPSView", "TransmitterCode_2src_2main_8cpp.html#acfb857911a5c8c11020e345c71bd36ec", null ],
     [ "GotoMacrosView", "TransmitterCode_2src_2main_8cpp.html#abdecfd433e1830c6497040b03450bed7", null ],
     [ "GotoModelsView", "TransmitterCode_2src_2main_8cpp.html#a446a94169d966af920710f7acddc5257", null ],
     [ "GreenLedOn", "TransmitterCode_2src_2main_8cpp.html#a62e53eb9359c32b666e3386d62c57037", null ],
