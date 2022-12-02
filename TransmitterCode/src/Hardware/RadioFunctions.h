@@ -444,6 +444,8 @@ extern void          GotoFrontView();
 extern void          CheckDualRatesValues();
 extern void          UpdateLED();
 extern void          CheckMotorOff();
+extern bool          GetButtonPress();
+extern void          CheckPowerOffButton();
 
 /*********************************************************************************************************************************/
 // function prototypes

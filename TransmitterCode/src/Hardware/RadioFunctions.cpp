@@ -74,7 +74,7 @@ void Procrastinate(uint32_t HowLong)
     RecursedAlready = true;
     while ((millis() - ThisMoment) < HowLong) {
         KickTheDog();                                                  // keep watchdog happy
-        if (Connected && BoundFlag && ModelMatched) SendData();        // keep receiver happy too ... but guard against recursion 
+        if (Connected && BoundFlag && ModelMatched) SendData();        // keep receiver happy too ... but guard against recursion
     }
     RecursedAlready = false;
 }
