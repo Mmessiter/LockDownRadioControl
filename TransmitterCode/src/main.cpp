@@ -5036,7 +5036,7 @@ void ReceiveModelFile()
     Radio1.startListening();
     RXTimer = millis();           // Start timer
     while (!Radio1.available()) { // Await the sender....
-        Procrastinate(5);
+        delay(5);
         if (GetButtonPress()) {
             NormaliseTheRadio();
             RedLedOn();
@@ -5117,7 +5117,7 @@ void ReceiveModelFile()
     ModelsFileNumber.close();
     BuildDirectory();
     SendText(ModelsView_filename, Success);
-    Procrastinate(750);
+    delay(750);
     SendText(ModelsView_filename, SingleModelFile);
     Radio1.setRetries(RETRYCOUNT, RETRYWAIT);
     // **************************************** Below Here the new model is imported for immediate use
@@ -5165,7 +5165,7 @@ void SendModelFile()
     BlueLedOn();
     SendCommand(ProgressStart);
     SendValue(Progress, p);
-    Procrastinate(10);
+    delay(10);
 #ifdef DB_MODEL_EXCHANGE
     Serial.print("Sending model: ");
     Serial.println(SingleModelFile);
@@ -5183,7 +5183,7 @@ void SendModelFile()
     Radio1.setRetries(15, 15);
     Radio1.openWritingPipe(TXPipe);
     Radio1.stopListening();
-    Procrastinate(4);
+    delay(4);
     while (Fposition < Fsize) {
         KickTheDog(); // Watchdog
         p = ((float)Fposition / (float)Fsize) * 100;
@@ -5213,7 +5213,7 @@ void SendModelFile()
        }
         if (Radio1.write(&Fbuffer, BUFFERSIZE + 4)) {
             SentMoment = millis();
-            Procrastinate(1);
+            delay(1);
             if (Radio1.isAckPayloadAvailable()) {
                 Radio1.read(&Fack, sizeof(Fack));
                 Serial.println("ACK received");
@@ -5239,7 +5239,7 @@ void SendModelFile()
     Serial.println("ALL SENT.");
 #endif
     SendValue(Progress, 100);
-    Procrastinate(750);
+    delay(750);
     NormaliseTheRadio();
     SendCommand(ProgressEnd);
     RedLedOn();
