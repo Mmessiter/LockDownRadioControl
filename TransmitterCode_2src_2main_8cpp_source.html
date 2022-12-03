@@ -4978,7 +4978,7 @@ $(document).ready(function(){initNavTree('TransmitterCode_2src_2main_8cpp_source
 <div class="line"><a id="l05036" name="l05036"></a><span class="lineno"> 5036</span>    <a class="code hl_variable" href="RadioFunctions_8h.html#aae23a8374f487a46c5fcb1fb02fadc69">Radio1</a>.startListening();</div>
 <div class="line"><a id="l05037" name="l05037"></a><span class="lineno"> 5037</span>    RXTimer = millis();           <span class="comment">// Start timer</span></div>
 <div class="line"><a id="l05038" name="l05038"></a><span class="lineno"> 5038</span>    <span class="keywordflow">while</span> (!<a class="code hl_variable" href="RadioFunctions_8h.html#aae23a8374f487a46c5fcb1fb02fadc69">Radio1</a>.available()) { <span class="comment">// Await the sender....</span></div>
-<div class="line"><a id="l05039" name="l05039"></a><span class="lineno"> 5039</span>        <a class="code hl_function" href="RadioFunctions_8cpp.html#a760609a682300dfe6bfaac737fd4d5eb">Procrastinate</a>(5);</div>
+<div class="line"><a id="l05039" name="l05039"></a><span class="lineno"> 5039</span>        delay(5);</div>
 <div class="line"><a id="l05040" name="l05040"></a><span class="lineno"> 5040</span>        <span class="keywordflow">if</span> (<a class="code hl_function" href="TransmitterCode_2src_2main_8cpp.html#acd96c3022716bba17005df2e6b3d0ed6">GetButtonPress</a>()) {</div>
 <div class="line"><a id="l05041" name="l05041"></a><span class="lineno"> 5041</span>            <a class="code hl_function" href="TransmitterCode_2src_2main_8cpp.html#a0708fa5166a126be25283b6cfaff6227">NormaliseTheRadio</a>();</div>
 <div class="line"><a id="l05042" name="l05042"></a><span class="lineno"> 5042</span>            <a class="code hl_function" href="TransmitterCode_2src_2main_8cpp.html#a7d34cec6e8edc20c8b50424e15dcc7c7">RedLedOn</a>();</div>
@@ -5059,7 +5059,7 @@ $(document).ready(function(){initNavTree('TransmitterCode_2src_2main_8cpp_source
 <div class="line"><a id="l05117" name="l05117"></a><span class="lineno"> 5117</span>    <a class="code hl_variable" href="TransmitterCode_2src_2main_8cpp.html#a3c59f91f84e4b03ab8c76c68429e7ce4">ModelsFileNumber</a>.close();</div>
 <div class="line"><a id="l05118" name="l05118"></a><span class="lineno"> 5118</span>    <a class="code hl_function" href="TransmitterCode_2src_2main_8cpp.html#affc6c0de18db71aa5ad8b4d241339731">BuildDirectory</a>();</div>
 <div class="line"><a id="l05119" name="l05119"></a><span class="lineno"> 5119</span>    <a class="code hl_function" href="TransmitterCode_2src_2main_8cpp.html#afe513398f72d5e48f691830a1ef6eb42">SendText</a>(ModelsView_filename, Success);</div>
-<div class="line"><a id="l05120" name="l05120"></a><span class="lineno"> 5120</span>    <a class="code hl_function" href="RadioFunctions_8cpp.html#a760609a682300dfe6bfaac737fd4d5eb">Procrastinate</a>(750);</div>
+<div class="line"><a id="l05120" name="l05120"></a><span class="lineno"> 5120</span>    delay(750);</div>
 <div class="line"><a id="l05121" name="l05121"></a><span class="lineno"> 5121</span>    <a class="code hl_function" href="TransmitterCode_2src_2main_8cpp.html#afe513398f72d5e48f691830a1ef6eb42">SendText</a>(ModelsView_filename, <a class="code hl_variable" href="TransmitterCode_2src_2main_8cpp.html#ae72cb82df39671a3226320fc9c32c125">SingleModelFile</a>);</div>
 <div class="line"><a id="l05122" name="l05122"></a><span class="lineno"> 5122</span>    <a class="code hl_variable" href="RadioFunctions_8h.html#aae23a8374f487a46c5fcb1fb02fadc69">Radio1</a>.setRetries(<a class="code hl_define" href="RadioFunctions_8h.html#a0cf4668725c06b3a6d64a2895c906379">RETRYCOUNT</a>, <a class="code hl_define" href="RadioFunctions_8h.html#aadc879b4b6396135d31e22c22955a753">RETRYWAIT</a>);</div>
 <div class="line"><a id="l05123" name="l05123"></a><span class="lineno"> 5123</span>    <span class="comment">// **************************************** Below Here the new model is imported for immediate use</span></div>
@@ -5106,7 +5106,7 @@ $(document).ready(function(){initNavTree('TransmitterCode_2src_2main_8cpp_source
 <div class="line"><a id="l05165" name="l05165"></a><span class="lineno"> 5165</span>    <a class="code hl_function" href="TransmitterCode_2src_2main_8cpp.html#aa1f9aec467eb00917ad9ffdc0bd5b20d">BlueLedOn</a>();</div>
 <div class="line"><a id="l05166" name="l05166"></a><span class="lineno"> 5166</span>    <a class="code hl_function" href="TransmitterCode_2src_2main_8cpp.html#aecac2f0c289f02ef3c92b85be82eacac">SendCommand</a>(ProgressStart);</div>
 <div class="line"><a id="l05167" name="l05167"></a><span class="lineno"> 5167</span>    <a class="code hl_function" href="TransmitterCode_2src_2main_8cpp.html#a1e20efc1e419b252b50d36f9924503fc">SendValue</a>(Progress, p);</div>
-<div class="line"><a id="l05168" name="l05168"></a><span class="lineno"> 5168</span>    <a class="code hl_function" href="RadioFunctions_8cpp.html#a760609a682300dfe6bfaac737fd4d5eb">Procrastinate</a>(10);</div>
+<div class="line"><a id="l05168" name="l05168"></a><span class="lineno"> 5168</span>    delay(10);</div>
 <div class="line"><a id="l05169" name="l05169"></a><span class="lineno"> 5169</span><span class="preprocessor">#ifdef DB_MODEL_EXCHANGE</span></div>
 <div class="line"><a id="l05170" name="l05170"></a><span class="lineno"> 5170</span>    Serial.print(<span class="stringliteral">&quot;Sending model: &quot;</span>);</div>
 <div class="line"><a id="l05171" name="l05171"></a><span class="lineno"> 5171</span>    Serial.println(<a class="code hl_variable" href="TransmitterCode_2src_2main_8cpp.html#ae72cb82df39671a3226320fc9c32c125">SingleModelFile</a>);</div>
@@ -5124,7 +5124,7 @@ $(document).ready(function(){initNavTree('TransmitterCode_2src_2main_8cpp_source
 <div class="line"><a id="l05183" name="l05183"></a><span class="lineno"> 5183</span>    <a class="code hl_variable" href="RadioFunctions_8h.html#aae23a8374f487a46c5fcb1fb02fadc69">Radio1</a>.setRetries(15, 15);</div>
 <div class="line"><a id="l05184" name="l05184"></a><span class="lineno"> 5184</span>    <a class="code hl_variable" href="RadioFunctions_8h.html#aae23a8374f487a46c5fcb1fb02fadc69">Radio1</a>.openWritingPipe(TXPipe);</div>
 <div class="line"><a id="l05185" name="l05185"></a><span class="lineno"> 5185</span>    <a class="code hl_variable" href="RadioFunctions_8h.html#aae23a8374f487a46c5fcb1fb02fadc69">Radio1</a>.stopListening();</div>
-<div class="line"><a id="l05186" name="l05186"></a><span class="lineno"> 5186</span>    <a class="code hl_function" href="RadioFunctions_8cpp.html#a760609a682300dfe6bfaac737fd4d5eb">Procrastinate</a>(4);</div>
+<div class="line"><a id="l05186" name="l05186"></a><span class="lineno"> 5186</span>    delay(4);</div>
 <div class="line"><a id="l05187" name="l05187"></a><span class="lineno"> 5187</span>    <span class="keywordflow">while</span> (Fposition &lt; Fsize) {</div>
 <div class="line"><a id="l05188" name="l05188"></a><span class="lineno"> 5188</span>        <a class="code hl_function" href="TransmitterCode_2src_2main_8cpp.html#ada95a00a341e4a80176eda743a94ab2e">KickTheDog</a>(); <span class="comment">// Watchdog</span></div>
 <div class="line"><a id="l05189" name="l05189"></a><span class="lineno"> 5189</span>        p = ((float)Fposition / (<span class="keywordtype">float</span>)Fsize) * 100;</div>
@@ -5154,7 +5154,7 @@ $(document).ready(function(){initNavTree('TransmitterCode_2src_2main_8cpp_source
 <div class="line"><a id="l05213" name="l05213"></a><span class="lineno"> 5213</span>       }</div>
 <div class="line"><a id="l05214" name="l05214"></a><span class="lineno"> 5214</span>        <span class="keywordflow">if</span> (<a class="code hl_variable" href="RadioFunctions_8h.html#aae23a8374f487a46c5fcb1fb02fadc69">Radio1</a>.write(&amp;Fbuffer, <a class="code hl_define" href="TransmitterCode_2src_2main_8cpp.html#ac3146f1e9227301bb4aa518f4d336cee">BUFFERSIZE</a> + 4)) {</div>
 <div class="line"><a id="l05215" name="l05215"></a><span class="lineno"> 5215</span>            SentMoment = millis();</div>
-<div class="line"><a id="l05216" name="l05216"></a><span class="lineno"> 5216</span>            <a class="code hl_function" href="RadioFunctions_8cpp.html#a760609a682300dfe6bfaac737fd4d5eb">Procrastinate</a>(1);</div>
+<div class="line"><a id="l05216" name="l05216"></a><span class="lineno"> 5216</span>            delay(1);</div>
 <div class="line"><a id="l05217" name="l05217"></a><span class="lineno"> 5217</span>            <span class="keywordflow">if</span> (<a class="code hl_variable" href="RadioFunctions_8h.html#aae23a8374f487a46c5fcb1fb02fadc69">Radio1</a>.isAckPayloadAvailable()) {</div>
 <div class="line"><a id="l05218" name="l05218"></a><span class="lineno"> 5218</span>                <a class="code hl_variable" href="RadioFunctions_8h.html#aae23a8374f487a46c5fcb1fb02fadc69">Radio1</a>.read(&amp;Fack, <span class="keyword">sizeof</span>(Fack));</div>
 <div class="line"><a id="l05219" name="l05219"></a><span class="lineno"> 5219</span>                Serial.println(<span class="stringliteral">&quot;ACK received&quot;</span>);</div>
@@ -5180,7 +5180,7 @@ $(document).ready(function(){initNavTree('TransmitterCode_2src_2main_8cpp_source
 <div class="line"><a id="l05239" name="l05239"></a><span class="lineno"> 5239</span>    Serial.println(<span class="stringliteral">&quot;ALL SENT.&quot;</span>);</div>
 <div class="line"><a id="l05240" name="l05240"></a><span class="lineno"> 5240</span><span class="preprocessor">#endif</span></div>
 <div class="line"><a id="l05241" name="l05241"></a><span class="lineno"> 5241</span>    <a class="code hl_function" href="TransmitterCode_2src_2main_8cpp.html#a1e20efc1e419b252b50d36f9924503fc">SendValue</a>(Progress, 100);</div>
-<div class="line"><a id="l05242" name="l05242"></a><span class="lineno"> 5242</span>    <a class="code hl_function" href="RadioFunctions_8cpp.html#a760609a682300dfe6bfaac737fd4d5eb">Procrastinate</a>(750);</div>
+<div class="line"><a id="l05242" name="l05242"></a><span class="lineno"> 5242</span>    delay(750);</div>
 <div class="line"><a id="l05243" name="l05243"></a><span class="lineno"> 5243</span>    <a class="code hl_function" href="TransmitterCode_2src_2main_8cpp.html#a0708fa5166a126be25283b6cfaff6227">NormaliseTheRadio</a>();</div>
 <div class="line"><a id="l05244" name="l05244"></a><span class="lineno"> 5244</span>    <a class="code hl_function" href="TransmitterCode_2src_2main_8cpp.html#aecac2f0c289f02ef3c92b85be82eacac">SendCommand</a>(ProgressEnd);</div>
 <div class="line"><a id="l05245" name="l05245"></a><span class="lineno"> 5245</span>    <a class="code hl_function" href="TransmitterCode_2src_2main_8cpp.html#a7d34cec6e8edc20c8b50424e15dcc7c7">RedLedOn</a>();</div>
