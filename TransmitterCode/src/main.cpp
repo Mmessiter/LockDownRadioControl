@@ -3406,7 +3406,7 @@ FLASHMEM void setup()
     ScanI2c();
     if (USE_INA219) ina219.begin();
     InitSwitchesAndTrims();
-    if(!BuddyPupilOnSbus) InitRadio(DefaultPipe);
+    InitRadio(DefaultPipe);
     delay(WARMUPDELAY);                        // Allow Nextion time to warm up
     SendValue(FrontView_BackGround, BackGroundColour); // Get colours ready
     SendValue(FrontView_ForeGround, ForeGroundColour);
@@ -5213,19 +5213,11 @@ void SendModelFile()
        }
         if (Radio1.write(&Fbuffer, BUFFERSIZE + 4)) {
             SentMoment = millis();
-            delay(1);
-            if (Radio1.isAckPayloadAvailable()) {
-                Radio1.read(&Fack, sizeof(Fack));
-                Serial.println("ACK received");
-                Serial.println(Fposition);
-            }
-            else {
-                Serial.println("NO ACK received");
-            }
+            Radio1.read(&Fack, sizeof(Fack)); 
         }
         else {
-            if (PacketNumber == 2) { // error - no connection
-                SetThePipe(DefaultPipe);
+            if (PacketNumber == 2) { // error - no connection // heer
+                NormaliseTheRadio();
                 SendCommand(ProgressEnd);
                 return;
             }
@@ -5689,7 +5681,7 @@ void EndBuddyView()
 
 
     char pSetupView[]   = "page SetupView";
-    BuddyPupilOnSbus    = GetValue(BuddyP); // Pupil, wired
+    BuddyPupilOnSbus    = GetValue(BuddyP); // Pupil, wired // heer
     BuddyMaster         = GetValue(BuddyM); // Master, either.
     SaveAllParameters();
     b5isGrey = false;
