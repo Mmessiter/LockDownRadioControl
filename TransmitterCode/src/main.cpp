@@ -1517,9 +1517,9 @@ FASTRUN bool CheckTXVolts()
         TransmitterBatteryVolts = ((ina219.getBusVoltage_V()) * 100) + (TxVoltageCorrection * 2);               // Correction for inaccurate ina219
         dtostrf(TransmitterBatteryVolts / 200, 2, 2, nbuf);                                                     // Volts per cell
         if (TXLiPo) {                                                                                           // Does TX have a LiPo or a LiFePo4?
-                TransmitterBatteryPercentLeft = map(TransmitterBatteryVolts, 3.6 * 200, 4.20 * 200, 0, 100);  // LIPO Battery 3.50 -> 4.20  volts per cell
+                TransmitterBatteryPercentLeft = map(TransmitterBatteryVolts, 3.5 * 200, 4.00 * 200, 0, 100);    // LIPO Battery 3.50 -> c. 4.00  volts per cell
             } else {                                                                                            // No, it's a LiFePo4
-                TransmitterBatteryPercentLeft = map(TransmitterBatteryVolts, 3.2 * 200, 3.33 * 200, 0, 100);    // LiFePo4 Battery 3.1 ->3.35  volts per cell
+                TransmitterBatteryPercentLeft = map(TransmitterBatteryVolts, 3.2 * 200, 3.33 * 200, 0, 100);    // LiFePo4 Battery 3.1 -> 3.35  volts per cell
             }
         if (TransmitterBatteryPercentLeft < LowBattery) {
             TXWarningFlag = true;
