@@ -1509,7 +1509,7 @@ FASTRUN bool CheckTXVolts()
     char  Vbuf[10];                  // Little buffer for numbers
     char  TXBattInfo[65];
     char  pc[] = "%";
-    char  nbuf[10];                   // Little buffer for numbers
+    char  nbuf[10];                  // Little buffer for numbers
     char  v[] = "V";
     char  t17[] = "t17";
 
@@ -1535,7 +1535,7 @@ FASTRUN bool CheckTXVolts()
                 SendText(FrontView_TXBV, TXBattInfo);
             }
             else {
-                strcat(nbuf, v); //
+                strcat(nbuf, v); 
                 SendText(FrontView_TXBV, nbuf);
             }
         }
