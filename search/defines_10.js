@@ -15,7 +15,8 @@ var searchData=
   ['retrycount_12',['RETRYCOUNT',['../RadioFunctions_8h.html#a0cf4668725c06b3a6d64a2895c906379',1,'RadioFunctions.h']]],
   ['retrywait_13',['RETRYWAIT',['../RadioFunctions_8h.html#aadc879b4b6396135d31e22c22955a753',1,'RadioFunctions.h']]],
   ['reverseview_14',['REVERSEVIEW',['../RadioFunctions_8h.html#a3bedd97d2e81444eda8c2d43050b88c9',1,'RadioFunctions.h']]],
-  ['rxversion_5fmajor_15',['RXVERSION_MAJOR',['../common_8h.html#a2b147d5155fcf962e9f1c4885b32c67d',1,'common.h']]],
-  ['rxversion_5fminimus_16',['RXVERSION_MINIMUS',['../common_8h.html#a46d5105ccf92f7e44b10af6fd51772a8',1,'common.h']]],
-  ['rxversion_5fminor_17',['RXVERSION_MINOR',['../common_8h.html#adeb76229aa4087c3bc1e1fd17bd865b2',1,'common.h']]]
+  ['rxsetupview_15',['RXSETUPVIEW',['../RadioFunctions_8h.html#a780837bb310f271084ffc0720d6be13b',1,'RadioFunctions.h']]],
+  ['rxversion_5fmajor_16',['RXVERSION_MAJOR',['../common_8h.html#a2b147d5155fcf962e9f1c4885b32c67d',1,'common.h']]],
+  ['rxversion_5fminimus_17',['RXVERSION_MINIMUS',['../common_8h.html#a46d5105ccf92f7e44b10af6fd51772a8',1,'common.h']]],
+  ['rxversion_5fminor_18',['RXVERSION_MINOR',['../common_8h.html#adeb76229aa4087c3bc1e1fd17bd865b2',1,'common.h']]]
 ];
