@@ -12,7 +12,7 @@
 
 #define TXVERSION_MAJOR   2
 #define TXVERSION_MINOR   0
-#define TXVERSION_MINIMUS 0
+#define TXVERSION_MINIMUS 1
 
 // **************************************************************************
 //                               Includes                                   *
@@ -140,7 +140,7 @@
 #define SCANVIEW        4
 #define MODELSVIEW      5
 #define CALIBRATEVIEW   6
-#define MAINSETUPVIEW   7
+#define TXSETUPVIEW   7
 #define SUBTRIMVIEW     8
 #define DATAVIEW        9
 #define TRIM_VIEW       10
@@ -163,6 +163,8 @@
 #define BUDDYCHVIEW     27
 #define OPTIONVIEW4     28
 #define DUALRATESVIEW   29
+#define GPSVIEW         30
+#define RXSETUPVIEW     31
 
 // **************************************************************************
 //                          Switches' GPIOs                                 *

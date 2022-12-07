@@ -416,6 +416,7 @@ uint8_t   SwapWaveBand      = 0;
 uint16_t  TrimFactor        = 2; // How much to multiply trim by
 uint8_t   DateFix           = 0;
 bool      b5isGrey          = false;
+bool      b12isGrey         = false;
 uint16_t  BackGroundColour  = 214;
 uint16_t  ForeGroundColour  = White;
 uint16_t  HighlightColour   = Yellow;
@@ -1509,16 +1510,17 @@ FASTRUN bool CheckTXVolts()
     char  Vbuf[10];                  // Little buffer for numbers
     char  TXBattInfo[65];
     char  pc[] = "%";
-    char  nbuf[10];                   // Little buffer for numbers
+    char  nbuf[10];                  // Little buffer for numbers
     char  v[] = "V";
-    
+    char  t17[] = "t17";
+
     if (USE_INA219) {
         TransmitterBatteryVolts = ((ina219.getBusVoltage_V()) * 100) + (TxVoltageCorrection * 2);               // Correction for inaccurate ina219
         dtostrf(TransmitterBatteryVolts / 200, 2, 2, nbuf);                                                     // Volts per cell
         if (TXLiPo) {                                                                                           // Does TX have a LiPo or a LiFePo4?
-                TransmitterBatteryPercentLeft = map(TransmitterBatteryVolts, 3.6 * 200, 4.20 * 200, 0, 100);  // LIPO Battery 3.50 -> 4.20  volts per cell
+                TransmitterBatteryPercentLeft = map(TransmitterBatteryVolts, 3.5 * 200, 4.00 * 200, 0, 100);    // LIPO Battery 3.50 -> c. 4.00  volts per cell
             } else {                                                                                            // No, it's a LiFePo4
-                TransmitterBatteryPercentLeft = map(TransmitterBatteryVolts, 3.2 * 200, 3.33 * 200, 0, 100);    // LiFePo4 Battery 3.1 ->3.35  volts per cell
+                TransmitterBatteryPercentLeft = map(TransmitterBatteryVolts, 3.2 * 200, 3.33 * 200, 0, 100);    // LiFePo4 Battery 3.1 -> 3.35  volts per cell
             }
         if (TransmitterBatteryPercentLeft < LowBattery) {
             TXWarningFlag = true;
@@ -1534,11 +1536,14 @@ FASTRUN bool CheckTXVolts()
                 SendText(FrontView_TXBV, TXBattInfo);
             }
             else {
-                strcat(nbuf, v); //
+                strcat(nbuf, v); 
                 SendText(FrontView_TXBV, nbuf);
             }
         }
-        if (CurrentView == DATAVIEW) SendText(DataView_txv, TransmitterVersionNumber);
+        if (CurrentView == DATAVIEW) {
+            SendText(DataView_txv, TransmitterVersionNumber);
+            SendText(t17, nbuf);
+        }
     }
     return TXWarningFlag;
 }
@@ -1560,7 +1565,8 @@ FASTRUN bool CheckRXVolts()
     char  v[]              = "V  (";
     char  pc[]             = "%";
     char  spaces[]         = "  ";
-    
+    char     t6[]             = "t6";
+
     ReadVolts                = (RXModelVolts * 100) + (RxVoltageCorrection * RXCellCount);
     GreenPercentBar          = map(ReadVolts, 3.4f * RXCellCount * 100, 4.2f * RXCellCount * 100, 0, 100);
     if (RXVoltsDetected) {
@@ -1579,6 +1585,11 @@ FASTRUN bool CheckRXVolts()
                 strcat(RXBattInfo, PerCell);
                 SendText(FrontView_RXBV, RXBattInfo);  
             }
+            if (CurrentView == DATAVIEW){
+                 dtostrf(VoltsPerCell, 2, 2, Vbuf);
+                 SendText(t6, Vbuf);
+            }
+
             if (VoltsPerCell < StopFlyingVoltsPerCell && GreenPercentBar > 0) {
                 if (!LowVoltstimer) LowVoltstimer = millis();        // Start a timer if not running already 
                 if (millis() - LowVoltstimer > LOW_VOLTAGE_TIME){    // Is RX Lipo down to storage volts for over 3 seconds? 
@@ -1765,7 +1776,7 @@ FASTRUN void ShowComms()
             SendValue(DataView_pps, PacketsPerSecond);
             SendValue(DataView_lps, TotalLostPackets / 2); // about half probably made it but went un acknoledged
             SendText(DataView_Alt,  ModelAltitude);
-          SendText(DataView_MaxAlt, MaxAltitude);
+            SendText(DataView_MaxAlt, MaxAltitude);
             SendText(DataView_Temp, ModelTemperature);
             SendText(DataView_Rx,   ThisRadio);
             SendText(DataView_rxv,  ReceiverVersionNumber);
@@ -1774,6 +1785,11 @@ FASTRUN void ShowComms()
             SendValue(DataView_Sg,  RX1TotalTime - SavedRX1TotalTime);
             SendValue(DataView_Ag,  GapAverage);
             SendValue(DataView_Gc,  RX2TotalTime - SavedRX2TotalTime);
+            snprintf(Vbuf, 6, "%d", (int)SbusRepeats - SavedSbusRepeats);
+            SendText(Sbs, Vbuf);
+            SendValue(DataView_lps, TotalLostPackets / 2);
+        }
+        if (CurrentView == GPSVIEW ) {
             if (GpsFix) { // if no fix, then leave display as before
                 SendText(Fix, yes);
             }
@@ -1802,9 +1818,6 @@ FASTRUN void ShowComms()
             SendText(BTo, Vbuf);
             snprintf(Vbuf, 6, "%d", (int)GPSMaxDistance);
             SendText(Mxd, Vbuf);
-            snprintf(Vbuf, 6, "%d", (int)SbusRepeats - SavedSbusRepeats);
-            SendText(Sbs, Vbuf);
-            if (BoundFlag) SendValue(DataView_lps, TotalLostPackets / 2);
         }
         CheckScreenTime();
         if (CheckTXVolts() || CheckRXVolts()) {         // Note: If TX Battery is low, then CheckRXVolts() is not even called.
@@ -1825,20 +1838,24 @@ void ReEnableScanButton()   // Scan button AND models button
     char b12NOTGreyed[] = "b12.pco=";
     char nb[15];
     char cmd[30];
-    if (CurrentView == MAINSETUPVIEW) {
-        if (b5isGrey) {
-            Str(nb, ForeGroundColour, 0);
+    
+    Str(nb, ForeGroundColour, 0);
+
+    if (CurrentView == TXSETUPVIEW && b5isGrey) {
             strcpy(cmd, b5NOTGreyed);
             strcat(cmd, nb);
             SendCommand(cmd);
+            b5isGrey = false;
+    } 
+
+    if (CurrentView == RXSETUPVIEW && b12isGrey) {
             strcpy(cmd, b12NOTGreyed);
             strcat(cmd, nb);
             SendCommand(cmd);
-            b5isGrey = false;
-        }
+            b12isGrey = false;
     }
-   
 }
+   
 /*********************************************************************************************************************************/
 
 /** Send 13 joined together char arrays to NEXTION */
@@ -3394,7 +3411,7 @@ FLASHMEM void setup()
     ScanI2c();
     if (USE_INA219) ina219.begin();
     InitSwitchesAndTrims();
-    if(!BuddyPupilOnSbus) InitRadio(DefaultPipe);
+    InitRadio(DefaultPipe);
     delay(WARMUPDELAY);                        // Allow Nextion time to warm up
     SendValue(FrontView_BackGround, BackGroundColour); // Get colours ready
     SendValue(FrontView_ForeGround, ForeGroundColour);
@@ -5024,7 +5041,7 @@ void ReceiveModelFile()
     Radio1.startListening();
     RXTimer = millis();           // Start timer
     while (!Radio1.available()) { // Await the sender....
-        Procrastinate(5);
+        delay(5);
         if (GetButtonPress()) {
             NormaliseTheRadio();
             RedLedOn();
@@ -5105,7 +5122,7 @@ void ReceiveModelFile()
     ModelsFileNumber.close();
     BuildDirectory();
     SendText(ModelsView_filename, Success);
-    Procrastinate(750);
+    delay(750);
     SendText(ModelsView_filename, SingleModelFile);
     Radio1.setRetries(RETRYCOUNT, RETRYWAIT);
     // **************************************** Below Here the new model is imported for immediate use
@@ -5153,7 +5170,7 @@ void SendModelFile()
     BlueLedOn();
     SendCommand(ProgressStart);
     SendValue(Progress, p);
-    Procrastinate(10);
+    delay(10);
 #ifdef DB_MODEL_EXCHANGE
     Serial.print("Sending model: ");
     Serial.println(SingleModelFile);
@@ -5171,7 +5188,7 @@ void SendModelFile()
     Radio1.setRetries(15, 15);
     Radio1.openWritingPipe(TXPipe);
     Radio1.stopListening();
-    Procrastinate(4);
+    delay(4);
     while (Fposition < Fsize) {
         KickTheDog(); // Watchdog
         p = ((float)Fposition / (float)Fsize) * 100;
@@ -5201,19 +5218,11 @@ void SendModelFile()
        }
         if (Radio1.write(&Fbuffer, BUFFERSIZE + 4)) {
             SentMoment = millis();
-            Procrastinate(1);
-            if (Radio1.isAckPayloadAvailable()) {
-                Radio1.read(&Fack, sizeof(Fack));
-                Serial.println("ACK received");
-                Serial.println(Fposition);
-            }
-            else {
-                Serial.println("NO ACK received");
-            }
+            Radio1.read(&Fack, sizeof(Fack)); 
         }
         else {
-            if (PacketNumber == 2) { // error - no connection
-                SetThePipe(DefaultPipe);
+            if (PacketNumber == 2) { // error - no connection 
+                NormaliseTheRadio();
                 SendCommand(ProgressEnd);
                 return;
             }
@@ -5227,7 +5236,7 @@ void SendModelFile()
     Serial.println("ALL SENT.");
 #endif
     SendValue(Progress, 100);
-    Procrastinate(750);
+    delay(750);
     NormaliseTheRadio();
     SendCommand(ProgressEnd);
     RedLedOn();
@@ -5582,7 +5591,7 @@ void PopulateMacrosView()
 
 void ExitMacrosView()
 {
-    char    pSetupView[]                 = "page SetupView";
+    char    pRXSetupView[]               = "page RXSetupView"; 
     char    MacroNumber[]                = "Mno";
     char    TriggerChannel[]             = "Tch";
     char    MoveToChannel[]              = "Mch";
@@ -5598,8 +5607,9 @@ void ExitMacrosView()
     UseMacros                            = true;
     SaveOneModel(ModelNumber);
     b5isGrey = false;
-    SendCommand(pSetupView);
-    CurrentView = MAINSETUPVIEW;
+    b12isGrey = false;
+    SendCommand(pRXSetupView);
+    CurrentView = RXSETUPVIEW;
     UpdateModelsNameEveryWhere();
     
 }
@@ -5610,7 +5620,7 @@ void EndReverseView()
 { // channel reverse flags are 16 individual BITs in var 'ReversedChannelBITS'
     char    fs[16][5] = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
     uint8_t i;
-    char    pSetupView[]    = "page SetupView";
+    char    pRXSetupView[]    = "page RXSetupView";
     char    ProgressStart[] = "vis Progress,1";
     char    ProgressEnd[]   = "vis Progress,0";
     char    Progress[]      = "Progress";
@@ -5620,11 +5630,12 @@ void EndReverseView()
         SendValue(Progress, (i * (100 / 16)));
         if (GetValue(fs[i])) ReversedChannelBITS |= 1 << i; // set a BIT 
     }
-    CurrentView = MAINSETUPVIEW;
     SaveOneModel(ModelNumber);
     SendCommand(ProgressEnd);
     b5isGrey = false;
-    SendCommand(pSetupView);
+    b12isGrey = false;
+    SendCommand(pRXSetupView);
+    CurrentView = RXSETUPVIEW;
     UpdateModelsNameEveryWhere();
 }
 
@@ -5675,14 +5686,14 @@ void EndBuddyView()
     char BuddyM[] = "BuddyM";
     char BuddyP[] = "BuddyP";
 
-
-    char pSetupView[]   = "page SetupView";
-    BuddyPupilOnSbus    = GetValue(BuddyP); // Pupil, wired
+    char pRXSetupView[]   = "page RXSetupView";
+    BuddyPupilOnSbus    = GetValue(BuddyP); // Pupil, wired 
     BuddyMaster         = GetValue(BuddyM); // Master, either.
     SaveAllParameters();
     b5isGrey = false;
-    SendCommand(pSetupView);
-    CurrentView = MAINSETUPVIEW;
+    b12isGrey = false;
+    SendCommand(pRXSetupView);
+    CurrentView = RXSETUPVIEW;
     UpdateModelsNameEveryWhere();
 }
 /*********************************************************************************************************************************/
@@ -5822,10 +5833,10 @@ void LogVIEW()
 void SetupViewFM() 
 { // (Exit from models screen) New model name occurs at offset 4 in TextIn
 
-    char page_SetupView[] = "page SetupView";
+    char page_RXSetupView[] = "page RXSetupView";
     SaveAllParameters();
-    CurrentView = MAINSETUPVIEW;
-    SendCommand(page_SetupView);
+    CurrentView = RXSETUPVIEW;
+    SendCommand(page_RXSetupView);
     CurrentMode        = NORMAL; // Send data again
     UpdateModelsNameEveryWhere();
 }
@@ -5848,10 +5859,10 @@ void StartSubTrimView()
 /******************************************************************************************************************************/
 void EndSubTrimView()
 { // Subtrim view exit
-    char page_SetupView[] = "page SetupView";
+    char page_RXSetupView[] = "page RXSetupView";
     SaveOneModel(ModelNumber);
-    CurrentView = MAINSETUPVIEW;
-    SendCommand(page_SetupView);
+    CurrentView = RXSETUPVIEW;
+    SendCommand(page_RXSetupView);
     LastTimeRead = 0;
     UpdateModelsNameEveryWhere();
 }
@@ -5872,7 +5883,7 @@ void StartTrimDefView()
 void DefineTrimsEnd()
 { // exit from trim defining screen
     char pCalibrateView[] = "page CalibrateView";
-    CurrentView           = MAINSETUPVIEW;
+    CurrentView           = TXSETUPVIEW;
     SendCommand(pCalibrateView);
     Force_ReDisplay();
     CurrentView   = CALIBRATEVIEW;
@@ -5896,7 +5907,7 @@ void Options2End()
     char page_SetupView[] = "page SetupView";
     DeltaGMT              = GetValue(dGMT);
     SaveTransmitterParameters();
-    CurrentView = MAINSETUPVIEW;
+    CurrentView = TXSETUPVIEW;
     SendCommand(page_SetupView);
     UpdateModelsNameEveryWhere();
 }
@@ -5991,7 +6002,7 @@ void OptionView4End()
     MotorChannelZero    = GetValue(Mvalue);
     UseMotorKill        = GetValue(UseKill);
     MotorChannel        = GetValue(Mchannel) - 1;
-    CurrentView = MAINSETUPVIEW;
+    CurrentView = TXSETUPVIEW;
     SendCommand(page_SetupView);
     SaveAllParameters();
     UpdateModelsNameEveryWhere();
@@ -6032,7 +6043,7 @@ void OptionView3End()
     ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);
     SaveAllParameters();
     CloseModelsFile();
-    CurrentView = MAINSETUPVIEW;
+    CurrentView = TXSETUPVIEW;
     SendCommand(page_SetupView);
     UpdateModelsNameEveryWhere();
 }
@@ -6313,9 +6324,44 @@ void DualRatesRefresh(){
         DisplayDualRateValues();
 }
 
+/******************************************************************************************************************************/
 
+void GotoGPSView(){                              
+
+   char GotoGPSView[] = "page GPSView";
+   SendCommand(GotoGPSView);
+   CurrentView = GPSVIEW;
+
+}
+
+/******************************************************************************************************************************/
+void StartModelSetup(){
+    char GotoModelSetup[]           = "page RXSetupView"; // heer
+    char ProgressStart[]            = "vis Progress,1";
+    char ProgressEnd[]              = "vis Progress,0";
+    char Progress[]                 = "Progress";
+    char fs[16][5]                 = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
+     
+            if (CurrentView == FAILSAFE_VIEW) { //  read failsafe blobs
+                SendCommand(ProgressStart);
+                for (int i = 0; i < 16; ++i) {
+                    FailSafeChannel[i] = GetValue(fs[i]);
+                    SendValue(Progress, i * (100 / 16));
+                }
+                SendCommand(ProgressEnd);
+            }
+
+    SendCommand(GotoModelSetup);
+    CurrentView = RXSETUPVIEW;
+    UpdateModelsNameEveryWhere();
+}
+
+/******************************************************************************************************************************/
+void EndModelSetup(){
+     GotoFrontView();
+}
 // ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
-#define LASTFUNCTION 49 // one more than final one
+#define LASTFUNCTION 52 // one more than final one
 
 void (*NumberedFunctions[LASTFUNCTION])() {
     Blank,                // 0 (spare)
@@ -6366,7 +6412,10 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     DualRatesStart,             // 45
     DualRatesEnd,               // 46
     DualRatesRefresh,           // 47  
-    GotoFrontView               // 48
+    GotoFrontView,              // 48
+    GotoGPSView,                // 49
+    StartModelSetup,            // 50
+    EndModelSetup               // 51
 
 }; // list will become much longer ...
 
@@ -6416,6 +6465,7 @@ FASTRUN void ButtonWasPressed()
                 NumberedFunctions[NumberedCommand](); // Call the needed function -- with a function pointer                     *
                                                       // **********************************************************************************************************************************
                 b5isGrey = false;
+                b12isGrey = false;
                 ClearText();
                 return;
             }
@@ -6463,6 +6513,8 @@ FASTRUN void ButtonWasPressed()
         char MixesView_Reversed[]      = "Reversed";
         char MixesView_Percent[]       = "Percent";
         char page_SetupView[]          = "page SetupView";
+        char page_RXSetupView[]        = "page RXSetupView";
+
         char page_AudioView[]          = "page AudioView";
         char page_ColoursView[]        = "page ColoursView";
         char GoSetupView[]             = "GoSetupView";
@@ -6668,32 +6720,28 @@ FASTRUN void ButtonWasPressed()
             AnnounceConnected = GetValue(c5);
             RestoreBrightness();
             SetAudioVolume(AudioVolume);
-            CurrentView = MAINSETUPVIEW;
+            CurrentView = TXSETUPVIEW;
             SendCommand(page_SetupView);
             LastTimeRead = 0;
             SaveTransmitterParameters();
             UpdateModelsNameEveryWhere();
             b5isGrey = false;
+            b12isGrey = false;
             ClearText();
             return;
         }
-        if (InStrng(SetupView, TextIn) > 0) {   //  goto main setup screen
-            if (CurrentView == FAILSAFE_VIEW) { //  read failsafe blobs
-                SendCommand(ProgressStart);
-                for (int i = 0; i < 16; ++i) {
-                    FailSafeChannel[i] = GetValue(fs[i]);
-                    SendValue(Progress, i * (100 / 16));
-                }
-                SendCommand(ProgressEnd);
-            }
+        if (InStrng(SetupView, TextIn) > 0) {   //  goto main setup screen // heer
+           
+           
             ClearText();
             SaveAllParameters();
-            CurrentView = MAINSETUPVIEW;
+            CurrentView = TXSETUPVIEW;
             SendCommand(page_SetupView);
             LastTimeRead = 0;
             CurrentMode        = NORMAL;
-            CurrentView        = MAINSETUPVIEW;
+            CurrentView        = TXSETUPVIEW;
             b5isGrey           = false;
+            b12isGrey = false;
             ClearText();
             UpdateModelsNameEveryWhere();
             return;
@@ -6768,11 +6816,12 @@ FASTRUN void ButtonWasPressed()
             SaveAllParameters();
             SendValue(Progress, 95);
             SendValue(Progress, 100);
-            CurrentView = MAINSETUPVIEW;
+            CurrentView = TXSETUPVIEW;
             SendCommand(page_SetupView);
             LastTimeRead = 0;
             CurrentMode        = NORMAL;
             b5isGrey           = false;
+            b12isGrey = false;
             SendCommand(ProgressEnd);
             LedWasGreen = false;
             UpdateModelsNameEveryWhere();
@@ -6780,9 +6829,11 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(DataEnd, TextIn) > 0) { //  Exit from Data screen
-            CurrentView = MAINSETUPVIEW;
+        if (InStrng(DataEnd, TextIn) > 0) { //  Exit from Data screen 
+            SendCommand(page_RXSetupView);
+            CurrentView = RXSETUPVIEW;
             b5isGrey    = false;
+            b12isGrey = false;
             CurrentMode = NORMAL;
             UpdateModelsNameEveryWhere();
             ClearText();
@@ -6814,8 +6865,9 @@ FASTRUN void ButtonWasPressed()
        
 
         if (InStrng(Scan_End, TextIn) > 0) { //  goto setup screen from Scan screen
-            CurrentView = MAINSETUPVIEW;
+            CurrentView = TXSETUPVIEW;
             b5isGrey    = false;
+            b12isGrey = false;
             SendCommand(page_SetupView);
             LastTimeRead = 0;
             DoScanEnd();
@@ -7081,13 +7133,15 @@ FASTRUN void ButtonWasPressed()
             CurrentMode = NORMAL;
             SendCommand(ProgressEnd);
             UpdateButtonLabels();
-            CurrentView = MAINSETUPVIEW;
-            SendCommand(page_SetupView);
+            CurrentView = RXSETUPVIEW;
+            SendCommand(page_RXSetupView); // heer
             b5isGrey = false;
+            b12isGrey = false;
             LastTimeRead = 0;
             ClearText();
             return;
         }
+        
         if (InStrng(CH1NAME, TextIn) > 0) {
             p = InStrng(CH1NAME, TextIn);
             i = p + 7;
@@ -7326,9 +7380,10 @@ FASTRUN void ButtonWasPressed()
         }
 
         if (InStrng(GoSetupView, TextIn) > 0) {
-            CurrentView = MAINSETUPVIEW;
+            CurrentView = TXSETUPVIEW;
             SendCommand(page_SetupView);
             b5isGrey    = false;
+            b12isGrey = false;
             UpdateModelsNameEveryWhere();
             ClearText();
             return;
@@ -7352,8 +7407,9 @@ FASTRUN void ButtonWasPressed()
             SendValue(FrontView_Special, SpecialColour);
             SendValue(FrontView_Highlight, HighlightColour);
             SaveTransmitterParameters();
-            CurrentView = MAINSETUPVIEW;
+            CurrentView = TXSETUPVIEW;
             b5isGrey    = false;
+            b12isGrey = false;
             SendCommand(page_SetupView);
             LastTimeRead = 0;
             UpdateModelsNameEveryWhere();
@@ -7448,7 +7504,8 @@ FASTRUN void ButtonWasPressed()
             if (GetValue(Mode2) == 1) SticksMode = 2;
             SaveAllParameters(); // save trims to SDcard
             b5isGrey           = false;
-            CurrentView = MAINSETUPVIEW;
+            b12isGrey = false;
+            CurrentView = TXSETUPVIEW;
             SendCommand(page_SetupView);
             LastTimeRead = 0;
             CurrentMode        = NORMAL;
@@ -8572,12 +8629,17 @@ void CheckModelName()
 
 void CheckScanButton() // Scan button AND models button
 {
-    if (CurrentView == MAINSETUPVIEW) {
-        if (ModelMatched) {
+    if (ModelMatched) {
+        if (CurrentView == TXSETUPVIEW) {
           if(!b5isGrey) { 
                 SendCommand(b5Greyed);
-                SendCommand(b12Greyed);
                 b5isGrey = true;
+            }
+        }
+         if (CurrentView == RXSETUPVIEW) {
+            if(!b12isGrey) { 
+                SendCommand(b12Greyed);
+                b12isGrey = true;
             }
         }
     }
@@ -8670,8 +8732,9 @@ void FASTRUN ManageTransmitter(){
         if (RightNow - LastTimeRead >= 1000) {                       // Once a second for these...
             ReadTime();                                              // Do the clock
             GetStatistics();                                         // Do stats
-            if (CurrentView == MAINSETUPVIEW) CheckScanButton();
-            if (CurrentView == MODELSVIEW)    CheckModelName();      // In MODELSVIEW, this function checks correct name is displayed.
+            if (CurrentView == TXSETUPVIEW) CheckScanButton();
+            if (CurrentView == RXSETUPVIEW) CheckScanButton();
+            if (CurrentView == MODELSVIEW)  CheckModelName();      // In MODELSVIEW, this function checks correct name is displayed.
             LastTimeRead = millis();
             return;                                                  // That's enough housekeeping this time around
         }
