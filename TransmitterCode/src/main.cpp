@@ -188,11 +188,14 @@ uint8_t  MinDegrees[5][CHANNELSUSED + 1];    //    Min Degrees (0)
 uint8_t  SubTrims[CHANNELSUSED + 1];         //    Subtrims
 uint8_t  SubTrimToEdit      = 0;
 uint8_t  Bank                       = 1;
+uint8_t  BanksNamesIndex[4]         = {0, 0, 0, 0};//
+// uint8_t  BankNames[20][20]          = {"Bank1",Bank2;// heer
+
+char     ChannelNames[CHANNELSUSED][11] = {{"Aileron"}, {"Elevator"}, {"Throttle"}, {"Rudder"}, {"Gear"}, {"AUX1"}, {"AUX2"}, {"AUX3"}, {"AUX4"}, {"AUX5"}, {"AUX6"}, {"AUX7"}, {"AUX8"}, {"AUX9"}, {"AUX10"}, {"AUX11"}};
+
 uint8_t  PreviousBank               = 1;
 uint8_t  DualRateInUse              = 1;
 uint8_t  PreviousDualRateInUse      = 1;
-
-
 uint16_t ChannelMax[CHANNELSUSED + 1];    //    output of pots at max
 uint16_t ChannelMidHi[CHANNELSUSED + 1];  //    output of pots at MidHi
 uint16_t ChannelCentre[CHANNELSUSED + 1]; //    output of pots at Centre
@@ -353,7 +356,6 @@ uint8_t  SaveBank             = 0;
 bool     FailSafeChannel[CHANNELSUSED];
 bool     SaveFailSafeNow = false;
 uint32_t FailSafeTimer;
-char     ChannelNames[CHANNELSUSED][11] = {{"Aileron"}, {"Elevator"}, {"Throttle"}, {"Rudder"}, {"Gear"}, {"AUX1"}, {"AUX2"}, {"AUX3"}, {"AUX4"}, {"AUX5"}, {"AUX6"}, {"AUX7"}, {"AUX8"}, {"AUX9"}, {"AUX10"}, {"AUX11"}};
 
 uint32_t LastPacketSentTime = 0;
 uint16_t CompressedData[COMPRESSEDWORDS]; // = 20
@@ -6338,7 +6340,7 @@ void GotoGPSView(){
 
 /******************************************************************************************************************************/
 void StartModelSetup(){
-    char GotoModelSetup[]           = "page RXSetupView"; // heer
+    char GotoModelSetup[]           = "page RXSetupView"; 
     char ProgressStart[]            = "vis Progress,1";
     char ProgressEnd[]              = "vis Progress,0";
     char Progress[]                 = "Progress";
@@ -6732,9 +6734,7 @@ FASTRUN void ButtonWasPressed()
             ClearText();
             return;
         }
-        if (InStrng(SetupView, TextIn) > 0) {   //  goto main setup screen // heer
-           
-           
+        if (InStrng(SetupView, TextIn) > 0) {   //  goto main setup screen
             ClearText();
             SaveAllParameters();
             CurrentView = TXSETUPVIEW;
@@ -7136,7 +7136,7 @@ FASTRUN void ButtonWasPressed()
             SendCommand(ProgressEnd);
             UpdateButtonLabels();
             CurrentView = RXSETUPVIEW;
-            SendCommand(page_RXSetupView); // heer
+            SendCommand(page_RXSetupView);
             b5isGrey = false;
             b12isGrey = false;
             LastTimeRead = 0;
