@@ -11,8 +11,9 @@ var searchData=
   ['nocarrier_8',['NoCarrier',['../RadioFunctions_8h.html#a2a951a35df4a07c010710b02a17f92b7',1,'NoCarrier():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a740b6b60d941238e8a8cd6caa083a7ca',1,'NoCarrier():&#160;main.cpp']]],
   ['noerror_9',['NOERROR',['../RadioFunctions_8h.html#a7c8e007a5b28cfb6d606095153d7e764',1,'RadioFunctions.h']]],
   ['normal_10',['NORMAL',['../RadioFunctions_8h.html#a1291f416b069313021b519eea62d5bf1',1,'RadioFunctions.h']]],
-  ['normalisetheradio_11',['NormaliseTheRadio',['../TransmitterCode_2src_2main_8cpp.html#a0708fa5166a126be25283b6cfaff6227',1,'main.cpp']]],
-  ['normalize_12',['normalize',['../classVectorInt16.html#aefdadb30fbc20b564bbbf0b1a885e349',1,'VectorInt16::normalize()'],['../classVectorFloat.html#a112eaf8758a6f51b96ed1ccb71700495',1,'VectorFloat::normalize()'],['../classQuaternion.html#a48e6bafb249c895ed25f29dc9170e11e',1,'Quaternion::normalize()']]],
-  ['notstillconnected_13',['NotStillConnected',['../TransmitterCode_2src_2main_8cpp.html#a75cead2f224731cba6299be91a344a05',1,'main.cpp']]],
-  ['numberedfunctions_14',['NumberedFunctions',['../TransmitterCode_2src_2main_8cpp.html#abb4fb8e30aec6f80bfcb85d5f4c7931f',1,'main.cpp']]]
+  ['normalb_11',['NORMALB',['../RadioFunctions_8h.html#a83d7d6582885c30fe3fa4511c7584348',1,'RadioFunctions.h']]],
+  ['normalisetheradio_12',['NormaliseTheRadio',['../TransmitterCode_2src_2main_8cpp.html#a0708fa5166a126be25283b6cfaff6227',1,'main.cpp']]],
+  ['normalize_13',['normalize',['../classVectorInt16.html#aefdadb30fbc20b564bbbf0b1a885e349',1,'VectorInt16::normalize()'],['../classVectorFloat.html#a112eaf8758a6f51b96ed1ccb71700495',1,'VectorFloat::normalize()'],['../classQuaternion.html#a48e6bafb249c895ed25f29dc9170e11e',1,'Quaternion::normalize()']]],
+  ['notstillconnected_14',['NotStillConnected',['../TransmitterCode_2src_2main_8cpp.html#a75cead2f224731cba6299be91a344a05',1,'main.cpp']]],
+  ['numberedfunctions_15',['NumberedFunctions',['../TransmitterCode_2src_2main_8cpp.html#abb4fb8e30aec6f80bfcb85d5f4c7931f',1,'main.cpp']]]
 ];
