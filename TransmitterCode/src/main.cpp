@@ -191,6 +191,8 @@ uint8_t  Bank                       = 1;
 uint8_t  PreviousBank               = 1;
 uint8_t  DualRateInUse              = 1;
 uint8_t  PreviousDualRateInUse      = 1;
+
+
 uint16_t ChannelMax[CHANNELSUSED + 1];    //    output of pots at max
 uint16_t ChannelMidHi[CHANNELSUSED + 1];  //    output of pots at MidHi
 uint16_t ChannelCentre[CHANNELSUSED + 1]; //    output of pots at Centre

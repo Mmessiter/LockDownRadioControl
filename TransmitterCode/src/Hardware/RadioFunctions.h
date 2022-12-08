@@ -244,7 +244,21 @@
 #define RATE2           35
 #define RATE3           36
 #define PLSTURNOFF      37
-
+#define AEROBATICS      38
+#define AUTO            39
+#define CRUISE          40
+#define FLAPS           41
+#define HOVER           42
+#define IDLE1           43
+#define IDLE2           44
+#define LANDING         45
+#define LAUNCH          46
+#define NORMALB         47
+#define SPEED           48
+#define TAKEOFF         49
+#define THERMAL         50
+#define THRHOLD         51
+#define THREEDEE        52
 
 // **************************************************************************
 //               SDCARD MODEL MEMORY CONSTANTS                              *
