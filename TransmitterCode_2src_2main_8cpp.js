@@ -311,6 +311,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "b5isGrey", "TransmitterCode_2src_2main_8cpp.html#a2cacff4290d454b1134b62c183e4e17a", null ],
     [ "BackGroundColour", "TransmitterCode_2src_2main_8cpp.html#a59c3d8b001e63150ebf11e3d9d6dca5b", null ],
     [ "Bank", "TransmitterCode_2src_2main_8cpp.html#a22e13a2a5c7a6d6776b46f5341bda026", null ],
+    [ "BanksNamesIndex", "TransmitterCode_2src_2main_8cpp.html#ac741f2a41cc736193280f6dd8e99fdd2", null ],
     [ "BindButton", "TransmitterCode_2src_2main_8cpp.html#a11a586885b48e92a4cd03ff1840ac374", null ],
     [ "BindButtonVisible", "TransmitterCode_2src_2main_8cpp.html#a54179a9bdd2f60e628828060581339ec", null ],
     [ "BindingNow", "TransmitterCode_2src_2main_8cpp.html#a1873a8dc0cbecc66366b95540f9c3249", null ],
