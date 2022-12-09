@@ -1,5 +1,6 @@
 var NAVTREEINDEX10 =
 {
+"classVectorFloat.html#a3b12ed03e28bded4316275882433e5aa":[7,0,7,1],
 "classVectorFloat.html#a4affe2a9de97600b3d8df98586679e14":[7,0,7,8],
 "classVectorFloat.html#a54b8e4234e3b48e106d090570755f107":[7,0,7,9],
 "classVectorFloat.html#a8b54ec5c117ca7101cff478b3cfaa0cc":[7,0,7,0],
@@ -121,8 +122,8 @@ var NAVTREEINDEX10 =
 "functions_t.html":[7,3,0,16],
 "functions_u.html":[7,3,0,17],
 "functions_v.html":[7,3,0,18],
-"functions_vars.html":[7,3,2],
 "functions_vars.html":[7,3,2,0],
+"functions_vars.html":[7,3,2],
 "functions_vars_a.html":[7,3,2,1],
 "functions_vars_b.html":[7,3,2,2],
 "functions_vars_c.html":[7,3,2,3],
@@ -147,14 +148,14 @@ var NAVTREEINDEX10 =
 "functions_y.html":[7,3,0,21],
 "functions_z.html":[7,3,0,22],
 "functions_~.html":[7,3,0,23],
-"globals.html":[8,1,0,0],
 "globals.html":[8,1,0],
+"globals.html":[8,1,0,0],
 "globals_a.html":[8,1,0,1],
 "globals_b.html":[8,1,0,2],
 "globals_c.html":[8,1,0,3],
 "globals_d.html":[8,1,0,4],
-"globals_defs.html":[8,1,4],
 "globals_defs.html":[8,1,4,0],
+"globals_defs.html":[8,1,4],
 "globals_defs_a.html":[8,1,4,1],
 "globals_defs_b.html":[8,1,4,2],
 "globals_defs_c.html":[8,1,4,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX10 =
 "globals_x.html":[8,1,0,24],
 "globals_y.html":[8,1,0,25],
 "globals_z.html":[8,1,0,26],
-"helper__3dmath_8h.html":[8,0,1,0,0,0,0],
-"helper__3dmath_8h_source.html":[8,0,1,0,0,0,0]
+"helper__3dmath_8h.html":[8,0,1,0,0,0,0]
 };
