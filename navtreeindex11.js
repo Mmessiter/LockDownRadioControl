@@ -1,5 +1,11 @@
 var NAVTREEINDEX11 =
 {
+"md_Docs_LDRC1____User_Manual.html#autotoc_md18":[2,0],
+"md_Docs_LDRC1____User_Manual.html#autotoc_md19":[2,0,0],
+"md_Docs_LDRC1____User_Manual.html#autotoc_md20":[2,1],
+"md_Docs_LDRC1____User_Manual.html#autotoc_md21":[2,2],
+"md_Docs_LDRC1____User_Manual.html#autotoc_md22":[2,3],
+"md_Docs_LDRC1____User_Manual.html#autotoc_md23":[2,4],
 "md_Docs_LDRC1____User_Manual.html#autotoc_md24":[2,5],
 "md_Docs_LDRC1____User_Manual.html#autotoc_md25":[2,6],
 "md_Docs_LDRC1____User_Manual.html#autotoc_md26":[2,7],
