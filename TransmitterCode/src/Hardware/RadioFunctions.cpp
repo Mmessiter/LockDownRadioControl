@@ -58,8 +58,7 @@ FASTRUN void BufferNewPipe()
 }
 
 /************************************************************************************************************/
-// This function replaces delay() without freezing critical tasks
-void Procrastinate(uint32_t HowLong)
+void Procrastinate(uint32_t HowLong) // This function replaces delay() without freezing critical tasks
 {
     uint32_t ThisMoment = millis();
 
@@ -73,8 +72,14 @@ void Procrastinate(uint32_t HowLong)
     
     RecursedAlready = true;
     while ((millis() - ThisMoment) < HowLong) {
-        KickTheDog();                                                  // keep watchdog happy
-        if (Connected && BoundFlag && ModelMatched) SendData();        // keep receiver happy too ... but guard against recursion
+        KickTheDog();                                               // keep watchdog happy
+        if (Connected && BoundFlag && ModelMatched) {               // keep receiver happy too ... but guard against recursion
+            GetNewChannelValues();
+            ShowServoPos();
+            NewCompressNeeded = true;
+            Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24// heer
+            SendData();
+        } 
     }
     RecursedAlready = false;
 }

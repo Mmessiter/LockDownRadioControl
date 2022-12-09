@@ -8,13 +8,13 @@
  * - 16 channels
  * - 12 BIT servo resolution (11 BIT via SBUS)
  * - 32 Mixes
- * - 4 Flight modes (AKA Banks), or 3 plus autorotation
+ * - 4 Flight modes with user definable and announced names.
  * - "ModelMatch" plus automatic model memory selection. (Avoid flying with wrong memory loaded.)
  * - Buddyboxing with selectable channels.
  * - Voice messages and other audio prompts.
  * - User defined Channel names
  * - 2.4 Ghz FHSS ISM band licence free in UK and most other countries.
- * - 2.5 Km range (approx.)
+ * - > 2 Km range 
  * - Telemetry including GPS, volts, temperature & barometric pressure, using custom I2C sensor hub
  * - 64 editable 5-point curves (16 channels x 4 flight modes): straight, smoothed or exponential.
  * - FailSafe on any or all channel(s)
@@ -42,9 +42,10 @@
  * - Hardware bug in nRF24L01+ fixed. (FIFO buffers crash the chip when they're full for > 4ms. So these are not used.)
  * - Screen colours definable
  * - Data screen gives all possible telemetry
- * - Log files implemented - and help file system with unlimited file length
+ * - Log files  
+ * - Help files display system from text files.
  * - Safety switch implemtented (Stops accidental motor starting)
- * - Dual Rates (actually - quadruple rates) implemented
+ * - Rates (three rates) implemented
  *
  *
  * @section txPinout Teensy 4.1 Pins
@@ -1437,8 +1438,6 @@ FASTRUN void ShowServoPos()
 {
     if (millis() - ShowServoTimer <= 100) return;
    
-   
-  
     char     Ch_Lables[16][5] = {"Ch1", "Ch2", "Ch3", "Ch4", "Ch5", "Ch6", "Ch7", "Ch8", "Ch9", "Ch10", "Ch11", "Ch12", "Ch13", "Ch14", "Ch15", "Ch16"};
     char     ChannelInput[]   = "Input";
     char     ChannelOutput[]  = "Output";
@@ -1481,7 +1480,6 @@ FASTRUN void ShowServoPos()
                 l1 = map(l1, ChannelCentre[l], ChannelMax[l], ChannelCentre[l], ChannelMin[l]);
             }
         }
-
         if (l1 <= ChannelCentre[l]) {
             SendValue(ChannelInput, map(l1, ChannelCentre[l], ChannelMin[l], 0, -100));
             StickPosition = map(l1, ChannelMin[l], ChannelCentre[l], BoxLeft - 0, BoxLeft + (((BoxRight - fixitx) - BoxLeft) / 2));
@@ -1491,11 +1489,8 @@ FASTRUN void ShowServoPos()
         }
 
         if ((abs(StickPosition - SavedLineX) > LeastDistance) ){
-          //  if  (LedWasRed) // Not while connected as too slow
-          //  {
                 DisplayCurve();                                                                                        // needed to clear last line
                 DrawLine(StickPosition - 1, BoxTop + 3, StickPosition - 1, (BoxBottom - 3) - BoxTop, HighlightColour); // draws line for stick position
-          //  }
             SendValue(ChannelOutput, map(SendBuffer[ChanneltoSet-1], MINMICROS, MAXMICROS, -100, 100));
             SavedLineX = StickPosition;
         }
@@ -1503,7 +1498,6 @@ FASTRUN void ShowServoPos()
     }
     ShowServoTimer = millis();
 }
-
 
 /*********************************************************************************************************************************/
 FASTRUN bool CheckTXVolts()
@@ -3365,18 +3359,6 @@ void ShowLogFile(uint8_t StartLine)
     SendText1(LogTeXt, TheText);                             // Then send it
 }
 
-
-
-/*********************************************************************************************************************************/
-
-void testit(){
-    delay(5000);
-    for (int i = 0; i < 22; ++i) {
-        Serial.println(BankTexts[i]);
-        PlaySound(BankSounds[i]);
-        delay(4000);
-    }
-}
 
 /*********************************************************************************************************************************/
 // SETUP
@@ -6393,7 +6375,7 @@ void ListenToBanks(){
     for (int i = 0; i < 4;++i){
             BanksInUse[i] = GetValue(BKS[i]);
             PlaySound(BankSounds[BanksInUse[i]]);
-            delay(1200);
+            Procrastinate(1200);
   }
 }
 /******************************************************************************************************************************/
