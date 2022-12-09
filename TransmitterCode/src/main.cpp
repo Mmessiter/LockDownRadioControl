@@ -6378,11 +6378,11 @@ void StartBankNames(){
 void EndBankNames(){
 
     char BKS[4][4] = {{"BK1"},{"BK2"},{"BK3"},{"BK4"}};    // heer
-    for (int i = 0; i < 4;++i){
+    for (int i = 0; i < 4; ++i){
         BanksInUse[i] = GetValue(BKS[i]);
-   }
-   SaveOneModel(ModelNumber);
-   StartModelSetup();
+    }
+    SaveOneModel(ModelNumber);
+    StartModelSetup();
 }
 
 /******************************************************************************************************************************/
@@ -6392,7 +6392,7 @@ void ListenToBanks(){
     for (int i = 0; i < 4;++i){
             BanksInUse[i] = GetValue(BKS[i]);
             PlaySound(BankSounds[BanksInUse[i]]);
-            delay(1000);
+            delay(1200);
   }
 }
 /******************************************************************************************************************************/
