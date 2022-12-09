@@ -264,6 +264,13 @@
 #define BFM2            54
 #define BFM3            55
 #define BFM4            56
+#define AIRBRAKES       57
+#define STUNT1          58
+#define STUNT2          59
+#define WHEELSDOWN      60
+#define WHEELSUP        61
+
+
 
 // **************************************************************************
 //               SDCARD MODEL MEMORY CONSTANTS                              *
