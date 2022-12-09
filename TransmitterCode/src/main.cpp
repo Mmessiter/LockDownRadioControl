@@ -187,11 +187,14 @@ uint8_t  MidLowDegrees[5][CHANNELSUSED + 1]; //    MidLow Degrees (45)
 uint8_t  MinDegrees[5][CHANNELSUSED + 1];    //    Min Degrees (0)
 uint8_t  SubTrims[CHANNELSUSED + 1];         //    Subtrims
 uint8_t  SubTrimToEdit      = 0;
-uint8_t  Bank                       = 1;
-char     BankTexts[19][8]           = {{"Bank1"},{"Bank2"},{"Bank3"}, {"Bank4"},{"Aeros"}, {"Auto"},{"Cruise"},{"Flaps"},{"Hover"},{"IdleUp1"},{"IdleUp2"},{"Landing"},{"Launch"},{"Normal"},{"Speed"},{"Takeoff"},{"Thermal"},{"Hold"},"3D"};
-uint8_t  BankSounds[19]            =  {  BANKONE,  BANKTWO,  BANKTHREE, BANKFOUR, AEROBATICS,AUTO,    CRUISE,    FLAPS,    HOVER,    IDLE1,       IDLE2,     LANDING,    LAUNCH,    NORMALB,   SPEED,    TAKEOFF,    THERMAL,    THRHOLD,THREEDEE};
+
+uint8_t  Bank                       =  1;
+char     BankTexts[23][14]           =  {{"Flight mode 1"},{"Flight mode 2"},{"Flight mode 3"},{"Flight mode 4"},{"Bank 1"},{"Bank 2"},{"Bank 3"}, {"Bank 4"},{"Aerobatics"}, {"Autos"},{"Cruise"},{"Flaps"},{"Hover"},{"Idle up 1"},{"Idle up 2"},{"Landing"},{"Launch"},{"Normal"},{"Speed"},{"Takeoff"},{"Thermal"},{"Hold"},"3D"};
+uint8_t  BankSounds[23]             =  {   BFM1,             BFM2,             BFM3,             BFM4,             BANKONE,   BANKTWO,   BANKTHREE,  BANKFOUR, AEROBATICS,      AUTO,     CRUISE,    FLAPS,    HOVER,    IDLE1,        IDLE2,        LANDING,    LAUNCH,    NORMALB,   SPEED,    TAKEOFF,    THERMAL,    THRHOLD,THREEDEE};
+uint8_t  BanksInUse[4]              =  {0, 1, 2, 3};
+uint8_t  PreviousBank               =  1;
+
 char     ChannelNames[CHANNELSUSED][11] = {{"Aileron"}, {"Elevator"}, {"Throttle"}, {"Rudder"}, {"Gear"}, {"AUX1"}, {"AUX2"}, {"AUX3"}, {"AUX4"}, {"AUX5"}, {"AUX6"}, {"AUX7"}, {"AUX8"}, {"AUX9"}, {"AUX10"}, {"AUX11"}};
-uint8_t  PreviousBank               = 1;
 uint8_t  DualRateInUse              = 1;
 uint8_t  PreviousDualRateInUse      = 1;
 uint16_t ChannelMax[CHANNELSUSED + 1];    //    output of pots at max
@@ -207,7 +210,6 @@ double   xPoints[5];
 double   yPoints[5];
 double   xPoint = 0;
 double   yPoint = 0;
-
 uint16_t BoxBottom;
 uint16_t BoxTop;
 uint16_t BoxLeft;
@@ -1883,7 +1885,7 @@ void SendCharArray(char* ch0, char* ch1, char* ch2, char* ch3, char* ch4, char* 
 void SendMixValues() // sends mix values to Nextion screen
 {
     char MixesView_Enabled[]       = "MixesView.Enabled";
-    char MixesView_Bank[]    = "MixesView.Bank";
+    char MixesView_Bank[]          = "MixesView.Bank";
     char MixesView_MasterChannel[] = "MixesView.MasterChannel";
     char MixesView_SlaveChannel[]  = "MixesView.SlaveChannel";
     char MixesView_Reversed[]      = "MixesView.Reversed";
@@ -3356,6 +3358,19 @@ void ShowLogFile(uint8_t StartLine)
     SendText1(LogTeXt, TheText);                             // Then send it
 }
 
+
+
+/*********************************************************************************************************************************/
+
+void testit(){
+    delay(5000);
+    for (int i = 0; i < 22; ++i) {
+        Serial.println(BankTexts[i]);
+        PlaySound(BankSounds[i]);
+        delay(4000);
+    }
+}
+
 /*********************************************************************************************************************************/
 // SETUP
 /*********************************************************************************************************************************/
@@ -3419,9 +3434,8 @@ FLASHMEM void setup()
     SendValue(FrontView_ForeGround, ForeGroundColour);
     SendValue(FrontView_Special, SpecialColour);
     SendValue(FrontView_Highlight, HighlightColour);
-    
-
-    SendCommand(page_FrontView);
+    CurrentView = 254;
+    GotoFrontView();
     SetAudioVolume(AudioVolume);
     if (PlayFanfare) {
         PlaySound(THEFANFARE);
@@ -5253,8 +5267,7 @@ void SendModelFile()
 
 void SoundBank()
 {
-    uint8_t Sounds[4] = {BANKONE, BANKTWO, BANKTHREE, BANKFOUR};
-    PlaySound(Sounds[Bank - 1]);
+    PlaySound(BankSounds[BanksInUse[Bank-1]]);
     ScreenTimeTimer = millis(); // reset screen counter
     if (ScreenIsOff) {
         RestoreBrightness();
@@ -8378,12 +8391,22 @@ FASTRUN uint32_t GetIntFromAckPayload()   // This one uses a uint32_t int
 /************************************************************************************************************/
 
 void GotoFrontView(){
+
+
+    char fms[4][4] = {{"fm1"},{"fm2"},{"fm3"},{"fm4"}};
+    
+
     if (CurrentView != FRONTVIEW)
     {
           if (CurrentView == SCANVIEW) DoScanEnd();  
           SendCommand(page_FrontView);
           CurrentView = FRONTVIEW;
-          UpdateModelsNameEveryWhere();
+
+          for (int i = 0; i < 4;++i){ // heer
+            SendText(fms[i], BankTexts[BanksInUse[i]]);
+          }
+
+            UpdateModelsNameEveryWhere();
           SafetyWasOn ^= 1;                     // this forces a re-display of safety state
           ShowBank();
           LastTimeRead = 0;

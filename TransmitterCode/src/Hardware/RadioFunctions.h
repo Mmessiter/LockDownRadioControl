@@ -259,6 +259,10 @@
 #define THERMAL         50
 #define THRHOLD         51
 #define THREEDEE        52
+#define BFM1            53
+#define BFM2            54
+#define BFM3            55
+#define BFM4            56
 
 // **************************************************************************
 //               SDCARD MODEL MEMORY CONSTANTS                              *
