@@ -285,7 +285,6 @@ var TransmitterCode_2src_2main_8cpp =
     [ "StraightLineInterpolation", "TransmitterCode_2src_2main_8cpp.html#a88983dee7d62d5f01e7152c6c62b3a98", null ],
     [ "swap", "TransmitterCode_2src_2main_8cpp.html#a31322f63ce3e02c4ef9a0c1e0c7f1ff5", null ],
     [ "SynchRTCwithGPSTime", "TransmitterCode_2src_2main_8cpp.html#abb1ea95b6b3f033883aa87682d3240ab", null ],
-    [ "testit", "TransmitterCode_2src_2main_8cpp.html#a4bc8e1ddf284383eebc9d22f88befb21", null ],
     [ "ThrottleDownTrim", "TransmitterCode_2src_2main_8cpp.html#a4f13231fd2e430935dbee50a83078018", null ],
     [ "ThrottleUpTrim", "TransmitterCode_2src_2main_8cpp.html#abe827a1e4c23eb79d1771da1e9393178", null ],
     [ "UpdateButtonLabels", "TransmitterCode_2src_2main_8cpp.html#abf59862cf6c4e3df5a76f0bfea8919ef", null ],
