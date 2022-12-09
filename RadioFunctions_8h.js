@@ -1,6 +1,7 @@
 var RadioFunctions_8h =
 [
     [ "AEROBATICS", "RadioFunctions_8h.html#a7df635dd9a2363e735cdd7d66ecd2c41", null ],
+    [ "AIRBRAKES", "RadioFunctions_8h.html#a4988fcf9943b9ee7ff0e02d8bd3e4f7f", null ],
     [ "AUDIOVIEW", "RadioFunctions_8h.html#a445cfbf06ed74188fcf3965b4cab9533", null ],
     [ "AUTO", "RadioFunctions_8h.html#a0cc6f7717df9fbdc0f33efb88720a639", null ],
     [ "AUTOSWITCH", "RadioFunctions_8h.html#aa4414f3ff790f01b8bb41a0f51d1518f", null ],
@@ -168,6 +169,8 @@ var RadioFunctions_8h =
     [ "STICKSVIEW", "RadioFunctions_8h.html#abfc5f0d31f80fc812b9c44a55fe3134e", null ],
     [ "STORAGECHARGE", "RadioFunctions_8h.html#a0d7f6ce749c2aceb4ecef39efa939fa6", null ],
     [ "STRAIGHTLINES", "RadioFunctions_8h.html#a00adadb4876f6c86728e50a79fbc8fcc", null ],
+    [ "STUNT1", "RadioFunctions_8h.html#a80c9e9ddb7c76b17439adab7175427c4", null ],
+    [ "STUNT2", "RadioFunctions_8h.html#a85bfc79a4f7b1b55e87c9ee89069c456", null ],
     [ "SUBTRIMVIEW", "RadioFunctions_8h.html#a489f04d8af51ba47e5032937dc23a330", null ],
     [ "SWITCH0", "RadioFunctions_8h.html#a5ad241ff204c1ff242cb95c222a4b8c1", null ],
     [ "SWITCH1", "RadioFunctions_8h.html#a744dee59d95ae6f4dece38e44bb145f9", null ],
@@ -209,6 +212,8 @@ var RadioFunctions_8h =
     [ "WATCHDOGTIMEOUT", "RadioFunctions_8h.html#a263fd3c52a680256641d33815e7ef6a4", null ],
     [ "WEAKMSG", "RadioFunctions_8h.html#ab307882b2cf0f392aad17febe154494a", null ],
     [ "WHAHWHAHMSG", "RadioFunctions_8h.html#a1060615e1e6ea5a35355369ccd14a92c", null ],
+    [ "WHEELSDOWN", "RadioFunctions_8h.html#acf42ba9802b4a3e2a4f8aa042f688484", null ],
+    [ "WHEELSUP", "RadioFunctions_8h.html#a2f4add3512786c2587a55304d167a770", null ],
     [ "White", "RadioFunctions_8h.html#a298a3b7c7f2ea427a7cd21cdc9a4f054", null ],
     [ "Yellow", "RadioFunctions_8h.html#a239cc4651865ee2ac90ac5c1e6d2d8b5", null ],
     [ "BufferNewPipe", "RadioFunctions_8h.html#a9a3e35cbf8abeae1ebdb4af8dff3571a", null ],
