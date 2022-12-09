@@ -165,6 +165,7 @@
 #define DUALRATESVIEW   29
 #define GPSVIEW         30
 #define RXSETUPVIEW     31
+#define BANKSNAMESVIEW  32
 
 // **************************************************************************
 //                          Switches' GPIOs                                 *
@@ -467,6 +468,7 @@ extern void          CheckMotorOff();
 extern bool          GetButtonPress();
 extern void          CheckPowerOffButton();
 
+
 /*********************************************************************************************************************************/
 // function prototypes
 
@@ -513,6 +515,7 @@ void         SetUKFrequencies();
 FASTRUN uint16_t GetStickInputInputOnly(uint8_t l);
 FASTRUN void     LogSafety(bool On);
 void             ShowMotor(int on);
+void          StartModelSetup();
 
 /*********************************************************************************************************************************/
 

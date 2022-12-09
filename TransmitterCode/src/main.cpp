@@ -189,9 +189,10 @@ uint8_t  SubTrims[CHANNELSUSED + 1];         //    Subtrims
 uint8_t  SubTrimToEdit      = 0;
 
 uint8_t  Bank                       =  1;
-char     BankTexts[23][14]           =  {{"Flight mode 1"},{"Flight mode 2"},{"Flight mode 3"},{"Flight mode 4"},{"Bank 1"},{"Bank 2"},{"Bank 3"}, {"Bank 4"},{"Aerobatics"}, {"Autos"},{"Cruise"},{"Flaps"},{"Hover"},{"Idle up 1"},{"Idle up 2"},{"Landing"},{"Launch"},{"Normal"},{"Speed"},{"Takeoff"},{"Thermal"},{"Hold"},"3D"};
+// ************************************** 0                  1                 2                  3                4          5           6           7          8                9        10          11       12        13             14            15          16          17      18        19           20         21     22                                   ***
+char     BankTexts[23][14]          =  {{ "Flight mode 1"},{"Flight mode 2"},{"Flight mode 3"},{"Flight mode 4"},{"Bank 1"},{"Bank 2"},{"Bank 3"}, {"Bank 4"},{"Aerobatics"}, {"Autos"},{"Cruise"},{"Flaps"},{"Hover"},{"Idle up 1"},{"Idle up 2"},{"Landing"},{"Launch"},{"Normal"},{"Speed"},{"Takeoff"},{"Thermal"},{"Hold"},"3D"};
 uint8_t  BankSounds[23]             =  {   BFM1,             BFM2,             BFM3,             BFM4,             BANKONE,   BANKTWO,   BANKTHREE,  BANKFOUR, AEROBATICS,      AUTO,     CRUISE,    FLAPS,    HOVER,    IDLE1,        IDLE2,        LANDING,    LAUNCH,    NORMALB,   SPEED,    TAKEOFF,    THERMAL,    THRHOLD,THREEDEE};
-uint8_t  BanksInUse[4]              =  {0, 1, 2, 3};
+uint8_t  BanksInUse[4]              =  {4, 5, 6, 7};
 uint8_t  PreviousBank               =  1;
 
 char     ChannelNames[CHANNELSUSED][11] = {{"Aileron"}, {"Elevator"}, {"Throttle"}, {"Rudder"}, {"Gear"}, {"AUX1"}, {"AUX2"}, {"AUX3"}, {"AUX4"}, {"AUX5"}, {"AUX6"}, {"AUX7"}, {"AUX8"}, {"AUX9"}, {"AUX10"}, {"AUX11"}};
@@ -2452,13 +2453,6 @@ uint8_t SDRead8BITS(int p_address)
 
 void UpdateModelsNameEveryWhere()
 {
-    char fms[4][7] = {
-        "Bank 1",
-        "Bank 2",
-        "Bank 3",
-        "Bank 4",
-    };
-
     char TheModelName[]        = "ModelName";
     char GraphView_Channel[]   = "Channel";
     char TrimView_Bank[] = "t1";
@@ -2471,8 +2465,6 @@ void UpdateModelsNameEveryWhere()
     char lb[] = " (";
     char rb[] = ")";
    
-
-
     strcpy(mn1, ModelName);
     
     if (CurrentView == FRONTVIEW) SendText(Owner, TxName);
@@ -2494,10 +2486,10 @@ void UpdateModelsNameEveryWhere()
             SendText(GraphView_Channel, ChannelNames[ChanneltoSet - 1]);
         }
     }
-    if (CurrentView == STICKSVIEW) SendText(SticksView_t1, fms[Bank - 1]);
-    if (CurrentView == GRAPHVIEW) SendText(GraphView_fmode, fms[Bank - 1]);
+    if (CurrentView == STICKSVIEW) SendText(SticksView_t1, BankTexts[BanksInUse[Bank-1]]);
+    if (CurrentView == GRAPHVIEW) SendText(GraphView_fmode, BankTexts[BanksInUse[Bank-1]]);
     if (CurrentView == TRIM_VIEW) {
-        SendText(TrimView_Bank, fms[Bank - 1]);
+        SendText(TrimView_Bank, BankTexts[BanksInUse[Bank-1]]);
         UpdateTrimView();
     }
    
@@ -2596,6 +2588,14 @@ void UpdateButtonLabels()
             if (i < 4) SendValue(TrimLabels[i], InputTrim[i] + 1); //
         }
     }
+}
+
+/*********************************************************************************************************************************/
+void CheckBanksInUse(){
+
+        for (int i = 0; i < 4; ++i){
+             if (BanksInUse[i] > 23) BanksInUse[i] = i;
+        }
 }
 /*********************************************************************************************************************************/
 void CheckSavedTrimValues()
@@ -2803,12 +2803,18 @@ bool ReadOneModel(uint8_t Mnum)
         DualRateChannels[i]= SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
     }
+    CheckDualRatesValues();
     BuddySwitch = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
     DualRatesSwitch = SDRead8BITS(SDCardAddress);
+   
     ++SDCardAddress;
-
-    CheckDualRatesValues();
+    for (i = 0; i < 4;++i){
+          BanksInUse[i] =  SDRead8BITS(SDCardAddress);
+          ++SDCardAddress;
+    }
+    CheckBanksInUse();
+   
 
     // **************************************
 
@@ -3843,8 +3849,10 @@ void SaveOneModel(uint16_t mnum)
     SDUpdate8BITS(SDCardAddress, DualRatesSwitch); 
     ++SDCardAddress;
 
-
-
+    for (i = 0; i < 4;++i){
+            SDUpdate8BITS(SDCardAddress, BanksInUse[i]);
+             ++SDCardAddress;
+    }
 
     SaveCheckSum32(); // Save the Model parametres checksm
     
@@ -6350,6 +6358,44 @@ void GotoGPSView(){
 }
 
 /******************************************************************************************************************************/
+
+void StartBankNames(){
+
+   char GotoBankNames[] = "page BankNameView";
+   char BKS[4][4] = {{"BK1"},{"BK2"},{"BK3"},{"BK4"}};
+
+   SendCommand(GotoBankNames);
+   CurrentView = BANKSNAMESVIEW;
+
+   for (int i = 0; i < 4;++i){
+        SendValue(BKS[i],BanksInUse[i]);
+   }
+   UpdateModelsNameEveryWhere();
+}
+
+/******************************************************************************************************************************/
+
+void EndBankNames(){
+
+    char BKS[4][4] = {{"BK1"},{"BK2"},{"BK3"},{"BK4"}};    // heer
+    for (int i = 0; i < 4;++i){
+        BanksInUse[i] = GetValue(BKS[i]);
+   }
+   SaveOneModel(ModelNumber);
+   StartModelSetup();
+}
+
+/******************************************************************************************************************************/
+
+void ListenToBanks(){
+    char BKS[4][4] = {{"BK1"},{"BK2"},{"BK3"},{"BK4"}};   
+    for (int i = 0; i < 4;++i){
+            BanksInUse[i] = GetValue(BKS[i]);
+            PlaySound(BankSounds[BanksInUse[i]]);
+            delay(1000);
+  }
+}
+/******************************************************************************************************************************/
 void StartModelSetup(){
     char GotoModelSetup[]           = "page RXSetupView"; 
     char ProgressStart[]            = "vis Progress,1";
@@ -6375,8 +6421,10 @@ void StartModelSetup(){
 void EndModelSetup(){
      GotoFrontView();
 }
+
+
 // ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
-#define LASTFUNCTION 52 // one more than final one
+#define LASTFUNCTION 55 // one more than final one
 
 void (*NumberedFunctions[LASTFUNCTION])() {
     Blank,                // 0 (spare)
@@ -6430,7 +6478,10 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     GotoFrontView,              // 48
     GotoGPSView,                // 49
     StartModelSetup,            // 50
-    EndModelSetup               // 51
+    EndModelSetup,              // 51
+    StartBankNames,             // 52    
+    EndBankNames,               // 53
+    ListenToBanks               // 54
 
 }; // list will become much longer ...
 
@@ -7574,7 +7625,7 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(Sticks_View, TextIn)) {
+        if (InStrng(Sticks_View, TextIn)) { // heer
             SendCommand(page_SticksView);
             Force_ReDisplay();
             CurrentView = STICKSVIEW;
@@ -8402,7 +8453,7 @@ void GotoFrontView(){
           SendCommand(page_FrontView);
           CurrentView = FRONTVIEW;
 
-          for (int i = 0; i < 4;++i){ // heer
+          for (int i = 0; i < 4;++i){ 
             SendText(fms[i], BankTexts[BanksInUse[i]]);
           }
 
