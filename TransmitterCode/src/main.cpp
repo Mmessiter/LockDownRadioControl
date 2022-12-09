@@ -188,8 +188,8 @@ uint8_t  MinDegrees[5][CHANNELSUSED + 1];    //    Min Degrees (0)
 uint8_t  SubTrims[CHANNELSUSED + 1];         //    Subtrims
 uint8_t  SubTrimToEdit      = 0;
 uint8_t  Bank                       = 1;
-uint8_t  BanksNamesIndex[4]         = {0, 0, 0, 0};//
-// uint8_t  BankNames[20][20]          = {"Bank1",Bank2;// heer
+uint8_t  BankTexts[19][8]           = {{"Bank1"},   {"Bank2"},{"Bank3"}, {"Bank4"}, {"Aeros"},{"Auto"},{"Cruise"},{"Flaps"},{"Hover"},{"IdleUp1"},{"IdleUp2"},{"Landing"},{"Launch"},{"Normal"},{"Speed"},{"Takeoff"},{"Thermal"},{"Hold"},"3D"};
+uint8_t  BankSounds[]               =  {  BANKONE,    BANKTWO,   BANKTHREE, BANKFOUR, AEROBATICS,AUTO,    CRUISE,    FLAPS,    HOVER,    IDLE1,       IDLE2,      LANDING,    LAUNCH,    NORMALB,   SPEED,    TAKEOFF,    THERMAL, THRHOLD,   THREEDEE};
 
 char     ChannelNames[CHANNELSUSED][11] = {{"Aileron"}, {"Elevator"}, {"Throttle"}, {"Rudder"}, {"Gear"}, {"AUX1"}, {"AUX2"}, {"AUX3"}, {"AUX4"}, {"AUX5"}, {"AUX6"}, {"AUX7"}, {"AUX8"}, {"AUX9"}, {"AUX10"}, {"AUX11"}};
 
