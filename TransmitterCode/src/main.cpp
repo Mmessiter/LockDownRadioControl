@@ -2182,18 +2182,28 @@ void  GetCurveDots(uint16_t OutputChannel, uint16_t TheRate)
     for (int i = 0; i < 5; ++i) CurveDots[i] = UseFullRate(i, OutputChannel);  // ... channel not used so 100%
 }
 
+uint32_t SampleTime = 100;
+
 /*********************************************************************************************************************************/
-// This is not called
-void DoDeadZone()
-{
-    uint8_t ch = 0; 
-    uint8_t DeadZone = 10;
-    for (ch = 0; ch < 2; ++ch){ // aileron and elevator only
-        if (abs(SendBuffer[ch] - IntoHigherRes(CentreDegrees[Bank][ch])) < DeadZone) {
-            SendBuffer[ch] = IntoHigherRes(CentreDegrees[Bank][ch]);
+
+void DoSlowServos(){ // work in progress .... // heer
+
+    if (millis() - SampleTime < 100)  return;
+    SampleTime = millis();
+
+    for (int i = 0; i < 16; ++i) {
+        if (i==7){                                              // channel 8 only for a test
+            int Diff = abs(SendBuffer[i] - LastBuffer[i]);
+            
+            if (abs(Diff > 5)) {
+                Look(SendBuffer[i]);
+            }
+
+            LastBuffer[i] = SendBuffer[i];//heer
         }
     }
 }
+
 /*********************************************************************************************************************************/
 
 /** @brief GET NEW SERVO POSITIONS */
@@ -2221,7 +2231,7 @@ FASTRUN void GetNewChannelValues()
     if (CurrentMode == NORMAL) {
         DoReverseSense();
         DoMixes();
-        //DoDeadZone();
+        DoSlowServos();
     }
 }
 /*********************************************************************************************************************************/
@@ -6360,7 +6370,7 @@ void StartBankNames(){
 
 void EndBankNames(){
 
-    char BKS[4][4] = {{"BK1"},{"BK2"},{"BK3"},{"BK4"}};    // heer
+    char BKS[4][4] = {{"BK1"},{"BK2"},{"BK3"},{"BK4"}};   
     for (int i = 0; i < 4; ++i){
         BanksInUse[i] = GetValue(BKS[i]);
     }
@@ -7608,7 +7618,7 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(Sticks_View, TextIn)) { // heer
+        if (InStrng(Sticks_View, TextIn)) {
             SendCommand(page_SticksView);
             Force_ReDisplay();
             CurrentView = STICKSVIEW;
