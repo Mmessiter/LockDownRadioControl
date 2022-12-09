@@ -117,12 +117,12 @@ var NAVTREEINDEX =
 "RadioFunctions_8h.html#a01c7a0b0de94ec72fe070ea9f90dc2ec",
 "RadioFunctions_8h.html#aae23a8374f487a46c5fcb1fb02fadc69",
 "TransmitterCode_2src_2main_8cpp.html#a0070f1201c3b616bcef9519caa36a81c",
-"TransmitterCode_2src_2main_8cpp.html#a694f4f5a0147f4dc29b0bc1a8951547d",
-"TransmitterCode_2src_2main_8cpp.html#acc312445fe26b5cac85fab093aab1c2f",
-"classMPU6050.html#a658dfc7e35b7fdba360a75f137bde33a",
-"classMPU9250.html#a55bd8631b32052958e8e56ff42a0d18e",
-"classVectorInt16.html#af1b5c4c297bdd32751ab4519480b919f",
-"md_Docs_LDRC1____User_Manual.html#autotoc_md25"
+"TransmitterCode_2src_2main_8cpp.html#a69393b86406e49dbacfbabd283877495",
+"TransmitterCode_2src_2main_8cpp.html#acc08bcf3ab2602da03708eb1c8a2c119",
+"classMPU6050.html#a6503f0fdfefa0fd287a75032667b7b69",
+"classMPU9250.html#a551689391a2bfa5aa4af6f10b586ee76",
+"classVectorInt16.html#aefdadb30fbc20b564bbbf0b1a885e349",
+"md_Docs_LDRC1____User_Manual.html#autotoc_md24"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

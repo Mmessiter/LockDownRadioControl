@@ -1,5 +1,6 @@
 var NAVTREEINDEX10 =
 {
+"classVectorInt16.html#aefdadb30fbc20b564bbbf0b1a885e349":[7,0,8,5],
 "classVectorInt16.html#af1b5c4c297bdd32751ab4519480b919f":[7,0,8,9],
 "classes.html":[7,1],
 "common_8h.html":[8,0,2,0,0,0],
@@ -65,8 +66,8 @@ var NAVTREEINDEX10 =
 "elapsedMillis_8h.html":[8,0,1,0,0,2,0],
 "elapsedMillis_8h_source.html":[8,0,1,0,0,2,0],
 "files.html":[8,0],
-"functions.html":[7,3,0],
 "functions.html":[7,3,0,0],
+"functions.html":[7,3,0],
 "functions_a.html":[7,3,0,1],
 "functions_b.html":[7,3,0,2],
 "functions_c.html":[7,3,0,3],
@@ -75,8 +76,8 @@ var NAVTREEINDEX10 =
 "functions_enum.html":[7,3,3],
 "functions_eval.html":[7,3,4],
 "functions_f.html":[7,3,0,6],
-"functions_func.html":[7,3,1,0],
 "functions_func.html":[7,3,1],
+"functions_func.html":[7,3,1,0],
 "functions_func_c.html":[7,3,1,1],
 "functions_func_d.html":[7,3,1,2],
 "functions_func_e.html":[7,3,1,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX10 =
 "md_Docs_LDRC1____User_Manual.html#autotoc_md20":[2,1],
 "md_Docs_LDRC1____User_Manual.html#autotoc_md21":[2,2],
 "md_Docs_LDRC1____User_Manual.html#autotoc_md22":[2,3],
-"md_Docs_LDRC1____User_Manual.html#autotoc_md23":[2,4],
-"md_Docs_LDRC1____User_Manual.html#autotoc_md24":[2,5]
+"md_Docs_LDRC1____User_Manual.html#autotoc_md23":[2,4]
 };
