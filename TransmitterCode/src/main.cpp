@@ -2193,16 +2193,16 @@ void  GetCurveDots(uint16_t OutputChannel, uint16_t TheRate)
 
 void     DoSlowServos() {                                                           // heer
     for (int i = 0; i < 16; ++i) {                                                  // Test every channel
-        if (StepSize[i]) {                                                          // If zero, use full speed. No slowing
+        if (StepSize[i]) {                                                          // If StepSize = zero, use full speed. No slowing
             if ((millis() - SlowTime[i]) > 10) {                                    // This next part runs only 100 times per second
                 SlowTime[i] = millis();                                             // Store start time of this iteration
                 if (CurrentPosition[i] == 0)  CurrentPosition[i] = SendBuffer[i];   // Must start somewhere   
                 int  distance  = SendBuffer[i] - CurrentPosition[i];                // Define how far to move
                 int  SSize     = StepSize[i];                                       // Get step size
                 if (SSize > abs(distance)) SSize = 1;                               // This avoids overshooting the limit
-                if (distance < 0) SSize = -SSize;                                   // Negative
+                if (distance < 0) SSize = -SSize;                                   // Negative?
                 if (!distance) SSize = 0;                                           // Already arrived?
-                CurrentPosition[i] += SSize;                                        // Move a little bit towards goal
+                CurrentPosition[i] += SSize;                                        // Move Current Position a little bit towards goal
             }
         SendBuffer[i] = CurrentPosition[i];                                         // Modify next servo position
         }
