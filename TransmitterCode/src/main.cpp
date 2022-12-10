@@ -2195,10 +2195,10 @@ void     DoSlowServos() {
             int  distance  = SendBuffer[i] - CurrentPosition[i];// how far to go
             int  SSize     = StepSize[i];
             if ((millis() - SlowTime[i]) > 10) { // this part run 100 times per second
-                SlowTime[i] = millis();
+                SlowTime[i] = millis(); 
                 if (distance < 0) SSize = -SSize;
                 CurrentPosition[i] += SSize;                 // move towards goal
-                if (abs(CurrentPosition[i] - SendBuffer[i]) <  SSize+5)  CurrentPosition[i] = SendBuffer[i]; // if close, nail it.
+                if (abs(CurrentPosition[i] - SendBuffer[i]) < 25)  CurrentPosition[i] = SendBuffer[i]; // if close, nail it.
             }
         SendBuffer[i] = CurrentPosition[i];                     // modify instruction to slow servo
         }
@@ -2620,7 +2620,7 @@ void CheckSavedTrimValues()
 }
 
 /*********************************************************************************************************************************/
-void  CheckStepSizes(){
+void  CheckStepSizes(){ // for slow servos
     bool KO = false;
     for (int i = 0; i < 15; ++i) {
         if (StepSize[i] > 100) KO = true;
