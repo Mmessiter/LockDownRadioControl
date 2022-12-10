@@ -166,6 +166,7 @@
 #define GPSVIEW         30
 #define RXSETUPVIEW     31
 #define BANKSNAMESVIEW  32
+#define SLOWSERVOVIEW   33
 
 // **************************************************************************
 //                          Switches' GPIOs                                 *

@@ -2587,11 +2587,13 @@ void UpdateButtonLabels()
             SendValue(fs[i], FailSafeChannel[i]);
         }
     }
-    if (CurrentView == INPUTS_VIEW || CurrentView == FAILSAFE_VIEW || CurrentView == REVERSEVIEW || CurrentView == BUDDYCHVIEW) {
+    if (CurrentView == INPUTS_VIEW || CurrentView == FAILSAFE_VIEW || CurrentView == REVERSEVIEW || CurrentView == BUDDYCHVIEW || CurrentView == SLOWSERVOVIEW) {
         for (int i = 0; i < 16; ++i) {
             SendText(fsch_labels[i], ChannelNames[i]);
             SendValue(InputStick_Labels[i], InPutStick[i] + 1);
-            if (i < 4) SendValue(TrimLabels[i], InputTrim[i] + 1); //
+            if (CurrentView != SLOWSERVOVIEW){
+                        if (i < 4) SendValue(TrimLabels[i], InputTrim[i] + 1); //
+             }
         }
     }
 }
@@ -2616,6 +2618,19 @@ void CheckSavedTrimValues()
         }
     }
 }
+
+/*********************************************************************************************************************************/
+void  CheckStepSizes(){
+    bool KO = false;
+    for (int i = 0; i < 15; ++i) {
+        if (StepSize[i] > 100) KO = true;
+     }
+     if (KO){
+        for (int i = 0; i < 15; ++i) {
+            StepSize[i] = 0;
+        }
+    }
+  }
 /*********************************************************************************************************************************/
 
 bool ReadOneModel(uint8_t Mnum)
@@ -2820,7 +2835,11 @@ bool ReadOneModel(uint8_t Mnum)
           ++SDCardAddress;
     }
     CheckBanksInUse();
-   
+    for (i = 0; i < 15; ++i){
+           StepSize[i] =  SDRead8BITS(SDCardAddress);
+          ++SDCardAddress;
+     }
+    CheckStepSizes();
 
     // **************************************
 
@@ -3843,10 +3862,14 @@ void SaveOneModel(uint16_t mnum)
     SDUpdate8BITS(SDCardAddress, DualRatesSwitch); 
     ++SDCardAddress;
 
-    for (i = 0; i < 4;++i){
+    for (i = 0; i < 4; ++i){
             SDUpdate8BITS(SDCardAddress, BanksInUse[i]);
              ++SDCardAddress;
     }
+    for (i = 0; i < 15; ++i){
+         SDUpdate8BITS(SDCardAddress, StepSize[i]); 
+        ++SDCardAddress;
+     }
 
     SaveCheckSum32(); // Save the Model parametres checksm
     
@@ -6416,9 +6439,38 @@ void EndModelSetup(){
      GotoFrontView();
 }
 
+/******************************************************************************************************************************/
+void StartSlowView(){ // heer
 
+     char GoSlowServoScreen[] = "page SlowServoView";
+     char ns[16][4]    = {{"n0"}, {"n1"}, {"n2"}, {"n3"}, {"n4"}, {"n5"}, {"n6"}, {"n7"}, {"n8"}, {"n9"}, {"n10"}, {"n11"}, {"n12"}, {"n13"}, {"n14"}, {"n15"}};
+     SendCommand(GoSlowServoScreen);
+     CurrentView = SLOWSERVOVIEW;
+     UpdateButtonLabels();
+     UpdateModelsNameEveryWhere();
+     for (int i = 0; i < 15; ++i){
+                SendValue(ns[i], StepSize[i]);
+     }
+}
+/******************************************************************************************************************************/
+void EndSlowView(){
+    char ProgressStart[]           = "vis Progress,1";
+    char ProgressEnd[]             = "vis Progress,0";
+    char Progress[]                = "Progress";
+    char ns[16][4]    = {{"n0"}, {"n1"}, {"n2"}, {"n3"}, {"n4"}, {"n5"}, {"n6"}, {"n7"}, {"n8"}, {"n9"}, {"n10"}, {"n11"}, {"n12"}, {"n13"}, {"n14"}, {"n15"}};
+    SendCommand(ProgressStart);
+    for (int i = 0; i < 15; ++i){
+         StepSize[i] = GetValue(ns[i]);
+         SendValue(Progress,i * (100 / 16));
+     }
+     SaveOneModel(ModelNumber);
+     SendValue(Progress, 100);
+     Procrastinate(250);
+     SendCommand(ProgressEnd);
+     StartModelSetup();
+}
 // ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
-#define LASTFUNCTION 55 // one more than final one
+#define LASTFUNCTION 57 // one more than final one
 
 void (*NumberedFunctions[LASTFUNCTION])() {
     Blank,                // 0 (spare)
@@ -6475,7 +6527,9 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     EndModelSetup,              // 51
     StartBankNames,             // 52    
     EndBankNames,               // 53
-    ListenToBanks               // 54
+    ListenToBanks,              // 54
+    StartSlowView,              // 55
+    EndSlowView                 // 56
 
 }; // list will become much longer ...
 
