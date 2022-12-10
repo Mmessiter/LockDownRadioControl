@@ -2188,20 +2188,23 @@ void  GetCurveDots(uint16_t OutputChannel, uint16_t TheRate)
 }
 
 /*********************************************************************************************************************************/
+/**************************** This function implements slowed servos for flaps etc. **********************************************/
+/*********************************************************************************************************************************/
 
-void     DoSlowServos() { 
-    for (int i = 0; i < 16; ++i) {
-        if (StepSize[i]) { //  non-zero? 
-            if (CurrentPosition[i] == 0)  CurrentPosition[i] = SendBuffer[i];   
-            int  distance  = SendBuffer[i] - CurrentPosition[i];// how far to go
-            int  SSize     = StepSize[i];
-            if ((millis() - SlowTime[i]) > 10) { // this part run 100 times per second
-                SlowTime[i] = millis(); 
-                if (distance < 0) SSize = -SSize;
-                CurrentPosition[i] += SSize;                 // move towards goal
-                if (abs(CurrentPosition[i] - SendBuffer[i]) < 25)  CurrentPosition[i] = SendBuffer[i]; // if close, nail it.
+void     DoSlowServos() {                                                           // heer
+    for (int i = 0; i < 16; ++i) {                                                  // Test every channel
+        if (StepSize[i]) {                                                          // If zero, use full speed. No slowing
+            if ((millis() - SlowTime[i]) > 10) {                                    // This next part runs only 100 times per second
+                SlowTime[i] = millis();                                             // Store start time of this iteration
+                if (CurrentPosition[i] == 0)  CurrentPosition[i] = SendBuffer[i];   // Must start somewhere   
+                int  distance  = SendBuffer[i] - CurrentPosition[i];                // Define how far to move
+                int  SSize     = StepSize[i];                                       // Get step size
+                if (SSize > abs(distance)) SSize = 1;                               // This avoids overstepping the limit
+                if (distance < 0) SSize = -SSize;                                   // Negative
+                if (!distance) SSize = 0;                                           // Already arrived?
+                CurrentPosition[i] += SSize;                                        // Move a little bit towards goal
             }
-        SendBuffer[i] = CurrentPosition[i];                     // modify instruction to slow servo
+        SendBuffer[i] = CurrentPosition[i];                                         // Modify next servo position
         }
     }
 }
@@ -2621,10 +2624,10 @@ void CheckSavedTrimValues()
 }
 
 /*********************************************************************************************************************************/
-void  CheckStepSizes(){ // for slow servos
+void  CheckStepSizes(){ // for slow servos // heer
     bool KO = false;
     for (int i = 0; i < 16; ++i) {
-        if (StepSize[i] > 20) KO = true;
+        if (StepSize[i] > 100) KO = true;
      }
      if (KO){
         for (int i = 0; i < 16; ++i) {
@@ -6441,7 +6444,7 @@ void EndModelSetup(){
 }
 
 /******************************************************************************************************************************/
-void StartSlowView(){ // heer
+void StartSlowView(){
 
      char GoSlowServoScreen[] = "page SlowServoView";
      char ns[16][4]    = {{"n0"}, {"n1"}, {"n2"}, {"n3"}, {"n4"}, {"n5"}, {"n6"}, {"n7"}, {"n8"}, {"n9"}, {"n10"}, {"n11"}, {"n12"}, {"n13"}, {"n14"}, {"n15"}};
