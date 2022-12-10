@@ -177,6 +177,10 @@ const uint8_t AckPayloadSize = sizeof(AckPayload); // i.e. 6
 
 // *****************************************************************************************************************
 
+
+uint32_t SlowTime[16];                       //    For timing slow servos
+uint16_t CurrentPosition[UNCOMPRESSEDWORDS]; //    Position from which a slow servo started (0 = not started yet)
+
 uint16_t SendBuffer[UNCOMPRESSEDWORDS];      //    Data to send to rx (16 words)
 uint16_t ShownBuffer[UNCOMPRESSEDWORDS];     //    Data shown before
 uint16_t LastBuffer[CHANNELSUSED + 1];       //    Used to spot any change
@@ -2182,26 +2186,30 @@ void  GetCurveDots(uint16_t OutputChannel, uint16_t TheRate)
     for (int i = 0; i < 5; ++i) CurveDots[i] = UseFullRate(i, OutputChannel);  // ... channel not used so 100%
 }
 
-uint32_t SampleTime = 100;
-
 /*********************************************************************************************************************************/
 
-void DoSlowServos(){ // work in progress .... // heer
 
-    if (millis() - SampleTime < 100)  return;
-    SampleTime = millis();
-
+void     DoSlowServos()   // heer
+{ 
+    int     distance = 0;
+    int     temp;
     for (int i = 0; i < 16; ++i) {
-        if (i==7){                                              // channel 8 only for a test
-            int Diff = abs(SendBuffer[i] - LastBuffer[i]);
-            
-            if (abs(Diff > 5)) {
-                Look(SendBuffer[i]);
-            }
-
-            LastBuffer[i] = SendBuffer[i];//heer
+        if (i == 10) { //  ONLY test
+            if (CurrentPosition[i] == 0)  CurrentPosition[i] = SendBuffer[i];   
+            distance  = SendBuffer[i] - CurrentPosition[i];
+            if ((millis() - SlowTime[i]) > 10)  { // this part run 100 times per second
+                SlowTime[i] = millis();
+                temp     = 15;
+                if (distance < 0) temp = -temp;
+                if (!distance) temp = 0;
+                CurrentPosition[i] += temp;
+                if (temp < 0) temp = -temp;
+                if (abs(CurrentPosition[i] - SendBuffer[i]) <  temp+5)  CurrentPosition[i] = SendBuffer[i];
+           }
+            SendBuffer[i] = CurrentPosition[i];
+            Look(CurrentPosition[i]);
         }
-    }
+     }
 }
 
 /*********************************************************************************************************************************/
