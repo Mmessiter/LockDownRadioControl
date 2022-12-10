@@ -41,11 +41,12 @@
  * - Capacitive touch screen GUI
  * - Hardware bug in nRF24L01+ fixed. (FIFO buffers crash the chip when they're full for > 4ms. So these are not used.)
  * - Screen colours definable
- * - Data screen gives all possible telemetry
+ * - Data screen gives almost all possible telemetry
  * - Log files  
  * - Help files display system from text files.
  * - Safety switch implemtented (Stops accidental motor starting)
  * - Rates (three rates) implemented
+ * - Slow Servos implemented: Any channel can be slowed by almost any amount for realistic flaps, U/C etc,
  *
  *
  * @section txPinout Teensy 4.1 Pins
@@ -2622,11 +2623,11 @@ void CheckSavedTrimValues()
 /*********************************************************************************************************************************/
 void  CheckStepSizes(){ // for slow servos
     bool KO = false;
-    for (int i = 0; i < 15; ++i) {
+    for (int i = 0; i < 16; ++i) {
         if (StepSize[i] > 100) KO = true;
      }
      if (KO){
-        for (int i = 0; i < 15; ++i) {
+        for (int i = 0; i < 16; ++i) {
             StepSize[i] = 0;
         }
     }
@@ -2835,7 +2836,7 @@ bool ReadOneModel(uint8_t Mnum)
           ++SDCardAddress;
     }
     CheckBanksInUse();
-    for (i = 0; i < 15; ++i){
+    for (i = 0; i < 16; ++i){
            StepSize[i] =  SDRead8BITS(SDCardAddress);
           ++SDCardAddress;
      }
@@ -3866,7 +3867,7 @@ void SaveOneModel(uint16_t mnum)
             SDUpdate8BITS(SDCardAddress, BanksInUse[i]);
              ++SDCardAddress;
     }
-    for (i = 0; i < 15; ++i){
+    for (i = 0; i < 16; ++i){
          SDUpdate8BITS(SDCardAddress, StepSize[i]); 
         ++SDCardAddress;
      }
@@ -6448,7 +6449,7 @@ void StartSlowView(){ // heer
      CurrentView = SLOWSERVOVIEW;
      UpdateButtonLabels();
      UpdateModelsNameEveryWhere();
-     for (int i = 0; i < 15; ++i){
+     for (int i = 0; i < 16; ++i){
                 SendValue(ns[i], StepSize[i]);
      }
 }
@@ -6459,7 +6460,7 @@ void EndSlowView(){
     char Progress[]                = "Progress";
     char ns[16][4]    = {{"n0"}, {"n1"}, {"n2"}, {"n3"}, {"n4"}, {"n5"}, {"n6"}, {"n7"}, {"n8"}, {"n9"}, {"n10"}, {"n11"}, {"n12"}, {"n13"}, {"n14"}, {"n15"}};
     SendCommand(ProgressStart);
-    for (int i = 0; i < 15; ++i){
+    for (int i = 0; i < 16; ++i){
          StepSize[i] = GetValue(ns[i]);
          SendValue(Progress,i * (100 / 16));
      }
