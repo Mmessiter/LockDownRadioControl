@@ -164,6 +164,7 @@ var RadioFunctions_8h =
     [ "SHOWCOMMSDELAY", "RadioFunctions_8h.html#ac3bae9d911f4773794c9977639f6a116", null ],
     [ "SIXMINUTES", "RadioFunctions_8h.html#a2b38f1266cfe8d0aef5b7eb3a8262b35", null ],
     [ "SkyBlue", "RadioFunctions_8h.html#a8a431faef1cf5f8d166b51cd97ee08bf", null ],
+    [ "SLOWSERVOVIEW", "RadioFunctions_8h.html#abf4356adfbfbf7bfb86bc7c86b1fbeec", null ],
     [ "SMOOTHEDCURVES", "RadioFunctions_8h.html#a4bb4c483e9d754ae63391df1d8341deb", null ],
     [ "SPEED", "RadioFunctions_8h.html#aac3553b3932cbfeeac4526ce7ca0336b", null ],
     [ "STICKSVIEW", "RadioFunctions_8h.html#abfc5f0d31f80fc812b9c44a55fe3134e", null ],
