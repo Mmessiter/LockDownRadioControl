@@ -584,6 +584,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "SpecialColour", "TransmitterCode_2src_2main_8cpp.html#ad573af1737d71953a0301a82b1bee22d", null ],
     [ "StartBackGround", "TransmitterCode_2src_2main_8cpp.html#a4c274dbafec73d54251779fa8640d290", null ],
     [ "StartLocation", "TransmitterCode_2src_2main_8cpp.html#a3d13608c0de514d44371734e8063f278", null ],
+    [ "StepSize", "TransmitterCode_2src_2main_8cpp.html#a0e2e72b215725703976ac6e8f7cc972d", null ],
     [ "SticksMode", "TransmitterCode_2src_2main_8cpp.html#a5624a3289e95022504382c0d5a194b61", null ],
     [ "StillConnected", "TransmitterCode_2src_2main_8cpp.html#a3e3841d5d217d93a249d41215f1ccac4", null ],
     [ "StillConnectedBox", "TransmitterCode_2src_2main_8cpp.html#a997fe7cf0bc7ef4b623d1ae29ca38e46", null ],
