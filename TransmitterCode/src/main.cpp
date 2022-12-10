@@ -178,19 +178,19 @@ const uint8_t AckPayloadSize = sizeof(AckPayload); // i.e. 6
 // *****************************************************************************************************************
 
 
-uint32_t SlowTime[16];                       //    For timing slow servos
-uint16_t CurrentPosition[UNCOMPRESSEDWORDS]; //    Position from which a slow servo started (0 = not started yet)
-
-uint16_t SendBuffer[UNCOMPRESSEDWORDS];      //    Data to send to rx (16 words)
-uint16_t ShownBuffer[UNCOMPRESSEDWORDS];     //    Data shown before
-uint16_t LastBuffer[CHANNELSUSED + 1];       //    Used to spot any change
-uint16_t PreMixBuffer[CHANNELSUSED + 1];     //    Data collected from sticks
-uint8_t  MaxDegrees[5][CHANNELSUSED + 1];    //    Max degrees (180)
-uint8_t  MidHiDegrees[5][CHANNELSUSED + 1];  //    MidHi degrees (135)
-uint8_t  CentreDegrees[5][CHANNELSUSED + 1]; //    Middle degrees (90)
-uint8_t  MidLowDegrees[5][CHANNELSUSED + 1]; //    MidLow Degrees (45)
-uint8_t  MinDegrees[5][CHANNELSUSED + 1];    //    Min Degrees (0)
-uint8_t  SubTrims[CHANNELSUSED + 1];         //    Subtrims
+uint32_t SlowTime[16];                                      //    For timing slow servos
+uint8_t  StepSize[16] = {0,0,0,0,0,0,0,0,5,5,5,5,5,5,5,5};  //    How far to move each time on slow servos
+uint16_t CurrentPosition[UNCOMPRESSEDWORDS];                //    Position from which a slow servo started (0 = not started yet)
+uint16_t SendBuffer[UNCOMPRESSEDWORDS];                     //    Data to send to rx (16 words)
+uint16_t ShownBuffer[UNCOMPRESSEDWORDS];                    //    Data shown before
+uint16_t LastBuffer[CHANNELSUSED + 1];                      //    Used to spot any change
+uint16_t PreMixBuffer[CHANNELSUSED + 1];                    //    Data collected from sticks
+uint8_t  MaxDegrees[5][CHANNELSUSED + 1];                   //    Max degrees (180)
+uint8_t  MidHiDegrees[5][CHANNELSUSED + 1];                 //    MidHi degrees (135)
+uint8_t  CentreDegrees[5][CHANNELSUSED + 1];                //    Middle degrees (90)
+uint8_t  MidLowDegrees[5][CHANNELSUSED + 1];                //    MidLow Degrees (45)
+uint8_t  MinDegrees[5][CHANNELSUSED + 1];                   //    Min Degrees (0)
+uint8_t  SubTrims[CHANNELSUSED + 1];                        //    Subtrims
 uint8_t  SubTrimToEdit      = 0;
 
 uint8_t  Bank                       =  1;
@@ -2188,22 +2188,19 @@ void  GetCurveDots(uint16_t OutputChannel, uint16_t TheRate)
 
 /*********************************************************************************************************************************/
 
-
-void     DoSlowServos()   // heer
-{ 
+void     DoSlowServos() { 
     for (int i = 0; i < 16; ++i) {
-        if (i == 10) { //  ONLY test
+        if (StepSize[i]) { //  non-zero? 
             if (CurrentPosition[i] == 0)  CurrentPosition[i] = SendBuffer[i];   
-            int  distance  = SendBuffer[i] - CurrentPosition[i];
-            int  StepSize = 5 ;
-            if ((millis() - SlowTime[i]) > 10)  { // this part run 100 times per second
+            int  distance  = SendBuffer[i] - CurrentPosition[i];// how far to go
+            int  SSize     = StepSize[i];
+            if ((millis() - SlowTime[i]) > 10) { // this part run 100 times per second
                 SlowTime[i] = millis();
-                if (distance < 0) StepSize = -StepSize;
-                CurrentPosition[i] += StepSize;
-                if (StepSize < 0) StepSize = -StepSize;
-                if (abs(CurrentPosition[i] - SendBuffer[i]) <  StepSize+5)  CurrentPosition[i] = SendBuffer[i]; // if close, nail it.
-           }
-            SendBuffer[i] = CurrentPosition[i];  // modify instruction
+                if (distance < 0) SSize = -SSize;
+                CurrentPosition[i] += SSize;                 // move towards goal
+                if (abs(CurrentPosition[i] - SendBuffer[i]) <  SSize+5)  CurrentPosition[i] = SendBuffer[i]; // if close, nail it.
+            }
+        SendBuffer[i] = CurrentPosition[i];                     // modify instruction to slow servo
         }
     }
 }
