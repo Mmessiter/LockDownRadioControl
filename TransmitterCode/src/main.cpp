@@ -2188,7 +2188,7 @@ void  GetCurveDots(uint16_t OutputChannel, uint16_t TheRate)
 }
 
 /*********************************************************************************************************************************/
-/**************************** This function implements slowed servos for flaps etc. **********************************************/
+/**************************** This function implements slowed servos for flaps, U/Cs etc. ****************************************/
 /*********************************************************************************************************************************/
 
 void     DoSlowServos() {                                                           // heer
@@ -2199,7 +2199,7 @@ void     DoSlowServos() {                                                       
                 if (CurrentPosition[i] == 0)  CurrentPosition[i] = SendBuffer[i];   // Must start somewhere   
                 int  distance  = SendBuffer[i] - CurrentPosition[i];                // Define how far to move
                 int  SSize     = StepSize[i];                                       // Get step size
-                if (SSize > abs(distance)) SSize = 1;                               // This avoids overstepping the limit
+                if (SSize > abs(distance)) SSize = 1;                               // This avoids overshooting the limit
                 if (distance < 0) SSize = -SSize;                                   // Negative
                 if (!distance) SSize = 0;                                           // Already arrived?
                 CurrentPosition[i] += SSize;                                        // Move a little bit towards goal
