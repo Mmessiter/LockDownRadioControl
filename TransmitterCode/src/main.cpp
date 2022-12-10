@@ -179,7 +179,7 @@ const uint8_t AckPayloadSize = sizeof(AckPayload); // i.e. 6
 
 
 uint32_t SlowTime[16];                                      //    For timing slow servos
-uint8_t  StepSize[16] = {0,0,0,0,0,0,0,0,5,5,5,5,5,5,5,5};  //    How far to move each time on slow servos
+uint8_t  StepSize[16] = {0,0,0,0,0,0,0,0,5,25,5,25,5,25,5,25};  //    How far to move each time on slow servos
 uint16_t CurrentPosition[UNCOMPRESSEDWORDS];                //    Position from which a slow servo started (0 = not started yet)
 uint16_t SendBuffer[UNCOMPRESSEDWORDS];                     //    Data to send to rx (16 words)
 uint16_t ShownBuffer[UNCOMPRESSEDWORDS];                    //    Data shown before
