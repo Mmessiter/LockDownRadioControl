@@ -2191,25 +2191,21 @@ void  GetCurveDots(uint16_t OutputChannel, uint16_t TheRate)
 
 void     DoSlowServos()   // heer
 { 
-    int     distance = 0;
-    int     temp;
     for (int i = 0; i < 16; ++i) {
         if (i == 10) { //  ONLY test
             if (CurrentPosition[i] == 0)  CurrentPosition[i] = SendBuffer[i];   
-            distance  = SendBuffer[i] - CurrentPosition[i];
+            int  distance  = SendBuffer[i] - CurrentPosition[i];
+            int  StepSize = 5 ;
             if ((millis() - SlowTime[i]) > 10)  { // this part run 100 times per second
                 SlowTime[i] = millis();
-                temp     = 15;
-                if (distance < 0) temp = -temp;
-                if (!distance) temp = 0;
-                CurrentPosition[i] += temp;
-                if (temp < 0) temp = -temp;
-                if (abs(CurrentPosition[i] - SendBuffer[i]) <  temp+5)  CurrentPosition[i] = SendBuffer[i];
+                if (distance < 0) StepSize = -StepSize;
+                CurrentPosition[i] += StepSize;
+                if (StepSize < 0) StepSize = -StepSize;
+                if (abs(CurrentPosition[i] - SendBuffer[i]) <  StepSize+5)  CurrentPosition[i] = SendBuffer[i]; // if close, nail it.
            }
-            SendBuffer[i] = CurrentPosition[i];
-            Look(CurrentPosition[i]);
+            SendBuffer[i] = CurrentPosition[i];  // modify instruction
         }
-     }
+    }
 }
 
 /*********************************************************************************************************************************/
