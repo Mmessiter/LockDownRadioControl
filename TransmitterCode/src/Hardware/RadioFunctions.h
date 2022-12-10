@@ -165,6 +165,8 @@
 #define DUALRATESVIEW   29
 #define GPSVIEW         30
 #define RXSETUPVIEW     31
+#define BANKSNAMESVIEW  32
+#define SLOWSERVOVIEW   33
 
 // **************************************************************************
 //                          Switches' GPIOs                                 *
@@ -244,6 +246,31 @@
 #define RATE2           35
 #define RATE3           36
 #define PLSTURNOFF      37
+#define AEROBATICS      38
+#define AUTO            39
+#define CRUISE          40
+#define FLAPS           41
+#define HOVER           42
+#define IDLE1           43
+#define IDLE2           44
+#define LANDING         45
+#define LAUNCH          46
+#define NORMALB         47
+#define SPEED           48
+#define TAKEOFF         49
+#define THERMAL         50
+#define THRHOLD         51
+#define THREEDEE        52
+#define BFM1            53
+#define BFM2            54
+#define BFM3            55
+#define BFM4            56
+#define AIRBRAKES       57
+#define STUNT1          58
+#define STUNT2          59
+#define WHEELSDOWN      60
+#define WHEELSUP        61
+
 
 
 // **************************************************************************
@@ -449,6 +476,7 @@ extern void          CheckMotorOff();
 extern bool          GetButtonPress();
 extern void          CheckPowerOffButton();
 
+
 /*********************************************************************************************************************************/
 // function prototypes
 
@@ -495,6 +523,7 @@ void         SetUKFrequencies();
 FASTRUN uint16_t GetStickInputInputOnly(uint8_t l);
 FASTRUN void     LogSafety(bool On);
 void             ShowMotor(int on);
+void          StartModelSetup();
 
 /*********************************************************************************************************************************/
 

@@ -8,13 +8,13 @@
  * - 16 channels
  * - 12 BIT servo resolution (11 BIT via SBUS)
  * - 32 Mixes
- * - 4 Flight modes (AKA Banks), or 3 plus autorotation
+ * - 4 Flight modes with user definable and announced names.
  * - "ModelMatch" plus automatic model memory selection. (Avoid flying with wrong memory loaded.)
  * - Buddyboxing with selectable channels.
  * - Voice messages and other audio prompts.
  * - User defined Channel names
  * - 2.4 Ghz FHSS ISM band licence free in UK and most other countries.
- * - 2.5 Km range (approx.)
+ * - > 2 Km range 
  * - Telemetry including GPS, volts, temperature & barometric pressure, using custom I2C sensor hub
  * - 64 editable 5-point curves (16 channels x 4 flight modes): straight, smoothed or exponential.
  * - FailSafe on any or all channel(s)
@@ -41,10 +41,12 @@
  * - Capacitive touch screen GUI
  * - Hardware bug in nRF24L01+ fixed. (FIFO buffers crash the chip when they're full for > 4ms. So these are not used.)
  * - Screen colours definable
- * - Data screen gives all possible telemetry
- * - Log files implemented - and help file system with unlimited file length
+ * - Data screen gives almost all possible telemetry
+ * - Log files  
+ * - Help files display system from text files.
  * - Safety switch implemtented (Stops accidental motor starting)
- * - Dual Rates (actually - quadruple rates) implemented
+ * - Rates (three rates) implemented
+ * - Slow Servos implemented: Any channel can be slowed by almost any amount for realistic flaps, U/C etc,
  *
  *
  * @section txPinout Teensy 4.1 Pins
@@ -176,19 +178,31 @@ const uint8_t AckPayloadSize = sizeof(AckPayload); // i.e. 6
 
 // *****************************************************************************************************************
 
-uint16_t SendBuffer[UNCOMPRESSEDWORDS];      //    Data to send to rx (16 words)
-uint16_t ShownBuffer[UNCOMPRESSEDWORDS];     //    Data shown before
-uint16_t LastBuffer[CHANNELSUSED + 1];       //    Used to spot any change
-uint16_t PreMixBuffer[CHANNELSUSED + 1];     //    Data collected from sticks
-uint8_t  MaxDegrees[5][CHANNELSUSED + 1];    //    Max degrees (180)
-uint8_t  MidHiDegrees[5][CHANNELSUSED + 1];  //    MidHi degrees (135)
-uint8_t  CentreDegrees[5][CHANNELSUSED + 1]; //    Middle degrees (90)
-uint8_t  MidLowDegrees[5][CHANNELSUSED + 1]; //    MidLow Degrees (45)
-uint8_t  MinDegrees[5][CHANNELSUSED + 1];    //    Min Degrees (0)
-uint8_t  SubTrims[CHANNELSUSED + 1];         //    Subtrims
+
+uint32_t SlowTime[16];                                      //    For timing slow servos
+uint8_t  StepSize[16] = {0,0,0,0,0,0,0,0,5,25,5,25,5,25,5,25};  //    How far to move each time on slow servos
+uint16_t CurrentPosition[UNCOMPRESSEDWORDS];                //    Position from which a slow servo started (0 = not started yet)
+uint16_t SendBuffer[UNCOMPRESSEDWORDS];                     //    Data to send to rx (16 words)
+uint16_t ShownBuffer[UNCOMPRESSEDWORDS];                    //    Data shown before
+uint16_t LastBuffer[CHANNELSUSED + 1];                      //    Used to spot any change
+uint16_t PreMixBuffer[CHANNELSUSED + 1];                    //    Data collected from sticks
+uint8_t  MaxDegrees[5][CHANNELSUSED + 1];                   //    Max degrees (180)
+uint8_t  MidHiDegrees[5][CHANNELSUSED + 1];                 //    MidHi degrees (135)
+uint8_t  CentreDegrees[5][CHANNELSUSED + 1];                //    Middle degrees (90)
+uint8_t  MidLowDegrees[5][CHANNELSUSED + 1];                //    MidLow Degrees (45)
+uint8_t  MinDegrees[5][CHANNELSUSED + 1];                   //    Min Degrees (0)
+uint8_t  SubTrims[CHANNELSUSED + 1];                        //    Subtrims
 uint8_t  SubTrimToEdit      = 0;
-uint8_t  Bank                       = 1;
-uint8_t  PreviousBank               = 1;
+
+uint8_t  Bank                       =  1;
+// User defined bank names zone
+// ************************************** 0                  1                 2                  3                4          5           6           7          8                9        10          11       12        13             14            15          16          17      18        19           20         21     22           23         24         25          26           27        ***
+char     BankTexts[28][14]          =  {{ "Flight mode 1"},{"Flight mode 2"},{"Flight mode 3"},{"Flight mode 4"},{"Bank 1"},{"Bank 2"},{"Bank 3"}, {"Bank 4"},{"Aerobatics"}, {"Auto"},{"Cruise"},{"Flaps"},{"Hover"},{"Idle up 1"},{"Idle up 2"},{"Landing"},{"Launch"},{"Normal"},{"Speed"},{"Takeoff"},{"Thermal"},{"Hold"},{"3D"}   ,{"Brakes"},{"Stunt 1"},{"Stunt 2"},{"Gear up"},{"Gear down"}};
+uint8_t  BankSounds[28]             =  {   BFM1,             BFM2,             BFM3,             BFM4,             BANKONE,   BANKTWO,   BANKTHREE,  BANKFOUR, AEROBATICS,      AUTO,     CRUISE,    FLAPS,    HOVER,    IDLE1,        IDLE2,        LANDING,    LAUNCH,    NORMALB,   SPEED,    TAKEOFF,    THERMAL,    THRHOLD,THREEDEE,AIRBRAKES,  STUNT1,     STUNT2,     WHEELSDOWN, WHEELSUP};
+uint8_t  BanksInUse[4]              =  {0, 1, 2, 3};
+uint8_t  PreviousBank               =  1;
+// ************************************
+char     ChannelNames[CHANNELSUSED][11] = {{"Aileron"}, {"Elevator"}, {"Throttle"}, {"Rudder"}, {"Gear"}, {"AUX1"}, {"AUX2"}, {"AUX3"}, {"AUX4"}, {"AUX5"}, {"AUX6"}, {"AUX7"}, {"AUX8"}, {"AUX9"}, {"AUX10"}, {"AUX11"}};
 uint8_t  DualRateInUse              = 1;
 uint8_t  PreviousDualRateInUse      = 1;
 uint16_t ChannelMax[CHANNELSUSED + 1];    //    output of pots at max
@@ -204,7 +218,6 @@ double   xPoints[5];
 double   yPoints[5];
 double   xPoint = 0;
 double   yPoint = 0;
-
 uint16_t BoxBottom;
 uint16_t BoxTop;
 uint16_t BoxLeft;
@@ -351,7 +364,6 @@ uint8_t  SaveBank             = 0;
 bool     FailSafeChannel[CHANNELSUSED];
 bool     SaveFailSafeNow = false;
 uint32_t FailSafeTimer;
-char     ChannelNames[CHANNELSUSED][11] = {{"Aileron"}, {"Elevator"}, {"Throttle"}, {"Rudder"}, {"Gear"}, {"AUX1"}, {"AUX2"}, {"AUX3"}, {"AUX4"}, {"AUX5"}, {"AUX6"}, {"AUX7"}, {"AUX8"}, {"AUX9"}, {"AUX10"}, {"AUX11"}};
 
 uint32_t LastPacketSentTime = 0;
 uint16_t CompressedData[COMPRESSEDWORDS]; // = 20
@@ -1431,8 +1443,6 @@ FASTRUN void ShowServoPos()
 {
     if (millis() - ShowServoTimer <= 100) return;
    
-   
-  
     char     Ch_Lables[16][5] = {"Ch1", "Ch2", "Ch3", "Ch4", "Ch5", "Ch6", "Ch7", "Ch8", "Ch9", "Ch10", "Ch11", "Ch12", "Ch13", "Ch14", "Ch15", "Ch16"};
     char     ChannelInput[]   = "Input";
     char     ChannelOutput[]  = "Output";
@@ -1475,7 +1485,6 @@ FASTRUN void ShowServoPos()
                 l1 = map(l1, ChannelCentre[l], ChannelMax[l], ChannelCentre[l], ChannelMin[l]);
             }
         }
-
         if (l1 <= ChannelCentre[l]) {
             SendValue(ChannelInput, map(l1, ChannelCentre[l], ChannelMin[l], 0, -100));
             StickPosition = map(l1, ChannelMin[l], ChannelCentre[l], BoxLeft - 0, BoxLeft + (((BoxRight - fixitx) - BoxLeft) / 2));
@@ -1485,11 +1494,8 @@ FASTRUN void ShowServoPos()
         }
 
         if ((abs(StickPosition - SavedLineX) > LeastDistance) ){
-          //  if  (LedWasRed) // Not while connected as too slow
-          //  {
                 DisplayCurve();                                                                                        // needed to clear last line
                 DrawLine(StickPosition - 1, BoxTop + 3, StickPosition - 1, (BoxBottom - 3) - BoxTop, HighlightColour); // draws line for stick position
-          //  }
             SendValue(ChannelOutput, map(SendBuffer[ChanneltoSet-1], MINMICROS, MAXMICROS, -100, 100));
             SavedLineX = StickPosition;
         }
@@ -1497,7 +1503,6 @@ FASTRUN void ShowServoPos()
     }
     ShowServoTimer = millis();
 }
-
 
 /*********************************************************************************************************************************/
 FASTRUN bool CheckTXVolts()
@@ -1881,7 +1886,7 @@ void SendCharArray(char* ch0, char* ch1, char* ch2, char* ch3, char* ch4, char* 
 void SendMixValues() // sends mix values to Nextion screen
 {
     char MixesView_Enabled[]       = "MixesView.Enabled";
-    char MixesView_Bank[]    = "MixesView.Bank";
+    char MixesView_Bank[]          = "MixesView.Bank";
     char MixesView_MasterChannel[] = "MixesView.MasterChannel";
     char MixesView_SlaveChannel[]  = "MixesView.SlaveChannel";
     char MixesView_Reversed[]      = "MixesView.Reversed";
@@ -2183,17 +2188,24 @@ void  GetCurveDots(uint16_t OutputChannel, uint16_t TheRate)
 }
 
 /*********************************************************************************************************************************/
-// This is not called
-void DoDeadZone()
-{
-    uint8_t ch = 0; 
-    uint8_t DeadZone = 10;
-    for (ch = 0; ch < 2; ++ch){ // aileron and elevator only
-        if (abs(SendBuffer[ch] - IntoHigherRes(CentreDegrees[Bank][ch])) < DeadZone) {
-            SendBuffer[ch] = IntoHigherRes(CentreDegrees[Bank][ch]);
+
+void     DoSlowServos() { 
+    for (int i = 0; i < 16; ++i) {
+        if (StepSize[i]) { //  non-zero? 
+            if (CurrentPosition[i] == 0)  CurrentPosition[i] = SendBuffer[i];   
+            int  distance  = SendBuffer[i] - CurrentPosition[i];// how far to go
+            int  SSize     = StepSize[i];
+            if ((millis() - SlowTime[i]) > 10) { // this part run 100 times per second
+                SlowTime[i] = millis(); 
+                if (distance < 0) SSize = -SSize;
+                CurrentPosition[i] += SSize;                 // move towards goal
+                if (abs(CurrentPosition[i] - SendBuffer[i]) < 25)  CurrentPosition[i] = SendBuffer[i]; // if close, nail it.
+            }
+        SendBuffer[i] = CurrentPosition[i];                     // modify instruction to slow servo
         }
     }
 }
+
 /*********************************************************************************************************************************/
 
 /** @brief GET NEW SERVO POSITIONS */
@@ -2221,7 +2233,7 @@ FASTRUN void GetNewChannelValues()
     if (CurrentMode == NORMAL) {
         DoReverseSense();
         DoMixes();
-        //DoDeadZone();
+        DoSlowServos();
     }
 }
 /*********************************************************************************************************************************/
@@ -2448,13 +2460,6 @@ uint8_t SDRead8BITS(int p_address)
 
 void UpdateModelsNameEveryWhere()
 {
-    char fms[4][7] = {
-        "Bank 1",
-        "Bank 2",
-        "Bank 3",
-        "Bank 4",
-    };
-
     char TheModelName[]        = "ModelName";
     char GraphView_Channel[]   = "Channel";
     char TrimView_Bank[] = "t1";
@@ -2467,8 +2472,6 @@ void UpdateModelsNameEveryWhere()
     char lb[] = " (";
     char rb[] = ")";
    
-
-
     strcpy(mn1, ModelName);
     
     if (CurrentView == FRONTVIEW) SendText(Owner, TxName);
@@ -2490,10 +2493,10 @@ void UpdateModelsNameEveryWhere()
             SendText(GraphView_Channel, ChannelNames[ChanneltoSet - 1]);
         }
     }
-    if (CurrentView == STICKSVIEW) SendText(SticksView_t1, fms[Bank - 1]);
-    if (CurrentView == GRAPHVIEW) SendText(GraphView_fmode, fms[Bank - 1]);
+    if (CurrentView == STICKSVIEW) SendText(SticksView_t1, BankTexts[BanksInUse[Bank-1]]);
+    if (CurrentView == GRAPHVIEW) SendText(GraphView_fmode, BankTexts[BanksInUse[Bank-1]]);
     if (CurrentView == TRIM_VIEW) {
-        SendText(TrimView_Bank, fms[Bank - 1]);
+        SendText(TrimView_Bank, BankTexts[BanksInUse[Bank-1]]);
         UpdateTrimView();
     }
    
@@ -2585,13 +2588,23 @@ void UpdateButtonLabels()
             SendValue(fs[i], FailSafeChannel[i]);
         }
     }
-    if (CurrentView == INPUTS_VIEW || CurrentView == FAILSAFE_VIEW || CurrentView == REVERSEVIEW || CurrentView == BUDDYCHVIEW) {
+    if (CurrentView == INPUTS_VIEW || CurrentView == FAILSAFE_VIEW || CurrentView == REVERSEVIEW || CurrentView == BUDDYCHVIEW || CurrentView == SLOWSERVOVIEW) {
         for (int i = 0; i < 16; ++i) {
             SendText(fsch_labels[i], ChannelNames[i]);
             SendValue(InputStick_Labels[i], InPutStick[i] + 1);
-            if (i < 4) SendValue(TrimLabels[i], InputTrim[i] + 1); //
+            if (CurrentView != SLOWSERVOVIEW){
+                        if (i < 4) SendValue(TrimLabels[i], InputTrim[i] + 1); //
+             }
         }
     }
+}
+
+/*********************************************************************************************************************************/
+void CheckBanksInUse(){
+
+        for (int i = 0; i < 4; ++i){
+             if (BanksInUse[i] > 23) BanksInUse[i] = i;
+        }
 }
 /*********************************************************************************************************************************/
 void CheckSavedTrimValues()
@@ -2606,6 +2619,19 @@ void CheckSavedTrimValues()
         }
     }
 }
+
+/*********************************************************************************************************************************/
+void  CheckStepSizes(){ // for slow servos
+    bool KO = false;
+    for (int i = 0; i < 16; ++i) {
+        if (StepSize[i] > 100) KO = true;
+     }
+     if (KO){
+        for (int i = 0; i < 16; ++i) {
+            StepSize[i] = 0;
+        }
+    }
+  }
 /*********************************************************************************************************************************/
 
 bool ReadOneModel(uint8_t Mnum)
@@ -2799,12 +2825,22 @@ bool ReadOneModel(uint8_t Mnum)
         DualRateChannels[i]= SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
     }
+    CheckDualRatesValues();
     BuddySwitch = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
     DualRatesSwitch = SDRead8BITS(SDCardAddress);
+   
     ++SDCardAddress;
-
-    CheckDualRatesValues();
+    for (i = 0; i < 4;++i){
+          BanksInUse[i] =  SDRead8BITS(SDCardAddress);
+          ++SDCardAddress;
+    }
+    CheckBanksInUse();
+    for (i = 0; i < 16; ++i){
+           StepSize[i] =  SDRead8BITS(SDCardAddress);
+          ++SDCardAddress;
+     }
+    CheckStepSizes();
 
     // **************************************
 
@@ -3354,6 +3390,7 @@ void ShowLogFile(uint8_t StartLine)
     SendText1(LogTeXt, TheText);                             // Then send it
 }
 
+
 /*********************************************************************************************************************************/
 // SETUP
 /*********************************************************************************************************************************/
@@ -3417,9 +3454,8 @@ FLASHMEM void setup()
     SendValue(FrontView_ForeGround, ForeGroundColour);
     SendValue(FrontView_Special, SpecialColour);
     SendValue(FrontView_Highlight, HighlightColour);
-    
-
-    SendCommand(page_FrontView);
+    CurrentView = 254;
+    GotoFrontView();
     SetAudioVolume(AudioVolume);
     if (PlayFanfare) {
         PlaySound(THEFANFARE);
@@ -3827,8 +3863,14 @@ void SaveOneModel(uint16_t mnum)
     SDUpdate8BITS(SDCardAddress, DualRatesSwitch); 
     ++SDCardAddress;
 
-
-
+    for (i = 0; i < 4; ++i){
+            SDUpdate8BITS(SDCardAddress, BanksInUse[i]);
+             ++SDCardAddress;
+    }
+    for (i = 0; i < 16; ++i){
+         SDUpdate8BITS(SDCardAddress, StepSize[i]); 
+        ++SDCardAddress;
+     }
 
     SaveCheckSum32(); // Save the Model parametres checksm
     
@@ -5251,8 +5293,7 @@ void SendModelFile()
 
 void SoundBank()
 {
-    uint8_t Sounds[4] = {BANKONE, BANKTWO, BANKTHREE, BANKFOUR};
-    PlaySound(Sounds[Bank - 1]);
+    PlaySound(BankSounds[BanksInUse[Bank-1]]);
     ScreenTimeTimer = millis(); // reset screen counter
     if (ScreenIsOff) {
         RestoreBrightness();
@@ -6335,8 +6376,46 @@ void GotoGPSView(){
 }
 
 /******************************************************************************************************************************/
+
+void StartBankNames(){
+
+   char GotoBankNames[] = "page BankNameView";
+   char BKS[4][4] = {{"BK1"},{"BK2"},{"BK3"},{"BK4"}};
+
+   SendCommand(GotoBankNames);
+   CurrentView = BANKSNAMESVIEW;
+
+   for (int i = 0; i < 4;++i){
+        SendValue(BKS[i],BanksInUse[i]);
+   }
+   UpdateModelsNameEveryWhere();
+}
+
+/******************************************************************************************************************************/
+
+void EndBankNames(){
+
+    char BKS[4][4] = {{"BK1"},{"BK2"},{"BK3"},{"BK4"}};   
+    for (int i = 0; i < 4; ++i){
+        BanksInUse[i] = GetValue(BKS[i]);
+    }
+    SaveOneModel(ModelNumber);
+    StartModelSetup();
+}
+
+/******************************************************************************************************************************/
+
+void ListenToBanks(){
+    char BKS[4][4] = {{"BK1"},{"BK2"},{"BK3"},{"BK4"}};   
+    for (int i = 0; i < 4;++i){
+            BanksInUse[i] = GetValue(BKS[i]);
+            PlaySound(BankSounds[BanksInUse[i]]);
+            Procrastinate(1200);
+  }
+}
+/******************************************************************************************************************************/
 void StartModelSetup(){
-    char GotoModelSetup[]           = "page RXSetupView"; // heer
+    char GotoModelSetup[]           = "page RXSetupView"; 
     char ProgressStart[]            = "vis Progress,1";
     char ProgressEnd[]              = "vis Progress,0";
     char Progress[]                 = "Progress";
@@ -6360,8 +6439,39 @@ void StartModelSetup(){
 void EndModelSetup(){
      GotoFrontView();
 }
+
+/******************************************************************************************************************************/
+void StartSlowView(){ // heer
+
+     char GoSlowServoScreen[] = "page SlowServoView";
+     char ns[16][4]    = {{"n0"}, {"n1"}, {"n2"}, {"n3"}, {"n4"}, {"n5"}, {"n6"}, {"n7"}, {"n8"}, {"n9"}, {"n10"}, {"n11"}, {"n12"}, {"n13"}, {"n14"}, {"n15"}};
+     SendCommand(GoSlowServoScreen);
+     CurrentView = SLOWSERVOVIEW;
+     UpdateButtonLabels();
+     UpdateModelsNameEveryWhere();
+     for (int i = 0; i < 16; ++i){
+                SendValue(ns[i], StepSize[i]);
+     }
+}
+/******************************************************************************************************************************/
+void EndSlowView(){
+    char ProgressStart[]           = "vis Progress,1";
+    char ProgressEnd[]             = "vis Progress,0";
+    char Progress[]                = "Progress";
+    char ns[16][4]    = {{"n0"}, {"n1"}, {"n2"}, {"n3"}, {"n4"}, {"n5"}, {"n6"}, {"n7"}, {"n8"}, {"n9"}, {"n10"}, {"n11"}, {"n12"}, {"n13"}, {"n14"}, {"n15"}};
+    SendCommand(ProgressStart);
+    for (int i = 0; i < 16; ++i){
+         StepSize[i] = GetValue(ns[i]);
+         SendValue(Progress,i * (100 / 16));
+     }
+     SaveOneModel(ModelNumber);
+     SendValue(Progress, 100);
+     Procrastinate(250);
+     SendCommand(ProgressEnd);
+     StartModelSetup();
+}
 // ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
-#define LASTFUNCTION 52 // one more than final one
+#define LASTFUNCTION 57 // one more than final one
 
 void (*NumberedFunctions[LASTFUNCTION])() {
     Blank,                // 0 (spare)
@@ -6415,7 +6525,12 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     GotoFrontView,              // 48
     GotoGPSView,                // 49
     StartModelSetup,            // 50
-    EndModelSetup               // 51
+    EndModelSetup,              // 51
+    StartBankNames,             // 52    
+    EndBankNames,               // 53
+    ListenToBanks,              // 54
+    StartSlowView,              // 55
+    EndSlowView                 // 56
 
 }; // list will become much longer ...
 
@@ -6730,9 +6845,7 @@ FASTRUN void ButtonWasPressed()
             ClearText();
             return;
         }
-        if (InStrng(SetupView, TextIn) > 0) {   //  goto main setup screen // heer
-           
-           
+        if (InStrng(SetupView, TextIn) > 0) {   //  goto main setup screen
             ClearText();
             SaveAllParameters();
             CurrentView = TXSETUPVIEW;
@@ -7134,7 +7247,7 @@ FASTRUN void ButtonWasPressed()
             SendCommand(ProgressEnd);
             UpdateButtonLabels();
             CurrentView = RXSETUPVIEW;
-            SendCommand(page_RXSetupView); // heer
+            SendCommand(page_RXSetupView);
             b5isGrey = false;
             b12isGrey = false;
             LastTimeRead = 0;
@@ -8378,12 +8491,22 @@ FASTRUN uint32_t GetIntFromAckPayload()   // This one uses a uint32_t int
 /************************************************************************************************************/
 
 void GotoFrontView(){
+
+
+    char fms[4][4] = {{"fm1"},{"fm2"},{"fm3"},{"fm4"}};
+    
+
     if (CurrentView != FRONTVIEW)
     {
           if (CurrentView == SCANVIEW) DoScanEnd();  
           SendCommand(page_FrontView);
           CurrentView = FRONTVIEW;
-          UpdateModelsNameEveryWhere();
+
+          for (int i = 0; i < 4;++i){ 
+            SendText(fms[i], BankTexts[BanksInUse[i]]);
+          }
+
+            UpdateModelsNameEveryWhere();
           SafetyWasOn ^= 1;                     // this forces a re-display of safety state
           ShowBank();
           LastTimeRead = 0;
