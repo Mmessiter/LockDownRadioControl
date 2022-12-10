@@ -2624,7 +2624,7 @@ void CheckSavedTrimValues()
 void  CheckStepSizes(){ // for slow servos
     bool KO = false;
     for (int i = 0; i < 16; ++i) {
-        if (StepSize[i] > 100) KO = true;
+        if (StepSize[i] > 20) KO = true;
      }
      if (KO){
         for (int i = 0; i < 16; ++i) {
@@ -6464,6 +6464,7 @@ void EndSlowView(){
          StepSize[i] = GetValue(ns[i]);
          SendValue(Progress,i * (100 / 16));
      }
+     CheckStepSizes();
      SaveOneModel(ModelNumber);
      SendValue(Progress, 100);
      Procrastinate(250);
@@ -6585,9 +6586,7 @@ FASTRUN void ButtonWasPressed()
                 return;
             }
         }
-
         int  i                         = 0;
-        
         char Write[]                   = "Write";
         char Setup[]                   = "Setup";
         char ClickX[]                  = "ClickX";
@@ -6629,7 +6628,6 @@ FASTRUN void ButtonWasPressed()
         char MixesView_Percent[]       = "Percent";
         char page_SetupView[]          = "page SetupView";
         char page_RXSetupView[]        = "page RXSetupView";
-
         char page_AudioView[]          = "page AudioView";
         char page_ColoursView[]        = "page ColoursView";
         char GoSetupView[]             = "GoSetupView";
