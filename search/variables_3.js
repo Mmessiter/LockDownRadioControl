@@ -44,14 +44,15 @@ var searchData=
   ['clockspoken_41',['ClockSpoken',['../TransmitterCode_2src_2main_8cpp.html#a235116408ba9ac496c2a243a340888e5',1,'main.cpp']]],
   ['compresseddata_42',['CompressedData',['../ReceiverCode_2src_2main_8cpp.html#aa16611ba89205c8cb9e75353ce1ad032',1,'CompressedData():&#160;main.cpp'],['../RadioFunctions_8h.html#a4fc8940a1091b62dbffbe6358772a691',1,'CompressedData():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#aa16611ba89205c8cb9e75353ce1ad032',1,'CompressedData():&#160;main.cpp']]],
   ['config_43',['CONFIG',['../classMPU9250.html#aab05dcc81b5628ed687e152263c52966',1,'MPU9250']]],
-  ['connected_44',['Connected',['../radio_8h.html#a5318db734c71b1b08208ef690f1f0146',1,'Connected():&#160;radio.h'],['../RadioFunctions_8h.html#a5318db734c71b1b08208ef690f1f0146',1,'Connected():&#160;radio.h'],['../TransmitterCode_2src_2main_8cpp.html#a5318db734c71b1b08208ef690f1f0146',1,'Connected():&#160;main.cpp']]],
+  ['connected_44',['Connected',['../RadioFunctions_8h.html#a5318db734c71b1b08208ef690f1f0146',1,'Connected():&#160;radio.h'],['../TransmitterCode_2src_2main_8cpp.html#a5318db734c71b1b08208ef690f1f0146',1,'Connected():&#160;main.cpp'],['../radio_8h.html#a5318db734c71b1b08208ef690f1f0146',1,'Connected():&#160;radio.h']]],
   ['connectionassessseconds_45',['ConnectionAssessSeconds',['../RadioFunctions_8h.html#ac58a25a73bcc60b4f892b7ad285d7adc',1,'ConnectionAssessSeconds():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#ac58a25a73bcc60b4f892b7ad285d7adc',1,'ConnectionAssessSeconds():&#160;main.cpp']]],
   ['copytrimstoall_46',['CopyTrimsToAll',['../TransmitterCode_2src_2main_8cpp.html#ae737f11637caa631c30255f614800ba6',1,'main.cpp']]],
   ['coursetogps_47',['CourseToGPS',['../ReceiverCode_2src_2main_8cpp.html#a1a4e211f9858a5d6d61d11e5679a71f3',1,'CourseToGPS():&#160;main.cpp'],['../radio_8h.html#a1a4e211f9858a5d6d61d11e5679a71f3',1,'CourseToGPS():&#160;main.cpp']]],
   ['current_5ftime_48',['current_time',['../Quadcopter_2src_2main_8cpp.html#a42cc85bc12e25d1c6206a5044d8174e4',1,'main.cpp']]],
   ['currentmode_49',['CurrentMode',['../RadioFunctions_8h.html#aacabee92eb3ddd2e3cf31695c00a912e',1,'CurrentMode():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#aacabee92eb3ddd2e3cf31695c00a912e',1,'CurrentMode():&#160;main.cpp']]],
   ['currentpoint_50',['CurrentPoint',['../TransmitterCode_2src_2main_8cpp.html#af10ffe07503b33fd55065fd9021e17e7',1,'main.cpp']]],
-  ['currentradio_51',['CurrentRadio',['../radio_8h.html#a7bca81159d93f215060f40f45f19b0de',1,'radio.h']]],
-  ['currentview_52',['CurrentView',['../RadioFunctions_8h.html#a2c76c41cd62573eb7227882fc9b9e557',1,'CurrentView():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a2c76c41cd62573eb7227882fc9b9e557',1,'CurrentView():&#160;main.cpp']]],
-  ['curvedots_53',['CurveDots',['../TransmitterCode_2src_2main_8cpp.html#a434509284a88e9637c9b9847efe0b0e0',1,'main.cpp']]]
+  ['currentposition_51',['CurrentPosition',['../TransmitterCode_2src_2main_8cpp.html#ade76e94669870d42879b18f17505f967',1,'main.cpp']]],
+  ['currentradio_52',['CurrentRadio',['../radio_8h.html#a7bca81159d93f215060f40f45f19b0de',1,'radio.h']]],
+  ['currentview_53',['CurrentView',['../RadioFunctions_8h.html#a2c76c41cd62573eb7227882fc9b9e557',1,'CurrentView():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a2c76c41cd62573eb7227882fc9b9e557',1,'CurrentView():&#160;main.cpp']]],
+  ['curvedots_54',['CurveDots',['../TransmitterCode_2src_2main_8cpp.html#a434509284a88e9637c9b9847efe0b0e0',1,'main.cpp']]]
 ];
