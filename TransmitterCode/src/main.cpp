@@ -2193,7 +2193,7 @@ void  GetCurveDots(uint16_t OutputChannel, uint16_t TheRate)
 /**************************** This function implements slowed servos for flaps, U/Cs etc. ****************************************/
 /*********************************************************************************************************************************/
 
-void     DoSlowServos() {                                                           // heer
+void     DoSlowServos() {                                                           // 
     for (int i = 0; i < 16; ++i) {                                                  // Test every channel
         if (StepSize[i] < 100) {                                                    // If StepSize = 100, use full speed. No slowing
             if ((millis() - SlowTime[i]) > 10) {                                    // This next part runs only 100 times per second
@@ -3834,7 +3834,6 @@ void SaveOneModel(uint16_t mnum)
 
     SDUpdate8BITS(SDCardAddress,UseMotorKill);
     ++SDCardAddress;
-    Look(UseMotorKill); 
     SDUpdate8BITS(SDCardAddress, MotorChannelZero);
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress,MotorChannel);
@@ -6037,7 +6036,6 @@ void OptionView4End()
     char UseKill[]        = "c0";
     char Mchannel[]       = "n1";
     char Mvalue[]         = "n0";
-    Look(42);
     MotorChannelZero    = GetValue(Mvalue);
     UseMotorKill        = GetValue(UseKill);
     MotorChannel        = GetValue(Mchannel) - 1;
@@ -6471,7 +6469,7 @@ void EndSlowView(){
 }
 
 /******************************************************************************************************************************/
-void WriteNewCurve(){ // heer
+void WriteNewCurve(){ 
             char CopyToAllBanks[]          = "callfm";
             char page_SticksView[]         = "page SticksView";
 
@@ -6549,9 +6547,9 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     DualRatesStart,             // 45
     DualRatesEnd,               // 46
     DualRatesRefresh,           // 47  
-    GotoFrontView,              // 48...heer
+    GotoFrontView,              // 48
     GotoGPSView,                // 49
-    StartModelSetup,            // 50...
+    StartModelSetup,            // 50
     EndModelSetup,              // 51
     StartBankNames,             // 52    
     EndBankNames,               // 53
@@ -8490,20 +8488,12 @@ FASTRUN uint32_t GetIntFromAckPayload()   // This one uses a uint32_t int
 
 /************************************************************************************************************/
 
-void GotoFrontView(){
-
-
+void GotoFrontView(){ // heer
     char fms[4][4] = {{"fm1"},{"fm2"},{"fm3"},{"fm4"}};
-    
-
-    if (CurrentView != FRONTVIEW)
-    {
-          if (CurrentView == SCANVIEW) DoScanEnd();  
-                SendCommand(page_FrontView);
-                CurrentView = FRONTVIEW;
-                for (int i = 0; i < 4;++i){ 
-                SendText(fms[i], BankTexts[BanksInUse[i]]);
-          }
+    if (CurrentView != FRONTVIEW) { 
+        if (CurrentView == SCANVIEW) {DoScanEnd();}
+          SendCommand(page_FrontView);
+          CurrentView = FRONTVIEW;
           UpdateModelsNameEveryWhere();
           SafetyWasOn ^= 1;                     // this forces a re-display of safety state
           ShowBank();
@@ -8516,6 +8506,9 @@ void GotoFrontView(){
           LastShowTime = 0;                     // this is to make redisplay sooner (in ShowComms())
           SendText(FrontView_Connected, na);
     }
+    for (int i = 0; i < 4; ++i) {
+          SendText(fms[i], BankTexts[BanksInUse[i]]);
+    }
 }
 
 /************************************************************************************************************/
@@ -8524,7 +8517,7 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
     
     uint8_t SavedModelNumber = ModelNumber;
     ModelMatched             = false;
-    GotoFrontView();
+    GotoFrontView(); // heer
     RestoreBrightness();
     if (ModelIdentified) {                                                //  We have both bits of Model ID?
         if ((ModelsMacUnion.Val32[0] == ModelsMacUnionSaved.Val32[0]) && (ModelsMacUnion.Val32[1] == ModelsMacUnionSaved.Val32[1])) {       
@@ -8552,6 +8545,7 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                         Procrastinate(1500);
                         }
                     SaveAllParameters();                                  //  Save it
+                    GotoFrontView(); // heer
                 }else{                                                    
                     if (AnnounceConnected) {
                         if ((millis() - WarningTimer) > 10000) {
