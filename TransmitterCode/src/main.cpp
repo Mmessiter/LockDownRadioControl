@@ -1441,7 +1441,8 @@ FASTRUN void CheckTimer()
 
 FASTRUN void ShowServoPos()
 {
-    if (millis() - ShowServoTimer <= 100) return;
+    if (millis() - ShowServoTimer < 20) return; // was 100?!
+     ShowServoTimer = millis();
    
     char     Ch_Lables[16][5] = {"Ch1", "Ch2", "Ch3", "Ch4", "Ch5", "Ch6", "Ch7", "Ch8", "Ch9", "Ch10", "Ch11", "Ch12", "Ch13", "Ch14", "Ch15", "Ch16"};
     char     ChannelInput[]   = "Input";
@@ -1501,7 +1502,7 @@ FASTRUN void ShowServoPos()
         }
         
     }
-    ShowServoTimer = millis();
+   
 }
 
 /*********************************************************************************************************************************/
@@ -2624,12 +2625,8 @@ void CheckSavedTrimValues()
 }
 
 /*********************************************************************************************************************************/
-void  CheckStepSizes(){ // for slow servos // heer
-   
-    for (int i = 0; i < 16; ++i) {
-        if (StepSize[i] > 100) StepSize[i] = 100;
-    }
-   
+void  CheckStepSizes(){ // for slow servos 
+    for (int i = 0; i < 16; ++i) if (StepSize[i] > 100) StepSize[i] = 100;
   }
 /*********************************************************************************************************************************/
 
