@@ -119,10 +119,10 @@ var NAVTREEINDEX =
 "SensorHubT32_2src_2main_8cpp.html#af1b5290b72a9f9bc5d1d70c7c14df9b0",
 "TransmitterCode_2src_2main_8cpp.html#a618bc6ca4ab71bb4d5d7e00dc71f9e56",
 "TransmitterCode_2src_2main_8cpp.html#ac57deb5507c3835634b98d51b5d13c9b",
-"classMPU6050.html#a50b99a2a37c9d8708e807ef90b31df9b",
-"classMPU9250.html#a478a3d1f96f703ce49a8d1794d8ce984",
-"classSBUS.html#aeb87d0ab21224d4cc84848c93a788848",
-"globals_vars_y.html"
+"classMPU6050.html#a500bb2df2e46eaecd3fb2ba7304a5ed3",
+"classMPU9250.html#a472679872163e0c4994ae125982d5fd2",
+"classSBUS.html#a96b6c9fdafb74f656ee3c476ff40fb23",
+"globals_vars_x.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

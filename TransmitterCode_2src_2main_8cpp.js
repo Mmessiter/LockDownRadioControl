@@ -301,6 +301,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "UseFullRate", "TransmitterCode_2src_2main_8cpp.html#a8f53f86499d740b350f7b6d791c90497", null ],
     [ "WatchDogCallBack", "TransmitterCode_2src_2main_8cpp.html#ae410be09c6f449451d8f2327fd895c7d", null ],
     [ "WordWrap", "TransmitterCode_2src_2main_8cpp.html#a6d6ab5dcee82c319640e3a0a0537ebf7", null ],
+    [ "WriteNewCurve", "TransmitterCode_2src_2main_8cpp.html#ac80d36db695cecb74d129643387feefd", null ],
     [ "WriteToLogFile", "TransmitterCode_2src_2main_8cpp.html#a99154e537ca6e0ce5d538fddf0c2aab3", null ],
     [ "ZeroDataScreen", "TransmitterCode_2src_2main_8cpp.html#a6da9a1fd0b003151f79eabc702ba80ff", null ],
     [ "AckPayload", "TransmitterCode_2src_2main_8cpp.html#a30a079d60b4731ce1531091ffe56a703", null ],

@@ -1,5 +1,6 @@
 var NAVTREEINDEX10 =
 {
+"classSBUS.html#a96b6c9fdafb74f656ee3c476ff40fb23":[7,0,6,10],
 "classSBUS.html#aeb87d0ab21224d4cc84848c93a788848":[7,0,6,11],
 "classSBUS.html#aecb494398de660b416a5619316a4b7af":[7,0,6,9],
 "classSBUS.html#aee0b4b879b6415eac8d79879c24bf88d":[7,0,6,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX10 =
 "globals_vars_t.html":[8,1,2,19],
 "globals_vars_u.html":[8,1,2,20],
 "globals_vars_v.html":[8,1,2,21],
-"globals_vars_w.html":[8,1,2,22],
-"globals_vars_x.html":[8,1,2,23]
+"globals_vars_w.html":[8,1,2,22]
 };
