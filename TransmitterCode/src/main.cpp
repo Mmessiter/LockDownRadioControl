@@ -1212,9 +1212,7 @@ void SendCommand(char* tbox)
         delayMicroseconds(70);
     }
     GetReturnCode();
-   // if (InStrng(page, tbox)) delay(SCREENCHANGEWAIT); // Allow time for new page to appear
-     if (InStrng(page, tbox)) Procrastinate(SCREENCHANGEWAIT); // Allow time for new page to appear
-   
+    if (InStrng(page, tbox)) Procrastinate(SCREENCHANGEWAIT); // Allow time for new page to appear
 }
 /*********************************************************************************************************************************/
 void SendText(char* tbox, char* NewWord)
