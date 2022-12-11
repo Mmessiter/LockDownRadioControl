@@ -1211,8 +1211,9 @@ void SendCommand(char* tbox)
         NEXTION.write(0xff);
         delayMicroseconds(70);
     }
-     GetReturnCode();
-    if (InStrng(page, tbox)) Procrastinate(SCREENCHANGEWAIT); // Allow time for new page to appear
+    GetReturnCode();
+   // if (InStrng(page, tbox)) delay(SCREENCHANGEWAIT); // Allow time for new page to appear
+     if (InStrng(page, tbox)) Procrastinate(SCREENCHANGEWAIT); // Allow time for new page to appear
    
 }
 /*********************************************************************************************************************************/
@@ -2466,9 +2467,10 @@ uint8_t SDRead8BITS(int p_address)
 
 void UpdateModelsNameEveryWhere()
 {
+   
     char TheModelName[]        = "ModelName";
     char GraphView_Channel[]   = "Channel";
-    char TrimView_Bank[] = "t1";
+    char TrimView_Bank[]       = "t1";
     char GraphView_fmode[]     = "fmode";
     char SticksView_t1[]       = "t1";
     char NoName[17];
@@ -2500,7 +2502,7 @@ void UpdateModelsNameEveryWhere()
         }
     }
     if (CurrentView == STICKSVIEW) SendText(SticksView_t1, BankTexts[BanksInUse[Bank-1]]);
-    if (CurrentView == GRAPHVIEW) SendText(GraphView_fmode, BankTexts[BanksInUse[Bank-1]]);
+    if (CurrentView == GRAPHVIEW)  SendText(GraphView_fmode, BankTexts[BanksInUse[Bank-1]]);
     if (CurrentView == TRIM_VIEW) {
         SendText(TrimView_Bank, BankTexts[BanksInUse[Bank-1]]);
         UpdateTrimView();
@@ -6549,9 +6551,9 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     DualRatesStart,             // 45
     DualRatesEnd,               // 46
     DualRatesRefresh,           // 47  
-    GotoFrontView,              // 48
+    GotoFrontView,              // 48...heer
     GotoGPSView,                // 49
-    StartModelSetup,            // 50
+    StartModelSetup,            // 50...
     EndModelSetup,              // 51
     StartBankNames,             // 52    
     EndBankNames,               // 53
@@ -8499,14 +8501,12 @@ void GotoFrontView(){
     if (CurrentView != FRONTVIEW)
     {
           if (CurrentView == SCANVIEW) DoScanEnd();  
-          SendCommand(page_FrontView);
-          CurrentView = FRONTVIEW;
-
-          for (int i = 0; i < 4;++i){ 
-            SendText(fms[i], BankTexts[BanksInUse[i]]);
+                SendCommand(page_FrontView);
+                CurrentView = FRONTVIEW;
+                for (int i = 0; i < 4;++i){ 
+                SendText(fms[i], BankTexts[BanksInUse[i]]);
           }
-
-            UpdateModelsNameEveryWhere();
+          UpdateModelsNameEveryWhere();
           SafetyWasOn ^= 1;                     // this forces a re-display of safety state
           ShowBank();
           LastTimeRead = 0;
