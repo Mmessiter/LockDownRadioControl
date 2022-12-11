@@ -2193,7 +2193,7 @@ void  GetCurveDots(uint16_t OutputChannel, uint16_t TheRate)
 
 void     DoSlowServos() {                                                           // heer
     for (int i = 0; i < 16; ++i) {                                                  // Test every channel
-        if (StepSize[i]) {                                                          // If StepSize = zero, use full speed. No slowing
+        if (StepSize[i] < 100) {                                                    // If StepSize = 100, use full speed. No slowing
             if ((millis() - SlowTime[i]) > 10) {                                    // This next part runs only 100 times per second
                 SlowTime[i] = millis();                                             // Store start time of this iteration
                 if (CurrentPosition[i] == 0)  CurrentPosition[i] = SendBuffer[i];   // Must start somewhere   
@@ -2625,15 +2625,11 @@ void CheckSavedTrimValues()
 
 /*********************************************************************************************************************************/
 void  CheckStepSizes(){ // for slow servos // heer
-    bool KO = false;
+   
     for (int i = 0; i < 16; ++i) {
-        if (StepSize[i] > 100) KO = true;
-     }
-     if (KO){
-        for (int i = 0; i < 16; ++i) {
-            StepSize[i] = 0;
-        }
+        if (StepSize[i] > 100) StepSize[i] = 100;
     }
+   
   }
 /*********************************************************************************************************************************/
 
