@@ -1441,7 +1441,9 @@ FASTRUN void CheckTimer()
 
 FASTRUN void ShowServoPos()
 {
-    if (millis() - ShowServoTimer < 20) return; // was 100?!
+    uint32_t Hertz = 25;                            // Fast
+    if (CurrentView == GRAPHVIEW) Hertz = 200;      // Slower!
+    if (millis() - ShowServoTimer < Hertz) return; 
      ShowServoTimer = millis();
    
     char     Ch_Lables[16][5] = {"Ch1", "Ch2", "Ch3", "Ch4", "Ch5", "Ch6", "Ch7", "Ch8", "Ch9", "Ch10", "Ch11", "Ch12", "Ch13", "Ch14", "Ch15", "Ch16"};
@@ -6467,8 +6469,36 @@ void EndSlowView(){
      SendCommand(ProgressEnd);
      StartModelSetup();
 }
+
+/******************************************************************************************************************************/
+void WriteNewCurve(){ // heer
+            char CopyToAllBanks[]          = "callfm";
+            char page_SticksView[]         = "page SticksView";
+
+            if(GetValue(CopyToAllBanks)){
+                for (int p = 1; p <= 4; ++p) {
+                    if (p != Bank) {
+                        MinDegrees[p][ChanneltoSet - 1]         = MinDegrees[Bank][ChanneltoSet - 1];
+                        MidLowDegrees[p][ChanneltoSet - 1]      = MidLowDegrees[Bank][ChanneltoSet - 1];
+                        CentreDegrees[p][ChanneltoSet - 1]      = CentreDegrees[Bank][ChanneltoSet - 1];
+                        MidHiDegrees[p][ChanneltoSet - 1]       = MidHiDegrees[Bank][ChanneltoSet - 1];
+                        MaxDegrees[p][ChanneltoSet - 1]         = MaxDegrees[Bank][ChanneltoSet - 1];
+                        InterpolationTypes[p][ChanneltoSet - 1] = InterpolationTypes[Bank][ChanneltoSet - 1];
+                        Exponential[p][ChanneltoSet - 1]        = Exponential[Bank][ChanneltoSet - 1];
+                    }
+                }
+            }
+            ChanneltoSet = 0;
+            SaveOneModel(ModelNumber);
+            Force_ReDisplay();
+            SendCommand(page_SticksView); // Set to SticksView
+            CurrentView = STICKSVIEW;
+            UpdateModelsNameEveryWhere();
+            ClearText();
+          
+}
 // ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
-#define LASTFUNCTION 57 // one more than final one
+#define LASTFUNCTION 58 // one more than final one
 
 void (*NumberedFunctions[LASTFUNCTION])() {
     Blank,                // 0 (spare)
@@ -6527,7 +6557,8 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     EndBankNames,               // 53
     ListenToBanks,              // 54
     StartSlowView,              // 55
-    EndSlowView                 // 56
+    EndSlowView,                // 56
+    WriteNewCurve               // 57
 
 }; // list will become much longer ...
 
@@ -6583,7 +6614,6 @@ FASTRUN void ButtonWasPressed()
             }
         }
         int  i                         = 0;
-        char Write[]                   = "Write";
         char Setup[]                   = "Setup";
         char ClickX[]                  = "ClickX";
         char ClickY[]                  = "ClickY";
@@ -7621,30 +7651,6 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(Write, TextIn) > 0) { //  write new data to SD
-            p = GetValue(CopyToAllBanks);
-            if (p == 1) {
-                for (p = 1; p <= 4; ++p) {
-                    if (p != Bank) {
-                        MinDegrees[p][ChanneltoSet - 1]         = MinDegrees[Bank][ChanneltoSet - 1];
-                        MidLowDegrees[p][ChanneltoSet - 1]      = MidLowDegrees[Bank][ChanneltoSet - 1];
-                        CentreDegrees[p][ChanneltoSet - 1]      = CentreDegrees[Bank][ChanneltoSet - 1];
-                        MidHiDegrees[p][ChanneltoSet - 1]       = MidHiDegrees[Bank][ChanneltoSet - 1];
-                        MaxDegrees[p][ChanneltoSet - 1]         = MaxDegrees[Bank][ChanneltoSet - 1];
-                        InterpolationTypes[p][ChanneltoSet - 1] = InterpolationTypes[Bank][ChanneltoSet - 1];
-                        Exponential[p][ChanneltoSet - 1]        = Exponential[Bank][ChanneltoSet - 1];
-                    }
-                }
-            }
-            ChanneltoSet = 0;
-            SaveOneModel(ModelNumber);
-            Force_ReDisplay();
-            SendCommand(page_SticksView); // Set to SticksView
-            CurrentView = STICKSVIEW;
-            UpdateModelsNameEveryWhere();
-            ClearText();
-            return;
-        }
 
         if (InStrng(Setup, TextIn) > 0) {   // Which channel to setup ... Goes to GraphView
             ChanneltoSet = GetChannel();
