@@ -546,6 +546,9 @@ void PlaySound(uint16_t TheSound)
     char SoundPrefix[]  = "play 0,";
     char SoundPostfix[] = "0";
     char NB[6];
+    if (CurrentView == MODELSVIEW){
+        if (TheSound != CLICKONE) return;
+    }
     Str(NB, TheSound, 1);
     strcpy(Sound, SoundPrefix);
     strcat(Sound, NB);
@@ -8783,11 +8786,12 @@ void CheckModelName()
     char BK1[]      = "BK1";
     ModelNumber = GetValue(BK1)+1;
     if (LastModelLoaded != ModelNumber) {       
-        if ((ModelNumber > 31) || (ModelNumber < 1)) {
+        if ((ModelNumber > 31) || (ModelNumber < 1)) {// heer
             ModelNumber = 1;
             SendValue(BK1, ModelNumber-1);
         }
         ReadOneModel(ModelNumber);
+        if (TrimClicks) PlaySound(CLICKONE);// heer
         if (UseLog) LogThisModel();
         LastModelLoaded = ModelNumber;
         UpdateModelsNameEveryWhere();
