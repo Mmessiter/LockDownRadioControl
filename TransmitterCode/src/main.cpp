@@ -4410,10 +4410,10 @@ void SetDefaultValues()
     DualRateChannels[5] = 0;
     DualRateChannels[6] = 0;
     DualRateChannels[7] = 0;
-    for (int i = 0; i < 4; ++i){// heer
+    for (int i = 0; i < 4; ++i){
          BanksInUse[i] = i+4;
     }
-    for (int i = 0; i < 16; ++i){// heer
+    for (int i = 0; i < 16; ++i){
         StepSize[i] = 100;
     }
     SaveOneModel(ModelNumber);
@@ -5782,7 +5782,7 @@ void LoadModelSelector(){
 
     char BK1p[]     = "BK1.path=\"";
     char BK1[]      = "BK1";
-    char crlf[]     = {13, 10, 0};   //heer
+    char crlf[]     = {13, 10, 0};  
     char lb[]       = " (";
     char rb[]       = ")";
     char nb[4];
@@ -6883,7 +6883,7 @@ FASTRUN void ButtonWasPressed()
             ModelNumber= GetValue(BK1)+1;
             SetDefaultValues();
             SaveOneModel(ModelNumber);
-            LoadModelSelector();// heer
+            LoadModelSelector();
             ClearText();
             return;
         }
@@ -8786,12 +8786,12 @@ void CheckModelName()
     char BK1[]      = "BK1";
     ModelNumber = GetValue(BK1)+1;
     if (LastModelLoaded != ModelNumber) {       
-        if ((ModelNumber > 31) || (ModelNumber < 1)) {// heer
+        if ((ModelNumber > 31) || (ModelNumber < 1)) {
             ModelNumber = 1;
             SendValue(BK1, ModelNumber-1);
         }
         ReadOneModel(ModelNumber);
-        if (TrimClicks) PlaySound(CLICKONE);// heer
+        if (TrimClicks) PlaySound(CLICKONE);
         if (UseLog) LogThisModel();
         LastModelLoaded = ModelNumber;
         UpdateModelsNameEveryWhere();
@@ -8902,13 +8902,13 @@ void FASTRUN ManageTransmitter(){
 
     if ((PACEMAKER - TXPacketElapsed  <= TIMEFORTXMANAGMENT) && Connected && BoundFlag && ModelMatched) return;     // If it's almost time to send data, then do not start some other task which might take longer.
 
-    if (RightNow - TransmitterLastManaged > 100) {                   // 10 times a second is plenty
-        if (RightNow - LastTimeRead >= 500) {                       // 2wice a second for these...
+    if (RightNow - TransmitterLastManaged > 50) {                    // 10 times a second is plenty
+        if (RightNow - LastTimeRead >= 1000) {                       // once a second for these... 
             ReadTime();                                              // Do the clock
             GetStatistics();                                         // Do stats
-            if (CurrentView == TXSETUPVIEW) CheckScanButton();
+            if (CurrentView == TXSETUPVIEW) CheckScanButton();       // heer
             if (CurrentView == RXSETUPVIEW) CheckScanButton();
-            if (CurrentView == MODELSVIEW)  CheckModelName();      // In MODELSVIEW, this function checks correct name is displayed.
+            if (CurrentView == MODELSVIEW)  CheckModelName();         // In MODELSVIEW, this function checks correct name is displayed.
             LastTimeRead = millis();
             return;                                                  // That's enough housekeeping this time around
         }
