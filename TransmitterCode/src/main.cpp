@@ -966,25 +966,6 @@ bool MayBeAddZero(uint8_t nn)
     return false;
 }
 
-
-/*********************************************************************************************************************************/
-
-//void ReadNextionTime(){ // maybe later!
-    
-   // char Nyear[]       = "rtc0";
-   // char Nmonth[]      = "rtc1";
-   // char Nday[]        = "rtc2";
-   // char Nhour[]       = "rtc3";
-   // char Nminute[]     = "rtc4";
-   // char Second[]      = "rtc5";
-   // char NDayOfWeek[]  = "rtc6";
-   //char SetDay[]      = "rtc2=5";f
-
-   // SendCommand(SetDay);
-
-   // Look(GetOtherValue(Nyear));
-//}
-
 /*********************************************************************************************************************************/
 
 void ReadTime()
@@ -1211,9 +1192,8 @@ void SendCommand(char* tbox)
         NEXTION.write(0xff);
         delayMicroseconds(70);
     }
-     GetReturnCode();
+    GetReturnCode();
     if (InStrng(page, tbox)) Procrastinate(SCREENCHANGEWAIT); // Allow time for new page to appear
-   
 }
 /*********************************************************************************************************************************/
 void SendText(char* tbox, char* NewWord)
@@ -1233,6 +1213,24 @@ void SendText(char* tbox, char* NewWord)
     SendCommand(CB);
     GetReturnCode();
 }
+
+/*********************************************************************************************************************************/
+void SendOtherText(char* tbox, char* NewWord)
+{
+    char quote[] = "\"";
+    char CB[1024];
+    char TooLong[] = "Too long!";
+
+    if (strlen(NewWord) > 2048) {
+        strcpy(NewWord, TooLong);
+    }
+    strcpy(CB, tbox);
+    strcat(CB, NewWord);
+    strcat(CB, quote);
+    SendCommand(CB);
+    GetReturnCode();
+}
+
 /*********************************************************************************************************************************/
 void SendText1(char* tbox, char* NewWord)
 {
@@ -1441,7 +1439,10 @@ FASTRUN void CheckTimer()
 
 FASTRUN void ShowServoPos()
 {
-    if (millis() - ShowServoTimer <= 100) return;
+    uint32_t Hertz = 25;                            // Fast
+    if (CurrentView == GRAPHVIEW) Hertz = 200;      // Slower!
+    if (millis() - ShowServoTimer < Hertz) return; 
+     ShowServoTimer = millis();
    
     char     Ch_Lables[16][5] = {"Ch1", "Ch2", "Ch3", "Ch4", "Ch5", "Ch6", "Ch7", "Ch8", "Ch9", "Ch10", "Ch11", "Ch12", "Ch13", "Ch14", "Ch15", "Ch16"};
     char     ChannelInput[]   = "Input";
@@ -1501,7 +1502,7 @@ FASTRUN void ShowServoPos()
         }
         
     }
-    ShowServoTimer = millis();
+   
 }
 
 /*********************************************************************************************************************************/
@@ -2188,20 +2189,23 @@ void  GetCurveDots(uint16_t OutputChannel, uint16_t TheRate)
 }
 
 /*********************************************************************************************************************************/
+/**************************** This function implements slowed servos for flaps, U/Cs etc. ****************************************/
+/*********************************************************************************************************************************/
 
-void     DoSlowServos() { 
-    for (int i = 0; i < 16; ++i) {
-        if (StepSize[i]) { //  non-zero? 
-            if (CurrentPosition[i] == 0)  CurrentPosition[i] = SendBuffer[i];   
-            int  distance  = SendBuffer[i] - CurrentPosition[i];// how far to go
-            int  SSize     = StepSize[i];
-            if ((millis() - SlowTime[i]) > 10) { // this part run 100 times per second
-                SlowTime[i] = millis(); 
-                if (distance < 0) SSize = -SSize;
-                CurrentPosition[i] += SSize;                 // move towards goal
-                if (abs(CurrentPosition[i] - SendBuffer[i]) < 25)  CurrentPosition[i] = SendBuffer[i]; // if close, nail it.
+void     DoSlowServos() {                                                           // 
+    for (int i = 0; i < 16; ++i) {                                                  // Test every channel
+        if (StepSize[i] < 100) {                                                    // If StepSize = 100, use full speed. No slowing
+            if ((millis() - SlowTime[i]) > 10) {                                    // This next part runs only 100 times per second
+                SlowTime[i] = millis();                                             // Store start time of this iteration
+                if (CurrentPosition[i] == 0)  CurrentPosition[i] = SendBuffer[i];   // Must start somewhere   
+                int  distance  = SendBuffer[i] - CurrentPosition[i];                // Define how far to move
+                int  SSize     = StepSize[i];                                       // Get step size
+                if (SSize > abs(distance)) SSize = 1;                               // This avoids overshooting the limit
+                if (distance < 0) SSize = -SSize;                                   // Negative?
+                if (!distance) SSize = 0;                                           // Already arrived?
+                CurrentPosition[i] += SSize;                                        // Move Current Position a little bit towards goal
             }
-        SendBuffer[i] = CurrentPosition[i];                     // modify instruction to slow servo
+        SendBuffer[i] = CurrentPosition[i];                                         // Modify next servo position
         }
     }
 }
@@ -2460,9 +2464,10 @@ uint8_t SDRead8BITS(int p_address)
 
 void UpdateModelsNameEveryWhere()
 {
+   
     char TheModelName[]        = "ModelName";
     char GraphView_Channel[]   = "Channel";
-    char TrimView_Bank[] = "t1";
+    char TrimView_Bank[]       = "t1";
     char GraphView_fmode[]     = "fmode";
     char SticksView_t1[]       = "t1";
     char NoName[17];
@@ -2494,7 +2499,7 @@ void UpdateModelsNameEveryWhere()
         }
     }
     if (CurrentView == STICKSVIEW) SendText(SticksView_t1, BankTexts[BanksInUse[Bank-1]]);
-    if (CurrentView == GRAPHVIEW) SendText(GraphView_fmode, BankTexts[BanksInUse[Bank-1]]);
+    if (CurrentView == GRAPHVIEW)  SendText(GraphView_fmode, BankTexts[BanksInUse[Bank-1]]);
     if (CurrentView == TRIM_VIEW) {
         SendText(TrimView_Bank, BankTexts[BanksInUse[Bank-1]]);
         UpdateTrimView();
@@ -2621,16 +2626,8 @@ void CheckSavedTrimValues()
 }
 
 /*********************************************************************************************************************************/
-void  CheckStepSizes(){ // for slow servos
-    bool KO = false;
-    for (int i = 0; i < 16; ++i) {
-        if (StepSize[i] > 100) KO = true;
-     }
-     if (KO){
-        for (int i = 0; i < 16; ++i) {
-            StepSize[i] = 0;
-        }
-    }
+void  CheckStepSizes(){ // for slow servos 
+    for (int i = 0; i < 16; ++i) if (StepSize[i] > 100) StepSize[i] = 100;
   }
 /*********************************************************************************************************************************/
 
@@ -3836,7 +3833,6 @@ void SaveOneModel(uint16_t mnum)
 
     SDUpdate8BITS(SDCardAddress,UseMotorKill);
     ++SDCardAddress;
-    Look(UseMotorKill); 
     SDUpdate8BITS(SDCardAddress, MotorChannelZero);
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress,MotorChannel);
@@ -4403,7 +4399,6 @@ void SetDefaultValues()
     Drate1                         = 100;
     Drate2                         = 75;
     Drate3                         = 50;
-    
     DualRateChannels[0] = 1;
     DualRateChannels[1] = 2;
     DualRateChannels[2] = 4;
@@ -4412,6 +4407,12 @@ void SetDefaultValues()
     DualRateChannels[5] = 0;
     DualRateChannels[6] = 0;
     DualRateChannels[7] = 0;
+    for (int i = 0; i < 4; ++i){// heer
+         BanksInUse[i] = i+4;
+    }
+    for (int i = 0; i < 16; ++i){// heer
+        StepSize[i] = 100;
+    }
     SaveOneModel(ModelNumber);
     CloseModelsFile();
     SendValue(Progress, 100);
@@ -5770,18 +5771,56 @@ void DoLastTimeRead()
 {
     LastTimeRead = 0;
 }
+
+
+
+/******************************************************************************************************************************/
+void LoadModelSelector(){
+
+    char BK1p[]     = "BK1.path=\"";
+    char BK1[]      = "BK1";
+    char crlf[]     = {13, 10, 0};   //heer
+    char lb[]       = " (";
+    char rb[]       = ")";
+    char nb[4];
+    char buf[1024];
+
+    int8_t SavedModelNumber = ModelNumber;
+    for (ModelNumber = 1; ModelNumber < 32; ++ModelNumber){
+        ReadOneModel(ModelNumber);
+        if (ModelNumber == 1){
+            strcpy(buf, ModelName);
+            strcat(buf, lb);
+            Str(nb, ModelNumber, 0);
+            strcat(buf, nb);
+            strcat(buf, rb);
+            strcat(buf, crlf);
+        }else{
+            strcat(buf, ModelName);
+            strcat(buf, lb);
+            Str(nb, ModelNumber, 0);
+            strcat(buf, nb);
+            strcat(buf, rb);
+            strcat(buf, crlf);
+        }
+    }   
+    SendOtherText(BK1p, buf);
+    ModelNumber = SavedModelNumber;
+    ReadOneModel(ModelNumber);
+    SendValue(BK1, ModelNumber-1);
+}
 /******************************************************************************************************************************/
 void GotoModelsView()
 {
     char pModelsView[] = "page ModelsView";
-    char mn[]          = "ModelNumber";
-    if (ModelMatched) return;       // must not change when model connected
+
+    if (ModelMatched) return; // must not change when model connected
     SendCommand(pModelsView);
     CurrentView = MODELSVIEW;
     UpdateModelsNameEveryWhere();
     BuildDirectory(); // of SD card
     ShowFileNumber();
-    SendValue(mn, ModelNumber);
+    LoadModelSelector();
 }
 /******************************************************************************************************************************/
 void GotoMacrosView()
@@ -6039,7 +6078,6 @@ void OptionView4End()
     char UseKill[]        = "c0";
     char Mchannel[]       = "n1";
     char Mvalue[]         = "n0";
-    Look(42);
     MotorChannelZero    = GetValue(Mvalue);
     UseMotorKill        = GetValue(UseKill);
     MotorChannel        = GetValue(Mchannel) - 1;
@@ -6441,7 +6479,7 @@ void EndModelSetup(){
 }
 
 /******************************************************************************************************************************/
-void StartSlowView(){ // heer
+void StartSlowView(){
 
      char GoSlowServoScreen[] = "page SlowServoView";
      char ns[16][4]    = {{"n0"}, {"n1"}, {"n2"}, {"n3"}, {"n4"}, {"n5"}, {"n6"}, {"n7"}, {"n8"}, {"n9"}, {"n10"}, {"n11"}, {"n12"}, {"n13"}, {"n14"}, {"n15"}};
@@ -6464,14 +6502,61 @@ void EndSlowView(){
          StepSize[i] = GetValue(ns[i]);
          SendValue(Progress,i * (100 / 16));
      }
+     CheckStepSizes();
      SaveOneModel(ModelNumber);
      SendValue(Progress, 100);
      Procrastinate(250);
      SendCommand(ProgressEnd);
      StartModelSetup();
 }
+/******************************************************************************************************************************/
+void WriteNewCurve(){ 
+            char CopyToAllBanks[]          = "callfm";
+            char page_SticksView[]         = "page SticksView";
+
+            if(GetValue(CopyToAllBanks)){
+                for (int p = 1; p <= 4; ++p) {
+                    if (p != Bank) {
+                        MinDegrees[p][ChanneltoSet - 1]         = MinDegrees[Bank][ChanneltoSet - 1];
+                        MidLowDegrees[p][ChanneltoSet - 1]      = MidLowDegrees[Bank][ChanneltoSet - 1];
+                        CentreDegrees[p][ChanneltoSet - 1]      = CentreDegrees[Bank][ChanneltoSet - 1];
+                        MidHiDegrees[p][ChanneltoSet - 1]       = MidHiDegrees[Bank][ChanneltoSet - 1];
+                        MaxDegrees[p][ChanneltoSet - 1]         = MaxDegrees[Bank][ChanneltoSet - 1];
+                        InterpolationTypes[p][ChanneltoSet - 1] = InterpolationTypes[Bank][ChanneltoSet - 1];
+                        Exponential[p][ChanneltoSet - 1]        = Exponential[Bank][ChanneltoSet - 1];
+                    }
+                }
+            }
+            ChanneltoSet = 0;
+            SaveOneModel(ModelNumber);
+            Force_ReDisplay();
+            SendCommand(page_SticksView); // Set to SticksView
+            CurrentView = STICKSVIEW;
+            UpdateModelsNameEveryWhere();
+            ClearText();
+          
+}
+
+
+/******************************************************************************************************************************/
+void StartRenameModel(){
+
+  char GoRenameModelScreen[] = "page RenameView";
+  char NewName[]             = "NewName";
+  SendCommand(GoRenameModelScreen); 
+  CurrentView = RENAMEMODELVIEW;
+  SendText(NewName, ModelName);
+
+}
+/******************************************************************************************************************************/
+void EndRenameModel(){
+  char NewName[]             = "NewName";
+  GetText(NewName, ModelName);
+  SaveOneModel(ModelNumber);
+  GotoModelsView();
+}
 // ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
-#define LASTFUNCTION 57 // one more than final one
+#define LASTFUNCTION 60 // one more than final one
 
 void (*NumberedFunctions[LASTFUNCTION])() {
     Blank,                // 0 (spare)
@@ -6530,7 +6615,10 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     EndBankNames,               // 53
     ListenToBanks,              // 54
     StartSlowView,              // 55
-    EndSlowView                 // 56
+    EndSlowView,                // 56
+    WriteNewCurve,              // 57
+    StartRenameModel,           // 58            
+    EndRenameModel              // 59
 
 }; // list will become much longer ...
 
@@ -6568,7 +6656,7 @@ FASTRUN void ButtonWasPressed()
         }
         else {
             Serial.print("Command NUMBER: -> ");
-            Look(NumberedCommand);
+            Serial.println(NumberedCommand);
         }
 #endif
 
@@ -6585,10 +6673,7 @@ FASTRUN void ButtonWasPressed()
                 return;
             }
         }
-
         int  i                         = 0;
-        
-        char Write[]                   = "Write";
         char Setup[]                   = "Setup";
         char ClickX[]                  = "ClickX";
         char ClickY[]                  = "ClickY";
@@ -6629,7 +6714,6 @@ FASTRUN void ButtonWasPressed()
         char MixesView_Percent[]       = "Percent";
         char page_SetupView[]          = "page SetupView";
         char page_RXSetupView[]        = "page RXSetupView";
-
         char page_AudioView[]          = "page AudioView";
         char page_ColoursView[]        = "page ColoursView";
         char GoSetupView[]             = "GoSetupView";
@@ -6772,11 +6856,8 @@ FASTRUN void ButtonWasPressed()
         char StEDIT[]               = "StEDIT";
         char pLogView[]             = "page LogView";
         char dGMT[]                 = "dGMT";
-        char RxName[]               = "RxName";
         char TxNme[]                = "TxName";
-      
-
-
+        char BK1[]                  = "BK1";
 
         // ************************* test input words from Nextion *****************
 
@@ -6794,11 +6875,12 @@ FASTRUN void ButtonWasPressed()
             ClearText();
             return;
         }
-
+        
         if (InStrng(Delete, TextIn) > 0) {
-            ModelNumber = GetValue(ModelsView_ModelNumber);
+            ModelNumber= GetValue(BK1)+1;
             SetDefaultValues();
             SaveOneModel(ModelNumber);
+            LoadModelSelector();// heer
             ClearText();
             return;
         }
@@ -6900,8 +6982,6 @@ FASTRUN void ButtonWasPressed()
             SendCommand(ProgressStart);
             SendValue(Progress, 10);
             GetText(TxNme, TxName); 
-            SendValue(Progress, 20);
-            GetText(RxName, ModelName); 
             SendValue(Progress, 30);
             Qnh = (uint16_t)GetValue(QNH);
             SendValue(Progress, 40);
@@ -7059,7 +7139,6 @@ FASTRUN void ButtonWasPressed()
             SendValue(Pto, (Inactivity_Timeout / TICKSPERMINUTE));
             SendText(Tx_Name, TxName);
             SendValue(QNH, Qnh);
-            SendText(RxName, ModelName); 
             SendValue(trf, TrimFactor);
             SendValue(Bwn, LowBattery);
             SendValue(c0, CopyTrimsToAll);
@@ -7480,6 +7559,7 @@ FASTRUN void ButtonWasPressed()
             Procrastinate(10);
             SendCommand(ProgressEnd);
             if (FileError) ShowFileErrorMsg();
+            LoadModelSelector();
             ClearText();
             return;
         }
@@ -7627,30 +7707,6 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(Write, TextIn) > 0) { //  write new data to SD
-            p = GetValue(CopyToAllBanks);
-            if (p == 1) {
-                for (p = 1; p <= 4; ++p) {
-                    if (p != Bank) {
-                        MinDegrees[p][ChanneltoSet - 1]         = MinDegrees[Bank][ChanneltoSet - 1];
-                        MidLowDegrees[p][ChanneltoSet - 1]      = MidLowDegrees[Bank][ChanneltoSet - 1];
-                        CentreDegrees[p][ChanneltoSet - 1]      = CentreDegrees[Bank][ChanneltoSet - 1];
-                        MidHiDegrees[p][ChanneltoSet - 1]       = MidHiDegrees[Bank][ChanneltoSet - 1];
-                        MaxDegrees[p][ChanneltoSet - 1]         = MaxDegrees[Bank][ChanneltoSet - 1];
-                        InterpolationTypes[p][ChanneltoSet - 1] = InterpolationTypes[Bank][ChanneltoSet - 1];
-                        Exponential[p][ChanneltoSet - 1]        = Exponential[Bank][ChanneltoSet - 1];
-                    }
-                }
-            }
-            ChanneltoSet = 0;
-            SaveOneModel(ModelNumber);
-            Force_ReDisplay();
-            SendCommand(page_SticksView); // Set to SticksView
-            CurrentView = STICKSVIEW;
-            UpdateModelsNameEveryWhere();
-            ClearText();
-            return;
-        }
 
         if (InStrng(Setup, TextIn) > 0) {   // Which channel to setup ... Goes to GraphView
             ChanneltoSet = GetChannel();
@@ -7798,12 +7854,7 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(Reset, TextIn)) // Now zeros EXPO only
         {
-           // MinDegrees[Bank][ChanneltoSet - 1]         = 30;
-           // MidLowDegrees[Bank][ChanneltoSet - 1]      = 60;
-           // CentreDegrees[Bank][ChanneltoSet - 1]      = 90;
-           // MidHiDegrees[Bank][ChanneltoSet - 1]       = 120;
-           // MaxDegrees[Bank][ChanneltoSet - 1]         = 150;
-            
+          
             Exponential[Bank][ChanneltoSet - 1]        = DEFAULT_EXPO;
             InterpolationTypes[Bank][ChanneltoSet - 1] = EXPONENTIALCURVES; // expo = default
             DisplayCurveAndServoPos();
@@ -8490,23 +8541,13 @@ FASTRUN uint32_t GetIntFromAckPayload()   // This one uses a uint32_t int
 
 /************************************************************************************************************/
 
-void GotoFrontView(){
-
-
+void GotoFrontView(){ 
     char fms[4][4] = {{"fm1"},{"fm2"},{"fm3"},{"fm4"}};
-    
-
-    if (CurrentView != FRONTVIEW)
-    {
-          if (CurrentView == SCANVIEW) DoScanEnd();  
+    if (CurrentView != FRONTVIEW) { 
+        if (CurrentView == SCANVIEW) {DoScanEnd();}
           SendCommand(page_FrontView);
           CurrentView = FRONTVIEW;
-
-          for (int i = 0; i < 4;++i){ 
-            SendText(fms[i], BankTexts[BanksInUse[i]]);
-          }
-
-            UpdateModelsNameEveryWhere();
+          UpdateModelsNameEveryWhere();
           SafetyWasOn ^= 1;                     // this forces a re-display of safety state
           ShowBank();
           LastTimeRead = 0;
@@ -8518,6 +8559,9 @@ void GotoFrontView(){
           LastShowTime = 0;                     // this is to make redisplay sooner (in ShowComms())
           SendText(FrontView_Connected, na);
     }
+    for (int i = 0; i < 4; ++i) {
+          SendText(fms[i], BankTexts[BanksInUse[i]]);
+    }
 }
 
 /************************************************************************************************************/
@@ -8526,7 +8570,7 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
     
     uint8_t SavedModelNumber = ModelNumber;
     ModelMatched             = false;
-    GotoFrontView();
+    GotoFrontView(); 
     RestoreBrightness();
     if (ModelIdentified) {                                                //  We have both bits of Model ID?
         if ((ModelsMacUnion.Val32[0] == ModelsMacUnionSaved.Val32[0]) && (ModelsMacUnion.Val32[1] == ModelsMacUnionSaved.Val32[1])) {       
@@ -8554,6 +8598,7 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                         Procrastinate(1500);
                         }
                     SaveAllParameters();                                  //  Save it
+                    GotoFrontView(); 
                 }else{                                                    
                     if (AnnounceConnected) {
                         if ((millis() - WarningTimer) > 10000) {
@@ -8735,11 +8780,13 @@ FASTRUN void CheckGapsLength()
 /************************************************************************************************************/
 void CheckModelName()
 {                                                  // In ModelsView, this function checks correct name is displayed.
-    char ModelsView_ModelNumber[] = "ModelNumber"; //
-    
-    ModelNumber = GetValue(ModelsView_ModelNumber);
+    char BK1[]      = "BK1";
+    ModelNumber = GetValue(BK1)+1;
     if (LastModelLoaded != ModelNumber) {       
-        if ((ModelNumber > 99) || (ModelNumber < 1)) ModelNumber = 1;
+        if ((ModelNumber > 31) || (ModelNumber < 1)) {
+            ModelNumber = 1;
+            SendValue(BK1, ModelNumber-1);
+        }
         ReadOneModel(ModelNumber);
         if (UseLog) LogThisModel();
         LastModelLoaded = ModelNumber;
@@ -8852,7 +8899,7 @@ void FASTRUN ManageTransmitter(){
     if ((PACEMAKER - TXPacketElapsed  <= TIMEFORTXMANAGMENT) && Connected && BoundFlag && ModelMatched) return;     // If it's almost time to send data, then do not start some other task which might take longer.
 
     if (RightNow - TransmitterLastManaged > 100) {                   // 10 times a second is plenty
-        if (RightNow - LastTimeRead >= 1000) {                       // Once a second for these...
+        if (RightNow - LastTimeRead >= 500) {                       // 2wice a second for these...
             ReadTime();                                              // Do the clock
             GetStatistics();                                         // Do stats
             if (CurrentView == TXSETUPVIEW) CheckScanButton();

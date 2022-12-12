@@ -61,7 +61,6 @@ FASTRUN void BufferNewPipe()
 void Procrastinate(uint32_t HowLong) // This function replaces delay() without freezing critical tasks
 {
     uint32_t ThisMoment = millis();
-
     if (RecursedAlready) 
     {
         while ((millis() - ThisMoment) < HowLong) {
@@ -69,21 +68,13 @@ void Procrastinate(uint32_t HowLong) // This function replaces delay() without f
         }
         return;   // do not allow indirect recursion any further
     }
-    
     RecursedAlready = true;
     while ((millis() - ThisMoment) < HowLong) {
         KickTheDog();                                               // keep watchdog happy
-        if (Connected && BoundFlag && ModelMatched) {               // keep receiver happy too ... but guard against recursion
-            GetNewChannelValues();
-            ShowServoPos();
-            NewCompressNeeded = true;
-            Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24// heer
-            SendData();
-        } 
+        if (Connected && BoundFlag && ModelMatched)  SendData();    // resend some old data briefly (collecting new is dangerous and not worth it.)
     }
     RecursedAlready = false;
 }
-
 //***********************************************************************************************************
 void Look(int p)  // This is just to save typing Serial.println :)
 {
