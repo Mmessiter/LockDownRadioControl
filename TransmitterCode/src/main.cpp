@@ -8791,7 +8791,7 @@ void CheckModelName()
             SendValue(BK1, ModelNumber-1);
         }
         ReadOneModel(ModelNumber);
-        if (TrimClicks) PlaySound(CLICKONE);
+        if (ButtonClicks) PlaySound(CLICKONE);
         if (UseLog) LogThisModel();
         LastModelLoaded = ModelNumber;
         UpdateModelsNameEveryWhere();
