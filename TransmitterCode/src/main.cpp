@@ -6857,7 +6857,7 @@ FASTRUN void ButtonWasPressed()
         char pLogView[]             = "page LogView";
         char dGMT[]                 = "dGMT";
         char TxNme[]                = "TxName";
-      
+        char BK1[]                  = "BK1";
 
         // ************************* test input words from Nextion *****************
 
@@ -6875,7 +6875,7 @@ FASTRUN void ButtonWasPressed()
             ClearText();
             return;
         }
-        char BK1[]      = "BK1";
+        
         if (InStrng(Delete, TextIn) > 0) {
             ModelNumber= GetValue(BK1)+1;
             SetDefaultValues();
