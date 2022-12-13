@@ -530,8 +530,9 @@ uint8_t  Drate2                          = 75;
 uint8_t  Drate3                          = 50;
 uint8_t  DualRateChannels[8]             =  {1, 2, 4, 0, 0, 0, 0, 0};
 uint16_t CurveDots[5];
-uint8_t  DualRateValue                = 100;
-char     GoModelsView[] = "page ModelsView";
+uint8_t  DualRateValue                   = 100;
+char     GoModelsView[]                  = "page ModelsView";
+char     pCalibrateView[]                = "page CalibrateView";
 
 // **********************************************************************************************************************************
 // *********************************************** END OF GLOBAL DATA ***************************************************************
@@ -6192,44 +6193,49 @@ void ThrottleDownTrim(){
 void ResetTransmitterSettings(){    // This function resets all transmitter parameters to the default state. 
                                     // But not the clock. Calibration shoulw  be done next. 
 
-const char         Tn[32]      = "Unknown";
-    
-    BuddyPupilOnSbus = false;
-    BuddyMaster    = false;
-    ModelNumber    = 1;
-    ScreenTimeout  = 120;
-    Inactivity_Timeout = INACTIVITYTIMEOUT;
-    strcpy(TxName, Tn);
-    Qnh               = 1009;
-    DeltaGMT          = 0;
-    BackGroundColour  = 214;
-    ForeGroundColour  = White;
-    SpecialColour     = Red;
-    HighlightColour   = Yellow;
-    SticksMode        = 2;
-    AudioVolume       = 20;
-    Brightness        = 100;
-    PlayFanfare       = false;
-    TrimClicks        = true;
-    ButtonClicks      = false;
-    SpeakingClock     = true;
-    AnnounceBanks     = true;
-    ResetSwitchNumbers();
-    MinimumGap          = 75;
-    LogRXSwaps          = true;
-    UseLog              = false;
-    AnnounceConnected   = true;
-    ResetAllTrims();
-    TxVoltageCorrection     = 0;
-    PowerOffWarningSeconds  = DEFAULTPOWEROFFWARNING;
-    LEDBrightness           = DEFAULTLEDBRIGHTNESS;
-    ConnectionAssessSeconds = 1;
-    AutoModelSelect         = true;
-    MotorChannel            = 15;
-    MotorChannelZero        = 0;
-    SetDS1307ToCompilerTime();
-    delay (250);
-    for (ModelNumber = 1; ModelNumber < MAXMODELNUMBER; ++ModelNumber){
+    const char         Tn[32]      = "Unknown";
+
+   char prompt[] = "Reset all settings?"; // heer
+
+   if (!GetConfirmation(pCalibrateView,prompt)) return;
+   
+
+   BuddyPupilOnSbus   = false;
+   BuddyMaster        = false;
+   ModelNumber        = 1;
+   ScreenTimeout      = 120;
+   Inactivity_Timeout = INACTIVITYTIMEOUT;
+   strcpy(TxName, Tn);
+   Qnh              = 1009;
+   DeltaGMT         = 0;
+   BackGroundColour = 214;
+   ForeGroundColour = White;
+   SpecialColour    = Red;
+   HighlightColour  = Yellow;
+   SticksMode       = 2;
+   AudioVolume      = 20;
+   Brightness       = 100;
+   PlayFanfare      = false;
+   TrimClicks       = true;
+   ButtonClicks     = false;
+   SpeakingClock    = true;
+   AnnounceBanks    = true;
+   ResetSwitchNumbers();
+   MinimumGap        = 75;
+   LogRXSwaps        = true;
+   UseLog            = false;
+   AnnounceConnected = true;
+   ResetAllTrims();
+   TxVoltageCorrection     = 0;
+   PowerOffWarningSeconds  = DEFAULTPOWEROFFWARNING;
+   LEDBrightness           = DEFAULTLEDBRIGHTNESS;
+   ConnectionAssessSeconds = 1;
+   AutoModelSelect         = true;
+   MotorChannel            = 15;
+   MotorChannelZero        = 0;
+   SetDS1307ToCompilerTime();
+   delay(250);
+   for (ModelNumber = 1; ModelNumber < MAXMODELNUMBER; ++ModelNumber) {
         SetDefaultValues(); 
     }
     ModelNumber = 1;
@@ -6555,30 +6561,32 @@ void EndRenameModel(){
 
  char Confirmed[2];
 /******************************************************************************************************************************/
+// Gets Windows style confirmation
+// params: 
+// Prompt is the prompt
+// goback is the command needed to return to calling page
+ 
  bool GetConfirmation(char* goback,char* Prompt){ // heer
 
-  char PopupViewy[] = "page PopupView"; // heer
-  char Dialog[]     = "Dialog";
-
-  SendCommand(PopupViewy);
+  char GoPopupView[] = "page PopupView"; 
+  char Dialog[]      = "Dialog";
+  char niu[]         = "Not in use";
+  if (InStrng(niu,Prompt)) return true;   // overwriting a memory 'Not in use' is always OK
+  SendCommand(GoPopupView);
   SendText(Dialog, Prompt);
   Confirmed[0] = '?';
-  while (Confirmed[0] == '?') { if (GetButtonPress()){ButtonWasPressed();}  }
+  while (Confirmed[0] == '?') {                 // await user response
+    if (GetButtonPress()){ButtonWasPressed();}
+    KickTheDog();
+  }
   SendCommand(goback);
-  if (Confirmed[0] == 'Y') return true;
-  return false;
+  if (Confirmed[0] == 'Y') return true;   // tell caller OK to continue
+  return false;                           // tell caller STOP!
  }
-
  /******************************************************************************************************************************/
- void YesPressed(){
-  Confirmed[0] = 'Y';
- }
-
+ void YesPressed(){ Confirmed[0] = 'Y';}
 /******************************************************************************************************************************/
- void NoPressed(){
-    Confirmed[0] = 'N';
- }
-
+ void NoPressed() { Confirmed[0] = 'N';}
 // ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
 #define LASTFUNCTION 62 // one more than final one
 
@@ -6833,7 +6841,7 @@ FASTRUN void ButtonWasPressed()
         char pTrimView[]               = "page TrimView";
         char pMixesView[]              = "page MixesView";
         char pTypeView[]               = "page TypeView";
-        char pCalibrateView[]          = "page CalibrateView";
+       
         char pFailSafe[]               = "page FailSafeView";
         char DataView_Clear[]          = "Clear";
         char DataView_AltZero[]        = "AltZero";
@@ -6886,7 +6894,8 @@ FASTRUN void ButtonWasPressed()
         char BK1[]                  = "BK1";
         char Prompt[30];
         char del[] = "Delete ";
-        char ques[] = "?";
+        char overwr[] = "Overwrite ";
+        char ques[]   = "?";
 
         // ************************* test input words from Nextion *****************
 
@@ -6909,7 +6918,6 @@ FASTRUN void ButtonWasPressed()
             strcpy(Prompt, del);
             strcat(Prompt, ModelName);
             strcat(Prompt, ques);
-
             if (GetConfirmation(GoModelsView,Prompt))  {   // heer
                 ModelNumber= GetValue(BK1)+1;
                 SetDefaultValues();
@@ -7557,43 +7565,49 @@ FASTRUN void ButtonWasPressed()
             ClearText();
             return;
         }
+        
         p = InStrng(Import, TextIn); 
         if (p > 0) {
-            SendCommand(ProgressStart);
-            Procrastinate(10);
-            SendValue(Progress, 5);
-            Procrastinate(10);
             j = 0;
             i = p + 5;
-            while (TextIn[i] > 0) {
+            while (TextIn[i] > 0) {   
                 if (TextIn[i] >= 97 && TextIn[i] <= 122) {
-                    TextIn[i] &= ~0x20;
-                }
-                SingleModelFile[j] = TextIn[i];
-                ++j;
-                ++i;
-                SingleModelFile[j] = 0;
+                TextIn[i] &= ~0x20;
             }
-            if (InStrng(ModExt, SingleModelFile) == 0) strcat(SingleModelFile, ModExt);
-            SingleModelFlag = true;
-            SendValue(Progress, 10);
-            Procrastinate(10);
-            CloseModelsFile();
-            ReadOneModel(1);
-            SendValue(Progress, 50);
-            Procrastinate(10);
-            SingleModelFlag = false;
-            CloseModelsFile();
-            SendValue(Progress, 75);
-            Procrastinate(10);
-            SaveAllParameters();
-            CloseModelsFile();
-            UpdateModelsNameEveryWhere();
-            SendValue(Progress, 100);
-            Procrastinate(10);
-            SendCommand(ProgressEnd);
-            if (FileError) ShowFileErrorMsg();
-            LoadModelSelector();
+            SingleModelFile[j] = TextIn[i];
+            ++j;
+            ++i;
+            SingleModelFile[j] = 0;
+            }
+            strcpy(Prompt, overwr);
+            strcat(Prompt, ModelName);
+            strcat(Prompt, ques);
+            if (GetConfirmation(GoModelsView,Prompt))  {   // heer
+                SendCommand(ProgressStart);
+                Procrastinate(10);
+                SendValue(Progress, 5);
+                Procrastinate(10);
+                if (InStrng(ModExt, SingleModelFile) == 0) strcat(SingleModelFile, ModExt);
+                SingleModelFlag = true;
+                SendValue(Progress, 10);
+                Procrastinate(10);
+                CloseModelsFile();
+                ReadOneModel(1);
+                SendValue(Progress, 50);
+                Procrastinate(10);
+                SingleModelFlag = false;
+                CloseModelsFile();
+                SendValue(Progress, 75);
+                Procrastinate(10);
+                SaveAllParameters();
+                CloseModelsFile();
+                UpdateModelsNameEveryWhere();
+                SendValue(Progress, 100);
+                Procrastinate(10);
+                SendCommand(ProgressEnd);
+                if (FileError) ShowFileErrorMsg();
+                LoadModelSelector();
+         }
             ClearText();
             return;
         }
