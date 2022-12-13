@@ -238,11 +238,11 @@ uint32_t Secs                = 0;
 uint32_t PausedSecs          = 0;
 uint32_t Mins                = 0;
 uint32_t Hours               = 0;
-uint8_t  ModelNumber         = 1;
+uint32_t ModelNumber         = 1;
 uint8_t  ModelDefined        = 0;
 uint16_t MemoryForTransmtter = 0; // SD space for transmitter parameters
 uint16_t OneModelMemory      = 0; // SD space for every model's parameters
-uint16_t SDCardAddress       = 0; // Address on SD card (offset from zero)
+uint32_t SDCardAddress       = 0; // Address on SD card (offset from zero)
 
 uint8_t FHSS_Channels1[42] = {93, 111, 107, 103, 106, 97, 108, 102, 118, // TEST array
                               104, 101, 109, 98, 113, 124, 115, 91, 96, 85, 117, 89, 99, 114, 87, 112,
@@ -2638,22 +2638,19 @@ void  CheckStepSizes(){ // for slow servos
   }
 /*********************************************************************************************************************************/
 
-bool ReadOneModel(uint8_t Mnum)
+bool ReadOneModel(uint32_t Mnum)
 {
     uint16_t j;
     uint16_t i;
-    char     NoModelYet[] = "Model ";
-    char     nb[5];
-
+    char     NoModelYet[] = "Error ";
+  
     FileCheckSum = 0;
-    if ((ModelNumber > 99) || (ModelNumber < 0)) ModelNumber = 1;
-    Str(nb, ModelNumber, 0);
-    strcpy(ModelName, NoModelYet);
-    strcat(ModelName, nb);
+    if ((ModelNumber > 90) || (ModelNumber < 0)) ModelNumber = 1;
+    strcpy(ModelName, NoModelYet); // indicator of error
     if (!ModelsFileOpen) OpenModelsFile();
     if (!ModelsFileOpen) return false;
-    SDCardAddress = TXSIZE;                    
-    if (SingleModelFlag) SDCardAddress = MODELOFFSET;   // Changed from 250 to 0    
+    SDCardAddress = TXSIZE;
+    if (SingleModelFlag) SDCardAddress = 0; // MODELOFFSET;   // Changed from 250 to 0
     SDCardAddress += ((Mnum - 1) * MODELSIZE); 
     StartLocation = SDCardAddress;
     ModelDefined  = SDRead8BITS(SDCardAddress);
@@ -3697,7 +3694,7 @@ void SaveTransmitterParameters()
 /*********************************************************************************************************************************/
 
 /** MODEL Specific */
-void SaveOneModel(uint16_t mnum)
+void SaveOneModel(uint32_t mnum)
 {
     uint16_t j;
     uint16_t i;
@@ -5776,10 +5773,7 @@ void LoadModelSelector(){
     char nb[4];
     char buf[MAXBUFFERSIZE];
 
-
-
-
-    int8_t SavedModelNumber = ModelNumber;
+    int32_t SavedModelNumber = ModelNumber;
     for (ModelNumber = 1; ModelNumber < MAXMODELNUMBER; ++ModelNumber){
             ReadOneModel(ModelNumber);
             if (ModelNumber == 1) {
@@ -6195,7 +6189,7 @@ void ResetTransmitterSettings(){    // This function resets all transmitter para
 
     const char         Tn[32]      = "Unknown";
 
-   char prompt[] = "Reset all settings?"; // heer
+   char prompt[] = "Reset all settings?"; 
 
    if (!GetConfirmation(pCalibrateView,prompt)) return;
    
@@ -6234,13 +6228,15 @@ void ResetTransmitterSettings(){    // This function resets all transmitter para
    MotorChannel            = 15;
    MotorChannelZero        = 0;
    SetDS1307ToCompilerTime();
-   delay(250);
+   delay(50);
    for (ModelNumber = 1; ModelNumber < MAXMODELNUMBER; ++ModelNumber) {
-        SetDefaultValues(); 
-    }
-    ModelNumber = 1;
-    SaveTransmitterParameters();
-    SaveTransmitterParameters();
+        SetDefaultValues();
+        delay(50);
+   }
+   PlaySound(CLICKONE);
+   ModelNumber = 1;
+   SaveTransmitterParameters();
+   SaveTransmitterParameters();
 }
 
 
@@ -6566,7 +6562,7 @@ void EndRenameModel(){
 // Prompt is the prompt
 // goback is the command needed to return to calling page
  
- bool GetConfirmation(char* goback,char* Prompt){ // heer
+ bool GetConfirmation(char* goback,char* Prompt){
 
   char GoPopupView[] = "page PopupView"; 
   char Dialog[]      = "Dialog";
@@ -6918,7 +6914,7 @@ FASTRUN void ButtonWasPressed()
             strcpy(Prompt, del);
             strcat(Prompt, ModelName);
             strcat(Prompt, ques);
-            if (GetConfirmation(GoModelsView,Prompt))  {   // heer
+            if (GetConfirmation(GoModelsView,Prompt))  {  
                 ModelNumber= GetValue(BK1)+1;
                 SetDefaultValues();
                 LoadModelSelector();
@@ -7582,7 +7578,7 @@ FASTRUN void ButtonWasPressed()
             strcpy(Prompt, overwr);
             strcat(Prompt, ModelName);
             strcat(Prompt, ques);
-            if (GetConfirmation(GoModelsView,Prompt))  {   // heer
+            if (GetConfirmation(GoModelsView,Prompt))  {   
                 SendCommand(ProgressStart);
                 Procrastinate(10);
                 SendValue(Progress, 5);
