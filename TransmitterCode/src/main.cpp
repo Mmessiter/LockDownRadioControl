@@ -6228,12 +6228,13 @@ void ResetTransmitterSettings(){    // This function resets all transmitter para
    MotorChannel            = 15;
    MotorChannelZero        = 0;
    SetDS1307ToCompilerTime();
-   delay(50);
+   delay(10);
+   PlaySound(BEEPMIDDLE);
    for (ModelNumber = 1; ModelNumber < MAXMODELNUMBER; ++ModelNumber) {
         SetDefaultValues();
-        delay(50);
+        delay(10);
    }
-   PlaySound(CLICKONE);
+   PlaySound(BEEPCOMPLETE);
    ModelNumber = 1;
    SaveTransmitterParameters();
    SaveTransmitterParameters();
