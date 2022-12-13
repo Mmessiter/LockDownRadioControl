@@ -77,9 +77,13 @@
 #define DEFAULTLEDBRIGHTNESS    20                        // LED brightness
 #define DEFAULTPOWEROFFWARNING  3                         // Default time to warn before cutting power      
 #define MAXDUALRATE             200
+#define MAXBUFFERSIZE           6000
+#define MAXMODELNUMBER          91
+
 // **************************************************************************
 //                            FHSS PARAMETERS                               *
 //***************************************************************************
+
 
 #define PACEMAKER                7    // MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
 #define RETRYCOUNT               3    // auto retries inside nRF24L01

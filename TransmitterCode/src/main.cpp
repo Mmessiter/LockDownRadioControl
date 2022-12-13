@@ -9,6 +9,8 @@
  * - 12 BIT servo resolution (11 BIT via SBUS)
  * - 32 Mixes
  * - 4 Flight modes with user definable and announced names.
+ * - 90 Model memories
+ * - Unlimited model files for backup (32 Gig)
  * - "ModelMatch" plus automatic model memory selection. (Avoid flying with wrong memory loaded.)
  * - Buddyboxing with selectable channels.
  * - Voice messages and other audio prompts.
@@ -267,7 +269,7 @@ bool      DefiningTrims               = false;
 bool      TrimDefined[4]              = {true, true, true, true};
 char      DateTime[]                  = "DateTime";
 char      ScreenViewTimeout[]         = "Sto"; // needed for display info
-char      ModelName[30];
+char      ModelName[30] = "Not in use";
 uint16_t  ScreenTimeout               = 120; // Screen has two minute timeout by default
 int       LastLinePosition            = 0;
 uint8_t   RXCellCount                 = 2;
@@ -1221,10 +1223,10 @@ void SendText(char* tbox, char* NewWord)
 void SendOtherText(char* tbox, char* NewWord)
 {
     char quote[] = "\"";
-    char CB[1024];
+    char CB[MAXBUFFERSIZE];
     char TooLong[] = "Too long!";
 
-    if (strlen(NewWord) > 2048) {
+    if (strlen(NewWord) > MAXBUFFERSIZE-2) {
         strcpy(NewWord, TooLong);
     }
     strcpy(CB, tbox);
@@ -3496,6 +3498,7 @@ FLASHMEM void setup()
             SendText(Warning, err_chksm);
         }
         if (ErrorState == MODELSFILENOTFOUND){
+           // ResetTransmitterSettings();
             SendText(Warning, err_404);
         }
         if (ErrorState == MOTORISON){
@@ -4290,18 +4293,20 @@ void ShowDirectory()
 
 /*********************************************************************************************************************************/
 
-void SetDefaultValues()
+void SetDefaultValues() // heer
 {
-    uint16_t j;
-    uint16_t i;
-    char     ProgressStart[] = "vis Progress,1";
-    char     ProgressEnd[]   = "vis Progress,0";
-    char     Progress[]      = "Progress";
+    uint16_t j=0;
+    uint16_t i=0;
+    char     empty[] = "Not in use";
+    
+      while ((empty[i]) && (i < 29)){
+           ModelName[i] = empty[i];
+           ModelName[i + 1] = 0;
+           ++i;
+     }
 
     char DefaultChannelNames[CHANNELSUSED][11] = {{"Aileron"}, {"Elevator"}, {"Throttle"}, {"Rudder"}, {"Ch 5"}, {"Ch 6"}, {"Ch 7"}, {"Ch 8"}, {"Ch 9"}, {"Ch 10"}, {"Ch 11"}, {"Ch 12"}, {"Ch 13"}, {"Ch 14"}, {"Ch 15"}, {"Ch 16"}};
-    SendCommand(ProgressStart);
-    SendValue(Progress, 5);
-    Procrastinate(10);
+  
 
     for (i = 0; i < CHANNELSUSED; ++i) {
         for (j = 1; j <= 4; ++j) {
@@ -4321,15 +4326,12 @@ void SetDefaultValues()
             }
         }
     }
-    SendValue(Progress, 15);
-    Procrastinate(10);
     for (j = 0; j < MAXMIXES; ++j) {
         for (i = 0; i < CHANNELSUSED; ++i) {
             Mixes[j][i] = 0;
         }
     }
-    SendValue(Progress, 25);
-    Procrastinate(10);
+   
 
     for (j = 0; j < BANKSUSED + 1; ++j) { // must have fudged this somewhere.... 5?!
         for (i = 0; i < CHANNELSUSED; ++i) {
@@ -4339,8 +4341,6 @@ void SetDefaultValues()
     }
     RXCellCount = 3;
 
-    SendValue(Progress, 45);
-    Procrastinate(10);
     for (i = 0; i < CHANNELSUSED; ++i) {
         InPutStick[i] = i;
     }
@@ -4354,13 +4354,11 @@ void SetDefaultValues()
     SWITCH2Reversed = false;
     SWITCH3Reversed = false;
     SWITCH4Reversed = false;
-    SendValue(Progress, 65);
-    Procrastinate(10);
+  
     for (i = 0; i < CHANNELSUSED; ++i) {
         FailSafeChannel[i] = false;
     }
-    SendValue(Progress, 75);
-    Procrastinate(10);
+ 
     for (i = 0; i < CHANNELSUSED; ++i) {
         for (j = 0; j < 10; ++j) {
             ChannelNames[i][j] = DefaultChannelNames[i][j];
@@ -4392,8 +4390,7 @@ void SetDefaultValues()
     MotorChannel = 2;
     
     ReversedChannelBITS = 0; //  No channel reversed
-    SendValue(Progress, 95);
-    Procrastinate(10);
+   
     LEDBrightness       = DEFAULTLEDBRIGHTNESS;
     RxVoltageCorrection = 0;
     ModelsMacUnionSaved.Val32[0] = 0;
@@ -4416,20 +4413,9 @@ void SetDefaultValues()
     for (int i = 0; i < 16; ++i){
         StepSize[i] = 100;
     }
+    ModelDefined  = 42;
     SaveOneModel(ModelNumber);
     CloseModelsFile();
-    SendValue(Progress, 100);
-    SDCardAddress = TXSIZE;                         //  spare bytes for TX stuff
-    SDCardAddress += (ModelNumber - 1) * MODELSIZE; //  spare bytes for Model params
-    StartLocation = SDCardAddress;
-    ModelDefined  = 0;
-    OpenModelsFile();
-    SDUpdate8BITS(SDCardAddress, ModelDefined); // mark this model as undefined
-    CloseModelsFile();
-    ReadOneModel(ModelNumber);
-    UpdateModelsNameEveryWhere();
-    Procrastinate(100);
-    SendCommand(ProgressEnd);
 }
 
 /*********************************************************************************************************************************/
@@ -5786,18 +5772,21 @@ void LoadModelSelector(){
     char lb[]       = " (";
     char rb[]       = ")";
     char nb[4];
-    char buf[1024];
+    char buf[MAXBUFFERSIZE];
+
+
+
 
     int8_t SavedModelNumber = ModelNumber;
-    for (ModelNumber = 1; ModelNumber < 32; ++ModelNumber){
-        ReadOneModel(ModelNumber);
-        if (ModelNumber == 1){
-            strcpy(buf, ModelName);
-            strcat(buf, lb);
-            Str(nb, ModelNumber, 0);
-            strcat(buf, nb);
-            strcat(buf, rb);
-            strcat(buf, crlf);
+    for (ModelNumber = 1; ModelNumber < MAXMODELNUMBER; ++ModelNumber){
+            ReadOneModel(ModelNumber);
+            if (ModelNumber == 1) {
+                strcpy(buf, ModelName);
+                strcat(buf, lb);
+                Str(nb, ModelNumber, 0);
+                strcat(buf, nb);
+                strcat(buf, rb);
+                strcat(buf, crlf);
         }else{
             strcat(buf, ModelName);
             strcat(buf, lb);
@@ -6219,11 +6208,11 @@ const char         Tn[32]      = "Unknown";
     SpecialColour     = Red;
     HighlightColour   = Yellow;
     SticksMode        = 2;
-    AudioVolume       = 50;
+    AudioVolume       = 20;
     Brightness        = 100;
-    PlayFanfare       = true;
+    PlayFanfare       = false;
     TrimClicks        = true;
-    ButtonClicks      = true;
+    ButtonClicks      = false;
     SpeakingClock     = true;
     AnnounceBanks     = true;
     ResetSwitchNumbers();
@@ -6241,9 +6230,14 @@ const char         Tn[32]      = "Unknown";
     MotorChannelZero        = 0;
     SetDS1307ToCompilerTime();
     delay (250);
+    for (ModelNumber = 1; ModelNumber < MAXMODELNUMBER; ++ModelNumber){
+        SetDefaultValues(); 
+    }
+    ModelNumber = 1;
     SaveTransmitterParameters();
     SaveTransmitterParameters();
 }
+
 
 /*********************************************************************************************************************************/
 
@@ -6882,7 +6876,6 @@ FASTRUN void ButtonWasPressed()
         if (InStrng(Delete, TextIn) > 0) {
             ModelNumber= GetValue(BK1)+1;
             SetDefaultValues();
-            SaveOneModel(ModelNumber);
             LoadModelSelector();
             ClearText();
             return;
@@ -8586,7 +8579,7 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
         } else {
             if (AutoModelSelect){                                         //  It's not a match so maybe search for it.
                 ModelNumber = 0;
-                while ((ModelMatched == false) && (ModelNumber < 99)) {   //  Try to match the ID with a save one
+                while ((ModelMatched == false) && (ModelNumber < MAXMODELNUMBER)) {   //  Try to match the ID with a save one
                     ++ModelNumber;
                     ReadOneModel(ModelNumber);                           
                     if ((ModelsMacUnion.Val32[0] == ModelsMacUnionSaved.Val32[0]) && (ModelsMacUnion.Val32[1] == ModelsMacUnionSaved.Val32[1])) {
@@ -8786,7 +8779,7 @@ void CheckModelName()
     char BK1[]      = "BK1";
     ModelNumber = GetValue(BK1)+1;
     if (LastModelLoaded != ModelNumber) {       
-        if ((ModelNumber > 31) || (ModelNumber < 1)) {
+        if ((ModelNumber >= MAXMODELNUMBER) || (ModelNumber < 1)) {
             ModelNumber = 1;
             SendValue(BK1, ModelNumber-1);
         }
@@ -8906,7 +8899,7 @@ void FASTRUN ManageTransmitter(){
         if (RightNow - LastTimeRead >= 1000) {                       // once a second for these... 
             ReadTime();                                              // Do the clock
             GetStatistics();                                         // Do stats
-            if (CurrentView == TXSETUPVIEW) CheckScanButton();       // heer
+            if (CurrentView == TXSETUPVIEW) CheckScanButton();       // 
             if (CurrentView == RXSETUPVIEW) CheckScanButton();
             if (CurrentView == MODELSVIEW)  CheckModelName();         // In MODELSVIEW, this function checks correct name is displayed.
             LastTimeRead = millis();
