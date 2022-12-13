@@ -528,6 +528,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "page_FhssView", "TransmitterCode_2src_2main_8cpp.html#abb0c124b134df44ba1d408d719ab6b75", null ],
     [ "page_FrontView", "TransmitterCode_2src_2main_8cpp.html#a0a6be8adfb11b7e5dafd3f47867c0801", null ],
     [ "PausedSecs", "TransmitterCode_2src_2main_8cpp.html#a39d02faa564fd940b3d34bb1ea0f2599", null ],
+    [ "pCalibrateView", "TransmitterCode_2src_2main_8cpp.html#adc0d9ac990358430d894fecda3a724ec", null ],
     [ "PlayFanfare", "TransmitterCode_2src_2main_8cpp.html#af20a742cb89289b31695edccb45ccb3f", null ],
     [ "PointsCount", "TransmitterCode_2src_2main_8cpp.html#abc8fa11262dc227a1bd6eba957fcf95c", null ],
     [ "PowerOffTimer", "TransmitterCode_2src_2main_8cpp.html#a4920261904b22c215b85f66a7b5670e5", null ],
