@@ -8628,14 +8628,15 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
         } else {
             if (AutoModelSelect){                                         //  It's not a match so maybe search for it.
                 ModelNumber = 0;
-                while ((ModelMatched == false) && (ModelNumber < MAXMODELNUMBER)) {   //  Try to match the ID with a save one
-                    ++ModelNumber;
-                    ReadOneModel(ModelNumber);                           
-                    if ((ModelsMacUnion.Val32[0] == ModelsMacUnionSaved.Val32[0]) && (ModelsMacUnion.Val32[1] == ModelsMacUnionSaved.Val32[1])) {
-                        ModelMatched = true;
-                        BindButton = true; 
+                while ((ModelMatched == false) && (ModelNumber < MAXMODELNUMBER-1)) 
+                    {   //  Try to match the ID with a saved one
+                        ++ModelNumber;
+                        ReadOneModel(ModelNumber);
+                        if ((ModelsMacUnion.Val32[0] == ModelsMacUnionSaved.Val32[0]) && (ModelsMacUnion.Val32[1] == ModelsMacUnionSaved.Val32[1])) {
+                            ModelMatched = true;
+                            BindButton = true; 
+                        }
                     }
-                }
                 if (ModelMatched){                                        //  Found it!
                     UpdateModelsNameEveryWhere();                         //  Use it.
                     if (AnnounceConnected) {
@@ -8661,7 +8662,7 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                     BindButton = true;
                     ModelMatched = false;
                 } return;
-            } else {
+             } else {
                 SendCommand(BindButtonVisible);
                 if ((millis() - WarningTimer) > 10000) {
                     WarningTimer = millis();
