@@ -531,6 +531,7 @@ uint8_t  Drate3                          = 50;
 uint8_t  DualRateChannels[8]             =  {1, 2, 4, 0, 0, 0, 0, 0};
 uint16_t CurveDots[5];
 uint8_t  DualRateValue                = 100;
+char     GoModelsView[] = "page ModelsView";
 
 // **********************************************************************************************************************************
 // *********************************************** END OF GLOBAL DATA ***************************************************************
@@ -4293,7 +4294,7 @@ void ShowDirectory()
 
 /*********************************************************************************************************************************/
 
-void SetDefaultValues() // heer
+void SetDefaultValues() 
 {
     uint16_t j=0;
     uint16_t i=0;
@@ -5804,10 +5805,8 @@ void LoadModelSelector(){
 /******************************************************************************************************************************/
 void GotoModelsView()
 {
-    char pModelsView[] = "page ModelsView";
-
     if (ModelMatched) return; // must not change when model connected
-    SendCommand(pModelsView);
+    SendCommand(GoModelsView);
     CurrentView = MODELSVIEW;
     UpdateModelsNameEveryWhere();
     BuildDirectory(); // of SD card
@@ -6552,8 +6551,36 @@ void EndRenameModel(){
   SaveOneModel(ModelNumber);
   GotoModelsView();
 }
+
+
+ char Confirmed[2];
+/******************************************************************************************************************************/
+ bool GetConfirmation(char* goback,char* Prompt){ // heer
+
+  char PopupViewy[] = "page PopupView"; // heer
+  char Dialog[]     = "Dialog";
+
+  SendCommand(PopupViewy);
+  SendText(Dialog, Prompt);
+  Confirmed[0] = '?';
+  while (Confirmed[0] == '?') { if (GetButtonPress()){ButtonWasPressed();}  }
+  SendCommand(goback);
+  if (Confirmed[0] == 'Y') return true;
+  return false;
+ }
+
+ /******************************************************************************************************************************/
+ void YesPressed(){
+  Confirmed[0] = 'Y';
+ }
+
+/******************************************************************************************************************************/
+ void NoPressed(){
+    Confirmed[0] = 'N';
+ }
+
 // ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
-#define LASTFUNCTION 60 // one more than final one
+#define LASTFUNCTION 62 // one more than final one
 
 void (*NumberedFunctions[LASTFUNCTION])() {
     Blank,                // 0 (spare)
@@ -6615,7 +6642,9 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     EndSlowView,                // 56
     WriteNewCurve,              // 57
     StartRenameModel,           // 58            
-    EndRenameModel              // 59
+    EndRenameModel,             // 59
+    YesPressed,                 // 60
+    NoPressed                   // 61
 
 }; // list will become much longer ...
 
@@ -6855,6 +6884,9 @@ FASTRUN void ButtonWasPressed()
         char dGMT[]                 = "dGMT";
         char TxNme[]                = "TxName";
         char BK1[]                  = "BK1";
+        char Prompt[30];
+        char del[] = "Delete ";
+        char ques[] = "?";
 
         // ************************* test input words from Nextion *****************
 
@@ -6874,9 +6906,15 @@ FASTRUN void ButtonWasPressed()
         }
         
         if (InStrng(Delete, TextIn) > 0) {
-            ModelNumber= GetValue(BK1)+1;
-            SetDefaultValues();
-            LoadModelSelector();
+            strcpy(Prompt, del);
+            strcat(Prompt, ModelName);
+            strcat(Prompt, ques);
+
+            if (GetConfirmation(GoModelsView,Prompt))  {   // heer
+                ModelNumber= GetValue(BK1)+1;
+                SetDefaultValues();
+                LoadModelSelector();
+            }
             ClearText();
             return;
         }
