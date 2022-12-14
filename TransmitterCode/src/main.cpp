@@ -319,7 +319,8 @@ File      ModelsFileNumber;
 
 Adafruit_INA219 ina219;
 
-char SingleModelFile[80];
+char SingleModelFile[40];
+char BackupModelFile[40];
 bool SingleModelFlag = false;
 
 bool     ModelsFileOpen = false;
@@ -407,6 +408,7 @@ bool     BuddyMaster         = false;
 bool     SlaveHasControl     = false;
 uint16_t Qnh                 = 1009; // pressure at sea level here
 uint16_t LastModelLoaded     = 0;
+uint16_t LastFileInView      = 0;
 uint8_t  MinimumGap          = 75;
 uint8_t  RecentStartLine     = 0;
 char     RecentTextFile[20];
@@ -533,6 +535,7 @@ uint16_t CurveDots[5];
 uint8_t  DualRateValue                   = 100;
 char     GoModelsView[]                  = "page ModelsView";
 char     pCalibrateView[]                = "page CalibrateView";
+char Confirmed[2];
 
 // **********************************************************************************************************************************
 // *********************************************** END OF GLOBAL DATA ***************************************************************
@@ -892,6 +895,8 @@ void KickTheDog()
     if (millis() - LastDogKick >= KICKRATE) {
         TeensyWatchDog.feed();
         LastDogKick = millis();
+      //  Serial.print("Kicked! at ");
+      //  Look(millis());
     }
 }
 
@@ -3416,7 +3421,7 @@ FLASHMEM void setup()
     ResetSubTrims();
     CentreTrims();
     WatchDogConfig.window   = WATCHDOGMAXRATE; //  = MINIMUM RATE in milli seconds, (32ms to 522.232s) must be MUCH smaller than timeout
-    WatchDogConfig.timeout  = WATCHDOGTIMEOUT; //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s)
+    WatchDogConfig.timeout  =  WATCHDOGTIMEOUT; //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s)
     WatchDogConfig.callback = WatchDogCallBack;
     TeensyWatchDog.begin(WatchDogConfig);
     LastDogKick = millis(); // needed? - yes!
@@ -5760,13 +5765,11 @@ void DoLastTimeRead()
     LastTimeRead = 0;
 }
 
-
-
 /******************************************************************************************************************************/
 void LoadModelSelector(){
 
-    char BK1p[]     = "BK1.path=\"";
-    char BK1[]      = "BK1";
+    char MMemsp[]     = "MMems.path=\"";
+    char MMems[]      = "MMems";
     char crlf[]     = {13, 10, 0};  
     char lb[]       = " (";
     char rb[]       = ")";
@@ -5792,21 +5795,47 @@ void LoadModelSelector(){
             strcat(buf, crlf);
         }
     }   
-    SendOtherText(BK1p, buf);
+    SendOtherText(MMemsp, buf);
     ModelNumber = SavedModelNumber;
     ReadOneModel(ModelNumber);
-    SendValue(BK1, ModelNumber-1);
+    SendValue(MMems, ModelNumber-1);
 }
+
+
+/******************************************************************************************************************************/
+
+void LoadFileSelector(){
+
+    char Mfilesp[]     = "Mfiles.path=\"";
+    char Mfiles[]      = "Mfiles";
+    char crlf[]     = {13, 10, 0};  
+    char buf[MAXBUFFERSIZE];
+
+    for (int f = 0; f < ExportedFileCounter; ++f){ 
+        if (!f) 
+        {   strcpy(buf, TheFilesList[f]);
+            strcat(buf, crlf);
+        }else{
+            strcat(buf, TheFilesList[f]);
+            strcat(buf, crlf);
+        }
+    }
+    SendOtherText(Mfilesp, buf);
+    FileNumberInView = GetValue(Mfiles);
+ }
+
 /******************************************************************************************************************************/
 void GotoModelsView()
 {
-    if (ModelMatched) return; // must not change when model connected
-    SendCommand(GoModelsView);
-    CurrentView = MODELSVIEW;
-    UpdateModelsNameEveryWhere();
-    BuildDirectory(); // of SD card
-    ShowFileNumber();
-    LoadModelSelector();
+
+ if (ModelMatched) return; // must not change when model connected
+ SendCommand(GoModelsView);
+ CurrentView = MODELSVIEW;
+ UpdateModelsNameEveryWhere();
+ BuildDirectory(); // of SD card 
+ LoadFileSelector();
+ ShowFileNumber();
+ LoadModelSelector();
 }
 /******************************************************************************************************************************/
 void GotoMacrosView()
@@ -6547,6 +6576,53 @@ void StartRenameModel(){
   SendText(NewName, ModelName);
 
 }
+
+/******************************************************************************************************************************/
+
+void GetDefaultFilename(int p){
+            int j = 0;
+            int i = p + 5;
+            while ((TextIn[i] > 0) && (i < 18)) {
+                if (TextIn[i] >= 97 && TextIn[i] <= 122) {
+                    TextIn[i] &= ~0x20; // upper case only
+                }
+                SingleModelFile[j] = TextIn[i];
+                ++j;
+                ++i;
+                SingleModelFile[j] = 0;
+            }
+}
+
+/******************************************************************************************************************************/
+void WriteBackup(){
+        char ModExt[]                  = ".MOD";
+        char ModelsView_filename[]     = "filename";
+        char ProgressStart[]           = "vis Progress,1";
+        char ProgressEnd[]             = "vis Progress,0";
+        char Progress[]                = "Progress";
+
+                if ((InStrng(ModExt, SingleModelFile) == 0) && (strlen(SingleModelFile) <= 8)) strcat(SingleModelFile, ModExt);
+                if ((strlen(SingleModelFile) <= 12) && (InStrng(ModExt, SingleModelFile) > 0))
+                {
+                    SendText(ModelsView_filename, SingleModelFile);
+                    SendCommand(ProgressStart);
+                    for (uint8_t WriteTwice = 1; WriteTwice <= 3; ++WriteTwice) { // Write many times is needed. Once does't work ... no idea why!
+                        SingleModelFlag = true;
+                        SaveOneModel(1);
+                        SendValue(Progress, WriteTwice * 15);
+                    }
+                    SingleModelFlag = false;
+                    SendValue(Progress, 80);
+                    BuildDirectory();
+                    SendValue(Progress, 100);
+                    Procrastinate(300);
+                    SendCommand(ProgressEnd);
+                }else {
+                    FileError = true;
+                }
+                if (FileError) ShowFileErrorMsg();
+}
+
 /******************************************************************************************************************************/
 void EndRenameModel(){
   char NewName[]             = "NewName";
@@ -6554,9 +6630,24 @@ void EndRenameModel(){
   SaveOneModel(ModelNumber);
   GotoModelsView();
 }
+/******************************************************************************************************************************/
+void GetBackupFilename(char* goback){
 
+    char GoBackupView[] = "page BackupView"; // heer
+    char t1[]           = "t1";
+    char Mname[]        = "Modelname";
 
- char Confirmed[2];
+    SendCommand(GoBackupView);
+    SendText(t1, SingleModelFile);
+    SendText(Mname, ModelName);
+    Confirmed[0] = '?';
+    while (Confirmed[0] == '?') {                 // await user response
+        if (GetButtonPress()){ButtonWasPressed();}
+        KickTheDog();
+    }
+    GetText(t1, BackupModelFile);
+    SendCommand(goback);
+}
 /******************************************************************************************************************************/
 // Gets Windows style confirmation
 // params: 
@@ -6807,7 +6898,6 @@ FASTRUN void ButtonWasPressed()
         char ProgressEnd[]             = "vis Progress,0";
         char Progress[]                = "Progress";
         char HelpView[]                = "HelpView";
-        char ModelsView_filename[]     = "filename";
         char ReceiveModel[]            = "ReceiveModel";
         char SendModel[]               = "SendModel";
         char PowerOff[]                = "PowerOff";
@@ -6888,7 +6978,7 @@ FASTRUN void ButtonWasPressed()
         char pLogView[]             = "page LogView";
         char dGMT[]                 = "dGMT";
         char TxNme[]                = "TxName";
-        char BK1[]                  = "BK1";
+        char MMems[]                = "MMems";
         char Prompt[30];
         char del[] = "Delete ";
         char overwr[] = "Overwrite ";
@@ -6916,7 +7006,7 @@ FASTRUN void ButtonWasPressed()
             strcat(Prompt, ModelName);
             strcat(Prompt, ques);
             if (GetConfirmation(GoModelsView,Prompt))  {  
-                ModelNumber= GetValue(BK1)+1;
+                ModelNumber= GetValue(MMems)+1;
                 SetDefaultValues();
                 LoadModelSelector();
             }
@@ -7496,10 +7586,16 @@ FASTRUN void ButtonWasPressed()
                 ++i;
                 SingleModelFile[j] = 0;
             }
-            SD.remove(SingleModelFile);
-            BuildDirectory();
-            --FileNumberInView;
-            ShowFileNumber();
+            strcpy(Prompt, del);
+            strcat(Prompt, SingleModelFile);
+            strcat(Prompt, ques);
+            if (GetConfirmation(GoModelsView,Prompt))  {  
+               SD.remove(SingleModelFile);
+                BuildDirectory();
+                LoadFileSelector();
+                --FileNumberInView;
+                ShowFileNumber();
+            }
             CloseModelsFile();
             ClearText();
             return;
@@ -7524,44 +7620,28 @@ FASTRUN void ButtonWasPressed()
 
         p = InStrng(Export, TextIn);
         if (p > 0) {
-            j = 0;
-            i = p + 5;
-            while ((TextIn[i] > 0) && (i < 18)) {
-                if (TextIn[i] >= 97 && TextIn[i] <= 122) {
-                    TextIn[i] &= ~0x20; // upper case only
+            GetDefaultFilename(p); 
+            GetBackupFilename(GoModelsView);// heer
+            if ((Confirmed[0] == 'Y') && (strcmp(BackupModelFile,SingleModelFile))) {
+                strcpy(SingleModelFile, BackupModelFile);
+                WriteBackup();
+            }
+            if ((Confirmed[0] == 'Y') && !(strcmp(BackupModelFile,SingleModelFile))) {
+                strcpy(Prompt, overwr);
+                strcat(Prompt, SingleModelFile);
+                strcat(Prompt, ques);
+                if (GetConfirmation(GoModelsView, Prompt)) {   
+                    WriteBackup();
                 }
-                SingleModelFile[j] = TextIn[i];
-                ++j;
-                ++i;
-                SingleModelFile[j] = 0;
             }
-
-            if ((InStrng(ModExt, SingleModelFile) == 0) && (strlen(SingleModelFile) <= 8)) {
-                strcat(SingleModelFile, ModExt);
-            }
-            if ((strlen(SingleModelFile) <= 12) && (InStrng(ModExt, SingleModelFile) > 0))
-            {
-                SendText(ModelsView_filename, SingleModelFile);
-                SendCommand(ProgressStart);
-                for (uint8_t WriteTwice = 1; WriteTwice <= 3; ++WriteTwice) { // Write many times is needed. Once does't work ... no idea why!
-                    SingleModelFlag = true;
-                    SaveOneModel(1);
-                    SendValue(Progress, WriteTwice * 15);
-                }
-                SingleModelFlag = false;
-                SendValue(Progress, 80);
-                BuildDirectory();
-                SendValue(Progress, 100);
-                Procrastinate(300);
-                SendCommand(ProgressEnd);
-            }
-            else {
-                FileError = true;
-            }
-            if (FileError) ShowFileErrorMsg();
+            BuildDirectory(); // of SD card 
+            LoadFileSelector();
+            ShowFileNumber();
+            LoadModelSelector();
             ClearText();
             return;
         }
+
         
         p = InStrng(Import, TextIn); 
         if (p > 0) {
@@ -8826,12 +8906,19 @@ FASTRUN void CheckGapsLength()
 /************************************************************************************************************/
 void CheckModelName()
 {                                                  // In ModelsView, this function checks correct name is displayed.
-    char BK1[]      = "BK1";
-    ModelNumber = GetValue(BK1)+1;
+    char MMems[]      = "MMems";
+    char Mfiles[]      = "Mfiles";
+    
+    ModelNumber = GetValue(MMems)+1;
+    FileNumberInView = GetValue(Mfiles); 
+    if (FileNumberInView != LastFileInView){
+        ShowFileNumber();
+    }
+
     if (LastModelLoaded != ModelNumber) {       
         if ((ModelNumber >= MAXMODELNUMBER) || (ModelNumber < 1)) {
             ModelNumber = 1;
-            SendValue(BK1, ModelNumber-1);
+            SendValue(MMems, ModelNumber-1);
         }
         ReadOneModel(ModelNumber);
         if (ButtonClicks) PlaySound(CLICKONE);
