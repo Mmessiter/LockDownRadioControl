@@ -2400,7 +2400,11 @@ if(!ModelsFileOpen){
     }
   }
 }
+/*********************************************************************************************************************************/
 
+void ShortDelay(){
+  delayMicroseconds(300);
+}
 /*********************************************************************************************************************************/
 
 void BuildCheckSum(int p_address, int p_value) 
@@ -2415,10 +2419,15 @@ void SDUpdate32BITS(int p_address, uint32_t p_value)
 {
     BuildCheckSum(p_address, p_value);
     ModelsFileNumber.seek(p_address);
+    ShortDelay();
     ModelsFileNumber.write(uint8_t(p_value));
+    ShortDelay();
     ModelsFileNumber.write(uint8_t(p_value >> 8));
+    ShortDelay();
     ModelsFileNumber.write(uint8_t(p_value >> 16));
+    ShortDelay();
     ModelsFileNumber.write(uint8_t(p_value >> 24));
+    ShortDelay();
 }
 
 /*********************************************************************************************************************************/
@@ -2438,8 +2447,11 @@ void SDUpdate16BITS(int p_address, int p_value)
 {
     BuildCheckSum(p_address, p_value);
     ModelsFileNumber.seek(p_address);
+    ShortDelay();
     ModelsFileNumber.write(uint8_t(p_value));
+    ShortDelay();
     ModelsFileNumber.write(uint8_t(p_value >> 8));
+    ShortDelay();
 }
 /*********************************************************************************************************************************/
 
@@ -2447,7 +2459,9 @@ void SDUpdate8BITS(int p_address, uint8_t p_value)
 {
     BuildCheckSum(p_address, p_value);
     ModelsFileNumber.seek(p_address);
+    ShortDelay();
     ModelsFileNumber.write(uint8_t(p_value));
+    ShortDelay();
 }
 
 /*********************************************************************************************************************************/
@@ -2456,8 +2470,11 @@ int SDRead16BITS(int p_address)
 {
    
     ModelsFileNumber.seek(p_address);
+    ShortDelay();
     int r = ModelsFileNumber.read();
+    ShortDelay();
     r += ModelsFileNumber.read() << 8;
+    ShortDelay();
     BuildCheckSum(p_address, r);
     return r;
 }
@@ -5827,7 +5844,8 @@ void LoadFileSelector(){
     }
     SendOtherText(Mfilesp, buf);
     FileNumberInView = GetValue(Mfiles);
- }
+    LastFileInView   = 120;
+}
 
 /******************************************************************************************************************************/
 void GotoModelsView()
@@ -6599,17 +6617,20 @@ void GetDefaultFilename(int p){
 }
 
 /******************************************************************************************************************************/
-void WriteBackup(){
+void WriteBackup(){ // heer
                 char ModExt[] = ".MOD";
+
+                char ProgressStart[]           = "vis Progress,1";
+                char ProgressEnd[]             = "vis Progress,0";
+                char Progress[]                = "Progress";
                 if ((InStrng(ModExt, SingleModelFile) == 0) && (strlen(SingleModelFile) <= 8)) strcat(SingleModelFile, ModExt);
                 if ((strlen(SingleModelFile) <= 12) && (InStrng(ModExt, SingleModelFile) > 0)){
-
-                for (int i = 1; i < 4;++i){
+                SendCommand(ProgressStart);
+                for (int i = 1; i < 3; ++i) {
                     CloseModelsFile(); // heer
                     SingleModelFlag = true;
-                    delay(50);
                     SaveOneModel(1);
-                     delay(50);
+                    SendValue(Progress, i * (100 / 3)); // heer
                 }
                 CloseModelsFile();
                 SingleModelFlag = false;
@@ -6617,6 +6638,8 @@ void WriteBackup(){
                     FileError = true;
                 }
                 if (FileError) ShowFileErrorMsg();
+                 SendCommand(ProgressEnd);
+                 LastFileInView   = 120;
 }
 
 /******************************************************************************************************************************/
@@ -6664,6 +6687,7 @@ void GetBackupFilename(char* goback){
     KickTheDog();
   }
   SendCommand(goback);
+  LastFileInView   = 120;
   if (Confirmed[0] == 'Y') return true;   // tell caller OK to continue
   return false;                           // tell caller STOP!
  }
