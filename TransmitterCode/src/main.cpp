@@ -6603,10 +6603,12 @@ void WriteBackup(){
                 char ModExt[] = ".MOD";
                 if ((InStrng(ModExt, SingleModelFile) == 0) && (strlen(SingleModelFile) <= 8)) strcat(SingleModelFile, ModExt);
                 if ((strlen(SingleModelFile) <= 12) && (InStrng(ModExt, SingleModelFile) > 0)){
-                CloseModelsFile();
+                
+                CloseModelsFile(); // heer
                 SingleModelFlag = true;
                 SaveOneModel(1);
                 SingleModelFlag = false;
+
                 CloseModelsFile();
                 }else {
                     FileError = true;
@@ -6624,7 +6626,7 @@ void EndRenameModel(){
 /******************************************************************************************************************************/
 void GetBackupFilename(char* goback){
 
-    char GoBackupView[] = "page BackupView"; // heer
+    char GoBackupView[] = "page BackupView"; 
     char t1[]           = "t1";
     char Mname[]        = "Modelname";
 
@@ -7614,7 +7616,7 @@ FASTRUN void ButtonWasPressed()
         p = InStrng(Export, TextIn);
         if (p > 0) {
             GetDefaultFilename(p); 
-            GetBackupFilename(GoModelsView);// heer
+            GetBackupFilename(GoModelsView);
             if ((Confirmed[0] == 'Y') && (strcmp(BackupModelFile,SingleModelFile))) {
                 strcpy(SingleModelFile, BackupModelFile);
                     WriteBackup();
