@@ -6603,13 +6603,16 @@ void WriteBackup(){
                 char ModExt[] = ".MOD";
                 if ((InStrng(ModExt, SingleModelFile) == 0) && (strlen(SingleModelFile) <= 8)) strcat(SingleModelFile, ModExt);
                 if ((strlen(SingleModelFile) <= 12) && (InStrng(ModExt, SingleModelFile) > 0)){
-                
-                CloseModelsFile(); // heer
-                SingleModelFlag = true;
-                SaveOneModel(1);
-                SingleModelFlag = false;
 
+                for (int i = 1; i < 4;++i){
+                    CloseModelsFile(); // heer
+                    SingleModelFlag = true;
+                    delay(50);
+                    SaveOneModel(1);
+                     delay(50);
+                }
                 CloseModelsFile();
+                SingleModelFlag = false;
                 }else {
                     FileError = true;
                 }
