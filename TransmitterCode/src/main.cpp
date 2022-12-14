@@ -2383,14 +2383,21 @@ bool CheckFileExists(char * fl){
 
 /*********************************************************************************************************************************/
 
+void ShortDelay(){
+  delayMicroseconds(300);
+}
+/*********************************************************************************************************************************/
+
 void OpenModelsFile()
 {
 if(!ModelsFileOpen){
     if (SingleModelFlag) {
         ModelsFileNumber = SD.open(SingleModelFile, FILE_WRITE);
+        ShortDelay();
     }
     else {
         ModelsFileNumber = SD.open(ModelsFile, FILE_WRITE);
+        ShortDelay();
     }
     if (ModelsFileNumber == 0) {
         FileError = true;
@@ -2399,11 +2406,6 @@ if(!ModelsFileOpen){
         ModelsFileOpen = true;
     }
   }
-}
-/*********************************************************************************************************************************/
-
-void ShortDelay(){
-  delayMicroseconds(300);
 }
 /*********************************************************************************************************************************/
 
