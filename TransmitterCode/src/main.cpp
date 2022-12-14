@@ -2385,6 +2385,7 @@ bool CheckFileExists(char * fl){
 
 void OpenModelsFile()
 {
+if(!ModelsFileOpen){
     if (SingleModelFlag) {
         ModelsFileNumber = SD.open(SingleModelFile, FILE_WRITE);
     }
@@ -2397,6 +2398,7 @@ void OpenModelsFile()
     else {
         ModelsFileOpen = true;
     }
+  }
 }
 
 /*********************************************************************************************************************************/
@@ -2647,12 +2649,15 @@ bool ReadOneModel(uint32_t Mnum)
 {
     uint16_t j;
     uint16_t i;
-    char     NoModelYet[] = "Error ";
+    char     NoModelYet[] = "Error! ";
   
     FileCheckSum = 0;
-    if ((ModelNumber > 90) || (ModelNumber < 0)) ModelNumber = 1;
+    if ((ModelNumber > 90) || (ModelNumber <= 0)) ModelNumber = 1;
+    OpenModelsFile(); 
+    if (!ModelsFileOpen) {delay(300); OpenModelsFile(); }
+    
     strcpy(ModelName, NoModelYet); // indicator of error
-    if (!ModelsFileOpen) OpenModelsFile();
+
     if (!ModelsFileOpen) return false;
     SDCardAddress = TXSIZE;
     if (SingleModelFlag) SDCardAddress = 0; // MODELOFFSET;   // Changed from 250 to 0
@@ -3701,15 +3706,15 @@ void SaveTransmitterParameters()
 /** MODEL Specific */
 void SaveOneModel(uint32_t mnum)
 {
-    uint16_t j;
-    uint16_t i;
+    uint32_t j;
+    uint32_t i;
     bool     EndOfName = false;
     FileCheckSum = 0;
-    if ((mnum < 1) || (mnum > 99)) return; // There is no model zero!
+    if ((mnum < 1) || (mnum > MAXMODELNUMBER)) return; // There is no model zero!
     if (!ModelsFileOpen) OpenModelsFile();
     SDCardAddress = TXSIZE;                  //  spare bytes for TX stuff
-    if (SingleModelFlag) SDCardAddress = MODELOFFSET;    // 250 or zero
     SDCardAddress += (mnum - 1) * MODELSIZE; //  spare bytes for Model params
+    if (SingleModelFlag) SDCardAddress = 0;   
     StartLocation = SDCardAddress;
     ModelDefined  = 42;
     SDUpdate8BITS(SDCardAddress, ModelDefined);
@@ -5775,7 +5780,7 @@ void LoadModelSelector(){
     char rb[]       = ")";
     char nb[4];
     char buf[MAXBUFFERSIZE];
-
+    
     int32_t SavedModelNumber = ModelNumber;
     for (ModelNumber = 1; ModelNumber < MAXMODELNUMBER; ++ModelNumber){
             ReadOneModel(ModelNumber);
@@ -5799,8 +5804,8 @@ void LoadModelSelector(){
     ModelNumber = SavedModelNumber;
     ReadOneModel(ModelNumber);
     SendValue(MMems, ModelNumber-1);
+    Look(strlen(buf));
 }
-
 
 /******************************************************************************************************************************/
 
@@ -5812,7 +5817,7 @@ void LoadFileSelector(){
     char buf[MAXBUFFERSIZE];
 
     for (int f = 0; f < ExportedFileCounter; ++f){ 
-        if (!f) 
+        if (f==0) 
         {   strcpy(buf, TheFilesList[f]);
             strcat(buf, crlf);
         }else{
@@ -6595,28 +6600,14 @@ void GetDefaultFilename(int p){
 
 /******************************************************************************************************************************/
 void WriteBackup(){
-        char ModExt[]                  = ".MOD";
-        char ModelsView_filename[]     = "filename";
-        char ProgressStart[]           = "vis Progress,1";
-        char ProgressEnd[]             = "vis Progress,0";
-        char Progress[]                = "Progress";
-
+                char ModExt[] = ".MOD";
                 if ((InStrng(ModExt, SingleModelFile) == 0) && (strlen(SingleModelFile) <= 8)) strcat(SingleModelFile, ModExt);
-                if ((strlen(SingleModelFile) <= 12) && (InStrng(ModExt, SingleModelFile) > 0))
-                {
-                    SendText(ModelsView_filename, SingleModelFile);
-                    SendCommand(ProgressStart);
-                    for (uint8_t WriteTwice = 1; WriteTwice <= 3; ++WriteTwice) { // Write many times is needed. Once does't work ... no idea why!
-                        SingleModelFlag = true;
-                        SaveOneModel(1);
-                        SendValue(Progress, WriteTwice * 15);
-                    }
-                    SingleModelFlag = false;
-                    SendValue(Progress, 80);
-                    BuildDirectory();
-                    SendValue(Progress, 100);
-                    Procrastinate(300);
-                    SendCommand(ProgressEnd);
+                if ((strlen(SingleModelFile) <= 12) && (InStrng(ModExt, SingleModelFile) > 0)){
+                CloseModelsFile();
+                SingleModelFlag = true;
+                SaveOneModel(1);
+                SingleModelFlag = false;
+                CloseModelsFile();
                 }else {
                     FileError = true;
                 }
@@ -6767,8 +6758,8 @@ FASTRUN void ButtonWasPressed()
         } NextionCommand;
         NextionCommand.First4Bytes[0] = TextIn[0];
         NextionCommand.First4Bytes[1] = TextIn[1];
-        NextionCommand.First4Bytes[2] = TextIn[2];
-        NextionCommand.First4Bytes[3] = TextIn[3];
+        NextionCommand.First4Bytes[2] = 0; //   TextIn[2];
+        NextionCommand.First4Bytes[3] = 0; //   TextIn[3];
         uint32_t NumberedCommand      = NextionCommand.FirstDWord - 128;
 
 #ifdef DB_NEXTION
@@ -6779,7 +6770,9 @@ FASTRUN void ButtonWasPressed()
         else {
             Serial.print("Command NUMBER: -> ");
             Serial.println(NumberedCommand);
+          
         }
+          
 #endif
 
         if (TextIn[0] >= 128) {                       // (First byte != printable char) indicates a numbered command...
@@ -7624,8 +7617,9 @@ FASTRUN void ButtonWasPressed()
             GetBackupFilename(GoModelsView);// heer
             if ((Confirmed[0] == 'Y') && (strcmp(BackupModelFile,SingleModelFile))) {
                 strcpy(SingleModelFile, BackupModelFile);
-                WriteBackup();
-            }
+                    WriteBackup();
+                Confirmed[0] = '?';
+           }
             if ((Confirmed[0] == 'Y') && !(strcmp(BackupModelFile,SingleModelFile))) {
                 strcpy(Prompt, overwr);
                 strcat(Prompt, SingleModelFile);
@@ -7634,12 +7628,10 @@ FASTRUN void ButtonWasPressed()
                     WriteBackup();
                 }
             }
-            BuildDirectory(); // of SD card 
-            LoadFileSelector();
-            ShowFileNumber();
-            LoadModelSelector();
-            ClearText();
-            return;
+                BuildDirectory(); // of SD card 
+                LoadFileSelector();
+                ClearText();
+                return;
         }
 
         
@@ -8908,11 +8900,11 @@ void CheckModelName()
 {                                                  // In ModelsView, this function checks correct name is displayed.
     char MMems[]      = "MMems";
     char Mfiles[]      = "Mfiles";
-    
     ModelNumber = GetValue(MMems)+1;
     FileNumberInView = GetValue(Mfiles); 
     if (FileNumberInView != LastFileInView){
         ShowFileNumber();
+        LastFileInView = FileNumberInView;
     }
 
     if (LastModelLoaded != ModelNumber) {       

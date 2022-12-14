@@ -77,7 +77,7 @@
 #define DEFAULTLEDBRIGHTNESS    20                        // LED brightness
 #define DEFAULTPOWEROFFWARNING  3                         // Default time to warn before cutting power      
 #define MAXDUALRATE             200
-#define MAXBUFFERSIZE           6000
+#define MAXBUFFERSIZE           4096
 #define MAXMODELNUMBER          91
 
 // **************************************************************************
