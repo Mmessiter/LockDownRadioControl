@@ -9070,7 +9070,6 @@ void FASTRUN ManageTransmitter(){
             GetStatistics();                                         // Do stats
             if (CurrentView == TXSETUPVIEW) CheckScanButton();       // 
             if (CurrentView == RXSETUPVIEW) CheckScanButton();
-            if (CurrentView == MODELSVIEW)  CheckModelName();         // In MODELSVIEW, this function checks correct name is displayed.
             LastTimeRead = millis();
             return;                                                  // That's enough housekeeping this time around
         }
@@ -9080,6 +9079,7 @@ void FASTRUN ManageTransmitter(){
         ShowComms();                                                 // Screen Data                                  
         CheckTimer();                                                // Screen Timer
         CheckPowerOffButton();                                       // Pretty obvious really ...
+        if ((CurrentView == MODELSVIEW) && (!Connected)) CheckModelName();         // In MODELSVIEW, this function checks correct name is displayed.
         TransmitterLastManaged = millis();
     }
 }
