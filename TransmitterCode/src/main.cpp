@@ -6615,17 +6615,16 @@ void GetDefaultFilename(){  // Build filename from ModelName as best we can usin
   char mod[] = ".MOD";
             while (i < 8) {
                 if (ModelName[j] > 32) {
-                    SingleModelFile[i] = ModelName[j] & ~0x20;
-                    SingleModelFile[i + 1] = 0;
-                    ++i;
+                   if (!isdigit (ModelName[j])) SingleModelFile[i] = ModelName[j] & ~0x20;
+                   ++i;
+                    SingleModelFile[i] = 0;
                 } 
-                if (!ModelName[j]) break;
+                if (ModelName[j]<32) break;
                  ++j;
-                if (strlen(SingleModelFile) >= 8) break;
+                if (i >= 8) break;
             }
            strcat(SingleModelFile, mod);
 }
-
 /******************************************************************************************************************************/
 void WriteBackup(){
                 char ModExt[] = ".MOD";
@@ -6634,7 +6633,9 @@ void WriteBackup(){
                 char Progress[]                = "Progress";
                 uint8_t Iterations             = 4;
                 for (uint8_t i = 0; i < strlen(SingleModelFile);++i){
-                        if (SingleModelFile[i] != '.') SingleModelFile[i] &= ~0x20; // upper case!
+                        if (!isdigit (SingleModelFile[i])){
+                            if (SingleModelFile[i] != '.') SingleModelFile[i] &= ~0x20; // upper case!
+                        }
                 }
                 SendValue(Progress, 10);
                 if ((InStrng(ModExt, SingleModelFile) == 0) && (strlen(SingleModelFile) <= 8)) strcat(SingleModelFile, ModExt);
