@@ -2384,7 +2384,7 @@ bool CheckFileExists(char * fl){
 /*********************************************************************************************************************************/
 
 void ShortDelay(){
-  delayMicroseconds(30);
+  delayMicroseconds(50);
 }
 /*********************************************************************************************************************************/
 
@@ -2393,11 +2393,11 @@ void OpenModelsFile()
 if(!ModelsFileOpen){
     if (SingleModelFlag) {
         ModelsFileNumber = SD.open(SingleModelFile, FILE_WRITE);
-        delayMicroseconds(500);
+        delay(3);
     }
     else {
         ModelsFileNumber = SD.open(ModelsFile, FILE_WRITE);
-        delayMicroseconds(500);
+         delay(3);
     }
     if (ModelsFileNumber == 0) {
         FileError = true;
@@ -5842,7 +5842,7 @@ void LoadFileSelector(){
     char nofiles[] = "(No files)";
     
     strcpy(buf, nofiles);
-    for (int f = 0; f < ExportedFileCounter; ++f){ // heer
+    for (int f = 0; f < ExportedFileCounter; ++f){ 
         if (f==0) 
         {   strcpy(buf, TheFilesList[f]);
             strcat(buf, crlf);
@@ -6611,7 +6611,7 @@ void StartRenameModel(){
 
 /******************************************************************************************************************************/
 
-void GetDefaultFilename(){  // Build filename from ModelName as best we can using first 8 chars upper cased // heer
+void GetDefaultFilename(){  // Build filename from ModelName as best we can using first 8 chars upper cased
   int  j     = 0;
   int  i     = 0;
   char mod[] = ".MOD";
@@ -6634,16 +6634,18 @@ void WriteBackup(){
                 char ProgressStart[]           = "vis Progress,1";
                 char ProgressEnd[]             = "vis Progress,0";
                 char Progress[]                = "Progress";
-                
-                
+                uint8_t Iterations                = 4;
+
                 SendValue(Progress, 10);
                 if ((InStrng(ModExt, SingleModelFile) == 0) && (strlen(SingleModelFile) <= 8)) strcat(SingleModelFile, ModExt);
                 if ((strlen(SingleModelFile) <= 12) && (InStrng(ModExt, SingleModelFile) > 0)){
                 SendCommand(ProgressStart);
-                CloseModelsFile(); 
-                SingleModelFlag = true;
-                SaveOneModel(1);
-                SendValue(Progress, 50); 
+                for (int i = 0; i < Iterations; i++){
+                    CloseModelsFile();
+                    SingleModelFlag = true;
+                    SaveOneModel(1);
+                    SendValue(Progress, i * (100 / Iterations));  // write several times is needed!! :-)
+                }
                 CloseModelsFile();
                 SingleModelFlag = false;
                 }else {
@@ -6664,7 +6666,7 @@ void EndRenameModel(){
   GotoModelsView();
 }
 /******************************************************************************************************************************/
-bool GetBackupFilename(char* goback){
+bool GetBackupFilename(char* goback){ // HERE THE USER CAN REPLACE DEFAULT FILENAME IF HE WANTS TO
 
     char GoBackupView[] = "page BackupView"; 
     char t1[]           = "t1";
@@ -6683,7 +6685,7 @@ bool GetBackupFilename(char* goback){
     return false;
 }
 /******************************************************************************************************************************/
-// Gets Windows style confirmation
+// Gets Windows style confirmation (FILE OVERWRITE ETC.)
 // params: 
 // Prompt is the prompt
 // goback is the command needed to return to calling page
@@ -7655,7 +7657,7 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(Export, TextIn)) { // heer
+        if (InStrng(Export, TextIn)) {
             GetDefaultFilename();
             if (GetBackupFilename(GoModelsView)){
                 if (CheckFileExists(SingleModelFile)) {
