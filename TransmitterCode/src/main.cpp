@@ -320,7 +320,6 @@ File      ModelsFileNumber;
 Adafruit_INA219 ina219;
 
 char SingleModelFile[40];
-char BackupModelFile[40];
 bool SingleModelFlag = false;
 
 bool     ModelsFileOpen = false;
