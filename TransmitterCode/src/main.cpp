@@ -4233,16 +4233,21 @@ void DoNewChannelName(int ch, int k)
 /** @brief updates display in textbox */
 void ShowFileNumber()
 {
-    char ModelsView_filename[] = "filename";
+    char dflt[]                 = "DEFAULT.MOD";
+    char ModelsView_filename[]  = "filename";
     char newfname[17];
+   
+    strcpy(newfname, dflt);
     if (FileNumberInView >= ExportedFileCounter) FileNumberInView = 0;
     if (FileNumberInView < 0) FileNumberInView = ExportedFileCounter - 1;
-    for (int i = 0; i < 12; ++i) {
-        newfname[i]     = TheFilesList[FileNumberInView][i];
-        newfname[i + 1] = 0;
-        if (newfname[i] <= 32 || newfname[i] > 127) break;
-    }
-    SendText(ModelsView_filename, newfname);
+    if (ExportedFileCounter){ 
+        for (int i = 0; i < 12; ++i) {
+            newfname[i]     = TheFilesList[FileNumberInView][i];
+            newfname[i + 1] = 0;
+            if (newfname[i] <= 32 || newfname[i] > 127) break;
+        }
+   }
+   SendText(ModelsView_filename, newfname);
 }
 
 /*********************************************************************************************************************************/
@@ -5835,8 +5840,10 @@ void LoadFileSelector(){
     char Mfiles[]      = "Mfiles";
     char crlf[]     = {13, 10, 0};  
     char buf[MAXBUFFERSIZE];
-
-    for (int f = 0; f < ExportedFileCounter; ++f){ 
+    char nofiles[] = "(No files)";
+    
+    strcpy(buf, nofiles);
+    for (int f = 0; f < ExportedFileCounter; ++f){ // heer
         if (f==0) 
         {   strcpy(buf, TheFilesList[f]);
             strcat(buf, crlf);
@@ -6605,34 +6612,39 @@ void StartRenameModel(){
 
 /******************************************************************************************************************************/
 
-void GetDefaultFilename(int p){
-            int j = 0;
-            int i = p + 5;
-            while ((TextIn[i] > 0) && (i < 18)) {
-                if (TextIn[i] >= 97 && TextIn[i] <= 122) {
-                    TextIn[i] &= ~0x20; // upper case only
-                }
-                SingleModelFile[j] = TextIn[i];
-                ++j;
-                ++i;
-                SingleModelFile[j] = 0;
+void GetDefaultFilename(){  // Build filename from ModelName as best we can using first 8 chars upper cased // heer
+  int  j     = 0;
+  int  i     = 0;
+  char mod[] = ".MOD";
+            while (i < 8) {
+                if (ModelName[j] > 32) {
+                    SingleModelFile[i] = ModelName[j] & ~0x20;
+                    SingleModelFile[i + 1] = 0;
+                    ++i;
+                } 
+                if (!ModelName[j]) break;
+                 ++j;
+                if (strlen(SingleModelFile) >= 8) break;
             }
+            strcat(SingleModelFile, mod);       
 }
 
 /******************************************************************************************************************************/
-void WriteBackup(){ // heer
+void WriteBackup(){
                 char ModExt[] = ".MOD";
                 char ProgressStart[]           = "vis Progress,1";
                 char ProgressEnd[]             = "vis Progress,0";
                 char Progress[]                = "Progress";
-                  SendValue(Progress, 10);
+                
+                
+                SendValue(Progress, 10);
                 if ((InStrng(ModExt, SingleModelFile) == 0) && (strlen(SingleModelFile) <= 8)) strcat(SingleModelFile, ModExt);
                 if ((strlen(SingleModelFile) <= 12) && (InStrng(ModExt, SingleModelFile) > 0)){
                 SendCommand(ProgressStart);
                 CloseModelsFile(); 
                 SingleModelFlag = true;
                 SaveOneModel(1);
-                SendValue(Progress, 50); // heer
+                SendValue(Progress, 50); 
                 CloseModelsFile();
                 SingleModelFlag = false;
                 }else {
@@ -6653,22 +6665,23 @@ void EndRenameModel(){
   GotoModelsView();
 }
 /******************************************************************************************************************************/
-void GetBackupFilename(char* goback){
+bool GetBackupFilename(char* goback){
 
     char GoBackupView[] = "page BackupView"; 
     char t1[]           = "t1";
     char Mname[]        = "Modelname";
-
     SendCommand(GoBackupView);
     SendText(t1, SingleModelFile);
     SendText(Mname, ModelName);
     Confirmed[0] = '?';
     while (Confirmed[0] == '?') {                 // await user response
-        if (GetButtonPress()){ButtonWasPressed();}
-        KickTheDog();
+            if (GetButtonPress()){ButtonWasPressed();}
+            KickTheDog();
     }
-    GetText(t1, BackupModelFile);
+    GetText(t1, SingleModelFile);
     SendCommand(goback);
+    if (Confirmed[0] == 'Y') return true;
+    return false;
 }
 /******************************************************************************************************************************/
 // Gets Windows style confirmation
@@ -7643,27 +7656,24 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        p = InStrng(Export, TextIn);
-        if (p > 0) {
-            GetDefaultFilename(p); 
-            GetBackupFilename(GoModelsView);
-            if ((Confirmed[0] == 'Y') && (strcmp(BackupModelFile,SingleModelFile))) {
-                strcpy(SingleModelFile, BackupModelFile);
-                    WriteBackup();
-                Confirmed[0] = '?';
-           }
-            if ((Confirmed[0] == 'Y') && !(strcmp(BackupModelFile,SingleModelFile))) {
-                strcpy(Prompt, overwr);
-                strcat(Prompt, SingleModelFile);
-                strcat(Prompt, ques);
-                if (GetConfirmation(GoModelsView, Prompt)) {   
+        if (InStrng(Export, TextIn)) { // heer
+            GetDefaultFilename();
+            if (GetBackupFilename(GoModelsView)){
+                if (CheckFileExists(SingleModelFile)) {
+                    strcpy(Prompt, overwr);
+                    strcat(Prompt, SingleModelFile);
+                    strcat(Prompt, ques);
+                    if (GetConfirmation(GoModelsView, Prompt)) { 
+                        WriteBackup();
+                    }
+                }else{
                     WriteBackup();
                 }
             }
-                BuildDirectory(); // of SD card 
-                LoadFileSelector();
-                ClearText();
-                return;
+        BuildDirectory(); // of SD card 
+        LoadFileSelector();
+        ClearText();
+        return;
         }
 
         
