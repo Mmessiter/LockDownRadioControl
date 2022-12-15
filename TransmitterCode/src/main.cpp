@@ -894,8 +894,7 @@ void KickTheDog()
     if (millis() - LastDogKick >= KICKRATE) {
         TeensyWatchDog.feed();
         LastDogKick = millis();
-      //  Serial.print("Kicked! at ");
-      //  Look(millis());
+     
     }
 }
 
@@ -5828,7 +5827,6 @@ void LoadModelSelector(){
     ModelNumber = SavedModelNumber;
     ReadOneModel(ModelNumber);
     SendValue(MMems, ModelNumber-1);
-    Look(strlen(buf));
 }
 
 /******************************************************************************************************************************/
@@ -6612,8 +6610,8 @@ void StartRenameModel(){
 /******************************************************************************************************************************/
 
 void GetDefaultFilename(){  // Build filename from ModelName as best we can using first 8 chars upper cased
-  int  j     = 0;
-  int  i     = 0;
+  uint8_t  j     = 0;
+  uint8_t  i     = 0;
   char mod[] = ".MOD";
             while (i < 8) {
                 if (ModelName[j] > 32) {
@@ -6625,7 +6623,7 @@ void GetDefaultFilename(){  // Build filename from ModelName as best we can usin
                  ++j;
                 if (strlen(SingleModelFile) >= 8) break;
             }
-            strcat(SingleModelFile, mod);       
+           strcat(SingleModelFile, mod);
 }
 
 /******************************************************************************************************************************/
@@ -6634,8 +6632,10 @@ void WriteBackup(){
                 char ProgressStart[]           = "vis Progress,1";
                 char ProgressEnd[]             = "vis Progress,0";
                 char Progress[]                = "Progress";
-                uint8_t Iterations                = 4;
-
+                uint8_t Iterations             = 4;
+                for (uint8_t i = 0; i < strlen(SingleModelFile);++i){
+                        if (SingleModelFile[i] != '.') SingleModelFile[i] &= ~0x20; // upper case!
+                }
                 SendValue(Progress, 10);
                 if ((InStrng(ModExt, SingleModelFile) == 0) && (strlen(SingleModelFile) <= 8)) strcat(SingleModelFile, ModExt);
                 if ((strlen(SingleModelFile) <= 12) && (InStrng(ModExt, SingleModelFile) > 0)){
