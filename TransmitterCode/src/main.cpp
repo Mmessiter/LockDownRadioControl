@@ -2366,6 +2366,7 @@ void CloseModelsFile()
     if (ModelsFileOpen) {
         ModelsFileNumber.close();
         ModelsFileOpen = false;
+        delayMicroseconds(500);
     }
 }
 
@@ -2384,7 +2385,7 @@ bool CheckFileExists(char * fl){
 /*********************************************************************************************************************************/
 
 void ShortDelay(){
-  delayMicroseconds(300);
+  delayMicroseconds(30);
 }
 /*********************************************************************************************************************************/
 
@@ -2393,11 +2394,11 @@ void OpenModelsFile()
 if(!ModelsFileOpen){
     if (SingleModelFlag) {
         ModelsFileNumber = SD.open(SingleModelFile, FILE_WRITE);
-        ShortDelay();
+        delayMicroseconds(500);
     }
     else {
         ModelsFileNumber = SD.open(ModelsFile, FILE_WRITE);
-        ShortDelay();
+        delayMicroseconds(500);
     }
     if (ModelsFileNumber == 0) {
         FileError = true;
@@ -6621,27 +6622,27 @@ void GetDefaultFilename(int p){
 /******************************************************************************************************************************/
 void WriteBackup(){ // heer
                 char ModExt[] = ".MOD";
-
                 char ProgressStart[]           = "vis Progress,1";
                 char ProgressEnd[]             = "vis Progress,0";
                 char Progress[]                = "Progress";
+                  SendValue(Progress, 10);
                 if ((InStrng(ModExt, SingleModelFile) == 0) && (strlen(SingleModelFile) <= 8)) strcat(SingleModelFile, ModExt);
                 if ((strlen(SingleModelFile) <= 12) && (InStrng(ModExt, SingleModelFile) > 0)){
                 SendCommand(ProgressStart);
-                for (int i = 1; i < 3; ++i) {
-                    CloseModelsFile(); // heer
-                    SingleModelFlag = true;
-                    SaveOneModel(1);
-                    SendValue(Progress, i * (100 / 3)); // heer
-                }
+                CloseModelsFile(); 
+                SingleModelFlag = true;
+                SaveOneModel(1);
+                SendValue(Progress, 50); // heer
                 CloseModelsFile();
                 SingleModelFlag = false;
                 }else {
                     FileError = true;
                 }
                 if (FileError) ShowFileErrorMsg();
-                 SendCommand(ProgressEnd);
-                 LastFileInView   = 120;
+                SendValue(Progress, 100);
+                delay(100);
+                SendCommand(ProgressEnd);
+                LastFileInView = 120;
 }
 
 /******************************************************************************************************************************/
