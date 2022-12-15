@@ -330,7 +330,6 @@ var TransmitterCode_2src_2main_8cpp =
     [ "b5Greyed", "TransmitterCode_2src_2main_8cpp.html#a48ed16418893473ea7e8da4fe6c08b15", null ],
     [ "b5isGrey", "TransmitterCode_2src_2main_8cpp.html#a2cacff4290d454b1134b62c183e4e17a", null ],
     [ "BackGroundColour", "TransmitterCode_2src_2main_8cpp.html#a59c3d8b001e63150ebf11e3d9d6dca5b", null ],
-    [ "BackupModelFile", "TransmitterCode_2src_2main_8cpp.html#afbf0c64659f03368a96f13b2734c23c7", null ],
     [ "Bank", "TransmitterCode_2src_2main_8cpp.html#a22e13a2a5c7a6d6776b46f5341bda026", null ],
     [ "BanksInUse", "TransmitterCode_2src_2main_8cpp.html#a2f3f9bbd2850e612adc826db0714d9ef", null ],
     [ "BankSounds", "TransmitterCode_2src_2main_8cpp.html#ade4ac1f396d9c6a9b601c8f7041fba9c", null ],
