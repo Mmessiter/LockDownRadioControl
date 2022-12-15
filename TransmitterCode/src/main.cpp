@@ -6615,9 +6615,9 @@ void GetDefaultFilename(){  // Build filename from ModelName as best we can usin
   char mod[] = ".MOD";
             while (i < 8) {
                 if (ModelName[j] > 32) {
-                   if (!isdigit (ModelName[j])) SingleModelFile[i] = ModelName[j] & ~0x20;
+                   SingleModelFile[i] = toUpperCase(ModelName[j]);
                    ++i;
-                    SingleModelFile[i] = 0;
+                   SingleModelFile[i] = 0;
                 } 
                 if (ModelName[j]<32) break;
                  ++j;
@@ -6633,10 +6633,9 @@ void WriteBackup(){
                 char Progress[]                = "Progress";
                 uint8_t Iterations             = 4;
                 for (uint8_t i = 0; i < strlen(SingleModelFile);++i){
-                        if (!isdigit (SingleModelFile[i])){
-                            if (SingleModelFile[i] != '.') SingleModelFile[i] &= ~0x20; // upper case!
-                        }
+                    SingleModelFile[i] = toUpperCase(SingleModelFile[i]);
                 }
+             
                 SendValue(Progress, 10);
                 if ((InStrng(ModExt, SingleModelFile) == 0) && (strlen(SingleModelFile) <= 8)) strcat(SingleModelFile, ModExt);
                 if ((strlen(SingleModelFile) <= 12) && (InStrng(ModExt, SingleModelFile) > 0)){
@@ -7684,10 +7683,7 @@ FASTRUN void ButtonWasPressed()
             j = 0;
             i = p + 5;
             while (TextIn[i] > 0) {   
-                if (TextIn[i] >= 97 && TextIn[i] <= 122) {
-                TextIn[i] &= ~0x20;
-            }
-            SingleModelFile[j] = TextIn[i];
+            SingleModelFile[j] = toUpperCase(TextIn[i]);
             ++j;
             ++i;
             SingleModelFile[j] = 0;
