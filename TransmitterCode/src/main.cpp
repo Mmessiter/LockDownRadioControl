@@ -5202,6 +5202,7 @@ void ReceiveModelFile()
     CloseModelsFile();
     delay(2000);
     GotoModelsView();
+    ClearText();
 }
 
 
