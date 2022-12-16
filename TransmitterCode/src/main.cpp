@@ -5211,7 +5211,6 @@ void ReceiveModelFile()
 /** @brief SEND A MODEL FILE */
 void SendModelFile() 
 {
-
     char          ProgressStart[] = "vis Progress,1";
     char          ProgressEnd[]   = "vis Progress,0";
     char          Progress[]      = "Progress";
