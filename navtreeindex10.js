@@ -1,5 +1,7 @@
 var NAVTREEINDEX10 =
 {
+"classQuaternion.html":[7,0,5],
+"classQuaternion.html#a079a5673188a8a7d608e8495de0dd119":[7,0,5,2],
 "classQuaternion.html#a3bd3f270462944423611f44e19d2511b":[7,0,5,9],
 "classQuaternion.html#a3ff8405ed92a3ca16de656e6c83b4028":[7,0,5,5],
 "classQuaternion.html#a48e6bafb249c895ed25f29dc9170e11e":[7,0,5,6],
@@ -247,7 +249,5 @@ var NAVTREEINDEX10 =
 "globals_type.html":[8,1,3],
 "globals_u.html":[8,1,0,21],
 "globals_v.html":[8,1,0,22],
-"globals_vars.html":[8,1,2],
-"globals_vars.html":[8,1,2,0],
-"globals_vars_b.html":[8,1,2,1]
+"globals_vars.html":[8,1,2]
 };

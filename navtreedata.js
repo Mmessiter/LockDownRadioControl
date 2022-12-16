@@ -118,11 +118,11 @@ var NAVTREEINDEX =
 "RadioFunctions_8h.html#aa8cb091644f8785e060422c38a5ee334",
 "SensorHubT32_2src_2main_8cpp.html#ae1460f6669589cc4881aad0fd6440030",
 "TransmitterCode_2src_2main_8cpp.html#a5f109790a6fe0b972a502f3cac4ed1e7",
-"TransmitterCode_2src_2main_8cpp.html#abf278d2a0f4b093a96fd83a6f635d8c8",
-"classMPU6050.html#a410af58f5ff5f74e4ef8d61495908226",
-"classMPU9250.html#a2ec6d66f8a1d381e5a6b558756e3275d",
-"classQuaternion.html#a3bd3f270462944423611f44e19d2511b",
-"globals_vars_c.html"
+"TransmitterCode_2src_2main_8cpp.html#abe827a1e4c23eb79d1771da1e9393178",
+"classMPU6050.html#a3cff6b9613ad01aa1a51c287f5c5e329",
+"classMPU9250.html#a29cf790113cc58face9d1a2ddaddb567",
+"classQuaternion.html",
+"globals_vars.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
