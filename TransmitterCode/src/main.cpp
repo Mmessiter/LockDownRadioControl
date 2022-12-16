@@ -4293,42 +4293,6 @@ void SaveAllParameters()
 
 /*********************************************************************************************************************************/
 
-void ShowDirectory()
-{
-    char    filelistbuf[1024];
-    char    nul[]          = "";
-    char    crlf[]         = {13, 10, 0};
-    char    space[]        = {' ', 0};
-    char    fileviewlist[] = "FilesView.list";
-    char    t[2]           = "P";
-    uint8_t n              = 0;
-    uint8_t nlp            = 0;
-    strcpy(filelistbuf, nul);
-    for (int i = 0; i < ExportedFileCounter; ++i) {
-        nlp = 13;
-        for (int z = 0; z < 12; ++z) {
-            t[0] = TheFilesList[i][z];
-            if (t[0] == 0) break;
-            nlp--;
-            strcat(filelistbuf, t);
-        }
-        n++;
-        if (n > 2) {
-            strcat(filelistbuf, crlf);
-            n = 0;
-        }
-        else
-        {
-            for (int q = 0; q < nlp; ++q) {
-                strcat(filelistbuf, space);
-            }
-        }
-    }
-    SendText1(fileviewlist, filelistbuf);
-}
-
-/*********************************************************************************************************************************/
-
 void SetDefaultValues() 
 {
     uint16_t j=0;
@@ -5066,7 +5030,16 @@ void ShowFileProgress(char* Msg)
 
 /*********************************************************************************************************************************/
 
-/** @brief RECEIVE A MODEL FILE */
+void ShowFileTransferWindow(){
+    char gofw[] = "page FileExchView";
+    SendCommand(gofw);
+    CurrentView = FILEEXCHANGEVIEW;
+
+}
+
+/*********************************************************************************************************************************/
+
+/** @brief RECEIVE A MODEL FILE */ // heer
 void ReceiveModelFile()
 {
     uint64_t      RXPipe;
@@ -5081,7 +5054,8 @@ void ReceiveModelFile()
     char          WaitTime[6];
     char          WaitMsg[17];
     char          ThreeDots[]    = "...";
-    char          Receiving[]    = "Receiving ...";
+    char          Receiving[]    = "Receiving: ";
+    char          fnamebuf[30];
     char          TimeoutMsg[]   = "TIMEOUT";
     char          Success[]      = "* Success! *";
     unsigned long Fsize          = 0;
@@ -5093,6 +5067,8 @@ void ReceiveModelFile()
     char          of[]       = " of ";
     char          msg[50];
     char          bytes[] = " bytes.";
+    char          t0[]    = "t0";
+    char          RXheader[] = "File receive";
 
 #ifdef DB_MODEL_EXCHANGE
     uint8_t PacketNumber = 0;
@@ -5100,7 +5076,11 @@ void ReceiveModelFile()
     Serial.println(Waiting);
 #endif
     BlueLedOn();
+    ShowFileTransferWindow();
+
     SendText(ModelsView_filename, Waiting);
+    SendText(t0, RXheader);
+
     RXPipe = FILEPIPEADDRESS;
     Radio1.setRetries(15, 15);
     Radio1.setChannel(FILECHANNEL);
@@ -5153,6 +5133,11 @@ void ReceiveModelFile()
     Serial.println(Fsize);
 #endif
     Fposition        = 0;
+    
+    strcpy(fnamebuf, Receiving);
+    strcat(fnamebuf, SingleModelFile);
+     SendText(ModelsView_filename, fnamebuf);
+
     ModelsFileNumber = SD.open(SingleModelFile, FILE_WRITE);                    //  Open file to receive
     RXTimer          = millis();                                                //  zero timeout
     while ((Fposition < Fsize) && (millis() - RXTimer) / 1000 <= FILETIMEOUT) { //  (Fposition<Fsize) ********************
@@ -5210,12 +5195,16 @@ void ReceiveModelFile()
     strcat(msg, bytes);
     ShowFileProgress(msg);
     PlaySound(BEEPCOMPLETE);
+    CloseModelsFile();
+    delay(2000);
+    GotoModelsView();
 }
+
 
 /*********************************************************************************************************************************/
 
 /** @brief SEND A MODEL FILE */
-void SendModelFile()
+void SendModelFile() // heer
 {
 
     char          ProgressStart[] = "vis Progress,1";
@@ -5234,8 +5223,15 @@ void SendModelFile()
     char          msg[50];
     char          bytes[]    = " bytes.";
     uint32_t      SentMoment = 0;
+    char          ModelsView_filename[] = "filename";
+    char          t0[]                  = "t0";
+    char          Fsend[]               = "Sending file";
 
     BlueLedOn();
+    CloseModelsFile();
+    ShowFileTransferWindow();
+    SendText(ModelsView_filename, SingleModelFile);
+    SendText(t0, Fsend);
     SendCommand(ProgressStart);
     SendValue(Progress, p);
     delay(10);
@@ -5313,6 +5309,10 @@ void SendModelFile()
     strcat(msg, bytes);
     ShowFileProgress(msg);
     PlaySound(BEEPCOMPLETE);
+    delay(2000);
+    SendCommand(GoModelsView);
+    CurrentView = MODELSVIEW;
+    CloseModelsFile();
 }
 
 /*********************************************************************************************************************************/
@@ -6912,8 +6912,6 @@ FASTRUN void ButtonWasPressed()
         char InputTrim_labels[4][4]    = {"n0", "n1", "n2", "n3"};
         char Export[]                  = "Export";
         char Import[]                  = "Import";
-        char ListFiles[]               = "ListFiles";
-        char PageFilesView[]           = "page FilesView";
         char DelFile[]                 = "DelFile";
         char ModExt[]                  = ".MOD";
         char FailSAVE[]                = "FailSAVE";
@@ -7348,9 +7346,9 @@ FASTRUN void ButtonWasPressed()
                 SendValue(MixesView_MixNumber, MixNumber); // New load of mix window
                 SendMixValues();
             }
-            if (CurrentView == FILESVIEW) {
-                ShowDirectory();
-            }
+           // if (CurrentView == FILESVIEW) {
+           //     ShowDirectory();
+           // }
             if (CurrentView == MACROS_VIEW) {
                 // Do nothing!
             }
@@ -7721,14 +7719,6 @@ FASTRUN void ButtonWasPressed()
                 if (FileError) ShowFileErrorMsg();
                 LoadModelSelector();
          }
-            ClearText();
-            return;
-        }
-        if (InStrng(ListFiles, TextIn) > 0) {
-            SendCommand(PageFilesView);
-            CurrentView      = FILESVIEW; // Can't change this until I can change it back!  :-)
-            SavedCurrentView = FILESVIEW;
-            ShowDirectory();
             ClearText();
             return;
         }
@@ -9079,7 +9069,7 @@ void FASTRUN ManageTransmitter(){
             CheckForNextionButtonPress();  
             return;                                                  // That's enough housekeeping this time around
         }
-        if (RightNow - LastModelCheck >= 250) {                     // four times a second for these...
+        if (RightNow - LastModelCheck >= 1000) {                     // four times a second for these...
              CheckForNextionButtonPress();  
             if (CurrentView == TXSETUPVIEW) CheckScanButton();      // 
             if (CurrentView == RXSETUPVIEW) CheckScanButton();

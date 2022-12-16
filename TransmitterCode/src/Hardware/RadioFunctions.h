@@ -172,6 +172,7 @@
 #define BANKSNAMESVIEW  32
 #define SLOWSERVOVIEW   33
 #define RENAMEMODELVIEW 34
+#define FILEEXCHANGEVIEW 35
 
 // **************************************************************************
 //                          Switches' GPIOs                                 *
@@ -530,6 +531,7 @@ FASTRUN void     LogSafety(bool On);
 void             ShowMotor(int on);
 void             StartModelSetup();
 bool             GetConfirmation(char* goback, char* Prompt);
+void             GotoModelsView();
 
 /*********************************************************************************************************************************/
 
