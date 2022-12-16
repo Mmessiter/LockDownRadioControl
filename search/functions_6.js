@@ -203,8 +203,8 @@ var searchData=
   ['gettimefromackpayload_200',['GetTimeFromAckPayload',['../TransmitterCode_2src_2main_8cpp.html#a86523345ecdd52f3d93dccd6fcf4370a',1,'main.cpp']]],
   ['gettrimamount_201',['GetTrimAmount',['../TransmitterCode_2src_2main_8cpp.html#a07fabdf50e27daf4c4bd38d316a40e68',1,'main.cpp']]],
   ['gettxversionnumber_202',['GetTXVersionNumber',['../TransmitterCode_2src_2main_8cpp.html#aee99c2684d91ac475ed24480da4dcc30',1,'main.cpp']]],
-  ['getvalue_203',['getvalue',['../TransmitterCode_2src_2main_8cpp.html#aff6fa8906188d3249b01bf59de47df2f',1,'main.cpp']]],
-  ['getvalue_204',['GetValue',['../TransmitterCode_2src_2main_8cpp.html#a6e4fac4e296c09388b8b56353402d67a',1,'main.cpp']]],
+  ['getvalue_203',['GetValue',['../TransmitterCode_2src_2main_8cpp.html#a6e4fac4e296c09388b8b56353402d67a',1,'main.cpp']]],
+  ['getvalue_204',['getvalue',['../TransmitterCode_2src_2main_8cpp.html#aff6fa8906188d3249b01bf59de47df2f',1,'main.cpp']]],
   ['getwaitforexternalsensorenabled_205',['getWaitForExternalSensorEnabled',['../classMPU6050.html#a4e2ebda47b85b4c5463f041c790bf5c0',1,'MPU6050']]],
   ['getwakecycleenabled_206',['getWakeCycleEnabled',['../classMPU6050.html#a89afc5235b9088c696e2cc7841f5259a',1,'MPU6050']]],
   ['getwakefrequency_207',['getWakeFrequency',['../classMPU6050.html#a249a905ae4572a462414f2d94236258a',1,'MPU6050']]],
@@ -236,6 +236,6 @@ var searchData=
   ['gotofrontview_233',['GotoFrontView',['../RadioFunctions_8h.html#a2d16d1f4802d4029bc8933a18d213beb',1,'GotoFrontView():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a2d16d1f4802d4029bc8933a18d213beb',1,'GotoFrontView():&#160;main.cpp']]],
   ['gotogpsview_234',['GotoGPSView',['../TransmitterCode_2src_2main_8cpp.html#acfb857911a5c8c11020e345c71bd36ec',1,'main.cpp']]],
   ['gotomacrosview_235',['GotoMacrosView',['../TransmitterCode_2src_2main_8cpp.html#abdecfd433e1830c6497040b03450bed7',1,'main.cpp']]],
-  ['gotomodelsview_236',['GotoModelsView',['../TransmitterCode_2src_2main_8cpp.html#a446a94169d966af920710f7acddc5257',1,'main.cpp']]],
+  ['gotomodelsview_236',['GotoModelsView',['../RadioFunctions_8h.html#a446a94169d966af920710f7acddc5257',1,'GotoModelsView():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a446a94169d966af920710f7acddc5257',1,'GotoModelsView():&#160;main.cpp']]],
   ['greenledon_237',['GreenLedOn',['../RadioFunctions_8h.html#a62e53eb9359c32b666e3386d62c57037',1,'GreenLedOn():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a62e53eb9359c32b666e3386d62c57037',1,'GreenLedOn():&#160;main.cpp']]]
 ];
