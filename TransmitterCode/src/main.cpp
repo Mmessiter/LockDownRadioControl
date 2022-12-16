@@ -4299,10 +4299,14 @@ void SetDefaultValues()
     uint16_t i=0;
     char     empty[] = "Not in use";
     
-      while ((empty[i]) && (i < 29)){
-           ModelName[i] = empty[i];
-           ModelName[i + 1] = 0;
-           ++i;
+
+    CloseModelsFile();
+    OpenModelsFile();
+
+    while ((empty[i]) && (i < 29)) {
+        ModelName[i]     = empty[i];
+        ModelName[i + 1] = 0;
+        ++i;
      }
 
     char DefaultChannelNames[CHANNELSUSED][11] = {{"Aileron"}, {"Elevator"}, {"Throttle"}, {"Rudder"}, {"Ch 5"}, {"Ch 6"}, {"Ch 7"}, {"Ch 8"}, {"Ch 9"}, {"Ch 10"}, {"Ch 11"}, {"Ch 12"}, {"Ch 13"}, {"Ch 14"}, {"Ch 15"}, {"Ch 16"}};
@@ -5039,7 +5043,7 @@ void ShowFileTransferWindow(){
 
 /*********************************************************************************************************************************/
 
-/** @brief RECEIVE A MODEL FILE */ // heer
+/** @brief RECEIVE A MODEL FILE */ 
 void ReceiveModelFile()
 {
     uint64_t      RXPipe;
@@ -5204,7 +5208,7 @@ void ReceiveModelFile()
 /*********************************************************************************************************************************/
 
 /** @brief SEND A MODEL FILE */
-void SendModelFile() // heer
+void SendModelFile() 
 {
 
     char          ProgressStart[] = "vis Progress,1";
@@ -6252,10 +6256,15 @@ void ResetTransmitterSettings(){    // This function resets all transmitter para
 
     const char         Tn[32]      = "Unknown";
 
-   char prompt[] = "Reset all settings?"; 
+   char prompt[] = "Delete all settings and models?!"; // heer
+   int  sofar   = 0;
 
    if (!GetConfirmation(pCalibrateView,prompt)) return;
-   
+   char ProgressStart[]  = "vis Progress,1";
+   char ProgressEnd[]    = "vis Progress,0";
+   char Progress[]       = "Progress";
+   SendCommand(ProgressStart);
+   SendValue(Progress, 2);
 
    BuddyPupilOnSbus   = false;
    BuddyMaster        = false;
@@ -6291,16 +6300,18 @@ void ResetTransmitterSettings(){    // This function resets all transmitter para
    MotorChannel            = 15;
    MotorChannelZero        = 0;
    SetDS1307ToCompilerTime();
-   delay(10);
-   PlaySound(BEEPMIDDLE);
-   for (ModelNumber = 1; ModelNumber < MAXMODELNUMBER; ++ModelNumber) {
-        SetDefaultValues();
-        delay(10);
+   for (int k = 1; k < 4;++k){ // writes default three times!
+        for (ModelNumber = 1; ModelNumber < MAXMODELNUMBER; ++ModelNumber) { 
+            ++sofar;
+            SetDefaultValues();
+            SendValue(Progress, (sofar * (100 / MAXMODELNUMBER)) /3);
+        }
    }
-   PlaySound(BEEPCOMPLETE);
+   SendValue(Progress,100);
    ModelNumber = 1;
    SaveTransmitterParameters();
    SaveTransmitterParameters();
+   SendCommand(ProgressEnd);
 }
 
 
