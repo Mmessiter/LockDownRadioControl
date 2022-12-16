@@ -376,6 +376,7 @@ uint32_t Inactivity_Start   = 0;
 tmElements_t tm;
 char         TxName[32]      = "Unknown";
 uint32_t     LastTimeRead    = 0;
+uint32_t     LastModelCheck    = 0;
 uint32_t     TransmitterLastManaged    = 0;
 uint32_t     LastShowTime    = 0;
 uint32_t     LastDogKick     = 0;
@@ -538,6 +539,14 @@ char Confirmed[2];
 
 // **********************************************************************************************************************************
 // *********************************************** END OF GLOBAL DATA ***************************************************************
+// **********************************************************************************************************************************
+
+
+void CheckForNextionButtonPress()
+{
+      if (GetButtonPress()) ButtonWasPressed(); 
+}
+
 // **********************************************************************************************************************************
 
 uint8_t Ascii(char c)
@@ -2471,16 +2480,11 @@ int SDRead16BITS(int p_address)
 {
    
     ModelsFileNumber.seek(p_address);
-    ShortDelay();
     int r = ModelsFileNumber.read();
-    ShortDelay();
     r += ModelsFileNumber.read() << 8;
-    ShortDelay();
     BuildCheckSum(p_address, r);
     return r;
 }
-
-
 
 /*********************************************************************************************************************************/
 
@@ -6676,8 +6680,8 @@ bool GetBackupFilename(char* goback){ // HERE THE USER CAN REPLACE DEFAULT FILEN
     SendText(Mname, ModelName);
     Confirmed[0] = '?';
     while (Confirmed[0] == '?') {                 // await user response
-            if (GetButtonPress()){ButtonWasPressed();}
-            KickTheDog();
+                    CheckForNextionButtonPress();
+                    KickTheDog();
     }
     GetText(t1, SingleModelFile);
     SendCommand(goback);
@@ -6700,8 +6704,8 @@ bool GetBackupFilename(char* goback){ // HERE THE USER CAN REPLACE DEFAULT FILEN
   SendText(Dialog, Prompt);
   Confirmed[0] = '?';
   while (Confirmed[0] == '?') {                 // await user response
-    if (GetButtonPress()){ButtonWasPressed();}
-    KickTheDog();
+                    CheckForNextionButtonPress();
+                    KickTheDog();
   }
   SendCommand(goback);
   LastFileInView   = 120;
@@ -8944,6 +8948,7 @@ void CheckModelName()
     FileNumberInView = GetValue(Mfiles); 
     if (FileNumberInView != LastFileInView){
         ShowFileNumber();
+        if (ButtonClicks) PlaySound(CLICKONE);
         LastFileInView = FileNumberInView;
     }
 
@@ -9058,28 +9063,37 @@ void FASTRUN ManageTransmitter(){
     uint32_t RightNow = millis();
     uint32_t TXPacketElapsed = RightNow - LastPacketSentTime;
 
-    KickTheDog();                                                   // Watchdog ... ALWAYS!
-                                                  
-    if (GetButtonPress()) ButtonWasPressed();                       // Pretty obvious really ...    
+    KickTheDog();                                                    // Watchdog ... ALWAYS!
 
-    if ((PACEMAKER - TXPacketElapsed  <= TIMEFORTXMANAGMENT) && Connected && BoundFlag && ModelMatched) return;     // If it's almost time to send data, then do not start some other task which might take longer.
+    CheckForNextionButtonPress();                                    // Pretty obvious really ...
 
-    if (RightNow - TransmitterLastManaged > 50) {                    // 10 times a second is plenty
-        if (RightNow - LastTimeRead >= 1000) {                       // once a second for these... 
+    if ((PACEMAKER - TXPacketElapsed  <= TIMEFORTXMANAGMENT) && Connected && BoundFlag && ModelMatched) {
+        return; // If it's almost time to send data, then do not start some other task which might easily take longer.
+    }
+      
+      if (RightNow - TransmitterLastManaged > 50) {                  // 20 times a second is plenty
+        if (RightNow - LastTimeRead >= 1000) {                       // once a second for these...
             ReadTime();                                              // Do the clock
             GetStatistics();                                         // Do stats
-            if (CurrentView == TXSETUPVIEW) CheckScanButton();       // 
-            if (CurrentView == RXSETUPVIEW) CheckScanButton();
             LastTimeRead = millis();
+            CheckForNextionButtonPress();  
             return;                                                  // That's enough housekeeping this time around
         }
-        ReadSwitches();                                              // Check switch positions
-        CheckHardwareTrims();
+        if (RightNow - LastModelCheck >= 250) {                     // four times a second for these...
+             CheckForNextionButtonPress();  
+            if (CurrentView == TXSETUPVIEW) CheckScanButton();      // 
+            if (CurrentView == RXSETUPVIEW) CheckScanButton();
+            if ((CurrentView == MODELSVIEW) && (!Connected)) CheckModelName();         // In MODELSVIEW, this function checks correct name is displayed.
+            CheckForNextionButtonPress();
+            LastModelCheck = millis();
+        } 
+        ReadSwitches();                                              // Check switch positions 20 times a second
+        CheckHardwareTrims();                                        // Trims 20 times a second
         GetBank();                                                   // Must not call too often        
         ShowComms();                                                 // Screen Data                                  
         CheckTimer();                                                // Screen Timer
         CheckPowerOffButton();                                       // Pretty obvious really ...
-        if ((CurrentView == MODELSVIEW) && (!Connected)) CheckModelName();         // In MODELSVIEW, this function checks correct name is displayed.
+       
         TransmitterLastManaged = millis();
     }
 }
