@@ -2381,7 +2381,7 @@ void CloseModelsFile()
 /*********************************************************************************************************************************/
 
 bool CheckFileExists(char * fl){
-
+    CloseModelsFile();
     bool exists = false;
     File t;
     t = SD.open(fl, FILE_READ);
@@ -6617,6 +6617,7 @@ void StartRenameModel(){
 
 }
 
+
 /******************************************************************************************************************************/
 
 void GetDefaultFilename(){  // Build filename from ModelName as best we can using first 8 chars upper cased
@@ -6635,18 +6636,27 @@ void GetDefaultFilename(){  // Build filename from ModelName as best we can usin
             }
            strcat(SingleModelFile, mod);
 }
+
+/******************************************************************************************************************************/
+
+void FixFileName(){
+ char ModExt[] = ".MOD";
+        for (uint8_t i = 0; i < strlen(SingleModelFile);++i){
+              SingleModelFile[i] = toUpperCase(SingleModelFile[i]);
+        }
+        if (!InStrng(ModExt, SingleModelFile) && (strlen(SingleModelFile) <= 8)) strcat(SingleModelFile, ModExt); 
+}
+
 /******************************************************************************************************************************/
 void WriteBackup(){
-                char ModExt[] = ".MOD";
+
+                char ModExt[]                  = ".MOD";
                 char ProgressStart[]           = "vis Progress,1";
                 char ProgressEnd[]             = "vis Progress,0";
                 char Progress[]                = "Progress";
                 uint8_t Iterations             = 4;
-                for (uint8_t i = 0; i < strlen(SingleModelFile);++i){
-                    SingleModelFile[i] = toUpperCase(SingleModelFile[i]);
-                }
-                SendValue(Progress, 10);
-                if ((InStrng(ModExt, SingleModelFile) == 0) && (strlen(SingleModelFile) <= 8)) strcat(SingleModelFile, ModExt);
+                SendValue(Progress, 1);
+                FixFileName();
                 if ((strlen(SingleModelFile) <= 12) && (InStrng(ModExt, SingleModelFile) > 0)){
                 SendCommand(ProgressStart);
                 for (int i = 0; i < Iterations; i++){
@@ -6751,6 +6761,16 @@ void LoadModelForRenaming(){
  }
 /******************************************************************************************************************************/
 
+ void Analyse(char * f){
+
+    for (uint8_t i = 0; i < strlen(f);++i){
+            Serial.print(f[i]);
+            Serial.print(" = ");
+            Serial.println(Ascii(f[i]));
+    }
+ }
+/******************************************************************************************************************************/
+
 // This implements the impossible "SD card rename file" ... by reading, re-saveing under new name, then deleting old file.
 
  void RenameFile(){ // heer
@@ -6767,20 +6787,26 @@ void LoadModelForRenaming(){
   GetText(ModelsView_filename, SingleModelFile);
   strcpy(Deleteable, SingleModelFile);
   LoadModelForRenaming();
-  if(GetBackupFilename(GoModelsView, SingleModelFile, model, Head,prompt)){ // heer
-        if (CheckFileExists(SingleModelFile)) {
+  if(GetBackupFilename(GoModelsView, SingleModelFile, model, Head,prompt)){ 
+      FixFileName();
+     // Analyse(SingleModelFile);
+      if (strcmp(Deleteable,SingleModelFile) == 0) return;
+      Serial.println(SingleModelFile);
+      if (CheckFileExists(SingleModelFile)) {
                     strcpy(Prompt, overwr);
                     strcat(Prompt, SingleModelFile);
                     strcat(Prompt, ques);
-                    if (GetConfirmation(GoModelsView, Prompt)) { 
+                    if (GetConfirmation(GoModelsView, Prompt))
+                    {
                         WriteBackup();
                         SD.remove(Deleteable);
                     }
-            }else{
-                        WriteBackup();
-                        SD.remove(Deleteable);
-            }
-    }
+                }
+                else {
+                    WriteBackup();
+                    SD.remove(Deleteable);
+                    }
+       }
     BuildDirectory();
     LoadFileSelector();
     RestoreCurrentModel();
@@ -6790,10 +6816,7 @@ void LoadModelForRenaming(){
 
  void ModelViewEnd(){ // heer
 
-// (Exit from models screen) 
-
-    char page_RXSetupView[] = "page RXSetupView";
-    char pr[]               = "Change model to ";
+    char pr[]               = "Select ";
     char buf[50];
     char q[] = "?";
 
@@ -6808,11 +6831,7 @@ void LoadModelForRenaming(){
                     }
      }
     SaveAllParameters();
-    CurrentView = RXSETUPVIEW;
-    SendCommand(page_RXSetupView);
-    CurrentMode        = NORMAL; // Send data again
-    UpdateModelsNameEveryWhere();
-
+    GotoFrontView();
  }
 // ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
 #define LASTFUNCTION 63 // one more than final one
@@ -7119,7 +7138,7 @@ FASTRUN void ButtonWasPressed()
         char dGMT[]                 = "dGMT";
         char TxNme[]                = "TxName";
         char MMems[]                = "MMems";
-        char Prompt[30];
+        char Prompt[50];
         char del[]                  = "Delete ";
         char overwr[]               = "Overwrite ";
         char ques[]                 = "?";
@@ -9042,7 +9061,6 @@ void CheckModelName()
         if (ButtonClicks) PlaySound(CLICKONE);
         LastFileInView = FileNumberInView;
     }
-
     if (LastModelLoaded != ModelNumber) {       
         if ((ModelNumber >= MAXMODELNUMBER) || (ModelNumber < 1)) {
             ModelNumber = 1;
@@ -9050,7 +9068,7 @@ void CheckModelName()
            
         }
         ReadOneModel(ModelNumber);
-         SendText(mn, ModelName);
+        SendText(mn, ModelName);
         if (ButtonClicks) PlaySound(CLICKONE);
         if (UseLog) LogThisModel();
         LastModelLoaded = ModelNumber;
@@ -9174,7 +9192,7 @@ void FASTRUN ManageTransmitter(){
         }
         if (RightNow - LastModelCheck >= 1000) {                     // four times a second for these...
              CheckForNextionButtonPress();  
-            if (CurrentView == TXSETUPVIEW) CheckScanButton();      // 
+            if (CurrentView == TXSETUPVIEW) CheckScanButton();       // 
             if (CurrentView == RXSETUPVIEW) CheckScanButton();
             if ((CurrentView == MODELSVIEW) && (!Connected)) CheckModelName();         // In MODELSVIEW, this function checks correct name is displayed.
             CheckForNextionButtonPress();
