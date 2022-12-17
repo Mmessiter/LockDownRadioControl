@@ -11,7 +11,7 @@ var searchData=
   ['readbyte_8',['readByte',['../classI2Cdev.html#ad3fb41ce124a29f93749d99611c75c33',1,'I2Cdev']]],
   ['readbytes_9',['readBytes',['../classI2Cdev.html#aca9c503da5cffd6ac6f8eff9b195c5f4',1,'I2Cdev']]],
   ['readcal_10',['readCal',['../classSBUS.html#a385df1b8fcb453e5a63eae01fb394c61',1,'SBUS']]],
-  ['readchecksum32_11',['ReadCheckSum32',['../RadioFunctions_8h.html#a3c809856d2abf6b6f804e2fbe68d06f5',1,'ReadCheckSum32():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a3c809856d2abf6b6f804e2fbe68d06f5',1,'ReadCheckSum32():&#160;main.cpp']]],
+  ['readchecksum32_11',['ReadCheckSum32',['../TransmitterCode_2src_2main_8cpp.html#a3c809856d2abf6b6f804e2fbe68d06f5',1,'ReadCheckSum32():&#160;main.cpp'],['../RadioFunctions_8h.html#a3c809856d2abf6b6f804e2fbe68d06f5',1,'ReadCheckSum32():&#160;main.cpp']]],
   ['readchswitch_12',['ReadCHSwitch',['../TransmitterCode_2src_2main_8cpp.html#aeed3be7dfc45cde2e9e9d3578c104760',1,'main.cpp']]],
   ['readdata_13',['ReadData',['../ReceiverCode_2src_2main_8cpp.html#a07ca94db0e305e9c01ec51e417576308',1,'main.cpp']]],
   ['readdrswitch_14',['ReadDRSwitch',['../TransmitterCode_2src_2main_8cpp.html#a0d5901e43a27733953343dd462178ada',1,'main.cpp']]],
@@ -60,8 +60,9 @@ var searchData=
   ['resettemperaturepath_57',['resetTemperaturePath',['../classMPU6050.html#a559c2d091d36a4e0489bc639916ddbb6',1,'MPU6050']]],
   ['resettransmittersettings_58',['ResetTransmitterSettings',['../RadioFunctions_8h.html#a5c7f22bae35d5d6df9d54fe79dbb8401',1,'ResetTransmitterSettings():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a5c7f22bae35d5d6df9d54fe79dbb8401',1,'ResetTransmitterSettings():&#160;main.cpp']]],
   ['restorebrightness_59',['RestoreBrightness',['../RadioFunctions_8h.html#a49da3478d89a22069e29c7f00cb46a5f',1,'RestoreBrightness():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a49da3478d89a22069e29c7f00cb46a5f',1,'RestoreBrightness():&#160;main.cpp']]],
-  ['rotate_60',['rotate',['../classVectorFloat.html#afef0e6d631fb1eb67b6913e90730aa9e',1,'VectorFloat::rotate()'],['../classVectorInt16.html#ac7bf149db0a2b66d7683b87ebeb2dfc5',1,'VectorInt16::rotate()']]],
-  ['rudderlefttrim_61',['RudderLeftTrim',['../TransmitterCode_2src_2main_8cpp.html#ae96314eac241d2716e7ebda1fc658ec4',1,'main.cpp']]],
-  ['rudderrighttrim_62',['RudderRightTrim',['../TransmitterCode_2src_2main_8cpp.html#a77a49849e3aa20dc1aadce0fe00de798',1,'main.cpp']]],
-  ['runmacro_63',['RunMacro',['../RadioFunctions_8cpp.html#a91fb686ba2d3111821721ab33b442918',1,'RadioFunctions.cpp']]]
+  ['restorecurrentmodel_60',['RestoreCurrentModel',['../TransmitterCode_2src_2main_8cpp.html#aa1f353c2c61131eeafa77c6e67608e45',1,'main.cpp']]],
+  ['rotate_61',['rotate',['../classVectorInt16.html#ac7bf149db0a2b66d7683b87ebeb2dfc5',1,'VectorInt16::rotate()'],['../classVectorFloat.html#afef0e6d631fb1eb67b6913e90730aa9e',1,'VectorFloat::rotate()']]],
+  ['rudderlefttrim_62',['RudderLeftTrim',['../TransmitterCode_2src_2main_8cpp.html#ae96314eac241d2716e7ebda1fc658ec4',1,'main.cpp']]],
+  ['rudderrighttrim_63',['RudderRightTrim',['../TransmitterCode_2src_2main_8cpp.html#a77a49849e3aa20dc1aadce0fe00de798',1,'main.cpp']]],
+  ['runmacro_64',['RunMacro',['../RadioFunctions_8cpp.html#a91fb686ba2d3111821721ab33b442918',1,'RadioFunctions.cpp']]]
 ];
