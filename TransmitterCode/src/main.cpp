@@ -6751,6 +6751,8 @@ void LoadModelForRenaming(){
  }
 /******************************************************************************************************************************/
 
+// This implements the impossible "SD card rename file" ... by reading, re-saveing under new name, then deleting old file.
+
  void RenameFile(){ // heer
   char ModelsView_filename[] = "filename";
   char Head[]                = "Rename this backup";
