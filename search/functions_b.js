@@ -10,11 +10,12 @@ var searchData=
   ['mapwithexponential_7',['MapWithExponential',['../TransmitterCode_2src_2main_8cpp.html#a927484b01116cd14fd1ade706bc06d51',1,'main.cpp']]],
   ['markhere_8',['MarkHere',['../ReceiverCode_2src_2main_8cpp.html#a5ae8a2aa29e834880ccf370c7547961b',1,'main.cpp']]],
   ['maybeaddzero_9',['MayBeAddZero',['../TransmitterCode_2src_2main_8cpp.html#ae310e7fc6397929ae886869c05cbc334',1,'main.cpp']]],
-  ['moveatrim_10',['MoveaTrim',['../TransmitterCode_2src_2main_8cpp.html#a17123a117a96a9416dec48d9345f8a5b',1,'MoveaTrim(uint8_t i):&#160;main.cpp'],['../RadioFunctions_8h.html#a17123a117a96a9416dec48d9345f8a5b',1,'MoveaTrim(uint8_t i):&#160;main.cpp']]],
-  ['movecurrentpointdown_11',['MoveCurrentPointDown',['../TransmitterCode_2src_2main_8cpp.html#ac7a913ec35d5e97835e753fd1ee77dd7',1,'main.cpp']]],
-  ['movecurrentpointup_12',['MoveCurrentPointUp',['../TransmitterCode_2src_2main_8cpp.html#adff425c4aac140ddca211d4ef4d98a7e',1,'main.cpp']]],
-  ['movepoint_13',['MovePoint',['../TransmitterCode_2src_2main_8cpp.html#aad727ec0b0f9f34487a535eaa4a83172',1,'main.cpp']]],
-  ['moveservos_14',['MoveServos',['../ReceiverCode_2src_2main_8cpp.html#a6f2443a0666140cf4d8b7352bb3b793c',1,'MoveServos():&#160;main.cpp'],['../radio_8h.html#a6f2443a0666140cf4d8b7352bb3b793c',1,'MoveServos():&#160;main.cpp']]],
-  ['mpu6050_15',['MPU6050',['../classMPU6050.html#a50b99a2a37c9d8708e807ef90b31df9b',1,'MPU6050']]],
-  ['mpu9250_16',['MPU9250',['../classMPU9250FIFO.html#a4b15facd0ce38964d241db56b1c57f75',1,'MPU9250FIFO::MPU9250(SPIClass &amp;bus, uint8_t csPin)'],['../classMPU9250FIFO.html#acaf2ae31cfdeb6d47b922996feb55b69',1,'MPU9250FIFO::MPU9250(TwoWire &amp;bus, uint8_t address)'],['../classMPU9250.html#a4b15facd0ce38964d241db56b1c57f75',1,'MPU9250::MPU9250(SPIClass &amp;bus, uint8_t csPin)'],['../classMPU9250.html#acaf2ae31cfdeb6d47b922996feb55b69',1,'MPU9250::MPU9250(TwoWire &amp;bus, uint8_t address)']]]
+  ['modelviewend_10',['ModelViewEnd',['../TransmitterCode_2src_2main_8cpp.html#ae9f91b9da28f2e1e2fb126961f03c31c',1,'main.cpp']]],
+  ['moveatrim_11',['MoveaTrim',['../TransmitterCode_2src_2main_8cpp.html#a17123a117a96a9416dec48d9345f8a5b',1,'MoveaTrim(uint8_t i):&#160;main.cpp'],['../RadioFunctions_8h.html#a17123a117a96a9416dec48d9345f8a5b',1,'MoveaTrim(uint8_t i):&#160;main.cpp']]],
+  ['movecurrentpointdown_12',['MoveCurrentPointDown',['../TransmitterCode_2src_2main_8cpp.html#ac7a913ec35d5e97835e753fd1ee77dd7',1,'main.cpp']]],
+  ['movecurrentpointup_13',['MoveCurrentPointUp',['../TransmitterCode_2src_2main_8cpp.html#adff425c4aac140ddca211d4ef4d98a7e',1,'main.cpp']]],
+  ['movepoint_14',['MovePoint',['../TransmitterCode_2src_2main_8cpp.html#aad727ec0b0f9f34487a535eaa4a83172',1,'main.cpp']]],
+  ['moveservos_15',['MoveServos',['../ReceiverCode_2src_2main_8cpp.html#a6f2443a0666140cf4d8b7352bb3b793c',1,'MoveServos():&#160;main.cpp'],['../radio_8h.html#a6f2443a0666140cf4d8b7352bb3b793c',1,'MoveServos():&#160;main.cpp']]],
+  ['mpu6050_16',['MPU6050',['../classMPU6050.html#a50b99a2a37c9d8708e807ef90b31df9b',1,'MPU6050']]],
+  ['mpu9250_17',['MPU9250',['../classMPU9250FIFO.html#a4b15facd0ce38964d241db56b1c57f75',1,'MPU9250FIFO::MPU9250(SPIClass &amp;bus, uint8_t csPin)'],['../classMPU9250FIFO.html#acaf2ae31cfdeb6d47b922996feb55b69',1,'MPU9250FIFO::MPU9250(TwoWire &amp;bus, uint8_t address)'],['../classMPU9250.html#a4b15facd0ce38964d241db56b1c57f75',1,'MPU9250::MPU9250(SPIClass &amp;bus, uint8_t csPin)'],['../classMPU9250.html#acaf2ae31cfdeb6d47b922996feb55b69',1,'MPU9250::MPU9250(TwoWire &amp;bus, uint8_t address)']]]
 ];
