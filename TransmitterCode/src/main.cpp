@@ -239,6 +239,7 @@ uint32_t PausedSecs          = 0;
 uint32_t Mins                = 0;
 uint32_t Hours               = 0;
 uint32_t ModelNumber         = 1;
+uint32_t SavedModelNumber         = 1;
 uint32_t PreviousModelNumber = 1;
 uint8_t  ModelDefined        = 0;
 uint16_t MemoryForTransmtter = 0; // SD space for transmitter parameters
@@ -526,7 +527,6 @@ char     Warning[]                  = "Warning";
 bool     RecursedAlready = false;
 bool     TXLiPo                         = false;
 uint8_t  CurrentPoint                   = 1;
-
 bool     UseDualRates                    = false;
 uint8_t  Drate1                          = 100; 
 uint8_t  Drate2                          = 75; 
@@ -536,7 +536,7 @@ uint16_t CurveDots[5];
 uint8_t  DualRateValue                   = 100;
 char     GoModelsView[]                  = "page ModelsView";
 char     pCalibrateView[]                = "page CalibrateView";
-char Confirmed[2];
+char    Confirmed[2];
 
 // **********************************************************************************************************************************
 // *********************************************** END OF GLOBAL DATA ***************************************************************
@@ -2381,7 +2381,7 @@ void CloseModelsFile()
 /*********************************************************************************************************************************/
 
 bool CheckFileExists(char * fl){
-
+    CloseModelsFile();
     bool exists = false;
     File t;
     t = SD.open(fl, FILE_READ);
@@ -2393,7 +2393,7 @@ bool CheckFileExists(char * fl){
 /*********************************************************************************************************************************/
 
 void ShortDelay(){
-  delayMicroseconds(50);
+  delayMicroseconds(15);
 }
 /*********************************************************************************************************************************/
 
@@ -2402,11 +2402,11 @@ void OpenModelsFile()
 if(!ModelsFileOpen){
     if (SingleModelFlag) {
         ModelsFileNumber = SD.open(SingleModelFile, FILE_WRITE);
-        delay(3);
+        delay(300);
     }
     else {
         ModelsFileNumber = SD.open(ModelsFile, FILE_WRITE);
-         delay(3);
+         delay(300);
     }
     if (ModelsFileNumber == 0) {
         FileError = true;
@@ -5093,9 +5093,12 @@ void ReceiveModelFile()
     Radio1.openReadingPipe(1, RXPipe);
     Radio1.startListening();
     RXTimer = millis();           // Start timer
+    ClearText();
     while (!Radio1.available()) { // Await the sender....
-        delay(5);
+           delay(1);
         if (GetButtonPress()) {
+            GotoModelsView();
+            ClearText();
             NormaliseTheRadio();
             RedLedOn();
             ButtonWasPressed();
@@ -5822,7 +5825,7 @@ void LoadModelSelector(){
     }   
     SendOtherText(MMemsp, buf);
     ModelNumber = SavedModelNumber;
-    ReadOneModel(ModelNumber); // heer!
+    ReadOneModel(ModelNumber); 
     SendValue(MMems, ModelNumber-1);
     SendText(mn, ModelName);
 }
@@ -5856,7 +5859,7 @@ void LoadFileSelector(){
 void GotoModelsView()
 {
 
- if (ModelMatched) return; // must not change when model connected // heer
+ if (ModelMatched) return; // must not change when model connected 
  SendCommand(GoModelsView);
  CurrentView = MODELSVIEW;
  UpdateModelsNameEveryWhere();
@@ -6614,6 +6617,7 @@ void StartRenameModel(){
 
 }
 
+
 /******************************************************************************************************************************/
 
 void GetDefaultFilename(){  // Build filename from ModelName as best we can using first 8 chars upper cased
@@ -6632,19 +6636,27 @@ void GetDefaultFilename(){  // Build filename from ModelName as best we can usin
             }
            strcat(SingleModelFile, mod);
 }
+
+/******************************************************************************************************************************/
+
+void FixFileName(){
+ char ModExt[] = ".MOD";
+        for (uint8_t i = 0; i < strlen(SingleModelFile);++i){
+              SingleModelFile[i] = toUpperCase(SingleModelFile[i]);
+        }
+        if (!InStrng(ModExt, SingleModelFile) && (strlen(SingleModelFile) <= 8)) strcat(SingleModelFile, ModExt); 
+}
+
 /******************************************************************************************************************************/
 void WriteBackup(){
-                char ModExt[] = ".MOD";
+
+                char ModExt[]                  = ".MOD";
                 char ProgressStart[]           = "vis Progress,1";
                 char ProgressEnd[]             = "vis Progress,0";
                 char Progress[]                = "Progress";
                 uint8_t Iterations             = 4;
-                for (uint8_t i = 0; i < strlen(SingleModelFile);++i){
-                    SingleModelFile[i] = toUpperCase(SingleModelFile[i]);
-                }
-             
-                SendValue(Progress, 10);
-                if ((InStrng(ModExt, SingleModelFile) == 0) && (strlen(SingleModelFile) <= 8)) strcat(SingleModelFile, ModExt);
+                SendValue(Progress, 1);
+                FixFileName();
                 if ((strlen(SingleModelFile) <= 12) && (InStrng(ModExt, SingleModelFile) > 0)){
                 SendCommand(ProgressStart);
                 for (int i = 0; i < Iterations; i++){
@@ -6673,14 +6685,21 @@ void EndRenameModel(){
   GotoModelsView();
 }
 /******************************************************************************************************************************/
-bool GetBackupFilename(char* goback){ // HERE THE USER CAN REPLACE DEFAULT FILENAME IF HE WANTS TO
+bool GetBackupFilename(char* goback,char * tt1, char * MMname, char * heading,char * pprompt){ // HERE THE USER CAN REPLACE DEFAULT FILENAME IF HE WANTS TO
 
-    char GoBackupView[] = "page BackupView"; 
-    char t1[]           = "t1";
-    char Mname[]        = "Modelname";
+    char GoBackupView[] = "page BackupView";
+    char t0[]           = "t0";           // prompt
+    char t1[]           = "t1";           // default filename
+    char t3[]           = "t3";           // heading
+    char Mname[]        = "Modelname";    // model name
+
     SendCommand(GoBackupView);
-    SendText(t1, SingleModelFile);
-    SendText(Mname, ModelName);
+    
+    SendText(t0, pprompt);      // prompt
+    SendText(t1, tt1);          // filename
+    SendText(Mname, MMname);    // Model name
+    SendText(t3, heading);      // heading
+
     Confirmed[0] = '?';
     while (Confirmed[0] == '?') {                 // await user response
                     CheckForNextionButtonPress();
@@ -6720,18 +6739,84 @@ bool GetBackupFilename(char* goback){ // HERE THE USER CAN REPLACE DEFAULT FILEN
 /******************************************************************************************************************************/
  void NoPressed() { Confirmed[0] = 'N';}
  /******************************************************************************************************************************/
- void RenameFile(){
 
+ void SaveCurrentModel(){ 
+    SavedModelNumber = ModelNumber;
+ }
+/******************************************************************************************************************************/
+
+void LoadModelForRenaming(){
+     CloseModelsFile();
+    SingleModelFlag = true;
+    ReadOneModel(1);
+}
+/******************************************************************************************************************************/
+
+ void RestoreCurrentModel(){
+    CloseModelsFile();
+    ModelNumber     = SavedModelNumber;
+    SingleModelFlag = false;
+    ReadOneModel(ModelNumber);
+    SaveAllParameters();
+ }
+/******************************************************************************************************************************/
+
+ void Analyse(char * f){
+
+    for (uint8_t i = 0; i < strlen(f);++i){
+            Serial.print(f[i]);
+            Serial.print(" = ");
+            Serial.println(Ascii(f[i]));
+    }
+ }
+/******************************************************************************************************************************/
+
+// This implements the impossible "SD card rename file" ... by reading, re-saveing under new name, then deleting old file.
+
+ void RenameFile(){ // heer
+  char ModelsView_filename[] = "filename";
+  char Head[]                = "Rename this backup";
+  char model[]               = "(i.e. just change its filename)";
+  char prompt[]              = "New filename?";
+  char Prompt[30];
+  char overwr[]               = "Overwrite ";
+  char ques[]                 = "?";
+  char Deleteable[31];
+
+  SaveCurrentModel();
+  GetText(ModelsView_filename, SingleModelFile);
+  strcpy(Deleteable, SingleModelFile);
+  LoadModelForRenaming();
+  if(GetBackupFilename(GoModelsView, SingleModelFile, model, Head,prompt)){ 
+      FixFileName();
+     // Analyse(SingleModelFile);
+      if (strcmp(Deleteable,SingleModelFile) == 0) return;
+      Serial.println(SingleModelFile);
+      if (CheckFileExists(SingleModelFile)) {
+                    strcpy(Prompt, overwr);
+                    strcat(Prompt, SingleModelFile);
+                    strcat(Prompt, ques);
+                    if (GetConfirmation(GoModelsView, Prompt))
+                    {
+                        WriteBackup();
+                        SD.remove(Deleteable);
+                    }
+                }
+                else {
+                    WriteBackup();
+                    SD.remove(Deleteable);
+                    }
+       }
+    BuildDirectory();
+    LoadFileSelector();
+    RestoreCurrentModel();
  }
 
 /******************************************************************************************************************************/
 
  void ModelViewEnd(){ // heer
 
-// (Exit from models screen) 
-
-    char page_RXSetupView[] = "page RXSetupView";
-    char pr[]               = "Change model to ";
+    char pr[]               = "Select ";
     char buf[50];
     char q[] = "?";
 
@@ -6746,11 +6831,7 @@ bool GetBackupFilename(char* goback){ // HERE THE USER CAN REPLACE DEFAULT FILEN
                     }
      }
     SaveAllParameters();
-    CurrentView = RXSETUPVIEW;
-    SendCommand(page_RXSetupView);
-    CurrentMode        = NORMAL; // Send data again
-    UpdateModelsNameEveryWhere();
-
+    GotoFrontView();
  }
 // ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
 #define LASTFUNCTION 63 // one more than final one
@@ -7057,10 +7138,12 @@ FASTRUN void ButtonWasPressed()
         char dGMT[]                 = "dGMT";
         char TxNme[]                = "TxName";
         char MMems[]                = "MMems";
-        char Prompt[30];
-        char del[] = "Delete ";
-        char overwr[] = "Overwrite ";
-        char ques[]   = "?";
+        char Prompt[50];
+        char del[]                  = "Delete ";
+        char overwr[]               = "Overwrite ";
+        char ques[]                 = "?";
+        char hhead[]                = "Create backup file for";
+        char fprompt[]              = "Filename?";
 
         // ************************* test input words from Nextion *****************
 
@@ -7694,9 +7777,10 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(Export, TextIn)) {
+
+if (InStrng(Export, TextIn)) {
             GetDefaultFilename();
-            if (GetBackupFilename(GoModelsView)){
+            if (GetBackupFilename(GoModelsView,SingleModelFile, ModelName, hhead,fprompt)){
                 if (CheckFileExists(SingleModelFile)) {
                     strcpy(Prompt, overwr);
                     strcat(Prompt, SingleModelFile);
@@ -7714,7 +7798,6 @@ FASTRUN void ButtonWasPressed()
         return;
         }
 
-        
         p = InStrng(Import, TextIn); 
         if (p > 0) {
             j = 0;
@@ -8978,7 +9061,6 @@ void CheckModelName()
         if (ButtonClicks) PlaySound(CLICKONE);
         LastFileInView = FileNumberInView;
     }
-
     if (LastModelLoaded != ModelNumber) {       
         if ((ModelNumber >= MAXMODELNUMBER) || (ModelNumber < 1)) {
             ModelNumber = 1;
@@ -8986,7 +9068,7 @@ void CheckModelName()
            
         }
         ReadOneModel(ModelNumber);
-         SendText(mn, ModelName);// heer
+        SendText(mn, ModelName);
         if (ButtonClicks) PlaySound(CLICKONE);
         if (UseLog) LogThisModel();
         LastModelLoaded = ModelNumber;
@@ -9108,10 +9190,11 @@ void FASTRUN ManageTransmitter(){
             CheckForNextionButtonPress();  
             return;                                                  // That's enough housekeeping this time around
         }
-        if (RightNow - LastModelCheck >= 1000) {                     // four times a second for these...
+        if (RightNow - LastModelCheck >= 500) {                     // 2 times a second for these...
              CheckForNextionButtonPress();  
-            if (CurrentView == TXSETUPVIEW) CheckScanButton();      // 
+            if (CurrentView == TXSETUPVIEW) CheckScanButton();       // 
             if (CurrentView == RXSETUPVIEW) CheckScanButton();
+            CheckForNextionButtonPress(); 
             if ((CurrentView == MODELSVIEW) && (!Connected)) CheckModelName();         // In MODELSVIEW, this function checks correct name is displayed.
             CheckForNextionButtonPress();
             LastModelCheck = millis();
