@@ -142,6 +142,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "GetTXVersionNumber", "TransmitterCode_2src_2main_8cpp.html#aee99c2684d91ac475ed24480da4dcc30", null ],
     [ "getvalue", "TransmitterCode_2src_2main_8cpp.html#aff6fa8906188d3249b01bf59de47df2f", null ],
     [ "GetValue", "TransmitterCode_2src_2main_8cpp.html#a6e4fac4e296c09388b8b56353402d67a", null ],
+    [ "GoBackFromModels", "TransmitterCode_2src_2main_8cpp.html#a7c7ce8ee172cc418366d3feb06e4fbd3", null ],
     [ "GotoFrontView", "TransmitterCode_2src_2main_8cpp.html#a2d16d1f4802d4029bc8933a18d213beb", null ],
     [ "GotoGPSView", "TransmitterCode_2src_2main_8cpp.html#acfb857911a5c8c11020e345c71bd36ec", null ],
     [ "GotoMacrosView", "TransmitterCode_2src_2main_8cpp.html#abdecfd433e1830c6497040b03450bed7", null ],
