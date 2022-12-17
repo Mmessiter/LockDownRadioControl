@@ -9190,10 +9190,11 @@ void FASTRUN ManageTransmitter(){
             CheckForNextionButtonPress();  
             return;                                                  // That's enough housekeeping this time around
         }
-        if (RightNow - LastModelCheck >= 1000) {                     // four times a second for these...
+        if (RightNow - LastModelCheck >= 500) {                     // 2 times a second for these...
              CheckForNextionButtonPress();  
             if (CurrentView == TXSETUPVIEW) CheckScanButton();       // 
             if (CurrentView == RXSETUPVIEW) CheckScanButton();
+            CheckForNextionButtonPress(); 
             if ((CurrentView == MODELSVIEW) && (!Connected)) CheckModelName();         // In MODELSVIEW, this function checks correct name is displayed.
             CheckForNextionButtonPress();
             LastModelCheck = millis();
