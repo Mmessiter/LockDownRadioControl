@@ -77,9 +77,13 @@
 #define DEFAULTLEDBRIGHTNESS    20                        // LED brightness
 #define DEFAULTPOWEROFFWARNING  3                         // Default time to warn before cutting power      
 #define MAXDUALRATE             200
+#define MAXBUFFERSIZE           4096
+#define MAXMODELNUMBER          91
+
 // **************************************************************************
 //                            FHSS PARAMETERS                               *
 //***************************************************************************
+
 
 #define PACEMAKER                7    // MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
 #define RETRYCOUNT               3    // auto retries inside nRF24L01
@@ -168,6 +172,7 @@
 #define BANKSNAMESVIEW  32
 #define SLOWSERVOVIEW   33
 #define RENAMEMODELVIEW 34
+#define FILEEXCHANGEVIEW 35
 
 // **************************************************************************
 //                          Switches' GPIOs                                 *
@@ -524,7 +529,9 @@ void         SetUKFrequencies();
 FASTRUN uint16_t GetStickInputInputOnly(uint8_t l);
 FASTRUN void     LogSafety(bool On);
 void             ShowMotor(int on);
-void          StartModelSetup();
+void             StartModelSetup();
+bool             GetConfirmation(char* goback, char* Prompt);
+void             GotoModelsView();
 
 /*********************************************************************************************************************************/
 

@@ -9,6 +9,8 @@
  * - 12 BIT servo resolution (11 BIT via SBUS)
  * - 32 Mixes
  * - 4 Flight modes with user definable and announced names.
+ * - 90 Model memories
+ * - Unlimited model files for backup (32 Gig)
  * - "ModelMatch" plus automatic model memory selection. (Avoid flying with wrong memory loaded.)
  * - Buddyboxing with selectable channels.
  * - Voice messages and other audio prompts.
@@ -236,11 +238,11 @@ uint32_t Secs                = 0;
 uint32_t PausedSecs          = 0;
 uint32_t Mins                = 0;
 uint32_t Hours               = 0;
-uint8_t  ModelNumber         = 1;
+uint32_t ModelNumber         = 1;
 uint8_t  ModelDefined        = 0;
 uint16_t MemoryForTransmtter = 0; // SD space for transmitter parameters
 uint16_t OneModelMemory      = 0; // SD space for every model's parameters
-uint16_t SDCardAddress       = 0; // Address on SD card (offset from zero)
+uint32_t SDCardAddress       = 0; // Address on SD card (offset from zero)
 
 uint8_t FHSS_Channels1[42] = {93, 111, 107, 103, 106, 97, 108, 102, 118, // TEST array
                               104, 101, 109, 98, 113, 124, 115, 91, 96, 85, 117, 89, 99, 114, 87, 112,
@@ -267,7 +269,7 @@ bool      DefiningTrims               = false;
 bool      TrimDefined[4]              = {true, true, true, true};
 char      DateTime[]                  = "DateTime";
 char      ScreenViewTimeout[]         = "Sto"; // needed for display info
-char      ModelName[30];
+char      ModelName[30] = "Not in use";
 uint16_t  ScreenTimeout               = 120; // Screen has two minute timeout by default
 int       LastLinePosition            = 0;
 uint8_t   RXCellCount                 = 2;
@@ -317,7 +319,7 @@ File      ModelsFileNumber;
 
 Adafruit_INA219 ina219;
 
-char SingleModelFile[80];
+char SingleModelFile[40];
 bool SingleModelFlag = false;
 
 bool     ModelsFileOpen = false;
@@ -374,6 +376,7 @@ uint32_t Inactivity_Start   = 0;
 tmElements_t tm;
 char         TxName[32]      = "Unknown";
 uint32_t     LastTimeRead    = 0;
+uint32_t     LastModelCheck    = 0;
 uint32_t     TransmitterLastManaged    = 0;
 uint32_t     LastShowTime    = 0;
 uint32_t     LastDogKick     = 0;
@@ -405,6 +408,7 @@ bool     BuddyMaster         = false;
 bool     SlaveHasControl     = false;
 uint16_t Qnh                 = 1009; // pressure at sea level here
 uint16_t LastModelLoaded     = 0;
+uint16_t LastFileInView      = 0;
 uint8_t  MinimumGap          = 75;
 uint8_t  RecentStartLine     = 0;
 char     RecentTextFile[20];
@@ -528,10 +532,21 @@ uint8_t  Drate2                          = 75;
 uint8_t  Drate3                          = 50;
 uint8_t  DualRateChannels[8]             =  {1, 2, 4, 0, 0, 0, 0, 0};
 uint16_t CurveDots[5];
-uint8_t  DualRateValue                = 100;
+uint8_t  DualRateValue                   = 100;
+char     GoModelsView[]                  = "page ModelsView";
+char     pCalibrateView[]                = "page CalibrateView";
+char Confirmed[2];
 
 // **********************************************************************************************************************************
 // *********************************************** END OF GLOBAL DATA ***************************************************************
+// **********************************************************************************************************************************
+
+
+void CheckForNextionButtonPress()
+{
+      if (GetButtonPress()) ButtonWasPressed(); 
+}
+
 // **********************************************************************************************************************************
 
 uint8_t Ascii(char c)
@@ -546,6 +561,9 @@ void PlaySound(uint16_t TheSound)
     char SoundPrefix[]  = "play 0,";
     char SoundPostfix[] = "0";
     char NB[6];
+    if (CurrentView == MODELSVIEW){
+        if (TheSound != CLICKONE) return;
+    }
     Str(NB, TheSound, 1);
     strcpy(Sound, SoundPrefix);
     strcat(Sound, NB);
@@ -885,6 +903,7 @@ void KickTheDog()
     if (millis() - LastDogKick >= KICKRATE) {
         TeensyWatchDog.feed();
         LastDogKick = millis();
+     
     }
 }
 
@@ -1218,10 +1237,10 @@ void SendText(char* tbox, char* NewWord)
 void SendOtherText(char* tbox, char* NewWord)
 {
     char quote[] = "\"";
-    char CB[1024];
+    char CB[MAXBUFFERSIZE];
     char TooLong[] = "Too long!";
 
-    if (strlen(NewWord) > 2048) {
+    if (strlen(NewWord) > MAXBUFFERSIZE-2) {
         strcpy(NewWord, TooLong);
     }
     strcpy(CB, tbox);
@@ -2354,6 +2373,7 @@ void CloseModelsFile()
     if (ModelsFileOpen) {
         ModelsFileNumber.close();
         ModelsFileOpen = false;
+        delayMicroseconds(500);
     }
 }
 
@@ -2371,13 +2391,21 @@ bool CheckFileExists(char * fl){
 
 /*********************************************************************************************************************************/
 
+void ShortDelay(){
+  delayMicroseconds(50);
+}
+/*********************************************************************************************************************************/
+
 void OpenModelsFile()
 {
+if(!ModelsFileOpen){
     if (SingleModelFlag) {
         ModelsFileNumber = SD.open(SingleModelFile, FILE_WRITE);
+        delay(3);
     }
     else {
         ModelsFileNumber = SD.open(ModelsFile, FILE_WRITE);
+         delay(3);
     }
     if (ModelsFileNumber == 0) {
         FileError = true;
@@ -2385,8 +2413,8 @@ void OpenModelsFile()
     else {
         ModelsFileOpen = true;
     }
+  }
 }
-
 /*********************************************************************************************************************************/
 
 void BuildCheckSum(int p_address, int p_value) 
@@ -2401,10 +2429,15 @@ void SDUpdate32BITS(int p_address, uint32_t p_value)
 {
     BuildCheckSum(p_address, p_value);
     ModelsFileNumber.seek(p_address);
+    ShortDelay();
     ModelsFileNumber.write(uint8_t(p_value));
+    ShortDelay();
     ModelsFileNumber.write(uint8_t(p_value >> 8));
+    ShortDelay();
     ModelsFileNumber.write(uint8_t(p_value >> 16));
+    ShortDelay();
     ModelsFileNumber.write(uint8_t(p_value >> 24));
+    ShortDelay();
 }
 
 /*********************************************************************************************************************************/
@@ -2424,8 +2457,11 @@ void SDUpdate16BITS(int p_address, int p_value)
 {
     BuildCheckSum(p_address, p_value);
     ModelsFileNumber.seek(p_address);
+    ShortDelay();
     ModelsFileNumber.write(uint8_t(p_value));
+    ShortDelay();
     ModelsFileNumber.write(uint8_t(p_value >> 8));
+    ShortDelay();
 }
 /*********************************************************************************************************************************/
 
@@ -2433,7 +2469,9 @@ void SDUpdate8BITS(int p_address, uint8_t p_value)
 {
     BuildCheckSum(p_address, p_value);
     ModelsFileNumber.seek(p_address);
+    ShortDelay();
     ModelsFileNumber.write(uint8_t(p_value));
+    ShortDelay();
 }
 
 /*********************************************************************************************************************************/
@@ -2447,8 +2485,6 @@ int SDRead16BITS(int p_address)
     BuildCheckSum(p_address, r);
     return r;
 }
-
-
 
 /*********************************************************************************************************************************/
 
@@ -2631,22 +2667,22 @@ void  CheckStepSizes(){ // for slow servos
   }
 /*********************************************************************************************************************************/
 
-bool ReadOneModel(uint8_t Mnum)
+bool ReadOneModel(uint32_t Mnum)
 {
     uint16_t j;
     uint16_t i;
-    char     NoModelYet[] = "Model ";
-    char     nb[5];
-
+    char     NoModelYet[] = "Error! ";
+  
     FileCheckSum = 0;
-    if ((ModelNumber > 99) || (ModelNumber < 0)) ModelNumber = 1;
-    Str(nb, ModelNumber, 0);
-    strcpy(ModelName, NoModelYet);
-    strcat(ModelName, nb);
-    if (!ModelsFileOpen) OpenModelsFile();
+    if ((ModelNumber > 90) || (ModelNumber <= 0)) ModelNumber = 1;
+    OpenModelsFile(); 
+    if (!ModelsFileOpen) {delay(300); OpenModelsFile(); }
+    
+    strcpy(ModelName, NoModelYet); // indicator of error
+
     if (!ModelsFileOpen) return false;
-    SDCardAddress = TXSIZE;                    
-    if (SingleModelFlag) SDCardAddress = MODELOFFSET;   // Changed from 250 to 0    
+    SDCardAddress = TXSIZE;
+    if (SingleModelFlag) SDCardAddress = 0; // MODELOFFSET;   // Changed from 250 to 0
     SDCardAddress += ((Mnum - 1) * MODELSIZE); 
     StartLocation = SDCardAddress;
     ModelDefined  = SDRead8BITS(SDCardAddress);
@@ -3412,7 +3448,7 @@ FLASHMEM void setup()
     ResetSubTrims();
     CentreTrims();
     WatchDogConfig.window   = WATCHDOGMAXRATE; //  = MINIMUM RATE in milli seconds, (32ms to 522.232s) must be MUCH smaller than timeout
-    WatchDogConfig.timeout  = WATCHDOGTIMEOUT; //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s)
+    WatchDogConfig.timeout  =  WATCHDOGTIMEOUT; //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s)
     WatchDogConfig.callback = WatchDogCallBack;
     TeensyWatchDog.begin(WatchDogConfig);
     LastDogKick = millis(); // needed? - yes!
@@ -3493,6 +3529,7 @@ FLASHMEM void setup()
             SendText(Warning, err_chksm);
         }
         if (ErrorState == MODELSFILENOTFOUND){
+           // ResetTransmitterSettings();
             SendText(Warning, err_404);
         }
         if (ErrorState == MOTORISON){
@@ -3689,17 +3726,17 @@ void SaveTransmitterParameters()
 /*********************************************************************************************************************************/
 
 /** MODEL Specific */
-void SaveOneModel(uint16_t mnum)
+void SaveOneModel(uint32_t mnum)
 {
-    uint16_t j;
-    uint16_t i;
+    uint32_t j;
+    uint32_t i;
     bool     EndOfName = false;
     FileCheckSum = 0;
-    if ((mnum < 1) || (mnum > 99)) return; // There is no model zero!
+    if ((mnum < 1) || (mnum > MAXMODELNUMBER)) return; // There is no model zero!
     if (!ModelsFileOpen) OpenModelsFile();
     SDCardAddress = TXSIZE;                  //  spare bytes for TX stuff
-    if (SingleModelFlag) SDCardAddress = MODELOFFSET;    // 250 or zero
     SDCardAddress += (mnum - 1) * MODELSIZE; //  spare bytes for Model params
+    if (SingleModelFlag) SDCardAddress = 0;   
     StartLocation = SDCardAddress;
     ModelDefined  = 42;
     SDUpdate8BITS(SDCardAddress, ModelDefined);
@@ -4198,16 +4235,21 @@ void DoNewChannelName(int ch, int k)
 /** @brief updates display in textbox */
 void ShowFileNumber()
 {
-    char ModelsView_filename[] = "filename";
+    char dflt[]                 = "DEFAULT.MOD";
+    char ModelsView_filename[]  = "filename";
     char newfname[17];
+   
+    strcpy(newfname, dflt);
     if (FileNumberInView >= ExportedFileCounter) FileNumberInView = 0;
     if (FileNumberInView < 0) FileNumberInView = ExportedFileCounter - 1;
-    for (int i = 0; i < 12; ++i) {
-        newfname[i]     = TheFilesList[FileNumberInView][i];
-        newfname[i + 1] = 0;
-        if (newfname[i] <= 32 || newfname[i] > 127) break;
-    }
-    SendText(ModelsView_filename, newfname);
+    if (ExportedFileCounter){ 
+        for (int i = 0; i < 12; ++i) {
+            newfname[i]     = TheFilesList[FileNumberInView][i];
+            newfname[i + 1] = 0;
+            if (newfname[i] <= 32 || newfname[i] > 127) break;
+        }
+   }
+   SendText(ModelsView_filename, newfname);
 }
 
 /*********************************************************************************************************************************/
@@ -4251,54 +4293,24 @@ void SaveAllParameters()
 
 /*********************************************************************************************************************************/
 
-void ShowDirectory()
+void SetDefaultValues() 
 {
-    char    filelistbuf[1024];
-    char    nul[]          = "";
-    char    crlf[]         = {13, 10, 0};
-    char    space[]        = {' ', 0};
-    char    fileviewlist[] = "FilesView.list";
-    char    t[2]           = "P";
-    uint8_t n              = 0;
-    uint8_t nlp            = 0;
-    strcpy(filelistbuf, nul);
-    for (int i = 0; i < ExportedFileCounter; ++i) {
-        nlp = 13;
-        for (int z = 0; z < 12; ++z) {
-            t[0] = TheFilesList[i][z];
-            if (t[0] == 0) break;
-            nlp--;
-            strcat(filelistbuf, t);
-        }
-        n++;
-        if (n > 2) {
-            strcat(filelistbuf, crlf);
-            n = 0;
-        }
-        else
-        {
-            for (int q = 0; q < nlp; ++q) {
-                strcat(filelistbuf, space);
-            }
-        }
-    }
-    SendText1(fileviewlist, filelistbuf);
-}
+    uint16_t j=0;
+    uint16_t i=0;
+    char     empty[] = "Not in use";
+    
 
-/*********************************************************************************************************************************/
+    CloseModelsFile();
+    OpenModelsFile();
 
-void SetDefaultValues()
-{
-    uint16_t j;
-    uint16_t i;
-    char     ProgressStart[] = "vis Progress,1";
-    char     ProgressEnd[]   = "vis Progress,0";
-    char     Progress[]      = "Progress";
+    while ((empty[i]) && (i < 29)) {
+        ModelName[i]     = empty[i];
+        ModelName[i + 1] = 0;
+        ++i;
+     }
 
     char DefaultChannelNames[CHANNELSUSED][11] = {{"Aileron"}, {"Elevator"}, {"Throttle"}, {"Rudder"}, {"Ch 5"}, {"Ch 6"}, {"Ch 7"}, {"Ch 8"}, {"Ch 9"}, {"Ch 10"}, {"Ch 11"}, {"Ch 12"}, {"Ch 13"}, {"Ch 14"}, {"Ch 15"}, {"Ch 16"}};
-    SendCommand(ProgressStart);
-    SendValue(Progress, 5);
-    Procrastinate(10);
+  
 
     for (i = 0; i < CHANNELSUSED; ++i) {
         for (j = 1; j <= 4; ++j) {
@@ -4318,15 +4330,12 @@ void SetDefaultValues()
             }
         }
     }
-    SendValue(Progress, 15);
-    Procrastinate(10);
     for (j = 0; j < MAXMIXES; ++j) {
         for (i = 0; i < CHANNELSUSED; ++i) {
             Mixes[j][i] = 0;
         }
     }
-    SendValue(Progress, 25);
-    Procrastinate(10);
+   
 
     for (j = 0; j < BANKSUSED + 1; ++j) { // must have fudged this somewhere.... 5?!
         for (i = 0; i < CHANNELSUSED; ++i) {
@@ -4336,8 +4345,6 @@ void SetDefaultValues()
     }
     RXCellCount = 3;
 
-    SendValue(Progress, 45);
-    Procrastinate(10);
     for (i = 0; i < CHANNELSUSED; ++i) {
         InPutStick[i] = i;
     }
@@ -4351,13 +4358,11 @@ void SetDefaultValues()
     SWITCH2Reversed = false;
     SWITCH3Reversed = false;
     SWITCH4Reversed = false;
-    SendValue(Progress, 65);
-    Procrastinate(10);
+  
     for (i = 0; i < CHANNELSUSED; ++i) {
         FailSafeChannel[i] = false;
     }
-    SendValue(Progress, 75);
-    Procrastinate(10);
+ 
     for (i = 0; i < CHANNELSUSED; ++i) {
         for (j = 0; j < 10; ++j) {
             ChannelNames[i][j] = DefaultChannelNames[i][j];
@@ -4389,8 +4394,7 @@ void SetDefaultValues()
     MotorChannel = 2;
     
     ReversedChannelBITS = 0; //  No channel reversed
-    SendValue(Progress, 95);
-    Procrastinate(10);
+   
     LEDBrightness       = DEFAULTLEDBRIGHTNESS;
     RxVoltageCorrection = 0;
     ModelsMacUnionSaved.Val32[0] = 0;
@@ -4407,26 +4411,15 @@ void SetDefaultValues()
     DualRateChannels[5] = 0;
     DualRateChannels[6] = 0;
     DualRateChannels[7] = 0;
-    for (int i = 0; i < 4; ++i){// heer
+    for (int i = 0; i < 4; ++i){
          BanksInUse[i] = i+4;
     }
-    for (int i = 0; i < 16; ++i){// heer
+    for (int i = 0; i < 16; ++i){
         StepSize[i] = 100;
     }
+    ModelDefined  = 42;
     SaveOneModel(ModelNumber);
     CloseModelsFile();
-    SendValue(Progress, 100);
-    SDCardAddress = TXSIZE;                         //  spare bytes for TX stuff
-    SDCardAddress += (ModelNumber - 1) * MODELSIZE; //  spare bytes for Model params
-    StartLocation = SDCardAddress;
-    ModelDefined  = 0;
-    OpenModelsFile();
-    SDUpdate8BITS(SDCardAddress, ModelDefined); // mark this model as undefined
-    CloseModelsFile();
-    ReadOneModel(ModelNumber);
-    UpdateModelsNameEveryWhere();
-    Procrastinate(100);
-    SendCommand(ProgressEnd);
 }
 
 /*********************************************************************************************************************************/
@@ -5041,7 +5034,16 @@ void ShowFileProgress(char* Msg)
 
 /*********************************************************************************************************************************/
 
-/** @brief RECEIVE A MODEL FILE */
+void ShowFileTransferWindow(){
+    char gofw[] = "page FileExchView";
+    SendCommand(gofw);
+    CurrentView = FILEEXCHANGEVIEW;
+
+}
+
+/*********************************************************************************************************************************/
+
+/** @brief RECEIVE A MODEL FILE */ 
 void ReceiveModelFile()
 {
     uint64_t      RXPipe;
@@ -5056,7 +5058,8 @@ void ReceiveModelFile()
     char          WaitTime[6];
     char          WaitMsg[17];
     char          ThreeDots[]    = "...";
-    char          Receiving[]    = "Receiving ...";
+    char          Receiving[]    = "Receiving: ";
+    char          fnamebuf[30];
     char          TimeoutMsg[]   = "TIMEOUT";
     char          Success[]      = "* Success! *";
     unsigned long Fsize          = 0;
@@ -5068,6 +5071,8 @@ void ReceiveModelFile()
     char          of[]       = " of ";
     char          msg[50];
     char          bytes[] = " bytes.";
+    char          t0[]    = "t0";
+    char          RXheader[] = "File receive";
 
 #ifdef DB_MODEL_EXCHANGE
     uint8_t PacketNumber = 0;
@@ -5075,7 +5080,11 @@ void ReceiveModelFile()
     Serial.println(Waiting);
 #endif
     BlueLedOn();
+    ShowFileTransferWindow();
+
     SendText(ModelsView_filename, Waiting);
+    SendText(t0, RXheader);
+
     RXPipe = FILEPIPEADDRESS;
     Radio1.setRetries(15, 15);
     Radio1.setChannel(FILECHANNEL);
@@ -5128,6 +5137,11 @@ void ReceiveModelFile()
     Serial.println(Fsize);
 #endif
     Fposition        = 0;
+    
+    strcpy(fnamebuf, Receiving);
+    strcat(fnamebuf, SingleModelFile);
+     SendText(ModelsView_filename, fnamebuf);
+
     ModelsFileNumber = SD.open(SingleModelFile, FILE_WRITE);                    //  Open file to receive
     RXTimer          = millis();                                                //  zero timeout
     while ((Fposition < Fsize) && (millis() - RXTimer) / 1000 <= FILETIMEOUT) { //  (Fposition<Fsize) ********************
@@ -5185,14 +5199,18 @@ void ReceiveModelFile()
     strcat(msg, bytes);
     ShowFileProgress(msg);
     PlaySound(BEEPCOMPLETE);
+    CloseModelsFile();
+    delay(2000);
+    GotoModelsView();
+    ClearText();
 }
+
 
 /*********************************************************************************************************************************/
 
 /** @brief SEND A MODEL FILE */
-void SendModelFile()
+void SendModelFile() 
 {
-
     char          ProgressStart[] = "vis Progress,1";
     char          ProgressEnd[]   = "vis Progress,0";
     char          Progress[]      = "Progress";
@@ -5209,8 +5227,15 @@ void SendModelFile()
     char          msg[50];
     char          bytes[]    = " bytes.";
     uint32_t      SentMoment = 0;
+    char          ModelsView_filename[] = "filename";
+    char          t0[]                  = "t0";
+    char          Fsend[]               = "Sending file";
 
     BlueLedOn();
+    CloseModelsFile();
+    ShowFileTransferWindow();
+    SendText(ModelsView_filename, SingleModelFile);
+    SendText(t0, Fsend);
     SendCommand(ProgressStart);
     SendValue(Progress, p);
     delay(10);
@@ -5288,6 +5313,10 @@ void SendModelFile()
     strcat(msg, bytes);
     ShowFileProgress(msg);
     PlaySound(BEEPCOMPLETE);
+    delay(2000);
+    SendCommand(GoModelsView);
+    CurrentView = MODELSVIEW;
+    CloseModelsFile();
 }
 
 /*********************************************************************************************************************************/
@@ -5772,29 +5801,27 @@ void DoLastTimeRead()
     LastTimeRead = 0;
 }
 
-
-
 /******************************************************************************************************************************/
 void LoadModelSelector(){
 
-    char BK1p[]     = "BK1.path=\"";
-    char BK1[]      = "BK1";
-    char crlf[]     = {13, 10, 0};   //heer
+    char MMemsp[]     = "MMems.path=\"";
+    char MMems[]      = "MMems";
+    char crlf[]     = {13, 10, 0};  
     char lb[]       = " (";
     char rb[]       = ")";
     char nb[4];
-    char buf[1024];
-
-    int8_t SavedModelNumber = ModelNumber;
-    for (ModelNumber = 1; ModelNumber < 32; ++ModelNumber){
-        ReadOneModel(ModelNumber);
-        if (ModelNumber == 1){
-            strcpy(buf, ModelName);
-            strcat(buf, lb);
-            Str(nb, ModelNumber, 0);
-            strcat(buf, nb);
-            strcat(buf, rb);
-            strcat(buf, crlf);
+    char buf[MAXBUFFERSIZE];
+    
+    int32_t SavedModelNumber = ModelNumber;
+    for (ModelNumber = 1; ModelNumber < MAXMODELNUMBER; ++ModelNumber){
+            ReadOneModel(ModelNumber);
+            if (ModelNumber == 1) {
+                strcpy(buf, ModelName);
+                strcat(buf, lb);
+                Str(nb, ModelNumber, 0);
+                strcat(buf, nb);
+                strcat(buf, rb);
+                strcat(buf, crlf);
         }else{
             strcat(buf, ModelName);
             strcat(buf, lb);
@@ -5804,23 +5831,49 @@ void LoadModelSelector(){
             strcat(buf, crlf);
         }
     }   
-    SendOtherText(BK1p, buf);
+    SendOtherText(MMemsp, buf);
     ModelNumber = SavedModelNumber;
     ReadOneModel(ModelNumber);
-    SendValue(BK1, ModelNumber-1);
+    SendValue(MMems, ModelNumber-1);
 }
+
+/******************************************************************************************************************************/
+
+void LoadFileSelector(){
+
+    char Mfilesp[]     = "Mfiles.path=\"";
+    char Mfiles[]      = "Mfiles";
+    char crlf[]     = {13, 10, 0};  
+    char buf[MAXBUFFERSIZE];
+    char nofiles[] = "(No files)";
+    
+    strcpy(buf, nofiles);
+    for (int f = 0; f < ExportedFileCounter; ++f){ 
+        if (f==0) 
+        {   strcpy(buf, TheFilesList[f]);
+            strcat(buf, crlf);
+        }else{
+            strcat(buf, TheFilesList[f]);
+            strcat(buf, crlf);
+        }
+    }
+    SendOtherText(Mfilesp, buf);
+    FileNumberInView = GetValue(Mfiles);
+    LastFileInView   = 120;
+}
+
 /******************************************************************************************************************************/
 void GotoModelsView()
 {
-    char pModelsView[] = "page ModelsView";
 
-    if (ModelMatched) return; // must not change when model connected
-    SendCommand(pModelsView);
-    CurrentView = MODELSVIEW;
-    UpdateModelsNameEveryWhere();
-    BuildDirectory(); // of SD card
-    ShowFileNumber();
-    LoadModelSelector();
+ if (ModelMatched) return; // must not change when model connected
+ SendCommand(GoModelsView);
+ CurrentView = MODELSVIEW;
+ UpdateModelsNameEveryWhere();
+ BuildDirectory(); // of SD card 
+ LoadFileSelector();
+ ShowFileNumber();
+ LoadModelSelector();
 }
 /******************************************************************************************************************************/
 void GotoMacrosView()
@@ -6201,46 +6254,66 @@ void ThrottleDownTrim(){
 void ResetTransmitterSettings(){    // This function resets all transmitter parameters to the default state. 
                                     // But not the clock. Calibration shoulw  be done next. 
 
-const char         Tn[32]      = "Unknown";
-    
-    BuddyPupilOnSbus = false;
-    BuddyMaster    = false;
-    ModelNumber    = 1;
-    ScreenTimeout  = 120;
-    Inactivity_Timeout = INACTIVITYTIMEOUT;
-    strcpy(TxName, Tn);
-    Qnh               = 1009;
-    DeltaGMT          = 0;
-    BackGroundColour  = 214;
-    ForeGroundColour  = White;
-    SpecialColour     = Red;
-    HighlightColour   = Yellow;
-    SticksMode        = 2;
-    AudioVolume       = 50;
-    Brightness        = 100;
-    PlayFanfare       = true;
-    TrimClicks        = true;
-    ButtonClicks      = true;
-    SpeakingClock     = true;
-    AnnounceBanks     = true;
-    ResetSwitchNumbers();
-    MinimumGap          = 75;
-    LogRXSwaps          = true;
-    UseLog              = false;
-    AnnounceConnected   = true;
-    ResetAllTrims();
-    TxVoltageCorrection     = 0;
-    PowerOffWarningSeconds  = DEFAULTPOWEROFFWARNING;
-    LEDBrightness           = DEFAULTLEDBRIGHTNESS;
-    ConnectionAssessSeconds = 1;
-    AutoModelSelect         = true;
-    MotorChannel            = 15;
-    MotorChannelZero        = 0;
-    SetDS1307ToCompilerTime();
-    delay (250);
-    SaveTransmitterParameters();
-    SaveTransmitterParameters();
+    const char         Tn[32]      = "Unknown";
+
+   char prompt[] = "Delete all settings and models?!"; // heer
+   int  sofar   = 0;
+
+   if (!GetConfirmation(pCalibrateView,prompt)) return;
+   char ProgressStart[]  = "vis Progress,1";
+   char ProgressEnd[]    = "vis Progress,0";
+   char Progress[]       = "Progress";
+   SendCommand(ProgressStart);
+   SendValue(Progress, 2);
+
+   BuddyPupilOnSbus   = false;
+   BuddyMaster        = false;
+   ModelNumber        = 1;
+   ScreenTimeout      = 120;
+   Inactivity_Timeout = INACTIVITYTIMEOUT;
+   strcpy(TxName, Tn);
+   Qnh              = 1009;
+   DeltaGMT         = 0;
+   BackGroundColour = 214;
+   ForeGroundColour = White;
+   SpecialColour    = Red;
+   HighlightColour  = Yellow;
+   SticksMode       = 2;
+   AudioVolume      = 20;
+   Brightness       = 100;
+   PlayFanfare      = false;
+   TrimClicks       = true;
+   ButtonClicks     = false;
+   SpeakingClock    = true;
+   AnnounceBanks    = true;
+   ResetSwitchNumbers();
+   MinimumGap        = 75;
+   LogRXSwaps        = true;
+   UseLog            = false;
+   AnnounceConnected = true;
+   ResetAllTrims();
+   TxVoltageCorrection     = 0;
+   PowerOffWarningSeconds  = DEFAULTPOWEROFFWARNING;
+   LEDBrightness           = DEFAULTLEDBRIGHTNESS;
+   ConnectionAssessSeconds = 1;
+   AutoModelSelect         = true;
+   MotorChannel            = 15;
+   MotorChannelZero        = 0;
+   SetDS1307ToCompilerTime();
+   for (int k = 1; k < 4;++k){ // writes default three times!
+        for (ModelNumber = 1; ModelNumber < MAXMODELNUMBER; ++ModelNumber) { 
+            ++sofar;
+            SetDefaultValues();
+            SendValue(Progress, (sofar * (100 / MAXMODELNUMBER)) /3);
+        }
+   }
+   SendValue(Progress,100);
+   ModelNumber = 1;
+   SaveTransmitterParameters();
+   SaveTransmitterParameters();
+   SendCommand(ProgressEnd);
 }
+
 
 /*********************************************************************************************************************************/
 
@@ -6548,6 +6621,58 @@ void StartRenameModel(){
   SendText(NewName, ModelName);
 
 }
+
+/******************************************************************************************************************************/
+
+void GetDefaultFilename(){  // Build filename from ModelName as best we can using first 8 chars upper cased
+  uint8_t  j     = 0;
+  uint8_t  i     = 0;
+  char mod[] = ".MOD";
+            while (i < 8) {
+                if (ModelName[j] > 32) {
+                   SingleModelFile[i] = toUpperCase(ModelName[j]);
+                   ++i;
+                   SingleModelFile[i] = 0;
+                } 
+                if (ModelName[j]<32) break;
+                 ++j;
+                if (i >= 8) break;
+            }
+           strcat(SingleModelFile, mod);
+}
+/******************************************************************************************************************************/
+void WriteBackup(){
+                char ModExt[] = ".MOD";
+                char ProgressStart[]           = "vis Progress,1";
+                char ProgressEnd[]             = "vis Progress,0";
+                char Progress[]                = "Progress";
+                uint8_t Iterations             = 4;
+                for (uint8_t i = 0; i < strlen(SingleModelFile);++i){
+                    SingleModelFile[i] = toUpperCase(SingleModelFile[i]);
+                }
+             
+                SendValue(Progress, 10);
+                if ((InStrng(ModExt, SingleModelFile) == 0) && (strlen(SingleModelFile) <= 8)) strcat(SingleModelFile, ModExt);
+                if ((strlen(SingleModelFile) <= 12) && (InStrng(ModExt, SingleModelFile) > 0)){
+                SendCommand(ProgressStart);
+                for (int i = 0; i < Iterations; i++){
+                    CloseModelsFile();
+                    SingleModelFlag = true;
+                    SaveOneModel(1);
+                    SendValue(Progress, i * (100 / Iterations));  // write several times is needed!! :-)
+                }
+                CloseModelsFile();
+                SingleModelFlag = false;
+                }else {
+                    FileError = true;
+                }
+                if (FileError) ShowFileErrorMsg();
+                SendValue(Progress, 100);
+                delay(100);
+                SendCommand(ProgressEnd);
+                LastFileInView = 120;
+}
+
 /******************************************************************************************************************************/
 void EndRenameModel(){
   char NewName[]             = "NewName";
@@ -6555,8 +6680,55 @@ void EndRenameModel(){
   SaveOneModel(ModelNumber);
   GotoModelsView();
 }
+/******************************************************************************************************************************/
+bool GetBackupFilename(char* goback){ // HERE THE USER CAN REPLACE DEFAULT FILENAME IF HE WANTS TO
+
+    char GoBackupView[] = "page BackupView"; 
+    char t1[]           = "t1";
+    char Mname[]        = "Modelname";
+    SendCommand(GoBackupView);
+    SendText(t1, SingleModelFile);
+    SendText(Mname, ModelName);
+    Confirmed[0] = '?';
+    while (Confirmed[0] == '?') {                 // await user response
+                    CheckForNextionButtonPress();
+                    KickTheDog();
+    }
+    GetText(t1, SingleModelFile);
+    SendCommand(goback);
+    if (Confirmed[0] == 'Y') return true;
+    return false;
+}
+/******************************************************************************************************************************/
+// Gets Windows style confirmation (FILE OVERWRITE ETC.)
+// params: 
+// Prompt is the prompt
+// goback is the command needed to return to calling page
+ 
+ bool GetConfirmation(char* goback,char* Prompt){
+
+  char GoPopupView[] = "page PopupView"; 
+  char Dialog[]      = "Dialog";
+  char niu[]         = "Not in use";
+  if (InStrng(niu,Prompt)) return true;   // overwriting a memory 'Not in use' is always OK
+  SendCommand(GoPopupView);
+  SendText(Dialog, Prompt);
+  Confirmed[0] = '?';
+  while (Confirmed[0] == '?') {                 // await user response
+                    CheckForNextionButtonPress();
+                    KickTheDog();
+  }
+  SendCommand(goback);
+  LastFileInView   = 120;
+  if (Confirmed[0] == 'Y') return true;   // tell caller OK to continue
+  return false;                           // tell caller STOP!
+ }
+ /******************************************************************************************************************************/
+ void YesPressed(){ Confirmed[0] = 'Y';}
+/******************************************************************************************************************************/
+ void NoPressed() { Confirmed[0] = 'N';}
 // ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
-#define LASTFUNCTION 60 // one more than final one
+#define LASTFUNCTION 62 // one more than final one
 
 void (*NumberedFunctions[LASTFUNCTION])() {
     Blank,                // 0 (spare)
@@ -6618,7 +6790,9 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     EndSlowView,                // 56
     WriteNewCurve,              // 57
     StartRenameModel,           // 58            
-    EndRenameModel              // 59
+    EndRenameModel,             // 59
+    YesPressed,                 // 60
+    NoPressed                   // 61
 
 }; // list will become much longer ...
 
@@ -6645,8 +6819,8 @@ FASTRUN void ButtonWasPressed()
         } NextionCommand;
         NextionCommand.First4Bytes[0] = TextIn[0];
         NextionCommand.First4Bytes[1] = TextIn[1];
-        NextionCommand.First4Bytes[2] = TextIn[2];
-        NextionCommand.First4Bytes[3] = TextIn[3];
+        NextionCommand.First4Bytes[2] = 0; //   TextIn[2];
+        NextionCommand.First4Bytes[3] = 0; //   TextIn[3];
         uint32_t NumberedCommand      = NextionCommand.FirstDWord - 128;
 
 #ifdef DB_NEXTION
@@ -6657,7 +6831,9 @@ FASTRUN void ButtonWasPressed()
         else {
             Serial.print("Command NUMBER: -> ");
             Serial.println(NumberedCommand);
+          
         }
+          
 #endif
 
         if (TextIn[0] >= 128) {                       // (First byte != printable char) indicates a numbered command...
@@ -6747,8 +6923,6 @@ FASTRUN void ButtonWasPressed()
         char InputTrim_labels[4][4]    = {"n0", "n1", "n2", "n3"};
         char Export[]                  = "Export";
         char Import[]                  = "Import";
-        char ListFiles[]               = "ListFiles";
-        char PageFilesView[]           = "page FilesView";
         char DelFile[]                 = "DelFile";
         char ModExt[]                  = ".MOD";
         char FailSAVE[]                = "FailSAVE";
@@ -6776,7 +6950,6 @@ FASTRUN void ButtonWasPressed()
         char ProgressEnd[]             = "vis Progress,0";
         char Progress[]                = "Progress";
         char HelpView[]                = "HelpView";
-        char ModelsView_filename[]     = "filename";
         char ReceiveModel[]            = "ReceiveModel";
         char SendModel[]               = "SendModel";
         char PowerOff[]                = "PowerOff";
@@ -6807,7 +6980,7 @@ FASTRUN void ButtonWasPressed()
         char pTrimView[]               = "page TrimView";
         char pMixesView[]              = "page MixesView";
         char pTypeView[]               = "page TypeView";
-        char pCalibrateView[]          = "page CalibrateView";
+       
         char pFailSafe[]               = "page FailSafeView";
         char DataView_Clear[]          = "Clear";
         char DataView_AltZero[]        = "AltZero";
@@ -6857,7 +7030,11 @@ FASTRUN void ButtonWasPressed()
         char pLogView[]             = "page LogView";
         char dGMT[]                 = "dGMT";
         char TxNme[]                = "TxName";
-        char BK1[]                  = "BK1";
+        char MMems[]                = "MMems";
+        char Prompt[30];
+        char del[] = "Delete ";
+        char overwr[] = "Overwrite ";
+        char ques[]   = "?";
 
         // ************************* test input words from Nextion *****************
 
@@ -6877,10 +7054,14 @@ FASTRUN void ButtonWasPressed()
         }
         
         if (InStrng(Delete, TextIn) > 0) {
-            ModelNumber= GetValue(BK1)+1;
-            SetDefaultValues();
-            SaveOneModel(ModelNumber);
-            LoadModelSelector();// heer
+            strcpy(Prompt, del);
+            strcat(Prompt, ModelName);
+            strcat(Prompt, ques);
+            if (GetConfirmation(GoModelsView,Prompt))  {  
+                ModelNumber= GetValue(MMems)+1;
+                SetDefaultValues();
+                LoadModelSelector();
+            }
             ClearText();
             return;
         }
@@ -7176,9 +7357,9 @@ FASTRUN void ButtonWasPressed()
                 SendValue(MixesView_MixNumber, MixNumber); // New load of mix window
                 SendMixValues();
             }
-            if (CurrentView == FILESVIEW) {
-                ShowDirectory();
-            }
+           // if (CurrentView == FILESVIEW) {
+           //     ShowDirectory();
+           // }
             if (CurrentView == MACROS_VIEW) {
                 // Do nothing!
             }
@@ -7457,10 +7638,16 @@ FASTRUN void ButtonWasPressed()
                 ++i;
                 SingleModelFile[j] = 0;
             }
-            SD.remove(SingleModelFile);
-            BuildDirectory();
-            --FileNumberInView;
-            ShowFileNumber();
+            strcpy(Prompt, del);
+            strcat(Prompt, SingleModelFile);
+            strcat(Prompt, ques);
+            if (GetConfirmation(GoModelsView,Prompt))  {  
+               SD.remove(SingleModelFile);
+                BuildDirectory();
+                LoadFileSelector();
+                --FileNumberInView;
+                ShowFileNumber();
+            }
             CloseModelsFile();
             ClearText();
             return;
@@ -7483,91 +7670,66 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        p = InStrng(Export, TextIn);
-        if (p > 0) {
-            j = 0;
-            i = p + 5;
-            while ((TextIn[i] > 0) && (i < 18)) {
-                if (TextIn[i] >= 97 && TextIn[i] <= 122) {
-                    TextIn[i] &= ~0x20; // upper case only
+        if (InStrng(Export, TextIn)) {
+            GetDefaultFilename();
+            if (GetBackupFilename(GoModelsView)){
+                if (CheckFileExists(SingleModelFile)) {
+                    strcpy(Prompt, overwr);
+                    strcat(Prompt, SingleModelFile);
+                    strcat(Prompt, ques);
+                    if (GetConfirmation(GoModelsView, Prompt)) { 
+                        WriteBackup();
+                    }
+                }else{
+                    WriteBackup();
                 }
-                SingleModelFile[j] = TextIn[i];
-                ++j;
-                ++i;
-                SingleModelFile[j] = 0;
             }
-
-            if ((InStrng(ModExt, SingleModelFile) == 0) && (strlen(SingleModelFile) <= 8)) {
-                strcat(SingleModelFile, ModExt);
-            }
-            if ((strlen(SingleModelFile) <= 12) && (InStrng(ModExt, SingleModelFile) > 0))
-            {
-                SendText(ModelsView_filename, SingleModelFile);
-                SendCommand(ProgressStart);
-                for (uint8_t WriteTwice = 1; WriteTwice <= 3; ++WriteTwice) { // Write many times is needed. Once does't work ... no idea why!
-                    SingleModelFlag = true;
-                    SaveOneModel(1);
-                    SendValue(Progress, WriteTwice * 15);
-                }
-                SingleModelFlag = false;
-                SendValue(Progress, 80);
-                BuildDirectory();
-                SendValue(Progress, 100);
-                Procrastinate(300);
-                SendCommand(ProgressEnd);
-            }
-            else {
-                FileError = true;
-            }
-            if (FileError) ShowFileErrorMsg();
-            ClearText();
-            return;
+        BuildDirectory(); // of SD card 
+        LoadFileSelector();
+        ClearText();
+        return;
         }
+
+        
         p = InStrng(Import, TextIn); 
         if (p > 0) {
-            SendCommand(ProgressStart);
-            Procrastinate(10);
-            SendValue(Progress, 5);
-            Procrastinate(10);
             j = 0;
             i = p + 5;
-            while (TextIn[i] > 0) {
-                if (TextIn[i] >= 97 && TextIn[i] <= 122) {
-                    TextIn[i] &= ~0x20;
-                }
-                SingleModelFile[j] = TextIn[i];
-                ++j;
-                ++i;
-                SingleModelFile[j] = 0;
+            while (TextIn[i] > 0) {   
+            SingleModelFile[j] = toUpperCase(TextIn[i]);
+            ++j;
+            ++i;
+            SingleModelFile[j] = 0;
             }
-            if (InStrng(ModExt, SingleModelFile) == 0) strcat(SingleModelFile, ModExt);
-            SingleModelFlag = true;
-            SendValue(Progress, 10);
-            Procrastinate(10);
-            CloseModelsFile();
-            ReadOneModel(1);
-            SendValue(Progress, 50);
-            Procrastinate(10);
-            SingleModelFlag = false;
-            CloseModelsFile();
-            SendValue(Progress, 75);
-            Procrastinate(10);
-            SaveAllParameters();
-            CloseModelsFile();
-            UpdateModelsNameEveryWhere();
-            SendValue(Progress, 100);
-            Procrastinate(10);
-            SendCommand(ProgressEnd);
-            if (FileError) ShowFileErrorMsg();
-            LoadModelSelector();
-            ClearText();
-            return;
-        }
-        if (InStrng(ListFiles, TextIn) > 0) {
-            SendCommand(PageFilesView);
-            CurrentView      = FILESVIEW; // Can't change this until I can change it back!  :-)
-            SavedCurrentView = FILESVIEW;
-            ShowDirectory();
+            strcpy(Prompt, overwr);
+            strcat(Prompt, ModelName);
+            strcat(Prompt, ques);
+            if (GetConfirmation(GoModelsView,Prompt))  {   
+                SendCommand(ProgressStart);
+                Procrastinate(10);
+                SendValue(Progress, 5);
+                Procrastinate(10);
+                if (InStrng(ModExt, SingleModelFile) == 0) strcat(SingleModelFile, ModExt);
+                SingleModelFlag = true;
+                SendValue(Progress, 10);
+                Procrastinate(10);
+                CloseModelsFile();
+                ReadOneModel(1);
+                SendValue(Progress, 50);
+                Procrastinate(10);
+                SingleModelFlag = false;
+                CloseModelsFile();
+                SendValue(Progress, 75);
+                Procrastinate(10);
+                SaveAllParameters();
+                CloseModelsFile();
+                UpdateModelsNameEveryWhere();
+                SendValue(Progress, 100);
+                Procrastinate(10);
+                SendCommand(ProgressEnd);
+                if (FileError) ShowFileErrorMsg();
+                LoadModelSelector();
+         }
             ClearText();
             return;
         }
@@ -8583,14 +8745,15 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
         } else {
             if (AutoModelSelect){                                         //  It's not a match so maybe search for it.
                 ModelNumber = 0;
-                while ((ModelMatched == false) && (ModelNumber < 99)) {   //  Try to match the ID with a save one
-                    ++ModelNumber;
-                    ReadOneModel(ModelNumber);                           
-                    if ((ModelsMacUnion.Val32[0] == ModelsMacUnionSaved.Val32[0]) && (ModelsMacUnion.Val32[1] == ModelsMacUnionSaved.Val32[1])) {
-                        ModelMatched = true;
-                        BindButton = true; 
+                while ((ModelMatched == false) && (ModelNumber < MAXMODELNUMBER-1)) 
+                    {   //  Try to match the ID with a saved one
+                        ++ModelNumber;
+                        ReadOneModel(ModelNumber);
+                        if ((ModelsMacUnion.Val32[0] == ModelsMacUnionSaved.Val32[0]) && (ModelsMacUnion.Val32[1] == ModelsMacUnionSaved.Val32[1])) {
+                            ModelMatched = true;
+                            BindButton = true; 
+                        }
                     }
-                }
                 if (ModelMatched){                                        //  Found it!
                     UpdateModelsNameEveryWhere();                         //  Use it.
                     if (AnnounceConnected) {
@@ -8616,7 +8779,7 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                     BindButton = true;
                     ModelMatched = false;
                 } return;
-            } else {
+             } else {
                 SendCommand(BindButtonVisible);
                 if ((millis() - WarningTimer) > 10000) {
                     WarningTimer = millis();
@@ -8780,14 +8943,23 @@ FASTRUN void CheckGapsLength()
 /************************************************************************************************************/
 void CheckModelName()
 {                                                  // In ModelsView, this function checks correct name is displayed.
-    char BK1[]      = "BK1";
-    ModelNumber = GetValue(BK1)+1;
+    char MMems[]      = "MMems";
+    char Mfiles[]      = "Mfiles";
+    ModelNumber = GetValue(MMems)+1;
+    FileNumberInView = GetValue(Mfiles); 
+    if (FileNumberInView != LastFileInView){
+        ShowFileNumber();
+        if (ButtonClicks) PlaySound(CLICKONE);
+        LastFileInView = FileNumberInView;
+    }
+
     if (LastModelLoaded != ModelNumber) {       
-        if ((ModelNumber > 31) || (ModelNumber < 1)) {
+        if ((ModelNumber >= MAXMODELNUMBER) || (ModelNumber < 1)) {
             ModelNumber = 1;
-            SendValue(BK1, ModelNumber-1);
+            SendValue(MMems, ModelNumber-1);
         }
         ReadOneModel(ModelNumber);
+        if (ButtonClicks) PlaySound(CLICKONE);
         if (UseLog) LogThisModel();
         LastModelLoaded = ModelNumber;
         UpdateModelsNameEveryWhere();
@@ -8892,28 +9064,37 @@ void FASTRUN ManageTransmitter(){
     uint32_t RightNow = millis();
     uint32_t TXPacketElapsed = RightNow - LastPacketSentTime;
 
-    KickTheDog();                                                   // Watchdog ... ALWAYS!
-                                                  
-    if (GetButtonPress()) ButtonWasPressed();                       // Pretty obvious really ...    
+    KickTheDog();                                                    // Watchdog ... ALWAYS!
 
-    if ((PACEMAKER - TXPacketElapsed  <= TIMEFORTXMANAGMENT) && Connected && BoundFlag && ModelMatched) return;     // If it's almost time to send data, then do not start some other task which might take longer.
+    CheckForNextionButtonPress();                                    // Pretty obvious really ...
 
-    if (RightNow - TransmitterLastManaged > 100) {                   // 10 times a second is plenty
-        if (RightNow - LastTimeRead >= 500) {                       // 2wice a second for these...
+    if ((PACEMAKER - TXPacketElapsed  <= TIMEFORTXMANAGMENT) && Connected && BoundFlag && ModelMatched) {
+        return; // If it's almost time to send data, then do not start some other task which might easily take longer.
+    }
+      
+      if (RightNow - TransmitterLastManaged > 50) {                  // 20 times a second is plenty
+        if (RightNow - LastTimeRead >= 1000) {                       // once a second for these...
             ReadTime();                                              // Do the clock
             GetStatistics();                                         // Do stats
-            if (CurrentView == TXSETUPVIEW) CheckScanButton();
-            if (CurrentView == RXSETUPVIEW) CheckScanButton();
-            if (CurrentView == MODELSVIEW)  CheckModelName();      // In MODELSVIEW, this function checks correct name is displayed.
             LastTimeRead = millis();
+            CheckForNextionButtonPress();  
             return;                                                  // That's enough housekeeping this time around
         }
-        ReadSwitches();                                              // Check switch positions
-        CheckHardwareTrims();
+        if (RightNow - LastModelCheck >= 1000) {                     // four times a second for these...
+             CheckForNextionButtonPress();  
+            if (CurrentView == TXSETUPVIEW) CheckScanButton();      // 
+            if (CurrentView == RXSETUPVIEW) CheckScanButton();
+            if ((CurrentView == MODELSVIEW) && (!Connected)) CheckModelName();         // In MODELSVIEW, this function checks correct name is displayed.
+            CheckForNextionButtonPress();
+            LastModelCheck = millis();
+        } 
+        ReadSwitches();                                              // Check switch positions 20 times a second
+        CheckHardwareTrims();                                        // Trims 20 times a second
         GetBank();                                                   // Must not call too often        
         ShowComms();                                                 // Screen Data                                  
         CheckTimer();                                                // Screen Timer
         CheckPowerOffButton();                                       // Pretty obvious really ...
+       
         TransmitterLastManaged = millis();
     }
 }
