@@ -239,6 +239,7 @@ uint32_t PausedSecs          = 0;
 uint32_t Mins                = 0;
 uint32_t Hours               = 0;
 uint32_t ModelNumber         = 1;
+uint32_t PreviousModelNumber = 1;
 uint8_t  ModelDefined        = 0;
 uint16_t MemoryForTransmtter = 0; // SD space for transmitter parameters
 uint16_t OneModelMemory      = 0; // SD space for every model's parameters
@@ -5781,20 +5782,7 @@ void Blank()
 {
     return;
 }
-/******************************************************************************************************************************/
-void DecFileInView()
-{ // 1
-    --FileNumberInView;
-    ShowFileNumber();
-    CloseModelsFile();
-}
-/******************************************************************************************************************************/
-void IncFileInView()
-{ // 2
-    ++FileNumberInView;
-    ShowFileNumber();
-    CloseModelsFile();
-}
+
 /******************************************************************************************************************************/
 void DoLastTimeRead()
 {
@@ -5811,7 +5799,8 @@ void LoadModelSelector(){
     char rb[]       = ")";
     char nb[4];
     char buf[MAXBUFFERSIZE];
-    
+    char mn[] = "modelname";
+
     int32_t SavedModelNumber = ModelNumber;
     for (ModelNumber = 1; ModelNumber < MAXMODELNUMBER; ++ModelNumber){
             ReadOneModel(ModelNumber);
@@ -5833,8 +5822,9 @@ void LoadModelSelector(){
     }   
     SendOtherText(MMemsp, buf);
     ModelNumber = SavedModelNumber;
-    ReadOneModel(ModelNumber);
+    ReadOneModel(ModelNumber); // heer!
     SendValue(MMems, ModelNumber-1);
+    SendText(mn, ModelName);
 }
 
 /******************************************************************************************************************************/
@@ -5866,13 +5856,14 @@ void LoadFileSelector(){
 void GotoModelsView()
 {
 
- if (ModelMatched) return; // must not change when model connected
+ if (ModelMatched) return; // must not change when model connected // heer
  SendCommand(GoModelsView);
  CurrentView = MODELSVIEW;
  UpdateModelsNameEveryWhere();
- BuildDirectory(); // of SD card 
+ BuildDirectory(); 
  LoadFileSelector();
  ShowFileNumber();
+ PreviousModelNumber = ModelNumber; // save number
  LoadModelSelector();
 }
 /******************************************************************************************************************************/
@@ -5964,7 +5955,7 @@ void LogVIEW()
 
 /******************************************************************************************************************************/
 void SetupViewFM() 
-{ // (Exit from models screen) New model name occurs at offset 4 in TextIn
+{ 
 
     char page_RXSetupView[] = "page RXSetupView";
     SaveAllParameters();
@@ -5974,6 +5965,7 @@ void SetupViewFM()
     UpdateModelsNameEveryWhere();
 }
     
+
 /******************************************************************************************************************************/
 void StartSubTrimView()
 { // Subtrim view start
@@ -6256,7 +6248,7 @@ void ResetTransmitterSettings(){    // This function resets all transmitter para
 
     const char         Tn[32]      = "Unknown";
 
-   char prompt[] = "Delete all settings and models?!"; // heer
+   char prompt[] = "Delete all settings and models?!"; 
    int  sofar   = 0;
 
    if (!GetConfirmation(pCalibrateView,prompt)) return;
@@ -6727,13 +6719,46 @@ bool GetBackupFilename(char* goback){ // HERE THE USER CAN REPLACE DEFAULT FILEN
  void YesPressed(){ Confirmed[0] = 'Y';}
 /******************************************************************************************************************************/
  void NoPressed() { Confirmed[0] = 'N';}
+ /******************************************************************************************************************************/
+ void RenameFile(){
+
+ }
+
+/******************************************************************************************************************************/
+
+ void ModelViewEnd(){ // heer
+
+// (Exit from models screen) 
+
+    char page_RXSetupView[] = "page RXSetupView";
+    char pr[]               = "Change model to ";
+    char buf[50];
+    char q[] = "?";
+
+    if (PreviousModelNumber != ModelNumber) {
+                    strcpy(buf, pr);
+                    strcat(buf, ModelName);
+                    strcat(buf, q);
+                    GetConfirmation(GoModelsView, buf);
+                    if (Confirmed[0] != 'Y'){
+                    ModelNumber = PreviousModelNumber;
+                    ReadOneModel(ModelNumber);
+                    }
+     }
+    SaveAllParameters();
+    CurrentView = RXSETUPVIEW;
+    SendCommand(page_RXSetupView);
+    CurrentMode        = NORMAL; // Send data again
+    UpdateModelsNameEveryWhere();
+
+ }
 // ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
-#define LASTFUNCTION 62 // one more than final one
+#define LASTFUNCTION 63 // one more than final one
 
 void (*NumberedFunctions[LASTFUNCTION])() {
-    Blank,                // 0 (spare)
-    DecFileInView,        // 1
-    IncFileInView,        // 2
+    Blank,                // 0 (spares)
+    Blank,                // 1
+    ModelViewEnd,         // 2
     DoLastTimeRead,       // 3
     GotoModelsView,       // 4
     GotoMacrosView,       // 5
@@ -6792,7 +6817,8 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     StartRenameModel,           // 58            
     EndRenameModel,             // 59
     YesPressed,                 // 60
-    NoPressed                   // 61
+    NoPressed,                  // 61
+    RenameFile                  // 62
 
 }; // list will become much longer ...
 
@@ -7357,9 +7383,7 @@ FASTRUN void ButtonWasPressed()
                 SendValue(MixesView_MixNumber, MixNumber); // New load of mix window
                 SendMixValues();
             }
-           // if (CurrentView == FILESVIEW) {
-           //     ShowDirectory();
-           // }
+           
             if (CurrentView == MACROS_VIEW) {
                 // Do nothing!
             }
@@ -8943,8 +8967,10 @@ FASTRUN void CheckGapsLength()
 /************************************************************************************************************/
 void CheckModelName()
 {                                                  // In ModelsView, this function checks correct name is displayed.
-    char MMems[]      = "MMems";
-    char Mfiles[]      = "Mfiles";
+    char MMems[]        = "MMems";
+    char Mfiles[]       = "Mfiles";
+    char mn[]           = "modelname";
+
     ModelNumber = GetValue(MMems)+1;
     FileNumberInView = GetValue(Mfiles); 
     if (FileNumberInView != LastFileInView){
@@ -8957,8 +8983,10 @@ void CheckModelName()
         if ((ModelNumber >= MAXMODELNUMBER) || (ModelNumber < 1)) {
             ModelNumber = 1;
             SendValue(MMems, ModelNumber-1);
+           
         }
         ReadOneModel(ModelNumber);
+         SendText(mn, ModelName);// heer
         if (ButtonClicks) PlaySound(CLICKONE);
         if (UseLog) LogThisModel();
         LastModelLoaded = ModelNumber;
