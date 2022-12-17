@@ -483,6 +483,7 @@ extern bool          GetButtonPress();
 extern void          CheckPowerOffButton();
 
 
+
 /*********************************************************************************************************************************/
 // function prototypes
 
@@ -532,6 +533,7 @@ void             ShowMotor(int on);
 void             StartModelSetup();
 bool             GetConfirmation(char* goback, char* Prompt);
 void             GotoModelsView();
+void             SaveCurrentModel();
 
 /*********************************************************************************************************************************/
 

@@ -5860,6 +5860,7 @@ void GotoModelsView()
 {
 
  if (ModelMatched) return; // must not change when model connected 
+ SaveCurrentModel();
  SendCommand(GoModelsView);
  CurrentView = MODELSVIEW;
  UpdateModelsNameEveryWhere();
@@ -6833,8 +6834,16 @@ void LoadModelForRenaming(){
     SaveAllParameters();
     GotoFrontView();
  }
+
+/******************************************************************************************************************************/
+
+ void GoBackFromModels(){
+     RestoreCurrentModel();
+     GotoFrontView();
+ }
+
 // ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
-#define LASTFUNCTION 63 // one more than final one
+#define LASTFUNCTION 64 // one more than final one
 
 void (*NumberedFunctions[LASTFUNCTION])() {
     Blank,                // 0 (spares)
@@ -6899,7 +6908,8 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     EndRenameModel,             // 59
     YesPressed,                 // 60
     NoPressed,                  // 61
-    RenameFile                  // 62
+    RenameFile,                 // 62
+    GoBackFromModels            // 63
 
 }; // list will become much longer ...
 
