@@ -7791,6 +7791,7 @@ FASTRUN void ButtonWasPressed()
 if (InStrng(Export, TextIn)) {
             GetDefaultFilename();
             if (GetBackupFilename(GoModelsView,SingleModelFile, ModelName, hhead,fprompt)){
+                FixFileName();
                 if (CheckFileExists(SingleModelFile)) {
                     strcpy(Prompt, overwr);
                     strcat(Prompt, SingleModelFile);
@@ -7798,7 +7799,8 @@ if (InStrng(Export, TextIn)) {
                     if (GetConfirmation(GoModelsView, Prompt)) { 
                         WriteBackup();
                     }
-                }else{
+                }
+                else {
                     WriteBackup();
                 }
             }
