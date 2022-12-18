@@ -378,7 +378,7 @@ uint32_t Inactivity_Start   = 0;
 tmElements_t tm;
 char         TxName[32]      = "Unknown";
 uint32_t     LastTimeRead    = 0;
-uint32_t     LastModelCheck    = 0;
+uint32_t     LastScanButtonCheck    = 0;
 uint32_t     TransmitterLastManaged    = 0;
 uint32_t     LastShowTime    = 0;
 uint32_t     LastDogKick     = 0;
@@ -6837,6 +6837,18 @@ void LoadModelForRenaming(){
 
 /******************************************************************************************************************************/
 
+void DoMFName(){
+    Procrastinate(200);
+    CheckModelName();    // In MODELSVIEW, this function checks correct name is displayed.
+    Procrastinate(500);
+    CheckModelName();    // in case we were much too quick!
+    Procrastinate(1000);
+    CheckModelName();    // in case we were too quick!
+}
+
+
+/******************************************************************************************************************************/
+
  void GoBackFromModels(){
      RestoreCurrentModel();
      GotoFrontView();
@@ -6846,8 +6858,8 @@ void LoadModelForRenaming(){
 #define LASTFUNCTION 64 // one more than final one
 
 void (*NumberedFunctions[LASTFUNCTION])() {
-    Blank,                // 0 (spares)
-    Blank,                // 1
+    Blank,                // 0 
+    DoMFName,             // 1
     ModelViewEnd,         // 2
     DoLastTimeRead,       // 3
     GotoModelsView,       // 4
@@ -9070,7 +9082,6 @@ void CheckModelName()
     FileNumberInView = GetValue(Mfiles); 
     if (FileNumberInView != LastFileInView){
         ShowFileNumber();
-        if (ButtonClicks) PlaySound(CLICKONE);
         LastFileInView = FileNumberInView;
     }
     if (LastModelLoaded != ModelNumber) {       
@@ -9081,7 +9092,6 @@ void CheckModelName()
         }
         ReadOneModel(ModelNumber);
         SendText(mn, ModelName);
-        if (ButtonClicks) PlaySound(CLICKONE);
         if (UseLog) LogThisModel();
         LastModelLoaded = ModelNumber;
         UpdateModelsNameEveryWhere();
@@ -9202,14 +9212,9 @@ void FASTRUN ManageTransmitter(){
             CheckForNextionButtonPress();  
             return;                                                  // That's enough housekeeping this time around
         }
-        if (RightNow - LastModelCheck >= 500) {                     // 2 times a second for these...
-             CheckForNextionButtonPress();  
-            if (CurrentView == TXSETUPVIEW) CheckScanButton();       // 
-            if (CurrentView == RXSETUPVIEW) CheckScanButton();
-            CheckForNextionButtonPress(); 
-            if ((CurrentView == MODELSVIEW) && (!Connected)) CheckModelName();         // In MODELSVIEW, this function checks correct name is displayed.
-            CheckForNextionButtonPress();
-            LastModelCheck = millis();
+        if (RightNow - LastScanButtonCheck >= 100) {                    
+            if ((CurrentView == TXSETUPVIEW) || (CurrentView == RXSETUPVIEW)) CheckScanButton();       
+            LastScanButtonCheck = millis();
         } 
         ReadSwitches();                                              // Check switch positions 20 times a second
         CheckHardwareTrims();                                        // Trims 20 times a second

@@ -534,6 +534,7 @@ void             StartModelSetup();
 bool             GetConfirmation(char* goback, char* Prompt);
 void             GotoModelsView();
 void             SaveCurrentModel();
+void             CheckModelName();
 
 /*********************************************************************************************************************************/
 
