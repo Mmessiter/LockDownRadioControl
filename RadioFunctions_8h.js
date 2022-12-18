@@ -227,6 +227,7 @@ var RadioFunctions_8h =
     [ "CheckDualRatesValues", "RadioFunctions_8h.html#a5467d21eeae42d1bfdb79914ef52d0ed", null ],
     [ "CheckGapsLength", "RadioFunctions_8h.html#aa60c9cac090f6965b4223d5caf84e2f1", null ],
     [ "CheckInvisiblePoint", "RadioFunctions_8h.html#a1870ad872e2424cbf8222747d3a43617", null ],
+    [ "CheckModelName", "RadioFunctions_8h.html#a984cb52354a84c45e9e41f396a1c5e92", null ],
     [ "CheckMotorOff", "RadioFunctions_8h.html#a2f7d73b3096c884b2ace4b3399268325", null ],
     [ "CheckPowerOffButton", "RadioFunctions_8h.html#a6ae37c6938b8c10b83d1bc74e8643bd9", null ],
     [ "CheckRange", "RadioFunctions_8h.html#a01c7a0b0de94ec72fe070ea9f90dc2ec", null ],
