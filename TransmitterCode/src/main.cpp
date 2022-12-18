@@ -6642,10 +6642,8 @@ void GetDefaultFilename(){  // Build filename from ModelName as best we can usin
 
 void FixFileName(){
  char ModExt[] = ".MOD";
-        for (uint8_t i = 0; i < strlen(SingleModelFile);++i){
-              SingleModelFile[i] = toUpperCase(SingleModelFile[i]);
-        }
-        if (!InStrng(ModExt, SingleModelFile) && (strlen(SingleModelFile) <= 8)) strcat(SingleModelFile, ModExt); 
+    for (uint8_t i = 0; i < strlen(SingleModelFile);++i)  SingleModelFile[i] = toUpperCase(SingleModelFile[i]);
+    if (!InStrng(ModExt, SingleModelFile) && (strlen(SingleModelFile) <= 8)) strcat(SingleModelFile, ModExt); 
 }
 
 /******************************************************************************************************************************/
@@ -6839,11 +6837,11 @@ void LoadModelForRenaming(){
 
 void DoMFName(){
     Procrastinate(200);
-    CheckModelName();    // In MODELSVIEW, this function checks correct name is displayed.
+    CheckModelName();    // In MODELSVIEW, this function checks correct model name and filename is displayed.
     Procrastinate(500);
     CheckModelName();    // in case we were much too quick!
     Procrastinate(1000);
-    CheckModelName();    // in case we were too quick!
+    CheckModelName();    // in case we were far too quick!
 }
 
 
@@ -9088,7 +9086,6 @@ void CheckModelName()
         if ((ModelNumber >= MAXMODELNUMBER) || (ModelNumber < 1)) {
             ModelNumber = 1;
             SendValue(MMems, ModelNumber-1);
-           
         }
         ReadOneModel(ModelNumber);
         SendText(mn, ModelName);
