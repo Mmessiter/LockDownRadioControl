@@ -431,7 +431,7 @@ uint32_t  SwapWaveBandTimer = 0;
 uint8_t   UkRulesCounter    = 0;
 bool      UkRules           = true;
 uint8_t   SwapWaveBand      = 0;
-uint16_t  TrimFactor        = 2; // How much to multiply trim by
+uint16_t  TrimMultiplier     = 2; // How much to multiply trim by
 uint8_t   DateFix           = 0;
 bool      b5isGrey          = false;
 bool      b12isGrey         = false;
@@ -2144,7 +2144,7 @@ uint16_t GetTrimAmount(uint8_t InputTrim){ // This is now added to INPUT instead
             if (InputTrim == 1) tt = 2;
             if (InputTrim == 2) tt = 1; 
         }
-        TrimAmount = (Trims[Bank][tt] - 80) * TrimFactor; // TRIMS on lower four input channels (80 is mid point !! (range 40 - 80 - 120)) 
+        TrimAmount = (Trims[Bank][tt] - 80) * TrimMultiplier; // TRIMS on lower four input channels (80 is mid point !! (range 40 - 80 - 120)) 
         if (TrimsReversed[Bank][tt]) TrimAmount = -TrimAmount;
         return TrimAmount;
 }
@@ -2250,7 +2250,7 @@ FASTRUN void GetNewChannelValues()
             InputValue = analogRead(AnalogueInput[InputChannel]) + TrimAmount;                                           // Get values from sticks' pots then ADD TRIM then interpolate them.
             OutputValue = Interpolate[InterpolationTypes[Bank][OutputChannel]](InputValue, InputChannel, OutputChannel); // Use function pointer array to invoke selected interpolation.
         }
-        OutputValue += (SubTrims[OutputChannel] - 127) * (TrimFactor / 2);                                               // ADD SUBTRIM to output channel, not mapped input channel (Range 0 - 127 - 254)
+        OutputValue += (SubTrims[OutputChannel] - 127) * (TrimMultiplier);                                               // ADD SUBTRIM to output channel, not mapped input channel (Range 0 - 127 - 254)
         PreMixBuffer[OutputChannel] = constrain(OutputValue, MINMICROS, MAXMICROS);
         SendBuffer[OutputChannel]   = PreMixBuffer[OutputChannel];
      }
@@ -2393,7 +2393,7 @@ bool CheckFileExists(char * fl){
 /*********************************************************************************************************************************/
 
 void ShortDelay(){
-  delayMicroseconds(15);
+  delayMicroseconds(10);
 }
 /*********************************************************************************************************************************/
 
@@ -2402,11 +2402,11 @@ void OpenModelsFile()
 if(!ModelsFileOpen){
     if (SingleModelFlag) {
         ModelsFileNumber = SD.open(SingleModelFile, FILE_WRITE);
-        delay(300);
+        delay(100);
     }
     else {
         ModelsFileNumber = SD.open(ModelsFile, FILE_WRITE);
-         delay(300);
+         delay(100);
     }
     if (ModelsFileNumber == 0) {
         FileError = true;
@@ -2729,9 +2729,8 @@ bool ReadOneModel(uint32_t Mnum)
     }
     RXCellCount = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-    TrimFactor = SDRead16BITS(SDCardAddress);
-    if (TrimFactor < 1) TrimFactor = 1;
-    if (TrimFactor > 10) TrimFactor = 10;
+    TrimMultiplier = SDRead16BITS(SDCardAddress);
+    TrimMultiplier=CheckRange(TrimMultiplier, 1, 20);
     ++SDCardAddress;
     ++SDCardAddress;
     LowBattery = SDRead8BITS(SDCardAddress);
@@ -3782,7 +3781,7 @@ void SaveOneModel(uint32_t mnum)
     }
     SDUpdate8BITS(SDCardAddress, RXCellCount);
     ++SDCardAddress;
-    SDUpdate16BITS(SDCardAddress, TrimFactor);
+    SDUpdate16BITS(SDCardAddress, TrimMultiplier);
     ++SDCardAddress;
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, LowBattery);
@@ -6528,18 +6527,27 @@ void StartModelSetup(){
     char Progress[]                 = "Progress";
     char fs[16][5]                 = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
      
-            if (CurrentView == FAILSAFE_VIEW) { //  read failsafe blobs
-                SendCommand(ProgressStart);
-                for (int i = 0; i < 16; ++i) {
-                    FailSafeChannel[i] = GetValue(fs[i]);
-                    SendValue(Progress, i * (100 / 16));
-                }
-                SendCommand(ProgressEnd);
-            }
 
+    if (CurrentView == TRIM_VIEW) {
+            EndTrimView();
+    }
+
+    if (CurrentView == FAILSAFE_VIEW) { //  read failsafe blobs
+        SendCommand(ProgressStart);
+        for (int i = 0; i < 16; ++i) {
+            FailSafeChannel[i] = GetValue(fs[i]);
+            SendValue(Progress, i * (100 / 16));
+        }
+        SendCommand(ProgressEnd);
+    }
+
+    b5isGrey  = false;
+    b12isGrey = false;     
     SendCommand(GotoModelSetup);
     CurrentView = RXSETUPVIEW;
     UpdateModelsNameEveryWhere();
+    CurrentMode        = NORMAL;
+    LastTimeRead = 0;
 }
 
 /******************************************************************************************************************************/
@@ -6772,7 +6780,7 @@ void LoadModelForRenaming(){
 
 // This implements the impossible "SD card rename file" ... by reading, re-saveing under new name, then deleting old file.
 
- void RenameFile(){ // heer
+ void RenameFile(){ 
   char ModelsView_filename[] = "filename";
   char Head[]                = "Rename this backup";
   char model[]               = "(i.e. just change its filename)";
@@ -6813,7 +6821,7 @@ void LoadModelForRenaming(){
 
 /******************************************************************************************************************************/
 
- void ModelViewEnd(){ // heer
+ void ModelViewEnd(){ 
 
     char pr[]               = "Select ";
     char buf[50];
@@ -6922,7 +6930,35 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     GoBackFromModels            // 63
 
 }; // list will become much longer ...
+// **********************************************************************************************************************************
+ void StartTrimView(){ // heer
+            char pTrimView[]            = "page TrimView";
+            char n0[]                   = "n0";
+            char c0[]                   = "c0";
 
+            SendCommand(pTrimView);
+            CurrentView = TRIM_VIEW;
+            SendValue(n0, TrimMultiplier);
+            SendValue(c0, CopyTrimsToAll);
+            UpdateModelsNameEveryWhere(); // also updates trimview (If CurrentView == TRIM_VIEW!! :-)
+            ClearText();
+ }
+ // **********************************************************************************************************************************
+
+void EndTrimView(){
+            char Mode1[]                = "Mode1";
+            char Mode2[]                = "Mode2";
+            char n0[]                   = "n0";
+            char c0[]                   = "c0";
+            if (GetValue(Mode1) == 1) SticksMode = 1;
+            if (GetValue(Mode2) == 1) SticksMode = 2;
+            TrimMultiplier=GetValue(n0);
+            TrimMultiplier=CheckRange(TrimMultiplier, 1, 20);
+
+            CopyTrimsToAll=GetValue(c0);
+            SaveOneModel(ModelNumber); // save trims to SDcard
+}
+            
 /*********************************************************************************************************************************
  *                          BUTTON WAS PRESSED (DEAL WITH INPUT FROM NEXTION DISPLAY)                                            *
  *********************************************************************************************************************************/
@@ -7057,6 +7093,7 @@ FASTRUN void ButtonWasPressed()
         char fs[16][5]                 = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
         char CH1NAME[]                 = "CH1NAME=";
         char CH2NAME[]                 = "CH2NAME=";
+          char b17[]                  = "b17";
         char CH3NAME[]                 = "CH3NAME=";
         char CH4NAME[]                 = "CH4NAME=";
         char CH5NAME[]                 = "CH5NAME=";
@@ -7104,7 +7141,7 @@ FASTRUN void ButtonWasPressed()
         char pSwitchesView[]           = "page SwitchesView";
         char pInputsView[]             = "page InputsView";
         char pOptionsViewS[]           = "page OptionsView";
-        char pTrimView[]               = "page TrimView";
+        
         char pMixesView[]              = "page MixesView";
         char pTypeView[]               = "page TypeView";
        
@@ -7117,8 +7154,6 @@ FASTRUN void ButtonWasPressed()
         char UKRULES[]              = "UKRULES";
         char Htext0[]               = "HELP";
         char Htext1[]               = "Help";
-        char b17[]                  = "b17";
-        char trf[]                  = "trf"; // Trim factor
         char Bwn[]                  = "Bwn";
         char SetupCol[]             = "SetupCol";
         char b0_bco[]               = "b0.bco";
@@ -7129,8 +7164,6 @@ FASTRUN void ButtonWasPressed()
         char FrontView_ForeGround[] = "FrontView.ForeGround";
         char FrontView_Special[]    = "FrontView.Special";
         char FrontView_Highlight[]  = "FrontView.Highlight";
-        char Mode1[]                = "Mode1";
-        char Mode2[]                = "Mode2";
         char TrimView_r1[]          = "r1";
         char TrimView_r2[]          = "r2";
         char TrimView_r3[]          = "r3";
@@ -7295,13 +7328,11 @@ FASTRUN void ButtonWasPressed()
             SendValue(Progress, 30);
             Qnh = (uint16_t)GetValue(QNH);
             SendValue(Progress, 40);
-            TrimFactor     = GetValue(trf);
             SendValue(Progress, 50);
             LowBattery     = GetValue(Bwn);
             SendValue(Progress, 60);
             ScreenTimeout  = GetValue(ScreenViewTimeout);
             SendValue(Progress, 70);
-            CopyTrimsToAll = GetValue(c0);
             SendValue(Progress, 80);
             Inactivity_Timeout = GetValue(Pto) * TICKSPERMINUTE;
             if (Inactivity_Timeout < INACTIVITYMINIMUM) Inactivity_Timeout = INACTIVITYMINIMUM;
@@ -7449,9 +7480,7 @@ FASTRUN void ButtonWasPressed()
             SendValue(Pto, (Inactivity_Timeout / TICKSPERMINUTE));
             SendText(Tx_Name, TxName);
             SendValue(QNH, Qnh);
-            SendValue(trf, TrimFactor);
             SendValue(Bwn, LowBattery);
-            SendValue(c0, CopyTrimsToAll);
             CurrentView = OPTIONS_VIEW;
             CurrentMode = NORMAL;
             ClearText();
@@ -7940,18 +7969,10 @@ if (InStrng(Export, TextIn)) {
         }
 
         if (InStrng(TrimView, TextIn) > 0) { // TrimView just appeared, so update it.
-            SendCommand(pTrimView);
-            CurrentView = TRIM_VIEW;
-            UpdateModelsNameEveryWhere(); // also updates trimview (If CurrentView == TRIM_VIEW!! :-)
-            if (!UkRules) {
-                SendText(b17, Htext0);
-            }
-            else {
-                SendText(b17, Htext1);
-            }
-            ClearText();
+            StartTrimView();
             return;
         }
+
         if (InStrng(RTRIM, TextIn) > 0) {
             TrimsReversed[Bank][0] = GetValue(TrimView_r1);
             TrimsReversed[Bank][1] = GetValue(TrimView_r4);
@@ -7984,18 +8005,7 @@ if (InStrng(Export, TextIn)) {
         }
 
         if (InStrng(Trim, TextIn) > 0) { // This is the return from Trim view
-            if (GetValue(Mode1) == 1) SticksMode = 1;
-            if (GetValue(Mode2) == 1) SticksMode = 2;
-            SaveAllParameters(); // save trims to SDcard
-            b5isGrey           = false;
-            b12isGrey = false;
-            CurrentView = TXSETUPVIEW;
-            SendCommand(page_SetupView);
-            LastTimeRead = 0;
-            CurrentMode        = NORMAL;
-            UpdateModelsNameEveryWhere();
-            ClearText();
-            return;
+            EndTrimView();
         }
 
 
