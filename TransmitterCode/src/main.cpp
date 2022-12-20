@@ -2323,7 +2323,7 @@ void UpdateTrimView()
     char    TrimViewChannels[4][4] = {"ch1", "ch4", "ch2", "ch3"};
     char    TrimViewNumbers[4][3]  = {"n1", "n4", "n2", "n3"};
     char    TrimViewReversed[4][3] = {"r1", "r4", "r2", "r3"};
-    char    TrimChannelNames[4][3]= {"c1", "c2", "c3", "c4"};
+    char    TrimChannelNames[4][3] = {"c1", "c2", "c3", "c4"};
 
 
     if (CurrentView == FRONTVIEW || (CurrentView == TRIM_VIEW)) {
