@@ -17,7 +17,7 @@ var searchData=
   ['transmitterversionnumber_14',['TransmitterVersionNumber',['../TransmitterCode_2src_2main_8cpp.html#a60227ba657b591c1f0123978897e60aa',1,'main.cpp']]],
   ['trimclicks_15',['TrimClicks',['../TransmitterCode_2src_2main_8cpp.html#ae72cd49c59d06c6160b52860f2c73f1a',1,'main.cpp']]],
   ['trimdefined_16',['TrimDefined',['../TransmitterCode_2src_2main_8cpp.html#a637b67a91d76737f0574a633348cc114',1,'main.cpp']]],
-  ['trimfactor_17',['TrimFactor',['../TransmitterCode_2src_2main_8cpp.html#a9a5554921fdc9aa1218a50b8754e3934',1,'main.cpp']]],
+  ['trimmultiplier_17',['TrimMultiplier',['../TransmitterCode_2src_2main_8cpp.html#ae46d51cc5056395aceef8ac04871e00c',1,'main.cpp']]],
   ['trimnumber_18',['TrimNumber',['../TransmitterCode_2src_2main_8cpp.html#a90ae717bdcc02bd1388ff25afb8fdad6',1,'main.cpp']]],
   ['trimrepeatspeed_19',['TrimRepeatSpeed',['../TransmitterCode_2src_2main_8cpp.html#a321797809a871259bfbb5986b5972d6e',1,'main.cpp']]],
   ['trims_20',['Trims',['../TransmitterCode_2src_2main_8cpp.html#aa091f2d8f47174c6960fd69335a4e5fa',1,'main.cpp']]],
