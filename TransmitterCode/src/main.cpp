@@ -123,7 +123,7 @@ WDT_timings_t WatchDogConfig;
 SBUS          MySbus(SBUSPORT);
 uint16_t      SbusChannels[CHANNELSUSED + 2]; // a few spare
 uint32_t      SBUSTimer = 0;
-uint8_t       Mixes[MAXMIXES + 1][CHANNELSUSED + 1];                // Channel mixes' 2D array store
+uint8_t       Mixes[MAXMIXES + 1][CHANNELSUSED + 1];          // Channel mixes' 2D array store
 int           Trims[BANKSUSED + 1][CHANNELSUSED + 1];         // Trims to store
 uint8_t       TrimsReversed[BANKSUSED + 1][CHANNELSUSED + 1]; // Trim directions to store
 uint8_t       Exponential[BANKSUSED + 1][CHANNELSUSED + 1];   // Exponential
@@ -2138,7 +2138,7 @@ uint16_t (*Interpolate[3])(uint16_t InputValue, uint16_t InputChannel, uint16_t 
 
 /*********************************************************************************************************************************/
 
-uint16_t GetTrimAmount(uint8_t InputTrim){ // This is now added to INPUT instead of output  
+uint16_t GetTrimAmount(uint8_t InputTrim){ // This is now added to INPUT instead of output   // heer
     uint16_t TrimAmount, tt = InputTrim;
         if (SticksMode == 2) {
             if (InputTrim == 1) tt = 2;
@@ -2323,6 +2323,9 @@ void UpdateTrimView()
     char    TrimViewChannels[4][4] = {"ch1", "ch4", "ch2", "ch3"};
     char    TrimViewNumbers[4][3]  = {"n1", "n4", "n2", "n3"};
     char    TrimViewReversed[4][3] = {"r1", "r4", "r2", "r3"};
+    char    TrimChannelNames[4][3]= {"c1", "c2", "c3", "c4"};
+
+
     if (CurrentView == FRONTVIEW || (CurrentView == TRIM_VIEW)) {
         for (int i = 0; i < 4; ++i) {
             p = i;
@@ -2330,12 +2333,13 @@ void UpdateTrimView()
                 if (i == 1) p = 2;
                 if (i == 2) p = 1;
             }
-            SendValue(TrimViewChannels[p], (Trims[Bank][p]));
-            SendValue(TrimViewNumbers[p], (Trims[Bank][p] - 80));
+            SendValue(TrimViewChannels[p], (Trims[Bank][p]));                 // i ????
+            SendValue(TrimViewNumbers[p],  (Trims[Bank][p] - 80));
             SendValue(TrimViewReversed[p], (TrimsReversed[Bank][p]));
+            SendText(TrimChannelNames[p],  ChannelNames[InputTrim[i]]);        // heer
         }
     }
-  
+
     if (CurrentView == TRIM_VIEW) {
         if (SticksMode == 2) {
             SendValue(Mode2, 1);
@@ -3529,7 +3533,7 @@ FLASHMEM void setup()
             SendText(Warning, err_chksm);
         }
         if (ErrorState == MODELSFILENOTFOUND){
-           // ResetTransmitterSettings();
+        
             SendText(Warning, err_404);
         }
         if (ErrorState == MOTORISON){
@@ -4389,9 +4393,9 @@ void SetDefaultValues()
     for (int i = 0; i < 4; ++i) {
         InputTrim[i] = i;
     }
-    UseMotorKill = false;
+    UseMotorKill = true;
     MotorChannelZero = 0;
-    MotorChannel = 2;
+    MotorChannel = 15;
     
     ReversedChannelBITS = 0; //  No channel reversed
    
@@ -6291,15 +6295,15 @@ void ResetTransmitterSettings(){    // This function resets all transmitter para
    PowerOffWarningSeconds  = DEFAULTPOWEROFFWARNING;
    LEDBrightness           = DEFAULTLEDBRIGHTNESS;
    ConnectionAssessSeconds = 1;
-   AutoModelSelect         = true;
+   AutoModelSelect         = false;
    MotorChannel            = 15;
    MotorChannelZero        = 0;
    SetDS1307ToCompilerTime();
-   for (int k = 1; k < 4;++k){ // writes default three times!
+   for (int k = 1; k < 5;++k){ // writes default four times!
         for (ModelNumber = 1; ModelNumber < MAXMODELNUMBER; ++ModelNumber) { 
             ++sofar;
             SetDefaultValues();
-            SendValue(Progress, (sofar * (100 / MAXMODELNUMBER)) /3);
+            SendValue(Progress, (sofar * (100 / MAXMODELNUMBER)) / 4);
         }
    }
    SendValue(Progress,100);
