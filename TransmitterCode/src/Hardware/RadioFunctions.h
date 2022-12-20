@@ -37,7 +37,7 @@
 //    DEBUG OPTIONS (Uncomment any of these for that bit of debug info)     *
 //***************************************************************************
 
-// #define DB_NEXTION        // Debug NEXTION
+ // #define DB_NEXTION        // Debug NEXTION
 // #define DB_SD             // Debug SD card data
 // #define DB_CHECKSUM       // Debug 32BIT file checksum info
 // #define DB_FHSS           // Debug real time FHSS data
@@ -483,6 +483,7 @@ extern bool          GetButtonPress();
 extern void          CheckPowerOffButton();
 
 
+
 /*********************************************************************************************************************************/
 // function prototypes
 
@@ -532,6 +533,9 @@ void             ShowMotor(int on);
 void             StartModelSetup();
 bool             GetConfirmation(char* goback, char* Prompt);
 void             GotoModelsView();
+void             SaveCurrentModel();
+void             CheckModelName();
+void             EndTrimView();
 
 /*********************************************************************************************************************************/
 
