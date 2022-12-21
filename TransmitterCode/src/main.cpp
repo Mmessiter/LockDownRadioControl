@@ -2138,7 +2138,7 @@ uint16_t (*Interpolate[3])(uint16_t InputValue, uint16_t InputChannel, uint16_t 
 
 /*********************************************************************************************************************************/
 
-int GetTrimAmount(uint8_t InputChannel){ // This is now added to INPUT instead of output   // heer
+int GetTrimAmount(uint8_t InputChannel){ 
     int TrimAmount, tt = InputChannel;
         
         if (SticksMode == 2) {
@@ -2242,10 +2242,10 @@ FASTRUN void GetNewChannelValues()
     for (OutputChannel = 0; OutputChannel < CHANNELSUSED; ++OutputChannel) {                                             // Do every channel
         InputChannel = InPutStick[OutputChannel];                                                                        // Input sticks knobs & switches are mapped by user                                                                                                 
         GetCurveDots(OutputChannel, DualRateValue);  
-        if (InputChannel > 7) {                                                                                          // Must be a switch if over 7
-            OutputValue = GetStickInput(InputChannel) ;                                                                  // Four 3 postion switches
-        } else {                                                                                                         // i.e. l <= 7 so it's a Stick/knob/switch
-            InputValue = analogRead(AnalogueInput[InputChannel]) ;                                                       // Get values from sticks' pots then ADD TRIM then interpolate them.
+        if (InputChannel > 7) {                                                                                         // Must be a switch if over 7
+            OutputValue = GetStickInput(InputChannel);                                                                  // Four 3 postion switches
+        } else {                                                                                                        // i.e. l <= 7 so it's a Stick/knob/switch
+            InputValue = analogRead(AnalogueInput[InputChannel]);                                                       // Get values from sticks' pots then ADD TRIM then interpolate them.
             OutputValue = Interpolate[InterpolationTypes[Bank][OutputChannel]](InputValue, InputChannel, OutputChannel); // Use function pointer array to invoke selected interpolation.
         }
         OutputValue += GetTrimAmount(InputChannel);
