@@ -1581,7 +1581,7 @@ FASTRUN bool CheckRXVolts()
     uint8_t  GreenPercentBar    = 0;
     char  JRX[]         = "JRX";
     bool  RXWarningFlag = false;
-    char  Vbuf[16];
+    char  Vbuf[10];
     char  RXBattInfo[65];
     float VoltsPerCell     = 0;
     char  FrontView_RXBV[] = "RXBV";
@@ -1730,7 +1730,7 @@ FASTRUN void ShowComms()
     char DataView_Sg[]         = "Sg";
     char DataView_Ag[]         = "Ag";
     char DataView_Gc[]         = "Gc";
-    char Vbuf[16];
+    char Vbuf[10];
     char Fix[]               = "Fix"; // These are label names in the NEXTION data screen. They are best kept short.
     char Lon[]               = "Lon";
     char Lat[]               = "Lat";
@@ -2656,7 +2656,7 @@ void CheckSavedTrimValues()
 {
     bool OK = true;
     for (int i = 0; i < 4; ++i) {
-        if ((InputTrim[i] > 15) || (InputTrim[i] < 0)) OK = false; // heer
+        if ((InputTrim[i] > 15) || (InputTrim[i] < 0)) OK = false;
     }
     if (!OK) {
         for (int i = 0; i < 4; ++i) {
@@ -6049,19 +6049,14 @@ void OptionView2Start()
     char dGMT[]          = "dGMT"; // Time zone
     char n1[]            = "n1";
     char n2[]            = "n2";
-    char t10[]           = "t10";
     char n3[]            = "n3";
     char lpm[]           = "c0";    // Auto model match
     char OptionV2Start[] = "page OptionView2";
     char TxVCorrextion[] = "t2";
-    char RxVCorrextion[] = "n0"; // RX Voltage correction
-    char  fbuf[10];
+  
 
     if (CurrentView == OPTIONVIEW3) { //  TODO: And what if was Options 1??
-      GetText(t10, fbuf);
-      StopFlyingVoltsPerCell = atof(fbuf); 
-      SFV                    = StopFlyingVoltsPerCell * 100;// this makes it a 16 bit value I can save easily
-      RxVoltageCorrection    = GetValue(RxVCorrextion);
+    
       TxVoltageCorrection    = GetValue(TxVCorrextion);
       PowerOffWarningSeconds = GetValue(n2);
       PowerOffWarningSeconds = CheckRange(PowerOffWarningSeconds, 1, 10);
@@ -6081,14 +6076,14 @@ void OptionView2Start()
 
 /******************************************************************************************************************************/
 
-void OptionView3Start()
+void OptionView3Start() /// NOT CALLED
 {
     char TxVCorrextion[] = "t2";
     char n1[]            = "n1";
     char n2[]            = "n2";
     char t10[]           = "t10";
     char n3[]            = "n3";
-    char RxVCorrextion[] = "n0"; // RX Voltage correction
+  //  char RxVCorrextion[] = "n0"; // RX Voltage correction
     char lpm[]           = "c0"; // Low power mode
     char Vbuf[10];
     char OptionV3Start[] = "page OptionView3";
@@ -6098,7 +6093,7 @@ void OptionView3Start()
     snprintf(Vbuf, 5, "%f", StopFlyingVoltsPerCell);
     SendText(t10, Vbuf);
     SendValue(TxVCorrextion, TxVoltageCorrection);
-    SendValue(RxVCorrextion, RxVoltageCorrection);
+  //  SendValue(RxVCorrextion, RxVoltageCorrection);
     SendValue(n2,  PowerOffWarningSeconds);
     SendValue(n3,  ConnectionAssessSeconds);
     SendValue(lpm, AutoModelSelect);
@@ -6107,35 +6102,49 @@ void OptionView3Start()
 
 /******************************************************************************************************************************/
 
-void OptionView4Start() 
+void RXSetup1Start() // page 2
 {
-    char OptionV4Start[]  = "page OptionView4";
+    char pRXSetup1[]  = "page RXSetupView1";
     char UseKill[]        = "c0";
     char Mchannel[]       = "n1";
     char Mvalue[]         = "n0";
-
-    SendCommand(OptionV4Start);
-    Procrastinate(100);
+    char t10[]            = "t10";
+    char Vbuf[15];
+    char RxVCorrextion[]  = "n2";
+    
+    SendCommand(pRXSetup1);
+    snprintf(Vbuf, 5, "%f", StopFlyingVoltsPerCell);
+    SendText(t10, Vbuf);
     SendValue(Mvalue, MotorChannelZero);
     SendValue(Mchannel, MotorChannel + 1);
     SendValue(UseKill, UseMotorKill);
-    CurrentView = OPTIONVIEW4;
+    SendValue(RxVCorrextion, RxVoltageCorrection);
+    CurrentView = RXSETUPVIEW1;
 }
+
 /******************************************************************************************************************************/
 
-void OptionView4End()
+void RXSetup1End()
 {
-    char page_SetupView[] = "page SetupView";
-    char UseKill[]        = "c0";
-    char Mchannel[]       = "n1";
-    char Mvalue[]         = "n0";
-    MotorChannelZero    = GetValue(Mvalue);
-    UseMotorKill        = GetValue(UseKill);
-    MotorChannel        = GetValue(Mchannel) - 1;
-    CurrentView = TXSETUPVIEW;
-    SendCommand(page_SetupView);
-    SaveAllParameters();
+    char page_RXSetupView[] = "page RXSetupView";
+    char UseKill[]          = "c0";
+    char Mchannel[]         = "n1";
+    char Mvalue[]           = "n0";
+    char t10[]              = "t10";
+    char fbuf[16];
+    char RxVCorrextion[]    = "n2";
+    GetText(t10, fbuf);
+    StopFlyingVoltsPerCell  = atof(fbuf);
+    SFV                     = StopFlyingVoltsPerCell * 100;  // this makes it a 16 bit value I can save easily
+    MotorChannelZero        = GetValue(Mvalue);
+    RxVoltageCorrection     = GetValue(RxVCorrextion);
+    UseMotorKill            = GetValue(UseKill);
+    MotorChannel            = GetValue(Mchannel) - 1;
+    CurrentView             = TXSETUPVIEW;
+    SaveOneModel(ModelNumber);
     UpdateModelsNameEveryWhere();
+    SendCommand(page_RXSetupView);
+   
 }
 
 /******************************************************************************************************************************/
@@ -6149,29 +6158,23 @@ void UpdateLED(){ // LED Brightness has changed so this ensures it is redisplaye
 
 /******************************************************************************************************************************/
 
-void OptionView3End()
+void OptionView3End() // 
 {
     char TxVCorrextion[]  = "t2";
-    char RxVCorrextion[]  = "n0";
-    char n2[]             = "n2";
+    char n2[]             = "n2"; // heer
     char n3[]             = "n3";
     char n1[]             = "n1";
-    char t10[]            = "t10";
     char page_SetupView[] = "page SetupView";
     char lpm[]            = "c0"; // Auto model selection
-    char  fbuf[10];
-    GetText(t10, fbuf);
-    StopFlyingVoltsPerCell  = atof(fbuf);
-    SFV                     = StopFlyingVoltsPerCell * 100;  // this makes it a 16 bit value I can save easily
+
     TxVoltageCorrection     = GetValue(TxVCorrextion);
-    RxVoltageCorrection     = GetValue(RxVCorrextion);
     PowerOffWarningSeconds  = GetValue(n2);
     PowerOffWarningSeconds  = CheckRange(PowerOffWarningSeconds, 1, 10);
     AutoModelSelect         = GetValue(lpm);
     if (LEDBrightness != GetValue(n1)) UpdateLED(); 
     ConnectionAssessSeconds = GetValue(n3);
     ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);
-    SaveAllParameters();
+    SaveTransmitterParameters();
     CloseModelsFile();
     CurrentView = TXSETUPVIEW;
     SendCommand(page_SetupView);
@@ -6212,6 +6215,7 @@ void BuddyChViewEnd()
         SendValue(Progress, i * (100 / 16));
     }
     SaveOneModel(ModelNumber);
+    CloseModelsFile();
     SendCommand(ProgressEnd);
     SendCommand(page_BuddyView);
     CurrentView = BUDDYVIEW;
@@ -6905,8 +6909,8 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     ElevatorDownTrim,     // 35
     ThrottleDownTrim,     // 36  
     ThrottleUpTrim,       // 37  
-    OptionView4Start,     // 38  
-    OptionView4End,       // 39  
+    RXSetup1Start,        // 38  
+    RXSetup1End,          // 39    
     ResetTransmitterSettings,   // 40
     BindNow,                    // 41
     PointUp,                    // 42
@@ -6934,7 +6938,7 @@ void (*NumberedFunctions[LASTFUNCTION])() {
 
 }; // list will become much longer ...
 // **********************************************************************************************************************************
- void StartTrimView(){ // heer
+ void StartTrimView(){
             char pTrimView[]            = "page TrimView";
             char n0[]                   = "n0";
             char c0[]                   = "c0";
@@ -7656,7 +7660,7 @@ FASTRUN void ButtonWasPressed()
             SendCommand(ProgressStart);
             for (int i = 0; i < 16; ++i) {
                 InPutStick[i] = CheckRange((GetValue(InputStick_Labels[i]) - 1), 0, 15);
-                if (i < 4) InputTrim[i] = CheckRange((GetValue(InputTrim_labels[i]) - 1), 0, 15); // heer
+                if (i < 4) InputTrim[i] = CheckRange((GetValue(InputTrim_labels[i]) - 1), 0, 15); 
                 SendValue(Progress, i * (100 / 16));
             }
             SendValue(Progress, 99);

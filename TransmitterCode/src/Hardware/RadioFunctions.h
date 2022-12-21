@@ -165,7 +165,7 @@
 #define OPTIONVIEW2     25
 #define OPTIONVIEW3     26
 #define BUDDYCHVIEW     27
-#define OPTIONVIEW4     28
+#define RXSETUPVIEW1    28
 #define DUALRATESVIEW   29
 #define GPSVIEW         30
 #define RXSETUPVIEW     31
