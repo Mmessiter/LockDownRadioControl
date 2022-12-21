@@ -2138,11 +2138,12 @@ uint16_t (*Interpolate[3])(uint16_t InputValue, uint16_t InputChannel, uint16_t 
 
 /*********************************************************************************************************************************/
 
-uint16_t GetTrimAmount(uint8_t InputTrim){ // This is now added to INPUT instead of output   // heer
-    uint16_t TrimAmount, tt = InputTrim;
+int GetTrimAmount(uint8_t InputChannel){ // This is now added to INPUT instead of output   // heer
+    int TrimAmount, tt = InputChannel;
+        
         if (SticksMode == 2) {
-            if (InputTrim == 1) tt = 2;
-            if (InputTrim == 2) tt = 1; 
+            if (InputChannel == 1) tt = 2;
+            if (InputChannel == 2) tt = 1; 
         }
         TrimAmount = (Trims[Bank][tt] - 80) * TrimMultiplier; // TRIMS on lower four input channels (80 is mid point !! (range 40 - 80 - 120)) 
         if (TrimsReversed[Bank][tt]) TrimAmount = -TrimAmount;
@@ -2236,20 +2237,18 @@ void     DoSlowServos() {                                                       
 FASTRUN void GetNewChannelValues()
 {
     if (NewCompressNeeded) return;                                                                                       // Have we compressed the last one yet?
-     NewCompressNeeded     = true;                                                                                       // Yes indeed. It's therefore time for new data.
-     uint16_t OutputValue, InputChannel, InputValue, OutputChannel, TrimAmount;                                          // Local variables now with more meaningful names
-    
-     for (OutputChannel = 0; OutputChannel < CHANNELSUSED; ++OutputChannel) {                                            // Do every channel
+    NewCompressNeeded = true;                                                                                            // Yes indeed. It's therefore time for new data.
+    uint16_t OutputValue, InputChannel, InputValue, OutputChannel;
+    for (OutputChannel = 0; OutputChannel < CHANNELSUSED; ++OutputChannel) {                                             // Do every channel
         InputChannel = InPutStick[OutputChannel];                                                                        // Input sticks knobs & switches are mapped by user                                                                                                 
         GetCurveDots(OutputChannel, DualRateValue);  
         if (InputChannel > 7) {                                                                                          // Must be a switch if over 7
-            OutputValue = GetStickInput(InputChannel);                                                                   // Four 3 postion switches
+            OutputValue = GetStickInput(InputChannel) ;                                                                  // Four 3 postion switches
         } else {                                                                                                         // i.e. l <= 7 so it's a Stick/knob/switch
-            TrimAmount   = 0;                                                                                            // Trim is zero if not input 1-4
-            if (InputChannel < 4) TrimAmount = GetTrimAmount(InputTrim[InputChannel]);                                   // User defined trim input
-            InputValue = analogRead(AnalogueInput[InputChannel]) + TrimAmount;                                           // Get values from sticks' pots then ADD TRIM then interpolate them.
+            InputValue = analogRead(AnalogueInput[InputChannel]) ;                                                       // Get values from sticks' pots then ADD TRIM then interpolate them.
             OutputValue = Interpolate[InterpolationTypes[Bank][OutputChannel]](InputValue, InputChannel, OutputChannel); // Use function pointer array to invoke selected interpolation.
         }
+        OutputValue += GetTrimAmount(InputChannel);
         OutputValue += (SubTrims[OutputChannel] - 127) * (TrimMultiplier);                                               // ADD SUBTRIM to output channel, not mapped input channel (Range 0 - 127 - 254)
         PreMixBuffer[OutputChannel] = constrain(OutputValue, MINMICROS, MAXMICROS);
         SendBuffer[OutputChannel]   = PreMixBuffer[OutputChannel];
@@ -2657,7 +2656,7 @@ void CheckSavedTrimValues()
 {
     bool OK = true;
     for (int i = 0; i < 4; ++i) {
-        if ((InputTrim[i] > 3) || (InputTrim[i] < 0)) OK = false;
+        if ((InputTrim[i] > 15) || (InputTrim[i] < 0)) OK = false; // heer
     }
     if (!OK) {
         for (int i = 0; i < 4; ++i) {
@@ -7657,7 +7656,7 @@ FASTRUN void ButtonWasPressed()
             SendCommand(ProgressStart);
             for (int i = 0; i < 16; ++i) {
                 InPutStick[i] = CheckRange((GetValue(InputStick_Labels[i]) - 1), 0, 15);
-                if (i < 4) InputTrim[i] = CheckRange((GetValue(InputTrim_labels[i]) - 1), 0, 3);
+                if (i < 4) InputTrim[i] = CheckRange((GetValue(InputTrim_labels[i]) - 1), 0, 15); // heer
                 SendValue(Progress, i * (100 / 16));
             }
             SendValue(Progress, 99);
@@ -7993,20 +7992,21 @@ if (InStrng(Export, TextIn)) {
             return;
         }
         if (InStrng(TRIMS50, TextIn) > 0) {
-            for (i = 0; i < 4; ++i) {
-                Trims[Bank][i] = 80; // Mid value is 80
+            for (i = 0; i < 15; ++i) {
+                    Trims[Bank][i] = 80; // Mid value is 80
+                }
                 if (CopyTrimsToAll) {
-                    for (i = 0; i < 4; ++i) {
+                    for (i = 0; i < 15; ++i) {
                         for (int fm = 1; fm < 5; ++fm) {
                             Trims[fm][i]         = 80;
                             TrimsReversed[fm][i] = TrimsReversed[Bank][i];
                         }
                     }
                 }
-            }
             ClearText();
             return;
         }
+    
 
         if (InStrng(Trim, TextIn) > 0) { // This is the return from Trim view
             EndTrimView();
@@ -8587,28 +8587,28 @@ void MoveaTrim(uint8_t i)
 
     switch (i) {
         case 0:
-            IncTrim(0); // Aileron
+            IncTrim(InputTrim[0]); // Aileron
             break;
         case 1:
-            DecTrim(0); // Aileron
+            DecTrim(InputTrim[0]); // Aileron
             break;
         case 2:
-            IncTrim(Elevator);
+            IncTrim(InputTrim[Elevator]);
             break;
         case 3:
-            DecTrim(Elevator);
+            DecTrim(InputTrim[Elevator]);
             break;
         case 4:
-            DecTrim(Throttle);
+            DecTrim(InputTrim[Throttle]);
             break;
         case 5:
-            IncTrim(Throttle);
+            IncTrim(InputTrim[Throttle]);
             break;
         case 6:
-            IncTrim(3); // Rudder
+            IncTrim(InputTrim[3]); // Rudder
             break;
         case 7:
-            DecTrim(3); // Rudder
+            DecTrim(InputTrim[3]); // Rudder
             break;
         default:
             break;
