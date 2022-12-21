@@ -15,9 +15,6 @@ var searchData=
   ['optionview3_12',['OPTIONVIEW3',['../RadioFunctions_8h.html#a8d39c6400d468e4435fe0cd79ce663d2',1,'RadioFunctions.h']]],
   ['optionview3end_13',['OptionView3End',['../TransmitterCode_2src_2main_8cpp.html#ab71829b0aee177464a613b151545c08a',1,'main.cpp']]],
   ['optionview3start_14',['OptionView3Start',['../TransmitterCode_2src_2main_8cpp.html#af991f96a1dc93f4cb1a464bc7c4e4ade',1,'main.cpp']]],
-  ['optionview4_15',['OPTIONVIEW4',['../RadioFunctions_8h.html#ab579099e1e9cfa79bded54f4232218ea',1,'RadioFunctions.h']]],
-  ['optionview4end_16',['OptionView4End',['../TransmitterCode_2src_2main_8cpp.html#acd53633dca2d1d5f522b58f874a67df7',1,'main.cpp']]],
-  ['optionview4start_17',['OptionView4Start',['../TransmitterCode_2src_2main_8cpp.html#a885812335df03a0e56809137de409f87',1,'main.cpp']]],
-  ['orange_18',['Orange',['../RadioFunctions_8h.html#a154e686fe7f3f545c01af3592ce0cdff',1,'RadioFunctions.h']]],
-  ['owner_19',['Owner',['../TransmitterCode_2src_2main_8cpp.html#ab1b65653436f50b09bb5c9396b290dce',1,'main.cpp']]]
+  ['orange_15',['Orange',['../RadioFunctions_8h.html#a154e686fe7f3f545c01af3592ce0cdff',1,'RadioFunctions.h']]],
+  ['owner_16',['Owner',['../TransmitterCode_2src_2main_8cpp.html#ab1b65653436f50b09bb5c9396b290dce',1,'main.cpp']]]
 ];
