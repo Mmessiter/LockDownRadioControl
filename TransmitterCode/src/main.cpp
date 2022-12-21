@@ -2324,7 +2324,6 @@ void UpdateTrimView()
     char    TrimViewReversed[4][3] = {"r1", "r4", "r2", "r3"};
     char    TrimChannelNames[4][3] = {"c1", "c2", "c3", "c4"};
 
-
     if (CurrentView == FRONTVIEW || (CurrentView == TRIM_VIEW)) {
         for (int i = 0; i < 4; ++i) {
             p = i;
@@ -2332,10 +2331,11 @@ void UpdateTrimView()
                 if (i == 1) p = 2;
                 if (i == 2) p = 1;
             }
-            SendValue(TrimViewChannels[p], (Trims[Bank][p]));                 // i ????
-            SendValue(TrimViewNumbers[p],  (Trims[Bank][p] - 80));
-            SendValue(TrimViewReversed[p], (TrimsReversed[Bank][p]));
-            SendText(TrimChannelNames[p],  ChannelNames[InputTrim[i]]);        // heer
+            uint8_t pp = InputTrim[p];
+            SendValue(TrimViewChannels[p], (Trims[Bank][pp]));                 
+            SendValue(TrimViewNumbers[p],  (Trims[Bank][pp] - 80));
+            SendValue(TrimViewReversed[p], (TrimsReversed[Bank][pp]));
+            SendText(TrimChannelNames[p],  ChannelNames[pp]);       
         }
     }
 
