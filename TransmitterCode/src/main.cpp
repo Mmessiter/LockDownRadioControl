@@ -4315,10 +4315,10 @@ void SetDefaultValues()
     char DefaultChannelNames[CHANNELSUSED][11] = {{"Aileron"}, {"Elevator"}, {"Throttle"}, {"Rudder"}, {"Ch 5"}, {"Ch 6"}, {"Ch 7"}, {"Ch 8"}, {"Ch 9"}, {"Ch 10"}, {"Ch 11"}, {"Ch 12"}, {"Ch 13"}, {"Ch 14"}, {"Ch 15"}, {"Ch 16"}};
   
 
-    for (i = 0; i < CHANNELSUSED; ++i) {
+    for (i = 0; i < CHANNELSUSED; ++i) { // heer
         for (j = 1; j <= 4; ++j) {
-            if (i == 1) {
-                MaxDegrees[j][i]    = 30; // Elevator goes the other way by default
+            if ((i == 0) || (i == 1)) {
+                MaxDegrees[j][i]    = 30; // goes the other way by default
                 MidHiDegrees[j][i]  = 60;
                 CentreDegrees[j][i] = 90;
                 MidLowDegrees[j][i] = 120;
