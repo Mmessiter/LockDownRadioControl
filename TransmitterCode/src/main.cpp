@@ -6102,7 +6102,7 @@ void OptionView3Start() /// NOT CALLED
 
 /******************************************************************************************************************************/
 
-void RXSetup1Start() // page 2
+void RXSetup1Start() // model options screen
 {
     char pRXSetup1[]  = "page RXSetupView1";
     char UseKill[]        = "c0";
@@ -6111,8 +6111,12 @@ void RXSetup1Start() // page 2
     char t10[]            = "t10";
     char Vbuf[15];
     char RxVCorrextion[]  = "n2";
-    
+    char c1[] = "c1";
+    char n3[] = "n3";
+
     SendCommand(pRXSetup1);
+    SendValue(c1, CopyTrimsToAll);
+    SendValue(n3, TrimMultiplier);
     snprintf(Vbuf, 5, "%f", StopFlyingVoltsPerCell);
     SendText(t10, Vbuf);
     SendValue(Mvalue, MotorChannelZero);
@@ -6120,6 +6124,8 @@ void RXSetup1Start() // page 2
     SendValue(UseKill, UseMotorKill);
     SendValue(RxVCorrextion, RxVoltageCorrection);
     CurrentView = RXSETUPVIEW1;
+    UpdateModelsNameEveryWhere();
+
 }
 
 /******************************************************************************************************************************/
@@ -6133,6 +6139,12 @@ void RXSetup1End()
     char t10[]              = "t10";
     char fbuf[16];
     char RxVCorrextion[]    = "n2";
+    char c1[] = "c1";
+    char n3[] = "n3";
+
+
+    CopyTrimsToAll= GetValue(c1);
+    TrimMultiplier=GetValue(n3);
     GetText(t10, fbuf);
     StopFlyingVoltsPerCell  = atof(fbuf);
     SFV                     = StopFlyingVoltsPerCell * 100;  // this makes it a 16 bit value I can save easily
@@ -6161,7 +6173,7 @@ void UpdateLED(){ // LED Brightness has changed so this ensures it is redisplaye
 void OptionView3End() // 
 {
     char TxVCorrextion[]  = "t2";
-    char n2[]             = "n2"; // heer
+    char n2[]             = "n2"; 
     char n3[]             = "n3";
     char n1[]             = "n1";
     char page_SetupView[] = "page SetupView";
@@ -6534,11 +6546,6 @@ void StartModelSetup(){
     char Progress[]                 = "Progress";
     char fs[16][5]                 = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
      
-
-    if (CurrentView == TRIM_VIEW) {
-            EndTrimView();
-    }
-
     if (CurrentView == FAILSAFE_VIEW) { //  read failsafe blobs
         SendCommand(ProgressStart);
         for (int i = 0; i < 16; ++i) {
@@ -6950,21 +6957,6 @@ void (*NumberedFunctions[LASTFUNCTION])() {
             UpdateModelsNameEveryWhere(); // also updates trimview (If CurrentView == TRIM_VIEW!! :-)
             ClearText();
  }
- // **********************************************************************************************************************************
-
-void EndTrimView(){
-            char Mode1[]                = "Mode1";
-            char Mode2[]                = "Mode2";
-            char n0[]                   = "n0";
-            char c0[]                   = "c0";
-            if (GetValue(Mode1) == 1) SticksMode = 1;
-            if (GetValue(Mode2) == 1) SticksMode = 2;
-            TrimMultiplier=GetValue(n0);
-            TrimMultiplier=CheckRange(TrimMultiplier, 1, 20);
-
-            CopyTrimsToAll=GetValue(c0);
-            SaveOneModel(ModelNumber); // save trims to SDcard
-}
             
 /*********************************************************************************************************************************
  *                          BUTTON WAS PRESSED (DEAL WITH INPUT FROM NEXTION DISPLAY)                                            *
@@ -7034,7 +7026,7 @@ FASTRUN void ButtonWasPressed()
         char DataEnd[]                 = "DataEnd";
         char Data_View[]               = "DataView";
         char CalibrateView[]           = "CalibrateView";
-        char Trim[]                    = "Trim";
+       // char Trim[]                    = "Trim";
         char TrimView[]                = "TrimView";
         char TRIMS50[]                 = "TRIMS50";
         char RTRIM[]                   = "RTRIM";
@@ -7175,8 +7167,7 @@ FASTRUN void ButtonWasPressed()
         char TrimView_r2[]          = "r2";
         char TrimView_r3[]          = "r3";
         char TrimView_r4[]          = "r4";
-        char Md1[]                  = "Md1";
-        char Md2[]                  = "Md2";
+
         char SetupAud[]             = "SetupAud";
         char n0[]                   = "n0";
         char Ex1[]                  = "Ex1";
@@ -7291,16 +7282,8 @@ FASTRUN void ButtonWasPressed()
             UpdateModelsNameEveryWhere();
             return;
         }
-        if (InStrng(Md1, TextIn) > 0) { // Mode 1 for trims
-            SticksMode = 1;
-            ClearText();
-            return;
-        }
-        if (InStrng(Md2, TextIn) > 0) { // Mode 2 for trims
-            SticksMode = 2;
-            ClearText();
-            return;
-        }
+    
+        
         if (InStrng(Mark, TextIn) > 0) {
             GPSMarkHere    = 255; // Mark this location
             GPSMaxDistance = 0;
@@ -7331,7 +7314,8 @@ FASTRUN void ButtonWasPressed()
         if (InStrng(OptionsEnd, TextIn) > 0) { // Exit from Options screen
             SendCommand(ProgressStart);
             SendValue(Progress, 10);
-            GetText(TxNme, TxName); 
+            SticksMode = CheckRange(GetValue(n0), 1, 2); 
+            GetText(TxNme, TxName);
             SendValue(Progress, 30);
             Qnh = (uint16_t)GetValue(QNH);
             SendValue(Progress, 40);
@@ -7479,10 +7463,11 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(OptionsViewS, TextIn) > 0) {
+        if (InStrng(OptionsViewS, TextIn) > 0) {  // start tx setup screen 1
             FixDeltaGMTSign();
             if (CurrentView == OPTIONVIEW2) DeltaGMT = GetValue(dGMT);
             SendCommand(pOptionsViewS);
+            SendValue(n0, SticksMode);
             SendValue(ScreenViewTimeout, ScreenTimeout);
             SendValue(Pto, (Inactivity_Timeout / TICKSPERMINUTE));
             SendText(Tx_Name, TxName);
@@ -8009,11 +7994,6 @@ if (InStrng(Export, TextIn)) {
                 }
             ClearText();
             return;
-        }
-    
-
-        if (InStrng(Trim, TextIn) > 0) { // This is the return from Trim view
-            EndTrimView();
         }
 
 
