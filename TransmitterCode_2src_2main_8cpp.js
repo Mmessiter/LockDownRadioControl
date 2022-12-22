@@ -102,7 +102,6 @@ var TransmitterCode_2src_2main_8cpp =
     [ "EndSend", "TransmitterCode_2src_2main_8cpp.html#ad7b8aa834c87265667a5687b1787a1cc", null ],
     [ "EndSlowView", "TransmitterCode_2src_2main_8cpp.html#a0e7666bd8d250935f34395e0f6dea7bf", null ],
     [ "EndSubTrimView", "TransmitterCode_2src_2main_8cpp.html#a40003084a0136ca08cf8ded75ff4aa4d", null ],
-    [ "EndTrimView", "TransmitterCode_2src_2main_8cpp.html#a4a3b3a5edf41e8d1ce82c15077d0e1b0", null ],
     [ "ExitMacrosView", "TransmitterCode_2src_2main_8cpp.html#a488388f6430a0fc7bec57074ba750a2d", null ],
     [ "ExponentialInterpolation", "TransmitterCode_2src_2main_8cpp.html#ab309da1bf9c1b4a4b7763d8968d7f83e", null ],
     [ "FillBox", "TransmitterCode_2src_2main_8cpp.html#a93d9f055a2723479bb28f6c53fdb2643", null ],

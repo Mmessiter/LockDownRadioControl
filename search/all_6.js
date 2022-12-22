@@ -15,7 +15,7 @@ var searchData=
   ['endsend_12',['EndSend',['../TransmitterCode_2src_2main_8cpp.html#ad7b8aa834c87265667a5687b1787a1cc',1,'main.cpp']]],
   ['endslowview_13',['EndSlowView',['../TransmitterCode_2src_2main_8cpp.html#a0e7666bd8d250935f34395e0f6dea7bf',1,'main.cpp']]],
   ['endsubtrimview_14',['EndSubTrimView',['../TransmitterCode_2src_2main_8cpp.html#a40003084a0136ca08cf8ded75ff4aa4d',1,'main.cpp']]],
-  ['endtrimview_15',['EndTrimView',['../TransmitterCode_2src_2main_8cpp.html#a4a3b3a5edf41e8d1ce82c15077d0e1b0',1,'EndTrimView():&#160;main.cpp'],['../RadioFunctions_8h.html#a4a3b3a5edf41e8d1ce82c15077d0e1b0',1,'EndTrimView():&#160;main.cpp']]],
+  ['endtrimview_15',['EndTrimView',['../RadioFunctions_8h.html#a4a3b3a5edf41e8d1ce82c15077d0e1b0',1,'RadioFunctions.h']]],
   ['error_5fpitch_16',['error_pitch',['../Quadcopter_2src_2main_8cpp.html#a85db48f36a764a6e733a1b8804267f13',1,'main.cpp']]],
   ['error_5fpitch_5fprev_17',['error_pitch_prev',['../Quadcopter_2src_2main_8cpp.html#ac119332644a91fcd9a93df0d7f27db09',1,'main.cpp']]],
   ['error_5froll_18',['error_roll',['../Quadcopter_2src_2main_8cpp.html#adbf3948b425a805510e6c6f9bf17ec3c',1,'main.cpp']]],
