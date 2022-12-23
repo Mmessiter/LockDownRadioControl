@@ -2300,7 +2300,6 @@ void CalibrateSticks() // This discovers end of travel place for sticks etc.
 void ChannelCentres()
 {
     for (int i = 0; i < PROPOCHANNELS; ++i) {
-       // ChannelCentre[i] = analogRead(AnalogueInput[i]);
         ChannelCentre[i] = AnalogueReed(i);
         ChannelMidHi[i]  = ChannelCentre[i] + ((ChannelMax[i] - ChannelCentre[i]) / 2);
         ChannelMidLow[i] = ChannelMin[i] + ((ChannelCentre[i] - ChannelMin[i]) / 2);
@@ -4297,10 +4296,9 @@ void SaveAllParameters()
 
 /*********************************************************************************************************************************/
 
-// this function takes account of the fact one gimble is upside down!
+// This function takes account of the fact one gimbal is upside down ... and some use mode 2.
 
 int AnalogueReed(uint8_t InputChannel){      //heer
-    
     int value = analogRead(AnalogueInput[InputChannel]);
     if (SticksMode == 2){
         if ((InputChannel == 0) || (InputChannel == 2)){  
@@ -4311,7 +4309,6 @@ int AnalogueReed(uint8_t InputChannel){      //heer
               value = map(value, ChannelMin[InputChannel], ChannelMax[InputChannel], ChannelMax[InputChannel], ChannelMin[InputChannel]);
         }
     }
-
     return value;
 }
 
