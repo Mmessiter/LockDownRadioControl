@@ -2321,7 +2321,6 @@ void UpdateTrimView()
     uint8_t p;
     char    TrimViewChannels[4][4] = {"ch1", "ch4", "ch2", "ch3"};
     char    TrimViewNumbers[4][3]  = {"n1", "n4", "n2", "n3"};
-   // char    TrimViewReversed[4][3] = {"r1", "r4", "r2", "r3"};
     char    TrimChannelNames[4][3] = {"c1", "c2", "c3", "c4"};
 
     if (CurrentView == FRONTVIEW || (CurrentView == TRIM_VIEW)) {
@@ -2334,7 +2333,6 @@ void UpdateTrimView()
             uint8_t pp = InputTrim[p];
             SendValue(TrimViewChannels[p], (Trims[Bank][pp]));                 
             SendValue(TrimViewNumbers[p],  (Trims[Bank][pp] - 80));
-          //  SendValue(TrimViewReversed[p], (TrimsReversed[Bank][pp]));
             SendText(TrimChannelNames[p],  ChannelNames[pp]);       
         }
     }
@@ -2726,7 +2724,8 @@ bool ReadOneModel(uint32_t Mnum)
     }
     for (j = 0; j < BANKSUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
-            TrimsReversed[j][i] = SDRead8BITS(SDCardAddress);
+          //  TrimsReversed[j][i] = SDRead8BITS(SDCardAddress);
+            TrimsReversed[j][i] = 0;  // These are now disabled!!
             ++SDCardAddress;
         }
     }
@@ -7983,24 +7982,7 @@ if (InStrng(Export, TextIn)) {
             return;
         }
 
-      //  if (InStrng(RTRIM, TextIn) > 0) {
-      //      TrimsReversed[Bank][0] = GetValue(TrimView_r1);
-      //      TrimsReversed[Bank][1] = GetValue(TrimView_r4);
-      //      TrimsReversed[Bank][2] = GetValue(TrimView_r2);
-      //      TrimsReversed[Bank][3] = GetValue(TrimView_r3);
-      //      if (CopyTrimsToAll) {
-      //          for (j = 0; j < 4; ++j) {
-      //              for (i = 1; i < 5; ++i) {
-      //                  TrimsReversed[i][j] = TrimsReversed[Bank][j];
-      //              }
-      //          }
-      //      }
-      //      ClearText();
-      //      return;
-        
-      //  }
-       
-       
+           
         if (InStrng(TRIMS50, TextIn) > 0) {
             for (i = 0; i < 15; ++i) {
                     Trims[Bank][i] = 80; // Mid value is 80
