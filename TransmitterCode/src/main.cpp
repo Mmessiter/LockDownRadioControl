@@ -2314,8 +2314,7 @@ void ChannelCentres()
 /*********************************************************************************************************************************/
 void UpdateTrimView()
 {
-    char    Mode1[] = "Mode1";
-    char    Mode2[] = "Mode2";
+   
     uint8_t p;
     char    TrimViewChannels[4][4] = {"ch1", "ch4", "ch2", "ch3"};
     char    TrimViewNumbers[4][3]  = {"n1", "n4", "n2", "n3"};
@@ -2331,19 +2330,10 @@ void UpdateTrimView()
             uint8_t pp = InputTrim[p];
             SendValue(TrimViewChannels[p], (Trims[Bank][pp]));                 
             SendValue(TrimViewNumbers[p],  (Trims[Bank][pp] - 80));
-            SendText(TrimChannelNames[p],  ChannelNames[pp]);       
+            if (CurrentView == TRIM_VIEW) SendText(TrimChannelNames[p],  ChannelNames[pp]);       
         }
     }
 
-    if (CurrentView == TRIM_VIEW) {
-        if (SticksMode == 2) {
-            SendValue(Mode2, 1);
-            SendValue(Mode1, 0);
-        } else {
-            SendValue(Mode1, 1);
-            SendValue(Mode2, 0);
-        }
-    }
 }
 /*********************************************************************************************************************************/
 
