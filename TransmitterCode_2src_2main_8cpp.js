@@ -650,7 +650,6 @@ var TransmitterCode_2src_2main_8cpp =
     [ "TrimNumber", "TransmitterCode_2src_2main_8cpp.html#a90ae717bdcc02bd1388ff25afb8fdad6", null ],
     [ "TrimRepeatSpeed", "TransmitterCode_2src_2main_8cpp.html#a321797809a871259bfbb5986b5972d6e", null ],
     [ "Trims", "TransmitterCode_2src_2main_8cpp.html#aa091f2d8f47174c6960fd69335a4e5fa", null ],
-    [ "TrimsReversed", "TransmitterCode_2src_2main_8cpp.html#ad4c5b1153accf9cb947b595457ac7af8", null ],
     [ "TrimSwitch", "TransmitterCode_2src_2main_8cpp.html#ad5adb31bc39b92d27e6ca35ef4dafefe", null ],
     [ "TrimTimer", "TransmitterCode_2src_2main_8cpp.html#a48589088880569c1ae40f8c226cc52be", null ],
     [ "TurnOffRX", "TransmitterCode_2src_2main_8cpp.html#a553fac5bc8b66591d5c1d735e624a614", null ],
