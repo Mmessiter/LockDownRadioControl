@@ -221,6 +221,7 @@ var RadioFunctions_8h =
     [ "WHEELSUP", "RadioFunctions_8h.html#a2f4add3512786c2587a55304d167a770", null ],
     [ "White", "RadioFunctions_8h.html#a298a3b7c7f2ea427a7cd21cdc9a4f054", null ],
     [ "Yellow", "RadioFunctions_8h.html#a239cc4651865ee2ac90ac5c1e6d2d8b5", null ],
+    [ "AnalogueReed", "RadioFunctions_8h.html#ac5728db610c441820a6f47295967cbab", null ],
     [ "BufferNewPipe", "RadioFunctions_8h.html#a9a3e35cbf8abeae1ebdb4af8dff3571a", null ],
     [ "ButtonWasPressed", "RadioFunctions_8h.html#a8e7ccbf842764fd85cc578be263f7202", null ],
     [ "CalibrateEdgeSwitches", "RadioFunctions_8h.html#a128fe47088693b102796cd67a175ea08", null ],
