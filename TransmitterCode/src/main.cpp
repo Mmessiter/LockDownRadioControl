@@ -2246,7 +2246,7 @@ FASTRUN void GetNewChannelValues()
         if (InputChannel > 7) {                                                                                          // Must be a switch if over 7
             OutputValue = GetStickInput(InputChannel);                                                                   // Four 3 postion switches
         } else {                                                                                                         // i.e. l <= 7 so it's a Stick/knob/switch                                           
-            InputValue = AnalogueReed(InputChannel) + GetTrimAmount(InputChannel);                                      // Get values from sticks' pots then ADD TRIM then interpolate them.
+            InputValue = AnalogueReed(InputChannel) + GetTrimAmount(InputChannel);                                       // Get values from sticks' pots then ADD TRIM then interpolate them.
             OutputValue = Interpolate[InterpolationTypes[Bank][OutputChannel]](InputValue, InputChannel, OutputChannel); // Use function pointer array to invoke selected interpolation.
         }
         OutputValue += (SubTrims[OutputChannel] - 127) * (TrimMultiplier);                                               // ADD SUBTRIM to output channel, not mapped input channel (Range 0 - 127 - 254)
@@ -2300,7 +2300,8 @@ void CalibrateSticks() // This discovers end of travel place for sticks etc.
 void ChannelCentres()
 {
     for (int i = 0; i < PROPOCHANNELS; ++i) {
-        ChannelCentre[i] = analogRead(AnalogueInput[i]);
+       // ChannelCentre[i] = analogRead(AnalogueInput[i]);
+        ChannelCentre[i] = AnalogueReed(i);
         ChannelMidHi[i]  = ChannelCentre[i] + ((ChannelMax[i] - ChannelCentre[i]) / 2);
         ChannelMidLow[i] = ChannelMin[i] + ((ChannelCentre[i] - ChannelMin[i]) / 2);
     }
