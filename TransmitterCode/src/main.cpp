@@ -125,7 +125,6 @@ uint16_t      SbusChannels[CHANNELSUSED + 2]; // a few spare
 uint32_t      SBUSTimer = 0;
 uint8_t       Mixes[MAXMIXES + 1][CHANNELSUSED + 1];          // Channel mixes' 2D array store
 int           Trims[BANKSUSED + 1][CHANNELSUSED + 1];         // Trims to store
-uint8_t       TrimsReversed[BANKSUSED + 1][CHANNELSUSED + 1]; // Trim directions to store
 uint8_t       Exponential[BANKSUSED + 1][CHANNELSUSED + 1];   // Exponential
 uint8_t       InterpolationTypes[BANKSUSED + 1][CHANNELSUSED + 1];
 
@@ -2147,7 +2146,6 @@ int GetTrimAmount(uint8_t InputChannel){
             if (InputChannel == 2) tt = 1; 
         }
         TrimAmount = (Trims[Bank][tt] - 80) * TrimMultiplier; // TRIMS on lower four input channels (80 is mid point !! (range 40 - 80 - 120)) 
-        if (TrimsReversed[Bank][tt]) TrimAmount = -TrimAmount;
         return TrimAmount;
 }
 
@@ -2724,8 +2722,7 @@ bool ReadOneModel(uint32_t Mnum)
     }
     for (j = 0; j < BANKSUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
-          //  TrimsReversed[j][i] = SDRead8BITS(SDCardAddress);
-            TrimsReversed[j][i] = 0;  // These are now disabled!!
+                                // These are now disabled and this space is spare
             ++SDCardAddress;
         }
     }
@@ -3777,7 +3774,7 @@ void SaveOneModel(uint32_t mnum)
     }
     for (j = 0; j < BANKSUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
-            SDUpdate8BITS(SDCardAddress, TrimsReversed[j][i]);
+         // SPARE!!!
             ++SDCardAddress;
         }
     }
@@ -4295,7 +4292,8 @@ void SaveAllParameters()
 
 /*********************************************************************************************************************************/
 
-// This function takes account of the fact one gimbal is upside down ... and some use mode 2.
+// This function takes account of the fact one gimbal is upside down ... and some people use mode 2.
+// Aileron is always reversed, plus either throttle or elevator according to mode 1 or 2
 
 int AnalogueReed(uint8_t InputChannel){      //heer
     int value = analogRead(AnalogueInput[InputChannel]);
@@ -4319,7 +4317,6 @@ void SetDefaultValues()
     uint16_t i=0;
     char     empty[] = "Not in use";
     
-
     CloseModelsFile();
     OpenModelsFile();
 
@@ -4331,23 +4328,13 @@ void SetDefaultValues()
 
     char DefaultChannelNames[CHANNELSUSED][11] = {{"Aileron"}, {"Elevator"}, {"Throttle"}, {"Rudder"}, {"Ch 5"}, {"Ch 6"}, {"Ch 7"}, {"Ch 8"}, {"Ch 9"}, {"Ch 10"}, {"Ch 11"}, {"Ch 12"}, {"Ch 13"}, {"Ch 14"}, {"Ch 15"}, {"Ch 16"}};
   
-
     for (i = 0; i < CHANNELSUSED; ++i) { // heer
         for (j = 1; j <= 4; ++j) {
-          //  if ((i == 0) || (i == 1)) {
-          //      MaxDegrees[j][i]    = 30; // goes the other way by default
-          //      MidHiDegrees[j][i]  = 60;
-          //      CentreDegrees[j][i] = 90;
-          //      MidLowDegrees[j][i] = 120;
-          //      MinDegrees[j][i]    = 150;
-          //  }
-          //  else {
                 MaxDegrees[j][i]    = 150;
                 MidHiDegrees[j][i]  = 120;
                 CentreDegrees[j][i] = 90;
                 MidLowDegrees[j][i] = 60;
                 MinDegrees[j][i]    = 30;
-           // }
         }
     }
 
@@ -4357,11 +4344,9 @@ void SetDefaultValues()
         }
     }
    
-
     for (j = 0; j < BANKSUSED + 1; ++j) { // must have fudged this somewhere.... 5?!
         for (i = 0; i < CHANNELSUSED; ++i) {
             Trims[j][i]         = 80; // MIDPOINT is 80 !
-            TrimsReversed[j][i] = 0;
         }
     }
     RXCellCount = 3;
@@ -7991,7 +7976,6 @@ if (InStrng(Export, TextIn)) {
                     for (i = 0; i < 15; ++i) {
                         for (int fm = 1; fm < 5; ++fm) {
                             Trims[fm][i]         = 80;
-                            TrimsReversed[fm][i] = TrimsReversed[Bank][i];
                         }
                     }
                 }
@@ -8602,11 +8586,11 @@ void MoveaTrim(uint8_t i)
     }
     if (ScreenIsOff) RestoreBrightness();
     if (CopyTrimsToAll) {
-        for (i = 0; i < 4; ++i)
+        for (i = 0; i < 4; ++i){
             for (int fm = 1; fm < 5; ++fm) {
                 Trims[fm][i]         = Trims[Bank][i];
-                TrimsReversed[fm][i] = TrimsReversed[Bank][i];
             }
+        }
     }
 }
 
@@ -9220,7 +9204,6 @@ void FASTRUN ManageTransmitter(){
         ShowComms();                                                 // Screen Data                                  
         CheckTimer();                                                // Screen Timer
         CheckPowerOffButton();                                       // Pretty obvious really ...
-       
         TransmitterLastManaged = millis();
     }
 }
