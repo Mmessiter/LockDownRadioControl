@@ -1496,7 +1496,8 @@ FASTRUN void ShowServoPos()
         uint16_t LeastDistance = 3; // if the change is very small, don't re-display anything - to reduce flashing. :=)!!
           
         l = (InPutStick[ChanneltoSet - 1]);
-        if (ChanneltoSet <= 8) l1 = analogRead(AnalogueInput[l]); else l1 = GetStickInputInputOnly(l); 
+     //   if (ChanneltoSet <= 8) l1 = AnalogueReed(AnalogueInput[l]); else l1 = GetStickInputInputOnly(l); 
+         if (ChanneltoSet <= 8) l1 = AnalogueReed(l); else l1 = GetStickInputInputOnly(l); 
 
         if (ReversedChannelBITS & 1 << (ChanneltoSet - 1)) { // reversed?
             if (l1 <= ChannelCentre[l]) {
@@ -2242,13 +2243,12 @@ FASTRUN void GetNewChannelValues()
     for (OutputChannel = 0; OutputChannel < CHANNELSUSED; ++OutputChannel) {                                             // Do every channel
         InputChannel = InPutStick[OutputChannel];                                                                        // Input sticks knobs & switches are mapped by user                                                                                                 
         GetCurveDots(OutputChannel, DualRateValue);  
-        if (InputChannel > 7) {                                                                                         // Must be a switch if over 7
-            OutputValue = GetStickInput(InputChannel);                                                                  // Four 3 postion switches
-        } else {                                                                                                        // i.e. l <= 7 so it's a Stick/knob/switch
-            InputValue = analogRead(AnalogueInput[InputChannel]);                                                       // Get values from sticks' pots then ADD TRIM then interpolate them.
+        if (InputChannel > 7) {                                                                                          // Must be a switch if over 7
+            OutputValue = GetStickInput(InputChannel);                                                                   // Four 3 postion switches
+        } else {                                                                                                         // i.e. l <= 7 so it's a Stick/knob/switch                                           
+            InputValue = AnalogueReed(InputChannel) + GetTrimAmount(InputChannel);                                      // Get values from sticks' pots then ADD TRIM then interpolate them.
             OutputValue = Interpolate[InterpolationTypes[Bank][OutputChannel]](InputValue, InputChannel, OutputChannel); // Use function pointer array to invoke selected interpolation.
         }
-        OutputValue += GetTrimAmount(InputChannel);
         OutputValue += (SubTrims[OutputChannel] - 127) * (TrimMultiplier);                                               // ADD SUBTRIM to output channel, not mapped input channel (Range 0 - 127 - 254)
         PreMixBuffer[OutputChannel] = constrain(OutputValue, MINMICROS, MAXMICROS);
         SendBuffer[OutputChannel]   = PreMixBuffer[OutputChannel];
@@ -2321,7 +2321,7 @@ void UpdateTrimView()
     uint8_t p;
     char    TrimViewChannels[4][4] = {"ch1", "ch4", "ch2", "ch3"};
     char    TrimViewNumbers[4][3]  = {"n1", "n4", "n2", "n3"};
-    char    TrimViewReversed[4][3] = {"r1", "r4", "r2", "r3"};
+   // char    TrimViewReversed[4][3] = {"r1", "r4", "r2", "r3"};
     char    TrimChannelNames[4][3] = {"c1", "c2", "c3", "c4"};
 
     if (CurrentView == FRONTVIEW || (CurrentView == TRIM_VIEW)) {
@@ -2334,7 +2334,7 @@ void UpdateTrimView()
             uint8_t pp = InputTrim[p];
             SendValue(TrimViewChannels[p], (Trims[Bank][pp]));                 
             SendValue(TrimViewNumbers[p],  (Trims[Bank][pp] - 80));
-            SendValue(TrimViewReversed[p], (TrimsReversed[Bank][pp]));
+          //  SendValue(TrimViewReversed[p], (TrimsReversed[Bank][pp]));
             SendText(TrimChannelNames[p],  ChannelNames[pp]);       
         }
     }
@@ -4296,6 +4296,26 @@ void SaveAllParameters()
 
 /*********************************************************************************************************************************/
 
+// this function takes account of the fact one gimble is upside down!
+
+int AnalogueReed(uint8_t InputChannel){      //heer
+    
+    int value = analogRead(AnalogueInput[InputChannel]);
+    if (SticksMode == 2){
+        if ((InputChannel == 0) || (InputChannel == 2)){  
+              value = map(value, ChannelMin[InputChannel], ChannelMax[InputChannel], ChannelMax[InputChannel], ChannelMin[InputChannel]); 
+        }
+    } else {
+        if ((InputChannel == 0) || (InputChannel == 1)){
+              value = map(value, ChannelMin[InputChannel], ChannelMax[InputChannel], ChannelMax[InputChannel], ChannelMin[InputChannel]);
+        }
+    }
+
+    return value;
+}
+
+/*********************************************************************************************************************************/
+
 void SetDefaultValues() 
 {
     uint16_t j=0;
@@ -4317,22 +4337,23 @@ void SetDefaultValues()
 
     for (i = 0; i < CHANNELSUSED; ++i) { // heer
         for (j = 1; j <= 4; ++j) {
-            if ((i == 0) || (i == 1)) {
-                MaxDegrees[j][i]    = 30; // goes the other way by default
-                MidHiDegrees[j][i]  = 60;
-                CentreDegrees[j][i] = 90;
-                MidLowDegrees[j][i] = 120;
-                MinDegrees[j][i]    = 150;
-            }
-            else {
+          //  if ((i == 0) || (i == 1)) {
+          //      MaxDegrees[j][i]    = 30; // goes the other way by default
+          //      MidHiDegrees[j][i]  = 60;
+          //      CentreDegrees[j][i] = 90;
+          //      MidLowDegrees[j][i] = 120;
+          //      MinDegrees[j][i]    = 150;
+          //  }
+          //  else {
                 MaxDegrees[j][i]    = 150;
                 MidHiDegrees[j][i]  = 120;
                 CentreDegrees[j][i] = 90;
                 MidLowDegrees[j][i] = 60;
                 MinDegrees[j][i]    = 30;
-            }
+           // }
         }
     }
+
     for (j = 0; j < MAXMIXES; ++j) {
         for (i = 0; i < CHANNELSUSED; ++i) {
             Mixes[j][i] = 0;
@@ -7026,10 +7047,9 @@ FASTRUN void ButtonWasPressed()
         char DataEnd[]                 = "DataEnd";
         char Data_View[]               = "DataView";
         char CalibrateView[]           = "CalibrateView";
-       // char Trim[]                    = "Trim";
         char TrimView[]                = "TrimView";
         char TRIMS50[]                 = "TRIMS50";
-        char RTRIM[]                   = "RTRIM";
+       // char RTRIM[]                   = "RTRIM";
         char MIXES_VIEW[]              = "MIXESVIEW"; // first call
         char Fhss_View[]               = "FhssView";
         char FM1[]                     = "FM 1";
@@ -7163,10 +7183,10 @@ FASTRUN void ButtonWasPressed()
         char FrontView_ForeGround[] = "FrontView.ForeGround";
         char FrontView_Special[]    = "FrontView.Special";
         char FrontView_Highlight[]  = "FrontView.Highlight";
-        char TrimView_r1[]          = "r1";
-        char TrimView_r2[]          = "r2";
-        char TrimView_r3[]          = "r3";
-        char TrimView_r4[]          = "r4";
+      //  char TrimView_r1[]          = "r1";
+      //  char TrimView_r2[]          = "r2";
+      //  char TrimView_r3[]          = "r3";
+      //  char TrimView_r4[]          = "r4";
 
         char SetupAud[]             = "SetupAud";
         char n0[]                   = "n0";
@@ -7965,21 +7985,24 @@ if (InStrng(Export, TextIn)) {
             return;
         }
 
-        if (InStrng(RTRIM, TextIn) > 0) {
-            TrimsReversed[Bank][0] = GetValue(TrimView_r1);
-            TrimsReversed[Bank][1] = GetValue(TrimView_r4);
-            TrimsReversed[Bank][2] = GetValue(TrimView_r2);
-            TrimsReversed[Bank][3] = GetValue(TrimView_r3);
-            if (CopyTrimsToAll) {
-                for (j = 0; j < 4; ++j) {
-                    for (i = 1; i < 5; ++i) {
-                        TrimsReversed[i][j] = TrimsReversed[Bank][j];
-                    }
-                }
-            }
-            ClearText();
-            return;
-        }
+      //  if (InStrng(RTRIM, TextIn) > 0) {
+      //      TrimsReversed[Bank][0] = GetValue(TrimView_r1);
+      //      TrimsReversed[Bank][1] = GetValue(TrimView_r4);
+      //      TrimsReversed[Bank][2] = GetValue(TrimView_r2);
+      //      TrimsReversed[Bank][3] = GetValue(TrimView_r3);
+      //      if (CopyTrimsToAll) {
+      //          for (j = 0; j < 4; ++j) {
+      //              for (i = 1; i < 5; ++i) {
+      //                  TrimsReversed[i][j] = TrimsReversed[Bank][j];
+      //              }
+      //          }
+      //      }
+      //      ClearText();
+      //      return;
+        
+      //  }
+       
+       
         if (InStrng(TRIMS50, TextIn) > 0) {
             for (i = 0; i < 15; ++i) {
                     Trims[Bank][i] = 80; // Mid value is 80

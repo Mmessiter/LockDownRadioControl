@@ -536,6 +536,7 @@ void             GotoModelsView();
 void             SaveCurrentModel();
 void             CheckModelName();
 void             EndTrimView();
+int              AnalogueReed(uint8_t InputChannel);
 
 /*********************************************************************************************************************************/
 
