@@ -225,7 +225,10 @@ uint16_t BoxLeft;
 uint16_t BoxRight;
 uint16_t ClickX;
 uint16_t ClickY;
-uint16_t AnalogueInput[PROPOCHANNELS] = {A0, A1, A2, A3, A6, A7, A8, A9}; // 8 PROPO Channels for transmission
+
+uint16_t AnalogueInput[PROPOCHANNELS] = {A0, A1, A2, A3, A6, A7, A8, A9}; // 8 PROPO Channels for transmission   // fix order for mode 2 heer
+uint8_t  TrimNumber[8]               = {TRIM1A, TRIM1B, TRIM2A, TRIM2B, TRIM3A, TRIM3B, TRIM4A, TRIM4B};        // These too can get swapped over later
+
 uint8_t  CurrentMode                  = NORMAL;
 uint8_t  AllChannels[127]; /// for scanning
 uint8_t  NoCarrier[127];
@@ -265,7 +268,7 @@ char      StartBackGround[]           = "click Background,0";
 char      ModelsFile[]                = "models.dat";
 uint8_t   SwitchNumber[8]             = {SWITCH0, SWITCH1, SWITCH2, SWITCH3, SWITCH4, SWITCH5, SWITCH6, SWITCH7}; // These can get swapped over later
 uint8_t   DefaultSwitchNumber[8]      = {SWITCH0, SWITCH1, SWITCH2, SWITCH3, SWITCH4, SWITCH5, SWITCH6, SWITCH7}; // Default values
-uint8_t   TrimNumber[8]               = {TRIM1A, TRIM1B, TRIM2A, TRIM2B, TRIM3A, TRIM3B, TRIM4A, TRIM4B};         // These too can get swapped over later
+
 bool      DefiningTrims               = false;
 bool      TrimDefined[4]              = {true, true, true, true};
 char      DateTime[]                  = "DateTime";
@@ -4285,7 +4288,7 @@ void SaveAllParameters()
 // This function takes account of the fact one gimbal is upside down ... and some people use mode 2.
 // Aileron is always reversed, plus either throttle or elevator according to mode 1 or 2
 
-int AnalogueReed(uint8_t InputChannel){      //heer
+int AnalogueReed(uint8_t InputChannel){    
     int value = analogRead(AnalogueInput[InputChannel]);
     if (SticksMode == 2){
         if ((InputChannel == 0) || (InputChannel == 2)){  
@@ -4318,7 +4321,7 @@ void SetDefaultValues()
 
     char DefaultChannelNames[CHANNELSUSED][11] = {{"Aileron"}, {"Elevator"}, {"Throttle"}, {"Rudder"}, {"Ch 5"}, {"Ch 6"}, {"Ch 7"}, {"Ch 8"}, {"Ch 9"}, {"Ch 10"}, {"Ch 11"}, {"Ch 12"}, {"Ch 13"}, {"Ch 14"}, {"Ch 15"}, {"Ch 16"}};
   
-    for (i = 0; i < CHANNELSUSED; ++i) { // heer
+    for (i = 0; i < CHANNELSUSED; ++i) { 
         for (j = 1; j <= 4; ++j) {
                 MaxDegrees[j][i]    = 150;
                 MidHiDegrees[j][i]  = 120;
