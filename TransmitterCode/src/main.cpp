@@ -226,8 +226,9 @@ uint16_t BoxRight;
 uint16_t ClickX;
 uint16_t ClickY;
 
-uint16_t AnalogueInput[PROPOCHANNELS] = {A0, A1, A2, A3, A6, A7, A8, A9}; // 8 PROPO Channels for transmission   // fix order for mode 2 heer
-uint8_t  TrimNumber[8]               = {TRIM1A, TRIM1B, TRIM2A, TRIM2B, TRIM3A, TRIM3B, TRIM4A, TRIM4B};        // These too can get swapped over later
+uint8_t  SticksMode                    = 2;
+uint16_t AnalogueInput[PROPOCHANNELS]  = {A0, A1, A2, A3, A6, A7, A8, A9}; // 8 PROPO Channels for transmission   // fix order for mode 2 heer
+uint8_t  TrimNumber[8]                 = {TRIM1A, TRIM1B, TRIM2A, TRIM2B, TRIM3A, TRIM3B, TRIM4A, TRIM4B};        // These too can get swapped over later
 
 uint8_t  CurrentMode                  = NORMAL;
 uint8_t  AllChannels[127]; /// for scanning
@@ -446,7 +447,7 @@ uint8_t   LowBattery        = LOWBATTERY;
 uint16_t  SbusRepeats       = 0;
 uint16_t  SavedSbusRepeats  = 0;
 bool      RXVoltsDetected   = false;
-uint8_t   SticksMode        = 2;
+
 uint16_t  RadioSwaps        = 0;
 uint16_t  RX1TotalTime      = 0;
 uint16_t  RX2TotalTime      = 0;
@@ -544,6 +545,47 @@ char    Confirmed[2];
 // *********************************************** END OF GLOBAL DATA ***************************************************************
 // **********************************************************************************************************************************
 
+void ConfigureStickMode(){  // This sets stick mode without moving wires
+
+if (SticksMode == 1) {
+
+        AnalogueInput[0] = A0;
+        AnalogueInput[1] = A1;
+        AnalogueInput[2] = A2;
+        AnalogueInput[3] = A3;
+        AnalogueInput[4] = A6;
+        AnalogueInput[5] = A7;
+        AnalogueInput[6] = A8;
+        AnalogueInput[7] = A9;
+        TrimNumber[0] = TRIM1A;
+        TrimNumber[1] = TRIM1B;
+        TrimNumber[2] = TRIM2A;
+        TrimNumber[3] = TRIM2B;
+        TrimNumber[4] = TRIM3A;
+        TrimNumber[5] = TRIM3B;
+        TrimNumber[6] = TRIM4A;
+        TrimNumber[7] = TRIM4B;
+    }
+if (SticksMode == 2) {
+
+        AnalogueInput[0] = A0;
+        AnalogueInput[1] = A2;
+        AnalogueInput[2] = A1;
+        AnalogueInput[3] = A3;
+        AnalogueInput[4] = A6;
+        AnalogueInput[5] = A7;
+        AnalogueInput[6] = A8;
+        AnalogueInput[7] = A9;
+        TrimNumber[0] = TRIM1A;
+        TrimNumber[1] = TRIM1B;
+        TrimNumber[4] = TRIM2A;
+        TrimNumber[5] = TRIM2B;
+        TrimNumber[2] = TRIM3A;
+        TrimNumber[3] = TRIM3B;
+        TrimNumber[6] = TRIM4A;
+        TrimNumber[7] = TRIM4B;
+    }          
+}
 
 void CheckForNextionButtonPress()
 {
@@ -3508,6 +3550,7 @@ FLASHMEM void setup()
     SendText(FrontView_Connected, na);
     UpdateModelsNameEveryWhere();
     WarningTimer = millis();
+    ConfigureStickMode();
     CheckMotorOff();
     if (MotorEnabled){
             ErrorState = MOTORISON;
@@ -6152,7 +6195,7 @@ void RXSetup1End()
     SaveOneModel(ModelNumber);
     UpdateModelsNameEveryWhere();
     SendCommand(page_RXSetupView);
-   
+    
 }
 
 /******************************************************************************************************************************/
@@ -7158,11 +7201,7 @@ FASTRUN void ButtonWasPressed()
         char FrontView_ForeGround[] = "FrontView.ForeGround";
         char FrontView_Special[]    = "FrontView.Special";
         char FrontView_Highlight[]  = "FrontView.Highlight";
-      //  char TrimView_r1[]          = "r1";
-      //  char TrimView_r2[]          = "r2";
-      //  char TrimView_r3[]          = "r3";
-      //  char TrimView_r4[]          = "r4";
-
+      
         char SetupAud[]             = "SetupAud";
         char n0[]                   = "n0";
         char Ex1[]                  = "Ex1";
@@ -7306,7 +7345,7 @@ FASTRUN void ButtonWasPressed()
             ClearText();
             return;
         }
-        if (InStrng(OptionsEnd, TextIn) > 0) { // Exit from Options screen
+        if (InStrng(OptionsEnd, TextIn) > 0) { // Exit from TX Options screen1 
             SendCommand(ProgressStart);
             SendValue(Progress, 10);
             SticksMode = CheckRange(GetValue(n0), 1, 2); 
@@ -7345,6 +7384,7 @@ FASTRUN void ButtonWasPressed()
             SendCommand(ProgressEnd);
             LedWasGreen = false;
             UpdateModelsNameEveryWhere();
+            ConfigureStickMode();
             ClearText();
             return;
         }
