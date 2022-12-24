@@ -227,7 +227,7 @@ uint16_t ClickX;
 uint16_t ClickY;
 
 uint8_t  SticksMode                    = 2;
-uint16_t AnalogueInput[PROPOCHANNELS]  = {A0, A1, A2, A3, A6, A7, A8, A9}; // 8 PROPO Channels for transmission   // fix order for mode 2 heer
+uint16_t AnalogueInput[PROPOCHANNELS]  = {A0, A1, A2, A3, A6, A7, A8, A9}; // 8 PROPO Channels for transmission   // fix order for mode 2 
 uint8_t  TrimNumber[8]                 = {TRIM1A, TRIM1B, TRIM2A, TRIM2B, TRIM3A, TRIM3B, TRIM4A, TRIM4B};        // These too can get swapped over later
 
 uint8_t  CurrentMode                  = NORMAL;
@@ -545,10 +545,13 @@ char    Confirmed[2];
 // *********************************************** END OF GLOBAL DATA ***************************************************************
 // **********************************************************************************************************************************
 
-void ConfigureStickMode(){  // This sets stick mode without moving wires
+
+
+// **********************************************************************************************************************************
+
+void ConfigureStickMode(){  // This sets stick mode without moving any wires. Must be wired as for Mode 1
 
 if (SticksMode == 1) {
-
         AnalogueInput[0] = A0;
         AnalogueInput[1] = A1;
         AnalogueInput[2] = A2;
@@ -557,17 +560,9 @@ if (SticksMode == 1) {
         AnalogueInput[5] = A7;
         AnalogueInput[6] = A8;
         AnalogueInput[7] = A9;
-        TrimNumber[0] = TRIM1A;
-        TrimNumber[1] = TRIM1B;
-        TrimNumber[2] = TRIM2A;
-        TrimNumber[3] = TRIM2B;
-        TrimNumber[4] = TRIM3A;
-        TrimNumber[5] = TRIM3B;
-        TrimNumber[6] = TRIM4A;
-        TrimNumber[7] = TRIM4B;
     }
-if (SticksMode == 2) {
 
+if (SticksMode == 2) {
         AnalogueInput[0] = A0;
         AnalogueInput[1] = A2;
         AnalogueInput[2] = A1;
@@ -576,16 +571,11 @@ if (SticksMode == 2) {
         AnalogueInput[5] = A7;
         AnalogueInput[6] = A8;
         AnalogueInput[7] = A9;
-        TrimNumber[0] = TRIM1A;
-        TrimNumber[1] = TRIM1B;
-        TrimNumber[4] = TRIM2A;
-        TrimNumber[5] = TRIM2B;
-        TrimNumber[2] = TRIM3A;
-        TrimNumber[3] = TRIM3B;
-        TrimNumber[6] = TRIM4A;
-        TrimNumber[7] = TRIM4B;
+      
     }          
 }
+
+// **********************************************************************************************************************************
 
 void CheckForNextionButtonPress()
 {
@@ -2375,10 +2365,10 @@ void UpdateTrimView()
             uint8_t pp = InputTrim[p];
             SendValue(TrimViewChannels[p], (Trims[Bank][pp]));                 
             SendValue(TrimViewNumbers[p],  (Trims[Bank][pp] - 80));
-            if (CurrentView == TRIM_VIEW) SendText(TrimChannelNames[p],  ChannelNames[pp]);       
+            if (CurrentView == TRIM_VIEW) SendText(TrimChannelNames[i],  ChannelNames[pp]);       
         }
     }
-
+ 
 }
 /*********************************************************************************************************************************/
 
@@ -3549,8 +3539,8 @@ FLASHMEM void setup()
     }
     SendText(FrontView_Connected, na);
     UpdateModelsNameEveryWhere();
-    WarningTimer = millis();
     ConfigureStickMode();
+    WarningTimer = millis();
     CheckMotorOff();
     if (MotorEnabled){
             ErrorState = MOTORISON;
@@ -6061,14 +6051,44 @@ void DefineTrimsEnd()
     CurrentMode   = NORMAL;
     SaveTransmitterParameters();
     UpdateModelsNameEveryWhere();
+  
 }
 /******************************************************************************************************************************/
-void ResetAllTrims()
+void ResetAllTrims() // heer
 {
-    uint8_t T[8] = {TRIM1A, TRIM1B, TRIM2A, TRIM2B, TRIM3A, TRIM3B, TRIM4A, TRIM4B};
-    for (int i = 0; i < 8; ++i) {
-        TrimNumber[i] = T[i];
+     
+
+if (SticksMode == 1) { // heer 
+        TrimNumber[0] = TRIM1A;  // these may change
+        TrimNumber[1] = TRIM1B;
+        TrimNumber[2] = TRIM2A;
+        TrimNumber[3] = TRIM2B;
+        TrimNumber[4] = TRIM3A;
+        TrimNumber[5] = TRIM3B;
+        TrimNumber[6] = TRIM4A;
+        TrimNumber[7] = TRIM4B;
     }
+
+
+if (SticksMode == 2) {
+
+        TrimNumber[0] = TRIM1A;  // these may change // heer
+        TrimNumber[1] = TRIM1B;
+
+        TrimNumber[4] = TRIM2A;
+        TrimNumber[5] = TRIM2B;
+        
+        TrimNumber[2] = TRIM3A;
+        TrimNumber[3] = TRIM3B;
+        
+        TrimNumber[6] = TRIM4A;
+        TrimNumber[7] = TRIM4B;
+
+
+    }          
+
+
+
 }
 /******************************************************************************************************************************/
 void Options2End()
@@ -6780,8 +6800,8 @@ bool GetBackupFilename(char* goback,char * tt1, char * MMname, char * heading,ch
 
   char GoPopupView[] = "page PopupView"; 
   char Dialog[]      = "Dialog";
-  char niu[]         = "Not in use";
-  if (InStrng(niu,Prompt)) return true;   // overwriting a memory 'Not in use' is always OK
+  
+
   SendCommand(GoPopupView);
   SendText(Dialog, Prompt);
   Confirmed[0] = '?';
@@ -6819,16 +6839,7 @@ void LoadModelForRenaming(){
     ReadOneModel(ModelNumber);
     SaveAllParameters();
  }
-/******************************************************************************************************************************/
 
- void Analyse(char * f){
-
-    for (uint8_t i = 0; i < strlen(f);++i){
-            Serial.print(f[i]);
-            Serial.print(" = ");
-            Serial.println(Ascii(f[i]));
-    }
- }
 /******************************************************************************************************************************/
 
 // This implements the impossible "SD card rename file" ... by reading, re-saveing under new name, then deleting old file.
@@ -6849,7 +6860,6 @@ void LoadModelForRenaming(){
   LoadModelForRenaming();
   if(GetBackupFilename(GoModelsView, SingleModelFile, model, Head,prompt)){ 
       FixFileName();
-     // Analyse(SingleModelFile);
       if (strcmp(Deleteable,SingleModelFile) == 0) return;
       Serial.println(SingleModelFile);
       if (CheckFileExists(SingleModelFile)) {
@@ -6879,6 +6889,7 @@ void LoadModelForRenaming(){
     char pr[]               = "Select ";
     char buf[50];
     char q[] = "?";
+
 
     if (PreviousModelNumber != ModelNumber) {
                     strcpy(buf, pr);
@@ -7384,8 +7395,8 @@ FASTRUN void ButtonWasPressed()
             SendCommand(ProgressEnd);
             LedWasGreen = false;
             UpdateModelsNameEveryWhere();
+            ClearText();// heer
             ConfigureStickMode();
-            ClearText();
             return;
         }
 
@@ -8629,16 +8640,18 @@ void MoveaTrim(uint8_t i)
 
 /************************************************************************************************************/
 
-void SetATrimDefinition(int i)
+void SetATrimDefinition(int i) 
 {
     char AilDone[] = "Aileron trim is defined!";
     char EleDone[] = "Elevator trim is defined!";
     char ThrDone[] = "Throttle trim is defined!";
     char RudDone[] = "Rudder trim is defined!";
+   
     char ail[]     = "ail";
     char ele[]     = "ele";
     char thr[]     = "thr";
     char rud[]     = "rud";
+   
     // Aileron
     if (!TrimDefined[0]) {
         if ((i == 0) || (i == 1)) {
@@ -8655,6 +8668,8 @@ void SetATrimDefinition(int i)
             TrimNumber[0] = TRIM1B;
         }
     }
+
+if (SticksMode == 1){
     // Elevator
     if (!TrimDefined[1]) {
         if ((i == 2) || (i == 3)) {
@@ -8671,6 +8686,7 @@ void SetATrimDefinition(int i)
             TrimNumber[2] = TRIM2B;
         }
     }
+
     // Throttle
     if (!TrimDefined[2]) {
         if ((i == 4) || (i == 5)) {
@@ -8687,6 +8703,44 @@ void SetATrimDefinition(int i)
             TrimNumber[4] = TRIM3B;
         }
     }
+}
+
+if (SticksMode == 2){
+    // Throttle
+    if (!TrimDefined[1]) {
+        if ((i == 4) || (i == 5)) {
+            PlaySound(BEEPCOMPLETE);
+            SendText(thr, ThrDone);
+            TrimDefined[1] = true;
+        }
+        if (i == 5) {
+            TrimNumber[5] = TRIM2A;
+            TrimNumber[4] = TRIM2B;
+        }
+        if (i == 4) {
+            TrimNumber[4] = TRIM2A;
+            TrimNumber[5] = TRIM2B;
+        }
+    }
+
+    // Elevator
+    if (!TrimDefined[2]) {
+        if ((i == 2) || (i == 3)) {
+            PlaySound(BEEPCOMPLETE);
+            SendText(ele, EleDone);
+            TrimDefined[2] = true;
+        }
+        if (i == 3) {
+            TrimNumber[2] = TRIM3A;
+            TrimNumber[3] = TRIM3B;
+        }
+        if (i == 2) {
+            TrimNumber[3] = TRIM3A;
+            TrimNumber[2] = TRIM3B;
+        }
+    }
+}
+
     // Rudder
     if (!TrimDefined[3]) {
         if ((i == 6) || (i == 7)) {
@@ -8710,7 +8764,7 @@ void SetATrimDefinition(int i)
 void CheckHardwareTrims()
 {
     int i;
-    if ((millis() - TrimTimer) < TrimRepeatSpeed) return; // check occasionally for trim press
+    if ((millis() - TrimTimer) < TrimRepeatSpeed) return; // check occasionally for trim press 
     TrimTimer = millis();
     for (i = 0; i < 8; ++i) {
         if (TrimSwitch[i]) {
