@@ -571,7 +571,6 @@ if (SticksMode == 2) {
         AnalogueInput[5] = A7;
         AnalogueInput[6] = A8;
         AnalogueInput[7] = A9;
-      
     }          
 }
 
@@ -6057,7 +6056,6 @@ void DefineTrimsEnd()
 void ResetAllTrims() // heer
 {
      
-
 if (SticksMode == 1) { // heer 
         TrimNumber[0] = TRIM1A;  // these may change
         TrimNumber[1] = TRIM1B;
@@ -6069,26 +6067,16 @@ if (SticksMode == 1) { // heer
         TrimNumber[7] = TRIM4B;
     }
 
-
 if (SticksMode == 2) {
-
         TrimNumber[0] = TRIM1A;  // these may change // heer
         TrimNumber[1] = TRIM1B;
-
         TrimNumber[4] = TRIM2A;
         TrimNumber[5] = TRIM2B;
-        
         TrimNumber[2] = TRIM3A;
         TrimNumber[3] = TRIM3B;
-        
         TrimNumber[6] = TRIM4A;
         TrimNumber[7] = TRIM4B;
-
-
     }          
-
-
-
 }
 /******************************************************************************************************************************/
 void Options2End()
