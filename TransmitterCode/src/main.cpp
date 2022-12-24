@@ -6053,11 +6053,11 @@ void DefineTrimsEnd()
   
 }
 /******************************************************************************************************************************/
-void ResetAllTrims() // heer
+void ResetAllTrims() 
 {
      
-if (SticksMode == 1) { // heer 
-        TrimNumber[0] = TRIM1A;  // these may change
+if (SticksMode == 1) { 
+        TrimNumber[0] = TRIM1A;  // these will change when redefined
         TrimNumber[1] = TRIM1B;
         TrimNumber[2] = TRIM2A;
         TrimNumber[3] = TRIM2B;
@@ -6068,7 +6068,7 @@ if (SticksMode == 1) { // heer
     }
 
 if (SticksMode == 2) {
-        TrimNumber[0] = TRIM1A;  // these may change // heer
+        TrimNumber[0] = TRIM1A; 
         TrimNumber[1] = TRIM1B;
         TrimNumber[4] = TRIM2A;
         TrimNumber[5] = TRIM2B;
@@ -7344,10 +7344,13 @@ FASTRUN void ButtonWasPressed()
             ClearText();
             return;
         }
-        if (InStrng(OptionsEnd, TextIn) > 0) { // Exit from TX Options screen1 
+
+     
+
+        if (InStrng(OptionsEnd, TextIn) > 0) { // Exit from TX Options screen1 // heer
             SendCommand(ProgressStart);
             SendValue(Progress, 10);
-            SticksMode = CheckRange(GetValue(n0), 1, 2); 
+            SticksMode = CheckRange(GetValue(n0), 1, 2);  // heer
             GetText(TxNme, TxName);
             SendValue(Progress, 30);
             Qnh = (uint16_t)GetValue(QNH);
@@ -7383,7 +7386,7 @@ FASTRUN void ButtonWasPressed()
             SendCommand(ProgressEnd);
             LedWasGreen = false;
             UpdateModelsNameEveryWhere();
-            ClearText();// heer
+            ClearText();
             ConfigureStickMode();
             return;
         }
