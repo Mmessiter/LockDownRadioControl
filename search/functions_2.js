@@ -47,10 +47,11 @@ var searchData=
   ['compare48bitvalues_44',['Compare48BitValues',['../ReceiverCode_2src_2main_8cpp.html#ae4b6d38acdc3de6654beb1cb5ac1b053',1,'main.cpp']]],
   ['comparemodelsids_45',['CompareModelsIDs',['../TransmitterCode_2src_2main_8cpp.html#af8fe429ceb65bf9d257a2a0f1c63eccb',1,'main.cpp']]],
   ['compress_46',['Compress',['../RadioFunctions_8cpp.html#a1ddd5e8d5bd649dd98ce3710fbff651b',1,'Compress(uint16_t *compressed_buf, uint16_t *uncompressed_buf, uint8_t uncompressed_size):&#160;RadioFunctions.cpp'],['../RadioFunctions_8h.html#a1ddd5e8d5bd649dd98ce3710fbff651b',1,'Compress(uint16_t *compressed_buf, uint16_t *uncompressed_buf, uint8_t uncompressed_size):&#160;RadioFunctions.cpp']]],
-  ['controlangle_47',['controlANGLE',['../Quadcopter_2src_2main_8cpp.html#a65f83d03987a32aea44172062214273d',1,'main.cpp']]],
-  ['controlangle2_48',['controlANGLE2',['../Quadcopter_2src_2main_8cpp.html#a147b4c89c72c6397859b3cbe18cc47cd',1,'main.cpp']]],
-  ['controlmixer_49',['controlMixer',['../Quadcopter_2src_2main_8cpp.html#a95a8288a82a1168b82213a00cf085a0f',1,'main.cpp']]],
-  ['controlrate_50',['controlRATE',['../Quadcopter_2src_2main_8cpp.html#ae7f9ccabb7ac4a5c80d7189d9ba54e13',1,'main.cpp']]],
-  ['createtimedatestamp_51',['CreateTimeDateStamp',['../TransmitterCode_2src_2main_8cpp.html#a1a0a5d73007aba01755e5274d12e6e9b',1,'main.cpp']]],
-  ['createtimestamp_52',['CreateTimeStamp',['../TransmitterCode_2src_2main_8cpp.html#a5d42b1fba153cc76dc96778cfb6f1a40',1,'main.cpp']]]
+  ['configurestickmode_47',['ConfigureStickMode',['../TransmitterCode_2src_2main_8cpp.html#a9c0d58f91488496f6946d25b4ad2cbd8',1,'main.cpp']]],
+  ['controlangle_48',['controlANGLE',['../Quadcopter_2src_2main_8cpp.html#a65f83d03987a32aea44172062214273d',1,'main.cpp']]],
+  ['controlangle2_49',['controlANGLE2',['../Quadcopter_2src_2main_8cpp.html#a147b4c89c72c6397859b3cbe18cc47cd',1,'main.cpp']]],
+  ['controlmixer_50',['controlMixer',['../Quadcopter_2src_2main_8cpp.html#a95a8288a82a1168b82213a00cf085a0f',1,'main.cpp']]],
+  ['controlrate_51',['controlRATE',['../Quadcopter_2src_2main_8cpp.html#ae7f9ccabb7ac4a5c80d7189d9ba54e13',1,'main.cpp']]],
+  ['createtimedatestamp_52',['CreateTimeDateStamp',['../TransmitterCode_2src_2main_8cpp.html#a1a0a5d73007aba01755e5274d12e6e9b',1,'main.cpp']]],
+  ['createtimestamp_53',['CreateTimeStamp',['../TransmitterCode_2src_2main_8cpp.html#a5d42b1fba153cc76dc96778cfb6f1a40',1,'main.cpp']]]
 ];

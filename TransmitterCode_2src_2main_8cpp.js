@@ -63,6 +63,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "CloseLogFile", "TransmitterCode_2src_2main_8cpp.html#a6f003363493fc53b69f9efc1f447a6a1", null ],
     [ "CloseModelsFile", "TransmitterCode_2src_2main_8cpp.html#a6922974b734cfe3a511e074a2d6ac33c", null ],
     [ "CompareModelsIDs", "TransmitterCode_2src_2main_8cpp.html#af8fe429ceb65bf9d257a2a0f1c63eccb", null ],
+    [ "ConfigureStickMode", "TransmitterCode_2src_2main_8cpp.html#a9c0d58f91488496f6946d25b4ad2cbd8", null ],
     [ "CreateTimeDateStamp", "TransmitterCode_2src_2main_8cpp.html#a1a0a5d73007aba01755e5274d12e6e9b", null ],
     [ "CreateTimeStamp", "TransmitterCode_2src_2main_8cpp.html#a5d42b1fba153cc76dc96778cfb6f1a40", null ],
     [ "DecDate", "TransmitterCode_2src_2main_8cpp.html#ac00389a3b76e3ced4517c6ad4147e86a", null ],
