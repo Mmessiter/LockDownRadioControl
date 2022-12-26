@@ -5080,7 +5080,6 @@ void ReceiveModelFile()
     uint64_t      RXPipe;
     uint32_t      RXTimer               = 0;
     char          ModelsView_filename[] = "filename";
-    char GoModelsView1[]                  = "page ModelsView";
     char          ProgressStart[]       = "vis Progress,1";
     char          ProgressEnd[]         = "vis Progress,0";
     char          Progress[]            = "Progress";
@@ -5236,7 +5235,7 @@ void ReceiveModelFile()
     CloseModelsFile();
     delay(2000);
     ClearText();
-    SendCommand(GoModelsView1);
+    SendCommand(GoModelsView);
     CurrentView = MODELSVIEW;
     BuildDirectory(); 
     LoadFileSelector();
