@@ -264,6 +264,8 @@ var RadioFunctions_8h =
     [ "InitRadio", "RadioFunctions_8h.html#a86ce6c54618629a61b8502786d2ce82c", null ],
     [ "InStrng", "RadioFunctions_8h.html#a5f109790a6fe0b972a502f3cac4ed1e7", null ],
     [ "KickTheDog", "RadioFunctions_8h.html#ada95a00a341e4a80176eda743a94ab2e", null ],
+    [ "LoadFileSelector", "RadioFunctions_8h.html#a824f2e559561add2deadb0d3033c8510", null ],
+    [ "LoadModelSelector", "RadioFunctions_8h.html#a6684199e9da3ca0bdb0e01260eec7e30", null ],
     [ "LoadPacketData", "RadioFunctions_8h.html#ac4ffb9b555ce8d38f615610dc89b5499", null ],
     [ "LogConnection", "RadioFunctions_8h.html#a896d9c3f90c2a4c083748097a98bc96b", null ],
     [ "LogDisConnection", "RadioFunctions_8h.html#a01c8a29ed73a0c490282e23e119eca14", null ],
