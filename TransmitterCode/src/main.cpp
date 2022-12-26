@@ -5080,6 +5080,7 @@ void ReceiveModelFile()
     uint64_t      RXPipe;
     uint32_t      RXTimer               = 0;
     char          ModelsView_filename[] = "filename";
+    char GoModelsView1[]                  = "page ModelsView";
     char          ProgressStart[]       = "vis Progress,1";
     char          ProgressEnd[]         = "vis Progress,0";
     char          Progress[]            = "Progress";
@@ -5210,10 +5211,10 @@ void ReceiveModelFile()
         }
     }
     SendValue(Progress, 100);
-    ModelsFileNumber.close();
+    CloseModelsFile();
     BuildDirectory();
     SendText(ModelsView_filename, Success);
-    delay(750);
+    delay(500);
     SendText(ModelsView_filename, SingleModelFile);
     Radio1.setRetries(RETRYCOUNT, RETRYWAIT);
     // **************************************** Below Here the new model is imported for immediate use
@@ -5224,7 +5225,6 @@ void ReceiveModelFile()
     CloseModelsFile();
     SaveAllParameters();
     CloseModelsFile();
-    UpdateModelsNameEveryWhere();
     NormaliseTheRadio();
     SendCommand(ProgressEnd);
     RedLedOn();
@@ -5235,10 +5235,14 @@ void ReceiveModelFile()
     PlaySound(BEEPCOMPLETE);
     CloseModelsFile();
     delay(2000);
-    GotoModelsView();
+    ClearText();
+    SendCommand(GoModelsView1);
+    CurrentView = MODELSVIEW;
+    BuildDirectory(); 
+    LoadFileSelector();
+    LoadModelSelector();
     ClearText();
 }
-
 
 /*********************************************************************************************************************************/
 
@@ -7592,14 +7596,7 @@ FASTRUN void ButtonWasPressed()
             return;
         }
         if (InStrng(ReceiveModel, TextIn) > 0) {
-            i = strlen(ReceiveModel);
-            j = 0;
-            while (uint8_t(TextIn[i] && i < 100) > 0) {
-                SingleModelFile[j] = TextIn[i];
-                ++j;
-                ++i;
-                SingleModelFile[j] = 0;
-            } // got local name but won't use it.....
+            ClearText();
             ReceiveModelFile();
             ClearText();
             return;

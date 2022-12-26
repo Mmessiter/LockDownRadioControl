@@ -481,8 +481,8 @@ extern void          UpdateLED();
 extern void          CheckMotorOff();
 extern bool          GetButtonPress();
 extern void          CheckPowerOffButton();
-
-
+extern void          LoadFileSelector();
+extern void          LoadModelSelector();
 
 /*********************************************************************************************************************************/
 // function prototypes
