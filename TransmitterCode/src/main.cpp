@@ -5237,7 +5237,6 @@ void ReceiveModelFile()
     ClearText();
     SendCommand(GoModelsView);
     CurrentView = MODELSVIEW;
-    BuildDirectory(); 
     LoadFileSelector();
     LoadModelSelector();
     ClearText();
