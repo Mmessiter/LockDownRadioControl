@@ -1247,7 +1247,7 @@ void SendCommand(char* tbox)
     }
     GetReturnCode();
     if (InStrng(page, tbox)) Procrastinate(SCREENCHANGEWAIT); // Allow time for new page to appear
-   // Serial.println(tbox);
+  
 }
 /*********************************************************************************************************************************/
 void SendText(char* tbox, char* NewWord)
@@ -4341,7 +4341,7 @@ void SetDefaultValues()
 {
     uint16_t j=0;
     uint16_t i=0;
-    char     empty[] = "Not in use";
+    char     empty[30] = "Not in use";
     
     CloseModelsFile();
     OpenModelsFile();
@@ -5217,7 +5217,7 @@ void ReceiveModelFile()
     delay(500);
     SendText(ModelsView_filename, SingleModelFile);
     Radio1.setRetries(RETRYCOUNT, RETRYWAIT);
-    // **************************************** Below Here the new model is imported for immediate use
+    // **************************************** Below Here the new model is imported for immediate use // heer
     SingleModelFlag = true;
     CloseModelsFile();
     ReadOneModel(1);
