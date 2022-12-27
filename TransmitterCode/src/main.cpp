@@ -1247,6 +1247,7 @@ void SendCommand(char* tbox)
     }
     GetReturnCode();
     if (InStrng(page, tbox)) Procrastinate(SCREENCHANGEWAIT); // Allow time for new page to appear
+   // Serial.println(tbox);
 }
 /*********************************************************************************************************************************/
 void SendText(char* tbox, char* NewWord)
@@ -1507,7 +1508,7 @@ FASTRUN void ShowServoPos()
     // The first 8 channels are displayed on all three of these screens
     if ((CurrentView == STICKSVIEW) || (CurrentView == FRONTVIEW) || (CurrentView == CALIBRATEVIEW)) {
         for (int i = 0; i < 8; ++i) {
-            if (SendBuffer[i] != ShownBuffer[i]) {
+            if (abs(SendBuffer[i] -  ShownBuffer[i]) > 10){             //  no need to show tiny movements
                 SendValue(Ch_Lables[i], IntoLowerRes(SendBuffer[i]));
                 ShownBuffer[i] = SendBuffer[i];
             }
@@ -1517,7 +1518,7 @@ FASTRUN void ShowServoPos()
     // The second 8 channels are displayed on only two screens
     if ((CurrentView == STICKSVIEW) || (CurrentView == FRONTVIEW)) {
         for (int i = 8; i < 16; ++i) {
-            if (SendBuffer[i] != ShownBuffer[i]) {
+              if (abs(SendBuffer[i] -  ShownBuffer[i]) > 10){
                 SendValue(Ch_Lables[i], IntoLowerRes(SendBuffer[i]));
                 ShownBuffer[i] = SendBuffer[i];
             }
@@ -5231,14 +5232,13 @@ void ReceiveModelFile()
     strcat(msg, Str(nb1, Fsize, 0));
     strcat(msg, bytes);
     ShowFileProgress(msg);
+    ClearText();
     PlaySound(BEEPCOMPLETE);
     CloseModelsFile();
-    delay(2000);
+    GotoModelsView();
     ClearText();
-    SendCommand(GoModelsView);
-    CurrentView = MODELSVIEW;
-    LoadFileSelector();
-    LoadModelSelector();
+    Procrastinate(1000);
+    GotoModelsView();
     ClearText();
 }
 
@@ -6915,7 +6915,7 @@ void DoMFName(){
  }
 
 // ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
-#define LASTFUNCTION 64 // one more than final one
+#define LASTFUNCTION 66 // one more than final one
 
 void (*NumberedFunctions[LASTFUNCTION])() {
     Blank,                // 0 
@@ -6981,7 +6981,9 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     YesPressed,                 // 60
     NoPressed,                  // 61
     RenameFile,                 // 62
-    GoBackFromModels            // 63
+    GoBackFromModels,           // 63
+    Blank,                      // 64 // spare
+    ReceiveModelFile            // 65
 
 }; // list will become much longer ...
 // **********************************************************************************************************************************
@@ -7152,7 +7154,6 @@ FASTRUN void ButtonWasPressed()
         char ProgressEnd[]             = "vis Progress,0";
         char Progress[]                = "Progress";
         char HelpView[]                = "HelpView";
-        char ReceiveModel[]            = "ReceiveModel";
         char SendModel[]               = "SendModel";
         char PowerOff[]                = "PowerOff";
         char OffNow[]                  = "OffNow"; // force power off
@@ -7349,10 +7350,10 @@ FASTRUN void ButtonWasPressed()
 
      
 
-        if (InStrng(OptionsEnd, TextIn) > 0) { // Exit from TX Options screen1 // heer
+        if (InStrng(OptionsEnd, TextIn) > 0) { // Exit from TX Options screen1
             SendCommand(ProgressStart);
             SendValue(Progress, 10);
-            SticksMode = CheckRange(GetValue(n0), 1, 2);  // heer
+            SticksMode = CheckRange(GetValue(n0), 1, 2); 
             GetText(TxNme, TxName);
             SendValue(Progress, 30);
             Qnh = (uint16_t)GetValue(QNH);
@@ -7593,12 +7594,7 @@ FASTRUN void ButtonWasPressed()
             DisplayCurveAndServoPos();
             return;
         }
-        if (InStrng(ReceiveModel, TextIn) > 0) {
-            ClearText();
-            ReceiveModelFile();
-            ClearText();
-            return;
-        }
+     
         if (InStrng(PowerOff, TextIn) > 0) { // power off button up no longer turns off!
             PowerOffTimer = 0;
             ClearText();
