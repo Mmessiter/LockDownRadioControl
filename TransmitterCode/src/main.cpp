@@ -1531,7 +1531,6 @@ FASTRUN void ShowServoPos()
         uint16_t LeastDistance = 3; // if the change is very small, don't re-display anything - to reduce flashing. :=)!!
           
         l = (InPutStick[ChanneltoSet - 1]);
-     //   if (ChanneltoSet <= 8) l1 = AnalogueReed(AnalogueInput[l]); else l1 = GetStickInputInputOnly(l); 
          if (ChanneltoSet <= 8) l1 = AnalogueReed(l); else l1 = GetStickInputInputOnly(l); 
 
         if (ReversedChannelBITS & 1 << (ChanneltoSet - 1)) { // reversed?
