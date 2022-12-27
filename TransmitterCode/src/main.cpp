@@ -539,7 +539,8 @@ uint16_t CurveDots[5];
 uint8_t  DualRateValue                   = 100;
 char     GoModelsView[]                  = "page ModelsView";
 char     pCalibrateView[]                = "page CalibrateView";
-char    Confirmed[2];
+char     Confirmed[2];
+
 
 // **********************************************************************************************************************************
 // *********************************************** END OF GLOBAL DATA ***************************************************************
@@ -5106,11 +5107,12 @@ void ReceiveModelFile()
     char          t0[]    = "t0";
     char          RXheader[] = "File receive";
 
-#ifdef DB_MODEL_EXCHANGE
+ #ifdef DB_MODEL_EXCHANGE
     uint8_t PacketNumber = 0;
     Serial.println("Receiving model ...");
     Serial.println(Waiting);
-#endif
+ #endif
+
     BlueLedOn();
     ShowFileTransferWindow();
 
@@ -5137,9 +5139,9 @@ void ReceiveModelFile()
         }
         KickTheDog(); // Watchdog
         if ((millis() - RXTimer) / 1000 >= FILETIMEOUT) {
-#ifdef DB_MODEL_EXCHANGE
+ #ifdef DB_MODEL_EXCHANGE
             Serial.println("Timeout");
-#endif
+ #endif
             SendText(ModelsView_filename, TimeoutMsg);
             NormaliseTheRadio();
             return; // Give up waiting
@@ -5153,7 +5155,7 @@ void ReceiveModelFile()
                 SendText(ModelsView_filename, WaitMsg); // Show user how long remains to wait
             }
         }
-    } // *First* packet must have arrived!
+     } // *First* packet must have arrived!
     SendCommand(ProgressStart);
     SendValue(Progress, p);
     SendText(ModelsView_filename, Receiving);
@@ -5164,18 +5166,18 @@ void ReceiveModelFile()
     Fsize += Fbuffer[BUFFERSIZE + 1] << 8;
     Fsize += Fbuffer[BUFFERSIZE + 2] << 16;
     Fsize += Fbuffer[BUFFERSIZE + 3] << 24; //  Get file size
-#ifdef DB_MODEL_EXCHANGE
+ #ifdef DB_MODEL_EXCHANGE
     Serial.println("CONNECTED!");
     Serial.print("FileName=");
     Serial.println(SingleModelFile);
     Serial.print("File size = ");
     Serial.println(Fsize);
-#endif
+ #endif
     Fposition        = 0;
     
     strcpy(fnamebuf, Receiving);
     strcat(fnamebuf, SingleModelFile);
-     SendText(ModelsView_filename, fnamebuf);
+    SendText(ModelsView_filename, fnamebuf);
 
     ModelsFileNumber = SD.open(SingleModelFile, FILE_WRITE);                    //  Open file to receive
     RXTimer          = millis();                                                //  zero timeout
@@ -5203,11 +5205,11 @@ void ReceiveModelFile()
             strcat(msg, of);
             strcat(msg, Str(nb1, Fsize, 0));
             ShowFileProgress(msg);
-#ifdef DB_MODEL_EXCHANGE
+ #ifdef DB_MODEL_EXCHANGE
             PacketNumber = Fbuffer[25];
             Serial.print("PacketNumber: ");
             Serial.println(PacketNumber);
-#endif
+ #endif
         }
     }
     SendValue(Progress, 100);
@@ -5216,7 +5218,6 @@ void ReceiveModelFile()
     SendText(ModelsView_filename, Success);
     delay(500);
     SendText(ModelsView_filename, SingleModelFile);
-    Radio1.setRetries(RETRYCOUNT, RETRYWAIT);
     // **************************************** Below Here the new model is imported for immediate use // heer
     SingleModelFlag = true;
     CloseModelsFile();
@@ -5227,7 +5228,6 @@ void ReceiveModelFile()
     CloseModelsFile();
     NormaliseTheRadio();
     SendCommand(ProgressEnd);
-    RedLedOn();
     strcpy(msg, Received);
     strcat(msg, Str(nb1, Fsize, 0));
     strcat(msg, bytes);
@@ -5237,9 +5237,8 @@ void ReceiveModelFile()
     CloseModelsFile();
     GotoModelsView();
     ClearText();
-    Procrastinate(1000);
-    GotoModelsView();
-    ClearText();
+    RedLedOn();
+    BoundFlag = true; // This just prevents jump to front screen (Cleared on leaving models area)
 }
 
 /*********************************************************************************************************************************/
@@ -6615,7 +6614,8 @@ void StartModelSetup(){
 
 /******************************************************************************************************************************/
 void EndModelSetup(){
-     GotoFrontView();
+    
+    GotoFrontView();
 }
 
 /******************************************************************************************************************************/
@@ -6879,8 +6879,6 @@ void LoadModelForRenaming(){
     char pr[]               = "Select ";
     char buf[50];
     char q[] = "?";
-
-
     if (PreviousModelNumber != ModelNumber) {
                     strcpy(buf, pr);
                     strcat(buf, ModelName);
@@ -6892,6 +6890,7 @@ void LoadModelForRenaming(){
                     }
      }
     SaveAllParameters();
+    BoundFlag = false;
     GotoFrontView();
  }
 
@@ -8888,8 +8887,11 @@ FASTRUN uint32_t GetIntFromAckPayload()   // This one uses a uint32_t int
 
 void GotoFrontView(){ 
     char fms[4][4] = {{"fm1"},{"fm2"},{"fm3"},{"fm4"}};
-    if (CurrentView != FRONTVIEW) { 
-        if (CurrentView == SCANVIEW) {DoScanEnd();}
+   
+    if (CurrentView != FRONTVIEW) {
+          if (CurrentView == SCANVIEW) {
+            DoScanEnd();
+          }
           SendCommand(page_FrontView);
           CurrentView = FRONTVIEW;
           UpdateModelsNameEveryWhere();
@@ -8915,7 +8917,7 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
     
     uint8_t SavedModelNumber = ModelNumber;
     ModelMatched             = false;
-    GotoFrontView(); 
+    GotoFrontView();
     RestoreBrightness();
     if (ModelIdentified) {                                                //  We have both bits of Model ID?
         if ((ModelsMacUnion.Val32[0] == ModelsMacUnionSaved.Val32[0]) && (ModelsMacUnion.Val32[1] == ModelsMacUnionSaved.Val32[1])) {       
@@ -8975,7 +8977,9 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
     }
 }
 /************************************************************************************************************/
-void  GetModelsMacAddress(){  
+void  GetModelsMacAddress(){
+
+    
     switch (AckPayload.Purpose)
     {
         case 0:
@@ -9002,6 +9006,7 @@ void  GetModelsMacAddress(){
         }
     }
 }
+
 /************************************************************************************************************/
 FASTRUN void ParseAckPayload()
 {
@@ -9016,8 +9021,8 @@ FASTRUN void ParseAckPayload()
     }
 
     if (!BoundFlag){
-        GetModelsMacAddress();
-        return;
+       GetModelsMacAddress(); // heer
+       return;
     }
     
     switch (AckPayload.Purpose) // Only look at the low 7 BITS
