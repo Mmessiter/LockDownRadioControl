@@ -5153,6 +5153,14 @@ void ReceiveModelFile()
                 strcat(WaitMsg, Str(WaitTime, (FILETIMEOUT - SecondsElapsed), 0));
                 strcat(WaitMsg, ThreeDots);
                 SendText(ModelsView_filename, WaitMsg); // Show user how long remains to wait
+                 if (GetButtonPress()) {
+                    GotoModelsView();
+                    ClearText();
+                    NormaliseTheRadio();
+                    RedLedOn();
+                    ButtonWasPressed();
+                return;
+                }
             }
         }
      } // *First* packet must have arrived!
@@ -5302,6 +5310,10 @@ void SendModelFile()
         ShowFileProgress(msg);
         SendValue(Progress, p);
         PacketNumber++;
+        
+        
+        
+        
         if (PacketNumber == 1) {
             strcpy(Fbuffer, SingleModelFile); // Filename in first packet
             Fbuffer[BUFFERSIZE]     = Fsize;
@@ -5326,7 +5338,8 @@ void SendModelFile()
         else {
             if (PacketNumber == 2) { // error - no connection 
                 NormaliseTheRadio();
-                SendCommand(ProgressEnd);
+                SendCommand(GoModelsView);
+                CurrentView = MODELSVIEW;
                 return;
             }
         }
@@ -9021,7 +9034,7 @@ FASTRUN void ParseAckPayload()
     }
 
     if (!BoundFlag){
-       GetModelsMacAddress(); // heer
+       GetModelsMacAddress(); 
        return;
     }
     
