@@ -5243,6 +5243,7 @@ void ReceiveModelFile()
     ClearText();
     PlaySound(BEEPCOMPLETE);
     CloseModelsFile();
+    Procrastinate(2000);
     GotoModelsView();
     ClearText();
     RedLedOn();
@@ -5309,11 +5310,7 @@ void SendModelFile()
         strcat(msg, Str(nb1, Fsize, 0));
         ShowFileProgress(msg);
         SendValue(Progress, p);
-        PacketNumber++;
-        
-        
-        
-        
+        ++PacketNumber;
         if (PacketNumber == 1) {
             strcpy(Fbuffer, SingleModelFile); // Filename in first packet
             Fbuffer[BUFFERSIZE]     = Fsize;
