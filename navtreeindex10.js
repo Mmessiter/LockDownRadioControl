@@ -1,5 +1,6 @@
 var NAVTREEINDEX10 =
 {
+"classMPU9250FIFO.html#a75c47423fbddf6f9fe00fb1f6722dbae":[7,0,3,26],
 "classMPU9250FIFO.html#a7917088bf64a12b1f5e3c2b5cb69bb17":[7,0,3,3],
 "classMPU9250FIFO.html#a7a8ea8c5d5ea6bae2e0e5289ffdf595b":[7,0,3,16],
 "classMPU9250FIFO.html#a7c859854572ae7d9bef07d5464fdbef1":[7,0,3,9],
@@ -248,6 +249,5 @@ var NAVTREEINDEX10 =
 "globals_func_u.html":[8,1,1,18],
 "globals_func_w.html":[8,1,1,19],
 "globals_func_y.html":[8,1,1,20],
-"globals_func_z.html":[8,1,1,21],
-"globals_g.html":[8,1,0,7]
+"globals_func_z.html":[8,1,1,21]
 };

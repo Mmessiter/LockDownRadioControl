@@ -254,6 +254,7 @@ var RadioFunctions_8h =
     [ "GetConfirmation", "RadioFunctions_8h.html#a6506bf72e0dd9e9ce480156b47625bff", null ],
     [ "GetNewChannelValues", "RadioFunctions_8h.html#a1a11fabb6c953055a80c5df5eebbfb0d", null ],
     [ "GetOtherValue", "RadioFunctions_8h.html#ac8919b32f9c38cc65c7b93cae664acfb", null ],
+    [ "GetReturnCode", "RadioFunctions_8h.html#a43937dd3d9c795271fd9c3eb3c6b6410", null ],
     [ "GetSlaveChannelValues", "RadioFunctions_8h.html#a4635a8fc77c9f57fca53a5206cd5e571", null ],
     [ "GetStickInput", "RadioFunctions_8h.html#af065c70531320b19dbb5f54a714e186a", null ],
     [ "GetStickInputInputOnly", "RadioFunctions_8h.html#af1030157034999448f5ca611d6209385", null ],
