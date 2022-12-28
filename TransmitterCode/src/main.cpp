@@ -6372,7 +6372,7 @@ void ResetTransmitterSettings(){    // This function resets all transmitter para
    MotorChannelZero        = 0;
    SetDS1307ToCompilerTime();
    for (int k = 1; k < 5;++k){ // writes default four times!
-        for (ModelNumber = 1; ModelNumber < MAXMODELNUMBER; ++ModelNumber) { 
+        for (ModelNumber = 1; ModelNumber <= MAXMODELNUMBER; ++ModelNumber) { 
             ++sofar;
             SetDefaultValues();
             SendValue(Progress, (sofar * (100 / MAXMODELNUMBER)) / 4);
@@ -6758,7 +6758,7 @@ void WriteBackup(){
 
 /******************************************************************************************************************************/
 void EndRenameModel(){
-  char NewName[]             = "NewName";
+  char NewName[31]             = "NewName";
   GetText(NewName, ModelName);
   SaveOneModel(ModelNumber);
   GotoModelsView();
