@@ -5185,7 +5185,7 @@ void ReceiveModelFile()
     strcpy(fnamebuf, Receiving);
     strcat(fnamebuf, SingleModelFile);
     SendText(ModelsView_filename, fnamebuf);
-
+    CloseModelsFile();
     ModelsFileNumber = SD.open(SingleModelFile, FILE_WRITE);                    //  Open file to receive
     RXTimer          = millis();                                                //  zero timeout
     while ((Fposition < Fsize) && (millis() - RXTimer) / 1000 <= FILETIMEOUT) { //  (Fposition<Fsize) ********************
@@ -5193,7 +5193,7 @@ void ReceiveModelFile()
         if (GetButtonPress()) {                                                 // user can abandon the transfer by hitting a button
             NormaliseTheRadio();
             RedLedOn();
-            ButtonWasPressed();
+            GotoModelsView();
             return;
         }
         if (Radio1.available()) {
@@ -5212,11 +5212,12 @@ void ReceiveModelFile()
             strcat(msg, of);
             strcat(msg, Str(nb1, Fsize, 0));
             ShowFileProgress(msg);
- #ifdef DB_MODEL_EXCHANGE
+// #ifdef DB_MODEL_EXCHANGE
             PacketNumber = Fbuffer[25];
             Serial.print("PacketNumber: ");
             Serial.println(PacketNumber);
- #endif
+ //#endif
+            //delay(10);
         }
     }
     SendValue(Progress, 100);
