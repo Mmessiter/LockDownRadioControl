@@ -32,13 +32,14 @@ var searchData=
   ['writebytes_29',['writeBytes',['../classI2Cdev.html#aa4e39cac6c0eac5112f9132084bcc93e',1,'I2Cdev']]],
   ['writecal_30',['writeCal',['../classSBUS.html#a30a661b3e229e95e17591021e638e89e',1,'SBUS']]],
   ['writedmpconfigurationset_31',['writeDMPConfigurationSet',['../classMPU6050.html#abe4f64f68164116b2ec94fe1d987929a',1,'MPU6050']]],
-  ['writememoryblock_32',['writeMemoryBlock',['../classMPU6050.html#aae135772b45e1c7968b55f4f01b3757f',1,'MPU6050']]],
-  ['writememorybyte_33',['writeMemoryByte',['../classMPU6050.html#a20de45af9109402f0cfe785f8fdbf439',1,'MPU6050']]],
-  ['writenewcurve_34',['WriteNewCurve',['../TransmitterCode_2src_2main_8cpp.html#ac80d36db695cecb74d129643387feefd',1,'main.cpp']]],
-  ['writeprogdmpconfigurationset_35',['writeProgDMPConfigurationSet',['../classMPU6050.html#a160a3d018a81eb85a33874a43f44b3ea',1,'MPU6050']]],
-  ['writeprogmemoryblock_36',['writeProgMemoryBlock',['../classMPU6050.html#a201dc0aa819f451584c575c5a7590e10',1,'MPU6050']]],
-  ['writeregister_37',['writeRegister',['../classMPU9250.html#a5712e6a1fa4a34cf44234c1e44f1ca52',1,'MPU9250']]],
-  ['writetologfile_38',['WriteToLogFile',['../TransmitterCode_2src_2main_8cpp.html#a99154e537ca6e0ce5d538fddf0c2aab3',1,'main.cpp']]],
-  ['writeword_39',['writeWord',['../classI2Cdev.html#acbe68a802d6a177301736e60bedd1def',1,'I2Cdev']]],
-  ['writewords_40',['writeWords',['../classI2Cdev.html#aae37c0526e4b4730a5b2ffd752fd8b21',1,'I2Cdev']]]
+  ['writeentirebuffer_32',['WriteEntireBuffer',['../TransmitterCode_2src_2main_8cpp.html#ac6c0b6739efc96d73e69179ed88516ed',1,'main.cpp']]],
+  ['writememoryblock_33',['writeMemoryBlock',['../classMPU6050.html#aae135772b45e1c7968b55f4f01b3757f',1,'MPU6050']]],
+  ['writememorybyte_34',['writeMemoryByte',['../classMPU6050.html#a20de45af9109402f0cfe785f8fdbf439',1,'MPU6050']]],
+  ['writenewcurve_35',['WriteNewCurve',['../TransmitterCode_2src_2main_8cpp.html#ac80d36db695cecb74d129643387feefd',1,'main.cpp']]],
+  ['writeprogdmpconfigurationset_36',['writeProgDMPConfigurationSet',['../classMPU6050.html#a160a3d018a81eb85a33874a43f44b3ea',1,'MPU6050']]],
+  ['writeprogmemoryblock_37',['writeProgMemoryBlock',['../classMPU6050.html#a201dc0aa819f451584c575c5a7590e10',1,'MPU6050']]],
+  ['writeregister_38',['writeRegister',['../classMPU9250.html#a5712e6a1fa4a34cf44234c1e44f1ca52',1,'MPU9250']]],
+  ['writetologfile_39',['WriteToLogFile',['../TransmitterCode_2src_2main_8cpp.html#a99154e537ca6e0ce5d538fddf0c2aab3',1,'main.cpp']]],
+  ['writeword_40',['writeWord',['../classI2Cdev.html#acbe68a802d6a177301736e60bedd1def',1,'I2Cdev']]],
+  ['writewords_41',['writeWords',['../classI2Cdev.html#aae37c0526e4b4730a5b2ffd752fd8b21',1,'I2Cdev']]]
 ];
