@@ -5232,7 +5232,7 @@ void ReceiveModelFile()
         if (Radio1.available()) {
             Radio1.writeAckPayload(1, &Fack, sizeof(Fack));
             Radio1.read(&Fbuffer, BUFFERSIZE + 4);   
-            StoreBuffer(Fbuffer, BUFFERSIZE);
+            StoreBuffer(Fbuffer, BUFFERSIZE);                               // Store it in ram for now rather than disk it
             Radio1.flush_rx();
             Fposition += BUFFERSIZE;
             if (Fposition > Fsize) Fposition = Fsize;
