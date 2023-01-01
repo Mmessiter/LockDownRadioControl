@@ -540,7 +540,8 @@ uint8_t  DualRateValue                   = 100;
 char     GoModelsView[]                  = "page ModelsView";
 char     pCalibrateView[]                = "page CalibrateView";
 char     Confirmed[2];
-
+char     NewFileBuffer[MAXFILELEN];
+uint16_t NewFileBufferPointer = 0;
 
 // **********************************************************************************************************************************
 // *********************************************** END OF GLOBAL DATA ***************************************************************
@@ -2419,6 +2420,12 @@ bool CheckFileExists(char * fl){
 void ShortDelay(){
   delayMicroseconds(10);
 }
+
+
+void ShortishDelay(){
+  delayMicroseconds(1750);
+}
+
 /*********************************************************************************************************************************/
 
 void OpenModelsFile()
@@ -2705,7 +2712,11 @@ bool ReadOneModel(uint32_t Mnum)
     
     strcpy(ModelName, NoModelYet); // indicator of error
 
-    if (!ModelsFileOpen) return false;
+    if (!ModelsFileOpen) {
+        Serial.println("Cannot open file");
+        return false;
+    }
+   
     SDCardAddress = TXSIZE;
     if (SingleModelFlag) SDCardAddress = 0; // MODELOFFSET;   // Changed from 250 to 0
     SDCardAddress += ((Mnum - 1) * MODELSIZE); 
@@ -5075,6 +5086,30 @@ void ShowFileTransferWindow(){
 
 /*********************************************************************************************************************************/
 
+void StoreBuffer(char * Buf, uint32_t len){
+    for (uint16_t i = 0; i < len; ++i) {
+        if ((NewFileBufferPointer + i) > MAXFILELEN) break;
+        NewFileBuffer[NewFileBufferPointer + i] = Buf[i];
+    }
+    NewFileBufferPointer += len;
+}
+/*********************************************************************************************************************************/
+
+void WriteEntireBuffer(){
+     ModelsFileNumber.close();
+     CloseModelsFile();
+     for (int i = 0; i < 3; ++i) {
+        ModelsFileNumber = SD.open(SingleModelFile, FILE_WRITE);
+        ModelsFileNumber.seek(0);
+        ShortishDelay();
+        ModelsFileNumber.write(NewFileBuffer, NewFileBufferPointer);
+        ShortishDelay();
+        ModelsFileNumber.close();
+        ShortishDelay();
+     }
+}
+/*********************************************************************************************************************************/
+
 /** @brief RECEIVE A MODEL FILE */ 
 void ReceiveModelFile()
 {
@@ -5111,21 +5146,20 @@ void ReceiveModelFile()
     Serial.println("Receiving model ...");
     Serial.println(Waiting);
  #endif
-
     BlueLedOn();
     ShowFileTransferWindow();
-
     SendText(ModelsView_filename, Waiting);
     SendText(t0, RXheader);
-
     RXPipe = FILEPIPEADDRESS;
     Radio1.setRetries(15, 15);
     Radio1.setChannel(FILECHANNEL);
     Radio1.flush_tx();
     Radio1.openReadingPipe(1, RXPipe);
     Radio1.startListening();
+    NewFileBufferPointer = 0;
     RXTimer = millis();           // Start timer
     ClearText();
+    CloseModelsFile();
     while (!Radio1.available()) { // Await the sender....
            delay(1);
         if (GetButtonPress()) {
@@ -5146,7 +5180,7 @@ void ReceiveModelFile()
             return; // Give up waiting
         }
         else {
-            SecondsElapsed = (millis() - RXTimer) / 1000;
+             SecondsElapsed = (millis() - RXTimer) / 1000;
             if (SecondsElapsed == (int)SecondsElapsed) { // whole number of seconds?
                 strcpy(WaitMsg, Waiting);
                 strcat(WaitMsg, Str(WaitTime, (FILETIMEOUT - SecondsElapsed), 0));
@@ -5163,6 +5197,7 @@ void ReceiveModelFile()
             }
         }
      } // *First* packet must have arrived!
+    
     SendCommand(ProgressStart);
     SendValue(Progress, p);
     SendText(ModelsView_filename, Receiving);
@@ -5181,27 +5216,23 @@ void ReceiveModelFile()
     Serial.println(Fsize);
  #endif
     Fposition        = 0;
-    
     strcpy(fnamebuf, Receiving);
     strcat(fnamebuf, SingleModelFile);
     SendText(ModelsView_filename, fnamebuf);
-    CloseModelsFile();
-    ModelsFileNumber = SD.open(SingleModelFile, FILE_WRITE);                    //  Open file to receive
-    RXTimer          = millis();                                                //  zero timeout
-    while ((Fposition < Fsize) && (millis() - RXTimer) / 1000 <= FILETIMEOUT) { //  (Fposition<Fsize) ********************
+    RXTimer = millis();         //  zero timeout
+    while (Fposition < Fsize) { //  (Fposition<Fsize) ********************
         KickTheDog();                                                           //  Watchdog
         if (GetButtonPress()) {                                                 // user can abandon the transfer by hitting a button
+            ButtonWasPressed();
             NormaliseTheRadio();
             RedLedOn();
             GotoModelsView();
             return;
         }
         if (Radio1.available()) {
-            Radio1.flush_tx();
             Radio1.writeAckPayload(1, &Fack, sizeof(Fack));
-            Radio1.read(&Fbuffer, BUFFERSIZE + 4);
-            ModelsFileNumber.seek(Fposition);            // Move filepointer IS NEEDED!!
-            ModelsFileNumber.write(Fbuffer, BUFFERSIZE); // Write part of file
+            Radio1.read(&Fbuffer, BUFFERSIZE + 4);   
+            StoreBuffer(Fbuffer, BUFFERSIZE);
             Radio1.flush_rx();
             Fposition += BUFFERSIZE;
             if (Fposition > Fsize) Fposition = Fsize;
@@ -5212,23 +5243,18 @@ void ReceiveModelFile()
             strcat(msg, of);
             strcat(msg, Str(nb1, Fsize, 0));
             ShowFileProgress(msg);
-// #ifdef DB_MODEL_EXCHANGE
-            PacketNumber = Fbuffer[25];
-            Serial.print("PacketNumber: ");
-            Serial.println(PacketNumber);
- //#endif
-            //delay(10);
         }
     }
     SendValue(Progress, 100);
-    CloseModelsFile();
+    WriteEntireBuffer();
     BuildDirectory();
     SendText(ModelsView_filename, Success);
     delay(500);
     SendText(ModelsView_filename, SingleModelFile);
-    // **************************************** Below Here the new model is imported for immediate use // heer
+
+    // **************************************** Below Here the new model is imported for immediate use
+    
     SingleModelFlag = true;
-    CloseModelsFile();
     ReadOneModel(1);
     SingleModelFlag = false;
     CloseModelsFile();
@@ -5301,6 +5327,7 @@ void SendModelFile()
     Radio1.openWritingPipe(TXPipe);
     Radio1.stopListening();
     delay(4);
+   
     while (Fposition < Fsize) {
         KickTheDog(); // Watchdog
         p = ((float)Fposition / (float)Fsize) * 100;
@@ -5320,17 +5347,18 @@ void SendModelFile()
         }
         else {
             ModelsFileNumber.seek(Fposition);           // Move filepointer
+            ShortDelay();
             ModelsFileNumber.read(Fbuffer, BUFFERSIZE); // Read part of file
             Fposition += BUFFERSIZE;
             if (Fposition > Fsize) Fposition = Fsize;
         }
-        while ((millis() - SentMoment) < PACEMAKER * 2 ) {
+        while (millis()- SentMoment < 50) { // heer
             Radio1.flush_tx();
-            Radio1.flush_rx();
-       }
+            Radio1.flush_rx();   
+        }
+        SentMoment = millis();
         if (Radio1.write(&Fbuffer, BUFFERSIZE + 4)) {
-            SentMoment = millis();
-            Radio1.read(&Fack, sizeof(Fack)); 
+            Radio1.read(&Fack, sizeof(Fack));    
         }
         else {
             if (PacketNumber == 2) { // error - no connection 
@@ -5339,6 +5367,7 @@ void SendModelFile()
                 CurrentView = MODELSVIEW;
                 return;
             }
+
         }
 #ifdef DB_MODEL_EXCHANGE
         Serial.println(PacketNumber);
