@@ -12,7 +12,7 @@
 
 #define TXVERSION_MAJOR   2
 #define TXVERSION_MINOR   0
-#define TXVERSION_MINIMUS 1
+#define TXVERSION_MINIMUS 2
 
 // **************************************************************************
 //                               Includes                                   *
@@ -37,7 +37,7 @@
 //    DEBUG OPTIONS (Uncomment any of these for that bit of debug info)     *
 //***************************************************************************
 
- // #define DB_NEXTION        // Debug NEXTION
+ //#define DB_NEXTION        // Debug NEXTION
 // #define DB_SD             // Debug SD card data
 // #define DB_CHECKSUM       // Debug 32BIT file checksum info
 // #define DB_FHSS           // Debug real time FHSS data
@@ -165,7 +165,7 @@
 #define OPTIONVIEW2     25
 #define OPTIONVIEW3     26
 #define BUDDYCHVIEW     27
-#define OPTIONVIEW4     28
+#define RXSETUPVIEW1    28
 #define DUALRATESVIEW   29
 #define GPSVIEW         30
 #define RXSETUPVIEW     31
@@ -481,8 +481,8 @@ extern void          UpdateLED();
 extern void          CheckMotorOff();
 extern bool          GetButtonPress();
 extern void          CheckPowerOffButton();
-
-
+extern void          LoadFileSelector();
+extern void          LoadModelSelector();
 
 /*********************************************************************************************************************************/
 // function prototypes
@@ -536,6 +536,8 @@ void             GotoModelsView();
 void             SaveCurrentModel();
 void             CheckModelName();
 void             EndTrimView();
+int              AnalogueReed(uint8_t InputChannel);
+void             GetReturnCode();
 
 /*********************************************************************************************************************************/
 
