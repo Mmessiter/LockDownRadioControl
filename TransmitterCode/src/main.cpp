@@ -1145,7 +1145,6 @@ void RedLedOn()
         LastShowTime                                = 0;
         ModelsMacUnion.Val32[0]                     = 0;
         ModelsMacUnion.Val32[1]                     = 0;
-        
         RangeTestGoodPackets                        = 0;
         RecentPacketsLost                           = 0;
         SetUKFrequencies();
@@ -8543,14 +8542,16 @@ void GetBank()
     Channel12SwitchValue = CheckSwitch(Channel12Switch);
     if (Bank != PreviousBank) {
         RestoreBrightness();
-        LastShowTime          = 0;
         LastTimeRead          = 0;
         if (UseLog) LogNewBank();
         if (MotorEnabled == MotorWasEnabled) { // When turning off motor, don't sound bank too.
             if (AnnounceBanks) SoundBank();
         }
-        if (CurrentView == FRONTVIEW) ShowBank();
-        UpdateModelsNameEveryWhere();
+        if (CurrentView == FRONTVIEW) {
+                ShowBank();}
+        else{
+                UpdateModelsNameEveryWhere();
+        }
         if (CurrentView == GRAPHVIEW) DisplayCurveAndServoPos();
     }
     MotorWasEnabled = MotorEnabled;                               // Remember motor state
