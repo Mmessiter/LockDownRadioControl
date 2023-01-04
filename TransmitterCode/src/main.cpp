@@ -9331,14 +9331,15 @@ FASTRUN void loop()
     GetNewChannelValues();                                       // Load SendBuffer with new servo positions  Very frequently
     if (UseMacros) ExecuteMacro();                               // Modify it if macro is running
     if (BuddyPupilOnSbus) { 
-        NewCompressNeeded = false;                               // fake it as Buddy is not sending data
+        NewCompressNeeded = false;                               // Fake it as Buddy does not send compressed data
+        ShowServoPos(); 
     } else {                                                     // Skip these next lines when buddying as a slave
         if (!BoundFlag && Connected) BufferNewPipe();            // if not yet bound, insert our pipe into SendBuffer BUT ONLY WHEN CONNECTED 
         if (BuddyMaster) GetSlaveChannelValues();                // If buddy master, get buddy data and maybe use it.
-        if (!MotorEnabled) SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero
+        ShowServoPos();                                          // This might show motor on when it's prevented, AND buddys servo positions
+        if (!MotorEnabled) SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero whatever was shown.
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24
-    }
-    ShowServoPos();                                             
+    }                                   
     switch (CurrentMode) {
         case NORMAL:            // 0
             SendData();
