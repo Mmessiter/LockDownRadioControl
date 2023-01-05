@@ -7424,7 +7424,6 @@ FASTRUN void ButtonWasPressed()
             b5isGrey           = false;
             b12isGrey = false;
             SendCommand(ProgressEnd);
-            LedWasGreen = false;
             UpdateModelsNameEveryWhere();
             ClearText();
             ConfigureStickMode();
