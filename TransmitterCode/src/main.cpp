@@ -1389,6 +1389,7 @@ uint32_t GetValue(char* nbox) // This function calls the function above until it
         Procrastinate(50);
         ValueIn = getvalue(nbox);
         ++i;
+        Serial.println(nbox);
     }
     return ValueIn;
 }
@@ -1939,17 +1940,44 @@ void SendCharArray(char* ch0, char* ch1, char* ch2, char* ch3, char* ch4, char* 
 
 /*********************************************************************************************************************************/
 
-void SendMixValues() // sends mix values to Nextion screen
+void SaveMixValues(){
+
+    char MixesView_Enabled[]       = "Enabled";
+    char MixesView_Bank[]          = "FlightMode";
+    char MixesView_MasterChannel[] = "MasterChannel";
+    char MixesView_SlaveChannel[]  = "SlaveChannel";
+    char MixesView_Reversed[]      = "Reversed";
+    char MixesView_Percent[]       = "Percent";
+    char MixesView_h0[]            = "h0"; // =the slider control
+
+
+                Mixes[MixNumber][M_Enabled]       = GetValue(MixesView_Enabled);
+                Mixes[MixNumber][M_Bank]          = GetValue(MixesView_Bank);
+                Mixes[MixNumber][M_MasterChannel] = GetValue(MixesView_MasterChannel);
+                Mixes[MixNumber][M_SlaveChannel]  = GetValue(MixesView_SlaveChannel);
+                Mixes[MixNumber][M_Reversed]      = GetValue(MixesView_Reversed);
+                Mixes[MixNumber][M_Percent]       = GetValue(MixesView_Percent);
+                Mixes[MixNumber][M_Percent]       = GetValue(MixesView_h0);
+
+
+
+}
+
+
+/*********************************************************************************************************************************/
+
+
+void ShowMixValues() // sends mix values to Nextion screen
 {
-    char MixesView_Enabled[]       = "MixesView.Enabled";
-    char MixesView_Bank[]          = "MixesView.Bank";
-    char MixesView_MasterChannel[] = "MixesView.MasterChannel";
-    char MixesView_SlaveChannel[]  = "MixesView.SlaveChannel";
-    char MixesView_Reversed[]      = "MixesView.Reversed";
-    char MixesView_Percent[]       = "MixesView.Percent";
-    char MixesView_h0[]            = "MixesView.h0"; // =the slider control
-    char MixesView_chM[]           = "MixesView.chM";
-    char MixesView_chS[]           = "MixesView.chS";
+    char MixesView_Enabled[]       = "Enabled";
+    char MixesView_Bank[]          = "FlightMode";
+    char MixesView_MasterChannel[] = "MasterChannel";
+    char MixesView_SlaveChannel[]  = "SlaveChannel";
+    char MixesView_Reversed[]      = "Reversed";
+    char MixesView_Percent[]       = "Percent";
+    char MixesView_h0[]            = "h0"; // =the slider control
+    char MixesView_chM[]           = "chM";
+    char MixesView_chS[]           = "chS";
 
     SendText(MixesView_chM, ChannelNames[Mixes[MixNumber][M_MasterChannel] - 1]);
     SendText(MixesView_chS, ChannelNames[Mixes[MixNumber][M_SlaveChannel] - 1]);
@@ -1967,6 +1995,11 @@ void SendMixValues() // sends mix values to Nextion screen
     }
     SendValue(MixesView_Percent, Mixes[MixNumber][M_Percent]);
     SendValue(MixesView_h0, Mixes[MixNumber][M_Percent]);
+
+       
+    SendText(MixesView_chM, ChannelNames[Mixes[MixNumber][M_MasterChannel] - 1]);
+    SendText(MixesView_chS, ChannelNames[Mixes[MixNumber][M_SlaveChannel] - 1]);
+
 }
 
 /*********************************************************************************************************************************/
@@ -2067,25 +2100,25 @@ FASTRUN void DoMixes()
     int m, c, p, mindeg, maxdeg, TheSum, Result;
     for (m = 1; m <= MAXMIXES; ++m) {
         if (Mixes[m][M_Bank] == Bank || Mixes[m][M_Bank] == 0) {
-            if (Mixes[m][M_Enabled] == 1) {
-                for (c = 0; c < CHANNELSUSED; ++c) {
-                    if ((Mixes[m][M_MasterChannel] - 1) == c) {
-                        p = map(PreMixBuffer[c], MINMICROS, MAXMICROS, -HALFMICROSRANGE, HALFMICROSRANGE);
-                        p = p * Mixes[m][M_Percent] / 50; // *****  50, not 100, because mix can now go right to 200% *****
-                        if (Mixes[m][M_Reversed] == 1) p = -p;
-                        TheSum = SendBuffer[(Mixes[m][M_SlaveChannel]) - 1] + p;                        // THIS IS THE MIX!
-                        mindeg = IntoHigherRes(MinDegrees[Bank][(Mixes[m][M_SlaveChannel]) - 1]); // todo: add option to change or remove constraints
-                        maxdeg = IntoHigherRes(MaxDegrees[Bank][(Mixes[m][M_SlaveChannel]) - 1]);
-                        if (mindeg > maxdeg) {
-                             Result = constrain(TheSum, maxdeg, mindeg);
+        if (Mixes[m][M_Enabled] == 1) { 
+                    for (c = 0; c < CHANNELSUSED; ++c) {
+                        if ((Mixes[m][M_MasterChannel] - 1) == c) {
+                            p = map(PreMixBuffer[c], MINMICROS, MAXMICROS, -HALFMICROSRANGE, HALFMICROSRANGE);
+                            p = p * Mixes[m][M_Percent] / 100;                      
+                            if (Mixes[m][M_Reversed] == 1) p = -p;
+                            TheSum = SendBuffer[(Mixes[m][M_SlaveChannel]) - 1] + p;                  // THIS IS THE MIX!
+                            mindeg = IntoHigherRes(MinDegrees[Bank][(Mixes[m][M_SlaveChannel]) - 1]); // todo: add option to change or remove constraints
+                            maxdeg = IntoHigherRes(MaxDegrees[Bank][(Mixes[m][M_SlaveChannel]) - 1]);
+                            if (mindeg > maxdeg) {
+                                Result = constrain(TheSum, maxdeg, mindeg);
+                            }
+                            else {
+                                Result = constrain(TheSum, mindeg, maxdeg);
+                            }
+                            SendBuffer[(Mixes[m][M_SlaveChannel]) - 1] = Result;
                         }
-                        else {
-                             Result = constrain(TheSum, mindeg, maxdeg);
-                        }
-                        SendBuffer[(Mixes[m][M_SlaveChannel]) - 1] = Result;
                     }
-                }
-            }
+        }
         }
     }
 }
@@ -5351,7 +5384,7 @@ void SendModelFile()
             Fposition += BUFFERSIZE;
             if (Fposition > Fsize) Fposition = Fsize;
         }
-        while (millis()- SentMoment < 50) { // heer
+        while (millis()- SentMoment < 50) {
             Radio1.flush_tx();
             Radio1.flush_rx();   
         }
@@ -6641,6 +6674,11 @@ void StartModelSetup(){
         SendCommand(ProgressEnd);
     }
 
+    if (CurrentView == MIXESVIEW) { //  read mixes
+            SaveMixValues();
+            SaveOneModel(ModelNumber);
+        }
+
     b5isGrey  = false;
     b12isGrey = false;     
     SendCommand(GotoModelSetup);
@@ -7099,7 +7137,6 @@ FASTRUN void ButtonWasPressed()
         char Front_View[]              = "FrontView";
         char Sticks_View[]             = "SticksView";
         char Graph_View[]              = "GraphView";
-        char Mixes_View[]              = "MixesView";
         char SetupView[]               = "MainSetup";
         char Scan_End[]                = "ScanEnd";
         char DataEnd[]                 = "DataEnd";
@@ -7107,8 +7144,8 @@ FASTRUN void ButtonWasPressed()
         char CalibrateView[]           = "CalibrateView";
         char TrimView[]                = "TrimView";
         char TRIMS50[]                 = "TRIMS50";
-       // char RTRIM[]                   = "RTRIM";
         char MIXES_VIEW[]              = "MIXESVIEW"; // first call
+        char Mixes_View[]              = "MixesView";
         char Fhss_View[]               = "FhssView";
         char FM1[]                     = "FM 1";
         char FM2[]                     = "FM 2";
@@ -7122,12 +7159,6 @@ FASTRUN void ButtonWasPressed()
         char ModelsView_ModelNumber[]  = "ModelNumber";
         char page_SticksView[]         = "page SticksView";
         char page_GraphView[]          = "page GraphView";
-        char MixesView_Enabled[]       = "Enabled";
-        char MixesView_Bank[]          = "Bank";
-        char MixesView_MasterChannel[] = "MasterChannel";
-        char MixesView_SlaveChannel[]  = "SlaveChannel";
-        char MixesView_Reversed[]      = "Reversed";
-        char MixesView_Percent[]       = "Percent";
         char page_SetupView[]          = "page SetupView";
         char page_RXSetupView[]        = "page RXSetupView";
         char page_AudioView[]          = "page AudioView";
@@ -7185,8 +7216,6 @@ FASTRUN void ButtonWasPressed()
         char CH14NAME[]                = "CH14NAME=";
         char CH15NAME[]                = "CH15NAME=";
         char CH16NAME[]                = "CH16NAME=";
-        char MixesView_chM[]           = "chM";
-        char MixesView_chS[]           = "chS";
         char ProgressStart[]           = "vis Progress,1";
         char ProgressEnd[]             = "vis Progress,0";
         char Progress[]                = "Progress";
@@ -7581,7 +7610,7 @@ FASTRUN void ButtonWasPressed()
                 if (MixNumber == 0) MixNumber = 1;
                 LastMixNumber = 33;                        // just to be differernt
                 SendValue(MixesView_MixNumber, MixNumber); // New load of mix window
-                SendMixValues();
+                ShowMixValues();
             }
            
             if (CurrentView == MACROS_VIEW) {
@@ -8101,36 +8130,38 @@ if (InStrng(Export, TextIn)) {
             return;
         }
 
-        if (InStrng(MIXES_VIEW, TextIn)) {
+        if (InStrng(MIXES_VIEW, TextIn)) {   //        First call to load screen
             SendCommand(pMixesView);
             CurrentView = MIXESVIEW;
             UpdateModelsNameEveryWhere();
             if (MixNumber == 0) MixNumber = 1;
-            LastMixNumber = 33;                        // just to be differernt
+            LastMixNumber = MixNumber;                       
             SendValue(MixesView_MixNumber, MixNumber); // New load of mix window
-            SendMixValues();
+            ShowMixValues();
             ClearText();
             return;
         }
 
-        if (InStrng(Mixes_View, TextIn)) {
+        if (InStrng(Mixes_View, TextIn)) { // heer!  mix number has changed or a param has changed
             CurrentView = MIXESVIEW;
-            Procrastinate(100); // allow screen changes to appear
             UpdateModelsNameEveryWhere();
             MixNumber = GetValue(MixesView_MixNumber);
-            if (LastMixNumber != MixNumber) { // Did it change?
+
+            if (LastMixNumber != MixNumber)   // Did it change?
+            { 
+
+Serial.println ("Mix number changed");
+            
                 LastMixNumber = MixNumber;
-                SendMixValues();
-            }
-            else {
-                Mixes[MixNumber][M_Enabled]       = GetValue(MixesView_Enabled);
-                Mixes[MixNumber][M_Bank]    = GetValue(MixesView_Bank);
-                Mixes[MixNumber][M_MasterChannel] = GetValue(MixesView_MasterChannel);
-                Mixes[MixNumber][M_SlaveChannel]  = GetValue(MixesView_SlaveChannel);
-                Mixes[MixNumber][M_Reversed]      = GetValue(MixesView_Reversed);
-                Mixes[MixNumber][M_Percent]       = GetValue(MixesView_Percent);
-                SendText(MixesView_chM, ChannelNames[Mixes[MixNumber][M_MasterChannel] - 1]);
-                SendText(MixesView_chS, ChannelNames[Mixes[MixNumber][M_SlaveChannel] - 1]);
+                ShowMixValues();
+            
+            } else {                        // here we read current mix's new specification
+
+Serial.println ("Mix number not changed");
+                
+                SaveMixValues();
+                SaveOneModel(ModelNumber);
+                ShowMixValues();
             }
             ClearText();
             return;
