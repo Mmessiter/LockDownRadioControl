@@ -106,6 +106,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "ExitMacrosView", "TransmitterCode_2src_2main_8cpp.html#a488388f6430a0fc7bec57074ba750a2d", null ],
     [ "ExponentialInterpolation", "TransmitterCode_2src_2main_8cpp.html#ab309da1bf9c1b4a4b7763d8968d7f83e", null ],
     [ "FillBox", "TransmitterCode_2src_2main_8cpp.html#a93d9f055a2723479bb28f6c53fdb2643", null ],
+    [ "FixCHNames", "TransmitterCode_2src_2main_8cpp.html#ae9f11f030b85ae36e21266f42e6c65f3", null ],
     [ "FixDeltaGMTSign", "TransmitterCode_2src_2main_8cpp.html#a493eeacfcf61a53db5933a893f7d94a6", null ],
     [ "FixFileName", "TransmitterCode_2src_2main_8cpp.html#afd54540fc7dec21cfe25295d77aa8093", null ],
     [ "Force_ReDisplay", "TransmitterCode_2src_2main_8cpp.html#aa1e81e58421a34fdfd7bfb31925f5a90", null ],
