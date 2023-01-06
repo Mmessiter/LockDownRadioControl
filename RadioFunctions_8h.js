@@ -90,6 +90,7 @@ var RadioFunctions_8h =
     [ "M_Bank", "RadioFunctions_8h.html#afbfbe35486d9ee68d5286e84b4134d04", null ],
     [ "M_Enabled", "RadioFunctions_8h.html#ad2b2fe49829868cf9b49c2e65dfaa006", null ],
     [ "M_MasterChannel", "RadioFunctions_8h.html#ad6c3cb6bd50690ce1867594d589cc727", null ],
+    [ "M_ONEDIRECTION", "RadioFunctions_8h.html#a84a1dfac58dea9586fff2df38ebe6060", null ],
     [ "M_Percent", "RadioFunctions_8h.html#a1d2c1a7c2e532457f8a16284d4560094", null ],
     [ "M_R1", "RadioFunctions_8h.html#a25c000282c221bb28fa3fac74ccb1eae", null ],
     [ "M_R2", "RadioFunctions_8h.html#a4a4b6ec654cebc103b3e88037cf29de8", null ],
