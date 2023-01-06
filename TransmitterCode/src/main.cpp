@@ -1941,7 +1941,6 @@ void SendCharArray(char* ch0, char* ch1, char* ch2, char* ch3, char* ch4, char* 
 /*********************************************************************************************************************************/
 
 void SaveMixValues(){
-
     char MixesView_Enabled[]       = "Enabled";
     char MixesView_Bank[]          = "FlightMode";
     char MixesView_MasterChannel[] = "MasterChannel";
@@ -1958,14 +1957,9 @@ void SaveMixValues(){
                 Mixes[MixNumber][M_Reversed]      = GetValue(MixesView_Reversed);
                 Mixes[MixNumber][M_Percent]       = GetValue(MixesView_Percent);
                 Mixes[MixNumber][M_Percent]       = GetValue(MixesView_h0);
-
-
-
 }
 
-
 /*********************************************************************************************************************************/
-
 
 void ShowMixValues() // sends mix values to Nextion screen
 {
@@ -1995,11 +1989,8 @@ void ShowMixValues() // sends mix values to Nextion screen
     }
     SendValue(MixesView_Percent, Mixes[MixNumber][M_Percent]);
     SendValue(MixesView_h0, Mixes[MixNumber][M_Percent]);
-
-       
     SendText(MixesView_chM, ChannelNames[Mixes[MixNumber][M_MasterChannel] - 1]);
     SendText(MixesView_chS, ChannelNames[Mixes[MixNumber][M_SlaveChannel] - 1]);
-
 }
 
 /*********************************************************************************************************************************/
@@ -2104,7 +2095,7 @@ FASTRUN void DoMixes()
                     for (c = 0; c < CHANNELSUSED; ++c) {
                         if ((Mixes[m][M_MasterChannel] - 1) == c) {
                             p = map(PreMixBuffer[c], MINMICROS, MAXMICROS, -HALFMICROSRANGE, HALFMICROSRANGE);
-                            p = p * Mixes[m][M_Percent] / 100;                      
+                            p = p * Mixes[m][M_Percent] / 100;                  
                             if (Mixes[m][M_Reversed] == 1) p = -p;
                             TheSum = SendBuffer[(Mixes[m][M_SlaveChannel]) - 1] + p;                  // THIS IS THE MIX!
                             mindeg = IntoHigherRes(MinDegrees[Bank][(Mixes[m][M_SlaveChannel]) - 1]); // todo: add option to change or remove constraints
@@ -8146,22 +8137,15 @@ if (InStrng(Export, TextIn)) {
             CurrentView = MIXESVIEW;
             UpdateModelsNameEveryWhere();
             MixNumber = GetValue(MixesView_MixNumber);
-
             if (LastMixNumber != MixNumber)   // Did it change?
             { 
-
-Serial.println ("Mix number changed");
-            
                 LastMixNumber = MixNumber;
-                ShowMixValues();
-            
-            } else {                        // here we read current mix's new specification
-
-Serial.println ("Mix number not changed");
-                
-                SaveMixValues();
-                SaveOneModel(ModelNumber);
-                ShowMixValues();
+                ShowMixValues();            // Yes - Just show new mix number
+            } else 
+            {                        
+                SaveMixValues();            // No - Same mix number, new value somewhere
+                SaveOneModel(ModelNumber);  // Save change
+                ShowMixValues();            // Show change
             }
             ClearText();
             return;
