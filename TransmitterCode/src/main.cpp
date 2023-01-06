@@ -123,7 +123,7 @@ WDT_timings_t WatchDogConfig;
 SBUS          MySbus(SBUSPORT);
 uint16_t      SbusChannels[CHANNELSUSED + 2]; // a few spare
 uint32_t      SBUSTimer = 0;
-uint8_t       Mixes[MAXMIXES + 1][CHANNELSUSED + 1];          // Channel mixes' 2D array store
+uint8_t       Mixes[MAXMIXES + 1][CHANNELSUSED + 1];          // 17 possible elements per mix. NOTHING to do with channels count!!!
 int           Trims[BANKSUSED + 1][CHANNELSUSED + 1];         // Trims to store
 uint8_t       Exponential[BANKSUSED + 1][CHANNELSUSED + 1];   // Exponential
 uint8_t       InterpolationTypes[BANKSUSED + 1][CHANNELSUSED + 1];
@@ -542,6 +542,9 @@ char     pCalibrateView[]                = "page CalibrateView";
 char     Confirmed[2];
 char     NewFileBuffer[MAXFILELEN];
 uint16_t NewFileBufferPointer = 0;
+char     ProgressStart[]       = "vis Progress,1";
+char     ProgressEnd[]         = "vis Progress,0";
+char     Progress[]            = "Progress";
 
 // **********************************************************************************************************************************
 // *********************************************** END OF GLOBAL DATA ***************************************************************
@@ -1940,7 +1943,8 @@ void SendCharArray(char* ch0, char* ch1, char* ch2, char* ch3, char* ch4, char* 
 
 /*********************************************************************************************************************************/
 
-void SaveMixValues(){
+void SaveMixValues(){ // heer
+
     char MixesView_Enabled[]       = "Enabled";
     char MixesView_Bank[]          = "FlightMode";
     char MixesView_MasterChannel[] = "MasterChannel";
@@ -1948,15 +1952,31 @@ void SaveMixValues(){
     char MixesView_Reversed[]      = "Reversed";
     char MixesView_Percent[]       = "Percent";
     char MixesView_h0[]            = "h0"; // =the slider control
+    char MixesView_od[]            = "od"; // One direction
 
 
-                Mixes[MixNumber][M_Enabled]       = GetValue(MixesView_Enabled);
-                Mixes[MixNumber][M_Bank]          = GetValue(MixesView_Bank);
-                Mixes[MixNumber][M_MasterChannel] = GetValue(MixesView_MasterChannel);
-                Mixes[MixNumber][M_SlaveChannel]  = GetValue(MixesView_SlaveChannel);
-                Mixes[MixNumber][M_Reversed]      = GetValue(MixesView_Reversed);
-                Mixes[MixNumber][M_Percent]       = GetValue(MixesView_Percent);
-                Mixes[MixNumber][M_Percent]       = GetValue(MixesView_h0);
+    SendCommand(ProgressStart);
+    SendValue(Progress, 5);
+    Mixes[MixNumber][M_Enabled]       = GetValue(MixesView_Enabled);
+    SendValue(Progress, 10);
+    Mixes[MixNumber][M_Bank]          = GetValue(MixesView_Bank);
+    SendValue(Progress, 25);
+    Mixes[MixNumber][M_MasterChannel] = GetValue(MixesView_MasterChannel);
+    SendValue(Progress, 40);
+    Mixes[MixNumber][M_SlaveChannel]  = GetValue(MixesView_SlaveChannel);
+    SendValue(Progress, 55);
+    Mixes[MixNumber][M_Reversed]      = GetValue(MixesView_Reversed);
+    SendValue(Progress, 70);
+    Mixes[MixNumber][M_Percent]       = GetValue(MixesView_Percent);
+    SendValue(Progress, 85);
+    Mixes[MixNumber][M_Percent]       = GetValue(MixesView_h0);
+    SendValue(Progress, 93);
+    Mixes[MixNumber][M_ONEDIRECTION]  = GetValue(MixesView_od);
+    SendValue(Progress, 100);
+
+
+    
+  
 }
 
 /*********************************************************************************************************************************/
@@ -1972,6 +1992,7 @@ void ShowMixValues() // sends mix values to Nextion screen
     char MixesView_h0[]            = "h0"; // =the slider control
     char MixesView_chM[]           = "chM";
     char MixesView_chS[]           = "chS";
+    char MixesView_od[]            = "od";
 
     SendText(MixesView_chM, ChannelNames[Mixes[MixNumber][M_MasterChannel] - 1]);
     SendText(MixesView_chS, ChannelNames[Mixes[MixNumber][M_SlaveChannel] - 1]);
@@ -1989,6 +2010,8 @@ void ShowMixValues() // sends mix values to Nextion screen
     }
     SendValue(MixesView_Percent, Mixes[MixNumber][M_Percent]);
     SendValue(MixesView_h0, Mixes[MixNumber][M_Percent]);
+
+    SendValue(MixesView_od, Mixes[MixNumber][M_ONEDIRECTION]);
     SendText(MixesView_chM, ChannelNames[Mixes[MixNumber][M_MasterChannel] - 1]);
     SendText(MixesView_chS, ChannelNames[Mixes[MixNumber][M_SlaveChannel] - 1]);
 }
@@ -2096,7 +2119,14 @@ FASTRUN void DoMixes()
                         if ((Mixes[m][M_MasterChannel] - 1) == c) {
                             p = map(PreMixBuffer[c], MINMICROS, MAXMICROS, -HALFMICROSRANGE, HALFMICROSRANGE);
                             p = p * Mixes[m][M_Percent] / 100;                  
-                            if (Mixes[m][M_Reversed] == 1) p = -p;
+                            if (Mixes[m][M_Reversed]) p = -p;
+                            if (Mixes[m][M_ONEDIRECTION]){ 
+                                if (Mixes[m][M_Reversed]){
+                                    if (p > 0) p = -p; 
+                                }else{
+                                    if (p < 0) p = -p;
+                                }
+                            }
                             TheSum = SendBuffer[(Mixes[m][M_SlaveChannel]) - 1] + p;                  // THIS IS THE MIX!
                             mindeg = IntoHigherRes(MinDegrees[Bank][(Mixes[m][M_SlaveChannel]) - 1]); // todo: add option to change or remove constraints
                             maxdeg = IntoHigherRes(MaxDegrees[Bank][(Mixes[m][M_SlaveChannel]) - 1]);
@@ -2109,10 +2139,10 @@ FASTRUN void DoMixes()
                             SendBuffer[(Mixes[m][M_SlaveChannel]) - 1] = Result;
                         }
                     }
-        }
+                }
+            }
         }
     }
-}
 
 /*********************************************************************************************************************************/
 //                  My new version of the the traditional "map()" function -- but here with exponential added.
@@ -5139,9 +5169,6 @@ void ReceiveModelFile()
     uint64_t      RXPipe;
     uint32_t      RXTimer               = 0;
     char          ModelsView_filename[] = "filename";
-    char          ProgressStart[]       = "vis Progress,1";
-    char          ProgressEnd[]         = "vis Progress,0";
-    char          Progress[]            = "Progress";
     char          Fbuffer[BUFFERSIZE + 8]; // spare space
     uint8_t       Fack      = 1;           // just a token byte
     char          Waiting[] = "Waiting ";
@@ -5304,9 +5331,6 @@ void ReceiveModelFile()
 /** @brief SEND A MODEL FILE */
 void SendModelFile() 
 {
-    char          ProgressStart[] = "vis Progress,1";
-    char          ProgressEnd[]   = "vis Progress,0";
-    char          Progress[]      = "Progress";
     uint64_t      TXPipe;
     uint8_t       Fack      = 1;
     unsigned long Fsize     = 0;
@@ -5601,9 +5625,6 @@ void ReadNewSwitchFunction(){
 
         char PageSwitchView[]          = "page SwitchesView";
         char OneSwitchViewc_revd[]     = "c_revd"; // Reversed
-        char    ProgressStart[] = "vis Progress,1";
-        char    ProgressEnd[]   = "vis Progress,0";
-        char    Progress[]      = "Progress";
 
             SendCommand(ProgressStart);
             SendValue(Progress, 10);
@@ -5789,9 +5810,6 @@ void EndReverseView()
     char    fs[16][5] = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
     uint8_t i;
     char    pRXSetupView[]    = "page RXSetupView";
-    char    ProgressStart[] = "vis Progress,1";
-    char    ProgressEnd[]   = "vis Progress,0";
-    char    Progress[]      = "Progress";
     SendCommand(ProgressStart);
     ReversedChannelBITS = 0;
     for (i = 0; i < 16; ++i) {
@@ -5814,9 +5832,6 @@ void StartReverseView()
     char    pReverseView[] = "page ReverseView";
     char    fs[16][5]      = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
     uint8_t i;
-    char    Progress[]      = "Progress";
-    char    ProgressStart[] = "vis Progress,1";
-    char    ProgressEnd[]   = "vis Progress,0";
     CurrentView             = REVERSEVIEW;
     SendCommand(pReverseView);
     UpdateButtonLabels();
@@ -6325,9 +6340,6 @@ void BuddyChViewStart()
 
 void BuddyChViewEnd()
 {
-    char ProgressStart[]  = "vis Progress,1";
-    char ProgressEnd[]    = "vis Progress,0";
-    char Progress[]       = "Progress";
     char page_BuddyView[] = "page BuddyView";
     char fs[16][5]        = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
     SendCommand(ProgressStart);
@@ -6384,9 +6396,6 @@ void ResetTransmitterSettings(){    // This function resets all transmitter para
    int  sofar   = 0;
 
    if (!GetConfirmation(pCalibrateView,prompt)) return;
-   char ProgressStart[]  = "vis Progress,1";
-   char ProgressEnd[]    = "vis Progress,0";
-   char Progress[]       = "Progress";
    SendCommand(ProgressStart);
    SendValue(Progress, 2);
 
@@ -6538,9 +6547,6 @@ void DualRatesStart(){
 /******************************************************************************************************************************/
 
 void ReadDualRatesValues(){ 
-    char ProgressStart[]  = "vis Progress,1";
-    char ProgressEnd[]    = "vis Progress,0";
-    char Progress[]       = "Progress";
     char rate2[]          = "rate2";
     char rate3[]          = "rate3";
     char rate1[]          = "rate1";
@@ -6651,9 +6657,6 @@ void ListenToBanks(){
 /******************************************************************************************************************************/
 void StartModelSetup(){
     char GotoModelSetup[]           = "page RXSetupView"; 
-    char ProgressStart[]            = "vis Progress,1";
-    char ProgressEnd[]              = "vis Progress,0";
-    char Progress[]                 = "Progress";
     char fs[16][5]                 = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
      
     if (CurrentView == FAILSAFE_VIEW) { //  read failsafe blobs
@@ -6668,6 +6671,7 @@ void StartModelSetup(){
     if (CurrentView == MIXESVIEW) { //  read mixes
             SaveMixValues();
             SaveOneModel(ModelNumber);
+            SendCommand(ProgressEnd);
         }
 
     b5isGrey  = false;
@@ -6700,9 +6704,6 @@ void StartSlowView(){
 }
 /******************************************************************************************************************************/
 void EndSlowView(){
-    char ProgressStart[]           = "vis Progress,1";
-    char ProgressEnd[]             = "vis Progress,0";
-    char Progress[]                = "Progress";
     char ns[16][4]    = {{"n0"}, {"n1"}, {"n2"}, {"n3"}, {"n4"}, {"n5"}, {"n6"}, {"n7"}, {"n8"}, {"n9"}, {"n10"}, {"n11"}, {"n12"}, {"n13"}, {"n14"}, {"n15"}};
     SendCommand(ProgressStart);
     for (int i = 0; i < 16; ++i){
@@ -6788,9 +6789,6 @@ void FixFileName(){
 void WriteBackup(){
 
                 char ModExt[]                  = ".MOD";
-                char ProgressStart[]           = "vis Progress,1";
-                char ProgressEnd[]             = "vis Progress,0";
-                char Progress[]                = "Progress";
                 uint8_t Iterations             = 4;
                 SendValue(Progress, 1);
                 FixFileName();
@@ -7207,9 +7205,6 @@ FASTRUN void ButtonWasPressed()
         char CH14NAME[]                = "CH14NAME=";
         char CH15NAME[]                = "CH15NAME=";
         char CH16NAME[]                = "CH16NAME=";
-        char ProgressStart[]           = "vis Progress,1";
-        char ProgressEnd[]             = "vis Progress,0";
-        char Progress[]                = "Progress";
         char HelpView[]                = "HelpView";
         char SendModel[]               = "SendModel";
         char PowerOff[]                = "PowerOff";
@@ -8147,6 +8142,7 @@ if (InStrng(Export, TextIn)) {
                 SaveMixValues();             // No - Same mix number but new value somewhere
                 SaveOneModel(ModelNumber);   // Save change
                 ShowMixValues();             // Show change
+                SendCommand(ProgressEnd);
             }
             ClearText();
             return;

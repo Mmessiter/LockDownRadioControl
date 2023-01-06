@@ -124,7 +124,7 @@
 //                               Mixes                                      *
 // **************************************************************************
 
-#define M_Enabled       0 // Offsets for Mixes array
+#define M_Enabled       0 // Offsets for Mixes array ( up to 17)
 #define M_Bank          1
 #define M_MasterChannel 2
 #define M_SlaveChannel  3
@@ -132,6 +132,7 @@
 #define M_Percent       5
 #define M_R1            6
 #define M_R2            7
+#define M_ONEDIRECTION  8
 
 // **************************************************************************
 //                               Screens                                    *
