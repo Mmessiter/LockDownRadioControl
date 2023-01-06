@@ -2023,12 +2023,11 @@ void FixCHNames(){
    
     char MixesView_chM[]           = "chM";
     char MixesView_chS[]           = "chS";
-     char MixesView_MasterChannel[] = "MasterChannel";
+    char MixesView_MasterChannel[] = "MasterChannel";
     char MixesView_SlaveChannel[]  = "SlaveChannel";
 
     Mixes[MixNumber][M_MasterChannel] = GetValue(MixesView_MasterChannel);
     Mixes[MixNumber][M_SlaveChannel]  = GetValue(MixesView_SlaveChannel);
-    
     SendText(MixesView_chM, ChannelNames[Mixes[MixNumber][M_MasterChannel] - 1]);
     SendText(MixesView_chS, ChannelNames[Mixes[MixNumber][M_SlaveChannel] - 1]);
 }
