@@ -8133,19 +8133,20 @@ if (InStrng(Export, TextIn)) {
             return;
         }
 
-        if (InStrng(Mixes_View, TextIn)) { // heer!  mix number has changed or a param has changed
+        if (InStrng(Mixes_View, TextIn)) {    // Mix number or a param has changed
             CurrentView = MIXESVIEW;
             UpdateModelsNameEveryWhere();
             MixNumber = GetValue(MixesView_MixNumber);
-            if (LastMixNumber != MixNumber)   // Did it change?
+            if (LastMixNumber != MixNumber)   // Did number change?
             { 
                 LastMixNumber = MixNumber;
-                ShowMixValues();            // Yes - Just show new mix number
-            } else 
+                ShowMixValues();              // Yes - Just show new mix number stuff
+            } 
+            else 
             {                        
-                SaveMixValues();            // No - Same mix number, new value somewhere
-                SaveOneModel(ModelNumber);  // Save change
-                ShowMixValues();            // Show change
+                SaveMixValues();             // No - Same mix number but new value somewhere
+                SaveOneModel(ModelNumber);   // Save change
+                ShowMixValues();             // Show change
             }
             ClearText();
             return;
