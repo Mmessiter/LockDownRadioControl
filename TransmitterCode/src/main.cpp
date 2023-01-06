@@ -2016,6 +2016,23 @@ void ShowMixValues() // sends mix values to Nextion screen
     SendText(MixesView_chS, ChannelNames[Mixes[MixNumber][M_SlaveChannel] - 1]);
 }
 
+
+/*********************************************************************************************************************************/
+
+void FixCHNames(){
+   
+    char MixesView_chM[]           = "chM";
+    char MixesView_chS[]           = "chS";
+     char MixesView_MasterChannel[] = "MasterChannel";
+    char MixesView_SlaveChannel[]  = "SlaveChannel";
+
+    Mixes[MixNumber][M_MasterChannel] = GetValue(MixesView_MasterChannel);
+    Mixes[MixNumber][M_SlaveChannel]  = GetValue(MixesView_SlaveChannel);
+    
+    SendText(MixesView_chM, ChannelNames[Mixes[MixNumber][M_MasterChannel] - 1]);
+    SendText(MixesView_chS, ChannelNames[Mixes[MixNumber][M_SlaveChannel] - 1]);
+}
+
 /*********************************************************************************************************************************/
 
 int GetNextNumber(int p1, char text1[CHARSMAX])
@@ -8127,22 +8144,24 @@ if (InStrng(Export, TextIn)) {
             ClearText();
             return;
         }
-
-        if (InStrng(Mixes_View, TextIn)) {    // Mix number or a param has changed
+        if (InStrng(Mixes_View, TextIn)) {      // Mix number OR a parameter has changed
             CurrentView = MIXESVIEW;
             UpdateModelsNameEveryWhere();
+            uint8_t ThisMixNumber = MixNumber;  // save it
             MixNumber = GetValue(MixesView_MixNumber);
-            if (LastMixNumber != MixNumber)   // Did number change?
-            { 
-                LastMixNumber = MixNumber;
-                ShowMixValues();              // Yes - Just show new mix number stuff
+            if (LastMixNumber != MixNumber)     // Did number change?
+            {
+                LastMixNumber = MixNumber;      // save new mix number
+                MixNumber = ThisMixNumber;      // force back to old number to grab last lot before doing new one
+                SaveMixValues();                // save them
+                SaveOneModel(ModelNumber);      
+                SendCommand(ProgressEnd);
+                MixNumber = LastMixNumber;      // back to new one
+                ShowMixValues();                // show new lot
             } 
             else 
             {                        
-                SaveMixValues();             // No - Same mix number but new value somewhere
-                SaveOneModel(ModelNumber);   // Save change
-                ShowMixValues();             // Show change
-                SendCommand(ProgressEnd);
+                FixCHNames();                   // just redisplay ch names
             }
             ClearText();
             return;
