@@ -1943,7 +1943,7 @@ void SendCharArray(char* ch0, char* ch1, char* ch2, char* ch3, char* ch4, char* 
 
 /*********************************************************************************************************************************/
 
-void SaveMixValues(){ // heer
+void SaveMixValues(){
 
     char MixesView_Enabled[]       = "Enabled";
     char MixesView_Bank[]          = "FlightMode";
@@ -1953,7 +1953,6 @@ void SaveMixValues(){ // heer
     char MixesView_Percent[]       = "Percent";
     char MixesView_h0[]            = "h0"; // =the slider control
     char MixesView_od[]            = "od"; // One direction
-
 
     SendCommand(ProgressStart);
     SendValue(Progress, 5);
@@ -1973,10 +1972,6 @@ void SaveMixValues(){ // heer
     SendValue(Progress, 93);
     Mixes[MixNumber][M_ONEDIRECTION]  = GetValue(MixesView_od);
     SendValue(Progress, 100);
-
-
-    
-  
 }
 
 /*********************************************************************************************************************************/
@@ -2127,38 +2122,40 @@ FASTRUN uint16_t GetStickInputInputOnly(uint8_t l) // This returns the input onl
 /*********************************************************************************************************************************/
 FASTRUN void DoMixes()
 {
-    int m, c, p, mindeg, maxdeg, TheSum, Result;
+    int m, c, p, mindeg, maxdeg, TheSum;
     for (m = 1; m <= MAXMIXES; ++m) {
         if (Mixes[m][M_Bank] == Bank || Mixes[m][M_Bank] == 0) {
-        if (Mixes[m][M_Enabled] == 1) { 
-                    for (c = 0; c < CHANNELSUSED; ++c) {
-                        if ((Mixes[m][M_MasterChannel] - 1) == c) {
-                            p = map(PreMixBuffer[c], MINMICROS, MAXMICROS, -HALFMICROSRANGE, HALFMICROSRANGE);
-                            p = p * Mixes[m][M_Percent] / 100;                  
-                            if (Mixes[m][M_Reversed]) p = -p;
-                            if (Mixes[m][M_ONEDIRECTION]){ 
-                                if (Mixes[m][M_Reversed]){
+            if (Mixes[m][M_Enabled] == 1) { 
+                for (c = 0; c < CHANNELSUSED; ++c) {
+                    if ((Mixes[m][M_MasterChannel] - 1) == c) {
+                        p = map(PreMixBuffer[c], MINMICROS, MAXMICROS, -HALFMICROSRANGE, HALFMICROSRANGE);
+                        p = p * Mixes[m][M_Percent] / 100;                  
+                        if (Mixes[m][M_Reversed]) p = -p;
+                        if (Mixes[m][M_ONEDIRECTION])
+                        { 
+                            if (Mixes[m][M_Reversed])
+                            {
                                     if (p > 0) p = -p; 
-                                }else{
+                                }else
+                                {
                                     if (p < 0) p = -p;
                                 }
-                            }
-                            TheSum = SendBuffer[(Mixes[m][M_SlaveChannel]) - 1] + p;                  // THIS IS THE MIX!
-                            mindeg = IntoHigherRes(MinDegrees[Bank][(Mixes[m][M_SlaveChannel]) - 1]); // todo: add option to change or remove constraints
-                            maxdeg = IntoHigherRes(MaxDegrees[Bank][(Mixes[m][M_SlaveChannel]) - 1]);
-                            if (mindeg > maxdeg) {
-                                Result = constrain(TheSum, maxdeg, mindeg);
-                            }
-                            else {
-                                Result = constrain(TheSum, mindeg, maxdeg);
-                            }
-                            SendBuffer[(Mixes[m][M_SlaveChannel]) - 1] = Result;
+                        }
+                        TheSum = SendBuffer[(Mixes[m][M_SlaveChannel]) - 1] + p;                  // THIS IS THE MIX!
+                        mindeg = IntoHigherRes(MinDegrees[Bank][(Mixes[m][M_SlaveChannel]) - 1]); // todo: add option to change or remove constraints
+                        maxdeg = IntoHigherRes(MaxDegrees[Bank][(Mixes[m][M_SlaveChannel]) - 1]);
+                        if (mindeg > maxdeg) {
+                            SendBuffer[(Mixes[m][M_SlaveChannel]) - 1] = constrain(TheSum, maxdeg, mindeg);
+                        }
+                        else {
+                            SendBuffer[(Mixes[m][M_SlaveChannel]) - 1] = constrain(TheSum, mindeg, maxdeg);
                         }
                     }
                 }
             }
         }
     }
+}
 
 /*********************************************************************************************************************************/
 //                  My new version of the the traditional "map()" function -- but here with exponential added.
