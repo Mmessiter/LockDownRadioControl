@@ -5203,14 +5203,13 @@ void ReceiveModelFile()
     char          bytes[] = " bytes.";
     char          t0[]    = "t0";
     char          RXheader[] = "File receive";
-    char          prompt[30];
     char          ovwr[] = "Overwrite ";
     char          ques[] = "?";
 
-    strcpy(prompt, ovwr);
-    strcat(prompt, ModelName);
-    strcat(prompt, ques);
-    if (!GetConfirmation(GoModelsView,prompt)) return; // Get confirmation or quit
+    strcpy(msg, ovwr);
+    strcat(msg, ModelName);
+    strcat(msg, ques);
+    if (!GetConfirmation(GoModelsView,msg)) return; // Get confirmation or quit
     BlueLedOn();
     ShowFileTransferWindow();
     SendText(ModelsView_filename, Waiting);
