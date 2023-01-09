@@ -2122,33 +2122,43 @@ FASTRUN uint16_t GetStickInputInputOnly(uint8_t l) // This returns the input onl
 /*********************************************************************************************************************************/
 FASTRUN void DoMixes()
 {
-    int m, c, p, mindeg, maxdeg, TheSum;
-    for (m = 1; m <= MAXMIXES; ++m) {
-        if (Mixes[m][M_Bank] == Bank || Mixes[m][M_Bank] == 0) {
-            if (Mixes[m][M_Enabled] == 1) { 
-                for (c = 0; c < CHANNELSUSED; ++c) {
-                    if ((Mixes[m][M_MasterChannel] - 1) == c) {
-                        p = map(PreMixBuffer[c], MINMICROS, MAXMICROS, -HALFMICROSRANGE, HALFMICROSRANGE);
-                        p = p * Mixes[m][M_Percent] / 100;                  
-                        if (Mixes[m][M_Reversed]) p = -p;
-                        if (Mixes[m][M_ONEDIRECTION])
+    int MixNumber, ChNo, MixValue, mindeg, maxdeg;
+
+    for (MixNumber = 1; MixNumber <= MAXMIXES; ++MixNumber) 
+    {
+        if (Mixes[MixNumber][M_Bank] == Bank || (!Mixes[MixNumber][M_Bank])) 
+        {
+            if (Mixes[MixNumber][M_Enabled] == 1) 
+            { 
+                for (ChNo = 0; ChNo < CHANNELSUSED; ++ChNo) 
+                {
+                    if ((Mixes[MixNumber][M_MasterChannel] - 1) == ChNo) 
+                    {
+                        MixValue = (map(PreMixBuffer[ChNo], MINMICROS, MAXMICROS, -HALFMICROSRANGE, HALFMICROSRANGE)) * (int) Mixes[MixNumber][M_Percent] / 100 ;
+                        
+                        if (Mixes[MixNumber][M_ONEDIRECTION]) 
                         { 
-                            if (Mixes[m][M_Reversed])
+                            if (Mixes[MixNumber][M_Reversed])
                             {
-                                    if (p > 0) p = -p; 
-                                }else
-                                {
-                                    if (p < 0) p = -p;
-                                }
+                                if (MixValue > 0) MixValue = -MixValue; 
+                            }else
+                            {
+                                if (MixValue < 0) MixValue = -MixValue;
+                            }
+                        }else
+                        {
+                            if (Mixes[MixNumber][M_Reversed]) MixValue = -MixValue;
                         }
-                        TheSum = SendBuffer[(Mixes[m][M_SlaveChannel]) - 1] + p;                  // THIS IS THE MIX!
-                        mindeg = IntoHigherRes(MinDegrees[Bank][(Mixes[m][M_SlaveChannel]) - 1]); // todo: add option to change or remove constraints
-                        maxdeg = IntoHigherRes(MaxDegrees[Bank][(Mixes[m][M_SlaveChannel]) - 1]);
-                        if (mindeg > maxdeg) {
-                            SendBuffer[(Mixes[m][M_SlaveChannel]) - 1] = constrain(TheSum, maxdeg, mindeg);
+                        MixValue += SendBuffer[(Mixes[MixNumber][M_SlaveChannel]) - 1];                   // This is the mix moment! (MixValue is now the sum)
+                        mindeg = IntoHigherRes(MinDegrees[Bank][(Mixes[MixNumber][M_SlaveChannel]) - 1]); 
+                        maxdeg = IntoHigherRes(MaxDegrees[Bank][(Mixes[MixNumber][M_SlaveChannel]) - 1]);
+                        if (mindeg > maxdeg) 
+                        {
+                            SendBuffer[(Mixes[MixNumber][M_SlaveChannel]) - 1] = constrain(MixValue, maxdeg, mindeg);
                         }
-                        else {
-                            SendBuffer[(Mixes[m][M_SlaveChannel]) - 1] = constrain(TheSum, mindeg, maxdeg);
+                        else 
+                        {
+                            SendBuffer[(Mixes[MixNumber][M_SlaveChannel]) - 1] = constrain(MixValue, mindeg, maxdeg);
                         }
                     }
                 }
@@ -3599,7 +3609,7 @@ FLASHMEM void setup()
     SendValue(FrontView_Mins, 0);
     SendValue(FrontView_Secs, 0);
     //  ***************************************************************************************
-     // SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
+      //SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
     //  **   BUT then re-comment it!! Otherwise it will reset to same time on every boot up! **
     //  ***************************************************************************************
     BoundFlag = false;
@@ -5206,10 +5216,12 @@ void ReceiveModelFile()
     char          ovwr[] = "Overwrite ";
     char          ques[] = "?";
 
+
     strcpy(msg, ovwr);
     strcat(msg, ModelName);
     strcat(msg, ques);
     if (!GetConfirmation(GoModelsView,msg)) return; // Get confirmation or quit
+
     BlueLedOn();
     ShowFileTransferWindow();
     SendText(ModelsView_filename, Waiting);
@@ -5279,6 +5291,8 @@ void ReceiveModelFile()
     Serial.print("File size = ");
     Serial.println(Fsize);
  #endif
+
+
     Fposition        = 0;
     strcpy(fnamebuf, Receiving);
     strcat(fnamebuf, SingleModelFile);
@@ -5400,11 +5414,11 @@ void SendModelFile()
         SendValue(Progress, p);
         ++PacketNumber;
         if (PacketNumber == 1) {
-            strcpy(Fbuffer, SingleModelFile); // Filename in first packet
+            strcpy(Fbuffer, SingleModelFile);           // Filename in first packet
             Fbuffer[BUFFERSIZE]     = Fsize;
             Fbuffer[BUFFERSIZE + 1] = Fsize >> 8;
             Fbuffer[BUFFERSIZE + 2] = Fsize >> 16;
-            Fbuffer[BUFFERSIZE + 3] = Fsize >> 24; // SEND FILE SIZE (four bytes)
+            Fbuffer[BUFFERSIZE + 3] = Fsize >> 24;      // SEND FILE SIZE (four bytes)
         }
         else {
             ModelsFileNumber.seek(Fposition);           // Move filepointer
@@ -7684,6 +7698,7 @@ FASTRUN void ButtonWasPressed()
                 ++i;
                 SingleModelFile[j] = 0;
             }
+          //  Serial.println(SingleModelFile);
             SendModelFile();
             ClearText();
             return;
