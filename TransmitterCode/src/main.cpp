@@ -2122,19 +2122,19 @@ FASTRUN uint16_t GetStickInputInputOnly(uint8_t l) // This returns the input onl
 /*********************************************************************************************************************************/
 FASTRUN void DoMixes()
 {
-    int MixNumber, ChNo, MixValue, mindeg, maxdeg;
+    short      MixNumber, ChannelNumber, MixValue, MinimumDeg, MaximumDeg; // heer
 
-    for (MixNumber = 1; MixNumber <= MAXMIXES; ++MixNumber) 
+    for (MixNumber = 1; MixNumber < MAXMIXES; ++MixNumber) 
     {
-        if (Mixes[MixNumber][M_Bank] == Bank || (!Mixes[MixNumber][M_Bank])) 
-        {
-            if (Mixes[MixNumber][M_Enabled] == 1) 
-            { 
-                for (ChNo = 0; ChNo < CHANNELSUSED; ++ChNo) 
+        if (Mixes[MixNumber][M_Enabled]) 
+        { 
+            if (Mixes[MixNumber][M_Bank] == Bank || (!Mixes[MixNumber][M_Bank])) 
+            {
+                for (ChannelNumber = 0; ChannelNumber < CHANNELSUSED; ++ChannelNumber) 
                 {
-                    if ((Mixes[MixNumber][M_MasterChannel] - 1) == ChNo) 
+                    if ((Mixes[MixNumber][M_MasterChannel] - 1) == ChannelNumber) 
                     {
-                        MixValue = (map(PreMixBuffer[ChNo], MINMICROS, MAXMICROS, -HALFMICROSRANGE, HALFMICROSRANGE)) * (int) Mixes[MixNumber][M_Percent] / 100 ;
+                        MixValue = (map(PreMixBuffer[ChannelNumber], MINMICROS, MAXMICROS, -HALFMICROSRANGE, HALFMICROSRANGE)) * (short) Mixes[MixNumber][M_Percent] / 100;
                         
                         if (Mixes[MixNumber][M_ONEDIRECTION]) 
                         { 
@@ -2149,16 +2149,16 @@ FASTRUN void DoMixes()
                         {
                             if (Mixes[MixNumber][M_Reversed]) MixValue = -MixValue;
                         }
-                        MixValue += SendBuffer[(Mixes[MixNumber][M_SlaveChannel]) - 1];                   // This is the mix moment! (MixValue is now the sum)
-                        mindeg = IntoHigherRes(MinDegrees[Bank][(Mixes[MixNumber][M_SlaveChannel]) - 1]); 
-                        maxdeg = IntoHigherRes(MaxDegrees[Bank][(Mixes[MixNumber][M_SlaveChannel]) - 1]);
-                        if (mindeg > maxdeg) 
+                        MixValue += SendBuffer[(Mixes[MixNumber][M_SlaveChannel]) - 1];      // This is the actual mix moment! (MixValue is now the mixed value)
+                        MinimumDeg = IntoHigherRes(MinDegrees[Bank][(Mixes[MixNumber][M_SlaveChannel]) - 1]); 
+                        MaximumDeg = IntoHigherRes(MaxDegrees[Bank][(Mixes[MixNumber][M_SlaveChannel]) - 1]);
+                        if (MinimumDeg > MaximumDeg) 
                         {
-                            SendBuffer[(Mixes[MixNumber][M_SlaveChannel]) - 1] = constrain(MixValue, maxdeg, mindeg);
+                            SendBuffer[(Mixes[MixNumber][M_SlaveChannel]) - 1] = constrain(MixValue, MaximumDeg, MinimumDeg);
                         }
                         else 
                         {
-                            SendBuffer[(Mixes[MixNumber][M_SlaveChannel]) - 1] = constrain(MixValue, mindeg, maxdeg);
+                            SendBuffer[(Mixes[MixNumber][M_SlaveChannel]) - 1] = constrain(MixValue, MinimumDeg, MaximumDeg);
                         }
                     }
                 }
@@ -2356,7 +2356,7 @@ FASTRUN void GetNewChannelValues()
         if (InputChannel > 7) {                                                                                          // Must be a switch if over 7
             OutputValue = GetStickInput(InputChannel);                                                                   // Four 3 postion switches
         } else {                                                                                                         // i.e. l <= 7 so it's a Stick/knob/switch                                           
-            InputValue = AnalogueReed(InputChannel) + GetTrimAmount(InputChannel);                                       // Get values from sticks' pots then ADD TRIM then interpolate them.
+            InputValue  = AnalogueReed(InputChannel) + GetTrimAmount(InputChannel);                                       // Get values from sticks' pots then ADD TRIM then interpolate them.
             OutputValue = Interpolate[InterpolationTypes[Bank][OutputChannel]](InputValue, InputChannel, OutputChannel); // Use function pointer array to invoke selected interpolation.
         }
         OutputValue += (SubTrims[OutputChannel] - 127) * (TrimMultiplier);                                               // ADD SUBTRIM to output channel, not mapped input channel (Range 0 - 127 - 254)
