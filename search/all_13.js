@@ -1,7 +1,7 @@
 var searchData=
 [
   ['radio_2eh_0',['radio.h',['../radio_8h.html',1,'']]],
-  ['radio1_1',['Radio1',['../radio_8h.html#a6e2d4126d864c50e7c23c988c2bfdd1a',1,'Radio1(pinCE1, pinCSN1):&#160;radio.h'],['../TransmitterCode_2src_2main_8cpp.html#a621c346e4b1d9b24b9a5bda63d0f0f52',1,'Radio1(CE_PIN, CSN_PIN):&#160;main.cpp'],['../RadioFunctions_8h.html#aae23a8374f487a46c5fcb1fb02fadc69',1,'Radio1():&#160;RadioFunctions.h']]],
+  ['radio1_1',['Radio1',['../TransmitterCode_2src_2main_8cpp.html#a621c346e4b1d9b24b9a5bda63d0f0f52',1,'Radio1(CE_PIN, CSN_PIN):&#160;main.cpp'],['../radio_8h.html#a6e2d4126d864c50e7c23c988c2bfdd1a',1,'Radio1(pinCE1, pinCSN1):&#160;radio.h'],['../RadioFunctions_8h.html#aae23a8374f487a46c5fcb1fb02fadc69',1,'Radio1():&#160;RadioFunctions.h']]],
   ['radio2_2',['Radio2',['../radio_8h.html#a8b76f3c338025926421c7b308405bbfd',1,'radio.h']]],
   ['radiofunctions_2ecpp_3',['RadioFunctions.cpp',['../RadioFunctions_8cpp.html',1,'']]],
   ['radiofunctions_2eh_4',['RadioFunctions.h',['../RadioFunctions_8h.html',1,'']]],
@@ -49,7 +49,7 @@ var searchData=
   ['readtimeout_46',['readTimeout',['../classI2Cdev.html#ae2125796e0948127fc15031650111e82',1,'I2Cdev']]],
   ['readword_47',['readWord',['../classI2Cdev.html#a545cd48b1e806e7e467b542c9e38e8c8',1,'I2Cdev']]],
   ['readwords_48',['readWords',['../classI2Cdev.html#a1b3d895dc6a00cbb5fb3b0441b2e35de',1,'I2Cdev']]],
-  ['readytousedata_49',['ReadyToUseData',['../ReceiverCode_2src_2main_8cpp.html#a0bbfa9b2a3f05016d9c5d48beee24c34',1,'main.cpp']]],
+  ['readytousedata_49',['ReadyToUseData',['../ReceiverCode_2src_2main_8cpp.html#a0bbfa9b2a3f05016d9c5d48beee24c34',1,'ReadyToUseData():&#160;main.cpp'],['../radio_8h.html#a0bbfa9b2a3f05016d9c5d48beee24c34',1,'ReadyToUseData():&#160;main.cpp']]],
   ['rebuildflags_50',['RebuildFlags',['../ReceiverCode_2src_2main_8cpp.html#ad86a39e4cba19592c760833870f6f69c',1,'main.cpp']]],
   ['receive_5ftimeout_51',['RECEIVE_TIMEOUT',['../common_8h.html#a4c69942f01447fa7563c5726c7d8abf2',1,'common.h']]],
   ['receivedata_52',['ReceiveData',['../ReceiverCode_2src_2main_8cpp.html#a06807a4f185694d37f774702ba74db0a',1,'ReceiveData():&#160;main.cpp'],['../radio_8h.html#a06807a4f185694d37f774702ba74db0a',1,'ReceiveData():&#160;main.cpp']]],

@@ -60,6 +60,7 @@ var radio_8h =
     [ "PacketNumber", "radio_8h.html#a09cb370d93005b5a43e932a3d6093ea2", null ],
     [ "PreviousData", "radio_8h.html#a54007b635670b351453013425e7f2814", null ],
     [ "RadioSwaps", "radio_8h.html#aff48e1463bf663c156032302d0161c98", null ],
+    [ "ReadyToUseData", "radio_8h.html#a0bbfa9b2a3f05016d9c5d48beee24c34", null ],
     [ "ReceivedData", "radio_8h.html#ae5bff5a2375f932e5653e5d3659330d3", null ],
     [ "ReconnectedMoment", "radio_8h.html#ae6657a547a79d8e304b8ddeb3f6a38e0", null ],
     [ "ReconnectIndex", "radio_8h.html#a90d98310365e78ee5ec06aaa7a4092f1", null ],

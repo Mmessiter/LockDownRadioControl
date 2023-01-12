@@ -5,7 +5,7 @@ var searchData=
   ['rangetestgoodpackets_2',['RangeTestGoodPackets',['../RadioFunctions_8h.html#a8a5b55d644bb404cd6cdf61c5a85f822',1,'RangeTestGoodPackets():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a8a5b55d644bb404cd6cdf61c5a85f822',1,'RangeTestGoodPackets():&#160;main.cpp']]],
   ['rangeteststart_3',['RangeTestStart',['../TransmitterCode_2src_2main_8cpp.html#a8e7018af38f2b48314416c9559cb39e0',1,'main.cpp']]],
   ['readtimeout_4',['readTimeout',['../classI2Cdev.html#ae2125796e0948127fc15031650111e82',1,'I2Cdev']]],
-  ['readytousedata_5',['ReadyToUseData',['../ReceiverCode_2src_2main_8cpp.html#a0bbfa9b2a3f05016d9c5d48beee24c34',1,'main.cpp']]],
+  ['readytousedata_5',['ReadyToUseData',['../ReceiverCode_2src_2main_8cpp.html#a0bbfa9b2a3f05016d9c5d48beee24c34',1,'ReadyToUseData():&#160;main.cpp'],['../radio_8h.html#a0bbfa9b2a3f05016d9c5d48beee24c34',1,'ReadyToUseData():&#160;main.cpp']]],
   ['receiveddata_6',['ReceivedData',['../radio_8h.html#ae5bff5a2375f932e5653e5d3659330d3',1,'radio.h']]],
   ['receiverequestflag_7',['ReceiveRequestFlag',['../SensorHubT32_2src_2main_8cpp.html#a5ac604cfd226554c62738bdbabf09f5f',1,'main.cpp']]],
   ['receiverversionnumber_8',['ReceiverVersionNumber',['../TransmitterCode_2src_2main_8cpp.html#a54977872c85f09f2b15f657c83df9300',1,'main.cpp']]],
