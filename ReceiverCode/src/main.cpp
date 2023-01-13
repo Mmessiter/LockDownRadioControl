@@ -116,7 +116,7 @@ void LoadFailSafeData()
 /** Map servo channels' data from ReceivedData buffer into SbusChannels buffer */
 void MapToSBUS()
 {
-    if (ReadyToUseData) {
+    if (Connected) {
         for (int j = 0; j < CHANNELSUSED; ++j) {
             SbusChannels[j] = static_cast<uint16_t>(map(ReceivedData[j], MINMICROS, MAXMICROS, RANGEMIN, RANGEMAX));
         }
@@ -223,14 +223,12 @@ bool ReadData()
 void AttachServos()
 {
     if (!ServosAttached) {
-        MySbus.begin(); // AND START SBUS!!!
         for (uint8_t i = 0; i < SERVOSUSED; ++i) {
             MCMServo[i].attach(PWMPins[i]);
         }
         ServosAttached = true;
-        uint32_t tt    = millis();
-        while (millis() - tt < 1000) ReceiveData(); // absorb any intial junk
     }
+    MySbus.begin(); // AND START SBUS!!!
 }
 /************************************************************************************************************/
 // This function binds the model using the TX supplied Pipe instead of the default one.
@@ -239,6 +237,7 @@ void AttachServos()
 void BindModel(){  
     ThisPipe = NewPipe;
     OldPipe  = NewPipe;
+   
     CurrentRadio->stopListening();
     delayMicroseconds(250);
     SetNewPipe();                  // change to bound pipe
@@ -254,8 +253,9 @@ void BindModel(){
         AttachServos();  // AND START SBUS!!!  
         FirstConnection   = false;
     }
+    uint32_t t = millis();
+    while (millis() - t < 1000)  ReceiveData(); // this avoid initial glitch on reconnect  // heer
     ReadyToUseData = true;
-
 }
 // ***************************************************************************************************************************************************
 void SendToSensorHub(char m[])
@@ -300,6 +300,7 @@ void SendQnhToSensorHub()
 
 void SetTestFrequencies()
 {
+
     FHSSChPointer  = FHSS_Channels1;
     FrequencyCount = FREQUENCYSCOUNT1;
 }
@@ -695,15 +696,14 @@ FLASHMEM void setup()
 void loop()
 {
     ReceiveData();
-    if (ReadyToUseData){     
+    if (BoundFlag && Connected && ModelMatched) {                   // Only move servos if everything is good
         if (millis() - SBUSTimer >= SBUSRATE) {                     // SBUS rate is also good enough for servo rate
             SBUSTimer = millis();                                   // timer starts before send starts....
             MoveServos();                                           // Actually do something useful at last
         }
         if (FailSafeSave) SaveFailSafeData();
-    }   
-    else 
-    {
+    }
+    else {
         if (!BoundFlag) DoBinding();
     }
 }

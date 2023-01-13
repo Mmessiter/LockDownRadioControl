@@ -53,7 +53,6 @@ extern float    DistanceGPS;
 extern float    CourseToGPS;
 extern uint8_t  MacAddress[8];
 extern uint8_t  TheReceivedPipe[8];
-extern bool     ReadyToUseData;
 
 extern void     BindModel();
 extern void FailSafe(); // defined in main.cpp
@@ -259,7 +258,6 @@ void TryTheOtherTransceiver(uint8_t Recon_Ch)
 
 void KeepSbusHappy()
 {
-    if (!ReadyToUseData) return;
     if (millis() < 20000) return;           // Let things settle down after connection for 20 seconds or so before using this
     if (millis() - SBUSTimer >= SBUSRATE) { // Does SBUS expect a packet?
         SBUSTimer = millis();               // Yes...
