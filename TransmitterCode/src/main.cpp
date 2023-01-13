@@ -2122,7 +2122,7 @@ FASTRUN uint16_t GetStickInputInputOnly(uint8_t l) // This returns the input onl
 /*********************************************************************************************************************************/
 FASTRUN void DoMixes()
 {
-    short      MixNumber, ChannelNumber, MixValue, MinimumDeg, MaximumDeg; // heer
+    short      MixNumber, ChannelNumber, MixValue, MinimumDeg, MaximumDeg; 
 
     for (MixNumber = 1; MixNumber < MAXMIXES; ++MixNumber) 
     {
@@ -4966,7 +4966,7 @@ FASTRUN void DisplayCurve()
 void BindNow() // Bind button was pressed 
 {
 #ifdef DB_BIND
-    Serial.println("Saving model's ID");
+    Serial.println("Saving model's ID"); // heer
 #endif
     BindingNow = 1;
     ModelMatched                 = true;
@@ -4974,9 +4974,10 @@ void BindNow() // Bind button was pressed
     ModelsMacUnionSaved.Val32[1] = ModelsMacUnion.Val32[1];
     SaveOneModel(ModelNumber);
     MakeBindButtonInvisible();
-    if (AnnounceConnected) PlaySound(BINDSUCCEEDED);
+    if (AnnounceConnected) PlaySound(BINDSUCCEEDED); // heer
     Procrastinate(1700);
     UpdateModelsNameEveryWhere();
+
 }
 
 /*********************************************************************************************************************************/
@@ -8345,7 +8346,7 @@ void LoadPacketData()
         case 0:
              SendBuffer[CHANNELSUSED + 2] = BindingNow;
             if (BindingNow == 1) {
-                BindingNow   = 2;
+                BindingNow  = 2;
             }
             if (((millis() - FailSafeTimer) > 1500) && SaveFailSafeNow) {
                 SendBuffer[CHANNELSUSED + 1] = SaveFailSafeNow; // FailSafeSaveMoment
