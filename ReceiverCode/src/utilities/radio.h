@@ -53,7 +53,7 @@ extern float    DistanceGPS;
 extern float    CourseToGPS;
 extern uint8_t  MacAddress[8];
 extern uint8_t  TheReceivedPipe[8];
-extern uint32_t BootupMoment;
+extern uint32_t NewConnectionMoment;
 
 extern void BindModel();
 extern void FailSafe(); // defined in main.cpp
@@ -63,6 +63,7 @@ extern void ReadSensorHub();
 extern void SetUKFrequencies();
 extern void MoveServos();
 extern FASTRUN void ReceiveData();
+extern bool FailedSafe;
 
 /** AckPayload Stucture for data returned to transmitter. */
 struct Payload
@@ -259,7 +260,7 @@ void TryTheOtherTransceiver(uint8_t Recon_Ch)
 
 void KeepSbusHappy()
 {
-    if ((millis() - BootupMoment) < 20000) return;           // Let things settle down after connection for 20 seconds or so before using this
+    if ((millis() - NewConnectionMoment) < 20000) return;           // Let things settle down after connection for 20 seconds or so before using this
     if (millis() - SBUSTimer >= SBUSRATE) { // Does SBUS expect a packet?
         SBUSTimer = millis();               // Yes...
         if (!FailSafeSent)                  // But don't send after failsafe
@@ -310,6 +311,10 @@ void Reconnect()
     FailSafeSent = false;
     if (PreviousRadio != ThisRadio) ++RadioSwaps; // Count the radio swaps
     ReconnectedMoment = millis();                 // Save this moment
+    if (FailedSafe){
+        FailedSafe = false;
+        NewConnectionMoment = millis();
+    }
 #ifdef DB_RXTIMERS
     Serial.print("Transceiver1 use so far: ");
     Serial.print(RX1TotalTime / 1000);

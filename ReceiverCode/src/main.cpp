@@ -81,7 +81,7 @@ uint8_t         MinsGPS;
 uint8_t         SecsGPS;
 uint16_t        CompressedData[COMPRESSEDWORDS]; // 30 bytes -> 40 bytes when uncompressed
 bool            SensorHubDead   = false;
-uint32_t        BootupMoment    = 0;
+uint32_t        NewConnectionMoment    = 0;
 bool            QNHSent         = false;
 bool            FirstLostPacket = true;
 uint8_t         MacAddress[8]   = {0, 0, 0, 0, 0, 0, 0, 0};
@@ -89,6 +89,7 @@ bool            ModelMatched    = false;
 uint8_t         TheReceivedPipe[8];
 bool            FirstConnection = true;
 bool            ReadyToUseData  = false;
+bool            FailedSafe = true;  // Starting up as the same as after failsafe
 /************************************************************************************************************/
 
 void LoadFailSafeData()
@@ -160,8 +161,8 @@ void FailSafe()
     BoundFlag    = false;       // default startup conditions
     ThisPipe     = DEFAULTPIPE; // default startup conditions
     SetNewPipe();
-    BootupMoment   = millis(); // new
     ReadyToUseData = false;
+    FailedSafe     = true;
 }
 
 #ifdef DB_FHSS
@@ -540,7 +541,7 @@ FASTRUN void ReceiveData()
                     TimeTest = millis();                                         //  Time the I2C calls. If too long, don't repeat it ... save the model.
                     if (SensorHubConnected) ReadTheSensorHub();                  //  Sensor now has its own MCU. Calls return in far less that 6 ms unless it lost I2C synch
                     if (INA219Connected) INA219Volts = ina219.getBusVoltage_V(); //  Get RX LIPO volts if connected separately (as will be needed on 'planes with no GPS fitted.)
-                    if ((millis() - BootupMoment) > 5000) {
+                    if ((millis() - NewConnectionMoment) > 5000) {
                         if ((millis() - TimeTest) > 6) SensorHubHasFailed(); //  If sensor hub and/or INA219 fails, don't bother calling either again (It normally returns within 2 ms.
                     }
                 }
@@ -699,7 +700,6 @@ FLASHMEM void setup()
     ThisRadio = 2;
 #endif
     GetOldPipe();
-    BootupMoment = millis();
     SetUKFrequencies();
     digitalWrite(LED_PIN, LOW);
 }
