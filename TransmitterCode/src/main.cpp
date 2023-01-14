@@ -7411,6 +7411,9 @@ FASTRUN void ButtonWasPressed()
             ++UkRulesCounter;
             if (UkRulesCounter == 1) SwapWaveBandTimer = millis();
             if (UkRulesCounter == 3) {
+                
+                // good place for test code heer ...
+
                 if ((millis() - SwapWaveBandTimer) < 5000) { // pressed three times in under 5 seconds?!
                     if (!UkRules) {
                         SwapWaveBand = 1;
@@ -7423,6 +7426,8 @@ FASTRUN void ButtonWasPressed()
                         SendText(b17, Htext0);
                     }
                 }
+                
+
                 UkRulesCounter = 0;
             }
             ClearText();
