@@ -35,6 +35,7 @@ var radio_8h =
     [ "AngleGPS", "radio_8h.html#a9cb6617428d513efc095336972632da6", null ],
     [ "BaroAltitude", "radio_8h.html#acec349590f33af1fb88040ed4d12e53f", null ],
     [ "BaroTemperature", "radio_8h.html#abda84b8cbebce00b7d4b0ea759b8d07f", null ],
+    [ "BootupMoment", "radio_8h.html#a1883c8c3aad38ab8955bd5de6971c9a7", null ],
     [ "BoundFlag", "radio_8h.html#a44d37e4e8af884bf172344c0835a5593", null ],
     [ "Connected", "radio_8h.html#a5318db734c71b1b08208ef690f1f0146", null ],
     [ "CourseToGPS", "radio_8h.html#a1a4e211f9858a5d6d61d11e5679a71f3", null ],
