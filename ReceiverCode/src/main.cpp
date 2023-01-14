@@ -84,16 +84,16 @@ bool            SensorHubDead   = false;
 uint32_t        BootupMoment    = 0;
 bool            QNHSent         = false;
 bool            FirstLostPacket = true;
-uint8_t         MacAddress[8] = {0,0,0,0,0,0,0,0};
+uint8_t         MacAddress[8]   = {0, 0, 0, 0, 0, 0, 0, 0};
 bool            ModelMatched    = false;
 uint8_t         TheReceivedPipe[8];
 bool            FirstConnection = true;
-bool            ReadyToUseData = false;
+bool            ReadyToUseData  = false;
 /************************************************************************************************************/
 
 void LoadFailSafeData()
 {
-   uint8_t FS_Offset = FS_EEPROM_OFFSET;
+    uint8_t  FS_Offset = FS_EEPROM_OFFSET;
     uint16_t s[CHANNELSUSED];
 
     for (uint8_t i = 0; i < CHANNELSUSED; ++i) {
@@ -127,7 +127,7 @@ void MapToSBUS()
 
 void MoveServos()
 {
-    if (!ReadyToUseData) return; 
+    if (!ReadyToUseData) return;
     MySbus.write(SbusChannels); // Send SBUS data
     for (int j = 0; j < SERVOSUSED; ++j) {
         if (PreviousData[j] != ReceivedData[j]) { // if same as last time, don't send again.
@@ -141,26 +141,27 @@ void MoveServos()
 
 /** Execute FailSafe data from EEPROM. */
 void FailSafe()
-{   
+{
     if (BoundFlag)
     {
         LoadFailSafeData();
-        Connected = true;   // to force sending this data!
+        Connected = true; // to force sending this data!
         MapToSBUS();
         MoveServos();
-        Connected = false;  // I lied earlier - we're not really connected.
+        Connected = false; // I lied earlier - we're not really connected.
     }
-    SetUKFrequencies();     // default startup conditions
+    SetUKFrequencies(); // default startup conditions
     ModelMatched = false;
-    SaveNewBind  = true;    // default startup conditions
-    Connected    = false;   // default startup conditions
-    FailSafeSent = true;    // Once is enough
-    SbusRepeats  = 0;       // Reset this count for next connection
-    BindNow      = 0;       // default startup conditions
-    BoundFlag    = false;   // default startup conditions
+    SaveNewBind  = true;        // default startup conditions
+    Connected    = false;       // default startup conditions
+    FailSafeSent = true;        // Once is enough
+    SbusRepeats  = 0;           // Reset this count for next connection
+    BindNow      = 0;           // default startup conditions
+    BoundFlag    = false;       // default startup conditions
     ThisPipe     = DEFAULTPIPE; // default startup conditions
-    ReadyToUseData = false;
     SetNewPipe();
+    BootupMoment   = millis(); // new
+    ReadyToUseData = false;
 }
 
 #ifdef DB_FHSS
@@ -180,7 +181,7 @@ void ShowHopDurationEtc()
     Serial.print("  Average Time per packet: ");
     Serial.print(OnePacketTime);
     Serial.print("ms.  Next frequency: ");
-    Serial.print(freq,3);
+    Serial.print(freq, 3);
     Serial.print(BoundFlag ? " Bound!" : " NOT Bound");
     Serial.print("  Radio: ");
     Serial.print(ThisRadio);
@@ -214,7 +215,7 @@ bool ReadData()
         delayMicroseconds(1500);                                       // N.B. SOME DUFF NRF24L01 TRANSCEIVERS NEED THIS PAUSE. But not all.
         CurrentRadio->read(&CompressedData, sizeof(CompressedData));   // Get Data
     }
-    if (Connected) UseReceivedData();  
+    if (Connected) UseReceivedData();
     return Connected;
 }
 
@@ -234,27 +235,28 @@ void AttachServos()
 // This function binds the model using the TX supplied Pipe instead of the default one.
 // If not already saved, this saves it to the eeprom too for next time.
 
-void BindModel(){  
+void BindModel()
+{
     ThisPipe = NewPipe;
     OldPipe  = NewPipe;
-   
+
     CurrentRadio->stopListening();
     delayMicroseconds(250);
-    SetNewPipe();                  // change to bound pipe
-    if (SaveNewBind){
-       for (uint8_t i = 0; i < 8; ++i) { 
-        EEPROM.update(i+BIND_EEPROM_OFFSET, TheReceivedPipe[i]); 
+    SetNewPipe(); // change to bound pipe
+    if (SaveNewBind) {
+        for (uint8_t i = 0; i < 8; ++i) {
+            EEPROM.update(i + BIND_EEPROM_OFFSET, TheReceivedPipe[i]);
         }
     }
     BoundFlag   = true;
     BindNow     = 0;
     SaveNewBind = false;
     if (FirstConnection) {
-        AttachServos();  // AND START SBUS!!!  
-        FirstConnection   = false;
+        AttachServos(); // AND START SBUS!!!
+        FirstConnection = false;
     }
     uint32_t t = millis();
-    while (millis() - t < 1000)  ReceiveData(); // this avoid initial glitch on reconnect  // heer
+    while (millis() - t < 1000) ReceiveData(); // this avoid initial glitch on reconnect  // heer
     ReadyToUseData = true;
 }
 // ***************************************************************************************************************************************************
@@ -332,7 +334,7 @@ void ReadExtraParameters()
 
     switch (PacketNumber) {
         case 0:
-            BindNow = ReceivedData[CHANNELSUSED + 2];
+            BindNow      = ReceivedData[CHANNELSUSED + 2];
             FailSafeSave = bool(ReceivedData[CHANNELSUSED + 1]);
             if (FailSafeSave) {
                 TwoBytes = uint16_t(FS_byte2) + uint16_t(FS_byte1 << 8);
@@ -531,12 +533,12 @@ FASTRUN void ReceiveData()
 {
     uint32_t TimeTest;
     if (Connected) {
-        if ((millis() - SensorHubAccessed) > 10) {                                //  Reading Sensor hub 100 x per second should be enough
-            if (millis() - LastPacketArrivalTime < 1) {                           //  If, and only if, we have still absolutely loads of time, do stuff now while waiting ...
-                SensorHubAccessed = millis();                                     //  Note the moment of last attempted read.
-                if (!SensorHubDead) {                                             //  Better check it hasn't died.
-                    TimeTest = millis();                                          //  Time the I2C calls. If too long, don't repeat it ... save the model.
-                    if (SensorHubConnected) ReadTheSensorHub();                 //  Sensor now has its own MCU. Calls return in far less that 6 ms unless it lost I2C synch
+        if ((millis() - SensorHubAccessed) > 10) {                               //  Reading Sensor hub 100 x per second should be enough
+            if (millis() - LastPacketArrivalTime < 1) {                          //  If, and only if, we have still absolutely loads of time, do stuff now while waiting ...
+                SensorHubAccessed = millis();                                    //  Note the moment of last attempted read.
+                if (!SensorHubDead) {                                            //  Better check it hasn't died.
+                    TimeTest = millis();                                         //  Time the I2C calls. If too long, don't repeat it ... save the model.
+                    if (SensorHubConnected) ReadTheSensorHub();                  //  Sensor now has its own MCU. Calls return in far less that 6 ms unless it lost I2C synch
                     if (INA219Connected) INA219Volts = ina219.getBusVoltage_V(); //  Get RX LIPO volts if connected separately (as will be needed on 'planes with no GPS fitted.)
                     if ((millis() - BootupMoment) > 5000) {
                         if ((millis() - TimeTest) > 6) SensorHubHasFailed(); //  If sensor hub and/or INA219 fails, don't bother calling either again (It normally returns within 2 ms.
@@ -590,7 +592,7 @@ FLASHMEM void ScanI2c()
 /************************************************************************************************************/
 void SaveFailSafeData()
 {
-    // FailSafe data occupies EEPROM from offset FS_EEPROM_OFFSET 
+    // FailSafe data occupies EEPROM from offset FS_EEPROM_OFFSET
     uint8_t FS_Offset = FS_EEPROM_OFFSET;
     for (uint8_t i = 0; i < CHANNELSUSED; ++i) {
         EEPROM.update(i + FS_Offset, (map(ReceivedData[i], MINMICROS, MAXMICROS, 0, 180))); // save servo positions lower res: 8 bits
@@ -607,9 +609,9 @@ void SaveFailSafeData()
     FailSafeSave = false;
 }
 
-
 /************************************************************************************************************/
-void ShowPipes(){               // only for debugging
+void ShowPipes()
+{ // only for debugging
 #ifdef DB_BIND
     Serial.print("NewPipe: ");
     Serial.println((int)NewPipe, HEX);
@@ -620,34 +622,46 @@ void ShowPipes(){               // only for debugging
 
 /************************************************************************************************************/
 
-bool Compare48BitValues(uint64_t c1, uint64_t c2){
+bool Compare48BitValues(uint64_t c1, uint64_t c2)
+{
 
-union {uint64_t v64; uint8_t v8[8];} union1;
-union {uint64_t v64; uint8_t v8[8];} union2;
+    union
+    {
+        uint64_t v64;
+        uint8_t  v8[8];
+    } union1;
+    union
+    {
+        uint64_t v64;
+        uint8_t  v8[8];
+    } union2;
 
     union1.v64 = c1;
     union2.v64 = c2;
-    
-    for (int i = 0; i < 6; ++i) if (union1.v8[i] != union2.v8[i]) return false;
-    
+
+    for (int i = 0; i < 6; ++i)
+        if (union1.v8[i] != union2.v8[i]) return false;
+
     return true;
 }
 
 /************************************************************************************************************/
-void DoBinding(){
+void DoBinding()
+{
     GetNewPipe();
-   // ShowPipes();    
-    if (Compare48BitValues(OldPipe,NewPipe)){       // Compares two 48 BIT numbers
-        SaveNewBind = false;                        // No need to save it as we had it.
-        BindNow = 1;                                // This critical value is sent from TX when user hits bind button, on set locally if we we knew him already
+    // ShowPipes();
+    if (Compare48BitValues(OldPipe, NewPipe)) { // Compares two 48 BIT numbers
+        SaveNewBind = false;                    // No need to save it as we had it.
+        BindNow     = 1;                        // This critical value is sent from TX when user hits bind button, on set locally if we we knew him already
     }
     if (BindNow > 0 && !BoundFlag && ModelMatched) BindModel(); // only when all conditions are right shall we bind.
 }
 /************************************************************************************************************/
 
-void teensyMAC(uint8_t *mac) {      // GET UNIQUE TEENSY 4.0 ID
-    for(uint8_t by=0; by<2; by++) mac[by]=(HW_OCOTP_MAC1 >> ((1-by)*8)) & 0xFF;
-    for(uint8_t by=0; by<4; by++) mac[by+2]=(HW_OCOTP_MAC0 >> ((3-by)*8)) & 0xFF;
+void teensyMAC(uint8_t* mac)
+{ // GET UNIQUE TEENSY 4.0 ID
+    for (uint8_t by = 0; by < 2; by++) mac[by] = (HW_OCOTP_MAC1 >> ((1 - by) * 8)) & 0xFF;
+    for (uint8_t by = 0; by < 4; by++) mac[by + 2] = (HW_OCOTP_MAC0 >> ((3 - by) * 8)) & 0xFF;
 }
 /************************************************************************************************************/
 // SETUP
@@ -661,7 +675,7 @@ FLASHMEM void setup()
     pinMode(pinCE2, OUTPUT);
     digitalWrite(LED_PIN, HIGH);
     delay(2500); // Needed so that the Sensor hub can boot first and be detected
-    teensyMAC(MacAddress); 
+    teensyMAC(MacAddress);
     CurrentRadio = &Radio1;
     digitalWrite(pinCSN2, CSN_OFF);
     digitalWrite(pinCE2, CE_OFF);
@@ -696,10 +710,10 @@ FLASHMEM void setup()
 void loop()
 {
     ReceiveData();
-    if (BoundFlag && Connected && ModelMatched) {                   // Only move servos if everything is good
-        if (millis() - SBUSTimer >= SBUSRATE) {                     // SBUS rate is also good enough for servo rate
-            SBUSTimer = millis();                                   // timer starts before send starts....
-            MoveServos();                                           // Actually do something useful at last
+    if (BoundFlag && Connected && ModelMatched) { // Only move servos if everything is good
+        if (millis() - SBUSTimer >= SBUSRATE) {   // SBUS rate is also good enough for servo rate
+            SBUSTimer = millis();                 // timer starts before send starts....
+            MoveServos();                         // Actually do something useful at last
         }
         if (FailSafeSave) SaveFailSafeData();
     }
