@@ -142,7 +142,9 @@ void RecordsPacketSuccess(uint8_t s)
 
 FASTRUN void FailedPacket()
 {
-    if (LostContactFlag) TryToReconnect();
+    if (LostContactFlag) {
+        TryToReconnect();
+    }
     RecordsPacketSuccess(0);                      // Record a failure
     ++RecentPacketsLost;                          // this is to keep track of events when receiver is off
     ++TotalLostPackets;                           // This is total - never zeroed
