@@ -40,7 +40,7 @@ var searchData=
   ['receivedata_37',['ReceiveData',['../ReceiverCode_2src_2main_8cpp.html#a06807a4f185694d37f774702ba74db0a',1,'ReceiveData():&#160;main.cpp'],['../radio_8h.html#a06807a4f185694d37f774702ba74db0a',1,'ReceiveData():&#160;main.cpp']]],
   ['receiveeventinterrupt_38',['ReceiveEventInterrupt',['../SensorHubT32_2src_2main_8cpp.html#a2be9d0838709dc3a88a9a54108bd2b4a',1,'main.cpp']]],
   ['receivemodelfile_39',['ReceiveModelFile',['../TransmitterCode_2src_2main_8cpp.html#ab7c9edf843c732d7fe296564f39bc0dc',1,'main.cpp']]],
-  ['reconnect_40',['Reconnect',['../radio_8h.html#a692b8b0727e0db358f99c7bf4e8235c0',1,'radio.h']]],
+  ['reconnect_40',['Reconnect',['../radio_8h.html#aca314b55765a1c3af5397c0cb3ce47ff',1,'radio.h']]],
   ['recordspacketsuccess_41',['RecordsPacketSuccess',['../RadioFunctions_8cpp.html#afc091b5942e21a03f6dc8635d5e519ba',1,'RadioFunctions.cpp']]],
   ['redledon_42',['RedLedOn',['../RadioFunctions_8h.html#a7d34cec6e8edc20c8b50424e15dcc7c7',1,'RedLedOn():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a7d34cec6e8edc20c8b50424e15dcc7c7',1,'RedLedOn():&#160;main.cpp']]],
   ['reducelimits_43',['ReduceLimits',['../TransmitterCode_2src_2main_8cpp.html#ad875fe28566f35ffc5f90e73d0089fc6',1,'main.cpp']]],
