@@ -1,5 +1,6 @@
 var NAVTREEINDEX4 =
 {
+"RadioFunctions_8h.html#aa4414f3ff790f01b8bb41a0f51d1518f":[8,0,4,0,0,1,4],
 "RadioFunctions_8h.html#aa4dd4979e290d977d813a5a4af263b0d":[8,0,4,0,0,1,113],
 "RadioFunctions_8h.html#aa4e775cc458a824cb4bef031518b19a2":[8,0,4,0,0,1,366],
 "RadioFunctions_8h.html#aa60c9cac090f6965b4223d5caf84e2f1":[8,0,4,0,0,1,227],
@@ -248,6 +249,5 @@ var NAVTREEINDEX4 =
 "SensorHubT32_2src_2main_8cpp.html#a9557f718b9a7dd41a441c12555167908":[8,0,3,0,0,29],
 "SensorHubT32_2src_2main_8cpp.html#a9e66319eb62ac284544d36d69f59bda5":[8,0,3,0,0,51],
 "SensorHubT32_2src_2main_8cpp.html#aa111fdf18410d5ea9db7bba30eb3867b":[8,0,3,0,0,28],
-"SensorHubT32_2src_2main_8cpp.html#aa2c448c0ec510ffaaecbc5991e726b53":[8,0,3,0,0,8],
-"SensorHubT32_2src_2main_8cpp.html#aa813a4b38095c6683d78bdf2baa33f69":[8,0,3,0,0,7]
+"SensorHubT32_2src_2main_8cpp.html#aa2c448c0ec510ffaaecbc5991e726b53":[8,0,3,0,0,8]
 };
