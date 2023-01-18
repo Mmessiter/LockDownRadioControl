@@ -54,7 +54,9 @@
 #define pinCSN2                  20                        // NRF2
 #define pinCE2                   21                        // NRF2
 #define FAILSAFE_TIMEOUT         2000                      // two seconds until failsafe
+
 #define RECONNECT_CHANNELS_COUNT 3                         // How many channels to try when reconnecting
+
 #define RECONNECT_CHANNELS_START 12                        // Offset in the array to begin getting reconnect channels
 #define UNCOMPRESSEDWORDS        20                        //   16 Channels plus extra 4 16 BIT values
 #define COMPRESSEDWORDS          UNCOMPRESSEDWORDS * 3 / 4 // = 16 WORDS  with no extra

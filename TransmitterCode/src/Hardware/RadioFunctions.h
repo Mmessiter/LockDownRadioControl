@@ -89,7 +89,9 @@
 #define RETRYCOUNT               3    // auto retries inside nRF24L01 (was 3)
 #define RETRYWAIT                2    // Wait between retries is RetryWait+1 * 250us. (WAS 2) A failed packet therefore takes (RetryWait+1 * 250us) * RetryCount
 #define LOSTCONTACTCUTOFF        3    // How many packets to lose before reconnect triggers
+
 #define RECONNECT_CHANNELS_COUNT 3    // How many channels to try when reconnecting
+
 #define RECONNECT_CHANNELS_START 12   // Offset into channels' array
 #define RED_LED_ON_TIME          2000 // How many ms of no connection before RED led comes on
 #define LOW_VOLTAGE_TIME         3000 // How many ms to endure low voltage before announcing it. (3 seconds)
@@ -445,6 +447,7 @@ extern bool           LowPowerMode;
 extern bool           NewCompressNeeded;
 extern bool           ModelMatched;
 extern bool           SendNoData;
+extern uint8_t        ReconnectionIndex;
 // external (global) functions needed here
 extern void  GetSlaveChannelValues();
 extern void  KickTheDog();
@@ -538,6 +541,7 @@ void             SaveCurrentModel();
 void             CheckModelName();
 void             EndTrimView();
 int              AnalogueReed(uint8_t InputChannel);
+
 void             GetReturnCode();
 
 

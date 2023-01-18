@@ -166,7 +166,6 @@ FASTRUN void FailedPacket()
     if (SecondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH); // INACTIVITY POWER OFF HERE!!
 }
 
-uint8_t ReconIndex = 0;
 /************************************************************************************************************/
 
 void TryToReconnect()
@@ -176,9 +175,9 @@ void TryToReconnect()
         TryOtherPipe();
         RecentPacketsLost = 0;
     }
-    ++ReconIndex;
-    if (ReconIndex >= RECONNECT_CHANNELS_COUNT) ReconIndex = 0;
-    NextChannel = *(FHSSChPointer + RECONNECT_CHANNELS_START + ReconIndex); //  reconnect channel (selected from first three)
+    ++ReconnectionIndex;
+    if (ReconnectionIndex >= RECONNECT_CHANNELS_COUNT) ReconnectionIndex = 0;
+    NextChannel = *(FHSSChPointer + RECONNECT_CHANNELS_START + ReconnectionIndex); //  reconnect channel (selected from first three)
     HopToNextChannel();
 }
 
