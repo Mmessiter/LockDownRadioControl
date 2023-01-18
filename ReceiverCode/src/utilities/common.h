@@ -32,8 +32,8 @@
 #define HOPTIME               80  // ms between channel changes 
 
 // ********************************* reconnect params ***************************************
-#define LISTEN_PERIOD   30 //   (was 50) How many ms to listen for TX in Reconnect()
-#define RECEIVE_TIMEOUT 17 //   (was 22) <=9 fails, >=11 OK ... 
+#define LISTEN_PERIOD   15 //   (was 30) How many ms to listen for TX in Reconnect()
+#define RECEIVE_TIMEOUT 12 //   (was 17) <=9 fails, >=11 OK ... 
 // *****************************************************************************************
 
 #define DEFAULTPIPE              0xBABE1E5420LL

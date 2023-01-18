@@ -284,6 +284,7 @@ FASTRUN void Reconnect()
 
     if (ThisRadio == 1) RX1TotalTime += (millis() - ReconnectedMoment); // keep track of how long on each
     if (ThisRadio == 2) RX2TotalTime += (millis() - ReconnectedMoment);
+    
     while (!Connected) {
         if (BoundFlag) KeepSbusHappy(); // Some SBUS systems timeout FAST, so resend old data to keep it happy
         CurrentRadio->stopListening();
@@ -296,7 +297,6 @@ FASTRUN void Reconnect()
         if (Attempts < 3) TryToConnectNow();
         if (!Connected) {
            
-
 #ifdef SECOND_TRANSCEIVER
             if (Attempts >= 3) {
                 TryTheOtherTransceiver(ReconnectChannel);
@@ -312,7 +312,8 @@ FASTRUN void Reconnect()
                 if (!FailSafeSent) FailSafe();
             }
         }
-    }
+    } // cannot pass here if not connected
+
      // must have connected by here
     
     FailSafeSent = false;
