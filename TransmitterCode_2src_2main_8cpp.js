@@ -578,6 +578,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "RecentStartLine", "TransmitterCode_2src_2main_8cpp.html#a1c51abf9c65ed93e152859c5c080f578", null ],
     [ "RecentTextFile", "TransmitterCode_2src_2main_8cpp.html#af92d424401a792a9437fa3e6b7548983", null ],
     [ "Reconnected", "TransmitterCode_2src_2main_8cpp.html#a0f8aa0f6f0fca3b57e848eec8d23724e", null ],
+    [ "ReconnectionIndex", "TransmitterCode_2src_2main_8cpp.html#aa3d3407bef9f6718dba572936ef3c055", null ],
     [ "RecursedAlready", "TransmitterCode_2src_2main_8cpp.html#aa4e775cc458a824cb4bef031518b19a2", null ],
     [ "ReversedChannelBITS", "TransmitterCode_2src_2main_8cpp.html#ab67a250be0b26224543450b96a5f11bf", null ],
     [ "RX1TotalTime", "TransmitterCode_2src_2main_8cpp.html#a95dd54e021a56919600706636b80fb5a", null ],

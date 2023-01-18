@@ -365,6 +365,7 @@ var RadioFunctions_8h =
     [ "RangeTestGoodPackets", "RadioFunctions_8h.html#a8a5b55d644bb404cd6cdf61c5a85f822", null ],
     [ "RecentPacketsLost", "RadioFunctions_8h.html#a75bea305c82af413e997a07f6554ff93", null ],
     [ "Reconnected", "RadioFunctions_8h.html#a0f8aa0f6f0fca3b57e848eec8d23724e", null ],
+    [ "ReconnectionIndex", "RadioFunctions_8h.html#aa3d3407bef9f6718dba572936ef3c055", null ],
     [ "RecoveryTimer", "RadioFunctions_8h.html#ac6156efad98d22f44766714a565ccf2f", null ],
     [ "RecursedAlready", "RadioFunctions_8h.html#aa4e775cc458a824cb4bef031518b19a2", null ],
     [ "ScanEnd", "RadioFunctions_8h.html#a6fde7bc3d03bda84c33abdbe1ed7b5bf", null ],

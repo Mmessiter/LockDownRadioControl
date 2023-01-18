@@ -1,5 +1,6 @@
 var NAVTREEINDEX10 =
 {
+"classMPU9250FIFO.html#a170e0378763ba3a0b3a1dcef0c7f99e5":[7,0,3,27],
 "classMPU9250FIFO.html#a1a2a466ab9692c592b91000674d26c31":[7,0,3,25],
 "classMPU9250FIFO.html#a237e76228c565b9f98e981714a70e1e5":[7,0,3,10],
 "classMPU9250FIFO.html#a23e68d07de050096a85a0640fee0fa15":[7,0,3,32],
@@ -144,8 +145,8 @@ var NAVTREEINDEX10 =
 "elapsedMillis_8h.html":[8,0,1,0,0,2,0],
 "elapsedMillis_8h_source.html":[8,0,1,0,0,2,0],
 "files.html":[8,0],
-"functions.html":[7,3,0],
 "functions.html":[7,3,0,0],
+"functions.html":[7,3,0],
 "functions_a.html":[7,3,0,1],
 "functions_b.html":[7,3,0,2],
 "functions_c.html":[7,3,0,3],
@@ -154,8 +155,8 @@ var NAVTREEINDEX10 =
 "functions_enum.html":[7,3,3],
 "functions_eval.html":[7,3,4],
 "functions_f.html":[7,3,0,6],
-"functions_func.html":[7,3,1,0],
 "functions_func.html":[7,3,1],
+"functions_func.html":[7,3,1,0],
 "functions_func_c.html":[7,3,1,1],
 "functions_func_d.html":[7,3,1,2],
 "functions_func_e.html":[7,3,1,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX10 =
 "globals_func_d.html":[8,1,1,3],
 "globals_func_e.html":[8,1,1,4],
 "globals_func_f.html":[8,1,1,5],
-"globals_func_g.html":[8,1,1,6],
-"globals_func_h.html":[8,1,1,7]
+"globals_func_g.html":[8,1,1,6]
 };
