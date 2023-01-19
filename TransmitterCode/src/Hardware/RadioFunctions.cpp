@@ -175,9 +175,13 @@ void TryToReconnect()
         TryOtherPipe();
         RecentPacketsLost = 0;
     }
+    
     ++ReconnectionIndex;
     if (ReconnectionIndex >= RECONNECT_CHANNELS_COUNT) ReconnectionIndex = 0;
-    NextChannel = *(FHSSChPointer + RECONNECT_CHANNELS_START + ReconnectionIndex); //  reconnect channel (selected from first three)
+    NextChannel = *(FHSSRecoveryPointer + RECONNECT_CHANNELS_START + ReconnectionIndex); //  reconnect channel (selected from first three)
+   
+    // NextChannel = 120; // heer (Faster reconnection!)
+    
     HopToNextChannel();
 }
 

@@ -258,7 +258,8 @@ uint8_t FHSS_Channels[83] = {51, 28, 24, 61, 64, 55, 66, 19, 76, 21, 59, 67, 15,
                              54, 12, 80, 53, 22, 1, 74, 39, 58, 63, 70, 52, 42, 25, 43, 26, 14, 38, 48, 68, 33, 27, 60, 44, 46,
                              56, 7, 81, 5, 65, 4, 10};
 
-uint8_t* FHSSChPointer; // pointer for channels array (three only used for reconnect)
+uint8_t*  FHSSChPointer; // pointer for channels array (three only used for reconnect)
+uint8_t*  FHSSRecoveryPointer;
 char      BindButtonVisible[]         = "vis bind,1";
 char      page_FrontView[]            = "page FrontView";
 char      page_FhssView[]             = "page FhssView";
@@ -403,7 +404,7 @@ bool     LedIsBlinking       = false;
 float    BlinkHertz          = 2;
 uint32_t BlinkTimer          = 0;
 uint8_t  BlinkOnPhase        = 1;
-bool     LedWasGreen         = false;
+bool     LedWasGreen         = true;
 bool     LedWasRed           = false;
 char     ThisRadio[4]        = "0 ";
 uint8_t  LastRadio           = 0;
@@ -545,6 +546,8 @@ uint16_t NewFileBufferPointer = 0;
 char     ProgressStart[]       = "vis Progress,1";
 char     ProgressEnd[]         = "vis Progress,0";
 char     Progress[]            = "Progress";
+char     InVisible[]           = "vis Quality,0";
+ char    Visible[]             = "vis Quality,1";
 
 uint8_t ReconnectionIndex = 0;
 // **********************************************************************************************************************************
@@ -1155,11 +1158,12 @@ void RedLedOn()
         if (CurrentView == FRONTVIEW) {
             SendText(FrontView_Connected, na);
             SendCommand(WarnOff);
+            SendCommand(InVisible);
         }
         if (UseLog) LogDisConnection();
-        if (AnnounceConnected) PlaySound(DISCONNECTEDMSG);
-        if (!LedIsBlinking) ShowComms();
-    }
+        if (AnnounceConnected) PlaySound(DISCONNECTEDMSG); // heer
+        }
+
     LedWasRed = true;
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, 0);
@@ -1716,7 +1720,6 @@ int GetSuccessRate()
 void ShowConnectionQuality()
 {
     char Quality[]                = "Quality";
-    char Visible[]                = "vis Quality,1";
     char Msgbuf[]                 = "                       ";
     char Msg_Connected[]          = "Connection: ";
     char Msg_ConnectedPerfect[]   = "Perfect";
@@ -1752,7 +1755,7 @@ FASTRUN void ShowComms()
     if (millis() - LastShowTime < SHOWCOMMSDELAY) return;
     
     LastShowTime               = millis();
-    char InVisible[]           = "vis Quality,0";
+    
     char FrontView_AckPayload[]= "AckPayload";
     char FrontView_RXBV[]      = "RXBV";
     char Msg_CnctdBuddyMast[]  = "* BUDDY MASTER! *";
@@ -3242,12 +3245,14 @@ FASTRUN void SetUKFrequencies()
 {
     FHSSChPointer = FHSS_Channels;
     UkRules       = true;
+    FHSSRecoveryPointer = FHSS_Channels1;
 }
 /************************************************************************************************************/
 FASTRUN void SetTestFrequencies()
 {
     FHSSChPointer = FHSS_Channels1;
     UkRules       = false;
+    FHSSRecoveryPointer = FHSS_Channels1;
 }
 /************************************************************************************************************/
 FASTRUN void CreateTimeStamp(char* DateAndTime)
@@ -4967,7 +4972,7 @@ FASTRUN void DisplayCurve()
 void BindNow() // Bind button was pressed 
 {
 #ifdef DB_BIND
-    Serial.println("Saving model's ID"); // heer
+    Serial.println("Saving model's ID"); 
 #endif
     BindingNow = 1;
     ModelMatched                 = true;
@@ -4975,7 +4980,7 @@ void BindNow() // Bind button was pressed
     ModelsMacUnionSaved.Val32[1] = ModelsMacUnion.Val32[1];
     SaveOneModel(ModelNumber);
     MakeBindButtonInvisible();
-    if (AnnounceConnected) PlaySound(BINDSUCCEEDED); // heer
+    if (AnnounceConnected) PlaySound(BINDSUCCEEDED); 
     Procrastinate(1700);
     UpdateModelsNameEveryWhere();
 
@@ -7413,7 +7418,6 @@ FASTRUN void ButtonWasPressed()
             if (UkRulesCounter == 1) SwapWaveBandTimer = millis();
             if (UkRulesCounter == 3) {
                 
-                // good place for test code heer ...
 
                 if ((millis() - SwapWaveBandTimer) < 5000) { // pressed three times in under 5 seconds?!
                     if (!UkRules) {

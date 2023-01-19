@@ -2,18 +2,18 @@
 // ************************************************** Receiver code **************************************************
 
 /** @file ReceiverCode/src/main.cpp
- * // Malcolm Messiter 2022
+ * // Malcolm Messiter 2020 - 2023
  * @page RXCODE RecieverCode
  *
- * @section rxFeatures Features List
+ * @section rx Features List
  * - WORKS ON TEENSY 4.0
  * - Detects and uses INA219 to read volts (NOW IN SENSOR HUB as well)
  * - Detects and uses BMP280 pressure sensor for altitude (NOW IN SENSOR HUB)
  * - Binding implemented
- * - SBUS implemented...
+ * - SBUS implemented
  * - Failsafe implemented (after two seconds)
  * - RESOLUTION INCREASED TO 12 BITS
- * - Channels increased to 16, 9 PWM outputs.  SBUS can handle all.
+ * - Channels increased to 16. 9 PWM outputs.  SBUS can handle all.
  * - Exponential implemented (at TX end)
  * - Sensor Hub added with GPS and more sensors
  * - Supports one or two tranceivers (nRF24L01+)
@@ -303,7 +303,7 @@ void SendQnhToSensorHub()
 
 void SetTestFrequencies()
 {
-
+    FHSSRecoveryPointer = FHSS_Channels1;
     FHSSChPointer  = FHSS_Channels1;
     FrequencyCount = FREQUENCYSCOUNT1;
 }
@@ -315,6 +315,7 @@ void SetTestFrequencies()
 void SetUKFrequencies()
 {
 
+    FHSSRecoveryPointer = FHSS_Channels1;
     FHSSChPointer  = FHSS_Channels;
     FrequencyCount = FREQUENCYSCOUNT;
 }
@@ -520,15 +521,6 @@ void SensorHubHasFailed()
     SensorHubDead   = true; // This flag inhibits further attempts to call the hub, which might save a model.
 }
 
-// ******************************************************************************************************************************************************************
-FASTRUN void TryNextChannel()
-{
-    ++NextChannelNumber;                                            // Move up the channels' array
-    if (NextChannelNumber >= FrequencyCount) NextChannelNumber = 1; // If needed, wrap the channels' array pointer
-    NextChannel = *(FHSSChPointer + NextChannelNumber);
-    HopToNextChannel();
-    FirstLostPacket = false;
-}
 // ******************************************************************************************************************************************************************
 FASTRUN void ReceiveData()
 {

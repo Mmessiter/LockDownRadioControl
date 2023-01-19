@@ -1,5 +1,5 @@
 /** @file ReceiverCode/src/utilities/common.h */
-// Malcolm Messiter 2022
+// Malcolm Messiter 2020 - 2023
 #ifndef _SRC_UTILITIES_COMMON_H
 #define _SRC_UTILITIES_COMMON_H
 
@@ -15,7 +15,7 @@
 
 #define RXVERSION_MAJOR   2
 #define RXVERSION_MINOR   0
-#define RXVERSION_MINIMUS 4 // Jan 2023
+#define RXVERSION_MINIMUS 5 // Jan 2023
 
 
 // #define DB_FHSS
@@ -25,11 +25,11 @@
 // #define DB_RXTIMERS
 
 //**************************************************************************************************************************
-  #define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< ****
+  //#define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< ****
 //**************************************************************************************************************************
 
 #define SENSOR_HUB_I2C_ADDRESS 8
-#define HOPTIME               80  // ms between channel changes 
+#define HOPTIME                80  // ms between channel changes 
 
 // ********************************* reconnect params ***************************************
 #define LISTEN_PERIOD   15 //   (was 30) How many ms to listen for TX in Reconnect()
@@ -72,6 +72,9 @@ bool     FailSafeSave          = false;
 bool     INA219Connected       = false; //  Volts from INA219 ?
 
 uint8_t* FHSSChPointer; // Pointer for FHSS channels' array
+
+uint8_t* FHSSRecoveryPointer; // Pointer for FHSS channels' array for recovery
+
 uint8_t  FrequencyCount    = FREQUENCYSCOUNT;
 uint8_t  FHSS_Channels[83] = {51, 28, 24, 61, 64, 55, 66, 19, 76, 21, 59, 67, 15, 71, 82, 32, 49, 69, 13, 2, 34, 47, 20, 16, 72, // These are good for UK
                               35, 57, 45, 29, 75, 3, 41, 62, 11, 9, 77, 37, 8, 31, 36, 18, 17, 50, 78, 73, 30, 79, 6, 23, 40,

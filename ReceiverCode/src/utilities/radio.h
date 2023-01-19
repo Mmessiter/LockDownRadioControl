@@ -1,5 +1,5 @@
 /** @file ReceiverCode/src/utilities/radio.h */
-// Malcolm Messiter 2022
+// Malcolm Messiter 2020 - 2023
 #ifndef _SRC_UTILITIES_RADIO_H
 #define _SRC_UTILITIES_RADIO_H
 #include "common.h"
@@ -278,7 +278,7 @@ void KeepSbusHappy()
 FASTRUN void Reconnect()
 { // This is called when contact is lost, to reconnect ASAP
     uint32_t SearchStartTime = millis();
-    uint8_t ReconnectChannel = *(FHSSChPointer + ReconnectIndex); // Get a reconnect channel
+    uint8_t ReconnectChannel = *(FHSSRecoveryPointer + ReconnectIndex); // Get a reconnect channel
     uint8_t PreviousRadio    = ThisRadio;
     uint8_t Attempts         = 0;
 
@@ -288,10 +288,17 @@ FASTRUN void Reconnect()
     while (!Connected) {
         if (BoundFlag) KeepSbusHappy(); // Some SBUS systems timeout FAST, so resend old data to keep it happy
         CurrentRadio->stopListening();
+        CurrentRadio->flush_tx(); 
+        CurrentRadio->flush_rx(); 
+        
         delayMicroseconds(1000);                             // NEEDED!
-        ReconnectChannel = *(FHSSChPointer + ReconnectIndex); // Get a reconnect channel
+        
+        ReconnectChannel = *(FHSSRecoveryPointer + ReconnectIndex); // Get a reconnect channel
         ++ReconnectIndex;
         if (ReconnectIndex >= RECONNECT_CHANNELS_COUNT + RECONNECT_CHANNELS_START) ReconnectIndex = RECONNECT_CHANNELS_START;
+
+       // ReconnectChannel = 120; // heer  (Faster reconnection!)
+
         CurrentRadio->setChannel(ReconnectChannel);
          ++Attempts;
         if (Attempts < 3) TryToConnectNow();
@@ -315,7 +322,9 @@ FASTRUN void Reconnect()
     } // cannot pass here if not connected
 
      // must have connected by here
-    
+
+  //  Serial.println (ReconnectChannel);
+
     FailSafeSent = false;
     if (PreviousRadio != ThisRadio) ++RadioSwaps; // Count the radio swaps
     ReconnectedMoment = millis();                 // Save this moment
