@@ -28,7 +28,6 @@ var ReceiverCode_2src_2main_8cpp =
     [ "setup", "ReceiverCode_2src_2main_8cpp.html#a17699f358cf9f7c3155a9c5daf8ff13c", null ],
     [ "ShowPipes", "ReceiverCode_2src_2main_8cpp.html#a75cc49e9cc24c5f7159fb18c577c5603", null ],
     [ "teensyMAC", "ReceiverCode_2src_2main_8cpp.html#a06122bf4eee8af08c02c45022253a4f4", null ],
-    [ "TryNextChannel", "ReceiverCode_2src_2main_8cpp.html#a1d10d2ca466b8014f874f16aaa39da91", null ],
     [ "UseReceivedData", "ReceiverCode_2src_2main_8cpp.html#abb1997c589abc6432f612eaedf985e38", null ],
     [ "AltitudeGPS", "ReceiverCode_2src_2main_8cpp.html#a9690c7445dbd0530fa729af6bac11044", null ],
     [ "AngleGPS", "ReceiverCode_2src_2main_8cpp.html#a9cb6617428d513efc095336972632da6", null ],

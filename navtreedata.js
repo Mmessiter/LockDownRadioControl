@@ -77,7 +77,7 @@ var NAVTREE =
     ] ],
     [ "LDRC3 - Software developement", "md_Docs_LDRC3___Software_developement.html", null ],
     [ "RecieverCode", "RXCODE.html", [
-      [ "Features List", "RXCODE.html#rxFeatures", null ],
+      [ "Features List", "RXCODE.html#rx", null ],
       [ "TEENSY 4.0 PINS", "RXCODE.html#rxpinout", null ]
     ] ],
     [ ".", "TransmitterCode.html", [
@@ -115,14 +115,14 @@ var NAVTREEINDEX =
 "MPU6050_8h.html#aa4a24f325b4449adf83ce8458bb31a08",
 "Quadcopter_2src_2main_8cpp.html#a16a244087b5c92e39d803738faa6ff67",
 "RadioFunctions_8h.html#a01c7a0b0de94ec72fe070ea9f90dc2ec",
-"RadioFunctions_8h.html#aa4414f3ff790f01b8bb41a0f51d1518f",
+"RadioFunctions_8h.html#aa429cd977709122166b6e31fa10903d1",
 "SensorHubT32_2src_2main_8cpp.html#aa813a4b38095c6683d78bdf2baa33f69",
-"TransmitterCode_2src_2main_8cpp.html#a594f07765a7ed90e0830d4e2f69a7112",
-"TransmitterCode_2src_2main_8cpp.html#ab5736b017daadeb2c1d7dc73489d31a6",
-"classMPU6050.html#a20de45af9109402f0cfe785f8fdbf439",
-"classMPU9250.html#a0f8f1f024f8d3b0461385b53022472ac",
-"classMPU9250FIFO.html#a170e0378763ba3a0b3a1dcef0c7f99e5",
-"globals_func_h.html"
+"TransmitterCode_2src_2main_8cpp.html#a590a9174319918d7e3d7baca323fcf26",
+"TransmitterCode_2src_2main_8cpp.html#ab50929c4d3d76c3a37ab817e0022d57a",
+"classMPU6050.html#a1d9fc7f1058c4ab9a8a586e3fc30d12d",
+"classMPU9250.html#a07accae4b4fe268fce2e26b007bb54c3",
+"classMPU9250.html#affbb71e6f18ec3c9fbc5efd8631bdd5e",
+"globals_func_e.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
