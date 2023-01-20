@@ -175,13 +175,9 @@ void TryToReconnect()
         TryOtherPipe();
         RecentPacketsLost = 0;
     }
-    
     ++ReconnectionIndex;
     if (ReconnectionIndex >= RECONNECT_CHANNELS_COUNT) ReconnectionIndex = 0;
     NextChannel = *(FHSSRecoveryPointer + RECONNECT_CHANNELS_START + ReconnectionIndex); //  reconnect channel (selected from first three)
-   
-    // NextChannel = 120; // heer (Faster reconnection!)
-    
     HopToNextChannel();
 }
 
@@ -383,8 +379,8 @@ FLASHMEM void InitRadio(uint64_t Pipe)
     Radio1.stopListening();
     delay(2);
     Radio1.enableDynamicPayloads();
-    Radio1.setAddressWidth(5);       // was 4, is now 5
-    Radio1.setCRCLength(RF24_CRC_8); // could be 16
+    Radio1.setAddressWidth(5);              // was 4, is now 5
+    Radio1.setCRCLength(RF24_CRC_8); // (RF24_CRC_8); // could be 16
     GapSum      = 0;
 }
 /*********************************************************************************************************************************/

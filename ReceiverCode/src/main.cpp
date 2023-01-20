@@ -540,6 +540,7 @@ FASTRUN void ReceiveData()
             }
         }
     }
+    if (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT)  Reconnect();// Try to reconnect.
     if (ReadData()) {
         ReadExtraParameters(); // Check the extra parameters
     }
@@ -552,9 +553,6 @@ FASTRUN void ReceiveData()
                 }
             }
         }
-        if (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT) {
-            Reconnect();
-        } // Try to reconnect.
     }
 }
 /************************************************************************************************************/

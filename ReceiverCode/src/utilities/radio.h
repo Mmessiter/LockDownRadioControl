@@ -177,11 +177,11 @@ FLASHMEM void InitCurrentRadio()
     CurrentRadio->enableAckPayload();       // needed
     CurrentRadio->enableDynamicPayloads();  // needed
     CurrentRadio->maskIRQ(1, 1, 1);         // no interrupts - seems NEEDED at the moment - (line *IS* connected)
-    CurrentRadio->setCRCLength(RF24_CRC_8); // could be 16 or disabled
+    CurrentRadio->setCRCLength(RF24_CRC_8); //  (RF24_CRC_8); // could be 16 or disabled
     CurrentRadio->setPALevel(RF24_PA_MAX);
     CurrentRadio->setDataRate(RF24_250KBPS);
     CurrentRadio->openReadingPipe(1, ThisPipe);
-    CurrentRadio->setRetries(3, 3); // automatic retries
+    CurrentRadio->setRetries(3, 3);         // automatic retries
     CurrentRadio->setAutoAck(true);
     SaveNewBind = true;
     HopStart    = millis();
@@ -297,8 +297,6 @@ FASTRUN void Reconnect()
         ++ReconnectIndex;
         if (ReconnectIndex >= RECONNECT_CHANNELS_COUNT + RECONNECT_CHANNELS_START) ReconnectIndex = RECONNECT_CHANNELS_START;
 
-       // ReconnectChannel = 120; // heer  (Faster reconnection!)
-
         CurrentRadio->setChannel(ReconnectChannel);
          ++Attempts;
         if (Attempts < 3) TryToConnectNow();
@@ -322,8 +320,6 @@ FASTRUN void Reconnect()
     } // cannot pass here if not connected
 
      // must have connected by here
-
-  //  Serial.println (ReconnectChannel);
 
     FailSafeSent = false;
     if (PreviousRadio != ThisRadio) ++RadioSwaps; // Count the radio swaps
