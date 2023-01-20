@@ -177,7 +177,7 @@ FLASHMEM void InitCurrentRadio()
     CurrentRadio->enableAckPayload();       // needed
     CurrentRadio->enableDynamicPayloads();  // needed
     CurrentRadio->maskIRQ(1, 1, 1);         // no interrupts - seems NEEDED at the moment - (line *IS* connected)
-    CurrentRadio->setCRCLength(RF24_CRC_8); //  (RF24_CRC_8); // could be 16 or disabled
+    CurrentRadio->setCRCLength(RF24_CRC_8); // (RF24_CRC_8); // could be 16 or disabled
     CurrentRadio->setPALevel(RF24_PA_MAX);
     CurrentRadio->setDataRate(RF24_250KBPS);
     CurrentRadio->openReadingPipe(1, ThisPipe);
