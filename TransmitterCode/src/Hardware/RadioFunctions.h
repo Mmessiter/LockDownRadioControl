@@ -40,7 +40,7 @@
 // #define DB_NEXTION        // Debug NEXTION
 // #define DB_SD             // Debug SD card data
 // #define DB_CHECKSUM       // Debug 32BIT file checksum info
- // #define DB_FHSS           // Debug real time FHSS data
+// #define DB_FHSS           // Debug real time FHSS data
 // #define DB_SENSORS        // Debug Sensors
 // #define DB_BIND           // Debug Binding
 // #define DB_SWITCHES       // Debug Switches
@@ -87,7 +87,7 @@
 #define PACEMAKER                7    // 7 MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
 #define RETRYCOUNT               2    // auto retries inside nRF24L01 (was 3)
 #define RETRYWAIT                0    // Wait between retries is RetryWait+1 * 250us. (WAS 2) A failed packet therefore takes (RetryWait+1 * 250us) * RetryCount
-#define LOSTCONTACTCUTOFF        3    // 3 How many packets to lose before reconnect triggers
+#define LOSTCONTACTCUTOFF        2    // 3 How many packets to lose before reconnect triggers
 #define RECONNECT_CHANNELS_COUNT 3    // How many channels to try when reconnecting
 #define RECONNECT_CHANNELS_START 12   // Offset into channels' array
 #define RED_LED_ON_TIME          3500 // How many ms of no connection before RED led comes on
