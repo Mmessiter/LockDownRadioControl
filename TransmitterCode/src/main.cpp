@@ -548,6 +548,7 @@ char     ProgressEnd[]         = "vis Progress,0";
 char     Progress[]            = "Progress";
 char     InVisible[]           = "vis Quality,0";
  char    Visible[]             = "vis Quality,1";
+ uint32_t MostRecentHop;
 
 uint8_t ReconnectionIndex = 0;
 // **********************************************************************************************************************************
@@ -557,6 +558,13 @@ uint8_t ReconnectionIndex = 0;
 
 
 // **********************************************************************************************************************************
+
+ void HopNowAnyway() // heer
+ {
+         // MostRecentHop = ....
+        NextChannel       = *(FHSSChPointer + NextChannelNumber); // The actual channel number pointed to.   //  *** HEER ***
+        HopToNextChannel();
+ }
 
 void ConfigureStickMode(){  // This sets stick mode without moving any wires. Must be wired as for Mode 1
 
@@ -1161,7 +1169,7 @@ void RedLedOn()
             SendCommand(InVisible);
         }
         if (UseLog) LogDisConnection();
-        if (AnnounceConnected) PlaySound(DISCONNECTEDMSG); // heer
+        if (AnnounceConnected) PlaySound(DISCONNECTEDMSG); 
         }
 
     LedWasRed = true;
@@ -9104,11 +9112,12 @@ void  GetModelsMacAddress(){
 FASTRUN void ParseAckPayload()
 {
     if (BuddyPupilOnSbus) return; // buddy pupil need none of this
-
+ 
+    NextChannelNumber = AckPayload.Byte5;                     // every packet tells of next hop destination
+     
     if (AckPayload.Purpose & 0x80) // Hi bit is now the **HOP NOW!!** flag
     {
-        NextChannelNumber = AckPayload.Byte5;                     // This is just the array pointer or offset
-        NextChannel       = *(FHSSChPointer + NextChannelNumber); // The actual channel number pointed to.
+        NextChannel       = *(FHSSChPointer + NextChannelNumber); // The actual channel number pointed to.   //  *** HEER ***
         HopToNextChannel();
         AckPayload.Purpose &= 0x7f; // Clear the high BIT, use the remainder ...
     }
@@ -9187,11 +9196,11 @@ FASTRUN void ParseAckPayload()
         case 18:
             GetTimeFromAckPayload();
             ReadTheRTC();
-            if (GPSDay != GmonthDay) GPSTimeSynched = false;
-            if (GPSMonth != GPSMonth) GPSTimeSynched = false;
-            if (GPSMins != Gminute) GPSTimeSynched = false;
-            if (GPSHours != Ghour) GPSTimeSynched = false;
-            if (GPSSecs != Gsecond) GPSTimeSynched = false;
+            if (GPSDay   != GmonthDay) GPSTimeSynched = false;
+            if (GPSMonth != GPSMonth)  GPSTimeSynched = false;
+            if (GPSMins  != Gminute)   GPSTimeSynched = false;
+            if (GPSHours != Ghour)     GPSTimeSynched = false;
+            if (GPSSecs  != Gsecond)   GPSTimeSynched = false;
             if (GpsFix) SynchRTCwithGPSTime();
             break;
         default:

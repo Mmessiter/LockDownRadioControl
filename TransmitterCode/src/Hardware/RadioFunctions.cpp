@@ -340,13 +340,14 @@ float Pduration  = 0;
 FASTRUN void HopToNextChannel()
 {
     Radio1.setChannel(NextChannel); // Hop !
+    MostRecentHop = millis();       // note the time!
     delayMicroseconds(500);
-    Radio1.stopListening(); // Transmit only
+    Radio1.stopListening();         // Transmit only
     delayMicroseconds(500);
 
 #ifdef DB_FHSS 
     if (BoundFlag && Connected && ModelMatched){
-        float ch   = *(FHSSChPointer + NextChannelNumber);
+        float ch   = *(FHSSChPointer +  NextChannelNumber);
         float Freq = 2.4;
         PEndTime   = millis();
         Pduration  = (PEndTime - PStartTime) / 1000;

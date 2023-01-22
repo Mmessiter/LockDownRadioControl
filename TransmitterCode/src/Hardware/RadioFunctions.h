@@ -446,6 +446,8 @@ extern bool           NewCompressNeeded;
 extern bool           ModelMatched;
 extern bool           SendNoData;
 extern uint8_t        ReconnectionIndex;
+extern uint32_t       MostRecentHop;
+
 // external (global) functions needed here
 extern void  GetSlaveChannelValues();
 extern void  KickTheDog();
