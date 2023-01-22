@@ -4154,8 +4154,8 @@ void ReadTextFile(char* fname, char* htext, uint8_t StartLineNumber, uint8_t Max
 
     char crlf[]         = {13, 10, 0};
     char a[]            = " ";
-    char dots[]         = "(There's more below ...) ";
-    char dots1[]        = "(There's more above ...) ";
+    char dots[]         = "(Hit 'Down' for more ...) ";
+    char dots1[]        = "(Hit 'Up' to scroll up ...) ";
     char slash[]        = "/";
     char OpenBracket[]  = "( ";
     char CloseBracket[] = " )";
