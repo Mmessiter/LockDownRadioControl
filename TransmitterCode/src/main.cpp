@@ -242,7 +242,7 @@ uint32_t PausedSecs          = 0;
 uint32_t Mins                = 0;
 uint32_t Hours               = 0;
 uint32_t ModelNumber         = 1;
-uint32_t SavedModelNumber         = 1;
+uint32_t SavedModelNumber    = 1;
 uint32_t PreviousModelNumber = 1;
 uint8_t  ModelDefined        = 0;
 uint16_t MemoryForTransmtter = 0; // SD space for transmitter parameters
@@ -3246,7 +3246,7 @@ FASTRUN void SetUKFrequencies()
 {
     FHSSChPointer = FHSS_Channels;
     UkRules       = true;
-    FHSSRecoveryPointer = FHSS_Channels1;
+    FHSSRecoveryPointer = FHSS_Channels;
 }
 /************************************************************************************************************/
 FASTRUN void SetTestFrequencies()

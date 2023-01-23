@@ -88,7 +88,7 @@
 #define RETRYCOUNT               2    // auto retries inside nRF24L01 (was 3)
 #define RETRYWAIT                0    // Wait between retries is RetryWait+1 * 250us. (WAS 2) A failed packet therefore takes (RetryWait+1 * 250us) * RetryCount
 #define LOSTCONTACTCUTOFF        3    // 2 How many packets to lose before reconnect triggers HEER!!
-#define RECONNECT_CHANNELS_COUNT 3    // How many channels to try when reconnecting
+#define RECONNECT_CHANNELS_COUNT 2    // How many channels to try when reconnecting
 #define RECONNECT_CHANNELS_START 12   // Offset into channels' array
 #define RED_LED_ON_TIME          2500 // How many ms of no connection before RED led comes on
 #define LOW_VOLTAGE_TIME         3000 // How many ms to endure low voltage before announcing it. (3 seconds)
