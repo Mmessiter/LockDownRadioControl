@@ -12,7 +12,7 @@
 
 #define TXVERSION_MAJOR   2
 #define TXVERSION_MINOR   0
-#define TXVERSION_MINIMUS 5
+#define TXVERSION_MINIMUS 6
 
 // **************************************************************************
 //                               Includes                                   *
@@ -88,7 +88,7 @@
 #define RETRYCOUNT               2    // auto retries inside nRF24L01 (was 3)
 #define RETRYWAIT                0    // Wait between retries is RetryWait+1 * 250us. (WAS 2) A failed packet therefore takes (RetryWait+1 * 250us) * RetryCount
 #define LOSTCONTACTCUTOFF        2    // 3 How many packets to lose before reconnect triggers
-#define RECONNECT_CHANNELS_COUNT 3    // How many channels to try when reconnecting
+#define RECONNECT_CHANNELS_COUNT 2    // How many channels to try when reconnecting
 #define RECONNECT_CHANNELS_START 12   // Offset into channels' array
 #define RED_LED_ON_TIME          3500 // How many ms of no connection before RED led comes on
 #define LOW_VOLTAGE_TIME         3000 // How many ms to endure low voltage before announcing it. (3 seconds)
@@ -144,7 +144,7 @@
 #define SCANVIEW        4
 #define MODELSVIEW      5
 #define CALIBRATEVIEW   6
-#define TXSETUPVIEW   7
+#define TXSETUPVIEW     7
 #define SUBTRIMVIEW     8
 #define DATAVIEW        9
 #define TRIM_VIEW       10

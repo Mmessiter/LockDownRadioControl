@@ -315,7 +315,7 @@ void SetTestFrequencies()
 void SetUKFrequencies()
 {
 
-    FHSSRecoveryPointer = FHSS_Channels1;
+    FHSSRecoveryPointer = FHSS_Channels;
     FHSSChPointer  = FHSS_Channels;
     FrequencyCount = FREQUENCYSCOUNT;
 }
