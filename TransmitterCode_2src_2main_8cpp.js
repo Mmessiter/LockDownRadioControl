@@ -151,7 +151,6 @@ var TransmitterCode_2src_2main_8cpp =
     [ "GotoMacrosView", "TransmitterCode_2src_2main_8cpp.html#abdecfd433e1830c6497040b03450bed7", null ],
     [ "GotoModelsView", "TransmitterCode_2src_2main_8cpp.html#a446a94169d966af920710f7acddc5257", null ],
     [ "GreenLedOn", "TransmitterCode_2src_2main_8cpp.html#a62e53eb9359c32b666e3386d62c57037", null ],
-    [ "HopNowAnyway", "TransmitterCode_2src_2main_8cpp.html#aada9f9df7e85b8c033d0cc1f75544f99", null ],
     [ "IncDate", "TransmitterCode_2src_2main_8cpp.html#ac3f1d629a53f2b8bb9aa5bdc2b0a730d", null ],
     [ "IncHour", "TransmitterCode_2src_2main_8cpp.html#aee918002ab8f85e66499b048b6ce722b", null ],
     [ "IncMinute", "TransmitterCode_2src_2main_8cpp.html#a7db4bbbc2d6fc9114c7758525fa4c088", null ],

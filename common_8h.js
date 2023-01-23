@@ -36,6 +36,7 @@ var common_8h =
     [ "SENSOR_HUB_I2C_ADDRESS", "common_8h.html#a07a2f33887ffa40ffbc3b895fcfc1999", null ],
     [ "SERVOSUSED", "common_8h.html#ab1515f8a159ef919c7afb5a1d71f55a3", null ],
     [ "UNCOMPRESSEDWORDS", "common_8h.html#a0c40a351a0c0e01fbd5e5b1b0187eb48", null ],
+    [ "HopToNextChannel", "common_8h.html#a62ec0168b1eea5f5c14f663d9217574d", null ],
     [ "FailSafeSave", "common_8h.html#a332eaa61dd85cd649cf62de2345e246e", null ],
     [ "FHSS_Channels", "common_8h.html#ad8056611eb984e8cacf9f0e526815a99", null ],
     [ "FHSS_Channels1", "common_8h.html#aeea38114c49f6b6dbe375b7a64acdccb", null ],

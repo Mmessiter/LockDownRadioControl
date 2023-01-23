@@ -11,6 +11,7 @@ var RadioFunctions_8cpp =
     [ "ExecuteMacro", "RadioFunctions_8cpp.html#a78f22801971c106db61d728dd345e28e", null ],
     [ "FailedPacket", "RadioFunctions_8cpp.html#a5fbd3c8613a4163425c94965704ce5f8", null ],
     [ "FlushFifos", "RadioFunctions_8cpp.html#a07c27b4e208198453c70876517926052", null ],
+    [ "HopNowAnyway", "RadioFunctions_8cpp.html#aada9f9df7e85b8c033d0cc1f75544f99", null ],
     [ "HopToNextChannel", "RadioFunctions_8cpp.html#a52aa3e80bccf5e75346c93fdae63122d", null ],
     [ "InitRadio", "RadioFunctions_8cpp.html#a799f38bc33abdb30eec1d7db3cf27d58", null ],
     [ "Look", "RadioFunctions_8cpp.html#a44db40e8ffa545be92871325c4dcdc55", null ],
