@@ -64,6 +64,7 @@ extern void SetUKFrequencies();
 extern void MoveServos();
 extern FASTRUN void ReceiveData();
 extern bool FailedSafe;
+extern uint32_t MostRecentHop;
 
 /** AckPayload Stucture for data returned to transmitter. */
 struct Payload
@@ -92,6 +93,15 @@ struct Payload
 Payload AckPayload;
 uint8_t AckPayloadSize = sizeof(AckPayload); // Size for later externs if needed etc. (=6)
 
+
+/************************************************************************************************************/
+
+void HopNowAnyway(){ // HEER!!
+        ++NextChannelNumber;                                            // Move up the channels' array
+        if (NextChannelNumber >= FrequencyCount) NextChannelNumber = 1; // If needed, wrap the channels' array pointer
+        NextChannel           = *(FHSSChPointer + NextChannelNumber);
+        HopToNextChannel();
+}
 /************************************************************************************************************/
 
 void SetNewPipe()
@@ -120,7 +130,7 @@ void SendVersionNumberToAckPayload() // AND which radio transceiver is currently
 
 /************************************************************************************************************/
 
-void GetNewPipe() // receive
+void GetNewPipe() 
 {   NewPipe =  (uint64_t)ReceivedData[0] << 56;
     NewPipe += (uint64_t)ReceivedData[1] << 48;
     NewPipe += (uint64_t)ReceivedData[2] << 40;
@@ -157,11 +167,13 @@ FLASHMEM void GetOldPipe()
 
 /************************************************************************************************************/
 
-void HopToNextChannel()
+void     HopToNextChannel()
 {
     CurrentRadio->stopListening();
-    delay(1);
+    delayMicroseconds (500);
     CurrentRadio->setChannel(NextChannel);
+    MostRecentHop = millis();
+    delayMicroseconds(500);
     CurrentRadio->startListening();
 #ifdef DB_FHSS
     ShowHopDurationEtc();

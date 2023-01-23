@@ -559,13 +559,6 @@ uint8_t ReconnectionIndex = 0;
 
 // **********************************************************************************************************************************
 
- void HopNowAnyway() // heer
- {
-         // MostRecentHop = ....
-        NextChannel       = *(FHSSChPointer + NextChannelNumber); // The actual channel number pointed to.   //  *** HEER ***
-        HopToNextChannel();
- }
-
 void ConfigureStickMode(){  // This sets stick mode without moving any wires. Must be wired as for Mode 1
 
 if (SticksMode == 1) {

@@ -138,16 +138,28 @@ void RecordsPacketSuccess(uint8_t s)
     ++PacketsHistoryIndex;
     if (PacketsHistoryIndex >= (PERFECTPACKETSPERSECOND * ConnectionAssessSeconds)) PacketsHistoryIndex = 0; //
 }
+
+
+ void HopNowAnyway() // HEER!!
+ {
+        NextChannel       = *(FHSSChPointer + NextChannelNumber); // The actual channel number pointed to.   //  *** HEER ***
+        HopToNextChannel();
+        ++NextChannelNumber;
+ }
+
 /***************************************************************************************/
 
 FASTRUN void FailedPacket()
 {
-    if (LostContactFlag) {
-        TryToReconnect();
-    }
     RecordsPacketSuccess(0);                      // Record a failure
     ++RecentPacketsLost;                          // this is to keep track of events when receiver is off
     ++TotalLostPackets;                           // This is total - never zeroed
+  //  if ((millis()-MostRecentHop) > 80){
+  //      if (ModelMatched) {
+  //          HopNowAnyway();
+  //          Serial.println("Hopped!");
+  //      }
+  //  }
     if (RecentPacketsLost >= LOSTCONTACTCUTOFF) { // Don't panic until at least LOSTCONTACTCUTOFF packets are lost.
         if (!GapStart) GapStart = millis();       // To keep track of this gap's length
         LostContactFlag = true;
@@ -162,6 +174,12 @@ FASTRUN void FailedPacket()
             }
         }
     }
+    if (LostContactFlag) {
+        TryToReconnect();
+     //   Serial.print(millis());
+     //   Serial.println("  RECONNECTING...");
+    }
+
     int SecondsRemaining = (Inactivity_Timeout / 1000) - (millis() - Inactivity_Start) / 1000;
     if (SecondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH); // INACTIVITY POWER OFF HERE!!
 }

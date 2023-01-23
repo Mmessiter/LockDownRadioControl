@@ -32,8 +32,11 @@
 #define HOPTIME                80  // ms between channel changes 
 
 // ********************************* reconnect params ***************************************
+
 #define LISTEN_PERIOD   15 //   (was 30) How many ms to listen for TX in Reconnect()
-#define RECEIVE_TIMEOUT 12 //   (was 17) <=9 fails, >=11 OK ... 
+
+#define RECEIVE_TIMEOUT 14 //   (was 12) <=9 fails, >=11 OK ... HEER!!
+
 // *****************************************************************************************
 
 #define DEFAULTPIPE              0xBABE1E5420LL
@@ -86,5 +89,7 @@ uint8_t FHSS_Channels1[42] = {93, 111, 107, 103, 106, 97, 108, 102, 118, 104, 10
                               86, 94, 92, 119, 120, 100, 121, 123, 95, 122, 105, 84, 116, 90, 110, 88};
 
 /************************************************************************************************************/
+
+void HopToNextChannel();
 
 #endif // defined (_SRC_UTILITIES_COMMON_H)
