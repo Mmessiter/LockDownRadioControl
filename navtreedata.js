@@ -80,7 +80,7 @@ var NAVTREE =
       [ "Features List", "RXCODE.html#rx", null ],
       [ "TEENSY 4.0 PINS", "RXCODE.html#rxpinout", null ]
     ] ],
-    [ ".", "TransmitterCode.html", [
+    [ "...", "TransmitterCode.html", [
       [ "Radio Control Features list, so far:", "TransmitterCode.html#LockDown", null ],
       [ "Teensy 4.1 Pins", "TransmitterCode.html#txPinout", null ]
     ] ],
