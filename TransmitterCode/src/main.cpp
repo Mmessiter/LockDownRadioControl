@@ -242,7 +242,7 @@ uint32_t PausedSecs          = 0;
 uint32_t Mins                = 0;
 uint32_t Hours               = 0;
 uint32_t ModelNumber         = 1;
-uint32_t SavedModelNumber         = 1;
+uint32_t SavedModelNumber    = 1;
 uint32_t PreviousModelNumber = 1;
 uint8_t  ModelDefined        = 0;
 uint16_t MemoryForTransmtter = 0; // SD space for transmitter parameters
@@ -558,13 +558,6 @@ uint8_t ReconnectionIndex = 0;
 
 
 // **********************************************************************************************************************************
-
- void HopNowAnyway() // heer
- {
-         // MostRecentHop = ....
-        NextChannel       = *(FHSSChPointer + NextChannelNumber); // The actual channel number pointed to.   //  *** HEER ***
-        HopToNextChannel();
- }
 
 void ConfigureStickMode(){  // This sets stick mode without moving any wires. Must be wired as for Mode 1
 

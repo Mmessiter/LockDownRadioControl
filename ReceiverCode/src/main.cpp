@@ -90,6 +90,7 @@ uint8_t         TheReceivedPipe[8];
 bool            FirstConnection = true;
 bool            ReadyToUseData  = false;
 bool            FailedSafe = true;  // Starting up as the same as after failsafe
+uint32_t        MostRecentHop;
 /************************************************************************************************************/
 
 void LoadFailSafeData()
@@ -540,7 +541,13 @@ FASTRUN void ReceiveData()
             }
         }
     }
-    if (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT)  Reconnect();// Try to reconnect.
+    
+    if (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT)  Reconnect(); // Try to reconnect.
+    
+  //  if (millis() - MostRecentHop >= HOPTIME+20) {
+  //      if (ModelMatched) HopNowAnyway();                // HOP IN THE SILENCE
+  //  }
+
     if (ReadData()) {
         ReadExtraParameters(); // Check the extra parameters
     }
