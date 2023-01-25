@@ -81,14 +81,13 @@ var searchData=
   ['buffersize_78',['BUFFERSIZE',['../TransmitterCode_2src_2main_8cpp.html#ac3146f1e9227301bb4aa518f4d336cee',1,'main.cpp']]],
   ['buildchecksum_79',['BuildCheckSum',['../TransmitterCode_2src_2main_8cpp.html#a4a6675e3f0ebf8db35d21d829dcce052',1,'main.cpp']]],
   ['builddirectory_80',['BuildDirectory',['../TransmitterCode_2src_2main_8cpp.html#affc6c0de18db71aa5ad8b4d241339731',1,'main.cpp']]],
-  ['building_20the_20lockdownradiocontrol_81',['Building the LockDownRadioControl',['../md_Docs_LDRC2___Building_The_Radio.html',1,'']]],
-  ['button_5fsense_5fpin_82',['BUTTON_SENSE_PIN',['../RadioFunctions_8h.html#a6ee4615320320baaf7e0d8e87642141e',1,'RadioFunctions.h']]],
-  ['buttonclicks_83',['ButtonClicks',['../TransmitterCode_2src_2main_8cpp.html#a0955aa08f4b43e6f78ff256fc6ccf421',1,'main.cpp']]],
-  ['buttonwaspressed_84',['ButtonWasPressed',['../RadioFunctions_8h.html#a8e7ccbf842764fd85cc578be263f7202',1,'ButtonWasPressed():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a804fdbdd5eab4c596bbe8a23eecbe4d5',1,'ButtonWasPressed():&#160;main.cpp']]],
-  ['byte1_85',['Byte1',['../structPayload.html#ab1cbe4c4b9ee9ce839084b274f3ea494',1,'Payload']]],
-  ['byte2_86',['Byte2',['../structPayload.html#ae7106f2efa1bb9f4ebb720c7c9fc54b8',1,'Payload']]],
-  ['byte3_87',['Byte3',['../structPayload.html#a31d05bdbdf85fe184cc7f806d3391fa9',1,'Payload']]],
-  ['byte4_88',['Byte4',['../structPayload.html#a654bdf192bbe0cc64dc8280527c2da20',1,'Payload']]],
-  ['byte5_89',['Byte5',['../structPayload.html#ae28220045a0918bdb0fc6484dbff55f9',1,'Payload']]],
-  ['bytespermacro_90',['BYTESPERMACRO',['../RadioFunctions_8h.html#acb6ba8383362a5f2efee8416bc4300c9',1,'RadioFunctions.h']]]
+  ['button_5fsense_5fpin_81',['BUTTON_SENSE_PIN',['../RadioFunctions_8h.html#a6ee4615320320baaf7e0d8e87642141e',1,'RadioFunctions.h']]],
+  ['buttonclicks_82',['ButtonClicks',['../TransmitterCode_2src_2main_8cpp.html#a0955aa08f4b43e6f78ff256fc6ccf421',1,'main.cpp']]],
+  ['buttonwaspressed_83',['ButtonWasPressed',['../RadioFunctions_8h.html#a8e7ccbf842764fd85cc578be263f7202',1,'ButtonWasPressed():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a804fdbdd5eab4c596bbe8a23eecbe4d5',1,'ButtonWasPressed():&#160;main.cpp']]],
+  ['byte1_84',['Byte1',['../structPayload.html#ab1cbe4c4b9ee9ce839084b274f3ea494',1,'Payload']]],
+  ['byte2_85',['Byte2',['../structPayload.html#ae7106f2efa1bb9f4ebb720c7c9fc54b8',1,'Payload']]],
+  ['byte3_86',['Byte3',['../structPayload.html#a31d05bdbdf85fe184cc7f806d3391fa9',1,'Payload']]],
+  ['byte4_87',['Byte4',['../structPayload.html#a654bdf192bbe0cc64dc8280527c2da20',1,'Payload']]],
+  ['byte5_88',['Byte5',['../structPayload.html#ae28220045a0918bdb0fc6484dbff55f9',1,'Payload']]],
+  ['bytespermacro_89',['BYTESPERMACRO',['../RadioFunctions_8h.html#acb6ba8383362a5f2efee8416bc4300c9',1,'RadioFunctions.h']]]
 ];

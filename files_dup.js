@@ -1,6 +1,5 @@
 var files_dup =
 [
-    [ "Docs", "dir_5baf679cf4943df8904dce5d41d4d3dc.html", null ],
     [ "Quadcopter", "dir_5dc8caded50c696bf97d60d55a81b95c.html", "dir_5dc8caded50c696bf97d60d55a81b95c" ],
     [ "ReceiverCode", "dir_25061517341c4cd99c170271a90b5899.html", "dir_25061517341c4cd99c170271a90b5899" ],
     [ "SensorHubT32", "dir_bc43e722192e51f8bb0226ac573abc19.html", "dir_bc43e722192e51f8bb0226ac573abc19" ],
