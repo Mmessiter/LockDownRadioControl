@@ -35,7 +35,7 @@
 
 #define LISTEN_PERIOD   15 //   How many ms to listen for TX in Reconnect()
 
-#define RECEIVE_TIMEOUT 14 //   (was 12) <=9 fails, >=11 OK ... HEER!!
+#define RECEIVE_TIMEOUT 14 //   <=9 fails, >=11 OK ... HEER!!
 
 // *****************************************************************************************
 
