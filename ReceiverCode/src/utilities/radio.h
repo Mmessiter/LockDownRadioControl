@@ -308,9 +308,8 @@ FASTRUN void Reconnect()
         ReconnectChannel = *(FHSSRecoveryPointer + ReconnectIndex); // Get a reconnect channel
         ++ReconnectIndex;
         if (ReconnectIndex >= RECONNECT_CHANNELS_COUNT + RECONNECT_CHANNELS_START) ReconnectIndex = RECONNECT_CHANNELS_START;
-
         CurrentRadio->setChannel(ReconnectChannel);
-         ++Attempts;
+        ++Attempts;
         if (Attempts < 3) TryToConnectNow();
         if (!Connected) {
            
