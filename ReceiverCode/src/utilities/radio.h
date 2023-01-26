@@ -208,6 +208,8 @@ void TryToConnectNow()
     while ((!CurrentRadio->available()) && (millis() - ATimer) < LISTEN_PERIOD) {
     }
     Connected = CurrentRadio->available();
+
+   // if (Connected) Serial.println(millis() - ATimer);
 }
 
 /************************************************************************************************************/
@@ -331,7 +333,7 @@ FASTRUN void Reconnect()
     } // cannot pass here if not connected
 
      // must have connected by here
-
+    
     FailSafeSent = false;
     if (PreviousRadio != ThisRadio) ++RadioSwaps; // Count the radio swaps
     ReconnectedMoment = millis();                 // Save this moment

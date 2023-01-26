@@ -209,13 +209,13 @@ void UseReceivedData()
 bool ReadData()
 {
     Connected = false;
-    while (CurrentRadio->available()) { // Get all, but use only the latest
+    if (CurrentRadio->available()) { // Get all, but use only the latest
         LoadAckPayload();
-        Connected = true;
         CurrentRadio->flush_tx();                                      // This avoids a lockup that happens when the FIFO gets full
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // Send telemetry
         delayMicroseconds(1500);                                       // N.B. SOME DUFF NRF24L01 TRANSCEIVERS NEED THIS PAUSE. But not all.
         CurrentRadio->read(&CompressedData, sizeof(CompressedData));   // Get Data
+        Connected = true;
     }
     if (Connected) UseReceivedData();
     return Connected;
