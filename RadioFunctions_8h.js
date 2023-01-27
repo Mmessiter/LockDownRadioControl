@@ -119,7 +119,6 @@ var RadioFunctions_8h =
     [ "MMFOUND", "RadioFunctions_8h.html#a0b03ce36ca9e2bb94b7cb4ea493e4925", null ],
     [ "MMMATCHED", "RadioFunctions_8h.html#a4deeeed0d33ed73ae31e3d23ebd7f5e5", null ],
     [ "MMNOTFOUND", "RadioFunctions_8h.html#a1d4c0728a4eb0310bc1d4816cb6cc9b4", null ],
-    [ "MODELOFFSET", "RadioFunctions_8h.html#a3c63e854276964000a04192eaa13a268", null ],
     [ "MODELSFILENOTFOUND", "RadioFunctions_8h.html#ab62cc0382b477fe0602ec7aa2a8553d4", null ],
     [ "MODELSIZE", "RadioFunctions_8h.html#a9c26d80f6f18d6a999a1a464e92192ef", null ],
     [ "MODELSVIEW", "RadioFunctions_8h.html#a920f01d8bd6e26cf3e4c387cef2ad495", null ],

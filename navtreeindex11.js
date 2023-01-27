@@ -1,6 +1,5 @@
 var NAVTREEINDEX11 =
 {
-"globals_func.html":[4,1,1],
 "globals_func.html":[4,1,1,0],
 "globals_func_b.html":[4,1,1,1],
 "globals_func_c.html":[4,1,1,2],
