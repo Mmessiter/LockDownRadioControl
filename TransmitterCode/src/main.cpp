@@ -148,25 +148,17 @@ uint16_t DefaultTrimRepeatSpeed = 600;
 char     FrontView_Connected[]  = "Connected";
 char     na[]                   = "";
 
-// ************************************* AckPayload structure ******************************************************
-/**
+/* ************************************* AckPayload structure ******************************************************
+
  * This first byte "Purpose" defines what all the other bytes mean, AND ...
  * the highest BIT of Purpose means ** HOP TO NEXT CHANNEL A.S.A.P. (IF ON) **
  * the lower 7 BITs then define the meaning of the remainder of the ackpayload bytes
- * If Purpose == 1 then ...
- *
- * AckPayload.Byte2           =  ThisRadio;              // RX Transceiver in current use
- * AckPayload.Byte3           =  RXVERSION_MAJOR;
- * AckPayload.Byte4           =  RXVERSION_MINOR;
- * AckPayload.Byte5           =  RXVERSION_MINIMUS;
- *
- *  If Purpose = 2 then ...
- **/
+ */
 
 struct Payload
 {
     uint8_t Purpose; // Defines meaning of the remainder
-                     // Highest BIT of Purpose means HOP NOW! IF ON
+                     // Highest BIT of Purpose means HOP NOW! when ON
     uint8_t Byte1;   //
     uint8_t Byte2;   //
     uint8_t Byte3;   //
@@ -1317,8 +1309,8 @@ void SendText1(char* tbox, char* NewWord)
 void EndSend()
 {
     for (u_int8_t pp = 0; pp < 3; ++pp) {
-        NEXTION.write(0xff);
-    }          // Send end of Input message //
+        NEXTION.write(0xff);// Send end of Input message //
+    }          
     Procrastinate(55); // ** A DELAY ** (>=50 ms) was needed if an answer might come! (!! Shorter with Intelligent dislay)
 }
 /*********************************************************************************************************************************/
@@ -2010,7 +2002,6 @@ void ShowMixValues() // sends mix values to Nextion screen
     }
     SendValue(MixesView_Percent, Mixes[MixNumber][M_Percent]);
     SendValue(MixesView_h0, Mixes[MixNumber][M_Percent]);
-
     SendValue(MixesView_od, Mixes[MixNumber][M_ONEDIRECTION]);
     SendText(MixesView_chM, ChannelNames[Mixes[MixNumber][M_MasterChannel] - 1]);
     SendText(MixesView_chS, ChannelNames[Mixes[MixNumber][M_SlaveChannel] - 1]);
@@ -8565,9 +8556,11 @@ void GetBank()
             if (LedWasRed)
                 {
                   MotorEnabled = false;
-                   if ((millis() - WarningTimer) > 4000) { 
-                        PlaySound(PLSTURNOFF);
-                        WarningTimer = millis();
+                   if (!BuddyPupilOnSbus){
+                        if ((millis() - WarningTimer) > 4000) { 
+                            PlaySound(PLSTURNOFF); // HEER!
+                            WarningTimer = millis();
+                        }
                    }
                 return;
                 }

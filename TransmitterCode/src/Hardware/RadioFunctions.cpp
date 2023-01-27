@@ -81,7 +81,6 @@ void Look(int p)  // This is just to save typing Serial.println :)
     Serial.println(p);
 }
 
-
 //***********************************************************************************************************
 // *************************************** Functions to run macros  *****************************************
 // **********************************************************************************************************
@@ -139,6 +138,7 @@ void RecordsPacketSuccess(uint8_t s)
     if (PacketsHistoryIndex >= (PERFECTPACKETSPERSECOND * ConnectionAssessSeconds)) PacketsHistoryIndex = 0; //
 }
 
+/***************************************************************************************/
 
  void HopNowAnyway() // HEER!!
  {

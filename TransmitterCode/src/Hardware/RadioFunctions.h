@@ -285,12 +285,7 @@
 
 #define TXSIZE            512      // SD space reserved for transmitter (WAS  250)
 #define MODELSIZE         2048     // SD space reserved for each model (WAS 1600)
-
-//#define MODELOFFSET     250      // OLD VERSION
-#define MODELOFFSET         0      // NEW VERSION
-
 #define MAXFILELEN        1024 * 3 // MAX SIZE FOR HELP AND LOG FILES
-
 #define MAXBACKUPFILES    95
 
 // **************************************************************************
@@ -541,10 +536,7 @@ void             SaveCurrentModel();
 void             CheckModelName();
 void             EndTrimView();
 int              AnalogueReed(uint8_t InputChannel);
-
 void             GetReturnCode();
-
-
 /*********************************************************************************************************************************/
 
 #endif
