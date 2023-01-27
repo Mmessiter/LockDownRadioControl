@@ -140,9 +140,9 @@ void RecordsPacketSuccess(uint8_t s)
 
 /***************************************************************************************/
 
- void HopNowAnyway() // HEER!!
+ void HopNowAnyway() 
  {
-        NextChannel       = *(FHSSChPointer + NextChannelNumber); // The actual channel number pointed to.   //  *** HEER ***
+        NextChannel       = *(FHSSChPointer + NextChannelNumber); // The actual channel number pointed to. 
         HopToNextChannel();
         ++NextChannelNumber;
  }

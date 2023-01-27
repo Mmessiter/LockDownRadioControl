@@ -8558,7 +8558,7 @@ void GetBank()
                   MotorEnabled = false;
                    if (!BuddyPupilOnSbus){
                         if ((millis() - WarningTimer) > 4000) { 
-                            PlaySound(PLSTURNOFF); // HEER!
+                            PlaySound(PLSTURNOFF);
                             WarningTimer = millis();
                         }
                    }
@@ -9103,7 +9103,7 @@ FASTRUN void ParseAckPayload()
      
     if (AckPayload.Purpose & 0x80) // Hi bit is now the **HOP NOW!!** flag
     {
-        NextChannel       = *(FHSSChPointer + NextChannelNumber); // The actual channel number pointed to.   //  *** HEER ***
+        NextChannel       = *(FHSSChPointer + NextChannelNumber); // The actual channel number pointed to.   
         HopToNextChannel();
         AckPayload.Purpose &= 0x7f; // Clear the high BIT, use the remainder ...
     }
