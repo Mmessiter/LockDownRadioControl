@@ -6465,6 +6465,7 @@ void ResetTransmitterSettings(){    // This function resets all transmitter para
             ++sofar;
             SetDefaultValues();
             SendValue(Progress, (sofar * (100 / MAXMODELNUMBER)) / 4);
+            KickTheDog();
         }
    }
    SendValue(Progress,100);
