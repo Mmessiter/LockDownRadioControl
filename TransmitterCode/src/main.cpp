@@ -9386,6 +9386,7 @@ FASTRUN void loop()
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24
         ShowServoPos();          // heer
     }                                   
+   
     switch (CurrentMode) {
         case NORMAL:            // 0
             SendData();
