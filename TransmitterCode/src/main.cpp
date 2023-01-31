@@ -8544,7 +8544,10 @@ void GetBank()
         SafetyWasOn = SafetyON;
     }                       
    
-    if (SafetyON) MotorEnabled = false;
+    if (SafetyON) {
+        MotorEnabled = false; // heer
+       
+    }
 
     if ((MotorEnabled != MotorWasEnabled) && (UseMotorKill))  {                         // MotorEnabled changed ?
         if (MotorEnabled) {
@@ -9378,10 +9381,10 @@ FASTRUN void loop()
         ShowServoPos(); 
     } else {                                                     // Skip these next lines when buddying as a slave
         if (!BoundFlag && Connected) BufferNewPipe();            // if not yet bound, insert our pipe into SendBuffer BUT ONLY WHEN CONNECTED 
-        if (BuddyMaster) GetSlaveChannelValues();                // If buddy master, get buddy data and maybe use it.
-        ShowServoPos();                                          // This might show motor on when it's prevented, AND buddys servo positions
-        if (!MotorEnabled) SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero whatever was shown.
+        if (BuddyMaster) GetSlaveChannelValues();                // If buddy master, get buddy data and maybe use it. 
+        if (!MotorEnabled) SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero whatever was shown.   
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24
+        ShowServoPos();          // heer
     }                                   
     switch (CurrentMode) {
         case NORMAL:            // 0
