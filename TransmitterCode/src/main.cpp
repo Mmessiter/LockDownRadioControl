@@ -5426,23 +5426,17 @@ void SendModelFile()
             Fposition += BUFFERSIZE;
             if (Fposition > Fsize) Fposition = Fsize;
         }
-        while (millis()- SentMoment < 50) {
+        
+        while (millis()- SentMoment < 25) { 
             Radio1.flush_tx();
             Radio1.flush_rx();   
         }
         SentMoment = millis();
+        
         if (Radio1.write(&Fbuffer, BUFFERSIZE + 4)) {
-            Radio1.read(&Fack, sizeof(Fack));    
+            Radio1.read(&Fack, sizeof(Fack));    // ignore the ACK
         }
-        else {
-            if (PacketNumber == 2) { // error - no connection 
-                NormaliseTheRadio();
-                SendCommand(GoModelsView);
-                CurrentView = MODELSVIEW;
-                return;
-            }
-
-        }
+        
 #ifdef DB_MODEL_EXCHANGE
         Serial.println(PacketNumber);
 #endif

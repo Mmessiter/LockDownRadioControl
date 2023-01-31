@@ -394,7 +394,7 @@ FLASHMEM void InitRadio(uint64_t Pipe)
     Radio1.setDataRate(RF24_250KBPS);
     Radio1.enableAckPayload();
     Radio1.openWritingPipe(Pipe);             // Current Pipe address used for Binding
-    Radio1.setRetries(RETRYCOUNT, RETRYWAIT); // automatic retries and pauses *** WAS 15,15 *** !!
+    Radio1.setRetries(RETRYCOUNT, RETRYWAIT); // automatic retries and pauses
     Radio1.stopListening();
     delay(2);
     Radio1.enableDynamicPayloads();
