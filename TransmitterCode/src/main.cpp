@@ -1465,10 +1465,12 @@ bool GetButtonPress()
 //             END OF NEXTION FUNCTIONS
 /*********************************************************************************************************************************/
 
-FASTRUN void CheckTimer()
+
+
+FASTRUN void ShowMotorTimer()
 {
     uint8_t Recording[10] = {ONEMINUTE, TWOMINUTES, THREEMINUTES, FOURMINUTES, FIVEMINUTES, SIXMINUTES, SEVENMINUTES, EIGHTMINUTES, NINEMINUTES, TENMINUTES};
-    if (MotorEnabled && !LostContactFlag) {
+    if ((MotorEnabled && !LostContactFlag) ) {
         Secs  = ((millis() - TimerMillis) / 1000) + PausedSecs;
         Hours = Secs / 3600;
         Secs %= 3600;
@@ -8545,8 +8547,13 @@ void GetBank()
     }                       
    
     if (SafetyON) {
-        MotorEnabled = false; // heer
-       
+        MotorEnabled = false; 
+        PausedSecs = 0; // Safety switch zeros timer.
+        if (CurrentView == FRONTVIEW){
+            SendValue(FrontView_Secs, 0);
+            SendValue(FrontView_Mins, 0);
+            SendValue(FrontView_Hours,0);
+        }
     }
 
     if ((MotorEnabled != MotorWasEnabled) && (UseMotorKill))  {                         // MotorEnabled changed ?
@@ -8579,7 +8586,7 @@ void GetBank()
             PausedSecs = Secs + (Mins * 60) + (Hours * 3600);                           // Remember how long so far
         }
         LastSeconds = 0;  
-        CheckTimer();
+        ShowMotorTimer();
     }
     Channel9SwitchValue  = CheckSwitch(Channel9Switch);
     Channel10SwitchValue = CheckSwitch(Channel10Switch);
@@ -8986,7 +8993,7 @@ void GotoFrontView(){
           Reconnected  = false;                 // this is to make '** Connected! **' redisplay (in ShowComms())
           LastSeconds  = 0;                     // This forces redisplay of timer...
           Force_ReDisplay();
-          CheckTimer();
+          ShowMotorTimer();
           ClearText();
           LastShowTime = 0;                     // this is to make redisplay sooner (in ShowComms())
           SendText(FrontView_Connected, na);
@@ -9362,7 +9369,7 @@ void FASTRUN ManageTransmitter(){
         CheckHardwareTrims();                                        // Trims 20 times a second
         GetBank();                                                   // Must not call too often        
         ShowComms();                                                 // Screen Data                                  
-        CheckTimer();                                                // Screen Timer
+        ShowMotorTimer();                                                // Screen Timer
         CheckPowerOffButton();                                       // Pretty obvious really ...
         TransmitterLastManaged = millis();
     }
@@ -9382,7 +9389,7 @@ FASTRUN void loop()
     } else {                                                     // Skip these next lines when buddying as a slave
         if (!BoundFlag && Connected) BufferNewPipe();            // if not yet bound, insert our pipe into SendBuffer BUT ONLY WHEN CONNECTED 
         if (BuddyMaster) GetSlaveChannelValues();                // If buddy master, get buddy data and maybe use it. 
-        ShowServoPos();                                          // heer
+        ShowServoPos();                                          
         if (!MotorEnabled) SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero whatever was shown.   
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24
     }                                   
