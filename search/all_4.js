@@ -80,7 +80,7 @@ var searchData=
   ['checkstepsizes_77',['CheckStepSizes',['../TransmitterCode_2src_2main_8cpp.html#af2028eceef03ca4c84aa7d71677c0647',1,'main.cpp']]],
   ['checksumerror_78',['CHECKSUMERROR',['../RadioFunctions_8h.html#a3ea624f3ab1d95d1843e9c4024425a7a',1,'RadioFunctions.h']]],
   ['checkswitch_79',['CheckSwitch',['../TransmitterCode_2src_2main_8cpp.html#afcd616e96ae28694a7fa2197ad74c6fe',1,'main.cpp']]],
-  ['checktimer_80',['CheckTimer',['../RadioFunctions_8h.html#addfc131a271de92cb52d869fde35729e',1,'CheckTimer():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a671f8420f68cbdd4f18e4726f93e14da',1,'CheckTimer():&#160;main.cpp']]],
+  ['checktimer_80',['CheckTimer',['../RadioFunctions_8h.html#addfc131a271de92cb52d869fde35729e',1,'RadioFunctions.h']]],
   ['checktrimvalues_81',['CheckTrimValues',['../RadioFunctions_8h.html#a1930cb00e0e68d2c871cec56cc458064',1,'CheckTrimValues():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a1930cb00e0e68d2c871cec56cc458064',1,'CheckTrimValues():&#160;main.cpp']]],
   ['checktxvolts_82',['CheckTXVolts',['../TransmitterCode_2src_2main_8cpp.html#a28ff2460f96b023cdb62a5c2b8f593f5',1,'main.cpp']]],
   ['checkwhetheritstimetohop_83',['CheckWhetherItsTimeToHop',['../radio_8h.html#ad21c5c00ff554736e4e21cee13773cd5',1,'radio.h']]],
