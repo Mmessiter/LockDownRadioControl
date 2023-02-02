@@ -544,7 +544,7 @@ char     Visible[]             = "vis Quality,1";
 uint32_t MostRecentHop;
 uint8_t  ReconnectionIndex      = 0;
 bool     TimerDownwards         = false;
-uint16_t TimerStartTime         =  5; // heer
+uint16_t TimerStartTime         = 5 * 60; 
 bool     TimesUp                = false;
 
 // **********************************************************************************************************************************
@@ -1503,7 +1503,7 @@ FASTRUN void ShowMotorTimer()
         }
         if (TimerDownwards){
             if ((!Mins) && (!Secs) && (ElapsedSeconds > 2)) {
-                PlaySound(STORAGECHARGE);
+                PlaySound(STORAGECHARGE); // = Stop Flyfing!
                 TimesUp = true;
             }
         }
@@ -3000,6 +3000,15 @@ bool ReadOneModel(uint32_t Mnum)
      }
     CheckStepSizes();
 
+    TimerDownwards          = (bool) SDRead8BITS(SDCardAddress);
+   
+    ++SDCardAddress;
+    TimerStartTime          = SDRead16BITS(SDCardAddress);
+    if (TimerStartTime > 120 * 60) TimerStartTime = 5 * 60;
+    ++SDCardAddress;
+    ++SDCardAddress;
+
+
     // **************************************
 
     ReadCheckSum32(); 
@@ -4032,6 +4041,13 @@ void SaveOneModel(uint32_t mnum)
          SDUpdate8BITS(SDCardAddress, StepSize[i]); 
         ++SDCardAddress;
      }
+
+        SDUpdate8BITS(SDCardAddress, TimerDownwards); 
+        ++SDCardAddress;   
+        SDUpdate16BITS(SDCardAddress, TimerStartTime);
+      
+        ++SDCardAddress;
+        ++SDCardAddress;
 
     SaveCheckSum32(); // Save the Model parametres checksm
     
@@ -6214,7 +6230,7 @@ void OptionView2Start()
     char n1[]            = "n1";
     char n2[]            = "n2";
     char n3[]            = "n3";
-    char lpm[]           = "c0";    // Auto model match
+   
     char OptionV2Start[] = "page OptionView2";
     char TxVCorrextion[] = "t2";
   
@@ -6224,7 +6240,7 @@ void OptionView2Start()
       TxVoltageCorrection    = GetValue(TxVCorrextion);
       PowerOffWarningSeconds = GetValue(n2);
       PowerOffWarningSeconds = CheckRange(PowerOffWarningSeconds, 1, 10);
-      AutoModelSelect        = GetValue(lpm);
+     
       if (LEDBrightness != GetValue(n1)) UpdateLED();
       ConnectionAssessSeconds = GetValue(n3);
       ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);
@@ -6247,21 +6263,26 @@ void OptionView3Start() /// NOT CALLED
     char n2[]            = "n2";
     char t10[]           = "t10";
     char n3[]            = "n3";
-  //  char RxVCorrextion[] = "n0"; // RX Voltage correction
     char lpm[]           = "c0"; // Low power mode
     char Vbuf[10];
     char OptionV3Start[] = "page OptionView3";
-    CurrentView          = OPTIONVIEW3; 
+    char QNH[]           = "Qnh";
+
+
+    CurrentView          = OPTIONVIEW3;
     SendCommand(OptionV3Start);
     Procrastinate(250);
     snprintf(Vbuf, 5, "%f", StopFlyingVoltsPerCell);
     SendText(t10, Vbuf);
     SendValue(TxVCorrextion, TxVoltageCorrection);
-  //  SendValue(RxVCorrextion, RxVoltageCorrection);
     SendValue(n2,  PowerOffWarningSeconds);
     SendValue(n3,  ConnectionAssessSeconds);
     SendValue(lpm, AutoModelSelect);
     SendValue(n1,  LEDBrightness);
+    SendValue(QNH,  Qnh);
+
+
+    
 }
 
 /******************************************************************************************************************************/
@@ -6278,6 +6299,9 @@ void RXSetup1Start() // model options screen
     char c1[] = "c1";
     char n3[] = "n3";
 
+    char n4[] = "n4";    // TimerDownwards timer minutes
+    char c2[] = "c2";    // TimerDownwards timer on off
+
     SendCommand(pRXSetup1);
     SendValue(c1, CopyTrimsToAll);
     SendValue(n3, TrimMultiplier);
@@ -6287,6 +6311,8 @@ void RXSetup1Start() // model options screen
     SendValue(Mchannel, MotorChannel + 1);
     SendValue(UseKill, UseMotorKill);
     SendValue(RxVCorrextion, RxVoltageCorrection);
+    SendValue(c2, TimerDownwards);
+    SendValue(n4, TimerStartTime/60);
     CurrentView = RXSETUPVIEW1;
     UpdateModelsNameEveryWhere();
 
@@ -6305,6 +6331,8 @@ void RXSetup1End()
     char RxVCorrextion[]    = "n2";
     char c1[] = "c1";
     char n3[] = "n3";
+    char n4[] = "n4";    // TimerDownwards timer minutes
+    char c2[] = "c2";    // TimerDownwards timer on off
 
 
     CopyTrimsToAll= GetValue(c1);
@@ -6316,6 +6344,10 @@ void RXSetup1End()
     RxVoltageCorrection     = GetValue(RxVCorrextion);
     UseMotorKill            = GetValue(UseKill);
     MotorChannel            = GetValue(Mchannel) - 1;
+    TimerDownwards          = GetValue(c2);
+    TimerStartTime          = GetValue(n4) * 60;
+    Look(TimerDownwards);
+
     CurrentView             = TXSETUPVIEW;
     SaveOneModel(ModelNumber);
     UpdateModelsNameEveryWhere();
@@ -6341,12 +6373,13 @@ void OptionView3End() //
     char n3[]             = "n3";
     char n1[]             = "n1";
     char page_SetupView[] = "page SetupView";
-    char lpm[]            = "c0"; // Auto model selection
+    char QNH[]            = "Qnh";
 
     TxVoltageCorrection     = GetValue(TxVCorrextion);
     PowerOffWarningSeconds  = GetValue(n2);
     PowerOffWarningSeconds  = CheckRange(PowerOffWarningSeconds, 1, 10);
-    AutoModelSelect         = GetValue(lpm);
+    Qnh = (uint16_t)GetValue(QNH);
+
     if (LEDBrightness != GetValue(n1)) UpdateLED(); 
     ConnectionAssessSeconds = GetValue(n3);
     ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);
@@ -7158,6 +7191,7 @@ FASTRUN void ButtonWasPressed()
             }
         }
         int  i                         = 0;
+        char lpm[]                     = "c0"; // Auto model selection
         char Setup[]                   = "Setup";
         char ClickX[]                  = "ClickX";
         char ClickY[]                  = "ClickY";
@@ -7280,8 +7314,8 @@ FASTRUN void ButtonWasPressed()
         char DataView_Clear[]          = "Clear";
         char DataView_AltZero[]        = "AltZero";
         char OptionsEnd[]              = "OptionsEnd";
-        char QNH[]                     = "Qnh";
-        char Mark[]                    = "Mark";
+       
+        char Mark[]                 = "Mark";
         char UKRULES[]              = "UKRULES";
         char Htext0[]               = "HELP";
         char Htext1[]               = "Help";
@@ -7295,7 +7329,7 @@ FASTRUN void ButtonWasPressed()
         char FrontView_ForeGround[] = "FrontView.ForeGround";
         char FrontView_Special[]    = "FrontView.Special";
         char FrontView_Highlight[]  = "FrontView.Highlight";
-      
+        char QNH[]                  = "Qnh";
         char SetupAud[]             = "SetupAud";
         char n0[]                   = "n0";
         char Ex1[]                  = "Ex1";
@@ -7452,8 +7486,9 @@ FASTRUN void ButtonWasPressed()
             SticksMode = CheckRange(GetValue(n0), 1, 2); 
             GetText(TxNme, TxName);
             SendValue(Progress, 30);
-            Qnh = (uint16_t)GetValue(QNH);
+           
             SendValue(Progress, 40);
+            AutoModelSelect = GetValue(lpm); 
             SendValue(Progress, 50);
             LowBattery     = GetValue(Bwn);
             SendValue(Progress, 60);
@@ -7606,7 +7641,9 @@ FASTRUN void ButtonWasPressed()
             SendValue(ScreenViewTimeout, ScreenTimeout);
             SendValue(Pto, (Inactivity_Timeout / TICKSPERMINUTE));
             SendText(Tx_Name, TxName);
-            SendValue(QNH, Qnh);
+            SendValue(QNH, Qnh); // heer
+
+                       SendValue(lpm, AutoModelSelect); // heer
             SendValue(Bwn, LowBattery);
             CurrentView = OPTIONS_VIEW;
             CurrentMode = NORMAL;
