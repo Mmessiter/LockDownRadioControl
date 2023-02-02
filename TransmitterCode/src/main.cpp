@@ -458,6 +458,7 @@ bool      PlayFanfare       = true;
 bool      TrimClicks        = true;
 bool      SpeakingClock     = true;
 bool      ClockSpoken       = false;
+bool      ClockSpoken1      = false;
 bool      AnnounceBanks     = true;
 bool      AnnounceConnected = true;
 bool      CopyTrimsToAll    = true;
@@ -1489,6 +1490,7 @@ FASTRUN void ShowMotorTimer()
     if (LastSeconds != Secs) {
 
         ClockSpoken = false;
+        ClockSpoken1 = false;
         if (CurrentView == FRONTVIEW) {
             SendValue(FrontView_Secs, Secs);
             SendValue(FrontView_Mins, Mins);
@@ -1496,6 +1498,14 @@ FASTRUN void ShowMotorTimer()
         }
         LastSeconds = Secs;
     }
+    
+    if (TimerDownwards){
+        if ((Secs < 11) && !Mins && !ClockSpoken1 && (ElapsedSeconds > 2)){
+                PlaySound(CLICKONE);
+                ClockSpoken1 = true;
+        }
+    }
+
     if (!Secs && SpeakingClock && !ClockSpoken) {
         ClockSpoken = true;
         if ((Mins <= 10) && (Mins > 0)) {
@@ -1503,10 +1513,12 @@ FASTRUN void ShowMotorTimer()
         }
         if (TimerDownwards){
             if ((!Mins) && (!Secs) && (ElapsedSeconds > 2)) {
-                PlaySound(STORAGECHARGE); // = Stop Flyfing!
+                PlaySound(STORAGECHARGE);   // = Stop Flyfing!
                 TimesUp = true;
             }
         }
+
+
     }
 }
 
@@ -8586,7 +8598,8 @@ void GetBank()
     if (SafetyWasOn != SafetyON){
         if (SafetyON) ShowSafetyIsOn(); else ShowSafetyIsOff();
         SafetyWasOn = SafetyON;
-    }                       
+    }
+    
     if (SafetyON) {
         MotorEnabled = false;
         TimesUp      = false;
@@ -8602,6 +8615,9 @@ void GetBank()
             SendValue(FrontView_Hours, 0);
         }
     }
+    
+
+    
     if ((MotorEnabled != MotorWasEnabled) && (UseMotorKill))  {                         // MotorEnabled changed ?
         if (MotorEnabled) {
             if (LedWasRed)
