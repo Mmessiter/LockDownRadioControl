@@ -6268,7 +6268,6 @@ void OptionView3Start() /// NOT CALLED
     char OptionV3Start[] = "page OptionView3";
     char QNH[]           = "Qnh";
 
-
     CurrentView          = OPTIONVIEW3;
     SendCommand(OptionV3Start);
     Procrastinate(250);
@@ -6280,9 +6279,6 @@ void OptionView3Start() /// NOT CALLED
     SendValue(lpm, AutoModelSelect);
     SendValue(n1,  LEDBrightness);
     SendValue(QNH,  Qnh);
-
-
-    
 }
 
 /******************************************************************************************************************************/
@@ -6379,7 +6375,6 @@ void OptionView3End() //
     PowerOffWarningSeconds  = GetValue(n2);
     PowerOffWarningSeconds  = CheckRange(PowerOffWarningSeconds, 1, 10);
     Qnh = (uint16_t)GetValue(QNH);
-
     if (LEDBrightness != GetValue(n1)) UpdateLED(); 
     ConnectionAssessSeconds = GetValue(n3);
     ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);
@@ -7329,7 +7324,6 @@ FASTRUN void ButtonWasPressed()
         char FrontView_ForeGround[] = "FrontView.ForeGround";
         char FrontView_Special[]    = "FrontView.Special";
         char FrontView_Highlight[]  = "FrontView.Highlight";
-        char QNH[]                  = "Qnh";
         char SetupAud[]             = "SetupAud";
         char n0[]                   = "n0";
         char Ex1[]                  = "Ex1";
@@ -7641,9 +7635,7 @@ FASTRUN void ButtonWasPressed()
             SendValue(ScreenViewTimeout, ScreenTimeout);
             SendValue(Pto, (Inactivity_Timeout / TICKSPERMINUTE));
             SendText(Tx_Name, TxName);
-            SendValue(QNH, Qnh); // heer
-
-                       SendValue(lpm, AutoModelSelect); // heer
+            SendValue(lpm, AutoModelSelect); // heer
             SendValue(Bwn, LowBattery);
             CurrentView = OPTIONS_VIEW;
             CurrentMode = NORMAL;
