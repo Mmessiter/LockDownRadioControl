@@ -1,5 +1,5 @@
 /** @file ReceiverCode/src/utilities/radio.h */
-// Malcolm Messiter 2022
+// Malcolm Messiter 2020 - 2023
 #ifndef _SRC_UTILITIES_RADIO_H
 #define _SRC_UTILITIES_RADIO_H
 #include "common.h"
@@ -53,8 +53,9 @@ extern float    DistanceGPS;
 extern float    CourseToGPS;
 extern uint8_t  MacAddress[8];
 extern uint8_t  TheReceivedPipe[8];
+extern uint32_t NewConnectionMoment;
 
-extern void     BindModel();
+extern void BindModel();
 extern void FailSafe(); // defined in main.cpp
 extern void ClearAckPayload();
 extern void ShowHopDurationEtc();
@@ -62,6 +63,8 @@ extern void ReadSensorHub();
 extern void SetUKFrequencies();
 extern void MoveServos();
 extern FASTRUN void ReceiveData();
+extern bool FailedSafe;
+extern uint32_t MostRecentHop;
 
 /** AckPayload Stucture for data returned to transmitter. */
 struct Payload
@@ -90,6 +93,15 @@ struct Payload
 Payload AckPayload;
 uint8_t AckPayloadSize = sizeof(AckPayload); // Size for later externs if needed etc. (=6)
 
+
+/************************************************************************************************************/
+
+void HopNowAnyway(){ // HEER!!
+        ++NextChannelNumber;                                            // Move up the channels' array
+        if (NextChannelNumber >= FrequencyCount) NextChannelNumber = 1; // If needed, wrap the channels' array pointer
+        NextChannel           = *(FHSSChPointer + NextChannelNumber);
+        HopToNextChannel();
+}
 /************************************************************************************************************/
 
 void SetNewPipe()
@@ -118,7 +130,7 @@ void SendVersionNumberToAckPayload() // AND which radio transceiver is currently
 
 /************************************************************************************************************/
 
-void GetNewPipe() // receive
+void GetNewPipe() 
 {   NewPipe =  (uint64_t)ReceivedData[0] << 56;
     NewPipe += (uint64_t)ReceivedData[1] << 48;
     NewPipe += (uint64_t)ReceivedData[2] << 40;
@@ -155,18 +167,20 @@ FLASHMEM void GetOldPipe()
 
 /************************************************************************************************************/
 
-void HopToNextChannel()
+void     HopToNextChannel()
 {
     CurrentRadio->stopListening();
-    delay(1);
+    delayMicroseconds (500);
     CurrentRadio->setChannel(NextChannel);
+    MostRecentHop = millis();
+    delayMicroseconds(500);
     CurrentRadio->startListening();
 #ifdef DB_FHSS
     ShowHopDurationEtc();
 #endif
 }
 
-/************************************************************************************************************/
+/**************************************************************************************************************/
 
 /** Initialize a radio transceiver. */
 FLASHMEM void InitCurrentRadio()
@@ -175,11 +189,11 @@ FLASHMEM void InitCurrentRadio()
     CurrentRadio->enableAckPayload();       // needed
     CurrentRadio->enableDynamicPayloads();  // needed
     CurrentRadio->maskIRQ(1, 1, 1);         // no interrupts - seems NEEDED at the moment - (line *IS* connected)
-    CurrentRadio->setCRCLength(RF24_CRC_8); // could be 16 or disabled
+    CurrentRadio->setCRCLength(RF24_CRC_8); // (RF24_CRC_8); // could be 16 or disabled
     CurrentRadio->setPALevel(RF24_PA_MAX);
     CurrentRadio->setDataRate(RF24_250KBPS);
     CurrentRadio->openReadingPipe(1, ThisPipe);
-    CurrentRadio->setRetries(3, 3); // automatic retries
+    CurrentRadio->setRetries(3, 3);         // automatic retries
     CurrentRadio->setAutoAck(true);
     SaveNewBind = true;
     HopStart    = millis();
@@ -194,11 +208,12 @@ void TryToConnectNow()
     while ((!CurrentRadio->available()) && (millis() - ATimer) < LISTEN_PERIOD) {
     }
     Connected = CurrentRadio->available();
+
+   // if (Connected) Serial.println(millis() - ATimer);
 }
 
 /************************************************************************************************************/
 
-#ifdef SECOND_TRANSCEIVER
 
 void ProdRadio(uint8_t Recon_Ch)
 { // After switching radios, this prod allows EITHER to connect. Don't know why - yet!
@@ -217,6 +232,7 @@ void ProdRadio(uint8_t Recon_Ch)
 
 /************************************************************************************************************/
 
+#ifdef SECOND_TRANSCEIVER
 void SwapChipEnableLines()
 {
     if (ThisRadio == 1) {
@@ -258,7 +274,7 @@ void TryTheOtherTransceiver(uint8_t Recon_Ch)
 
 void KeepSbusHappy()
 {
-    if (millis() < 20000) return;           // Let things settle down after connection for 20 seconds or so before using this
+    if ((millis() - NewConnectionMoment) < 20000) return;           // Let things settle down after connection for 20 seconds or so before using this
     if (millis() - SBUSTimer >= SBUSRATE) { // Does SBUS expect a packet?
         SBUSTimer = millis();               // Yes...
         if (!FailSafeSent)                  // But don't send after failsafe
@@ -273,42 +289,58 @@ void KeepSbusHappy()
 
 /************************************************************************************************************/
 
-void Reconnect()
+FASTRUN void Reconnect()
 { // This is called when contact is lost, to reconnect ASAP
     uint32_t SearchStartTime = millis();
-    uint8_t ReconnectChannel = *(FHSSChPointer + ReconnectIndex); // Get a reconnect channel
+    uint8_t ReconnectChannel = *(FHSSRecoveryPointer + ReconnectIndex); // Get a reconnect channel
     uint8_t PreviousRadio    = ThisRadio;
-#ifdef SECOND_TRANSCEIVER
-    uint8_t Attempts = 0;
-#endif
+    uint8_t Attempts         = 0;
+
     if (ThisRadio == 1) RX1TotalTime += (millis() - ReconnectedMoment); // keep track of how long on each
     if (ThisRadio == 2) RX2TotalTime += (millis() - ReconnectedMoment);
+    
     while (!Connected) {
         if (BoundFlag) KeepSbusHappy(); // Some SBUS systems timeout FAST, so resend old data to keep it happy
         CurrentRadio->stopListening();
+        CurrentRadio->flush_tx(); 
+        CurrentRadio->flush_rx(); 
+        
         delayMicroseconds(1000);                             // NEEDED!
-        ReconnectChannel = *(FHSSChPointer + ReconnectIndex); // Get a reconnect channel
+        
+        ReconnectChannel = *(FHSSRecoveryPointer + ReconnectIndex); // Get a reconnect channel
         ++ReconnectIndex;
         if (ReconnectIndex >= RECONNECT_CHANNELS_COUNT + RECONNECT_CHANNELS_START) ReconnectIndex = RECONNECT_CHANNELS_START;
         CurrentRadio->setChannel(ReconnectChannel);
-        TryToConnectNow();
-
-#ifdef SECOND_TRANSCEIVER
         ++Attempts;
-        if (Attempts >= 2) {
-            if (!Connected) TryTheOtherTransceiver(ReconnectChannel);
-            Attempts = 0;
-        }
-#endif
+        if (Attempts < 3) TryToConnectNow();
         if (!Connected) {
+           
+#ifdef SECOND_TRANSCEIVER
+            if (Attempts >= 3) {
+                TryTheOtherTransceiver(ReconnectChannel);
+                Attempts = 0;
+            }
+#else
+            if (Attempts >= 3) {
+                ProdRadio(ReconnectChannel); // This avoids a lockup of the nRF24L01+ !
+                Attempts = 0;
+            }
+#endif
             if ((millis() - SearchStartTime) > FAILSAFE_TIMEOUT) {
                 if (!FailSafeSent) FailSafe();
             }
         }
-    }
+    } // cannot pass here if not connected
+
+     // must have connected by here
+    
     FailSafeSent = false;
     if (PreviousRadio != ThisRadio) ++RadioSwaps; // Count the radio swaps
     ReconnectedMoment = millis();                 // Save this moment
+    if (FailedSafe){
+        FailedSafe = false;
+        NewConnectionMoment = millis();
+    }
 #ifdef DB_RXTIMERS
     Serial.print("Transceiver1 use so far: ");
     Serial.print(RX1TotalTime / 1000);

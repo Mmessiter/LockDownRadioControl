@@ -2,7 +2,7 @@
 /************************************************************************************************************/
 //                                      Radio Functions
 /************************************************************************************************************/
-// Malcolm Messiter 2022
+// Malcolm Messiter 2020 - 2023
 #include "RadioFunctions.h"
 /************************************************************************************************************/
 
@@ -81,7 +81,6 @@ void Look(int p)  // This is just to save typing Serial.println :)
     Serial.println(p);
 }
 
-
 //***********************************************************************************************************
 // *************************************** Functions to run macros  *****************************************
 // **********************************************************************************************************
@@ -138,14 +137,29 @@ void RecordsPacketSuccess(uint8_t s)
     ++PacketsHistoryIndex;
     if (PacketsHistoryIndex >= (PERFECTPACKETSPERSECOND * ConnectionAssessSeconds)) PacketsHistoryIndex = 0; //
 }
+
+/***************************************************************************************/
+
+ void HopNowAnyway() 
+ {
+        NextChannel       = *(FHSSChPointer + NextChannelNumber); // The actual channel number pointed to. 
+        HopToNextChannel();
+        ++NextChannelNumber;
+ }
+
 /***************************************************************************************/
 
 FASTRUN void FailedPacket()
 {
-    if (LostContactFlag) TryToReconnect();
     RecordsPacketSuccess(0);                      // Record a failure
     ++RecentPacketsLost;                          // this is to keep track of events when receiver is off
     ++TotalLostPackets;                           // This is total - never zeroed
+  //  if ((millis()-MostRecentHop) > 80){
+  //      if (ModelMatched) {
+  //          HopNowAnyway();
+  //          Serial.println("Hopped!");
+  //      }
+  //  }
     if (RecentPacketsLost >= LOSTCONTACTCUTOFF) { // Don't panic until at least LOSTCONTACTCUTOFF packets are lost.
         if (!GapStart) GapStart = millis();       // To keep track of this gap's length
         LostContactFlag = true;
@@ -160,6 +174,12 @@ FASTRUN void FailedPacket()
             }
         }
     }
+    if (LostContactFlag) {
+        TryToReconnect();
+     //   Serial.print(millis());
+     //   Serial.println("  RECONNECTING...");
+    }
+
     int SecondsRemaining = (Inactivity_Timeout / 1000) - (millis() - Inactivity_Start) / 1000;
     if (SecondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH); // INACTIVITY POWER OFF HERE!!
 }
@@ -173,7 +193,9 @@ void TryToReconnect()
         TryOtherPipe();
         RecentPacketsLost = 0;
     }
-    NextChannel = *(FHSSChPointer + random(RECONNECT_CHANNELS_COUNT) + RECONNECT_CHANNELS_START); // random reconnect channel (selected from first three)
+    ++ReconnectionIndex;
+    if (ReconnectionIndex >= RECONNECT_CHANNELS_COUNT) ReconnectionIndex = 0;
+    NextChannel = *(FHSSRecoveryPointer + RECONNECT_CHANNELS_START + ReconnectionIndex); //  reconnect channel (selected from three)
     HopToNextChannel();
 }
 
@@ -336,13 +358,14 @@ float Pduration  = 0;
 FASTRUN void HopToNextChannel()
 {
     Radio1.setChannel(NextChannel); // Hop !
+    MostRecentHop = millis();       // note the time!
     delayMicroseconds(500);
-    Radio1.stopListening(); // Transmit only
+    Radio1.stopListening();         // Transmit only
     delayMicroseconds(500);
 
 #ifdef DB_FHSS 
     if (BoundFlag && Connected && ModelMatched){
-        float ch   = *(FHSSChPointer + NextChannelNumber);
+        float ch   = *(FHSSChPointer +  NextChannelNumber);
         float Freq = 2.4;
         PEndTime   = millis();
         Pduration  = (PEndTime - PStartTime) / 1000;
@@ -371,12 +394,12 @@ FLASHMEM void InitRadio(uint64_t Pipe)
     Radio1.setDataRate(RF24_250KBPS);
     Radio1.enableAckPayload();
     Radio1.openWritingPipe(Pipe);             // Current Pipe address used for Binding
-    Radio1.setRetries(RETRYCOUNT, RETRYWAIT); // automatic retries and pauses *** WAS 15,15 *** !!
+    Radio1.setRetries(RETRYCOUNT, RETRYWAIT); // automatic retries and pauses
     Radio1.stopListening();
     delay(2);
     Radio1.enableDynamicPayloads();
-    Radio1.setAddressWidth(5);       // was 4, is now 5
-    Radio1.setCRCLength(RF24_CRC_8); // could be 16
+    Radio1.setAddressWidth(5);              // was 4, is now 5
+    Radio1.setCRCLength(RF24_CRC_8); // (RF24_CRC_8); // could be 16
     GapSum      = 0;
 }
 /*********************************************************************************************************************************/

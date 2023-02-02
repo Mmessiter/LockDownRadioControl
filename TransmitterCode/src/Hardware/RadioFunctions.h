@@ -7,12 +7,12 @@
 #define RadioFunctions_H
 
 // **************************************************************************
-//                TX VERSION NUMBER   (November 2022 Malcolm Messiter)        *
+//       TX VERSION NUMBER   (May 2020 - January 2023 Malcolm Messiter)      *
 //***************************************************************************
 
 #define TXVERSION_MAJOR   2
 #define TXVERSION_MINOR   0
-#define TXVERSION_MINIMUS 2
+#define TXVERSION_MINIMUS 8
 
 // **************************************************************************
 //                               Includes                                   *
@@ -37,7 +37,7 @@
 //    DEBUG OPTIONS (Uncomment any of these for that bit of debug info)     *
 //***************************************************************************
 
- //#define DB_NEXTION        // Debug NEXTION
+ #define DB_NEXTION        // Debug NEXTION
 // #define DB_SD             // Debug SD card data
 // #define DB_CHECKSUM       // Debug 32BIT file checksum info
 // #define DB_FHSS           // Debug real time FHSS data
@@ -84,14 +84,13 @@
 //                            FHSS PARAMETERS                               *
 //***************************************************************************
 
-
-#define PACEMAKER                7    // MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
-#define RETRYCOUNT               3    // auto retries inside nRF24L01
-#define RETRYWAIT                1    // Wait between retries is RetryWait+1 * 250us. A failed packet therefore takes (RetryWait+1 * 250us) * RetryCount
-#define LOSTCONTACTCUTOFF        3    // How many packets to lose before reconnect triggers
-#define RECONNECT_CHANNELS_COUNT 3    // How many channels to try when reconnecting
+#define PACEMAKER                7    // 7 MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
+#define RETRYCOUNT               2    // auto retries inside nRF24L01 (was 3)
+#define RETRYWAIT                0    // Wait between retries is RetryWait+1 * 250us. (WAS 2) A failed packet therefore takes (RetryWait+1 * 250us) * RetryCount
+#define LOSTCONTACTCUTOFF        2    // 3 How many packets to lose before reconnect triggers
+#define RECONNECT_CHANNELS_COUNT 2    // How many channels to try when reconnecting
 #define RECONNECT_CHANNELS_START 12   // Offset into channels' array
-#define RED_LED_ON_TIME          2000 // How many ms of no connection before RED led comes on
+#define RED_LED_ON_TIME          3500 // How many ms of no connection before RED led comes on
 #define LOW_VOLTAGE_TIME         3000 // How many ms to endure low voltage before announcing it. (3 seconds)
 
 // **************************************************************************
@@ -124,7 +123,7 @@
 //                               Mixes                                      *
 // **************************************************************************
 
-#define M_Enabled       0 // Offsets for Mixes array
+#define M_Enabled       0 // Offsets for Mixes array ( up to 17)
 #define M_Bank          1
 #define M_MasterChannel 2
 #define M_SlaveChannel  3
@@ -132,6 +131,7 @@
 #define M_Percent       5
 #define M_R1            6
 #define M_R2            7
+#define M_ONEDIRECTION  8
 
 // **************************************************************************
 //                               Screens                                    *
@@ -144,7 +144,7 @@
 #define SCANVIEW        4
 #define MODELSVIEW      5
 #define CALIBRATEVIEW   6
-#define TXSETUPVIEW   7
+#define TXSETUPVIEW     7
 #define SUBTRIMVIEW     8
 #define DATAVIEW        9
 #define TRIM_VIEW       10
@@ -285,12 +285,7 @@
 
 #define TXSIZE            512      // SD space reserved for transmitter (WAS  250)
 #define MODELSIZE         2048     // SD space reserved for each model (WAS 1600)
-
-//#define MODELOFFSET     250      // OLD VERSION
-#define MODELOFFSET         0      // NEW VERSION
-
 #define MAXFILELEN        1024 * 3 // MAX SIZE FOR HELP AND LOG FILES
-
 #define MAXBACKUPFILES    95
 
 // **************************************************************************
@@ -411,6 +406,7 @@ extern char           ThisRadio[4];
 extern uint32_t       GapSum;
 extern uint32_t       GapStart;
 extern uint8_t*       FHSSChPointer;
+extern uint8_t*       FHSSRecoveryPointer;
 extern bool           BuddyPupilOnSbus;
 extern bool           BuddyMaster;
 extern uint16_t       BackGroundColour;
@@ -444,6 +440,9 @@ extern bool           LowPowerMode;
 extern bool           NewCompressNeeded;
 extern bool           ModelMatched;
 extern bool           SendNoData;
+extern uint8_t        ReconnectionIndex;
+extern uint32_t       MostRecentHop;
+
 // external (global) functions needed here
 extern void  GetSlaveChannelValues();
 extern void  KickTheDog();
@@ -538,7 +537,6 @@ void             CheckModelName();
 void             EndTrimView();
 int              AnalogueReed(uint8_t InputChannel);
 void             GetReturnCode();
-
 /*********************************************************************************************************************************/
 
 #endif

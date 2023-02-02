@@ -1,7 +1,7 @@
 /** @file TransmitterCode/src/main.cpp
- * // Malcolm Messiter 2022
+ * // Malcolm Messiter 2020 - 2023
  *
- * @page TransmitterCode.
+ * @page TransmitterCode...
  * @section LockDown Radio Control Features list, so far:
  * - Uses Teensy 4.1 MCU (at 600 Mhz) with nRF24L01+ transceiver
  * - (Ebyte's ML01DP5 recommended for TX, two ML01SP4s for RX.)
@@ -123,7 +123,7 @@ WDT_timings_t WatchDogConfig;
 SBUS          MySbus(SBUSPORT);
 uint16_t      SbusChannels[CHANNELSUSED + 2]; // a few spare
 uint32_t      SBUSTimer = 0;
-uint8_t       Mixes[MAXMIXES + 1][CHANNELSUSED + 1];          // Channel mixes' 2D array store
+uint8_t       Mixes[MAXMIXES + 1][CHANNELSUSED + 1];          // 17 possible elements per mix. NOTHING to do with channels count!!!
 int           Trims[BANKSUSED + 1][CHANNELSUSED + 1];         // Trims to store
 uint8_t       Exponential[BANKSUSED + 1][CHANNELSUSED + 1];   // Exponential
 uint8_t       InterpolationTypes[BANKSUSED + 1][CHANNELSUSED + 1];
@@ -148,25 +148,17 @@ uint16_t DefaultTrimRepeatSpeed = 600;
 char     FrontView_Connected[]  = "Connected";
 char     na[]                   = "";
 
-// ************************************* AckPayload structure ******************************************************
-/**
+/* ************************************* AckPayload structure ******************************************************
+
  * This first byte "Purpose" defines what all the other bytes mean, AND ...
  * the highest BIT of Purpose means ** HOP TO NEXT CHANNEL A.S.A.P. (IF ON) **
  * the lower 7 BITs then define the meaning of the remainder of the ackpayload bytes
- * If Purpose == 1 then ...
- *
- * AckPayload.Byte2           =  ThisRadio;              // RX Transceiver in current use
- * AckPayload.Byte3           =  RXVERSION_MAJOR;
- * AckPayload.Byte4           =  RXVERSION_MINOR;
- * AckPayload.Byte5           =  RXVERSION_MINIMUS;
- *
- *  If Purpose = 2 then ...
- **/
+ */
 
 struct Payload
 {
     uint8_t Purpose; // Defines meaning of the remainder
-                     // Highest BIT of Purpose means HOP NOW! IF ON
+                     // Highest BIT of Purpose means HOP NOW! when ON
     uint8_t Byte1;   //
     uint8_t Byte2;   //
     uint8_t Byte3;   //
@@ -238,11 +230,12 @@ uint8_t  ScanEnd             = 125;
 uint32_t TimerMillis         = 0;
 uint32_t LastSeconds         = 0;
 uint32_t Secs                = 0;
+uint32_t ElapsedSeconds    = 0;
 uint32_t PausedSecs          = 0;
 uint32_t Mins                = 0;
 uint32_t Hours               = 0;
 uint32_t ModelNumber         = 1;
-uint32_t SavedModelNumber         = 1;
+uint32_t SavedModelNumber    = 1;
 uint32_t PreviousModelNumber = 1;
 uint8_t  ModelDefined        = 0;
 uint16_t MemoryForTransmtter = 0; // SD space for transmitter parameters
@@ -258,7 +251,8 @@ uint8_t FHSS_Channels[83] = {51, 28, 24, 61, 64, 55, 66, 19, 76, 21, 59, 67, 15,
                              54, 12, 80, 53, 22, 1, 74, 39, 58, 63, 70, 52, 42, 25, 43, 26, 14, 38, 48, 68, 33, 27, 60, 44, 46,
                              56, 7, 81, 5, 65, 4, 10};
 
-uint8_t* FHSSChPointer; // pointer for channels array (three only used for reconnect)
+uint8_t*  FHSSChPointer; // pointer for channels array (three only used for reconnect)
+uint8_t*  FHSSRecoveryPointer;
 char      BindButtonVisible[]         = "vis bind,1";
 char      page_FrontView[]            = "page FrontView";
 char      page_FhssView[]             = "page FhssView";
@@ -403,7 +397,7 @@ bool     LedIsBlinking       = false;
 float    BlinkHertz          = 2;
 uint32_t BlinkTimer          = 0;
 uint8_t  BlinkOnPhase        = 1;
-bool     LedWasGreen         = false;
+bool     LedWasGreen         = true;
 bool     LedWasRed           = false;
 char     ThisRadio[4]        = "0 ";
 uint8_t  LastRadio           = 0;
@@ -542,6 +536,16 @@ char     pCalibrateView[]                = "page CalibrateView";
 char     Confirmed[2];
 char     NewFileBuffer[MAXFILELEN];
 uint16_t NewFileBufferPointer = 0;
+char     ProgressStart[]       = "vis Progress,1";
+char     ProgressEnd[]         = "vis Progress,0";
+char     Progress[]            = "Progress";
+char     InVisible[]           = "vis Quality,0";
+char     Visible[]             = "vis Quality,1";
+uint32_t MostRecentHop;
+uint8_t  ReconnectionIndex      = 0;
+bool     TimerDownwards         = false;
+uint16_t TimerStartTime         = 5 * 60; 
+bool     TimesUp                = false;
 
 // **********************************************************************************************************************************
 // *********************************************** END OF GLOBAL DATA ***************************************************************
@@ -1145,18 +1149,18 @@ void RedLedOn()
         LastShowTime                                = 0;
         ModelsMacUnion.Val32[0]                     = 0;
         ModelsMacUnion.Val32[1]                     = 0;
-        
         RangeTestGoodPackets                        = 0;
         RecentPacketsLost                           = 0;
         SetUKFrequencies();
         if (CurrentView == FRONTVIEW) {
             SendText(FrontView_Connected, na);
             SendCommand(WarnOff);
+            SendCommand(InVisible);
         }
         if (UseLog) LogDisConnection();
-        if (AnnounceConnected) PlaySound(DISCONNECTEDMSG);
-        if (!LedIsBlinking) ShowComms();
-    }
+        if (AnnounceConnected) PlaySound(DISCONNECTEDMSG); 
+        }
+
     LedWasRed = true;
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, 0);
@@ -1309,8 +1313,8 @@ void SendText1(char* tbox, char* NewWord)
 void EndSend()
 {
     for (u_int8_t pp = 0; pp < 3; ++pp) {
-        NEXTION.write(0xff);
-    }          // Send end of Input message //
+        NEXTION.write(0xff);// Send end of Input message //
+    }          
     Procrastinate(55); // ** A DELAY ** (>=50 ms) was needed if an answer might come! (!! Shorter with Intelligent dislay)
 }
 /*********************************************************************************************************************************/
@@ -1390,6 +1394,7 @@ uint32_t GetValue(char* nbox) // This function calls the function above until it
         Procrastinate(50);
         ValueIn = getvalue(nbox);
         ++i;
+        Serial.println(nbox);
     }
     return ValueIn;
 }
@@ -1464,17 +1469,25 @@ bool GetButtonPress()
 //             END OF NEXTION FUNCTIONS
 /*********************************************************************************************************************************/
 
-FASTRUN void CheckTimer()
+
+
+FASTRUN void ShowMotorTimer()
 {
+
+    if (TimesUp) return;
+
     uint8_t Recording[10] = {ONEMINUTE, TWOMINUTES, THREEMINUTES, FOURMINUTES, FIVEMINUTES, SIXMINUTES, SEVENMINUTES, EIGHTMINUTES, NINEMINUTES, TENMINUTES};
-    if (MotorEnabled && !LostContactFlag) {
-        Secs  = ((millis() - TimerMillis) / 1000) + PausedSecs;
+    if ((MotorEnabled && !LostContactFlag) ) {
+        ElapsedSeconds  = ((millis() - TimerMillis) / 1000) + PausedSecs;
+        Secs = ElapsedSeconds;
+        if (TimerDownwards)  Secs = TimerStartTime - ElapsedSeconds;
         Hours = Secs / 3600;
         Secs %= 3600;
         Mins = Secs / 60;
         Secs %= 60;
     }
     if (LastSeconds != Secs) {
+
         ClockSpoken = false;
         if (CurrentView == FRONTVIEW) {
             SendValue(FrontView_Secs, Secs);
@@ -1487,6 +1500,12 @@ FASTRUN void CheckTimer()
         ClockSpoken = true;
         if ((Mins <= 10) && (Mins > 0)) {
             PlaySound(Recording[Mins - 1]);
+        }
+        if (TimerDownwards){
+            if ((!Mins) && (!Secs) && (ElapsedSeconds > 2)) {
+                PlaySound(STORAGECHARGE); // = Stop Flyfing!
+                TimesUp = true;
+            }
         }
     }
 }
@@ -1712,7 +1731,6 @@ int GetSuccessRate()
 void ShowConnectionQuality()
 {
     char Quality[]                = "Quality";
-    char Visible[]                = "vis Quality,1";
     char Msgbuf[]                 = "                       ";
     char Msg_Connected[]          = "Connection: ";
     char Msg_ConnectedPerfect[]   = "Perfect";
@@ -1748,7 +1766,7 @@ FASTRUN void ShowComms()
     if (millis() - LastShowTime < SHOWCOMMSDELAY) return;
     
     LastShowTime               = millis();
-    char InVisible[]           = "vis Quality,0";
+    
     char FrontView_AckPayload[]= "AckPayload";
     char FrontView_RXBV[]      = "RXBV";
     char Msg_CnctdBuddyMast[]  = "* BUDDY MASTER! *";
@@ -1940,17 +1958,51 @@ void SendCharArray(char* ch0, char* ch1, char* ch2, char* ch3, char* ch4, char* 
 
 /*********************************************************************************************************************************/
 
-void SendMixValues() // sends mix values to Nextion screen
+void SaveMixValues(){
+
+    char MixesView_Enabled[]       = "Enabled";
+    char MixesView_Bank[]          = "FlightMode";
+    char MixesView_MasterChannel[] = "MasterChannel";
+    char MixesView_SlaveChannel[]  = "SlaveChannel";
+    char MixesView_Reversed[]      = "Reversed";
+    char MixesView_Percent[]       = "Percent";
+    char MixesView_h0[]            = "h0"; // =the slider control
+    char MixesView_od[]            = "od"; // One direction
+
+    SendCommand(ProgressStart);
+    SendValue(Progress, 5);
+    Mixes[MixNumber][M_Enabled]       = GetValue(MixesView_Enabled);
+    SendValue(Progress, 10);
+    Mixes[MixNumber][M_Bank]          = GetValue(MixesView_Bank);
+    SendValue(Progress, 25);
+    Mixes[MixNumber][M_MasterChannel] = GetValue(MixesView_MasterChannel);
+    SendValue(Progress, 40);
+    Mixes[MixNumber][M_SlaveChannel]  = GetValue(MixesView_SlaveChannel);
+    SendValue(Progress, 55);
+    Mixes[MixNumber][M_Reversed]      = GetValue(MixesView_Reversed);
+    SendValue(Progress, 70);
+    Mixes[MixNumber][M_Percent]       = GetValue(MixesView_Percent);
+    SendValue(Progress, 85);
+    Mixes[MixNumber][M_Percent]       = GetValue(MixesView_h0);
+    SendValue(Progress, 93);
+    Mixes[MixNumber][M_ONEDIRECTION]  = GetValue(MixesView_od);
+    SendValue(Progress, 100);
+}
+
+/*********************************************************************************************************************************/
+
+void ShowMixValues() // sends mix values to Nextion screen
 {
-    char MixesView_Enabled[]       = "MixesView.Enabled";
-    char MixesView_Bank[]          = "MixesView.Bank";
-    char MixesView_MasterChannel[] = "MixesView.MasterChannel";
-    char MixesView_SlaveChannel[]  = "MixesView.SlaveChannel";
-    char MixesView_Reversed[]      = "MixesView.Reversed";
-    char MixesView_Percent[]       = "MixesView.Percent";
-    char MixesView_h0[]            = "MixesView.h0"; // =the slider control
-    char MixesView_chM[]           = "MixesView.chM";
-    char MixesView_chS[]           = "MixesView.chS";
+    char MixesView_Enabled[]       = "Enabled";
+    char MixesView_Bank[]          = "FlightMode";
+    char MixesView_MasterChannel[] = "MasterChannel";
+    char MixesView_SlaveChannel[]  = "SlaveChannel";
+    char MixesView_Reversed[]      = "Reversed";
+    char MixesView_Percent[]       = "Percent";
+    char MixesView_h0[]            = "h0"; // =the slider control
+    char MixesView_chM[]           = "chM";
+    char MixesView_chS[]           = "chS";
+    char MixesView_od[]            = "od";
 
     SendText(MixesView_chM, ChannelNames[Mixes[MixNumber][M_MasterChannel] - 1]);
     SendText(MixesView_chS, ChannelNames[Mixes[MixNumber][M_SlaveChannel] - 1]);
@@ -1968,6 +2020,25 @@ void SendMixValues() // sends mix values to Nextion screen
     }
     SendValue(MixesView_Percent, Mixes[MixNumber][M_Percent]);
     SendValue(MixesView_h0, Mixes[MixNumber][M_Percent]);
+    SendValue(MixesView_od, Mixes[MixNumber][M_ONEDIRECTION]);
+    SendText(MixesView_chM, ChannelNames[Mixes[MixNumber][M_MasterChannel] - 1]);
+    SendText(MixesView_chS, ChannelNames[Mixes[MixNumber][M_SlaveChannel] - 1]);
+}
+
+
+/*********************************************************************************************************************************/
+
+void FixCHNames(){
+   
+    char MixesView_chM[]           = "chM";
+    char MixesView_chS[]           = "chS";
+    char MixesView_MasterChannel[] = "MasterChannel";
+    char MixesView_SlaveChannel[]  = "SlaveChannel";
+
+    Mixes[MixNumber][M_MasterChannel] = GetValue(MixesView_MasterChannel);
+    Mixes[MixNumber][M_SlaveChannel]  = GetValue(MixesView_SlaveChannel);
+    SendText(MixesView_chM, ChannelNames[Mixes[MixNumber][M_MasterChannel] - 1]);
+    SendText(MixesView_chS, ChannelNames[Mixes[MixNumber][M_SlaveChannel] - 1]);
 }
 
 /*********************************************************************************************************************************/
@@ -2065,25 +2136,44 @@ FASTRUN uint16_t GetStickInputInputOnly(uint8_t l) // This returns the input onl
 /*********************************************************************************************************************************/
 FASTRUN void DoMixes()
 {
-    int m, c, p, mindeg, maxdeg, TheSum, Result;
-    for (m = 1; m <= MAXMIXES; ++m) {
-        if (Mixes[m][M_Bank] == Bank || Mixes[m][M_Bank] == 0) {
-            if (Mixes[m][M_Enabled] == 1) {
-                for (c = 0; c < CHANNELSUSED; ++c) {
-                    if ((Mixes[m][M_MasterChannel] - 1) == c) {
-                        p = map(PreMixBuffer[c], MINMICROS, MAXMICROS, -HALFMICROSRANGE, HALFMICROSRANGE);
-                        p = p * Mixes[m][M_Percent] / 50; // *****  50, not 100, because mix can now go right to 200% *****
-                        if (Mixes[m][M_Reversed] == 1) p = -p;
-                        TheSum = SendBuffer[(Mixes[m][M_SlaveChannel]) - 1] + p;                        // THIS IS THE MIX!
-                        mindeg = IntoHigherRes(MinDegrees[Bank][(Mixes[m][M_SlaveChannel]) - 1]); // todo: add option to change or remove constraints
-                        maxdeg = IntoHigherRes(MaxDegrees[Bank][(Mixes[m][M_SlaveChannel]) - 1]);
-                        if (mindeg > maxdeg) {
-                             Result = constrain(TheSum, maxdeg, mindeg);
+    short      MixNumber, ChannelNumber, MixValue, MinimumDeg, MaximumDeg; 
+
+    for (MixNumber = 1; MixNumber < MAXMIXES; ++MixNumber) 
+    {
+        if (Mixes[MixNumber][M_Enabled]) 
+        { 
+            if (Mixes[MixNumber][M_Bank] == Bank || (!Mixes[MixNumber][M_Bank])) 
+            {
+                for (ChannelNumber = 0; ChannelNumber < CHANNELSUSED; ++ChannelNumber) 
+                {
+                    if ((Mixes[MixNumber][M_MasterChannel] - 1) == ChannelNumber) 
+                    {
+                        MixValue = (map(PreMixBuffer[ChannelNumber], MINMICROS, MAXMICROS, -HALFMICROSRANGE, HALFMICROSRANGE)) * (short) Mixes[MixNumber][M_Percent] / 100;
+                        
+                        if (Mixes[MixNumber][M_ONEDIRECTION]) 
+                        { 
+                            if (Mixes[MixNumber][M_Reversed])
+                            {
+                                if (MixValue > 0) MixValue = -MixValue; 
+                            }else
+                            {
+                                if (MixValue < 0) MixValue = -MixValue;
+                            }
+                        }else
+                        {
+                            if (Mixes[MixNumber][M_Reversed]) MixValue = -MixValue;
                         }
-                        else {
-                             Result = constrain(TheSum, mindeg, maxdeg);
+                        MixValue += SendBuffer[(Mixes[MixNumber][M_SlaveChannel]) - 1];      // This is the actual mix moment! (MixValue is now the mixed value)
+                        MinimumDeg = IntoHigherRes(MinDegrees[Bank][(Mixes[MixNumber][M_SlaveChannel]) - 1]); 
+                        MaximumDeg = IntoHigherRes(MaxDegrees[Bank][(Mixes[MixNumber][M_SlaveChannel]) - 1]);
+                        if (MinimumDeg > MaximumDeg) 
+                        {
+                            SendBuffer[(Mixes[MixNumber][M_SlaveChannel]) - 1] = constrain(MixValue, MaximumDeg, MinimumDeg);
                         }
-                        SendBuffer[(Mixes[m][M_SlaveChannel]) - 1] = Result;
+                        else 
+                        {
+                            SendBuffer[(Mixes[MixNumber][M_SlaveChannel]) - 1] = constrain(MixValue, MinimumDeg, MaximumDeg);
+                        }
                     }
                 }
             }
@@ -2280,7 +2370,7 @@ FASTRUN void GetNewChannelValues()
         if (InputChannel > 7) {                                                                                          // Must be a switch if over 7
             OutputValue = GetStickInput(InputChannel);                                                                   // Four 3 postion switches
         } else {                                                                                                         // i.e. l <= 7 so it's a Stick/knob/switch                                           
-            InputValue = AnalogueReed(InputChannel) + GetTrimAmount(InputChannel);                                       // Get values from sticks' pots then ADD TRIM then interpolate them.
+            InputValue  = AnalogueReed(InputChannel) + GetTrimAmount(InputChannel);                                       // Get values from sticks' pots then ADD TRIM then interpolate them.
             OutputValue = Interpolate[InterpolationTypes[Bank][OutputChannel]](InputValue, InputChannel, OutputChannel); // Use function pointer array to invoke selected interpolation.
         }
         OutputValue += (SubTrims[OutputChannel] - 127) * (TrimMultiplier);                                               // ADD SUBTRIM to output channel, not mapped input channel (Range 0 - 127 - 254)
@@ -2910,6 +3000,15 @@ bool ReadOneModel(uint32_t Mnum)
      }
     CheckStepSizes();
 
+    TimerDownwards          = (bool) SDRead8BITS(SDCardAddress);
+   
+    ++SDCardAddress;
+    TimerStartTime          = SDRead16BITS(SDCardAddress);
+    if (TimerStartTime > 120 * 60) TimerStartTime = 5 * 60;
+    ++SDCardAddress;
+    ++SDCardAddress;
+
+
     // **************************************
 
     ReadCheckSum32(); 
@@ -3165,12 +3264,14 @@ FASTRUN void SetUKFrequencies()
 {
     FHSSChPointer = FHSS_Channels;
     UkRules       = true;
+    FHSSRecoveryPointer = FHSS_Channels;
 }
 /************************************************************************************************************/
 FASTRUN void SetTestFrequencies()
 {
     FHSSChPointer = FHSS_Channels1;
     UkRules       = false;
+    FHSSRecoveryPointer = FHSS_Channels1;
 }
 /************************************************************************************************************/
 FASTRUN void CreateTimeStamp(char* DateAndTime)
@@ -3533,7 +3634,7 @@ FLASHMEM void setup()
     SendValue(FrontView_Mins, 0);
     SendValue(FrontView_Secs, 0);
     //  ***************************************************************************************
-     // SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
+      //SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
     //  **   BUT then re-comment it!! Otherwise it will reset to same time on every boot up! **
     //  ***************************************************************************************
     BoundFlag = false;
@@ -3941,6 +4042,13 @@ void SaveOneModel(uint32_t mnum)
         ++SDCardAddress;
      }
 
+        SDUpdate8BITS(SDCardAddress, TimerDownwards); 
+        ++SDCardAddress;   
+        SDUpdate16BITS(SDCardAddress, TimerStartTime);
+      
+        ++SDCardAddress;
+        ++SDCardAddress;
+
     SaveCheckSum32(); // Save the Model parametres checksm
     
     // ********************** Add more
@@ -4064,8 +4172,8 @@ void ReadTextFile(char* fname, char* htext, uint8_t StartLineNumber, uint8_t Max
 
     char crlf[]         = {13, 10, 0};
     char a[]            = " ";
-    char dots[]         = "(There's more below ...) ";
-    char dots1[]        = "(There's more above ...) ";
+    char dots[]         = "(Hit 'Down' for more ...) ";
+    char dots1[]        = "(Hit 'Up' to scroll up ...) ";
     char slash[]        = "/";
     char OpenBracket[]  = "( ";
     char CloseBracket[] = " )";
@@ -4890,7 +4998,7 @@ FASTRUN void DisplayCurve()
 void BindNow() // Bind button was pressed 
 {
 #ifdef DB_BIND
-    Serial.println("Saving model's ID");
+    Serial.println("Saving model's ID"); 
 #endif
     BindingNow = 1;
     ModelMatched                 = true;
@@ -4898,9 +5006,10 @@ void BindNow() // Bind button was pressed
     ModelsMacUnionSaved.Val32[1] = ModelsMacUnion.Val32[1];
     SaveOneModel(ModelNumber);
     MakeBindButtonInvisible();
-    if (AnnounceConnected) PlaySound(BINDSUCCEEDED);
+    if (AnnounceConnected) PlaySound(BINDSUCCEEDED); 
     Procrastinate(1700);
     UpdateModelsNameEveryWhere();
+
 }
 
 /*********************************************************************************************************************************/
@@ -5116,9 +5225,6 @@ void ReceiveModelFile()
     uint64_t      RXPipe;
     uint32_t      RXTimer               = 0;
     char          ModelsView_filename[] = "filename";
-    char          ProgressStart[]       = "vis Progress,1";
-    char          ProgressEnd[]         = "vis Progress,0";
-    char          Progress[]            = "Progress";
     char          Fbuffer[BUFFERSIZE + 8]; // spare space
     uint8_t       Fack      = 1;           // just a token byte
     char          Waiting[] = "Waiting ";
@@ -5140,12 +5246,15 @@ void ReceiveModelFile()
     char          bytes[] = " bytes.";
     char          t0[]    = "t0";
     char          RXheader[] = "File receive";
+    char          ovwr[] = "Overwrite ";
+    char          ques[] = "?";
 
- #ifdef DB_MODEL_EXCHANGE
-    uint8_t PacketNumber = 0;
-    Serial.println("Receiving model ...");
-    Serial.println(Waiting);
- #endif
+
+    strcpy(msg, ovwr);
+    strcat(msg, ModelName);
+    strcat(msg, ques);
+    if (!GetConfirmation(GoModelsView,msg)) return; // Get confirmation or quit
+
     BlueLedOn();
     ShowFileTransferWindow();
     SendText(ModelsView_filename, Waiting);
@@ -5215,6 +5324,8 @@ void ReceiveModelFile()
     Serial.print("File size = ");
     Serial.println(Fsize);
  #endif
+
+
     Fposition        = 0;
     strcpy(fnamebuf, Receiving);
     strcat(fnamebuf, SingleModelFile);
@@ -5281,9 +5392,6 @@ void ReceiveModelFile()
 /** @brief SEND A MODEL FILE */
 void SendModelFile() 
 {
-    char          ProgressStart[] = "vis Progress,1";
-    char          ProgressEnd[]   = "vis Progress,0";
-    char          Progress[]      = "Progress";
     uint64_t      TXPipe;
     uint8_t       Fack      = 1;
     unsigned long Fsize     = 0;
@@ -5339,11 +5447,11 @@ void SendModelFile()
         SendValue(Progress, p);
         ++PacketNumber;
         if (PacketNumber == 1) {
-            strcpy(Fbuffer, SingleModelFile); // Filename in first packet
+            strcpy(Fbuffer, SingleModelFile);           // Filename in first packet
             Fbuffer[BUFFERSIZE]     = Fsize;
             Fbuffer[BUFFERSIZE + 1] = Fsize >> 8;
             Fbuffer[BUFFERSIZE + 2] = Fsize >> 16;
-            Fbuffer[BUFFERSIZE + 3] = Fsize >> 24; // SEND FILE SIZE (four bytes)
+            Fbuffer[BUFFERSIZE + 3] = Fsize >> 24;      // SEND FILE SIZE (four bytes)
         }
         else {
             ModelsFileNumber.seek(Fposition);           // Move filepointer
@@ -5352,23 +5460,17 @@ void SendModelFile()
             Fposition += BUFFERSIZE;
             if (Fposition > Fsize) Fposition = Fsize;
         }
-        while (millis()- SentMoment < 50) { // heer
+        
+        while (millis()- SentMoment < 25) { 
             Radio1.flush_tx();
             Radio1.flush_rx();   
         }
         SentMoment = millis();
+        
         if (Radio1.write(&Fbuffer, BUFFERSIZE + 4)) {
-            Radio1.read(&Fack, sizeof(Fack));    
+            Radio1.read(&Fack, sizeof(Fack));    // ignore the ACK
         }
-        else {
-            if (PacketNumber == 2) { // error - no connection 
-                NormaliseTheRadio();
-                SendCommand(GoModelsView);
-                CurrentView = MODELSVIEW;
-                return;
-            }
-
-        }
+        
 #ifdef DB_MODEL_EXCHANGE
         Serial.println(PacketNumber);
 #endif
@@ -5578,9 +5680,6 @@ void ReadNewSwitchFunction(){
 
         char PageSwitchView[]          = "page SwitchesView";
         char OneSwitchViewc_revd[]     = "c_revd"; // Reversed
-        char    ProgressStart[] = "vis Progress,1";
-        char    ProgressEnd[]   = "vis Progress,0";
-        char    Progress[]      = "Progress";
 
             SendCommand(ProgressStart);
             SendValue(Progress, 10);
@@ -5766,9 +5865,6 @@ void EndReverseView()
     char    fs[16][5] = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
     uint8_t i;
     char    pRXSetupView[]    = "page RXSetupView";
-    char    ProgressStart[] = "vis Progress,1";
-    char    ProgressEnd[]   = "vis Progress,0";
-    char    Progress[]      = "Progress";
     SendCommand(ProgressStart);
     ReversedChannelBITS = 0;
     for (i = 0; i < 16; ++i) {
@@ -5791,9 +5887,6 @@ void StartReverseView()
     char    pReverseView[] = "page ReverseView";
     char    fs[16][5]      = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
     uint8_t i;
-    char    Progress[]      = "Progress";
-    char    ProgressStart[] = "vis Progress,1";
-    char    ProgressEnd[]   = "vis Progress,0";
     CurrentView             = REVERSEVIEW;
     SendCommand(pReverseView);
     UpdateButtonLabels();
@@ -6137,7 +6230,7 @@ void OptionView2Start()
     char n1[]            = "n1";
     char n2[]            = "n2";
     char n3[]            = "n3";
-    char lpm[]           = "c0";    // Auto model match
+   
     char OptionV2Start[] = "page OptionView2";
     char TxVCorrextion[] = "t2";
   
@@ -6147,7 +6240,7 @@ void OptionView2Start()
       TxVoltageCorrection    = GetValue(TxVCorrextion);
       PowerOffWarningSeconds = GetValue(n2);
       PowerOffWarningSeconds = CheckRange(PowerOffWarningSeconds, 1, 10);
-      AutoModelSelect        = GetValue(lpm);
+     
       if (LEDBrightness != GetValue(n1)) UpdateLED();
       ConnectionAssessSeconds = GetValue(n3);
       ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);
@@ -6170,21 +6263,22 @@ void OptionView3Start() /// NOT CALLED
     char n2[]            = "n2";
     char t10[]           = "t10";
     char n3[]            = "n3";
-  //  char RxVCorrextion[] = "n0"; // RX Voltage correction
     char lpm[]           = "c0"; // Low power mode
     char Vbuf[10];
     char OptionV3Start[] = "page OptionView3";
-    CurrentView          = OPTIONVIEW3; 
+    char QNH[]           = "Qnh";
+
+    CurrentView          = OPTIONVIEW3;
     SendCommand(OptionV3Start);
     Procrastinate(250);
     snprintf(Vbuf, 5, "%f", StopFlyingVoltsPerCell);
     SendText(t10, Vbuf);
     SendValue(TxVCorrextion, TxVoltageCorrection);
-  //  SendValue(RxVCorrextion, RxVoltageCorrection);
     SendValue(n2,  PowerOffWarningSeconds);
     SendValue(n3,  ConnectionAssessSeconds);
     SendValue(lpm, AutoModelSelect);
     SendValue(n1,  LEDBrightness);
+    SendValue(QNH,  Qnh);
 }
 
 /******************************************************************************************************************************/
@@ -6201,6 +6295,9 @@ void RXSetup1Start() // model options screen
     char c1[] = "c1";
     char n3[] = "n3";
 
+    char n4[] = "n4";    // TimerDownwards timer minutes
+    char c2[] = "c2";    // TimerDownwards timer on off
+
     SendCommand(pRXSetup1);
     SendValue(c1, CopyTrimsToAll);
     SendValue(n3, TrimMultiplier);
@@ -6210,6 +6307,8 @@ void RXSetup1Start() // model options screen
     SendValue(Mchannel, MotorChannel + 1);
     SendValue(UseKill, UseMotorKill);
     SendValue(RxVCorrextion, RxVoltageCorrection);
+    SendValue(c2, TimerDownwards);
+    SendValue(n4, TimerStartTime/60);
     CurrentView = RXSETUPVIEW1;
     UpdateModelsNameEveryWhere();
 
@@ -6228,6 +6327,8 @@ void RXSetup1End()
     char RxVCorrextion[]    = "n2";
     char c1[] = "c1";
     char n3[] = "n3";
+    char n4[] = "n4";    // TimerDownwards timer minutes
+    char c2[] = "c2";    // TimerDownwards timer on off
 
 
     CopyTrimsToAll= GetValue(c1);
@@ -6239,6 +6340,10 @@ void RXSetup1End()
     RxVoltageCorrection     = GetValue(RxVCorrextion);
     UseMotorKill            = GetValue(UseKill);
     MotorChannel            = GetValue(Mchannel) - 1;
+    TimerDownwards          = GetValue(c2);
+    TimerStartTime          = GetValue(n4) * 60;
+    Look(TimerDownwards);
+
     CurrentView             = TXSETUPVIEW;
     SaveOneModel(ModelNumber);
     UpdateModelsNameEveryWhere();
@@ -6264,12 +6369,12 @@ void OptionView3End() //
     char n3[]             = "n3";
     char n1[]             = "n1";
     char page_SetupView[] = "page SetupView";
-    char lpm[]            = "c0"; // Auto model selection
+    char QNH[]            = "Qnh";
 
     TxVoltageCorrection     = GetValue(TxVCorrextion);
     PowerOffWarningSeconds  = GetValue(n2);
     PowerOffWarningSeconds  = CheckRange(PowerOffWarningSeconds, 1, 10);
-    AutoModelSelect         = GetValue(lpm);
+    Qnh = (uint16_t)GetValue(QNH);
     if (LEDBrightness != GetValue(n1)) UpdateLED(); 
     ConnectionAssessSeconds = GetValue(n3);
     ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);
@@ -6302,9 +6407,6 @@ void BuddyChViewStart()
 
 void BuddyChViewEnd()
 {
-    char ProgressStart[]  = "vis Progress,1";
-    char ProgressEnd[]    = "vis Progress,0";
-    char Progress[]       = "Progress";
     char page_BuddyView[] = "page BuddyView";
     char fs[16][5]        = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
     SendCommand(ProgressStart);
@@ -6361,9 +6463,6 @@ void ResetTransmitterSettings(){    // This function resets all transmitter para
    int  sofar   = 0;
 
    if (!GetConfirmation(pCalibrateView,prompt)) return;
-   char ProgressStart[]  = "vis Progress,1";
-   char ProgressEnd[]    = "vis Progress,0";
-   char Progress[]       = "Progress";
    SendCommand(ProgressStart);
    SendValue(Progress, 2);
 
@@ -6406,6 +6505,7 @@ void ResetTransmitterSettings(){    // This function resets all transmitter para
             ++sofar;
             SetDefaultValues();
             SendValue(Progress, (sofar * (100 / MAXMODELNUMBER)) / 4);
+            KickTheDog();
         }
    }
    SendValue(Progress,100);
@@ -6515,9 +6615,6 @@ void DualRatesStart(){
 /******************************************************************************************************************************/
 
 void ReadDualRatesValues(){ 
-    char ProgressStart[]  = "vis Progress,1";
-    char ProgressEnd[]    = "vis Progress,0";
-    char Progress[]       = "Progress";
     char rate2[]          = "rate2";
     char rate3[]          = "rate3";
     char rate1[]          = "rate1";
@@ -6628,9 +6725,6 @@ void ListenToBanks(){
 /******************************************************************************************************************************/
 void StartModelSetup(){
     char GotoModelSetup[]           = "page RXSetupView"; 
-    char ProgressStart[]            = "vis Progress,1";
-    char ProgressEnd[]              = "vis Progress,0";
-    char Progress[]                 = "Progress";
     char fs[16][5]                 = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
      
     if (CurrentView == FAILSAFE_VIEW) { //  read failsafe blobs
@@ -6641,6 +6735,12 @@ void StartModelSetup(){
         }
         SendCommand(ProgressEnd);
     }
+
+    if (CurrentView == MIXESVIEW) { //  read mixes
+            SaveMixValues();
+            SaveOneModel(ModelNumber);
+            SendCommand(ProgressEnd);
+        }
 
     b5isGrey  = false;
     b12isGrey = false;     
@@ -6672,9 +6772,6 @@ void StartSlowView(){
 }
 /******************************************************************************************************************************/
 void EndSlowView(){
-    char ProgressStart[]           = "vis Progress,1";
-    char ProgressEnd[]             = "vis Progress,0";
-    char Progress[]                = "Progress";
     char ns[16][4]    = {{"n0"}, {"n1"}, {"n2"}, {"n3"}, {"n4"}, {"n5"}, {"n6"}, {"n7"}, {"n8"}, {"n9"}, {"n10"}, {"n11"}, {"n12"}, {"n13"}, {"n14"}, {"n15"}};
     SendCommand(ProgressStart);
     for (int i = 0; i < 16; ++i){
@@ -6760,9 +6857,6 @@ void FixFileName(){
 void WriteBackup(){
 
                 char ModExt[]                  = ".MOD";
-                char ProgressStart[]           = "vis Progress,1";
-                char ProgressEnd[]             = "vis Progress,0";
-                char Progress[]                = "Progress";
                 uint8_t Iterations             = 4;
                 SendValue(Progress, 1);
                 FixFileName();
@@ -7092,6 +7186,7 @@ FASTRUN void ButtonWasPressed()
             }
         }
         int  i                         = 0;
+        char lpm[]                     = "c0"; // Auto model selection
         char Setup[]                   = "Setup";
         char ClickX[]                  = "ClickX";
         char ClickY[]                  = "ClickY";
@@ -7100,7 +7195,6 @@ FASTRUN void ButtonWasPressed()
         char Front_View[]              = "FrontView";
         char Sticks_View[]             = "SticksView";
         char Graph_View[]              = "GraphView";
-        char Mixes_View[]              = "MixesView";
         char SetupView[]               = "MainSetup";
         char Scan_End[]                = "ScanEnd";
         char DataEnd[]                 = "DataEnd";
@@ -7108,8 +7202,8 @@ FASTRUN void ButtonWasPressed()
         char CalibrateView[]           = "CalibrateView";
         char TrimView[]                = "TrimView";
         char TRIMS50[]                 = "TRIMS50";
-       // char RTRIM[]                   = "RTRIM";
         char MIXES_VIEW[]              = "MIXESVIEW"; // first call
+        char Mixes_View[]              = "MixesView";
         char Fhss_View[]               = "FhssView";
         char FM1[]                     = "FM 1";
         char FM2[]                     = "FM 2";
@@ -7123,12 +7217,6 @@ FASTRUN void ButtonWasPressed()
         char ModelsView_ModelNumber[]  = "ModelNumber";
         char page_SticksView[]         = "page SticksView";
         char page_GraphView[]          = "page GraphView";
-        char MixesView_Enabled[]       = "Enabled";
-        char MixesView_Bank[]          = "Bank";
-        char MixesView_MasterChannel[] = "MasterChannel";
-        char MixesView_SlaveChannel[]  = "SlaveChannel";
-        char MixesView_Reversed[]      = "Reversed";
-        char MixesView_Percent[]       = "Percent";
         char page_SetupView[]          = "page SetupView";
         char page_RXSetupView[]        = "page RXSetupView";
         char page_AudioView[]          = "page AudioView";
@@ -7186,11 +7274,6 @@ FASTRUN void ButtonWasPressed()
         char CH14NAME[]                = "CH14NAME=";
         char CH15NAME[]                = "CH15NAME=";
         char CH16NAME[]                = "CH16NAME=";
-        char MixesView_chM[]           = "chM";
-        char MixesView_chS[]           = "chS";
-        char ProgressStart[]           = "vis Progress,1";
-        char ProgressEnd[]             = "vis Progress,0";
-        char Progress[]                = "Progress";
         char HelpView[]                = "HelpView";
         char SendModel[]               = "SendModel";
         char PowerOff[]                = "PowerOff";
@@ -7226,8 +7309,8 @@ FASTRUN void ButtonWasPressed()
         char DataView_Clear[]          = "Clear";
         char DataView_AltZero[]        = "AltZero";
         char OptionsEnd[]              = "OptionsEnd";
-        char QNH[]                     = "Qnh";
-        char Mark[]                    = "Mark";
+       
+        char Mark[]                 = "Mark";
         char UKRULES[]              = "UKRULES";
         char Htext0[]               = "HELP";
         char Htext1[]               = "Help";
@@ -7241,7 +7324,6 @@ FASTRUN void ButtonWasPressed()
         char FrontView_ForeGround[] = "FrontView.ForeGround";
         char FrontView_Special[]    = "FrontView.Special";
         char FrontView_Highlight[]  = "FrontView.Highlight";
-      
         char SetupAud[]             = "SetupAud";
         char n0[]                   = "n0";
         char Ex1[]                  = "Ex1";
@@ -7368,6 +7450,8 @@ FASTRUN void ButtonWasPressed()
             ++UkRulesCounter;
             if (UkRulesCounter == 1) SwapWaveBandTimer = millis();
             if (UkRulesCounter == 3) {
+                
+
                 if ((millis() - SwapWaveBandTimer) < 5000) { // pressed three times in under 5 seconds?!
                     if (!UkRules) {
                         SwapWaveBand = 1;
@@ -7380,6 +7464,8 @@ FASTRUN void ButtonWasPressed()
                         SendText(b17, Htext0);
                     }
                 }
+                
+
                 UkRulesCounter = 0;
             }
             ClearText();
@@ -7394,8 +7480,9 @@ FASTRUN void ButtonWasPressed()
             SticksMode = CheckRange(GetValue(n0), 1, 2); 
             GetText(TxNme, TxName);
             SendValue(Progress, 30);
-            Qnh = (uint16_t)GetValue(QNH);
+           
             SendValue(Progress, 40);
+            AutoModelSelect = GetValue(lpm); 
             SendValue(Progress, 50);
             LowBattery     = GetValue(Bwn);
             SendValue(Progress, 60);
@@ -7425,7 +7512,6 @@ FASTRUN void ButtonWasPressed()
             b5isGrey           = false;
             b12isGrey = false;
             SendCommand(ProgressEnd);
-            LedWasGreen = false;
             UpdateModelsNameEveryWhere();
             ClearText();
             ConfigureStickMode();
@@ -7549,7 +7635,7 @@ FASTRUN void ButtonWasPressed()
             SendValue(ScreenViewTimeout, ScreenTimeout);
             SendValue(Pto, (Inactivity_Timeout / TICKSPERMINUTE));
             SendText(Tx_Name, TxName);
-            SendValue(QNH, Qnh);
+            SendValue(lpm, AutoModelSelect); // heer
             SendValue(Bwn, LowBattery);
             CurrentView = OPTIONS_VIEW;
             CurrentMode = NORMAL;
@@ -7583,7 +7669,7 @@ FASTRUN void ButtonWasPressed()
                 if (MixNumber == 0) MixNumber = 1;
                 LastMixNumber = 33;                        // just to be differernt
                 SendValue(MixesView_MixNumber, MixNumber); // New load of mix window
-                SendMixValues();
+                ShowMixValues();
             }
            
             if (CurrentView == MACROS_VIEW) {
@@ -7657,6 +7743,7 @@ FASTRUN void ButtonWasPressed()
                 ++i;
                 SingleModelFile[j] = 0;
             }
+          //  Serial.println(SingleModelFile);
             SendModelFile();
             ClearText();
             return;
@@ -8103,36 +8190,35 @@ if (InStrng(Export, TextIn)) {
             return;
         }
 
-        if (InStrng(MIXES_VIEW, TextIn)) {
+        if (InStrng(MIXES_VIEW, TextIn)) {   //        First call to load screen
             SendCommand(pMixesView);
             CurrentView = MIXESVIEW;
             UpdateModelsNameEveryWhere();
             if (MixNumber == 0) MixNumber = 1;
-            LastMixNumber = 33;                        // just to be differernt
+            LastMixNumber = MixNumber;                       
             SendValue(MixesView_MixNumber, MixNumber); // New load of mix window
-            SendMixValues();
+            ShowMixValues();
             ClearText();
             return;
         }
-
-        if (InStrng(Mixes_View, TextIn)) {
+        if (InStrng(Mixes_View, TextIn)) {      // Mix number OR a parameter has changed
             CurrentView = MIXESVIEW;
-            Procrastinate(100); // allow screen changes to appear
             UpdateModelsNameEveryWhere();
+            uint8_t ThisMixNumber = MixNumber;  // save it
             MixNumber = GetValue(MixesView_MixNumber);
-            if (LastMixNumber != MixNumber) { // Did it change?
-                LastMixNumber = MixNumber;
-                SendMixValues();
-            }
-            else {
-                Mixes[MixNumber][M_Enabled]       = GetValue(MixesView_Enabled);
-                Mixes[MixNumber][M_Bank]    = GetValue(MixesView_Bank);
-                Mixes[MixNumber][M_MasterChannel] = GetValue(MixesView_MasterChannel);
-                Mixes[MixNumber][M_SlaveChannel]  = GetValue(MixesView_SlaveChannel);
-                Mixes[MixNumber][M_Reversed]      = GetValue(MixesView_Reversed);
-                Mixes[MixNumber][M_Percent]       = GetValue(MixesView_Percent);
-                SendText(MixesView_chM, ChannelNames[Mixes[MixNumber][M_MasterChannel] - 1]);
-                SendText(MixesView_chS, ChannelNames[Mixes[MixNumber][M_SlaveChannel] - 1]);
+            if (LastMixNumber != MixNumber)     // Did number change?
+            {
+                LastMixNumber = MixNumber;      // save new mix number
+                MixNumber = ThisMixNumber;      // force back to old number to grab last lot before doing new one
+                SaveMixValues();                // save them
+                SaveOneModel(ModelNumber);      
+                SendCommand(ProgressEnd);
+                MixNumber = LastMixNumber;      // back to new one
+                ShowMixValues();                // show new lot
+            } 
+            else 
+            {                        
+                FixCHNames();                   // just redisplay ch names
             }
             ClearText();
             return;
@@ -8304,7 +8390,7 @@ void LoadPacketData()
         case 0:
              SendBuffer[CHANNELSUSED + 2] = BindingNow;
             if (BindingNow == 1) {
-                BindingNow   = 2;
+                BindingNow  = 2;
             }
             if (((millis() - FailSafeTimer) > 1500) && SaveFailSafeNow) {
                 SendBuffer[CHANNELSUSED + 1] = SaveFailSafeNow; // FailSafeSaveMoment
@@ -8505,37 +8591,48 @@ void GetBank()
         SafetyWasOn = SafetyON;
     }                       
    
-    if (SafetyON) MotorEnabled = false;
+    if (SafetyON) {
+        MotorEnabled = false;
+        TimesUp      = false;
+        PausedSecs   = 0; // Safety switch zeros timer. BUT don't update display!
+                          // if (CurrentView == FRONTVIEW) {
+                          //     SendValue(FrontView_Secs, 0);
+                          //     SendValue(FrontView_Mins, 0);
+                          //     SendValue(FrontView_Hours,0);
+                          // }
+    }
 
     if ((MotorEnabled != MotorWasEnabled) && (UseMotorKill))  {                         // MotorEnabled changed ?
         if (MotorEnabled) {
             if (LedWasRed)
                 {
                   MotorEnabled = false;
-                   if ((millis() - WarningTimer) > 4000) { 
-                        PlaySound(PLSTURNOFF);
-                        WarningTimer = millis();
+                   if (!BuddyPupilOnSbus){
+                        if ((millis() - WarningTimer) > 4000) { 
+                            PlaySound(PLSTURNOFF);
+                            WarningTimer = millis();
+                        }
                    }
                 return;
                 }
             ShowMotor(1);
             if (AnnounceBanks) PlaySound(MOTORON);                                      // Tell the pilot motor is on! 
               if (UseLog) LogMotor(1);   
-              TimerMillis = millis();
+              TimerMillis = millis();                                                   // Motor ON timerpause off  
         }
         else {
-              if (AnnounceBanks) PlaySound(MOTOROFF);
-              if (UseLog) LogMotor(0);
-               SendCommand(WarnOff);
+            if (AnnounceBanks) PlaySound(MOTOROFF);
+            if (UseLog) LogMotor(0);
+            SendCommand(WarnOff);
             ShowMotor(0);                                                               // Tell the pilot motor is off
-           if (SendNoData){
+            if (SendNoData){
                 SendCommand(WarnOff);
                 SendNoData = false;                                                     // user turned off motor
             }
-            PausedSecs = Secs + (Mins * 60) + (Hours * 3600);                           // Remember how long so far
+            PausedSecs  = ElapsedSeconds;                                             //    Motor OFF timerpause started
         }
         LastSeconds = 0;  
-        CheckTimer();
+        ShowMotorTimer();
     }
     Channel9SwitchValue  = CheckSwitch(Channel9Switch);
     Channel10SwitchValue = CheckSwitch(Channel10Switch);
@@ -8543,14 +8640,16 @@ void GetBank()
     Channel12SwitchValue = CheckSwitch(Channel12Switch);
     if (Bank != PreviousBank) {
         RestoreBrightness();
-        LastShowTime          = 0;
         LastTimeRead          = 0;
         if (UseLog) LogNewBank();
         if (MotorEnabled == MotorWasEnabled) { // When turning off motor, don't sound bank too.
             if (AnnounceBanks) SoundBank();
         }
-        if (CurrentView == FRONTVIEW) ShowBank();
-        UpdateModelsNameEveryWhere();
+        if (CurrentView == FRONTVIEW) {
+                ShowBank();}
+        else{
+                UpdateModelsNameEveryWhere();
+        }
         if (CurrentView == GRAPHVIEW) DisplayCurveAndServoPos();
     }
     MotorWasEnabled = MotorEnabled;                               // Remember motor state
@@ -8940,7 +9039,7 @@ void GotoFrontView(){
           Reconnected  = false;                 // this is to make '** Connected! **' redisplay (in ShowComms())
           LastSeconds  = 0;                     // This forces redisplay of timer...
           Force_ReDisplay();
-          CheckTimer();
+          ShowMotorTimer();
           ClearText();
           LastShowTime = 0;                     // this is to make redisplay sooner (in ShowComms())
           SendText(FrontView_Connected, na);
@@ -9050,11 +9149,12 @@ void  GetModelsMacAddress(){
 FASTRUN void ParseAckPayload()
 {
     if (BuddyPupilOnSbus) return; // buddy pupil need none of this
-
+ 
+    NextChannelNumber = AckPayload.Byte5;                     // every packet tells of next hop destination
+     
     if (AckPayload.Purpose & 0x80) // Hi bit is now the **HOP NOW!!** flag
     {
-        NextChannelNumber = AckPayload.Byte5;                     // This is just the array pointer or offset
-        NextChannel       = *(FHSSChPointer + NextChannelNumber); // The actual channel number pointed to.
+        NextChannel       = *(FHSSChPointer + NextChannelNumber); // The actual channel number pointed to.   
         HopToNextChannel();
         AckPayload.Purpose &= 0x7f; // Clear the high BIT, use the remainder ...
     }
@@ -9133,11 +9233,11 @@ FASTRUN void ParseAckPayload()
         case 18:
             GetTimeFromAckPayload();
             ReadTheRTC();
-            if (GPSDay != GmonthDay) GPSTimeSynched = false;
-            if (GPSMonth != GPSMonth) GPSTimeSynched = false;
-            if (GPSMins != Gminute) GPSTimeSynched = false;
-            if (GPSHours != Ghour) GPSTimeSynched = false;
-            if (GPSSecs != Gsecond) GPSTimeSynched = false;
+            if (GPSDay   != GmonthDay) GPSTimeSynched = false;
+            if (GPSMonth != GPSMonth)  GPSTimeSynched = false;
+            if (GPSMins  != Gminute)   GPSTimeSynched = false;
+            if (GPSHours != Ghour)     GPSTimeSynched = false;
+            if (GPSSecs  != Gsecond)   GPSTimeSynched = false;
             if (GpsFix) SynchRTCwithGPSTime();
             break;
         default:
@@ -9315,7 +9415,7 @@ void FASTRUN ManageTransmitter(){
         CheckHardwareTrims();                                        // Trims 20 times a second
         GetBank();                                                   // Must not call too often        
         ShowComms();                                                 // Screen Data                                  
-        CheckTimer();                                                // Screen Timer
+        ShowMotorTimer();                                                // Screen Timer
         CheckPowerOffButton();                                       // Pretty obvious really ...
         TransmitterLastManaged = millis();
     }
@@ -9330,14 +9430,16 @@ FASTRUN void loop()
     GetNewChannelValues();                                       // Load SendBuffer with new servo positions  Very frequently
     if (UseMacros) ExecuteMacro();                               // Modify it if macro is running
     if (BuddyPupilOnSbus) { 
-        NewCompressNeeded = false;                               // fake it as Buddy is not sending data
+        NewCompressNeeded = false;                               // Fake it as Buddy does not send compressed data
+        ShowServoPos(); 
     } else {                                                     // Skip these next lines when buddying as a slave
         if (!BoundFlag && Connected) BufferNewPipe();            // if not yet bound, insert our pipe into SendBuffer BUT ONLY WHEN CONNECTED 
-        if (BuddyMaster) GetSlaveChannelValues();                // If buddy master, get buddy data and maybe use it.
-        if (!MotorEnabled) SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero
+        if (BuddyMaster) GetSlaveChannelValues();                // If buddy master, get buddy data and maybe use it. 
+        ShowServoPos();                                          
+        if (!MotorEnabled) SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero whatever was shown.   
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24
-    }
-    ShowServoPos();                                             
+    }                                   
+   
     switch (CurrentMode) {
         case NORMAL:            // 0
             SendData();
