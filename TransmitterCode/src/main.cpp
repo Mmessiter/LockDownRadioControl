@@ -6342,8 +6342,6 @@ void RXSetup1End()
     MotorChannel            = GetValue(Mchannel) - 1;
     TimerDownwards          = GetValue(c2);
     TimerStartTime          = GetValue(n4) * 60;
-    Look(TimerDownwards);
-
     CurrentView             = TXSETUPVIEW;
     SaveOneModel(ModelNumber);
     UpdateModelsNameEveryWhere();
@@ -7635,7 +7633,7 @@ FASTRUN void ButtonWasPressed()
             SendValue(ScreenViewTimeout, ScreenTimeout);
             SendValue(Pto, (Inactivity_Timeout / TICKSPERMINUTE));
             SendText(Tx_Name, TxName);
-            SendValue(lpm, AutoModelSelect); // heer
+            SendValue(lpm, AutoModelSelect); 
             SendValue(Bwn, LowBattery);
             CurrentView = OPTIONS_VIEW;
             CurrentMode = NORMAL;
@@ -8519,7 +8517,6 @@ void GetBank()
 { //  and  motor switch and safety switch ETC ...
 
     if (CurrentMode != NORMAL) return; // not needed if calibrating
-
     SafetyON     = false;
     BuddyON      = false;
 
@@ -8590,18 +8587,21 @@ void GetBank()
         if (SafetyON) ShowSafetyIsOn(); else ShowSafetyIsOff();
         SafetyWasOn = SafetyON;
     }                       
-   
     if (SafetyON) {
         MotorEnabled = false;
         TimesUp      = false;
-        PausedSecs   = 0; // Safety switch zeros timer. BUT don't update display!
-                          // if (CurrentView == FRONTVIEW) {
-                          //     SendValue(FrontView_Secs, 0);
-                          //     SendValue(FrontView_Mins, 0);
-                          //     SendValue(FrontView_Hours,0);
-                          // }
+        PausedSecs   = 0; 
+        if (CurrentView == FRONTVIEW){
+            if (TimerDownwards) { 
+                Mins = TimerStartTime / 60;
+            }else{
+                Mins = 0;
+            }
+            SendValue(FrontView_Secs, 0);
+            SendValue(FrontView_Mins, Mins);
+            SendValue(FrontView_Hours, 0);
+        }
     }
-
     if ((MotorEnabled != MotorWasEnabled) && (UseMotorKill))  {                         // MotorEnabled changed ?
         if (MotorEnabled) {
             if (LedWasRed)
