@@ -230,6 +230,7 @@ uint8_t  ScanEnd             = 125;
 uint32_t TimerMillis         = 0;
 uint32_t LastSeconds         = 0;
 uint32_t Secs                = 0;
+uint32_t ElapsedSeconds    = 0;
 uint32_t PausedSecs          = 0;
 uint32_t Mins                = 0;
 uint32_t Hours               = 0;
@@ -539,10 +540,13 @@ char     ProgressStart[]       = "vis Progress,1";
 char     ProgressEnd[]         = "vis Progress,0";
 char     Progress[]            = "Progress";
 char     InVisible[]           = "vis Quality,0";
- char    Visible[]             = "vis Quality,1";
- uint32_t MostRecentHop;
+char     Visible[]             = "vis Quality,1";
+uint32_t MostRecentHop;
+uint8_t  ReconnectionIndex      = 0;
+bool     TimerDownwards         = false;
+uint16_t TimerStartTime         =  5; // heer
+bool     TimesUp                = false;
 
-uint8_t ReconnectionIndex = 0;
 // **********************************************************************************************************************************
 // *********************************************** END OF GLOBAL DATA ***************************************************************
 // **********************************************************************************************************************************
@@ -1469,15 +1473,21 @@ bool GetButtonPress()
 
 FASTRUN void ShowMotorTimer()
 {
+
+    if (TimesUp) return;
+
     uint8_t Recording[10] = {ONEMINUTE, TWOMINUTES, THREEMINUTES, FOURMINUTES, FIVEMINUTES, SIXMINUTES, SEVENMINUTES, EIGHTMINUTES, NINEMINUTES, TENMINUTES};
     if ((MotorEnabled && !LostContactFlag) ) {
-        Secs  = ((millis() - TimerMillis) / 1000) + PausedSecs;
+        ElapsedSeconds  = ((millis() - TimerMillis) / 1000) + PausedSecs;
+        Secs = ElapsedSeconds;
+        if (TimerDownwards)  Secs = TimerStartTime - ElapsedSeconds;
         Hours = Secs / 3600;
         Secs %= 3600;
         Mins = Secs / 60;
         Secs %= 60;
     }
     if (LastSeconds != Secs) {
+
         ClockSpoken = false;
         if (CurrentView == FRONTVIEW) {
             SendValue(FrontView_Secs, Secs);
@@ -1490,6 +1500,12 @@ FASTRUN void ShowMotorTimer()
         ClockSpoken = true;
         if ((Mins <= 10) && (Mins > 0)) {
             PlaySound(Recording[Mins - 1]);
+        }
+        if (TimerDownwards){
+            if ((!Mins) && (!Secs) && (ElapsedSeconds > 2)) {
+                PlaySound(STORAGECHARGE);
+                TimesUp = true;
+            }
         }
     }
 }
@@ -8547,13 +8563,14 @@ void GetBank()
     }                       
    
     if (SafetyON) {
-        MotorEnabled = false; 
-        PausedSecs = 0; // Safety switch zeros timer.
-        if (CurrentView == FRONTVIEW){
-            SendValue(FrontView_Secs, 0);
-            SendValue(FrontView_Mins, 0);
-            SendValue(FrontView_Hours,0);
-        }
+        MotorEnabled = false;
+        TimesUp      = false;
+        PausedSecs   = 0; // Safety switch zeros timer. BUT don't update display!
+                          // if (CurrentView == FRONTVIEW) {
+                          //     SendValue(FrontView_Secs, 0);
+                          //     SendValue(FrontView_Mins, 0);
+                          //     SendValue(FrontView_Hours,0);
+                          // }
     }
 
     if ((MotorEnabled != MotorWasEnabled) && (UseMotorKill))  {                         // MotorEnabled changed ?
@@ -8572,18 +8589,18 @@ void GetBank()
             ShowMotor(1);
             if (AnnounceBanks) PlaySound(MOTORON);                                      // Tell the pilot motor is on! 
               if (UseLog) LogMotor(1);   
-              TimerMillis = millis();
+              TimerMillis = millis();                                                   // Motor ON timerpause off  
         }
         else {
-              if (AnnounceBanks) PlaySound(MOTOROFF);
-              if (UseLog) LogMotor(0);
-               SendCommand(WarnOff);
+            if (AnnounceBanks) PlaySound(MOTOROFF);
+            if (UseLog) LogMotor(0);
+            SendCommand(WarnOff);
             ShowMotor(0);                                                               // Tell the pilot motor is off
-           if (SendNoData){
+            if (SendNoData){
                 SendCommand(WarnOff);
                 SendNoData = false;                                                     // user turned off motor
             }
-            PausedSecs = Secs + (Mins * 60) + (Hours * 3600);                           // Remember how long so far
+            PausedSecs  = ElapsedSeconds;                                             //    Motor OFF timerpause started
         }
         LastSeconds = 0;  
         ShowMotorTimer();
