@@ -387,6 +387,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "ClickX", "TransmitterCode_2src_2main_8cpp.html#a5977abea05dff7ba2cdb9dd379595f76", null ],
     [ "ClickY", "TransmitterCode_2src_2main_8cpp.html#a85578a4e235e2836fdbbfa037bcb5805", null ],
     [ "ClockSpoken", "TransmitterCode_2src_2main_8cpp.html#a235116408ba9ac496c2a243a340888e5", null ],
+    [ "ClockSpoken1", "TransmitterCode_2src_2main_8cpp.html#af6cab75e259de8cad651fc31410602ea", null ],
     [ "CompressedData", "TransmitterCode_2src_2main_8cpp.html#aa16611ba89205c8cb9e75353ce1ad032", null ],
     [ "Confirmed", "TransmitterCode_2src_2main_8cpp.html#a5034d37305ec158f8bc486558dcd8f53", null ],
     [ "Connected", "TransmitterCode_2src_2main_8cpp.html#a5318db734c71b1b08208ef690f1f0146", null ],
