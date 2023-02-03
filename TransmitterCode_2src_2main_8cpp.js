@@ -393,6 +393,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "Connected", "TransmitterCode_2src_2main_8cpp.html#a5318db734c71b1b08208ef690f1f0146", null ],
     [ "ConnectionAssessSeconds", "TransmitterCode_2src_2main_8cpp.html#ac58a25a73bcc60b4f892b7ad285d7adc", null ],
     [ "CopyTrimsToAll", "TransmitterCode_2src_2main_8cpp.html#ae737f11637caa631c30255f614800ba6", null ],
+    [ "CountDownIndex", "TransmitterCode_2src_2main_8cpp.html#adfcd3241fc01c3231bd87d8711016b15", null ],
     [ "CurrentMode", "TransmitterCode_2src_2main_8cpp.html#aacabee92eb3ddd2e3cf31695c00a912e", null ],
     [ "CurrentPoint", "TransmitterCode_2src_2main_8cpp.html#af10ffe07503b33fd55065fd9021e17e7", null ],
     [ "CurrentPosition", "TransmitterCode_2src_2main_8cpp.html#ade76e94669870d42879b18f17505f967", null ],
