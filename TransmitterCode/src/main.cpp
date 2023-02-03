@@ -547,6 +547,7 @@ uint8_t  ReconnectionIndex      = 0;
 bool     TimerDownwards         = false;
 uint16_t TimerStartTime         = 5 * 60; 
 bool     TimesUp                = false;
+uint8_t  CountDownIndex = 0;
 
 // **********************************************************************************************************************************
 // *********************************************** END OF GLOBAL DATA ***************************************************************
@@ -1471,13 +1472,16 @@ bool GetButtonPress()
 /*********************************************************************************************************************************/
 
 
-
 FASTRUN void ShowMotorTimer()
 {
 
     if (TimesUp) return;
 
     uint8_t Recording[10] = {ONEMINUTE, TWOMINUTES, THREEMINUTES, FOURMINUTES, FIVEMINUTES, SIXMINUTES, SEVENMINUTES, EIGHTMINUTES, NINEMINUTES, TENMINUTES};
+    
+    uint8_t Cdown[10]     = {TEN,NINE,EIGHT,SEVEN,SIX,FIVE,FOUR,THREE,TWO,ONE};
+
+    
     if ((MotorEnabled && !LostContactFlag) ) {
         ElapsedSeconds  = ((millis() - TimerMillis) / 1000) + PausedSecs;
         Secs = ElapsedSeconds;
@@ -1499,10 +1503,11 @@ FASTRUN void ShowMotorTimer()
         LastSeconds = Secs;
     }
     
-    if (TimerDownwards){
-        if ((Secs < 11) && !Mins && !ClockSpoken1 && (ElapsedSeconds > 2)){
-                PlaySound(CLICKONE);
-                ClockSpoken1 = true;
+    if (TimerDownwards) {
+        if ((Secs < 11) && !Mins && !ClockSpoken1 && (ElapsedSeconds > 2)) {
+            PlaySound(Cdown[CountDownIndex]);
+            ++CountDownIndex;
+            ClockSpoken1 = true;
         }
     }
 
@@ -1515,6 +1520,7 @@ FASTRUN void ShowMotorTimer()
             if ((!Mins) && (!Secs) && (ElapsedSeconds > 2)) {
                 PlaySound(STORAGECHARGE);   // = Stop Flyfing!
                 TimesUp = true;
+                CountDownIndex  = 0;
             }
         }
 
@@ -8603,8 +8609,9 @@ void GetBank()
     if (SafetyON) {
         MotorEnabled = false;
         TimesUp      = false;
-        PausedSecs   = 0; 
-        if (CurrentView == FRONTVIEW){
+        PausedSecs   = 0;
+        CountDownIndex = 0;
+        if (CurrentView == FRONTVIEW) {
             if (TimerDownwards) { 
                 Mins = TimerStartTime / 60;
             }else{

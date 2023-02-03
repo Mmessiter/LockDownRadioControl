@@ -276,6 +276,16 @@
 #define STUNT2          59
 #define WHEELSDOWN      60
 #define WHEELSUP        61
+#define TEN             62
+#define NINE            63
+#define EIGHT           64
+#define SEVEN           65
+#define SIX             66
+#define FIVE            67
+#define FOUR            68
+#define THREE           69
+#define TWO             70
+#define ONE             71
 
 
 
