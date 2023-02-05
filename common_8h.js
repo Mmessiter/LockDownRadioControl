@@ -21,6 +21,7 @@ var common_8h =
     [ "pinCE2", "common_8h.html#a86715d66aa5d1363f2db07ae6428eb90", null ],
     [ "pinCSN1", "common_8h.html#a047f5702802c2bbf4918e9318f3e6a56", null ],
     [ "pinCSN2", "common_8h.html#a76971ffb50fdfd6bc8e2c3c6ac339459", null ],
+    [ "PPMPORT", "common_8h.html#a95812254c835135cc2281a48a97d7664", null ],
     [ "RANGEMAX", "common_8h.html#a152ff5774ac656fc5f23664a214a8b53", null ],
     [ "RANGEMIN", "common_8h.html#a2279f0fac9f7362b46f3c53ae91a5ce8", null ],
     [ "RECEIVE_TIMEOUT", "common_8h.html#a4c69942f01447fa7563c5726c7d8abf2", null ],
