@@ -46,6 +46,7 @@
 #define SERVOSUSED               9  // But all 16 are available via SBUS
 #define SBUSRATE                 10 // SBUS frame every 10 milliseconds
 #define SBUSPORT                 Serial3
+#define PPMPORT                  16
 #define RECONNECTGAP             25 // Send no data to servos for 25 ms after a reconnect (10 was not quite enough)
 #define MINMICROS                500
 #define MAXMICROS                2500
