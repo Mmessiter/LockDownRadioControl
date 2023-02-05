@@ -209,7 +209,7 @@ void UseReceivedData()
 bool ReadData()
 {
     Connected = false;
-    if (CurrentRadio->available()) { // Get all, but use only the latest
+    while (CurrentRadio->available()) { // Get all, but use only the latest
         LoadAckPayload();
         CurrentRadio->flush_tx();                                      // This avoids a lockup that happens when the FIFO gets full
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // Send telemetry
