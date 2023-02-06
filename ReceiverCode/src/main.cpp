@@ -94,9 +94,9 @@ bool            FirstConnection = true;
 bool            ReadyToUseData  = false;
 bool            FailedSafe = true;  // Starting up as the same as after failsafe
 uint32_t        MostRecentHop;
-bool            UseSBUS = false;
 uint8_t         PPMChannelOrder[SERVOSUSED] = {2, 3, 1, 4, 5, 6, 7, 8, 9};
 uint8_t         FrameRate                   = SBUSRATE;
+bool            UseSBUS = true;
 
 /************************************************************************************************************/
 
@@ -237,13 +237,13 @@ void AttachServos()
         for (uint8_t i = 0; i < SERVOSUSED; ++i) {
             MCMServo[i].attach(PWMPins[i]);
         }
-        ServosAttached = true;
+    ServosAttached = true;
     }
     if (UseSBUS){ 
         MySbus.begin();             // AND START SBUS
         FrameRate = SBUSRATE;       // 10 ms
     }else{
-        PPMOutput.begin(PPMPORT);   // ... Or PPM
+        PPMOutput.begin(PPMPORT);   // Or PPM on same pin
         FrameRate = PPMRATE;        // 20 ms 
     }
 }
