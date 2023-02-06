@@ -1,8 +1,8 @@
 var searchData=
 [
   ['failedpacket_0',['FailedPacket',['../RadioFunctions_8cpp.html#a5fbd3c8613a4163425c94965704ce5f8',1,'FailedPacket():&#160;RadioFunctions.cpp'],['../RadioFunctions_8h.html#a783a0141bea15d8539730afd4b3b06a3',1,'FailedPacket():&#160;RadioFunctions.cpp']]],
-  ['failsafe_1',['failSafe',['../Quadcopter_2src_2main_8cpp.html#a3b309466c71a16820f1d84a81b8cfb93',1,'main.cpp']]],
-  ['failsafe_2',['FailSafe',['../ReceiverCode_2src_2main_8cpp.html#a42318598726782ebb2e1857f167c8cda',1,'FailSafe():&#160;main.cpp'],['../radio_8h.html#a42318598726782ebb2e1857f167c8cda',1,'FailSafe():&#160;main.cpp']]],
+  ['failsafe_1',['FailSafe',['../ReceiverCode_2src_2main_8cpp.html#a42318598726782ebb2e1857f167c8cda',1,'FailSafe():&#160;main.cpp'],['../radio_8h.html#a42318598726782ebb2e1857f167c8cda',1,'FailSafe():&#160;main.cpp']]],
+  ['failsafe_2',['failSafe',['../Quadcopter_2src_2main_8cpp.html#a3b309466c71a16820f1d84a81b8cfb93',1,'main.cpp']]],
   ['fillbox_3',['FillBox',['../RadioFunctions_8h.html#a93d9f055a2723479bb28f6c53fdb2643',1,'FillBox(int x1, int y1, int w, int h, int c):&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a93d9f055a2723479bb28f6c53fdb2643',1,'FillBox(int x1, int y1, int w, int h, int c):&#160;main.cpp']]],
   ['fixchnames_4',['FixCHNames',['../TransmitterCode_2src_2main_8cpp.html#ae9f11f030b85ae36e21266f42e6c65f3',1,'main.cpp']]],
   ['fixdeltagmtsign_5',['FixDeltaGMTSign',['../TransmitterCode_2src_2main_8cpp.html#a493eeacfcf61a53db5933a893f7d94a6',1,'main.cpp']]],

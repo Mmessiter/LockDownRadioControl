@@ -44,6 +44,7 @@ var ReceiverCode_2src_2main_8cpp =
     [ "FailSafeDataLoaded", "ReceiverCode_2src_2main_8cpp.html#a08ed7a870be8e84ae26ee0b972866bb3", null ],
     [ "FirstConnection", "ReceiverCode_2src_2main_8cpp.html#ac2fc49f3335ebd2b38d0184306dfcf9b", null ],
     [ "FirstLostPacket", "ReceiverCode_2src_2main_8cpp.html#adcebf40c47ef63b1edd881d82ff4eb5c", null ],
+    [ "FrameRate", "ReceiverCode_2src_2main_8cpp.html#a15934d6b655d0b6335f5d5924cda43dc", null ],
     [ "FS_byte1", "ReceiverCode_2src_2main_8cpp.html#a3be9019b72265fa9443e1f1132fd9bc7", null ],
     [ "FS_byte2", "ReceiverCode_2src_2main_8cpp.html#a9949c81d8f6abc28616445945c5d24ba", null ],
     [ "GpsFix", "ReceiverCode_2src_2main_8cpp.html#a86c2722f6c671747562cc504a440e243", null ],
@@ -62,6 +63,8 @@ var ReceiverCode_2src_2main_8cpp =
     [ "NewConnectionMoment", "ReceiverCode_2src_2main_8cpp.html#a5ce4b7c421146d2957e4ae7c91118661", null ],
     [ "OldQnh", "ReceiverCode_2src_2main_8cpp.html#a9457ea1945cb317c212c8cb98a829f39", null ],
     [ "PacketStartTime", "ReceiverCode_2src_2main_8cpp.html#ac479139b01668992bdccae3c508df1df", null ],
+    [ "PPMChannelOrder", "ReceiverCode_2src_2main_8cpp.html#a895a44d6997cf437187de470e1835d15", null ],
+    [ "PPMOutput", "ReceiverCode_2src_2main_8cpp.html#a41e85682a7a27ea99995f9eb979036fd", null ],
     [ "PWMPins", "ReceiverCode_2src_2main_8cpp.html#a19f864fa6bdea0867325f70e162c92ef", null ],
     [ "Qnh", "ReceiverCode_2src_2main_8cpp.html#ae3495ca407a0a3ea570ce0af7a3447a3", null ],
     [ "QNHSent", "ReceiverCode_2src_2main_8cpp.html#a85141adc0aa19e8a8d1d9b3e5796500f", null ],
@@ -78,5 +81,6 @@ var ReceiverCode_2src_2main_8cpp =
     [ "ServosAttached", "ReceiverCode_2src_2main_8cpp.html#a95b22fb572f7a91a89a431c7f1236575", null ],
     [ "SpeedGPS", "ReceiverCode_2src_2main_8cpp.html#af02319a1e0d8c0c651f23e49acc228f8", null ],
     [ "TheReceivedPipe", "ReceiverCode_2src_2main_8cpp.html#ae5a33f9a5f131b46460efad8f0e8e8b5", null ],
+    [ "UseSBUS", "ReceiverCode_2src_2main_8cpp.html#a80f5214ddc3b9618293f3b2694dff6f7", null ],
     [ "YearGPS", "ReceiverCode_2src_2main_8cpp.html#a4a1012a9dfe5632ac326ce712f311472", null ]
 ];

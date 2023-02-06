@@ -1,5 +1,9 @@
 var NAVTREEINDEX11 =
 {
+"globals_defs_d.html":[4,1,4,4],
+"globals_defs_e.html":[4,1,4,5],
+"globals_defs_f.html":[4,1,4,6],
+"globals_defs_g.html":[4,1,4,7],
 "globals_defs_h.html":[4,1,4,8],
 "globals_defs_i.html":[4,1,4,9],
 "globals_defs_k.html":[4,1,4,10],
