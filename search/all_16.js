@@ -19,5 +19,5 @@ var searchData=
   ['usemotorkill_16',['UseMotorKill',['../TransmitterCode_2src_2main_8cpp.html#ad76445c097f9d33a6935be5c2489bd34',1,'main.cpp']]],
   ['user_5fctrl_17',['USER_CTRL',['../classMPU9250.html#ac7a02a1a77fe8bf5a477cc37820d2f27',1,'MPU9250']]],
   ['usereceiveddata_18',['UseReceivedData',['../ReceiverCode_2src_2main_8cpp.html#abb1997c589abc6432f612eaedf985e38',1,'main.cpp']]],
-  ['usesbus_19',['UseSBUS',['../ReceiverCode_2src_2main_8cpp.html#a80f5214ddc3b9618293f3b2694dff6f7',1,'main.cpp']]]
+  ['usesbus_19',['UseSBUS',['../ReceiverCode_2src_2main_8cpp.html#a80f5214ddc3b9618293f3b2694dff6f7',1,'UseSBUS():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a80f5214ddc3b9618293f3b2694dff6f7',1,'UseSBUS():&#160;main.cpp']]]
 ];
