@@ -430,7 +430,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "FirstConnection", "TransmitterCode_2src_2main_8cpp.html#ac2fc49f3335ebd2b38d0184306dfcf9b", null ],
     [ "FMSwitch", "TransmitterCode_2src_2main_8cpp.html#a452f6aed1252d3f1da8a0ceb07552c07", null ],
     [ "ForeGroundColour", "TransmitterCode_2src_2main_8cpp.html#a029840d27a3c9954aa481d494df4ace6", null ],
-    [ "FrameRate", "TransmitterCode_2src_2main_8cpp.html#a15934d6b655d0b6335f5d5924cda43dc", null ],
+    [ "FrameRate", "TransmitterCode_2src_2main_8cpp.html#a40bf1d8a8c81402f614bc3edce58d4ee", null ],
     [ "FrontView_Connected", "TransmitterCode_2src_2main_8cpp.html#ab61956b4b300b36a8a9234e2a9b53087", null ],
     [ "FrontView_Hours", "TransmitterCode_2src_2main_8cpp.html#aedaf1495391d83b1ff10ad2192fffc93", null ],
     [ "FrontView_Mins", "TransmitterCode_2src_2main_8cpp.html#a60f4339de362e3a16c844e1325523c90", null ],
