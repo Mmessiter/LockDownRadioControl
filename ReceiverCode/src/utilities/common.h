@@ -16,8 +16,7 @@
 
 #define RXVERSION_MAJOR   2
 #define RXVERSION_MINOR   0
-#define RXVERSION_MINIMUS 7 // Feb 2023
-
+#define RXVERSION_MINIMUS 8 // Feb 2023
 
 // #define DB_FHSS
 // #define DB_SENSORS
@@ -39,8 +38,6 @@
 #define RECEIVE_TIMEOUT 14 //   <=9 fails, >=11 OK ... HEER!!
 
 // *****************************************************************************************
-
-
 
 #define DEFAULTPIPE              0xBABE1E5420LL
 #define FREQUENCYSCOUNT          82 // uses 82 different channels

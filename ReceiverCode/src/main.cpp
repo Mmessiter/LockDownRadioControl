@@ -11,9 +11,10 @@
  * - Detects and uses BMP280 pressure sensor for altitude (NOW IN SENSOR HUB)
  * - Binding implemented
  * - SBUS implemented
+ * - PPM Implemented
  * - Failsafe implemented (after two seconds)
  * - RESOLUTION INCREASED TO 12 BITS
- * - Channels increased to 16. 9 PWM outputs.  SBUS can handle all.
+ * - Channels increased to 16. 9 PWM outputs.  SBUS can handle all. PPM Does 8
  * - Exponential implemented (at TX end)
  * - Sensor Hub added with GPS and more sensors
  * - Supports one or two tranceivers (nRF24L01+)
@@ -27,8 +28,8 @@
  * | 11    | SPI MOSI (FOR BOTH RADIOS)  |
  * | 12    | SPI MISO (FOR BOTH RADIOS)  |
  * | 13    | SPI SCK  (FOR BOTH RADIOS) |
- * | 14    | SBUS output (TX3) |
- * | 15    | Don't use. SBUS driver takes it (RX3) |
+ * | 14    | SBUS OR PPM output (TX3) |
+ * | 15    | Don't use if using SBUS. The driver takes it (RX3) |
  * | 16    | SPARE
  * | 17    | SPARE
  * | 18    | I2C SDA (FOR I2C) | *** --- >> BLUE WIRE   = 18 !! << --- ***
@@ -238,10 +239,12 @@ void AttachServos()
         }
         ServosAttached = true;
     }
-if (UseSBUS){ 
-        MySbus.begin(); // AND START SBUS
+    if (UseSBUS){ 
+        MySbus.begin();             // AND START SBUS
+        FrameRate = SBUSRATE;       // 10 ms
     }else{
-        PPMOutput.begin(PPMPORT); // ... Or PPM
+        PPMOutput.begin(PPMPORT);   // ... Or PPM
+        FrameRate = PPMRATE;        // 20 ms 
     }
 }
 /************************************************************************************************************/
@@ -269,7 +272,7 @@ void BindModel()
         FirstConnection = false;
     }
     uint32_t t = millis();
-    while (millis() - t < 1000) ReceiveData(); // this avoid initial glitch on reconnect  // heer
+    while (millis() - t < 1000) ReceiveData(); // this avoid initial glitch on reconnect  
     ReadyToUseData = true;
 }
 // ***************************************************************************************************************************************************
@@ -715,11 +718,6 @@ FLASHMEM void setup()
 void loop()
 {
     ReceiveData();
-    if (UseSBUS) {
-        FrameRate = SBUSRATE;  // 10 ms
-     }else{
-        FrameRate = PPMRATE;   // 20 ms 
-    }
     if (BoundFlag && Connected && ModelMatched) { // Only move servos if everything is good
         if (millis() - SBUSTimer >= FrameRate) {  // FrameRate rate is also good enough for servo rate
             SBUSTimer = millis();                 // timer starts before send starts....
