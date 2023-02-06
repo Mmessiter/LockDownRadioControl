@@ -255,6 +255,7 @@ void BindModel()
 {
     ThisPipe = NewPipe;
     OldPipe  = NewPipe;
+    uint32_t t;
 
     CurrentRadio->stopListening();
     delayMicroseconds(250);
@@ -268,10 +269,12 @@ void BindModel()
     BindNow     = 0;
     SaveNewBind = false;
     if (FirstConnection) {
-        AttachServos(); // AND START SBUS!!!
+        t = millis();
+        while (millis() - t < 2000) ReceiveData(); // this to sort SBUS / PPM  
+        AttachServos(); // AND START SBUS or PPM
         FirstConnection = false;
     }
-    uint32_t t = millis();
+    t = millis();
     while (millis() - t < 1000) ReceiveData(); // this avoid initial glitch on reconnect  
     ReadyToUseData = true;
 }
@@ -381,6 +384,12 @@ void ReadExtraParameters()
                 if (SwapWaveBand == 1) SetUKFrequencies();
                 if (SwapWaveBand == 2) SetTestFrequencies();
             }
+            break;
+        case 5:
+             UseSBUS = ReceivedData[CHANNELSUSED + 1];
+             FrameRate = ReceivedData[CHANNELSUSED + 2];
+            break;
+
         default:
             break;
     }

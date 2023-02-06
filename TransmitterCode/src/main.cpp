@@ -548,6 +548,8 @@ bool     TimerDownwards         = false;
 uint16_t TimerStartTime         = 5 * 60; 
 bool     TimesUp                = false;
 uint8_t  CountDownIndex = 0;
+bool     UseSBUS                = false; // at receiver. false = PPM
+uint8_t  FrameRate              = 20;
 
 // **********************************************************************************************************************************
 // *********************************************** END OF GLOBAL DATA ***************************************************************
@@ -3025,7 +3027,10 @@ bool ReadOneModel(uint32_t Mnum)
     if (TimerStartTime > 120 * 60) TimerStartTime = 5 * 60;
     ++SDCardAddress;
     ++SDCardAddress;
-
+    UseSBUS         = (bool) SDRead8BITS(SDCardAddress);
+    ++SDCardAddress;
+    FrameRate         =  SDRead8BITS(SDCardAddress);
+    ++SDCardAddress;
 
     // **************************************
 
@@ -4066,6 +4071,12 @@ void SaveOneModel(uint32_t mnum)
       
         ++SDCardAddress;
         ++SDCardAddress;
+
+        SDUpdate8BITS(SDCardAddress, UseSBUS); 
+        ++SDCardAddress;   
+
+        SDUpdate8BITS(SDCardAddress, FrameRate); 
+        ++SDCardAddress;  
 
     SaveCheckSum32(); // Save the Model parametres checksm
     
@@ -6315,6 +6326,9 @@ void RXSetup1Start() // model options screen
 
     char n4[] = "n4";    // TimerDownwards timer minutes
     char c2[] = "c2";    // TimerDownwards timer on off
+    char r0[] = "r0";    // SBUS on
+    char r1[] = "r1";    // PPM on
+    char n5[] = "n5";    // Framerate
 
     SendCommand(pRXSetup1);
     SendValue(c1, CopyTrimsToAll);
@@ -6327,6 +6341,10 @@ void RXSetup1Start() // model options screen
     SendValue(RxVCorrextion, RxVoltageCorrection);
     SendValue(c2, TimerDownwards);
     SendValue(n4, TimerStartTime/60);
+    SendValue(r0, UseSBUS);
+    SendValue(r1, !UseSBUS);
+    SendValue(n5, FrameRate);
+
     CurrentView = RXSETUPVIEW1;
     UpdateModelsNameEveryWhere();
 
@@ -6347,7 +6365,8 @@ void RXSetup1End()
     char n3[] = "n3";
     char n4[] = "n4";    // TimerDownwards timer minutes
     char c2[] = "c2";    // TimerDownwards timer on off
-
+    char r0[] = "r0";    // SBUS on
+    char n5[] = "n5";    // Framerate
 
     CopyTrimsToAll= GetValue(c1);
     TrimMultiplier=GetValue(n3);
@@ -6360,6 +6379,8 @@ void RXSetup1End()
     MotorChannel            = GetValue(Mchannel) - 1;
     TimerDownwards          = GetValue(c2);
     TimerStartTime          = GetValue(n4) * 60;
+    UseSBUS                 = GetValue(r0);
+    FrameRate               = GetValue(n5);
     CurrentView             = TXSETUPVIEW;
     SaveOneModel(ModelNumber);
     UpdateModelsNameEveryWhere();
@@ -8436,8 +8457,13 @@ void LoadPacketData()
             if (SwapWaveBand == 1) SetUKFrequencies();
             SwapWaveBand = 0;
             break;
-        default:
+
+        case 5:
+            SendBuffer[CHANNELSUSED + 1] = UseSBUS;  // 1 - 0
+            SendBuffer[CHANNELSUSED + 2] = FrameRate; // 10 - 20
             break;
+
+        default : break;
     }
 }
 
