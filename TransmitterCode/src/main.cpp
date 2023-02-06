@@ -62,20 +62,20 @@
  * | 3  LED     | GREEN |
  * | 4  LED     | BLUE |
  * | 5  POLOLU  | 2808 ALL POWER OFF SIGNAL (When high)  |
- * | 6  Pololu  | Sensor for power button press while on |
+ **| 6  POLOLU  | Sensor for power button press while on | *****<< ? PPM ?
  * | 7  (RX2)   | SBUS IN    ---------> BUDDY BOX SYSTEM |
  * | 8  (TX2)   | SBUS OUT   ---------> BUDDY BOX SYSTEM |
- * | 9  (CE)    | nRF24l01 (CE) |
- * | 10 (CS)    | nRF24l01 (CSN) |
- * | 11 (MOSI)  | nRF24l01 (MOSI) |
- * | 12 (MISO)  | nRF24l01 (MISO) |
- * | 13 (SCK)   | nRF24l01 (SCK) |
- * | 14 (A0)    | Joystick POT CH1 |
- * | 15 (A1)    | Joystick POT CH2 |
+ **| 9  (CE)    | nRF24l01 (CE) |
+ **| 10 (CS)    | nRF24l01 (CSN) |
+ **| 11 (MOSI)  | nRF24l01 (MOSI) |
+ **| 12 (MISO)  | nRF24l01 (MISO) |
+ **| 13 (SCK)   | nRF24l01 (SCK) |
+ **| 14 (A0)    | Joystick POT CH1 |
+ **| 15 (A1)    | Joystick POT CH2 |
  * | 16 (A2)    | Joystick POT CH3 |
  * | 17 (A3)    | Joystick POT CH4 |
- * | 18         | I2C bus  SDA |
- * | 19         | I2C bus  SCL |
+ **| 18         | I2C bus  SDA |
+ **| 19         | I2C bus  SCL |
  * | 20 (A6)    | POT KNOB CH5 |
  * | 21 (A7)    | POT KNOB CH6 |
  * | 22 (A8)    | POT KNOB CH7 |
@@ -9415,13 +9415,10 @@ void FASTRUN ManageTransmitter(){
     uint32_t TXPacketElapsed = RightNow - LastPacketSentTime;
 
     KickTheDog();                                                    // Watchdog ... ALWAYS!
-
-    CheckForNextionButtonPress();                                    // Pretty obvious really ...
-
-    if ((PACEMAKER - TXPacketElapsed  <= TIMEFORTXMANAGMENT) && Connected && BoundFlag && ModelMatched) {
+    CheckForNextionButtonPress(); // Pretty obvious really ...
+    if ((PACEMAKER - TXPacketElapsed  <= TIMEFORTXMANAGMENT) && ModelMatched) {
         return; // If it's almost time to send data, then do not start some other task which might easily take longer.
     }
-      
       if (RightNow - TransmitterLastManaged > 50) {                  // 20 times a second is plenty
         if (RightNow - LastTimeRead >= 1000) {                       // once a second for these...
             ReadTime();                                              // Do the clock
@@ -9437,8 +9434,8 @@ void FASTRUN ManageTransmitter(){
         ReadSwitches();                                              // Check switch positions 20 times a second
         CheckHardwareTrims();                                        // Trims 20 times a second
         GetBank();                                                   // Must not call too often        
-        ShowComms();                                                 // Screen Data                                  
-        ShowMotorTimer();                                                // Screen Timer
+        ShowComms();                                                 // Screen Telemetry Data                                  
+        ShowMotorTimer();                                            // Screen Timer
         CheckPowerOffButton();                                       // Pretty obvious really ...
         TransmitterLastManaged = millis();
     }
