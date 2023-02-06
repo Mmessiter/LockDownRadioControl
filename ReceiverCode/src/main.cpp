@@ -386,8 +386,8 @@ void ReadExtraParameters()
             }
             break;
         case 5:
-             UseSBUS = ReceivedData[CHANNELSUSED + 1];
-             FrameRate = ReceivedData[CHANNELSUSED + 2];
+             UseSBUS    = (bool) ReceivedData[CHANNELSUSED + 1]; // if false means PPM
+             FrameRate  = ReceivedData[CHANNELSUSED + 2];
             break;
 
         default:
