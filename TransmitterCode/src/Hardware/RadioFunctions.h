@@ -37,7 +37,7 @@
 //    DEBUG OPTIONS (Uncomment any of these for that bit of debug info)     *
 //***************************************************************************
 
- #define DB_NEXTION        // Debug NEXTION
+// #define DB_NEXTION        // Debug NEXTION
 // #define DB_SD             // Debug SD card data
 // #define DB_CHECKSUM       // Debug 32BIT file checksum info
 // #define DB_FHSS           // Debug real time FHSS data
@@ -276,6 +276,16 @@
 #define STUNT2          59
 #define WHEELSDOWN      60
 #define WHEELSUP        61
+#define TEN             62
+#define NINE            63
+#define EIGHT           64
+#define SEVEN           65
+#define SIX             66
+#define FIVE            67
+#define FOUR            68
+#define THREE           69
+#define TWO             70
+#define ONE             71
 
 
 

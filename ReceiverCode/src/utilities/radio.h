@@ -54,7 +54,6 @@ extern float    CourseToGPS;
 extern uint8_t  MacAddress[8];
 extern uint8_t  TheReceivedPipe[8];
 extern uint32_t NewConnectionMoment;
-
 extern void BindModel();
 extern void FailSafe(); // defined in main.cpp
 extern void ClearAckPayload();

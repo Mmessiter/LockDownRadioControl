@@ -11,9 +11,10 @@
  * - Detects and uses BMP280 pressure sensor for altitude (NOW IN SENSOR HUB)
  * - Binding implemented
  * - SBUS implemented
+ * - PPM Implemented
  * - Failsafe implemented (after two seconds)
  * - RESOLUTION INCREASED TO 12 BITS
- * - Channels increased to 16. 9 PWM outputs.  SBUS can handle all.
+ * - Channels increased to 16. 9 PWM outputs.  SBUS can handle all. PPM Does 8
  * - Exponential implemented (at TX end)
  * - Sensor Hub added with GPS and more sensors
  * - Supports one or two tranceivers (nRF24L01+)
@@ -27,8 +28,8 @@
  * | 11    | SPI MOSI (FOR BOTH RADIOS)  |
  * | 12    | SPI MISO (FOR BOTH RADIOS)  |
  * | 13    | SPI SCK  (FOR BOTH RADIOS) |
- * | 14    | SBUS output (TX3) |
- * | 15    | Don't use. SBUS driver takes it (RX3) |
+ * | 14    | SBUS OR PPM output (TX3) |
+ * | 15    | Don't use if using SBUS. The driver takes it (RX3) |
  * | 16    | SPARE
  * | 17    | SPARE
  * | 18    | I2C SDA (FOR I2C) | *** --- >> BLUE WIRE   = 18 !! << --- ***
@@ -41,11 +42,13 @@
  * @see ReceiverCode/src/main.cpp
  */
 #include "utilities/radio.h"
+
 Adafruit_INA219 ina219;
 bool            SensorHubConnected = false; //  GPS (Adafruit Ultimate GPS) ?
 Servo           MCMServo[SERVOSUSED];
 uint8_t         PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8}; // 9 PWMs, remaining 7 via sbus
-SBUS            MySbus(SBUSPORT);
+SBUS                    MySbus(SBUSPORT);    // SBUS
+PulsePositionOutput     PPMOutput;           // PPM
 float           PacketStartTime;
 uint8_t         BindNow        = 0;     /** indicates that the receiver should start the binding/pairing process */
 bool            BoundFlag      = false; /** indicates if receiver paired with transmitter */
@@ -91,6 +94,10 @@ bool            FirstConnection = true;
 bool            ReadyToUseData  = false;
 bool            FailedSafe = true;  // Starting up as the same as after failsafe
 uint32_t        MostRecentHop;
+uint8_t         PPMChannelOrder[SERVOSUSED] = {2, 3, 1, 4, 5, 6, 7, 8, 9};
+uint8_t         FrameRate                   = SBUSRATE;
+bool            UseSBUS = true;
+
 /************************************************************************************************************/
 
 void LoadFailSafeData()
@@ -130,10 +137,11 @@ void MapToSBUS()
 void MoveServos()
 {
     if (!ReadyToUseData) return;
-    MySbus.write(SbusChannels); // Send SBUS data
+    if(UseSBUS) MySbus.write(SbusChannels); // Send SBUS data
     for (int j = 0; j < SERVOSUSED; ++j) {
-        if (PreviousData[j] != ReceivedData[j]) { // if same as last time, don't send again.
+         if (PreviousData[j] != ReceivedData[j]) { // if same as last time, don't send again.
             MCMServo[j].writeMicroseconds(ReceivedData[j]);
+            if(!UseSBUS) PPMOutput.write(PPMChannelOrder[j], map(ReceivedData[j], MINMICROS, MAXMICROS, 1000, 2000)); // PPM Send!     
             PreviousData[j] = ReceivedData[j];
         }
     }
@@ -209,7 +217,7 @@ void UseReceivedData()
 bool ReadData()
 {
     Connected = false;
-    if (CurrentRadio->available()) { // Get all, but use only the latest
+    while (CurrentRadio->available()) { // Get all, but use only the latest
         LoadAckPayload();
         CurrentRadio->flush_tx();                                      // This avoids a lockup that happens when the FIFO gets full
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // Send telemetry
@@ -229,9 +237,15 @@ void AttachServos()
         for (uint8_t i = 0; i < SERVOSUSED; ++i) {
             MCMServo[i].attach(PWMPins[i]);
         }
-        ServosAttached = true;
+    ServosAttached = true;
     }
-    MySbus.begin(); // AND START SBUS!!!
+    if (UseSBUS){ 
+        MySbus.begin();             // AND START SBUS
+        FrameRate = SBUSRATE;       // 10 ms
+    }else{
+        PPMOutput.begin(PPMPORT);   // Or PPM on same pin
+        FrameRate = PPMRATE;        // 20 ms 
+    }
 }
 /************************************************************************************************************/
 // This function binds the model using the TX supplied Pipe instead of the default one.
@@ -241,6 +255,7 @@ void BindModel()
 {
     ThisPipe = NewPipe;
     OldPipe  = NewPipe;
+    uint32_t t;
 
     CurrentRadio->stopListening();
     delayMicroseconds(250);
@@ -254,11 +269,13 @@ void BindModel()
     BindNow     = 0;
     SaveNewBind = false;
     if (FirstConnection) {
-        AttachServos(); // AND START SBUS!!!
+        t = millis();
+        while (millis() - t < 2000) ReceiveData(); // this to sort SBUS / PPM  
+        AttachServos(); // AND START SBUS or PPM
         FirstConnection = false;
     }
-    uint32_t t = millis();
-    while (millis() - t < 1000) ReceiveData(); // this avoid initial glitch on reconnect  // heer
+    t = millis();
+    while (millis() - t < 1000) ReceiveData(); // this avoid initial glitch on reconnect  
     ReadyToUseData = true;
 }
 // ***************************************************************************************************************************************************
@@ -367,6 +384,12 @@ void ReadExtraParameters()
                 if (SwapWaveBand == 1) SetUKFrequencies();
                 if (SwapWaveBand == 2) SetTestFrequencies();
             }
+            break;
+        case 5:
+             UseSBUS = ReceivedData[CHANNELSUSED + 1];
+             FrameRate = ReceivedData[CHANNELSUSED + 2];
+            break;
+
         default:
             break;
     }
@@ -544,15 +567,12 @@ FASTRUN void ReceiveData()
     
     if (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT)  Reconnect(); // Try to reconnect.
     
-  //  if (millis() - MostRecentHop >= HOPTIME+20) {
-  //      if (ModelMatched) HopNowAnyway();                // HOP IN THE SILENCE
-  //  }
-
     if (ReadData()) {
         ReadExtraParameters(); // Check the extra parameters
     }
     else {
-        if (millis() - SBUSTimer >= SBUSRATE) { // No new packet yet - but maybe it's time to dispatch the last?
+
+        if (millis() - SBUSTimer >= FrameRate) { // No new packet yet - but maybe it's time to dispatch the last?
             if (BoundFlag && (millis() > 10000)) {
                 if (Connected) {
                     KeepSbusHappy(); // if it's time - send a SBUS packet. It might be new data.
@@ -708,7 +728,7 @@ void loop()
 {
     ReceiveData();
     if (BoundFlag && Connected && ModelMatched) { // Only move servos if everything is good
-        if (millis() - SBUSTimer >= SBUSRATE) {   // SBUS rate is also good enough for servo rate
+        if (millis() - SBUSTimer >= FrameRate) {  // FrameRate rate is also good enough for servo rate
             SBUSTimer = millis();                 // timer starts before send starts....
             MoveServos();                         // Actually do something useful at last
         }

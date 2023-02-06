@@ -62,20 +62,20 @@
  * | 3  LED     | GREEN |
  * | 4  LED     | BLUE |
  * | 5  POLOLU  | 2808 ALL POWER OFF SIGNAL (When high)  |
- * | 6  Pololu  | Sensor for power button press while on |
+ **| 6  POLOLU  | Sensor for power button press while on | *****<< ? PPM ?
  * | 7  (RX2)   | SBUS IN    ---------> BUDDY BOX SYSTEM |
  * | 8  (TX2)   | SBUS OUT   ---------> BUDDY BOX SYSTEM |
- * | 9  (CE)    | nRF24l01 (CE) |
- * | 10 (CS)    | nRF24l01 (CSN) |
- * | 11 (MOSI)  | nRF24l01 (MOSI) |
- * | 12 (MISO)  | nRF24l01 (MISO) |
- * | 13 (SCK)   | nRF24l01 (SCK) |
- * | 14 (A0)    | Joystick POT CH1 |
- * | 15 (A1)    | Joystick POT CH2 |
+ **| 9  (CE)    | nRF24l01 (CE) |
+ **| 10 (CS)    | nRF24l01 (CSN) |
+ **| 11 (MOSI)  | nRF24l01 (MOSI) |
+ **| 12 (MISO)  | nRF24l01 (MISO) |
+ **| 13 (SCK)   | nRF24l01 (SCK) |
+ **| 14 (A0)    | Joystick POT CH1 |
+ **| 15 (A1)    | Joystick POT CH2 |
  * | 16 (A2)    | Joystick POT CH3 |
  * | 17 (A3)    | Joystick POT CH4 |
- * | 18         | I2C bus  SDA |
- * | 19         | I2C bus  SCL |
+ **| 18         | I2C bus  SDA |
+ **| 19         | I2C bus  SCL |
  * | 20 (A6)    | POT KNOB CH5 |
  * | 21 (A7)    | POT KNOB CH6 |
  * | 22 (A8)    | POT KNOB CH7 |
@@ -458,6 +458,7 @@ bool      PlayFanfare       = true;
 bool      TrimClicks        = true;
 bool      SpeakingClock     = true;
 bool      ClockSpoken       = false;
+bool      ClockSpoken1      = false;
 bool      AnnounceBanks     = true;
 bool      AnnounceConnected = true;
 bool      CopyTrimsToAll    = true;
@@ -546,11 +547,13 @@ uint8_t  ReconnectionIndex      = 0;
 bool     TimerDownwards         = false;
 uint16_t TimerStartTime         = 5 * 60; 
 bool     TimesUp                = false;
+uint8_t  CountDownIndex = 0;
+bool     UseSBUS                = true;  // at receiver. false = PPM
+uint16_t FrameRate              = 100;  
 
 // **********************************************************************************************************************************
 // *********************************************** END OF GLOBAL DATA ***************************************************************
 // **********************************************************************************************************************************
-
 
 
 // **********************************************************************************************************************************
@@ -1470,13 +1473,16 @@ bool GetButtonPress()
 /*********************************************************************************************************************************/
 
 
-
 FASTRUN void ShowMotorTimer()
 {
 
     if (TimesUp) return;
 
     uint8_t Recording[10] = {ONEMINUTE, TWOMINUTES, THREEMINUTES, FOURMINUTES, FIVEMINUTES, SIXMINUTES, SEVENMINUTES, EIGHTMINUTES, NINEMINUTES, TENMINUTES};
+    
+    uint8_t Cdown[10]     = {TEN,NINE,EIGHT,SEVEN,SIX,FIVE,FOUR,THREE,TWO,ONE};
+
+    
     if ((MotorEnabled && !LostContactFlag) ) {
         ElapsedSeconds  = ((millis() - TimerMillis) / 1000) + PausedSecs;
         Secs = ElapsedSeconds;
@@ -1489,6 +1495,7 @@ FASTRUN void ShowMotorTimer()
     if (LastSeconds != Secs) {
 
         ClockSpoken = false;
+        ClockSpoken1 = false;
         if (CurrentView == FRONTVIEW) {
             SendValue(FrontView_Secs, Secs);
             SendValue(FrontView_Mins, Mins);
@@ -1496,6 +1503,15 @@ FASTRUN void ShowMotorTimer()
         }
         LastSeconds = Secs;
     }
+    
+    if (TimerDownwards) {
+        if ((Secs < 11) && !Mins && !ClockSpoken1 && (ElapsedSeconds > 2)) {
+            PlaySound(Cdown[CountDownIndex]);
+            ++CountDownIndex;
+            ClockSpoken1 = true;
+        }
+    }
+
     if (!Secs && SpeakingClock && !ClockSpoken) {
         ClockSpoken = true;
         if ((Mins <= 10) && (Mins > 0)) {
@@ -1503,10 +1519,13 @@ FASTRUN void ShowMotorTimer()
         }
         if (TimerDownwards){
             if ((!Mins) && (!Secs) && (ElapsedSeconds > 2)) {
-                PlaySound(STORAGECHARGE); // = Stop Flyfing!
+                PlaySound(STORAGECHARGE);   // = Stop Flyfing!
                 TimesUp = true;
+                CountDownIndex  = 0;
             }
         }
+
+
     }
 }
 
@@ -3007,7 +3026,11 @@ bool ReadOneModel(uint32_t Mnum)
     if (TimerStartTime > 120 * 60) TimerStartTime = 5 * 60;
     ++SDCardAddress;
     ++SDCardAddress;
-
+    UseSBUS         = (bool) SDRead8BITS(SDCardAddress);
+    ++SDCardAddress;
+    FrameRate         =  SDRead16BITS(SDCardAddress);
+    ++SDCardAddress;
+    ++SDCardAddress;
 
     // **************************************
 
@@ -4047,6 +4070,13 @@ void SaveOneModel(uint32_t mnum)
         SDUpdate16BITS(SDCardAddress, TimerStartTime);
       
         ++SDCardAddress;
+        ++SDCardAddress;
+
+        SDUpdate8BITS(SDCardAddress, UseSBUS); 
+        ++SDCardAddress;   
+
+        SDUpdate16BITS(SDCardAddress, FrameRate); 
+        ++SDCardAddress;  
         ++SDCardAddress;
 
     SaveCheckSum32(); // Save the Model parametres checksm
@@ -5872,7 +5902,6 @@ void EndReverseView()
         if (GetValue(fs[i])) ReversedChannelBITS |= 1 << i; // set a BIT 
     }
     SaveOneModel(ModelNumber);
-    SendCommand(ProgressEnd);
     b5isGrey = false;
     b12isGrey = false;
     SendCommand(pRXSetupView);
@@ -6297,6 +6326,10 @@ void RXSetup1Start() // model options screen
 
     char n4[] = "n4";    // TimerDownwards timer minutes
     char c2[] = "c2";    // TimerDownwards timer on off
+    char r0[] = "r0";    // SBUS on
+    char r1[] = "r1";    // PPM on
+    char n5[] = "n5";    // Framerate
+
 
     SendCommand(pRXSetup1);
     SendValue(c1, CopyTrimsToAll);
@@ -6309,6 +6342,9 @@ void RXSetup1Start() // model options screen
     SendValue(RxVCorrextion, RxVoltageCorrection);
     SendValue(c2, TimerDownwards);
     SendValue(n4, TimerStartTime/60);
+    SendValue(r0, UseSBUS);
+    SendValue(r1, !UseSBUS);
+    SendValue(n5,FrameRate); // FrameRate = ms between packets
     CurrentView = RXSETUPVIEW1;
     UpdateModelsNameEveryWhere();
 
@@ -6329,24 +6365,37 @@ void RXSetup1End()
     char n3[] = "n3";
     char n4[] = "n4";    // TimerDownwards timer minutes
     char c2[] = "c2";    // TimerDownwards timer on off
+    char r0[] = "r0";    // SBUS on
+    char n5[] = "n5";    // Framerate
 
-
+    SendCommand(ProgressStart);
     CopyTrimsToAll= GetValue(c1);
+    SendValue(Progress,5);
     TrimMultiplier=GetValue(n3);
     GetText(t10, fbuf);
     StopFlyingVoltsPerCell  = atof(fbuf);
+    SendValue(Progress,10);
     SFV                     = StopFlyingVoltsPerCell * 100;  // this makes it a 16 bit value I can save easily
+    SendValue(Progress,20);
     MotorChannelZero        = GetValue(Mvalue);
+    SendValue(Progress,30);
     RxVoltageCorrection     = GetValue(RxVCorrextion);
+    SendValue(Progress,40);
     UseMotorKill            = GetValue(UseKill);
+    SendValue(Progress,50);
     MotorChannel            = GetValue(Mchannel) - 1;
+    SendValue(Progress,60);
     TimerDownwards          = GetValue(c2);
+    SendValue(Progress,70);
     TimerStartTime          = GetValue(n4) * 60;
-    Look(TimerDownwards);
-
+    SendValue(Progress,80);
+    UseSBUS                 = GetValue(r0);
+    SendValue(Progress,90);
+    FrameRate              =  GetValue(n5);
+    SendValue(Progress, 100);
     CurrentView             = TXSETUPVIEW;
     SaveOneModel(ModelNumber);
-    UpdateModelsNameEveryWhere();
+    UpdateModelsNameEveryWhere();   
     SendCommand(page_RXSetupView);
     
 }
@@ -6417,7 +6466,6 @@ void BuddyChViewEnd()
     }
     SaveOneModel(ModelNumber);
     CloseModelsFile();
-    SendCommand(ProgressEnd);
     SendCommand(page_BuddyView);
     CurrentView = BUDDYVIEW;
 }
@@ -6514,7 +6562,6 @@ void ResetTransmitterSettings(){    // This function resets all transmitter para
    SaveTransmitterParameters();
    SendCommand(ProgressEnd);
 }
-
 
 /*********************************************************************************************************************************/
 
@@ -6781,8 +6828,6 @@ void EndSlowView(){
      CheckStepSizes();
      SaveOneModel(ModelNumber);
      SendValue(Progress, 100);
-     Procrastinate(250);
-     SendCommand(ProgressEnd);
      StartModelSetup();
 }
 /******************************************************************************************************************************/
@@ -7635,7 +7680,7 @@ FASTRUN void ButtonWasPressed()
             SendValue(ScreenViewTimeout, ScreenTimeout);
             SendValue(Pto, (Inactivity_Timeout / TICKSPERMINUTE));
             SendText(Tx_Name, TxName);
-            SendValue(lpm, AutoModelSelect); // heer
+            SendValue(lpm, AutoModelSelect); 
             SendValue(Bwn, LowBattery);
             CurrentView = OPTIONS_VIEW;
             CurrentMode = NORMAL;
@@ -7805,7 +7850,6 @@ FASTRUN void ButtonWasPressed()
             SaveOneModel(ModelNumber);
             SendValue(Progress, 100);
             CurrentMode = NORMAL;
-            SendCommand(ProgressEnd);
             UpdateButtonLabels();
             CurrentView = RXSETUPVIEW;
             SendCommand(page_RXSetupView);
@@ -8420,8 +8464,13 @@ void LoadPacketData()
             if (SwapWaveBand == 1) SetUKFrequencies();
             SwapWaveBand = 0;
             break;
-        default:
+
+        case 5:
+            SendBuffer[CHANNELSUSED + 1] = UseSBUS;       // 1 - 0
+            SendBuffer[CHANNELSUSED + 2] = (uint8_t)(1000 / FrameRate);
             break;
+
+        default : break;
     }
 }
 
@@ -8519,7 +8568,6 @@ void GetBank()
 { //  and  motor switch and safety switch ETC ...
 
     if (CurrentMode != NORMAL) return; // not needed if calibrating
-
     SafetyON     = false;
     BuddyON      = false;
 
@@ -8589,19 +8637,27 @@ void GetBank()
     if (SafetyWasOn != SafetyON){
         if (SafetyON) ShowSafetyIsOn(); else ShowSafetyIsOff();
         SafetyWasOn = SafetyON;
-    }                       
-   
+    }
+    
     if (SafetyON) {
         MotorEnabled = false;
         TimesUp      = false;
-        PausedSecs   = 0; // Safety switch zeros timer. BUT don't update display!
-                          // if (CurrentView == FRONTVIEW) {
-                          //     SendValue(FrontView_Secs, 0);
-                          //     SendValue(FrontView_Mins, 0);
-                          //     SendValue(FrontView_Hours,0);
-                          // }
+        PausedSecs   = 0;
+        CountDownIndex = 0;
+        if (CurrentView == FRONTVIEW) {
+            if (TimerDownwards) { 
+                Mins = TimerStartTime / 60;
+            }else{
+                Mins = 0;
+            }
+            SendValue(FrontView_Secs, 0);
+            SendValue(FrontView_Mins, Mins);
+            SendValue(FrontView_Hours, 0);
+        }
     }
+    
 
+    
     if ((MotorEnabled != MotorWasEnabled) && (UseMotorKill))  {                         // MotorEnabled changed ?
         if (MotorEnabled) {
             if (LedWasRed)
@@ -9392,13 +9448,10 @@ void FASTRUN ManageTransmitter(){
     uint32_t TXPacketElapsed = RightNow - LastPacketSentTime;
 
     KickTheDog();                                                    // Watchdog ... ALWAYS!
-
-    CheckForNextionButtonPress();                                    // Pretty obvious really ...
-
-    if ((PACEMAKER - TXPacketElapsed  <= TIMEFORTXMANAGMENT) && Connected && BoundFlag && ModelMatched) {
+    CheckForNextionButtonPress(); // Pretty obvious really ...
+    if ((PACEMAKER - TXPacketElapsed  <= TIMEFORTXMANAGMENT) && ModelMatched) {
         return; // If it's almost time to send data, then do not start some other task which might easily take longer.
     }
-      
       if (RightNow - TransmitterLastManaged > 50) {                  // 20 times a second is plenty
         if (RightNow - LastTimeRead >= 1000) {                       // once a second for these...
             ReadTime();                                              // Do the clock
@@ -9414,8 +9467,8 @@ void FASTRUN ManageTransmitter(){
         ReadSwitches();                                              // Check switch positions 20 times a second
         CheckHardwareTrims();                                        // Trims 20 times a second
         GetBank();                                                   // Must not call too often        
-        ShowComms();                                                 // Screen Data                                  
-        ShowMotorTimer();                                                // Screen Timer
+        ShowComms();                                                 // Screen Telemetry Data                                  
+        ShowMotorTimer();                                            // Screen Timer
         CheckPowerOffButton();                                       // Pretty obvious really ...
         TransmitterLastManaged = millis();
     }
@@ -9426,7 +9479,7 @@ void FASTRUN ManageTransmitter(){
 /************************************************************************************************************/
 FASTRUN void loop()
 {
-    ManageTransmitter();                                         // Do the needed chores ... if there's time
+    ManageTransmitter();                                         // Do the needed chores ... (if there's time)
     GetNewChannelValues();                                       // Load SendBuffer with new servo positions  Very frequently
     if (UseMacros) ExecuteMacro();                               // Modify it if macro is running
     if (BuddyPupilOnSbus) { 

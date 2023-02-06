@@ -12,11 +12,11 @@
 #include <Servo.h>
 #include <SBUS.h>
 #include "utilities/radio.h"
+#include <PulsePosition.h>
 
 #define RXVERSION_MAJOR   2
 #define RXVERSION_MINOR   0
-#define RXVERSION_MINIMUS 7 // Feb 2023
-
+#define RXVERSION_MINIMUS 8 // Feb 2023
 
 // #define DB_FHSS
 // #define DB_SENSORS
@@ -25,7 +25,7 @@
 // #define DB_RXTIMERS
 
 //**************************************************************************************************************************
-  #define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< ****
+#define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< ****
 //**************************************************************************************************************************
 
 #define SENSOR_HUB_I2C_ADDRESS 8
@@ -45,12 +45,14 @@
 #define CHANNELSUSED             16
 #define SERVOSUSED               9  // But all 16 are available via SBUS
 #define SBUSRATE                 10 // SBUS frame every 10 milliseconds
-#define SBUSPORT                 Serial3
-#define RECONNECTGAP             25 // Send no data to servos for 25 ms after a reconnect (10 was not quite enough)
+#define PPMRATE                  20 // PPM frame every 20 milliseconds
+#define SBUSPORT                 Serial3                    // = 14
+#define PPMPORT                  14                        // same as SBUS
+#define RECONNECTGAP             25                        // Send no data to servos for 25 ms after a reconnect (10 was not quite enough)
 #define MINMICROS                500
 #define MAXMICROS                2500
 #define LED_PIN                  LED_BUILTIN
-#define RANGEMAX                 2047 // = Frsky at 150 %
+#define RANGEMAX                 2047                      // = Frsky at 150 %
 #define RANGEMIN                 0
 #define pinCE1                   9                         // NRF1
 #define pinCSN1                  10                        // NRF1
