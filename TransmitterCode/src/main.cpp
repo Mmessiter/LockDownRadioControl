@@ -6344,7 +6344,7 @@ void RXSetup1Start() // model options screen
     SendValue(n4, TimerStartTime/60);
     SendValue(r0, UseSBUS);
     SendValue(r1, !UseSBUS);
-    SendValue(n5,FrameRate); // FrameRate = ms between packets
+    SendValue(n5,FrameRate);
     CurrentView = RXSETUPVIEW1;
     UpdateModelsNameEveryWhere();
 
