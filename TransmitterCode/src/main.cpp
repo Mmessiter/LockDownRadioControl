@@ -548,13 +548,12 @@ bool     TimerDownwards         = false;
 uint16_t TimerStartTime         = 5 * 60; 
 bool     TimesUp                = false;
 uint8_t  CountDownIndex = 0;
-bool     UseSBUS                = false; // at receiver. false = PPM
-uint8_t  FrameRate              = 20;
+bool     UseSBUS                = true;  // at receiver. false = PPM
+uint16_t FrameRate              = 100;  
 
 // **********************************************************************************************************************************
 // *********************************************** END OF GLOBAL DATA ***************************************************************
 // **********************************************************************************************************************************
-
 
 
 // **********************************************************************************************************************************
@@ -3029,7 +3028,8 @@ bool ReadOneModel(uint32_t Mnum)
     ++SDCardAddress;
     UseSBUS         = (bool) SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-    FrameRate         =  SDRead8BITS(SDCardAddress);
+    FrameRate         =  SDRead16BITS(SDCardAddress);
+    ++SDCardAddress;
     ++SDCardAddress;
 
     // **************************************
@@ -4075,8 +4075,9 @@ void SaveOneModel(uint32_t mnum)
         SDUpdate8BITS(SDCardAddress, UseSBUS); 
         ++SDCardAddress;   
 
-        SDUpdate8BITS(SDCardAddress, FrameRate); 
+        SDUpdate16BITS(SDCardAddress, FrameRate); 
         ++SDCardAddress;  
+        ++SDCardAddress;
 
     SaveCheckSum32(); // Save the Model parametres checksm
     
@@ -5901,7 +5902,6 @@ void EndReverseView()
         if (GetValue(fs[i])) ReversedChannelBITS |= 1 << i; // set a BIT 
     }
     SaveOneModel(ModelNumber);
-    SendCommand(ProgressEnd);
     b5isGrey = false;
     b12isGrey = false;
     SendCommand(pRXSetupView);
@@ -6330,6 +6330,7 @@ void RXSetup1Start() // model options screen
     char r1[] = "r1";    // PPM on
     char n5[] = "n5";    // Framerate
 
+
     SendCommand(pRXSetup1);
     SendValue(c1, CopyTrimsToAll);
     SendValue(n3, TrimMultiplier);
@@ -6343,8 +6344,7 @@ void RXSetup1Start() // model options screen
     SendValue(n4, TimerStartTime/60);
     SendValue(r0, UseSBUS);
     SendValue(r1, !UseSBUS);
-    SendValue(n5, FrameRate);
-
+    SendValue(n5,FrameRate); // FrameRate = ms between packets
     CurrentView = RXSETUPVIEW1;
     UpdateModelsNameEveryWhere();
 
@@ -6368,22 +6368,34 @@ void RXSetup1End()
     char r0[] = "r0";    // SBUS on
     char n5[] = "n5";    // Framerate
 
+    SendCommand(ProgressStart);
     CopyTrimsToAll= GetValue(c1);
+    SendValue(Progress,5);
     TrimMultiplier=GetValue(n3);
     GetText(t10, fbuf);
     StopFlyingVoltsPerCell  = atof(fbuf);
+    SendValue(Progress,10);
     SFV                     = StopFlyingVoltsPerCell * 100;  // this makes it a 16 bit value I can save easily
+    SendValue(Progress,20);
     MotorChannelZero        = GetValue(Mvalue);
+    SendValue(Progress,30);
     RxVoltageCorrection     = GetValue(RxVCorrextion);
+    SendValue(Progress,40);
     UseMotorKill            = GetValue(UseKill);
+    SendValue(Progress,50);
     MotorChannel            = GetValue(Mchannel) - 1;
+    SendValue(Progress,60);
     TimerDownwards          = GetValue(c2);
+    SendValue(Progress,70);
     TimerStartTime          = GetValue(n4) * 60;
+    SendValue(Progress,80);
     UseSBUS                 = GetValue(r0);
-    FrameRate               = GetValue(n5);
+    SendValue(Progress,90);
+    FrameRate              =  GetValue(n5);
+    SendValue(Progress, 100);
     CurrentView             = TXSETUPVIEW;
     SaveOneModel(ModelNumber);
-    UpdateModelsNameEveryWhere();
+    UpdateModelsNameEveryWhere();   
     SendCommand(page_RXSetupView);
     
 }
@@ -6454,7 +6466,6 @@ void BuddyChViewEnd()
     }
     SaveOneModel(ModelNumber);
     CloseModelsFile();
-    SendCommand(ProgressEnd);
     SendCommand(page_BuddyView);
     CurrentView = BUDDYVIEW;
 }
@@ -6551,7 +6562,6 @@ void ResetTransmitterSettings(){    // This function resets all transmitter para
    SaveTransmitterParameters();
    SendCommand(ProgressEnd);
 }
-
 
 /*********************************************************************************************************************************/
 
@@ -6818,8 +6828,6 @@ void EndSlowView(){
      CheckStepSizes();
      SaveOneModel(ModelNumber);
      SendValue(Progress, 100);
-     Procrastinate(250);
-     SendCommand(ProgressEnd);
      StartModelSetup();
 }
 /******************************************************************************************************************************/
@@ -7842,7 +7850,6 @@ FASTRUN void ButtonWasPressed()
             SaveOneModel(ModelNumber);
             SendValue(Progress, 100);
             CurrentMode = NORMAL;
-            SendCommand(ProgressEnd);
             UpdateButtonLabels();
             CurrentView = RXSETUPVIEW;
             SendCommand(page_RXSetupView);
@@ -8459,8 +8466,8 @@ void LoadPacketData()
             break;
 
         case 5:
-            SendBuffer[CHANNELSUSED + 1] = UseSBUS;  // 1 - 0
-            SendBuffer[CHANNELSUSED + 2] = FrameRate; // 10 - 20
+            SendBuffer[CHANNELSUSED + 1] = UseSBUS;       // 1 - 0
+            SendBuffer[CHANNELSUSED + 2] = (uint8_t)(1000 / FrameRate);
             break;
 
         default : break;
@@ -9472,7 +9479,7 @@ void FASTRUN ManageTransmitter(){
 /************************************************************************************************************/
 FASTRUN void loop()
 {
-    ManageTransmitter();                                         // Do the needed chores ... if there's time
+    ManageTransmitter();                                         // Do the needed chores ... (if there's time)
     GetNewChannelValues();                                       // Load SendBuffer with new servo positions  Very frequently
     if (UseMacros) ExecuteMacro();                               // Modify it if macro is running
     if (BuddyPupilOnSbus) { 
