@@ -108,16 +108,17 @@ Features List</h1>
 <li>Detects and uses BMP280 pressure sensor for altitude (NOW IN SENSOR HUB)</li>
 <li>Binding implemented</li>
 <li><a class="el" href="classSBUS.html">SBUS</a> implemented</li>
+<li>PPM Implemented</li>
 <li>Failsafe implemented (after two seconds)</li>
 <li>RESOLUTION INCREASED TO 12 BITS</li>
-<li>Channels increased to 16. 9 PWM outputs. <a class="el" href="classSBUS.html">SBUS</a> can handle all.</li>
+<li>Channels increased to 16. 9 PWM outputs. <a class="el" href="classSBUS.html">SBUS</a> can handle all. PPM Does 8</li>
 <li>Exponential implemented (at TX end)</li>
 <li>Sensor Hub added with GPS and more sensors</li>
 <li>Supports one or two tranceivers (nRF24L01+)</li>
 </ul>
 <h1><a class="anchor" id="rxpinout"></a>
 TEENSY 4.0 PINS</h1>
-<p >| pin number(s) | purpose | |------------&mdash;|------&mdash;| | 0...8 | PWM SERVOS Channels 1 - 9 | (Channels 10 - 16 available via <a class="el" href="classSBUS.html">SBUS</a>) | 9 | SPI CE1 (FOR RADIO1) | | 10 | SPI CSN1 (FOR RADIO1) | | 11 | SPI MOSI (FOR BOTH RADIOS) | | 12 | SPI MISO (FOR BOTH RADIOS) | | 13 | SPI SCK (FOR BOTH RADIOS) | | 14 | <a class="el" href="classSBUS.html">SBUS</a> output (TX3) | | 15 | Don't use. <a class="el" href="classSBUS.html">SBUS</a> driver takes it (RX3) | | 16 | SPARE | 17 | SPARE | 18 | I2C SDA (FOR I2C) | *** &mdash; &gt;&gt; BLUE WIRE = 18 !! &lt;&lt; &mdash; *** | 19 | I2C SCK (FOR I2C) | *** &mdash; &gt;&gt; YELLOW WIRE = 19 !! &lt;&lt; &mdash; *** | 20 | SPI CSN2 (FOR RADIO2) | | 21 | SPI CE2 (FOR RADIO2) | | 22 | IRQ1 (FOR RADIO1) | | 23 | IRQ2 (FOR RADIO2) |</p>
+<p >| pin number(s) | purpose | |------------&mdash;|------&mdash;| | 0...8 | PWM SERVOS Channels 1 - 9 | (Channels 10 - 16 available via <a class="el" href="classSBUS.html">SBUS</a>) | 9 | SPI CE1 (FOR RADIO1) | | 10 | SPI CSN1 (FOR RADIO1) | | 11 | SPI MOSI (FOR BOTH RADIOS) | | 12 | SPI MISO (FOR BOTH RADIOS) | | 13 | SPI SCK (FOR BOTH RADIOS) | | 14 | <a class="el" href="classSBUS.html">SBUS</a> OR PPM output (TX3) | | 15 | Don't use if using <a class="el" href="classSBUS.html">SBUS</a>. The driver takes it (RX3) | | 16 | SPARE | 17 | SPARE | 18 | I2C SDA (FOR I2C) | *** &mdash; &gt;&gt; BLUE WIRE = 18 !! &lt;&lt; &mdash; *** | 19 | I2C SCK (FOR I2C) | *** &mdash; &gt;&gt; YELLOW WIRE = 19 !! &lt;&lt; &mdash; *** | 20 | SPI CSN2 (FOR RADIO2) | | 21 | SPI CE2 (FOR RADIO2) | | 22 | IRQ1 (FOR RADIO1) | | 23 | IRQ2 (FOR RADIO2) |</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="ReceiverCode_2src_2main_8cpp.html">ReceiverCode/src/main.cpp</a> </dd></dl>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
