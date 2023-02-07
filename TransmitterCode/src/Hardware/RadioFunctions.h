@@ -7,6 +7,12 @@
 #define RadioFunctions_H
 
 // **************************************************************************
+//     SUPPORT FOR TX MODULE                                                *
+// **************************************************************************
+
+  #define TXMODULESUPPORT // ONLY FOR NEW PCBs  <<< *** <<<
+
+// **************************************************************************
 //       TX VERSION NUMBER   (May 2020 - January 2023 Malcolm Messiter)      *
 //***************************************************************************
 
@@ -32,6 +38,7 @@
 #include <SBUS.h>
 #include <RF24.h>
 #include <Watchdog_t4.h>
+#include <PulsePosition.h>
 
 // **************************************************************************
 //    DEBUG OPTIONS (Uncomment any of these for that bit of debug info)     *
@@ -208,8 +215,13 @@
 #define GREENLED            3
 #define BLUELED             4
 #define POWER_OFF_PIN       5
-#define BUTTON_SENSE_PIN    6
 
+#ifdef TXMODULESUPPORT
+    #define BUTTON_SENSE_PIN    33
+    #define PPMPORT             6
+#else
+    #define BUTTON_SENSE_PIN    6
+#endif
 // **************************************************************************
 //               Sounds                             *
 //***************************************************************************

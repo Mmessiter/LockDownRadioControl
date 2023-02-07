@@ -11,7 +11,7 @@
  * - Detects and uses BMP280 pressure sensor for altitude (NOW IN SENSOR HUB)
  * - Binding implemented
  * - SBUS implemented
- * - PPM Implemented
+ * - PPM Implemented on the same pin as SBUS (Serial 3 / Pin 14)
  * - Failsafe implemented (after two seconds)
  * - RESOLUTION INCREASED TO 12 BITS
  * - Channels increased to 16. 9 PWM outputs.  SBUS can handle all. PPM Does 8
@@ -47,8 +47,8 @@ Adafruit_INA219 ina219;
 bool            SensorHubConnected = false; //  GPS (Adafruit Ultimate GPS) ?
 Servo           MCMServo[SERVOSUSED];
 uint8_t         PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8}; // 9 PWMs, remaining 7 via sbus
-SBUS                    MySbus(SBUSPORT);    // SBUS
-PulsePositionOutput     PPMOutput;           // PPM
+SBUS            MySbus(SBUSPORT);       // SBUS
+PulsePositionOutput     PPMOutput;      // PPM
 float           PacketStartTime;
 uint8_t         BindNow        = 0;     /** indicates that the receiver should start the binding/pairing process */
 bool            BoundFlag      = false; /** indicates if receiver paired with transmitter */
@@ -137,13 +137,13 @@ void MapToSBUS()
 void MoveServos()
 {
     if (!ReadyToUseData) return;
-    if(UseSBUS) MySbus.write(SbusChannels); // Send SBUS data
+    if (UseSBUS) MySbus.write(SbusChannels);       // Send SBUS data
     for (int j = 0; j < SERVOSUSED; ++j) {
          if (PreviousData[j] != ReceivedData[j]) { // if same as last time, don't send again.
             MCMServo[j].writeMicroseconds(ReceivedData[j]);
-            if(!UseSBUS) PPMOutput.write(PPMChannelOrder[j], map(ReceivedData[j], MINMICROS, MAXMICROS, 1000, 2000)); // PPM Send!     
+            if (!UseSBUS) PPMOutput.write(PPMChannelOrder[j], map(ReceivedData[j], MINMICROS, MAXMICROS, 1000, 2000)); // PPM Send!     
             PreviousData[j] = ReceivedData[j];
-        }
+         }
     }
 }
 
@@ -241,10 +241,8 @@ void AttachServos()
     }
     if (UseSBUS){ 
         MySbus.begin();             // AND START SBUS
-        FrameRate = SBUSRATE;       // 10 ms
     }else{
         PPMOutput.begin(PPMPORT);   // Or PPM on same pin
-        FrameRate = PPMRATE;        // 20 ms 
     }
 }
 /************************************************************************************************************/
@@ -255,8 +253,7 @@ void BindModel()
 {
     ThisPipe = NewPipe;
     OldPipe  = NewPipe;
-    uint32_t t;
-
+   
     CurrentRadio->stopListening();
     delayMicroseconds(250);
     SetNewPipe(); // change to bound pipe
@@ -268,14 +265,13 @@ void BindModel()
     BoundFlag   = true;
     BindNow     = 0;
     SaveNewBind = false;
+    uint32_t t = millis();
+    
+    while (millis() - t < 1500) ReceiveData(); // this avoid initial glitch on reconnect 
     if (FirstConnection) {
-        t = millis();
-        while (millis() - t < 2000) ReceiveData(); // this to sort SBUS / PPM  
-        AttachServos(); // AND START SBUS or PPM
+        AttachServos(); // AND START SBUS / PPM
         FirstConnection = false;
     }
-    t = millis();
-    while (millis() - t < 1000) ReceiveData(); // this avoid initial glitch on reconnect  
     ReadyToUseData = true;
 }
 // ***************************************************************************************************************************************************

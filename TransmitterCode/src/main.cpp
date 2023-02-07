@@ -550,6 +550,11 @@ bool     TimesUp                = false;
 uint8_t  CountDownIndex = 0;
 bool     UseSBUS                = true;  // at receiver. false = PPM
 uint16_t FrameRate              = 100;  
+PulsePositionOutput     PPMOutput;      // PPM
+uint8_t                 PPMChannelOrder[16]  = {2, 3, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+uint32_t                LastPPMFrame         = 0;
+uint8_t                 PPMChannelNumber     = 8;
+uint8_t                 PPMMillis            = 20;
 
 // **********************************************************************************************************************************
 // *********************************************** END OF GLOBAL DATA ***************************************************************
@@ -3018,9 +3023,7 @@ bool ReadOneModel(uint32_t Mnum)
           ++SDCardAddress;
      }
     CheckStepSizes();
-
     TimerDownwards          = (bool) SDRead8BITS(SDCardAddress);
-   
     ++SDCardAddress;
     TimerStartTime          = SDRead16BITS(SDCardAddress);
     if (TimerStartTime > 120 * 60) TimerStartTime = 5 * 60;
@@ -3029,6 +3032,10 @@ bool ReadOneModel(uint32_t Mnum)
     UseSBUS         = (bool) SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
     FrameRate         =  SDRead16BITS(SDCardAddress);
+    if ((FrameRate < 10) || (FrameRate > 250)){  // miles out of range framerate?
+          FrameRate = 100;
+          UseSBUS   = true;
+    }
     ++SDCardAddress;
     ++SDCardAddress;
 
@@ -3682,7 +3689,11 @@ FLASHMEM void setup()
             SendNoData = true;
     }
     if(!UseMotorKill)  ShowMotor(1);
-   
+
+#ifdef TXMODULESUPPORT
+    PPMOutput.begin(PPMPORT);   
+#endif
+    
     if (ErrorState) {
         SendCommand(WarnNow);
         if (ErrorState == CHECKSUMERROR) {
@@ -7800,7 +7811,6 @@ FASTRUN void ButtonWasPressed()
                 SendValue(Progress, i * (100 / 16));
             }
             SendValue(Progress, 100);
-            SaveOneModel(ModelNumber);
             FailSafeTimer   = millis();
             SaveFailSafeNow = true;
             ClearText();
@@ -8439,7 +8449,8 @@ void LoadPacketData()
             if (((millis() - FailSafeTimer) > 1500) && SaveFailSafeNow) {
                 SendBuffer[CHANNELSUSED + 1] = SaveFailSafeNow; // FailSafeSaveMoment
                 SaveFailSafeNow              = false;           // once should do it.
-                SendCommand(ProgressEnd);
+                
+                SendCommand(ProgressEnd); // heer
             }
             break;
         case 1:
@@ -8467,7 +8478,7 @@ void LoadPacketData()
 
         case 5:
             SendBuffer[CHANNELSUSED + 1] = UseSBUS;       // 1 - 0
-            SendBuffer[CHANNELSUSED + 2] = (uint8_t)(1000 / FrameRate);
+            SendBuffer[CHANNELSUSED + 2] = (uint8_t)(1000 / FrameRate); // frame rate converted to ms per frame
             break;
 
         default : break;
@@ -9473,6 +9484,17 @@ void FASTRUN ManageTransmitter(){
         TransmitterLastManaged = millis();
     }
 }
+/**********************************************************************************************************/
+#ifdef TXMODULESUPPORT
+
+void SendPPM(){ // heer  Send a frame of PPM
+    if (millis() - LastPPMFrame < PPMMillis) return; // 50 Hz?
+    LastPPMFrame = millis();
+    for (int j = 0; j < PPMChannelNumber; ++j) {
+        PPMOutput.write(PPMChannelOrder[j], map(SendBuffer[j], MINMICROS, MAXMICROS, 1000, 2000));
+    }
+}
+#endif
 
 /************************************************************************************************************/
 // LOOP
@@ -9496,6 +9518,9 @@ FASTRUN void loop()
     switch (CurrentMode) {
         case NORMAL:            // 0
             SendData();
+#ifdef TXMODULESUPPORT
+            SendPPM();         // for TX module
+#endif
             break;
         case CALIBRATELIMITS:   // 1
             CalibrateSticks();
