@@ -68,6 +68,6 @@ var searchData=
   ['audiovolume_65',['AudioVolume',['../TransmitterCode_2src_2main_8cpp.html#adddcbca54e7b49592c3f6c360bf04494',1,'main.cpp']]],
   ['auto_66',['AUTO',['../RadioFunctions_8h.html#a0cc6f7717df9fbdc0f33efb88720a639',1,'RadioFunctions.h']]],
   ['automodelselect_67',['AutoModelSelect',['../TransmitterCode_2src_2main_8cpp.html#a77387f8b9f18e9b75448e01d821ae17e',1,'main.cpp']]],
-  ['autoswitch_68',['AUTOSWITCH',['../RadioFunctions_8h.html#aa4414f3ff790f01b8bb41a0f51d1518f',1,'RadioFunctions.h']]],
-  ['autoswitch_69',['AutoSwitch',['../TransmitterCode_2src_2main_8cpp.html#a6d1c8ca21c8826267f5687d3799c6a1f',1,'main.cpp']]]
+  ['autoswitch_68',['AutoSwitch',['../TransmitterCode_2src_2main_8cpp.html#a6d1c8ca21c8826267f5687d3799c6a1f',1,'main.cpp']]],
+  ['autoswitch_69',['AUTOSWITCH',['../RadioFunctions_8h.html#aa4414f3ff790f01b8bb41a0f51d1518f',1,'RadioFunctions.h']]]
 ];
