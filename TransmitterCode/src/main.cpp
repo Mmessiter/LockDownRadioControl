@@ -551,7 +551,11 @@ uint8_t  CountDownIndex = 0;
 bool     UseSBUS                = true;  // at receiver. false = PPM
 uint16_t FrameRate              = 100;  
 PulsePositionOutput     PPMOutput;      // PPM
-uint8_t                 PPMChannelOrder[16]  = {2, 3, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+
+//uint8_t                 PPMChannelOrder[16]  = {2, 3, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+
+uint8_t                 PPMChannelOrder[16]  = {3, 1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+
 uint32_t                LastPPMFrame         = 0;
 uint8_t                 PPMChannelNumber     = 8;
 uint8_t                 PPMMillis            = 20;
