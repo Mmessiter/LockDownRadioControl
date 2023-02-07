@@ -549,16 +549,17 @@ uint16_t TimerStartTime         = 5 * 60;
 bool     TimesUp                = false;
 uint8_t  CountDownIndex = 0;
 bool     UseSBUS                = true;  // at receiver. false = PPM
-uint16_t FrameRate              = 100;  
-PulsePositionOutput     PPMOutput;      // PPM
 
-//uint8_t                 PPMChannelOrder[16]  = {2, 3, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+// **********************************  PPM Area for TX **********************************************
+uint16_t FrameRate              = 100;  
+PulsePositionOutput     PPMOutput;              // PPM for buddy boxing and TX Modules
+PulsePositionOutput     PPMInput;               // PPM for buddy boxing
 
 uint8_t                 PPMChannelOrder[16]  = {3, 1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
-
 uint32_t                LastPPMFrame         = 0;
-uint8_t                 PPMChannelNumber     = 8;
+uint8_t                 PPMChannelNumber     = 6;
 uint8_t                 PPMMillis            = 20;
+bool                    UseTXModule          = false;
 
 // **********************************************************************************************************************************
 // *********************************************** END OF GLOBAL DATA ***************************************************************
@@ -3651,7 +3652,7 @@ FLASHMEM void setup()
     ScanI2c();
     if (USE_INA219) ina219.begin();
     InitSwitchesAndTrims();
-    InitRadio(DefaultPipe);
+    if (!UseTXModule) InitRadio(DefaultPipe);
     delay(WARMUPDELAY);                        // Allow Nextion time to warm up
     SendValue(FrontView_BackGround, BackGroundColour); // Get colours ready
     SendValue(FrontView_ForeGround, ForeGroundColour);
@@ -3695,7 +3696,9 @@ FLASHMEM void setup()
     if(!UseMotorKill)  ShowMotor(1);
 
 #ifdef TXMODULESUPPORT
-    PPMOutput.begin(PPMPORT);   
+
+  if (UseTXModule)  PPMOutput.begin(PPMPORT);   
+
 #endif
     
     if (ErrorState) {
@@ -9521,9 +9524,9 @@ FASTRUN void loop()
    
     switch (CurrentMode) {
         case NORMAL:            // 0
-            SendData();
+            if (!UseTXModule) SendData();
 #ifdef TXMODULESUPPORT
-            SendPPM();         // for TX module
+            if (UseTXModule) SendPPM();         // for TX module or buddy
 #endif
             break;
         case CALIBRATELIMITS:   // 1
