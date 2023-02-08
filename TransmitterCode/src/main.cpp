@@ -62,9 +62,9 @@
  * | 3  LED     | GREEN |
  * | 4  LED     | BLUE |
  * | 5  POLOLU  | 2808 ALL POWER OFF SIGNAL (When high)  |
- **| 6  POLOLU  | Sensor for power button press while on | *****<< ? PPM ?
- * | 7  (RX2)   | SBUS IN    ---------> BUDDY BOX SYSTEM |
- * | 8  (TX2)   | SBUS OUT   ---------> BUDDY BOX SYSTEM |
+ **| 6  PPM     | PPM IN or OUT (was Sensor for power button)
+ * | 7  (RX2)   | SPARE (was BUDDY BOX)
+ * | 8  (TX2)   | SPARE (was  BUDDY BOX)
  **| 9  (CE)    | nRF24l01 (CE) |
  **| 10 (CS)    | nRF24l01 (CSN) |
  **| 11 (MOSI)  | nRF24l01 (MOSI) |
@@ -88,7 +88,7 @@
  * | 30         | Switch 3 |
  * | 31         | Switch 4 |
  * | 32         | Switch 4 |
- * | 33 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< (!! SPARE !!)
+ * | 33         | Sensor for power button press while on | (formally a SPARE)
  * | 34         |TRIM (CH1a)|
  * | 35         |TRIM (CH1b)|
  * | 36         |TRIM (CH2a)|
@@ -550,16 +550,18 @@ bool     TimesUp                = false;
 uint8_t  CountDownIndex = 0;
 bool     UseSBUS                = true;  // at receiver. false = PPM
 
-// **********************************  PPM Area for TX **********************************************
+// **********************************************************************************************************************************
+// **********************************  PPM Area for TX MODULE **********************************************************************
 uint16_t FrameRate              = 100;  
 PulsePositionOutput     PPMOutput;              // PPM for buddy boxing and TX Modules
 PulsePositionOutput     PPMInput;               // PPM for buddy boxing
-
+//                                              T  A  E  R 
 uint8_t                 PPMChannelOrder[16]  = {3, 1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
 uint32_t                LastPPMFrame         = 0;
 uint8_t                 PPMChannelNumber     = 6;
 uint8_t                 PPMMillis            = 20;
-bool                    UseTXModule          = false;
+bool                    UseTXModule          = true;
+// **********************************************************************************************************************************
 
 // **********************************************************************************************************************************
 // *********************************************** END OF GLOBAL DATA ***************************************************************
