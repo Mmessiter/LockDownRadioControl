@@ -1,11 +1,13 @@
 var TransmitterCode_2src_2main_8cpp =
 [
     [ "Payload", "structPayload.html", "structPayload" ],
+    [ "A", "TransmitterCode_2src_2main_8cpp.html#a955f504eccf76b4eb2489c0adab03121", null ],
     [ "APPROXIMATION", "TransmitterCode_2src_2main_8cpp.html#aee8c3c363eab49d6a90d3f74587694d5", null ],
     [ "BOXLEFT", "TransmitterCode_2src_2main_8cpp.html#a311676c322643cddb6f37b0ed605053c", null ],
     [ "BOXSIZE", "TransmitterCode_2src_2main_8cpp.html#a4f84c7cd953e90b218a9baa12f6e5e35", null ],
     [ "BOXTOP", "TransmitterCode_2src_2main_8cpp.html#a77283adcfca9bc9bcf9fa2e476f220ab", null ],
     [ "BUFFERSIZE", "TransmitterCode_2src_2main_8cpp.html#ac3146f1e9227301bb4aa518f4d336cee", null ],
+    [ "E", "TransmitterCode_2src_2main_8cpp.html#a07484107e6d9fdf38b53edf631d6511d", null ],
     [ "FILECHANNEL", "TransmitterCode_2src_2main_8cpp.html#a25a02fd19ba6092af59f73a9de071bd2", null ],
     [ "FILEDATARATE", "TransmitterCode_2src_2main_8cpp.html#a632cdd81885fffa95960e573cc6b42b3", null ],
     [ "FILEPALEVEL", "TransmitterCode_2src_2main_8cpp.html#af4896f4ff6b440a66c915e3f891c71d2", null ],
@@ -14,6 +16,8 @@ var TransmitterCode_2src_2main_8cpp =
     [ "fixitx", "TransmitterCode_2src_2main_8cpp.html#ad40f5a53042299d0a733f7238b5df3a2", null ],
     [ "LASTFUNCTION", "TransmitterCode_2src_2main_8cpp.html#a7b562fa140e3020f492686ce35e4ac52", null ],
     [ "MAXWIDTH", "TransmitterCode_2src_2main_8cpp.html#ac101c663138f79260b6d5ea00140fa22", null ],
+    [ "R", "TransmitterCode_2src_2main_8cpp.html#a5c71a5e59a53413cd6c270266d63b031", null ],
+    [ "T", "TransmitterCode_2src_2main_8cpp.html#a0acb682b8260ab1c60b918599864e2e5", null ],
     [ "AdjustDateTime", "TransmitterCode_2src_2main_8cpp.html#a9de4ea8e761b5f0e537f6f326f9ad429", null ],
     [ "AileronLeftTrim", "TransmitterCode_2src_2main_8cpp.html#a71f72bed656884a7e88b70f73f8d81a4", null ],
     [ "AileronRightTrim", "TransmitterCode_2src_2main_8cpp.html#ae734c00c145b79aa75e175155f8dd4a7", null ],
