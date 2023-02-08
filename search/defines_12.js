@@ -25,9 +25,10 @@ var searchData=
   ['two_22',['TWO',['../RadioFunctions_8h.html#a888e15353eb3d330c743dbdeb47117e2',1,'RadioFunctions.h']]],
   ['twominutes_23',['TWOMINUTES',['../RadioFunctions_8h.html#adc071342f0d02db71ceac915c16d7f85',1,'RadioFunctions.h']]],
   ['txmodulesupport_24',['TXMODULESUPPORT',['../RadioFunctions_8h.html#a0224fe60e9befad7b62531ab850fed98',1,'RadioFunctions.h']]],
-  ['txsetupview_25',['TXSETUPVIEW',['../RadioFunctions_8h.html#a59446de1638c86e10c4ac9e5e2871511',1,'RadioFunctions.h']]],
-  ['txsize_26',['TXSIZE',['../RadioFunctions_8h.html#a4b19180ba242a70607d90a3d37985df2',1,'RadioFunctions.h']]],
-  ['txversion_5fmajor_27',['TXVERSION_MAJOR',['../RadioFunctions_8h.html#aebd7ef5764d81d53646b187e0e337bd3',1,'RadioFunctions.h']]],
-  ['txversion_5fminimus_28',['TXVERSION_MINIMUS',['../RadioFunctions_8h.html#a7b2773d8aa3a50ce71dfeb1568f8da26',1,'RadioFunctions.h']]],
-  ['txversion_5fminor_29',['TXVERSION_MINOR',['../RadioFunctions_8h.html#a892ac703d752012a921e12fc7d632bf2',1,'RadioFunctions.h']]]
+  ['txmoduleview_25',['TXMODULEVIEW',['../RadioFunctions_8h.html#a70a0f4317ce7de6e2ef8b8725d23b945',1,'RadioFunctions.h']]],
+  ['txsetupview_26',['TXSETUPVIEW',['../RadioFunctions_8h.html#a59446de1638c86e10c4ac9e5e2871511',1,'RadioFunctions.h']]],
+  ['txsize_27',['TXSIZE',['../RadioFunctions_8h.html#a4b19180ba242a70607d90a3d37985df2',1,'RadioFunctions.h']]],
+  ['txversion_5fmajor_28',['TXVERSION_MAJOR',['../RadioFunctions_8h.html#aebd7ef5764d81d53646b187e0e337bd3',1,'RadioFunctions.h']]],
+  ['txversion_5fminimus_29',['TXVERSION_MINIMUS',['../RadioFunctions_8h.html#a7b2773d8aa3a50ce71dfeb1568f8da26',1,'RadioFunctions.h']]],
+  ['txversion_5fminor_30',['TXVERSION_MINOR',['../RadioFunctions_8h.html#a892ac703d752012a921e12fc7d632bf2',1,'RadioFunctions.h']]]
 ];
