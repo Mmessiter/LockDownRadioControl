@@ -10,15 +10,15 @@
 //     SUPPORT FOR TX MODULE                                                *
 // **************************************************************************
 
-  #define TXMODULESUPPORT // ONLY FOR NEW PCBs  <<< *** <<<
+  #define TXMODULESUPPORT // ONLY FOR NEW VERSION PCBs  <<< *** <<<
 
 // **************************************************************************
-//       TX VERSION NUMBER   (May 2020 - January 2023 Malcolm Messiter)      *
+//       TX VERSION NUMBER   (May 2020 - February 2023 Malcolm Messiter)      *
 //***************************************************************************
 
 #define TXVERSION_MAJOR   2
 #define TXVERSION_MINOR   0
-#define TXVERSION_MINIMUS 8
+#define TXVERSION_MINIMUS 9
 
 // **************************************************************************
 //                               Includes                                   *

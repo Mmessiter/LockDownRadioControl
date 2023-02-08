@@ -549,18 +549,26 @@ uint16_t TimerStartTime         = 5 * 60;
 bool     TimesUp                = false;
 uint8_t  CountDownIndex = 0;
 bool     UseSBUS                = true;  // at receiver. false = PPM
+uint16_t FrameRate              = 100;  
 
 // **********************************************************************************************************************************
 // **********************************  PPM Area for TX MODULE **********************************************************************
-uint16_t FrameRate              = 100;  
-PulsePositionOutput     PPMOutput;              // PPM for buddy boxing and TX Modules
-PulsePositionOutput     PPMInput;               // PPM for buddy boxing
-//                                              T  A  E  R 
-uint8_t                 PPMChannelOrder[16]  = {3, 1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+#ifdef TXMODULESUPPORT
+
+#define A 1
+#define E 2
+#define T 3
+#define R 4
+
+PulsePositionOutput     PPMOutput;             // PPM for buddy boxing and TX Modules
+PulsePositionOutput     PPMInput;              // PPM for buddy boxing
+uint8_t                 PPMChannelOrder[16]  = {T, A, E, R, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
 uint32_t                LastPPMFrame         = 0;
 uint8_t                 PPMChannelNumber     = 6;
-uint8_t                 PPMMillis            = 20;
-bool                    UseTXModule          = true;
+uint8_t                 PPMMillis            = 22;
+bool                    UseTXModule          = false;
+
+#endif
 // **********************************************************************************************************************************
 
 // **********************************************************************************************************************************
@@ -3654,7 +3662,13 @@ FLASHMEM void setup()
     ScanI2c();
     if (USE_INA219) ina219.begin();
     InitSwitchesAndTrims();
+
+#ifdef TXMODULESUPPORT
     if (!UseTXModule) InitRadio(DefaultPipe);
+#else
+    InitRadio(DefaultPipe);
+#endif
+
     delay(WARMUPDELAY);                        // Allow Nextion time to warm up
     SendValue(FrontView_BackGround, BackGroundColour); // Get colours ready
     SendValue(FrontView_ForeGround, ForeGroundColour);
@@ -3671,7 +3685,7 @@ FLASHMEM void setup()
     SendValue(FrontView_Mins, 0);
     SendValue(FrontView_Secs, 0);
     //  ***************************************************************************************
-      //SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
+    //  SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
     //  **   BUT then re-comment it!! Otherwise it will reset to same time on every boot up! **
     //  ***************************************************************************************
     BoundFlag = false;
@@ -9526,9 +9540,15 @@ FASTRUN void loop()
    
     switch (CurrentMode) {
         case NORMAL:            // 0
-            if (!UseTXModule) SendData();
+            
 #ifdef TXMODULESUPPORT
-            if (UseTXModule) SendPPM();         // for TX module or buddy
+            if (!UseTXModule) {
+                SendData();         // local TX
+            }else{
+                 SendPPM();         // for TX module or buddy
+            }
+#else
+            SendData();
 #endif
             break;
         case CALIBRATELIMITS:   // 1
