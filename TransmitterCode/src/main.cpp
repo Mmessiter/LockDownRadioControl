@@ -3232,7 +3232,7 @@ bool LoadAllParameters()
         if ((PPMChannelNumber > 16) || (PPMChannelNumber < 1)) PPMChannelNumber = 8;
         ++SDCardAddress;
         PPMMillis = SDRead8BITS(SDCardAddress);
-         if ((PPMMillis > 250) || (PPMMillis < 50)) PPMMillis = 200;
+         if ((PPMMillis > 50) || (PPMMillis < 2)) PPMMillis = 22;
         ++SDCardAddress;
          UseTXModule = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
@@ -7200,32 +7200,49 @@ void SelectChannelOrder(){
  void TXModuleViewEnd(){
 
     char page_SetupView[] = "page SetupView";
+    char GoBack[] = "page TXModuleView";
     char c1[] = "c1";   // Use module
     char n3[] = "n3";   // number of channels
     char n4[] = "n4";   // ms
     char r0[] = "r0"; 
     char r1[] = "r1";
     char r2[] = "r2";
-
-   
+    char prompt[] = "Power off transmitter?";
+    bool oldUseTxModule  = UseTXModule;
+    
     SendCommand(ProgressStart);
     SendValue(Progress, 10);
-    UseTXModule      =   GetValue(c1);
+    UseTXModule      =   GetValue(c1); // heer
+    if (UseTXModule != oldUseTxModule){
+        if (!GetConfirmation(GoBack,prompt)){
+                UseTXModule = oldUseTxModule;
+                SendValue(c1, UseTXModule);
+                return;
+        }
+    }
     SendValue(Progress, 30);
-    PPMChannelNumber =   GetValue(n3);
+    Procrastinate(100);
+    PPMChannelNumber = GetValue(n3);
     SendValue(Progress, 51);
     PPMMillis        =   GetValue(n4);
     if (GetValue(r0)) PPMOrderSelection = 1;
     SendValue(Progress, 63);
+    Procrastinate(10);
     if (GetValue(r1)) PPMOrderSelection = 2;
     SendValue(Progress, 88);
+    Procrastinate(10);
     if (GetValue(r2)) PPMOrderSelection = 3;
     SelectChannelOrder();
     SendValue(Progress, 99);
+    Procrastinate(10);
     SaveTransmitterParameters();
+    Procrastinate(10);
     SendCommand(page_SetupView);
     CurrentView = TXSETUPVIEW;
-    digitalWrite(POWER_OFF_PIN, HIGH); //heer!!
+    Procrastinate(10);
+    if (UseTXModule != oldUseTxModule) {
+        digitalWrite(POWER_OFF_PIN, HIGH); //heer!!
+    }
  }
 
 // ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
@@ -9615,7 +9632,7 @@ void FASTRUN ManageTransmitter(){
 /**********************************************************************************************************/
 #ifdef TXMODULESUPPORT
 
-void SendPPM(){ // Send a frame of PPM /// heer
+void SendPPM(){ // Send a frame of PPM 
     if (millis() - LastPPMFrame < PPMMillis) return; // 50 Hz?
     LastPPMFrame = millis();
     for (int j = 0; j < PPMChannelNumber; ++j) {
