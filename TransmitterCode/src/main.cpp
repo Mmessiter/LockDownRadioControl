@@ -562,8 +562,14 @@ uint16_t FrameRate              = 100;
 
 PulsePositionOutput     PPMOutput;             // PPM for buddy boxing and TX Modules
 PulsePositionOutput     PPMInput;              // PPM for buddy boxing
-uint8_t                 PPMChannelOrder[16]  = {T, A, E, R, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+
+uint8_t                 * PPMChannelOrder;    // will point to needed channel order
+uint8_t                 PPMChannelOrder1[16]  = {A, E, T, R, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+uint8_t                 PPMChannelOrder2[16]  = {T, A, E, R, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+uint8_t                 PPMChannelOrder3[16]  = {E, T, A, R, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
 uint32_t                LastPPMFrame         = 0;
+
+uint8_t                 PPMOrderSelection    = 2;
 uint8_t                 PPMChannelNumber     = 6;
 uint8_t                 PPMMillis            = 22;
 bool                    UseTXModule          = false;
@@ -957,6 +963,12 @@ bool getDate(const char* str)
     tm.Month = monthIndex + 1;
     tm.Year  = CalendarYrToTm(Year);
     return true;
+}
+
+/*********************************************************************************************************************************/
+
+void Reboot(){
+    while (true) {TeensyWatchDog.feed();}
 }
 
 /*********************************************************************************************************************************/
@@ -3213,6 +3225,17 @@ bool LoadAllParameters()
         ++SDCardAddress;
         TXLiPo = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
+        PPMOrderSelection = SDRead8BITS(SDCardAddress);
+        if ((PPMOrderSelection > 3) || (PPMOrderSelection < 1)) PPMOrderSelection = 2;
+        ++SDCardAddress;
+        PPMChannelNumber = SDRead8BITS(SDCardAddress);
+        if ((PPMChannelNumber > 16) || (PPMChannelNumber < 1)) PPMChannelNumber = 8;
+        ++SDCardAddress;
+        PPMMillis = SDRead8BITS(SDCardAddress);
+         if ((PPMMillis > 250) || (PPMMillis < 50)) PPMMillis = 200;
+        ++SDCardAddress;
+         UseTXModule = SDRead8BITS(SDCardAddress);
+        ++SDCardAddress;
         ReadCheckSum32(); 
         CheckTrimValues();
         MemoryForTransmtter = SDCardAddress;
@@ -3713,7 +3736,8 @@ FLASHMEM void setup()
 
 #ifdef TXMODULESUPPORT
 
-  if (UseTXModule)  PPMOutput.begin(PPMPORT);   
+  if (UseTXModule)  PPMOutput.begin(PPMPORT);
+  SelectChannelOrder();
 
 #endif
     
@@ -3913,6 +3937,16 @@ void SaveTransmitterParameters()
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, TXLiPo);
     ++SDCardAddress;
+
+     SDUpdate8BITS(SDCardAddress, PPMOrderSelection);
+    ++SDCardAddress;
+     SDUpdate8BITS(SDCardAddress, PPMChannelNumber);
+    ++SDCardAddress;
+     SDUpdate8BITS(SDCardAddress, PPMMillis);
+    ++SDCardAddress;
+     SDUpdate8BITS(SDCardAddress, UseTXModule);
+    ++SDCardAddress;
+
     SaveCheckSum32();  // Save the Transmitter parametres checksm
     CloseModelsFile();
 }
@@ -7125,8 +7159,77 @@ void DoMFName(){
      GotoFrontView();
  }
 
+/******************************************************************************************************************************/
+
+ void TXModuleViewStart(){ 
+
+    char GoTXModule[] = "page TXModuleView";
+    CurrentView = TXMODULEVIEW;
+
+    char c1[] = "c1";   // Use module
+    char n3[] = "n3";   // number of channels
+    char n4[] = "n4";   // ms
+    char r0[] = "r0"; 
+    char r1[] = "r1";
+    char r2[] = "r2";
+
+    SendCommand(GoTXModule);
+    SendValue(c1, UseTXModule);
+    SendValue(n3, PPMChannelNumber);
+    SendValue(n4, PPMMillis);
+    if (PPMOrderSelection == 1) {SendValue(r0, 1);}
+        else {SendValue(r0, 0);}
+    if (PPMOrderSelection == 2) {SendValue(r1, 1);}
+        else {SendValue(r1, 0);}
+    if (PPMOrderSelection == 3) {SendValue(r2, 1);}
+        else {SendValue(r2, 0);}
+ }
+
+/******************************************************************************************************************************/
+
+void SelectChannelOrder(){
+
+       if(PPMOrderSelection == 1) PPMChannelOrder   = PPMChannelOrder1;
+       if(PPMOrderSelection == 2) PPMChannelOrder   = PPMChannelOrder2;   
+       if(PPMOrderSelection == 3) PPMChannelOrder   = PPMChannelOrder3;
+   
+}
+
+/******************************************************************************************************************************/
+
+ void TXModuleViewEnd(){
+
+    char page_SetupView[] = "page SetupView";
+    char c1[] = "c1";   // Use module
+    char n3[] = "n3";   // number of channels
+    char n4[] = "n4";   // ms
+    char r0[] = "r0"; 
+    char r1[] = "r1";
+    char r2[] = "r2";
+
+   
+    SendCommand(ProgressStart);
+    SendValue(Progress, 10);
+    UseTXModule      =   GetValue(c1);
+    SendValue(Progress, 30);
+    PPMChannelNumber =   GetValue(n3);
+    SendValue(Progress, 51);
+    PPMMillis        =   GetValue(n4);
+    if (GetValue(r0)) PPMOrderSelection = 1;
+    SendValue(Progress, 63);
+    if (GetValue(r1)) PPMOrderSelection = 2;
+    SendValue(Progress, 88);
+    if (GetValue(r2)) PPMOrderSelection = 3;
+    SelectChannelOrder();
+    SendValue(Progress, 99);
+    SaveTransmitterParameters();
+    SendCommand(page_SetupView);
+    CurrentView = TXSETUPVIEW;
+    digitalWrite(POWER_OFF_PIN, HIGH); //heer!!
+ }
+
 // ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
-#define LASTFUNCTION 66 // one more than final one
+#define LASTFUNCTION 68 // one more than final one
 
 void (*NumberedFunctions[LASTFUNCTION])() {
     Blank,                // 0 
@@ -7193,8 +7296,10 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     NoPressed,                  // 61
     RenameFile,                 // 62
     GoBackFromModels,           // 63
-    Blank,                      // 64 // spare
-    ReceiveModelFile            // 65
+    Blank,                      // 64 
+    ReceiveModelFile,           // 65
+    TXModuleViewStart,          // 66
+    TXModuleViewEnd             // 67
 
 }; // list will become much longer ...
 // **********************************************************************************************************************************
@@ -8473,7 +8578,7 @@ void LoadPacketData()
                 SendBuffer[CHANNELSUSED + 1] = SaveFailSafeNow; // FailSafeSaveMoment
                 SaveFailSafeNow              = false;           // once should do it.
                 
-                SendCommand(ProgressEnd); // heer
+                SendCommand(ProgressEnd); 
             }
             break;
         case 1:
@@ -9510,11 +9615,11 @@ void FASTRUN ManageTransmitter(){
 /**********************************************************************************************************/
 #ifdef TXMODULESUPPORT
 
-void SendPPM(){ // heer  Send a frame of PPM
+void SendPPM(){ // Send a frame of PPM /// heer
     if (millis() - LastPPMFrame < PPMMillis) return; // 50 Hz?
     LastPPMFrame = millis();
     for (int j = 0; j < PPMChannelNumber; ++j) {
-        PPMOutput.write(PPMChannelOrder[j], map(SendBuffer[j], MINMICROS, MAXMICROS, 1000, 2000));
+        PPMOutput.write(*(PPMChannelOrder + j), map(SendBuffer[j], MINMICROS, MAXMICROS, 1000, 2000));
     }
 }
 #endif

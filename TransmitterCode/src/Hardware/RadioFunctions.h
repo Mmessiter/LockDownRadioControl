@@ -180,6 +180,7 @@
 #define SLOWSERVOVIEW   33
 #define RENAMEMODELVIEW 34
 #define FILEEXCHANGEVIEW 35
+#define TXMODULEVIEW    36
 
 // **************************************************************************
 //                          Switches' GPIOs                                 *
@@ -559,6 +560,7 @@ void             CheckModelName();
 void             EndTrimView();
 int              AnalogueReed(uint8_t InputChannel);
 void             GetReturnCode();
+void             SelectChannelOrder();
 /*********************************************************************************************************************************/
 
 #endif

@@ -28,7 +28,7 @@
  * | 11    | SPI MOSI (FOR BOTH RADIOS)  |
  * | 12    | SPI MISO (FOR BOTH RADIOS)  |
  * | 13    | SPI SCK  (FOR BOTH RADIOS) |
- * | 14    | SBUS OR PPM output (TX3) |
+ * | 14    | SBUS *OR PPM* output (TX3) |
  * | 15    | Don't use if using SBUS. The driver takes it (RX3) |
  * | 16    | SPARE
  * | 17    | SPARE
