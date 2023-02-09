@@ -27,6 +27,7 @@ var RadioFunctions_8h =
     [ "Brown", "RadioFunctions_8h.html#a3057a3f4d88842d385cd5ad6c5ddf80f", null ],
     [ "BUDDYCHVIEW", "RadioFunctions_8h.html#a292f677c644b13c00f8026f08ee648c9", null ],
     [ "BUDDYMSG", "RadioFunctions_8h.html#a4369b0021c14140eca0aab3f7d3c83d1", null ],
+    [ "BUDDYPPM", "RadioFunctions_8h.html#af5faba9790876cb33ca5d4ecaafc86ab", null ],
     [ "BUDDYVIEW", "RadioFunctions_8h.html#a38c9376ad661411cad3019d4a43ac493", null ],
     [ "BUTTON_SENSE_PIN", "RadioFunctions_8h.html#a6ee4615320320baaf7e0d8e87642141e", null ],
     [ "BYTESPERMACRO", "RadioFunctions_8h.html#acb6ba8383362a5f2efee8416bc4300c9", null ],
