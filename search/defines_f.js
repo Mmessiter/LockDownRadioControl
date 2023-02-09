@@ -27,7 +27,7 @@ var searchData=
   ['pincsn2_24',['pinCSN2',['../common_8h.html#a76971ffb50fdfd6bc8e2c3c6ac339459',1,'common.h']]],
   ['plsturnoff_25',['PLSTURNOFF',['../RadioFunctions_8h.html#a3d9e7817e8c3f47044067ead9b8ce38b',1,'RadioFunctions.h']]],
   ['power_5foff_5fpin_26',['POWER_OFF_PIN',['../RadioFunctions_8h.html#aac8f9c268e406507be95a1255281323c',1,'RadioFunctions.h']]],
-  ['ppmport_27',['PPMPORT',['../common_8h.html#a95812254c835135cc2281a48a97d7664',1,'PPMPORT():&#160;common.h'],['../RadioFunctions_8h.html#a95812254c835135cc2281a48a97d7664',1,'PPMPORT():&#160;RadioFunctions.h']]],
+  ['ppmport_27',['PPMPORT',['../common_8h.html#a95812254c835135cc2281a48a97d7664',1,'common.h']]],
   ['ppmrate_28',['PPMRATE',['../common_8h.html#aea3696981531ec0dcd387eece9b5af44',1,'common.h']]],
   ['printfloatx_29',['printfloatx',['../MPU6050_8cpp.html#a4846b5f0cc3c43f0bd038519c2cc1340',1,'MPU6050.cpp']]],
   ['progmem_30',['PROGMEM',['../MPU6050__6Axis__MotionApps20_8h.html#a75acaba9e781937468d0911423bc0c35',1,'PROGMEM():&#160;MPU6050_6Axis_MotionApps20.h'],['../MPU6050__6Axis__MotionApps__V6__12_8h.html#a75acaba9e781937468d0911423bc0c35',1,'PROGMEM():&#160;MPU6050_6Axis_MotionApps_V6_12.h'],['../MPU6050__9Axis__MotionApps41_8h.html#a75acaba9e781937468d0911423bc0c35',1,'PROGMEM():&#160;MPU6050_9Axis_MotionApps41.h']]],

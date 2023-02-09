@@ -270,7 +270,6 @@ var TransmitterCode_2src_2main_8cpp =
     [ "SendModelFile", "TransmitterCode_2src_2main_8cpp.html#a58c67a975068930341f0663e0a08c9d3", null ],
     [ "SendOtherText", "TransmitterCode_2src_2main_8cpp.html#a2124579df12bdc81995d8d8dc4f47734", null ],
     [ "SendOtherValue", "TransmitterCode_2src_2main_8cpp.html#a4f1ca0e52ac9382c6d314d0a4b4a44cc", null ],
-    [ "SendPPM", "TransmitterCode_2src_2main_8cpp.html#aa13f35720398e2d1a7467e37b634b364", null ],
     [ "SendText", "TransmitterCode_2src_2main_8cpp.html#afe513398f72d5e48f691830a1ef6eb42", null ],
     [ "SendText1", "TransmitterCode_2src_2main_8cpp.html#a27dff58ae433cc3b32b7007757195c6d", null ],
     [ "SendValue", "TransmitterCode_2src_2main_8cpp.html#a1e20efc1e419b252b50d36f9924503fc", null ],
