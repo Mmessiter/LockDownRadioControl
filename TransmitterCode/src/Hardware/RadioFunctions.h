@@ -11,6 +11,7 @@
 // **************************************************************************
 
   #define TXMODULESUPPORT // ONLY FOR NEW VERSION PCBs  <<< *** <<<
+ // #define NEWPCB
 
 // **************************************************************************
 //       TX VERSION NUMBER   (May 2020 - February 2023 Malcolm Messiter)      *
@@ -68,8 +69,17 @@
 #define BANKSUSED               4                         // Flight modes (AKA Banks)
 #define DEFAULTPIPEADDRESS      0xBABE1E5420LL            // Pipe address for startup - any value but MUST match RX
 #define LOWBATTERY              42                        // Default percent for warning (User definable)
-#define CE_PIN                  9                         // for SPI to nRF24L01
-#define CSN_PIN                 10                        // for SPI to nRF24L01
+
+#ifdef NEWPCB
+  #define CE_PIN                  7                         // for SPI to nRF24L01
+  #define CSN_PIN                 8                         // for SPI to nRF24L01
+  #define BUDDYPPM                10                        // Buddybox PPM pin
+#else
+  #define CE_PIN                  9                         // for SPI to nRF24L01
+  #define CSN_PIN                 10                        // for SPI to nRF24L01
+  #define BUDDYPPM                6                         // Buddybox PPM pin
+#endif
+
 #define INACTIVITYTIMEOUT       10 * TICKSPERMINUTE       // Default time after which to switch off
 #define INACTIVITYMINIMUM       05 * TICKSPERMINUTE       // Inactivity timeout minimum is 5 minutes
 #define INACTIVITYMAXIMUM       30 * TICKSPERMINUTE       // Inactivity timeout maximum is 30 minutes

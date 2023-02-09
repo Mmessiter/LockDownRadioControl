@@ -49,6 +49,8 @@
  * - Safety switch implemtented (Stops accidental motor starting)
  * - Rates (three rates) implemented
  * - Slow Servos implemented: Any channel can be slowed by almost any amount for realistic flaps, U/C etc,
+ * - PPM or SBUS now possible from reciever
+ * - Support for external third party transmitter modules added
  *
  *
  * @section txPinout Teensy 4.1 Pins
@@ -61,12 +63,12 @@
  * | 2  LED     | RED |
  * | 3  LED     | GREEN |
  * | 4  LED     | BLUE |
- * | 5  POLOLU  | 2808 ALL POWER OFF SIGNAL (When high)  |
- **| 6  PPM     | PPM IN or OUT (was Sensor for power button)
- * | 7  (RX2)   | SPARE (was BUDDY BOX)
- * | 8  (TX2)   | SPARE (was  BUDDY BOX)
- **| 9  (CE)    | nRF24l01 (CE) |
- **| 10 (CS)    | nRF24l01 (CSN) |
+ * | 5  (POLOLU)| 2808 ALL POWER OFF SIGNAL (When high)  |
+ **| 6  (PPM)   | PPM IN or OUT NEW PCB TX MODULE (was Sensor for power button)
+ * | 7  (CE)    | nRF24l01 (CE)  | on new PCB
+ * | 8  (CSN)   | nRF24l01 (CSN) | on new PCB
+ **| 9  .....   | was nRF24l01 (CSN) now SPARE on new PCB
+ **| 10 (PPM)   | was nRF24l01 (CSN) now BUDDY PPM on new PCB)
  **| 11 (MOSI)  | nRF24l01 (MOSI) |
  **| 12 (MISO)  | nRF24l01 (MISO) |
  **| 13 (SCK)   | nRF24l01 (SCK) |
@@ -74,8 +76,8 @@
  **| 15 (A1)    | Joystick POT CH2 |
  * | 16 (A2)    | Joystick POT CH3 |
  * | 17 (A3)    | Joystick POT CH4 |
- **| 18         | I2C bus  SDA |
- **| 19         | I2C bus  SCL |
+ **| 18 (I2C)   | I2C bus  SDA |
+ **| 19 (I2C)   | I2C bus  SCL |
  * | 20 (A6)    | POT KNOB CH5 |
  * | 21 (A7)    | POT KNOB CH6 |
  * | 22 (A8)    | POT KNOB CH7 |
