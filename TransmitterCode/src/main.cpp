@@ -555,28 +555,21 @@ uint16_t FrameRate              = 100;
 
 // **********************************************************************************************************************************
 // **********************************  PPM Area for TX MODULE **********************************************************************
-#ifdef TXMODULESUPPORT
-
 #define A 1
 #define E 2
 #define T 3
 #define R 4
-
 PulsePositionOutput     PPMOutput;             // PPM for buddy boxing and TX Modules
 PulsePositionOutput     PPMInput;              // PPM for buddy boxing
-
 uint8_t                 * PPMChannelOrder;    // will point to needed channel order
 uint8_t                 PPMChannelOrder1[16]  = {A, E, T, R, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
 uint8_t                 PPMChannelOrder2[16]  = {T, A, E, R, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
 uint8_t                 PPMChannelOrder3[16]  = {E, T, A, R, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
 uint32_t                LastPPMFrame         = 0;
-
 uint8_t                 PPMOrderSelection    = 2;
 uint8_t                 PPMChannelNumber     = 6;
 uint8_t                 PPMMillis            = 22;
 bool                    UseTXModule          = false;
-
-#endif
 // **********************************************************************************************************************************
 
 // **********************************************************************************************************************************
