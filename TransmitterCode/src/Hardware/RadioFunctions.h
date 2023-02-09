@@ -10,7 +10,7 @@
 //     SUPPORT FOR TX MODULE                                                *
 // **************************************************************************
 
- // #define TXMODULESUPPORT // ONLY FOR NEW VERSION PCBs  <<< *** <<<
+  #define TXMODULESUPPORT // ONLY FOR NEW VERSION PCBs  <<< *** <<<
  // #define NEWPCB
 
 // **************************************************************************

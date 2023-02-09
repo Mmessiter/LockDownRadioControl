@@ -504,7 +504,8 @@ union {
 
 char b5Greyed[]                     = "b5.pco=33840";
 char b12Greyed[]                    = "b12.pco=33840";
-bool MotorEnabled                   = false;
+char     b1Greyed[]                      = "b1.pco=33840";
+bool     MotorEnabled                    = false;
 bool     SendNoData                 = false;
 bool     MotorWasEnabled            = false;
 uint8_t MotorChannel                = 15;
@@ -1962,6 +1963,8 @@ void ReEnableScanButton()   // Scan button AND models button
 {
     char b5NOTGreyed[]  = "b5.pco=";
     char b12NOTGreyed[] = "b12.pco=";
+    char b1NOTGreyed[]  = "b1.pco=";
+
     char nb[15];
     char cmd[30];
     
@@ -1969,6 +1972,9 @@ void ReEnableScanButton()   // Scan button AND models button
 
     if (CurrentView == TXSETUPVIEW && b5isGrey) {
             strcpy(cmd, b5NOTGreyed);
+            strcat(cmd, nb);
+            SendCommand(cmd);
+            strcpy(cmd, b1NOTGreyed);
             strcat(cmd, nb);
             SendCommand(cmd);
             b5isGrey = false;
@@ -7236,7 +7242,7 @@ void SelectChannelOrder(){
     CurrentView = TXSETUPVIEW;
     Procrastinate(10);
     if (UseTXModule != oldUseTxModule) {
-        digitalWrite(POWER_OFF_PIN, HIGH); //heer!!
+        digitalWrite(POWER_OFF_PIN, HIGH); 
     }
  }
 
@@ -9508,7 +9514,8 @@ void CheckScanButton() // Scan button AND models button
     if (ModelMatched) {
         if (CurrentView == TXSETUPVIEW) {
           if(!b5isGrey) { 
-                SendCommand(b5Greyed);
+                SendCommand(b5Greyed); // heer
+                SendCommand(b1Greyed); // heer
                 b5isGrey = true;
             }
         }
