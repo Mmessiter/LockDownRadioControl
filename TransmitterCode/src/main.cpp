@@ -3653,7 +3653,7 @@ FLASHMEM void setup()
     ResetSubTrims();
     CentreTrims();
     WatchDogConfig.window   = WATCHDOGMAXRATE; //  = MINIMUM RATE in milli seconds, (32ms to 522.232s) must be MUCH smaller than timeout
-    WatchDogConfig.timeout  =  WATCHDOGTIMEOUT; //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s)
+    WatchDogConfig.timeout  = WATCHDOGTIMEOUT; //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s)
     WatchDogConfig.callback = WatchDogCallBack;
     TeensyWatchDog.begin(WatchDogConfig);
     LastDogKick = millis(); // needed? - yes!
@@ -3673,8 +3673,6 @@ FLASHMEM void setup()
             ErrorState = MODELSFILENOTFOUND; // if no file ... or no SD
     }
 
-
-
     teensyMAC(MacAddress);  // Get MAC address and use it as pipe address
     NewPipe = (uint64_t)MacAddress[0] << 40;
     NewPipe += (uint64_t)MacAddress[1] << 32;
@@ -3688,7 +3686,15 @@ FLASHMEM void setup()
     InitSwitchesAndTrims();
 
 #ifdef TXMODULESUPPORT
-    if (!UseTXModule) InitRadio(DefaultPipe);
+if (UseTXModule)  
+    {
+        PPMOutput.begin(PPMPORT);
+    }
+    else
+    {
+        InitRadio(DefaultPipe);
+    }
+    SelectChannelOrder();
 #else
     InitRadio(DefaultPipe);
 #endif
@@ -3703,7 +3709,7 @@ FLASHMEM void setup()
     SetAudioVolume(AudioVolume);
     if (PlayFanfare) {
         PlaySound(THEFANFARE);
-        delay(4000); // Fanafare takes about 4 seconds
+        delay(4000); // Fanfare takes about 4 seconds
     }
     SendValue(FrontView_Hours, 0);
     SendValue(FrontView_Mins, 0);
@@ -3716,7 +3722,7 @@ FLASHMEM void setup()
     StartInactvityTimeout();
     SizeOfCompressedData = sizeof(CompressedData);
     GetTXVersionNumber();
-    MySbus.begin();
+    MySbus.begin();                             
     SetUKFrequencies();
     ScreenTimeTimer = millis();
     RestoreBrightness();
@@ -3735,13 +3741,7 @@ FLASHMEM void setup()
     }
     if(!UseMotorKill)  ShowMotor(1);
 
-#ifdef TXMODULESUPPORT
 
-  if (UseTXModule)  PPMOutput.begin(PPMPORT);
-  SelectChannelOrder();
-
-#endif
-    
     if (ErrorState) {
         SendCommand(WarnNow);
         if (ErrorState == CHECKSUMERROR) {
@@ -9634,11 +9634,15 @@ void FASTRUN ManageTransmitter(){
 /**********************************************************************************************************/
 #ifdef TXMODULESUPPORT
 
+#define MAXPPM 2000
+#define MINPPM 1000
+
+
 void SendPPM(){ // Send a frame of PPM 
     if (millis() - LastPPMFrame < PPMMillis) return; // 50 Hz?
     LastPPMFrame = millis();
     for (int j = 0; j < PPMChannelNumber; ++j) {
-        PPMOutput.write(*(PPMChannelOrder + j), map(SendBuffer[j], MINMICROS, MAXMICROS, 1000, 2000));
+        PPMOutput.write(*(PPMChannelOrder + j), map(SendBuffer[j], MINMICROS, MAXMICROS, MINPPM, MAXPPM));
     }
 }
 #endif
