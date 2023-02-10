@@ -555,14 +555,15 @@ bool     UseSBUS                = true;  // at receiver. false = PPM
 uint16_t FrameRate              = 100;  
 
 // **********************************************************************************************************************************
-// **********************************  PPM Area for TX MODULE **********************************************************************
+// **********************************  Area for PPM & TX MODULE **********************************************************************
 #define A 1
 #define E 2
 #define T 3
 #define R 4
-PulsePositionOutput     PPMOutput;             // PPM for buddy boxing and TX Modules
-PulsePositionOutput     PPMInput;              // PPM for buddy boxing
-uint8_t                 * PPMChannelOrder;    // will point to needed channel order
+PulsePositionOutput     PPMOutputModule;       // PPM for buddy boxing and TX Modules
+PulsePositionOutput     PPMOutputBuddy;        // PPM for buddy boxing and TX Modules
+PulsePositionInput      PPMInputBuddy;         // PPM for buddy boxing
+uint8_t                 * PPMChannelOrder;     // will point to needed channel order
 uint8_t                 PPMChannelOrder1[16]  = {A, E, T, R, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
 uint8_t                 PPMChannelOrder2[16]  = {T, A, E, R, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
 uint8_t                 PPMChannelOrder3[16]  = {E, T, A, R, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
@@ -679,6 +680,43 @@ void GetSlaveChannelValues()
         SlaveHasControl = false;
     }
 }
+
+/************************************************************************************************************/
+// This function reads data from BUDDY (Slave) BUT uses it ONLY WHILE buddy switch is on
+
+void GetSlaveChannelValuesPPM()
+{
+    if (BuddyON) {
+        uint8_t ChCount = PPMInputBuddy.available();
+        if (ChCount) {
+            SBUSTimer = millis();                                                                   // RESET timeout when data comes in
+        }                                                                                           // Even if there's no new data, re-use old data
+        if (millis() - SBUSTimer < 500) {                                                           // Ignore data more than 500ms old
+            for (int j = 0; j < ChCount; ++j) {                                                     // While slave has control, his stick data replaces all ours
+                uint16_t PpmIn = map(PPMInputBuddy.read(j+1), 1000, 2000, MINMICROS, MAXMICROS);
+                if (BuddyControlled & 1 << j) {                                                     // Test if this channel is buddy controlled. If not leave it unchanged
+                    SendBuffer[j] = PpmIn;                                                          // Put re-mapped data where we can use it.
+                }
+            }
+            if (!SlaveHasControl && AnnounceConnected) {
+                PlaySound(BUDDYMSG);
+                LastShowTime = 0;
+            }
+            SlaveHasControl = true;
+        }
+    }
+    else { // Buddy is Off
+        if (SlaveHasControl && AnnounceConnected) {
+            PlaySound(MASTERMSG);
+            LastShowTime = 0;
+        }
+        SlaveHasControl = false;
+    }
+}
+
+
+
+
 /**************************** Clear Macros if junk was loaded from SD ********************************************************************************/
 void CheckMacrosBuffer()
 {
@@ -722,6 +760,23 @@ FASTRUN void MapToSBUS()
         MySbus.write(SbusChannels);
     }
 }
+
+/************************************************************************************************************/
+/** Map servo channels' data from SendBuffer into SbusChannels buffer */
+// This funtion is used by the BUDDY slave to send it's controls out down a wire using SBUS
+
+FASTRUN void MapToPPM() // heer
+{
+    if (millis() - SBUSTimer >= SBUSRATE)
+    {
+        SBUSTimer = millis();
+        for (int j = 0; j < CHANNELSUSED; ++j)
+        {
+            PPMOutputBuddy.write(j+1, map(SendBuffer[j], MINMICROS, MAXMICROS, 1000, 2000));
+        }
+    }
+}
+
 /*********************************************************************************************************************************/
 
 uint8_t decToBcd(uint8_t val)
@@ -3688,16 +3743,25 @@ FLASHMEM void setup()
 #ifdef TXMODULESUPPORT
 if (UseTXModule)  
     {
-        PPMOutput.begin(PPMPORT);
+        PPMOutputModule.begin(PPMPORT); // heer
+        SelectChannelOrder();
     }
     else
     {
         InitRadio(DefaultPipe);
     }
-    SelectChannelOrder();
+        
 #else
     InitRadio(DefaultPipe);
 #endif
+
+
+#ifdef TXMODULESUPPORT  // heer
+    if(BuddyMaster){
+         PPMInputBuddy.begin(BUDDYPPMPORT);
+    }else{
+        if (!UseTXModule && BuddyPupilOnSbus) PPMOutputBuddy.begin(BUDDYPPMPORT); // 'if' can be removed later
+    }
 
     delay(WARMUPDELAY);                        // Allow Nextion time to warm up
     SendValue(FrontView_BackGround, BackGroundColour); // Get colours ready
@@ -3742,6 +3806,7 @@ if (UseTXModule)
     if(!UseMotorKill)  ShowMotor(1);
 
 
+#endif
     if (ErrorState) {
         SendCommand(WarnNow);
         if (ErrorState == CHECKSUMERROR) {
@@ -7213,7 +7278,7 @@ void SelectChannelOrder(){
     
     SendCommand(ProgressStart);
     SendValue(Progress, 10);
-    UseTXModule      =   GetValue(c1); // heer
+    UseTXModule      =   GetValue(c1); 
     if (UseTXModule != oldUseTxModule){
         if (!GetConfirmation(GoBack,prompt)){
                 UseTXModule = oldUseTxModule;
@@ -9514,8 +9579,8 @@ void CheckScanButton() // Scan button AND models button
     if (ModelMatched) {
         if (CurrentView == TXSETUPVIEW) {
           if(!b5isGrey) { 
-                SendCommand(b5Greyed); // heer
-                SendCommand(b1Greyed); // heer
+                SendCommand(b5Greyed); 
+                SendCommand(b1Greyed);
                 b5isGrey = true;
             }
         }
@@ -9634,15 +9699,11 @@ void FASTRUN ManageTransmitter(){
 /**********************************************************************************************************/
 #ifdef TXMODULESUPPORT
 
-#define MAXPPM 2000
-#define MINPPM 1000
-
-
 void SendPPM(){ // Send a frame of PPM 
     if (millis() - LastPPMFrame < PPMMillis) return; // 50 Hz?
     LastPPMFrame = millis();
     for (int j = 0; j < PPMChannelNumber; ++j) {
-        PPMOutput.write(*(PPMChannelOrder + j), map(SendBuffer[j], MINMICROS, MAXMICROS, MINPPM, MAXPPM));
+        PPMOutputModule.write(*(PPMChannelOrder + j), map(SendBuffer[j], MINMICROS, MAXMICROS, 1000, 2000));
     }
 }
 #endif
@@ -9660,7 +9721,7 @@ FASTRUN void loop()
         ShowServoPos(); 
     } else {                                                     // Skip these next lines when buddying as a slave
         if (!BoundFlag && Connected) BufferNewPipe();            // if not yet bound, insert our pipe into SendBuffer BUT ONLY WHEN CONNECTED 
-        if (BuddyMaster) GetSlaveChannelValues();                // If buddy master, get buddy data and maybe use it. 
+        if (BuddyMaster) GetSlaveChannelValuesPPM();             // If buddy master, get buddy data and maybe use it. 
         ShowServoPos();                                          
         if (!MotorEnabled) SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero whatever was shown.   
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24

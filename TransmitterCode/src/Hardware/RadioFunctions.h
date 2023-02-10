@@ -10,7 +10,7 @@
 //     SUPPORT FOR TX MODULE                                                *
 // **************************************************************************
 
- // #define TXMODULESUPPORT // ONLY FOR NEW VERSION PCBs  <<< *** <<<
+  #define TXMODULESUPPORT // ONLY FOR NEW VERSION  <<< *** <<<
  // #define NEWPCB
 
 // **************************************************************************
@@ -73,11 +73,11 @@
 #ifdef NEWPCB
   #define CE_PIN                  7                         // for SPI to nRF24L01
   #define CSN_PIN                 8                         // for SPI to nRF24L01
-  #define BUDDYPPM                10                        // Buddybox PPM pin
+  #define BUDDYPPMPORT            10                        // Buddybox PPM pin
 #else
   #define CE_PIN                  9                         // for SPI to nRF24L01
   #define CSN_PIN                 10                        // for SPI to nRF24L01
-  #define BUDDYPPM                6                         // Buddybox PPM pin
+  #define BUDDYPPMPORT            6                         // Buddybox PPM pin
 #endif
 
 #define INACTIVITYTIMEOUT       10 * TICKSPERMINUTE       // Default time after which to switch off
@@ -494,6 +494,7 @@ extern void  FailedPacket();
 extern void  StartInactvityTimeout();
 extern void  ShowServoPos();
 extern void  MapToSBUS();
+extern void  MapToPPM();
 extern void  ZeroDataScreen();
 extern void  RedLedOn();
 extern void  ReEnableScanButton();
