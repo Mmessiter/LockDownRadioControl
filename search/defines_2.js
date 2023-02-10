@@ -26,7 +26,7 @@ var searchData=
   ['brown_23',['Brown',['../RadioFunctions_8h.html#a3057a3f4d88842d385cd5ad6c5ddf80f',1,'RadioFunctions.h']]],
   ['buddychview_24',['BUDDYCHVIEW',['../RadioFunctions_8h.html#a292f677c644b13c00f8026f08ee648c9',1,'RadioFunctions.h']]],
   ['buddymsg_25',['BUDDYMSG',['../RadioFunctions_8h.html#a4369b0021c14140eca0aab3f7d3c83d1',1,'RadioFunctions.h']]],
-  ['buddyppm_26',['BUDDYPPM',['../RadioFunctions_8h.html#af5faba9790876cb33ca5d4ecaafc86ab',1,'RadioFunctions.h']]],
+  ['buddyppmport_26',['BUDDYPPMPORT',['../RadioFunctions_8h.html#a7693b6311a14f65e0b9e2f3d202229b9',1,'RadioFunctions.h']]],
   ['buddyview_27',['BUDDYVIEW',['../RadioFunctions_8h.html#a38c9376ad661411cad3019d4a43ac493',1,'RadioFunctions.h']]],
   ['buffer_5flength_28',['BUFFER_LENGTH',['../I2Cdev_8cpp.html#af7b7dc9a200cb1404c280bd500fd1551',1,'I2Cdev.cpp']]],
   ['buffersize_29',['BUFFERSIZE',['../TransmitterCode_2src_2main_8cpp.html#ac3146f1e9227301bb4aa518f4d336cee',1,'main.cpp']]],
