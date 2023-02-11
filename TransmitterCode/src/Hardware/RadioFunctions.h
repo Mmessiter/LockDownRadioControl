@@ -376,7 +376,7 @@
 //                            PPM PARAMETERS   (FOR BUDDY BOXING)          *
 //***************************************************************************
 
-#define PPMFRAMERATE 10 // SBUS frame every 10 milliseconds ( = 100 Hz)
+#define PPMFRAMERATE 10 // PPM frame every 22 milliseconds 
 #define RANGEMAX 2047 // = Frsky at 150 %
 #define RANGEMIN 0    // = Frsky at 0 %
 
@@ -439,7 +439,7 @@ extern uint32_t       GapSum;
 extern uint32_t       GapStart;
 extern uint8_t*       FHSSChPointer;
 extern uint8_t*       FHSSRecoveryPointer;
-extern bool           BuddyPupilOnSbus;
+extern bool           BuddyPupilOnPPM;
 extern bool           BuddyMaster;
 extern uint16_t       BackGroundColour;
 extern uint16_t       HighlightColour;

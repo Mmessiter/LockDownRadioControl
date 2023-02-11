@@ -402,7 +402,7 @@ bool     LedWasRed           = false;
 char     ThisRadio[4]        = "0 ";
 uint8_t  LastRadio           = 0;
 uint8_t  NextChannel         = 0;
-bool     BuddyPupilOnSbus    = false;
+bool     BuddyPupilOnPPM    = false;
 bool     BuddyMaster         = false;
 bool     SlaveHasControl     = false;
 uint16_t Qnh                 = 1009; // pressure at sea level here
@@ -650,16 +650,13 @@ void FixDeltaGMTSign()
 
 void GetSlaveChannelValuesPPM()
 {
-    if (BuddyON) {
-        uint8_t ChCount = PPMInputBuddy.available();
-        if (ChCount) {
-            PPMTimer = millis();                                                                   // RESET timeout when data comes in
-        }                                                                                           // Even if there's no new data, re-use old data
-        if (millis() - PPMTimer < 500) {                                                           // Ignore data more than 500ms old
+     if (BuddyON) {
+        int ChCount = PPMInputBuddy.available();
+        if (ChCount){
             for (int j = 0; j < ChCount; ++j) {                                                     // While slave has control, his stick data replaces all ours
-                uint16_t PpmIn = map(PPMInputBuddy.read(j+1), 1000, 2000, MINMICROS, MAXMICROS);
-                if (BuddyControlled & 1 << j) {                                                     // Test if this channel is buddy controlled. If not leave it unchanged
-                    SendBuffer[j] = PpmIn;                                                          // Put re-mapped data where we can use it.
+                uint16_t PpmIn = PPMInputBuddy.read(j+1);
+                if (BuddyControlled & 1 << (j)) {                                                     // Test if this channel is buddy controlled. If not leave it unchanged
+                    SendBuffer[j] = map(PpmIn, 1000, 2000, MINMICROS, MAXMICROS);
                 }
             }
             if (!SlaveHasControl && AnnounceConnected) {
@@ -707,7 +704,7 @@ FLASHMEM void ResetSubTrims()
 /** Map servo channels' data from SendBuffer into SbusChannels buffer */
 // This funtion is used by the BUDDY slave to send it's controls out down a wire using SBUS
 
-FASTRUN void SendViaPPM() // heer
+FASTRUN void SendViaPPM() // heersend
 {
     if (millis() - PPMTimer >= PPMFRAMERATE)
     {
@@ -1869,7 +1866,7 @@ FASTRUN void ShowComms()
             default:
                 break;
             }
-            if (BuddyPupilOnSbus) SendText(FrontView_Connected, MsgBuddying);
+            if (BuddyPupilOnPPM) SendText(FrontView_Connected, MsgBuddying);
             if (LedWasGreen) {
                 if (BoundFlag) {
                     if (!BuddyMaster) {
@@ -3128,7 +3125,7 @@ bool LoadAllParameters()
         ChannelMax[i] = SDRead16BITS(SDCardAddress);
         SDCardAddress += 2;
         }
-        BuddyPupilOnSbus = SDRead8BITS(SDCardAddress);
+        BuddyPupilOnPPM = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
         BuddyMaster = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
@@ -3685,7 +3682,7 @@ FLASHMEM void setup()
 #ifdef TXMODULESUPPORT
 if (UseTXModule)  
     {
-        PPMOutputModule.begin(PPMPORT); // heer
+        PPMOutputModule.begin(PPMPORT); 
         SelectChannelOrder();
     }
     else
@@ -3698,14 +3695,14 @@ if (UseTXModule)
 #endif
 
 
-#ifdef TXMODULESUPPORT  // heer
+#ifdef TXMODULESUPPORT  
     if(BuddyMaster){
          PPMInputBuddy.begin(BUDDYPPMPORT);
     }else{
-        if (!UseTXModule && BuddyPupilOnSbus) {
+        if (!UseTXModule && BuddyPupilOnPPM) {
             PPMOutputBuddy.begin(BUDDYPPMPORT); // 'if' can be removed later
         }
-    } // heer
+    } 
 
     delay(WARMUPDELAY);                        // Allow Nextion time to warm up
     SendValue(FrontView_BackGround, BackGroundColour); // Get colours ready
@@ -3864,7 +3861,7 @@ void SaveTransmitterParameters()
         SDUpdate16BITS(SDCardAddress, ChannelMax[i]); // Stick max output of pot
         SDCardAddress += 2;
     }
-    SDUpdate8BITS(SDCardAddress, BuddyPupilOnSbus);
+    SDUpdate8BITS(SDCardAddress, BuddyPupilOnPPM);
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, BuddyMaster);
     ++SDCardAddress;
@@ -6021,7 +6018,7 @@ void StartBuddyView()
     SendCommand(pBuddyView);
     CurrentView = BUDDYVIEW;
     SendValue(BuddyM, BuddyMaster);
-    SendValue(BuddyP, BuddyPupilOnSbus);
+    SendValue(BuddyP, BuddyPupilOnPPM);
 }
 
 /*********************************************************************************************************************************/
@@ -6032,7 +6029,7 @@ void EndBuddyView()
     char BuddyP[] = "BuddyP";
 
     char pRXSetupView[]   = "page RXSetupView";
-    BuddyPupilOnSbus    = GetValue(BuddyP); // Pupil, wired 
+    BuddyPupilOnPPM    = GetValue(BuddyP); // Pupil, wired 
     BuddyMaster         = GetValue(BuddyM); // Master, either.
     SaveAllParameters();
     b5isGrey = false;
@@ -6592,7 +6589,7 @@ void ResetTransmitterSettings(){    // This function resets all transmitter para
    SendCommand(ProgressStart);
    SendValue(Progress, 2);
 
-   BuddyPupilOnSbus   = false;
+   BuddyPupilOnPPM   = false;
    BuddyMaster        = false;
    ModelNumber        = 1;
    ScreenTimeout      = 120;
@@ -7705,7 +7702,7 @@ FASTRUN void ButtonWasPressed()
             if (Inactivity_Timeout > INACTIVITYMAXIMUM) Inactivity_Timeout = INACTIVITYMAXIMUM;
             SendValue(Progress, 90);
             FixDeltaGMTSign();
-            if (BuddyPupilOnSbus)
+            if (BuddyPupilOnPPM)
             {
                 Connected            = false;
                 LostContactFlag      = true;
@@ -8829,7 +8826,7 @@ void GetBank()
             if (LedWasRed)
                 {
                   MotorEnabled = false;
-                   if (!BuddyPupilOnSbus){
+                   if (!BuddyPupilOnPPM){
                         if ((millis() - WarningTimer) > 4000) { 
                             PlaySound(PLSTURNOFF);
                             WarningTimer = millis();
@@ -9370,7 +9367,7 @@ void  GetModelsMacAddress(){
 /************************************************************************************************************/
 FASTRUN void ParseAckPayload()
 {
-    if (BuddyPupilOnSbus) return; // buddy pupil need none of this
+    if (BuddyPupilOnPPM) return; // buddy pupil need none of this
  
     NextChannelNumber = AckPayload.Byte5;                     // every packet tells of next hop destination
      
@@ -9659,9 +9656,10 @@ void SendPPM(){ // Send a frame of PPM
 FASTRUN void loop()
 {
     ManageTransmitter();                                         // Do the needed chores ... (if there's time)
-    GetNewChannelValues();                                       // Load SendBuffer with new servo positions  Very frequently
+    if (!BuddyON) GetNewChannelValues();                         // Load SendBuffer with new servo positions  Very frequently
     if (UseMacros) ExecuteMacro();                               // Modify it if macro is running
-    if (BuddyPupilOnSbus) { 
+   
+    if (BuddyPupilOnPPM) { 
         NewCompressNeeded = false;                               // Fake it as Buddy does not send compressed data
         ShowServoPos(); 
     } else {                                                     // Skip these next lines when buddying as a slave
