@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['sbusport_0',['SBUSPORT',['../RadioFunctions_8h.html#aa82f9d8a298740acdbaa5c78a9e9f50c',1,'SBUSPORT():&#160;RadioFunctions.h'],['../common_8h.html#aa82f9d8a298740acdbaa5c78a9e9f50c',1,'SBUSPORT():&#160;common.h']]],
-  ['sbusrate_1',['SBUSRATE',['../RadioFunctions_8h.html#a39848a06498c1e6444c458f25542b252',1,'SBUSRATE():&#160;RadioFunctions.h'],['../common_8h.html#a39848a06498c1e6444c458f25542b252',1,'SBUSRATE():&#160;common.h']]],
+  ['sbusport_0',['SBUSPORT',['../common_8h.html#aa82f9d8a298740acdbaa5c78a9e9f50c',1,'common.h']]],
+  ['sbusrate_1',['SBUSRATE',['../common_8h.html#a39848a06498c1e6444c458f25542b252',1,'common.h']]],
   ['scanview_2',['SCANVIEW',['../RadioFunctions_8h.html#a6f1464e66db944aef96d5617811acb8b',1,'RadioFunctions.h']]],
   ['scanwaveband_3',['SCANWAVEBAND',['../RadioFunctions_8h.html#af8400c0c2d5c4779f32223055a12336d',1,'RadioFunctions.h']]],
   ['screenchangewait_4',['SCREENCHANGEWAIT',['../RadioFunctions_8h.html#a5fa58304135bf4162814d78de050f1c0',1,'RadioFunctions.h']]],
@@ -20,7 +20,7 @@ var searchData=
   ['sticksview_17',['STICKSVIEW',['../RadioFunctions_8h.html#abfc5f0d31f80fc812b9c44a55fe3134e',1,'RadioFunctions.h']]],
   ['storagecharge_18',['STORAGECHARGE',['../RadioFunctions_8h.html#a0d7f6ce749c2aceb4ecef39efa939fa6',1,'RadioFunctions.h']]],
   ['straightlines_19',['STRAIGHTLINES',['../RadioFunctions_8h.html#a00adadb4876f6c86728e50a79fbc8fcc',1,'RadioFunctions.h']]],
-  ['strcat_5fp_20',['strcat_P',['../MPU6050__6Axis__MotionApps__V6__12_8h.html#a2ca9304dda7dc2472812baa9e9ede965',1,'strcat_P():&#160;MPU6050_6Axis_MotionApps_V6_12.h'],['../MPU6050__9Axis__MotionApps41_8h.html#a2ca9304dda7dc2472812baa9e9ede965',1,'strcat_P():&#160;MPU6050_9Axis_MotionApps41.h'],['../MPU6050__6Axis__MotionApps20_8h.html#a2ca9304dda7dc2472812baa9e9ede965',1,'strcat_P():&#160;MPU6050_6Axis_MotionApps20.h']]],
+  ['strcat_5fp_20',['strcat_P',['../MPU6050__6Axis__MotionApps20_8h.html#a2ca9304dda7dc2472812baa9e9ede965',1,'strcat_P():&#160;MPU6050_6Axis_MotionApps20.h'],['../MPU6050__9Axis__MotionApps41_8h.html#a2ca9304dda7dc2472812baa9e9ede965',1,'strcat_P():&#160;MPU6050_9Axis_MotionApps41.h'],['../MPU6050__6Axis__MotionApps__V6__12_8h.html#a2ca9304dda7dc2472812baa9e9ede965',1,'strcat_P():&#160;MPU6050_6Axis_MotionApps_V6_12.h']]],
   ['strcmp_5fp_21',['strcmp_P',['../MPU6050__6Axis__MotionApps20_8h.html#abbb2cd396dde2d1575948bb16ce2853a',1,'strcmp_P():&#160;MPU6050_6Axis_MotionApps20.h'],['../MPU6050__6Axis__MotionApps__V6__12_8h.html#abbb2cd396dde2d1575948bb16ce2853a',1,'strcmp_P():&#160;MPU6050_6Axis_MotionApps_V6_12.h'],['../MPU6050__9Axis__MotionApps41_8h.html#abbb2cd396dde2d1575948bb16ce2853a',1,'strcmp_P():&#160;MPU6050_9Axis_MotionApps41.h']]],
   ['strcpy_5fp_22',['strcpy_P',['../MPU6050__6Axis__MotionApps20_8h.html#ae74941b597bdd8ffb5c35f45b636946b',1,'strcpy_P():&#160;MPU6050_6Axis_MotionApps20.h'],['../MPU6050__6Axis__MotionApps__V6__12_8h.html#ae74941b597bdd8ffb5c35f45b636946b',1,'strcpy_P():&#160;MPU6050_6Axis_MotionApps_V6_12.h'],['../MPU6050__9Axis__MotionApps41_8h.html#ae74941b597bdd8ffb5c35f45b636946b',1,'strcpy_P():&#160;MPU6050_9Axis_MotionApps41.h']]],
   ['stunt1_23',['STUNT1',['../RadioFunctions_8h.html#a80c9e9ddb7c76b17439adab7175427c4',1,'RadioFunctions.h']]],
