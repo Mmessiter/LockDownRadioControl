@@ -176,6 +176,7 @@ uint32_t SlowTime[16];                                      //    For timing slo
 uint8_t  StepSize[16] = {0,0,0,0,0,0,0,0,5,25,5,25,5,25,5,25};  //    How far to move each time on slow servos
 uint16_t CurrentPosition[UNCOMPRESSEDWORDS];                //    Position from which a slow servo started (0 = not started yet)
 uint16_t SendBuffer[UNCOMPRESSEDWORDS];                     //    Data to send to rx (16 words)
+uint16_t PPMBuffer[UNCOMPRESSEDWORDS];                      //   
 uint16_t ShownBuffer[UNCOMPRESSEDWORDS];                    //    Data shown before
 uint16_t LastBuffer[CHANNELSUSED + 1];                      //    Used to spot any change
 uint16_t PreMixBuffer[CHANNELSUSED + 1];                    //    Data collected from sticks
@@ -648,24 +649,28 @@ void FixDeltaGMTSign()
 /************************************************************************************************************/
 // This function reads data from BUDDY (Slave) BUT uses it ONLY WHILE buddy switch is on
 
-void GetSlaveChannelValuesPPM() // MASTER code
+void GetSlaveChannelValuesPPM() // MASTER code // heer
 {
      if (BuddyON) {
-        int ChCount = PPMInputBuddy.available();
-        if (ChCount){
-            for (int j = 0; j < ChCount; ++j) {                                                     // While slave has control, his stick data replaces all ours
-                uint16_t PpmIn = PPMInputBuddy.read(j+1);
-                if (BuddyControlled & 1 << (j)) {                                                    // Test if this channel is buddy controlled. If not leave it unchanged
+        if (PPMInputBuddy.available() == CHANNELSUSED){
+            for (int j = 0; j < CHANNELSUSED; ++j) {                                   // While slave has control, his stick data replaces all ours
+                uint16_t PpmIn = PPMInputBuddy.read(j + 1);                            // read EVERY channel
+                if (BuddyControlled & 1 << (j)) {                                      // Test if this channel is buddy controlled. If not leave it unchanged
                     SendBuffer[j] = map(PpmIn, 1000, 2000, MINMICROS, MAXMICROS);
+                    PPMBuffer[j]  = SendBuffer[j];
                 }
             }
-            if (!SlaveHasControl) {     // Buddy is On
+            if (!SlaveHasControl) {                                                    // Buddy is now On
                 PlaySound(BUDDYMSG);
                 LastShowTime = 0;
                 SlaveHasControl = true;
             }
+        }else{
+            for (int j = 0; j < CHANNELSUSED; ++j) {                                    // reuse old data if no new is available.
+                 if (BuddyControlled & 1 << (j)) SendBuffer[j] = PPMBuffer[j];
+            }
         }
-    } else {                            // Buddy is Off
+    } else {                                                                            // Buddy is now Off
         if (SlaveHasControl) {
             PlaySound(MASTERMSG);
             LastShowTime = 0;
@@ -1809,9 +1814,9 @@ FASTRUN void ShowComms()
     
     char FrontView_AckPayload[]= "AckPayload";
     char FrontView_RXBV[]      = "RXBV";
-    char Msg_CnctdBuddyMast[]  = "* BUDDY MASTER! *";
-    char Msg_CnctdBuddySlave[] = "* BUDDY SLAVE! *";
-    char MsgBuddying[]         = "Buddy";
+    char Msg_CnctdBuddyMast[]  = "* MASTER has control *";
+    char Msg_CnctdBuddySlave[] = "* BUDDY has control *";
+    char MsgBuddying[]         = "* Buddy *";
     char DataView_pps[]        = "pps"; // These are label names in the NEXTION data screen. They are best kept short.
     char DataView_lps[]        = "lps";
     char DataView_Alt[]        = "alt";
@@ -9638,9 +9643,7 @@ void FASTRUN ManageTransmitter(){
 }
 /**********************************************************************************************************/
 #ifdef TXMODULESUPPORT
-
 void SendPPM(){ // Send a frame of PPM 
- Look(millis());
     if (millis() - LastPPMFrame < PPMMillis) return; 
     LastPPMFrame = millis();
     for (int j = 0; j < PPMChannelNumber; ++j) {
@@ -9648,14 +9651,13 @@ void SendPPM(){ // Send a frame of PPM
     }
 }
 #endif
-
 /************************************************************************************************************/
 // LOOP
 /************************************************************************************************************/
 FASTRUN void loop()
 {
     ManageTransmitter();                                         // Do the needed chores ... (if there's time)
-    if (!BuddyON) GetNewChannelValues();                         // Load SendBuffer with new servo positions  Very frequently
+    GetNewChannelValues();                                       // Load SendBuffer with new servo positions  Very frequently
     if (UseMacros) ExecuteMacro();                               // Modify it if macro is running
    
     if (BuddyPupilOnPPM) { 
@@ -9663,7 +9665,7 @@ FASTRUN void loop()
         ShowServoPos(); 
     } else {                                                     // Skip these next lines when buddying as a slave
         if (!BoundFlag && Connected) BufferNewPipe();            // if not yet bound, insert our pipe into SendBuffer BUT ONLY WHEN CONNECTED 
-        if (BuddyMaster) GetSlaveChannelValuesPPM();                 // If buddy master, get buddy data and maybe use it. 
+        if (BuddyMaster) GetSlaveChannelValuesPPM();             // If buddy master, get buddy data and maybe use it. 
         ShowServoPos();                                          
         if (!MotorEnabled && !BuddyON) SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero whatever was shown.   
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24
