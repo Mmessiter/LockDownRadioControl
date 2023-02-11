@@ -648,30 +648,29 @@ void FixDeltaGMTSign()
 /************************************************************************************************************/
 // This function reads data from BUDDY (Slave) BUT uses it ONLY WHILE buddy switch is on
 
-void GetSlaveChannelValuesPPM()
+void GetSlaveChannelValuesPPM() // MASTER code
 {
      if (BuddyON) {
         int ChCount = PPMInputBuddy.available();
         if (ChCount){
             for (int j = 0; j < ChCount; ++j) {                                                     // While slave has control, his stick data replaces all ours
                 uint16_t PpmIn = PPMInputBuddy.read(j+1);
-                if (BuddyControlled & 1 << (j)) {                                                     // Test if this channel is buddy controlled. If not leave it unchanged
+                if (BuddyControlled & 1 << (j)) {                                                    // Test if this channel is buddy controlled. If not leave it unchanged
                     SendBuffer[j] = map(PpmIn, 1000, 2000, MINMICROS, MAXMICROS);
                 }
             }
-            if (!SlaveHasControl && AnnounceConnected) {
+            if (!SlaveHasControl) {     // Buddy is On
                 PlaySound(BUDDYMSG);
                 LastShowTime = 0;
+                SlaveHasControl = true;
             }
-            SlaveHasControl = true;
         }
-    }
-    else { // Buddy is Off
-        if (SlaveHasControl && AnnounceConnected) {
+    } else {                            // Buddy is Off
+        if (SlaveHasControl) {
             PlaySound(MASTERMSG);
             LastShowTime = 0;
+            SlaveHasControl = false;
         }
-        SlaveHasControl = false;
     }
 }
 /**************************** Clear Macros if junk was loaded from SD ********************************************************************************/
@@ -704,9 +703,9 @@ FLASHMEM void ResetSubTrims()
 /** Map servo channels' data from SendBuffer into SbusChannels buffer */
 // This funtion is used by the BUDDY slave to send it's controls out down a wire using SBUS
 
-FASTRUN void SendViaPPM() // heersend
+FASTRUN void SendViaPPM() 
 {
-    if (millis() - PPMTimer >= PPMFRAMERATE)
+    if (millis() - PPMTimer >= PPMBUDDYFRAMERATE)
     {
         PPMTimer = millis();
         for (int j = 0; j < CHANNELSUSED; ++j)
@@ -9664,9 +9663,9 @@ FASTRUN void loop()
         ShowServoPos(); 
     } else {                                                     // Skip these next lines when buddying as a slave
         if (!BoundFlag && Connected) BufferNewPipe();            // if not yet bound, insert our pipe into SendBuffer BUT ONLY WHEN CONNECTED 
-        if (BuddyMaster) GetSlaveChannelValuesPPM();             // If buddy master, get buddy data and maybe use it. 
+        if (BuddyMaster) GetSlaveChannelValuesPPM();                 // If buddy master, get buddy data and maybe use it. 
         ShowServoPos();                                          
-        if (!MotorEnabled) SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero whatever was shown.   
+        if (!MotorEnabled && !BuddyON) SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero whatever was shown.   
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24
     }                                   
    

@@ -376,7 +376,7 @@
 //                            PPM PARAMETERS   (FOR BUDDY BOXING)          *
 //***************************************************************************
 
-#define PPMFRAMERATE 10 // PPM frame every 22 milliseconds 
+#define PPMBUDDYFRAMERATE 10 // PPM frame every 10 milliseconds 
 #define RANGEMAX 2047 // = Frsky at 150 %
 #define RANGEMIN 0    // = Frsky at 0 %
 
