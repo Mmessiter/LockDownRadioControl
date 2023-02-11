@@ -27,7 +27,7 @@ var searchData=
   ['pincsn2_24',['pinCSN2',['../common_8h.html#a76971ffb50fdfd6bc8e2c3c6ac339459',1,'common.h']]],
   ['plsturnoff_25',['PLSTURNOFF',['../RadioFunctions_8h.html#a3d9e7817e8c3f47044067ead9b8ce38b',1,'RadioFunctions.h']]],
   ['power_5foff_5fpin_26',['POWER_OFF_PIN',['../RadioFunctions_8h.html#aac8f9c268e406507be95a1255281323c',1,'RadioFunctions.h']]],
-  ['ppmframerate_27',['PPMFRAMERATE',['../RadioFunctions_8h.html#a696ad11112332d721a9a14cd0f5836d8',1,'RadioFunctions.h']]],
+  ['ppmbuddyframerate_27',['PPMBUDDYFRAMERATE',['../RadioFunctions_8h.html#a382154ba197e2cdf260955df9437b707',1,'RadioFunctions.h']]],
   ['ppmport_28',['PPMPORT',['../common_8h.html#a95812254c835135cc2281a48a97d7664',1,'PPMPORT():&#160;common.h'],['../RadioFunctions_8h.html#a95812254c835135cc2281a48a97d7664',1,'PPMPORT():&#160;RadioFunctions.h']]],
   ['ppmrate_29',['PPMRATE',['../common_8h.html#aea3696981531ec0dcd387eece9b5af44',1,'common.h']]],
   ['printfloatx_30',['printfloatx',['../MPU6050_8cpp.html#a4846b5f0cc3c43f0bd038519c2cc1340',1,'MPU6050.cpp']]],

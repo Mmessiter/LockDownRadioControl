@@ -146,7 +146,7 @@ var RadioFunctions_8h =
     [ "PERFECTPACKETSPERSECOND", "RadioFunctions_8h.html#ad19ebeeabe5c8ede82c5be3f8d3f7776", null ],
     [ "PLSTURNOFF", "RadioFunctions_8h.html#a3d9e7817e8c3f47044067ead9b8ce38b", null ],
     [ "POWER_OFF_PIN", "RadioFunctions_8h.html#aac8f9c268e406507be95a1255281323c", null ],
-    [ "PPMFRAMERATE", "RadioFunctions_8h.html#a696ad11112332d721a9a14cd0f5836d8", null ],
+    [ "PPMBUDDYFRAMERATE", "RadioFunctions_8h.html#a382154ba197e2cdf260955df9437b707", null ],
     [ "PPMPORT", "RadioFunctions_8h.html#a95812254c835135cc2281a48a97d7664", null ],
     [ "PROPOCHANNELS", "RadioFunctions_8h.html#a19677884790860fea7a21dae72e1b862", null ],
     [ "Purple", "RadioFunctions_8h.html#a5168ce33eb581e85fbfa454e89012bfb", null ],
