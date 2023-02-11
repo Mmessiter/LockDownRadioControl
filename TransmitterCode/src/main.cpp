@@ -122,9 +122,7 @@
 RF24          Radio1(CE_PIN, CSN_PIN);
 WDT_T4<WDT3>  TeensyWatchDog;
 WDT_timings_t WatchDogConfig;
-SBUS          MySbus(SBUSPORT);
-uint16_t      SbusChannels[CHANNELSUSED + 2]; // a few spare
-uint32_t      SBUSTimer = 0;
+uint32_t      PPMTimer = 0;
 uint8_t       Mixes[MAXMIXES + 1][CHANNELSUSED + 1];          // 17 possible elements per mix. NOTHING to do with channels count!!!
 int           Trims[BANKSUSED + 1][CHANNELSUSED + 1];         // Trims to store
 uint8_t       Exponential[BANKSUSED + 1][CHANNELSUSED + 1];   // Exponential
@@ -551,7 +549,7 @@ bool     TimerDownwards         = false;
 uint16_t TimerStartTime         = 5 * 60; 
 bool     TimesUp                = false;
 uint8_t  CountDownIndex = 0;
-bool     UseSBUS                = true;  // at receiver. false = PPM
+bool     UseSBUSFromRX                = true;  // at receiver. false = PPM
 uint16_t FrameRate              = 100;  
 
 // **********************************************************************************************************************************
@@ -570,7 +568,7 @@ uint8_t                 PPMChannelOrder3[16]  = {E, T, A, R, 5, 6, 7, 8, 9, 10, 
 uint32_t                LastPPMFrame         = 0;
 uint8_t                 PPMOrderSelection    = 2;
 uint8_t                 PPMChannelNumber     = 6;
-uint8_t                 PPMMillis            = 22;
+uint8_t                 PPMMillis            = 22; // for Module, not buddy
 bool                    UseTXModule          = false;
 // **********************************************************************************************************************************
 
@@ -650,48 +648,14 @@ void FixDeltaGMTSign()
 /************************************************************************************************************/
 // This function reads data from BUDDY (Slave) BUT uses it ONLY WHILE buddy switch is on
 
-void GetSlaveChannelValues()
-{
-    bool failSafeM; // These flags not used, yet...
-    bool lostFrameM;
-      
-    if (BuddyON){
-        if (MySbus.read(&SbusChannels[0], &failSafeM, &lostFrameM)) {                               // Buddy is On
-            SBUSTimer = millis();                                                                   // RESET timeout when data comes in
-        }                                                                                           // Even if there's no new data, re-use old data
-        if (millis() - SBUSTimer < 500) {                                                           // Ignore data more than 500ms old
-            for (int j = 0; j < CHANNELSUSED; ++j) {                                                // While slave has control, his stick data replaces all ours
-                if (BuddyControlled & 1 << j) {                                                     // Test if this channel is buddy controlled. If not leave it unchanged
-                    SendBuffer[j] = map(SbusChannels[j], RANGEMIN, RANGEMAX, MINMICROS, MAXMICROS); // Put re-mapped data where we can use it.
-                }
-            }
-            if (!SlaveHasControl && AnnounceConnected) {
-                PlaySound(BUDDYMSG);
-                LastShowTime = 0;
-            }
-            SlaveHasControl = true;
-        }
-    }
-    else { // Buddy is Off
-        if (SlaveHasControl && AnnounceConnected) {
-            PlaySound(MASTERMSG);
-            LastShowTime = 0;
-        }
-        SlaveHasControl = false;
-    }
-}
-
-/************************************************************************************************************/
-// This function reads data from BUDDY (Slave) BUT uses it ONLY WHILE buddy switch is on
-
 void GetSlaveChannelValuesPPM()
 {
     if (BuddyON) {
         uint8_t ChCount = PPMInputBuddy.available();
         if (ChCount) {
-            SBUSTimer = millis();                                                                   // RESET timeout when data comes in
+            PPMTimer = millis();                                                                   // RESET timeout when data comes in
         }                                                                                           // Even if there's no new data, re-use old data
-        if (millis() - SBUSTimer < 500) {                                                           // Ignore data more than 500ms old
+        if (millis() - PPMTimer < 500) {                                                           // Ignore data more than 500ms old
             for (int j = 0; j < ChCount; ++j) {                                                     // While slave has control, his stick data replaces all ours
                 uint16_t PpmIn = map(PPMInputBuddy.read(j+1), 1000, 2000, MINMICROS, MAXMICROS);
                 if (BuddyControlled & 1 << j) {                                                     // Test if this channel is buddy controlled. If not leave it unchanged
@@ -713,10 +677,6 @@ void GetSlaveChannelValuesPPM()
         SlaveHasControl = false;
     }
 }
-
-
-
-
 /**************************** Clear Macros if junk was loaded from SD ********************************************************************************/
 void CheckMacrosBuffer()
 {
@@ -747,29 +707,11 @@ FLASHMEM void ResetSubTrims()
 /** Map servo channels' data from SendBuffer into SbusChannels buffer */
 // This funtion is used by the BUDDY slave to send it's controls out down a wire using SBUS
 
-FASTRUN void MapToSBUS()
+FASTRUN void SendViaPPM() // heer
 {
-    if (millis() - SBUSTimer >= SBUSRATE)
+    if (millis() - PPMTimer >= PPMFRAMERATE)
     {
-        SBUSTimer = millis();
-
-        for (int j = 0; j < CHANNELSUSED; ++j)
-        {
-            SbusChannels[j] = static_cast<uint16_t>(map(SendBuffer[j], MINMICROS, MAXMICROS, RANGEMIN, RANGEMAX));
-        }
-        MySbus.write(SbusChannels);
-    }
-}
-
-/************************************************************************************************************/
-/** Map servo channels' data from SendBuffer into SbusChannels buffer */
-// This funtion is used by the BUDDY slave to send it's controls out down a wire using SBUS
-
-FASTRUN void MapToPPM() // heer
-{
-    if (millis() - SBUSTimer >= SBUSRATE)
-    {
-        SBUSTimer = millis();
+        PPMTimer = millis();
         for (int j = 0; j < CHANNELSUSED; ++j)
         {
             PPMOutputBuddy.write(j+1, map(SendBuffer[j], MINMICROS, MAXMICROS, 1000, 2000));
@@ -3112,12 +3054,12 @@ bool ReadOneModel(uint32_t Mnum)
     if (TimerStartTime > 120 * 60) TimerStartTime = 5 * 60;
     ++SDCardAddress;
     ++SDCardAddress;
-    UseSBUS         = (bool) SDRead8BITS(SDCardAddress);
+    UseSBUSFromRX         = (bool) SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
     FrameRate         =  SDRead16BITS(SDCardAddress);
     if ((FrameRate < 10) || (FrameRate > 250)){  // miles out of range framerate?
           FrameRate = 100;
-          UseSBUS   = true;
+          UseSBUSFromRX   = true;
     }
     ++SDCardAddress;
     ++SDCardAddress;
@@ -3760,8 +3702,10 @@ if (UseTXModule)
     if(BuddyMaster){
          PPMInputBuddy.begin(BUDDYPPMPORT);
     }else{
-        if (!UseTXModule && BuddyPupilOnSbus) PPMOutputBuddy.begin(BUDDYPPMPORT); // 'if' can be removed later
-    }
+        if (!UseTXModule && BuddyPupilOnSbus) {
+            PPMOutputBuddy.begin(BUDDYPPMPORT); // 'if' can be removed later
+        }
+    } // heer
 
     delay(WARMUPDELAY);                        // Allow Nextion time to warm up
     SendValue(FrontView_BackGround, BackGroundColour); // Get colours ready
@@ -3786,7 +3730,7 @@ if (UseTXModule)
     StartInactvityTimeout();
     SizeOfCompressedData = sizeof(CompressedData);
     GetTXVersionNumber();
-    MySbus.begin();                             
+                          
     SetUKFrequencies();
     ScreenTimeTimer = millis();
     RestoreBrightness();
@@ -4206,7 +4150,7 @@ void SaveOneModel(uint32_t mnum)
         ++SDCardAddress;
         ++SDCardAddress;
 
-        SDUpdate8BITS(SDCardAddress, UseSBUS); 
+        SDUpdate8BITS(SDCardAddress, UseSBUSFromRX); 
         ++SDCardAddress;   
 
         SDUpdate16BITS(SDCardAddress, FrameRate); 
@@ -6476,8 +6420,8 @@ void RXSetup1Start() // model options screen
     SendValue(RxVCorrextion, RxVoltageCorrection);
     SendValue(c2, TimerDownwards);
     SendValue(n4, TimerStartTime/60);
-    SendValue(r0, UseSBUS);
-    SendValue(r1, !UseSBUS);
+    SendValue(r0, UseSBUSFromRX);
+    SendValue(r1, !UseSBUSFromRX);
     SendValue(n5,FrameRate);
     CurrentView = RXSETUPVIEW1;
     UpdateModelsNameEveryWhere();
@@ -6523,7 +6467,7 @@ void RXSetup1End()
     SendValue(Progress,70);
     TimerStartTime          = GetValue(n4) * 60;
     SendValue(Progress,80);
-    UseSBUS                 = GetValue(r0);
+    UseSBUSFromRX                 = GetValue(r0);
     SendValue(Progress,90);
     FrameRate              =  GetValue(n5);
     SendValue(Progress, 100);
@@ -8688,7 +8632,7 @@ void LoadPacketData()
             break;
 
         case 5:
-            SendBuffer[CHANNELSUSED + 1] = UseSBUS;       // 1 - 0
+            SendBuffer[CHANNELSUSED + 1] = UseSBUSFromRX;       // 1 - 0
             SendBuffer[CHANNELSUSED + 2] = (uint8_t)(1000 / FrameRate); // frame rate converted to ms per frame
             break;
 
@@ -9700,10 +9644,11 @@ void FASTRUN ManageTransmitter(){
 #ifdef TXMODULESUPPORT
 
 void SendPPM(){ // Send a frame of PPM 
-    if (millis() - LastPPMFrame < PPMMillis) return; // 50 Hz?
+ Look(millis());
+    if (millis() - LastPPMFrame < PPMMillis) return; 
     LastPPMFrame = millis();
     for (int j = 0; j < PPMChannelNumber; ++j) {
-        PPMOutputModule.write(*(PPMChannelOrder + j), map(SendBuffer[j], MINMICROS, MAXMICROS, 1000, 2000));
+        PPMOutputModule.write(*(PPMChannelOrder + j), map(SendBuffer[j], MINMICROS, MAXMICROS, 1000, 2000));  
     }
 }
 #endif

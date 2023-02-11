@@ -232,7 +232,7 @@ FASTRUN void SendData()
     if (SendNoData) return;
     if ((millis() - LastPacketSentTime) >= PACEMAKER) {
         LastPacketSentTime = millis();
-        if (BuddyPupilOnSbus) {MapToPPM();return;}                  // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
+        if (BuddyPupilOnSbus) {SendViaPPM();return;}                  // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
         LoadPacketData();                                           // extra parameters appended to the data packet
         Connected = false;                                          // Assume the worst until ACK is received.
         FlushFifos();

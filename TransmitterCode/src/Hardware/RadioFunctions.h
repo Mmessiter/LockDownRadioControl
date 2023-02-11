@@ -36,7 +36,7 @@
 #include <TeensyID.h>
 #include <EEPROM.h>
 #include <InterpolationLib.h>
-#include <SBUS.h>
+//#include <SBUS.h>
 #include <RF24.h>
 #include <Watchdog_t4.h>
 #include <PulsePosition.h>
@@ -373,11 +373,10 @@
 #define MACRORUNNINGNOW     5 // Running flag (BIT 0 running/not running,  BIT 1 = Timer active / inactive)
 
 // **************************************************************************
-//                            SBUS PARAMETERS   (FOR BUDDY BOXING)          *
+//                            PPM PARAMETERS   (FOR BUDDY BOXING)          *
 //***************************************************************************
 
-#define SBUSRATE 10 // SBUS frame every 10 milliseconds ( = 100 Hz)
-#define SBUSPORT Serial2
+#define PPMFRAMERATE 10 // SBUS frame every 10 milliseconds ( = 100 Hz)
 #define RANGEMAX 2047 // = Frsky at 150 %
 #define RANGEMIN 0    // = Frsky at 0 %
 
@@ -493,8 +492,7 @@ extern void  ParseAckPayload();
 extern void  FailedPacket();
 extern void  StartInactvityTimeout();
 extern void  ShowServoPos();
-extern void  MapToSBUS();
-extern void  MapToPPM();
+extern void  SendViaPPM();
 extern void  ZeroDataScreen();
 extern void  RedLedOn();
 extern void  ReEnableScanButton();
