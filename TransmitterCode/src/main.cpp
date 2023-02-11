@@ -649,15 +649,15 @@ void FixDeltaGMTSign()
 /************************************************************************************************************/
 // This function reads data from BUDDY (Slave) BUT uses it ONLY WHILE buddy switch is on
 
-void GetSlaveChannelValuesPPM() // MASTER code // heer
+void GetSlaveChannelValuesPPM() // MASTER code 
 {
      if (BuddyON) {
         if (PPMInputBuddy.available() == CHANNELSUSED){
             for (int j = 0; j < CHANNELSUSED; ++j) {                                   // While slave has control, his stick data replaces all ours
                 uint16_t PpmIn = PPMInputBuddy.read(j + 1);                            // read EVERY channel
                 if (BuddyControlled & 1 << (j)) {                                      // Test if this channel is buddy controlled. If not leave it unchanged
-                    SendBuffer[j] = map(PpmIn, 1000, 2000, MINMICROS, MAXMICROS);
-                    PPMBuffer[j]  = SendBuffer[j];
+                    SendBuffer[j] = PpmIn;
+                    PPMBuffer[j]  = PpmIn;
                 }
             }
             if (!SlaveHasControl) {                                                    // Buddy is now On
@@ -715,7 +715,7 @@ FASTRUN void SendViaPPM()
         PPMTimer = millis();
         for (int j = 0; j < CHANNELSUSED; ++j)
         {
-            PPMOutputBuddy.write(j+1, map(SendBuffer[j], MINMICROS, MAXMICROS, 1000, 2000));
+            PPMOutputBuddy.write(j+1, SendBuffer[j]); //  (no mapping)
         }
     }
 }
