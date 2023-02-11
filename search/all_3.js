@@ -75,7 +75,7 @@ var searchData=
   ['buddymsg_72',['BUDDYMSG',['../RadioFunctions_8h.html#a4369b0021c14140eca0aab3f7d3c83d1',1,'RadioFunctions.h']]],
   ['buddyon_73',['BuddyON',['../TransmitterCode_2src_2main_8cpp.html#a2134130b3bde6e04237bca0aab2c22ef',1,'main.cpp']]],
   ['buddyppmport_74',['BUDDYPPMPORT',['../RadioFunctions_8h.html#a7693b6311a14f65e0b9e2f3d202229b9',1,'RadioFunctions.h']]],
-  ['buddypupilonsbus_75',['BuddyPupilOnSbus',['../RadioFunctions_8h.html#aab2132c978e02d59db104ace9511cee6',1,'BuddyPupilOnSbus():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#aab2132c978e02d59db104ace9511cee6',1,'BuddyPupilOnSbus():&#160;main.cpp']]],
+  ['buddypupilonppm_75',['BuddyPupilOnPPM',['../RadioFunctions_8h.html#ad0fba269cc9a3aa9400013a6b80cbd09',1,'BuddyPupilOnPPM():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#ad0fba269cc9a3aa9400013a6b80cbd09',1,'BuddyPupilOnPPM():&#160;main.cpp']]],
   ['buddyswitch_76',['BuddySwitch',['../TransmitterCode_2src_2main_8cpp.html#aad45cb80b969ee0f10952b145e4c15a5',1,'main.cpp']]],
   ['buddyview_77',['BUDDYVIEW',['../RadioFunctions_8h.html#a38c9376ad661411cad3019d4a43ac493',1,'RadioFunctions.h']]],
   ['buffer_5flength_78',['BUFFER_LENGTH',['../I2Cdev_8cpp.html#af7b7dc9a200cb1404c280bd500fd1551',1,'I2Cdev.cpp']]],

@@ -41,7 +41,7 @@ var searchData=
   ['buddycontrolled_38',['BuddyControlled',['../TransmitterCode_2src_2main_8cpp.html#a5c21772263bd77182ecf11e45dc773a5',1,'main.cpp']]],
   ['buddymaster_39',['BuddyMaster',['../RadioFunctions_8h.html#a26a52012e307147a99289fff5c492358',1,'BuddyMaster():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a26a52012e307147a99289fff5c492358',1,'BuddyMaster():&#160;main.cpp']]],
   ['buddyon_40',['BuddyON',['../TransmitterCode_2src_2main_8cpp.html#a2134130b3bde6e04237bca0aab2c22ef',1,'main.cpp']]],
-  ['buddypupilonsbus_41',['BuddyPupilOnSbus',['../RadioFunctions_8h.html#aab2132c978e02d59db104ace9511cee6',1,'BuddyPupilOnSbus():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#aab2132c978e02d59db104ace9511cee6',1,'BuddyPupilOnSbus():&#160;main.cpp']]],
+  ['buddypupilonppm_41',['BuddyPupilOnPPM',['../RadioFunctions_8h.html#ad0fba269cc9a3aa9400013a6b80cbd09',1,'BuddyPupilOnPPM():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#ad0fba269cc9a3aa9400013a6b80cbd09',1,'BuddyPupilOnPPM():&#160;main.cpp']]],
   ['buddyswitch_42',['BuddySwitch',['../TransmitterCode_2src_2main_8cpp.html#aad45cb80b969ee0f10952b145e4c15a5',1,'main.cpp']]],
   ['buttonclicks_43',['ButtonClicks',['../TransmitterCode_2src_2main_8cpp.html#a0955aa08f4b43e6f78ff256fc6ccf421',1,'main.cpp']]],
   ['byte1_44',['Byte1',['../structPayload.html#ab1cbe4c4b9ee9ce839084b274f3ea494',1,'Payload']]],

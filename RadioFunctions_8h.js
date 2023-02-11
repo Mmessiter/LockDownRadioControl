@@ -332,7 +332,7 @@ var RadioFunctions_8h =
     [ "BadChannels", "RadioFunctions_8h.html#a5824d45baec8c549c63ff8a7fa8ac9d8", null ],
     [ "BoundFlag", "RadioFunctions_8h.html#a44d37e4e8af884bf172344c0835a5593", null ],
     [ "BuddyMaster", "RadioFunctions_8h.html#a26a52012e307147a99289fff5c492358", null ],
-    [ "BuddyPupilOnSbus", "RadioFunctions_8h.html#aab2132c978e02d59db104ace9511cee6", null ],
+    [ "BuddyPupilOnPPM", "RadioFunctions_8h.html#ad0fba269cc9a3aa9400013a6b80cbd09", null ],
     [ "ChannelCentre", "RadioFunctions_8h.html#a1ed2189ce3484aec5668702d3ad26f81", null ],
     [ "ChannelMax", "RadioFunctions_8h.html#aa0c26e4abaa1de1802c283559fd4c68c", null ],
     [ "ChannelMidHi", "RadioFunctions_8h.html#ae2a2bff09ff786f00f4b567d5fde8e38", null ],
