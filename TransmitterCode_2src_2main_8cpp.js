@@ -575,6 +575,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "PowerOffTimer", "TransmitterCode_2src_2main_8cpp.html#a4920261904b22c215b85f66a7b5670e5", null ],
     [ "PowerOffWarningSeconds", "TransmitterCode_2src_2main_8cpp.html#a655d384f81374c34aa6629856258263a", null ],
     [ "PowerWarningVisible", "TransmitterCode_2src_2main_8cpp.html#aea12b11ce3bf765886dbee30a5e94d5d", null ],
+    [ "PPMBuffer", "TransmitterCode_2src_2main_8cpp.html#afebbab0d566941028bdc265a4f7c3544", null ],
     [ "PPMChannelNumber", "TransmitterCode_2src_2main_8cpp.html#a0318f8b5330f2e631c1ec601a9373827", null ],
     [ "PPMChannelOrder", "TransmitterCode_2src_2main_8cpp.html#ab33012141a70a3e5d65a6c6ecc604d21", null ],
     [ "PPMChannelOrder1", "TransmitterCode_2src_2main_8cpp.html#aee5ebd27e815e72e74c744942f0692fa", null ],
