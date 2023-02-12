@@ -58,7 +58,7 @@
 
 #define CHANNELSUSED            16                        // 16 Channels
 #define MAXMIXES                32                        // 32 mixes
-#define TICKSPERMINUTE          60000                     // millis() += 60000 per minute
+#define TICKSPERMINUTE          60000                     // millis() = 60000 per minute
 #define PROPOCHANNELS           8                         // Only 4 have knobs / 2 sticks (= 4 hall sensors)
 #define BANKSWITCH              4                         // Default MODE switch
 #define AUTOSWITCH              1                         // Default AUTO switch
@@ -85,14 +85,13 @@
 #define CHARSMAX                120                       // Max length for char arrays
 #define UNCOMPRESSEDWORDS       20                        // DATA TO SEND = 40  bytes
 #define COMPRESSEDWORDS    UNCOMPRESSEDWORDS * 3 / 4      // COMPRESSED DATA SENT = 30  bytes
-#define PERFECTPACKETSPERSECOND 150                       // Flat out perfect packets per second
 #define TIMEFORTXMANAGMENT      3                         // How many ms must remain spare between data packets before daring to undertake more trivial tasks 
 #define DEFAULTLEDBRIGHTNESS    20                        // LED brightness
 #define DEFAULTPOWEROFFWARNING  3                         // Default time to warn before cutting power      
 #define MAXDUALRATE             200
 #define MAXBUFFERSIZE           4096
 #define MAXMODELNUMBER          91
-
+#define PERFECTPACKETSPERSECOND 150                       // Flat out perfect packets per second
 // **************************************************************************
 //                            FHSS PARAMETERS                               *
 //***************************************************************************
@@ -365,16 +364,16 @@
 #define MACROSTARTTIME      1 // In ** >> 10ths << ** of a second since trigger. ( = millis() * 100 ) up to 25.4 seconds
 #define MACRODURATION       2 // In ** >> 10ths << ** of a second since start    ( = millis() * 100 ) up to 25.4 seconds
 #define MACROMOVECHANNEL    3 // Which channel to move.
-#define MACROMOVETOPOSITION 4 // Where to put said channel for said duration. (0 -180)
+#define MACROMOVETOPOSITION 4 // Where to put said channel for said duration. (0 - 180)
 #define MACRORUNNINGNOW     5 // Running flag (BIT 0 running/not running,  BIT 1 = Timer active / inactive)
 
 // **************************************************************************
 //                            PPM PARAMETERS   (FOR BUDDY BOXING)          *
 //***************************************************************************
 
-#define PPMBUDDYFRAMERATE 10 // PPM frame every 10 milliseconds 
-#define RANGEMAX 2047 // = Frsky at 150 %
-#define RANGEMIN 0    // = Frsky at 0 %
+#define PPMBUDDYFRAMERATE 10  // PPM new frame every 10 milliseconds 
+#define RANGEMAX 2047         // = Frsky at 150 %
+#define RANGEMIN 0            // = Frsky at 0 %
 
 // **************************************************************************
 //                          NEXTION SERIAL CONNECTION                       *

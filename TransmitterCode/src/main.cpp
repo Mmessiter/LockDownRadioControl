@@ -4542,6 +4542,7 @@ void SaveAllParameters()
 
 // This function takes account of the fact one gimbal is upside down ... and some people use mode 2.
 // Aileron is always reversed, plus either throttle or elevator according to mode 1 or 2
+// It reverses some pins 
 
 int AnalogueReed(uint8_t InputChannel){    
     int value = analogRead(AnalogueInput[InputChannel]);
