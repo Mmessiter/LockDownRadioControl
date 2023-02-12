@@ -6032,8 +6032,8 @@ void EndBuddyView()
     char GoBack[] = "page BuddyView";
     OldPupil = BuddyPupilOnPPM;
     OldMaster = BuddyMaster;
-    BuddyPupilOnPPM    = GetValue(BuddyP); // Pupil, wired 
-    BuddyMaster         = GetValue(BuddyM); // Master
+    BuddyPupilOnPPM    = GetValue(BuddyP); // Pupil 
+    BuddyMaster        = GetValue(BuddyM); // Master
     if  ((OldPupil != BuddyPupilOnPPM) || (OldMaster != BuddyMaster)){
         if (!GetConfirmation(GoBack,prompt)) return; 
     }
@@ -7233,7 +7233,7 @@ void SelectChannelOrder(){
     SendValue(Progress, 10);
     UseTXModule      =   GetValue(c1); 
     if (UseTXModule != oldUseTxModule){
-        if (!GetConfirmation(GoBack,prompt)){ // heer
+        if (!GetConfirmation(GoBack,prompt)){ 
                 UseTXModule = oldUseTxModule;
                 SendValue(c1, UseTXModule);
                 return;
