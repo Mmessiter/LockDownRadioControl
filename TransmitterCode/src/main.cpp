@@ -705,21 +705,15 @@ FLASHMEM void ResetSubTrims()
     }
 }
 /************************************************************************************************************/
-/** Map servo channels' data from SendBuffer into SbusChannels buffer */
-// This funtion is used by the BUDDY slave to send it's controls out down a wire using SBUS
+//  Send via PPM for Buddy box pupil
 
-FASTRUN void SendViaPPM() 
+FASTRUN void SendViaPPM()
 {
-    if (millis() - PPMTimer >= PPMBUDDYFRAMERATE)
-    {
+    if (millis() - PPMTimer >= PPMBUDDYFRAMERATE) {
         PPMTimer = millis();
-        for (int j = 0; j < CHANNELSUSED; ++j)
-        {
-            PPMOutputBuddy.write(j+1, SendBuffer[j]); //  (no mapping)
-        }
+        for (int j = 0; j < CHANNELSUSED; ++j) PPMOutputBuddy.write(j+1, SendBuffer[j]); 
     }
 }
-
 /*********************************************************************************************************************************/
 
 uint8_t decToBcd(uint8_t val)
@@ -6031,17 +6025,29 @@ void EndBuddyView()
 {
     char BuddyM[] = "BuddyM";
     char BuddyP[] = "BuddyP";
-
     char pRXSetupView[]   = "page RXSetupView";
+    bool OldPupil;
+    bool OldMaster;
+    char prompt[] = "Power off transmitter?";
+    char GoBack[] = "page BuddyView";
+    OldPupil = BuddyPupilOnPPM;
+    OldMaster = BuddyMaster;
     BuddyPupilOnPPM    = GetValue(BuddyP); // Pupil, wired 
-    BuddyMaster         = GetValue(BuddyM); // Master, either.
+    BuddyMaster         = GetValue(BuddyM); // Master
+    if  ((OldPupil != BuddyPupilOnPPM) || (OldMaster != BuddyMaster)){
+        if (!GetConfirmation(GoBack,prompt)) return; 
+    }
     SaveAllParameters();
     b5isGrey = false;
     b12isGrey = false;
     SendCommand(pRXSetupView);
     CurrentView = RXSETUPVIEW;
     UpdateModelsNameEveryWhere();
+    if  ((OldPupil != BuddyPupilOnPPM) || (OldMaster != BuddyMaster)){
+            digitalWrite(POWER_OFF_PIN, HIGH); 
+    }
 }
+
 /*********************************************************************************************************************************/
 FASTRUN void DisplayCurveAndServoPos(){
 
@@ -7175,6 +7181,8 @@ void DoMFName(){
  void TXModuleViewStart(){ 
 
     char GoTXModule[] = "page TXModuleView";
+    if (ModelMatched) return;
+
     CurrentView = TXMODULEVIEW;
 
     char c1[] = "c1";   // Use module
@@ -7225,7 +7233,7 @@ void SelectChannelOrder(){
     SendValue(Progress, 10);
     UseTXModule      =   GetValue(c1); 
     if (UseTXModule != oldUseTxModule){
-        if (!GetConfirmation(GoBack,prompt)){
+        if (!GetConfirmation(GoBack,prompt)){ // heer
                 UseTXModule = oldUseTxModule;
                 SendValue(c1, UseTXModule);
                 return;
@@ -7488,7 +7496,6 @@ FASTRUN void ButtonWasPressed()
         char CH16NAME[]                = "CH16NAME=";
         char HelpView[]                = "HelpView";
         char SendModel[]               = "SendModel";
-        char PowerOff[]                = "PowerOff";
         char OffNow[]                  = "OffNow"; // force power off
         char OptionsViewS[]            = "OptionsViewS";
         char Pto[]                     = "Pto";
@@ -7931,11 +7938,6 @@ FASTRUN void ButtonWasPressed()
             return;
         }
      
-        if (InStrng(PowerOff, TextIn) > 0) { // power off button up no longer turns off!
-            PowerOffTimer = 0;
-            ClearText();
-            return;
-        }
 
         if (InStrng(OffNow, TextIn) > 0) { // redundant
             if (UseLog) LogPowerOff();
