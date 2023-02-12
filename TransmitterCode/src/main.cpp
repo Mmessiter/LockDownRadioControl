@@ -6031,7 +6031,9 @@ void EndBuddyView()
     bool OldMaster;
     char prompt[] = "Power off transmitter?";
     char GoBack[] = "page BuddyView";
-    OldPupil = BuddyPupilOnPPM;
+    
+    
+    OldPupil = BuddyPupilOnPPM;             // save old version to detect a change
     OldMaster = BuddyMaster;
     BuddyPupilOnPPM    = GetValue(BuddyP); // Pupil 
     BuddyMaster        = GetValue(BuddyM); // Master
