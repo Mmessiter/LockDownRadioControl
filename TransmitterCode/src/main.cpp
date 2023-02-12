@@ -6036,7 +6036,12 @@ void EndBuddyView()
     BuddyPupilOnPPM    = GetValue(BuddyP); // Pupil 
     BuddyMaster        = GetValue(BuddyM); // Master
     if  ((OldPupil != BuddyPupilOnPPM) || (OldMaster != BuddyMaster)){
-        if (!GetConfirmation(GoBack,prompt)) return; 
+        if (!GetConfirmation(GoBack,prompt)) {
+            SendValue(BuddyM, OldMaster);
+            SendValue(BuddyP, OldPupil);
+            BuddyPupilOnPPM = OldPupil;
+            BuddyMaster = OldMaster;
+        } 
     }
     SaveAllParameters();
     b5isGrey = false;
