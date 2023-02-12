@@ -9683,12 +9683,11 @@ FASTRUN void loop()
    
     switch (CurrentMode) {
         case NORMAL:            // 0
-            
 #ifdef TXMODULESUPPORT
             if (!UseTXModule) {
                 SendData();         // local TX
             }else{
-                 SendPPM();         // for TX module or buddy
+                 SendPPM();         // for TX module 
             }
 #else
             SendData();
