@@ -31,13 +31,9 @@
 #include <RF24.h>
 #include <Wire.h>
 #include <Adafruit_INA219.h>
-//#include <TimeLib.h>
 #include <DS1307RTC.h>
 #include <TeensyID.h>
-#include <EEPROM.h>
 #include <InterpolationLib.h>
-//#include <SBUS.h>
-#include <RF24.h>
 #include <Watchdog_t4.h>
 #include <PulsePosition.h>
 
