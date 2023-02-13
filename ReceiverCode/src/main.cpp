@@ -136,14 +136,14 @@ void MapToSBUS()
 
 void MoveServos()
 {
-    if (!ReadyToUseData) return;
+    if (!ReadyToUseData) return; // heer
     if (UseSBUS)
     {
         MySbus.write(SbusChannels);         // Send SBUS data
     }
     else
     {                                       // not SBUS = PPM 
-        for (int j = 0; j < CHANNELSUSED; ++j) {
+        for (int j = 0; j < PPMChannelCount; ++j) {
             PPMOutput.write(PPMChannelOrder[j], map(ReceivedData[j], MINMICROS, MAXMICROS, 1000, 2000));           
         }  
     }
@@ -392,7 +392,7 @@ void ReadExtraParameters()
             break;
         case 5:
              UseSBUS    = (bool) ReceivedData[CHANNELSUSED + 1]; // if false means PPM
-             //PPMChannelCount  = ReceivedData[CHANNELSUSED + 2];
+             PPMChannelCount  = ReceivedData[CHANNELSUSED + 2];
             break;
 
         default:

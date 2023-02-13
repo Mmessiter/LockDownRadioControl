@@ -550,8 +550,8 @@ bool     TimerDownwards         = false;
 uint16_t TimerStartTime         = 5 * 60; 
 bool     TimesUp                = false;
 uint8_t  CountDownIndex = 0;
-bool     UseSBUSFromRX                = true;  // at receiver. false = PPM
-uint16_t FrameRate              = 100;  
+bool     UseSBUSFromRX          = true;  // at receiver. false = PPM
+uint16_t PPMChannelCount        = 8;  // for our RX - not module  
 
 // **********************************************************************************************************************************
 // **********************************  Area for PPM & TX MODULE **********************************************************************
@@ -3051,10 +3051,9 @@ bool ReadOneModel(uint32_t Mnum)
     ++SDCardAddress;
     UseSBUSFromRX         = (bool) SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-    FrameRate         =  SDRead16BITS(SDCardAddress);
-    if ((FrameRate < 10) || (FrameRate > 250)){  // miles out of range framerate?
-          FrameRate = 100;
-          UseSBUSFromRX   = true;
+    PPMChannelCount         =  SDRead16BITS(SDCardAddress);
+    if ((PPMChannelCount > 16) || (PPMChannelCount < 1)){  // miles out of range PPMChannelCount?
+         PPMChannelCount = 8;
     }
     ++SDCardAddress;
     ++SDCardAddress;
@@ -4148,7 +4147,7 @@ void SaveOneModel(uint32_t mnum)
         SDUpdate8BITS(SDCardAddress, UseSBUSFromRX); 
         ++SDCardAddress;   
 
-        SDUpdate16BITS(SDCardAddress, FrameRate); 
+        SDUpdate16BITS(SDCardAddress, PPMChannelCount); 
         ++SDCardAddress;  
         ++SDCardAddress;
 
@@ -6421,7 +6420,7 @@ void RXSetup1Start() // model options screen
     char c2[] = "c2";    // TimerDownwards timer on off
     char r0[] = "r0";    // SBUS on
     char r1[] = "r1";    // PPM on
-    char n5[] = "n5";    // Framerate
+    char n5[] = "n5";    // PPMChannelCount
 
 
     SendCommand(pRXSetup1);
@@ -6437,7 +6436,7 @@ void RXSetup1Start() // model options screen
     SendValue(n4, TimerStartTime/60);
     SendValue(r0, UseSBUSFromRX);
     SendValue(r1, !UseSBUSFromRX);
-    SendValue(n5,FrameRate);
+    SendValue(n5,PPMChannelCount);
     CurrentView = RXSETUPVIEW1;
     UpdateModelsNameEveryWhere();
 
@@ -6459,7 +6458,7 @@ void RXSetup1End()
     char n4[] = "n4";    // TimerDownwards timer minutes
     char c2[] = "c2";    // TimerDownwards timer on off
     char r0[] = "r0";    // SBUS on
-    char n5[] = "n5";    // Framerate
+    char n5[] = "n5";    // PPMChannelCount
 
     SendCommand(ProgressStart);
     CopyTrimsToAll= GetValue(c1);
@@ -6482,9 +6481,9 @@ void RXSetup1End()
     SendValue(Progress,70);
     TimerStartTime          = GetValue(n4) * 60;
     SendValue(Progress,80);
-    UseSBUSFromRX                 = GetValue(r0);
+    UseSBUSFromRX            = GetValue(r0);
     SendValue(Progress,90);
-    FrameRate              =  GetValue(n5);
+    PPMChannelCount              =  GetValue(n5);
     SendValue(Progress, 100);
     CurrentView             = TXSETUPVIEW;
     SaveOneModel(ModelNumber);
@@ -8644,7 +8643,7 @@ void LoadPacketData()
 
         case 5:
             SendBuffer[CHANNELSUSED + 1] = UseSBUSFromRX;       // 1 - 0
-            SendBuffer[CHANNELSUSED + 2] = (uint8_t)(1000 / FrameRate); // frame rate converted to ms per frame
+            SendBuffer[CHANNELSUSED + 2] = PPMChannelCount;     // 
             break;
 
         default : break;
