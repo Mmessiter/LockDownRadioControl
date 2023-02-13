@@ -9670,7 +9670,7 @@ FASTRUN void loop()
      
 
     if (UseMacros) ExecuteMacro();                               // Modify it if macro is running
-   
+
     if (BuddyPupilOnPPM) { 
         NewCompressNeeded = false;                               // Fake it as Buddy does not send compressed data
         ShowServoPos(); 
