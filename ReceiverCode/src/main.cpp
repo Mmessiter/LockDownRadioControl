@@ -141,7 +141,7 @@ void MoveServos()
     for (int j = 0; j < SERVOSUSED; ++j) {
          if (PreviousData[j] != ReceivedData[j]) { // if same as last time, don't send again.
             MCMServo[j].writeMicroseconds(ReceivedData[j]);
-            if (!UseSBUS) PPMOutput.write(PPMChannelOrder[j], map(ReceivedData[j], MINMICROS, MAXMICROS, 1000, 2000)); // PPM Send!     
+            if (!UseSBUS) PPMOutput.write(PPMChannelOrder[j], map(ReceivedData[j], MINMICROS, MAXMICROS, 1000, 2000)); // PPM Send!          
             PreviousData[j] = ReceivedData[j];
          }
     }
@@ -567,8 +567,7 @@ FASTRUN void ReceiveData()
         ReadExtraParameters(); // Check the extra parameters
     }
     else {
-
-        if (millis() - SBUSTimer >= FrameRate) { // No new packet yet - but maybe it's time to dispatch the last?
+        if (millis() - SBUSTimer >= SBUSRATE) { // No new packet yet - but maybe it's time to dispatch the last?
             if (BoundFlag && (millis() > 10000)) {
                 if (Connected) {
                     KeepSbusHappy(); // if it's time - send a SBUS packet. It might be new data.
@@ -724,7 +723,7 @@ void loop()
 {
     ReceiveData();
     if (BoundFlag && Connected && ModelMatched) { // Only move servos if everything is good
-        if (millis() - SBUSTimer >= FrameRate) {  // FrameRate rate is also good enough for servo rate
+        if (millis() - SBUSTimer >= SBUSRATE) {   // SBUSRATE rate is also good enough for servo rate
             SBUSTimer = millis();                 // timer starts before send starts....
             MoveServos();                         // Actually do something useful at last
         }

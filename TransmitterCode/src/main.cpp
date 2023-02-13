@@ -569,7 +569,7 @@ uint8_t                 PPMChannelOrder3[16]  = {E, T, A, R, 5, 6, 7, 8, 9, 10, 
 uint32_t                LastPPMFrame         = 0;
 uint8_t                 PPMOrderSelection    = 2;
 uint8_t                 PPMChannelsNumber     = 6;
-uint8_t                 PPMMillis            = 22; // for Module, not buddy
+uint8_t                 PPMMillis            = 22; // Not used!!! (yet)
 bool                    UseTXModule          = false;
 // **********************************************************************************************************************************
 
@@ -3225,7 +3225,7 @@ bool LoadAllParameters()
         if ((PPMChannelsNumber > 16) || (PPMChannelsNumber < 1)) PPMChannelsNumber = 6;
         ++SDCardAddress;
         PPMMillis = SDRead8BITS(SDCardAddress);
-         if ((PPMMillis > 50) || (PPMMillis < 2)) PPMMillis = 22;
+         if ((PPMMillis > 50) || (PPMMillis < 2)) PPMMillis = 22;// Not used!!! (yet)
         ++SDCardAddress;
          UseTXModule = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
@@ -3947,7 +3947,7 @@ void SaveTransmitterParameters()
     ++SDCardAddress;
      SDUpdate8BITS(SDCardAddress, PPMChannelsNumber);
     ++SDCardAddress;
-     SDUpdate8BITS(SDCardAddress, PPMMillis);
+     SDUpdate8BITS(SDCardAddress, PPMMillis);// Not used!!! (yet)
     ++SDCardAddress;
      SDUpdate8BITS(SDCardAddress, UseTXModule);
     ++SDCardAddress;
@@ -7203,7 +7203,7 @@ void DoMFName(){
     SendCommand(GoTXModule);
     SendValue(c1, UseTXModule);
     SendValue(n3, PPMChannelsNumber);
-    SendValue(n4, PPMMillis);
+    SendValue(n4, PPMMillis);// Not used!!! (yet)
     if (PPMOrderSelection == 1) {SendValue(r0, 1);}
         else {SendValue(r0, 0);}
     if (PPMOrderSelection == 2) {SendValue(r1, 1);}
@@ -7251,7 +7251,7 @@ void SelectChannelOrder(){
     Procrastinate(100);
     PPMChannelsNumber = GetValue(n3);
     SendValue(Progress, 51);
-    PPMMillis        =   GetValue(n4);
+    PPMMillis        =   GetValue(n4);// Not used!!! (yet)
     if (GetValue(r0)) PPMOrderSelection = 1;
     SendValue(Progress, 63);
     Procrastinate(10);
@@ -9653,10 +9653,10 @@ void FASTRUN ManageTransmitter(){
 /**********************************************************************************************************/
 #ifdef TXMODULESUPPORT
 void SendPPM(){ // Send a frame of PPM 
-    if (millis() - LastPPMFrame < PPMMillis) return; 
+    if (millis() - LastPPMFrame < 10) return; // was PPMMillis ... that was wrong
     LastPPMFrame = millis();
     for (int j = 0; j < PPMChannelsNumber; ++j) {
-        PPMOutputModule.write(*(PPMChannelOrder + j), map(SendBuffer[j], MINMICROS, MAXMICROS, 1000, 2000));  
+        PPMOutputModule.write(*(PPMChannelOrder + j), SendBuffer[j]);  
     }
 }
 #endif

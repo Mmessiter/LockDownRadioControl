@@ -45,7 +45,6 @@
 #define CHANNELSUSED             16
 #define SERVOSUSED               9  // But all 16 are available via SBUS
 #define SBUSRATE                 10 // SBUS frame every 10 milliseconds
-#define PPMRATE                  20 // PPM frame every 20 milliseconds
 #define SBUSPORT                 Serial3                    // = 14
 #define PPMPORT                  14                        // same as SBUS
 #define RECONNECTGAP             25                        // Send no data to servos for 25 ms after a reconnect (10 was not quite enough)
