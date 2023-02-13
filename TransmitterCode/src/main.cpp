@@ -8832,9 +8832,7 @@ void GetBank()
             SendValue(FrontView_Hours, 0);
         }
     }
-    
 
-    
     if ((MotorEnabled != MotorWasEnabled) && (UseMotorKill))  {                         // MotorEnabled changed ?
         if (MotorEnabled) {
             if (LedWasRed)
@@ -8887,6 +8885,7 @@ void GetBank()
     }
     MotorWasEnabled = MotorEnabled;                               // Remember motor state
     PreviousBank = Bank;                                          // Remember BANK
+    
 }
 
 // *************************************************************************************************************
@@ -9668,6 +9667,8 @@ FASTRUN void loop()
 {
     ManageTransmitter();                                         // Do the needed chores ... (if there's time)
     GetNewChannelValues();                                       // Load SendBuffer with new servo positions  Very frequently
+     
+
     if (UseMacros) ExecuteMacro();                               // Modify it if macro is running
    
     if (BuddyPupilOnPPM) { 
@@ -9675,9 +9676,9 @@ FASTRUN void loop()
         ShowServoPos(); 
     } else {                                                     // Skip these next lines when buddying as a slave
         if (!BoundFlag && Connected) BufferNewPipe();            // if not yet bound, insert our pipe into SendBuffer BUT ONLY WHEN CONNECTED 
-        if (BuddyMaster) GetSlaveChannelValuesPPM();             // If buddy master, get buddy data and maybe use it. 
-        ShowServoPos();                                          
+        if (BuddyMaster) GetSlaveChannelValuesPPM();             // If buddy master, get buddy data and maybe use it.                                         
         if (!MotorEnabled && !BuddyON) SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero whatever was shown.   
+        ShowServoPos();
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24
     }                                   
    
