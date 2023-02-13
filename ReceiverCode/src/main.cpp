@@ -94,9 +94,9 @@ bool            FirstConnection = true;
 bool            ReadyToUseData  = false;
 bool            FailedSafe = true;  // Starting up as the same as after failsafe
 uint32_t        MostRecentHop;
-uint8_t         PPMChannelOrder[SERVOSUSED] = {2, 3, 1, 4, 5, 6, 7, 8, 9};
-uint8_t         FrameRate                   = SBUSRATE;
-bool            UseSBUS = true;
+uint8_t         PPMChannelOrder[CHANNELSUSED] = {2,3,1,4,5,6,7,8,9,10,11,12,13,14,15,16};
+uint8_t         PPMChannelCount             = 8;
+bool            UseSBUS                     = true;
 
 /************************************************************************************************************/
 
@@ -137,14 +137,23 @@ void MapToSBUS()
 void MoveServos()
 {
     if (!ReadyToUseData) return;
-    if (UseSBUS) MySbus.write(SbusChannels);       // Send SBUS data
+    if (UseSBUS)
+    {
+        MySbus.write(SbusChannels);         // Send SBUS data
+    }
+    else
+    {                                       // not SBUS = PPM 
+        for (int j = 0; j < CHANNELSUSED; ++j) {
+            PPMOutput.write(PPMChannelOrder[j], map(ReceivedData[j], MINMICROS, MAXMICROS, 1000, 2000));           
+        }  
+    }
     for (int j = 0; j < SERVOSUSED; ++j) {
          if (PreviousData[j] != ReceivedData[j]) { // if same as last time, don't send again.
             MCMServo[j].writeMicroseconds(ReceivedData[j]);
-            if (!UseSBUS) PPMOutput.write(PPMChannelOrder[j], map(ReceivedData[j], MINMICROS, MAXMICROS, 1000, 2000)); // PPM Send!          
             PreviousData[j] = ReceivedData[j];
          }
     }
+    
 }
 
 /************************************************************************************************************/
@@ -383,7 +392,7 @@ void ReadExtraParameters()
             break;
         case 5:
              UseSBUS    = (bool) ReceivedData[CHANNELSUSED + 1]; // if false means PPM
-             FrameRate  = ReceivedData[CHANNELSUSED + 2];
+             //PPMChannelCount  = ReceivedData[CHANNELSUSED + 2];
             break;
 
         default:
