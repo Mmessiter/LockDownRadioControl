@@ -28,7 +28,7 @@ var searchData=
   ['poweroffwarningseconds_25',['PowerOffWarningSeconds',['../TransmitterCode_2src_2main_8cpp.html#a655d384f81374c34aa6629856258263a',1,'main.cpp']]],
   ['powerwarningvisible_26',['PowerWarningVisible',['../TransmitterCode_2src_2main_8cpp.html#aea12b11ce3bf765886dbee30a5e94d5d',1,'main.cpp']]],
   ['ppmbuffer_27',['PPMBuffer',['../TransmitterCode_2src_2main_8cpp.html#afebbab0d566941028bdc265a4f7c3544',1,'main.cpp']]],
-  ['ppmchannelcount_28',['PPMChannelCount',['../ReceiverCode_2src_2main_8cpp.html#ab566a72e193521242910acc9f1501dc8',1,'main.cpp']]],
+  ['ppmchannelcount_28',['PPMChannelCount',['../ReceiverCode_2src_2main_8cpp.html#ab566a72e193521242910acc9f1501dc8',1,'PPMChannelCount():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#aeba1e4884d0b6664c2367fe1f0612422',1,'PPMChannelCount():&#160;main.cpp']]],
   ['ppmchannelorder_29',['PPMChannelOrder',['../ReceiverCode_2src_2main_8cpp.html#ad69e62c190fbcc678474e091630ea363',1,'PPMChannelOrder():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#ab33012141a70a3e5d65a6c6ecc604d21',1,'PPMChannelOrder():&#160;main.cpp']]],
   ['ppmchannelorder1_30',['PPMChannelOrder1',['../TransmitterCode_2src_2main_8cpp.html#aee5ebd27e815e72e74c744942f0692fa',1,'main.cpp']]],
   ['ppmchannelorder2_31',['PPMChannelOrder2',['../TransmitterCode_2src_2main_8cpp.html#a7701a514c9fc5818f09252a60cf941dd',1,'main.cpp']]],
