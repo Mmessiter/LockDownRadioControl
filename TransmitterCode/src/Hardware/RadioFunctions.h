@@ -11,7 +11,7 @@
 // **************************************************************************
 
   #define TXMODULESUPPORT // ONLY FOR NEW VERSION  <<< *** <<<
- // #define NEWPCB
+  #define NEWPCB
 
 // **************************************************************************
 //       TX VERSION NUMBER   (May 2020 - February 2023 Malcolm Messiter)      *
@@ -66,7 +66,7 @@
 #define DEFAULTPIPEADDRESS      0xBABE1E5420LL            // Pipe address for startup - any value but MUST match RX
 #define LOWBATTERY              42                        // Default percent for warning (User definable)
 
-#ifdef NEWPCB
+#ifdef NEWPCB  // red or greeen PCBs ... not black
   #define CE_PIN                  7                         // for SPI to nRF24L01
   #define CSN_PIN                 8                         // for SPI to nRF24L01
   #define BUDDYPPMPORT            10                        // Buddybox PPM pin
