@@ -8388,14 +8388,17 @@ if (InStrng(Export, TextIn)) {
         }
 
         if (InStrng(Fhss_View, TextIn)) {
-            if (!b5isGrey) // no scan while connected!!!
+            
+            
+            if ((!b5isGrey) )// no scan while connected!!!      
             {
-                SendCommand(page_FhssView);
-                DrawFhssBox();
-                DoScanInit();
-                CurrentMode = SCANWAVEBAND;
-                CurrentView = SCANVIEW;
-                BlueLedOn();
+                    if (UseTXModule) InitRadio(DefaultPipe);// heer
+                    SendCommand(page_FhssView);
+                    DrawFhssBox();
+                    DoScanInit();
+                    CurrentMode = SCANWAVEBAND;
+                    CurrentView = SCANVIEW;
+                    BlueLedOn();
             }
             ClearText();
             return;
