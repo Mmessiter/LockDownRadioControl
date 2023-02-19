@@ -9651,7 +9651,7 @@ void FASTRUN ManageTransmitter(){
 }
 /**********************************************************************************************************/
 #ifdef TXMODULESUPPORT
-void SendPPM(){ // Send a frame of PPM 
+void SendPPM(){ // Send a frame of PPM heer
     if (millis() - LastPPMFrame < 10) return; // was PPMMillis ... that was wrong
     LastPPMFrame = millis();
     for (int j = 0; j < PPMChannelsNumber; ++j) {
