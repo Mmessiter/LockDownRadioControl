@@ -63,7 +63,6 @@ extern void SetUKFrequencies();
 extern void MoveServos();
 extern FASTRUN void ReceiveData();
 extern bool FailedSafe;
-extern uint32_t MostRecentHop;
 
 /** AckPayload Stucture for data returned to transmitter. */
 struct Payload
@@ -169,10 +168,9 @@ FLASHMEM void GetOldPipe()
 void     HopToNextChannel()
 {
     CurrentRadio->stopListening();
-    delayMicroseconds (500);
+    delayMicroseconds(100);
     CurrentRadio->setChannel(NextChannel);
-    MostRecentHop = millis();
-    delayMicroseconds(500);
+    delayMicroseconds(100);
     CurrentRadio->startListening();
 #ifdef DB_FHSS
     ShowHopDurationEtc();
@@ -192,7 +190,7 @@ FLASHMEM void InitCurrentRadio()
     CurrentRadio->setPALevel(RF24_PA_MAX);
     CurrentRadio->setDataRate(RF24_250KBPS);
     CurrentRadio->openReadingPipe(1, ThisPipe);
-    CurrentRadio->setRetries(3, 3);         // automatic retries
+    CurrentRadio->setRetries(0, 2);         // automatic retries
     CurrentRadio->setAutoAck(true);
     SaveNewBind = true;
     HopStart    = millis();
@@ -354,6 +352,15 @@ FASTRUN void Reconnect()
 #endif
 }
 /************************************************************************************************************/
+
+void IncChannelNumber(){
+        ++NextChannelNumber;                                            // Move up the channels' array
+        if (NextChannelNumber >= FrequencyCount) NextChannelNumber = 1; // If needed, wrap the channels' array pointer
+        AckPayload.Byte5 = NextChannelNumber;                           // Tell the transmitter which element of the array to use next.
+        NextChannel      = *(FHSSChPointer + NextChannelNumber);        // Get the actual channel number from the array.      
+}
+
+/************************************************************************************************************/
 // This function checks the time since last hop.
 // If it's time to HOP, it sets the high bit in AckPayload.Purpose and both ends then HOP to new channel before next packet.
 // The other 7 BITS of AckPayload.Purpose dictate the Payload's function (therefore 127 possibities.)
@@ -365,11 +372,8 @@ void CheckWhetherItsTimeToHop()
     AckPayload.Purpose &= 0x7f;                                         // Clear the HOP flag
     if ((millis() - HopStart) >= HOPTIME) {                             // Time to hop??
         AckPayload.Purpose |= 0x80;                                     // Yes. So set the HOP flag leaving lower 7 bits unchanged
-        ++NextChannelNumber;                                            // Move up the channels' array
-        if (NextChannelNumber >= FrequencyCount) NextChannelNumber = 1; // If needed, wrap the channels' array pointer
-        AckPayload.Byte5 = NextChannelNumber;                           // Tell the transmitter which element of the array to use next.
-        NextChannel      = *(FHSSChPointer + NextChannelNumber);        // Get the actual channel number from the array.
-        HopNow           = true;                                        // Set local flag and hop when ready BUT NOT BEFORE.
+        IncChannelNumber();
+        HopNow = true; // Set local flag and hop when ready BUT NOT BEFORE.
     }
 }
 /************************************************************************************************************/

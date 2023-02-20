@@ -400,7 +400,7 @@ FLASHMEM void InitRadio(uint64_t Pipe)
     Radio1.enableDynamicPayloads();
     Radio1.setAddressWidth(5);              // was 4, is now 5
     Radio1.setCRCLength(RF24_CRC_8); // (RF24_CRC_8); // could be 16
-    GapSum      = 0;
+    GapSum  = 0;
 }
 /*********************************************************************************************************************************/
 

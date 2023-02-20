@@ -8392,7 +8392,7 @@ if (InStrng(Export, TextIn)) {
             
             if ((!b5isGrey) )// no scan while connected!!!      
             {
-                    if (UseTXModule) InitRadio(DefaultPipe);// heer
+                    if (UseTXModule) InitRadio(DefaultPipe);   // because scan fails if radio isn't initialised
                     SendCommand(page_FhssView);
                     DrawFhssBox();
                     DoScanInit();
