@@ -181,6 +181,7 @@ void FailSafe()
     SetNewPipe();
     ReadyToUseData = false;
     FailedSafe     = true;
+    LoadFailSafeData();
     GetOldPipe();               // default startup conditions
 }
 

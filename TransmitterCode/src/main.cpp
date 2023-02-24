@@ -9376,7 +9376,7 @@ void  GetModelsMacAddress(){
     }
     if (!BindingTimer) BindingTimer = millis();
     if (BindButton) {
-        if ((millis() - BindingTimer) > 1500) {
+        if ((millis() - BindingTimer) > 3000) {
             SendCommand(BindButtonVisible); 
             BindButton = true;
         }
