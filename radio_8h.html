@@ -155,6 +155,8 @@ Functions</h2></td></tr>
 <tr class="separator:a56ee137fc60749fa274236bc239c3291"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af56956a6b17dbdfc9fceedeb5a13cb71"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="radio_8h.html#af56956a6b17dbdfc9fceedeb5a13cb71">SendVersionNumberToAckPayload</a> ()</td></tr>
 <tr class="separator:af56956a6b17dbdfc9fceedeb5a13cb71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f57423b51a89ce596c324bbf359a6cb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="radio_8h.html#a5f57423b51a89ce596c324bbf359a6cb">ValidateNewPipe</a> ()</td></tr>
+<tr class="separator:a5f57423b51a89ce596c324bbf359a6cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad8b2470258da4e397b34d67ffce9ebaf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="radio_8h.html#ad8b2470258da4e397b34d67ffce9ebaf">GetNewPipe</a> ()</td></tr>
 <tr class="separator:ad8b2470258da4e397b34d67ffce9ebaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a198affe6f9f64da7272c5fcfe16c1621"><td class="memItemLeft" align="right" valign="top">FLASHMEM void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="radio_8h.html#a198affe6f9f64da7272c5fcfe16c1621">GetOldPipe</a> ()</td></tr>
@@ -228,6 +230,12 @@ Variables</h2></td></tr>
 <tr class="separator:a88d2add9e7ca58e7218870f887b25859"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a594f07765a7ed90e0830d4e2f69a7112"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="radio_8h.html#a594f07765a7ed90e0830d4e2f69a7112">NewPipe</a> = 0</td></tr>
 <tr class="separator:a594f07765a7ed90e0830d4e2f69a7112"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3662a2886499f793d8cfcfe589798574"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="radio_8h.html#a3662a2886499f793d8cfcfe589798574">NewPipeMaybe</a> = 0</td></tr>
+<tr class="separator:a3662a2886499f793d8cfcfe589798574"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd91604fdea68053cd6cb707e4e86271"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="radio_8h.html#abd91604fdea68053cd6cb707e4e86271">PreviousNewPipes</a> [<a class="el" href="common_8h.html#a820e3704750ed47bfb6bd2c3c6b54fce">PIPES_TO_COMPARE</a>]</td></tr>
+<tr class="separator:abd91604fdea68053cd6cb707e4e86271"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add4f073372ad9627fcdf944e752b7549"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="radio_8h.html#add4f073372ad9627fcdf944e752b7549">PreviousNewPipesIndex</a> = 0</td></tr>
+<tr class="separator:add4f073372ad9627fcdf944e752b7549"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d3c194b5406bff33ef9357f8b1666cc"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="radio_8h.html#a8d3c194b5406bff33ef9357f8b1666cc">OldPipe</a> = 0</td></tr>
 <tr class="separator:a8d3c194b5406bff33ef9357f8b1666cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a97bbae82012a7c41f47dcb8ce8a48a90"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="radio_8h.html#a97bbae82012a7c41f47dcb8ce8a48a90">FailSafeSent</a> = true</td></tr>
@@ -292,6 +300,10 @@ Variables</h2></td></tr>
 <tr class="separator:a5ce4b7c421146d2957e4ae7c91118661"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6aa44585f8f06cb4f4760da8352b2df7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="radio_8h.html#a6aa44585f8f06cb4f4760da8352b2df7">FailedSafe</a></td></tr>
 <tr class="separator:a6aa44585f8f06cb4f4760da8352b2df7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6eca5cb54b625d65d257370332a51a0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="radio_8h.html#ab6eca5cb54b625d65d257370332a51a0">NewData</a></td></tr>
+<tr class="separator:ab6eca5cb54b625d65d257370332a51a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8db1cb4ed83fda3eb629971dcf8a5c9"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="radio_8h.html#ab8db1cb4ed83fda3eb629971dcf8a5c9">pcount</a></td></tr>
+<tr class="separator:ab8db1cb4ed83fda3eb629971dcf8a5c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a30a079d60b4731ce1531091ffe56a703"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structPayload.html">Payload</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="radio_8h.html#a30a079d60b4731ce1531091ffe56a703">AckPayload</a></td></tr>
 <tr class="separator:a30a079d60b4731ce1531091ffe56a703"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6dc99d00582ef356ea3d57700dca6dab"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="radio_8h.html#a6dc99d00582ef356ea3d57700dca6dab">AckPayloadSize</a> = sizeof(<a class="el" href="radio_8h.html#a30a079d60b4731ce1531091ffe56a703">AckPayload</a>)</td></tr>
@@ -313,11 +325,11 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00260">260</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00264">264</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="radio_8h_aa0c6905579a33aef28d737d43676cbbd_cgraph.svg" width="1558" height="838"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="radio_8h_aa0c6905579a33aef28d737d43676cbbd_cgraph.svg" width="1558" height="920"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 <div class="dynheader">
@@ -344,7 +356,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00370">370</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00402">402</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -409,7 +421,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00536">536</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00568">568</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -435,11 +447,11 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 <p >Execute FailSafe data from EEPROM. </p>
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00161">161</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00162">162</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="radio_8h_a42318598726782ebb2e1857f167c8cda_cgraph.svg" width="403" height="234"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="radio_8h_a42318598726782ebb2e1857f167c8cda_cgraph.svg" width="424" height="283"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 <div class="dynheader">
@@ -466,7 +478,13 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00131">131</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00157">157</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" frameborder="0" src="radio_8h_ad8b2470258da4e397b34d67ffce9ebaf_cgraph.svg" width="278" height="36"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
+</div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -492,7 +510,7 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 <p >Get pipe address from EEPROM. </p><dl class="section note"><dt>Note</dt><dd>Address data in EEPORM is valid only after a previous power cycle observed a completed binding process (pairing was successful at least once during last flight's session). </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00153">153</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00185">185</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -502,7 +520,7 @@ Here is the call graph for this function:</div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="radio_8h_a198affe6f9f64da7272c5fcfe16c1621_icgraph.svg" width="203" height="36"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="radio_8h_a198affe6f9f64da7272c5fcfe16c1621_icgraph.svg" width="1146" height="407"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 
@@ -523,7 +541,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00097">97</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00102">102</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -548,7 +566,7 @@ Here is the call graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00168">168</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00200">200</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -573,7 +591,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00356">356</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00388">388</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -599,7 +617,7 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 <p >Initialize a radio transceiver. </p>
 
-<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00183">183</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00215">215</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -624,7 +642,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00272">272</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00304">304</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -655,7 +673,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00453">453</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00485">485</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -686,7 +704,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00137">137</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00138">138</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -718,7 +736,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00215">215</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00247">247</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -811,11 +829,11 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00112">112</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00117">117</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="radio_8h_a56ee137fc60749fa274236bc239c3291_icgraph.svg" width="366" height="36"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="radio_8h_a56ee137fc60749fa274236bc239c3291_icgraph.svg" width="1308" height="407"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 
@@ -853,11 +871,11 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00553">553</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00557">557</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="radio_8h_a06807a4f185694d37f774702ba74db0a_cgraph.svg" width="1422" height="886"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="radio_8h_a06807a4f185694d37f774702ba74db0a_cgraph.svg" width="1422" height="911"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 <div class="dynheader">
@@ -884,11 +902,11 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00289">289</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00321">321</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="radio_8h_aca314b55765a1c3af5397c0cb3ce47ff_cgraph.svg" width="684" height="434"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="radio_8h_aca314b55765a1c3af5397c0cb3ce47ff_cgraph.svg" width="684" height="483"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 <div class="dynheader">
@@ -915,7 +933,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00403">403</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00435">435</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -947,7 +965,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00412">412</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00444">444</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -978,7 +996,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00426">426</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00458">458</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -1009,7 +1027,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00395">395</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00427">427</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -1041,7 +1059,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00380">380</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00412">412</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -1072,7 +1090,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00121">121</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00126">126</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -1097,7 +1115,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00105">105</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00110">110</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -1122,7 +1140,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00337">337</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00341">341</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1164,7 +1182,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00233">233</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00265">265</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -1190,7 +1208,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00252">252</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00284">284</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -1221,11 +1239,36 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00201">201</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00233">233</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><iframe scrolling="no" frameborder="0" src="radio_8h_a1208ef26dd460e6f5f56582f4fbfcf94_icgraph.svg" width="1114" height="87"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
+</div>
+
+</div>
+</div>
+<a id="a5f57423b51a89ce596c324bbf359a6cb" name="a5f57423b51a89ce596c324bbf359a6cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5f57423b51a89ce596c324bbf359a6cb">&#9670;&#160;</a></span>ValidateNewPipe()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ValidateNewPipe </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00137">137</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" frameborder="0" src="radio_8h_a5f57423b51a89ce596c324bbf359a6cb_icgraph.svg" width="502" height="36"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 
@@ -1244,7 +1287,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00091">91</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00096">96</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
 
 </div>
 </div>
@@ -1260,7 +1303,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00092">92</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00097">97</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
 
 </div>
 </div>
@@ -1525,7 +1568,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00026">26</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00029">29</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
 
 </div>
 </div>
@@ -1794,6 +1837,30 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
+<a id="ab6eca5cb54b625d65d257370332a51a0" name="ab6eca5cb54b625d65d257370332a51a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab6eca5cb54b625d65d257370332a51a0">&#9670;&#160;</a></span>NewData</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool NewData</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00100">100</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+
+</div>
+</div>
 <a id="a594f07765a7ed90e0830d4e2f69a7112" name="a594f07765a7ed90e0830d4e2f69a7112"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a594f07765a7ed90e0830d4e2f69a7112">&#9670;&#160;</a></span>NewPipe</h2>
 
@@ -1807,6 +1874,22 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00024">24</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
+
+</div>
+</div>
+<a id="a3662a2886499f793d8cfcfe589798574" name="a3662a2886499f793d8cfcfe589798574"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3662a2886499f793d8cfcfe589798574">&#9670;&#160;</a></span>NewPipeMaybe</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t NewPipeMaybe = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00025">25</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
 
 </div>
 </div>
@@ -1854,7 +1937,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00025">25</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00028">28</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
 
 </div>
 </div>
@@ -1874,6 +1957,30 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
+<a id="ab8db1cb4ed83fda3eb629971dcf8a5c9" name="ab8db1cb4ed83fda3eb629971dcf8a5c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab8db1cb4ed83fda3eb629971dcf8a5c9">&#9670;&#160;</a></span>pcount</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t pcount</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00101">101</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+
+</div>
+</div>
 <a id="a54007b635670b351453013425e7f2814" name="a54007b635670b351453013425e7f2814"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a54007b635670b351453013425e7f2814">&#9670;&#160;</a></span>PreviousData</h2>
 
@@ -1890,6 +1997,38 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
+<a id="abd91604fdea68053cd6cb707e4e86271" name="abd91604fdea68053cd6cb707e4e86271"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd91604fdea68053cd6cb707e4e86271">&#9670;&#160;</a></span>PreviousNewPipes</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t PreviousNewPipes[<a class="el" href="common_8h.html#a820e3704750ed47bfb6bd2c3c6b54fce">PIPES_TO_COMPARE</a>]</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00026">26</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
+
+</div>
+</div>
+<a id="add4f073372ad9627fcdf944e752b7549" name="add4f073372ad9627fcdf944e752b7549"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#add4f073372ad9627fcdf944e752b7549">&#9670;&#160;</a></span>PreviousNewPipesIndex</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t PreviousNewPipesIndex = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00027">27</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
+
+</div>
+</div>
 <a id="aff48e1463bf663c156032302d0161c98" name="aff48e1463bf663c156032302d0161c98"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aff48e1463bf663c156032302d0161c98">&#9670;&#160;</a></span>RadioSwaps</h2>
 
@@ -1902,7 +2041,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00030">30</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00033">33</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
 
 </div>
 </div>
@@ -1974,7 +2113,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00028">28</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00031">31</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
 
 </div>
 </div>
@@ -1990,7 +2129,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00029">29</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00032">32</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
 
 </div>
 </div>
@@ -2062,7 +2201,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00027">27</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="radio_8h_source.html#l00030">30</a> of file <a class="el" href="radio_8h_source.html">radio.h</a>.</p>
 
 </div>
 </div>
