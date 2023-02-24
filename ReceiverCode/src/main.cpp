@@ -97,7 +97,8 @@ uint32_t        MostRecentHop;
 uint8_t         PPMChannelOrder[CHANNELSUSED] = {2,3,1,4,5,6,7,8,9,10,11,12,13,14,15,16};
 uint8_t         PPMChannelCount             = 8;
 bool            UseSBUS                     = true;
-
+bool            NewData                     = false;
+uint16_t        pcount                      = 0; // how many pipes so far received from TX
 /************************************************************************************************************/
 
 void LoadFailSafeData()
@@ -136,7 +137,7 @@ void MapToSBUS()
 
 void MoveServos()
 {
-    if (!ReadyToUseData) return; // heer
+    if (!ReadyToUseData) return; 
     if (UseSBUS)
     {
         MySbus.write(SbusChannels);         // Send SBUS data
@@ -168,7 +169,7 @@ void FailSafe()
         MoveServos();
         Connected = false; // I lied earlier - we're not really connected.
     }
-    SetUKFrequencies(); // default startup conditions
+    SetUKFrequencies();         // default startup conditions
     ModelMatched = false;
     SaveNewBind  = true;        // default startup conditions
     Connected    = false;       // default startup conditions
@@ -180,6 +181,7 @@ void FailSafe()
     SetNewPipe();
     ReadyToUseData = false;
     FailedSafe     = true;
+    GetOldPipe();               // default startup conditions
 }
 
 #ifdef DB_FHSS
@@ -221,6 +223,7 @@ void UseReceivedData()
     }
 }
 
+
 /************************************************************************************************************/
 bool ReadData()
 {
@@ -232,6 +235,7 @@ bool ReadData()
         delayMicroseconds(1500);                                       // N.B. SOME DUFF NRF24L01 TRANSCEIVERS NEED THIS PAUSE. But not all.
         CurrentRadio->read(&CompressedData, sizeof(CompressedData));   // Get Data
         Connected = true;
+        NewData   = true;
     }
     if (Connected) UseReceivedData();
     return Connected;
@@ -662,18 +666,21 @@ bool Compare48BitValues(uint64_t c1, uint64_t c2)
 
     for (int i = 0; i < 6; ++i)
         if (union1.v8[i] != union2.v8[i]) return false;
-
     return true;
 }
 
 /************************************************************************************************************/
-void DoBinding()
+void DoBinding() // heer
 {
     GetNewPipe();
+    if (pcount < 10) return;
     // ShowPipes();
+   
     if (Compare48BitValues(OldPipe, NewPipe)) { // Compares two 48 BIT numbers
         SaveNewBind = false;                    // No need to save it as we had it.
-        BindNow     = 1;                        // This critical value is sent from TX when user hits bind button, on set locally if we we knew him already
+        
+        BindNow     = 1;                        // This critical value is sent from TX when user hits bind button, 
+                                                // only set locally if we we knew him already
     }
     if (BindNow > 0 && !BoundFlag && ModelMatched) BindModel(); // only when all conditions are right shall we bind.
 }

@@ -22,6 +22,9 @@ uint16_t Interations = 0;
 uint32_t HopStart;
 uint64_t ThisPipe     = 0xBABE1E5420LL; // default startup
 uint64_t NewPipe      = 0;
+uint64_t NewPipeMaybe = 0;
+uint64_t PreviousNewPipes[PIPES_TO_COMPARE];
+uint8_t  PreviousNewPipesIndex = 0;
 uint64_t OldPipe      = 0;
 bool     FailSafeSent = true;
 uint16_t SbusRepeats  = 0;
@@ -62,7 +65,9 @@ extern void ReadSensorHub();
 extern void SetUKFrequencies();
 extern void MoveServos();
 extern FASTRUN void ReceiveData();
-extern bool FailedSafe;
+extern bool         FailedSafe;
+extern bool         NewData;
+extern uint16_t     pcount;
 
 /** AckPayload Stucture for data returned to transmitter. */
 struct Payload
@@ -94,7 +99,7 @@ uint8_t AckPayloadSize = sizeof(AckPayload); // Size for later externs if needed
 
 /************************************************************************************************************/
 
-void HopNowAnyway(){ // HEER!!
+void HopNowAnyway(){ 
         ++NextChannelNumber;                                            // Move up the channels' array
         if (NextChannelNumber >= FrequencyCount) NextChannelNumber = 1; // If needed, wrap the channels' array pointer
         NextChannel           = *(FHSSChPointer + NextChannelNumber);
@@ -125,22 +130,49 @@ void SendVersionNumberToAckPayload() // AND which radio transceiver is currently
     AckPayload.Byte3 = RXVERSION_MINOR;
     AckPayload.Byte4 = RXVERSION_MINIMUS;
 }
+/************************************************************************************************************/
+// This function compares the just-received pipe with several of the previous ones
+// if it matches most of them then its probably not corrupted. 
+
+bool ValidateNewPipe(){ 
+    
+    uint8_t MatchedCounter = 0;
+    
+    if (pcount < 8) return false;  // ignore first few
+    
+    PreviousNewPipes[PreviousNewPipesIndex] = NewPipeMaybe;
+    PreviousNewPipesIndex++;
+    if (PreviousNewPipesIndex > PIPES_TO_COMPARE) PreviousNewPipesIndex = 0;
+    
+    for (int i = 0; i < PIPES_TO_COMPARE;++i){
+        if (NewPipeMaybe == PreviousNewPipes[i]) ++ MatchedCounter;
+    }
+    
+    if (MatchedCounter >= PIPES_TO_COMPARE - 1) return true; // half or more is OK
+    return false;
+}
 
 /************************************************************************************************************/
 
-void GetNewPipe() 
-{   NewPipe =  (uint64_t)ReceivedData[0] << 56;
-    NewPipe += (uint64_t)ReceivedData[1] << 48;
-    NewPipe += (uint64_t)ReceivedData[2] << 40;
-    NewPipe += (uint64_t)ReceivedData[3] << 32;
-    NewPipe += (uint64_t)ReceivedData[4] << 24;
-    NewPipe += (uint64_t)ReceivedData[5] << 16;
-    NewPipe += (uint64_t)ReceivedData[6] << 8;
-    NewPipe += (uint64_t)ReceivedData[7];
-
-    for (int i = 0; i < 8; ++i){
+void GetNewPipe() // heer
+{
+    if (!NewData) return;
+    NewData = false;
+    NewPipeMaybe =  (uint64_t)ReceivedData[0] << 56;
+    NewPipeMaybe += (uint64_t)ReceivedData[1] << 48;
+    NewPipeMaybe += (uint64_t)ReceivedData[2] << 40;
+    NewPipeMaybe += (uint64_t)ReceivedData[3] << 32;
+    NewPipeMaybe += (uint64_t)ReceivedData[4] << 24;
+    NewPipeMaybe += (uint64_t)ReceivedData[5] << 16;
+    NewPipeMaybe += (uint64_t)ReceivedData[6] << 8;
+    NewPipeMaybe += (uint64_t)ReceivedData[7];
+    if (ValidateNewPipe()) { // was this pipe corrupted?
+        NewPipe = NewPipeMaybe;
+        for (int i = 0; i < 8; ++i){
           TheReceivedPipe[i] = ReceivedData[i];
+        }
     }
+    ++pcount; // inc pipes received
 }
 
 /************************************************************************************************************/

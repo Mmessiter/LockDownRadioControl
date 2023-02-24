@@ -368,8 +368,8 @@ bool     SaveFailSafeNow = false;
 uint32_t FailSafeTimer;
 
 uint32_t LastPacketSentTime = 0;
-uint16_t CompressedData[COMPRESSEDWORDS]; // = 20
-uint8_t  SizeOfCompressedData;
+uint16_t CompressedData[COMPRESSEDWORDS];   // = 15 words, 30 bytes
+uint8_t  SizeOfCompressedData;              // = 30
 uint32_t Inactivity_Timeout = INACTIVITYTIMEOUT;
 uint32_t Inactivity_Start   = 0;
 
@@ -8596,9 +8596,14 @@ uint16_t MakeTwobytes(bool* f)
 
 /************************************************************************************************************/
 
+// 20 x 16bit words are sent compressed to only 15 (30 bytes)
+// 4 16 bit words are vacant for other stuff (8 bytes)
+// Extra data can be send using the last 10 bytes of each data packet. 
+// These are defined by the packet number.
+
 void LoadPacketData()
 {
-    uint16_t Twobytes = 0; // Extra data can be send using the last four bytes of each data packet. These are defined by the packet number
+    uint16_t Twobytes = 0; 
     uint8_t  FS_Byte1;
     uint8_t  FS_Byte2;
     char     ProgressEnd[]       = "vis Progress,0";
@@ -8617,7 +8622,6 @@ void LoadPacketData()
             if (((millis() - FailSafeTimer) > 1500) && SaveFailSafeNow) {
                 SendBuffer[CHANNELSUSED + 1] = SaveFailSafeNow; // FailSafeSaveMoment
                 SaveFailSafeNow              = false;           // once should do it.
-                
                 SendCommand(ProgressEnd); 
             }
             break;
@@ -9654,8 +9658,8 @@ void FASTRUN ManageTransmitter(){
 }
 /**********************************************************************************************************/
 #ifdef TXMODULESUPPORT
-void SendPPM(){ // Send a frame of PPM heer
-    if (millis() - LastPPMFrame < 10) return; // was PPMMillis ... that was wrong
+void SendPPM(){ // Send a frame of PPM to Third party TX module
+    if (millis() - LastPPMFrame < 10) return; // was PPMMillis (... that was wrong)
     LastPPMFrame = millis();
     for (int j = 0; j < PPMChannelsNumber; ++j) {
         PPMOutputModule.write(*(PPMChannelOrder + j), SendBuffer[j]);  
@@ -9681,7 +9685,6 @@ FASTRUN void loop()
         if (BuddyMaster) GetSlaveChannelValuesPPM();             // If buddy master, get buddy data and maybe use it.                                         
         if (!MotorEnabled && !BuddyON) SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero whatever was shown.   
         ShowServoPos();
-        Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24
     }                                   
    
     switch (CurrentMode) {

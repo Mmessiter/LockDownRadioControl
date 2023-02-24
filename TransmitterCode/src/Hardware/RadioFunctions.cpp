@@ -232,11 +232,15 @@ FASTRUN void SendData()
     if (SendNoData) return;
     if ((millis() - LastPacketSentTime) >= PACEMAKER) {
         LastPacketSentTime = millis();
-        if (BuddyPupilOnPPM) {SendViaPPM();return;}                  // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
+        if (BuddyPupilOnPPM) {
+            SendViaPPM();
+            return;
+        }                                                           // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
         LoadPacketData();                                           // extra parameters appended to the data packet
         Connected = false;                                          // Assume the worst until ACK is received.
         FlushFifos();
-        if (Radio1.write(&CompressedData, SizeOfCompressedData)) {  //  ************************** >>>>> SEND DATA TO RX <<<<< ***************************************
+        Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);    // Compress 32 bytes down to 24 (40 -> 30??)
+        if (Radio1.write(&CompressedData, SizeOfCompressedData)) {  //  ************************** >>>>> SEND DATA (30 bytes) TO RX <<<<< ***************************************
             SuccessfulPacket();
             FlushFifos();
         } else {

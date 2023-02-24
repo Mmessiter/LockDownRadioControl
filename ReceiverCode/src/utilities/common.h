@@ -16,7 +16,7 @@
 
 #define RXVERSION_MAJOR   2
 #define RXVERSION_MINOR   1
-#define RXVERSION_MINIMUS 1 // Feb 2023
+#define RXVERSION_MINIMUS 2 // Feb 2023
 
 // #define DB_FHSS
 // #define DB_SENSORS
@@ -70,6 +70,7 @@
 #define CE_OFF                   LOW
 #define BIND_EEPROM_OFFSET        0                          // use 8 bytes from here
 #define FS_EEPROM_OFFSET         BIND_EEPROM_OFFSET+8        // use 16 bytes from here
+#define PIPES_TO_COMPARE         8           
 
 uint32_t LastPacketArrivalTime = 0;
 bool     FailSafeSave          = false;
