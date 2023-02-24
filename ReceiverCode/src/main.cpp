@@ -169,7 +169,7 @@ void FailSafe()
         MoveServos();
         Connected = false; // I lied earlier - we're not really connected.
     }
-    SetUKFrequencies();         // default startup conditions
+    SetUKFrequencies(); // default startup conditions
     ModelMatched = false;
     SaveNewBind  = true;        // default startup conditions
     Connected    = false;       // default startup conditions
@@ -181,8 +181,6 @@ void FailSafe()
     SetNewPipe();
     ReadyToUseData = false;
     FailedSafe     = true;
-    LoadFailSafeData();
-    GetOldPipe();               // default startup conditions
 }
 
 #ifdef DB_FHSS
