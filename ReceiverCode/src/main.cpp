@@ -169,8 +169,8 @@ void FailSafe()
         MoveServos();
         Connected = false; // I lied earlier - we're not really connected.
     }
-    SetUKFrequencies(); // default startup conditions
-    ModelMatched = false;
+    SetUKFrequencies();         // default startup conditions
+    ModelMatched = false;       // default startup conditions
     SaveNewBind  = true;        // default startup conditions
     Connected    = false;       // default startup conditions
     FailSafeSent = true;        // Once is enough
