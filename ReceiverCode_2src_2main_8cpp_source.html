@@ -229,21 +229,21 @@ $(document).ready(function(){initNavTree('ReceiverCode_2src_2main_8cpp_source.ht
 <div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>        <a class="code hl_function" href="ReceiverCode_2src_2main_8cpp.html#a6f2443a0666140cf4d8b7352bb3b793c">MoveServos</a>();</div>
 <div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>        <a class="code hl_variable" href="radio_8h.html#a5318db734c71b1b08208ef690f1f0146">Connected</a> = <span class="keyword">false</span>;      <span class="comment">// I lied earlier - we&#39;re not really connected.</span></div>
 <div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>    }</div>
-<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span><span class="comment">/* This bit removed so it stays bound during dissconnection until reboot</span></div>
-<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span><span class="comment"></span> </div>
-<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span><span class="comment">    SetUKFrequencies();         // default startup conditions</span></div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span><span class="comment">/*  This bit removed so it REMAINS BOUND after dissconnection until reboot ...</span></div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span><span class="comment">    for faster reconnection and to block other transmitters</span></div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span><span class="comment"></span> </div>
 <div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span><span class="comment">    ModelMatched = false;       // default startup conditions</span></div>
 <div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span><span class="comment">    SaveNewBind  = true;        // default startup conditions</span></div>
 <div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span><span class="comment">    Connected    = false;       // default startup conditions</span></div>
-<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span><span class="comment">    FailSafeSent = true;        // Once is enough</span></div>
-<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span><span class="comment">    SbusRepeats  = 0;           // Reset this count for next connection</span></div>
-<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span><span class="comment">    BindNow      = 0;           // default startup conditions</span></div>
-<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span><span class="comment">    BoundFlag    = false;       // default startup conditions</span></div>
-<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span><span class="comment">    ThisPipe     = DEFAULTPIPE; // default startup conditions</span></div>
-<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span><span class="comment">    SetNewPipe();</span></div>
-<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span><span class="comment">    ReadyToUseData = false;</span></div>
-<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span><span class="comment">  */</span></div>
-<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>  </div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span><span class="comment">    SbusRepeats  = 0;           // Reset this count for next connection</span></div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span><span class="comment">    BindNow      = 0;           // default startup conditions</span></div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span><span class="comment">    BoundFlag    = false;       // default startup conditions</span></div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span><span class="comment">    ThisPipe     = DEFAULTPIPE; // default startup conditions</span></div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span><span class="comment">    SetNewPipe();</span></div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span><span class="comment">    ReadyToUseData = false;</span></div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span><span class="comment">*/</span></div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>    <a class="code hl_function" href="ReceiverCode_2src_2main_8cpp.html#a2eabdb233653fa02f0b899e26b5e8ce7">SetUKFrequencies</a>();           <span class="comment">// default startup conditions</span></div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>    <a class="code hl_variable" href="radio_8h.html#a97bbae82012a7c41f47dcb8ce8a48a90">FailSafeSent</a>   = <span class="keyword">true</span>;        <span class="comment">// Once is enough</span></div>
 <div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>    <a class="code hl_variable" href="ReceiverCode_2src_2main_8cpp.html#a6aa44585f8f06cb4f4760da8352b2df7">FailedSafe</a>     = <span class="keyword">true</span>;</div>
 <div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>}</div>
 <div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span> </div>
@@ -954,6 +954,7 @@ $(document).ready(function(){initNavTree('ReceiverCode_2src_2main_8cpp_source.ht
 <div class="ttc" id="aradio_8h_html_a8d3c194b5406bff33ef9357f8b1666cc"><div class="ttname"><a href="radio_8h.html#a8d3c194b5406bff33ef9357f8b1666cc">OldPipe</a></div><div class="ttdeci">uint64_t OldPipe</div><div class="ttdef"><b>Definition:</b> <a href="radio_8h_source.html#l00028">radio.h:28</a></div></div>
 <div class="ttc" id="aradio_8h_html_a8f6625d513c0e3887659968a39ddc325"><div class="ttname"><a href="radio_8h.html#a8f6625d513c0e3887659968a39ddc325">HopNow</a></div><div class="ttdeci">bool HopNow</div><div class="ttdef"><b>Definition:</b> <a href="radio_8h_source.html#l00012">radio.h:12</a></div></div>
 <div class="ttc" id="aradio_8h_html_a937fc53e966c6b5c66b9d66c01cec13f"><div class="ttname"><a href="radio_8h.html#a937fc53e966c6b5c66b9d66c01cec13f">HopStart</a></div><div class="ttdeci">uint32_t HopStart</div><div class="ttdef"><b>Definition:</b> <a href="radio_8h_source.html#l00022">radio.h:22</a></div></div>
+<div class="ttc" id="aradio_8h_html_a97bbae82012a7c41f47dcb8ce8a48a90"><div class="ttname"><a href="radio_8h.html#a97bbae82012a7c41f47dcb8ce8a48a90">FailSafeSent</a></div><div class="ttdeci">bool FailSafeSent</div><div class="ttdef"><b>Definition:</b> <a href="radio_8h_source.html#l00029">radio.h:29</a></div></div>
 <div class="ttc" id="aradio_8h_html_ab652df130d9feb78c0accd5beedf7d80"><div class="ttname"><a href="radio_8h.html#ab652df130d9feb78c0accd5beedf7d80">InitCurrentRadio</a></div><div class="ttdeci">FLASHMEM void InitCurrentRadio()</div><div class="ttdef"><b>Definition:</b> <a href="radio_8h_source.html#l00215">radio.h:215</a></div></div>
 <div class="ttc" id="aradio_8h_html_aca314b55765a1c3af5397c0cb3ce47ff"><div class="ttname"><a href="radio_8h.html#aca314b55765a1c3af5397c0cb3ce47ff">Reconnect</a></div><div class="ttdeci">FASTRUN void Reconnect()</div><div class="ttdef"><b>Definition:</b> <a href="radio_8h_source.html#l00321">radio.h:321</a></div></div>
 <div class="ttc" id="aradio_8h_html_ad8b2470258da4e397b34d67ffce9ebaf"><div class="ttname"><a href="radio_8h.html#ad8b2470258da4e397b34d67ffce9ebaf">GetNewPipe</a></div><div class="ttdeci">void GetNewPipe()</div><div class="ttdef"><b>Definition:</b> <a href="radio_8h_source.html#l00157">radio.h:157</a></div></div>
