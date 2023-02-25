@@ -6641,6 +6641,7 @@ void ResetTransmitterSettings(){    // This function resets all transmitter para
    AutoModelSelect         = false;
    MotorChannel            = 15;
    MotorChannelZero        = 0;
+   TimerDownwards          = false;
    UseTXModule             = false;
    SetDS1307ToCompilerTime();
    for (int k = 1; k < 5;++k){ // writes default four times!
