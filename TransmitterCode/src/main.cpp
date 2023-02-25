@@ -133,7 +133,7 @@ uint8_t  MixNumber        = 0;
 uint8_t  CurrentView      = FRONTVIEW;
 uint8_t  SavedCurrentView = FRONTVIEW;
 uint64_t DefaultPipe      = DEFAULTPIPEADDRESS;  //          Default Radio pipe address
-uint64_t NewPipe          = DEFAULTPIPEADDRESS;  //          New Radio pipe address for binding will come from MAC address
+uint64_t TeensyMACAddPipe          = DEFAULTPIPEADDRESS;  //          New Radio pipe address for binding will come from MAC address
 char     TextIn[CHARSMAX + 2];                   // spare space
 uint16_t PacketsPerSecond = 0;
 uint8_t  PacketsHistoryBuffer[PERFECTPACKETSPERSECOND * MAXSHOWCOMMSSESCONDS]; // Here we record some history
@@ -3665,12 +3665,12 @@ FLASHMEM void setup()
     }
 
     teensyMAC(MacAddress);  // Get MAC address and use it as pipe address
-    NewPipe = (uint64_t)MacAddress[0] << 40;
-    NewPipe += (uint64_t)MacAddress[1] << 32;
-    NewPipe += (uint64_t)MacAddress[2] << 24;
-    NewPipe += (uint64_t)MacAddress[3] << 16;
-    NewPipe += (uint64_t)MacAddress[4] << 8;
-    NewPipe += (uint64_t)MacAddress[5];
+    TeensyMACAddPipe = (uint64_t)MacAddress[0] << 40;
+    TeensyMACAddPipe += (uint64_t)MacAddress[1] << 32;
+    TeensyMACAddPipe += (uint64_t)MacAddress[2] << 24;
+    TeensyMACAddPipe += (uint64_t)MacAddress[3] << 16;
+    TeensyMACAddPipe += (uint64_t)MacAddress[4] << 8;
+    TeensyMACAddPipe += (uint64_t)MacAddress[5];
     Wire.begin();
     ScanI2c();
     if (USE_INA219) ina219.begin();
@@ -9681,7 +9681,7 @@ FASTRUN void loop()
         NewCompressNeeded = false;                               // Fake it as Buddy does not send compressed data
         ShowServoPos(); 
     } else {                                                     // Skip these next lines when buddying as a slave
-        if (!BoundFlag && Connected) BufferNewPipe();            // if not yet bound, insert our pipe into SendBuffer BUT ONLY WHEN CONNECTED 
+        if (!BoundFlag && Connected) BufferTeensyMACAddPipe();            // if not yet bound, insert our pipe into SendBuffer BUT ONLY WHEN CONNECTED 
         if (BuddyMaster) GetSlaveChannelValuesPPM();             // If buddy master, get buddy data and maybe use it.                                         
         if (!MotorEnabled && !BuddyON) SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero whatever was shown.   
         ShowServoPos();

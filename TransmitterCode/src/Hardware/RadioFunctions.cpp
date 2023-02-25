@@ -40,23 +40,23 @@ FASTRUN void TryOtherPipe()
     else {
         BoundFlag = true;
         ModelMatched = true;
-        SetThePipe(NewPipe);
+        SetThePipe(TeensyMACAddPipe);
     }
 }
 
 /************************************************************************************************************/
 
-FASTRUN void BufferNewPipe()
+FASTRUN void BufferTeensyMACAddPipe()
 {
 
-    SendBuffer[0] = (uint8_t)((NewPipe >> 56) & 0xFF); // if not yet bound, send pipe
-    SendBuffer[1] = (uint8_t)((NewPipe >> 48) & 0xFF);
-    SendBuffer[2] = (uint8_t)((NewPipe >> 40) & 0xFF);
-    SendBuffer[3] = (uint8_t)((NewPipe >> 32) & 0xFF);
-    SendBuffer[4] = (uint8_t)((NewPipe >> 24) & 0xFF);
-    SendBuffer[5] = (uint8_t)((NewPipe >> 16) & 0xFF);
-    SendBuffer[6] = (uint8_t)((NewPipe >> 8) & 0xFF);
-    SendBuffer[7] = (uint8_t)((NewPipe)&0xFF);
+    SendBuffer[0] = (uint8_t)((TeensyMACAddPipe >> 56) & 0xFF); // if not yet bound, send pipe
+    SendBuffer[1] = (uint8_t)((TeensyMACAddPipe >> 48) & 0xFF);
+    SendBuffer[2] = (uint8_t)((TeensyMACAddPipe >> 40) & 0xFF);
+    SendBuffer[3] = (uint8_t)((TeensyMACAddPipe >> 32) & 0xFF);
+    SendBuffer[4] = (uint8_t)((TeensyMACAddPipe >> 24) & 0xFF);
+    SendBuffer[5] = (uint8_t)((TeensyMACAddPipe >> 16) & 0xFF);
+    SendBuffer[6] = (uint8_t)((TeensyMACAddPipe >> 8) & 0xFF);
+    SendBuffer[7] = (uint8_t)((TeensyMACAddPipe)&0xFF);
 }
 
 /************************************************************************************************************/

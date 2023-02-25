@@ -169,21 +169,21 @@ void FailSafe()
         MoveServos();
         Connected = false;      // I lied earlier - we're not really connected.
     }
-/* This bit removed so it stays bound during dissconnection until reboot
+/*  This bit removed so it REMAINS BOUND after dissconnection until reboot ...
+    for faster reconnection and to block other transmitters
 
-    SetUKFrequencies();         // default startup conditions
     ModelMatched = false;       // default startup conditions
     SaveNewBind  = true;        // default startup conditions
     Connected    = false;       // default startup conditions
-    FailSafeSent = true;        // Once is enough
     SbusRepeats  = 0;           // Reset this count for next connection
     BindNow      = 0;           // default startup conditions
     BoundFlag    = false;       // default startup conditions
     ThisPipe     = DEFAULTPIPE; // default startup conditions
     SetNewPipe();
     ReadyToUseData = false;
-  */
-  
+*/
+    SetUKFrequencies();           // default startup conditions
+    FailSafeSent   = true;        // Once is enough
     FailedSafe     = true;
 }
 
