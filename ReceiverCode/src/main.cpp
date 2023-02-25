@@ -164,11 +164,13 @@ void FailSafe()
     if (BoundFlag)
     {
         LoadFailSafeData();
-        Connected = true; // to force sending this data!
+        Connected = true;       // to force sending this data!
         MapToSBUS();
         MoveServos();
-        Connected = false; // I lied earlier - we're not really connected.
+        Connected = false;      // I lied earlier - we're not really connected.
     }
+/* This bit removed so it stays bound during dissconnection until reboot
+
     SetUKFrequencies();         // default startup conditions
     ModelMatched = false;       // default startup conditions
     SaveNewBind  = true;        // default startup conditions
@@ -180,6 +182,8 @@ void FailSafe()
     ThisPipe     = DEFAULTPIPE; // default startup conditions
     SetNewPipe();
     ReadyToUseData = false;
+  */
+  
     FailedSafe     = true;
 }
 

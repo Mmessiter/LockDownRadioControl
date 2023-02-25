@@ -34,10 +34,12 @@ FASTRUN void TryOtherPipe()
 {
     if (BoundFlag == true) {
         BoundFlag = false;
+        ModelMatched = false;
         SetThePipe(DefaultPipe);
     }
     else {
         BoundFlag = true;
+        ModelMatched = true;
         SetThePipe(NewPipe);
     }
 }
