@@ -652,6 +652,7 @@ void FixDeltaGMTSign()
 void GetSlaveChannelValuesPPM() // MASTER code 
 {
      if (BuddyON) {
+
         if (PPMInputBuddy.available() == CHANNELSUSED){
             for (int j = 0; j < CHANNELSUSED; ++j) {                                   // While slave has control, his stick data replaces all ours
                 uint16_t PpmIn = PPMInputBuddy.read(j + 1);                            // read EVERY channel
@@ -675,6 +676,7 @@ void GetSlaveChannelValuesPPM() // MASTER code
             PlaySound(MASTERMSG);
             LastShowTime = 0;
             SlaveHasControl = false;
+            Look(SendBuffer[0]);
         }
     }
 }
@@ -9682,7 +9684,7 @@ FASTRUN void loop()
         NewCompressNeeded = false;                               // Fake it as Buddy does not send compressed data
         ShowServoPos(); 
     } else {                                                     // Skip these next lines when buddying as a slave
-        if (!BoundFlag && Connected) BufferTeensyMACAddPipe();            // if not yet bound, insert our pipe into SendBuffer BUT ONLY WHEN CONNECTED 
+        if (!BoundFlag && Connected) BufferTeensyMACAddPipe();   // if not yet bound, insert our pipe into SendBuffer BUT ONLY WHEN CONNECTED 
         if (BuddyMaster) GetSlaveChannelValuesPPM();             // If buddy master, get buddy data and maybe use it.                                         
         if (!MotorEnabled && !BuddyON) SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero whatever was shown.   
         ShowServoPos();
