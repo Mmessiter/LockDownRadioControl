@@ -6639,6 +6639,7 @@ void ResetTransmitterSettings(){    // This function resets all transmitter para
    AutoModelSelect         = false;
    MotorChannel            = 15;
    MotorChannelZero        = 0;
+   UseTXModule             = false;
    SetDS1307ToCompilerTime();
    for (int k = 1; k < 5;++k){ // writes default four times!
         for (ModelNumber = 1; ModelNumber <= MAXMODELNUMBER; ++ModelNumber) { 
@@ -9685,15 +9686,17 @@ FASTRUN void loop()
         if (BuddyMaster) GetSlaveChannelValuesPPM();             // If buddy master, get buddy data and maybe use it.                                         
         if (!MotorEnabled && !BuddyON) SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero whatever was shown.   
         ShowServoPos();
-    }                                   
-   
+       
+    }
+
     switch (CurrentMode) {
         case NORMAL:            // 0
 #ifdef TXMODULESUPPORT
             if (!UseTXModule) {
                 SendData();         // local TX
             }else{
-                 SendPPM();         // for TX module 
+                 SendPPM();         // for TX module
+                 NewCompressNeeded = false;
             }
 #else
             SendData();
