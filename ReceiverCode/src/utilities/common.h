@@ -25,7 +25,7 @@
 // #define DB_RXTIMERS
 
 //**************************************************************************************************************************
-#define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< ****
+// #define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< ****
 //**************************************************************************************************************************
 
 #define SENSOR_HUB_I2C_ADDRESS 8
@@ -35,7 +35,7 @@
 
 #define LISTEN_PERIOD   14 //   How many ms to listen for TX in Reconnect()
 
-#define RECEIVE_TIMEOUT 14 //   <=9 fails, >=11 OK ... HEER!!
+#define RECEIVE_TIMEOUT 14 //   <=9 fails, >=11 OK 
 
 // *****************************************************************************************
 
@@ -51,6 +51,7 @@
 #define MINMICROS                500
 #define MAXMICROS                2500
 #define LED_PIN                  LED_BUILTIN
+#define LED_RED                  16     
 #define RANGEMAX                 2047                      // = Frsky at 150 %
 #define RANGEMIN                 0
 #define pinCE1                   9                         // NRF1

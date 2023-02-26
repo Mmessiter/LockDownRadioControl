@@ -30,7 +30,7 @@
  * | 13    | SPI SCK  (FOR BOTH RADIOS) |
  * | 14    | SBUS *OR PPM* output (TX3) |
  * | 15    | Don't use if using SBUS. The driver takes it (RX3) |
- * | 16    | SPARE
+ * | 16    | RED LED
  * | 17    | SPARE
  * | 18    | I2C SDA (FOR I2C) | *** --- >> BLUE WIRE   = 18 !! << --- ***
  * | 19    | I2C SCK (FOR I2C) | *** --- >> YELLOW WIRE = 19 !! << --- ***
@@ -42,6 +42,7 @@
  * @see ReceiverCode/src/main.cpp
  */
 #include "utilities/radio.h"
+
 
 Adafruit_INA219 ina219;
 bool            SensorHubConnected = false; //  GPS (Adafruit Ultimate GPS) ?
@@ -99,6 +100,9 @@ uint8_t         PPMChannelCount             = 8;
 bool            UseSBUS                     = true;
 bool            NewData                     = false;
 uint16_t        pcount                      = 0; // how many pipes so far received from TX
+bool            Blinking                    = true;
+uint8_t         BlinkValue                  = 1;
+uint32_t        BlinkTimer                  = 0;
 /************************************************************************************************************/
 
 void LoadFailSafeData()
@@ -185,6 +189,8 @@ void FailSafe()
     SetUKFrequencies();           // default startup conditions
     FailSafeSent   = true;        // Once is enough
     FailedSafe     = true;
+    digitalWrite(LED_RED, LOW);
+   
 }
 
 #ifdef DB_FHSS
@@ -266,28 +272,29 @@ void AttachServos()
 
 void BindModel()
 {
-    ThisPipe = NewPipe;
+    ThisPipe = NewPipe;  // heer
     OldPipe  = NewPipe;
    
     CurrentRadio->stopListening();
     delayMicroseconds(250);
-    SetNewPipe(); // change to bound pipe
-    if (SaveNewBind) {
-        for (uint8_t i = 0; i < 8; ++i) {
-            EEPROM.update(i + BIND_EEPROM_OFFSET, TheReceivedPipe[i]);
-        }
-    }
+    SetNewPipe(); // change to bound pipe <<< ***************************************
     BoundFlag   = true;
     BindNow     = 0;
-    SaveNewBind = false;
     uint32_t t = millis();
-    
     while (millis() - t < 1500) ReceiveData(); // this avoid initial glitch on reconnect 
     if (FirstConnection) {
         AttachServos(); // AND START SBUS / PPM
         FirstConnection = false;
     }
     ReadyToUseData = true;
+    if (SaveNewBind) {
+        for (uint8_t i = 0; i < 8; ++i) {
+            EEPROM.update(i + BIND_EEPROM_OFFSET, TheReceivedPipe[i]);
+        }
+        // Serial.println("BIND SAVED");
+    }
+    SaveNewBind = false;
+   
 }
 // ***************************************************************************************************************************************************
 void SendToSensorHub(char m[])
@@ -365,7 +372,7 @@ void ReadExtraParameters()
 
     switch (PacketNumber) {
         case 0:
-            BindNow      = ReceivedData[CHANNELSUSED + 2];
+            BindNow      = ReceivedData[CHANNELSUSED + 2];    
             FailSafeSave = bool(ReceivedData[CHANNELSUSED + 1]);
             if (FailSafeSave) {
                 TwoBytes = uint16_t(FS_byte2) + uint16_t(FS_byte1 << 8);
@@ -640,12 +647,12 @@ void SaveFailSafeData()
 /************************************************************************************************************/
 void ShowPipes()
 { // only for debugging
-#ifdef DB_BIND
+//#ifdef DB_BIND
     Serial.print("NewPipe: ");
     Serial.println((int)NewPipe, HEX);
     Serial.print("OldPipe: ");
     Serial.println((int)OldPipe, HEX);
-#endif
+//#endif
 }
 
 /************************************************************************************************************/
@@ -673,19 +680,21 @@ bool Compare48BitValues(uint64_t c1, uint64_t c2)
 }
 
 /************************************************************************************************************/
-void DoBinding() // heer
+void DoBinding() 
 {
-    GetNewPipe();
-    if (pcount < 10) return;
-    // ShowPipes();
+   // Serial.print("DoBinding ->");
+   // Serial.println(millis());
+    GetNewPipe(); // heer
+    if (pcount < 8) return;
+  //  ShowPipes();
    
     if (Compare48BitValues(OldPipe, NewPipe)) { // Compares two 48 BIT numbers
         SaveNewBind = false;                    // No need to save it as we had it.
-        
         BindNow     = 1;                        // This critical value is sent from TX when user hits bind button, 
                                                 // only set locally if we we knew him already
     }
-    if (BindNow > 0 && !BoundFlag && ModelMatched) BindModel(); // only when all conditions are right shall we bind.
+    if (ModelMatched) BindModel();  // ??? && Bindnow??
+  
 }
 /************************************************************************************************************/
 
@@ -694,6 +703,8 @@ void teensyMAC(uint8_t* mac)
     for (uint8_t by = 0; by < 2; by++) mac[by] = (HW_OCOTP_MAC1 >> ((1 - by) * 8)) & 0xFF;
     for (uint8_t by = 0; by < 4; by++) mac[by + 2] = (HW_OCOTP_MAC0 >> ((3 - by) * 8)) & 0xFF;
 }
+
+
 /************************************************************************************************************/
 // SETUP
 /************************************************************************************************************/
@@ -701,15 +712,21 @@ FLASHMEM void setup()
 {
     pinMode(LED_PIN, OUTPUT);
     pinMode(pinCSN1, OUTPUT);
+#ifdef SECOND_TRANSCEIVER
     pinMode(pinCSN2, OUTPUT);
-    pinMode(pinCE1, OUTPUT);
     pinMode(pinCE2, OUTPUT);
+#endif
+    pinMode(pinCE1, OUTPUT);
+    pinMode(LED_RED, OUTPUT);
     digitalWrite(LED_PIN, HIGH);
+    digitalWrite(LED_RED, LOW);
     delay(2500); // Needed so that the Sensor hub can boot first and be detected
     teensyMAC(MacAddress);
     CurrentRadio = &Radio1;
+#ifdef SECOND_TRANSCEIVER
     digitalWrite(pinCSN2, CSN_OFF);
     digitalWrite(pinCE2, CE_OFF);
+#endif
     digitalWrite(pinCSN1, CSN_ON);
     digitalWrite(pinCE1, CE_ON);
     delay(4);
@@ -733,6 +750,20 @@ FLASHMEM void setup()
     SetUKFrequencies();
     digitalWrite(LED_PIN, LOW);
 }
+
+void BlinkLed() {
+
+    if ((millis()- BlinkTimer) > 100){
+        BlinkTimer = millis();
+        BlinkValue ^= 1;
+        if (BlinkValue) {
+            digitalWrite(LED_RED, HIGH);
+        }else{
+            digitalWrite(LED_RED, LOW);
+        }
+    }
+
+}
 /************************************************************************************************************/
 // LOOP
 /************************************************************************************************************/
@@ -740,6 +771,7 @@ FLASHMEM void setup()
 void loop()
 {
     ReceiveData();
+   // if (Blinking) BlinkLed();
     if (BoundFlag && Connected && ModelMatched) { // Only move servos if everything is good
         if (millis() - SBUSTimer >= SBUSRATE) {   // SBUSRATE rate is also good enough for servo rate
             SBUSTimer = millis();                 // timer starts before send starts....
@@ -748,6 +780,6 @@ void loop()
         if (FailSafeSave) SaveFailSafeData();
     }
     else {
-        if (!BoundFlag) DoBinding();
+         if (!BoundFlag) DoBinding();
     }
 }

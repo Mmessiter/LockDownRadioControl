@@ -40,7 +40,7 @@ FASTRUN void TryOtherPipe()
     else {
         BoundFlag = true;
         ModelMatched = true;
-        SetThePipe(TeensyMACAddPipe);
+        SetThePipe(TeensyMACAddPipe); // heer
     }
 }
 
@@ -156,13 +156,9 @@ FASTRUN void FailedPacket()
     RecordsPacketSuccess(0);                      // Record a failure
     ++RecentPacketsLost;                          // this is to keep track of events when receiver is off
     ++TotalLostPackets;                           // This is total - never zeroed
-  //  if ((millis()-MostRecentHop) > 80){
-  //      if (ModelMatched) {
-  //          HopNowAnyway();
-  //          Serial.println("Hopped!");
-  //      }
-  //  }
+  
     if (RecentPacketsLost >= LOSTCONTACTCUTOFF) { // Don't panic until at least LOSTCONTACTCUTOFF packets are lost.
+       // PlaySound(CLICKONE);                    // Later... optional
         if (!GapStart) GapStart = millis();       // To keep track of this gap's length
         LostContactFlag = true;
         Reconnected     = false;
@@ -226,7 +222,7 @@ void FlushFifos()
     delayMicroseconds(250);
 }
 /************************************************************************************************************/
-//****************** Function to send pre-compressed data to receiver ***************************************
+//****************** Function to send data to receiver ***************************************
 /************************************************************************************************************/
 
 FASTRUN void SendData()

@@ -5105,15 +5105,20 @@ void BindNow() // Bind button was pressed
 #ifdef DB_BIND
     Serial.println("Saving model's ID"); 
 #endif
-    BindingNow = 1;
     ModelMatched                 = true;
     ModelsMacUnionSaved.Val32[0] = ModelsMacUnion.Val32[0];
     ModelsMacUnionSaved.Val32[1] = ModelsMacUnion.Val32[1];
     SaveOneModel(ModelNumber);
     MakeBindButtonInvisible();
+    
+    UpdateModelsNameEveryWhere(); 
+    BoundFlag = true;
+    ModelMatched = true;
+    BindingNow = 1;
+    Procrastinate(500);
+    SetThePipe(TeensyMACAddPipe); // heer
     if (AnnounceConnected) PlaySound(BINDSUCCEEDED); 
     Procrastinate(1700);
-    UpdateModelsNameEveryWhere();
 
 }
 
@@ -9380,10 +9385,10 @@ void  GetModelsMacAddress(){
     }
     if (!BindingTimer) BindingTimer = millis();
     if (BindButton) {
-        if ((millis() - BindingTimer) > 3000) {
+      //  if ((millis() - BindingTimer) > 1500) { // heer
             SendCommand(BindButtonVisible); 
             BindButton = true;
-        }
+      //  }
     }
 }
 

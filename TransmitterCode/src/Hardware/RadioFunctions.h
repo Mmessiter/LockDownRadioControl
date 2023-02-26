@@ -44,7 +44,7 @@
 // #define DB_NEXTION        // Debug NEXTION
 // #define DB_SD             // Debug SD card data
 // #define DB_CHECKSUM       // Debug 32BIT file checksum info
-// #define DB_FHSS           // Debug real time FHSS data
+ //#define DB_FHSS           // Debug real time FHSS data
 // #define DB_SENSORS        // Debug Sensors
 // #define DB_BIND           // Debug Binding
 // #define DB_SWITCHES       // Debug Switches
@@ -509,6 +509,7 @@ extern bool          GetButtonPress();
 extern void          CheckPowerOffButton();
 extern void          LoadFileSelector();
 extern void          LoadModelSelector();
+extern void          PlaySound(uint16_t TheSound);
 
 /*********************************************************************************************************************************/
 // function prototypes

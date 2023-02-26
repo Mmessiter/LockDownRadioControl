@@ -68,6 +68,9 @@ extern FASTRUN void ReceiveData();
 extern bool         FailedSafe;
 extern bool         NewData;
 extern uint16_t     pcount;
+extern bool         ModelMatched;
+extern bool         Blinking;
+extern void         BlinkLed();
 
 /** AckPayload Stucture for data returned to transmitter. */
 struct Payload
@@ -138,7 +141,7 @@ bool ValidateNewPipe(){
     
     uint8_t MatchedCounter = 0;
     
-    if (pcount < 8) return false;  // ignore first few
+    if (pcount < 4) return false;  // ignore first few
     
     PreviousNewPipes[PreviousNewPipesIndex] = NewPipeMaybe;
     PreviousNewPipesIndex++;
@@ -148,13 +151,13 @@ bool ValidateNewPipe(){
         if (NewPipeMaybe == PreviousNewPipes[i]) ++ MatchedCounter;
     }
     
-    if (MatchedCounter >= PIPES_TO_COMPARE - 1) return true; // half or more is OK
+    if (MatchedCounter >= PIPES_TO_COMPARE / 2 ) return true; // half or more is OK
     return false;
 }
 
 /************************************************************************************************************/
 
-void GetNewPipe() // heer
+void GetNewPipe() 
 {
     if (!NewData) return;
     NewData = false;
@@ -171,7 +174,7 @@ void GetNewPipe() // heer
         for (int i = 0; i < 8; ++i){
           TheReceivedPipe[i] = ReceivedData[i];
         }
-    }
+  }
     ++pcount; // inc pipes received
 }
 
@@ -325,10 +328,13 @@ FASTRUN void Reconnect()
     uint8_t PreviousRadio    = ThisRadio;
     uint8_t Attempts         = 0;
 
+   
+
     if (ThisRadio == 1) RX1TotalTime += (millis() - ReconnectedMoment); // keep track of how long on each
     if (ThisRadio == 2) RX2TotalTime += (millis() - ReconnectedMoment);
     
     while (!Connected) {
+       // if (Blinking) BlinkLed();
         if (BoundFlag) KeepSbusHappy(); // Some SBUS systems timeout FAST, so resend old data to keep it happy
         CurrentRadio->stopListening();
         CurrentRadio->flush_tx(); 
@@ -366,6 +372,10 @@ FASTRUN void Reconnect()
     FailSafeSent = false;
     if (PreviousRadio != ThisRadio) ++RadioSwaps; // Count the radio swaps
     ReconnectedMoment = millis();                 // Save this moment
+    if (ModelMatched) {
+        digitalWrite(LED_RED, HIGH);
+        Blinking = false;
+    }
     if (FailedSafe){
         FailedSafe = false;
         NewConnectionMoment = millis();
