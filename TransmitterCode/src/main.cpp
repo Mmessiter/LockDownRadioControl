@@ -5105,21 +5105,20 @@ void BindNow() // Bind button was pressed
 #ifdef DB_BIND
     Serial.println("Saving model's ID"); 
 #endif
+    if (BoundFlag) return;
+    BindingNow                   = 1;
+    BoundFlag                    = true;
     ModelMatched                 = true;
+    Connected                    = true;
+    Procrastinate(250);
     ModelsMacUnionSaved.Val32[0] = ModelsMacUnion.Val32[0];
     ModelsMacUnionSaved.Val32[1] = ModelsMacUnion.Val32[1];
     SaveOneModel(ModelNumber);
     MakeBindButtonInvisible();
-    
     UpdateModelsNameEveryWhere(); 
-    BoundFlag = true;
-    ModelMatched = true;
-    BindingNow = 1;
-    Procrastinate(500);
     SetThePipe(TeensyMACAddPipe); // heer
     if (AnnounceConnected) PlaySound(BINDSUCCEEDED); 
-    Procrastinate(1700);
-
+    Procrastinate(1500);
 }
 
 /*********************************************************************************************************************************/
@@ -9301,6 +9300,9 @@ void GotoFrontView(){
 void CompareModelsIDs(){ // The saved MacAddress is compared with the one just received from the model ... etc ...
     
     uint8_t SavedModelNumber = ModelNumber;
+
+    if (ModelMatched) return; // must not change when model connected 
+
     ModelMatched             = false;
     GotoFrontView();
     RestoreBrightness();

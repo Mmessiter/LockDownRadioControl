@@ -173,19 +173,7 @@ void FailSafe()
         MoveServos();
         Connected = false;      // I lied earlier - we're not really connected.
     }
-/*  This bit removed so it REMAINS BOUND after dissconnection until reboot ...
-    for faster reconnection and to block other transmitters
 
-    ModelMatched = false;       // default startup conditions
-    SaveNewBind  = true;        // default startup conditions
-    Connected    = false;       // default startup conditions
-    SbusRepeats  = 0;           // Reset this count for next connection
-    BindNow      = 0;           // default startup conditions
-    BoundFlag    = false;       // default startup conditions
-    ThisPipe     = DEFAULTPIPE; // default startup conditions
-    SetNewPipe();
-    ReadyToUseData = false;
-*/
     SetUKFrequencies();           // default startup conditions
     FailSafeSent   = true;        // Once is enough
     FailedSafe     = true;
@@ -367,12 +355,13 @@ void ReadExtraParameters()
 {
     uint16_t TwoBytes = 0;
     uint8_t  SwapWaveBand;
-
+    uint8_t  bn = 0;
     PacketNumber = ReceivedData[CHANNELSUSED];
 
     switch (PacketNumber) {
         case 0:
-            BindNow      = ReceivedData[CHANNELSUSED + 2];    
+            bn = ReceivedData[CHANNELSUSED + 2];
+            if (bn) BindNow = 1;
             FailSafeSave = bool(ReceivedData[CHANNELSUSED + 1]);
             if (FailSafeSave) {
                 TwoBytes = uint16_t(FS_byte2) + uint16_t(FS_byte1 << 8);
@@ -682,19 +671,21 @@ bool Compare48BitValues(uint64_t c1, uint64_t c2)
 /************************************************************************************************************/
 void DoBinding() 
 {
-   // Serial.print("DoBinding ->");
-   // Serial.println(millis());
+  
     GetNewPipe(); // heer
     if (pcount < 8) return;
   //  ShowPipes();
-   
     if (Compare48BitValues(OldPipe, NewPipe)) { // Compares two 48 BIT numbers
         SaveNewBind = false;                    // No need to save it as we had it.
         BindNow     = 1;                        // This critical value is sent from TX when user hits bind button, 
                                                 // only set locally if we we knew him already
     }
-    if (ModelMatched) BindModel();  // ??? && Bindnow??
-  
+    Serial.print(BindNow);
+    Serial.print(" ");
+    Serial.println(millis());
+
+   if ((ModelMatched) && (!BoundFlag)) BindModel(); // ??? && Bindnow??
+   // if ((ModelMatched) && (!BoundFlag) && (BindNow)) BindModel(); // ??? && Bindnow??
 }
 /************************************************************************************************************/
 
