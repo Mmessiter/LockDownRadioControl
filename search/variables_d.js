@@ -44,7 +44,7 @@ var searchData=
   ['modelaltitude_41',['ModelAltitude',['../TransmitterCode_2src_2main_8cpp.html#a7cf0e4bc317527d0695a7832f2c9f0e5',1,'main.cpp']]],
   ['modeldefined_42',['ModelDefined',['../TransmitterCode_2src_2main_8cpp.html#a7de8ce7890864d7765fca744338c4759',1,'main.cpp']]],
   ['modelidentified_43',['ModelIdentified',['../TransmitterCode_2src_2main_8cpp.html#adf67cd7c0b0e663e2498f870ca6405b6',1,'main.cpp']]],
-  ['modelmatched_44',['ModelMatched',['../ReceiverCode_2src_2main_8cpp.html#abafce2220b6ad57b4be99289a7953a0c',1,'ModelMatched():&#160;main.cpp'],['../RadioFunctions_8h.html#abafce2220b6ad57b4be99289a7953a0c',1,'ModelMatched():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#abafce2220b6ad57b4be99289a7953a0c',1,'ModelMatched():&#160;main.cpp']]],
+  ['modelmatched_44',['ModelMatched',['../ReceiverCode_2src_2main_8cpp.html#abafce2220b6ad57b4be99289a7953a0c',1,'ModelMatched():&#160;main.cpp'],['../radio_8h.html#abafce2220b6ad57b4be99289a7953a0c',1,'ModelMatched():&#160;main.cpp'],['../RadioFunctions_8h.html#abafce2220b6ad57b4be99289a7953a0c',1,'ModelMatched():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#abafce2220b6ad57b4be99289a7953a0c',1,'ModelMatched():&#160;main.cpp']]],
   ['modelname_45',['ModelName',['../TransmitterCode_2src_2main_8cpp.html#ad61c470de31a7d84669a8170b5d68718',1,'main.cpp']]],
   ['modelnumber_46',['ModelNumber',['../TransmitterCode_2src_2main_8cpp.html#a4563a416bfec098674f95b7002e151e1',1,'main.cpp']]],
   ['modelsfile_47',['ModelsFile',['../TransmitterCode_2src_2main_8cpp.html#ad770dd5d9906766e96979c3954c6b67b',1,'main.cpp']]],

@@ -291,6 +291,7 @@ var RadioFunctions_8h =
     [ "Look", "RadioFunctions_8h.html#a44db40e8ffa545be92871325c4dcdc55", null ],
     [ "MoveaTrim", "RadioFunctions_8h.html#a17123a117a96a9416dec48d9345f8a5b", null ],
     [ "ParseAckPayload", "RadioFunctions_8h.html#a230e862a4da0f66746b6b3afba6bd77a", null ],
+    [ "PlaySound", "RadioFunctions_8h.html#aa490b4664b0a4498d53b30b82287d5df", null ],
     [ "PreScan", "RadioFunctions_8h.html#a5e3e764f8311564f5e20c3a838b25c07", null ],
     [ "Procrastinate", "RadioFunctions_8h.html#a760609a682300dfe6bfaac737fd4d5eb", null ],
     [ "ReadCheckSum32", "RadioFunctions_8h.html#a3c809856d2abf6b6f804e2fbe68d06f5", null ],
