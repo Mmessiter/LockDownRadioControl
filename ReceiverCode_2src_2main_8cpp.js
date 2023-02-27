@@ -9,6 +9,7 @@ var ReceiverCode_2src_2main_8cpp =
     [ "Compare48BitValues", "ReceiverCode_2src_2main_8cpp.html#ae4b6d38acdc3de6654beb1cb5ac1b053", null ],
     [ "DoBinding", "ReceiverCode_2src_2main_8cpp.html#af4a2e182cd3b86ca9765a08100cfb14a", null ],
     [ "FailSafe", "ReceiverCode_2src_2main_8cpp.html#a42318598726782ebb2e1857f167c8cda", null ],
+    [ "HangAbout", "ReceiverCode_2src_2main_8cpp.html#a2a408dfb00bc3a9acf5e0515c5f8fc59", null ],
     [ "LoadFailSafeData", "ReceiverCode_2src_2main_8cpp.html#a7b232e8049c83655363495df07fc96d9", null ],
     [ "loop", "ReceiverCode_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f", null ],
     [ "MapToSBUS", "ReceiverCode_2src_2main_8cpp.html#a6a495c5560f12cc3fd3df9454927d681", null ],
