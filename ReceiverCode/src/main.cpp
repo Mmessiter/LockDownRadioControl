@@ -31,7 +31,7 @@
  * | 14    | SBUS *OR PPM* output (TX3) |
  * | 15    | Don't use if using SBUS. The driver takes it (RX3) |
  * | 16    | RED LED
- * | 17    | SPARE
+ * | 17    | BIND PLUG (held LOW means plug is in)
  * | 18    | I2C SDA (FOR I2C) | *** --- >> BLUE WIRE   = 18 !! << --- ***
  * | 19    | I2C SCK (FOR I2C) | *** --- >> YELLOW WIRE = 19 !! << --- ***
  * | 20    | SPI CSN2 (FOR RADIO2)  |
