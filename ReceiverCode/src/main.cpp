@@ -693,6 +693,23 @@ void HangAbout(){
 }
 
 /************************************************************************************************************/
+
+void ReadBindPlug(){
+        SetUKFrequencies();
+        GetOldPipe();
+    if (!digitalRead(BINDPLUG_PIN)) { // Bind Plug needed to bind!
+        Blinking = true;              // Blinking = binding to new TX
+        }
+    else{
+        Blinking = false;             // Already bound
+        NewPipe = OldPipe;
+        SaveNewBind = false;
+        SetNewPipe();
+        HangAbout(); // sending model ID
+        BindModel();
+    }
+}
+/************************************************************************************************************/
 // SETUP
 /************************************************************************************************************/
 FLASHMEM void setup()
@@ -715,6 +732,13 @@ FLASHMEM void setup()
     if (INA219Connected) ina219.begin();
     teensyMAC(MacAddress);
     CurrentRadio = &Radio1;
+    //ThisPipe     = 0xBABE1E5420LL;
+    if (digitalRead(BINDPLUG_PIN)) { // ie no bind plug, so initialise to bound pipe
+        GetOldPipe();
+        ThisPipe = OldPipe;
+        NewPipe  = OldPipe;
+    }
+
 #ifdef SECOND_TRANSCEIVER
     digitalWrite(pinCSN2, CSN_OFF);
     digitalWrite(pinCE2, CE_OFF);
@@ -735,20 +759,7 @@ FLASHMEM void setup()
     InitCurrentRadio();
     ThisRadio = 2;
 #endif
-    SetUKFrequencies();
-    GetOldPipe();  
-    if (!digitalRead(BINDPLUG_PIN)) { // Bind Plug needed to bind!
-        Blinking = true;              // Blinking = binding to new TX
-        }
-    else{
-        Blinking = false;             // Already bound
-        NewPipe = OldPipe;
-        SaveNewBind = false;
-        SetNewPipe();
-        HangAbout(); // sending model ID
-        BindModel();
-    }
-    
+    ReadBindPlug();
     digitalWrite(LED_PIN, LOW);
 }
 
