@@ -15,6 +15,7 @@ var ReceiverCode_2src_2main_8cpp =
     [ "MapToSBUS", "ReceiverCode_2src_2main_8cpp.html#a6a495c5560f12cc3fd3df9454927d681", null ],
     [ "MarkHere", "ReceiverCode_2src_2main_8cpp.html#a5ae8a2aa29e834880ccf370c7547961b", null ],
     [ "MoveServos", "ReceiverCode_2src_2main_8cpp.html#a6f2443a0666140cf4d8b7352bb3b793c", null ],
+    [ "ReadBindPlug", "ReceiverCode_2src_2main_8cpp.html#a5b90f51dfaa1795437ab024e8ab778d5", null ],
     [ "ReadData", "ReceiverCode_2src_2main_8cpp.html#a07ca94db0e305e9c01ec51e417576308", null ],
     [ "ReadExtraParameters", "ReceiverCode_2src_2main_8cpp.html#a6c490ef42e364f8bb1430c436e86c9c0", null ],
     [ "ReadTheSensorHub", "ReceiverCode_2src_2main_8cpp.html#a5d2350b2507883d3644251013370bc5b", null ],
