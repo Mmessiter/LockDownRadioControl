@@ -100,7 +100,7 @@ uint8_t         PPMChannelCount             = 8;
 bool            UseSBUS                     = true;
 bool            NewData                     = false;
 uint16_t        pcount                      = 0; // how many pipes so far received from TX
-bool            Blinking                    = true;
+bool            Blinking                    = false;
 uint8_t         BlinkValue                  = 1;
 uint32_t        BlinkTimer                  = 0;
 /************************************************************************************************************/
@@ -262,7 +262,7 @@ void BindModel()
 {
     ThisPipe = NewPipe;  // heer
     OldPipe  = NewPipe;
-   
+    digitalWrite(LED_RED, HIGH);
     CurrentRadio->stopListening();
     delayMicroseconds(250);
     SetNewPipe(); // change to bound pipe <<< ***************************************
@@ -279,7 +279,7 @@ void BindModel()
         for (uint8_t i = 0; i < 8; ++i) {
             EEPROM.update(i + BIND_EEPROM_OFFSET, TheReceivedPipe[i]);
         }
-        // Serial.println("BIND SAVED");
+      Serial.println("BIND SAVED");
     }
     SaveNewBind = false;
    
@@ -355,13 +355,12 @@ void ReadExtraParameters()
 {
     uint16_t TwoBytes = 0;
     uint8_t  SwapWaveBand;
-    uint8_t  bn = 0;
     PacketNumber = ReceivedData[CHANNELSUSED];
 
     switch (PacketNumber) {
         case 0:
-            bn = ReceivedData[CHANNELSUSED + 2];
-            if (bn) BindNow = 1;
+          //  bn = ReceivedData[CHANNELSUSED + 2];
+        
             FailSafeSave = bool(ReceivedData[CHANNELSUSED + 1]);
             if (FailSafeSave) {
                 TwoBytes = uint16_t(FS_byte2) + uint16_t(FS_byte1 << 8);
@@ -671,21 +670,9 @@ bool Compare48BitValues(uint64_t c1, uint64_t c2)
 /************************************************************************************************************/
 void DoBinding() 
 {
-  
-    GetNewPipe(); // heer
-    if (pcount < 8) return;
-  //  ShowPipes();
-    if (Compare48BitValues(OldPipe, NewPipe)) { // Compares two 48 BIT numbers
-        SaveNewBind = false;                    // No need to save it as we had it.
-        BindNow     = 1;                        // This critical value is sent from TX when user hits bind button, 
-                                                // only set locally if we we knew him already
-    }
-    Serial.print(BindNow);
-    Serial.print(" ");
-    Serial.println(millis());
-
-   if ((ModelMatched) && (!BoundFlag)) BindModel(); // ??? && Bindnow??
-   // if ((ModelMatched) && (!BoundFlag) && (BindNow)) BindModel(); // ??? && Bindnow??
+    GetNewPipe(); 
+    if (pcount < 6) return;
+    if ((ModelMatched) && (!BoundFlag) && (Blinking)) BindModel(); 
 }
 /************************************************************************************************************/
 
@@ -695,6 +682,15 @@ void teensyMAC(uint8_t* mac)
     for (uint8_t by = 0; by < 4; by++) mac[by + 2] = (HW_OCOTP_MAC0 >> ((3 - by) * 8)) & 0xFF;
 }
 
+/************************************************************************************************************/
+
+void HangAbout(){
+    uint32_t tt = millis();
+    while (millis()-tt < 500) {
+        ReceiveData();
+        if (Blinking) BlinkLed();
+    }
+}
 
 /************************************************************************************************************/
 // SETUP
@@ -709,9 +705,14 @@ FLASHMEM void setup()
 #endif
     pinMode(pinCE1, OUTPUT);
     pinMode(LED_RED, OUTPUT);
+    pinMode(BINDPLUG_PIN, INPUT_PULLUP);
     digitalWrite(LED_PIN, HIGH);
     digitalWrite(LED_RED, LOW);
     delay(2500); // Needed so that the Sensor hub can boot first and be detected
+    Wire.begin();
+    delay(20);
+    ScanI2c(); // Detect what's connected
+    if (INA219Connected) ina219.begin();
     teensyMAC(MacAddress);
     CurrentRadio = &Radio1;
 #ifdef SECOND_TRANSCEIVER
@@ -723,10 +724,7 @@ FLASHMEM void setup()
     delay(4);
     InitCurrentRadio();
     ThisRadio = 1;
-    Wire.begin();
-    delay(20);
-    ScanI2c(); // Detect what's connected
-    if (INA219Connected) ina219.begin();
+    
 #ifdef SECOND_TRANSCEIVER
     CurrentRadio = &Radio2;
     digitalWrite(pinCSN1, CSN_OFF);
@@ -737,10 +735,24 @@ FLASHMEM void setup()
     InitCurrentRadio();
     ThisRadio = 2;
 #endif
-    GetOldPipe();
     SetUKFrequencies();
+    GetOldPipe();  
+    if (!digitalRead(BINDPLUG_PIN)) { // Bind Plug needed to bind!
+        Blinking = true;              // Blinking = binding to new TX
+        }
+    else{
+        Blinking = false;             // Already bound
+        NewPipe = OldPipe;
+        SaveNewBind = false;
+        SetNewPipe();
+        HangAbout(); // sending model ID
+        BindModel();
+    }
+    
     digitalWrite(LED_PIN, LOW);
 }
+
+/************************************************************************************************************/
 
 void BlinkLed() {
 
@@ -753,7 +765,6 @@ void BlinkLed() {
             digitalWrite(LED_RED, LOW);
         }
     }
-
 }
 /************************************************************************************************************/
 // LOOP
@@ -762,7 +773,7 @@ void BlinkLed() {
 void loop()
 {
     ReceiveData();
-   // if (Blinking) BlinkLed();
+    if (Blinking) BlinkLed();
     if (BoundFlag && Connected && ModelMatched) { // Only move servos if everything is good
         if (millis() - SBUSTimer >= SBUSRATE) {   // SBUSRATE rate is also good enough for servo rate
             SBUSTimer = millis();                 // timer starts before send starts....

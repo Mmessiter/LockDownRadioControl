@@ -334,7 +334,7 @@ FASTRUN void Reconnect()
     if (ThisRadio == 2) RX2TotalTime += (millis() - ReconnectedMoment);
     
     while (!Connected) {
-       // if (Blinking) BlinkLed();
+        if (Blinking) BlinkLed();
         if (BoundFlag) KeepSbusHappy(); // Some SBUS systems timeout FAST, so resend old data to keep it happy
         CurrentRadio->stopListening();
         CurrentRadio->flush_tx(); 

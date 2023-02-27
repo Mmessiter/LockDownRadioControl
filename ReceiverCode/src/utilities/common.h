@@ -52,7 +52,8 @@
 #define MINMICROS                500
 #define MAXMICROS                2500
 #define LED_PIN                  LED_BUILTIN
-#define LED_RED                  16     
+#define LED_RED                  16   
+#define BINDPLUG_PIN             17  
 #define RANGEMAX                 2047                      // = Frsky at 150 %
 #define RANGEMIN                 0
 #define pinCE1                   9                         // NRF1
