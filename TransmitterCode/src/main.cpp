@@ -9338,7 +9338,7 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                         Serial.println("Calling SAVEBIND");
                         BindNow(); // heer
                     }else{
-                        // ???
+                        // ??? // here is unknown model with "BindNewModel" switched off.
                     }
                 }
                 return;
@@ -9378,9 +9378,9 @@ void  GetModelsMacAddress(){
     }
     if (!BindingTimer) BindingTimer = millis();
     if (BindButton) {
-      //  if ((millis() - BindingTimer) > 1500) { // heer
-            SendCommand(BindButtonVisible); 
-            BindButton = true;
+      //  if ((millis() - BindingTimer) > 1500) { 
+           // SendCommand(BindButtonVisible); 
+           // BindButton = true;
       //  }
     }
 }
