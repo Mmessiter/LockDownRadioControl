@@ -9288,7 +9288,7 @@ $(document).ready(function(){initNavTree('TransmitterCode_2src_2main_8cpp_source
 <div class="line"><a id="l09338" name="l09338"></a><span class="lineno"> 9338</span>                        Serial.println(<span class="stringliteral">&quot;Calling SAVEBIND&quot;</span>);</div>
 <div class="line"><a id="l09339" name="l09339"></a><span class="lineno"> 9339</span>                        <a class="code hl_variable" href="ReceiverCode_2src_2main_8cpp.html#ac629a0e239d1c27f33584d6ac3e841f8">BindNow</a>(); <span class="comment">// heer</span></div>
 <div class="line"><a id="l09340" name="l09340"></a><span class="lineno"> 9340</span>                    }<span class="keywordflow">else</span>{</div>
-<div class="line"><a id="l09341" name="l09341"></a><span class="lineno"> 9341</span>                        <span class="comment">// ???</span></div>
+<div class="line"><a id="l09341" name="l09341"></a><span class="lineno"> 9341</span>                        <span class="comment">// ??? // here is unknown model with &quot;BindNewModel&quot; switched off.</span></div>
 <div class="line"><a id="l09342" name="l09342"></a><span class="lineno"> 9342</span>                    }</div>
 <div class="line"><a id="l09343" name="l09343"></a><span class="lineno"> 9343</span>                }</div>
 <div class="line"><a id="l09344" name="l09344"></a><span class="lineno"> 9344</span>                <span class="keywordflow">return</span>;</div>
@@ -9328,9 +9328,9 @@ $(document).ready(function(){initNavTree('TransmitterCode_2src_2main_8cpp_source
 <div class="line"><a id="l09378" name="l09378"></a><span class="lineno"> 9378</span>    }</div>
 <div class="line"><a id="l09379" name="l09379"></a><span class="lineno"> 9379</span>    <span class="keywordflow">if</span> (!<a class="code hl_variable" href="TransmitterCode_2src_2main_8cpp.html#ae9cfcaed75c797ac035d4fae9cc9fb47">BindingTimer</a>) <a class="code hl_variable" href="TransmitterCode_2src_2main_8cpp.html#ae9cfcaed75c797ac035d4fae9cc9fb47">BindingTimer</a> = millis();</div>
 <div class="line"><a id="l09380" name="l09380"></a><span class="lineno"> 9380</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="TransmitterCode_2src_2main_8cpp.html#a11a586885b48e92a4cd03ff1840ac374">BindButton</a>) {</div>
-<div class="line"><a id="l09381" name="l09381"></a><span class="lineno"> 9381</span>      <span class="comment">//  if ((millis() - BindingTimer) &gt; 1500) { // heer</span></div>
-<div class="line"><a id="l09382" name="l09382"></a><span class="lineno"> 9382</span>            <a class="code hl_function" href="TransmitterCode_2src_2main_8cpp.html#aecac2f0c289f02ef3c92b85be82eacac">SendCommand</a>(<a class="code hl_variable" href="TransmitterCode_2src_2main_8cpp.html#a54179a9bdd2f60e628828060581339ec">BindButtonVisible</a>); </div>
-<div class="line"><a id="l09383" name="l09383"></a><span class="lineno"> 9383</span>            <a class="code hl_variable" href="TransmitterCode_2src_2main_8cpp.html#a11a586885b48e92a4cd03ff1840ac374">BindButton</a> = <span class="keyword">true</span>;</div>
+<div class="line"><a id="l09381" name="l09381"></a><span class="lineno"> 9381</span>      <span class="comment">//  if ((millis() - BindingTimer) &gt; 1500) { </span></div>
+<div class="line"><a id="l09382" name="l09382"></a><span class="lineno"> 9382</span>           <span class="comment">// SendCommand(BindButtonVisible); </span></div>
+<div class="line"><a id="l09383" name="l09383"></a><span class="lineno"> 9383</span>           <span class="comment">// BindButton = true;</span></div>
 <div class="line"><a id="l09384" name="l09384"></a><span class="lineno"> 9384</span>      <span class="comment">//  }</span></div>
 <div class="line"><a id="l09385" name="l09385"></a><span class="lineno"> 9385</span>    }</div>
 <div class="line"><a id="l09386" name="l09386"></a><span class="lineno"> 9386</span>}</div>
