@@ -44,7 +44,7 @@ var searchData=
   ['closelogfile_41',['CloseLogFile',['../RadioFunctions_8h.html#abc72fe68abd024cb263115e0afd3160a',1,'CloseLogFile():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a6f003363493fc53b69f9efc1f447a6a1',1,'CloseLogFile():&#160;main.cpp']]],
   ['closemodelsfile_42',['CloseModelsFile',['../TransmitterCode_2src_2main_8cpp.html#a6922974b734cfe3a511e074a2d6ac33c',1,'main.cpp']]],
   ['commandmotors_43',['commandMotors',['../Quadcopter_2src_2main_8cpp.html#a9acf6c6b8012c342b50fc7b0656ccc31',1,'main.cpp']]],
-  ['compare48bitvalues_44',['Compare48BitValues',['../ReceiverCode_2src_2main_8cpp.html#ae4b6d38acdc3de6654beb1cb5ac1b053',1,'main.cpp']]],
+  ['compare48bitvalues_44',['Compare48BitValues',['../ReceiverCode_2src_2main_8cpp.html#ae4b6d38acdc3de6654beb1cb5ac1b053',1,'Compare48BitValues(uint64_t c1, uint64_t c2):&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#ae4b6d38acdc3de6654beb1cb5ac1b053',1,'Compare48BitValues(uint64_t c1, uint64_t c2):&#160;main.cpp']]],
   ['comparemodelsids_45',['CompareModelsIDs',['../TransmitterCode_2src_2main_8cpp.html#af8fe429ceb65bf9d257a2a0f1c63eccb',1,'main.cpp']]],
   ['compress_46',['Compress',['../RadioFunctions_8cpp.html#a1ddd5e8d5bd649dd98ce3710fbff651b',1,'Compress(uint16_t *compressed_buf, uint16_t *uncompressed_buf, uint8_t uncompressed_size):&#160;RadioFunctions.cpp'],['../RadioFunctions_8h.html#a1ddd5e8d5bd649dd98ce3710fbff651b',1,'Compress(uint16_t *compressed_buf, uint16_t *uncompressed_buf, uint8_t uncompressed_size):&#160;RadioFunctions.cpp']]],
   ['configurestickmode_47',['ConfigureStickMode',['../TransmitterCode_2src_2main_8cpp.html#a9c0d58f91488496f6946d25b4ad2cbd8',1,'main.cpp']]],
