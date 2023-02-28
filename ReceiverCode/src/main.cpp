@@ -704,7 +704,7 @@ void ReadBindPlug(){
         Blinking = false;             // Already bound
         NewPipe = OldPipe;
         SaveNewBind = false;
-        SetNewPipe();
+        SetNewPipe(); 
         HangAbout(); // sending model ID
         BindModel();
     }

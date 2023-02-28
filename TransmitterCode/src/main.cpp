@@ -552,6 +552,7 @@ bool     TimesUp                = false;
 uint8_t  CountDownIndex = 0;
 bool     UseSBUSFromRX          = true;  // at receiver. false = PPM
 uint16_t PPMChannelCount        = 8;  // for our RX - not module  
+uint8_t ModelAddressCounter     = 0;
 
 // **********************************************************************************************************************************
 // **********************************  Area for PPM & TX MODULE **********************************************************************
@@ -1175,6 +1176,7 @@ void RedLedOn()
         LastShowTime                                = 0;
         ModelsMacUnion.Val32[0]                     = 0;
         ModelsMacUnion.Val32[1]                     = 0;
+        ModelAddressCounter                         = 0;
         RangeTestGoodPackets                        = 0;
         RecentPacketsLost                           = 0;
         SetUKFrequencies();
@@ -9293,6 +9295,29 @@ void GotoFrontView(){
 
 /************************************************************************************************************/
 
+bool Compare48BitValues(uint64_t c1, uint64_t c2)
+{
+    union
+    {
+        uint64_t v64;
+        uint8_t  v8[8];
+    } union1;
+    union
+    {
+        uint64_t v64;
+        uint8_t  v8[8];
+    } union2;
+
+    union1.v64 = c1;
+    union2.v64 = c2;
+
+    for (int i = 0; i < 6; ++i)
+        if (union1.v8[i] != union2.v8[i]) return false;
+    return true;
+}
+
+/************************************************************************************************************/
+
 void CompareModelsIDs(){ // The saved MacAddress is compared with the one just received from the model ... etc ...
     
     uint8_t SavedModelNumber = ModelNumber;
@@ -9302,8 +9327,8 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
     ModelMatched             = false;
     GotoFrontView();
     RestoreBrightness();
-    if (ModelIdentified) {                                                //  We have both bits of Model ID?
-        if ((ModelsMacUnion.Val32[0] == ModelsMacUnionSaved.Val32[0]) && (ModelsMacUnion.Val32[1] == ModelsMacUnionSaved.Val32[1])) {       
+    if (ModelIdentified) {                                                //  We have both bits of Model ID?      
+          if (Compare48BitValues(ModelsMacUnion.Val32[1],ModelsMacUnion.Val32[0])) {
             if (AnnounceConnected) {
                 PlaySound(MMMATCHED);
                 Procrastinate(1000);
@@ -9322,12 +9347,13 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                             BindButton = true; 
                         }
                     }
-                if (ModelMatched){                                        //  Found it!
+                if (ModelMatched){                                        //  Found it!    
                     UpdateModelsNameEveryWhere();                         //  Use it.
                     if (AnnounceConnected) {
                         PlaySound(MMFOUND);
                         Procrastinate(1500);
-                        }
+                       
+                    }
                     SaveAllParameters();                                  //  Save it
                     GotoFrontView(); 
                 }else{                                                    
@@ -9353,10 +9379,12 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
         }
     }
 }
+
+
 /************************************************************************************************************/
 void  GetModelsMacAddress(){
 
-    
+    ++ ModelAddressCounter;
     switch (AckPayload.Purpose)
     {
         case 0:
@@ -9368,19 +9396,15 @@ void  GetModelsMacAddress(){
         default:
              break;
     }
-  
+
+    Look(ModelsMacUnion.Val32[0]); // TODO: Build array and validate
+    Look(ModelsMacUnion.Val32[1]);
+
     if (ModelMatched == false) {
         if ((ModelsMacUnion.Val32[0] > 0) && (ModelsMacUnion.Val32[1] > 0)){   // got both bits yet? 
-               ModelIdentified = true;
+              if (ModelAddressCounter >8) ModelIdentified = true;
         }
         CompareModelsIDs();
-    }
-    if (!BindingTimer) BindingTimer = millis();
-    if (BindButton) {
-      //  if ((millis() - BindingTimer) > 1500) { 
-           // SendCommand(BindButtonVisible); 
-           // BindButton = true;
-      //  }
     }
 }
 
