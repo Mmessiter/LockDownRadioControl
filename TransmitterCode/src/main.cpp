@@ -1420,7 +1420,6 @@ uint32_t GetValue(char* nbox) // This function calls the function above until it
         Procrastinate(50);
         ValueIn = getvalue(nbox);
         ++i;
-        Serial.println(nbox);
     }
     return ValueIn;
 }
