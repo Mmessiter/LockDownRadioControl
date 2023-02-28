@@ -363,6 +363,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "BindButtonVisible", "TransmitterCode_2src_2main_8cpp.html#a54179a9bdd2f60e628828060581339ec", null ],
     [ "BindingNow", "TransmitterCode_2src_2main_8cpp.html#a1873a8dc0cbecc66366b95540f9c3249", null ],
     [ "BindingTimer", "TransmitterCode_2src_2main_8cpp.html#ae9cfcaed75c797ac035d4fae9cc9fb47", null ],
+    [ "BindNewModel", "TransmitterCode_2src_2main_8cpp.html#a0ea5da47b739d36326d60e571125175e", null ],
     [ "BlinkHertz", "TransmitterCode_2src_2main_8cpp.html#af8795de08ab0ad1ab1a8679eae6c617a", null ],
     [ "BlinkOnPhase", "TransmitterCode_2src_2main_8cpp.html#a324fd33f9933254079efa1cc42c05e1f", null ],
     [ "BlinkTimer", "TransmitterCode_2src_2main_8cpp.html#a79ef591b711372e0f452e2afe8d2a718", null ],
