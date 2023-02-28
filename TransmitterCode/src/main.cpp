@@ -571,6 +571,7 @@ uint8_t                 PPMOrderSelection    = 2;
 uint8_t                 PPMChannelsNumber     = 6;
 uint8_t                 PPMMillis            = 22; // Not used!!! (yet)
 bool                    UseTXModule          = false;
+bool                    BindNewModel         = true;
 // **********************************************************************************************************************************
 
 // **********************************************************************************************************************************
@@ -5105,30 +5106,26 @@ void BindNow() // Bind button was pressed
 #ifdef DB_BIND
     Serial.println("Saving model's ID"); 
 #endif
-    if (BoundFlag) return;
     BindingNow                   = 1;
     BoundFlag                    = true;
     ModelMatched                 = true;
     Connected                    = true;
-    Procrastinate(250);
     ModelsMacUnionSaved.Val32[0] = ModelsMacUnion.Val32[0];
     ModelsMacUnionSaved.Val32[1] = ModelsMacUnion.Val32[1];
     SaveOneModel(ModelNumber);
     MakeBindButtonInvisible();
-    UpdateModelsNameEveryWhere(); 
-    SetThePipe(TeensyMACAddPipe); // heer
-    if (AnnounceConnected) PlaySound(BINDSUCCEEDED); 
-    Procrastinate(1500);
+    UpdateModelsNameEveryWhere();
+    Serial.println("Saved new bind"); // heer
 }
 
-/*********************************************************************************************************************************/
+    /*********************************************************************************************************************************/
 
-int GetDifference(int YtouchPlace, int oldy)
-{
-    int dd;
-    dd = (YtouchPlace - oldy) / 2;
-    if (dd < 0) dd = -dd;
-    return dd;
+    int GetDifference(int YtouchPlace, int oldy)
+    {
+        int dd;
+        dd = (YtouchPlace - oldy) / 2;
+        if (dd < 0) dd = -dd;
+        return dd;
 }
 /*********************************************************************************************************************************/
 void MoveCurrentPointUp()  
@@ -9300,8 +9297,8 @@ void GotoFrontView(){
 void CompareModelsIDs(){ // The saved MacAddress is compared with the one just received from the model ... etc ...
     
     uint8_t SavedModelNumber = ModelNumber;
-
-    if (ModelMatched) return; // must not change when model connected 
+    
+    if (ModelMatched) return; // must not change when model connected
 
     ModelMatched             = false;
     GotoFrontView();
@@ -9335,22 +9332,16 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                     SaveAllParameters();                                  //  Save it
                     GotoFrontView(); 
                 }else{                                                    
-                    if (AnnounceConnected) {
-                        if ((millis() - WarningTimer) > 10000) {
-                            PlaySound(MMNOTFOUND); 
-                            Procrastinate(1500);
-                        }
-                    }
                     ModelNumber = SavedModelNumber;                       //  Not found anywhere. So offer to bind the restored selected one
                     ReadOneModel(ModelNumber);
-                    SendCommand(BindButtonVisible);
-                    if ((millis() - WarningTimer) > 10000) {
-                        WarningTimer = millis();
-                        if (AnnounceConnected) PlaySound(BINDNEEDED);
+                    if (BindNewModel){
+                        Serial.println("Calling SAVEBIND");
+                        BindNow(); // heer
+                    }else{
+                        // ???
                     }
-                    BindButton = true;
-                    ModelMatched = false;
-                } return;
+                }
+                return;
              } else {
                 SendCommand(BindButtonVisible);
                 if ((millis() - WarningTimer) > 10000) {
@@ -9378,7 +9369,7 @@ void  GetModelsMacAddress(){
         default:
              break;
     }
-   
+  
     if (ModelMatched == false) {
         if ((ModelsMacUnion.Val32[0] > 0) && (ModelsMacUnion.Val32[1] > 0)){   // got both bits yet? 
                ModelIdentified = true;
@@ -9407,8 +9398,8 @@ FASTRUN void ParseAckPayload()
         HopToNextChannel();
         AckPayload.Purpose &= 0x7f; // Clear the high BIT, use the remainder ...
     }
-
-    if (!BoundFlag){
+  
+    if (!ModelMatched){
        GetModelsMacAddress(); 
        return;
     }

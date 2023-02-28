@@ -39,7 +39,7 @@ FASTRUN void TryOtherPipe()
     }
     else {
         BoundFlag = true;
-        ModelMatched = true;
+      //  ModelMatched = true;
         SetThePipe(TeensyMACAddPipe); // heer
     }
 }
