@@ -92,6 +92,7 @@
 #define MAXBUFFERSIZE           4096
 #define MAXMODELNUMBER          91
 #define PERFECTPACKETSPERSECOND 150                       // Flat out perfect packets per second
+#define PIPES_TO_COMPARE        8
 // **************************************************************************
 //                            FHSS PARAMETERS                               *
 //***************************************************************************

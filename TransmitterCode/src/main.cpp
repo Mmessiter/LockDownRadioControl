@@ -492,12 +492,14 @@ bool      ModelIdentified         = false;
 bool      ModelMatched            = false;
 bool      AutoModelSelect         = true;
 union {
-        uint32_t Val32[2] = {0, 0};
+        uint32_t Val64  = 0;
+        uint32_t Val32[2];
         uint8_t  Val8[8]; // Model's Mac address just obtained from model
      }  ModelsMacUnion;
 
 union {
-        uint32_t Val32[2] = {0,0};
+        uint32_t Val64  = 0;
+        uint32_t Val32[2] ;
         uint8_t  Val8[8];        // Model's Mac address that had been saved on disk
      }  ModelsMacUnionSaved;
 
@@ -552,7 +554,7 @@ bool     TimesUp                = false;
 uint8_t  CountDownIndex = 0;
 bool     UseSBUSFromRX          = true;  // at receiver. false = PPM
 uint16_t PPMChannelCount        = 8;  // for our RX - not module  
-uint8_t ModelAddressCounter     = 0;
+
 
 // **********************************************************************************************************************************
 // **********************************  Area for PPM & TX MODULE **********************************************************************
@@ -573,6 +575,11 @@ uint8_t                 PPMChannelsNumber     = 6;
 uint8_t                 PPMMillis            = 22; // Not used!!! (yet)
 bool                    UseTXModule          = false;
 bool                    BindNewModel         = true;
+
+uint64_t NewPipeMaybe = 0;
+uint64_t PreviousNewPipes[PIPES_TO_COMPARE];
+uint8_t  PreviousNewPipesIndex = 0;
+uint8_t  pcount                = 0;
 // **********************************************************************************************************************************
 
 // **********************************************************************************************************************************
@@ -1172,11 +1179,11 @@ void RedLedOn()
         BindButton                                  = false;
         BindingNow                                  = 0;
         BindingTimer                                = 0;
+        pcount                                      = 0;
         PacketsPerSecond                            = 0;
         LastShowTime                                = 0;
         ModelsMacUnion.Val32[0]                     = 0;
         ModelsMacUnion.Val32[1]                     = 0;
-        ModelAddressCounter                         = 0;
         RangeTestGoodPackets                        = 0;
         RecentPacketsLost                           = 0;
         SetUKFrequencies();
@@ -5114,7 +5121,6 @@ void BindNow() // Bind button was pressed
     ModelsMacUnionSaved.Val32[0] = ModelsMacUnion.Val32[0];
     ModelsMacUnionSaved.Val32[1] = ModelsMacUnion.Val32[1];
     SaveOneModel(ModelNumber);
-    MakeBindButtonInvisible();
     UpdateModelsNameEveryWhere();
     Serial.println("Saved new bind"); // heer
 }
@@ -9295,29 +9301,6 @@ void GotoFrontView(){
 
 /************************************************************************************************************/
 
-bool Compare48BitValues(uint64_t c1, uint64_t c2)
-{
-    union
-    {
-        uint64_t v64;
-        uint8_t  v8[8];
-    } union1;
-    union
-    {
-        uint64_t v64;
-        uint8_t  v8[8];
-    } union2;
-
-    union1.v64 = c1;
-    union2.v64 = c2;
-
-    for (int i = 0; i < 6; ++i)
-        if (union1.v8[i] != union2.v8[i]) return false;
-    return true;
-}
-
-/************************************************************************************************************/
-
 void CompareModelsIDs(){ // The saved MacAddress is compared with the one just received from the model ... etc ...
     
     uint8_t SavedModelNumber = ModelNumber;
@@ -9327,14 +9310,16 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
     ModelMatched             = false;
     GotoFrontView();
     RestoreBrightness();
+    
     if (ModelIdentified) {                                                //  We have both bits of Model ID?      
-          if (Compare48BitValues(ModelsMacUnion.Val32[1],ModelsMacUnion.Val32[0])) {
+        
+          if (ModelsMacUnion.Val64 == ModelsMacUnionSaved.Val64) {
             if (AnnounceConnected) {
                 PlaySound(MMMATCHED);
                 Procrastinate(1000);
                 }
                 ModelMatched = true;                                      //  It's a match so start flying!
-                BindButton = true; 
+                BindButton   = true; 
         } else {
             if (AutoModelSelect){                                         //  It's not a match so maybe search for it.
                 ModelNumber = 0;
@@ -9342,7 +9327,7 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                     {   //  Try to match the ID with a saved one
                         ++ModelNumber;
                         ReadOneModel(ModelNumber);
-                        if ((ModelsMacUnion.Val32[0] == ModelsMacUnionSaved.Val32[0]) && (ModelsMacUnion.Val32[1] == ModelsMacUnionSaved.Val32[1])) {
+                        if (ModelsMacUnion.Val64 == ModelsMacUnionSaved.Val64) {
                             ModelMatched = true;
                             BindButton = true; 
                         }
@@ -9380,31 +9365,47 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
     }
 }
 
+/************************************************************************************************************/
+// This function compares the just-received pipe with several of the previous ones
+// if it matches most of them then it's probably not corrupted :-) 
+bool ValidateNewPipe(){ 
+    uint8_t MatchedCounter = 0;
+    ++pcount;
+    if (pcount < 5) return false; // ignore first few
+    PreviousNewPipes[PreviousNewPipesIndex] = NewPipeMaybe;
+    PreviousNewPipesIndex++;
+    if (PreviousNewPipesIndex > PIPES_TO_COMPARE) PreviousNewPipesIndex = 0;
+    for (int i = 0; i < PIPES_TO_COMPARE;++i){
+        if (NewPipeMaybe == PreviousNewPipes[i]) ++ MatchedCounter;
+    }
+    if (MatchedCounter >= PIPES_TO_COMPARE  - 2 ) return true; // half or more is OK
+    return false;
+}
 
 /************************************************************************************************************/
 void  GetModelsMacAddress(){
 
-    ++ ModelAddressCounter;
     switch (AckPayload.Purpose)
     {
         case 0:
              ModelsMacUnion.Val32[0] = GetIntFromAckPayload();
+             Look(ModelsMacUnion.Val32[0]);
              break;
         case 1:
              ModelsMacUnion.Val32[1] = GetIntFromAckPayload();  
+             Look(ModelsMacUnion.Val32[1]);
              break;
         default:
              break;
     }
-
-    Look(ModelsMacUnion.Val32[0]); // TODO: Build array and validate
-    Look(ModelsMacUnion.Val32[1]);
-
     if (ModelMatched == false) {
-        if ((ModelsMacUnion.Val32[0] > 0) && (ModelsMacUnion.Val32[1] > 0)){   // got both bits yet? 
-              if (ModelAddressCounter >8) ModelIdentified = true;
-        }
-        CompareModelsIDs();
+        if ((ModelsMacUnion.Val32[0] > 0) && (ModelsMacUnion.Val32[1] > 0)){   // got both bits yet?
+             NewPipeMaybe = ModelsMacUnion.Val64;
+             if (ValidateNewPipe()) {
+                ModelIdentified = true; 
+                CompareModelsIDs();
+            } 
+        }    
     }
 }
 

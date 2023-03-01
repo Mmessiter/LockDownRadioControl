@@ -71,6 +71,7 @@ extern uint16_t     pcount;
 extern bool         ModelMatched;
 extern bool         Blinking;
 extern void         BlinkLed();
+extern  uint8_t MacAddressSentCounter;
 
 /** AckPayload Stucture for data returned to transmitter. */
 struct Payload
@@ -473,6 +474,8 @@ void  SendMacAddress()
   } ThisUnion;
   uint8_t MaxAckP = 1;      // only packets 0 and 1 are needed here.
 
+  ++ MacAddressSentCounter;
+
   AckPayload.Purpose &= 0x7F;
   ++AckPayload.Purpose;
   if (AckPayload.Purpose > MaxAckP) AckPayload.Purpose = 0; // wrap after max
@@ -482,9 +485,12 @@ void  SendMacAddress()
        switch (AckPayload.Purpose) {
            case 0:
                SendIntToAckPayload(ThisUnion.Val32[0]);
+               Serial.println(ThisUnion.Val32[0]);
                break;
            case 1:
-               SendIntToAckPayload(ThisUnion.Val32[1]);
+                SendIntToAckPayload(ThisUnion.Val32[1]);
+                Serial.println(ThisUnion.Val32[1]);
+                Serial.println(" ");
                break;
            default:
                break;
@@ -495,7 +501,7 @@ void  SendMacAddress()
 void LoadAckPayload()
 {
     
-     if (!BoundFlag) {
+     if (MacAddressSentCounter < 16) {
         SendMacAddress(); 
         return;
     }

@@ -103,6 +103,7 @@ uint16_t        pcount                      = 0; // how many pipes so far receiv
 bool            Blinking                    = false;
 uint8_t         BlinkValue                  = 1;
 uint32_t        BlinkTimer                  = 0;
+uint8_t         MacAddressSentCounter        = 0;
 /************************************************************************************************************/
 
 void LoadFailSafeData()
@@ -178,7 +179,7 @@ void FailSafe()
     FailSafeSent   = true;        // Once is enough
     FailedSafe     = true;
     digitalWrite(LED_RED, LOW);
-   
+    MacAddressSentCounter = 0;
 }
 
 #ifdef DB_FHSS
