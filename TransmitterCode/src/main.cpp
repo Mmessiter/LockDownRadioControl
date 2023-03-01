@@ -380,10 +380,8 @@ uint32_t     LastScanButtonCheck    = 0;
 uint32_t     TransmitterLastManaged    = 0;
 uint32_t     LastShowTime    = 0;
 uint32_t     LastDogKick     = 0;
-uint8_t      MacAddress[6];
+uint8_t      MacAddress[8]   = {0, 0, 0, 0, 0, 0, 0, 0};
 uint8_t      ErrorState      = 0;
-
-
 uint16_t XtouchPlace = 0; // Clicked X
 uint16_t YtouchPlace = 0; // Clicked Y
 
@@ -3675,7 +3673,11 @@ FLASHMEM void setup()
             ErrorState = MODELSFILENOTFOUND; // if no file ... or no SD
     }
 
-    teensyMAC(MacAddress);  // Get MAC address and use it as pipe address
+    teensyMAC(MacAddress);  // Get MAC address and use it as pipe address // heer
+
+   // for (int q = 0; q < 8;++q)MacAddress[q] = 0x12; // test! heer
+   
+
     TeensyMACAddPipe = (uint64_t)MacAddress[0] << 40;
     TeensyMACAddPipe += (uint64_t)MacAddress[1] << 32;
     TeensyMACAddPipe += (uint64_t)MacAddress[2] << 24;
@@ -5111,9 +5113,7 @@ FASTRUN void DisplayCurve()
 
 void BindNow() // Bind button was pressed 
 {
-#ifdef DB_BIND
-    Serial.println("Saving model's ID"); 
-#endif
+
     BindingNow                   = 1;
     BoundFlag                    = true;
     ModelMatched                 = true;
@@ -5121,8 +5121,7 @@ void BindNow() // Bind button was pressed
     ModelsMacUnionSaved.Val32[0] = ModelsMacUnion.Val32[0];
     ModelsMacUnionSaved.Val32[1] = ModelsMacUnion.Val32[1];
     SaveOneModel(ModelNumber);
-    UpdateModelsNameEveryWhere();
-    Serial.println("Saved new bind"); // heer
+    Serial.println("Saved MODEL ID!"); // heer
 }
 
     /*********************************************************************************************************************************/
@@ -9354,7 +9353,8 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                     ModelNumber = SavedModelNumber;                       //  Not found anywhere. So offer to bind the restored selected one
                     ReadOneModel(ModelNumber);
                     if (BindNewModel){
-                        Serial.println("Calling SAVEBIND");
+                        Serial.println("Calling SAVING MODEL ID...");
+                        Procrastinate(1000); // test!
                         BindNow(); // heer
                     }
                 }
@@ -9378,7 +9378,7 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
 bool ValidateNewPipe(){ 
     uint8_t MatchedCounter = 0;
     ++pcount;
-    if (pcount < 5) return false; // ignore first few
+    if (pcount < 5) return false; // ignore first few // heer
     PreviousNewPipes[PreviousNewPipesIndex] = NewPipeMaybe;
     PreviousNewPipesIndex++;
     if (PreviousNewPipesIndex > PIPES_TO_COMPARE) PreviousNewPipesIndex = 0;

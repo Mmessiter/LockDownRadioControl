@@ -261,29 +261,32 @@ void AttachServos()
 
 void BindModel()
 {
-    ThisPipe = NewPipe;  // heer
+    ThisPipe = NewPipe;  // test!
     OldPipe  = NewPipe;
     digitalWrite(LED_RED, HIGH);
     CurrentRadio->stopListening();
     delayMicroseconds(250);
     SetNewPipe(); // change to bound pipe <<< ***************************************
     BoundFlag   = true;
-    BindNow     = 0;
+    Blinking    = false;
+    ModelMatched = true;
+    BindNow      = 0;
+
+    if (SaveNewBind) {
+        for (uint8_t i = 0; i < 8; ++i) {
+            EEPROM.update(i + BIND_EEPROM_OFFSET, TheReceivedPipe[i]);
+            delay(10);
+        }
+      Serial.println("TX ID SAVED");
+    }
     uint32_t t = millis();
     while (millis() - t < 1500) ReceiveData(); // this avoid initial glitch on reconnect 
     if (FirstConnection) {
         AttachServos(); // AND START SBUS / PPM
         FirstConnection = false;
     }
-    ReadyToUseData = true;
-    if (SaveNewBind) {
-        for (uint8_t i = 0; i < 8; ++i) {
-            EEPROM.update(i + BIND_EEPROM_OFFSET, TheReceivedPipe[i]);
-        }
-      Serial.println("BIND SAVED");
-    }
+    ReadyToUseData = true; 
     SaveNewBind = false;
-   
 }
 // ***************************************************************************************************************************************************
 void SendToSensorHub(char m[])
@@ -643,37 +646,15 @@ void ShowPipes()
     Serial.println((int)OldPipe, HEX);
 //#endif
 }
-
-/************************************************************************************************************/
-
-bool Compare48BitValues(uint64_t c1, uint64_t c2)
-{
-
-    union
-    {
-        uint64_t v64;
-        uint8_t  v8[8];
-    } union1;
-    union
-    {
-        uint64_t v64;
-        uint8_t  v8[8];
-    } union2;
-
-    union1.v64 = c1;
-    union2.v64 = c2;
-
-    for (int i = 0; i < 6; ++i)
-        if (union1.v8[i] != union2.v8[i]) return false;
-    return true;
-}
-
 /************************************************************************************************************/
 void DoBinding() 
 {
     GetNewPipe(); 
-    if (pcount < 6) return;
-    if ((ModelMatched) && (!BoundFlag) && (Blinking)) BindModel(); 
+    if (pcount < 4) return; // test!
+    if ((ModelMatched) && (!BoundFlag) && (Blinking)) 
+    {
+        BindModel();
+    }
 }
 /************************************************************************************************************/
 
@@ -733,10 +714,10 @@ FLASHMEM void setup()
     if (INA219Connected) ina219.begin();
     teensyMAC(MacAddress);
 
-    //for (int i = 0; i < 8; ++i) MacAddress[i] = 0x0B; // force new ID fo tests!
+  //  for (int i = 0; i < 8; ++i) MacAddress[i] = 0x0B; // force new ID fo test! heer
 
     CurrentRadio = &Radio1;
-    //ThisPipe     = 0xBABE1E5420LL;
+    ThisPipe     = 0xBABE1E5420LL;
     if (digitalRead(BINDPLUG_PIN)) { // ie no bind plug, so initialise to bound pipe
         GetOldPipe();
         ThisPipe = OldPipe;
@@ -788,6 +769,8 @@ void BlinkLed() {
 void loop()
 {
     ReceiveData();
+   // Serial.print (millis());
+   // Serial.println("  OK");
     if (Blinking) BlinkLed();
     if (BoundFlag && Connected && ModelMatched) { // Only move servos if everything is good
         if (millis() - SBUSTimer >= SBUSRATE) {   // SBUSRATE rate is also good enough for servo rate
