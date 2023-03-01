@@ -6,7 +6,6 @@ var ReceiverCode_2src_2main_8cpp =
     [ "AttachServos", "ReceiverCode_2src_2main_8cpp.html#a0cbfd712ab3bd8f654bc19400fd704bd", null ],
     [ "BindModel", "ReceiverCode_2src_2main_8cpp.html#aa0c6905579a33aef28d737d43676cbbd", null ],
     [ "BlinkLed", "ReceiverCode_2src_2main_8cpp.html#aa477cf7453bb57dab00e7b654f62cb13", null ],
-    [ "Compare48BitValues", "ReceiverCode_2src_2main_8cpp.html#ae4b6d38acdc3de6654beb1cb5ac1b053", null ],
     [ "DoBinding", "ReceiverCode_2src_2main_8cpp.html#af4a2e182cd3b86ca9765a08100cfb14a", null ],
     [ "FailSafe", "ReceiverCode_2src_2main_8cpp.html#a42318598726782ebb2e1857f167c8cda", null ],
     [ "HangAbout", "ReceiverCode_2src_2main_8cpp.html#a2a408dfb00bc3a9acf5e0515c5f8fc59", null ],
