@@ -240,9 +240,11 @@ FASTRUN void SendData()
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);    // Compress 32 bytes down to 24 (40 -> 30??)
         if (Radio1.write(&CompressedData, SizeOfCompressedData)) {  //  ************************** >>>>> SEND DATA (30 bytes) TO RX <<<<< ***************************************
             SuccessfulPacket();
+            
             FlushFifos();
         } else {
             FlushFifos();
+           
             FailedPacket();
         }
     }

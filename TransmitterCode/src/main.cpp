@@ -9307,6 +9307,16 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
     
     if (ModelMatched) return; // must not change when model connected
 
+   /* 
+   if (!AutoModelSelect){
+            Serial.println("Calling SAVING BIND NON AUTO");
+            BindNow(); // heer
+            ModelMatched = true;
+            AutoModelSelect = true;
+            return;
+    }
+    */
+
     ModelMatched             = false;
     GotoFrontView();
     RestoreBrightness();
@@ -9337,7 +9347,6 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                     if (AnnounceConnected) {
                         PlaySound(MMFOUND);
                         Procrastinate(1500);
-                       
                     }
                     SaveAllParameters();                                  //  Save it
                     GotoFrontView(); 
@@ -9347,8 +9356,6 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                     if (BindNewModel){
                         Serial.println("Calling SAVEBIND");
                         BindNow(); // heer
-                    }else{
-                        // ??? // here is unknown model with "BindNewModel" switched off.
                     }
                 }
                 return;
@@ -9422,9 +9429,10 @@ FASTRUN void ParseAckPayload()
         HopToNextChannel();
         AckPayload.Purpose &= 0x7f; // Clear the high BIT, use the remainder ...
     }
-  
+ 
     if (!ModelMatched){
-       GetModelsMacAddress(); 
+       GetModelsMacAddress();
+      
        return;
     }
     
@@ -9697,6 +9705,8 @@ void SendPPM(){ // Send a frame of PPM to Third party TX module
 /************************************************************************************************************/
 FASTRUN void loop()
 {
+    
+     
     ManageTransmitter();                                         // Do the needed chores ... (if there's time)
     GetNewChannelValues();                                       // Load SendBuffer with new servo positions  Very frequently
      
@@ -9719,6 +9729,7 @@ FASTRUN void loop()
 #ifdef TXMODULESUPPORT
             if (!UseTXModule) {
                 SendData();         // local TX
+                 
             }else{
                  SendPPM();         // for TX module
                  NewCompressNeeded = false;
