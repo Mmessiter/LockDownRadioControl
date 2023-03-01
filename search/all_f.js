@@ -8,7 +8,7 @@ var searchData=
   ['newfilebufferpointer_5',['NewFileBufferPointer',['../TransmitterCode_2src_2main_8cpp.html#a1ca852f79f9cbe1f4ccb5d4ffc287aa9',1,'main.cpp']]],
   ['newpcb_6',['NEWPCB',['../RadioFunctions_8h.html#a7494653ff9b81d7068c2f8095e97648b',1,'RadioFunctions.h']]],
   ['newpipe_7',['NewPipe',['../radio_8h.html#a594f07765a7ed90e0830d4e2f69a7112',1,'radio.h']]],
-  ['newpipemaybe_8',['NewPipeMaybe',['../radio_8h.html#a3662a2886499f793d8cfcfe589798574',1,'radio.h']]],
+  ['newpipemaybe_8',['NewPipeMaybe',['../radio_8h.html#a3662a2886499f793d8cfcfe589798574',1,'NewPipeMaybe():&#160;radio.h'],['../TransmitterCode_2src_2main_8cpp.html#a3662a2886499f793d8cfcfe589798574',1,'NewPipeMaybe():&#160;main.cpp']]],
   ['nextchannel_9',['NextChannel',['../TransmitterCode_2src_2main_8cpp.html#a4c9fbf66b2c98730d43dc9dfe573a998',1,'NextChannel():&#160;main.cpp'],['../RadioFunctions_8h.html#a4c9fbf66b2c98730d43dc9dfe573a998',1,'NextChannel():&#160;radio.h'],['../radio_8h.html#a4c9fbf66b2c98730d43dc9dfe573a998',1,'NextChannel():&#160;radio.h']]],
   ['nextchannelnumber_10',['NextChannelNumber',['../radio_8h.html#a372b457a109ccee3253b219df1a47412',1,'NextChannelNumber():&#160;radio.h'],['../RadioFunctions_8h.html#a372b457a109ccee3253b219df1a47412',1,'NextChannelNumber():&#160;radio.h'],['../TransmitterCode_2src_2main_8cpp.html#a372b457a109ccee3253b219df1a47412',1,'NextChannelNumber():&#160;main.cpp']]],
   ['nextion_11',['NEXTION',['../RadioFunctions_8h.html#a8faf90f81afc68086a4b47c2e94cd519',1,'RadioFunctions.h']]],

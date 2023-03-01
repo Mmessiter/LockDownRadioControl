@@ -25,7 +25,7 @@ var searchData=
   ['pince2_22',['pinCE2',['../common_8h.html#a86715d66aa5d1363f2db07ae6428eb90',1,'common.h']]],
   ['pincsn1_23',['pinCSN1',['../common_8h.html#a047f5702802c2bbf4918e9318f3e6a56',1,'common.h']]],
   ['pincsn2_24',['pinCSN2',['../common_8h.html#a76971ffb50fdfd6bc8e2c3c6ac339459',1,'common.h']]],
-  ['pipes_5fto_5fcompare_25',['PIPES_TO_COMPARE',['../common_8h.html#a820e3704750ed47bfb6bd2c3c6b54fce',1,'common.h']]],
+  ['pipes_5fto_5fcompare_25',['PIPES_TO_COMPARE',['../common_8h.html#a820e3704750ed47bfb6bd2c3c6b54fce',1,'PIPES_TO_COMPARE():&#160;common.h'],['../RadioFunctions_8h.html#a820e3704750ed47bfb6bd2c3c6b54fce',1,'PIPES_TO_COMPARE():&#160;RadioFunctions.h']]],
   ['plsturnoff_26',['PLSTURNOFF',['../RadioFunctions_8h.html#a3d9e7817e8c3f47044067ead9b8ce38b',1,'RadioFunctions.h']]],
   ['power_5foff_5fpin_27',['POWER_OFF_PIN',['../RadioFunctions_8h.html#aac8f9c268e406507be95a1255281323c',1,'RadioFunctions.h']]],
   ['ppmbuddyframerate_28',['PPMBUDDYFRAMERATE',['../RadioFunctions_8h.html#a382154ba197e2cdf260955df9437b707',1,'RadioFunctions.h']]],
