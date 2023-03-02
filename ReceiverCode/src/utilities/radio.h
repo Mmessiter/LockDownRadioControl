@@ -240,30 +240,12 @@ FLASHMEM void InitCurrentRadio()
 void TryToConnectNow()
 {
     uint32_t ATimer;
-  //  uint8_t  TimeUsed = 0;
-
-   
+  
     delayMicroseconds(250);
     CurrentRadio->startListening();
     ATimer = millis();
-    
-  //  Serial.print(" Re-connection time used = ");
-
     while ((!CurrentRadio->available()) && (millis() - ATimer) < LISTEN_PERIOD) {delayMicroseconds(10);}// *** > Lock up sometimes happens here!! < ***
-    
-   // TimeUsed = (millis() - ATimer);
-    
     Connected = CurrentRadio->available();
-    /*
-    if ((TimeUsed < LISTEN_PERIOD) || (Connected)){
-        Serial.print(TimeUsed);
-        Serial.println("ms. Connected :)");
-    }
-    else {
-        Serial.print(TimeUsed);
-        Serial.println("ms. Not connected :(");
-    } 
-    */
 }
 
 /************************************************************************************************************/
@@ -354,8 +336,6 @@ FASTRUN void Reconnect()
     if (ThisRadio == 2) RX2TotalTime += (millis() - ReconnectedMoment);
     
     while (!Connected) {
-       // Serial.print(millis());
-
         if (Blinking) BlinkLed();
         if (BoundFlag) KeepSbusHappy(); // Some SBUS systems timeout FAST, so resend old data to keep it happy
         delayMicroseconds(300);
