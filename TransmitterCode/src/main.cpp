@@ -9360,8 +9360,7 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                     ReadOneModel(ModelNumber);
                     if (BindNewModel){
                         Serial.println("Calling SAVING MODEL ID...");
-                        Procrastinate(1000); // test!
-                        BindNow(); // heer
+                        BindNow(); // heer TEST!
                     }
                 }
                 return;

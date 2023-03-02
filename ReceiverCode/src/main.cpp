@@ -659,7 +659,7 @@ void SaveFailSafeData()
 void DoBinding() 
 {
     GetNewPipe(); 
-    if (pcount < 4) return;
+  //  if (pcount < 2) return;
     if ((ModelMatched) && (!BoundFlag) && (Blinking)) 
     {
         BindModel();
@@ -695,16 +695,12 @@ void HangAbout(){
 
 void ReadBindPlug(){
         SetUKFrequencies();
-        GetOldPipe();
     if (!digitalRead(BINDPLUG_PIN)) { // Bind Plug needed to bind!
         Blinking = true;              // Blinking = binding to new TX
-        }
-    else{
+    }else{
         Blinking = false;             // Already bound
-        NewPipe = OldPipe;
         SaveNewBind = false;
-        SetNewPipe(); 
-        HangAbout(); // sending model ID
+        HangAbout(); // sending model ID?
         BindModel();
     }
 }
@@ -724,10 +720,10 @@ FLASHMEM void setup()
     pinMode(BINDPLUG_PIN, INPUT_PULLUP);
     digitalWrite(LED_PIN, HIGH);
     digitalWrite(LED_RED, LOW);
-    delay(2500); // Needed so that the Sensor hub can boot first and be detected
+    delay(2500);  // Needed so that the Sensor hub can boot first and be detected
     Wire.begin();
     delay(20);
-    ScanI2c(); // Detect what's connected
+    ScanI2c();    // Detect what's connected
     if (INA219Connected) ina219.begin();
     teensyMAC(MacAddress);
 
@@ -761,12 +757,10 @@ FLASHMEM void setup()
     InitCurrentRadio();
     ThisRadio = 2;
 #endif
-    ReadBindPlug();
-
     WatchDogConfig.window   = WATCHDOGMAXRATE; //  = MINIMUM RATE in milli seconds, (32ms to 522.232s) must be MUCH smaller than timeout
     WatchDogConfig.timeout  = WATCHDOGTIMEOUT; //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s)
     WatchDogConfig.callback = WatchDogCallBack;
-
+    ReadBindPlug();
     digitalWrite(LED_PIN, LOW);
 }
 
