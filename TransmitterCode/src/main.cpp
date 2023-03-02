@@ -1212,8 +1212,13 @@ void GreenLedOn()
     if (!LedWasGreen || LedIsBlinking) { // no need to repeat unless it is blinking
         if (!LedIsBlinking) {
             ShowComms();
-            if (AnnounceConnected) PlaySound(CONNECTEDMSG);
-        }
+            if (AnnounceConnected) {
+                PlaySound(CONNECTEDMSG);
+                ModelMatched = true;
+                BoundFlag    = true; // test!
+                Procrastinate(2000);
+            }
+            }
         if (UseLog) {
                 LogConnection();
         }
@@ -1891,7 +1896,7 @@ FASTRUN void ShowComms()
                             SendText(FrontView_Connected, Msg_CnctdBuddySlave);
                         }
                     }
-                    GreenLedOn();
+                    if (BoundFlag && ModelMatched) GreenLedOn();
                     StartInactvityTimeout();
                 } else {
                     SendText(FrontView_RXBV, na); // data not available
@@ -3672,18 +3677,17 @@ FLASHMEM void setup()
     } else {
             ErrorState = MODELSFILENOTFOUND; // if no file ... or no SD
     }
-
     teensyMAC(MacAddress);  // Get MAC address and use it as pipe address // heer
 
-   // for (int q = 0; q < 8;++q)MacAddress[q] = 0x12; // test! heer
-   
+  //  for (int q = 0; q < 8; ++q)MacAddress[q] = 0x12; // test! heer
 
-    TeensyMACAddPipe = (uint64_t)MacAddress[0] << 40;
+    TeensyMACAddPipe =  (uint64_t)MacAddress[0] << 40;
     TeensyMACAddPipe += (uint64_t)MacAddress[1] << 32;
     TeensyMACAddPipe += (uint64_t)MacAddress[2] << 24;
     TeensyMACAddPipe += (uint64_t)MacAddress[3] << 16;
     TeensyMACAddPipe += (uint64_t)MacAddress[4] << 8;
     TeensyMACAddPipe += (uint64_t)MacAddress[5];
+
     Wire.begin();
     ScanI2c();
     if (USE_INA219) ina219.begin();
@@ -3730,7 +3734,7 @@ if (UseTXModule)
     SendValue(FrontView_Mins, 0);
     SendValue(FrontView_Secs, 0);
     //  ***************************************************************************************
-     // SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
+    //  SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
     //  **   BUT then re-comment it!! Otherwise it will reset to same time on every boot up! **
     //  ***************************************************************************************
     BoundFlag = false;
@@ -9323,12 +9327,14 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
     if (ModelIdentified) {                                                //  We have both bits of Model ID?      
         
           if (ModelsMacUnion.Val64 == ModelsMacUnionSaved.Val64) {
-            if (AnnounceConnected) {
-                PlaySound(MMMATCHED);
-                Procrastinate(1000);
-                }
+
+                if (AnnounceConnected) {
+                PlaySound(MMMATCHED); // test!
+                Procrastinate(1500);
                 ModelMatched = true;                                      //  It's a match so start flying!
-                BindButton   = true; 
+                BindButton   = true;
+                }
+
         } else {
             if (AutoModelSelect){                                         //  It's not a match so maybe search for it.
                 ModelNumber = 0;
@@ -9396,11 +9402,11 @@ void  GetModelsMacAddress(){
     {
         case 0:
              ModelsMacUnion.Val32[0] = GetIntFromAckPayload();
-             Look(ModelsMacUnion.Val32[0]);
+            // Look(ModelsMacUnion.Val32[0]);
              break;
         case 1:
              ModelsMacUnion.Val32[1] = GetIntFromAckPayload();  
-             Look(ModelsMacUnion.Val32[1]);
+            // Look(ModelsMacUnion.Val32[1]);
              break;
         default:
              break;
@@ -9703,6 +9709,8 @@ void SendPPM(){ // Send a frame of PPM to Third party TX module
 /************************************************************************************************************/
 // LOOP
 /************************************************************************************************************/
+
+uint8_t      testt = 0;
 FASTRUN void loop()
 {
     
@@ -9729,7 +9737,6 @@ FASTRUN void loop()
 #ifdef TXMODULESUPPORT
             if (!UseTXModule) {
                 SendData();         // local TX
-                 
             }else{
                  SendPPM();         // for TX module
                  NewCompressNeeded = false;

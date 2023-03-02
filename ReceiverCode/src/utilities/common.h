@@ -13,6 +13,7 @@
 #include <SBUS.h>
 #include "utilities/radio.h"
 #include <PulsePosition.h>
+#include <Watchdog_t4.h>
 
 #define RXVERSION_MAJOR   2
 #define RXVERSION_MINOR   1
@@ -28,6 +29,19 @@
 //**************************************************************************************************************************
  #define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< ****
 //**************************************************************************************************************************
+
+
+// **************************************************************************
+//                            WATCHDOG PARAMETERS                           *
+//***************************************************************************
+
+#define WATCHDOGTIMEOUT 10000 // 10 Seconds before reboot (32ms -> 500 seconds)
+#define KICKRATE        1000  // Kick once a second (must be between WATCHDOGMAXRATE and WATCHDOGTIMEOUT)
+#define WATCHDOGMAXRATE 500   // 500 ms secs between kicks is max rate allowed
+//**************************************************************************************************************************
+
+
+
 
 #define SENSOR_HUB_I2C_ADDRESS 8
 #define HOPTIME                80  // ms between channel changes 

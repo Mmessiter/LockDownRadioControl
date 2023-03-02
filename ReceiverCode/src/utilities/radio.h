@@ -54,8 +54,8 @@ extern float    AngleGPS;
 extern float    AltitudeGPS;
 extern float    DistanceGPS;
 extern float    CourseToGPS;
-extern uint8_t  MacAddress[8];
-extern uint8_t  TheReceivedPipe[8];
+extern uint8_t  MacAddress[9];
+extern uint8_t  TheReceivedPipe[9];
 extern uint32_t NewConnectionMoment;
 extern void BindModel();
 extern void FailSafe(); // defined in main.cpp
@@ -162,6 +162,7 @@ void GetNewPipe()
 {
     if (!NewData) return;
     NewData = false;
+ 
     NewPipeMaybe =  (uint64_t)ReceivedData[0] << 56;
     NewPipeMaybe += (uint64_t)ReceivedData[1] << 48;
     NewPipeMaybe += (uint64_t)ReceivedData[2] << 40;
@@ -170,12 +171,14 @@ void GetNewPipe()
     NewPipeMaybe += (uint64_t)ReceivedData[5] << 16;
     NewPipeMaybe += (uint64_t)ReceivedData[6] << 8;
     NewPipeMaybe += (uint64_t)ReceivedData[7];
-    if (ValidateNewPipe()) { // was this pipe corrupted?
+
+    if (ValidateNewPipe())
+    { // was this pipe corrupted?
         NewPipe = NewPipeMaybe;
         for (int i = 0; i < 8; ++i){
           TheReceivedPipe[i] = ReceivedData[i];
         }
-  }
+    }
     ++pcount; // inc pipes received
 }
 
@@ -236,13 +239,31 @@ FLASHMEM void InitCurrentRadio()
 
 void TryToConnectNow()
 {
-    CurrentRadio->startListening();
-    uint32_t ATimer = millis();
-    while ((!CurrentRadio->available()) && (millis() - ATimer) < LISTEN_PERIOD) {
-    }
-    Connected = CurrentRadio->available();
+    uint32_t ATimer;
+  //  uint8_t  TimeUsed = 0;
 
-   // if (Connected) Serial.println(millis() - ATimer);
+   
+    delayMicroseconds(250);
+    CurrentRadio->startListening();
+    ATimer = millis();
+    
+  //  Serial.print(" Re-connection time used = ");
+
+    while ((!CurrentRadio->available()) && (millis() - ATimer) < LISTEN_PERIOD) {delayMicroseconds(10);}// *** > Lock up sometimes happens here!! < ***
+    
+   // TimeUsed = (millis() - ATimer);
+    
+    Connected = CurrentRadio->available();
+    /*
+    if ((TimeUsed < LISTEN_PERIOD) || (Connected)){
+        Serial.print(TimeUsed);
+        Serial.println("ms. Connected :)");
+    }
+    else {
+        Serial.print(TimeUsed);
+        Serial.println("ms. Not connected :(");
+    } 
+    */
 }
 
 /************************************************************************************************************/
@@ -329,33 +350,41 @@ FASTRUN void Reconnect()
     uint8_t PreviousRadio    = ThisRadio;
     uint8_t Attempts         = 0;
 
-   
-
     if (ThisRadio == 1) RX1TotalTime += (millis() - ReconnectedMoment); // keep track of how long on each
     if (ThisRadio == 2) RX2TotalTime += (millis() - ReconnectedMoment);
     
     while (!Connected) {
+       // Serial.print(millis());
+
         if (Blinking) BlinkLed();
         if (BoundFlag) KeepSbusHappy(); // Some SBUS systems timeout FAST, so resend old data to keep it happy
+        delayMicroseconds(300);
         CurrentRadio->stopListening();
         CurrentRadio->flush_tx(); 
         CurrentRadio->flush_rx(); 
-        
-        delayMicroseconds(1000);                             // NEEDED!
-        
+        delay(3);                             // NEEDED!
         ReconnectChannel = *(FHSSRecoveryPointer + ReconnectIndex); // Get a reconnect channel
         ++ReconnectIndex;
         if (ReconnectIndex >= RECONNECT_CHANNELS_COUNT + RECONNECT_CHANNELS_START) ReconnectIndex = RECONNECT_CHANNELS_START;
         CurrentRadio->setChannel(ReconnectChannel);
+        delay(1); 
         ++Attempts;
-        if (Attempts < 3) TryToConnectNow();
+         
+       
+        if (Attempts < 3) {
+            TryToConnectNow();
+        }
+       
         if (!Connected) {
            
+
 #ifdef SECOND_TRANSCEIVER
+          
             if (Attempts >= 3) {
                 TryTheOtherTransceiver(ReconnectChannel);
                 Attempts = 0;
             }
+            
 #else
             if (Attempts >= 3) {
                 ProdRadio(ReconnectChannel); // This avoids a lockup of the nRF24L01+ !
@@ -365,11 +394,11 @@ FASTRUN void Reconnect()
             if ((millis() - SearchStartTime) > FAILSAFE_TIMEOUT) {
                 if (!FailSafeSent) FailSafe();
             }
+            
         }
     } // cannot pass here if not connected
 
      // must have connected by here
-    
     FailSafeSent = false;
     if (PreviousRadio != ThisRadio) ++RadioSwaps; // Count the radio swaps
     ReconnectedMoment = millis();                 // Save this moment
@@ -379,8 +408,9 @@ FASTRUN void Reconnect()
     }
     if (FailedSafe){
         FailedSafe = false;
-        NewConnectionMoment = millis();
+        NewConnectionMoment = millis();   
     }
+    
 #ifdef DB_RXTIMERS
     Serial.print("Transceiver1 use so far: ");
     Serial.print(RX1TotalTime / 1000);
@@ -485,12 +515,9 @@ void  SendMacAddress()
        switch (AckPayload.Purpose) {
            case 0:
                SendIntToAckPayload(ThisUnion.Val32[0]);
-               Serial.println(ThisUnion.Val32[0]);
                break;
            case 1:
                 SendIntToAckPayload(ThisUnion.Val32[1]);
-                Serial.println(ThisUnion.Val32[1]);
-                Serial.println(" ");
                break;
            default:
                break;

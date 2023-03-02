@@ -48,7 +48,6 @@ FASTRUN void TryOtherPipe()
 
 FASTRUN void BufferTeensyMACAddPipe()
 {
-
     SendBuffer[0] = (uint8_t)((TeensyMACAddPipe >> 56) & 0xFF); // if not yet bound, send pipe
     SendBuffer[1] = (uint8_t)((TeensyMACAddPipe >> 48) & 0xFF);
     SendBuffer[2] = (uint8_t)((TeensyMACAddPipe >> 40) & 0xFF);
@@ -57,6 +56,7 @@ FASTRUN void BufferTeensyMACAddPipe()
     SendBuffer[5] = (uint8_t)((TeensyMACAddPipe >> 16) & 0xFF);
     SendBuffer[6] = (uint8_t)((TeensyMACAddPipe >> 8) & 0xFF);
     SendBuffer[7] = (uint8_t)((TeensyMACAddPipe)&0xFF);
+   
 }
 
 /************************************************************************************************************/

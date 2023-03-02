@@ -88,9 +88,9 @@ bool            SensorHubDead   = false;
 uint32_t        NewConnectionMoment    = 0;
 bool            QNHSent         = false;
 bool            FirstLostPacket = true;
-uint8_t         MacAddress[8]   = {0, 0, 0, 0, 0, 0, 0, 0};
+uint8_t         MacAddress[9]   = {0, 0, 0, 0, 0, 0, 0, 0,0};
 bool            ModelMatched    = false;
-uint8_t         TheReceivedPipe[8];
+uint8_t         TheReceivedPipe[9];
 bool            FirstConnection = true;
 bool            ReadyToUseData  = false;
 bool            FailedSafe = true;  // Starting up as the same as after failsafe
@@ -104,6 +104,10 @@ bool            Blinking                    = false;
 uint8_t         BlinkValue                  = 1;
 uint32_t        BlinkTimer                  = 0;
 uint8_t         MacAddressSentCounter        = 0;
+WDT_T4<WDT3>    TeensyWatchDog;
+WDT_timings_t   WatchDogConfig;
+uint32_t        LastDogKick     = 0;
+
 /************************************************************************************************************/
 
 void LoadFailSafeData()
@@ -139,6 +143,20 @@ void MapToSBUS()
 }
 
 /************************************************************************************************************/
+
+
+void KickTheDog()
+{
+    if (millis() - LastDogKick >= KICKRATE) {
+        TeensyWatchDog.feed();
+        LastDogKick = millis();
+     
+    }
+}
+
+
+/************************************************************************************************************/
+
 
 void MoveServos()
 {
@@ -261,24 +279,24 @@ void AttachServos()
 
 void BindModel()
 {
-    ThisPipe = NewPipe;  // test!
+    ThisPipe = NewPipe;
     OldPipe  = NewPipe;
     digitalWrite(LED_RED, HIGH);
     CurrentRadio->stopListening();
     delayMicroseconds(250);
     SetNewPipe(); // change to bound pipe <<< ***************************************
     BoundFlag   = true;
-    Blinking    = false;
     ModelMatched = true;
     BindNow      = 0;
 
-    if (SaveNewBind) {
+    if (Blinking) {
         for (uint8_t i = 0; i < 8; ++i) {
             EEPROM.update(i + BIND_EEPROM_OFFSET, TheReceivedPipe[i]);
             delay(10);
         }
-      Serial.println("TX ID SAVED");
+     //   Serial.println("TX ID SAVED");
     }
+    Blinking    = false; 
     uint32_t t = millis();
     while (millis() - t < 1500) ReceiveData(); // this avoid initial glitch on reconnect 
     if (FirstConnection) {
@@ -287,6 +305,7 @@ void BindModel()
     }
     ReadyToUseData = true; 
     SaveNewBind = false;
+    Serial.println("BOUND!"); 
 }
 // ***************************************************************************************************************************************************
 void SendToSensorHub(char m[])
@@ -637,24 +656,22 @@ void SaveFailSafeData()
 }
 
 /************************************************************************************************************/
-void ShowPipes()
-{ // only for debugging
-//#ifdef DB_BIND
-    Serial.print("NewPipe: ");
-    Serial.println((int)NewPipe, HEX);
-    Serial.print("OldPipe: ");
-    Serial.println((int)OldPipe, HEX);
-//#endif
-}
-/************************************************************************************************************/
 void DoBinding() 
 {
     GetNewPipe(); 
-    if (pcount < 4) return; // test!
+    if (pcount < 4) return;
     if ((ModelMatched) && (!BoundFlag) && (Blinking)) 
     {
         BindModel();
     }
+}
+
+
+/************************************************************************************************************/
+
+void WatchDogCallBack()
+{
+    // Serial.println("RESETTING ...");
 }
 /************************************************************************************************************/
 
@@ -714,7 +731,7 @@ FLASHMEM void setup()
     if (INA219Connected) ina219.begin();
     teensyMAC(MacAddress);
 
-  //  for (int i = 0; i < 8; ++i) MacAddress[i] = 0x0B; // force new ID fo test! heer
+   // for (int i = 0; i < 8; ++i) MacAddress[i] = 0x0B; // force new ID fo test! heer
 
     CurrentRadio = &Radio1;
     ThisPipe     = 0xBABE1E5420LL;
@@ -745,6 +762,11 @@ FLASHMEM void setup()
     ThisRadio = 2;
 #endif
     ReadBindPlug();
+
+    WatchDogConfig.window   = WATCHDOGMAXRATE; //  = MINIMUM RATE in milli seconds, (32ms to 522.232s) must be MUCH smaller than timeout
+    WatchDogConfig.timeout  = WATCHDOGTIMEOUT; //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s)
+    WatchDogConfig.callback = WatchDogCallBack;
+
     digitalWrite(LED_PIN, LOW);
 }
 
@@ -768,9 +790,11 @@ void BlinkLed() {
 
 void loop()
 {
+    KickTheDog();
+    
+   // Serial.print("Loop: ");
+   // Serial.println(millis());
     ReceiveData();
-   // Serial.print (millis());
-   // Serial.println("  OK");
     if (Blinking) BlinkLed();
     if (BoundFlag && Connected && ModelMatched) { // Only move servos if everything is good
         if (millis() - SBUSTimer >= SBUSRATE) {   // SBUSRATE rate is also good enough for servo rate
@@ -780,6 +804,10 @@ void loop()
         if (FailSafeSave) SaveFailSafeData();
     }
     else {
-         if (!BoundFlag) DoBinding();
+         if (!BoundFlag) 
+         {
+           DoBinding();
+          
+         }
     }
 }
