@@ -59,7 +59,7 @@ var radio_8h =
     [ "Interations", "radio_8h.html#ac8e10a08e9da70138c4a8459c6902d7d", null ],
     [ "LatitudeGPS", "radio_8h.html#a79c2bfabc0682301ec238954845e1e81", null ],
     [ "LongitudeGPS", "radio_8h.html#afabe4c9d9760f8606aa408474e3d626c", null ],
-    [ "MacAddress", "radio_8h.html#ad343661d8a4343426f171e531b9d8aa9", null ],
+    [ "MacAddress", "radio_8h.html#aa3c6638e494bc201c243565c9e955e70", null ],
     [ "MacAddressSentCounter", "radio_8h.html#a2268481553f865838b04545b0928359a", null ],
     [ "MinsGPS", "radio_8h.html#ad3b8d1f00f2046a53bd3c5c997af2abb", null ],
     [ "ModelMatched", "radio_8h.html#abafce2220b6ad57b4be99289a7953a0c", null ],
@@ -90,7 +90,7 @@ var radio_8h =
     [ "SecsGPS", "radio_8h.html#a79832b04c40823abb496f503a264e7d5", null ],
     [ "SensorHubConnected", "radio_8h.html#af5ed7b5350f1500e976e56af6f24efb0", null ],
     [ "SpeedGPS", "radio_8h.html#af02319a1e0d8c0c651f23e49acc228f8", null ],
-    [ "TheReceivedPipe", "radio_8h.html#ae5a33f9a5f131b46460efad8f0e8e8b5", null ],
+    [ "TheReceivedPipe", "radio_8h.html#aa7db1522659b047ba9cac82fee244e8d", null ],
     [ "ThisPipe", "radio_8h.html#a88d2add9e7ca58e7218870f887b25859", null ],
     [ "ThisRadio", "radio_8h.html#a25cc3bb5cb94f4bbef0f2c5b79140c20", null ],
     [ "YearGPS", "radio_8h.html#a4a1012a9dfe5632ac326ce712f311472", null ]

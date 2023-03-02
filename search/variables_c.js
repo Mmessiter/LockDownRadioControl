@@ -1,7 +1,7 @@
 var searchData=
 [
   ['lastbuffer_0',['LastBuffer',['../TransmitterCode_2src_2main_8cpp.html#ae002bd879607e8a3f7722ad78a9aae73',1,'main.cpp']]],
-  ['lastdogkick_1',['LastDogKick',['../TransmitterCode_2src_2main_8cpp.html#a5cbc9265d072e0d0eefb7337baa6c4e2',1,'main.cpp']]],
+  ['lastdogkick_1',['LastDogKick',['../ReceiverCode_2src_2main_8cpp.html#a5cbc9265d072e0d0eefb7337baa6c4e2',1,'LastDogKick():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a5cbc9265d072e0d0eefb7337baa6c4e2',1,'LastDogKick():&#160;main.cpp']]],
   ['lastfileinview_2',['LastFileInView',['../TransmitterCode_2src_2main_8cpp.html#a77a004fce053dac15e7c389907d142b4',1,'main.cpp']]],
   ['lastfouronly_3',['LastFourOnly',['../TransmitterCode_2src_2main_8cpp.html#a97701cb4182125a490f24c210f4d3e24',1,'main.cpp']]],
   ['lastlineposition_4',['LastLinePosition',['../TransmitterCode_2src_2main_8cpp.html#af4c308fd737536a055254fb9858ced91',1,'main.cpp']]],
@@ -15,7 +15,7 @@ var searchData=
   ['lastseconds_12',['LastSeconds',['../TransmitterCode_2src_2main_8cpp.html#a461bdfbe0df771f541b8872ac04bb717',1,'main.cpp']]],
   ['lastshowtime_13',['LastShowTime',['../TransmitterCode_2src_2main_8cpp.html#ae818c99aa6e4a19030a586da53a9dcc4',1,'main.cpp']]],
   ['lasttimeread_14',['LastTimeRead',['../TransmitterCode_2src_2main_8cpp.html#ad70c8744223914d4350b199002cec7b7',1,'main.cpp']]],
-  ['latitudegps_15',['LatitudeGPS',['../radio_8h.html#a79c2bfabc0682301ec238954845e1e81',1,'LatitudeGPS():&#160;main.cpp'],['../ReceiverCode_2src_2main_8cpp.html#a79c2bfabc0682301ec238954845e1e81',1,'LatitudeGPS():&#160;main.cpp']]],
+  ['latitudegps_15',['LatitudeGPS',['../ReceiverCode_2src_2main_8cpp.html#a79c2bfabc0682301ec238954845e1e81',1,'LatitudeGPS():&#160;main.cpp'],['../radio_8h.html#a79c2bfabc0682301ec238954845e1e81',1,'LatitudeGPS():&#160;main.cpp']]],
   ['ledbrightness_16',['LEDBrightness',['../TransmitterCode_2src_2main_8cpp.html#a77915a48e3521d96d558aee6ea3549c8',1,'main.cpp']]],
   ['ledisblinking_17',['LedIsBlinking',['../TransmitterCode_2src_2main_8cpp.html#a733907c842f15a6a6c1c0ce292f55ba2',1,'main.cpp']]],
   ['ledwasgreen_18',['LedWasGreen',['../RadioFunctions_8h.html#abe57ee67b36530a7bde7680e5b6e40f8',1,'LedWasGreen():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#abe57ee67b36530a7bde7680e5b6e40f8',1,'LedWasGreen():&#160;main.cpp']]],
