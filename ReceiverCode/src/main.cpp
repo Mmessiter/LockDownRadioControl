@@ -288,13 +288,13 @@ void BindModel()
     BoundFlag   = true;
     ModelMatched = true;
     BindNow      = 0;
-
+    Serial.println("BOUND!"); 
     if (Blinking) {
         for (uint8_t i = 0; i < 8; ++i) {
             EEPROM.update(i + BIND_EEPROM_OFFSET, TheReceivedPipe[i]);
             delay(10);
         }
-     //   Serial.println("TX ID SAVED");
+        Serial.println("TX ID SAVED");
     }
     Blinking    = false; 
     uint32_t t = millis();
@@ -305,7 +305,7 @@ void BindModel()
     }
     ReadyToUseData = true; 
     SaveNewBind = false;
-    Serial.println("BOUND!"); 
+    
 }
 // ***************************************************************************************************************************************************
 void SendToSensorHub(char m[])
@@ -659,7 +659,8 @@ void SaveFailSafeData()
 void DoBinding() 
 {
     GetNewPipe(); 
-  //  if (pcount < 2) return;
+    if (pcount < 4) return;
+   
     if ((ModelMatched) && (!BoundFlag) && (Blinking)) 
     {
         BindModel();
@@ -726,9 +727,7 @@ FLASHMEM void setup()
     ScanI2c();    // Detect what's connected
     if (INA219Connected) ina219.begin();
     teensyMAC(MacAddress);
-
-   // for (int i = 0; i < 8; ++i) MacAddress[i] = 0x0B; // force new ID fo test! heer
-
+    for (int i = 0; i < 8; ++i) MacAddress[i] = 0x0B; // force new ID fo test! heer
     CurrentRadio = &Radio1;
     ThisPipe     = 0xBABE1E5420LL;
     if (digitalRead(BINDPLUG_PIN)) { // ie no bind plug, so initialise to bound pipe

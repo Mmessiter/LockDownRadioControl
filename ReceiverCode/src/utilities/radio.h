@@ -175,8 +175,8 @@ void GetNewPipe()
     if (ValidateNewPipe())
     { // was this pipe corrupted?
         NewPipe = NewPipeMaybe;
-        for (int i = 0; i < 8; ++i){
-          TheReceivedPipe[i] = ReceivedData[i];
+        for (int i = 0; i < 8; ++i) {
+            TheReceivedPipe[i] = ReceivedData[i];
         }
     }
     ++pcount; // inc pipes received
