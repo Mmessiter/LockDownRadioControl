@@ -511,6 +511,7 @@ extern void          CheckPowerOffButton();
 extern void          LoadFileSelector();
 extern void          LoadModelSelector();
 extern void          PlaySound(uint16_t TheSound);
+extern uint8_t       CheckPipeNibbles(uint8_t b);
 
 /*********************************************************************************************************************************/
 // function prototypes

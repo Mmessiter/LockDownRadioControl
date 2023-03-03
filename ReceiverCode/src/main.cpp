@@ -288,13 +288,30 @@ void BindModel()
     BoundFlag   = true;
     ModelMatched = true;
     BindNow      = 0;
+
+#ifdef DB_BIND
     Serial.println("BOUND!"); 
+#endif
     if (Blinking) {
-        for (uint8_t i = 0; i < 8; ++i) {
+
+#ifdef DB_BIND
+            Serial.println("SAVING RECEIVED PIPE:");
+#endif
+
+        for (uint8_t i = 0; i < 6; ++i) {
             EEPROM.update(i + BIND_EEPROM_OFFSET, TheReceivedPipe[i]);
-            delay(10);
+
+#ifdef DB_BIND
+            Serial.print(TheReceivedPipe[i], HEX);
+            Serial.print(" ");
+#endif
+
         }
-        Serial.println("TX ID SAVED");
+
+#ifdef DB_BIND
+            Serial.println("");
+            Serial.println("TX PIPE SAVED");
+#endif
     }
     Blinking    = false; 
     uint32_t t = millis();
@@ -307,6 +324,17 @@ void BindModel()
     SaveNewBind = false;
     
 }
+
+/************************************************************************************************************/
+void ReadSavedPipe() // save only 6 bytes
+{
+    for (uint8_t i = 0; i < 6; ++i) {
+        SavedPipeAddress[i] = EEPROM.read(i+BIND_EEPROM_OFFSET); // uses first 6 bytes only.
+    }
+}
+
+
+
 // ***************************************************************************************************************************************************
 void SendToSensorHub(char m[])
 {
@@ -658,13 +686,17 @@ void SaveFailSafeData()
 /************************************************************************************************************/
 void DoBinding() 
 {
+#ifdef DB_BIND
+   // Serial.println("DoBinding()");
+#endif
+
     GetNewPipe(); 
-    if (pcount < 4) return;
+   // if (pcount < 4) return;
    
-    if ((ModelMatched) && (!BoundFlag) && (Blinking)) 
-    {
-        BindModel();
-    }
+  //  if ((ModelMatched) && (!BoundFlag) && (Blinking)) 
+  //  {
+  //      BindModel();
+  //  }
 }
 
 
@@ -698,6 +730,9 @@ void ReadBindPlug(){
         SetUKFrequencies();
     if (!digitalRead(BINDPLUG_PIN)) { // Bind Plug needed to bind!
         Blinking = true;              // Blinking = binding to new TX
+#ifdef DB_BIND
+        Serial.println("Bind plug detected.");
+#endif
     }else{
         Blinking = false;             // Already bound
         SaveNewBind = false;
@@ -727,7 +762,7 @@ FLASHMEM void setup()
     ScanI2c();    // Detect what's connected
     if (INA219Connected) ina219.begin();
     teensyMAC(MacAddress);
-    for (int i = 0; i < 8; ++i) MacAddress[i] = 0x0B; // force new ID fo test! heer
+   // for (int i = 0; i < 8; ++i) MacAddress[i] = 0x0B; // force new ID fo test! heer
     CurrentRadio = &Radio1;
     ThisPipe     = 0xBABE1E5420LL;
     if (digitalRead(BINDPLUG_PIN)) { // ie no bind plug, so initialise to bound pipe
@@ -784,9 +819,6 @@ void BlinkLed() {
 void loop()
 {
     KickTheDog();
-    
-   // Serial.print("Loop: ");
-   // Serial.println(millis());
     ReceiveData();
     if (Blinking) BlinkLed();
     if (BoundFlag && Connected && ModelMatched) { // Only move servos if everything is good
@@ -799,8 +831,7 @@ void loop()
     else {
          if (!BoundFlag) 
          {
-           DoBinding();
-          
+                DoBinding();
          }
     }
 }

@@ -133,8 +133,8 @@ uint8_t  MixNumber        = 0;
 uint8_t  CurrentView      = FRONTVIEW;
 uint8_t  SavedCurrentView = FRONTVIEW;
 uint64_t DefaultPipe      = DEFAULTPIPEADDRESS;  //          Default Radio pipe address
-uint64_t TeensyMACAddPipe          = DEFAULTPIPEADDRESS;  //          New Radio pipe address for binding will come from MAC address
-char     TextIn[CHARSMAX + 2];                   // spare space
+uint64_t TeensyMACAddPipe = DEFAULTPIPEADDRESS;  //          New Radio pipe address for binding will come from MAC address
+char     TextIn[CHARSMAX + 2];                   //          Spare space
 uint16_t PacketsPerSecond = 0;
 uint8_t  PacketsHistoryBuffer[PERFECTPACKETSPERSECOND * MAXSHOWCOMMSSESCONDS]; // Here we record some history
 uint16_t PacketsHistoryIndex    = 0;
@@ -3635,6 +3635,28 @@ void ShowLogFile(uint8_t StartLine)
 
 
 /*********************************************************************************************************************************/
+// This function gets the unique MAC address of the Teensy 4.1
+// And also fixes it so that it's a suitable Pipe address for the nRF24L01
+
+void GetTeensyMacAdress(){
+
+    teensyMAC(MacAddress);                                // Get MAC address 
+
+    for (int i = 0; i < 8; ++i){
+        MacAddress[i] = CheckPipeNibbles(MacAddress[i]);  // Fix if needed
+    }
+    //  for (int q = 0; q < 8; ++q)MacAddress[q] = 0x12; // test! heer
+
+    TeensyMACAddPipe = (uint64_t)MacAddress[0]  << 40;
+    TeensyMACAddPipe += (uint64_t)MacAddress[1] << 32;
+    TeensyMACAddPipe += (uint64_t)MacAddress[2] << 24;
+    TeensyMACAddPipe += (uint64_t)MacAddress[3] << 16;
+    TeensyMACAddPipe += (uint64_t)MacAddress[4] << 8;
+    TeensyMACAddPipe += (uint64_t)MacAddress[5];
+
+}
+
+/*********************************************************************************************************************************/
 // SETUP
 /*********************************************************************************************************************************/
 FLASHMEM void setup()
@@ -3677,16 +3699,8 @@ FLASHMEM void setup()
     } else {
             ErrorState = MODELSFILENOTFOUND; // if no file ... or no SD
     }
-    teensyMAC(MacAddress);  // Get MAC address and use it as pipe address // heer
-
-  //  for (int q = 0; q < 8; ++q)MacAddress[q] = 0x12; // test! heer
-
-    TeensyMACAddPipe =  (uint64_t)MacAddress[0] << 40;
-    TeensyMACAddPipe += (uint64_t)MacAddress[1] << 32;
-    TeensyMACAddPipe += (uint64_t)MacAddress[2] << 24;
-    TeensyMACAddPipe += (uint64_t)MacAddress[3] << 16;
-    TeensyMACAddPipe += (uint64_t)MacAddress[4] << 8;
-    TeensyMACAddPipe += (uint64_t)MacAddress[5];
+    GetTeensyMacAdress();
+    
 
     Wire.begin();
     ScanI2c();

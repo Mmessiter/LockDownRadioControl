@@ -71,7 +71,8 @@ extern uint16_t     pcount;
 extern bool         ModelMatched;
 extern bool         Blinking;
 extern void         BlinkLed();
-extern  uint8_t MacAddressSentCounter;
+extern uint8_t MacAddressSentCounter;
+extern void ReadSavedPipe();
 
 /** AckPayload Stucture for data returned to transmitter. */
 struct Payload
@@ -116,14 +117,6 @@ void SetNewPipe()
     CurrentRadio->openReadingPipe(1, ThisPipe);
 }
 
-/************************************************************************************************************/
-
-void ReadSavedPipe()
-{
-    for (uint8_t i = 0; i < 8; ++i) {
-        SavedPipeAddress[i] = EEPROM.read(i+BIND_EEPROM_OFFSET); // uses first 8 bytes only.
-    }
-}
 
 /************************************************************************************************************/
 
@@ -134,6 +127,9 @@ void SendVersionNumberToAckPayload() // AND which radio transceiver is currently
     AckPayload.Byte3 = RXVERSION_MINOR;
     AckPayload.Byte4 = RXVERSION_MINIMUS;
 }
+
+bool PipeSeen = false;
+
 /************************************************************************************************************/
 // This function compares the just-received pipe with several of the previous ones
 // if it matches most of them then its probably not corrupted. 
@@ -142,7 +138,7 @@ bool ValidateNewPipe(){
     
     uint8_t MatchedCounter = 0;
     
-    if (pcount < 4) return false;  // ignore first few
+    if (pcount < 2) return false;  // ignore first few
     
     PreviousNewPipes[PreviousNewPipesIndex] = NewPipeMaybe;
     PreviousNewPipesIndex++;
@@ -158,26 +154,57 @@ bool ValidateNewPipe(){
 
 /************************************************************************************************************/
 
-void GetNewPipe() 
-{
-    if (!NewData) return;
-    NewData = false;
- 
-    NewPipeMaybe =  (uint64_t)ReceivedData[0] << 56;
-    NewPipeMaybe += (uint64_t)ReceivedData[1] << 48;
-    NewPipeMaybe += (uint64_t)ReceivedData[2] << 40;
-    NewPipeMaybe += (uint64_t)ReceivedData[3] << 32;
-    NewPipeMaybe += (uint64_t)ReceivedData[4] << 24;
-    NewPipeMaybe += (uint64_t)ReceivedData[5] << 16;
-    NewPipeMaybe += (uint64_t)ReceivedData[6] << 8;
-    NewPipeMaybe += (uint64_t)ReceivedData[7];
+uint8_t CheckPipeNibbles(uint8_t b){ // heer
 
-    if (ValidateNewPipe())
-    { // was this pipe corrupted?
-        NewPipe = NewPipeMaybe;
-        for (int i = 0; i < 8; ++i) {
-            TheReceivedPipe[i] = ReceivedData[i];
+    uint8_t temp;
+    uint8_t BadLowerNibble[4]       = {0x05, 0x0a, 0x02, 0x01};
+    uint8_t BadHigherNibble[4]      = {0x50, 0xa0, 0x20, 0x10};
+    uint8_t BetterLowerNibble[4]    = {0x03, 0x04, 0x06, 0x07};
+    uint8_t BetterHigherNibble[4]   = {0x30, 0x40, 0x60, 0x70};
+
+    if (!b)                                     // ********** check for a zero **********
+        {               
+            return 0x36;                        // return an acceptable byte
         }
+    for (int i = 0; i < 4; ++i) {               // ********** check LOWER nibble **********
+        if ((b & 0x0f) == BadLowerNibble[i])
+        {
+            temp = b & 0xf0;                    // save only the hi nibble in temp
+            b    = temp | BetterLowerNibble[i]; // put an acceptable nibble into lower nibble
+        }
+    }
+    for (int i = 0; i < 4;++i){                 // ********** check HIGHER nibble **********
+        if ((b & 0xf0) == BadHigherNibble[i]) 
+        {
+            temp = b & 0x0f;                    // save only the Low nibble in temp
+            b = temp | BetterHigherNibble[i];   // put an acceptable nibble into Higher nibble
+        }
+    }
+    return b;
+}
+/************************************************************************************************************/
+
+
+void GetNewPipe()  // from TX
+{
+     if (!NewData) return;
+     NewData = false;
+   
+    NewPipeMaybe = (uint64_t)ReceivedData[0]  << 40;
+    NewPipeMaybe += (uint64_t)ReceivedData[1] << 32;
+    NewPipeMaybe += (uint64_t)ReceivedData[2] << 24;
+    NewPipeMaybe += (uint64_t)ReceivedData[3] << 16;
+    NewPipeMaybe += (uint64_t)ReceivedData[4] << 8;
+    NewPipeMaybe += (uint64_t)ReceivedData[5];
+
+    if (ValidateNewPipe())  // was this pipe corrupted?
+    {
+        NewPipe      = NewPipeMaybe;
+        for (int i = 0; i < 6; ++i) {
+            TheReceivedPipe[i] = ReceivedData[i];          
+        }
+        BindModel();
+        PipeSeen = true;
     }
     ++pcount; // inc pipes received
 }
@@ -192,14 +219,23 @@ void GetNewPipe()
 FLASHMEM void GetOldPipe()
 {
     ReadSavedPipe();
-    OldPipe = (uint64_t)SavedPipeAddress[0] << 56;
-    OldPipe += (uint64_t)SavedPipeAddress[1] << 48;
-    OldPipe += (uint64_t)SavedPipeAddress[2] << 40;
-    OldPipe += (uint64_t)SavedPipeAddress[3] << 32;
-    OldPipe += (uint64_t)SavedPipeAddress[4] << 24;
-    OldPipe += (uint64_t)SavedPipeAddress[5] << 16;
-    OldPipe += (uint64_t)SavedPipeAddress[6] << 8;
-    OldPipe += (uint64_t)SavedPipeAddress[7];
+    
+    OldPipe  = (uint64_t)SavedPipeAddress[0] << 40;
+    OldPipe += (uint64_t)SavedPipeAddress[1] << 32;
+    OldPipe += (uint64_t)SavedPipeAddress[2] << 24;
+    OldPipe += (uint64_t)SavedPipeAddress[3] << 16;
+    OldPipe += (uint64_t)SavedPipeAddress[4] << 8;
+    OldPipe += (uint64_t)SavedPipeAddress[5];
+    
+#ifdef DB_BIND
+    Serial.println("Loading PIPE:");
+    for (int i = 0; i < 6; ++i){
+        Serial.print(SavedPipeAddress[i], HEX);
+        Serial.print(" ");
+    }
+    Serial.println(" ");
+#endif
+    
 }
 
 /************************************************************************************************************/

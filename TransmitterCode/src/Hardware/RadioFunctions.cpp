@@ -43,20 +43,52 @@ FASTRUN void TryOtherPipe()
         SetThePipe(TeensyMACAddPipe); // heer
     }
 }
+/************************************************************************************************************/
+
+uint8_t CheckPipeNibbles(uint8_t b){ // heer
+
+    uint8_t temp;
+    uint8_t BadLowerNibble[4]       = {0x05, 0x0a, 0x02, 0x01};
+    uint8_t BadHigherNibble[4]      = {0x50, 0xa0, 0x20, 0x10};
+    uint8_t BetterLowerNibble[4]    = {0x03, 0x04, 0x06, 0x07};
+    uint8_t BetterHigherNibble[4]   = {0x30, 0x40, 0x60, 0x70};
+
+    if (!b)                                     // ********** check for a zero **********
+        {               
+            return 0x36;                        // return an acceptable byte
+        }
+    for (int i = 0; i < 4; ++i) {               // ********** check LOWER nibble **********
+        if ((b & 0x0f) == BadLowerNibble[i])
+        {
+            temp = b & 0xf0;                    // save only the hi nibble in temp
+            b    = temp | BetterLowerNibble[i]; // put an acceptable nibble into lower nibble
+        }
+    }
+    for (int i = 0; i < 4;++i){                 // ********** check HIGHER nibble **********
+        if ((b & 0xf0) == BadHigherNibble[i]) 
+        {
+            temp = b & 0x0f;                    // save only the Low nibble in temp
+            b = temp | BetterHigherNibble[i];   // put an acceptable nibble into Higher nibble
+        }
+    }
+    return b;
+}
 
 /************************************************************************************************************/
 
 FASTRUN void BufferTeensyMACAddPipe()
 {
-    SendBuffer[0] = (uint8_t)((TeensyMACAddPipe >> 56) & 0xFF); // if not yet bound, send pipe
-    SendBuffer[1] = (uint8_t)((TeensyMACAddPipe >> 48) & 0xFF);
-    SendBuffer[2] = (uint8_t)((TeensyMACAddPipe >> 40) & 0xFF);
-    SendBuffer[3] = (uint8_t)((TeensyMACAddPipe >> 32) & 0xFF);
-    SendBuffer[4] = (uint8_t)((TeensyMACAddPipe >> 24) & 0xFF);
-    SendBuffer[5] = (uint8_t)((TeensyMACAddPipe >> 16) & 0xFF);
-    SendBuffer[6] = (uint8_t)((TeensyMACAddPipe >> 8) & 0xFF);
-    SendBuffer[7] = (uint8_t)((TeensyMACAddPipe)&0xFF);
-   
+
+    SendBuffer[0] = (uint8_t)((TeensyMACAddPipe >> 40) & 0xFF);
+    SendBuffer[1] = (uint8_t)((TeensyMACAddPipe >> 32) & 0xFF);
+    SendBuffer[2] = (uint8_t)((TeensyMACAddPipe >> 24) & 0xFF);
+    SendBuffer[3] = (uint8_t)((TeensyMACAddPipe >> 16) & 0xFF);
+    SendBuffer[4] = (uint8_t)((TeensyMACAddPipe >> 8) & 0xFF);
+    SendBuffer[5] = (uint8_t)((TeensyMACAddPipe)&0xFF);
+    
+    for (int i = 0; i < 8; ++i){
+        // SendBuffer[i] = CheckPipeNibbles(SendBuffer[i]); // LATER
+    }
 }
 
 /************************************************************************************************************/

@@ -22,7 +22,7 @@
 
  // #define DB_FHSS
 // #define DB_SENSORS
-// #define DB_BIND
+ #define DB_BIND
 // #define DB_FAILSAFE
 // #define DB_RXTIMERS
 
