@@ -72,7 +72,8 @@ extern bool         ModelMatched;
 extern bool         Blinking;
 extern void         BlinkLed();
 extern uint8_t MacAddressSentCounter;
-extern void ReadSavedPipe();
+extern void         ReadSavedPipe();
+extern void         KickTheDog();
 
 /** AckPayload Stucture for data returned to transmitter. */
 struct Payload
@@ -373,6 +374,7 @@ FASTRUN void Reconnect()
     
     while (!Connected) {
         if (Blinking) BlinkLed();
+        KickTheDog();
         if (BoundFlag) KeepSbusHappy(); // Some SBUS systems timeout FAST, so resend old data to keep it happy
         delayMicroseconds(300);
         CurrentRadio->stopListening();
