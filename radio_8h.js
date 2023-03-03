@@ -15,6 +15,7 @@ var radio_8h =
     [ "IncChannelNumber", "radio_8h.html#ae913e02ff1fdfed85e4248ec648c1c6e", null ],
     [ "InitCurrentRadio", "radio_8h.html#ab652df130d9feb78c0accd5beedf7d80", null ],
     [ "KeepSbusHappy", "radio_8h.html#a6f74cdb7b32a3aa9e9342661bd44ad1a", null ],
+    [ "KickTheDog", "radio_8h.html#ada95a00a341e4a80176eda743a94ab2e", null ],
     [ "LoadAckPayload", "radio_8h.html#a664f409561bfcf119e0379dd991217e5", null ],
     [ "MoveServos", "radio_8h.html#a6f2443a0666140cf4d8b7352bb3b793c", null ],
     [ "ProdRadio", "radio_8h.html#a62f1498f67d7e438905ae486bc27044f", null ],

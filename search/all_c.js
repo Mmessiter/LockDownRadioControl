@@ -12,7 +12,7 @@ var searchData=
   ['ki_5froll_5frate_9',['Ki_roll_rate',['../Quadcopter_2src_2main_8cpp.html#a83ab455150e1e5c38c3d168d8c43f247',1,'main.cpp']]],
   ['ki_5fyaw_10',['Ki_yaw',['../Quadcopter_2src_2main_8cpp.html#a0b98df1ff2ca4c30c974221fb809bdb6',1,'main.cpp']]],
   ['kickrate_11',['KICKRATE',['../common_8h.html#a639fb69a9b4f236e3b1a16435b82bb81',1,'KICKRATE():&#160;common.h'],['../RadioFunctions_8h.html#a639fb69a9b4f236e3b1a16435b82bb81',1,'KICKRATE():&#160;RadioFunctions.h']]],
-  ['kickthedog_12',['KickTheDog',['../ReceiverCode_2src_2main_8cpp.html#ada95a00a341e4a80176eda743a94ab2e',1,'KickTheDog():&#160;main.cpp'],['../RadioFunctions_8h.html#ada95a00a341e4a80176eda743a94ab2e',1,'KickTheDog():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#ada95a00a341e4a80176eda743a94ab2e',1,'KickTheDog():&#160;main.cpp']]],
+  ['kickthedog_12',['KickTheDog',['../ReceiverCode_2src_2main_8cpp.html#ada95a00a341e4a80176eda743a94ab2e',1,'KickTheDog():&#160;main.cpp'],['../radio_8h.html#ada95a00a341e4a80176eda743a94ab2e',1,'KickTheDog():&#160;main.cpp'],['../RadioFunctions_8h.html#ada95a00a341e4a80176eda743a94ab2e',1,'KickTheDog():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#ada95a00a341e4a80176eda743a94ab2e',1,'KickTheDog():&#160;main.cpp']]],
   ['kp_5fpitch_5fangle_13',['Kp_pitch_angle',['../Quadcopter_2src_2main_8cpp.html#a29f7c5ed6f3cae8017cf017839e21a84',1,'main.cpp']]],
   ['kp_5fpitch_5frate_14',['Kp_pitch_rate',['../Quadcopter_2src_2main_8cpp.html#a130b55b7e62be76c4e7340a9b0f77e29',1,'main.cpp']]],
   ['kp_5froll_5fangle_15',['Kp_roll_angle',['../Quadcopter_2src_2main_8cpp.html#a5a46682cae29e1f9b8404a7c75c5ab7c',1,'main.cpp']]],
