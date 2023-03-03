@@ -64,7 +64,7 @@ uint8_t CheckPipeNibbles(uint8_t b){ // heer
             b    = temp | BetterLowerNibble[i]; // put an acceptable nibble into lower nibble
         }
     }
-    for (int i = 0; i < 4;++i){                 // ********** check HIGHER nibble **********
+    for (int i = 0; i < 4; ++i){                 // ********** check HIGHER nibble **********
         if ((b & 0xf0) == BadHigherNibble[i]) 
         {
             temp = b & 0x0f;                    // save only the Low nibble in temp
