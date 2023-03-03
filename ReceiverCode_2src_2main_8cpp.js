@@ -18,6 +18,7 @@ var ReceiverCode_2src_2main_8cpp =
     [ "ReadBindPlug", "ReceiverCode_2src_2main_8cpp.html#a5b90f51dfaa1795437ab024e8ab778d5", null ],
     [ "ReadData", "ReceiverCode_2src_2main_8cpp.html#a07ca94db0e305e9c01ec51e417576308", null ],
     [ "ReadExtraParameters", "ReceiverCode_2src_2main_8cpp.html#a6c490ef42e364f8bb1430c436e86c9c0", null ],
+    [ "ReadSavedPipe", "ReceiverCode_2src_2main_8cpp.html#a56ee137fc60749fa274236bc239c3291", null ],
     [ "ReadTheSensorHub", "ReceiverCode_2src_2main_8cpp.html#a5d2350b2507883d3644251013370bc5b", null ],
     [ "RebuildFlags", "ReceiverCode_2src_2main_8cpp.html#ad86a39e4cba19592c760833870f6f69c", null ],
     [ "ReceiveData", "ReceiverCode_2src_2main_8cpp.html#a06807a4f185694d37f774702ba74db0a", null ],

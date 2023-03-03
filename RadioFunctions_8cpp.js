@@ -4,6 +4,7 @@ var RadioFunctions_8cpp =
     [ "yy1", "RadioFunctions_8cpp.html#a10274b74b5b9f35476ae844506775afe", null ],
     [ "YY1EXTRA", "RadioFunctions_8cpp.html#ad7ab066fbe7d750f032f5761dbaa2487", null ],
     [ "BufferTeensyMACAddPipe", "RadioFunctions_8cpp.html#a8c4da8345a38bb20db07dcaac7af9c05", null ],
+    [ "CheckPipeNibbles", "RadioFunctions_8cpp.html#acd761b7a3274515f60af86504f70fcd6", null ],
     [ "Compress", "RadioFunctions_8cpp.html#a1ddd5e8d5bd649dd98ce3710fbff651b", null ],
     [ "DoScanEnd", "RadioFunctions_8cpp.html#a31fb6a46af68482e107cddee58dfb677", null ],
     [ "DoScanInit", "RadioFunctions_8cpp.html#a77c4a4ffa609df08830ccece07bf283b", null ],
