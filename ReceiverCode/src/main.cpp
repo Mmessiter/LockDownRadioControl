@@ -150,7 +150,6 @@ void KickTheDog()
     if (millis() - LastDogKick >= KICKRATE) {
         TeensyWatchDog.feed();
         LastDogKick = millis();
-     
     }
 }
 
@@ -762,7 +761,7 @@ FLASHMEM void setup()
     ScanI2c();    // Detect what's connected
     if (INA219Connected) ina219.begin();
     teensyMAC(MacAddress);
-   // for (int i = 0; i < 8; ++i) MacAddress[i] = 0x0B; // force new ID fo test! heer
+    for (int i = 0; i < 8; ++i) MacAddress[i] = 0x0B; // force new ID fo test! heer
     CurrentRadio = &Radio1;
     ThisPipe     = 0xBABE1E5420LL;
     if (digitalRead(BINDPLUG_PIN)) { // ie no bind plug, so initialise to bound pipe
@@ -794,6 +793,7 @@ FLASHMEM void setup()
     WatchDogConfig.window   = WATCHDOGMAXRATE; //  = MINIMUM RATE in milli seconds, (32ms to 522.232s) must be MUCH smaller than timeout
     WatchDogConfig.timeout  = WATCHDOGTIMEOUT; //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s)
     WatchDogConfig.callback = WatchDogCallBack;
+    TeensyWatchDog.begin(WatchDogConfig);
     ReadBindPlug();
     digitalWrite(LED_PIN, LOW);
 }
@@ -820,6 +820,8 @@ void loop()
 {
     KickTheDog();
     ReceiveData();
+
+
     if (Blinking) BlinkLed();
     if (BoundFlag && Connected && ModelMatched) { // Only move servos if everything is good
         if (millis() - SBUSTimer >= SBUSRATE) {   // SBUSRATE rate is also good enough for servo rate

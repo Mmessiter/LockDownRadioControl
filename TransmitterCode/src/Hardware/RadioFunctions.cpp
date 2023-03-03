@@ -78,17 +78,12 @@ uint8_t CheckPipeNibbles(uint8_t b){ // heer
 
 FASTRUN void BufferTeensyMACAddPipe()
 {
-
     SendBuffer[0] = (uint8_t)((TeensyMACAddPipe >> 40) & 0xFF);
     SendBuffer[1] = (uint8_t)((TeensyMACAddPipe >> 32) & 0xFF);
     SendBuffer[2] = (uint8_t)((TeensyMACAddPipe >> 24) & 0xFF);
     SendBuffer[3] = (uint8_t)((TeensyMACAddPipe >> 16) & 0xFF);
     SendBuffer[4] = (uint8_t)((TeensyMACAddPipe >> 8) & 0xFF);
     SendBuffer[5] = (uint8_t)((TeensyMACAddPipe)&0xFF);
-    
-    for (int i = 0; i < 8; ++i){
-        // SendBuffer[i] = CheckPipeNibbles(SendBuffer[i]); // LATER
-    }
 }
 
 /************************************************************************************************************/

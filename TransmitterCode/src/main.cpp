@@ -3643,7 +3643,7 @@ void GetTeensyMacAdress(){
     teensyMAC(MacAddress);                                // Get MAC address 
 
     for (int i = 0; i < 8; ++i){
-        MacAddress[i] = CheckPipeNibbles(MacAddress[i]);  // Fix if needed
+        MacAddress[i] = CheckPipeNibbles(MacAddress[i]);  // Fix PIPE if needed !
     }
     //  for (int q = 0; q < 8; ++q)MacAddress[q] = 0x12; // test! heer
 

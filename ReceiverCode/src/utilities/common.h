@@ -22,7 +22,7 @@
 
  // #define DB_FHSS
 // #define DB_SENSORS
- #define DB_BIND
+// #define DB_BIND
 // #define DB_FAILSAFE
 // #define DB_RXTIMERS
 
@@ -35,7 +35,7 @@
 //                            WATCHDOG PARAMETERS                           *
 //***************************************************************************
 
-#define WATCHDOGTIMEOUT 10000 // 10 Seconds before reboot (32ms -> 500 seconds)
+#define WATCHDOGTIMEOUT 5000 // 5 Seconds before reboot (32ms -> 500 seconds)
 #define KICKRATE        1000  // Kick once a second (must be between WATCHDOGMAXRATE and WATCHDOGTIMEOUT)
 #define WATCHDOGMAXRATE 500   // 500 ms secs between kicks is max rate allowed
 //**************************************************************************************************************************
