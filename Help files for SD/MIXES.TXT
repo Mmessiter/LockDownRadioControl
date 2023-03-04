@@ -6,4 +6,7 @@ A percentage of the curve that was defined for the Master is passed to each of i
 A Slave's end points (as defined in the Slave's curve) are never exceeded.||
 
 A Slave can even have its own Master as its Slave. This is needed for V tails, flaperons, delta wings etc.||
+
 Master-Slave associations are not cascaded. That is, if a Slave is also a Master, its Slave(s) inherit nothing from their Master's Master.
+
+Selecting 'One direction only' will only move the slave one way of course. This might be needed if for example you want up elevator with left AND right rudder.

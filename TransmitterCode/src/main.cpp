@@ -27,7 +27,7 @@
  * - Screen timeout to save battery.
  * - FHSS with very fast connect and reconnect
  * - Uses 32 GIG SD card for model memories and help files
- * - Binding without bind plug - uses unique Mac address as pipe address.
+ * - Binding - uses unique Mac address as pipe address.
  * - Four User definable three position switches
  * - Channels 5,6,7 & 8 can be switches or knobs.
  * - Input sources definable - any stick, switch or knob can be mapped to any function.
@@ -49,6 +49,8 @@
  * - Safety switch implemtented (Stops accidental motor starting)
  * - Rates (three rates) implemented
  * - Slow Servos implemented: Any channel can be slowed by almost any amount for realistic flaps, U/C etc,
+ * - PPM or SBUS now possible from reciever
+ * - Support for external third party transmitter modules added
  *
  *
  * @section txPinout Teensy 4.1 Pins
@@ -61,12 +63,12 @@
  * | 2  LED     | RED |
  * | 3  LED     | GREEN |
  * | 4  LED     | BLUE |
- * | 5  POLOLU  | 2808 ALL POWER OFF SIGNAL (When high)  |
- **| 6  PPM     | PPM IN or OUT (was Sensor for power button)
- * | 7  (RX2)   | SPARE (was BUDDY BOX)
- * | 8  (TX2)   | SPARE (was  BUDDY BOX)
- **| 9  (CE)    | nRF24l01 (CE) |
- **| 10 (CS)    | nRF24l01 (CSN) |
+ * | 5  (POLOLU)| 2808 ALL POWER OFF SIGNAL (When high)  |
+ **| 6  (PPM)   | PPM IN or OUT NEW PCB TX MODULE (was Sensor for power button)
+ * | 7  (CE)    | nRF24l01 (CE)  | on new PCB
+ * | 8  (CSN)   | nRF24l01 (CSN) | on new PCB
+ **| 9  .....   | was nRF24l01 (CSN) now SPARE on new PCB
+ **| 10 (PPM)   | was nRF24l01 (CSN) now BUDDY PPM on new PCB)
  **| 11 (MOSI)  | nRF24l01 (MOSI) |
  **| 12 (MISO)  | nRF24l01 (MISO) |
  **| 13 (SCK)   | nRF24l01 (SCK) |
@@ -74,8 +76,8 @@
  **| 15 (A1)    | Joystick POT CH2 |
  * | 16 (A2)    | Joystick POT CH3 |
  * | 17 (A3)    | Joystick POT CH4 |
- **| 18         | I2C bus  SDA |
- **| 19         | I2C bus  SCL |
+ **| 18 (I2C)   | I2C bus  SDA |
+ **| 19 (I2C)   | I2C bus  SCL |
  * | 20 (A6)    | POT KNOB CH5 |
  * | 21 (A7)    | POT KNOB CH6 |
  * | 22 (A8)    | POT KNOB CH7 |
@@ -120,9 +122,7 @@
 RF24          Radio1(CE_PIN, CSN_PIN);
 WDT_T4<WDT3>  TeensyWatchDog;
 WDT_timings_t WatchDogConfig;
-SBUS          MySbus(SBUSPORT);
-uint16_t      SbusChannels[CHANNELSUSED + 2]; // a few spare
-uint32_t      SBUSTimer = 0;
+uint32_t      PPMTimer = 0;
 uint8_t       Mixes[MAXMIXES + 1][CHANNELSUSED + 1];          // 17 possible elements per mix. NOTHING to do with channels count!!!
 int           Trims[BANKSUSED + 1][CHANNELSUSED + 1];         // Trims to store
 uint8_t       Exponential[BANKSUSED + 1][CHANNELSUSED + 1];   // Exponential
@@ -133,8 +133,8 @@ uint8_t  MixNumber        = 0;
 uint8_t  CurrentView      = FRONTVIEW;
 uint8_t  SavedCurrentView = FRONTVIEW;
 uint64_t DefaultPipe      = DEFAULTPIPEADDRESS;  //          Default Radio pipe address
-uint64_t NewPipe          = DEFAULTPIPEADDRESS;  //          New Radio pipe address for binding will come from MAC address
-char     TextIn[CHARSMAX + 2];                   // spare space
+uint64_t TeensyMACAddPipe = DEFAULTPIPEADDRESS;  //          New Radio pipe address for binding will come from MAC address
+char     TextIn[CHARSMAX + 2];                   //          Spare space
 uint16_t PacketsPerSecond = 0;
 uint8_t  PacketsHistoryBuffer[PERFECTPACKETSPERSECOND * MAXSHOWCOMMSSESCONDS]; // Here we record some history
 uint16_t PacketsHistoryIndex    = 0;
@@ -176,6 +176,7 @@ uint32_t SlowTime[16];                                      //    For timing slo
 uint8_t  StepSize[16] = {0,0,0,0,0,0,0,0,5,25,5,25,5,25,5,25};  //    How far to move each time on slow servos
 uint16_t CurrentPosition[UNCOMPRESSEDWORDS];                //    Position from which a slow servo started (0 = not started yet)
 uint16_t SendBuffer[UNCOMPRESSEDWORDS];                     //    Data to send to rx (16 words)
+uint16_t PPMBuffer[UNCOMPRESSEDWORDS];                      //   
 uint16_t ShownBuffer[UNCOMPRESSEDWORDS];                    //    Data shown before
 uint16_t LastBuffer[CHANNELSUSED + 1];                      //    Used to spot any change
 uint16_t PreMixBuffer[CHANNELSUSED + 1];                    //    Data collected from sticks
@@ -367,8 +368,8 @@ bool     SaveFailSafeNow = false;
 uint32_t FailSafeTimer;
 
 uint32_t LastPacketSentTime = 0;
-uint16_t CompressedData[COMPRESSEDWORDS]; // = 20
-uint8_t  SizeOfCompressedData;
+uint16_t CompressedData[COMPRESSEDWORDS];   // = 15 words, 30 bytes
+uint8_t  SizeOfCompressedData;              // = 30
 uint32_t Inactivity_Timeout = INACTIVITYTIMEOUT;
 uint32_t Inactivity_Start   = 0;
 
@@ -379,10 +380,8 @@ uint32_t     LastScanButtonCheck    = 0;
 uint32_t     TransmitterLastManaged    = 0;
 uint32_t     LastShowTime    = 0;
 uint32_t     LastDogKick     = 0;
-uint8_t      MacAddress[6];
+uint8_t      MacAddress[8]   = {0, 0, 0, 0, 0, 0, 0, 0};
 uint8_t      ErrorState      = 0;
-
-
 uint16_t XtouchPlace = 0; // Clicked X
 uint16_t YtouchPlace = 0; // Clicked Y
 
@@ -402,7 +401,7 @@ bool     LedWasRed           = false;
 char     ThisRadio[4]        = "0 ";
 uint8_t  LastRadio           = 0;
 uint8_t  NextChannel         = 0;
-bool     BuddyPupilOnSbus    = false;
+bool     BuddyPupilOnPPM    = false;
 bool     BuddyMaster         = false;
 bool     SlaveHasControl     = false;
 uint16_t Qnh                 = 1009; // pressure at sea level here
@@ -491,18 +490,21 @@ bool      ModelIdentified         = false;
 bool      ModelMatched            = false;
 bool      AutoModelSelect         = true;
 union {
-        uint32_t Val32[2] = {0, 0};
+        uint32_t Val64  = 0;
+        uint32_t Val32[2];
         uint8_t  Val8[8]; // Model's Mac address just obtained from model
      }  ModelsMacUnion;
 
 union {
-        uint32_t Val32[2] = {0,0};
+        uint32_t Val64  = 0;
+        uint32_t Val32[2] ;
         uint8_t  Val8[8];        // Model's Mac address that had been saved on disk
      }  ModelsMacUnionSaved;
 
 char b5Greyed[]                     = "b5.pco=33840";
 char b12Greyed[]                    = "b12.pco=33840";
-bool MotorEnabled                   = false;
+char     b1Greyed[]                      = "b1.pco=33840";
+bool     MotorEnabled                    = false;
 bool     SendNoData                 = false;
 bool     MotorWasEnabled            = false;
 uint8_t MotorChannel                = 15;
@@ -548,19 +550,35 @@ bool     TimerDownwards         = false;
 uint16_t TimerStartTime         = 5 * 60; 
 bool     TimesUp                = false;
 uint8_t  CountDownIndex = 0;
-bool     UseSBUS                = true;  // at receiver. false = PPM
+bool     UseSBUSFromRX          = true;  // at receiver. false = PPM
+uint16_t PPMChannelCount        = 8;  // for our RX - not module  
+
 
 // **********************************************************************************************************************************
-// **********************************  PPM Area for TX MODULE **********************************************************************
-uint16_t FrameRate              = 100;  
-PulsePositionOutput     PPMOutput;              // PPM for buddy boxing and TX Modules
-PulsePositionOutput     PPMInput;               // PPM for buddy boxing
-//                                              T  A  E  R 
-uint8_t                 PPMChannelOrder[16]  = {3, 1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+// **********************************  Area for PPM & TX MODULE **********************************************************************
+#define A 1
+#define E 2
+#define T 3
+#define R 4
+PulsePositionOutput     PPMOutputModule;       // PPM for buddy boxing and TX Modules
+PulsePositionOutput     PPMOutputBuddy;        // PPM for buddy boxing and TX Modules
+PulsePositionInput      PPMInputBuddy;         // PPM for buddy boxing
+uint8_t                 * PPMChannelOrder;     // will point to needed channel order
+uint8_t                 PPMChannelOrder1[16]  = {A, E, T, R, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+uint8_t                 PPMChannelOrder2[16]  = {T, A, E, R, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+uint8_t                 PPMChannelOrder3[16]  = {E, T, A, R, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
 uint32_t                LastPPMFrame         = 0;
-uint8_t                 PPMChannelNumber     = 6;
-uint8_t                 PPMMillis            = 20;
-bool                    UseTXModule          = true;
+uint8_t                 PPMOrderSelection    = 2;
+uint8_t                 PPMChannelsNumber     = 6;
+uint8_t                 PPMMillis            = 22; // Not used!!! (yet)
+bool                    UseTXModule          = false;
+bool                    BindNewModel         = true;
+
+uint64_t NewPipeMaybe = 0;
+uint64_t PreviousNewPipes[PIPES_TO_COMPARE];
+uint8_t  PreviousNewPipesIndex = 0;
+uint8_t  pcount                = 0;
+char page_RXSetupView[] = "page RXSetupView";
 // **********************************************************************************************************************************
 
 // **********************************************************************************************************************************
@@ -639,34 +657,35 @@ void FixDeltaGMTSign()
 /************************************************************************************************************/
 // This function reads data from BUDDY (Slave) BUT uses it ONLY WHILE buddy switch is on
 
-void GetSlaveChannelValues()
+void GetSlaveChannelValuesPPM() // MASTER code 
 {
-    bool failSafeM; // These flags not used, yet...
-    bool lostFrameM;
-      
-    if (BuddyON){
-        if (MySbus.read(&SbusChannels[0], &failSafeM, &lostFrameM)) {                               // Buddy is On
-            SBUSTimer = millis();                                                                   // RESET timeout when data comes in
-        }                                                                                           // Even if there's no new data, re-use old data
-        if (millis() - SBUSTimer < 500) {                                                           // Ignore data more than 500ms old
-            for (int j = 0; j < CHANNELSUSED; ++j) {                                                // While slave has control, his stick data replaces all ours
-                if (BuddyControlled & 1 << j) {                                                     // Test if this channel is buddy controlled. If not leave it unchanged
-                    SendBuffer[j] = map(SbusChannels[j], RANGEMIN, RANGEMAX, MINMICROS, MAXMICROS); // Put re-mapped data where we can use it.
+     if (BuddyON) {
+
+        if (PPMInputBuddy.available() == CHANNELSUSED){
+            for (int j = 0; j < CHANNELSUSED; ++j) {                                   // While slave has control, his stick data replaces all ours
+                uint16_t PpmIn = PPMInputBuddy.read(j + 1);                            // read EVERY channel
+                if (BuddyControlled & 1 << (j)) {                                      // Test if this channel is buddy controlled. If not leave it unchanged
+                    SendBuffer[j] = PpmIn;
+                    PPMBuffer[j]  = PpmIn;
                 }
             }
-            if (!SlaveHasControl && AnnounceConnected) {
+            if (!SlaveHasControl) {                                                    // Buddy is now On
                 PlaySound(BUDDYMSG);
                 LastShowTime = 0;
+                SlaveHasControl = true;
             }
-            SlaveHasControl = true;
+        }else{
+            for (int j = 0; j < CHANNELSUSED; ++j) {                                    // reuse old data if no new is available.
+                 if (BuddyControlled & 1 << (j)) SendBuffer[j] = PPMBuffer[j];
+            }
         }
-    }
-    else { // Buddy is Off
-        if (SlaveHasControl && AnnounceConnected) {
+    } else {                                                                            // Buddy is now Off
+        if (SlaveHasControl) {
             PlaySound(MASTERMSG);
             LastShowTime = 0;
+            SlaveHasControl = false;
+            Look(SendBuffer[0]);
         }
-        SlaveHasControl = false;
     }
 }
 /**************************** Clear Macros if junk was loaded from SD ********************************************************************************/
@@ -696,20 +715,13 @@ FLASHMEM void ResetSubTrims()
     }
 }
 /************************************************************************************************************/
-/** Map servo channels' data from SendBuffer into SbusChannels buffer */
-// This funtion is used by the BUDDY slave to send it's controls out down a wire using SBUS
+//  Send via PPM for Buddy box pupil
 
-FASTRUN void MapToSBUS()
+FASTRUN void SendViaPPM()
 {
-    if (millis() - SBUSTimer >= SBUSRATE)
-    {
-        SBUSTimer = millis();
-
-        for (int j = 0; j < CHANNELSUSED; ++j)
-        {
-            SbusChannels[j] = static_cast<uint16_t>(map(SendBuffer[j], MINMICROS, MAXMICROS, RANGEMIN, RANGEMAX));
-        }
-        MySbus.write(SbusChannels);
+    if (millis() - PPMTimer >= PPMBUDDYFRAMERATE) {
+        PPMTimer = millis();
+        for (int j = 0; j < CHANNELSUSED; ++j) PPMOutputBuddy.write(j+1, SendBuffer[j]); 
     }
 }
 /*********************************************************************************************************************************/
@@ -953,6 +965,12 @@ bool getDate(const char* str)
 
 /*********************************************************************************************************************************/
 
+void Reboot(){
+    while (true) {TeensyWatchDog.feed();}
+}
+
+/*********************************************************************************************************************************/
+
 void KickTheDog()
 {
     if (millis() - LastDogKick >= KICKRATE) {
@@ -1160,6 +1178,7 @@ void RedLedOn()
         BindButton                                  = false;
         BindingNow                                  = 0;
         BindingTimer                                = 0;
+        pcount                                      = 0;
         PacketsPerSecond                            = 0;
         LastShowTime                                = 0;
         ModelsMacUnion.Val32[0]                     = 0;
@@ -1194,8 +1213,13 @@ void GreenLedOn()
     if (!LedWasGreen || LedIsBlinking) { // no need to repeat unless it is blinking
         if (!LedIsBlinking) {
             ShowComms();
-            if (AnnounceConnected) PlaySound(CONNECTEDMSG);
-        }
+            if (AnnounceConnected) {
+                PlaySound(CONNECTEDMSG);
+                ModelMatched = true;
+                BoundFlag    = true; 
+                Procrastinate(2000);
+            }
+            }
         if (UseLog) {
                 LogConnection();
         }
@@ -1409,7 +1433,6 @@ uint32_t GetValue(char* nbox) // This function calls the function above until it
         Procrastinate(50);
         ValueIn = getvalue(nbox);
         ++i;
-        Serial.println(nbox);
     }
     return ValueIn;
 }
@@ -1800,9 +1823,9 @@ FASTRUN void ShowComms()
     
     char FrontView_AckPayload[]= "AckPayload";
     char FrontView_RXBV[]      = "RXBV";
-    char Msg_CnctdBuddyMast[]  = "* BUDDY MASTER! *";
-    char Msg_CnctdBuddySlave[] = "* BUDDY SLAVE! *";
-    char MsgBuddying[]         = "Buddy";
+    char Msg_CnctdBuddyMast[]  = "* MASTER has control *";
+    char Msg_CnctdBuddySlave[] = "* BUDDY has control *";
+    char MsgBuddying[]         = "* Buddy *";
     char DataView_pps[]        = "pps"; // These are label names in the NEXTION data screen. They are best kept short.
     char DataView_lps[]        = "lps";
     char DataView_Alt[]        = "alt";
@@ -1856,7 +1879,7 @@ FASTRUN void ShowComms()
             default:
                 break;
             }
-            if (BuddyPupilOnSbus) SendText(FrontView_Connected, MsgBuddying);
+            if (BuddyPupilOnPPM) SendText(FrontView_Connected, MsgBuddying);
             if (LedWasGreen) {
                 if (BoundFlag) {
                     if (!BuddyMaster) {
@@ -1874,7 +1897,7 @@ FASTRUN void ShowComms()
                             SendText(FrontView_Connected, Msg_CnctdBuddySlave);
                         }
                     }
-                    GreenLedOn();
+                    if (BoundFlag && ModelMatched) GreenLedOn();
                     StartInactvityTimeout();
                 } else {
                     SendText(FrontView_RXBV, na); // data not available
@@ -1947,6 +1970,8 @@ void ReEnableScanButton()   // Scan button AND models button
 {
     char b5NOTGreyed[]  = "b5.pco=";
     char b12NOTGreyed[] = "b12.pco=";
+    char b1NOTGreyed[]  = "b1.pco=";
+
     char nb[15];
     char cmd[30];
     
@@ -1954,6 +1979,9 @@ void ReEnableScanButton()   // Scan button AND models button
 
     if (CurrentView == TXSETUPVIEW && b5isGrey) {
             strcpy(cmd, b5NOTGreyed);
+            strcat(cmd, nb);
+            SendCommand(cmd);
+            strcpy(cmd, b1NOTGreyed);
             strcat(cmd, nb);
             SendCommand(cmd);
             b5isGrey = false;
@@ -3036,12 +3064,11 @@ bool ReadOneModel(uint32_t Mnum)
     if (TimerStartTime > 120 * 60) TimerStartTime = 5 * 60;
     ++SDCardAddress;
     ++SDCardAddress;
-    UseSBUS         = (bool) SDRead8BITS(SDCardAddress);
+    UseSBUSFromRX         = (bool) SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-    FrameRate         =  SDRead16BITS(SDCardAddress);
-    if ((FrameRate < 10) || (FrameRate > 250)){  // miles out of range framerate?
-          FrameRate = 100;
-          UseSBUS   = true;
+    PPMChannelCount         =  SDRead16BITS(SDCardAddress);
+    if ((PPMChannelCount > 16) || (PPMChannelCount < 1)){  // miles out of range PPMChannelCount?
+         PPMChannelCount = 8;
     }
     ++SDCardAddress;
     ++SDCardAddress;
@@ -3110,7 +3137,7 @@ bool LoadAllParameters()
         ChannelMax[i] = SDRead16BITS(SDCardAddress);
         SDCardAddress += 2;
         }
-        BuddyPupilOnSbus = SDRead8BITS(SDCardAddress);
+        BuddyPupilOnPPM = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
         BuddyMaster = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
@@ -3204,6 +3231,17 @@ bool LoadAllParameters()
         AutoModelSelect = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
         TXLiPo = SDRead8BITS(SDCardAddress);
+        ++SDCardAddress;
+        PPMOrderSelection = SDRead8BITS(SDCardAddress);
+        if ((PPMOrderSelection > 3) || (PPMOrderSelection < 1)) PPMOrderSelection = 2;
+        ++SDCardAddress;
+        PPMChannelsNumber = SDRead8BITS(SDCardAddress);
+        if ((PPMChannelsNumber > 16) || (PPMChannelsNumber < 1)) PPMChannelsNumber = 6;
+        ++SDCardAddress;
+        PPMMillis = SDRead8BITS(SDCardAddress);
+         if ((PPMMillis > 50) || (PPMMillis < 2)) PPMMillis = 22;// Not used!!! (yet)
+        ++SDCardAddress;
+         UseTXModule = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
         ReadCheckSum32(); 
         CheckTrimValues();
@@ -3598,6 +3636,28 @@ void ShowLogFile(uint8_t StartLine)
 
 
 /*********************************************************************************************************************************/
+// This function gets the unique MAC address of the Teensy 4.1
+// And also fixes it so that it's a suitable Pipe address for the nRF24L01
+
+void GetTeensyMacAdress(){
+
+    teensyMAC(MacAddress);                                // Get MAC address 
+
+    for (int i = 0; i < 8; ++i){
+        MacAddress[i] = CheckPipeNibbles(MacAddress[i]);  // Fix PIPE if needed !
+    }
+    //  for (int q = 0; q < 8; ++q)MacAddress[q] = 0x12; // test! 
+
+    TeensyMACAddPipe = (uint64_t)MacAddress[0]  << 40;
+    TeensyMACAddPipe += (uint64_t)MacAddress[1] << 32;
+    TeensyMACAddPipe += (uint64_t)MacAddress[2] << 24;
+    TeensyMACAddPipe += (uint64_t)MacAddress[3] << 16;
+    TeensyMACAddPipe += (uint64_t)MacAddress[4] << 8;
+    TeensyMACAddPipe += (uint64_t)MacAddress[5];
+
+}
+
+/*********************************************************************************************************************************/
 // SETUP
 /*********************************************************************************************************************************/
 FLASHMEM void setup()
@@ -3621,7 +3681,7 @@ FLASHMEM void setup()
     ResetSubTrims();
     CentreTrims();
     WatchDogConfig.window   = WATCHDOGMAXRATE; //  = MINIMUM RATE in milli seconds, (32ms to 522.232s) must be MUCH smaller than timeout
-    WatchDogConfig.timeout  =  WATCHDOGTIMEOUT; //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s)
+    WatchDogConfig.timeout  = WATCHDOGTIMEOUT; //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s)
     WatchDogConfig.callback = WatchDogCallBack;
     TeensyWatchDog.begin(WatchDogConfig);
     LastDogKick = millis(); // needed? - yes!
@@ -3640,21 +3700,39 @@ FLASHMEM void setup()
     } else {
             ErrorState = MODELSFILENOTFOUND; // if no file ... or no SD
     }
+    GetTeensyMacAdress();
+    
 
-
-
-    teensyMAC(MacAddress);  // Get MAC address and use it as pipe address
-    NewPipe = (uint64_t)MacAddress[0] << 40;
-    NewPipe += (uint64_t)MacAddress[1] << 32;
-    NewPipe += (uint64_t)MacAddress[2] << 24;
-    NewPipe += (uint64_t)MacAddress[3] << 16;
-    NewPipe += (uint64_t)MacAddress[4] << 8;
-    NewPipe += (uint64_t)MacAddress[5];
     Wire.begin();
     ScanI2c();
     if (USE_INA219) ina219.begin();
     InitSwitchesAndTrims();
-    if (!UseTXModule) InitRadio(DefaultPipe);
+
+#ifdef TXMODULESUPPORT
+if (UseTXModule)  
+    {
+        PPMOutputModule.begin(PPMPORT); 
+        SelectChannelOrder();
+    }
+    else
+    {
+        InitRadio(DefaultPipe);
+    }
+        
+#else
+    InitRadio(DefaultPipe);
+#endif
+
+
+#ifdef TXMODULESUPPORT  
+    if(BuddyMaster){
+         PPMInputBuddy.begin(BUDDYPPMPORT);
+    }else{
+        if (!UseTXModule && BuddyPupilOnPPM) {
+            PPMOutputBuddy.begin(BUDDYPPMPORT); // 'if' can be removed later
+        }
+    } 
+
     delay(WARMUPDELAY);                        // Allow Nextion time to warm up
     SendValue(FrontView_BackGround, BackGroundColour); // Get colours ready
     SendValue(FrontView_ForeGround, ForeGroundColour);
@@ -3665,20 +3743,20 @@ FLASHMEM void setup()
     SetAudioVolume(AudioVolume);
     if (PlayFanfare) {
         PlaySound(THEFANFARE);
-        delay(4000); // Fanafare takes about 4 seconds
+        delay(4000); // Fanfare takes about 4 seconds
     }
     SendValue(FrontView_Hours, 0);
     SendValue(FrontView_Mins, 0);
     SendValue(FrontView_Secs, 0);
     //  ***************************************************************************************
-      //SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
+    // SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
     //  **   BUT then re-comment it!! Otherwise it will reset to same time on every boot up! **
     //  ***************************************************************************************
     BoundFlag = false;
     StartInactvityTimeout();
     SizeOfCompressedData = sizeof(CompressedData);
     GetTXVersionNumber();
-    MySbus.begin();
+                          
     SetUKFrequencies();
     ScreenTimeTimer = millis();
     RestoreBrightness();
@@ -3697,12 +3775,8 @@ FLASHMEM void setup()
     }
     if(!UseMotorKill)  ShowMotor(1);
 
-#ifdef TXMODULESUPPORT
-
-  if (UseTXModule)  PPMOutput.begin(PPMPORT);   
 
 #endif
-    
     if (ErrorState) {
         SendCommand(WarnNow);
         if (ErrorState == CHECKSUMERROR) {
@@ -3816,7 +3890,7 @@ void SaveTransmitterParameters()
         SDUpdate16BITS(SDCardAddress, ChannelMax[i]); // Stick max output of pot
         SDCardAddress += 2;
     }
-    SDUpdate8BITS(SDCardAddress, BuddyPupilOnSbus);
+    SDUpdate8BITS(SDCardAddress, BuddyPupilOnPPM);
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, BuddyMaster);
     ++SDCardAddress;
@@ -3899,6 +3973,16 @@ void SaveTransmitterParameters()
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, TXLiPo);
     ++SDCardAddress;
+
+     SDUpdate8BITS(SDCardAddress, PPMOrderSelection);
+    ++SDCardAddress;
+     SDUpdate8BITS(SDCardAddress, PPMChannelsNumber);
+    ++SDCardAddress;
+     SDUpdate8BITS(SDCardAddress, PPMMillis);// Not used!!! (yet)
+    ++SDCardAddress;
+     SDUpdate8BITS(SDCardAddress, UseTXModule);
+    ++SDCardAddress;
+
     SaveCheckSum32();  // Save the Transmitter parametres checksm
     CloseModelsFile();
 }
@@ -4092,10 +4176,10 @@ void SaveOneModel(uint32_t mnum)
         ++SDCardAddress;
         ++SDCardAddress;
 
-        SDUpdate8BITS(SDCardAddress, UseSBUS); 
+        SDUpdate8BITS(SDCardAddress, UseSBUSFromRX); 
         ++SDCardAddress;   
 
-        SDUpdate16BITS(SDCardAddress, FrameRate); 
+        SDUpdate16BITS(SDCardAddress, PPMChannelCount); 
         ++SDCardAddress;  
         ++SDCardAddress;
 
@@ -4489,6 +4573,7 @@ void SaveAllParameters()
 
 // This function takes account of the fact one gimbal is upside down ... and some people use mode 2.
 // Aileron is always reversed, plus either throttle or elevator according to mode 1 or 2
+// It reverses some pins 
 
 int AnalogueReed(uint8_t InputChannel){    
     int value = analogRead(AnalogueInput[InputChannel]);
@@ -5047,29 +5132,25 @@ FASTRUN void DisplayCurve()
 
 void BindNow() // Bind button was pressed 
 {
-#ifdef DB_BIND
-    Serial.println("Saving model's ID"); 
-#endif
-    BindingNow = 1;
+
+    BindingNow                   = 1;
+    BoundFlag                    = true;
     ModelMatched                 = true;
+    Connected                    = true;
     ModelsMacUnionSaved.Val32[0] = ModelsMacUnion.Val32[0];
     ModelsMacUnionSaved.Val32[1] = ModelsMacUnion.Val32[1];
     SaveOneModel(ModelNumber);
-    MakeBindButtonInvisible();
-    if (AnnounceConnected) PlaySound(BINDSUCCEEDED); 
-    Procrastinate(1700);
-    UpdateModelsNameEveryWhere();
-
+    Serial.println("Saved MODEL ID!");
 }
 
-/*********************************************************************************************************************************/
+    /*********************************************************************************************************************************/
 
-int GetDifference(int YtouchPlace, int oldy)
-{
-    int dd;
-    dd = (YtouchPlace - oldy) / 2;
-    if (dd < 0) dd = -dd;
-    return dd;
+    int GetDifference(int YtouchPlace, int oldy)
+    {
+        int dd;
+        dd = (YtouchPlace - oldy) / 2;
+        if (dd < 0) dd = -dd;
+        return dd;
 }
 /*********************************************************************************************************************************/
 void MoveCurrentPointUp()  
@@ -5963,7 +6044,7 @@ void StartBuddyView()
     SendCommand(pBuddyView);
     CurrentView = BUDDYVIEW;
     SendValue(BuddyM, BuddyMaster);
-    SendValue(BuddyP, BuddyPupilOnSbus);
+    SendValue(BuddyP, BuddyPupilOnPPM);
 }
 
 /*********************************************************************************************************************************/
@@ -5972,17 +6053,36 @@ void EndBuddyView()
 {
     char BuddyM[] = "BuddyM";
     char BuddyP[] = "BuddyP";
-
     char pRXSetupView[]   = "page RXSetupView";
-    BuddyPupilOnSbus    = GetValue(BuddyP); // Pupil, wired 
-    BuddyMaster         = GetValue(BuddyM); // Master, either.
+    bool OldPupil;
+    bool OldMaster;
+    char prompt[] = "Power off transmitter?";
+    char GoBack[] = "page BuddyView";
+    
+    
+    OldPupil = BuddyPupilOnPPM;             // save old version to detect a change
+    OldMaster = BuddyMaster;
+    BuddyPupilOnPPM    = GetValue(BuddyP); // Pupil 
+    BuddyMaster        = GetValue(BuddyM); // Master
+    if  ((OldPupil != BuddyPupilOnPPM) || (OldMaster != BuddyMaster)){
+        if (!GetConfirmation(GoBack,prompt)) {
+            SendValue(BuddyM, OldMaster);
+            SendValue(BuddyP, OldPupil);
+            BuddyPupilOnPPM = OldPupil;
+            BuddyMaster = OldMaster;
+        } 
+    }
     SaveAllParameters();
     b5isGrey = false;
     b12isGrey = false;
     SendCommand(pRXSetupView);
     CurrentView = RXSETUPVIEW;
     UpdateModelsNameEveryWhere();
+    if  ((OldPupil != BuddyPupilOnPPM) || (OldMaster != BuddyMaster)){
+            digitalWrite(POWER_OFF_PIN, HIGH); 
+    }
 }
+
 /*********************************************************************************************************************************/
 FASTRUN void DisplayCurveAndServoPos(){
 
@@ -6173,7 +6273,6 @@ void LogVIEW()
 void SetupViewFM() 
 { 
 
-    char page_RXSetupView[] = "page RXSetupView";
     SaveAllParameters();
     CurrentView = RXSETUPVIEW;
     SendCommand(page_RXSetupView);
@@ -6200,7 +6299,7 @@ void StartSubTrimView()
 /******************************************************************************************************************************/
 void EndSubTrimView()
 { // Subtrim view exit
-    char page_RXSetupView[] = "page RXSetupView";
+   
     SaveOneModel(ModelNumber);
     CurrentView = RXSETUPVIEW;
     SendCommand(page_RXSetupView);
@@ -6348,7 +6447,7 @@ void RXSetup1Start() // model options screen
     char c2[] = "c2";    // TimerDownwards timer on off
     char r0[] = "r0";    // SBUS on
     char r1[] = "r1";    // PPM on
-    char n5[] = "n5";    // Framerate
+    char n5[] = "n5";    // PPMChannelCount
 
 
     SendCommand(pRXSetup1);
@@ -6362,9 +6461,9 @@ void RXSetup1Start() // model options screen
     SendValue(RxVCorrextion, RxVoltageCorrection);
     SendValue(c2, TimerDownwards);
     SendValue(n4, TimerStartTime/60);
-    SendValue(r0, UseSBUS);
-    SendValue(r1, !UseSBUS);
-    SendValue(n5,FrameRate);
+    SendValue(r0, UseSBUSFromRX);
+    SendValue(r1, !UseSBUSFromRX);
+    SendValue(n5,PPMChannelCount);
     CurrentView = RXSETUPVIEW1;
     UpdateModelsNameEveryWhere();
 
@@ -6374,7 +6473,6 @@ void RXSetup1Start() // model options screen
 
 void RXSetup1End()
 {
-    char page_RXSetupView[] = "page RXSetupView";
     char UseKill[]          = "c0";
     char Mchannel[]         = "n1";
     char Mvalue[]           = "n0";
@@ -6386,7 +6484,7 @@ void RXSetup1End()
     char n4[] = "n4";    // TimerDownwards timer minutes
     char c2[] = "c2";    // TimerDownwards timer on off
     char r0[] = "r0";    // SBUS on
-    char n5[] = "n5";    // Framerate
+    char n5[] = "n5";    // PPMChannelCount
 
     SendCommand(ProgressStart);
     CopyTrimsToAll= GetValue(c1);
@@ -6409,9 +6507,9 @@ void RXSetup1End()
     SendValue(Progress,70);
     TimerStartTime          = GetValue(n4) * 60;
     SendValue(Progress,80);
-    UseSBUS                 = GetValue(r0);
+    UseSBUSFromRX            = GetValue(r0);
     SendValue(Progress,90);
-    FrameRate              =  GetValue(n5);
+    PPMChannelCount              =  GetValue(n5);
     SendValue(Progress, 100);
     CurrentView             = TXSETUPVIEW;
     SaveOneModel(ModelNumber);
@@ -6534,7 +6632,7 @@ void ResetTransmitterSettings(){    // This function resets all transmitter para
    SendCommand(ProgressStart);
    SendValue(Progress, 2);
 
-   BuddyPupilOnSbus   = false;
+   BuddyPupilOnPPM   = false;
    BuddyMaster        = false;
    ModelNumber        = 1;
    ScreenTimeout      = 120;
@@ -6567,6 +6665,8 @@ void ResetTransmitterSettings(){    // This function resets all transmitter para
    AutoModelSelect         = false;
    MotorChannel            = 15;
    MotorChannelZero        = 0;
+   TimerDownwards          = false;
+   UseTXModule             = false;
    SetDS1307ToCompilerTime();
    for (int k = 1; k < 5;++k){ // writes default four times!
         for (ModelNumber = 1; ModelNumber <= MAXMODELNUMBER; ++ModelNumber) { 
@@ -6989,7 +7089,6 @@ bool GetBackupFilename(char* goback,char * tt1, char * MMname, char * heading,ch
   char GoPopupView[] = "page PopupView"; 
   char Dialog[]      = "Dialog";
   
-
   SendCommand(GoPopupView);
   SendText(Dialog, Prompt);
   Confirmed[0] = '?';
@@ -7111,8 +7210,115 @@ void DoMFName(){
      GotoFrontView();
  }
 
+/******************************************************************************************************************************/
+
+ void TXModuleViewStart(){ 
+
+    char GoTXModule[] = "page TXModuleView";
+    if (ModelMatched) return;
+
+    CurrentView = TXMODULEVIEW;
+
+    char c1[] = "c1";   // Use module
+    char n3[] = "n3";   // number of channels
+    char n4[] = "n4";   // ms
+    char r0[] = "r0"; 
+    char r1[] = "r1";
+    char r2[] = "r2";
+
+    SendCommand(GoTXModule);
+    SendValue(c1, UseTXModule);
+    SendValue(n3, PPMChannelsNumber);
+    SendValue(n4, PPMMillis);// Not used!!! (yet)
+    if (PPMOrderSelection == 1) {SendValue(r0, 1);}
+        else {SendValue(r0, 0);}
+    if (PPMOrderSelection == 2) {SendValue(r1, 1);}
+        else {SendValue(r1, 0);}
+    if (PPMOrderSelection == 3) {SendValue(r2, 1);}
+        else {SendValue(r2, 0);}
+ }
+
+/******************************************************************************************************************************/
+
+void SelectChannelOrder(){
+
+       if(PPMOrderSelection == 1) PPMChannelOrder   = PPMChannelOrder1;
+       if(PPMOrderSelection == 2) PPMChannelOrder   = PPMChannelOrder2;   
+       if(PPMOrderSelection == 3) PPMChannelOrder   = PPMChannelOrder3;
+   
+}
+
+/******************************************************************************************************************************/
+
+ void TXModuleViewEnd(){
+
+    char page_SetupView[] = "page SetupView";
+    char GoBack[] = "page TXModuleView";
+    char c1[] = "c1";   // Use module
+    char n3[] = "n3";   // number of channels
+    char n4[] = "n4";   // ms
+    char r0[] = "r0"; 
+    char r1[] = "r1";
+    char r2[] = "r2";
+    char prompt[] = "Power off transmitter?";
+    bool oldUseTxModule  = UseTXModule;
+    
+    SendCommand(ProgressStart);
+    SendValue(Progress, 10);
+    UseTXModule      =   GetValue(c1); 
+    if (UseTXModule != oldUseTxModule){
+        if (!GetConfirmation(GoBack,prompt)){ 
+                UseTXModule = oldUseTxModule;
+                SendValue(c1, UseTXModule);
+                return;
+        }
+    }
+    SendValue(Progress, 30);
+    Procrastinate(100);
+    PPMChannelsNumber = GetValue(n3);
+    SendValue(Progress, 51);
+    PPMMillis        =   GetValue(n4);// Not used!!! (yet)
+    if (GetValue(r0)) PPMOrderSelection = 1;
+    SendValue(Progress, 63);
+    Procrastinate(10);
+    if (GetValue(r1)) PPMOrderSelection = 2;
+    SendValue(Progress, 88);
+    Procrastinate(10);
+    if (GetValue(r2)) PPMOrderSelection = 3;
+    SelectChannelOrder();
+    SendValue(Progress, 99);
+    Procrastinate(10);
+    SaveTransmitterParameters();
+    Procrastinate(10);
+    SendCommand(page_SetupView);
+    CurrentView = TXSETUPVIEW;
+    Procrastinate(10);
+    if (UseTXModule != oldUseTxModule) {
+        digitalWrite(POWER_OFF_PIN, HIGH); 
+    }
+ }
+/******************************************************************************************************************************/
+void ModelUnmatch(){ // heer
+
+  // This deletes cuttent model ID in preparation perhas for binding to new model.
+
+    char prompt[]                   = "Un-match this model memory?";
+    char Done[]                     = "Model memory forgotten.";
+    char DoneAlready[]              = "Model already forgotten.";
+
+    if (!ModelsMacUnionSaved.Val64){   
+        GetConfirmation(page_RXSetupView, DoneAlready);
+        return;
+    }
+
+    if (GetConfirmation(page_RXSetupView,prompt)){
+        ModelsMacUnionSaved.Val64 = 0;
+        SaveOneModel(ModelNumber);
+        GetConfirmation(page_RXSetupView, Done);
+    }
+}
 // ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
-#define LASTFUNCTION 66 // one more than final one
+#define LASTFUNCTION 69 // One more than final one, because first is number zero
 
 void (*NumberedFunctions[LASTFUNCTION])() {
     Blank,                // 0 
@@ -7179,8 +7385,11 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     NoPressed,                  // 61
     RenameFile,                 // 62
     GoBackFromModels,           // 63
-    Blank,                      // 64 // spare
-    ReceiveModelFile            // 65
+    Blank,                      // 64 
+    ReceiveModelFile,           // 65
+    TXModuleViewStart,          // 66
+    TXModuleViewEnd,            // 67
+    ModelUnmatch                // 68
 
 }; // list will become much longer ...
 // **********************************************************************************************************************************
@@ -7188,7 +7397,6 @@ void (*NumberedFunctions[LASTFUNCTION])() {
             char pTrimView[]            = "page TrimView";
             char n0[]                   = "n0";
             char c0[]                   = "c0";
-
             SendCommand(pTrimView);
             CurrentView = TRIM_VIEW;
             SendValue(n0, TrimMultiplier);
@@ -7283,7 +7491,6 @@ FASTRUN void ButtonWasPressed()
         char page_SticksView[]         = "page SticksView";
         char page_GraphView[]          = "page GraphView";
         char page_SetupView[]          = "page SetupView";
-        char page_RXSetupView[]        = "page RXSetupView";
         char page_AudioView[]          = "page AudioView";
         char page_ColoursView[]        = "page ColoursView";
         char GoSetupView[]             = "GoSetupView";
@@ -7341,7 +7548,6 @@ FASTRUN void ButtonWasPressed()
         char CH16NAME[]                = "CH16NAME=";
         char HelpView[]                = "HelpView";
         char SendModel[]               = "SendModel";
-        char PowerOff[]                = "PowerOff";
         char OffNow[]                  = "OffNow"; // force power off
         char OptionsViewS[]            = "OptionsViewS";
         char Pto[]                     = "Pto";
@@ -7559,7 +7765,7 @@ FASTRUN void ButtonWasPressed()
             if (Inactivity_Timeout > INACTIVITYMAXIMUM) Inactivity_Timeout = INACTIVITYMAXIMUM;
             SendValue(Progress, 90);
             FixDeltaGMTSign();
-            if (BuddyPupilOnSbus)
+            if (BuddyPupilOnPPM)
             {
                 Connected            = false;
                 LostContactFlag      = true;
@@ -7784,11 +7990,6 @@ FASTRUN void ButtonWasPressed()
             return;
         }
      
-        if (InStrng(PowerOff, TextIn) > 0) { // power off button up no longer turns off!
-            PowerOffTimer = 0;
-            ClearText();
-            return;
-        }
 
         if (InStrng(OffNow, TextIn) > 0) { // redundant
             if (UseLog) LogPowerOff();
@@ -8232,14 +8433,17 @@ if (InStrng(Export, TextIn)) {
         }
 
         if (InStrng(Fhss_View, TextIn)) {
-            if (!b5isGrey) // no scan while connected!!!
+            
+            
+            if ((!b5isGrey) )// no scan while connected!!!      
             {
-                SendCommand(page_FhssView);
-                DrawFhssBox();
-                DoScanInit();
-                CurrentMode = SCANWAVEBAND;
-                CurrentView = SCANVIEW;
-                BlueLedOn();
+                    if (UseTXModule) InitRadio(DefaultPipe);   // because scan fails if radio isn't initialised
+                    SendCommand(page_FhssView);
+                    DrawFhssBox();
+                    DoScanInit();
+                    CurrentMode = SCANWAVEBAND;
+                    CurrentView = SCANVIEW;
+                    BlueLedOn();
             }
             ClearText();
             return;
@@ -8437,9 +8641,14 @@ uint16_t MakeTwobytes(bool* f)
 
 /************************************************************************************************************/
 
+// 20 x 16bit words are sent compressed to only 15 (30 bytes)
+// 4 16 bit words are vacant for other stuff (8 bytes)
+// Extra data can be send using the last 10 bytes of each data packet. 
+// These are defined by the packet number.
+
 void LoadPacketData()
 {
-    uint16_t Twobytes = 0; // Extra data can be send using the last four bytes of each data packet. These are defined by the packet number
+    uint16_t Twobytes = 0; 
     uint8_t  FS_Byte1;
     uint8_t  FS_Byte2;
     char     ProgressEnd[]       = "vis Progress,0";
@@ -8451,15 +8660,14 @@ void LoadPacketData()
     SendBuffer[CHANNELSUSED + 2] = 0;
     switch (PacketNumber) {
         case 0:
-             SendBuffer[CHANNELSUSED + 2] = BindingNow;
-            if (BindingNow == 1) {
-                BindingNow  = 2;
-            }
+           //  SendBuffer[CHANNELSUSED + 2] = BindingNow;
+           // if (BindingNow == 1) {
+           //     BindingNow  = 2;
+           // }
             if (((millis() - FailSafeTimer) > 1500) && SaveFailSafeNow) {
                 SendBuffer[CHANNELSUSED + 1] = SaveFailSafeNow; // FailSafeSaveMoment
                 SaveFailSafeNow              = false;           // once should do it.
-                
-                SendCommand(ProgressEnd); // heer
+                SendCommand(ProgressEnd); 
             }
             break;
         case 1:
@@ -8486,8 +8694,8 @@ void LoadPacketData()
             break;
 
         case 5:
-            SendBuffer[CHANNELSUSED + 1] = UseSBUS;       // 1 - 0
-            SendBuffer[CHANNELSUSED + 2] = (uint8_t)(1000 / FrameRate); // frame rate converted to ms per frame
+            SendBuffer[CHANNELSUSED + 1] = UseSBUSFromRX;       // 1 - 0
+            SendBuffer[CHANNELSUSED + 2] = PPMChannelCount;     // 
             break;
 
         default : break;
@@ -8675,15 +8883,13 @@ void GetBank()
             SendValue(FrontView_Hours, 0);
         }
     }
-    
 
-    
     if ((MotorEnabled != MotorWasEnabled) && (UseMotorKill))  {                         // MotorEnabled changed ?
         if (MotorEnabled) {
             if (LedWasRed)
                 {
                   MotorEnabled = false;
-                   if (!BuddyPupilOnSbus){
+                   if (!BuddyPupilOnPPM){
                         if ((millis() - WarningTimer) > 4000) { 
                             PlaySound(PLSTURNOFF);
                             WarningTimer = millis();
@@ -8730,6 +8936,7 @@ void GetBank()
     }
     MotorWasEnabled = MotorEnabled;                               // Remember motor state
     PreviousBank = Bank;                                          // Remember BANK
+    
 }
 
 // *************************************************************************************************************
@@ -9130,17 +9337,36 @@ void GotoFrontView(){
 void CompareModelsIDs(){ // The saved MacAddress is compared with the one just received from the model ... etc ...
     
     uint8_t SavedModelNumber = ModelNumber;
+    
+    if (ModelMatched) return; // must not change when model connected
+
+   /* 
+   if (!AutoModelSelect){
+            Serial.println("Calling SAVING BIND NON AUTO");
+            BindNow(); 
+            ModelMatched = true;
+            AutoModelSelect = true;
+            return;
+    }
+    */
+
     ModelMatched             = false;
     GotoFrontView();
     RestoreBrightness();
-    if (ModelIdentified) {                                                //  We have both bits of Model ID?
-        if ((ModelsMacUnion.Val32[0] == ModelsMacUnionSaved.Val32[0]) && (ModelsMacUnion.Val32[1] == ModelsMacUnionSaved.Val32[1])) {       
-            if (AnnounceConnected) {
-                PlaySound(MMMATCHED);
-                Procrastinate(1000);
-                }
+    
+    if (ModelIdentified) {                                                //  We have both bits of Model ID?      
+        
+          if (ModelsMacUnion.Val64 == ModelsMacUnionSaved.Val64) {
+
+                if (AnnounceConnected) {
+                    if (AutoModelSelect){
+                        PlaySound(MMMATCHED); 
+                        Procrastinate(1500);
+                    }
                 ModelMatched = true;                                      //  It's a match so start flying!
-                BindButton = true; 
+                BindButton   = true;
+                }
+
         } else {
             if (AutoModelSelect){                                         //  It's not a match so maybe search for it.
                 ModelNumber = 0;
@@ -9148,85 +9374,84 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                     {   //  Try to match the ID with a saved one
                         ++ModelNumber;
                         ReadOneModel(ModelNumber);
-                        if ((ModelsMacUnion.Val32[0] == ModelsMacUnionSaved.Val32[0]) && (ModelsMacUnion.Val32[1] == ModelsMacUnionSaved.Val32[1])) {
+                        if (ModelsMacUnion.Val64 == ModelsMacUnionSaved.Val64) {
                             ModelMatched = true;
                             BindButton = true; 
                         }
                     }
-                if (ModelMatched){                                        //  Found it!
+                if (ModelMatched){                                        //  Found it!    
                     UpdateModelsNameEveryWhere();                         //  Use it.
                     if (AnnounceConnected) {
                         PlaySound(MMFOUND);
                         Procrastinate(1500);
-                        }
+                    }
                     SaveAllParameters();                                  //  Save it
                     GotoFrontView(); 
                 }else{                                                    
-                    if (AnnounceConnected) {
-                        if ((millis() - WarningTimer) > 10000) {
-                            PlaySound(MMNOTFOUND); 
-                            Procrastinate(1500);
-                        }
-                    }
-                    ModelNumber = SavedModelNumber;                       //  Not found anywhere. So offer to bind the restored selected one
+                    ModelNumber = SavedModelNumber; //  Not found anywhere. So  bind to the restored selected one
                     ReadOneModel(ModelNumber);
-                    SendCommand(BindButtonVisible);
-                    if ((millis() - WarningTimer) > 10000) {
-                        WarningTimer = millis();
-                        if (AnnounceConnected) PlaySound(BINDNEEDED);
-                    }
-                    BindButton = true;
-                    ModelMatched = false;
-                } return;
-             } else {
-                SendCommand(BindButtonVisible);
-                if ((millis() - WarningTimer) > 10000) {
-                    WarningTimer = millis();
-                    if (AnnounceConnected) PlaySound(BINDNEEDED);
+                    BindNow(); 
+                    PlaySound(MMSAVED);
+                    Procrastinate(1650);
                 }
-                BindButton = true;
-                ModelMatched = false;
+                return;
+             } else {     
+                BindNow(); 
             }
         }
     }
 }
+
+/************************************************************************************************************/
+// This function compares the just-received pipe with several of the previous ones
+// if it matches most of them then it's probably not corrupted :-) 
+bool ValidateNewPipe(){ 
+    uint8_t MatchedCounter = 0;
+    ++pcount;
+    if (pcount < 5) return false; 
+    PreviousNewPipes[PreviousNewPipesIndex] = NewPipeMaybe;
+    PreviousNewPipesIndex++;
+    if (PreviousNewPipesIndex > PIPES_TO_COMPARE) PreviousNewPipesIndex = 0;
+    for (int i = 0; i < PIPES_TO_COMPARE;++i){
+        if (NewPipeMaybe == PreviousNewPipes[i]) ++ MatchedCounter;
+    }
+    if (MatchedCounter >= PIPES_TO_COMPARE  - 2 ) return true; // half or more is OK
+    return false;
+}
+
 /************************************************************************************************************/
 void  GetModelsMacAddress(){
 
-    
     switch (AckPayload.Purpose)
     {
         case 0:
              ModelsMacUnion.Val32[0] = GetIntFromAckPayload();
+            // Look(ModelsMacUnion.Val32[0]);
              break;
         case 1:
              ModelsMacUnion.Val32[1] = GetIntFromAckPayload();  
+            // Look(ModelsMacUnion.Val32[1]);
              break;
         default:
              break;
     }
-   
     if (ModelMatched == false) {
-        if ((ModelsMacUnion.Val32[0] > 0) && (ModelsMacUnion.Val32[1] > 0)){   // got both bits yet? 
-               ModelIdentified = true;
-        }
-        CompareModelsIDs();
-    }
-    if (!BindingTimer) BindingTimer = millis();
-    if (BindButton) {
-        if ((millis() - BindingTimer) > 1500) {
-            SendCommand(BindButtonVisible); 
-            BindButton = true;
-        }
+        if ((ModelsMacUnion.Val32[0] > 0) && (ModelsMacUnion.Val32[1] > 0)){   // got both bits yet?
+             NewPipeMaybe = ModelsMacUnion.Val64;
+             if (ValidateNewPipe()) {
+                ModelIdentified = true; 
+                CompareModelsIDs();
+            } 
+        }    
     }
 }
 
 /************************************************************************************************************/
 FASTRUN void ParseAckPayload()
 {
-    if (BuddyPupilOnSbus) return; // buddy pupil need none of this
+    if (BuddyPupilOnPPM) return; // buddy pupil need none of this
  
-    NextChannelNumber = AckPayload.Byte5;                     // every packet tells of next hop destination
+    NextChannelNumber = AckPayload.Byte5;                 // every packet tells of next hop destination
      
     if (AckPayload.Purpose & 0x80) // Hi bit is now the **HOP NOW!!** flag
     {
@@ -9234,9 +9459,9 @@ FASTRUN void ParseAckPayload()
         HopToNextChannel();
         AckPayload.Purpose &= 0x7f; // Clear the high BIT, use the remainder ...
     }
-
-    if (!BoundFlag){
-       GetModelsMacAddress(); 
+ 
+    if (!ModelMatched){
+       GetModelsMacAddress();
        return;
     }
     
@@ -9377,7 +9602,8 @@ void CheckScanButton() // Scan button AND models button
     if (ModelMatched) {
         if (CurrentView == TXSETUPVIEW) {
           if(!b5isGrey) { 
-                SendCommand(b5Greyed);
+                SendCommand(b5Greyed); 
+                SendCommand(b1Greyed);
                 b5isGrey = true;
             }
         }
@@ -9495,40 +9721,51 @@ void FASTRUN ManageTransmitter(){
 }
 /**********************************************************************************************************/
 #ifdef TXMODULESUPPORT
-
-void SendPPM(){ // heer  Send a frame of PPM
-    if (millis() - LastPPMFrame < PPMMillis) return; // 50 Hz?
+void SendPPM(){ // Send a frame of PPM to Third party TX module
+    if (millis() - LastPPMFrame < 10) return; // was PPMMillis (... that was wrong)
     LastPPMFrame = millis();
-    for (int j = 0; j < PPMChannelNumber; ++j) {
-        PPMOutput.write(PPMChannelOrder[j], map(SendBuffer[j], MINMICROS, MAXMICROS, 1000, 2000));
+    for (int j = 0; j < PPMChannelsNumber; ++j) {
+        PPMOutputModule.write(*(PPMChannelOrder + j), SendBuffer[j]);  
     }
 }
 #endif
-
 /************************************************************************************************************/
 // LOOP
 /************************************************************************************************************/
+
+uint8_t      testt = 0;
 FASTRUN void loop()
 {
+    
+     
     ManageTransmitter();                                         // Do the needed chores ... (if there's time)
     GetNewChannelValues();                                       // Load SendBuffer with new servo positions  Very frequently
+     
+
     if (UseMacros) ExecuteMacro();                               // Modify it if macro is running
-    if (BuddyPupilOnSbus) { 
+
+    if (BuddyPupilOnPPM) { 
         NewCompressNeeded = false;                               // Fake it as Buddy does not send compressed data
         ShowServoPos(); 
     } else {                                                     // Skip these next lines when buddying as a slave
-        if (!BoundFlag && Connected) BufferNewPipe();            // if not yet bound, insert our pipe into SendBuffer BUT ONLY WHEN CONNECTED 
-        if (BuddyMaster) GetSlaveChannelValues();                // If buddy master, get buddy data and maybe use it. 
-        ShowServoPos();                                          
-        if (!MotorEnabled) SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero whatever was shown.   
-        Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24
-    }                                   
-   
+        if (!BoundFlag && Connected) BufferTeensyMACAddPipe();   // if not yet bound, insert our pipe into SendBuffer BUT ONLY WHEN CONNECTED 
+        if (BuddyMaster) GetSlaveChannelValuesPPM();             // If buddy master, get buddy data and maybe use it.                                         
+        if (!MotorEnabled && !BuddyON) SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero whatever was shown.   
+        ShowServoPos();
+       
+    }
+
     switch (CurrentMode) {
         case NORMAL:            // 0
-            if (!UseTXModule) SendData();
 #ifdef TXMODULESUPPORT
-            if (UseTXModule) SendPPM();         // for TX module or buddy
+            if (!UseTXModule) {
+                SendData();         // local TX
+            }else{
+                 SendPPM();         // for TX module
+                 NewCompressNeeded = false;
+            }
+#else
+            SendData();
 #endif
             break;
         case CALIBRATELIMITS:   // 1

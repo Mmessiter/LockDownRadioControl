@@ -13,10 +13,12 @@
 #include <SBUS.h>
 #include "utilities/radio.h"
 #include <PulsePosition.h>
+#include <Watchdog_t4.h>
 
 #define RXVERSION_MAJOR   2
-#define RXVERSION_MINOR   0
-#define RXVERSION_MINIMUS 8 // Feb 2023
+#define RXVERSION_MINOR   1
+#define RXVERSION_MINIMUS 4 // March 2023
+
 
 // #define DB_FHSS
 // #define DB_SENSORS
@@ -25,7 +27,16 @@
 // #define DB_RXTIMERS
 
 //**************************************************************************************************************************
-#define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< ****
+ #define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< ****
+//**************************************************************************************************************************
+
+// **************************************************************************
+//                            WATCHDOG PARAMETERS                           *
+//***************************************************************************
+
+#define WATCHDOGTIMEOUT 2000 // 2 Seconds before reboot (32ms -> 500 seconds)
+#define KICKRATE        500  // Kick twice a second (must be between WATCHDOGMAXRATE and WATCHDOGTIMEOUT)
+#define WATCHDOGMAXRATE 250  // 250 ms secs between kicks is max rate allowed
 //**************************************************************************************************************************
 
 #define SENSOR_HUB_I2C_ADDRESS 8
@@ -35,23 +46,24 @@
 
 #define LISTEN_PERIOD   14 //   How many ms to listen for TX in Reconnect()
 
-#define RECEIVE_TIMEOUT 14 //   <=9 fails, >=11 OK ... HEER!!
+#define RECEIVE_TIMEOUT 14 //   <=9 fails, >=11 OK 
 
 // *****************************************************************************************
 
-#define DEFAULTPIPE              0xBABE1E5420LL
+#define DEFAULTPIPE              0xB7BE3E9423LL // Default pre-bind pipe address (Matches TX default pipe)
 #define FREQUENCYSCOUNT          82 // uses 82 different channels
 #define FREQUENCYSCOUNT1         41 // uses 41 different test channels
 #define CHANNELSUSED             16
 #define SERVOSUSED               9  // But all 16 are available via SBUS
 #define SBUSRATE                 10 // SBUS frame every 10 milliseconds
-#define PPMRATE                  20 // PPM frame every 20 milliseconds
 #define SBUSPORT                 Serial3                    // = 14
 #define PPMPORT                  14                        // same as SBUS
 #define RECONNECTGAP             25                        // Send no data to servos for 25 ms after a reconnect (10 was not quite enough)
 #define MINMICROS                500
 #define MAXMICROS                2500
 #define LED_PIN                  LED_BUILTIN
+#define LED_RED                  16   
+#define BINDPLUG_PIN             17  
 #define RANGEMAX                 2047                      // = Frsky at 150 %
 #define RANGEMIN                 0
 #define pinCE1                   9                         // NRF1
@@ -71,6 +83,7 @@
 #define CE_OFF                   LOW
 #define BIND_EEPROM_OFFSET        0                          // use 8 bytes from here
 #define FS_EEPROM_OFFSET         BIND_EEPROM_OFFSET+8        // use 16 bytes from here
+#define PIPES_TO_COMPARE         8           
 
 uint32_t LastPacketArrivalTime = 0;
 bool     FailSafeSave          = false;

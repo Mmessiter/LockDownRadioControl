@@ -10,15 +10,16 @@
 //     SUPPORT FOR TX MODULE                                                *
 // **************************************************************************
 
-  #define TXMODULESUPPORT // ONLY FOR NEW PCBs  <<< *** <<<
+  #define TXMODULESUPPORT // ONLY FOR NEW VERSION  <<< *** <<<
+  #define NEWPCB
 
 // **************************************************************************
-//       TX VERSION NUMBER   (May 2020 - January 2023 Malcolm Messiter)      *
+//       TX VERSION NUMBER   (May 2020 - March 2023 Malcolm Messiter)      *
 //***************************************************************************
 
 #define TXVERSION_MAJOR   2
-#define TXVERSION_MINOR   0
-#define TXVERSION_MINIMUS 8
+#define TXVERSION_MINOR   1
+#define TXVERSION_MINIMUS 4
 
 // **************************************************************************
 //                               Includes                                   *
@@ -30,13 +31,9 @@
 #include <RF24.h>
 #include <Wire.h>
 #include <Adafruit_INA219.h>
-//#include <TimeLib.h>
 #include <DS1307RTC.h>
 #include <TeensyID.h>
-#include <EEPROM.h>
 #include <InterpolationLib.h>
-#include <SBUS.h>
-#include <RF24.h>
 #include <Watchdog_t4.h>
 #include <PulsePosition.h>
 
@@ -47,7 +44,7 @@
 // #define DB_NEXTION        // Debug NEXTION
 // #define DB_SD             // Debug SD card data
 // #define DB_CHECKSUM       // Debug 32BIT file checksum info
-// #define DB_FHSS           // Debug real time FHSS data
+ //#define DB_FHSS           // Debug real time FHSS data
 // #define DB_SENSORS        // Debug Sensors
 // #define DB_BIND           // Debug Binding
 // #define DB_SWITCHES       // Debug Switches
@@ -58,18 +55,25 @@
 //                               General                                    *
 // **************************************************************************
 
-
+#define DEFAULTPIPEADDRESS      0xB7BE3E9423LL            // Pipe address for startup - any value but MUST match RX
 #define CHANNELSUSED            16                        // 16 Channels
 #define MAXMIXES                32                        // 32 mixes
-#define TICKSPERMINUTE          60000                     // millis() += 60000 per minute
+#define TICKSPERMINUTE          60000                     // millis() = 60000 per minute
 #define PROPOCHANNELS           8                         // Only 4 have knobs / 2 sticks (= 4 hall sensors)
 #define BANKSWITCH              4                         // Default MODE switch
 #define AUTOSWITCH              1                         // Default AUTO switch
 #define BANKSUSED               4                         // Flight modes (AKA Banks)
-#define DEFAULTPIPEADDRESS      0xBABE1E5420LL            // Pipe address for startup - any value but MUST match RX
 #define LOWBATTERY              42                        // Default percent for warning (User definable)
-#define CE_PIN                  9                         // for SPI to nRF24L01
-#define CSN_PIN                 10                        // for SPI to nRF24L01
+#ifdef NEWPCB                                             // ***>>> red or green PCBs ... not black <<<***
+  #define CE_PIN                  7                         // for SPI to nRF24L01
+  #define CSN_PIN                 8                         // for SPI to nRF24L01
+  #define BUDDYPPMPORT            10                        // Buddybox PPM pin
+#else
+  #define CE_PIN                  9                         // for SPI to nRF24L01
+  #define CSN_PIN                 10                        // for SPI to nRF24L01
+  #define BUDDYPPMPORT            6                         // Buddybox PPM pin
+#endif
+
 #define INACTIVITYTIMEOUT       10 * TICKSPERMINUTE       // Default time after which to switch off
 #define INACTIVITYMINIMUM       05 * TICKSPERMINUTE       // Inactivity timeout minimum is 5 minutes
 #define INACTIVITYMAXIMUM       30 * TICKSPERMINUTE       // Inactivity timeout maximum is 30 minutes
@@ -79,14 +83,14 @@
 #define CHARSMAX                120                       // Max length for char arrays
 #define UNCOMPRESSEDWORDS       20                        // DATA TO SEND = 40  bytes
 #define COMPRESSEDWORDS    UNCOMPRESSEDWORDS * 3 / 4      // COMPRESSED DATA SENT = 30  bytes
-#define PERFECTPACKETSPERSECOND 150                       // Flat out perfect packets per second
 #define TIMEFORTXMANAGMENT      3                         // How many ms must remain spare between data packets before daring to undertake more trivial tasks 
 #define DEFAULTLEDBRIGHTNESS    20                        // LED brightness
 #define DEFAULTPOWEROFFWARNING  3                         // Default time to warn before cutting power      
 #define MAXDUALRATE             200
 #define MAXBUFFERSIZE           4096
 #define MAXMODELNUMBER          91
-
+#define PERFECTPACKETSPERSECOND 150                       // Flat out perfect packets per second
+#define PIPES_TO_COMPARE        8
 // **************************************************************************
 //                            FHSS PARAMETERS                               *
 //***************************************************************************
@@ -180,6 +184,7 @@
 #define SLOWSERVOVIEW   33
 #define RENAMEMODELVIEW 34
 #define FILEEXCHANGEVIEW 35
+#define TXMODULEVIEW    36
 
 // **************************************************************************
 //                          Switches' GPIOs                                 *
@@ -298,8 +303,7 @@
 #define THREE           69
 #define TWO             70
 #define ONE             71
-
-
+#define MMSAVED         72
 
 // **************************************************************************
 //               SDCARD MODEL MEMORY CONSTANTS                              *
@@ -358,17 +362,16 @@
 #define MACROSTARTTIME      1 // In ** >> 10ths << ** of a second since trigger. ( = millis() * 100 ) up to 25.4 seconds
 #define MACRODURATION       2 // In ** >> 10ths << ** of a second since start    ( = millis() * 100 ) up to 25.4 seconds
 #define MACROMOVECHANNEL    3 // Which channel to move.
-#define MACROMOVETOPOSITION 4 // Where to put said channel for said duration. (0 -180)
+#define MACROMOVETOPOSITION 4 // Where to put said channel for said duration. (0 - 180)
 #define MACRORUNNINGNOW     5 // Running flag (BIT 0 running/not running,  BIT 1 = Timer active / inactive)
 
 // **************************************************************************
-//                            SBUS PARAMETERS   (FOR BUDDY BOXING)          *
+//                            PPM PARAMETERS   (FOR BUDDY BOXING)          *
 //***************************************************************************
 
-#define SBUSRATE 10 // SBUS frame every 10 milliseconds ( = 100 Hz)
-#define SBUSPORT Serial2
-#define RANGEMAX 2047 // = Frsky at 150 %
-#define RANGEMIN 0    // = Frsky at 0 %
+#define PPMBUDDYFRAMERATE 10  // PPM new frame every 10 milliseconds 
+#define RANGEMAX 2047         // = Frsky at 150 %
+#define RANGEMIN 0            // = Frsky at 0 %
 
 // **************************************************************************
 //                          NEXTION SERIAL CONNECTION                       *
@@ -385,9 +388,9 @@
 //                            WATCHDOG PARAMETERS                           *
 //***************************************************************************
 
-#define WATCHDOGTIMEOUT 10000 // 10 Seconds before reboot (32ms -> 500 seconds)
-#define KICKRATE        1000  // Kick once a second (must be between WATCHDOGMAXRATE and WATCHDOGTIMEOUT)
-#define WATCHDOGMAXRATE 500   // 500 ms secs between kicks is max rate allowed
+#define WATCHDOGTIMEOUT 2000 // 2 Seconds before reboot (32ms -> 500 seconds)
+#define KICKRATE        500  // Kick twice a second (must be between WATCHDOGMAXRATE and WATCHDOGTIMEOUT)
+#define WATCHDOGMAXRATE 250  // 250 ms secs between kicks is max rate allowed
 
 /*********************************************************************************************************************************/
 // external (global vars) needed here
@@ -408,7 +411,7 @@ extern uint32_t       LastPacketSentTime;
 extern bool           BoundFlag;
 extern uint8_t        CurrentView;
 extern uint16_t       SendBuffer[];
-extern uint64_t       NewPipe;
+extern uint64_t       TeensyMACAddPipe;
 extern bool           LostContactFlag;
 extern uint64_t       DefaultPipe;
 extern long int       RecoveryTimer;
@@ -429,7 +432,7 @@ extern uint32_t       GapSum;
 extern uint32_t       GapStart;
 extern uint8_t*       FHSSChPointer;
 extern uint8_t*       FHSSRecoveryPointer;
-extern bool           BuddyPupilOnSbus;
+extern bool           BuddyPupilOnPPM;
 extern bool           BuddyMaster;
 extern uint16_t       BackGroundColour;
 extern uint16_t       HighlightColour;
@@ -482,7 +485,7 @@ extern void  ParseAckPayload();
 extern void  FailedPacket();
 extern void  StartInactvityTimeout();
 extern void  ShowServoPos();
-extern void  MapToSBUS();
+extern void  SendViaPPM();
 extern void  ZeroDataScreen();
 extern void  RedLedOn();
 extern void  ReEnableScanButton();
@@ -504,6 +507,8 @@ extern bool          GetButtonPress();
 extern void          CheckPowerOffButton();
 extern void          LoadFileSelector();
 extern void          LoadModelSelector();
+extern void          PlaySound(uint16_t TheSound);
+extern uint8_t       CheckPipeNibbles(uint8_t b);
 
 /*********************************************************************************************************************************/
 // function prototypes
@@ -536,7 +541,7 @@ void         LogThisLongGap();
 void         LogThisModel();
 void         Force_ReDisplay();
 FASTRUN void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uint8_t uncompressed_size);
-FASTRUN void BufferNewPipe();
+FASTRUN void BufferTeensyMACAddPipe();
 void         ExecuteMacro();
 void         Look(int p);
 void         ShowBank();
@@ -559,6 +564,7 @@ void             CheckModelName();
 void             EndTrimView();
 int              AnalogueReed(uint8_t InputChannel);
 void             GetReturnCode();
+void             SelectChannelOrder();
 /*********************************************************************************************************************************/
 
 #endif

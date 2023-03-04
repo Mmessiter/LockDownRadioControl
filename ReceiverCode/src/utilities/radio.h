@@ -20,8 +20,11 @@ uint16_t ReceivedData[UNCOMPRESSEDWORDS]; //  20 x 16 BIT words
 uint16_t PreviousData[UNCOMPRESSEDWORDS]; /** Previously received data (used for servos. Hence not sent if unchanged) */
 uint16_t Interations = 0;
 uint32_t HopStart;
-uint64_t ThisPipe     = 0xBABE1E5420LL; // default startup
+uint64_t ThisPipe     = DEFAULTPIPE; // default startup
 uint64_t NewPipe      = 0;
+uint64_t NewPipeMaybe = 0;
+uint64_t PreviousNewPipes[PIPES_TO_COMPARE];
+uint8_t  PreviousNewPipesIndex = 0;
 uint64_t OldPipe      = 0;
 bool     FailSafeSent = true;
 uint16_t SbusRepeats  = 0;
@@ -51,8 +54,8 @@ extern float    AngleGPS;
 extern float    AltitudeGPS;
 extern float    DistanceGPS;
 extern float    CourseToGPS;
-extern uint8_t  MacAddress[8];
-extern uint8_t  TheReceivedPipe[8];
+extern uint8_t  MacAddress[9];
+extern uint8_t  TheReceivedPipe[9];
 extern uint32_t NewConnectionMoment;
 extern void BindModel();
 extern void FailSafe(); // defined in main.cpp
@@ -62,8 +65,15 @@ extern void ReadSensorHub();
 extern void SetUKFrequencies();
 extern void MoveServos();
 extern FASTRUN void ReceiveData();
-extern bool FailedSafe;
-extern uint32_t MostRecentHop;
+extern bool         FailedSafe;
+extern bool         NewData;
+extern uint16_t     pcount;
+extern bool         ModelMatched;
+extern bool         Blinking;
+extern void         BlinkLed();
+extern uint8_t MacAddressSentCounter;
+extern void         ReadSavedPipe();
+extern void         KickTheDog();
 
 /** AckPayload Stucture for data returned to transmitter. */
 struct Payload
@@ -95,7 +105,7 @@ uint8_t AckPayloadSize = sizeof(AckPayload); // Size for later externs if needed
 
 /************************************************************************************************************/
 
-void HopNowAnyway(){ // HEER!!
+void HopNowAnyway(){ 
         ++NextChannelNumber;                                            // Move up the channels' array
         if (NextChannelNumber >= FrequencyCount) NextChannelNumber = 1; // If needed, wrap the channels' array pointer
         NextChannel           = *(FHSSChPointer + NextChannelNumber);
@@ -108,14 +118,6 @@ void SetNewPipe()
     CurrentRadio->openReadingPipe(1, ThisPipe);
 }
 
-/************************************************************************************************************/
-
-void ReadSavedPipe()
-{
-    for (uint8_t i = 0; i < 8; ++i) {
-        SavedPipeAddress[i] = EEPROM.read(i+BIND_EEPROM_OFFSET); // uses first 8 bytes only.
-    }
-}
 
 /************************************************************************************************************/
 
@@ -127,21 +129,83 @@ void SendVersionNumberToAckPayload() // AND which radio transceiver is currently
     AckPayload.Byte4 = RXVERSION_MINIMUS;
 }
 
+bool PipeSeen = false;
+
+/************************************************************************************************************/
+// This function compares the just-received pipe with several of the previous ones
+// if it matches most of them then its probably not corrupted. 
+
+bool ValidateNewPipe(){ 
+    
+    uint8_t MatchedCounter = 0;
+    
+    if (pcount < 2) return false;  // ignore first few
+    
+    PreviousNewPipes[PreviousNewPipesIndex] = NewPipeMaybe;
+    PreviousNewPipesIndex++;
+    if (PreviousNewPipesIndex > PIPES_TO_COMPARE) PreviousNewPipesIndex = 0;
+    
+    for (int i = 0; i < PIPES_TO_COMPARE;++i){
+        if (NewPipeMaybe == PreviousNewPipes[i]) ++ MatchedCounter;
+    }
+    
+    if (MatchedCounter >= PIPES_TO_COMPARE / 2 ) return true; // half or more is OK
+    return false;
+}
+
+/************************************************************************************************************/
+#define BADNIBBLECOUNT 6
+uint8_t CheckPipeNibbles(uint8_t b){ // heer
+
+    uint8_t temp;
+    uint8_t BadLowerNibble[BADNIBBLECOUNT]       = {0x05,0x0a,0x02,0x01,0x00,0x0f};
+    uint8_t BadHigherNibble[BADNIBBLECOUNT]      = {0x50,0xa0,0x20,0x10,0x00,0xf0};
+    uint8_t BetterLowerNibble[BADNIBBLECOUNT]    = {0x03,0x04,0x06,0x07,0x08,0x09};
+    uint8_t BetterHigherNibble[BADNIBBLECOUNT]   = {0x30,0x40,0x60,0x70,0x80,0x90};
+
+    if (!b) return 0x36;                                     // return an acceptable byte for a zero
+        
+    for (int i = 0; i < BADNIBBLECOUNT; ++i) {               // ********** check LOWER nibble **********
+        if ((b & 0x0f) == BadLowerNibble[i])
+        {
+            temp = b & 0xf0;                                 // save only the hi nibble in temp
+            b    = temp | BetterLowerNibble[i];              // put an acceptable nibble into lower nibble
+        }
+    }
+    for (int i = 0; i < BADNIBBLECOUNT;++i){                 // ********** check HIGHER nibble **********
+        if ((b & 0xf0) == BadHigherNibble[i]) 
+        {
+            temp = b & 0x0f;                                  // save only the Low nibble in temp
+            b = temp | BetterHigherNibble[i];                 // put an acceptable nibble into Higher nibble
+        }
+    }
+    return b;
+}
 /************************************************************************************************************/
 
-void GetNewPipe() 
-{   NewPipe =  (uint64_t)ReceivedData[0] << 56;
-    NewPipe += (uint64_t)ReceivedData[1] << 48;
-    NewPipe += (uint64_t)ReceivedData[2] << 40;
-    NewPipe += (uint64_t)ReceivedData[3] << 32;
-    NewPipe += (uint64_t)ReceivedData[4] << 24;
-    NewPipe += (uint64_t)ReceivedData[5] << 16;
-    NewPipe += (uint64_t)ReceivedData[6] << 8;
-    NewPipe += (uint64_t)ReceivedData[7];
 
-    for (int i = 0; i < 8; ++i){
-          TheReceivedPipe[i] = ReceivedData[i];
+void GetNewPipe()  // from TX
+{
+     if (!NewData) return;
+     NewData = false;
+   
+    NewPipeMaybe = (uint64_t)ReceivedData[0]  << 40;
+    NewPipeMaybe += (uint64_t)ReceivedData[1] << 32;
+    NewPipeMaybe += (uint64_t)ReceivedData[2] << 24;
+    NewPipeMaybe += (uint64_t)ReceivedData[3] << 16;
+    NewPipeMaybe += (uint64_t)ReceivedData[4] << 8;
+    NewPipeMaybe += (uint64_t)ReceivedData[5];
+
+    if (ValidateNewPipe())  // was this pipe corrupted?
+    {
+        NewPipe      = NewPipeMaybe;
+        for (int i = 0; i < 6; ++i) {
+            TheReceivedPipe[i] = ReceivedData[i];          
+        }
+        BindModel();
+        PipeSeen = true;
     }
+    ++pcount; // inc pipes received
 }
 
 /************************************************************************************************************/
@@ -154,14 +218,23 @@ void GetNewPipe()
 FLASHMEM void GetOldPipe()
 {
     ReadSavedPipe();
-    OldPipe = (uint64_t)SavedPipeAddress[0] << 56;
-    OldPipe += (uint64_t)SavedPipeAddress[1] << 48;
-    OldPipe += (uint64_t)SavedPipeAddress[2] << 40;
-    OldPipe += (uint64_t)SavedPipeAddress[3] << 32;
-    OldPipe += (uint64_t)SavedPipeAddress[4] << 24;
-    OldPipe += (uint64_t)SavedPipeAddress[5] << 16;
-    OldPipe += (uint64_t)SavedPipeAddress[6] << 8;
-    OldPipe += (uint64_t)SavedPipeAddress[7];
+    
+    OldPipe  = (uint64_t)SavedPipeAddress[0] << 40;
+    OldPipe += (uint64_t)SavedPipeAddress[1] << 32;
+    OldPipe += (uint64_t)SavedPipeAddress[2] << 24;
+    OldPipe += (uint64_t)SavedPipeAddress[3] << 16;
+    OldPipe += (uint64_t)SavedPipeAddress[4] << 8;
+    OldPipe += (uint64_t)SavedPipeAddress[5];
+    
+#ifdef DB_BIND
+    Serial.println("Loading PIPE:");
+    for (int i = 0; i < 6; ++i){
+        Serial.print(SavedPipeAddress[i], HEX);
+        Serial.print(" ");
+    }
+    Serial.println(" ");
+#endif
+    
 }
 
 /************************************************************************************************************/
@@ -169,10 +242,9 @@ FLASHMEM void GetOldPipe()
 void     HopToNextChannel()
 {
     CurrentRadio->stopListening();
-    delayMicroseconds (500);
+    delayMicroseconds(100);
     CurrentRadio->setChannel(NextChannel);
-    MostRecentHop = millis();
-    delayMicroseconds(500);
+    delayMicroseconds(100);
     CurrentRadio->startListening();
 #ifdef DB_FHSS
     ShowHopDurationEtc();
@@ -192,7 +264,7 @@ FLASHMEM void InitCurrentRadio()
     CurrentRadio->setPALevel(RF24_PA_MAX);
     CurrentRadio->setDataRate(RF24_250KBPS);
     CurrentRadio->openReadingPipe(1, ThisPipe);
-    CurrentRadio->setRetries(3, 3);         // automatic retries
+    CurrentRadio->setRetries(0, 2);         // automatic retries
     CurrentRadio->setAutoAck(true);
     SaveNewBind = true;
     HopStart    = millis();
@@ -202,13 +274,13 @@ FLASHMEM void InitCurrentRadio()
 
 void TryToConnectNow()
 {
+    uint32_t ATimer;
+  
+    delayMicroseconds(250);
     CurrentRadio->startListening();
-    uint32_t ATimer = millis();
-    while ((!CurrentRadio->available()) && (millis() - ATimer) < LISTEN_PERIOD) {
-    }
+    ATimer = millis();
+    while ((!CurrentRadio->available()) && (millis() - ATimer) < LISTEN_PERIOD) {delayMicroseconds(10);}// *** > Lock up sometimes happens here!! < ***
     Connected = CurrentRadio->available();
-
-   // if (Connected) Serial.println(millis() - ATimer);
 }
 
 /************************************************************************************************************/
@@ -299,26 +371,36 @@ FASTRUN void Reconnect()
     if (ThisRadio == 2) RX2TotalTime += (millis() - ReconnectedMoment);
     
     while (!Connected) {
+        if (Blinking) BlinkLed();
+        KickTheDog();
         if (BoundFlag) KeepSbusHappy(); // Some SBUS systems timeout FAST, so resend old data to keep it happy
+        delayMicroseconds(300);
         CurrentRadio->stopListening();
         CurrentRadio->flush_tx(); 
         CurrentRadio->flush_rx(); 
-        
-        delayMicroseconds(1000);                             // NEEDED!
-        
+        delay(3);                             // NEEDED!
         ReconnectChannel = *(FHSSRecoveryPointer + ReconnectIndex); // Get a reconnect channel
         ++ReconnectIndex;
         if (ReconnectIndex >= RECONNECT_CHANNELS_COUNT + RECONNECT_CHANNELS_START) ReconnectIndex = RECONNECT_CHANNELS_START;
         CurrentRadio->setChannel(ReconnectChannel);
+        delay(1); 
         ++Attempts;
-        if (Attempts < 3) TryToConnectNow();
+         
+       
+        if (Attempts < 3) {
+            TryToConnectNow();
+        }
+       
         if (!Connected) {
            
+
 #ifdef SECOND_TRANSCEIVER
+          
             if (Attempts >= 3) {
                 TryTheOtherTransceiver(ReconnectChannel);
                 Attempts = 0;
             }
+            
 #else
             if (Attempts >= 3) {
                 ProdRadio(ReconnectChannel); // This avoids a lockup of the nRF24L01+ !
@@ -328,18 +410,23 @@ FASTRUN void Reconnect()
             if ((millis() - SearchStartTime) > FAILSAFE_TIMEOUT) {
                 if (!FailSafeSent) FailSafe();
             }
+            
         }
     } // cannot pass here if not connected
 
      // must have connected by here
-    
     FailSafeSent = false;
     if (PreviousRadio != ThisRadio) ++RadioSwaps; // Count the radio swaps
     ReconnectedMoment = millis();                 // Save this moment
+    if (ModelMatched) {
+        digitalWrite(LED_RED, HIGH);
+        Blinking = false;
+    }
     if (FailedSafe){
         FailedSafe = false;
-        NewConnectionMoment = millis();
+        NewConnectionMoment = millis();   
     }
+    
 #ifdef DB_RXTIMERS
     Serial.print("Transceiver1 use so far: ");
     Serial.print(RX1TotalTime / 1000);
@@ -354,6 +441,15 @@ FASTRUN void Reconnect()
 #endif
 }
 /************************************************************************************************************/
+
+void IncChannelNumber(){
+        ++NextChannelNumber;                                            // Move up the channels' array
+        if (NextChannelNumber >= FrequencyCount) NextChannelNumber = 1; // If needed, wrap the channels' array pointer
+        AckPayload.Byte5 = NextChannelNumber;                           // Tell the transmitter which element of the array to use next.
+        NextChannel      = *(FHSSChPointer + NextChannelNumber);        // Get the actual channel number from the array.      
+}
+
+/************************************************************************************************************/
 // This function checks the time since last hop.
 // If it's time to HOP, it sets the high bit in AckPayload.Purpose and both ends then HOP to new channel before next packet.
 // The other 7 BITS of AckPayload.Purpose dictate the Payload's function (therefore 127 possibities.)
@@ -365,11 +461,8 @@ void CheckWhetherItsTimeToHop()
     AckPayload.Purpose &= 0x7f;                                         // Clear the HOP flag
     if ((millis() - HopStart) >= HOPTIME) {                             // Time to hop??
         AckPayload.Purpose |= 0x80;                                     // Yes. So set the HOP flag leaving lower 7 bits unchanged
-        ++NextChannelNumber;                                            // Move up the channels' array
-        if (NextChannelNumber >= FrequencyCount) NextChannelNumber = 1; // If needed, wrap the channels' array pointer
-        AckPayload.Byte5 = NextChannelNumber;                           // Tell the transmitter which element of the array to use next.
-        NextChannel      = *(FHSSChPointer + NextChannelNumber);        // Get the actual channel number from the array.
-        HopNow           = true;                                        // Set local flag and hop when ready BUT NOT BEFORE.
+        IncChannelNumber();
+        HopNow = true; // Set local flag and hop when ready BUT NOT BEFORE.
     }
 }
 /************************************************************************************************************/
@@ -427,6 +520,8 @@ void  SendMacAddress()
   } ThisUnion;
   uint8_t MaxAckP = 1;      // only packets 0 and 1 are needed here.
 
+  ++ MacAddressSentCounter;
+
   AckPayload.Purpose &= 0x7F;
   ++AckPayload.Purpose;
   if (AckPayload.Purpose > MaxAckP) AckPayload.Purpose = 0; // wrap after max
@@ -438,7 +533,7 @@ void  SendMacAddress()
                SendIntToAckPayload(ThisUnion.Val32[0]);
                break;
            case 1:
-               SendIntToAckPayload(ThisUnion.Val32[1]);
+                SendIntToAckPayload(ThisUnion.Val32[1]);
                break;
            default:
                break;
@@ -449,7 +544,7 @@ void  SendMacAddress()
 void LoadAckPayload()
 {
     
-     if (!BoundFlag) {
+     if (MacAddressSentCounter < 16) {
         SendMacAddress(); 
         return;
     }
