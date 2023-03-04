@@ -27,7 +27,7 @@
  * - Screen timeout to save battery.
  * - FHSS with very fast connect and reconnect
  * - Uses 32 GIG SD card for model memories and help files
- * - Binding without bind plug - uses unique Mac address as pipe address.
+ * - Binding - uses unique Mac address as pipe address.
  * - Four User definable three position switches
  * - Channels 5,6,7 & 8 can be switches or knobs.
  * - Input sources definable - any stick, switch or knob can be mapped to any function.
@@ -578,6 +578,7 @@ uint64_t NewPipeMaybe = 0;
 uint64_t PreviousNewPipes[PIPES_TO_COMPARE];
 uint8_t  PreviousNewPipesIndex = 0;
 uint8_t  pcount                = 0;
+char page_RXSetupView[] = "page RXSetupView";
 // **********************************************************************************************************************************
 
 // **********************************************************************************************************************************
@@ -1215,7 +1216,7 @@ void GreenLedOn()
             if (AnnounceConnected) {
                 PlaySound(CONNECTEDMSG);
                 ModelMatched = true;
-                BoundFlag    = true; // test!
+                BoundFlag    = true; 
                 Procrastinate(2000);
             }
             }
@@ -3645,7 +3646,7 @@ void GetTeensyMacAdress(){
     for (int i = 0; i < 8; ++i){
         MacAddress[i] = CheckPipeNibbles(MacAddress[i]);  // Fix PIPE if needed !
     }
-    //  for (int q = 0; q < 8; ++q)MacAddress[q] = 0x12; // test! heer
+    //  for (int q = 0; q < 8; ++q)MacAddress[q] = 0x12; // test! 
 
     TeensyMACAddPipe = (uint64_t)MacAddress[0]  << 40;
     TeensyMACAddPipe += (uint64_t)MacAddress[1] << 32;
@@ -5139,7 +5140,7 @@ void BindNow() // Bind button was pressed
     ModelsMacUnionSaved.Val32[0] = ModelsMacUnion.Val32[0];
     ModelsMacUnionSaved.Val32[1] = ModelsMacUnion.Val32[1];
     SaveOneModel(ModelNumber);
-    Serial.println("Saved MODEL ID!"); // heer
+    Serial.println("Saved MODEL ID!");
 }
 
     /*********************************************************************************************************************************/
@@ -6272,7 +6273,6 @@ void LogVIEW()
 void SetupViewFM() 
 { 
 
-    char page_RXSetupView[] = "page RXSetupView";
     SaveAllParameters();
     CurrentView = RXSETUPVIEW;
     SendCommand(page_RXSetupView);
@@ -6299,7 +6299,7 @@ void StartSubTrimView()
 /******************************************************************************************************************************/
 void EndSubTrimView()
 { // Subtrim view exit
-    char page_RXSetupView[] = "page RXSetupView";
+   
     SaveOneModel(ModelNumber);
     CurrentView = RXSETUPVIEW;
     SendCommand(page_RXSetupView);
@@ -6473,7 +6473,6 @@ void RXSetup1Start() // model options screen
 
 void RXSetup1End()
 {
-    char page_RXSetupView[] = "page RXSetupView";
     char UseKill[]          = "c0";
     char Mchannel[]         = "n1";
     char Mvalue[]           = "n0";
@@ -7090,7 +7089,6 @@ bool GetBackupFilename(char* goback,char * tt1, char * MMname, char * heading,ch
   char GoPopupView[] = "page PopupView"; 
   char Dialog[]      = "Dialog";
   
-
   SendCommand(GoPopupView);
   SendText(Dialog, Prompt);
   Confirmed[0] = '?';
@@ -7299,9 +7297,28 @@ void SelectChannelOrder(){
         digitalWrite(POWER_OFF_PIN, HIGH); 
     }
  }
+/******************************************************************************************************************************/
+void ModelUnmatch(){ // heer
 
+  // This deletes cuttent model ID in preparation perhas for binding to new model.
+
+    char prompt[]                   = "Un-match this model memory?";
+    char Done[]                     = "Model memory forgotten.";
+    char DoneAlready[]              = "Model already forgotten.";
+
+    if (!ModelsMacUnionSaved.Val64){   
+        GetConfirmation(page_RXSetupView, DoneAlready);
+        return;
+    }
+
+    if (GetConfirmation(page_RXSetupView,prompt)){
+        ModelsMacUnionSaved.Val64 = 0;
+        SaveOneModel(ModelNumber);
+        GetConfirmation(page_RXSetupView, Done);
+    }
+}
 // ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
-#define LASTFUNCTION 68 // one more than final one
+#define LASTFUNCTION 69 // One more than final one, because first is number zero
 
 void (*NumberedFunctions[LASTFUNCTION])() {
     Blank,                // 0 
@@ -7371,7 +7388,8 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     Blank,                      // 64 
     ReceiveModelFile,           // 65
     TXModuleViewStart,          // 66
-    TXModuleViewEnd             // 67
+    TXModuleViewEnd,            // 67
+    ModelUnmatch                // 68
 
 }; // list will become much longer ...
 // **********************************************************************************************************************************
@@ -7379,7 +7397,6 @@ void (*NumberedFunctions[LASTFUNCTION])() {
             char pTrimView[]            = "page TrimView";
             char n0[]                   = "n0";
             char c0[]                   = "c0";
-
             SendCommand(pTrimView);
             CurrentView = TRIM_VIEW;
             SendValue(n0, TrimMultiplier);
@@ -7474,7 +7491,6 @@ FASTRUN void ButtonWasPressed()
         char page_SticksView[]         = "page SticksView";
         char page_GraphView[]          = "page GraphView";
         char page_SetupView[]          = "page SetupView";
-        char page_RXSetupView[]        = "page RXSetupView";
         char page_AudioView[]          = "page AudioView";
         char page_ColoursView[]        = "page ColoursView";
         char GoSetupView[]             = "GoSetupView";
@@ -8644,10 +8660,10 @@ void LoadPacketData()
     SendBuffer[CHANNELSUSED + 2] = 0;
     switch (PacketNumber) {
         case 0:
-             SendBuffer[CHANNELSUSED + 2] = BindingNow;
-            if (BindingNow == 1) {
-                BindingNow  = 2;
-            }
+           //  SendBuffer[CHANNELSUSED + 2] = BindingNow;
+           // if (BindingNow == 1) {
+           //     BindingNow  = 2;
+           // }
             if (((millis() - FailSafeTimer) > 1500) && SaveFailSafeNow) {
                 SendBuffer[CHANNELSUSED + 1] = SaveFailSafeNow; // FailSafeSaveMoment
                 SaveFailSafeNow              = false;           // once should do it.
@@ -9327,7 +9343,7 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
    /* 
    if (!AutoModelSelect){
             Serial.println("Calling SAVING BIND NON AUTO");
-            BindNow(); // heer
+            BindNow(); 
             ModelMatched = true;
             AutoModelSelect = true;
             return;
@@ -9343,8 +9359,10 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
           if (ModelsMacUnion.Val64 == ModelsMacUnionSaved.Val64) {
 
                 if (AnnounceConnected) {
-                PlaySound(MMMATCHED); // test!
-                Procrastinate(1500);
+                    if (AutoModelSelect){
+                        PlaySound(MMMATCHED); 
+                        Procrastinate(1500);
+                    }
                 ModelMatched = true;                                      //  It's a match so start flying!
                 BindButton   = true;
                 }
@@ -9370,22 +9388,15 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                     SaveAllParameters();                                  //  Save it
                     GotoFrontView(); 
                 }else{                                                    
-                    ModelNumber = SavedModelNumber;                       //  Not found anywhere. So offer to bind the restored selected one
+                    ModelNumber = SavedModelNumber; //  Not found anywhere. So  bind to the restored selected one
                     ReadOneModel(ModelNumber);
-                    if (BindNewModel){
-                        Serial.println("Calling SAVING MODEL ID...");
-                        BindNow(); // heer TEST!
-                    }
+                    BindNow(); 
+                    PlaySound(MMSAVED);
+                    Procrastinate(1650);
                 }
                 return;
-             } else {
-                SendCommand(BindButtonVisible);
-                if ((millis() - WarningTimer) > 10000) {
-                    WarningTimer = millis();
-                    if (AnnounceConnected) PlaySound(BINDNEEDED);
-                }
-                BindButton = true;
-                ModelMatched = false;
+             } else {     
+                BindNow(); 
             }
         }
     }
@@ -9397,7 +9408,7 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
 bool ValidateNewPipe(){ 
     uint8_t MatchedCounter = 0;
     ++pcount;
-    if (pcount < 5) return false; // ignore first few // heer
+    if (pcount < 5) return false; 
     PreviousNewPipes[PreviousNewPipesIndex] = NewPipeMaybe;
     PreviousNewPipesIndex++;
     if (PreviousNewPipesIndex > PIPES_TO_COMPARE) PreviousNewPipesIndex = 0;
@@ -9440,7 +9451,7 @@ FASTRUN void ParseAckPayload()
 {
     if (BuddyPupilOnPPM) return; // buddy pupil need none of this
  
-    NextChannelNumber = AckPayload.Byte5;                     // every packet tells of next hop destination
+    NextChannelNumber = AckPayload.Byte5;                 // every packet tells of next hop destination
      
     if (AckPayload.Purpose & 0x80) // Hi bit is now the **HOP NOW!!** flag
     {
@@ -9451,7 +9462,6 @@ FASTRUN void ParseAckPayload()
  
     if (!ModelMatched){
        GetModelsMacAddress();
-      
        return;
     }
     

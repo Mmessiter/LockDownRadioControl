@@ -14,12 +14,12 @@
   #define NEWPCB
 
 // **************************************************************************
-//       TX VERSION NUMBER   (May 2020 - February 2023 Malcolm Messiter)      *
+//       TX VERSION NUMBER   (May 2020 - March 2023 Malcolm Messiter)      *
 //***************************************************************************
 
 #define TXVERSION_MAJOR   2
 #define TXVERSION_MINOR   1
-#define TXVERSION_MINIMUS 3
+#define TXVERSION_MINIMUS 4
 
 // **************************************************************************
 //                               Includes                                   *
@@ -55,7 +55,7 @@
 //                               General                                    *
 // **************************************************************************
 
-
+#define DEFAULTPIPEADDRESS      0xB7BE3E9423LL            // Pipe address for startup - any value but MUST match RX
 #define CHANNELSUSED            16                        // 16 Channels
 #define MAXMIXES                32                        // 32 mixes
 #define TICKSPERMINUTE          60000                     // millis() = 60000 per minute
@@ -63,10 +63,8 @@
 #define BANKSWITCH              4                         // Default MODE switch
 #define AUTOSWITCH              1                         // Default AUTO switch
 #define BANKSUSED               4                         // Flight modes (AKA Banks)
-#define DEFAULTPIPEADDRESS      0xBABE1E5420LL            // Pipe address for startup - any value but MUST match RX
 #define LOWBATTERY              42                        // Default percent for warning (User definable)
-
-#ifdef NEWPCB  // red or greeen PCBs ... not black
+#ifdef NEWPCB                                             // ***>>> red or green PCBs ... not black <<<***
   #define CE_PIN                  7                         // for SPI to nRF24L01
   #define CSN_PIN                 8                         // for SPI to nRF24L01
   #define BUDDYPPMPORT            10                        // Buddybox PPM pin
@@ -305,8 +303,7 @@
 #define THREE           69
 #define TWO             70
 #define ONE             71
-
-
+#define MMSAVED         72
 
 // **************************************************************************
 //               SDCARD MODEL MEMORY CONSTANTS                              *
@@ -391,9 +388,9 @@
 //                            WATCHDOG PARAMETERS                           *
 //***************************************************************************
 
-#define WATCHDOGTIMEOUT 10000 // 10 Seconds before reboot (32ms -> 500 seconds)
-#define KICKRATE        1000  // Kick once a second (must be between WATCHDOGMAXRATE and WATCHDOGTIMEOUT)
-#define WATCHDOGMAXRATE 500   // 500 ms secs between kicks is max rate allowed
+#define WATCHDOGTIMEOUT 2000 // 2 Seconds before reboot (32ms -> 500 seconds)
+#define KICKRATE        500  // Kick twice a second (must be between WATCHDOGMAXRATE and WATCHDOGTIMEOUT)
+#define WATCHDOGMAXRATE 250  // 250 ms secs between kicks is max rate allowed
 
 /*********************************************************************************************************************************/
 // external (global vars) needed here

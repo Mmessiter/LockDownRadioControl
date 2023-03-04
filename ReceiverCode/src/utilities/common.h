@@ -17,10 +17,10 @@
 
 #define RXVERSION_MAJOR   2
 #define RXVERSION_MINOR   1
-#define RXVERSION_MINIMUS 3 // Feb 2023
+#define RXVERSION_MINIMUS 4 // March 2023
 
 
- // #define DB_FHSS
+// #define DB_FHSS
 // #define DB_SENSORS
 // #define DB_BIND
 // #define DB_FAILSAFE
@@ -30,18 +30,14 @@
  #define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< ****
 //**************************************************************************************************************************
 
-
 // **************************************************************************
 //                            WATCHDOG PARAMETERS                           *
 //***************************************************************************
 
-#define WATCHDOGTIMEOUT 5000 // 5 Seconds before reboot (32ms -> 500 seconds)
-#define KICKRATE        1000  // Kick once a second (must be between WATCHDOGMAXRATE and WATCHDOGTIMEOUT)
-#define WATCHDOGMAXRATE 500   // 500 ms secs between kicks is max rate allowed
+#define WATCHDOGTIMEOUT 2000 // 2 Seconds before reboot (32ms -> 500 seconds)
+#define KICKRATE        500  // Kick twice a second (must be between WATCHDOGMAXRATE and WATCHDOGTIMEOUT)
+#define WATCHDOGMAXRATE 250  // 250 ms secs between kicks is max rate allowed
 //**************************************************************************************************************************
-
-
-
 
 #define SENSOR_HUB_I2C_ADDRESS 8
 #define HOPTIME                80  // ms between channel changes 
@@ -54,7 +50,7 @@
 
 // *****************************************************************************************
 
-#define DEFAULTPIPE              0xBABE1E5420LL
+#define DEFAULTPIPE              0xB7BE3E9423LL // Default pre-bind pipe address (Matches TX default pipe)
 #define FREQUENCYSCOUNT          82 // uses 82 different channels
 #define FREQUENCYSCOUNT1         41 // uses 41 different test channels
 #define CHANNELSUSED             16

@@ -37,38 +37,38 @@ FASTRUN void TryOtherPipe()
         ModelMatched = false;
         SetThePipe(DefaultPipe);
     }
-    else {
-        BoundFlag = true;
-      //  ModelMatched = true;
+    else 
+    {
+        BoundFlag = true;           //  ... but not modelmatched yet
         SetThePipe(TeensyMACAddPipe); // heer
     }
 }
 /************************************************************************************************************/
+/************************************************************************************************************/
+#define BADNIBBLECOUNT 6
 
 uint8_t CheckPipeNibbles(uint8_t b){ // heer
 
     uint8_t temp;
-    uint8_t BadLowerNibble[4]       = {0x05, 0x0a, 0x02, 0x01};
-    uint8_t BadHigherNibble[4]      = {0x50, 0xa0, 0x20, 0x10};
-    uint8_t BetterLowerNibble[4]    = {0x03, 0x04, 0x06, 0x07};
-    uint8_t BetterHigherNibble[4]   = {0x30, 0x40, 0x60, 0x70};
+    uint8_t BadLowerNibble[BADNIBBLECOUNT]       = {0x05,0x0a,0x02,0x01,0x00,0x0f};
+    uint8_t BadHigherNibble[BADNIBBLECOUNT]      = {0x50,0xa0,0x20,0x10,0x00,0xf0};
+    uint8_t BetterLowerNibble[BADNIBBLECOUNT]    = {0x03,0x04,0x06,0x07,0x08,0x09};
+    uint8_t BetterHigherNibble[BADNIBBLECOUNT]   = {0x30,0x40,0x60,0x70,0x80,0x90};
 
-    if (!b)                                     // ********** check for a zero **********
-        {               
-            return 0x36;                        // return an acceptable byte
-        }
-    for (int i = 0; i < 4; ++i) {               // ********** check LOWER nibble **********
+    if (!b) return 0x36;                                     // return an acceptable byte for a zero
+        
+    for (int i = 0; i < BADNIBBLECOUNT; ++i) {               // ********** check LOWER nibble **********
         if ((b & 0x0f) == BadLowerNibble[i])
         {
-            temp = b & 0xf0;                    // save only the hi nibble in temp
-            b    = temp | BetterLowerNibble[i]; // put an acceptable nibble into lower nibble
+            temp = b & 0xf0;                                 // save only the hi nibble in temp
+            b    = temp | BetterLowerNibble[i];              // put an acceptable nibble into lower nibble
         }
     }
-    for (int i = 0; i < 4; ++i){                 // ********** check HIGHER nibble **********
+    for (int i = 0; i < BADNIBBLECOUNT;++i){                 // ********** check HIGHER nibble **********
         if ((b & 0xf0) == BadHigherNibble[i]) 
         {
-            temp = b & 0x0f;                    // save only the Low nibble in temp
-            b = temp | BetterHigherNibble[i];   // put an acceptable nibble into Higher nibble
+            temp = b & 0x0f;                                  // save only the Low nibble in temp
+            b = temp | BetterHigherNibble[i];                 // put an acceptable nibble into Higher nibble
         }
     }
     return b;
@@ -438,9 +438,9 @@ FLASHMEM void InitRadio(uint64_t Pipe)
 void SetThePipe(uint64_t WhichPipe)
 {
     Radio1.openWritingPipe(WhichPipe);
-    delay(2);
+    delay(1);
     Radio1.stopListening();
-    delay(2); // allow things to happen
+    delay(1); // allow things to happen
 }
 
 /*********************************************************************************************************************************/

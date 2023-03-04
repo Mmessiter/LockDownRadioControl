@@ -763,7 +763,7 @@ FLASHMEM void setup()
     teensyMAC(MacAddress);
     for (int i = 0; i < 8; ++i) MacAddress[i] = 0x0B; // force new ID fo test! heer
     CurrentRadio = &Radio1;
-    ThisPipe     = 0xBABE1E5420LL;
+    ThisPipe     = DEFAULTPIPE;
     if (digitalRead(BINDPLUG_PIN)) { // ie no bind plug, so initialise to bound pipe
         GetOldPipe();
         ThisPipe = OldPipe;
