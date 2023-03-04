@@ -9352,18 +9352,15 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
     RestoreBrightness();
     
     if (ModelIdentified) {                                                //  We have both bits of Model ID?      
-        
           if (ModelsMacUnion.Val64 == ModelsMacUnionSaved.Val64) {
-
                 if (AnnounceConnected) {
                     if (AutoModelSelect){
                         PlaySound(MMMATCHED); 
                         Procrastinate(1500);
                     }
+                }
                 ModelMatched = true;                                      //  It's a match so start flying!
                 BindButton   = true;
-                }
-
         } else {
             if (AutoModelSelect){                                         //  It's not a match so maybe search for it.
                 ModelNumber = 0;

@@ -715,17 +715,8 @@ void teensyMAC(uint8_t* mac)
 
 /************************************************************************************************************/
 
-void HangAbout(){
-    uint32_t tt = millis();
-    while (millis()-tt < 500) {
-        ReceiveData();
-        if (Blinking) BlinkLed();
-    }
-}
-
-/************************************************************************************************************/
-
 void ReadBindPlug(){
+        uint32_t tt = millis();
         SetUKFrequencies();
     if (!digitalRead(BINDPLUG_PIN)) { // Bind Plug needed to bind!
         Blinking = true;              // Blinking = binding to new TX
@@ -733,10 +724,10 @@ void ReadBindPlug(){
         Serial.println("Bind plug detected.");
 #endif
     }else{
-        Blinking = false;             // Already bound
+        Blinking = false;               // Already bound
         SaveNewBind = false;
-        HangAbout(); // sending model ID?
-        BindModel();
+        while (millis()-tt < 500)  ReceiveData();
+        BindModel();                    // TODO check this...
     }
 }
 /************************************************************************************************************/
@@ -761,7 +752,7 @@ FLASHMEM void setup()
     ScanI2c();    // Detect what's connected
     if (INA219Connected) ina219.begin();
     teensyMAC(MacAddress);
-    for (int i = 0; i < 8; ++i) MacAddress[i] = 0x0B; // force new ID fo test! heer
+   // for (int i = 0; i < 8; ++i) MacAddress[i] = 0x0B; // force new ID fo test! heer
     CurrentRadio = &Radio1;
     ThisPipe     = DEFAULTPIPE;
     if (digitalRead(BINDPLUG_PIN)) { // ie no bind plug, so initialise to bound pipe
