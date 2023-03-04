@@ -3685,7 +3685,6 @@ FLASHMEM void setup()
     WatchDogConfig.callback = WatchDogCallBack;
     TeensyWatchDog.begin(WatchDogConfig);
     LastDogKick = millis(); // needed? - yes!
-   
     delay(WARMUPDELAY);
     if (!SD.begin(BUILTIN_SDCARD)) { // MUST return true or all is lost! 
         delay(WARMUPDELAY);
@@ -5132,15 +5131,16 @@ FASTRUN void DisplayCurve()
 
 void BindNow() // Bind button was pressed 
 {
-
     BindingNow                   = 1;
     BoundFlag                    = true;
     ModelMatched                 = true;
     Connected                    = true;
-    ModelsMacUnionSaved.Val32[0] = ModelsMacUnion.Val32[0];
-    ModelsMacUnionSaved.Val32[1] = ModelsMacUnion.Val32[1];
-    SaveOneModel(ModelNumber);
-    Serial.println("Saved MODEL ID!");
+    if (AutoModelSelect){
+        ModelsMacUnionSaved.Val32[0] = ModelsMacUnion.Val32[0];
+        ModelsMacUnionSaved.Val32[1] = ModelsMacUnion.Val32[1];
+        SaveOneModel(ModelNumber);
+        Serial.println("Saved MODEL ID!");
+    }
 }
 
     /*********************************************************************************************************************************/
@@ -7300,21 +7300,29 @@ void SelectChannelOrder(){
 /******************************************************************************************************************************/
 void ModelUnmatch(){ // heer
 
-  // This deletes cuttent model ID in preparation perhas for binding to new model.
+  // This deletes cuttent model ID in preparation perhaps for binding to new model.
 
-    char prompt[]                   = "Un-match this model memory?";
-    char Done[]                     = "Model memory forgotten.";
-    char DoneAlready[]              = "Model already forgotten.";
+    char p[]                        = "Un-match "; 
+    char p1[]                       = "?";
+    char prompt[50];
+    char Done[]                     = "Model match ID forgotten.";
+    char DoneAlready[]              = "Model match ID not found.";
+    char NotDone[]                  = "Model match ID retained.";
+
+    strcpy(prompt, p);
+    strcat(prompt, ModelName);
+    strcat(prompt, p1);
 
     if (!ModelsMacUnionSaved.Val64){   
         GetConfirmation(page_RXSetupView, DoneAlready);
         return;
     }
-
     if (GetConfirmation(page_RXSetupView,prompt)){
         ModelsMacUnionSaved.Val64 = 0;
         SaveOneModel(ModelNumber);
         GetConfirmation(page_RXSetupView, Done);
+    }else{
+        GetConfirmation(page_RXSetupView, NotDone);
     }
 }
 // ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
@@ -9339,17 +9347,6 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
     uint8_t SavedModelNumber = ModelNumber;
     
     if (ModelMatched) return; // must not change when model connected
-
-   /* 
-   if (!AutoModelSelect){
-            Serial.println("Calling SAVING BIND NON AUTO");
-            BindNow(); 
-            ModelMatched = true;
-            AutoModelSelect = true;
-            return;
-    }
-    */
-
     ModelMatched             = false;
     GotoFrontView();
     RestoreBrightness();
@@ -9381,18 +9378,22 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                     }
                 if (ModelMatched){                                        //  Found it!    
                     UpdateModelsNameEveryWhere();                         //  Use it.
-                    if (AnnounceConnected) {
+                    if (AnnounceConnected) 
+                    {
                         PlaySound(MMFOUND);
                         Procrastinate(1500);
                     }
                     SaveAllParameters();                                  //  Save it
                     GotoFrontView(); 
                 }else{                                                    
-                    ModelNumber = SavedModelNumber; //  Not found anywhere. So  bind to the restored selected one
+                    ModelNumber = SavedModelNumber; //  Not found, so bind to the restored selected one
                     ReadOneModel(ModelNumber);
                     BindNow(); 
-                    PlaySound(MMSAVED);
-                    Procrastinate(1650);
+                    if (AutoModelSelect)
+                    {
+                        PlaySound(MMSAVED);
+                        Procrastinate(2000);
+                    }
                 }
                 return;
              } else {     

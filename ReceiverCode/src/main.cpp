@@ -794,6 +794,7 @@ FLASHMEM void setup()
     WatchDogConfig.timeout  = WATCHDOGTIMEOUT; //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s)
     WatchDogConfig.callback = WatchDogCallBack;
     TeensyWatchDog.begin(WatchDogConfig);
+    KickTheDog();
     ReadBindPlug();
     digitalWrite(LED_PIN, LOW);
 }
