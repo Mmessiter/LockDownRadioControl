@@ -9198,7 +9198,7 @@ void swap(uint8_t* a, uint8_t* b)
     *b = c;
 }
 /************************************************************************************************************/
-void CalibrateEdgeSwitches()
+void CalibrateEdgeSwitches() // heer
 { // This function avoids the need to rotate the four edge switches if installed backwards
     for (int i = 0; i < 8; ++i) {
         if (digitalRead(SwitchNumber[i])) {
@@ -9206,7 +9206,7 @@ void CalibrateEdgeSwitches()
             if (i == 2) swap(&SwitchNumber[i], &SwitchNumber[i + 1]); // swap over switches' pin number if wrongly installed
             if (i == 4) swap(&SwitchNumber[i], &SwitchNumber[i + 1]); // swap over switches' pin number if wrongly installed
             if (i == 6) swap(&SwitchNumber[i], &SwitchNumber[i + 1]); // swap over switches' pin number if wrongly installed
-        }
+        }   //// try 7 not 6 ....
     }
 }
 /************************************************************************************************************/
