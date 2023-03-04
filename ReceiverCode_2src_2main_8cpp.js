@@ -8,7 +8,6 @@ var ReceiverCode_2src_2main_8cpp =
     [ "BlinkLed", "ReceiverCode_2src_2main_8cpp.html#aa477cf7453bb57dab00e7b654f62cb13", null ],
     [ "DoBinding", "ReceiverCode_2src_2main_8cpp.html#af4a2e182cd3b86ca9765a08100cfb14a", null ],
     [ "FailSafe", "ReceiverCode_2src_2main_8cpp.html#a42318598726782ebb2e1857f167c8cda", null ],
-    [ "HangAbout", "ReceiverCode_2src_2main_8cpp.html#a2a408dfb00bc3a9acf5e0515c5f8fc59", null ],
     [ "KickTheDog", "ReceiverCode_2src_2main_8cpp.html#ada95a00a341e4a80176eda743a94ab2e", null ],
     [ "LoadFailSafeData", "ReceiverCode_2src_2main_8cpp.html#a7b232e8049c83655363495df07fc96d9", null ],
     [ "loop", "ReceiverCode_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f", null ],
