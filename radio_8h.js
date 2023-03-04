@@ -1,6 +1,7 @@
 var radio_8h =
 [
     [ "Payload", "structPayload.html", "structPayload" ],
+    [ "BADNIBBLECOUNT", "radio_8h.html#a6a0dc2e4d5be33970d9a245234202655", null ],
     [ "BindModel", "radio_8h.html#aa0c6905579a33aef28d737d43676cbbd", null ],
     [ "BlinkLed", "radio_8h.html#aa477cf7453bb57dab00e7b654f62cb13", null ],
     [ "CheckPipeNibbles", "radio_8h.html#acd761b7a3274515f60af86504f70fcd6", null ],

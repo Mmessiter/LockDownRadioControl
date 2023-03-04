@@ -1,5 +1,6 @@
 var RadioFunctions_8cpp =
 [
+    [ "BADNIBBLECOUNT", "RadioFunctions_8cpp.html#a6a0dc2e4d5be33970d9a245234202655", null ],
     [ "xx1", "RadioFunctions_8cpp.html#af12cb4fe3d6d02738ca7a75e1e1fd722", null ],
     [ "yy1", "RadioFunctions_8cpp.html#a10274b74b5b9f35476ae844506775afe", null ],
     [ "YY1EXTRA", "RadioFunctions_8cpp.html#ad7ab066fbe7d750f032f5761dbaa2487", null ],
