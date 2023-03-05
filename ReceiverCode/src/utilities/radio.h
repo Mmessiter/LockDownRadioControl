@@ -256,19 +256,26 @@ void     HopToNextChannel()
 
 /**************************************************************************************************************/
 
+void ConfigureRadio(){
+    CurrentRadio->setPALevel(RF24_PA_MAX);
+    CurrentRadio->setDataRate(RF24_250KBPS);
+    CurrentRadio->enableAckPayload();       // needed
+    CurrentRadio->setRetries(2, 0);         // automatic retries
+    CurrentRadio->enableDynamicPayloads();  // needed
+    CurrentRadio->setAddressWidth(5);
+    CurrentRadio->setCRCLength(RF24_CRC_16); // could be 8 or disabled
+    CurrentRadio->setAutoAck(true);
+    CurrentRadio->maskIRQ(1, 1, 1);         // no interrupts - seems NEEDED at the moment - (line *IS* connected)
+    CurrentRadio->openReadingPipe(1, ThisPipe);
+}
+
+/**************************************************************************************************************/
+
 /** Initialize a radio transceiver. */
 FLASHMEM void InitCurrentRadio()
 {
     CurrentRadio->begin();
-    CurrentRadio->enableAckPayload();       // needed
-    CurrentRadio->enableDynamicPayloads();  // needed
-    CurrentRadio->maskIRQ(1, 1, 1);         // no interrupts - seems NEEDED at the moment - (line *IS* connected)
-    CurrentRadio->setCRCLength(RF24_CRC_8); // (RF24_CRC_8); // could be 16 or disabled
-    CurrentRadio->setPALevel(RF24_PA_MAX);
-    CurrentRadio->setDataRate(RF24_250KBPS);
-    CurrentRadio->openReadingPipe(1, ThisPipe);
-    CurrentRadio->setRetries(0, 2);         // automatic retries
-    CurrentRadio->setAutoAck(true);
+    ConfigureRadio(); 
     SaveNewBind = true;
     HopStart    = millis();
 }
@@ -292,13 +299,18 @@ void TryToConnectNow()
 void ProdRadio(uint8_t Recon_Ch)
 { // After switching radios, this prod allows EITHER to connect. Don't know why - yet!
 
-    CurrentRadio->enableAckPayload();
-    CurrentRadio->enableDynamicPayloads();
-    CurrentRadio->maskIRQ(1, 1, 1);
-    CurrentRadio->setCRCLength(RF24_CRC_8);
+    ConfigureRadio();
+    /*
     CurrentRadio->setPALevel(RF24_PA_MAX);
     CurrentRadio->setDataRate(RF24_250KBPS);
+    CurrentRadio->enableAckPayload();
+    CurrentRadio->setRetries(2, 0);         // automatic retries
+    CurrentRadio->enableDynamicPayloads();
+    CurrentRadio->setAddressWidth(5);
+    CurrentRadio->setCRCLength(RF24_CRC_16);
+    CurrentRadio->maskIRQ(1, 1, 1);
     CurrentRadio->openReadingPipe(1, ThisPipe);
+*/
     CurrentRadio->setChannel(Recon_Ch);
     delay(3);
     TryToConnectNow();
