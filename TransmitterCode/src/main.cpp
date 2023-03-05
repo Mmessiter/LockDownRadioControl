@@ -9345,14 +9345,14 @@ void GotoFrontView(){
 void CompareModelsIDs(){ // The saved MacAddress is compared with the one just received from the model ... etc ...
     
     uint8_t SavedModelNumber = ModelNumber;
-    
     if (ModelMatched) return; // must not change when model connected
     ModelMatched             = false;
     GotoFrontView();
     RestoreBrightness();
-    
+  
     if (ModelIdentified) {                                                //  We have both bits of Model ID?      
-          if (ModelsMacUnion.Val64 == ModelsMacUnionSaved.Val64) {
+          if (ModelsMacUnion.Val64 == ModelsMacUnionSaved.Val64) 
+            {
                 if (AnnounceConnected) {
                     if (AutoModelSelect){
                         PlaySound(MMMATCHED); 
@@ -9361,10 +9361,14 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                 }
                 ModelMatched = true;                                      //  It's a match so start flying!
                 BindButton   = true;
-        } else {
-            if (AutoModelSelect){                                         //  It's not a match so maybe search for it.
-                ModelNumber = 0;
-                while ((ModelMatched == false) && (ModelNumber < MAXMODELNUMBER-1)) 
+                return;
+            } 
+            if (ModelsMacUnion.Val64 != ModelsMacUnionSaved.Val64) 
+            {
+                if (AutoModelSelect)
+                { //  It's not a match so maybe search for it.
+                    ModelNumber = 0;
+                    while ((ModelMatched == false) && (ModelNumber < MAXMODELNUMBER - 1)) 
                     {   //  Try to match the ID with a saved one
                         ++ModelNumber;
                         ReadOneModel(ModelNumber);
@@ -9373,29 +9377,31 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                             BindButton = true; 
                         }
                     }
-                if (ModelMatched){                                        //  Found it!    
-                    UpdateModelsNameEveryWhere();                         //  Use it.
-                    if (AnnounceConnected) 
-                    {
-                        PlaySound(MMFOUND);
-                        Procrastinate(1500);
+                    if (ModelMatched)
+                    {                                                         //  Found it!    
+                        UpdateModelsNameEveryWhere();                         //  Use it.
+                        if (AnnounceConnected) 
+                        {
+                            PlaySound(MMFOUND);
+                            Procrastinate(1500);
+                        }
+                        SaveAllParameters();                                  //  Save it
+                        GotoFrontView(); 
+                    }else{                                           
+                        ModelNumber = SavedModelNumber; //  Not found, so bind to the restored selected one
+                        ReadOneModel(ModelNumber);
+                        BindNow(); 
+                        if (AutoModelSelect)
+                        {
+                            PlaySound(MMSAVED);
+                            Procrastinate(2000);
+                        }   
                     }
-                    SaveAllParameters();                                  //  Save it
-                    GotoFrontView(); 
-                }else{                                                    
-                    ModelNumber = SavedModelNumber; //  Not found, so bind to the restored selected one
-                    ReadOneModel(ModelNumber);
+                } 
+                if (!AutoModelSelect) 
+                {     
                     BindNow(); 
-                    if (AutoModelSelect)
-                    {
-                        PlaySound(MMSAVED);
-                        Procrastinate(2000);
-                    }
                 }
-                return;
-             } else {     
-                BindNow(); 
-            }
         }
     }
 }
@@ -9405,21 +9411,22 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
 // if it matches most of them then it's probably not corrupted :-) 
 bool ValidateNewPipe(){ 
     uint8_t MatchedCounter = 0;
+      
     ++pcount;
-    if (pcount < 5) return false; 
+    if (pcount < 2) return false; 
     PreviousNewPipes[PreviousNewPipesIndex] = NewPipeMaybe;
     PreviousNewPipesIndex++;
     if (PreviousNewPipesIndex > PIPES_TO_COMPARE) PreviousNewPipesIndex = 0;
     for (int i = 0; i < PIPES_TO_COMPARE;++i){
         if (NewPipeMaybe == PreviousNewPipes[i]) ++ MatchedCounter;
     }
-    if (MatchedCounter >= PIPES_TO_COMPARE  - 2 ) return true; // half or more is OK
+    if (MatchedCounter >= PIPES_TO_COMPARE / 2 ) return true; // half or more is OK
     return false;
 }
 
 /************************************************************************************************************/
 void  GetModelsMacAddress(){
-
+ 
     switch (AckPayload.Purpose)
     {
         case 0:
@@ -9434,6 +9441,7 @@ void  GetModelsMacAddress(){
              break;
     }
     if (ModelMatched == false) {
+      
         if ((ModelsMacUnion.Val32[0] > 0) && (ModelsMacUnion.Val32[1] > 0)){   // got both bits yet?
              NewPipeMaybe = ModelsMacUnion.Val64;
              if (ValidateNewPipe()) {
@@ -9447,6 +9455,7 @@ void  GetModelsMacAddress(){
 /************************************************************************************************************/
 FASTRUN void ParseAckPayload()
 {
+
     if (BuddyPupilOnPPM) return; // buddy pupil need none of this
  
     NextChannelNumber = AckPayload.Byte5;                 // every packet tells of next hop destination
@@ -9458,7 +9467,7 @@ FASTRUN void ParseAckPayload()
         AckPayload.Purpose &= 0x7f; // Clear the high BIT, use the remainder ...
     }
  
-    if (!ModelMatched){
+    if (!ModelMatched && !LedWasGreen){
        GetModelsMacAddress();
        return;
     }

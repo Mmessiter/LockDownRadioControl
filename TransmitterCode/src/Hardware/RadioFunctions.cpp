@@ -100,7 +100,7 @@ void Procrastinate(uint32_t HowLong) // This function replaces delay() without f
     RecursedAlready = true;
     while ((millis() - ThisMoment) < HowLong) {
         KickTheDog();                               // keep watchdog happy
-        if (Connected && BoundFlag)  SendData();    // ModelMatched?? TEST!! resend some old data briefly (collecting new is dangerous and not worth it.)
+        if (Connected && BoundFlag && ModelMatched) SendData();    // ModelMatched?? YES. resend some old data briefly (collecting new is dangerous and not worth it.)
     }
     RecursedAlready = false;
 }

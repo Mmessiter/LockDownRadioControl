@@ -195,13 +195,16 @@ void GetNewPipe()  // from TX
     NewPipeMaybe += (uint64_t)ReceivedData[3] << 16;
     NewPipeMaybe += (uint64_t)ReceivedData[4] << 8;
     NewPipeMaybe += (uint64_t)ReceivedData[5];
-
-    if (ValidateNewPipe())  // was this pipe corrupted?
+    
+    if (ValidateNewPipe()) // was this pipe corrupted?
     {
         NewPipe      = NewPipeMaybe;
         for (int i = 0; i < 6; ++i) {
             TheReceivedPipe[i] = ReceivedData[i];          
         }
+#ifdef DB_BIND
+        Serial.println("Received TX ID!");
+#endif      
         BindModel();
         PipeSeen = true;
     }
