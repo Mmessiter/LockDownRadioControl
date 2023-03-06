@@ -34,8 +34,6 @@ var radio_8h =
     [ "SetNewPipe", "radio_8h.html#a6f54969e66375decc44723b141b78766", null ],
     [ "SetUKFrequencies", "radio_8h.html#a2eabdb233653fa02f0b899e26b5e8ce7", null ],
     [ "ShowHopDurationEtc", "radio_8h.html#a2863e7455e30e6fddc0fcf56f62d6564", null ],
-    [ "SwapChipEnableLines", "radio_8h.html#ac980be068a45a1406b0e244304741ac6", null ],
-    [ "TryTheOtherTransceiver", "radio_8h.html#adfacfc7d075937cec51b7bcd08d323ca", null ],
     [ "TryToConnectNow", "radio_8h.html#a1208ef26dd460e6f5f56582f4fbfcf94", null ],
     [ "TurnLedOff", "radio_8h.html#aadfccc52afc40455e31e965015c29b46", null ],
     [ "TurnLedOn", "radio_8h.html#a852569e2aefff6371f3adad09fcd746f", null ],

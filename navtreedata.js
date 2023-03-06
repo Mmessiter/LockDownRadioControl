@@ -74,12 +74,12 @@ var NAVTREEINDEX =
 "RadioFunctions_8h.html",
 "RadioFunctions_8h.html#a992a1c7536f872bdfd833e282cf3b4e4",
 "ReceiverCode_2src_2main_8cpp.html#afabe4c9d9760f8606aa408474e3d626c",
-"TransmitterCode_2src_2main_8cpp.html#a461bdfbe0df771f541b8872ac04bb717",
-"TransmitterCode_2src_2main_8cpp.html#a9d94366336f1e5fd43edb9c24bec5821",
-"TransmitterCode_2src_2main_8cpp.html#aee99c2684d91ac475ed24480da4dcc30",
-"classMPU6050.html#aaefb4b3d93cf4b78d56cd63b10ea0e97",
-"classMPU9250.html#aa48133a853a679469bfc91235c4a52cf",
-"functions_func_c.html",
+"TransmitterCode_2src_2main_8cpp.html#a45797b71ce4448c7f838836b39b48b48",
+"TransmitterCode_2src_2main_8cpp.html#a9cf57d14f56372d539472d6e1cc79a77",
+"TransmitterCode_2src_2main_8cpp.html#aee9320d84f0e518a8cc937ac1f706cf4",
+"classMPU6050.html#aaee15e48af7ba78660b5754f3bb5f37a",
+"classMPU9250.html#aa46038cd293d89d7287795df5cd9acfe",
+"functions_func.html",
 "radio_8h.html#acec349590f33af1fb88040ed4d12e53f"
 ];
 

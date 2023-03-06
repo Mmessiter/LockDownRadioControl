@@ -193,7 +193,7 @@ var searchData=
   ['getstickinput_190',['GetStickInput',['../RadioFunctions_8h.html#af065c70531320b19dbb5f54a714e186a',1,'GetStickInput(uint8_t l):&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a248db02e07497e7a4149db17b4e5c2f3',1,'GetStickInput(uint8_t l):&#160;main.cpp']]],
   ['getstickinputinputonly_191',['GetStickInputInputOnly',['../TransmitterCode_2src_2main_8cpp.html#af1030157034999448f5ca611d6209385',1,'GetStickInputInputOnly(uint8_t l):&#160;main.cpp'],['../RadioFunctions_8h.html#af1030157034999448f5ca611d6209385',1,'GetStickInputInputOnly(uint8_t l):&#160;main.cpp']]],
   ['getsuccessrate_192',['GetSuccessRate',['../TransmitterCode_2src_2main_8cpp.html#a9f5745d51ac7a3efbee333bcacd06c50',1,'main.cpp']]],
-  ['getteensymacadress_193',['GetTeensyMacAdress',['../TransmitterCode_2src_2main_8cpp.html#a0fb058d8e04761a2794bb064eebead57',1,'main.cpp']]],
+  ['getteensymacaddress_193',['GetTeensyMacAddress',['../TransmitterCode_2src_2main_8cpp.html#a079eed93efcfacfd2a78c69e8a6f3085',1,'main.cpp']]],
   ['gettemperature_194',['getTemperature',['../classMPU6050.html#aedfa4f1e6507f48c0a09545345a87875',1,'MPU6050']]],
   ['gettemperature_195',['GetTemperature',['../TransmitterCode_2src_2main_8cpp.html#a19f6fc09d690832e74fd3c679207f07f',1,'main.cpp']]],
   ['gettemperature_5fc_196',['getTemperature_C',['../classMPU9250.html#a3b6cad3768c6153c56fcac4edd3fe792',1,'MPU9250']]],
