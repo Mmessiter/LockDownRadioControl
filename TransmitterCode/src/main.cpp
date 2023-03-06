@@ -9749,10 +9749,10 @@ FASTRUN void loop()
         ShowServoPos(); 
     } else {                                                     // Skip these next lines when buddying as a slave
 
-        if (!BoundFlag || !ModelMatched) {
+        if (!BoundFlag || !ModelMatched) {                       // Keep zeroing the timer while not bound etc.
             BindingTimer = millis();
         }
-        if ((millis() - BindingTimer) < 3000) BufferTeensyMACAddPipe(); 
+        if ((millis() - BindingTimer) < 3000) BufferTeensyMACAddPipe(); // extra three seconds to exchange pipes
         if (BuddyMaster) GetSlaveChannelValuesPPM();                                               // If buddy master, get buddy data and maybe use it.
         if (!MotorEnabled && !BuddyON) SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero whatever was shown.   
         ShowServoPos();
