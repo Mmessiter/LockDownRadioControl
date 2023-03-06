@@ -118,8 +118,9 @@ void HopNowAnyway(){
 void SetNewPipe()
 {
     CurrentRadio->openReadingPipe(1, ThisPipe);
+    delay(1);
+    CurrentRadio->startListening();
 }
-
 
 /************************************************************************************************************/
 
@@ -248,6 +249,7 @@ void ConfigureRadio(){
     CurrentRadio->setAutoAck(true);
     CurrentRadio->maskIRQ(1, 1, 1);         // no interrupts - seems NEEDED at the moment - (line *IS* connected)
     CurrentRadio->openReadingPipe(1, ThisPipe);
+    CurrentRadio->startListening();
 }
 
 /**************************************************************************************************************/
@@ -281,17 +283,6 @@ void ProdRadio(uint8_t Recon_Ch)
 { // After switching radios, this prod allows EITHER to connect. Don't know why - yet!
 
     ConfigureRadio();
-    /*
-    CurrentRadio->setPALevel(RF24_PA_MAX);
-    CurrentRadio->setDataRate(RF24_250KBPS);
-    CurrentRadio->enableAckPayload();
-    CurrentRadio->setRetries(2, 0);         // automatic retries
-    CurrentRadio->enableDynamicPayloads();
-    CurrentRadio->setAddressWidth(5);
-    CurrentRadio->setCRCLength(RF24_CRC_16);
-    CurrentRadio->maskIRQ(1, 1, 1);
-    CurrentRadio->openReadingPipe(1, ThisPipe);
-*/
     CurrentRadio->setChannel(Recon_Ch);
     delay(3);
     TryToConnectNow();
@@ -404,9 +395,8 @@ FASTRUN void Reconnect()
             }
 #endif
             if ((millis() - SearchStartTime) > FAILSAFE_TIMEOUT) {
-                if (!FailSafeSent) FailSafe();
+                     if (!FailSafeSent) FailSafe();
             }
-            
         }
     } // cannot pass here if not connected
 

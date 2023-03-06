@@ -213,6 +213,7 @@ void FailSafe()
     FailedSafe     = true;
     TurnLedOff();
     MacAddressSentCounter = 0;
+    Serial.println("Failsafe!");
 }
 
 #ifdef DB_FHSS
@@ -358,7 +359,7 @@ void BindModel()
 }
 
 /************************************************************************************************************/
-void ReadSavedPipe() // save only 6 bytes
+void ReadSavedPipe() // read only 6 bytes
 {
     for (uint8_t i = 0; i < 6; ++i) {
         SavedPipeAddress[i] = EEPROM.read(i+BIND_EEPROM_OFFSET); // uses first 6 bytes only.
@@ -723,8 +724,7 @@ void DoBinding()
 #endif
 
     GetNewPipe(); 
-   // if (pcount < 4) return;
-   
+  // if (pcount < 4) return; 
   //  if ((ModelMatched) && (!BoundFlag) && (Blinking)) 
   //  {
   //      BindModel();
@@ -782,8 +782,10 @@ FLASHMEM void setup()
     delay(2500); // Needed so that the Sensor hub can boot first and be detected
     Wire.begin();
     delay(20);
+    
     ScanI2c();    // Detect what's connected
     if (INA219Connected) ina219.begin();
+    
     teensyMAC(MacAddress);
    //  for (int i = 0; i < 8; ++i) MacAddress[i] = 0x0B; // force new ID fo test! heer
     CurrentRadio = &Radio1;

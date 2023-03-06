@@ -3634,13 +3634,21 @@ void ShowLogFile(uint8_t StartLine)
 }
 
 
+/************************************************************************************************************/
+
+void teensyMAC(uint8_t* mac)
+{ // GET UNIQUE TEENSY 4.0 ID
+    for (uint8_t by = 0; by < 2; by++) mac[by] = (HW_OCOTP_MAC1 >> ((1 - by) * 8)) & 0xFF;
+    for (uint8_t by = 0; by < 4; by++) mac[by + 2] = (HW_OCOTP_MAC0 >> ((3 - by) * 8)) & 0xFF;
+}
+
 /*********************************************************************************************************************************/
 // This function gets the unique MAC address of the Teensy 4.1
 // And also fixes it so that it's a suitable Pipe address for the nRF24L01
 
-void GetTeensyMacAdress(){
+void GetTeensyMacAddress(){
 
-    teensyMAC(MacAddress);                                // Get MAC address 
+     teensyMAC(MacAddress);                                // Get MAC address 
 
     for (int i = 0; i < 8; ++i){
         MacAddress[i] = CheckPipeNibbles(MacAddress[i]);  // Fix PIPE if needed !
@@ -3698,13 +3706,14 @@ FLASHMEM void setup()
     } else {
             ErrorState = MODELSFILENOTFOUND; // if no file ... or no SD
     }
-    GetTeensyMacAdress();
     
-
+    GetTeensyMacAddress();
+    
     Wire.begin();
     ScanI2c();
     if (USE_INA219) ina219.begin();
     InitSwitchesAndTrims();
+
 
 #ifdef TXMODULESUPPORT
 if (UseTXModule)  
@@ -9357,6 +9366,7 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                         PlaySound(MMMATCHED); 
                         Procrastinate(1500);
                     }
+                    
                 }
                 ModelMatched = true;                                      //  It's a match so start flying!
                 BindButton   = true;
@@ -9384,8 +9394,10 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                             PlaySound(MMFOUND);
                             Procrastinate(1500);
                         }
+                        
                         SaveAllParameters();                                  //  Save it
-                        GotoFrontView(); 
+                        GotoFrontView();
+                        
                     }else{                                           
                         ModelNumber = SavedModelNumber; //  Not found, so bind to the restored selected one
                         ReadOneModel(ModelNumber);
@@ -9403,6 +9415,7 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                 }
         }
     }
+    
 }
 
 /************************************************************************************************************/
@@ -9444,7 +9457,8 @@ void  GetModelsMacAddress(){
              if (ValidateNewPipe()) {
                 ModelIdentified = true; 
                 CompareModelsIDs();
-            } 
+                
+             }
         }    
     }
 }
@@ -9452,7 +9466,6 @@ void  GetModelsMacAddress(){
 /************************************************************************************************************/
 FASTRUN void ParseAckPayload()
 {
-
     if (BuddyPupilOnPPM) return; // buddy pupil need none of this
  
     NextChannelNumber = AckPayload.Byte5;                 // every packet tells of next hop destination
@@ -9698,6 +9711,7 @@ void FASTRUN ManageTransmitter(){
     uint32_t TXPacketElapsed = RightNow - LastPacketSentTime;
 
     KickTheDog();                                                    // Watchdog ... ALWAYS!
+    CheckPowerOffButton();                                           // Pretty obvious really ...   
     CheckForNextionButtonPress(); // Pretty obvious really ...
     if ((PACEMAKER - TXPacketElapsed  <= TIMEFORTXMANAGMENT) && ModelMatched) {
         return; // If it's almost time to send data, then do not start some other task which might easily take longer.
@@ -9719,7 +9733,6 @@ void FASTRUN ManageTransmitter(){
         GetBank();                                                   // Must not call too often        
         ShowComms();                                                 // Screen Telemetry Data                                  
         ShowMotorTimer();                                            // Screen Timer
-        CheckPowerOffButton();                                       // Pretty obvious really ...
         TransmitterLastManaged = millis();
     }
 }
@@ -9752,7 +9765,10 @@ FASTRUN void loop()
         if (!BoundFlag || !ModelMatched) {                       // Keep zeroing the timer while not bound etc.
             BindingTimer = millis();
         }
-        if ((millis() - BindingTimer) < 3000) BufferTeensyMACAddPipe(); // extra three seconds to exchange pipes
+        
+        if ((millis() - BindingTimer) < 3000)
+        BufferTeensyMACAddPipe(); // test! extra three seconds to exchange pipes 
+        
         if (BuddyMaster) GetSlaveChannelValuesPPM();                                               // If buddy master, get buddy data and maybe use it.
         if (!MotorEnabled && !BuddyON) SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero whatever was shown.   
         ShowServoPos();
@@ -9762,7 +9778,7 @@ FASTRUN void loop()
         case NORMAL:            // 0
 #ifdef TXMODULESUPPORT
             if (!UseTXModule) {
-                SendData(); // local TX
+                 SendData(); // local TX
             }else{
                  SendPPM();         // for TX module
                  NewCompressNeeded = false;

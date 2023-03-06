@@ -32,7 +32,7 @@
 #include <Wire.h>
 #include <Adafruit_INA219.h>
 #include <DS1307RTC.h>
-#include <TeensyID.h>
+// #include <TeensyID.h>
 #include <InterpolationLib.h>
 #include <Watchdog_t4.h>
 #include <PulsePosition.h>
@@ -44,7 +44,7 @@
 // #define DB_NEXTION        // Debug NEXTION
 // #define DB_SD             // Debug SD card data
 // #define DB_CHECKSUM       // Debug 32BIT file checksum info
- //#define DB_FHSS           // Debug real time FHSS data
+// #define DB_FHSS           // Debug real time FHSS data
 // #define DB_SENSORS        // Debug Sensors
 // #define DB_BIND           // Debug Binding
 // #define DB_SWITCHES       // Debug Switches

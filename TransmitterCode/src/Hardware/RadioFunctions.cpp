@@ -83,6 +83,13 @@ FASTRUN void BufferTeensyMACAddPipe()
     SendBuffer[3] = (uint8_t)((TeensyMACAddPipe >> 16) & 0xFF);
     SendBuffer[4] = (uint8_t)((TeensyMACAddPipe >> 8) & 0xFF);
     SendBuffer[5] = (uint8_t)((TeensyMACAddPipe)&0xFF);
+    #ifdef DB_BIND
+    for (int i = 0; i < 6; ++i){
+        Serial.print (SendBuffer[i], HEX);
+        Serial.print(" ");
+    }
+    Serial.println(" ");
+    #endif
 }
 
 /************************************************************************************************************/
@@ -253,6 +260,7 @@ void FlushFifos()
 
 FASTRUN void SendData()
 {
+    
     if (SendNoData) return;
     if ((millis() - LastPacketSentTime) >= PACEMAKER) {
         LastPacketSentTime = millis();
