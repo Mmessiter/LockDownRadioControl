@@ -1177,7 +1177,6 @@ void RedLedOn()
         BoundFlag                                   = false;
         BindButton                                  = false;
         BindingNow                                  = 0;
-        BindingTimer                                = 0;
         pcount                                      = 0;
         PacketsPerSecond                            = 0;
         LastShowTime                                = 0;
@@ -9755,11 +9754,12 @@ FASTRUN void loop()
         NewCompressNeeded = false;                               // Fake it as Buddy does not send compressed data
         ShowServoPos(); 
     } else {                                                     // Skip these next lines when buddying as a slave
-        if (!BoundFlag && Connected) BufferTeensyMACAddPipe();   // if not yet bound, insert our pipe into SendBuffer BUT ONLY WHEN CONNECTED 
-        if (BuddyMaster) GetSlaveChannelValuesPPM();             // If buddy master, get buddy data and maybe use it.                                         
+
+        if (!BoundFlag || !ModelMatched) BindingTimer = millis();
+        if ((millis() - BindingTimer) < 3000) BufferTeensyMACAddPipe(); // TODO :THIS MUST BE LONGER TIME
+        if (BuddyMaster) GetSlaveChannelValuesPPM();                                               // If buddy master, get buddy data and maybe use it.
         if (!MotorEnabled && !BuddyON) SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero whatever was shown.   
         ShowServoPos();
-       
     }
 
     switch (CurrentMode) {

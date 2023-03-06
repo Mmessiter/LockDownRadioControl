@@ -184,10 +184,11 @@ uint8_t CheckPipeNibbles(uint8_t b){ // heer
 /************************************************************************************************************/
 
 
-void GetNewPipe()  // from TX
+void GetNewPipe() // from TX
 {
      if (!NewData) return;
      NewData = false;
+    if (PipeSeen) return;
    
     NewPipeMaybe = (uint64_t)ReceivedData[0]  << 40;
     NewPipeMaybe += (uint64_t)ReceivedData[1] << 32;
@@ -198,13 +199,20 @@ void GetNewPipe()  // from TX
     
     if (ValidateNewPipe()) // was this pipe corrupted?
     {
-        NewPipe      = NewPipeMaybe;
-        for (int i = 0; i < 6; ++i) {
-            TheReceivedPipe[i] = ReceivedData[i];          
-        }
 #ifdef DB_BIND
         Serial.println("Received TX ID!");
-#endif      
+#endif 
+        NewPipe      = NewPipeMaybe;
+        for (int i = 0; i < 6; ++i) {
+            TheReceivedPipe[i] = ReceivedData[i];
+#ifdef DB_BIND
+            Serial.print(TheReceivedPipe[i], HEX);
+            Serial.print(" ");
+#endif 
+        }
+#ifdef DB_BIND
+            Serial.println(" ");
+#endif 
         BindModel();
         PipeSeen = true;
     }
@@ -438,8 +446,8 @@ FASTRUN void Reconnect()
         Blinking = false;
     }
     if (FailedSafe){
-        FailedSafe = false;
-        NewConnectionMoment = millis();   
+        FailedSafe          = false;
+        NewConnectionMoment = millis();
     }
     
 #ifdef DB_RXTIMERS

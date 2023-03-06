@@ -92,7 +92,6 @@ uint8_t         MacAddress[9]   = {0, 0, 0, 0, 0, 0, 0, 0,0};
 bool            ModelMatched    = false;
 uint8_t         TheReceivedPipe[9];
 bool            FirstConnection = true;
-bool            ReadyToUseData  = false;
 bool            FailedSafe = true;  // Starting up as the same as after failsafe
 uint32_t        MostRecentHop;
 uint8_t         PPMChannelOrder[CHANNELSUSED] = {2,3,1,4,5,6,7,8,9,10,11,12,13,14,15,16};
@@ -153,13 +152,24 @@ void KickTheDog()
     }
 }
 
+/************************************************************************************************************/
+
+bool CheckCrazyValues(){ // might come when binding
+
+    for (int i = 0; i < 15; ++i) {
+        if ((ReceivedData[i] < MINMICROS) || (ReceivedData[i] > MAXMICROS)) return false;
+    }
+    return true;
+}
 
 /************************************************************************************************************/
 
 
 void MoveServos()
 {
-    if (!ReadyToUseData) return; 
+    if (!CheckCrazyValues()) {
+        return;
+    }
     if (UseSBUS)
     {
         MySbus.write(SbusChannels);         // Send SBUS data
@@ -237,8 +247,6 @@ void UseReceivedData()
         HopStart = millis();                                     // ... and start the timer.
     }
 }
-
-
 /************************************************************************************************************/
 bool ReadData()
 {
@@ -313,13 +321,11 @@ void BindModel()
 #endif
     }
     Blinking    = false; 
-    uint32_t t = millis();
-    while (millis() - t < 1500) ReceiveData(); // this avoid initial glitch on reconnect 
+    
     if (FirstConnection) {
         AttachServos(); // AND START SBUS / PPM
         FirstConnection = false;
     }
-    ReadyToUseData = true; 
     SaveNewBind = false;
     
 }
@@ -752,7 +758,7 @@ FLASHMEM void setup()
     ScanI2c();    // Detect what's connected
     if (INA219Connected) ina219.begin();
     teensyMAC(MacAddress);
-   // for (int i = 0; i < 8; ++i) MacAddress[i] = 0x0B; // force new ID fo test! heer
+    // for (int i = 0; i < 8; ++i) MacAddress[i] = 0x0B; // force new ID fo test! heer
     CurrentRadio = &Radio1;
     ThisPipe     = DEFAULTPIPE;
     if (digitalRead(BINDPLUG_PIN)) { // ie no bind plug, so initialise to bound pipe
@@ -812,7 +818,6 @@ void loop()
 {
     KickTheDog();
     ReceiveData();
-
 
     if (Blinking) BlinkLed();
     if (BoundFlag && Connected && ModelMatched) { // Only move servos if everything is good

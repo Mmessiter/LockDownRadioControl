@@ -421,18 +421,17 @@ FASTRUN void HopToNextChannel()
 FLASHMEM void InitRadio(uint64_t Pipe)
 {
     Radio1.begin(); 
-    
     Radio1.setPALevel(RF24_PA_MAX, true);
     Radio1.setDataRate(RF24_250KBPS);
     Radio1.enableAckPayload();
+    Radio1.openWritingPipe(Pipe);             // Current Pipe address used for Binding
     Radio1.setRetries(RETRYCOUNT, RETRYWAIT); // automatic retries and pauses
-    Radio1.enableDynamicPayloads();
-    Radio1.setAddressWidth(5);                  // was 4, is now 5
-    Radio1.setCRCLength(RF24_CRC_16);           // (RF24_CRC_16); // was 8 
-    Radio1.openWritingPipe(Pipe);               // Current Pipe address used for Binding
-    GapSum  = 0;
     Radio1.stopListening();
-    delay(1);
+    delay(2);
+    Radio1.enableDynamicPayloads();
+    Radio1.setAddressWidth(5);              // was 4, is now 5
+    Radio1.setCRCLength(RF24_CRC_16); // (RF24_CRC_8); // could be 16
+    GapSum  = 0;
 }
 /*********************************************************************************************************************************/
 
