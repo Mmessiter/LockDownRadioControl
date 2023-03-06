@@ -9739,7 +9739,6 @@ void SendPPM(){ // Send a frame of PPM to Third party TX module
 // LOOP
 /************************************************************************************************************/
 
-uint8_t      testt = 0;
 FASTRUN void loop()
 {
     
@@ -9756,7 +9755,7 @@ FASTRUN void loop()
     } else {                                                     // Skip these next lines when buddying as a slave
 
         if (!BoundFlag || !ModelMatched) BindingTimer = millis();
-        if ((millis() - BindingTimer) < 3000) BufferTeensyMACAddPipe(); // TODO :THIS MUST BE LONGER TIME
+        if ((millis() - BindingTimer) < 3000) BufferTeensyMACAddPipe(); 
         if (BuddyMaster) GetSlaveChannelValuesPPM();                                               // If buddy master, get buddy data and maybe use it.
         if (!MotorEnabled && !BuddyON) SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero whatever was shown.   
         ShowServoPos();
