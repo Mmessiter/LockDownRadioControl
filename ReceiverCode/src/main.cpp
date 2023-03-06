@@ -106,6 +106,8 @@ uint8_t         MacAddressSentCounter        = 0;
 WDT_T4<WDT3>    TeensyWatchDog;
 WDT_timings_t   WatchDogConfig;
 uint32_t        LastDogKick     = 0;
+bool            LedIsOn = false;
+
 
 /************************************************************************************************************/
 
@@ -167,9 +169,13 @@ bool CheckCrazyValues(){ // might come when binding
 
 void MoveServos()
 {
-    if (!CheckCrazyValues()) {
+    if (!CheckCrazyValues()) { 
+        TurnLedOff();
         return;
+    } else {
+        TurnLedOn();
     }
+
     if (UseSBUS)
     {
         MySbus.write(SbusChannels);         // Send SBUS data
@@ -205,7 +211,7 @@ void FailSafe()
     SetUKFrequencies();           // default startup conditions
     FailSafeSent   = true;        // Once is enough
     FailedSafe     = true;
-    digitalWrite(LED_RED, LOW);
+    TurnLedOff();
     MacAddressSentCounter = 0;
 }
 
@@ -280,6 +286,28 @@ void AttachServos()
         PPMOutput.begin(PPMPORT);   // Or PPM on same pin
     }
 }
+
+/************************************************************************************************************/
+
+void TurnLedOn()
+{
+     if (!LedIsOn){
+        digitalWrite(LED_RED, HIGH);
+        LedIsOn = true;
+     }
+}
+
+
+/************************************************************************************************************/
+
+void TurnLedOff()
+{
+     if (LedIsOn){
+        digitalWrite(LED_RED, LOW);
+        LedIsOn = false;
+     }
+}
+
 /************************************************************************************************************/
 // This function binds the model using the TX supplied Pipe instead of the default one.
 // If not already saved, this saves it to the eeprom too for next time.
@@ -288,7 +316,6 @@ void BindModel()
 {
     ThisPipe = NewPipe;
     OldPipe  = NewPipe;
-    digitalWrite(LED_RED, HIGH);
     CurrentRadio->stopListening();
     delayMicroseconds(250);
     SetNewPipe(); // change to bound pipe <<< ***************************************
@@ -751,8 +778,8 @@ FLASHMEM void setup()
     pinMode(LED_RED, OUTPUT);
     pinMode(BINDPLUG_PIN, INPUT_PULLUP);
     digitalWrite(LED_PIN, HIGH);
-    digitalWrite(LED_RED, LOW);
-    delay(2500);  // Needed so that the Sensor hub can boot first and be detected
+    TurnLedOff();
+    delay(2500); // Needed so that the Sensor hub can boot first and be detected
     Wire.begin();
     delay(20);
     ScanI2c();    // Detect what's connected
@@ -804,9 +831,9 @@ void BlinkLed() {
         BlinkTimer = millis();
         BlinkValue ^= 1;
         if (BlinkValue) {
-            digitalWrite(LED_RED, HIGH);
+            TurnLedOn();
         }else{
-            digitalWrite(LED_RED, LOW);
+            TurnLedOff();
         }
     }
 }

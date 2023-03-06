@@ -74,6 +74,8 @@ extern void         BlinkLed();
 extern uint8_t MacAddressSentCounter;
 extern void         ReadSavedPipe();
 extern void         KickTheDog();
+extern void         TurnLedOn();
+extern void         TurnLedOff();
 
 /** AckPayload Stucture for data returned to transmitter. */
 struct Payload
@@ -442,7 +444,6 @@ FASTRUN void Reconnect()
     if (PreviousRadio != ThisRadio) ++RadioSwaps; // Count the radio swaps
     ReconnectedMoment = millis();                 // Save this moment
     if (ModelMatched) {
-        digitalWrite(LED_RED, HIGH);
         Blinking = false;
     }
     if (FailedSafe){
