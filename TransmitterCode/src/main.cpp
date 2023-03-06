@@ -3645,7 +3645,7 @@ void GetTeensyMacAdress(){
     for (int i = 0; i < 8; ++i){
         MacAddress[i] = CheckPipeNibbles(MacAddress[i]);  // Fix PIPE if needed !
     }
-    //  for (int q = 0; q < 8; ++q)MacAddress[q] = 0x12; // test! 
+     // for (int q = 0; q < 8; ++q)MacAddress[q] = 0x12; // test! 
 
     TeensyMACAddPipe = (uint64_t)MacAddress[0]  << 40;
     TeensyMACAddPipe += (uint64_t)MacAddress[1] << 32;
@@ -9430,11 +9430,9 @@ void  GetModelsMacAddress(){
     {
         case 0:
              ModelsMacUnion.Val32[0] = GetIntFromAckPayload();
-            // Look(ModelsMacUnion.Val32[0]);
              break;
         case 1:
              ModelsMacUnion.Val32[1] = GetIntFromAckPayload();  
-            // Look(ModelsMacUnion.Val32[1]);
              break;
         default:
              break;
@@ -9741,12 +9739,9 @@ void SendPPM(){ // Send a frame of PPM to Third party TX module
 
 FASTRUN void loop()
 {
-    
-     
     ManageTransmitter();                                         // Do the needed chores ... (if there's time)
     GetNewChannelValues();                                       // Load SendBuffer with new servo positions  Very frequently
      
-
     if (UseMacros) ExecuteMacro();                               // Modify it if macro is running
 
     if (BuddyPupilOnPPM) { 
@@ -9754,7 +9749,9 @@ FASTRUN void loop()
         ShowServoPos(); 
     } else {                                                     // Skip these next lines when buddying as a slave
 
-        if (!BoundFlag || !ModelMatched) BindingTimer = millis();
+        if (!BoundFlag || !ModelMatched) {
+            BindingTimer = millis();
+        }
         if ((millis() - BindingTimer) < 3000) BufferTeensyMACAddPipe(); 
         if (BuddyMaster) GetSlaveChannelValuesPPM();                                               // If buddy master, get buddy data and maybe use it.
         if (!MotorEnabled && !BuddyON) SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero whatever was shown.   
@@ -9765,7 +9762,7 @@ FASTRUN void loop()
         case NORMAL:            // 0
 #ifdef TXMODULESUPPORT
             if (!UseTXModule) {
-                SendData();         // local TX
+                SendData(); // local TX
             }else{
                  SendPPM();         // for TX module
                  NewCompressNeeded = false;

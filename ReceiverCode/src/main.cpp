@@ -175,7 +175,7 @@ void MoveServos()
     } else {
         TurnLedOn();
     }
-
+    
     if (UseSBUS)
     {
         MySbus.write(SbusChannels);         // Send SBUS data
@@ -785,7 +785,7 @@ FLASHMEM void setup()
     ScanI2c();    // Detect what's connected
     if (INA219Connected) ina219.begin();
     teensyMAC(MacAddress);
-    // for (int i = 0; i < 8; ++i) MacAddress[i] = 0x0B; // force new ID fo test! heer
+   //  for (int i = 0; i < 8; ++i) MacAddress[i] = 0x0B; // force new ID fo test! heer
     CurrentRadio = &Radio1;
     ThisPipe     = DEFAULTPIPE;
     if (digitalRead(BINDPLUG_PIN)) { // ie no bind plug, so initialise to bound pipe
