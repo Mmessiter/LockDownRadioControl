@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['badnibblecount_0',['BADNIBBLECOUNT',['../RadioFunctions_8cpp.html#a6a0dc2e4d5be33970d9a245234202655',1,'BADNIBBLECOUNT():&#160;RadioFunctions.cpp'],['../radio_8h.html#a6a0dc2e4d5be33970d9a245234202655',1,'BADNIBBLECOUNT():&#160;radio.h']]],
+  ['badnibblecount_0',['BADNIBBLECOUNT',['../RadioFunctions_8cpp.html#a6a0dc2e4d5be33970d9a245234202655',1,'RadioFunctions.cpp']]],
   ['bankfour_1',['BANKFOUR',['../RadioFunctions_8h.html#a70c430cc7f6137ab569257395a50bd73',1,'RadioFunctions.h']]],
   ['bankone_2',['BANKONE',['../RadioFunctions_8h.html#a71b5a946c9e0c6ae61a9ba32e3f4fb53',1,'RadioFunctions.h']]],
   ['banksnamesview_3',['BANKSNAMESVIEW',['../RadioFunctions_8h.html#a3e5a3899e1c4af97aaae48211045cde5',1,'RadioFunctions.h']]],

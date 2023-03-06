@@ -1,10 +1,8 @@
 var radio_8h =
 [
     [ "Payload", "structPayload.html", "structPayload" ],
-    [ "BADNIBBLECOUNT", "radio_8h.html#a6a0dc2e4d5be33970d9a245234202655", null ],
     [ "BindModel", "radio_8h.html#aa0c6905579a33aef28d737d43676cbbd", null ],
     [ "BlinkLed", "radio_8h.html#aa477cf7453bb57dab00e7b654f62cb13", null ],
-    [ "CheckPipeNibbles", "radio_8h.html#acd761b7a3274515f60af86504f70fcd6", null ],
     [ "CheckWhetherItsTimeToHop", "radio_8h.html#ad21c5c00ff554736e4e21cee13773cd5", null ],
     [ "ClearAckPayload", "radio_8h.html#a5a26715a721e1073d6ae00498282c056", null ],
     [ "ConfigureRadio", "radio_8h.html#a3bb52983d9a2108589830301007bdce1", null ],
@@ -36,6 +34,8 @@ var radio_8h =
     [ "SetNewPipe", "radio_8h.html#a6f54969e66375decc44723b141b78766", null ],
     [ "SetUKFrequencies", "radio_8h.html#a2eabdb233653fa02f0b899e26b5e8ce7", null ],
     [ "ShowHopDurationEtc", "radio_8h.html#a2863e7455e30e6fddc0fcf56f62d6564", null ],
+    [ "SwapChipEnableLines", "radio_8h.html#ac980be068a45a1406b0e244304741ac6", null ],
+    [ "TryTheOtherTransceiver", "radio_8h.html#adfacfc7d075937cec51b7bcd08d323ca", null ],
     [ "TryToConnectNow", "radio_8h.html#a1208ef26dd460e6f5f56582f4fbfcf94", null ],
     [ "TurnLedOff", "radio_8h.html#aadfccc52afc40455e31e965015c29b46", null ],
     [ "TurnLedOn", "radio_8h.html#a852569e2aefff6371f3adad09fcd746f", null ],
