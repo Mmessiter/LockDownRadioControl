@@ -74,6 +74,7 @@ var radio_8h =
     [ "NextChannelNumber", "radio_8h.html#a372b457a109ccee3253b219df1a47412", null ],
     [ "PacketNumber", "radio_8h.html#a09cb370d93005b5a43e932a3d6093ea2", null ],
     [ "pcount", "radio_8h.html#ab8db1cb4ed83fda3eb629971dcf8a5c9", null ],
+    [ "PipePointer", "radio_8h.html#a9b742087149d776e2b9cbc77e1f3bab6", null ],
     [ "PipeSeen", "radio_8h.html#a7bc4d56a6fec99b2cdd9f7aafa16b5ac", null ],
     [ "PreviousData", "radio_8h.html#a54007b635670b351453013425e7f2814", null ],
     [ "PreviousNewPipes", "radio_8h.html#abd91604fdea68053cd6cb707e4e86271", null ],
