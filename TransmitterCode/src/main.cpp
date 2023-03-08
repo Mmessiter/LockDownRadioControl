@@ -3655,13 +3655,13 @@ void GetTeensyMacAddress(){
     }
      // for (int q = 0; q < 8; ++q)MacAddress[q] = 0x12; // test! 
 
-    TeensyMACAddPipe = (uint64_t)MacAddress[0]  << 40;
+    TeensyMACAddPipe  = (uint64_t)MacAddress[0] << 40;
     TeensyMACAddPipe += (uint64_t)MacAddress[1] << 32;
     TeensyMACAddPipe += (uint64_t)MacAddress[2] << 24;
     TeensyMACAddPipe += (uint64_t)MacAddress[3] << 16;
     TeensyMACAddPipe += (uint64_t)MacAddress[4] << 8;
     TeensyMACAddPipe += (uint64_t)MacAddress[5];
-
+    TeensyMACAddPipe &= 0xffffffffff;
 }
 
 /*********************************************************************************************************************************/

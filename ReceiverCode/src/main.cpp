@@ -316,7 +316,6 @@ void TurnLedOff()
 
 void BindModel()
 {
-     ThisPipe = NewPipe;
     CurrentRadio->stopListening();
     delayMicroseconds(250);
     BoundFlag   = true;
@@ -779,11 +778,8 @@ FLASHMEM void setup()
    //  for (int i = 0; i < 8; ++i) MacAddress[i] = 0x0B; // force new ID fo test! 
     CurrentRadio = &Radio1;
    
-   // ThisPipe       = DEFAULTPIPE;
     if (digitalRead(BINDPLUG_PIN)) { // ie no bind plug, so initialise to bound pipe
         GetOldPipe();
-        ThisPipe = OldPipe;
-        NewPipe  = OldPipe;
     }
 
 #ifdef SECOND_TRANSCEIVER

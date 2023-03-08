@@ -20,12 +20,9 @@ uint16_t ReceivedData[UNCOMPRESSEDWORDS]; //  20 x 16 BIT words
 uint16_t PreviousData[UNCOMPRESSEDWORDS]; /** Previously received data (used for servos. Hence not sent if unchanged) */
 uint16_t Interations = 0;
 uint32_t HopStart;
-uint64_t ThisPipe;    
-uint64_t NewPipe      = 0;
 uint64_t NewPipeMaybe = 0;
 uint64_t PreviousNewPipes[PIPES_TO_COMPARE];
 uint8_t  PreviousNewPipesIndex = 0;
-uint64_t OldPipe      = 0;
 bool     FailSafeSent = true;
 uint16_t SbusRepeats  = 0;
 uint32_t RX1TotalTime = 0;
@@ -118,7 +115,7 @@ void HopNowAnyway(){
 
 void SetNewPipe()
 {
-        CurrentRadio->openReadingPipe(1, TheReceivedPipe); // now uses 5 byte array
+        CurrentRadio->openReadingPipe(1, TheReceivedPipe); //  5 byte array
         delay(1);
         CurrentRadio->startListening();
         delay(1);
@@ -182,9 +179,8 @@ void GetNewPipe() // from TX
 #ifdef DB_BIND
         Serial.println("Received TX ID!");
 #endif 
-        NewPipe      = NewPipeMaybe;
         for (int i = 0; i < 5; ++i) {
-            TheReceivedPipe[4-i] = ReceivedData[i+1]; // reversed for our use
+            TheReceivedPipe[4-i] = ReceivedData[i+1]; // reversed byte array for our use
 #ifdef DB_BIND
             Serial.print(ReceivedData[i+1], HEX);
             Serial.print(" ");
@@ -194,7 +190,6 @@ void GetNewPipe() // from TX
 #ifdef DB_BIND
         Serial.println(" ");
 #endif 
-
         BindModel();
         PipeSeen = true;
     }
@@ -212,17 +207,10 @@ FLASHMEM void GetOldPipe() // heer
 {
     ReadSavedPipe();
     
-    OldPipe  = (uint64_t)TheReceivedPipe[0] << 40;
-    OldPipe += (uint64_t)TheReceivedPipe[1] << 32;
-    OldPipe += (uint64_t)TheReceivedPipe[2] << 24;
-    OldPipe += (uint64_t)TheReceivedPipe[3] << 16;
-    OldPipe += (uint64_t)TheReceivedPipe[4] << 8;
-    OldPipe += (uint64_t)TheReceivedPipe[5];
-    
 #ifdef DB_BIND
-    Serial.println("Loading PIPE:");
+    Serial.println("Loaded old PIPE:");
     for (int i = 0; i < 5; ++i){
-        Serial.print(TheReceivedPipe[4-i], HEX);
+        Serial.print(TheReceivedPipe[i], HEX);
         Serial.print(" ");
     }
     Serial.println(" ");
@@ -256,13 +244,11 @@ void ConfigureRadio(){
     CurrentRadio->setCRCLength(RF24_CRC_16); // could be 8 or disabled
     CurrentRadio->setAutoAck(true);
     CurrentRadio->maskIRQ(1, 1, 1);         // no interrupts - seems NEEDED at the moment - (line *IS* connected)
-    
     if (!BoundFlag){
-        CurrentRadio->openReadingPipe(1, DefaultPipe);     // byte array 
+        CurrentRadio->openReadingPipe(1, DefaultPipe);     // 5 byte array 
     }else{
-        CurrentRadio->openReadingPipe(1, TheReceivedPipe); // byte array 
+        CurrentRadio->openReadingPipe(1, TheReceivedPipe); // 5 byte array 
     }
-
     CurrentRadio->startListening();
 }
 
