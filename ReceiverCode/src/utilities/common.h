@@ -50,7 +50,7 @@
 
 // *****************************************************************************************
 
-#define DEFAULTPIPE      0xB7BE3E9423LL // Default pre-bind pipe address (Matches TX default pipe)
+
 #define FREQUENCYSCOUNT  82             // uses 82 different channels
 #define FREQUENCYSCOUNT1 41             // uses 41 different test channels
 #define CHANNELSUSED     16

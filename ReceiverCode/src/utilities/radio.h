@@ -20,7 +20,7 @@ uint16_t ReceivedData[UNCOMPRESSEDWORDS]; //  20 x 16 BIT words
 uint16_t PreviousData[UNCOMPRESSEDWORDS]; /** Previously received data (used for servos. Hence not sent if unchanged) */
 uint16_t Interations = 0;
 uint32_t HopStart;
-uint64_t ThisPipe     = DEFAULTPIPE; // default startup
+uint64_t ThisPipe;    
 uint64_t NewPipe      = 0;
 uint64_t NewPipeMaybe = 0;
 uint64_t PreviousNewPipes[PIPES_TO_COMPARE];
@@ -55,7 +55,7 @@ extern float    AltitudeGPS;
 extern float    DistanceGPS;
 extern float    CourseToGPS;
 extern uint8_t  MacAddress[9];
-extern uint8_t  TheReceivedPipe[9];
+extern uint8_t  TheReceivedPipe[6];
 extern uint32_t NewConnectionMoment;
 extern void BindModel();
 extern void FailSafe(); // defined in main.cpp
@@ -76,6 +76,7 @@ extern void         ReadSavedPipe();
 extern void         KickTheDog();
 extern void         TurnLedOn();
 extern void         TurnLedOff();
+extern uint8_t      DefaultPipe[6];
 
 /** AckPayload Stucture for data returned to transmitter. */
 struct Payload
@@ -117,9 +118,14 @@ void HopNowAnyway(){
 
 void SetNewPipe()
 {
-    CurrentRadio->openReadingPipe(1, ThisPipe);
-    delay(1);
-    CurrentRadio->startListening();
+        CurrentRadio->openReadingPipe(1, TheReceivedPipe); // now uses 5 byte array
+        delay(1);
+        CurrentRadio->startListening();
+        delay(1);
+#ifdef DB_BIND
+        if (BoundFlag)  Serial.println("BOUND TO TX'S PIPE");
+#endif
+   
 }
 
 /************************************************************************************************************/
@@ -177,16 +183,18 @@ void GetNewPipe() // from TX
         Serial.println("Received TX ID!");
 #endif 
         NewPipe      = NewPipeMaybe;
-        for (int i = 0; i < 6; ++i) {
-            TheReceivedPipe[i] = ReceivedData[i];
+        for (int i = 0; i < 5; ++i) {
+            TheReceivedPipe[4-i] = ReceivedData[i+1]; // reversed for our use
 #ifdef DB_BIND
-            Serial.print(TheReceivedPipe[i], HEX);
+            Serial.print(ReceivedData[i+1], HEX);
             Serial.print(" ");
 #endif 
         }
+        TheReceivedPipe[5] = 0;
 #ifdef DB_BIND
-            Serial.println(" ");
+        Serial.println(" ");
 #endif 
+
         BindModel();
         PipeSeen = true;
     }
@@ -200,21 +208,21 @@ void GetNewPipe() // from TX
  * @note Address data in EEPORM is valid only after a previous power cycle observed
  * a completed binding process (pairing was successful at least once during last flight's session).
  */
-FLASHMEM void GetOldPipe()
+FLASHMEM void GetOldPipe() // heer
 {
     ReadSavedPipe();
     
-    OldPipe  = (uint64_t)SavedPipeAddress[0] << 40;
-    OldPipe += (uint64_t)SavedPipeAddress[1] << 32;
-    OldPipe += (uint64_t)SavedPipeAddress[2] << 24;
-    OldPipe += (uint64_t)SavedPipeAddress[3] << 16;
-    OldPipe += (uint64_t)SavedPipeAddress[4] << 8;
-    OldPipe += (uint64_t)SavedPipeAddress[5];
+    OldPipe  = (uint64_t)TheReceivedPipe[0] << 40;
+    OldPipe += (uint64_t)TheReceivedPipe[1] << 32;
+    OldPipe += (uint64_t)TheReceivedPipe[2] << 24;
+    OldPipe += (uint64_t)TheReceivedPipe[3] << 16;
+    OldPipe += (uint64_t)TheReceivedPipe[4] << 8;
+    OldPipe += (uint64_t)TheReceivedPipe[5];
     
 #ifdef DB_BIND
     Serial.println("Loading PIPE:");
-    for (int i = 0; i < 6; ++i){
-        Serial.print(SavedPipeAddress[i], HEX);
+    for (int i = 0; i < 5; ++i){
+        Serial.print(TheReceivedPipe[4-i], HEX);
         Serial.print(" ");
     }
     Serial.println(" ");
@@ -248,7 +256,13 @@ void ConfigureRadio(){
     CurrentRadio->setCRCLength(RF24_CRC_16); // could be 8 or disabled
     CurrentRadio->setAutoAck(true);
     CurrentRadio->maskIRQ(1, 1, 1);         // no interrupts - seems NEEDED at the moment - (line *IS* connected)
-    CurrentRadio->openReadingPipe(1, ThisPipe);
+    
+    if (!BoundFlag){
+        CurrentRadio->openReadingPipe(1, DefaultPipe);     // byte array 
+    }else{
+        CurrentRadio->openReadingPipe(1, TheReceivedPipe); // byte array 
+    }
+
     CurrentRadio->startListening();
 }
 

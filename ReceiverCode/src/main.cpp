@@ -51,7 +51,6 @@ uint8_t         PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8}; // 9 PWMs, re
 SBUS            MySbus(SBUSPORT);       // SBUS
 PulsePositionOutput     PPMOutput;      // PPM
 float           PacketStartTime;
-uint8_t         BindNow        = 0;     /** indicates that the receiver should start the binding/pairing process */
 bool            BoundFlag      = false; /** indicates if receiver paired with transmitter */
 bool            ServosAttached = false;
 uint16_t        SbusChannels[CHANNELSUSED + 1]; // Just one spare
@@ -90,7 +89,7 @@ bool            QNHSent         = false;
 bool            FirstLostPacket = true;
 uint8_t         MacAddress[9]   = {0, 0, 0, 0, 0, 0, 0, 0,0};
 bool            ModelMatched    = false;
-uint8_t         TheReceivedPipe[9];
+uint8_t         TheReceivedPipe[6];
 bool            FirstConnection = true;
 bool            FailedSafe = true;  // Starting up as the same as after failsafe
 uint32_t        MostRecentHop;
@@ -107,8 +106,10 @@ WDT_T4<WDT3>    TeensyWatchDog;
 WDT_timings_t   WatchDogConfig;
 uint32_t        LastDogKick     = 0;
 bool            LedIsOn = false;
-
-
+// #define DEFAULTPIPE     0xB7BE3E9423LL // Default pre-bind pipe address (Matches TX default pipe) 
+// uint8_t DefaultPipe[6] = {0xb7, 0xbe, 0x3e, 0x94, 0x23,    0x00};
+uint8_t DefaultPipe[6] = {0x23, 0x94, 0x3e, 0xbe, 0xb7,    0x00};
+   
 /************************************************************************************************************/
 
 void LoadFailSafeData()
@@ -315,25 +316,18 @@ void TurnLedOff()
 
 void BindModel()
 {
-    ThisPipe = NewPipe;
-    OldPipe  = NewPipe;
+     ThisPipe = NewPipe;
     CurrentRadio->stopListening();
     delayMicroseconds(250);
-    SetNewPipe(); // change to bound pipe <<< ***************************************
     BoundFlag   = true;
     ModelMatched = true;
-    BindNow      = 0;
-
-#ifdef DB_BIND
-    Serial.println("BOUND!"); 
-#endif
     if (Blinking) {
-
+            SetNewPipe(); // change to bound pipe <<< ***************************************
 #ifdef DB_BIND
             Serial.println("SAVING RECEIVED PIPE:");
 #endif
 
-        for (uint8_t i = 0; i < 6; ++i) {
+        for (uint8_t i = 0; i < 5; ++i) {
             EEPROM.update(i + BIND_EEPROM_OFFSET, TheReceivedPipe[i]);
 
 #ifdef DB_BIND
@@ -361,8 +355,8 @@ void BindModel()
 /************************************************************************************************************/
 void ReadSavedPipe() // read only 6 bytes
 {
-    for (uint8_t i = 0; i < 6; ++i) {
-        SavedPipeAddress[i] = EEPROM.read(i+BIND_EEPROM_OFFSET); // uses first 6 bytes only.
+    for (uint8_t i = 0; i < 5; ++i) {
+        TheReceivedPipe[i] = EEPROM.read(i+BIND_EEPROM_OFFSET); // uses first 6 bytes only.
     }
 }
 
@@ -719,16 +713,10 @@ void SaveFailSafeData()
 /************************************************************************************************************/
 void DoBinding() 
 {
-#ifdef DB_BIND
-   // Serial.println("DoBinding()");
-#endif
+
 
     GetNewPipe(); 
-  // if (pcount < 4) return; 
-  //  if ((ModelMatched) && (!BoundFlag) && (Blinking)) 
-  //  {
-  //      BindModel();
-  //  }
+ 
 }
 
 
@@ -748,7 +736,7 @@ void teensyMAC(uint8_t* mac)
 
 /************************************************************************************************************/
 
-void ReadBindPlug(){
+void ReadBindPlug(){ // heer
         uint32_t tt = millis();
         SetUKFrequencies();
     if (!digitalRead(BINDPLUG_PIN)) { // Bind Plug needed to bind!
@@ -758,6 +746,7 @@ void ReadBindPlug(){
 #endif
     }else{
         Blinking = false;               // Already bound
+        BoundFlag = true;
         SaveNewBind = false;
         while (millis()-tt < 500)  ReceiveData();
         BindModel();                    // TODO check this...
@@ -787,9 +776,10 @@ FLASHMEM void setup()
     if (INA219Connected) ina219.begin();
     
     teensyMAC(MacAddress);
-   //  for (int i = 0; i < 8; ++i) MacAddress[i] = 0x0B; // force new ID fo test! heer
+   //  for (int i = 0; i < 8; ++i) MacAddress[i] = 0x0B; // force new ID fo test! 
     CurrentRadio = &Radio1;
-    ThisPipe     = DEFAULTPIPE;
+   
+   // ThisPipe       = DEFAULTPIPE;
     if (digitalRead(BINDPLUG_PIN)) { // ie no bind plug, so initialise to bound pipe
         GetOldPipe();
         ThisPipe = OldPipe;
