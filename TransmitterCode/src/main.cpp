@@ -9770,9 +9770,9 @@ FASTRUN void loop()
         NewCompressNeeded = false;                               // Fake it as Buddy does not send compressed data
         ShowServoPos(); 
     } else {                                                     // Skip these next lines when buddying as a slave
-        if (BuddyMaster) GetSlaveChannelValuesPPM();      // If buddy master, get buddy data and maybe use it.
-        ShowServoPos();                                            
+        if (BuddyMaster) GetSlaveChannelValuesPPM();      // If buddy master, get buddy data and maybe use it.                                         
         if (!MotorEnabled && !BuddyON) SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero whatever was shown.   
+        ShowServoPos();  
         if (!BoundFlag || !ModelMatched)  BindingTimer = millis();
         if ((millis() - BindingTimer) < 3000) BufferTeensyMACAddPipe(); // test! extra three seconds to exchange pipes 
     }
