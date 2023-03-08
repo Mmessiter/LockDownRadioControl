@@ -9749,6 +9749,12 @@ void SendPPM(){ // Send a frame of PPM to Third party TX module
     }
 }
 #endif
+
+void OkSoFar(){
+
+    Look(millis());
+}
+
 /************************************************************************************************************/
 // LOOP
 /************************************************************************************************************/
@@ -9757,24 +9763,18 @@ FASTRUN void loop()
 {
     ManageTransmitter();                                         // Do the needed chores ... (if there's time)
     GetNewChannelValues();                                       // Load SendBuffer with new servo positions  Very frequently
-     
-    if (UseMacros) ExecuteMacro();                               // Modify it if macro is running
+   
+    if (UseMacros) ExecuteMacro(); // Modify it if macro is running
 
     if (BuddyPupilOnPPM) { 
         NewCompressNeeded = false;                               // Fake it as Buddy does not send compressed data
         ShowServoPos(); 
     } else {                                                     // Skip these next lines when buddying as a slave
-
-        if (!BoundFlag || !ModelMatched) {                       // Keep zeroing the timer while not bound etc.
-            BindingTimer = millis();
-        }
-        
-        if ((millis() - BindingTimer) < 3000)
-        BufferTeensyMACAddPipe(); // test! extra three seconds to exchange pipes 
-        
-        if (BuddyMaster) GetSlaveChannelValuesPPM();                                               // If buddy master, get buddy data and maybe use it.
+        if (BuddyMaster) GetSlaveChannelValuesPPM();      // If buddy master, get buddy data and maybe use it.
+        ShowServoPos();                                            
         if (!MotorEnabled && !BuddyON) SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero whatever was shown.   
-        ShowServoPos();
+        if (!BoundFlag || !ModelMatched)  BindingTimer = millis();
+        if ((millis() - BindingTimer) < 3000) BufferTeensyMACAddPipe(); // test! extra three seconds to exchange pipes 
     }
 
     switch (CurrentMode) {
