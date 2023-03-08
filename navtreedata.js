@@ -79,7 +79,7 @@ var NAVTREEINDEX =
 "TransmitterCode_2src_2main_8cpp.html#aee9320d84f0e518a8cc937ac1f706cf4",
 "classMPU6050.html#aaee15e48af7ba78660b5754f3bb5f37a",
 "classMPU9250.html#aa46038cd293d89d7287795df5cd9acfe",
-"functions_func.html",
+"functions_func_c.html",
 "radio_8h.html#acec349590f33af1fb88040ed4d12e53f"
 ];
 

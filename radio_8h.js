@@ -50,6 +50,7 @@ var radio_8h =
     [ "CourseToGPS", "radio_8h.html#a1a4e211f9858a5d6d61d11e5679a71f3", null ],
     [ "CurrentRadio", "radio_8h.html#a7bca81159d93f215060f40f45f19b0de", null ],
     [ "DayGPS", "radio_8h.html#a4c722ec4fa2ff675bd4a2d511e80cd6e", null ],
+    [ "DefaultPipe", "radio_8h.html#ac17bcdae8bda705ade2cf0935e12853d", null ],
     [ "DistanceGPS", "radio_8h.html#a6f76c248ca5e727e482873f5328587e1", null ],
     [ "FailedSafe", "radio_8h.html#a6aa44585f8f06cb4f4760da8352b2df7", null ],
     [ "FailSafeSent", "radio_8h.html#a97bbae82012a7c41f47dcb8ce8a48a90", null ],
@@ -93,7 +94,7 @@ var radio_8h =
     [ "SecsGPS", "radio_8h.html#a79832b04c40823abb496f503a264e7d5", null ],
     [ "SensorHubConnected", "radio_8h.html#af5ed7b5350f1500e976e56af6f24efb0", null ],
     [ "SpeedGPS", "radio_8h.html#af02319a1e0d8c0c651f23e49acc228f8", null ],
-    [ "TheReceivedPipe", "radio_8h.html#aa7db1522659b047ba9cac82fee244e8d", null ],
+    [ "TheReceivedPipe", "radio_8h.html#a036e89e7dd45664d2a0b28230afcd0ac", null ],
     [ "ThisPipe", "radio_8h.html#a88d2add9e7ca58e7218870f887b25859", null ],
     [ "ThisRadio", "radio_8h.html#a25cc3bb5cb94f4bbef0f2c5b79140c20", null ],
     [ "YearGPS", "radio_8h.html#a4a1012a9dfe5632ac326ce712f311472", null ]
