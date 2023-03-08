@@ -69,11 +69,9 @@ var radio_8h =
     [ "MonthGPS", "radio_8h.html#a0944456d2dbd7c1deb2abba2532afe24", null ],
     [ "NewConnectionMoment", "radio_8h.html#a5ce4b7c421146d2957e4ae7c91118661", null ],
     [ "NewData", "radio_8h.html#ab6eca5cb54b625d65d257370332a51a0", null ],
-    [ "NewPipe", "radio_8h.html#a594f07765a7ed90e0830d4e2f69a7112", null ],
     [ "NewPipeMaybe", "radio_8h.html#a3662a2886499f793d8cfcfe589798574", null ],
     [ "NextChannel", "radio_8h.html#a4c9fbf66b2c98730d43dc9dfe573a998", null ],
     [ "NextChannelNumber", "radio_8h.html#a372b457a109ccee3253b219df1a47412", null ],
-    [ "OldPipe", "radio_8h.html#a8d3c194b5406bff33ef9357f8b1666cc", null ],
     [ "PacketNumber", "radio_8h.html#a09cb370d93005b5a43e932a3d6093ea2", null ],
     [ "pcount", "radio_8h.html#ab8db1cb4ed83fda3eb629971dcf8a5c9", null ],
     [ "PipeSeen", "radio_8h.html#a7bc4d56a6fec99b2cdd9f7aafa16b5ac", null ],
@@ -95,7 +93,6 @@ var radio_8h =
     [ "SensorHubConnected", "radio_8h.html#af5ed7b5350f1500e976e56af6f24efb0", null ],
     [ "SpeedGPS", "radio_8h.html#af02319a1e0d8c0c651f23e49acc228f8", null ],
     [ "TheReceivedPipe", "radio_8h.html#a036e89e7dd45664d2a0b28230afcd0ac", null ],
-    [ "ThisPipe", "radio_8h.html#a88d2add9e7ca58e7218870f887b25859", null ],
     [ "ThisRadio", "radio_8h.html#a25cc3bb5cb94f4bbef0f2c5b79140c20", null ],
     [ "YearGPS", "radio_8h.html#a4a1012a9dfe5632ac326ce712f311472", null ]
 ];
