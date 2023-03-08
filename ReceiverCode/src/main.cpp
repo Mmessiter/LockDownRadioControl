@@ -30,7 +30,7 @@
  * | 13    | SPI SCK  (FOR BOTH RADIOS) |
  * | 14    | SBUS *OR PPM* output (TX3) |
  * | 15    | Don't use if using SBUS. The driver takes it (RX3) |
- * | 16    | RED LED
+ * | 16    | RED LED  - This LED is ON when connected, OFF when disconnected and blinking when binding 
  * | 17    | BIND PLUG (held LOW means plug is in)
  * | 18    | I2C SDA (FOR I2C) | *** --- >> BLUE WIRE   = 18 !! << --- ***
  * | 19    | I2C SCK (FOR I2C) | *** --- >> YELLOW WIRE = 19 !! << --- ***
@@ -106,10 +106,9 @@ WDT_T4<WDT3>    TeensyWatchDog;
 WDT_timings_t   WatchDogConfig;
 uint32_t        LastDogKick     = 0;
 bool            LedIsOn = false;
-// #define DEFAULTPIPE     0xB7BE3E9423LL // Default pre-bind pipe address (Matches TX default pipe) 
-// uint8_t DefaultPipe[6] = {0xb7, 0xbe, 0x3e, 0x94, 0x23,    0x00};
-uint8_t DefaultPipe[6] = {0x23, 0x94, 0x3e, 0xbe, 0xb7,    0x00};
-   
+uint8_t *       PipePointer;
+uint8_t         DefaultPipe[6] = {0x23, 0x94, 0x3e, 0xbe, 0xb7, 0x00};
+
 /************************************************************************************************************/
 
 void LoadFailSafeData()
@@ -355,11 +354,10 @@ void BindModel()
 void ReadSavedPipe() // read only 6 bytes
 {
     for (uint8_t i = 0; i < 5; ++i) {
-        TheReceivedPipe[i] = EEPROM.read(i+BIND_EEPROM_OFFSET); // uses first 6 bytes only.
+        TheReceivedPipe[i] = EEPROM.read(i+BIND_EEPROM_OFFSET); // uses first 5 bytes only.
     }
+    TheReceivedPipe[5] = 0;
 }
-
-
 
 // ***************************************************************************************************************************************************
 void SendToSensorHub(char m[])
@@ -415,7 +413,6 @@ void SetTestFrequencies()
 
 void SetUKFrequencies()
 {
-
     FHSSRecoveryPointer = FHSS_Channels;
     FHSSChPointer  = FHSS_Channels;
     FrequencyCount = FREQUENCYSCOUNT;
@@ -710,16 +707,6 @@ void SaveFailSafeData()
 }
 
 /************************************************************************************************************/
-void DoBinding() 
-{
-
-
-    GetNewPipe(); 
- 
-}
-
-
-/************************************************************************************************************/
 
 void WatchDogCallBack()
 {
@@ -738,18 +725,21 @@ void teensyMAC(uint8_t* mac)
 void ReadBindPlug(){ // heer
         uint32_t tt = millis();
         SetUKFrequencies();
-    if (!digitalRead(BINDPLUG_PIN)) { // Bind Plug needed to bind!
+        PipePointer = DefaultPipe;
+        if (!digitalRead(BINDPLUG_PIN)) { // Bind Plug needed to bind!
         Blinking = true;              // Blinking = binding to new TX
 #ifdef DB_BIND
         Serial.println("Bind plug detected.");
 #endif
-    }else{
+        }
+        else {
         Blinking = false;               // Already bound
+        PipePointer = TheReceivedPipe;
         BoundFlag = true;
         SaveNewBind = false;
         while (millis()-tt < 500)  ReceiveData();
         BindModel();                    // TODO check this...
-    }
+        }
 }
 /************************************************************************************************************/
 // SETUP
@@ -770,16 +760,16 @@ FLASHMEM void setup()
     delay(2500); // Needed so that the Sensor hub can boot first and be detected
     Wire.begin();
     delay(20);
-    
     ScanI2c();    // Detect what's connected
     if (INA219Connected) ina219.begin();
-    
     teensyMAC(MacAddress);
+
    //  for (int i = 0; i < 8; ++i) MacAddress[i] = 0x0B; // force new ID fo test! 
+    PipePointer = DefaultPipe;
     CurrentRadio = &Radio1;
-   
     if (digitalRead(BINDPLUG_PIN)) { // ie no bind plug, so initialise to bound pipe
         GetOldPipe();
+        PipePointer = TheReceivedPipe;
     }
 
 #ifdef SECOND_TRANSCEIVER
@@ -833,7 +823,6 @@ void loop()
 {
     KickTheDog();
     ReceiveData();
-
     if (Blinking) BlinkLed();
     if (BoundFlag && Connected && ModelMatched) { // Only move servos if everything is good
         if (millis() - SBUSTimer >= SBUSRATE) {   // SBUSRATE rate is also good enough for servo rate
@@ -843,9 +832,6 @@ void loop()
         if (FailSafeSave) SaveFailSafeData();
     }
     else {
-         if (!BoundFlag) 
-         {
-                DoBinding();
-         }
+         if (!BoundFlag)  GetNewPipe();
     }
 }

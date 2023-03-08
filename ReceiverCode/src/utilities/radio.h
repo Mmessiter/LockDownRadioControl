@@ -74,6 +74,7 @@ extern void         KickTheDog();
 extern void         TurnLedOn();
 extern void         TurnLedOff();
 extern uint8_t      DefaultPipe[6];
+extern uint8_t *    PipePointer;
 
 /** AckPayload Stucture for data returned to transmitter. */
 struct Payload
@@ -116,6 +117,7 @@ void HopNowAnyway(){
 void SetNewPipe()
 {
         CurrentRadio->openReadingPipe(1, TheReceivedPipe); //  5 byte array
+        //CurrentRadio->openReadingPipe(1, PipePointer); //  5 * byte array
         delay(1);
         CurrentRadio->startListening();
         delay(1);
@@ -244,11 +246,14 @@ void ConfigureRadio(){
     CurrentRadio->setCRCLength(RF24_CRC_16); // could be 8 or disabled
     CurrentRadio->setAutoAck(true);
     CurrentRadio->maskIRQ(1, 1, 1);         // no interrupts - seems NEEDED at the moment - (line *IS* connected)
+  //  CurrentRadio->openReadingPipe(1, PipePointer); // ?? Doesn't work
+    
     if (!BoundFlag){
         CurrentRadio->openReadingPipe(1, DefaultPipe);     // 5 byte array 
     }else{
         CurrentRadio->openReadingPipe(1, TheReceivedPipe); // 5 byte array 
     }
+    
     CurrentRadio->startListening();
 }
 
