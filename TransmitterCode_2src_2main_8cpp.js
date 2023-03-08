@@ -207,6 +207,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "MovePoint", "TransmitterCode_2src_2main_8cpp.html#aad727ec0b0f9f34487a535eaa4a83172", null ],
     [ "NoPressed", "TransmitterCode_2src_2main_8cpp.html#a3e94c54a32cece9adbfc29791658d04e", null ],
     [ "NormaliseTheRadio", "TransmitterCode_2src_2main_8cpp.html#a0708fa5166a126be25283b6cfaff6227", null ],
+    [ "OkSoFar", "TransmitterCode_2src_2main_8cpp.html#ab1482fb1c6f43a7cab00877b08e83ddb", null ],
     [ "OpenLogFileR", "TransmitterCode_2src_2main_8cpp.html#a74a992633b38147ad59f2fc9540294e4", null ],
     [ "OpenLogFileW", "TransmitterCode_2src_2main_8cpp.html#ad2d22d4683c318454ab9a1dd15e1f647", null ],
     [ "OpenModelsFile", "TransmitterCode_2src_2main_8cpp.html#ae7618f38a148877bc5681be58cba8354", null ],
