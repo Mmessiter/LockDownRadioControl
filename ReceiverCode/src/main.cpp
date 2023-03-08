@@ -90,6 +90,7 @@ bool            FirstLostPacket = true;
 uint8_t         MacAddress[9]   = {0, 0, 0, 0, 0, 0, 0, 0,0};
 bool            ModelMatched    = false;
 uint8_t         TheReceivedPipe[6];
+uint8_t         TheCurrentPipe[6];
 bool            FirstConnection = true;
 bool            FailedSafe = true;  // Starting up as the same as after failsafe
 uint32_t        MostRecentHop;
@@ -107,7 +108,9 @@ WDT_timings_t   WatchDogConfig;
 uint32_t        LastDogKick     = 0;
 bool            LedIsOn = false;
 uint8_t *       PipePointer;
+uint8_t         Pipnum = PIPENUMBER;
 uint8_t         DefaultPipe[6] = {0x23, 0x94, 0x3e, 0xbe, 0xb7, 0x00};
+uint8_t         CurrentPipe[6];
 
 /************************************************************************************************************/
 
@@ -258,7 +261,7 @@ void UseReceivedData()
 bool ReadData()
 {
     Connected = false;
-    while (CurrentRadio->available()) { // Get all, but use only the latest
+    while (CurrentRadio->available(&Pipnum)) { // Get all, but use only the latest
         LoadAckPayload();
         CurrentRadio->flush_tx();                                      // This avoids a lockup that happens when the FIFO gets full
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // Send telemetry
@@ -726,8 +729,9 @@ void ReadBindPlug(){ // heer
         uint32_t tt = millis();
         SetUKFrequencies();
         PipePointer = DefaultPipe;
+        CopyCurrentPipe(DefaultPipe,PIPENUMBER);
         if (!digitalRead(BINDPLUG_PIN)) { // Bind Plug needed to bind!
-        Blinking = true;              // Blinking = binding to new TX
+        Blinking = true;                  // Blinking = binding to new TX
 #ifdef DB_BIND
         Serial.println("Bind plug detected.");
 #endif
@@ -735,6 +739,7 @@ void ReadBindPlug(){ // heer
         else {
         Blinking = false;               // Already bound
         PipePointer = TheReceivedPipe;
+        CopyCurrentPipe(TheReceivedPipe,BOUNDPIPENUMBER);
         BoundFlag = true;
         SaveNewBind = false;
         while (millis()-tt < 500)  ReceiveData();
@@ -766,10 +771,10 @@ FLASHMEM void setup()
 
    //  for (int i = 0; i < 8; ++i) MacAddress[i] = 0x0B; // force new ID fo test! 
     PipePointer = DefaultPipe;
+    CopyCurrentPipe(DefaultPipe,PIPENUMBER);
     CurrentRadio = &Radio1;
     if (digitalRead(BINDPLUG_PIN)) { // ie no bind plug, so initialise to bound pipe
         GetOldPipe();
-        PipePointer = TheReceivedPipe;
     }
 
 #ifdef SECOND_TRANSCEIVER

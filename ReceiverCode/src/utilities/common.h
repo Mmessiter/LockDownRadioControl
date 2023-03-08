@@ -44,15 +44,15 @@
 
 // ********************************* reconnect params ***************************************
 
-#define LISTEN_PERIOD 14 //   How many ms to listen for TX in Reconnect()
-
+#define LISTEN_PERIOD 14   //   How many ms to listen for TX in Reconnect()
 #define RECEIVE_TIMEOUT 14 //   <=9 fails, >=11 OK
 
 // *****************************************************************************************
-
-#define FREQUENCYSCOUNT  82             // uses 82 different channels
-#define FREQUENCYSCOUNT1 41             // uses 41 different test channels
-#define CHANNELSUSED     16
+#define PIPENUMBER       1   
+#define BOUNDPIPENUMBER  2 
+#define FREQUENCYSCOUNT  82      // uses 82 different channels
+#define FREQUENCYSCOUNT1 41      // uses 41 different test channels
+#define CHANNELSUSED     16      //
 #define SERVOSUSED       9       // But all 16 are available via SBUS
 #define SBUSRATE         10      // SBUS frame every 10 milliseconds
 #define SBUSPORT         Serial3 // = 14

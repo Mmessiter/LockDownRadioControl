@@ -75,14 +75,18 @@ uint8_t CheckPipeNibbles(uint8_t b){ // heer
 
 /************************************************************************************************************/
 
-FASTRUN void BufferTeensyMACAddPipe()
+FASTRUN void BufferTeensyMACAddPipe() // heer
 {
-    SendBuffer[0] = (uint8_t)((TeensyMACAddPipe >> 40) & 0xFF);
-    SendBuffer[1] = (uint8_t)((TeensyMACAddPipe >> 32) & 0xFF);
-    SendBuffer[2] = (uint8_t)((TeensyMACAddPipe >> 24) & 0xFF);
-    SendBuffer[3] = (uint8_t)((TeensyMACAddPipe >> 16) & 0xFF);
-    SendBuffer[4] = (uint8_t)((TeensyMACAddPipe >> 8) & 0xFF);
-    SendBuffer[5] = (uint8_t)((TeensyMACAddPipe)&0xFF);
+  
+    SendBuffer[0] = 0;
+  //  Serial.print("sent:");
+    for (int q = 1; q < 6; ++q) {
+        SendBuffer[q] = MacAddress[q];
+       // Serial.print(SendBuffer[q],HEX);
+       // Serial.print(" ");
+    }
+    SendBuffer[6] = 0;
+   //  Serial.println("");
     #ifdef DB_BIND
     for (int i = 0; i < 6; ++i){
         Serial.print (SendBuffer[i], HEX);
@@ -436,7 +440,7 @@ FLASHMEM void InitRadio(uint64_t Pipe)
     Radio1.stopListening();
     delay(2);
     Radio1.enableDynamicPayloads();
-    Radio1.setAddressWidth(5);              // was 4, is now 5
+    Radio1.setAddressWidth(3);              // was 4, is now 5
     Radio1.setCRCLength(RF24_CRC_16); // (RF24_CRC_8); // could be 16
     GapSum  = 0;
 }

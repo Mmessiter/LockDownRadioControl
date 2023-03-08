@@ -75,6 +75,8 @@ extern void         TurnLedOn();
 extern void         TurnLedOff();
 extern uint8_t      DefaultPipe[6];
 extern uint8_t *    PipePointer;
+extern uint8_t      CurrentPipe[6];
+extern uint8_t      Pipnum;
 
 /** AckPayload Stucture for data returned to transmitter. */
 struct Payload
@@ -105,6 +107,15 @@ uint8_t AckPayloadSize = sizeof(AckPayload); // Size for later externs if needed
 
 
 /************************************************************************************************************/
+void CopyCurrentPipe(uint8_t * p, uint8_t pn){
+
+    for (int i = 0; i < 6;++i){
+        CurrentPipe[i] = p[i];
+    }
+    PipePointer = p;
+    Pipnum      = pn;
+}
+/************************************************************************************************************/
 
 void HopNowAnyway(){ 
         ++NextChannelNumber;                                            // Move up the channels' array
@@ -116,8 +127,7 @@ void HopNowAnyway(){
 
 void SetNewPipe()
 {
-        CurrentRadio->openReadingPipe(1, TheReceivedPipe); //  5 byte array
-        //CurrentRadio->openReadingPipe(1, PipePointer); //  5 * byte array
+        CurrentRadio->openReadingPipe(PIPENUMBER, PipePointer); //  5 * byte array
         delay(1);
         CurrentRadio->startListening();
         delay(1);
@@ -165,11 +175,10 @@ bool ValidateNewPipe(){
 
 void GetNewPipe() // from TX
 {
-     if (!NewData) return;
-     NewData = false;
+    if (!NewData) return;
+    NewData = false;
     if (PipeSeen) return;
-   
-    NewPipeMaybe = (uint64_t)ReceivedData[0]  << 40;
+    NewPipeMaybe =  (uint64_t)ReceivedData[0] << 40;
     NewPipeMaybe += (uint64_t)ReceivedData[1] << 32;
     NewPipeMaybe += (uint64_t)ReceivedData[2] << 24;
     NewPipeMaybe += (uint64_t)ReceivedData[3] << 16;
@@ -182,9 +191,9 @@ void GetNewPipe() // from TX
         Serial.println("Received TX ID!");
 #endif 
         for (int i = 0; i < 5; ++i) {
-            TheReceivedPipe[4-i] = ReceivedData[i+1]; // reversed byte array for our use
+            TheReceivedPipe[4-i] =  ReceivedData[i+1] & 0xff; // reversed byte array for our use
 #ifdef DB_BIND
-            Serial.print(ReceivedData[i+1], HEX);
+            Serial.print((uint8_t)ReceivedData[i+1], HEX);
             Serial.print(" ");
 #endif 
         }
@@ -192,6 +201,7 @@ void GetNewPipe() // from TX
 #ifdef DB_BIND
         Serial.println(" ");
 #endif 
+        CopyCurrentPipe(TheReceivedPipe, BOUNDPIPENUMBER);
         BindModel();
         PipeSeen = true;
     }
@@ -208,6 +218,7 @@ void GetNewPipe() // from TX
 FLASHMEM void GetOldPipe() // heer
 {
     ReadSavedPipe();
+    CopyCurrentPipe(TheReceivedPipe, BOUNDPIPENUMBER);
     
 #ifdef DB_BIND
     Serial.println("Loaded old PIPE:");
@@ -222,7 +233,7 @@ FLASHMEM void GetOldPipe() // heer
 
 /************************************************************************************************************/
 
-void     HopToNextChannel()
+void  HopToNextChannel()
 {
     CurrentRadio->stopListening();
     delayMicroseconds(100);
@@ -242,18 +253,11 @@ void ConfigureRadio(){
     CurrentRadio->enableAckPayload();       // needed
     CurrentRadio->setRetries(2, 0);         // automatic retries
     CurrentRadio->enableDynamicPayloads();  // needed
-    CurrentRadio->setAddressWidth(5);
+    CurrentRadio->setAddressWidth(3);
     CurrentRadio->setCRCLength(RF24_CRC_16); // could be 8 or disabled
     CurrentRadio->setAutoAck(true);
     CurrentRadio->maskIRQ(1, 1, 1);         // no interrupts - seems NEEDED at the moment - (line *IS* connected)
-  //  CurrentRadio->openReadingPipe(1, PipePointer); // ?? Doesn't work
-    
-    if (!BoundFlag){
-        CurrentRadio->openReadingPipe(1, DefaultPipe);     // 5 byte array 
-    }else{
-        CurrentRadio->openReadingPipe(1, TheReceivedPipe); // 5 byte array 
-    }
-    
+    CurrentRadio->openReadingPipe(PIPENUMBER, PipePointer); 
     CurrentRadio->startListening();
 }
 
@@ -277,8 +281,8 @@ void TryToConnectNow()
     delayMicroseconds(250);
     CurrentRadio->startListening();
     ATimer = millis();
-    while ((!CurrentRadio->available()) && (millis() - ATimer) < LISTEN_PERIOD) {delayMicroseconds(10);}// *** > Lock up sometimes happens here!! < ***
-    Connected = CurrentRadio->available();
+    while ((!CurrentRadio->available(&Pipnum)) && (millis() - ATimer) < LISTEN_PERIOD) {delayMicroseconds(10);}// *** > Lock up sometimes happens here!! < ***
+    Connected = CurrentRadio->available(&Pipnum);
 }
 
 /************************************************************************************************************/
@@ -404,8 +408,7 @@ FASTRUN void Reconnect()
             }
         }
     } // cannot pass here if not connected
-
-     // must have connected by here
+      // must have connected by here
     FailSafeSent = false;
     if (PreviousRadio != ThisRadio) ++RadioSwaps; // Count the radio swaps
     ReconnectedMoment = millis();                 // Save this moment

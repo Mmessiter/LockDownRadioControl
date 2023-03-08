@@ -3653,8 +3653,11 @@ void GetTeensyMacAddress(){
     for (int i = 0; i < 8; ++i){
         MacAddress[i] = CheckPipeNibbles(MacAddress[i]);  // Fix PIPE if needed !
     }
-     // for (int q = 0; q < 8; ++q)MacAddress[q] = 0x12; // test! 
-
+      for (int q = 1; q < 6; ++q) {
+          //MacAddress[q] = 0xc4; // test!
+            Serial.print(MacAddress[q], HEX);
+            Serial.print(" ");
+      }
     TeensyMACAddPipe  = (uint64_t)MacAddress[0] << 40;
     TeensyMACAddPipe += (uint64_t)MacAddress[1] << 32;
     TeensyMACAddPipe += (uint64_t)MacAddress[2] << 24;
