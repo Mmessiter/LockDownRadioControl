@@ -440,7 +440,7 @@ FLASHMEM void InitRadio(uint64_t Pipe)
     Radio1.stopListening();
     delay(2);
     Radio1.enableDynamicPayloads();
-    Radio1.setAddressWidth(3);              // was 5, is now 3
+    Radio1.setAddressWidth(5);              // was 5, is now 3
     Radio1.setCRCLength(RF24_CRC_16); // (RF24_CRC_8); // could be 16
     GapSum  = 0;
 }

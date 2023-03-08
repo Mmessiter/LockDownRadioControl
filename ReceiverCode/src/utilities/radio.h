@@ -253,7 +253,7 @@ void ConfigureRadio(){
     CurrentRadio->enableAckPayload();       // needed
     CurrentRadio->setRetries(2, 0);         // automatic retries
     CurrentRadio->enableDynamicPayloads();  // needed
-    CurrentRadio->setAddressWidth(3);
+    CurrentRadio->setAddressWidth(5);
     CurrentRadio->setCRCLength(RF24_CRC_16); // could be 8 or disabled
     CurrentRadio->setAutoAck(true);
     CurrentRadio->maskIRQ(1, 1, 1);         // no interrupts - seems NEEDED at the moment - (line *IS* connected)
