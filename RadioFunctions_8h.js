@@ -365,6 +365,7 @@ var RadioFunctions_8h =
     [ "LedWasRed", "RadioFunctions_8h.html#ade7869bef39ac7f65c47c558c7efd4fc", null ],
     [ "LostContactFlag", "RadioFunctions_8h.html#ad5f463902789a79fc622b3befd9409b9", null ],
     [ "LowPowerMode", "RadioFunctions_8h.html#aff0b3d2ab8500d95569cb52a1fa2dad1", null ],
+    [ "MacAddress", "RadioFunctions_8h.html#ad343661d8a4343426f171e531b9d8aa9", null ],
     [ "MacrosBuffer", "RadioFunctions_8h.html#a961efaa3441c7a8fc7ecea83b2cd3260", null ],
     [ "MacroStartTime", "RadioFunctions_8h.html#abacba397df8422d772f9f387649a9494", null ],
     [ "MacroStopTime", "RadioFunctions_8h.html#a9e444f8769253f982906c933290b1369", null ],

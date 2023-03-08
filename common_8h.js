@@ -2,6 +2,7 @@ var common_8h =
 [
     [ "BIND_EEPROM_OFFSET", "common_8h.html#a9711a7159ecb22d58fd6331700663ee7", null ],
     [ "BINDPLUG_PIN", "common_8h.html#a9986f66313bda8d791f5f4ec246d5709", null ],
+    [ "BOUNDPIPENUMBER", "common_8h.html#a5f3f2939c5f5efcee13dc77b62dbaeb4", null ],
     [ "CE_OFF", "common_8h.html#a45f36ff4dbd4f62c8d80b9cd22a05e75", null ],
     [ "CE_ON", "common_8h.html#af59ccf587172ff1ab593f7a51276a720", null ],
     [ "CHANNELSUSED", "common_8h.html#ad143c01c2b36424b292b568f48cbe014", null ],
@@ -24,6 +25,7 @@ var common_8h =
     [ "pinCE2", "common_8h.html#a86715d66aa5d1363f2db07ae6428eb90", null ],
     [ "pinCSN1", "common_8h.html#a047f5702802c2bbf4918e9318f3e6a56", null ],
     [ "pinCSN2", "common_8h.html#a76971ffb50fdfd6bc8e2c3c6ac339459", null ],
+    [ "PIPENUMBER", "common_8h.html#a24c9b00741947ab168f9e0d687150e22", null ],
     [ "PIPES_TO_COMPARE", "common_8h.html#a820e3704750ed47bfb6bd2c3c6b54fce", null ],
     [ "PPMPORT", "common_8h.html#a95812254c835135cc2281a48a97d7664", null ],
     [ "RANGEMAX", "common_8h.html#a152ff5774ac656fc5f23664a214a8b53", null ],
