@@ -332,7 +332,7 @@ bool     Switch[8];
 bool     TrimSwitch[8];
 
 uint8_t  FMSwitch             = BANKSWITCH;
-uint8_t  AutoSwitch           = AUTOSWITCH;
+uint8_t  Autoswitch           = Autoswitch;
 uint8_t  SafetySwitch         = 0;
 
 uint8_t  BuddySwitch         = 0;
@@ -478,14 +478,14 @@ short int TxVoltageCorrection     = 0;
 short int RxVoltageCorrection     = 0;
 uint8_t   LEDBrightness           = DEFAULTLEDBRIGHTNESS;
 uint32_t  PowerOffTimer           = 0;
-char      StillConnected[]        = "vis StillConnected,1";
+ 
 char      StillConnectedBox[]     = "StillConnected";
 char      TurnOffRX[]             = "TURN OFF RX";
-char      NotStillConnected[]     = "vis StillConnected,0";
+
 bool      PowerWarningVisible     = false;
 uint8_t   TurnOffSecondToGo       = 2;
 uint8_t   PowerOffWarningSeconds  = 2;
-uint8_t   ConnectionAssessSeconds = 1;
+uint8_t   ConnectionAssessSeconds = 1; 
 uint32_t  PreviousPowerOffTimer   = 0;
 bool      ModelIdentified         = false;
 bool      ModelMatched            = false;
@@ -502,18 +502,18 @@ union {
         uint8_t  Val8[8];        // Model's Mac address that had been saved on disk
      }  ModelsMacUnionSaved;
 
-char b5Greyed[]                     = "b5.pco=33840";
-char b12Greyed[]                    = "b12.pco=33840";
-char     b1Greyed[]                      = "b1.pco=33840";
-bool     MotorEnabled                    = false;
+char     b5Greyed[]                 = "b5.pco=33840";
+char     b12Greyed[]                = "b12.pco=33840";
+char     b1Greyed[]                 = "b1.pco=33840";
+bool     MotorEnabled               = false;
 bool     SendNoData                 = false;
 bool     MotorWasEnabled            = false;
-uint8_t MotorChannel                = 15;
-uint8_t MotorChannelZero            = 0; 
-bool    UseMotorKill                = true;
-bool    SafetyON                    = false;
-bool     BuddyON                        = false;
-bool     SafetyWasOn                    = false;
+uint8_t  MotorChannel               = 15;
+uint8_t  MotorChannelZero           = 0; 
+bool     UseMotorKill               = true;
+bool     SafetyON                   = false;
+bool     BuddyON                    = false;
+bool     SafetyWasOn                = false;
 u_int8_t WarningSound               = BATTERYISLOW;
 uint32_t LowVoltstimer              = 0;
 float    StopFlyingVoltsPerCell     = 0;
@@ -540,8 +540,6 @@ char     pCalibrateView[]                = "page CalibrateView";
 char     Confirmed[2];
 char     NewFileBuffer[MAXFILELEN];
 uint16_t NewFileBufferPointer = 0;
-char     ProgressStart[]       = "vis Progress,1";
-char     ProgressEnd[]         = "vis Progress,0";
 char     Progress[]            = "Progress";
 char     InVisible[]           = "vis Quality,0";
 char     Visible[]             = "vis Quality,1";
@@ -574,12 +572,11 @@ uint8_t                 PPMChannelsNumber     = 6;
 uint8_t                 PPMMillis            = 22; // Not used!!! (yet)
 bool                    UseTXModule          = false;
 bool                    BindNewModel         = true;
-
 uint64_t NewPipeMaybe = 0;
 uint64_t PreviousNewPipes[PIPES_TO_COMPARE];
 uint8_t  PreviousNewPipesIndex = 0;
 uint8_t  pcount                = 0;
-char page_RXSetupView[] = "page RXSetupView";
+
 // **********************************************************************************************************************************
 
 // **********************************************************************************************************************************
@@ -2027,6 +2024,7 @@ void SaveMixValues(){
     char MixesView_Percent[]       = "Percent";
     char MixesView_h0[]            = "h0"; // =the slider control
     char MixesView_od[]            = "od"; // One direction
+    char     ProgressStart[]       = "vis Progress,1";
 
     SendCommand(ProgressStart);
     SendValue(Progress, 5);
@@ -2958,7 +2956,7 @@ bool ReadOneModel(uint32_t Mnum)
 
     FMSwitch = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-    AutoSwitch = SDRead8BITS(SDCardAddress);
+    Autoswitch = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
     Channel9Switch = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
@@ -4097,7 +4095,7 @@ void SaveOneModel(uint32_t mnum)
     }
     SDUpdate8BITS(SDCardAddress, FMSwitch);
     ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, AutoSwitch);
+    SDUpdate8BITS(SDCardAddress, Autoswitch);
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, Channel9Switch);
     ++SDCardAddress;
@@ -4458,7 +4456,7 @@ void UpdateSwitchesView() //  (Should be optimised but it works!)
     
 
     SendText(SwitchesView_sw1, NotUsed);
-    if (AutoSwitch == 1)        SendText(SwitchesView_sw1, Auto);
+    if (Autoswitch == 1)        SendText(SwitchesView_sw1, Auto);
     if (FMSwitch == 1)          SendText(SwitchesView_sw1, Banks123);
     if (Channel9Switch == 1)    SendText(SwitchesView_sw1, c9);
     if (Channel10Switch == 1)   SendText(SwitchesView_sw1, c10);
@@ -4469,7 +4467,7 @@ void UpdateSwitchesView() //  (Should be optimised but it works!)
     if (BuddySwitch == 1)       SendText(SwitchesView_sw1, Buddy_Switch);
     
     SendText(SwitchesView_sw2, NotUsed);
-    if (AutoSwitch == 2)        SendText(SwitchesView_sw2, Auto);
+    if (Autoswitch == 2)        SendText(SwitchesView_sw2, Auto);
     if (FMSwitch == 2)          SendText(SwitchesView_sw2, Banks123);
     if (Channel9Switch == 2)    SendText(SwitchesView_sw2, c9);
     if (Channel10Switch == 2)   SendText(SwitchesView_sw2, c10);
@@ -4480,7 +4478,7 @@ void UpdateSwitchesView() //  (Should be optimised but it works!)
     if (BuddySwitch == 2)       SendText(SwitchesView_sw2, Buddy_Switch);
    
     SendText(SwitchesView_sw3, NotUsed);
-    if (AutoSwitch == 3)        SendText(SwitchesView_sw3, Auto);
+    if (Autoswitch == 3)        SendText(SwitchesView_sw3, Auto);
     if (FMSwitch == 3)          SendText(SwitchesView_sw3, Banks123);
     if (Channel9Switch == 3)    SendText(SwitchesView_sw3, c9);
     if (Channel10Switch == 3)   SendText(SwitchesView_sw3, c10);
@@ -4491,7 +4489,7 @@ void UpdateSwitchesView() //  (Should be optimised but it works!)
     if (BuddySwitch == 3)       SendText(SwitchesView_sw3, Buddy_Switch);
    
     SendText(SwitchesView_sw4, NotUsed);
-    if (AutoSwitch == 4)        SendText(SwitchesView_sw4, Auto);
+    if (Autoswitch == 4)        SendText(SwitchesView_sw4, Auto);
     if (FMSwitch == 4)          SendText(SwitchesView_sw4, Banks123);
     if (Channel9Switch == 4)    SendText(SwitchesView_sw4, c9);
     if (Channel10Switch == 4)   SendText(SwitchesView_sw4, c10);
@@ -4653,7 +4651,7 @@ void SetDefaultValues()
         InPutStick[i] = i;
     }
     FMSwitch        = 4;
-    AutoSwitch      = 1;
+    Autoswitch      = 1;
     Channel9Switch  = 2;
     Channel10Switch = 3;
     Channel11Switch = 0;
@@ -5404,7 +5402,8 @@ void ReceiveModelFile()
     char          RXheader[] = "File receive";
     char          ovwr[] = "Overwrite ";
     char          ques[] = "?";
-
+    char          ProgressStart[]       = "vis Progress,1";
+    char          ProgressEnd[]         = "vis Progress,0";
 
     strcpy(msg, ovwr);
     strcat(msg, ModelName);
@@ -5564,6 +5563,8 @@ void SendModelFile()
     char          ModelsView_filename[] = "filename";
     char          t0[]                  = "t0";
     char          Fsend[]               = "Sending file";
+    char          ProgressStart[]       = "vis Progress,1";
+    char          ProgressEnd[]         = "vis Progress,0";
 
     BlueLedOn();
     CloseModelsFile();
@@ -5726,7 +5727,7 @@ void updateOneSwitchView()  //
     if (SwitchEditNumber == 1) {
         ValueSent = false; // If no setting, = Not Used
         if (FMSwitch == 1) SendValue(OneSwitchView_r1, 1);
-        if (AutoSwitch == 1) SendValue(OneSwitchView_r2, 1);
+        if (Autoswitch == 1) SendValue(OneSwitchView_r2, 1);
         if (Channel9Switch == 1) SendValue(OneSwitchView_r3, 1);
         if (Channel10Switch == 1) SendValue(OneSwitchView_r4, 1);
         if (Channel11Switch == 1) SendValue(OneSwitchView_r5, 1);
@@ -5742,7 +5743,7 @@ void updateOneSwitchView()  //
     if (SwitchEditNumber == 2) {
         ValueSent = false;
         if (FMSwitch == 2) SendValue(OneSwitchView_r1, 1);
-        if (AutoSwitch == 2) SendValue(OneSwitchView_r2, 1);
+        if (Autoswitch == 2) SendValue(OneSwitchView_r2, 1);
         if (Channel9Switch == 2) SendValue(OneSwitchView_r3, 1);
         if (Channel10Switch == 2) SendValue(OneSwitchView_r4, 1);
         if (Channel11Switch == 2) SendValue(OneSwitchView_r5, 1);
@@ -5756,7 +5757,7 @@ void updateOneSwitchView()  //
     if (SwitchEditNumber == 3) {
         ValueSent = false;
         if (FMSwitch == 3) SendValue(OneSwitchView_r1, 1);
-        if (AutoSwitch == 3) SendValue(OneSwitchView_r2, 1);
+        if (Autoswitch == 3) SendValue(OneSwitchView_r2, 1);
         if (Channel9Switch == 3) SendValue(OneSwitchView_r3, 1);
         if (Channel10Switch == 3) SendValue(OneSwitchView_r4, 1);
         if (Channel11Switch == 3) SendValue(OneSwitchView_r5, 1);
@@ -5771,7 +5772,7 @@ void updateOneSwitchView()  //
     if (SwitchEditNumber == 4) {
         ValueSent = false;
         if (FMSwitch == 4) SendValue(OneSwitchView_r1, 1);
-        if (AutoSwitch == 4) SendValue(OneSwitchView_r2, 1);
+        if (Autoswitch == 4) SendValue(OneSwitchView_r2, 1);
         if (Channel9Switch == 4) SendValue(OneSwitchView_r3, 1);
         if (Channel10Switch == 4) SendValue(OneSwitchView_r4, 1);
         if (Channel11Switch == 4) SendValue(OneSwitchView_r5, 1);
@@ -5832,8 +5833,8 @@ void ReadNewSwitchFunction(){
         char OneSwitchView_r7[]        = "r7";     // Safety
         char OneSwitchView_r8[]        = "r8";     // Dual Rates
         char OneSwitchView_r9[]        = "r9";     // Buddy
-
-
+        char ProgressStart[]       = "vis Progress,1";
+        char ProgressEnd[]         = "vis Progress,0";
         char PageSwitchView[]          = "page SwitchesView";
         char OneSwitchViewc_revd[]     = "c_revd"; // Reversed
 
@@ -5849,10 +5850,10 @@ void ReadNewSwitchFunction(){
 
             SendValue(Progress, 15);
             if (GetValue(OneSwitchView_r2)) {
-                AutoSwitch = SwitchEditNumber;
+                Autoswitch = SwitchEditNumber;
             }
             else {
-                if (AutoSwitch == SwitchEditNumber) AutoSwitch = 0;
+                if (Autoswitch == SwitchEditNumber) Autoswitch = 0;
             }
             SendValue(Progress, 25);
             if (GetValue(OneSwitchView_r3)) {
@@ -6020,6 +6021,7 @@ void EndReverseView()
 { // channel reverse flags are 16 individual BITs in var 'ReversedChannelBITS'
     char    fs[16][5] = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
     uint8_t i;
+    char     ProgressStart[]       = "vis Progress,1";
     char    pRXSetupView[]    = "page RXSetupView";
     SendCommand(ProgressStart);
     ReversedChannelBITS = 0;
@@ -6042,6 +6044,10 @@ void StartReverseView()
     char    pReverseView[] = "page ReverseView";
     char    fs[16][5]      = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
     uint8_t i;
+    char     ProgressStart[]       = "vis Progress,1";
+    char     ProgressEnd[]         = "vis Progress,0";
+
+
     CurrentView             = REVERSEVIEW;
     SendCommand(pReverseView);
     UpdateButtonLabels();
@@ -6297,6 +6303,7 @@ void LogVIEW()
 /******************************************************************************************************************************/
 void SetupViewFM() 
 { 
+    char page_RXSetupView[] = "page RXSetupView";
 
     SaveAllParameters();
     CurrentView = RXSETUPVIEW;
@@ -6324,7 +6331,8 @@ void StartSubTrimView()
 /******************************************************************************************************************************/
 void EndSubTrimView()
 { // Subtrim view exit
-   
+   char page_RXSetupView[] = "page RXSetupView";
+
     SaveOneModel(ModelNumber);
     CurrentView = RXSETUPVIEW;
     SendCommand(page_RXSetupView);
@@ -6510,6 +6518,8 @@ void RXSetup1End()
     char c2[] = "c2";    // TimerDownwards timer on off
     char r0[] = "r0";    // SBUS on
     char n5[] = "n5";    // PPMChannelCount
+    char page_RXSetupView[] = "page RXSetupView";
+    char     ProgressStart[]       = "vis Progress,1";
 
     SendCommand(ProgressStart);
     CopyTrimsToAll= GetValue(c1);
@@ -6600,6 +6610,7 @@ void BuddyChViewStart()
 void BuddyChViewEnd()
 {
     char page_BuddyView[] = "page BuddyView";
+    char     ProgressStart[]       = "vis Progress,1";
     char fs[16][5]        = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
     SendCommand(ProgressStart);
     BuddyControlled = 0;
@@ -6652,6 +6663,7 @@ void ResetTransmitterSettings(){    // This function resets all transmitter para
 
    char prompt[] = "Delete all settings and models?!"; 
    int  sofar   = 0;
+   char     ProgressStart[]       = "vis Progress,1";
 
    if (!GetConfirmation(pCalibrateView,prompt)) return;
    SendCommand(ProgressStart);
@@ -6692,6 +6704,7 @@ void ResetTransmitterSettings(){    // This function resets all transmitter para
    MotorChannelZero        = 0;
    TimerDownwards          = false;
    UseTXModule             = false;
+   char     ProgressEnd[]         = "vis Progress,0";
    SetDS1307ToCompilerTime();
    for (int k = 1; k < 5;++k){ // writes default four times!
         for (ModelNumber = 1; ModelNumber <= MAXMODELNUMBER; ++ModelNumber) { 
@@ -6818,6 +6831,8 @@ void ReadDualRatesValues(){
     char ChNumber6[]      = "n4";
     char ChNumber7[]      = "n5";
     char ChNumber8[]      = "n7";
+    char     ProgressStart[]       = "vis Progress,1";
+    char     ProgressEnd[]         = "vis Progress,0";
     SendCommand(ProgressStart);
     SendValue(Progress, 10);
     Procrastinate(10);
@@ -6918,7 +6933,8 @@ void ListenToBanks(){
 void StartModelSetup(){
     char GotoModelSetup[]           = "page RXSetupView"; 
     char fs[16][5]                 = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
-     
+     char     ProgressStart[]       = "vis Progress,1";
+     char     ProgressEnd[]         = "vis Progress,0";
     if (CurrentView == FAILSAFE_VIEW) { //  read failsafe blobs
         SendCommand(ProgressStart);
         for (int i = 0; i < 16; ++i) {
@@ -6965,6 +6981,7 @@ void StartSlowView(){
 /******************************************************************************************************************************/
 void EndSlowView(){
     char ns[16][4]    = {{"n0"}, {"n1"}, {"n2"}, {"n3"}, {"n4"}, {"n5"}, {"n6"}, {"n7"}, {"n8"}, {"n9"}, {"n10"}, {"n11"}, {"n12"}, {"n13"}, {"n14"}, {"n15"}};
+    char     ProgressStart[]       = "vis Progress,1";
     SendCommand(ProgressStart);
     for (int i = 0; i < 16; ++i){
          StepSize[i] = GetValue(ns[i]);
@@ -7048,6 +7065,8 @@ void WriteBackup(){
 
                 char ModExt[]                  = ".MOD";
                 uint8_t Iterations             = 4;
+                char     ProgressStart[]       = "vis Progress,1";
+                char     ProgressEnd[]         = "vis Progress,0";
                 SendValue(Progress, 1);
                 FixFileName();
                 if ((strlen(SingleModelFile) <= 12) && (InStrng(ModExt, SingleModelFile) > 0)){
@@ -7287,6 +7306,7 @@ void SelectChannelOrder(){
     char r2[] = "r2";
     char prompt[] = "Power off transmitter?";
     bool oldUseTxModule  = UseTXModule;
+    char     ProgressStart[]       = "vis Progress,1";
     
     SendCommand(ProgressStart);
     SendValue(Progress, 10);
@@ -7333,6 +7353,7 @@ void ModelUnmatch(){
     char Done[]                     = "Model match ID forgotten.";
     char DoneAlready[]              = "Model match ID not found.";
     char NotDone[]                  = "Model match ID retained.";
+    char page_RXSetupView[]         = "page RXSetupView";
 
     strcpy(prompt, p);
     strcat(prompt, ModelName);
@@ -7655,7 +7676,9 @@ FASTRUN void ButtonWasPressed()
         char ques[]                 = "?";
         char hhead[]                = "Create backup file for";
         char fprompt[]              = "Filename?";
-
+        char page_RXSetupView[]     = "page RXSetupView";
+        char     ProgressStart[]       = "vis Progress,1";
+        char     ProgressEnd[]         = "vis Progress,0";
         // ************************* test input words from Nextion *****************
 
         if (InStrng(StCH, TextIn)) { // select sub trim channel
@@ -8811,10 +8834,10 @@ void CheckMotorOff(){ // For Safety
     if (!UseMotorKill) return;
     ReadSwitches();
     MotorEnabled = true;
-    if (AutoSwitch == 1 && Switch[7]    == SWITCH1Reversed) MotorEnabled = true;
-    if (AutoSwitch  == 2 && Switch[5]   == SWITCH2Reversed) MotorEnabled = true;
-    if (AutoSwitch  == 3 && Switch[0]   == SWITCH3Reversed) MotorEnabled = true;
-    if (AutoSwitch  == 4 && Switch[2]   == SWITCH4Reversed) MotorEnabled = true; 
+    if (Autoswitch == 1 && Switch[7]    == SWITCH1Reversed) MotorEnabled = true;
+    if (Autoswitch  == 2 && Switch[5]   == SWITCH2Reversed) MotorEnabled = true;
+    if (Autoswitch  == 3 && Switch[0]   == SWITCH3Reversed) MotorEnabled = true;
+    if (Autoswitch  == 4 && Switch[2]   == SWITCH4Reversed) MotorEnabled = true; 
     if (SafetySwitch == 1 && Switch[7]  == SWITCH1Reversed) SafetyON = true;
     if (SafetySwitch == 2 && Switch[5]  == SWITCH2Reversed) SafetyON = true;
     if (SafetySwitch == 3 && Switch[0]  == SWITCH3Reversed) SafetyON = true;
@@ -8836,10 +8859,10 @@ void GetBank()
 
     MotorEnabled = !UseMotorKill; //  If not using motor switch then motor is always enabled.
 
-    if (AutoSwitch == 1 && Switch[7]   == SWITCH1Reversed) MotorEnabled = true;
-    if (AutoSwitch == 2 && Switch[5]   == SWITCH2Reversed) MotorEnabled = true;
-    if (AutoSwitch == 3 && Switch[1]   == SWITCH3Reversed) MotorEnabled = true;
-    if (AutoSwitch == 4 && Switch[2]   == SWITCH4Reversed) MotorEnabled = true; 
+    if (Autoswitch == 1 && Switch[7]   == SWITCH1Reversed) MotorEnabled = true;
+    if (Autoswitch == 2 && Switch[5]   == SWITCH2Reversed) MotorEnabled = true;
+    if (Autoswitch == 3 && Switch[1]   == SWITCH3Reversed) MotorEnabled = true;
+    if (Autoswitch == 4 && Switch[2]   == SWITCH4Reversed) MotorEnabled = true; 
 
     if (SafetySwitch == 1 && Switch[7] == SWITCH1Reversed) SafetyON = true;
     if (SafetySwitch == 2 && Switch[5] == SWITCH2Reversed) SafetyON = true;
@@ -8890,10 +8913,10 @@ void GetBank()
     if (FMSwitch == 2)        ReadFMSwitch(Switch[4], Switch[5], SWITCH2Reversed);
     if (FMSwitch == 1)        ReadFMSwitch(Switch[6], Switch[7], SWITCH1Reversed);
     
-    if (AutoSwitch == 1 && Switch[6] == SWITCH1Reversed) Bank = 4;                      // Flight mode 4 (Auto) overrides modes 1,2,3.
-    if (AutoSwitch == 2 && Switch[4] == SWITCH2Reversed) Bank = 4;
-    if (AutoSwitch == 3 && Switch[1] == SWITCH3Reversed) Bank = 4;
-    if (AutoSwitch == 4 && Switch[3] == SWITCH4Reversed) Bank = 4;
+    if (Autoswitch == 1 && Switch[6] == SWITCH1Reversed) Bank = 4;                      // Flight mode 4 (Auto) overrides modes 1,2,3.
+    if (Autoswitch == 2 && Switch[4] == SWITCH2Reversed) Bank = 4;
+    if (Autoswitch == 3 && Switch[1] == SWITCH3Reversed) Bank = 4;
+    if (Autoswitch == 4 && Switch[3] == SWITCH4Reversed) Bank = 4;
 
     if (SafetyWasOn != SafetyON){
         if (SafetyON) ShowSafetyIsOn(); else ShowSafetyIsOff();
@@ -9667,6 +9690,9 @@ void CheckPowerOffButton()
     char PowerMsg[15];
     char PowerPre[] = "TURN OFF?! ";
     char nb[4];
+    char NotStillConnected[]     = "vis StillConnected,0";
+    char StillConnected[]     = "vis StillConnected,1";
+    
 
     if (!digitalRead(BUTTON_SENSE_PIN)){ 
         GotoFrontView();

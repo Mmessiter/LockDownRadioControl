@@ -49,7 +49,7 @@
 
 // *****************************************************************************************
 #define PIPENUMBER       1   
-#define BOUNDPIPENUMBER  2 
+#define BOUNDPIPENUMBER  1       // no advantage from a difference from 1 
 #define FREQUENCYSCOUNT  82      // uses 82 different channels
 #define FREQUENCYSCOUNT1 41      // uses 41 different test channels
 #define CHANNELSUSED     16      //

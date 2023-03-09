@@ -128,9 +128,6 @@ void HopNowAnyway(){
 void SetNewPipe()
 {
         CurrentRadio->openReadingPipe(PIPENUMBER, PipePointer); //  5 * byte array
-        delay(1);
-        CurrentRadio->startListening();
-        delay(1);
 #ifdef DB_BIND
         if (BoundFlag)  Serial.println("BOUND TO TX'S PIPE");
 #endif
@@ -381,22 +378,16 @@ FASTRUN void Reconnect()
         CurrentRadio->setChannel(ReconnectChannel);
         delay(1); 
         ++Attempts;
-         
-       
         if (Attempts < 3) {
             TryToConnectNow();
         }
-       
         if (!Connected) {
            
-
 #ifdef SECOND_TRANSCEIVER
-          
             if (Attempts >= 3) {
                 TryTheOtherTransceiver(ReconnectChannel);
                 Attempts = 0;
             }
-            
 #else
             if (Attempts >= 3) {
                 ProdRadio(ReconnectChannel); // This avoids a lockup of the nRF24L01+ !
