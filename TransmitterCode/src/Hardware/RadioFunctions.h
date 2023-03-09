@@ -63,7 +63,8 @@
 #define AUTOSWITCH              1                         // Default AUTO switch
 #define BANKSUSED               4                         // Flight modes (AKA Banks)
 #define LOWBATTERY              42                        // Default percent for warning (User definable)
-#ifdef NEWPCB                                             // ***>>> red or green PCBs ... not black <<<***
+
+#ifdef NEWPCB                              // ***>>> red or green PCBs ... not black <<<***
   #define CE_PIN                  7                         // for SPI to nRF24L01
   #define CSN_PIN                 8                         // for SPI to nRF24L01
   #define BUDDYPPMPORT            10                        // Buddybox PPM pin
