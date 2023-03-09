@@ -309,13 +309,13 @@ float     RXModelVolts                = 0;
 int       RXModelAltitude             = 0;
 int       RXMAXModelAltitude          = 0;
 int       GroundModelAltitude         = 0;
-float     RXModelTemperature          = 0;
-char      ModelTemperature[8]         = " ";
-char      ModelAltitude[8]            = " ";
-char      MaxAltitude[8]              = " ";
+float     RXTemperature               = 0;
 float     MaxAlt                      = 0;
-char      ReceiverVersionNumber[8]    = " ";
-char      TransmitterVersionNumber[8] = " ";
+char      Modeltemperature[8]         = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20};
+char      ModelAltitude[8]            = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20};
+char      MaxAltitude[8]              = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20};
+char      ReceiverVersionNumber[8]    = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20};
+char      TransmitterVersionNumber[8] = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20};
 File      ModelsFileNumber;
 
 Adafruit_INA219 ina219;
@@ -1911,7 +1911,7 @@ FASTRUN void ShowComms()
             SendValue(DataView_lps, TotalLostPackets / 2); // about half probably made it but went un acknoledged
             SendText(DataView_Alt,  ModelAltitude);
             SendText(DataView_MaxAlt, MaxAltitude);
-            SendText(DataView_Temp, ModelTemperature);
+            SendText(DataView_Temp, Modeltemperature);
             SendText(DataView_Rx,   ThisRadio);
             SendText(DataView_rxv,  ReceiverVersionNumber);
             SendValue(DataView_Ls,  GapLongest);
@@ -9319,8 +9319,8 @@ void GetAltitude()
 /************************************************************************************************************/
 void GetTemperature()
 {
-    RXModelTemperature = GetFromAckPayload();
-    snprintf(ModelTemperature, 5, "%f", RXModelTemperature);
+    RXTemperature = GetFromAckPayload();
+    snprintf(Modeltemperature, 5, "%f", RXTemperature);
 }
 /************************************************************************************************************/
 FASTRUN uint32_t GetIntFromAckPayload()   // This one uses a uint32_t int
@@ -9499,7 +9499,7 @@ FASTRUN void ParseAckPayload()
        GetModelsMacAddress();
        return;
     }
-    
+   
     switch (AckPayload.Purpose) // Only look at the low 7 BITS
     {
         case 0:
