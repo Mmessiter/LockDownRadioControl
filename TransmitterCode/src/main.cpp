@@ -147,6 +147,7 @@ uint16_t TrimRepeatSpeed        = 600;
 uint16_t DefaultTrimRepeatSpeed = 600;
 char     FrontView_Connected[]  = "Connected";
 char     na[]                   = "";
+bool     NewModelMemoryWasSaved = false; // test!
 
 /* ************************************* AckPayload structure ******************************************************
 
@@ -3650,14 +3651,21 @@ void GetTeensyMacAddress(){
 
      teensyMAC(MacAddress);                                // Get MAC address 
 
-    for (int i = 0; i < 8; ++i){
+    for (int i = 1; i < 6; ++i){
         MacAddress[i] = CheckPipeNibbles(MacAddress[i]);  // Fix PIPE if needed !
     }
-      for (int q = 1; q < 6; ++q) {
-          //MacAddress[q] = 0xc4; // test!
-            Serial.print(MacAddress[q], HEX);
-            Serial.print(" ");
+   // for (int i = 1; i < 6; ++i) MacAddress[i] = 0x42; // TEST! (... Force new ID for tests)
+
+#ifdef DB_BIND
+    Serial.println("");
+    Serial.println("Local (transmitter) ID sent: ");
+    for (int q = 1; q < 6; ++q) {
+        Serial.print(MacAddress[q], HEX);
+        Serial.print(" ");
       }
+      Serial.println("");
+      Serial.println("(5 bytes of 6 sent, probably with some modified nibbles or bytes)");
+#endif
     TeensyMACAddPipe  = (uint64_t)MacAddress[0] << 40;
     TeensyMACAddPipe += (uint64_t)MacAddress[1] << 32;
     TeensyMACAddPipe += (uint64_t)MacAddress[2] << 24;
@@ -5146,14 +5154,20 @@ void BindNow() // Bind button was pressed
     BoundFlag                    = true;
     ModelMatched                 = true;
     Connected                    = true;
-    if (AutoModelSelect){
-        ModelsMacUnionSaved.Val32[0] = ModelsMacUnion.Val32[0];
-        ModelsMacUnionSaved.Val32[1] = ModelsMacUnion.Val32[1];
-        SaveOneModel(ModelNumber);
-        Serial.println("Saved MODEL ID!");
+    ModelsMacUnionSaved.Val32[0] = ModelsMacUnion.Val32[0];
+    ModelsMacUnionSaved.Val32[1] = ModelsMacUnion.Val32[1];
+    SaveOneModel(ModelNumber);
+#ifdef DB_BIND
+    Serial.println("");
+    Serial.println("Remote (model) ID saved:");
+    for (int i = 0; i < 6;++i){
+         Serial.print(ModelsMacUnionSaved.Val8[i],HEX);
+         Serial.print(" ");
     }
+     Serial.println(" ");
+     Serial.println("(All 6 bytes of Teensy MAC ID used without modification.) ");
+#endif
 }
-
     /*********************************************************************************************************************************/
 
     int GetDifference(int YtouchPlace, int oldy)
@@ -5305,7 +5319,7 @@ void MovePoint()
 void NormaliseTheRadio()
 {
     SetThePipe(DefaultPipe);
-    Radio1.setCRCLength(RF24_CRC_8);
+    Radio1.setCRCLength(RF24_CRC_16);
     Radio1.setRetries(RETRYCOUNT, RETRYWAIT);
 }
 
@@ -7309,7 +7323,7 @@ void SelectChannelOrder(){
     }
  }
 /******************************************************************************************************************************/
-void ModelUnmatch(){ // heer
+void ModelUnmatch(){ 
 
   // This deletes cuttent model ID in preparation perhaps for binding to new model.
 
@@ -9209,7 +9223,7 @@ void swap(uint8_t* a, uint8_t* b)
     *b = c;
 }
 /************************************************************************************************************/
-void CalibrateEdgeSwitches() // heer
+void CalibrateEdgeSwitches() 
 { // This function avoids the need to rotate the four edge switches if installed backwards
     for (int i = 0; i < 8; ++i) {
         if (digitalRead(SwitchNumber[i])) {
@@ -9404,11 +9418,12 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                     }else{                                           
                         ModelNumber = SavedModelNumber; //  Not found, so bind to the restored selected one
                         ReadOneModel(ModelNumber);
-                        BindNow(); 
+                        BindNow();
+                        NewModelMemoryWasSaved = true;
                         if (AutoModelSelect)
                         {
-                            PlaySound(MMSAVED);
-                            Procrastinate(2000);
+                            PlaySound(MMSAVED); // test!
+                            Procrastinate(1700);
                         }   
                     }
                 } 
@@ -9754,36 +9769,60 @@ void OkSoFar(){
 
     Look(millis());
 }
+/************************************************************************************************************/
 
+void FixMotorChannel()
+{
+    if (!MotorEnabled && !BuddyON) {
+        SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero whatever was shown.
+    }
+}
+
+/************************************************************************************************************/
+void SendBindingPipe()
+{
+    uint16_t BindPause = 3000;
+    if (NewModelMemoryWasSaved) BindPause = 6000;
+    if (!BoundFlag || !ModelMatched) BindingTimer = millis();
+    if ((millis() - BindingTimer) < BindPause) 
+    {
+        BufferTeensyMACAddPipe(); //  test! Extra 3 or 6 seconds to exchange pipes 
+    }else
+    {
+        NewModelMemoryWasSaved = false; // return to normal service
+    }
+}
+/************************************************************************************************************/
+void GetBuddyData()
+{
+        if (BuddyMaster)  GetSlaveChannelValuesPPM();             // Get buddy data and maybe use it. 
+}
 /************************************************************************************************************/
 // LOOP
 /************************************************************************************************************/
 
 FASTRUN void loop()
 {
-    ManageTransmitter();                                         // Do the needed chores ... (if there's time)
-    GetNewChannelValues();                                       // Load SendBuffer with new servo positions  Very frequently
-   
-    if (UseMacros) ExecuteMacro(); // Modify it if macro is running
+    ManageTransmitter();                       // Do the needed chores ... (if there's time)
+    GetNewChannelValues();                     // Load SendBuffer with new servo positions very frequently
+    if (UseMacros) ExecuteMacro();             // Modify it if macro is running
 
     if (BuddyPupilOnPPM) { 
-        NewCompressNeeded = false;                               // Fake it as Buddy does not send compressed data
+        NewCompressNeeded = false;             // Fake it as Buddy does not send compressed data
         ShowServoPos(); 
-    } else {                                                     // Skip these next lines when buddying as a slave
-        if (BuddyMaster) GetSlaveChannelValuesPPM();      // If buddy master, get buddy data and maybe use it.                                         
-        if (!MotorEnabled && !BuddyON) SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero whatever was shown.   
-        ShowServoPos();  
-        if (!BoundFlag || !ModelMatched)  BindingTimer = millis();
-        if ((millis() - BindingTimer) < 3000) BufferTeensyMACAddPipe(); // test! extra three seconds to exchange pipes 
+    } else {                                   // Skip these next lines when buddying as a slave
+        GetBuddyData();                        // Only if master
+        FixMotorChannel();                     // Maybe force it low BEFORE Binding data is added
+        ShowServoPos();                        // Show servo positions to user
+        SendBindingPipe();                     // Only if not bound yet - overwrite low throttle setting
     }
-
     switch (CurrentMode) {
-        case NORMAL:            // 0
+        case NORMAL:                           // 0
 #ifdef TXMODULESUPPORT
             if (!UseTXModule) {
-                 SendData(); // local TX
+                 SendData();                   // local TX
             }else{
-                 SendPPM();         // for TX module
+                 SendPPM();                    // for TX module
                  NewCompressNeeded = false;
             }
 #else

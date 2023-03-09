@@ -38,15 +38,15 @@ FASTRUN void TryOtherPipe()
     }
     else 
     {
-        BoundFlag = true;           //  ... but not modelmatched yet
-        SetThePipe(TeensyMACAddPipe); // heer
+        BoundFlag = true;               //  ... but not modelmatched yet
+        SetThePipe(TeensyMACAddPipe);   // 
     }
 }
 /************************************************************************************************************/
 /************************************************************************************************************/
 #define BADNIBBLECOUNT 6
 
-uint8_t CheckPipeNibbles(uint8_t b){ // heer
+uint8_t CheckPipeNibbles(uint8_t b){ 
 
     uint8_t      temp;
     uint8_t     BadLowerNibble[BADNIBBLECOUNT]   = {0x05,0x0a,0x02,0x01,0x00,0x0f};
@@ -75,25 +75,11 @@ uint8_t CheckPipeNibbles(uint8_t b){ // heer
 
 /************************************************************************************************************/
 
-FASTRUN void BufferTeensyMACAddPipe() // heer
+FASTRUN void BufferTeensyMACAddPipe()
 {
-  
-    SendBuffer[0] = 0;
-  //  Serial.print("sent:");
     for (int q = 1; q < 6; ++q) {
         SendBuffer[q] = MacAddress[q];
-       // Serial.print(SendBuffer[q],HEX);
-       // Serial.print(" ");
     }
-    SendBuffer[6] = 0;
-   //  Serial.println("");
-    #ifdef DB_BIND
-    for (int i = 0; i < 6; ++i){
-        Serial.print (SendBuffer[i], HEX);
-        Serial.print(" ");
-    }
-    Serial.println(" ");
-    #endif
 }
 
 /************************************************************************************************************/
@@ -224,7 +210,7 @@ FASTRUN void FailedPacket()
 void TryToReconnect()
 {
     if (BuddyPupilOnPPM) return;
-    if (RecentPacketsLost > 50) {
+    if (RecentPacketsLost > 25) { // heer! was 50
         TryOtherPipe();
         RecentPacketsLost = 0;
     }
@@ -440,7 +426,7 @@ FLASHMEM void InitRadio(uint64_t Pipe)
     Radio1.stopListening();
     delay(2);
     Radio1.enableDynamicPayloads();
-    Radio1.setAddressWidth(5);              // was 5, is now 3
+    Radio1.setAddressWidth(5);              //  5
     Radio1.setCRCLength(RF24_CRC_16); // (RF24_CRC_8); // could be 16
     GapSum  = 0;
 }
