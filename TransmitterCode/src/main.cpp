@@ -145,9 +145,8 @@ uint8_t  PreviousTrim           = 255;
 uint32_t TrimTimer              = 0;
 uint16_t TrimRepeatSpeed        = 600;
 uint16_t DefaultTrimRepeatSpeed = 600;
-char     FrontView_Connected[]  = "Connected";
 char     na[]                   = "";
-bool     NewModelMemoryWasSaved = false; // test!
+bool     NewModelMemoryWasSaved = false; 
 
 /* ************************************* AckPayload structure ******************************************************
 
@@ -171,7 +170,6 @@ Payload AckPayload;
 const uint8_t AckPayloadSize = sizeof(AckPayload); // i.e. 6
 
 // *****************************************************************************************************************
-
 
 uint32_t SlowTime[16];                                      //    For timing slow servos
 uint8_t  StepSize[16] = {0,0,0,0,0,0,0,0,5,25,5,25,5,25,5,25};  //    How far to move each time on slow servos
@@ -219,7 +217,6 @@ uint16_t BoxLeft;
 uint16_t BoxRight;
 uint16_t ClickX;
 uint16_t ClickY;
-
 uint8_t  SticksMode                    = 2;
 uint16_t AnalogueInput[PROPOCHANNELS]  = {A0, A1, A2, A3, A6, A7, A8, A9}; // 8 PROPO Channels for transmission   // fix order for mode 2 
 uint8_t  TrimNumber[8]                 = {TRIM1A, TRIM1B, TRIM2A, TRIM2B, TRIM3A, TRIM3B, TRIM4A, TRIM4B};        // These too can get swapped over later
@@ -255,22 +252,14 @@ uint8_t FHSS_Channels[83] = {51, 28, 24, 61, 64, 55, 66, 19, 76, 21, 59, 67, 15,
 
 uint8_t*  FHSSChPointer; // pointer for channels array (three only used for reconnect)
 uint8_t*  FHSSRecoveryPointer;
-char      BindButtonVisible[]         = "vis bind,1";
-char      page_FrontView[]            = "page FrontView";
-char      page_FhssView[]             = "page FhssView";
-char      FrontView_Hours[]           = "Hours";
-char      FrontView_Mins[]            = "Mins";
-char      FrontView_Secs[]            = "Secs";
-char      StartBackGround[]           = "click Background,0";
-char      ModelsFile[]                = "models.dat";
+
+
+
 uint8_t   SwitchNumber[8]             = {SWITCH0, SWITCH1, SWITCH2, SWITCH3, SWITCH4, SWITCH5, SWITCH6, SWITCH7}; // These can get swapped over later
 uint8_t   DefaultSwitchNumber[8]      = {SWITCH0, SWITCH1, SWITCH2, SWITCH3, SWITCH4, SWITCH5, SWITCH6, SWITCH7}; // Default values
-
 bool      DefiningTrims               = false;
 bool      TrimDefined[4]              = {true, true, true, true};
-char      DateTime[]                  = "DateTime";
-char      ScreenViewTimeout[]         = "Sto"; // needed for display info
-char      ModelName[30] = "Not in use";
+char      ModelName[30]               = "Untitled";
 uint16_t  ScreenTimeout               = 120; // Screen has two minute timeout by default
 int       LastLinePosition            = 0;
 uint8_t   RXCellCount                 = 2;
@@ -283,7 +272,6 @@ uint32_t  GapStart                    = 0;
 uint32_t  ThisGap                     = 0;
 uint32_t  GapAverage                  = 0;
 uint32_t  GapCount                    = 0;
-char      ModelVolts[8]               = " ";
 float     GPSLatitude                 = 0;
 float     GPSLongitude                = 0;
 float     GPSMarkLatitude             = 0;
@@ -300,7 +288,7 @@ uint8_t   GPSDay                      = 0;
 uint8_t   GPSMonth                    = 0;
 uint8_t   GPSYear                     = 0;
 float     GPSAltitude                 = 0;
-float     GPSMaxAltitude              = 0;
+float     GPSMaxaltitude              = 0;
 float     GPSGroundAltitude           = 0;
 float     GPSDistanceTo               = 0;
 float     GPSCourseTo                 = 0;
@@ -311,18 +299,18 @@ int       RXMAXModelAltitude          = 0;
 int       GroundModelAltitude         = 0;
 float     RXTemperature               = 0;
 float     MaxAlt                      = 0;
-char      Modeltemperature[8]         = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20};
+char      ModelTempRX[8]         = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20};
 char      ModelAltitude[8]            = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20};
-char      MaxAltitude[8]              = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20};
+char      Maxaltitude[8]              = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20};
 char      ReceiverVersionNumber[8]    = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20};
 char      TransmitterVersionNumber[8] = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20};
+char      ModelVolts[8]               = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20};
 File      ModelsFileNumber;
 
 Adafruit_INA219 ina219;
 
 char SingleModelFile[40];
 bool SingleModelFlag = false;
-
 bool     ModelsFileOpen = false;
 bool     USE_INA219     = false;
 uint8_t  BindingNow     = 0;
@@ -330,14 +318,11 @@ uint32_t BindingTimer   = 0;
 bool     BoundFlag      = false;
 bool     Switch[8];
 bool     TrimSwitch[8];
-
 uint8_t  FMSwitch             = BANKSWITCH;
 uint8_t  Autoswitch           = Autoswitch;
 uint8_t  SafetySwitch         = 0;
-
 uint8_t  BuddySwitch         = 0;
 uint8_t  DualRatesSwitch     = 0;
-
 uint8_t  Channel9Switch       = 0;
 uint8_t  Channel10Switch      = 0;
 uint8_t  Channel11Switch      = 0;
@@ -367,13 +352,11 @@ uint8_t  SaveBank             = 0;
 bool     FailSafeChannel[CHANNELSUSED];
 bool     SaveFailSafeNow = false;
 uint32_t FailSafeTimer;
-
 uint32_t LastPacketSentTime = 0;
 uint16_t CompressedData[COMPRESSEDWORDS];   // = 15 words, 30 bytes
 uint8_t  SizeOfCompressedData;              // = 30
 uint32_t Inactivity_Timeout = INACTIVITYTIMEOUT;
 uint32_t Inactivity_Start   = 0;
-
 tmElements_t tm;
 char         TxName[32]      = "Unknown";
 uint32_t     LastTimeRead    = 0;
@@ -478,10 +461,6 @@ short int TxVoltageCorrection     = 0;
 short int RxVoltageCorrection     = 0;
 uint8_t   LEDBrightness           = DEFAULTLEDBRIGHTNESS;
 uint32_t  PowerOffTimer           = 0;
- 
-char      StillConnectedBox[]     = "StillConnected";
-char      TurnOffRX[]             = "TURN OFF RX";
-
 bool      PowerWarningVisible     = false;
 uint8_t   TurnOffSecondToGo       = 2;
 uint8_t   PowerOffWarningSeconds  = 2;
@@ -502,9 +481,6 @@ union {
         uint8_t  Val8[8];        // Model's Mac address that had been saved on disk
      }  ModelsMacUnionSaved;
 
-char     b5Greyed[]                 = "b5.pco=33840";
-char     b12Greyed[]                = "b12.pco=33840";
-char     b1Greyed[]                 = "b1.pco=33840";
 bool     MotorEnabled               = false;
 bool     SendNoData                 = false;
 bool     MotorWasEnabled            = false;
@@ -521,10 +497,6 @@ uint16_t SFV                        = 0; // =StopFlyingVoltsPerCell * 100
 bool     NewCompressNeeded          = true;
 uint32_t FileCheckSum               = 0;
 bool     DoingCheckSm               = false;
-char     Owner[]                    = "Owner";
-char     WarnNow[]                  = "vis Warning,1";
-char     WarnOff[]                  = "vis Warning,0";
-char     Warning[]                  = "Warning";
 bool     RecursedAlready = false;
 bool     TXLiPo                         = false;
 uint8_t  CurrentPoint                   = 1;
@@ -535,14 +507,11 @@ uint8_t  Drate3                          = 50;
 uint8_t  DualRateChannels[8]             =  {1, 2, 4, 0, 0, 0, 0, 0};
 uint16_t CurveDots[5];
 uint8_t  DualRateValue                   = 100;
-char     GoModelsView[]                  = "page ModelsView";
-char     pCalibrateView[]                = "page CalibrateView";
+
 char     Confirmed[2];
 char     NewFileBuffer[MAXFILELEN];
 uint16_t NewFileBufferPointer = 0;
-char     Progress[]            = "Progress";
-char     InVisible[]           = "vis Quality,0";
-char     Visible[]             = "vis Quality,1";
+
 uint32_t MostRecentHop;
 uint8_t  ReconnectionIndex      = 0;
 bool     TimerDownwards         = false;
@@ -1069,7 +1038,8 @@ void ReadTime()
     char    Space[]  = " ";
     char    colon[]  = ":";
     char    colon1[] = ".";
-    char    zero[]   = "0";
+    char    zero[]   = "0"; 
+    char    DateTime[]   = "DateTime";
    
     uint8_t DisplayedHour;
     FixDeltaGMTSign();
@@ -1166,6 +1136,7 @@ uint8_t GetLEDBrightness()
 
 void RedLedOn() 
 {
+    char     InVisible[]           = "vis Quality,0";
     if (LedWasGreen) {
         RXVoltsDetected                             = false;
         LedWasGreen                                 = false;
@@ -1182,6 +1153,8 @@ void RedLedOn()
         ModelsMacUnion.Val32[1]                     = 0;
         RangeTestGoodPackets                        = 0;
         RecentPacketsLost                           = 0;
+        char     FrontView_Connected[]  = "Connected";
+        char     WarnOff[]                  = "vis Warning,0";
         SetUKFrequencies();
         if (CurrentView == FRONTVIEW) {
             SendText(FrontView_Connected, na);
@@ -1507,6 +1480,9 @@ bool GetButtonPress()
 
 FASTRUN void ShowMotorTimer()
 {
+char      FrontView_Hours[]           = "Hours";
+char      FrontView_Mins[]            = "Mins";
+char      FrontView_Secs[]            = "Secs";
 
     if (TimesUp) return;
 
@@ -1792,6 +1768,8 @@ void ShowConnectionQuality()
     char Msg_ConnectedWeak[]      = "Weak";
     char Msg_ConnectedVWeak[]     = "Very weak";
     int  ConnectionQuality        = GetSuccessRate();
+    char     FrontView_Connected[]  = "Connected";
+    char     Visible[]             = "vis Quality,1";
 
     if (!LedWasGreen) return;
     SendValue(Quality, ConnectionQuality); // show quality of connection in progress bar
@@ -1804,7 +1782,7 @@ void ShowConnectionQuality()
     if ((ConnectionQuality >= 25) && (ConnectionQuality < 50)) strcat(Msgbuf, Msg_ConnectedWeak);
     if ((ConnectionQuality >= 1) && (ConnectionQuality < 25)) strcat(Msgbuf, Msg_ConnectedVWeak);
     SendText(FrontView_Connected, Msgbuf);
-    SendCommand(Visible);
+    SendCommand(Visible); // heer
 }
 /*********************************************************************************************************************************/
 
@@ -1856,6 +1834,10 @@ FASTRUN void ShowComms()
     char rate2[]             = "Rate 2";
     char rate3[]             = "Rate 3";
     char rate4[]             = "      ";
+    char     FrontView_Connected[]  = "Connected";
+    char     WarnNow[]                  = "vis Warning,1"; 
+    char     WarnOff[]                  = "vis Warning,0";
+    char     InVisible[]           = "vis Quality,0";
 
         if (CurrentView == FRONTVIEW) {
             ShowConnectionQuality();
@@ -1907,8 +1889,8 @@ FASTRUN void ShowComms()
             SendValue(DataView_pps, PacketsPerSecond);
             SendValue(DataView_lps, TotalLostPackets / 2); // about half probably made it but went un acknoledged
             SendText(DataView_Alt,  ModelAltitude);
-            SendText(DataView_MaxAlt, MaxAltitude);
-            SendText(DataView_Temp, Modeltemperature);
+            SendText(DataView_MaxAlt, Maxaltitude);
+            SendText(DataView_Temp, ModelTempRX);
             SendText(DataView_Rx,   ThisRadio);
             SendText(DataView_rxv,  ReceiverVersionNumber);
             SendValue(DataView_Ls,  GapLongest);
@@ -1943,7 +1925,7 @@ FASTRUN void ShowComms()
             SendText(MxS, Vbuf);
             snprintf(Vbuf, 4, "%d", (int)GPSAltitude);
             SendText(ALT, Vbuf);
-            snprintf(Vbuf, 4, "%d", (int)GPSMaxAltitude);
+            snprintf(Vbuf, 4, "%d", (int)GPSMaxaltitude);
             SendText(MALT, Vbuf);
             snprintf(Vbuf, 4, "%d", (int)GPSCourseTo);
             SendText(BTo, Vbuf);
@@ -2025,6 +2007,7 @@ void SaveMixValues(){
     char MixesView_h0[]            = "h0"; // =the slider control
     char MixesView_od[]            = "od"; // One direction
     char     ProgressStart[]       = "vis Progress,1";
+    char     Progress[]            = "Progress";
 
     SendCommand(ProgressStart);
     SendValue(Progress, 5);
@@ -2577,6 +2560,9 @@ void ShortishDelay(){
 
 void OpenModelsFile()
 {
+
+char      ModelsFile[]                = "models.dat";
+
 if(!ModelsFileOpen){
     if (SingleModelFlag) {
         ModelsFileNumber = SD.open(SingleModelFile, FILE_WRITE);
@@ -2679,7 +2665,7 @@ uint8_t SDRead8BITS(int p_address)
 
 void UpdateModelsNameEveryWhere()
 {
-   
+    char Owner[]                    = "Owner";  
     char TheModelName[]        = "ModelName";
     char GraphView_Channel[]   = "Channel";
     char TrimView_Bank[]       = "t1";
@@ -3684,8 +3670,15 @@ FLASHMEM void setup()
     char FrontView_Highlight[]  = "FrontView.Highlight";
     char err_chksm[]            = "File checksum?";
     char err_404[]              = "File not found";
+    char     FrontView_Connected[]  = "Connected";
     char err_MotorOn[]          = " MOTOR IS ON! ";
-
+    char      FrontView_Hours[]           = "Hours";
+    char      FrontView_Mins[]            = "Mins";
+    char      FrontView_Secs[]            = "Secs";
+    char     WarnNow[]                  = "vis Warning,1"; 
+    char     Warning[]                  = "Warning";
+    char      ModelsFile[]                = "models.dat";
+    
     pinMode(REDLED, OUTPUT);
     pinMode(GREENLED, OUTPUT);
     pinMode(BLUELED, OUTPUT);
@@ -3754,6 +3747,7 @@ if (UseTXModule)
     SendValue(FrontView_ForeGround, ForeGroundColour);
     SendValue(FrontView_Special, SpecialColour);
     SendValue(FrontView_Highlight, HighlightColour);
+    
     CurrentView = 254;
     GotoFrontView();
     SetAudioVolume(AudioVolume);
@@ -5404,6 +5398,8 @@ void ReceiveModelFile()
     char          ques[] = "?";
     char          ProgressStart[]       = "vis Progress,1";
     char          ProgressEnd[]         = "vis Progress,0";
+    char     GoModelsView[]                  = "page ModelsView";
+    char     Progress[]            = "Progress";
 
     strcpy(msg, ovwr);
     strcat(msg, ModelName);
@@ -5565,6 +5561,8 @@ void SendModelFile()
     char          Fsend[]               = "Sending file";
     char          ProgressStart[]       = "vis Progress,1";
     char          ProgressEnd[]         = "vis Progress,0";
+    char     GoModelsView[]                  = "page ModelsView";
+    char     Progress[]            = "Progress";
 
     BlueLedOn();
     CloseModelsFile();
@@ -5811,7 +5809,7 @@ void ZeroDataScreen()
     GapCount           = 0;
     GapStart           = 0;
     RXMAXModelAltitude = 0;
-    GPSMaxAltitude     = 0;
+    GPSMaxaltitude     = 0;
     ThisGap            = 0;
     GPSMaxDistance     = 0;
     GPSMaxSpeed        = 0;
@@ -5837,6 +5835,7 @@ void ReadNewSwitchFunction(){
         char ProgressEnd[]         = "vis Progress,0";
         char PageSwitchView[]          = "page SwitchesView";
         char OneSwitchViewc_revd[]     = "c_revd"; // Reversed
+        char     Progress[]            = "Progress";
 
             SendCommand(ProgressStart);
             SendValue(Progress, 10);
@@ -6023,6 +6022,7 @@ void EndReverseView()
     uint8_t i;
     char     ProgressStart[]       = "vis Progress,1";
     char    pRXSetupView[]    = "page RXSetupView";
+    char     Progress[]            = "Progress";
     SendCommand(ProgressStart);
     ReversedChannelBITS = 0;
     for (i = 0; i < 16; ++i) {
@@ -6046,6 +6046,7 @@ void StartReverseView()
     uint8_t i;
     char     ProgressStart[]       = "vis Progress,1";
     char     ProgressEnd[]         = "vis Progress,0";
+    char     Progress[]            = "Progress";
 
 
     CurrentView             = REVERSEVIEW;
@@ -6201,7 +6202,7 @@ void LoadFileSelector(){
 /******************************************************************************************************************************/
 void GotoModelsView()
 {
-
+char     GoModelsView[]                  = "page ModelsView";
  if (ModelMatched) return; // must not change when model connected 
  SaveCurrentModel();
  SendCommand(GoModelsView);
@@ -6520,6 +6521,7 @@ void RXSetup1End()
     char n5[] = "n5";    // PPMChannelCount
     char page_RXSetupView[] = "page RXSetupView";
     char     ProgressStart[]       = "vis Progress,1";
+    char     Progress[]            = "Progress";
 
     SendCommand(ProgressStart);
     CopyTrimsToAll= GetValue(c1);
@@ -6610,6 +6612,7 @@ void BuddyChViewStart()
 void BuddyChViewEnd()
 {
     char page_BuddyView[] = "page BuddyView";
+    char     Progress[]            = "Progress";
     char     ProgressStart[]       = "vis Progress,1";
     char fs[16][5]        = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
     SendCommand(ProgressStart);
@@ -6664,6 +6667,8 @@ void ResetTransmitterSettings(){    // This function resets all transmitter para
    char prompt[] = "Delete all settings and models?!"; 
    int  sofar   = 0;
    char     ProgressStart[]       = "vis Progress,1";
+   char     Progress[]            = "Progress";
+   char     pCalibrateView[]                = "page CalibrateView";
 
    if (!GetConfirmation(pCalibrateView,prompt)) return;
    SendCommand(ProgressStart);
@@ -6833,6 +6838,7 @@ void ReadDualRatesValues(){
     char ChNumber8[]      = "n7";
     char     ProgressStart[]       = "vis Progress,1";
     char     ProgressEnd[]         = "vis Progress,0";
+    char     Progress[]            = "Progress";
     SendCommand(ProgressStart);
     SendValue(Progress, 10);
     Procrastinate(10);
@@ -6935,6 +6941,7 @@ void StartModelSetup(){
     char fs[16][5]                 = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
      char     ProgressStart[]       = "vis Progress,1";
      char     ProgressEnd[]         = "vis Progress,0";
+     char     Progress[]            = "Progress";
     if (CurrentView == FAILSAFE_VIEW) { //  read failsafe blobs
         SendCommand(ProgressStart);
         for (int i = 0; i < 16; ++i) {
@@ -6982,6 +6989,7 @@ void StartSlowView(){
 void EndSlowView(){
     char ns[16][4]    = {{"n0"}, {"n1"}, {"n2"}, {"n3"}, {"n4"}, {"n5"}, {"n6"}, {"n7"}, {"n8"}, {"n9"}, {"n10"}, {"n11"}, {"n12"}, {"n13"}, {"n14"}, {"n15"}};
     char     ProgressStart[]       = "vis Progress,1";
+    char     Progress[]            = "Progress";
     SendCommand(ProgressStart);
     for (int i = 0; i < 16; ++i){
          StepSize[i] = GetValue(ns[i]);
@@ -7067,6 +7075,7 @@ void WriteBackup(){
                 uint8_t Iterations             = 4;
                 char     ProgressStart[]       = "vis Progress,1";
                 char     ProgressEnd[]         = "vis Progress,0";
+                char     Progress[]            = "Progress";
                 SendValue(Progress, 1);
                 FixFileName();
                 if ((strlen(SingleModelFile) <= 12) && (InStrng(ModExt, SingleModelFile) > 0)){
@@ -7184,6 +7193,7 @@ void LoadModelForRenaming(){
   char overwr[]               = "Overwrite ";
   char ques[]                 = "?";
   char Deleteable[31];
+  char     GoModelsView[]                  = "page ModelsView";
 
   SaveCurrentModel();
   GetText(ModelsView_filename, SingleModelFile);
@@ -7220,6 +7230,7 @@ void LoadModelForRenaming(){
     char pr[]               = "Select ";
     char buf[50];
     char q[] = "?";
+    char     GoModelsView[]                  = "page ModelsView";
     if (PreviousModelNumber != ModelNumber) {
                     strcpy(buf, pr);
                     strcat(buf, ModelName);
@@ -7307,6 +7318,7 @@ void SelectChannelOrder(){
     char prompt[] = "Power off transmitter?";
     bool oldUseTxModule  = UseTXModule;
     char     ProgressStart[]       = "vis Progress,1";
+    char     Progress[]            = "Progress";
     
     SendCommand(ProgressStart);
     SendValue(Progress, 10);
@@ -7679,6 +7691,16 @@ FASTRUN void ButtonWasPressed()
         char page_RXSetupView[]     = "page RXSetupView";
         char     ProgressStart[]       = "vis Progress,1";
         char     ProgressEnd[]         = "vis Progress,0";
+        char     Progress[]            = "Progress";
+        char      ScreenViewTimeout[]         = "Sto"; // needed for display info
+        char      page_FhssView[]             = "page FhssView";
+        char      FrontView_Hours[]           = "Hours";
+        char      FrontView_Mins[]            = "Mins";
+        char      FrontView_Secs[]            = "Secs";
+        char      StartBackGround[]           = "click Background,0";
+        char     GoModelsView[]                  = "page ModelsView";
+
+        char     pCalibrateView[]                = "page CalibrateView";
         // ************************* test input words from Nextion *****************
 
         if (InStrng(StCH, TextIn)) { // select sub trim channel
@@ -7873,7 +7895,7 @@ FASTRUN void ButtonWasPressed()
             else {
                 GPSGroundAltitude = 0;
             }
-            GPSMaxAltitude     = 0;
+            GPSMaxaltitude     = 0;
             RXMAXModelAltitude = 0;
             ClearText();
             return;
@@ -8851,6 +8873,11 @@ void CheckMotorOff(){ // For Safety
 void GetBank()
 { //  and  motor switch and safety switch ETC ...
 
+char      FrontView_Hours[]           = "Hours";
+char      FrontView_Mins[]            = "Mins";
+char      FrontView_Secs[]            = "Secs";
+char     WarnOff[]                  = "vis Warning,0";
+
     if (CurrentMode != NORMAL) return; // not needed if calibrating
     SafetyON     = false;
     BuddyON      = false;
@@ -9336,14 +9363,14 @@ void GetAltitude()
 {
     RXModelAltitude = int(GetFromAckPayload()) - GroundModelAltitude;
     if (RXMAXModelAltitude < RXModelAltitude) RXMAXModelAltitude = RXModelAltitude;
-    snprintf(MaxAltitude, 5, "%d", RXMAXModelAltitude);
+    snprintf(Maxaltitude, 5, "%d", RXMAXModelAltitude);
     snprintf(ModelAltitude, 5, "%d", RXModelAltitude);
 }
 /************************************************************************************************************/
 void GetTemperature()
 {
     RXTemperature = GetFromAckPayload();
-    snprintf(Modeltemperature, 5, "%f", RXTemperature);
+    snprintf(ModelTempRX, 5, "%f", RXTemperature);
 }
 /************************************************************************************************************/
 FASTRUN uint32_t GetIntFromAckPayload()   // This one uses a uint32_t int
@@ -9364,6 +9391,8 @@ FASTRUN uint32_t GetIntFromAckPayload()   // This one uses a uint32_t int
 
 void GotoFrontView(){ 
     char fms[4][4] = {{"fm1"},{"fm2"},{"fm3"},{"fm4"}};
+    char     FrontView_Connected[]  = "Connected";
+    char      page_FrontView[]            = "page FrontView";
    
     if (CurrentView != FRONTVIEW) {
           if (CurrentView == SCANVIEW) {
@@ -9574,7 +9603,7 @@ FASTRUN void ParseAckPayload()
         case 13:
             GPSAltitude = GetFromAckPayload() - GPSGroundAltitude;
             if (GPSAltitude < 0) GPSAltitude = 0;
-            if (GPSMaxAltitude < GPSAltitude) GPSMaxAltitude = GPSAltitude;
+            if (GPSMaxaltitude < GPSAltitude) GPSMaxaltitude = GPSAltitude;
             break;
         case 14:
             GPSDistanceTo = GetFromAckPayload();
@@ -9657,6 +9686,10 @@ void CheckModelName()
 
 void CheckScanButton() // Scan button AND models button
 {
+    char     b5Greyed[]                 = "b5.pco=33840";
+    char     b12Greyed[]                = "b12.pco=33840";
+    char     b1Greyed[]                 = "b1.pco=33840";
+
     if (ModelMatched) {
         if (CurrentView == TXSETUPVIEW) {
           if(!b5isGrey) { 
@@ -9690,8 +9723,9 @@ void CheckPowerOffButton()
     char PowerMsg[15];
     char PowerPre[] = "TURN OFF?! ";
     char nb[4];
-    char NotStillConnected[]     = "vis StillConnected,0";
-    char StillConnected[]     = "vis StillConnected,1";
+    char NotStillConnected[]        = "vis StillConnected,0";
+    char StillConnected[]           = "vis StillConnected,1";
+    char  StillConnectedBox[]       = "StillConnected";
     
 
     if (!digitalRead(BUTTON_SENSE_PIN)){ 
