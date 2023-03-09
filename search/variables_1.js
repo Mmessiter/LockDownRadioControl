@@ -45,5 +45,5 @@ var searchData=
   ['announceconnected_42',['AnnounceConnected',['../TransmitterCode_2src_2main_8cpp.html#a7f979f6e267f37833beb30c91b796cae',1,'main.cpp']]],
   ['audiovolume_43',['AudioVolume',['../TransmitterCode_2src_2main_8cpp.html#adddcbca54e7b49592c3f6c360bf04494',1,'main.cpp']]],
   ['automodelselect_44',['AutoModelSelect',['../TransmitterCode_2src_2main_8cpp.html#a77387f8b9f18e9b75448e01d821ae17e',1,'main.cpp']]],
-  ['autoswitch_45',['AutoSwitch',['../TransmitterCode_2src_2main_8cpp.html#a6d1c8ca21c8826267f5687d3799c6a1f',1,'main.cpp']]]
+  ['autoswitch_45',['Autoswitch',['../TransmitterCode_2src_2main_8cpp.html#a5b8bae72a42da5c8a19ad3b4c1692538',1,'main.cpp']]]
 ];
