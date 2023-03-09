@@ -27,14 +27,13 @@ var searchData=
   ['trims_24',['Trims',['../TransmitterCode_2src_2main_8cpp.html#aa091f2d8f47174c6960fd69335a4e5fa',1,'main.cpp']]],
   ['trimswitch_25',['TrimSwitch',['../TransmitterCode_2src_2main_8cpp.html#ad5adb31bc39b92d27e6ca35ef4dafefe',1,'main.cpp']]],
   ['trimtimer_26',['TrimTimer',['../TransmitterCode_2src_2main_8cpp.html#a48589088880569c1ae40f8c226cc52be',1,'main.cpp']]],
-  ['turnoffrx_27',['TurnOffRX',['../TransmitterCode_2src_2main_8cpp.html#a553fac5bc8b66591d5c1d735e624a614',1,'main.cpp']]],
-  ['turnoffsecondtogo_28',['TurnOffSecondToGo',['../TransmitterCode_2src_2main_8cpp.html#a8469143c4224c918fc85eab562041d88',1,'main.cpp']]],
-  ['tx_29',['tX',['../classMPU9250.html#af7d992743ffa2e15d5674b45a100791e',1,'MPU9250']]],
-  ['txlipo_30',['TXLiPo',['../TransmitterCode_2src_2main_8cpp.html#ae15fd0f1128566cd1120f3dd2e287dc1',1,'main.cpp']]],
-  ['txname_31',['TxName',['../TransmitterCode_2src_2main_8cpp.html#a967f3c9b0fd867928c55d75d65cfcd8c',1,'main.cpp']]],
-  ['txontime_32',['TxOnTime',['../RadioFunctions_8h.html#a992a1c7536f872bdfd833e282cf3b4e4',1,'RadioFunctions.h']]],
-  ['txtimestamp_33',['TXTimeStamp',['../RadioFunctions_8h.html#afd020f35b9f4a1aa2643c4fdcc46f5db',1,'RadioFunctions.h']]],
-  ['txvoltagecorrection_34',['TxVoltageCorrection',['../TransmitterCode_2src_2main_8cpp.html#a985d38323fbadec8df22d3e17ca18eb2',1,'main.cpp']]],
-  ['ty_35',['tY',['../classMPU9250.html#ae100c82474b1e78337ecfdc8d18518d5',1,'MPU9250']]],
-  ['tz_36',['tZ',['../classMPU9250.html#a595f111a497c7727ac70a544b98162e1',1,'MPU9250']]]
+  ['turnoffsecondtogo_27',['TurnOffSecondToGo',['../TransmitterCode_2src_2main_8cpp.html#a8469143c4224c918fc85eab562041d88',1,'main.cpp']]],
+  ['tx_28',['tX',['../classMPU9250.html#af7d992743ffa2e15d5674b45a100791e',1,'MPU9250']]],
+  ['txlipo_29',['TXLiPo',['../TransmitterCode_2src_2main_8cpp.html#ae15fd0f1128566cd1120f3dd2e287dc1',1,'main.cpp']]],
+  ['txname_30',['TxName',['../TransmitterCode_2src_2main_8cpp.html#a967f3c9b0fd867928c55d75d65cfcd8c',1,'main.cpp']]],
+  ['txontime_31',['TxOnTime',['../RadioFunctions_8h.html#a992a1c7536f872bdfd833e282cf3b4e4',1,'RadioFunctions.h']]],
+  ['txtimestamp_32',['TXTimeStamp',['../RadioFunctions_8h.html#afd020f35b9f4a1aa2643c4fdcc46f5db',1,'RadioFunctions.h']]],
+  ['txvoltagecorrection_33',['TxVoltageCorrection',['../TransmitterCode_2src_2main_8cpp.html#a985d38323fbadec8df22d3e17ca18eb2',1,'main.cpp']]],
+  ['ty_34',['tY',['../classMPU9250.html#ae100c82474b1e78337ecfdc8d18518d5',1,'MPU9250']]],
+  ['tz_35',['tZ',['../classMPU9250.html#a595f111a497c7727ac70a544b98162e1',1,'MPU9250']]]
 ];

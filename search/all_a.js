@@ -10,7 +10,7 @@ var searchData=
   ['i2c_5fslv0_5fen_7',['I2C_SLV0_EN',['../classMPU9250.html#a6150b9869ac3d40c1773cfff6f123016',1,'MPU9250']]],
   ['i2c_5fslv0_5freg_8',['I2C_SLV0_REG',['../classMPU9250.html#a8b22e82027b25cdce70e4df0f412e856',1,'MPU9250']]],
   ['i2caddress_9',['I2CADDRESS',['../SensorHubT32_2src_2main_8cpp.html#a6ee9f32cf8cccca5a7e078c303afee94',1,'main.cpp']]],
-  ['i2cdev_10',['I2Cdev',['../classI2Cdev.html#a0a466e2323d9f719a1ecc9fa11ac5c84',1,'I2Cdev::I2Cdev()'],['../classI2Cdev.html',1,'I2Cdev']]],
+  ['i2cdev_10',['I2Cdev',['../classI2Cdev.html',1,'I2Cdev'],['../classI2Cdev.html#a0a466e2323d9f719a1ecc9fa11ac5c84',1,'I2Cdev::I2Cdev()']]],
   ['i2cdev_2ecpp_11',['I2Cdev.cpp',['../I2Cdev_8cpp.html',1,'']]],
   ['i2cdev_2eh_12',['I2Cdev.h',['../I2Cdev_8h.html',1,'']]],
   ['i2cdev_5farduino_5fwire_13',['I2CDEV_ARDUINO_WIRE',['../I2Cdev_8h.html#a552406c30ac10b8bf904f5015fb987e0',1,'I2Cdev.h']]],
@@ -30,11 +30,11 @@ var searchData=
   ['i_5fygain_5fmin_27',['I_YGAIN_MIN',['../Quadcopter_2src_2main_8cpp.html#a1c62fb46ed07188f22be7f261e256da0',1,'main.cpp']]],
   ['idle1_28',['IDLE1',['../RadioFunctions_8h.html#a6206862dac2a46795d3222da29fd31d2',1,'RadioFunctions.h']]],
   ['idle2_29',['IDLE2',['../RadioFunctions_8h.html#a6b723cc074c7c348aa1e89c558b676fe',1,'RadioFunctions.h']]],
-  ['idlen_30',['IDLEN',['../ReceiverCode_2src_2main_8cpp.html#a472646a6b1f959aa3b4261a8247c2015',1,'IDLEN():&#160;main.cpp'],['../SensorHubT32_2src_2main_8cpp.html#a472646a6b1f959aa3b4261a8247c2015',1,'IDLEN():&#160;main.cpp']]],
+  ['idlen_30',['IDLEN',['../SensorHubT32_2src_2main_8cpp.html#a472646a6b1f959aa3b4261a8247c2015',1,'IDLEN():&#160;main.cpp'],['../ReceiverCode_2src_2main_8cpp.html#a472646a6b1f959aa3b4261a8247c2015',1,'IDLEN():&#160;main.cpp']]],
   ['imuinit_31',['IMUinit',['../Quadcopter_2src_2main_8cpp.html#a2b033451ecabbb1e6e0aec20d547bc25',1,'main.cpp']]],
   ['ina219_32',['ina219',['../ReceiverCode_2src_2main_8cpp.html#a69393b86406e49dbacfbabd283877495',1,'ina219():&#160;main.cpp'],['../SensorHubT32_2src_2main_8cpp.html#a69393b86406e49dbacfbabd283877495',1,'ina219():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a69393b86406e49dbacfbabd283877495',1,'ina219():&#160;main.cpp']]],
   ['ina219connected_33',['INA219Connected',['../common_8h.html#a8251d20351fc918ea452ad591c75116e',1,'common.h']]],
-  ['ina219volts_34',['INA219Volts',['../ReceiverCode_2src_2main_8cpp.html#ad84d94b7259bcf40213f0af9be706ee7',1,'INA219Volts():&#160;main.cpp'],['../radio_8h.html#ad84d94b7259bcf40213f0af9be706ee7',1,'INA219Volts():&#160;main.cpp'],['../SensorHubT32_2src_2main_8cpp.html#ad84d94b7259bcf40213f0af9be706ee7',1,'INA219Volts():&#160;main.cpp']]],
+  ['ina219volts_34',['INA219Volts',['../SensorHubT32_2src_2main_8cpp.html#ad84d94b7259bcf40213f0af9be706ee7',1,'INA219Volts():&#160;main.cpp'],['../ReceiverCode_2src_2main_8cpp.html#ad84d94b7259bcf40213f0af9be706ee7',1,'INA219Volts():&#160;main.cpp'],['../radio_8h.html#ad84d94b7259bcf40213f0af9be706ee7',1,'INA219Volts():&#160;main.cpp']]],
   ['inactivity_5fstart_35',['Inactivity_Start',['../RadioFunctions_8h.html#a42f848041eda5cd5b98d334ab44a15a1',1,'Inactivity_Start():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a42f848041eda5cd5b98d334ab44a15a1',1,'Inactivity_Start():&#160;main.cpp']]],
   ['inactivity_5ftimeout_36',['Inactivity_Timeout',['../RadioFunctions_8h.html#ae99f193f5a3e06508bbe4b32ee91a963',1,'Inactivity_Timeout():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#ae99f193f5a3e06508bbe4b32ee91a963',1,'Inactivity_Timeout():&#160;main.cpp']]],
   ['inactivitymaximum_37',['INACTIVITYMAXIMUM',['../RadioFunctions_8h.html#a6f6e4e8e296f81b3dd22980c49168662',1,'RadioFunctions.h']]],
@@ -84,6 +84,5 @@ var searchData=
   ['intodegrees_81',['IntoDegrees',['../TransmitterCode_2src_2main_8cpp.html#a442340cad0d09e58be5ec6afdd5b27d1',1,'main.cpp']]],
   ['intohigherres_82',['IntoHigherRes',['../TransmitterCode_2src_2main_8cpp.html#a0d8d8a0d67cb9b04481f1692abe75368',1,'main.cpp']]],
   ['intolowerres_83',['IntoLowerRes',['../TransmitterCode_2src_2main_8cpp.html#a5cdbe11d62e0de7610ba323e60b97d33',1,'main.cpp']]],
-  ['invisible_84',['InVisible',['../TransmitterCode_2src_2main_8cpp.html#a89e5f24bf4bf10011bb6581b288d5fc2',1,'main.cpp']]],
-  ['invsqrt_85',['invSqrt',['../Quadcopter_2src_2main_8cpp.html#a5e5346796220b271615a52428f6ec6ca',1,'main.cpp']]]
+  ['invsqrt_84',['invSqrt',['../Quadcopter_2src_2main_8cpp.html#a5e5346796220b271615a52428f6ec6ca',1,'main.cpp']]]
 ];

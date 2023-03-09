@@ -39,6 +39,5 @@ var searchData=
   ['integral_5fyaw_5fprev_36',['integral_yaw_prev',['../Quadcopter_2src_2main_8cpp.html#af6f1ae4bc8203051100523cc2ebaba89',1,'main.cpp']]],
   ['interations_37',['Interations',['../radio_8h.html#ac8e10a08e9da70138c4a8459c6902d7d',1,'radio.h']]],
   ['interpolate_38',['Interpolate',['../TransmitterCode_2src_2main_8cpp.html#ac8ce9c3b3ac8639fb34ffe64bef87c34',1,'main.cpp']]],
-  ['interpolationtypes_39',['InterpolationTypes',['../TransmitterCode_2src_2main_8cpp.html#a5424ceb23e086124c417474911365a58',1,'main.cpp']]],
-  ['invisible_40',['InVisible',['../TransmitterCode_2src_2main_8cpp.html#a89e5f24bf4bf10011bb6581b288d5fc2',1,'main.cpp']]]
+  ['interpolationtypes_39',['InterpolationTypes',['../TransmitterCode_2src_2main_8cpp.html#a5424ceb23e086124c417474911365a58',1,'main.cpp']]]
 ];
