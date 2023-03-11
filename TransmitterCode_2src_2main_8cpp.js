@@ -625,8 +625,6 @@ var TransmitterCode_2src_2main_8cpp =
     [ "SavedSbusRepeats", "TransmitterCode_2src_2main_8cpp.html#ac3404e7b5c5628ea17545ccdc3428114", null ],
     [ "SaveFailSafeNow", "TransmitterCode_2src_2main_8cpp.html#acd6754de95b605bb65a52a86e96121f7", null ],
     [ "SbusRepeats", "TransmitterCode_2src_2main_8cpp.html#a62cc4d43d463897ef0d417150d6e7f3f", null ],
-    [ "ScanEnd", "TransmitterCode_2src_2main_8cpp.html#a6fde7bc3d03bda84c33abdbe1ed7b5bf", null ],
-    [ "ScanStart", "TransmitterCode_2src_2main_8cpp.html#a40219e66b010dcf762b96491c9e668ec", null ],
     [ "ScreenIsOff", "TransmitterCode_2src_2main_8cpp.html#aff4581f5a99a6d8eb37ef22e94d858d3", null ],
     [ "ScreenTimeout", "TransmitterCode_2src_2main_8cpp.html#a3c8096a17fd0f8dbb05f47be54fd7637", null ],
     [ "ScreenTimeTimer", "TransmitterCode_2src_2main_8cpp.html#a83b0bce3874e15bbce39bac61907b689", null ],

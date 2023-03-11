@@ -388,8 +388,6 @@ var RadioFunctions_8h =
     [ "ReconnectionIndex", "RadioFunctions_8h.html#aa3d3407bef9f6718dba572936ef3c055", null ],
     [ "RecoveryTimer", "RadioFunctions_8h.html#ac6156efad98d22f44766714a565ccf2f", null ],
     [ "RecursedAlready", "RadioFunctions_8h.html#aa4e775cc458a824cb4bef031518b19a2", null ],
-    [ "ScanEnd", "RadioFunctions_8h.html#a6fde7bc3d03bda84c33abdbe1ed7b5bf", null ],
-    [ "ScanStart", "RadioFunctions_8h.html#a40219e66b010dcf762b96491c9e668ec", null ],
     [ "SendBuffer", "RadioFunctions_8h.html#a55f006b14432e3ce08ccbfc802f35cd8", null ],
     [ "SendNoData", "RadioFunctions_8h.html#ae2e29194ec87a0075a6ad4decfa37d8e", null ],
     [ "ShowServoTimer", "RadioFunctions_8h.html#ae4989662282fe08eb2deb769a3611fa0", null ],
