@@ -181,7 +181,6 @@ FASTRUN void FailedPacket()
     ++TotalLostPackets;                           // This is total - never zeroed
   
     if (RecentPacketsLost >= LOSTCONTACTCUTOFF) { // Don't panic until at least LOSTCONTACTCUTOFF packets are lost.
-       // PlaySound(CLICKONE);                    // Later... optional
         if (!GapStart) GapStart = millis();       // To keep track of this gap's length
         LostContactFlag = true;
         Reconnected     = false;
@@ -195,12 +194,8 @@ FASTRUN void FailedPacket()
             }
         }
     }
-    if (LostContactFlag) {
-        TryToReconnect();
-     //   Serial.print(millis());
-     //   Serial.println("  RECONNECTING...");
-    }
-
+    if (LostContactFlag) TryToReconnect();
+   
     int SecondsRemaining = (Inactivity_Timeout / 1000) - (millis() - Inactivity_Start) / 1000;
     if (SecondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH); // INACTIVITY POWER OFF HERE!!
 }
@@ -342,10 +337,10 @@ void ScanAllChannels()
     char fyll[] = "fill ";
     char NewYellow[15];
     char NA[1] = ""; // blank one
-
+    
     Str(NewYellow, HighlightColour, 0);
-    for (Sc = ScanStart; Sc <= ScanEnd; ++Sc) {
-        if (NEXTION.available()) return; // in case someone wants to stop!
+    for (Sc = 1; Sc <= 125; ++Sc) { // heer
+       if (NEXTION.available()) return; // in case someone wants to stop!
         Radio1.setChannel(Sc);
         Radio1.startListening();
         x2 = x1 + (Sc * 5);
@@ -359,8 +354,7 @@ void ScanAllChannels()
                 AllChannels[Sc] += BlobHeight;
                 SendCharArray(CB, fyll, Str(NB, x2, 1), Str(NB1, (y2), 1), Str(NB2, 5, 1), Str(NB3, BlobHeight, 1), NewYellow, NA, NA, NA, NA, NA, NA);
             }
-        }
-        else {
+        } else {
             ++NoCarrier[Sc];
             if (NoCarrier[Sc] > 15) { // must see no carrier >15 times before reducing the trace
                 if (AllChannels[Sc] >= (BlobHeight)) {

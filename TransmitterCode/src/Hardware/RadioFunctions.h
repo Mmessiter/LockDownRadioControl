@@ -400,8 +400,6 @@ extern uint8_t        CurrentMode;
 extern uint8_t        NoCarrier[];
 extern uint8_t        AllChannels[];
 extern char           NEXTIONSleepTime[];
-extern uint8_t        ScanStart;
-extern uint8_t        ScanEnd;
 extern uint8_t        BadChannelPointer;
 extern uint8_t        BadChannels[];
 extern uint8_t        NextChannel;

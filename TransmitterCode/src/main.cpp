@@ -224,12 +224,11 @@ uint8_t  TrimNumber[8]                 = {TRIM1A, TRIM1B, TRIM2A, TRIM2B, TRIM3A
 uint8_t  CurrentMode                  = NORMAL;
 uint8_t  AllChannels[127]; /// for scanning
 uint8_t  NoCarrier[127];
-uint8_t  ScanStart           = 1;
-uint8_t  ScanEnd             = 125;
+
 uint32_t TimerMillis         = 0;
 uint32_t LastSeconds         = 0;
 uint32_t Secs                = 0;
-uint32_t ElapsedSeconds    = 0;
+uint32_t ElapsedSeconds      = 0;
 uint32_t PausedSecs          = 0;
 uint32_t Mins                = 0;
 uint32_t Hours               = 0;
@@ -299,7 +298,7 @@ int       RXMAXModelAltitude          = 0;
 int       GroundModelAltitude         = 0;
 float     RXTemperature               = 0;
 float     MaxAlt                      = 0;
-char      ModelTempRX[8]         = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20};
+char      ModelTempRX[8]              = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20};
 char      ModelAltitude[8]            = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20};
 char      Maxaltitude[8]              = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20};
 char      ReceiverVersionNumber[8]    = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20};
@@ -3759,7 +3758,7 @@ if (UseTXModule)
     SendValue(FrontView_Mins, 0);
     SendValue(FrontView_Secs, 0);
     //  ***************************************************************************************
-    // SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
+    //  SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
     //  **   BUT then re-comment it!! Otherwise it will reset to same time on every boot up! **
     //  ***************************************************************************************
     BoundFlag = false;
