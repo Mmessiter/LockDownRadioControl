@@ -19,7 +19,7 @@
 
 #define TXVERSION_MAJOR   2
 #define TXVERSION_MINOR   1
-#define TXVERSION_MINIMUS 7
+#define TXVERSION_MINIMUS 8
 
 // **************************************************************************
 //                               Includes                                   *

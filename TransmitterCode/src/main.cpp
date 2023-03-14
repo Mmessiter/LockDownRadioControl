@@ -134,7 +134,7 @@ namespace TXSetupValues{
     uint8_t   LEDBrightness           = DEFAULTLEDBRIGHTNESS;
     short int TxVoltageCorrection     = 0;
     uint16_t  Qnh                     = 1009; // pressure at sea level here
-    } // namespace TXSetupValues
+    };                                        // namespace TXSetupValues
 
 /***************************************************************************************************************/
 
@@ -142,7 +142,7 @@ namespace ConnectionStatus{
     bool     Connected        = false;
     bool     ModelMatched     = false;
     bool     BoundFlag        = false;
-    } // namespace ConnectionStatus
+    }; // namespace ConnectionStatus
 
 /****************************************************************************************************************/
 
@@ -173,9 +173,8 @@ namespace TxDataView{ // heer
     int       RXModelAltitude              = 0;
     int       RXMAXModelAltitude           = 0;
     int       GroundModelAltitude          = 0;
-  
 
-    } // namespace TxDataView
+    }; // namespace TxDataView
 
 /***********************************************************************************************************/
 
@@ -185,7 +184,7 @@ namespace SlowServos
     uint8_t  StepSize[16] = {0,0,0,0,0,0,0,0,5,25,5,25,5,25,5,25};  //    How far to move each time on slow servos
     uint16_t CurrentPosition[UNCOMPRESSEDWORDS];                //    Position from which a slow servo started (0 = not started yet)
 
-} // namespace SlowServos
+    }; // namespace SlowServos
 
 /***********************************************************************************************************/
 
@@ -219,52 +218,51 @@ namespace GPSspace
     uint8_t   Gmonth;    // = tm.Month;  // 1-12
     uint8_t   Gyear;     // = tm.Year;   // 0-99
     bool      GPSTimeSynched    = false;
-   
-}// namespace GPSspace
+
+    }; // namespace GPSspace
 
 /***********************************************************************************************************/
 
+namespace TrimSpace
+{
+    uint8_t  PreviousTrim           = 255;
+    uint32_t TrimTimer              = 0;
+    uint16_t TrimRepeatSpeed        = 600;
+    uint16_t DefaultTrimRepeatSpeed = 600;
+    bool     DefiningTrims               = false;
+    bool     TrimDefined[4]              = {true, true, true, true};
+    uint8_t  SubTrims[CHANNELSUSED + 1];                        //    Subtrims
+    uint8_t  SubTrimToEdit      = 0;
+    uint16_t TrimMultiplier     = 2; // How much to multiply trim by
+    bool     TrimClicks        = true;
+    uint8_t  InputTrim[4]         = {0, 1, 2, 3};  // User defined trim input
+    bool     CopyTrimsToAll    = true;
+}; // namespace TrimSpace
 
-uint8_t  PreviousTrim           = 255;
-uint32_t TrimTimer              = 0;
-uint16_t TrimRepeatSpeed        = 600;
-uint16_t DefaultTrimRepeatSpeed = 600;
+/***********************************************************************************************************/
 
-
-
-uint8_t  LastMixNumber    = 1;
-uint8_t  MixNumber        = 0;
-uint8_t  Mixes[MAXMIXES + 1][CHANNELSUSED + 1];          // 17 possible elements per mix. NOTHING to do with channels count!!!
-
-RF24          Radio1(CE_PIN, CSN_PIN);
-WDT_T4<WDT3>  TeensyWatchDog;
-WDT_timings_t WatchDogConfig;
-uint32_t      PPMTimer = 0;
-
-int           Trims[BANKSUSED + 1][CHANNELSUSED + 1];         // Trims to store
-uint8_t       Exponential[BANKSUSED + 1][CHANNELSUSED + 1];   // Exponential
-uint8_t       InterpolationTypes[BANKSUSED + 1][CHANNELSUSED + 1];
-
-
-
-uint8_t  CurrentView      = FRONTVIEW;
-uint8_t  SavedCurrentView = FRONTVIEW;
-
-
-uint64_t DefaultPipe      = DEFAULTPIPEADDRESS;  //          Default Radio pipe address
-uint64_t TeensyMACAddPipe = DEFAULTPIPEADDRESS;  //          New Radio pipe address for binding will come from MAC address
-char     TextIn[CHARSMAX + 2];                   //          Spare space
-
-
-uint8_t  PacketsHistoryBuffer[PERFECTPACKETSPERSECOND * MAXSHOWCOMMSSESCONDS]; // Here we record some history
-uint16_t PacketsHistoryIndex    = 0;
-uint8_t  PacketNumber           = 0;
-
-
-
-
-char     na[]                   = "";
-bool     NewModelMemoryWasSaved = false; 
+bool            TrimSwitch[8];                              
+uint8_t         TrimNumber[8]    = {TRIM1A, TRIM1B, TRIM2A, TRIM2B, TRIM3A, TRIM3B, TRIM4A, TRIM4B};        // These too can get swapped over later
+int             Trims[BANKSUSED + 1][CHANNELSUSED + 1];         // Trims to store
+uint8_t         LastMixNumber    = 1;
+uint8_t         MixNumber        = 0;
+uint8_t         Mixes[MAXMIXES + 1][CHANNELSUSED + 1];          // 17 possible elements per mix. NOTHING to do with channels count!!!
+RF24            Radio1(CE_PIN, CSN_PIN);
+WDT_T4<WDT3>    TeensyWatchDog;
+WDT_timings_t   WatchDogConfig;
+uint32_t        PPMTimer = 0;
+uint8_t         Exponential[BANKSUSED + 1][CHANNELSUSED + 1];   // Exponential
+uint8_t         InterpolationTypes[BANKSUSED + 1][CHANNELSUSED + 1];
+uint8_t         CurrentView      = FRONTVIEW;
+uint8_t         SavedCurrentView = FRONTVIEW;
+uint64_t        DefaultPipe      = DEFAULTPIPEADDRESS;  //          Default Radio pipe address
+uint64_t        TeensyMACAddPipe = DEFAULTPIPEADDRESS;  //          New Radio pipe address for binding will come from MAC address
+char            TextIn[CHARSMAX + 2];                   //          Spare space
+uint8_t         PacketsHistoryBuffer[PERFECTPACKETSPERSECOND * MAXSHOWCOMMSSESCONDS]; // Here we record some history
+uint16_t        PacketsHistoryIndex    = 0;
+uint8_t         PacketNumber           = 0;
+char            na[]                   = "";
+bool            NewModelMemoryWasSaved = false; 
 
 /* ************************************* AckPayload structure ******************************************************
 
@@ -300,8 +298,6 @@ uint8_t  MidHiDegrees[5][CHANNELSUSED + 1];                 //    MidHi degrees 
 uint8_t  CentreDegrees[5][CHANNELSUSED + 1];                //    Middle degrees (90)
 uint8_t  MidLowDegrees[5][CHANNELSUSED + 1];                //    MidLow Degrees (45)
 uint8_t  MinDegrees[5][CHANNELSUSED + 1];                   //    Min Degrees (0)
-uint8_t  SubTrims[CHANNELSUSED + 1];                        //    Subtrims
-uint8_t  SubTrimToEdit      = 0;
 
 uint8_t  Bank                       =  1;
 // User defined bank names zone
@@ -333,14 +329,10 @@ uint16_t BoxLeft;
 uint16_t BoxRight;
 uint16_t ClickX;
 uint16_t ClickY;
-
 uint16_t AnalogueInput[PROPOCHANNELS]  = {A0, A1, A2, A3, A6, A7, A8, A9}; // 8 PROPO Channels for transmission   // fix order for mode 2 
-uint8_t  TrimNumber[8]                 = {TRIM1A, TRIM1B, TRIM2A, TRIM2B, TRIM3A, TRIM3B, TRIM4A, TRIM4B};        // These too can get swapped over later
-
 uint8_t  CurrentMode                  = NORMAL;
 uint8_t  AllChannels[127]; /// for scanning
 uint8_t  NoCarrier[127];
-
 uint32_t TimerMillis         = 0;
 uint32_t LastSeconds         = 0;
 uint32_t Secs                = 0;
@@ -367,13 +359,8 @@ uint8_t FHSS_Channels[83] = {51, 28, 24, 61, 64, 55, 66, 19, 76, 21, 59, 67, 15,
 
 uint8_t*  FHSSChPointer; // pointer for channels array (three only used for reconnect)
 uint8_t*  FHSSRecoveryPointer;
-
-
-
 uint8_t   SwitchNumber[8]             = {SWITCH0, SWITCH1, SWITCH2, SWITCH3, SWITCH4, SWITCH5, SWITCH6, SWITCH7}; // These can get swapped over later
 uint8_t   DefaultSwitchNumber[8]      = {SWITCH0, SWITCH1, SWITCH2, SWITCH3, SWITCH4, SWITCH5, SWITCH6, SWITCH7}; // Default values
-bool      DefiningTrims               = false;
-bool      TrimDefined[4]              = {true, true, true, true};
 char      ModelName[30]               = "Untitled";
 int       LastLinePosition            = 0;
 uint8_t   RXCellCount                 = 2;
@@ -384,9 +371,6 @@ uint32_t  GapSum                      = 0;
 uint32_t  GapStart                    = 0;
 uint32_t  ThisGap                     = 0;
 uint32_t  GapCount                    = 0;
-
-
-
 File      ModelsFileNumber;
 Adafruit_INA219 ina219;
 char     SingleModelFile[40];
@@ -395,7 +379,6 @@ bool     ModelsFileOpen = false;
 bool     USE_INA219     = false;
 uint32_t BindingTimer   = 0;
 bool     Switch[8];
-bool     TrimSwitch[8];
 uint8_t  FMSwitch             = BANKSWITCH;
 uint8_t  Autoswitch           = Autoswitch;
 uint8_t  SafetySwitch         = 0;
@@ -419,7 +402,6 @@ uint8_t  SwitchEditNumber     = 0; // number of switch being edited
 uint32_t ShowServoTimer       = 0;
 bool     LastFourOnly         = false;
 uint8_t  InPutStick[17]       = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}; //
-uint8_t  InputTrim[4]         = {0, 1, 2, 3};                                           // User defined trim inputs
 uint8_t  ExportedFileCounter  = 0;
 char     TheFilesList[100][14];
 uint16_t FileNumberInView     = 0;
@@ -433,10 +415,8 @@ uint32_t FailSafeTimer;
 uint32_t LastPacketSentTime = 0;
 uint16_t CompressedData[COMPRESSEDWORDS];   // = 15 words, 30 bytes
 uint8_t  SizeOfCompressedData;              // = 30
-
 uint32_t Inactivity_Start   = 0;
 tmElements_t tm;
-
 uint32_t     LastTimeRead    = 0;
 uint32_t     LastScanButtonCheck    = 0;
 uint32_t     TransmitterLastManaged    = 0;
@@ -446,25 +426,19 @@ uint8_t      MacAddress[8]   = {0, 0, 0, 0, 0, 0, 0, 0};
 uint8_t      ErrorState      = 0;
 uint16_t XtouchPlace = 0; // Clicked X
 uint16_t YtouchPlace = 0; // Clicked Y
-
-uint8_t PreviousChannelNumber = 0;
-uint8_t NextChannelNumber     = 0;
-
-// changing these four valiables controls LED blink and speed
-
+uint8_t  PreviousChannelNumber = 0;
+uint8_t  NextChannelNumber     = 0;
 bool     LedIsBlinking       = false;
 float    BlinkHertz          = 2;
 uint32_t BlinkTimer          = 0;
 uint8_t  BlinkOnPhase        = 1;
 bool     LedWasGreen         = true;
 bool     LedWasRed           = false;
-
 uint8_t  LastRadio           = 0;
 uint8_t  NextChannel         = 0;
 bool     BuddyPupilOnPPM    = false;
 bool     BuddyMaster         = false;
 bool     SlaveHasControl     = false;
-
 uint16_t LastModelLoaded     = 0;
 uint16_t LastFileInView      = 0;
 uint8_t  MinimumGap          = 75;
@@ -473,13 +447,10 @@ char     RecentTextFile[20];
 bool     LogRXSwaps       = false;
 bool     ThereIsMoreToSee = false;
 bool     UseLog           = false;
-
-
 uint32_t  SwapWaveBandTimer = 0;
 uint8_t   UkRulesCounter    = 0;
 bool      UkRules           = true;
 uint8_t   SwapWaveBand      = 0;
-uint16_t  TrimMultiplier     = 2; // How much to multiply trim by
 uint8_t   DateFix           = 0;
 bool      b5isGrey          = false;
 bool      b12isGrey         = false;
@@ -496,14 +467,11 @@ bool      ScreenIsOff       = false;
 uint8_t   Brightness        = 100;
 bool      ButtonClicks      = true;
 bool      PlayFanfare       = true;
-bool      TrimClicks        = true;
 bool      SpeakingClock     = true;
 bool      ClockSpoken       = false;
 bool      ClockSpoken1      = false;
 bool      AnnounceBanks     = true;
 bool      AnnounceConnected = true;
-bool      CopyTrimsToAll    = true;
-
 uint8_t   MacrosBuffer[MAXMACROS][BYTESPERMACRO]; // macros' buffer
 uint32_t  MacroStartTime[MAXMACROS];
 uint32_t  MacroStopTime[MAXMACROS];
@@ -515,19 +483,12 @@ bool      FirstConnection     = true;
 File      LogFileNumber;
 bool      LogFileOpen             = false;
 bool      ShowVPC                 = false;
-
 short int RxVoltageCorrection     = 0;
-
 uint32_t  PowerOffTimer           = 0;
 bool      PowerWarningVisible     = false;
-
-
-
 uint8_t   TurnOffSecondToGo       = 2;
-
 uint32_t  PreviousPowerOffTimer   = 0;
 bool      ModelIdentified         = false;
-
 union {
         uint32_t Val64  = 0;
         uint32_t Val32[2];
@@ -566,11 +527,9 @@ uint8_t  Drate3                          = 50;
 uint8_t  DualRateChannels[8]             =  {1, 2, 4, 0, 0, 0, 0, 0};
 uint16_t CurveDots[5];
 uint8_t  DualRateValue                   = 100;
-
 char     Confirmed[2];
 char     NewFileBuffer[MAXFILELEN];
 uint16_t NewFileBufferPointer = 0;
-
 uint32_t MostRecentHop;
 uint8_t  ReconnectionIndex      = 0;
 bool     TimerDownwards         = false;
@@ -579,7 +538,6 @@ bool     TimesUp                = false;
 uint8_t  CountDownIndex = 0;
 bool     UseSBUSFromRX          = true;  // at receiver. false = PPM
 uint16_t PPMChannelCount        = 8;  // for our RX - not module  
-
 
 // **********************************************************************************************************************************
 // **********************************  Area for PPM & TX MODULE **********************************************************************
@@ -737,7 +695,7 @@ void CheckMacrosBuffer()
 FLASHMEM void ResetSubTrims()
 {
     for (int i = 0; i < 16; ++i) {
-        SubTrims[i] = 127;
+        TrimSpace::SubTrims[i] = 127;
     }
 }
 /************************************************************************************************************/
@@ -2352,7 +2310,7 @@ int GetTrimAmount(uint8_t InputChannel){
             if (InputChannel == 1) tt = 2;
             if (InputChannel == 2) tt = 1; 
         }
-        TrimAmount = (Trims[Bank][tt] - 80) * TrimMultiplier; // TRIMS on lower four input channels (80 is mid point !! (range 40 - 80 - 120)) 
+        TrimAmount = (Trims[Bank][tt] - 80) * TrimSpace::TrimMultiplier; // TRIMS on lower four input channels (80 is mid point !! (range 40 - 80 - 120)) 
         return TrimAmount;
 }
 
@@ -2454,7 +2412,7 @@ FASTRUN void GetNewChannelValues()
             InputValue  = AnalogueReed(InputChannel) + GetTrimAmount(InputChannel);                                       // Get values from sticks' pots then ADD TRIM then interpolate them.
             OutputValue = Interpolate[InterpolationTypes[Bank][OutputChannel]](InputValue, InputChannel, OutputChannel); // Use function pointer array to invoke selected interpolation.
         }
-        OutputValue += (SubTrims[OutputChannel] - 127) * (TrimMultiplier);                                               // ADD SUBTRIM to output channel, not mapped input channel (Range 0 - 127 - 254)
+        OutputValue += (TrimSpace::SubTrims[OutputChannel] - 127) * (TrimSpace::TrimMultiplier);                                               // ADD SUBTRIM to output channel, not mapped input channel (Range 0 - 127 - 254)
         PreMixBuffer[OutputChannel] = constrain(OutputValue, MINMICROS, MAXMICROS);
         SendBuffer[OutputChannel]   = PreMixBuffer[OutputChannel];
      }
@@ -2534,7 +2492,7 @@ void UpdateTrimView()
                 if (i == 1) p = 2;
                 if (i == 2) p = 1;
             }
-            uint8_t pp = InputTrim[p];
+            uint8_t pp = TrimSpace::InputTrim[p];
             SendValue(TrimViewChannels[p], (Trims[Bank][pp]));                 
             SendValue(TrimViewNumbers[p],  (Trims[Bank][pp] - 80));
             if (CurrentView == TRIM_VIEW) SendText(TrimChannelNames[i],  ChannelNames[pp]);       
@@ -2840,7 +2798,7 @@ void UpdateButtonLabels()
             SendText(fsch_labels[i], ChannelNames[i]);
             SendValue(InputStick_Labels[i], InPutStick[i] + 1);
             if (CurrentView != SLOWSERVOVIEW){
-                        if (i < 4) SendValue(TrimLabels[i], InputTrim[i] + 1); //
+                        if (i < 4) SendValue(TrimLabels[i], TrimSpace::InputTrim[i] + 1); //
              }
         }
     }
@@ -2858,11 +2816,11 @@ void CheckSavedTrimValues()
 {
     bool OK = true;
     for (int i = 0; i < 4; ++i) {
-        if ((InputTrim[i] > 15) || (InputTrim[i] < 0)) OK = false;
+        if ((TrimSpace::InputTrim[i] > 15) || (TrimSpace::InputTrim[i] < 0)) OK = false;
     }
     if (!OK) {
         for (int i = 0; i < 4; ++i) {
-            InputTrim[i] = i;
+            TrimSpace::InputTrim[i] = i;
         }
     }
 }
@@ -2938,27 +2896,27 @@ bool ReadOneModel(uint32_t Mnum)
     }
     RXCellCount = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-    TrimMultiplier = SDRead16BITS(SDCardAddress);
-    TrimMultiplier=CheckRange(TrimMultiplier, 1, 20);
+    TrimSpace::TrimMultiplier = SDRead16BITS(SDCardAddress);
+    TrimSpace::TrimMultiplier=CheckRange(TrimSpace::TrimMultiplier, 1, 20);
     ++SDCardAddress;
     ++SDCardAddress;
     TXSetupValues::LowBattery = SDRead8BITS(SDCardAddress);
     if (TXSetupValues::LowBattery > 100) TXSetupValues::LowBattery = TXSetupValues::LowBattery;
     if (TXSetupValues::LowBattery < 10) TXSetupValues::LowBattery = LOWBATTERY;
     ++SDCardAddress;
-    CopyTrimsToAll = SDRead8BITS(SDCardAddress);
+    TrimSpace::CopyTrimsToAll = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
 
     for (i = 0; i < CHANNELSUSED; ++i) {
-        SubTrims[i] = SDRead8BITS(SDCardAddress);
-        if ((SubTrims[i] < 10) || (SubTrims[i] > 244)) SubTrims[i] = 127; // centre if undefined or zero
+        TrimSpace::SubTrims[i] = SDRead8BITS(SDCardAddress);
+        if ((TrimSpace::SubTrims[i] < 10) || (TrimSpace::SubTrims[i] > 244)) TrimSpace::SubTrims[i] = 127; // centre if undefined or zero
         ++SDCardAddress;
     }
     ReversedChannelBITS = SDRead16BITS(SDCardAddress);
     ++SDCardAddress;
     ++SDCardAddress;
     for (i = 0; i < 4; ++i) {
-        InputTrim[i] = SDRead8BITS(SDCardAddress);
+        TrimSpace::InputTrim[i] = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
     }
     RxVoltageCorrection = SDRead16BITS(SDCardAddress);
@@ -3210,7 +3168,7 @@ bool LoadAllParameters()
         ++SDCardAddress;
         PlayFanfare = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
-        TrimClicks = SDRead8BITS(SDCardAddress);
+        TrimSpace::TrimClicks = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
         ButtonClicks = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
@@ -3984,7 +3942,7 @@ void SaveTransmitterParameters()
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, PlayFanfare);
     ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, TrimClicks);
+    SDUpdate8BITS(SDCardAddress, TrimSpace::TrimClicks);
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, ButtonClicks);
     ++SDCardAddress;
@@ -4096,22 +4054,22 @@ void SaveOneModel(uint32_t mnum)
     }
     SDUpdate8BITS(SDCardAddress, RXCellCount);
     ++SDCardAddress;
-    SDUpdate16BITS(SDCardAddress, TrimMultiplier);
+    SDUpdate16BITS(SDCardAddress, TrimSpace::TrimMultiplier);
     ++SDCardAddress;
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, TXSetupValues::LowBattery);
     ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, CopyTrimsToAll);
+    SDUpdate8BITS(SDCardAddress, TrimSpace::CopyTrimsToAll);
     ++SDCardAddress;
     for (i = 0; i < CHANNELSUSED; ++i) {
-        SDUpdate8BITS(SDCardAddress, SubTrims[i]);
+        SDUpdate8BITS(SDCardAddress, TrimSpace::SubTrims[i]);
         ++SDCardAddress;
     }
     SDUpdate16BITS(SDCardAddress, ReversedChannelBITS);
     ++SDCardAddress;
     ++SDCardAddress;
     for (i = 0; i < 4; ++i) {
-        SDUpdate8BITS(SDCardAddress, InputTrim[i]);
+        SDUpdate8BITS(SDCardAddress, TrimSpace::InputTrim[i]);
         ++SDCardAddress;
     }
     SDUpdate16BITS(SDCardAddress, RxVoltageCorrection);
@@ -4716,7 +4674,7 @@ void SetDefaultValues()
         }
     }
     for (i = 0; i < CHANNELSUSED + 1; ++i) {
-        SubTrims[i] = 127; // centre (0 - 254)
+        TrimSpace::SubTrims[i] = 127; // centre (0 - 254)
     }
     for (j = 0; j < BYTESPERMACRO; ++j) {
         for (i = 0; i < MAXMACROS; ++i) {
@@ -4724,7 +4682,7 @@ void SetDefaultValues()
         }
     }
     for (int i = 0; i < 4; ++i) {
-        InputTrim[i] = i;
+        TrimSpace::InputTrim[i] = i;
     }
     UseMotorKill = true;
     MotorChannelZero = 0;
@@ -6362,11 +6320,11 @@ void StartSubTrimView()
     char n0[]           = "n0";
     char h0[]           = "h0";
     SendCommand(pSubTrimView);
-    SubTrimToEdit = 0;
+    TrimSpace::SubTrimToEdit = 0;
     CurrentView   = SUBTRIMVIEW;
-    SendText(t2, ChannelNames[SubTrimToEdit]);
-    SendValue(n0, SubTrims[SubTrimToEdit] - 127);
-    SendValue(h0, SubTrims[SubTrimToEdit]);
+    SendText(t2, ChannelNames[TrimSpace::SubTrimToEdit]);
+    SendValue(n0, TrimSpace::SubTrims[TrimSpace::SubTrimToEdit] - 127);
+    SendValue(h0, TrimSpace::SubTrims[TrimSpace::SubTrimToEdit]);
     UpdateModelsNameEveryWhere();
 }
 /******************************************************************************************************************************/
@@ -6389,8 +6347,8 @@ void StartTrimDefView()
     ResetAllTrims();
     BlueLedOn();
     CurrentMode = SENDNOTHING;
-    for (int i = 0; i < 4; ++i) TrimDefined[i] = false; 
-    DefiningTrims = true;
+    for (int i = 0; i < 4; ++i) TrimSpace::TrimDefined[i] = false; 
+    TrimSpace::DefiningTrims = true;
    
 }
 /******************************************************************************************************************************/
@@ -6401,7 +6359,7 @@ void DefineTrimsEnd()
     SendCommand(pCalibrateView);
     Force_ReDisplay();
     CurrentView   = CALIBRATEVIEW;
-    DefiningTrims = false;
+    TrimSpace::DefiningTrims = false;
     CurrentMode   = NORMAL;
     SaveTransmitterParameters();
     UpdateModelsNameEveryWhere();
@@ -6525,8 +6483,8 @@ void RXSetup1Start() // model options screen
 
 
     SendCommand(pRXSetup1);
-    SendValue(c1, CopyTrimsToAll);
-    SendValue(n3, TrimMultiplier);
+    SendValue(c1, TrimSpace::CopyTrimsToAll);
+    SendValue(n3, TrimSpace::TrimMultiplier);
     snprintf(Vbuf, 5, "%f", StopFlyingVoltsPerCell);
     SendText(t10, Vbuf);
     SendValue(Mvalue, MotorChannelZero);
@@ -6564,9 +6522,9 @@ void RXSetup1End()
     char     Progress[]            = "Progress";
 
     SendCommand(ProgressStart);
-    CopyTrimsToAll= GetValue(c1);
+    TrimSpace::CopyTrimsToAll= GetValue(c1);
     SendValue(Progress,5);
-    TrimMultiplier=GetValue(n3);
+    TrimSpace::TrimMultiplier=GetValue(n3);
     GetText(t10, fbuf);
     StopFlyingVoltsPerCell  = atof(fbuf);
     SendValue(Progress,10);
@@ -6730,7 +6688,7 @@ void ResetTransmitterSettings(){    // This function resets all transmitter para
    AudioVolume      = 20;
    Brightness       = 100;
    PlayFanfare      = false;
-   TrimClicks       = true;
+   TrimSpace::TrimClicks       = true;
    ButtonClicks     = false;
    SpeakingClock    = true;
    AnnounceBanks    = true;
@@ -7505,8 +7463,8 @@ void (*NumberedFunctions[LASTFUNCTION])() {
             char c0[]                   = "c0";
             SendCommand(pTrimView);
             CurrentView = TRIM_VIEW;
-            SendValue(n0, TrimMultiplier);
-            SendValue(c0, CopyTrimsToAll);
+            SendValue(n0, TrimSpace::TrimMultiplier);
+            SendValue(c0, TrimSpace::CopyTrimsToAll);
             UpdateModelsNameEveryWhere(); // also updates trimview (If CurrentView == TRIM_VIEW!! :-)
             ClearText();
  }
@@ -7744,16 +7702,16 @@ FASTRUN void ButtonWasPressed()
         // ************************* test input words from Nextion *****************
 
         if (InStrng(StCH, TextIn)) { // select sub trim channel
-            SubTrimToEdit = GetValue(s0);
-            SendText(t2, ChannelNames[SubTrimToEdit]);
-            SendValue(n0, SubTrims[SubTrimToEdit] - 127);
-            SendValue(h0, SubTrims[SubTrimToEdit]);
+            TrimSpace::SubTrimToEdit = GetValue(s0);
+            SendText(t2, ChannelNames[TrimSpace::SubTrimToEdit]);
+            SendValue(n0, TrimSpace::SubTrims[TrimSpace::SubTrimToEdit] - 127);
+            SendValue(h0, TrimSpace::SubTrims[TrimSpace::SubTrimToEdit]);
             ClearText();
             return;
         }
 
         if (InStrng(StEDIT, TextIn)) {                    // edit sub trim value
-            SubTrims[SubTrimToEdit] = GetValue(n0) + 127; // 127 is mid point in 8 bit value 0 - 254
+            TrimSpace::SubTrims[TrimSpace::SubTrimToEdit] = GetValue(n0) + 127; // 127 is mid point in 8 bit value 0 - 254
             ClearText();
             return;
         }
@@ -7780,7 +7738,7 @@ FASTRUN void ButtonWasPressed()
             SendValue(n1, Brightness);
             SendValue(h0, Brightness);
             SendValue(c0, PlayFanfare);
-            SendValue(c1, TrimClicks);
+            SendValue(c1, TrimSpace::TrimClicks);
             SendValue(c2, ButtonClicks);
             SendValue(c3, SpeakingClock);
             SendValue(c4, AnnounceBanks);
@@ -7796,7 +7754,7 @@ FASTRUN void ButtonWasPressed()
             if (AudioVolume < 5) AudioVolume = 5;
             Brightness        = GetValue(n1);
             PlayFanfare       = GetValue(c0);
-            TrimClicks        = GetValue(c1);
+            TrimSpace::TrimClicks        = GetValue(c1);
             ButtonClicks      = GetValue(c2);
             SpeakingClock     = GetValue(c3);
             AnnounceBanks     = GetValue(c4);
@@ -8181,7 +8139,7 @@ FASTRUN void ButtonWasPressed()
             SendCommand(ProgressStart);
             for (int i = 0; i < 16; ++i) {
                 InPutStick[i] = CheckRange((GetValue(InputStick_Labels[i]) - 1), 0, 15);
-                if (i < 4) InputTrim[i] = CheckRange((GetValue(InputTrim_labels[i]) - 1), 0, 15); 
+                if (i < 4) TrimSpace::InputTrim[i] = CheckRange((GetValue(InputTrim_labels[i]) - 1), 0, 15); 
                 SendValue(Progress, i * (100 / 16));
             }
             SendValue(Progress, 99);
@@ -8505,7 +8463,7 @@ if (InStrng(Export, TextIn)) {
             for (i = 0; i < 15; ++i) {
                     Trims[Bank][i] = 80; // Mid value is 80
                 }
-                if (CopyTrimsToAll) {
+                if (TrimSpace::CopyTrimsToAll) {
                     for (i = 0; i < 15; ++i) {
                         for (int fm = 1; fm < 5; ++fm) {
                             Trims[fm][i]         = 80;
@@ -9068,22 +9026,22 @@ void IncTrim(uint8_t t)
     Trims[Bank][t] += 1;
     if (Trims[Bank][t] >= 120) {
         Trims[Bank][t] = 120;
-        if (TrimClicks) {
+        if (TrimSpace::TrimClicks) {
 
             PlaySound(BEEPCOMPLETE);
             Sounded         = true;
-            TrimRepeatSpeed = DefaultTrimRepeatSpeed;
+            TrimSpace::TrimRepeatSpeed = TrimSpace::DefaultTrimRepeatSpeed;
         }
     }
     if (Trims[Bank][t] == 80) {
-        TrimRepeatSpeed = DefaultTrimRepeatSpeed; // Restore default trim repeat speed at centre
-        if (TrimClicks) {
+        TrimSpace::TrimRepeatSpeed = TrimSpace::DefaultTrimRepeatSpeed; // Restore default trim repeat speed at centre
+        if (TrimSpace::TrimClicks) {
             PlaySound(BEEPMIDDLE);
             Sounded = true;
         }
     }
     if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimView();
-    if ((TrimClicks) && (!Sounded)) PlaySound(CLICKZERO);
+    if ((TrimSpace::TrimClicks) && (!Sounded)) PlaySound(CLICKZERO);
 }
 // *************************************************************************************************************
 
@@ -9094,21 +9052,21 @@ void DecTrim(uint8_t t)
     Trims[Bank][t] -= 1;
     if (Trims[Bank][t] <= 40) {
         Trims[Bank][t] = 40;
-        if (TrimClicks) {
+        if (TrimSpace::TrimClicks) {
             PlaySound(BEEPCOMPLETE);
             Sounded         = true;
-            TrimRepeatSpeed = DefaultTrimRepeatSpeed;
+            TrimSpace::TrimRepeatSpeed = TrimSpace::DefaultTrimRepeatSpeed;
         }
     }
     if (Trims[Bank][t] == 80) {
-        TrimRepeatSpeed = DefaultTrimRepeatSpeed; // Restore default trim repeat speed at centre
-        if (TrimClicks) {
+        TrimSpace::TrimRepeatSpeed = TrimSpace::DefaultTrimRepeatSpeed; // Restore default trim repeat speed at centre
+        if (TrimSpace::TrimClicks) {
             PlaySound(BEEPMIDDLE);
             Sounded = true;
         }
     }
     if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimView();
-    if ((TrimClicks) && (!Sounded)) PlaySound(CLICKZERO);
+    if ((TrimSpace::TrimClicks) && (!Sounded)) PlaySound(CLICKZERO);
 }
 
 // *************************************************************************************************************
@@ -9125,34 +9083,34 @@ void MoveaTrim(uint8_t i)
 
     switch (i) {
         case 0:
-            IncTrim(InputTrim[0]); // Aileron
+            IncTrim(TrimSpace::InputTrim[0]); // Aileron
             break;
         case 1:
-            DecTrim(InputTrim[0]); // Aileron
+            DecTrim(TrimSpace::InputTrim[0]); // Aileron
             break;
         case 2:
-            IncTrim(InputTrim[Elevator]);
+            IncTrim(TrimSpace::InputTrim[Elevator]);
             break;
         case 3:
-            DecTrim(InputTrim[Elevator]);
+            DecTrim(TrimSpace::InputTrim[Elevator]);
             break;
         case 4:
-            DecTrim(InputTrim[Throttle]);
+            DecTrim(TrimSpace::InputTrim[Throttle]);
             break;
         case 5:
-            IncTrim(InputTrim[Throttle]);
+            IncTrim(TrimSpace::InputTrim[Throttle]);
             break;
         case 6:
-            IncTrim(InputTrim[3]); // Rudder
+            IncTrim(TrimSpace::InputTrim[3]); // Rudder
             break;
         case 7:
-            DecTrim(InputTrim[3]); // Rudder
+            DecTrim(TrimSpace::InputTrim[3]); // Rudder
             break;
         default:
             break;
     }
     if (ScreenIsOff) RestoreBrightness();
-    if (CopyTrimsToAll) {
+    if (TrimSpace::CopyTrimsToAll) {
         for (i = 0; i < 4; ++i){
             for (int fm = 1; fm < 5; ++fm) {
                 Trims[fm][i]         = Trims[Bank][i];
@@ -9176,11 +9134,11 @@ void SetATrimDefinition(int i)
     char rud[]     = "rud";
    
     // Aileron
-    if (!TrimDefined[0]) {
+    if (!TrimSpace::TrimDefined[0]) {
         if ((i == 0) || (i == 1)) {
             PlaySound(BEEPCOMPLETE);
             SendText(ail, AilDone);
-            TrimDefined[0] = true;
+            TrimSpace::TrimDefined[0] = true;
         }
         if (i == 0) {
             TrimNumber[0] = TRIM1A;
@@ -9194,11 +9152,11 @@ void SetATrimDefinition(int i)
 
 if (TXSetupValues::SticksMode == 1){
     // Elevator
-    if (!TrimDefined[1]) {
+    if (!TrimSpace::TrimDefined[1]) {
         if ((i == 2) || (i == 3)) {
             PlaySound(BEEPCOMPLETE);
             SendText(ele, EleDone);
-            TrimDefined[1] = true;
+            TrimSpace::TrimDefined[1] = true;
         }
         if (i == 3) {
             TrimNumber[2] = TRIM2A;
@@ -9211,11 +9169,11 @@ if (TXSetupValues::SticksMode == 1){
     }
 
     // Throttle
-    if (!TrimDefined[2]) {
+    if (!TrimSpace::TrimDefined[2]) {
         if ((i == 4) || (i == 5)) {
             PlaySound(BEEPCOMPLETE);
             SendText(thr, ThrDone);
-            TrimDefined[2] = true;
+            TrimSpace::TrimDefined[2] = true;
         }
         if (i == 4) {
             TrimNumber[4] = TRIM3A;
@@ -9230,11 +9188,11 @@ if (TXSetupValues::SticksMode == 1){
 
 if (TXSetupValues::SticksMode == 2){
     // Throttle
-    if (!TrimDefined[1]) {
+    if (!TrimSpace::TrimDefined[1]) {
         if ((i == 4) || (i == 5)) {
             PlaySound(BEEPCOMPLETE);
             SendText(thr, ThrDone);
-            TrimDefined[1] = true;
+            TrimSpace::TrimDefined[1] = true;
         }
         if (i == 5) {
             TrimNumber[5] = TRIM2A;
@@ -9247,11 +9205,11 @@ if (TXSetupValues::SticksMode == 2){
     }
 
     // Elevator
-    if (!TrimDefined[2]) {
+    if (!TrimSpace::TrimDefined[2]) {
         if ((i == 2) || (i == 3)) {
             PlaySound(BEEPCOMPLETE);
             SendText(ele, EleDone);
-            TrimDefined[2] = true;
+            TrimSpace::TrimDefined[2] = true;
         }
         if (i == 3) {
             TrimNumber[2] = TRIM3A;
@@ -9265,11 +9223,11 @@ if (TXSetupValues::SticksMode == 2){
 }
 
     // Rudder
-    if (!TrimDefined[3]) {
+    if (!TrimSpace::TrimDefined[3]) {
         if ((i == 6) || (i == 7)) {
             PlaySound(BEEPCOMPLETE);
             SendText(rud, RudDone);
-            TrimDefined[3] = true;
+            TrimSpace::TrimDefined[3] = true;
         }
         if (i == 6) {
             TrimNumber[6] = TRIM4A;
@@ -9287,18 +9245,18 @@ if (TXSetupValues::SticksMode == 2){
 void CheckHardwareTrims()
 {
     int i;
-    if ((millis() - TrimTimer) < TrimRepeatSpeed) return; // check occasionally for trim press 
-    TrimTimer = millis();
+    if ((millis() - TrimSpace::TrimTimer) < TrimSpace::TrimRepeatSpeed) return; // check occasionally for trim press 
+    TrimSpace::TrimTimer = millis();
     for (i = 0; i < 8; ++i) {
         if (TrimSwitch[i]) {
-            if (DefiningTrims) {
+            if (TrimSpace::DefiningTrims) {
                 SetATrimDefinition(i);
                 return;
             }
             MoveaTrim(i);
             TransmitterLastManaged = 0;                     //  to speed up repeat
-            TrimRepeatSpeed -= (TrimRepeatSpeed / 4);       //  accelerate repeat...
-            if (TrimRepeatSpeed < 10) TrimRepeatSpeed = 30; //  ... up to a point...
+            TrimSpace::TrimRepeatSpeed -= (TrimSpace::TrimRepeatSpeed / 4);       //  accelerate repeat...
+            if (TrimSpace::TrimRepeatSpeed < 10) TrimSpace::TrimRepeatSpeed = 30; //  ... up to a point...
         }
     }
 }
@@ -9331,21 +9289,21 @@ FASTRUN void ReadSwitches() // and indeed read digital trims if these are fitted
         Switch[i]     = !digitalRead(SwitchNumber[i]); // These are reversed because they are active low
         TrimSwitch[i] = !digitalRead(TrimNumber[i]);   // These are reversed because they are active low
         if (TrimSwitch[i]) ++flag;                     // a finger is on a trim lever...
-        if ((TrimSwitch[i]) && (PreviousTrim != i)) {  // is it a new one?
-            TrimTimer    = 0;                          // it IS a new one, so no delay please.
-            PreviousTrim = i;                          // remember which trim it was
+        if ((TrimSwitch[i]) && (TrimSpace::PreviousTrim != i)) {  // is it a new one?
+            TrimSpace::TrimTimer    = 0;                          // it IS a new one, so no delay please.
+            TrimSpace::PreviousTrim = i;                          // remember which trim it was
         }
     }
     if (flag > 1) {                                     // one at a time please!!
-        TrimRepeatSpeed = DefaultTrimRepeatSpeed;       // Restore default trim repeat speed
+        TrimSpace::TrimRepeatSpeed = TrimSpace::DefaultTrimRepeatSpeed;       // Restore default trim repeat speed
         for (int i = 0; i < 8; ++i) {
             (TrimSwitch[i]) = 0;
             flag            = 0;
         }
     }
     if (!flag) {
-        PreviousTrim    = 254;                          // Previous trim must now match none
-        TrimRepeatSpeed = DefaultTrimRepeatSpeed;       // Restore default trim repeat speed
+        TrimSpace::PreviousTrim    = 254;                          // Previous trim must now match none
+        TrimSpace::TrimRepeatSpeed = TrimSpace::DefaultTrimRepeatSpeed;       // Restore default trim repeat speed
     }
   
 }
@@ -9812,7 +9770,7 @@ void CheckPowerOffButton()
                 SimulateCloseDown();
             }
             --TurnOffSecondToGo;
-             if (TrimClicks)  PlaySound(CLICKZERO);
+             if (TrimSpace::TrimClicks)  PlaySound(CLICKZERO);
             PreviousPowerOffTimer = millis();
         }
     }
