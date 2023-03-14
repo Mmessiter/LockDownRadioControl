@@ -32,13 +32,13 @@ FASTRUN void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uint
 
 FASTRUN void TryOtherPipe()
 {
-    if (BoundFlag == true) {
-        BoundFlag = false;
+    if (ConnectionStatus::BoundFlag == true) {
+        ConnectionStatus::BoundFlag = false;
         SetThePipe(DefaultPipe);
     }
     else 
     {
-        BoundFlag = true;               //  ... but not modelmatched yet
+        ConnectionStatus::BoundFlag = true;               //  ... but not ConnectionStatus::ModelMatched yet
         SetThePipe(TeensyMACAddPipe);   // 
     }
 }
@@ -96,7 +96,7 @@ void Procrastinate(uint32_t HowLong) // This function replaces delay() without f
     RecursedAlready = true;
     while ((millis() - ThisMoment) < HowLong) {
         KickTheDog();                               // keep watchdog happy
-        if (Connected && BoundFlag && ModelMatched) SendData();    // ModelMatched?? YES. resend some old data briefly (collecting new is dangerous and not worth it.)
+        if (ConnectionStatus::Connected && ConnectionStatus::BoundFlag && ConnectionStatus::ModelMatched) SendData();    // ConnectionStatus::ModelMatched?? YES. resend some old data briefly (collecting new is dangerous and not worth it.)
     }
     RecursedAlready = false;
 }
@@ -160,7 +160,7 @@ void RecordsPacketSuccess(uint8_t s)
 { // or failure according to s
     PacketsHistoryBuffer[PacketsHistoryIndex] = s;
     ++PacketsHistoryIndex;
-    if (PacketsHistoryIndex >= (PERFECTPACKETSPERSECOND * ConnectionAssessSeconds)) PacketsHistoryIndex = 0; //
+    if (PacketsHistoryIndex >= (PERFECTPACKETSPERSECOND * TXSetupValues::ConnectionAssessSeconds)) PacketsHistoryIndex = 0; //
 }
 
 /***************************************************************************************/
@@ -178,7 +178,7 @@ FASTRUN void FailedPacket()
 {
     RecordsPacketSuccess(0);                      // Record a failure
     ++RecentPacketsLost;                          // this is to keep track of events when receiver is off
-    ++TotalLostPackets;                           // This is total - never zeroed
+    ++TxDataView::TotalLostPackets;                           // This is total - never zeroed
   
     if (RecentPacketsLost >= LOSTCONTACTCUTOFF) { // Don't panic until at least LOSTCONTACTCUTOFF packets are lost.
         if (!GapStart) GapStart = millis();       // To keep track of this gap's length
@@ -196,7 +196,7 @@ FASTRUN void FailedPacket()
     }
     if (LostContactFlag) TryToReconnect();
    
-    int SecondsRemaining = (Inactivity_Timeout / 1000) - (millis() - Inactivity_Start) / 1000;
+    int SecondsRemaining = (TXSetupValues::Inactivity_Timeout / 1000) - (millis() - Inactivity_Start) / 1000;
     if (SecondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH); // INACTIVITY POWER OFF HERE!!
 }
 
@@ -223,8 +223,8 @@ void SuccessfulPacket()
     RecordsPacketSuccess(1);
     LostContactFlag   = false;
     RecentPacketsLost = 0;
-    Connected         = true;
-    if (BoundFlag && !LedWasGreen) GreenLedOn();
+    ConnectionStatus::Connected         = true;
+    if (ConnectionStatus::BoundFlag && !LedWasGreen) GreenLedOn();
     CheckGapsLength();
     Radio1.read(&AckPayload, AckPayloadSize); //  "sizeof" doesn't work with externs,
     ParseAckPayload();
@@ -254,7 +254,7 @@ FASTRUN void SendData()
             return;
         }                                                           // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
         LoadPacketData();                                           // extra parameters appended to the data packet
-        Connected = false;                                          // Assume the worst until ACK is received.
+        ConnectionStatus::Connected = false;                                          // Assume the worst until ACK is received.
         FlushFifos();
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);    // Compress 32 bytes down to 24 (40 -> 30??)
         if (Radio1.write(&CompressedData, SizeOfCompressedData)) {  //  ************************** >>>>> SEND DATA (30 bytes) TO RX <<<<< ***************************************
@@ -386,7 +386,7 @@ FASTRUN void HopToNextChannel()
     delayMicroseconds(500);
 
 #ifdef DB_FHSS 
-    if (BoundFlag && Connected && ModelMatched){
+    if (ConnectionStatus::BoundFlag && ConnectionStatus::Connected && ConnectionStatus::ConnectionStatus::ModelMatched){
         float ch   = *(FHSSChPointer +  NextChannelNumber);
         float Freq = 2.4;
         PEndTime   = millis();
@@ -440,7 +440,7 @@ void DoScanInit()
 {
     Radio1.setDataRate(RF24_1MBPS); // Scan only works at this default rate
     CurrentMode = SCANWAVEBAND;     // Fhss == No transmitting please, we are scanning.
-    BoundFlag   = false;
+    ConnectionStatus::BoundFlag   = false;
     for (int i = 0; i < 125; i++) {
         NoCarrier[i]   = 0;
         AllChannels[i] = 0;

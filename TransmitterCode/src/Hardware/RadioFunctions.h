@@ -392,8 +392,29 @@
 #define KICKRATE        500  // Kick twice a second (must be between WATCHDOGMAXRATE and WATCHDOGTIMEOUT)
 #define WATCHDOGMAXRATE 250  // 250 ms secs between kicks is max rate allowed
 
-/*********************************************************************************************************************************/
+/**********************************************************************************************************/
+/****************************** namespaces that are shared ( Will expand) *********************************/
+/**********************************************************************************************************/
+
+namespace TxDataView{
+  extern uint32_t    TotalLostPackets;
+}
+
+namespace TXSetupValues{
+    extern uint8_t   ConnectionAssessSeconds; 
+    extern uint32_t  Inactivity_Timeout;
+}
+
+namespace ConnectionStatus{
+    extern bool      Connected;
+    extern bool      ModelMatched;
+    extern bool      BoundFlag;
+    } // namespace ConnectionStatus
+
+/**********************************************************************************************************/
+
 // external (global vars) needed here
+
 
 extern RF24           Radio1;
 extern uint8_t        CurrentMode;
@@ -444,11 +465,10 @@ extern uint8_t        MacrosBuffer[MAXMACROS][BYTESPERMACRO]; // macros' buffer
 extern uint32_t       MacroStartTime[MAXMACROS];
 extern uint32_t       MacroStopTime[MAXMACROS];
 extern bool           UseMacros;
-extern uint32_t       TotalLostPackets;
 extern bool           Reconnected;
 extern bool           LedWasGreen;
 extern bool           LedWasRed;
-extern uint32_t       Inactivity_Timeout;
+
 extern uint32_t       Inactivity_Start;
 extern bool           UkRules;
 extern bool           PreviousUkRules;

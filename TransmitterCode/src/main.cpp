@@ -119,6 +119,59 @@
 
 #include "Hardware/RadioFunctions.h" // This file contains many definitions and further includes
 
+/************************************ namespaces ***********************************************************************/
+
+namespace TXSetupValues{
+    uint8_t   PowerOffWarningSeconds  = 2;
+    uint8_t   ConnectionAssessSeconds = 1; 
+    uint8_t   SticksMode              = 2;
+    bool      AutoModelSelect         = true;
+    uint16_t  ScreenTimeout           = 120; // Screen has two minute timeout by default
+    uint32_t  Inactivity_Timeout      = INACTIVITYTIMEOUT;
+    char      TxName[32]              = "Unknown";
+    uint8_t   LowBattery              = LOWBATTERY;
+    short int DeltaGMT                = 0;
+    uint8_t   LEDBrightness           = DEFAULTLEDBRIGHTNESS;
+    short int TxVoltageCorrection     = 0;
+    uint16_t  Qnh                     = 1009; // pressure at sea level here
+    } // namespace TXSetupValues
+
+/***************************************************************************************************************/
+
+namespace ConnectionStatus{
+    bool     Connected        = false;
+    bool     ModelMatched     = false;
+    bool     BoundFlag        = false;
+    } // namespace ConnectionStatus
+
+/****************************************************************************************************************/
+
+namespace TxDataView{ // heer
+    uint16_t PacketsPerSecond             = 0;
+    uint32_t TotalLostPackets             = 0;
+    char      ModelAltitude[9]            = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00};
+    char      Maxaltitude[9]              = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00};
+    char      ModelTempRX[9]              = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00};
+    char      ReceiverVersionNumber[9]    = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00};
+    char      TransmitterVersionNumber[9] = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00};
+    char      ThisRadio[4]                = "0 ";
+    uint32_t  GapLongest                   = 0;
+    uint16_t  RadioSwaps                   = 0;
+    uint16_t  SavedRadioSwaps              = 0;
+    uint16_t  RX1TotalTime                 = 0;
+    uint16_t  RX2TotalTime                 = 0;
+    uint16_t  SavedRX1TotalTime            = 0;
+    uint32_t  GapAverage                   = 0;
+    uint16_t  SavedRX2TotalTime            = 0;
+    uint16_t  SbusRepeats                  = 0;
+    uint16_t  SavedSbusRepeats             = 0;
+    float     VoltsPerCell                 = 0;
+    float     RXTemperature                = 0;
+  
+    } // namespace TxDataView
+
+/***********************************************************************************************************/
+
 RF24          Radio1(CE_PIN, CSN_PIN);
 WDT_T4<WDT3>  TeensyWatchDog;
 WDT_timings_t WatchDogConfig;
@@ -135,10 +188,11 @@ uint8_t  SavedCurrentView = FRONTVIEW;
 uint64_t DefaultPipe      = DEFAULTPIPEADDRESS;  //          Default Radio pipe address
 uint64_t TeensyMACAddPipe = DEFAULTPIPEADDRESS;  //          New Radio pipe address for binding will come from MAC address
 char     TextIn[CHARSMAX + 2];                   //          Spare space
-uint16_t PacketsPerSecond = 0;
+
+
 uint8_t  PacketsHistoryBuffer[PERFECTPACKETSPERSECOND * MAXSHOWCOMMSSESCONDS]; // Here we record some history
 uint16_t PacketsHistoryIndex    = 0;
-uint32_t TotalLostPackets       = 0;
+
 uint8_t  PacketNumber           = 0;
 uint8_t  GPSMarkHere            = 0;
 uint8_t  PreviousTrim           = 255;
@@ -204,7 +258,7 @@ uint16_t ChannelCentre[CHANNELSUSED + 1]; //    output of pots at Centre
 uint16_t ChannelMidLow[CHANNELSUSED + 1]; //    output of pots at MidLow
 uint16_t ChannelMin[CHANNELSUSED + 1];    //    output of pots at min
 uint16_t ChanneltoSet     = 0;
-bool     Connected        = false;
+
 uint16_t BuddyControlled  = 0; // Flags
 double   PointsCount      = 5; // This for displaying curves only
 double   xPoints[5];
@@ -217,7 +271,7 @@ uint16_t BoxLeft;
 uint16_t BoxRight;
 uint16_t ClickX;
 uint16_t ClickY;
-uint8_t  SticksMode                    = 2;
+
 uint16_t AnalogueInput[PROPOCHANNELS]  = {A0, A1, A2, A3, A6, A7, A8, A9}; // 8 PROPO Channels for transmission   // fix order for mode 2 
 uint8_t  TrimNumber[8]                 = {TRIM1A, TRIM1B, TRIM2A, TRIM2B, TRIM3A, TRIM3B, TRIM4A, TRIM4B};        // These too can get swapped over later
 
@@ -259,17 +313,17 @@ uint8_t   DefaultSwitchNumber[8]      = {SWITCH0, SWITCH1, SWITCH2, SWITCH3, SWI
 bool      DefiningTrims               = false;
 bool      TrimDefined[4]              = {true, true, true, true};
 char      ModelName[30]               = "Untitled";
-uint16_t  ScreenTimeout               = 120; // Screen has two minute timeout by default
+
 int       LastLinePosition            = 0;
 uint8_t   RXCellCount                 = 2;
 bool      JustHoppedFlag              = true;
 bool      LostContactFlag             = true;
 uint32_t  RecentPacketsLost           = 0;
 uint32_t  GapSum                      = 0;
-uint32_t  GapLongest                  = 0;
+
 uint32_t  GapStart                    = 0;
 uint32_t  ThisGap                     = 0;
-uint32_t  GapAverage                  = 0;
+
 uint32_t  GapCount                    = 0;
 float     GPSLatitude                 = 0;
 float     GPSLongitude                = 0;
@@ -296,13 +350,11 @@ float     RXModelVolts                = 0;
 int       RXModelAltitude             = 0;
 int       RXMAXModelAltitude          = 0;
 int       GroundModelAltitude         = 0;
-float     RXTemperature               = 0;
+
 float     MaxAlt                      = 0;
-char      ModelTempRX[8]              = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20};
-char      ModelAltitude[8]            = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20};
-char      Maxaltitude[8]              = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20};
-char      ReceiverVersionNumber[8]    = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20};
-char      TransmitterVersionNumber[8] = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20};
+
+
+
 char      ModelVolts[8]               = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20};
 File      ModelsFileNumber;
 
@@ -314,7 +366,7 @@ bool     ModelsFileOpen = false;
 bool     USE_INA219     = false;
 uint8_t  BindingNow     = 0;
 uint32_t BindingTimer   = 0;
-bool     BoundFlag      = false;
+
 bool     Switch[8];
 bool     TrimSwitch[8];
 uint8_t  FMSwitch             = BANKSWITCH;
@@ -354,10 +406,10 @@ uint32_t FailSafeTimer;
 uint32_t LastPacketSentTime = 0;
 uint16_t CompressedData[COMPRESSEDWORDS];   // = 15 words, 30 bytes
 uint8_t  SizeOfCompressedData;              // = 30
-uint32_t Inactivity_Timeout = INACTIVITYTIMEOUT;
+
 uint32_t Inactivity_Start   = 0;
 tmElements_t tm;
-char         TxName[32]      = "Unknown";
+
 uint32_t     LastTimeRead    = 0;
 uint32_t     LastScanButtonCheck    = 0;
 uint32_t     TransmitterLastManaged    = 0;
@@ -381,13 +433,13 @@ uint32_t BlinkTimer          = 0;
 uint8_t  BlinkOnPhase        = 1;
 bool     LedWasGreen         = true;
 bool     LedWasRed           = false;
-char     ThisRadio[4]        = "0 ";
+
 uint8_t  LastRadio           = 0;
 uint8_t  NextChannel         = 0;
 bool     BuddyPupilOnPPM    = false;
 bool     BuddyMaster         = false;
 bool     SlaveHasControl     = false;
-uint16_t Qnh                 = 1009; // pressure at sea level here
+
 uint16_t LastModelLoaded     = 0;
 uint16_t LastFileInView      = 0;
 uint8_t  MinimumGap          = 75;
@@ -405,7 +457,7 @@ uint8_t   GmonthDay; // = tm.Day;    // 1-31
 uint8_t   Gmonth;    // = tm.Month;  // 1-12
 uint8_t   Gyear;     // = tm.Year;   // 0-99
 bool      GPSTimeSynched    = false;
-short int DeltaGMT          = 0;
+
 uint32_t  SwapWaveBandTimer = 0;
 uint8_t   UkRulesCounter    = 0;
 bool      UkRules           = true;
@@ -419,17 +471,12 @@ uint16_t  ForeGroundColour  = White;
 uint16_t  HighlightColour   = Yellow;
 uint16_t  SpecialColour     = Red;
 bool      Reconnected       = false;
-uint8_t   LowBattery        = LOWBATTERY;
-uint16_t  SbusRepeats       = 0;
-uint16_t  SavedSbusRepeats  = 0;
+
+
 bool      RXVoltsDetected   = false;
 
-uint16_t  RadioSwaps        = 0;
-uint16_t  RX1TotalTime      = 0;
-uint16_t  RX2TotalTime      = 0;
-uint16_t  SavedRadioSwaps   = 0;
-uint16_t  SavedRX1TotalTime = 0;
-uint16_t  SavedRX2TotalTime = 0;
+
+
 uint8_t   AudioVolume       = 50;
 uint32_t  WarningTimer      = 0;
 uint32_t  ScreenTimeTimer   = 0;
@@ -456,18 +503,19 @@ bool      FirstConnection     = true;
 File      LogFileNumber;
 bool      LogFileOpen             = false;
 bool      ShowVPC                 = false;
-short int TxVoltageCorrection     = 0;
+
 short int RxVoltageCorrection     = 0;
-uint8_t   LEDBrightness           = DEFAULTLEDBRIGHTNESS;
+
 uint32_t  PowerOffTimer           = 0;
 bool      PowerWarningVisible     = false;
+
+
+
 uint8_t   TurnOffSecondToGo       = 2;
-uint8_t   PowerOffWarningSeconds  = 2;
-uint8_t   ConnectionAssessSeconds = 1; 
+
 uint32_t  PreviousPowerOffTimer   = 0;
 bool      ModelIdentified         = false;
-bool      ModelMatched            = false;
-bool      AutoModelSelect         = true;
+
 union {
         uint32_t Val64  = 0;
         uint32_t Val32[2];
@@ -556,7 +604,7 @@ uint8_t  pcount                = 0;
 
 void ConfigureStickMode(){  // This sets stick mode without moving any wires. Must be wired as for Mode 1
 
-if (SticksMode == 1) {
+if (TXSetupValues::SticksMode == 1) {
         AnalogueInput[0] = A0;
         AnalogueInput[1] = A1;
         AnalogueInput[2] = A2;
@@ -567,7 +615,7 @@ if (SticksMode == 1) {
         AnalogueInput[7] = A9;
     }
 
-if (SticksMode == 2) {
+if (TXSetupValues::SticksMode == 2) {
         AnalogueInput[0] = A0;
         AnalogueInput[1] = A2;
         AnalogueInput[2] = A1;
@@ -609,14 +657,14 @@ void PlaySound(uint16_t TheSound)
     strcat(Sound, SoundPostfix);
     SendCommand(Sound);
 }
-/******************* DeltaGMT is a user defined representation of time zone. It should never exceed 24. Not on this planet. **********/
+/******************* TXSetupValues::DeltaGMT is a user defined representation of time zone. It should never exceed 24. Not on this planet. **********/
 void FixDeltaGMTSign()
 {
-    if (DeltaGMT < -24) DeltaGMT = 0; // Undefined value?f
-    if (DeltaGMT > 24) {              // This fixes the sign bit if negative !!!! (There's surely a better way !!!)
-        DeltaGMT ^= 0xffff;           // toggle every bit! :-)
-        ++DeltaGMT;                   // Add one
-        DeltaGMT = -DeltaGMT;         // it's definately meant to be negative!
+    if (TXSetupValues::DeltaGMT < -24) TXSetupValues::DeltaGMT = 0; // Undefined value?f
+    if (TXSetupValues::DeltaGMT > 24) {              // This fixes the sign bit if negative !!!! (There's surely a better way !!!)
+        TXSetupValues::DeltaGMT ^= 0xffff;           // toggle every bit! :-)
+        ++TXSetupValues::DeltaGMT;                   // Add one
+        TXSetupValues::DeltaGMT = -TXSetupValues::DeltaGMT;         // it's definately meant to be negative!
     }
 }
 
@@ -1064,7 +1112,7 @@ void ReadTime()
             strcat(TimeString, Space);
             strcat(TimeString, (Str(NB, tmYearToCalendar(tm.Year), 0)));
             strcat(TimeString, Space);
-            DisplayedHour = tm.Hour + DeltaGMT;
+            DisplayedHour = tm.Hour + TXSetupValues::DeltaGMT;
             DateFix       = 0;
             if (DisplayedHour > 24) {
                 DisplayedHour -= 24;
@@ -1100,7 +1148,7 @@ void StartInactvityTimeout()
 
 void MakeBindButtonInvisible()
 {
-    if (!ModelMatched) return;
+    if (!ConnectionStatus::ModelMatched) return;
     if (CurrentView == FRONTVIEW) {
         char bbiv[] = "vis bind,0";
         if (BindButton) {
@@ -1124,7 +1172,7 @@ uint8_t GetLEDBrightness()
         BlinkOnPhase = 1;
     }
     if (BlinkOnPhase) {
-        return LEDBrightness; // 0 - 254 (= brightness)
+        return TXSetupValues::LEDBrightness; // 0 - 254 (= brightness)
     }
     else {
         return 0;
@@ -1141,12 +1189,12 @@ void RedLedOn()
         LedWasGreen                                 = false;
         RXVoltsDetected                             = false;
         ModelIdentified                             = false;
-        ModelMatched                                = false;
-        BoundFlag                                   = false;
+        ConnectionStatus::ModelMatched                                = false;
+        ConnectionStatus::BoundFlag                                   = false;
         BindButton                                  = false;
         BindingNow                                  = 0;
         pcount                                      = 0;
-        PacketsPerSecond                            = 0;
+        TxDataView::PacketsPerSecond                            = 0;
         LastShowTime                                = 0;
         ModelsMacUnion.Val32[0]                     = 0;
         ModelsMacUnion.Val32[1]                     = 0;
@@ -1174,7 +1222,7 @@ void RedLedOn()
 
 void GreenLedOn()
 {
-    if (!ModelMatched) return; // no green led for wrong model
+    if (!ConnectionStatus::ModelMatched) return; // no green led for wrong model
     if (!LedWasGreen) {
         ClearSuccessRate();
         LastShowTime = 0;
@@ -1184,8 +1232,8 @@ void GreenLedOn()
             ShowComms();
             if (AnnounceConnected) {
                 PlaySound(CONNECTEDMSG);
-                ModelMatched = true;
-                BoundFlag    = true; 
+                ConnectionStatus::ModelMatched = true;
+                ConnectionStatus::BoundFlag    = true; 
                 Procrastinate(2000);
             }
             }
@@ -1622,14 +1670,14 @@ FASTRUN bool CheckTXVolts()
     char  t17[] = "t17";
 
     if (USE_INA219) {
-        TransmitterBatteryVolts = ((ina219.getBusVoltage_V()) * 100) + (TxVoltageCorrection * 2);               // Correction for inaccurate ina219
+        TransmitterBatteryVolts = ((ina219.getBusVoltage_V()) * 100) + (TXSetupValues::TxVoltageCorrection * 2);               // Correction for inaccurate ina219
         dtostrf(TransmitterBatteryVolts / 200, 2, 2, nbuf);                                                     // Volts per cell
         if (TXLiPo) {                                                                                           // Does TX have a LiPo or a LiFePo4?
                 TransmitterBatteryPercentLeft = map(TransmitterBatteryVolts, 3.5 * 200, 4.00 * 200, 0, 100);    // LIPO Battery 3.50 -> c. 4.00  volts per cell
             } else {                                                                                            // No, it's a LiFePo4
                 TransmitterBatteryPercentLeft = map(TransmitterBatteryVolts, 3.2 * 200, 3.33 * 200, 0, 100);    // LiFePo4 Battery 3.1 -> 3.35  volts per cell
             }
-        if (TransmitterBatteryPercentLeft < LowBattery) {
+        if (TransmitterBatteryPercentLeft < TXSetupValues::LowBattery) {
             TXWarningFlag = true;
             WarningSound = BATTERYISLOW;
         }
@@ -1647,8 +1695,8 @@ FASTRUN bool CheckTXVolts()
                 SendText(FrontView_TXBV, nbuf);
             }
         }
-        if (CurrentView == DATAVIEW) {
-            SendText(DataView_txv, TransmitterVersionNumber);
+        if (CurrentView == DATAVIEW) { 
+            SendText(DataView_txv, TxDataView::TransmitterVersionNumber);
             SendText(t17, nbuf);
         }
     }
@@ -1664,7 +1712,7 @@ FASTRUN bool CheckRXVolts()
     bool  RXWarningFlag = false;
     char  Vbuf[10];
     char  RXBattInfo[65];
-    float VoltsPerCell     = 0;
+    
     char  FrontView_RXBV[] = "RXBV";
     char  RXPC[]           = "RXPC";
     char  PerCell[]        = " per cell)";
@@ -1679,25 +1727,25 @@ FASTRUN bool CheckRXVolts()
     if (RXVoltsDetected) {
         GreenPercentBar = constrain(GreenPercentBar, 0, 100);
         WarningSound = BATTERYISLOW;
-        if (BoundFlag) {
-           VoltsPerCell = (ReadVolts / RXCellCount) / 100;
+        if (ConnectionStatus::BoundFlag) {
+           TxDataView::VoltsPerCell = (ReadVolts / RXCellCount) / 100;
            if (CurrentView == FRONTVIEW){
                 SendValue(JRX, GreenPercentBar);  
                 strcat(Str(Vbuf, GreenPercentBar, 0), pc);
                 SendText(RXPC, Vbuf); 
                 strcpy(RXBattInfo, ModelVolts);
                 strcat(RXBattInfo, v);
-                dtostrf(VoltsPerCell, 2, 2, Vbuf);
+                dtostrf(TxDataView::VoltsPerCell, 2, 2, Vbuf);
                 strcat(RXBattInfo, Vbuf);
                 strcat(RXBattInfo, PerCell);
                 SendText(FrontView_RXBV, RXBattInfo);  
             }
             if (CurrentView == DATAVIEW){
-                 dtostrf(VoltsPerCell, 2, 2, Vbuf);
+                 dtostrf(TxDataView::VoltsPerCell, 2, 2, Vbuf);
                  SendText(t6, Vbuf);
             }
 
-            if (VoltsPerCell < StopFlyingVoltsPerCell && GreenPercentBar > 0) {
+            if (TxDataView::VoltsPerCell < StopFlyingVoltsPerCell && GreenPercentBar > 0) {
                 if (!LowVoltstimer) LowVoltstimer = millis();        // Start a timer if not running already 
                 if (millis() - LowVoltstimer > LOW_VOLTAGE_TIME){    // Is RX Lipo down to storage volts for over 3 seconds? 
                     RXWarningFlag = true; 
@@ -1710,7 +1758,7 @@ FASTRUN bool CheckRXVolts()
         }
     }
     else {
-        if (BoundFlag && CurrentView == FRONTVIEW) {
+        if (ConnectionStatus::BoundFlag && CurrentView == FRONTVIEW) {
             SendText(FrontView_RXBV, RXBattNA);
             SendValue(JRX, 0);
             SendText(RXPC, spaces);
@@ -1723,7 +1771,7 @@ FASTRUN bool CheckRXVolts()
 void CheckScreenTime()
 {
     char ScreenOff[] = "dim=10";
-    if ((millis() - ScreenTimeTimer) > ScreenTimeout * 1000) {
+    if ((millis() - ScreenTimeTimer) > TXSetupValues::ScreenTimeout * 1000) {
         SendCommand(ScreenOff);
         ScreenTimeTimer = millis();
         ScreenIsOff     = true;
@@ -1733,7 +1781,7 @@ void CheckScreenTime()
 /*********************************************************************************************************************************/
 void ClearSuccessRate()
 {
-    for (int i = 0; i < (PERFECTPACKETSPERSECOND * (uint16_t)ConnectionAssessSeconds); ++i) { // 126 packets per second start off good
+    for (int i = 0; i < (PERFECTPACKETSPERSECOND * (uint16_t)TXSetupValues::ConnectionAssessSeconds); ++i) { // 126 packets per second start off good
         PacketsHistoryBuffer[i] = 1;
     }
 }
@@ -1741,7 +1789,7 @@ void ClearSuccessRate()
 int GetSuccessRate()
 {   uint16_t Total = 0;
     uint16_t SuccessRate;
-    uint16_t Perfection = (PERFECTPACKETSPERSECOND * (uint16_t)ConnectionAssessSeconds);
+    uint16_t Perfection = (PERFECTPACKETSPERSECOND * (uint16_t)TXSetupValues::ConnectionAssessSeconds);
 
     for (uint16_t i = 0; i < Perfection; ++i) { // PERFECTPACKETSPERSECOND (126) packets per second are either good or bad
         Total += PacketsHistoryBuffer[i];
@@ -1751,7 +1799,7 @@ int GetSuccessRate()
     return SuccessRate;
 }
 /*********************************************************************************************************************************/
-// this function looks at the most recent ((uint16_t) ConnectionAssessSeconds) few seconds of packets which succeeded and expresses these
+// this function looks at the most recent ((uint16_t) TXSetupValues::ConnectionAssessSeconds) few seconds of packets which succeeded and expresses these
 // as a percentage of total attempted packets.
 
 void ShowConnectionQuality()
@@ -1781,7 +1829,7 @@ void ShowConnectionQuality()
     if ((ConnectionQuality >= 25) && (ConnectionQuality < 50)) strcat(Msgbuf, Msg_ConnectedWeak);
     if ((ConnectionQuality >= 1) && (ConnectionQuality < 25)) strcat(Msgbuf, Msg_ConnectedVWeak);
     SendText(FrontView_Connected, Msgbuf);
-    SendCommand(Visible); // heer
+    SendCommand(Visible); 
 }
 /*********************************************************************************************************************************/
 
@@ -1859,7 +1907,7 @@ FASTRUN void ShowComms()
             }
             if (BuddyPupilOnPPM) SendText(FrontView_Connected, MsgBuddying);
             if (LedWasGreen) {
-                if (BoundFlag) {
+                if (ConnectionStatus::BoundFlag) {
                     if (!BuddyMaster) {
                         if (!Reconnected) {
                             MakeBindButtonInvisible();
@@ -1875,7 +1923,7 @@ FASTRUN void ShowComms()
                             SendText(FrontView_Connected, Msg_CnctdBuddySlave);
                         }
                     }
-                    if (BoundFlag && ModelMatched) GreenLedOn();
+                    if (ConnectionStatus::BoundFlag && ConnectionStatus::ModelMatched) GreenLedOn();
                     StartInactvityTimeout();
                 } else {
                     SendText(FrontView_RXBV, na); // data not available
@@ -1884,22 +1932,22 @@ FASTRUN void ShowComms()
                 }
             }
         }
-        if (CurrentView == DATAVIEW && Connected) {
-            SendValue(DataView_pps, PacketsPerSecond);
-            SendValue(DataView_lps, TotalLostPackets / 2); // about half probably made it but went un acknoledged
-            SendText(DataView_Alt,  ModelAltitude);
-            SendText(DataView_MaxAlt, Maxaltitude);
-            SendText(DataView_Temp, ModelTempRX);
-            SendText(DataView_Rx,   ThisRadio);
-            SendText(DataView_rxv,  ReceiverVersionNumber);
-            SendValue(DataView_Ls,  GapLongest);
-            SendValue(DataView_Ts,  RadioSwaps - SavedRadioSwaps);
-            SendValue(DataView_Sg,  RX1TotalTime - SavedRX1TotalTime);
-            SendValue(DataView_Ag,  GapAverage);
-            SendValue(DataView_Gc,  RX2TotalTime - SavedRX2TotalTime);
-            snprintf(Vbuf, 6, "%d", (int)SbusRepeats - SavedSbusRepeats);
+        if (CurrentView == DATAVIEW && ConnectionStatus::Connected) {
+            SendValue(DataView_pps, TxDataView::PacketsPerSecond);
+            SendValue(DataView_lps, TxDataView::TotalLostPackets / 2); // about half probably made it but went un acknoledged
+            SendText(DataView_Alt,  TxDataView::ModelAltitude);
+            SendText(DataView_MaxAlt, TxDataView::Maxaltitude);
+            SendText(DataView_Temp, TxDataView::ModelTempRX);
+            SendText(DataView_Rx,   TxDataView::ThisRadio);
+            SendText(DataView_rxv,  TxDataView::ReceiverVersionNumber);
+            SendValue(DataView_Ls,  TxDataView::GapLongest);
+            SendValue(DataView_Ts,  TxDataView::RadioSwaps - TxDataView::SavedRadioSwaps);
+            SendValue(DataView_Sg,  TxDataView::RX1TotalTime - TxDataView::SavedRX1TotalTime);
+            SendValue(DataView_Ag,  TxDataView::GapAverage);
+            SendValue(DataView_Gc,  TxDataView::RX2TotalTime - TxDataView::SavedRX2TotalTime);
+            snprintf(Vbuf, 6, "%d", (int)TxDataView::SbusRepeats - TxDataView::SavedSbusRepeats);
             SendText(Sbs, Vbuf);
-            SendValue(DataView_lps, TotalLostPackets / 2);
+            SendValue(DataView_lps, TxDataView::TotalLostPackets / 2);
         }
         if (CurrentView == GPSVIEW ) {
             if (GpsFix) { // if no fix, then leave display as before
@@ -2306,7 +2354,7 @@ uint16_t (*Interpolate[3])(uint16_t InputValue, uint16_t InputChannel, uint16_t 
 int GetTrimAmount(uint8_t InputChannel){ 
     int TrimAmount, tt = InputChannel;
         
-        if (SticksMode == 2) {
+        if (TXSetupValues::SticksMode == 2) {
             if (InputChannel == 1) tt = 2;
             if (InputChannel == 2) tt = 1; 
         }
@@ -2488,7 +2536,7 @@ void UpdateTrimView()
     if (CurrentView == FRONTVIEW || (CurrentView == TRIM_VIEW)) {
         for (int i = 0; i < 4; ++i) {
             p = i;
-            if (SticksMode == 2) {
+            if (TXSetupValues::SticksMode == 2) {
                 if (i == 1) p = 2;
                 if (i == 2) p = 1;
             }
@@ -2664,7 +2712,7 @@ uint8_t SDRead8BITS(int p_address)
 
 void UpdateModelsNameEveryWhere()
 {
-    char Owner[]                    = "Owner";  
+    char Owner[]               = "Owner";  
     char TheModelName[]        = "ModelName";
     char GraphView_Channel[]   = "Channel";
     char TrimView_Bank[]       = "t1";
@@ -2679,7 +2727,7 @@ void UpdateModelsNameEveryWhere()
    
     strcpy(mn1, ModelName);
     
-    if (CurrentView == FRONTVIEW) SendText(Owner, TxName);
+    if (CurrentView == FRONTVIEW) SendText(Owner, TXSetupValues::TxName);
 
     if (CurrentView != MODELSVIEW){ 
         strcat(mn1, lb);
@@ -2900,9 +2948,9 @@ bool ReadOneModel(uint32_t Mnum)
     TrimMultiplier=CheckRange(TrimMultiplier, 1, 20);
     ++SDCardAddress;
     ++SDCardAddress;
-    LowBattery = SDRead8BITS(SDCardAddress);
-    if (LowBattery > 100) LowBattery = LOWBATTERY;
-    if (LowBattery < 10) LowBattery = LOWBATTERY;
+    TXSetupValues::LowBattery = SDRead8BITS(SDCardAddress);
+    if (TXSetupValues::LowBattery > 100) TXSetupValues::LowBattery = TXSetupValues::LowBattery;
+    if (TXSetupValues::LowBattery < 10) TXSetupValues::LowBattery = LOWBATTERY;
     ++SDCardAddress;
     CopyTrimsToAll = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
@@ -3126,21 +3174,21 @@ bool LoadAllParameters()
         ++SDCardAddress;
         ModelNumber = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
-        ScreenTimeout = SDRead16BITS(SDCardAddress);
+        TXSetupValues::ScreenTimeout = SDRead16BITS(SDCardAddress);
         ++SDCardAddress;
         ++SDCardAddress;
-        Inactivity_Timeout = SDRead8BITS(SDCardAddress) * TICKSPERMINUTE;
-        if (Inactivity_Timeout < INACTIVITYMINIMUM) Inactivity_Timeout = INACTIVITYMINIMUM;
-        if (Inactivity_Timeout > INACTIVITYMAXIMUM) Inactivity_Timeout = INACTIVITYMAXIMUM;
+        TXSetupValues::Inactivity_Timeout = SDRead8BITS(SDCardAddress) * TICKSPERMINUTE;
+        if (TXSetupValues::Inactivity_Timeout < INACTIVITYMINIMUM) TXSetupValues::Inactivity_Timeout = INACTIVITYMINIMUM;
+        if (TXSetupValues::Inactivity_Timeout > INACTIVITYMAXIMUM) TXSetupValues::Inactivity_Timeout = INACTIVITYMAXIMUM;
         ++SDCardAddress;
         for (j = 0; j < 30; ++j) {
-            TxName[j] = SDRead8BITS(SDCardAddress);
+            TXSetupValues::TxName[j] = SDRead8BITS(SDCardAddress);
             ++SDCardAddress;
         }
-        Qnh = SDRead16BITS(SDCardAddress);
+        TXSetupValues::Qnh = SDRead16BITS(SDCardAddress);
         ++SDCardAddress;
         ++SDCardAddress;
-        DeltaGMT = SDRead16BITS(SDCardAddress);
+        TXSetupValues::DeltaGMT = SDRead16BITS(SDCardAddress);
         ++SDCardAddress;
         ++SDCardAddress;
         BackGroundColour = SDRead16BITS(SDCardAddress);
@@ -3159,7 +3207,7 @@ bool LoadAllParameters()
         if (HighlightColour == 0) HighlightColour = Yellow;
         ++SDCardAddress;
         ++SDCardAddress;
-        SticksMode = SDRead8BITS(SDCardAddress);
+        TXSetupValues::SticksMode = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
         AudioVolume = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
@@ -3197,21 +3245,21 @@ bool LoadAllParameters()
             TrimNumber[j] = SDRead8BITS(SDCardAddress);
             ++SDCardAddress;
         }
-        TxVoltageCorrection = SDRead16BITS(SDCardAddress);
-        if ((TxVoltageCorrection > 20) || (TxVoltageCorrection < 0)) TxVoltageCorrection = 0;
+        TXSetupValues::TxVoltageCorrection = SDRead16BITS(SDCardAddress);
+        if ((TXSetupValues::TxVoltageCorrection > 20) || (TXSetupValues::TxVoltageCorrection < 0)) TXSetupValues::TxVoltageCorrection = 0;
         ++SDCardAddress;
         ++SDCardAddress;
-        PowerOffWarningSeconds = SDRead8BITS(SDCardAddress);
-        PowerOffWarningSeconds = CheckRange(PowerOffWarningSeconds, 1, 30);
+        TXSetupValues::PowerOffWarningSeconds = SDRead8BITS(SDCardAddress);
+        TXSetupValues::PowerOffWarningSeconds = CheckRange(TXSetupValues::PowerOffWarningSeconds, 1, 30);
         ++SDCardAddress;
-        LEDBrightness = SDRead16BITS(SDCardAddress);
-        LEDBrightness = CheckRange(LEDBrightness, 1, 254);
+        TXSetupValues::LEDBrightness = SDRead16BITS(SDCardAddress);
+        TXSetupValues::LEDBrightness = CheckRange(TXSetupValues::LEDBrightness, 1, 254);
         ++SDCardAddress;
         ++SDCardAddress;
-        ConnectionAssessSeconds = SDRead8BITS(SDCardAddress);
-        ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);
+        TXSetupValues::ConnectionAssessSeconds = SDRead8BITS(SDCardAddress);
+        TXSetupValues::ConnectionAssessSeconds = CheckRange(TXSetupValues::ConnectionAssessSeconds, 1, 6);
         ++SDCardAddress;
-        AutoModelSelect = SDRead8BITS(SDCardAddress);
+        TXSetupValues::AutoModelSelect = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
         TXLiPo = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
@@ -3311,11 +3359,11 @@ FLASHMEM void GetTXVersionNumber()
     uint8_t Txv1 = TXVERSION_MAJOR;
     uint8_t Txv2 = TXVERSION_MINOR;
     uint8_t Txv3 = TXVERSION_MINIMUS;
-    Str(TransmitterVersionNumber, Txv1, 2);
+    Str(TxDataView::TransmitterVersionNumber, Txv1, 2);
     Str(nbuf, Txv2, 2);
-    strcat(TransmitterVersionNumber, nbuf);
+    strcat(TxDataView::TransmitterVersionNumber, nbuf);
     Str(nbuf, Txv3, 0);
-    strcat(TransmitterVersionNumber, nbuf);
+    strcat(TxDataView::TransmitterVersionNumber, nbuf);
 }
 /************************************************************************************************************/
 FASTRUN void SetUKFrequencies()
@@ -3541,7 +3589,7 @@ FASTRUN void LogThisRX()
     char Ltext[] = "RX: ";
     char thetext[10];
     strcpy(thetext, Ltext);
-    strcat(thetext, ThisRadio);
+    strcat(thetext, TxDataView::ThisRadio);
     LogText(thetext, 5);
 }
 
@@ -3761,7 +3809,7 @@ if (UseTXModule)
     //  SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
     //  **   BUT then re-comment it!! Otherwise it will reset to same time on every boot up! **
     //  ***************************************************************************************
-    BoundFlag = false;
+    ConnectionStatus::BoundFlag = false;
     StartInactvityTimeout();
     SizeOfCompressedData = sizeof(CompressedData);
     GetTXVersionNumber();
@@ -3804,7 +3852,7 @@ if (UseTXModule)
 
 void GetStatistics()
 {
-    if (RangeTestGoodPackets) PacketsPerSecond = RangeTestGoodPackets;
+    if (RangeTestGoodPackets) TxDataView::PacketsPerSecond = RangeTestGoodPackets;
     RangeTestGoodPackets = 0;
 }
 
@@ -3905,21 +3953,21 @@ void SaveTransmitterParameters()
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, ModelNumber);
     ++SDCardAddress;
-    SDUpdate16BITS(SDCardAddress, ScreenTimeout);
+    SDUpdate16BITS(SDCardAddress, TXSetupValues::ScreenTimeout);
     ++SDCardAddress;
     ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, (Inactivity_Timeout / TICKSPERMINUTE));
+    SDUpdate8BITS(SDCardAddress, (TXSetupValues::Inactivity_Timeout / TICKSPERMINUTE));
     ++SDCardAddress;
     for (j = 0; j < 30; ++j) {
-        if (EON) TxName[j] = 0;
-        SDUpdate8BITS(SDCardAddress, TxName[j]);
-        if (TxName[j] == 0) EON = true;
+        if (EON) TXSetupValues::TxName[j] = 0;
+        SDUpdate8BITS(SDCardAddress, TXSetupValues::TxName[j]);
+        if (TXSetupValues::TxName[j] == 0) EON = true;
         ++SDCardAddress;
     }
-    SDUpdate16BITS(SDCardAddress, Qnh);
+    SDUpdate16BITS(SDCardAddress, TXSetupValues::Qnh);
     ++SDCardAddress;
     ++SDCardAddress;
-    SDUpdate16BITS(SDCardAddress, DeltaGMT);
+    SDUpdate16BITS(SDCardAddress, TXSetupValues::DeltaGMT);
     ++SDCardAddress;
     ++SDCardAddress;
     SDUpdate16BITS(SDCardAddress, BackGroundColour);
@@ -3934,7 +3982,7 @@ void SaveTransmitterParameters()
     SDUpdate16BITS(SDCardAddress, HighlightColour);
     ++SDCardAddress;
     ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, SticksMode); 
+    SDUpdate8BITS(SDCardAddress, TXSetupValues::SticksMode); 
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, AudioVolume);
     ++SDCardAddress;
@@ -3968,17 +4016,17 @@ void SaveTransmitterParameters()
         SDUpdate8BITS(SDCardAddress, TrimNumber[j]);
         ++SDCardAddress;
     }
-    SDUpdate16BITS(SDCardAddress, TxVoltageCorrection);
+    SDUpdate16BITS(SDCardAddress, TXSetupValues::TxVoltageCorrection);
     ++SDCardAddress;
     ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, PowerOffWarningSeconds);
+    SDUpdate8BITS(SDCardAddress, TXSetupValues::PowerOffWarningSeconds);
     ++SDCardAddress;
-    SDUpdate16BITS(SDCardAddress, LEDBrightness);
+    SDUpdate16BITS(SDCardAddress, TXSetupValues::LEDBrightness);
     ++SDCardAddress;
     ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, ConnectionAssessSeconds);
+    SDUpdate8BITS(SDCardAddress, TXSetupValues::ConnectionAssessSeconds);
     ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, AutoModelSelect);  
+    SDUpdate8BITS(SDCardAddress, TXSetupValues::AutoModelSelect);  
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, TXLiPo);
     ++SDCardAddress;
@@ -4057,7 +4105,7 @@ void SaveOneModel(uint32_t mnum)
     SDUpdate16BITS(SDCardAddress, TrimMultiplier);
     ++SDCardAddress;
     ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, LowBattery);
+    SDUpdate8BITS(SDCardAddress, TXSetupValues::LowBattery);
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, CopyTrimsToAll);
     ++SDCardAddress;
@@ -4586,7 +4634,7 @@ void SaveAllParameters()
 
 int AnalogueReed(uint8_t InputChannel){    
     int value = analogRead(AnalogueInput[InputChannel]);
-    if (SticksMode == 2){
+    if (TXSetupValues::SticksMode == 2){
         if ((InputChannel == 0) || (InputChannel == 2)){  
               value = map(value, ChannelMin[InputChannel], ChannelMax[InputChannel], ChannelMax[InputChannel], ChannelMin[InputChannel]); 
         }
@@ -4690,7 +4738,7 @@ void SetDefaultValues()
     
     ReversedChannelBITS = 0; //  No channel reversed
    
-    LEDBrightness       = DEFAULTLEDBRIGHTNESS;
+    TXSetupValues::LEDBrightness       = DEFAULTLEDBRIGHTNESS;
     RxVoltageCorrection = 0;
     ModelsMacUnionSaved.Val32[0] = 0;
     ModelsMacUnionSaved.Val32[1] = 0;
@@ -5142,9 +5190,9 @@ FASTRUN void DisplayCurve()
 void BindNow() // Bind button was pressed 
 {
     BindingNow                   = 1;
-    BoundFlag                    = true;
-    ModelMatched                 = true;
-    Connected                    = true;
+    ConnectionStatus::BoundFlag                    = true;
+    ConnectionStatus::ModelMatched                 = true;
+    ConnectionStatus::Connected                    = true;
     ModelsMacUnionSaved.Val32[0] = ModelsMacUnion.Val32[0];
     ModelsMacUnionSaved.Val32[1] = ModelsMacUnion.Val32[1];
     SaveOneModel(ModelNumber);
@@ -5534,7 +5582,7 @@ void ReceiveModelFile()
     GotoModelsView();
     ClearText();
     RedLedOn();
-    BoundFlag = true; // This just prevents jump to front screen (Cleared on leaving models area)
+    ConnectionStatus::BoundFlag = true; // This just prevents jump to front screen (Cleared on leaving models area)
 }
 
 /*********************************************************************************************************************************/
@@ -5801,10 +5849,10 @@ void RestoreBrightness()
 
 void ZeroDataScreen()
 { // ZERO Those parameters that are zeroable
-    TotalLostPackets   = 0;
-    GapLongest         = 0;
+    TxDataView::TotalLostPackets   = 0;
+    TxDataView::GapLongest         = 0;
     GapSum             = 0;
-    GapAverage         = 0;
+    TxDataView::GapAverage         = 0;
     GapCount           = 0;
     GapStart           = 0;
     RXMAXModelAltitude = 0;
@@ -5812,10 +5860,10 @@ void ZeroDataScreen()
     ThisGap            = 0;
     GPSMaxDistance     = 0;
     GPSMaxSpeed        = 0;
-    SavedRadioSwaps    = RadioSwaps; // Cannot easily zero these, so do a subtraction
-    SavedRX1TotalTime  = RX1TotalTime;
-    SavedRX2TotalTime  = RX2TotalTime;
-    SavedSbusRepeats   = SbusRepeats;
+    TxDataView::SavedRadioSwaps    = TxDataView::RadioSwaps; // Cannot easily zero these, so do a subtraction
+    TxDataView::SavedRX1TotalTime  = TxDataView::RX1TotalTime;
+    TxDataView::SavedRX2TotalTime  = TxDataView::RX2TotalTime;
+    TxDataView::SavedSbusRepeats   = TxDataView::SbusRepeats;
     LastShowTime       = 0; // for instant redisplay
 }
 /***************************************************** ReadNewSwitchFunction ****************************************************************************/
@@ -6202,7 +6250,7 @@ void LoadFileSelector(){
 void GotoModelsView()
 {
 char     GoModelsView[]                  = "page ModelsView";
- if (ModelMatched) return; // must not change when model connected 
+ if (ConnectionStatus::ModelMatched) return; // must not change when model connected 
  SaveCurrentModel();
  SendCommand(GoModelsView);
  CurrentView = MODELSVIEW;
@@ -6370,7 +6418,7 @@ void DefineTrimsEnd()
 void ResetAllTrims() 
 {
      
-if (SticksMode == 1) { 
+if (TXSetupValues::SticksMode == 1) { 
         TrimNumber[0] = TRIM1A;  // these will change when redefined
         TrimNumber[1] = TRIM1B;
         TrimNumber[2] = TRIM2A;
@@ -6381,7 +6429,7 @@ if (SticksMode == 1) {
         TrimNumber[7] = TRIM4B;
     }
 
-if (SticksMode == 2) {
+if (TXSetupValues::SticksMode == 2) {
         TrimNumber[0] = TRIM1A; 
         TrimNumber[1] = TRIM1B;
         TrimNumber[4] = TRIM2A;
@@ -6397,7 +6445,7 @@ void Options2End()
 { // back to setup?
     char dGMT[]           = "dGMT";
     char page_SetupView[] = "page SetupView";
-    DeltaGMT              = GetValue(dGMT);
+    TXSetupValues::DeltaGMT              = GetValue(dGMT);
     SaveTransmitterParameters();
     CurrentView = TXSETUPVIEW;
     SendCommand(page_SetupView);
@@ -6418,13 +6466,13 @@ void OptionView2Start()
 
     if (CurrentView == OPTIONVIEW3) { //  TODO: And what if was Options 1??
     
-      TxVoltageCorrection    = GetValue(TxVCorrextion);
-      PowerOffWarningSeconds = GetValue(n2);
-      PowerOffWarningSeconds = CheckRange(PowerOffWarningSeconds, 1, 10);
+      TXSetupValues::TxVoltageCorrection    = GetValue(TxVCorrextion);
+      TXSetupValues::PowerOffWarningSeconds = GetValue(n2);
+      TXSetupValues::PowerOffWarningSeconds = CheckRange(TXSetupValues::PowerOffWarningSeconds, 1, 10);
      
-      if (LEDBrightness != GetValue(n1)) UpdateLED();
-      ConnectionAssessSeconds = GetValue(n3);
-      ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);
+      if (TXSetupValues::LEDBrightness != GetValue(n1)) UpdateLED();
+      TXSetupValues::ConnectionAssessSeconds = GetValue(n3);
+      TXSetupValues::ConnectionAssessSeconds = CheckRange(TXSetupValues::ConnectionAssessSeconds, 1, 6);
       SaveAllParameters();
     }
 
@@ -6432,7 +6480,7 @@ void OptionView2Start()
     LastTimeRead = 0;
     SendCommand(OptionV2Start);
     Procrastinate(100);
-    SendValue(dGMT, DeltaGMT);
+    SendValue(dGMT, TXSetupValues::DeltaGMT);
 }
 
 /******************************************************************************************************************************/
@@ -6454,12 +6502,12 @@ void OptionView3Start() /// NOT CALLED
     Procrastinate(250);
     snprintf(Vbuf, 5, "%f", StopFlyingVoltsPerCell);
     SendText(t10, Vbuf);
-    SendValue(TxVCorrextion, TxVoltageCorrection);
-    SendValue(n2,  PowerOffWarningSeconds);
-    SendValue(n3,  ConnectionAssessSeconds);
-    SendValue(lpm, AutoModelSelect);
-    SendValue(n1,  LEDBrightness);
-    SendValue(QNH,  Qnh);
+    SendValue(TxVCorrextion, TXSetupValues::TxVoltageCorrection);
+    SendValue(n2,  TXSetupValues::PowerOffWarningSeconds);
+    SendValue(n3,  TXSetupValues::ConnectionAssessSeconds);
+    SendValue(lpm, TXSetupValues::AutoModelSelect);
+    SendValue(n1,  TXSetupValues::LEDBrightness);
+    SendValue(QNH,  TXSetupValues::Qnh);
 }
 
 /******************************************************************************************************************************/
@@ -6558,8 +6606,8 @@ void RXSetup1End()
 
 void UpdateLED(){ // LED Brightness has changed so this ensures it is redisplayed
     char n1[]             = "n1";
-    LEDBrightness           = GetValue(n1);
-    LEDBrightness           = CheckRange(LEDBrightness, 1, 254);
+    TXSetupValues::LEDBrightness           = GetValue(n1);
+    TXSetupValues::LEDBrightness           = CheckRange(TXSetupValues::LEDBrightness, 1, 254);
     LedWasGreen = false; // Forces a redisplay if brightness has changed
 }
 
@@ -6574,13 +6622,13 @@ void OptionView3End() //
     char page_SetupView[] = "page SetupView";
     char QNH[]            = "Qnh";
 
-    TxVoltageCorrection     = GetValue(TxVCorrextion);
-    PowerOffWarningSeconds  = GetValue(n2);
-    PowerOffWarningSeconds  = CheckRange(PowerOffWarningSeconds, 1, 10);
-    Qnh = (uint16_t)GetValue(QNH);
-    if (LEDBrightness != GetValue(n1)) UpdateLED(); 
-    ConnectionAssessSeconds = GetValue(n3);
-    ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);
+    TXSetupValues::TxVoltageCorrection     = GetValue(TxVCorrextion);
+    TXSetupValues::PowerOffWarningSeconds  = GetValue(n2);
+    TXSetupValues::PowerOffWarningSeconds  = CheckRange(TXSetupValues::PowerOffWarningSeconds, 1, 10);
+    TXSetupValues::Qnh = (uint16_t)GetValue(QNH);
+    if (TXSetupValues::LEDBrightness != GetValue(n1)) UpdateLED(); 
+    TXSetupValues::ConnectionAssessSeconds = GetValue(n3);
+    TXSetupValues::ConnectionAssessSeconds = CheckRange(TXSetupValues::ConnectionAssessSeconds, 1, 6);
     SaveTransmitterParameters();
     CloseModelsFile();
     CurrentView = TXSETUPVIEW;
@@ -6636,25 +6684,25 @@ void AileronLeftTrim(){MoveaTrim(1);}
 /******************************************************************************************************************************/
 void ElevatorUpTrim(){
     uint8_t tt = 2;
-    if (SticksMode == 2)  tt = 5;
+    if (TXSetupValues::SticksMode == 2)  tt = 5;
      MoveaTrim(tt);
 }
 /******************************************************************************************************************************/
 void ElevatorDownTrim(){
      uint8_t tt = 3;
-     if (SticksMode == 2)  tt = 4;
+     if (TXSetupValues::SticksMode == 2)  tt = 4;
      MoveaTrim(tt);
 }
 /******************************************************************************************************************************/
 void ThrottleUpTrim(){
     uint8_t tt = 4;
-    if (SticksMode == 2) tt = 3;
+    if (TXSetupValues::SticksMode == 2) tt = 3;
     MoveaTrim(tt);
 }
 /******************************************************************************************************************************/
 void ThrottleDownTrim(){
     uint8_t tt = 5;
-     if (SticksMode == 2) tt = 2;
+     if (TXSetupValues::SticksMode == 2) tt = 2;
      MoveaTrim(tt);
 }
 /******************************************************************************************************************************/
@@ -6676,16 +6724,16 @@ void ResetTransmitterSettings(){    // This function resets all transmitter para
    BuddyPupilOnPPM   = false;
    BuddyMaster        = false;
    ModelNumber        = 1;
-   ScreenTimeout      = 120;
-   Inactivity_Timeout = INACTIVITYTIMEOUT;
-   strcpy(TxName, Tn);
-   Qnh              = 1009;
-   DeltaGMT         = 0;
+   TXSetupValues::ScreenTimeout      = 120;
+   TXSetupValues::Inactivity_Timeout = INACTIVITYTIMEOUT;
+   strcpy(TXSetupValues::TxName, Tn);
+   TXSetupValues::Qnh              = 1009;
+   TXSetupValues::DeltaGMT         = 0;
    BackGroundColour = 214;
    ForeGroundColour = White;
    SpecialColour    = Red;
    HighlightColour  = Yellow;
-   SticksMode       = 2;
+   TXSetupValues::SticksMode       = 2;
    AudioVolume      = 20;
    Brightness       = 100;
    PlayFanfare      = false;
@@ -6699,11 +6747,11 @@ void ResetTransmitterSettings(){    // This function resets all transmitter para
    UseLog            = false;
    AnnounceConnected = true;
    ResetAllTrims();
-   TxVoltageCorrection     = 0;
-   PowerOffWarningSeconds  = DEFAULTPOWEROFFWARNING;
-   LEDBrightness           = DEFAULTLEDBRIGHTNESS;
-   ConnectionAssessSeconds = 1;
-   AutoModelSelect         = false;
+   TXSetupValues::TxVoltageCorrection     = 0;
+   TXSetupValues::PowerOffWarningSeconds  = DEFAULTPOWEROFFWARNING;
+   TXSetupValues::LEDBrightness           = DEFAULTLEDBRIGHTNESS;
+   TXSetupValues::ConnectionAssessSeconds = 1;
+   TXSetupValues::AutoModelSelect         = false;
    MotorChannel            = 15;
    MotorChannelZero        = 0;
    TimerDownwards          = false;
@@ -7241,7 +7289,7 @@ void LoadModelForRenaming(){
                     }
      }
     SaveAllParameters();
-    BoundFlag = false;
+    ConnectionStatus::BoundFlag = false;
     GotoFrontView();
  }
 
@@ -7269,7 +7317,7 @@ void DoMFName(){
  void TXModuleViewStart(){ 
 
     char GoTXModule[] = "page TXModuleView";
-    if (ModelMatched) return;
+    if (ConnectionStatus::ModelMatched) return;
 
     CurrentView = TXMODULEVIEW;
 
@@ -7825,28 +7873,28 @@ FASTRUN void ButtonWasPressed()
         if (InStrng(OptionsEnd, TextIn) > 0) { // Exit from TX Options screen1
             SendCommand(ProgressStart);
             SendValue(Progress, 10);
-            SticksMode = CheckRange(GetValue(n0), 1, 2); 
-            GetText(TxNme, TxName);
+            TXSetupValues::SticksMode = CheckRange(GetValue(n0), 1, 2); 
+            GetText(TxNme, TXSetupValues::TxName);
             SendValue(Progress, 30);
            
             SendValue(Progress, 40);
-            AutoModelSelect = GetValue(lpm); 
+            TXSetupValues::AutoModelSelect = GetValue(lpm); 
             SendValue(Progress, 50);
-            LowBattery     = GetValue(Bwn);
+            TXSetupValues::LowBattery     = GetValue(Bwn);
             SendValue(Progress, 60);
-            ScreenTimeout  = GetValue(ScreenViewTimeout);
+            TXSetupValues::ScreenTimeout  = GetValue(ScreenViewTimeout);
             SendValue(Progress, 70);
             SendValue(Progress, 80);
-            Inactivity_Timeout = GetValue(Pto) * TICKSPERMINUTE;
-            if (Inactivity_Timeout < INACTIVITYMINIMUM) Inactivity_Timeout = INACTIVITYMINIMUM;
-            if (Inactivity_Timeout > INACTIVITYMAXIMUM) Inactivity_Timeout = INACTIVITYMAXIMUM;
+            TXSetupValues::Inactivity_Timeout = GetValue(Pto) * TICKSPERMINUTE;
+            if (TXSetupValues::Inactivity_Timeout < INACTIVITYMINIMUM) TXSetupValues::Inactivity_Timeout = INACTIVITYMINIMUM;
+            if (TXSetupValues::Inactivity_Timeout > INACTIVITYMAXIMUM) TXSetupValues::Inactivity_Timeout = INACTIVITYMAXIMUM;
             SendValue(Progress, 90);
             FixDeltaGMTSign();
             if (BuddyPupilOnPPM)
             {
-                Connected            = false;
+                ConnectionStatus::Connected            = false;
                 LostContactFlag      = true;
-                PacketsPerSecond     = 0;
+                TxDataView::PacketsPerSecond     = 0;
                 RangeTestGoodPackets = 0;
                 BlueLedOn();
             }
@@ -7977,14 +8025,14 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(OptionsViewS, TextIn) > 0) {  // start tx setup screen 1
             FixDeltaGMTSign();
-            if (CurrentView == OPTIONVIEW2) DeltaGMT = GetValue(dGMT);
+            if (CurrentView == OPTIONVIEW2) TXSetupValues::DeltaGMT = GetValue(dGMT);
             SendCommand(pOptionsViewS);
-            SendValue(n0, SticksMode);
-            SendValue(ScreenViewTimeout, ScreenTimeout);
-            SendValue(Pto, (Inactivity_Timeout / TICKSPERMINUTE));
-            SendText(Tx_Name, TxName);
-            SendValue(lpm, AutoModelSelect); 
-            SendValue(Bwn, LowBattery);
+            SendValue(n0, TXSetupValues::SticksMode);
+            SendValue(ScreenViewTimeout, TXSetupValues::ScreenTimeout);
+            SendValue(Pto, (TXSetupValues::Inactivity_Timeout / TICKSPERMINUTE));
+            SendText(Tx_Name, TXSetupValues::TxName);
+            SendValue(lpm, TXSetupValues::AutoModelSelect); 
+            SendValue(Bwn, TXSetupValues::LowBattery);
             CurrentView = OPTIONS_VIEW;
             CurrentMode = NORMAL;
             ClearText();
@@ -8752,8 +8800,8 @@ void LoadPacketData()
             SendBuffer[CHANNELSUSED + 2] = FS_Byte1; // these are failsafe flags
             break;
         case 2:
-            SendBuffer[CHANNELSUSED + 1] = Qnh >> 8;     // (HiByte)   Qnh is current atmospheric pressure at sea level here (an aviation term)
-            SendBuffer[CHANNELSUSED + 2] = Qnh & 0x00ff; // (LowByte)  Qnh is current atmospheric pressure at sea level here (an aviation term)
+            SendBuffer[CHANNELSUSED + 1] = TXSetupValues::Qnh >> 8;     // (HiByte)   Qnh is current atmospheric pressure at sea level here (an aviation term)
+            SendBuffer[CHANNELSUSED + 2] = TXSetupValues::Qnh & 0x00ff; // (LowByte)  Qnh is current atmospheric pressure at sea level here (an aviation term)
             break;
         case 3:
             if (GPSMarkHere) {
@@ -8763,7 +8811,7 @@ void LoadPacketData()
             }
             break;
         case 4:
-            SendBuffer[CHANNELSUSED + 1] = ModelMatched; // let receiver know whether correct model is loaded.
+            SendBuffer[CHANNELSUSED + 1] = ConnectionStatus::ModelMatched; // let receiver know whether correct model is loaded.
             SendBuffer[CHANNELSUSED + 2] = SwapWaveBand; 
             if (SwapWaveBand == 2) SetTestFrequencies();
             if (SwapWaveBand == 1) SetUKFrequencies();
@@ -9079,7 +9127,7 @@ void MoveaTrim(uint8_t i)
     uint8_t Elevator = 1;
     uint8_t Throttle = 2;
 
-    if (SticksMode == 2) {
+    if (TXSetupValues::SticksMode == 2) {
         Elevator = 2;
         Throttle = 1;
     }
@@ -9153,7 +9201,7 @@ void SetATrimDefinition(int i)
         }
     }
 
-if (SticksMode == 1){
+if (TXSetupValues::SticksMode == 1){
     // Elevator
     if (!TrimDefined[1]) {
         if ((i == 2) || (i == 3)) {
@@ -9189,7 +9237,7 @@ if (SticksMode == 1){
     }
 }
 
-if (SticksMode == 2){
+if (TXSetupValues::SticksMode == 2){
     // Throttle
     if (!TrimDefined[1]) {
         if ((i == 4) || (i == 5)) {
@@ -9316,16 +9364,16 @@ void GetRXVersionNumber()
 {
     char nbuf[5];
     Str(nbuf, AckPayload.Byte1, 0);
-    strcpy(ThisRadio, nbuf);
+    strcpy(TxDataView::ThisRadio, nbuf);
     if (LastRadio != AckPayload.Byte1) {
         LastRadio = AckPayload.Byte1;
         if (LogRXSwaps && UseLog) LogThisRX();
     }
-    Str(ReceiverVersionNumber, AckPayload.Byte2, 2);
+    Str(TxDataView::ReceiverVersionNumber, AckPayload.Byte2, 2);
     Str(nbuf, AckPayload.Byte3, 2);
-    strcat(ReceiverVersionNumber, nbuf);
+    strcat(TxDataView::ReceiverVersionNumber, nbuf);
     Str(nbuf, AckPayload.Byte4, 0);
-    strcat(ReceiverVersionNumber, nbuf);
+    strcat(TxDataView::ReceiverVersionNumber, nbuf);
 }
 
 /************************************************************************************************************/
@@ -9362,14 +9410,14 @@ void GetAltitude()
 {
     RXModelAltitude = int(GetFromAckPayload()) - GroundModelAltitude;
     if (RXMAXModelAltitude < RXModelAltitude) RXMAXModelAltitude = RXModelAltitude;
-    snprintf(Maxaltitude, 5, "%d", RXMAXModelAltitude);
-    snprintf(ModelAltitude, 5, "%d", RXModelAltitude);
+    snprintf(TxDataView::Maxaltitude, 5, "%d", RXMAXModelAltitude);
+    snprintf(TxDataView::ModelAltitude, 5, "%d", RXModelAltitude);
 }
 /************************************************************************************************************/
 void GetTemperature()
 {
-    RXTemperature = GetFromAckPayload();
-    snprintf(ModelTempRX, 5, "%f", RXTemperature);
+    TxDataView::RXTemperature = GetFromAckPayload();
+    snprintf(TxDataView::ModelTempRX, 5, "%f", TxDataView::RXTemperature);
 }
 /************************************************************************************************************/
 FASTRUN uint32_t GetIntFromAckPayload()   // This one uses a uint32_t int
@@ -9421,8 +9469,8 @@ void GotoFrontView(){
 void CompareModelsIDs(){ // The saved MacAddress is compared with the one just received from the model ... etc ...
     
     uint8_t SavedModelNumber = ModelNumber;
-    if (ModelMatched) return; // must not change when model connected
-    ModelMatched             = false;
+    if (ConnectionStatus::ModelMatched) return; // must not change when model connected
+    ConnectionStatus::ModelMatched             = false;
     GotoFrontView();
     RestoreBrightness();
   
@@ -9430,31 +9478,31 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
           if (ModelsMacUnion.Val64 == ModelsMacUnionSaved.Val64) 
             {
                 if (AnnounceConnected) {
-                    if (AutoModelSelect){
+                    if (TXSetupValues::AutoModelSelect){
                         PlaySound(MMMATCHED); 
                         Procrastinate(1500);
                     }
                     
                 }
-                ModelMatched = true;                                      //  It's a match so start flying!
+                ConnectionStatus::ModelMatched = true;                                      //  It's a match so start flying!
                 BindButton   = true;
                 return;
             } 
             if (ModelsMacUnion.Val64 != ModelsMacUnionSaved.Val64) 
             {
-                if (AutoModelSelect)
+                if (TXSetupValues::AutoModelSelect)
                 { //  It's not a match so maybe search for it.
                     ModelNumber = 0;
-                    while ((ModelMatched == false) && (ModelNumber < MAXMODELNUMBER - 1)) 
+                    while ((ConnectionStatus::ModelMatched == false) && (ModelNumber < MAXMODELNUMBER - 1)) 
                     {   //  Try to match the ID with a saved one
                         ++ModelNumber;
                         ReadOneModel(ModelNumber);
                         if (ModelsMacUnion.Val64 == ModelsMacUnionSaved.Val64) {
-                            ModelMatched = true;
+                            ConnectionStatus::ModelMatched = true;
                             BindButton = true; 
                         }
                     }
-                    if (ModelMatched)
+                    if (ConnectionStatus::ModelMatched)
                     {                                                         //  Found it!    
                         UpdateModelsNameEveryWhere();                         //  Use it.
                         if (AnnounceConnected) 
@@ -9471,14 +9519,14 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                         ReadOneModel(ModelNumber);
                         BindNow();
                         NewModelMemoryWasSaved = true;
-                        if (AutoModelSelect)
+                        if (TXSetupValues::AutoModelSelect)
                         {
                             PlaySound(MMSAVED); // test!
                             Procrastinate(1700);
                         }   
                     }
                 } 
-                if (!AutoModelSelect) 
+                if (!TXSetupValues::AutoModelSelect) 
                 {     
                     BindNow(); 
                 }
@@ -9519,7 +9567,7 @@ void  GetModelsMacAddress(){
         default:
              break;
     }
-    if (ModelMatched == false) {
+    if (ConnectionStatus::ModelMatched == false) {
       
         if ((ModelsMacUnion.Val32[0] > 0) && (ModelsMacUnion.Val32[1] > 0)){   // got both bits yet?
              NewPipeMaybe = ModelsMacUnion.Val64;
@@ -9546,7 +9594,7 @@ FASTRUN void ParseAckPayload()
         AckPayload.Purpose &= 0x7f; // Clear the high BIT, use the remainder ...
     }
  
-    if (!ModelMatched && !LedWasGreen){
+    if (!ConnectionStatus::ModelMatched && !LedWasGreen){
        GetModelsMacAddress();
        return;
     }
@@ -9557,16 +9605,16 @@ FASTRUN void ParseAckPayload()
             GetRXVersionNumber();
             break;
         case 1:
-            SbusRepeats = GetFromAckPayload();
+            TxDataView::SbusRepeats = GetFromAckPayload();
             break;
         case 2:
-            RadioSwaps = GetFromAckPayload();
+            TxDataView::RadioSwaps = GetFromAckPayload();
             break;
         case 3:
-            RX1TotalTime = GetFromAckPayload();
+            TxDataView::RX1TotalTime = GetFromAckPayload();
             break;
         case 4:
-            RX2TotalTime = GetFromAckPayload();
+            TxDataView::RX2TotalTime = GetFromAckPayload();
             break;
         case 5:
             RXModelVolts    = GetFromAckPayload();
@@ -9638,17 +9686,17 @@ FASTRUN void CheckGapsLength()
         ++GapCount;
         ThisGap = (millis() - GapStart); // AND in fact RX sends no data for 20 ms after reconnection
         if (ThisGap >= MinimumGap && UseLog) LogThisGap();
-        if (ThisGap > GapLongest) GapLongest = ThisGap;
+        if (ThisGap > TxDataView::GapLongest) TxDataView::GapLongest = ThisGap;
         GapSum += ThisGap;
         GapStart   = 0;
-        GapAverage = GapSum / GapCount;
+        TxDataView::GapAverage = GapSum / GapCount;
 #ifdef DB_GAPS
         Serial.print("GapCount: ");
         Serial.println(GapCount);
         Serial.print("GapAverage: ");
-        Serial.println(GapAverage);
+        Serial.println(TxDataView::GapAverage);
         Serial.print("GapLongest: ");
-        Serial.println(GapLongest);
+        Serial.println(TxDataView::GapLongest);
         Serial.println(" ");
 #endif
     }
@@ -9689,7 +9737,7 @@ void CheckScanButton() // Scan button AND models button
     char     b12Greyed[]                = "b12.pco=33840";
     char     b1Greyed[]                 = "b1.pco=33840";
 
-    if (ModelMatched) {
+    if (ConnectionStatus::ModelMatched) {
         if (CurrentView == TXSETUPVIEW) {
           if(!b5isGrey) { 
                 SendCommand(b5Greyed); 
@@ -9737,7 +9785,7 @@ void CheckPowerOffButton()
             if (!PowerOffTimer) {
                 RestoreBrightness();
                 PowerOffTimer     = millis(); // Start a timer for power off button down
-                TurnOffSecondToGo = PowerOffWarningSeconds;
+                TurnOffSecondToGo = TXSetupValues::PowerOffWarningSeconds;
                 }
         }
     } else {
@@ -9790,7 +9838,7 @@ void FASTRUN ManageTransmitter(){
     KickTheDog();                                                    // Watchdog ... ALWAYS!
     CheckPowerOffButton();                                           // Pretty obvious really ...   
     CheckForNextionButtonPress(); // Pretty obvious really ...
-    if ((PACEMAKER - TXPacketElapsed  <= TIMEFORTXMANAGMENT) && ModelMatched) {
+    if ((PACEMAKER - TXPacketElapsed  <= TIMEFORTXMANAGMENT) && ConnectionStatus::ModelMatched) {
         return; // If it's almost time to send data, then do not start some other task which might easily take longer.
     }
       if (RightNow - TransmitterLastManaged > 50) {                  // 20 times a second is plenty
@@ -9842,7 +9890,7 @@ void SendBindingPipe()
 {
     uint16_t BindPause = 3000;
     if (NewModelMemoryWasSaved) BindPause = 6000;
-    if (!BoundFlag || !ModelMatched) BindingTimer = millis();
+    if (!ConnectionStatus::BoundFlag || !ConnectionStatus::ModelMatched) BindingTimer = millis();
     if ((millis() - BindingTimer) < BindPause) 
     {
         BufferTeensyMACAddPipe(); //  test! Extra 3 or 6 seconds to exchange pipes 
