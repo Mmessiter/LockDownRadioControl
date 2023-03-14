@@ -27,9 +27,9 @@ var searchData=
   ['rx1totaltime_24',['RX1TotalTime',['../namespaceTxDataView.html#a3ab26af388822c58ef65c9734197a431',1,'TxDataView::RX1TotalTime()'],['../radio_8h.html#aa1850e21b7988ec8784a0a6a89077df0',1,'RX1TotalTime():&#160;radio.h']]],
   ['rx2totaltime_25',['RX2TotalTime',['../radio_8h.html#aabc8c01b8e9f9b91a3575bf7052dc4de',1,'RX2TotalTime():&#160;radio.h'],['../namespaceTxDataView.html#a3fdcf20995f7d4db3c665f586a986e5b',1,'TxDataView::RX2TotalTime()']]],
   ['rxcellcount_26',['RXCellCount',['../TransmitterCode_2src_2main_8cpp.html#aa09bc4e1398cb869ae79670683470ed5',1,'main.cpp']]],
-  ['rxmaxmodelaltitude_27',['RXMAXModelAltitude',['../TransmitterCode_2src_2main_8cpp.html#aac60f398ee9f5f9f89459014e003f68d',1,'main.cpp']]],
-  ['rxmodelaltitude_28',['RXModelAltitude',['../TransmitterCode_2src_2main_8cpp.html#a60096f1f0ec75fa673207d2d11cfd123',1,'main.cpp']]],
-  ['rxmodelvolts_29',['RXModelVolts',['../TransmitterCode_2src_2main_8cpp.html#a5f56f32c16498a3547635bda86c49428',1,'main.cpp']]],
+  ['rxmaxmodelaltitude_27',['RXMAXModelAltitude',['../namespaceTxDataView.html#a7bbf084e6f9b4c6cd595341d37aad101',1,'TxDataView']]],
+  ['rxmodelaltitude_28',['RXModelAltitude',['../namespaceTxDataView.html#a71eaea16812b14fa8fe17c6650bb5db1',1,'TxDataView']]],
+  ['rxmodelvolts_29',['RXModelVolts',['../namespaceTxDataView.html#a2115566106a26c51bc5049868ddcdf29',1,'TxDataView']]],
   ['rxtemperature_30',['RXTemperature',['../namespaceTxDataView.html#ab9578ce7f104f8a9d3a3f17fdb08c6e4',1,'TxDataView']]],
   ['rxvoltagecorrection_31',['RxVoltageCorrection',['../TransmitterCode_2src_2main_8cpp.html#ad17e5f7f0f1b17d90abfb4da29f1ab41',1,'main.cpp']]],
   ['rxvoltsdetected_32',['RXVoltsDetected',['../TransmitterCode_2src_2main_8cpp.html#abad630d30092274e24516848d8096925',1,'main.cpp']]]

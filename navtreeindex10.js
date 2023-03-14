@@ -1,6 +1,5 @@
 var NAVTREEINDEX10 =
 {
-"classMPU9250.html#ab38ed8b895f7c8a128da66084e085501":[4,0,2,120],
 "classMPU9250.html#ab3cde169087d4e06e153f58b448136d5":[4,0,2,163],
 "classMPU9250.html#ab40144403714611c828d55d466204c6d":[4,0,2,223],
 "classMPU9250.html#ab4598bd2ae52a03e4ee214b7a758f9d0":[4,0,2,143],
@@ -223,8 +222,8 @@ var NAVTREEINDEX10 =
 "functions_enum.html":[4,3,3],
 "functions_eval.html":[4,3,4],
 "functions_f.html":[4,3,0,6],
-"functions_func.html":[4,3,1,0],
 "functions_func.html":[4,3,1],
+"functions_func.html":[4,3,1,0],
 "functions_func_c.html":[4,3,1,1],
 "functions_func_d.html":[4,3,1,2],
 "functions_func_e.html":[4,3,1,3],
@@ -249,5 +248,6 @@ var NAVTREEINDEX10 =
 "functions_q.html":[4,3,0,13],
 "functions_r.html":[4,3,0,14],
 "functions_s.html":[4,3,0,15],
-"functions_t.html":[4,3,0,16]
+"functions_t.html":[4,3,0,16],
+"functions_u.html":[4,3,0,17]
 };
