@@ -179,19 +179,77 @@ namespace TxDataView{ // heer
 
 /***********************************************************************************************************/
 
+namespace SlowServos
+{
+    uint32_t SlowTime[16];                                      //    For timing slow servos
+    uint8_t  StepSize[16] = {0,0,0,0,0,0,0,0,5,25,5,25,5,25,5,25};  //    How far to move each time on slow servos
+    uint16_t CurrentPosition[UNCOMPRESSEDWORDS];                //    Position from which a slow servo started (0 = not started yet)
+
+} // namespace SlowServos
+
+namespace GPSspace
+{
+    uint8_t   GPSMarkHere                 = 0;
+    float     GPSLatitude                 = 0;
+    float     GPSLongitude                = 0;
+   // float     GPSMarkLatitude             = 0; // heer!
+
+}// namespace GPSspace
+
+
+
+float     GPSMarkLongitude            = 0;
+float     GPSAngle                    = 0;
+bool      GpsFix                      = 0;
+uint8_t   GPSSatellites               = 0;
+uint16_t  GPSSpeed                    = 0;
+uint16_t  GPSMaxSpeed                 = 0;
+uint8_t   GPSHours                    = 0;
+uint8_t   GPSMins                     = 0;
+uint8_t   GPSSecs                     = 0;
+uint8_t   GPSDay                      = 0;
+uint8_t   GPSMonth                    = 0;
+uint8_t   GPSYear                     = 0;
+float     GPSAltitude                 = 0;
+float     GPSMaxaltitude              = 0;
+float     GPSGroundAltitude           = 0;
+float     GPSDistanceTo               = 0;
+float     GPSCourseTo                 = 0;
+float     GPSMaxDistance              = 0;
+uint8_t   Gsecond;   // = tm.Second; // 0-59
+uint8_t   Gminute;   // = tm.Minute; // 0-59
+uint8_t   Ghour;     // = tm.Hour;   // 0-23
+uint8_t   GweekDay;  // = tm.Wday;   // 1-7
+uint8_t   GmonthDay; // = tm.Day;    // 1-31
+uint8_t   Gmonth;    // = tm.Month;  // 1-12
+uint8_t   Gyear;     // = tm.Year;   // 0-99
+bool      GPSTimeSynched    = false;
+
+
+
+
+
+uint8_t  LastMixNumber    = 1;
+uint8_t  MixNumber        = 0;
+uint8_t  Mixes[MAXMIXES + 1][CHANNELSUSED + 1];          // 17 possible elements per mix. NOTHING to do with channels count!!!
+
+
+
 RF24          Radio1(CE_PIN, CSN_PIN);
 WDT_T4<WDT3>  TeensyWatchDog;
 WDT_timings_t WatchDogConfig;
 uint32_t      PPMTimer = 0;
-uint8_t       Mixes[MAXMIXES + 1][CHANNELSUSED + 1];          // 17 possible elements per mix. NOTHING to do with channels count!!!
+
 int           Trims[BANKSUSED + 1][CHANNELSUSED + 1];         // Trims to store
 uint8_t       Exponential[BANKSUSED + 1][CHANNELSUSED + 1];   // Exponential
 uint8_t       InterpolationTypes[BANKSUSED + 1][CHANNELSUSED + 1];
 
-uint8_t  LastMixNumber    = 1;
-uint8_t  MixNumber        = 0;
+
+
 uint8_t  CurrentView      = FRONTVIEW;
 uint8_t  SavedCurrentView = FRONTVIEW;
+
+
 uint64_t DefaultPipe      = DEFAULTPIPEADDRESS;  //          Default Radio pipe address
 uint64_t TeensyMACAddPipe = DEFAULTPIPEADDRESS;  //          New Radio pipe address for binding will come from MAC address
 char     TextIn[CHARSMAX + 2];                   //          Spare space
@@ -201,7 +259,7 @@ uint8_t  PacketsHistoryBuffer[PERFECTPACKETSPERSECOND * MAXSHOWCOMMSSESCONDS]; /
 uint16_t PacketsHistoryIndex    = 0;
 
 uint8_t  PacketNumber           = 0;
-uint8_t  GPSMarkHere            = 0;
+
 uint8_t  PreviousTrim           = 255;
 uint32_t TrimTimer              = 0;
 uint16_t TrimRepeatSpeed        = 600;
@@ -232,9 +290,7 @@ const uint8_t AckPayloadSize = sizeof(AckPayload); // i.e. 6
 
 // *****************************************************************************************************************
 
-uint32_t SlowTime[16];                                      //    For timing slow servos
-uint8_t  StepSize[16] = {0,0,0,0,0,0,0,0,5,25,5,25,5,25,5,25};  //    How far to move each time on slow servos
-uint16_t CurrentPosition[UNCOMPRESSEDWORDS];                //    Position from which a slow servo started (0 = not started yet)
+
 uint16_t SendBuffer[UNCOMPRESSEDWORDS];                     //    Data to send to rx (16 words)
 uint16_t PPMBuffer[UNCOMPRESSEDWORDS];                      //   
 uint16_t ShownBuffer[UNCOMPRESSEDWORDS];                    //    Data shown before
@@ -329,27 +385,9 @@ uint32_t  GapSum                      = 0;
 uint32_t  GapStart                    = 0;
 uint32_t  ThisGap                     = 0;
 uint32_t  GapCount                    = 0;
-float     GPSLatitude                 = 0;
-float     GPSLongitude                = 0;
-float     GPSMarkLatitude             = 0;
-float     GPSMarkLongitude            = 0;
-float     GPSAngle                    = 0;
-bool      GpsFix                      = 0;
-uint8_t   GPSSatellites               = 0;
-uint16_t  GPSSpeed                    = 0;
-uint16_t  GPSMaxSpeed                 = 0;
-uint8_t   GPSHours                    = 0;
-uint8_t   GPSMins                     = 0;
-uint8_t   GPSSecs                     = 0;
-uint8_t   GPSDay                      = 0;
-uint8_t   GPSMonth                    = 0;
-uint8_t   GPSYear                     = 0;
-float     GPSAltitude                 = 0;
-float     GPSMaxaltitude              = 0;
-float     GPSGroundAltitude           = 0;
-float     GPSDistanceTo               = 0;
-float     GPSCourseTo                 = 0;
-float     GPSMaxDistance              = 0;
+
+
+
 File      ModelsFileNumber;
 Adafruit_INA219 ina219;
 char     SingleModelFile[40];
@@ -437,14 +475,6 @@ bool     LogRXSwaps       = false;
 bool     ThereIsMoreToSee = false;
 bool     UseLog           = false;
 
-uint8_t   Gsecond;   // = tm.Second; // 0-59
-uint8_t   Gminute;   // = tm.Minute; // 0-59
-uint8_t   Ghour;     // = tm.Hour;   // 0-23
-uint8_t   GweekDay;  // = tm.Wday;   // 1-7
-uint8_t   GmonthDay; // = tm.Day;    // 1-31
-uint8_t   Gmonth;    // = tm.Month;  // 1-12
-uint8_t   Gyear;     // = tm.Year;   // 0-99
-bool      GPSTimeSynched    = false;
 
 uint32_t  SwapWaveBandTimer = 0;
 uint8_t   UkRulesCounter    = 0;
@@ -1923,9 +1953,9 @@ FASTRUN void ShowComms()
             }
             snprintf(Vbuf, 3, "%d", GPSSatellites);
             SendText(Sat, Vbuf);
-            snprintf(Vbuf, 10, "%f", GPSLongitude);
+            snprintf(Vbuf, 10, "%f", GPSspace::GPSLongitude);
             SendText(Lon, Vbuf);
-            snprintf(Vbuf, 10, "%f", GPSLatitude);
+            snprintf(Vbuf, 10, "%f", GPSspace::GPSLatitude);
             SendText(Lat, Vbuf);
             snprintf(Vbuf, 7, "%d", int(GPSAngle));
             SendText(Bear, Vbuf);
@@ -2392,18 +2422,18 @@ void  GetCurveDots(uint16_t OutputChannel, uint16_t TheRate)
 
 void     DoSlowServos() {                                                           // 
     for (int i = 0; i < 16; ++i) {                                                  // Test every channel
-        if (StepSize[i] < 100) {                                                    // If StepSize = 100, use full speed. No slowing
-            if ((millis() - SlowTime[i]) > 10) {                                    // This next part runs only 100 times per second
-                SlowTime[i] = millis();                                             // Store start time of this iteration
-                if (CurrentPosition[i] == 0)  CurrentPosition[i] = SendBuffer[i];   // Must start somewhere   
-                int  distance  = SendBuffer[i] - CurrentPosition[i];                // Define how far to move
-                int  SSize     = StepSize[i];                                       // Get step size
+        if (SlowServos::StepSize[i] < 100) {                                                    // If SlowServos::StepSize = 100, use full speed. No slowing
+            if ((millis() - SlowServos::SlowTime[i]) > 10) {                                    // This next part runs only 100 times per second
+                SlowServos::SlowTime[i] = millis();                                             // Store start time of this iteration
+                if (SlowServos::CurrentPosition[i] == 0)  SlowServos::CurrentPosition[i] = SendBuffer[i];   // Must start somewhere   
+                int  distance  = SendBuffer[i] - SlowServos::CurrentPosition[i];                // Define how far to move
+                int  SSize     = SlowServos::StepSize[i];                                       // Get step size
                 if (SSize > abs(distance)) SSize = 1;                               // This avoids overshooting the limit
                 if (distance < 0) SSize = -SSize;                                   // Negative?
                 if (!distance) SSize = 0;                                           // Already arrived?
-                CurrentPosition[i] += SSize;                                        // Move Current Position a little bit towards goal
+                SlowServos::CurrentPosition[i] += SSize;                                        // Move Current Position a little bit towards goal
             }
-        SendBuffer[i] = CurrentPosition[i];                                         // Modify next servo position
+        SendBuffer[i] = SlowServos::CurrentPosition[i];                                         // Modify next servo position
         }
     }
 }
@@ -2840,7 +2870,7 @@ void CheckSavedTrimValues()
 
 /*********************************************************************************************************************************/
 void  CheckStepSizes(){ // for slow servos 
-    for (int i = 0; i < 16; ++i) if (StepSize[i] > 100) StepSize[i] = 100;
+    for (int i = 0; i < 16; ++i) if (SlowServos::StepSize[i] > 100) SlowServos::StepSize[i] = 100;
   }
 /*********************************************************************************************************************************/
 
@@ -3050,7 +3080,7 @@ bool ReadOneModel(uint32_t Mnum)
     }
     CheckBanksInUse();
     for (i = 0; i < 16; ++i){
-           StepSize[i] =  SDRead8BITS(SDCardAddress);
+           SlowServos::StepSize[i] =  SDRead8BITS(SDCardAddress);
           ++SDCardAddress;
      }
     CheckStepSizes();
@@ -4187,7 +4217,7 @@ void SaveOneModel(uint32_t mnum)
              ++SDCardAddress;
     }
     for (i = 0; i < 16; ++i){
-         SDUpdate8BITS(SDCardAddress, StepSize[i]); 
+         SDUpdate8BITS(SDCardAddress, SlowServos::StepSize[i]); 
         ++SDCardAddress;
      }
 
@@ -4723,7 +4753,7 @@ void SetDefaultValues()
          BanksInUse[i] = i+4;
     }
     for (int i = 0; i < 16; ++i){
-        StepSize[i] = 100;
+        SlowServos::StepSize[i] = 100;
     }
     ModelDefined  = 42;
     SaveOneModel(ModelNumber);
@@ -6993,7 +7023,7 @@ void StartSlowView(){
      UpdateButtonLabels();
      UpdateModelsNameEveryWhere();
      for (int i = 0; i < 16; ++i){
-                SendValue(ns[i], StepSize[i]);
+                SendValue(ns[i], SlowServos::StepSize[i]);
      }
 }
 /******************************************************************************************************************************/
@@ -7003,7 +7033,7 @@ void EndSlowView(){
     char     Progress[]            = "Progress";
     SendCommand(ProgressStart);
     for (int i = 0; i < 16; ++i){
-         StepSize[i] = GetValue(ns[i]);
+         SlowServos::StepSize[i] = GetValue(ns[i]);
          SendValue(Progress,i * (100 / 16));
      }
      CheckStepSizes();
@@ -7801,7 +7831,7 @@ FASTRUN void ButtonWasPressed()
     
         
         if (InStrng(Mark, TextIn) > 0) {
-            GPSMarkHere    = 255; // Mark this location
+            GPSspace::GPSMarkHere    = 255; // Mark this location
             GPSMaxDistance = 0;
             ClearText();
             return;
@@ -8766,10 +8796,10 @@ void LoadPacketData()
             SendBuffer[CHANNELSUSED + 2] = TXSetupValues::Qnh & 0x00ff; // (LowByte)  Qnh is current atmospheric pressure at sea level here (an aviation term)
             break;
         case 3:
-            if (GPSMarkHere) {
+            if (GPSspace::GPSMarkHere) {
                 SendBuffer[CHANNELSUSED + 1] = 0;
-                SendBuffer[CHANNELSUSED + 2] = GPSMarkHere;
-                GPSMarkHere                  = 0;
+                SendBuffer[CHANNELSUSED + 2] = GPSspace::GPSMarkHere;
+                GPSspace::GPSMarkHere                  = 0;
             }
             break;
         case 4:
@@ -9592,10 +9622,10 @@ FASTRUN void ParseAckPayload()
             GetTemperature();
             break;
         case 8:
-            GPSLatitude = GetFromAckPayload();
+            GPSspace::GPSLatitude = GetFromAckPayload();
             break;
         case 9:
-            GPSLongitude = GetFromAckPayload();
+            GPSspace::GPSLongitude = GetFromAckPayload();
             break;
         case 10:
             GPSAngle = GetFromAckPayload();
