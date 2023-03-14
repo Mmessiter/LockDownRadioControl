@@ -187,53 +187,54 @@ namespace SlowServos
 
 } // namespace SlowServos
 
+/***********************************************************************************************************/
+
 namespace GPSspace
 {
     uint8_t   GPSMarkHere                 = 0;
     float     GPSLatitude                 = 0;
     float     GPSLongitude                = 0;
-   // float     GPSMarkLatitude             = 0; // heer!
-
+    float     GPSAngle                    = 0;
+    bool      GpsFix                      = 0;
+    uint8_t   GPSSatellites               = 0;
+    uint16_t  GPSSpeed                    = 0;
+    uint16_t  GPSMaxSpeed                 = 0;
+    uint8_t   GPSHours                    = 0;
+    uint8_t   GPSMins                     = 0;
+    uint8_t   GPSSecs                     = 0;
+    uint8_t   GPSDay                      = 0;
+    uint8_t   GPSMonth                    = 0;
+    uint8_t   GPSYear                     = 0;
+    float     GPSAltitude                 = 0;
+    float     GPSMaxaltitude              = 0;
+    float     GPSGroundAltitude           = 0;
+    float     GPSDistanceTo               = 0;
+    float     GPSCourseTo                 = 0;
+    float     GPSMaxDistance              = 0;
+    uint8_t   Gsecond;   // = tm.Second; // 0-59
+    uint8_t   Gminute;   // = tm.Minute; // 0-59
+    uint8_t   Ghour;     // = tm.Hour;   // 0-23
+    uint8_t   GweekDay;  // = tm.Wday;   // 1-7
+    uint8_t   GmonthDay; // = tm.Day;    // 1-31
+    uint8_t   Gmonth;    // = tm.Month;  // 1-12
+    uint8_t   Gyear;     // = tm.Year;   // 0-99
+    bool      GPSTimeSynched    = false;
+   
 }// namespace GPSspace
 
+/***********************************************************************************************************/
 
 
-float     GPSMarkLongitude            = 0;
-float     GPSAngle                    = 0;
-bool      GpsFix                      = 0;
-uint8_t   GPSSatellites               = 0;
-uint16_t  GPSSpeed                    = 0;
-uint16_t  GPSMaxSpeed                 = 0;
-uint8_t   GPSHours                    = 0;
-uint8_t   GPSMins                     = 0;
-uint8_t   GPSSecs                     = 0;
-uint8_t   GPSDay                      = 0;
-uint8_t   GPSMonth                    = 0;
-uint8_t   GPSYear                     = 0;
-float     GPSAltitude                 = 0;
-float     GPSMaxaltitude              = 0;
-float     GPSGroundAltitude           = 0;
-float     GPSDistanceTo               = 0;
-float     GPSCourseTo                 = 0;
-float     GPSMaxDistance              = 0;
-uint8_t   Gsecond;   // = tm.Second; // 0-59
-uint8_t   Gminute;   // = tm.Minute; // 0-59
-uint8_t   Ghour;     // = tm.Hour;   // 0-23
-uint8_t   GweekDay;  // = tm.Wday;   // 1-7
-uint8_t   GmonthDay; // = tm.Day;    // 1-31
-uint8_t   Gmonth;    // = tm.Month;  // 1-12
-uint8_t   Gyear;     // = tm.Year;   // 0-99
-bool      GPSTimeSynched    = false;
-
-
+uint8_t  PreviousTrim           = 255;
+uint32_t TrimTimer              = 0;
+uint16_t TrimRepeatSpeed        = 600;
+uint16_t DefaultTrimRepeatSpeed = 600;
 
 
 
 uint8_t  LastMixNumber    = 1;
 uint8_t  MixNumber        = 0;
 uint8_t  Mixes[MAXMIXES + 1][CHANNELSUSED + 1];          // 17 possible elements per mix. NOTHING to do with channels count!!!
-
-
 
 RF24          Radio1(CE_PIN, CSN_PIN);
 WDT_T4<WDT3>  TeensyWatchDog;
@@ -257,13 +258,11 @@ char     TextIn[CHARSMAX + 2];                   //          Spare space
 
 uint8_t  PacketsHistoryBuffer[PERFECTPACKETSPERSECOND * MAXSHOWCOMMSSESCONDS]; // Here we record some history
 uint16_t PacketsHistoryIndex    = 0;
-
 uint8_t  PacketNumber           = 0;
 
-uint8_t  PreviousTrim           = 255;
-uint32_t TrimTimer              = 0;
-uint16_t TrimRepeatSpeed        = 600;
-uint16_t DefaultTrimRepeatSpeed = 600;
+
+
+
 char     na[]                   = "";
 bool     NewModelMemoryWasSaved = false; 
 
@@ -772,13 +771,13 @@ FLASHMEM void SetTheRTC()
     uint8_t zero = 0x00;
     Wire.beginTransmission(DS1307_ADDRESS);
     Wire.write(zero); // Stop the oscillator
-    Wire.write(decToBcd(Gsecond));
-    Wire.write(decToBcd(Gminute));
-    Wire.write(decToBcd(Ghour));
-    Wire.write(decToBcd(GweekDay));
-    Wire.write(decToBcd(GmonthDay));
-    Wire.write(decToBcd(Gmonth));
-    Wire.write(decToBcd(Gyear));
+    Wire.write(decToBcd(GPSspace::Gsecond));
+    Wire.write(decToBcd(GPSspace::Gminute));
+    Wire.write(decToBcd(GPSspace::Ghour));
+    Wire.write(decToBcd(GPSspace::GweekDay));
+    Wire.write(decToBcd(GPSspace::GmonthDay));
+    Wire.write(decToBcd(GPSspace::Gmonth));
+    Wire.write(decToBcd(GPSspace::Gyear));
     Wire.write(zero); //  Re-start it
     Wire.endTransmission();
 }
@@ -793,25 +792,25 @@ void ReadTheRTC()
     uint8_t monthDay = tm.Day;    // 1-31
     uint8_t month    = tm.Month;  // 1-12
     uint8_t year     = tm.Year;   // 0-99
-    Gsecond          = second;
-    Gminute          = minute;
-    Ghour            = hour;
-    GweekDay         = weekDay;
-    GmonthDay        = monthDay;
-    Gmonth           = month;
-    Gyear            = year - 30; // ???
+    GPSspace::Gsecond          = second;
+    GPSspace::Gminute          = minute;
+    GPSspace::Ghour            = hour;
+    GPSspace::GweekDay         = weekDay;
+    GPSspace::GmonthDay        = monthDay;
+    GPSspace::Gmonth           = month;
+    GPSspace::Gyear            = year - 30; // ???
 }
 /*********************************************************************************************************************************/
 void SynchRTCwithGPSTime()
 { // This function corrects the time and the date.
-    if (!GPSTimeSynched) {
-        GPSTimeSynched = true;
-        Gsecond        = GPSSecs;
-        Gminute        = GPSMins;
-        Ghour          = GPSHours;
-        GmonthDay      = GPSDay;
-        Gmonth         = GPSMonth;
-        Gyear          = GPSYear + 1744; // ????
+    if (!GPSspace::GPSTimeSynched) {
+        GPSspace::GPSTimeSynched = true;
+        GPSspace::Gsecond        = GPSspace::GPSSecs;
+        GPSspace::Gminute        = GPSspace::GPSMins;
+        GPSspace::Ghour          = GPSspace::GPSHours;
+        GPSspace::GmonthDay      = GPSspace::GPSDay;
+        GPSspace::Gmonth         = GPSspace::GPSMonth;
+        GPSspace::Gyear          = GPSspace::GPSYear + 1744; // ????
         SetTheRTC();
     }
 }
@@ -820,31 +819,31 @@ void SynchRTCwithGPSTime()
 void AdjustDateTime(uint8_t MinChange, uint8_t HourChange, uint8_t YearChange, uint8_t MonthChange, uint8_t DateChange)
 {
     ReadTheRTC();
-    Gminute += MinChange;
-    if (Gminute > 59) {
-        Gminute = 0;
-        if (Ghour < 23) {
-            ++Ghour;
+    GPSspace::Gminute += MinChange;
+    if (GPSspace::Gminute > 59) {
+        GPSspace::Gminute = 0;
+        if (GPSspace::Ghour < 23) {
+            ++GPSspace::Ghour;
         }
     }
-    if (Gminute < 1) {
-        Gminute = 0;
-        if (Ghour > 0) {
-            --Ghour;
+    if (GPSspace::Gminute < 1) {
+        GPSspace::Gminute = 0;
+        if (GPSspace::Ghour > 0) {
+            --GPSspace::Ghour;
         }
     }
-    Ghour += HourChange;
-    if (Ghour < 0) Ghour = 0;
-    if (Ghour > 23) Ghour = 23;
-    Gyear += YearChange;
-    if (Gyear < 0) Gyear = 0;
-    if (Gyear > 99) Gyear = 99;
-    Gmonth += MonthChange;
-    if (Gmonth < 1) Gmonth = 1;
-    if (Gmonth > 12) Gmonth = 12;
-    GmonthDay += DateChange;
-    if (GmonthDay < 1) GmonthDay = 1;
-    if (GmonthDay > 31) GmonthDay = 31;
+    GPSspace::Ghour += HourChange;
+    if (GPSspace::Ghour < 0) GPSspace::Ghour = 0;
+    if (GPSspace::Ghour > 23) GPSspace::Ghour = 23;
+    GPSspace::Gyear += YearChange;
+    if (GPSspace::Gyear < 0) GPSspace::Gyear = 0;
+    if (GPSspace::Gyear > 99) GPSspace::Gyear = 99;
+    GPSspace::Gmonth += MonthChange;
+    if (GPSspace::Gmonth < 1) GPSspace::Gmonth = 1;
+    if (GPSspace::Gmonth > 12) GPSspace::Gmonth = 12;
+    GPSspace::GmonthDay += DateChange;
+    if (GPSspace::GmonthDay < 1) GPSspace::GmonthDay = 1;
+    if (GPSspace::GmonthDay > 31) GPSspace::GmonthDay = 31;
     SetTheRTC();
 }
 /*********************************************************************************************************************************/
@@ -1945,33 +1944,33 @@ FASTRUN void ShowComms()
             SendValue(DataView_lps, TxDataView::TotalLostPackets / 2);
         }
         if (CurrentView == GPSVIEW ) {
-            if (GpsFix) { // if no fix, then leave display as before
+            if (GPSspace::GpsFix) { // if no fix, then leave display as before
                 SendText(Fix, yes);
             }
             else {
                 SendText(Fix, no);
             }
-            snprintf(Vbuf, 3, "%d", GPSSatellites);
+            snprintf(Vbuf, 3, "%d", GPSspace::GPSSatellites);
             SendText(Sat, Vbuf);
             snprintf(Vbuf, 10, "%f", GPSspace::GPSLongitude);
             SendText(Lon, Vbuf);
             snprintf(Vbuf, 10, "%f", GPSspace::GPSLatitude);
             SendText(Lat, Vbuf);
-            snprintf(Vbuf, 7, "%d", int(GPSAngle));
+            snprintf(Vbuf, 7, "%d", int(GPSspace::GPSAngle));
             SendText(Bear, Vbuf);
-            snprintf(Vbuf, 6, "%d", (int)GPSDistanceTo);
+            snprintf(Vbuf, 6, "%d", (int)GPSspace::GPSDistanceTo);
             SendText(Dist, Vbuf);
-            snprintf(Vbuf, 4, "%d", (int)GPSSpeed);
+            snprintf(Vbuf, 4, "%d", (int)GPSspace::GPSSpeed);
             SendText(Sped, Vbuf);
-            snprintf(Vbuf, 4, "%d", (int)GPSMaxSpeed);
+            snprintf(Vbuf, 4, "%d", (int)GPSspace::GPSMaxSpeed);
             SendText(MxS, Vbuf);
-            snprintf(Vbuf, 4, "%d", (int)GPSAltitude);
+            snprintf(Vbuf, 4, "%d", (int)GPSspace::GPSAltitude);
             SendText(ALT, Vbuf);
-            snprintf(Vbuf, 4, "%d", (int)GPSMaxaltitude);
+            snprintf(Vbuf, 4, "%d", (int)GPSspace::GPSMaxaltitude);
             SendText(MALT, Vbuf);
-            snprintf(Vbuf, 4, "%d", (int)GPSCourseTo);
+            snprintf(Vbuf, 4, "%d", (int)GPSspace::GPSCourseTo);
             SendText(BTo, Vbuf);
-            snprintf(Vbuf, 6, "%d", (int)GPSMaxDistance);
+            snprintf(Vbuf, 6, "%d", (int)GPSspace::GPSMaxDistance);
             SendText(Mxd, Vbuf);
         }
         CheckScreenTime();
@@ -5850,10 +5849,10 @@ void ZeroDataScreen()
     GapCount           = 0;
     GapStart           = 0;
     TxDataView::RXMAXModelAltitude = 0;
-    GPSMaxaltitude     = 0;
+    GPSspace::GPSMaxaltitude     = 0;
     ThisGap            = 0;
-    GPSMaxDistance     = 0;
-    GPSMaxSpeed        = 0;
+    GPSspace::GPSMaxDistance     = 0;
+    GPSspace::GPSMaxSpeed        = 0;
     TxDataView::SavedRadioSwaps    = TxDataView::RadioSwaps; // Cannot easily zero these, so do a subtraction
     TxDataView::SavedRX1TotalTime  = TxDataView::RX1TotalTime;
     TxDataView::SavedRX2TotalTime  = TxDataView::RX2TotalTime;
@@ -7832,7 +7831,7 @@ FASTRUN void ButtonWasPressed()
         
         if (InStrng(Mark, TextIn) > 0) {
             GPSspace::GPSMarkHere    = 255; // Mark this location
-            GPSMaxDistance = 0;
+            GPSspace::GPSMaxDistance = 0;
             ClearText();
             return;
         }
@@ -7930,13 +7929,13 @@ FASTRUN void ButtonWasPressed()
             else {
                 TxDataView::GroundModelAltitude = 0;
             }
-            if (!GPSGroundAltitude) {
-                GPSGroundAltitude = GPSAltitude;
+            if (!GPSspace::GPSGroundAltitude) {
+                GPSspace::GPSGroundAltitude = GPSspace::GPSAltitude;
             }
             else {
-                GPSGroundAltitude = 0;
+                GPSspace::GPSGroundAltitude = 0;
             }
-            GPSMaxaltitude     = 0;
+            GPSspace::GPSMaxaltitude     = 0;
             TxDataView::RXMAXModelAltitude = 0;
             ClearText();
             return;
@@ -9386,16 +9385,16 @@ FASTRUN float GetFromAckPayload()
 /************************************************************************************************************/
 void GetTimeFromAckPayload()
 {
-    GPSSecs  = AckPayload.Byte1;
-    GPSMins  = AckPayload.Byte2;
-    GPSHours = AckPayload.Byte3;
+    GPSspace::GPSSecs  = AckPayload.Byte1;
+    GPSspace::GPSMins  = AckPayload.Byte2;
+    GPSspace::GPSHours = AckPayload.Byte3;
 }
 /************************************************************************************************************/
 void GetDateFromAckPayload()
 {
-    GPSDay   = AckPayload.Byte1;
-    GPSMonth = AckPayload.Byte2;
-    GPSYear  = AckPayload.Byte3;
+    GPSspace::GPSDay   = AckPayload.Byte1;
+    GPSspace::GPSMonth = AckPayload.Byte2;
+    GPSspace::GPSYear  = AckPayload.Byte3;
 }
 /************************************************************************************************************/
 void GetAltitude()
@@ -9628,29 +9627,29 @@ FASTRUN void ParseAckPayload()
             GPSspace::GPSLongitude = GetFromAckPayload();
             break;
         case 10:
-            GPSAngle = GetFromAckPayload();
+            GPSspace::GPSAngle = GetFromAckPayload();
             break;
         case 11:
-            GPSSpeed = GetFromAckPayload();
-            if (GPSMaxSpeed < GPSSpeed) GPSMaxSpeed = GPSSpeed;
+            GPSspace::GPSSpeed = GetFromAckPayload();
+            if (GPSspace::GPSMaxSpeed < GPSspace::GPSSpeed) GPSspace::GPSMaxSpeed = GPSspace::GPSSpeed;
             break;
         case 12:
-            GpsFix = GetFromAckPayload();
+            GPSspace::GpsFix = GetFromAckPayload();
             break;
         case 13:
-            GPSAltitude = GetFromAckPayload() - GPSGroundAltitude;
-            if (GPSAltitude < 0) GPSAltitude = 0;
-            if (GPSMaxaltitude < GPSAltitude) GPSMaxaltitude = GPSAltitude;
+            GPSspace::GPSAltitude = GetFromAckPayload() - GPSspace::GPSGroundAltitude;
+            if (GPSspace::GPSAltitude < 0) GPSspace::GPSAltitude = 0;
+            if (GPSspace::GPSMaxaltitude < GPSspace::GPSAltitude) GPSspace::GPSMaxaltitude = GPSspace::GPSAltitude;
             break;
         case 14:
-            GPSDistanceTo = GetFromAckPayload();
-            if (GPSMaxDistance < GPSDistanceTo) GPSMaxDistance = GPSDistanceTo;
+            GPSspace::GPSDistanceTo = GetFromAckPayload();
+            if (GPSspace::GPSMaxDistance < GPSspace::GPSDistanceTo) GPSspace::GPSMaxDistance = GPSspace::GPSDistanceTo;
             break;
         case 15:
-            GPSCourseTo = GetFromAckPayload();
+            GPSspace::GPSCourseTo = GetFromAckPayload();
             break;
         case 16:
-            GPSSatellites = (uint8_t)GetFromAckPayload();
+            GPSspace::GPSSatellites = (uint8_t)GetFromAckPayload();
             break;
         case 17:
             GetDateFromAckPayload();
@@ -9658,12 +9657,12 @@ FASTRUN void ParseAckPayload()
         case 18:
             GetTimeFromAckPayload();
             ReadTheRTC();
-            if (GPSDay   != GmonthDay) GPSTimeSynched = false;
-            if (GPSMonth != GPSMonth)  GPSTimeSynched = false;
-            if (GPSMins  != Gminute)   GPSTimeSynched = false;
-            if (GPSHours != Ghour)     GPSTimeSynched = false;
-            if (GPSSecs  != Gsecond)   GPSTimeSynched = false;
-            if (GpsFix) SynchRTCwithGPSTime();
+            if (GPSspace::GPSDay   != GPSspace::GmonthDay) GPSspace::GPSTimeSynched = false;
+            if (GPSspace::GPSMonth != GPSspace::GPSMonth)  GPSspace::GPSTimeSynched = false;
+            if (GPSspace::GPSMins  != GPSspace::Gminute)   GPSspace::GPSTimeSynched = false;
+            if (GPSspace::GPSHours != GPSspace::Ghour)     GPSspace::GPSTimeSynched = false;
+            if (GPSspace::GPSSecs  != GPSspace::Gsecond)   GPSspace::GPSTimeSynched = false;
+            if (GPSspace::GpsFix) SynchRTCwithGPSTime();
             break;
         default:
             break;
