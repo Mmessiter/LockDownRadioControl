@@ -396,14 +396,16 @@
 /****************************** namespaces that are shared ( Will expand) *********************************/
 /**********************************************************************************************************/
 
-namespace TxDataView{
-  extern uint32_t    TotalLostPackets;
-}
 
 namespace TXSetupValues{
-    extern uint8_t   ConnectionAssessSeconds; 
+    extern uint8_t   ConnectionAssessSeconds;
     extern uint32_t  Inactivity_Timeout;
-}
+    } // namespace TXSetupValues
+
+
+namespace TxDataView{
+    extern uint32_t TotalLostPackets;
+    } // namespace TxDataView
 
 namespace ConnectionStatus{
     extern bool      Connected;

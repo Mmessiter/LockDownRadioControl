@@ -147,8 +147,7 @@ namespace ConnectionStatus{
 /****************************************************************************************************************/
 
 namespace TxDataView{ // heer
-    uint16_t PacketsPerSecond             = 0;
-    uint32_t TotalLostPackets             = 0;
+  
     char      ModelAltitude[9]            = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00};
     char      Maxaltitude[9]              = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00};
     char      ModelTempRX[9]              = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00};
@@ -156,6 +155,8 @@ namespace TxDataView{ // heer
     char      TransmitterVersionNumber[9] = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00};
     char      ModelVolts[9]               = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00};
     char      ThisRadio[4]                = "0 ";
+    uint16_t  PacketsPerSecond             = 0;
+    uint32_t  TotalLostPackets             = 0;
     uint32_t  GapLongest                   = 0;
     uint16_t  RadioSwaps                   = 0;
     uint16_t  SavedRadioSwaps              = 0;
@@ -351,12 +352,10 @@ float     GPSCourseTo                 = 0;
 float     GPSMaxDistance              = 0;
 File      ModelsFileNumber;
 Adafruit_INA219 ina219;
-
-char SingleModelFile[40];
-bool SingleModelFlag = false;
+char     SingleModelFile[40];
+bool     SingleModelFlag = false;
 bool     ModelsFileOpen = false;
 bool     USE_INA219     = false;
-uint8_t  BindingNow     = 0;
 uint32_t BindingTimer   = 0;
 bool     Switch[8];
 bool     TrimSwitch[8];
@@ -411,8 +410,6 @@ uint8_t      ErrorState      = 0;
 uint16_t XtouchPlace = 0; // Clicked X
 uint16_t YtouchPlace = 0; // Clicked Y
 
-bool BindButton = false;
-
 uint8_t PreviousChannelNumber = 0;
 uint8_t NextChannelNumber     = 0;
 
@@ -462,12 +459,7 @@ uint16_t  ForeGroundColour  = White;
 uint16_t  HighlightColour   = Yellow;
 uint16_t  SpecialColour     = Red;
 bool      Reconnected       = false;
-
-
 bool      RXVoltsDetected   = false;
-
-
-
 uint8_t   AudioVolume       = 50;
 uint32_t  WarningTimer      = 0;
 uint32_t  ScreenTimeTimer   = 0;
@@ -1137,20 +1129,6 @@ void StartInactvityTimeout()
 
 /*********************************************************************************************************************************/
 
-void MakeBindButtonInvisible()
-{
-    if (!ConnectionStatus::ModelMatched) return;
-    if (CurrentView == FRONTVIEW) {
-        char bbiv[] = "vis bind,0";
-        if (BindButton) {
-            SendCommand(bbiv);
-            BindButton = false;
-        }
-    }
-}
-
-/*********************************************************************************************************************************/
-
 uint8_t GetLEDBrightness()
 {
     if (LedIsBlinking) {
@@ -1180,12 +1158,10 @@ void RedLedOn()
         LedWasGreen                                 = false;
         RXVoltsDetected                             = false;
         ModelIdentified                             = false;
-        ConnectionStatus::ModelMatched                                = false;
-        ConnectionStatus::BoundFlag                                   = false;
-        BindButton                                  = false;
-        BindingNow                                  = 0;
+        ConnectionStatus::ModelMatched              = false;
+        ConnectionStatus::BoundFlag                 = false;
         pcount                                      = 0;
-        TxDataView::PacketsPerSecond                            = 0;
+        TxDataView::PacketsPerSecond                = 0;
         LastShowTime                                = 0;
         ModelsMacUnion.Val32[0]                     = 0;
         ModelsMacUnion.Val32[1]                     = 0;
@@ -1241,7 +1217,6 @@ void GreenLedOn()
         analogWrite(REDLED, 0);
         analogWrite(GREENLED, GetLEDBrightness()); // Brightness is a function of maybe blinking
         if (GetLEDBrightness()) LedWasGreen = true;
-        MakeBindButtonInvisible();
         Reconnected = false;
     }
 }
@@ -1901,7 +1876,6 @@ FASTRUN void ShowComms()
                 if (ConnectionStatus::BoundFlag) {
                     if (!BuddyMaster) {
                         if (!Reconnected) {
-                            MakeBindButtonInvisible();
                             ShowConnectionQuality();
                             Reconnected = true;
                         }
@@ -5180,7 +5154,6 @@ FASTRUN void DisplayCurve()
 
 void BindNow() // Bind button was pressed 
 {
-    BindingNow                   = 1;
     ConnectionStatus::BoundFlag                    = true;
     ConnectionStatus::ModelMatched                 = true;
     ConnectionStatus::Connected                    = true;
@@ -8776,10 +8749,8 @@ void LoadPacketData()
     SendBuffer[CHANNELSUSED + 2] = 0;
     switch (PacketNumber) {
         case 0:
-           //  SendBuffer[CHANNELSUSED + 2] = BindingNow;
-           // if (BindingNow == 1) {
-           //     BindingNow  = 2;
-           // }
+           //  SendBuffer[CHANNELSUSED + 2] = ??? ; // spare
+           
             if (((millis() - FailSafeTimer) > 1500) && SaveFailSafeNow) {
                 SendBuffer[CHANNELSUSED + 1] = SaveFailSafeNow; // FailSafeSaveMoment
                 SaveFailSafeNow              = false;           // once should do it.
@@ -9476,7 +9447,6 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                     
                 }
                 ConnectionStatus::ModelMatched = true;                                      //  It's a match so start flying!
-                BindButton   = true;
                 return;
             } 
             if (ModelsMacUnion.Val64 != ModelsMacUnionSaved.Val64) 
@@ -9490,7 +9460,6 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                         ReadOneModel(ModelNumber);
                         if (ModelsMacUnion.Val64 == ModelsMacUnionSaved.Val64) {
                             ConnectionStatus::ModelMatched = true;
-                            BindButton = true; 
                         }
                     }
                     if (ConnectionStatus::ModelMatched)
