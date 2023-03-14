@@ -154,6 +154,7 @@ namespace TxDataView{ // heer
     char      ModelTempRX[9]              = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00};
     char      ReceiverVersionNumber[9]    = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00};
     char      TransmitterVersionNumber[9] = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00};
+    char      ModelVolts[9]               = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00};
     char      ThisRadio[4]                = "0 ";
     uint32_t  GapLongest                   = 0;
     uint16_t  RadioSwaps                   = 0;
@@ -167,7 +168,12 @@ namespace TxDataView{ // heer
     uint16_t  SavedSbusRepeats             = 0;
     float     VoltsPerCell                 = 0;
     float     RXTemperature                = 0;
+    float     RXModelVolts                 = 0;
+    int       RXModelAltitude              = 0;
+    int       RXMAXModelAltitude           = 0;
+    int       GroundModelAltitude          = 0;
   
+
     } // namespace TxDataView
 
 /***********************************************************************************************************/
@@ -313,17 +319,14 @@ uint8_t   DefaultSwitchNumber[8]      = {SWITCH0, SWITCH1, SWITCH2, SWITCH3, SWI
 bool      DefiningTrims               = false;
 bool      TrimDefined[4]              = {true, true, true, true};
 char      ModelName[30]               = "Untitled";
-
 int       LastLinePosition            = 0;
 uint8_t   RXCellCount                 = 2;
 bool      JustHoppedFlag              = true;
 bool      LostContactFlag             = true;
 uint32_t  RecentPacketsLost           = 0;
 uint32_t  GapSum                      = 0;
-
 uint32_t  GapStart                    = 0;
 uint32_t  ThisGap                     = 0;
-
 uint32_t  GapCount                    = 0;
 float     GPSLatitude                 = 0;
 float     GPSLongitude                = 0;
@@ -346,18 +349,7 @@ float     GPSGroundAltitude           = 0;
 float     GPSDistanceTo               = 0;
 float     GPSCourseTo                 = 0;
 float     GPSMaxDistance              = 0;
-float     RXModelVolts                = 0;
-int       RXModelAltitude             = 0;
-int       RXMAXModelAltitude          = 0;
-int       GroundModelAltitude         = 0;
-
-float     MaxAlt                      = 0;
-
-
-
-char      ModelVolts[8]               = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20};
 File      ModelsFileNumber;
-
 Adafruit_INA219 ina219;
 
 char SingleModelFile[40];
@@ -366,7 +358,6 @@ bool     ModelsFileOpen = false;
 bool     USE_INA219     = false;
 uint8_t  BindingNow     = 0;
 uint32_t BindingTimer   = 0;
-
 bool     Switch[8];
 bool     TrimSwitch[8];
 uint8_t  FMSwitch             = BANKSWITCH;
@@ -1722,7 +1713,7 @@ FASTRUN bool CheckRXVolts()
     char  spaces[]         = "  ";
     char     t6[]             = "t6";
 
-    ReadVolts                = (RXModelVolts * 100) + (RxVoltageCorrection * RXCellCount);
+    ReadVolts                = (TxDataView::RXModelVolts * 100) + (RxVoltageCorrection * RXCellCount);
     GreenPercentBar          = map(ReadVolts, 3.4f * RXCellCount * 100, 4.2f * RXCellCount * 100, 0, 100);
     if (RXVoltsDetected) {
         GreenPercentBar = constrain(GreenPercentBar, 0, 100);
@@ -1733,7 +1724,7 @@ FASTRUN bool CheckRXVolts()
                 SendValue(JRX, GreenPercentBar);  
                 strcat(Str(Vbuf, GreenPercentBar, 0), pc);
                 SendText(RXPC, Vbuf); 
-                strcpy(RXBattInfo, ModelVolts);
+                strcpy(RXBattInfo, TxDataView::ModelVolts);
                 strcat(RXBattInfo, v);
                 dtostrf(TxDataView::VoltsPerCell, 2, 2, Vbuf);
                 strcat(RXBattInfo, Vbuf);
@@ -5855,7 +5846,7 @@ void ZeroDataScreen()
     TxDataView::GapAverage         = 0;
     GapCount           = 0;
     GapStart           = 0;
-    RXMAXModelAltitude = 0;
+    TxDataView::RXMAXModelAltitude = 0;
     GPSMaxaltitude     = 0;
     ThisGap            = 0;
     GPSMaxDistance     = 0;
@@ -7930,11 +7921,11 @@ FASTRUN void ButtonWasPressed()
             return;
         }
         if (InStrng(DataView_AltZero, TextIn) > 0) { //  Set zero altitude on data screen
-            if (!GroundModelAltitude) {
-                GroundModelAltitude = RXModelAltitude;
+            if (!TxDataView::GroundModelAltitude) {
+                TxDataView::GroundModelAltitude = TxDataView::RXModelAltitude;
             }
             else {
-                GroundModelAltitude = 0;
+                TxDataView::GroundModelAltitude = 0;
             }
             if (!GPSGroundAltitude) {
                 GPSGroundAltitude = GPSAltitude;
@@ -7943,7 +7934,7 @@ FASTRUN void ButtonWasPressed()
                 GPSGroundAltitude = 0;
             }
             GPSMaxaltitude     = 0;
-            RXMAXModelAltitude = 0;
+            TxDataView::RXMAXModelAltitude = 0;
             ClearText();
             return;
         }
@@ -9408,10 +9399,10 @@ void GetDateFromAckPayload()
 /************************************************************************************************************/
 void GetAltitude()
 {
-    RXModelAltitude = int(GetFromAckPayload()) - GroundModelAltitude;
-    if (RXMAXModelAltitude < RXModelAltitude) RXMAXModelAltitude = RXModelAltitude;
-    snprintf(TxDataView::Maxaltitude, 5, "%d", RXMAXModelAltitude);
-    snprintf(TxDataView::ModelAltitude, 5, "%d", RXModelAltitude);
+    TxDataView::RXModelAltitude = int(GetFromAckPayload()) - TxDataView::GroundModelAltitude;
+    if (TxDataView::RXMAXModelAltitude < TxDataView::RXModelAltitude) TxDataView::RXMAXModelAltitude = TxDataView::RXModelAltitude;
+    snprintf(TxDataView::Maxaltitude, 5, "%d", TxDataView::RXMAXModelAltitude);
+    snprintf(TxDataView::ModelAltitude, 5, "%d", TxDataView::RXModelAltitude);
 }
 /************************************************************************************************************/
 void GetTemperature()
@@ -9617,12 +9608,12 @@ FASTRUN void ParseAckPayload()
             TxDataView::RX2TotalTime = GetFromAckPayload();
             break;
         case 5:
-            RXModelVolts    = GetFromAckPayload();
+            TxDataView::RXModelVolts    = GetFromAckPayload();
             RXVoltsDetected = false;
-            if (RXModelVolts > 0) {
+            if (TxDataView::RXModelVolts > 0) {
                 RXVoltsDetected = true;
-                if (RXCellCount == 12) RXModelVolts *= 2; // voltage divider needed !
-                snprintf(ModelVolts, 5, "%f", RXModelVolts);
+                if (RXCellCount == 12) TxDataView::RXModelVolts *= 2; // voltage divider needed !
+                snprintf(TxDataView::ModelVolts, 5, "%f", TxDataView::RXModelVolts);
             }
             break;
         case 6:
