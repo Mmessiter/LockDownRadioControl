@@ -40,6 +40,20 @@ var namespaces_dup =
       [ "SlowTime", "namespaceSlowServos.html#aac9c3e601168ac41c00046e2d3cd8f93", null ],
       [ "StepSize", "namespaceSlowServos.html#a28f9a42528b1ed753a282a79459cf47a", null ]
     ] ],
+    [ "TrimSpace", "namespaceTrimSpace.html", [
+      [ "CopyTrimsToAll", "namespaceTrimSpace.html#a33c315231707999640a25b9267949589", null ],
+      [ "DefaultTrimRepeatSpeed", "namespaceTrimSpace.html#a3f44e97d5962b3068527507b2cec92ed", null ],
+      [ "DefiningTrims", "namespaceTrimSpace.html#a757e7270a9f1c563f12605aaa6b130d4", null ],
+      [ "InputTrim", "namespaceTrimSpace.html#a49dde5b64a57f70ba34c65ac9a4e3593", null ],
+      [ "PreviousTrim", "namespaceTrimSpace.html#ad0f3b94dc19b0c47729bdb01469065ff", null ],
+      [ "SubTrims", "namespaceTrimSpace.html#abd2a18a814a0df3f2484e3a900f615dd", null ],
+      [ "SubTrimToEdit", "namespaceTrimSpace.html#a2bacee68b246549d1a91ff948b02d220", null ],
+      [ "TrimClicks", "namespaceTrimSpace.html#a1a90d6b97aec3131f50d0a917cd341ba", null ],
+      [ "TrimDefined", "namespaceTrimSpace.html#ac0865134d366d1cf995a9b418a148cc9", null ],
+      [ "TrimMultiplier", "namespaceTrimSpace.html#ab138dd46e544a571c34a9130d9c6392b", null ],
+      [ "TrimRepeatSpeed", "namespaceTrimSpace.html#a620cfafcdb530ce6be3811ada72879c1", null ],
+      [ "TrimTimer", "namespaceTrimSpace.html#a850914b2c2e69d157f6b84fe988487f9", null ]
+    ] ],
     [ "TxDataView", "namespaceTxDataView.html", [
       [ "GapAverage", "namespaceTxDataView.html#a3015bd02e55a9afc70cbfa266e5518f6", null ],
       [ "GapLongest", "namespaceTxDataView.html#ad6535e8d4352e7a67a95cd97996307ae", null ],

@@ -53,7 +53,7 @@ var searchData=
   ['previousnewpipes_50',['PreviousNewPipes',['../radio_8h.html#abd91604fdea68053cd6cb707e4e86271',1,'PreviousNewPipes():&#160;radio.h'],['../TransmitterCode_2src_2main_8cpp.html#abd91604fdea68053cd6cb707e4e86271',1,'PreviousNewPipes():&#160;main.cpp']]],
   ['previousnewpipesindex_51',['PreviousNewPipesIndex',['../radio_8h.html#add4f073372ad9627fcdf944e752b7549',1,'PreviousNewPipesIndex():&#160;radio.h'],['../TransmitterCode_2src_2main_8cpp.html#add4f073372ad9627fcdf944e752b7549',1,'PreviousNewPipesIndex():&#160;main.cpp']]],
   ['previouspowerofftimer_52',['PreviousPowerOffTimer',['../TransmitterCode_2src_2main_8cpp.html#aa0f21f6821e047d682752823a78bbb28',1,'main.cpp']]],
-  ['previoustrim_53',['PreviousTrim',['../TransmitterCode_2src_2main_8cpp.html#a9b9c21290f5fd4339ede092077d4dfad',1,'main.cpp']]],
+  ['previoustrim_53',['PreviousTrim',['../namespaceTrimSpace.html#ad0f3b94dc19b0c47729bdb01469065ff',1,'TrimSpace']]],
   ['previousukrules_54',['PreviousUkRules',['../RadioFunctions_8h.html#a1d77a74eeedd4ed97d38aba4996085b9',1,'RadioFunctions.h']]],
   ['print_5fcounter_55',['print_counter',['../Quadcopter_2src_2main_8cpp.html#a4f2748b40ccb482e2bd1120f31171ad2',1,'main.cpp']]],
   ['progmem_56',['PROGMEM',['../MPU6050__6Axis__MotionApps20_8h.html#ac511f931ef6563ffe04d50234287ecb6',1,'PROGMEM():&#160;MPU6050_6Axis_MotionApps20.h'],['../MPU6050__6Axis__MotionApps__V6__12_8h.html#ac511f931ef6563ffe04d50234287ecb6',1,'PROGMEM():&#160;MPU6050_6Axis_MotionApps_V6_12.h'],['../MPU6050__9Axis__MotionApps41_8h.html#a9ef67ec0ac01c37764f8e0f73b1e4b81',1,'PROGMEM():&#160;MPU6050_9Axis_MotionApps41.h']]],

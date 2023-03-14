@@ -93,7 +93,7 @@ var searchData=
   ['previousnewpipes_90',['PreviousNewPipes',['../radio_8h.html#abd91604fdea68053cd6cb707e4e86271',1,'PreviousNewPipes():&#160;radio.h'],['../TransmitterCode_2src_2main_8cpp.html#abd91604fdea68053cd6cb707e4e86271',1,'PreviousNewPipes():&#160;main.cpp']]],
   ['previousnewpipesindex_91',['PreviousNewPipesIndex',['../radio_8h.html#add4f073372ad9627fcdf944e752b7549',1,'PreviousNewPipesIndex():&#160;radio.h'],['../TransmitterCode_2src_2main_8cpp.html#add4f073372ad9627fcdf944e752b7549',1,'PreviousNewPipesIndex():&#160;main.cpp']]],
   ['previouspowerofftimer_92',['PreviousPowerOffTimer',['../TransmitterCode_2src_2main_8cpp.html#aa0f21f6821e047d682752823a78bbb28',1,'main.cpp']]],
-  ['previoustrim_93',['PreviousTrim',['../TransmitterCode_2src_2main_8cpp.html#a9b9c21290f5fd4339ede092077d4dfad',1,'main.cpp']]],
+  ['previoustrim_93',['PreviousTrim',['../namespaceTrimSpace.html#ad0f3b94dc19b0c47729bdb01469065ff',1,'TrimSpace']]],
   ['previousukrules_94',['PreviousUkRules',['../RadioFunctions_8h.html#a1d77a74eeedd4ed97d38aba4996085b9',1,'RadioFunctions.h']]],
   ['print_5fcounter_95',['print_counter',['../Quadcopter_2src_2main_8cpp.html#a4f2748b40ccb482e2bd1120f31171ad2',1,'main.cpp']]],
   ['printacceldata_96',['printAccelData',['../Quadcopter_2src_2main_8cpp.html#aacb9f52bb633a473b642fed6febab7a7',1,'main.cpp']]],

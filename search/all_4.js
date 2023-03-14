@@ -119,7 +119,7 @@ var searchData=
   ['controlmixer_116',['controlMixer',['../Quadcopter_2src_2main_8cpp.html#a95a8288a82a1168b82213a00cf085a0f',1,'main.cpp']]],
   ['controlrate_117',['controlRATE',['../Quadcopter_2src_2main_8cpp.html#ae7f9ccabb7ac4a5c80d7189d9ba54e13',1,'main.cpp']]],
   ['copycurrentpipe_118',['CopyCurrentPipe',['../radio_8h.html#aa55e98a44b0bcb87b4e318381fece092',1,'radio.h']]],
-  ['copytrimstoall_119',['CopyTrimsToAll',['../TransmitterCode_2src_2main_8cpp.html#ae737f11637caa631c30255f614800ba6',1,'main.cpp']]],
+  ['copytrimstoall_119',['CopyTrimsToAll',['../namespaceTrimSpace.html#a33c315231707999640a25b9267949589',1,'TrimSpace']]],
   ['countdownindex_120',['CountDownIndex',['../TransmitterCode_2src_2main_8cpp.html#adfcd3241fc01c3231bd87d8711016b15',1,'main.cpp']]],
   ['coursetogps_121',['CourseToGPS',['../ReceiverCode_2src_2main_8cpp.html#a1a4e211f9858a5d6d61d11e5679a71f3',1,'CourseToGPS():&#160;main.cpp'],['../radio_8h.html#a1a4e211f9858a5d6d61d11e5679a71f3',1,'CourseToGPS():&#160;main.cpp']]],
   ['createtimedatestamp_122',['CreateTimeDateStamp',['../TransmitterCode_2src_2main_8cpp.html#a1a0a5d73007aba01755e5274d12e6e9b',1,'main.cpp']]],

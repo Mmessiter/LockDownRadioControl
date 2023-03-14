@@ -16,7 +16,7 @@ var searchData=
   ['inactivity_5fstart_13',['Inactivity_Start',['../RadioFunctions_8h.html#a42f848041eda5cd5b98d334ab44a15a1',1,'Inactivity_Start():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a42f848041eda5cd5b98d334ab44a15a1',1,'Inactivity_Start():&#160;main.cpp']]],
   ['inactivity_5ftimeout_14',['Inactivity_Timeout',['../namespaceTXSetupValues.html#a4cfff693cd3842391c89b6bac9342869',1,'TXSetupValues']]],
   ['inputstick_15',['InPutStick',['../TransmitterCode_2src_2main_8cpp.html#ab9d98ee9d26a1af8f20291fd0b717056',1,'main.cpp']]],
-  ['inputtrim_16',['InputTrim',['../TransmitterCode_2src_2main_8cpp.html#aa7902ad07a101f48774eafbde7456c40',1,'main.cpp']]],
+  ['inputtrim_16',['InputTrim',['../namespaceTrimSpace.html#a49dde5b64a57f70ba34c65ac9a4e3593',1,'TrimSpace']]],
   ['int_5fdisable_17',['INT_DISABLE',['../classMPU9250.html#aa0334939994e2e178d3d282469031ae5',1,'MPU9250']]],
   ['int_5fenable_18',['INT_ENABLE',['../classMPU9250.html#a76419818d1ac3740a74f3203a6e4e93a',1,'MPU9250']]],
   ['int_5fpin_5fcfg_19',['INT_PIN_CFG',['../classMPU9250.html#a7e507212aa30920ba9a5c6e93c852b7a',1,'MPU9250']]],

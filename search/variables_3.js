@@ -48,7 +48,7 @@ var searchData=
   ['confirmed_45',['Confirmed',['../TransmitterCode_2src_2main_8cpp.html#a5034d37305ec158f8bc486558dcd8f53',1,'main.cpp']]],
   ['connected_46',['Connected',['../radio_8h.html#a5318db734c71b1b08208ef690f1f0146',1,'Connected():&#160;radio.h'],['../namespaceConnectionStatus.html#a0d63fa366cd0ba674ea659f37fb3531a',1,'ConnectionStatus::Connected()'],['../RadioFunctions_8h.html#a5318db734c71b1b08208ef690f1f0146',1,'Connected():&#160;radio.h']]],
   ['connectionassessseconds_47',['ConnectionAssessSeconds',['../namespaceTXSetupValues.html#a40353edfbb9d1c11328a0e1b4e55ba0e',1,'TXSetupValues::ConnectionAssessSeconds()'],['../RadioFunctions_8h.html#ac58a25a73bcc60b4f892b7ad285d7adc',1,'ConnectionAssessSeconds():&#160;RadioFunctions.h']]],
-  ['copytrimstoall_48',['CopyTrimsToAll',['../TransmitterCode_2src_2main_8cpp.html#ae737f11637caa631c30255f614800ba6',1,'main.cpp']]],
+  ['copytrimstoall_48',['CopyTrimsToAll',['../namespaceTrimSpace.html#a33c315231707999640a25b9267949589',1,'TrimSpace']]],
   ['countdownindex_49',['CountDownIndex',['../TransmitterCode_2src_2main_8cpp.html#adfcd3241fc01c3231bd87d8711016b15',1,'main.cpp']]],
   ['coursetogps_50',['CourseToGPS',['../ReceiverCode_2src_2main_8cpp.html#a1a4e211f9858a5d6d61d11e5679a71f3',1,'CourseToGPS():&#160;main.cpp'],['../radio_8h.html#a1a4e211f9858a5d6d61d11e5679a71f3',1,'CourseToGPS():&#160;main.cpp']]],
   ['current_5ftime_51',['current_time',['../Quadcopter_2src_2main_8cpp.html#a42cc85bc12e25d1c6206a5044d8174e4',1,'main.cpp']]],

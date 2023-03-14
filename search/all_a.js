@@ -56,7 +56,7 @@ var searchData=
   ['initswitchesandtrims_53',['InitSwitchesAndTrims',['../TransmitterCode_2src_2main_8cpp.html#aa43884078cb84d9ae16d8cd6791c7042',1,'main.cpp']]],
   ['inputs_5fview_54',['INPUTS_VIEW',['../RadioFunctions_8h.html#aa2bec27575ce278d56e8d9f844dfe72e',1,'RadioFunctions.h']]],
   ['inputstick_55',['InPutStick',['../TransmitterCode_2src_2main_8cpp.html#ab9d98ee9d26a1af8f20291fd0b717056',1,'main.cpp']]],
-  ['inputtrim_56',['InputTrim',['../TransmitterCode_2src_2main_8cpp.html#aa7902ad07a101f48774eafbde7456c40',1,'main.cpp']]],
+  ['inputtrim_56',['InputTrim',['../namespaceTrimSpace.html#a49dde5b64a57f70ba34c65ac9a4e3593',1,'TrimSpace']]],
   ['instrng_57',['InStrng',['../RadioFunctions_8h.html#a5f109790a6fe0b972a502f3cac4ed1e7',1,'InStrng(char *text1, char *text2):&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a5f109790a6fe0b972a502f3cac4ed1e7',1,'InStrng(char *text1, char *text2):&#160;main.cpp']]],
   ['int_5fdisable_58',['INT_DISABLE',['../classMPU9250.html#aa0334939994e2e178d3d282469031ae5',1,'MPU9250']]],
   ['int_5fenable_59',['INT_ENABLE',['../classMPU9250.html#a76419818d1ac3740a74f3203a6e4e93a',1,'MPU9250']]],
