@@ -5,6 +5,16 @@ var namespaces_dup =
       [ "Connected", "namespaceConnectionStatus.html#a0d63fa366cd0ba674ea659f37fb3531a", null ],
       [ "ModelMatched", "namespaceConnectionStatus.html#ad4d46da7918f6fcd21b861e4cb2bc180", null ]
     ] ],
+    [ "GPSspace", "namespaceGPSspace.html", [
+      [ "GPSLatitude", "namespaceGPSspace.html#a8ff17463b82b261559d4297fd49b5114", null ],
+      [ "GPSLongitude", "namespaceGPSspace.html#a753ed43cccd80208a924f79674517399", null ],
+      [ "GPSMarkHere", "namespaceGPSspace.html#ad745ef9894f29c5362f8f43db4c9eeb1", null ]
+    ] ],
+    [ "SlowServos", "namespaceSlowServos.html", [
+      [ "CurrentPosition", "namespaceSlowServos.html#a5e55ce0c749f0d02fb203b5f6dbef9d2", null ],
+      [ "SlowTime", "namespaceSlowServos.html#aac9c3e601168ac41c00046e2d3cd8f93", null ],
+      [ "StepSize", "namespaceSlowServos.html#a28f9a42528b1ed753a282a79459cf47a", null ]
+    ] ],
     [ "TxDataView", "namespaceTxDataView.html", [
       [ "GapAverage", "namespaceTxDataView.html#a3015bd02e55a9afc70cbfa266e5518f6", null ],
       [ "GapLongest", "namespaceTxDataView.html#ad6535e8d4352e7a67a95cd97996307ae", null ],
