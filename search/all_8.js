@@ -1,9 +1,9 @@
 var searchData=
 [
   ['g_0',['G',['../classMPU9250.html#a9f6f8a4a0e315741e8f2e2d56fbcd8bb',1,'MPU9250']]],
-  ['gapaverage_1',['GapAverage',['../TransmitterCode_2src_2main_8cpp.html#ad656113b013dd90ec2b95f43559ea559',1,'main.cpp']]],
+  ['gapaverage_1',['GapAverage',['../namespaceTxDataView.html#a3015bd02e55a9afc70cbfa266e5518f6',1,'TxDataView']]],
   ['gapcount_2',['GapCount',['../TransmitterCode_2src_2main_8cpp.html#aec39ffe2e010b8a92d8c536c81579586',1,'main.cpp']]],
-  ['gaplongest_3',['GapLongest',['../TransmitterCode_2src_2main_8cpp.html#a0bca236cb88a38219ece770757adcbb2',1,'main.cpp']]],
+  ['gaplongest_3',['GapLongest',['../namespaceTxDataView.html#ad6535e8d4352e7a67a95cd97996307ae',1,'TxDataView']]],
   ['gapstart_4',['GapStart',['../RadioFunctions_8h.html#aefd589330e26c925a4c6f97b6a8cf98e',1,'GapStart():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#aefd589330e26c925a4c6f97b6a8cf98e',1,'GapStart():&#160;main.cpp']]],
   ['gapsum_5',['GapSum',['../RadioFunctions_8h.html#a9942132c4d194a03fc9791cfdf876ac3',1,'GapSum():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a9942132c4d194a03fc9791cfdf876ac3',1,'GapSum():&#160;main.cpp']]],
   ['getaccelbiasx_5fmss_6',['getAccelBiasX_mss',['../classMPU9250.html#ab1216d85d53de15fb1f8ddc1e4424318',1,'MPU9250']]],
@@ -260,8 +260,8 @@ var searchData=
   ['gpsday_257',['GPSDay',['../SensorHubT32_2src_2main_8cpp.html#a882e41768b06234c5a87749be672ea06',1,'GPSDay():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a882e41768b06234c5a87749be672ea06',1,'GPSDay():&#160;main.cpp']]],
   ['gpsdevice_258',['GPSDEVICE',['../SensorHubT32_2src_2main_8cpp.html#ac5dd8c90defc2c0d78e99d2d5c1a0fd1',1,'main.cpp']]],
   ['gpsdistanceto_259',['GPSDistanceTo',['../SensorHubT32_2src_2main_8cpp.html#a54a01db3255a3557b936ef1b8907adce',1,'GPSDistanceTo():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a54a01db3255a3557b936ef1b8907adce',1,'GPSDistanceTo():&#160;main.cpp']]],
-  ['gpsfix_260',['GPSFix',['../SensorHubT32_2src_2main_8cpp.html#a0c32781a3efa57d89a067a024d9e00b9',1,'main.cpp']]],
-  ['gpsfix_261',['GpsFix',['../ReceiverCode_2src_2main_8cpp.html#a86c2722f6c671747562cc504a440e243',1,'GpsFix():&#160;main.cpp'],['../radio_8h.html#a86c2722f6c671747562cc504a440e243',1,'GpsFix():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a86c2722f6c671747562cc504a440e243',1,'GpsFix():&#160;main.cpp']]],
+  ['gpsfix_260',['GpsFix',['../ReceiverCode_2src_2main_8cpp.html#a86c2722f6c671747562cc504a440e243',1,'GpsFix():&#160;main.cpp'],['../radio_8h.html#a86c2722f6c671747562cc504a440e243',1,'GpsFix():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a86c2722f6c671747562cc504a440e243',1,'GpsFix():&#160;main.cpp']]],
+  ['gpsfix_261',['GPSFix',['../SensorHubT32_2src_2main_8cpp.html#a0c32781a3efa57d89a067a024d9e00b9',1,'main.cpp']]],
   ['gpsgroundaltitude_262',['GPSGroundAltitude',['../TransmitterCode_2src_2main_8cpp.html#acaa43339312ef300c8b54ef4fb1af054',1,'main.cpp']]],
   ['gpshours_263',['GPSHours',['../SensorHubT32_2src_2main_8cpp.html#a51b2b206ccc31e2626ee3770cce9fb36',1,'GPSHours():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a51b2b206ccc31e2626ee3770cce9fb36',1,'GPSHours():&#160;main.cpp']]],
   ['gpsi2cbytes_264',['GPSI2CBYTES',['../ReceiverCode_2src_2main_8cpp.html#ab92133bc8cbae639e681505e0679bc28',1,'GPSI2CBYTES():&#160;main.cpp'],['../SensorHubT32_2src_2main_8cpp.html#ab92133bc8cbae639e681505e0679bc28',1,'GPSI2CBYTES():&#160;main.cpp']]],

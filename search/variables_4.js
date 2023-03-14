@@ -7,7 +7,7 @@ var searchData=
   ['defaultswitchnumber_4',['DefaultSwitchNumber',['../TransmitterCode_2src_2main_8cpp.html#a0040cba31e48ea25f429ce1668f8c21f',1,'main.cpp']]],
   ['defaulttrimrepeatspeed_5',['DefaultTrimRepeatSpeed',['../TransmitterCode_2src_2main_8cpp.html#ae6d47d8ad12367e1eb9c48442cfdcf99',1,'main.cpp']]],
   ['definingtrims_6',['DefiningTrims',['../TransmitterCode_2src_2main_8cpp.html#a53d8c3d55ec5cdfd424929c62efe1677',1,'main.cpp']]],
-  ['deltagmt_7',['DeltaGMT',['../TransmitterCode_2src_2main_8cpp.html#ab509e0e6c824d1a805643fbdae7a9a5e',1,'main.cpp']]],
+  ['deltagmt_7',['DeltaGMT',['../namespaceTXSetupValues.html#a1edf69569a73174d4036520252f0792e',1,'TXSetupValues']]],
   ['derivative_5fpitch_8',['derivative_pitch',['../Quadcopter_2src_2main_8cpp.html#a44e4c5ef3fe278fdb756a2f3c895b180',1,'main.cpp']]],
   ['derivative_5froll_9',['derivative_roll',['../Quadcopter_2src_2main_8cpp.html#ab49f64edf6e58c8520f18a1d88eba712',1,'main.cpp']]],
   ['derivative_5fyaw_10',['derivative_yaw',['../Quadcopter_2src_2main_8cpp.html#a6504b99cbe10f8c45564aaa8e213bf91',1,'main.cpp']]],

@@ -36,7 +36,7 @@ var searchData=
   ['ina219connected_33',['INA219Connected',['../common_8h.html#a8251d20351fc918ea452ad591c75116e',1,'common.h']]],
   ['ina219volts_34',['INA219Volts',['../SensorHubT32_2src_2main_8cpp.html#ad84d94b7259bcf40213f0af9be706ee7',1,'INA219Volts():&#160;main.cpp'],['../ReceiverCode_2src_2main_8cpp.html#ad84d94b7259bcf40213f0af9be706ee7',1,'INA219Volts():&#160;main.cpp'],['../radio_8h.html#ad84d94b7259bcf40213f0af9be706ee7',1,'INA219Volts():&#160;main.cpp']]],
   ['inactivity_5fstart_35',['Inactivity_Start',['../RadioFunctions_8h.html#a42f848041eda5cd5b98d334ab44a15a1',1,'Inactivity_Start():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a42f848041eda5cd5b98d334ab44a15a1',1,'Inactivity_Start():&#160;main.cpp']]],
-  ['inactivity_5ftimeout_36',['Inactivity_Timeout',['../RadioFunctions_8h.html#ae99f193f5a3e06508bbe4b32ee91a963',1,'Inactivity_Timeout():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#ae99f193f5a3e06508bbe4b32ee91a963',1,'Inactivity_Timeout():&#160;main.cpp']]],
+  ['inactivity_5ftimeout_36',['Inactivity_Timeout',['../namespaceTXSetupValues.html#a4cfff693cd3842391c89b6bac9342869',1,'TXSetupValues']]],
   ['inactivitymaximum_37',['INACTIVITYMAXIMUM',['../RadioFunctions_8h.html#a6f6e4e8e296f81b3dd22980c49168662',1,'RadioFunctions.h']]],
   ['inactivityminimum_38',['INACTIVITYMINIMUM',['../RadioFunctions_8h.html#a0da025fab2b31f5ffb073d6e12fe7fde',1,'RadioFunctions.h']]],
   ['inactivitytimeout_39',['INACTIVITYTIMEOUT',['../RadioFunctions_8h.html#afc6ed518e5867e4d7095ec597eae9443',1,'RadioFunctions.h']]],

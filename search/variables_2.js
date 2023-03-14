@@ -30,7 +30,7 @@ var searchData=
   ['blinktimer_27',['BlinkTimer',['../ReceiverCode_2src_2main_8cpp.html#a79ef591b711372e0f452e2afe8d2a718',1,'BlinkTimer():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a79ef591b711372e0f452e2afe8d2a718',1,'BlinkTimer():&#160;main.cpp']]],
   ['blinkvalue_28',['BlinkValue',['../ReceiverCode_2src_2main_8cpp.html#a869d8c74a47ad8ee055d516a6b66027e',1,'main.cpp']]],
   ['bmp280_29',['bmp280',['../SensorHubT32_2src_2main_8cpp.html#a1eeadec20c253385fe11f15108d783c8',1,'main.cpp']]],
-  ['boundflag_30',['BoundFlag',['../ReceiverCode_2src_2main_8cpp.html#a44d37e4e8af884bf172344c0835a5593',1,'BoundFlag():&#160;main.cpp'],['../radio_8h.html#a44d37e4e8af884bf172344c0835a5593',1,'BoundFlag():&#160;main.cpp'],['../RadioFunctions_8h.html#a44d37e4e8af884bf172344c0835a5593',1,'BoundFlag():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a44d37e4e8af884bf172344c0835a5593',1,'BoundFlag():&#160;main.cpp']]],
+  ['boundflag_30',['BoundFlag',['../ReceiverCode_2src_2main_8cpp.html#a44d37e4e8af884bf172344c0835a5593',1,'BoundFlag():&#160;main.cpp'],['../radio_8h.html#a44d37e4e8af884bf172344c0835a5593',1,'BoundFlag():&#160;main.cpp'],['../namespaceConnectionStatus.html#a7c84396f36a589f9c60bbcf943247422',1,'ConnectionStatus::BoundFlag()'],['../RadioFunctions_8h.html#a44d37e4e8af884bf172344c0835a5593',1,'BoundFlag():&#160;main.cpp']]],
   ['boxbottom_31',['BoxBottom',['../TransmitterCode_2src_2main_8cpp.html#a81a4216a983eb807a4198ca4ad04d9f4',1,'main.cpp']]],
   ['boxleft_32',['BoxLeft',['../TransmitterCode_2src_2main_8cpp.html#a0ed09cfec8eba1e12ea13c223e5254a5',1,'main.cpp']]],
   ['boxright_33',['BoxRight',['../TransmitterCode_2src_2main_8cpp.html#a1c9a0f315590595ea96610c5bc1ced78',1,'main.cpp']]],
