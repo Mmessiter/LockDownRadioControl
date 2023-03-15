@@ -1767,9 +1767,12 @@ void ShowConnectionQuality()
     char Msg_ConnectedWeak[]      = "Weak";
     char Msg_ConnectedVWeak[]     = "Very weak";
     int  ConnectionQuality        = GetSuccessRate();
-    char     FrontView_Connected[]  = "Connected";
-    char     Visible[]             = "vis Quality,1";
+    char FrontView_Connected[]    = "Connected";
+    char Visible[]                = "vis Quality,1";
+    char TXModuleMSG[]            = "** Using TX module **";
 
+
+    if (UseTXModule) SendText(FrontView_Connected, TXModuleMSG);
     if (!LedWasGreen) return;
     SendValue(Quality, ConnectionQuality); // show quality of connection in progress bar
     strcpy(Msgbuf, Msg_Connected);
