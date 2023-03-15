@@ -370,7 +370,6 @@ var RadioFunctions_8h =
     [ "MacroStartTime", "RadioFunctions_8h.html#abacba397df8422d772f9f387649a9494", null ],
     [ "MacroStopTime", "RadioFunctions_8h.html#a9e444f8769253f982906c933290b1369", null ],
     [ "ModelMatched", "RadioFunctions_8h.html#abafce2220b6ad57b4be99289a7953a0c", null ],
-    [ "MostRecentHop", "RadioFunctions_8h.html#a714d525bca8203ed425c37a33e8c5419", null ],
     [ "NewCompressNeeded", "RadioFunctions_8h.html#a37ebe494d562386d4f9f00b629d4cf1a", null ],
     [ "NextChannel", "RadioFunctions_8h.html#a4c9fbf66b2c98730d43dc9dfe573a998", null ],
     [ "NextChannelNumber", "RadioFunctions_8h.html#a372b457a109ccee3253b219df1a47412", null ],
