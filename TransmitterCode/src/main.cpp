@@ -517,7 +517,7 @@ bool     TimerDownwards         = false;
 uint16_t TimerStartTime         = 5 * 60; 
 bool     TimesUp                = false;
 uint8_t  CountDownIndex = 0;
-bool     UseSBUSFromRX          = true;  // at receiver. false = PPM
+bool     UseSBUSNotPPMFromRX    = true;  // at receiver. false = PPM
 uint16_t PPMChannelCount        = 8;  // for our RX - not module  
 
 
@@ -3050,7 +3050,7 @@ bool ReadOneModel(uint32_t Mnum)
     if (TimerStartTime > 120 * 60) TimerStartTime = 5 * 60;
     ++SDCardAddress;
     ++SDCardAddress;
-    UseSBUSFromRX         = (bool) SDRead8BITS(SDCardAddress);
+    UseSBUSNotPPMFromRX           = (bool) SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
     PPMChannelCount         =  SDRead16BITS(SDCardAddress);
     if ((PPMChannelCount > 16) || (PPMChannelCount < 1)){  // miles out of range PPMChannelCount?
@@ -4188,7 +4188,7 @@ void SaveOneModel(uint32_t mnum)
         ++SDCardAddress;
         ++SDCardAddress;
 
-        SDUpdate8BITS(SDCardAddress, UseSBUSFromRX); 
+        SDUpdate8BITS(SDCardAddress, UseSBUSNotPPMFromRX); 
         ++SDCardAddress;   
 
         SDUpdate16BITS(SDCardAddress, PPMChannelCount); 
@@ -6497,8 +6497,8 @@ void RXSetup1Start() // model options screen
     SendValue(RxVCorrextion, RxVoltageCorrection);
     SendValue(c2, TimerDownwards);
     SendValue(n4, TimerStartTime/60);
-    SendValue(r0, UseSBUSFromRX);
-    SendValue(r1, !UseSBUSFromRX);
+    SendValue(r0, UseSBUSNotPPMFromRX);
+    SendValue(r1, !UseSBUSNotPPMFromRX);
     SendValue(n5,PPMChannelCount);
     CurrentView = RXSETUPVIEW1;
     UpdateModelsNameEveryWhere();
@@ -6546,7 +6546,7 @@ void RXSetup1End()
     SendValue(Progress,70);
     TimerStartTime          = GetValue(n4) * 60;
     SendValue(Progress,80);
-    UseSBUSFromRX            = GetValue(r0);
+    UseSBUSNotPPMFromRX            = GetValue(r0);
     SendValue(Progress,90);
     PPMChannelCount              =  GetValue(n5);
     SendValue(Progress, 100);
@@ -8774,7 +8774,7 @@ void LoadPacketData()
             break;
 
         case 5:
-            SendBuffer[CHANNELSUSED + 1] = UseSBUSFromRX;       // 1 - 0
+            SendBuffer[CHANNELSUSED + 1] = UseSBUSNotPPMFromRX;       // 1 - 0
             SendBuffer[CHANNELSUSED + 2] = PPMChannelCount;     // 
             break;
 
