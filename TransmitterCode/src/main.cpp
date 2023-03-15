@@ -273,8 +273,6 @@ uint32_t  GapAverage                  = 0;
 uint32_t  GapCount                    = 0;
 float     GPSLatitude                 = 0;
 float     GPSLongitude                = 0;
-float     GPSMarkLatitude             = 0;
-float     GPSMarkLongitude            = 0;
 float     GPSAngle                    = 0;
 bool      GpsFix                      = 0;
 uint8_t   GPSSatellites               = 0;
@@ -510,15 +508,13 @@ uint8_t  DualRateValue                   = 100;
 char     Confirmed[2];
 char     NewFileBuffer[MAXFILELEN];
 uint16_t NewFileBufferPointer = 0;
-
-uint32_t MostRecentHop;
 uint8_t  ReconnectionIndex      = 0;
 bool     TimerDownwards         = false;
 uint16_t TimerStartTime         = 5 * 60; 
 bool     TimesUp                = false;
 uint8_t  CountDownIndex = 0;
 bool     UseSBUSNotPPMFromRX    = true;  // at receiver. false = PPM
-uint16_t PPMChannelCount        = 8;  // for our RX - not module  
+uint16_t PPMChannelCount        = 8;  // for our RX - NOT TX module  
 
 
 // **********************************************************************************************************************************

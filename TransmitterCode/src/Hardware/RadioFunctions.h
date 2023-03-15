@@ -466,8 +466,7 @@ extern bool           NewCompressNeeded;
 extern bool           ModelMatched;
 extern bool           SendNoData;
 extern uint8_t        ReconnectionIndex;
-extern uint32_t       MostRecentHop;
-extern uint8_t               MacAddress[8];
+extern uint8_t        MacAddress[8];
 
 // external (global) functions needed here
 extern void  GetSlaveChannelValues();

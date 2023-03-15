@@ -382,7 +382,6 @@ float Pduration  = 0;
 FASTRUN void HopToNextChannel()
 {
     Radio1.setChannel(NextChannel); // Hop !
-    MostRecentHop = millis();       // note the time!
     delayMicroseconds(500);
     Radio1.stopListening();         // Transmit only
     delayMicroseconds(500);
