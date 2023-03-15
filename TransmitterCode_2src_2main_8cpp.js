@@ -692,7 +692,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "UseLog", "TransmitterCode_2src_2main_8cpp.html#aa42482a0bb01edaf26f217dbc38643d2", null ],
     [ "UseMacros", "TransmitterCode_2src_2main_8cpp.html#a42a6363bff83773c1b99caa06aebb1f5", null ],
     [ "UseMotorKill", "TransmitterCode_2src_2main_8cpp.html#ad76445c097f9d33a6935be5c2489bd34", null ],
-    [ "UseSBUSFromRX", "TransmitterCode_2src_2main_8cpp.html#aa320516fd03acf6821aeb98a79dcb415", null ],
+    [ "UseSBUSNotPPMFromRX", "TransmitterCode_2src_2main_8cpp.html#a979622dc268dd31678cc927e54867bf4", null ],
     [ "UseTXModule", "TransmitterCode_2src_2main_8cpp.html#a981faa4e7968104f16333ff07db55ce3", null ],
     [ "Val32", "TransmitterCode_2src_2main_8cpp.html#adc7498bedbda955851733c9f3ef82752", null ],
     [ "Val64", "TransmitterCode_2src_2main_8cpp.html#af0666ca28f466317b3e6f618a75076da", null ],

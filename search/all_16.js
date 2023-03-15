@@ -20,6 +20,6 @@ var searchData=
   ['user_5fctrl_17',['USER_CTRL',['../classMPU9250.html#ac7a02a1a77fe8bf5a477cc37820d2f27',1,'MPU9250']]],
   ['usereceiveddata_18',['UseReceivedData',['../ReceiverCode_2src_2main_8cpp.html#abb1997c589abc6432f612eaedf985e38',1,'main.cpp']]],
   ['usesbus_19',['UseSBUS',['../ReceiverCode_2src_2main_8cpp.html#a80f5214ddc3b9618293f3b2694dff6f7',1,'main.cpp']]],
-  ['usesbusfromrx_20',['UseSBUSFromRX',['../TransmitterCode_2src_2main_8cpp.html#aa320516fd03acf6821aeb98a79dcb415',1,'main.cpp']]],
+  ['usesbusnotppmfromrx_20',['UseSBUSNotPPMFromRX',['../TransmitterCode_2src_2main_8cpp.html#a979622dc268dd31678cc927e54867bf4',1,'main.cpp']]],
   ['usetxmodule_21',['UseTXModule',['../TransmitterCode_2src_2main_8cpp.html#a981faa4e7968104f16333ff07db55ce3',1,'main.cpp']]]
 ];
