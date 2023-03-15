@@ -300,6 +300,7 @@ uint8_t  MidLowDegrees[5][CHANNELSUSED + 1];                //    MidLow Degrees
 uint8_t  MinDegrees[5][CHANNELSUSED + 1];                   //    Min Degrees (0)
 
 uint8_t  Bank                       =  1;
+
 // User defined bank names zone
 // ************************************** 0                  1                 2                  3                4          5           6           7          8                9        10          11       12        13             14            15          16          17      18        19           20         21     22           23         24         25          26           27        ***
 char     BankTexts[28][14]          =  {{ "Flight mode 1"},{"Flight mode 2"},{"Flight mode 3"},{"Flight mode 4"},{"Bank 1"},{"Bank 2"},{"Bank 3"}, {"Bank 4"},{"Aerobatics"}, {"Auto"},{"Cruise"},{"Flaps"},{"Hover"},{"Idle up 1"},{"Idle up 2"},{"Landing"},{"Launch"},{"Normal"},{"Speed"},{"Takeoff"},{"Thermal"},{"Hold"},{"3D"}   ,{"Brakes"},{"Stunt 1"},{"Stunt 2"},{"Gear up"},{"Gear down"}};
@@ -9809,20 +9810,23 @@ void FASTRUN ManageTransmitter(){
     }
 }
 /**********************************************************************************************************/
+void ShowSendBufferValue(int i){
+        Serial.print("Channel ");
+        Serial.print(i+1);
+        Serial.print(" = ");
+        Serial.println(SendBuffer[i]);
+}
+/**********************************************************************************************************/
 #ifdef TXMODULESUPPORT
 void SendPPM(){ // Send a frame of PPM to Third party TX module
     if (millis() - LastPPMFrame < 10) return; // was PPMMillis (... that was wrong)
     LastPPMFrame = millis();
     for (int j = 0; j < PPMChannelsNumber; ++j) {
-        PPMOutputModule.write(*(PPMChannelOrder + j), SendBuffer[j]);  
+        PPMOutputModule.write(*(PPMChannelOrder + j), SendBuffer[j]);
     }
 }
 #endif
 
-void OkSoFar(){
-
-    Look(millis());
-}
 /************************************************************************************************************/
 
 void FixMotorChannel()
@@ -9836,6 +9840,7 @@ void FixMotorChannel()
 void SendBindingPipe()
 {
     uint16_t BindPause = 3000;
+    if (UseTXModule) return;
     if (NewModelMemoryWasSaved) BindPause = 6000;
     if (!ConnectionStatus::BoundFlag || !ConnectionStatus::ModelMatched) BindingTimer = millis();
     if ((millis() - BindingTimer) < BindPause) 
@@ -9868,7 +9873,7 @@ FASTRUN void loop()
         GetBuddyData();                        // Only if master
         FixMotorChannel();                     // Maybe force it low BEFORE Binding data is added
         ShowServoPos();                        // Show servo positions to user
-        SendBindingPipe();                     // Only if not bound yet - overwrite low throttle setting
+        SendBindingPipe();   // Only if not bound yet - overwrite low throttle setting
     }
     switch (CurrentMode) {
         case NORMAL:                           // 0
