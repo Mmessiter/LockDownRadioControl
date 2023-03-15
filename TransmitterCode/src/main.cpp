@@ -9840,6 +9840,7 @@ void FixMotorChannel()
 /************************************************************************************************************/
 void SendBindingPipe()
 {
+    if (UseTXModule) return;
     uint16_t BindPause = 3000;
     if (NewModelMemoryWasSaved) BindPause = 6000;
     if (!BoundFlag || !ModelMatched) BindingTimer = millis();
