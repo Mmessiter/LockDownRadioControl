@@ -28,15 +28,17 @@
 // **************************************************************************
 
 #include <Arduino.h>
+#include <Watchdog_t4.h>
+#include <TeensyID.h> 
+#include <PulsePosition.h>
+#include <RF24.h>
 #include <SD.h>
 #include <SPI.h>
-#include <RF24.h>
 #include <Wire.h>
 #include <Adafruit_INA219.h>
 #include <DS1307RTC.h>
 #include <InterpolationLib.h>
-#include <Watchdog_t4.h>
-#include <PulsePosition.h>
+
 
 // **************************************************************************
 //    DEBUG OPTIONS (Uncomment any of these for that bit of debug info)     *

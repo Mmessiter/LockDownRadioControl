@@ -526,10 +526,11 @@ uint16_t PPMChannelCount        = 8;  // for our RX - NOT TX module
 PulsePositionOutput     PPMOutputModule;       // PPM for buddy boxing and TX Modules
 PulsePositionOutput     PPMOutputBuddy;        // PPM for buddy boxing and TX Modules
 PulsePositionInput      PPMInputBuddy;         // PPM for buddy boxing
-uint8_t                 * PPMChannelOrder;     // will point to needed channel order
+
 uint8_t                 PPMChannelOrder1[16]  = {A, E, T, R, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
 uint8_t                 PPMChannelOrder2[16]  = {T, A, E, R, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
 uint8_t                 PPMChannelOrder3[16]  = {E, T, A, R, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+uint8_t                 * PPMChannelOrder = PPMChannelOrder2;     // will point to needed channel order
 uint32_t                LastPPMFrame         = 0;
 uint8_t                 PPMOrderSelection    = 2;
 uint8_t                 PPMChannelsNumber     = 6;
@@ -3046,7 +3047,7 @@ bool ReadOneModel(uint32_t Mnum)
     if (TimerStartTime > 120 * 60) TimerStartTime = 5 * 60;
     ++SDCardAddress;
     ++SDCardAddress;
-    UseSBUSNotPPMFromRX           = (bool) SDRead8BITS(SDCardAddress);
+    UseSBUSNotPPMFromRX     = (bool) SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
     PPMChannelCount         =  SDRead16BITS(SDCardAddress);
     if ((PPMChannelCount > 16) || (PPMChannelCount < 1)){  // miles out of range PPMChannelCount?
@@ -3616,14 +3617,6 @@ void ShowLogFile(uint8_t StartLine)
     SendText1(LogTeXt, TheText);                             // Then send it
 }
 
-
-/************************************************************************************************************/
-
-void teensyMAC(uint8_t* mac)
-{ // GET UNIQUE TEENSY 4.0 ID
-    for (uint8_t by = 0; by < 2; by++) mac[by] = (HW_OCOTP_MAC1 >> ((1 - by) * 8)) & 0xFF;
-    for (uint8_t by = 0; by < 4; by++) mac[by + 2] = (HW_OCOTP_MAC0 >> ((3 - by) * 8)) & 0xFF;
-}
 
 /*********************************************************************************************************************************/
 // This function gets the unique MAC address of the Teensy 4.1

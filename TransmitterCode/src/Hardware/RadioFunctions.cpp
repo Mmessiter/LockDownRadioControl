@@ -419,7 +419,7 @@ FLASHMEM void InitRadio(uint64_t Pipe)
     Radio1.openWritingPipe(Pipe);             // Current Pipe address used for Binding
     Radio1.setRetries(RETRYCOUNT, RETRYWAIT); // automatic retries and pauses
     Radio1.stopListening();
-    delay(2);
+    delay(1);
     Radio1.enableDynamicPayloads();
     Radio1.setAddressWidth(5);              //  5
     Radio1.setCRCLength(RF24_CRC_16); // (RF24_CRC_8); // could be 16
