@@ -202,7 +202,7 @@ void TryToReconnect()
     }
     ++ReconnectionIndex;
     if (ReconnectionIndex >= RECONNECT_CHANNELS_COUNT) ReconnectionIndex = 0;
-    NextChannel = *(FHSSRecoveryPointer + RECONNECT_CHANNELS_START + ReconnectionIndex); //  reconnect channel (selected from three)
+    NextChannel = *(FHSS_data::FHSSRecoveryPointer + RECONNECT_CHANNELS_START + ReconnectionIndex); //  reconnect channel (selected from three)
     HopToNextChannel();
 }
 
@@ -377,7 +377,7 @@ FASTRUN void HopToNextChannel()
 
 #ifdef DB_FHSS 
     if (BoundFlag && Connected && ModelMatched){
-        float ch   = *(FHSSChPointer +  NextChannelNumber);
+        float ch   = *(FHSS_data::FHSSChPointer +  FHSS_data::NextChannelNumber);
         float Freq = 2.4;
         PEndTime   = millis();
         Pduration  = (PEndTime - PStartTime) / 1000;

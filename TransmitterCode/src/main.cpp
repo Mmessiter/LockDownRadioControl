@@ -498,11 +498,12 @@ uint16_t TimerStartTime         = 5 * 60;
 bool     TimesUp                = false;
 uint8_t  CountDownIndex = 0;
 
+
 // **********************************************************************************************************************************
-// **********************************  Area & struct for FHSS data ************************************************************
+// **********************************  Area & namespace for FHSS data ************************************************************
 // **********************************************************************************************************************************
 
-struct FFHS_Area{
+namespace FHSS_data{
 
 uint8_t    FHSS_Channels1[42] = {93, 111, 107, 103, 106, 97, 108, 102, 118, // TEST array
                               104, 101, 109, 98, 113, 124, 115, 91, 96, 85, 117, 89, 99, 114, 87, 112,
@@ -515,12 +516,14 @@ uint8_t   FHSS_Channels[83] = {51, 28, 24, 61, 64, 55, 66, 19, 76, 21, 59, 67, 1
                                56, 7, 81, 5, 65, 4, 10};
 uint8_t   UkRulesCounter    = 0;
 bool      UkRules           = true;
-};
-
-FFHS_Area FFHS_data;
 uint8_t*  FHSSRecoveryPointer;
 uint8_t*  FHSSChPointer;                // pointer for channels array (three only used for reconnect)
 uint8_t   NextChannelNumber     = 0;
+}
+
+
+
+
 
 // **********************************************************************************************************************************
 // **********************************  Area & struct for PPM & TX MODULE ************************************************************
@@ -1086,12 +1089,12 @@ void ReadTime()
             }
             if (MayBeAddZero(DisplayedHour)) strcat(TimeString, zero);
             strcat(TimeString, Str(NB, DisplayedHour, 0));
-            if (FFHS_data.UkRules) strcat(TimeString, colon);
-            if (!FFHS_data.UkRules) strcat(TimeString, colon1);
+            if (FHSS_data::UkRules) strcat(TimeString, colon);
+            if (!FHSS_data::UkRules) strcat(TimeString, colon1);
             if (MayBeAddZero(tm.Minute)) strcat(TimeString, zero);
             strcat(TimeString, Str(NB, tm.Minute, 0));
-            if (FFHS_data.UkRules) strcat(TimeString, colon);
-            if (!FFHS_data.UkRules) strcat(TimeString, colon1);
+            if (FHSS_data::UkRules) strcat(TimeString, colon);
+            if (!FHSS_data::UkRules) strcat(TimeString, colon1);
             if (MayBeAddZero(tm.Second)) strcat(TimeString, zero);
             strcat(TimeString, Str(NB, tm.Second, 0));
             SendText(DateTime, TimeString);
@@ -3318,16 +3321,16 @@ FLASHMEM void GetTXVersionNumber()
 /************************************************************************************************************/
 FASTRUN void SetUKFrequencies()
 {
-    FHSSChPointer = FFHS_data.FHSS_Channels;
-    FFHS_data.UkRules       = true;
-    FHSSRecoveryPointer = FFHS_data.FHSS_Channels;
+    FHSS_data::FHSSChPointer = FHSS_data::FHSS_Channels;
+    FHSS_data::UkRules       = true;
+    FHSS_data::FHSSRecoveryPointer = FHSS_data::FHSS_Channels;
 }
 /************************************************************************************************************/
 FASTRUN void SetTestFrequencies()
 {
-    FHSSChPointer = FFHS_data.FHSS_Channels1;
-    FFHS_data.UkRules       = false;
-   FHSSRecoveryPointer = FFHS_data.FHSS_Channels1;
+    FHSS_data::FHSSChPointer = FHSS_data::FHSS_Channels1;
+    FHSS_data::UkRules       = false;
+    FHSS_data::FHSSRecoveryPointer = FHSS_data::FHSS_Channels1;
 }
 /************************************************************************************************************/
 FASTRUN void CreateTimeStamp(char* DateAndTime)
@@ -7785,26 +7788,26 @@ FASTRUN void ButtonWasPressed()
             return;
         }
         if (InStrng(UKRULES, TextIn) > 0) { // UK Offcom regulations?
-            ++FFHS_data.UkRulesCounter;
-            if (FFHS_data.UkRulesCounter == 1) SwapWaveBandTimer = millis();
-            if (FFHS_data.UkRulesCounter == 3) {
+            ++FHSS_data::UkRulesCounter;
+            if (FHSS_data::UkRulesCounter == 1) SwapWaveBandTimer = millis();
+            if (FHSS_data::UkRulesCounter == 3) {
                 
 
                 if ((millis() - SwapWaveBandTimer) < 5000) { // pressed three times in under 5 seconds?!
-                    if (!FFHS_data.UkRules) {
+                    if (!FHSS_data::UkRules) {
                         SwapWaveBand = 1;
-                        FFHS_data.UkRules      = true;
+                        FHSS_data::UkRules      = true;
                         SendText(b17, Htext1);
                     }
                     else {
                         SwapWaveBand = 2;
-                        FFHS_data.UkRules      = false;
+                        FHSS_data::UkRules      = false;
                         SendText(b17, Htext0);
                     }
                 }
                 
 
-                FFHS_data.UkRulesCounter = 0;
+                FHSS_data::UkRulesCounter = 0;
             }
             ClearText();
             return;
@@ -8131,9 +8134,9 @@ FASTRUN void ButtonWasPressed()
             for (int i = 0; i < 16; ++i) {
                 InPutStick[i] = CheckRange((GetValue(InputStick_Labels[i]) - 1), 0, 15);
                 if (i < 4) InputTrim[i] = CheckRange((GetValue(InputTrim_labels[i]) - 1), 0, 15); 
-                SendValue(Progress, i * (100 / 16));
+                SendValue(Progress, (((i+1) * 100)/16)-1);
             }
-            SendValue(Progress, 99);
+            SendValue(Progress, 95);
             SaveOneModel(ModelNumber);
             SendValue(Progress, 100);
             CurrentMode = NORMAL;
@@ -9525,11 +9528,11 @@ FASTRUN void ParseAckPayload()
 {
     if (BuddyPupilOnPPM) return; // buddy pupil need none of this
  
-    NextChannelNumber = AckPayload.Byte5;                 // every packet tells of next hop destination
+    FHSS_data::NextChannelNumber = AckPayload.Byte5;                 // every packet tells of next hop destination
      
     if (AckPayload.Purpose & 0x80) // Hi bit is now the **HOP NOW!!** flag
     {
-        NextChannel       = *(FHSSChPointer + NextChannelNumber); // The actual channel number pointed to.   
+        NextChannel       = *(FHSS_data::FHSSChPointer + FHSS_data::NextChannelNumber); // The actual channel number pointed to.   
         HopToNextChannel();
         AckPayload.Purpose &= 0x7f; // Clear the high BIT, use the remainder ...
     }

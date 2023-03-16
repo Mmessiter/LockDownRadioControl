@@ -38,6 +38,8 @@
 #include <Adafruit_INA219.h>
 #include <DS1307RTC.h>
 #include <InterpolationLib.h>
+#include "structs.h"
+
 
 
 // **************************************************************************
@@ -423,14 +425,16 @@ extern uint16_t       CompressedData[];
 extern struct Payload AckPayload;
 const extern  uint8_t  AckPayloadSize;
 
-extern struct FFHS_Area FFHS_data;//
-
-extern uint8_t*         FHSSChPointer;
-extern uint8_t*         FHSSRecoveryPointer;
+  namespace FHSS_data
+{
+  extern uint8_t*       FHSSRecoveryPointer;
+  extern uint8_t*       FHSSChPointer;
+  extern uint8_t        NextChannelNumber;
+}
 
 extern uint8_t        SizeOfCompressedData;
 extern uint16_t       RangeTestGoodPackets;
-extern uint8_t        NextChannelNumber;
+
 extern uint32_t       RecentPacketsLost;
 extern uint32_t       TxOnTime;
 extern uint32_t       TXTimeStamp;
@@ -573,5 +577,7 @@ int              AnalogueReed(uint8_t InputChannel);
 void             GetReturnCode();
 void             SelectChannelOrder();
 /*********************************************************************************************************************************/
+
+
 
 #endif
