@@ -667,8 +667,6 @@ var TransmitterCode_2src_2main_8cpp =
     [ "TXLiPo", "TransmitterCode_2src_2main_8cpp.html#ae15fd0f1128566cd1120f3dd2e287dc1", null ],
     [ "TxName", "TransmitterCode_2src_2main_8cpp.html#a967f3c9b0fd867928c55d75d65cfcd8c", null ],
     [ "TxVoltageCorrection", "TransmitterCode_2src_2main_8cpp.html#a985d38323fbadec8df22d3e17ca18eb2", null ],
-    [ "UkRules", "TransmitterCode_2src_2main_8cpp.html#a7847cc790a939f378993691ae7d40a2f", null ],
-    [ "UkRulesCounter", "TransmitterCode_2src_2main_8cpp.html#a29883074027da47422a24b04284728db", null ],
     [ "USE_INA219", "TransmitterCode_2src_2main_8cpp.html#a87ae50e2ac4507568cbf98072f174a1b", null ],
     [ "UseDualRates", "TransmitterCode_2src_2main_8cpp.html#a5f6ebf5df29e0ee922a462cbdd419ed8", null ],
     [ "UseLog", "TransmitterCode_2src_2main_8cpp.html#aa42482a0bb01edaf26f217dbc38643d2", null ],

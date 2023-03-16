@@ -1,7 +1,5 @@
 var NAVTREEINDEX8 =
 {
-"TransmitterCode_2src_2main_8cpp.html#aff9eea2f8a1a10bc94b26b1f84b7b27b":[4,0,3,0,1,507],
-"TransmitterCode_2src_2main_8cpp.html#affc6c0de18db71aa5ad8b4d241339731":[4,0,3,0,1,32],
 "TransmitterCode_2src_2main_8cpp_source.html":[4,0,3,0,1],
 "annotated.html":[3,0],
 "classI2Cdev.html":[3,0,1],
@@ -249,5 +247,7 @@ var NAVTREEINDEX8 =
 "classMPU6050.html#ae528a25b4997ad0e3091a012e4e4419e":[3,0,2,242],
 "classMPU6050.html#ae54dc358da048e61a1ac68012300fdaa":[3,0,2,223],
 "classMPU6050.html#ae7e9ead9645bcef326eb579c6ab5d5ff":[3,0,2,111],
-"classMPU6050.html#ae84fd795630f9ab5e8d6b19a616a11ce":[3,0,2,108]
+"classMPU6050.html#ae84fd795630f9ab5e8d6b19a616a11ce":[3,0,2,108],
+"classMPU6050.html#ae9882b425cbdced4de325b608d896e10":[3,0,2,103],
+"classMPU6050.html#aea90c3e6a6666f070f7833a913cfa821":[3,0,2,177]
 };
