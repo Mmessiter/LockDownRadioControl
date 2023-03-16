@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['r_0',['R',['../TransmitterCode_2src_2main_8cpp.html#a5c71a5e59a53413cd6c270266d63b031',1,'main.cpp']]],
+  ['r_0',['R',['../StructsEtc_8h.html#a5c71a5e59a53413cd6c270266d63b031',1,'StructsEtc.h']]],
   ['radio_2eh_1',['radio.h',['../radio_8h.html',1,'']]],
   ['radio1_2',['Radio1',['../TransmitterCode_2src_2main_8cpp.html#a621c346e4b1d9b24b9a5bda63d0f0f52',1,'Radio1(CE_PIN, CSN_PIN):&#160;main.cpp'],['../radio_8h.html#a6e2d4126d864c50e7c23c988c2bfdd1a',1,'Radio1(pinCE1, pinCSN1):&#160;radio.h'],['../RadioFunctions_8h.html#aae23a8374f487a46c5fcb1fb02fadc69',1,'Radio1():&#160;RadioFunctions.h']]],
   ['radio2_3',['Radio2',['../radio_8h.html#a8b76f3c338025926421c7b308405bbfd',1,'radio.h']]],

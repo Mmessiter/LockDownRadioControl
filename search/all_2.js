@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['a_0',['A',['../TransmitterCode_2src_2main_8cpp.html#a955f504eccf76b4eb2489c0adab03121',1,'main.cpp']]],
+  ['a_0',['A',['../StructsEtc_8h.html#a955f504eccf76b4eb2489c0adab03121',1,'StructsEtc.h']]],
   ['accel_5f2g_1',['ACCEL_2G',['../Quadcopter_2src_2main_8cpp.html#adce3bf2dea7bd001b53e2ca18575f1c0',1,'main.cpp']]],
   ['accel_5fconfig_2',['ACCEL_CONFIG',['../classMPU9250.html#aafa6e01d85e697d8900a038434f72b27',1,'MPU9250']]],
   ['accel_5fconfig2_3',['ACCEL_CONFIG2',['../classMPU9250.html#a9c3c4be39f134ef83747075e6db1ba88',1,'MPU9250']]],
@@ -37,8 +37,8 @@ var searchData=
   ['accy_5fprev_34',['AccY_prev',['../Quadcopter_2src_2main_8cpp.html#a94379192c0c07ed9a9d947f302ced332',1,'main.cpp']]],
   ['accz_35',['AccZ',['../Quadcopter_2src_2main_8cpp.html#af9a08745989f56ac72e8757359a30d5e',1,'main.cpp']]],
   ['accz_5fprev_36',['AccZ_prev',['../Quadcopter_2src_2main_8cpp.html#a4f12d0d2fdb0d0fa64c642c085341efa',1,'main.cpp']]],
-  ['ackpayload_37',['AckPayload',['../RadioFunctions_8h.html#aec532bb9df7f865e6612fabf46895e6c',1,'AckPayload():&#160;radio.h'],['../radio_8h.html#a30a079d60b4731ce1531091ffe56a703',1,'AckPayload():&#160;radio.h'],['../TransmitterCode_2src_2main_8cpp.html#a30a079d60b4731ce1531091ffe56a703',1,'AckPayload():&#160;main.cpp']]],
-  ['ackpayloadsize_38',['AckPayloadSize',['../radio_8h.html#a6dc99d00582ef356ea3d57700dca6dab',1,'AckPayloadSize():&#160;radio.h'],['../RadioFunctions_8h.html#a81b9fbb62d8099a8e75c5d4720f41895',1,'AckPayloadSize():&#160;radio.h'],['../TransmitterCode_2src_2main_8cpp.html#a81b9fbb62d8099a8e75c5d4720f41895',1,'AckPayloadSize():&#160;main.cpp']]],
+  ['ackpayload_37',['AckPayload',['../RadioFunctions_8h.html#aec532bb9df7f865e6612fabf46895e6c',1,'AckPayload():&#160;radio.h'],['../radio_8h.html#a30a079d60b4731ce1531091ffe56a703',1,'AckPayload():&#160;radio.h'],['../StructsEtc_8h.html#a30a079d60b4731ce1531091ffe56a703',1,'AckPayload():&#160;StructsEtc.h']]],
+  ['ackpayloadsize_38',['AckPayloadSize',['../radio_8h.html#a6dc99d00582ef356ea3d57700dca6dab',1,'AckPayloadSize():&#160;radio.h'],['../RadioFunctions_8h.html#a81b9fbb62d8099a8e75c5d4720f41895',1,'AckPayloadSize():&#160;radio.h'],['../StructsEtc_8h.html#a81b9fbb62d8099a8e75c5d4720f41895',1,'AckPayloadSize():&#160;StructsEtc.h']]],
   ['adjustdatetime_39',['AdjustDateTime',['../TransmitterCode_2src_2main_8cpp.html#a9de4ea8e761b5f0e537f6f326f9ad429',1,'main.cpp']]],
   ['aerobatics_40',['AEROBATICS',['../RadioFunctions_8h.html#a7df635dd9a2363e735cdd7d66ecd2c41',1,'RadioFunctions.h']]],
   ['aileronlefttrim_41',['AileronLeftTrim',['../TransmitterCode_2src_2main_8cpp.html#a71f72bed656884a7e88b70f73f8d81a4',1,'main.cpp']]],

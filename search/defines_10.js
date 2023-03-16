@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['r_0',['R',['../TransmitterCode_2src_2main_8cpp.html#a5c71a5e59a53413cd6c270266d63b031',1,'main.cpp']]],
+  ['r_0',['R',['../StructsEtc_8h.html#a5c71a5e59a53413cd6c270266d63b031',1,'StructsEtc.h']]],
   ['rangemax_1',['RANGEMAX',['../common_8h.html#a152ff5774ac656fc5f23664a214a8b53',1,'RANGEMAX():&#160;common.h'],['../RadioFunctions_8h.html#a152ff5774ac656fc5f23664a214a8b53',1,'RANGEMAX():&#160;RadioFunctions.h']]],
   ['rangemin_2',['RANGEMIN',['../common_8h.html#a2279f0fac9f7362b46f3c53ae91a5ce8',1,'RANGEMIN():&#160;common.h'],['../RadioFunctions_8h.html#a2279f0fac9f7362b46f3c53ae91a5ce8',1,'RANGEMIN():&#160;RadioFunctions.h']]],
   ['rate1_3',['RATE1',['../RadioFunctions_8h.html#ad35dcec60fb61a3768da09d05a16c5a7',1,'RadioFunctions.h']]],
