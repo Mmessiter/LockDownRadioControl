@@ -4,6 +4,7 @@
 /************************************************************************************************************/
 // Malcolm Messiter 2020 - 2023
 #include "RadioFunctions.h"
+
 /************************************************************************************************************/
 
  /* Compresses uint16_t* buffer values (each with 12 bit resolution - the lower 12 bits).
@@ -205,7 +206,7 @@ void TryToReconnect()
     NextChannel = *(FHSS_data::FHSSRecoveryPointer + RECONNECT_CHANNELS_START + ReconnectionIndex); //  reconnect channel (selected from three)
     HopToNextChannel();
 }
-
+// class  ConnectClass;
 /************************************************************************************************************/
 void SuccessfulPacket()
 {
@@ -215,6 +216,7 @@ void SuccessfulPacket()
     LostContactFlag   = false;
     RecentPacketsLost = 0;
     Connected         = true;
+   // ConnectClass.setConnected(true);
     if (BoundFlag && !LedWasGreen) GreenLedOn();
     CheckGapsLength();
     Radio1.read(&AckPayload, AckPayloadSize); //  "sizeof" doesn't work with externs,
