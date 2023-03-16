@@ -1,6 +1,5 @@
 var annotated_dup =
 [
-    [ "FFHS_Area", "structFFHS__Area.html", "structFFHS__Area" ],
     [ "I2Cdev", "classI2Cdev.html", "classI2Cdev" ],
     [ "MPU6050", "classMPU6050.html", "classMPU6050" ],
     [ "MPU9250", "classMPU9250.html", "classMPU9250" ],

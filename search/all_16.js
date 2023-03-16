@@ -1,12 +1,12 @@
 var searchData=
 [
-  ['ukrules_0',['UkRules',['../structFFHS__Area.html#a5c5f6f1d424c14455b10c9b1b859d9e5',1,'FFHS_Area::UkRules()'],['../RadioFunctions_8h.html#a7847cc790a939f378993691ae7d40a2f',1,'UkRules():&#160;RadioFunctions.h']]],
-  ['ukrulescounter_1',['UkRulesCounter',['../structFFHS__Area.html#a7c9dc9a53de9d516957886e4d9ecc289',1,'FFHS_Area']]],
+  ['ukrules_0',['UkRules',['../RadioFunctions_8h.html#a7847cc790a939f378993691ae7d40a2f',1,'UkRules():&#160;RadioFunctions.h'],['../namespaceFHSS__data.html#a5dacaf20c4eebf662d8c33089bccfad7',1,'FHSS_data::UkRules()']]],
+  ['ukrulescounter_1',['UkRulesCounter',['../namespaceFHSS__data.html#aa3c3400179aea187ac2158a25ce6b08a',1,'FHSS_data']]],
   ['uncompressedwords_2',['UNCOMPRESSEDWORDS',['../common_8h.html#a0c40a351a0c0e01fbd5e5b1b0187eb48',1,'UNCOMPRESSEDWORDS():&#160;common.h'],['../RadioFunctions_8h.html#a0c40a351a0c0e01fbd5e5b1b0187eb48',1,'UNCOMPRESSEDWORDS():&#160;RadioFunctions.h']]],
   ['updatebuttonlabels_3',['UpdateButtonLabels',['../TransmitterCode_2src_2main_8cpp.html#abf59862cf6c4e3df5a76f0bfea8919ef',1,'main.cpp']]],
   ['updateinterpolationtypes_4',['updateInterpolationTypes',['../TransmitterCode_2src_2main_8cpp.html#a3d20af2f1fee81198a0cef2d4500083a',1,'main.cpp']]],
   ['updateled_5',['UpdateLED',['../RadioFunctions_8h.html#a8c8edf1ff8b98d9cd27b45c4e20f22d9',1,'UpdateLED():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a8c8edf1ff8b98d9cd27b45c4e20f22d9',1,'UpdateLED():&#160;main.cpp']]],
-  ['updatemodelsnameeverywhere_6',['UpdateModelsNameEveryWhere',['../TransmitterCode_2src_2main_8cpp.html#a9e1de754e1d2d483fb15957f70cf0488',1,'UpdateModelsNameEveryWhere():&#160;main.cpp'],['../RadioFunctions_8h.html#a9e1de754e1d2d483fb15957f70cf0488',1,'UpdateModelsNameEveryWhere():&#160;main.cpp']]],
+  ['updatemodelsnameeverywhere_6',['UpdateModelsNameEveryWhere',['../RadioFunctions_8h.html#a9e1de754e1d2d483fb15957f70cf0488',1,'UpdateModelsNameEveryWhere():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a9e1de754e1d2d483fb15957f70cf0488',1,'UpdateModelsNameEveryWhere():&#160;main.cpp']]],
   ['updateoneswitchview_7',['updateOneSwitchView',['../TransmitterCode_2src_2main_8cpp.html#a14dcac76ed8a048041fdc6e6f5d5d000',1,'main.cpp']]],
   ['updateswitchesview_8',['UpdateSwitchesView',['../TransmitterCode_2src_2main_8cpp.html#ad2376976bcbc43d81e55e5b58ce2818d',1,'main.cpp']]],
   ['updatetrimview_9',['UpdateTrimView',['../TransmitterCode_2src_2main_8cpp.html#ac78966debc2cdc13d8ca958ce3b20c78',1,'main.cpp']]],

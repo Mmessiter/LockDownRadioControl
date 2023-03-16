@@ -41,6 +41,13 @@ var NAVTREE =
       [ "Radio Control Features list, so far:", "TransmitterCode.html#LockDown", null ],
       [ "Teensy 4.1 Pins", "TransmitterCode.html#txPinout", null ]
     ] ],
+    [ "Namespaces", "namespaces.html", [
+      [ "Namespace List", "namespaces.html", "namespaces_dup" ],
+      [ "Namespace Members", "namespacemembers.html", [
+        [ "All", "namespacemembers.html", null ],
+        [ "Variables", "namespacemembers_vars.html", null ]
+      ] ]
+    ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],
@@ -72,14 +79,15 @@ var NAVTREEINDEX =
 "MPU6050_8h.html#aa4a24f325b4449adf83ce8458bb31a08",
 "Quadcopter_2src_2main_8cpp.html#a16a244087b5c92e39d803738faa6ff67",
 "RadioFunctions_8h.html#a0008024e40c8e90017f18745d34b6224",
-"RadioFunctions_8h.html#a9c26d80f6f18d6a999a1a464e92192ef",
-"ReceiverCode_2src_2main_8cpp.html#afabe4c9d9760f8606aa408474e3d626c",
-"TransmitterCode_2src_2main_8cpp.html#a4ba723ef2554d270e96431d281d7dadf",
-"TransmitterCode_2src_2main_8cpp.html#aa55e9d8bf10b47c2b9139b197b7ee842",
-"TransmitterCode_2src_2main_8cpp_source.html",
-"classMPU6050.html#aec9b1f7b83d8850858f4200b3afa79fd",
-"classMPU9250.html#ad8a854d983ef261da1fe34aec3037886",
-"functions_y.html"
+"RadioFunctions_8h.html#a9d1ed55f9bcd66d3b1137bca25978f0f",
+"ReceiverCode_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f",
+"TransmitterCode_2src_2main_8cpp.html#a4c9fbf66b2c98730d43dc9dfe573a998",
+"TransmitterCode_2src_2main_8cpp.html#aa61377ec59e711151913086167f2f48f",
+"annotated.html",
+"classMPU6050.html#aed33db318a770d0020eb8b84058650f3",
+"classMPU9250.html#ad9b6213723700af8daba00f31840fe16",
+"functions_z.html",
+"structs_8h.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

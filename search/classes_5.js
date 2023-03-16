@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['sbus_0',['SBUS',['../classSBUS.html',1,'']]]
+  ['vectorfloat_0',['VectorFloat',['../classVectorFloat.html',1,'']]],
+  ['vectorint16_1',['VectorInt16',['../classVectorInt16.html',1,'']]]
 ];

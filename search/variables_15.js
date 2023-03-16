@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['ukrules_0',['UkRules',['../structFFHS__Area.html#a5c5f6f1d424c14455b10c9b1b859d9e5',1,'FFHS_Area::UkRules()'],['../RadioFunctions_8h.html#a7847cc790a939f378993691ae7d40a2f',1,'UkRules():&#160;RadioFunctions.h']]],
-  ['ukrulescounter_1',['UkRulesCounter',['../structFFHS__Area.html#a7c9dc9a53de9d516957886e4d9ecc289',1,'FFHS_Area']]],
+  ['ukrules_0',['UkRules',['../RadioFunctions_8h.html#a7847cc790a939f378993691ae7d40a2f',1,'UkRules():&#160;RadioFunctions.h'],['../namespaceFHSS__data.html#a5dacaf20c4eebf662d8c33089bccfad7',1,'FHSS_data::UkRules()']]],
+  ['ukrulescounter_1',['UkRulesCounter',['../namespaceFHSS__data.html#aa3c3400179aea187ac2158a25ce6b08a',1,'FHSS_data']]],
   ['use_5fina219_2',['USE_INA219',['../TransmitterCode_2src_2main_8cpp.html#a87ae50e2ac4507568cbf98072f174a1b',1,'main.cpp']]],
   ['usedualrates_3',['UseDualRates',['../TransmitterCode_2src_2main_8cpp.html#a5f6ebf5df29e0ee922a462cbdd419ed8',1,'main.cpp']]],
   ['uselog_4',['UseLog',['../RadioFunctions_8h.html#aa42482a0bb01edaf26f217dbc38643d2',1,'UseLog():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#aa42482a0bb01edaf26f217dbc38643d2',1,'UseLog():&#160;main.cpp']]],
