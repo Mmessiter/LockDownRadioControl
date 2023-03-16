@@ -497,14 +497,15 @@ bool     DoingCheckSm               = false;
 bool     RecursedAlready = false;
 bool     TXLiPo                         = false;
 uint8_t  CurrentPoint                   = 1;
+
 bool     UseDualRates                    = false;
 uint8_t  Drate1                          = 100; 
 uint8_t  Drate2                          = 75; 
 uint8_t  Drate3                          = 50;
 uint8_t  DualRateChannels[8]             =  {1, 2, 4, 0, 0, 0, 0, 0};
-uint16_t CurveDots[5];
 uint8_t  DualRateValue                   = 100;
 
+uint16_t CurveDots[5];
 char     Confirmed[2];
 char     NewFileBuffer[MAXFILELEN];
 uint16_t NewFileBufferPointer = 0;
@@ -3734,7 +3735,7 @@ if (PPMdata.UseTXModule)
          PPMdata.PPMInputBuddy.begin(BUDDYPPMPORT);
     }else{
         if (!PPMdata.UseTXModule && BuddyPupilOnPPM) {
-            PPMdata.PPMOutputBuddy.begin(BUDDYPPMPORT); // 'if' can be removed later
+            PPMdata.PPMOutputBuddy.begin(BUDDYPPMPORT); 
         }
     } 
 
