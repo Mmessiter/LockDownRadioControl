@@ -6,6 +6,7 @@ var hierarchy =
       [ "MPU9250FIFO", "classMPU9250FIFO.html", null ]
     ] ],
     [ "Payload", "structPayload.html", null ],
+    [ "PPMArea", "structPPMArea.html", null ],
     [ "Quaternion", "classQuaternion.html", null ],
     [ "SBUS", "classSBUS.html", null ],
     [ "VectorFloat", "classVectorFloat.html", null ],

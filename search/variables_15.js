@@ -9,6 +9,6 @@ var searchData=
   ['usemotorkill_6',['UseMotorKill',['../TransmitterCode_2src_2main_8cpp.html#ad76445c097f9d33a6935be5c2489bd34',1,'main.cpp']]],
   ['user_5fctrl_7',['USER_CTRL',['../classMPU9250.html#ac7a02a1a77fe8bf5a477cc37820d2f27',1,'MPU9250']]],
   ['usesbus_8',['UseSBUS',['../ReceiverCode_2src_2main_8cpp.html#a80f5214ddc3b9618293f3b2694dff6f7',1,'main.cpp']]],
-  ['usesbusnotppmfromrx_9',['UseSBUSNotPPMFromRX',['../TransmitterCode_2src_2main_8cpp.html#a979622dc268dd31678cc927e54867bf4',1,'main.cpp']]],
-  ['usetxmodule_10',['UseTXModule',['../TransmitterCode_2src_2main_8cpp.html#a981faa4e7968104f16333ff07db55ce3',1,'main.cpp']]]
+  ['usesbusfromrx_9',['UseSBUSFromRX',['../structPPMArea.html#a748d93840ef117d5c5cd62dc915f0891',1,'PPMArea']]],
+  ['usetxmodule_10',['UseTXModule',['../structPPMArea.html#a6f623131e7bf583da7799c58fe3d9c08',1,'PPMArea']]]
 ];
