@@ -513,30 +513,36 @@ bool     TimerDownwards         = false;
 uint16_t TimerStartTime         = 5 * 60; 
 bool     TimesUp                = false;
 uint8_t  CountDownIndex = 0;
-bool     UseSBUSNotPPMFromRX    = true;  // at receiver. false = PPM
-uint16_t PPMChannelCount        = 8;  // for our RX - NOT TX module  
-
 
 // **********************************************************************************************************************************
-// **********************************  Area for PPM & TX MODULE **********************************************************************
-#define A 1
-#define E 2
-#define T 3
-#define R 4
-PulsePositionOutput     PPMOutputModule;       // PPM for buddy boxing and TX Modules
-PulsePositionOutput     PPMOutputBuddy;        // PPM for buddy boxing and TX Modules
-PulsePositionInput      PPMInputBuddy;         // PPM for buddy boxing
+// **********************************  Area & struct for PPM & TX MODULE ************************************************************
+// **********************************************************************************************************************************
 
-uint8_t                 PPMChannelOrder1[16]  = {A, E, T, R, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
-uint8_t                 PPMChannelOrder2[16]  = {T, A, E, R, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
-uint8_t                 PPMChannelOrder3[16]  = {E, T, A, R, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
-uint8_t                 * PPMChannelOrder = PPMChannelOrder2;     // will point to needed channel order
-uint32_t                LastPPMFrame         = 0;
-uint8_t                 PPMOrderSelection    = 2;
-uint8_t                 PPMChannelsNumber     = 6;
-uint8_t                 PPMMillis            = 22; // Not used!!! (yet)
-bool                    UseTXModule          = false;
-bool                    BindNewModel         = true;
+    #define A 1
+    #define E 2
+    #define T 3
+    #define R 4
+
+struct PPMArea{
+    PulsePositionOutput     PPMOutputModule;                          // PPM for buddy boxing and TX Modules
+    PulsePositionOutput     PPMOutputBuddy;                           // PPM for buddy boxing and TX Modules
+    PulsePositionInput      PPMInputBuddy;                            // PPM for buddy boxing
+    bool                    UseSBUSFromRX         = true;             // at receiver. false = PPM // heer
+    uint16_t                PPMChannelCount       = 8;                // for our RX - NOT TX module  
+    uint8_t                 PPMChannelOrder1[16]  = {A, E, T, R, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+    uint8_t                 PPMChannelOrder2[16]  = {T, A, E, R, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+    uint8_t                 PPMChannelOrder3[16]  = {E, T, A, R, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+    uint8_t                 * PPMChannelOrder     = PPMChannelOrder2; // will point to needed channel order
+    uint32_t                LastPPMFrame          = 0;
+    uint8_t                 PPMOrderSelection     = 2;
+    uint8_t                 PPMChannelsNumber     = 6;
+    uint8_t                 PPMMillis             = 22;               // Not used!!! (yet)
+    bool                    UseTXModule           = false;
+};
+PPMArea PPMdata;
+
+// **********************************************************************************************************************************
+
 uint64_t NewPipeMaybe = 0;
 uint64_t PreviousNewPipes[PIPES_TO_COMPARE];
 uint8_t  PreviousNewPipesIndex = 0;
@@ -547,7 +553,6 @@ uint8_t  pcount                = 0;
 // **********************************************************************************************************************************
 // *********************************************** END OF GLOBAL DATA ***************************************************************
 // **********************************************************************************************************************************
-
 
 // **********************************************************************************************************************************
 
@@ -624,9 +629,9 @@ void GetSlaveChannelValuesPPM() // MASTER code
 {
      if (BuddyON) {
 
-        if (PPMInputBuddy.available() == CHANNELSUSED){
+        if (PPMdata.PPMInputBuddy.available() == CHANNELSUSED){
             for (int j = 0; j < CHANNELSUSED; ++j) {                                   // While slave has control, his stick data replaces all ours
-                uint16_t PpmIn = PPMInputBuddy.read(j + 1);                            // read EVERY channel
+                uint16_t PpmIn = PPMdata.PPMInputBuddy.read(j + 1);                            // read EVERY channel
                 if (BuddyControlled & 1 << (j)) {                                      // Test if this channel is buddy controlled. If not leave it unchanged
                     SendBuffer[j] = PpmIn;
                     PPMBuffer[j]  = PpmIn;
@@ -684,7 +689,7 @@ FASTRUN void SendViaPPM()
 {
     if (millis() - PPMTimer >= PPMBUDDYFRAMERATE) {
         PPMTimer = millis();
-        for (int j = 0; j < CHANNELSUSED; ++j) PPMOutputBuddy.write(j+1, SendBuffer[j]); 
+        for (int j = 0; j < CHANNELSUSED; ++j) PPMdata.PPMOutputBuddy.write(j+1, SendBuffer[j]); 
     }
 }
 /*********************************************************************************************************************************/
@@ -1769,7 +1774,7 @@ void ShowConnectionQuality()
     char TXModuleMSG[]            = "** Using TX module **";
 
 
-    if (UseTXModule) SendText(FrontView_Connected, TXModuleMSG);
+    if (PPMdata.UseTXModule) SendText(FrontView_Connected, TXModuleMSG);
     if (!LedWasGreen) return;
     SendValue(Quality, ConnectionQuality); // show quality of connection in progress bar
     strcpy(Msgbuf, Msg_Connected);
@@ -1781,7 +1786,7 @@ void ShowConnectionQuality()
     if ((ConnectionQuality >= 25) && (ConnectionQuality < 50)) strcat(Msgbuf, Msg_ConnectedWeak);
     if ((ConnectionQuality >= 1) && (ConnectionQuality < 25)) strcat(Msgbuf, Msg_ConnectedVWeak);
     SendText(FrontView_Connected, Msgbuf);
-    SendCommand(Visible); // heer
+    SendCommand(Visible); 
 }
 /*********************************************************************************************************************************/
 
@@ -3047,11 +3052,11 @@ bool ReadOneModel(uint32_t Mnum)
     if (TimerStartTime > 120 * 60) TimerStartTime = 5 * 60;
     ++SDCardAddress;
     ++SDCardAddress;
-    UseSBUSNotPPMFromRX     = (bool) SDRead8BITS(SDCardAddress);
+    PPMdata.UseSBUSFromRX     = (bool) SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-    PPMChannelCount         =  SDRead16BITS(SDCardAddress);
-    if ((PPMChannelCount > 16) || (PPMChannelCount < 1)){  // miles out of range PPMChannelCount?
-         PPMChannelCount = 8;
+    PPMdata.PPMChannelCount         =  SDRead16BITS(SDCardAddress);
+    if ((PPMdata.PPMChannelCount > 16) || (PPMdata.PPMChannelCount < 1)){  // miles out of range PPMChannelCount?
+         PPMdata.PPMChannelCount = 8;
     }
     ++SDCardAddress;
     ++SDCardAddress;
@@ -3215,16 +3220,16 @@ bool LoadAllParameters()
         ++SDCardAddress;
         TXLiPo = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
-        PPMOrderSelection = SDRead8BITS(SDCardAddress);
-        if ((PPMOrderSelection > 3) || (PPMOrderSelection < 1)) PPMOrderSelection = 2;
+        PPMdata.PPMOrderSelection = SDRead8BITS(SDCardAddress);
+        if ((PPMdata.PPMOrderSelection > 3) || (PPMdata.PPMOrderSelection < 1)) PPMdata.PPMOrderSelection = 2;
         ++SDCardAddress;
-        PPMChannelsNumber = SDRead8BITS(SDCardAddress);
-        if ((PPMChannelsNumber > 16) || (PPMChannelsNumber < 1)) PPMChannelsNumber = 6;
+        PPMdata.PPMChannelsNumber = SDRead8BITS(SDCardAddress);
+        if ((PPMdata.PPMChannelsNumber > 16) || (PPMdata.PPMChannelsNumber < 1)) PPMdata.PPMChannelsNumber = 6;
         ++SDCardAddress;
-        PPMMillis = SDRead8BITS(SDCardAddress);
-         if ((PPMMillis > 50) || (PPMMillis < 2)) PPMMillis = 22;// Not used!!! (yet)
+        PPMdata.PPMMillis = SDRead8BITS(SDCardAddress);
+         if ((PPMdata.PPMMillis > 50) || (PPMdata.PPMMillis < 2)) PPMdata.PPMMillis = 22;// Not used!!! (yet)
         ++SDCardAddress;
-         UseTXModule = SDRead8BITS(SDCardAddress);
+         PPMdata.UseTXModule = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
         ReadCheckSum32(); 
         CheckTrimValues();
@@ -3709,9 +3714,9 @@ FLASHMEM void setup()
 
 
 #ifdef TXMODULESUPPORT
-if (UseTXModule)  
+if (PPMdata.UseTXModule)  
     {
-        PPMOutputModule.begin(PPMPORT); 
+        PPMdata.PPMOutputModule.begin(PPMPORT); 
         SelectChannelOrder();
     }
     else
@@ -3726,10 +3731,10 @@ if (UseTXModule)
 
 #ifdef TXMODULESUPPORT  
     if(BuddyMaster){
-         PPMInputBuddy.begin(BUDDYPPMPORT);
+         PPMdata.PPMInputBuddy.begin(BUDDYPPMPORT);
     }else{
-        if (!UseTXModule && BuddyPupilOnPPM) {
-            PPMOutputBuddy.begin(BUDDYPPMPORT); // 'if' can be removed later
+        if (!PPMdata.UseTXModule && BuddyPupilOnPPM) {
+            PPMdata.PPMOutputBuddy.begin(BUDDYPPMPORT); // 'if' can be removed later
         }
     } 
 
@@ -3975,13 +3980,13 @@ void SaveTransmitterParameters()
     SDUpdate8BITS(SDCardAddress, TXLiPo);
     ++SDCardAddress;
 
-     SDUpdate8BITS(SDCardAddress, PPMOrderSelection);
+     SDUpdate8BITS(SDCardAddress, PPMdata.PPMOrderSelection);
     ++SDCardAddress;
-     SDUpdate8BITS(SDCardAddress, PPMChannelsNumber);
+     SDUpdate8BITS(SDCardAddress, PPMdata.PPMChannelsNumber);
     ++SDCardAddress;
-     SDUpdate8BITS(SDCardAddress, PPMMillis);// Not used!!! (yet)
+     SDUpdate8BITS(SDCardAddress, PPMdata.PPMMillis);// Not used!!! (yet)
     ++SDCardAddress;
-     SDUpdate8BITS(SDCardAddress, UseTXModule);
+     SDUpdate8BITS(SDCardAddress, PPMdata.UseTXModule);
     ++SDCardAddress;
 
     SaveCheckSum32();  // Save the Transmitter parametres checksm
@@ -4177,10 +4182,10 @@ void SaveOneModel(uint32_t mnum)
         ++SDCardAddress;
         ++SDCardAddress;
 
-        SDUpdate8BITS(SDCardAddress, UseSBUSNotPPMFromRX); 
+        SDUpdate8BITS(SDCardAddress, PPMdata.UseSBUSFromRX); 
         ++SDCardAddress;   
 
-        SDUpdate16BITS(SDCardAddress, PPMChannelCount); 
+        SDUpdate16BITS(SDCardAddress, PPMdata.PPMChannelCount); 
         ++SDCardAddress;  
         ++SDCardAddress;
 
@@ -6486,9 +6491,9 @@ void RXSetup1Start() // model options screen
     SendValue(RxVCorrextion, RxVoltageCorrection);
     SendValue(c2, TimerDownwards);
     SendValue(n4, TimerStartTime/60);
-    SendValue(r0, UseSBUSNotPPMFromRX);
-    SendValue(r1, !UseSBUSNotPPMFromRX);
-    SendValue(n5,PPMChannelCount);
+    SendValue(r0, PPMdata.UseSBUSFromRX);
+    SendValue(r1, !PPMdata.UseSBUSFromRX);
+    SendValue(n5,PPMdata.PPMChannelCount);
     CurrentView = RXSETUPVIEW1;
     UpdateModelsNameEveryWhere();
 
@@ -6535,9 +6540,9 @@ void RXSetup1End()
     SendValue(Progress,70);
     TimerStartTime          = GetValue(n4) * 60;
     SendValue(Progress,80);
-    UseSBUSNotPPMFromRX            = GetValue(r0);
+    PPMdata.UseSBUSFromRX            = GetValue(r0);
     SendValue(Progress,90);
-    PPMChannelCount              =  GetValue(n5);
+    PPMdata.PPMChannelCount              =  GetValue(n5);
     SendValue(Progress, 100);
     CurrentView             = TXSETUPVIEW;
     SaveOneModel(ModelNumber);
@@ -6699,7 +6704,7 @@ void ResetTransmitterSettings(){    // This function resets all transmitter para
    MotorChannel            = 15;
    MotorChannelZero        = 0;
    TimerDownwards          = false;
-   UseTXModule             = false;
+   PPMdata.UseTXModule             = false;
    char     ProgressEnd[]         = "vis Progress,0";
    SetDS1307ToCompilerTime();
    for (int k = 1; k < 5;++k){ // writes default four times!
@@ -7273,14 +7278,14 @@ void DoMFName(){
     char r2[] = "r2";
 
     SendCommand(GoTXModule);
-    SendValue(c1, UseTXModule);
-    SendValue(n3, PPMChannelsNumber);
-    SendValue(n4, PPMMillis);// Not used!!! (yet)
-    if (PPMOrderSelection == 1) {SendValue(r0, 1);}
+    SendValue(c1, PPMdata.UseTXModule);
+    SendValue(n3, PPMdata.PPMChannelsNumber);
+    SendValue(n4, PPMdata.PPMMillis);// Not used!!! (yet)
+    if (PPMdata.PPMOrderSelection == 1) {SendValue(r0, 1);}
         else {SendValue(r0, 0);}
-    if (PPMOrderSelection == 2) {SendValue(r1, 1);}
+    if (PPMdata.PPMOrderSelection == 2) {SendValue(r1, 1);}
         else {SendValue(r1, 0);}
-    if (PPMOrderSelection == 3) {SendValue(r2, 1);}
+    if (PPMdata.PPMOrderSelection == 3) {SendValue(r2, 1);}
         else {SendValue(r2, 0);}
  }
 
@@ -7288,9 +7293,9 @@ void DoMFName(){
 
 void SelectChannelOrder(){
 
-       if(PPMOrderSelection == 1) PPMChannelOrder   = PPMChannelOrder1;
-       if(PPMOrderSelection == 2) PPMChannelOrder   = PPMChannelOrder2;   
-       if(PPMOrderSelection == 3) PPMChannelOrder   = PPMChannelOrder3;
+       if(PPMdata.PPMOrderSelection == 1) PPMdata.PPMChannelOrder   = PPMdata.PPMChannelOrder1;
+       if(PPMdata.PPMOrderSelection == 2) PPMdata.PPMChannelOrder   = PPMdata.PPMChannelOrder2;   
+       if(PPMdata.PPMOrderSelection == 3) PPMdata.PPMChannelOrder   = PPMdata.PPMChannelOrder3;
    
 }
 
@@ -7307,32 +7312,32 @@ void SelectChannelOrder(){
     char r1[] = "r1";
     char r2[] = "r2";
     char prompt[] = "Power off transmitter?";
-    bool oldUseTxModule  = UseTXModule;
+    bool oldUseTxModule  = PPMdata.UseTXModule;
     char     ProgressStart[]       = "vis Progress,1";
     char     Progress[]            = "Progress";
     
     SendCommand(ProgressStart);
     SendValue(Progress, 10);
-    UseTXModule      =   GetValue(c1); 
-    if (UseTXModule != oldUseTxModule){
+    PPMdata.UseTXModule      =   GetValue(c1); 
+    if (PPMdata.UseTXModule != oldUseTxModule){
         if (!GetConfirmation(GoBack,prompt)){ 
-                UseTXModule = oldUseTxModule;
-                SendValue(c1, UseTXModule);
+                PPMdata.UseTXModule = oldUseTxModule;
+                SendValue(c1, PPMdata.UseTXModule);
                 return;
         }
     }
     SendValue(Progress, 30);
     Procrastinate(100);
-    PPMChannelsNumber = GetValue(n3);
+    PPMdata.PPMChannelsNumber = GetValue(n3);
     SendValue(Progress, 51);
-    PPMMillis        =   GetValue(n4);// Not used!!! (yet)
-    if (GetValue(r0)) PPMOrderSelection = 1;
+    PPMdata.PPMMillis        =   GetValue(n4);// Not used!!! (yet)
+    if (GetValue(r0)) PPMdata.PPMOrderSelection = 1;
     SendValue(Progress, 63);
     Procrastinate(10);
-    if (GetValue(r1)) PPMOrderSelection = 2;
+    if (GetValue(r1)) PPMdata.PPMOrderSelection = 2;
     SendValue(Progress, 88);
     Procrastinate(10);
-    if (GetValue(r2)) PPMOrderSelection = 3;
+    if (GetValue(r2)) PPMdata.PPMOrderSelection = 3;
     SelectChannelOrder();
     SendValue(Progress, 99);
     Procrastinate(10);
@@ -7341,7 +7346,7 @@ void SelectChannelOrder(){
     SendCommand(page_SetupView);
     CurrentView = TXSETUPVIEW;
     Procrastinate(10);
-    if (UseTXModule != oldUseTxModule) {
+    if (PPMdata.UseTXModule != oldUseTxModule) {
         digitalWrite(POWER_OFF_PIN, HIGH); 
     }
  }
@@ -8506,7 +8511,7 @@ if (InStrng(Export, TextIn)) {
             
             if ((!b5isGrey) )// no scan while connected!!!      
             {
-                    if (UseTXModule) InitRadio(DefaultPipe);   // because scan fails if radio isn't initialised
+                    if (PPMdata.UseTXModule) InitRadio(DefaultPipe);   // because scan fails if radio isn't initialised
                     SendCommand(page_FhssView);
                     DrawFhssBox();
                     DoScanInit();
@@ -8763,8 +8768,8 @@ void LoadPacketData()
             break;
 
         case 5:
-            SendBuffer[CHANNELSUSED + 1] = UseSBUSNotPPMFromRX;       // 1 - 0
-            SendBuffer[CHANNELSUSED + 2] = PPMChannelCount;     // 
+            SendBuffer[CHANNELSUSED + 1] = PPMdata.UseSBUSFromRX;       // 1 - 0
+            SendBuffer[CHANNELSUSED + 2] = PPMdata.PPMChannelCount;     // 
             break;
 
         default : break;
@@ -9808,10 +9813,10 @@ void FASTRUN ManageTransmitter(){
 /**********************************************************************************************************/
 #ifdef TXMODULESUPPORT
 void SendPPM(){ // Send a frame of PPM to Third party TX module
-    if (millis() - LastPPMFrame < 10) return; // was PPMMillis (... that was wrong)
-    LastPPMFrame = millis();
-    for (int j = 0; j < PPMChannelsNumber; ++j) {
-        PPMOutputModule.write(*(PPMChannelOrder + j), SendBuffer[j]);  
+    if (millis() - PPMdata.LastPPMFrame < 10) return; // was PPMMillis (... that was wrong)
+    PPMdata.LastPPMFrame = millis();
+    for (int j = 0; j < PPMdata.PPMChannelsNumber; ++j) {
+        PPMdata.PPMOutputModule.write(*(PPMdata.PPMChannelOrder + j), SendBuffer[j]);  
     }
 }
 #endif
@@ -9834,7 +9839,7 @@ void FixMotorChannel()
 /************************************************************************************************************/
 void SendBindingPipe()
 {
-    if (UseTXModule) return;
+    if (PPMdata.UseTXModule) return;
     uint16_t BindPause = 3000;
     if (NewModelMemoryWasSaved) BindPause = 6000;
     if (!BoundFlag || !ModelMatched) BindingTimer = millis();
@@ -9873,7 +9878,7 @@ FASTRUN void loop()
     switch (CurrentMode) {
         case NORMAL:                           // 0
 #ifdef TXMODULESUPPORT
-            if (!UseTXModule) {
+            if (!PPMdata.UseTXModule) {
                  SendData();                   // local TX
             }else{
                  SendPPM();                    // for TX module
