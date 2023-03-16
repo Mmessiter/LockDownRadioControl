@@ -389,8 +389,7 @@ uint8_t   Gyear;     // = tm.Year;   // 0-99
 bool      GPSTimeSynched    = false;
 short int DeltaGMT          = 0;
 uint32_t  SwapWaveBandTimer = 0;
-uint8_t   UkRulesCounter    = 0;
-bool      UkRules           = true;
+
 uint8_t   SwapWaveBand      = 0;
 uint16_t  TrimMultiplier     = 2; // How much to multiply trim by
 uint8_t   DateFix           = 0;
@@ -514,6 +513,8 @@ uint8_t   FHSS_Channels[83] = {51, 28, 24, 61, 64, 55, 66, 19, 76, 21, 59, 67, 1
                                35, 57, 45, 29, 75, 3, 41, 62, 11, 9, 77, 37, 8, 31, 36, 18, 17, 50, 78, 73, 30, 79, 6, 23, 40,
                                54, 12, 80, 53, 22, 1, 74, 39, 58, 63, 70, 52, 42, 25, 43, 26, 14, 38, 48, 68, 33, 27, 60, 44, 46,
                                56, 7, 81, 5, 65, 4, 10};
+uint8_t   UkRulesCounter    = 0;
+bool      UkRules           = true;
 };
 
 FFHS_Area FFHS_data;
@@ -1085,12 +1086,12 @@ void ReadTime()
             }
             if (MayBeAddZero(DisplayedHour)) strcat(TimeString, zero);
             strcat(TimeString, Str(NB, DisplayedHour, 0));
-            if (UkRules) strcat(TimeString, colon);
-            if (!UkRules) strcat(TimeString, colon1);
+            if (FFHS_data.UkRules) strcat(TimeString, colon);
+            if (!FFHS_data.UkRules) strcat(TimeString, colon1);
             if (MayBeAddZero(tm.Minute)) strcat(TimeString, zero);
             strcat(TimeString, Str(NB, tm.Minute, 0));
-            if (UkRules) strcat(TimeString, colon);
-            if (!UkRules) strcat(TimeString, colon1);
+            if (FFHS_data.UkRules) strcat(TimeString, colon);
+            if (!FFHS_data.UkRules) strcat(TimeString, colon1);
             if (MayBeAddZero(tm.Second)) strcat(TimeString, zero);
             strcat(TimeString, Str(NB, tm.Second, 0));
             SendText(DateTime, TimeString);
@@ -3318,14 +3319,14 @@ FLASHMEM void GetTXVersionNumber()
 FASTRUN void SetUKFrequencies()
 {
     FHSSChPointer = FFHS_data.FHSS_Channels;
-    UkRules       = true;
+    FFHS_data.UkRules       = true;
     FHSSRecoveryPointer = FFHS_data.FHSS_Channels;
 }
 /************************************************************************************************************/
 FASTRUN void SetTestFrequencies()
 {
     FHSSChPointer = FFHS_data.FHSS_Channels1;
-    UkRules       = false;
+    FFHS_data.UkRules       = false;
    FHSSRecoveryPointer = FFHS_data.FHSS_Channels1;
 }
 /************************************************************************************************************/
@@ -7784,26 +7785,26 @@ FASTRUN void ButtonWasPressed()
             return;
         }
         if (InStrng(UKRULES, TextIn) > 0) { // UK Offcom regulations?
-            ++UkRulesCounter;
-            if (UkRulesCounter == 1) SwapWaveBandTimer = millis();
-            if (UkRulesCounter == 3) {
+            ++FFHS_data.UkRulesCounter;
+            if (FFHS_data.UkRulesCounter == 1) SwapWaveBandTimer = millis();
+            if (FFHS_data.UkRulesCounter == 3) {
                 
 
                 if ((millis() - SwapWaveBandTimer) < 5000) { // pressed three times in under 5 seconds?!
-                    if (!UkRules) {
+                    if (!FFHS_data.UkRules) {
                         SwapWaveBand = 1;
-                        UkRules      = true;
+                        FFHS_data.UkRules      = true;
                         SendText(b17, Htext1);
                     }
                     else {
                         SwapWaveBand = 2;
-                        UkRules      = false;
+                        FFHS_data.UkRules      = false;
                         SendText(b17, Htext0);
                     }
                 }
                 
 
-                UkRulesCounter = 0;
+                FFHS_data.UkRulesCounter = 0;
             }
             ClearText();
             return;
