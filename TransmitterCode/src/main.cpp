@@ -201,8 +201,7 @@ uint16_t AnalogueInput[PROPOCHANNELS]  = {A0, A1, A2, A3, A6, A7, A8, A9}; // 8 
 uint8_t  TrimNumber[8]                 = {TRIM1A, TRIM1B, TRIM2A, TRIM2B, TRIM3A, TRIM3B, TRIM4A, TRIM4B};        // These too can get swapped over later
 
 uint8_t  CurrentMode                  = NORMAL;
-uint8_t  AllChannels[127]; /// for scanning
-uint8_t  NoCarrier[127];
+
 
 uint32_t TimerMillis         = 0;
 uint32_t LastSeconds         = 0;
@@ -9813,7 +9812,7 @@ FASTRUN void loop()
             ChannelCentres();
             break;
         case SCANWAVEBAND:      // 3
-            ScanAllChannels();
+            ScanAllChannels(false);
             break;
         case SENDNOTHING:       // 4
             break;

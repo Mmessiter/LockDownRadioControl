@@ -314,7 +314,7 @@ void DrawFhssBox()
 
 // This function scans the waveband and displays result in the box that was drawn by the function above.
 
-void ScanAllChannels()
+void ScanAllChannels(bool cls)
 {
     int  x1 = xx1;
     int  y1 = yy1;
@@ -330,8 +330,17 @@ void ScanAllChannels()
     char fyll[] = "fill ";
     char NewYellow[15];
     char NA[1] = ""; // blank one
-    
-    Str(NewYellow, HighlightColour, 0);
+    static uint8_t  AllChannels[127]; /// for scanning
+    static uint8_t  NoCarrier[127];
+
+    if (cls){
+        for (int i = 0; i < 125; i++) {
+            NoCarrier[i]   = 0;
+            AllChannels[i] = 0;
+        }
+        return;
+    }
+        Str(NewYellow, HighlightColour, 0);
     for (Sc = 1; Sc <= 125; ++Sc) { // heer
        if (NEXTION.available()) return; // in case someone wants to stop!
         Radio1.setChannel(Sc);
@@ -433,10 +442,7 @@ void DoScanInit()
     Radio1.setDataRate(RF24_1MBPS); // Scan only works at this default rate
     CurrentMode = SCANWAVEBAND;     // Fhss == No transmitting please, we are scanning.
     BoundFlag   = false;
-    for (int i = 0; i < 125; i++) {
-        NoCarrier[i]   = 0;
-        AllChannels[i] = 0;
-    }
+    ScanAllChannels(true);
 }
 
 /*********************************************************************************************************************************/

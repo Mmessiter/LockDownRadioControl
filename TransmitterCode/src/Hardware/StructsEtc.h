@@ -1,6 +1,5 @@
 
 #ifndef TXstructs_h
-
 #define TXstructs_h
 
 #include <Arduino.h>

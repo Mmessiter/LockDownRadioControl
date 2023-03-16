@@ -527,7 +527,7 @@ void         DoScanInit();
 void         DoScanEnd();
 void         PreScan();
 void         HopToNextChannel();
-void         ScanAllChannels();
+void         ScanAllChannels(bool cls);
 void         SendData();
 void         Procrastinate(uint32_t HowLong);
 void         DrawFhssBox();
