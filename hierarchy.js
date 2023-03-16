@@ -1,5 +1,6 @@
 var hierarchy =
 [
+    [ "FFHS_Area", "structFFHS__Area.html", null ],
     [ "I2Cdev", "classI2Cdev.html", null ],
     [ "MPU6050", "classMPU6050.html", null ],
     [ "MPU9250", "classMPU9250.html", [

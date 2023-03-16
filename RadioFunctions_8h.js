@@ -349,7 +349,7 @@ var RadioFunctions_8h =
     [ "CurrentMode", "RadioFunctions_8h.html#aacabee92eb3ddd2e3cf31695c00a912e", null ],
     [ "CurrentView", "RadioFunctions_8h.html#a2c76c41cd62573eb7227882fc9b9e557", null ],
     [ "DefaultPipe", "RadioFunctions_8h.html#a0b9fd9f8e85725c128617f006132ea57", null ],
-    [ "FHSS_Channels", "RadioFunctions_8h.html#a04e4fafd0e5c4b4b64317128f248a929", null ],
+    [ "FFHS_data", "RadioFunctions_8h.html#a225852daf2f477b5d8195c3353988a0a", null ],
     [ "FHSSChPointer", "RadioFunctions_8h.html#a76b48a1dfbe2bd97ee5e0479ff16e8ef", null ],
     [ "FHSSRecoveryPointer", "RadioFunctions_8h.html#a90e15e9a52f172f55e92f5c86bcb5b29", null ],
     [ "ForeGroundColour", "RadioFunctions_8h.html#a029840d27a3c9954aa481d494df4ace6", null ],
