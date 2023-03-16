@@ -47,7 +47,7 @@
 // #define DB_NEXTION        // Debug NEXTION
 // #define DB_SD             // Debug SD card data
 // #define DB_CHECKSUM       // Debug 32BIT file checksum info
-// #define DB_FHSS           // Debug real time FHSS data
+ // #define DB_FHSS           // Debug real time FHSS data
 // #define DB_SENSORS        // Debug Sensors
 // #define DB_BIND           // Debug Binding
 // #define DB_SWITCHES       // Debug Switches
@@ -419,9 +419,15 @@ extern uint64_t       DefaultPipe;
 extern long int       RecoveryTimer;
 extern bool           Connected;
 extern uint16_t       CompressedData[];
-extern uint8_t        FHSS_Channels[];
+
 extern struct Payload AckPayload;
-const extern uint8_t  AckPayloadSize;
+const extern  uint8_t  AckPayloadSize;
+
+extern struct FFHS_Area FFHS_data;//
+
+extern uint8_t*         FHSSChPointer;
+extern uint8_t*         FHSSRecoveryPointer;
+
 extern uint8_t        SizeOfCompressedData;
 extern uint16_t       RangeTestGoodPackets;
 extern uint8_t        NextChannelNumber;
@@ -432,8 +438,7 @@ extern uint32_t       HopStart;
 extern char           ThisRadio[4];
 extern uint32_t       GapSum;
 extern uint32_t       GapStart;
-extern uint8_t*       FHSSChPointer;
-extern uint8_t*       FHSSRecoveryPointer;
+
 extern bool           BuddyPupilOnPPM;
 extern bool           BuddyMaster;
 extern uint16_t       BackGroundColour;

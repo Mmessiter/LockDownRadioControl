@@ -240,18 +240,6 @@ uint16_t MemoryForTransmtter = 0; // SD space for transmitter parameters
 uint16_t OneModelMemory      = 0; // SD space for every model's parameters
 uint32_t SDCardAddress       = 0; // Address on SD card (offset from zero)
 
-uint8_t FHSS_Channels1[42] = {93, 111, 107, 103, 106, 97, 108, 102, 118, // TEST array
-                              104, 101, 109, 98, 113, 124, 115, 91, 96, 85, 117, 89, 99, 114, 87, 112,
-                              86, 94, 92, 119, 120, 100, 121, 123, 95, 122, 105, 84, 116, 90, 110, 88};
-
-uint8_t FHSS_Channels[83] = {51, 28, 24, 61, 64, 55, 66, 19, 76, 21, 59, 67, 15, 71, 82, 32, 49, 69, 13, 2, 34, 47, 20, 16, 72, // UK array
-                             35, 57, 45, 29, 75, 3, 41, 62, 11, 9, 77, 37, 8, 31, 36, 18, 17, 50, 78, 73, 30, 79, 6, 23, 40,
-                             54, 12, 80, 53, 22, 1, 74, 39, 58, 63, 70, 52, 42, 25, 43, 26, 14, 38, 48, 68, 33, 27, 60, 44, 46,
-                             56, 7, 81, 5, 65, 4, 10};
-
-uint8_t*  FHSSChPointer; // pointer for channels array (three only used for reconnect)
-uint8_t*  FHSSRecoveryPointer;
-
 
 
 uint8_t   SwitchNumber[8]             = {SWITCH0, SWITCH1, SWITCH2, SWITCH3, SWITCH4, SWITCH5, SWITCH6, SWITCH7}; // These can get swapped over later
@@ -366,10 +354,6 @@ uint8_t      ErrorState      = 0;
 uint16_t XtouchPlace = 0; // Clicked X
 uint16_t YtouchPlace = 0; // Clicked Y
 
-bool BindButton = false;
-
-uint8_t PreviousChannelNumber = 0;
-uint8_t NextChannelNumber     = 0;
 
 // changing these four valiables controls LED blink and speed
 
@@ -514,6 +498,28 @@ bool     TimerDownwards         = false;
 uint16_t TimerStartTime         = 5 * 60; 
 bool     TimesUp                = false;
 uint8_t  CountDownIndex = 0;
+
+// **********************************************************************************************************************************
+// **********************************  Area & struct for FHSS data ************************************************************
+// **********************************************************************************************************************************
+
+struct FFHS_Area{
+
+uint8_t    FHSS_Channels1[42] = {93, 111, 107, 103, 106, 97, 108, 102, 118, // TEST array
+                              104, 101, 109, 98, 113, 124, 115, 91, 96, 85, 117, 89, 99, 114, 87, 112,
+                              86, 94, 92, 119, 120, 100, 121, 123, 95, 122, 105, 84, 116, 90, 110, 88};
+
+
+uint8_t   FHSS_Channels[83] = {51, 28, 24, 61, 64, 55, 66, 19, 76, 21, 59, 67, 15, 71, 82, 32, 49, 69, 13, 2, 34, 47, 20, 16, 72, // UK array
+                               35, 57, 45, 29, 75, 3, 41, 62, 11, 9, 77, 37, 8, 31, 36, 18, 17, 50, 78, 73, 30, 79, 6, 23, 40,
+                               54, 12, 80, 53, 22, 1, 74, 39, 58, 63, 70, 52, 42, 25, 43, 26, 14, 38, 48, 68, 33, 27, 60, 44, 46,
+                               56, 7, 81, 5, 65, 4, 10};
+};
+
+FFHS_Area FFHS_data;
+uint8_t*  FHSSRecoveryPointer;
+uint8_t*  FHSSChPointer;                // pointer for channels array (three only used for reconnect)
+uint8_t   NextChannelNumber     = 0;
 
 // **********************************************************************************************************************************
 // **********************************  Area & struct for PPM & TX MODULE ************************************************************
@@ -1101,20 +1107,6 @@ void StartInactvityTimeout()
 
 /*********************************************************************************************************************************/
 
-void MakeBindButtonInvisible()
-{
-    if (!ModelMatched) return;
-    if (CurrentView == FRONTVIEW) {
-        char bbiv[] = "vis bind,0";
-        if (BindButton) {
-            SendCommand(bbiv);
-            BindButton = false;
-        }
-    }
-}
-
-/*********************************************************************************************************************************/
-
 uint8_t GetLEDBrightness()
 {
     if (LedIsBlinking) {
@@ -1146,7 +1138,7 @@ void RedLedOn()
         ModelIdentified                             = false;
         ModelMatched                                = false;
         BoundFlag                                   = false;
-        BindButton                                  = false;
+        //BindButton                                  = false;
         BindingNow                                  = 0;
         pcount                                      = 0;
         PacketsPerSecond                            = 0;
@@ -1205,7 +1197,7 @@ void GreenLedOn()
         analogWrite(REDLED, 0);
         analogWrite(GREENLED, GetLEDBrightness()); // Brightness is a function of maybe blinking
         if (GetLEDBrightness()) LedWasGreen = true;
-        MakeBindButtonInvisible();
+       // MakeBindButtonInvisible();
         Reconnected = false;
     }
 }
@@ -1868,7 +1860,6 @@ FASTRUN void ShowComms()
                 if (BoundFlag) {
                     if (!BuddyMaster) {
                         if (!Reconnected) {
-                            MakeBindButtonInvisible();
                             ShowConnectionQuality();
                             Reconnected = true;
                         }
@@ -3326,16 +3317,16 @@ FLASHMEM void GetTXVersionNumber()
 /************************************************************************************************************/
 FASTRUN void SetUKFrequencies()
 {
-    FHSSChPointer = FHSS_Channels;
+    FHSSChPointer = FFHS_data.FHSS_Channels;
     UkRules       = true;
-    FHSSRecoveryPointer = FHSS_Channels;
+    FHSSRecoveryPointer = FFHS_data.FHSS_Channels;
 }
 /************************************************************************************************************/
 FASTRUN void SetTestFrequencies()
 {
-    FHSSChPointer = FHSS_Channels1;
+    FHSSChPointer = FFHS_data.FHSS_Channels1;
     UkRules       = false;
-    FHSSRecoveryPointer = FHSS_Channels1;
+   FHSSRecoveryPointer = FFHS_data.FHSS_Channels1;
 }
 /************************************************************************************************************/
 FASTRUN void CreateTimeStamp(char* DateAndTime)
@@ -9435,7 +9426,6 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                     
                 }
                 ModelMatched = true;                                      //  It's a match so start flying!
-                BindButton   = true;
                 return;
             } 
             if (ModelsMacUnion.Val64 != ModelsMacUnionSaved.Val64) 
@@ -9449,7 +9439,6 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                         ReadOneModel(ModelNumber);
                         if (ModelsMacUnion.Val64 == ModelsMacUnionSaved.Val64) {
                             ModelMatched = true;
-                            BindButton = true; 
                         }
                     }
                     if (ModelMatched)

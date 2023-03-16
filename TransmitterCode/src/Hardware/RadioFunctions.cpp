@@ -163,17 +163,6 @@ void RecordsPacketSuccess(uint8_t s)
     if (PacketsHistoryIndex >= (PERFECTPACKETSPERSECOND * ConnectionAssessSeconds)) PacketsHistoryIndex = 0; //
 }
 
-/***************************************************************************************/
-
- void HopNowAnyway() 
- {
-        NextChannel       = *(FHSSChPointer + NextChannelNumber); // The actual channel number pointed to. 
-        HopToNextChannel();
-        ++NextChannelNumber;
- }
-
-/***************************************************************************************/
-
 FASTRUN void FailedPacket()
 {
     RecordsPacketSuccess(0);                      // Record a failure
