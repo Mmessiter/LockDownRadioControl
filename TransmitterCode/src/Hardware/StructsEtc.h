@@ -1,9 +1,10 @@
-#include <Arduino.h>
-#include <PulsePosition.h>
 
 #ifndef TXstructs_h
+
 #define TXstructs_h
 
+#include <Arduino.h>
+#include <PulsePosition.h>
 
 /* ************************************* AckPayload structure ******************************************************
 
@@ -47,7 +48,7 @@ uint8_t   UkRulesCounter    = 0;
 bool      UkRules           = true;
 uint8_t*  FHSSRecoveryPointer;
 uint8_t*  FHSSChPointer;                // pointer for channels array (three only used for Recovery)
-uint8_t   NextChannelNumber     = 0;
+uint8_t   NextChannelNumber  = 0;
 }
 
 // **********************************************************************************************************************************
@@ -60,8 +61,8 @@ uint8_t   NextChannelNumber     = 0;
     #define R 4
 
 struct PPMArea{
-    PulsePositionOutput     PPMOutputModule;                          // PPM for buddy boxing and TX Modules
-    PulsePositionOutput     PPMOutputBuddy;                           // PPM for buddy boxing and TX Modules
+    PulsePositionOutput     PPMOutputModule;                          // PPM for TX Modules
+    PulsePositionOutput     PPMOutputBuddy;                           // PPM for buddy boxing 
     PulsePositionInput      PPMInputBuddy;                            // PPM for buddy boxing
     bool                    UseSBUSFromRX         = true;             // at receiver. false = PPM // heer
     uint16_t                PPMChannelCount       = 8;                // for our RX - NOT TX module  
@@ -76,6 +77,5 @@ struct PPMArea{
     bool                    UseTXModule           = false;
 };
 PPMArea PPMdata;
-
 
 #endif

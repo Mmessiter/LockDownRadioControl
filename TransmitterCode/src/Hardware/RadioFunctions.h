@@ -1,6 +1,6 @@
 
 // **************************************************************************
-//     This header file has all definitions and includes                    *
+//     This header file has most definitions and includes                   *
 // **************************************************************************
 
 #ifndef RadioFunctions_H
