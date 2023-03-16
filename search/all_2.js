@@ -55,7 +55,7 @@ var searchData=
   ['ak8963_5fpwr_5fdown_52',['AK8963_PWR_DOWN',['../classMPU9250.html#a7b12d669961fc847f3f5eab94c560e73',1,'MPU9250']]],
   ['ak8963_5freset_53',['AK8963_RESET',['../classMPU9250.html#a025bef32e50b09afcbaa02397a9749ca',1,'MPU9250']]],
   ['ak8963_5fwho_5fam_5fi_54',['AK8963_WHO_AM_I',['../classMPU9250.html#ab83c85ca5103d4baf46d800f1bc5e52c',1,'MPU9250']]],
-  ['allchannels_55',['AllChannels',['../TransmitterCode_2src_2main_8cpp.html#a1d18aaaa3cc4ba52bd309c88815c60a7',1,'AllChannels():&#160;main.cpp'],['../RadioFunctions_8h.html#a340f5f74a3364594ad9b460d4b5b04d5',1,'AllChannels():&#160;main.cpp']]],
+  ['allchannels_55',['AllChannels',['../RadioFunctions_8h.html#a340f5f74a3364594ad9b460d4b5b04d5',1,'RadioFunctions.h']]],
   ['altitudegps_56',['AltitudeGPS',['../ReceiverCode_2src_2main_8cpp.html#a9690c7445dbd0530fa729af6bac11044',1,'AltitudeGPS():&#160;main.cpp'],['../radio_8h.html#a9690c7445dbd0530fa729af6bac11044',1,'AltitudeGPS():&#160;main.cpp']]],
   ['analogueinput_57',['AnalogueInput',['../TransmitterCode_2src_2main_8cpp.html#aff628072047986ff5293dbb907c3f676',1,'main.cpp']]],
   ['analoguereed_58',['AnalogueReed',['../RadioFunctions_8h.html#ac5728db610c441820a6f47295967cbab',1,'AnalogueReed(uint8_t InputChannel):&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#ac5728db610c441820a6f47295967cbab',1,'AnalogueReed(uint8_t InputChannel):&#160;main.cpp']]],

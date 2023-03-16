@@ -9,7 +9,7 @@ var searchData=
   ['savetransmitterparameters_6',['SaveTransmitterParameters',['../TransmitterCode_2src_2main_8cpp.html#aaf3d3b6d086a958ac8ebf1bb771adcee',1,'main.cpp']]],
   ['sbus_7',['SBUS',['../classSBUS.html#aee0b4b879b6415eac8d79879c24bf88d',1,'SBUS']]],
   ['scalecommands_8',['scaleCommands',['../Quadcopter_2src_2main_8cpp.html#a8d52798485917f4265993ca62bd6ced4',1,'main.cpp']]],
-  ['scanallchannels_9',['ScanAllChannels',['../RadioFunctions_8cpp.html#a3856ba0adae43d089f08c7b7f653b306',1,'ScanAllChannels():&#160;RadioFunctions.cpp'],['../RadioFunctions_8h.html#a3856ba0adae43d089f08c7b7f653b306',1,'ScanAllChannels():&#160;RadioFunctions.cpp']]],
+  ['scanallchannels_9',['ScanAllChannels',['../RadioFunctions_8cpp.html#ae17dae8deffe2e33044f61fd3a8ebca2',1,'ScanAllChannels(bool cls):&#160;RadioFunctions.cpp'],['../RadioFunctions_8h.html#ae17dae8deffe2e33044f61fd3a8ebca2',1,'ScanAllChannels(bool cls):&#160;RadioFunctions.cpp']]],
   ['scani2c_10',['ScanI2c',['../ReceiverCode_2src_2main_8cpp.html#a887240a00b11c00c971e633ed47319f9',1,'ScanI2c():&#160;main.cpp'],['../SensorHubT32_2src_2main_8cpp.html#a20ffd6680226b1e058002512386e7770',1,'ScanI2c():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a887240a00b11c00c971e633ed47319f9',1,'ScanI2c():&#160;main.cpp']]],
   ['scrollhelpfile_11',['ScrollHelpFile',['../TransmitterCode_2src_2main_8cpp.html#ab0a84052e41734eb43651d054ee2b4c5',1,'main.cpp']]],
   ['sdread16bits_12',['SDRead16BITS',['../TransmitterCode_2src_2main_8cpp.html#a390e5cfbafdda998c93b9a352560d57d',1,'main.cpp']]],

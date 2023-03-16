@@ -19,7 +19,7 @@ var RadioFunctions_8cpp =
     [ "Procrastinate", "RadioFunctions_8cpp.html#a760609a682300dfe6bfaac737fd4d5eb", null ],
     [ "RecordsPacketSuccess", "RadioFunctions_8cpp.html#afc091b5942e21a03f6dc8635d5e519ba", null ],
     [ "RunMacro", "RadioFunctions_8cpp.html#a91fb686ba2d3111821721ab33b442918", null ],
-    [ "ScanAllChannels", "RadioFunctions_8cpp.html#a3856ba0adae43d089f08c7b7f653b306", null ],
+    [ "ScanAllChannels", "RadioFunctions_8cpp.html#ae17dae8deffe2e33044f61fd3a8ebca2", null ],
     [ "SendData", "RadioFunctions_8cpp.html#a049bfb836e7aa4a3a48a1a4bd225fafc", null ],
     [ "SetThePipe", "RadioFunctions_8cpp.html#a70dc6f8d2e5ccef6b8e4a2b9b0afb2ce", null ],
     [ "StartMacro", "RadioFunctions_8cpp.html#aff7f985af10a021196ae5c9bf188c445", null ],

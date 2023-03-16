@@ -49,7 +49,7 @@ var searchData=
   ['sbusrepeats_46',['SbusRepeats',['../TransmitterCode_2src_2main_8cpp.html#a62cc4d43d463897ef0d417150d6e7f3f',1,'SbusRepeats():&#160;main.cpp'],['../radio_8h.html#a62cc4d43d463897ef0d417150d6e7f3f',1,'SbusRepeats():&#160;radio.h']]],
   ['sbustimer_47',['SBUSTimer',['../ReceiverCode_2src_2main_8cpp.html#a2e121251691466f81a2f540f00e7141e',1,'SBUSTimer():&#160;main.cpp'],['../radio_8h.html#a2e121251691466f81a2f540f00e7141e',1,'SBUSTimer():&#160;main.cpp']]],
   ['scalecommands_48',['scaleCommands',['../Quadcopter_2src_2main_8cpp.html#a8d52798485917f4265993ca62bd6ced4',1,'main.cpp']]],
-  ['scanallchannels_49',['ScanAllChannels',['../RadioFunctions_8cpp.html#a3856ba0adae43d089f08c7b7f653b306',1,'ScanAllChannels():&#160;RadioFunctions.cpp'],['../RadioFunctions_8h.html#a3856ba0adae43d089f08c7b7f653b306',1,'ScanAllChannels():&#160;RadioFunctions.cpp']]],
+  ['scanallchannels_49',['ScanAllChannels',['../RadioFunctions_8cpp.html#ae17dae8deffe2e33044f61fd3a8ebca2',1,'ScanAllChannels(bool cls):&#160;RadioFunctions.cpp'],['../RadioFunctions_8h.html#ae17dae8deffe2e33044f61fd3a8ebca2',1,'ScanAllChannels(bool cls):&#160;RadioFunctions.cpp']]],
   ['scani2c_50',['ScanI2c',['../ReceiverCode_2src_2main_8cpp.html#a887240a00b11c00c971e633ed47319f9',1,'ScanI2c():&#160;main.cpp'],['../SensorHubT32_2src_2main_8cpp.html#a20ffd6680226b1e058002512386e7770',1,'ScanI2c():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a887240a00b11c00c971e633ed47319f9',1,'ScanI2c():&#160;main.cpp']]],
   ['scanview_51',['SCANVIEW',['../RadioFunctions_8h.html#a6f1464e66db944aef96d5617811acb8b',1,'RadioFunctions.h']]],
   ['scanwaveband_52',['SCANWAVEBAND',['../RadioFunctions_8h.html#af8400c0c2d5c4779f32223055a12336d',1,'RadioFunctions.h']]],

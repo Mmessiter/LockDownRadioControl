@@ -11,6 +11,6 @@ var searchData=
   ['nextchannel_8',['NextChannel',['../radio_8h.html#a4c9fbf66b2c98730d43dc9dfe573a998',1,'NextChannel():&#160;radio.h'],['../RadioFunctions_8h.html#a4c9fbf66b2c98730d43dc9dfe573a998',1,'NextChannel():&#160;radio.h'],['../TransmitterCode_2src_2main_8cpp.html#a4c9fbf66b2c98730d43dc9dfe573a998',1,'NextChannel():&#160;main.cpp']]],
   ['nextchannelnumber_9',['NextChannelNumber',['../radio_8h.html#a372b457a109ccee3253b219df1a47412',1,'NextChannelNumber():&#160;radio.h'],['../namespaceFHSS__data.html#a052746df02560319bc39fa4c7d87408e',1,'FHSS_data::NextChannelNumber()']]],
   ['nextionsleeptime_10',['NEXTIONSleepTime',['../RadioFunctions_8h.html#aa98c3d7858384fded2f32ce45a271605',1,'RadioFunctions.h']]],
-  ['nocarrier_11',['NoCarrier',['../RadioFunctions_8h.html#a2a951a35df4a07c010710b02a17f92b7',1,'NoCarrier():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a740b6b60d941238e8a8cd6caa083a7ca',1,'NoCarrier():&#160;main.cpp']]],
+  ['nocarrier_11',['NoCarrier',['../RadioFunctions_8h.html#a2a951a35df4a07c010710b02a17f92b7',1,'RadioFunctions.h']]],
   ['numberedfunctions_12',['NumberedFunctions',['../TransmitterCode_2src_2main_8cpp.html#abb4fb8e30aec6f80bfcb85d5f4c7931f',1,'main.cpp']]]
 ];
