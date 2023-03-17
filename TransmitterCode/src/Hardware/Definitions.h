@@ -7,7 +7,7 @@
 #define Definitions_H
 
 // **************************************************************************
-//     SUPPORT FOR TX MODULE                                                *
+//     SUPPORT FOR TX MODULE AND NEW PCB Version                            *
 // **************************************************************************
 
   #define TXMODULESUPPORT // ONLY FOR NEW VERSION  <<< *** <<<
