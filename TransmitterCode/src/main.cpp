@@ -323,7 +323,7 @@ uint32_t     LastTimeRead    = 0;
 uint32_t     LastScanButtonCheck    = 0;
 uint32_t     TransmitterLastManaged    = 0;
 uint32_t     LastShowTime    = 0;
-uint32_t     LastDogKick     = 0;
+
 uint8_t      MacAddress[8]   = {0, 0, 0, 0, 0, 0, 0, 0};
 uint8_t      ErrorState      = 0;
 uint16_t XtouchPlace = 0; // Clicked X
@@ -876,6 +876,7 @@ void Reboot(){
 
 void KickTheDog()
 {
+    static uint32_t   LastDogKick     = 0;
     if (millis() - LastDogKick >= KICKRATE) {
         TeensyWatchDog.feed();
         LastDogKick = millis();
@@ -3610,7 +3611,7 @@ FLASHMEM void setup()
     WatchDogConfig.timeout  = WATCHDOGTIMEOUT; //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s)
     WatchDogConfig.callback = WatchDogCallBack;
     TeensyWatchDog.begin(WatchDogConfig);
-    LastDogKick = millis(); // needed? - yes!
+ 
     delay(WARMUPDELAY);
     if (!SD.begin(BUILTIN_SDCARD)) { // MUST return true or all is lost! 
         delay(WARMUPDELAY);
