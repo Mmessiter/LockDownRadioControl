@@ -124,7 +124,7 @@
 RF24          Radio1(CE_PIN, CSN_PIN);
 WDT_T4<WDT3>  TeensyWatchDog;
 WDT_timings_t WatchDogConfig;
-uint32_t      PPMTimer = 0;
+
 uint8_t       Mixes[MAXMIXES + 1][CHANNELSUSED + 1];          // 17 possible elements per mix. NOTHING to do with channels count!!!
 int           Trims[BANKSUSED + 1][CHANNELSUSED + 1];         // Trims to store
 uint8_t       Exponential[BANKSUSED + 1][CHANNELSUSED + 1];   // Exponential
@@ -150,7 +150,6 @@ uint16_t DefaultTrimRepeatSpeed = 600;
 char     na[]                   = "";
 bool     NewModelMemoryWasSaved = false; 
 
-uint32_t SlowTime[16];                                      //    For timing slow servos
 uint8_t  StepSize[16] = {0,0,0,0,0,0,0,0,5,25,5,25,5,25,5,25};  //    How far to move each time on slow servos
 uint16_t CurrentPosition[UNCOMPRESSEDWORDS];                //    Position from which a slow servo started (0 = not started yet)
 uint16_t SendBuffer[UNCOMPRESSEDWORDS];                     //    Data to send to rx (16 words)
@@ -621,6 +620,8 @@ FLASHMEM void ResetSubTrims()
 
 FASTRUN void SendViaPPM()
 {
+    static uint32_t      PPMTimer = 0;
+    
     if (millis() - PPMTimer >= PPMBUDDYFRAMERATE) {
         PPMTimer = millis();
         for (int j = 0; j < CHANNELSUSED; ++j) PPMdata.PPMOutputBuddy.write(j+1, SendBuffer[j]); 
@@ -2301,7 +2302,8 @@ void  GetCurveDots(uint16_t OutputChannel, uint16_t TheRate)
 /**************************** This function implements slowed servos for flaps, U/Cs etc. ****************************************/
 /*********************************************************************************************************************************/
 
-void     DoSlowServos() {                                                           // 
+void     DoSlowServos() {                          
+    static uint32_t SlowTime[16];                                       // 
     for (int i = 0; i < 16; ++i) {                                                  // Test every channel
         if (StepSize[i] < 100) {                                                    // If StepSize = 100, use full speed. No slowing
             if ((millis() - SlowTime[i]) > 10) {                                    // This next part runs only 100 times per second
