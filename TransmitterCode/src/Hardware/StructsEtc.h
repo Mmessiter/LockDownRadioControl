@@ -1,9 +1,9 @@
 
-#ifndef TXstructs_h
-#define TXstructs_h
-
 #include <Arduino.h>
 #include <PulsePosition.h>
+#ifndef STRUCTSETC_H
+#define STRUCTSETC_H
+
 
 /* ************************************* AckPayload structure ******************************************************
 
