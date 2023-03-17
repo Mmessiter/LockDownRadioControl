@@ -473,7 +473,6 @@ var TransmitterCode_2src_2main_8cpp =
     [ "InterpolationTypes", "TransmitterCode_2src_2main_8cpp.html#a5424ceb23e086124c417474911365a58", null ],
     [ "JustHoppedFlag", "TransmitterCode_2src_2main_8cpp.html#ae768cbeda38b92908ae481b943893e3b", null ],
     [ "LastBuffer", "TransmitterCode_2src_2main_8cpp.html#ae002bd879607e8a3f7722ad78a9aae73", null ],
-    [ "LastDogKick", "TransmitterCode_2src_2main_8cpp.html#a5cbc9265d072e0d0eefb7337baa6c4e2", null ],
     [ "LastFileInView", "TransmitterCode_2src_2main_8cpp.html#a77a004fce053dac15e7c389907d142b4", null ],
     [ "LastFourOnly", "TransmitterCode_2src_2main_8cpp.html#a97701cb4182125a490f24c210f4d3e24", null ],
     [ "LastLinePosition", "TransmitterCode_2src_2main_8cpp.html#af4c308fd737536a055254fb9858ced91", null ],

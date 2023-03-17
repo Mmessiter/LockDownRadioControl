@@ -82,10 +82,10 @@ var NAVTREEINDEX =
 "RadioFunctions_8h.html#a9e1de754e1d2d483fb15957f70cf0488",
 "ReceiverCode_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f",
 "TransmitterCode_2src_2main_8cpp.html#a4920261904b22c215b85f66a7b5670e5",
-"TransmitterCode_2src_2main_8cpp.html#aa61377ec59e711151913086167f2f48f",
-"classI2Cdev.html#a0a466e2323d9f719a1ecc9fa11ac5c84",
-"classMPU6050.html#aeec244d6f9d33f45260ff459fabb9622",
-"classMPU9250.html#add18eb9ed44f047f11d75b2f1e44af4b",
+"TransmitterCode_2src_2main_8cpp.html#aa6e0bf2f41a5920241f2618bb0e0bce0",
+"classMPU6050.html",
+"classMPU6050.html#aef44106927c1b986588f36bffaebea54",
+"classMPU9250.html#add3d273a6b8a64e79c9801878ee46cf8",
 "globals.html"
 ];
 
