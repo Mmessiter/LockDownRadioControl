@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['teensymacaddpipe_0',['TeensyMACAddPipe',['../RadioFunctions_8h.html#a5ff6438d9609fc0270f0f2c8f7d0897a',1,'TeensyMACAddPipe():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a5ff6438d9609fc0270f0f2c8f7d0897a',1,'TeensyMACAddPipe():&#160;main.cpp']]],
+  ['teensymacaddpipe_0',['TeensyMACAddPipe',['../TransmitterCode_2src_2main_8cpp.html#a5ff6438d9609fc0270f0f2c8f7d0897a',1,'main.cpp']]],
   ['teensywatchdog_1',['TeensyWatchDog',['../ReceiverCode_2src_2main_8cpp.html#ab1a4e0031c7577ce2c7a568affacb58e',1,'TeensyWatchDog():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#ab1a4e0031c7577ce2c7a568affacb58e',1,'TeensyWatchDog():&#160;main.cpp']]],
   ['temp_5fout_2',['TEMP_OUT',['../classMPU9250.html#ab40144403714611c828d55d466204c6d',1,'MPU9250']]],
   ['textin_3',['TextIn',['../TransmitterCode_2src_2main_8cpp.html#a527f04236d0e03be6e0224a0e748f0c3',1,'main.cpp']]],
@@ -9,14 +9,14 @@ var searchData=
   ['thereceivedpipe_6',['TheReceivedPipe',['../ReceiverCode_2src_2main_8cpp.html#a036e89e7dd45664d2a0b28230afcd0ac',1,'TheReceivedPipe():&#160;main.cpp'],['../radio_8h.html#a036e89e7dd45664d2a0b28230afcd0ac',1,'TheReceivedPipe():&#160;main.cpp']]],
   ['thereismoretosee_7',['ThereIsMoreToSee',['../TransmitterCode_2src_2main_8cpp.html#adb831eb55ed2957c4677c87a6f51be59',1,'main.cpp']]],
   ['thisgap_8',['ThisGap',['../TransmitterCode_2src_2main_8cpp.html#ae0aa9266aded94af479d912e6cc4abaf',1,'main.cpp']]],
-  ['thisradio_9',['ThisRadio',['../TransmitterCode_2src_2main_8cpp.html#a2e695c7565eda3b02ff77324e274772b',1,'ThisRadio():&#160;main.cpp'],['../RadioFunctions_8h.html#a2e695c7565eda3b02ff77324e274772b',1,'ThisRadio():&#160;radio.h'],['../radio_8h.html#a25cc3bb5cb94f4bbef0f2c5b79140c20',1,'ThisRadio():&#160;radio.h']]],
+  ['thisradio_9',['ThisRadio',['../TransmitterCode_2src_2main_8cpp.html#a2e695c7565eda3b02ff77324e274772b',1,'ThisRadio():&#160;main.cpp'],['../radio_8h.html#a25cc3bb5cb94f4bbef0f2c5b79140c20',1,'ThisRadio():&#160;radio.h']]],
   ['thro_5fdes_10',['thro_des',['../Quadcopter_2src_2main_8cpp.html#a0fd62fddc65725616819cf617952a303',1,'main.cpp']]],
   ['timerdownwards_11',['TimerDownwards',['../TransmitterCode_2src_2main_8cpp.html#a83de835c65151cd164d3af27e6b859af',1,'main.cpp']]],
   ['timermillis_12',['TimerMillis',['../TransmitterCode_2src_2main_8cpp.html#a648c27b8c8c314b32a3e2f1c11601e91',1,'main.cpp']]],
   ['timerstarttime_13',['TimerStartTime',['../TransmitterCode_2src_2main_8cpp.html#aa065c6b04a874cb13b1c4034245b878a',1,'main.cpp']]],
   ['timesup_14',['TimesUp',['../TransmitterCode_2src_2main_8cpp.html#add2df54d772fdd874012080827eacc3e',1,'main.cpp']]],
   ['tm_15',['tm',['../TransmitterCode_2src_2main_8cpp.html#a52357cbf68af66972047f7aed7a45218',1,'main.cpp']]],
-  ['totallostpackets_16',['TotalLostPackets',['../RadioFunctions_8h.html#add763855be5b4be56770f98ca20d0ad4',1,'TotalLostPackets():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#add763855be5b4be56770f98ca20d0ad4',1,'TotalLostPackets():&#160;main.cpp']]],
+  ['totallostpackets_16',['TotalLostPackets',['../TransmitterCode_2src_2main_8cpp.html#add763855be5b4be56770f98ca20d0ad4',1,'main.cpp']]],
   ['transmitterlastmanaged_17',['TransmitterLastManaged',['../TransmitterCode_2src_2main_8cpp.html#a1942ba53f270789e316c552c4a81b762',1,'main.cpp']]],
   ['transmitterversionnumber_18',['TransmitterVersionNumber',['../TransmitterCode_2src_2main_8cpp.html#a2877a4cd1def41fb3d62006d88ef5de6',1,'main.cpp']]],
   ['trimclicks_19',['TrimClicks',['../TransmitterCode_2src_2main_8cpp.html#ae72cd49c59d06c6160b52860f2c73f1a',1,'main.cpp']]],
@@ -31,9 +31,7 @@ var searchData=
   ['tx_28',['tX',['../classMPU9250.html#af7d992743ffa2e15d5674b45a100791e',1,'MPU9250']]],
   ['txlipo_29',['TXLiPo',['../TransmitterCode_2src_2main_8cpp.html#ae15fd0f1128566cd1120f3dd2e287dc1',1,'main.cpp']]],
   ['txname_30',['TxName',['../TransmitterCode_2src_2main_8cpp.html#a967f3c9b0fd867928c55d75d65cfcd8c',1,'main.cpp']]],
-  ['txontime_31',['TxOnTime',['../RadioFunctions_8h.html#a992a1c7536f872bdfd833e282cf3b4e4',1,'RadioFunctions.h']]],
-  ['txtimestamp_32',['TXTimeStamp',['../RadioFunctions_8h.html#afd020f35b9f4a1aa2643c4fdcc46f5db',1,'RadioFunctions.h']]],
-  ['txvoltagecorrection_33',['TxVoltageCorrection',['../TransmitterCode_2src_2main_8cpp.html#a985d38323fbadec8df22d3e17ca18eb2',1,'main.cpp']]],
-  ['ty_34',['tY',['../classMPU9250.html#ae100c82474b1e78337ecfdc8d18518d5',1,'MPU9250']]],
-  ['tz_35',['tZ',['../classMPU9250.html#a595f111a497c7727ac70a544b98162e1',1,'MPU9250']]]
+  ['txvoltagecorrection_31',['TxVoltageCorrection',['../TransmitterCode_2src_2main_8cpp.html#a985d38323fbadec8df22d3e17ca18eb2',1,'main.cpp']]],
+  ['ty_32',['tY',['../classMPU9250.html#ae100c82474b1e78337ecfdc8d18518d5',1,'MPU9250']]],
+  ['tz_33',['tZ',['../classMPU9250.html#a595f111a497c7727ac70a544b98162e1',1,'MPU9250']]]
 ];

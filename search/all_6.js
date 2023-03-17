@@ -1,8 +1,8 @@
 var searchData=
 [
   ['e_0',['E',['../StructsEtc_8h.html#a07484107e6d9fdf38b53edf631d6511d',1,'StructsEtc.h']]],
-  ['eight_1',['EIGHT',['../RadioFunctions_8h.html#aaf6cfeda610d5092df7deb18fd5d63c2',1,'RadioFunctions.h']]],
-  ['eightminutes_2',['EIGHTMINUTES',['../RadioFunctions_8h.html#a62dd1c416123614c530d141c800379c0',1,'RadioFunctions.h']]],
+  ['eight_1',['EIGHT',['../Definitions_8h.html#aaf6cfeda610d5092df7deb18fd5d63c2',1,'Definitions.h']]],
+  ['eightminutes_2',['EIGHTMINUTES',['../Definitions_8h.html#a62dd1c416123614c530d141c800379c0',1,'Definitions.h']]],
   ['elapsedmillis_2eh_3',['elapsedMillis.h',['../elapsedMillis_8h.html',1,'']]],
   ['elapsedseconds_4',['ElapsedSeconds',['../TransmitterCode_2src_2main_8cpp.html#a42ed0a2bcff9665c4d9e7c10d57688b8',1,'main.cpp']]],
   ['elevatordowntrim_5',['ElevatorDownTrim',['../TransmitterCode_2src_2main_8cpp.html#a84a0468d2a49718c86cfad2b845abd62',1,'main.cpp']]],
@@ -18,7 +18,7 @@ var searchData=
   ['endsend_15',['EndSend',['../TransmitterCode_2src_2main_8cpp.html#ad7b8aa834c87265667a5687b1787a1cc',1,'main.cpp']]],
   ['endslowview_16',['EndSlowView',['../TransmitterCode_2src_2main_8cpp.html#a0e7666bd8d250935f34395e0f6dea7bf',1,'main.cpp']]],
   ['endsubtrimview_17',['EndSubTrimView',['../TransmitterCode_2src_2main_8cpp.html#a40003084a0136ca08cf8ded75ff4aa4d',1,'main.cpp']]],
-  ['endtrimview_18',['EndTrimView',['../RadioFunctions_8h.html#a4a3b3a5edf41e8d1ce82c15077d0e1b0',1,'RadioFunctions.h']]],
+  ['endtrimview_18',['EndTrimView',['../Definitions_8h.html#a4a3b3a5edf41e8d1ce82c15077d0e1b0',1,'Definitions.h']]],
   ['error_5fpitch_19',['error_pitch',['../Quadcopter_2src_2main_8cpp.html#a85db48f36a764a6e733a1b8804267f13',1,'main.cpp']]],
   ['error_5fpitch_5fprev_20',['error_pitch_prev',['../Quadcopter_2src_2main_8cpp.html#ac119332644a91fcd9a93df0d7f27db09',1,'main.cpp']]],
   ['error_5froll_21',['error_roll',['../Quadcopter_2src_2main_8cpp.html#adbf3948b425a805510e6c6f9bf17ec3c',1,'main.cpp']]],
@@ -26,10 +26,10 @@ var searchData=
   ['error_5fyaw_23',['error_yaw',['../Quadcopter_2src_2main_8cpp.html#a239046dd7e85cc3e82531319556f9f5d',1,'main.cpp']]],
   ['error_5fyaw_5fprev_24',['error_yaw_prev',['../Quadcopter_2src_2main_8cpp.html#ae366cc2072db3fde7b163c534ea9b745',1,'main.cpp']]],
   ['errorstate_25',['ErrorState',['../TransmitterCode_2src_2main_8cpp.html#a6a368860ecd3ed4841f7564ec5bef635',1,'main.cpp']]],
-  ['executemacro_26',['ExecuteMacro',['../RadioFunctions_8cpp.html#a78f22801971c106db61d728dd345e28e',1,'ExecuteMacro():&#160;RadioFunctions.cpp'],['../RadioFunctions_8h.html#a78f22801971c106db61d728dd345e28e',1,'ExecuteMacro():&#160;RadioFunctions.cpp']]],
+  ['executemacro_26',['ExecuteMacro',['../Definitions_8h.html#a78f22801971c106db61d728dd345e28e',1,'ExecuteMacro():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a78f22801971c106db61d728dd345e28e',1,'ExecuteMacro():&#160;main.cpp']]],
   ['exitmacrosview_27',['ExitMacrosView',['../TransmitterCode_2src_2main_8cpp.html#a488388f6430a0fc7bec57074ba750a2d',1,'main.cpp']]],
   ['exponential_28',['Exponential',['../TransmitterCode_2src_2main_8cpp.html#a98ff7a43b72a0fdbf4cca16a9910d229',1,'main.cpp']]],
-  ['exponentialcurves_29',['EXPONENTIALCURVES',['../RadioFunctions_8h.html#a0681550b8fd26c741ffd8c6447a64f82',1,'RadioFunctions.h']]],
+  ['exponentialcurves_29',['EXPONENTIALCURVES',['../Definitions_8h.html#a0681550b8fd26c741ffd8c6447a64f82',1,'Definitions.h']]],
   ['exponentialinterpolation_30',['ExponentialInterpolation',['../TransmitterCode_2src_2main_8cpp.html#ab309da1bf9c1b4a4b7763d8968d7f83e',1,'main.cpp']]],
   ['exportedfilecounter_31',['ExportedFileCounter',['../TransmitterCode_2src_2main_8cpp.html#a1252681409ac5c9ed335a78f80633236',1,'main.cpp']]],
   ['ext_5fsens_5fdata_5f00_32',['EXT_SENS_DATA_00',['../classMPU9250.html#af3ff49b6a515f043ed76fc3f0088ccfe',1,'MPU9250']]]

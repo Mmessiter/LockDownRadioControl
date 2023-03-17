@@ -3,7 +3,7 @@ var searchData=
   ['datefix_0',['DateFix',['../TransmitterCode_2src_2main_8cpp.html#af963d49af3aeb834d322601d3c3e3d04',1,'main.cpp']]],
   ['daygps_1',['DayGPS',['../ReceiverCode_2src_2main_8cpp.html#a4c722ec4fa2ff675bd4a2d511e80cd6e',1,'DayGPS():&#160;main.cpp'],['../radio_8h.html#a4c722ec4fa2ff675bd4a2d511e80cd6e',1,'DayGPS():&#160;main.cpp']]],
   ['debugtimer_2',['DebugTimer',['../SensorHubT32_2src_2main_8cpp.html#a7867e45e2d19ce05cda4ef2692ee0dbe',1,'main.cpp']]],
-  ['defaultpipe_3',['DefaultPipe',['../ReceiverCode_2src_2main_8cpp.html#ac17bcdae8bda705ade2cf0935e12853d',1,'DefaultPipe():&#160;main.cpp'],['../radio_8h.html#ac17bcdae8bda705ade2cf0935e12853d',1,'DefaultPipe():&#160;main.cpp'],['../RadioFunctions_8h.html#a0b9fd9f8e85725c128617f006132ea57',1,'DefaultPipe():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a0b9fd9f8e85725c128617f006132ea57',1,'DefaultPipe():&#160;main.cpp']]],
+  ['defaultpipe_3',['DefaultPipe',['../ReceiverCode_2src_2main_8cpp.html#ac17bcdae8bda705ade2cf0935e12853d',1,'DefaultPipe():&#160;main.cpp'],['../radio_8h.html#ac17bcdae8bda705ade2cf0935e12853d',1,'DefaultPipe():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a0b9fd9f8e85725c128617f006132ea57',1,'DefaultPipe():&#160;main.cpp']]],
   ['defaultswitchnumber_4',['DefaultSwitchNumber',['../TransmitterCode_2src_2main_8cpp.html#a0040cba31e48ea25f429ce1668f8c21f',1,'main.cpp']]],
   ['defaulttrimrepeatspeed_5',['DefaultTrimRepeatSpeed',['../TransmitterCode_2src_2main_8cpp.html#ae6d47d8ad12367e1eb9c48442cfdcf99',1,'main.cpp']]],
   ['definingtrims_6',['DefiningTrims',['../TransmitterCode_2src_2main_8cpp.html#a53d8c3d55ec5cdfd424929c62efe1677',1,'main.cpp']]],
