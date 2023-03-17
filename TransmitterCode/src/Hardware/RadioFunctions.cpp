@@ -331,7 +331,7 @@ void ScanAllChannels(bool cls)
     char fyll[] = "fill ";
     char NewYellow[15];
     char NA[1] = ""; // blank one
-    static uint8_t  AllChannels[127]; /// for scanning
+    static uint8_t  AllChannels[127];
     static uint8_t  NoCarrier[127];
 
     if (cls){
