@@ -1,9 +1,8 @@
 
-#include <Arduino.h>
-#include <PulsePosition.h>
+#include "Hardware/Definitions.h" // This file contains many definitions and further includes
+
 #ifndef STRUCTSETC_H
 #define STRUCTSETC_H
-
 
 /* ************************************* AckPayload structure ******************************************************
 

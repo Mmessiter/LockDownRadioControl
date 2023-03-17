@@ -1,10 +1,10 @@
 
-// **************************************************************************
-//     This header file has most definitions and includes                   *
-// **************************************************************************
+// ***************************************************************************
+//     This header file has prototypes, definitions and includes             *
+// ***************************************************************************
 
-#ifndef RadioFunctions_H
-#define RadioFunctions_H
+#ifndef Definitions_H
+#define Definitions_H
 
 // **************************************************************************
 //     SUPPORT FOR TX MODULE                                                *
@@ -21,7 +21,19 @@
 #define TXVERSION_MINOR   1
 #define TXVERSION_MINIMUS 7
 
+// **************************************************************************
+//    DEBUG OPTIONS (Uncomment any of these for that bit of debug info)     *
+//***************************************************************************
 
+// #define DB_NEXTION        // Debug NEXTION
+// #define DB_SD             // Debug SD card data
+// #define DB_CHECKSUM       // Debug 32BIT file checksum info
+// #define DB_FHSS           // Debug real time FHSS data
+// #define DB_SENSORS        // Debug Sensors
+// #define DB_BIND           // Debug Binding
+// #define DB_SWITCHES       // Debug Switches
+// #define DB_MODEL_EXCHANGE // Debug MODEL EXCHANGE (by RF link)
+// #define DB_GAPS           // Debug Connection Gap assessment
 
 // **************************************************************************
 //                               Includes                                   *
@@ -38,21 +50,8 @@
 #include <Adafruit_INA219.h>
 #include <DS1307RTC.h>
 #include <InterpolationLib.h>
-
-
-// **************************************************************************
-//    DEBUG OPTIONS (Uncomment any of these for that bit of debug info)     *
-//***************************************************************************
-
-// #define DB_NEXTION        // Debug NEXTION
-// #define DB_SD             // Debug SD card data
-// #define DB_CHECKSUM       // Debug 32BIT file checksum info
-// #define DB_FHSS           // Debug real time FHSS data
-// #define DB_SENSORS        // Debug Sensors
-// #define DB_BIND           // Debug Binding
-// #define DB_SWITCHES       // Debug Switches
-// #define DB_MODEL_EXCHANGE // Debug MODEL EXCHANGE (by RF link)
-// #define DB_GAPS           // Debug Connection Gap assessment
+#include "Hardware/StructsEtc.h" 
+ 
 
 // **************************************************************************
 //                               General                                    *
@@ -396,131 +395,51 @@
 #define KICKRATE        500  // Kick twice a second (must be between WATCHDOGMAXRATE and WATCHDOGTIMEOUT)
 #define WATCHDOGMAXRATE 250  // 250 ms secs between kicks is max rate allowed
 
-/*********************************************************************************************************************************/
-// external (global vars) needed here
-
-extern RF24           Radio1;
-extern uint8_t        CurrentMode;
-extern uint8_t        NoCarrier[];
-extern uint8_t        AllChannels[];
-extern char           NEXTIONSleepTime[];
-extern uint8_t        BadChannelPointer;
-extern uint8_t        BadChannels[];
-extern uint8_t        NextChannel;
-extern uint8_t        PacketNumber;
-extern bool           JustHoppedFlag;
-extern uint32_t       LastPacketSentTime;
-extern bool           BoundFlag;
-extern uint8_t        CurrentView;
-extern uint16_t       SendBuffer[];
-extern uint64_t       TeensyMACAddPipe;
-extern bool           LostContactFlag;
-extern uint64_t       DefaultPipe;
-extern long int       RecoveryTimer;
-extern bool           Connected;
-extern uint16_t       CompressedData[];
-
-extern struct Payload AckPayload;
-const extern  uint8_t  AckPayloadSize;
-
-  namespace FHSS_data
-{
-  extern uint8_t*       FHSSRecoveryPointer;
-  extern uint8_t*       FHSSChPointer;
-  extern uint8_t        NextChannelNumber;
-}
-
-extern uint8_t        SizeOfCompressedData;
-extern uint16_t       RangeTestGoodPackets;
-
-extern uint32_t       RecentPacketsLost;
-extern uint32_t       TxOnTime;
-extern uint32_t       TXTimeStamp;
-extern uint32_t       HopStart;
-extern char           ThisRadio[4];
-extern uint32_t       GapSum;
-extern uint32_t       GapStart;
-
-extern bool           BuddyPupilOnPPM;
-extern bool           BuddyMaster;
-extern uint16_t       BackGroundColour;
-extern uint16_t       HighlightColour;
-extern uint16_t       ForeGroundColour;
-extern uint16_t       ChannelMax[CHANNELSUSED + 1];           //    output of pots at max
-extern uint16_t       ChannelMidHi[CHANNELSUSED + 1];         //    output of pots at MidHi
-extern uint16_t       ChannelCentre[CHANNELSUSED + 1];        //    output of pots at Centre
-extern uint16_t       ChannelMidLow[CHANNELSUSED + 1];        //    output of pots at MidLow
-extern uint16_t       ChannelMin[CHANNELSUSED + 1];           //    output of pots at min
-extern uint8_t        MacrosBuffer[MAXMACROS][BYTESPERMACRO]; // macros' buffer
-extern uint32_t       MacroStartTime[MAXMACROS];
-extern uint32_t       MacroStopTime[MAXMACROS];
-extern bool           UseMacros;
-extern uint32_t       TotalLostPackets;
-extern bool           Reconnected;
-extern bool           LedWasGreen;
-extern bool           LedWasRed;
-extern uint32_t       Inactivity_Timeout;
-extern uint32_t       Inactivity_Start;
-extern bool           UkRules;
-extern bool           PreviousUkRules;
-extern bool           UseLog;
-extern uint32_t       ShowServoTimer;
-extern uint16_t       PacketsPerSecond;
-extern uint16_t       GetStickInput(uint8_t l);
-extern uint8_t        PacketsHistoryBuffer[PERFECTPACKETSPERSECOND * MAXSHOWCOMMSSESCONDS];
-extern uint16_t       PacketsHistoryIndex;
-extern uint8_t        ConnectionAssessSeconds;
-extern bool           LowPowerMode;
-extern bool           NewCompressNeeded;
-extern bool           ModelMatched;
-extern bool           SendNoData;
-extern uint8_t        ReconnectionIndex;
-extern uint8_t        MacAddress[8];
-
 // external (global) functions needed here
-extern void  GetSlaveChannelValues();
-extern void  KickTheDog();
-extern void  SendCommand(char* tbox);
-extern void  ReadSwitches();
-extern void  ShowComms();
-extern void  CheckTimer();
-extern void  SendCharArray(char* ch0, char* ch1, char* ch2, char* ch3, char* ch4, char* ch5, char* ch6, char* ch7, char* ch8, char* ch9, char* ch10, char* ch11, char* ch12);
-extern char* Str(char* s, int n, int comma);
-extern void  GetNewChannelValues();
-extern void  LoadPacketData();
-extern void  GreenLedOn();
-extern void  CheckGapsLength();
-extern void  ParseAckPayload();
-extern void  FailedPacket();
-extern void  StartInactvityTimeout();
-extern void  ShowServoPos();
-extern void  SendViaPPM();
-extern void  ZeroDataScreen();
-extern void  RedLedOn();
-extern void  ReEnableScanButton();
-extern void  LogUKRules();
-extern int   InStrng(char* text1, char* text2);
-extern void  ReadCheckSum32();
-extern void          ResetTransmitterSettings();
-extern void          TryToReconnect();
-extern void          FlushFifos();
-extern bool          RecursedAlready;
-extern FLASHMEM void SetDS1307ToCompilerTime();
-extern int           GetOtherValue(char* nbox);
-extern void          CheckInvisiblePoint();
-extern void          GotoFrontView();
-extern void          CheckDualRatesValues();
-extern void          UpdateLED();
-extern void          CheckMotorOff();
-extern bool          GetButtonPress();
-extern void          CheckPowerOffButton();
-extern void          LoadFileSelector();
-extern void          LoadModelSelector();
-extern void          PlaySound(uint16_t TheSound);
-extern uint8_t       CheckPipeNibbles(uint8_t b);
+
+ void  GetSlaveChannelValues();
+ void  KickTheDog();
+ void  SendCommand(char* tbox);
+ void  ReadSwitches();
+ void  ShowComms();
+ void  CheckTimer();
+ void  SendCharArray(char* ch0, char* ch1, char* ch2, char* ch3, char* ch4, char* ch5, char* ch6, char* ch7, char* ch8, char* ch9, char* ch10, char* ch11, char* ch12);
+ char* Str(char* s, int n, int comma);
+ void  GetNewChannelValues();
+ void  LoadPacketData();
+ void  GreenLedOn();
+ void  CheckGapsLength();
+ void  ParseAckPayload();
+ void  FailedPacket();
+ void  StartInactvityTimeout();
+ void  ShowServoPos();
+ void  SendViaPPM();
+ void  ZeroDataScreen();
+ void  RedLedOn();
+ void  ReEnableScanButton();
+ void  LogUKRules();
+ int   InStrng(char* text1, char* text2);
+ void  ReadCheckSum32();
+ void          ResetTransmitterSettings();
+ void          TryToReconnect();
+ void          FlushFifos();
+ FLASHMEM void SetDS1307ToCompilerTime();
+ int           GetOtherValue(char* nbox);
+ void          CheckInvisiblePoint();
+ void          GotoFrontView();
+ void          CheckDualRatesValues();
+ void          UpdateLED();
+ void          CheckMotorOff();
+ bool          GetButtonPress();
+ void          CheckPowerOffButton();
+ void          LoadFileSelector();
+ void          LoadModelSelector();
+ void          PlaySound(uint16_t TheSound);
+ uint8_t       CheckPipeNibbles(uint8_t b);
 
 /*********************************************************************************************************************************/
 // function prototypes
+
 
 void         InitRadio(uint64_t Pipe);
 void         SetThePipe(uint64_t WhichPipe);
