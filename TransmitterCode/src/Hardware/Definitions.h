@@ -395,52 +395,50 @@
 #define KICKRATE        500  // Kick twice a second (must be between WATCHDOGMAXRATE and WATCHDOGTIMEOUT)
 #define WATCHDOGMAXRATE 250  // 250 ms secs between kicks is max rate allowed
 
-// external (global) functions needed here
 
- void  GetSlaveChannelValues();
- void  KickTheDog();
- void  SendCommand(char* tbox);
- void  ReadSwitches();
- void  ShowComms();
- void  CheckTimer();
- void  SendCharArray(char* ch0, char* ch1, char* ch2, char* ch3, char* ch4, char* ch5, char* ch6, char* ch7, char* ch8, char* ch9, char* ch10, char* ch11, char* ch12);
- char* Str(char* s, int n, int comma);
- void  GetNewChannelValues();
- void  LoadPacketData();
- void  GreenLedOn();
- void  CheckGapsLength();
- void  ParseAckPayload();
- void  FailedPacket();
- void  StartInactvityTimeout();
- void  ShowServoPos();
- void  SendViaPPM();
- void  ZeroDataScreen();
- void  RedLedOn();
- void  ReEnableScanButton();
- void  LogUKRules();
- int   InStrng(char* text1, char* text2);
- void  ReadCheckSum32();
- void          ResetTransmitterSettings();
- void          TryToReconnect();
- void          FlushFifos();
- FLASHMEM void SetDS1307ToCompilerTime();
- int           GetOtherValue(char* nbox);
- void          CheckInvisiblePoint();
- void          GotoFrontView();
- void          CheckDualRatesValues();
- void          UpdateLED();
- void          CheckMotorOff();
- bool          GetButtonPress();
- void          CheckPowerOffButton();
- void          LoadFileSelector();
- void          LoadModelSelector();
- void          PlaySound(uint16_t TheSound);
- uint8_t       CheckPipeNibbles(uint8_t b);
+// **************************************************************************
+//                            Function Prototypes                           *
+//***************************************************************************
 
-/*********************************************************************************************************************************/
-// function prototypes
-
-
+void         GetSlaveChannelValues();
+void         KickTheDog();
+void         SendCommand(char* tbox);
+void         ReadSwitches();
+void         ShowComms();
+void         CheckTimer();
+void         SendCharArray(char* ch0, char* ch1, char* ch2, char* ch3, char* ch4, char* ch5, char* ch6, char* ch7, char* ch8, char* ch9, char* ch10, char* ch11, char* ch12);
+char*        Str(char* s, int n, int comma);
+void         GetNewChannelValues();
+void         LoadPacketData();
+void         GreenLedOn();
+void         CheckGapsLength();
+void         ParseAckPayload();
+void         FailedPacket();
+void         StartInactvityTimeout();
+void         ShowServoPos();
+void         SendViaPPM();
+void         ZeroDataScreen();
+void         RedLedOn();
+void         ReEnableScanButton();
+void         LogUKRules();
+int          InStrng(char* text1, char* text2);
+void         ReadCheckSum32();
+void         ResetTransmitterSettings();
+void         TryToReconnect();
+void         FlushFifos();
+FLASHMEM void SetDS1307ToCompilerTime();
+int          GetOtherValue(char* nbox);
+void         CheckInvisiblePoint();
+void         GotoFrontView();
+void         CheckDualRatesValues();
+void         UpdateLED();
+void         CheckMotorOff();
+bool         GetButtonPress();
+void         CheckPowerOffButton();
+void         LoadFileSelector();
+void         LoadModelSelector();
+void         PlaySound(uint16_t TheSound);
+uint8_t      CheckPipeNibbles(uint8_t b);
 void         InitRadio(uint64_t Pipe);
 void         SetThePipe(uint64_t WhichPipe);
 void         DoScanInit();
@@ -482,19 +480,17 @@ int          CheckRange(int v, int min, int max);
 void         MoveaTrim(uint8_t i);
 void         SetUKFrequencies();
 FASTRUN uint16_t GetStickInputInputOnly(uint8_t l);
-FASTRUN void     LogSafety(bool On);
-void             ShowMotor(int on);
-void             StartModelSetup();
-bool             GetConfirmation(char* goback, char* Prompt);
-void             GotoModelsView();
-void             SaveCurrentModel();
-void             CheckModelName();
-void             EndTrimView();
-int              AnalogueReed(uint8_t InputChannel);
-void             GetReturnCode();
-void             SelectChannelOrder();
+FASTRUN void LogSafety(bool On);
+void         ShowMotor(int on);
+void         StartModelSetup();
+bool         GetConfirmation(char* goback, char* Prompt);
+void         GotoModelsView();
+void         SaveCurrentModel();
+void         CheckModelName();
+void         EndTrimView();
+int          AnalogueReed(uint8_t InputChannel);
+void         GetReturnCode();
+void         SelectChannelOrder();
 /*********************************************************************************************************************************/
-
-
 
 #endif
