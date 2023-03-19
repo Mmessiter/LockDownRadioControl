@@ -144,7 +144,7 @@ uint8_t  GPSMarkHere            = 0;
 uint8_t  PreviousTrim           = 255;
 uint32_t TrimTimer              = 0;
 uint16_t TrimRepeatSpeed        = 600;
-uint16_t DefaultTrimRepeatSpeed = 600;
+
 char     na[]                   = "";
 bool     NewModelMemoryWasSaved = false; 
 
@@ -219,7 +219,7 @@ uint8_t   SwitchNumber[8]             = {SWITCH0, SWITCH1, SWITCH2, SWITCH3, SWI
 uint8_t   DefaultSwitchNumber[8]      = {SWITCH0, SWITCH1, SWITCH2, SWITCH3, SWITCH4, SWITCH5, SWITCH6, SWITCH7}; // Default values
 bool      DefiningTrims               = false;
 bool      TrimDefined[4]              = {true, true, true, true};
-char      ModelName[30]               = "Untitled";
+char      ModelName[40]               = "Untitled";
 uint16_t  ScreenTimeout               = 120; // Screen has two minute timeout by default
 int       LastLinePosition            = 0;
 uint8_t   RXCellCount                 = 2;
@@ -316,7 +316,7 @@ uint8_t  SizeOfCompressedData;              // = 30
 uint32_t Inactivity_Timeout = INACTIVITYTIMEOUT;
 uint32_t Inactivity_Start   = 0;
 tmElements_t tm;
-char         TxName[32]      = "Unknown";
+char         TxName[40]      = "Unknown";
 uint32_t     LastTimeRead    = 0;
 uint32_t     LastScanButtonCheck    = 0;
 uint32_t     TransmitterLastManaged    = 0;
@@ -336,7 +336,7 @@ uint32_t BlinkTimer          = 0;
 uint8_t  BlinkOnPhase        = 1;
 bool     LedWasGreen         = true;
 bool     LedWasRed           = false;
-char     ThisRadio[4]        = "0 ";
+char     ThisRadio[6]        = "0 ";
 uint8_t  LastRadio           = 0;
 uint8_t  NextChannel         = 0;
 bool     BuddyPupilOnPPM    = false;
@@ -347,7 +347,7 @@ uint16_t LastModelLoaded     = 0;
 uint16_t LastFileInView      = 0;
 uint8_t  MinimumGap          = 75;
 uint8_t  RecentStartLine     = 0;
-char     RecentTextFile[20];
+char     RecentTextFile[30];
 bool     LogRXSwaps       = false;
 bool     ThereIsMoreToSee = false;
 bool     UseLog           = false;
@@ -969,7 +969,7 @@ void ReadTime()
     static char ShortMonth[12][7] = {"Jan. ", "Feb. ", "Mar. ", "Apr. ", "May  ", "June ", "July ", "Aug. ", "Sept ", "Oct. ", "Nov. ", "Dec. "};
 
     char    NB[10];
-    char    TimeString[50];
+    char    TimeString[80];
     char    Space[]  = " ";
     char    colon[]  = ":";
     char    colon1[] = ".";
@@ -1192,7 +1192,6 @@ void SendText(char* tbox, char* NewWord)
     char quote[] = "\"";
     char CB[100];
     char TooLong[] = "Too long!";
-
     if (strlen(NewWord) > 90) {
         strcpy(NewWord, TooLong);
     }
@@ -1537,7 +1536,7 @@ FASTRUN bool CheckTXVolts()
     bool  TXWarningFlag    = false;
     float TransmitterBatteryPercentLeft, TransmitterBatteryVolts;
     char  Vbuf[10];                  // Little buffer for numbers
-    char  TXBattInfo[65];
+    char  TXBattInfo[80];
     char  pc[] = "%";
     char  nbuf[10];                  // Little buffer for numbers
     char  v[] = "V";
@@ -1585,7 +1584,7 @@ FASTRUN bool CheckRXVolts()
     char  JRX[]         = "JRX";
     bool  RXWarningFlag = false;
     char  Vbuf[10];
-    char  RXBattInfo[65];
+    char  RXBattInfo[80];
     float VoltsPerCell     = 0;
     char  FrontView_RXBV[] = "RXBV";
     char  RXPC[]           = "RXPC";
@@ -1679,7 +1678,7 @@ int GetSuccessRate()
 void ShowConnectionQuality()
 {
     char Quality[]                = "Quality";
-    char Msgbuf[]                 = "                       ";
+    char Msgbuf[80];
     char Msg_Connected[]          = "Connection: ";
     char Msg_ConnectedPerfect[]   = "Perfect";
     char Msg_ConnectedExcellent[] = "Excellent";
@@ -1874,8 +1873,8 @@ void ReEnableScanButton()   // Scan button AND models button
     char b12NOTGreyed[] = "b12.pco=";
     char b1NOTGreyed[]  = "b1.pco=";
 
-    char nb[15];
-    char cmd[30];
+    char nb[20];
+    char cmd[40];
     
     Str(nb, ForeGroundColour, 0);
 
@@ -2595,10 +2594,10 @@ void UpdateModelsNameEveryWhere()
     char TrimView_Bank[]       = "t1";
     char GraphView_fmode[]     = "fmode";
     char SticksView_t1[]       = "t1";
-    char NoName[17];
+    char NoName[40];
     char Ch[] = "Channel ";
     char Nbuf[7];
-    char mn1[30];             // holds model name plus its number
+    char mn1[40];             // holds model name plus its number
     char lb[] = " (";
     char rb[] = ")";
    
@@ -3430,7 +3429,7 @@ FASTRUN void LogNewBank()
 {
     char Ltext[] = "Bank: ";
     char NB[5];
-    char thetext[10];
+    char thetext[20];
     Str(NB, Bank, 0);
     strcpy(thetext, Ltext);
     strcat(thetext, NB);
@@ -3442,7 +3441,7 @@ FASTRUN void LogNewBank()
  FASTRUN void LogMotor(bool On){
     char Ltext1[] = "Motor On";
     char Ltext0[] = "Motor Off";
-    char thetext[10];
+    char thetext[20];
         if (On) strcpy(thetext, Ltext1); 
         else
         strcpy(thetext, Ltext0);
@@ -3453,7 +3452,7 @@ FASTRUN void LogNewBank()
  FASTRUN void LogSafety(bool On){
     char Ltext1[] = "Safety On";
     char Ltext0[] = "Safety Off";
-    char thetext[10];
+    char thetext[20];
         if (On) strcpy(thetext, Ltext1); 
         else
         strcpy(thetext, Ltext0);
@@ -3524,7 +3523,7 @@ FASTRUN void LogPowerOff()
 FASTRUN void LogThisModel()
 {
     char Ltext[] = "Model loaded: ";
-    char thetext[55];
+    char thetext[75];
     strcpy(thetext, Ltext);
     strcat(thetext, ModelName);
     LogText(thetext, strlen(Ltext) + strlen(ModelName));
@@ -3600,29 +3599,28 @@ FLASHMEM void setup()
     pinMode(BLUELED, OUTPUT);
     pinMode(POWER_OFF_PIN, OUTPUT);
     BlueLedOn();
-    NEXTION.begin(921600); // BAUD rate also set in display code THIS IS THE MAX (was 115200)
-    InitMaxMin();          // in case not yet calibrated
-    InitCentreDegrees();   // In case not yet calibrated
+    NEXTION.begin(921600);                      // BAUD rate also set in display code THIS IS THE MAX (was 115200)
+    InitMaxMin();                           
+    InitCentreDegrees();   
     ResetSubTrims();
     CentreTrims();
-    WatchDogConfig.window   = WATCHDOGMAXRATE; //  = MINIMUM RATE in milli seconds, (32ms to 522.232s) must be MUCH smaller than timeout
-    WatchDogConfig.timeout  = WATCHDOGTIMEOUT; //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s)
+    WatchDogConfig.window   = WATCHDOGMAXRATE;  //  = MINIMUM RATE in milli seconds, (32ms to 522.232s) must be MUCH smaller than timeout
+    WatchDogConfig.timeout  = WATCHDOGTIMEOUT;  //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s)
     WatchDogConfig.callback = WatchDogCallBack;
     TeensyWatchDog.begin(WatchDogConfig);
- 
-    delay(WARMUPDELAY);
-    if (!SD.begin(BUILTIN_SDCARD)) { // MUST return true or all is lost! 
-        delay(WARMUPDELAY);
-        SD.begin(BUILTIN_SDCARD);    // a second attempt for iffy sd cards ?!
+    delay(300);                                 // Give the dog a chance to startup
+    DelayWithDog(WARMUPDELAY);
+    if (!SD.begin(BUILTIN_SDCARD)) {            // MUST return true or all is lost! 
+        DelayWithDog(WARMUPDELAY);
+        SD.begin(BUILTIN_SDCARD);               // a second attempt for iffy sd cards ?!
     }
     ErrorState = NOERROR;
-
     if (CheckFileExists(ModelsFile)) {
-        if (!LoadAllParameters()) { // if file not good ..
+        if (!LoadAllParameters()) {             // if file not good ..
             ErrorState = CHECKSUMERROR;
         }
     } else {
-            ErrorState = MODELSFILENOTFOUND; // if no file ... or no SD
+            ErrorState = MODELSFILENOTFOUND;    // if no file ... or no SD
     }
     
     GetTeensyMacAddress();
@@ -3658,7 +3656,7 @@ if (PPMdata.UseTXModule)
         }
     } 
 
-    delay(WARMUPDELAY);                        // Allow Nextion time to warm up
+    DelayWithDog(WARMUPDELAY);                        // Allow Nextion time to warm up
     SendValue(FrontView_BackGround, BackGroundColour); // Get colours ready
     SendValue(FrontView_ForeGround, ForeGroundColour);
     SendValue(FrontView_Special, SpecialColour);
@@ -3669,7 +3667,7 @@ if (PPMdata.UseTXModule)
     SetAudioVolume(AudioVolume);
     if (PlayFanfare) {
         PlaySound(THEFANFARE);
-        delay(4000); // Fanfare takes about 4 seconds
+        DelayWithDog(4000); // Fanfare takes about 4 seconds
     }
     SendValue(FrontView_Hours, 0);
     SendValue(FrontView_Mins, 0);
@@ -3709,11 +3707,13 @@ if (PPMdata.UseTXModule)
             SendText(Warning, err_chksm);
         }
         if (ErrorState == MODELSFILENOTFOUND){
-        
             SendText(Warning, err_404);
         }
         if (ErrorState == MOTORISON){
             SendText(Warning, err_MotorOn);
+            PlaySound(MOTORON);
+            DelayWithDog(1200);
+            PlaySound(PLSTURNOFF);
         }
     }
 }
@@ -4145,33 +4145,11 @@ void SaveOneModel(uint32_t mnum)
 }
 
 /*********************************************************************************************************************************/
-
-/** Bubble sort */
-void SortDirectory()
-{
-    int  f      = 0;
-    bool flag   = true;
-    int  Scount = 0;
-    char TempArray[18];
-    while (flag && Scount < 10000) {
-        flag = false;
-        for (f = 0; f < ExportedFileCounter - 1; ++f) {
-            if (strcmp(TheFilesList[f], TheFilesList[f + 1]) > 0) {
-                strcpy(TempArray, TheFilesList[f]);
-                strcpy(TheFilesList[f], TheFilesList[f + 1]);
-                strcpy(TheFilesList[f + 1], TempArray);
-                flag = true;
-                ++Scount;
-            }
-        }
-    }
-}
-/*********************************************************************************************************************************/
 void BuildDirectory()
 {
     char MOD[] = ".MOD";
-    char Entry1[20];
-    char fn[18];
+    char Entry1[30];
+    char fn[20];
     int  i              = 0;
     File dir            = SD.open("/");
     ExportedFileCounter = 0;
@@ -4189,7 +4167,6 @@ void BuildDirectory()
         }
         entry.close();
     }
-    SortDirectory();
 }
 /*********************************************************************************************************************************/
 uint16_t WordWrap(char* htext)
@@ -4237,7 +4214,7 @@ void ReadTextFile(char* fname, char* htext, uint8_t StartLineNumber, uint8_t Max
     char slash[]        = "/";
     char OpenBracket[]  = "( ";
     char CloseBracket[] = " )";
-    char SearchFile[30];
+    char SearchFile[40];
 
     StopLineNumber = StartLineNumber + MaxLines;
     strcpy(SearchFile, slash);
@@ -4346,10 +4323,10 @@ void UpdateSwitchesView() //  (Should be optimised but it works!)
     char Safety_Switch[]    = "Safety    ";
     char Buddy_Switch[]     = "Buddy     ";
     char DualRates_Switch[] = "Rates     ";
-    char c9[30];
-    char c10[30];
-    char c11[30];
-    char c12[30];
+    char c9[40];
+    char c10[40];
+    char c11[40];
+    char c12[40];
     char cc9[] = " (Ch 9)";
     char cc10[]= " (Ch 10)";
     char cc11[]= " (Ch 11)";
@@ -4441,7 +4418,7 @@ void ShowFileNumber()
 {
     char dflt[]                 = "DEFAULT.MOD";
     char ModelsView_filename[]  = "filename";
-    char newfname[17];
+    char newfname[27];
    
     strcpy(newfname, dflt);
     if (FileNumberInView >= ExportedFileCounter) FileNumberInView = 0;
@@ -4670,7 +4647,7 @@ void CheckDualRatesValues(){
 void ClearBox()
 {
     char nb[10];
-    char cmd[50];
+    char cmd[80];
     //char fillcmd[] = "fill 30,30,380,365,";
     char fillcmd[] = "fill 20,20,388,375,";
     strcpy(cmd, fillcmd);
@@ -4693,7 +4670,7 @@ void DrawLine(int x1, int y1, int x2, int y2, int c)
 {
     char line[] = "line ";
     char nb[12];
-    char cb[50];
+    char cb[60];
     char comma[] = ",";
     strcpy(cb, line);
     strcat(cb, Str(nb, x1, 0));
@@ -4720,7 +4697,7 @@ void FillBox(int x1, int y1, int w, int h, int c)
 {
     char line[] = "fill ";
     char nb[12];
-    char cb[50];
+    char cb[60];
     char comma[] = ",";
     strcpy(cb, line);
     strcat(cb, Str(nb, x1, 0));
@@ -4747,7 +4724,7 @@ FASTRUN void DrawBox(int x1, int y1, int x2, int y2, int c)
 {
     char line[] = "draw ";
     char nb[12];
-    char cb[50];
+    char cb[60];
     char comma[] = ",";
     strcpy(cb, line);
     strcat(cb, Str(nb, x1, 0));
@@ -4808,7 +4785,7 @@ FASTRUN void DrawDot(int xx, int yy, int rad, int colr)
 {
     char cirs[] = "cirs ";
     char nb[12];
-    char cb[50];
+    char cb[60];
     char comma[] = ",";
     strcpy(cb, cirs);
     strcat(cb, Str(nb, xx, 0));
@@ -6595,7 +6572,7 @@ void ResetTransmitterSettings(){    // This function resets all transmitter para
    ModelNumber        = 1;
    ScreenTimeout      = 120;
    Inactivity_Timeout = INACTIVITYTIMEOUT;
-   strcpy(TxName, Tn);
+   strcpy(TxName, Tn); 
    Qnh              = 1009;
    DeltaGMT         = 0;
    BackGroundColour = 214;
@@ -7105,10 +7082,10 @@ void LoadModelForRenaming(){
   char Head[]                = "Rename this backup";
   char model[]               = "(i.e. just change its filename)";
   char prompt[]              = "New filename?";
-  char Prompt[30];
+  char Prompt[50];
   char overwr[]               = "Overwrite ";
   char ques[]                 = "?";
-  char Deleteable[31];
+  char Deleteable[42];
   char     GoModelsView[]                  = "page ModelsView";
 
   SaveCurrentModel();
@@ -7144,7 +7121,7 @@ void LoadModelForRenaming(){
  void ModelViewEnd(){ 
 
     char pr[]               = "Select ";
-    char buf[50];
+    char buf[60];
     char q[] = "?";
     char     GoModelsView[]                  = "page ModelsView";
     if (PreviousModelNumber != ModelNumber) {
@@ -7277,7 +7254,7 @@ void ModelUnmatch(){
 
     char p[]                        = "Un-match "; 
     char p1[]                       = "?";
-    char prompt[50];
+    char prompt[60];
     char Done[]                     = "Model match ID forgotten.";
     char DoneAlready[]              = "Model match ID not found.";
     char NotDone[]                  = "Model match ID retained.";
@@ -7598,7 +7575,7 @@ FASTRUN void ButtonWasPressed()
         char dGMT[]                 = "dGMT";
         char TxNme[]                = "TxName";
         char MMems[]                = "MMems";
-        char Prompt[50];
+        char Prompt[60];
         char del[]                  = "Delete ";
         char overwr[]               = "Overwrite ";
         char ques[]                 = "?";
@@ -8935,7 +8912,6 @@ char     WarnOff[]                  = "vis Warning,0";
     }
     MotorWasEnabled = MotorEnabled;                               // Remember motor state
     PreviousBank = Bank;                                          // Remember BANK
-    
 }
 
 // *************************************************************************************************************
@@ -8950,11 +8926,11 @@ void IncTrim(uint8_t t)
 
             PlaySound(BEEPCOMPLETE);
             Sounded         = true;
-            TrimRepeatSpeed = DefaultTrimRepeatSpeed;
+            TrimRepeatSpeed = DEFAULTTRIMREPEATSPEED;
         }
     }
     if (Trims[Bank][t] == 80) {
-        TrimRepeatSpeed = DefaultTrimRepeatSpeed; // Restore default trim repeat speed at centre
+        TrimRepeatSpeed = DEFAULTTRIMREPEATSPEED; // Restore default trim repeat speed at centre
         if (TrimClicks) {
             PlaySound(BEEPMIDDLE);
             Sounded = true;
@@ -8975,11 +8951,11 @@ void DecTrim(uint8_t t)
         if (TrimClicks) {
             PlaySound(BEEPCOMPLETE);
             Sounded         = true;
-            TrimRepeatSpeed = DefaultTrimRepeatSpeed;
+            TrimRepeatSpeed = DEFAULTTRIMREPEATSPEED;
         }
     }
     if (Trims[Bank][t] == 80) {
-        TrimRepeatSpeed = DefaultTrimRepeatSpeed; // Restore default trim repeat speed at centre
+        TrimRepeatSpeed = DEFAULTTRIMREPEATSPEED; // Restore default trim repeat speed at centre
         if (TrimClicks) {
             PlaySound(BEEPMIDDLE);
             Sounded = true;
@@ -9215,7 +9191,7 @@ FASTRUN void ReadSwitches() // and indeed read digital trims if these are fitted
         }
     }
     if (flag > 1) {                                     // one at a time please!!
-        TrimRepeatSpeed = DefaultTrimRepeatSpeed;       // Restore default trim repeat speed
+        TrimRepeatSpeed = DEFAULTTRIMREPEATSPEED;       // Restore default trim repeat speed
         for (int i = 0; i < 8; ++i) {
             (TrimSwitch[i]) = 0;
             flag            = 0;
@@ -9223,7 +9199,7 @@ FASTRUN void ReadSwitches() // and indeed read digital trims if these are fitted
     }
     if (!flag) {
         PreviousTrim    = 254;                          // Previous trim must now match none
-        TrimRepeatSpeed = DefaultTrimRepeatSpeed;       // Restore default trim repeat speed
+        TrimRepeatSpeed = DEFAULTTRIMREPEATSPEED;       // Restore default trim repeat speed
     }
   
 }
@@ -9905,6 +9881,14 @@ FASTRUN void BufferTeensyMACAddPipe()
     }
 }
 
+/************************************************************************************************************/
+
+void DelayWithDog(uint32_t HowLong){
+        uint32_t ThisMoment = millis();
+        while ((millis() - ThisMoment) < HowLong) {
+            KickTheDog(); 
+        }
+}
 /************************************************************************************************************/
 void Procrastinate(uint32_t HowLong) // This function replaces delay() without freezing critical tasks
 {

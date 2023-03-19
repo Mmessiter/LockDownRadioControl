@@ -52,7 +52,6 @@
 #include <InterpolationLib.h>
 #include "Hardware/StructsEtc.h" 
  
-
 // **************************************************************************
 //                               General                                    *
 // **************************************************************************
@@ -66,6 +65,7 @@
 #define AUTOSWITCH              1                         // Default AUTO switch
 #define BANKSUSED               4                         // Flight modes (AKA Banks)
 #define LOWBATTERY              42                        // Default percent for warning (User definable)
+#define DEFAULTTRIMREPEATSPEED  600
 
 #ifdef NEWPCB                              // ***>>> red or green PCBs ... not black <<<***
   #define CE_PIN                  7                         // for SPI to nRF24L01
@@ -491,6 +491,6 @@ void         EndTrimView();
 int          AnalogueReed(uint8_t InputChannel);
 void         GetReturnCode();
 void         SelectChannelOrder();
+void         DelayWithDog(uint32_t HowLong);
 /*********************************************************************************************************************************/
-
 #endif
