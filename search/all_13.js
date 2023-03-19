@@ -60,7 +60,7 @@ var searchData=
   ['receiverversionnumber_57',['ReceiverVersionNumber',['../TransmitterCode_2src_2main_8cpp.html#a0606336234719f5039122563372820ac',1,'main.cpp']]],
   ['recentpacketslost_58',['RecentPacketsLost',['../TransmitterCode_2src_2main_8cpp.html#a75bea305c82af413e997a07f6554ff93',1,'main.cpp']]],
   ['recentstartline_59',['RecentStartLine',['../TransmitterCode_2src_2main_8cpp.html#a1c51abf9c65ed93e152859c5c080f578',1,'main.cpp']]],
-  ['recenttextfile_60',['RecentTextFile',['../TransmitterCode_2src_2main_8cpp.html#af92d424401a792a9437fa3e6b7548983',1,'main.cpp']]],
+  ['recenttextfile_60',['RecentTextFile',['../TransmitterCode_2src_2main_8cpp.html#a850ebf7e5e2cefc8e47c06ad7523e9b8',1,'main.cpp']]],
   ['recievercode_61',['RecieverCode',['../RXCODE.html',1,'']]],
   ['reconnect_62',['Reconnect',['../radio_8h.html#aca314b55765a1c3af5397c0cb3ce47ff',1,'radio.h']]],
   ['reconnect_5fchannels_5fcount_63',['RECONNECT_CHANNELS_COUNT',['../common_8h.html#a2e43bf9a06b03c08517e35fb1c553350',1,'RECONNECT_CHANNELS_COUNT():&#160;common.h'],['../Definitions_8h.html#a2e43bf9a06b03c08517e35fb1c553350',1,'RECONNECT_CHANNELS_COUNT():&#160;Definitions.h']]],

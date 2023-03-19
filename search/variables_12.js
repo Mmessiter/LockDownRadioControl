@@ -9,7 +9,7 @@ var searchData=
   ['receiverversionnumber_6',['ReceiverVersionNumber',['../TransmitterCode_2src_2main_8cpp.html#a0606336234719f5039122563372820ac',1,'main.cpp']]],
   ['recentpacketslost_7',['RecentPacketsLost',['../TransmitterCode_2src_2main_8cpp.html#a75bea305c82af413e997a07f6554ff93',1,'main.cpp']]],
   ['recentstartline_8',['RecentStartLine',['../TransmitterCode_2src_2main_8cpp.html#a1c51abf9c65ed93e152859c5c080f578',1,'main.cpp']]],
-  ['recenttextfile_9',['RecentTextFile',['../TransmitterCode_2src_2main_8cpp.html#af92d424401a792a9437fa3e6b7548983',1,'main.cpp']]],
+  ['recenttextfile_9',['RecentTextFile',['../TransmitterCode_2src_2main_8cpp.html#a850ebf7e5e2cefc8e47c06ad7523e9b8',1,'main.cpp']]],
   ['reconnected_10',['Reconnected',['../TransmitterCode_2src_2main_8cpp.html#a0f8aa0f6f0fca3b57e848eec8d23724e',1,'main.cpp']]],
   ['reconnectedmoment_11',['ReconnectedMoment',['../ReceiverCode_2src_2main_8cpp.html#ae6657a547a79d8e304b8ddeb3f6a38e0',1,'ReconnectedMoment():&#160;main.cpp'],['../radio_8h.html#ae6657a547a79d8e304b8ddeb3f6a38e0',1,'ReconnectedMoment():&#160;main.cpp']]],
   ['reconnectindex_12',['ReconnectIndex',['../radio_8h.html#a90d98310365e78ee5ec06aaa7a4092f1',1,'radio.h']]],

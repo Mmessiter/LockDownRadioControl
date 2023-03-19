@@ -9,7 +9,7 @@ var searchData=
   ['thereceivedpipe_6',['TheReceivedPipe',['../ReceiverCode_2src_2main_8cpp.html#a036e89e7dd45664d2a0b28230afcd0ac',1,'TheReceivedPipe():&#160;main.cpp'],['../radio_8h.html#a036e89e7dd45664d2a0b28230afcd0ac',1,'TheReceivedPipe():&#160;main.cpp']]],
   ['thereismoretosee_7',['ThereIsMoreToSee',['../TransmitterCode_2src_2main_8cpp.html#adb831eb55ed2957c4677c87a6f51be59',1,'main.cpp']]],
   ['thisgap_8',['ThisGap',['../TransmitterCode_2src_2main_8cpp.html#ae0aa9266aded94af479d912e6cc4abaf',1,'main.cpp']]],
-  ['thisradio_9',['ThisRadio',['../TransmitterCode_2src_2main_8cpp.html#a2e695c7565eda3b02ff77324e274772b',1,'ThisRadio():&#160;main.cpp'],['../radio_8h.html#a25cc3bb5cb94f4bbef0f2c5b79140c20',1,'ThisRadio():&#160;radio.h']]],
+  ['thisradio_9',['ThisRadio',['../TransmitterCode_2src_2main_8cpp.html#a762fbe9f4709c8f02d07d3c13816b64e',1,'ThisRadio():&#160;main.cpp'],['../radio_8h.html#a25cc3bb5cb94f4bbef0f2c5b79140c20',1,'ThisRadio():&#160;radio.h']]],
   ['thro_5fdes_10',['thro_des',['../Quadcopter_2src_2main_8cpp.html#a0fd62fddc65725616819cf617952a303',1,'main.cpp']]],
   ['timerdownwards_11',['TimerDownwards',['../TransmitterCode_2src_2main_8cpp.html#a83de835c65151cd164d3af27e6b859af',1,'main.cpp']]],
   ['timermillis_12',['TimerMillis',['../TransmitterCode_2src_2main_8cpp.html#a648c27b8c8c314b32a3e2f1c11601e91',1,'main.cpp']]],
@@ -30,7 +30,7 @@ var searchData=
   ['turnoffsecondtogo_27',['TurnOffSecondToGo',['../TransmitterCode_2src_2main_8cpp.html#a8469143c4224c918fc85eab562041d88',1,'main.cpp']]],
   ['tx_28',['tX',['../classMPU9250.html#af7d992743ffa2e15d5674b45a100791e',1,'MPU9250']]],
   ['txlipo_29',['TXLiPo',['../TransmitterCode_2src_2main_8cpp.html#ae15fd0f1128566cd1120f3dd2e287dc1',1,'main.cpp']]],
-  ['txname_30',['TxName',['../TransmitterCode_2src_2main_8cpp.html#a967f3c9b0fd867928c55d75d65cfcd8c',1,'main.cpp']]],
+  ['txname_30',['TxName',['../TransmitterCode_2src_2main_8cpp.html#a2706b92e2f31363ec86e745e2014afef',1,'main.cpp']]],
   ['txvoltagecorrection_31',['TxVoltageCorrection',['../TransmitterCode_2src_2main_8cpp.html#a985d38323fbadec8df22d3e17ca18eb2',1,'main.cpp']]],
   ['ty_32',['tY',['../classMPU9250.html#ae100c82474b1e78337ecfdc8d18518d5',1,'MPU9250']]],
   ['tz_33',['tZ',['../classMPU9250.html#a595f111a497c7727ac70a544b98162e1',1,'MPU9250']]]

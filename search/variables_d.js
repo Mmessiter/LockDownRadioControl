@@ -46,7 +46,7 @@ var searchData=
   ['modeldefined_43',['ModelDefined',['../TransmitterCode_2src_2main_8cpp.html#a7de8ce7890864d7765fca744338c4759',1,'main.cpp']]],
   ['modelidentified_44',['ModelIdentified',['../TransmitterCode_2src_2main_8cpp.html#adf67cd7c0b0e663e2498f870ca6405b6',1,'main.cpp']]],
   ['modelmatched_45',['ModelMatched',['../TransmitterCode_2src_2main_8cpp.html#abafce2220b6ad57b4be99289a7953a0c',1,'ModelMatched():&#160;main.cpp'],['../radio_8h.html#abafce2220b6ad57b4be99289a7953a0c',1,'ModelMatched():&#160;main.cpp'],['../ReceiverCode_2src_2main_8cpp.html#abafce2220b6ad57b4be99289a7953a0c',1,'ModelMatched():&#160;main.cpp']]],
-  ['modelname_46',['ModelName',['../TransmitterCode_2src_2main_8cpp.html#ad61c470de31a7d84669a8170b5d68718',1,'main.cpp']]],
+  ['modelname_46',['ModelName',['../TransmitterCode_2src_2main_8cpp.html#a70d32371e38c7c5862fdc7e149609f7c',1,'main.cpp']]],
   ['modelnumber_47',['ModelNumber',['../TransmitterCode_2src_2main_8cpp.html#a4563a416bfec098674f95b7002e151e1',1,'main.cpp']]],
   ['modelsfilenumber_48',['ModelsFileNumber',['../TransmitterCode_2src_2main_8cpp.html#a3c59f91f84e4b03ab8c76c68429e7ce4',1,'main.cpp']]],
   ['modelsfileopen_49',['ModelsFileOpen',['../TransmitterCode_2src_2main_8cpp.html#a2feea4e42b19e3b7f6656c60f05fd191',1,'main.cpp']]],

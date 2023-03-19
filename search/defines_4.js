@@ -13,7 +13,8 @@ var searchData=
   ['defaultledbrightness_10',['DEFAULTLEDBRIGHTNESS',['../Definitions_8h.html#a2a95d6724b678596120391f5ea8f1ebe',1,'Definitions.h']]],
   ['defaultpipeaddress_11',['DEFAULTPIPEADDRESS',['../Definitions_8h.html#a4882e6035f50cbda34385a5388985813',1,'Definitions.h']]],
   ['defaultpoweroffwarning_12',['DEFAULTPOWEROFFWARNING',['../Definitions_8h.html#aaf61bb959d38561c65510a50ecb4f4d3',1,'Definitions.h']]],
-  ['disconnectedmsg_13',['DISCONNECTEDMSG',['../Definitions_8h.html#ad369aa903154f60e4c7877091791e1c4',1,'Definitions.h']]],
-  ['ds1307_5faddress_14',['DS1307_ADDRESS',['../Definitions_8h.html#a647261f334080cbf95e4f8dd79f73769',1,'Definitions.h']]],
-  ['dualratesview_15',['DUALRATESVIEW',['../Definitions_8h.html#a9003bf850d4b53a17692c707fbf4e4d4',1,'Definitions.h']]]
+  ['defaulttrimrepeatspeed_13',['DEFAULTTRIMREPEATSPEED',['../Definitions_8h.html#a13df60922332fb1b7a5bb3ac8cca4ad4',1,'Definitions.h']]],
+  ['disconnectedmsg_14',['DISCONNECTEDMSG',['../Definitions_8h.html#ad369aa903154f60e4c7877091791e1c4',1,'Definitions.h']]],
+  ['ds1307_5faddress_15',['DS1307_ADDRESS',['../Definitions_8h.html#a647261f334080cbf95e4f8dd79f73769',1,'Definitions.h']]],
+  ['dualratesview_16',['DUALRATESVIEW',['../Definitions_8h.html#a9003bf850d4b53a17692c707fbf4e4d4',1,'Definitions.h']]]
 ];
