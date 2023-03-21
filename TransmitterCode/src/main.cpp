@@ -474,13 +474,6 @@ uint8_t  CountDownIndex = 0;
 
 // **********************************************************************************************************************************
 
-uint64_t NewPipeMaybe = 0;
-uint64_t PreviousNewPipes[PIPES_TO_COMPARE];
-uint8_t  PreviousNewPipesIndex = 0;
-uint8_t  pcount                = 0;
-
-// **********************************************************************************************************************************
-
 // **********************************************************************************************************************************
 // *********************************************** END OF GLOBAL DATA ***************************************************************
 // **********************************************************************************************************************************
@@ -1071,7 +1064,6 @@ void RedLedOn()
         ModelIdentified                             = false;
         ModelMatched                                = false;
         BoundFlag                                   = false;
-        pcount                                      = 0;
         PacketsPerSecond                            = 0;
         LastShowTime                                = 0;
         ModelsMacUnion.Val32[0]                     = 0;
@@ -1079,7 +1071,7 @@ void RedLedOn()
         RangeTestGoodPackets                        = 0;
         RecentPacketsLost                           = 0;
         char     FrontView_Connected[]  = "Connected";
-        char     WarnOff[]                  = "vis Warning,0";
+        char     WarnOff[]              = "vis Warning,0";
         SetUKFrequencies();
         if (CurrentView == FRONTVIEW) {
             SendText(FrontView_Connected, na);
@@ -1112,7 +1104,7 @@ void GreenLedOn()
                 PlaySound(CONNECTEDMSG);
                 ModelMatched = true;
                 BoundFlag    = true; 
-                Procrastinate(2000);
+                DelayWithDog(750); 
             }
             }
         if (UseLog) {
@@ -9377,25 +9369,6 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
     }
     
 }
-
-/************************************************************************************************************/
-// This function compares the just-received pipe with several of the previous ones
-// if it matches most of them then it's probably not corrupted :-) 
-bool ValidateNewPipe(){ 
-    uint8_t MatchedCounter = 0;
-      
-    ++pcount;
-    if (pcount < 2) return false; 
-    PreviousNewPipes[PreviousNewPipesIndex] = NewPipeMaybe;
-    PreviousNewPipesIndex++;
-    if (PreviousNewPipesIndex >= PIPES_TO_COMPARE) PreviousNewPipesIndex = 0;
-    for (int i = 0; i < PIPES_TO_COMPARE;++i){
-        if (NewPipeMaybe == PreviousNewPipes[i]) ++ MatchedCounter;
-    }
-    if (MatchedCounter >= PIPES_TO_COMPARE / 2 ) return true; // half or more is OK
-    return false;
-}
-
 /************************************************************************************************************/
 void  GetModelsMacAddress(){
  
@@ -9411,13 +9384,9 @@ void  GetModelsMacAddress(){
              break;
     }
     if (ModelMatched == false) {
-      
         if ((ModelsMacUnion.Val32[0] > 0) && (ModelsMacUnion.Val32[1] > 0)){   // got both bits yet?
-             NewPipeMaybe = ModelsMacUnion.Val64;
-             if (ValidateNewPipe()) { // test!
                  ModelIdentified = true; 
                  CompareModelsIDs();      
-             }
         }    
     }
 }
@@ -9879,39 +9848,18 @@ FASTRUN void BufferTeensyMACAddPipe()
         SendBuffer[q] = MacAddress[q];
     }
 }
-
 /************************************************************************************************************/
-
 void DelayWithDog(uint32_t HowLong){
         uint32_t ThisMoment = millis();
         while ((millis() - ThisMoment) < HowLong) {
             KickTheDog(); 
         }
 }
-/************************************************************************************************************/
-void Procrastinate(uint32_t HowLong) // This function replaces delay() without freezing critical tasks
-{
-    uint32_t ThisMoment = millis();
-    if (RecursedAlready) 
-    {
-        while ((millis() - ThisMoment) < HowLong) {
-            KickTheDog(); 
-        }
-        return;   // do not allow indirect recursion any further
-    }
-    RecursedAlready = true;
-    while ((millis() - ThisMoment) < HowLong) {
-        KickTheDog();                               // keep watchdog happy
-        if (Connected && BoundFlag && ModelMatched) SendData();    // ModelMatched?? YES. resend some old data briefly (collecting new is dangerous and not worth it.)
-    }
-    RecursedAlready = false;
-}
 //***********************************************************************************************************
 void Look(int p)  // This is just to save typing Serial.println :)
 {
     Serial.println(p);
 }
-
 //***********************************************************************************************************
 // *************************************** Functions to run macros  *****************************************
 // **********************************************************************************************************
