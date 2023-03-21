@@ -141,17 +141,16 @@ Radio Control Features list, so far:</h1>
 <li>Macros - for snap rolls, heli rescue, etc.</li>
 <li>Hardware digital trims with accellerating repeat</li>
 <li>Capacitive touch screen GUI</li>
-<li>Hardware bug in nRF24L01+ fixed. (FIFO buffers crash the chip when they're full for &gt; 4ms. So these are not used.)</li>
+<li>Hardware bug in nRF24L01+ worked-around: FIFO buffers crash the chip when they're full for &gt; 4ms. So these are flushed often.</li>
 <li>Screen colours definable</li>
 <li>Data screen gives almost all possible telemetry</li>
-<li>Log files <br  />
-</li>
-<li>Help files display system from text files.</li>
+<li>Log files (on SD 32 gig card)</li>
+<li>Help files display system from plain text files.</li>
 <li>Safety switch implemtented (Stops accidental motor starting)</li>
 <li>Rates (three rates) implemented</li>
 <li>Slow Servos implemented: Any channel can be slowed by almost any amount for realistic flaps, U/C etc,</li>
-<li>PPM or <a class="el" href="classSBUS.html">SBUS</a> now possible from reciever</li>
-<li>Support for external third party transmitter modules added</li>
+<li>PPM or <a class="el" href="classSBUS.html">SBUS</a> now possible from reciever - chosen in transmitter.</li>
+<li>Support for external third party transmitter modules added (JR type).</li>
 </ul>
 <h1><a class="anchor" id="txPinout"></a>
 Teensy 4.1 Pins</h1>
