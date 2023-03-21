@@ -41,16 +41,16 @@
  * - Macros - for snap rolls, heli rescue, etc.
  * - Hardware digital trims with accellerating repeat
  * - Capacitive touch screen GUI
- * - Hardware bug in nRF24L01+ fixed. (FIFO buffers crash the chip when they're full for > 4ms. So these are not used.)
+ * - Hardware bug in nRF24L01+ worked-around: FIFO buffers crash the chip when they're full for > 4ms. So these are flushed often.
  * - Screen colours definable
  * - Data screen gives almost all possible telemetry
- * - Log files  
- * - Help files display system from text files.
+ * - Log files  (on SD 32 gig card)
+ * - Help files display system from plain text files.
  * - Safety switch implemtented (Stops accidental motor starting)
  * - Rates (three rates) implemented
  * - Slow Servos implemented: Any channel can be slowed by almost any amount for realistic flaps, U/C etc,
- * - PPM or SBUS now possible from reciever
- * - Support for external third party transmitter modules added
+ * - PPM or SBUS now possible from reciever - chosen in transmitter.
+ * - Support for external third party transmitter modules added (JR type).
  *
  *
  * @section txPinout Teensy 4.1 Pins
@@ -6829,6 +6829,7 @@ void StartModelSetup(){
      char     ProgressStart[]       = "vis Progress,1";
      char     ProgressEnd[]         = "vis Progress,0";
      char     Progress[]            = "Progress";
+ 
     if (CurrentView == FAILSAFE_VIEW) { //  read failsafe blobs
         SendCommand(ProgressStart);
         for (int i = 0; i < 16; ++i) {
@@ -6840,7 +6841,6 @@ void StartModelSetup(){
 
     if (CurrentView == MIXESVIEW) { //  read mixes
             SaveMixValues();
-            SaveOneModel(ModelNumber);
             SendCommand(ProgressEnd);
         }
 
@@ -6848,6 +6848,7 @@ void StartModelSetup(){
     b12isGrey = false;     
     SendCommand(GotoModelSetup);
     CurrentView = RXSETUPVIEW;
+    SaveOneModel(ModelNumber);
     UpdateModelsNameEveryWhere();
     CurrentMode        = NORMAL;
     LastTimeRead = 0;
@@ -7501,7 +7502,6 @@ FASTRUN void ButtonWasPressed()
         char CH16NAME[]                = "CH16NAME=";
         char HelpView[]                = "HelpView";
         char SendModel[]               = "SendModel";
-        char OffNow[]                  = "OffNow"; // force power off
         char OptionsViewS[]            = "OptionsViewS";
         char Pto[]                     = "Pto";
         char Tx_Name[]                 = "TxName";
@@ -7955,15 +7955,6 @@ FASTRUN void ButtonWasPressed()
             return;
         }
      
-
-        if (InStrng(OffNow, TextIn) > 0) { // redundant
-            if (UseLog) LogPowerOff();
-            SaveAllParameters();
-            DelayWithDog(250); 
-            digitalWrite(POWER_OFF_PIN, HIGH); // force OFF in Options View
-            ClearText();
-            return;
-        }
 
         if (InStrng(SendModel, TextIn) > 0) {
             i = strlen(SendModel);
@@ -9572,6 +9563,8 @@ void SimulateCloseDown(){ // Because real closedown occurs only after button is 
     analogWrite(BLUELED, 0);
     analogWrite(REDLED, 0);
     SendCommand(ScreenOff);
+    SaveOneModel(ModelNumber);            // in case any trim change etc wasn't saved
+    DelayWithDog(2500);
     digitalWrite(POWER_OFF_PIN, HIGH); 
 }
 /************************************************************************************************************/
@@ -9586,7 +9579,7 @@ void CheckPowerOffButton()
     char  StillConnectedBox[]       = "StillConnected";
     
 
-    if (!digitalRead(BUTTON_SENSE_PIN)){ 
+    if (!digitalRead(BUTTON_SENSE_PIN)){
         GotoFrontView();
         if (!LedWasGreen) 
         {
@@ -9603,9 +9596,10 @@ void CheckPowerOffButton()
             PowerOffTimer = 0;
     }
 
-    if (PowerOffTimer) { // count down started?
+    if (PowerOffTimer) {                          // count down started?
         if (!PowerWarningVisible) {
             SendCommand(StillConnected);
+            SaveOneModel(ModelNumber);            // in case any trim change etc wasn't saved
             PowerWarningVisible = true;
         }
     }
