@@ -9941,8 +9941,6 @@ FASTRUN void FailedPacket()
     if (SecondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH); // INACTIVITY POWER OFF HERE!!
 }
 
-
-
 /************************************************************************************************************/
 
 void TryToReconnect()
