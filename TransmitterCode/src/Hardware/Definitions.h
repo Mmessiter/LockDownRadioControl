@@ -492,5 +492,6 @@ int          AnalogueReed(uint8_t InputChannel);
 void         GetReturnCode();
 void         SelectChannelOrder();
 void         DelayWithDog(uint32_t HowLong);
+void         SaveTransmitterParameters();
 /*********************************************************************************************************************************/
 #endif

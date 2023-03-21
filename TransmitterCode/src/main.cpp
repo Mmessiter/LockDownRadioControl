@@ -271,7 +271,6 @@ char SingleModelFile[40];
 bool SingleModelFlag = false;
 bool     ModelsFileOpen = false;
 bool     USE_INA219     = false;
-uint8_t  BindingNow     = 0;
 uint32_t BindingTimer   = 0;
 bool     BoundFlag      = false;
 bool     Switch[8];
@@ -422,13 +421,14 @@ uint32_t  PreviousPowerOffTimer   = 0;
 bool      ModelIdentified         = false;
 bool      ModelMatched            = false;
 bool      AutoModelSelect         = true;
-union {
+
+union uMacReceived {
         uint32_t Val64  = 0;
         uint32_t Val32[2];
         uint8_t  Val8[8]; // Model's Mac address just obtained from model
      }  ModelsMacUnion;
 
-union {
+union uMacStored {
         uint32_t Val64  = 0;
         uint32_t Val32[2] ;
         uint8_t  Val8[8];        // Model's Mac address that had been saved on disk
@@ -1036,6 +1036,12 @@ void StartInactvityTimeout()
 
 uint8_t GetLEDBrightness()
 {
+
+    if (LEDBrightness < 15) {
+        LEDBrightness = DEFAULTLEDBRIGHTNESS;
+        SaveTransmitterParameters();
+    }
+
     if (LedIsBlinking) {
         if ((millis() - BlinkTimer) > (750 / BlinkHertz)) {
             BlinkOnPhase ^= 1;
@@ -1065,8 +1071,6 @@ void RedLedOn()
         ModelIdentified                             = false;
         ModelMatched                                = false;
         BoundFlag                                   = false;
-        //BindButton                                  = false;
-        BindingNow                                  = 0;
         pcount                                      = 0;
         PacketsPerSecond                            = 0;
         LastShowTime                                = 0;
@@ -1124,7 +1128,6 @@ void GreenLedOn()
         analogWrite(REDLED, 0);
         analogWrite(GREENLED, GetLEDBrightness()); // Brightness is a function of maybe blinking
         if (GetLEDBrightness()) LedWasGreen = true;
-       // MakeBindButtonInvisible();
         Reconnected = false;
     }
 }
@@ -1182,7 +1185,7 @@ void SendCommand(char* tbox)
         delayMicroseconds(70);
     }
     GetReturnCode();
-    if (InStrng(page, tbox)) Procrastinate(SCREENCHANGEWAIT); // Allow time for new page to appear
+    if (InStrng(page, tbox)) DelayWithDog(SCREENCHANGEWAIT); // Allow time for new page to appear
   
 }
 /*********************************************************************************************************************************/
@@ -1244,7 +1247,7 @@ void EndSend()
     for (u_int8_t pp = 0; pp < 3; ++pp) {
         NEXTION.write(0xff);// Send end of Input message //
     }          
-    Procrastinate(55); // ** A DELAY ** (>=50 ms) was needed if an answer might come! (!! Shorter with Intelligent dislay)
+    DelayWithDog(55); // ** A DELAY ** (>=50 ms) was needed if an answer might come! (!! Shorter with Intelligent dislay)
 }
 /*********************************************************************************************************************************/
 void SendValue(char* nbox, int value)
@@ -1320,7 +1323,7 @@ uint32_t GetValue(char* nbox) // This function calls the function above until it
     uint32_t ValueIn = getvalue(nbox);
 
     while (ValueIn == 65535 && i < 25) { // if error read again!
-        Procrastinate(50);
+        DelayWithDog(50);
         ValueIn = getvalue(nbox);
         ++i;
     }
@@ -3553,7 +3556,7 @@ void GetTeensyMacAddress(){
     for (int i = 1; i < 6; ++i){
         MacAddress[i] = CheckPipeNibbles(MacAddress[i]);  // Fix PIPE if needed !
     }
-   // for (int i = 1; i < 6; ++i) MacAddress[i] = 0x42; // TEST! (... Force new ID for tests)
+  //  for (int i = 1; i < 6; ++i) MacAddress[i] = 0x42; // TEST! (... Force new ID for tests)
 
 #ifdef DB_BIND
     Serial.println("");
@@ -3673,7 +3676,7 @@ if (PPMdata.UseTXModule)
     SendValue(FrontView_Mins, 0);
     SendValue(FrontView_Secs, 0);
     //  ***************************************************************************************
-    //  SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
+     // SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
     //  **   BUT then re-comment it!! Otherwise it will reset to same time on every boot up! **
     //  ***************************************************************************************
     BoundFlag = false;
@@ -3792,7 +3795,6 @@ void ReadCheckSum32()
 
 void SaveTransmitterParameters()
 {
-   
     bool EON = false;
     int  j   = 0;
     int  i   = 0;
@@ -4441,9 +4443,9 @@ void ShowFileErrorMsg()
     char ErrorOff[] = "vis error,0";
     for (int pp = 0; pp < 3; ++pp) {
         SendCommand(ErrorOn);
-        Procrastinate(200);
+        DelayWithDog(200);
         SendCommand(ErrorOff);
-        Procrastinate(100);
+        DelayWithDog(100);
     }
     FileError = false;
 }
@@ -5035,7 +5037,6 @@ FASTRUN void DisplayCurve()
 
 void BindNow() // Bind button was pressed 
 {
-    BindingNow                   = 1;
     BoundFlag                    = true;
     ModelMatched                 = true;
     Connected                    = true;
@@ -5424,7 +5425,7 @@ void ReceiveModelFile()
     ClearText();
     PlaySound(BEEPCOMPLETE);
     CloseModelsFile();
-    Procrastinate(2000);
+    DelayWithDog(2000);
     GotoModelsView();
     ClearText();
     RedLedOn();
@@ -6012,7 +6013,7 @@ void EndBuddyView()
 FASTRUN void DisplayCurveAndServoPos(){
 
     ClearBox();                    
-    Procrastinate(5);
+    DelayWithDog(5);
     SavedLineX = 52735;             // just to be massvely different
     ShowServoPos();                 // this calls displaycurve!!!
     ClearText();
@@ -6114,7 +6115,7 @@ void GotoMacrosView()
     PreviousMacroNumber = 200; // i.e. no usable number
     SendCommand(pMacrosView);  // Display MacroView
     CurrentView = MACROS_VIEW;
-    Procrastinate(200);        // allow enough time for screen to display
+    DelayWithDog(200);        // allow enough time for screen to display
     UpdateModelsNameEveryWhere();
     PopulateMacrosView();
 }
@@ -6325,7 +6326,7 @@ void OptionView2Start()
     CurrentView  = OPTIONVIEW2;
     LastTimeRead = 0;
     SendCommand(OptionV2Start);
-    Procrastinate(100);
+    DelayWithDog(100);
     SendValue(dGMT, DeltaGMT);
 }
 
@@ -6345,13 +6346,14 @@ void OptionView3Start() /// NOT CALLED
 
     CurrentView          = OPTIONVIEW3;
     SendCommand(OptionV3Start);
-    Procrastinate(250);
+    DelayWithDog(250);
     snprintf(Vbuf, 5, "%f", StopFlyingVoltsPerCell);
     SendText(t10, Vbuf);
     SendValue(TxVCorrextion, TxVoltageCorrection);
     SendValue(n2,  PowerOffWarningSeconds);
     SendValue(n3,  ConnectionAssessSeconds);
     SendValue(lpm, AutoModelSelect);
+    if (LEDBrightness < 15) LEDBrightness = DEFAULTLEDBRIGHTNESS;
     SendValue(n1,  LEDBrightness);
     SendValue(QNH,  Qnh);
 }
@@ -6734,7 +6736,7 @@ void ReadDualRatesValues(){
     char     Progress[]            = "Progress";
     SendCommand(ProgressStart);
     SendValue(Progress, 10);
-    Procrastinate(10);
+    DelayWithDog(10);
     Drate1 = GetValue(rate1);
     if (Drate1 > MAXDUALRATE) Drate1 = MAXDUALRATE; 
     Drate2 = GetValue(rate2);
@@ -6742,21 +6744,21 @@ void ReadDualRatesValues(){
     Drate3 = GetValue(rate3);
     if (Drate3 > MAXDUALRATE) Drate3 = MAXDUALRATE;
     SendValue(Progress, 50);
-    Procrastinate(10);
+    DelayWithDog(10);
     DualRateChannels[0] = CheckRange(GetValue(ChNumber1),0,8);
     DualRateChannels[1] = CheckRange(GetValue(ChNumber2),0,8);   
     DualRateChannels[2] = CheckRange(GetValue(ChNumber3),0,8);
     SendValue(Progress, 60);
-    Procrastinate(10);
+    DelayWithDog(10);
     DualRateChannels[3] = CheckRange(GetValue(ChNumber4),0,8);
     DualRateChannels[4] = CheckRange(GetValue(ChNumber5),0,8);
     DualRateChannels[5] = CheckRange(GetValue(ChNumber6),0,8);
     SendValue(Progress, 75);
-    Procrastinate(10);
+    DelayWithDog(10);
     DualRateChannels[6] = CheckRange(GetValue(ChNumber7),0,8);
     DualRateChannels[7] = CheckRange(GetValue(ChNumber8),0,8);
     SendValue(Progress, 100);
-    Procrastinate(10);
+    DelayWithDog(10);
     SendCommand(ProgressEnd);
 }
 /******************************************************************************************************************************/
@@ -6825,7 +6827,7 @@ void ListenToBanks(){
     for (int i = 0; i < 4;++i){
             BanksInUse[i] = GetValue(BKS[i]);
             PlaySound(BankSounds[BanksInUse[i]]);
-            Procrastinate(1200);
+            DelayWithDog(1200);
   }
 }
 /******************************************************************************************************************************/
@@ -7142,11 +7144,11 @@ void LoadModelForRenaming(){
 /******************************************************************************************************************************/
 
 void DoMFName(){
-    Procrastinate(200);
+    DelayWithDog(200);
     CheckModelName();    // In MODELSVIEW, this function checks correct model name and filename is displayed.
-    Procrastinate(500);
+    DelayWithDog(500);
     CheckModelName();    // in case we were much too quick!
-    Procrastinate(1000);
+    DelayWithDog(1000);
     CheckModelName();    // in case we were far too quick!
 }
 
@@ -7224,25 +7226,25 @@ void SelectChannelOrder(){
         }
     }
     SendValue(Progress, 30);
-    Procrastinate(100);
+    DelayWithDog(100);
     PPMdata.PPMChannelsNumber = GetValue(n3);
     SendValue(Progress, 51);
     PPMdata.PPMMillis        =   GetValue(n4);// Not used!!! (yet)
     if (GetValue(r0)) PPMdata.PPMOrderSelection = 1;
     SendValue(Progress, 63);
-    Procrastinate(10);
+    DelayWithDog(10);
     if (GetValue(r1)) PPMdata.PPMOrderSelection = 2;
     SendValue(Progress, 88);
-    Procrastinate(10);
+    DelayWithDog(10);
     if (GetValue(r2)) PPMdata.PPMOrderSelection = 3;
     SelectChannelOrder();
     SendValue(Progress, 99);
-    Procrastinate(10);
+    DelayWithDog(10);
     SaveTransmitterParameters();
-    Procrastinate(10);
+    DelayWithDog(10);
     SendCommand(page_SetupView);
     CurrentView = TXSETUPVIEW;
-    Procrastinate(10);
+    DelayWithDog(10);
     if (PPMdata.UseTXModule != oldUseTxModule) {
         digitalWrite(POWER_OFF_PIN, HIGH); 
     }
@@ -8244,26 +8246,26 @@ if (InStrng(Export, TextIn)) {
             strcat(Prompt, ques);
             if (GetConfirmation(GoModelsView,Prompt))  {   
                 SendCommand(ProgressStart);
-                Procrastinate(10);
+                DelayWithDog(10);
                 SendValue(Progress, 5);
-                Procrastinate(10);
+                DelayWithDog(10);
                 if (InStrng(ModExt, SingleModelFile) == 0) strcat(SingleModelFile, ModExt);
                 SingleModelFlag = true;
                 SendValue(Progress, 10);
-                Procrastinate(10);
+                DelayWithDog(10);
                 CloseModelsFile();
                 ReadOneModel(1);
                 SendValue(Progress, 50);
-                Procrastinate(10);
+                DelayWithDog(10);
                 SingleModelFlag = false;
                 CloseModelsFile();
                 SendValue(Progress, 75);
-                Procrastinate(10);
+                DelayWithDog(10);
                 SaveAllParameters();
                 CloseModelsFile();
                 UpdateModelsNameEveryWhere();
                 SendValue(Progress, 100);
-                Procrastinate(10);
+                DelayWithDog(10);
                 SendCommand(ProgressEnd);
                 if (FileError) ShowFileErrorMsg();
                 LoadModelSelector();
@@ -8631,10 +8633,9 @@ void LoadPacketData()
     SendBuffer[CHANNELSUSED + 2] = 0;
     switch (PacketNumber) {
         case 0:
-           //  SendBuffer[CHANNELSUSED + 2] = BindingNow;
-           // if (BindingNow == 1) {
-           //     BindingNow  = 2;
-           // }
+           
+           //  SendBuffer[CHANNELSUSED + 2] = NOTUSEDYET;
+           
             if (((millis() - FailSafeTimer) > 1500) && SaveFailSafeNow) {
                 SendBuffer[CHANNELSUSED + 1] = SaveFailSafeNow; // FailSafeSaveMoment
                 SaveFailSafeNow              = false;           // once should do it.
@@ -9315,7 +9316,6 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
     
     uint8_t SavedModelNumber = ModelNumber;
     if (ModelMatched) return; // must not change when model connected
-    ModelMatched             = false;
     GotoFrontView();
     RestoreBrightness();
   
@@ -9325,7 +9325,7 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                 if (AnnounceConnected) {
                     if (AutoModelSelect){
                         PlaySound(MMMATCHED); 
-                        Procrastinate(1500);
+                        DelayWithDog(1500);
                     }
                     
                 }
@@ -9351,7 +9351,7 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                         if (AnnounceConnected) 
                         {
                             PlaySound(MMFOUND);
-                            Procrastinate(1500);
+                            DelayWithDog(1500);
                         }
                         
                         SaveAllParameters();                                  //  Save it
@@ -9364,8 +9364,8 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                         NewModelMemoryWasSaved = true;
                         if (AutoModelSelect)
                         {
-                            PlaySound(MMSAVED); // test!
-                            Procrastinate(1700);
+                            PlaySound(MMSAVED); 
+                            DelayWithDog(1700);
                         }   
                     }
                 } 
@@ -9388,7 +9388,7 @@ bool ValidateNewPipe(){
     if (pcount < 2) return false; 
     PreviousNewPipes[PreviousNewPipesIndex] = NewPipeMaybe;
     PreviousNewPipesIndex++;
-    if (PreviousNewPipesIndex > PIPES_TO_COMPARE) PreviousNewPipesIndex = 0;
+    if (PreviousNewPipesIndex >= PIPES_TO_COMPARE) PreviousNewPipesIndex = 0;
     for (int i = 0; i < PIPES_TO_COMPARE;++i){
         if (NewPipeMaybe == PreviousNewPipes[i]) ++ MatchedCounter;
     }
@@ -9414,10 +9414,9 @@ void  GetModelsMacAddress(){
       
         if ((ModelsMacUnion.Val32[0] > 0) && (ModelsMacUnion.Val32[1] > 0)){   // got both bits yet?
              NewPipeMaybe = ModelsMacUnion.Val64;
-             if (ValidateNewPipe()) {
-                ModelIdentified = true; 
-                CompareModelsIDs();
-                
+             if (ValidateNewPipe()) { // test!
+                 ModelIdentified = true; 
+                 CompareModelsIDs();      
              }
         }    
     }
@@ -9739,7 +9738,7 @@ void SendBindingPipe()
     if (!BoundFlag || !ModelMatched) BindingTimer = millis();
     if ((millis() - BindingTimer) < BindPause) 
     {
-        BufferTeensyMACAddPipe(); //  test! Extra 3 or 6 seconds to exchange pipes 
+        BufferTeensyMACAddPipe(); 
     }else
     {
         NewModelMemoryWasSaved = false; // return to normal service
@@ -10222,13 +10221,13 @@ FLASHMEM void InitRadio(uint64_t Pipe)
     Radio1.setPALevel(RF24_PA_MAX, true);
     Radio1.setDataRate(RF24_250KBPS);
     Radio1.enableAckPayload();
-    Radio1.openWritingPipe(Pipe);             // Current Pipe address used for Binding
-    Radio1.setRetries(RETRYCOUNT, RETRYWAIT); // automatic retries and pauses
+    Radio1.openWritingPipe(Pipe);               // Current Pipe address used for Binding
+    Radio1.setRetries(RETRYCOUNT, RETRYWAIT);   // automatic retries and pauses
     Radio1.stopListening();
-    delay(1);
+    delayMicroseconds(500);
     Radio1.enableDynamicPayloads();
-    Radio1.setAddressWidth(5);              //  5
-    Radio1.setCRCLength(RF24_CRC_16); // (RF24_CRC_8); // could be 16
+    Radio1.setAddressWidth(5);          
+    Radio1.setCRCLength(RF24_CRC_16);           // could be (RF24_CRC_8);
     GapSum  = 0;
 }
 /*********************************************************************************************************************************/
@@ -10236,9 +10235,9 @@ FLASHMEM void InitRadio(uint64_t Pipe)
 void SetThePipe(uint64_t WhichPipe)
 {
     Radio1.openWritingPipe(WhichPipe);
-    delay(1);
+    delayMicroseconds(500);
     Radio1.stopListening();
-    delay(1); // allow things to happen
+    delayMicroseconds(500); // allow things to happen
 }
 /*********************************************************************************************************************************/
 
