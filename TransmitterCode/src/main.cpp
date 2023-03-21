@@ -9972,7 +9972,7 @@ void TryToReconnect()
     NextChannel = *(FHSS_data::FHSSRecoveryPointer + RECONNECT_CHANNELS_START + ReconnectionIndex); //  reconnect channel (selected from three)
     HopToNextChannel();
 }
-// class  ConnectClass;
+
 /************************************************************************************************************/
 void SuccessfulPacket()
 {
@@ -9982,7 +9982,6 @@ void SuccessfulPacket()
     LostContactFlag   = false;
     RecentPacketsLost = 0;
     Connected         = true;
-   // ConnectClass.setConnected(true);
     if (BoundFlag && !LedWasGreen) GreenLedOn();
     CheckGapsLength();
     Radio1.read(&AckPayload, AckPayloadSize); //  "sizeof" doesn't work with externs,
