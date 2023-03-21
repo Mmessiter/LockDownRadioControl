@@ -2484,11 +2484,11 @@ char      ModelsFile[]                = "models.dat";
 if(!ModelsFileOpen){
     if (SingleModelFlag) {
         ModelsFileNumber = SD.open(SingleModelFile, FILE_WRITE);
-        delay(100);
+        DelayWithDog(100);
     }
     else {
         ModelsFileNumber = SD.open(ModelsFile, FILE_WRITE);
-         delay(100);
+         DelayWithDog(100);
     }
     if (ModelsFileNumber == 0) {
         FileError = true;
@@ -2759,7 +2759,7 @@ bool ReadOneModel(uint32_t Mnum)
     FileCheckSum = 0;
     if ((ModelNumber > 90) || (ModelNumber <= 0)) ModelNumber = 1;
     OpenModelsFile(); 
-    if (!ModelsFileOpen) {delay(300); OpenModelsFile(); }
+    if (!ModelsFileOpen) {DelayWithDog(300); OpenModelsFile(); }
     
     strcpy(ModelName, NoModelYet); // indicator of error
 
@@ -3603,7 +3603,7 @@ FLASHMEM void setup()
     WatchDogConfig.timeout  = WATCHDOGTIMEOUT;  //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s)
     WatchDogConfig.callback = WatchDogCallBack;
     TeensyWatchDog.begin(WatchDogConfig);
-    delay(300);                                 // Give the dog a chance to startup
+    delay(300);       // <<********************* MUST ALLOW DOG TO INITIALISE 
     DelayWithDog(WARMUPDELAY);
     if (!SD.begin(BUILTIN_SDCARD)) {            // MUST return true or all is lost! 
         DelayWithDog(WARMUPDELAY);
@@ -5397,7 +5397,7 @@ void ReceiveModelFile()
     WriteEntireBuffer();
     BuildDirectory();
     SendText(ModelsView_filename, Success);
-    delay(500);
+    DelayWithDog(500);
     SendText(ModelsView_filename, SingleModelFile);
 
     // **************************************** Below Here the new model is imported for immediate use
@@ -5457,7 +5457,7 @@ void SendModelFile()
     SendText(t0, Fsend);
     SendCommand(ProgressStart);
     SendValue(Progress, p);
-    delay(10);
+    DelayWithDog(10);
 #ifdef DB_MODEL_EXCHANGE
     Serial.print("Sending model: ");
     Serial.println(SingleModelFile);
@@ -5475,7 +5475,7 @@ void SendModelFile()
     Radio1.setRetries(15, 15);
     Radio1.openWritingPipe(TXPipe);
     Radio1.stopListening();
-    delay(4);
+    DelayWithDog(4);
    
     while (Fposition < Fsize) {
         KickTheDog(); // Watchdog
@@ -5521,7 +5521,7 @@ void SendModelFile()
     Serial.println("ALL SENT.");
 #endif
     SendValue(Progress, 100);
-    delay(750);
+    DelayWithDog(750);
     NormaliseTheRadio();
     SendCommand(ProgressEnd);
     RedLedOn();
@@ -5530,7 +5530,7 @@ void SendModelFile()
     strcat(msg, bytes);
     ShowFileProgress(msg);
     PlaySound(BEEPCOMPLETE);
-    delay(2000);
+    DelayWithDog(2000);
     SendCommand(GoModelsView);
     CurrentView = MODELSVIEW;
     CloseModelsFile();
@@ -6980,7 +6980,7 @@ void WriteBackup(){
                 }
                 if (FileError) ShowFileErrorMsg();
                 SendValue(Progress, 100);
-                delay(100);
+                DelayWithDog(100);
                 SendCommand(ProgressEnd);
                 LastFileInView = 120;
 }
@@ -7959,7 +7959,7 @@ FASTRUN void ButtonWasPressed()
         if (InStrng(OffNow, TextIn) > 0) { // redundant
             if (UseLog) LogPowerOff();
             SaveAllParameters();
-            delay(250); 
+            DelayWithDog(250); 
             digitalWrite(POWER_OFF_PIN, HIGH); // force OFF in Options View
             ClearText();
             return;
@@ -9166,7 +9166,7 @@ void CalibrateEdgeSwitches()
             if (i == 2) swap(&SwitchNumber[i], &SwitchNumber[i + 1]); // swap over switches' pin number if wrongly installed
             if (i == 4) swap(&SwitchNumber[i], &SwitchNumber[i + 1]); // swap over switches' pin number if wrongly installed
             if (i == 6) swap(&SwitchNumber[i], &SwitchNumber[i + 1]); // swap over switches' pin number if wrongly installed
-        }   //// try 7 not 6 ....
+        }   
     }
 }
 /************************************************************************************************************/
@@ -9627,10 +9627,10 @@ void CheckPowerOffButton()
                 if (UseLog) LogPowerOff(); // log the event
                 if (PlayFanfare) {
                     PlaySound(WHAHWHAHMSG);
-                    delay(2300);
+                    DelayWithDog(2300);
                 } 
                 SaveAllParameters();
-                delay(250);                        // wait a mo for user to see 0 and log to write to file
+                DelayWithDog(250);                        // wait a mo for user to see 0 and log to write to file
                 SimulateCloseDown();
             }
             --TurnOffSecondToGo;
@@ -9849,11 +9849,9 @@ FASTRUN void BufferTeensyMACAddPipe()
     }
 }
 /************************************************************************************************************/
-void DelayWithDog(uint32_t HowLong){
+void DelayWithDog(uint32_t HowLong){   // Implements delay() and also kicks the dog a lot
         uint32_t ThisMoment = millis();
-        while ((millis() - ThisMoment) < HowLong) {
-            KickTheDog(); 
-        }
+        while ((millis() - ThisMoment) < HowLong)  KickTheDog(); 
 }
 //***********************************************************************************************************
 void Look(int p)  // This is just to save typing Serial.println :)
