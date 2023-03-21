@@ -6,7 +6,7 @@ var searchData=
   ['savefailsafedata_3',['SaveFailSafeData',['../ReceiverCode_2src_2main_8cpp.html#a96891035aa9f064462b6a614c5878f51',1,'main.cpp']]],
   ['savemixvalues_4',['SaveMixValues',['../TransmitterCode_2src_2main_8cpp.html#a63daed42947b977db0cac434bcd44b5e',1,'main.cpp']]],
   ['saveonemodel_5',['SaveOneModel',['../TransmitterCode_2src_2main_8cpp.html#ab5210e90502030d9f8864752dd70dc20',1,'main.cpp']]],
-  ['savetransmitterparameters_6',['SaveTransmitterParameters',['../TransmitterCode_2src_2main_8cpp.html#aaf3d3b6d086a958ac8ebf1bb771adcee',1,'main.cpp']]],
+  ['savetransmitterparameters_6',['SaveTransmitterParameters',['../Definitions_8h.html#aaf3d3b6d086a958ac8ebf1bb771adcee',1,'SaveTransmitterParameters():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#aaf3d3b6d086a958ac8ebf1bb771adcee',1,'SaveTransmitterParameters():&#160;main.cpp']]],
   ['sbus_7',['SBUS',['../classSBUS.html#aee0b4b879b6415eac8d79879c24bf88d',1,'SBUS']]],
   ['scalecommands_8',['scaleCommands',['../Quadcopter_2src_2main_8cpp.html#a8d52798485917f4265993ca62bd6ced4',1,'main.cpp']]],
   ['scanallchannels_9',['ScanAllChannels',['../Definitions_8h.html#ae17dae8deffe2e33044f61fd3a8ebca2',1,'ScanAllChannels(bool cls):&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#ae17dae8deffe2e33044f61fd3a8ebca2',1,'ScanAllChannels(bool cls):&#160;main.cpp']]],

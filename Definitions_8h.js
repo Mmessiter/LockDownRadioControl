@@ -307,6 +307,7 @@ var Definitions_8h =
     [ "ResetTransmitterSettings", "Definitions_8h.html#a5c7f22bae35d5d6df9d54fe79dbb8401", null ],
     [ "RestoreBrightness", "Definitions_8h.html#a49da3478d89a22069e29c7f00cb46a5f", null ],
     [ "SaveCurrentModel", "Definitions_8h.html#af5e8d51b8f0fb2cfc985ca3de187cc8a", null ],
+    [ "SaveTransmitterParameters", "Definitions_8h.html#aaf3d3b6d086a958ac8ebf1bb771adcee", null ],
     [ "ScanAllChannels", "Definitions_8h.html#ae17dae8deffe2e33044f61fd3a8ebca2", null ],
     [ "SelectChannelOrder", "Definitions_8h.html#a8ecf24a84e20841dab0219efd6b9797b", null ],
     [ "SendCharArray", "Definitions_8h.html#acd617ff93ca893aa7d65aaf2898dfc3d", null ],

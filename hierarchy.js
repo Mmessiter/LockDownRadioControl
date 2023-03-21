@@ -9,6 +9,8 @@ var hierarchy =
     [ "PPMArea", "structPPMArea.html", null ],
     [ "Quaternion", "classQuaternion.html", null ],
     [ "SBUS", "classSBUS.html", null ],
+    [ "uMacReceived", "unionuMacReceived.html", null ],
+    [ "uMacStored", "unionuMacStored.html", null ],
     [ "VectorFloat", "classVectorFloat.html", null ],
     [ "VectorInt16", "classVectorInt16.html", null ]
 ];
