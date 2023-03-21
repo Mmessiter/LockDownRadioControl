@@ -326,6 +326,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "ShowSafetyIsOn", "TransmitterCode_2src_2main_8cpp.html#a624dab5b77d191ddae33fbe2ac2da4ae", null ],
     [ "ShowServoPos", "TransmitterCode_2src_2main_8cpp.html#ad770ee51a34d8c5026e65136884c16bf", null ],
     [ "SimulateCloseDown", "TransmitterCode_2src_2main_8cpp.html#a761b6bcf24c9ccf34e61a5757ebfc4a7", null ],
+    [ "SortDirectory", "TransmitterCode_2src_2main_8cpp.html#a113f8bee0942b732f19881466ef0f42d", null ],
     [ "SoundBank", "TransmitterCode_2src_2main_8cpp.html#a030ff9af8fc6b06c659a3c56ab7d2ff2", null ],
     [ "StartBankNames", "TransmitterCode_2src_2main_8cpp.html#a0ae3d4fad1e79724448c269efc4da9ec", null ],
     [ "StartBuddyView", "TransmitterCode_2src_2main_8cpp.html#aaf48dfa7ac69b0baa5134fd9547f722c", null ],
