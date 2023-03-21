@@ -1,11 +1,5 @@
 var NAVTREEINDEX11 =
 {
-"globals_t.html":[5,1,0,20],
-"globals_type.html":[5,1,3],
-"globals_u.html":[5,1,0,21],
-"globals_v.html":[5,1,0,22],
-"globals_vars.html":[5,1,2,0],
-"globals_vars.html":[5,1,2],
 "globals_vars_b.html":[5,1,2,1],
 "globals_vars_c.html":[5,1,2,2],
 "globals_vars_d.html":[5,1,2,3],
