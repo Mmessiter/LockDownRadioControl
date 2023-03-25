@@ -8755,7 +8755,7 @@ void CheckMotorOff(){ // For Safety
 
     if (!UseMotorKill) return;
     ReadSwitches();
-    MotorEnabled = true;
+    MotorEnabled = false;
     if (Autoswitch == 1 && Switch[7]    == SWITCH1Reversed) MotorEnabled = true;
     if (Autoswitch  == 2 && Switch[5]   == SWITCH2Reversed) MotorEnabled = true;
     if (Autoswitch  == 3 && Switch[0]   == SWITCH3Reversed) MotorEnabled = true;
