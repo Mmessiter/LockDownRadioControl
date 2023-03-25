@@ -2839,7 +2839,7 @@ bool ReadOneModel(uint32_t Mnum)
         ++SDCardAddress;
     }
     RxVoltageCorrection = SDRead16BITS(SDCardAddress);
-    if ((RxVoltageCorrection > 20) || (RxVoltageCorrection < 0)) RxVoltageCorrection = 0;
+   
     ++SDCardAddress;
     ++SDCardAddress;
     CheckSavedTrimValues();
