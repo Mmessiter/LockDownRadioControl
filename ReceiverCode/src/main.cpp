@@ -36,8 +36,8 @@
  * | 19    | I2C SCK (FOR I2C) | *** --- >> YELLOW WIRE = 19 !! << --- ***
  * | 20    | SPI CSN2 (FOR RADIO2)  |
  * | 21    | SPI CE2 (FOR RADIO2) |
- * | 22    | IRQ1 (FOR RADIO1) |
- * | 23    | IRQ2 (FOR RADIO2) |
+ * | 22    | Spare (CH10 ? ... or CE1)
+ * | 23    | Spare (CH11 ? ... or CSN1)
  *
  * @see ReceiverCode/src/main.cpp
  */
