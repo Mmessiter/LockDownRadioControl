@@ -576,7 +576,6 @@ void GetSlaveChannelValuesPPM() // MASTER code
             PlaySound(MASTERMSG);
             LastShowTime = 0;
             SlaveHasControl = false;
-            Look(SendBuffer[0]);
         }
     }
 }
@@ -5600,11 +5599,8 @@ void updateOneSwitchView()  //
     char OneSwitchView_r7[]    = "r7";    // Safety
     char OneSwitchView_r8[]    = "r8";    // Dual Rates
     char OneSwitchView_r9[]    = "r9";    // Buddy
-
-
     char OneSwitchViewc_revd[] = "c_revd"; // Reversed
     char SwNum[]               = "Sw";
-
     char ch9[]  = "t3";
     char ch10[] = "t4";
     char ch11[] = "t5";
@@ -5631,6 +5627,8 @@ void updateOneSwitchView()  //
     strcat(temp, ch12a);
     SendText(ch12,temp);
 
+
+
     if (SwitchEditNumber == 1) {
         ValueSent = false; // If no setting, = Not Used
         if (FMSwitch == 1) SendValue(OneSwitchView_r1, 1);
@@ -5642,8 +5640,6 @@ void updateOneSwitchView()  //
         if (SafetySwitch == 1) SendValue(OneSwitchView_r7, 1);
         if (DualRatesSwitch == 1) SendValue(OneSwitchView_r8, 1);
         if (BuddySwitch == 1) SendValue(OneSwitchView_r9, 1);
-        
-        
         if (!ValueSent) SendValue(OneSwitchView_r0, 1); // nothing yet, so not used
         if (SWITCH1Reversed) SendValue(OneSwitchViewc_revd, 1);
     }
@@ -5672,7 +5668,6 @@ void updateOneSwitchView()  //
         if (SafetySwitch == 3) SendValue(OneSwitchView_r7, 1);
         if (DualRatesSwitch == 3) SendValue(OneSwitchView_r8, 1);
         if (BuddySwitch == 3) SendValue(OneSwitchView_r9, 1);
-        
         if (!ValueSent) SendValue(OneSwitchView_r0, 1); // nothing yet, so not used
         if (SWITCH3Reversed) SendValue(OneSwitchViewc_revd, 1);
     }
@@ -5740,8 +5735,8 @@ void ReadNewSwitchFunction(){
         char OneSwitchView_r7[]        = "r7";     // Safety
         char OneSwitchView_r8[]        = "r8";     // Dual Rates
         char OneSwitchView_r9[]        = "r9";     // Buddy
-        char ProgressStart[]       = "vis Progress,1";
-        char ProgressEnd[]         = "vis Progress,0";
+        char ProgressStart[]           = "vis Progress,1";
+        char ProgressEnd[]             = "vis Progress,0";
         char PageSwitchView[]          = "page SwitchesView";
         char OneSwitchViewc_revd[]     = "c_revd"; // Reversed
         char     Progress[]            = "Progress";
@@ -5849,8 +5844,8 @@ void ReadNewSwitchFunction(){
             }
             SendValue(Progress, 100);
             SaveOneModel(ModelNumber);
-            SendCommand(PageSwitchView); // change to all switches screen
-            UpdateSwitchesView();     // update its info
+            SendCommand(PageSwitchView);    // change to all switches screen
+            UpdateSwitchesView();           // update its info
             ClearText();
             SendCommand(ProgressEnd);
             return;
