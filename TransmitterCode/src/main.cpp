@@ -555,7 +555,7 @@ void GetSlaveChannelValuesPPM() // MASTER code
 
         if (PPMdata.PPMInputBuddy.available() == CHANNELSUSED){
             for (int j = 0; j < CHANNELSUSED; ++j) {                                   // While slave has control, his stick data replaces all ours
-                uint16_t PpmIn = PPMdata.PPMInputBuddy.read(j + 1);                            // read EVERY channel
+                uint16_t PpmIn = PPMdata.PPMInputBuddy.read(j + 1);                    // read EVERY channel
                 if (BuddyControlled & 1 << (j)) {                                      // Test if this channel is buddy controlled. If not leave it unchanged
                     SendBuffer[j] = PpmIn;
                     PPMBuffer[j]  = PpmIn;
@@ -9686,11 +9686,15 @@ void FASTRUN ManageTransmitter(){
 }
 /**********************************************************************************************************/
 #ifdef TXMODULESUPPORT
+
+//#define MINMICROS       500
+//#define MAXMICROS       2500
 void SendPPM(){ // Send a frame of PPM to Third party TX module
-    if (millis() - PPMdata.LastPPMFrame < 10) return; // was PPMMillis (... that was wrong)
+    if (millis() - PPMdata.LastPPMFrame < 10) return; 
     PPMdata.LastPPMFrame = millis();
     for (int j = 0; j < PPMdata.PPMChannelsNumber; ++j) {
-        PPMdata.PPMOutputModule.write(*(PPMdata.PPMChannelOrder + j), SendBuffer[j]);  
+        PPMdata.PPMOutputModule.write(*(PPMdata.PPMChannelOrder + j), SendBuffer[j]);  // heer
+        // PPMdata.PPMOutputModule.write(*(PPMdata.PPMChannelOrder + j), map(SendBuffer[j],MINMICROS,MAXMICROS, 0, 1024));  // heer
     }
 }
 #endif
@@ -9958,7 +9962,7 @@ FASTRUN void FailedPacket()
 void TryToReconnect()
 {
     if (BuddyPupilOnPPM) return;
-    if (RecentPacketsLost > 25) { // heer! was 50
+    if (RecentPacketsLost > 25) { 
         TryOtherPipe();
         RecentPacketsLost = 0;
     }
@@ -10101,7 +10105,7 @@ void ScanAllChannels(bool cls)
         return;
     }
         Str(NewYellow, HighlightColour, 0);
-    for (Sc = 1; Sc <= 125; ++Sc) { // heer
+    for (Sc = 1; Sc <= 125; ++Sc) { 
        if (NEXTION.available()) return; // in case someone wants to stop!
         Radio1.setChannel(Sc);
         Radio1.startListening();
