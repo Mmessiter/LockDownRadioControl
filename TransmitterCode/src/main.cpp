@@ -123,7 +123,7 @@ RF24          Radio1(CE_PIN, CSN_PIN);
 WDT_T4<WDT3>  TeensyWatchDog;
 WDT_timings_t WatchDogConfig;
 
-uint8_t       Mixes[MAXMIXES + 1][CHANNELSUSED + 1];          // 17 possible elements per mix. NOTHING to do with channels count!!!
+byte          Mixes[MAXMIXES + 1][17];                        // 17 possible elements per mix. NOTHING to do with channels count!!!
 int           Trims[BANKSUSED + 1][CHANNELSUSED + 1];         // Trims to store
 uint8_t       Exponential[BANKSUSED + 1][CHANNELSUSED + 1];   // Exponential
 uint8_t       InterpolationTypes[BANKSUSED + 1][CHANNELSUSED + 1];
@@ -1920,10 +1920,10 @@ void SaveMixValues(){
     char MixesView_SlaveChannel[]  = "SlaveChannel";
     char MixesView_Reversed[]      = "Reversed";
     char MixesView_Percent[]       = "Percent";
-    char MixesView_h0[]            = "h0"; // =the slider control
     char MixesView_od[]            = "od"; // One direction
-    char     ProgressStart[]       = "vis Progress,1";
-    char     Progress[]            = "Progress";
+    char MixesView_offset[]        = "Offset";
+    char ProgressStart[]           = "vis Progress,1";
+    char Progress[]                = "Progress";
 
     SendCommand(ProgressStart);
     SendValue(Progress, 5);
@@ -1939,9 +1939,10 @@ void SaveMixValues(){
     SendValue(Progress, 70);
     Mixes[MixNumber][M_Percent]       = GetValue(MixesView_Percent);
     SendValue(Progress, 85);
-    Mixes[MixNumber][M_Percent]       = GetValue(MixesView_h0);
-    SendValue(Progress, 93);
+    SendValue(Progress, 90);
     Mixes[MixNumber][M_ONEDIRECTION]  = GetValue(MixesView_od);
+    SendValue(Progress, 95);
+    Mixes[MixNumber][M_OFFSET]       = GetValue(MixesView_offset) + 127; // because it's unsigned
     SendValue(Progress, 100);
 }
 
@@ -1955,10 +1956,10 @@ void ShowMixValues() // sends mix values to Nextion screen
     char MixesView_SlaveChannel[]  = "SlaveChannel";
     char MixesView_Reversed[]      = "Reversed";
     char MixesView_Percent[]       = "Percent";
-    char MixesView_h0[]            = "h0"; // =the slider control
     char MixesView_chM[]           = "chM";
     char MixesView_chS[]           = "chS";
     char MixesView_od[]            = "od";
+    char MixesView_offset[]        = "Offset";
 
     SendText(MixesView_chM, ChannelNames[Mixes[MixNumber][M_MasterChannel] - 1]);
     SendText(MixesView_chS, ChannelNames[Mixes[MixNumber][M_SlaveChannel] - 1]);
@@ -1975,8 +1976,8 @@ void ShowMixValues() // sends mix values to Nextion screen
         SendValue(MixesView_SlaveChannel, Mixes[MixNumber][M_SlaveChannel]);
     }
     SendValue(MixesView_Percent, Mixes[MixNumber][M_Percent]);
-    SendValue(MixesView_h0, Mixes[MixNumber][M_Percent]);
     SendValue(MixesView_od, Mixes[MixNumber][M_ONEDIRECTION]);
+    SendValue(MixesView_offset, Mixes[MixNumber][M_OFFSET] - 127);  // because it's unsigned
     SendText(MixesView_chM, ChannelNames[Mixes[MixNumber][M_MasterChannel] - 1]);
     SendText(MixesView_chS, ChannelNames[Mixes[MixNumber][M_SlaveChannel] - 1]);
 }
@@ -2120,6 +2121,7 @@ FASTRUN void DoMixes()
                             if (Mixes[MixNumber][M_Reversed]) MixValue = -MixValue;
                         }
                         MixValue += SendBuffer[(Mixes[MixNumber][M_SlaveChannel]) - 1];      // This is the actual mix moment! (MixValue is now the mixed value)
+                        MixValue += (Mixes[MixNumber][M_OFFSET] - 127) * 8; // heer
                         MinimumDeg = IntoHigherRes(MinDegrees[Bank][(Mixes[MixNumber][M_SlaveChannel]) - 1]); 
                         MaximumDeg = IntoHigherRes(MaxDegrees[Bank][(Mixes[MixNumber][M_SlaveChannel]) - 1]);
                         if (MinimumDeg > MaximumDeg) 
@@ -3946,8 +3948,8 @@ void SaveOneModel(uint32_t mnum)
         }
     }
     for (j = 0; j < MAXMIXES; ++j) {
-        for (i = 0; i < CHANNELSUSED + 1; ++i) {
-            SDUpdate8BITS(SDCardAddress, Mixes[j][i]); // Save mixes
+        for (i = 0; i < 17; ++i) {
+            SDUpdate8BITS(SDCardAddress, Mixes[j][i]); // Save mixes // heer
             ++SDCardAddress;
         }
     }

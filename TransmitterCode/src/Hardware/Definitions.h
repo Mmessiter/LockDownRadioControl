@@ -25,7 +25,7 @@
 //    DEBUG OPTIONS (Uncomment any of these for that bit of debug info)     *
 //***************************************************************************
 
-// #define DB_NEXTION        // Debug NEXTION
+ #define DB_NEXTION        // Debug NEXTION
 // #define DB_SD             // Debug SD card data
 // #define DB_CHECKSUM       // Debug 32BIT file checksum info
 // #define DB_FHSS           // Debug real time FHSS data
@@ -146,6 +146,7 @@
 #define M_R1            6
 #define M_R2            7
 #define M_ONEDIRECTION  8
+#define M_OFFSET        9
 
 // **************************************************************************
 //                               Screens                                    *
