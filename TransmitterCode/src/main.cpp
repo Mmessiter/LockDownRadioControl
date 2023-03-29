@@ -1938,8 +1938,7 @@ void SaveMixValues(){
     Mixes[MixNumber][M_Reversed]      = GetValue(MixesView_Reversed);
     SendValue(Progress, 70);
     Mixes[MixNumber][M_Percent]       = GetValue(MixesView_Percent);
-    SendValue(Progress, 85);
-    SendValue(Progress, 90);
+    SendValue(Progress, 87);
     Mixes[MixNumber][M_ONEDIRECTION]  = GetValue(MixesView_od);
     SendValue(Progress, 95);
     Mixes[MixNumber][M_OFFSET]       = GetValue(MixesView_offset) + 127; // because it's unsigned
