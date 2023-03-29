@@ -2295,7 +2295,7 @@ void  GetCurveDots(uint16_t OutputChannel, uint16_t TheRate)
 /*********************************************************************************************************************************/
 
 void     DoSlowServos() {                          
-    static uint32_t SlowTime[16];                                       // 
+    static uint32_t SlowTime[16];                                                   // 
     for (int i = 0; i < 16; ++i) {                                                  // Test every channel
         if (StepSize[i] < 100) {                                                    // If StepSize = 100, use full speed. No slowing
             if ((millis() - SlowTime[i]) > 10) {                                    // This next part runs only 100 times per second
@@ -2309,6 +2309,7 @@ void     DoSlowServos() {
                 CurrentPosition[i] += SSize;                                        // Move Current Position a little bit towards goal
             }
         SendBuffer[i] = CurrentPosition[i];                                         // Modify next servo position
+        PreMixBuffer[i]  = SendBuffer[i];
         }
     }
 }
@@ -2336,8 +2337,8 @@ FASTRUN void GetNewChannelValues()
      }
     if (CurrentMode == NORMAL) {
         DoReverseSense();
-        DoMixes();
         DoSlowServos();
+        DoMixes();    // Mixes the OUTPUT :-)
     }
 }
 /*********************************************************************************************************************************/
