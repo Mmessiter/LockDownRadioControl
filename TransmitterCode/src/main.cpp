@@ -2309,7 +2309,7 @@ void     DoSlowServos() {
                 CurrentPosition[i] += SSize;                                        // Move Current Position a little bit towards goal
             }
         SendBuffer[i] = CurrentPosition[i];                                         // Modify next servo position
-        PreMixBuffer[i]  = SendBuffer[i];
+        PreMixBuffer[i]  = SendBuffer[i];                                           // mix the slowed version
         }
     }
 }
@@ -9688,32 +9688,22 @@ void FASTRUN ManageTransmitter(){
 /**********************************************************************************************************/
 #ifdef TXMODULESUPPORT
 
-//#define MINMICROS       500
-//#define MAXMICROS       2500
 void SendPPM(){ // Send a frame of PPM to Third party TX module
     if (millis() - PPMdata.LastPPMFrame < 10) return; 
     PPMdata.LastPPMFrame = millis();
     for (int j = 0; j < PPMdata.PPMChannelsNumber; ++j) {
         PPMdata.PPMOutputModule.write(*(PPMdata.PPMChannelOrder + j), SendBuffer[j]);  // heer
-        // PPMdata.PPMOutputModule.write(*(PPMdata.PPMChannelOrder + j), map(SendBuffer[j],MINMICROS,MAXMICROS, 0, 1024));  // heer
-    }
+      }
 }
 #endif
 
-void OkSoFar(){
-
-    Look(millis());
-}
 /************************************************************************************************************/
-
 void FixMotorChannel()
 {
     if (!MotorEnabled && !BuddyON) {
         SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero whatever was shown.
     }
 }
-
-
 
 /************************************************************************************************************/
 void SendBindingPipe()
