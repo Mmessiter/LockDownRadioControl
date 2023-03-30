@@ -1976,7 +1976,8 @@ void ShowMixValues() // sends mix values to Nextion screen
     }
     SendValue(MixesView_Percent, Mixes[MixNumber][M_Percent]);
     SendValue(MixesView_od, Mixes[MixNumber][M_ONEDIRECTION]);
-    SendValue(MixesView_offset, Mixes[MixNumber][M_OFFSET] - 127);  // because it's unsigned
+    if (((Mixes[MixNumber][M_OFFSET]) > 227) || ((Mixes[MixNumber][M_OFFSET]) < 27)) Mixes[MixNumber][M_OFFSET] = 127;  // zeroed if out of range
+    SendValue(MixesView_offset, Mixes[MixNumber][M_OFFSET] - 127);  // because it's 'unsigned'
     SendText(MixesView_chM, ChannelNames[Mixes[MixNumber][M_MasterChannel] - 1]);
     SendText(MixesView_chS, ChannelNames[Mixes[MixNumber][M_SlaveChannel] - 1]);
 }
@@ -2275,7 +2276,7 @@ float UseFullRate(short int Curve, uint8_t OutputChannel){
 
 /*********************************************************************************************************************************/
 
-void  GetCurveDots(uint16_t OutputChannel, uint16_t TheRate)
+void  GetCurveDots(uint16_t OutputChannel, uint16_t TheRate) // This for the Dual Rates function
 {                                                   // This for the Dual Rates function
                                                     // Effectively, it just copies the Y dot's magnitude on the curve, but might reduce the extent if rate is not 100 and channel specified
     if (TheRate != 100){                            // Not 100% ?
@@ -2325,13 +2326,14 @@ FASTRUN void GetNewChannelValues()
     uint16_t OutputValue, InputChannel, InputValue, OutputChannel;
     for (OutputChannel = 0; OutputChannel < CHANNELSUSED; ++OutputChannel) {                                             // Do every channel
         InputChannel = InPutStick[OutputChannel];                                                                        // Input sticks knobs & switches are mapped by user                                                                                                 
-        GetCurveDots(OutputChannel, DualRateValue);  
+        GetCurveDots(OutputChannel, DualRateValue);  // This for the Dual Rates function
         if (InputChannel > 7) {                                                                                          // Must be a switch if over 7
             OutputValue = GetStickInput(InputChannel);                                                                   // Four 3 postion switches
         } else {                                                                                                         // i.e. l <= 7 so it's a Stick/knob/switch                                           
-            InputValue  = AnalogueReed(InputChannel) + GetTrimAmount(InputChannel);                                       // Get values from sticks' pots then ADD TRIM then interpolate them.
+            InputValue = AnalogueReed(InputChannel);                                                                                // Get values from sticks' pots then ADD TRIM then interpolate them.
             OutputValue = Interpolate[InterpolationTypes[Bank][OutputChannel]](InputValue, InputChannel, OutputChannel); // Use function pointer array to invoke selected interpolation.
         }
+        OutputValue += GetTrimAmount(InputChannel); // Add trim AFTER doing rates
         OutputValue += (SubTrims[OutputChannel] - 127) * (TrimMultiplier);                                               // ADD SUBTRIM to output channel, not mapped input channel (Range 0 - 127 - 254)
         PreMixBuffer[OutputChannel] = constrain(OutputValue, MINMICROS, MAXMICROS);
         SendBuffer[OutputChannel]   = PreMixBuffer[OutputChannel];
