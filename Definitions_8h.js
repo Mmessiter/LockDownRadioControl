@@ -50,7 +50,6 @@ var Definitions_8h =
     [ "CSN_ON", "Definitions_8h.html#ab22ef6e01ad09b637ca55f3fcd3cae94", null ],
     [ "CSN_PIN", "Definitions_8h.html#a6c4d73944fe1bd2ff7ceee867c315ac1", null ],
     [ "DATAVIEW", "Definitions_8h.html#a5d4f7906962f2c612f1eeabd809f2f52", null ],
-    [ "DB_NEXTION", "Definitions_8h.html#a37c149666ecf7d90765ce2a9df4b8fb8", null ],
     [ "DEFAULT_EXPO", "Definitions_8h.html#a2a42bee007b474de05c409af41aba395", null ],
     [ "DEFAULTLEDBRIGHTNESS", "Definitions_8h.html#a2a95d6724b678596120391f5ea8f1ebe", null ],
     [ "DEFAULTPIPEADDRESS", "Definitions_8h.html#a4882e6035f50cbda34385a5388985813", null ],

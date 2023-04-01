@@ -1,6 +1,5 @@
 var NAVTREEINDEX3 =
 {
-"MPU6050__6Axis__MotionApps__V6__12_8h.html#a73cf3e57e32321cb193b3cc4b041cc6c":[5,0,0,0,0,0,6,13],
 "MPU6050__6Axis__MotionApps__V6__12_8h.html#a75acaba9e781937468d0911423bc0c35":[5,0,0,0,0,0,6,22],
 "MPU6050__6Axis__MotionApps__V6__12_8h.html#a8a3c5c6e2c14ced6f6bb5c68ffc70082":[5,0,0,0,0,0,6,28],
 "MPU6050__6Axis__MotionApps__V6__12_8h.html#a8c58c1a4bc98cdbf19a2a070cf889524":[5,0,0,0,0,0,6,27],
@@ -249,5 +248,6 @@ var NAVTREEINDEX3 =
 "Quadcopter_2src_2main_8cpp.html#ac3911351a5c7f3c279a0043ee8d82aca":[5,0,0,0,1,179],
 "Quadcopter_2src_2main_8cpp.html#ac3fef4926a251b91d04b92a74a70cf98":[5,0,0,0,1,233],
 "Quadcopter_2src_2main_8cpp.html#ac4b36cc4c9335e33316312f3428ec8ad":[5,0,0,0,1,84],
-"Quadcopter_2src_2main_8cpp.html#ac6ac8f7dadfc13730ef787e4a1067aef":[5,0,0,0,1,175]
+"Quadcopter_2src_2main_8cpp.html#ac6ac8f7dadfc13730ef787e4a1067aef":[5,0,0,0,1,175],
+"Quadcopter_2src_2main_8cpp.html#ac72774e799315c84110ef2b7ec60070b":[5,0,0,0,1,23]
 };

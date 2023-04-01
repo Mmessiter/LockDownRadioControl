@@ -76,12 +76,12 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "Definitions_8h.html",
-"Definitions_8h.html#ab307882b2cf0f392aad17febe154494a",
-"MPU6050_8h.html#a6c67014f4d0b0c2b20b7f5de816cf16c",
-"MPU6050__6Axis__MotionApps__V6__12_8h.html#a73cf3e57e32321cb193b3cc4b041cc6c",
-"Quadcopter_2src_2main_8cpp.html#ac72774e799315c84110ef2b7ec60070b",
-"TransmitterCode_2src_2main_8cpp.html#a038111bf598c53ad7b9a62ca45259356",
-"TransmitterCode_2src_2main_8cpp.html#a6922974b734cfe3a511e074a2d6ac33c",
+"Definitions_8h.html#ab5b352492259f7b453a051455d5dca50",
+"MPU6050_8h.html#a6cd0377342ce090355618d6028157467",
+"MPU6050__6Axis__MotionApps__V6__12_8h.html#a75acaba9e781937468d0911423bc0c35",
+"Quadcopter_2src_2main_8cpp.html#ac91c8327b89cc5a48456390b496bb553",
+"TransmitterCode_2src_2main_8cpp.html#a049bfb836e7aa4a3a48a1a4bd225fafc",
+"TransmitterCode_2src_2main_8cpp.html#a69393b86406e49dbacfbabd283877495",
 "TransmitterCode_2src_2main_8cpp.html#ac5728db610c441820a6f47295967cbab",
 "classMPU6050.html#a455f63be2ea810cac26d583da6915050",
 "classMPU9250.html#a36fab1c8d06aa5dcd0e6a4014d7ca5e7",
