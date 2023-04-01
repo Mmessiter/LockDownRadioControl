@@ -260,7 +260,9 @@ void UseReceivedData()
 /************************************************************************************************************/
 bool ReadData()
 {
-    Connected = false;
+    bool ReconnectPacket = false;
+
+    Connected            = false;
     while (CurrentRadio->available(&Pipnum)) { // Get all, but use only the latest
         LoadAckPayload();
         CurrentRadio->flush_tx();                                      // This avoids a lockup that happens when the FIFO gets full
@@ -269,8 +271,12 @@ bool ReadData()
         CurrentRadio->read(&CompressedData, sizeof(CompressedData));   // Get Data
         Connected = true;
         NewData   = true;
+        if (CompressedData[0] == 0xffff && CompressedData[1] == 0xffff) {
+            ReconnectPacket = true;  
+            NewData   = false;
+        }
     }
-    if (Connected) UseReceivedData();
+    if (Connected && !ReconnectPacket) UseReceivedData();
     return Connected;
 }
 

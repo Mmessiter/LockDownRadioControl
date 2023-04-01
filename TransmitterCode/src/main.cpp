@@ -3950,7 +3950,7 @@ void SaveOneModel(uint32_t mnum)
     }
     for (j = 0; j < MAXMIXES; ++j) {
         for (i = 0; i < 17; ++i) {
-            SDUpdate8BITS(SDCardAddress, Mixes[j][i]); // Save mixes // heer
+            SDUpdate8BITS(SDCardAddress, Mixes[j][i]); // Save mixes 
             ++SDCardAddress;
         }
     }
@@ -9695,7 +9695,7 @@ void SendPPM(){ // Send a frame of PPM to Third party TX module
     if (millis() - PPMdata.LastPPMFrame < 10) return; 
     PPMdata.LastPPMFrame = millis();
     for (int j = 0; j < PPMdata.PPMChannelsNumber; ++j) {
-        PPMdata.PPMOutputModule.write(*(PPMdata.PPMChannelOrder + j), SendBuffer[j]);  // heer
+        PPMdata.PPMOutputModule.write(*(PPMdata.PPMChannelOrder + j), SendBuffer[j]);  
       }
 }
 #endif
@@ -9971,15 +9971,17 @@ void SuccessfulPacket()
 {
     ++RangeTestGoodPackets;
     ++PacketNumber;
-    RecordsPacketSuccess(1);
-    LostContactFlag   = false;
+    RecordsPacketSuccess(1);   
     RecentPacketsLost = 0;
     Connected         = true;
     if (BoundFlag && !LedWasGreen) GreenLedOn();
     CheckGapsLength();
-    Radio1.read(&AckPayload, AckPayloadSize); //  "sizeof" doesn't work with externs,
-    ParseAckPayload();
+    if (!LostContactFlag){
+        Radio1.read(&AckPayload, AckPayloadSize); //  "sizeof" doesn't work with externs,
+        ParseAckPayload();
+    }
     StartInactvityTimeout();
+    LostContactFlag   = false;
 }
 
 /************************************************************************************************************/
@@ -9990,6 +9992,18 @@ void FlushFifos()
     Radio1.flush_rx();
     delayMicroseconds(250);
 }
+/************************************************************************************************************/
+ void SendReconnectPacket(){
+        uint32_t ShortPacket = {0xffffffff};
+        if (Radio1.write(&ShortPacket, 4)) {  
+            FlushFifos();
+            SuccessfulPacket();
+        }
+        else {
+            FlushFifos();
+            FailedPacket();
+        }
+ }
 /************************************************************************************************************/
 //****************** Function to send data to receiver ***************************************
 /************************************************************************************************************/
@@ -10004,17 +10018,19 @@ FASTRUN void SendData()
             SendViaPPM();
             return;
         }                                                           // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
-        LoadPacketData();                                           // extra parameters appended to the data packet
         Connected = false;                                          // Assume the worst until ACK is received.
         FlushFifos();
+        if (LostContactFlag){
+            SendReconnectPacket();
+            return;
+        }
+        LoadPacketData();                                           // extra parameters appended to the data packet
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);    // Compress 32 bytes down to 24 (40 -> 30??)
         if (Radio1.write(&CompressedData, SizeOfCompressedData)) {  //  ************************** >>>>> SEND DATA (30 bytes) TO RX <<<<< ***************************************
-            SuccessfulPacket();
-            
+            SuccessfulPacket(); 
             FlushFifos();
         } else {
             FlushFifos();
-           
             FailedPacket();
         }
     }
