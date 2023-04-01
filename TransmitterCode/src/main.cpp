@@ -9976,10 +9976,8 @@ void SuccessfulPacket()
     Connected         = true;
     if (BoundFlag && !LedWasGreen) GreenLedOn();
     CheckGapsLength();
-    if (!LostContactFlag){
-        Radio1.read(&AckPayload, AckPayloadSize); //  "sizeof" doesn't work with externs,
-        ParseAckPayload();
-    }
+    Radio1.read(&AckPayload, AckPayloadSize); //  "sizeof" doesn't work with externs,
+    ParseAckPayload();
     StartInactvityTimeout();
     LostContactFlag   = false;
 }
