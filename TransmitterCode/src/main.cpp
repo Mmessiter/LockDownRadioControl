@@ -1752,14 +1752,21 @@ FASTRUN void ShowComms()
     char rate3[]             = "Rate 3";
     char rate4[]             = "      ";
     char     FrontView_Connected[]  = "Connected";
-    char     WarnNow[]                  = "vis Warning,1"; 
-    char     WarnOff[]                  = "vis Warning,0";
-    char     InVisible[]           = "vis Quality,0";
+    char     WarnNow[]              = "vis Warning,1"; 
+    char     WarnOff[]              = "vis Warning,0";
+    char     InVisible[]            = "vis Quality,0";
+    char     IdReceived[]           = "t22";
+    char     IdStored[]             = "t19";
+    char     IdReceived1[]          = "t23";
+    char     IdStored1[]            = "t24";
 
-        if (CurrentView == FRONTVIEW) {
-            ShowConnectionQuality();
-            switch (DualRateInUse)
-            {
+
+    unsigned int TempModelId                   = 0;
+
+    if (CurrentView == FRONTVIEW) {
+        ShowConnectionQuality();
+        switch (DualRateInUse)
+        {
             case 1:
                  SendText(rate, rate1);
                  break;
@@ -1817,6 +1824,22 @@ FASTRUN void ShowComms()
             snprintf(Vbuf, 6, "%d", (int)SbusRepeats - SavedSbusRepeats);
             SendText(Sbs, Vbuf);
             SendValue(DataView_lps, TotalLostPackets / 2);
+            
+            TempModelId = ModelsMacUnionSaved.Val32[0];
+            snprintf(Vbuf, 8, "%X", TempModelId);
+            if (TempModelId) SendText(IdStored, Vbuf);
+            TempModelId = ModelsMacUnionSaved.Val32[1];
+            snprintf(Vbuf, 8, "%X", TempModelId);
+            if (TempModelId) SendText(IdStored1, Vbuf);
+
+            TempModelId = ModelsMacUnion.Val32[0];
+            snprintf(Vbuf, 8, "%X", TempModelId);
+            if (TempModelId) SendText(IdReceived,Vbuf);
+            TempModelId = ModelsMacUnion.Val32[1];
+            snprintf(Vbuf, 8, "%X", TempModelId);
+            if (TempModelId) SendText(IdReceived1,Vbuf);
+        
+            // heer
         }
         if (CurrentView == GPSVIEW ) {
             if (GpsFix) { // if no fix, then leave display as before
@@ -2121,7 +2144,7 @@ FASTRUN void DoMixes()
                             if (Mixes[MixNumber][M_Reversed]) MixValue = -MixValue;
                         }
                         MixValue += SendBuffer[(Mixes[MixNumber][M_SlaveChannel]) - 1];      // This is the actual mix moment! (MixValue is now the mixed value)
-                        MixValue += (Mixes[MixNumber][M_OFFSET] - 127) * 8; // heer
+                        MixValue += (Mixes[MixNumber][M_OFFSET] - 127) * 8; 
                         MinimumDeg = IntoHigherRes(MinDegrees[Bank][(Mixes[MixNumber][M_SlaveChannel]) - 1]); 
                         MaximumDeg = IntoHigherRes(MaxDegrees[Bank][(Mixes[MixNumber][M_SlaveChannel]) - 1]);
                         if (MinimumDeg > MaximumDeg) 
@@ -7286,7 +7309,8 @@ void ModelUnmatch(){
         return;
     }
     if (GetConfirmation(page_RXSetupView,prompt)){
-        ModelsMacUnionSaved.Val64 = 0;
+        ModelsMacUnionSaved.Val32[0] = 0;
+        ModelsMacUnionSaved.Val32[1] = 0;
         SaveOneModel(ModelNumber);
         GetConfirmation(page_RXSetupView, Done);
     }else{
