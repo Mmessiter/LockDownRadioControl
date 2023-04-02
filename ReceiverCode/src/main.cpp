@@ -271,12 +271,12 @@ bool ReadData()
         CurrentRadio->read(&CompressedData, sizeof(CompressedData));   // Get Data
         Connected = true;
         NewData   = true;
-        if (CompressedData[0] == 0xffff && CompressedData[1] == 0xffff) {
-            ReconnectPacket = true;  
-            NewData   = false;
-        }
+      //  if (CompressedData[0] == 0xffff && CompressedData[1] == 0xffff) {
+      //      ReconnectPacket = true;  
+       //     NewData   = false;
+      //  }
     }
-    if (Connected && !ReconnectPacket) UseReceivedData();
+    if (Connected) UseReceivedData();
     return Connected;
 }
 
