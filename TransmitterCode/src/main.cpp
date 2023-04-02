@@ -10012,25 +10012,14 @@ void FlushFifos()
     Radio1.flush_rx();
     delayMicroseconds(250);
 }
-/************************************************************************************************************/
- void SendReconnectPacket(){
-        uint32_t ShortPacket = {0xffffffff};
-        if (Radio1.write(&ShortPacket, 4)) {  
-            FlushFifos();
-            SuccessfulPacket();
-        }
-        else {
-            FlushFifos();
-            FailedPacket();
-        }
- }
+
 /************************************************************************************************************/
 //****************** Function to send data to receiver ***************************************
 /************************************************************************************************************/
 
 FASTRUN void SendData()
 {
-    
+    uint8_t len = 0;
     if (SendNoData) return;
     if ((millis() - LastPacketSentTime) >= PACEMAKER) {
         LastPacketSentTime = millis();
@@ -10040,15 +10029,19 @@ FASTRUN void SendData()
         }                                                           // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
         Connected = false;                                          // Assume the worst until ACK is received.
         FlushFifos();
-      
-      //  if (LostContactFlag){
-      //      SendReconnectPacket();
-      //      return;
-      //  }
-       
-        LoadPacketData();                                           // extra parameters appended to the data packet
-        Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);    // Compress 32 bytes down to 24 (40 -> 30??)
-        if (Radio1.write(&CompressedData, SizeOfCompressedData)) {  //  ************************** >>>>> SEND DATA (30 bytes) TO RX <<<<< ***************************************
+
+         if (LostContactFlag && LedWasGreen){                         // shorter packet to reconnect
+            CompressedData[0] = 0xffff;
+            CompressedData[1] = 0xffff;
+            len               = 4;
+         }
+         else {
+            LoadPacketData();                                            // extra parameters appended to the data packet
+            len = SizeOfCompressedData;                      
+            Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);    // Compress 32 bytes down to 24 (40 -> 30??)
+         }
+
+        if (Radio1.write(&CompressedData, len)) {  //  ************************** >>>>> SEND DATA (30 bytes) TO RX <<<<< ***************************************
             SuccessfulPacket(); 
             FlushFifos();
         } else {
