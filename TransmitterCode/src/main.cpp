@@ -1730,7 +1730,7 @@ FASTRUN void ShowComms()
     char DataView_Sg[]         = "Sg";
     char DataView_Ag[]         = "Ag";
     char DataView_Gc[]         = "Gc";
-    char Vbuf[10];
+    char Vbuf[50];
     char Fix[]               = "Fix"; // These are label names in the NEXTION data screen. They are best kept short.
     char Lon[]               = "Lon";
     char Lat[]               = "Lat";
@@ -1826,19 +1826,20 @@ FASTRUN void ShowComms()
             SendValue(DataView_lps, TotalLostPackets / 2);
             
             TempModelId = ModelsMacUnionSaved.Val32[0];
-            snprintf(Vbuf, 8, "%X", TempModelId);
+            snprintf(Vbuf, 9, "%X", TempModelId);
             if (TempModelId) SendText(IdStored, Vbuf);
             TempModelId = ModelsMacUnionSaved.Val32[1];
-            snprintf(Vbuf, 8, "%X", TempModelId);
+            snprintf(Vbuf, 9, "%X", TempModelId);
             if (TempModelId) SendText(IdStored1, Vbuf);
 
             TempModelId = ModelsMacUnion.Val32[0];
-            snprintf(Vbuf, 8, "%X", TempModelId);
+            snprintf(Vbuf, 9, "%X", TempModelId);
             if (TempModelId) SendText(IdReceived,Vbuf);
             TempModelId = ModelsMacUnion.Val32[1];
-            snprintf(Vbuf, 8, "%X", TempModelId);
+            snprintf(Vbuf, 9, "%X", TempModelId);
             if (TempModelId) SendText(IdReceived1,Vbuf);
-        
+           
+
             // heer
         }
         if (CurrentView == GPSVIEW ) {
