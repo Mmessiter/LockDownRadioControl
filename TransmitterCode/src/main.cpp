@@ -10020,7 +10020,11 @@ void FlushFifos()
 FASTRUN void SendData()
 {
     if (SendNoData) return;
-    if ((millis() - LastPacketSentTime) >= PACEMAKER) {
+   
+    uint16_t PacketGap = PACEMAKER;
+    if (LostContactFlag && LedWasGreen && !BuddyPupilOnPPM) PacketGap = 0;
+    if ((millis() - LastPacketSentTime) >= PacketGap) {
+   
         LastPacketSentTime = millis();
         if (BuddyPupilOnPPM) {
             SendViaPPM();
