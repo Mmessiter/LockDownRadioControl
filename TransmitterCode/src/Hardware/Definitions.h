@@ -19,7 +19,7 @@
 
 #define TXVERSION_MAJOR   2
 #define TXVERSION_MINOR   1
-#define TXVERSION_MINIMUS 9
+#define TXVERSION_MINIMUS 8
 
 // **************************************************************************
 //    DEBUG OPTIONS (Uncomment any of these for that bit of debug info)     *

@@ -10019,7 +10019,6 @@ void FlushFifos()
 
 FASTRUN void SendData()
 {
-    uint8_t len = 0;
     if (SendNoData) return;
     if ((millis() - LastPacketSentTime) >= PACEMAKER) {
         LastPacketSentTime = millis();
@@ -10029,19 +10028,9 @@ FASTRUN void SendData()
         }                                                           // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
         Connected = false;                                          // Assume the worst until ACK is received.
         FlushFifos();
-
-         if (LostContactFlag && LedWasGreen){                         // shorter packet to reconnect
-            CompressedData[0] = 0xffff;
-            CompressedData[1] = 0xffff;
-            len               = 4;
-         }
-         else {
-            LoadPacketData();                                            // extra parameters appended to the data packet
-            len = SizeOfCompressedData;                      
-            Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);    // Compress 32 bytes down to 24 (40 -> 30??)
-         }
-
-        if (Radio1.write(&CompressedData, len)) {  //  ************************** >>>>> SEND DATA (30 bytes) TO RX <<<<< ***************************************
+        LoadPacketData();                                           // extra parameters appended to the data packet   
+        Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);    // Compress 32 bytes down to 24 (40 -> 30??)
+        if (Radio1.write(&CompressedData, SizeOfCompressedData)) {  //  ************************** >>>>> SEND DATA (30 bytes) TO RX <<<<< ***************************************
             SuccessfulPacket(); 
             FlushFifos();
         } else {
