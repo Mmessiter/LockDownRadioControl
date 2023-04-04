@@ -14,7 +14,7 @@
   #define NEWPCB
 
 // **************************************************************************
-//       TX VERSION NUMBER   (May 2020 - March 2023 Malcolm Messiter)      *
+//       TX VERSION NUMBER   (May 2020 - April 2023 Malcolm Messiter)      *
 //***************************************************************************
 
 #define TXVERSION_MAJOR   2
