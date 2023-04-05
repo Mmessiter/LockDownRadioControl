@@ -20,12 +20,9 @@ uint16_t ReceivedData[UNCOMPRESSEDWORDS]; //  20 x 16 BIT words
 uint16_t PreviousData[UNCOMPRESSEDWORDS]; /** Previously received data (used for servos. Hence not sent if unchanged) */
 uint16_t Interations = 0;
 uint32_t HopStart;
-uint64_t ThisPipe     = DEFAULTPIPE; // default startup
-uint64_t NewPipe      = 0;
 uint64_t NewPipeMaybe = 0;
 uint64_t PreviousNewPipes[PIPES_TO_COMPARE];
 uint8_t  PreviousNewPipesIndex = 0;
-uint64_t OldPipe      = 0;
 bool     FailSafeSent = true;
 uint16_t SbusRepeats  = 0;
 uint32_t RX1TotalTime = 0;
@@ -55,7 +52,7 @@ extern float    AltitudeGPS;
 extern float    DistanceGPS;
 extern float    CourseToGPS;
 extern uint8_t  MacAddress[9];
-extern uint8_t  TheReceivedPipe[9];
+extern uint8_t  TheReceivedPipe[6];
 extern uint32_t NewConnectionMoment;
 extern void BindModel();
 extern void FailSafe(); // defined in main.cpp
@@ -74,6 +71,12 @@ extern void         BlinkLed();
 extern uint8_t MacAddressSentCounter;
 extern void         ReadSavedPipe();
 extern void         KickTheDog();
+extern void         TurnLedOn();
+extern void         TurnLedOff();
+extern uint8_t      DefaultPipe[6];
+extern uint8_t *    PipePointer;
+extern uint8_t      CurrentPipe[6];
+extern uint8_t      Pipnum;
 
 /** AckPayload Stucture for data returned to transmitter. */
 struct Payload
@@ -104,6 +107,15 @@ uint8_t AckPayloadSize = sizeof(AckPayload); // Size for later externs if needed
 
 
 /************************************************************************************************************/
+void CopyCurrentPipe(uint8_t * p, uint8_t pn){
+
+    for (int i = 0; i < 6;++i){
+        CurrentPipe[i] = p[i];
+    }
+    PipePointer = p;
+    Pipnum      = pn;
+}
+/************************************************************************************************************/
 
 void HopNowAnyway(){ 
         ++NextChannelNumber;                                            // Move up the channels' array
@@ -115,9 +127,12 @@ void HopNowAnyway(){
 
 void SetNewPipe()
 {
-    CurrentRadio->openReadingPipe(1, ThisPipe);
+        CurrentRadio->openReadingPipe(PIPENUMBER, PipePointer); //  5 * byte array
+#ifdef DB_BIND
+        if (BoundFlag)  Serial.println("BOUND TO TX'S PIPE");
+#endif
+   
 }
-
 
 /************************************************************************************************************/
 
@@ -154,54 +169,36 @@ bool ValidateNewPipe(){
 }
 
 /************************************************************************************************************/
-#define BADNIBBLECOUNT 6
-uint8_t CheckPipeNibbles(uint8_t b){ // heer
 
-    uint8_t temp;
-    uint8_t BadLowerNibble[BADNIBBLECOUNT]       = {0x05,0x0a,0x02,0x01,0x00,0x0f};
-    uint8_t BadHigherNibble[BADNIBBLECOUNT]      = {0x50,0xa0,0x20,0x10,0x00,0xf0};
-    uint8_t BetterLowerNibble[BADNIBBLECOUNT]    = {0x03,0x04,0x06,0x07,0x08,0x09};
-    uint8_t BetterHigherNibble[BADNIBBLECOUNT]   = {0x30,0x40,0x60,0x70,0x80,0x90};
-
-    if (!b) return 0x36;                                     // return an acceptable byte for a zero
-        
-    for (int i = 0; i < BADNIBBLECOUNT; ++i) {               // ********** check LOWER nibble **********
-        if ((b & 0x0f) == BadLowerNibble[i])
-        {
-            temp = b & 0xf0;                                 // save only the hi nibble in temp
-            b    = temp | BetterLowerNibble[i];              // put an acceptable nibble into lower nibble
-        }
-    }
-    for (int i = 0; i < BADNIBBLECOUNT;++i){                 // ********** check HIGHER nibble **********
-        if ((b & 0xf0) == BadHigherNibble[i]) 
-        {
-            temp = b & 0x0f;                                  // save only the Low nibble in temp
-            b = temp | BetterHigherNibble[i];                 // put an acceptable nibble into Higher nibble
-        }
-    }
-    return b;
-}
-/************************************************************************************************************/
-
-
-void GetNewPipe()  // from TX
+void GetNewPipe() // from TX
 {
-     if (!NewData) return;
-     NewData = false;
-   
-    NewPipeMaybe = (uint64_t)ReceivedData[0]  << 40;
+    if (!NewData) return;
+    NewData = false;
+    if (PipeSeen) return;
+    NewPipeMaybe =  (uint64_t)ReceivedData[0] << 40;
     NewPipeMaybe += (uint64_t)ReceivedData[1] << 32;
     NewPipeMaybe += (uint64_t)ReceivedData[2] << 24;
     NewPipeMaybe += (uint64_t)ReceivedData[3] << 16;
     NewPipeMaybe += (uint64_t)ReceivedData[4] << 8;
     NewPipeMaybe += (uint64_t)ReceivedData[5];
-
-    if (ValidateNewPipe())  // was this pipe corrupted?
+    
+    if (ValidateNewPipe()) // was this pipe corrupted?
     {
-        NewPipe      = NewPipeMaybe;
-        for (int i = 0; i < 6; ++i) {
-            TheReceivedPipe[i] = ReceivedData[i];          
+#ifdef DB_BIND
+        Serial.println("Received TX ID!");
+#endif 
+        for (int i = 0; i < 5; ++i) {
+            TheReceivedPipe[4-i] =  ReceivedData[i+1] & 0xff; // reversed byte array for our use
+#ifdef DB_BIND
+            Serial.print((uint8_t)ReceivedData[i+1], HEX);
+            Serial.print(" ");
+#endif 
         }
+        TheReceivedPipe[5] = 0;
+#ifdef DB_BIND
+        Serial.println(" ");
+#endif 
+        CopyCurrentPipe(TheReceivedPipe, BOUNDPIPENUMBER);
         BindModel();
         PipeSeen = true;
     }
@@ -215,21 +212,15 @@ void GetNewPipe()  // from TX
  * @note Address data in EEPORM is valid only after a previous power cycle observed
  * a completed binding process (pairing was successful at least once during last flight's session).
  */
-FLASHMEM void GetOldPipe()
+FLASHMEM void GetOldPipe() // heer
 {
     ReadSavedPipe();
-    
-    OldPipe  = (uint64_t)SavedPipeAddress[0] << 40;
-    OldPipe += (uint64_t)SavedPipeAddress[1] << 32;
-    OldPipe += (uint64_t)SavedPipeAddress[2] << 24;
-    OldPipe += (uint64_t)SavedPipeAddress[3] << 16;
-    OldPipe += (uint64_t)SavedPipeAddress[4] << 8;
-    OldPipe += (uint64_t)SavedPipeAddress[5];
+    CopyCurrentPipe(TheReceivedPipe, BOUNDPIPENUMBER);
     
 #ifdef DB_BIND
-    Serial.println("Loading PIPE:");
-    for (int i = 0; i < 6; ++i){
-        Serial.print(SavedPipeAddress[i], HEX);
+    Serial.println("Loaded old PIPE:");
+    for (int i = 0; i < 5; ++i){
+        Serial.print(TheReceivedPipe[i], HEX);
         Serial.print(" ");
     }
     Serial.println(" ");
@@ -239,7 +230,7 @@ FLASHMEM void GetOldPipe()
 
 /************************************************************************************************************/
 
-void     HopToNextChannel()
+void  HopToNextChannel()
 {
     CurrentRadio->stopListening();
     delayMicroseconds(100);
@@ -253,19 +244,27 @@ void     HopToNextChannel()
 
 /**************************************************************************************************************/
 
+void ConfigureRadio(){
+    CurrentRadio->setPALevel(RF24_PA_MAX);
+    CurrentRadio->setDataRate(RF24_250KBPS);
+    CurrentRadio->enableAckPayload();       // needed
+    CurrentRadio->setRetries(2, 0);         // automatic retries
+    CurrentRadio->enableDynamicPayloads();  // needed
+    CurrentRadio->setAddressWidth(5);
+    CurrentRadio->setCRCLength(RF24_CRC_16); // could be 8 or disabled
+    CurrentRadio->setAutoAck(true);
+    CurrentRadio->maskIRQ(1, 1, 1);         // no interrupts - seems NEEDED at the moment - (line *IS* connected)
+    CurrentRadio->openReadingPipe(PIPENUMBER, PipePointer); 
+    CurrentRadio->startListening();
+}
+
+/**************************************************************************************************************/
+
 /** Initialize a radio transceiver. */
 FLASHMEM void InitCurrentRadio()
 {
     CurrentRadio->begin();
-    CurrentRadio->enableAckPayload();       // needed
-    CurrentRadio->enableDynamicPayloads();  // needed
-    CurrentRadio->maskIRQ(1, 1, 1);         // no interrupts - seems NEEDED at the moment - (line *IS* connected)
-    CurrentRadio->setCRCLength(RF24_CRC_8); // (RF24_CRC_8); // could be 16 or disabled
-    CurrentRadio->setPALevel(RF24_PA_MAX);
-    CurrentRadio->setDataRate(RF24_250KBPS);
-    CurrentRadio->openReadingPipe(1, ThisPipe);
-    CurrentRadio->setRetries(0, 2);         // automatic retries
-    CurrentRadio->setAutoAck(true);
+    ConfigureRadio(); 
     SaveNewBind = true;
     HopStart    = millis();
 }
@@ -279,8 +278,8 @@ void TryToConnectNow()
     delayMicroseconds(250);
     CurrentRadio->startListening();
     ATimer = millis();
-    while ((!CurrentRadio->available()) && (millis() - ATimer) < LISTEN_PERIOD) {delayMicroseconds(10);}// *** > Lock up sometimes happens here!! < ***
-    Connected = CurrentRadio->available();
+    while ((!CurrentRadio->available(&Pipnum)) && (millis() - ATimer) < LISTEN_PERIOD) {delayMicroseconds(10);}// *** > Lock up sometimes happens here!! < ***
+    Connected = CurrentRadio->available(&Pipnum);
 }
 
 /************************************************************************************************************/
@@ -289,13 +288,7 @@ void TryToConnectNow()
 void ProdRadio(uint8_t Recon_Ch)
 { // After switching radios, this prod allows EITHER to connect. Don't know why - yet!
 
-    CurrentRadio->enableAckPayload();
-    CurrentRadio->enableDynamicPayloads();
-    CurrentRadio->maskIRQ(1, 1, 1);
-    CurrentRadio->setCRCLength(RF24_CRC_8);
-    CurrentRadio->setPALevel(RF24_PA_MAX);
-    CurrentRadio->setDataRate(RF24_250KBPS);
-    CurrentRadio->openReadingPipe(1, ThisPipe);
+    ConfigureRadio();
     CurrentRadio->setChannel(Recon_Ch);
     delay(3);
     TryToConnectNow();
@@ -385,22 +378,16 @@ FASTRUN void Reconnect()
         CurrentRadio->setChannel(ReconnectChannel);
         delay(1); 
         ++Attempts;
-         
-       
         if (Attempts < 3) {
             TryToConnectNow();
         }
-       
         if (!Connected) {
            
-
 #ifdef SECOND_TRANSCEIVER
-          
             if (Attempts >= 3) {
                 TryTheOtherTransceiver(ReconnectChannel);
                 Attempts = 0;
             }
-            
 #else
             if (Attempts >= 3) {
                 ProdRadio(ReconnectChannel); // This avoids a lockup of the nRF24L01+ !
@@ -408,23 +395,20 @@ FASTRUN void Reconnect()
             }
 #endif
             if ((millis() - SearchStartTime) > FAILSAFE_TIMEOUT) {
-                if (!FailSafeSent) FailSafe();
+                     if (!FailSafeSent) FailSafe();
             }
-            
         }
     } // cannot pass here if not connected
-
-     // must have connected by here
+      // must have connected by here
     FailSafeSent = false;
     if (PreviousRadio != ThisRadio) ++RadioSwaps; // Count the radio swaps
     ReconnectedMoment = millis();                 // Save this moment
     if (ModelMatched) {
-        digitalWrite(LED_RED, HIGH);
         Blinking = false;
     }
     if (FailedSafe){
-        FailedSafe = false;
-        NewConnectionMoment = millis();   
+        FailedSafe          = false;
+        NewConnectionMoment = millis();
     }
     
 #ifdef DB_RXTIMERS

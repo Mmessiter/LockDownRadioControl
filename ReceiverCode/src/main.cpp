@@ -30,14 +30,14 @@
  * | 13    | SPI SCK  (FOR BOTH RADIOS) |
  * | 14    | SBUS *OR PPM* output (TX3) |
  * | 15    | Don't use if using SBUS. The driver takes it (RX3) |
- * | 16    | RED LED
+ * | 16    | RED LED  - This LED is ON when connected, OFF when disconnected and blinking when binding 
  * | 17    | BIND PLUG (held LOW means plug is in)
  * | 18    | I2C SDA (FOR I2C) | *** --- >> BLUE WIRE   = 18 !! << --- ***
  * | 19    | I2C SCK (FOR I2C) | *** --- >> YELLOW WIRE = 19 !! << --- ***
  * | 20    | SPI CSN2 (FOR RADIO2)  |
  * | 21    | SPI CE2 (FOR RADIO2) |
- * | 22    | IRQ1 (FOR RADIO1) |
- * | 23    | IRQ2 (FOR RADIO2) |
+ * | 22    | Spare (CH10 ? ... or CE1)
+ * | 23    | Spare (CH11 ? ... or CSN1)
  *
  * @see ReceiverCode/src/main.cpp
  */
@@ -51,7 +51,6 @@ uint8_t         PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8}; // 9 PWMs, re
 SBUS            MySbus(SBUSPORT);       // SBUS
 PulsePositionOutput     PPMOutput;      // PPM
 float           PacketStartTime;
-uint8_t         BindNow        = 0;     /** indicates that the receiver should start the binding/pairing process */
 bool            BoundFlag      = false; /** indicates if receiver paired with transmitter */
 bool            ServosAttached = false;
 uint16_t        SbusChannels[CHANNELSUSED + 1]; // Just one spare
@@ -90,9 +89,9 @@ bool            QNHSent         = false;
 bool            FirstLostPacket = true;
 uint8_t         MacAddress[9]   = {0, 0, 0, 0, 0, 0, 0, 0,0};
 bool            ModelMatched    = false;
-uint8_t         TheReceivedPipe[9];
+uint8_t         TheReceivedPipe[6];
+uint8_t         TheCurrentPipe[6];
 bool            FirstConnection = true;
-bool            ReadyToUseData  = false;
 bool            FailedSafe = true;  // Starting up as the same as after failsafe
 uint32_t        MostRecentHop;
 uint8_t         PPMChannelOrder[CHANNELSUSED] = {2,3,1,4,5,6,7,8,9,10,11,12,13,14,15,16};
@@ -107,6 +106,11 @@ uint8_t         MacAddressSentCounter        = 0;
 WDT_T4<WDT3>    TeensyWatchDog;
 WDT_timings_t   WatchDogConfig;
 uint32_t        LastDogKick     = 0;
+bool            LedIsOn = false;
+uint8_t *       PipePointer;
+uint8_t         Pipnum = PIPENUMBER;
+uint8_t         DefaultPipe[6] = {0x23, 0x94, 0x3e, 0xbe, 0xb7, 0x00};
+uint8_t         CurrentPipe[6];
 
 /************************************************************************************************************/
 
@@ -153,13 +157,28 @@ void KickTheDog()
     }
 }
 
+/************************************************************************************************************/
+
+bool CheckCrazyValues(){ // might come when binding
+
+    for (int i = 0; i < 15; ++i) {
+        if ((ReceivedData[i] < MINMICROS) || (ReceivedData[i] > MAXMICROS)) return false;
+    }
+    return true;
+}
 
 /************************************************************************************************************/
 
 
 void MoveServos()
 {
-    if (!ReadyToUseData) return; 
+    if (!CheckCrazyValues()) { 
+        TurnLedOff();
+        return;
+    } else {
+        TurnLedOn();
+    }
+    
     if (UseSBUS)
     {
         MySbus.write(SbusChannels);         // Send SBUS data
@@ -195,8 +214,9 @@ void FailSafe()
     SetUKFrequencies();           // default startup conditions
     FailSafeSent   = true;        // Once is enough
     FailedSafe     = true;
-    digitalWrite(LED_RED, LOW);
+    TurnLedOff();
     MacAddressSentCounter = 0;
+    Serial.println("Failsafe!");
 }
 
 #ifdef DB_FHSS
@@ -237,13 +257,11 @@ void UseReceivedData()
         HopStart = millis();                                     // ... and start the timer.
     }
 }
-
-
 /************************************************************************************************************/
 bool ReadData()
 {
-    Connected = false;
-    while (CurrentRadio->available()) { // Get all, but use only the latest
+    Connected            = false;
+    while (CurrentRadio->available(&Pipnum)) { // Get all, but use only the latest
         LoadAckPayload();
         CurrentRadio->flush_tx();                                      // This avoids a lockup that happens when the FIFO gets full
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // Send telemetry
@@ -252,7 +270,7 @@ bool ReadData()
         Connected = true;
         NewData   = true;
     }
-    if (Connected) UseReceivedData();
+    if (Connected ) UseReceivedData();
     return Connected;
 }
 
@@ -272,32 +290,45 @@ void AttachServos()
         PPMOutput.begin(PPMPORT);   // Or PPM on same pin
     }
 }
+
+/************************************************************************************************************/
+
+void TurnLedOn()
+{
+     if (!LedIsOn){
+        digitalWrite(LED_RED, HIGH);
+        LedIsOn = true;
+     }
+}
+
+
+/************************************************************************************************************/
+
+void TurnLedOff()
+{
+     if (LedIsOn){
+        digitalWrite(LED_RED, LOW);
+        LedIsOn = false;
+     }
+}
+
 /************************************************************************************************************/
 // This function binds the model using the TX supplied Pipe instead of the default one.
 // If not already saved, this saves it to the eeprom too for next time.
 
 void BindModel()
 {
-    ThisPipe = NewPipe;
-    OldPipe  = NewPipe;
-    digitalWrite(LED_RED, HIGH);
     CurrentRadio->stopListening();
     delayMicroseconds(250);
-    SetNewPipe(); // change to bound pipe <<< ***************************************
     BoundFlag   = true;
     ModelMatched = true;
-    BindNow      = 0;
-
-#ifdef DB_BIND
-    Serial.println("BOUND!"); 
-#endif
     if (Blinking) {
-
+            SetNewPipe(); // change to bound pipe <<< ***************************************
 #ifdef DB_BIND
             Serial.println("SAVING RECEIVED PIPE:");
 #endif
 
-        for (uint8_t i = 0; i < 6; ++i) {
+        for (uint8_t i = 0; i < 5; ++i) {
             EEPROM.update(i + BIND_EEPROM_OFFSET, TheReceivedPipe[i]);
 
 #ifdef DB_BIND
@@ -313,26 +344,23 @@ void BindModel()
 #endif
     }
     Blinking    = false; 
-    uint32_t t = millis();
-    while (millis() - t < 1500) ReceiveData(); // this avoid initial glitch on reconnect 
+    
     if (FirstConnection) {
         AttachServos(); // AND START SBUS / PPM
         FirstConnection = false;
     }
-    ReadyToUseData = true; 
     SaveNewBind = false;
     
 }
 
 /************************************************************************************************************/
-void ReadSavedPipe() // save only 6 bytes
+void ReadSavedPipe() // read only 6 bytes
 {
-    for (uint8_t i = 0; i < 6; ++i) {
-        SavedPipeAddress[i] = EEPROM.read(i+BIND_EEPROM_OFFSET); // uses first 6 bytes only.
+    for (uint8_t i = 0; i < 5; ++i) {
+        TheReceivedPipe[i] = EEPROM.read(i+BIND_EEPROM_OFFSET); // uses first 5 bytes only.
     }
+    TheReceivedPipe[5] = 0;
 }
-
-
 
 // ***************************************************************************************************************************************************
 void SendToSensorHub(char m[])
@@ -388,7 +416,6 @@ void SetTestFrequencies()
 
 void SetUKFrequencies()
 {
-
     FHSSRecoveryPointer = FHSS_Channels;
     FHSSChPointer  = FHSS_Channels;
     FrequencyCount = FREQUENCYSCOUNT;
@@ -683,23 +710,6 @@ void SaveFailSafeData()
 }
 
 /************************************************************************************************************/
-void DoBinding() 
-{
-#ifdef DB_BIND
-   // Serial.println("DoBinding()");
-#endif
-
-    GetNewPipe(); 
-   // if (pcount < 4) return;
-   
-  //  if ((ModelMatched) && (!BoundFlag) && (Blinking)) 
-  //  {
-  //      BindModel();
-  //  }
-}
-
-
-/************************************************************************************************************/
 
 void WatchDogCallBack()
 {
@@ -715,29 +725,26 @@ void teensyMAC(uint8_t* mac)
 
 /************************************************************************************************************/
 
-void HangAbout(){
-    uint32_t tt = millis();
-    while (millis()-tt < 500) {
-        ReceiveData();
-        if (Blinking) BlinkLed();
-    }
-}
-
-/************************************************************************************************************/
-
-void ReadBindPlug(){
+void ReadBindPlug(){ // heer
+        uint32_t tt = millis();
         SetUKFrequencies();
-    if (!digitalRead(BINDPLUG_PIN)) { // Bind Plug needed to bind!
-        Blinking = true;              // Blinking = binding to new TX
+        PipePointer = DefaultPipe;
+        CopyCurrentPipe(DefaultPipe,PIPENUMBER);
+        if (!digitalRead(BINDPLUG_PIN)) { // Bind Plug needed to bind!
+        Blinking = true;                  // Blinking = binding to new TX
 #ifdef DB_BIND
         Serial.println("Bind plug detected.");
 #endif
-    }else{
-        Blinking = false;             // Already bound
+        }
+        else {
+        Blinking = false;               // Already bound
+        PipePointer = TheReceivedPipe;
+        CopyCurrentPipe(TheReceivedPipe,BOUNDPIPENUMBER);
+        BoundFlag = true;
         SaveNewBind = false;
-        HangAbout(); // sending model ID?
-        BindModel();
-    }
+        while (millis()-tt < 500)  ReceiveData();
+        BindModel();                    // TODO check this...
+        }
 }
 /************************************************************************************************************/
 // SETUP
@@ -754,20 +761,20 @@ FLASHMEM void setup()
     pinMode(LED_RED, OUTPUT);
     pinMode(BINDPLUG_PIN, INPUT_PULLUP);
     digitalWrite(LED_PIN, HIGH);
-    digitalWrite(LED_RED, LOW);
-    delay(2500);  // Needed so that the Sensor hub can boot first and be detected
+    TurnLedOff();
+    delay(2500); // Needed so that the Sensor hub can boot first and be detected
     Wire.begin();
     delay(20);
     ScanI2c();    // Detect what's connected
     if (INA219Connected) ina219.begin();
     teensyMAC(MacAddress);
-    for (int i = 0; i < 8; ++i) MacAddress[i] = 0x0B; // force new ID fo test! heer
+
+   //  for (int i = 0; i < 8; ++i) MacAddress[i] = 0x0B; // force new ID fo test! 
+    PipePointer = DefaultPipe;
+    CopyCurrentPipe(DefaultPipe,PIPENUMBER);
     CurrentRadio = &Radio1;
-    ThisPipe     = DEFAULTPIPE;
     if (digitalRead(BINDPLUG_PIN)) { // ie no bind plug, so initialise to bound pipe
         GetOldPipe();
-        ThisPipe = OldPipe;
-        NewPipe  = OldPipe;
     }
 
 #ifdef SECOND_TRANSCEIVER
@@ -794,6 +801,7 @@ FLASHMEM void setup()
     WatchDogConfig.timeout  = WATCHDOGTIMEOUT; //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s)
     WatchDogConfig.callback = WatchDogCallBack;
     TeensyWatchDog.begin(WatchDogConfig);
+    KickTheDog();
     ReadBindPlug();
     digitalWrite(LED_PIN, LOW);
 }
@@ -806,9 +814,9 @@ void BlinkLed() {
         BlinkTimer = millis();
         BlinkValue ^= 1;
         if (BlinkValue) {
-            digitalWrite(LED_RED, HIGH);
+            TurnLedOn();
         }else{
-            digitalWrite(LED_RED, LOW);
+            TurnLedOff();
         }
     }
 }
@@ -820,8 +828,6 @@ void loop()
 {
     KickTheDog();
     ReceiveData();
-
-
     if (Blinking) BlinkLed();
     if (BoundFlag && Connected && ModelMatched) { // Only move servos if everything is good
         if (millis() - SBUSTimer >= SBUSRATE) {   // SBUSRATE rate is also good enough for servo rate
@@ -831,9 +837,6 @@ void loop()
         if (FailSafeSave) SaveFailSafeData();
     }
     else {
-         if (!BoundFlag) 
-         {
-                DoBinding();
-         }
+         if (!BoundFlag)  GetNewPipe();
     }
 }
