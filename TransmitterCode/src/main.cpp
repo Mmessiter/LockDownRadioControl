@@ -2527,7 +2527,7 @@ if(!ModelsFileOpen){
 }
 /*********************************************************************************************************************************/
 
-void BuildCheckSum(int p_address, int p_value) 
+void BuildCheckSum(int p_address, short int p_value) 
 {
     if (!DoingCheckSm) FileCheckSum += (p_value *  (p_address+1));  // don't include checksum in its own calculation
 }
@@ -2563,7 +2563,7 @@ uint32_t SDRead32BITS(int p_address)
 }
 /*********************************************************************************************************************************/
 
-void SDUpdate16BITS(int p_address, int p_value)
+void SDUpdate16BITS(int p_address, short int p_value)
 {
     BuildCheckSum(p_address, p_value);
     ModelsFileNumber.seek(p_address);
@@ -2586,11 +2586,11 @@ void SDUpdate8BITS(int p_address, uint8_t p_value)
 
 /*********************************************************************************************************************************/
 
-int SDRead16BITS(int p_address)
+short int SDRead16BITS(int p_address)
 {
    
     ModelsFileNumber.seek(p_address);
-    int r = ModelsFileNumber.read();
+    short int r = ModelsFileNumber.read();
     r += ModelsFileNumber.read() << 8;
     BuildCheckSum(p_address, r);
     return r;
