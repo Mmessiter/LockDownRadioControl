@@ -1,10 +1,10 @@
+Transmitter modes 1 and 2 are supported. Set this option first, before calibration.||
 
-Trim factor selects how much trim to apply.||
-
-'Copy trims to all banks' does what you might expect!
-
-Hours from GMT selects your time zone. This is needed if GPS is connected as it will correct the Real Time Clock to GMT if zone is not known. ||
-
+Automatic model selection will attempt to match the model's ID with one stored in a model memory.|
+If the model's ID is not found, the new ID is immediately stored in the currently loaded model memory.|
+So when setting up a new model, be sure to load the new model memory before switching on the receiver.|
+If the receiver had beed used before in another model, turn off 'Automatic model selection' as well.|| 
+ 
 Screen timeout will save battery while you fly by turning off the screen. To switch it back on, change flight mode or press a button.||
 
 Inactivity Timeout will switch off the transmitter after it's been forgotten and left on. It will never switch off while connected, nor if you move a stick or press a button.||
@@ -13,12 +13,13 @@ Low battery warning will warn you when either the transmitter or receiver batter
 
 System page 2 allows the clock to be set||
 
+Hours from GMT selects your time zone. This is needed if GPS is connected as it will correct the Real Time Clock to GMT if zone is not known. ||
+
 On System page 3:||
 
 'QNH' means atmospheric pressure at sea level for the current time and location. This is needed for more accurate altitude readings from the BMP280 barometer, assuming one was fitted. ||
 
 Aviation web sites will give this information for nearby airports.||
-
 
 LED brightness can be 0 to 254 where zero is off and 254 is very bright.||
 
@@ -29,7 +30,7 @@ The power-off button works immediately when there is no connection. ||
 When a model is connected it must be held down for a few seconds (defined here) to switch off.||
 
 On the front screen the connection quality indicator works by counting successful and unsuccessful packets over several seconds.| 
-The number of seconds can be between one and six and is defined here.
+The number of seconds can be between one and six and is defined here.||
 
 
 
