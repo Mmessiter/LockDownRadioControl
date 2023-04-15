@@ -411,7 +411,7 @@ bool      LogFileOpen             = false;
 bool      ShowVPC                 = false;
 short int TxVoltageCorrection     = 0;
 short int RxVoltageCorrection     = 0;
-uint8_t   LEDBrightness           = DEFAULTLEDBRIGHTNESS;
+uint16_t  LEDBrightness           = DEFAULTLEDBRIGHTNESS; // needs only 8 bits really
 uint32_t  PowerOffTimer           = 0;
 bool      PowerWarningVisible     = false;
 uint8_t   TurnOffSecondToGo       = 2;
@@ -3667,9 +3667,7 @@ if (PPMdata.UseTXModule)
 #else
     InitRadio(DefaultPipe);
 #endif
-
-
-#ifdef TXMODULESUPPORT  
+ 
     if(BuddyMaster){
          PPMdata.PPMInputBuddy.begin(BUDDYPPMPORT);
     }else{
@@ -3721,8 +3719,6 @@ if (PPMdata.UseTXModule)
     }
     if(!UseMotorKill)  ShowMotor(1);
 
-
-#endif
     if (ErrorState) {
         SendCommand(WarnNow);
         if (ErrorState == CHECKSUMERROR) {
