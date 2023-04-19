@@ -49,7 +49,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "CheckInvisiblePoint", "TransmitterCode_2src_2main_8cpp.html#a1870ad872e2424cbf8222747d3a43617", null ],
     [ "CheckLogFileIsOpen", "TransmitterCode_2src_2main_8cpp.html#ac45f2f949ccfa372a8cbab3ef0b8caa8", null ],
     [ "CheckMacrosBuffer", "TransmitterCode_2src_2main_8cpp.html#a6bb930920ba3a8d45a737dde782ef65c", null ],
-    [ "CheckModelName", "TransmitterCode_2src_2main_8cpp.html#a984cb52354a84c45e9e41f396a1c5e92", null ],
+    [ "CheckModelName", "TransmitterCode_2src_2main_8cpp.html#a5c0f1fd26cdd6ecde365f521060158ba", null ],
     [ "CheckMotorOff", "TransmitterCode_2src_2main_8cpp.html#a2f7d73b3096c884b2ace4b3399268325", null ],
     [ "CheckPipeNibbles", "TransmitterCode_2src_2main_8cpp.html#acd761b7a3274515f60af86504f70fcd6", null ],
     [ "CheckPowerOffButton", "TransmitterCode_2src_2main_8cpp.html#a6ae37c6938b8c10b83d1bc74e8643bd9", null ],

@@ -246,7 +246,7 @@ var Definitions_8h =
     [ "CheckDualRatesValues", "Definitions_8h.html#a5467d21eeae42d1bfdb79914ef52d0ed", null ],
     [ "CheckGapsLength", "Definitions_8h.html#aa60c9cac090f6965b4223d5caf84e2f1", null ],
     [ "CheckInvisiblePoint", "Definitions_8h.html#a1870ad872e2424cbf8222747d3a43617", null ],
-    [ "CheckModelName", "Definitions_8h.html#a984cb52354a84c45e9e41f396a1c5e92", null ],
+    [ "CheckModelName", "Definitions_8h.html#a5c0f1fd26cdd6ecde365f521060158ba", null ],
     [ "CheckMotorOff", "Definitions_8h.html#a2f7d73b3096c884b2ace4b3399268325", null ],
     [ "CheckPipeNibbles", "Definitions_8h.html#acd761b7a3274515f60af86504f70fcd6", null ],
     [ "CheckPowerOffButton", "Definitions_8h.html#a6ae37c6938b8c10b83d1bc74e8643bd9", null ],
