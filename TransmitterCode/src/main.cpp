@@ -7179,14 +7179,8 @@ void LoadModelForRenaming(){
 /******************************************************************************************************************************/
 
 void DoMFName(){
-   DelayWithDog(200);
-   if (CheckModelName()) return;    // In MODELSVIEW, this function checks correct model name and filename is displayed.
-   DelayWithDog(500);
-   if (CheckModelName()) return;    // in case we were much too quick!
-   DelayWithDog(1000);
-   if (CheckModelName()) return;   // in case we were far too quick!
-   DelayWithDog(1000);
-   CheckModelName();
+    DelayWithDog(100);
+    CheckModelName();
 }
 
 /******************************************************************************************************************************/
@@ -9709,7 +9703,8 @@ void FASTRUN ManageTransmitter(){
         CheckHardwareTrims();                                        // Trims 20 times a second
         GetBank();                                                   // Must not call too often        
         ShowComms();                                                 // Screen Telemetry Data                                  
-        ShowMotorTimer();                                            // Screen Timer
+        if (CurrentView == FRONTVIEW) ShowMotorTimer();              // Screen Timer
+        if (CurrentView == MODELSVIEW) CheckModelName();
         TransmitterLastManaged = millis();
     }
 }
