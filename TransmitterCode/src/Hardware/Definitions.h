@@ -487,7 +487,7 @@ void         StartModelSetup();
 bool         GetConfirmation(char* goback, char* Prompt);
 void         GotoModelsView();
 void         SaveCurrentModel();
-void         CheckModelName();
+bool         CheckModelName();
 void         EndTrimView();
 int          AnalogueReed(uint8_t InputChannel);
 void         GetReturnCode();

@@ -7179,14 +7179,15 @@ void LoadModelForRenaming(){
 /******************************************************************************************************************************/
 
 void DoMFName(){
-    DelayWithDog(200);
-    CheckModelName();    // In MODELSVIEW, this function checks correct model name and filename is displayed.
-    DelayWithDog(500);
-    CheckModelName();    // in case we were much too quick!
-    DelayWithDog(1000);
-    CheckModelName();    // in case we were far too quick!
+   DelayWithDog(200);
+   if (CheckModelName()) return;    // In MODELSVIEW, this function checks correct model name and filename is displayed.
+   DelayWithDog(500);
+   if (CheckModelName()) return;    // in case we were much too quick!
+   DelayWithDog(1000);
+   if (CheckModelName()) return;   // in case we were far too quick!
+   DelayWithDog(1000);
+   CheckModelName();
 }
-
 
 /******************************************************************************************************************************/
 
@@ -9548,8 +9549,9 @@ FASTRUN void CheckGapsLength()
 }
 
 /************************************************************************************************************/
-void CheckModelName()
+bool CheckModelName()
 {                                                  // In ModelsView, this function checks correct name is displayed.
+                                                   // it returns true if it has changed
     char MMems[]        = "MMems";
     char Mfiles[]       = "Mfiles";
     char mn[]           = "modelname";
@@ -9570,8 +9572,10 @@ void CheckModelName()
         if (UseLog) LogThisModel();
         LastModelLoaded = ModelNumber;
         UpdateModelsNameEveryWhere();
+        return true;
     }
     ClearText();
+    return false;
 }
 
 /************************************************************************************************************/
