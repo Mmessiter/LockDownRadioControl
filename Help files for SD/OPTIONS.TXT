@@ -1,9 +1,18 @@
 Transmitter modes 1 and 2 are supported. Set this option first, before calibration.||
 
-Automatic model selection will attempt to match the model's ID with one stored in a model memory.|
-If the model's ID is not found, the new ID is immediately stored in the currently loaded model memory.|
-So when setting up a new model, be sure to load the new model memory before switching on the receiver.|
-If the receiver had beed used before in another model, turn off 'Automatic model selection' as well.|| 
+Automatic model selection will attempt to match the model's ID with one stored in a model memory following these rules:||
+
+A receiver that boots up without a bind plug in place will connect with its own previously bound transmitter and no other transmitter. ||
+
+When a receiver boots up with bind plug in, it will immediately bind with a nearby transmitter that’s switched on but not connected.||
+
+If ‘Automatic model selection’ is turned on when connecting, all model memories are searched for a match with the connecting model’s ID. If a match is found, the matched model memory is loaded. If no match is found, the new model ID is stored in the currently loaded model memory. ||
+
+Hence, when a transmitter connects to a model that’s unrecognised, the ID of that model is stored in the current model memory. (Indeed this happens even if ‘Automatic model selection’ is turned off. )
+
+So when connecting to a model for the first time, manually load the correct Model memory on the transmitter before connection to receiver.
+
+If you make a mistake and the model’s ID gets accidentally stored with the wrong model memory, use the Model setup option ‘Unmatch’ to remove the model’s ID from that memory, then reconnect with the correct model memory loaded first. 
  
 Screen timeout will save battery while you fly by turning off the screen. To switch it back on, change flight mode or press a button.||
 
