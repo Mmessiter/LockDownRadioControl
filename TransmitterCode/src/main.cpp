@@ -9693,12 +9693,9 @@ void FASTRUN ManageTransmitter(){
             GetStatistics();                                         // Do stats
             LastTimeRead = millis();
             CheckForNextionButtonPress();  
-            if (CurrentView == MODELSVIEW) {
-                CheckModelName();
-                CheckForNextionButtonPress();  
-            }
-            ShowComms();                                                 // Screen Telemetry Data       
-            if (CurrentView == FRONTVIEW) ShowMotorTimer();              // Screen Timer 
+            ShowComms();                                            // Screen Telemetry Data 
+            if (CurrentView == MODELSVIEW) CheckModelName();               
+            if (CurrentView == FRONTVIEW)  ShowMotorTimer();          // Screen Timer 
             return;                                                  // That's enough housekeeping this time around
         }
         if (RightNow - LastScanButtonCheck >= 100) {                    
@@ -9708,7 +9705,6 @@ void FASTRUN ManageTransmitter(){
         ReadSwitches();                                              // Check switch positions 20 times a second
         CheckHardwareTrims();                                        // Trims 20 times a second
         GetBank();                                                   // Must not call too often                            
-        
         TransmitterLastManaged = millis();
     }
 }
