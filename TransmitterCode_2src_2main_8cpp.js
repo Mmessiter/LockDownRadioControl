@@ -554,7 +554,6 @@ var TransmitterCode_2src_2main_8cpp =
     [ "NewCompressNeeded", "TransmitterCode_2src_2main_8cpp.html#a37ebe494d562386d4f9f00b629d4cf1a", null ],
     [ "NewFileBuffer", "TransmitterCode_2src_2main_8cpp.html#a7eaf7514909d5b2d72a7d85d46e4424c", null ],
     [ "NewFileBufferPointer", "TransmitterCode_2src_2main_8cpp.html#a1ca852f79f9cbe1f4ccb5d4ffc287aa9", null ],
-    [ "NewModelMemoryWasSaved", "TransmitterCode_2src_2main_8cpp.html#ab9347f60dafba0be1dbd4028534c7a52", null ],
     [ "NextChannel", "TransmitterCode_2src_2main_8cpp.html#a4c9fbf66b2c98730d43dc9dfe573a998", null ],
     [ "NumberedFunctions", "TransmitterCode_2src_2main_8cpp.html#abb4fb8e30aec6f80bfcb85d5f4c7931f", null ],
     [ "OneModelMemory", "TransmitterCode_2src_2main_8cpp.html#af41e1522d47ccad6267f971f13cb6f79", null ],
