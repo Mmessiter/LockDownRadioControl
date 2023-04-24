@@ -1,5 +1,5 @@
 /** @file TransmitterCode/src/main.cpp
- * // Malcolm Messiter 2020 - 2023
+ * // Malcolm Messiter 2022
  *
  * @page TransmitterCode...
  * @section LockDown Radio Control Features list, so far:
@@ -1839,8 +1839,6 @@ FASTRUN void ShowComms()
             snprintf(Vbuf, 9, "%X", TempModelId);
             if (TempModelId) SendText(IdReceived1,Vbuf);
            
-
-            // heer
         }
         if (CurrentView == GPSVIEW ) {
             if (GpsFix) { // if no fix, then leave display as before
@@ -3693,7 +3691,7 @@ if (PPMdata.UseTXModule)
     SendValue(FrontView_Mins, 0);
     SendValue(FrontView_Secs, 0);
     //  ***************************************************************************************
-    // SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
+    //  SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
     //  **   BUT then re-comment it!! Otherwise it will reset to same time on every boot up! **
     //  ***************************************************************************************
     BoundFlag = false;
@@ -4322,7 +4320,7 @@ void ScrollHelpFile()
     SendText1(HelpView, HelpText);                                     // Then send it
 }
 /*********************************************************************************************************************************/
-void SendHelp()
+void SendHelp() 
 { // load new help file
     char hcmd[] = "page HelpView";
     char HelpFile[20];
@@ -6473,11 +6471,11 @@ void RXSetup1End()
     SendValue(Progress,70);
     TimerStartTime          = GetValue(n4) * 60;
     SendValue(Progress,80);
-    PPMdata.UseSBUSFromRX            = GetValue(r0);
+    PPMdata.UseSBUSFromRX   = GetValue(r0);
     SendValue(Progress,90);
-    PPMdata.PPMChannelCount              =  GetValue(n5);
+    PPMdata.PPMChannelCount  =  GetValue(n5);
     SendValue(Progress, 100);
-    CurrentView             = TXSETUPVIEW;
+    CurrentView             = RXSETUPVIEW; 
     SaveOneModel(ModelNumber);
     UpdateModelsNameEveryWhere();   
     SendCommand(page_RXSetupView);
@@ -7925,6 +7923,11 @@ FASTRUN void ButtonWasPressed()
             }                       // Get page name to which to return
             SendCommand(WhichPage); // this sends nextion back to last screen
             CurrentView = SavedCurrentView;
+
+            if ((CurrentView == RXSETUPVIEW) || (CurrentView == TXSETUPVIEW)){ 
+                b5isGrey = false;
+                b12isGrey = false;
+            }
 
             if (CurrentView == GRAPHVIEW) {
                 DisplayCurveAndServoPos();
