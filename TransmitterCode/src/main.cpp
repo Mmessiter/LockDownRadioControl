@@ -146,7 +146,7 @@ uint32_t TrimTimer              = 0;
 uint16_t TrimRepeatSpeed        = 600;
 
 char     na[]                   = "";
-bool     NewModelMemoryWasSaved = false; 
+//bool     NewModelMemoryWasSaved = false; 
 
 uint8_t  StepSize[16] = {0,0,0,0,0,0,0,0,5,25,5,25,5,25,5,25};  //    How far to move each time on slow servos
 uint16_t CurrentPosition[UNCOMPRESSEDWORDS];                //    Position from which a slow servo started (0 = not started yet)
@@ -9385,7 +9385,7 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                         ModelNumber = SavedModelNumber; //  Not found, so bind to the restored selected one
                         ReadOneModel(ModelNumber);
                         BindNow();
-                        NewModelMemoryWasSaved = true;
+                      //  NewModelMemoryWasSaved = true;
                         if (AutoModelSelect)
                         {
                             PlaySound(MMSAVED); 
@@ -9735,15 +9735,15 @@ void FixMotorChannel()
 void SendBindingPipe()
 {
     if (PPMdata.UseTXModule) return;
-    uint16_t BindPause = 3000;
-    if (NewModelMemoryWasSaved) BindPause = 6000;
+    uint16_t BindPause = 1200; // heer ??!!           // was 3000
+   // if (NewModelMemoryWasSaved) BindPause = 1000;     // was 6000
     if (!BoundFlag || !ModelMatched) BindingTimer = millis();
     if ((millis() - BindingTimer) < BindPause) 
     {
         BufferTeensyMACAddPipe(); 
     }else
     {
-        NewModelMemoryWasSaved = false; // return to normal service
+      //  NewModelMemoryWasSaved = false; // return to normal service
     }
 }
 /************************************************************************************************************/
