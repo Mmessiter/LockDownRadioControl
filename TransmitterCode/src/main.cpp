@@ -9735,7 +9735,7 @@ void FixMotorChannel()
 void SendBindingPipe()
 {
     if (PPMdata.UseTXModule) return;
-    uint16_t BindPause = 1200; // heer ??!!           // was 3000
+    uint16_t BindPause = 1200; // heer ??!!             // was 3000
    // if (NewModelMemoryWasSaved) BindPause = 1000;     // was 6000
     if (!BoundFlag || !ModelMatched) BindingTimer = millis();
     if ((millis() - BindingTimer) < BindPause) 
