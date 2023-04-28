@@ -194,7 +194,8 @@ uint16_t BoxRight;
 uint16_t ClickX;
 uint16_t ClickY;
 uint8_t  SticksMode                    = 2;
-uint16_t AnalogueInput[PROPOCHANNELS]  = {A0, A1, A2, A3, A6, A7, A8, A9}; // 8 PROPO Channels for transmission   // fix order for mode 2 
+uint8_t  SavedSticksMode               = 2;
+uint16_t AnalogueInput[PROPOCHANNELS]  = {A0, A1, A2, A3, A6, A7, A8, A9};                                        // 8 PROPO Channels for transmission   // fix order for mode 2
 uint8_t  TrimNumber[8]                 = {TRIM1A, TRIM1B, TRIM2A, TRIM2B, TRIM3A, TRIM3B, TRIM4A, TRIM4B};        // These too can get swapped over later
 
 uint8_t  CurrentMode                  = NORMAL;
@@ -2871,8 +2872,8 @@ bool ReadOneModel(uint32_t Mnum)
     BuddyControlled = SDRead16BITS(SDCardAddress);
     ++SDCardAddress;
     ++SDCardAddress;
-
-    SDCardAddress += 1; // 1 Spare Bytes here (PID stuff gone) *****************************
+    SavedSticksMode = SDRead8BITS(SDCardAddress); // save sticks mode in case of rf transfer
+    ++ SDCardAddress;  // 0 Spare Bytes here  ***************************** heer
 
     for (i = 0; i < CHANNELSUSED; ++i) {
         InPutStick[i] = SDRead8BITS(SDCardAddress);
@@ -4011,8 +4012,10 @@ void SaveOneModel(uint32_t mnum)
     SDUpdate16BITS(SDCardAddress, BuddyControlled);
     ++SDCardAddress;
     ++SDCardAddress;
+  
+    SDUpdate8BITS(SDCardAddress, SticksMode); // save sticks mode in case of rf transfer
 
-    SDCardAddress += 1; // *********************** 1 spare here remaining  **********************
+    SDCardAddress += 1; // *********************** 0 spare here remaining  ********************** heer
 
     for (i = 0; i < CHANNELSUSED; ++i) {
         SDUpdate8BITS(SDCardAddress, InPutStick[i]);
@@ -5448,6 +5451,13 @@ void ReceiveModelFile()
     
     SingleModelFlag = true;
     ReadOneModel(1);
+    if (SavedSticksMode != SticksMode){ // swap over trims (elevator -  Throttle)
+        for (int ba = 1; ba < 5; ++ba){
+            uint8_t temp = Trims[ba][1];
+            Trims[ba][1] = Trims[ba][2];
+            Trims[ba][2] = temp;
+        }
+    }
     SingleModelFlag = false;
     CloseModelsFile();
     SaveAllParameters();
@@ -9735,7 +9745,7 @@ void FixMotorChannel()
 void SendBindingPipe()
 {
     if (PPMdata.UseTXModule) return;
-    uint16_t BindPause = 1200; // heer ??!!             // was 3000
+    uint16_t BindPause = 1200;                          // was 3000
    // if (NewModelMemoryWasSaved) BindPause = 1000;     // was 6000
     if (!BoundFlag || !ModelMatched) BindingTimer = millis();
     if ((millis() - BindingTimer) < BindPause) 
