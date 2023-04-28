@@ -412,7 +412,7 @@ bool      LogFileOpen             = false;
 bool      ShowVPC                 = false;
 short int TxVoltageCorrection     = 0;
 short int RxVoltageCorrection     = 0;
-uint16_t  LEDBrightness           = DEFAULTLEDBRIGHTNESS; // needs only 8 bits really
+uint8_t   LEDBrightness           = DEFAULTLEDBRIGHTNESS; // needs only 8 bits really
 uint32_t  PowerOffTimer           = 0;
 bool      PowerWarningVisible     = false;
 uint8_t   TurnOffSecondToGo       = 2;
@@ -3149,9 +3149,11 @@ bool LoadAllParameters()
         PowerOffWarningSeconds = SDRead8BITS(SDCardAddress);
         PowerOffWarningSeconds = CheckRange(PowerOffWarningSeconds, 1, 30);
         ++SDCardAddress;
-        LEDBrightness = SDRead16BITS(SDCardAddress);
+        LEDBrightness = SDRead8BITS(SDCardAddress);
         LEDBrightness = CheckRange(LEDBrightness, 1, 254);
         ++SDCardAddress;
+        // one spare byte here!
+        //
         ++SDCardAddress;
         ConnectionAssessSeconds = SDRead8BITS(SDCardAddress);
         ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);
@@ -3908,6 +3910,8 @@ void SaveTransmitterParameters()
     ++SDCardAddress;
     SDUpdate16BITS(SDCardAddress, LEDBrightness);
     ++SDCardAddress;
+    // one spare byte here!
+    //
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, ConnectionAssessSeconds);
     ++SDCardAddress;
