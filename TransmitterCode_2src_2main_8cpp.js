@@ -607,6 +607,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "SavedRX1TotalTime", "TransmitterCode_2src_2main_8cpp.html#a92340ce5ec923466feb97fc24573d64e", null ],
     [ "SavedRX2TotalTime", "TransmitterCode_2src_2main_8cpp.html#aafbc525923c23d3cd46b59ac13f91dca", null ],
     [ "SavedSbusRepeats", "TransmitterCode_2src_2main_8cpp.html#ac3404e7b5c5628ea17545ccdc3428114", null ],
+    [ "SavedSticksMode", "TransmitterCode_2src_2main_8cpp.html#a832fd68074b211decbc4bd82bc264ae6", null ],
     [ "SaveFailSafeNow", "TransmitterCode_2src_2main_8cpp.html#acd6754de95b605bb65a52a86e96121f7", null ],
     [ "SbusRepeats", "TransmitterCode_2src_2main_8cpp.html#a62cc4d43d463897ef0d417150d6e7f3f", null ],
     [ "ScreenIsOff", "TransmitterCode_2src_2main_8cpp.html#aff4581f5a99a6d8eb37ef22e94d858d3", null ],

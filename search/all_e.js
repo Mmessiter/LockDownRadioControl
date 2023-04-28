@@ -45,7 +45,7 @@ var searchData=
   ['magx_42',['MagX',['../Quadcopter_2src_2main_8cpp.html#a2147cfcf58b4ad01e6914a0e07678b93',1,'main.cpp']]],
   ['magy_43',['MagY',['../Quadcopter_2src_2main_8cpp.html#ac6ac8f7dadfc13730ef787e4a1067aef',1,'main.cpp']]],
   ['magz_44',['MagZ',['../Quadcopter_2src_2main_8cpp.html#a3be02ea38098132450acb2f9209b458e',1,'main.cpp']]],
-  ['main_2ecpp_45',['main.cpp',['../SensorHubT32_2src_2main_8cpp.html',1,'(Global Namespace)'],['../ReceiverCode_2src_2main_8cpp.html',1,'(Global Namespace)'],['../Quadcopter_2src_2main_8cpp.html',1,'(Global Namespace)'],['../TransmitterCode_2src_2main_8cpp.html',1,'(Global Namespace)']]],
+  ['main_2ecpp_45',['main.cpp',['../Quadcopter_2src_2main_8cpp.html',1,'(Global Namespace)'],['../ReceiverCode_2src_2main_8cpp.html',1,'(Global Namespace)'],['../TransmitterCode_2src_2main_8cpp.html',1,'(Global Namespace)'],['../SensorHubT32_2src_2main_8cpp.html',1,'(Global Namespace)']]],
   ['makelogfilename_46',['MakeLogFileName',['../TransmitterCode_2src_2main_8cpp.html#a05c7b4e0b98f9b97eebf9617442de6a5',1,'main.cpp']]],
   ['maketwobytes_47',['MakeTwobytes',['../TransmitterCode_2src_2main_8cpp.html#a5aa4888b924a4f1d95e9cedc3004f2b6',1,'main.cpp']]],
   ['managetransmitter_48',['ManageTransmitter',['../TransmitterCode_2src_2main_8cpp.html#a558ea014e230b7caa54ce5a37ad29b22',1,'main.cpp']]],
