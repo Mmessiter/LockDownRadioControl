@@ -2873,7 +2873,7 @@ bool ReadOneModel(uint32_t Mnum)
     ++SDCardAddress;
     ++SDCardAddress;
     SavedSticksMode = SDRead8BITS(SDCardAddress); // save sticks mode in case of rf transfer
-    ++ SDCardAddress;  // 0 Spare Bytes here  ***************************** heer
+    ++ SDCardAddress;  // 0 Spare Bytes here  ***************************** 
 
     for (i = 0; i < CHANNELSUSED; ++i) {
         InPutStick[i] = SDRead8BITS(SDCardAddress);
@@ -4015,7 +4015,7 @@ void SaveOneModel(uint32_t mnum)
   
     SDUpdate8BITS(SDCardAddress, SticksMode); // save sticks mode in case of rf transfer
 
-    SDCardAddress += 1; // *********************** 0 spare here remaining  ********************** heer
+    SDCardAddress += 1; // *********************** 0 spare here remaining  ********************** 
 
     for (i = 0; i < CHANNELSUSED; ++i) {
         SDUpdate8BITS(SDCardAddress, InPutStick[i]);
@@ -5451,7 +5451,7 @@ void ReceiveModelFile()
     
     SingleModelFlag = true;
     ReadOneModel(1);
-    if (SavedSticksMode != SticksMode){ // swap over trims (elevator -  Throttle)
+    if (SavedSticksMode != SticksMode){ // swap over trims (elevator -  Throttle) heer
         for (int ba = 1; ba < 5; ++ba){
             uint8_t temp = Trims[ba][1];
             Trims[ba][1] = Trims[ba][2];
