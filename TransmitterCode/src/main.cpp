@@ -10313,27 +10313,26 @@ void MoveRightPaddle(int y){
 /*********************************************************************************************************************************/
 
 void   PlayPong(){  // called 100 times per second
-    static uint32_t Ponged = 0;
-    static int      x      = STARTX;
-    static int      y      = STARTY;
-    static int      LeftPaddlY   = STARTY;
-    static int      RightPaddlY  = STARTY;
+    static uint32_t Ponged          = 0;
+    static int      x               = STARTX;
+    static int      y               = STARTY;
+    static int      LeftPaddlY      = STARTY;
+    static int      RightPaddlY     = STARTY;
     static int      OLDLeftPaddlY   = STARTY;
     static int      OLDRightPaddlY  = STARTY;
-    static int incy        = PONGBALLSPEED;
-    static int incx        = PONGBALLSPEED;
-    static int LeftScore   = 0;
-    static int RightScore  = 0;
-    char   n0[]            = "n0";
-    char   n1[]            = "n1";
+    static int      incy            = PONGBALLSPEED;
+    static int      incx            = PONGBALLSPEED;
+    static int      LeftScore       = 0;
+    static int      RightScore      = 0;
+    char   n0[]                     = "n0";
+    char   n1[]                     = "n1";
 
     if ((millis() - Ponged) < PONGSPEED) return;
     Ponged = millis();
 
     y += incy;
     x += incx;
-  
-
+ 
   if (SticksMode == 1){
         LeftPaddlY=(map(PreMixBuffer[1],MINMICROS,MAXMICROS,PONGY2+EXTRAPONG,PONGY1-EXTRAPONG));
         RightPaddlY=(map(PreMixBuffer[2],MINMICROS,MAXMICROS,PONGY1-EXTRAPONG,PONGY2+EXTRAPONG));
@@ -10358,25 +10357,21 @@ void   PlayPong(){  // called 100 times per second
     if ((x <= (RIGHTPADDLEX + PONGCLEAR)) && (x >= (RIGHTPADDLEX - PONGCLEAR))){
          if ((y >= (RightPaddlY-(PADDLEHEIGHT/2))) && (y <= (RightPaddlY+(PADDLEHEIGHT/2)))){
              incx = -incx;
-            randomSeed(micros());
+             randomSeed(micros());
              incy = 2 - random(4);
              PlaySound(BEEPMIDDLE);
          }
     }
-
     if ((y + PONGCLEAR) >= PONGY2) {
         incy = -incy;
         PlaySound(CLICKZERO);
         StartInactvityTimeout();
-      
     }
     if (y <= (PONGY1 + PONGCLEAR)) {
         incy = -incy;
         PlaySound(CLICKZERO);
         StartInactvityTimeout();
     }
-
-
     if (((x + PONGCLEAR) >= PONGX2) && (x)){
         if ((y < GOALBOT-2) && (y > GOALTOP+2)){
             ++RightScore;
@@ -10417,10 +10412,8 @@ void   PlayPong(){  // called 100 times per second
             PlaySound(CLICKZERO);
         }
     }
-
     MoveBall(x,y); 
     NewCompressNeeded = false;
-   
 }
 
 /****************************************************************************************************************/
