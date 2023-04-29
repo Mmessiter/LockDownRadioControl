@@ -10262,17 +10262,17 @@ void DoScanEnd()
 #define PONGX1          20          // BOX dimentions
 #define PONGX2          790         // BOX dimentions
 #define PONGY1          50          // BOX dimentions
-#define PONGY2          420         // BOX dimentions
-#define PONGGOALSIZE    150         // Size of goal
+#define PONGY2          410         // BOX dimentions
+#define PONGGOALSIZE    360 // 180         // Size of goal
 #define PONGBALLSIZE    7           // Size of ball
-#define PONGSPEED       10           // Frame rate
+#define PONGSPEED       10          // Frame rate
 #define PONGBALLSPEED   4           // Ball movement per frame 
 #define PONGCLEAR (PONGBALLSPEED+PONGBALLSIZE)+4  // ball clearance from box when bouncing
 #define GOALTOP (PONGY1 + ((PONGY2 - PONGY1) / 2)) - (PONGGOALSIZE / 2)
 #define GOALBOT (PONGY1 + ((PONGY2 - PONGY1) / 2)) + (PONGGOALSIZE / 2)
 #define STARTX PONGX1+((PONGX2-PONGX1)/2)  // start position of ball
 #define STARTY PONGY1+((PONGY2-PONGY1)/2)+ 90
-#define PADDLEHEIGHT 60
+#define PADDLEHEIGHT 45 // 60
 #define PADDLEGAP    40
 #define LEFTPADDLEX PONGX1 + PADDLEGAP
 #define RIGHTPADDLEX PONGX2 - PADDLEGAP
@@ -10335,10 +10335,10 @@ void   PlayPong(){  // called 100 times per second
  
   if (SticksMode == 1){
         LeftPaddlY=(map(PreMixBuffer[1],MINMICROS,MAXMICROS,PONGY2+EXTRAPONG,PONGY1-EXTRAPONG));
-        RightPaddlY=(map(PreMixBuffer[2],MINMICROS,MAXMICROS,PONGY1-EXTRAPONG,PONGY2+EXTRAPONG));
+        RightPaddlY=(map(PreMixBuffer[2],MINMICROS,MAXMICROS,PONGY2+EXTRAPONG,PONGY1-EXTRAPONG));
     }else{
-        LeftPaddlY=(map(PreMixBuffer[2],MINMICROS,MAXMICROS,PONGY1-EXTRAPONG,PONGY2))+EXTRAPONG ;// heer
-        RightPaddlY=(map(PreMixBuffer[1],MINMICROS,MAXMICROS,PONGY2+EXTRAPONG,PONGY1-EXTRAPONG))+EXTRAPONG;
+        LeftPaddlY=(map(PreMixBuffer[2],MINMICROS,MAXMICROS,PONGY2+EXTRAPONG+10,PONGY1-12));
+        RightPaddlY=(map(PreMixBuffer[1],MINMICROS,MAXMICROS,PONGY2+EXTRAPONG+45,PONGY1-35));
     }
 
     if (RightPaddlY != OLDRightPaddlY) MoveRightPaddle(RightPaddlY);
@@ -10380,6 +10380,15 @@ void   PlayPong(){  // called 100 times per second
         if ((y < GOALBOT-2) && (y > GOALTOP+2)){
             ++RightScore;
             SendValue(n0, RightScore);
+            if (RightScore>=10){
+                PlaySound(THEFANFARE);
+                DelayWithDog(6000);
+                RightScore = 0;
+                LeftScore = 0;
+                SendValue(n0, RightScore);
+                SendValue(n1, LeftScore);
+            }
+           
             x = PONGX2;
             MoveBall(x,y);
             PlaySound(BEEPCOMPLETE);
@@ -10404,13 +10413,22 @@ void   PlayPong(){  // called 100 times per second
             MoveBall(x,y);
             PlaySound(BEEPCOMPLETE);
             SendValue(n1, LeftScore);
+            if (LeftScore>=10){
+                PlaySound(THEFANFARE);
+                DelayWithDog(6000);
+                RightScore = 0;
+                LeftScore = 0;
+                SendValue(n0, RightScore);
+                SendValue(n1, LeftScore);
+            }
+          
             DelayWithDog(500);
             x      = -STARTX;
             y      = -STARTY;
             randomSeed(micros());
             incx = PONGBALLSPEED;
             incy = PONGBALLSPEED - random(PONGBALLSPEED*2);
-            while (incx == 0) incx = 2 - random(4);
+            while (incx == 0) incx = PONGBALLSPEED - random(PONGBALLSPEED*2);
         }else{
             incx = -incx;
             PlaySound(CLICKZERO);
@@ -10418,6 +10436,9 @@ void   PlayPong(){  // called 100 times per second
     }
     MoveBall(x,y); 
     NewCompressNeeded = false;
+    SendValue(n0, RightScore);
+    SendValue(n1, LeftScore);
+    DrawLine(PONGX1 + ((PONGX2 - PONGX1) / 2), PONGY1, PONGX1 + ((PONGX2 - PONGX1) / 2), PONGY2, Green);
 }
 
 /****************************************************************************************************************/
