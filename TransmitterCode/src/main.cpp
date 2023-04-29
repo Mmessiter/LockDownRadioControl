@@ -5455,7 +5455,7 @@ void ReceiveModelFile()
     
     SingleModelFlag = true;
     ReadOneModel(1);
-    if (SavedSticksMode != SticksMode){ // swap over trims (elevator -  Throttle) heer
+    if (SavedSticksMode != SticksMode){ // swap over trims (elevator -  Throttle)
         for (int ba = 1; ba < 5; ++ba){
             uint8_t temp = Trims[ba][1];
             Trims[ba][1] = Trims[ba][2];
@@ -10263,26 +10263,25 @@ void DoScanEnd()
 #define PONGX2          790         // BOX dimentions
 #define PONGY1          50          // BOX dimentions
 #define PONGY2          420         // BOX dimentions
-#define PONGGOALSIZE    120         // Size of goal
+#define PONGGOALSIZE    150         // Size of goal
 #define PONGBALLSIZE    7           // Size of ball
 #define PONGSPEED       8           // Frame rate
-#define PONGBALLSPEED   2           // Ball movement per frame 
-#define PONGCLEAR (PONGBALLSPEED+PONGBALLSIZE)  // ball clearance from box when bouncing
+#define PONGBALLSPEED   3           // Ball movement per frame 
+#define PONGCLEAR (PONGBALLSPEED+PONGBALLSIZE)+4  // ball clearance from box when bouncing
 #define GOALTOP (PONGY1 + ((PONGY2 - PONGY1) / 2)) - (PONGGOALSIZE / 2)
 #define GOALBOT (PONGY1 + ((PONGY2 - PONGY1) / 2)) + (PONGGOALSIZE / 2)
 #define STARTX PONGX1+((PONGX2-PONGX1)/2)  // start position of ball
-#define STARTY PONGY1+((PONGY2-PONGY1)/2)
+#define STARTY PONGY1+((PONGY2-PONGY1)/2)+ 90
 #define PADDLEHEIGHT 60
 #define PADDLEGAP    40
 #define LEFTPADDLEX PONGX1 + PADDLEGAP
 #define RIGHTPADDLEX PONGX2 - PADDLEGAP
-
-
+#define EXTRAPONG 42
 
 
 /*********************************************************************************************************************************/
 void StartPong(){
-    char page_PongView[] = "page PongView"; // heer
+    char page_PongView[] = "page PongView"; 
     SendCommand(page_PongView);
     CurrentView = PONGVIEW;
     CurrentMode = PONGMODE;
@@ -10334,44 +10333,48 @@ void   PlayPong(){  // called 100 times per second
     y += incy;
     x += incx;
   
-    LeftPaddlY=(map(PreMixBuffer[1],MINMICROS,MAXMICROS,PONGY2,PONGY1));
-    RightPaddlY=(map(PreMixBuffer[2],MINMICROS,MAXMICROS,PONGY1,PONGY2));
+
+  if (SticksMode == 1){
+        LeftPaddlY=(map(PreMixBuffer[1],MINMICROS,MAXMICROS,PONGY2+EXTRAPONG,PONGY1-EXTRAPONG));
+        RightPaddlY=(map(PreMixBuffer[2],MINMICROS,MAXMICROS,PONGY1-EXTRAPONG,PONGY2+EXTRAPONG));
+    }else{
+        LeftPaddlY=(map(PreMixBuffer[2],MINMICROS,MAXMICROS,PONGY1-EXTRAPONG,PONGY2))+EXTRAPONG ;// heer
+        RightPaddlY=(map(PreMixBuffer[1],MINMICROS,MAXMICROS,PONGY2+EXTRAPONG,PONGY1-EXTRAPONG))+EXTRAPONG;
+    }
+
     if (RightPaddlY != OLDRightPaddlY) MoveRightPaddle(RightPaddlY);
     if (OLDLeftPaddlY != LeftPaddlY) MoveLeftPaddle(LeftPaddlY);
     OLDLeftPaddlY = LeftPaddlY;
     OLDRightPaddlY = RightPaddlY;
 
-
-
-    if ((x <= LEFTPADDLEX + PONGCLEAR) && (x >= LEFTPADDLEX-PONGCLEAR)){
+    if ((x <= LEFTPADDLEX + PONGCLEAR) && (x >= LEFTPADDLEX - PONGCLEAR)){
          if ((y >= (LeftPaddlY-(PADDLEHEIGHT/2))) && (y <= (LeftPaddlY+(PADDLEHEIGHT/2)))){
              incx = -incx;
-            PlaySound(BEEPMIDDLE);
+             randomSeed(micros());
+             incy = 2 - random(4);
+             PlaySound(BEEPMIDDLE);
          }
     }
-    
-
-
-
-    if ((x <= RIGHTPADDLEX + PONGCLEAR) && (x >= RIGHTPADDLEX-PONGCLEAR)){
+    if ((x <= (RIGHTPADDLEX + PONGCLEAR)) && (x >= (RIGHTPADDLEX - PONGCLEAR))){
          if ((y >= (RightPaddlY-(PADDLEHEIGHT/2))) && (y <= (RightPaddlY+(PADDLEHEIGHT/2)))){
              incx = -incx;
-            PlaySound(BEEPMIDDLE);
+            randomSeed(micros());
+             incy = 2 - random(4);
+             PlaySound(BEEPMIDDLE);
          }
     }
-
 
     if ((y + PONGCLEAR) >= PONGY2) {
         incy = -incy;
         PlaySound(CLICKZERO);
+        StartInactvityTimeout();
+      
     }
     if (y <= (PONGY1 + PONGCLEAR)) {
         incy = -incy;
         PlaySound(CLICKZERO);
+        StartInactvityTimeout();
     }
-
-
-
 
 
     if (((x + PONGCLEAR) >= PONGX2) && (x)){
@@ -10384,10 +10387,14 @@ void   PlayPong(){  // called 100 times per second
             DelayWithDog(500);
             x      = -STARTX;
             y      = -STARTY;
+            randomSeed(micros());
+            incx   = 2 - random(4);
+            incy   = 2 - random(4);
+            while (incx == 0) incx = 2 - random(4);
         }
         else {
             incx = -incx;
-              PlaySound(CLICKZERO);
+            PlaySound(CLICKZERO);
         }
     }
 
@@ -10401,6 +10408,10 @@ void   PlayPong(){  // called 100 times per second
             DelayWithDog(500);
             x      = -STARTX;
             y      = -STARTY;
+            randomSeed(micros());
+            incx   = 2 - random(4);
+            incy   = 2 - random(4);
+            while (incx == 0) incx = 2 - random(4);
         }else{
             incx = -incx;
             PlaySound(CLICKZERO);
@@ -10409,6 +10420,7 @@ void   PlayPong(){  // called 100 times per second
 
     MoveBall(x,y); 
     NewCompressNeeded = false;
+   
 }
 
 /****************************************************************************************************************/
