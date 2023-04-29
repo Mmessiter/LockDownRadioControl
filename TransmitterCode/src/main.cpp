@@ -10258,28 +10258,6 @@ void DoScanEnd()
 }
 
 /*********************************************************************************************************************************/
-
-#define PONGX1          20          // BOX dimentions
-#define PONGX2          790         // BOX dimentions
-#define PONGY1          50          // BOX dimentions
-#define PONGY2          410         // BOX dimentions
-#define PONGGOALSIZE    360 // 180         // Size of goal
-#define PONGBALLSIZE    7           // Size of ball
-#define PONGSPEED       10          // Frame rate
-#define PONGBALLSPEED   4           // Ball movement per frame 
-#define PONGCLEAR (PONGBALLSPEED+PONGBALLSIZE)+4  // ball clearance from box when bouncing
-#define GOALTOP (PONGY1 + ((PONGY2 - PONGY1) / 2)) - (PONGGOALSIZE / 2)
-#define GOALBOT (PONGY1 + ((PONGY2 - PONGY1) / 2)) + (PONGGOALSIZE / 2)
-#define STARTX PONGX1+((PONGX2-PONGX1)/2)  // start position of ball
-#define STARTY PONGY1+((PONGY2-PONGY1)/2)+ 90
-#define PADDLEHEIGHT 45 // 60
-#define PADDLEGAP    40
-#define LEFTPADDLEX PONGX1 + PADDLEGAP
-#define RIGHTPADDLEX PONGX2 - PADDLEGAP
-#define EXTRAPONG 42
-
-
-/*********************************************************************************************************************************/
 void StartPong(){
     char page_PongView[] = "page PongView"; 
     SendCommand(page_PongView);
@@ -10438,7 +10416,7 @@ void   PlayPong(){  // called 100 times per second
     NewCompressNeeded = false;
     SendValue(n0, RightScore);
     SendValue(n1, LeftScore);
-    DrawLine(PONGX1 + ((PONGX2 - PONGX1) / 2), PONGY1, PONGX1 + ((PONGX2 - PONGX1) / 2), PONGY2, Green);
+    DrawLine(PONGX1 + ((PONGX2 - PONGX1) / 2), PONGY1, PONGX1 + ((PONGX2 - PONGX1) / 2), PONGY2, Gray);
 }
 
 /****************************************************************************************************************/
