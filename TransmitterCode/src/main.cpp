@@ -10259,17 +10259,17 @@ void DoScanEnd()
 
 /*********************************************************************************************************************************/
 
-#define PONGX1  20
+#define PONGX1  20  // X,Y BOX dimentions
 #define PONGX2  790
 #define PONGY1  50
 #define PONGY2  420
-#define PONGGAP 120
-#define PONGBALLSIZE 7
-#define PONGSPEED 10
-#define PONGBALLSPEED 3
-#define PONGCLEAR (PONGBALLSPEED+PONGBALLSIZE)
-#define GAPTOP (PONGY1 + ((PONGY2 - PONGY1) / 2)) - (PONGGAP / 2)
-#define GAPBOT (PONGY1 + ((PONGY2 - PONGY1) / 2)) + (PONGGAP / 2)
+#define PONGGOALSIZE 120  // size of goal
+#define PONGBALLSIZE 7    // size of ball
+#define PONGSPEED 10      // frame rate
+#define PONGBALLSPEED 3   // ball movement per frame 
+#define PONGCLEAR (PONGBALLSPEED+PONGBALLSIZE)// ball clearance from box
+#define GOALTOP (PONGY1 + ((PONGY2 - PONGY1) / 2)) - (PONGGOALSIZE / 2)
+#define GOALBOT (PONGY1 + ((PONGY2 - PONGY1) / 2)) + (PONGGOALSIZE / 2)
 #define STARTX PONGX1+((PONGX2-PONGX1)/2)
 #define STARTY PONGY1+((PONGY2-PONGY1)/2)
 
@@ -10287,8 +10287,8 @@ void StartPong(){
     BlueLedOn();
 
     DrawBox  (PONGX1, PONGY1, PONGX2, PONGY2, ForeGroundColour);
-    DrawLine (PONGX1, GAPTOP, PONGX1, GAPBOT, BackGroundColour);
-    DrawLine (PONGX2, GAPTOP, PONGX2, GAPBOT, BackGroundColour);
+    DrawLine (PONGX1, GOALTOP, PONGX1, GOALBOT, BackGroundColour);
+    DrawLine (PONGX2, GOALTOP, PONGX2, GOALBOT, BackGroundColour);
 }
 
 void MoveBall(int x, int y){
@@ -10333,7 +10333,7 @@ void   PlayPong(){  // called 100 times per second
     }
 
     if (((x + PONGCLEAR) >= PONGX2) && (x)){
-        if ((y < GAPBOT-2) && (y > GAPTOP+2)){
+        if ((y < GOALBOT-2) && (y > GOALTOP+2)){
             ++RightScore;
             SendValue(n0, RightScore);
             x = PONGX2;
@@ -10350,7 +10350,7 @@ void   PlayPong(){  // called 100 times per second
     }
 
     if ((x <= (PONGX1 + PONGCLEAR)) && (x)) {
-        if ((y < GAPBOT-2) && (y > GAPTOP+2)){
+        if ((y < GOALBOT-2) && (y > GOALTOP+2)){
         
             ++LeftScore;
             x = PONGX1;
