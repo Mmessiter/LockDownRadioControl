@@ -10292,16 +10292,16 @@ void MoveRightPaddle(int y){
 
 void   PlayPong(){  // called 100 times per second
     static uint32_t Ponged          = 0;
-    static int      x               = STARTX;
-    static int      y               = STARTY;
-    static int      LeftPaddlY      = STARTY;
-    static int      RightPaddlY     = STARTY;
-    static int      OLDLeftPaddlY   = STARTY;
-    static int      OLDRightPaddlY  = STARTY;
-    static int      incy            = PONGBALLSPEED;
-    static int      incx            = PONGBALLSPEED;
-    static int      LeftScore       = 0;
-    static int      RightScore      = 0;
+    static short int      x               = STARTX;
+    static short int      y               = STARTY;
+    static short int      LeftPaddlY      = STARTY;
+    static short int      RightPaddlY     = STARTY;
+    static short int      OLDLeftPaddlY   = STARTY;
+    static short int      OLDRightPaddlY  = STARTY;
+    static short int      incy            = PONGBALLSPEED;
+    static short int      incx            = PONGBALLSPEED;
+    static short int      LeftScore       = 0;
+    static short int      RightScore      = 0;
     char   n0[]                     = "n0";
     char   n1[]                     = "n1";
 
@@ -10328,7 +10328,7 @@ void   PlayPong(){  // called 100 times per second
          if ((y >= (LeftPaddlY-(PADDLEHEIGHT/2))) && (y <= (LeftPaddlY+(PADDLEHEIGHT/2)))){
              incx = -incx;
              randomSeed(micros());
-             incy = 2 - random(4);
+             incy = 4 - random(8);
              PlaySound(BEEPMIDDLE);
          }
     }
@@ -10336,18 +10336,18 @@ void   PlayPong(){  // called 100 times per second
          if ((y >= (RightPaddlY-(PADDLEHEIGHT/2))) && (y <= (RightPaddlY+(PADDLEHEIGHT/2)))){
              incx = -incx;
              randomSeed(micros());
-             incy = 2 - random(4);
+             incy = 4 - random(8);
              PlaySound(BEEPMIDDLE);
          }
     }
-    if ((y + PONGCLEAR) >= PONGY2) {
+    if ((y + PONGCLEAR) >= PONGY2) { // bounce off bottom
         incy = -incy;
         if (incy == 0) incy =  -PONGBALLSPEED;
         PlaySound(CLICKZERO);
         ScreenTimeTimer = millis();
         StartInactvityTimeout();
     }
-    if (y <= (PONGY1 + PONGCLEAR)) {
+    if (y <= (PONGY1 + PONGCLEAR)) {// bounce off top
         incy = -incy;
          if (incy == 0) incy =  PONGBALLSPEED;
         PlaySound(CLICKZERO);
@@ -10355,7 +10355,7 @@ void   PlayPong(){  // called 100 times per second
         StartInactvityTimeout();
     }
     if (((x + PONGCLEAR) >= PONGX2) && (x)){
-        if ((y < GOALBOT-2) && (y > GOALTOP+2)){
+        if ((y < GOALBOT-2) && (y > GOALTOP+2)){ // scored on the right
             ++RightScore;
             SendValue(n0, RightScore);
             if (RightScore>=10){
@@ -10366,7 +10366,6 @@ void   PlayPong(){  // called 100 times per second
                 SendValue(n0, RightScore);
                 SendValue(n1, LeftScore);
             }
-           
             x = PONGX2;
             MoveBall(x,y);
             PlaySound(BEEPCOMPLETE);
@@ -10383,8 +10382,7 @@ void   PlayPong(){  // called 100 times per second
             PlaySound(CLICKZERO);
         }
     }
-
-    if ((x <= (PONGX1 + PONGCLEAR)) && (x)) {
+    if ((x <= (PONGX1 + PONGCLEAR)) && (x)) {// scored on the left
         if ((y < GOALBOT-2) && (y > GOALTOP+2)){
             ++LeftScore;
             x = PONGX1;
@@ -10399,7 +10397,6 @@ void   PlayPong(){  // called 100 times per second
                 SendValue(n0, RightScore);
                 SendValue(n1, LeftScore);
             }
-          
             DelayWithDog(500);
             x      = -STARTX;
             y      = -STARTY;
