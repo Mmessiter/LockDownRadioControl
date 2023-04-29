@@ -17,9 +17,10 @@ var searchData=
   ['retrycount_14',['RETRYCOUNT',['../Definitions_8h.html#a0cf4668725c06b3a6d64a2895c906379',1,'Definitions.h']]],
   ['retrywait_15',['RETRYWAIT',['../Definitions_8h.html#aadc879b4b6396135d31e22c22955a753',1,'Definitions.h']]],
   ['reverseview_16',['REVERSEVIEW',['../Definitions_8h.html#a3bedd97d2e81444eda8c2d43050b88c9',1,'Definitions.h']]],
-  ['rxsetupview_17',['RXSETUPVIEW',['../Definitions_8h.html#a780837bb310f271084ffc0720d6be13b',1,'Definitions.h']]],
-  ['rxsetupview1_18',['RXSETUPVIEW1',['../Definitions_8h.html#aaf6268b3ed41c0e18d11de29157837b8',1,'Definitions.h']]],
-  ['rxversion_5fmajor_19',['RXVERSION_MAJOR',['../common_8h.html#a2b147d5155fcf962e9f1c4885b32c67d',1,'common.h']]],
-  ['rxversion_5fminimus_20',['RXVERSION_MINIMUS',['../common_8h.html#a46d5105ccf92f7e44b10af6fd51772a8',1,'common.h']]],
-  ['rxversion_5fminor_21',['RXVERSION_MINOR',['../common_8h.html#adeb76229aa4087c3bc1e1fd17bd865b2',1,'common.h']]]
+  ['rightpaddlex_17',['RIGHTPADDLEX',['../TransmitterCode_2src_2main_8cpp.html#ac486479fd9b023454968dd48a4ebefa4',1,'main.cpp']]],
+  ['rxsetupview_18',['RXSETUPVIEW',['../Definitions_8h.html#a780837bb310f271084ffc0720d6be13b',1,'Definitions.h']]],
+  ['rxsetupview1_19',['RXSETUPVIEW1',['../Definitions_8h.html#aaf6268b3ed41c0e18d11de29157837b8',1,'Definitions.h']]],
+  ['rxversion_5fmajor_20',['RXVERSION_MAJOR',['../common_8h.html#a2b147d5155fcf962e9f1c4885b32c67d',1,'common.h']]],
+  ['rxversion_5fminimus_21',['RXVERSION_MINIMUS',['../common_8h.html#a46d5105ccf92f7e44b10af6fd51772a8',1,'common.h']]],
+  ['rxversion_5fminor_22',['RXVERSION_MINOR',['../common_8h.html#adeb76229aa4087c3bc1e1fd17bd865b2',1,'common.h']]]
 ];
