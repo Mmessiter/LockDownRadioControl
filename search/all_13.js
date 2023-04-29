@@ -99,7 +99,7 @@ var searchData=
   ['retrywait_96',['RETRYWAIT',['../Definitions_8h.html#aadc879b4b6396135d31e22c22955a753',1,'Definitions.h']]],
   ['reversedchannelbits_97',['ReversedChannelBITS',['../TransmitterCode_2src_2main_8cpp.html#ab67a250be0b26224543450b96a5f11bf',1,'main.cpp']]],
   ['reverseview_98',['REVERSEVIEW',['../Definitions_8h.html#a3bedd97d2e81444eda8c2d43050b88c9',1,'Definitions.h']]],
-  ['rightpaddlex_99',['RIGHTPADDLEX',['../TransmitterCode_2src_2main_8cpp.html#ac486479fd9b023454968dd48a4ebefa4',1,'main.cpp']]],
+  ['rightpaddlex_99',['RIGHTPADDLEX',['../Definitions_8h.html#ac486479fd9b023454968dd48a4ebefa4',1,'Definitions.h']]],
   ['roll_5fdes_100',['roll_des',['../Quadcopter_2src_2main_8cpp.html#a78e28c63c59f8225a3ca8325752bb36d',1,'main.cpp']]],
   ['roll_5fdes_5fprev_101',['roll_des_prev',['../Quadcopter_2src_2main_8cpp.html#aba668cad36498485e518f89d02869bad',1,'main.cpp']]],
   ['roll_5fimu_102',['roll_IMU',['../Quadcopter_2src_2main_8cpp.html#a6eb0038d717befb2a856c2a3ab5c5cd9',1,'main.cpp']]],

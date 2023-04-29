@@ -26,7 +26,7 @@ var searchData=
   ['ledison_23',['LedIsOn',['../ReceiverCode_2src_2main_8cpp.html#a3ca00afe3d594df8b2a34589b39b0c03',1,'main.cpp']]],
   ['ledwasgreen_24',['LedWasGreen',['../TransmitterCode_2src_2main_8cpp.html#abe57ee67b36530a7bde7680e5b6e40f8',1,'main.cpp']]],
   ['ledwasred_25',['LedWasRed',['../TransmitterCode_2src_2main_8cpp.html#ade7869bef39ac7f65c47c558c7efd4fc',1,'main.cpp']]],
-  ['leftpaddlex_26',['LEFTPADDLEX',['../TransmitterCode_2src_2main_8cpp.html#a659e285f28c4f0f4c9d71e32e38d7eb7',1,'main.cpp']]],
+  ['leftpaddlex_26',['LEFTPADDLEX',['../Definitions_8h.html#a659e285f28c4f0f4c9d71e32e38d7eb7',1,'Definitions.h']]],
   ['listen_5fperiod_27',['LISTEN_PERIOD',['../common_8h.html#a66ccb27c237c105f63ffa01c67d6eed9',1,'common.h']]],
   ['listentobanks_28',['ListenToBanks',['../TransmitterCode_2src_2main_8cpp.html#a8ac4e6b41e9a80988a21774ad9f3b3ee',1,'main.cpp']]],
   ['loadackpayload_29',['LoadAckPayload',['../radio_8h.html#a664f409561bfcf119e0379dd991217e5',1,'radio.h']]],

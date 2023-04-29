@@ -5,7 +5,7 @@ var searchData=
   ['launch_2',['LAUNCH',['../Definitions_8h.html#a2aa73b9b7fc317218fc6b888b6d88b71',1,'Definitions.h']]],
   ['led_5fpin_3',['LED_PIN',['../common_8h.html#ab4553be4db9860d940f81d7447173b2f',1,'common.h']]],
   ['led_5fred_4',['LED_RED',['../common_8h.html#a31e20330f8ce94e0dd10b005a15c5898',1,'common.h']]],
-  ['leftpaddlex_5',['LEFTPADDLEX',['../TransmitterCode_2src_2main_8cpp.html#a659e285f28c4f0f4c9d71e32e38d7eb7',1,'main.cpp']]],
+  ['leftpaddlex_5',['LEFTPADDLEX',['../Definitions_8h.html#a659e285f28c4f0f4c9d71e32e38d7eb7',1,'Definitions.h']]],
   ['listen_5fperiod_6',['LISTEN_PERIOD',['../common_8h.html#a66ccb27c237c105f63ffa01c67d6eed9',1,'common.h']]],
   ['logview_7',['LOGVIEW',['../Definitions_8h.html#ab5b352492259f7b453a051455d5dca50',1,'Definitions.h']]],
   ['lostcontactcutoff_8',['LOSTCONTACTCUTOFF',['../Definitions_8h.html#ac5b4f54697bc5a8d58ef0c92c094c6b6',1,'Definitions.h']]],
