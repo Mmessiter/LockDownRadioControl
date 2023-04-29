@@ -10265,8 +10265,8 @@ void DoScanEnd()
 #define PONGY2          420         // BOX dimentions
 #define PONGGOALSIZE    150         // Size of goal
 #define PONGBALLSIZE    7           // Size of ball
-#define PONGSPEED       8           // Frame rate
-#define PONGBALLSPEED   3           // Ball movement per frame 
+#define PONGSPEED       10           // Frame rate
+#define PONGBALLSPEED   4           // Ball movement per frame 
 #define PONGCLEAR (PONGBALLSPEED+PONGBALLSIZE)+4  // ball clearance from box when bouncing
 #define GOALTOP (PONGY1 + ((PONGY2 - PONGY1) / 2)) - (PONGGOALSIZE / 2)
 #define GOALBOT (PONGY1 + ((PONGY2 - PONGY1) / 2)) + (PONGGOALSIZE / 2)
@@ -10364,12 +10364,16 @@ void   PlayPong(){  // called 100 times per second
     }
     if ((y + PONGCLEAR) >= PONGY2) {
         incy = -incy;
+        if (incy == 0) incy =  -PONGBALLSPEED;
         PlaySound(CLICKZERO);
+        ScreenTimeTimer = millis();
         StartInactvityTimeout();
     }
     if (y <= (PONGY1 + PONGCLEAR)) {
         incy = -incy;
+         if (incy == 0) incy =  PONGBALLSPEED;
         PlaySound(CLICKZERO);
+        ScreenTimeTimer = millis();
         StartInactvityTimeout();
     }
     if (((x + PONGCLEAR) >= PONGX2) && (x)){
@@ -10383,9 +10387,9 @@ void   PlayPong(){  // called 100 times per second
             x      = -STARTX;
             y      = -STARTY;
             randomSeed(micros());
-            incx   = 2 - random(4);
-            incy   = 2 - random(4);
-            while (incx == 0) incx = 2 - random(4);
+            incx = -PONGBALLSPEED;
+            incy = 3 - random(6);
+            while (incx == 0) incx = PONGBALLSPEED - random(PONGBALLSPEED*2);
         }
         else {
             incx = -incx;
@@ -10404,8 +10408,8 @@ void   PlayPong(){  // called 100 times per second
             x      = -STARTX;
             y      = -STARTY;
             randomSeed(micros());
-            incx   = 2 - random(4);
-            incy   = 2 - random(4);
+            incx = PONGBALLSPEED;
+            incy = PONGBALLSPEED - random(PONGBALLSPEED*2);
             while (incx == 0) incx = 2 - random(4);
         }else{
             incx = -incx;
