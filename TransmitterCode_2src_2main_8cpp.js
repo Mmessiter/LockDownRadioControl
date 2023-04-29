@@ -8,6 +8,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "BOXSIZE", "TransmitterCode_2src_2main_8cpp.html#a4f84c7cd953e90b218a9baa12f6e5e35", null ],
     [ "BOXTOP", "TransmitterCode_2src_2main_8cpp.html#a77283adcfca9bc9bcf9fa2e476f220ab", null ],
     [ "BUFFERSIZE", "TransmitterCode_2src_2main_8cpp.html#ac3146f1e9227301bb4aa518f4d336cee", null ],
+    [ "EXTRAPONG", "TransmitterCode_2src_2main_8cpp.html#a36f8bd51861e67da0f91c9d70340d665", null ],
     [ "FILECHANNEL", "TransmitterCode_2src_2main_8cpp.html#a25a02fd19ba6092af59f73a9de071bd2", null ],
     [ "FILEDATARATE", "TransmitterCode_2src_2main_8cpp.html#a632cdd81885fffa95960e573cc6b42b3", null ],
     [ "FILEPALEVEL", "TransmitterCode_2src_2main_8cpp.html#af4896f4ff6b440a66c915e3f891c71d2", null ],
