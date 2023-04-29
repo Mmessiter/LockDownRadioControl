@@ -10259,55 +10259,68 @@ void DoScanEnd()
 
 /*********************************************************************************************************************************/
 
-#define PONGX1  20  // X,Y BOX dimentions
-#define PONGX2  790
-#define PONGY1  50
-#define PONGY2  420
-#define PONGGOALSIZE 120  // size of goal
-#define PONGBALLSIZE 7    // size of ball
-#define PONGSPEED 10      // frame rate
-#define PONGBALLSPEED 3   // ball movement per frame 
-#define PONGCLEAR (PONGBALLSPEED+PONGBALLSIZE)// ball clearance from box
+#define PONGX1          20          // BOX dimentions
+#define PONGX2          790         // BOX dimentions
+#define PONGY1          50          // BOX dimentions
+#define PONGY2          420         // BOX dimentions
+#define PONGGOALSIZE    120         // Size of goal
+#define PONGBALLSIZE    7           // Size of ball
+#define PONGSPEED       8           // Frame rate
+#define PONGBALLSPEED   2           // Ball movement per frame 
+#define PONGCLEAR (PONGBALLSPEED+PONGBALLSIZE)  // ball clearance from box when bouncing
 #define GOALTOP (PONGY1 + ((PONGY2 - PONGY1) / 2)) - (PONGGOALSIZE / 2)
 #define GOALBOT (PONGY1 + ((PONGY2 - PONGY1) / 2)) + (PONGGOALSIZE / 2)
-#define STARTX PONGX1+((PONGX2-PONGX1)/2)
+#define STARTX PONGX1+((PONGX2-PONGX1)/2)  // start position of ball
 #define STARTY PONGY1+((PONGY2-PONGY1)/2)
+#define PADDLEHEIGHT 60
+#define PADDLEGAP    40
+#define LEFTPADDLEX PONGX1 + PADDLEGAP
+#define RIGHTPADDLEX PONGX2 - PADDLEGAP
+
+
+
 
 /*********************************************************************************************************************************/
-
 void StartPong(){
-
-
     char page_PongView[] = "page PongView"; // heer
-
-
     SendCommand(page_PongView);
     CurrentView = PONGVIEW;
     CurrentMode = PONGMODE;
     BlueLedOn();
-
-    DrawBox  (PONGX1, PONGY1, PONGX2, PONGY2, ForeGroundColour);
-    DrawLine (PONGX1, GOALTOP, PONGX1, GOALBOT, BackGroundColour);
-    DrawLine (PONGX2, GOALTOP, PONGX2, GOALBOT, BackGroundColour);
+    DrawBox  (PONGX1, PONGY1, PONGX2, PONGY2,   ForeGroundColour);   // Draw court
+    DrawLine (PONGX1, GOALTOP, PONGX1, GOALBOT, BackGroundColour);   // Make goal openings
+    DrawLine (PONGX2, GOALTOP, PONGX2, GOALBOT, BackGroundColour);   // Make goal openings
 }
-
+/*********************************************************************************************************************************/
 void MoveBall(int x, int y){
-
     static int lastx = 0;
     static int lasty = 0;
-
-    DrawDot(lastx, lasty, PONGBALLSIZE+1, BackGroundColour);
-    DrawDot(x, y, PONGBALLSIZE, HighlightColour);
-    lastx = x;
-    lasty = y;
+    DrawDot(lastx, lasty, PONGBALLSIZE+1, BackGroundColour); // Clear last position
+    DrawDot(x, y, PONGBALLSIZE, HighlightColour);            // Draw new position
+    lastx = x;                                               // save last position
+    lasty = y;                                               // save last position
 }
-
+/*********************************************************************************************************************************/
+//FASTRUN void DrawBox(int x1, int y1, int x2, int y2, int c)
+void MoveLeftPaddle(int y){
+    DrawLine(LEFTPADDLEX, PONGY1+3, LEFTPADDLEX, PONGY2-3, BackGroundColour);
+    DrawLine(LEFTPADDLEX, y - (PADDLEHEIGHT/2), LEFTPADDLEX , y + (PADDLEHEIGHT/2), ForeGroundColour);
+}
+/*********************************************************************************************************************************/
+void MoveRightPaddle(int y){
+    DrawLine(RIGHTPADDLEX, PONGY1+3, RIGHTPADDLEX, PONGY2-3, BackGroundColour);
+    DrawLine(RIGHTPADDLEX, y - (PADDLEHEIGHT/2), RIGHTPADDLEX , y + (PADDLEHEIGHT/2), ForeGroundColour);
+}
 /*********************************************************************************************************************************/
 
 void   PlayPong(){  // called 100 times per second
     static uint32_t Ponged = 0;
     static int      x      = STARTX;
     static int      y      = STARTY;
+    static int      LeftPaddlY   = STARTY;
+    static int      RightPaddlY  = STARTY;
+    static int      OLDLeftPaddlY   = STARTY;
+    static int      OLDRightPaddlY  = STARTY;
     static int incy        = PONGBALLSPEED;
     static int incx        = PONGBALLSPEED;
     static int LeftScore   = 0;
@@ -10317,11 +10330,36 @@ void   PlayPong(){  // called 100 times per second
 
     if ((millis() - Ponged) < PONGSPEED) return;
     Ponged = millis();
-    Serial.println(map(PreMixBuffer[2],MINMICROS,MAXMICROS,0, 100));
-    NewCompressNeeded = false;
-  
+
     y += incy;
     x += incx;
+  
+    LeftPaddlY=(map(PreMixBuffer[1],MINMICROS,MAXMICROS,PONGY2,PONGY1));
+    RightPaddlY=(map(PreMixBuffer[2],MINMICROS,MAXMICROS,PONGY1,PONGY2));
+    if (RightPaddlY != OLDRightPaddlY) MoveRightPaddle(RightPaddlY);
+    if (OLDLeftPaddlY != LeftPaddlY) MoveLeftPaddle(LeftPaddlY);
+    OLDLeftPaddlY = LeftPaddlY;
+    OLDRightPaddlY = RightPaddlY;
+
+
+
+    if ((x <= LEFTPADDLEX + PONGCLEAR) && (x >= LEFTPADDLEX-PONGCLEAR)){
+         if ((y >= (LeftPaddlY-(PADDLEHEIGHT/2))) && (y <= (LeftPaddlY+(PADDLEHEIGHT/2)))){
+             incx = -incx;
+            PlaySound(BEEPMIDDLE);
+         }
+    }
+    
+
+
+
+    if ((x <= RIGHTPADDLEX + PONGCLEAR) && (x >= RIGHTPADDLEX-PONGCLEAR)){
+         if ((y >= (RightPaddlY-(PADDLEHEIGHT/2))) && (y <= (RightPaddlY+(PADDLEHEIGHT/2)))){
+             incx = -incx;
+            PlaySound(BEEPMIDDLE);
+         }
+    }
+
 
     if ((y + PONGCLEAR) >= PONGY2) {
         incy = -incy;
@@ -10331,6 +10369,10 @@ void   PlayPong(){  // called 100 times per second
         incy = -incy;
         PlaySound(CLICKZERO);
     }
+
+
+
+
 
     if (((x + PONGCLEAR) >= PONGX2) && (x)){
         if ((y < GOALBOT-2) && (y > GOALTOP+2)){
@@ -10351,7 +10393,6 @@ void   PlayPong(){  // called 100 times per second
 
     if ((x <= (PONGX1 + PONGCLEAR)) && (x)) {
         if ((y < GOALBOT-2) && (y > GOALTOP+2)){
-        
             ++LeftScore;
             x = PONGX1;
             MoveBall(x,y);
@@ -10366,7 +10407,8 @@ void   PlayPong(){  // called 100 times per second
         }
     }
 
-    MoveBall(x,y);
+    MoveBall(x,y); 
+    NewCompressNeeded = false;
 }
 
 /****************************************************************************************************************/
