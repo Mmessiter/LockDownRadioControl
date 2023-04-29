@@ -81,7 +81,7 @@ var NAVTREEINDEX =
 "MPU6050__6Axis__MotionApps__V6__12_8h.html#a515a845ea5139d8cf1c7f09ad6dad243",
 "Quadcopter_2src_2main_8cpp.html#ac3fef4926a251b91d04b92a74a70cf98",
 "TransmitterCode_2src_2main_8cpp.html#a01ddd63e9f328dd117ee13b789852868",
-"TransmitterCode_2src_2main_8cpp.html#a648c27b8c8c314b32a3e2f1c11601e91",
+"TransmitterCode_2src_2main_8cpp.html#a6506bf72e0dd9e9ce480156b47625bff",
 "TransmitterCode_2src_2main_8cpp.html#abead2677dc553c693bcf9bf0c54c0c81",
 "classMPU6050.html#a34a1def575f6abcd464afe954de8a461",
 "classMPU9250.html#a2530fe0e8fe51998d89088e298eb7465",

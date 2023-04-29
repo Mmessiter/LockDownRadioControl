@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['gapbot_0',['GAPBOT',['../TransmitterCode_2src_2main_8cpp.html#a33837384988f4402dfe9893dd36c02be',1,'main.cpp']]],
-  ['gaptop_1',['GAPTOP',['../TransmitterCode_2src_2main_8cpp.html#a15aa591e2de365443a2876791dc99f06',1,'main.cpp']]],
+  ['goalbot_0',['GOALBOT',['../TransmitterCode_2src_2main_8cpp.html#a88274c98f9ba63042b35afbd7076b306',1,'main.cpp']]],
+  ['goaltop_1',['GOALTOP',['../TransmitterCode_2src_2main_8cpp.html#a46603c2a51d5a3cf0bbeffe6806d01d8',1,'main.cpp']]],
   ['gpsbaudrate_2',['GPSBAUDRATE',['../SensorHubT32_2src_2main_8cpp.html#a372295c11945751efdddfd98372e4aa7',1,'main.cpp']]],
   ['gpsdevice_3',['GPSDEVICE',['../SensorHubT32_2src_2main_8cpp.html#ac5dd8c90defc2c0d78e99d2d5c1a0fd1',1,'main.cpp']]],
   ['gpsi2cbytes_4',['GPSI2CBYTES',['../ReceiverCode_2src_2main_8cpp.html#ab92133bc8cbae639e681505e0679bc28',1,'GPSI2CBYTES():&#160;main.cpp'],['../SensorHubT32_2src_2main_8cpp.html#ab92133bc8cbae639e681505e0679bc28',1,'GPSI2CBYTES():&#160;main.cpp']]],

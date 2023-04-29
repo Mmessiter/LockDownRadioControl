@@ -31,7 +31,7 @@ var searchData=
   ['pongballsize_28',['PONGBALLSIZE',['../TransmitterCode_2src_2main_8cpp.html#a6a999268e2ca267f555f9d7c7ac4709d',1,'main.cpp']]],
   ['pongballspeed_29',['PONGBALLSPEED',['../TransmitterCode_2src_2main_8cpp.html#a2964f2d96ad9ad297a4ee34f51a59392',1,'main.cpp']]],
   ['pongclear_30',['PONGCLEAR',['../TransmitterCode_2src_2main_8cpp.html#a41e52d0d4629f7cf3034686c58fc4396',1,'main.cpp']]],
-  ['ponggap_31',['PONGGAP',['../TransmitterCode_2src_2main_8cpp.html#a3f287a6805dcd24fed2f6be4a3c4a1b3',1,'main.cpp']]],
+  ['ponggoalsize_31',['PONGGOALSIZE',['../TransmitterCode_2src_2main_8cpp.html#a5d2713642bb07f65757924506616c8e9',1,'main.cpp']]],
   ['pongmode_32',['PONGMODE',['../Definitions_8h.html#a94eefdd9d3bca90ade5352c71aadc82d',1,'Definitions.h']]],
   ['pongspeed_33',['PONGSPEED',['../TransmitterCode_2src_2main_8cpp.html#aa319e9ef2fe452af829a9f554e3e1909',1,'main.cpp']]],
   ['pongview_34',['PONGVIEW',['../Definitions_8h.html#a67c9ddae1f6ba98f6c002fe4285bd5d3',1,'Definitions.h']]],
