@@ -7321,8 +7321,10 @@ void ModelUnmatch(){
         GetConfirmation(page_RXSetupView, NotDone);
     }
 }
+/******************************************************************************************************************************/
+
 // ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
-#define LASTFUNCTION 69 // One more than final one, because first is number zero
+#define LASTFUNCTION 70 // One more than final one, because first is number zero
 
 void (*NumberedFunctions[LASTFUNCTION])() {
     Blank,                // 0 
@@ -7393,7 +7395,8 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     ReceiveModelFile,           // 65
     TXModuleViewStart,          // 66
     TXModuleViewEnd,            // 67
-    ModelUnmatch                // 68
+    ModelUnmatch,               // 68
+    StartPong                   // 69
 
 }; // list will become much longer ...
 // **********************************************************************************************************************************
@@ -9331,6 +9334,7 @@ void GotoFrontView(){
           }
           SendCommand(page_FrontView);
           CurrentView = FRONTVIEW;
+          CurrentMode = NORMAL;
           UpdateModelsNameEveryWhere();
           SafetyWasOn ^= 1;                     // this forces a re-display of safety state
           ShowBank();
@@ -9773,17 +9777,19 @@ FASTRUN void loop()
 {
     ManageTransmitter();                       // Do the needed chores ... (if there's time)
     GetNewChannelValues();                     // Load SendBuffer with new servo positions very frequently
-    if (UseMacros) ExecuteMacro();             // Modify it if macro is running
-
-    if (BuddyPupilOnPPM) { 
-        NewCompressNeeded = false;             // Fake it as Buddy does not send compressed data
-        ShowServoPos(); 
-    } else {                                   // Skip these next lines when buddying as a slave
-        GetBuddyData();                        // Only if master
-        FixMotorChannel();                     // Maybe force it low BEFORE Binding data is added
-        ShowServoPos();                        // Show servo positions to user
-        SendBindingPipe();                     // Only if not bound yet - overwrite low throttle setting
-    }
+   if (CurrentMode < 3){
+        if (UseMacros) ExecuteMacro();             // Modify it if macro is running
+        if (BuddyPupilOnPPM) { 
+            NewCompressNeeded = false;             // Fake it as Buddy does not send compressed data
+            ShowServoPos(); 
+        } else {                                   // Skip these next lines when buddying as a slave
+            GetBuddyData();                        // Only if master
+            FixMotorChannel();                     // Maybe force it low BEFORE Binding data is added
+            ShowServoPos();                        // Show servo positions to user
+            SendBindingPipe();                     // Only if not bound yet - overwrite low throttle setting
+        }
+   }
+  
     switch (CurrentMode) {
         case NORMAL:                           // 0
 #ifdef TXMODULESUPPORT
@@ -9807,6 +9813,9 @@ FASTRUN void loop()
             ScanAllChannels(false);
             break;
         case SENDNOTHING:       // 4
+            break;
+        case PONGMODE:          // 5
+            PlayPong();
             break;
         default:
             break;              // CurrentMode >= 4 for no action at all.
@@ -10247,4 +10256,117 @@ void DoScanEnd()
     Radio1.openWritingPipe(DefaultPipe);
     CurrentMode = NORMAL;
 }
+
 /*********************************************************************************************************************************/
+
+#define PONGX1  20
+#define PONGX2  790
+#define PONGY1  50
+#define PONGY2  420
+#define PONGGAP 120
+#define PONGBALLSIZE 7
+#define PONGSPEED 10
+#define PONGBALLSPEED 3
+#define PONGCLEAR (PONGBALLSPEED+PONGBALLSIZE)
+#define GAPTOP (PONGY1 + ((PONGY2 - PONGY1) / 2)) - (PONGGAP / 2)
+#define GAPBOT (PONGY1 + ((PONGY2 - PONGY1) / 2)) + (PONGGAP / 2)
+#define STARTX PONGX1+((PONGX2-PONGX1)/2)
+#define STARTY PONGY1+((PONGY2-PONGY1)/2)
+
+/*********************************************************************************************************************************/
+
+void StartPong(){
+
+
+    char page_PongView[] = "page PongView"; // heer
+
+
+    SendCommand(page_PongView);
+    CurrentView = PONGVIEW;
+    CurrentMode = PONGMODE;
+    BlueLedOn();
+
+    DrawBox  (PONGX1, PONGY1, PONGX2, PONGY2, ForeGroundColour);
+    DrawLine (PONGX1, GAPTOP, PONGX1, GAPBOT, BackGroundColour);
+    DrawLine (PONGX2, GAPTOP, PONGX2, GAPBOT, BackGroundColour);
+}
+
+void MoveBall(int x, int y){
+
+    static int lastx = 0;
+    static int lasty = 0;
+
+    DrawDot(lastx, lasty, PONGBALLSIZE+1, BackGroundColour);
+    DrawDot(x, y, PONGBALLSIZE, HighlightColour);
+    lastx = x;
+    lasty = y;
+}
+
+/*********************************************************************************************************************************/
+
+void   PlayPong(){  // called 100 times per second
+    static uint32_t Ponged = 0;
+    static int      x      = STARTX;
+    static int      y      = STARTY;
+    static int incy        = PONGBALLSPEED;
+    static int incx        = PONGBALLSPEED;
+    static int LeftScore   = 0;
+    static int RightScore  = 0;
+    char   n0[]            = "n0";
+    char   n1[]            = "n1";
+
+    if ((millis() - Ponged) < PONGSPEED) return;
+    Ponged = millis();
+    Serial.println(map(PreMixBuffer[2],MINMICROS,MAXMICROS,0, 100));
+    NewCompressNeeded = false;
+  
+    y += incy;
+    x += incx;
+
+    if ((y + PONGCLEAR) >= PONGY2) {
+        incy = -incy;
+        PlaySound(CLICKZERO);
+    }
+    if (y <= (PONGY1 + PONGCLEAR)) {
+        incy = -incy;
+        PlaySound(CLICKZERO);
+    }
+
+    if (((x + PONGCLEAR) >= PONGX2) && (x)){
+        if ((y < GAPBOT-2) && (y > GAPTOP+2)){
+            ++RightScore;
+            SendValue(n0, RightScore);
+            x = PONGX2;
+            MoveBall(x,y);
+            PlaySound(BEEPCOMPLETE);
+            DelayWithDog(500);
+            x      = -STARTX;
+            y      = -STARTY;
+        }
+        else {
+            incx = -incx;
+              PlaySound(CLICKZERO);
+        }
+    }
+
+    if ((x <= (PONGX1 + PONGCLEAR)) && (x)) {
+        if ((y < GAPBOT-2) && (y > GAPTOP+2)){
+        
+            ++LeftScore;
+            x = PONGX1;
+            MoveBall(x,y);
+            PlaySound(BEEPCOMPLETE);
+            SendValue(n1, LeftScore);
+            DelayWithDog(500);
+            x      = -STARTX;
+            y      = -STARTY;
+        }else{
+            incx = -incx;
+            PlaySound(CLICKZERO);
+        }
+    }
+
+    MoveBall(x,y);
+}
+
+/****************************************************************************************************************/

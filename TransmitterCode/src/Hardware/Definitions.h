@@ -116,6 +116,7 @@
 #define CENTRESTICKS    2 // Calibrate Centres (SEND NO DATA)
 #define SCANWAVEBAND    3 // Scan waveband (SEND NO DATA)
 #define SENDNOTHING     4 // Transmission off (SEND NO DATA)
+#define PONGMODE        5 // Play Pong
 
 // **************************************************************************
 //                               Colours                                    *
@@ -189,6 +190,8 @@
 #define RENAMEMODELVIEW 34
 #define FILEEXCHANGEVIEW 35
 #define TXMODULEVIEW    36
+#define PONGVIEW        37
+
 
 // **************************************************************************
 //                          Switches' GPIOs                                 *
@@ -494,5 +497,8 @@ void         GetReturnCode();
 void         SelectChannelOrder();
 void         DelayWithDog(uint32_t HowLong);
 void         SaveTransmitterParameters();
+void         PlayPong();
+void         Look(int p);
+void         StartPong();
 /*********************************************************************************************************************************/
 #endif
