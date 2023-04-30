@@ -420,7 +420,7 @@
 #define PADDLEGAP    40
 #define LEFTPADDLEX PONGX1 + PADDLEGAP
 #define RIGHTPADDLEX PONGX2 - PADDLEGAP
-#define EXTRAPONG    42
+#define EXTRAPONG    40
 
 // **************************************************************************
 //                            Function Prototypes                           *
