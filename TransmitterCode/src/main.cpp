@@ -10377,8 +10377,8 @@ void   PlayPong(){  // called 100 times per second
             x      = -STARTX;
             y      = -STARTY;
             randomSeed(micros());
-            incx = -PONGBALLSPEED;
-            incy = PONGBALLSPEED - random(PONGBALLSPEED*2);
+            incx = -PONGBALLSPEED + random(PONGBALLSPEED*2);
+            incy =  PONGBALLSPEED - random(PONGBALLSPEED*2);
             while (incx == 0) incx = PONGBALLSPEED - random(PONGBALLSPEED*2);
         }
         else {
@@ -10405,7 +10405,7 @@ void   PlayPong(){  // called 100 times per second
             x      = -STARTX;
             y      = -STARTY;
             randomSeed(micros());
-            incx = PONGBALLSPEED;
+            incx = PONGBALLSPEED - random(PONGBALLSPEED*2);;
             incy = PONGBALLSPEED - random(PONGBALLSPEED*2);
             while (incx == 0) incx = PONGBALLSPEED - random(PONGBALLSPEED*2);
         }else{
