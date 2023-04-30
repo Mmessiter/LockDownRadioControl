@@ -10328,7 +10328,7 @@ void   PlayPong(){  // called 100 times per second
          if ((y >= (LeftPaddlY-(PADDLEHEIGHT/2))) && (y <= (LeftPaddlY+(PADDLEHEIGHT/2)))){
              incx = -incx;
              randomSeed(micros());
-             incy = 4 - random(8);
+             incy = PONGBALLSPEED - random(PONGBALLSPEED);
              PlaySound(BEEPMIDDLE);
          }
     }
@@ -10336,7 +10336,7 @@ void   PlayPong(){  // called 100 times per second
          if ((y >= (RightPaddlY-(PADDLEHEIGHT/2))) && (y <= (RightPaddlY+(PADDLEHEIGHT/2)))){
              incx = -incx;
              randomSeed(micros());
-             incy = 4 - random(8);
+             incy = PONGBALLSPEED - random(PONGBALLSPEED*2);
              PlaySound(BEEPMIDDLE);
          }
     }
@@ -10358,7 +10358,7 @@ void   PlayPong(){  // called 100 times per second
         if ((y < GOALBOT-2) && (y > GOALTOP+2)){ // scored on the right
             ++RightScore;
             SendValue(n0, RightScore);
-            if (RightScore>=10){
+            if (RightScore >= 10){
                 PlaySound(THEFANFARE);
                 DelayWithDog(6000);
                 RightScore = 0;
@@ -10374,7 +10374,7 @@ void   PlayPong(){  // called 100 times per second
             y      = -STARTY;
             randomSeed(micros());
             incx = -PONGBALLSPEED;
-            incy = 3 - random(6);
+            incy = PONGBALLSPEED - random(PONGBALLSPEED*2);
             while (incx == 0) incx = PONGBALLSPEED - random(PONGBALLSPEED*2);
         }
         else {
@@ -10389,7 +10389,7 @@ void   PlayPong(){  // called 100 times per second
             MoveBall(x,y);
             PlaySound(BEEPCOMPLETE);
             SendValue(n1, LeftScore);
-            if (LeftScore>=10){
+            if (LeftScore >= 10){
                 PlaySound(THEFANFARE);
                 DelayWithDog(6000);
                 RightScore = 0;
