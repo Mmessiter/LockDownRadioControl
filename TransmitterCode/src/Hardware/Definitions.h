@@ -416,7 +416,6 @@
 #define GOALBOT (PONGY1 + ((PONGY2 - PONGY1) / 2)) + (PONGGOALSIZE / 2)
 #define STARTX PONGX1+((PONGX2-PONGX1)/2)  // start position of ball
 #define STARTY PONGY1+((PONGY2-PONGY1)/2)+ 90
-#define PADDLEHEIGHT 50 // 60?
 #define PADDLEHEIGHT 60 
 #define PADDLEGAP    40
 #define LEFTPADDLEX PONGX1 + PADDLEGAP
