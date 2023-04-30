@@ -116,6 +116,7 @@
 #define CENTRESTICKS    2 // Calibrate Centres (SEND NO DATA)
 #define SCANWAVEBAND    3 // Scan waveband (SEND NO DATA)
 #define SENDNOTHING     4 // Transmission off (SEND NO DATA)
+#define PONGMODE        5 // Play Pong
 
 // **************************************************************************
 //                               Colours                                    *
@@ -189,6 +190,8 @@
 #define RENAMEMODELVIEW 34
 #define FILEEXCHANGEVIEW 35
 #define TXMODULEVIEW    36
+#define PONGVIEW        37
+
 
 // **************************************************************************
 //                          Switches' GPIOs                                 *
@@ -396,6 +399,28 @@
 #define KICKRATE        1000 // Kick interval (must be between WATCHDOGMAXRATE and WATCHDOGTIMEOUT)
 #define WATCHDOGMAXRATE 250  // 250 ms secs between kicks is max rate allowed
 
+//***************************************************************************
+//                                     PONG                                 *
+//***************************************************************************
+
+#define PONGX1          20          // BOX dimentions
+#define PONGX2          790         // BOX dimentions
+#define PONGY1          50          // BOX dimentions
+#define PONGY2          410         // BOX dimentions
+#define PONGGOALSIZE    360 // 180 ?        // Size of goal
+#define PONGBALLSIZE    7           // Size of ball
+#define PONGSPEED       10          // Frame rate
+#define PONGBALLSPEED   4           // Ball movement per frame 
+#define PONGCLEAR (PONGBALLSPEED+PONGBALLSIZE)+4  // ball clearance from box when bouncing
+#define GOALTOP (PONGY1 + ((PONGY2 - PONGY1) / 2)) - (PONGGOALSIZE / 2)
+#define GOALBOT (PONGY1 + ((PONGY2 - PONGY1) / 2)) + (PONGGOALSIZE / 2)
+#define STARTX PONGX1+((PONGX2-PONGX1)/2)  // start position of ball
+#define STARTY PONGY1+((PONGY2-PONGY1)/2)+ 90
+#define PADDLEHEIGHT 50 // 60?
+#define PADDLEGAP    40
+#define LEFTPADDLEX PONGX1 + PADDLEGAP
+#define RIGHTPADDLEX PONGX2 - PADDLEGAP
+#define EXTRAPONG    42
 
 // **************************************************************************
 //                            Function Prototypes                           *
@@ -487,12 +512,15 @@ void         StartModelSetup();
 bool         GetConfirmation(char* goback, char* Prompt);
 void         GotoModelsView();
 void         SaveCurrentModel();
-void         CheckModelName();
+bool         CheckModelName();
 void         EndTrimView();
 int          AnalogueReed(uint8_t InputChannel);
 void         GetReturnCode();
 void         SelectChannelOrder();
 void         DelayWithDog(uint32_t HowLong);
 void         SaveTransmitterParameters();
+void         PlayPong();
+void         Look(int p);
+void         StartPong();
 /*********************************************************************************************************************************/
 #endif

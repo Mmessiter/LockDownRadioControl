@@ -1,5 +1,5 @@
 /** @file TransmitterCode/src/main.cpp
- * // Malcolm Messiter 2020 - 2023
+ * // Malcolm Messiter 2022
  *
  * @page TransmitterCode...
  * @section LockDown Radio Control Features list, so far:
@@ -146,7 +146,7 @@ uint32_t TrimTimer              = 0;
 uint16_t TrimRepeatSpeed        = 600;
 
 char     na[]                   = "";
-bool     NewModelMemoryWasSaved = false; 
+//bool     NewModelMemoryWasSaved = false; 
 
 uint8_t  StepSize[16] = {0,0,0,0,0,0,0,0,5,25,5,25,5,25,5,25};  //    How far to move each time on slow servos
 uint16_t CurrentPosition[UNCOMPRESSEDWORDS];                //    Position from which a slow servo started (0 = not started yet)
@@ -194,7 +194,8 @@ uint16_t BoxRight;
 uint16_t ClickX;
 uint16_t ClickY;
 uint8_t  SticksMode                    = 2;
-uint16_t AnalogueInput[PROPOCHANNELS]  = {A0, A1, A2, A3, A6, A7, A8, A9}; // 8 PROPO Channels for transmission   // fix order for mode 2 
+uint8_t  SavedSticksMode               = 2;
+uint16_t AnalogueInput[PROPOCHANNELS]  = {A0, A1, A2, A3, A6, A7, A8, A9};                                        // 8 PROPO Channels for transmission   // fix order for mode 2
 uint8_t  TrimNumber[8]                 = {TRIM1A, TRIM1B, TRIM2A, TRIM2B, TRIM3A, TRIM3B, TRIM4A, TRIM4B};        // These too can get swapped over later
 
 uint8_t  CurrentMode                  = NORMAL;
@@ -411,7 +412,7 @@ bool      LogFileOpen             = false;
 bool      ShowVPC                 = false;
 short int TxVoltageCorrection     = 0;
 short int RxVoltageCorrection     = 0;
-uint8_t   LEDBrightness           = DEFAULTLEDBRIGHTNESS;
+uint8_t   LEDBrightness           = DEFAULTLEDBRIGHTNESS; // needs only 8 bits really
 uint32_t  PowerOffTimer           = 0;
 bool      PowerWarningVisible     = false;
 uint8_t   TurnOffSecondToGo       = 2;
@@ -1839,8 +1840,6 @@ FASTRUN void ShowComms()
             snprintf(Vbuf, 9, "%X", TempModelId);
             if (TempModelId) SendText(IdReceived1,Vbuf);
            
-
-            // heer
         }
         if (CurrentView == GPSVIEW ) {
             if (GpsFix) { // if no fix, then leave display as before
@@ -2527,7 +2526,7 @@ if(!ModelsFileOpen){
 }
 /*********************************************************************************************************************************/
 
-void BuildCheckSum(int p_address, int p_value) 
+void BuildCheckSum(int p_address, short int p_value) 
 {
     if (!DoingCheckSm) FileCheckSum += (p_value *  (p_address+1));  // don't include checksum in its own calculation
 }
@@ -2563,7 +2562,7 @@ uint32_t SDRead32BITS(int p_address)
 }
 /*********************************************************************************************************************************/
 
-void SDUpdate16BITS(int p_address, int p_value)
+void SDUpdate16BITS(int p_address, short int p_value)
 {
     BuildCheckSum(p_address, p_value);
     ModelsFileNumber.seek(p_address);
@@ -2586,11 +2585,11 @@ void SDUpdate8BITS(int p_address, uint8_t p_value)
 
 /*********************************************************************************************************************************/
 
-int SDRead16BITS(int p_address)
+short int SDRead16BITS(int p_address)
 {
    
     ModelsFileNumber.seek(p_address);
-    int r = ModelsFileNumber.read();
+    short int r = ModelsFileNumber.read();
     r += ModelsFileNumber.read() << 8;
     BuildCheckSum(p_address, r);
     return r;
@@ -2873,8 +2872,8 @@ bool ReadOneModel(uint32_t Mnum)
     BuddyControlled = SDRead16BITS(SDCardAddress);
     ++SDCardAddress;
     ++SDCardAddress;
-
-    SDCardAddress += 1; // 1 Spare Bytes here (PID stuff gone) *****************************
+    SavedSticksMode = SDRead8BITS(SDCardAddress); // save sticks mode in case of rf transfer
+    ++ SDCardAddress;  // 0 Spare Bytes here  ***************************** 
 
     for (i = 0; i < CHANNELSUSED; ++i) {
         InPutStick[i] = SDRead8BITS(SDCardAddress);
@@ -3150,9 +3149,11 @@ bool LoadAllParameters()
         PowerOffWarningSeconds = SDRead8BITS(SDCardAddress);
         PowerOffWarningSeconds = CheckRange(PowerOffWarningSeconds, 1, 30);
         ++SDCardAddress;
-        LEDBrightness = SDRead16BITS(SDCardAddress);
+        LEDBrightness = SDRead8BITS(SDCardAddress);
         LEDBrightness = CheckRange(LEDBrightness, 1, 254);
         ++SDCardAddress;
+        // one spare byte here!
+        //
         ++SDCardAddress;
         ConnectionAssessSeconds = SDRead8BITS(SDCardAddress);
         ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);
@@ -3667,9 +3668,7 @@ if (PPMdata.UseTXModule)
 #else
     InitRadio(DefaultPipe);
 #endif
-
-
-#ifdef TXMODULESUPPORT  
+ 
     if(BuddyMaster){
          PPMdata.PPMInputBuddy.begin(BUDDYPPMPORT);
     }else{
@@ -3721,8 +3720,6 @@ if (PPMdata.UseTXModule)
     }
     if(!UseMotorKill)  ShowMotor(1);
 
-
-#endif
     if (ErrorState) {
         SendCommand(WarnNow);
         if (ErrorState == CHECKSUMERROR) {
@@ -3913,6 +3910,8 @@ void SaveTransmitterParameters()
     ++SDCardAddress;
     SDUpdate16BITS(SDCardAddress, LEDBrightness);
     ++SDCardAddress;
+    // one spare byte here!
+    //
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, ConnectionAssessSeconds);
     ++SDCardAddress;
@@ -4017,8 +4016,10 @@ void SaveOneModel(uint32_t mnum)
     SDUpdate16BITS(SDCardAddress, BuddyControlled);
     ++SDCardAddress;
     ++SDCardAddress;
+  
+    SDUpdate8BITS(SDCardAddress, SticksMode); // save sticks mode in case of rf transfer
 
-    SDCardAddress += 1; // *********************** 1 spare here remaining  **********************
+    SDCardAddress += 1; // *********************** 0 spare here remaining  ********************** 
 
     for (i = 0; i < CHANNELSUSED; ++i) {
         SDUpdate8BITS(SDCardAddress, InPutStick[i]);
@@ -4326,7 +4327,7 @@ void ScrollHelpFile()
     SendText1(HelpView, HelpText);                                     // Then send it
 }
 /*********************************************************************************************************************************/
-void SendHelp()
+void SendHelp() 
 { // load new help file
     char hcmd[] = "page HelpView";
     char HelpFile[20];
@@ -5454,6 +5455,13 @@ void ReceiveModelFile()
     
     SingleModelFlag = true;
     ReadOneModel(1);
+    if (SavedSticksMode != SticksMode){ // swap over trims (elevator -  Throttle)
+        for (int ba = 1; ba < 5; ++ba){
+            uint8_t temp = Trims[ba][1];
+            Trims[ba][1] = Trims[ba][2];
+            Trims[ba][2] = temp;
+        }
+    }
     SingleModelFlag = false;
     CloseModelsFile();
     SaveAllParameters();
@@ -6477,11 +6485,11 @@ void RXSetup1End()
     SendValue(Progress,70);
     TimerStartTime          = GetValue(n4) * 60;
     SendValue(Progress,80);
-    PPMdata.UseSBUSFromRX            = GetValue(r0);
+    PPMdata.UseSBUSFromRX   = GetValue(r0);
     SendValue(Progress,90);
-    PPMdata.PPMChannelCount              =  GetValue(n5);
+    PPMdata.PPMChannelCount  =  GetValue(n5);
     SendValue(Progress, 100);
-    CurrentView             = TXSETUPVIEW;
+    CurrentView             = RXSETUPVIEW; 
     SaveOneModel(ModelNumber);
     UpdateModelsNameEveryWhere();   
     SendCommand(page_RXSetupView);
@@ -7183,14 +7191,9 @@ void LoadModelForRenaming(){
 /******************************************************************************************************************************/
 
 void DoMFName(){
-    DelayWithDog(200);
-    CheckModelName();    // In MODELSVIEW, this function checks correct model name and filename is displayed.
-    DelayWithDog(500);
-    CheckModelName();    // in case we were much too quick!
-    DelayWithDog(1000);
-    CheckModelName();    // in case we were far too quick!
+    DelayWithDog(100);
+    CheckModelName();
 }
-
 
 /******************************************************************************************************************************/
 
@@ -7318,8 +7321,10 @@ void ModelUnmatch(){
         GetConfirmation(page_RXSetupView, NotDone);
     }
 }
+/******************************************************************************************************************************/
+
 // ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
-#define LASTFUNCTION 69 // One more than final one, because first is number zero
+#define LASTFUNCTION 70 // One more than final one, because first is number zero
 
 void (*NumberedFunctions[LASTFUNCTION])() {
     Blank,                // 0 
@@ -7390,7 +7395,8 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     ReceiveModelFile,           // 65
     TXModuleViewStart,          // 66
     TXModuleViewEnd,            // 67
-    ModelUnmatch                // 68
+    ModelUnmatch,               // 68
+    StartPong                   // 69
 
 }; // list will become much longer ...
 // **********************************************************************************************************************************
@@ -7934,6 +7940,11 @@ FASTRUN void ButtonWasPressed()
             }                       // Get page name to which to return
             SendCommand(WhichPage); // this sends nextion back to last screen
             CurrentView = SavedCurrentView;
+
+            if ((CurrentView == RXSETUPVIEW) || (CurrentView == TXSETUPVIEW)){ 
+                b5isGrey = false;
+                b12isGrey = false;
+            }
 
             if (CurrentView == GRAPHVIEW) {
                 DisplayCurveAndServoPos();
@@ -9323,6 +9334,7 @@ void GotoFrontView(){
           }
           SendCommand(page_FrontView);
           CurrentView = FRONTVIEW;
+          CurrentMode = NORMAL;
           UpdateModelsNameEveryWhere();
           SafetyWasOn ^= 1;                     // this forces a re-display of safety state
           ShowBank();
@@ -9391,7 +9403,7 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                         ModelNumber = SavedModelNumber; //  Not found, so bind to the restored selected one
                         ReadOneModel(ModelNumber);
                         BindNow();
-                        NewModelMemoryWasSaved = true;
+                      //  NewModelMemoryWasSaved = true;
                         if (AutoModelSelect)
                         {
                             PlaySound(MMSAVED); 
@@ -9552,8 +9564,9 @@ FASTRUN void CheckGapsLength()
 }
 
 /************************************************************************************************************/
-void CheckModelName()
+bool CheckModelName()
 {                                                  // In ModelsView, this function checks correct name is displayed.
+                                                   // it returns true if it has changed
     char MMems[]        = "MMems";
     char Mfiles[]       = "Mfiles";
     char mn[]           = "modelname";
@@ -9574,8 +9587,10 @@ void CheckModelName()
         if (UseLog) LogThisModel();
         LastModelLoaded = ModelNumber;
         UpdateModelsNameEveryWhere();
+        return true;
     }
     ClearText();
+    return false;
 }
 
 /************************************************************************************************************/
@@ -9699,6 +9714,9 @@ void FASTRUN ManageTransmitter(){
             GetStatistics();                                         // Do stats
             LastTimeRead = millis();
             CheckForNextionButtonPress();  
+            ShowComms();                                            // Screen Telemetry Data 
+            if (CurrentView == MODELSVIEW) CheckModelName();               
+            if (CurrentView == FRONTVIEW)  ShowMotorTimer();          // Screen Timer 
             return;                                                  // That's enough housekeeping this time around
         }
         if (RightNow - LastScanButtonCheck >= 100) {                    
@@ -9707,9 +9725,7 @@ void FASTRUN ManageTransmitter(){
         } 
         ReadSwitches();                                              // Check switch positions 20 times a second
         CheckHardwareTrims();                                        // Trims 20 times a second
-        GetBank();                                                   // Must not call too often        
-        ShowComms();                                                 // Screen Telemetry Data                                  
-        ShowMotorTimer();                                            // Screen Timer
+        GetBank();                                                   // Must not call too often                            
         TransmitterLastManaged = millis();
     }
 }
@@ -9737,15 +9753,15 @@ void FixMotorChannel()
 void SendBindingPipe()
 {
     if (PPMdata.UseTXModule) return;
-    uint16_t BindPause = 3000;
-    if (NewModelMemoryWasSaved) BindPause = 6000;
+    uint16_t BindPause = 1200;                          // was 3000
+   // if (NewModelMemoryWasSaved) BindPause = 1000;     // was 6000
     if (!BoundFlag || !ModelMatched) BindingTimer = millis();
     if ((millis() - BindingTimer) < BindPause) 
     {
         BufferTeensyMACAddPipe(); 
     }else
     {
-        NewModelMemoryWasSaved = false; // return to normal service
+      //  NewModelMemoryWasSaved = false; // return to normal service
     }
 }
 /************************************************************************************************************/
@@ -9761,17 +9777,19 @@ FASTRUN void loop()
 {
     ManageTransmitter();                       // Do the needed chores ... (if there's time)
     GetNewChannelValues();                     // Load SendBuffer with new servo positions very frequently
-    if (UseMacros) ExecuteMacro();             // Modify it if macro is running
-
-    if (BuddyPupilOnPPM) { 
-        NewCompressNeeded = false;             // Fake it as Buddy does not send compressed data
-        ShowServoPos(); 
-    } else {                                   // Skip these next lines when buddying as a slave
-        GetBuddyData();                        // Only if master
-        FixMotorChannel();                     // Maybe force it low BEFORE Binding data is added
-        ShowServoPos();                        // Show servo positions to user
-        SendBindingPipe();                     // Only if not bound yet - overwrite low throttle setting
-    }
+   if (CurrentMode < 3){
+        if (UseMacros) ExecuteMacro();             // Modify it if macro is running
+        if (BuddyPupilOnPPM) { 
+            NewCompressNeeded = false;             // Fake it as Buddy does not send compressed data
+            ShowServoPos(); 
+        } else {                                   // Skip these next lines when buddying as a slave
+            GetBuddyData();                        // Only if master
+            FixMotorChannel();                     // Maybe force it low BEFORE Binding data is added
+            ShowServoPos();                        // Show servo positions to user
+            SendBindingPipe();                     // Only if not bound yet - overwrite low throttle setting
+        }
+   }
+  
     switch (CurrentMode) {
         case NORMAL:                           // 0
 #ifdef TXMODULESUPPORT
@@ -9795,6 +9813,9 @@ FASTRUN void loop()
             ScanAllChannels(false);
             break;
         case SENDNOTHING:       // 4
+            break;
+        case PONGMODE:          // 5
+            PlayPong();
             break;
         default:
             break;              // CurrentMode >= 4 for no action at all.
@@ -9947,6 +9968,7 @@ void RecordsPacketSuccess(uint8_t s)
     if (PacketsHistoryIndex >= (PERFECTPACKETSPERSECOND * ConnectionAssessSeconds)) PacketsHistoryIndex = 0; //
 }
 
+/************************************************************************************************************/
 FASTRUN void FailedPacket()
 {
     RecordsPacketSuccess(0);                      // Record a failure
@@ -10234,4 +10256,164 @@ void DoScanEnd()
     Radio1.openWritingPipe(DefaultPipe);
     CurrentMode = NORMAL;
 }
+
 /*********************************************************************************************************************************/
+void StartPong(){
+    char page_PongView[] = "page PongView"; 
+    SendCommand(page_PongView);
+    CurrentView = PONGVIEW;
+    CurrentMode = PONGMODE;
+    BlueLedOn();
+    DrawBox  (PONGX1, PONGY1, PONGX2, PONGY2,   ForeGroundColour);   // Draw court
+    DrawLine (PONGX1, GOALTOP, PONGX1, GOALBOT, BackGroundColour);   // Make goal openings
+    DrawLine (PONGX2, GOALTOP, PONGX2, GOALBOT, BackGroundColour);   // Make goal openings
+}
+/*********************************************************************************************************************************/
+void MoveBall(int x, int y){
+    static int lastx = 0;
+    static int lasty = 0;
+    DrawDot(lastx, lasty, PONGBALLSIZE+1, BackGroundColour); // Clear last position
+    DrawDot(x, y, PONGBALLSIZE, HighlightColour);            // Draw new position
+    lastx = x;                                               // save last position
+    lasty = y;                                               // save last position
+}
+/*********************************************************************************************************************************/
+//FASTRUN void DrawBox(int x1, int y1, int x2, int y2, int c)
+void MoveLeftPaddle(int y){
+    DrawLine(LEFTPADDLEX, PONGY1+3, LEFTPADDLEX, PONGY2-3, BackGroundColour);
+    DrawLine(LEFTPADDLEX, y - (PADDLEHEIGHT/2), LEFTPADDLEX , y + (PADDLEHEIGHT/2), ForeGroundColour);
+}
+/*********************************************************************************************************************************/
+void MoveRightPaddle(int y){
+    DrawLine(RIGHTPADDLEX, PONGY1+3, RIGHTPADDLEX, PONGY2-3, BackGroundColour);
+    DrawLine(RIGHTPADDLEX, y - (PADDLEHEIGHT/2), RIGHTPADDLEX , y + (PADDLEHEIGHT/2), ForeGroundColour);
+}
+/*********************************************************************************************************************************/
+
+void   PlayPong(){  // called 100 times per second
+    static uint32_t Ponged          = 0;
+    static short int      x               = STARTX;
+    static short int      y               = STARTY;
+    static short int      LeftPaddlY      = STARTY;
+    static short int      RightPaddlY     = STARTY;
+    static short int      OLDLeftPaddlY   = STARTY;
+    static short int      OLDRightPaddlY  = STARTY;
+    static short int      incy            = PONGBALLSPEED;
+    static short int      incx            = PONGBALLSPEED;
+    static short int      LeftScore       = 0;
+    static short int      RightScore      = 0;
+    char   n0[]                     = "n0";
+    char   n1[]                     = "n1";
+
+    if ((millis() - Ponged) < PONGSPEED) return;
+    Ponged = millis();
+
+    y += incy;
+    x += incx;
+ 
+  if (SticksMode == 1){
+        LeftPaddlY=(map(PreMixBuffer[1],MINMICROS,MAXMICROS,PONGY2+EXTRAPONG,PONGY1-EXTRAPONG));
+        RightPaddlY=(map(PreMixBuffer[2],MINMICROS,MAXMICROS,PONGY2+EXTRAPONG,PONGY1-EXTRAPONG));
+    }else{
+        LeftPaddlY=(map(PreMixBuffer[2],MINMICROS,MAXMICROS,PONGY2+EXTRAPONG+10,PONGY1-12));
+        RightPaddlY=(map(PreMixBuffer[1],MINMICROS,MAXMICROS,PONGY2+EXTRAPONG+45,PONGY1-35));
+    }
+
+    if (RightPaddlY != OLDRightPaddlY) MoveRightPaddle(RightPaddlY);
+    if (OLDLeftPaddlY != LeftPaddlY) MoveLeftPaddle(LeftPaddlY);
+    OLDLeftPaddlY = LeftPaddlY;
+    OLDRightPaddlY = RightPaddlY;
+
+    if ((x <= LEFTPADDLEX + PONGCLEAR) && (x >= LEFTPADDLEX - PONGCLEAR)){
+         if ((y >= (LeftPaddlY-(PADDLEHEIGHT/2))) && (y <= (LeftPaddlY+(PADDLEHEIGHT/2)))){
+             incx = -incx;
+             randomSeed(micros());
+             incy = 4 - random(8);
+             PlaySound(BEEPMIDDLE);
+         }
+    }
+    if ((x <= (RIGHTPADDLEX + PONGCLEAR)) && (x >= (RIGHTPADDLEX - PONGCLEAR))){
+         if ((y >= (RightPaddlY-(PADDLEHEIGHT/2))) && (y <= (RightPaddlY+(PADDLEHEIGHT/2)))){
+             incx = -incx;
+             randomSeed(micros());
+             incy = 4 - random(8);
+             PlaySound(BEEPMIDDLE);
+         }
+    }
+    if ((y + PONGCLEAR) >= PONGY2) { // bounce off bottom
+        incy = -incy;
+        if (incy == 0) incy =  -PONGBALLSPEED;
+        PlaySound(CLICKZERO);
+        ScreenTimeTimer = millis();
+        StartInactvityTimeout();
+    }
+    if (y <= (PONGY1 + PONGCLEAR)) {// bounce off top
+        incy = -incy;
+         if (incy == 0) incy =  PONGBALLSPEED;
+        PlaySound(CLICKZERO);
+        ScreenTimeTimer = millis();
+        StartInactvityTimeout();
+    }
+    if (((x + PONGCLEAR) >= PONGX2) && (x)){
+        if ((y < GOALBOT-2) && (y > GOALTOP+2)){ // scored on the right
+            ++RightScore;
+            SendValue(n0, RightScore);
+            if (RightScore>=10){
+                PlaySound(THEFANFARE);
+                DelayWithDog(6000);
+                RightScore = 0;
+                LeftScore = 0;
+                SendValue(n0, RightScore);
+                SendValue(n1, LeftScore);
+            }
+            x = PONGX2;
+            MoveBall(x,y);
+            PlaySound(BEEPCOMPLETE);
+            DelayWithDog(500);
+            x      = -STARTX;
+            y      = -STARTY;
+            randomSeed(micros());
+            incx = -PONGBALLSPEED;
+            incy = 3 - random(6);
+            while (incx == 0) incx = PONGBALLSPEED - random(PONGBALLSPEED*2);
+        }
+        else {
+            incx = -incx;
+            PlaySound(CLICKZERO);
+        }
+    }
+    if ((x <= (PONGX1 + PONGCLEAR)) && (x)) {// scored on the left
+        if ((y < GOALBOT-2) && (y > GOALTOP+2)){
+            ++LeftScore;
+            x = PONGX1;
+            MoveBall(x,y);
+            PlaySound(BEEPCOMPLETE);
+            SendValue(n1, LeftScore);
+            if (LeftScore>=10){
+                PlaySound(THEFANFARE);
+                DelayWithDog(6000);
+                RightScore = 0;
+                LeftScore = 0;
+                SendValue(n0, RightScore);
+                SendValue(n1, LeftScore);
+            }
+            DelayWithDog(500);
+            x      = -STARTX;
+            y      = -STARTY;
+            randomSeed(micros());
+            incx = PONGBALLSPEED;
+            incy = PONGBALLSPEED - random(PONGBALLSPEED*2);
+            while (incx == 0) incx = PONGBALLSPEED - random(PONGBALLSPEED*2);
+        }else{
+            incx = -incx;
+            PlaySound(CLICKZERO);
+        }
+    }
+    MoveBall(x,y); 
+    NewCompressNeeded = false;
+    SendValue(n0, RightScore);
+    SendValue(n1, LeftScore);
+    DrawLine(PONGX1 + ((PONGX2 - PONGX1) / 2), PONGY1, PONGX1 + ((PONGX2 - PONGX1) / 2), PONGY2, Gray);
+}
+
+/****************************************************************************************************************/
