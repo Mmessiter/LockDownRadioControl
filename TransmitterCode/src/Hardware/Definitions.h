@@ -407,16 +407,16 @@
 #define PONGX2          790         // BOX dimentions
 #define PONGY1          50          // BOX dimentions
 #define PONGY2          410         // BOX dimentions
-#define PONGGOALSIZE    360 // 180 ?        // Size of goal
+#define PONGGOALSIZE    180         // Size of goal
 #define PONGBALLSIZE    7           // Size of ball
 #define PONGSPEED       10          // Frame rate
-#define PONGBALLSPEED   4           // Ball movement per frame 
+#define PONGBALLSPEED   5           // Ball movement per frame 
 #define PONGCLEAR (PONGBALLSPEED+PONGBALLSIZE)+4  // ball clearance from box when bouncing
 #define GOALTOP (PONGY1 + ((PONGY2 - PONGY1) / 2)) - (PONGGOALSIZE / 2)
 #define GOALBOT (PONGY1 + ((PONGY2 - PONGY1) / 2)) + (PONGGOALSIZE / 2)
 #define STARTX PONGX1+((PONGX2-PONGX1)/2)  // start position of ball
 #define STARTY PONGY1+((PONGY2-PONGY1)/2)+ 90
-#define PADDLEHEIGHT 50 // 60?
+#define PADDLEHEIGHT 60 
 #define PADDLEGAP    40
 #define LEFTPADDLEX PONGX1 + PADDLEGAP
 #define RIGHTPADDLEX PONGX2 - PADDLEGAP
