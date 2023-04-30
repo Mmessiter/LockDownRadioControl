@@ -10291,7 +10291,7 @@ void MoveRightPaddle(int y){
 /*********************************************************************************************************************************/
 
 void   PlayPong(){  // called 100 times per second
-    static uint32_t Ponged          = 0;
+    static uint32_t Ponged                = 0;
     static short int      x               = STARTX;
     static short int      y               = STARTY;
     static short int      LeftPaddlY      = STARTY;
@@ -10302,8 +10302,8 @@ void   PlayPong(){  // called 100 times per second
     static short int      incx            = PONGBALLSPEED;
     static short int      LeftScore       = 0;
     static short int      RightScore      = 0;
-    char   n0[]                     = "n0";
-    char   n1[]                     = "n1";
+    char   n0[]                           = "n0";
+    char   n1[]                           = "n1";
 
     if ((millis() - Ponged) < PONGSPEED) return;
     Ponged = millis();
@@ -10327,6 +10327,7 @@ void   PlayPong(){  // called 100 times per second
     if ((x <= LEFTPADDLEX + PONGCLEAR) && (x >= LEFTPADDLEX - PONGCLEAR)){
          if ((y >= (LeftPaddlY-(PADDLEHEIGHT/2))) && (y <= (LeftPaddlY+(PADDLEHEIGHT/2)))){
              incx = -incx;
+             x    = LEFTPADDLEX + PONGCLEAR + 10;
              randomSeed(micros());
              incy = PONGBALLSPEED - random(PONGBALLSPEED);
              PlaySound(BEEPMIDDLE);
@@ -10335,6 +10336,7 @@ void   PlayPong(){  // called 100 times per second
     if ((x <= (RIGHTPADDLEX + PONGCLEAR)) && (x >= (RIGHTPADDLEX - PONGCLEAR))){
          if ((y >= (RightPaddlY-(PADDLEHEIGHT/2))) && (y <= (RightPaddlY+(PADDLEHEIGHT/2)))){
              incx = -incx;
+             x    = (RIGHTPADDLEX - PONGCLEAR) - 10;
              randomSeed(micros());
              incy = PONGBALLSPEED - random(PONGBALLSPEED*2);
              PlaySound(BEEPMIDDLE);
@@ -10342,14 +10344,16 @@ void   PlayPong(){  // called 100 times per second
     }
     if ((y + PONGCLEAR) >= PONGY2) { // bounce off bottom
         incy = -incy;
-        if (incy == 0) incy =  -PONGBALLSPEED;
+        y    = (PONGY2 - PONGCLEAR) - 10;
+        if (incy == 0) incy =  -PONGBALLSPEED*2;
         PlaySound(CLICKZERO);
         ScreenTimeTimer = millis();
         StartInactvityTimeout();
     }
     if (y <= (PONGY1 + PONGCLEAR)) {// bounce off top
         incy = -incy;
-         if (incy == 0) incy =  PONGBALLSPEED;
+        y    = PONGY1 + PONGCLEAR + 10;
+        if (incy == 0) incy = PONGBALLSPEED * 2;
         PlaySound(CLICKZERO);
         ScreenTimeTimer = millis();
         StartInactvityTimeout();
