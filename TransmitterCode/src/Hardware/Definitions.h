@@ -14,7 +14,7 @@
   #define NEWPCB
 
 // **************************************************************************
-//       TX VERSION NUMBER   (May 2020 - April 2023 Malcolm Messiter)      *
+//       TX VERSION NUMBER   (May 2020 - May 2023 Malcolm Messiter)      *
 //***************************************************************************
 
 #define TXVERSION_MAJOR   2
@@ -50,7 +50,7 @@
 #include <Adafruit_INA219.h>
 #include <DS1307RTC.h>
 #include <InterpolationLib.h>
-#include "Hardware/StructsEtc.h" 
+
  
 // **************************************************************************
 //                               General                                    *
@@ -523,4 +523,5 @@ void         PlayPong();
 void         Look(int p);
 void         StartPong();
 /*********************************************************************************************************************************/
+#include "Hardware/StructsEtc.h" // This file needs including AFTER Definitions so it can use definitions!
 #endif

@@ -1,5 +1,5 @@
 /** @file TransmitterCode/src/main.cpp
- * // Malcolm Messiter 2022
+ * // Malcolm Messiter 2023
  *
  * @page TransmitterCode...
  * @section LockDown Radio Control Features list, so far:
@@ -118,6 +118,8 @@
 // ************************************************** TRANSMITTER CODE **************************************************
 
 #include "Hardware/Definitions.h" // This file contains many definitions and further includes
+
+
 
 RF24          Radio1(CE_PIN, CSN_PIN);
 WDT_T4<WDT3>  TeensyWatchDog;
@@ -10247,8 +10249,7 @@ void DoScanInit()
     BoundFlag   = false;
     ScanAllChannels(true);
 }
-
-/*********************************************************************************************************************************/
+/***********************************************************************************************************/
 
 void DoScanEnd()
 {
@@ -10257,7 +10258,11 @@ void DoScanEnd()
     CurrentMode = NORMAL;
 }
 
-/*********************************************************************************************************************************/
+/*******************************************************************************************************************************/
+//                                                  PONG
+/*******************************************************************************************************************************/
+
+
 void StartPong(){
     char page_PongView[] = "page PongView"; 
     SendCommand(page_PongView);
