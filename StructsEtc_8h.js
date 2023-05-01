@@ -5,7 +5,6 @@ var StructsEtc_8h =
     [ "A", "StructsEtc_8h.html#a955f504eccf76b4eb2489c0adab03121", null ],
     [ "E", "StructsEtc_8h.html#a07484107e6d9fdf38b53edf631d6511d", null ],
     [ "R", "StructsEtc_8h.html#a5c71a5e59a53413cd6c270266d63b031", null ],
-    [ "STRUCTSETC_H", "StructsEtc_8h.html#a49f16f8f30d4f33c51245bbd772db87f", null ],
     [ "T", "StructsEtc_8h.html#a0acb682b8260ab1c60b918599864e2e5", null ],
     [ "AckPayload", "StructsEtc_8h.html#a30a079d60b4731ce1531091ffe56a703", null ],
     [ "AckPayloadSize", "StructsEtc_8h.html#a81b9fbb62d8099a8e75c5d4720f41895", null ],
