@@ -523,5 +523,5 @@ void         PlayPong();
 void         Look(int p);
 void         StartPong();
 /*********************************************************************************************************************************/
-#include "Hardware/StructsEtc.h" // This file needs including AFTER Definitions so it can use definitions!
+#include "Hardware/StructsEtc.h" // This file needs including AFTER Definitions so it can use the definitions!
 #endif
