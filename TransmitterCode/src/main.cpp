@@ -119,8 +119,6 @@
 
 #include "Hardware/Definitions.h" // This file contains many definitions and further includes
 
-
-
 RF24          Radio1(CE_PIN, CSN_PIN);
 WDT_T4<WDT3>  TeensyWatchDog;
 WDT_timings_t WatchDogConfig;

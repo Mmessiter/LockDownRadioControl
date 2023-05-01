@@ -1,4 +1,4 @@
-
+// NO INCLUDES!!
 #ifndef STRUCTSETC_H
 #define STRUCTSETC_H
 
