@@ -9,7 +9,7 @@
  * - 12 BIT servo resolution (11 BIT via SBUS)
  * - 32 Mixes
  * - 4 Flight modes with user definable and announced names.
- * - 90 Model memories
+ * - 90 Model memories.
  * - Unlimited model files for backup (32 Gig)
  * - "ModelMatch" plus automatic model memory selection. (Avoid flying with wrong memory loaded.)
  * - Buddyboxing with selectable channels.
