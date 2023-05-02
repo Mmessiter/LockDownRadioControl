@@ -16,7 +16,7 @@ var searchData=
   ['reconnectindex_13',['ReconnectIndex',['../radio_8h.html#a90d98310365e78ee5ec06aaa7a4092f1',1,'radio.h']]],
   ['reconnectionindex_14',['ReconnectionIndex',['../transceiver_8h.html#aa3d3407bef9f6718dba572936ef3c055',1,'ReconnectionIndex():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#aa3d3407bef9f6718dba572936ef3c055',1,'ReconnectionIndex():&#160;main.cpp']]],
   ['recursedalready_15',['RecursedAlready',['../TransmitterCode_2src_2main_8cpp.html#aa4e775cc458a824cb4bef031518b19a2',1,'main.cpp']]],
-  ['reversedchannelbits_16',['ReversedChannelBITS',['../TransmitterCode_2src_2main_8cpp.html#ab67a250be0b26224543450b96a5f11bf',1,'ReversedChannelBITS():&#160;main.cpp'],['../Utilities_8h.html#ab67a250be0b26224543450b96a5f11bf',1,'ReversedChannelBITS():&#160;main.cpp']]],
+  ['reversedchannelbits_16',['ReversedChannelBITS',['../Pong_8h.html#ab67a250be0b26224543450b96a5f11bf',1,'ReversedChannelBITS():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#ab67a250be0b26224543450b96a5f11bf',1,'ReversedChannelBITS():&#160;main.cpp'],['../Utilities_8h.html#ab67a250be0b26224543450b96a5f11bf',1,'ReversedChannelBITS():&#160;main.cpp']]],
   ['roll_5fdes_17',['roll_des',['../Quadcopter_2src_2main_8cpp.html#a78e28c63c59f8225a3ca8325752bb36d',1,'main.cpp']]],
   ['roll_5fdes_5fprev_18',['roll_des_prev',['../Quadcopter_2src_2main_8cpp.html#aba668cad36498485e518f89d02869bad',1,'main.cpp']]],
   ['roll_5fimu_19',['roll_IMU',['../Quadcopter_2src_2main_8cpp.html#a6eb0038d717befb2a856c2a3ab5c5cd9',1,'main.cpp']]],
@@ -24,12 +24,12 @@ var searchData=
   ['roll_5fpassthru_21',['roll_passthru',['../Quadcopter_2src_2main_8cpp.html#a04d9b90af56f5d557fc2a21739e3edd5',1,'main.cpp']]],
   ['roll_5fpid_22',['roll_PID',['../Quadcopter_2src_2main_8cpp.html#a5f9fe871bf862f4ea03cdb75c12d4093',1,'main.cpp']]],
   ['rx1totaltime_23',['RX1TotalTime',['../radio_8h.html#aa1850e21b7988ec8784a0a6a89077df0',1,'RX1TotalTime():&#160;radio.h'],['../TransmitterCode_2src_2main_8cpp.html#a95dd54e021a56919600706636b80fb5a',1,'RX1TotalTime():&#160;main.cpp']]],
-  ['rx2totaltime_24',['RX2TotalTime',['../radio_8h.html#aabc8c01b8e9f9b91a3575bf7052dc4de',1,'RX2TotalTime():&#160;radio.h'],['../TransmitterCode_2src_2main_8cpp.html#a3e02a2c832634c8521a867cac4299c5c',1,'RX2TotalTime():&#160;main.cpp']]],
+  ['rx2totaltime_24',['RX2TotalTime',['../TransmitterCode_2src_2main_8cpp.html#a3e02a2c832634c8521a867cac4299c5c',1,'RX2TotalTime():&#160;main.cpp'],['../radio_8h.html#aabc8c01b8e9f9b91a3575bf7052dc4de',1,'RX2TotalTime():&#160;radio.h']]],
   ['rxcellcount_25',['RXCellCount',['../TransmitterCode_2src_2main_8cpp.html#aa09bc4e1398cb869ae79670683470ed5',1,'main.cpp']]],
   ['rxmaxmodelaltitude_26',['RXMAXModelAltitude',['../TransmitterCode_2src_2main_8cpp.html#aac60f398ee9f5f9f89459014e003f68d',1,'main.cpp']]],
   ['rxmodelaltitude_27',['RXModelAltitude',['../TransmitterCode_2src_2main_8cpp.html#a60096f1f0ec75fa673207d2d11cfd123',1,'main.cpp']]],
   ['rxmodelvolts_28',['RXModelVolts',['../TransmitterCode_2src_2main_8cpp.html#a5f56f32c16498a3547635bda86c49428',1,'main.cpp']]],
   ['rxtemperature_29',['RXTemperature',['../TransmitterCode_2src_2main_8cpp.html#a8f333cca5ad77798d4c8d61ba81e97d8',1,'main.cpp']]],
   ['rxvoltagecorrection_30',['RxVoltageCorrection',['../TransmitterCode_2src_2main_8cpp.html#ad17e5f7f0f1b17d90abfb4da29f1ab41',1,'main.cpp']]],
-  ['rxvoltsdetected_31',['RXVoltsDetected',['../Utilities_8h.html#abad630d30092274e24516848d8096925',1,'RXVoltsDetected():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#abad630d30092274e24516848d8096925',1,'RXVoltsDetected():&#160;main.cpp']]]
+  ['rxvoltsdetected_31',['RXVoltsDetected',['../Pong_8h.html#abad630d30092274e24516848d8096925',1,'RXVoltsDetected():&#160;main.cpp'],['../Utilities_8h.html#abad630d30092274e24516848d8096925',1,'RXVoltsDetected():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#abad630d30092274e24516848d8096925',1,'RXVoltsDetected():&#160;main.cpp']]]
 ];

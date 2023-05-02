@@ -51,7 +51,7 @@ var searchData=
   ['renamefile_48',['RenameFile',['../TransmitterCode_2src_2main_8cpp.html#a9d94366336f1e5fd43edb9c24bec5821',1,'main.cpp']]],
   ['reset_49',['reset',['../classMPU6050.html#a7100b6d276c3c8664cf00d768b7b0dee',1,'MPU6050']]],
   ['resetaccelerometerpath_50',['resetAccelerometerPath',['../classMPU6050.html#a99ee74708c12f32e48ef5ec69ac9f4a9',1,'MPU6050']]],
-  ['resetalltrims_51',['ResetAllTrims',['../Definitions_8h.html#a883e18dbafdf41d3451879db47ab113f',1,'ResetAllTrims():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a883e18dbafdf41d3451879db47ab113f',1,'ResetAllTrims():&#160;main.cpp']]],
+  ['resetalltrims_51',['ResetAllTrims',['../Definitions_8h.html#a883e18dbafdf41d3451879db47ab113f',1,'ResetAllTrims():&#160;Trims.h'],['../Trims_8h.html#a883e18dbafdf41d3451879db47ab113f',1,'ResetAllTrims():&#160;Trims.h']]],
   ['resetdmp_52',['resetDMP',['../classMPU6050.html#a7a9706f177e84b295739198e6b2ded95',1,'MPU6050']]],
   ['resetfifo_53',['resetFIFO',['../classMPU6050.html#aafa0dc38b7ea2acd1aecd5d9df8cbd08',1,'MPU6050']]],
   ['resetgyroscopepath_54',['resetGyroscopePath',['../classMPU6050.html#af1599c0d70f07fd3e28683d571842c22',1,'MPU6050']]],
@@ -66,7 +66,7 @@ var searchData=
   ['rotate_63',['rotate',['../classVectorInt16.html#ac7bf149db0a2b66d7683b87ebeb2dfc5',1,'VectorInt16::rotate()'],['../classVectorFloat.html#afef0e6d631fb1eb67b6913e90730aa9e',1,'VectorFloat::rotate()']]],
   ['rudderlefttrim_64',['RudderLeftTrim',['../TransmitterCode_2src_2main_8cpp.html#ae96314eac241d2716e7ebda1fc658ec4',1,'main.cpp']]],
   ['rudderrighttrim_65',['RudderRightTrim',['../TransmitterCode_2src_2main_8cpp.html#a77a49849e3aa20dc1aadce0fe00de798',1,'main.cpp']]],
-  ['runmacro_66',['RunMacro',['../TransmitterCode_2src_2main_8cpp.html#a91fb686ba2d3111821721ab33b442918',1,'main.cpp']]],
+  ['runmacro_66',['RunMacro',['../macros_8h.html#a91fb686ba2d3111821721ab33b442918',1,'macros.h']]],
   ['rxsetup1end_67',['RXSetup1End',['../TransmitterCode_2src_2main_8cpp.html#a2e0aa19fa93c1bacd9b4600025f33594',1,'main.cpp']]],
   ['rxsetup1start_68',['RXSetup1Start',['../TransmitterCode_2src_2main_8cpp.html#a127743223a757b674107ccfc9d77f12f',1,'main.cpp']]]
 ];

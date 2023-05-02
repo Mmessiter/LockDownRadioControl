@@ -1,8 +1,11 @@
 var transceiver_8h =
 [
+    [ "BADNIBBLECOUNT", "transceiver_8h.html#a6a0dc2e4d5be33970d9a245234202655", null ],
     [ "xx1", "transceiver_8h.html#af12cb4fe3d6d02738ca7a75e1e1fd722", null ],
     [ "yy1", "transceiver_8h.html#a10274b74b5b9f35476ae844506775afe", null ],
     [ "YY1EXTRA", "transceiver_8h.html#ad7ab066fbe7d750f032f5761dbaa2487", null ],
+    [ "BufferTeensyMACAddPipe", "transceiver_8h.html#a8c4da8345a38bb20db07dcaac7af9c05", null ],
+    [ "CheckPipeNibbles", "transceiver_8h.html#acd761b7a3274515f60af86504f70fcd6", null ],
     [ "Compress", "transceiver_8h.html#a1ddd5e8d5bd649dd98ce3710fbff651b", null ],
     [ "DoScanEnd", "transceiver_8h.html#a31fb6a46af68482e107cddee58dfb677", null ],
     [ "DoScanInit", "transceiver_8h.html#a77c4a4ffa609df08830ccece07bf283b", null ],
@@ -13,6 +16,7 @@ var transceiver_8h =
     [ "InitRadio", "transceiver_8h.html#a799f38bc33abdb30eec1d7db3cf27d58", null ],
     [ "RecordsPacketSuccess", "transceiver_8h.html#afc091b5942e21a03f6dc8635d5e519ba", null ],
     [ "ScanAllChannels", "transceiver_8h.html#ae17dae8deffe2e33044f61fd3a8ebca2", null ],
+    [ "SendBindingPipe", "transceiver_8h.html#ae5df0d6d4352a4039d996e773e8fc6bf", null ],
     [ "SendData", "transceiver_8h.html#a049bfb836e7aa4a3a48a1a4bd225fafc", null ],
     [ "SetThePipe", "transceiver_8h.html#a70dc6f8d2e5ccef6b8e4a2b9b0afb2ce", null ],
     [ "SuccessfulPacket", "transceiver_8h.html#a1c11bb6771548de7d96723045b922620", null ],
@@ -29,6 +33,7 @@ var transceiver_8h =
     [ "Inactivity_Timeout", "transceiver_8h.html#ae99f193f5a3e06508bbe4b32ee91a963", null ],
     [ "LastPacketSentTime", "transceiver_8h.html#a273b3bba431004a227ac5fad026b3e1e", null ],
     [ "LostContactFlag", "transceiver_8h.html#ad5f463902789a79fc622b3befd9409b9", null ],
+    [ "MacAddress", "transceiver_8h.html#ad343661d8a4343426f171e531b9d8aa9", null ],
     [ "NewCompressNeeded", "transceiver_8h.html#a37ebe494d562386d4f9f00b629d4cf1a", null ],
     [ "NextChannel", "transceiver_8h.html#a4c9fbf66b2c98730d43dc9dfe573a998", null ],
     [ "PacketNumber", "transceiver_8h.html#a09cb370d93005b5a43e932a3d6093ea2", null ],

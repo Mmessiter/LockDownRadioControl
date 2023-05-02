@@ -1,0 +1,28 @@
+var Trims_8h =
+[
+    [ "CheckHardwareTrims", "Trims_8h.html#add643409678258cabdb0aa1ae76d802a", null ],
+    [ "DefineTrimsEnd", "Trims_8h.html#a175b6111f05e020becf6f4fc8c3e474d", null ],
+    [ "EndSubTrimView", "Trims_8h.html#a40003084a0136ca08cf8ded75ff4aa4d", null ],
+    [ "GetTrimAmount", "Trims_8h.html#aacd8b022714bb89847239dd878ad9509", null ],
+    [ "ResetAllTrims", "Trims_8h.html#a883e18dbafdf41d3451879db47ab113f", null ],
+    [ "SaveOneModel", "Trims_8h.html#ab5210e90502030d9f8864752dd70dc20", null ],
+    [ "SetATrimDefinition", "Trims_8h.html#a67037f3d9963a3107353a1badb1af3a6", null ],
+    [ "StartSubTrimView", "Trims_8h.html#a8f725b11214f53b84fe2c7a9a4eb15ac", null ],
+    [ "StartTrimDefView", "Trims_8h.html#a6fed69b1bb6d33fc82707a4e70bf3ef4", null ],
+    [ "StartTrimView", "Trims_8h.html#a76b1f472f8c90038b85799f8d7b33e7f", null ],
+    [ "Bank", "Trims_8h.html#a22e13a2a5c7a6d6776b46f5341bda026", null ],
+    [ "CopyTrimsToAll", "Trims_8h.html#ae737f11637caa631c30255f614800ba6", null ],
+    [ "DefiningTrims", "Trims_8h.html#a53d8c3d55ec5cdfd424929c62efe1677", null ],
+    [ "LastTimeRead", "Trims_8h.html#ad70c8744223914d4350b199002cec7b7", null ],
+    [ "ModelNumber", "Trims_8h.html#a4563a416bfec098674f95b7002e151e1", null ],
+    [ "SticksMode", "Trims_8h.html#a5624a3289e95022504382c0d5a194b61", null ],
+    [ "SubTrimToEdit", "Trims_8h.html#a66b4a2fa113bac114f91593f34ad274a", null ],
+    [ "TransmitterLastManaged", "Trims_8h.html#a1942ba53f270789e316c552c4a81b762", null ],
+    [ "TrimDefined", "Trims_8h.html#a637b67a91d76737f0574a633348cc114", null ],
+    [ "TrimMultiplier", "Trims_8h.html#ae46d51cc5056395aceef8ac04871e00c", null ],
+    [ "TrimNumber", "Trims_8h.html#a90ae717bdcc02bd1388ff25afb8fdad6", null ],
+    [ "TrimRepeatSpeed", "Trims_8h.html#a321797809a871259bfbb5986b5972d6e", null ],
+    [ "Trims", "Trims_8h.html#aa091f2d8f47174c6960fd69335a4e5fa", null ],
+    [ "TrimSwitch", "Trims_8h.html#ad5adb31bc39b92d27e6ca35ef4dafefe", null ],
+    [ "TrimTimer", "Trims_8h.html#a48589088880569c1ae40f8c226cc52be", null ]
+];

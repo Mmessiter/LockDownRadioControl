@@ -55,12 +55,12 @@ var searchData=
   ['ak8963_5fpwr_5fdown_52',['AK8963_PWR_DOWN',['../classMPU9250.html#a7b12d669961fc847f3f5eab94c560e73',1,'MPU9250']]],
   ['ak8963_5freset_53',['AK8963_RESET',['../classMPU9250.html#a025bef32e50b09afcbaa02397a9749ca',1,'MPU9250']]],
   ['ak8963_5fwho_5fam_5fi_54',['AK8963_WHO_AM_I',['../classMPU9250.html#ab83c85ca5103d4baf46d800f1bc5e52c',1,'MPU9250']]],
-  ['altitudegps_55',['AltitudeGPS',['../ReceiverCode_2src_2main_8cpp.html#a9690c7445dbd0530fa729af6bac11044',1,'AltitudeGPS():&#160;main.cpp'],['../radio_8h.html#a9690c7445dbd0530fa729af6bac11044',1,'AltitudeGPS():&#160;main.cpp']]],
-  ['analogueinput_56',['AnalogueInput',['../Utilities_8h.html#aff628072047986ff5293dbb907c3f676',1,'AnalogueInput():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#aff628072047986ff5293dbb907c3f676',1,'AnalogueInput():&#160;main.cpp']]],
+  ['altitudegps_55',['AltitudeGPS',['../radio_8h.html#a9690c7445dbd0530fa729af6bac11044',1,'AltitudeGPS():&#160;main.cpp'],['../ReceiverCode_2src_2main_8cpp.html#a9690c7445dbd0530fa729af6bac11044',1,'AltitudeGPS():&#160;main.cpp']]],
+  ['analogueinput_56',['AnalogueInput',['../Pong_8h.html#aff628072047986ff5293dbb907c3f676',1,'AnalogueInput():&#160;main.cpp'],['../Utilities_8h.html#aff628072047986ff5293dbb907c3f676',1,'AnalogueInput():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#aff628072047986ff5293dbb907c3f676',1,'AnalogueInput():&#160;main.cpp']]],
   ['analoguereed_57',['AnalogueReed',['../Definitions_8h.html#ac5728db610c441820a6f47295967cbab',1,'AnalogueReed(uint8_t InputChannel):&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#ac5728db610c441820a6f47295967cbab',1,'AnalogueReed(uint8_t InputChannel):&#160;main.cpp']]],
   ['anglegps_58',['AngleGPS',['../ReceiverCode_2src_2main_8cpp.html#a9cb6617428d513efc095336972632da6',1,'AngleGPS():&#160;main.cpp'],['../radio_8h.html#a9cb6617428d513efc095336972632da6',1,'AngleGPS():&#160;main.cpp']]],
   ['announcebanks_59',['AnnounceBanks',['../TransmitterCode_2src_2main_8cpp.html#ae9add7064c6a555558088c4f67560535',1,'main.cpp']]],
-  ['announceconnected_60',['AnnounceConnected',['../Utilities_8h.html#a7f979f6e267f37833beb30c91b796cae',1,'AnnounceConnected():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a7f979f6e267f37833beb30c91b796cae',1,'AnnounceConnected():&#160;main.cpp']]],
+  ['announceconnected_60',['AnnounceConnected',['../Utilities_8h.html#a7f979f6e267f37833beb30c91b796cae',1,'AnnounceConnected():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a7f979f6e267f37833beb30c91b796cae',1,'AnnounceConnected():&#160;main.cpp'],['../Pong_8h.html#a7f979f6e267f37833beb30c91b796cae',1,'AnnounceConnected():&#160;main.cpp']]],
   ['approximation_61',['APPROXIMATION',['../TransmitterCode_2src_2main_8cpp.html#aee8c3c363eab49d6a90d3f74587694d5',1,'main.cpp']]],
   ['ascii_62',['Ascii',['../Utilities_8h.html#a3a793f5d71f6db34ad82272d211f8954',1,'Utilities.h']]],
   ['attachservos_63',['AttachServos',['../ReceiverCode_2src_2main_8cpp.html#a0cbfd712ab3bd8f654bc19400fd704bd',1,'main.cpp']]],
@@ -68,6 +68,6 @@ var searchData=
   ['audiovolume_65',['AudioVolume',['../TransmitterCode_2src_2main_8cpp.html#adddcbca54e7b49592c3f6c360bf04494',1,'main.cpp']]],
   ['auto_66',['AUTO',['../Definitions_8h.html#a0cc6f7717df9fbdc0f33efb88720a639',1,'Definitions.h']]],
   ['automodelselect_67',['AutoModelSelect',['../TransmitterCode_2src_2main_8cpp.html#a77387f8b9f18e9b75448e01d821ae17e',1,'main.cpp']]],
-  ['autoswitch_68',['Autoswitch',['../TransmitterCode_2src_2main_8cpp.html#a5b8bae72a42da5c8a19ad3b4c1692538',1,'main.cpp']]],
-  ['autoswitch_69',['AUTOSWITCH',['../Definitions_8h.html#aa4414f3ff790f01b8bb41a0f51d1518f',1,'Definitions.h']]]
+  ['autoswitch_68',['AUTOSWITCH',['../Definitions_8h.html#aa4414f3ff790f01b8bb41a0f51d1518f',1,'Definitions.h']]],
+  ['autoswitch_69',['Autoswitch',['../TransmitterCode_2src_2main_8cpp.html#a5b8bae72a42da5c8a19ad3b4c1692538',1,'main.cpp']]]
 ];

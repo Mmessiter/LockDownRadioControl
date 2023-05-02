@@ -204,7 +204,7 @@ var searchData=
   ['gettextin_201',['GetTextIn',['../Utilities_8h.html#a6fe457db5d6bc71ccb447dee824abf6a',1,'Utilities.h']]],
   ['gettime_202',['getTime',['../Utilities_8h.html#ae96ca3df2e8b9eef75d400de6ef06db3',1,'Utilities.h']]],
   ['gettimefromackpayload_203',['GetTimeFromAckPayload',['../TransmitterCode_2src_2main_8cpp.html#a86523345ecdd52f3d93dccd6fcf4370a',1,'main.cpp']]],
-  ['gettrimamount_204',['GetTrimAmount',['../TransmitterCode_2src_2main_8cpp.html#aacd8b022714bb89847239dd878ad9509',1,'main.cpp']]],
+  ['gettrimamount_204',['GetTrimAmount',['../Trims_8h.html#aacd8b022714bb89847239dd878ad9509',1,'Trims.h']]],
   ['gettxversionnumber_205',['GetTXVersionNumber',['../TransmitterCode_2src_2main_8cpp.html#aee99c2684d91ac475ed24480da4dcc30',1,'main.cpp']]],
   ['getvalue_206',['GetValue',['../Utilities_8h.html#a6e4fac4e296c09388b8b56353402d67a',1,'Utilities.h']]],
   ['getvalue_207',['getvalue',['../Utilities_8h.html#aff6fa8906188d3249b01bf59de47df2f',1,'Utilities.h']]],
