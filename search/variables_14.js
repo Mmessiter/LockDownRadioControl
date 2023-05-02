@@ -25,13 +25,12 @@ var searchData=
   ['trimnumber_22',['TrimNumber',['../Trims_8h.html#a90ae717bdcc02bd1388ff25afb8fdad6',1,'TrimNumber():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a90ae717bdcc02bd1388ff25afb8fdad6',1,'TrimNumber():&#160;main.cpp']]],
   ['trimrepeatspeed_23',['TrimRepeatSpeed',['../Trims_8h.html#a321797809a871259bfbb5986b5972d6e',1,'TrimRepeatSpeed():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a321797809a871259bfbb5986b5972d6e',1,'TrimRepeatSpeed():&#160;main.cpp']]],
   ['trims_24',['Trims',['../Trims_8h.html#aa091f2d8f47174c6960fd69335a4e5fa',1,'Trims():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#aa091f2d8f47174c6960fd69335a4e5fa',1,'Trims():&#160;main.cpp']]],
-  ['trimswitch_25',['TrimSwitch',['../Trims_8h.html#ad5adb31bc39b92d27e6ca35ef4dafefe',1,'TrimSwitch():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#ad5adb31bc39b92d27e6ca35ef4dafefe',1,'TrimSwitch():&#160;main.cpp']]],
+  ['trimswitch_25',['TrimSwitch',['../TransmitterCode_2src_2main_8cpp.html#ad5adb31bc39b92d27e6ca35ef4dafefe',1,'TrimSwitch():&#160;main.cpp'],['../Trims_8h.html#ad5adb31bc39b92d27e6ca35ef4dafefe',1,'TrimSwitch():&#160;main.cpp']]],
   ['trimtimer_26',['TrimTimer',['../Trims_8h.html#a48589088880569c1ae40f8c226cc52be',1,'Trims.h']]],
-  ['turnoffsecondtogo_27',['TurnOffSecondToGo',['../TransmitterCode_2src_2main_8cpp.html#a8469143c4224c918fc85eab562041d88',1,'main.cpp']]],
-  ['tx_28',['tX',['../classMPU9250.html#af7d992743ffa2e15d5674b45a100791e',1,'MPU9250']]],
-  ['txlipo_29',['TXLiPo',['../TransmitterCode_2src_2main_8cpp.html#ae15fd0f1128566cd1120f3dd2e287dc1',1,'main.cpp']]],
-  ['txname_30',['TxName',['../TransmitterCode_2src_2main_8cpp.html#a2706b92e2f31363ec86e745e2014afef',1,'main.cpp']]],
-  ['txvoltagecorrection_31',['TxVoltageCorrection',['../TransmitterCode_2src_2main_8cpp.html#a985d38323fbadec8df22d3e17ca18eb2',1,'main.cpp']]],
-  ['ty_32',['tY',['../classMPU9250.html#ae100c82474b1e78337ecfdc8d18518d5',1,'MPU9250']]],
-  ['tz_33',['tZ',['../classMPU9250.html#a595f111a497c7727ac70a544b98162e1',1,'MPU9250']]]
+  ['tx_27',['tX',['../classMPU9250.html#af7d992743ffa2e15d5674b45a100791e',1,'MPU9250']]],
+  ['txlipo_28',['TXLiPo',['../TransmitterCode_2src_2main_8cpp.html#ae15fd0f1128566cd1120f3dd2e287dc1',1,'main.cpp']]],
+  ['txname_29',['TxName',['../TransmitterCode_2src_2main_8cpp.html#a2706b92e2f31363ec86e745e2014afef',1,'main.cpp']]],
+  ['txvoltagecorrection_30',['TxVoltageCorrection',['../TransmitterCode_2src_2main_8cpp.html#a985d38323fbadec8df22d3e17ca18eb2',1,'main.cpp']]],
+  ['ty_31',['tY',['../classMPU9250.html#ae100c82474b1e78337ecfdc8d18518d5',1,'MPU9250']]],
+  ['tz_32',['tZ',['../classMPU9250.html#a595f111a497c7727ac70a544b98162e1',1,'MPU9250']]]
 ];
