@@ -15,7 +15,7 @@ var searchData=
   ['endmodelsetup_12',['EndModelSetup',['../TransmitterCode_2src_2main_8cpp.html#a2149418bb038e4a09266523c3bde2fce',1,'main.cpp']]],
   ['endrenamemodel_13',['EndRenameModel',['../TransmitterCode_2src_2main_8cpp.html#a7af8e147bab19bdc499ffef595d30aae',1,'main.cpp']]],
   ['endreverseview_14',['EndReverseView',['../TransmitterCode_2src_2main_8cpp.html#afd3dd964eafc30405e000b03579dd00c',1,'main.cpp']]],
-  ['endsend_15',['EndSend',['../TransmitterCode_2src_2main_8cpp.html#ad7b8aa834c87265667a5687b1787a1cc',1,'main.cpp']]],
+  ['endsend_15',['EndSend',['../Definitions_8h.html#ad7b8aa834c87265667a5687b1787a1cc',1,'EndSend():&#160;Utilities.h'],['../Utilities_8h.html#ad7b8aa834c87265667a5687b1787a1cc',1,'EndSend():&#160;Utilities.h']]],
   ['endslowview_16',['EndSlowView',['../TransmitterCode_2src_2main_8cpp.html#a0e7666bd8d250935f34395e0f6dea7bf',1,'main.cpp']]],
   ['endsubtrimview_17',['EndSubTrimView',['../TransmitterCode_2src_2main_8cpp.html#a40003084a0136ca08cf8ded75ff4aa4d',1,'main.cpp']]],
   ['endtrimview_18',['EndTrimView',['../Definitions_8h.html#a4a3b3a5edf41e8d1ce82c15077d0e1b0',1,'Definitions.h']]],

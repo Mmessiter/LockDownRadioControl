@@ -8,7 +8,7 @@ var searchData=
   ['updatebuttonlabels_5',['UpdateButtonLabels',['../TransmitterCode_2src_2main_8cpp.html#abf59862cf6c4e3df5a76f0bfea8919ef',1,'main.cpp']]],
   ['updateinterpolationtypes_6',['updateInterpolationTypes',['../TransmitterCode_2src_2main_8cpp.html#a3d20af2f1fee81198a0cef2d4500083a',1,'main.cpp']]],
   ['updateled_7',['UpdateLED',['../TransmitterCode_2src_2main_8cpp.html#a8c8edf1ff8b98d9cd27b45c4e20f22d9',1,'UpdateLED():&#160;main.cpp'],['../Definitions_8h.html#a8c8edf1ff8b98d9cd27b45c4e20f22d9',1,'UpdateLED():&#160;main.cpp']]],
-  ['updatemodelsnameeverywhere_8',['UpdateModelsNameEveryWhere',['../Definitions_8h.html#a9e1de754e1d2d483fb15957f70cf0488',1,'UpdateModelsNameEveryWhere():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a9e1de754e1d2d483fb15957f70cf0488',1,'UpdateModelsNameEveryWhere():&#160;main.cpp']]],
+  ['updatemodelsnameeverywhere_8',['UpdateModelsNameEveryWhere',['../TransmitterCode_2src_2main_8cpp.html#a9e1de754e1d2d483fb15957f70cf0488',1,'UpdateModelsNameEveryWhere():&#160;main.cpp'],['../Definitions_8h.html#a9e1de754e1d2d483fb15957f70cf0488',1,'UpdateModelsNameEveryWhere():&#160;main.cpp']]],
   ['updateoneswitchview_9',['updateOneSwitchView',['../TransmitterCode_2src_2main_8cpp.html#a14dcac76ed8a048041fdc6e6f5d5d000',1,'main.cpp']]],
   ['updateswitchesview_10',['UpdateSwitchesView',['../TransmitterCode_2src_2main_8cpp.html#ad2376976bcbc43d81e55e5b58ce2818d',1,'main.cpp']]],
   ['updatetrimview_11',['UpdateTrimView',['../TransmitterCode_2src_2main_8cpp.html#ac78966debc2cdc13d8ca958ce3b20c78',1,'main.cpp']]],
@@ -16,12 +16,13 @@ var searchData=
   ['use_5fina219_13',['USE_INA219',['../TransmitterCode_2src_2main_8cpp.html#a87ae50e2ac4507568cbf98072f174a1b',1,'main.cpp']]],
   ['usedualrates_14',['UseDualRates',['../TransmitterCode_2src_2main_8cpp.html#a5f6ebf5df29e0ee922a462cbdd419ed8',1,'main.cpp']]],
   ['usefullrate_15',['UseFullRate',['../TransmitterCode_2src_2main_8cpp.html#a8f53f86499d740b350f7b6d791c90497',1,'main.cpp']]],
-  ['uselog_16',['UseLog',['../TransmitterCode_2src_2main_8cpp.html#aa42482a0bb01edaf26f217dbc38643d2',1,'main.cpp']]],
-  ['usemacros_17',['UseMacros',['../TransmitterCode_2src_2main_8cpp.html#a42a6363bff83773c1b99caa06aebb1f5',1,'main.cpp']]],
+  ['uselog_16',['UseLog',['../Utilities_8h.html#aa42482a0bb01edaf26f217dbc38643d2',1,'UseLog():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#aa42482a0bb01edaf26f217dbc38643d2',1,'UseLog():&#160;main.cpp']]],
+  ['usemacros_17',['UseMacros',['../Utilities_8h.html#a42a6363bff83773c1b99caa06aebb1f5',1,'UseMacros():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a42a6363bff83773c1b99caa06aebb1f5',1,'UseMacros():&#160;main.cpp']]],
   ['usemotorkill_18',['UseMotorKill',['../TransmitterCode_2src_2main_8cpp.html#ad76445c097f9d33a6935be5c2489bd34',1,'main.cpp']]],
   ['user_5fctrl_19',['USER_CTRL',['../classMPU9250.html#ac7a02a1a77fe8bf5a477cc37820d2f27',1,'MPU9250']]],
   ['usereceiveddata_20',['UseReceivedData',['../ReceiverCode_2src_2main_8cpp.html#abb1997c589abc6432f612eaedf985e38',1,'main.cpp']]],
   ['usesbus_21',['UseSBUS',['../ReceiverCode_2src_2main_8cpp.html#a80f5214ddc3b9618293f3b2694dff6f7',1,'main.cpp']]],
   ['usesbusfromrx_22',['UseSBUSFromRX',['../structPPMArea.html#a748d93840ef117d5c5cd62dc915f0891',1,'PPMArea']]],
-  ['usetxmodule_23',['UseTXModule',['../structPPMArea.html#a6f623131e7bf583da7799c58fe3d9c08',1,'PPMArea']]]
+  ['usetxmodule_23',['UseTXModule',['../structPPMArea.html#a6f623131e7bf583da7799c58fe3d9c08',1,'PPMArea']]],
+  ['utilities_2eh_24',['Utilities.h',['../Utilities_8h.html',1,'']]]
 ];

@@ -38,10 +38,10 @@ var searchData=
   ['ak8963_5freset_35',['AK8963_RESET',['../classMPU9250.html#a025bef32e50b09afcbaa02397a9749ca',1,'MPU9250']]],
   ['ak8963_5fwho_5fam_5fi_36',['AK8963_WHO_AM_I',['../classMPU9250.html#ab83c85ca5103d4baf46d800f1bc5e52c',1,'MPU9250']]],
   ['altitudegps_37',['AltitudeGPS',['../ReceiverCode_2src_2main_8cpp.html#a9690c7445dbd0530fa729af6bac11044',1,'AltitudeGPS():&#160;main.cpp'],['../radio_8h.html#a9690c7445dbd0530fa729af6bac11044',1,'AltitudeGPS():&#160;main.cpp']]],
-  ['analogueinput_38',['AnalogueInput',['../TransmitterCode_2src_2main_8cpp.html#aff628072047986ff5293dbb907c3f676',1,'main.cpp']]],
+  ['analogueinput_38',['AnalogueInput',['../Utilities_8h.html#aff628072047986ff5293dbb907c3f676',1,'AnalogueInput():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#aff628072047986ff5293dbb907c3f676',1,'AnalogueInput():&#160;main.cpp']]],
   ['anglegps_39',['AngleGPS',['../ReceiverCode_2src_2main_8cpp.html#a9cb6617428d513efc095336972632da6',1,'AngleGPS():&#160;main.cpp'],['../radio_8h.html#a9cb6617428d513efc095336972632da6',1,'AngleGPS():&#160;main.cpp']]],
   ['announcebanks_40',['AnnounceBanks',['../TransmitterCode_2src_2main_8cpp.html#ae9add7064c6a555558088c4f67560535',1,'main.cpp']]],
-  ['announceconnected_41',['AnnounceConnected',['../TransmitterCode_2src_2main_8cpp.html#a7f979f6e267f37833beb30c91b796cae',1,'main.cpp']]],
+  ['announceconnected_41',['AnnounceConnected',['../Utilities_8h.html#a7f979f6e267f37833beb30c91b796cae',1,'AnnounceConnected():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a7f979f6e267f37833beb30c91b796cae',1,'AnnounceConnected():&#160;main.cpp']]],
   ['audiovolume_42',['AudioVolume',['../TransmitterCode_2src_2main_8cpp.html#adddcbca54e7b49592c3f6c360bf04494',1,'main.cpp']]],
   ['automodelselect_43',['AutoModelSelect',['../TransmitterCode_2src_2main_8cpp.html#a77387f8b9f18e9b75448e01d821ae17e',1,'main.cpp']]],
   ['autoswitch_44',['Autoswitch',['../TransmitterCode_2src_2main_8cpp.html#a5b8bae72a42da5c8a19ad3b4c1692538',1,'main.cpp']]]

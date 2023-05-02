@@ -15,7 +15,7 @@ var searchData=
   ['reconnectindex_12',['ReconnectIndex',['../radio_8h.html#a90d98310365e78ee5ec06aaa7a4092f1',1,'radio.h']]],
   ['reconnectionindex_13',['ReconnectionIndex',['../TransmitterCode_2src_2main_8cpp.html#aa3d3407bef9f6718dba572936ef3c055',1,'main.cpp']]],
   ['recursedalready_14',['RecursedAlready',['../TransmitterCode_2src_2main_8cpp.html#aa4e775cc458a824cb4bef031518b19a2',1,'main.cpp']]],
-  ['reversedchannelbits_15',['ReversedChannelBITS',['../TransmitterCode_2src_2main_8cpp.html#ab67a250be0b26224543450b96a5f11bf',1,'main.cpp']]],
+  ['reversedchannelbits_15',['ReversedChannelBITS',['../TransmitterCode_2src_2main_8cpp.html#ab67a250be0b26224543450b96a5f11bf',1,'ReversedChannelBITS():&#160;main.cpp'],['../Utilities_8h.html#ab67a250be0b26224543450b96a5f11bf',1,'ReversedChannelBITS():&#160;main.cpp']]],
   ['roll_5fdes_16',['roll_des',['../Quadcopter_2src_2main_8cpp.html#a78e28c63c59f8225a3ca8325752bb36d',1,'main.cpp']]],
   ['roll_5fdes_5fprev_17',['roll_des_prev',['../Quadcopter_2src_2main_8cpp.html#aba668cad36498485e518f89d02869bad',1,'main.cpp']]],
   ['roll_5fimu_18',['roll_IMU',['../Quadcopter_2src_2main_8cpp.html#a6eb0038d717befb2a856c2a3ab5c5cd9',1,'main.cpp']]],
@@ -30,5 +30,5 @@ var searchData=
   ['rxmodelvolts_27',['RXModelVolts',['../TransmitterCode_2src_2main_8cpp.html#a5f56f32c16498a3547635bda86c49428',1,'main.cpp']]],
   ['rxtemperature_28',['RXTemperature',['../TransmitterCode_2src_2main_8cpp.html#a8f333cca5ad77798d4c8d61ba81e97d8',1,'main.cpp']]],
   ['rxvoltagecorrection_29',['RxVoltageCorrection',['../TransmitterCode_2src_2main_8cpp.html#ad17e5f7f0f1b17d90abfb4da29f1ab41',1,'main.cpp']]],
-  ['rxvoltsdetected_30',['RXVoltsDetected',['../TransmitterCode_2src_2main_8cpp.html#abad630d30092274e24516848d8096925',1,'main.cpp']]]
+  ['rxvoltsdetected_30',['RXVoltsDetected',['../Utilities_8h.html#abad630d30092274e24516848d8096925',1,'RXVoltsDetected():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#abad630d30092274e24516848d8096925',1,'RXVoltsDetected():&#160;main.cpp']]]
 ];
