@@ -255,7 +255,6 @@ if (SticksMode == 2){
 void CheckHardwareTrims()
 {
     int i;
-     
     if ((millis() - TrimTimer) < TrimRepeatSpeed) return; // check occasionally for trim press 
     TrimTimer = millis();
     for (i = 0; i < 8; ++i) {
