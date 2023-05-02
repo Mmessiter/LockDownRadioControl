@@ -524,9 +524,10 @@ void         Look(int p);
 void         StartPong();
 FASTRUN void ButtonWasPressed();
 bool         GetButtonPress();
-void             EndSend();
-void             ReadTheRTC();
+void         EndSend();
+void         ReadTheRTC();
 /*********************************************************************************************************************************/
 #include "Hardware/StructsEtc.h" // These files needs including AFTER Definitions so they can actually use the definitions :-)
 #include "Hardware/Utilities.h" 
+#include "Hardware/transceiver.h" 
 #endif

@@ -162,32 +162,6 @@ void CheckForNextionButtonPress()
     }
 
     /*********************************************************************************************************************************/
-    uint32_t getvalue(char* nbox)
-    {
-        uint32_t ValueIn = 0;
-        char     GET[]   = "get ";
-        char     VAL[]   = ".val";
-        char     CB[100];
-
-        strcpy(CB, GET);
-        strcat(CB, nbox);
-        strcat(CB, VAL);
-        NEXTION.print(CB);
-        EndSend();
-        GetTextIn();
-        if (TextIn[0] == 'q') {
-            ValueIn = TextIn[1]; // Collect and build 32 bit value from 4 bytes
-            ValueIn += (TextIn[2] << 8);
-            ValueIn += (TextIn[3] << 16);
-            ValueIn += (TextIn[4] << 24);
-        }
-        else {
-            ValueIn = 65535; // = THERE WAS AN ERROR !
-        }
-        return ValueIn;
-    }
-
-    /*********************************************************************************************************************************/
     void SendCommand(char* tbox)
     {
         char page[] = "page ";
@@ -242,6 +216,32 @@ void CheckForNextionButtonPress()
     if (ButtonPressed && ButtonClicks) PlaySound(CLICKONE);
     return ButtonPressed;
 }
+
+    /*********************************************************************************************************************************/
+    uint32_t getvalue(char* nbox)
+    {
+        uint32_t ValueIn = 0;
+        char     GET[]   = "get ";
+        char     VAL[]   = ".val";
+        char     CB[100];
+
+        strcpy(CB, GET);
+        strcat(CB, nbox);
+        strcat(CB, VAL);
+        NEXTION.print(CB);
+        EndSend();
+        GetTextIn();
+        if (TextIn[0] == 'q') {
+            ValueIn = TextIn[1]; // Collect and build 32 bit value from 4 bytes
+            ValueIn += (TextIn[2] << 8);
+            ValueIn += (TextIn[3] << 16);
+            ValueIn += (TextIn[4] << 24);
+        }
+        else {
+            ValueIn = 65535; // = THERE WAS AN ERROR !
+        }
+        return ValueIn;
+    }
 
 /*********************************************************************************************************************************/
 
