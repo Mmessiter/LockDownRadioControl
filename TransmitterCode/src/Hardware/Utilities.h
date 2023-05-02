@@ -1249,3 +1249,40 @@ void ReEnableScanButton()   // Scan button AND models button
 }
 
 /************************************************************************************************************/
+void DelayWithDog(uint32_t HowLong){   // Implements delay() and also kicks the dog a lot
+        uint32_t ThisMoment = millis();
+        while ((millis() - ThisMoment) < HowLong)  {
+        KickTheDog();
+        }
+}
+//***********************************************************************************************************
+void Look(int p)  // This is just to save typing Serial.println :)
+{
+    Serial.println(p);
+}
+
+/************************************************************************************************************/
+
+void CheckScanButton() // Scan button AND models button
+{
+    char     b5Greyed[]                 = "b5.pco=33840";
+    char     b12Greyed[]                = "b12.pco=33840";
+    char     b1Greyed[]                 = "b1.pco=33840";
+
+    if (ModelMatched) {
+        if (CurrentView == TXSETUPVIEW) {
+          if(!b5isGrey) { 
+                SendCommand(b5Greyed); 
+                SendCommand(b1Greyed);
+                b5isGrey = true;
+            }
+        }
+         if (CurrentView == RXSETUPVIEW) {
+            if(!b12isGrey) { 
+                SendCommand(b12Greyed);
+                b12isGrey = true;
+            }
+        }
+    }
+}
+/************************************************************************************************************/

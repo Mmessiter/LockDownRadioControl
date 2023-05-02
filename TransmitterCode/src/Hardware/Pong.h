@@ -1,0 +1,233 @@
+// *************************************** Pong.h  *****************************************
+
+#include <Arduino.h>
+
+extern void swap(uint8_t* a, uint8_t* b);
+extern bool               ValueSent;
+extern char               TextIn[122];
+extern bool               ButtonClicks;
+extern uint8_t            CurrentView;
+extern WDT_T4<WDT3>       TeensyWatchDog;
+extern WDT_timings_t      WatchDogConfig;
+extern uint8_t            SticksMode;
+extern uint16_t           AnalogueInput[PROPOCHANNELS];
+extern short              DeltaGMT;
+extern uint8_t            Gsecond;   // = tm.Second; // 0-59
+extern uint8_t            Gminute;   // = tm.Minute; // 0-59
+extern uint8_t            Ghour;     // = tm.Hour;   // 0-23
+extern uint8_t            GweekDay;  // = tm.Wday;   // 1-7
+extern uint8_t            GmonthDay; // = tm.Day;    // 1-31
+extern uint8_t            Gmonth;    // = tm.Month;  // 1-12
+extern uint8_t            Gyear;     // = tm.Year;   // 0-99
+extern bool               GPSTimeSynched;
+extern uint8_t            GPSHours;
+extern uint8_t            GPSMins;
+extern uint8_t            GPSSecs;
+extern uint8_t            GPSDay;
+extern uint8_t            GPSMonth;
+extern uint8_t            GPSYear;
+extern tmElements_t       tm;
+extern uint8_t            DateFix;
+extern uint8_t            SubTrims[CHANNELSUSED + 1];
+extern uint8_t            MacrosBuffer[MAXMACROS][BYTESPERMACRO];
+extern bool               UseMacros;
+extern uint32_t           Inactivity_Start;
+extern float              BlinkHertz;
+extern uint8_t            LEDBrightness;
+extern bool               LedIsBlinking;
+extern uint32_t           BlinkTimer;
+extern uint32_t           ScreenTimeTimer;
+extern bool               ScreenIsOff;
+extern uint16_t           ScreenTimeout;
+extern byte               Mixes[MAXMIXES + 1][17];
+extern char               ChannelNames[CHANNELSUSED][11];
+extern uint8_t            MixNumber;
+extern bool               LedWasGreen;
+extern bool               LedWasRed;
+extern char               na[];
+extern bool               AnnounceConnected;
+extern bool               UseLog;
+extern bool               ModelIdentified;
+extern bool               BoundFlag;
+extern bool               ModelMatched;
+extern bool               RXVoltsDetected;
+extern uint16_t           PacketsPerSecond;
+extern uint32_t           LastShowTime;
+extern uint8_t            ConnectionAssessSeconds;
+extern uint8_t            PacketsHistoryBuffer[PERFECTPACKETSPERSECOND * MAXSHOWCOMMSSESCONDS];
+extern uint16_t           BackGroundColour;
+extern uint16_t           ReversedChannelBITS;
+extern uint16_t           PreMixBuffer[CHANNELSUSED + 1];
+extern uint16_t           SendBuffer[UNCOMPRESSEDWORDS];
+extern uint16_t           ForeGroundColour;
+extern bool               b5isGrey;
+extern bool               b12isGrey;
+
+/*******************************************************************************************************************************/
+//                                                  PONG
+/*******************************************************************************************************************************/
+
+void StartPong(){
+    char page_PongView[] = "page PongView"; 
+    SendCommand(page_PongView);
+    CurrentView = PONGVIEW;
+    CurrentMode = PONGMODE;
+    BlueLedOn();
+    DrawBox  (PONGX1, PONGY1, PONGX2, PONGY2,   ForeGroundColour);   // Draw court
+    DrawLine (PONGX1, GOALTOP, PONGX1, GOALBOT, BackGroundColour);   // Make goal openings
+    DrawLine (PONGX2, GOALTOP, PONGX2, GOALBOT, BackGroundColour);   // Make goal openings
+}
+
+/*********************************************************************************************************************************/
+void MoveBall(int x, int y){
+    static int lastx = 0;
+    static int lasty = 0;
+    DrawDot(lastx, lasty, PONGBALLSIZE+1, BackGroundColour); // Clear last position
+    DrawDot(x, y, PONGBALLSIZE, HighlightColour);            // Draw new position
+    lastx = x;                                               // save last position
+    lasty = y;                                               // save last position
+}
+/*********************************************************************************************************************************/
+
+void MoveLeftPaddle(int y){
+    DrawLine(LEFTPADDLEX, PONGY1+3, LEFTPADDLEX, PONGY2-3, BackGroundColour);
+    DrawLine(LEFTPADDLEX, y - (PADDLEHEIGHT/2), LEFTPADDLEX , y + (PADDLEHEIGHT/2), ForeGroundColour);
+}
+
+/*********************************************************************************************************************************/
+void MoveRightPaddle(int y){
+    DrawLine(RIGHTPADDLEX, PONGY1+3, RIGHTPADDLEX, PONGY2-3, BackGroundColour);
+    DrawLine(RIGHTPADDLEX, y - (PADDLEHEIGHT/2), RIGHTPADDLEX , y + (PADDLEHEIGHT/2), ForeGroundColour);
+}
+
+void   PlayPong(){  // called 100 times per second
+    static uint32_t Ponged                = 0;
+    static short int      x               = STARTX;
+    static short int      y               = STARTY;
+    static short int      LeftPaddlY      = STARTY;
+    static short int      RightPaddlY     = STARTY;
+    static short int      OLDLeftPaddlY   = STARTY;
+    static short int      OLDRightPaddlY  = STARTY;
+    static short int      incy            = PONGBALLSPEED;
+    static short int      incx            = PONGBALLSPEED;
+    static short int      LeftScore       = 0;
+    static short int      RightScore      = 0;
+    char   n0[]                           = "n0";   // score labels
+    char   n1[]                           = "n1";   // score labels
+    uint8_t               lstk            = 1;      // left stick input
+    uint8_t               rstk            = 2;      // right stick input
+
+    if ((millis() - Ponged) < PONGSPEED) return;
+    Ponged = millis();
+
+    y += incy;
+    x += incx;
+
+    if (SticksMode == 2) swap(&lstk, &rstk);
+
+    LeftPaddlY  = map(PreMixBuffer[lstk],MINMICROS,MAXMICROS,PONGY2+EXTRAPONG,PONGY1-EXTRAPONG);
+    RightPaddlY = map(PreMixBuffer[rstk],MINMICROS,MAXMICROS,PONGY2+EXTRAPONG,PONGY1-EXTRAPONG);
+   
+    if (RightPaddlY   != OLDRightPaddlY) MoveRightPaddle(RightPaddlY);
+    if (OLDLeftPaddlY != LeftPaddlY)     MoveLeftPaddle(LeftPaddlY);
+    OLDLeftPaddlY = LeftPaddlY;
+    OLDRightPaddlY = RightPaddlY;
+
+    if ((x <= LEFTPADDLEX + PONGCLEAR) && (x >= LEFTPADDLEX - PONGCLEAR)){ // hit left paddle?
+         if ((y >= (LeftPaddlY-(PADDLEHEIGHT/2))) && (y <= (LeftPaddlY+(PADDLEHEIGHT/2)))){
+             incx = -incx;
+             x    = LEFTPADDLEX + PONGCLEAR + 10;
+             randomSeed(micros());
+             incy = PONGBALLSPEED - random(PONGBALLSPEED);
+             PlaySound(BEEPMIDDLE);
+         }
+    }
+    if ((x <= (RIGHTPADDLEX + PONGCLEAR)) && (x >= (RIGHTPADDLEX - PONGCLEAR))){// hit right paddle?
+         if ((y >= (RightPaddlY-(PADDLEHEIGHT/2))) && (y <= (RightPaddlY+(PADDLEHEIGHT/2)))){
+             incx = -incx;
+             x    = (RIGHTPADDLEX - PONGCLEAR) - 10;
+             randomSeed(micros());
+             incy = PONGBALLSPEED - random(PONGBALLSPEED*2);
+             PlaySound(BEEPMIDDLE);
+         }
+    }
+    if ((y + PONGCLEAR) >= PONGY2) { // bounce off bottom
+        incy = -incy;
+        y    = (PONGY2 - PONGCLEAR) - 10;
+        if (incy == 0) incy =  -PONGBALLSPEED*2;
+        PlaySound(CLICKZERO);
+        ScreenTimeTimer = millis();
+        StartInactvityTimeout();
+    }
+    if (y <= (PONGY1 + PONGCLEAR)) {// bounce off top
+        incy = -incy;
+        y    = PONGY1 + PONGCLEAR + 10;
+        if (incy == 0) incy = PONGBALLSPEED * 2;
+        PlaySound(CLICKZERO);
+        ScreenTimeTimer = millis();
+        StartInactvityTimeout();
+    }
+    if (((x + PONGCLEAR) >= PONGX2) && (x)){
+        if ((y < GOALBOT-2) && (y > GOALTOP+2)){ // scored on the right
+            ++RightScore;
+            SendValue(n0, RightScore);
+            if (RightScore >= 10){
+                PlaySound(THEFANFARE);
+                DelayWithDog(6000);
+                RightScore = 0;
+                LeftScore = 0;
+                SendValue(n0, RightScore);
+                SendValue(n1, LeftScore);
+            }
+            x = PONGX2;
+            MoveBall(x,y);
+            PlaySound(BEEPCOMPLETE);
+            DelayWithDog(500);
+            x      = -STARTX;
+            y      = -STARTY;
+            randomSeed(micros());
+            incx = -PONGBALLSPEED + random(PONGBALLSPEED*2);
+            while (abs(incx) < 3) incx = -PONGBALLSPEED + random(PONGBALLSPEED*2);
+            incy =  PONGBALLSPEED - random(PONGBALLSPEED*2);
+            
+        }
+        else {
+            incx = -incx;
+            PlaySound(CLICKZERO);
+        }
+    }
+    if ((x <= (PONGX1 + PONGCLEAR)) && (x)) {// scored on the left
+        if ((y < GOALBOT-2) && (y > GOALTOP+2)){
+            ++LeftScore;
+            x = PONGX1;
+            MoveBall(x,y);
+            PlaySound(BEEPCOMPLETE);
+            SendValue(n1, LeftScore);
+            if (LeftScore >= 10){
+                PlaySound(THEFANFARE);
+                DelayWithDog(6000);
+                RightScore = 0;
+                LeftScore = 0;
+                SendValue(n0, RightScore);
+                SendValue(n1, LeftScore);
+            }
+            DelayWithDog(500);
+            x      = -STARTX;
+            y      = -STARTY;
+            randomSeed(micros());
+            incx = PONGBALLSPEED - random(PONGBALLSPEED*2);
+            while (abs(incx) < 3) incx = PONGBALLSPEED - random(PONGBALLSPEED*2);
+            incy = PONGBALLSPEED - random(PONGBALLSPEED*2);
+        }else{
+            incx = -incx;
+            PlaySound(CLICKZERO);
+        }
+    }
+    MoveBall(x,y); 
+    NewCompressNeeded = false;
+    SendValue(n0, RightScore);
+    SendValue(n1, LeftScore);
+    DrawLine(PONGX1 + ((PONGX2 - PONGX1) / 2), PONGY1, PONGX1 + ((PONGX2 - PONGX1) / 2), PONGY2, Gray);
+}
+
+/****************************************************************************************************************/

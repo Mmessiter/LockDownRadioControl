@@ -1,7 +1,7 @@
-
-// ***************************************************************************
-//     This header file has many prototypes, definitions and includes        *
-// ***************************************************************************
+// ******************** Definitions.h ****************************************
+//     This header file has many prototypes, definitions                     *
+//     It has many more includes AT THE BOTTOM !                             *
+// ****************************************************************************
 
 #ifndef Definitions_H
 #define Definitions_H
@@ -356,13 +356,6 @@
 #define SMOOTHEDCURVES    1
 #define EXPONENTIALCURVES 2
 
-// **************************************************************************
-//                              Macros                                      *
-// **************************************************************************
-
-#define MAXMACROS     8 // 8 macros enough for now?
-#define BYTESPERMACRO 6 // 6 bytes each
-
 // ********************* Offsets within macros' buffer ***********************
 
 #define MACROTRIGGERCHANNEL 0 // 1 - 16. 0 means dissabled.
@@ -371,6 +364,14 @@
 #define MACROMOVECHANNEL    3 // Which channel to move.
 #define MACROMOVETOPOSITION 4 // Where to put said channel for said duration. (0 - 180)
 #define MACRORUNNINGNOW     5 // Running flag (BIT 0 running/not running,  BIT 1 = Timer active / inactive)
+
+// **************************************************************************
+//                              Macros                                      *
+// **************************************************************************
+
+#define MAXMACROS     8 // 8 macros enough for now?
+#define BYTESPERMACRO 6 // 6 bytes each
+
 
 // **************************************************************************
 //                            PPM PARAMETERS   (FOR BUDDY BOXING)          *
@@ -527,7 +528,12 @@ bool         GetButtonPress();
 void         EndSend();
 void         ReadTheRTC();
 /*********************************************************************************************************************************/
-#include "Hardware/StructsEtc.h" // These files needs including AFTER Definitions so they can actually use the definitions :-)
+// These files are included *AFTER* the Definitions, otherwise they can't see the definitions :-)
+#include "Hardware/StructsEtc.h" 
 #include "Hardware/Utilities.h" 
 #include "Hardware/transceiver.h" 
+#include "Hardware/Pong.h" 
+#include "Hardware/Macros.h" 
+#include "Hardware/Trims.h" 
+
 #endif

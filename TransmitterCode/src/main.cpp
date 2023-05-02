@@ -117,17 +117,15 @@
  */
 // ************************************************** TRANSMITTER CODE **************************************************
 
-#include "Hardware/Definitions.h" // This file contains many definitions and further includes
+#include "Hardware/Definitions.h" // This file contains many definitions and many further includes
 
 RF24          Radio1(CE_PIN, CSN_PIN);
 WDT_T4<WDT3>  TeensyWatchDog;
 WDT_timings_t WatchDogConfig;
-
 byte          Mixes[MAXMIXES + 1][17];                        // 17 possible elements per mix. NOTHING to do with channels count!!!
 int           Trims[BANKSUSED + 1][CHANNELSUSED + 1];         // Trims to store
 uint8_t       Exponential[BANKSUSED + 1][CHANNELSUSED + 1];   // Exponential
 uint8_t       InterpolationTypes[BANKSUSED + 1][CHANNELSUSED + 1];
-
 uint8_t  LastMixNumber    = 1;
 uint8_t  MixNumber        = 0;
 uint8_t  CurrentView      = FRONTVIEW;
@@ -137,17 +135,13 @@ uint64_t TeensyMACAddPipe = DEFAULTPIPEADDRESS;  //          New Radio pipe addr
 char     TextIn[CHARSMAX + 2];                   //          Spare space
 uint16_t PacketsPerSecond = 0;
 uint8_t  PacketsHistoryBuffer[PERFECTPACKETSPERSECOND * MAXSHOWCOMMSSESCONDS]; // Here we record some history
-
 uint32_t TotalLostPackets       = 0;
 uint8_t  PacketNumber           = 0;
 uint8_t  GPSMarkHere            = 0;
 uint8_t  PreviousTrim           = 255;
-uint32_t TrimTimer              = 0;
+
 uint16_t TrimRepeatSpeed        = 600;
-
 char     na[]                   = "";
-//bool     NewModelMemoryWasSaved = false; 
-
 uint8_t  StepSize[16] = {0,0,0,0,0,0,0,0,5,25,5,25,5,25,5,25};  //    How far to move each time on slow servos
 uint16_t CurrentPosition[UNCOMPRESSEDWORDS];                //    Position from which a slow servo started (0 = not started yet)
 uint16_t SendBuffer[UNCOMPRESSEDWORDS];                     //    Data to send to rx (16 words)
@@ -261,14 +255,11 @@ char      ReceiverVersionNumber[9]    = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20
 char      TransmitterVersionNumber[9] = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,0};
 char      ModelVolts[9]               = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,0};
 File      ModelsFileNumber;
-
 Adafruit_INA219 ina219;
-
 char SingleModelFile[40];
 bool SingleModelFlag = false;
 bool     ModelsFileOpen = false;
 bool     USE_INA219     = false;
-uint32_t BindingTimer   = 0;
 bool     BoundFlag      = false;
 bool     Switch[8];
 bool     TrimSwitch[8];
@@ -373,7 +364,6 @@ uint8_t   LowBattery        = LOWBATTERY;
 uint16_t  SbusRepeats       = 0;
 uint16_t  SavedSbusRepeats  = 0;
 bool      RXVoltsDetected   = false;
-
 uint16_t  RadioSwaps        = 0;
 uint16_t  RX1TotalTime      = 0;
 uint16_t  RX2TotalTime      = 0;
@@ -394,12 +384,6 @@ bool      ClockSpoken1      = false;
 bool      AnnounceBanks     = true;
 bool      AnnounceConnected = true;
 bool      CopyTrimsToAll    = true;
-
-uint8_t   MacrosBuffer[MAXMACROS][BYTESPERMACRO]; // macros' buffer
-uint32_t  MacroStartTime[MAXMACROS];
-uint32_t  MacroStopTime[MAXMACROS];
-uint8_t   PreviousMacroNumber = 1;
-bool      UseMacros           = false;
 uint16_t  ReversedChannelBITS = 0; // 16 BIT for 16 Channels
 uint16_t  SavedLineX          = 12345;
 bool      FirstConnection     = true;
@@ -1190,18 +1174,6 @@ uint16_t (*Interpolate[3])(uint16_t InputValue, uint16_t InputChannel, uint16_t 
     ExponentialInterpolation    // 2
 };
 
-/*********************************************************************************************************************************/
-
-int GetTrimAmount(uint8_t InputChannel){ 
-    int TrimAmount, tt = InputChannel;
-        
-        if (SticksMode == 2) {
-            if (InputChannel == 1) tt = 2;
-            if (InputChannel == 2) tt = 1; 
-        }
-        TrimAmount = (Trims[Bank][tt] - 80) * TrimMultiplier; // TRIMS on lower four input channels (80 is mid point !! (range 40 - 80 - 120)) 
-        return TrimAmount;
-}
 
 /*********************************************************************************************************************************/
 
@@ -5078,85 +5050,6 @@ void SetupViewFM()
     
 
 /******************************************************************************************************************************/
-void StartSubTrimView()
-{ // Subtrim view start
-    char pSubTrimView[] = "page SubTrimView";
-    char t2[]           = "t2";
-    char n0[]           = "n0";
-    char h0[]           = "h0";
-    SendCommand(pSubTrimView);
-    SubTrimToEdit = 0;
-    CurrentView   = SUBTRIMVIEW;
-    SendText(t2, ChannelNames[SubTrimToEdit]);
-    SendValue(n0, SubTrims[SubTrimToEdit] - 127);
-    SendValue(h0, SubTrims[SubTrimToEdit]);
-    UpdateModelsNameEveryWhere();
-}
-/******************************************************************************************************************************/
-void EndSubTrimView()
-{ // Subtrim view exit
-   char page_RXSetupView[] = "page RXSetupView";
-
-    SaveOneModel(ModelNumber);
-    CurrentView = RXSETUPVIEW;
-    SendCommand(page_RXSetupView);
-    LastTimeRead = 0;
-    UpdateModelsNameEveryWhere();
-}
-/******************************************************************************************************************************/
-void StartTrimDefView()
-{
-    char pTrimDefView[] = "page TrimDefView";
-    CurrentView         = TRIMDEFVIEW;
-    SendCommand(pTrimDefView);
-    ResetAllTrims();
-    BlueLedOn();
-    CurrentMode = SENDNOTHING;
-    for (int i = 0; i < 4; ++i) TrimDefined[i] = false; 
-    DefiningTrims = true;
-   
-}
-/******************************************************************************************************************************/
-void DefineTrimsEnd()
-{ // exit from trim defining screen
-    char pCalibrateView[] = "page CalibrateView";
-    CurrentView           = TXSETUPVIEW;
-    SendCommand(pCalibrateView);
-    Force_ReDisplay();
-    CurrentView   = CALIBRATEVIEW;
-    DefiningTrims = false;
-    CurrentMode   = NORMAL;
-    SaveTransmitterParameters();
-    UpdateModelsNameEveryWhere();
-  
-}
-/******************************************************************************************************************************/
-void ResetAllTrims() 
-{
-     
-if (SticksMode == 1) { 
-        TrimNumber[0] = TRIM1A;  // these will change when redefined
-        TrimNumber[1] = TRIM1B;
-        TrimNumber[2] = TRIM2A;
-        TrimNumber[3] = TRIM2B;
-        TrimNumber[4] = TRIM3A;
-        TrimNumber[5] = TRIM3B;
-        TrimNumber[6] = TRIM4A;
-        TrimNumber[7] = TRIM4B;
-    }
-
-if (SticksMode == 2) {
-        TrimNumber[0] = TRIM1A; 
-        TrimNumber[1] = TRIM1B;
-        TrimNumber[4] = TRIM2A;
-        TrimNumber[5] = TRIM2B;
-        TrimNumber[2] = TRIM3A;
-        TrimNumber[3] = TRIM3B;
-        TrimNumber[6] = TRIM4A;
-        TrimNumber[7] = TRIM4B;
-    }          
-}
-/******************************************************************************************************************************/
 void Options2End()
 { // back to setup?
     char dGMT[]           = "dGMT";
@@ -6224,19 +6117,7 @@ void (*NumberedFunctions[LASTFUNCTION])() {
 }; // list will become much longer ...
 
 
-// **********************************************************************************************************************************
- void StartTrimView(){
-            char pTrimView[]            = "page TrimView";
-            char n0[]                   = "n0";
-            char c0[]                   = "c0";
-            SendCommand(pTrimView);
-            CurrentView = TRIM_VIEW;
-            SendValue(n0, TrimMultiplier);
-            SendValue(c0, CopyTrimsToAll);
-            UpdateModelsNameEveryWhere(); // also updates trimview (If CurrentView == TRIM_VIEW!! :-)
-            ClearText();
- }
-            
+     
 /*********************************************************************************************************************************
  *                          BUTTON WAS PRESSED (DEAL WITH INPUT FROM NEXTION DISPLAY)                                            *
  *********************************************************************************************************************************/
@@ -7883,147 +7764,6 @@ void MoveaTrim(uint8_t i)
 }
 
 /************************************************************************************************************/
-
-void SetATrimDefinition(int i) 
-{
-    char AilDone[] = "Aileron trim is defined!";
-    char EleDone[] = "Elevator trim is defined!";
-    char ThrDone[] = "Throttle trim is defined!";
-    char RudDone[] = "Rudder trim is defined!";
-   
-    char ail[]     = "ail";
-    char ele[]     = "ele";
-    char thr[]     = "thr";
-    char rud[]     = "rud";
-   
-    // Aileron
-    if (!TrimDefined[0]) {
-        if ((i == 0) || (i == 1)) {
-            PlaySound(BEEPCOMPLETE);
-            SendText(ail, AilDone);
-            TrimDefined[0] = true;
-        }
-        if (i == 0) {
-            TrimNumber[0] = TRIM1A;
-            TrimNumber[1] = TRIM1B;
-        }
-        if (i == 1) {
-            TrimNumber[1] = TRIM1A;
-            TrimNumber[0] = TRIM1B;
-        }
-    }
-
-if (SticksMode == 1){
-    // Elevator
-    if (!TrimDefined[1]) {
-        if ((i == 2) || (i == 3)) {
-            PlaySound(BEEPCOMPLETE);
-            SendText(ele, EleDone);
-            TrimDefined[1] = true;
-        }
-        if (i == 3) {
-            TrimNumber[2] = TRIM2A;
-            TrimNumber[3] = TRIM2B;
-        }
-        if (i == 2) {
-            TrimNumber[3] = TRIM2A;
-            TrimNumber[2] = TRIM2B;
-        }
-    }
-
-    // Throttle
-    if (!TrimDefined[2]) {
-        if ((i == 4) || (i == 5)) {
-            PlaySound(BEEPCOMPLETE);
-            SendText(thr, ThrDone);
-            TrimDefined[2] = true;
-        }
-        if (i == 4) {
-            TrimNumber[4] = TRIM3A;
-            TrimNumber[5] = TRIM3B;
-        }
-        if (i == 5) {
-            TrimNumber[5] = TRIM3A;
-            TrimNumber[4] = TRIM3B;
-        }
-    }
-}
-
-if (SticksMode == 2){
-    // Throttle
-    if (!TrimDefined[1]) {
-        if ((i == 4) || (i == 5)) {
-            PlaySound(BEEPCOMPLETE);
-            SendText(thr, ThrDone);
-            TrimDefined[1] = true;
-        }
-        if (i == 5) {
-            TrimNumber[5] = TRIM2A;
-            TrimNumber[4] = TRIM2B;
-        }
-        if (i == 4) {
-            TrimNumber[4] = TRIM2A;
-            TrimNumber[5] = TRIM2B;
-        }
-    }
-
-    // Elevator
-    if (!TrimDefined[2]) {
-        if ((i == 2) || (i == 3)) {
-            PlaySound(BEEPCOMPLETE);
-            SendText(ele, EleDone);
-            TrimDefined[2] = true;
-        }
-        if (i == 3) {
-            TrimNumber[2] = TRIM3A;
-            TrimNumber[3] = TRIM3B;
-        }
-        if (i == 2) {
-            TrimNumber[3] = TRIM3A;
-            TrimNumber[2] = TRIM3B;
-        }
-    }
-}
-
-    // Rudder
-    if (!TrimDefined[3]) {
-        if ((i == 6) || (i == 7)) {
-            PlaySound(BEEPCOMPLETE);
-            SendText(rud, RudDone);
-            TrimDefined[3] = true;
-        }
-        if (i == 6) {
-            TrimNumber[6] = TRIM4A;
-            TrimNumber[7] = TRIM4B;
-        }
-        if (i == 7) {
-            TrimNumber[7] = TRIM4A;
-            TrimNumber[6] = TRIM4B;
-        }
-    }
-}
-
-/************************************************************************************************************/
-
-void CheckHardwareTrims()
-{
-    int i;
-    if ((millis() - TrimTimer) < TrimRepeatSpeed) return; // check occasionally for trim press 
-    TrimTimer = millis();
-    for (i = 0; i < 8; ++i) {
-        if (TrimSwitch[i]) {
-            if (DefiningTrims) {
-                SetATrimDefinition(i);
-                return;
-            }
-            MoveaTrim(i);
-            TransmitterLastManaged = 0;                     //  to speed up repeat
-            TrimRepeatSpeed -= (TrimRepeatSpeed / 4);       //  accelerate repeat...
-            if (TrimRepeatSpeed < 10) TrimRepeatSpeed = 30; //  ... up to a point...
-        }
-    }
-}
-/************************************************************************************************************/
 void swap(uint8_t* a, uint8_t* b)
 { // Just swap over two bytes, a & b :-)
     uint8_t c;
@@ -8152,7 +7892,7 @@ void GotoFrontView(){
     char fms[4][4] = {{"fm1"},{"fm2"},{"fm3"},{"fm4"}};
     char     FrontView_Connected[]  = "Connected";
     char      page_FrontView[]            = "page FrontView";
-   
+    CurrentMode                           = NORMAL;
     if (CurrentView != FRONTVIEW) {
           if (CurrentView == SCANVIEW) {
             DoScanEnd();
@@ -8419,30 +8159,6 @@ bool CheckModelName()
 }
 
 /************************************************************************************************************/
-
-void CheckScanButton() // Scan button AND models button
-{
-    char     b5Greyed[]                 = "b5.pco=33840";
-    char     b12Greyed[]                = "b12.pco=33840";
-    char     b1Greyed[]                 = "b1.pco=33840";
-
-    if (ModelMatched) {
-        if (CurrentView == TXSETUPVIEW) {
-          if(!b5isGrey) { 
-                SendCommand(b5Greyed); 
-                SendCommand(b1Greyed);
-                b5isGrey = true;
-            }
-        }
-         if (CurrentView == RXSETUPVIEW) {
-            if(!b12isGrey) { 
-                SendCommand(b12Greyed);
-                b12isGrey = true;
-            }
-        }
-    }
-}
-/************************************************************************************************************/
 void SimulateCloseDown(){ // Because real closedown occurs only after button is released
     
     char ScreenOff[] = "dim=0";
@@ -8575,21 +8291,6 @@ void FixMotorChannel()
 }
 
 /************************************************************************************************************/
-void SendBindingPipe()
-{
-    if (PPMdata.UseTXModule) return;
-    uint16_t BindPause = 1200;                          // was 3000
-   // if (NewModelMemoryWasSaved) BindPause = 1000;     // was 6000
-    if (!BoundFlag || !ModelMatched) BindingTimer = millis();
-    if ((millis() - BindingTimer) < BindPause) 
-    {
-        BufferTeensyMACAddPipe(); 
-    }else
-    {
-      //  NewModelMemoryWasSaved = false; // return to normal service
-    }
-}
-/************************************************************************************************************/
 void GetBuddyData()
 {
         if (BuddyMaster)  GetSlaveChannelValuesPPM();             // Get buddy data and maybe use it. 
@@ -8648,269 +8349,3 @@ FASTRUN void loop()
 } // end loop()
 
 /************************************************************************************************************/
-/************************************************************************************************************/
-#define BADNIBBLECOUNT 6
-
-uint8_t CheckPipeNibbles(uint8_t b){ 
-
-    uint8_t      temp;
-    uint8_t     BadLowerNibble[BADNIBBLECOUNT]   = {0x05,0x0a,0x02,0x01,0x00,0x0f};
-    uint8_t    BadHigherNibble[BADNIBBLECOUNT]   = {0x50,0xa0,0x20,0x10,0x00,0xf0};
-    uint8_t  BetterLowerNibble[BADNIBBLECOUNT]   = {0x03,0x04,0x06,0x07,0x08,0x09};
-    uint8_t BetterHigherNibble[BADNIBBLECOUNT]   = {0x30,0x40,0x60,0x70,0x80,0x90};
-
-    if (!b) return 0x36;                                     // return an acceptable byte for a zero
-        
-    for (int i = 0; i < BADNIBBLECOUNT; ++i) {               // ********** check LOWER nibble **********
-        if ((b & 0x0f) == BadLowerNibble[i])
-        {
-            temp = b & 0xf0;                                 // save only the hi nibble in temp
-            b    = temp | BetterLowerNibble[i];              // put an acceptable nibble into lower nibble
-        }
-    }
-    for (int i = 0; i < BADNIBBLECOUNT;++i){                 // ********** check HIGHER nibble **********
-        if ((b & 0xf0) == BadHigherNibble[i]) 
-        {
-            temp = b & 0x0f;                                  // save only the Low nibble in temp
-            b = temp | BetterHigherNibble[i];                 // put an acceptable nibble into Higher nibble
-        }
-    }
-    return b;
-}
-
-/************************************************************************************************************/
-
-FASTRUN void BufferTeensyMACAddPipe()
-{
-    for (int q = 1; q < 6; ++q) {
-        SendBuffer[q] = MacAddress[q];
-    }
-}
-/************************************************************************************************************/
-void DelayWithDog(uint32_t HowLong){   // Implements delay() and also kicks the dog a lot
-        uint32_t ThisMoment = millis();
-        while ((millis() - ThisMoment) < HowLong)  KickTheDog(); 
-}
-//***********************************************************************************************************
-void Look(int p)  // This is just to save typing Serial.println :)
-{
-    Serial.println(p);
-}
-//***********************************************************************************************************
-// *************************************** Functions to run macros  *****************************************
-// **********************************************************************************************************
-void StartMacro(uint8_t m)
-{                                                                                     // Start a macro
-    MacrosBuffer[m][MACRORUNNINGNOW] |= 1;                                            // LOW BIT = "running now" flag
-    MacroStartTime[m] = millis() + ((MacrosBuffer[m][MACROSTARTTIME]) * 100);         // Note its Start moment
-    MacroStopTime[m]  = MacroStartTime[m] + ((MacrosBuffer[m][MACRODURATION]) * 100); // Note its Stop moment
-}
-/************************************************************************************************************/
-void RunMacro(uint8_t m)
-{ // Move a servo to a place
-    uint32_t RightNow = millis();
-    if (RightNow >= MacroStartTime[m]) MacrosBuffer[m][MACRORUNNINGNOW] |= 2; // Set the ACTIVE Bit if started (BIT 1)
-    if (RightNow >= MacroStopTime[m]) MacrosBuffer[m][MACRORUNNINGNOW] &= 1;  // Clear the ACTIVE Bit if expired (BIT 1)
-    if (MacrosBuffer[m][MACRORUNNINGNOW] & 2) {
-        SendBuffer[(MacrosBuffer[m][MACROMOVECHANNEL]) - 1] = map(MacrosBuffer[m][MACROMOVETOPOSITION], 0, 180, MINMICROS, MAXMICROS); // Do it if currently active!
-    }
-}
-/************************************************************************************************************/
-void StopMacro(uint8_t m)
-{ // Stop a macro
-    MacrosBuffer[m][MACRORUNNINGNOW] = 0;
-}
-/************************************************************************************************************/
-
-void ExecuteMacro()
-{ // Main entry point from SendData()  ... START/STOP/RUN
-    uint8_t TriggerChannel = 0;
-    for (u_int8_t i = 0; i < MAXMACROS; ++i) {
-        // ***************************** START OR STOP ******************************
-        TriggerChannel = (MacrosBuffer[i][MACROTRIGGERCHANNEL]) - 1;  // Down by one as channels are really 0 - 15
-        if (TriggerChannel) {                                         // Is trigger channel non-zero?
-            if (SendBuffer[TriggerChannel] >= MAXMICROS - 1) {        // Is the trigger point is close to its highest value?
-                if (!MacrosBuffer[i][MACRORUNNINGNOW]) StartMacro(i); // Yes. Start if not already started
-            }
-            else {
-                if (MacrosBuffer[i][MACRORUNNINGNOW]) StopMacro(i); // No. Stop it if it was running
-            }
-            // ****************************  RUN ****************************************
-            if (MacrosBuffer[i][MACRORUNNINGNOW]) { // If running, move the servo ... if timer agrees.
-                RunMacro(i);
-            }
-        }
-    }
-}
-
-// *************** END OF MACROS ZONE ************************************************
-
-
-/*******************************************************************************************************************************/
-//                                                  PONG
-/*******************************************************************************************************************************/
-
-
-void StartPong(){
-    char page_PongView[] = "page PongView"; 
-    SendCommand(page_PongView);
-    CurrentView = PONGVIEW;
-    CurrentMode = PONGMODE;
-    BlueLedOn();
-    DrawBox  (PONGX1, PONGY1, PONGX2, PONGY2,   ForeGroundColour);   // Draw court
-    DrawLine (PONGX1, GOALTOP, PONGX1, GOALBOT, BackGroundColour);   // Make goal openings
-    DrawLine (PONGX2, GOALTOP, PONGX2, GOALBOT, BackGroundColour);   // Make goal openings
-}
-/*********************************************************************************************************************************/
-void MoveBall(int x, int y){
-    static int lastx = 0;
-    static int lasty = 0;
-    DrawDot(lastx, lasty, PONGBALLSIZE+1, BackGroundColour); // Clear last position
-    DrawDot(x, y, PONGBALLSIZE, HighlightColour);            // Draw new position
-    lastx = x;                                               // save last position
-    lasty = y;                                               // save last position
-}
-/*********************************************************************************************************************************/
-//FASTRUN void DrawBox(int x1, int y1, int x2, int y2, int c)
-void MoveLeftPaddle(int y){
-    DrawLine(LEFTPADDLEX, PONGY1+3, LEFTPADDLEX, PONGY2-3, BackGroundColour);
-    DrawLine(LEFTPADDLEX, y - (PADDLEHEIGHT/2), LEFTPADDLEX , y + (PADDLEHEIGHT/2), ForeGroundColour);
-}
-/*********************************************************************************************************************************/
-void MoveRightPaddle(int y){
-    DrawLine(RIGHTPADDLEX, PONGY1+3, RIGHTPADDLEX, PONGY2-3, BackGroundColour);
-    DrawLine(RIGHTPADDLEX, y - (PADDLEHEIGHT/2), RIGHTPADDLEX , y + (PADDLEHEIGHT/2), ForeGroundColour);
-}
-/*********************************************************************************************************************************/
-
-void   PlayPong(){  // called 100 times per second
-    static uint32_t Ponged                = 0;
-    static short int      x               = STARTX;
-    static short int      y               = STARTY;
-    static short int      LeftPaddlY      = STARTY;
-    static short int      RightPaddlY     = STARTY;
-    static short int      OLDLeftPaddlY   = STARTY;
-    static short int      OLDRightPaddlY  = STARTY;
-    static short int      incy            = PONGBALLSPEED;
-    static short int      incx            = PONGBALLSPEED;
-    static short int      LeftScore       = 0;
-    static short int      RightScore      = 0;
-    char   n0[]                           = "n0";   // score labels
-    char   n1[]                           = "n1";   // score labels
-    uint8_t               lstk            = 1;      // left stick input
-    uint8_t               rstk            = 2;      // right stick input
-
-    if ((millis() - Ponged) < PONGSPEED) return;
-    Ponged = millis();
-
-    y += incy;
-    x += incx;
-
-    if (SticksMode == 2) swap(&lstk, &rstk);
-
-    LeftPaddlY  = map(PreMixBuffer[lstk],MINMICROS,MAXMICROS,PONGY2+EXTRAPONG,PONGY1-EXTRAPONG);
-    RightPaddlY = map(PreMixBuffer[rstk],MINMICROS,MAXMICROS,PONGY2+EXTRAPONG,PONGY1-EXTRAPONG);
-   
-    if (RightPaddlY   != OLDRightPaddlY) MoveRightPaddle(RightPaddlY);
-    if (OLDLeftPaddlY != LeftPaddlY)     MoveLeftPaddle(LeftPaddlY);
-    OLDLeftPaddlY = LeftPaddlY;
-    OLDRightPaddlY = RightPaddlY;
-
-    if ((x <= LEFTPADDLEX + PONGCLEAR) && (x >= LEFTPADDLEX - PONGCLEAR)){ // hit left paddle?
-         if ((y >= (LeftPaddlY-(PADDLEHEIGHT/2))) && (y <= (LeftPaddlY+(PADDLEHEIGHT/2)))){
-             incx = -incx;
-             x    = LEFTPADDLEX + PONGCLEAR + 10;
-             randomSeed(micros());
-             incy = PONGBALLSPEED - random(PONGBALLSPEED);
-             PlaySound(BEEPMIDDLE);
-         }
-    }
-    if ((x <= (RIGHTPADDLEX + PONGCLEAR)) && (x >= (RIGHTPADDLEX - PONGCLEAR))){// hit right paddle?
-         if ((y >= (RightPaddlY-(PADDLEHEIGHT/2))) && (y <= (RightPaddlY+(PADDLEHEIGHT/2)))){
-             incx = -incx;
-             x    = (RIGHTPADDLEX - PONGCLEAR) - 10;
-             randomSeed(micros());
-             incy = PONGBALLSPEED - random(PONGBALLSPEED*2);
-             PlaySound(BEEPMIDDLE);
-         }
-    }
-    if ((y + PONGCLEAR) >= PONGY2) { // bounce off bottom
-        incy = -incy;
-        y    = (PONGY2 - PONGCLEAR) - 10;
-        if (incy == 0) incy =  -PONGBALLSPEED*2;
-        PlaySound(CLICKZERO);
-        ScreenTimeTimer = millis();
-        StartInactvityTimeout();
-    }
-    if (y <= (PONGY1 + PONGCLEAR)) {// bounce off top
-        incy = -incy;
-        y    = PONGY1 + PONGCLEAR + 10;
-        if (incy == 0) incy = PONGBALLSPEED * 2;
-        PlaySound(CLICKZERO);
-        ScreenTimeTimer = millis();
-        StartInactvityTimeout();
-    }
-    if (((x + PONGCLEAR) >= PONGX2) && (x)){
-        if ((y < GOALBOT-2) && (y > GOALTOP+2)){ // scored on the right
-            ++RightScore;
-            SendValue(n0, RightScore);
-            if (RightScore >= 10){
-                PlaySound(THEFANFARE);
-                DelayWithDog(6000);
-                RightScore = 0;
-                LeftScore = 0;
-                SendValue(n0, RightScore);
-                SendValue(n1, LeftScore);
-            }
-            x = PONGX2;
-            MoveBall(x,y);
-            PlaySound(BEEPCOMPLETE);
-            DelayWithDog(500);
-            x      = -STARTX;
-            y      = -STARTY;
-            randomSeed(micros());
-            incx = -PONGBALLSPEED + random(PONGBALLSPEED*2);
-            while (abs(incx) < 3) incx = -PONGBALLSPEED + random(PONGBALLSPEED*2);
-            incy =  PONGBALLSPEED - random(PONGBALLSPEED*2);
-            
-        }
-        else {
-            incx = -incx;
-            PlaySound(CLICKZERO);
-        }
-    }
-    if ((x <= (PONGX1 + PONGCLEAR)) && (x)) {// scored on the left
-        if ((y < GOALBOT-2) && (y > GOALTOP+2)){
-            ++LeftScore;
-            x = PONGX1;
-            MoveBall(x,y);
-            PlaySound(BEEPCOMPLETE);
-            SendValue(n1, LeftScore);
-            if (LeftScore >= 10){
-                PlaySound(THEFANFARE);
-                DelayWithDog(6000);
-                RightScore = 0;
-                LeftScore = 0;
-                SendValue(n0, RightScore);
-                SendValue(n1, LeftScore);
-            }
-            DelayWithDog(500);
-            x      = -STARTX;
-            y      = -STARTY;
-            randomSeed(micros());
-            incx = PONGBALLSPEED - random(PONGBALLSPEED*2);
-            while (abs(incx) < 3) incx = PONGBALLSPEED - random(PONGBALLSPEED*2);
-            incy = PONGBALLSPEED - random(PONGBALLSPEED*2);
-        }else{
-            incx = -incx;
-            PlaySound(CLICKZERO);
-        }
-    }
-    MoveBall(x,y); 
-    NewCompressNeeded = false;
-    SendValue(n0, RightScore);
-    SendValue(n1, LeftScore);
-    DrawLine(PONGX1 + ((PONGX2 - PONGX1) / 2), PONGY1, PONGX1 + ((PONGX2 - PONGX1) / 2), PONGY2, Gray);
-}
-
-/****************************************************************************************************************/

@@ -1,3 +1,5 @@
+// ********************** Transceiver.h ***********************************************
+
 #include <Arduino.h>
 extern RF24          Radio1;
 extern uint64_t      DefaultPipe;
@@ -22,6 +24,7 @@ extern uint32_t             TotalLostPackets;
 extern uint32_t             GapStart;
 extern bool                        Reconnected;
 extern uint32_t                    Inactivity_Timeout;
+extern uint8_t                     MacAddress[8];
 /*********************************************************************************************************************************/
 
 /************************************************************************************************************/
@@ -366,4 +369,59 @@ void SetThePipe(uint64_t WhichPipe)
     delayMicroseconds(500);
     Radio1.stopListening();
     delayMicroseconds(500); // allow things to happen
+}
+/************************************************************************************************************/
+#define BADNIBBLECOUNT 6
+
+uint8_t CheckPipeNibbles(uint8_t b){ 
+
+    uint8_t      temp;
+    uint8_t     BadLowerNibble[BADNIBBLECOUNT]   = {0x05,0x0a,0x02,0x01,0x00,0x0f};
+    uint8_t    BadHigherNibble[BADNIBBLECOUNT]   = {0x50,0xa0,0x20,0x10,0x00,0xf0};
+    uint8_t  BetterLowerNibble[BADNIBBLECOUNT]   = {0x03,0x04,0x06,0x07,0x08,0x09};
+    uint8_t BetterHigherNibble[BADNIBBLECOUNT]   = {0x30,0x40,0x60,0x70,0x80,0x90};
+
+    if (!b) return 0x36;                                     // return an acceptable byte for a zero
+        
+    for (int i = 0; i < BADNIBBLECOUNT; ++i) {               // ********** check LOWER nibble **********
+        if ((b & 0x0f) == BadLowerNibble[i])
+        {
+            temp = b & 0xf0;                                 // save only the hi nibble in temp
+            b    = temp | BetterLowerNibble[i];              // put an acceptable nibble into lower nibble
+        }
+    }
+    for (int i = 0; i < BADNIBBLECOUNT;++i){                 // ********** check HIGHER nibble **********
+        if ((b & 0xf0) == BadHigherNibble[i]) 
+        {
+            temp = b & 0x0f;                                  // save only the Low nibble in temp
+            b = temp | BetterHigherNibble[i];                 // put an acceptable nibble into Higher nibble
+        }
+    }
+    return b;
+}
+
+/************************************************************************************************************/
+
+FASTRUN void BufferTeensyMACAddPipe()
+{
+    for (int q = 1; q < 6; ++q) {
+        SendBuffer[q] = MacAddress[q];
+    }
+}
+
+/************************************************************************************************************/
+void SendBindingPipe()
+{
+    static uint32_t BindingTimer   = 0;
+    if (PPMdata.UseTXModule) return;
+    uint16_t BindPause = 1200;                          // was 3000
+   // if (NewModelMemoryWasSaved) BindPause = 1000;     // was 6000
+    if (!BoundFlag || !ModelMatched) BindingTimer = millis();
+    if ((millis() - BindingTimer) < BindPause) 
+    {
+        BufferTeensyMACAddPipe(); 
+    }else
+    {
+      //  NewModelMemoryWasSaved = false; // return to normal service
+    }
 }
