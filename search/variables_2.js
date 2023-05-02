@@ -33,7 +33,7 @@ var searchData=
   ['buddycontrolled_30',['BuddyControlled',['../TransmitterCode_2src_2main_8cpp.html#a5c21772263bd77182ecf11e45dc773a5',1,'main.cpp']]],
   ['buddymaster_31',['BuddyMaster',['../TransmitterCode_2src_2main_8cpp.html#a26a52012e307147a99289fff5c492358',1,'main.cpp']]],
   ['buddyon_32',['BuddyON',['../TransmitterCode_2src_2main_8cpp.html#a2134130b3bde6e04237bca0aab2c22ef',1,'main.cpp']]],
-  ['buddypupilonppm_33',['BuddyPupilOnPPM',['../TransmitterCode_2src_2main_8cpp.html#ad0fba269cc9a3aa9400013a6b80cbd09',1,'main.cpp']]],
+  ['buddypupilonppm_33',['BuddyPupilOnPPM',['../transceiver_8h.html#ad0fba269cc9a3aa9400013a6b80cbd09',1,'BuddyPupilOnPPM():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#ad0fba269cc9a3aa9400013a6b80cbd09',1,'BuddyPupilOnPPM():&#160;main.cpp']]],
   ['buddyswitch_34',['BuddySwitch',['../TransmitterCode_2src_2main_8cpp.html#aad45cb80b969ee0f10952b145e4c15a5',1,'main.cpp']]],
   ['buttonclicks_35',['ButtonClicks',['../Utilities_8h.html#a0955aa08f4b43e6f78ff256fc6ccf421',1,'ButtonClicks():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a0955aa08f4b43e6f78ff256fc6ccf421',1,'ButtonClicks():&#160;main.cpp']]],
   ['byte1_36',['Byte1',['../structPayload.html#ab1cbe4c4b9ee9ce839084b274f3ea494',1,'Payload']]],

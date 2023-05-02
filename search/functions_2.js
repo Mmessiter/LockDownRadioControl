@@ -47,7 +47,7 @@ var searchData=
   ['closemodelsfile_44',['CloseModelsFile',['../TransmitterCode_2src_2main_8cpp.html#a6922974b734cfe3a511e074a2d6ac33c',1,'main.cpp']]],
   ['commandmotors_45',['commandMotors',['../Quadcopter_2src_2main_8cpp.html#a9acf6c6b8012c342b50fc7b0656ccc31',1,'main.cpp']]],
   ['comparemodelsids_46',['CompareModelsIDs',['../TransmitterCode_2src_2main_8cpp.html#af8fe429ceb65bf9d257a2a0f1c63eccb',1,'main.cpp']]],
-  ['compress_47',['Compress',['../Definitions_8h.html#a1ddd5e8d5bd649dd98ce3710fbff651b',1,'Compress(uint16_t *compressed_buf, uint16_t *uncompressed_buf, uint8_t uncompressed_size):&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a1ddd5e8d5bd649dd98ce3710fbff651b',1,'Compress(uint16_t *compressed_buf, uint16_t *uncompressed_buf, uint8_t uncompressed_size):&#160;main.cpp']]],
+  ['compress_47',['Compress',['../Definitions_8h.html#a1ddd5e8d5bd649dd98ce3710fbff651b',1,'Compress(uint16_t *compressed_buf, uint16_t *uncompressed_buf, uint8_t uncompressed_size):&#160;transceiver.h'],['../transceiver_8h.html#a1ddd5e8d5bd649dd98ce3710fbff651b',1,'Compress(uint16_t *compressed_buf, uint16_t *uncompressed_buf, uint8_t uncompressed_size):&#160;transceiver.h']]],
   ['configureradio_48',['ConfigureRadio',['../radio_8h.html#a3bb52983d9a2108589830301007bdce1',1,'radio.h']]],
   ['configurestickmode_49',['ConfigureStickMode',['../Utilities_8h.html#a9c0d58f91488496f6946d25b4ad2cbd8',1,'Utilities.h']]],
   ['controlangle_50',['controlANGLE',['../Quadcopter_2src_2main_8cpp.html#a65f83d03987a32aea44172062214273d',1,'main.cpp']]],

@@ -11,6 +11,6 @@ var searchData=
   ['ypoint_8',['yPoint',['../TransmitterCode_2src_2main_8cpp.html#ac57deb5507c3835634b98d51b5d13c9b',1,'main.cpp']]],
   ['ypoints_9',['yPoints',['../TransmitterCode_2src_2main_8cpp.html#aff20e4985ae632d4c59eeb3d772874c9',1,'main.cpp']]],
   ['ytouchplace_10',['YtouchPlace',['../TransmitterCode_2src_2main_8cpp.html#a1ee9e6968fdbcee5ba9e5dc2070dbdb3',1,'main.cpp']]],
-  ['yy1_11',['yy1',['../TransmitterCode_2src_2main_8cpp.html#a10274b74b5b9f35476ae844506775afe',1,'main.cpp']]],
-  ['yy1extra_12',['YY1EXTRA',['../TransmitterCode_2src_2main_8cpp.html#ad7ab066fbe7d750f032f5761dbaa2487',1,'main.cpp']]]
+  ['yy1_11',['yy1',['../transceiver_8h.html#a10274b74b5b9f35476ae844506775afe',1,'transceiver.h']]],
+  ['yy1extra_12',['YY1EXTRA',['../transceiver_8h.html#ad7ab066fbe7d750f032f5761dbaa2487',1,'transceiver.h']]]
 ];

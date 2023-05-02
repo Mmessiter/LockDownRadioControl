@@ -14,7 +14,7 @@ var searchData=
   ['initcurrentradio_11',['InitCurrentRadio',['../radio_8h.html#ab652df130d9feb78c0accd5beedf7d80',1,'radio.h']]],
   ['initialize_12',['initialize',['../classMPU6050.html#abd8fc6c18adf158011118fbccc7e7054',1,'MPU6050']]],
   ['initmaxmin_13',['InitMaxMin',['../TransmitterCode_2src_2main_8cpp.html#a07064494c6f54db67dfab08c1f744a65',1,'main.cpp']]],
-  ['initradio_14',['InitRadio',['../Definitions_8h.html#a86ce6c54618629a61b8502786d2ce82c',1,'InitRadio(uint64_t Pipe):&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a799f38bc33abdb30eec1d7db3cf27d58',1,'InitRadio(uint64_t Pipe):&#160;main.cpp']]],
+  ['initradio_14',['InitRadio',['../Definitions_8h.html#a86ce6c54618629a61b8502786d2ce82c',1,'InitRadio(uint64_t Pipe):&#160;transceiver.h'],['../transceiver_8h.html#a799f38bc33abdb30eec1d7db3cf27d58',1,'InitRadio(uint64_t Pipe):&#160;transceiver.h']]],
   ['initswitchesandtrims_15',['InitSwitchesAndTrims',['../TransmitterCode_2src_2main_8cpp.html#aa43884078cb84d9ae16d8cd6791c7042',1,'main.cpp']]],
   ['instrng_16',['InStrng',['../Definitions_8h.html#a5f109790a6fe0b972a502f3cac4ed1e7',1,'InStrng(char *text1, char *text2):&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a5f109790a6fe0b972a502f3cac4ed1e7',1,'InStrng(char *text1, char *text2):&#160;main.cpp']]],
   ['intodegrees_17',['IntoDegrees',['../Utilities_8h.html#a442340cad0d09e58be5ec6afdd5b27d1',1,'Utilities.h']]],
