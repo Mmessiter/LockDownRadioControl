@@ -1,5 +1,5 @@
 /** @file TransmitterCode/src/main.cpp
- * // Malcolm Messiter 2022
+ * // Malcolm Messiter 2023
  *
  * @page TransmitterCode...
  * @section LockDown Radio Control Features list, so far:
@@ -9,7 +9,7 @@
  * - 12 BIT servo resolution (11 BIT via SBUS)
  * - 32 Mixes
  * - 4 Flight modes with user definable and announced names.
- * - 90 Model memories
+ * - 90 Model memories.
  * - Unlimited model files for backup (32 Gig)
  * - "ModelMatch" plus automatic model memory selection. (Avoid flying with wrong memory loaded.)
  * - Buddyboxing with selectable channels.
@@ -10247,8 +10247,7 @@ void DoScanInit()
     BoundFlag   = false;
     ScanAllChannels(true);
 }
-
-/*********************************************************************************************************************************/
+/***********************************************************************************************************/
 
 void DoScanEnd()
 {
@@ -10257,7 +10256,11 @@ void DoScanEnd()
     CurrentMode = NORMAL;
 }
 
-/*********************************************************************************************************************************/
+/*******************************************************************************************************************************/
+//                                                  PONG
+/*******************************************************************************************************************************/
+
+
 void StartPong(){
     char page_PongView[] = "page PongView"; 
     SendCommand(page_PongView);
