@@ -1,6 +1,6 @@
 
 // ***************************************************************************
-//     This header file has prototypes, definitions and includes             *
+//     This header file has many prototypes, definitions and includes        *
 // ***************************************************************************
 
 #ifndef Definitions_H
