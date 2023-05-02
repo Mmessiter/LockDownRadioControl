@@ -1,6 +1,6 @@
 // ******************** Definitions.h ****************************************
 //     This header file has many prototypes, definitions                     *
-//     It has many more includes AT THE BOTTOM !                             *
+//     ** It has many more includes AT THE BOTTOM ! **                       *
 // ****************************************************************************
 
 #ifndef Definitions_H

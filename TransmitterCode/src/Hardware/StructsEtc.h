@@ -1,4 +1,6 @@
+// ****************************** Structs etc *******************************************************
 #include <Arduino.h>
+
 #ifndef STRUCTSETC_H
 #define STRUCTSETC_H
 

@@ -393,9 +393,9 @@ bool      ShowVPC                 = false;
 short int TxVoltageCorrection     = 0;
 short int RxVoltageCorrection     = 0;
 uint8_t   LEDBrightness           = DEFAULTLEDBRIGHTNESS; // needs only 8 bits really
-uint32_t  PowerOffTimer           = 0;
-bool      PowerWarningVisible     = false;
-uint8_t   TurnOffSecondToGo       = 2;
+
+
+
 uint8_t   PowerOffWarningSeconds  = 2;
 uint8_t   ConnectionAssessSeconds = 1; 
 uint32_t  PreviousPowerOffTimer   = 0;
@@ -8173,13 +8173,15 @@ void SimulateCloseDown(){ // Because real closedown occurs only after button is 
 /************************************************************************************************************/
 void CheckPowerOffButton()
 {
-
+    static bool      PowerWarningVisible     = false;
+    static uint32_t  PowerOffTimer           = 0;
+    static uint8_t   TurnOffSecondToGo       = PowerOffWarningSeconds;
     char PowerMsg[15];
     char PowerPre[] = "TURN OFF?! ";
     char nb[4];
     char NotStillConnected[]        = "vis StillConnected,0";
     char StillConnected[]           = "vis StillConnected,1";
-    char  StillConnectedBox[]       = "StillConnected";
+    char StillConnectedBox[]       = "StillConnected";
     
 
     if (!digitalRead(BUTTON_SENSE_PIN)){
@@ -8197,6 +8199,7 @@ void CheckPowerOffButton()
         }
     } else {
             PowerOffTimer = 0;
+            TurnOffSecondToGo = PowerOffWarningSeconds;
     }
 
     if (PowerOffTimer) {                          // count down started?
@@ -8210,6 +8213,7 @@ void CheckPowerOffButton()
         if (PowerWarningVisible) {
             SendCommand(NotStillConnected);
             PowerWarningVisible = false;
+            TurnOffSecondToGo = PowerOffWarningSeconds;
         }
         return;
     }
