@@ -55,6 +55,8 @@ void   PlayPong(){  // called 100 times per second
     uint8_t               lstk            = 1;      // left stick input
     uint8_t               rstk            = 2;      // right stick input
 
+
+    if (CurrentView == HELP_VIEW)return;
     if ((millis() - Ponged) < PONGSPEED) return;
     Ponged = millis();
 

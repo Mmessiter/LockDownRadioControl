@@ -6309,6 +6309,8 @@ FASTRUN void ButtonWasPressed()
             SendCommand(WhichPage); // this sends nextion back to last screen
             CurrentView = SavedCurrentView;
 
+            if (CurrentView == PONGVIEW) StartPong();
+
             if ((CurrentView == RXSETUPVIEW) || (CurrentView == TXSETUPVIEW)){ 
                 b5isGrey = false;
                 b12isGrey = false;
