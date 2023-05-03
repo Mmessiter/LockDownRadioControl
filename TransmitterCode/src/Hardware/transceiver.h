@@ -1,30 +1,6 @@
 // ********************** Transceiver.h ***********************************************
 
 #include <Arduino.h>
-extern RF24          Radio1;
-extern uint64_t      DefaultPipe;
-extern uint8_t       CurrentMode;
-extern uint8_t       PacketNumber;
-extern uint8_t       NextChannel;
-extern uint32_t      GapSum;
-extern uint16_t      HighlightColour;
-extern bool          SendNoData;
-extern bool          LostContactFlag;
-extern bool          BuddyPupilOnPPM;
-extern bool          Connected;
-extern uint16_t             CompressedData[COMPRESSEDWORDS];
-extern uint16_t             RangeTestGoodPackets;
-extern uint32_t             RecentPacketsLost;
-extern uint8_t              SizeOfCompressedData;
-extern uint32_t             LastPacketSentTime;
-extern bool                 NewCompressNeeded;
-extern uint8_t              ReconnectionIndex;
-extern uint64_t             TeensyMACAddPipe;
-extern uint32_t             TotalLostPackets;
-extern uint32_t             GapStart;
-extern bool                        Reconnected;
-extern uint32_t                    Inactivity_Timeout;
-extern uint8_t                     MacAddress[8];
 /*********************************************************************************************************************************/
 
 /************************************************************************************************************/

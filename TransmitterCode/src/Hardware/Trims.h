@@ -4,22 +4,6 @@
 
 uint32_t TrimTimer              = 0;
 
-
-extern uint8_t   SticksMode;
-extern int       Trims[BANKSUSED + 1][CHANNELSUSED + 1]; // Trims to store
-extern uint8_t   Bank;
-extern uint16_t  TrimMultiplier;                         // How much to multiply trim by
-extern bool      CopyTrimsToAll;
-extern uint8_t   SubTrimToEdit;
-extern uint32_t  ModelNumber;
-extern uint32_t  LastTimeRead;
-extern void      SaveOneModel(uint32_t mnum);
-extern bool      DefiningTrims;
-extern bool      TrimDefined[4];
-extern uint8_t   TrimNumber[8];
-extern uint16_t  TrimRepeatSpeed;
-extern bool     TrimSwitch[8];
-extern uint32_t  TransmitterLastManaged;
 // **********************************************************************************************************************************
 void StartTrimView()
 {

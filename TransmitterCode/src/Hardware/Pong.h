@@ -1,70 +1,8 @@
-// *************************************** Pong.h  *****************************************
 
 #include <Arduino.h>
 
-extern void swap(uint8_t* a, uint8_t* b);
-extern bool               ValueSent;
-extern char               TextIn[122];
-extern bool               ButtonClicks;
-extern uint8_t            CurrentView;
-extern WDT_T4<WDT3>       TeensyWatchDog;
-extern WDT_timings_t      WatchDogConfig;
-extern uint8_t            SticksMode;
-extern uint16_t           AnalogueInput[PROPOCHANNELS];
-extern short              DeltaGMT;
-extern uint8_t            Gsecond;   // = tm.Second; // 0-59
-extern uint8_t            Gminute;   // = tm.Minute; // 0-59
-extern uint8_t            Ghour;     // = tm.Hour;   // 0-23
-extern uint8_t            GweekDay;  // = tm.Wday;   // 1-7
-extern uint8_t            GmonthDay; // = tm.Day;    // 1-31
-extern uint8_t            Gmonth;    // = tm.Month;  // 1-12
-extern uint8_t            Gyear;     // = tm.Year;   // 0-99
-extern bool               GPSTimeSynched;
-extern uint8_t            GPSHours;
-extern uint8_t            GPSMins;
-extern uint8_t            GPSSecs;
-extern uint8_t            GPSDay;
-extern uint8_t            GPSMonth;
-extern uint8_t            GPSYear;
-extern tmElements_t       tm;
-extern uint8_t            DateFix;
-extern uint8_t            SubTrims[CHANNELSUSED + 1];
-extern uint8_t            MacrosBuffer[MAXMACROS][BYTESPERMACRO];
-extern bool               UseMacros;
-extern uint32_t           Inactivity_Start;
-extern float              BlinkHertz;
-extern uint8_t            LEDBrightness;
-extern bool               LedIsBlinking;
-extern uint32_t           BlinkTimer;
-extern uint32_t           ScreenTimeTimer;
-extern bool               ScreenIsOff;
-extern uint16_t           ScreenTimeout;
-extern byte               Mixes[MAXMIXES + 1][17];
-extern char               ChannelNames[CHANNELSUSED][11];
-extern uint8_t            MixNumber;
-extern bool               LedWasGreen;
-extern bool               LedWasRed;
-extern char               na[];
-extern bool               AnnounceConnected;
-extern bool               UseLog;
-extern bool               ModelIdentified;
-extern bool               BoundFlag;
-extern bool               ModelMatched;
-extern bool               RXVoltsDetected;
-extern uint16_t           PacketsPerSecond;
-extern uint32_t           LastShowTime;
-extern uint8_t            ConnectionAssessSeconds;
-extern uint8_t            PacketsHistoryBuffer[PERFECTPACKETSPERSECOND * MAXSHOWCOMMSSESCONDS];
-extern uint16_t           BackGroundColour;
-extern uint16_t           ReversedChannelBITS;
-extern uint16_t           PreMixBuffer[CHANNELSUSED + 1];
-extern uint16_t           SendBuffer[UNCOMPRESSEDWORDS];
-extern uint16_t           ForeGroundColour;
-extern bool               b5isGrey;
-extern bool               b12isGrey;
-
 /*******************************************************************************************************************************/
-//                                                  PONG
+//                                                  PONG.h
 /*******************************************************************************************************************************/
 
 void StartPong(){
