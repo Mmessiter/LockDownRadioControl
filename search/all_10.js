@@ -4,7 +4,7 @@ var searchData=
   ['one_1',['ONE',['../Definitions_8h.html#a206b6f5362e56b51ca957635350b70b6',1,'Definitions.h']]],
   ['one_5fswitch_5fview_2',['ONE_SWITCH_VIEW',['../Definitions_8h.html#a933cba614da0ca34d9e36b24d462ee07',1,'Definitions.h']]],
   ['oneminute_3',['ONEMINUTE',['../Definitions_8h.html#aaf3f23da47dee530842f92fe3d3501e3',1,'Definitions.h']]],
-  ['onemodelmemory_4',['OneModelMemory',['../TransmitterCode_2src_2main_8cpp.html#af41e1522d47ccad6267f971f13cb6f79',1,'main.cpp']]],
+  ['onemodelmemory_4',['OneModelMemory',['../Definitions_8h.html#af41e1522d47ccad6267f971f13cb6f79',1,'Definitions.h']]],
   ['openlogfiler_5',['OpenLogFileR',['../TransmitterCode_2src_2main_8cpp.html#a74a992633b38147ad59f2fc9540294e4',1,'main.cpp']]],
   ['openlogfilew_6',['OpenLogFileW',['../TransmitterCode_2src_2main_8cpp.html#ad2d22d4683c318454ab9a1dd15e1f647',1,'main.cpp']]],
   ['openmodelsfile_7',['OpenModelsFile',['../TransmitterCode_2src_2main_8cpp.html#ae7618f38a148877bc5681be58cba8354',1,'main.cpp']]],

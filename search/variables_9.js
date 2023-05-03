@@ -10,13 +10,13 @@ var searchData=
   ['i2c_5fslv0_5fen_7',['I2C_SLV0_EN',['../classMPU9250.html#a6150b9869ac3d40c1773cfff6f123016',1,'MPU9250']]],
   ['i2c_5fslv0_5freg_8',['I2C_SLV0_REG',['../classMPU9250.html#a8b22e82027b25cdce70e4df0f412e856',1,'MPU9250']]],
   ['i_5flimit_9',['i_limit',['../Quadcopter_2src_2main_8cpp.html#a1dd74ecfd9bb023afa0798103dd539ad',1,'main.cpp']]],
-  ['ina219_10',['ina219',['../TransmitterCode_2src_2main_8cpp.html#a69393b86406e49dbacfbabd283877495',1,'ina219():&#160;main.cpp'],['../SensorHubT32_2src_2main_8cpp.html#a69393b86406e49dbacfbabd283877495',1,'ina219():&#160;main.cpp'],['../ReceiverCode_2src_2main_8cpp.html#a69393b86406e49dbacfbabd283877495',1,'ina219():&#160;main.cpp']]],
+  ['ina219_10',['ina219',['../Definitions_8h.html#a69393b86406e49dbacfbabd283877495',1,'ina219():&#160;Definitions.h'],['../SensorHubT32_2src_2main_8cpp.html#a69393b86406e49dbacfbabd283877495',1,'ina219():&#160;main.cpp'],['../ReceiverCode_2src_2main_8cpp.html#a69393b86406e49dbacfbabd283877495',1,'ina219():&#160;main.cpp']]],
   ['ina219connected_11',['INA219Connected',['../common_8h.html#a8251d20351fc918ea452ad591c75116e',1,'common.h']]],
-  ['ina219volts_12',['INA219Volts',['../ReceiverCode_2src_2main_8cpp.html#ad84d94b7259bcf40213f0af9be706ee7',1,'INA219Volts():&#160;main.cpp'],['../radio_8h.html#ad84d94b7259bcf40213f0af9be706ee7',1,'INA219Volts():&#160;main.cpp'],['../SensorHubT32_2src_2main_8cpp.html#ad84d94b7259bcf40213f0af9be706ee7',1,'INA219Volts():&#160;main.cpp']]],
-  ['inactivity_5fstart_13',['Inactivity_Start',['../Utilities_8h.html#a42f848041eda5cd5b98d334ab44a15a1',1,'Inactivity_Start():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a42f848041eda5cd5b98d334ab44a15a1',1,'Inactivity_Start():&#160;main.cpp'],['../Pong_8h.html#a42f848041eda5cd5b98d334ab44a15a1',1,'Inactivity_Start():&#160;main.cpp']]],
-  ['inactivity_5ftimeout_14',['Inactivity_Timeout',['../transceiver_8h.html#ae99f193f5a3e06508bbe4b32ee91a963',1,'Inactivity_Timeout():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#ae99f193f5a3e06508bbe4b32ee91a963',1,'Inactivity_Timeout():&#160;main.cpp']]],
-  ['inputstick_15',['InPutStick',['../TransmitterCode_2src_2main_8cpp.html#ab9d98ee9d26a1af8f20291fd0b717056',1,'main.cpp']]],
-  ['inputtrim_16',['InputTrim',['../TransmitterCode_2src_2main_8cpp.html#aa7902ad07a101f48774eafbde7456c40',1,'main.cpp']]],
+  ['ina219volts_12',['INA219Volts',['../SensorHubT32_2src_2main_8cpp.html#ad84d94b7259bcf40213f0af9be706ee7',1,'INA219Volts():&#160;main.cpp'],['../radio_8h.html#ad84d94b7259bcf40213f0af9be706ee7',1,'INA219Volts():&#160;main.cpp'],['../ReceiverCode_2src_2main_8cpp.html#ad84d94b7259bcf40213f0af9be706ee7',1,'INA219Volts():&#160;main.cpp']]],
+  ['inactivity_5fstart_13',['Inactivity_Start',['../Definitions_8h.html#a42f848041eda5cd5b98d334ab44a15a1',1,'Inactivity_Start():&#160;Definitions.h'],['../Utilities_8h.html#a42f848041eda5cd5b98d334ab44a15a1',1,'Inactivity_Start():&#160;Definitions.h']]],
+  ['inactivity_5ftimeout_14',['Inactivity_Timeout',['../Definitions_8h.html#ae99f193f5a3e06508bbe4b32ee91a963',1,'Definitions.h']]],
+  ['inputstick_15',['InPutStick',['../Definitions_8h.html#ab9d98ee9d26a1af8f20291fd0b717056',1,'Definitions.h']]],
+  ['inputtrim_16',['InputTrim',['../Definitions_8h.html#aa7902ad07a101f48774eafbde7456c40',1,'Definitions.h']]],
   ['int_5fdisable_17',['INT_DISABLE',['../classMPU9250.html#aa0334939994e2e178d3d282469031ae5',1,'MPU9250']]],
   ['int_5fenable_18',['INT_ENABLE',['../classMPU9250.html#a76419818d1ac3740a74f3203a6e4e93a',1,'MPU9250']]],
   ['int_5fpin_5fcfg_19',['INT_PIN_CFG',['../classMPU9250.html#a7e507212aa30920ba9a5c6e93c852b7a',1,'MPU9250']]],
@@ -39,5 +39,5 @@ var searchData=
   ['integral_5fyaw_5fprev_36',['integral_yaw_prev',['../Quadcopter_2src_2main_8cpp.html#af6f1ae4bc8203051100523cc2ebaba89',1,'main.cpp']]],
   ['interations_37',['Interations',['../radio_8h.html#ac8e10a08e9da70138c4a8459c6902d7d',1,'radio.h']]],
   ['interpolate_38',['Interpolate',['../TransmitterCode_2src_2main_8cpp.html#ac8ce9c3b3ac8639fb34ffe64bef87c34',1,'main.cpp']]],
-  ['interpolationtypes_39',['InterpolationTypes',['../TransmitterCode_2src_2main_8cpp.html#a5424ceb23e086124c417474911365a58',1,'main.cpp']]]
+  ['interpolationtypes_39',['InterpolationTypes',['../Definitions_8h.html#a5424ceb23e086124c417474911365a58',1,'Definitions.h']]]
 ];

@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['radio1_0',['Radio1',['../TransmitterCode_2src_2main_8cpp.html#a621c346e4b1d9b24b9a5bda63d0f0f52',1,'Radio1(CE_PIN, CSN_PIN):&#160;main.cpp'],['../radio_8h.html#a6e2d4126d864c50e7c23c988c2bfdd1a',1,'Radio1(pinCE1, pinCSN1):&#160;radio.h']]],
+  ['radio1_0',['Radio1',['../Definitions_8h.html#a621c346e4b1d9b24b9a5bda63d0f0f52',1,'Radio1(CE_PIN, CSN_PIN):&#160;Definitions.h'],['../radio_8h.html#a6e2d4126d864c50e7c23c988c2bfdd1a',1,'Radio1(pinCE1, pinCSN1):&#160;radio.h']]],
   ['radio2_1',['Radio2',['../radio_8h.html#a8b76f3c338025926421c7b308405bbfd',1,'radio.h']]],
   ['read_2',['read',['../classSBUS.html#a44376d88b040d2cdf85f1a6d93633935',1,'SBUS']]],
   ['readak8963registers_3',['readAK8963Registers',['../classMPU9250.html#a8882aa5158664912c4d4354739d2bc23',1,'MPU9250']]],

@@ -25,7 +25,7 @@ var searchData=
   ['accz_22',['AccZ',['../Quadcopter_2src_2main_8cpp.html#af9a08745989f56ac72e8757359a30d5e',1,'main.cpp']]],
   ['accz_5fprev_23',['AccZ_prev',['../Quadcopter_2src_2main_8cpp.html#a4f12d0d2fdb0d0fa64c642c085341efa',1,'main.cpp']]],
   ['ackpayload_24',['AckPayload',['../StructsEtc_8h.html#a30a079d60b4731ce1531091ffe56a703',1,'AckPayload():&#160;StructsEtc.h'],['../radio_8h.html#a30a079d60b4731ce1531091ffe56a703',1,'AckPayload():&#160;radio.h']]],
-  ['ackpayloadsize_25',['AckPayloadSize',['../StructsEtc_8h.html#a81b9fbb62d8099a8e75c5d4720f41895',1,'AckPayloadSize():&#160;StructsEtc.h'],['../radio_8h.html#a6dc99d00582ef356ea3d57700dca6dab',1,'AckPayloadSize():&#160;radio.h']]],
+  ['ackpayloadsize_25',['AckPayloadSize',['../radio_8h.html#a6dc99d00582ef356ea3d57700dca6dab',1,'AckPayloadSize():&#160;radio.h'],['../StructsEtc_8h.html#a81b9fbb62d8099a8e75c5d4720f41895',1,'AckPayloadSize():&#160;StructsEtc.h']]],
   ['ak8963_5fasa_26',['AK8963_ASA',['../classMPU9250.html#aafe4f26060946ba06c550cbe1510cf9c',1,'MPU9250']]],
   ['ak8963_5fcnt_5fmeas1_27',['AK8963_CNT_MEAS1',['../classMPU9250.html#ab3cde169087d4e06e153f58b448136d5',1,'MPU9250']]],
   ['ak8963_5fcnt_5fmeas2_28',['AK8963_CNT_MEAS2',['../classMPU9250.html#aa74c8ffb8a828b7bd3c1ce4580a16b55',1,'MPU9250']]],
@@ -38,11 +38,11 @@ var searchData=
   ['ak8963_5freset_35',['AK8963_RESET',['../classMPU9250.html#a025bef32e50b09afcbaa02397a9749ca',1,'MPU9250']]],
   ['ak8963_5fwho_5fam_5fi_36',['AK8963_WHO_AM_I',['../classMPU9250.html#ab83c85ca5103d4baf46d800f1bc5e52c',1,'MPU9250']]],
   ['altitudegps_37',['AltitudeGPS',['../ReceiverCode_2src_2main_8cpp.html#a9690c7445dbd0530fa729af6bac11044',1,'AltitudeGPS():&#160;main.cpp'],['../radio_8h.html#a9690c7445dbd0530fa729af6bac11044',1,'AltitudeGPS():&#160;main.cpp']]],
-  ['analogueinput_38',['AnalogueInput',['../Utilities_8h.html#aff628072047986ff5293dbb907c3f676',1,'AnalogueInput():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#aff628072047986ff5293dbb907c3f676',1,'AnalogueInput():&#160;main.cpp'],['../Pong_8h.html#aff628072047986ff5293dbb907c3f676',1,'AnalogueInput():&#160;main.cpp']]],
+  ['analogueinput_38',['AnalogueInput',['../Definitions_8h.html#aff628072047986ff5293dbb907c3f676',1,'AnalogueInput():&#160;Definitions.h'],['../Utilities_8h.html#aff628072047986ff5293dbb907c3f676',1,'AnalogueInput():&#160;Definitions.h']]],
   ['anglegps_39',['AngleGPS',['../ReceiverCode_2src_2main_8cpp.html#a9cb6617428d513efc095336972632da6',1,'AngleGPS():&#160;main.cpp'],['../radio_8h.html#a9cb6617428d513efc095336972632da6',1,'AngleGPS():&#160;main.cpp']]],
-  ['announcebanks_40',['AnnounceBanks',['../TransmitterCode_2src_2main_8cpp.html#ae9add7064c6a555558088c4f67560535',1,'main.cpp']]],
-  ['announceconnected_41',['AnnounceConnected',['../Pong_8h.html#a7f979f6e267f37833beb30c91b796cae',1,'AnnounceConnected():&#160;main.cpp'],['../Utilities_8h.html#a7f979f6e267f37833beb30c91b796cae',1,'AnnounceConnected():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a7f979f6e267f37833beb30c91b796cae',1,'AnnounceConnected():&#160;main.cpp']]],
-  ['audiovolume_42',['AudioVolume',['../TransmitterCode_2src_2main_8cpp.html#adddcbca54e7b49592c3f6c360bf04494',1,'main.cpp']]],
-  ['automodelselect_43',['AutoModelSelect',['../TransmitterCode_2src_2main_8cpp.html#a77387f8b9f18e9b75448e01d821ae17e',1,'main.cpp']]],
-  ['autoswitch_44',['Autoswitch',['../TransmitterCode_2src_2main_8cpp.html#a5b8bae72a42da5c8a19ad3b4c1692538',1,'main.cpp']]]
+  ['announcebanks_40',['AnnounceBanks',['../Definitions_8h.html#ae9add7064c6a555558088c4f67560535',1,'Definitions.h']]],
+  ['announceconnected_41',['AnnounceConnected',['../Definitions_8h.html#a7f979f6e267f37833beb30c91b796cae',1,'AnnounceConnected():&#160;Definitions.h'],['../Utilities_8h.html#a7f979f6e267f37833beb30c91b796cae',1,'AnnounceConnected():&#160;Definitions.h']]],
+  ['audiovolume_42',['AudioVolume',['../Definitions_8h.html#adddcbca54e7b49592c3f6c360bf04494',1,'Definitions.h']]],
+  ['automodelselect_43',['AutoModelSelect',['../Definitions_8h.html#a77387f8b9f18e9b75448e01d821ae17e',1,'Definitions.h']]],
+  ['autoswitch_44',['Autoswitch',['../Definitions_8h.html#a5b8bae72a42da5c8a19ad3b4c1692538',1,'Definitions.h']]]
 ];
