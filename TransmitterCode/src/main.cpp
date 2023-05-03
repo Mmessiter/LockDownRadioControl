@@ -6061,7 +6061,7 @@ FASTRUN void ButtonWasPressed()
         if (InStrng(SetupAud, TextIn) > 0) { // Exit from screen with audio options
             CurrentMode = NORMAL;
             AudioVolume = GetValue(n0);
-            if (AudioVolume < 5) AudioVolume = 5;
+           // if (AudioVolume < 5) AudioVolume = 5;
             Brightness        = GetValue(n1);
             PlayFanfare       = GetValue(c0);
             TrimClicks        = GetValue(c1);
