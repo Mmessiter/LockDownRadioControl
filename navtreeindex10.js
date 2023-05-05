@@ -1,6 +1,5 @@
 var NAVTREEINDEX10 =
 {
-"classMPU9250.html#af6115bbd9b8bdd8979f4de53279710be":[4,0,2,117],
 "classMPU9250.html#af68ffa42e0bf808af73b11a9694d4f86":[4,0,2,104],
 "classMPU9250.html#af7d992743ffa2e15d5674b45a100791e":[4,0,2,224],
 "classMPU9250.html#af85a3badd3f79969c4715fceec962e39":[4,0,2,53],
@@ -249,5 +248,6 @@ var NAVTREEINDEX10 =
 "globals_defs_e.html":[5,1,4,5],
 "globals_defs_f.html":[5,1,4,6],
 "globals_defs_g.html":[5,1,4,7],
-"globals_defs_h.html":[5,1,4,8]
+"globals_defs_h.html":[5,1,4,8],
+"globals_defs_i.html":[5,1,4,9]
 };

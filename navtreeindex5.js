@@ -1,6 +1,5 @@
 var NAVTREEINDEX5 =
 {
-"Quadcopter_2src_2main_8cpp.html#a6da6469c8f59d9d140345974e110680d":[5,0,0,0,1,162],
 "Quadcopter_2src_2main_8cpp.html#a6de31cb5a5f88f66cffe9b38ac03d55d":[5,0,0,0,1,202],
 "Quadcopter_2src_2main_8cpp.html#a6eb0038d717befb2a856c2a3ab5c5cd9":[5,0,0,0,1,195],
 "Quadcopter_2src_2main_8cpp.html#a6ed95662a853b2d1a0eac89115d2f461":[5,0,0,0,1,69],
@@ -249,5 +248,6 @@ var NAVTREEINDEX5 =
 "SBUS_8h_source.html":[5,0,0,0,0,2,2],
 "SensorHubT32_2src_2main_8cpp.html":[5,0,2,0,0],
 "SensorHubT32_2src_2main_8cpp.html#a00e31bab157367fcde9712d63a57a778":[5,0,2,0,0,39],
-"SensorHubT32_2src_2main_8cpp.html#a0c32781a3efa57d89a067a024d9e00b9":[5,0,2,0,0,32]
+"SensorHubT32_2src_2main_8cpp.html#a0c32781a3efa57d89a067a024d9e00b9":[5,0,2,0,0,32],
+"SensorHubT32_2src_2main_8cpp.html#a169c53997a7da1d0fb99aec1b4675ce8":[5,0,2,0,0,26]
 };

@@ -15,10 +15,9 @@ var searchData=
   ['moveball_12',['MoveBall',['../Pong_8h.html#abead2677dc553c693bcf9bf0c54c0c81',1,'Pong.h']]],
   ['movecurrentpointdown_13',['MoveCurrentPointDown',['../TransmitterCode_2src_2main_8cpp.html#ac7a913ec35d5e97835e753fd1ee77dd7',1,'main.cpp']]],
   ['movecurrentpointup_14',['MoveCurrentPointUp',['../TransmitterCode_2src_2main_8cpp.html#adff425c4aac140ddca211d4ef4d98a7e',1,'main.cpp']]],
-  ['moveleftpaddle_15',['MoveLeftPaddle',['../Pong_8h.html#a597c265ad6f7184c9617fe733559fce1',1,'Pong.h']]],
+  ['movepaddles_15',['MovePaddles',['../Pong_8h.html#ae1838e25c06509f78c0de9f0e556d428',1,'Pong.h']]],
   ['movepoint_16',['MovePoint',['../TransmitterCode_2src_2main_8cpp.html#aad727ec0b0f9f34487a535eaa4a83172',1,'main.cpp']]],
-  ['moverightpaddle_17',['MoveRightPaddle',['../Pong_8h.html#a75b346b01df7a1e2903868da88639143',1,'Pong.h']]],
-  ['moveservos_18',['MoveServos',['../ReceiverCode_2src_2main_8cpp.html#a6f2443a0666140cf4d8b7352bb3b793c',1,'MoveServos():&#160;main.cpp'],['../radio_8h.html#a6f2443a0666140cf4d8b7352bb3b793c',1,'MoveServos():&#160;main.cpp']]],
-  ['mpu6050_19',['MPU6050',['../classMPU6050.html#a50b99a2a37c9d8708e807ef90b31df9b',1,'MPU6050']]],
-  ['mpu9250_20',['MPU9250',['../classMPU9250FIFO.html#a4b15facd0ce38964d241db56b1c57f75',1,'MPU9250FIFO::MPU9250(SPIClass &amp;bus, uint8_t csPin)'],['../classMPU9250FIFO.html#acaf2ae31cfdeb6d47b922996feb55b69',1,'MPU9250FIFO::MPU9250(TwoWire &amp;bus, uint8_t address)'],['../classMPU9250.html#a4b15facd0ce38964d241db56b1c57f75',1,'MPU9250::MPU9250(SPIClass &amp;bus, uint8_t csPin)'],['../classMPU9250.html#acaf2ae31cfdeb6d47b922996feb55b69',1,'MPU9250::MPU9250(TwoWire &amp;bus, uint8_t address)']]]
+  ['moveservos_17',['MoveServos',['../ReceiverCode_2src_2main_8cpp.html#a6f2443a0666140cf4d8b7352bb3b793c',1,'MoveServos():&#160;main.cpp'],['../radio_8h.html#a6f2443a0666140cf4d8b7352bb3b793c',1,'MoveServos():&#160;main.cpp']]],
+  ['mpu6050_18',['MPU6050',['../classMPU6050.html#a50b99a2a37c9d8708e807ef90b31df9b',1,'MPU6050']]],
+  ['mpu9250_19',['MPU9250',['../classMPU9250FIFO.html#a4b15facd0ce38964d241db56b1c57f75',1,'MPU9250FIFO::MPU9250(SPIClass &amp;bus, uint8_t csPin)'],['../classMPU9250FIFO.html#acaf2ae31cfdeb6d47b922996feb55b69',1,'MPU9250FIFO::MPU9250(TwoWire &amp;bus, uint8_t address)'],['../classMPU9250.html#a4b15facd0ce38964d241db56b1c57f75',1,'MPU9250::MPU9250(SPIClass &amp;bus, uint8_t csPin)'],['../classMPU9250.html#acaf2ae31cfdeb6d47b922996feb55b69',1,'MPU9250::MPU9250(TwoWire &amp;bus, uint8_t address)']]]
 ];
