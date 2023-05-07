@@ -553,7 +553,7 @@ uint8_t  PacketsHistoryBuffer[PERFECTPACKETSPERSECOND * MAXSHOWCOMMSSESCONDS]; /
 uint32_t TotalLostPackets       = 0;
 uint8_t  PacketNumber           = 0;
 uint8_t  GPSMarkHere            = 0;
-uint8_t  PreviousTrim           = 255;
+
 uint16_t TrimRepeatSpeed        = 600;
 char     na[]                   = "";
 uint8_t  StepSize[16] = {0,0,0,0,0,0,0,0,5,25,5,25,5,25,5,25};  //    How far to move each time on slow servos

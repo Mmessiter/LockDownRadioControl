@@ -7397,6 +7397,7 @@ void CalibrateEdgeSwitches()
 FASTRUN void ReadSwitches() // and indeed read digital trims if these are fitted
 {
     byte flag = 0;
+    static uint8_t  PreviousTrim           = 255;
     for (int i = 0; i < 8; ++i) {
         Switch[i]     = !digitalRead(SwitchNumber[i]); // These are reversed because they are active low
         TrimSwitch[i] = !digitalRead(TrimNumber[i]);   // These are reversed because they are active low
@@ -7501,7 +7502,6 @@ void GotoFrontView(){
     char fms[4][4] = {{"fm1"},{"fm2"},{"fm3"},{"fm4"}};
     char     FrontView_Connected[]  = "Connected";
     char      page_FrontView[]            = "page FrontView";
-    CurrentMode                           = NORMAL;
     if (CurrentView != FRONTVIEW) {
           if (CurrentView == SCANVIEW) {
             DoScanEnd();
@@ -7577,7 +7577,6 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                         ModelNumber = SavedModelNumber; //  Not found, so bind to the restored selected one
                         ReadOneModel(ModelNumber);
                         BindNow();
-                      //  NewModelMemoryWasSaved = true;
                         if (AutoModelSelect)
                         {
                             PlaySound(MMSAVED); 
