@@ -556,7 +556,6 @@ var Definitions_8h =
     [ "PreviousDualRateInUse", "Definitions_8h.html#a2f9054e404fa489d72b23ddcae8ef707", null ],
     [ "PreviousModelNumber", "Definitions_8h.html#abbcab2d4e69dfdc506e906295155c78f", null ],
     [ "PreviousPowerOffTimer", "Definitions_8h.html#aa0f21f6821e047d682752823a78bbb28", null ],
-    [ "PreviousTrim", "Definitions_8h.html#a9b9c21290f5fd4339ede092077d4dfad", null ],
     [ "Qnh", "Definitions_8h.html#ae3495ca407a0a3ea570ce0af7a3447a3", null ],
     [ "RadioSwaps", "Definitions_8h.html#a2f472b4c6d8312622d666f82bc1c78fb", null ],
     [ "RangeTestGoodPackets", "Definitions_8h.html#a8a5b55d644bb404cd6cdf61c5a85f822", null ],

@@ -1,6 +1,5 @@
 var NAVTREEINDEX12 =
 {
-"transceiver_8h.html#a31fb6a46af68482e107cddee58dfb677":[5,0,3,0,0,4,7],
 "transceiver_8h.html#a52aa3e80bccf5e75346c93fdae63122d":[5,0,3,0,0,4,12],
 "transceiver_8h.html#a5fbd3c8613a4163425c94965704ce5f8":[5,0,3,0,0,4,10],
 "transceiver_8h.html#a6a0dc2e4d5be33970d9a245234202655":[5,0,3,0,0,4,0],

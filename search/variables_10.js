@@ -49,13 +49,12 @@ var searchData=
   ['previousnewpipes_46',['PreviousNewPipes',['../radio_8h.html#abd91604fdea68053cd6cb707e4e86271',1,'radio.h']]],
   ['previousnewpipesindex_47',['PreviousNewPipesIndex',['../radio_8h.html#add4f073372ad9627fcdf944e752b7549',1,'radio.h']]],
   ['previouspowerofftimer_48',['PreviousPowerOffTimer',['../Definitions_8h.html#aa0f21f6821e047d682752823a78bbb28',1,'Definitions.h']]],
-  ['previoustrim_49',['PreviousTrim',['../Definitions_8h.html#a9b9c21290f5fd4339ede092077d4dfad',1,'Definitions.h']]],
-  ['print_5fcounter_50',['print_counter',['../Quadcopter_2src_2main_8cpp.html#a4f2748b40ccb482e2bd1120f31171ad2',1,'main.cpp']]],
-  ['progmem_51',['PROGMEM',['../MPU6050__6Axis__MotionApps20_8h.html#ac511f931ef6563ffe04d50234287ecb6',1,'PROGMEM():&#160;MPU6050_6Axis_MotionApps20.h'],['../MPU6050__6Axis__MotionApps__V6__12_8h.html#ac511f931ef6563ffe04d50234287ecb6',1,'PROGMEM():&#160;MPU6050_6Axis_MotionApps_V6_12.h'],['../MPU6050__9Axis__MotionApps41_8h.html#a9ef67ec0ac01c37764f8e0f73b1e4b81',1,'PROGMEM():&#160;MPU6050_9Axis_MotionApps41.h']]],
-  ['purpose_52',['Purpose',['../structPayload.html#ac18701f2aa35ebd8402f45f840d5c445',1,'Payload']]],
-  ['pwmpins_53',['PWMPins',['../ReceiverCode_2src_2main_8cpp.html#a19f864fa6bdea0867325f70e162c92ef',1,'main.cpp']]],
-  ['pwr_5fcycle_54',['PWR_CYCLE',['../classMPU9250.html#aa45b7c35140a74784f0dbb10d4a9b064',1,'MPU9250']]],
-  ['pwr_5fmgmnt_5f1_55',['PWR_MGMNT_1',['../classMPU9250.html#aa0bc719f1a0caff0f1864618a2a2fa80',1,'MPU9250']]],
-  ['pwr_5fmgmnt_5f2_56',['PWR_MGMNT_2',['../classMPU9250.html#af2ddd3ae16ad94754edb57aade224e1e',1,'MPU9250']]],
-  ['pwr_5freset_57',['PWR_RESET',['../classMPU9250.html#a729a11aa2cf968263b87934fd849478c',1,'MPU9250']]]
+  ['print_5fcounter_49',['print_counter',['../Quadcopter_2src_2main_8cpp.html#a4f2748b40ccb482e2bd1120f31171ad2',1,'main.cpp']]],
+  ['progmem_50',['PROGMEM',['../MPU6050__6Axis__MotionApps20_8h.html#ac511f931ef6563ffe04d50234287ecb6',1,'PROGMEM():&#160;MPU6050_6Axis_MotionApps20.h'],['../MPU6050__6Axis__MotionApps__V6__12_8h.html#ac511f931ef6563ffe04d50234287ecb6',1,'PROGMEM():&#160;MPU6050_6Axis_MotionApps_V6_12.h'],['../MPU6050__9Axis__MotionApps41_8h.html#a9ef67ec0ac01c37764f8e0f73b1e4b81',1,'PROGMEM():&#160;MPU6050_9Axis_MotionApps41.h']]],
+  ['purpose_51',['Purpose',['../structPayload.html#ac18701f2aa35ebd8402f45f840d5c445',1,'Payload']]],
+  ['pwmpins_52',['PWMPins',['../ReceiverCode_2src_2main_8cpp.html#a19f864fa6bdea0867325f70e162c92ef',1,'main.cpp']]],
+  ['pwr_5fcycle_53',['PWR_CYCLE',['../classMPU9250.html#aa45b7c35140a74784f0dbb10d4a9b064',1,'MPU9250']]],
+  ['pwr_5fmgmnt_5f1_54',['PWR_MGMNT_1',['../classMPU9250.html#aa0bc719f1a0caff0f1864618a2a2fa80',1,'MPU9250']]],
+  ['pwr_5fmgmnt_5f2_55',['PWR_MGMNT_2',['../classMPU9250.html#af2ddd3ae16ad94754edb57aade224e1e',1,'MPU9250']]],
+  ['pwr_5freset_56',['PWR_RESET',['../classMPU9250.html#a729a11aa2cf968263b87934fd849478c',1,'MPU9250']]]
 ];
