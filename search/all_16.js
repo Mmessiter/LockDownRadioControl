@@ -11,7 +11,7 @@ var searchData=
   ['updatemodelsnameeverywhere_8',['UpdateModelsNameEveryWhere',['../TransmitterCode_2src_2main_8cpp.html#a9e1de754e1d2d483fb15957f70cf0488',1,'UpdateModelsNameEveryWhere():&#160;main.cpp'],['../Definitions_8h.html#a9e1de754e1d2d483fb15957f70cf0488',1,'UpdateModelsNameEveryWhere():&#160;main.cpp']]],
   ['updateoneswitchview_9',['updateOneSwitchView',['../TransmitterCode_2src_2main_8cpp.html#a14dcac76ed8a048041fdc6e6f5d5d000',1,'main.cpp']]],
   ['updateswitchesview_10',['UpdateSwitchesView',['../TransmitterCode_2src_2main_8cpp.html#ad2376976bcbc43d81e55e5b58ce2818d',1,'main.cpp']]],
-  ['updatetrimview_11',['UpdateTrimView',['../TransmitterCode_2src_2main_8cpp.html#ac78966debc2cdc13d8ca958ce3b20c78',1,'main.cpp']]],
+  ['updatetrimview_11',['UpdateTrimView',['../Trims_8h.html#ac78966debc2cdc13d8ca958ce3b20c78',1,'Trims.h']]],
   ['uplog_12',['UpLog',['../TransmitterCode_2src_2main_8cpp.html#a2206c19b4fc075f4c9f1bb957ca89e1d',1,'main.cpp']]],
   ['use_5fina219_13',['USE_INA219',['../Definitions_8h.html#a87ae50e2ac4507568cbf98072f174a1b',1,'Definitions.h']]],
   ['usedualrates_14',['UseDualRates',['../Definitions_8h.html#a5f6ebf5df29e0ee922a462cbdd419ed8',1,'Definitions.h']]],
