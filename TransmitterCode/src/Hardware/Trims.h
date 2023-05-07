@@ -18,46 +18,6 @@ void StartTrimView()
     ClearText();
  }
        
-
-/*********************************************************************************************************************************/
-
-int GetTrimAmount(uint8_t InputChannel){ 
-    int TrimAmount, tt = InputChannel;
-        
-        if (SticksMode == 2) {
-            if (InputChannel == 1) tt = 2;
-            if (InputChannel == 2) tt = 1; 
-        }
-        TrimAmount = (Trims[Bank][tt] - 80) * TrimMultiplier; // TRIMS on lower four input channels (80 is mid point !! (range 40 - 80 - 120)) 
-        return TrimAmount;
-}
-
-/******************************************************************************************************************************/
-void StartSubTrimView()
-{ // Subtrim view start
-    char pSubTrimView[] = "page SubTrimView";
-    char t2[]           = "t2";
-    char n0[]           = "n0";
-    char h0[]           = "h0";
-    SendCommand(pSubTrimView);
-    SubTrimToEdit = 0;
-    CurrentView   = SUBTRIMVIEW;
-    SendText(t2, ChannelNames[SubTrimToEdit]);
-    SendValue(n0, SubTrims[SubTrimToEdit] - 127);
-    SendValue(h0, SubTrims[SubTrimToEdit]);
-    UpdateModelsNameEveryWhere();
-}
-/******************************************************************************************************************************/
-void EndSubTrimView()
-{ // Subtrim view exit
-   char page_RXSetupView[] = "page RXSetupView";
-
-    SaveOneModel(ModelNumber);
-    CurrentView = RXSETUPVIEW;
-    SendCommand(page_RXSetupView);
-    LastTimeRead = 0;
-    UpdateModelsNameEveryWhere();
-}
 /******************************************************************************************************************************/
 void StartTrimDefView()
 {
@@ -253,4 +213,102 @@ void CheckHardwareTrims()
             if (TrimRepeatSpeed < 10) TrimRepeatSpeed = 30; //  ... up to a point...
         }
     }
+}
+
+/*********************************************************************************************************************************/
+
+int GetTrimAmount(uint8_t InputChannel){ 
+    int TrimAmount, tt = InputChannel;
+        
+        if (SticksMode == 2) {
+            if (InputChannel == 1) tt = 2;
+            if (InputChannel == 2) tt = 1; 
+        }
+        TrimAmount = (Trims[Bank][tt] - 80) * TrimMultiplier; // TRIMS on lower four input channels (80 is mid point !! (range 40 - 80 - 120)) 
+        return TrimAmount;
+}
+/*********************************************************************************************************************************/
+void UpdateTrimView()
+{
+   
+    uint8_t p;
+    char    TrimViewChannels[4][4] = {"ch1", "ch4", "ch2", "ch3"};
+    char    TrimViewNumbers[4][3]  = {"n1", "n4", "n2", "n3"};
+    char    TrimChannelNames[4][3] = {"c1", "c2", "c3", "c4"};
+
+    if (CurrentView == FRONTVIEW || (CurrentView == TRIM_VIEW)) {
+        for (int i = 0; i < 4; ++i) {
+            p = i;
+            if (SticksMode == 2) {
+                if (i == 1) p = 2;
+                if (i == 2) p = 1;
+            }
+            uint8_t pp = InputTrim[p];
+            SendValue(TrimViewChannels[p], (Trims[Bank][pp]));                 
+            SendValue(TrimViewNumbers[p],  (Trims[Bank][pp] - 80));
+            if (CurrentView == TRIM_VIEW) SendText(TrimChannelNames[i],  ChannelNames[pp]);       
+        }
+    }
+ 
+}
+
+/*********************************************************************************************************************************/
+
+FLASHMEM void CentreTrims()
+{
+    for (int j = 0; j <= BANKSUSED; ++j) {
+        for (int i = 0; i < CHANNELSUSED; ++i) {
+            Trims[j][i] = 80;
+        }
+    }
+}
+/*********************************************************************************************************************************/
+void CheckSavedTrimValues()
+{
+    bool OK = true;
+    for (int i = 0; i < 4; ++i) {
+        if ((InputTrim[i] > 15) || (InputTrim[i] < 0)) OK = false;
+    }
+    if (!OK) {
+        for (int i = 0; i < 4; ++i) {
+            InputTrim[i] = i;
+        }
+    }
+}
+/*********************************************************************************************************************************/
+void CheckTrimValues()
+{
+    bool KO = false;
+    for (int j = 0; j < 8; ++j) {
+        if ((TrimNumber[j] > TRIM4B) || (TrimNumber[j] < TRIM1A)) KO = true;
+    }
+    if (KO) ResetAllTrims();
+}
+
+/******************************************************************************************************************************/
+void StartSubTrimView()
+{ // Subtrim view start
+    char pSubTrimView[] = "page SubTrimView";
+    char t2[]           = "t2";
+    char n0[]           = "n0";
+    char h0[]           = "h0";
+    SendCommand(pSubTrimView);
+    SubTrimToEdit = 0;
+    CurrentView   = SUBTRIMVIEW;
+    SendText(t2, ChannelNames[SubTrimToEdit]);
+    SendValue(n0, SubTrims[SubTrimToEdit] - 127);
+    SendValue(h0, SubTrims[SubTrimToEdit]);
+    UpdateModelsNameEveryWhere();
+}
+
+/******************************************************************************************************************************/
+void EndSubTrimView()
+{ // Subtrim view exit
+   char page_RXSetupView[] = "page RXSetupView";
+
+    SaveOneModel(ModelNumber);
+    CurrentView = RXSETUPVIEW;
+    SendCommand(page_RXSetupView);
+    LastTimeRead = 0;
+    UpdateModelsNameEveryWhere();
 }
