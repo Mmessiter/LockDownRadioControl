@@ -762,14 +762,16 @@ FLASHMEM void setup()
     pinMode(BINDPLUG_PIN, INPUT_PULLUP);
     digitalWrite(LED_PIN, HIGH);
     TurnLedOff();
-    delay(2500); // Needed so that the Sensor hub can boot first and be detected
+    if (digitalRead(BINDPLUG_PIN)) {
+        delay(2500); // Needed so that the Sensor hub can boot first and be detected (no bind plug)
+    } else{
+        delay(200); 
+    }
     Wire.begin();
     delay(20);
     ScanI2c();    // Detect what's connected
     if (INA219Connected) ina219.begin();
     teensyMAC(MacAddress);
-
-   //  for (int i = 0; i < 8; ++i) MacAddress[i] = 0x0B; // force new ID fo test! 
     PipePointer = DefaultPipe;
     CopyCurrentPipe(DefaultPipe,PIPENUMBER);
     CurrentRadio = &Radio1;
