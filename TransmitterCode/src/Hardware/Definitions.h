@@ -553,7 +553,6 @@ uint8_t  PacketsHistoryBuffer[PERFECTPACKETSPERSECOND * MAXSHOWCOMMSSESCONDS]; /
 uint32_t TotalLostPackets       = 0;
 uint8_t  PacketNumber           = 0;
 uint8_t  GPSMarkHere            = 0;
-
 uint16_t TrimRepeatSpeed        = 600;
 char     na[]                   = "";
 uint8_t  StepSize[16] = {0,0,0,0,0,0,0,0,5,25,5,25,5,25,5,25};  //    How far to move each time on slow servos
@@ -854,6 +853,11 @@ bool     TimerDownwards         = false;
 uint16_t TimerStartTime         = 5 * 60; 
 bool     TimesUp                = false;
 uint8_t  CountDownIndex = 0;
+uint8_t   MacrosBuffer[MAXMACROS][BYTESPERMACRO]; // macros' buffer
+uint32_t  MacroStartTime[MAXMACROS];
+uint32_t  MacroStopTime[MAXMACROS];
+uint8_t   PreviousMacroNumber = 1;
+bool      UseMacros           = false;
 
 // *********************************************** END OF GLOBAL DATA ***************************************************************
 

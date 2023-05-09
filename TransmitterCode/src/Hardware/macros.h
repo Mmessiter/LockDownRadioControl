@@ -1,11 +1,6 @@
 // *************************************** Macros.h  *****************************************
 #include <Arduino.h>
 
-uint8_t   MacrosBuffer[MAXMACROS][BYTESPERMACRO]; // macros' buffer
-uint32_t  MacroStartTime[MAXMACROS];
-uint32_t  MacroStopTime[MAXMACROS];
-uint8_t   PreviousMacroNumber = 1;
-bool      UseMacros           = false;
 
 //***********************************************************************************************************
 
