@@ -866,8 +866,6 @@ bool      UseMacros           = false;
 #include "Hardware/Utilities.h" 
 #include "Hardware/transceiver.h" 
 #include "Hardware/Pong.h" 
-#include "Hardware/Macros.h" 
+#include "Hardware/macros.h" 
 #include "Hardware/Trims.h" 
-
-
 #endif
