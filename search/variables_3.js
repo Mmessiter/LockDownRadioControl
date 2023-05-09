@@ -36,7 +36,7 @@ var searchData=
   ['channelmidhi_33',['ChannelMidHi',['../Definitions_8h.html#ae2a2bff09ff786f00f4b567d5fde8e38',1,'Definitions.h']]],
   ['channelmidlow_34',['ChannelMidLow',['../Definitions_8h.html#a6b76981ac753d96fc77b5ab7f9c0765a',1,'Definitions.h']]],
   ['channelmin_35',['ChannelMin',['../Definitions_8h.html#acc312445fe26b5cac85fab093aab1c2f',1,'Definitions.h']]],
-  ['channelnames_36',['ChannelNames',['../Definitions_8h.html#a0c9a9276cbc69bce973fabbed4a9686b',1,'ChannelNames():&#160;Definitions.h'],['../Utilities_8h.html#a0c9a9276cbc69bce973fabbed4a9686b',1,'ChannelNames():&#160;Definitions.h']]],
+  ['channelnames_36',['ChannelNames',['../Definitions_8h.html#a0c9a9276cbc69bce973fabbed4a9686b',1,'Definitions.h']]],
   ['channeltoset_37',['ChanneltoSet',['../Definitions_8h.html#afe31e2cddc17dd03549ad02cc613f743',1,'Definitions.h']]],
   ['clickx_38',['ClickX',['../Definitions_8h.html#a5977abea05dff7ba2cdb9dd379595f76',1,'Definitions.h']]],
   ['clicky_39',['ClickY',['../Definitions_8h.html#a85578a4e235e2836fdbbfa037bcb5805',1,'Definitions.h']]],
@@ -47,7 +47,7 @@ var searchData=
   ['config_44',['CONFIG',['../classMPU9250.html#aab05dcc81b5628ed687e152263c52966',1,'MPU9250']]],
   ['confirmed_45',['Confirmed',['../Definitions_8h.html#a5034d37305ec158f8bc486558dcd8f53',1,'Definitions.h']]],
   ['connected_46',['Connected',['../radio_8h.html#a5318db734c71b1b08208ef690f1f0146',1,'Connected():&#160;radio.h'],['../Definitions_8h.html#a5318db734c71b1b08208ef690f1f0146',1,'Connected():&#160;Definitions.h']]],
-  ['connectionassessseconds_47',['ConnectionAssessSeconds',['../Definitions_8h.html#ac58a25a73bcc60b4f892b7ad285d7adc',1,'ConnectionAssessSeconds():&#160;Definitions.h'],['../Utilities_8h.html#ac58a25a73bcc60b4f892b7ad285d7adc',1,'ConnectionAssessSeconds():&#160;Definitions.h']]],
+  ['connectionassessseconds_47',['ConnectionAssessSeconds',['../Definitions_8h.html#ac58a25a73bcc60b4f892b7ad285d7adc',1,'Definitions.h']]],
   ['copytrimstoall_48',['CopyTrimsToAll',['../Definitions_8h.html#ae737f11637caa631c30255f614800ba6',1,'Definitions.h']]],
   ['countdownindex_49',['CountDownIndex',['../Definitions_8h.html#adfcd3241fc01c3231bd87d8711016b15',1,'Definitions.h']]],
   ['coursetogps_50',['CourseToGPS',['../ReceiverCode_2src_2main_8cpp.html#a1a4e211f9858a5d6d61d11e5679a71f3',1,'CourseToGPS():&#160;main.cpp'],['../radio_8h.html#a1a4e211f9858a5d6d61d11e5679a71f3',1,'CourseToGPS():&#160;main.cpp']]],
@@ -57,6 +57,6 @@ var searchData=
   ['currentpoint_54',['CurrentPoint',['../Definitions_8h.html#af10ffe07503b33fd55065fd9021e17e7',1,'Definitions.h']]],
   ['currentposition_55',['CurrentPosition',['../Definitions_8h.html#ade76e94669870d42879b18f17505f967',1,'Definitions.h']]],
   ['currentradio_56',['CurrentRadio',['../radio_8h.html#a7bca81159d93f215060f40f45f19b0de',1,'radio.h']]],
-  ['currentview_57',['CurrentView',['../Definitions_8h.html#a2c76c41cd62573eb7227882fc9b9e557',1,'CurrentView():&#160;Definitions.h'],['../Utilities_8h.html#a2c76c41cd62573eb7227882fc9b9e557',1,'CurrentView():&#160;Definitions.h']]],
+  ['currentview_57',['CurrentView',['../Definitions_8h.html#a2c76c41cd62573eb7227882fc9b9e557',1,'Definitions.h']]],
   ['curvedots_58',['CurveDots',['../Definitions_8h.html#a434509284a88e9637c9b9847efe0b0e0',1,'Definitions.h']]]
 ];

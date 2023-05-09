@@ -1,12 +1,12 @@
 var searchData=
 [
-  ['datefix_0',['DateFix',['../Definitions_8h.html#af963d49af3aeb834d322601d3c3e3d04',1,'DateFix():&#160;Definitions.h'],['../Utilities_8h.html#af963d49af3aeb834d322601d3c3e3d04',1,'DateFix():&#160;Definitions.h']]],
+  ['datefix_0',['DateFix',['../Definitions_8h.html#af963d49af3aeb834d322601d3c3e3d04',1,'Definitions.h']]],
   ['daygps_1',['DayGPS',['../ReceiverCode_2src_2main_8cpp.html#a4c722ec4fa2ff675bd4a2d511e80cd6e',1,'DayGPS():&#160;main.cpp'],['../radio_8h.html#a4c722ec4fa2ff675bd4a2d511e80cd6e',1,'DayGPS():&#160;main.cpp']]],
   ['debugtimer_2',['DebugTimer',['../SensorHubT32_2src_2main_8cpp.html#a7867e45e2d19ce05cda4ef2692ee0dbe',1,'main.cpp']]],
   ['defaultpipe_3',['DefaultPipe',['../ReceiverCode_2src_2main_8cpp.html#ac17bcdae8bda705ade2cf0935e12853d',1,'DefaultPipe():&#160;main.cpp'],['../radio_8h.html#ac17bcdae8bda705ade2cf0935e12853d',1,'DefaultPipe():&#160;main.cpp'],['../Definitions_8h.html#a0b9fd9f8e85725c128617f006132ea57',1,'DefaultPipe():&#160;Definitions.h']]],
   ['defaultswitchnumber_4',['DefaultSwitchNumber',['../Definitions_8h.html#a0040cba31e48ea25f429ce1668f8c21f',1,'Definitions.h']]],
   ['definingtrims_5',['DefiningTrims',['../Definitions_8h.html#a53d8c3d55ec5cdfd424929c62efe1677',1,'Definitions.h']]],
-  ['deltagmt_6',['DeltaGMT',['../Definitions_8h.html#ab509e0e6c824d1a805643fbdae7a9a5e',1,'DeltaGMT():&#160;Definitions.h'],['../Utilities_8h.html#a931dd712c0356a0f591d947b7f7f5067',1,'DeltaGMT():&#160;Definitions.h']]],
+  ['deltagmt_6',['DeltaGMT',['../Definitions_8h.html#ab509e0e6c824d1a805643fbdae7a9a5e',1,'Definitions.h']]],
   ['derivative_5fpitch_7',['derivative_pitch',['../Quadcopter_2src_2main_8cpp.html#a44e4c5ef3fe278fdb756a2f3c895b180',1,'main.cpp']]],
   ['derivative_5froll_8',['derivative_roll',['../Quadcopter_2src_2main_8cpp.html#ab49f64edf6e58c8520f18a1d88eba712',1,'main.cpp']]],
   ['derivative_5fyaw_9',['derivative_yaw',['../Quadcopter_2src_2main_8cpp.html#a6504b99cbe10f8c45564aaa8e213bf91',1,'main.cpp']]],

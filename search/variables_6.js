@@ -23,7 +23,7 @@ var searchData=
   ['firstconnection_20',['FirstConnection',['../Definitions_8h.html#ac2fc49f3335ebd2b38d0184306dfcf9b',1,'FirstConnection():&#160;Definitions.h'],['../ReceiverCode_2src_2main_8cpp.html#ac2fc49f3335ebd2b38d0184306dfcf9b',1,'FirstConnection():&#160;main.cpp']]],
   ['firstlostpacket_21',['FirstLostPacket',['../ReceiverCode_2src_2main_8cpp.html#adcebf40c47ef63b1edd881d82ff4eb5c',1,'main.cpp']]],
   ['fmswitch_22',['FMSwitch',['../Definitions_8h.html#a452f6aed1252d3f1da8a0ceb07552c07',1,'Definitions.h']]],
-  ['foregroundcolour_23',['ForeGroundColour',['../Definitions_8h.html#a029840d27a3c9954aa481d494df4ace6',1,'ForeGroundColour():&#160;Definitions.h'],['../Utilities_8h.html#a029840d27a3c9954aa481d494df4ace6',1,'ForeGroundColour():&#160;Definitions.h']]],
+  ['foregroundcolour_23',['ForeGroundColour',['../Definitions_8h.html#a029840d27a3c9954aa481d494df4ace6',1,'Definitions.h']]],
   ['found_5fbmp280_24',['FOUND_BMP280',['../SensorHubT32_2src_2main_8cpp.html#a2aebb34fd4fbec2d3ac925f8cc7a7bee',1,'main.cpp']]],
   ['found_5fina219_25',['FOUND_INA219',['../SensorHubT32_2src_2main_8cpp.html#af1b5290b72a9f9bc5d1d70c7c14df9b0',1,'main.cpp']]],
   ['frequencycount_26',['FrequencyCount',['../common_8h.html#a2cecb6d8a82a88635e2c10438fedf092',1,'common.h']]],
