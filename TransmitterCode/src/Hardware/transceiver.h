@@ -378,7 +378,7 @@ uint8_t CheckPipeNibbles(uint8_t b){
 
 /************************************************************************************************************/
 
-FASTRUN void BufferTeensyMACAddPipe()
+FASTRUN void BufferTeensyMACAddPipe() // heeer
 {
     for (int q = 1; q < 6; ++q) {
         SendBuffer[q] = MacAddress[q];
