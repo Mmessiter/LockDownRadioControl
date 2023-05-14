@@ -406,7 +406,7 @@
 
 #define PONGX1          20          // BOX dimentions
 #define PONGX2          790         // BOX dimentions
-#define PONGY1          50          // BOX dimentions
+#define PONGY1          60          // BOX dimentions (was 50)
 #define PONGY2          410         // BOX dimentions
 #define PONGGOALSIZE    180         // Size of goal
 #define PONGBALLSIZE    7           // Size of ball

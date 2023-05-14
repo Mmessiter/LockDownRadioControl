@@ -53,20 +53,19 @@ uint8_t   NextChannelNumber  = 0;
 // **********************************  Area & struct for PPM & TX MODULE ************************************************************
 // **********************************************************************************************************************************
 
-    #define A 1
-    #define E 2
-    #define T 3
-    #define R 4
 
 struct PPMArea{
     PulsePositionOutput     PPMOutputModule;                          // PPM for TX Modules
     PulsePositionOutput     PPMOutputBuddy;                           // PPM for buddy boxing 
     PulsePositionInput      PPMInputBuddy;                            // PPM for buddy boxing
-    bool                    UseSBUSFromRX         = true;             // at receiver. false = PPM // heer
+    bool                    UseSBUSFromRX         = true;             // at receiver. false = PPM 
     uint16_t                PPMChannelCount       = 8;                // for our RX - NOT TX module  
-    uint8_t                 PPMChannelOrder1[16]  = {A, E, T, R, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
-    uint8_t                 PPMChannelOrder2[16]  = {T, A, E, R, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
-    uint8_t                 PPMChannelOrder3[16]  = {E, T, A, R, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+                                                //   A  E  T  R       // TRANSLATION IS REALLY BACKWARDS!
+    uint8_t                 PPMChannelOrder1[16]  = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+                                                //   T  A  E  R
+    uint8_t                 PPMChannelOrder2[16]  = {2, 3, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+                                                //   E  T  A  R 
+    uint8_t                 PPMChannelOrder3[16]  = {3, 1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
     uint8_t                 * PPMChannelOrder     = PPMChannelOrder2; // will point to needed channel order
     uint32_t                LastPPMFrame          = 0;
     uint8_t                 PPMOrderSelection     = 2;

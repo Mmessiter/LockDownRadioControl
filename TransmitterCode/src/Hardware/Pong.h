@@ -38,6 +38,9 @@ void   PlayPong(){  // called 100 times per second
     static short int      y               = STARTY;
     static short int      LeftPaddlY      = STARTY;
     static short int      RightPaddlY     = STARTY;
+    static short int      PrevLeftPaddlY  = STARTY;
+    static short int      PrevRightPaddlY = STARTY;
+
     static short int      incy            = PONGBALLSPEED;
     static short int      incx            = PONGBALLSPEED;
     static short int      LeftScore       = 0;
@@ -61,19 +64,23 @@ void   PlayPong(){  // called 100 times per second
              incx = -incx;
              x    = LEFTPADDLEX + PONGCLEAR + 10;
              randomSeed(micros());
-             incy = PONGBALLSPEED - random(PONGBALLSPEED);
+             if (PrevLeftPaddlY > LeftPaddlY)  incy = -random(PONGBALLSPEED);
+             if (PrevLeftPaddlY < LeftPaddlY)  incy = random(PONGBALLSPEED);
              PlaySound(BEEPMIDDLE);
          }
     }
+    PrevLeftPaddlY = LeftPaddlY;
     if ((x <= (RIGHTPADDLEX + PONGCLEAR)) && (x >= (RIGHTPADDLEX - PONGCLEAR))){// hit right paddle?
          if ((y >= (RightPaddlY-(PADDLEHEIGHT/2))) && (y <= (RightPaddlY+(PADDLEHEIGHT/2)))){
              incx = -incx;
              x    = (RIGHTPADDLEX - PONGCLEAR) - 10;
              randomSeed(micros());
-             incy = PONGBALLSPEED - random(PONGBALLSPEED*2);
+             if (PrevRightPaddlY > RightPaddlY)  incy = -random(PONGBALLSPEED);
+             if (PrevRightPaddlY < RightPaddlY)  incy = random(PONGBALLSPEED);
              PlaySound(BEEPMIDDLE);
          }
     }
+    PrevRightPaddlY = RightPaddlY;
     if ((y + PONGCLEAR) >= PONGY2) { // bounce off bottom
         incy = -incy;
         y    = (PONGY2 - PONGCLEAR) - 10;
@@ -81,7 +88,7 @@ void   PlayPong(){  // called 100 times per second
         ScreenTimeTimer = millis();
         StartInactvityTimeout();
     }
-    if (y <= (PONGY1 + PONGCLEAR)) {// bounce off top
+    if (y <= (PONGY1 + PONGCLEAR)) { // bounce off top
         incy = -incy;
         y    = PONGY1 + PONGCLEAR + 10;
         PlaySound(CLICKZERO);
