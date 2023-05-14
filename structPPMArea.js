@@ -8,7 +8,6 @@ var structPPMArea =
     [ "PPMChannelOrder3", "structPPMArea.html#aa75050972c449f88ad26c434b63b0870", null ],
     [ "PPMChannelsNumber", "structPPMArea.html#a52e475cf8a0672360f670b56a26c387f", null ],
     [ "PPMInputBuddy", "structPPMArea.html#a7e5c2741bbea2b6e14dc6bd890b83c93", null ],
-    [ "PPMMillis", "structPPMArea.html#acfdf7dae7d7987af96ab01633b5c50e8", null ],
     [ "PPMOrderSelection", "structPPMArea.html#a6ac130b16519ab38c553c4fb657ab4ea", null ],
     [ "PPMOutputBuddy", "structPPMArea.html#ad789042f778705e7568804ef8a621c2a", null ],
     [ "PPMOutputModule", "structPPMArea.html#af2994160f0f0eef059de1578e5544a75", null ],
