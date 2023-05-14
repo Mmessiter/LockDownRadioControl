@@ -1702,8 +1702,9 @@ bool LoadAllParameters()
         PPMdata.PPMChannelsNumber = SDRead8BITS(SDCardAddress);
         if ((PPMdata.PPMChannelsNumber > 16) || (PPMdata.PPMChannelsNumber < 1)) PPMdata.PPMChannelsNumber = 6;
         ++SDCardAddress;
-        PPMdata.PPMMillis = SDRead8BITS(SDCardAddress);
-         if ((PPMdata.PPMMillis > 50) || (PPMdata.PPMMillis < 2)) PPMdata.PPMMillis = 22;// Not used!!! (yet)
+       
+      // Not used!!! (yet)  1 spare
+       
         ++SDCardAddress;
          PPMdata.UseTXModule = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
@@ -2450,7 +2451,7 @@ void SaveTransmitterParameters()
     ++SDCardAddress;
      SDUpdate8BITS(SDCardAddress, PPMdata.PPMChannelsNumber);
     ++SDCardAddress;
-     SDUpdate8BITS(SDCardAddress, PPMdata.PPMMillis);// Not used!!! (yet)
+   // Not used!!! (yet) // 1 spare
     ++SDCardAddress;
      SDUpdate8BITS(SDCardAddress, PPMdata.UseTXModule);
     ++SDCardAddress;
@@ -5536,7 +5537,6 @@ void DoMFName(){
 
     char c1[] = "c1";   // Use module
     char n3[] = "n3";   // number of channels
-    char n4[] = "n4";   // ms
     char r0[] = "r0"; 
     char r1[] = "r1";
     char r2[] = "r2";
@@ -5544,7 +5544,6 @@ void DoMFName(){
     SendCommand(GoTXModule);
     SendValue(c1, PPMdata.UseTXModule);
     SendValue(n3, PPMdata.PPMChannelsNumber);
-    SendValue(n4, PPMdata.PPMMillis);// Not used!!! (yet)
     if (PPMdata.PPMOrderSelection == 1) {SendValue(r0, 1);}
         else {SendValue(r0, 0);}
     if (PPMdata.PPMOrderSelection == 2) {SendValue(r1, 1);}
@@ -5571,7 +5570,6 @@ void SelectChannelOrder(){
     char GoBack[] = "page TXModuleView";
     char c1[] = "c1";   // Use module
     char n3[] = "n3";   // number of channels
-    char n4[] = "n4";   // ms
     char r0[] = "r0"; 
     char r1[] = "r1";
     char r2[] = "r2";
@@ -5594,7 +5592,6 @@ void SelectChannelOrder(){
     DelayWithDog(100);
     PPMdata.PPMChannelsNumber = GetValue(n3);
     SendValue(Progress, 51);
-    PPMdata.PPMMillis        =   GetValue(n4);// Not used!!! (yet)
     if (GetValue(r0)) PPMdata.PPMOrderSelection = 1;
     SendValue(Progress, 63);
     DelayWithDog(10);
@@ -7789,12 +7786,12 @@ void CheckPowerOffButton()
     char nb[4];
     char NotStillConnected[]        = "vis StillConnected,0";
     char StillConnected[]           = "vis StillConnected,1";
-    char StillConnectedBox[]       = "StillConnected";
+    char StillConnectedBox[]        = "StillConnected";
     
 
     if (!digitalRead(BUTTON_SENSE_PIN)){
         GotoFrontView();
-        if (!LedWasGreen) 
+        if (!LedWasGreen && !PPMdata.UseTXModule)  // heer
         {
             SimulateCloseDown();              // if not connected power off immediately
         } else

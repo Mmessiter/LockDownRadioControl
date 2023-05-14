@@ -60,17 +60,18 @@ struct PPMArea{
     PulsePositionInput      PPMInputBuddy;                            // PPM for buddy boxing
     bool                    UseSBUSFromRX         = true;             // at receiver. false = PPM 
     uint16_t                PPMChannelCount       = 8;                // for our RX - NOT TX module  
-                                                //   A  E  T  R       // TRANSLATION IS REALLY BACKWARDS!
+
+                                                //   A  E  T  R       // TRANSLATION HAPPENS *BACKWARDS* !
     uint8_t                 PPMChannelOrder1[16]  = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
                                                 //   T  A  E  R
     uint8_t                 PPMChannelOrder2[16]  = {2, 3, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
                                                 //   E  T  A  R 
     uint8_t                 PPMChannelOrder3[16]  = {3, 1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
-    uint8_t                 * PPMChannelOrder     = PPMChannelOrder2; // will point to needed channel order
+
+    uint8_t                 * PPMChannelOrder     = PPMChannelOrder2; // This will point to needed channel order
     uint32_t                LastPPMFrame          = 0;
     uint8_t                 PPMOrderSelection     = 2;
     uint8_t                 PPMChannelsNumber     = 6;
-    uint8_t                 PPMMillis             = 22;               // Not used!!! (yet)
     bool                    UseTXModule           = false;
 };
 PPMArea PPMdata;
