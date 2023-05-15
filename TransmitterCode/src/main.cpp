@@ -3750,6 +3750,9 @@ void ReceiveModelFile()
     ShowFileTransferWindow();
     SendText(ModelsView_filename, Waiting);
     SendText(t0, RXheader);
+    if (PPMdata.UseTXModule){ // heer
+        InitRadio(DefaultPipe);
+    }
     RXPipe = FILEPIPEADDRESS;
     Radio1.setRetries(15, 15);
     Radio1.setChannel(FILECHANNEL);
@@ -3931,6 +3934,9 @@ void SendModelFile()
     Serial.print(Fsize);
     Serial.println(" bytes.");
 #endif
+    if (PPMdata.UseTXModule){ // heer
+        InitRadio(DefaultPipe);
+    }
     Radio1.setChannel(FILECHANNEL);
     Radio1.setPALevel(FILEPALEVEL, true);
     Radio1.setRetries(15, 15);
