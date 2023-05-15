@@ -251,7 +251,7 @@ char      FrontView_Secs[]            = "Secs";
     uint8_t Cdown[10]     = {TEN,NINE,EIGHT,SEVEN,SIX,FIVE,FOUR,THREE,TWO,ONE};
 
     
-    if ((MotorEnabled && !LostContactFlag) ) {
+    if ((MotorEnabled && (!LostContactFlag || PPMdata.UseTXModule))) { 
         ElapsedSeconds  = ((millis() - TimerMillis) / 1000) + PausedSecs;
         Secs = ElapsedSeconds;
         if (TimerDownwards)  Secs = TimerStartTime - ElapsedSeconds;
