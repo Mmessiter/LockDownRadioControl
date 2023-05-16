@@ -251,7 +251,7 @@ char      FrontView_Secs[]            = "Secs";
     uint8_t Cdown[10]     = {TEN,NINE,EIGHT,SEVEN,SIX,FIVE,FOUR,THREE,TWO,ONE};
 
     
-    if ((MotorEnabled && !LostContactFlag) ) {
+    if ((MotorEnabled && (!LostContactFlag || PPMdata.UseTXModule))) { 
         ElapsedSeconds  = ((millis() - TimerMillis) / 1000) + PausedSecs;
         Secs = ElapsedSeconds;
         if (TimerDownwards)  Secs = TimerStartTime - ElapsedSeconds;
@@ -539,12 +539,19 @@ FASTRUN void ShowComms()
     char     IdStored[]             = "t19";
     char     IdReceived1[]          = "t23";
     char     IdStored1[]            = "t24";
-
+    char     ams[]                  = "ams";
+    char     AmsOnMsg[]             = "AMS is ON";
+    char     AmsOffMsg[]            = "AMS is OFF"; // heer
 
     unsigned int TempModelId                   = 0;
 
     if (CurrentView == FRONTVIEW) {
         ShowConnectionQuality();
+        if (AutoModelSelect){
+            SendText(ams, AmsOnMsg);
+        } else {
+            SendText(ams, AmsOffMsg);
+        }
         switch (DualRateInUse)
         {
             case 1:
@@ -1002,30 +1009,7 @@ void ChannelCentres()
     GetNewChannelValues();
     CalibrateEdgeSwitches(); // These are now calibrated too in case some are reversed.
 }
-/*********************************************************************************************************************************/
-void UpdateTrimView()
-{
-   
-    uint8_t p;
-    char    TrimViewChannels[4][4] = {"ch1", "ch4", "ch2", "ch3"};
-    char    TrimViewNumbers[4][3]  = {"n1", "n4", "n2", "n3"};
-    char    TrimChannelNames[4][3] = {"c1", "c2", "c3", "c4"};
 
-    if (CurrentView == FRONTVIEW || (CurrentView == TRIM_VIEW)) {
-        for (int i = 0; i < 4; ++i) {
-            p = i;
-            if (SticksMode == 2) {
-                if (i == 1) p = 2;
-                if (i == 2) p = 1;
-            }
-            uint8_t pp = InputTrim[p];
-            SendValue(TrimViewChannels[p], (Trims[Bank][pp]));                 
-            SendValue(TrimViewNumbers[p],  (Trims[Bank][pp] - 80));
-            if (CurrentView == TRIM_VIEW) SendText(TrimChannelNames[i],  ChannelNames[pp]);       
-        }
-    }
- 
-}
 /*********************************************************************************************************************************/
 
 FLASHMEM void ScanI2c()
@@ -1260,17 +1244,6 @@ FLASHMEM void InitMaxMin()
 
 /*********************************************************************************************************************************/
 
-FLASHMEM void CentreTrims()
-{
-    for (int j = 0; j <= BANKSUSED; ++j) {
-        for (int i = 0; i < CHANNELSUSED; ++i) {
-            Trims[j][i] = 80;
-        }
-    }
-}
-
-/*********************************************************************************************************************************/
-
 FLASHMEM void InitCentreDegrees()
 {
 
@@ -1336,19 +1309,6 @@ void CheckBanksInUse(){
         for (int i = 0; i < 4; ++i){
              if (BanksInUse[i] > 23) BanksInUse[i] = i;
         }
-}
-/*********************************************************************************************************************************/
-void CheckSavedTrimValues()
-{
-    bool OK = true;
-    for (int i = 0; i < 4; ++i) {
-        if ((InputTrim[i] > 15) || (InputTrim[i] < 0)) OK = false;
-    }
-    if (!OK) {
-        for (int i = 0; i < 4; ++i) {
-            InputTrim[i] = i;
-        }
-    }
 }
 
 /*********************************************************************************************************************************/
@@ -1749,8 +1709,9 @@ bool LoadAllParameters()
         PPMdata.PPMChannelsNumber = SDRead8BITS(SDCardAddress);
         if ((PPMdata.PPMChannelsNumber > 16) || (PPMdata.PPMChannelsNumber < 1)) PPMdata.PPMChannelsNumber = 6;
         ++SDCardAddress;
-        PPMdata.PPMMillis = SDRead8BITS(SDCardAddress);
-         if ((PPMdata.PPMMillis > 50) || (PPMdata.PPMMillis < 2)) PPMdata.PPMMillis = 22;// Not used!!! (yet)
+       
+      // Not used!!! (yet)  1 spare
+       
         ++SDCardAddress;
          PPMdata.UseTXModule = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
@@ -1761,15 +1722,7 @@ bool LoadAllParameters()
         ReadOneModel(ModelNumber);
         return true;
 }
-/*********************************************************************************************************************************/
-void CheckTrimValues()
-{
-    bool KO = false;
-    for (int j = 0; j < 8; ++j) {
-        if ((TrimNumber[j] > TRIM4B) || (TrimNumber[j] < TRIM1A)) KO = true;
-    }
-    if (KO) ResetAllTrims();
-}
+
 /*********************************************************************************************************************************/
 void Force_ReDisplay()
 {
@@ -2505,7 +2458,7 @@ void SaveTransmitterParameters()
     ++SDCardAddress;
      SDUpdate8BITS(SDCardAddress, PPMdata.PPMChannelsNumber);
     ++SDCardAddress;
-     SDUpdate8BITS(SDCardAddress, PPMdata.PPMMillis);// Not used!!! (yet)
+   // Not used!!! (yet) // 1 spare
     ++SDCardAddress;
      SDUpdate8BITS(SDCardAddress, PPMdata.UseTXModule);
     ++SDCardAddress;
@@ -3804,6 +3757,9 @@ void ReceiveModelFile()
     ShowFileTransferWindow();
     SendText(ModelsView_filename, Waiting);
     SendText(t0, RXheader);
+    if (PPMdata.UseTXModule){
+        InitRadio(DefaultPipe);
+    }
     RXPipe = FILEPIPEADDRESS;
     Radio1.setRetries(15, 15);
     Radio1.setChannel(FILECHANNEL);
@@ -3985,6 +3941,9 @@ void SendModelFile()
     Serial.print(Fsize);
     Serial.println(" bytes.");
 #endif
+    if (PPMdata.UseTXModule){ 
+        InitRadio(DefaultPipe);
+    }
     Radio1.setChannel(FILECHANNEL);
     Radio1.setPALevel(FILEPALEVEL, true);
     Radio1.setRetries(15, 15);
@@ -5591,7 +5550,6 @@ void DoMFName(){
 
     char c1[] = "c1";   // Use module
     char n3[] = "n3";   // number of channels
-    char n4[] = "n4";   // ms
     char r0[] = "r0"; 
     char r1[] = "r1";
     char r2[] = "r2";
@@ -5599,7 +5557,6 @@ void DoMFName(){
     SendCommand(GoTXModule);
     SendValue(c1, PPMdata.UseTXModule);
     SendValue(n3, PPMdata.PPMChannelsNumber);
-    SendValue(n4, PPMdata.PPMMillis);// Not used!!! (yet)
     if (PPMdata.PPMOrderSelection == 1) {SendValue(r0, 1);}
         else {SendValue(r0, 0);}
     if (PPMdata.PPMOrderSelection == 2) {SendValue(r1, 1);}
@@ -5626,7 +5583,6 @@ void SelectChannelOrder(){
     char GoBack[] = "page TXModuleView";
     char c1[] = "c1";   // Use module
     char n3[] = "n3";   // number of channels
-    char n4[] = "n4";   // ms
     char r0[] = "r0"; 
     char r1[] = "r1";
     char r2[] = "r2";
@@ -5649,7 +5605,6 @@ void SelectChannelOrder(){
     DelayWithDog(100);
     PPMdata.PPMChannelsNumber = GetValue(n3);
     SendValue(Progress, 51);
-    PPMdata.PPMMillis        =   GetValue(n4);// Not used!!! (yet)
     if (GetValue(r0)) PPMdata.PPMOrderSelection = 1;
     SendValue(Progress, 63);
     DelayWithDog(10);
@@ -7452,6 +7407,7 @@ void CalibrateEdgeSwitches()
 FASTRUN void ReadSwitches() // and indeed read digital trims if these are fitted
 {
     byte flag = 0;
+    static uint8_t  PreviousTrim           = 255;
     for (int i = 0; i < 8; ++i) {
         Switch[i]     = !digitalRead(SwitchNumber[i]); // These are reversed because they are active low
         TrimSwitch[i] = !digitalRead(TrimNumber[i]);   // These are reversed because they are active low
@@ -7556,7 +7512,6 @@ void GotoFrontView(){
     char fms[4][4] = {{"fm1"},{"fm2"},{"fm3"},{"fm4"}};
     char     FrontView_Connected[]  = "Connected";
     char      page_FrontView[]            = "page FrontView";
-    CurrentMode                           = NORMAL;
     if (CurrentView != FRONTVIEW) {
           if (CurrentView == SCANVIEW) {
             DoScanEnd();
@@ -7632,7 +7587,6 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                         ModelNumber = SavedModelNumber; //  Not found, so bind to the restored selected one
                         ReadOneModel(ModelNumber);
                         BindNow();
-                      //  NewModelMemoryWasSaved = true;
                         if (AutoModelSelect)
                         {
                             PlaySound(MMSAVED); 
@@ -7845,12 +7799,12 @@ void CheckPowerOffButton()
     char nb[4];
     char NotStillConnected[]        = "vis StillConnected,0";
     char StillConnected[]           = "vis StillConnected,1";
-    char StillConnectedBox[]       = "StillConnected";
+    char StillConnectedBox[]        = "StillConnected";
     
 
     if (!digitalRead(BUTTON_SENSE_PIN)){
         GotoFrontView();
-        if (!LedWasGreen) 
+        if (!LedWasGreen && !PPMdata.UseTXModule) 
         {
             SimulateCloseDown();              // if not connected power off immediately
         } else
@@ -7923,9 +7877,9 @@ void FASTRUN ManageTransmitter(){
             GetStatistics();                                         // Do stats
             LastTimeRead = millis();
             CheckForNextionButtonPress();  
-            ShowComms();                                            // Screen Telemetry Data 
+            ShowComms();                                             // Screen Telemetry Data 
             if (CurrentView == MODELSVIEW) CheckModelName();               
-            if (CurrentView == FRONTVIEW)  ShowMotorTimer();          // Screen Timer 
+            if (CurrentView == FRONTVIEW)  ShowMotorTimer();         // Screen Timer 
             return;                                                  // That's enough housekeeping this time around
         }
         if (RightNow - LastScanButtonCheck >= 100) {                    

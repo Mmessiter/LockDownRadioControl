@@ -54,13 +54,13 @@ extern float    CourseToGPS;
 extern uint8_t  MacAddress[9];
 extern uint8_t  TheReceivedPipe[6];
 extern uint32_t NewConnectionMoment;
-extern void BindModel();
-extern void FailSafe(); // defined in main.cpp
-extern void ClearAckPayload();
-extern void ShowHopDurationEtc();
-extern void ReadSensorHub();
-extern void SetUKFrequencies();
-extern void MoveServos();
+extern void     BindModel();
+extern void     FailSafe(); // defined in main.cpp
+extern void     ClearAckPayload();
+extern void     ShowHopDurationEtc();
+extern void     ReadSensorHub();
+extern void     SetUKFrequencies();
+extern void     MoveServos();
 extern FASTRUN void ReceiveData();
 extern bool         FailedSafe;
 extern bool         NewData;
@@ -187,7 +187,7 @@ void GetNewPipe() // from TX
 #ifdef DB_BIND
         Serial.println("Received TX ID!");
 #endif 
-        for (int i = 0; i < 5; ++i) {
+        for (int i = 0; i < 5; ++i) { // heeer
             TheReceivedPipe[4-i] =  ReceivedData[i+1] & 0xff; // reversed byte array for our use
 #ifdef DB_BIND
             Serial.print((uint8_t)ReceivedData[i+1], HEX);

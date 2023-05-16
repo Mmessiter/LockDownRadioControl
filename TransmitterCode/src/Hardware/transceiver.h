@@ -378,26 +378,18 @@ uint8_t CheckPipeNibbles(uint8_t b){
 
 /************************************************************************************************************/
 
-FASTRUN void BufferTeensyMACAddPipe()
+FASTRUN void BufferTeensyMACAddPipe() // heeer
 {
     for (int q = 1; q < 6; ++q) {
         SendBuffer[q] = MacAddress[q];
     }
 }
-
 /************************************************************************************************************/
 void SendBindingPipe()
 {
     static uint32_t BindingTimer   = 0;
     if (PPMdata.UseTXModule) return;
-    uint16_t BindPause = 1200;                          // was 3000
-   // if (NewModelMemoryWasSaved) BindPause = 1000;     // was 6000
+    uint16_t BindPause = 1200; // failed at 200, OK just at 250. // 1200? heer                      
     if (!BoundFlag || !ModelMatched) BindingTimer = millis();
-    if ((millis() - BindingTimer) < BindPause) 
-    {
-        BufferTeensyMACAddPipe(); 
-    }else
-    {
-      //  NewModelMemoryWasSaved = false; // return to normal service
-    }
+    if ((millis() - BindingTimer) < BindPause) BufferTeensyMACAddPipe(); 
 }

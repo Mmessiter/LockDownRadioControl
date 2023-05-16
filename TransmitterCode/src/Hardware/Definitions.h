@@ -19,7 +19,7 @@
 
 #define TXVERSION_MAJOR   2
 #define TXVERSION_MINOR   1
-#define TXVERSION_MINIMUS 8
+#define TXVERSION_MINIMUS 9
 
 // **************************************************************************
 //    DEBUG OPTIONS (Uncomment any of these for that bit of debug info)     *
@@ -406,7 +406,7 @@
 
 #define PONGX1          20          // BOX dimentions
 #define PONGX2          790         // BOX dimentions
-#define PONGY1          50          // BOX dimentions
+#define PONGY1          60          // BOX dimentions (was 50)
 #define PONGY2          410         // BOX dimentions
 #define PONGGOALSIZE    180         // Size of goal
 #define PONGBALLSIZE    7           // Size of ball
@@ -553,7 +553,6 @@ uint8_t  PacketsHistoryBuffer[PERFECTPACKETSPERSECOND * MAXSHOWCOMMSSESCONDS]; /
 uint32_t TotalLostPackets       = 0;
 uint8_t  PacketNumber           = 0;
 uint8_t  GPSMarkHere            = 0;
-uint8_t  PreviousTrim           = 255;
 uint16_t TrimRepeatSpeed        = 600;
 char     na[]                   = "";
 uint8_t  StepSize[16] = {0,0,0,0,0,0,0,0,5,25,5,25,5,25,5,25};  //    How far to move each time on slow servos
@@ -854,6 +853,11 @@ bool     TimerDownwards         = false;
 uint16_t TimerStartTime         = 5 * 60; 
 bool     TimesUp                = false;
 uint8_t  CountDownIndex = 0;
+uint8_t   MacrosBuffer[MAXMACROS][BYTESPERMACRO]; // macros' buffer
+uint32_t  MacroStartTime[MAXMACROS];
+uint32_t  MacroStopTime[MAXMACROS];
+uint8_t   PreviousMacroNumber = 1;
+bool      UseMacros           = false;
 
 // *********************************************** END OF GLOBAL DATA ***************************************************************
 
@@ -862,8 +866,6 @@ uint8_t  CountDownIndex = 0;
 #include "Hardware/Utilities.h" 
 #include "Hardware/transceiver.h" 
 #include "Hardware/Pong.h" 
-#include "Hardware/Macros.h" 
+#include "Hardware/macros.h" 
 #include "Hardware/Trims.h" 
-
-
 #endif
