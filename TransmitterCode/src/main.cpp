@@ -539,12 +539,19 @@ FASTRUN void ShowComms()
     char     IdStored[]             = "t19";
     char     IdReceived1[]          = "t23";
     char     IdStored1[]            = "t24";
-
+    char     ams[]                  = "ams";
+    char     AmsOnMsg[]             = "AMS is ON";
+    char     AmsOffMsg[]            = "AMS is OFF"; // heer
 
     unsigned int TempModelId                   = 0;
 
     if (CurrentView == FRONTVIEW) {
         ShowConnectionQuality();
+        if (AutoModelSelect){
+            SendText(ams, AmsOnMsg);
+        } else {
+            SendText(ams, AmsOffMsg);
+        }
         switch (DualRateInUse)
         {
             case 1:
@@ -3750,7 +3757,7 @@ void ReceiveModelFile()
     ShowFileTransferWindow();
     SendText(ModelsView_filename, Waiting);
     SendText(t0, RXheader);
-    if (PPMdata.UseTXModule){ // heer
+    if (PPMdata.UseTXModule){
         InitRadio(DefaultPipe);
     }
     RXPipe = FILEPIPEADDRESS;
@@ -3934,7 +3941,7 @@ void SendModelFile()
     Serial.print(Fsize);
     Serial.println(" bytes.");
 #endif
-    if (PPMdata.UseTXModule){ // heer
+    if (PPMdata.UseTXModule){ 
         InitRadio(DefaultPipe);
     }
     Radio1.setChannel(FILECHANNEL);
@@ -7797,7 +7804,7 @@ void CheckPowerOffButton()
 
     if (!digitalRead(BUTTON_SENSE_PIN)){
         GotoFrontView();
-        if (!LedWasGreen && !PPMdata.UseTXModule)  // heer
+        if (!LedWasGreen && !PPMdata.UseTXModule) 
         {
             SimulateCloseDown();              // if not connected power off immediately
         } else
