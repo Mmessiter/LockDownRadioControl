@@ -389,7 +389,7 @@ void SendBindingPipe()
 {
     static uint32_t BindingTimer   = 0;
     if (PPMdata.UseTXModule) return;
-    uint16_t BindPause = 250; // failed at 200, OK at 250. // 1200? heer                      
+    uint16_t BindPause = 1200; // failed at 200, OK just at 250. // 1200? heer                      
     if (!BoundFlag || !ModelMatched) BindingTimer = millis();
     if ((millis() - BindingTimer) < BindPause) BufferTeensyMACAddPipe(); 
 }
