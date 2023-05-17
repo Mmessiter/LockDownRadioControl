@@ -375,7 +375,6 @@ FASTRUN bool CheckTXVolts()
     char  FrontView_TXBV[] = "TXBV"; // Labels on Nextion
     bool  TXWarningFlag    = false;
     float TransmitterBatteryPercentLeft, TransmitterBatteryVolts;
-    char  Vbuf[10];                  // Little buffer for numbers
     char  TXBattInfo[80];
     char  pc[] = "%";
     char  nbuf[10];                  // Little buffer for numbers
@@ -395,18 +394,11 @@ FASTRUN bool CheckTXVolts()
             WarningSound = BATTERYISLOW;
         }
         TransmitterBatteryPercentLeft = constrain(TransmitterBatteryPercentLeft, 0, 100);
-        strcpy(TXBattInfo, Str(Vbuf, TransmitterBatteryPercentLeft, 0));
         strcat(TXBattInfo, pc);
         if (CurrentView == FRONTVIEW) {
-            ShowVPC ^= 1;       //  Toggle voltspercell and percentage value
             SendValue(JTX, TransmitterBatteryPercentLeft);
-            if (ShowVPC) {
-                SendText(FrontView_TXBV, TXBattInfo);
-            }
-            else {
-                strcat(nbuf, v); 
-                SendText(FrontView_TXBV, nbuf);
-            }
+            strcat(nbuf, v); 
+            SendText(FrontView_TXBV, nbuf);
         }
         if (CurrentView == DATAVIEW) {
             SendText(DataView_txv, TransmitterVersionNumber);
@@ -540,10 +532,12 @@ FASTRUN void ShowComms()
     char     IdReceived1[]          = "t23";
     char     IdStored1[]            = "t24";
     char     ams[]                  = "ams";
-    char     AmsOnMsg[]             = "AMS is ON";
-    char     AmsOffMsg[]            = "AMS is OFF"; // heer
-
-    unsigned int TempModelId                   = 0;
+    char     trall[]                = "trall";
+    char     AmsOnMsg[]             = "AMS";
+    char     AmsOffMsg[]            = "   "; // heer
+    char     CopyTrimsToAllMSG[]    = "TrimAll";
+    char     CopyTrimsToNoneMSG[]   = "       ";
+    unsigned int TempModelId        = 0;
 
     if (CurrentView == FRONTVIEW) {
         ShowConnectionQuality();
@@ -551,6 +545,11 @@ FASTRUN void ShowComms()
             SendText(ams, AmsOnMsg);
         } else {
             SendText(ams, AmsOffMsg);
+        }
+        if (CopyTrimsToAll){
+            SendText(trall, CopyTrimsToAllMSG);
+        }else{
+            SendText(trall, CopyTrimsToNoneMSG);
         }
         switch (DualRateInUse)
         {
