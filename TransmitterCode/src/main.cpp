@@ -7510,7 +7510,8 @@ FASTRUN uint32_t GetIntFromAckPayload()   // This one uses a uint32_t int
 void GotoFrontView(){ 
     char fms[4][4] = {{"fm1"},{"fm2"},{"fm3"},{"fm4"}};
     char     FrontView_Connected[]  = "Connected";
-    char      page_FrontView[]            = "page FrontView";
+    char     page_FrontView[]       = "page FrontView";
+
     if (CurrentView != FRONTVIEW) {
           if (CurrentView == SCANVIEW) {
             DoScanEnd();
@@ -7533,8 +7534,8 @@ void GotoFrontView(){
     for (int i = 0; i < 4; ++i) {
           SendText(fms[i], BankTexts[BanksInUse[i]]);
     }
+    UpdateTrimView();
 }
-
 /************************************************************************************************************/
 
 void CompareModelsIDs(){ // The saved MacAddress is compared with the one just received from the model ... etc ...
