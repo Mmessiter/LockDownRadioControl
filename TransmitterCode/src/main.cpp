@@ -7557,18 +7557,16 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                 return;
             } else {
                 if (AutoModelSelect)
-                { //  It's not a match so maybe search for it.
+                { //  It's not a match so search for it.
                     ModelNumber = 0;
-                    while ((ModelMatched == false) && (ModelNumber < MAXMODELNUMBER - 1)) 
-                    {   //  Try to match the ID with a saved one
+                    while ((ModelMatched == false) && (ModelNumber < MAXMODELNUMBER - 1)) {   //  Try to match the ID with a saved one
                         ++ModelNumber;
                         ReadOneModel(ModelNumber);
                          if  ((ModelsMacUnion.Val32[0] == ModelsMacUnionSaved.Val32[0]) && (ModelsMacUnion.Val32[1] == ModelsMacUnionSaved.Val32[1])){
                             ModelMatched = true;
                         }
                     }
-                    if (ModelMatched)
-                    {                                                         //  Found it!    
+                    if (ModelMatched) {                                       //  Found it!    
                         UpdateModelsNameEveryWhere();                         //  Use it.
                         if (AnnounceConnected) 
                         {
