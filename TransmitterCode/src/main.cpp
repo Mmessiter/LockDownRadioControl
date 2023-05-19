@@ -7544,22 +7544,18 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
     if (ModelMatched) return; // must not change when model connected
     GotoFrontView();
     RestoreBrightness();
-  
     if (ModelIdentified) {                                                //  We have both bits of Model ID?      
-          if (ModelsMacUnion.Val64 == ModelsMacUnionSaved.Val64) 
+        if ((ModelsMacUnion.Val32[0] == ModelsMacUnionSaved.Val32[0]) && (ModelsMacUnion.Val32[1] == ModelsMacUnionSaved.Val32[1])) // heer  
             {
                 if (AnnounceConnected) {
                     if (AutoModelSelect){
                         PlaySound(MMMATCHED); 
                         DelayWithDog(1500);
-                    }
-                    
+                    }   
                 }
                 ModelMatched = true;                                      //  It's a match so start flying!
                 return;
-            } 
-            if (ModelsMacUnion.Val64 != ModelsMacUnionSaved.Val64) 
-            {
+            } else {
                 if (AutoModelSelect)
                 { //  It's not a match so maybe search for it.
                     ModelNumber = 0;
@@ -7567,7 +7563,7 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                     {   //  Try to match the ID with a saved one
                         ++ModelNumber;
                         ReadOneModel(ModelNumber);
-                        if (ModelsMacUnion.Val64 == ModelsMacUnionSaved.Val64) {
+                         if  ((ModelsMacUnion.Val32[0] == ModelsMacUnionSaved.Val32[0]) && (ModelsMacUnion.Val32[1] == ModelsMacUnionSaved.Val32[1])){
                             ModelMatched = true;
                         }
                     }
@@ -7579,7 +7575,6 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                             PlaySound(MMFOUND);
                             DelayWithDog(1500);
                         }
-                        
                         SaveAllParameters();                                  //  Save it
                         GotoFrontView();
                         
