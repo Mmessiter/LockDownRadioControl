@@ -83,6 +83,7 @@ var Definitions_8h =
     [ "HALFMICROSRANGE", "Definitions_8h.html#aa0f99ed9c5fd16fa7deba8d4f0336b3a", null ],
     [ "HELP_VIEW", "Definitions_8h.html#a7f61099fecfe7dae5a38078cb36a9bd4", null ],
     [ "HOVER", "Definitions_8h.html#acde728d65e290bc02e988924ea1bf3fa", null ],
+    [ "IDCHECKVIEW", "Definitions_8h.html#a7c9da6f6544170bad0e9be3b53de07a3", null ],
     [ "IDLE1", "Definitions_8h.html#a6206862dac2a46795d3222da29fd31d2", null ],
     [ "IDLE2", "Definitions_8h.html#a6b723cc074c7c348aa1e89c558b676fe", null ],
     [ "INACTIVITYMAXIMUM", "Definitions_8h.html#a6f6e4e8e296f81b3dd22980c49168662", null ],

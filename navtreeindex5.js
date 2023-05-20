@@ -1,5 +1,6 @@
 var NAVTREEINDEX5 =
 {
+"Quadcopter_2src_2main_8cpp.html#a65f83d03987a32aea44172062214273d":[5,0,0,0,1,33],
 "Quadcopter_2src_2main_8cpp.html#a66ab401162f7e33090db7604d7ec76c2":[5,0,0,0,1,143],
 "Quadcopter_2src_2main_8cpp.html#a68bc5d52c72e3692e23ef0cd45f36142":[5,0,0,0,1,10],
 "Quadcopter_2src_2main_8cpp.html#a6ccbae596c6740f3b04e25133943ce3e":[5,0,0,0,1,220],
@@ -248,6 +249,5 @@ var NAVTREEINDEX5 =
 "ReceiverCode_2src_2main_8cpp_source.html":[5,0,1,0,1],
 "SBUS_8cpp.html":[5,0,0,0,0,2,1],
 "SBUS_8cpp_source.html":[5,0,0,0,0,2,1],
-"SBUS_8h.html":[5,0,0,0,0,2,2],
-"SBUS_8h_source.html":[5,0,0,0,0,2,2]
+"SBUS_8h.html":[5,0,0,0,0,2,2]
 };
