@@ -5532,6 +5532,7 @@ void DoMFName(){
 }
 
 /******************************************************************************************************************************/
+// Function to display all model IDs and check for duplcates
 
 void CheckAllModelIds(){ // heer
       unsigned int TempModelId;
@@ -5558,7 +5559,6 @@ void CheckAllModelIds(){ // heer
             ReadOneModel(ModelNumber);
             ModelIDs[ModelNumber] = ModelsMacUnionSaved.Val64;
       }
-
       for (ModelNumber = 1; ModelNumber < MAXMODELNUMBER-1; ++ModelNumber) {
                     ReadOneModel(ModelNumber);
                     if (ModelNumber == 1) {
