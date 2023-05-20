@@ -5545,14 +5545,20 @@ void CheckAllModelIds(){ // heer
       char buf[MAXBUFFERSIZE];
       char          KO[] = " <- BAD! (";
       char          Okay[] = " - OK";
-      char          n0[]                   = "n0";
-      uint32_t      ModelIDsL[92];
-      uint32_t      ModelIDsH[92];
+      char          n0[]   = "n0";
+
+      uint64_t      ModelIDs[92];
       uint8_t       DuplicatesCount = 0;
       uint32_t      SavedModelNumber  = ModelNumber;
       SendCommand(GoIDview);
       CurrentView = IDCHECKVIEW;
       CurrentMode = SENDNOTHING;
+     
+      for (ModelNumber = 1; ModelNumber < MAXMODELNUMBER-1; ++ModelNumber) {
+            ReadOneModel(ModelNumber);
+            ModelIDs[ModelNumber] = ModelsMacUnionSaved.Val64;
+      }
+
       for (ModelNumber = 1; ModelNumber < MAXMODELNUMBER-1; ++ModelNumber) {
                     ReadOneModel(ModelNumber);
                     if (ModelNumber == 1) {
@@ -5572,14 +5578,13 @@ void CheckAllModelIds(){ // heer
                         strcat(buf, Vbuf);
                     }
                     TempModelId = ModelsMacUnionSaved.Val32[1];
-                    ModelIDsL[ModelNumber] = ModelsMacUnionSaved.Val32[0];
-                    ModelIDsH[ModelNumber] = ModelsMacUnionSaved.Val32[1];
+                    ModelIDs[ModelNumber] = ModelsMacUnionSaved.Val64;
                     snprintf(Vbuf, 10, "%X", TempModelId);
                     if (TempModelId) { 
                             strcat(buf, Vbuf);
                             int p = 0;
-                            for (unsigned int i = 1; i < MAXMODELNUMBER - 1; ++i) {
-                                if ((ModelIDsL[i] == ModelIDsL[ModelNumber]) && (ModelIDsH[i] == ModelIDsH[ModelNumber]) && (i != ModelNumber)) p = i;
+                            for (unsigned int i = 1; i < MAXMODELNUMBER-1; ++i) {
+                              if ((ModelIDs[i] == ModelIDs[ModelNumber])  && (i != ModelNumber)) p = i;
                             }
                             if (p > 0) {
                                 strcat(buf, KO); 
@@ -5597,12 +5602,9 @@ void CheckAllModelIds(){ // heer
         SendValue(n0, DuplicatesCount);
         ModelNumber  = SavedModelNumber;
         ReadOneModel(ModelNumber);
-
-       // GotoModelsView();
 }
 
 /******************************************************************************************************************************/
-
 
  void TXModuleViewStart(){ 
 
