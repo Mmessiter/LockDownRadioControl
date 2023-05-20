@@ -91,7 +91,7 @@
 #define DEFAULTLEDBRIGHTNESS    20                        // LED brightness
 #define DEFAULTPOWEROFFWARNING  3                         // Default time to warn before cutting power      
 #define MAXDUALRATE             200
-#define MAXBUFFERSIZE           4096
+#define MAXBUFFERSIZE           1024 * 6
 #define MAXMODELNUMBER          91
 #define PERFECTPACKETSPERSECOND 150                       // Flat out perfect packets per second
 #define PIPES_TO_COMPARE        6
@@ -192,6 +192,7 @@
 #define FILEEXCHANGEVIEW 35
 #define TXMODULEVIEW    36
 #define PONGVIEW        37
+#define IDCHECKVIEW     38
 
 
 // **************************************************************************

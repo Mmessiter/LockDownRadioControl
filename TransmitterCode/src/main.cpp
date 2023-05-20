@@ -4504,7 +4504,7 @@ void LoadModelSelector(){
     char mn[] = "modelname";
 
     int32_t SavedModelNumber = ModelNumber;
-    for (ModelNumber = 1; ModelNumber < MAXMODELNUMBER; ++ModelNumber){
+    for (ModelNumber = 1; ModelNumber < MAXMODELNUMBER; ++ModelNumber){ // heer
             ReadOneModel(ModelNumber);
             if (ModelNumber == 1) {
                 strcpy(buf, ModelName);
@@ -5533,42 +5533,76 @@ void DoMFName(){
 
 /******************************************************************************************************************************/
 
-void ShowModelIds(){
-#ifdef DB_IDS
-    unsigned int TempModelId;
-    char         Vbuf[15];
-    char         NotInUse[] = "Not in use";
+void CheckAllModelIds(){ // heer
+      unsigned int TempModelId;
+      char Vbuf[15];
+      char MMemsp[]     = "MMems.path=\"";
+      char GoIDview[]   = "page IDsView";
+      char crlf[]     = {13, 10, 0};  
+      char lb[]       = "(";
+      char rb[]       = ")  ";
+      char nb[4];
+      char buf[MAXBUFFERSIZE];
+      char          KO[] = " <- BAD! (";
+      char          Okay[] = " - OK";
+      char          n0[]                   = "n0";
+      uint32_t      ModelIDsL[92];
+      uint32_t      ModelIDsH[92];
+      uint8_t       DuplicatesCount = 0;
+      uint32_t      SavedModelNumber  = ModelNumber;
+      SendCommand(GoIDview);
+      CurrentView = IDCHECKVIEW;
+      CurrentMode = SENDNOTHING;
+      for (ModelNumber = 1; ModelNumber < MAXMODELNUMBER-1; ++ModelNumber) {
+                    ReadOneModel(ModelNumber);
+                    if (ModelNumber == 1) {
+                        strcpy(buf, lb);
+                    }
+                    else {
+                        strcat(buf, lb);
+                    }
+                    Str(nb, ModelNumber, 0);
+                    strcat(buf, nb);
+                    strcat(buf, rb);
+                    strcat(buf, ModelName);
+                    TempModelId = ModelsMacUnionSaved.Val32[0];
+                    snprintf(Vbuf, 10, "%X", TempModelId);
+                    if (TempModelId) {
+                        strcat(buf, " = ");
+                        strcat(buf, Vbuf);
+                    }
+                    TempModelId = ModelsMacUnionSaved.Val32[1];
+                    ModelIDsL[ModelNumber] = ModelsMacUnionSaved.Val32[0];
+                    ModelIDsH[ModelNumber] = ModelsMacUnionSaved.Val32[1];
+                    snprintf(Vbuf, 10, "%X", TempModelId);
+                    if (TempModelId) { 
+                            strcat(buf, Vbuf);
+                            int p = 0;
+                            for (unsigned int i = 1; i < MAXMODELNUMBER - 1; ++i) {
+                                if ((ModelIDsL[i] == ModelIDsL[ModelNumber]) && (ModelIDsH[i] == ModelIDsH[ModelNumber]) && (i != ModelNumber)) p = i;
+                            }
+                            if (p > 0) {
+                                strcat(buf, KO); 
+                                strcat(buf, Str(nb,p,0));
+                                strcat(buf, rb);
+                                ++DuplicatesCount;
+                            }
+                            else {
+                                strcat(buf, Okay);
+                            }
+                    }
+                    strcat(buf, crlf);
+        }      
+        SendOtherText(MMemsp, buf);
+        SendValue(n0, DuplicatesCount);
+        ModelNumber  = SavedModelNumber;
+        ReadOneModel(ModelNumber);
 
-    for (ModelNumber = 1; ModelNumber < 88; ++ModelNumber){
-            ReadOneModel(ModelNumber);
-            if (strcmp(NotInUse,ModelName)){
-                Serial.print("("); 
-                Serial.print(ModelNumber);
-                Serial.print(") "); 
-                Serial.print(ModelName);
-                TempModelId = 25 - strlen(ModelName);
-                if (ModelNumber > 9) TempModelId--;
-                for (unsigned int i = 0; i < TempModelId; ++i) Serial.print(" ");
-                TempModelId = ModelsMacUnionSaved.Val32[0];
-                snprintf(Vbuf, 10, "%X", TempModelId);
-                if (TempModelId) Serial.print(Vbuf);
-                TempModelId = ModelsMacUnionSaved.Val32[1];
-                snprintf(Vbuf, 10, "%X", TempModelId);
-                if (TempModelId) Serial.print(Vbuf);
-                Serial.println(" ");
-            }
-    }
-#endif
+       // GotoModelsView();
 }
-/******************************************************************************************************************************/
-
- void GoBackFromModels(){
-    ShowModelIds();
-    RestoreCurrentModel();
-    GotoFrontView();
- }
 
 /******************************************************************************************************************************/
+
 
  void TXModuleViewStart(){ 
 
@@ -5752,7 +5786,7 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     YesPressed,                 // 60
     NoPressed,                  // 61
     RenameFile,                 // 62
-    GoBackFromModels,           // 63
+    CheckAllModelIds,           // 63
     Blank,                      // 64 
     ReceiveModelFile,           // 65
     TXModuleViewStart,          // 66
@@ -7575,7 +7609,7 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
     GotoFrontView();
     RestoreBrightness();
     if (ModelIdentified) {                                                //  We have both bits of Model ID?      
-        if ((ModelsMacUnion.Val32[0] == ModelsMacUnionSaved.Val32[0]) && (ModelsMacUnion.Val32[1] == ModelsMacUnionSaved.Val32[1])) // heer  
+        if ((ModelsMacUnion.Val32[0] == ModelsMacUnionSaved.Val32[0]) && (ModelsMacUnion.Val32[1] == ModelsMacUnionSaved.Val32[1])) 
             {
                 if (AnnounceConnected) {
                     if (AutoModelSelect){
