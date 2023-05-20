@@ -812,7 +812,7 @@ bool      AutoModelSelect         = true;
 union uMacReceived {
         uint64_t Val64  = 0;
         uint32_t Val32[2];
-        uint8_t  Val8[8]; // Model's Mac address just obtained from model
+        uint8_t  Val8[8];       // Model's Mac address just obtained from model
      }  ModelsMacUnion;
 
 union uMacStored {
