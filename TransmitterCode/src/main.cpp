@@ -5539,18 +5539,18 @@ void CheckAllModelIds(){ // heer
       char Vbuf[15];
       char MMemsp[]     = "MMems.path=\"";
       char GoIDview[]   = "page IDsView";
-      char crlf[]     = {13, 10, 0};  
-      char lb[]       = "(";
-      char rb[]       = ")  ";
+      char crlf[]       = {13, 10, 0};  
+      char lb[]         = "(";
+      char rb[]         = ")  ";
+      char KO[]         = " <- BAD! (";
+      char Okay[]       = " - OK";
+      char n0[]         = "n0";
       char nb[4];
       char buf[MAXBUFFERSIZE];
-      char          KO[] = " <- BAD! (";
-      char          Okay[] = " - OK";
-      char          n0[]   = "n0";
-
       uint64_t      ModelIDs[92];
       uint8_t       DuplicatesCount = 0;
       uint32_t      SavedModelNumber  = ModelNumber;
+     
       SendCommand(GoIDview);
       CurrentView = IDCHECKVIEW;
       CurrentMode = SENDNOTHING;
@@ -5584,7 +5584,7 @@ void CheckAllModelIds(){ // heer
                             strcat(buf, Vbuf);
                             int p = 0;
                             for (unsigned int i = 1; i < MAXMODELNUMBER-1; ++i) {
-                              if ((ModelIDs[i] == ModelIDs[ModelNumber])  && (i != ModelNumber)) p = i;
+                              if ((ModelIDs[i] == ModelIDs[ModelNumber]) && (i != ModelNumber)) p = i;
                             }
                             if (p > 0) {
                                 strcat(buf, KO); 
