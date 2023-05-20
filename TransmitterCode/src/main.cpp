@@ -534,7 +534,7 @@ FASTRUN void ShowComms()
     char     ams[]                  = "ams";
     char     trall[]                = "trall";
     char     AmsOnMsg[]             = "AMS";
-    char     AmsOffMsg[]            = "   "; // heer
+    char     AmsOffMsg[]            = "   "; 
     char     CopyTrimsToAllMSG[]    = "TrimAll";
     char     CopyTrimsToNoneMSG[]   = "       ";
     unsigned int TempModelId        = 0;
@@ -5533,9 +5533,39 @@ void DoMFName(){
 
 /******************************************************************************************************************************/
 
+void ShowModelIds(){
+#ifdef DB_IDS
+    unsigned int TempModelId;
+    char         Vbuf[15];
+    char         NotInUse[] = "Not in use";
+
+    for (ModelNumber = 1; ModelNumber < 88; ++ModelNumber){
+            ReadOneModel(ModelNumber);
+            if (strcmp(NotInUse,ModelName)){
+                Serial.print("("); 
+                Serial.print(ModelNumber);
+                Serial.print(") "); 
+                Serial.print(ModelName);
+                TempModelId = 25 - strlen(ModelName);
+                if (ModelNumber > 9) TempModelId--;
+                for (unsigned int i = 0; i < TempModelId; ++i) Serial.print(" ");
+                TempModelId = ModelsMacUnionSaved.Val32[0];
+                snprintf(Vbuf, 10, "%X", TempModelId);
+                if (TempModelId) Serial.print(Vbuf);
+                TempModelId = ModelsMacUnionSaved.Val32[1];
+                snprintf(Vbuf, 10, "%X", TempModelId);
+                if (TempModelId) Serial.print(Vbuf);
+                Serial.println(" ");
+            }
+    }
+#endif
+}
+/******************************************************************************************************************************/
+
  void GoBackFromModels(){
-     RestoreCurrentModel();
-     GotoFrontView();
+    ShowModelIds();
+    RestoreCurrentModel();
+    GotoFrontView();
  }
 
 /******************************************************************************************************************************/
@@ -7553,7 +7583,7 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                         DelayWithDog(1500);
                     }   
                 }
-                ModelMatched = true;                                      //  It's a match so start flying!
+                ModelMatched = true;                                         //  It's a match so start flying!
                 return;
             } else {
                 if (AutoModelSelect)
@@ -7562,7 +7592,8 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                     while ((ModelMatched == false) && (ModelNumber < MAXMODELNUMBER - 1)) {   //  Try to match the ID with a saved one
                         ++ModelNumber;
                         ReadOneModel(ModelNumber);
-                         if  ((ModelsMacUnion.Val32[0] == ModelsMacUnionSaved.Val32[0]) && (ModelsMacUnion.Val32[1] == ModelsMacUnionSaved.Val32[1])){
+                        
+                        if  ((ModelsMacUnion.Val32[0] == ModelsMacUnionSaved.Val32[0]) && (ModelsMacUnion.Val32[1] == ModelsMacUnionSaved.Val32[1])){
                             ModelMatched = true;
                         }
                     }
@@ -7593,7 +7624,6 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                 }
         }
     }
-    
 }
 /************************************************************************************************************/
 void  GetModelsMacAddress(){

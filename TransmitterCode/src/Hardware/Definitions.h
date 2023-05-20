@@ -34,6 +34,7 @@
 // #define DB_SWITCHES       // Debug Switches
 // #define DB_MODEL_EXCHANGE // Debug MODEL EXCHANGE (by RF link)
 // #define DB_GAPS           // Debug Connection Gap assessment
+// #define DB_IDS            // Debug Model IDs (Hitting the 'BACK' button on models' screen will Serial.print these to the terminal)
 
 // **************************************************************************
 //                               Includes                                   *
