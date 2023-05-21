@@ -5542,8 +5542,8 @@ void CheckAllModelIds(){ // heer
       char crlf[]       = {13, 10, 0};  
       char lb[]         = "(";
       char rb[]         = ")  ";
-      char KO[]         = " <- BAD! (";
-      char Okay[]       = " - OK";
+      char KO[]         = ">>Same ID as ";
+      char Okay[]       = " (ID OK)";
       char n0[]         = "n0";
       char nb[4];
       char buf[MAXBUFFERSIZE];
@@ -5574,7 +5574,7 @@ void CheckAllModelIds(){ // heer
                     TempModelId = ModelsMacUnionSaved.Val32[0];
                     snprintf(Vbuf, 10, "%X", TempModelId);
                     if (TempModelId) {
-                        strcat(buf, " = ");
+                        strcat(buf, " ");
                         strcat(buf, Vbuf);
                     }
                     TempModelId = ModelsMacUnionSaved.Val32[1];
@@ -5589,7 +5589,7 @@ void CheckAllModelIds(){ // heer
                             if (p > 0) {
                                 strcat(buf, KO); 
                                 strcat(buf, Str(nb,p,0));
-                                strcat(buf, rb);
+                                 strcat(buf, "<<"); 
                                 ++DuplicatesCount;
                             }
                             else {
