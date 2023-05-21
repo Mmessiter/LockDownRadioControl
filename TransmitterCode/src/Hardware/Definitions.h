@@ -34,6 +34,7 @@
 // #define DB_SWITCHES       // Debug Switches
 // #define DB_MODEL_EXCHANGE // Debug MODEL EXCHANGE (by RF link)
 // #define DB_GAPS           // Debug Connection Gap assessment
+// #define DB_IDS            // Debug Model IDs (Hitting the 'BACK' button on models' screen will Serial.print these to the terminal)
 
 // **************************************************************************
 //                               Includes                                   *
@@ -90,7 +91,7 @@
 #define DEFAULTLEDBRIGHTNESS    20                        // LED brightness
 #define DEFAULTPOWEROFFWARNING  3                         // Default time to warn before cutting power      
 #define MAXDUALRATE             200
-#define MAXBUFFERSIZE           4096
+#define MAXBUFFERSIZE           1024 * 6
 #define MAXMODELNUMBER          91
 #define PERFECTPACKETSPERSECOND 150                       // Flat out perfect packets per second
 #define PIPES_TO_COMPARE        6
@@ -191,6 +192,7 @@
 #define FILEEXCHANGEVIEW 35
 #define TXMODULEVIEW    36
 #define PONGVIEW        37
+#define IDCHECKVIEW     38
 
 
 // **************************************************************************
@@ -808,13 +810,13 @@ bool      ModelMatched            = false;
 bool      AutoModelSelect         = true;
 
 union uMacReceived {
-        uint32_t Val64  = 0;
+        uint64_t Val64  = 0;
         uint32_t Val32[2];
-        uint8_t  Val8[8]; // Model's Mac address just obtained from model
+        uint8_t  Val8[8];       // Model's Mac address just obtained from model
      }  ModelsMacUnion;
 
 union uMacStored {
-        uint32_t Val64  = 0;
+        uint64_t Val64  = 0;
         uint32_t Val32[2] ;
         uint8_t  Val8[8];        // Model's Mac address that had been saved on disk
      }  ModelsMacUnionSaved;

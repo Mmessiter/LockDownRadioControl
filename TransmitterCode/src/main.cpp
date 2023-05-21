@@ -534,7 +534,7 @@ FASTRUN void ShowComms()
     char     ams[]                  = "ams";
     char     trall[]                = "trall";
     char     AmsOnMsg[]             = "AMS";
-    char     AmsOffMsg[]            = "   "; // heer
+    char     AmsOffMsg[]            = "   "; 
     char     CopyTrimsToAllMSG[]    = "TrimAll";
     char     CopyTrimsToNoneMSG[]   = "       ";
     unsigned int TempModelId        = 0;
@@ -4504,7 +4504,7 @@ void LoadModelSelector(){
     char mn[] = "modelname";
 
     int32_t SavedModelNumber = ModelNumber;
-    for (ModelNumber = 1; ModelNumber < MAXMODELNUMBER; ++ModelNumber){
+    for (ModelNumber = 1; ModelNumber < MAXMODELNUMBER; ++ModelNumber){ // heer
             ReadOneModel(ModelNumber);
             if (ModelNumber == 1) {
                 strcpy(buf, ModelName);
@@ -5532,11 +5532,77 @@ void DoMFName(){
 }
 
 /******************************************************************************************************************************/
+// Function to display all model IDs and check for duplcates
 
- void GoBackFromModels(){
-     RestoreCurrentModel();
-     GotoFrontView();
- }
+void CheckAllModelIds(){ // heer
+      unsigned int TempModelId;
+      char Vbuf[15];
+      char MMemsp[]     = "MMems.path=\"";
+      char GoIDview[]   = "page IDsView";
+      char crlf[]       = {13, 10, 0};  
+      char lb[]         = "(";
+      char rb[]         = ")  ";
+      char KO[]         = ">>Same ID as ";
+      char Okay[]       = " (ID OK)";
+      char n0[]         = "n0";
+      char nb[4];
+      char buf[MAXBUFFERSIZE];
+      uint64_t      ModelIDs[92];
+      uint8_t       DuplicatesCount = 0;
+      uint32_t      SavedModelNumber  = ModelNumber;
+     
+      SendCommand(GoIDview);
+      CurrentView = IDCHECKVIEW;
+      CurrentMode = SENDNOTHING;
+     
+      for (ModelNumber = 1; ModelNumber < MAXMODELNUMBER-1; ++ModelNumber) {
+            ReadOneModel(ModelNumber);
+            ModelIDs[ModelNumber] = ModelsMacUnionSaved.Val64;
+      }
+      for (ModelNumber = 1; ModelNumber < MAXMODELNUMBER-1; ++ModelNumber) {
+                    ReadOneModel(ModelNumber);
+                    if (ModelNumber == 1) {
+                        strcpy(buf, lb);
+                    }
+                    else {
+                        strcat(buf, lb);
+                    }
+                    Str(nb, ModelNumber, 0);
+                    strcat(buf, nb);
+                    strcat(buf, rb);
+                    strcat(buf, ModelName);
+                    TempModelId = ModelsMacUnionSaved.Val32[0];
+                    snprintf(Vbuf, 10, "%X", TempModelId);
+                    if (TempModelId) {
+                        strcat(buf, " ");
+                        strcat(buf, Vbuf);
+                    }
+                    TempModelId = ModelsMacUnionSaved.Val32[1];
+                    ModelIDs[ModelNumber] = ModelsMacUnionSaved.Val64;
+                    snprintf(Vbuf, 10, "%X", TempModelId);
+                    if (TempModelId) { 
+                            strcat(buf, Vbuf);
+                            int p = 0;
+                            for (unsigned int i = 1; i < MAXMODELNUMBER-1; ++i) {
+                              if ((ModelIDs[i] == ModelIDs[ModelNumber]) && (i != ModelNumber)) p = i;
+                            }
+                            if (p > 0) {
+                                strcat(buf, KO); 
+                                strcat(buf, Str(nb,p,0));
+                                 strcat(buf, "<<"); 
+                                ++DuplicatesCount;
+                            }
+                            else {
+                                strcat(buf, Okay);
+                            }
+                    }
+                    strcat(buf, crlf);
+        }      
+        SendOtherText(MMemsp, buf);
+        SendValue(n0, DuplicatesCount);
+        ModelNumber  = SavedModelNumber;
+        ReadOneModel(ModelNumber);
+}
 
 /******************************************************************************************************************************/
 
@@ -5722,7 +5788,7 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     YesPressed,                 // 60
     NoPressed,                  // 61
     RenameFile,                 // 62
-    GoBackFromModels,           // 63
+    CheckAllModelIds,           // 63
     Blank,                      // 64 
     ReceiveModelFile,           // 65
     TXModuleViewStart,          // 66
@@ -7510,7 +7576,8 @@ FASTRUN uint32_t GetIntFromAckPayload()   // This one uses a uint32_t int
 void GotoFrontView(){ 
     char fms[4][4] = {{"fm1"},{"fm2"},{"fm3"},{"fm4"}};
     char     FrontView_Connected[]  = "Connected";
-    char      page_FrontView[]            = "page FrontView";
+    char     page_FrontView[]       = "page FrontView";
+
     if (CurrentView != FRONTVIEW) {
           if (CurrentView == SCANVIEW) {
             DoScanEnd();
@@ -7533,8 +7600,8 @@ void GotoFrontView(){
     for (int i = 0; i < 4; ++i) {
           SendText(fms[i], BankTexts[BanksInUse[i]]);
     }
+    UpdateTrimView();
 }
-
 /************************************************************************************************************/
 
 void CompareModelsIDs(){ // The saved MacAddress is compared with the one just received from the model ... etc ...
@@ -7543,42 +7610,36 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
     if (ModelMatched) return; // must not change when model connected
     GotoFrontView();
     RestoreBrightness();
-  
     if (ModelIdentified) {                                                //  We have both bits of Model ID?      
-          if (ModelsMacUnion.Val64 == ModelsMacUnionSaved.Val64) 
+        if ((ModelsMacUnion.Val32[0] == ModelsMacUnionSaved.Val32[0]) && (ModelsMacUnion.Val32[1] == ModelsMacUnionSaved.Val32[1])) 
             {
                 if (AnnounceConnected) {
                     if (AutoModelSelect){
                         PlaySound(MMMATCHED); 
                         DelayWithDog(1500);
-                    }
-                    
+                    }   
                 }
-                ModelMatched = true;                                      //  It's a match so start flying!
+                ModelMatched = true;                                         //  It's a match so start flying!
                 return;
-            } 
-            if (ModelsMacUnion.Val64 != ModelsMacUnionSaved.Val64) 
-            {
+            } else {
                 if (AutoModelSelect)
-                { //  It's not a match so maybe search for it.
+                { //  It's not a match so search for it.
                     ModelNumber = 0;
-                    while ((ModelMatched == false) && (ModelNumber < MAXMODELNUMBER - 1)) 
-                    {   //  Try to match the ID with a saved one
+                    while ((ModelMatched == false) && (ModelNumber < MAXMODELNUMBER - 1)) {   //  Try to match the ID with a saved one
                         ++ModelNumber;
                         ReadOneModel(ModelNumber);
-                        if (ModelsMacUnion.Val64 == ModelsMacUnionSaved.Val64) {
+                        
+                        if  ((ModelsMacUnion.Val32[0] == ModelsMacUnionSaved.Val32[0]) && (ModelsMacUnion.Val32[1] == ModelsMacUnionSaved.Val32[1])){
                             ModelMatched = true;
                         }
                     }
-                    if (ModelMatched)
-                    {                                                         //  Found it!    
+                    if (ModelMatched) {                                       //  Found it!    
                         UpdateModelsNameEveryWhere();                         //  Use it.
                         if (AnnounceConnected) 
                         {
                             PlaySound(MMFOUND);
                             DelayWithDog(1500);
                         }
-                        
                         SaveAllParameters();                                  //  Save it
                         GotoFrontView();
                         
@@ -7599,7 +7660,6 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                 }
         }
     }
-    
 }
 /************************************************************************************************************/
 void  GetModelsMacAddress(){
