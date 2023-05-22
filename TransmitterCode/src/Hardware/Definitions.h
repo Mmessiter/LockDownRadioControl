@@ -103,8 +103,10 @@
 #define RETRYCOUNT               2    // auto retries inside nRF24L01 (was 3)
 #define RETRYWAIT                0    // Wait between retries is RetryWait+1 * 250us. (WAS 2) A failed packet therefore takes (RetryWait+1 * 250us) * RetryCount
 #define LOSTCONTACTCUTOFF        2    // 3 How many packets to lose before reconnect triggers
+
 #define RECONNECT_CHANNELS_COUNT 2    // How many channels to try when reconnecting
 #define RECONNECT_CHANNELS_START 12   // Offset into channels' array
+
 #define RED_LED_ON_TIME          3500 // How many ms of no connection before RED led comes on
 #define LOW_VOLTAGE_TIME         3000 // How many ms to endure low voltage before announcing it. (3 seconds)
 
@@ -117,7 +119,7 @@
 #define CENTRESTICKS    2 // Calibrate Centres (SEND NO DATA)
 #define SCANWAVEBAND    3 // Scan waveband (SEND NO DATA)
 #define SENDNOTHING     4 // Transmission off (SEND NO DATA)
-#define PONGMODE        5 // Play Pong
+#define PONGMODE        5 // Play Pong (SEND NO DATA)
 
 // **************************************************************************
 //                               Colours                                    *
@@ -531,7 +533,13 @@ void         EndSend();
 void         ReadTheRTC();
 void         swap(uint8_t* a, uint8_t* b);
 void         SaveOneModel(uint32_t mnum);
-
+bool         ReadOneModel(uint32_t Mnum);
+void         SaveAllParameters();
+void         BindNow();
+FASTRUN uint32_t GetIntFromAckPayload(); // This one uses a uint32_t int
+uint32_t  getvalue(char* nbox);
+uint32_t         GetValue(char* nbox);
+void             SendValue(char* nbox, int value);
 // **************************************************************************
 //                            GLOBAL DATA                                   *
 //***************************************************************************
@@ -863,11 +871,13 @@ bool      UseMacros           = false;
 
 // *********************************************** END OF GLOBAL DATA ***************************************************************
 
-// These files are included *AFTER* the Definitions, otherwise they can't see the definitions :-)
+// These files are included *AFTER* the Definitions, otherwise they can't see the definitions! :-)
 #include "Hardware/StructsEtc.h" 
 #include "Hardware/Utilities.h" 
 #include "Hardware/transceiver.h" 
 #include "Hardware/Pong.h" 
 #include "Hardware/macros.h" 
 #include "Hardware/Trims.h" 
+#include "Hardware/ModelMatch.h" 
+#include "Hardware/Nextion.h" 
 #endif

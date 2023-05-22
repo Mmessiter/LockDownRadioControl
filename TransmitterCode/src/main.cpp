@@ -168,7 +168,10 @@ FASTRUN void SendViaPPM()
 
 void RedLedOn() 
 {
-    char     InVisible[]           = "vis Quality,0";
+    char     InVisible[]            = "vis Quality,0";
+    char     FrontView_Connected[]  = "Connected";
+    char     WarnOff[]              = "vis Warning,0";
+    
     if (LedWasGreen) {
         RXVoltsDetected                             = false;
         LedWasGreen                                 = false;
@@ -178,12 +181,9 @@ void RedLedOn()
         BoundFlag                                   = false;
         PacketsPerSecond                            = 0;
         LastShowTime                                = 0;
-        ModelsMacUnion.Val32[0]                     = 0;
-        ModelsMacUnion.Val32[1]                     = 0;
+        ModelsMacUnion.Val64                        = 0;
         RangeTestGoodPackets                        = 0;
         RecentPacketsLost                           = 0;
-        char     FrontView_Connected[]  = "Connected";
-        char     WarnOff[]              = "vis Warning,0";
         SetUKFrequencies();
         if (CurrentView == FRONTVIEW) {
             SendText(FrontView_Connected, na);
@@ -3487,7 +3487,7 @@ FASTRUN void DisplayCurve()
 
 /*********************************************************************************************************************************/
 
-void BindNow() // Bind button was pressed 
+void BindNow()
 {
     BoundFlag                    = true;
     ModelMatched                 = true;
@@ -4504,7 +4504,7 @@ void LoadModelSelector(){
     char mn[] = "modelname";
 
     int32_t SavedModelNumber = ModelNumber;
-    for (ModelNumber = 1; ModelNumber < MAXMODELNUMBER; ++ModelNumber){ // heer
+    for (ModelNumber = 1; ModelNumber < MAXMODELNUMBER; ++ModelNumber){ 
             ReadOneModel(ModelNumber);
             if (ModelNumber == 1) {
                 strcpy(buf, ModelName);
@@ -4535,13 +4535,13 @@ void LoadFileSelector(){
 
     char Mfilesp[]     = "Mfiles.path=\"";
     char Mfiles[]      = "Mfiles";
-    char crlf[]     = {13, 10, 0};  
+    char crlf[]        = {13, 10, 0};  
     char buf[MAXBUFFERSIZE];
     char nofiles[] = "(No files)";
     
     strcpy(buf, nofiles);
     for (int f = 0; f < ExportedFileCounter; ++f){ 
-        if (f==0) 
+        if (f == 0) 
         {   strcpy(buf, TheFilesList[f]);
             strcat(buf, crlf);
         }else{
@@ -7605,83 +7605,6 @@ void GotoFrontView(){
     UpdateTrimView();
 }
 /************************************************************************************************************/
-
-void CompareModelsIDs(){ // The saved MacAddress is compared with the one just received from the model ... etc ...
-    
-    uint8_t SavedModelNumber = ModelNumber;
-    if (ModelMatched) return; // must not change when model connected
-    GotoFrontView();
-    RestoreBrightness();
-    if (ModelIdentified) {                                                  //  We have both bits of Model ID?      
-            if ((ModelsMacUnion.Val64 == ModelsMacUnionSaved.Val64)){
-                if (AnnounceConnected) {
-                    if (AutoModelSelect){
-                        PlaySound(MMMATCHED); 
-                        DelayWithDog(1500);
-                    }   
-                }
-                ModelMatched = true;                                         //  It's a match so start flying!
-                return;
-            } else {
-                if (AutoModelSelect)
-                { //  It's not a match so search for it.
-                    ModelNumber = 0;
-                    while ((ModelMatched == false) && (ModelNumber < MAXMODELNUMBER - 1)) {   //  Try to match the ID with a saved one
-                        ++ModelNumber;
-                        ReadOneModel(ModelNumber);
-                        if ((ModelsMacUnion.Val64 == ModelsMacUnionSaved.Val64)) {
-                            ModelMatched = true;
-                        }
-                    }
-                    if (ModelMatched) {                                       //  Found it!    
-                        UpdateModelsNameEveryWhere();                         //  Use it.
-                        if (AnnounceConnected) 
-                        {
-                            PlaySound(MMFOUND);
-                            DelayWithDog(1500);
-                        }
-                        SaveAllParameters();                                  //  Save it
-                        GotoFrontView();
-                        
-                    }else{                                           
-                        ModelNumber = SavedModelNumber; //  Not found, so bind to the restored selected one
-                        ReadOneModel(ModelNumber);
-                        BindNow();
-                        if (AutoModelSelect)
-                        {
-                            PlaySound(MMSAVED); 
-                            DelayWithDog(1700);
-                        }   
-                    }
-                } 
-                if (!AutoModelSelect) 
-                {     
-                    BindNow(); 
-                }
-        }
-    }
-}
-/************************************************************************************************************/
-void  GetModelsMacAddress(){
- 
-    switch (AckPayload.Purpose)
-    {
-        case 0:
-             ModelsMacUnion.Val32[0] = GetIntFromAckPayload();
-             break;
-        case 1:
-             ModelsMacUnion.Val32[1] = GetIntFromAckPayload();  
-             break;
-        default:
-             break;
-    }
-    if (ModelMatched == false) {
-        if ((ModelsMacUnion.Val32[0] > 0) && (ModelsMacUnion.Val32[1] > 0)){   // got both bits yet?
-                 ModelIdentified = true; 
-                 CompareModelsIDs();      
-        }    
-    }
-}
 
 /************************************************************************************************************/
 FASTRUN void ParseAckPayload()
