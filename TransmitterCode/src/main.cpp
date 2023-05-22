@@ -7612,9 +7612,8 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
     if (ModelMatched) return; // must not change when model connected
     GotoFrontView();
     RestoreBrightness();
-    if (ModelIdentified) {                                                //  We have both bits of Model ID?      
-        if ((ModelsMacUnion.Val32[0] == ModelsMacUnionSaved.Val32[0]) && (ModelsMacUnion.Val32[1] == ModelsMacUnionSaved.Val32[1])) 
-            {
+    if (ModelIdentified) {                                                  //  We have both bits of Model ID?      
+            if ((ModelsMacUnion.Val64 == ModelsMacUnionSaved.Val64)){
                 if (AnnounceConnected) {
                     if (AutoModelSelect){
                         PlaySound(MMMATCHED); 
@@ -7630,8 +7629,7 @@ void CompareModelsIDs(){ // The saved MacAddress is compared with the one just r
                     while ((ModelMatched == false) && (ModelNumber < MAXMODELNUMBER - 1)) {   //  Try to match the ID with a saved one
                         ++ModelNumber;
                         ReadOneModel(ModelNumber);
-                        
-                        if  ((ModelsMacUnion.Val32[0] == ModelsMacUnionSaved.Val32[0]) && (ModelsMacUnion.Val32[1] == ModelsMacUnionSaved.Val32[1])){
+                        if ((ModelsMacUnion.Val64 == ModelsMacUnionSaved.Val64)) {
                             ModelMatched = true;
                         }
                     }
