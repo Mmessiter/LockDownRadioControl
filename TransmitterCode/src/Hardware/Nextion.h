@@ -3,8 +3,7 @@
     /*********************************************************************************************************************************/
     //                        NEXTION functions
     /*********************************************************************************************************************************/
-    void GetReturnCode()
-    { // Currently this is absorbed but ignored. This seems to be essential.
+    void GetReturnCode(){ // Currently this is absorbed but ignored. This seems to be essential.
         delayMicroseconds(70);
         while (NEXTION.available()) {
            NEXTION.read();
@@ -12,8 +11,7 @@
         }
     }
     /*********************************************************************************************************************************/
-    void SendText(char* tbox, char* NewWord)
-    {
+    void SendText(char* tbox, char* NewWord){
         char txt[]   = ".txt=\"";
         char quote[] = "\"";
         char CB[100];
@@ -30,8 +28,7 @@
     }
 
     /*********************************************************************************************************************************/
-    void SendOtherText(char* tbox, char* NewWord)
-    {
+    void SendOtherText(char* tbox, char* NewWord){
         char quote[] = "\"";
         char CB[MAXBUFFERSIZE];
         char TooLong[] = "Too long!";
@@ -47,8 +44,7 @@
     }
 
     /*********************************************************************************************************************************/
-    void SendText1(char* tbox, char* NewWord)
-    {
+    void SendText1(char* tbox, char* NewWord) {
         char txt[]   = ".txt=\"";
         char quote[] = "\"";
         char CB[MAXFILELEN + 10];
@@ -65,8 +61,7 @@
         GetReturnCode();
     }
     /*********************************************************************************************************************************/
-    void SendOtherValue(char* nbox, int value)
-    {
+    void SendOtherValue(char* nbox, int value){
         char Val[] = "=";
         char CB[100];
         char NB[25];
@@ -79,8 +74,7 @@
     }
 
     /*********************************************************************************************************************************/
-    void GetTextIn()
-    {
+    void GetTextIn() {
         int j = 0;
         delayMicroseconds(20);
         if (NEXTION.available()) {
@@ -94,8 +88,7 @@
     }
 
     /*********************************************************************************************************************************/
-    void SendCommand(char* tbox)
-    {
+    void SendCommand(char* tbox){
         char page[] = "page ";
         NEXTION.print(tbox);
         for (int i = 0; i < 3; ++i) {
@@ -106,8 +99,7 @@
         if (InStrng(page, tbox)) DelayWithDog(SCREENCHANGEWAIT); // Allow time for new page to appear
     }
     /*********************************************************************************************************************************/
-    void EndSend()
-    {
+    void EndSend() {
         for (u_int8_t pp = 0; pp < 3; ++pp) {
             NEXTION.write(0xff); // Send end of Input message //
         }
@@ -115,8 +107,7 @@
     }
 
     /*********************************************************************************************************************************/
-    void SendValue(char* nbox, int value)
-    {
+    void SendValue(char* nbox, int value){
         char Val[] = ".val=";
         char CB[100];
         char NB[25];
@@ -129,8 +120,7 @@
     }
 
     /*********************************************************************************************************************************/
-    bool GetButtonPress()
-    {
+    bool GetButtonPress() {
         uint8_t a             = 0;
         int     i             = 0;
         bool    ButtonPressed = false;
@@ -150,8 +140,7 @@
 }
 
     /*********************************************************************************************************************************/
-    uint32_t getvalue(char* nbox)
-    {
+    uint32_t getvalue(char* nbox)  {
         uint32_t ValueIn = 0;
         char     GET[]   = "get ";
         char     VAL[]   = ".val";
@@ -177,8 +166,7 @@
 
 /*********************************************************************************************************************************/
 
-uint32_t GetValue(char* nbox) // This function calls the function above until it returns no error
-{
+uint32_t GetValue(char* nbox){ // This function calls the function above until it returns no error
     int      i       = 0;
     uint32_t ValueIn = getvalue(nbox);
 
@@ -193,8 +181,7 @@ uint32_t GetValue(char* nbox) // This function calls the function above until it
 // ***************************************************************************************************************
 // This function gets Nextion textbox Text into a char array pointed to by * TheText. There better be room!
 // It returns the length of array
-uint16_t GetText(char* TextBoxName, char* TheText)
-{
+uint16_t GetText(char* TextBoxName, char* TheText){
     char    get[]  = "get ";
     char    _txt[] = ".txt";
     char    CB[100];
@@ -215,8 +202,7 @@ uint16_t GetText(char* TextBoxName, char* TheText)
     return strlen(TheText);
 }
 /*********************************************************************************************************************************/
-int GetOtherValue(char* nbox) // don't add .val as other thingy is already there ...
-{
+int GetOtherValue(char* nbox) {// don't add .val as other thingy is already there ...
     double ValueIn = 0;
     char   GET[]   = "get ";
     char   CB[100];
@@ -233,7 +219,6 @@ int GetOtherValue(char* nbox) // don't add .val as other thingy is already there
     }
     return ValueIn;
 }
-
 /*********************************************************************************************************************************/
 //             END OF NEXTION FUNCTIONS
 /*********************************************************************************************************************************/
