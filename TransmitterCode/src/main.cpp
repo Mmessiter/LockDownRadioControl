@@ -4557,11 +4557,14 @@ void LoadFileSelector(){
 /******************************************************************************************************************************/
 void GotoModelsView()
 {
-char     GoModelsView[]                  = "page ModelsView";
+ char GoModelsView[] = "page ModelsView";
+
  if (ModelMatched) return; // must not change when model connected 
  SaveCurrentModel();
  SendCommand(GoModelsView);
  CurrentView = MODELSVIEW;
+ CurrentMode = SENDNOTHING;
+ BlueLedOn();
  UpdateModelsNameEveryWhere();
  BuildDirectory(); 
  LoadFileSelector();
@@ -5542,7 +5545,7 @@ void CheckAllModelIds(){ // heer
       char crlf[]       = {13, 10, 0};  
       char lb[]         = "(";
       char rb[]         = ")  ";
-      char KO[]         = ">>Same ID as ";
+      char KO[]         = ">Duplicate:";
       char Okay[]       = " (ID OK)";
       char n0[]         = "n0";
       char nb[4];
@@ -5550,10 +5553,11 @@ void CheckAllModelIds(){ // heer
       uint64_t      ModelIDs[92];
       uint8_t       DuplicatesCount = 0;
       uint32_t      SavedModelNumber  = ModelNumber;
-     
+
       SendCommand(GoIDview);
       CurrentView = IDCHECKVIEW;
       CurrentMode = SENDNOTHING;
+
      
       for (ModelNumber = 1; ModelNumber < MAXMODELNUMBER-1; ++ModelNumber) {
             ReadOneModel(ModelNumber);
@@ -5589,7 +5593,7 @@ void CheckAllModelIds(){ // heer
                             if (p > 0) {
                                 strcat(buf, KO); 
                                 strcat(buf, Str(nb,p,0));
-                                 strcat(buf, "<<"); 
+                                 strcat(buf, "<"); 
                                 ++DuplicatesCount;
                             }
                             else {
@@ -7579,9 +7583,7 @@ void GotoFrontView(){
     char     page_FrontView[]       = "page FrontView";
 
     if (CurrentView != FRONTVIEW) {
-          if (CurrentView == SCANVIEW) {
-            DoScanEnd();
-          }
+          if (CurrentView == SCANVIEW)   DoScanEnd();
           SendCommand(page_FrontView);
           CurrentView = FRONTVIEW;
           CurrentMode = NORMAL;
