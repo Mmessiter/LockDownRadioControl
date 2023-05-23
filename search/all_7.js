@@ -8,7 +8,7 @@ var searchData=
   ['failsafe_5',['failSafe',['../Quadcopter_2src_2main_8cpp.html#a3b309466c71a16820f1d84a81b8cfb93',1,'main.cpp']]],
   ['failsafe_5ftimeout_6',['FAILSAFE_TIMEOUT',['../common_8h.html#a0634ad724c86cd2b4ac7cfebbb622a9c',1,'common.h']]],
   ['failsafe_5fview_7',['FAILSAFE_VIEW',['../Definitions_8h.html#a1ef5fc5af54a467bfc4d8fd805081e3c',1,'Definitions.h']]],
-  ['failsafechannel_8',['FailSafeChannel',['../Definitions_8h.html#a5a547d8417a6f90c0b2bdd5d836274b2',1,'FailSafeChannel():&#160;Definitions.h'],['../ReceiverCode_2src_2main_8cpp.html#aeda79da3882f657a3eaefc5800122da5',1,'FailSafeChannel():&#160;main.cpp']]],
+  ['failsafechannel_8',['FailSafeChannel',['../Definitions_8h.html#adcce7cd9ef6dc6629d7409fc5f5c13fc',1,'FailSafeChannel():&#160;Definitions.h'],['../ReceiverCode_2src_2main_8cpp.html#aeda79da3882f657a3eaefc5800122da5',1,'FailSafeChannel():&#160;main.cpp']]],
   ['failsafedataloaded_9',['FailSafeDataLoaded',['../ReceiverCode_2src_2main_8cpp.html#a08ed7a870be8e84ae26ee0b972866bb3',1,'main.cpp']]],
   ['failsafesave_10',['FailSafeSave',['../common_8h.html#a332eaa61dd85cd649cf62de2345e246e',1,'common.h']]],
   ['failsafesent_11',['FailSafeSent',['../radio_8h.html#a97bbae82012a7c41f47dcb8ce8a48a90',1,'radio.h']]],

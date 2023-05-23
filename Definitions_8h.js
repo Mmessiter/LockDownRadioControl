@@ -444,7 +444,7 @@ var Definitions_8h =
     [ "ErrorState", "Definitions_8h.html#a6a368860ecd3ed4841f7564ec5bef635", null ],
     [ "Exponential", "Definitions_8h.html#a98ff7a43b72a0fdbf4cca16a9910d229", null ],
     [ "ExportedFileCounter", "Definitions_8h.html#a1252681409ac5c9ed335a78f80633236", null ],
-    [ "FailSafeChannel", "Definitions_8h.html#a5a547d8417a6f90c0b2bdd5d836274b2", null ],
+    [ "FailSafeChannel", "Definitions_8h.html#adcce7cd9ef6dc6629d7409fc5f5c13fc", null ],
     [ "FailSafeTimer", "Definitions_8h.html#abe06b5671242a2e75a695a87a3159a00", null ],
     [ "FHSS_Channels", "Definitions_8h.html#a181cb451e5e95fa7cfcb19fff25b9318", null ],
     [ "FHSS_Channels1", "Definitions_8h.html#ad8722ceeae8ace980fb37a0bb74579d2", null ],
