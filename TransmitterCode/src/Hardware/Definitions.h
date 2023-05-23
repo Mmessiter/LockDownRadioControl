@@ -102,9 +102,8 @@
 #define PACEMAKER                7    // 7 MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
 #define RETRYCOUNT               2    // auto retries inside nRF24L01 (was 3)
 #define RETRYWAIT                0    // Wait between retries is RetryWait+1 * 250us. (WAS 2) A failed packet therefore takes (RetryWait+1 * 250us) * RetryCount
-#define LOSTCONTACTCUTOFF        2    // 3 How many packets to lose before reconnect triggers
-
-#define RECONNECT_CHANNELS_COUNT 2    // How many channels to try when reconnecting
+#define LOSTCONTACTCUTOFF        4    // How many packets to lose before reconnect triggers (-- IT MIGHT BE JUST THE ACK WAS LOST)
+#define RECONNECT_CHANNELS_COUNT 4    // How many channels to try when reconnecting
 #define RECONNECT_CHANNELS_START 12   // Offset into channels' array
 
 #define RED_LED_ON_TIME          3500 // How many ms of no connection before RED led comes on
@@ -879,7 +878,7 @@ uint8_t    FHSS_Channels1[42] = {93, 111, 107, 103, 106, 97, 108, 102, 118, // T
                               104, 101, 109, 98, 113, 124, 115, 91, 96, 85, 117, 89, 99, 114, 87, 112,
                               86, 94, 92, 119, 120, 100, 121, 123, 95, 122, 105, 84, 116, 90, 110, 88};
 
-
+// offsets:                    0    1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18 19  20  21  22  23  24 ...
 uint8_t   FHSS_Channels[83] = {51, 28, 24, 61, 64, 55, 66, 19, 76, 21, 59, 67, 15, 71, 82, 32, 49, 69, 13, 2, 34, 47, 20, 16, 72, // UK array
                                35, 57, 45, 29, 75, 3, 41, 62, 11, 9, 77, 37, 8, 31, 36, 18, 17, 50, 78, 73, 30, 79, 6, 23, 40,
                                54, 12, 80, 53, 22, 1, 74, 39, 58, 63, 70, 52, 42, 25, 43, 26, 14, 38, 48, 68, 33, 27, 60, 44, 46,

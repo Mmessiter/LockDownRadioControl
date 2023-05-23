@@ -86,7 +86,6 @@ uint16_t        CompressedData[COMPRESSEDWORDS]; // 30 bytes -> 40 bytes when un
 bool            SensorHubDead   = false;
 uint32_t        NewConnectionMoment    = 0;
 bool            QNHSent         = false;
-bool            FirstLostPacket = true;
 uint8_t         MacAddress[9]   = {0, 0, 0, 0, 0, 0, 0, 0,0};
 bool            ModelMatched    = false;
 uint8_t         TheReceivedPipe[6];
@@ -262,7 +261,6 @@ bool ReadData()
 {
     Connected            = false;
     while (CurrentRadio->available(&Pipnum)) {                         // Get all, but use only the latest
-        FirstLostPacket = true;
         LoadAckPayload();
         CurrentRadio->flush_tx();                                      // This avoids a lockup that happens when the FIFO gets full
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // Send telemetry
@@ -652,17 +650,8 @@ FASTRUN void ReceiveData()
             }
         }
     }
-    
     if (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT)  {
-       if (FirstLostPacket){
-        //  jump to next channel here
-            IncChannelNumber(); // heer
-            HopToNextChannel();
-            FirstLostPacket = false;
-       }
-       else {
-            Reconnect(); // Try to reconnect.
-       }
+        Reconnect(); // Try to reconnect.
     }
     
     if (ReadData()) {

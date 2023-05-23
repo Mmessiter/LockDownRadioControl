@@ -7613,8 +7613,7 @@ FASTRUN void ParseAckPayload()
  
     FHSS_data::NextChannelNumber = AckPayload.Byte5; // every packet tells of next hop destination
      
-    if (AckPayload.Purpose & 0x80) // Hi bit is now the **HOP NOW!!** flag
-    {
+    if (AckPayload.Purpose & 0x80) {// Hi bit is now the **HOP NOW!!** flag
         NextChannel       = *(FHSS_data::FHSSChPointer + FHSS_data::NextChannelNumber); // The actual channel number pointed to.   
         HopToNextChannel();
         AckPayload.Purpose &= 0x7f; // Clear the high BIT, use the remainder ...
