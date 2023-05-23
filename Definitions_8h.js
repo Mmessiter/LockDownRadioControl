@@ -454,7 +454,6 @@ var Definitions_8h =
     [ "FileError", "Definitions_8h.html#a9b313f53ee84b82b622e9f186d0bbb81", null ],
     [ "FileNumberInView", "Definitions_8h.html#a9ddb35e0a6d43d40e1c43a81040db76b", null ],
     [ "FirstConnection", "Definitions_8h.html#ac2fc49f3335ebd2b38d0184306dfcf9b", null ],
-    [ "FirstPacketLost", "Definitions_8h.html#aedd5b8af0b0bbbe735b052dd05ad59f9", null ],
     [ "FMSwitch", "Definitions_8h.html#a452f6aed1252d3f1da8a0ceb07552c07", null ],
     [ "ForeGroundColour", "Definitions_8h.html#a029840d27a3c9954aa481d494df4ace6", null ],
     [ "GapAverage", "Definitions_8h.html#ad656113b013dd90ec2b95f43559ea559", null ],
