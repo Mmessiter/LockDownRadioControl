@@ -39,24 +39,21 @@ static uint16_t PacketsHistoryIndex    = 0;
     if (PacketsHistoryIndex >= (PERFECTPACKETSPERSECOND * ConnectionAssessSeconds)) PacketsHistoryIndex = 0; //
 }
 
-
 /************************************************************************************************************/
 void ForceNextChannel(){
         NextChannel = *(FHSS_data::FHSSChPointer + FHSS_data::NextChannelNumber); // We already have index to next channel
         HopToNextChannel();
 }
-
 /************************************************************************************************************/
 
 FASTRUN void FailedPacket()
 {
     RecordsPacketSuccess(0);                      // Record a failure
     ++RecentPacketsLost;                          // this is to keep track of events when receiver is off
-    ++TotalLostPackets;                           // This is total - never zeroed
-
-    if (FirstPacketLost){
-        ForceNextChannel();                      // If first lost, simply jump to next channel hoping receiver will too
-        FirstPacketLost = false;
+    ++TotalLostPackets;                           // This is total - never zeroed          
+    
+    if (RecentPacketsLost == 1) {  
+        ForceNextChannel();                       // If first lost packet, simply jump to next channel. Receiver will too!      
     }else{
 
     if (RecentPacketsLost >= LOSTCONTACTCUTOFF) { // Don't panic until at least LOSTCONTACTCUTOFF packets are lost.
@@ -125,7 +122,6 @@ void SuccessfulPacket()
 {
     ++RangeTestGoodPackets;
     ++PacketNumber;
-    FirstPacketLost = true;  // ie next lost will be 'first'
     RecordsPacketSuccess(1);   
     RecentPacketsLost = 0;
     Connected         = true;

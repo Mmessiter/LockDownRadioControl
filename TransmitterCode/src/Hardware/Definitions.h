@@ -828,11 +828,9 @@ union uMacStored {
         uint32_t Val32[2] ;
         uint8_t  Val8[8];        // Model's Mac address that had been saved on disk
      }  ModelsMacUnionSaved;
-
 bool     MotorEnabled               = false;
 bool     SendNoData                 = false;
 bool     MotorWasEnabled            = false;
-bool     FirstPacketLost            = true;
 uint8_t  MotorChannel               = 15;
 uint8_t  MotorChannelZero           = 0; 
 bool     UseMotorKill               = true;
