@@ -215,7 +215,7 @@ void FailSafe()
     FailedSafe     = true;
     TurnLedOff();
     MacAddressSentCounter = 0;
-    Serial.println("Failsafe!");
+   // Serial.println("Failsafe!");
 }
 
 #ifdef DB_FHSS

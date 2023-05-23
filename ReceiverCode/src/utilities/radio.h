@@ -398,8 +398,11 @@ FASTRUN void Reconnect()
                      if (!FailSafeSent) FailSafe();
             }
         }
-    } // cannot pass here if not connected
-      // must have connected by here
+    }   //  cannot pass here if not connected
+        //  must have connected by here
+        //  Serial.print("Reconnect channel: ");
+        //  Serial.println(ReconnectChannel);
+    
     FailSafeSent = false;
     if (PreviousRadio != ThisRadio) ++RadioSwaps; // Count the radio swaps
     ReconnectedMoment = millis();                 // Save this moment

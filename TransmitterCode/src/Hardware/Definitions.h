@@ -52,7 +52,6 @@
 #include <DS1307RTC.h>
 #include <InterpolationLib.h>
 
- 
 // **************************************************************************
 //                               General                                    *
 // **************************************************************************
@@ -68,7 +67,7 @@
 #define LOWBATTERY              42                        // Default percent for warning (User definable)
 #define DEFAULTTRIMREPEATSPEED  600
 
-#ifdef NEWPCB                              // ***>>> red or green PCBs ... not black <<<***
+#ifdef NEWPCB                              // ***>>> red or green PCBs ... not old black <<<***
   #define CE_PIN                  7                         // for SPI to nRF24L01
   #define CSN_PIN                 8                         // for SPI to nRF24L01
   #define BUDDYPPMPORT            10                        // Buddybox PPM pin
@@ -95,19 +94,19 @@
 #define MAXMODELNUMBER          91
 #define PERFECTPACKETSPERSECOND 150                       // Flat out perfect packets per second
 #define PIPES_TO_COMPARE        6
+#define RED_LED_ON_TIME         3500                      // How many ms of no connection before RED led comes on
+#define LOW_VOLTAGE_TIME        5000                      // How many ms to endure low voltage before announcing it. (5 seconds)
+
 // **************************************************************************
 //                            FHSS PARAMETERS                               *
 //***************************************************************************
 
 #define PACEMAKER                7    // 7 MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
-#define RETRYCOUNT               2    // auto retries inside nRF24L01 (was 3)
-#define RETRYWAIT                0    // Wait between retries is RetryWait+1 * 250us. (WAS 2) A failed packet therefore takes (RetryWait+1 * 250us) * RetryCount
-#define LOSTCONTACTCUTOFF        4    // How many packets to lose before reconnect triggers (-- IT MIGHT BE JUST THE ACK WAS LOST)
+#define RETRYCOUNT               2    // auto retries inside nRF24L01. MAX is 15. Fails below 2.
+#define RETRYWAIT                0    // = 250us = Wait between retries (RetryWait+1 * 250us)
+#define LOSTCONTACTCUTOFF        4    // How many packets to 'lose' before reconnect triggers (-- IT MIGHT BE JUST THE ACK WAS LOST)
 #define RECONNECT_CHANNELS_COUNT 4    // How many channels to try when reconnecting
 #define RECONNECT_CHANNELS_START 12   // Offset into channels' array
-
-#define RED_LED_ON_TIME          3500 // How many ms of no connection before RED led comes on
-#define LOW_VOLTAGE_TIME         3000 // How many ms to endure low voltage before announcing it. (3 seconds)
 
 // **************************************************************************
 //                            SEND MODE PARAMETERS                          *
@@ -716,7 +715,7 @@ bool     FileError            = false;
 uint32_t RangeTestStart       = 0;
 uint16_t RangeTestGoodPackets = 0;
 uint8_t  SaveBank             = 0;
-bool     FailSafeChannel[CHANNELSUSED];
+bool     FailSafeChannel[CHANNELSUSED+1];
 bool     SaveFailSafeNow = false;
 uint32_t FailSafeTimer;
 uint16_t CompressedData[COMPRESSEDWORDS];   // = 15 words, 30 bytes
@@ -895,6 +894,7 @@ uint8_t   NextChannelNumber  = 0;
 // *********************************************** END OF GLOBAL DATA ***************************************************************
 
 // These files are included *AFTER* the Definitions, otherwise they can't see the definitions! :-)
+
 #include "Hardware/StructsEtc.h" 
 #include "Hardware/Utilities.h" 
 #include "Hardware/transceiver.h" 

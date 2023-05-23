@@ -3074,9 +3074,9 @@ int AnalogueReed(uint8_t InputChannel){
 
 void SetDefaultValues() 
 {
-    uint16_t j=0;
-    uint16_t i=0;
-    char     empty[30] = "Not in use";
+    uint16_t j = 0;
+    uint16_t i = 0;
+    char     empty[33] = "Not in use";
     
     CloseModelsFile();
     OpenModelsFile();
@@ -3091,7 +3091,7 @@ void SetDefaultValues()
   
     for (i = 0; i < CHANNELSUSED; ++i) { 
         for (j = 1; j <= 4; ++j) {
-                MaxDegrees[j][i]    = 150;
+                MaxDegrees[j][i]    = 150; 
                 MidHiDegrees[j][i]  = 120;
                 CentreDegrees[j][i] = 90;
                 MidLowDegrees[j][i] = 60;
@@ -3135,17 +3135,17 @@ void SetDefaultValues()
             ChannelNames[i][j] = DefaultChannelNames[i][j];
         }
     }
-    for (j = 0; j < BANKSUSED + 1; ++j) {
-        for (i = 0; i < CHANNELSUSED + 1; ++i) {
+    for (j = 0; j < BANKSUSED; ++j) {
+        for (i = 0; i < CHANNELSUSED; ++i) {
             Exponential[j][i] = DEFAULT_EXPO; // 0% (50) expo = default
         }
     }
-    for (j = 0; j < BANKSUSED + 1; ++j) {
-        for (i = 0; i < CHANNELSUSED + 1; ++i) {
+    for (j = 0; j < BANKSUSED; ++j) {
+        for (i = 0; i < CHANNELSUSED; ++i) {
             InterpolationTypes[j][i] = EXPONENTIALCURVES; // Expo is default
         }
     }
-    for (i = 0; i < CHANNELSUSED + 1; ++i) {
+    for (i = 0; i < CHANNELSUSED; ++i) {
         SubTrims[i] = 127; // centre (0 - 254)
     }
     for (j = 0; j < BYTESPERMACRO; ++j) {
@@ -3159,10 +3159,7 @@ void SetDefaultValues()
     UseMotorKill = true;
     MotorChannelZero = 0;
     MotorChannel = 15;
-    
     ReversedChannelBITS = 0; //  No channel reversed
-   
-    LEDBrightness       = DEFAULTLEDBRIGHTNESS;
     RxVoltageCorrection = 0;
     ModelsMacUnionSaved.Val32[0] = 0;
     ModelsMacUnionSaved.Val32[1] = 0;
@@ -6058,6 +6055,7 @@ FASTRUN void ButtonWasPressed()
                 ModelNumber= GetValue(MMems)+1;
                 SetDefaultValues();
                 LoadModelSelector();
+                Look(422);
             }
             ClearText();
             return;
