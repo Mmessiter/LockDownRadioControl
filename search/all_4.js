@@ -103,7 +103,7 @@ var searchData=
   ['colours_5fview_100',['COLOURS_VIEW',['../Definitions_8h.html#a8bafc146db9adcaf79abde00aaffb6bc',1,'Definitions.h']]],
   ['commandmotors_101',['commandMotors',['../Quadcopter_2src_2main_8cpp.html#a9acf6c6b8012c342b50fc7b0656ccc31',1,'main.cpp']]],
   ['common_2eh_102',['common.h',['../common_8h.html',1,'']]],
-  ['comparemodelsids_103',['CompareModelsIDs',['../TransmitterCode_2src_2main_8cpp.html#af8fe429ceb65bf9d257a2a0f1c63eccb',1,'main.cpp']]],
+  ['comparemodelsids_103',['CompareModelsIDs',['../ModelMatch_8h.html#af8fe429ceb65bf9d257a2a0f1c63eccb',1,'ModelMatch.h']]],
   ['compress_104',['Compress',['../Definitions_8h.html#a1ddd5e8d5bd649dd98ce3710fbff651b',1,'Compress(uint16_t *compressed_buf, uint16_t *uncompressed_buf, uint8_t uncompressed_size):&#160;transceiver.h'],['../transceiver_8h.html#a1ddd5e8d5bd649dd98ce3710fbff651b',1,'Compress(uint16_t *compressed_buf, uint16_t *uncompressed_buf, uint8_t uncompressed_size):&#160;transceiver.h']]],
   ['compresseddata_105',['CompressedData',['../ReceiverCode_2src_2main_8cpp.html#aa16611ba89205c8cb9e75353ce1ad032',1,'CompressedData():&#160;main.cpp'],['../Definitions_8h.html#aa16611ba89205c8cb9e75353ce1ad032',1,'CompressedData():&#160;Definitions.h']]],
   ['compressedwords_106',['COMPRESSEDWORDS',['../common_8h.html#a461caf7198eaa60ce589088ff38b97cb',1,'COMPRESSEDWORDS():&#160;common.h'],['../Definitions_8h.html#a461caf7198eaa60ce589088ff38b97cb',1,'COMPRESSEDWORDS():&#160;Definitions.h']]],

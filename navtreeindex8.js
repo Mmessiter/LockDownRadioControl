@@ -1,5 +1,16 @@
 var NAVTREEINDEX8 =
 {
+"classMPU6050.html#a3d9bfcb5394c7a382009cd2dc91ce801":[4,0,1,234],
+"classMPU6050.html#a410af58f5ff5f74e4ef8d61495908226":[4,0,1,134],
+"classMPU6050.html#a41eeb40a654465966d260e3d31c4de4b":[4,0,1,184],
+"classMPU6050.html#a421cdf4cea9fea87decbd69084ba4956":[4,0,1,21],
+"classMPU6050.html#a4278dec5fec25be9a6f45b51a3373ad2":[4,0,1,98],
+"classMPU6050.html#a446d235905783c5b90637a6b6792ac76":[4,0,1,133],
+"classMPU6050.html#a447144e025f55b1dc96d7c209c5defd6":[4,0,1,247],
+"classMPU6050.html#a44cc43aaad1e52c1ba3142d4490af611":[4,0,1,174],
+"classMPU6050.html#a45013abb39103e858d432cc720bc351a":[4,0,1,207],
+"classMPU6050.html#a455f63be2ea810cac26d583da6915050":[4,0,1,14],
+"classMPU6050.html#a471929d7cf9049357c345633d22412a9":[4,0,1,227],
 "classMPU6050.html#a4b9e13d6776ba99e042773873557bedd":[4,0,1,99],
 "classMPU6050.html#a4c01f9ab83b64dbbc6b62e658c3d3d9b":[4,0,1,42],
 "classMPU6050.html#a4c1b9f42f59b11936da86b2a1b099981":[4,0,1,131],
@@ -238,16 +249,5 @@ var NAVTREEINDEX8 =
 "classMPU9250.html#a28763d4c62447190bdb038623c2fc8c6":[4,0,2,122],
 "classMPU9250.html#a29410a45b4ad0c57be2d49b4a5754ef1":[4,0,2,37],
 "classMPU9250.html#a29bf81faea471af3a3acdcc6fea7e6b3":[4,0,2,222],
-"classMPU9250.html#a29cf790113cc58face9d1a2ddaddb567":[4,0,2,138],
-"classMPU9250.html#a2c0fbd084154854375568538599f5402":[4,0,2,86],
-"classMPU9250.html#a2ec6d66f8a1d381e5a6b558756e3275d":[4,0,2,25],
-"classMPU9250.html#a2f06843f26cb165798a3f02af938ca65":[4,0,2,87],
-"classMPU9250.html#a2f3160391ac5e675a0b8a7a4cc7b5899":[4,0,2,196],
-"classMPU9250.html#a319d7500e46f6b1212e0f4067f2f5f70":[4,0,2,56],
-"classMPU9250.html#a32369a95df72383edd03fff2c7439233":[4,0,2,71],
-"classMPU9250.html#a349d5ed7b80a586a135172562d0d0a03":[4,0,2,151],
-"classMPU9250.html#a356555f4f8ee9e9b5b1a3ec4db993535":[4,0,2,144],
-"classMPU9250.html#a35c23245b36a7088cf7e4e28f25f6819":[4,0,2,123],
-"classMPU9250.html#a36fab1c8d06aa5dcd0e6a4014d7ca5e7":[4,0,2,54],
-"classMPU9250.html#a379cf800463e13ed12c01467ea596096":[4,0,2,116]
+"classMPU9250.html#a29cf790113cc58face9d1a2ddaddb567":[4,0,2,138]
 };

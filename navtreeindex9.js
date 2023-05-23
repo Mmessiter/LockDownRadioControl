@@ -1,5 +1,16 @@
 var NAVTREEINDEX9 =
 {
+"classMPU9250.html#a2c0fbd084154854375568538599f5402":[4,0,2,86],
+"classMPU9250.html#a2ec6d66f8a1d381e5a6b558756e3275d":[4,0,2,25],
+"classMPU9250.html#a2f06843f26cb165798a3f02af938ca65":[4,0,2,87],
+"classMPU9250.html#a2f3160391ac5e675a0b8a7a4cc7b5899":[4,0,2,196],
+"classMPU9250.html#a319d7500e46f6b1212e0f4067f2f5f70":[4,0,2,56],
+"classMPU9250.html#a32369a95df72383edd03fff2c7439233":[4,0,2,71],
+"classMPU9250.html#a349d5ed7b80a586a135172562d0d0a03":[4,0,2,151],
+"classMPU9250.html#a356555f4f8ee9e9b5b1a3ec4db993535":[4,0,2,144],
+"classMPU9250.html#a35c23245b36a7088cf7e4e28f25f6819":[4,0,2,123],
+"classMPU9250.html#a36fab1c8d06aa5dcd0e6a4014d7ca5e7":[4,0,2,54],
+"classMPU9250.html#a379cf800463e13ed12c01467ea596096":[4,0,2,116],
 "classMPU9250.html#a3899ad42ba5be85c1e85f060f8efb54f":[4,0,2,159],
 "classMPU9250.html#a3b6cad3768c6153c56fcac4edd3fe792":[4,0,2,39],
 "classMPU9250.html#a3c55394a0feeb00dc68a7ff5fa4683b5":[4,0,2,77],
@@ -238,16 +249,5 @@ var NAVTREEINDEX9 =
 "classMPU9250FIFO.html#ad4e3c1c46c969335aafd31d3950cadfb":[4,0,3,18],
 "classMPU9250FIFO.html#af42466d4aa13d914d1cf2377275e2702":[4,0,3,6],
 "classMPU9250FIFO.html#afcc08693f063db73bc69bbc0edd94d7c":[4,0,3,22],
-"classQuaternion.html":[4,0,6],
-"classQuaternion.html#a079a5673188a8a7d608e8495de0dd119":[4,0,6,2],
-"classQuaternion.html#a3bd3f270462944423611f44e19d2511b":[4,0,6,9],
-"classQuaternion.html#a3ff8405ed92a3ca16de656e6c83b4028":[4,0,6,5],
-"classQuaternion.html#a48e6bafb249c895ed25f29dc9170e11e":[4,0,6,6],
-"classQuaternion.html#a61f5f7cb9b248aa259292c3c1960a1f0":[4,0,6,4],
-"classQuaternion.html#a625cb732d8ff3083e7852b86b736ab29":[4,0,6,10],
-"classQuaternion.html#a6d0f82bd29fcbe29f784e848ec2eb8f1":[4,0,6,3],
-"classQuaternion.html#a8b80f191a3155cc0158d2b4f4d50b2cb":[4,0,6,8],
-"classQuaternion.html#aa44a65ab99e36f6ab8771030eed8a7ad":[4,0,6,7],
-"classQuaternion.html#abcc01358aada56ea5f0db4da18aaf77d":[4,0,6,0],
-"classQuaternion.html#ad8158a59767dc3d42ebf0324b82ba95a":[4,0,6,1]
+"classQuaternion.html":[4,0,6]
 };

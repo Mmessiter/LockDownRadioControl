@@ -24,7 +24,7 @@ var searchData=
   ['readmemoryblock_21',['readMemoryBlock',['../classMPU6050.html#a04d8d5e7b62605aed15f07f52afa74ca',1,'MPU6050']]],
   ['readmemorybyte_22',['readMemoryByte',['../classMPU6050.html#a4fb50ebcff2f4e686e3fbbafb70a1f75',1,'MPU6050']]],
   ['readnewswitchfunction_23',['ReadNewSwitchFunction',['../TransmitterCode_2src_2main_8cpp.html#a2521ceba7d91302765db4720e3367127',1,'main.cpp']]],
-  ['readonemodel_24',['ReadOneModel',['../TransmitterCode_2src_2main_8cpp.html#ac7a5ec6cf2ed7b50bd291f821e886302',1,'main.cpp']]],
+  ['readonemodel_24',['ReadOneModel',['../Definitions_8h.html#ac7a5ec6cf2ed7b50bd291f821e886302',1,'ReadOneModel(uint32_t Mnum):&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#ac7a5ec6cf2ed7b50bd291f821e886302',1,'ReadOneModel(uint32_t Mnum):&#160;main.cpp']]],
   ['readothersensors_25',['ReadOtherSensors',['../SensorHubT32_2src_2main_8cpp.html#a8ace27b0e3d8efecd55ad071506aa86d',1,'main.cpp']]],
   ['readregisters_26',['readRegisters',['../classMPU9250.html#a1c68fa77b74761fdb2eac5f7c0887f48',1,'MPU9250']]],
   ['readsavedpipe_27',['ReadSavedPipe',['../radio_8h.html#a56ee137fc60749fa274236bc239c3291',1,'ReadSavedPipe():&#160;main.cpp'],['../ReceiverCode_2src_2main_8cpp.html#a56ee137fc60749fa274236bc239c3291',1,'ReadSavedPipe():&#160;main.cpp']]],
