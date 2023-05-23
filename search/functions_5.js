@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['failedpacket_0',['FailedPacket',['../transceiver_8h.html#a5fbd3c8613a4163425c94965704ce5f8',1,'FailedPacket():&#160;transceiver.h'],['../Definitions_8h.html#a783a0141bea15d8539730afd4b3b06a3',1,'FailedPacket():&#160;transceiver.h']]],
+  ['failedpacket_0',['FailedPacket',['../Definitions_8h.html#a783a0141bea15d8539730afd4b3b06a3',1,'FailedPacket():&#160;transceiver.h'],['../transceiver_8h.html#a5fbd3c8613a4163425c94965704ce5f8',1,'FailedPacket():&#160;transceiver.h']]],
   ['failsafe_1',['failSafe',['../Quadcopter_2src_2main_8cpp.html#a3b309466c71a16820f1d84a81b8cfb93',1,'main.cpp']]],
   ['failsafe_2',['FailSafe',['../ReceiverCode_2src_2main_8cpp.html#a42318598726782ebb2e1857f167c8cda',1,'FailSafe():&#160;main.cpp'],['../radio_8h.html#a42318598726782ebb2e1857f167c8cda',1,'FailSafe():&#160;main.cpp']]],
   ['fillbox_3',['FillBox',['../Definitions_8h.html#a93d9f055a2723479bb28f6c53fdb2643',1,'FillBox(int x1, int y1, int w, int h, int c):&#160;Utilities.h'],['../Utilities_8h.html#a93d9f055a2723479bb28f6c53fdb2643',1,'FillBox(int x1, int y1, int w, int h, int c):&#160;Utilities.h']]],
@@ -10,6 +10,5 @@ var searchData=
   ['fixmotorchannel_7',['FixMotorChannel',['../TransmitterCode_2src_2main_8cpp.html#ab584ae7dbc9b1af37538f91b00b8927f',1,'main.cpp']]],
   ['floatfaderlinear_8',['floatFaderLinear',['../Quadcopter_2src_2main_8cpp.html#a52df4cd3a995a94095b13b2a5ff6413a',1,'main.cpp']]],
   ['flushfifos_9',['FlushFifos',['../Definitions_8h.html#a07c27b4e208198453c70876517926052',1,'FlushFifos():&#160;transceiver.h'],['../transceiver_8h.html#a07c27b4e208198453c70876517926052',1,'FlushFifos():&#160;transceiver.h']]],
-  ['force_5fredisplay_10',['Force_ReDisplay',['../Definitions_8h.html#aa1e81e58421a34fdfd7bfb31925f5a90',1,'Force_ReDisplay():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#aa1e81e58421a34fdfd7bfb31925f5a90',1,'Force_ReDisplay():&#160;main.cpp']]],
-  ['forcenextchannel_11',['ForceNextChannel',['../transceiver_8h.html#a4f34f692053ec919711977a4d459afeb',1,'transceiver.h']]]
+  ['force_5fredisplay_10',['Force_ReDisplay',['../Definitions_8h.html#aa1e81e58421a34fdfd7bfb31925f5a90',1,'Force_ReDisplay():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#aa1e81e58421a34fdfd7bfb31925f5a90',1,'Force_ReDisplay():&#160;main.cpp']]]
 ];

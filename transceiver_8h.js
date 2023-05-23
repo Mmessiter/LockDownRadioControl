@@ -12,7 +12,6 @@ var transceiver_8h =
     [ "DrawFhssBox", "transceiver_8h.html#a6bdc6419b47dda71d0d2c8faf652adc2", null ],
     [ "FailedPacket", "transceiver_8h.html#a5fbd3c8613a4163425c94965704ce5f8", null ],
     [ "FlushFifos", "transceiver_8h.html#a07c27b4e208198453c70876517926052", null ],
-    [ "ForceNextChannel", "transceiver_8h.html#a4f34f692053ec919711977a4d459afeb", null ],
     [ "HopToNextChannel", "transceiver_8h.html#a52aa3e80bccf5e75346c93fdae63122d", null ],
     [ "InitRadio", "transceiver_8h.html#a799f38bc33abdb30eec1d7db3cf27d58", null ],
     [ "RecordsPacketSuccess", "transceiver_8h.html#afc091b5942e21a03f6dc8635d5e519ba", null ],

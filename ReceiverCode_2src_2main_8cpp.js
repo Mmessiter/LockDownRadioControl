@@ -52,7 +52,6 @@ var ReceiverCode_2src_2main_8cpp =
     [ "FailSafeChannel", "ReceiverCode_2src_2main_8cpp.html#aeda79da3882f657a3eaefc5800122da5", null ],
     [ "FailSafeDataLoaded", "ReceiverCode_2src_2main_8cpp.html#a08ed7a870be8e84ae26ee0b972866bb3", null ],
     [ "FirstConnection", "ReceiverCode_2src_2main_8cpp.html#ac2fc49f3335ebd2b38d0184306dfcf9b", null ],
-    [ "FirstLostPacket", "ReceiverCode_2src_2main_8cpp.html#adcebf40c47ef63b1edd881d82ff4eb5c", null ],
     [ "FS_byte1", "ReceiverCode_2src_2main_8cpp.html#a3be9019b72265fa9443e1f1132fd9bc7", null ],
     [ "FS_byte2", "ReceiverCode_2src_2main_8cpp.html#a9949c81d8f6abc28616445945c5d24ba", null ],
     [ "GpsFix", "ReceiverCode_2src_2main_8cpp.html#a86c2722f6c671747562cc504a440e243", null ],
