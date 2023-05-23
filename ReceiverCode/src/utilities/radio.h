@@ -212,7 +212,7 @@ void GetNewPipe() // from TX
  * @note Address data in EEPORM is valid only after a previous power cycle observed
  * a completed binding process (pairing was successful at least once during last flight's session).
  */
-FLASHMEM void GetOldPipe() // heer
+FLASHMEM void GetOldPipe() 
 {
     ReadSavedPipe();
     CopyCurrentPipe(TheReceivedPipe, BOUNDPIPENUMBER);

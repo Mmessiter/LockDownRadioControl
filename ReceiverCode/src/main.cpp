@@ -261,7 +261,8 @@ void UseReceivedData()
 bool ReadData()
 {
     Connected            = false;
-    while (CurrentRadio->available(&Pipnum)) { // Get all, but use only the latest
+    while (CurrentRadio->available(&Pipnum)) {                         // Get all, but use only the latest
+        FirstLostPacket = true;
         LoadAckPayload();
         CurrentRadio->flush_tx();                                      // This avoids a lockup that happens when the FIFO gets full
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // Send telemetry
@@ -628,11 +629,15 @@ void SensorHubHasFailed()
     SensorHubDead   = true; // This flag inhibits further attempts to call the hub, which might save a model.
 }
 
+
 // ******************************************************************************************************************************************************************
+
 FASTRUN void ReceiveData()
-{
-    uint32_t TimeTest;
+{   
+    uint32_t    TimeTest;
+
     if (Connected) {
+       
         if ((millis() - SensorHubAccessed) > 10) {                               //  Reading Sensor hub 100 x per second should be enough
             if (millis() - LastPacketArrivalTime < 1) {                          //  If, and only if, we have still absolutely loads of time, do stuff now while waiting ...
                 SensorHubAccessed = millis();                                    //  Note the moment of last attempted read.
@@ -648,7 +653,17 @@ FASTRUN void ReceiveData()
         }
     }
     
-    if (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT)  Reconnect(); // Try to reconnect.
+    if (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT)  {
+       if (FirstLostPacket){
+        //  jump to next channel here
+            IncChannelNumber(); // heer
+            HopToNextChannel();
+            FirstLostPacket = false;
+       }
+       else {
+            Reconnect(); // Try to reconnect.
+       }
+    }
     
     if (ReadData()) {
         ReadExtraParameters(); // Check the extra parameters

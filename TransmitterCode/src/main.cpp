@@ -7611,7 +7611,7 @@ FASTRUN void ParseAckPayload()
 {
     if (BuddyPupilOnPPM) return; // buddy pupil need none of this
  
-    FHSS_data::NextChannelNumber = AckPayload.Byte5;                 // every packet tells of next hop destination
+    FHSS_data::NextChannelNumber = AckPayload.Byte5; // every packet tells of next hop destination
      
     if (AckPayload.Purpose & 0x80) // Hi bit is now the **HOP NOW!!** flag
     {

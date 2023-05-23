@@ -16,8 +16,8 @@
 #include <Watchdog_t4.h>
 
 #define RXVERSION_MAJOR   2
-#define RXVERSION_MINOR   1
-#define RXVERSION_MINIMUS 9 // May 2023
+#define RXVERSION_MINOR   2
+#define RXVERSION_MINIMUS 0 // May 2023
 
 // #define DB_FHSS
 // #define DB_SENSORS
