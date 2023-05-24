@@ -39,12 +39,7 @@
                     }else{                                           
                         ModelNumber = SavedModelNumber; //  Not found, so bind to the restored selected one
                         ReadOneModel(ModelNumber);
-                        BindNow();
-                        if (AutoModelSelect)
-                        {
-                            PlaySound(MMSAVED); 
-                            DelayWithDog(1700);
-                        }   
+                        BindNow();  
                     }
                 } 
                 if (!AutoModelSelect) BindNow();          

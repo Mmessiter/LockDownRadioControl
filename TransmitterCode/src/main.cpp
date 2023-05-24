@@ -3458,9 +3458,7 @@ void BindNow()
     BoundFlag                    = true;
     ModelMatched                 = true;
     Connected                    = true;
-    ModelsMacUnionSaved.Val32[0] = ModelsMacUnion.Val32[0];
-    ModelsMacUnionSaved.Val32[1] = ModelsMacUnion.Val32[1];
-    SaveOneModel(ModelNumber);
+         
 #ifdef DB_BIND
     Serial.println("");
     Serial.println("Remote (model) ID saved:");
@@ -3471,6 +3469,65 @@ void BindNow()
      Serial.println(" ");
      Serial.println("(All 6 bytes of Teensy MAC ID used without modification.) ");
 #endif
+}
+/******************************************************************************************************************************/
+void DeleteModelID(){ 
+
+  // This deletes current model ID 
+    char prompt[60];
+    char p[]                        = "Delete ID for "; 
+    char p1[]                       = "?";
+    char Done[]                     = "Model ID deleted.";
+    char DoneAlready[]              = "No model ID not found.";
+    char NotDone[]                  = "Model ID retained.";
+    char page_RXSetupView[]         = "page RXSetupView";
+
+    strcpy(prompt, p);
+    strcat(prompt, ModelName);
+    strcat(prompt, p1);
+
+    if (!ModelsMacUnionSaved.Val64){   
+        GetConfirmation(page_RXSetupView, DoneAlready);
+        return;
+    }
+    if (GetConfirmation(page_RXSetupView,prompt)){
+        ModelsMacUnionSaved.Val64 = 0;
+        SaveOneModel(ModelNumber);
+        GetConfirmation(page_RXSetupView, Done);
+    }else{
+        GetConfirmation(page_RXSetupView, NotDone);
+    }
+}
+
+/*********************************************************************************************************************************/
+
+    void StoreModelID(){                         // This stores current model ID    // heer  
+    
+    char prompt[60];
+    char p[]                        = "Store ID for ";   
+    char p1[]                       = "?";
+    char Done[]                     = "Model ID stored.";
+    char page_RXSetupView[]         = "page RXSetupView";
+    char NotDone[]                  = "Model ID not stored.";
+    char DoneAlready[]              = "No ID to store!";
+
+    strcpy(prompt, p);
+    strcat(prompt, ModelName);
+    strcat(prompt, p1);
+
+    if (!ModelsMacUnion.Val64){   
+        GetConfirmation(page_RXSetupView, DoneAlready);
+        return;
+    }
+
+    if (GetConfirmation(page_RXSetupView,prompt)){
+        PlaySound(MMSAVED);
+        ModelsMacUnionSaved.Val64 = ModelsMacUnion.Val64;
+        SaveOneModel(ModelNumber);
+        GetConfirmation(page_RXSetupView, Done);
+    }else{
+        GetConfirmation(page_RXSetupView, NotDone);
+    }
 }
     /*********************************************************************************************************************************/
 
@@ -4001,7 +4058,7 @@ void ShowMotor(int on)
 /*********************************************************************************************************************************/
 
 void DoOneSwitchView(uint8_t n){
-    char OneSwitchView_r0[]    = "r0";    
+    char OneSwitchView_r0[]    = "r0";     // Not used
     char OneSwitchView_r1[]    = "r1";     // Flight modes
     char OneSwitchView_r2[]    = "r2";     // Auto
     char OneSwitchView_r3[]    = "r3";     // Ch9
@@ -5308,7 +5365,7 @@ bool GetBackupFilename(char* goback,char * tt1, char * MMname, char * heading,ch
 // Prompt is the prompt
 // goback is the command needed to return to calling page
  
- bool GetConfirmation(char* goback,char* Prompt){
+ bool GetConfirmation(char* goback,char* Prompt){ // heer
 
   char GoPopupView[] = "page PopupView"; 
   char Dialog[]      = "Dialog";
@@ -5317,8 +5374,8 @@ bool GetBackupFilename(char* goback,char * tt1, char * MMname, char * heading,ch
   SendText(Dialog, Prompt);
   Confirmed[0] = '?';
   while (Confirmed[0] == '?') {                 // await user response
-                    CheckForNextionButtonPress();
-                    KickTheDog();
+        CheckForNextionButtonPress();
+        KickTheDog();
   }
   SendCommand(goback);
   LastFileInView   = 120;
@@ -5427,7 +5484,7 @@ void DoMFName(){
 /******************************************************************************************************************************/
 // Function to display all model IDs and check for duplcates
 
-void CheckAllModelIds(){ // heer
+void CheckAllModelIds(){
       unsigned int TempModelId;
       char Vbuf[15];
       char MMemsp[]     = "MMems.path=\"";
@@ -5583,40 +5640,11 @@ void SelectChannelOrder(){
         digitalWrite(POWER_OFF_PIN, HIGH); 
     }
  }
-/******************************************************************************************************************************/
-void ModelUnmatch(){ 
 
-  // This deletes cuttent model ID in preparation perhaps for binding to new model.
-
-    char p[]                        = "Un-match "; 
-    char p1[]                       = "?";
-    char prompt[60];
-    char Done[]                     = "Model match ID forgotten.";
-    char DoneAlready[]              = "Model match ID not found.";
-    char NotDone[]                  = "Model match ID retained.";
-    char page_RXSetupView[]         = "page RXSetupView";
-
-    strcpy(prompt, p);
-    strcat(prompt, ModelName);
-    strcat(prompt, p1);
-
-    if (!ModelsMacUnionSaved.Val64){   
-        GetConfirmation(page_RXSetupView, DoneAlready);
-        return;
-    }
-    if (GetConfirmation(page_RXSetupView,prompt)){
-        ModelsMacUnionSaved.Val32[0] = 0;
-        ModelsMacUnionSaved.Val32[1] = 0;
-        SaveOneModel(ModelNumber);
-        GetConfirmation(page_RXSetupView, Done);
-    }else{
-        GetConfirmation(page_RXSetupView, NotDone);
-    }
-}
 /******************************************************************************************************************************/
 
 // ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
-#define LASTFUNCTION 70 // One more than final one, because first is number zero
+#define LASTFUNCTION 71 // One more than final one, because first is number zero
 
 void (*NumberedFunctions[LASTFUNCTION])() {
     Blank,                // 0 
@@ -5687,10 +5715,11 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     ReceiveModelFile,           // 65
     TXModuleViewStart,          // 66
     TXModuleViewEnd,            // 67
-    ModelUnmatch,               // 68
-    StartPong                   // 69
+    DeleteModelID,              // 68
+    StartPong,                  // 69
+    StoreModelID                // 70
 
-}; // list will become much longer ...
+}; // list will become longer ...
 
 
      
