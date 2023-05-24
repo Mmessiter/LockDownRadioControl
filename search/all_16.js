@@ -9,7 +9,7 @@ var searchData=
   ['updateinterpolationtypes_6',['updateInterpolationTypes',['../TransmitterCode_2src_2main_8cpp.html#a3d20af2f1fee81198a0cef2d4500083a',1,'main.cpp']]],
   ['updateled_7',['UpdateLED',['../TransmitterCode_2src_2main_8cpp.html#a8c8edf1ff8b98d9cd27b45c4e20f22d9',1,'UpdateLED():&#160;main.cpp'],['../Definitions_8h.html#a8c8edf1ff8b98d9cd27b45c4e20f22d9',1,'UpdateLED():&#160;main.cpp']]],
   ['updatemodelsnameeverywhere_8',['UpdateModelsNameEveryWhere',['../Definitions_8h.html#a9e1de754e1d2d483fb15957f70cf0488',1,'UpdateModelsNameEveryWhere():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a9e1de754e1d2d483fb15957f70cf0488',1,'UpdateModelsNameEveryWhere():&#160;main.cpp']]],
-  ['updateoneswitchview_9',['updateOneSwitchView',['../TransmitterCode_2src_2main_8cpp.html#a14dcac76ed8a048041fdc6e6f5d5d000',1,'main.cpp']]],
+  ['updateoneswitchview_9',['UpdateOneSwitchView',['../TransmitterCode_2src_2main_8cpp.html#a5ffb33241b2b7a4dd07d631025aa813f',1,'main.cpp']]],
   ['updateswitchesview_10',['UpdateSwitchesView',['../TransmitterCode_2src_2main_8cpp.html#ad2376976bcbc43d81e55e5b58ce2818d',1,'main.cpp']]],
   ['updatetrimview_11',['UpdateTrimView',['../Trims_8h.html#ac78966debc2cdc13d8ca958ce3b20c78',1,'Trims.h']]],
   ['uplog_12',['UpLog',['../TransmitterCode_2src_2main_8cpp.html#a2206c19b4fc075f4c9f1bb957ca89e1d',1,'main.cpp']]],
