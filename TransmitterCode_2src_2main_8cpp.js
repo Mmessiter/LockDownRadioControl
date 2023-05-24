@@ -58,6 +58,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "DoMFName", "TransmitterCode_2src_2main_8cpp.html#ae267eaa80a4b3eb49ba10a97469eb7e9", null ],
     [ "DoMixes", "TransmitterCode_2src_2main_8cpp.html#ac77bd940a0faad7b997c9ddf40a7acc6", null ],
     [ "DoNewChannelName", "TransmitterCode_2src_2main_8cpp.html#aba44d61ea51411cb5c601beb94b6fef4", null ],
+    [ "DoOneSwitch", "TransmitterCode_2src_2main_8cpp.html#ab80517301562402fb80465f2e296bb46", null ],
     [ "DoSlowServos", "TransmitterCode_2src_2main_8cpp.html#a7a6560a77b8c4dd3925760790beafbd5", null ],
     [ "DownLog", "TransmitterCode_2src_2main_8cpp.html#a01be76cc3bf8a963f987ae47916dc8d3", null ],
     [ "DualRatesEnd", "TransmitterCode_2src_2main_8cpp.html#acaf005c908c2b6706d7ab9579f456ca8", null ],
