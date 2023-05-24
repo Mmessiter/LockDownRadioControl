@@ -3130,8 +3130,7 @@ void SetDefaultValues()
     MotorChannel = 15;
     ReversedChannelBITS = 0; //  No channel reversed
     RxVoltageCorrection = 0;
-    ModelsMacUnionSaved.Val32[0] = 0;
-    ModelsMacUnionSaved.Val32[1] = 0;
+    ModelsMacUnionSaved.Val64      = 0;
     UseDualRates                   = false;
     Drate1                         = 100;
     Drate2                         = 75;
@@ -3501,7 +3500,7 @@ void DeleteModelID(){
 
 /*********************************************************************************************************************************/
 
-    void StoreModelID(){                         // This stores current model ID    // heer  
+    void StoreModelID(){            // This stores current model ID    // heer  
     
     char prompt[60];
     char p[]                        = "Store ID for ";   
@@ -3530,9 +3529,7 @@ void DeleteModelID(){
     }
 }
     /*********************************************************************************************************************************/
-
-    int GetDifference(int YtouchPlace, int oldy)
-    {
+int GetDifference(int YtouchPlace, int oldy) {
         int dd;
         dd = (YtouchPlace - oldy) / 2;
         if (dd < 0) dd = -dd;
