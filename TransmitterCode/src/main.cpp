@@ -4046,7 +4046,7 @@ void RestoreBrightness(){
 }
 /*********************************************************************************************************************************/
 
-void ZeroDataScreen(){ // ZERO Those parameters that are zeroable
+void ZeroDataScreen(){                  // ZERO Those parameters that are zeroable
     TotalLostPackets   = 0;
     GapLongest         = 0;
     GapSum             = 0;
@@ -4058,11 +4058,11 @@ void ZeroDataScreen(){ // ZERO Those parameters that are zeroable
     ThisGap            = 0;
     GPSMaxDistance     = 0;
     GPSMaxSpeed        = 0;
-    SavedRadioSwaps    = RadioSwaps; // Cannot easily zero these, so do a subtraction
+    SavedRadioSwaps    = RadioSwaps;    // Cannot easily zero these, so do a subtraction
     SavedRX1TotalTime  = RX1TotalTime;
     SavedRX2TotalTime  = RX2TotalTime;
     SavedSbusRepeats   = SbusRepeats;
-    LastShowTime       = 0; // for instant redisplay
+    LastShowTime       = 0;             // for instant redisplay
 }
 /***************************************************** ReadNewSwitchFunction ****************************************************************************/
 
