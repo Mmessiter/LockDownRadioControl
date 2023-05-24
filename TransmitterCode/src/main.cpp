@@ -168,7 +168,10 @@ FASTRUN void SendViaPPM()
 
 void RedLedOn() 
 {
-    char     InVisible[]           = "vis Quality,0";
+    char     InVisible[]            = "vis Quality,0";
+    char     FrontView_Connected[]  = "Connected";
+    char     WarnOff[]              = "vis Warning,0";
+    
     if (LedWasGreen) {
         RXVoltsDetected                             = false;
         LedWasGreen                                 = false;
@@ -178,12 +181,9 @@ void RedLedOn()
         BoundFlag                                   = false;
         PacketsPerSecond                            = 0;
         LastShowTime                                = 0;
-        ModelsMacUnion.Val32[0]                     = 0;
-        ModelsMacUnion.Val32[1]                     = 0;
+        ModelsMacUnion.Val64                        = 0;
         RangeTestGoodPackets                        = 0;
         RecentPacketsLost                           = 0;
-        char     FrontView_Connected[]  = "Connected";
-        char     WarnOff[]              = "vis Warning,0";
         SetUKFrequencies();
         if (CurrentView == FRONTVIEW) {
             SendText(FrontView_Connected, na);
@@ -2887,14 +2887,11 @@ int GetChannel()
     }
     return atoi(&TextIn[i]);
 }
+
 /*********************************************************************************************************************************/
 
-void UpdateSwitchesView() //  (Should be optimised but it works!)
-{
-    char SwitchesView_sw1[] = "sw1";
-    char SwitchesView_sw2[] = "sw2";
-    char SwitchesView_sw3[] = "sw3";
-    char SwitchesView_sw4[] = "sw4";
+void DoOneSwitch(char * Sw, uint8_t n){
+
     char NotUsed[]          = "Not used";
     char Banks123[]         = "Banks 1-2-3";
     char Auto[]             = "Bank 4 (etc)";
@@ -2909,7 +2906,7 @@ void UpdateSwitchesView() //  (Should be optimised but it works!)
     char cc10[]= " (Ch 10)";
     char cc11[]= " (Ch 11)";
     char cc12[]= " (Ch 12)";
-    
+
     strcpy(c9, ChannelNames[8]);
     strcpy(c10, ChannelNames[9]);
     strcpy(c11, ChannelNames[10]);
@@ -2918,52 +2915,24 @@ void UpdateSwitchesView() //  (Should be optimised but it works!)
     strcat(c10, cc10);
     strcat(c11, cc11);
     strcat(c12, cc12);
-    
 
-    SendText(SwitchesView_sw1, NotUsed);
-    if (Autoswitch == 1)        SendText(SwitchesView_sw1, Auto);
-    if (FMSwitch == 1)          SendText(SwitchesView_sw1, Banks123);
-    if (Channel9Switch == 1)    SendText(SwitchesView_sw1, c9);
-    if (Channel10Switch == 1)   SendText(SwitchesView_sw1, c10);
-    if (Channel11Switch == 1)   SendText(SwitchesView_sw1, c11);
-    if (Channel12Switch == 1)   SendText(SwitchesView_sw1, c12);
-    if (SafetySwitch == 1)      SendText(SwitchesView_sw1, Safety_Switch);
-    if (DualRatesSwitch == 1)   SendText(SwitchesView_sw1, DualRates_Switch);
-    if (BuddySwitch == 1)       SendText(SwitchesView_sw1, Buddy_Switch);
-    
-    SendText(SwitchesView_sw2, NotUsed);
-    if (Autoswitch == 2)        SendText(SwitchesView_sw2, Auto);
-    if (FMSwitch == 2)          SendText(SwitchesView_sw2, Banks123);
-    if (Channel9Switch == 2)    SendText(SwitchesView_sw2, c9);
-    if (Channel10Switch == 2)   SendText(SwitchesView_sw2, c10);
-    if (Channel11Switch == 2)   SendText(SwitchesView_sw2, c11);
-    if (Channel12Switch == 2)   SendText(SwitchesView_sw2, c12);
-    if (SafetySwitch == 2)      SendText(SwitchesView_sw2, Safety_Switch);
-    if (DualRatesSwitch == 2)   SendText(SwitchesView_sw2, DualRates_Switch);
-    if (BuddySwitch == 2)       SendText(SwitchesView_sw2, Buddy_Switch);
-   
-    SendText(SwitchesView_sw3, NotUsed);
-    if (Autoswitch == 3)        SendText(SwitchesView_sw3, Auto);
-    if (FMSwitch == 3)          SendText(SwitchesView_sw3, Banks123);
-    if (Channel9Switch == 3)    SendText(SwitchesView_sw3, c9);
-    if (Channel10Switch == 3)   SendText(SwitchesView_sw3, c10);
-    if (Channel11Switch == 3)   SendText(SwitchesView_sw3, c11);
-    if (Channel12Switch == 3)   SendText(SwitchesView_sw3, c12);
-    if (SafetySwitch == 3)      SendText(SwitchesView_sw3, Safety_Switch);
-    if (DualRatesSwitch == 3)   SendText(SwitchesView_sw3, DualRates_Switch);
-    if (BuddySwitch == 3)       SendText(SwitchesView_sw3, Buddy_Switch);
-   
-    SendText(SwitchesView_sw4, NotUsed);
-    if (Autoswitch == 4)        SendText(SwitchesView_sw4, Auto);
-    if (FMSwitch == 4)          SendText(SwitchesView_sw4, Banks123);
-    if (Channel9Switch == 4)    SendText(SwitchesView_sw4, c9);
-    if (Channel10Switch == 4)   SendText(SwitchesView_sw4, c10);
-    if (Channel11Switch == 4)   SendText(SwitchesView_sw4, c11);
-    if (Channel12Switch == 4)   SendText(SwitchesView_sw4, c12);
-    if (SafetySwitch == 4)      SendText(SwitchesView_sw4, Safety_Switch);
-    if (DualRatesSwitch == 4)   SendText(SwitchesView_sw4, DualRates_Switch);
-    if (BuddySwitch == 4)       SendText(SwitchesView_sw4, Buddy_Switch);
-   
+    SendText(Sw, NotUsed);
+    if (Autoswitch == n)        SendText(Sw, Auto);
+    if (FMSwitch == n)          SendText(Sw, Banks123);
+    if (Channel9Switch == n)    SendText(Sw, c9);
+    if (Channel10Switch == n)   SendText(Sw, c10);
+    if (Channel11Switch == n)   SendText(Sw, c11);
+    if (Channel12Switch == n)   SendText(Sw, c12);
+    if (SafetySwitch == n)      SendText(Sw, Safety_Switch);
+    if (DualRatesSwitch == n)   SendText(Sw, DualRates_Switch);
+    if (BuddySwitch == n)       SendText(Sw, Buddy_Switch);
+}
+
+/*********************************************************************************************************************************/
+
+void UpdateSwitchesView(){ // now optimised!
+   char sw[4][4] = {"sw1", "sw2", "sw3", "sw4"};
+   for (int i = 1; i <= 4; ++i) DoOneSwitch(sw[i-1], i);
 }
 
 /*********************************************************************************************************************************/
@@ -3074,9 +3043,9 @@ int AnalogueReed(uint8_t InputChannel){
 
 void SetDefaultValues() 
 {
-    uint16_t j=0;
-    uint16_t i=0;
-    char     empty[30] = "Not in use";
+    uint16_t j = 0;
+    uint16_t i = 0;
+    char     empty[33] = "Not in use";
     
     CloseModelsFile();
     OpenModelsFile();
@@ -3091,7 +3060,7 @@ void SetDefaultValues()
   
     for (i = 0; i < CHANNELSUSED; ++i) { 
         for (j = 1; j <= 4; ++j) {
-                MaxDegrees[j][i]    = 150;
+                MaxDegrees[j][i]    = 150; 
                 MidHiDegrees[j][i]  = 120;
                 CentreDegrees[j][i] = 90;
                 MidLowDegrees[j][i] = 60;
@@ -3135,17 +3104,17 @@ void SetDefaultValues()
             ChannelNames[i][j] = DefaultChannelNames[i][j];
         }
     }
-    for (j = 0; j < BANKSUSED + 1; ++j) {
-        for (i = 0; i < CHANNELSUSED + 1; ++i) {
+    for (j = 0; j < BANKSUSED; ++j) {
+        for (i = 0; i < CHANNELSUSED; ++i) {
             Exponential[j][i] = DEFAULT_EXPO; // 0% (50) expo = default
         }
     }
-    for (j = 0; j < BANKSUSED + 1; ++j) {
-        for (i = 0; i < CHANNELSUSED + 1; ++i) {
+    for (j = 0; j < BANKSUSED; ++j) {
+        for (i = 0; i < CHANNELSUSED; ++i) {
             InterpolationTypes[j][i] = EXPONENTIALCURVES; // Expo is default
         }
     }
-    for (i = 0; i < CHANNELSUSED + 1; ++i) {
+    for (i = 0; i < CHANNELSUSED; ++i) {
         SubTrims[i] = 127; // centre (0 - 254)
     }
     for (j = 0; j < BYTESPERMACRO; ++j) {
@@ -3159,10 +3128,7 @@ void SetDefaultValues()
     UseMotorKill = true;
     MotorChannelZero = 0;
     MotorChannel = 15;
-    
     ReversedChannelBITS = 0; //  No channel reversed
-   
-    LEDBrightness       = DEFAULTLEDBRIGHTNESS;
     RxVoltageCorrection = 0;
     ModelsMacUnionSaved.Val32[0] = 0;
     ModelsMacUnionSaved.Val32[1] = 0;
@@ -3487,7 +3453,7 @@ FASTRUN void DisplayCurve()
 
 /*********************************************************************************************************************************/
 
-void BindNow() // Bind button was pressed 
+void BindNow()
 {
     BoundFlag                    = true;
     ModelMatched                 = true;
@@ -4008,11 +3974,9 @@ void SendModelFile()
     CurrentView = MODELSVIEW;
     CloseModelsFile();
 }
-
 /*********************************************************************************************************************************/
 
-void SoundBank()
-{
+void SoundBank(){
     PlaySound(BankSounds[BanksInUse[Bank-1]]);
     ScreenTimeTimer = millis(); // reset screen counter
     if (ScreenIsOff) {
@@ -4025,7 +3989,6 @@ void ShowBank(){
     char FMPress[4][12] = {"click fm1,1", "click fm2,1", "click fm3,1", "click fm4,1"};
     SendCommand(FMPress[Bank - 1]);
 }
-
 /*********************************************************************************************************************************/
 void ShowMotor(int on)
 {       
@@ -4034,12 +3997,10 @@ void ShowMotor(int on)
         char OffMsg[]   = "Motor OFF";
         if (on == 1)   SendText(bt0, OnMsg);
         if (on == 0)   SendText(bt0, OffMsg);
-       
 }
 /*********************************************************************************************************************************/
 
-void updateOneSwitchView()  //  
-{
+void DoOneSwitchView(uint8_t n){
     char OneSwitchView_r0[]    = "r0";    
     char OneSwitchView_r1[]    = "r1";     // Flight modes
     char OneSwitchView_r2[]    = "r2";     // Auto
@@ -4047,102 +4008,32 @@ void updateOneSwitchView()  //
     char OneSwitchView_r4[]    = "r4";     // Ch10
     char OneSwitchView_r5[]    = "r5";     // Ch11
     char OneSwitchView_r6[]    = "r6";     // Ch12
-    char OneSwitchView_r7[]    = "r7";    // Safety
-    char OneSwitchView_r8[]    = "r8";    // Dual Rates
-    char OneSwitchView_r9[]    = "r9";    // Buddy
+    char OneSwitchView_r7[]    = "r7";     // Safety
+    char OneSwitchView_r8[]    = "r8";     // Dual Rates
+    char OneSwitchView_r9[]    = "r9";     // Buddy
     char OneSwitchViewc_revd[] = "c_revd"; // Reversed
-    char SwNum[]               = "Sw";
-    char ch9[]  = "t3";
-    char ch10[] = "t4";
-    char ch11[] = "t5";
-    char ch12[] = "t6";
-    char ch9a[]  = " (Ch 9)";
-    char ch10a[] = " (Ch 10)";
-    char ch11a[] = " (Ch 11)";
-    char ch12a[] = " (Ch 12)";
-    
-    char temp[30];// show the channel names too instead of only numbers
-    strcpy(temp, ChannelNames[8]);
-    strcat(temp, ch9a);
-    SendText(ch9, temp); 
 
-    strcpy(temp, ChannelNames[9]);
-    strcat(temp, ch10a);
-    SendText(ch10, temp);
-
-    strcpy(temp, ChannelNames[10]);
-    strcat(temp, ch11a);
-    SendText(ch11, temp);
-
-    strcpy(temp, ChannelNames[11]);
-    strcat(temp, ch12a);
-    SendText(ch12,temp);
-
-
-
-    if (SwitchEditNumber == 1) {
-        ValueSent = false; // If no setting, = Not Used
-        if (FMSwitch == 1) SendValue(OneSwitchView_r1, 1);
-        if (Autoswitch == 1) SendValue(OneSwitchView_r2, 1);
-        if (Channel9Switch == 1) SendValue(OneSwitchView_r3, 1);
-        if (Channel10Switch == 1) SendValue(OneSwitchView_r4, 1);
-        if (Channel11Switch == 1) SendValue(OneSwitchView_r5, 1);
-        if (Channel12Switch == 1) SendValue(OneSwitchView_r6, 1);
-        if (SafetySwitch == 1) SendValue(OneSwitchView_r7, 1);
-        if (DualRatesSwitch == 1) SendValue(OneSwitchView_r8, 1);
-        if (BuddySwitch == 1) SendValue(OneSwitchView_r9, 1);
-        if (!ValueSent) SendValue(OneSwitchView_r0, 1); // nothing yet, so not used
-        if (SWITCH1Reversed) SendValue(OneSwitchViewc_revd, 1);
-    }
-    if (SwitchEditNumber == 2) {
-        ValueSent = false;
-        if (FMSwitch == 2) SendValue(OneSwitchView_r1, 1);
-        if (Autoswitch == 2) SendValue(OneSwitchView_r2, 1);
-        if (Channel9Switch == 2) SendValue(OneSwitchView_r3, 1);
-        if (Channel10Switch == 2) SendValue(OneSwitchView_r4, 1);
-        if (Channel11Switch == 2) SendValue(OneSwitchView_r5, 1);
-        if (Channel12Switch == 2) SendValue(OneSwitchView_r6, 1);
-        if (SafetySwitch == 2) SendValue(OneSwitchView_r7, 1);
-        if (DualRatesSwitch == 2) SendValue(OneSwitchView_r8, 1);
-        if (BuddySwitch == 2) SendValue(OneSwitchView_r9, 1);
-        if (!ValueSent) SendValue(OneSwitchView_r0, 1); // nothing yet, so not used
-        if (SWITCH2Reversed) SendValue(OneSwitchViewc_revd, 1);
-    }
-    if (SwitchEditNumber == 3) {
-        ValueSent = false;
-        if (FMSwitch == 3) SendValue(OneSwitchView_r1, 1);
-        if (Autoswitch == 3) SendValue(OneSwitchView_r2, 1);
-        if (Channel9Switch == 3) SendValue(OneSwitchView_r3, 1);
-        if (Channel10Switch == 3) SendValue(OneSwitchView_r4, 1);
-        if (Channel11Switch == 3) SendValue(OneSwitchView_r5, 1);
-        if (Channel12Switch == 3) SendValue(OneSwitchView_r6, 1);
-        if (SafetySwitch == 3) SendValue(OneSwitchView_r7, 1);
-        if (DualRatesSwitch == 3) SendValue(OneSwitchView_r8, 1);
-        if (BuddySwitch == 3) SendValue(OneSwitchView_r9, 1);
-        if (!ValueSent) SendValue(OneSwitchView_r0, 1); // nothing yet, so not used
-        if (SWITCH3Reversed) SendValue(OneSwitchViewc_revd, 1);
-    }
-    if (SwitchEditNumber == 4) {
-        ValueSent = false;
-        if (FMSwitch == 4) SendValue(OneSwitchView_r1, 1);
-        if (Autoswitch == 4) SendValue(OneSwitchView_r2, 1);
-        if (Channel9Switch == 4) SendValue(OneSwitchView_r3, 1);
-        if (Channel10Switch == 4) SendValue(OneSwitchView_r4, 1);
-        if (Channel11Switch == 4) SendValue(OneSwitchView_r5, 1);
-        if (Channel12Switch == 4) SendValue(OneSwitchView_r6, 1);
-        if (SafetySwitch == 4) SendValue(OneSwitchView_r7, 1);
-        if (DualRatesSwitch == 4) SendValue(OneSwitchView_r8, 1);
-        if (BuddySwitch == 4) SendValue(OneSwitchView_r9, 1);
-        if (!ValueSent) SendValue(OneSwitchView_r0, 1); // nothing yet, so not used
-        if (SWITCH4Reversed) SendValue(OneSwitchViewc_revd, 1);
-    }
-    SendValue(SwNum, SwitchEditNumber); // show switch number
-}
-
+    ValueSent = false; // If no setting, = Not Used
+    if (FMSwitch == n)        SendValue(OneSwitchView_r1, n);
+    if (Autoswitch == n)      SendValue(OneSwitchView_r2, n);
+    if (Channel9Switch == n)  SendValue(OneSwitchView_r3, n);
+    if (Channel10Switch == n) SendValue(OneSwitchView_r4, n);
+    if (Channel11Switch == n) SendValue(OneSwitchView_r5, n);
+    if (Channel12Switch == n) SendValue(OneSwitchView_r6, n);
+    if (SafetySwitch == n)    SendValue(OneSwitchView_r7, n);
+    if (DualRatesSwitch == n) SendValue(OneSwitchView_r8, n);
+    if (BuddySwitch == n)     SendValue(OneSwitchView_r9, n);
+    if (!ValueSent)           SendValue(OneSwitchView_r0, n); // nothing yet, so not used
+    if (SWITCH1Reversed)      SendValue(OneSwitchViewc_revd, n);
+}    
 /*********************************************************************************************************************************/
-
-void RestoreBrightness()
-{
+void UpdateOneSwitchView(){
+    char SwNum[] = "Sw";
+    SendValue(SwNum, SwitchEditNumber); // show switch number
+    for (int i = 1; i < 5; i++)  DoOneSwitchView(i);
+}
+/*********************************************************************************************************************************/
+void RestoreBrightness(){
     char cmd[20];
     char dim[] = "dim=";
     char nb[10];
@@ -4155,8 +4046,7 @@ void RestoreBrightness()
 }
 /*********************************************************************************************************************************/
 
-void ZeroDataScreen()
-{ // ZERO Those parameters that are zeroable
+void ZeroDataScreen(){                  // ZERO Those parameters that are zeroable
     TotalLostPackets   = 0;
     GapLongest         = 0;
     GapSum             = 0;
@@ -4168,11 +4058,11 @@ void ZeroDataScreen()
     ThisGap            = 0;
     GPSMaxDistance     = 0;
     GPSMaxSpeed        = 0;
-    SavedRadioSwaps    = RadioSwaps; // Cannot easily zero these, so do a subtraction
+    SavedRadioSwaps    = RadioSwaps;    // Cannot easily zero these, so do a subtraction
     SavedRX1TotalTime  = RX1TotalTime;
     SavedRX2TotalTime  = RX2TotalTime;
     SavedSbusRepeats   = SbusRepeats;
-    LastShowTime       = 0; // for instant redisplay
+    LastShowTime       = 0;             // for instant redisplay
 }
 /***************************************************** ReadNewSwitchFunction ****************************************************************************/
 
@@ -4504,7 +4394,7 @@ void LoadModelSelector(){
     char mn[] = "modelname";
 
     int32_t SavedModelNumber = ModelNumber;
-    for (ModelNumber = 1; ModelNumber < MAXMODELNUMBER; ++ModelNumber){ // heer
+    for (ModelNumber = 1; ModelNumber < MAXMODELNUMBER; ++ModelNumber){ 
             ReadOneModel(ModelNumber);
             if (ModelNumber == 1) {
                 strcpy(buf, ModelName);
@@ -4535,13 +4425,13 @@ void LoadFileSelector(){
 
     char Mfilesp[]     = "Mfiles.path=\"";
     char Mfiles[]      = "Mfiles";
-    char crlf[]     = {13, 10, 0};  
+    char crlf[]        = {13, 10, 0};  
     char buf[MAXBUFFERSIZE];
     char nofiles[] = "(No files)";
     
     strcpy(buf, nofiles);
     for (int f = 0; f < ExportedFileCounter; ++f){ 
-        if (f==0) 
+        if (f == 0) 
         {   strcpy(buf, TheFilesList[f]);
             strcat(buf, crlf);
         }else{
@@ -4557,11 +4447,14 @@ void LoadFileSelector(){
 /******************************************************************************************************************************/
 void GotoModelsView()
 {
-char     GoModelsView[]                  = "page ModelsView";
+ char GoModelsView[] = "page ModelsView";
+
  if (ModelMatched) return; // must not change when model connected 
  SaveCurrentModel();
  SendCommand(GoModelsView);
  CurrentView = MODELSVIEW;
+ CurrentMode = SENDNOTHING;
+ BlueLedOn();
  UpdateModelsNameEveryWhere();
  BuildDirectory(); 
  LoadFileSelector();
@@ -5542,7 +5435,7 @@ void CheckAllModelIds(){ // heer
       char crlf[]       = {13, 10, 0};  
       char lb[]         = "(";
       char rb[]         = ")  ";
-      char KO[]         = ">>Same ID as ";
+      char KO[]         = ">Duplicate:";
       char Okay[]       = " (ID OK)";
       char n0[]         = "n0";
       char nb[4];
@@ -5550,10 +5443,11 @@ void CheckAllModelIds(){ // heer
       uint64_t      ModelIDs[92];
       uint8_t       DuplicatesCount = 0;
       uint32_t      SavedModelNumber  = ModelNumber;
-     
+
       SendCommand(GoIDview);
       CurrentView = IDCHECKVIEW;
       CurrentMode = SENDNOTHING;
+
      
       for (ModelNumber = 1; ModelNumber < MAXMODELNUMBER-1; ++ModelNumber) {
             ReadOneModel(ModelNumber);
@@ -5589,7 +5483,7 @@ void CheckAllModelIds(){ // heer
                             if (p > 0) {
                                 strcat(buf, KO); 
                                 strcat(buf, Str(nb,p,0));
-                                 strcat(buf, "<<"); 
+                                 strcat(buf, "<"); 
                                 ++DuplicatesCount;
                             }
                             else {
@@ -6054,6 +5948,7 @@ FASTRUN void ButtonWasPressed()
                 ModelNumber= GetValue(MMems)+1;
                 SetDefaultValues();
                 LoadModelSelector();
+                Look(422);
             }
             ClearText();
             return;
@@ -6344,7 +6239,7 @@ FASTRUN void ButtonWasPressed()
                 UpdateSwitchesView();
             }
             if (CurrentView == ONE_SWITCH_VIEW) {
-                updateOneSwitchView();
+                UpdateOneSwitchView();
             }
             if (CurrentView == MODELSVIEW) {
                 SendValue(ModelsView_ModelNumber, ModelNumber);
@@ -6443,7 +6338,7 @@ FASTRUN void ButtonWasPressed()
             SwitchEditNumber = GetChannel(); // which switch?
             CurrentView      = ONE_SWITCH_VIEW;
             SendCommand(PageOneSwitchView); // edit one switch - could be 1-4
-            updateOneSwitchView();
+            UpdateOneSwitchView();
             UpdateModelsNameEveryWhere();
             ClearText();
             return;
@@ -7579,9 +7474,7 @@ void GotoFrontView(){
     char     page_FrontView[]       = "page FrontView";
 
     if (CurrentView != FRONTVIEW) {
-          if (CurrentView == SCANVIEW) {
-            DoScanEnd();
-          }
+          if (CurrentView == SCANVIEW)   DoScanEnd();
           SendCommand(page_FrontView);
           CurrentView = FRONTVIEW;
           CurrentMode = NORMAL;
@@ -7604,94 +7497,14 @@ void GotoFrontView(){
 }
 /************************************************************************************************************/
 
-void CompareModelsIDs(){ // The saved MacAddress is compared with the one just received from the model ... etc ...
-    
-    uint8_t SavedModelNumber = ModelNumber;
-    if (ModelMatched) return; // must not change when model connected
-    GotoFrontView();
-    RestoreBrightness();
-    if (ModelIdentified) {                                                //  We have both bits of Model ID?      
-        if ((ModelsMacUnion.Val32[0] == ModelsMacUnionSaved.Val32[0]) && (ModelsMacUnion.Val32[1] == ModelsMacUnionSaved.Val32[1])) 
-            {
-                if (AnnounceConnected) {
-                    if (AutoModelSelect){
-                        PlaySound(MMMATCHED); 
-                        DelayWithDog(1500);
-                    }   
-                }
-                ModelMatched = true;                                         //  It's a match so start flying!
-                return;
-            } else {
-                if (AutoModelSelect)
-                { //  It's not a match so search for it.
-                    ModelNumber = 0;
-                    while ((ModelMatched == false) && (ModelNumber < MAXMODELNUMBER - 1)) {   //  Try to match the ID with a saved one
-                        ++ModelNumber;
-                        ReadOneModel(ModelNumber);
-                        
-                        if  ((ModelsMacUnion.Val32[0] == ModelsMacUnionSaved.Val32[0]) && (ModelsMacUnion.Val32[1] == ModelsMacUnionSaved.Val32[1])){
-                            ModelMatched = true;
-                        }
-                    }
-                    if (ModelMatched) {                                       //  Found it!    
-                        UpdateModelsNameEveryWhere();                         //  Use it.
-                        if (AnnounceConnected) 
-                        {
-                            PlaySound(MMFOUND);
-                            DelayWithDog(1500);
-                        }
-                        SaveAllParameters();                                  //  Save it
-                        GotoFrontView();
-                        
-                    }else{                                           
-                        ModelNumber = SavedModelNumber; //  Not found, so bind to the restored selected one
-                        ReadOneModel(ModelNumber);
-                        BindNow();
-                        if (AutoModelSelect)
-                        {
-                            PlaySound(MMSAVED); 
-                            DelayWithDog(1700);
-                        }   
-                    }
-                } 
-                if (!AutoModelSelect) 
-                {     
-                    BindNow(); 
-                }
-        }
-    }
-}
-/************************************************************************************************************/
-void  GetModelsMacAddress(){
- 
-    switch (AckPayload.Purpose)
-    {
-        case 0:
-             ModelsMacUnion.Val32[0] = GetIntFromAckPayload();
-             break;
-        case 1:
-             ModelsMacUnion.Val32[1] = GetIntFromAckPayload();  
-             break;
-        default:
-             break;
-    }
-    if (ModelMatched == false) {
-        if ((ModelsMacUnion.Val32[0] > 0) && (ModelsMacUnion.Val32[1] > 0)){   // got both bits yet?
-                 ModelIdentified = true; 
-                 CompareModelsIDs();      
-        }    
-    }
-}
-
 /************************************************************************************************************/
 FASTRUN void ParseAckPayload()
 {
     if (BuddyPupilOnPPM) return; // buddy pupil need none of this
  
-    FHSS_data::NextChannelNumber = AckPayload.Byte5;                 // every packet tells of next hop destination
+    FHSS_data::NextChannelNumber = AckPayload.Byte5; // every packet tells of next hop destination
      
-    if (AckPayload.Purpose & 0x80) // Hi bit is now the **HOP NOW!!** flag
-    {
+    if (AckPayload.Purpose & 0x80) {// Hi bit is now the **HOP NOW!!** flag
         NextChannel       = *(FHSS_data::FHSSChPointer + FHSS_data::NextChannelNumber); // The actual channel number pointed to.   
         HopToNextChannel();
         AckPayload.Purpose &= 0x7f; // Clear the high BIT, use the remainder ...

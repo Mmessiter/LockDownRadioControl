@@ -212,7 +212,7 @@ void GetNewPipe() // from TX
  * @note Address data in EEPORM is valid only after a previous power cycle observed
  * a completed binding process (pairing was successful at least once during last flight's session).
  */
-FLASHMEM void GetOldPipe() // heer
+FLASHMEM void GetOldPipe() 
 {
     ReadSavedPipe();
     CopyCurrentPipe(TheReceivedPipe, BOUNDPIPENUMBER);
@@ -398,8 +398,11 @@ FASTRUN void Reconnect()
                      if (!FailSafeSent) FailSafe();
             }
         }
-    } // cannot pass here if not connected
-      // must have connected by here
+    }   //  cannot pass here if not connected
+        //  must have connected by here
+        //  Serial.print("Reconnect channel: ");
+        //  Serial.println(ReconnectChannel);
+    
     FailSafeSent = false;
     if (PreviousRadio != ThisRadio) ++RadioSwaps; // Count the radio swaps
     ReconnectedMoment = millis();                 // Save this moment

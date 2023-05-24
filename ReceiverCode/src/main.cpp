@@ -86,7 +86,6 @@ uint16_t        CompressedData[COMPRESSEDWORDS]; // 30 bytes -> 40 bytes when un
 bool            SensorHubDead   = false;
 uint32_t        NewConnectionMoment    = 0;
 bool            QNHSent         = false;
-bool            FirstLostPacket = true;
 uint8_t         MacAddress[9]   = {0, 0, 0, 0, 0, 0, 0, 0,0};
 bool            ModelMatched    = false;
 uint8_t         TheReceivedPipe[6];
@@ -216,7 +215,7 @@ void FailSafe()
     FailedSafe     = true;
     TurnLedOff();
     MacAddressSentCounter = 0;
-    Serial.println("Failsafe!");
+   // Serial.println("Failsafe!");
 }
 
 #ifdef DB_FHSS
@@ -261,7 +260,7 @@ void UseReceivedData()
 bool ReadData()
 {
     Connected            = false;
-    while (CurrentRadio->available(&Pipnum)) { // Get all, but use only the latest
+    while (CurrentRadio->available(&Pipnum)) {                         // Get all, but use only the latest
         LoadAckPayload();
         CurrentRadio->flush_tx();                                      // This avoids a lockup that happens when the FIFO gets full
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // Send telemetry
@@ -628,11 +627,15 @@ void SensorHubHasFailed()
     SensorHubDead   = true; // This flag inhibits further attempts to call the hub, which might save a model.
 }
 
+
 // ******************************************************************************************************************************************************************
+
 FASTRUN void ReceiveData()
-{
-    uint32_t TimeTest;
+{   
+    uint32_t    TimeTest;
+
     if (Connected) {
+       
         if ((millis() - SensorHubAccessed) > 10) {                               //  Reading Sensor hub 100 x per second should be enough
             if (millis() - LastPacketArrivalTime < 1) {                          //  If, and only if, we have still absolutely loads of time, do stuff now while waiting ...
                 SensorHubAccessed = millis();                                    //  Note the moment of last attempted read.
@@ -647,8 +650,9 @@ FASTRUN void ReceiveData()
             }
         }
     }
-    
-    if (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT)  Reconnect(); // Try to reconnect.
+    if (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT)  {
+        Reconnect(); // Try to reconnect.
+    }
     
     if (ReadData()) {
         ReadExtraParameters(); // Check the extra parameters

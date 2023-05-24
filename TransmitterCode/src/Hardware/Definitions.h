@@ -18,8 +18,8 @@
 //***************************************************************************
 
 #define TXVERSION_MAJOR   2
-#define TXVERSION_MINOR   1
-#define TXVERSION_MINIMUS 9
+#define TXVERSION_MINOR   2
+#define TXVERSION_MINIMUS 0
 
 // **************************************************************************
 //    DEBUG OPTIONS (Uncomment any of these for that bit of debug info)     *
@@ -52,7 +52,6 @@
 #include <DS1307RTC.h>
 #include <InterpolationLib.h>
 
- 
 // **************************************************************************
 //                               General                                    *
 // **************************************************************************
@@ -68,7 +67,7 @@
 #define LOWBATTERY              42                        // Default percent for warning (User definable)
 #define DEFAULTTRIMREPEATSPEED  600
 
-#ifdef NEWPCB                              // ***>>> red or green PCBs ... not black <<<***
+#ifdef NEWPCB                              // ***>>> red or green PCBs ... not old black <<<***
   #define CE_PIN                  7                         // for SPI to nRF24L01
   #define CSN_PIN                 8                         // for SPI to nRF24L01
   #define BUDDYPPMPORT            10                        // Buddybox PPM pin
@@ -95,18 +94,19 @@
 #define MAXMODELNUMBER          91
 #define PERFECTPACKETSPERSECOND 150                       // Flat out perfect packets per second
 #define PIPES_TO_COMPARE        6
+#define RED_LED_ON_TIME         3500                      // How many ms of no connection before RED led comes on
+#define LOW_VOLTAGE_TIME        5000                      // How many ms to endure low voltage before announcing it. (5 seconds)
+
 // **************************************************************************
 //                            FHSS PARAMETERS                               *
 //***************************************************************************
 
 #define PACEMAKER                7    // 7 MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
-#define RETRYCOUNT               2    // auto retries inside nRF24L01 (was 3)
-#define RETRYWAIT                0    // Wait between retries is RetryWait+1 * 250us. (WAS 2) A failed packet therefore takes (RetryWait+1 * 250us) * RetryCount
-#define LOSTCONTACTCUTOFF        2    // 3 How many packets to lose before reconnect triggers
-#define RECONNECT_CHANNELS_COUNT 2    // How many channels to try when reconnecting
+#define RETRYCOUNT               2    // auto retries inside nRF24L01. MAX is 15. Fails below 2.
+#define RETRYWAIT                0    // = 250us = Wait between retries (RetryWait+1 * 250us)
+#define LOSTCONTACTCUTOFF        4    // How many packets to 'lose' before reconnect triggers (-- IT MIGHT BE JUST THE ACK WAS LOST)
+#define RECONNECT_CHANNELS_COUNT 4    // How many channels to try when reconnecting
 #define RECONNECT_CHANNELS_START 12   // Offset into channels' array
-#define RED_LED_ON_TIME          3500 // How many ms of no connection before RED led comes on
-#define LOW_VOLTAGE_TIME         3000 // How many ms to endure low voltage before announcing it. (3 seconds)
 
 // **************************************************************************
 //                            SEND MODE PARAMETERS                          *
@@ -117,7 +117,7 @@
 #define CENTRESTICKS    2 // Calibrate Centres (SEND NO DATA)
 #define SCANWAVEBAND    3 // Scan waveband (SEND NO DATA)
 #define SENDNOTHING     4 // Transmission off (SEND NO DATA)
-#define PONGMODE        5 // Play Pong
+#define PONGMODE        5 // Play Pong (SEND NO DATA)
 
 // **************************************************************************
 //                               Colours                                    *
@@ -531,7 +531,13 @@ void         EndSend();
 void         ReadTheRTC();
 void         swap(uint8_t* a, uint8_t* b);
 void         SaveOneModel(uint32_t mnum);
-
+bool         ReadOneModel(uint32_t Mnum);
+void         SaveAllParameters();
+void         BindNow();
+FASTRUN uint32_t GetIntFromAckPayload(); // This one uses a uint32_t int
+uint32_t  getvalue(char* nbox);
+uint32_t         GetValue(char* nbox);
+void             SendValue(char* nbox, int value);
 // **************************************************************************
 //                            GLOBAL DATA                                   *
 //***************************************************************************
@@ -709,7 +715,7 @@ bool     FileError            = false;
 uint32_t RangeTestStart       = 0;
 uint16_t RangeTestGoodPackets = 0;
 uint8_t  SaveBank             = 0;
-bool     FailSafeChannel[CHANNELSUSED];
+bool     FailSafeChannel[CHANNELSUSED+1];
 bool     SaveFailSafeNow = false;
 uint32_t FailSafeTimer;
 uint16_t CompressedData[COMPRESSEDWORDS];   // = 15 words, 30 bytes
@@ -820,7 +826,6 @@ union uMacStored {
         uint32_t Val32[2] ;
         uint8_t  Val8[8];        // Model's Mac address that had been saved on disk
      }  ModelsMacUnionSaved;
-
 bool     MotorEnabled               = false;
 bool     SendNoData                 = false;
 bool     MotorWasEnabled            = false;
@@ -861,13 +866,41 @@ uint32_t  MacroStopTime[MAXMACROS];
 uint8_t   PreviousMacroNumber = 1;
 bool      UseMacros           = false;
 
+
+// **********************************************************************************************************************************
+// **********************************  Area & namespace for FHSS data ************************************************************
+// **********************************************************************************************************************************
+
+namespace FHSS_data{
+
+uint8_t    FHSS_Channels1[42] = {93, 111, 107, 103, 106, 97, 108, 102, 118, // TEST array
+                              104, 101, 109, 98, 113, 124, 115, 91, 96, 85, 117, 89, 99, 114, 87, 112,
+                              86, 94, 92, 119, 120, 100, 121, 123, 95, 122, 105, 84, 116, 90, 110, 88};
+
+// offsets:                    0    1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18 19  20  21  22  23  24 ...
+uint8_t   FHSS_Channels[83] = {51, 28, 24, 61, 64, 55, 66, 19, 76, 21, 59, 67, 15, 71, 82, 32, 49, 69, 13, 2, 34, 47, 20, 16, 72, // UK array
+                               35, 57, 45, 29, 75, 3, 41, 62, 11, 9, 77, 37, 8, 31, 36, 18, 17, 50, 78, 73, 30, 79, 6, 23, 40,
+                               54, 12, 80, 53, 22, 1, 74, 39, 58, 63, 70, 52, 42, 25, 43, 26, 14, 38, 48, 68, 33, 27, 60, 44, 46,
+                               56, 7, 81, 5, 65, 4, 10};
+uint8_t   UkRulesCounter    = 0;
+bool      UkRules           = true;
+uint8_t*  FHSSRecoveryPointer;
+uint8_t*  FHSSChPointer;                // pointer for channels array (three only used for Recovery)
+uint8_t   NextChannelNumber  = 0;
+}
+
+
+
 // *********************************************** END OF GLOBAL DATA ***************************************************************
 
-// These files are included *AFTER* the Definitions, otherwise they can't see the definitions :-)
+// These files are included *AFTER* the Definitions, otherwise they can't see the definitions! :-)
+
 #include "Hardware/StructsEtc.h" 
 #include "Hardware/Utilities.h" 
 #include "Hardware/transceiver.h" 
 #include "Hardware/Pong.h" 
 #include "Hardware/macros.h" 
 #include "Hardware/Trims.h" 
+#include "Hardware/ModelMatch.h" 
+#include "Hardware/Nextion.h" 
 #endif
