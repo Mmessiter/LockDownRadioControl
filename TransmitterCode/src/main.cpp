@@ -2887,14 +2887,11 @@ int GetChannel()
     }
     return atoi(&TextIn[i]);
 }
+
 /*********************************************************************************************************************************/
 
-void UpdateSwitchesView() //  (Should be optimised but it works!)
-{
-    char SwitchesView_sw1[] = "sw1";
-    char SwitchesView_sw2[] = "sw2";
-    char SwitchesView_sw3[] = "sw3";
-    char SwitchesView_sw4[] = "sw4";
+void DoOneSwitch(char * Sw, uint8_t n){
+
     char NotUsed[]          = "Not used";
     char Banks123[]         = "Banks 1-2-3";
     char Auto[]             = "Bank 4 (etc)";
@@ -2909,7 +2906,7 @@ void UpdateSwitchesView() //  (Should be optimised but it works!)
     char cc10[]= " (Ch 10)";
     char cc11[]= " (Ch 11)";
     char cc12[]= " (Ch 12)";
-    
+
     strcpy(c9, ChannelNames[8]);
     strcpy(c10, ChannelNames[9]);
     strcpy(c11, ChannelNames[10]);
@@ -2918,52 +2915,25 @@ void UpdateSwitchesView() //  (Should be optimised but it works!)
     strcat(c10, cc10);
     strcat(c11, cc11);
     strcat(c12, cc12);
-    
 
-    SendText(SwitchesView_sw1, NotUsed);
-    if (Autoswitch == 1)        SendText(SwitchesView_sw1, Auto);
-    if (FMSwitch == 1)          SendText(SwitchesView_sw1, Banks123);
-    if (Channel9Switch == 1)    SendText(SwitchesView_sw1, c9);
-    if (Channel10Switch == 1)   SendText(SwitchesView_sw1, c10);
-    if (Channel11Switch == 1)   SendText(SwitchesView_sw1, c11);
-    if (Channel12Switch == 1)   SendText(SwitchesView_sw1, c12);
-    if (SafetySwitch == 1)      SendText(SwitchesView_sw1, Safety_Switch);
-    if (DualRatesSwitch == 1)   SendText(SwitchesView_sw1, DualRates_Switch);
-    if (BuddySwitch == 1)       SendText(SwitchesView_sw1, Buddy_Switch);
-    
-    SendText(SwitchesView_sw2, NotUsed);
-    if (Autoswitch == 2)        SendText(SwitchesView_sw2, Auto);
-    if (FMSwitch == 2)          SendText(SwitchesView_sw2, Banks123);
-    if (Channel9Switch == 2)    SendText(SwitchesView_sw2, c9);
-    if (Channel10Switch == 2)   SendText(SwitchesView_sw2, c10);
-    if (Channel11Switch == 2)   SendText(SwitchesView_sw2, c11);
-    if (Channel12Switch == 2)   SendText(SwitchesView_sw2, c12);
-    if (SafetySwitch == 2)      SendText(SwitchesView_sw2, Safety_Switch);
-    if (DualRatesSwitch == 2)   SendText(SwitchesView_sw2, DualRates_Switch);
-    if (BuddySwitch == 2)       SendText(SwitchesView_sw2, Buddy_Switch);
-   
-    SendText(SwitchesView_sw3, NotUsed);
-    if (Autoswitch == 3)        SendText(SwitchesView_sw3, Auto);
-    if (FMSwitch == 3)          SendText(SwitchesView_sw3, Banks123);
-    if (Channel9Switch == 3)    SendText(SwitchesView_sw3, c9);
-    if (Channel10Switch == 3)   SendText(SwitchesView_sw3, c10);
-    if (Channel11Switch == 3)   SendText(SwitchesView_sw3, c11);
-    if (Channel12Switch == 3)   SendText(SwitchesView_sw3, c12);
-    if (SafetySwitch == 3)      SendText(SwitchesView_sw3, Safety_Switch);
-    if (DualRatesSwitch == 3)   SendText(SwitchesView_sw3, DualRates_Switch);
-    if (BuddySwitch == 3)       SendText(SwitchesView_sw3, Buddy_Switch);
-   
-    SendText(SwitchesView_sw4, NotUsed);
-    if (Autoswitch == 4)        SendText(SwitchesView_sw4, Auto);
-    if (FMSwitch == 4)          SendText(SwitchesView_sw4, Banks123);
-    if (Channel9Switch == 4)    SendText(SwitchesView_sw4, c9);
-    if (Channel10Switch == 4)   SendText(SwitchesView_sw4, c10);
-    if (Channel11Switch == 4)   SendText(SwitchesView_sw4, c11);
-    if (Channel12Switch == 4)   SendText(SwitchesView_sw4, c12);
-    if (SafetySwitch == 4)      SendText(SwitchesView_sw4, Safety_Switch);
-    if (DualRatesSwitch == 4)   SendText(SwitchesView_sw4, DualRates_Switch);
-    if (BuddySwitch == 4)       SendText(SwitchesView_sw4, Buddy_Switch);
-   
+    SendText(Sw, NotUsed);
+    if (Autoswitch == n)        SendText(Sw, Auto);
+    if (FMSwitch == n)          SendText(Sw, Banks123);
+    if (Channel9Switch == n)    SendText(Sw, c9);
+    if (Channel10Switch == n)   SendText(Sw, c10);
+    if (Channel11Switch == n)   SendText(Sw, c11);
+    if (Channel12Switch == n)   SendText(Sw, c12);
+    if (SafetySwitch == n)      SendText(Sw, Safety_Switch);
+    if (DualRatesSwitch == n)   SendText(Sw, DualRates_Switch);
+    if (BuddySwitch == n)       SendText(Sw, Buddy_Switch);
+}
+
+/*********************************************************************************************************************************/
+
+void UpdateSwitchesView()  // now optimised!
+{
+   char sw[4][4] = {"sw1", "sw2", "sw3", "sw4"};
+   for (int i = 1; i <= 4;++i) DoOneSwitch(sw[i-1], i);
 }
 
 /*********************************************************************************************************************************/
