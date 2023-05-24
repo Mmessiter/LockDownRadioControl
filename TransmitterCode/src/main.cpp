@@ -2930,10 +2930,9 @@ void DoOneSwitch(char * Sw, uint8_t n){
 
 /*********************************************************************************************************************************/
 
-void UpdateSwitchesView()  // now optimised!
-{
+void UpdateSwitchesView(){ // now optimised!
    char sw[4][4] = {"sw1", "sw2", "sw3", "sw4"};
-   for (int i = 1; i <= 4;++i) DoOneSwitch(sw[i-1], i);
+   for (int i = 1; i <= 4; ++i) DoOneSwitch(sw[i-1], i);
 }
 
 /*********************************************************************************************************************************/
@@ -3975,11 +3974,9 @@ void SendModelFile()
     CurrentView = MODELSVIEW;
     CloseModelsFile();
 }
-
 /*********************************************************************************************************************************/
 
-void SoundBank()
-{
+void SoundBank(){
     PlaySound(BankSounds[BanksInUse[Bank-1]]);
     ScreenTimeTimer = millis(); // reset screen counter
     if (ScreenIsOff) {
@@ -3992,7 +3989,6 @@ void ShowBank(){
     char FMPress[4][12] = {"click fm1,1", "click fm2,1", "click fm3,1", "click fm4,1"};
     SendCommand(FMPress[Bank - 1]);
 }
-
 /*********************************************************************************************************************************/
 void ShowMotor(int on)
 {       
@@ -4001,12 +3997,10 @@ void ShowMotor(int on)
         char OffMsg[]   = "Motor OFF";
         if (on == 1)   SendText(bt0, OnMsg);
         if (on == 0)   SendText(bt0, OffMsg);
-       
 }
 /*********************************************************************************************************************************/
 
-void updateOneSwitchView()  //  
-{
+void DoOneSwitchView(uint8_t n){
     char OneSwitchView_r0[]    = "r0";    
     char OneSwitchView_r1[]    = "r1";     // Flight modes
     char OneSwitchView_r2[]    = "r2";     // Auto
@@ -4014,102 +4008,32 @@ void updateOneSwitchView()  //
     char OneSwitchView_r4[]    = "r4";     // Ch10
     char OneSwitchView_r5[]    = "r5";     // Ch11
     char OneSwitchView_r6[]    = "r6";     // Ch12
-    char OneSwitchView_r7[]    = "r7";    // Safety
-    char OneSwitchView_r8[]    = "r8";    // Dual Rates
-    char OneSwitchView_r9[]    = "r9";    // Buddy
+    char OneSwitchView_r7[]    = "r7";     // Safety
+    char OneSwitchView_r8[]    = "r8";     // Dual Rates
+    char OneSwitchView_r9[]    = "r9";     // Buddy
     char OneSwitchViewc_revd[] = "c_revd"; // Reversed
-    char SwNum[]               = "Sw";
-    char ch9[]  = "t3";
-    char ch10[] = "t4";
-    char ch11[] = "t5";
-    char ch12[] = "t6";
-    char ch9a[]  = " (Ch 9)";
-    char ch10a[] = " (Ch 10)";
-    char ch11a[] = " (Ch 11)";
-    char ch12a[] = " (Ch 12)";
-    
-    char temp[30];// show the channel names too instead of only numbers
-    strcpy(temp, ChannelNames[8]);
-    strcat(temp, ch9a);
-    SendText(ch9, temp); 
 
-    strcpy(temp, ChannelNames[9]);
-    strcat(temp, ch10a);
-    SendText(ch10, temp);
-
-    strcpy(temp, ChannelNames[10]);
-    strcat(temp, ch11a);
-    SendText(ch11, temp);
-
-    strcpy(temp, ChannelNames[11]);
-    strcat(temp, ch12a);
-    SendText(ch12,temp);
-
-
-
-    if (SwitchEditNumber == 1) {
-        ValueSent = false; // If no setting, = Not Used
-        if (FMSwitch == 1) SendValue(OneSwitchView_r1, 1);
-        if (Autoswitch == 1) SendValue(OneSwitchView_r2, 1);
-        if (Channel9Switch == 1) SendValue(OneSwitchView_r3, 1);
-        if (Channel10Switch == 1) SendValue(OneSwitchView_r4, 1);
-        if (Channel11Switch == 1) SendValue(OneSwitchView_r5, 1);
-        if (Channel12Switch == 1) SendValue(OneSwitchView_r6, 1);
-        if (SafetySwitch == 1) SendValue(OneSwitchView_r7, 1);
-        if (DualRatesSwitch == 1) SendValue(OneSwitchView_r8, 1);
-        if (BuddySwitch == 1) SendValue(OneSwitchView_r9, 1);
-        if (!ValueSent) SendValue(OneSwitchView_r0, 1); // nothing yet, so not used
-        if (SWITCH1Reversed) SendValue(OneSwitchViewc_revd, 1);
-    }
-    if (SwitchEditNumber == 2) {
-        ValueSent = false;
-        if (FMSwitch == 2) SendValue(OneSwitchView_r1, 1);
-        if (Autoswitch == 2) SendValue(OneSwitchView_r2, 1);
-        if (Channel9Switch == 2) SendValue(OneSwitchView_r3, 1);
-        if (Channel10Switch == 2) SendValue(OneSwitchView_r4, 1);
-        if (Channel11Switch == 2) SendValue(OneSwitchView_r5, 1);
-        if (Channel12Switch == 2) SendValue(OneSwitchView_r6, 1);
-        if (SafetySwitch == 2) SendValue(OneSwitchView_r7, 1);
-        if (DualRatesSwitch == 2) SendValue(OneSwitchView_r8, 1);
-        if (BuddySwitch == 2) SendValue(OneSwitchView_r9, 1);
-        if (!ValueSent) SendValue(OneSwitchView_r0, 1); // nothing yet, so not used
-        if (SWITCH2Reversed) SendValue(OneSwitchViewc_revd, 1);
-    }
-    if (SwitchEditNumber == 3) {
-        ValueSent = false;
-        if (FMSwitch == 3) SendValue(OneSwitchView_r1, 1);
-        if (Autoswitch == 3) SendValue(OneSwitchView_r2, 1);
-        if (Channel9Switch == 3) SendValue(OneSwitchView_r3, 1);
-        if (Channel10Switch == 3) SendValue(OneSwitchView_r4, 1);
-        if (Channel11Switch == 3) SendValue(OneSwitchView_r5, 1);
-        if (Channel12Switch == 3) SendValue(OneSwitchView_r6, 1);
-        if (SafetySwitch == 3) SendValue(OneSwitchView_r7, 1);
-        if (DualRatesSwitch == 3) SendValue(OneSwitchView_r8, 1);
-        if (BuddySwitch == 3) SendValue(OneSwitchView_r9, 1);
-        if (!ValueSent) SendValue(OneSwitchView_r0, 1); // nothing yet, so not used
-        if (SWITCH3Reversed) SendValue(OneSwitchViewc_revd, 1);
-    }
-    if (SwitchEditNumber == 4) {
-        ValueSent = false;
-        if (FMSwitch == 4) SendValue(OneSwitchView_r1, 1);
-        if (Autoswitch == 4) SendValue(OneSwitchView_r2, 1);
-        if (Channel9Switch == 4) SendValue(OneSwitchView_r3, 1);
-        if (Channel10Switch == 4) SendValue(OneSwitchView_r4, 1);
-        if (Channel11Switch == 4) SendValue(OneSwitchView_r5, 1);
-        if (Channel12Switch == 4) SendValue(OneSwitchView_r6, 1);
-        if (SafetySwitch == 4) SendValue(OneSwitchView_r7, 1);
-        if (DualRatesSwitch == 4) SendValue(OneSwitchView_r8, 1);
-        if (BuddySwitch == 4) SendValue(OneSwitchView_r9, 1);
-        if (!ValueSent) SendValue(OneSwitchView_r0, 1); // nothing yet, so not used
-        if (SWITCH4Reversed) SendValue(OneSwitchViewc_revd, 1);
-    }
-    SendValue(SwNum, SwitchEditNumber); // show switch number
-}
-
+    ValueSent = false; // If no setting, = Not Used
+    if (FMSwitch == n)        SendValue(OneSwitchView_r1, n);
+    if (Autoswitch == n)      SendValue(OneSwitchView_r2, n);
+    if (Channel9Switch == n)  SendValue(OneSwitchView_r3, n);
+    if (Channel10Switch == n) SendValue(OneSwitchView_r4, n);
+    if (Channel11Switch == n) SendValue(OneSwitchView_r5, n);
+    if (Channel12Switch == n) SendValue(OneSwitchView_r6, n);
+    if (SafetySwitch == n)    SendValue(OneSwitchView_r7, n);
+    if (DualRatesSwitch == n) SendValue(OneSwitchView_r8, n);
+    if (BuddySwitch == n)     SendValue(OneSwitchView_r9, n);
+    if (!ValueSent)           SendValue(OneSwitchView_r0, n); // nothing yet, so not used
+    if (SWITCH1Reversed)      SendValue(OneSwitchViewc_revd, n);
+}    
 /*********************************************************************************************************************************/
-
-void RestoreBrightness()
-{
+void UpdateOneSwitchView(){
+    char SwNum[] = "Sw";
+    SendValue(SwNum, SwitchEditNumber); // show switch number
+    for (int i = 1; i < 5; i++)  DoOneSwitchView(i);
+}
+/*********************************************************************************************************************************/
+void RestoreBrightness(){
     char cmd[20];
     char dim[] = "dim=";
     char nb[10];
@@ -4122,8 +4046,7 @@ void RestoreBrightness()
 }
 /*********************************************************************************************************************************/
 
-void ZeroDataScreen()
-{ // ZERO Those parameters that are zeroable
+void ZeroDataScreen(){ // ZERO Those parameters that are zeroable
     TotalLostPackets   = 0;
     GapLongest         = 0;
     GapSum             = 0;
@@ -6316,7 +6239,7 @@ FASTRUN void ButtonWasPressed()
                 UpdateSwitchesView();
             }
             if (CurrentView == ONE_SWITCH_VIEW) {
-                updateOneSwitchView();
+                UpdateOneSwitchView();
             }
             if (CurrentView == MODELSVIEW) {
                 SendValue(ModelsView_ModelNumber, ModelNumber);
@@ -6415,7 +6338,7 @@ FASTRUN void ButtonWasPressed()
             SwitchEditNumber = GetChannel(); // which switch?
             CurrentView      = ONE_SWITCH_VIEW;
             SendCommand(PageOneSwitchView); // edit one switch - could be 1-4
-            updateOneSwitchView();
+            UpdateOneSwitchView();
             UpdateModelsNameEveryWhere();
             ClearText();
             return;
