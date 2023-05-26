@@ -93,9 +93,12 @@
 #define MAXBUFFERSIZE           1024 * 6
 #define MAXMODELNUMBER          91
 #define PERFECTPACKETSPERSECOND 150                       // Flat out perfect packets per second
-#define PIPES_TO_COMPARE        6
 #define RED_LED_ON_TIME         3500                      // How many ms of no connection before RED led comes on
 #define LOW_VOLTAGE_TIME        5000                      // How many ms to endure low voltage before announcing it. (5 seconds)
+#define MAXSHOWCOMMSSESCONDS    6                         // Assess average connection quality over most recent 6 seconds continously
+#define SHOWCOMMSDELAY          1000                      // ms pauses between updated info on NEXTION
+#define WARMUPDELAY             300                       // fails at 200 so must be >200 ...
+#define SCREENCHANGEWAIT        100                       // allow time for screen to appear
 
 // **************************************************************************
 //                            FHSS PARAMETERS                               *
@@ -388,10 +391,8 @@
 //***************************************************************************
 
 #define NEXTION              Serial1 // NEXTION is connected to Serial1
-#define MAXSHOWCOMMSSESCONDS 6       // Assess average connection quality over most recent 6 seconds continously
-#define SHOWCOMMSDELAY       1000    // ms pauses between updated info on NEXTION
-#define WARMUPDELAY          300     // fails at 200 so must be >200 ...
-#define SCREENCHANGEWAIT     100     // allow time for screen to appear
+
+
 
 
 // **************************************************************************

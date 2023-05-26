@@ -35,7 +35,7 @@ void StartTrimDefView()
 void DefineTrimsEnd()
 { // exit from trim defining screen
     char pCalibrateView[] = "page CalibrateView";
-    CurrentView           = TXSETUPVIEW;
+    CurrentView  = TXSETUPVIEW;
     SendCommand(pCalibrateView);
     Force_ReDisplay();
     CurrentView   = CALIBRATEVIEW;
@@ -198,10 +198,9 @@ if (SticksMode == 2){
 
 void CheckHardwareTrims()
 {
-    int i;
     if ((millis() - TrimTimer) < TrimRepeatSpeed) return; // check occasionally for trim press 
     TrimTimer = millis();
-    for (i = 0; i < 8; ++i) {
+    for (int i = 0; i < 8; ++i) {
         if (TrimSwitch[i]) {
             if (DefiningTrims) {
                 SetATrimDefinition(i);
@@ -218,13 +217,12 @@ void CheckHardwareTrims()
 /*********************************************************************************************************************************/
 
 int GetTrimAmount(uint8_t InputChannel){ 
-    int TrimAmount, tt = InputChannel;
-        
+    int tt = InputChannel;
         if (SticksMode == 2) {
             if (InputChannel == 1) tt = 2;
             if (InputChannel == 2) tt = 1; 
         }
-        TrimAmount = (Trims[Bank][tt] - 80) * TrimMultiplier; // TRIMS on lower four input channels (80 is mid point !! (range 40 - 80 - 120)) 
+        int TrimAmount = (Trims[Bank][tt] - 80) * TrimMultiplier; // TRIMS on lower four input channels (80 is mid point !! (range 40 - 80 - 120)) 
         return TrimAmount;
 }
 /*********************************************************************************************************************************/
