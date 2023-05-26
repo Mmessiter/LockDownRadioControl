@@ -397,3 +397,13 @@ void SendBindingPipe()
     if (!BoundFlag || !ModelMatched) BindingTimer = millis();
     if ((millis() - BindingTimer) < BindPause) BufferTeensyMACAddPipe(); 
 }
+
+
+/*********************************************************************************************************************************/
+
+void NormaliseTheRadio()
+{
+    SetThePipe(DefaultPipe);
+    Radio1.setCRCLength(RF24_CRC_16);
+    Radio1.setRetries(RETRYCOUNT, RETRYWAIT);
+}

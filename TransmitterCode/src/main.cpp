@@ -3669,15 +3669,6 @@ void MovePoint()
 }
 
 /*********************************************************************************************************************************/
-
-void NormaliseTheRadio()
-{
-    SetThePipe(DefaultPipe);
-    Radio1.setCRCLength(RF24_CRC_16);
-    Radio1.setRetries(RETRYCOUNT, RETRYWAIT);
-}
-
-/*********************************************************************************************************************************/
 void ShowFileProgress(char* Msg)
 {
     char t1[] = "t1";
