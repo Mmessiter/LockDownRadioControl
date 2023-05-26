@@ -4620,7 +4620,7 @@ void SetupViewFM()
 void Options2End()
 { // back to setup?
     char dGMT[]           = "dGMT";
-    char page_SetupView[] = "page SetupView";
+    char page_SetupView[] = "page TXSetupView";
     DeltaGMT              = GetValue(dGMT);
     SaveTransmitterParameters();
     CurrentView = TXSETUPVIEW;
@@ -4689,9 +4689,9 @@ void OptionView3Start() /// NOT CALLED
 
 /******************************************************************************************************************************/
 
-void RXSetup1Start() // model options screen
+void RXOptionsViewStart() // model options screen
 {
-    char pRXSetup1[]  = "page RXSetupView1";
+    char pRXSetup1[]  = "page RXOptionsView";
     char UseKill[]        = "c0";
     char Mchannel[]       = "n1";
     char Mvalue[]         = "n0";
@@ -4796,7 +4796,7 @@ void OptionView3End() //
     char n2[]             = "n2"; 
     char n3[]             = "n3";
     char n1[]             = "n1";
-    char page_SetupView[] = "page SetupView";
+    char page_SetupView[] = "page TXSetupView";
     char QNH[]            = "Qnh";
 
     TxVoltageCorrection     = GetValue(TxVCorrextion);
@@ -5592,7 +5592,7 @@ void SelectChannelOrder(){
 
  void TXModuleViewEnd(){
 
-    char page_SetupView[] = "page SetupView";
+    char page_SetupView[] = "page TXSetupView";
     char GoBack[] = "page TXModuleView";
     char c1[] = "c1";   // Use module
     char n3[] = "n3";   // number of channels
@@ -5682,7 +5682,7 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     ElevatorDownTrim,     // 35
     ThrottleDownTrim,     // 36  
     ThrottleUpTrim,       // 37  
-    RXSetup1Start,        // 38  
+    RXOptionsViewStart,        // 38  
     RXSetup1End,          // 39    
     ResetTransmitterSettings,   // 40
     BindNow,                    // 41
@@ -5804,7 +5804,7 @@ FASTRUN void ButtonWasPressed()
         char ModelsView_ModelNumber[]  = "ModelNumber";
         char page_SticksView[]         = "page SticksView";
         char page_GraphView[]          = "page GraphView";
-        char page_SetupView[]          = "page SetupView";
+        char page_SetupView[]          = "page TXSetupView";
         char page_AudioView[]          = "page AudioView";
         char page_ColoursView[]        = "page ColoursView";
         char GoSetupView[]             = "GoSetupView";
@@ -5884,7 +5884,7 @@ FASTRUN void ButtonWasPressed()
         char pDataView[]               = "page DataView";
         char pSwitchesView[]           = "page SwitchesView";
         char pInputsView[]             = "page InputsView";
-        char pOptionsViewS[]           = "page OptionsView";
+        char pOptionsViewS[]           = "page OptionsView"; // TX options view
         
         char pMixesView[]              = "page MixesView";
         char pTypeView[]               = "page TypeView";
@@ -6224,10 +6224,10 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(OptionsViewS, TextIn) > 0) {  // start tx setup screen 1
+        if (InStrng(OptionsViewS, TextIn) > 0) {  // start tx options screen 1
             FixDeltaGMTSign();
             if (CurrentView == OPTIONVIEW2) DeltaGMT = GetValue(dGMT);
-            SendCommand(pOptionsViewS);
+            SendCommand(pOptionsViewS);  // TX options view
             SendValue(n0, SticksMode);
             SendValue(ScreenViewTimeout, ScreenTimeout);
             SendValue(Pto, (Inactivity_Timeout / TICKSPERMINUTE));
