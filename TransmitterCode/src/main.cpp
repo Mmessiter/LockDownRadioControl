@@ -3558,7 +3558,6 @@ void MoveCurrentPointUp()
         case 5:
            ++ MaxDegrees[Bank][ChanneltoSet - 1];
            break;
-
         default:
             break;
           
@@ -3569,31 +3568,28 @@ void MoveCurrentPointUp()
 /*********************************************************************************************************************************/
 void MoveCurrentPointDown()  
 {
-
     switch (CurrentPoint){ 
         case 1:
-            -- MinDegrees[Bank][ChanneltoSet - 1];
+            if (MinDegrees[Bank][ChanneltoSet - 1])     -- MinDegrees[Bank][ChanneltoSet - 1];
             break;
         
         case 2:
-            -- MidLowDegrees[Bank][ChanneltoSet - 1];
+            if (MidLowDegrees[Bank][ChanneltoSet - 1])  -- MidLowDegrees[Bank][ChanneltoSet - 1];
             break;
 
         case 3:
-            -- CentreDegrees[Bank][ChanneltoSet - 1];
+            if (CentreDegrees[Bank][ChanneltoSet - 1])  -- CentreDegrees[Bank][ChanneltoSet - 1];
             break;
 
         case 4:
-           -- MidHiDegrees[Bank][ChanneltoSet - 1];
-           break;
+            if (MidHiDegrees[Bank][ChanneltoSet - 1])   -- MidHiDegrees[Bank][ChanneltoSet - 1];
+            break;
         
         case 5:
-           -- MaxDegrees[Bank][ChanneltoSet - 1];
-           break;
-
+            if(MaxDegrees[Bank][ChanneltoSet - 1])      -- MaxDegrees[Bank][ChanneltoSet - 1];
+            break;
         default:
             break;
-          
     }
     DisplayCurve();
 }
@@ -6333,7 +6329,6 @@ FASTRUN void ButtonWasPressed()
                 ++i;
                 SingleModelFile[j] = 0;
             }
-          //  Serial.println(SingleModelFile);
             SendModelFile();
             ClearText();
             return;
