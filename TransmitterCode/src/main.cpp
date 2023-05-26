@@ -5779,7 +5779,6 @@ FASTRUN void ButtonWasPressed()
         char ClickX[]                  = "ClickX";
         char ClickY[]                  = "ClickY";
         char Reset[]                   = "Reset";
-        char Reverse[]                 = "Reverse";
         char Front_View[]              = "FrontView";
         char Sticks_View[]             = "SticksView";
         char Graph_View[]              = "GraphView";
@@ -6872,31 +6871,12 @@ if (InStrng(Export, TextIn)) {
 
         if (InStrng(Reset, TextIn)) // Now zeros EXPO only
         {
-          
             Exponential[Bank][ChanneltoSet - 1]        = DEFAULT_EXPO;
             InterpolationTypes[Bank][ChanneltoSet - 1] = EXPONENTIALCURVES; // expo = default
             DisplayCurveAndServoPos();
             return;
         }
 
-        if (InStrng(Reverse, TextIn)) // REVERSE always reverses ALL FLIGHT MODES
-        {
-            for (int i = 1; i <= 4;++i){
-                p = MinDegrees[i][ChanneltoSet - 1];
-                MinDegrees[i][ChanneltoSet - 1]    = 180 - p;
-                p                                           = MidLowDegrees[i][ChanneltoSet - 1];
-                MidLowDegrees[i][ChanneltoSet - 1] = 180 - p;
-                p                                           = CentreDegrees[i][ChanneltoSet - 1];
-                CentreDegrees[i][ChanneltoSet - 1] = 180 - p;
-                p                                           = MidHiDegrees[i][ChanneltoSet - 1];
-                MidHiDegrees[i][ChanneltoSet - 1]  = 180 - p;
-                p                                           = MaxDegrees[i][ChanneltoSet - 1];
-                MaxDegrees[i][ChanneltoSet - 1]    = 180 - p;    
-            }
-            DisplayCurveAndServoPos();
-            ClearText();
-            return;
-        }
         p = (InStrng(ClickX, TextIn)); // Clicked to move point?
         if (p > 0) {
             XtouchPlace = GetNextNumber(p + 7, TextIn);
