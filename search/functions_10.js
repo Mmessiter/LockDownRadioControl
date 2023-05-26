@@ -67,6 +67,6 @@ var searchData=
   ['rudderlefttrim_64',['RudderLeftTrim',['../TransmitterCode_2src_2main_8cpp.html#ae96314eac241d2716e7ebda1fc658ec4',1,'main.cpp']]],
   ['rudderrighttrim_65',['RudderRightTrim',['../TransmitterCode_2src_2main_8cpp.html#a77a49849e3aa20dc1aadce0fe00de798',1,'main.cpp']]],
   ['runmacro_66',['RunMacro',['../macros_8h.html#a91fb686ba2d3111821721ab33b442918',1,'macros.h']]],
-  ['rxsetup1end_67',['RXSetup1End',['../TransmitterCode_2src_2main_8cpp.html#a2e0aa19fa93c1bacd9b4600025f33594',1,'main.cpp']]],
-  ['rxsetup1start_68',['RXSetup1Start',['../TransmitterCode_2src_2main_8cpp.html#a127743223a757b674107ccfc9d77f12f',1,'main.cpp']]]
+  ['rxoptionsviewstart_67',['RXOptionsViewStart',['../TransmitterCode_2src_2main_8cpp.html#af9735ed306706d15b52bef04ac954bd9',1,'main.cpp']]],
+  ['rxsetup1end_68',['RXSetup1End',['../TransmitterCode_2src_2main_8cpp.html#a2e0aa19fa93c1bacd9b4600025f33594',1,'main.cpp']]]
 ];

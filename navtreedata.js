@@ -82,7 +82,7 @@ var NAVTREEINDEX =
 "MPU6050_8h.html#adf909a696e2ebf9ba3dba9570ae02af2",
 "Quadcopter_2src_2main_8cpp.html#a4a54031db51ac84196bbdada8e90d9ea",
 "ReceiverCode_2src_2main_8cpp.html#ab92133bc8cbae639e681505e0679bc28",
-"TransmitterCode_2src_2main_8cpp.html#a9e1de754e1d2d483fb15957f70cf0488",
+"TransmitterCode_2src_2main_8cpp.html#a9ec95181a743e446cdec2e0fbf569f2c",
 "classMPU6050.html#a3cff6b9613ad01aa1a51c287f5c5e329",
 "classMPU9250.html#a29cf790113cc58face9d1a2ddaddb567",
 "classQuaternion.html",
