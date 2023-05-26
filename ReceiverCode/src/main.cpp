@@ -22,13 +22,13 @@
  * @section rxpinout TEENSY 4.0 PINS
  * | pin number(s) | purpose |
  * |---------------|---------|
- * | 0...8 | PWM SERVOS Channels 1 - 9 |  (Channels 10 - 16 available via SBUS)
+ * | 0...8 | PWM SERVOS Channels 1 - 9 |  (Channels 10 - 16 available via SBUS)  (TODO:the 8 PWM outputs on PCB could be expanded to 11.)
  * | 9     | SPI CE1  (FOR RADIO1) |
  * | 10    | SPI CSN1 (FOR RADIO1)  |
  * | 11    | SPI MOSI (FOR BOTH RADIOS)  |
  * | 12    | SPI MISO (FOR BOTH RADIOS)  |
  * | 13    | SPI SCK  (FOR BOTH RADIOS) |
- * | 14    | SBUS *OR PPM* output (TX3) |
+ * | 14    | SBUS *OR PPM* output (Serial TX3) |
  * | 15    | Don't use if using SBUS. The driver takes it (RX3) |
  * | 16    | RED LED  - This LED is ON when connected, OFF when disconnected and blinking when binding 
  * | 17    | BIND PLUG (held LOW means plug is in)
