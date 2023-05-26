@@ -157,7 +157,6 @@ var Definitions_8h =
     [ "PADDLEGAP", "Definitions_8h.html#a4fd3982c93d3562882d68e6902d4bed3", null ],
     [ "PADDLEHEIGHT", "Definitions_8h.html#acc5eb8a97e160ba0bcf65b6d7caaf38f", null ],
     [ "PERFECTPACKETSPERSECOND", "Definitions_8h.html#ad19ebeeabe5c8ede82c5be3f8d3f7776", null ],
-    [ "PIPES_TO_COMPARE", "Definitions_8h.html#a820e3704750ed47bfb6bd2c3c6b54fce", null ],
     [ "PLSTURNOFF", "Definitions_8h.html#a3d9e7817e8c3f47044067ead9b8ce38b", null ],
     [ "PONGBALLSIZE", "Definitions_8h.html#a6a999268e2ca267f555f9d7c7ac4709d", null ],
     [ "PONGBALLSPEED", "Definitions_8h.html#a2964f2d96ad9ad297a4ee34f51a59392", null ],
