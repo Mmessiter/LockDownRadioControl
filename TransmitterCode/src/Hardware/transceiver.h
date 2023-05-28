@@ -7,6 +7,9 @@
 //                                 Most Radio Functions 
 /************************************************************************************************************/
 
+// This functions performs lossless compression on the data sent to receiver, to keep it below 32 bytes 
+// and minimise latency. The receiver de-compresses of course.
+
  /* Compresses uint16_t* buffer values (each with 12 bit resolution - the lower 12 bits).
  * @param compressed_buf[out] Must have allocated 3/4 the size of uncompressed_buf
  * @param uncompressed_buf[in]
@@ -29,7 +32,6 @@ FASTRUN void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uint
     } 
 }
 
-
 /************************************************************************************************************/
 void RecordsPacketSuccess(uint8_t s)
 { // or failure according to s
@@ -39,11 +41,6 @@ static uint16_t PacketsHistoryIndex    = 0;
     if (PacketsHistoryIndex >= (PERFECTPACKETSPERSECOND * ConnectionAssessSeconds)) PacketsHistoryIndex = 0; //
 }
 
-/************************************************************************************************************/
-//void ForceNextChannel(){
-//        NextChannel = *(FHSS_data::FHSSChPointer + FHSS_data::NextChannelNumber); // We already have index to next channel
-//        HopToNextChannel();
-//}
 /************************************************************************************************************/
 
 FASTRUN void FailedPacket()
@@ -407,3 +404,4 @@ void NormaliseTheRadio()
     Radio1.setCRCLength(RF24_CRC_16);
     Radio1.setRetries(RETRYCOUNT, RETRYWAIT);
 }
+

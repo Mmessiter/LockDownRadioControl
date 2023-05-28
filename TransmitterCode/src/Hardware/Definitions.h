@@ -25,7 +25,7 @@
 //    DEBUG OPTIONS (Uncomment any of these for that bit of debug info)     *
 //***************************************************************************
 
-// #define DB_NEXTION        // Debug NEXTION
+ #define DB_NEXTION        // Debug NEXTION
 // #define DB_SD             // Debug SD card data
 // #define DB_CHECKSUM       // Debug 32BIT file checksum info
 // #define DB_FHSS           // Debug real time FHSS data
@@ -56,17 +56,6 @@
 //                               General                                    *
 // **************************************************************************
 
-#define DEFAULTPIPEADDRESS      0xB7BE3E9423LL            // Pipe address for startup - any value but MUST match RX
-#define CHANNELSUSED            16                        // 16 Channels
-#define MAXMIXES                32                        // 32 mixes
-#define TICKSPERMINUTE          60000                     // millis() = 60000 per minute
-#define PROPOCHANNELS           8                         // Only 4 have knobs / 2 sticks (= 4 hall sensors)
-#define BANKSWITCH              4                         // Default MODE switch
-#define AUTOSWITCH              1                         // Default AUTO switch
-#define BANKSUSED               4                         // Flight modes (AKA Banks)
-#define LOWBATTERY              42                        // Default percent for warning (User definable)
-#define DEFAULTTRIMREPEATSPEED  600
-
 #ifdef NEWPCB                              // ***>>> red or green PCBs ... not old black <<<***
   #define CE_PIN                  7                         // for SPI to nRF24L01
   #define CSN_PIN                 8                         // for SPI to nRF24L01
@@ -77,6 +66,16 @@
   #define BUDDYPPMPORT            6                         // Buddybox PPM pin
 #endif
 
+#define DEFAULTPIPEADDRESS      0xB7BE3E9423LL            // Pipe address for startup - any value but MUST match RX
+#define CHANNELSUSED            16                        // 16 Channels
+#define MAXMIXES                32                        // 32 mixes
+#define TICKSPERMINUTE          60000                     // millis() = 60000 per minute
+#define PROPOCHANNELS           8                         // Only 4 have knobs / 2 sticks (= 4 hall sensors)
+#define BANKSWITCH              4                         // Default MODE switch
+#define AUTOSWITCH              1                         // Default AUTO switch
+#define BANKSUSED               4                         // Flight modes (AKA Banks)
+#define LOWBATTERY              42                        // Default percent for warning (User definable)
+#define DEFAULTTRIMREPEATSPEED  600
 #define INACTIVITYTIMEOUT       10 * TICKSPERMINUTE       // Default time after which to switch off
 #define INACTIVITYMINIMUM       05 * TICKSPERMINUTE       // Inactivity timeout minimum is 5 minutes
 #define INACTIVITYMAXIMUM       30 * TICKSPERMINUTE       // Inactivity timeout maximum is 30 minutes
@@ -377,7 +376,6 @@
 #define MAXMACROS     8 // 8 macros enough for now?
 #define BYTESPERMACRO 6 // 6 bytes each
 
-
 // **************************************************************************
 //                            PPM PARAMETERS   (FOR BUDDY BOXING)          *
 //***************************************************************************
@@ -391,9 +389,6 @@
 //***************************************************************************
 
 #define NEXTION              Serial1 // NEXTION is connected to Serial1
-
-
-
 
 // **************************************************************************
 //                            WATCHDOG PARAMETERS                           *
@@ -867,7 +862,6 @@ uint32_t  MacroStopTime[MAXMACROS];
 uint8_t   PreviousMacroNumber = 1;
 bool      UseMacros           = false;
 
-
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************
 // **********************************************************************************************************************************
@@ -889,8 +883,6 @@ uint8_t*  FHSSRecoveryPointer;
 uint8_t*  FHSSChPointer;                // pointer for channels array (three only used for Recovery)
 uint8_t   NextChannelNumber  = 0;
 }
-
-
 
 // *********************************************** END OF GLOBAL DATA ***************************************************************
 
