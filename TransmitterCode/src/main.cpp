@@ -1692,7 +1692,7 @@ bool LoadAllParameters()
         LEDBrightness = SDRead8BITS(SDCardAddress);
         LEDBrightness = CheckRange(LEDBrightness, 1, 254);
         ++SDCardAddress;
-        // one spare byte here!
+        // one spare tx byte here!
         //
         ++SDCardAddress;
         ConnectionAssessSeconds = SDRead8BITS(SDCardAddress);
@@ -1709,7 +1709,7 @@ bool LoadAllParameters()
         if ((PPMdata.PPMChannelsNumber > 16) || (PPMdata.PPMChannelsNumber < 1)) PPMdata.PPMChannelsNumber = 6;
         ++SDCardAddress;
        
-      // Not used!!! (yet)  1 spare
+      // Not used!!! (yet)  1 tx spare
        
         ++SDCardAddress;
          PPMdata.UseTXModule = SDRead8BITS(SDCardAddress);
