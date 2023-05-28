@@ -5761,6 +5761,8 @@ FASTRUN void ButtonWasPressed()
             }
         }
         int  i                         = 0;
+        int  j                         = 0;
+        int  p                         = 0;
         char lpm[]                     = "c0"; // Auto model selection
         char Setup[]                   = "Setup";
         char ClickX[]                  = "ClickX";
@@ -5785,8 +5787,6 @@ FASTRUN void ButtonWasPressed()
         char FM4[]                     = "FM 4";
         char ReScan[]                  = "ReScan";
         char Delete[]                  = "Delete";
-        int  j                         = 0;
-        int  p                         = 0;
         char MixesView_MixNumber[]     = "MixNumber";
         char ModelsView_ModelNumber[]  = "ModelNumber";
         char page_SticksView[]         = "page SticksView";
@@ -5832,7 +5832,7 @@ FASTRUN void ButtonWasPressed()
         char fs[16][5]                 = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
         char CH1NAME[]                 = "CH1NAME=";
         char CH2NAME[]                 = "CH2NAME=";
-          char b17[]                  = "b17";
+        char b17[]                     = "b17";
         char CH3NAME[]                 = "CH3NAME=";
         char CH4NAME[]                 = "CH4NAME=";
         char CH5NAME[]                 = "CH5NAME=";
@@ -5872,15 +5872,12 @@ FASTRUN void ButtonWasPressed()
         char pSwitchesView[]           = "page SwitchesView";
         char pInputsView[]             = "page InputsView";
         char pOptionsViewS[]           = "page OptionsView"; // TX options view
-        
         char pMixesView[]              = "page MixesView";
         char pTypeView[]               = "page TypeView";
-       
         char pFailSafe[]               = "page FailSafeView";
         char DataView_Clear[]          = "Clear";
         char DataView_AltZero[]        = "AltZero";
         char OptionsEnd[]              = "OptionsEnd";
-       
         char Mark[]                 = "Mark";
         char UKRULES[]              = "UKRULES";
         char Htext0[]               = "HELP";
@@ -5923,19 +5920,18 @@ FASTRUN void ButtonWasPressed()
         char hhead[]                = "Create backup file for";
         char fprompt[]              = "Filename?";
         char page_RXSetupView[]     = "page RXSetupView";
-        char     ProgressStart[]       = "vis Progress,1";
-        char     ProgressEnd[]         = "vis Progress,0";
-        char     Progress[]            = "Progress";
-        char      ScreenViewTimeout[]         = "Sto"; // needed for display info
-        char      page_FhssView[]             = "page FhssView";
-        char      FrontView_Hours[]           = "Hours";
-        char      FrontView_Mins[]            = "Mins";
-        char      FrontView_Secs[]            = "Secs";
-        char      StartBackGround[]           = "click Background,0";
-        char     GoModelsView[]                  = "page ModelsView";
-
-        char     pCalibrateView[]                = "page CalibrateView";
-        // ************************* test input words from Nextion *****************
+        char ProgressStart[]        = "vis Progress,1";
+        char ProgressEnd[]          = "vis Progress,0";
+        char Progress[]             = "Progress";
+        char ScreenViewTimeout[]    = "Sto"; // needed for display info
+        char page_FhssView[]        = "page FhssView";
+        char FrontView_Hours[]      = "Hours";
+        char FrontView_Mins[]       = "Mins";
+        char FrontView_Secs[]       = "Secs";
+        char StartBackGround[]      = "click Background,0";
+        char GoModelsView[]         = "page ModelsView";
+        char pCalibrateView[]       = "page CalibrateView";
+        // ************************* test many input words from Nextion *****************
 
         if (InStrng(StCH, TextIn)) { // select sub trim channel
             SubTrimToEdit = GetValue(s0);
@@ -5988,7 +5984,6 @@ FASTRUN void ButtonWasPressed()
         if (InStrng(SetupAud, TextIn) > 0) { // Exit from screen with audio options
             CurrentMode = NORMAL;
             AudioVolume = GetValue(n0);
-           // if (AudioVolume < 5) AudioVolume = 5;
             Brightness        = GetValue(n1);
             PlayFanfare       = GetValue(c0);
             TrimClicks        = GetValue(c1);
@@ -6022,8 +6017,6 @@ FASTRUN void ButtonWasPressed()
             UpdateModelsNameEveryWhere();
             return;
         }
-    
-        
         if (InStrng(Mark, TextIn) > 0) {
             GPSMarkHere    = 255; // Mark this location
             GPSMaxDistance = 0;
@@ -6048,15 +6041,12 @@ FASTRUN void ButtonWasPressed()
                         SendText(b17, Htext0);
                     }
                 }
-                
-
                 FHSS_data::UkRulesCounter = 0;
             }
             ClearText();
             return;
         }
 
-     
 
         if (InStrng(OptionsEnd, TextIn) > 0) { // Exit from TX Options screen1
             SendCommand(ProgressStart);
