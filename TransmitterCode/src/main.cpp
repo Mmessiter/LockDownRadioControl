@@ -397,7 +397,7 @@ FASTRUN bool CheckTXVolts()
         strcat(TXBattInfo, pc);
         if (CurrentView == FRONTVIEW) {
             SendValue(JTX, TransmitterBatteryPercentLeft);
-            strcat(nbuf, v); 
+            strcat(nbuf, v);
             SendText(FrontView_TXBV, nbuf);
         }
         if (CurrentView == DATAVIEW) {
