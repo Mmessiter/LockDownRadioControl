@@ -7567,7 +7567,7 @@ FASTRUN void ParseAckPayload()
             GetTimeFromAckPayload();
             ReadTheRTC();
             if (GPSDay   != GmonthDay) GPSTimeSynched = false;
-            if (GPSMonth != GPSMonth)  GPSTimeSynched = false;
+            if (GPSMonth != Gmonth)    GPSTimeSynched = false;
             if (GPSMins  != Gminute)   GPSTimeSynched = false;
             if (GPSHours != Ghour)     GPSTimeSynched = false;
             if (GPSSecs  != Gsecond)   GPSTimeSynched = false;
