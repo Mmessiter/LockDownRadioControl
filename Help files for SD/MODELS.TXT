@@ -5,7 +5,15 @@ Scroll the left side of the screen to select a model from 1 to 89.||
 These are listed on the right hand side.||
 
 'Restore' reads a file into the currently selected model number, 
-overwriting whatever was there before. ||
+overwriting whatever was there. ||
+
+'ID check' will display receiver IDs for model memories stored, and check for any duplicates which should be avoided. ||
+
+When AMS (automatic model selection) is turned off, or the ID of the connecting model is not stored yet, the transmitter will connect to the currently loaded model - whatever it's stored ID.||
+
+On the main 'Model Setup' screen is the option to delete or to store the currently connected model ID. An ID cannot be stored when not connected, but it can be deleted.||
+
+To use AMS, be sure to store the IDs of your models with the right memory.||
 
 To 'Send' a model memory file wirelessly to another transmitter:||
 
