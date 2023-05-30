@@ -1382,7 +1382,7 @@ bool ReadOneModel(uint32_t Mnum)
     RXCellCount = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
     TrimMultiplier = SDRead16BITS(SDCardAddress);
-    TrimMultiplier=CheckRange(TrimMultiplier, 1, 20);
+    TrimMultiplier=CheckRange(TrimMultiplier,0, 25);
     ++SDCardAddress;
     ++SDCardAddress;
     LowBattery = SDRead8BITS(SDCardAddress);
