@@ -45,18 +45,18 @@ static uint16_t PacketsHistoryIndex    = 0;
 
 FASTRUN void FailedPacket()
 {
-    RecordsPacketSuccess(0);                        // Record a failure
-    ++RecentPacketsLost;                            // this is to keep track of events when receiver is off
-    ++TotalLostPackets;                             // This is total - never zeroed          
-        if (RecentPacketsLost >= LOSTCONTACTCUTOFF){// Don't panic until at least LOSTCONTACTCUTOFF packets are lost.
-            if (!GapStart) GapStart = millis();     // To keep track of this gap's length
+    RecordsPacketSuccess(0);                              // Record a failure
+    ++RecentPacketsLost;                                  // this is to keep track of events when receiver is off
+    ++TotalLostPackets;                                   // This is total - never zeroed          
+        if (RecentPacketsLost >= LOSTCONTACTCUTOFF){      // Don't panic until at least LOSTCONTACTCUTOFF packets are lost.
+            if (!GapStart) GapStart = millis();           // To keep track of this gap's length
             LostContactFlag = true;
             Reconnected     = false;
-            if ((millis() - GapStart) > RED_LED_ON_TIME) { // there's no need to blink red for every single lost packet. Only after 1/2 second of no connection.
+            if ((millis() - GapStart) > RED_LED_ON_TIME) { // there's no need to blink red for every single lost packet. Only after 3.5 seconds of no connection.
                 if (LedWasGreen && UseLog) {
                     LogThisLongGap();
                 }
-                if (!LedWasRed) {
+                if (!LedWasRed) {                          // Put on red led - receiver must be off
                     RedLedOn();
                     ReEnableScanButton();
                 }

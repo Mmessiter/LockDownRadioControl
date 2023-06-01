@@ -289,7 +289,7 @@ char      FrontView_Secs[]            = "Secs";
             if ((!Mins) && (!Secs) && (ElapsedSeconds > 2)) {
                 PlaySound(STORAGECHARGE);   // = Stop Flyfing!
                 TimesUp = true;
-                CountDownIndex  = 0;
+                CountDownIndex = 0;
             }
         }
 
