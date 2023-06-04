@@ -886,14 +886,4 @@ uint8_t   NextChannelNumber  = 0;
 
 // *********************************************** END OF GLOBAL DATA ***************************************************************
 
-// These files are included *AFTER* the Definitions, otherwise they can't see the definitions! :-)
-
-#include "Hardware/StructsEtc.h" 
-#include "Hardware/Utilities.h" 
-#include "Hardware/transceiver.h" 
-#include "Hardware/Pong.h" 
-#include "Hardware/macros.h" 
-#include "Hardware/Trims.h" 
-#include "Hardware/ModelMatch.h" 
-#include "Hardware/Nextion.h" 
 #endif

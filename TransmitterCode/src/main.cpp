@@ -117,7 +117,17 @@
  */
 // ************************************************** TRANSMITTER CODE **************************************************
 
-#include "Hardware/Definitions.h" // This file contains many definitions and many further includes
+#include "Hardware/Definitions.h" 
+#include "Hardware/StructsEtc.h" 
+#include "Hardware/Utilities.h" 
+#include "Hardware/transceiver.h" 
+#include "Hardware/Pong.h" 
+#include "Hardware/macros.h" 
+#include "Hardware/Trims.h" 
+#include "Hardware/ModelMatch.h" 
+#include "Hardware/Nextion.h" 
+
+//*************************************************************************************************************************
 
 // This function reads data from BUDDY (Slave) BUT uses it ONLY WHILE buddy switch is on
 
