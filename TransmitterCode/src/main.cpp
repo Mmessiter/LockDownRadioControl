@@ -6868,7 +6868,7 @@ if (InStrng(Export, TextIn)) {
             XtouchPlace = GetNextNumber(p + 7, TextIn);
             // This drops through to get Y as well before moving the point
         }
-        p = (InStrng(ClickY, TextIn)); // Clicked to move point?
+        p = (InStrng(ClickY, TextIn)); // Clicked to move point?  // heer 
         if (p > 0) {
             YtouchPlace = GetNextNumber(p + 7, TextIn);
             MovePoint();
