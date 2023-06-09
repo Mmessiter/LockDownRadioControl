@@ -117,7 +117,21 @@
  */
 // ************************************************** TRANSMITTER CODE **************************************************
 
-#include "Hardware/Definitions.h" 
+
+#include <Arduino.h>                    
+#include <Watchdog_t4.h>
+#include <TeensyID.h> 
+#include <PulsePosition.h>
+#include <RF24.h>
+#include <SD.h>
+#include <SPI.h>
+#include <Wire.h>
+#include <Adafruit_INA219.h>
+#include <DS1307RTC.h>
+#include <InterpolationLib.h>
+
+#include "Hardware/Definitions.h"  // must be here! (not higher or lower);
+
 #include "Hardware/StructsEtc.h" 
 #include "Hardware/Utilities.h" 
 #include "Hardware/transceiver.h" 

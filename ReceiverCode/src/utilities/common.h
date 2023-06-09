@@ -17,7 +17,7 @@
 
 #define RXVERSION_MAJOR   2
 #define RXVERSION_MINOR   2
-#define RXVERSION_MINIMUS 0 // May 2023
+#define RXVERSION_MINIMUS 1 // June 2023
 
 // #define DB_FHSS
 // #define DB_SENSORS
@@ -71,7 +71,7 @@
 #define pinCE2           21   // NRF2
 #define FAILSAFE_TIMEOUT 2000 // two seconds until failsafe
 
-#define RECONNECT_CHANNELS_COUNT 4                         // How many channels to try when reconnecting
+#define RECONNECT_CHANNELS_COUNT 2                         // How many channels to try when reconnecting
 #define RECONNECT_CHANNELS_START 12                        // Offset in the array to begin getting reconnect channels
 
 #define UNCOMPRESSEDWORDS        20                        //   16 Channels plus extra 4 16 BIT values

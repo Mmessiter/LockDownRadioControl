@@ -1,6 +1,5 @@
 // ******************** Definitions.h ****************************************
 //     This header file has many prototypes, definitions                     *
-//     ** It has many more includes AT THE BOTTOM ! **                       *
 // ****************************************************************************
 
 #ifndef Definitions_H
@@ -19,7 +18,7 @@
 
 #define TXVERSION_MAJOR   2
 #define TXVERSION_MINOR   2
-#define TXVERSION_MINIMUS 0
+#define TXVERSION_MINIMUS 1
 
 // **************************************************************************
 //    DEBUG OPTIONS (Uncomment any of these for that bit of debug info)     *
@@ -35,22 +34,6 @@
 // #define DB_MODEL_EXCHANGE // Debug MODEL EXCHANGE (by RF link)
 // #define DB_GAPS           // Debug Connection Gap assessment
 // #define DB_IDS            // Debug Model IDs (Hitting the 'BACK' button on models' screen will Serial.print these to the terminal)
-
-// **************************************************************************
-//                               Includes                                   *
-// **************************************************************************
-
-#include <Arduino.h>
-#include <Watchdog_t4.h>
-#include <TeensyID.h> 
-#include <PulsePosition.h>
-#include <RF24.h>
-#include <SD.h>
-#include <SPI.h>
-#include <Wire.h>
-#include <Adafruit_INA219.h>
-#include <DS1307RTC.h>
-#include <InterpolationLib.h>
 
 // **************************************************************************
 //                               General                                    *
@@ -106,8 +89,8 @@
 #define PACEMAKER                7    // 7 MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
 #define RETRYCOUNT               2    // auto retries inside nRF24L01. MAX is 15. Fails below 2.
 #define RETRYWAIT                0    // = 250us = Wait between retries (RetryWait+1 * 250us)
-#define LOSTCONTACTCUTOFF        4    // How many packets to 'lose' before reconnect triggers (-- IT MIGHT BE JUST THE ACK WAS LOST)
-#define RECONNECT_CHANNELS_COUNT 4    // How many channels to try when reconnecting
+#define LOSTCONTACTCUTOFF        2    // How many packets to 'lose' before reconnect triggers 
+#define RECONNECT_CHANNELS_COUNT 2    // How many channels to try when reconnecting
 #define RECONNECT_CHANNELS_START 12   // Offset into channels' array
 
 // **************************************************************************
