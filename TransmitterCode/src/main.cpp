@@ -4066,61 +4066,30 @@ void ShowMotor(int on)
 /*********************************************************************************************************************************/
 
 
-void DoOneSwitchView(uint8_t n){           // re-write ... one day!!
+void DoOneSwitchView(uint8_t n){           // re-write one day ... This works, but not very elagantly.
     
-    // char OneSwitchView_r0[]    = "r0";     // Not used
-    // char OneSwitchView_r1[]    = "r1";     // Flight modes
-    // char OneSwitchView_r2[]    = "r2";     // Auto
-    // char OneSwitchView_r3[]    = "r3";     // Ch9
-    // char OneSwitchView_r4[]    = "r4";     // Ch10
-    // char OneSwitchView_r5[]    = "r5";     // Ch11
-    // char OneSwitchView_r6[]    = "r6";     // Ch12
-    // char OneSwitchView_r7[]    = "r7";     // Safety
-    // char OneSwitchView_r8[]    = "r8";     // Dual Rates
-    // char OneSwitchView_r9[]    = "r9";     // Buddy
-     char OneSwitchViewc_revd[] = "c_revd"; // Reversed
-
+    char OneSwitchView_r0[]    = "r0";     // Not used
+    char OneSwitchView_r1[]    = "r1";     // Flight modes
+    char OneSwitchView_r2[]    = "r2";     // Auto
+    char OneSwitchView_r3[]    = "r3";     // Ch9
+    char OneSwitchView_r4[]    = "r4";     // Ch10
+    char OneSwitchView_r5[]    = "r5";     // Ch11
+    char OneSwitchView_r6[]    = "r6";     // Ch12
+    char OneSwitchView_r7[]    = "r7";     // Safety
+    char OneSwitchView_r8[]    = "r8";     // Dual Rates
+    char OneSwitchView_r9[]    = "r9";     // Buddy
+    char OneSwitchViewc_revd[] = "c_revd"; // Reversed
     ValueSent = false;          // If no setting, = Not Used
 
-    char RadioButtons [10][3] = {"r1", "r2", "r7", "r8", "r3", "r4", "r5", "r6","r9"};
-    SendValue(RadioButtons[n], 1);
-
-
-  
-
-
-    // Serial.print("n = ");
-    // Serial.println(n); 
-    // if (FMSwitch)           Serial.print("FMSwitch = ");
-    // if (FMSwitch)           Serial.println(FMSwitch);
-    // if (Autoswitch)         Serial.print("Autoswitch = ");
-    // if (Autoswitch)         Serial.println(Autoswitch);
-    // if (Channel9Switch)     Serial.print("Channel9Switch = ");
-    // if (Channel9Switch)     Serial.println(Channel9Switch);
-    // if (Channel10Switch)    Serial.print("Channel10Switch = ");
-    // if (Channel10Switch)    Serial.println(Channel10Switch);
-    // if (Channel11Switch)    Serial.print("Channel11Switch = ");
-    // if (Channel11Switch)    Serial.println(Channel11Switch);
-    // if (Channel12Switch)    Serial.print("Channel12Switch = ");
-    // if (Channel12Switch)    Serial.println(Channel12Switch);
-    // if (SafetySwitch)       Serial.print("SafetySwitch = ");
-    // if (SafetySwitch)       Serial.println(SafetySwitch);
-    // if (DualRatesSwitch)    Serial.print("DualRatesSwitch = ");
-    // if (DualRatesSwitch)    Serial.println(DualRatesSwitch);
-    // if (BuddySwitch)        Serial.print("BuddySwitch = ");
-    // if (BuddySwitch)        Serial.println(BuddySwitch);
-
-    
-
-    // if (FMSwitch == n)        SendValue(OneSwitchView_r1, 1);
-    // if (Autoswitch == n)      SendValue(OneSwitchView_r2, 1);
-    // if (Channel9Switch == n)  SendValue(OneSwitchView_r3, 1);
-    // if (Channel10Switch == n) SendValue(OneSwitchView_r4, 1);
-    // if (Channel11Switch == n) SendValue(OneSwitchView_r5, 1);
-    // if (Channel12Switch == n) SendValue(OneSwitchView_r6, 1);
-    // if (SafetySwitch == n)    SendValue(OneSwitchView_r7, 1);
-    // if (DualRatesSwitch == n) SendValue(OneSwitchView_r8, 1);
-    // if (BuddySwitch == n)     SendValue(OneSwitchView_r9, 1);
+    if (FMSwitch == n)        SendValue(OneSwitchView_r1, 1);
+    if (Autoswitch == n)      SendValue(OneSwitchView_r2, 1);
+    if (Channel9Switch == n)  SendValue(OneSwitchView_r3, 1);
+    if (Channel10Switch == n) SendValue(OneSwitchView_r4, 1);
+    if (Channel11Switch == n) SendValue(OneSwitchView_r5, 1);
+    if (Channel12Switch == n) SendValue(OneSwitchView_r6, 1);
+    if (SafetySwitch == n)    SendValue(OneSwitchView_r7, 1);
+    if (DualRatesSwitch == n) SendValue(OneSwitchView_r8, 1);
+    if (BuddySwitch == n)     SendValue(OneSwitchView_r9, 1);
     if (!ValueSent)           SendValue(OneSwitchView_r0, 1); // nothing yet, so not used
     if (SWITCH1Reversed)      SendValue(OneSwitchViewc_revd, 1);
 }    
