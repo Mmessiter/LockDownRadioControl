@@ -4092,6 +4092,9 @@ void DoOneSwitchView(uint8_t n){           // re-write one day ... This works, b
     if (BuddySwitch == n)     SendValue(OneSwitchView_r9, 1);
     if (!ValueSent)           SendValue(OneSwitchView_r0, 1); // nothing yet, so not used
     if (SWITCH1Reversed)      SendValue(OneSwitchViewc_revd, 1);
+
+    // heer!
+    
 }    
 /*********************************************************************************************************************************/
 void UpdateOneSwitchView(){
@@ -5689,14 +5692,14 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     BuddyChViewEnd,       // 29
     RudderLeftTrim,       // 30
     RudderRightTrim,      // 31  
-    AileronRightTrim,     // 32
-    AileronLeftTrim,      // 33
-    ElevatorUpTrim,       // 34  
-    ElevatorDownTrim,     // 35
-    ThrottleDownTrim,     // 36  
-    ThrottleUpTrim,       // 37  
-    RXOptionsViewStart,        // 38  
-    RXSetup1End,          // 39    
+    AileronRightTrim,           // 32
+    AileronLeftTrim,            // 33
+    ElevatorUpTrim,             // 34  
+    ElevatorDownTrim,           // 35
+    ThrottleDownTrim,           // 36  
+    ThrottleUpTrim,             // 37  
+    RXOptionsViewStart,         // 38  
+    RXSetup1End,                // 39    
     ResetTransmitterSettings,   // 40
     BindNow,                    // 41
     PointUp,                    // 42
