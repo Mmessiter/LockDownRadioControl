@@ -4067,7 +4067,11 @@ void ShowMotor(int on)
 
 
 void DoOneSwitchView(uint8_t n){           // re-write one day ... This works, but not very elagantly.
-    
+
+    char t3[] = "t3";
+    char t4[] = "t4";
+    char t5[] = "t5";
+    char t6[] = "t6";
     char OneSwitchView_r0[]    = "r0";     // Not used
     char OneSwitchView_r1[]    = "r1";     // Flight modes
     char OneSwitchView_r2[]    = "r2";     // Auto
@@ -4080,7 +4084,6 @@ void DoOneSwitchView(uint8_t n){           // re-write one day ... This works, b
     char OneSwitchView_r9[]    = "r9";     // Buddy
     char OneSwitchViewc_revd[] = "c_revd"; // Reversed
     ValueSent = false;          // If no setting, = Not Used
-
     if (FMSwitch == n)        SendValue(OneSwitchView_r1, 1);
     if (Autoswitch == n)      SendValue(OneSwitchView_r2, 1);
     if (Channel9Switch == n)  SendValue(OneSwitchView_r3, 1);
@@ -4092,10 +4095,11 @@ void DoOneSwitchView(uint8_t n){           // re-write one day ... This works, b
     if (BuddySwitch == n)     SendValue(OneSwitchView_r9, 1);
     if (!ValueSent)           SendValue(OneSwitchView_r0, 1); // nothing yet, so not used
     if (SWITCH1Reversed)      SendValue(OneSwitchViewc_revd, 1);
-
-    // heer!
-    
-}    
+    if (strlen(ChannelNames[8]) > 3) SendText(t3, ChannelNames[8]);
+    if (strlen(ChannelNames[9]) > 3) SendText(t4, ChannelNames[9]);
+    if (strlen(ChannelNames[10]) > 3) SendText(t5, ChannelNames[10]);
+    if (strlen(ChannelNames[11]) > 3) SendText(t6, ChannelNames[11]); // heer!!
+}
 /*********************************************************************************************************************************/
 void UpdateOneSwitchView(){
     char SwNum[] = "Sw";
