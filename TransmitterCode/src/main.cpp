@@ -3948,8 +3948,8 @@ void SendModelFile()
     char          Fsend[]               = "Sending file";
     char          ProgressStart[]       = "vis Progress,1";
     char          ProgressEnd[]         = "vis Progress,0";
-    char     GoModelsView[]                  = "page ModelsView";
-    char     Progress[]            = "Progress";
+    char          GoModelsView[]                  = "page ModelsView";
+    char          Progress[]            = "Progress";
 
     BlueLedOn();
     CloseModelsFile();
