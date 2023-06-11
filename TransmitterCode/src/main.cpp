@@ -4098,10 +4098,10 @@ void DoOneSwitchView(uint8_t n){           // re-write one day ... This works, b
     if (!ValueSent)           SendValue(OneSwitchView_r0, 1); // nothing yet, so not used
     if (SWITCH1Reversed)      SendValue(OneSwitchViewc_revd, 1);
 
-    if (strlen(ChannelNames[8]) > 3) SendText(t3, ChannelNames[8]);
-    if (strlen(ChannelNames[9]) > 3) SendText(t4, ChannelNames[9]);
-    if (strlen(ChannelNames[10]) > 3) SendText(t5, ChannelNames[10]);
-    if (strlen(ChannelNames[11]) > 3) SendText(t6, ChannelNames[11]); 
+    if (strlen(ChannelNames[8])  > 3) SendText(t3, ChannelNames[8]);    // Show channel names if they exist
+    if (strlen(ChannelNames[9])  > 3) SendText(t4, ChannelNames[9]);    // Show channel names if they exist
+    if (strlen(ChannelNames[10]) > 3) SendText(t5, ChannelNames[10]);   // Show channel names if they exist
+    if (strlen(ChannelNames[11]) > 3) SendText(t6, ChannelNames[11]);   // Show channel names if they exist
 
 }
 /*********************************************************************************************************************************/
