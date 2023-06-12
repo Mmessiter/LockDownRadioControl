@@ -724,7 +724,7 @@ void teensyMAC(uint8_t* mac)
 /************************************************************************************************************/
 
 void ReadBindPlug()
-{ 
+{
     uint32_t tt = millis();
     SetUKFrequencies();
     PipePointer = DefaultPipe;
