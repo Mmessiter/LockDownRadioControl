@@ -1,7 +1,6 @@
 // *************************************** Macros.h  *****************************************
 #include <Arduino.h>
 
-
 //***********************************************************************************************************
 
 void StartMacro(uint8_t m)
@@ -12,10 +11,10 @@ void StartMacro(uint8_t m)
 }
 /************************************************************************************************************/
 void RunMacro(uint8_t m)
-{ // Move a servo to a place
+{                                                                                                                                      // Move a servo to a place
     uint32_t RightNow = millis();
-    if (RightNow >= MacroStartTime[m]) MacrosBuffer[m][MACRORUNNINGNOW] |= 2; // Set the ACTIVE Bit if started (BIT 1)
-    if (RightNow >= MacroStopTime[m]) MacrosBuffer[m][MACRORUNNINGNOW] &= 1;  // Clear the ACTIVE Bit if expired (BIT 1)
+    if (RightNow >= MacroStartTime[m]) MacrosBuffer[m][MACRORUNNINGNOW] |= 2;                                                          // Set the ACTIVE Bit if started (BIT 1)
+    if (RightNow >= MacroStopTime[m]) MacrosBuffer[m][MACRORUNNINGNOW] &= 1;                                                           // Clear the ACTIVE Bit if expired (BIT 1)
     if (MacrosBuffer[m][MACRORUNNINGNOW] & 2) {
         SendBuffer[(MacrosBuffer[m][MACROMOVECHANNEL]) - 1] = map(MacrosBuffer[m][MACROMOVETOPOSITION], 0, 180, MINMICROS, MAXMICROS); // Do it if currently active!
     }

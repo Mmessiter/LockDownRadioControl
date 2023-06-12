@@ -4,20 +4,20 @@
 /*********************************************************************************************************************************/
 
 /************************************************************************************************************/
-//                                 Most Radio Functions 
+//                                 Most Radio Functions
 /************************************************************************************************************/
 
-// This functions performs lossless compression on the data sent to receiver, to keep it below 32 bytes 
+// This functions performs lossless compression on the data sent to receiver, to keep it below 32 bytes
 // and minimise latency. The receiver de-compresses of course.
 
- /* Compresses uint16_t* buffer values (each with 12 bit resolution - the lower 12 bits).
+/* Compresses uint16_t* buffer values (each with 12 bit resolution - the lower 12 bits).
  * @param compressed_buf[out] Must have allocated 3/4 the size of uncompressed_buf
  * @param uncompressed_buf[in]
  * @param uncompressed_size Size is in units of uint16_t (aka word or unsigned short). This *must* be divisible by 4.
  */
 FASTRUN void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uint8_t uncompressed_size)
 {
-    if (NewCompressNeeded){    // no need to recompress old data
+    if (NewCompressNeeded) { // no need to recompress old data
         NewCompressNeeded = false;
         uint8_t p         = 0;
         for (int l = 0; l < (uncompressed_size * 3 / 4); l += 3) {
@@ -29,13 +29,13 @@ FASTRUN void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uint
             ++p;
             ++p;
         }
-    } 
+    }
 }
 
 /************************************************************************************************************/
 void RecordsPacketSuccess(uint8_t s)
 { // or failure according to s
-static uint16_t PacketsHistoryIndex    = 0;
+    static uint16_t PacketsHistoryIndex       = 0;
     PacketsHistoryBuffer[PacketsHistoryIndex] = s;
     ++PacketsHistoryIndex;
     if (PacketsHistoryIndex >= (PERFECTPACKETSPERSECOND * ConnectionAssessSeconds)) PacketsHistoryIndex = 0; //
@@ -45,26 +45,26 @@ static uint16_t PacketsHistoryIndex    = 0;
 
 FASTRUN void FailedPacket()
 {
-    RecordsPacketSuccess(0);                              // Record a failure
-    ++RecentPacketsLost;                                  // this is to keep track of events when receiver is off
-    ++TotalLostPackets;                                   // This is total - never zeroed          
-        if (RecentPacketsLost >= LOSTCONTACTCUTOFF){      // Don't panic until at least LOSTCONTACTCUTOFF packets are lost.
-            if (!GapStart) GapStart = millis();           // To keep track of this gap's length
-            LostContactFlag = true;
-            Reconnected     = false;
-            if ((millis() - GapStart) > RED_LED_ON_TIME) { // there's no need to blink red for every single lost packet. Only after 3.5 seconds of no connection.
-                if (LedWasGreen && UseLog) {
-                    LogThisLongGap();
-                }
-                if (!LedWasRed) {                          // Put on red led - receiver must be off
-                    RedLedOn();
-                    ReEnableScanButton();
-                }
+    RecordsPacketSuccess(0);                      // Record a failure
+    ++RecentPacketsLost;                          // this is to keep track of events when receiver is off
+    ++TotalLostPackets;                           // This is total - never zeroed
+    if (RecentPacketsLost >= LOSTCONTACTCUTOFF) { // Don't panic until at least LOSTCONTACTCUTOFF packets are lost.
+        if (!GapStart) GapStart = millis();       // To keep track of this gap's length
+        LostContactFlag = true;
+        Reconnected     = false;
+        if ((millis() - GapStart) > RED_LED_ON_TIME) { // there's no need to blink red for every single lost packet. Only after 3.5 seconds of no connection.
+            if (LedWasGreen && UseLog) {
+                LogThisLongGap();
+            }
+            if (!LedWasRed) { // Put on red led - receiver must be off
+                RedLedOn();
+                ReEnableScanButton();
             }
         }
-        if (LostContactFlag) TryToReconnect();
-        int SecondsRemaining = (Inactivity_Timeout / 1000) - (millis() - Inactivity_Start) / 1000;
-        if (SecondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH); // INACTIVITY POWER OFF HERE!!
+    }
+    if (LostContactFlag) TryToReconnect();
+    int SecondsRemaining = (Inactivity_Timeout / 1000) - (millis() - Inactivity_Start) / 1000;
+    if (SecondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH); // INACTIVITY POWER OFF HERE!!
 }
 
 /************************************************************************************************************/
@@ -75,10 +75,10 @@ FASTRUN void TryOtherPipe()
         BoundFlag = false;
         SetThePipe(DefaultPipe);
     }
-    else 
+    else
     {
-        BoundFlag = true;               //  ... but not modelmatched yet
-        SetThePipe(TeensyMACAddPipe);   // 
+        BoundFlag = true;             //  ... but not modelmatched yet
+        SetThePipe(TeensyMACAddPipe); //
     }
 }
 /************************************************************************************************************/
@@ -86,7 +86,7 @@ FASTRUN void TryOtherPipe()
 void TryToReconnect()
 {
     if (BuddyPupilOnPPM) return;
-    if (RecentPacketsLost > 25) { 
+    if (RecentPacketsLost > 25) {
         TryOtherPipe();
         RecentPacketsLost = 0;
     }
@@ -111,7 +111,7 @@ void SuccessfulPacket()
 {
     ++RangeTestGoodPackets;
     ++PacketNumber;
-    RecordsPacketSuccess(1);   
+    RecordsPacketSuccess(1);
     RecentPacketsLost = 0;
     Connected         = true;
     if (BoundFlag && !LedWasGreen) GreenLedOn();
@@ -119,25 +119,25 @@ void SuccessfulPacket()
     Radio1.read(&AckPayload, AckPayloadSize); //  "sizeof" doesn't work with externs,
     ParseAckPayload();
     StartInactvityTimeout();
-    LostContactFlag   = false;
+    LostContactFlag = false;
 }
 
 /************************************************************************************************************/
 
 FLASHMEM void InitRadio(uint64_t Pipe)
 {
-    Radio1.begin(); 
+    Radio1.begin();
     Radio1.setPALevel(RF24_PA_MAX, true);
     Radio1.setDataRate(RF24_250KBPS);
     Radio1.enableAckPayload();
-    Radio1.openWritingPipe(Pipe);               // Current Pipe address used for Binding
-    Radio1.setRetries(RETRYCOUNT, RETRYWAIT);   // automatic retries and pauses
+    Radio1.openWritingPipe(Pipe);             // Current Pipe address used for Binding
+    Radio1.setRetries(RETRYCOUNT, RETRYWAIT); // automatic retries and pauses
     Radio1.stopListening();
     delayMicroseconds(500);
     Radio1.enableDynamicPayloads();
-    Radio1.setAddressWidth(5);          
-    Radio1.setCRCLength(RF24_CRC_16);           // could be (RF24_CRC_8);
-    GapSum  = 0;
+    Radio1.setAddressWidth(5);
+    Radio1.setCRCLength(RF24_CRC_16); // could be (RF24_CRC_8);
+    GapSum = 0;
 }
 
 /************************************************************************************************************/
@@ -147,24 +147,25 @@ FLASHMEM void InitRadio(uint64_t Pipe)
 FASTRUN void SendData()
 {
     if (SendNoData) return;
-  
+
     uint16_t PacketGap = PACEMAKER;
     if (LostContactFlag && LedWasGreen && !BuddyPupilOnPPM) PacketGap = 0;
     if ((millis() - LastPacketSentTime) >= PacketGap) {
-   
+
         LastPacketSentTime = millis();
         if (BuddyPupilOnPPM) {
             SendViaPPM();
             return;
-        }                                                           // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
-        Connected = false;                                          // Assume the worst until ACK is received.
+        }                                                          // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
+        Connected = false;                                         // Assume the worst until ACK is received.
         FlushFifos();
-        LoadPacketData();                                           // extra parameters appended to the data packet   
-        Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);    // Compress 32 bytes down to 24 (40 -> 30??)
-        if (Radio1.write(&CompressedData, SizeOfCompressedData)) {  //  ************************** >>>>> SEND DATA (30 bytes) TO RX <<<<< ***************************************
-            SuccessfulPacket(); 
+        LoadPacketData();                                          // extra parameters appended to the data packet
+        Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);   // Compress 32 bytes down to 24 (40 -> 30??)
+        if (Radio1.write(&CompressedData, SizeOfCompressedData)) { //  ************************** >>>>> SEND DATA (30 bytes) TO RX <<<<< ***************************************
+            SuccessfulPacket();
             FlushFifos();
-        } else {
+        }
+        else {
             FlushFifos();
             FailedPacket();
         }
@@ -244,33 +245,33 @@ void DrawFhssBox()
 
 void ScanAllChannels(bool cls)
 {
-    int  x1 = xx1;
-    int  y1 = yy1;
-    int  Sc;
-    int  x2, y2;
-    int  BlobHeight = 4; // Blobs are 4x4 pixels
-    char NB[12];         // Number Buffer
-    char NB1[12];
-    char NB2[12];
-    char NB3[12];
-    char NB4[12];
-    char CB[100]; // COMMAND BUFFER
-    char fyll[] = "fill ";
-    char NewYellow[15];
-    char NA[1] = ""; // blank one
-    static uint8_t  AllChannels[127];
-    static uint8_t  NoCarrier[127];
+    int            x1 = xx1;
+    int            y1 = yy1;
+    int            Sc;
+    int            x2, y2;
+    int            BlobHeight = 4; // Blobs are 4x4 pixels
+    char           NB[12];         // Number Buffer
+    char           NB1[12];
+    char           NB2[12];
+    char           NB3[12];
+    char           NB4[12];
+    char           CB[100]; // COMMAND BUFFER
+    char           fyll[] = "fill ";
+    char           NewYellow[15];
+    char           NA[1] = ""; // blank one
+    static uint8_t AllChannels[127];
+    static uint8_t NoCarrier[127];
 
-    if (cls){
+    if (cls) {
         for (int i = 0; i < 125; i++) {
             NoCarrier[i]   = 0;
             AllChannels[i] = 0;
         }
         return;
     }
-        Str(NewYellow, HighlightColour, 0);
-    for (Sc = 1; Sc <= 125; ++Sc) { 
-       if (NEXTION.available()) return; // in case someone wants to stop!
+    Str(NewYellow, HighlightColour, 0);
+    for (Sc = 1; Sc <= 125; ++Sc) {
+        if (NEXTION.available()) return; // in case someone wants to stop!
         Radio1.setChannel(Sc);
         Radio1.startListening();
         x2 = x1 + (Sc * 5);
@@ -284,7 +285,8 @@ void ScanAllChannels(bool cls)
                 AllChannels[Sc] += BlobHeight;
                 SendCharArray(CB, fyll, Str(NB, x2, 1), Str(NB1, (y2), 1), Str(NB2, 5, 1), Str(NB3, BlobHeight, 1), NewYellow, NA, NA, NA, NA, NA, NA);
             }
-        } else {
+        }
+        else {
             ++NoCarrier[Sc];
             if (NoCarrier[Sc] > 15) { // must see no carrier >15 times before reducing the trace
                 if (AllChannels[Sc] >= (BlobHeight)) {
@@ -303,8 +305,6 @@ float PEndTime   = 0;
 float Pduration  = 0;
 #endif
 
-
-
 /************************************************************************************************************/
 
 // This function hops to the next channel in the FFHS array (about 16 times a second)
@@ -316,9 +316,9 @@ FASTRUN void HopToNextChannel()
     Radio1.stopListening();         // Transmit only
     delayMicroseconds(500);
 
-#ifdef DB_FHSS 
-    if (BoundFlag && Connected && ModelMatched){
-        float ch   = *(FHSS_data::FHSSChPointer +  FHSS_data::NextChannelNumber);
+#ifdef DB_FHSS
+    if (BoundFlag && Connected && ModelMatched) {
+        float ch   = *(FHSS_data::FHSSChPointer + FHSS_data::NextChannelNumber);
         float Freq = 2.4;
         PEndTime   = millis();
         Pduration  = (PEndTime - PStartTime) / 1000;
@@ -350,28 +350,29 @@ void SetThePipe(uint64_t WhichPipe)
 /************************************************************************************************************/
 #define BADNIBBLECOUNT 6
 
-uint8_t CheckPipeNibbles(uint8_t b){ 
+uint8_t CheckPipeNibbles(uint8_t b)
+{
 
-    uint8_t      temp;
-    uint8_t     BadLowerNibble[BADNIBBLECOUNT]   = {0x05,0x0a,0x02,0x01,0x00,0x0f};
-    uint8_t    BadHigherNibble[BADNIBBLECOUNT]   = {0x50,0xa0,0x20,0x10,0x00,0xf0};
-    uint8_t  BetterLowerNibble[BADNIBBLECOUNT]   = {0x03,0x04,0x06,0x07,0x08,0x09};
-    uint8_t BetterHigherNibble[BADNIBBLECOUNT]   = {0x30,0x40,0x60,0x70,0x80,0x90};
+    uint8_t temp;
+    uint8_t BadLowerNibble[BADNIBBLECOUNT]     = {0x05, 0x0a, 0x02, 0x01, 0x00, 0x0f};
+    uint8_t BadHigherNibble[BADNIBBLECOUNT]    = {0x50, 0xa0, 0x20, 0x10, 0x00, 0xf0};
+    uint8_t BetterLowerNibble[BADNIBBLECOUNT]  = {0x03, 0x04, 0x06, 0x07, 0x08, 0x09};
+    uint8_t BetterHigherNibble[BADNIBBLECOUNT] = {0x30, 0x40, 0x60, 0x70, 0x80, 0x90};
 
-    if (!b) return 0x36;                                     // return an acceptable byte for a zero
-        
-    for (int i = 0; i < BADNIBBLECOUNT; ++i) {               // ********** check LOWER nibble **********
+    if (!b) return 0x36;                       // return an acceptable byte for a zero
+
+    for (int i = 0; i < BADNIBBLECOUNT; ++i) { // ********** check LOWER nibble **********
         if ((b & 0x0f) == BadLowerNibble[i])
         {
-            temp = b & 0xf0;                                 // save only the hi nibble in temp
-            b    = temp | BetterLowerNibble[i];              // put an acceptable nibble into lower nibble
+            temp = b & 0xf0;                    // save only the hi nibble in temp
+            b    = temp | BetterLowerNibble[i]; // put an acceptable nibble into lower nibble
         }
     }
-    for (int i = 0; i < BADNIBBLECOUNT;++i){                 // ********** check HIGHER nibble **********
-        if ((b & 0xf0) == BadHigherNibble[i]) 
+    for (int i = 0; i < BADNIBBLECOUNT; ++i) { // ********** check HIGHER nibble **********
+        if ((b & 0xf0) == BadHigherNibble[i])
         {
-            temp = b & 0x0f;                                  // save only the Low nibble in temp
-            b = temp | BetterHigherNibble[i];                 // put an acceptable nibble into Higher nibble
+            temp = b & 0x0f;                     // save only the Low nibble in temp
+            b    = temp | BetterHigherNibble[i]; // put an acceptable nibble into Higher nibble
         }
     }
     return b;
@@ -388,13 +389,12 @@ FASTRUN void BufferTeensyMACAddPipe() // heeer
 /************************************************************************************************************/
 void SendBindingPipe()
 {
-    static uint32_t BindingTimer   = 0;
+    static uint32_t BindingTimer = 0;
     if (PPMdata.UseTXModule) return;
-    uint16_t BindPause = 1200; // failed at 200, OK just at 250. // 1200? heer                      
+    uint16_t BindPause = 1200; // failed at 200, OK just at 250. // 1200? heer
     if (!BoundFlag || !ModelMatched) BindingTimer = millis();
-    if ((millis() - BindingTimer) < BindPause) BufferTeensyMACAddPipe(); 
+    if ((millis() - BindingTimer) < BindPause) BufferTeensyMACAddPipe();
 }
-
 
 /*********************************************************************************************************************************/
 
@@ -404,4 +404,3 @@ void NormaliseTheRadio()
     Radio1.setCRCLength(RF24_CRC_16);
     Radio1.setRetries(RETRYCOUNT, RETRYWAIT);
 }
-

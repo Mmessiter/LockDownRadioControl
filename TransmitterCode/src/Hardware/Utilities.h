@@ -23,7 +23,7 @@ void PlaySound(uint16_t TheSound)
     char SoundPrefix[]  = "play 0,";
     char SoundPostfix[] = "0";
     char NB[6];
-    if (CurrentView == MODELSVIEW){
+    if (CurrentView == MODELSVIEW) {
         if (TheSound != CLICKONE) return;
     }
     Str(NB, TheSound, 1);
@@ -102,25 +102,28 @@ void SetAudioVolume(uint16_t v)
 
 /*********************************************************************************************************************************/
 
-void Reboot(){
-    while (true) {TeensyWatchDog.feed();}
+void Reboot()
+{
+    while (true) {
+        TeensyWatchDog.feed();
+    }
 }
 
 /*********************************************************************************************************************************/
 void KickTheDog()
 {
-    static uint32_t   LastDogKick     = 0;
+    static uint32_t LastDogKick = 0;
     if (millis() - LastDogKick >= KICKRATE) {
         TeensyWatchDog.feed();
         LastDogKick = millis();
-     
     }
 }
 // **********************************************************************************************************************************
 
-void ConfigureStickMode(){  // This sets stick mode without moving any wires. Must be wired as for Mode 1
+void ConfigureStickMode()
+{ // This sets stick mode without moving any wires. Must be wired as for Mode 1
 
-if (SticksMode == 1) {
+    if (SticksMode == 1) {
         AnalogueInput[0] = A0;
         AnalogueInput[1] = A1;
         AnalogueInput[2] = A2;
@@ -131,7 +134,7 @@ if (SticksMode == 1) {
         AnalogueInput[7] = A9;
     }
 
-if (SticksMode == 2) {
+    if (SticksMode == 2) {
         AnalogueInput[0] = A0;
         AnalogueInput[1] = A2;
         AnalogueInput[2] = A1;
@@ -140,7 +143,7 @@ if (SticksMode == 2) {
         AnalogueInput[5] = A7;
         AnalogueInput[6] = A8;
         AnalogueInput[7] = A9;
-    }          
+    }
 }
 
 /******************* DeltaGMT is a user defined representation of time zone. It should never exceed 24. Not on this planet. **********/
@@ -407,18 +410,18 @@ bool MayBeAddZero(uint8_t nn)
 
 void ReadTime()
 {
-    
+
     static char month[12][15]     = {"January", "February", "March", "April", "May", "June", "July", "August", "Sept", "October", "November", "December"};
     static char ShortMonth[12][7] = {"Jan. ", "Feb. ", "Mar. ", "Apr. ", "May  ", "June ", "July ", "Aug. ", "Sept ", "Oct. ", "Nov. ", "Dec. "};
 
-    char    NB[10];
-    char    TimeString[80];
-    char    Space[]  = " ";
-    char    colon[]  = ":";
-    char    colon1[] = ".";
-    char    zero[]   = "0"; 
-    char    DateTime[]   = "DateTime";
-   
+    char NB[10];
+    char TimeString[80];
+    char Space[]    = " ";
+    char colon[]    = ":";
+    char colon1[]   = ".";
+    char zero[]     = "0";
+    char DateTime[] = "DateTime";
+
     uint8_t DisplayedHour;
     FixDeltaGMTSign();
     if (CurrentView == FRONTVIEW || CurrentView == OPTIONVIEW2) {
@@ -494,8 +497,6 @@ void CheckMacrosBuffer()
     }
 }
 
-
-
 /*********************************************************************************************************************************/
 
 void StartInactvityTimeout()
@@ -507,7 +508,7 @@ void StartInactvityTimeout()
 
 uint8_t GetLEDBrightness()
 {
-static uint8_t  BlinkOnPhase        = 1;
+    static uint8_t BlinkOnPhase = 1;
 
     if (LEDBrightness < 15) {
         LEDBrightness = DEFAULTLEDBRIGHTNESS;
@@ -613,11 +614,11 @@ int GetNextNumber(int p1, char text1[CHARSMAX])
     return j;
 }
 
-
 /*********************************************************************************************************************************/
 
-void FixCHNames(){
-   
+void FixCHNames()
+{
+
     char MixesView_chM[]           = "chM";
     char MixesView_chS[]           = "chS";
     char MixesView_MasterChannel[] = "MasterChannel";
@@ -650,7 +651,8 @@ void ClearSuccessRate()
 
 /*********************************************************************************************************************************/
 
-void SaveMixValues(){
+void SaveMixValues()
+{
 
     char MixesView_Enabled[]       = "Enabled";
     char MixesView_Bank[]          = "FlightMode";
@@ -665,21 +667,21 @@ void SaveMixValues(){
 
     SendCommand(ProgressStart);
     SendValue(Progress, 5);
-    Mixes[MixNumber][M_Enabled]       = GetValue(MixesView_Enabled);
+    Mixes[MixNumber][M_Enabled] = GetValue(MixesView_Enabled);
     SendValue(Progress, 10);
-    Mixes[MixNumber][M_Bank]          = GetValue(MixesView_Bank);
+    Mixes[MixNumber][M_Bank] = GetValue(MixesView_Bank);
     SendValue(Progress, 25);
     Mixes[MixNumber][M_MasterChannel] = GetValue(MixesView_MasterChannel);
     SendValue(Progress, 40);
-    Mixes[MixNumber][M_SlaveChannel]  = GetValue(MixesView_SlaveChannel);
+    Mixes[MixNumber][M_SlaveChannel] = GetValue(MixesView_SlaveChannel);
     SendValue(Progress, 55);
-    Mixes[MixNumber][M_Reversed]      = GetValue(MixesView_Reversed);
+    Mixes[MixNumber][M_Reversed] = GetValue(MixesView_Reversed);
     SendValue(Progress, 70);
-    Mixes[MixNumber][M_Percent]       = GetValue(MixesView_Percent);
+    Mixes[MixNumber][M_Percent] = GetValue(MixesView_Percent);
     SendValue(Progress, 87);
-    Mixes[MixNumber][M_ONEDIRECTION]  = GetValue(MixesView_od);
+    Mixes[MixNumber][M_ONEDIRECTION] = GetValue(MixesView_od);
     SendValue(Progress, 95);
-    Mixes[MixNumber][M_OFFSET]       = GetValue(MixesView_offset) + 127; // because it's unsigned
+    Mixes[MixNumber][M_OFFSET] = GetValue(MixesView_offset) + 127; // because it's unsigned
     SendValue(Progress, 100);
 }
 
@@ -714,8 +716,8 @@ void ShowMixValues() // sends mix values to Nextion screen
     }
     SendValue(MixesView_Percent, Mixes[MixNumber][M_Percent]);
     SendValue(MixesView_od, Mixes[MixNumber][M_ONEDIRECTION]);
-    if (((Mixes[MixNumber][M_OFFSET]) > 227) || ((Mixes[MixNumber][M_OFFSET]) < 27)) Mixes[MixNumber][M_OFFSET] = 127;  // zeroed if out of range
-    SendValue(MixesView_offset, Mixes[MixNumber][M_OFFSET] - 127);  // because it's 'unsigned'
+    if (((Mixes[MixNumber][M_OFFSET]) > 227) || ((Mixes[MixNumber][M_OFFSET]) < 27)) Mixes[MixNumber][M_OFFSET] = 127; // zeroed if out of range
+    SendValue(MixesView_offset, Mixes[MixNumber][M_OFFSET] - 127);                                                     // because it's 'unsigned'
     SendText(MixesView_chM, ChannelNames[Mixes[MixNumber][M_MasterChannel] - 1]);
     SendText(MixesView_chS, ChannelNames[Mixes[MixNumber][M_SlaveChannel] - 1]);
 }
@@ -831,31 +833,30 @@ int DegsToPercent(int degs)
 
 /*********************************************************************************************************************************/
 
-
 void ClearBox()
 {
     char nb[10];
     char cmd[80];
-    //char fillcmd[] = "fill 30,30,380,365,";
+    // char fillcmd[] = "fill 30,30,380,365,";
     char fillcmd[] = "fill 20,20,388,375,";
     strcpy(cmd, fillcmd);
     Str(nb, BackGroundColour, 0);
     strcat(cmd, nb);
     SendCommand(cmd);
- 
 }
 
 /*********************************************************************************************************************************/
 int GetSuccessRate()
-{   uint16_t Total = 0;
+{
+    uint16_t Total = 0;
     uint16_t SuccessRate;
     uint16_t Perfection = (PERFECTPACKETSPERSECOND * (uint16_t)ConnectionAssessSeconds);
 
     for (uint16_t i = 0; i < Perfection; ++i) { // PERFECTPACKETSPERSECOND (126) packets per second are either good or bad
         Total += PacketsHistoryBuffer[i];
     }
-    Total += (Perfection - Total) / 2;         // about half made it but were simply unacknowledged
-    SuccessRate = (Total * 100) / Perfection;  // return a percentage of total good packets
+    Total += (Perfection - Total) / 2;        // about half made it but were simply unacknowledged
+    SuccessRate = (Total * 100) / Perfection; // return a percentage of total good packets
     return SuccessRate;
 }
 
@@ -865,7 +866,7 @@ int GetSuccessRate()
 
 void ShowConnectionQuality()
 {
-    char Quality[]                = "Quality";
+    char Quality[] = "Quality";
     char Msgbuf[80];
     char Msg_Connected[]          = "Connection: ";
     char Msg_ConnectedPerfect[]   = "Perfect";
@@ -880,10 +881,9 @@ void ShowConnectionQuality()
     char Visible[]                = "vis Quality,1";
     char TXModuleMSG[]            = "** Using TX module **";
 
-
     if (PPMdata.UseTXModule) SendText(FrontView_Connected, TXModuleMSG);
     if (!LedWasGreen) return;
-    SendValue(Quality, ConnectionQuality); // show quality of connection in progress bar
+    SendValue(Quality, ConnectionQuality);                              // show quality of connection in progress bar
     strcpy(Msgbuf, Msg_Connected);
     if (ConnectionQuality >= 100) strcat(Msgbuf, Msg_ConnectedPerfect); // show quality as a comment
     if ((ConnectionQuality >= 95) && (ConnectionQuality < 100)) strcat(Msgbuf, Msg_ConnectedExcellent);
@@ -893,7 +893,7 @@ void ShowConnectionQuality()
     if ((ConnectionQuality >= 25) && (ConnectionQuality < 50)) strcat(Msgbuf, Msg_ConnectedWeak);
     if ((ConnectionQuality >= 1) && (ConnectionQuality < 25)) strcat(Msgbuf, Msg_ConnectedVWeak);
     SendText(FrontView_Connected, Msgbuf);
-    SendCommand(Visible); 
+    SendCommand(Visible);
 }
 
 /*********************************************************************************************************************************/
@@ -921,7 +921,7 @@ FASTRUN void DoReverseSense()
     }
 }
 /************************************************************************************************************/
-void ReEnableScanButton()   // Scan button AND models button
+void ReEnableScanButton() // Scan button AND models button
 {
     char b5NOTGreyed[]  = "b5.pco=";
     char b12NOTGreyed[] = "b12.pco=";
@@ -929,36 +929,37 @@ void ReEnableScanButton()   // Scan button AND models button
 
     char nb[20];
     char cmd[40];
-    
+
     Str(nb, ForeGroundColour, 0);
 
     if (CurrentView == TXSETUPVIEW && b5isGrey) {
-            strcpy(cmd, b5NOTGreyed);
-            strcat(cmd, nb);
-            SendCommand(cmd);
-            strcpy(cmd, b1NOTGreyed);
-            strcat(cmd, nb);
-            SendCommand(cmd);
-            b5isGrey = false;
-    } 
+        strcpy(cmd, b5NOTGreyed);
+        strcat(cmd, nb);
+        SendCommand(cmd);
+        strcpy(cmd, b1NOTGreyed);
+        strcat(cmd, nb);
+        SendCommand(cmd);
+        b5isGrey = false;
+    }
 
     if (CurrentView == RXSETUPVIEW && b12isGrey) {
-            strcpy(cmd, b12NOTGreyed);
-            strcat(cmd, nb);
-            SendCommand(cmd);
-            b12isGrey = false;
+        strcpy(cmd, b12NOTGreyed);
+        strcat(cmd, nb);
+        SendCommand(cmd);
+        b12isGrey = false;
     }
 }
 
 /************************************************************************************************************/
-void DelayWithDog(uint32_t HowLong){   // Implements delay() and also kicks the dog a lot
-        uint32_t ThisMoment = millis();
-        while ((millis() - ThisMoment) < HowLong)  {
+void DelayWithDog(uint32_t HowLong)
+{ // Implements delay() and also kicks the dog a lot
+    uint32_t ThisMoment = millis();
+    while ((millis() - ThisMoment) < HowLong) {
         KickTheDog();
-        }
+    }
 }
 //***********************************************************************************************************
-void Look(int p)  // This is just to save typing Serial.println :)
+void Look(int p) // This is just to save typing Serial.println :)
 {
     Serial.println(p);
 }
@@ -967,20 +968,20 @@ void Look(int p)  // This is just to save typing Serial.println :)
 
 void CheckScanButton() // Scan button AND models button
 {
-    char     b5Greyed[]                 = "b5.pco=33840";
-    char     b12Greyed[]                = "b12.pco=33840";
-    char     b1Greyed[]                 = "b1.pco=33840";
+    char b5Greyed[]  = "b5.pco=33840";
+    char b12Greyed[] = "b12.pco=33840";
+    char b1Greyed[]  = "b1.pco=33840";
 
     if (ModelMatched) {
         if (CurrentView == TXSETUPVIEW) {
-          if(!b5isGrey) { 
-                SendCommand(b5Greyed); 
+            if (!b5isGrey) {
+                SendCommand(b5Greyed);
                 SendCommand(b1Greyed);
                 b5isGrey = true;
             }
         }
-         if (CurrentView == RXSETUPVIEW) {
-            if(!b12isGrey) { 
+        if (CurrentView == RXSETUPVIEW) {
+            if (!b12isGrey) {
                 SendCommand(b12Greyed);
                 b12isGrey = true;
             }
