@@ -4073,6 +4073,11 @@ void DoOneSwitchView(uint8_t n){           // re-write one day ... This works, b
     char t5[] = "t5";
     char t6[] = "t6";
     
+    char ch9[] = "Channel 9";
+    char ch10[] = "Channel 10";
+    char ch11[] = "Channel 11";
+    char ch12[] = "Channel 12";
+
     char OneSwitchView_r0[]    = "r0";     // Not used
     char OneSwitchView_r1[]    = "r1";     // Flight modes
     char OneSwitchView_r2[]    = "r2";     // Auto
@@ -4098,10 +4103,19 @@ void DoOneSwitchView(uint8_t n){           // re-write one day ... This works, b
     if (!ValueSent)           SendValue(OneSwitchView_r0, 1); // nothing yet, so not used
     if (SWITCH1Reversed)      SendValue(OneSwitchViewc_revd, 1);
 
-    if (strlen(ChannelNames[8])  > 3) SendText(t3, ChannelNames[8]);    // Show channel names if they exist
-    if (strlen(ChannelNames[9])  > 3) SendText(t4, ChannelNames[9]);    // Show channel names if they exist
-    if (strlen(ChannelNames[10]) > 3) SendText(t5, ChannelNames[10]);   // Show channel names if they exist
-    if (strlen(ChannelNames[11]) > 3) SendText(t6, ChannelNames[11]);   // Show channel names if they exist
+
+    SendText(t3, ch9); 
+    SendText(t4, ch10);
+    SendText(t5, ch11);
+    SendText(t6, ch12);
+    
+   
+
+
+    if (strlen(ChannelNames[8])  >= 2) SendText(t3, ChannelNames[8]);    // Show channel names if they exist
+    if (strlen(ChannelNames[9])  >= 2) SendText(t4, ChannelNames[9]);    // Show channel names if they exist
+    if (strlen(ChannelNames[10]) >= 2) SendText(t5, ChannelNames[10]);   // Show channel names if they exist
+    if (strlen(ChannelNames[11]) >= 2) SendText(t6, ChannelNames[11]);   // Show channel names if they exist
 
 }
 /*********************************************************************************************************************************/
