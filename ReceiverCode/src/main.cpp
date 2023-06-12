@@ -30,7 +30,7 @@
  * | 13    | SPI SCK  (FOR BOTH RADIOS) |
  * | 14    | SBUS *OR PPM* output (Serial TX3) |
  * | 15    | Don't use if using SBUS. The driver takes it (RX3) |
- * | 16    | RED LED  - This LED is ON when connected, OFF when disconnected and blinking when binding 
+ * | 16    | RED LED  - This LED is ON when connected, OFF when disconnected and blinking when binding
  * | 17    | BIND PLUG (held LOW means plug is in)
  * | 18    | I2C SDA (FOR I2C) | *** --- >> BLUE WIRE   = 18 !! << --- ***
  * | 19    | I2C SCK (FOR I2C) | *** --- >> YELLOW WIRE = 19 !! << --- ***
@@ -43,73 +43,72 @@
  */
 #include "utilities/radio.h"
 
-
-Adafruit_INA219 ina219;
-bool            SensorHubConnected = false; //  GPS (Adafruit Ultimate GPS) ?
-Servo           MCMServo[SERVOSUSED];
-uint8_t         PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8}; // 9 PWMs, remaining 7 via sbus
-SBUS            MySbus(SBUSPORT);       // SBUS
-PulsePositionOutput     PPMOutput;      // PPM
-float           PacketStartTime;
-bool            BoundFlag      = false; /** indicates if receiver paired with transmitter */
-bool            ServosAttached = false;
-uint16_t        SbusChannels[CHANNELSUSED + 1]; // Just one spare
-uint32_t        SBUSTimer = 0;
-bool            FailSafeChannel[17];
-bool            FailSafeDataLoaded = false;
-uint8_t         FS_byte1           = 0; // All 16 failsafe channel flags are in these two bytes
-uint8_t         FS_byte2           = 0;
-uint32_t        ReconnectedMoment;
-uint16_t        BaroAltitude;
-float           BaroTemperature;
-float           INA219Volts       = 0;
-uint32_t        SensorTime        = 0;
-uint32_t        SensorHubAccessed = 0;
-uint16_t        Qnh               = 0; // Pressure at sea level here and now (defined at TX)
-uint16_t        OldQnh            = 0;
-uint8_t         SatellitesGPS;
-float           LatitudeGPS;
-float           LongitudeGPS;
-float           SpeedGPS;
-float           AngleGPS;
-bool            GpsFix = false;
-float           AltitudeGPS;
-float           DistanceGPS;
-float           CourseToGPS;
-uint8_t         DayGPS;
-uint8_t         MonthGPS;
-uint8_t         YearGPS;
-uint8_t         HoursGPS;
-uint8_t         MinsGPS;
-uint8_t         SecsGPS;
-uint16_t        CompressedData[COMPRESSEDWORDS]; // 30 bytes -> 40 bytes when uncompressed
-bool            SensorHubDead   = false;
-uint32_t        NewConnectionMoment    = 0;
-bool            QNHSent         = false;
-uint8_t         MacAddress[9]   = {0, 0, 0, 0, 0, 0, 0, 0,0};
-bool            ModelMatched    = false;
-uint8_t         TheReceivedPipe[6];
-uint8_t         TheCurrentPipe[6];
-bool            FirstConnection = true;
-bool            FailedSafe = true;  // Starting up as the same as after failsafe
-uint32_t        MostRecentHop;
-uint8_t         PPMChannelOrder[CHANNELSUSED] = {2,3,1,4,5,6,7,8,9,10,11,12,13,14,15,16};
-uint8_t         PPMChannelCount             = 8;
-bool            UseSBUS                     = true;
-bool            NewData                     = false;
-uint16_t        pcount                      = 0; // how many pipes so far received from TX
-bool            Blinking                    = false;
-uint8_t         BlinkValue                  = 1;
-uint32_t        BlinkTimer                  = 0;
-uint8_t         MacAddressSentCounter        = 0;
-WDT_T4<WDT3>    TeensyWatchDog;
-WDT_timings_t   WatchDogConfig;
-uint32_t        LastDogKick     = 0;
-bool            LedIsOn = false;
-uint8_t *       PipePointer;
-uint8_t         Pipnum = PIPENUMBER;
-uint8_t         DefaultPipe[6] = {0x23, 0x94, 0x3e, 0xbe, 0xb7, 0x00};
-uint8_t         CurrentPipe[6];
+Adafruit_INA219     ina219;
+bool                SensorHubConnected = false;                        //  GPS (Adafruit Ultimate GPS) ?
+Servo               MCMServo[SERVOSUSED];
+uint8_t             PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8}; // 9 PWMs, remaining 7 via sbus
+SBUS                MySbus(SBUSPORT);                                  // SBUS
+PulsePositionOutput PPMOutput;                                         // PPM
+float               PacketStartTime;
+bool                BoundFlag      = false;                            /** indicates if receiver paired with transmitter */
+bool                ServosAttached = false;
+uint16_t            SbusChannels[CHANNELSUSED + 1];                    // Just one spare
+uint32_t            SBUSTimer = 0;
+bool                FailSafeChannel[17];
+bool                FailSafeDataLoaded = false;
+uint8_t             FS_byte1           = 0; // All 16 failsafe channel flags are in these two bytes
+uint8_t             FS_byte2           = 0;
+uint32_t            ReconnectedMoment;
+uint16_t            BaroAltitude;
+float               BaroTemperature;
+float               INA219Volts       = 0;
+uint32_t            SensorTime        = 0;
+uint32_t            SensorHubAccessed = 0;
+uint16_t            Qnh               = 0; // Pressure at sea level here and now (defined at TX)
+uint16_t            OldQnh            = 0;
+uint8_t             SatellitesGPS;
+float               LatitudeGPS;
+float               LongitudeGPS;
+float               SpeedGPS;
+float               AngleGPS;
+bool                GpsFix = false;
+float               AltitudeGPS;
+float               DistanceGPS;
+float               CourseToGPS;
+uint8_t             DayGPS;
+uint8_t             MonthGPS;
+uint8_t             YearGPS;
+uint8_t             HoursGPS;
+uint8_t             MinsGPS;
+uint8_t             SecsGPS;
+uint16_t            CompressedData[COMPRESSEDWORDS]; // 30 bytes -> 40 bytes when uncompressed
+bool                SensorHubDead       = false;
+uint32_t            NewConnectionMoment = 0;
+bool                QNHSent             = false;
+uint8_t             MacAddress[9]       = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+bool                ModelMatched        = false;
+uint8_t             TheReceivedPipe[6];
+uint8_t             TheCurrentPipe[6];
+bool                FirstConnection = true;
+bool                FailedSafe      = true; // Starting up as the same as after failsafe
+uint32_t            MostRecentHop;
+uint8_t             PPMChannelOrder[CHANNELSUSED] = {2, 3, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+uint8_t             PPMChannelCount               = 8;
+bool                UseSBUS                       = true;
+bool                NewData                       = false;
+uint16_t            pcount                        = 0; // how many pipes so far received from TX
+bool                Blinking                      = false;
+uint8_t             BlinkValue                    = 1;
+uint32_t            BlinkTimer                    = 0;
+uint8_t             MacAddressSentCounter         = 0;
+WDT_T4<WDT3>        TeensyWatchDog;
+WDT_timings_t       WatchDogConfig;
+uint32_t            LastDogKick = 0;
+bool                LedIsOn     = false;
+uint8_t*            PipePointer;
+uint8_t             Pipnum         = PIPENUMBER;
+uint8_t             DefaultPipe[6] = {0x23, 0x94, 0x3e, 0xbe, 0xb7, 0x00};
+uint8_t             CurrentPipe[6];
 
 /************************************************************************************************************/
 
@@ -147,7 +146,6 @@ void MapToSBUS()
 
 /************************************************************************************************************/
 
-
 void KickTheDog()
 {
     if (millis() - LastDogKick >= KICKRATE) {
@@ -158,7 +156,8 @@ void KickTheDog()
 
 /************************************************************************************************************/
 
-bool CheckCrazyValues(){ // might come when binding
+bool CheckCrazyValues()
+{ // might come when binding
 
     for (int i = 0; i < 15; ++i) {
         if ((ReceivedData[i] < MINMICROS) || (ReceivedData[i] > MAXMICROS)) return false;
@@ -168,31 +167,31 @@ bool CheckCrazyValues(){ // might come when binding
 
 /************************************************************************************************************/
 
-
 void MoveServos()
 {
-    if (!CheckCrazyValues()) { 
+    if (!CheckCrazyValues()) {
         TurnLedOff();
         return;
-    } else {
+    }
+    else {
         TurnLedOn();
     }
-    
+
     if (UseSBUS)
     {
-        MySbus.write(SbusChannels);         // Send SBUS data
+        MySbus.write(SbusChannels); // Send SBUS data
     }
     else
-    {                                       // not SBUS = PPM 
+    { // not SBUS = PPM
         for (int j = 0; j < PPMChannelCount; ++j) {
-            PPMOutput.write(PPMChannelOrder[j], map(ReceivedData[j], MINMICROS, MAXMICROS, 1000, 2000));           
-        }  
+            PPMOutput.write(PPMChannelOrder[j], map(ReceivedData[j], MINMICROS, MAXMICROS, 1000, 2000));
+        }
     }
     for (int j = 0; j < SERVOSUSED; ++j) {
-         if (PreviousData[j] != ReceivedData[j]) { // if same as last time, don't send again.
+        if (PreviousData[j] != ReceivedData[j]) { // if same as last time, don't send again.
             MCMServo[j].writeMicroseconds(ReceivedData[j]);
             PreviousData[j] = ReceivedData[j];
-         }
+        }
     }
 }
 
@@ -204,18 +203,18 @@ void FailSafe()
     if (BoundFlag)
     {
         LoadFailSafeData();
-        Connected = true;       // to force sending this data!
+        Connected = true; // to force sending this data!
         MapToSBUS();
         MoveServos();
-        Connected = false;      // I lied earlier - we're not really connected.
+        Connected = false; // I lied earlier - we're not really connected.
     }
 
-    SetUKFrequencies();           // default startup conditions
-    FailSafeSent   = true;        // Once is enough
-    FailedSafe     = true;
+    SetUKFrequencies();  // default startup conditions
+    FailSafeSent = true; // Once is enough
+    FailedSafe   = true;
     TurnLedOff();
     MacAddressSentCounter = 0;
-   // Serial.println("Failsafe!");
+    // Serial.println("Failsafe!");
 }
 
 #ifdef DB_FHSS
@@ -259,7 +258,7 @@ void UseReceivedData()
 /************************************************************************************************************/
 bool ReadData()
 {
-    Connected            = false;
+    Connected = false;
     while (CurrentRadio->available(&Pipnum)) {                         // Get all, but use only the latest
         LoadAckPayload();
         CurrentRadio->flush_tx();                                      // This avoids a lockup that happens when the FIFO gets full
@@ -269,24 +268,23 @@ bool ReadData()
         Connected = true;
         NewData   = true;
     }
-    if (Connected ) UseReceivedData();
+    if (Connected) UseReceivedData();
     return Connected;
 }
-
 /************************************************************************************************************/
-
 void AttachServos()
 {
     if (!ServosAttached) {
         for (uint8_t i = 0; i < SERVOSUSED; ++i) {
             MCMServo[i].attach(PWMPins[i]);
         }
-    ServosAttached = true;
+        ServosAttached = true;
     }
-    if (UseSBUS){ 
-        MySbus.begin();             // AND START SBUS
-    }else{
-        PPMOutput.begin(PPMPORT);   // Or PPM on same pin
+    if (UseSBUS) {
+        MySbus.begin(); // AND START SBUS
+    }
+    else {
+        PPMOutput.begin(PPMPORT); // Or PPM on same pin
     }
 }
 
@@ -294,21 +292,20 @@ void AttachServos()
 
 void TurnLedOn()
 {
-     if (!LedIsOn){
+    if (!LedIsOn) {
         digitalWrite(LED_RED, HIGH);
         LedIsOn = true;
-     }
+    }
 }
-
 
 /************************************************************************************************************/
 
 void TurnLedOff()
 {
-     if (LedIsOn){
+    if (LedIsOn) {
         digitalWrite(LED_RED, LOW);
         LedIsOn = false;
-     }
+    }
 }
 
 /************************************************************************************************************/
@@ -319,12 +316,12 @@ void BindModel()
 {
     CurrentRadio->stopListening();
     delayMicroseconds(250);
-    BoundFlag   = true;
+    BoundFlag    = true;
     ModelMatched = true;
     if (Blinking) {
-            SetNewPipe(); // change to bound pipe <<< ***************************************
+        SetNewPipe(); // change to bound pipe <<< ***************************************
 #ifdef DB_BIND
-            Serial.println("SAVING RECEIVED PIPE:");
+        Serial.println("SAVING RECEIVED PIPE:");
 #endif
 
         for (uint8_t i = 0; i < 5; ++i) {
@@ -334,29 +331,27 @@ void BindModel()
             Serial.print(TheReceivedPipe[i], HEX);
             Serial.print(" ");
 #endif
-
         }
 
 #ifdef DB_BIND
-            Serial.println("");
-            Serial.println("TX PIPE SAVED");
+        Serial.println("");
+        Serial.println("TX PIPE SAVED");
 #endif
     }
-    Blinking    = false; 
-    
+    Blinking = false;
+
     if (FirstConnection) {
         AttachServos(); // AND START SBUS / PPM
         FirstConnection = false;
     }
     SaveNewBind = false;
-    
 }
 
 /************************************************************************************************************/
 void ReadSavedPipe() // read only 6 bytes
 {
     for (uint8_t i = 0; i < 5; ++i) {
-        TheReceivedPipe[i] = EEPROM.read(i+BIND_EEPROM_OFFSET); // uses first 5 bytes only.
+        TheReceivedPipe[i] = EEPROM.read(i + BIND_EEPROM_OFFSET); // uses first 5 bytes only.
     }
     TheReceivedPipe[5] = 0;
 }
@@ -377,7 +372,7 @@ void MarkHere()
 }
 /************************************************************************************************************/
 void RebuildFlags(bool* f, uint16_t tb)
-{ // Pass arraypointer and the two bytes to be decoded
+{                                          // Pass arraypointer and the two bytes to be decoded
     for (uint8_t i = 0; i < 16; ++i) {
         f[15 - i] = false;                 // false is default
         if (tb & 1 << i) f[15 - i] = true; // sets true if bit was on
@@ -405,8 +400,8 @@ void SendQnhToSensorHub()
 void SetTestFrequencies()
 {
     FHSSRecoveryPointer = FHSS_Channels1;
-    FHSSChPointer  = FHSS_Channels1;
-    FrequencyCount = FREQUENCYSCOUNT1;
+    FHSSChPointer       = FHSS_Channels1;
+    FrequencyCount      = FREQUENCYSCOUNT1;
 }
 /************************************************************************************************************/
 
@@ -416,8 +411,8 @@ void SetTestFrequencies()
 void SetUKFrequencies()
 {
     FHSSRecoveryPointer = FHSS_Channels;
-    FHSSChPointer  = FHSS_Channels;
-    FrequencyCount = FREQUENCYSCOUNT;
+    FHSSChPointer       = FHSS_Channels;
+    FrequencyCount      = FREQUENCYSCOUNT;
 }
 /************************************************************************************************************/
 /**
@@ -435,8 +430,8 @@ void ReadExtraParameters()
 
     switch (PacketNumber) {
         case 0:
-          //  bn = ReceivedData[CHANNELSUSED + 2];
-        
+            //  bn = ReceivedData[CHANNELSUSED + 2];
+
             FailSafeSave = bool(ReceivedData[CHANNELSUSED + 1]);
             if (FailSafeSave) {
                 TwoBytes = uint16_t(FS_byte2) + uint16_t(FS_byte1 << 8);
@@ -456,7 +451,7 @@ void ReadExtraParameters()
         case 3:
             if ((ReceivedData[CHANNELSUSED + 2]) == 255) { // Mark this location
                 MarkHere();
-                ReceivedData[CHANNELSUSED + 2] = 0; // ... Once only
+                ReceivedData[CHANNELSUSED + 2] = 0;        // ... Once only
             }
             break;
         case 4:
@@ -468,8 +463,8 @@ void ReadExtraParameters()
             }
             break;
         case 5:
-             UseSBUS    = (bool) ReceivedData[CHANNELSUSED + 1]; // if false means PPM
-             PPMChannelCount  = ReceivedData[CHANNELSUSED + 2];
+            UseSBUS         = (bool)ReceivedData[CHANNELSUSED + 1]; // if false means PPM
+            PPMChannelCount = ReceivedData[CHANNELSUSED + 2];
             break;
 
         default:
@@ -487,7 +482,7 @@ FASTRUN void ReadTheSensorHub()
 {
 
 #define IDLEN       3
-#define GPSI2CBYTES IDLEN + 4 // = 7 (only floats now)
+#define GPSI2CBYTES IDLEN + 4     // = 7 (only floats now)
 
     char  FIX[IDLEN + 1] = "FIX"; // GPS Fix
     char  SAT[IDLEN + 1] = "SAT"; // How many satellites
@@ -513,13 +508,13 @@ FASTRUN void ReadTheSensorHub()
     {
         float   Val32;
         uint8_t Val8[4];
-    } Rdata; // 'union' allows access to every byte
+    } Rdata;                                               // 'union' allows access to every byte
 
     Wire.requestFrom(SENSOR_HUB_I2C_ADDRESS, GPSI2CBYTES); // Ask hub for data
     for (int j = 0; j < GPSI2CBYTES; ++j) {
-        if (Wire.available()) { // Listen to HUB
+        if (Wire.available()) {                            // Listen to HUB
             if (j < IDLEN) {
-                RdataID[j] = Wire.read(); // This gets the three-char data id (eg LAT)
+                RdataID[j] = Wire.read();                  // This gets the three-char data id (eg LAT)
             }
             else {
                 Rdata.Val8[j - IDLEN] = Wire.read(); // This gets the 64 bit value for that data ID
@@ -627,15 +622,14 @@ void SensorHubHasFailed()
     SensorHubDead   = true; // This flag inhibits further attempts to call the hub, which might save a model.
 }
 
-
 // ******************************************************************************************************************************************************************
 
 FASTRUN void ReceiveData()
-{   
-    uint32_t    TimeTest;
+{
+    uint32_t TimeTest;
 
     if (Connected) {
-       
+
         if ((millis() - SensorHubAccessed) > 10) {                               //  Reading Sensor hub 100 x per second should be enough
             if (millis() - LastPacketArrivalTime < 1) {                          //  If, and only if, we have still absolutely loads of time, do stuff now while waiting ...
                 SensorHubAccessed = millis();                                    //  Note the moment of last attempted read.
@@ -644,16 +638,16 @@ FASTRUN void ReceiveData()
                     if (SensorHubConnected) ReadTheSensorHub();                  //  Sensor now has its own MCU. Calls return in far less that 6 ms unless it lost I2C synch
                     if (INA219Connected) INA219Volts = ina219.getBusVoltage_V(); //  Get RX LIPO volts if connected separately (as will be needed on 'planes with no GPS fitted.)
                     if ((millis() - NewConnectionMoment) > 5000) {
-                        if ((millis() - TimeTest) > 6) SensorHubHasFailed(); //  If sensor hub and/or INA219 fails, don't bother calling either again (It normally returns within 2 ms.
+                        if ((millis() - TimeTest) > 6) SensorHubHasFailed();     //  If sensor hub and/or INA219 fails, don't bother calling either again (It normally returns within 2 ms.
                     }
                 }
             }
         }
     }
-    if (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT)  {
+    if (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT) {
         Reconnect(); // Try to reconnect.
     }
-    
+
     if (ReadData()) {
         ReadExtraParameters(); // Check the extra parameters
     }
@@ -729,26 +723,27 @@ void teensyMAC(uint8_t* mac)
 
 /************************************************************************************************************/
 
-void ReadBindPlug(){ // heer
-        uint32_t tt = millis();
-        SetUKFrequencies();
-        PipePointer = DefaultPipe;
-        CopyCurrentPipe(DefaultPipe,PIPENUMBER);
-        if (!digitalRead(BINDPLUG_PIN)) { // Bind Plug needed to bind!
-        Blinking = true;                  // Blinking = binding to new TX
+void ReadBindPlug()
+{ // heer
+    uint32_t tt = millis();
+    SetUKFrequencies();
+    PipePointer = DefaultPipe;
+    CopyCurrentPipe(DefaultPipe, PIPENUMBER);
+    if (!digitalRead(BINDPLUG_PIN)) { // Bind Plug needed to bind!
+        Blinking = true;              // Blinking = binding to new TX
 #ifdef DB_BIND
         Serial.println("Bind plug detected.");
 #endif
-        }
-        else {
-        Blinking = false;               // Already bound
+    }
+    else {
+        Blinking    = false; // Already bound
         PipePointer = TheReceivedPipe;
-        CopyCurrentPipe(TheReceivedPipe,BOUNDPIPENUMBER);
-        BoundFlag = true;
+        CopyCurrentPipe(TheReceivedPipe, BOUNDPIPENUMBER);
+        BoundFlag   = true;
         SaveNewBind = false;
-        while (millis()-tt < 500)  ReceiveData();
-        BindModel();                    // TODO check this...
-        }
+        while (millis() - tt < 500) ReceiveData();
+        BindModel(); // TODO check this...
+    }
 }
 /************************************************************************************************************/
 // SETUP
@@ -768,16 +763,17 @@ FLASHMEM void setup()
     TurnLedOff();
     if (digitalRead(BINDPLUG_PIN)) {
         delay(2500); // Needed so that the Sensor hub can boot first and be detected (no bind plug)
-    } else{
-        delay(200); 
+    }
+    else {
+        delay(200);
     }
     Wire.begin();
     delay(20);
-    ScanI2c();    // Detect what's connected
+    ScanI2c(); // Detect what's connected
     if (INA219Connected) ina219.begin();
     teensyMAC(MacAddress);
     PipePointer = DefaultPipe;
-    CopyCurrentPipe(DefaultPipe,PIPENUMBER);
+    CopyCurrentPipe(DefaultPipe, PIPENUMBER);
     CurrentRadio = &Radio1;
     if (digitalRead(BINDPLUG_PIN)) { // ie no bind plug, so initialise to bound pipe
         GetOldPipe();
@@ -792,7 +788,7 @@ FLASHMEM void setup()
     delay(4);
     InitCurrentRadio();
     ThisRadio = 1;
-    
+
 #ifdef SECOND_TRANSCEIVER
     CurrentRadio = &Radio2;
     digitalWrite(pinCSN1, CSN_OFF);
@@ -814,14 +810,16 @@ FLASHMEM void setup()
 
 /************************************************************************************************************/
 
-void BlinkLed() {
+void BlinkLed()
+{
 
-    if ((millis()- BlinkTimer) > 100){
+    if ((millis() - BlinkTimer) > 100) {
         BlinkTimer = millis();
         BlinkValue ^= 1;
         if (BlinkValue) {
             TurnLedOn();
-        }else{
+        }
+        else {
             TurnLedOff();
         }
     }
@@ -843,6 +841,6 @@ void loop()
         if (FailSafeSave) SaveFailSafeData();
     }
     else {
-         if (!BoundFlag)  GetNewPipe();
+        if (!BoundFlag) GetNewPipe();
     }
 }
