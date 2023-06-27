@@ -952,7 +952,7 @@ void ReEnableScanButton() // Scan button AND models button
 
 /************************************************************************************************************/
 void DelayWithDog(uint32_t HowLong)
-{ // Implements delay() and also kicks the dog a lot
+{ // Implements delay() and also kicks the dog cruelly to keep it quiet.
     uint32_t ThisMoment = millis();
     while ((millis() - ThisMoment) < HowLong) {
         KickTheDog();
