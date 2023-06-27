@@ -958,10 +958,10 @@ void DelayWithDog(uint32_t HowLong)
         KickTheDog();
     }
 }
-//***********************************************************************************************************
-void Look(int p) // This is just to save typing Serial.println :)
+/************************************************************************************************************/
+template<typename any> void Look(const any& value) // this is a template function that can print anything but cannot be used to change anything
 {
-    Serial.println(p);
+    Serial.println(value);
 }
 
 /************************************************************************************************************/

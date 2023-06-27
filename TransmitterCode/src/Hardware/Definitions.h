@@ -9,8 +9,8 @@
 //     SUPPORT FOR TX MODULE AND NEW PCB Version                            *
 // **************************************************************************
 
-  #define TXMODULESUPPORT // ONLY FOR NEW VERSION  <<< *** <<<
-  #define NEWPCB
+#define TXMODULESUPPORT // ONLY FOR NEW VERSION  <<< *** <<<
+#define NEWPCB
 
 // **************************************************************************
 //       TX VERSION NUMBER   (May 2020 - May 2023 Malcolm Messiter)      *
@@ -39,14 +39,14 @@
 //                               General                                    *
 // **************************************************************************
 
-#ifdef NEWPCB                              // ***>>> red or green PCBs ... not old black <<<***
-  #define CE_PIN                  7                         // for SPI to nRF24L01
-  #define CSN_PIN                 8                         // for SPI to nRF24L01
-  #define BUDDYPPMPORT            10                        // Buddybox PPM pin
+#ifdef NEWPCB               // ***>>> red or green PCBs ... not old black <<<***
+    #define CE_PIN       7  // for SPI to nRF24L01
+    #define CSN_PIN      8  // for SPI to nRF24L01
+    #define BUDDYPPMPORT 10 // Buddybox PPM pin
 #else
-  #define CE_PIN                  9                         // for SPI to nRF24L01
-  #define CSN_PIN                 10                        // for SPI to nRF24L01
-  #define BUDDYPPMPORT            6                         // Buddybox PPM pin
+    #define CE_PIN       9  // for SPI to nRF24L01
+    #define CSN_PIN      10 // for SPI to nRF24L01
+    #define BUDDYPPMPORT 6  // Buddybox PPM pin
 #endif
 
 #define DEFAULTPIPEADDRESS      0xB7BE3E9423LL            // Pipe address for startup - any value but MUST match RX
@@ -67,31 +67,31 @@
 #define DEFAULT_EXPO            50                        // = ZERO EXPO (Range is 0 - 200. Below 50 is negative Expo)
 #define CHARSMAX                120                       // Max length for char arrays
 #define UNCOMPRESSEDWORDS       20                        // DATA TO SEND = 40  bytes
-#define COMPRESSEDWORDS    UNCOMPRESSEDWORDS * 3 / 4      // COMPRESSED DATA SENT = 30  bytes
-#define TIMEFORTXMANAGMENT      3                         // How many ms must remain spare between data packets before daring to undertake more trivial tasks 
+#define COMPRESSEDWORDS         UNCOMPRESSEDWORDS * 3 / 4 // COMPRESSED DATA SENT = 30  bytes
+#define TIMEFORTXMANAGMENT      3                         // How many ms must remain spare between data packets before daring to undertake more trivial tasks
 #define DEFAULTLEDBRIGHTNESS    20                        // LED brightness
-#define DEFAULTPOWEROFFWARNING  3                         // Default time to warn before cutting power      
+#define DEFAULTPOWEROFFWARNING  3                         // Default time to warn before cutting power
 #define MAXDUALRATE             200
 #define MAXBUFFERSIZE           1024 * 6
 #define MAXMODELNUMBER          91
-#define PERFECTPACKETSPERSECOND 150                       // Flat out perfect packets per second
-#define RED_LED_ON_TIME         3500                      // How many ms of no connection before RED led comes on
-#define LOW_VOLTAGE_TIME        5000                      // How many ms to endure low voltage before announcing it. (5 seconds)
-#define MAXSHOWCOMMSSESCONDS    6                         // Assess average connection quality over most recent 6 seconds continously
-#define SHOWCOMMSDELAY          1000                      // ms pauses between updated info on NEXTION
-#define WARMUPDELAY             300                       // fails at 200 so must be >200 ...
-#define SCREENCHANGEWAIT        100                       // allow time for screen to appear
+#define PERFECTPACKETSPERSECOND 150  // Flat out perfect packets per second
+#define RED_LED_ON_TIME         3500 // How many ms of no connection before RED led comes on
+#define LOW_VOLTAGE_TIME        5000 // How many ms to endure low voltage before announcing it. (5 seconds)
+#define MAXSHOWCOMMSSESCONDS    6    // Assess average connection quality over most recent 6 seconds continously
+#define SHOWCOMMSDELAY          1000 // ms pauses between updated info on NEXTION
+#define WARMUPDELAY             300  // fails at 200 so must be >200 ...
+#define SCREENCHANGEWAIT        100  // allow time for screen to appear
 
 // **************************************************************************
 //                            FHSS PARAMETERS                               *
 //***************************************************************************
 
-#define PACEMAKER                7    // 7 MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
-#define RETRYCOUNT               2    // auto retries inside nRF24L01. MAX is 15. Fails below 2.
-#define RETRYWAIT                0    // = 250us = Wait between retries (RetryWait+1 * 250us)
-#define LOSTCONTACTCUTOFF        2    // How many packets to 'lose' before reconnect triggers 
-#define RECONNECT_CHANNELS_COUNT 2    // How many channels to try when reconnecting
-#define RECONNECT_CHANNELS_START 12   // Offset into channels' array
+#define PACEMAKER                7  // 7 MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
+#define RETRYCOUNT               2  // auto retries inside nRF24L01. MAX is 15. Fails below 2.
+#define RETRYWAIT                0  // = 250us = Wait between retries (RetryWait+1 * 250us)
+#define LOSTCONTACTCUTOFF        2  // How many packets to 'lose' before reconnect triggers
+#define RECONNECT_CHANNELS_COUNT 2  // How many channels to try when reconnecting
+#define RECONNECT_CHANNELS_START 12 // Offset into channels' array
 
 // **************************************************************************
 //                            SEND MODE PARAMETERS                          *
@@ -139,46 +139,45 @@
 //                               Screens                                    *
 // **************************************************************************
 
-#define FRONTVIEW       0
-#define STICKSVIEW      1
-#define GRAPHVIEW       2
-#define MIXESVIEW       3
-#define SCANVIEW        4
-#define MODELSVIEW      5
-#define CALIBRATEVIEW   6
-#define TXSETUPVIEW     7
-#define SUBTRIMVIEW     8
-#define DATAVIEW        9
-#define TRIM_VIEW       10
-#define MACROS_VIEW     11
-#define SWITCHES_VIEW   12
-#define ONE_SWITCH_VIEW 13
-#define HELP_VIEW       14
-#define OPTIONS_VIEW    15
-#define INPUTS_VIEW     16
-#define FAILSAFE_VIEW   17
-#define COLOURS_VIEW    18
-#define AUDIOVIEW       19
-#define FILESVIEW       20
-#define REVERSEVIEW     21
-#define BUDDYVIEW       22
-#define LOGVIEW         23
-#define TRIMDEFVIEW     24
-#define OPTIONVIEW2     25
-#define OPTIONVIEW3     26
-#define BUDDYCHVIEW     27
-#define RXSETUPVIEW1    28
-#define DUALRATESVIEW   29
-#define GPSVIEW         30
-#define RXSETUPVIEW     31
-#define BANKSNAMESVIEW  32
-#define SLOWSERVOVIEW   33
-#define RENAMEMODELVIEW 34
+#define FRONTVIEW        0
+#define STICKSVIEW       1
+#define GRAPHVIEW        2
+#define MIXESVIEW        3
+#define SCANVIEW         4
+#define MODELSVIEW       5
+#define CALIBRATEVIEW    6
+#define TXSETUPVIEW      7
+#define SUBTRIMVIEW      8
+#define DATAVIEW         9
+#define TRIM_VIEW        10
+#define MACROS_VIEW      11
+#define SWITCHES_VIEW    12
+#define ONE_SWITCH_VIEW  13
+#define HELP_VIEW        14
+#define OPTIONS_VIEW     15
+#define INPUTS_VIEW      16
+#define FAILSAFE_VIEW    17
+#define COLOURS_VIEW     18
+#define AUDIOVIEW        19
+#define FILESVIEW        20
+#define REVERSEVIEW      21
+#define BUDDYVIEW        22
+#define LOGVIEW          23
+#define TRIMDEFVIEW      24
+#define OPTIONVIEW2      25
+#define OPTIONVIEW3      26
+#define BUDDYCHVIEW      27
+#define RXSETUPVIEW1     28
+#define DUALRATESVIEW    29
+#define GPSVIEW          30
+#define RXSETUPVIEW      31
+#define BANKSNAMESVIEW   32
+#define SLOWSERVOVIEW    33
+#define RENAMEMODELVIEW  34
 #define FILEEXCHANGEVIEW 35
-#define TXMODULEVIEW    36
-#define PONGVIEW        37
-#define IDCHECKVIEW     38
-
+#define TXMODULEVIEW     36
+#define PONGVIEW         37
+#define IDCHECKVIEW      38
 
 // **************************************************************************
 //                          Switches' GPIOs                                 *
@@ -210,16 +209,16 @@
 //                LED and Power off GPIOs                                   *
 // **************************************************************************
 
-#define REDLED              2 // COLOURED LEDS' PIN NUMBERS ...
-#define GREENLED            3
-#define BLUELED             4
-#define POWER_OFF_PIN       5
+#define REDLED        2 // COLOURED LEDS' PIN NUMBERS ...
+#define GREENLED      3
+#define BLUELED       4
+#define POWER_OFF_PIN 5
 
 #ifdef TXMODULESUPPORT
-    #define BUTTON_SENSE_PIN    33
-    #define PPMPORT             6
+    #define BUTTON_SENSE_PIN 33
+    #define PPMPORT          6
 #else
-    #define BUTTON_SENSE_PIN    6
+    #define BUTTON_SENSE_PIN 6
 #endif
 // **************************************************************************
 //               Sounds                             *
@@ -303,10 +302,10 @@
 //               SDCARD MODEL MEMORY CONSTANTS                              *
 //***************************************************************************
 
-#define TXSIZE            512      // SD space reserved for transmitter (WAS  250)
-#define MODELSIZE         2048     // SD space reserved for each model (WAS 1600)
-#define MAXFILELEN        1024 * 3 // MAX SIZE FOR HELP AND LOG FILES
-#define MAXBACKUPFILES    95
+#define TXSIZE         512      // SD space reserved for transmitter (WAS  250)
+#define MODELSIZE      2048     // SD space reserved for each model (WAS 1600)
+#define MAXFILELEN     1024 * 3 // MAX SIZE FOR HELP AND LOG FILES
+#define MAXBACKUPFILES 95
 
 // **************************************************************************
 //                            SERVO RANGE PARAMETERS                        *
@@ -321,19 +320,19 @@
 //                           nRF24L01 lines on off                          *
 // **************************************************************************
 
-#define CSN_ON                   LOW
-#define CSN_OFF                  HIGH
-#define CE_ON                    HIGH
-#define CE_OFF                   LOW
+#define CSN_ON  LOW
+#define CSN_OFF HIGH
+#define CE_ON   HIGH
+#define CE_OFF  LOW
 
 // **************************************************************************
 //                            Error Codes                                *
 // **************************************************************************
 
-#define NOERROR             0
-#define MODELSFILENOTFOUND  1
-#define CHECKSUMERROR       2
-#define MOTORISON           3
+#define NOERROR            0
+#define MODELSFILENOTFOUND 1
+#define CHECKSUMERROR      2
+#define MOTORISON          3
 
 // **************************************************************************
 //                            Interpolations                                *
@@ -363,15 +362,15 @@
 //                            PPM PARAMETERS   (FOR BUDDY BOXING)          *
 //***************************************************************************
 
-#define PPMBUDDYFRAMERATE 10  // PPM new frame every 10 milliseconds 
-#define RANGEMAX 2047         // = Frsky at 150 %
-#define RANGEMIN 0            // = Frsky at 0 %
+#define PPMBUDDYFRAMERATE 10   // PPM new frame every 10 milliseconds
+#define RANGEMAX          2047 // = Frsky at 150 %
+#define RANGEMIN          0    // = Frsky at 0 %
 
 // **************************************************************************
 //                          NEXTION SERIAL CONNECTION                       *
 //***************************************************************************
 
-#define NEXTION              Serial1 // NEXTION is connected to Serial1
+#define NEXTION Serial1 // NEXTION is connected to Serial1
 
 // **************************************************************************
 //                            WATCHDOG PARAMETERS                           *
@@ -385,136 +384,137 @@
 //                                     PONG                                 *
 //***************************************************************************
 
-#define PONGX1          20          // BOX dimentions
-#define PONGX2          790         // BOX dimentions
-#define PONGY1          60          // BOX dimentions (was 50)
-#define PONGY2          410         // BOX dimentions
-#define PONGGOALSIZE    180         // Size of goal
-#define PONGBALLSIZE    7           // Size of ball
-#define PONGSPEED       10          // Frame rate
-#define PONGBALLSPEED   5           // Ball movement per frame 
-#define PONGCLEAR (PONGBALLSPEED+PONGBALLSIZE)+4  // ball clearance from box when bouncing
-#define GOALTOP (PONGY1 + ((PONGY2 - PONGY1) / 2)) - (PONGGOALSIZE / 2)
-#define GOALBOT (PONGY1 + ((PONGY2 - PONGY1) / 2)) + (PONGGOALSIZE / 2)
-#define STARTX PONGX1+((PONGX2-PONGX1)/2)  // start position of ball
-#define STARTY PONGY1+((PONGY2-PONGY1)/2)+ 90
-#define PADDLEHEIGHT 60 
-#define PADDLEGAP    40
-#define LEFTPADDLEX PONGX1 + PADDLEGAP
-#define RIGHTPADDLEX PONGX2 - PADDLEGAP
-#define EXTRAPONG    38
+#define PONGX1        20                                 // BOX dimentions
+#define PONGX2        790                                // BOX dimentions
+#define PONGY1        60                                 // BOX dimentions (was 50)
+#define PONGY2        410                                // BOX dimentions
+#define PONGGOALSIZE  180                                // Size of goal
+#define PONGBALLSIZE  7                                  // Size of ball
+#define PONGSPEED     10                                 // Frame rate
+#define PONGBALLSPEED 5                                  // Ball movement per frame
+#define PONGCLEAR     (PONGBALLSPEED + PONGBALLSIZE) + 4 // ball clearance from box when bouncing
+#define GOALTOP       (PONGY1 + ((PONGY2 - PONGY1) / 2)) - (PONGGOALSIZE / 2)
+#define GOALBOT       (PONGY1 + ((PONGY2 - PONGY1) / 2)) + (PONGGOALSIZE / 2)
+#define STARTX        PONGX1 + ((PONGX2 - PONGX1) / 2) // start position of ball
+#define STARTY        PONGY1 + ((PONGY2 - PONGY1) / 2) + 90
+#define PADDLEHEIGHT  60
+#define PADDLEGAP     40
+#define LEFTPADDLEX   PONGX1 + PADDLEGAP
+#define RIGHTPADDLEX  PONGX2 - PADDLEGAP
+#define EXTRAPONG     38
 
 // **************************************************************************
 //                            Function Prototypes                           *
 //***************************************************************************
 
-void         GetSlaveChannelValues();
-void         KickTheDog();
-void         SendCommand(char* tbox);
-void         ReadSwitches();
-void         ShowComms();
-void         CheckTimer();
-void         SendCharArray(char* ch0, char* ch1, char* ch2, char* ch3, char* ch4, char* ch5, char* ch6, char* ch7, char* ch8, char* ch9, char* ch10, char* ch11, char* ch12);
-char*        Str(char* s, int n, int comma);
-void         GetNewChannelValues();
-void         LoadPacketData();
-void         GreenLedOn();
-void         CheckGapsLength();
-void         ParseAckPayload();
-void         FailedPacket();
-void         StartInactvityTimeout();
-void         ShowServoPos();
-void         SendViaPPM();
-void         ZeroDataScreen();
-void         RedLedOn();
-void         ReEnableScanButton();
-void         LogUKRules();
-int          InStrng(char* text1, char* text2);
-void         ReadCheckSum32();
-void         ResetTransmitterSettings();
-void         TryToReconnect();
-void         FlushFifos();
-FLASHMEM void SetDS1307ToCompilerTime();
-int          GetOtherValue(char* nbox);
-void         CheckInvisiblePoint();
-void         GotoFrontView();
-void         CheckDualRatesValues();
-void         UpdateLED();
-void         CheckMotorOff();
-bool         GetButtonPress();
-void         CheckPowerOffButton();
-void         LoadFileSelector();
-void         LoadModelSelector();
-void         PlaySound(uint16_t TheSound);
-uint8_t      CheckPipeNibbles(uint8_t b);
-void         InitRadio(uint64_t Pipe);
-void         SetThePipe(uint64_t WhichPipe);
-void         DoScanInit();
-void         DoScanEnd();
-void         PreScan();
-void         HopToNextChannel();
-void         ScanAllChannels(bool cls);
-void         SendData();
-void         Procrastinate(uint32_t HowLong);
-void         DrawFhssBox();
-void         SendText(char* tbox, char* NewWord); // needed a prototype or two here!
-void         RestoreBrightness();
-void         ButtonWasPressed();
-void         CalibrateEdgeSwitches();
-void         DisplayCurve();
-void         DrawLine(int x1, int y1, int x2, int y2, int c);
-void         DrawBox(int x1, int y1, int x2, int y2, int c);
-void         FillBox(int x1, int y1, int w, int h, int c);
-void         ReadTextFile(char* fname, char* htext, uint8_t StartLineNumber, uint8_t MaxLines);
-void         LogConnection();
-void         LogDisConnection();
-void         CloseLogFile();
-void         StartLogFile();
-void         ShowLogFile(uint8_t StartLine);
-void         LogThisLongGap();
-void         LogThisModel();
-void         Force_ReDisplay();
-FASTRUN void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uint8_t uncompressed_size);
-FASTRUN void BufferTeensyMACAddPipe();
-void         ExecuteMacro();
-void         Look(int p);
-void         ShowBank();
-void         UpdateModelsNameEveryWhere();
-void         DefineTrimsStart();
-void         ResetAllTrims();
-void         CheckTrimValues();
-void         ClearSuccessRate();
-int          CheckRange(int v, int min, int max);
-void         MoveaTrim(uint8_t i);
-void         SetUKFrequencies();
+
+
+void             GetSlaveChannelValues();
+void             KickTheDog();
+void             SendCommand(char* tbox);
+void             ReadSwitches();
+void             ShowComms();
+void             CheckTimer();
+void             SendCharArray(char* ch0, char* ch1, char* ch2, char* ch3, char* ch4, char* ch5, char* ch6, char* ch7, char* ch8, char* ch9, char* ch10, char* ch11, char* ch12);
+char*            Str(char* s, int n, int comma);
+void             GetNewChannelValues();
+void             LoadPacketData();
+void             GreenLedOn();
+void             CheckGapsLength();
+void             ParseAckPayload();
+void             FailedPacket();
+void             StartInactvityTimeout();
+void             ShowServoPos();
+void             SendViaPPM();
+void             ZeroDataScreen();
+void             RedLedOn();
+void             ReEnableScanButton();
+void             LogUKRules();
+int              InStrng(char* text1, char* text2);
+void             ReadCheckSum32();
+void             ResetTransmitterSettings();
+void             TryToReconnect();
+void             FlushFifos();
+FLASHMEM void    SetDS1307ToCompilerTime();
+int              GetOtherValue(char* nbox);
+void             CheckInvisiblePoint();
+void             GotoFrontView();
+void             CheckDualRatesValues();
+void             UpdateLED();
+void             CheckMotorOff();
+bool             GetButtonPress();
+void             CheckPowerOffButton();
+void             LoadFileSelector();
+void             LoadModelSelector();
+void             PlaySound(uint16_t TheSound);
+uint8_t          CheckPipeNibbles(uint8_t b);
+void             InitRadio(uint64_t Pipe);
+void             SetThePipe(uint64_t WhichPipe);
+void             DoScanInit();
+void             DoScanEnd();
+void             PreScan();
+void             HopToNextChannel();
+void             ScanAllChannels(bool cls);
+void             SendData();
+void             Procrastinate(uint32_t HowLong);
+void             DrawFhssBox();
+void             SendText(char* tbox, char* NewWord); // needed a prototype or two here!
+void             RestoreBrightness();
+void             ButtonWasPressed();
+void             CalibrateEdgeSwitches();
+void             DisplayCurve();
+void             DrawLine(int x1, int y1, int x2, int y2, int c);
+void             DrawBox(int x1, int y1, int x2, int y2, int c);
+void             FillBox(int x1, int y1, int w, int h, int c);
+void             ReadTextFile(char* fname, char* htext, uint8_t StartLineNumber, uint8_t MaxLines);
+void             LogConnection();
+void             LogDisConnection();
+void             CloseLogFile();
+void             StartLogFile();
+void             ShowLogFile(uint8_t StartLine);
+void             LogThisLongGap();
+void             LogThisModel();
+void             Force_ReDisplay();
+FASTRUN void     Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uint8_t uncompressed_size);
+FASTRUN void     BufferTeensyMACAddPipe();
+void             ExecuteMacro();
+template<typename any> void  Look(const any& value);
+void             ShowBank();
+void             UpdateModelsNameEveryWhere();
+void             DefineTrimsStart();
+void             ResetAllTrims();
+void             CheckTrimValues();
+void             ClearSuccessRate();
+int              CheckRange(int v, int min, int max);
+void             MoveaTrim(uint8_t i);
+void             SetUKFrequencies();
 FASTRUN uint16_t GetStickInputInputOnly(uint8_t l);
-FASTRUN void LogSafety(bool On);
-void         ShowMotor(int on);
-void         StartModelSetup();
-bool         GetConfirmation(char* goback, char* Prompt);
-void         GotoModelsView();
-void         SaveCurrentModel();
-bool         CheckModelName();
-void         EndTrimView();
-int          AnalogueReed(uint8_t InputChannel);
-void         GetReturnCode();
-void         SelectChannelOrder();
-void         DelayWithDog(uint32_t HowLong);
-void         SaveTransmitterParameters();
-void         PlayPong();
-void         Look(int p);
-void         StartPong();
-FASTRUN void ButtonWasPressed();
-bool         GetButtonPress();
-void         EndSend();
-void         ReadTheRTC();
-void         swap(uint8_t* a, uint8_t* b);
-void         SaveOneModel(uint32_t mnum);
-bool         ReadOneModel(uint32_t Mnum);
-void         SaveAllParameters();
-void         BindNow();
+FASTRUN void     LogSafety(bool On);
+void             ShowMotor(int on);
+void             StartModelSetup();
+bool             GetConfirmation(char* goback, char* Prompt);
+void             GotoModelsView();
+void             SaveCurrentModel();
+bool             CheckModelName();
+void             EndTrimView();
+int              AnalogueReed(uint8_t InputChannel);
+void             GetReturnCode();
+void             SelectChannelOrder();
+void             DelayWithDog(uint32_t HowLong);
+void             SaveTransmitterParameters();
+void             PlayPong();
+void             StartPong();
+FASTRUN void     ButtonWasPressed();
+bool             GetButtonPress();
+void             EndSend();
+void             ReadTheRTC();
+void             swap(uint8_t* a, uint8_t* b);
+void             SaveOneModel(uint32_t mnum);
+bool             ReadOneModel(uint32_t Mnum);
+void             SaveAllParameters();
+void             BindNow();
 FASTRUN uint32_t GetIntFromAckPayload(); // This one uses a uint32_t int
-uint32_t  getvalue(char* nbox);
+uint32_t         getvalue(char* nbox);
 uint32_t         GetValue(char* nbox);
 void             SendValue(char* nbox, int value);
 // **************************************************************************
@@ -524,216 +524,216 @@ void             SendValue(char* nbox, int value);
 RF24          Radio1(CE_PIN, CSN_PIN);
 WDT_T4<WDT3>  TeensyWatchDog;
 WDT_timings_t WatchDogConfig;
-byte          Mixes[MAXMIXES + 1][17];                        // 17 possible elements per mix. NOTHING to do with channels count!!!
-int           Trims[BANKSUSED + 1][CHANNELSUSED + 1];         // Trims to store
-uint8_t       Exponential[BANKSUSED + 1][CHANNELSUSED + 1];   // Exponential
+byte          Mixes[MAXMIXES + 1][17];                      // 17 possible elements per mix. NOTHING to do with channels count!!!
+int           Trims[BANKSUSED + 1][CHANNELSUSED + 1];       // Trims to store
+uint8_t       Exponential[BANKSUSED + 1][CHANNELSUSED + 1]; // Exponential
 uint8_t       InterpolationTypes[BANKSUSED + 1][CHANNELSUSED + 1];
-uint8_t  LastMixNumber    = 1;
-uint8_t  MixNumber        = 0;
-uint8_t  CurrentView      = FRONTVIEW;
-uint8_t  SavedCurrentView = FRONTVIEW;
-uint64_t DefaultPipe      = DEFAULTPIPEADDRESS;  //          Default Radio pipe address
-uint64_t TeensyMACAddPipe = DEFAULTPIPEADDRESS;  //          New Radio pipe address for binding will come from MAC address
-char     TextIn[CHARSMAX + 2];                   //          Spare space
-uint16_t PacketsPerSecond = 0;
-uint8_t  PacketsHistoryBuffer[PERFECTPACKETSPERSECOND * MAXSHOWCOMMSSESCONDS]; // Here we record some history
-uint32_t TotalLostPackets       = 0;
-uint8_t  PacketNumber           = 0;
-uint8_t  GPSMarkHere            = 0;
-uint16_t TrimRepeatSpeed        = 600;
-char     na[]                   = "";
-uint8_t  StepSize[16] = {0,0,0,0,0,0,0,0,5,25,5,25,5,25,5,25};  //    How far to move each time on slow servos
-uint16_t CurrentPosition[UNCOMPRESSEDWORDS];                //    Position from which a slow servo started (0 = not started yet)
-uint16_t SendBuffer[UNCOMPRESSEDWORDS];                     //    Data to send to rx (16 words)
-uint16_t PPMBuffer[UNCOMPRESSEDWORDS];                      //   
-uint16_t ShownBuffer[UNCOMPRESSEDWORDS];                    //    Data shown before
-uint16_t LastBuffer[CHANNELSUSED + 1];                      //    Used to spot any change
-uint16_t PreMixBuffer[CHANNELSUSED + 1];                    //    Data collected from sticks
-uint8_t  MaxDegrees[5][CHANNELSUSED + 1];                   //    Max degrees (180)
-uint8_t  MidHiDegrees[5][CHANNELSUSED + 1];                 //    MidHi degrees (135)
-uint8_t  CentreDegrees[5][CHANNELSUSED + 1];                //    Middle degrees (90)
-uint8_t  MidLowDegrees[5][CHANNELSUSED + 1];                //    MidLow Degrees (45)
-uint8_t  MinDegrees[5][CHANNELSUSED + 1];                   //    Min Degrees (0)
-uint8_t  SubTrims[CHANNELSUSED + 1];                        //    Subtrims
-uint8_t  SubTrimToEdit      = 0;
-uint32_t LastPacketSentTime = 0;
-uint8_t  Bank                       =  1;
+uint8_t       LastMixNumber    = 1;
+uint8_t       MixNumber        = 0;
+uint8_t       CurrentView      = FRONTVIEW;
+uint8_t       SavedCurrentView = FRONTVIEW;
+uint64_t      DefaultPipe      = DEFAULTPIPEADDRESS;                                //          Default Radio pipe address
+uint64_t      TeensyMACAddPipe = DEFAULTPIPEADDRESS;                                //          New Radio pipe address for binding will come from MAC address
+char          TextIn[CHARSMAX + 2];                                                 //          Spare space
+uint16_t      PacketsPerSecond = 0;
+uint8_t       PacketsHistoryBuffer[PERFECTPACKETSPERSECOND * MAXSHOWCOMMSSESCONDS]; // Here we record some history
+uint32_t      TotalLostPackets = 0;
+uint8_t       PacketNumber     = 0;
+uint8_t       GPSMarkHere      = 0;
+uint16_t      TrimRepeatSpeed  = 600;
+char          na[]             = "";
+uint8_t       StepSize[16]     = {0, 0, 0, 0, 0, 0, 0, 0, 5, 25, 5, 25, 5, 25, 5, 25}; //    How far to move each time on slow servos
+uint16_t      CurrentPosition[UNCOMPRESSEDWORDS];                                      //    Position from which a slow servo started (0 = not started yet)
+uint16_t      SendBuffer[UNCOMPRESSEDWORDS];                                           //    Data to send to rx (16 words)
+uint16_t      PPMBuffer[UNCOMPRESSEDWORDS];                                            //
+uint16_t      ShownBuffer[UNCOMPRESSEDWORDS];                                          //    Data shown before
+uint16_t      LastBuffer[CHANNELSUSED + 1];                                            //    Used to spot any change
+uint16_t      PreMixBuffer[CHANNELSUSED + 1];                                          //    Data collected from sticks
+uint8_t       MaxDegrees[5][CHANNELSUSED + 1];                                         //    Max degrees (180)
+uint8_t       MidHiDegrees[5][CHANNELSUSED + 1];                                       //    MidHi degrees (135)
+uint8_t       CentreDegrees[5][CHANNELSUSED + 1];                                      //    Middle degrees (90)
+uint8_t       MidLowDegrees[5][CHANNELSUSED + 1];                                      //    MidLow Degrees (45)
+uint8_t       MinDegrees[5][CHANNELSUSED + 1];                                         //    Min Degrees (0)
+uint8_t       SubTrims[CHANNELSUSED + 1];                                              //    Subtrims
+uint8_t       SubTrimToEdit      = 0;
+uint32_t      LastPacketSentTime = 0;
+uint8_t       Bank               = 1;
 // User defined bank names zone
 // ************************************** 0                  1                 2                  3                4          5           6           7          8                9        10          11       12        13             14            15          16          17      18        19           20         21     22           23         24         25          26           27        ***
-char     BankTexts[28][14]          =  {{ "Flight mode 1"},{"Flight mode 2"},{"Flight mode 3"},{"Flight mode 4"},{"Bank 1"},{"Bank 2"},{"Bank 3"}, {"Bank 4"},{"Aerobatics"}, {"Auto"},{"Cruise"},{"Flaps"},{"Hover"},{"Idle up 1"},{"Idle up 2"},{"Landing"},{"Launch"},{"Normal"},{"Speed"},{"Takeoff"},{"Thermal"},{"Hold"},{"3D"}   ,{"Brakes"},{"Stunt 1"},{"Stunt 2"},{"Gear up"},{"Gear down"}};
-uint8_t  BankSounds[28]             =  {   BFM1,             BFM2,             BFM3,             BFM4,             BANKONE,   BANKTWO,   BANKTHREE,  BANKFOUR, AEROBATICS,      AUTO,     CRUISE,    FLAPS,    HOVER,    IDLE1,        IDLE2,        LANDING,    LAUNCH,    NORMALB,   SPEED,    TAKEOFF,    THERMAL,    THRHOLD,THREEDEE,AIRBRAKES,  STUNT1,     STUNT2,     WHEELSDOWN, WHEELSUP};
-uint8_t  BanksInUse[4]              =  {0, 1, 2, 3};
-uint8_t  PreviousBank               =  1;
+char    BankTexts[28][14] = {{"Flight mode 1"}, {"Flight mode 2"}, {"Flight mode 3"}, {"Flight mode 4"}, {"Bank 1"}, {"Bank 2"}, {"Bank 3"}, {"Bank 4"}, {"Aerobatics"}, {"Auto"}, {"Cruise"}, {"Flaps"}, {"Hover"}, {"Idle up 1"}, {"Idle up 2"}, {"Landing"}, {"Launch"}, {"Normal"}, {"Speed"}, {"Takeoff"}, {"Thermal"}, {"Hold"}, {"3D"}, {"Brakes"}, {"Stunt 1"}, {"Stunt 2"}, {"Gear up"}, {"Gear down"}};
+uint8_t BankSounds[28]    = {BFM1, BFM2, BFM3, BFM4, BANKONE, BANKTWO, BANKTHREE, BANKFOUR, AEROBATICS, AUTO, CRUISE, FLAPS, HOVER, IDLE1, IDLE2, LANDING, LAUNCH, NORMALB, SPEED, TAKEOFF, THERMAL, THRHOLD, THREEDEE, AIRBRAKES, STUNT1, STUNT2, WHEELSDOWN, WHEELSUP};
+uint8_t BanksInUse[4]     = {0, 1, 2, 3};
+uint8_t PreviousBank      = 1;
 // ************************************
-char     ChannelNames[CHANNELSUSED][11] = {{"Aileron"}, {"Elevator"}, {"Throttle"}, {"Rudder"}, {"Gear"}, {"AUX1"}, {"AUX2"}, {"AUX3"}, {"AUX4"}, {"AUX5"}, {"AUX6"}, {"AUX7"}, {"AUX8"}, {"AUX9"}, {"AUX10"}, {"AUX11"}};
-uint8_t  DualRateInUse              = 1;
-uint8_t  PreviousDualRateInUse      = 1;
-uint16_t ChannelMax[CHANNELSUSED + 1];    //    output of pots at max
-uint16_t ChannelMidHi[CHANNELSUSED + 1];  //    output of pots at MidHi
-uint16_t ChannelCentre[CHANNELSUSED + 1]; //    output of pots at Centre
-uint16_t ChannelMidLow[CHANNELSUSED + 1]; //    output of pots at MidLow
-uint16_t ChannelMin[CHANNELSUSED + 1];    //    output of pots at min
-uint16_t ChanneltoSet     = 0;
-bool     Connected        = false;
-uint16_t BuddyControlled  = 0; // Flags
-double   PointsCount      = 5; // This for displaying curves only
-double   xPoints[5];
-double   yPoints[5];
-double   xPoint = 0;
-double   yPoint = 0;
-uint16_t BoxBottom;
-uint16_t BoxTop;
-uint16_t BoxLeft;
-uint16_t BoxRight;
-uint16_t ClickX;
-uint16_t ClickY;
-uint8_t  SticksMode                    = 2;
-uint8_t  SavedSticksMode               = 2;
-uint16_t AnalogueInput[PROPOCHANNELS]  = {A0, A1, A2, A3, A6, A7, A8, A9};                                        // 8 PROPO Channels for transmission   // fix order for mode 2
-uint8_t  TrimNumber[8]                 = {TRIM1A, TRIM1B, TRIM2A, TRIM2B, TRIM3A, TRIM3B, TRIM4A, TRIM4B};        // These too can get swapped over later
-uint8_t  CurrentMode                  = NORMAL;
-uint32_t TimerMillis         = 0;
-uint32_t LastSeconds         = 0;
-uint32_t Secs                = 0;
-uint32_t ElapsedSeconds      = 0;
-uint32_t PausedSecs          = 0;
-uint32_t Mins                = 0;
-uint32_t Hours               = 0;
-uint32_t ModelNumber         = 1;
-uint32_t SavedModelNumber    = 1;
-uint32_t PreviousModelNumber = 1;
-uint8_t  ModelDefined        = 0;
-uint16_t MemoryForTransmtter = 0; // SD space for transmitter parameters
-uint16_t OneModelMemory      = 0; // SD space for every model's parameters
-uint32_t SDCardAddress       = 0; // Address on SD card (offset from zero)
-uint8_t   SwitchNumber[8]             = {SWITCH0, SWITCH1, SWITCH2, SWITCH3, SWITCH4, SWITCH5, SWITCH6, SWITCH7}; // These can get swapped over later
-uint8_t   DefaultSwitchNumber[8]      = {SWITCH0, SWITCH1, SWITCH2, SWITCH3, SWITCH4, SWITCH5, SWITCH6, SWITCH7}; // Default values
-bool      DefiningTrims               = false;
-bool      TrimDefined[4]              = {true, true, true, true};
-char      ModelName[40]               = "Untitled";
-uint16_t  ScreenTimeout               = 120; // Screen has two minute timeout by default
-int       LastLinePosition            = 0;
-uint8_t   RXCellCount                 = 2;
-bool      JustHoppedFlag              = true;
-bool      LostContactFlag             = true;
-uint32_t  RecentPacketsLost           = 0;
-uint32_t  GapSum                      = 0;
-uint32_t  GapLongest                  = 0;
-uint32_t  GapStart                    = 0;
-uint32_t  ThisGap                     = 0;
-uint32_t  GapAverage                  = 0;
-uint32_t  GapCount                    = 0;
-float     GPSLatitude                 = 0;
-float     GPSLongitude                = 0;
-float     GPSAngle                    = 0;
-bool      GpsFix                      = 0;
-uint8_t   GPSSatellites               = 0;
-uint16_t  GPSSpeed                    = 0;
-uint16_t  GPSMaxSpeed                 = 0;
-uint8_t   GPSHours                    = 0;
-uint8_t   GPSMins                     = 0;
-uint8_t   GPSSecs                     = 0;
-uint8_t   GPSDay                      = 0;
-uint8_t   GPSMonth                    = 0;
-uint8_t   GPSYear                     = 0;
-float     GPSAltitude                 = 0;
-float     GPSMaxaltitude              = 0;
-float     GPSGroundAltitude           = 0;
-float     GPSDistanceTo               = 0;
-float     GPSCourseTo                 = 0;
-float     GPSMaxDistance              = 0;
-float     RXModelVolts                = 0;
-int       RXModelAltitude             = 0;
-int       RXMAXModelAltitude          = 0;
-int       GroundModelAltitude         = 0;
-float     RXTemperature               = 0;
-float     MaxAlt                      = 0;
-char      ModelTempRX[9]              = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,0};
-char      ModelAltitude[9]            = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,0};
-char      Maxaltitude[9]              = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,0};
-char      ReceiverVersionNumber[9]    = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,0};
-char      TransmitterVersionNumber[9] = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,0};
-char      ModelVolts[9]               = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,0};
-File      ModelsFileNumber;
+char            ChannelNames[CHANNELSUSED][11] = {{"Aileron"}, {"Elevator"}, {"Throttle"}, {"Rudder"}, {"Gear"}, {"AUX1"}, {"AUX2"}, {"AUX3"}, {"AUX4"}, {"AUX5"}, {"AUX6"}, {"AUX7"}, {"AUX8"}, {"AUX9"}, {"AUX10"}, {"AUX11"}};
+uint8_t         DualRateInUse                  = 1;
+uint8_t         PreviousDualRateInUse          = 1;
+uint16_t        ChannelMax[CHANNELSUSED + 1];    //    output of pots at max
+uint16_t        ChannelMidHi[CHANNELSUSED + 1];  //    output of pots at MidHi
+uint16_t        ChannelCentre[CHANNELSUSED + 1]; //    output of pots at Centre
+uint16_t        ChannelMidLow[CHANNELSUSED + 1]; //    output of pots at MidLow
+uint16_t        ChannelMin[CHANNELSUSED + 1];    //    output of pots at min
+uint16_t        ChanneltoSet    = 0;
+bool            Connected       = false;
+uint16_t        BuddyControlled = 0; // Flags
+double          PointsCount     = 5; // This for displaying curves only
+double          xPoints[5];
+double          yPoints[5];
+double          xPoint = 0;
+double          yPoint = 0;
+uint16_t        BoxBottom;
+uint16_t        BoxTop;
+uint16_t        BoxLeft;
+uint16_t        BoxRight;
+uint16_t        ClickX;
+uint16_t        ClickY;
+uint8_t         SticksMode                   = 2;
+uint8_t         SavedSticksMode              = 2;
+uint16_t        AnalogueInput[PROPOCHANNELS] = {A0, A1, A2, A3, A6, A7, A8, A9};                                 // 8 PROPO Channels for transmission   // fix order for mode 2
+uint8_t         TrimNumber[8]                = {TRIM1A, TRIM1B, TRIM2A, TRIM2B, TRIM3A, TRIM3B, TRIM4A, TRIM4B}; // These too can get swapped over later
+uint8_t         CurrentMode                  = NORMAL;
+uint32_t        TimerMillis                  = 0;
+uint32_t        LastSeconds                  = 0;
+uint32_t        Secs                         = 0;
+uint32_t        ElapsedSeconds               = 0;
+uint32_t        PausedSecs                   = 0;
+uint32_t        Mins                         = 0;
+uint32_t        Hours                        = 0;
+uint32_t        ModelNumber                  = 1;
+uint32_t        SavedModelNumber             = 1;
+uint32_t        PreviousModelNumber          = 1;
+uint8_t         ModelDefined                 = 0;
+uint16_t        MemoryForTransmtter          = 0;                                                                        // SD space for transmitter parameters
+uint16_t        OneModelMemory               = 0;                                                                        // SD space for every model's parameters
+uint32_t        SDCardAddress                = 0;                                                                        // Address on SD card (offset from zero)
+uint8_t         SwitchNumber[8]              = {SWITCH0, SWITCH1, SWITCH2, SWITCH3, SWITCH4, SWITCH5, SWITCH6, SWITCH7}; // These can get swapped over later
+uint8_t         DefaultSwitchNumber[8]       = {SWITCH0, SWITCH1, SWITCH2, SWITCH3, SWITCH4, SWITCH5, SWITCH6, SWITCH7}; // Default values
+bool            DefiningTrims                = false;
+bool            TrimDefined[4]               = {true, true, true, true};
+char            ModelName[40]                = "Untitled";
+uint16_t        ScreenTimeout                = 120; // Screen has two minute timeout by default
+int             LastLinePosition             = 0;
+uint8_t         RXCellCount                  = 2;
+bool            JustHoppedFlag               = true;
+bool            LostContactFlag              = true;
+uint32_t        RecentPacketsLost            = 0;
+uint32_t        GapSum                       = 0;
+uint32_t        GapLongest                   = 0;
+uint32_t        GapStart                     = 0;
+uint32_t        ThisGap                      = 0;
+uint32_t        GapAverage                   = 0;
+uint32_t        GapCount                     = 0;
+float           GPSLatitude                  = 0;
+float           GPSLongitude                 = 0;
+float           GPSAngle                     = 0;
+bool            GpsFix                       = 0;
+uint8_t         GPSSatellites                = 0;
+uint16_t        GPSSpeed                     = 0;
+uint16_t        GPSMaxSpeed                  = 0;
+uint8_t         GPSHours                     = 0;
+uint8_t         GPSMins                      = 0;
+uint8_t         GPSSecs                      = 0;
+uint8_t         GPSDay                       = 0;
+uint8_t         GPSMonth                     = 0;
+uint8_t         GPSYear                      = 0;
+float           GPSAltitude                  = 0;
+float           GPSMaxaltitude               = 0;
+float           GPSGroundAltitude            = 0;
+float           GPSDistanceTo                = 0;
+float           GPSCourseTo                  = 0;
+float           GPSMaxDistance               = 0;
+float           RXModelVolts                 = 0;
+int             RXModelAltitude              = 0;
+int             RXMAXModelAltitude           = 0;
+int             GroundModelAltitude          = 0;
+float           RXTemperature                = 0;
+float           MaxAlt                       = 0;
+char            ModelTempRX[9]               = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0};
+char            ModelAltitude[9]             = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0};
+char            Maxaltitude[9]               = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0};
+char            ReceiverVersionNumber[9]     = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0};
+char            TransmitterVersionNumber[9]  = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0};
+char            ModelVolts[9]                = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0};
+File            ModelsFileNumber;
 Adafruit_INA219 ina219;
-char     SingleModelFile[40];
-bool     SingleModelFlag = false;
-bool     ModelsFileOpen = false;
-bool     USE_INA219     = false;
-bool     BoundFlag      = false;
-bool     Switch[8];
-bool     TrimSwitch[8];
-uint8_t  FMSwitch             = BANKSWITCH;
-uint8_t  Autoswitch           = Autoswitch;
-uint8_t  SafetySwitch         = 0;
-uint8_t  BuddySwitch         = 0;
-uint8_t  DualRatesSwitch     = 0;
-uint8_t  Channel9Switch       = 0;
-uint8_t  Channel10Switch      = 0;
-uint8_t  Channel11Switch      = 0;
-uint8_t  Channel12Switch      = 0;
-uint8_t  Channel9SwitchValue  = 0;
-uint8_t  Channel10SwitchValue = 0;
-uint8_t  Channel11SwitchValue = 0;
-uint8_t  Channel12SwitchValue = 0;
-bool     SWITCH1Reversed      = false;
-bool     SWITCH2Reversed      = false;
-bool     SWITCH3Reversed      = false;
-bool     SWITCH4Reversed      = false;
-uint16_t StartLocation        = 0;
-bool     ValueSent            = false;
-uint8_t  SwitchEditNumber     = 0; // number of switch being edited
-uint32_t ShowServoTimer       = 0;
-bool     LastFourOnly         = false;
-uint8_t  InPutStick[17]       = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}; //
-uint8_t  InputTrim[4]         = {0, 1, 2, 3};                                           // User defined trim inputs
-uint8_t  ExportedFileCounter  = 0;
-char     TheFilesList[100][14];
-uint16_t FileNumberInView     = 0;
-bool     FileError            = false;
-uint32_t RangeTestStart       = 0;
-uint16_t RangeTestGoodPackets = 0;
-uint8_t  SaveBank             = 0;
-bool     FailSafeChannel[CHANNELSUSED+1];
-bool     SaveFailSafeNow = false;
-uint32_t FailSafeTimer;
-uint16_t CompressedData[COMPRESSEDWORDS];   // = 15 words, 30 bytes
-uint8_t  SizeOfCompressedData;              // = 30
-uint32_t Inactivity_Timeout = INACTIVITYTIMEOUT;
-uint32_t Inactivity_Start   = 0;
-tmElements_t tm;
-char         TxName[40]      = "Unknown";
-uint32_t     LastTimeRead    = 0;
-uint32_t     LastScanButtonCheck    = 0;
-uint32_t     TransmitterLastManaged    = 0;
-uint32_t     LastShowTime    = 0;
-uint8_t      MacAddress[8]   = {0, 0, 0, 0, 0, 0, 0, 0};
-uint8_t      ErrorState      = 0;
-uint16_t XtouchPlace = 0; // Clicked X
-uint16_t YtouchPlace = 0; // Clicked Y
+char            SingleModelFile[40];
+bool            SingleModelFlag = false;
+bool            ModelsFileOpen  = false;
+bool            USE_INA219      = false;
+bool            BoundFlag       = false;
+bool            Switch[8];
+bool            TrimSwitch[8];
+uint8_t         FMSwitch             = BANKSWITCH;
+uint8_t         Autoswitch           = Autoswitch;
+uint8_t         SafetySwitch         = 0;
+uint8_t         BuddySwitch          = 0;
+uint8_t         DualRatesSwitch      = 0;
+uint8_t         Channel9Switch       = 0;
+uint8_t         Channel10Switch      = 0;
+uint8_t         Channel11Switch      = 0;
+uint8_t         Channel12Switch      = 0;
+uint8_t         Channel9SwitchValue  = 0;
+uint8_t         Channel10SwitchValue = 0;
+uint8_t         Channel11SwitchValue = 0;
+uint8_t         Channel12SwitchValue = 0;
+bool            SWITCH1Reversed      = false;
+bool            SWITCH2Reversed      = false;
+bool            SWITCH3Reversed      = false;
+bool            SWITCH4Reversed      = false;
+uint16_t        StartLocation        = 0;
+bool            ValueSent            = false;
+uint8_t         SwitchEditNumber     = 0; // number of switch being edited
+uint32_t        ShowServoTimer       = 0;
+bool            LastFourOnly         = false;
+uint8_t         InPutStick[17]       = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}; //
+uint8_t         InputTrim[4]         = {0, 1, 2, 3};                                           // User defined trim inputs
+uint8_t         ExportedFileCounter  = 0;
+char            TheFilesList[100][14];
+uint16_t        FileNumberInView     = 0;
+bool            FileError            = false;
+uint32_t        RangeTestStart       = 0;
+uint16_t        RangeTestGoodPackets = 0;
+uint8_t         SaveBank             = 0;
+bool            FailSafeChannel[CHANNELSUSED + 1];
+bool            SaveFailSafeNow = false;
+uint32_t        FailSafeTimer;
+uint16_t        CompressedData[COMPRESSEDWORDS]; // = 15 words, 30 bytes
+uint8_t         SizeOfCompressedData;            // = 30
+uint32_t        Inactivity_Timeout = INACTIVITYTIMEOUT;
+uint32_t        Inactivity_Start   = 0;
+tmElements_t    tm;
+char            TxName[40]             = "Unknown";
+uint32_t        LastTimeRead           = 0;
+uint32_t        LastScanButtonCheck    = 0;
+uint32_t        TransmitterLastManaged = 0;
+uint32_t        LastShowTime           = 0;
+uint8_t         MacAddress[8]          = {0, 0, 0, 0, 0, 0, 0, 0};
+uint8_t         ErrorState             = 0;
+uint16_t        XtouchPlace            = 0; // Clicked X
+uint16_t        YtouchPlace            = 0; // Clicked Y
 
 // changing these four valiables controls LED blink and speed
 
-bool     LedIsBlinking       = false;
-float    BlinkHertz          = 2;
-uint32_t BlinkTimer          = 0;
-bool     LedWasGreen         = true;
-bool     LedWasRed           = false;
-char     ThisRadio[6]        = "0 ";
-uint8_t  LastRadio           = 0;
-uint8_t  NextChannel         = 0;
-bool     BuddyPupilOnPPM    = false;
-bool     BuddyMaster         = false;
-bool     SlaveHasControl     = false;
-uint16_t Qnh                 = 1009; // pressure at sea level here
-uint16_t LastModelLoaded     = 0;
-uint16_t LastFileInView      = 0;
-uint8_t  MinimumGap          = 75;
-uint8_t  RecentStartLine     = 0;
-char     RecentTextFile[30];
-bool     LogRXSwaps       = false;
-bool     ThereIsMoreToSee = false;
-bool     UseLog           = false;
+bool      LedIsBlinking   = false;
+float     BlinkHertz      = 2;
+uint32_t  BlinkTimer      = 0;
+bool      LedWasGreen     = true;
+bool      LedWasRed       = false;
+char      ThisRadio[6]    = "0 ";
+uint8_t   LastRadio       = 0;
+uint8_t   NextChannel     = 0;
+bool      BuddyPupilOnPPM = false;
+bool      BuddyMaster     = false;
+bool      SlaveHasControl = false;
+uint16_t  Qnh             = 1009; // pressure at sea level here
+uint16_t  LastModelLoaded = 0;
+uint16_t  LastFileInView  = 0;
+uint8_t   MinimumGap      = 75;
+uint8_t   RecentStartLine = 0;
+char      RecentTextFile[30];
+bool      LogRXSwaps       = false;
+bool      ThereIsMoreToSee = false;
+bool      UseLog           = false;
 uint8_t   Gsecond;   // = tm.Second; // 0-59
 uint8_t   Gminute;   // = tm.Minute; // 0-59
 uint8_t   Ghour;     // = tm.Hour;   // 0-23
@@ -741,43 +741,43 @@ uint8_t   GweekDay;  // = tm.Wday;   // 1-7
 uint8_t   GmonthDay; // = tm.Day;    // 1-31
 uint8_t   Gmonth;    // = tm.Month;  // 1-12
 uint8_t   Gyear;     // = tm.Year;   // 0-99
-bool      GPSTimeSynched    = false;
-short int DeltaGMT          = 0;
-uint32_t  SwapWaveBandTimer = 0;
-uint8_t   SwapWaveBand      = 0;
-uint16_t  TrimMultiplier     = 2; // How much to multiply trim by
-uint8_t   DateFix           = 0;
-bool      b5isGrey          = false;
-bool      b12isGrey         = false;
-uint16_t  BackGroundColour  = 214;
-uint16_t  ForeGroundColour  = White;
-uint16_t  HighlightColour   = Yellow;
-uint16_t  SpecialColour     = Red;
-bool      Reconnected       = false;
-uint8_t   LowBattery        = LOWBATTERY;
-uint16_t  SbusRepeats       = 0;
-uint16_t  SavedSbusRepeats  = 0;
-bool      RXVoltsDetected   = false;
-uint16_t  RadioSwaps        = 0;
-uint16_t  RX1TotalTime      = 0;
-uint16_t  RX2TotalTime      = 0;
-uint16_t  SavedRadioSwaps   = 0;
-uint16_t  SavedRX1TotalTime = 0;
-uint16_t  SavedRX2TotalTime = 0;
-uint8_t   AudioVolume       = 50;
-uint32_t  WarningTimer      = 0;
-uint32_t  ScreenTimeTimer   = 0;
-bool      ScreenIsOff       = false;
-uint8_t   Brightness        = 100;
-bool      ButtonClicks      = true;
-bool      PlayFanfare       = true;
-bool      TrimClicks        = true;
-bool      SpeakingClock     = true;
-bool      ClockSpoken       = false;
-bool      ClockSpoken1      = false;
-bool      AnnounceBanks     = true;
-bool      AnnounceConnected = true;
-bool      CopyTrimsToAll    = true;
+bool      GPSTimeSynched      = false;
+short int DeltaGMT            = 0;
+uint32_t  SwapWaveBandTimer   = 0;
+uint8_t   SwapWaveBand        = 0;
+uint16_t  TrimMultiplier      = 2; // How much to multiply trim by
+uint8_t   DateFix             = 0;
+bool      b5isGrey            = false;
+bool      b12isGrey           = false;
+uint16_t  BackGroundColour    = 214;
+uint16_t  ForeGroundColour    = White;
+uint16_t  HighlightColour     = Yellow;
+uint16_t  SpecialColour       = Red;
+bool      Reconnected         = false;
+uint8_t   LowBattery          = LOWBATTERY;
+uint16_t  SbusRepeats         = 0;
+uint16_t  SavedSbusRepeats    = 0;
+bool      RXVoltsDetected     = false;
+uint16_t  RadioSwaps          = 0;
+uint16_t  RX1TotalTime        = 0;
+uint16_t  RX2TotalTime        = 0;
+uint16_t  SavedRadioSwaps     = 0;
+uint16_t  SavedRX1TotalTime   = 0;
+uint16_t  SavedRX2TotalTime   = 0;
+uint8_t   AudioVolume         = 50;
+uint32_t  WarningTimer        = 0;
+uint32_t  ScreenTimeTimer     = 0;
+bool      ScreenIsOff         = false;
+uint8_t   Brightness          = 100;
+bool      ButtonClicks        = true;
+bool      PlayFanfare         = true;
+bool      TrimClicks          = true;
+bool      SpeakingClock       = true;
+bool      ClockSpoken         = false;
+bool      ClockSpoken1        = false;
+bool      AnnounceBanks       = true;
+bool      AnnounceConnected   = true;
+bool      CopyTrimsToAll      = true;
 uint16_t  ReversedChannelBITS = 0; // 16 BIT for 16 Channels
 uint16_t  SavedLineX          = 12345;
 bool      FirstConnection     = true;
@@ -788,84 +788,86 @@ short int TxVoltageCorrection     = 0;
 short int RxVoltageCorrection     = 0;
 uint8_t   LEDBrightness           = DEFAULTLEDBRIGHTNESS; // needs only 8 bits really
 uint8_t   PowerOffWarningSeconds  = 2;
-uint8_t   ConnectionAssessSeconds = 1; 
+uint8_t   ConnectionAssessSeconds = 1;
 uint32_t  PreviousPowerOffTimer   = 0;
 bool      ModelIdentified         = false;
 bool      ModelMatched            = false;
 bool      AutoModelSelect         = true;
 
-union uMacReceived {
-        uint64_t Val64  = 0;
-        uint32_t Val32[2];
-        uint8_t  Val8[8];       // Model's Mac address just obtained from model
-     }  ModelsMacUnion;
+union uMacReceived
+{
+    uint64_t Val64 = 0;
+    uint32_t Val32[2];
+    uint8_t  Val8[8]; // Model's Mac address just obtained from model
+} ModelsMacUnion;
 
-union uMacStored {
-        uint64_t Val64  = 0;
-        uint32_t Val32[2] ;
-        uint8_t  Val8[8];        // Model's Mac address that had been saved on disk
-     }  ModelsMacUnionSaved;
-bool     MotorEnabled               = false;
-bool     SendNoData                 = false;
-bool     MotorWasEnabled            = false;
-uint8_t  MotorChannel               = 15;
-uint8_t  MotorChannelZero           = 0; 
-bool     UseMotorKill               = true;
-bool     SafetyON                   = false;
-bool     BuddyON                    = false;
-bool     SafetyWasOn                = false;
-u_int8_t WarningSound               = BATTERYISLOW;
-uint32_t LowVoltstimer              = 0;
-float    StopFlyingVoltsPerCell     = 0;
-uint16_t SFV                        = 0; // =StopFlyingVoltsPerCell * 100
-bool     NewCompressNeeded          = true;
-uint32_t FileCheckSum               = 0;
-bool     DoingCheckSm               = false;
-bool     RecursedAlready = false;
-bool     TXLiPo                         = false;
-uint8_t  CurrentPoint                   = 1;
-bool     UseDualRates                    = false;
-uint8_t  Drate1                          = 100; 
-uint8_t  Drate2                          = 75; 
-uint8_t  Drate3                          = 50;
-uint8_t  DualRateChannels[8]             =  {1, 2, 4, 0, 0, 0, 0, 0};
-uint8_t  DualRateValue                   = 100;
+union uMacStored
+{
+    uint64_t Val64 = 0;
+    uint32_t Val32[2];
+    uint8_t  Val8[8]; // Model's Mac address that had been saved on disk
+} ModelsMacUnionSaved;
+bool     MotorEnabled           = false;
+bool     SendNoData             = false;
+bool     MotorWasEnabled        = false;
+uint8_t  MotorChannel           = 15;
+uint8_t  MotorChannelZero       = 0;
+bool     UseMotorKill           = true;
+bool     SafetyON               = false;
+bool     BuddyON                = false;
+bool     SafetyWasOn            = false;
+u_int8_t WarningSound           = BATTERYISLOW;
+uint32_t LowVoltstimer          = 0;
+float    StopFlyingVoltsPerCell = 0;
+uint16_t SFV                    = 0; // =StopFlyingVoltsPerCell * 100
+bool     NewCompressNeeded      = true;
+uint32_t FileCheckSum           = 0;
+bool     DoingCheckSm           = false;
+bool     RecursedAlready        = false;
+bool     TXLiPo                 = false;
+uint8_t  CurrentPoint           = 1;
+bool     UseDualRates           = false;
+uint8_t  Drate1                 = 100;
+uint8_t  Drate2                 = 75;
+uint8_t  Drate3                 = 50;
+uint8_t  DualRateChannels[8]    = {1, 2, 4, 0, 0, 0, 0, 0};
+uint8_t  DualRateValue          = 100;
 uint16_t CurveDots[5];
 char     Confirmed[2];
 char     NewFileBuffer[MAXFILELEN];
 uint16_t NewFileBufferPointer = 0;
-uint8_t  ReconnectionIndex      = 0;
-bool     TimerDownwards         = false;
-uint16_t TimerStartTime         = 5 * 60; 
-bool     TimesUp                = false;
-uint8_t  CountDownIndex = 0;
-uint8_t   MacrosBuffer[MAXMACROS][BYTESPERMACRO]; // macros' buffer
-uint32_t  MacroStartTime[MAXMACROS];
-uint32_t  MacroStopTime[MAXMACROS];
-uint8_t   PreviousMacroNumber = 1;
-bool      UseMacros           = false;
+uint8_t  ReconnectionIndex    = 0;
+bool     TimerDownwards       = false;
+uint16_t TimerStartTime       = 5 * 60;
+bool     TimesUp              = false;
+uint8_t  CountDownIndex       = 0;
+uint8_t  MacrosBuffer[MAXMACROS][BYTESPERMACRO]; // macros' buffer
+uint32_t MacroStartTime[MAXMACROS];
+uint32_t MacroStopTime[MAXMACROS];
+uint8_t  PreviousMacroNumber = 1;
+bool     UseMacros           = false;
 
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************
 // **********************************************************************************************************************************
 
-namespace FHSS_data{
+namespace FHSS_data {
 
-uint8_t    FHSS_Channels1[42] = {93, 111, 107, 103, 106, 97, 108, 102, 118, // TEST array
+uint8_t FHSS_Channels1[42] = {93, 111, 107, 103, 106, 97, 108, 102, 118, // TEST array
                               104, 101, 109, 98, 113, 124, 115, 91, 96, 85, 117, 89, 99, 114, 87, 112,
                               86, 94, 92, 119, 120, 100, 121, 123, 95, 122, 105, 84, 116, 90, 110, 88};
 
 // offsets:                    0    1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18 19  20  21  22  23  24 ...
-uint8_t   FHSS_Channels[83] = {51, 28, 24, 61, 64, 55, 66, 19, 76, 21, 59, 67, 15, 71, 82, 32, 49, 69, 13, 2, 34, 47, 20, 16, 72, // UK array
-                               35, 57, 45, 29, 75, 3, 41, 62, 11, 9, 77, 37, 8, 31, 36, 18, 17, 50, 78, 73, 30, 79, 6, 23, 40,
-                               54, 12, 80, 53, 22, 1, 74, 39, 58, 63, 70, 52, 42, 25, 43, 26, 14, 38, 48, 68, 33, 27, 60, 44, 46,
-                               56, 7, 81, 5, 65, 4, 10};
-uint8_t   UkRulesCounter    = 0;
-bool      UkRules           = true;
-uint8_t*  FHSSRecoveryPointer;
-uint8_t*  FHSSChPointer;                // pointer for channels array (three only used for Recovery)
-uint8_t   NextChannelNumber  = 0;
-}
+uint8_t  FHSS_Channels[83] = {51, 28, 24, 61, 64, 55, 66, 19, 76, 21, 59, 67, 15, 71, 82, 32, 49, 69, 13, 2, 34, 47, 20, 16, 72, // UK array
+                              35, 57, 45, 29, 75, 3, 41, 62, 11, 9, 77, 37, 8, 31, 36, 18, 17, 50, 78, 73, 30, 79, 6, 23, 40,
+                              54, 12, 80, 53, 22, 1, 74, 39, 58, 63, 70, 52, 42, 25, 43, 26, 14, 38, 48, 68, 33, 27, 60, 44, 46,
+                              56, 7, 81, 5, 65, 4, 10};
+uint8_t  UkRulesCounter    = 0;
+bool     UkRules           = true;
+uint8_t* FHSSRecoveryPointer;
+uint8_t* FHSSChPointer; // pointer for channels array (three only used for Recovery)
+uint8_t  NextChannelNumber = 0;
+} // namespace FHSS_data
 
 // *********************************************** END OF GLOBAL DATA ***************************************************************
 
