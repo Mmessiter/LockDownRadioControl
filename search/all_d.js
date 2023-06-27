@@ -60,7 +60,7 @@ var searchData=
   ['logview_57',['LOGVIEW',['../Definitions_8h.html#ab5b352492259f7b453a051455d5dca50',1,'Definitions.h']]],
   ['logview_58',['LogVIEW',['../TransmitterCode_2src_2main_8cpp.html#a6e27b8b3c5b752c6a208a768de54c277',1,'main.cpp']]],
   ['longitudegps_59',['LongitudeGPS',['../ReceiverCode_2src_2main_8cpp.html#afabe4c9d9760f8606aa408474e3d626c',1,'LongitudeGPS():&#160;main.cpp'],['../radio_8h.html#afabe4c9d9760f8606aa408474e3d626c',1,'LongitudeGPS():&#160;main.cpp']]],
-  ['look_60',['Look',['../Definitions_8h.html#a44db40e8ffa545be92871325c4dcdc55',1,'Look(int p):&#160;Utilities.h'],['../Utilities_8h.html#a44db40e8ffa545be92871325c4dcdc55',1,'Look(int p):&#160;Utilities.h']]],
+  ['look_60',['Look',['../Definitions_8h.html#a6d87eba17154f7f4f2f3802ef8ee261f',1,'Look(const any &amp;value):&#160;Utilities.h'],['../Utilities_8h.html#a6d87eba17154f7f4f2f3802ef8ee261f',1,'Look(const any &amp;value):&#160;Utilities.h']]],
   ['loop_61',['loop',['../Quadcopter_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../ReceiverCode_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../SensorHubT32_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#ad3cb30894c94eb016e98bdcaa899ac86',1,'loop():&#160;main.cpp']]],
   ['loopblink_62',['loopBlink',['../Quadcopter_2src_2main_8cpp.html#a9826c5f7dba6f1d578d9a90d06d4a373',1,'main.cpp']]],
   ['looprate_63',['loopRate',['../Quadcopter_2src_2main_8cpp.html#a368045f053bb43109cbd14504673bff6',1,'main.cpp']]],

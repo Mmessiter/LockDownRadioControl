@@ -41,7 +41,7 @@ var Utilities_8h =
     [ "IntoHigherRes", "Utilities_8h.html#a0d8d8a0d67cb9b04481f1692abe75368", null ],
     [ "IntoLowerRes", "Utilities_8h.html#a5cdbe11d62e0de7610ba323e60b97d33", null ],
     [ "KickTheDog", "Utilities_8h.html#ada95a00a341e4a80176eda743a94ab2e", null ],
-    [ "Look", "Utilities_8h.html#a44db40e8ffa545be92871325c4dcdc55", null ],
+    [ "Look", "Utilities_8h.html#a6d87eba17154f7f4f2f3802ef8ee261f", null ],
     [ "MapWithExponential", "Utilities_8h.html#a927484b01116cd14fd1ade706bc06d51", null ],
     [ "MayBeAddZero", "Utilities_8h.html#ae310e7fc6397929ae886869c05cbc334", null ],
     [ "PlaySound", "Utilities_8h.html#aa490b4664b0a4498d53b30b82287d5df", null ],
