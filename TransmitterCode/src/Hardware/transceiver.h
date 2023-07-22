@@ -89,7 +89,7 @@ FASTRUN void TryOtherPipe()
 void TryToReconnect()
 {
     if (BuddyPupilOnPPM) return;
-    if (!LedWasGreen) TryOtherPipe();
+    if (!LedWasGreen) TryOtherPipe(); // BUT NOT while connected to model!
     ++ReconnectionIndex;
     if (ReconnectionIndex >= RECONNECT_CHANNELS_COUNT) ReconnectionIndex = 0;
     NextChannel = *(FHSS_data::FHSSRecoveryPointer + RECONNECT_CHANNELS_START + ReconnectionIndex); //  reconnect channel (selected from three)
@@ -154,23 +154,18 @@ FASTRUN void SendData()
         if (BuddyPupilOnPPM) {
             SendViaPPM();
             return;
-        }                                                          // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
-        Connected = false;                                         // Assume the worst until ACK is received.
-        FlushFifos();                                              // This avoids a lockup that happens when the FIFO gets full.
-        LoadPacketData();                                          // extra parameters appended to the data packet
-        Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);   // Compress 32 bytes down to 24 (40 -> 30??)
-        if (Radio1.write(&CompressedData, SizeOfCompressedData)) { //  ************************** >>>>> SEND DATA (30 bytes) TO RX <<<<< ***************************************
-
-            SuccessfulPacket();
-        }
-        else {
+        }                                                        // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
+        Connected = false;                                       // Assume the worst until ACK is received.
+        FlushFifos();                                            // This avoids a lockup that happens when the FIFO gets full.
+        LoadPacketData();                                        // extra parameters appended to the data packet
+        Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24 (40 -> 30??)
+        if (Radio1.write(&CompressedData, SizeOfCompressedData))
+            SuccessfulPacket();                                  //  ************************** >>>>> SEND DATA (30 bytes) TO RX <<<<< ***************************************
+        else
             FailedPacket();
-        }
     }
 }
-
 /***********************************************************************************************************/
-
 void DoScanEnd()
 {
     Radio1.setDataRate(RF24_250KBPS);
