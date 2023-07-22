@@ -17,7 +17,7 @@
 
 #define RXVERSION_MAJOR   2
 #define RXVERSION_MINOR   2
-#define RXVERSION_MINIMUS 2 // June 2023
+#define RXVERSION_MINIMUS 3 // June 2023
 
 // #define DB_FHSS
 // #define DB_SENSORS
@@ -26,7 +26,7 @@
 // #define DB_RXTIMERS
 
 //**************************************************************************************************************************
-#define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< ****
+  #define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< ****
 //**************************************************************************************************************************
 
 // **************************************************************************
@@ -43,8 +43,10 @@
 
 // ********************************* reconnect params ***************************************
 
-#define LISTEN_PERIOD   14   //   How many ms to listen for TX in Reconnect()
-#define RECEIVE_TIMEOUT 14 //   <=9 fails, >=11 OK
+#define LISTEN_PERIOD   10      //  14 How many ms to listen for TX in Reconnect()
+#define RECEIVE_TIMEOUT 15      //   <=9 fails, >=11 OK
+#define RECONNECT_CHANNELS_COUNT 3  // How many channels to try when reconnecting
+#define RECONNECT_CHANNELS_START 12 // Offset in the array to begin getting reconnect channels
 
 // *****************************************************************************************
 #define PIPENUMBER       1   
@@ -70,8 +72,6 @@
 #define pinCE2           21   // NRF2
 #define FAILSAFE_TIMEOUT 2000 // two seconds until failsafe
 
-#define RECONNECT_CHANNELS_COUNT 2                         // How many channels to try when reconnecting
-#define RECONNECT_CHANNELS_START 12                        // Offset in the array to begin getting reconnect channels
 
 #define UNCOMPRESSEDWORDS        20                        //   16 Channels plus extra 4 16 BIT values
 #define COMPRESSEDWORDS          UNCOMPRESSEDWORDS * 3 / 4 // = 16 WORDS  with no extra
