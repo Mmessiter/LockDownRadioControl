@@ -41,7 +41,7 @@ void RecordsPacketSuccess(uint8_t s)
     if (PacketsHistoryIndex >= (PERFECTPACKETSPERSECOND * ConnectionAssessSeconds)) PacketsHistoryIndex = 0; //
 }
 /************************************************************************************************************/
-FASTRUN void FailedPacket()  // SLIGHTLY BETTER VERSION?
+FASTRUN void FailedPacket()  
 {
     RecordsPacketSuccess(0); // Record a failure
     ++RecentPacketsLost;     // this is to keep track of events when receiver is off
@@ -54,8 +54,8 @@ FASTRUN void FailedPacket()  // SLIGHTLY BETTER VERSION?
         }
     }
     if (LostContactFlag) {
-        if ((millis() - GapStart) > RED_LED_ON_TIME)
-        { // there's no need to blink red for every single lost packet. Only after 3.5 seconds of no connection.
+        if ((millis() - GapStart) > RED_LED_ON_TIME) // Receiver gone home?
+        { 
             if (LedWasGreen && UseLog) {
                 LogThisLongGap();
             }
@@ -65,6 +65,7 @@ FASTRUN void FailedPacket()  // SLIGHTLY BETTER VERSION?
             }
         }
         TryToReconnect();
+        LastPacketSentTime = 0;
     }
     int SecondsRemaining = (Inactivity_Timeout / 1000) - (millis() - Inactivity_Start) / 1000;
     if (SecondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH); // INACTIVITY POWER OFF HERE!!
@@ -89,7 +90,9 @@ FASTRUN void TryOtherPipe()
 void TryToReconnect()
 {
     if (BuddyPupilOnPPM) return;
-    if (!LedWasGreen) TryOtherPipe(); // BUT NOT while connected to model!
+    if (!LedWasGreen) {
+        TryOtherPipe(); // BUT NOT while connected to model!
+    }
     ++ReconnectionIndex;
     if (ReconnectionIndex >= RECONNECT_CHANNELS_COUNT) ReconnectionIndex = 0;
     NextChannel = *(FHSS_data::FHSSRecoveryPointer + RECONNECT_CHANNELS_START + ReconnectionIndex); //  reconnect channel (selected from three)
@@ -147,9 +150,7 @@ FLASHMEM void InitRadio(uint64_t Pipe)
 FASTRUN void SendData()
 {
     if (SendNoData) return;
-    uint16_t PacketGap = PACEMAKER;
-    if (LostContactFlag && LedWasGreen && !BuddyPupilOnPPM) PacketGap = 0;
-    if ((millis() - LastPacketSentTime) >= PacketGap) {
+    if ((millis() - LastPacketSentTime) >= PACEMAKER) {          // LastPacketSentTime is set to zero when a packet failed to send
         LastPacketSentTime = millis();
         if (BuddyPupilOnPPM) {
             SendViaPPM();
@@ -159,12 +160,17 @@ FASTRUN void SendData()
         FlushFifos();                                            // This avoids a lockup that happens when the FIFO gets full.
         LoadPacketData();                                        // extra parameters appended to the data packet
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24 (40 -> 30??)
-        if (Radio1.write(&CompressedData, SizeOfCompressedData))
-            SuccessfulPacket();                                  //  ************************** >>>>> SEND DATA (30 bytes) TO RX <<<<< ***************************************
+        if (Radio1.write(&CompressedData, SizeOfCompressedData)) //  ************************** >>>>> SEND DATA (30 bytes) TO RX <<<<< ***************************************
+        {
+            SuccessfulPacket();
+        } 
         else
+        {
             FailedPacket();
+        }
     }
 }
+
 /***********************************************************************************************************/
 void DoScanEnd()
 {
