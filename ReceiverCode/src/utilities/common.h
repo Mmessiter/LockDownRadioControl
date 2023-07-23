@@ -17,9 +17,9 @@
 
 #define RXVERSION_MAJOR   2
 #define RXVERSION_MINOR   2
-#define RXVERSION_MINIMUS 3 // June 2023
+#define RXVERSION_MINIMUS 3 // July 2023
 
-                            // #define DB_FHSS
+ // #define DB_FHSS
 // #define DB_SENSORS
 // #define DB_BIND
 // #define DB_FAILSAFE
@@ -41,12 +41,12 @@
 #define SENSOR_HUB_I2C_ADDRESS 8
 #define HOPTIME                80 // ms between channel changes
 
-// ********************************* reconnect params ***************************************
+// ********************* >>> Reconnect params <<< ***************************************
 
-#define LISTEN_PERIOD            10 //  14 How many ms to listen for TX in Reconnect()
-#define RECEIVE_TIMEOUT          15 //   <=9 fails, >=11 OK
-#define RECONNECT_CHANNELS_COUNT 3  // How many channels to try when reconnecting
-#define RECONNECT_CHANNELS_START 12 // Offset in the array to begin getting reconnect channels
+#define LISTEN_PERIOD            10  //  14 How many ms to listen for TX in Reconnect()
+#define RECEIVE_TIMEOUT          15  //   <=9 fails, >=11 OK
+#define RECONNECT_CHANNELS_COUNT 3   // How many channels to try when reconnecting
+#define RECONNECT_CHANNELS_START 12  // Offset in the array to begin getting reconnect channels
 
 // *****************************************************************************************
 #define PIPENUMBER       1
