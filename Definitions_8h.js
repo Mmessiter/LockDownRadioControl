@@ -422,6 +422,7 @@ var Definitions_8h =
     [ "CopyTrimsToAll", "Definitions_8h.html#ae737f11637caa631c30255f614800ba6", null ],
     [ "CountDownIndex", "Definitions_8h.html#adfcd3241fc01c3231bd87d8711016b15", null ],
     [ "CurrentMode", "Definitions_8h.html#aacabee92eb3ddd2e3cf31695c00a912e", null ],
+    [ "CurrentPipe", "Definitions_8h.html#ad822a6e47865e57ae25f51c6c0eea7de", null ],
     [ "CurrentPoint", "Definitions_8h.html#af10ffe07503b33fd55065fd9021e17e7", null ],
     [ "CurrentPosition", "Definitions_8h.html#ade76e94669870d42879b18f17505f967", null ],
     [ "CurrentView", "Definitions_8h.html#a2c76c41cd62573eb7227882fc9b9e557", null ],
