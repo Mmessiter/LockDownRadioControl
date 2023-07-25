@@ -846,6 +846,7 @@ uint32_t MacroStartTime[MAXMACROS];
 uint32_t MacroStopTime[MAXMACROS];
 uint8_t  PreviousMacroNumber = 1;
 bool     UseMacros           = false;
+bool     CurrentPipe         = 0;
 
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************

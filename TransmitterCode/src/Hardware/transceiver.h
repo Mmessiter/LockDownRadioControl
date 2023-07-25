@@ -41,7 +41,7 @@ void RecordsPacketSuccess(uint8_t s)
     if (PacketsHistoryIndex >= (PERFECTPACKETSPERSECOND * ConnectionAssessSeconds)) PacketsHistoryIndex = 0; //
 }
 /************************************************************************************************************/
-FASTRUN void FailedPacket()  
+FASTRUN void FailedPacket()
 {
     RecordsPacketSuccess(0); // Record a failure
     ++RecentPacketsLost;     // this is to keep track of events when receiver is off
@@ -55,7 +55,7 @@ FASTRUN void FailedPacket()
     }
     if (LostContactFlag) {
         if ((millis() - GapStart) > RED_LED_ON_TIME) // Receiver gone home?
-        { 
+        {
             if (LedWasGreen && UseLog) {
                 LogThisLongGap();
             }
@@ -78,11 +78,15 @@ FASTRUN void TryOtherPipe()
     if (BoundFlag == true) {
         BoundFlag = false;
         SetThePipe(DefaultPipe);
+        CurrentPipe = 0; // 0 = default pipe
+        //  Look("Default pipe");
     }
     else
     {
         BoundFlag = true;             //  ... but not modelmatched yet
         SetThePipe(TeensyMACAddPipe); //
+        CurrentPipe = 1;              // 1 = bound pipe
+        // Look("Bound pipe");
     }
 }
 /************************************************************************************************************/
@@ -92,7 +96,7 @@ void TryToReconnect()
     if (BuddyPupilOnPPM) return;
     if (!LedWasGreen) {
         TryOtherPipe(); // BUT NOT while connected to model!
-    }
+        }
     ++ReconnectionIndex;
     if (ReconnectionIndex >= RECONNECT_CHANNELS_COUNT) ReconnectionIndex = 0;
     NextChannel = *(FHSS_data::FHSSRecoveryPointer + RECONNECT_CHANNELS_START + ReconnectionIndex); //  reconnect channel (selected from three)
@@ -117,7 +121,9 @@ void SuccessfulPacket()
     RecordsPacketSuccess(1);
     RecentPacketsLost = 0;
     Connected         = true;
-    if (BoundFlag && !LedWasGreen) GreenLedOn();
+    if (BoundFlag && !LedWasGreen) {
+        GreenLedOn();
+    }
     CheckGapsLength();
     Radio1.read(&AckPayload, AckPayloadSize); //  "sizeof" doesn't work with externs,
     ParseAckPayload();
@@ -150,7 +156,7 @@ FLASHMEM void InitRadio(uint64_t Pipe)
 FASTRUN void SendData()
 {
     if (SendNoData) return;
-    if ((millis() - LastPacketSentTime) >= PACEMAKER) {          // LastPacketSentTime is set to zero when a packet failed to send
+    if ((millis() - LastPacketSentTime) >= PACEMAKER) { // LastPacketSentTime is set to zero when a packet failed to send
         LastPacketSentTime = millis();
         if (BuddyPupilOnPPM) {
             SendViaPPM();
@@ -163,7 +169,7 @@ FASTRUN void SendData()
         if (Radio1.write(&CompressedData, SizeOfCompressedData)) //  ************************** >>>>> SEND DATA (30 bytes) TO RX <<<<< ***************************************
         {
             SuccessfulPacket();
-        } 
+        }
         else
         {
             FailedPacket();
