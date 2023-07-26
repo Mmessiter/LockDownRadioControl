@@ -407,78 +407,77 @@
 //                            Function Prototypes                           *
 //***************************************************************************
 
-
-
-void             GetSlaveChannelValues();
-void             KickTheDog();
-void             SendCommand(char* tbox);
-void             ReadSwitches();
-void             ShowComms();
-void             CheckTimer();
-void             SendCharArray(char* ch0, char* ch1, char* ch2, char* ch3, char* ch4, char* ch5, char* ch6, char* ch7, char* ch8, char* ch9, char* ch10, char* ch11, char* ch12);
-char*            Str(char* s, int n, int comma);
-void             GetNewChannelValues();
-void             LoadPacketData();
-void             GreenLedOn();
-void             CheckGapsLength();
-void             ParseAckPayload();
-void             FailedPacket();
-void             StartInactvityTimeout();
-void             ShowServoPos();
-void             SendViaPPM();
-void             ZeroDataScreen();
-void             RedLedOn();
-void             ReEnableScanButton();
-void             LogUKRules();
-int              InStrng(char* text1, char* text2);
-void             ReadCheckSum32();
-void             ResetTransmitterSettings();
-void             TryToReconnect();
-void             FlushFifos();
-FLASHMEM void    SetDS1307ToCompilerTime();
-int              GetOtherValue(char* nbox);
-void             CheckInvisiblePoint();
-void             GotoFrontView();
-void             CheckDualRatesValues();
-void             UpdateLED();
-void             CheckMotorOff();
-bool             GetButtonPress();
-void             CheckPowerOffButton();
-void             LoadFileSelector();
-void             LoadModelSelector();
-void             PlaySound(uint16_t TheSound);
-uint8_t          CheckPipeNibbles(uint8_t b);
-void             InitRadio(uint64_t Pipe);
-void             SetThePipe(uint64_t WhichPipe);
-void             DoScanInit();
-void             DoScanEnd();
-void             PreScan();
-void             HopToNextChannel();
-void             ScanAllChannels(bool cls);
-void             SendData();
-void             Procrastinate(uint32_t HowLong);
-void             DrawFhssBox();
-void             SendText(char* tbox, char* NewWord); // needed a prototype or two here!
-void             RestoreBrightness();
-void             ButtonWasPressed();
-void             CalibrateEdgeSwitches();
-void             DisplayCurve();
-void             DrawLine(int x1, int y1, int x2, int y2, int c);
-void             DrawBox(int x1, int y1, int x2, int y2, int c);
-void             FillBox(int x1, int y1, int w, int h, int c);
-void             ReadTextFile(char* fname, char* htext, uint8_t StartLineNumber, uint8_t MaxLines);
-void             LogConnection();
-void             LogDisConnection();
-void             CloseLogFile();
-void             StartLogFile();
-void             ShowLogFile(uint8_t StartLine);
-void             LogThisLongGap();
-void             LogThisModel();
-void             Force_ReDisplay();
-FASTRUN void     Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uint8_t uncompressed_size);
-FASTRUN void     BufferTeensyMACAddPipe();
-void             ExecuteMacro();
-template<typename any> void  Look(const any& value);
+void          GetSlaveChannelValues();
+void          KickTheDog();
+void          SendCommand(char* tbox);
+void          ReadSwitches();
+void          ShowComms();
+void          CheckTimer();
+void          SendCharArray(char* ch0, char* ch1, char* ch2, char* ch3, char* ch4, char* ch5, char* ch6, char* ch7, char* ch8, char* ch9, char* ch10, char* ch11, char* ch12);
+char*         Str(char* s, int n, int comma);
+void          GetNewChannelValues();
+void          LoadPacketData();
+void          GreenLedOn();
+void          CheckGapsLength();
+void          ParseAckPayload();
+void          FailedPacket();
+void          StartInactvityTimeout();
+void          ShowServoPos();
+void          SendViaPPM();
+void          ZeroDataScreen();
+void          RedLedOn();
+void          ReEnableScanButton();
+void          LogUKRules();
+int           InStrng(char* text1, char* text2);
+void          ReadCheckSum32();
+void          ResetTransmitterSettings();
+void          TryToReconnect();
+void          FlushFifos();
+FLASHMEM void SetDS1307ToCompilerTime();
+int           GetOtherValue(char* nbox);
+void          CheckInvisiblePoint();
+void          GotoFrontView();
+void          CheckDualRatesValues();
+void          UpdateLED();
+void          CheckMotorOff();
+bool          GetButtonPress();
+void          CheckPowerOffButton();
+void          LoadFileSelector();
+void          LoadModelSelector();
+void          PlaySound(uint16_t TheSound);
+uint8_t       CheckPipeNibbles(uint8_t b);
+void          InitRadio(uint64_t Pipe);
+void          SetThePipe(uint64_t WhichPipe);
+void          DoScanInit();
+void          DoScanEnd();
+void          PreScan();
+void          HopToNextChannel();
+void          ScanAllChannels(bool cls);
+void          SendData();
+void          Procrastinate(uint32_t HowLong);
+void          DrawFhssBox();
+void          SendText(char* tbox, char* NewWord); // needed a prototype or two here!
+void          RestoreBrightness();
+void          ButtonWasPressed();
+void          CalibrateEdgeSwitches();
+void          DisplayCurve();
+void          DrawLine(int x1, int y1, int x2, int y2, int c);
+void          DrawBox(int x1, int y1, int x2, int y2, int c);
+void          FillBox(int x1, int y1, int w, int h, int c);
+void          ReadTextFile(char* fname, char* htext, uint8_t StartLineNumber, uint8_t MaxLines);
+void          LogConnection();
+void          LogDisConnection();
+void          CloseLogFile();
+void          StartLogFile();
+void          ShowLogFile(uint8_t StartLine);
+void          LogLongestGap();
+void          LogThisModel();
+void          Force_ReDisplay();
+FASTRUN void  Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uint8_t uncompressed_size);
+FASTRUN void  BufferTeensyMACAddPipe();
+void          ExecuteMacro();
+template<typename any>
+void             Look(const any& value);
 void             ShowBank();
 void             UpdateModelsNameEveryWhere();
 void             DefineTrimsStart();
@@ -517,6 +516,10 @@ FASTRUN uint32_t GetIntFromAckPayload(); // This one uses a uint32_t int
 uint32_t         getvalue(char* nbox);
 uint32_t         GetValue(char* nbox);
 void             SendValue(char* nbox, int value);
+void             LogTotalLostPackets();
+void             LogTotalGoodPackets();
+void             LogOverallSuccessRate();
+
 // **************************************************************************
 //                            GLOBAL DATA                                   *
 //***************************************************************************
@@ -537,24 +540,26 @@ uint64_t      TeensyMACAddPipe = DEFAULTPIPEADDRESS;                            
 char          TextIn[CHARSMAX + 2];                                                 //          Spare space
 uint16_t      PacketsPerSecond = 0;
 uint8_t       PacketsHistoryBuffer[PERFECTPACKETSPERSECOND * MAXSHOWCOMMSSESCONDS]; // Here we record some history
-uint32_t      TotalLostPackets = 0;
-uint8_t       PacketNumber     = 0;
-uint8_t       GPSMarkHere      = 0;
-uint16_t      TrimRepeatSpeed  = 600;
-char          na[]             = "";
-uint8_t       StepSize[16]     = {0, 0, 0, 0, 0, 0, 0, 0, 5, 25, 5, 25, 5, 25, 5, 25}; //    How far to move each time on slow servos
-uint16_t      CurrentPosition[UNCOMPRESSEDWORDS];                                      //    Position from which a slow servo started (0 = not started yet)
-uint16_t      SendBuffer[UNCOMPRESSEDWORDS];                                           //    Data to send to rx (16 words)
-uint16_t      PPMBuffer[UNCOMPRESSEDWORDS];                                            //
-uint16_t      ShownBuffer[UNCOMPRESSEDWORDS];                                          //    Data shown before
-uint16_t      LastBuffer[CHANNELSUSED + 1];                                            //    Used to spot any change
-uint16_t      PreMixBuffer[CHANNELSUSED + 1];                                          //    Data collected from sticks
-uint8_t       MaxDegrees[5][CHANNELSUSED + 1];                                         //    Max degrees (180)
-uint8_t       MidHiDegrees[5][CHANNELSUSED + 1];                                       //    MidHi degrees (135)
-uint8_t       CentreDegrees[5][CHANNELSUSED + 1];                                      //    Middle degrees (90)
-uint8_t       MidLowDegrees[5][CHANNELSUSED + 1];                                      //    MidLow Degrees (45)
-uint8_t       MinDegrees[5][CHANNELSUSED + 1];                                         //    Min Degrees (0)
-uint8_t       SubTrims[CHANNELSUSED + 1];                                              //    Subtrims
+uint32_t      TotalLostPackets   = 0;
+uint32_t      TotalGoodPackets   = 0;
+
+uint8_t       PacketNumber       = 0;
+uint8_t       GPSMarkHere        = 0;
+uint16_t      TrimRepeatSpeed    = 600;
+char          na[]               = "";
+uint8_t       StepSize[16]       = {0, 0, 0, 0, 0, 0, 0, 0, 5, 25, 5, 25, 5, 25, 5, 25}; //    How far to move each time on slow servos
+uint16_t      CurrentPosition[UNCOMPRESSEDWORDS];                                        //    Position from which a slow servo started (0 = not started yet)
+uint16_t      SendBuffer[UNCOMPRESSEDWORDS];                                             //    Data to send to rx (16 words)
+uint16_t      PPMBuffer[UNCOMPRESSEDWORDS];                                              //
+uint16_t      ShownBuffer[UNCOMPRESSEDWORDS];                                            //    Data shown before
+uint16_t      LastBuffer[CHANNELSUSED + 1];                                              //    Used to spot any change
+uint16_t      PreMixBuffer[CHANNELSUSED + 1];                                            //    Data collected from sticks
+uint8_t       MaxDegrees[5][CHANNELSUSED + 1];                                           //    Max degrees (180)
+uint8_t       MidHiDegrees[5][CHANNELSUSED + 1];                                         //    MidHi degrees (135)
+uint8_t       CentreDegrees[5][CHANNELSUSED + 1];                                        //    Middle degrees (90)
+uint8_t       MidLowDegrees[5][CHANNELSUSED + 1];                                        //    MidLow Degrees (45)
+uint8_t       MinDegrees[5][CHANNELSUSED + 1];                                           //    Min Degrees (0)
+uint8_t       SubTrims[CHANNELSUSED + 1];                                                //    Subtrims
 uint8_t       SubTrimToEdit      = 0;
 uint32_t      LastPacketSentTime = 0;
 uint8_t       Bank               = 1;

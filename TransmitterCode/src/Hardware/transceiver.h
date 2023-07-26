@@ -38,6 +38,7 @@ void RecordsPacketSuccess(uint8_t s)
     static uint16_t PacketsHistoryIndex       = 0;
     PacketsHistoryBuffer[PacketsHistoryIndex] = s;
     ++PacketsHistoryIndex;
+    ++TotalGoodPackets;
     if (PacketsHistoryIndex >= (PERFECTPACKETSPERSECOND * ConnectionAssessSeconds)) PacketsHistoryIndex = 0; //
 }
 /************************************************************************************************************/
@@ -45,7 +46,6 @@ FASTRUN void FailedPacket()
 {
     RecordsPacketSuccess(0); // Record a failure
     ++RecentPacketsLost;     // this is to keep track of events when receiver is off
-    ++TotalLostPackets;      // This is total - never zeroed
     if (!LostContactFlag) {
         if (RecentPacketsLost >= LOSTCONTACTCUTOFF) {
             LostContactFlag = true;
@@ -56,9 +56,6 @@ FASTRUN void FailedPacket()
     if (LostContactFlag) {
         if ((millis() - GapStart) > RED_LED_ON_TIME) // Receiver gone home?
         {
-            if (LedWasGreen && UseLog) {
-                LogThisLongGap();
-            }
             if (!LedWasRed) { // Put on red led - receiver must be off
                 RedLedOn();
                 ReEnableScanButton();
@@ -79,14 +76,12 @@ FASTRUN void TryOtherPipe()
         BoundFlag = false;
         SetThePipe(DefaultPipe);
         CurrentPipe = 0; // 0 = default pipe
-        //  Look("Default pipe");
     }
     else
     {
         BoundFlag = true;             //  ... but not modelmatched yet
         SetThePipe(TeensyMACAddPipe); //
         CurrentPipe = 1;              // 1 = bound pipe
-        // Look("Bound pipe");
     }
 }
 /************************************************************************************************************/
@@ -96,7 +91,7 @@ void TryToReconnect()
     if (BuddyPupilOnPPM) return;
     if (!LedWasGreen) {
         TryOtherPipe(); // BUT NOT while connected to model!
-        }
+    }
     ++ReconnectionIndex;
     if (ReconnectionIndex >= RECONNECT_CHANNELS_COUNT) ReconnectionIndex = 0;
     NextChannel = *(FHSS_data::FHSSRecoveryPointer + RECONNECT_CHANNELS_START + ReconnectionIndex); //  reconnect channel (selected from three)
@@ -119,6 +114,7 @@ void SuccessfulPacket()
     ++RangeTestGoodPackets;
     ++PacketNumber;
     RecordsPacketSuccess(1);
+    TotalLostPackets += RecentPacketsLost;
     RecentPacketsLost = 0;
     Connected         = true;
     if (BoundFlag && !LedWasGreen) {

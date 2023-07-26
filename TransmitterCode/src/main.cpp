@@ -234,7 +234,14 @@ void GreenLedOn()
         ClearSuccessRate();
         LastShowTime = 0;
     }
-    if (!LedWasGreen || LedIsBlinking) { // no need to repeat unless it is blinking
+
+    TotalLostPackets  = 0;
+    TotalGoodPackets  = 0;
+    RecentPacketsLost = 0;
+    GapLongest        = 0;
+
+    if (!LedWasGreen || LedIsBlinking)
+    { // no need to repeat unless it is blinking
         if (!LedIsBlinking) {
             ShowComms();
             if (AnnounceConnected) {
@@ -1870,7 +1877,7 @@ FASTRUN void CreateTimeStamp(char* DateAndTime)
 
     if (RTC.read(tm)) {
         strcpy(DateAndTime, null);
-     
+
         if (MayBeAddZero(tm.Day)) strcat(DateAndTime, zero);
         strcat(DateAndTime, Str(NB, tm.Day, 0));
         strcat(DateAndTime, Slash);
@@ -2001,7 +2008,7 @@ FASTRUN void LogFilePreamble()
     char dbuf[22];
     char Divider[] = " - ";
     CheckLogFileIsOpen();
-    CreateTimeStamp(dbuf);   // Put time stamp into buffer
+    CreateTimeStamp(dbuf);    // Put time stamp into buffer
     WriteToLogFile(dbuf, 20); // Add time stamp
     WriteToLogFile(Divider, sizeof(Divider));
 }
@@ -2020,7 +2027,7 @@ FASTRUN void LogMinGap()
 {
     char TheText[] = "Min logged gap: ";
     char buf[25]   = " ";
-    char NB[] = "    ";
+    char NB[]      = "    ";
 
     Str(NB, MinimumGap, 0);
     strcpy(buf, TheText);
@@ -2038,13 +2045,33 @@ FASTRUN void LogConnection()
     LogMinGap();
 }
 // ************************************************************************
+
+uint32_t GetOverallSuccessRate()
+{
+    return (TotalGoodPackets * 100) / (TotalGoodPackets + TotalLostPackets);
+}
+// ************************************************************************
 FASTRUN void LogDisConnection()
 {
-    char TheText[] = "Disconnected from ";
-    char buf[40]   = " ";
+    
+    char TheText4[] = "Total offline time: ";
+    char buf[40]    = " ";
+    char NB[]       = "    ";
+    char pc[]       = "%";
+    char TheText[]  = "Disconnected from ";
+   
+
     strcpy(buf, TheText);
     strcat(buf, ModelName);
     LogText(buf, sizeof(buf));
+
+    LogLongestGap();
+    LogTotalLostPackets();
+    LogTotalGoodPackets();
+   
+    LogOverallSuccessRate();
+
+   
 }
 // ************************************************************************
 FASTRUN void LogNewBank()
@@ -2115,21 +2142,45 @@ FASTRUN void LogThisGap()
 }
 // ************************************************************************
 
-FASTRUN void LogThisLongGap()
-{ // here is logged a Gap that exceeds one second - probably because rx was turned off
-    ThisGap      = (millis() - GapStart);
-    char Ltext[] = "Long Gap: ";
-    char NB[5];
+FASTRUN void LogLongestGap()
+{
     char thetext[20];
-    Str(NB, ThisGap, 0);
-    strcpy(thetext, Ltext);
-    strcat(thetext, NB);
-    LogText(thetext, strlen(Ltext) + 4);
+    sprintf(thetext, "Longest gap: %d", GapLongest);
+    LogText(thetext, strlen(thetext));
 }
 
 // ************************************************************************
 
-FASTRUN void LogPowerOn()
+void LogTotalLostPackets()
+{
+    char thetext[20];
+    sprintf(thetext, "Total lost packets: %d", TotalLostPackets);
+    LogText(thetext, strlen(thetext));
+}
+
+// ************************************************************************
+
+void LogTotalGoodPackets()
+{
+    char thetext[20];
+    sprintf(thetext, "Total good packets: %d", TotalGoodPackets);
+    LogText(thetext, strlen(thetext));
+}
+
+// ************************************************************************
+
+void LogOverallSuccessRate()
+{
+    char thetext[20];
+    uint32_t OverallSuccessRate = 0;
+    OverallSuccessRate = GetOverallSuccessRate();
+    sprintf(thetext, "Overall success rate: %d%%", OverallSuccessRate);
+    LogText(thetext, strlen(thetext));
+}
+// ************************************************************************
+
+FASTRUN void
+LogPowerOn()
 {
     char Ltext[] = "Power ON";
     char sp[]    = "*******************************************";
