@@ -1864,10 +1864,22 @@ FASTRUN void CreateTimeStamp(char* DateAndTime)
     char NB[10];
     char zero[]  = "0";
     char Colon[] = "."; // a dot!
+    char Slash[] = "/";
     char null[]  = "";
+    char space[] = " ";
 
     if (RTC.read(tm)) {
         strcpy(DateAndTime, null);
+     
+        if (MayBeAddZero(tm.Day)) strcat(DateAndTime, zero);
+        strcat(DateAndTime, Str(NB, tm.Day, 0));
+        strcat(DateAndTime, Slash);
+        if (MayBeAddZero(tm.Month)) strcat(DateAndTime, zero);
+        strcat(DateAndTime, Str(NB, tm.Month, 0));
+        strcat(DateAndTime, Slash);
+        strcat(DateAndTime, (Str(NB, tmYearToCalendar(tm.Year), 0)));
+        strcat(DateAndTime, space);
+
         if (MayBeAddZero(tm.Hour)) strcat(DateAndTime, zero);
         strcat(DateAndTime, Str(NB, tm.Hour, 0));
         strcat(DateAndTime, Colon);
@@ -1911,9 +1923,15 @@ FASTRUN void CreateTimeDateStamp(char* DateAndTime)
 FASTRUN void MakeLogFileName(char* LogFileName)
 {
     char NB[10];
-    char Ext[] = ".LOG";
+    char Ext[]  = ".LOG";
+    char dash[] = "-";
+    char zero[] = "0";
     if (RTC.read(tm)) {
+
+        if (MayBeAddZero(tm.Day)) strcat(LogFileName, zero);
         strcpy(LogFileName, Str(NB, tm.Day, 0));
+        strcat(LogFileName, dash);
+        if (MayBeAddZero(tm.Month)) strcat(LogFileName, zero);
         strcat(LogFileName, Str(NB, tm.Month, 0));
         strcat(LogFileName, Ext);
     }
@@ -1980,11 +1998,11 @@ FASTRUN void WriteToLogFile(char* SomeData, uint16_t len)
 // ************************************************************************
 FASTRUN void LogFilePreamble()
 {
-    char dbuf[12];
+    char dbuf[22];
     char Divider[] = " - ";
     CheckLogFileIsOpen();
     CreateTimeStamp(dbuf);   // Put time stamp into buffer
-    WriteToLogFile(dbuf, 9); // Add time stamp
+    WriteToLogFile(dbuf, 20); // Add time stamp
     WriteToLogFile(Divider, sizeof(Divider));
 }
 
@@ -2000,9 +2018,10 @@ FASTRUN void LogText(char* TheText, uint16_t len)
 // ************************************************************************
 FASTRUN void LogMinGap()
 {
-    char TheText[] = "Minimum logged gap (ms): ";
-    char buf[50]   = " ";
-    char NB[8];
+    char TheText[] = "Min logged gap: ";
+    char buf[25]   = " ";
+    char NB[] = "    ";
+
     Str(NB, MinimumGap, 0);
     strcpy(buf, TheText);
     strcat(buf, NB);
@@ -2113,6 +2132,8 @@ FASTRUN void LogThisLongGap()
 FASTRUN void LogPowerOn()
 {
     char Ltext[] = "Power ON";
+    char sp[]    = "*******************************************";
+    LogText(sp, strlen(sp));
     LogText(Ltext, strlen(Ltext));
 }
 
@@ -4544,7 +4565,6 @@ void LoadModelSelector()
 
 void LoadFileSelector()
 {
-
     char Mfilesp[] = "Mfiles.path=\"";
     char Mfiles[]  = "Mfiles";
     char crlf[]    = {13, 10, 0};
@@ -4652,7 +4672,12 @@ void LogEND()
 /******************************************************************************************************************************/
 void DelLOG()
 { // delete log and start new one
-    DeleteLogFile1();
+
+    char prompt[]   = "Delete log file?";
+    char pLogView[] = "page LogView";
+    if (GetConfirmation(pLogView, prompt)) {
+        DeleteLogFile1();
+    }
     ClearText();
 }
 /******************************************************************************************************************************/
@@ -7504,7 +7529,7 @@ void GetRXVersionNumber()
     strcpy(ThisRadio, nbuf);
     if (LastRadio != AckPayload.Byte1) {
         LastRadio = AckPayload.Byte1;
-        if (LogRXSwaps && UseLog) LogThisRX();
+        if (LogRXSwaps && UseLog && LastRadio <= 2) LogThisRX();
     }
     Str(ReceiverVersionNumber, AckPayload.Byte2, 2);
     Str(nbuf, AckPayload.Byte3, 2);
