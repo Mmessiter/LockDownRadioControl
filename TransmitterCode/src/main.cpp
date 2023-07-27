@@ -2138,8 +2138,8 @@ FASTRUN void LogThisGap()
 
 FASTRUN void LogLongestGap()
 {
-    char thetext[20];
-    sprintf(thetext, "Longest gap: %d", (int) GapLongest);
+    char thetext[50];
+    snprintf(thetext,45, "Longest gap: %d", (short int) GapLongest);
     LogText(thetext, strlen(thetext));
 }
 
@@ -2148,7 +2148,7 @@ FASTRUN void LogLongestGap()
 void LogTotalLostPackets()
 {
     char thetext[50];
-    snprintf(thetext,40,"Total lost packets: %d", (short int)TotalLostPackets);
+    snprintf(thetext,45,"Total lost packets: %d", (short int)TotalLostPackets);
     LogText(thetext, strlen(thetext));
 }
 
@@ -2157,7 +2157,7 @@ void LogTotalLostPackets()
     void LogTotalGoodPackets()
 {
     char thetext[50];
-    snprintf(thetext,40, "Total good packets: %d", (uint16_t) TotalGoodPackets);
+    snprintf(thetext,45, "Total good packets: %d", (uint16_t) TotalGoodPackets);
     LogText(thetext, strlen(thetext));
 }
 
@@ -2168,7 +2168,7 @@ void LogOverallSuccessRate()
     char thetext[50];
     uint32_t OverallSuccessRate = 0;
     OverallSuccessRate = GetOverallSuccessRate();
-    snprintf(thetext,40, "Overall success rate: %d%%", (uint8_t)OverallSuccessRate);
+    snprintf(thetext,45, "Overall success rate: %d%%", (uint8_t)OverallSuccessRate);
     LogText(thetext, strlen(thetext));
 }
 // ************************************************************************
