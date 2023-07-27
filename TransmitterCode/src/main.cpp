@@ -642,7 +642,7 @@ FASTRUN void ShowComms()
         SendValue(DataView_Sg, RX1TotalTime - SavedRX1TotalTime);
         SendValue(DataView_Ag, GapAverage);
         SendValue(DataView_Gc, RX2TotalTime - SavedRX2TotalTime);
-        snprintf(Vbuf, 6, "%d", (int)SbusRepeats - SavedSbusRepeats);
+        snprintf(Vbuf, 7, "%d", (int)SbusRepeats - SavedSbusRepeats);
         SendText(Sbs, Vbuf);
         SendValue(DataView_lps, TotalLostPackets / 2);
 
@@ -667,25 +667,25 @@ FASTRUN void ShowComms()
         else {
             SendText(Fix, no);
         }
-        snprintf(Vbuf, 3, "%d", GPSSatellites);
+        snprintf(Vbuf, 7, "%d", GPSSatellites);
         SendText(Sat, Vbuf);
-        snprintf(Vbuf, 10, "%f", GPSLongitude);
+        snprintf(Vbuf, 10, "%f",  GPSLongitude);
         SendText(Lon, Vbuf);
         snprintf(Vbuf, 10, "%f", GPSLatitude);
         SendText(Lat, Vbuf);
         snprintf(Vbuf, 7, "%d", int(GPSAngle));
         SendText(Bear, Vbuf);
-        snprintf(Vbuf, 6, "%d", (int)GPSDistanceTo);
+        snprintf(Vbuf, 7, "%d", (int)GPSDistanceTo);
         SendText(Dist, Vbuf);
-        snprintf(Vbuf, 4, "%d", (int)GPSSpeed);
+        snprintf(Vbuf, 6, "%d", (int)GPSSpeed);
         SendText(Sped, Vbuf);
-        snprintf(Vbuf, 4, "%d", (int)GPSMaxSpeed);
+        snprintf(Vbuf, 6, "%d", (int)GPSMaxSpeed);
         SendText(MxS, Vbuf);
-        snprintf(Vbuf, 4, "%d", (int)GPSAltitude);
+        snprintf(Vbuf, 6, "%d", (int)GPSAltitude);
         SendText(ALT, Vbuf);
-        snprintf(Vbuf, 4, "%d", (int)GPSMaxaltitude);
+        snprintf(Vbuf, 6, "%d", (int)GPSMaxaltitude);
         SendText(MALT, Vbuf);
-        snprintf(Vbuf, 4, "%d", (int)GPSCourseTo);
+        snprintf(Vbuf, 6, "%d", (int)GPSCourseTo);
         SendText(BTo, Vbuf);
         snprintf(Vbuf, 6, "%d", (int)GPSMaxDistance);
         SendText(Mxd, Vbuf);
@@ -2053,13 +2053,8 @@ uint32_t GetOverallSuccessRate()
 // ************************************************************************
 FASTRUN void LogDisConnection()
 {
-    
-    char TheText4[] = "Total offline time: ";
     char buf[40]    = " ";
-    char NB[]       = "    ";
-    char pc[]       = "%";
     char TheText[]  = "Disconnected from ";
-   
 
     strcpy(buf, TheText);
     strcat(buf, ModelName);
@@ -2068,9 +2063,7 @@ FASTRUN void LogDisConnection()
     LogLongestGap();
     LogTotalLostPackets();
     LogTotalGoodPackets();
-   
     LogOverallSuccessRate();
-
    
 }
 // ************************************************************************
@@ -2142,10 +2135,11 @@ FASTRUN void LogThisGap()
 }
 // ************************************************************************
 
+
 FASTRUN void LogLongestGap()
 {
     char thetext[20];
-    sprintf(thetext, "Longest gap: %d", GapLongest);
+    sprintf(thetext, "Longest gap: %d", (int) GapLongest);
     LogText(thetext, strlen(thetext));
 }
 
@@ -2153,17 +2147,17 @@ FASTRUN void LogLongestGap()
 
 void LogTotalLostPackets()
 {
-    char thetext[20];
-    sprintf(thetext, "Total lost packets: %d", TotalLostPackets);
+    char thetext[50];
+    snprintf(thetext,40,"Total lost packets: %d", (short int)TotalLostPackets);
     LogText(thetext, strlen(thetext));
 }
 
 // ************************************************************************
 
-void LogTotalGoodPackets()
+    void LogTotalGoodPackets()
 {
-    char thetext[20];
-    sprintf(thetext, "Total good packets: %d", TotalGoodPackets);
+    char thetext[50];
+    snprintf(thetext,40, "Total good packets: %d", (uint16_t) TotalGoodPackets);
     LogText(thetext, strlen(thetext));
 }
 
@@ -2171,10 +2165,10 @@ void LogTotalGoodPackets()
 
 void LogOverallSuccessRate()
 {
-    char thetext[20];
+    char thetext[50];
     uint32_t OverallSuccessRate = 0;
     OverallSuccessRate = GetOverallSuccessRate();
-    sprintf(thetext, "Overall success rate: %d%%", OverallSuccessRate);
+    snprintf(thetext,40, "Overall success rate: %d%%", (uint8_t)OverallSuccessRate);
     LogText(thetext, strlen(thetext));
 }
 // ************************************************************************
@@ -4820,7 +4814,7 @@ void OptionView3Start() /// NOT CALLED
     CurrentView = OPTIONVIEW3;
     SendCommand(OptionV3Start);
     DelayWithDog(250);
-    snprintf(Vbuf, 5, "%f", StopFlyingVoltsPerCell);
+    snprintf(Vbuf, 5, "%1.2f", StopFlyingVoltsPerCell);
     SendText(t10, Vbuf);
     SendValue(TxVCorrextion, TxVoltageCorrection);
     SendValue(n2, PowerOffWarningSeconds);
@@ -4854,7 +4848,7 @@ void RXOptionsViewStart() // model options screen
     SendCommand(pRXSetup1);
     SendValue(c1, CopyTrimsToAll);
     SendValue(n3, TrimMultiplier);
-    snprintf(Vbuf, 5, "%f", StopFlyingVoltsPerCell);
+    snprintf(Vbuf, 5, "%1.2f", StopFlyingVoltsPerCell);
     SendText(t10, Vbuf);
     SendValue(Mvalue, MotorChannelZero);
     SendValue(Mchannel, MotorChannel + 1);
@@ -7630,7 +7624,7 @@ void GetAltitude()
 void GetTemperature()
 {
     RXTemperature = GetFromAckPayload();
-    snprintf(ModelTempRX, 5, "%f", RXTemperature);
+    snprintf(ModelTempRX, 5, "%1.2f", RXTemperature);
 }
 /************************************************************************************************************/
 FASTRUN uint32_t GetIntFromAckPayload() // This one uses a uint32_t int
@@ -7720,7 +7714,7 @@ FASTRUN void ParseAckPayload()
             if (RXModelVolts > 0) {
                 RXVoltsDetected = true;
                 if (RXCellCount == 12) RXModelVolts *= 2; // voltage divider needed !
-                snprintf(ModelVolts, 5, "%f", RXModelVolts);
+                snprintf(ModelVolts, 5, "%1.2f", RXModelVolts);
             }
             break;
         case 6:
