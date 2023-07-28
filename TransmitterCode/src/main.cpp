@@ -7574,7 +7574,7 @@ void GetRXVersionNumber()
     strcpy(ThisRadio, nbuf);
     if (LastRadio != AckPayload.Byte1) {
         LastRadio = AckPayload.Byte1;
-        if (LogRXSwaps && UseLog && LastRadio <= 2) LogThisRX();
+        if (LogRXSwaps && UseLog && LastRadio <= 2 && (LastRadio)) LogThisRX();
     }
     Str(ReceiverVersionNumber, AckPayload.Byte2, 2);
     Str(nbuf, AckPayload.Byte3, 2);
