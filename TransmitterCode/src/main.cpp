@@ -4375,6 +4375,7 @@ void ReadNewSwitchFunction()
     SendValue(Progress, 100);
     SaveOneModel(ModelNumber);
     SendCommand(PageSwitchView); // change to all switches screen
+    CurrentView = SWITCHES_VIEW;
     UpdateSwitchesView();        // update its info
     ClearText();
     SendCommand(ProgressEnd);
