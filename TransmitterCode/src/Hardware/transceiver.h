@@ -38,31 +38,32 @@ void RecordsPacketSuccess(uint8_t s)
     static uint16_t PacketsHistoryIndex       = 0;
     PacketsHistoryBuffer[PacketsHistoryIndex] = s;
     ++PacketsHistoryIndex;
+    ++TotalGoodPackets;
     if (PacketsHistoryIndex >= (PERFECTPACKETSPERSECOND * ConnectionAssessSeconds)) PacketsHistoryIndex = 0; //
 }
-
 /************************************************************************************************************/
-
 FASTRUN void FailedPacket()
 {
-    RecordsPacketSuccess(0);                      // Record a failure
-    ++RecentPacketsLost;                          // this is to keep track of events when receiver is off
-    ++TotalLostPackets;                           // This is total - never zeroed
-    if (RecentPacketsLost >= LOSTCONTACTCUTOFF) { // Don't panic until at least LOSTCONTACTCUTOFF packets are lost.
-        if (!GapStart) GapStart = millis();       // To keep track of this gap's length
-        LostContactFlag = true;
-        Reconnected     = false;
-        if ((millis() - GapStart) > RED_LED_ON_TIME) { // there's no need to blink red for every single lost packet. Only after 3.5 seconds of no connection.
-            if (LedWasGreen && UseLog) {
-                LogThisLongGap();
-            }
+    RecordsPacketSuccess(0); // Record a failure
+    ++RecentPacketsLost;     // this is to keep track of events when receiver is off
+    if (!LostContactFlag) {
+        if (RecentPacketsLost >= LOSTCONTACTCUTOFF) {
+            LostContactFlag = true;
+            Reconnected     = false;
+            GapStart        = millis(); // To keep track of this gap's length
+        }
+    }
+    if (LostContactFlag) {
+        if ((millis() - GapStart) > RED_LED_ON_TIME) // Receiver gone home?
+        {
             if (!LedWasRed) { // Put on red led - receiver must be off
                 RedLedOn();
                 ReEnableScanButton();
             }
         }
+        TryToReconnect();
+        LastPacketSentTime = 0;
     }
-    if (LostContactFlag) TryToReconnect();
     int SecondsRemaining = (Inactivity_Timeout / 1000) - (millis() - Inactivity_Start) / 1000;
     if (SecondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH); // INACTIVITY POWER OFF HERE!!
 }
@@ -74,11 +75,13 @@ FASTRUN void TryOtherPipe()
     if (BoundFlag == true) {
         BoundFlag = false;
         SetThePipe(DefaultPipe);
+        CurrentPipe = 0; // 0 = default pipe
     }
     else
     {
         BoundFlag = true;             //  ... but not modelmatched yet
         SetThePipe(TeensyMACAddPipe); //
+        CurrentPipe = 1;              // 1 = bound pipe
     }
 }
 /************************************************************************************************************/
@@ -86,9 +89,8 @@ FASTRUN void TryOtherPipe()
 void TryToReconnect()
 {
     if (BuddyPupilOnPPM) return;
-    if (RecentPacketsLost > 25) {
-        TryOtherPipe();
-        RecentPacketsLost = 0;
+    if (!LedWasGreen) {
+        TryOtherPipe(); // BUT NOT while connected to model!
     }
     ++ReconnectionIndex;
     if (ReconnectionIndex >= RECONNECT_CHANNELS_COUNT) ReconnectionIndex = 0;
@@ -112,9 +114,12 @@ void SuccessfulPacket()
     ++RangeTestGoodPackets;
     ++PacketNumber;
     RecordsPacketSuccess(1);
+    TotalLostPackets += RecentPacketsLost;
     RecentPacketsLost = 0;
     Connected         = true;
-    if (BoundFlag && !LedWasGreen) GreenLedOn();
+    if (BoundFlag && !LedWasGreen) {
+        GreenLedOn();
+    }
     CheckGapsLength();
     Radio1.read(&AckPayload, AckPayloadSize); //  "sizeof" doesn't work with externs,
     ParseAckPayload();
@@ -147,33 +152,28 @@ FLASHMEM void InitRadio(uint64_t Pipe)
 FASTRUN void SendData()
 {
     if (SendNoData) return;
-
-    uint16_t PacketGap = PACEMAKER;
-    if (LostContactFlag && LedWasGreen && !BuddyPupilOnPPM) PacketGap = 0;
-    if ((millis() - LastPacketSentTime) >= PacketGap) {
-
+    if ((millis() - LastPacketSentTime) >= PACEMAKER) { // LastPacketSentTime is set to zero when a packet failed to send
         LastPacketSentTime = millis();
         if (BuddyPupilOnPPM) {
             SendViaPPM();
             return;
-        }                                                          // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
-        Connected = false;                                         // Assume the worst until ACK is received.
-        FlushFifos();
-        LoadPacketData();                                          // extra parameters appended to the data packet
-        Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS);   // Compress 32 bytes down to 24 (40 -> 30??)
-        if (Radio1.write(&CompressedData, SizeOfCompressedData)) { //  ************************** >>>>> SEND DATA (30 bytes) TO RX <<<<< ***************************************
+        }                                                        // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
+        Connected = false;                                       // Assume the worst until ACK is received.
+        FlushFifos();                                            // This avoids a lockup that happens when the FIFO gets full.
+        LoadPacketData();                                        // extra parameters appended to the data packet
+        Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24 (40 -> 30??)
+        if (Radio1.write(&CompressedData, SizeOfCompressedData)) //  ************************** >>>>> SEND DATA (30 bytes) TO RX <<<<< ***************************************
+        {
             SuccessfulPacket();
-            FlushFifos();
         }
-        else {
-            FlushFifos();
+        else
+        {
             FailedPacket();
         }
     }
 }
 
 /***********************************************************************************************************/
-
 void DoScanEnd()
 {
     Radio1.setDataRate(RF24_250KBPS);
@@ -391,9 +391,8 @@ void SendBindingPipe()
 {
     static uint32_t BindingTimer = 0;
     if (PPMdata.UseTXModule) return;
-    uint16_t BindPause = 1200; // failed at 200, OK just at 250. // 1200? heer
     if (!BoundFlag || !ModelMatched) BindingTimer = millis();
-    if ((millis() - BindingTimer) < BindPause) BufferTeensyMACAddPipe();
+    if ((millis() - BindingTimer) < 1200) BufferTeensyMACAddPipe();
 }
 
 /*********************************************************************************************************************************/

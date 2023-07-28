@@ -210,7 +210,7 @@ void GetNewPipe() // from TX
 /**
  * Get pipe address from EEPROM.
  * @note Address data in EEPORM is valid only after a previous power cycle observed
- * a completed binding process (pairing was successful at least once during last flight's session).
+ * a completed binding process .
  */
 FLASHMEM void GetOldPipe() 
 {

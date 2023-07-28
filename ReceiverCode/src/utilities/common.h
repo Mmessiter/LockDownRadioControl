@@ -17,9 +17,9 @@
 
 #define RXVERSION_MAJOR   2
 #define RXVERSION_MINOR   2
-#define RXVERSION_MINIMUS 2 // June 2023
+#define RXVERSION_MINIMUS 3 // July 2023
 
-// #define DB_FHSS
+ // #define DB_FHSS
 // #define DB_SENSORS
 // #define DB_BIND
 // #define DB_FAILSAFE
@@ -41,14 +41,16 @@
 #define SENSOR_HUB_I2C_ADDRESS 8
 #define HOPTIME                80 // ms between channel changes
 
-// ********************************* reconnect params ***************************************
+// ********************* >>> Reconnect params <<< ***************************************
 
-#define LISTEN_PERIOD   14   //   How many ms to listen for TX in Reconnect()
-#define RECEIVE_TIMEOUT 14 //   <=9 fails, >=11 OK
+#define LISTEN_PERIOD            14  //  14 (How many ms to listen for TX in Reconnect())
+#define RECEIVE_TIMEOUT          14  //  14  (<=9 fails, >=11 OK)
+#define RECONNECT_CHANNELS_COUNT 3   // How many channels to try when reconnecting
+#define RECONNECT_CHANNELS_START 12  // Offset in the array to begin getting reconnect channels
 
 // *****************************************************************************************
-#define PIPENUMBER       1   
-#define BOUNDPIPENUMBER  1       // no advantage from a difference from 1 
+#define PIPENUMBER       1
+#define BOUNDPIPENUMBER  1       // no advantage from a difference from 1
 #define FREQUENCYSCOUNT  82      // uses 82 different channels
 #define FREQUENCYSCOUNT1 41      // uses 41 different test channels
 #define CHANNELSUSED     16      //
@@ -62,34 +64,31 @@
 #define LED_PIN          LED_BUILTIN
 #define LED_RED          16
 #define BINDPLUG_PIN     17
-#define RANGEMAX         2047 // = Frsky at 150 %
+#define RANGEMAX         2047                        // = Frsky at 150 %
 #define RANGEMIN         0
-#define pinCE1           9    // NRF1
-#define pinCSN1          10   // NRF1
-#define pinCSN2          20   // NRF2
-#define pinCE2           21   // NRF2
-#define FAILSAFE_TIMEOUT 2000 // two seconds until failsafe
+#define pinCE1           9                           // NRF1
+#define pinCSN1          10                          // NRF1
+#define pinCSN2          20                          // NRF2
+#define pinCE2           21                          // NRF2
+#define FAILSAFE_TIMEOUT 2000                        // two seconds until failsafe
 
-#define RECONNECT_CHANNELS_COUNT 2                         // How many channels to try when reconnecting
-#define RECONNECT_CHANNELS_START 12                        // Offset in the array to begin getting reconnect channels
-
-#define UNCOMPRESSEDWORDS        20                        //   16 Channels plus extra 4 16 BIT values
-#define COMPRESSEDWORDS          UNCOMPRESSEDWORDS * 3 / 4 // = 16 WORDS  with no extra
-#define CSN_ON                   LOW
-#define CSN_OFF                  HIGH
-#define CE_ON                    HIGH
-#define CE_OFF                   LOW
-#define BIND_EEPROM_OFFSET       0                      // use 8 bytes from here
-#define FS_EEPROM_OFFSET         BIND_EEPROM_OFFSET + 8 // use 16 bytes from here
-#define PIPES_TO_COMPARE         8
+#define UNCOMPRESSEDWORDS  20                        //   16 Channels plus extra 4 16 BIT values
+#define COMPRESSEDWORDS    UNCOMPRESSEDWORDS * 3 / 4 // = 16 WORDS  with no extra
+#define CSN_ON             LOW
+#define CSN_OFF            HIGH
+#define CE_ON              HIGH
+#define CE_OFF             LOW
+#define BIND_EEPROM_OFFSET 0                      // use 8 bytes from here
+#define FS_EEPROM_OFFSET   BIND_EEPROM_OFFSET + 8 // use 16 bytes from here
+#define PIPES_TO_COMPARE   8
 
 uint32_t LastPacketArrivalTime = 0;
 bool     FailSafeSave          = false;
 bool     INA219Connected       = false; //  Volts from INA219 ?
 
-uint8_t* FHSSChPointer; // Pointer for FHSS channels' array
+uint8_t* FHSSChPointer;                 // Pointer for FHSS channels' array
 
-uint8_t* FHSSRecoveryPointer; // Pointer for FHSS channels' array for recovery
+uint8_t* FHSSRecoveryPointer;           // Pointer for FHSS channels' array for recovery
 
 uint8_t FrequencyCount    = FREQUENCYSCOUNT;
 uint8_t FHSS_Channels[83] = {51, 28, 24, 61, 64, 55, 66, 19, 76, 21, 59, 67, 15, 71, 82, 32, 49, 69, 13, 2, 34, 47, 20, 16, 72, // These are good for UK

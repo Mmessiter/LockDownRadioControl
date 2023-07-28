@@ -234,7 +234,14 @@ void GreenLedOn()
         ClearSuccessRate();
         LastShowTime = 0;
     }
-    if (!LedWasGreen || LedIsBlinking) { // no need to repeat unless it is blinking
+
+    TotalLostPackets  = 0;
+    TotalGoodPackets  = 0;
+    RecentPacketsLost = 0;
+    GapLongest        = 0;
+
+    if (!LedWasGreen || LedIsBlinking)
+    { // no need to repeat unless it is blinking
         if (!LedIsBlinking) {
             ShowComms();
             if (AnnounceConnected) {
@@ -613,7 +620,6 @@ FASTRUN void ShowComms()
                         SendText(FrontView_Connected, Msg_CnctdBuddySlave);
                     }
                 }
-                if (BoundFlag && ModelMatched) GreenLedOn();
                 StartInactvityTimeout();
             }
             else {
@@ -636,7 +642,7 @@ FASTRUN void ShowComms()
         SendValue(DataView_Sg, RX1TotalTime - SavedRX1TotalTime);
         SendValue(DataView_Ag, GapAverage);
         SendValue(DataView_Gc, RX2TotalTime - SavedRX2TotalTime);
-        snprintf(Vbuf, 6, "%d", (int)SbusRepeats - SavedSbusRepeats);
+        snprintf(Vbuf, 7, "%d", (int)SbusRepeats - SavedSbusRepeats);
         SendText(Sbs, Vbuf);
         SendValue(DataView_lps, TotalLostPackets / 2);
 
@@ -661,25 +667,25 @@ FASTRUN void ShowComms()
         else {
             SendText(Fix, no);
         }
-        snprintf(Vbuf, 3, "%d", GPSSatellites);
+        snprintf(Vbuf, 7, "%d", GPSSatellites);
         SendText(Sat, Vbuf);
-        snprintf(Vbuf, 10, "%f", GPSLongitude);
+        snprintf(Vbuf, 10, "%f",  GPSLongitude);
         SendText(Lon, Vbuf);
         snprintf(Vbuf, 10, "%f", GPSLatitude);
         SendText(Lat, Vbuf);
         snprintf(Vbuf, 7, "%d", int(GPSAngle));
         SendText(Bear, Vbuf);
-        snprintf(Vbuf, 6, "%d", (int)GPSDistanceTo);
+        snprintf(Vbuf, 7, "%d", (int)GPSDistanceTo);
         SendText(Dist, Vbuf);
-        snprintf(Vbuf, 4, "%d", (int)GPSSpeed);
+        snprintf(Vbuf, 6, "%d", (int)GPSSpeed);
         SendText(Sped, Vbuf);
-        snprintf(Vbuf, 4, "%d", (int)GPSMaxSpeed);
+        snprintf(Vbuf, 6, "%d", (int)GPSMaxSpeed);
         SendText(MxS, Vbuf);
-        snprintf(Vbuf, 4, "%d", (int)GPSAltitude);
+        snprintf(Vbuf, 6, "%d", (int)GPSAltitude);
         SendText(ALT, Vbuf);
-        snprintf(Vbuf, 4, "%d", (int)GPSMaxaltitude);
+        snprintf(Vbuf, 6, "%d", (int)GPSMaxaltitude);
         SendText(MALT, Vbuf);
-        snprintf(Vbuf, 4, "%d", (int)GPSCourseTo);
+        snprintf(Vbuf, 6, "%d", (int)GPSCourseTo);
         SendText(BTo, Vbuf);
         snprintf(Vbuf, 6, "%d", (int)GPSMaxDistance);
         SendText(Mxd, Vbuf);
@@ -1865,10 +1871,22 @@ FASTRUN void CreateTimeStamp(char* DateAndTime)
     char NB[10];
     char zero[]  = "0";
     char Colon[] = "."; // a dot!
+    char Slash[] = "/";
     char null[]  = "";
+    char space[] = " ";
 
     if (RTC.read(tm)) {
         strcpy(DateAndTime, null);
+
+        if (MayBeAddZero(tm.Day)) strcat(DateAndTime, zero);
+        strcat(DateAndTime, Str(NB, tm.Day, 0));
+        strcat(DateAndTime, Slash);
+        if (MayBeAddZero(tm.Month)) strcat(DateAndTime, zero);
+        strcat(DateAndTime, Str(NB, tm.Month, 0));
+        strcat(DateAndTime, Slash);
+        strcat(DateAndTime, (Str(NB, tmYearToCalendar(tm.Year), 0)));
+        strcat(DateAndTime, space);
+
         if (MayBeAddZero(tm.Hour)) strcat(DateAndTime, zero);
         strcat(DateAndTime, Str(NB, tm.Hour, 0));
         strcat(DateAndTime, Colon);
@@ -1912,9 +1930,15 @@ FASTRUN void CreateTimeDateStamp(char* DateAndTime)
 FASTRUN void MakeLogFileName(char* LogFileName)
 {
     char NB[10];
-    char Ext[] = ".LOG";
+    char Ext[]  = ".LOG";
+    char dash[] = "-";
+    char zero[] = "0";
     if (RTC.read(tm)) {
+
+        if (MayBeAddZero(tm.Day)) strcat(LogFileName, zero);
         strcpy(LogFileName, Str(NB, tm.Day, 0));
+        strcat(LogFileName, dash);
+        if (MayBeAddZero(tm.Month)) strcat(LogFileName, zero);
         strcat(LogFileName, Str(NB, tm.Month, 0));
         strcat(LogFileName, Ext);
     }
@@ -1981,11 +2005,11 @@ FASTRUN void WriteToLogFile(char* SomeData, uint16_t len)
 // ************************************************************************
 FASTRUN void LogFilePreamble()
 {
-    char dbuf[12];
+    char dbuf[22];
     char Divider[] = " - ";
     CheckLogFileIsOpen();
-    CreateTimeStamp(dbuf);   // Put time stamp into buffer
-    WriteToLogFile(dbuf, 9); // Add time stamp
+    CreateTimeStamp(dbuf);    // Put time stamp into buffer
+    WriteToLogFile(dbuf, 20); // Add time stamp
     WriteToLogFile(Divider, sizeof(Divider));
 }
 
@@ -2001,9 +2025,10 @@ FASTRUN void LogText(char* TheText, uint16_t len)
 // ************************************************************************
 FASTRUN void LogMinGap()
 {
-    char TheText[] = "Minimum logged gap (ms): ";
-    char buf[50]   = " ";
-    char NB[8];
+    char TheText[] = "Min logged gap: ";
+    char buf[25]   = " ";
+    char NB[]      = "    ";
+
     Str(NB, MinimumGap, 0);
     strcpy(buf, TheText);
     strcat(buf, NB);
@@ -2020,13 +2045,26 @@ FASTRUN void LogConnection()
     LogMinGap();
 }
 // ************************************************************************
+
+uint32_t GetOverallSuccessRate()
+{
+    return (TotalGoodPackets * 100) / (TotalGoodPackets + TotalLostPackets);
+}
+// ************************************************************************
 FASTRUN void LogDisConnection()
 {
-    char TheText[] = "Disconnected from ";
-    char buf[40]   = " ";
+    char buf[40]    = " ";
+    char TheText[]  = "Disconnected from ";
+
     strcpy(buf, TheText);
     strcat(buf, ModelName);
     LogText(buf, sizeof(buf));
+
+    LogLongestGap();
+    LogTotalLostPackets();
+    LogTotalGoodPackets();
+    LogOverallSuccessRate();
+   
 }
 // ************************************************************************
 FASTRUN void LogNewBank()
@@ -2097,23 +2135,50 @@ FASTRUN void LogThisGap()
 }
 // ************************************************************************
 
-FASTRUN void LogThisLongGap()
-{ // here is logged a Gap that exceeds one second - probably because rx was turned off
-    ThisGap      = (millis() - GapStart);
-    char Ltext[] = "Long Gap: ";
-    char NB[5];
-    char thetext[20];
-    Str(NB, ThisGap, 0);
-    strcpy(thetext, Ltext);
-    strcat(thetext, NB);
-    LogText(thetext, strlen(Ltext) + 4);
+
+FASTRUN void LogLongestGap()
+{
+    char thetext[50];
+    snprintf(thetext,45, "Longest gap: %d", (short int) GapLongest);
+    LogText(thetext, strlen(thetext));
 }
 
 // ************************************************************************
 
-FASTRUN void LogPowerOn()
+void LogTotalLostPackets()
+{
+    char thetext[50];
+    snprintf(thetext,45,"Total lost packets: %d", (short int)TotalLostPackets);
+    LogText(thetext, strlen(thetext));
+}
+
+// ************************************************************************
+
+    void LogTotalGoodPackets()
+{
+    char thetext[50];
+    snprintf(thetext,45, "Total good packets: %d", (uint16_t) TotalGoodPackets);
+    LogText(thetext, strlen(thetext));
+}
+
+// ************************************************************************
+
+void LogOverallSuccessRate()
+{
+    char thetext[50];
+    uint32_t OverallSuccessRate = 0;
+    OverallSuccessRate = GetOverallSuccessRate();
+    snprintf(thetext,45, "Overall success rate: %d%%", (uint8_t)OverallSuccessRate);
+    LogText(thetext, strlen(thetext));
+}
+// ************************************************************************
+
+FASTRUN void
+LogPowerOn()
 {
     char Ltext[] = "Power ON";
+    char sp[]    = "*******************************************";
+    LogText(sp, strlen(sp));
     LogText(Ltext, strlen(Ltext));
 }
 
@@ -2279,8 +2344,8 @@ FLASHMEM void setup()
     SendValue(FrontView_Mins, 0);
     SendValue(FrontView_Secs, 0);
     //  ***************************************************************************************
-    //  SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
-    //  **   BUT then re-comment it!! Otherwise it will reset to same time on every boot up! **
+    // SetDS1307ToCompilerTime();    //  **   Uncomment this line to set DS1307 clock to compiler's (Computer's) time.        **
+    // **   BUT then re-comment it!! Otherwise it will reset to same time on every boot up! **
     //  ***************************************************************************************
     BoundFlag = false;
     StartInactvityTimeout();
@@ -3510,7 +3575,6 @@ void BindNow()
     BoundFlag    = true;
     ModelMatched = true;
     Connected    = true;
-
 #ifdef DB_BIND
     Serial.println("");
     Serial.println("Remote (model) ID saved:");
@@ -4546,7 +4610,6 @@ void LoadModelSelector()
 
 void LoadFileSelector()
 {
-
     char Mfilesp[] = "Mfiles.path=\"";
     char Mfiles[]  = "Mfiles";
     char crlf[]    = {13, 10, 0};
@@ -4654,7 +4717,12 @@ void LogEND()
 /******************************************************************************************************************************/
 void DelLOG()
 { // delete log and start new one
-    DeleteLogFile1();
+
+    char prompt[]   = "Delete log file?";
+    char pLogView[] = "page LogView";
+    if (GetConfirmation(pLogView, prompt)) {
+        DeleteLogFile1();
+    }
     ClearText();
 }
 /******************************************************************************************************************************/
@@ -4746,7 +4814,7 @@ void OptionView3Start() /// NOT CALLED
     CurrentView = OPTIONVIEW3;
     SendCommand(OptionV3Start);
     DelayWithDog(250);
-    snprintf(Vbuf, 5, "%f", StopFlyingVoltsPerCell);
+    snprintf(Vbuf, 5, "%1.2f", StopFlyingVoltsPerCell);
     SendText(t10, Vbuf);
     SendValue(TxVCorrextion, TxVoltageCorrection);
     SendValue(n2, PowerOffWarningSeconds);
@@ -4780,7 +4848,7 @@ void RXOptionsViewStart() // model options screen
     SendCommand(pRXSetup1);
     SendValue(c1, CopyTrimsToAll);
     SendValue(n3, TrimMultiplier);
-    snprintf(Vbuf, 5, "%f", StopFlyingVoltsPerCell);
+    snprintf(Vbuf, 5, "%1.2f", StopFlyingVoltsPerCell);
     SendText(t10, Vbuf);
     SendValue(Mvalue, MotorChannelZero);
     SendValue(Mchannel, MotorChannel + 1);
@@ -7506,7 +7574,7 @@ void GetRXVersionNumber()
     strcpy(ThisRadio, nbuf);
     if (LastRadio != AckPayload.Byte1) {
         LastRadio = AckPayload.Byte1;
-        if (LogRXSwaps && UseLog) LogThisRX();
+        if (LogRXSwaps && UseLog && LastRadio <= 2 && (LastRadio)) LogThisRX();
     }
     Str(ReceiverVersionNumber, AckPayload.Byte2, 2);
     Str(nbuf, AckPayload.Byte3, 2);
@@ -7556,7 +7624,7 @@ void GetAltitude()
 void GetTemperature()
 {
     RXTemperature = GetFromAckPayload();
-    snprintf(ModelTempRX, 5, "%f", RXTemperature);
+    snprintf(ModelTempRX, 5, "%1.2f", RXTemperature);
 }
 /************************************************************************************************************/
 FASTRUN uint32_t GetIntFromAckPayload() // This one uses a uint32_t int
@@ -7646,7 +7714,7 @@ FASTRUN void ParseAckPayload()
             if (RXModelVolts > 0) {
                 RXVoltsDetected = true;
                 if (RXCellCount == 12) RXModelVolts *= 2; // voltage divider needed !
-                snprintf(ModelVolts, 5, "%f", RXModelVolts);
+                snprintf(ModelVolts, 5, "%1.2f", RXModelVolts);
             }
             break;
         case 6:
