@@ -274,11 +274,9 @@ FLASHMEM void InitCurrentRadio()
 void TryToConnectNow()
 {
     uint32_t ATimer;
-  
-    delayMicroseconds(250);
     CurrentRadio->startListening();
     ATimer = millis();
-    while ((!CurrentRadio->available(&Pipnum)) && (millis() - ATimer) < LISTEN_PERIOD) {delayMicroseconds(10);}// *** > Lock up sometimes happens here!! < ***
+    while ((!CurrentRadio->available(&Pipnum)) && (millis() - ATimer) < LISTEN_PERIOD) {}
     Connected = CurrentRadio->available(&Pipnum);
 }
 
@@ -287,7 +285,6 @@ void TryToConnectNow()
 
 void ProdRadio(uint8_t Recon_Ch)
 { // After switching radios, this prod allows EITHER to connect. Don't know why - yet!
-
     ConfigureRadio();
     CurrentRadio->setChannel(Recon_Ch);
     delay(3);
@@ -376,7 +373,7 @@ FASTRUN void Reconnect()
         ++ReconnectIndex;
         if (ReconnectIndex >= RECONNECT_CHANNELS_COUNT + RECONNECT_CHANNELS_START) ReconnectIndex = RECONNECT_CHANNELS_START;
         CurrentRadio->setChannel(ReconnectChannel);
-        delay(1); 
+        delayMicroseconds(300); 
         ++Attempts;
         if (Attempts < 3) {
             TryToConnectNow();
