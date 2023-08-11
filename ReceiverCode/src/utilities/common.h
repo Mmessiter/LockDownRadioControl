@@ -19,14 +19,14 @@
 #define RXVERSION_MINOR   2
 #define RXVERSION_MINIMUS 4 // August 2023
 
- // #define DB_FHSS
+// #define DB_FHSS
 // #define DB_SENSORS
 // #define DB_BIND
 // #define DB_FAILSAFE
 // #define DB_RXTIMERS
 
 //**************************************************************************************************************************
-//#define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< ****
+ #define SECOND_TRANSCEIVER // >>>>>>>>>>>>>>>> ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< ****
 //**************************************************************************************************************************
 
 // **************************************************************************
