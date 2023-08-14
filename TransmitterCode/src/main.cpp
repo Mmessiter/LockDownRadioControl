@@ -5529,7 +5529,7 @@ bool GetBackupFilename(char* goback, char* tt1, char* MMname, char* heading, cha
 // goback is the command needed to return to calling page
 
 bool GetConfirmation(char* goback, char* Prompt)
-{ // heer
+{ 
 
     char GoPopupView[] = "page PopupView";
     char Dialog[]      = "Dialog";
@@ -6418,6 +6418,7 @@ FASTRUN void ButtonWasPressed()
                 WhichPage[i] = 0;
             }                       // Get page name to which to return
             SendCommand(WhichPage); // this sends nextion back to last screen
+           // Look(WhichPage); // heer ********************************
             CurrentView = SavedCurrentView;
 
             if (CurrentView == PONGVIEW) StartPong();
