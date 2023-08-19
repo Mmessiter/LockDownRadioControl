@@ -1,5 +1,5 @@
 /** @file TransmitterCode/src/main.cpp
- * // Malcolm Messiter 2023
+ * // Malcolm Messiter 2020 - 2023
  *
  * @page TransmitterCode...
  * @section LockDown Radio Control Features list, so far:
@@ -57,7 +57,7 @@
  * | Teensy 4.1 Pins | Connections |
  * |-----------------|-------------|
  * | GND        | GND |
- * | Vin        | + 5.0 VDC |
+ * | Vin        | +5V power in  |
  * | 0  (RX1)   | NEXTION  (TX) |
  * | 1  (TX2)   | NEXTION  (RX) |
  * | 2  LED     | RED |
@@ -67,7 +67,7 @@
  **| 6  (PPM)   | PPM IN or OUT NEW PCB TX MODULE (was Sensor for power button)
  * | 7  (CE)    | nRF24l01 (CE)  | on new PCB
  * | 8  (CSN)   | nRF24l01 (CSN) | on new PCB
- **| 9  .....   | was nRF24l01 (CSN) now SPARE on new PCB
+ **| 9  .....   | was nRF24l01 (CSN) now SPARE on new PCB <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< SPARE
  **| 10 (PPM)   | was nRF24l01 (CSN) now BUDDY PPM on new PCB)
  **| 11 (MOSI)  | nRF24l01 (MOSI) |
  **| 12 (MISO)  | nRF24l01 (MISO) |
