@@ -5088,7 +5088,7 @@ void ThrottleDownTrim()
 /******************************************************************************************************************************/
 void ResetTransmitterSettings()
 { // This function resets all transmitter parameters to the default state.
-  // But not the clock. Calibration shoulw  be done next.
+  // Calibration should  be done next.
 
     const char Tn[32] = "Unknown";
 
@@ -5138,6 +5138,9 @@ void ResetTransmitterSettings()
     TimerDownwards          = false;
     PPMdata.UseTXModule     = false;
     char ProgressEnd[]      = "vis Progress,0";
+    for (int i = 0; i < 16; ++i) {
+        ChannelOutPut[i] = i;
+    }
     SetDS1307ToCompilerTime();
     for (int k = 1; k < 5; ++k) { // writes default four times!
         for (ModelNumber = 1; ModelNumber <= MAXMODELNUMBER; ++ModelNumber) {
